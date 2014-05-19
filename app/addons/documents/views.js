@@ -1833,31 +1833,6 @@ function(app, FauxtonAPI, Components, Documents, Views, Databases, pouchdb,
     }
   });
 
-
-  Views.newMenuDropdown = FauxtonAPI.View.extend({
-    template: "addons/documents/templates/add_new_ddoc_fn_dropdown",
-    tagName: "div",
-    className: "dropdown",
-    initialize: function(options){
-      this.database = options.database;
-      this.fullMenu = options.fullMenu;
-      this.ddocSafeName = options.ddocSafeName || "";
-    },
-    serialize: function(){
-      var sidebarItem = FauxtonAPI.getExtensions('sidebar:links');
-      return {
-        extensionLinks: sidebarItem,
-        database: this.database,
-        ddocSafe: this.ddocSafeName,
-        full:  this.fullMenu
-      };
-    }
-  });
-
-
-  Views.temp = FauxtonAPI.View.extend({
-  });
-
   Views.DdocInfo = FauxtonAPI.View.extend({
     template: "addons/documents/templates/ddoc_info",
 
