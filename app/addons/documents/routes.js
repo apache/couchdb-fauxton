@@ -453,7 +453,7 @@ function(app, FauxtonAPI, Documents, Databases, Components) {
   });
 
   var ChangesRouteObject = FauxtonAPI.RouteObject.extend({
-    layout: "with_sidebar",
+    layout: "one_pane",
     selectedHeader: "Databases",
     crumbs: function () {
       return [
@@ -488,8 +488,7 @@ function(app, FauxtonAPI, Documents, Databases, Components) {
       this.filterView = new Components.FilterView({
         eventNamespace: "changes"
       });
-
-      this.sideBarView = this.setView("#sidebar-content", new Documents.Views.ChangesSidebar({
+      this.headerView = this.setView("#tabs", new Documents.Views.ChangesHeader({
         filterView: this.filterView
       }));
     },
