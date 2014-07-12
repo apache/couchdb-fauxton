@@ -86,7 +86,8 @@ function (app, FauxtonAPI, Databases, Documents) {
       var promise = $.get(viewDoc.url() + '/_view/testview');
 
       promise.then(function (resp) { 
-        var row = JSON.parse(resp).rows[0];
+        resp = _.isString(resp) ? JSON.parse(resp) : resp;
+        var row = resp.rows[0];
         if (row.value === 6) {
           return deferred.resolve();
         }
