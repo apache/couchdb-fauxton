@@ -14,7 +14,10 @@ A recent of [node.js](http://nodejs.org/) and npm is required.
 
 ### Fauxton Setup ###
 
-    cd src/fauxton
+    # Clone the Fauxton repo: https://github.com/apache/couchdb-fauxton.git
+    git clone https://github.com/apache/couchdb-fauxton fauxton
+
+    cd fauxton
 
     # Install all dependencies
     npm install
