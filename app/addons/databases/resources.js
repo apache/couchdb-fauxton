@@ -136,7 +136,7 @@ function(app, FauxtonAPI, Documents) {
       if (full || (typeof(updateSeq) === 'number')) {
         return updateSeq;
       } else if (updateSeq) {
-        return updateSeq.split('-')[0];
+        return updateSeq[0];
       } else {
         return 0;
       }
