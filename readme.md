@@ -33,7 +33,7 @@ And then...
 ### Prepare Fauxton Release
     Follow the "Fauxton Setup" section,
     Edit settings.json variable root where the document will live.  eg.  "/_utils/fauxton/"
-    
+
     then:
 
     ./bin/grunt couchdb
@@ -48,7 +48,7 @@ And then...
 
     ./bin/grunt couchapp_deploy - to deploy to your local [CouchDB instance] (http://localhost:5984/fauxton/_design/fauxton/index.html)
 
-## Understang Fauxton Code layout
+## Understanding the Fauxton Code layout
 
 Each bit of functionality is its own seperate module or addon. All core modules are stored under `app/module` and any addons that are optional are under `app/addons`.
 We use [backbone.js](http://backbonejs.org/) and [Backbone.layoutmanager](https://github.com/tbranyen/backbone.layoutmanager) quite heavily, so best to get an idea how they work.
