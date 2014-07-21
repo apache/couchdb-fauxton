@@ -20,12 +20,22 @@ the License.
 <div class="api-navbar" style="display: none">
     <div class="input-prepend input-append">
       <span class="add-on">
-        API reference
+        API URL
         <a class="help-link" href="<%-getDocUrl(documentation)%>" target="_blank">
           <i class="icon-question-sign"></i>
         </a>
       </span>
-      <input type="text" class="input-xxlarge" value="<%- endpoint %>">
-      <a data-bypass="true" href="<%- endpoint %>" target="_blank" class="btn">Show me</a>
+      <input id="api-url-text" type="text" class="input-xxlarge" value="<%- endpoint %>">
+      <a class="btn copy-url" data-clipboard-target="api-url-text">
+        <i class="fonticon-eye icon"></i>
+        Copy
+      </a>
+
+      <div class="add-on">
+        <a data-bypass="true" href="<%- endpoint %>" target="_blank" class="btn">
+          <i class="fonticon-eye icon"></i>
+          View JSON
+        </a>
+      </div>
     </div>
 </div>

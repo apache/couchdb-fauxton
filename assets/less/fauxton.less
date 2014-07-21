@@ -883,25 +883,72 @@ div.spinner {
 }
 
 .api-navbar {
-  border-top: 1px solid @red;
-  padding: 20px;
+  .border-radius(5px);
+  position: absolute;
+  right: 5px;
+  background-color: #333;
+  padding: 5px 20px;
   .input-append.input-prepend {
     margin-bottom: 0px;
+    .copying {
+      background-color: #999;
+      transition: background-color 5ms linear;
+    }
     .add-on {
       background: none;
-      padding: 14px 12px 32px 12px;
+      padding: 0px;
+      margin: 10px 0;
       border: none;
+      display: block;
+      text-align: left;
+      color: #fff;
+      text-shadow: none;
+      height: auto;
     }
-    .btn:last-child{
+    .input-xxlarge {
+      .border-radius(5px 0 0 5px);
+      border: none;
+      padding: 9px;
+      -moz-transition: background-color 100ms linear;
+      -webkit-transition: background-color 100ms linear;
+      transition: background-color 100ms linear;
+    }
+    .btn{
+      background-color: @red;
+      color: #333;
       margin-left: -1px;
-      background: none;
-      padding: 13px 12px 11px 12px;
+      padding: 10px 10px 8px;
+      border: none;
+      .border-radius(5px);
       &:hover{
-        background-color: @red;
-        color: white;
+        background-color: #cbcbcb;
       }
     }
+    .copy-url {
+      .border-radius(0 5px 5px 0);
+    }
+    .copying {
+      background-color: #999;
+    }
+    .zeroclipboard-is-hover { 
+      background-color: #cbcbcb; 
+    }
+    .icon {
+      vertical-align: bottom;
+      font-size: 17.5px;
+    }
   }
+}
+.api-navbar:before {
+  content: '';
+  position: absolute;
+  top: -25px;
+  right: 30px;
+  border-color: transparent transparent #333 transparent;
+  border-style: solid;
+  border-width: 15px;
+  width: 0;
+  height: 0;
 }
 
 .js-log-filter-form {

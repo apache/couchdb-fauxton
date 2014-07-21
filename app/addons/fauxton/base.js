@@ -13,10 +13,11 @@
 define([
   "app",
   "api",
-  "addons/fauxton/resizeColumns"
+  "addons/fauxton/resizeColumns",
+  "plugins/zeroclipboard/ZeroClipboard"
 ],
 
-function(app, FauxtonAPI, resizeColumns) {
+function(app, FauxtonAPI, resizeColumns, ZeroClipboard) {
 
   var Fauxton = FauxtonAPI.addon();
   FauxtonAPI.addNotification = function (options) {
@@ -274,9 +275,7 @@ function(app, FauxtonAPI, resizeColumns) {
       }else{
         $currentTarget.removeClass("fonticon-minus").addClass("fonticon-plus");
       }
-
       $('.api-navbar').toggle();
-
     },
 
     serialize: function() {
@@ -297,6 +296,21 @@ function(app, FauxtonAPI, resizeColumns) {
       this.endpoint = endpoint[0];
       this.documentation = endpoint[1];
       this.render();
+    },
+    afterRender: function(){
+      ZeroClipboard.config({ moviePath: "/assets/js/plugins/zeroclipboard/ZeroClipboard.swf" });
+      var client = new ZeroClipboard(this.$(".copy-url"));
+      client.on("load", function(e){
+        var $apiInput = $('#api-navbar input');
+        var copyURLTimer;
+        client.on("mouseup", function(e){
+          $apiInput.css("background-color","#aaa");
+          window.clearTimeout(copyURLTimer);
+          copyURLTimer = setInterval(function () {
+            $apiInput.css("background-color","#fff");
+          }, 200);
+        });
+      });
     }
 
   });
