@@ -10,7 +10,7 @@ Requires **Bundler.io**, **Ruby 1.9.2+**, **FontForge** with Python scripting.
 # On Mac
 $ gem install bundler
 $ brew install fontforge eot-utils
-$ cd [LOCAL_COUCHDB_REPO]/src/fauxton/assets/fonts
+$ cd [LOCAL_COUCHDB_REPO]/src/couchdb-fauxton/assets/fonts
 $ bundle
 ```
 
@@ -22,9 +22,9 @@ Don't forget to update `fontcustom.yml` with the correct paths where it says `PU
 From there, you can run the command `$ fontcustom compile` to compile the svgs located in the ./icons directory into updated fauxtonicon font files. 
 
 It's setup to generate the following 
-- an `icons.less` file [LOCAL_COUCHDB_REPO]/src/fauxton/assets/less
-- a `fauxtonicon-preview.html` preview [LOCAL_COUCHDB_REPO]/src/fauxton/assets/fonts/styleguide
-- font files in [LOCAL_COUCHDB_REPO]/src/fauxton/assets/fonts/
+- an `icons.less` file [LOCAL_COUCHDB_REPO]/src/couchdb-fauxton/assets/less
+- a `fauxtonicon-preview.html` preview [LOCAL_COUCHDB_REPO]/src/couchdb-fauxton/assets/fonts/styleguide
+- font files in [LOCAL_COUCHDB_REPO]/src/couchdb-fauxton/assets/fonts/
   * `fauxtonicon.eot` 
   * `fauxtonicon.svg`
   * `fauxtonicon.ttf`
