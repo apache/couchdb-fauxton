@@ -36,7 +36,7 @@ And then...
 
     then:
 
-    ./bin/grunt couchdb
+    grunt couchdb
 
     This will install the latest version of Fauxton into `/share/www/fauxton`
 
@@ -46,7 +46,7 @@ And then...
 
 ### To Deploy Fauxton
 
-    ./bin/grunt couchapp_deploy - to deploy to your local [CouchDB instance] (http://localhost:5984/fauxton/_design/fauxton/index.html)
+    grunt couchapp_deploy - to deploy to your local [CouchDB instance] (http://localhost:5984/fauxton/_design/fauxton/index.html)
 
 ## Understanding the Fauxton Code layout
 
@@ -61,12 +61,8 @@ Each module must have a `base.js` file, this is read and compile when Fauxton is
 Checkout [Jira](https://issues.apache.org/jira/browse/COUCHDB/component/12320406) for a list of items to do.
 
 ## (Optional) To avoid a npm global install
-    # Add node_modules/.bin to your path
-    # export PATH=./node_modules/.bin:$PATH
-		# Or just use the wrappers in ./bin/
-
     # Development mode, non minified files
-    ./bin/grunt couchdebug
+    npm run couchdebug
 
     # Or fully compiled install
-    # ./bin/grunt couchdb
+    npm run couchdb
