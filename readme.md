@@ -3,24 +3,24 @@ Fauxton
 
 Fauxton is the new Web UI for CouchDB. To get it running in development on your machine. Follow the steps below.
 
+## COUCHDB is required ##
+
+Install couchdb from docs here: http://couchdb.readthedocs.org/en/latest/install/index.html
+
 ## Setup Fauxton ##
 
 A recent of [node.js](http://nodejs.org/) and npm is required.
 
-### CouchDB Setup ###
+### FORK THIS REPO
 
-    1. Clone the CouchDB repo: https://github.com/apache/couchdb.git or http://git-wip-us.apache.org/repos/asf/couchdb.git
-    cd couchdb
+    1. Fork the THIS repo: https://github.com/apache/couchdb-fauxton.git
+    2. add upstream to the main git repo 'git remote add git-repo https://github.com/apache/couchdb-fauxton.git'
+    2. add upstream to the private apache repo 'git remote add upstream http://git-wip-us.apache.org/repos/asf/couchdb-fauxton.git'
+    3. cd couchdb-fauxton
+    4. npm install
 
-### Fauxton Setup ###
 
-    # Clone the Fauxton repo: https://git-wip-us.apache.org/repos/asf/couchdb-fauxton.git
-    git clone https://git-wip-us.apache.org/repos/asf/couchdb-fauxton.git fauxton
-
-    cd fauxton
-
-    # Install all dependencies
-    npm install
+### NOTE: Before you run fauxton, don't forget to start couchdb!
 
 ### Dev Server
 Using the dev server is the easiest way to use fauxton, specially when
@@ -30,10 +30,13 @@ And then...
 
     grunt dev
 
+You should be able to access fauxton on `http://localhost:8000`
+
+
 ### Prepare Fauxton Release
     Follow the "Fauxton Setup" section,
     Edit settings.json variable root where the document will live.  eg.  "/_utils/fauxton/"
-    
+
     then:
 
     ./bin/grunt couchdb
