@@ -159,41 +159,51 @@ function(app, FauxtonAPI, Components, Documents, Databases) {
         database_encoded: app.utils.safeURLName(this.model.collection.database.id),
       };
     },
-    beforeRender: function(manage) {
-      var ddocDocs = this.model.get("doc"),
-          ddocName = this.model.id.replace(/^_design\//,""),
-          sideBarMenuLinks = [];
 
-      var sidebarListTypes = FauxtonAPI.getExtensions('sidebar:list');
-          if (ddocDocs){
-            this.buildIndexList(ddocDocs, "views", "view");
-            _.each(sidebarListTypes, function (type) {
-              this.buildIndexList(ddocDocs, type);
-            },this);
-          }
-       
-     var docSafe = app.utils.safeURLName(ddocName), 
-         database = this.collection.database,
-         links = _.reduce(FauxtonAPI.getExtensions('sidebar:links'), function (menuLinks, link) {
+    getSidebarLinks: function () {
+      var ddocName = this.model.id.replace(/^_design\//,""),
+          docSafe = app.utils.safeURLName(ddocName), 
+          database = this.collection.database;
 
-          menuLinks.push({
-            title: link.title,
-            url: "#" + database.url('app') + "/" + link.url + "/" + docSafe,
-            icon: 'fonticon-plus-circled'
-          });
+      return _.reduce(FauxtonAPI.getExtensions('sidebar:links'), function (menuLinks, link) {
 
-         return menuLinks; 
+        menuLinks.push({
+          title: link.title,
+          url: "#" + database.url('app') + "/" + link.url + "/" + docSafe,
+          icon: 'fonticon-plus-circled'
+        });
+
+        return menuLinks; 
      }, [{
       title: 'Secondary View',
       url: "#" + database.url('app') + "/new_view/" + docSafe,
       icon: 'fonticon-plus-circled'
      }]);
 
-     sideBarMenuLinks.push({
-       title: 'Add new',
-       links: links
-     });
+    },
 
+    renderIndexLists: function () {
+      var ddocDocs = this.model.get("doc"),
+          sidebarListTypes = FauxtonAPI.getExtensions('sidebar:list');
+
+      if (!ddocDocs){ return; }
+
+      this.buildIndexList(ddocDocs, "views", "view");
+      _.each(sidebarListTypes, function (type) {
+        this.buildIndexList(ddocDocs, type);
+      },this);
+
+    },
+
+    beforeRender: function(manage) {
+      var sideBarMenuLinks = [];
+
+      sideBarMenuLinks.push({
+        title: 'Add new',
+        links: this.getSidebarLinks()
+      });
+
+      this.renderIndexLists();
       this.insertView(".new-button", new Components.MenuDropDown({
         links: sideBarMenuLinks,
       }));
