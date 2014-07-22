@@ -190,11 +190,11 @@ function(app, FauxtonAPI, Documents, Databases, Resources) {
       this.toolsView && this.toolsView.remove();
       this.viewEditor && this.viewEditor.remove();
 
-      var DesignDocInfo = new Resources.DdocInfo({_id: "_design/"+ddoc},{database: this.data.database });
+      var designDocInfo = new Resources.DdocInfo({_id: "_design/"+ddoc},{database: this.data.database });
 
       this.setView("#dashboard-lower-content", new Documents.Views.DdocInfo({
         ddocName: ddoc,
-        model: DesignDocInfo
+        model: designDocInfo
       }));
 
       this.sidebar.setSelectedTab(app.utils.removeSpecialCharacters(ddoc)+"_metadata");
@@ -204,6 +204,8 @@ function(app, FauxtonAPI, Documents, Databases, Resources) {
           {"name": this.data.database.id, "link": Databases.databaseUrl(this.data.database)},
         ];
       };
+
+      this.apiUrl = [designDocInfo.url('apiurl'), designDocInfo.documentation() ];
 
     },
     tempFn:  function(databaseName, ddoc, fn){
