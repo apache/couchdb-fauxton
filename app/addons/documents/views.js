@@ -19,8 +19,8 @@ define([
   "addons/databases/resources",
 
   //Views
-  "addons/documents/sidebarviews",
-  "addons/documents/queryoptionviews",
+  "addons/documents/views-sidebar",
+  "addons/documents/views-advancedopts",
   // Libs
   "addons/fauxton/resizeColumns",
   //plugins

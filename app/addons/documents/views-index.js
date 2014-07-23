@@ -20,7 +20,7 @@ define([
   "addons/databases/resources",
   "addons/pouchdb/base",
   //views
-  "addons/documents/queryoptionviews",
+  "addons/documents/views-advancedopts",
   // Libs
   "addons/fauxton/resizeColumns",
 

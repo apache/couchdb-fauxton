@@ -18,9 +18,9 @@ define([
   // Modules
   //views
   "addons/documents/views",
-  "addons/documents/changesviews",
-  "addons/documents/indexviews",
-  "addons/documents/doceditorviews",
+  "addons/documents/views-changes",
+  "addons/documents/views-index",
+  "addons/documents/views-doceditor",
 
   "addons/databases/base",
   "addons/documents/resources"
