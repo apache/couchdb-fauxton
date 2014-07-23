@@ -11,17 +11,22 @@
 // the License.
 
 define([
-       "app",
+  "app",
 
-       "api",
+  "api",
 
-       // Modules
-       "addons/documents/views",
-       "addons/databases/base",
-       "addons/documents/resources"
+  // Modules
+  //views
+  "addons/documents/views",
+  "addons/documents/changesviews",
+  "addons/documents/indexviews",
+  "addons/documents/doceditorviews",
+
+  "addons/databases/base",
+  "addons/documents/resources"
 ],
 
-function(app, FauxtonAPI, Documents, Databases, Resources) {
+function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resources) {
 
   var DocEditorRouteObject = FauxtonAPI.RouteObject.extend({
     layout: "one_pane",
@@ -58,7 +63,7 @@ function(app, FauxtonAPI, Documents, Databases, Resources) {
 
     code_editor: function (database, doc) {
 
-      this.docView = this.setView("#dashboard-content", new Documents.Views.CodeEditor({
+      this.docView = this.setView("#dashboard-content", new DocEditor.CodeEditor({
         model: this.doc,
         database: this.database
       }));
@@ -299,7 +304,7 @@ function(app, FauxtonAPI, Documents, Databases, Resources) {
         }
       });
 
-      this.viewEditor = this.setView("#dashboard-upper-content", new Documents.Views.ViewEditor({
+      this.viewEditor = this.setView("#dashboard-upper-content", new Index.ViewEditor({
         model: this.data.database,
         ddocs: this.data.designDocs,
         viewName: view,
@@ -359,7 +364,7 @@ function(app, FauxtonAPI, Documents, Databases, Resources) {
       this.toolsView && this.toolsView.remove();
       this.documentsView && this.documentsView.remove();
 
-      this.viewEditor = this.setView("#dashboard-upper-content", new Documents.Views.ViewEditor({
+      this.viewEditor = this.setView("#dashboard-upper-content", new Index.ViewEditor({
         currentddoc: "_design/"+designDoc || "",
         ddocs: this.data.designDocs,
         params: params,
@@ -499,7 +504,7 @@ function(app, FauxtonAPI, Documents, Databases, Resources) {
       var docParams = app.getParams();
       this.data.database.buildChanges(docParams);
 
-      this.documentsView = this.setView("#dashboard-lower-content", new Documents.Views.Changes({
+      this.documentsView = this.setView("#dashboard-lower-content", new Changes.Changes({
         model: this.data.database
       }));
 
