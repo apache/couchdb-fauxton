@@ -419,9 +419,11 @@ function(app, FauxtonAPI, ace, spin) {
       this.setHeightToLineCount();
 
       this.editor.setTheme("ace/theme/" + this.theme);
+
       if (this.mode != "plain") {
         this.editor.getSession().setMode("ace/mode/" + this.mode);
       }
+      
       this.editor.setShowPrintMargin(false);
       this.addCommands();
 
@@ -576,6 +578,31 @@ function(app, FauxtonAPI, ace, spin) {
     }
 
   });
+
+
+  //Menu Drop down component. It takes links in this format and renders the Dropdown:
+  // [{
+  //  title: 'Section Title (optional)',
+  //  links: [{
+  //    icon: 'icon-class (optional)',
+  //    url: 'clickalble-url',
+  //    title: 'name of link'
+  //  }]
+  // }]
+  Components.MenuDropDown = FauxtonAPI.View.extend({
+    template: "addons/fauxton/templates/menu_dropdown",
+    className: "dropdown",
+    initialize: function(options){
+      this.links = options.links;
+    },
+    serialize: function(){
+      var sidebarItem = FauxtonAPI.getExtensions('sidebar:links');
+      return {
+        links: this.links
+      };
+    }
+  });
+
 
   //need to make this into a backbone view...
   var routeObjectSpinner;

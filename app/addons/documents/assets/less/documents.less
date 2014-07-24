@@ -10,6 +10,14 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 /*ALL DOCS TABLE*/
+
+@import "../../../../../assets/less/variables.less";
+@import "../../../../../assets/less/bootstrap/variables.less";
+@import "../../../../../assets/less/bootstrap/mixins.less";
+@import "advancedOptions.less";
+@import "changes.less";
+@import "sidenav.less";
+
 tr.all-docs-item {
   border: none;
   background: transparent;
@@ -20,7 +28,7 @@ tr.all-docs-item {
     }
 }
 button.beautify {
-	margin-top: 20px;
+  margin-top: 20px;
 }
 
 .toggle-btns {
@@ -80,33 +88,6 @@ button.beautify {
     }
 }
 
-/** used in changes.html **/
-.change-box {
-  margin: 0 20px 20px 20px;
-}
-
-.change-wrapper {
-  margin-top: 57px;
-  border-bottom: 1px solid #dddddd;
-  &:last-child {
-    border-bottom: none;
-  }
-  .row-fluid {
-    padding: 4px 0 4px 0;
-  }
-  .row-fluid:first {
-    padding: 0px 0 4px 0;
-  }
-  a:hover.js-copy {
-    text-decoration: none;
-  }
-  .js-json-container {
-    display: none;
-  }
-  .span2 {
-    font-weight: bold;
-  }
-}
 
 #map-function, #reduce-function{
     width: 100%;
@@ -117,39 +98,6 @@ button.beautify {
     width: 1316px;
     height: 688px;
     font-size: 16px;
-}
-
-#keys-input {
-  width: 100%;
-}
-
-#keys-error {
-  display: inline-block;
-}
-
-
-.change-sequence {
-  word-wrap: break-word;
-}
-
-#dashboard-upper-content{
-  .js-query-keys-wrapper{
-    padding-top: 0;
-  }
-  /** used in advanced-options.html**/
-  .custom-inputs {
-    .row-fluid{
-      padding-top: 20px;
-      .radio, .checkbox{
-        padding-left: 0;
-      }
-      .checkbox.inline,
-      #skipRows {
-        margin-bottom: 0;
-        padding: 6px;
-      }
-    }
-  }
 }
 
 button.string-edit {
@@ -176,4 +124,47 @@ button.string-edit[disabled] {
   height: 500px;
   width: 100%;
 }
+
+#keys-input {
+  width: 100%;
+}
+
+#keys-error {
+  display: inline-block;
+}
+
+
+.change-sequence {
+  word-wrap: break-word;
+}
+
+
+#dashboard-upper-content{
+  .js-query-keys-wrapper{
+    padding-top: 0;
+  }
+  /** used in advanced-options.html**/
+  .custom-inputs {
+    .row-fluid{
+      padding-top: 20px;
+      .radio, .checkbox{
+        padding-left: 0;
+      }
+      .checkbox.inline,
+      #skipRows {
+        margin-bottom: 0;
+        padding: 6px;
+      }
+    }
+  }
+}
+
+.nav-list{
+  border-top: none;
+}
+
+
+
+
+
 

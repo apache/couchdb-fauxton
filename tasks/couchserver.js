@@ -46,7 +46,7 @@ module.exports = function (grunt) {
           filePath;
 
       if (setContentSecurityPolicy) {
-        var headerValue = "default-src 'self'; img-src 'self'; font-src 'self'; " +
+        var headerValue = "default-src 'self'; img-src 'self' data:; font-src 'self'; " +
                           "script-src 'self' 'unsafe-eval'; style-src 'self' 'unsafe-inline';";
         res.setHeader('Content-Security-Policy', headerValue);
       }
@@ -59,6 +59,8 @@ module.exports = function (grunt) {
         filePath = path.join('./',url);
       } else if (!!url.match(/mocha|\/test\/core\/|test\.config/)) {
         filePath = path.join('./test', url.replace('/test/',''));
+      } else if (!!url.match(/fonts/)) {
+        filePath = path.join(dist_dir,url.split('?v=')[0]);
       } else if (!!url.match(/\.css|img/)) {
         url = url.replace(/\?.*/, '');
         filePath = path.join(dist_dir,url);

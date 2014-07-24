@@ -11,16 +11,22 @@
 // the License.
 
 define([
-       "app",
+  "app",
 
-       "api",
+  "api",
 
-       // Modules
-       "addons/documents/views",
-       "addons/databases/base"
+  // Modules
+  //views
+  "addons/documents/views",
+  "addons/documents/views-changes",
+  "addons/documents/views-index",
+  "addons/documents/views-doceditor",
+
+  "addons/databases/base",
+  "addons/documents/resources"
 ],
 
-function(app, FauxtonAPI, Documents, Databases) {
+function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resources) {
 
   var DocEditorRouteObject = FauxtonAPI.RouteObject.extend({
     layout: "one_pane",
@@ -57,7 +63,7 @@ function(app, FauxtonAPI, Documents, Databases) {
 
     code_editor: function (database, doc) {
 
-      this.docView = this.setView("#dashboard-content", new Documents.Views.CodeEditor({
+      this.docView = this.setView("#dashboard-content", new DocEditor.CodeEditor({
         model: this.doc,
         database: this.database
       }));
@@ -131,7 +137,25 @@ function(app, FauxtonAPI, Documents, Databases) {
         route: "viewFn",
         roles: ['_admin']
       },
-      "database/:database/new_view": "newViewEditor"
+      "database/:database/_design/:ddoc/_lists/:fn": {
+        route: "tempFn",
+        roles: ['_admin']
+      },
+      "database/:database/_design/:ddoc/_filters/:fn": {
+        route: "tempFn",
+        roles: ['_admin']
+      },
+      "database/:database/_design/:ddoc/_show/:fn": {
+        route: "tempFn",
+        roles: ['_admin']
+      },
+      "database/:database/_design/:ddoc/metadata": {
+        route: "designDocMetadata",
+        roles: ['_admin']
+      },
+      "database/:database/new_view": "newViewEditor",
+      "database/:database/new_view/:designDoc": "newViewEditor",
+      "database/:database/_changes(:params)": "changes"
     },
 
     events: {
@@ -166,6 +190,37 @@ function(app, FauxtonAPI, Documents, Databases) {
         collection: this.data.designDocs,
         database: this.data.database
       }));
+    },
+    designDocMetadata:  function(database, ddoc){
+      this.toolsView && this.toolsView.remove();
+      this.viewEditor && this.viewEditor.remove();
+
+      var designDocInfo = new Resources.DdocInfo({_id: "_design/"+ddoc},{database: this.data.database });
+
+      this.setView("#dashboard-lower-content", new Documents.Views.DdocInfo({
+        ddocName: ddoc,
+        model: designDocInfo
+      }));
+
+      this.sidebar.setSelectedTab(app.utils.removeSpecialCharacters(ddoc)+"_metadata");
+
+      this.crumbs = function () {
+        return [
+          {"name": this.data.database.id, "link": Databases.databaseUrl(this.data.database)},
+        ];
+      };
+
+      this.apiUrl = [designDocInfo.url('apiurl'), designDocInfo.documentation() ];
+
+    },
+    tempFn:  function(databaseName, ddoc, fn){
+      this.setView("#dashboard-upper-content", new Documents.Views.temp({}));
+      this.crumbs = function () {
+        return [
+          {"name": this.data.database.id, "link": Databases.databaseUrl(this.data.database)},
+        ];
+      };
+
     },
 
     establish: function () {
@@ -205,16 +260,11 @@ function(app, FauxtonAPI, Documents, Databases) {
         this.sidebar.setSelectedTab('all-docs');
       }
 
-      if (this.viewEditor) { this.viewEditor.remove(); }
-
-      this.toolsView = this.setView("#dashboard-upper-menu", new Documents.Views.JumpToDoc({
-        database: this.data.database,
-        collection: this.data.database.allDocs
-      }));
+      this.viewEditor && this.viewEditor.remove();
 
       this.data.database.allDocs.paging.pageSize = this.getDocPerPageLimit(urlParams, parseInt(docParams.limit, 10));
 
-      this.setView("#dashboard-upper-content", new Documents.Views.AllDocsLayout({
+      this.viewEditor = this.setView("#dashboard-upper-content", new Documents.Views.AllDocsLayout({
         database: this.data.database,
         collection: this.data.database.allDocs,
         params: urlParams,
@@ -254,7 +304,7 @@ function(app, FauxtonAPI, Documents, Databases) {
         }
       });
 
-      this.viewEditor = this.setView("#dashboard-upper-content", new Documents.Views.ViewEditor({
+      this.viewEditor = this.setView("#dashboard-upper-content", new Index.ViewEditor({
         model: this.data.database,
         ddocs: this.data.designDocs,
         viewName: view,
@@ -264,7 +314,7 @@ function(app, FauxtonAPI, Documents, Databases) {
         ddocInfo: this.ddocInfo(decodeDdoc, this.data.designDocs, view)
       }));
 
-      if (this.toolsView) { this.toolsView.remove(); }
+      this.toolsView && this.toolsView.remove();
 
       this.documentsView = this.createViewDocumentsView({
         designDoc: decodeDdoc,
@@ -308,13 +358,14 @@ function(app, FauxtonAPI, Documents, Databases) {
       }));
     },
 
-    newViewEditor: function () {
+    newViewEditor: function (database, designDoc) {
       var params = app.getParams();
 
       this.toolsView && this.toolsView.remove();
       this.documentsView && this.documentsView.remove();
 
-      this.viewEditor = this.setView("#dashboard-upper-content", new Documents.Views.ViewEditor({
+      this.viewEditor = this.setView("#dashboard-upper-content", new Index.ViewEditor({
+        currentddoc: "_design/"+designDoc || "",
         ddocs: this.data.designDocs,
         params: params,
         database: this.data.database,
@@ -447,46 +498,36 @@ function(app, FauxtonAPI, Documents, Databases) {
       } else {
         return parseInt(urlParams.limit, 10);
       }
-    }
-
-  });
-
-  var ChangesRouteObject = FauxtonAPI.RouteObject.extend({
-    layout: "with_tabs",
-    selectedHeader: "Databases",
-    crumbs: function () {
-      return [
-        {"name": this.database.id, "link": Databases.databaseUrl(this.database)},
-        {"name": "_changes", "link": "/_changes"}
-      ];
-    },
-
-    routes: {
-      "database/:database/_changes(:params)": "changes"
-    },
-
-    initialize: function (route, masterLayout, options) {
-      this.databaseName = options[0];
-      this.database = new Databases.Model({id: this.databaseName});
-
-      var docParams = app.getParams();
-
-      this.database.buildChanges(docParams);
     },
 
     changes: function (event) {
-      this.setView("#dashboard-content", new Documents.Views.Changes({
-        model: this.database
-      }));
-    },
+      var docParams = app.getParams();
+      this.data.database.buildChanges(docParams);
 
-    apiUrl: function() {
-      return [this.database.url("apiurl"), this.database.documentation()];
+      this.documentsView = this.setView("#dashboard-lower-content", new Changes.Changes({
+        model: this.data.database
+      }));
+
+      this.toolsView && this.toolsView.remove();
+      this.viewEditor && this.viewEditor.remove();
+
+      this.sidebar.setSelectedTab('changes');
+
+      this.crumbs = function () {
+        return [
+          {"name": this.data.database.id, "link": Databases.databaseUrl(this.data.database)},
+          {"name": "_changes", "link": "/_changes"}
+        ];
+      };
+
+      this.apiUrl = function() {
+        return [this.data.database.url("apiurl"), this.data.database.documentation()];
+      };
     }
 
   });
 
-  Documents.RouteObjects = [DocEditorRouteObject, NewDocEditorRouteObject, DocumentsRouteObject, ChangesRouteObject];
+  Documents.RouteObjects = [DocEditorRouteObject, NewDocEditorRouteObject, DocumentsRouteObject];
 
   return Documents;
 });
