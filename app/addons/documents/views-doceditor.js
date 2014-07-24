@@ -252,8 +252,9 @@ function(app, FauxtonAPI, Components, Documents, Databases,
       var editMatch = this.determineStringEditMatch(event);
       if (editMatch) {
         this.$("button.string-edit").removeAttr("disabled");
-	/* remove the following line (along with CSS) to go back to the toolbar */
-        this.$("button.string-edit").css("top", (this.$("#editor-container")[0].offsetTop - 2 + this.editor.getRowHeight() * this.editor.documentToScreenRow(this.editor.getSelectionStart().row)) + "px");
+	/* remove the following line (along with CSS) to go back to the toolbar: take the offset top of the editor, go down as many lines as we are positioned including fold and adjust by two pixels as the button is slightly larger than a line */
+	var positionFromTop = (this.$("#editor-container").offset().top - 2 + this.editor.getRowHeight() * this.editor.documentToScreenRow(this.editor.getSelectionStart().row));
+        this.$("button.string-edit").css("top", positionFromTop + "px");
         return true;
       }
       return false;
