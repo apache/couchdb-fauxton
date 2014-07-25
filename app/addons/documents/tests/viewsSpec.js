@@ -17,7 +17,7 @@ define([
 
   describe('DocumentsViews', function () {
     it('should load', function () {
-      assert.equal(typeof Views.Views.Changes, 'function');
+      assert.equal(typeof Views.Views.AllDocsList, 'function');
     });
   });
 });
