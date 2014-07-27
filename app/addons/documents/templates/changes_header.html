@@ -12,17 +12,20 @@ License for the specific language governing permissions and limitations under
 the License.
 -->
 
-<form class="form-inline js-filter-form">
-  <fieldset>
-    <input type="text" name="filter" placeholder="Type a filter">
-    <button type="submit" class="btn btn-primary">Filter</button>
-    <div class="help-block">
-      <strong> Eg. debug or <1.4.1> or any regex </strong>
-      <% if (tooltipText) { %>
-        <i class="js-filter-tooltip icon icon-question-sign" data-toggle="tooltip"
-          title="" data-original-title="<%- tooltipText %>"></i>
-      <% } %>
+<div class="dashboard-upper-menu">
+  <ul class="nav nav-tabs window-resizeable" id="db-views-tabs-nav">
+    <li>
+      <a class="js-toggle-filter" href="#filter" data-bypass="true" data-toggle="tab">
+        <i class="fonticon fonticon-plus"></i>Filter
+      </a>
+    </li>
+  </ul>
+</div>
+
+<div class="tab-content">
+  <div class="tab-pane" id="query">
+    <div class="changes-header">
+      <div class="pull-right js-filter"></div>
     </div>
-  </fieldset>
-</form>
-<ul class="filter-list"></ul>
+  </div>
+</div>

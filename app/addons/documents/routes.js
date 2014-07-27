@@ -23,10 +23,11 @@ define([
   "addons/documents/views-doceditor",
 
   "addons/databases/base",
-  "addons/documents/resources"
+  "addons/documents/resources",
+  "addons/fauxton/components"
 ],
 
-function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resources) {
+function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resources, Components) {
 
   var DocEditorRouteObject = FauxtonAPI.RouteObject.extend({
     layout: "one_pane",
@@ -163,7 +164,9 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
       "route:updatePreviewDocs": "updateAllDocsFromPreview",
       "route:reloadDesignDocs": "reloadDesignDocs",
       "route:paginate": "paginate",
-      "route:perPageChange": "perPageChange"
+      "route:perPageChange": "perPageChange",
+      "route:changesFilterAdd": "addFilter",
+      "route:changesFilterRemove": "removeFilter"
     },
 
     initialize: function (route, masterLayout, options) {
@@ -504,8 +507,15 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
       var docParams = app.getParams();
       this.data.database.buildChanges(docParams);
 
-      this.documentsView = this.setView("#dashboard-lower-content", new Changes.Changes({
+      this.changesView = this.setView("#dashboard-lower-content", new Changes.Changes({
         model: this.data.database
+      }));
+
+      this.filterView = new Components.FilterView({
+        eventNamespace: "changes"
+      });
+      this.headerView = this.setView("#dashboard-upper-content", new Changes.ChangesHeader({
+        filterView: this.filterView
       }));
 
       this.toolsView && this.toolsView.remove();
@@ -523,7 +533,17 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
       this.apiUrl = function() {
         return [this.data.database.url("apiurl"), this.data.database.documentation()];
       };
-    }
+    },
+
+    addFilter: function (filter) {
+      this.changesView.filters.push(filter);
+      this.changesView.render();
+    },
+
+    removeFilter: function (filter) {
+      this.changesView.filters.splice(this.changesView.filters.indexOf(filter), 1);
+      this.changesView.render();
+    },
 
   });
 

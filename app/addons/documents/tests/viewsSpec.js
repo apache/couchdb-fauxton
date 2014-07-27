@@ -11,8 +11,9 @@
 // the License.
 define([
         'addons/documents/views',
+        'addons/databases/base',
         'testUtils'
-], function (Views, testUtils) {
+], function (Views, Databases, testUtils) {
   var assert = testUtils.assert;
 
   describe('DocumentsViews', function () {
