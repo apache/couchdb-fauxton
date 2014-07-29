@@ -14,16 +14,36 @@ define([
         'addons/databases/base',
         'testUtils'
 ], function (Views, Databases, testUtils) {
-  var assert = testUtils.assert;
+  var assert = testUtils.assert,
+      ViewSandbox = testUtils.ViewSandbox,
+      viewSandbox;
 
   describe('Documents Changes', function () {
-    var filteredView;
+    var model = new Databases.Model({id: 'foo'}),
+        filteredView,
+        view,
+        handlerSpy;
+
+    model.buildChanges();
+
+    handlerSpy = sinon.spy(Views.Changes.prototype, 'toggleJson');
+
     beforeEach(function () {
       var database = new Databases.Model({id: 'bla'});
       database.buildChanges({descending: 'true', limit: '100', include_docs: 'true'} );
       filteredView = new Views.Changes({
         model: database
       });
+
+      view = new Views.Changes({
+        model: model
+      });
+      viewSandbox = new ViewSandbox();
+      viewSandbox.renderView(view);
+    });
+
+    afterEach(function () {
+      viewSandbox.remove();
     });
 
     it('filter false in case of deleted documents in the changes feed', function () {
@@ -35,6 +55,25 @@ define([
       ]);
 
       assert.equal(res.length, 2);
+    });
+
+    it('the toggle-json button calls a handler', function () {
+      view.$('.js-toggle-json').trigger('click');
+      assert.ok(handlerSpy.calledOnce);
+    });
+
+    it('rerenders on the sync event', function () {
+      var spy = sinon.spy(view, 'afterRender');
+      model.changes.trigger('sync');
+      view.afterRender.restore();
+      assert.ok(spy.calledOnce);
+    });
+
+    it('rerenders on the cachesync event', function () {
+      var spy = sinon.spy(view, 'afterRender');
+      model.changes.trigger('cachesync');
+      assert.ok(spy.calledOnce);
+      view.afterRender.restore();
     });
   });
 });
