@@ -27,7 +27,7 @@
     margin: 0;
     .query-group {
       padding: 20px;
-      border-bottom: 1px solid #ccc;
+      border-bottom: 1px solid #555;
     }
     .query-group:last-child {
       border-bottom: none;
@@ -44,6 +44,38 @@
     .dropdown.inline {
       display: inline-block;
     }
+    input[type="text"],
+    textarea {
+      .border-radius(5px);
+      background-color: #666;
+      padding: 8px;
+      border: none;
+      color: #eee;
+    }
+    .btn-success {
+      .border-radius(5px);
+    }
+  }
+  .toggle-btns {
+    .btn {
+      padding: 5px 5px 3px;
+      background: #727A82;
+      color: #fff;
+      font-size: 12px;
+      border: none;
+    }
+    .btn.active {
+      background: #fff;
+      color: #E33F3B;
+      box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.25) inset, 2px 2px 2px rgba(0, 0, 0, 0.15);
+    }
+    label:first-child {
+      .border-radius(5px 0 0 5px);
+    }
+    label:last-child {
+      .border-radius(0 5px 5px 0);
+      margin-left: 1px;
+    }
   }
 }
 #query:before {
@@ -56,4 +88,7 @@
   border-width: 15px;
   width: 0;
   height: 0;
+}
+#button-options {
+  margin-top: 20px;
 }
