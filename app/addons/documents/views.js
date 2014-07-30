@@ -50,12 +50,16 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
     selectAllDocs: function(){
       //trigger event to select all in other view
     },
-    afterRender:function(){
+    beforeRender:function(){
       //insert DB search dropdown
 
       //insert top create level dropdown with gear icon
 
       //search docs
+      this.setView("#header-search", new Views.JumpToDoc({
+        database: this.database,
+        collection: this.database.allDocs
+      }));
 
       //insert queryoptions
 
@@ -293,11 +297,11 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
 
     toggleQuery: function (event) {
       $('#dashboard-content').scrollTop(0);
-      this.$('#query').toggle('slow');
+      this.$('#query').toggle();
     },
 
     beforeRender: function () {
-      this.advancedOptions = this.insertView('#query', new QueryOptions.AdvancedOptions({
+      this.advancedOptions = this.insertView('#toggle-query', new QueryOptions.AdvancedOptions({
         updateViewFn: this.updateAllDocs,
         previewFn: this.previewView,
         hasReduce: false,
@@ -308,7 +312,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
       this.toolsView = this.setView(".js-search", new Views.JumpToDoc({
         database: this.database,
         collection: this.database.allDocs
-      }));
+      })); 
     },
 
     afterRender: function () {
