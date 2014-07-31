@@ -247,7 +247,7 @@ function(app, FauxtonAPI, Components, Documents, Changes, DocEditor, Databases, 
 
       this.data.database.allDocs.paging.pageSize = this.getDocPerPageLimit(urlParams, parseInt(docParams.limit, 10));
 
-      this.viewEditor = this.setView("#dashboard-upper-content", new Documents.Views.AllDocsLayout({
+      this.viewEditor = this.setView("#dashboard-upper-content", new Documents.Views.AllDocsHeader({
         database: this.data.database,
         collection: this.data.database.allDocs,
         params: urlParams,

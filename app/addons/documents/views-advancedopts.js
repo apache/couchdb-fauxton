@@ -39,10 +39,11 @@ function(app, FauxtonAPI, resizeColumns ) {
       "change form.js-view-query-update input": "updateFilters",
       "change form.js-view-query-update select": "updateFilters",
       "submit form.js-view-query-update": "updateView",
-      "click .toggle-btns > label":  "toggleQuery"
+      "click .toggle-btns > label":  "toggleQueryKeys",
+      "click #toggle-query": "toggleQuery"
     },
 
-    toggleQuery: function(e){
+    toggleQueryKeys: function(e){
       e.preventDefault();
 
       if (this.$(e.currentTarget).hasClass("active")){
@@ -59,6 +60,12 @@ function(app, FauxtonAPI, resizeColumns ) {
         //show section & disable what needs to be disabled
         this[showFunctionName]();
       }
+    },
+
+    toggleQuery: function (event) {
+      console.log('togglequery');
+      $('#dashboard-content').scrollTop(0);
+      this.$('#query-options').toggle();
     },
 
     showKeys: function(){
@@ -82,6 +89,7 @@ function(app, FauxtonAPI, resizeColumns ) {
           view.update(this.database, this.ddocName, this.viewName);
         }, this);
       }
+
     },
 
     renderOnUpdatehasReduce: function (hasReduce) {
