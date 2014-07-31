@@ -1,3 +1,4 @@
+
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License. You may obtain a copy of
 // the License at
@@ -45,10 +46,17 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
       'select .selectAllDocs': 'selectAllDocs'
     },
     initialize: function(options){
-
+      //adding the database to the object
+      this.database = options.database;
     },
     selectAllDocs: function(){
       //trigger event to select all in other view
+    },
+    serialize: function() {
+      //basically if you want something in a template, You can define it here
+      return {
+        database: this.database.get('id')
+      };
     },
     beforeRender:function(){
       //insert DB search dropdown
@@ -62,7 +70,75 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
       }));
 
       //insert queryoptions
+      //that file is included in require() above and the argument is QueryOptions
+      // and it wants all these params:
+      /* Sooooo I searched this file for where Advanced options was originally inserted to see what the hell
+         is happening.  and it's in AllDocsLayout.  So I'm going to move some of those functions over here
 
+        These are required:
+        this.database = options.database;
+        this.updateViewFn = options.updateViewFn;
+        this.previewFn = options.previewFn;
+
+        these are booleans:
+        this.showStale = _.isUndefined(options.showStale) ? false : options.showStale;
+        this.hasReduce = _.isUndefined(options.hasReduce) ? true : options.hasReduce;
+
+        these you only need for view indexes, not all docs because they are about
+        specific views and design docs (ddocs, also views live inside a ddoc):
+        this.viewName = options.viewName;
+        this.ddocName = options.ddocName;
+      */
+      this.setView("#query-options", new QueryOptions.AdvancedOptions({
+        updateViewFn: this.updateAllDocs,
+        previewFn: this.previewView,
+        database: this.database,
+        hasReduce: false,
+        showPreview: false,
+      }));
+
+    },
+    //moved from alldocs layout
+    updateAllDocs: function (event, paramInfo) {
+      event.preventDefault();
+
+      var errorParams = paramInfo.errorParams,
+          params = paramInfo.params;
+
+      if (_.any(errorParams)) {
+        _.map(errorParams, function(param) {
+
+          // TODO: Where to add this error?
+          // bootstrap wants the error on a control-group div, but we're not using that
+          //$('form.view-query-update input[name='+param+'], form.view-query-update select[name='+param+']').addClass('error');
+          return FauxtonAPI.addNotification({
+            msg: "JSON Parse Error on field: "+param.name,
+            type: "error",
+            selector: ".advanced-options .errors-container",
+            clear:  true
+          });
+        });
+        FauxtonAPI.addNotification({
+          msg: "Make sure that strings are properly quoted and any other values are valid JSON structures",
+          type: "warning",
+          selector: ".advanced-options .errors-container",
+          clear:  true
+        });
+
+        return false;
+      }
+
+      var fragment = window.location.hash.replace(/\?.*$/, '');
+
+      if (!_.isEmpty(params)) {
+        fragment = fragment + '?' + $.param(params);
+      }
+
+      FauxtonAPI.navigate(fragment, {trigger: false});
+      FauxtonAPI.triggerRouteEvent('updateAllDocs', {allDocs: true});
+    },
+    previewView: function (event) {
+      event.preventDefault();
     }
   });
 
@@ -297,7 +373,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
 
     toggleQuery: function (event) {
       $('#dashboard-content').scrollTop(0);
-      this.$('#query').toggle();
+      this.$('#query-options').toggle();
     },
 
     beforeRender: function () {
@@ -312,56 +388,13 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
       this.toolsView = this.setView(".js-search", new Views.JumpToDoc({
         database: this.database,
         collection: this.database.allDocs
-      })); 
+      }));
     },
 
     afterRender: function () {
       if (this.params) {
         this.advancedOptions.updateFromParams(this.params);
       }
-    },
-
-    updateAllDocs: function (event, paramInfo) {
-      event.preventDefault();
-
-      var errorParams = paramInfo.errorParams,
-          params = paramInfo.params;
-
-      if (_.any(errorParams)) {
-        _.map(errorParams, function(param) {
-
-          // TODO: Where to add this error?
-          // bootstrap wants the error on a control-group div, but we're not using that
-          //$('form.view-query-update input[name='+param+'], form.view-query-update select[name='+param+']').addClass('error');
-          return FauxtonAPI.addNotification({
-            msg: "JSON Parse Error on field: "+param.name,
-            type: "error",
-            selector: ".advanced-options .errors-container",
-            clear:  true
-          });
-        });
-        FauxtonAPI.addNotification({
-          msg: "Make sure that strings are properly quoted and any other values are valid JSON structures",
-          type: "warning",
-          selector: ".advanced-options .errors-container",
-          clear:  true
-        });
-
-        return false;
-      }
-
-      var fragment = window.location.hash.replace(/\?.*$/, '');
-
-      if (!_.isEmpty(params)) {
-        fragment = fragment + '?' + $.param(params);
-      }
-
-      FauxtonAPI.navigate(fragment, {trigger: false});
-      FauxtonAPI.triggerRouteEvent('updateAllDocs', {allDocs: true});
-    },
-
-    previewView: function (event) {
-      event.preventDefault();
     }
 
   });
@@ -435,7 +468,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
           rev = this.collection.get(docId).get('_rev'),
           data = {_id: docId, _rev: rev, _deleted: true};
 
-      if (!$row.hasClass('js-to-delete')) {
+      if (!$row.hasClass('js-to-delete')) {
         this.bulkDeleteDocsCollection.add(data);
       } else {
         this.bulkDeleteDocsCollection.remove(this.bulkDeleteDocsCollection.get(docId));
