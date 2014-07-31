@@ -68,17 +68,17 @@ function(app, FauxtonAPI, Components, Documents, Databases) {
       );
 
       var database = this.collection.database,
-          newurl = "#" + database.url('app') + '/new';
+          newurlPrefix = "#" + database.url('app');
 
       var newLinks = [{
         title: 'Add new',
         links: [{
           title: 'New Doc',
-          url: newurl,
+          url: newurlPrefix + '/new',
           icon: 'fonticon-plus-circled'
         },{
           title: 'New Design Doc',
-          url: newurl,
+          url: newurlPrefix + '/new_view',
           icon: 'fonticon-plus-circled'
         }]
       }];
