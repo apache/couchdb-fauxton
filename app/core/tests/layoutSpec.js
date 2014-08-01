@@ -27,24 +27,20 @@ define([
       it("Should set template without prefix", function () {
         layout.setTemplate('myTemplate');
 
-        assert.equal(layout.layout.template, 'templates/layouts/myTemplate');
+        assert.equal(layout.template, 'templates/layouts/myTemplate');
 
       });
 
       it("Should set template with prefix", function () {
         layout.setTemplate({name: 'myTemplate', prefix: 'myPrefix/'});
 
-        assert.equal(layout.layout.template, 'myPrefix/myTemplate');
+        assert.equal(layout.template, 'myPrefix/myTemplate');
       });
 
       it("Should remove old views", function () {
-        var view = {
-          remove: function () {}
-        };
+        var view = new FauxtonAPI.Layout();
 
-        layout.layoutViews = {
-          'selector': view
-        };
+        layout.setView('selector', view);
 
         var mockRemove = sinon.spy(view, 'remove');
         layout.setTemplate('myTemplate');
@@ -62,31 +58,5 @@ define([
       });
 
     });
-
-    describe('#renderView', function () {
-
-      it('Should render existing view', function () {
-        var view = new Backbone.View();
-        var mockRender = sinon.spy(view, 'render');
-        layout.layoutViews = {
-          '#selector': view
-        };
-
-        var out = layout.renderView('#selector');
-
-        assert.ok(mockRender.calledOnce);
-      });
-
-      it('Should return false for non-existing view', function () {
-        var view = new Backbone.View();
-        layout.layoutViews = {
-          'selector': view
-        };
-
-        var out = layout.renderView('wrongSelector');
-        assert.notOk(out, 'No view found');
-      });
-    });
-
   });
 });
