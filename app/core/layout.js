@@ -10,82 +10,31 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-define([
-  "backbone", 
-  "plugins/backbone.layoutmanager"
-], function(Backbone) {
+define(function(require, exports, module) {
+  var Backbone = require("backbone");
+  var LayoutManager = require("plugins/backbone.layoutmanager");
 
-  // A wrapper of the main Backbone.layoutmanager
-  // Allows the main layout of the page to be changed by any plugin.
-  var Layout = function () {
-    this.layout = new Backbone.Layout({
-      template: "templates/layouts/with_sidebar",
-    });
+  var Layout = Backbone.Layout.extend({
+    template: "templates/layouts/with_sidebar",
 
-    this.layoutViews = {};
-    this.el = this.layout.el;
-  };
-
-  Layout.configure = function (options) {
-    Backbone.Layout.configure(options);
-  };
-
-  // creatings the dashboard object same way backbone does
-  _.extend(Layout.prototype, {
-    render: function () {
-      return this.layout.render();
-    },
+    // Either tests or source are expecting synchronous renders, so disable
+    // asynchronous rendering improvements.
+    useRAF: false,
 
     setTemplate: function(template) {
       if (template.prefix){
-        this.layout.template = template.prefix + template.name;
+        this.template = template.prefix + template.name;
       } else{
-        this.layout.template = "templates/layouts/" + template;
+        this.template = "templates/layouts/" + template;
       }
+
       // If we're changing layouts all bets are off, so kill off all the
       // existing views in the layout.
-      _.each(this.layoutViews, function(view){view.remove();});
-      this.layoutViews = {};
+      this.removeView();
       this.render();
-    },
-
-    setView: function(selector, view, keep) {
-      this.layout.setView(selector, view, false);
-
-      if (!keep) {
-        this.layoutViews[selector] = view;
-      }
-
-      return view;
-    },
-
-    renderView: function(selector) {
-      var view = this.layoutViews[selector];
-      if (!view) {
-        return false;
-      } else {
-        return view.render();
-      }
-    },
-
-    removeView: function (selector) {
-      var view = this.layout.getView(selector);
-
-      if (!view) {
-        return false;
-      }
-
-      view.remove();
-      
-      if (this.layoutViews[selector]) {
-        delete this.layoutViews[selector];
-      }
-
-      return true;
     }
-
   });
 
-  return Layout;
+  module.exports = Layout;
 
 });
