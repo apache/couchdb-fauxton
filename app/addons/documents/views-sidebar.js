@@ -137,16 +137,22 @@ function(app, FauxtonAPI, Components, Documents, Databases) {
     toggleArrow:  function(e){
       this.$(e.currentTarget).toggleClass("down");
     },
-    buildIndexList: function(collection, selector, ddocType){
+    buildIndexList: function(collection, indexType){
       var design = this.model.id.replace(/^_design\//,"");
+      var selector = indexType.selector;
+      var ddocType = indexType.ddocType;
+      var icon = indexType.icon;
 
-      this.insertView(".accordion-body", new Views.IndexItem({
-        selector: selector,
-        ddoc: design,
-        collection: collection[selector],
-        ddocType: ddocType,
-        database: this.model.collection.database.id
-      }));
+      if (collection[selector]){
+        this.insertView(".accordion-body", new Views.IndexItem({
+          selector: selector,
+          ddoc: design,
+          collection: collection[selector],
+          ddocType: ddocType,
+          database: this.model.collection.database.id,
+          icon: icon
+        }));
+      }
     },
 
     serialize: function(){
@@ -162,23 +168,19 @@ function(app, FauxtonAPI, Components, Documents, Databases) {
 
     getSidebarLinks: function () {
       var ddocName = this.model.id.replace(/^_design\//,""),
-          docSafe = app.utils.safeURLName(ddocName), 
+          docSafe = app.utils.safeURLName(ddocName),
           database = this.collection.database;
 
       return _.reduce(FauxtonAPI.getExtensions('sidebar:links'), function (menuLinks, link) {
 
         menuLinks.push({
           title: link.title,
-          url: "#" + database.url('app') + "/" + link.url + "/" + docSafe,
+          url: "#" + database.url('app') + "/_design/" + docSafe + "/" + link.url,
           icon: 'fonticon-plus-circled'
         });
 
-        return menuLinks; 
-     }, [{
-      title: 'Secondary View',
-      url: "#" + database.url('app') + "/new_view/" + docSafe,
-      icon: 'fonticon-plus-circled'
-     }]);
+        return menuLinks;
+     }, []);
 
     },
 
@@ -188,9 +190,9 @@ function(app, FauxtonAPI, Components, Documents, Databases) {
 
       if (!ddocDocs){ return; }
 
-      this.buildIndexList(ddocDocs, "views", "view");
-      _.each(sidebarListTypes, function (type) {
-        this.buildIndexList(ddocDocs, type);
+      //this.buildIndexList(ddocDocs, "views", "view");
+      _.each(sidebarListTypes, function (listType) {
+        this.buildIndexList(ddocDocs, listType);
       },this);
 
     },
@@ -210,6 +212,7 @@ function(app, FauxtonAPI, Components, Documents, Databases) {
     }
   });
 
+  //Sidebar Index Item
   Views.IndexItem = FauxtonAPI.View.extend({
     template: "addons/documents/templates/index_menu_item",
     tagName: 'li',
@@ -221,16 +224,13 @@ function(app, FauxtonAPI, Components, Documents, Databases) {
       this.selected = !! options.selected;
       this.selector = options.selector;
       this.ddocType = options.ddocType || this.selector;
-      this.icons = {
-        "view": "fonticon-sidenav-map-reduce",
-        "indexes": "fonticon-sidenav-search"
-      };
+      this.icon = options.icon;
 
     },
 
     serialize: function() {
       return {
-        icon: this.icons[this.ddocType],
+        icon: this.icon,
         ddocType:  this.ddocType,
         index: this.index,
         ddoc: this.ddoc,
@@ -239,7 +239,6 @@ function(app, FauxtonAPI, Components, Documents, Databases) {
         collection: this.collection
       };
     },
-
     afterRender: function() {
       if (this.selected) {
         $(".sidenav ul.nav-list li").removeClass("active");
@@ -247,6 +246,8 @@ function(app, FauxtonAPI, Components, Documents, Databases) {
       }
     }
   });
+
+
 
   return Views;
 });

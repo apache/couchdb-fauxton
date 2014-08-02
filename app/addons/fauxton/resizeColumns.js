@@ -32,13 +32,21 @@ function(FauxtonAPI) {
       var primaryNavWidth  = $('body').hasClass('closeMenu') ? 64 : 220;
       return primaryNavWidth;
     },
-    getPanelWidth: function(){
+    getSinglePanelWidth: function(){
       var sidebarWidth = $('#sidebar-content').length > 0 ? $('#sidebar-content').outerWidth() : 0,
           borders = parseInt($('#dashboard').css('border-left-width'), 10) +
                     parseInt($('#dashboard-content').css('border-left-width'), 10) +
                     parseInt($('#dashboard-content').css('border-right-width'), 10);
 
       return (this.getPrimaryNavWidth() + sidebarWidth + borders);
+    },
+    getTwoPanelWidth: function(){
+      var borders = parseInt($('#dashboard').css('border-left-width'), 10) +
+          parseInt($('#right-content').css('border-left-width'), 10) +
+          parseInt($('#left-content').css('border-right-width'), 10)+
+          parseInt($('#left-content').css('border-left-width'), 10) +
+          parseInt($('#right-content').css('border-right-width'), 10);
+      return (this.getPrimaryNavWidth()+ borders);
     },
     initialize: function(){
      // $(window).off('resize');
@@ -59,23 +67,49 @@ function(FauxtonAPI) {
     cleanupCallback: function(){
       this.callback = null;
     },
+    singlePanelResize: function(){
+      var combinedWidth = window.innerWidth - this.getSinglePanelWidth(),
+      smallWidthConstraint = ($('#sidebar-content').length > 0)? 470:800,
+      panelWidth;
+
+      if (combinedWidth > smallWidthConstraint) {
+        panelWidth = combinedWidth;
+      } else if (combinedWidth < smallWidthConstraint){
+        panelWidth = smallWidthConstraint;
+      }
+      return panelWidth;
+    },
+
+    getPanelWidth: function(){
+      var panelWidth;
+      if ($('#dashboard').hasClass('two-pane')){
+        panelWidth = (window.innerWidth - this.getTwoPanelWidth())/2;
+      } else {
+        panelWidth = this.singlePanelResize();
+      }
+      return panelWidth;
+    },
+
+    setPosition: function(panelWidth){
+      var primary = this.getPrimaryNavWidth();
+      $('#right-content').css('left',panelWidth+primary);
+    },
+
     onResizeHandler: function (){
       //if there is an override, do that instead
       if (this.options.onResizeHandler){
         this.options.onResizeHandler();
       } else {
-        var combinedWidth = window.innerWidth - this.getPanelWidth(),
-        smallWidthConstraint = ($('#sidebar-content').length > 0)? 470:800,
-        panelWidth;
+        /*
+          Just so we all are aware:
+          This entire file and the html of the layouts is bonkers
+          crazy. I hate what horrible things happened in this file.
+          It will change soon with a layout overhaul.
+        */
 
-        if (combinedWidth > smallWidthConstraint) {
-          panelWidth = window.innerWidth - this.getPanelWidth();
-        } else if (combinedWidth < smallWidthConstraint){
-          panelWidth = smallWidthConstraint;
-        }
-
+        var panelWidth = this.getPanelWidth();
+        this.setPosition(panelWidth);
         $('.window-resizeable').innerWidth(panelWidth);
-
       }
       //if there is a callback, run that
       if(this.options.callback) {

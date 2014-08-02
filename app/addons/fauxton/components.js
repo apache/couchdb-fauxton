@@ -453,7 +453,7 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
       if (this.mode != "plain") {
         this.editor.getSession().setMode("ace/mode/" + this.mode);
       }
-      
+
       this.editor.setShowPrintMargin(false);
       this.addCommands();
 
@@ -624,11 +624,12 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
     className: "dropdown",
     initialize: function(options){
       this.links = options.links;
+      this.icon = options.icon || "fonticon-plus-circled2";
     },
     serialize: function(){
-      var sidebarItem = FauxtonAPI.getExtensions('sidebar:links');
       return {
-        links: this.links
+        links: this.links,
+        icon: this.icon
       };
     }
   });
@@ -656,7 +657,7 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
   //need to make this into a backbone view...
   var routeObjectSpinner;
   FauxtonAPI.RouteObject.on('beforeEstablish', function (routeObject) {
-    if (!routeObject.disableLoader){ 
+    if (!routeObject.disableLoader){
       var opts = {
         lines: 16, // The number of lines to draw
         length: 8, // The length of each line
@@ -702,7 +703,7 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
   FauxtonAPI.RouteObject.on('beforeRender', function (routeObject, view, selector) {
     removeRouteObjectSpinner();
 
-    if (!view.disableLoader){ 
+    if (!view.disableLoader){
       var opts = {
         lines: 16, // The number of lines to draw
         length: 8, // The length of each line

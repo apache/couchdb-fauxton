@@ -14,12 +14,11 @@ define([
   "app",
 
   "api",
-
+ "addons/fauxton/components",
   // Modules
   //views
   "addons/documents/views",
   "addons/documents/views-changes",
-  "addons/documents/views-index",
   "addons/documents/views-doceditor",
 
   "addons/databases/base",
@@ -27,7 +26,7 @@ define([
   "addons/fauxton/components"
 ],
 
-function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resources, Components) {
+function(app, FauxtonAPI, Components, Documents, Changes, DocEditor, Databases, Resources) {
 
   var DocEditorRouteObject = FauxtonAPI.RouteObject.extend({
     layout: "one_pane",
@@ -134,34 +133,16 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
         route: "allDocs",
         roles: ["_reader","_writer","_admin"]
       },
-      "database/:database/_design/:ddoc/_view/:view": {
-        route: "viewFn",
-        roles: ['_admin']
-      },
-      "database/:database/_design/:ddoc/_lists/:fn": {
-        route: "tempFn",
-        roles: ['_admin']
-      },
-      "database/:database/_design/:ddoc/_filters/:fn": {
-        route: "tempFn",
-        roles: ['_admin']
-      },
-      "database/:database/_design/:ddoc/_show/:fn": {
-        route: "tempFn",
-        roles: ['_admin']
-      },
       "database/:database/_design/:ddoc/metadata": {
         route: "designDocMetadata",
         roles: ['_admin']
       },
-      "database/:database/new_view": "newViewEditor",
-      "database/:database/new_view/:designDoc": "newViewEditor",
       "database/:database/_changes(:params)": "changes"
     },
 
     events: {
       "route:updateAllDocs": "updateAllDocsFromView",
-      "route:updatePreviewDocs": "updateAllDocsFromPreview",
+      // "route:updatePreviewDocs": "updateAllDocsFromPreview",
       "route:reloadDesignDocs": "reloadDesignDocs",
       "route:paginate": "paginate",
       "route:perPageChange": "perPageChange",
@@ -194,6 +175,7 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
         database: this.data.database
       }));
     },
+
     designDocMetadata:  function(database, ddoc){
       this.toolsView && this.toolsView.remove();
       this.viewEditor && this.viewEditor.remove();
@@ -214,15 +196,6 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
       };
 
       this.apiUrl = [designDocInfo.url('apiurl'), designDocInfo.documentation() ];
-
-    },
-    tempFn:  function(databaseName, ddoc, fn){
-      this.setView("#dashboard-upper-content", new Documents.Views.temp({}));
-      this.crumbs = function () {
-        return [
-          {"name": this.data.database.id, "link": Databases.databaseUrl(this.data.database)},
-        ];
-      };
 
     },
 
@@ -289,56 +262,6 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
       this.apiUrl = [this.data.database.allDocs.urlRef("apiurl", urlParams), this.data.database.allDocs.documentation() ];
     },
 
-    viewFn: function (databaseName, ddoc, view) {
-      var params = this.createParams(),
-          urlParams = params.urlParams,
-          docParams = params.docParams,
-          decodeDdoc = decodeURIComponent(ddoc);
-
-      view = view.replace(/\?.*$/,'');
-
-      this.data.indexedDocs = new Documents.IndexCollection(null, {
-        database: this.data.database,
-        design: decodeDdoc,
-        view: view,
-        params: docParams,
-        paging: {
-          pageSize: this.getDocPerPageLimit(urlParams, parseInt(docParams.limit, 10))
-        }
-      });
-
-      this.viewEditor = this.setView("#dashboard-upper-content", new Index.ViewEditor({
-        model: this.data.database,
-        ddocs: this.data.designDocs,
-        viewName: view,
-        params: urlParams,
-        newView: false,
-        database: this.data.database,
-        ddocInfo: this.ddocInfo(decodeDdoc, this.data.designDocs, view)
-      }));
-
-      this.toolsView && this.toolsView.remove();
-
-      this.documentsView = this.createViewDocumentsView({
-        designDoc: decodeDdoc,
-        docParams: docParams,
-        urlParams: urlParams,
-        database: this.data.database,
-        indexedDocs: this.data.indexedDocs,
-        designDocs: this.data.designDocs,
-        view: view
-      });
-
-      this.sidebar.setSelectedTab(app.utils.removeSpecialCharacters(ddoc) + '_' + app.utils.removeSpecialCharacters(view));
-
-      this.crumbs = function () {
-        return [
-          {"name": this.data.database.id, "link": Databases.databaseUrl(this.data.database)},
-        ];
-      };
-
-      this.apiUrl = [this.data.indexedDocs.urlRef("apiurl", urlParams), "docs"];
-    },
 
     ddocInfo: function (designDoc, designDocs, view) {
       return {
@@ -348,40 +271,18 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
       };
     },
 
-    createViewDocumentsView: function (options) {
+    // createViewDocumentsView: function (options) {
 
-      return this.setView("#dashboard-lower-content", new Documents.Views.AllDocsList({
-        database: options.database,
-        collection: options.indexedDocs,
-        nestedView: Documents.Views.Row,
-        viewList: true,
-        ddocInfo: this.ddocInfo(options.designDoc, options.designDocs, options.view),
-        docParams: options.docParams,
-        params: options.urlParams
-      }));
-    },
-
-    newViewEditor: function (database, designDoc) {
-      var params = app.getParams();
-
-      this.toolsView && this.toolsView.remove();
-      this.documentsView && this.documentsView.remove();
-
-      this.viewEditor = this.setView("#dashboard-upper-content", new Index.ViewEditor({
-        currentddoc: "_design/"+designDoc || "",
-        ddocs: this.data.designDocs,
-        params: params,
-        database: this.data.database,
-        newView: true
-      }));
-
-      this.sidebar.setSelectedTab('new-view');
-      this.crumbs = function () {
-        return [
-          {"name": this.data.database.id, "link": Databases.databaseUrl(this.data.database)},
-        ];
-      };
-    },
+    //   return this.setView("#dashboard-lower-content", new Documents.Views.AllDocsList({
+    //     database: options.database,
+    //     collection: options.indexedDocs,
+    //     nestedView: Documents.Views.Row,
+    //     viewList: true,
+    //     ddocInfo: this.ddocInfo(options.designDoc, options.designDocs, options.view),
+    //     docParams: options.docParams,
+    //     params: options.urlParams
+    //   }));
+    // },
 
     updateAllDocsFromView: function (event) {
       var view = event.view,
@@ -401,28 +302,6 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
         collection = this.data.database.allDocs;
         collection.paging.pageSize = pageSize;
 
-      } else {
-        collection = this.data.indexedDocs = new Documents.IndexCollection(null, {
-          database: this.data.database,
-          design: ddoc,
-          view: view,
-          params: docParams,
-          paging: {
-            pageSize: pageSize
-          }
-        });
-
-        if (!this.documentsView) {
-          this.documentsView = this.createViewDocumentsView({
-            designDoc: ddoc,
-            docParams: docParams,
-            urlParams: urlParams,
-            database: this.data.database,
-            indexedDocs: this.indexedDocs,
-            designDocs: this.data.designDocs,
-            view: view
-          });
-        }
       }
 
       this.documentsView.setCollection(collection);
@@ -430,26 +309,6 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
       this.documentsView.forceRender();
 
       this.apiUrl = [collection.urlRef("apiurl", urlParams), "docs"];
-    },
-
-    updateAllDocsFromPreview: function (event) {
-      var view = event.view,
-      rows = event.rows,
-      ddoc = event.ddoc;
-
-      this.data.indexedDocs = new Documents.PouchIndexCollection(null, {
-        database: this.data.database,
-        design: ddoc,
-        view: view,
-        rows: rows
-      });
-
-      this.documentsView = this.setView("#dashboard-lower-content", new Documents.Views.AllDocsList({
-        database: this.data.database,
-        collection: this.data.indexedDocs,
-        nestedView: Documents.Views.Row,
-        viewList: true
-      }));
     },
 
     perPageChange: function (perPage) {
