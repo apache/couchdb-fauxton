@@ -12,14 +12,16 @@ License for the specific language governing permissions and limitations under
 the License.
 -->
 
-<td class="select"><input type="checkbox"></td>
-<td>
-  <div>
-    <pre class="prettyprint"><%- JSON.stringify(doc.get("key")) %></pre>
+  <!-- Select toggle -->
+  <div id="header-select-all">
+    <span class="toggle-select-menu icon fonticon-ok-circled">Select</span>
   </div>
-</td>
-<td>
-  <div>
-    <pre class="prettyprint"><%- JSON.stringify(doc.get("value")) %></pre>
+  <!-- search (jump to doc)-->
+  <div id="header-search" class="js-search searchbox-container"></div>
+
+  <!-- Query Options-->
+  <div class="header-query-options">
+    <!-- Insert the query options here :) -->
+    <div id="query-options"></div>
+    <div id="header-api-bar"></div>
   </div>
-</td>

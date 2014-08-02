@@ -34,7 +34,124 @@ define([
 function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
   var Components = FauxtonAPI.addon();
 
+
+  //setting up the left header with the backbutton used in Views and All docs
+  Components.LeftHeader = FauxtonAPI.View.extend({
+    className: "header-left",
+    template: "addons/fauxton/templates/header_left",
+    initialize:function(options){
+      this.dropdownMenuLinks = options.dropdownMenu;
+      this.crumbs = options.crumbs || [];
+    },
+    updateCrumbs: function(crumbs){
+      this.breadcrumbs && this.breadcrumbs.update(crumbs);
+    },
+    updateDropdown: function(menuLinks){
+      this.dropdown && this.dropdown.update(menuLinks);
+    },
+    beforeRender: function(){
+      this.setUpCrumbs();
+      this.setUpDropDownMenu();
+    },
+    setUpCrumbs: function(){
+      this.breadcrumbs = this.insertView("#header-breadcrumbs", new Components.Breadcrumbs({
+        crumbs: this.crumbs
+      }));
+    },
+    setUpDropDownMenu: function(){
+      if (this.dropdownMenuLinks){
+        this.dropdown = this.insertView("#header-dropdown-menu", new Components.MenuDropDown({
+          icon: 'fonticon-cog',
+          links: this.dropdownMenuLinks,
+        }));
+      }
+    }
+  });
+
+
+  Components.Breadcrumbs = FauxtonAPI.View.extend({
+    className: "breadcrumb pull-left",
+    tagName: "ul",
+    template: "addons/fauxton/templates/breadcrumbs",
+    serialize: function() {
+      var crumbs = _.clone(this.crumbs);
+      return {
+        crumbs: crumbs
+      };
+    },
+    update: function(crumbs) {
+      this.crumbs = crumbs;
+      this.render();
+    },
+    initialize: function(options) {
+      this.crumbs = options.crumbs;
+    }
+  });
+
+  Components.ApiBar = FauxtonAPI.View.extend({
+    template: "addons/fauxton/templates/api_bar",
+    events:  {
+      "click .api-url-btn" : "toggleAPIbar"
+    },
+
+    initialize: function(options){
+      var _options = options || {};
+      this.endpoint = _options.endpoint || '_all_docs';
+      this.documentation = _options.documentation || 'docs';
+    },
+
+    toggleAPIbar: function(e){
+      var $currentTarget = $(e.currentTarget).find('span');
+      if ($currentTarget.hasClass("fonticon-plus")){
+        $currentTarget.removeClass("fonticon-plus").addClass("fonticon-minus");
+      }else{
+        $currentTarget.removeClass("fonticon-minus").addClass("fonticon-plus");
+      }
+      $('.api-navbar').toggle();
+    },
+
+    serialize: function() {
+      return {
+        endpoint: this.endpoint,
+        documentation: this.documentation
+      };
+    },
+
+    hide: function(){
+      this.$el.addClass('hide');
+    },
+    show: function(){
+      this.$el.removeClass('hide');
+    },
+    update: function(endpoint) {
+      this.show();
+      this.endpoint = endpoint[0];
+      this.documentation = endpoint[1];
+      this.render();
+    },
+    afterRender: function(){
+      ZeroClipboard.config({ moviePath: "/assets/js/plugins/zeroclipboard/ZeroClipboard.swf" });
+      var client = new ZeroClipboard(this.$(".copy-url"));
+      client.on("load", function(e){
+        var $apiInput = $('#api-navbar input');
+        var copyURLTimer;
+        client.on("mouseup", function(e){
+          $apiInput.css("background-color","#aaa");
+          window.clearTimeout(copyURLTimer);
+          copyURLTimer = setInterval(function () {
+            $apiInput.css("background-color","#fff");
+          }, 200);
+        });
+      });
+    }
+
+  });
+
+
+
+
   Components.Pagination = FauxtonAPI.View.extend({
+    className: "pagination pagination-centered",
     template: "addons/fauxton/templates/pagination",
 
     initialize: function(options) {
@@ -57,6 +174,7 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
   });
 
   Components.IndexPagination = FauxtonAPI.View.extend({
+    className: "pagination pagination-centered",
     template: "addons/fauxton/templates/index_pagination",
     events: {
       "click a": 'scrollTo',
@@ -453,7 +571,7 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
       if (this.mode != "plain") {
         this.editor.getSession().setMode("ace/mode/" + this.mode);
       }
-      
+
       this.editor.setShowPrintMargin(false);
       this.addCommands();
 
@@ -624,11 +742,16 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
     className: "dropdown",
     initialize: function(options){
       this.links = options.links;
+      this.icon = options.icon || "fonticon-plus-circled2";
+    },
+    update: function(links){
+      this.links = links;
+      this.render();
     },
     serialize: function(){
-      var sidebarItem = FauxtonAPI.getExtensions('sidebar:links');
       return {
-        links: this.links
+        links: this.links,
+        icon: this.icon
       };
     }
   });
@@ -656,7 +779,7 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
   //need to make this into a backbone view...
   var routeObjectSpinner;
   FauxtonAPI.RouteObject.on('beforeEstablish', function (routeObject) {
-    if (!routeObject.disableLoader){ 
+    if (!routeObject.disableLoader){
       var opts = {
         lines: 16, // The number of lines to draw
         length: 8, // The length of each line
@@ -702,7 +825,7 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
   FauxtonAPI.RouteObject.on('beforeRender', function (routeObject, view, selector) {
     removeRouteObjectSpinner();
 
-    if (!view.disableLoader){ 
+    if (!view.disableLoader){
       var opts = {
         lines: 16, // The number of lines to draw
         length: 8, // The length of each line

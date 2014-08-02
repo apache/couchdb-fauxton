@@ -34,8 +34,244 @@ function(app, FauxtonAPI, Components, Documents, Databases, pouchdb,
 
   var Views = {};
 
+
+//right header
+  Views.RightHeader = FauxtonAPI.View.extend({
+    className: "header-right",
+    template: "addons/indexes/templates/header_right",
+    initialize:function(options){
+      this.database = options.database;
+      this.title = options.title;
+      this.api = options.api;
+      this.endpoint = options.endpoint;
+      this.documentation = options.documentation;
+      this.eventer = _.extend({}, Backbone.Events);
+    },
+    updateApiUrl: function(api){
+      //this will update the api bar when the route changes
+      //you can find the method that updates it in components.js Components.ApiBar()
+      this.apiBar && this.apiBar.update(api);
+    },
+    beforeRender: function(){
+
+      this.apiBar = this.insertView("#header-api-bar", new Components.ApiBar({
+        endpoint: this.endpoint,
+        documentation: this.documentation
+      }));
+
+      this.advancedOptions = this.insertView('#header-query-options', new QueryOptions.AdvancedOptions({
+        updateViewFn: this.updateView,
+        previewFn: this.previewView,
+        database: this.database,
+        viewName: this.viewName,
+        ddocName: this.model.id,
+        hasReduce: this.hasReduce(),
+        eventer: this.eventer,
+        showStale: true
+      }));
+    },
+    hasReduce: function(){
+
+    },
+    updateView: function(event, paramInfo) {
+       event.preventDefault();
+
+       var errorParams = paramInfo.errorParams,
+           params = paramInfo.params;
+
+       if (_.any(errorParams)) {
+         _.map(errorParams, function(param) {
+
+           // TODO: Where to add this error?
+           // bootstrap wants the error on a control-group div, but we're not using that
+           //$('form.view-query-update input[name='+param+'], form.view-query-update select[name='+param+']').addClass('error');
+           return FauxtonAPI.addNotification({
+             msg: "JSON Parse Error on field: "+param.name,
+             type: "error",
+             selector: ".advanced-options .errors-container",
+             clear: true
+           });
+         });
+         FauxtonAPI.addNotification({
+           msg: "Make sure that strings are properly quoted and any other values are valid JSON structures",
+           type: "warning",
+           selector: ".advanced-options .errors-container",
+           clear: true
+         });
+
+         return false;
+      }
+
+       var fragment = window.location.hash.replace(/\?.*$/, '');
+       if (!_.isEmpty(params)) {
+        fragment = fragment + '?' + $.param(params);
+       }
+
+       FauxtonAPI.navigate(fragment, {trigger: false});
+       FauxtonAPI.triggerRouteEvent('updateAllDocs', {ddoc: this.ddocID, view: this.viewName});
+    },
+
+
+    previewView: function(event, paramsInfo) {
+      event.preventDefault();
+      var that = this,
+      mapVal = this.mapVal(),
+      reduceVal = this.reduceVal(),
+      paramsArr = [];
+
+      if (paramsInfo && paramsInfo.params) {
+        paramsArr = paramsInfo.params;
+      }
+
+      var params = _.reduce(paramsArr, function (params, param) {
+        params[param.name] = param.value;
+        return params;
+      }, {reduce: false});
+
+      FauxtonAPI.addNotification({
+        msg: "<strong>Warning!</strong> Preview executes the Map/Reduce functions in your browser, and may behave differently from CouchDB.",
+        type: "warning",
+        selector: ".advanced-options .errors-container",
+        fade: true,
+        escape: false // beware of possible XSS when the message changes
+      });
+
+      var promise = FauxtonAPI.Deferred();
+
+      if (!this.database.allDocs || this.database.allDocs.params.include_docs !== true) {
+        this.database.buildAllDocs({limit: Databases.DocLimit.toString(), include_docs: true});
+        promise = this.database.allDocs.fetch();
+       } else {
+        promise.resolve();
+       }
+
+      promise.then(function () {
+        params.docs = that.database.allDocs.map(function (model) { return model.get('doc');});
+        var queryPromise = pouchdb.runViewQuery({map: mapVal, reduce: reduceVal}, params);
+        queryPromise.then(function (results) {
+          FauxtonAPI.triggerRouteEvent('updatePreviewDocs', {rows: results.rows, ddoc: that.getCurrentDesignDoc().id, view: that.viewName});
+        });
+      });
+    }
+  });
+
+
+
+
+  Views.PreviewScreen = FauxtonAPI.View.extend({
+    template: "addons/indexes/templates/preview_screen",
+    className: "watermark-logo"
+  });
+
+
+  Views.Row = FauxtonAPI.View.extend({
+    template: "addons/indexes/templates/index_row_docular",
+    className: "doc-row",
+    events: {
+      "click button.delete": "destroy"
+    },
+
+    destroy: function (event) {
+      event.preventDefault();
+
+      window.alert('Cannot delete a document generated from a view.');
+    },
+
+    beforeRender: function(){
+      var newLinks = [{
+        links: [{
+          title: 'Table',
+          icon: 'fonticon-table'
+        },{
+          title: 'JSON',
+          icon: 'fonticon-json'
+        }]
+      }];
+
+      this.insertView("#view-doc-menu", new Components.MenuDropDown({
+        icon: 'fonticon-drop-down-dots',
+        links: newLinks,
+      }));
+    },
+
+    serialize: function() {
+      return {
+        docID: this.model.get('id'),
+        doc: this.model,
+        url: this.model.url('app')
+      };
+    }
+  });
+
+
+/*
+
+  INDEX EDITORS____________________________________
+
+*/
+
+  //Index view CORE  extend this
+  Views.IndexCore = FauxtonAPI.View.extend({
+    initialize: function(options) {
+        this.newView = options.newView || false;
+        this.ddocs = options.ddocs;
+        this.params = options.params;
+        this.database = options.database;
+        this.currentDdoc = options.currentddoc;
+      if (this.newView) {
+        this.viewName = 'newView';
+      } else {
+        this.ddocID = options.ddocInfo ? options.ddocInfo.id : '';
+        this.viewName = options.viewName;
+        this.ddocInfo = new Documents.DdocInfo({_id: this.ddocID},{database: this.database});
+      }
+
+      this.showIndex = false;
+      _.bindAll(this);
+    },
+    establish: function () {
+      if (this.ddocInfo) {
+        return this.ddocInfo.fetch();
+      }
+    },
+    serialize: function() {
+      return {
+        database: this.database.get('id'),
+        ddocs: this.ddocs,
+        ddoc: this.model,
+        ddocName: this.model.id,
+        viewName: this.viewName,
+        newView: this.newView,
+        langTemplates: this.langTemplates.javascript
+      };
+    }
+  });
+
+  Views.ShowEditor = Views.IndexCore.extend({
+    template: "addons/indexes/templates/show_editor",
+    langTemplates: {
+      "javascript": {
+        map: "function(doc) {\n  emit(doc._id, 1);\n}",
+      }
+    },
+    defaultLang: "javascript"
+  });
+
+  Views.ListEditor = Views.IndexCore.extend({
+    template: "addons/indexes/templates/list_editor",
+    langTemplates: {
+      "javascript": {
+        map: "function(doc) {\n  emit(doc._id, 1);\n}",
+      }
+    },
+    defaultLang: "javascript"
+  });
+
+
+
+
   Views.ViewEditor = FauxtonAPI.View.extend({
-    template: "addons/documents/templates/view_editor",
+    template: "addons/indexes/templates/view_editor",
     builtinReduces: ['_sum', '_count', '_stats'],
 
     events: {
@@ -45,8 +281,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, pouchdb,
       "click button.preview": "previewView",
       "click #db-views-tabs-nav": 'toggleIndexNav',
       "click .beautify_map":  "beautifyCode",
-      "click .beautify_reduce":  "beautifyCode",
-      "click #query-options-wrapper": 'toggleIndexNav'
+      "click .beautify_reduce":  "beautifyCode"
     },
 
     langTemplates: {
@@ -139,19 +374,20 @@ function(app, FauxtonAPI, Components, Documents, Databases, pouchdb,
       if (event) { event.preventDefault();}
 
       $('#dashboard-content').scrollTop(0); //scroll up
-
+      //check if the code is valid & the inputs are filled out
       if (this.hasValidCode() && this.$('#new-ddoc:visible').val() !=="") {
         var mapVal = this.mapEditor.getValue(),
         reduceVal = this.reduceVal(),
         viewName = this.$('#index-name').val(),
         ddoc = this.getCurrentDesignDoc(),
-        ddocName = ddoc.id,
-        viewNameChange = false;
+        ddocName = ddoc.id;
+        this.viewNameChange = false;
+
 
         if (this.viewName !== viewName) {
           ddoc.removeDdocView(this.viewName);
           this.viewName = viewName;
-          viewNameChange = true;
+          this.viewNameChange = true;
         }
 
         notification = FauxtonAPI.addNotification({
@@ -163,42 +399,11 @@ function(app, FauxtonAPI, Components, Documents, Databases, pouchdb,
         ddoc.setDdocView(viewName, mapVal, reduceVal);
 
         ddoc.save().then(function () {
-          that.ddocs.add(ddoc);
-
-          that.mapEditor.editSaved();
-          that.reduceEditor && that.reduceEditor.editSaved();
-
-
-          FauxtonAPI.addNotification({
-            msg: "View has been saved.",
-            type: "success",
-            selector: "#define-view .errors-container",
-            clear: true
-          });
-
-          if (that.newView || viewNameChange) {
-            var fragment = '/database/' + that.database.safeID() +'/' + ddoc.safeID() + '/_view/' + app.utils.safeURLName(viewName);
-
-            FauxtonAPI.navigate(fragment, {trigger: false});
-            that.newView = false;
-            that.ddocID = ddoc.safeID();
-            that.viewName = viewName;
-            that.ddocInfo = ddoc;
-            that.showIndex = true;
-            that.render();
-            FauxtonAPI.triggerRouteEvent('reloadDesignDocs', {
-              selectedTab: app.utils.removeSpecialCharacters(ddocName.replace(/_design\//,'')) + '_' + app.utils.removeSpecialCharacters(viewName)
-            });
-          }
-
-          if (that.reduceFunStr !== reduceVal) {
-            that.reduceFunStr = reduceVal;
-            that.advancedOptions.renderOnUpdatehasReduce(that.hasReduce());
-          }
-
-          FauxtonAPI.triggerRouteEvent('updateAllDocs', {ddoc: ddocName, view: viewName});
-
-        }, function(xhr) {
+          //on success
+          that.afterSave(ddoc, viewName, ddocName);
+        },
+        function(xhr) {
+          //on failure
           var responseText = JSON.parse(xhr.responseText).reason;
           notification = FauxtonAPI.addNotification({
             msg: "Save failed: " + responseText,
@@ -207,6 +412,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, pouchdb,
           });
         });
       } else {
+        //if nothing is filled out give an error message
         var errormessage = (this.$('#new-ddoc:visible').val() ==="")?"Enter a design doc name":"Please fix the Javascript errors and try again.";
         notification = FauxtonAPI.addNotification({
           msg: errormessage,
@@ -217,87 +423,49 @@ function(app, FauxtonAPI, Components, Documents, Databases, pouchdb,
       }
     },
 
-    updateView: function(event, paramInfo) {
-       event.preventDefault();
+    afterSave: function(ddoc, viewName, ddocName){
+      var reduceVal = this.reduceVal();
+      //add ddoc to the collection
+      this.ddocs.add(ddoc);
 
-       if (this.newView) { return alert('Please save this new view before querying it.'); }
-
-       var errorParams = paramInfo.errorParams,
-           params = paramInfo.params;
-
-       if (_.any(errorParams)) {
-         _.map(errorParams, function(param) {
-
-           // TODO: Where to add this error?
-           // bootstrap wants the error on a control-group div, but we're not using that
-           //$('form.view-query-update input[name='+param+'], form.view-query-update select[name='+param+']').addClass('error');
-           return FauxtonAPI.addNotification({
-             msg: "JSON Parse Error on field: "+param.name,
-             type: "error",
-             selector: ".advanced-options .errors-container",
-             clear: true
-           });
-         });
-         FauxtonAPI.addNotification({
-           msg: "Make sure that strings are properly quoted and any other values are valid JSON structures",
-           type: "warning",
-           selector: ".advanced-options .errors-container",
-           clear: true
-         });
-
-         return false;
-      }
-
-       var fragment = window.location.hash.replace(/\?.*$/, '');
-       if (!_.isEmpty(params)) {
-        fragment = fragment + '?' + $.param(params);
-       }
-
-       FauxtonAPI.navigate(fragment, {trigger: false});
-       FauxtonAPI.triggerRouteEvent('updateAllDocs', {ddoc: this.ddocID, view: this.viewName});
-    },
+      //trigger the EditSaved function on the map editor & reduce editor
+      this.mapEditor.editSaved();
+      this.reduceEditor && this.reduceEditor.editSaved();
 
 
-    previewView: function(event, paramsInfo) {
-      event.preventDefault();
-      var that = this,
-      mapVal = this.mapVal(),
-      reduceVal = this.reduceVal(),
-      paramsArr = [];
-
-      if (paramsInfo && paramsInfo.params) {
-        paramsArr = paramsInfo.params;
-      }
-
-      var params = _.reduce(paramsArr, function (params, param) {
-        params[param.name] = param.value;
-        return params;
-      }, {reduce: false});
-
+      //show a notification
       FauxtonAPI.addNotification({
-        msg: "<strong>Warning!</strong> Preview executes the Map/Reduce functions in your browser, and may behave differently from CouchDB.",
-        type: "warning",
-        selector: ".advanced-options .errors-container",
-        fade: true,
-        escape: false // beware of possible XSS when the message changes
+        msg: "View has been saved.",
+        type: "success",
+        selector: "#define-view .errors-container",
+        clear: true
       });
 
-      var promise = FauxtonAPI.Deferred();
 
-      if (!this.database.allDocs || this.database.allDocs.params.include_docs !== true) {
-        this.database.buildAllDocs({limit: Databases.DocLimit.toString(), include_docs: true});
-        promise = this.database.allDocs.fetch();
-       } else {
-        promise.resolve();
-       }
+      //if it's new or the name changed (aka created a new doc)
+      if (this.newView || this.viewNameChange) {
+        var fragment = '/database/' + this.database.safeID() +'/' + ddoc.safeID() + '/_view/' + app.utils.safeURLName(viewName);
 
-      promise.then(function () {
-        params.docs = that.database.allDocs.map(function (model) { return model.get('doc');});
-        var queryPromise = pouchdb.runViewQuery({map: mapVal, reduce: reduceVal}, params);
-        queryPromise.then(function (results) {
-          FauxtonAPI.triggerRouteEvent('updatePreviewDocs', {rows: results.rows, ddoc: that.getCurrentDesignDoc().id, view: that.viewName});
+        FauxtonAPI.navigate(fragment, {trigger: false});
+        this.newView = false;
+        this.ddocID = ddoc.safeID();
+        this.viewName = viewName;
+        this.ddocInfo = ddoc;
+        this.showIndex = true;
+        this.render();
+        FauxtonAPI.triggerRouteEvent('reloadDesignDocs', {
+          selectedTab: app.utils.removeSpecialCharacters(ddocName.replace(/_design\//,'')) + '_' + app.utils.removeSpecialCharacters(viewName)
         });
-      });
+      }
+
+      // TODO:// this should change to a trigger because we shouldn't define advanced options in this view
+      if (this.reduceFunStr !== reduceVal) {
+        this.reduceFunStr = reduceVal;
+       // this.advancedOptions.renderOnUpdatehasReduce(this.hasReduce());
+      }
+
+      // Route Event will reload the right content
+      FauxtonAPI.triggerRouteEvent('updateAllDocs', {ddoc: ddocName, view: viewName});
     },
 
     getCurrentDesignDoc: function () {
@@ -341,31 +509,10 @@ function(app, FauxtonAPI, Components, Documents, Databases, pouchdb,
       }, this);
     },
 
-    toggleIndexNav: function (event) {
-      $('#dashboard-content').scrollTop(0); //scroll up
-
-      var $targetId = this.$(event.target).attr('id'),
-          $previousTab = this.$(this.$('li.active a').attr('href')),
-          $targetTab = this.$(this.$(event.target).attr('href'));
-
-      if ($targetTab.attr('id') !== $previousTab.attr('id')) {
-        $previousTab.removeAttr('style');
-      }
-
-      if ($targetId === 'index-nav') {
-        if (this.newView) { return; }
-        var that = this;
-        $('#dashboard-content').scrollTop(0); //scroll up
-        $targetTab.toggle('slow', function(){
-           that.showEditors();
-        });
-      } else {
-        $targetTab.toggle('slow');
-      }
-    },
 
     serialize: function() {
       return {
+        database: this.database.get('id'),
         ddocs: this.ddocs,
         ddoc: this.model,
         ddocName: this.model.id,
@@ -435,37 +582,17 @@ function(app, FauxtonAPI, Components, Documents, Databases, pouchdb,
         database: this.database
       }));
 
-      if (!this.newView) {
-        this.eventer = _.extend({}, Backbone.Events);
-
-        this.advancedOptions = this.insertView('#query', new QueryOptions.AdvancedOptions({
-          updateViewFn: this.updateView,
-          previewFn: this.previewView,
-          database: this.database,
-          viewName: this.viewName,
-          ddocName: this.model.id,
-          hasReduce: this.hasReduce(),
-          eventer: this.eventer,
-          showStale: true
-        }));
-      }
-
     },
 
     afterRender: function() {
-
-      if (this.params && !this.newView) {
-        this.advancedOptions.updateFromParams(this.params);
-      }
+      //TODO: have this happen on a trigger once we move advanced options to the header
+      // if (this.params && !this.newView) {
+      //   this.advancedOptions.updateFromParams(this.params);
+      // }
 
       this.designDocSelector.updateDesignDoc();
-      if (this.newView || this.showIndex) {
-        this.showEditors();
-        this.showIndex = false;
-      } else {
-        this.$('#index').hide();
-        this.$('#index-nav').parent().removeClass('active');
-      }
+      this.showEditors();
+      this.showIndex = false;
 
     },
 
@@ -510,7 +637,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, pouchdb,
   });
 
   Views.DesignDocSelector = FauxtonAPI.View.extend({
-    template: "addons/documents/templates/design_doc_selector",
+    template: "addons/indexes/templates/design_doc_selector",
 
     events: {
       "change select#ddoc": "updateDesignDoc"
@@ -537,9 +664,9 @@ function(app, FauxtonAPI, Components, Documents, Databases, pouchdb,
 
     updateDesignDoc: function () {
       if (this.newDesignDoc()) {
-        this.$('#new-ddoc-section').show();
+        this.$('#new-ddoc').show();
       } else {
-        this.$('#new-ddoc-section').hide();
+        this.$('#new-ddoc').hide();
       }
     },
 

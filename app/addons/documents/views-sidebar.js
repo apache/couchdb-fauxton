@@ -151,8 +151,13 @@ function(app, FauxtonAPI, Components, Documents, Databases) {
     toggleArrow:  function(e){
       this.$(e.currentTarget).toggleClass("down");
     },
+    buildIndexList: function(collection, selector, ddocType){
+    buildIndexList: function(collection, indexType){
     buildIndexList: function(collection, info){
       var design = this.model.id.replace(/^_design\//,"");
+      var selector = indexType.selector;
+      var ddocType = indexType.ddocType;
+      var icon = indexType.icon;
 
       this.insertView(".accordion-body", new Views.IndexItem({
         selector: info.selector,
@@ -176,14 +181,14 @@ function(app, FauxtonAPI, Components, Documents, Databases) {
 
     getSidebarLinks: function () {
       var ddocName = this.model.id.replace(/^_design\//,""),
-          docSafe = app.utils.safeURLName(ddocName), 
+          docSafe = app.utils.safeURLName(ddocName),
           database = this.collection.database;
 
       return _.reduce(FauxtonAPI.getExtensions('sidebar:links'), function (menuLinks, link) {
 
         menuLinks.push({
           title: link.title,
-          url: "#" + database.url('app') + "/" + link.url + "/" + docSafe,
+          url: "#" + database.url('app')+ "/" + link.url + "/" + docSafe,
           icon: 'fonticon-plus-circled'
         });
 
@@ -228,6 +233,7 @@ function(app, FauxtonAPI, Components, Documents, Databases) {
     }
   });
 
+  //Sidebar Index Item
   Views.IndexItem = FauxtonAPI.View.extend({
     template: "addons/documents/templates/index_menu_item",
     tagName: 'li',
@@ -248,7 +254,7 @@ function(app, FauxtonAPI, Components, Documents, Databases) {
 
     serialize: function() {
       return {
-        icon: this.icons[this.ddocType],
+        icon:  this.icons[this.ddocType],
         ddocType:  this.selector,
         name: this.name,
         index: this.index,
@@ -258,7 +264,6 @@ function(app, FauxtonAPI, Components, Documents, Databases) {
         collection: this.collection
       };
     },
-
     afterRender: function() {
       if (this.selected) {
         $(".sidenav ul.nav-list li").removeClass("active");
@@ -266,6 +271,8 @@ function(app, FauxtonAPI, Components, Documents, Databases) {
       }
     }
   });
+
+
 
   return Views;
 });
