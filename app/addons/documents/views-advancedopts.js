@@ -63,7 +63,6 @@ function(app, FauxtonAPI, resizeColumns ) {
     },
 
     toggleQuery: function (event) {
-      console.log('togglequery');
       $('#dashboard-content').scrollTop(0);
       this.$('#query-options-tray').toggle();
     },

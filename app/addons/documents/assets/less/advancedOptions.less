@@ -28,20 +28,22 @@
   color: #fff;
   padding: 0;
   margin: 0;
-    .query-group {
-      padding: 20px;
-      border-bottom: 1px solid #555;
-    }
-    .query-group:last-child {
-      border-bottom: none;
-    }
-    .controls-group {
-      margin: 0;
-    }
-    .controls-group:last-child {
-      margin: 0;
-    }
-  
+  .add-on {
+    padding-bottom: 10px;
+  }
+  .query-group {
+    padding: 20px;
+    border-bottom: 1px solid #555;
+  }
+  .query-group:last-child {
+    border-bottom: none;
+  }
+  .controls-group {
+    margin: 0;
+  }
+  .controls-group:last-child {
+    margin: 0;
+  }
   form {
     margin-bottom: 0;
     .dropdown.inline {
@@ -55,8 +57,18 @@
       border: none;
       color: #eee;
     }
+    .checkbox {
+      padding: 0;
+      margin: 0;
+    }
     .btn-success {
       .border-radius(5px);
+    }
+    .btn-cancel, .btn-cancel:active {
+      background: none;
+      border: none;
+      box-shadow: none;
+      color: @red;
     }
   }
   .toggle-btns {
@@ -80,11 +92,27 @@
       margin-left: 1px;
     }
   }
+  label {
+    margin-right: 0;
+    font-size: 13px;
+  }
   div.controls-group.well{
     height: 180px;
     background: none;
     border: none;
     padding: 10px 0;
+  }
+  .row-fluid.fieldsets {
+    .inline {
+      width: 32%;
+    }
+    .inline:nth-child(3) {
+      text-align: right;
+      width: 34%;
+    }
+  }
+  #skipRows {
+    margin-left: 5px;
   }
 }
 #query-options-tray:before {
@@ -97,7 +125,4 @@
   border-width: 15px;
   width: 0;
   height: 0;
-}
-#button-options {
-  margin-top: 20px;
 }
