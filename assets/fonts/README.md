@@ -19,7 +19,7 @@ That should install the gem in a path like below:
 
 Don't forget to update `fontcustom.yml` with the correct paths where it says `PUT_YOUR_PATH_HERE`.
 
-From there, you can run the command `$ fontcustom compile` to compile the svgs located in the ./icons directory into updated fauxtonicon font files. 
+From there, you can run the command `$ bundle exec fontcustom compile` to compile the svgs located in the ./icons directory into updated fauxtonicon font files. 
 
 It's setup to generate the following 
 - an `icons.less` file [LOCAL_COUCHDB_REPO]/src/couchdb-fauxton/assets/less
