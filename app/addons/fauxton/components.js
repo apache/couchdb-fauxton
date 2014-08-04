@@ -34,6 +34,82 @@ define([
 function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
   var Components = FauxtonAPI.addon();
 
+
+  Components.Breadcrumbs = FauxtonAPI.View.extend({
+    template: "addons/fauxton/templates/breadcrumbs",
+
+    serialize: function() {
+      var crumbs = _.clone(this.crumbs);
+      return {
+        crumbs: crumbs
+      };
+    },
+
+    initialize: function(options) {
+      this.crumbs = options.crumbs;
+    }
+  });
+
+  Components.ApiBar = FauxtonAPI.View.extend({
+    template: "addons/fauxton/templates/api_bar",
+    endpoint: '_all_docs',
+
+    documentation: 'docs',
+
+    events:  {
+      "click .api-url-btn" : "toggleAPIbar"
+    },
+
+    toggleAPIbar: function(e){
+      var $currentTarget = $(e.currentTarget).find('span');
+      if ($currentTarget.hasClass("fonticon-plus")){
+        $currentTarget.removeClass("fonticon-plus").addClass("fonticon-minus");
+      }else{
+        $currentTarget.removeClass("fonticon-minus").addClass("fonticon-plus");
+      }
+      $('.api-navbar').toggle();
+    },
+
+    serialize: function() {
+      return {
+        endpoint: this.endpoint,
+        documentation: this.documentation
+      };
+    },
+
+    hide: function(){
+      this.$el.addClass('hide');
+    },
+    show: function(){
+      this.$el.removeClass('hide');
+    },
+    update: function(endpoint) {
+      this.show();
+      this.endpoint = endpoint[0];
+      this.documentation = endpoint[1];
+      this.render();
+    },
+    afterRender: function(){
+      ZeroClipboard.config({ moviePath: "/assets/js/plugins/zeroclipboard/ZeroClipboard.swf" });
+      var client = new ZeroClipboard(this.$(".copy-url"));
+      client.on("load", function(e){
+        var $apiInput = $('#api-navbar input');
+        var copyURLTimer;
+        client.on("mouseup", function(e){
+          $apiInput.css("background-color","#aaa");
+          window.clearTimeout(copyURLTimer);
+          copyURLTimer = setInterval(function () {
+            $apiInput.css("background-color","#fff");
+          }, 200);
+        });
+      });
+    }
+
+  });
+
+
+
+
   Components.Pagination = FauxtonAPI.View.extend({
     template: "addons/fauxton/templates/pagination",
 

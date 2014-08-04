@@ -51,7 +51,7 @@ function(app, FauxtonAPI, resizeColumns, Components, ZeroClipboard) {
   Fauxton.initialize = function () {
     // app.footer = new Fauxton.Footer({el: "#footer-content"}),
     app.navBar = new Fauxton.NavBar();
-    app.apiBar = new Fauxton.ApiBar();
+    app.apiBar = new Components.ApiBar();
 
     FauxtonAPI.when.apply(null, app.navBar.establish()).done(function() {
       FauxtonAPI.masterLayout.setView("#primary-navbar", app.navBar, true);
@@ -77,7 +77,7 @@ function(app, FauxtonAPI, resizeColumns, Components, ZeroClipboard) {
       var crumbs = routeObject.get('crumbs');
 
       if (crumbs.length) {
-        FauxtonAPI.masterLayout.setView('#breadcrumbs', new Fauxton.Breadcrumbs({
+        FauxtonAPI.masterLayout.setView('#breadcrumbs', new Components.Breadcrumbs({
           crumbs: crumbs
         }), true).render();
       }
@@ -93,20 +93,7 @@ function(app, FauxtonAPI, resizeColumns, Components, ZeroClipboard) {
     });
   };
 
-  Fauxton.Breadcrumbs = FauxtonAPI.View.extend({
-    template: "addons/fauxton/templates/breadcrumbs",
 
-    serialize: function() {
-      var crumbs = _.clone(this.crumbs);
-      return {
-        crumbs: crumbs
-      };
-    },
-
-    initialize: function(options) {
-      this.crumbs = options.crumbs;
-    }
-  });
 
   Fauxton.VersionInfo = Backbone.Model.extend({
     url: function () {
@@ -259,64 +246,6 @@ function(app, FauxtonAPI, resizeColumns, Components, ZeroClipboard) {
     // TODO: ADD ACTIVE CLASS
   });
 
-  Fauxton.ApiBar = FauxtonAPI.View.extend({
-    template: "addons/fauxton/templates/api_bar",
-    endpoint: '_all_docs',
-
-    documentation: 'docs',
-
-    events:  {
-      "click .api-url-btn" : "toggleAPIbar"
-    },
-
-    toggleAPIbar: function(e){
-      var $currentTarget = $(e.currentTarget).find('span');
-      if ($currentTarget.hasClass("fonticon-plus")){
-        $currentTarget.removeClass("fonticon-plus").addClass("fonticon-minus");
-      }else{
-        $currentTarget.removeClass("fonticon-minus").addClass("fonticon-plus");
-      }
-      $('.api-navbar').toggle();
-    },
-
-    serialize: function() {
-      return {
-        endpoint: this.endpoint,
-        documentation: this.documentation
-      };
-    },
-
-    hide: function(){
-      this.$el.addClass('hide');
-    },
-    show: function(){
-      this.$el.removeClass('hide');
-    },
-    update: function(endpoint) {
-      this.show();
-      this.endpoint = endpoint[0];
-      this.documentation = endpoint[1];
-      this.render();
-    },
-    afterRender: function(){
-      var client = new Components.Clipboard({
-        $el: this.$('.copy-url')
-      });
-
-      client.on("load", function(e){
-        var $apiInput = $('#api-navbar input');
-        var copyURLTimer;
-        client.on("mouseup", function(e){
-          $apiInput.css("background-color","#aaa");
-          window.clearTimeout(copyURLTimer);
-          copyURLTimer = setInterval(function () {
-            $apiInput.css("background-color","#fff");
-          }, 200);
-        });
-      });
-    }
-
-  });
 
   Fauxton.Notification = FauxtonAPI.View.extend({
     fadeTimer: 5000,
