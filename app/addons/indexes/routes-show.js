@@ -28,14 +28,15 @@ function (app, FauxtonAPI, Databases, Views, Documents, Resources, RouteCore) {
         roles: ['_admin']
       },
       "database/:database/new_show": "newShowEditor",
-      "database/:database/_design/:designDoc/new_show": "newShowEditor"
+      "database/:database/new_show/:designDoc": "newShowEditor"
     },
 
     newShowEditor: function (database, designDoc) {
       var params = app.getParams();
 
       this.setView("#left-content", new Views.ShowEditor({
-        currentddoc: "_design/"+designDoc || "",
+        model: this.data.database,
+        currentddoc: designDoc ? "_design/"+designDoc : "",
         ddocs: this.data.designDocs,
         params: params,
         database: this.data.database,

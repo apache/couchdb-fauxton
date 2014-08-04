@@ -51,10 +51,10 @@ function(app, FauxtonAPI, Components, Documents, Databases, pouchdb,
         this.params = options.params;
         this.database = options.database;
         this.currentDdoc = options.currentddoc;
-        if (this.newView) {
+      if (this.newView) {
         this.viewName = 'newView';
       } else {
-        this.ddocID = options.ddocInfo.id;
+        this.ddocID = options.ddocInfo ? options.ddocInfo.id : '';
         this.viewName = options.viewName;
         this.ddocInfo = new Documents.DdocInfo({_id: this.ddocID},{database: this.database});
       }
@@ -74,48 +74,39 @@ function(app, FauxtonAPI, Components, Documents, Databases, pouchdb,
         ddoc: this.model,
         ddocName: this.model.id,
         viewName: this.viewName,
-        reduceFunStr: this.reduceFunStr,
-        isCustomReduce: this.hasCustomReduce(),
         newView: this.newView,
         langTemplates: this.langTemplates.javascript
       };
     }
   });
 
-
-
-  Views.IndexHeader = Views.IndexCore.extend({
+  Views.IndexHeader = FauxtonAPI.View.extend({
     template: "addons/indexes/templates/index_header"
   });
 
-  Views.PreviewScreen = Views.IndexCore.extend({
+  Views.PreviewScreen = FauxtonAPI.View.extend({
     template: "addons/indexes/templates/preview_screen",
     className: "watermark-logo"
   });
 
-  Views.ShowEditor = FauxtonAPI.View.extend({
+  Views.ShowEditor = Views.IndexCore.extend({
     template: "addons/indexes/templates/show_editor",
-    initialize: function(options) {
-      this.newView = options.newView || false;
-      this.ddocs = options.ddocs;
-      this.params = options.params;
-      this.database = options.database;
-      this.currentDdoc = options.currentddoc;
-      if (this.newView) {
-        this.viewName = 'newView';
-      } else {
-        this.ddocID = options.ddocInfo.id;
-        this.viewName = options.viewName;
-        this.ddocInfo = new Documents.DdocInfo({_id: this.ddocID},{database: this.database});
+    langTemplates: {
+      "javascript": {
+        map: "function(doc) {\n  emit(doc._id, 1);\n}",
       }
-
-      this.showIndex = false;
-      _.bindAll(this);
     },
+    defaultLang: "javascript"
   });
 
-  Views.ListEditor = FauxtonAPI.View.extend({
+  Views.ListEditor = Views.IndexCore.extend({
     template: "addons/indexes/templates/list_editor",
+    langTemplates: {
+      "javascript": {
+        map: "function(doc) {\n  emit(doc._id, 1);\n}",
+      }
+    },
+    defaultLang: "javascript"
   });
 
 

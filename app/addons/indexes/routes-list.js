@@ -28,7 +28,7 @@ function (app, FauxtonAPI, Databases, Views, Documents, Resources, RouteCore) {
         roles: ['_admin']
       },
       "database/:database/new_list": "newListsEditor",
-      "database/:database/_design/:designDoc/new_list": "newListsEditor"
+      "database/:database/new_list/:designDoc": "newListsEditor"
     },
 
     apiUrl: function() {
@@ -40,7 +40,8 @@ function (app, FauxtonAPI, Databases, Views, Documents, Resources, RouteCore) {
       var params = app.getParams();
 
       this.setView("#left-content", new Views.ListEditor({
-        currentddoc: "_design/"+designDoc || "",
+        model: this.data.database,
+        currentddoc: designDoc ? "_design/"+designDoc : "",
         ddocs: this.data.designDocs,
         params: params,
         database: this.data.database,

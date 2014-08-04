@@ -27,8 +27,7 @@ function (app, FauxtonAPI, Databases, Views, Documents, Resources, RouteCore) {
         route: "viewFn",
         roles: ['_admin']
       },
-      "database/:database/new_view": "newViewEditor",
-      "database/:database/_design/:designDoc/new_view": "newViewEditor"
+      "database/:database/new_view/:designDoc": "newViewEditor"
     },
 
     newViewEditor: function (database, designDoc) {
@@ -37,7 +36,8 @@ function (app, FauxtonAPI, Databases, Views, Documents, Resources, RouteCore) {
       this.setView("#right-content", new Views.PreviewScreen({}));
 
       this.viewEditor = this.setView("#left-content", new Views.ViewEditor({
-        currentddoc: "_design/"+designDoc || "",
+        model: this.data.database,
+        currentddoc: designDoc ? "_design/"+designDoc : "",
         ddocs: this.data.designDocs,
         params: params,
         database: this.data.database,
