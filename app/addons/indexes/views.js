@@ -34,52 +34,6 @@ function(app, FauxtonAPI, Components, Documents, Databases, pouchdb,
 
   var Views = {};
 
-  //Index view CORE  extend this
-  Views.IndexCore = FauxtonAPI.View.extend({
-    langTemplates: {
-      "javascript": {
-        map: "function(doc) {\n  emit(doc._id, 1);\n}",
-        reduce: "function(keys, values, rereduce){\n  if (rereduce){\n    return sum(values);\n  } else {\n    return values.length;\n  }\n}"
-      }
-    },
-
-    defaultLang: "javascript",
-
-    initialize: function(options) {
-        this.newView = options.newView || false;
-        this.ddocs = options.ddocs;
-        this.params = options.params;
-        this.database = options.database;
-        this.currentDdoc = options.currentddoc;
-      if (this.newView) {
-        this.viewName = 'newView';
-      } else {
-        this.ddocID = options.ddocInfo ? options.ddocInfo.id : '';
-        this.viewName = options.viewName;
-        this.ddocInfo = new Documents.DdocInfo({_id: this.ddocID},{database: this.database});
-      }
-
-      this.showIndex = false;
-      _.bindAll(this);
-    },
-    establish: function () {
-      if (this.ddocInfo) {
-        return this.ddocInfo.fetch();
-      }
-    },
-    serialize: function() {
-      return {
-        database: this.database.get('id'),
-        ddocs: this.ddocs,
-        ddoc: this.model,
-        ddocName: this.model.id,
-        viewName: this.viewName,
-        newView: this.newView,
-        langTemplates: this.langTemplates.javascript
-      };
-    }
-  });
-
   Views.IndexHeader = FauxtonAPI.View.extend({
     template: "addons/indexes/templates/index_header"
   });
@@ -88,27 +42,6 @@ function(app, FauxtonAPI, Components, Documents, Databases, pouchdb,
     template: "addons/indexes/templates/preview_screen",
     className: "watermark-logo"
   });
-
-  Views.ShowEditor = Views.IndexCore.extend({
-    template: "addons/indexes/templates/show_editor",
-    langTemplates: {
-      "javascript": {
-        map: "function(doc) {\n  emit(doc._id, 1);\n}",
-      }
-    },
-    defaultLang: "javascript"
-  });
-
-  Views.ListEditor = Views.IndexCore.extend({
-    template: "addons/indexes/templates/list_editor",
-    langTemplates: {
-      "javascript": {
-        map: "function(doc) {\n  emit(doc._id, 1);\n}",
-      }
-    },
-    defaultLang: "javascript"
-  });
-
 
 
   Views.Row = FauxtonAPI.View.extend({
@@ -151,6 +84,68 @@ function(app, FauxtonAPI, Components, Documents, Databases, pouchdb,
   });
 
 
+/*
+
+  INDEX EDITORS____________________________________
+
+*/
+
+  //Index view CORE  extend this
+  Views.IndexCore = FauxtonAPI.View.extend({
+    initialize: function(options) {
+        this.newView = options.newView || false;
+        this.ddocs = options.ddocs;
+        this.params = options.params;
+        this.database = options.database;
+        this.currentDdoc = options.currentddoc;
+      if (this.newView) {
+        this.viewName = 'newView';
+      } else {
+        this.ddocID = options.ddocInfo ? options.ddocInfo.id : '';
+        this.viewName = options.viewName;
+        this.ddocInfo = new Documents.DdocInfo({_id: this.ddocID},{database: this.database});
+      }
+
+      this.showIndex = false;
+      _.bindAll(this);
+    },
+    establish: function () {
+      if (this.ddocInfo) {
+        return this.ddocInfo.fetch();
+      }
+    },
+    serialize: function() {
+      return {
+        database: this.database.get('id'),
+        ddocs: this.ddocs,
+        ddoc: this.model,
+        ddocName: this.model.id,
+        viewName: this.viewName,
+        newView: this.newView,
+        langTemplates: this.langTemplates.javascript
+      };
+    }
+  });
+
+  Views.ShowEditor = Views.IndexCore.extend({
+    template: "addons/indexes/templates/show_editor",
+    langTemplates: {
+      "javascript": {
+        map: "function(doc) {\n  emit(doc._id, 1);\n}",
+      }
+    },
+    defaultLang: "javascript"
+  });
+
+  Views.ListEditor = Views.IndexCore.extend({
+    template: "addons/indexes/templates/list_editor",
+    langTemplates: {
+      "javascript": {
+        map: "function(doc) {\n  emit(doc._id, 1);\n}",
+      }
+    },
+    defaultLang: "javascript"
+  });
 
 
 
@@ -632,9 +627,9 @@ function(app, FauxtonAPI, Components, Documents, Databases, pouchdb,
 
     updateDesignDoc: function () {
       if (this.newDesignDoc()) {
-        this.$('#new-ddoc-section').show();
+        this.$('#new-ddoc').show();
       } else {
-        this.$('#new-ddoc-section').hide();
+        this.$('#new-ddoc').hide();
       }
     },
 

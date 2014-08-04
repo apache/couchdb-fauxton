@@ -27,6 +27,7 @@ function (app, FauxtonAPI, Databases, Views, Documents, Resources, RouteCore) {
         route: "viewFn",
         roles: ['_admin']
       },
+      "database/:database/new_view": "newViewEditor",
       "database/:database/new_view/:designDoc": "newViewEditor"
     },
 

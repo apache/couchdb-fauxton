@@ -14,11 +14,10 @@ define([
   "app",
   "api",
   "addons/fauxton/resizeColumns",
-  "addons/fauxton/components",
-  "plugins/zeroclipboard/ZeroClipboard"
+  "addons/fauxton/components"
 ],
 
-function(app, FauxtonAPI, resizeColumns, Components, ZeroClipboard) {
+function(app, FauxtonAPI, resizeColumns, Components) {
 
   var Fauxton = FauxtonAPI.addon();
   FauxtonAPI.addNotification = function (options) {
