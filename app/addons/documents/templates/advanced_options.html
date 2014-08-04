@@ -37,6 +37,7 @@ the License.
                 <label for="check1">Include Docs</label>
               </div>
 
+              <% if (hasReduce) { %>
                 <div class="checkbox inline">
                   <input id="check2" name="reduce" type="checkbox" value="true">
                   <label for="check2">Reduce</label>
@@ -58,6 +59,7 @@ the License.
                     <option value="999" selected="selected">Exact</option>
                   </select>
                 </label>
+              <% } %>
 
           </div>
         </div>
@@ -113,10 +115,13 @@ the License.
       </div>
 
       <div class="row-fluid fieldsets">
-        <div class="checkbox inline">
-          <input id="check7" name="stale" type="checkbox" value="ok">
-          <label for="check7">Stale</label>
-        </div>
+        <% if (showStale) { %>
+          <div class="checkbox inline">
+            <input id="check7" name="stale" type="checkbox" value="ok">
+            <label for="check7">Stale</label>
+          </div>
+        <% } %>
+
         <div class="checkbox inline">
           <input id="check6" name="update_seq" type="checkbox" value="true">
           <label for="check6">Update Sequence</label>
@@ -124,7 +129,7 @@ the License.
 
         <div class="dropdown inline">
           <label class="drop-down">
-            Limit:
+            Limit 
             <select name="limit" class="input-small">
               <option selected="selected">None</option>
               <option>5</option>
@@ -140,7 +145,7 @@ the License.
 
       </div>
 
-      <div class="row-fluid">
+      <div class="row-fluid fieldsets">
         <div class="checkbox inline">
           <input id="check3" name="descending" type="checkbox" value="true">
           <label for="check3">Descending</label>
