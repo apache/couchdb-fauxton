@@ -171,11 +171,11 @@ function(app, FauxtonAPI, Components, Documents, Changes, DocEditor, Databases, 
           limit: 500
         }
       });
-
-      this.header = this.setView("#breadcrumbs", new Documents.Views.AllDocsHeader({
+      //The header has 2 parts now
+      //the right side will have api bar, search, query options etc
+      this.headerRight = this.setView("#api-navbar", new Documents.Views.RightAllDocsHeader({
         database: this.data.database
       }));
-
 
       this.sidebar = this.setView("#sidebar-content", new Documents.Views.Sidebar({
         collection: this.data.designDocs,
@@ -202,7 +202,7 @@ function(app, FauxtonAPI, Components, Documents, Changes, DocEditor, Databases, 
         ];
       };
 
-      this.apiUrl = [designDocInfo.url('apiurl'), designDocInfo.documentation() ];
+      this.headerRight.updateApiUrl([designDocInfo.url('apiurl'), designDocInfo.documentation()]);
 
     },
 
@@ -260,7 +260,9 @@ function(app, FauxtonAPI, Components, Documents, Changes, DocEditor, Databases, 
         {"name": this.data.database.id, "link": Databases.databaseUrl(this.data.database)}
       ];
 
-      this.apiUrl = [this.data.database.allDocs.urlRef("apiurl", urlParams), this.data.database.allDocs.documentation() ];
+
+      //needs to be added back
+      this.headerRight.updateApiUrl([this.data.database.allDocs.urlRef("apiurl", urlParams), this.data.database.allDocs.documentation()]);
     },
 
 
@@ -309,7 +311,7 @@ function(app, FauxtonAPI, Components, Documents, Changes, DocEditor, Databases, 
       this.documentsView.setParams(docParams, urlParams);
       this.documentsView.forceRender();
 
-      this.apiUrl = [collection.urlRef("apiurl", urlParams), "docs"];
+      this.headerRight.updateApiUrl([collection.urlRef("apiurl", urlParams), "docs"]);
     },
 
     perPageChange: function (perPage) {
