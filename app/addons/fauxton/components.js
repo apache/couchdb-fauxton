@@ -36,8 +36,9 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
 
 
   Components.Breadcrumbs = FauxtonAPI.View.extend({
+    className: "breadcrumb pull-left",
+    tagName: "ul",
     template: "addons/fauxton/templates/breadcrumbs",
-
     serialize: function() {
       var crumbs = _.clone(this.crumbs);
       return {

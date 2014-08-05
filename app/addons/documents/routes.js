@@ -56,6 +56,7 @@ function(app, FauxtonAPI, Components, Documents, Changes, DocEditor, Databases, 
 
     crumbs: function() {
       return [
+        {"name": "", "className": "fonticon-left-open", "link": "/_all_dbs"},
         {"name": this.database.id, "link": Databases.databaseUrl(this.database)},
         {"name": this.docID, "link": "#"}
       ];
@@ -113,6 +114,7 @@ function(app, FauxtonAPI, Components, Documents, Changes, DocEditor, Databases, 
     },
     crumbs: function() {
       return [
+        {"name": "", "className": "fonticon-left-open", "link": "/_all_dbs"},
         {"name": this.database.id, "link": Databases.databaseUrl(this.database)},
         {"name": "New", "link": "#"}
       ];
@@ -177,7 +179,6 @@ function(app, FauxtonAPI, Components, Documents, Changes, DocEditor, Databases, 
     },
 
     designDocMetadata:  function(database, ddoc){
-      this.toolsView && this.toolsView.remove();
       this.viewEditor && this.viewEditor.remove();
 
       var designDocInfo = new Resources.DdocInfo({_id: "_design/"+ddoc},{database: this.data.database });
@@ -191,6 +192,7 @@ function(app, FauxtonAPI, Components, Documents, Changes, DocEditor, Databases, 
 
       this.crumbs = function () {
         return [
+          {"name": "", "className": "fonticon-left-open", "link": "/_all_dbs"},
           {"name": this.data.database.id, "link": Databases.databaseUrl(this.data.database)},
         ];
       };
@@ -256,6 +258,7 @@ function(app, FauxtonAPI, Components, Documents, Changes, DocEditor, Databases, 
       }));
 
       this.crumbs = [
+        {"name": "", "className": "fonticon-left-open", "link": "/_all_dbs"},
         {"name": this.data.database.id, "link": Databases.databaseUrl(this.data.database)}
       ];
 
@@ -377,13 +380,14 @@ function(app, FauxtonAPI, Components, Documents, Changes, DocEditor, Databases, 
         filterView: this.filterView
       }));
 
-      this.toolsView && this.toolsView.remove();
+
       this.viewEditor && this.viewEditor.remove();
 
       this.sidebar.setSelectedTab('changes');
 
       this.crumbs = function () {
         return [
+          {"name": "", "className": "fonticon-left-open", "link": "/_all_dbs"},
           {"name": this.data.database.id, "link": Databases.databaseUrl(this.data.database)},
           {"name": "_changes", "link": "/_changes"}
         ];

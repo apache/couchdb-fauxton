@@ -34,9 +34,57 @@ function(app, FauxtonAPI, Components, Documents, Databases, pouchdb,
 
   var Views = {};
 
-  Views.IndexHeader = FauxtonAPI.View.extend({
-    template: "addons/indexes/templates/index_header"
+//left header
+  Views.LeftHeader = FauxtonAPI.View.extend({
+    className: "header-left",
+    template: "addons/indexes/templates/header_left",
+    initialize:function(options){
+      this.database = options.database;
+      this.title = options.title;
+    },
+    beforeRender: function(){
+      var crumbs = [
+        {"name": "", "className": "fonticon-left-open", "link": Databases.databaseUrl(this.database)},
+        {"name": this.title, "link": Databases.databaseUrl(this.database)}
+      ];
+      this.insertView("#header-breadcrumbs", new Components.Breadcrumbs({
+        crumbs: crumbs
+      }));
+      this.dropDownMenu();
+    },
+    dropDownMenu: function(){
+      var newLinks = [{
+        links: [{
+          title: 'Table',
+          icon: 'fonticon-table'
+        },{
+          title: 'JSON',
+          icon: 'fonticon-json'
+        }]
+      }];
+
+      this.insertView("#header-dropdown-menu", new Components.MenuDropDown({
+        icon: 'fonticon-cog',
+        links: newLinks,
+      }));
+    }
   });
+
+//right header
+  Views.RightHeader = FauxtonAPI.View.extend({
+    className: "header-right",
+    template: "addons/indexes/templates/header_right",
+    initialize:function(options){
+      this.database = options.database;
+      this.title = options.title;
+    },
+    beforeRender: function(){
+      this.insertView(".header-api-bar", new Components.ApiBar({}));
+    }
+  });
+
+
+
 
   Views.PreviewScreen = FauxtonAPI.View.extend({
     template: "addons/indexes/templates/preview_screen",

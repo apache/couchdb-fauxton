@@ -33,6 +33,7 @@ function (app, FauxtonAPI, Databases, Views, Documents, Resources, RouteCore) {
 
     newViewEditor: function (database, designDoc) {
       var params = app.getParams();
+      this.rightheader && this.rightheader.remove();
 
       this.setView("#right-content", new Views.PreviewScreen({}));
 
@@ -45,11 +46,11 @@ function (app, FauxtonAPI, Databases, Views, Documents, Resources, RouteCore) {
         newView: true
       }));
 
-      this.crumbs = function () {
-        return [
-          {"name": "Create View Index", "link": Databases.databaseUrl(this.data.database)},
-        ];
-      };
+      this.leftheader = this.setView("#breadcrumbs", new Views.LeftHeader({
+        title:"Create a View Index",
+        database: this.data.database
+      }));
+
     },
 
     viewFn: function (databaseName, ddoc, view) {
@@ -57,8 +58,16 @@ function (app, FauxtonAPI, Databases, Views, Documents, Resources, RouteCore) {
           urlParams = params.urlParams,
           docParams = params.docParams,
           decodeDdoc = decodeURIComponent(ddoc);
+          view = view.replace(/\?.*$/,'');
 
-      view = view.replace(/\?.*$/,'');
+      this.leftheader = this.setView("#breadcrumbs", new Views.LeftHeader({
+        title: view,
+        database: this.data.database
+      }));
+
+      this.rightheader = this.setView("#api-bar", new Views.RightHeader({
+        database: this.data.database
+      }));
 
       this.data.indexedDocs = new Resources.IndexCollection(null, {
         database: this.data.database,
@@ -80,8 +89,6 @@ function (app, FauxtonAPI, Databases, Views, Documents, Resources, RouteCore) {
         ddocInfo: this.ddocInfo(decodeDdoc, this.data.designDocs, view)
       }));
 
-      this.toolsView && this.toolsView.remove();
-
       this.documentsView = this.createViewDocumentsView({
         designDoc: decodeDdoc,
         docParams: docParams,
@@ -91,13 +98,6 @@ function (app, FauxtonAPI, Databases, Views, Documents, Resources, RouteCore) {
         designDocs: this.data.designDocs,
         view: view
       });
-
-
-      this.crumbs = function () {
-        return [
-          {"name": view, "link": Databases.databaseUrl(this.data.database)},
-        ];
-      };
 
       this.apiUrl = [this.data.indexedDocs.urlRef("apiurl", urlParams), "docs"];
     }
