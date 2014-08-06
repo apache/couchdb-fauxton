@@ -1,4 +1,3 @@
-
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License. You may obtain a copy of
 // the License at
@@ -244,6 +243,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
     className: "all-docs-item doc-row",
     initialize: function (options) {
       this.checked = options.checked;
+      this.expanded = options.expanded;
     },
 
     events: {
@@ -259,6 +259,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
 
     serialize: function() {
       return {
+        expanded: this.expanded,
         docID: this.model.get('_id'),
         doc: this.model,
         checked: this.checked
@@ -566,6 +567,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
         }
         this.rows[doc.id] = this.insertView("#doc-list", new this.nestedView({
           model: doc,
+          expanded: this.expandDocs,
           checked: isChecked
         }));
       }, this);
