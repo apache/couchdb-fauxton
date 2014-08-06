@@ -16,10 +16,11 @@ define([
   "addons/indexes/views",
   "addons/documents/views",
   "addons/indexes/resources",
-  "addons/indexes/routes-core"
+  "addons/indexes/routes-core",
+   "addons/fauxton/components"
 ],
 
-function (app, FauxtonAPI, Databases, Views, Documents, Resources, RouteCore) {
+function (app, FauxtonAPI, Databases, Views, Documents, Resources, RouteCore, Components) {
 
   var ShowIndexes = RouteCore.extend({
     routes: {
@@ -33,7 +34,9 @@ function (app, FauxtonAPI, Databases, Views, Documents, Resources, RouteCore) {
 
     newShowEditor: function (database, designDoc) {
       var params = app.getParams();
-
+      /* --------------------------------------------------
+        Insert View Editor for new view
+      ----------------------------------------------------*/
       this.setView("#left-content", new Views.ShowEditor({
         model: this.data.database,
         currentddoc: designDoc ? "_design/"+designDoc : "",
@@ -43,28 +46,56 @@ function (app, FauxtonAPI, Databases, Views, Documents, Resources, RouteCore) {
         newView: true
       }));
 
+      /* --------------------------------------------------
+        Insert Preview Screen View
+      ----------------------------------------------------*/
       this.setView("#right-content", new Views.PreviewScreen({}));
-      this.crumbs = function () {
-        return [
-          {"name": "Create Show Index", "link": Databases.databaseUrl(this.data.database)},
-        ];
-      };
+
+      /* --------------------------------------------------
+        Set up & Insert breadcrumb header
+      ----------------------------------------------------*/
+      var crumbs = [
+        {"name": "", "className": "fonticon-left-open", "link": Databases.databaseUrl(this.data.database)},
+        {"name": "Create a Show Index", "link": Databases.databaseUrl(this.data.database)}
+      ];
+      this.leftheader = this.setView("#breadcrumbs", new Components.LeftHeader({
+        crumbs: crumbs
+      }));
     },
+    tempFn:  function(databaseName, ddoc, view){
+      /* --------------------------------------------------
+        Set up breadcrumb header
+      ----------------------------------------------------*/
+      var crumbs = [
+        {"name": "", "className": "fonticon-left-open", "link": Databases.databaseUrl(this.data.database)},
+        {"name": view, "link": Databases.databaseUrl(this.data.database)}
+      ];
 
-    apiUrl: function() {
-      //TODO: Hook up proper API urls
-      return '';
-    },
+      var dropdown = [{
+        links: [{
+          title: 'Duplicate Index',
+          icon: 'fonticon-documents'
+        },{
+          title: 'Delete',
+          icon: 'fonticon-trash'
+        }]
+      }];
 
-    tempFn:  function(databaseName, ddoc, fn){
-      this.setView("#left-content", new Views.ShowEditor({}));
+      this.leftheader = this.setView("#breadcrumbs", new Components.LeftHeader({
+        crumbs: crumbs,
+        dropdownMenu: dropdown
+      }));
 
+
+      /* --------------------------------------------------
+        Insert Show Editor
+      ----------------------------------------------------*/
+      this.setView("#left-content", new Views.ListEditor({}));
+
+      /* --------------------------------------------------
+        Insert Preview Screen View
+      ----------------------------------------------------*/
       this.setView("#right-content", new Views.PreviewScreen({}));
-      this.crumbs = function () {
-        return [
-          {"name": this.data.database.id, "link": Databases.databaseUrl(this.data.database)},
-        ];
-      };
     }
   });
 

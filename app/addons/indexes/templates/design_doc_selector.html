@@ -11,28 +11,26 @@ WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 License for the specific language governing permissions and limitations under
 the License.
 -->
-<div class="span3">
-  <label for="ddoc">Save to Design Document <a class="help-link" href="<%-getDocUrl('design_doc')%>" target="_blank"><i class="icon-question-sign"></i></a></label>
-  <select id="ddoc">
-    <optgroup label="Select a document">
-      <option value="new-doc">New document</option>
+<label for="ddoc">Save to Design Document <a class="help-link" data-bypass="true" href="<%-getDocUrl('design_doc')%>" target="_blank"><i class="icon-question-sign"></i></a></label>
+<div class="row-fluid new-ddoc">
+  <div class="select-wrapper span5">
+    <select id="ddoc">
+      <optgroup label="Select a document">
+        <option value="new-doc">New document</option>
 
-      <% ddocs.each(function(ddoc) { %>
-      <%= ddoc.id %>
-      <%= ddocName %>
-      <% if (ddoc.id === ddocName) { %>
-      <option selected="selected" value="<%- ddoc.id %>"><%- ddoc.id %></option>
-      <% } else { %>
-      <option value="<%- ddoc.id %>"><%- ddoc.id %></option>
-      <% } %>
-      <% }); %>
-    </optgroup>
-  </select>
-</div>
-
-<div id="new-ddoc-section" class="span5" style="display:none">
-  <label class="control-label" for="new-ddoc"> _design/ </label>
-  <div class="controls">
-    <input type="text" id="new-ddoc" placeholder="newDesignDoc" />
+        <% ddocs.each(function(ddoc) { %>
+        <%= ddoc.id %>
+        <%= ddocName %>
+        <% if (ddoc.id === ddocName) { %>
+        <option selected="selected" value="<%- ddoc.id %>"><%- ddoc.id %></option>
+        <% } else { %>
+        <option value="<%- ddoc.id %>"><%- ddoc.id %></option>
+        <% } %>
+        <% }); %>
+      </optgroup>
+    </select>
+    <i></i>
   </div>
+
+  <input type="text" id="new-ddoc" class="span7" style="display:none" placeholder="Enter a design doc name" />
 </div>

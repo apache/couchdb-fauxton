@@ -16,10 +16,11 @@ define([
   "addons/indexes/views",
   "addons/documents/views",
   "addons/indexes/resources",
-  "addons/indexes/routes-core"
+  "addons/indexes/routes-core",
+  "addons/fauxton/components"
 ],
 
-function (app, FauxtonAPI, Databases, Views, Documents, Resources, RouteCore) {
+function (app, FauxtonAPI, Databases, Views, Documents, Resources, RouteCore, Components) {
 
   var ViewIndexes = RouteCore.extend({
     routes: {
@@ -33,10 +34,19 @@ function (app, FauxtonAPI, Databases, Views, Documents, Resources, RouteCore) {
 
     newViewEditor: function (database, designDoc) {
       var params = app.getParams();
+      /* --------------------------------------------------
+        remove right header
+      ----------------------------------------------------*/
       this.rightheader && this.rightheader.remove();
 
+      /* --------------------------------------------------
+        Insert Preview Screen View
+      ----------------------------------------------------*/
       this.setView("#right-content", new Views.PreviewScreen({}));
 
+      /* --------------------------------------------------
+        Insert View Editor for new view
+      ----------------------------------------------------*/
       this.viewEditor = this.setView("#left-content", new Views.ViewEditor({
         model: this.data.database,
         currentddoc: designDoc ? "_design/"+designDoc : "",
@@ -46,9 +56,15 @@ function (app, FauxtonAPI, Databases, Views, Documents, Resources, RouteCore) {
         newView: true
       }));
 
-      this.leftheader = this.setView("#breadcrumbs", new Views.LeftHeader({
-        title:"Create a View Index",
-        database: this.data.database
+      /* --------------------------------------------------
+        Set up & Insert breadcrumb header
+      ----------------------------------------------------*/
+      var crumbs = [
+        {"name": "", "className": "fonticon-left-open", "link": Databases.databaseUrl(this.data.database)},
+        {"name": "Create a View Index", "link": Databases.databaseUrl(this.data.database)}
+      ];
+      this.leftheader = this.setView("#breadcrumbs", new Components.LeftHeader({
+        crumbs: crumbs
       }));
 
     },
@@ -60,15 +76,32 @@ function (app, FauxtonAPI, Databases, Views, Documents, Resources, RouteCore) {
           decodeDdoc = decodeURIComponent(ddoc);
           view = view.replace(/\?.*$/,'');
 
-      this.leftheader = this.setView("#breadcrumbs", new Views.LeftHeader({
-        title: view,
-        database: this.data.database
+      /* --------------------------------------------------
+        Set up breadcrumb header
+      ----------------------------------------------------*/
+      var crumbs = [
+        {"name": "", "className": "fonticon-left-open", "link": Databases.databaseUrl(this.data.database)},
+        {"name": view, "link": Databases.databaseUrl(this.data.database)}
+      ];
+
+      var dropdown = [{
+        links: [{
+          title: 'Duplicate Index',
+          icon: 'fonticon-documents'
+        },{
+          title: 'Delete',
+          icon: 'fonticon-trash'
+        }]
+      }];
+
+      this.leftheader = this.setView("#breadcrumbs", new Components.LeftHeader({
+        crumbs: crumbs,
+        dropdownMenu: dropdown
       }));
 
-      this.rightheader = this.setView("#api-bar", new Views.RightHeader({
-        database: this.data.database
-      }));
-
+      /* --------------------------------------------------
+        Set up Index Collection
+      ----------------------------------------------------*/
       this.data.indexedDocs = new Resources.IndexCollection(null, {
         database: this.data.database,
         design: decodeDdoc,
@@ -79,6 +112,21 @@ function (app, FauxtonAPI, Databases, Views, Documents, Resources, RouteCore) {
         }
       });
 
+
+      /* --------------------------------------------------
+        Set up right header
+      ----------------------------------------------------*/
+
+      this.rightheader = this.setView("#api-navbar", new Views.RightHeader({
+        database: this.data.database,
+        model: this.data.database,
+        endpoint: this.data.indexedDocs.urlRef("apiurl", urlParams),
+        documentation: "docs"
+      }));
+
+      /* --------------------------------------------------
+        Insert View Editor
+      ----------------------------------------------------*/
       this.viewEditor = this.setView("#left-content", new Views.ViewEditor({
         model: this.data.database,
         ddocs: this.data.designDocs,
@@ -89,6 +137,9 @@ function (app, FauxtonAPI, Databases, Views, Documents, Resources, RouteCore) {
         ddocInfo: this.ddocInfo(decodeDdoc, this.data.designDocs, view)
       }));
 
+      /* --------------------------------------------------
+        Insert Docs returned from view
+      ----------------------------------------------------*/
       this.documentsView = this.createViewDocumentsView({
         designDoc: decodeDdoc,
         docParams: docParams,
@@ -98,8 +149,6 @@ function (app, FauxtonAPI, Databases, Views, Documents, Resources, RouteCore) {
         designDocs: this.data.designDocs,
         view: view
       });
-
-      this.apiUrl = [this.data.indexedDocs.urlRef("apiurl", urlParams), "docs"];
     }
   });
 

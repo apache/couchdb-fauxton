@@ -16,10 +16,11 @@ define([
   "addons/indexes/views",
   "addons/documents/views",
   "addons/indexes/resources",
-  "addons/indexes/routes-core"
+  "addons/indexes/routes-core",
+  "addons/fauxton/components"
 ],
 
-function (app, FauxtonAPI, Databases, Views, Documents, Resources, RouteCore) {
+function (app, FauxtonAPI, Databases, Views, Documents, Resources, RouteCore, Components) {
 
   var ListIndexes = RouteCore.extend({
     routes: {
@@ -39,6 +40,9 @@ function (app, FauxtonAPI, Databases, Views, Documents, Resources, RouteCore) {
     newListsEditor: function (database, designDoc) {
       var params = app.getParams();
 
+      /* --------------------------------------------------
+        Insert View Editor for new list
+      ----------------------------------------------------*/
       this.setView("#left-content", new Views.ListEditor({
         model: this.data.database,
         currentddoc: designDoc ? "_design/"+designDoc : "",
@@ -47,23 +51,56 @@ function (app, FauxtonAPI, Databases, Views, Documents, Resources, RouteCore) {
         database: this.data.database,
         newView: true
       }));
-
+      /* --------------------------------------------------
+        Insert Preview Screen View
+      ----------------------------------------------------*/
       this.setView("#right-content", new Views.PreviewScreen({}));
-      this.crumbs = function () {
-        return [
-          {"name": "Create List Index", "link": Databases.databaseUrl(this.data.database)},
-        ];
-      };
+
+      /* --------------------------------------------------
+        Set up & Insert breadcrumb header
+      ----------------------------------------------------*/
+      var crumbs = [
+        {"name": "", "className": "fonticon-left-open", "link": Databases.databaseUrl(this.data.database)},
+        {"name": "Create a List Index", "link": Databases.databaseUrl(this.data.database)}
+      ];
+      this.leftheader = this.setView("#breadcrumbs", new Components.LeftHeader({
+        crumbs: crumbs
+      }));
     },
-    tempFn:  function(databaseName, ddoc, fn){
+    tempFn:  function(databaseName, ddoc, view){
+      /* --------------------------------------------------
+        Set up breadcrumb header
+      ----------------------------------------------------*/
+      var crumbs = [
+        {"name": "", "className": "fonticon-left-open", "link": Databases.databaseUrl(this.data.database)},
+        {"name": view, "link": Databases.databaseUrl(this.data.database)}
+      ];
+
+      var dropdown = [{
+        links: [{
+          title: 'Duplicate Index',
+          icon: 'fonticon-documents'
+        },{
+          title: 'Delete',
+          icon: 'fonticon-trash'
+        }]
+      }];
+
+      this.leftheader = this.setView("#breadcrumbs", new Components.LeftHeader({
+        crumbs: crumbs,
+        dropdownMenu: dropdown
+      }));
+
+
+      /* --------------------------------------------------
+        Insert List Editor
+      ----------------------------------------------------*/
       this.setView("#left-content", new Views.ListEditor({}));
 
+      /* --------------------------------------------------
+        Insert Preview Screen View
+      ----------------------------------------------------*/
       this.setView("#right-content", new Views.PreviewScreen({}));
-      this.crumbs = function () {
-        return [
-          {"name": this.data.database.id, "link": Databases.databaseUrl(this.data.database)},
-        ];
-      };
     }
   });
 
