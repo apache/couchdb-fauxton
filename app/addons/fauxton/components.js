@@ -151,6 +151,7 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
 
 
   Components.Pagination = FauxtonAPI.View.extend({
+    className: "pagination pagination-centered",
     template: "addons/fauxton/templates/pagination",
 
     initialize: function(options) {
@@ -173,6 +174,7 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
   });
 
   Components.IndexPagination = FauxtonAPI.View.extend({
+    className: "pagination pagination-centered",
     template: "addons/fauxton/templates/index_pagination",
     events: {
       "click a": 'scrollTo',

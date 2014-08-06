@@ -598,8 +598,11 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
       }
 
       this.toggleTrash();
+      this.setPaginationWidth();
     },
-
+    setPaginationWidth: function(){
+      this.$('#documents-pagination').css('width', this.$el.outerWidth());
+    },
     perPage: function () {
       return this.allDocsNumber.perPage();
     }

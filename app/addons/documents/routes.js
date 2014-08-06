@@ -22,11 +22,10 @@ define([
   "addons/documents/views-doceditor",
 
   "addons/databases/base",
-  "addons/documents/resources",
-  "addons/fauxton/components"
+  "addons/documents/resources"
 ],
 
-function(app, FauxtonAPI, Components, Documents, Changes, DocEditor, Databases, Resources, Components) {
+function(app, FauxtonAPI, Components, Documents, Changes, DocEditor, Databases, Resources) {
   /* --------------------------------------------------
     DOCUMENT EDITOR ROUTE OBJECT
   ----------------------------------------------------*/
@@ -185,13 +184,35 @@ function(app, FauxtonAPI, Components, Documents, Changes, DocEditor, Databases, 
         }
       });
 
+      /* --------------------------------------------------
+        Set up breadcrumb header
+      ----------------------------------------------------*/
+      var crumbs = [
+        {"name": "", "className": "fonticon-left-open", "link": "/_all_dbs"},
+        {"name": this.data.database.id, "link": Databases.databaseUrl(this.data.database)}
+      ];
+
+      var dropdown = [{
+        links: [{
+          title: 'Duplicate Index',
+          icon: 'fonticon-documents'
+        },{
+          title: 'Delete',
+          icon: 'fonticon-trash'
+        }]
+      }];
+
+      this.leftheader = this.setView("#breadcrumbs", new Components.LeftHeader({
+        crumbs: crumbs,
+        dropdownMenu: dropdown
+      }));
 
       /* --------------------------------------------------
         Show right header for all docs that includes:
         query options, api bar, search and select
       ----------------------------------------------------*/
       this.changesHeader = true;
-      this.setAllDocsHeader();
+      this.resetAllDocsHeader();
 
       /* --------------------------------------------------
         Show the sidebar
@@ -203,7 +224,7 @@ function(app, FauxtonAPI, Components, Documents, Changes, DocEditor, Databases, 
       }));
     },
 
-    setAllDocsHeader: function(){
+    resetAllDocsHeader: function(){
       if (this.changesHeader){
         this.headerRight = this.setView("#api-navbar", new Documents.Views.RightAllDocsHeader({
           database: this.data.database
@@ -264,33 +285,11 @@ function(app, FauxtonAPI, Components, Documents, Changes, DocEditor, Databases, 
       }
 
 
-      /* --------------------------------------------------
-        Set up breadcrumb header
-      ----------------------------------------------------*/
-      var crumbs = [
-        {"name": "", "className": "fonticon-left-open", "link": "/_all_dbs"},
-        {"name": this.data.database.id, "link": Databases.databaseUrl(this.data.database)}
-      ];
-
-      var dropdown = [{
-        links: [{
-          title: 'Duplicate Index',
-          icon: 'fonticon-documents'
-        },{
-          title: 'Delete',
-          icon: 'fonticon-trash'
-        }]
-      }];
-
-      this.leftheader = this.setView("#breadcrumbs", new Components.LeftHeader({
-        crumbs: crumbs,
-        dropdownMenu: dropdown
-      }));
 
       /*--------------------------------------------------
       reset header if you have to
       ----------------------------------------------------*/
-      this.setAllDocsHeader();
+      this.resetAllDocsHeader();
 
       /* --------------------------------------------------
         Build all docs
@@ -390,7 +389,7 @@ function(app, FauxtonAPI, Components, Documents, Changes, DocEditor, Databases, 
 
     paginate: function (options) {
       var collection = this.documentsView.collection;
-
+      this.leftheader.forceRender();
       this.documentsView.forceRender();
       collection.paging.pageSize = options.perPage;
       var promise = collection[options.direction]({fetch: false});
@@ -485,7 +484,7 @@ function(app, FauxtonAPI, Components, Documents, Changes, DocEditor, Databases, 
     removeFilter: function (filter) {
       this.changesView.filters.splice(this.changesView.filters.indexOf(filter), 1);
       this.changesView.render();
-    },
+    }
 
   });
 
