@@ -346,6 +346,12 @@ module.exports = function(grunt) {
         ]
       },
 
+      zeroclip: {
+        files: [
+          {src: "assets/js/plugins/zeroclipboard/ZeroClipboard.swf", dest: "dist/release/js/zeroclipboard/ZeroClipboard.swf"},
+        ]
+      },
+
       dist:{
         files:[
           {src: "dist/debug/index.html", dest: "dist/release/index.html"},
@@ -466,8 +472,8 @@ module.exports = function(grunt) {
 
   grunt.registerTask('watchRun', ['clean:watch', 'dependencies', 'jshint']);
   // build a release
-  grunt.registerTask('release', ['clean' ,'dependencies', "gen_initialize:release", 'jshint', 'build', 'minify', 'copy:dist', 'copy:ace']);
-  grunt.registerTask('couchapp_release', ['clean' ,'dependencies', "gen_initialize:couchapp", 'jshint', 'build', 'minify', 'copy:dist', 'copy:ace']);
+  grunt.registerTask('release', ['clean' ,'dependencies', "gen_initialize:release", 'jshint', 'build', 'minify', 'copy:dist', 'copy:ace', 'copy:zeroclip']);
+  grunt.registerTask('couchapp_release', ['clean' ,'dependencies', "gen_initialize:couchapp", 'jshint', 'build', 'minify', 'copy:dist', 'copy:ace', 'copy:zeroclip']);
 
   /*
    * Install into CouchDB in either debug, release, or couchapp mode

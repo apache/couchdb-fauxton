@@ -19,10 +19,7 @@ define([
        "addons/fauxton/components",
 
        // Plugins
-       "plugins/prettify",
-       // this should never be global available:
-       // https://github.com/zeroclipboard/zeroclipboard/blob/master/docs/security.md
-       "plugins/zeroclipboard/ZeroClipboard"
+       "plugins/prettify"
 ],
 
 function(app, FauxtonAPI, resizeColumns, Components, prettify, ZeroClipboard) {
@@ -118,8 +115,9 @@ function(app, FauxtonAPI, resizeColumns, Components, prettify, ZeroClipboard) {
 
     afterRender: function(){
       prettyPrint();
-      ZeroClipboard.config({ moviePath: "/assets/js/plugins/zeroclipboard/ZeroClipboard.swf" });
-      var client = new ZeroClipboard(this.$(".js-copy"));
+      var client = new Components.Clipboard({
+        $el: this.$('.js-copy')
+      });
     }
   });
 

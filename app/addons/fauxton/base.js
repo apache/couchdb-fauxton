@@ -14,10 +14,11 @@ define([
   "app",
   "api",
   "addons/fauxton/resizeColumns",
+  "addons/fauxton/components",
   "plugins/zeroclipboard/ZeroClipboard"
 ],
 
-function(app, FauxtonAPI, resizeColumns, ZeroClipboard) {
+function(app, FauxtonAPI, resizeColumns, Components, ZeroClipboard) {
 
   var Fauxton = FauxtonAPI.addon();
   FauxtonAPI.addNotification = function (options) {
@@ -298,8 +299,10 @@ function(app, FauxtonAPI, resizeColumns, ZeroClipboard) {
       this.render();
     },
     afterRender: function(){
-      ZeroClipboard.config({ moviePath: "/assets/js/plugins/zeroclipboard/ZeroClipboard.swf" });
-      var client = new ZeroClipboard(this.$(".copy-url"));
+      var client = new Components.Clipboard({
+        $el: this.$('.copy-url')
+      });
+
       client.on("load", function(e){
         var $apiInput = $('#api-navbar input');
         var copyURLTimer;
