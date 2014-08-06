@@ -25,10 +25,13 @@ define([
   // Libs
   "api",
   "ace_configuration",
-  "spin"
+  "spin",
+  // this should never be global available:
+  // https://github.com/zeroclipboard/zeroclipboard/blob/master/docs/security.md
+  "plugins/zeroclipboard/ZeroClipboard"
 ],
 
-function(app, FauxtonAPI, ace, spin) {
+function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
   var Components = FauxtonAPI.addon();
 
   Components.Pagination = FauxtonAPI.View.extend({
@@ -630,6 +633,25 @@ function(app, FauxtonAPI, ace, spin) {
     }
   });
 
+  Components.Clipboard = FauxtonAPI.View.extend({
+    initialize: function (options) {
+      this.$el = options.$el;
+      this.moviePath = FauxtonAPI.getExtensions('zeroclipboard:movielist')[0];
+
+      if (_.isUndefined(this.moviePath)) {
+       this.moviePath = app.host + app.root + "js/zeroclipboard/ZeroClipboard.swf";
+      }
+
+      ZeroClipboard.config({ moviePath: this.moviePath });
+      this.client = new ZeroClipboard(this.$el);
+    },
+
+    on: function () {
+      return this.client.on.apply(this.client, arguments);
+    }
+
+  });
+
 
   //need to make this into a backbone view...
   var routeObjectSpinner;
@@ -709,6 +731,7 @@ function(app, FauxtonAPI, ace, spin) {
     removeViewSpinner(selector);
     removeRouteObjectSpinner();
   });
+
 
   return Components;
 });

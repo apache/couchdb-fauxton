@@ -67,6 +67,8 @@ module.exports = function (grunt) {
       } else if (!!url.match(/\.js$|\.html$/)) {
         // server js from app directory
         filePath = path.join(app_dir, url.replace('/_utils/fauxton/',''));
+      } else if (!!url.match(/ZeroClipboard/)) {
+        filePath = "./assets/js/plugins/zeroclipboard/ZeroClipboard.swf"
       } else if (!!url.match(/testrunner/)) {
         var testSetup = grunt.util.spawn({cmd: 'grunt', grunt: true, args: ['test_inline']}, function (error, result, code) {/* log.writeln(String(result));*/ });
         testSetup.stdout.pipe(process.stdout);
