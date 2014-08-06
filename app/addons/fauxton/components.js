@@ -44,10 +44,10 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
       this.crumbs = options.crumbs || [];
     },
     updateCrumbs: function(crumbs){
-      this.breadcrumbs.update(crumbs);
+      this.breadcrumbs && this.breadcrumbs.update(crumbs);
     },
     updateDropdown: function(menuLinks){
-      this.dropdown.update(menuLinks);
+      this.dropdown && this.dropdown.update(menuLinks);
     },
     beforeRender: function(){
       this.setUpCrumbs();
