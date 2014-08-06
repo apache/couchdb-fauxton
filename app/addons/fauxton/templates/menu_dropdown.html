@@ -21,11 +21,13 @@ the License.
     <% _.each(linkSection.links, function (link) { %>
       <li>
         <a
+          <% if (link.trigger){ %> data-bypass="true" triggerEvent="<%-link.trigger%>" <%}%>
           <% if (link.icon) { %>
           class="icon <%- link.icon %>"
           <% } %>
           href="<%- link.url %>">
           <%- link.title %>
+
         </a>
       <li>
     <%});%>

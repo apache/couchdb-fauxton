@@ -12,7 +12,7 @@ License for the specific language governing permissions and limitations under
 the License.
 -->
 
-<div class="select"><input <%- checked ? 'checked="checked"' : '' %> type="checkbox" class="js-row-select"></div>
+<div class="select" <% if (!showSelect){ %>style="display:none"<%}%> ><input <%- checked ? 'checked="checked"' : '' %> type="checkbox" class="js-row-select"></div>
 <div class="doc-item  ">
 
   <header>
@@ -25,10 +25,8 @@ the License.
     </div>
   <% } %>
   </header>
-  <% if (expanded){ %>
-    <div class="doc-data">
-      <pre class="prettyprint"><%- doc.prettyJSON() %></pre>
-    </div>
-  <% } %>
+  <div class="doc-data">
+    <pre class="prettyprint"><%- doc.prettyJSON() %></pre>
+  </div>
 </div>
 <div class="clearfix"></div>

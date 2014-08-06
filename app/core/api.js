@@ -26,6 +26,11 @@ function(FauxtonAPI, Layout, Router, RouteObject, utils) {
     utils: utils
   });
 
+  //global app events
+  FauxtonAPI.Events = {};
+  _.extend(FauxtonAPI.Events, Backbone.Events);
+
+
   FauxtonAPI.navigate = function(url, _opts) {
     var options = _.extend({trigger: true}, _opts );
     FauxtonAPI.router.navigate(url,options);
@@ -47,7 +52,7 @@ function(FauxtonAPI, Layout, Router, RouteObject, utils) {
     FauxtonAPI.router.triggerRouteEvent("route:"+routeEvent, args);
   };
 
-  
+
   return FauxtonAPI;
 });
 

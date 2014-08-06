@@ -40,12 +40,14 @@ function(app, FauxtonAPI, Components, Documents, Databases, pouchdb,
     className: "header-right",
     template: "addons/indexes/templates/header_right",
     initialize:function(options){
+      _.bindAll(this);
       this.database = options.database;
       this.title = options.title;
       this.api = options.api;
       this.endpoint = options.endpoint;
       this.documentation = options.documentation;
       this.eventer = _.extend({}, Backbone.Events);
+      FauxtonAPI.Events.on('advancedOptions:updateView', this.updateView);
     },
     updateApiUrl: function(api){
       //this will update the api bar when the route changes
@@ -60,8 +62,6 @@ function(app, FauxtonAPI, Components, Documents, Databases, pouchdb,
       }));
 
       this.advancedOptions = this.insertView('#header-query-options', new QueryOptions.AdvancedOptions({
-        updateViewFn: this.updateView,
-        previewFn: this.previewView,
         database: this.database,
         viewName: this.viewName,
         ddocName: this.model.id,

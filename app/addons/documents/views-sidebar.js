@@ -32,11 +32,13 @@ function(app, FauxtonAPI, Components, Documents, Databases) {
     },
 
     initialize: function(options) {
+      _.bindAll(this);
       this.database = options.database;
       if (options.ddocInfo) {
         this.ddocID = options.ddocInfo.id;
         this.currView = options.ddocInfo.currView;
       }
+      FauxtonAPI.Events.on('database:delete', this.showDeleteDatabaseModal)
     },
     showDeleteDatabaseModal: function(event){
       this.deleteDBModal.showModal();

@@ -192,19 +192,10 @@ function(app, FauxtonAPI, Components, Documents, Changes, DocEditor, Databases, 
         {"name": this.data.database.id, "link": Databases.databaseUrl(this.data.database)}
       ];
 
-      var dropdown = [{
-        links: [{
-          title: 'Duplicate Index',
-          icon: 'fonticon-documents'
-        },{
-          title: 'Delete',
-          icon: 'fonticon-trash'
-        }]
-      }];
 
       this.leftheader = this.setView("#breadcrumbs", new Components.LeftHeader({
         crumbs: crumbs,
-        dropdownMenu: dropdown
+        dropdownMenu: this.setUpDropdown()
       }));
 
       /* --------------------------------------------------
@@ -222,6 +213,54 @@ function(app, FauxtonAPI, Components, Documents, Changes, DocEditor, Databases, 
         collection: this.data.designDocs,
         database: this.data.database
       }));
+    },
+
+    setUpDropdown: function(){
+      var defaultMenuLinks = [{
+        links: [{
+          title: 'Replicate Database',
+          icon: 'fonticon-replicate',
+          url: '#/replication/'+this.databaseName
+        },{
+          title: 'Delete',
+          icon: 'fonticon-trash',
+          trigger: 'database:delete'
+        }]
+      }];
+
+      defaultMenuLinks.push({
+        title: 'Add new',
+        links: this.getExtensionLinks()
+      });
+
+      return defaultMenuLinks;
+    },
+
+    getExtensionLinks: function () {
+      var database = this.data.database,
+          newurlPrefix = "#" + database.url('app');
+
+      var menuLinks = [{
+          title: 'New Doc',
+          url: newurlPrefix + '/new',
+          icon: 'fonticon-plus-circled'
+        },{
+          title: 'New Design Doc',
+          url: newurlPrefix + '/new_view',
+          icon: 'fonticon-plus-circled'
+      }];
+
+      return _.reduce(FauxtonAPI.getExtensions('sidebar:links'), function (menuLinks, link) {
+
+        menuLinks.push({
+          title: link.title,
+          url: newurlPrefix + "/" + link.url,
+          icon: 'fonticon-plus-circled'
+        });
+
+        return menuLinks;
+     }, menuLinks);
+
     },
 
     resetAllDocsHeader: function(){
@@ -373,6 +412,7 @@ function(app, FauxtonAPI, Components, Documents, Changes, DocEditor, Databases, 
 
       this.documentsView.setCollection(collection);
       this.documentsView.setParams(docParams, urlParams);
+      this.leftheader.forceRender();
       this.documentsView.forceRender();
 
       this.headerRight.updateApiUrl([collection.urlRef("apiurl", urlParams), "docs"]);
@@ -382,6 +422,7 @@ function(app, FauxtonAPI, Components, Documents, Changes, DocEditor, Databases, 
       // We need to restore the collection parameters to the defaults (1st page)
       // and update the page size
       this.perPage = perPage;
+      this.leftheader.forceRender();
       this.documentsView.forceRender();
       this.documentsView.collection.pageSizeReset(perPage, {fetch: false});
       this.setDocPerPageLimit(perPage);

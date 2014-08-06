@@ -11,23 +11,14 @@ WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 License for the specific language governing permissions and limitations under
 the License.
 -->
-
-<div class="header-left">
-<!--back arrow-->
-
-<!--title with dropdown DB search-->
-
-<!-- Menu gear-->
-</div>
-
-
-<div class="header-right">
-<!-- Select button-->
-<!-- ? button-->
-<!-- ? button-->
-<!-- ? button-->
-<!-- ? button-->
-<!-- json button-->
-<!-- trash button-->
-<!-- cancel button-->
+<div class="row">
+  <div class="btn-toolbar span6">
+    <button type="button" class="btn btn-small all" data-toggle="button">✓ All</button>
+    <button class="btn btn-small disabled js-bulk-delete"><i class="icon-trash"></i></button>
+    <% if (expandDocs) { %>
+    <button id="collapse" class="btn btn-small"><i class="icon-minus"></i> Collapse</button>
+    <% } else { %>
+    <button id="collapse" class="btn btn-small"><i class="icon-plus"></i> Expand</button>
+    <% } %>
+  </div>
 </div>
