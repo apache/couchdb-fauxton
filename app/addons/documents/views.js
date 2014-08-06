@@ -487,7 +487,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
     },
 
     selectAll: function(evt){
-      $('.all-docs').find("input:checkbox").prop('checked', !$(evt.target).hasClass('active')).trigger('change');
+      $('#doc-list').find("input:checkbox").prop('checked', !$(evt.target).hasClass('active')).trigger('change');
     },
 
     serialize: function() {
