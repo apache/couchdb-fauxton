@@ -109,6 +109,7 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
       }else{
         $currentTarget.removeClass("fonticon-minus").addClass("fonticon-plus");
       }
+      $('#query-options-tray').hide();
       $('.api-navbar').toggle();
     },
 

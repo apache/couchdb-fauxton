@@ -64,7 +64,8 @@ function(app, FauxtonAPI, resizeColumns ) {
     toggleQuery: function(event) {
       $('#dashboard-content').scrollTop(0);
       this.$('#query-options-tray').toggle();
-    },
+      $('.api-navbar').hide();
+    }, 
 
     resetForm: function() {
       $('input, textarea').each(function(){
@@ -74,6 +75,7 @@ function(app, FauxtonAPI, resizeColumns ) {
       $("select").each(function(){
         this.selectedIndex = 0;
       });
+      $('#query-options-tray').hide();
     },
 
     showKeys: function(){
