@@ -1,0 +1,490 @@
+/*  Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ *  use this file except in compliance with the License. You may obtain a copy of
+ *  the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ *  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ *  License for the specific language governing permissions and limitations under
+ *  the License.
+ */
+ @import "variables.less";
+
+/* ajax loader */
+.loader {
+  background: url('../img/loader.gif') center center no-repeat;
+  min-height:  100px;
+}
+
+#global-notifications {
+  position: fixed;
+  top: 0px;
+  display: block;
+  z-index: 100000;
+  left: @navWidth;
+  .closeMenu & {
+    left: @collapsedNavWidth;
+  }
+  width: 100%;
+}
+
+/*container where the layout is injected*/
+#app-container{
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  > .row-fluid {
+    height: 100%;
+  }
+  &.loader{
+    min-height: 400px;
+    > *{
+      display: none;
+    }
+  }
+}
+
+/* Fixed side navigation */
+#primary-navbar {
+  /* hack for the scrollbar that shines through from the sidebar */
+  -webkit-transform: translate3d(0, 0, 0);
+  height: 100%;
+  position: fixed;
+  width: @navWidth;
+  top: 0;
+  bottom: 0;
+  background-color: @primaryNav;
+  overflow-y: scroll;
+  .version {
+    color: #fff;
+    font-size: 10px;
+    padding-left: 10px;
+  }
+  #footer-links{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+  }
+  #user-create-admin{
+    font-size: 12px
+  }
+  .navbar {
+     .burger{
+        .transition(all @transitionSpeed @transitionEaseType);
+        padding: 22px 0 0 18px;
+        position: fixed;
+        top: 0;
+        z-index: 100;
+        background-color: @primaryNav;
+        width: @navWidth;
+        div{
+          .transition(all @transitionSpeed @transitionEaseType);
+          height: 4px;
+          width: 24px;
+          .border-radius(2);
+          background-color: @navBG;
+          margin: 2px 0px;
+        }
+        &:hover div{
+          background-color: @orange;
+        }
+      }
+      .bottom-container {
+       height: 110px;
+       position: fixed;
+       bottom: 0;
+       width: 220px;
+       background: #3a2c2b;
+       .brand {
+         .box-sizing(content-box);
+         .hide-text;
+         .customTransition(left, 1s, 0.805, 0.005, 0.165, 0.985);
+         margin: 10px 0 0 0;
+         width: 200px;
+         height: 40px;
+         padding: 10px;
+         float: none;
+         background: #3a2c2b;
+         .icon {
+           .box-sizing(content-box);
+           background: url(../img/couchdb-site.png) no-repeat 0 0;
+           display: block;
+           height: 100%;
+           width: 100%;
+         }
+         .closeMenu & {
+           .icon {
+              background: url(../img/minilogo.png) no-repeat 0 0;
+            }
+            width: 45px;
+          }
+       }
+       #footer-nav-links {
+       li {
+       a {
+         font-size: 12px;
+         color: @red;
+         padding: 12px;
+         text-shadow: none;
+       }
+       &.active, &:hover{
+             a {
+               text-decoration: underline;
+             }
+           }
+     }
+       }
+    }
+    nav {
+      margin-top: 64px;
+      .nav{
+        margin: 0;
+        li{
+          .transition(all @transitionSpeed @transitionEaseType);
+          padding: 0;
+          font-size: 16px;
+          letter-spacing: 1px;
+          line-height: 23px;
+          width: @navWidth;
+          font-weight: normal;
+          font-family: helvetica;
+          .box-sizing(border-box);
+          background-color: @navBG;
+          border-bottom:  1px solid @primaryNav;
+          min-height: 48px;
+          &.active, &:hover{
+            a{
+              .box-shadow(none);
+            }
+            background-color: @red;
+          }
+          &:hover .fonticon:before{
+            color: @white;
+          }
+          &.active .fonticon:before,
+          &:hover .fonticon:before,
+          {
+            text-shadow: @boxShadow;
+            color: @NavIconActive;
+          }
+          a{
+            padding: 12px 25px 12px 60px;
+            background-color: transparent;
+            color: #fff;
+            text-shadow: @textShadowOff;
+            &.closeMenu{
+              color: transparent;
+            }
+            .fonticon {
+              position: relative;
+              &:before {
+                position: absolute;
+                top: -5px;
+                left: -41px;
+                font-size: 24px;
+                color: @NavIcon;
+                text-shadow: @boxShadowOff;
+              }
+            }
+            .closeMenu &{
+              color: transparent;
+            }
+          }
+        }
+      }
+      ul#footer-nav-links{
+        li{
+          background-color: @primaryNav;
+          border-top: 1px solid @red;
+          border-bottom: none;
+          font-size: 12px;
+          padding: 12px;
+          min-height: 44px;
+          &.active, &:hover{
+            background-color: @linkRed;
+            border-top: 1px solid @red;
+            a{
+              color: white;
+            }
+          }
+          a{
+            color: @red;
+          }
+        }
+
+      }
+      ul#bottom-nav-links{
+        margin-top: 0;
+        padding-bottom: 70px;
+        li{
+          min-height: 55px;
+          background-color: @bottomNav;
+          &.active{
+            background-color:@linkRed;
+          }
+          &:hover{
+            background-color: @navBGHover;
+          }
+          a{
+            &.fonticon {
+              position: relative;
+              &:before {
+                top: -5px;
+                left: -40px;
+                font-size: 22px;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+
+/*
+---------------------------------------------------
+  REUSEABLE SHADOW BORDER
+---------------------------------------------------
+*/
+
+.left-shadow-border{
+  border-left: 1px solid #999;
+  .box-shadow(-6px 0 rgba(0, 0, 0, 0.1));
+}
+
+.bottom-shadow-border{
+  border-bottom: 1px solid #999;
+  .box-shadow(0px 6px 0 0 rgba(0, 0, 0, 0.1));
+}
+
+/*
+
+  FIXED HEADER, DASHBOARD & BREADCRUMBS:
+
+  one_pane.html
+  two_pane.html
+  with_sidebar.html
+  with_tabs.html
+  with_tabs_sidebar.html
+*/
+#dashboard {
+  .left-shadow-border;
+  position: absolute;
+  left: @navWidth;
+  margin-left: 0;
+  padding-left: 0;
+  padding-right: 0;
+  background-color: @sidebarBG;
+  min-width: 600px;
+  height: 100%;
+  .closeMenu &{
+    left: @collapsedNavWidth;
+  }
+  &.one-pane{
+    min-width: 800px;
+    margin-top: 0;
+    overflow-x: hidden;
+  }
+  &.two-pane{
+    margin-top: 0;
+    overflow-x: hidden;
+  }
+}
+
+
+
+/* SIDEBAR-CONTENT & DASHBOARD-CONTENT LAYOUTS:
+  with_sidebar.html
+  with_tabs_sidebar.html
+*/
+
+#sidebar-content {
+  position: absolute;
+  top: 60px;
+  width: @sidebarWidth;
+  left: 0;
+  background-color: @secondarySidebar;
+  > div.inner {
+    display: block;
+  }
+}
+
+.topmenu-defaults {
+  height: 70px;
+  padding: 12px 10px 0;
+  .box-sizing(border-box);
+}
+
+/* USED IN TEMPLATE: with_tabs_sidebar.html */
+.dashboard-upper-menu{
+  right: 0;
+  left: @sidebarWidth+@navWidth;
+  position: fixed;
+  z-index: 11;
+  display: block;
+  .topmenu-defaults;
+  background-color: #CBCBCB;
+  .closeMenu & {
+    left: @sidebarWidth+@collapsedNavWidth;
+  }
+}
+
+#dashboard-lower-content{
+  background-color: #F1F1F1;
+  .view {
+    padding: 20px;
+  }
+}
+
+#dashboard-upper-content{
+  .tab-content {
+    padding-top: 70px;
+  }
+  .well{
+    padding: 20px;
+    .border-radius(0);
+    .box-shadow(none);
+  }
+}
+
+#dashboard-content{
+  &.row-fluid,
+  &.window-resizeable{
+    /*remove gutter without rewriting variable*/
+    margin-left: 0px;
+  }
+  padding: 20px;
+  .with-sidebar &{
+    .left-shadow-border;
+    border-right: 1px solid #999;
+    width: auto;
+    padding: 0px;
+    bottom: 0px;
+    top: 60px;
+    position: fixed;
+    overflow-x: hidden;
+    overflow-y: auto;
+    left: @sidebarWidth+@navWidth;
+    right: 0;
+    .box-sizing(border-box);
+    .closeMenu & {
+      left: @sidebarWidth+@collapsedNavWidth;
+    }
+  }
+  > div.inner {
+    display: block;
+  }
+}
+
+/*
+  Sidenav:
+  USED IN DOCUMENT ADDON & EXTERNAL ADDONS
+*/
+.sidenav {
+  padding: 0;
+  header {
+    width: @sidebarWidth;
+    border-bottom: 1px solid #d3d7db;
+  }
+  .nav-list{
+    .divider {
+      border: none;
+    }
+    > li > a:hover,
+    > li > a:focus{
+      background-color: @darkRed;
+      color: #fff;
+    }
+    li.active > a {
+      color: @darkRed;
+    }
+    > li > a{
+      color: @linkRed;
+      padding: 10px 13px 10px 24px;
+      border-bottom: 1px solid #d3d7db;
+      span{
+        margin-right: 8px;
+        width: 14px;
+        display: inline-block;
+        text-align: center;
+      }
+    }
+    a{
+      display: block;
+      padding: 10px 5px 5px 15px;
+      color: @subListGray;
+      .divider {
+        background: none;
+        color: #ccc;
+        padding: 0 2px;
+      }
+    }
+    .nav-header{
+      padding: 0px;
+      text-shadow: none;
+      color: #333333;
+      & > span:hover {
+        color: @red;
+      }
+    }
+  }
+}
+
+.row-fluid.content-area{
+  background-color: @background;
+}
+
+
+/*
+  #left-content & #right-content from template:
+  two_pane.html
+*/
+#left-content,
+#right-content{
+  .two-pane &{
+    padding: 0px;
+    bottom: 0px;
+    top: 60px;
+    margin-left:0;
+    position: fixed;
+    overflow-x: hidden;
+    overflow-y: auto;
+    .box-sizing(border-box);
+  }
+}
+
+#left-content{
+  .two-pane &{
+    left: @navWidth;
+    .closeMenu & {
+      left: @collapsedNavWidth;
+    }
+  }
+}
+#right-content{
+  .two-pane &{
+    .view {
+      padding: 0 20px;
+    }
+    border-left: 1px solid #999;
+    .box-shadow(-6px 0 rgba(0, 0, 0, 0.1));
+  }
+}
+
+
+.with-sidebar.content-area,
+.two-pane.content-area {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+
