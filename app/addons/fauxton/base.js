@@ -237,7 +237,7 @@ function(app, FauxtonAPI, resizeColumns, Components, ZeroClipboard) {
     },
 
     beforeRender: function () {
-      this.insertView(".version", this.versionFooter);
+      this.insertView(".js-version", this.versionFooter);
       this.addLinkViews();
     },
 
