@@ -10,6 +10,18 @@
  *  License for the specific language governing permissions and limitations under
  *  the License.
  */
+
+.left-shadow-border{
+  border-left: 1px solid #999;
+  .box-shadow(-6px 0 rgba(0, 0, 0, 0.1));
+}
+
+.bottom-shadow-border{
+  border-bottom: 1px solid #999;
+  .box-shadow(0px 6px 0 0 rgba(0, 0, 0, 0.1));
+}
+
+
 .fixed-header{
   height: 60px;
   background-color: @breadcrumbBG;
@@ -71,6 +83,11 @@
     > div{
       display:inline-block;
     }
+    .breadcrumb {
+      li:first-child{
+        border-right: 1px solid #ccc;
+      }
+    }
   }
   .breadcrumb {
     margin-bottom: 0;
@@ -86,7 +103,6 @@
         .two-pane & {
           padding:20px 10px;
           font-size: 19px;
-          border-right: 1px solid #ccc;
         }
       }
       color: @breadcrumbText;
@@ -109,20 +125,79 @@
     position: absolute;
     right: 0;
     top: 0;
+    .dropdown-toggle {
+      color: #666666;
+    }
     a {
+      padding: 10px 20px;
       text-decoration: none;
     }
     .dropdown {
       border-left: 1px solid #ccc;
-      padding: 20px;
+      padding: 20px 0px;
     }
     .dropdown-menu {
-      left: -105px;
-      top: 56px;
+      left: -109px;
+      top: 48px;
     }
   }
 }
 
 
-
+.header-right {
+  .add-on {
+    font-size: 16px;
+  }
+  .well {
+    padding: 0;
+    margin: 0;
+  }
+  .searchbox-container {
+    position: relative;
+    right: inherit;
+    input[type="text"] {
+      .border-radius(5px);
+      font-size: 13px;
+      padding: 8px 35px 8px 10px;
+      width: 275px;
+    }
+    .btn-primary {
+      background: none repeat scroll 0% 0% transparent;
+      border: none;
+      position: absolute;
+      right: 12px;
+      top: 8px;
+      z-index: 2;
+      color: #999;
+    }
+  }
+  > .btn {
+    padding: 0;
+    margin: 0;
+  }
+  > .button,
+  > .button a,
+  .api-url-btn > button {
+    color: #666;
+    font-size: 13px;
+    line-height: 3em;
+  }
+  > div {
+    float: right;
+    height: 60px;
+    border-left: 1px solid #ccc;
+    margin: 0;
+    padding: 10px 15px;
+    line-height: 40px;
+  }
+  > div:last-child {
+    border-left: none;
+  }
+  .api-url-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+  }
+}
 

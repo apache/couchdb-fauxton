@@ -335,11 +335,15 @@
   }
 }
 
+#right-content,
 #dashboard-lower-content{
-  background-color: #F1F1F1;
   .view {
-    padding: 20px;
+    background-color:#A8A1A1;
   }
+}
+
+#dashboard-lower-content .view{
+  padding: 20px;
 }
 
 #dashboard-upper-content{
@@ -382,6 +386,14 @@
   }
 }
 
+#global-notifications{
+  .with-sidebar & {
+    left: @sidebarWidth+@navWidth;
+    .closeMenu & {
+      left: @sidebarWidth+@collapsedNavWidth;
+    }
+  }
+}
 /*
   Sidenav:
   USED IN DOCUMENT ADDON & EXTERNAL ADDONS
@@ -470,7 +482,7 @@
 #right-content{
   .two-pane &{
     .view {
-      padding: 0 20px;
+      padding: 0 20px 40px;
     }
     border-left: 1px solid #999;
     .box-shadow(-6px 0 rgba(0, 0, 0, 0.1));

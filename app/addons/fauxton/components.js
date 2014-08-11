@@ -154,6 +154,7 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
 
 
   Components.Pagination = FauxtonAPI.View.extend({
+    tagName: "ul",
     className: "pagination pagination-centered",
     template: "addons/fauxton/templates/pagination",
 
@@ -178,6 +179,7 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
 
   Components.IndexPagination = FauxtonAPI.View.extend({
     className: "pagination pagination-centered",
+    tagName: 'ul',
     template: "addons/fauxton/templates/index_pagination",
     events: {
       "click a": 'scrollTo',
@@ -745,7 +747,7 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
     className: "dropdown",
     initialize: function(options){
       this.links = options.links;
-      this.icon = options.icon || "fonticon-plus-circled2";
+      this.icon = options.icon || "fonticon-plus-circled";
       _.bindAll(this);
       this.setUpEvents();
     },

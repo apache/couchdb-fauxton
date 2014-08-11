@@ -24,6 +24,11 @@ function (app, FauxtonAPI, Databases, Views, Documents, Resources) {
     layout: "two_pane",
 
     initialize: function (route, masterLayout, options) {
+      _.bindAll(this);
+      var params = this.createParams(),
+      urlParams = params.urlParams,
+      docParams = params.docParams;
+
       this.databaseName = options[0];
 
       this.data = {
@@ -42,12 +47,62 @@ function (app, FauxtonAPI, Databases, Views, Documents, Resources) {
           limit: 500
         }
       });
+
+
+      /* --------------------------------------------------
+        Set up right header
+      ----------------------------------------------------*/
+
+      this.rightHeader = this.setView("#api-navbar", new Views.RightHeader({
+        database: this.data.database,
+        model: this.data.database,
+        endpoint: this.data.designDocs.urlRef("apiurl", urlParams),
+        documentation: "docs"
+      }));
+
     },
 
     events: {
-      "route:updatePreviewDocs": "updateAllDocsFromPreview"
+      "route:updatePreviewDocs": "updateAllDocsFromPreview",
+      "route:perPageChange": "perPageChange",
+      "route:paginate": "paginate",
+      "route:updateAllDocs": "updateAllDocsFromView"
     },
 
+    /* --------------------------------------------------
+      Called when you change the # of items to show in the pagination footer
+    ----------------------------------------------------*/
+    perPageChange: function (perPage) {
+      // We need to restore the collection parameters to the defaults (1st page)
+      // and update the page size
+      this.perPage = perPage;
+      this.documentsView.forceRender();
+      this.documentsView.collection.pageSizeReset(perPage, {fetch: false});
+      this.setDocPerPageLimit(perPage);
+    },
+
+    /* --------------------------------------------------
+      Store the docs to show per page in local storage
+    ----------------------------------------------------*/
+    setDocPerPageLimit: function (perPage) {
+      window.localStorage.setItem('fauxton:perpage', perPage);
+    },
+
+    /* --------------------------------------------------
+      Triggers when you hit the paginate forward and backwards buttons
+    ----------------------------------------------------*/
+
+    paginate: function (options) {
+      var collection = this.documentsView.collection;
+
+      this.documentsView.forceRender();
+      collection.paging.pageSize = options.perPage;
+      var promise = collection[options.direction]({fetch: false});
+    },
+
+    /* --------------------------------------------------
+     Get Design doc info
+    ----------------------------------------------------*/
     ddocInfo: function (designDoc, designDocs, view) {
       return {
         id: "_design/" + designDoc,
@@ -56,6 +111,9 @@ function (app, FauxtonAPI, Databases, Views, Documents, Resources) {
       };
     },
 
+    /* --------------------------------------------------
+      URL params from Advanced/ Query options
+    ----------------------------------------------------*/
     createParams: function (options) {
       var urlParams = app.getParams(options);
       var params = Documents.QueryParams.parse(urlParams);
@@ -66,6 +124,9 @@ function (app, FauxtonAPI, Databases, Views, Documents, Resources) {
       };
     },
 
+    /* --------------------------------------------------
+      Stored docs in preview
+    ----------------------------------------------------*/
     getDocPerPageLimit: function (urlParams, perPage) {
       var storedPerPage = perPage;
 
@@ -91,6 +152,39 @@ function (app, FauxtonAPI, Databases, Views, Documents, Resources) {
       return this.data.designDocs.fetch({reset: true});
     },
 
+
+    /* --------------------------------------------------
+        Reload preview docs
+    -----------------------------------------------------*/
+    updateAllDocsFromView: function (event) {
+      var view = event.view,
+          params = this.createParams(),
+          urlParams = params.urlParams,
+          docParams = params.docParams,
+          ddoc = event.ddoc,
+          pageSize,
+          collection;
+
+      var defaultPageSize = _.isUndefined(this.documentsView) ? 20 : this.documentsView.perPage();
+      docParams.limit = pageSize = this.getDocPerPageLimit(urlParams, defaultPageSize);
+
+      if (event.allDocs) {
+        this.eventAllDocs = true; // this is horrible. But I cannot get the trigger not to fire the route!
+        this.data.database.buildAllDocs(docParams);
+        collection = this.data.database.allDocs;
+        collection.paging.pageSize = pageSize;
+
+      }
+
+      this.documentsView.setCollection(collection);
+      this.documentsView.setParams(docParams, urlParams);
+
+      this.documentsView.forceRender();
+    },
+
+    /* --------------------------------------------------
+      Docs that are returned from a view
+    ----------------------------------------------------*/
     createViewDocumentsView: function (options) {
       return this.setView("#right-content", new Documents.Views.AllDocsList({
         database: options.database,
@@ -103,6 +197,10 @@ function (app, FauxtonAPI, Databases, Views, Documents, Resources) {
       }));
     },
 
+
+    /* --------------------------------------------------
+      If Preview worked....
+    ----------------------------------------------------*/
     updateAllDocsFromPreview: function (event) {
       var view = event.view,
       rows = event.rows,

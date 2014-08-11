@@ -56,36 +56,8 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
     },
 
     selectAllMenu: function(e){
-      //trigger event to select all in other view
-      this.$('.toggle-select-menu').toggleClass('active');
-
-      //trigger event to change the header
-      this.toggleSelectMenu();
+      FauxtonAPI.triggerRouteEvent("toggleSelectHeader");
       FauxtonAPI.Events.trigger("documents:show-select-all",this.selectVisible);
-
-    },
-
-    toggleSelectMenu: function(){
-      if (this.selectVisible){
-        this.selectVisible = false;
-        this.selectMenu.remove();
-        this.addAllDocsMenu();
-      } else {
-        this.removeAllDocsMenu();
-        this.addSelectMenu();
-      }
-    },
-
-    addSelectMenu: function(){
-      this.selectVisible = true;
-      this.selectMenu =  this.insertView('#header-select-menu', new Views.SelectMenu({}));
-      this.selectMenu.render();
-    },
-
-    removeAllDocsMenu: function(){
-      this.headerSearch.remove();
-      this.queryOptions.remove();
-      this.apiBar.remove();
     },
 
     addAllDocsMenu: function(){
@@ -188,13 +160,21 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
   });
 
   // select docs header
-  Views.SelectMenu = FauxtonAPI.View.extend({
+  Views.SelectMenuHeader = FauxtonAPI.View.extend({
+    className: "header-right",
     template:"addons/documents/templates/select-doc-menu",
     events: {
       "click button.all": "selectAll",
       "click button.js-bulk-delete": "bulkDelete",
-      "click #collapse": "collapse"
+      "click #collapse": "collapse",
+      'click .toggle-select-menu': 'selectAllMenu'
     },
+
+    selectAllMenu: function(e){
+      FauxtonAPI.triggerRouteEvent("toggleSelectHeader");
+      FauxtonAPI.Events.trigger("documents:show-select-all",this.selectVisible);
+    },
+
     bulkDelete: function(){
       FauxtonAPI.Events.trigger("documents:bulkDelete");
     },
@@ -240,6 +220,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
         FauxtonAPI.addNotification({
           msg: 'The database <code>' + _.escape(databaseName) + '</code> has been deleted.',
           clear: true,
+          type: "error",
           escape: false // beware of possible XSS when the message changes
         });
       }).fail(function (rsp, error, msg) {
@@ -256,7 +237,9 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
 
   Views.Document = FauxtonAPI.View.extend({
     template: "addons/documents/templates/all_docs_item",
-    className: "all-docs-item doc-row",
+    className: function(){
+      return (this.showSelect? "showSelect":"") + " all-docs-item doc-row";
+    },
     initialize: function (options) {
       this.checked = options.checked;
       this.expanded = options.expanded;
@@ -268,8 +251,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
     },
 
     showSelectBox: function(bool){
-      this.showSelect = bool;
-      this.$('.select').toggle(this.showSelect);
+      this.$el.toggleClass('showSelect');
     },
 
     selectAll: function(checked){
@@ -294,7 +276,6 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
 
     serialize: function() {
       return {
-        showSelect: this.showSelect,
         expanded: this.expanded,
         docID: this.model.get('_id'),
         doc: this.model,
@@ -318,10 +299,11 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
       if (!window.confirm("Are you sure you want to delete this doc?")) {
         return false;
       }
-
+      var storeID = _.clone(this.model);
       this.model.destroy().then(function(resp) {
         FauxtonAPI.addNotification({
-          msg: "Succesfully deleted your doc",
+          msg: "Doc "+storeID.get('id')+" has been deleted.",
+          type: "error",
           clear:  true
         });
         that.$el.fadeOut(function () {

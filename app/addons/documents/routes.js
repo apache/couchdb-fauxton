@@ -158,7 +158,8 @@ function(app, FauxtonAPI, Components, Documents, Changes, DocEditor, Databases, 
       "route:paginate": "paginate",
       "route:perPageChange": "perPageChange",
       "route:changesFilterAdd": "addFilter",
-      "route:changesFilterRemove": "removeFilter"
+      "route:changesFilterRemove": "removeFilter",
+      "route:toggleSelectHeader": "toggleSelectheader"
     },
 
     initialize: function (route, masterLayout, options) {
@@ -202,7 +203,7 @@ function(app, FauxtonAPI, Components, Documents, Changes, DocEditor, Databases, 
         Show right header for all docs that includes:
         query options, api bar, search and select
       ----------------------------------------------------*/
-      this.changesHeader = true;
+      this.allDocsHeader = false;
       this.resetAllDocsHeader();
 
       /* --------------------------------------------------
@@ -263,12 +264,26 @@ function(app, FauxtonAPI, Components, Documents, Changes, DocEditor, Databases, 
 
     },
 
+    toggleSelectheader: function(){
+      /* --------------------------------------------------
+        Set up right header for the document select menu
+        or reset back to all docs header
+      ----------------------------------------------------*/
+      if (this.allDocsHeader){
+        this.allDocsHeader = false;
+        this.rightHeader = this.setView("#api-navbar", new Documents.Views.SelectMenuHeader({}));
+        this.rightHeader.forceRender();
+      } else {
+        this.resetAllDocsHeader();
+      }
+
+    },
     resetAllDocsHeader: function(){
-      if (this.changesHeader){
-        this.headerRight = this.setView("#api-navbar", new Documents.Views.RightAllDocsHeader({
+      if (!this.allDocsHeader){
+        this.rightHeader = this.setView("#api-navbar", new Documents.Views.RightAllDocsHeader({
           database: this.data.database
         }));
-        this.changesHeader = false;
+        this.allDocsHeader = true;
       }
     },
 
@@ -290,7 +305,7 @@ function(app, FauxtonAPI, Components, Documents, Changes, DocEditor, Databases, 
       /* --------------------------------------------------
         Update the apiUrl
       ----------------------------------------------------*/
-      this.headerRight.updateApiUrl([designDocInfo.url('apiurl'), designDocInfo.documentation()]);
+      this.rightHeader.updateApiUrl([designDocInfo.url('apiurl'), designDocInfo.documentation()]);
 
     },
 
@@ -365,7 +380,7 @@ function(app, FauxtonAPI, Components, Documents, Changes, DocEditor, Databases, 
       /* --------------------------------------------------
         update the api url
       ----------------------------------------------------*/
-      this.headerRight.updateApiUrl([this.data.database.allDocs.urlRef("apiurl", urlParams), this.data.database.allDocs.documentation()]);
+      this.rightHeader.updateApiUrl([this.data.database.allDocs.urlRef("apiurl", urlParams), this.data.database.allDocs.documentation()]);
     },
 
 
@@ -412,25 +427,32 @@ function(app, FauxtonAPI, Components, Documents, Changes, DocEditor, Databases, 
 
       this.documentsView.setCollection(collection);
       this.documentsView.setParams(docParams, urlParams);
-      this.leftheader.forceRender();
+
       this.documentsView.forceRender();
 
-      this.headerRight.updateApiUrl([collection.urlRef("apiurl", urlParams), "docs"]);
+      this.rightHeader.updateApiUrl([collection.urlRef("apiurl", urlParams), "docs"]);
     },
 
+    /* --------------------------------------------------
+      Called when you change the # of items to show in the pagination footer
+    ----------------------------------------------------*/
     perPageChange: function (perPage) {
       // We need to restore the collection parameters to the defaults (1st page)
       // and update the page size
       this.perPage = perPage;
-      this.leftheader.forceRender();
+
       this.documentsView.forceRender();
       this.documentsView.collection.pageSizeReset(perPage, {fetch: false});
       this.setDocPerPageLimit(perPage);
     },
 
+    /* --------------------------------------------------
+      Triggers when you hit the paginate forward and backwards buttons
+    ----------------------------------------------------*/
+
     paginate: function (options) {
       var collection = this.documentsView.collection;
-      this.leftheader.forceRender();
+
       this.documentsView.forceRender();
       collection.paging.pageSize = options.perPage;
       var promise = collection[options.direction]({fetch: false});
@@ -495,7 +517,7 @@ function(app, FauxtonAPI, Components, Documents, Changes, DocEditor, Databases, 
         documentation: this.data.database.documentation()
       }));
 
-      this.changesHeader = true;
+      this.allDocsHeader = true;
 
       /* --------------------------------------------------
         Set sidebar highlight
