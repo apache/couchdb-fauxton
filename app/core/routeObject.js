@@ -149,12 +149,17 @@ function(FauxtonAPI, Backbone) {
     },
 
     renderViewOnLayout: function(viewInfo, resp, xhr){
-      var masterLayout = viewInfo.masterLayout;
+      var masterLayout = viewInfo.masterLayout,
+          triggerBroadcast = _.bind(this.triggerBroadcast, this);
 
       masterLayout.setView(viewInfo.selector, viewInfo.view);
-      masterLayout.renderView(viewInfo.selector);
+      var promise = masterLayout.renderView(viewInfo.selector).promise();
 
-      this.triggerBroadcast('afterRender', viewInfo.view, viewInfo.selector);
+      promise.then(function () {
+        triggerBroadcast('afterRender', viewInfo.view, viewInfo.selector);
+      });
+
+      return promise;
     },
 
     establishError: function(resp){
