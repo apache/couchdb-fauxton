@@ -10,31 +10,86 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-define(function(require, exports, module) {
-  var Backbone = require("backbone");
-  var LayoutManager = require("plugins/backbone.layoutmanager");
+define([
+  "backbone", 
+  "plugins/backbone.layoutmanager"
+], function(Backbone) {
 
-  var Layout = Backbone.Layout.extend({
-    template: "templates/layouts/with_sidebar",
+  // A wrapper of the main Backbone.layoutmanager
+  // Allows the main layout of the page to be changed by any plugin.
+  var Layout = function () {
+    this.layout = new Backbone.Layout({
+      template: "templates/layouts/with_sidebar"
+    });
 
-    // Either tests or source are expecting synchronous renders, so disable
-    // asynchronous rendering improvements.
-    useRAF: false,
+    this.layoutViews = {};
+    //this views don't ever get removed. An example of this is the main navigation sidebar
+    this.permanentViews = {};
+    this.el = this.layout.el;
+  };
+
+  Layout.configure = function (options) {
+    Backbone.Layout.configure(options);
+  };
+
+  // creatings the dashboard object same way backbone does
+  _.extend(Layout.prototype, {
+    render: function () {
+      return this.layout.render();
+    },
 
     setTemplate: function(template) {
       if (template.prefix){
-        this.template = template.prefix + template.name;
+        this.layout.template = template.prefix + template.name;
       } else{
-        this.template = "templates/layouts/" + template;
+        this.layout.template = "templates/layouts/" + template;
       }
-
       // If we're changing layouts all bets are off, so kill off all the
       // existing views in the layout.
-      this.removeView();
+      _.each(this.layoutViews, function(view){view.removeView();});
+      this.layoutViews = {};
       this.render();
+    },
+
+    setView: function(selector, view, keep) {
+      this.layout.setView(selector, view, false);
+
+      if (!keep) {
+        this.layoutViews[selector] = view;
+      } else {
+        this.permanentViews[selector] = view;
+      }
+
+      return view;
+    },
+
+    renderView: function(selector) {
+      var view = this.layoutViews[selector];
+      if (!view) {
+        return false;
+      } else {
+        return view.render();
+      }
+    },
+
+    removeView: function (selector) {
+      var view = this.layout.getView(selector);
+
+      if (!view) {
+        return false;
+        }
+
+      this.layout.removeView(selector);
+      
+      if (this.layoutViews[selector]) {
+        delete this.layoutViews[selector];
+      }
+
+      return true;
     }
+
   });
 
-  module.exports = Layout;
+  return Layout;
 
 });

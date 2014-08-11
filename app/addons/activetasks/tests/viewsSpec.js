@@ -27,9 +27,9 @@ define([
 
     describe("on change polling rate", function () {
       var viewSandbox;
-      beforeEach(function () {
+      beforeEach(function (done) {
         viewSandbox = new ViewSandbox();
-        viewSandbox.renderView(tabMenu);
+        viewSandbox.renderView(tabMenu, done);
       });
 
       afterEach(function () {
@@ -66,7 +66,7 @@ define([
 
     describe('on request by type', function () {
       var viewSandbox, mainView;
-      beforeEach(function () {
+      beforeEach(function (done) {
 
         mainView = new Views.View({
           collection: new Activetasks.AllTasks(),
@@ -74,8 +74,9 @@ define([
         });
 
         viewSandbox = new ViewSandbox();
-        viewSandbox.renderView(tabMenu);
-        viewSandbox.renderView(mainView);
+        viewSandbox.renderView(tabMenu).promise().then(function () {
+          viewSandbox.renderView(mainView, done);
+        });
       });
 
       afterEach(function () {
@@ -99,14 +100,14 @@ define([
 
   describe('DataSection', function () {
     var viewSandbox, mainView;
-    beforeEach(function () {
+    beforeEach(function (done) {
       mainView = new Views.View({
         collection: new Activetasks.AllTasks(),
         currentView: "all"
       });
 
       viewSandbox = new ViewSandbox();
-      viewSandbox.renderView(mainView);
+      viewSandbox.renderView(mainView, done);
     });
 
     afterEach(function () {

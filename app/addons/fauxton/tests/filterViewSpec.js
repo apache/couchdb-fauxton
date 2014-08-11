@@ -27,13 +27,15 @@ define([
       FauxtonAPI.router.triggerRouteEvent = function () {};
     }
 
-    beforeEach(function () {
+    beforeEach(function (done) {
       filterView = new Components.FilterView({
         eventNamespace: 'mynamespace'
       });
 
+      Components.FilterItemView.prototype.useRAF = false;
+
       viewSandbox = new ViewSandbox();
-      viewSandbox.renderView(filterView);
+      viewSandbox.renderView(filterView, done);
     });
 
     afterEach(function () {
@@ -43,7 +45,6 @@ define([
     it('should add filter markup', function () {
       filterView.$('[name="filter"]').val('i was a lonely filter');
       filterView.$('.js-filter-form').submit();
-
       filterView.$('[name="filter"]').val('i am a filter');
       filterView.$('.js-filter-form').submit();
       assert.equal(2, filterView.$('.js-remove-filter').length);
@@ -73,7 +74,8 @@ define([
     it('should add tooltips when a text for it is defined', function () {
       filterView = new Components.FilterView({
         eventNamespace: 'mynamespace',
-        tooltipText: 'ente ente'
+        tooltipText: 'ente ente',
+        useRAF: false
       });
       viewSandbox.renderView(filterView);
       assert.equal(1, filterView.$('.js-filter-tooltip').length);
