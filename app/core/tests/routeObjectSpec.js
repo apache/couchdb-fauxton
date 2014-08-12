@@ -71,7 +71,13 @@ define([
             viewSpy = sinon.stub(view, "establish");
         
         view.hasRendered = false;
+        view.promise = function () { 
+          var promise = $.Deferred();
+          promise.resolve();
+          return promise;
+        };
         getViewsSpy.returns({'#view': view});
+        mockLayout.renderView = function () { return view;};
 
         testRouteObject.renderWith('the-route', mockLayout, 'args');
         assert.ok(viewSpy.calledOnce, 'Should render view');

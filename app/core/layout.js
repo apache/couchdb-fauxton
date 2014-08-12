@@ -10,35 +10,6 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-/*define(function(require, exports, module) {
-  var Backbone = require("backbone");
-  var LayoutManager = require("plugins/backbone.layoutmanager");
-
-  var Layout = Backbone.Layout.extend({
-    template: "templates/layouts/with_sidebar",
-
-    // Either tests or source are expecting synchronous renders, so disable
-    // asynchronous rendering improvements.
-    useRAF: true,
-
-    setTemplate: function(template) {
-      if (template.prefix){
-        this.template = template.prefix + template.name;
-      } else{
-        this.template = "templates/layouts/" + template;
-      }
-
-      // If we're changing layouts all bets are off, so kill off all the
-      // existing views in the layout.
-      this.removeView();
-      this.render();
-    }
-  });
-
-  module.exports = Layout;
-
-});*/
-
 define([
   "backbone", 
   "plugins/backbone.layoutmanager"
@@ -52,6 +23,8 @@ define([
     });
 
     this.layoutViews = {};
+    //this views don't ever get removed. An example of this is the main navigation sidebar
+    this.permanentViews = {};
     this.el = this.layout.el;
   };
 
@@ -83,6 +56,8 @@ define([
 
       if (!keep) {
         this.layoutViews[selector] = view;
+      } else {
+        this.permanentViews[selector] = view;
       }
 
       return view;
