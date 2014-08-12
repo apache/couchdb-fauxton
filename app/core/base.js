@@ -62,8 +62,6 @@ function(Backbone, LayoutManager) {
     manage: true,
     disableLoader: false,
 
-    // Either tests or source are expecting synchronous renders, so disable
-    // asynchronous rendering improvements.
     useRAF: true,
 
     forceRender: function () {
