@@ -27,26 +27,29 @@ define([
       FauxtonAPI.router.triggerRouteEvent = function () {};
     }
 
-    beforeEach(function () {
+    beforeEach(function (done) {
       filterView = new Components.FilterView({
         eventNamespace: 'mynamespace'
       });
 
       viewSandbox = new ViewSandbox();
-      viewSandbox.renderView(filterView);
+      viewSandbox.renderView(filterView, done);
     });
 
     afterEach(function () {
       viewSandbox.remove();
     });
 
-    it('should add filter markup', function () {
+    it('should add filter markup', function (done) {
       filterView.$('[name="filter"]').val('i was a lonely filter');
       filterView.$('.js-filter-form').submit();
-
       filterView.$('[name="filter"]').val('i am a filter');
       filterView.$('.js-filter-form').submit();
-      assert.equal(2, filterView.$('.js-remove-filter').length);
+
+      setTimeout(function () {
+        assert.equal(2, filterView.$('.js-remove-filter').length);
+        done();
+      }, 300);
     });
 
     it('should remove filter markup', function () {
@@ -70,13 +73,15 @@ define([
       assert.equal(0, filterView.$('.js-filter-tooltip').length);
     });
 
-    it('should add tooltips when a text for it is defined', function () {
+    it('should add tooltips when a text for it is defined', function (done) {
       filterView = new Components.FilterView({
         eventNamespace: 'mynamespace',
         tooltipText: 'ente ente'
       });
-      viewSandbox.renderView(filterView);
-      assert.equal(1, filterView.$('.js-filter-tooltip').length);
+      viewSandbox.renderView(filterView).promise().then(function () {
+        assert.equal(1, filterView.$('.js-filter-tooltip').length);
+        done();
+      });
     });
   });
 });

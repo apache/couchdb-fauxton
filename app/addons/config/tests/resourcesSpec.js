@@ -37,9 +37,9 @@ define([
 
     describe("editing Items", function () {
       var viewSandbox;
-      beforeEach(function () {
+      beforeEach(function (done) {
         viewSandbox = new ViewSandbox();
-        viewSandbox.renderView(tabMenu);
+        viewSandbox.renderView(tabMenu, done);
       });
 
       afterEach(function () {

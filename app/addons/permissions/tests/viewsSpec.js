@@ -21,7 +21,7 @@ define([
   describe('Permission View', function () {
     var security, section, viewSandbox;
 
-    beforeEach(function () {
+    beforeEach(function (done) {
       security = new Models.Security({'admins': {
         'names': ['_user'],
         'roles': []
@@ -34,7 +34,7 @@ define([
       });
 
       viewSandbox = new ViewSandbox();
-      viewSandbox.renderView(section); 
+      viewSandbox.renderView(section, done); 
     });
 
     afterEach(function () {
@@ -67,7 +67,7 @@ define([
         security,
         viewSandbox;
 
-    beforeEach(function () {
+    beforeEach(function (done) {
       security = new Models.Security({'admins': {
         'names': ['_user'],
         'roles': []
@@ -80,7 +80,7 @@ define([
       });
 
       viewSandbox = new ViewSandbox();
-      viewSandbox.renderView(section); 
+      viewSandbox.renderView(section, done); 
     });
 
     afterEach(function () {
@@ -130,13 +130,13 @@ define([
     var item,
         viewSandbox;
 
-    beforeEach(function () {
+    beforeEach(function (done) {
       item = new Views.PermissionItem({
         item: '_user'
       });
 
       viewSandbox = new ViewSandbox();
-      viewSandbox.renderView(item); 
+      viewSandbox.renderView(item, done); 
     });
 
     afterEach(function () {

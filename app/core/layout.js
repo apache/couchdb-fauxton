@@ -19,7 +19,7 @@ define([
   // Allows the main layout of the page to be changed by any plugin.
   var Layout = function () {
     this.layout = new Backbone.Layout({
-      template: "templates/layouts/with_sidebar",
+      template: "templates/layouts/with_sidebar"
     });
 
     this.layoutViews = {};
