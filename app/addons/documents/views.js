@@ -114,7 +114,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
 
     edit: function(event) {
       event.preventDefault();
-      FauxtonAPI.navigate("#" + this.model.url('app'));
+      FauxtonAPI.navigate("#" + this.model.url('web-index'));
     },
 
     destroy: function(event) {
