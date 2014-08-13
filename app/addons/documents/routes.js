@@ -182,8 +182,8 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
           pageSize: 500
         },
         params: {
-          startkey: '_design',
-          endkey: '_design1',
+          startkey: '_design/',
+          endkey: '_design0',
           include_docs: true,
           limit: 500
         }
