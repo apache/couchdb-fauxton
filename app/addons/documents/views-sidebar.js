@@ -151,14 +151,14 @@ function(app, FauxtonAPI, Components, Documents, Databases) {
     toggleArrow:  function(e){
       this.$(e.currentTarget).toggleClass("down");
     },
-    buildIndexList: function(collection, selector, ddocType){
+    buildIndexList: function(collection, info){
       var design = this.model.id.replace(/^_design\//,"");
 
       this.insertView(".accordion-body", new Views.IndexItem({
-        selector: selector,
+        selector: info.selector,
         ddoc: design,
-        collection: collection[selector],
-        ddocType: ddocType,
+        collection: collection[info.selector],
+        name: info.name,
         database: this.model.collection.database.id
       }));
     },
@@ -202,9 +202,13 @@ function(app, FauxtonAPI, Components, Documents, Databases) {
 
       if (!ddocDocs){ return; }
 
-      this.buildIndexList(ddocDocs, "views", "view");
-      _.each(sidebarListTypes, function (type) {
-        this.buildIndexList(ddocDocs, type);
+      this.buildIndexList(ddocDocs, {
+        selector: "views",
+        name: 'Views'
+      });
+
+      _.each(sidebarListTypes, function (info) {
+        this.buildIndexList(ddocDocs, info);
       },this);
 
     },
@@ -234,9 +238,9 @@ function(app, FauxtonAPI, Components, Documents, Databases) {
       this.database = options.database;
       this.selected = !! options.selected;
       this.selector = options.selector;
-      this.ddocType = options.ddocType || this.selector;
+      this.name = options.name;
       this.icons = {
-        "view": "fonticon-sidenav-map-reduce",
+        "Views": "fonticon-sidenav-map-reduce",
         "indexes": "fonticon-sidenav-search"
       };
 
@@ -245,7 +249,8 @@ function(app, FauxtonAPI, Components, Documents, Databases) {
     serialize: function() {
       return {
         icon: this.icons[this.ddocType],
-        ddocType:  this.ddocType,
+        ddocType:  this.selector,
+        name: this.name,
         index: this.index,
         ddoc: this.ddoc,
         database: this.database,

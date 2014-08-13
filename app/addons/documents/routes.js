@@ -134,7 +134,7 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
         route: "allDocs",
         roles: ["_reader","_writer","_admin"]
       },
-      "database/:database/_design/:ddoc/_view/:view": {
+      "database/:database/_design/:ddoc/_views/:view": {
         route: "viewFn",
         roles: ['_admin']
       },
