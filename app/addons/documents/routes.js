@@ -503,7 +503,7 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
       }
     },
 
-    changes: function (event) {
+    changes: function () {
       var docParams = app.getParams();
       this.data.database.buildChanges(docParams);
 
@@ -531,7 +531,7 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
       };
 
       this.apiUrl = function() {
-        return [this.data.database.url("apiurl"), this.data.database.documentation()];
+        return [this.data.database.url("changes-apiurl"), this.data.database.documentation()];
       };
     },
 
