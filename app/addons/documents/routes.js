@@ -134,7 +134,7 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
         route: "allDocs",
         roles: ["_reader","_writer","_admin"]
       },
-      "database/:database/_design/:ddoc/_view/:view": {
+      "database/:database/_design/:ddoc/_views/:view": {
         route: "viewFn",
         roles: ['_admin']
       },
@@ -182,8 +182,8 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
           pageSize: 500
         },
         params: {
-          startkey: '_design',
-          endkey: '_design1',
+          startkey: '_design/',
+          endkey: '_design0',
           include_docs: true,
           limit: 500
         }
@@ -503,7 +503,7 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
       }
     },
 
-    changes: function (event) {
+    changes: function () {
       var docParams = app.getParams();
       this.data.database.buildChanges(docParams);
 
@@ -531,7 +531,7 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
       };
 
       this.apiUrl = function() {
-        return [this.data.database.url("apiurl"), this.data.database.documentation()];
+        return [this.data.database.url("changes-apiurl"), this.data.database.documentation()];
       };
     },
 
