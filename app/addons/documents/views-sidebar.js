@@ -60,6 +60,31 @@ function(app, FauxtonAPI, Components, Documents, Databases) {
       };
     },
 
+    getNewButtonLinks: function () {
+      var database = this.collection.database,
+          newurlPrefix = "#" + database.url('app'),
+          addLinks = FauxtonAPI.getExtensions('sidebar:links');
+
+      return _.reduce(FauxtonAPI.getExtensions('sidebar:links'), function (menuLinks, link) {
+
+        menuLinks.push({
+          title: link.title,
+          url: newurlPrefix + "/" + link.url,
+          icon: 'fonticon-plus-circled'
+        });
+
+        return menuLinks; 
+     }, [{
+          title: 'New Doc',
+          url: newurlPrefix + '/new',
+          icon: 'fonticon-plus-circled'
+        },{
+          title: 'New View',
+          url: newurlPrefix + '/new_view',
+          icon: 'fonticon-plus-circled'
+        }]);
+    },
+
 
     beforeRender: function(manage) {
       this.deleteDBModal = this.setView(
@@ -67,20 +92,9 @@ function(app, FauxtonAPI, Components, Documents, Databases) {
         new Views.DeleteDBModal({database: this.database})
       );
 
-      var database = this.collection.database,
-          newurlPrefix = "#" + database.url('app');
-
       var newLinks = [{
         title: 'Add new',
-        links: [{
-          title: 'New Doc',
-          url: newurlPrefix + '/new',
-          icon: 'fonticon-plus-circled'
-        },{
-          title: 'New Design Doc',
-          url: newurlPrefix + '/new_view',
-          icon: 'fonticon-plus-circled'
-        }]
+        links: this.getNewButtonLinks()
       }];
 
       this.insertView("#new-all-docs-button", new Components.MenuDropDown({
@@ -175,7 +189,7 @@ function(app, FauxtonAPI, Components, Documents, Databases) {
 
         return menuLinks; 
      }, [{
-      title: 'Secondary View',
+      title: 'New View',
       url: "#" + database.url('app') + "/new_view/" + docSafe,
       icon: 'fonticon-plus-circled'
      }]);
