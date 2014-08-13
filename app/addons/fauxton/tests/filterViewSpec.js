@@ -32,6 +32,8 @@ define([
         eventNamespace: 'mynamespace'
       });
 
+      Components.FilterItemView.prototype.useRAF = false;
+
       viewSandbox = new ViewSandbox();
       viewSandbox.renderView(filterView, done);
     });
@@ -40,16 +42,12 @@ define([
       viewSandbox.remove();
     });
 
-    it('should add filter markup', function (done) {
+    it('should add filter markup', function () {
       filterView.$('[name="filter"]').val('i was a lonely filter');
       filterView.$('.js-filter-form').submit();
       filterView.$('[name="filter"]').val('i am a filter');
       filterView.$('.js-filter-form').submit();
-
-      setTimeout(function () {
-        assert.equal(2, filterView.$('.js-remove-filter').length);
-        done();
-      }, 300);
+      assert.equal(2, filterView.$('.js-remove-filter').length);
     });
 
     it('should remove filter markup', function () {
@@ -73,15 +71,14 @@ define([
       assert.equal(0, filterView.$('.js-filter-tooltip').length);
     });
 
-    it('should add tooltips when a text for it is defined', function (done) {
+    it('should add tooltips when a text for it is defined', function () {
       filterView = new Components.FilterView({
         eventNamespace: 'mynamespace',
-        tooltipText: 'ente ente'
+        tooltipText: 'ente ente',
+        useRAF: false
       });
-      viewSandbox.renderView(filterView).promise().then(function () {
-        assert.equal(1, filterView.$('.js-filter-tooltip').length);
-        done();
-      });
+      viewSandbox.renderView(filterView);
+      assert.equal(1, filterView.$('.js-filter-tooltip').length);
     });
   });
 });

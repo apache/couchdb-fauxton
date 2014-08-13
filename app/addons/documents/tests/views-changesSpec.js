@@ -36,7 +36,8 @@ define([
       });
 
       view = new Views.Changes({
-        model: model
+        model: model,
+        useRAF: false
       });
       viewSandbox = new ViewSandbox();
       viewSandbox.renderView(view, done);
