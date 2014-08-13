@@ -249,36 +249,24 @@ div.spinner {
 }
 
 .api-url-btn {
-  margin-top: 5px;
-  margin-bottom: 5px;
   .icon {
     font-size: 11px;
   }
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
 }
-
+.api-url-btn:hover {
+  background: none;
+}
 .api-navbar {
-  .border-radius(5px);
-  position: absolute;
-  right: 5px;
-  background-color: #333;
   padding: 5px 20px;
-  z-index: 2;
   .input-append.input-prepend {
     margin-bottom: 0px;
     .copying {
       background-color: #999;
       transition: background-color 5ms linear;
-    }
-    .add-on {
-      background: none;
-      padding: 0px;
-      margin: 10px 0;
-      border: none;
-      display: block;
-      text-align: left;
-      color: #fff;
-      text-shadow: none;
-      height: auto;
     }
     .input-xxlarge {
       .border-radius(5px 0 0 5px);
@@ -314,17 +302,6 @@ div.spinner {
       font-size: 17.5px;
     }
   }
-}
-.api-navbar:before {
-  content: '';
-  position: absolute;
-  top: -25px;
-  right: 30px;
-  border-color: transparent transparent #333 transparent;
-  border-style: solid;
-  border-width: 15px;
-  width: 0;
-  height: 0;
 }
 
 .js-filter-form {
