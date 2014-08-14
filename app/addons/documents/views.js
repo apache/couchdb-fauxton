@@ -430,8 +430,34 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
       });
     },
 
-    selectAll: function(evt){
-      $('.all-docs').find("input:checkbox").prop('checked', !$(evt.target).hasClass('active')).trigger('change');
+    selectAll: function (evt) {
+      var $allDocs = this.$('.all-docs'),
+          $rows = $allDocs.find('tr'),
+          $checkboxes = $allDocs.find('input:checkbox'),
+          modelsAffected,
+          docs;
+
+      $checkboxes.prop('checked', !$(evt.target).hasClass('active')).trigger('change');
+
+      if ($(evt.target).hasClass('active')) {
+        modelsAffected = _.reduce($rows, function (acc, el) {
+          var docId = $(el).attr('data-id');
+          acc.push(docId);
+          return acc;
+        }, []);
+        this.bulkDeleteDocsCollection.remove(modelsAffected);
+      } else {
+        modelsAffected = _.reduce($rows, function (acc, el) {
+          var docId = $(el).attr('data-id'),
+              rev = this.collection.get(docId).get('_rev');
+
+          acc.push({_id: docId, _rev: rev, _deleted: true});
+          return acc;
+        }, [], this);
+        this.bulkDeleteDocsCollection.add(modelsAffected);
+      }
+
+      this.toggleTrash();
     },
 
     serialize: function() {

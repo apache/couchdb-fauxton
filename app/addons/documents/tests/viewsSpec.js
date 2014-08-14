@@ -11,14 +11,47 @@
 // the License.
 define([
         'addons/documents/views',
+        'addons/documents/resources',
         'addons/databases/base',
         'testUtils'
-], function (Views, Databases, testUtils) {
-  var assert = testUtils.assert;
+], function (Views, Resources, Databases, testUtils) {
+  var assert = testUtils.assert,
+      ViewSandbox = testUtils.ViewSandbox,
+      viewSandbox;
 
-  describe('DocumentsViews', function () {
+  describe('AllDocsList', function () {
+    var database = new Databases.Model({id: 'registry'}),
+        bulkDeleteDocCollection = new Resources.BulkDeleteDocCollection([], {databaseId: 'registry'});
+
+    database.allDocs = new Resources.AllDocs({_id: "ente"}, {
+      database: database,
+      viewMeta: {update_seq: 1},
+      params: {}
+    });
+
+    var view = new Views.Views.AllDocsList({
+      viewList: false,
+      bulkDeleteDocsCollection: bulkDeleteDocCollection,
+      collection: database.allDocs
+    });
+
+    beforeEach(function () {
+      viewSandbox = new ViewSandbox();
+      viewSandbox.renderView(view);
+    });
+
+    afterEach(function () {
+      viewSandbox.remove();
+    });
+
     it('should load', function () {
       assert.equal(typeof Views.Views.AllDocsList, 'function');
+    });
+
+    it('pressing SelectAll should fill the delete-bulk-docs-collection', function () {
+      assert.equal(bulkDeleteDocCollection.length, 0);
+      view.$('button.all').trigger('click');
+      assert.equal(bulkDeleteDocCollection.length, 1);
     });
   });
 });
