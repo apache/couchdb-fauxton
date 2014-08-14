@@ -38,7 +38,6 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
     });
   }
 
-  //Header for alldocs with search, Query options,& api bar
   Views.RightAllDocsHeader = FauxtonAPI.View.extend({
     className: "header-right",
     template: "addons/documents/templates/header_alldocs",
@@ -55,9 +54,14 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
       FauxtonAPI.Events.on('success:bulkDelete', this.selectAllMenu);
     },
 
+    cleanup:function(){
+      FauxtonAPI.Events.unbind('advancedOptions:updateView');
+      FauxtonAPI.Events.unbind('success:bulkDelete');
+    },
+
     selectAllMenu: function(e){
       FauxtonAPI.triggerRouteEvent("toggleSelectHeader");
-      FauxtonAPI.Events.trigger("documents:show-select-all",this.selectVisible);
+      FauxtonAPI.Events.trigger("documents:showSelectAll",this.selectVisible);
     },
 
     addAllDocsMenu: function(){
@@ -127,21 +131,15 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
 
       if (_.any(errorParams)) {
         _.map(errorParams, function(param) {
-
-          // TODO: Where to add this error?
-          // bootstrap wants the error on a control-group div, but we're not using that
-          //$('form.view-query-update input[name='+param+'], form.view-query-update select[name='+param+']').addClass('error');
           return FauxtonAPI.addNotification({
             msg: "JSON Parse Error on field: "+param.name,
             type: "error",
-            selector: ".advanced-options .errors-container",
             clear:  true
           });
         });
         FauxtonAPI.addNotification({
           msg: "Make sure that strings are properly quoted and any other values are valid JSON structures",
           type: "warning",
-          selector: ".advanced-options .errors-container",
           clear:  true
         });
 
@@ -172,7 +170,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
 
     selectAllMenu: function(e){
       FauxtonAPI.triggerRouteEvent("toggleSelectHeader");
-      FauxtonAPI.Events.trigger("documents:show-select-all",this.selectVisible);
+      FauxtonAPI.Events.trigger("documents:showSelectAll",this.selectVisible);
     },
 
     bulkDelete: function(){
@@ -240,14 +238,21 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
     className: function(){
       return (this.showSelect? "showSelect":"") + " all-docs-item doc-row";
     },
+
     initialize: function (options) {
       this.checked = options.checked;
       this.expanded = options.expanded;
       this.showSelect = false;
       _.bindAll(this);
-      FauxtonAPI.Events.on("documents:show-select-all", this.showSelectBox);
+      FauxtonAPI.Events.on("documents:showSelectAll", this.showSelectBox);
       FauxtonAPI.Events.on("documents:collapse", this.collapse);
       FauxtonAPI.Events.on("documents:selectAll", this.selectAll);
+    },
+
+    cleanup: function(){
+      FauxtonAPI.Events.unbind("documents:showSelectAll");
+      FauxtonAPI.Events.unbind("documents:collapse");
+      FauxtonAPI.Events.unbind("documents:selectAll");
     },
 
     showSelectBox: function(bool){
@@ -536,8 +541,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
 
     serialize: function() {
       return {
-        viewList: this.viewList,
-        expandDocs: this.expandDocs,
+        resizeLayout: this.viewList?"-half":"",
         endOfResults: !this.pagination.canShowNextfn()
       };
     },
@@ -565,6 +569,8 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
     },
 
     cleanup: function () {
+      FauxtonAPI.Events.unbind("documents:bulkDelete");
+      FauxtonAPI.Events.unbind("documents:selectAll");
       this.pagination && this.pagination.remove();
       this.allDocsNumber && this.allDocsNumber.remove();
       _.each(this.rows, function (row) {row.remove();});
@@ -671,6 +677,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
 
 
   Views.DdocInfo = FauxtonAPI.View.extend({
+    className: "view",
     template: "addons/documents/templates/ddoc_info",
 
     initialize: function (options) {

@@ -49,12 +49,7 @@
     }
   }
   .one-pane & {
-    #breadcrumbs{
-      width: 90%;
-    }
-    position: relative;
-    border: none;
-    .box-shadow(none);
+    .bottom-shadow-border;
     left: auto;
   }
   /* these styles are for the new header*/
@@ -74,9 +69,7 @@
 
 #breadcrumbs {
   height: 60px;
-  &.sidebar{
-    width: @sidebarWidth - 4;
-  }
+  width: @sidebarWidth - 4;
   /* these styles are for the new header*/
   .header-left{
     > div{
@@ -97,7 +90,7 @@
       height: 60px;
       vertical-align: top;
       &:first-child {
-        font-size: 30px;
+        font-size: 24px;
         .with-sidebar &,
         .two-pane & {
           padding:20px 10px;
@@ -132,7 +125,7 @@
       color: #666666;
     }
     a {
-      padding: 10px 20px;
+      padding: 10px;
       text-decoration: none;
     }
     .dropdown {
@@ -140,7 +133,7 @@
       padding: 20px 0px;
     }
     .dropdown-menu {
-      left: -109px;
+      left: -115px;
       top: 48px;
     }
   }
@@ -216,9 +209,15 @@
       border: none;
       position: absolute;
       right: 12px;
-      top: 8px;
+      top: 0px;
+      height:60px;
       z-index: 2;
       color: #999;
+      .icon-search{
+        position: absolute;
+        top: 22px;
+        right: 15px;
+      }
     }
   }
   > div {
@@ -237,3 +236,12 @@
   right: 25px;
 }
 
+#jump-to-doc{
+  .btn-primary {
+    .icon-search{
+      position: absolute;
+      top: 18px;
+      right: 15px;
+    }
+  }
+}

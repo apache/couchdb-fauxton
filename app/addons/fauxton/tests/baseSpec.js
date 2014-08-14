@@ -61,12 +61,6 @@ define([
       FauxtonAPI.masterLayout = _layout;
     });
 
-    it('Should clear breadcrumbs', function () {
-      FauxtonAPI.masterLayout = mockLayout;
-      testRouteObject.renderWith('the-route', mockLayout, 'args');
-      assert.ok(mockLayout.removeView.calledWith('#breadcrumbs'), 'Clear Breadcrumbs called');
-    });
-
     it('Should set breadcrumbs when breadcrumbs exist', function () {
       FauxtonAPI.masterLayout = mockLayout;
       testRouteObject.renderWith('the-route', mockLayout, 'args');

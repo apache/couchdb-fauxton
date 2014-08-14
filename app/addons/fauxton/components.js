@@ -140,6 +140,10 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
       this.render();
     },
 
+    cleanup: function(){
+      FauxtonAPI.Events.unbind('APIbar:closeTray');
+    },
+
     afterRender: function(){
       ZeroClipboard.config({ moviePath: "/assets/js/plugins/zeroclipboard/ZeroClipboard.swf" });
       var client = new ZeroClipboard(this.$(".copy-url"));
