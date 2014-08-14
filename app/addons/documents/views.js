@@ -380,7 +380,6 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
     toggleDocument: function (event) {
       var $row = this.$(event.target).closest('tr'),
           docId = $row.attr('data-id'),
-          db = this.database.get('id'),
           rev = this.collection.get(docId).get('_rev'),
           data = {_id: docId, _rev: rev, _deleted: true};
 
