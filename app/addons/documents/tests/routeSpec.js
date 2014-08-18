@@ -25,7 +25,7 @@ define([
         docRoute.changes();
 
         console.log('docRoute.apiUrl()', docRoute.apiUrl());
-        assert.ok(!!docRoute.apiUrl()[0].match(/\/database\/fakeDB\/_changes\?descending=true&limit=100&include_docs=true/));
+        assert.ok(/\/database\/fakeDB\/_changes\?descending=true&limit=100&include_docs=true/.test(docRoute.apiUrl()[0]));
       });
 
     });
