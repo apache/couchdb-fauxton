@@ -35,9 +35,9 @@ define([
       collection: database.allDocs
     });
 
-    beforeEach(function () {
+    beforeEach(function (done) {
       viewSandbox = new ViewSandbox();
-      viewSandbox.renderView(view);
+      viewSandbox.renderView(view, done);
     });
 
     afterEach(function () {
