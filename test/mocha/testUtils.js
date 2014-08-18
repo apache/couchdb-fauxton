@@ -29,15 +29,19 @@ function(FauxtonAPI,chai, sinonChai) {
       this.$ = this.$el.find;
     },
     views: [],
-    renderView: function (view) {
+    renderView: function (view, done) {
       this.views.push(view);
       this.$el.append(view.el);
       view.render();
+      if (done) { 
+        view.promise().done(function () { done(); });
+      }
+      return view;
     },
 
     remove: function () {
       _.each(this.views, function (view) {
-        view.remove();
+        view.removeView();
       }, this);
     }
   });

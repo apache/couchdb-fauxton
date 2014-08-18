@@ -88,15 +88,19 @@ describe('Fauxton Notifications', function () {
       delete window.fauxton_xss_test_escaped;
     });
 
-    it('should be able to render unescaped', function () {
+    it('should be able to render unescaped', function (done) {
       var view = FauxtonAPI.addNotification({
         msg: '<script>window.fauxton_xss_test_unescaped = true;</script>',
         selector: 'body',
         escape: false
       });
-      view.$el.remove();
-      assert.ok(window.fauxton_xss_test_unescaped);
-      delete window.fauxton_xss_test_unescaped;
+
+      view.promise().then(function () {
+        view.$el.remove();
+        assert.ok(window.fauxton_xss_test_unescaped);
+        delete window.fauxton_xss_test_unescaped;
+        done();
+      });
     });
 
     it('should render escaped if the escape value is not explicitly false,' +

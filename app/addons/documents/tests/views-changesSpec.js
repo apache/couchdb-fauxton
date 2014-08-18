@@ -28,7 +28,7 @@ define([
 
     handlerSpy = sinon.spy(Views.Changes.prototype, 'toggleJson');
 
-    beforeEach(function () {
+    beforeEach(function (done) {
       var database = new Databases.Model({id: 'bla'});
       database.buildChanges({descending: 'true', limit: '100', include_docs: 'true'} );
       filteredView = new Views.Changes({
@@ -36,10 +36,11 @@ define([
       });
 
       view = new Views.Changes({
-        model: model
+        model: model,
+        useRAF: false
       });
       viewSandbox = new ViewSandbox();
-      viewSandbox.renderView(view);
+      viewSandbox.renderView(view, done);
     });
 
     afterEach(function () {

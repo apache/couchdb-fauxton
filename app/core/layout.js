@@ -19,10 +19,12 @@ define([
   // Allows the main layout of the page to be changed by any plugin.
   var Layout = function () {
     this.layout = new Backbone.Layout({
-      template: "templates/layouts/with_sidebar",
+      template: "templates/layouts/with_sidebar"
     });
 
     this.layoutViews = {};
+    //this views don't ever get removed. An example of this is the main navigation sidebar
+    this.permanentViews = {};
     this.el = this.layout.el;
   };
 
@@ -44,7 +46,7 @@ define([
       }
       // If we're changing layouts all bets are off, so kill off all the
       // existing views in the layout.
-      _.each(this.layoutViews, function(view){view.remove();});
+      _.each(this.layoutViews, function(view){view.removeView();});
       this.layoutViews = {};
       this.render();
     },
@@ -54,6 +56,8 @@ define([
 
       if (!keep) {
         this.layoutViews[selector] = view;
+      } else {
+        this.permanentViews[selector] = view;
       }
 
       return view;
@@ -73,9 +77,9 @@ define([
 
       if (!view) {
         return false;
-      }
+        }
 
-      view.remove();
+      this.layout.removeView(selector);
       
       if (this.layoutViews[selector]) {
         delete this.layoutViews[selector];

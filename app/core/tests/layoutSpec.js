@@ -38,17 +38,13 @@ define([
       });
 
       it("Should remove old views", function () {
-        var view = {
-          remove: function () {}
-        };
+        var view = new FauxtonAPI.View();
 
-        layout.layoutViews = {
-          'selector': view
-        };
+        layout.setView('#selector', view);
 
-        var mockRemove = sinon.spy(view, 'remove');
+        var removeSpy = sinon.spy(view, 'removeView');
         layout.setTemplate('myTemplate');
-        assert.ok(mockRemove.calledOnce);
+        assert.ok(removeSpy.calledOnce);
 
       });
 
@@ -63,30 +59,71 @@ define([
 
     });
 
-    describe('#renderView', function () {
-
-      it('Should render existing view', function () {
-        var view = new Backbone.View();
-        var mockRender = sinon.spy(view, 'render');
-        layout.layoutViews = {
-          '#selector': view
-        };
-
-        var out = layout.renderView('#selector');
-
-        assert.ok(mockRender.calledOnce);
+    describe('#setView', function () {
+      var view;
+      beforeEach(function () {
+        view = new FauxtonAPI.View();
       });
 
-      it('Should return false for non-existing view', function () {
-        var view = new Backbone.View();
-        layout.layoutViews = {
-          'selector': view
-        };
-
-        var out = layout.renderView('wrongSelector');
-        assert.notOk(out, 'No view found');
+      it("Should keep record of view", function () {
+        layout.setView('.selector', view);
+        assert.equal(view, layout.layoutViews['.selector']);
       });
+
+      it("Should not keep record of view if keep is false", function () {
+        layout.setView('.selector', view, true);
+        assert.ok(_.isUndefined(layout.layoutViews['.selector']));
+        assert.equal(view, layout.permanentViews['.selector']);
+      });
+
     });
 
+    describe('#removeView', function () {
+      var view;
+
+      beforeEach(function () {
+        view = new FauxtonAPI.View();
+        layout.setView('#selector', view);
+      });
+
+      it('Should remove view from layout', function () {
+        var removeSpy = sinon.spy(layout.layout, 'removeView');
+
+        layout.removeView('#selector');
+        assert.ok(removeSpy.calledOnce);
+      });
+
+      it('Should remove view from list of active views', function () {
+        layout.setView('#selector', view);
+        layout.removeView('#selector');
+
+        assert.ok(_.isUndefined(layout.layoutViews['#selector']));
+      });
+
+      it("should return false if view doesn't exist", function () {
+        assert.notOk(layout.removeView('#fake'));
+      });
+
+    });
+
+    describe('#renderView', function () {
+      var view;
+
+      beforeEach(function () {
+        view = new FauxtonAPI.View();
+        layout.setView('#selector', view);
+      });
+
+      it('should render view', function () {
+        var renderSpy = sinon.spy(view, 'render');
+        layout.renderView('#selector');
+        assert.ok(renderSpy.calledOnce);
+      });
+
+      it('should not render a non-existing view', function () {
+        assert.notOk(layout.renderView('#fake'));
+      });
+
+    });
   });
 });
