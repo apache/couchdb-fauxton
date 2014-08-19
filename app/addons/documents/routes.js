@@ -256,7 +256,6 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
       }
 
       this.data.database.buildAllDocs(docParams);
-      console.log('aa docs', docParams);
 
       if (docParams.startkey && docParams.startkey.indexOf('_design') > -1) {
         this.sidebar.setSelectedTab('design-docs');
