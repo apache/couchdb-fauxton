@@ -13,8 +13,9 @@ define([
         'api',
         'addons/activetasks/views',
         'addons/activetasks/resources',
+        'addons/activetasks/routes',
         'testUtils'
-], function (FauxtonAPI, Views, Activetasks, testUtils) {
+], function (FauxtonAPI, Views, Activetasks, RouteObject, testUtils) {
   var assert = testUtils.assert,
       ViewSandbox = testUtils.ViewSandbox;
 
@@ -62,19 +63,30 @@ define([
         assert.ok(spy.calledOnce);
       });
 
+      it("should set the correct active tab", function () {
+        var $rep = tabMenu.$('li[data-type="replication"]');
+        $rep.click();
+        assert.ok($rep.hasClass('active'));
+      });
     });
 
     describe('on request by type', function () {
-      var viewSandbox, mainView;
-      beforeEach(function (done) {
+      var viewSandbox, mainView, tabHeader, searchModel;
 
+      beforeEach(function (done) {
+        searchModel = new Activetasks.Search();
+
+        tabHeader = new Views.TabHeader({
+          searchModel: searchModel
+        });
         mainView = new Views.View({
           collection: new Activetasks.AllTasks(),
-          currentView: "all"
+          currentView: "all",
+          searchModel: searchModel
         });
 
         viewSandbox = new ViewSandbox();
-        viewSandbox.renderView(tabMenu).promise().then(function () {
+        viewSandbox.renderView(tabHeader, function () {
           viewSandbox.renderView(mainView, done);
         });
       });
@@ -83,16 +95,9 @@ define([
         viewSandbox.remove();
       });
 
-      it("should set the filter the main-view", function () {
-        var $rep = tabMenu.$('li[data-type="replication"]');
-        $rep.click();
-        assert.equal("replication", mainView.filter);
-      });
-
-      it("should set correct active tab", function () {
-        var $rep = tabMenu.$('li[data-type="replication"]');
-        $rep.click();
-        assert.ok($rep.hasClass('active'));
+      it("should set the filter 'database' for the main-view", function () {
+        var $rep = tabHeader.$("input").val("registry").trigger("keyup");
+        assert.equal("registry", mainView.searchModel.get('filterDatabase'));
       });
     });
 
@@ -103,7 +108,8 @@ define([
     beforeEach(function (done) {
       mainView = new Views.View({
         collection: new Activetasks.AllTasks(),
-        currentView: "all"
+        currentView: "all",
+        searchModel: new Activetasks.Search()
       });
 
       viewSandbox = new ViewSandbox();

@@ -39,30 +39,36 @@ function (app, FauxtonAPI, ActiveTasks) {
       "click th": "sortByType"
     },
 
-    filter: "all",
-
     initialize: function (options) {
-      this.listenTo(ActiveTasks.events, "tasks:filter", this.filterAndRender);
+      this.listenTo(this.searchModel, "change", this.render);
       this.listenTo(this.collection, "reset", this.render);
     },
 
     beforeRender: function () {
-      this.filterAndInsertView(this.filter);
-    },
-
-    filterAndRender: function (view) {
-      this.filter = view;
-      this.render();
+      this.filterAndInsertView();
     },
 
     filterAndInsertView: function () {
-      var that = this;
+      var that = this,
+          database = this.searchModel.get("filterDatabase"),
+          filter = this.searchModel.get("filterType"),
+          databaseRegex = new RegExp(database, "g");
+
       this.removeView(".js-tasks-go-here");
 
       this.collection.forEach(function (item) {
-        if (that.filter !== "all" && item.get("type") !== that.filter) {
+
+        if (filter && filter !== "all" && item.get("type") !== filter) {
           return;
         }
+
+        if (database &&
+            !databaseRegex.test(item.get("source")) &&
+            !databaseRegex.test(item.get("target")) &&
+            !databaseRegex.test(item.get("database"))) {
+          return;
+        }
+
         var view = new Views.TableDetail({
           model: item
         });
@@ -148,12 +154,12 @@ function (app, FauxtonAPI, ActiveTasks) {
 
     requestByType: function(e){
       var currentTarget = e.currentTarget,
-          datatype = this.$(currentTarget).attr("data-type");
+          filter = this.$(currentTarget).attr("data-type");
 
       this.$('.task-tabs').find('li').removeClass('active');
       this.$(currentTarget).addClass('active');
 
-      ActiveTasks.events.trigger("tasks:filter", datatype);
+      FauxtonAPI.triggerRouteEvent('changeFilter', filter);
     }
   });
 
@@ -171,7 +177,7 @@ function (app, FauxtonAPI, ActiveTasks) {
       if (this.type === "replication"){
         objectField = this.model.get('source') + " to " + this.model.get('target');
       } else if (this.type === "indexer") {
-        objectField = this.model.get("database") + " / " + this.model.get("design_document");
+        objectField = this.model.get("database") + " (View: " + this.model.get("design_document") + ")";
       }
       return objectField;
     },
@@ -179,7 +185,7 @@ function (app, FauxtonAPI, ActiveTasks) {
     getProgress:  function(){
       var progress = "";
       if (this.type === "indexer"){
-        progress = "Processed " +this.model.get('changes_done')+ " of "+this.model.get('total_changes')+ ' changes.';
+        progress = "Processed " +this.model.get('changes_done')+ " of "+this.model.get('total_changes')+ ' changes. ';
       } else if (this.type === "replication"){
         progress = this.model.get('docs_written')+ " docs written. ";
         if (this.model.get('changes_pending') !== undefined) {
@@ -205,6 +211,29 @@ function (app, FauxtonAPI, ActiveTasks) {
         objectField: this.getObject(),
         progress: this.getProgress()
       };
+    }
+  });
+
+  Views.TabHeader = FauxtonAPI.View.extend({
+    template: "addons/activetasks/templates/tab_header",
+
+    events: {
+      "keyup input": "searchDb",
+      "click .js-toggle-filter": "toggleQuery"
+    },
+
+    toggleQuery: function (event) {
+      $('#dashboard-content').scrollTop(0);
+      this.$('#query').toggle('slow');
+    },
+
+    searchDb: function (event) {
+      event.preventDefault();
+
+      var $search = this.$('input[name="search"]'),
+          database = $search.val();
+
+      this.searchModel.set('filterDatabase', database);
     }
   });
 
