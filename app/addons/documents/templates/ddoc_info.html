@@ -13,7 +13,7 @@ the License.
 -->
 <div>
   <header class="page-header">
-    <h2>Design Document Metadata: _design/<%=Ddoc%> </h2>
+    <h2>Design Document Metadata: _design/<%-Ddoc%> </h2>
     <p class="help">Information about the specified design document, including the index, index size and current status of the design document and associated index information.<a href="<%- getDocUrl('design_doc_metadata') %>" class="help-link" target="_blank" data-bypass="true"><i class="icon-question-sign"></i></a></p>
   </header>
   <div class="row-fluid">
@@ -24,17 +24,17 @@ the License.
 
       <dl>
         <dt>Updater</dt>
-        <dd><%= view_index.updater_running %></dd>
+        <dd><%- view_index.updater_running %></dd>
         <dt>Compact</dt>
-        <dd><%= view_index.compact_running %></dd>
+        <dd><%- view_index.compact_running %></dd>
         <dt>Waiting Commit</dt>
-        <dd><%= view_index.waiting_commit %></dd>
+        <dd><%- view_index.waiting_commit %></dd>
         <dt>Waiting Clients</dt>
-        <dd><%= view_index.waiting_clients %></dd>
+        <dd><%- view_index.waiting_clients %></dd>
         <dt>Update Sequence</dt>
-        <dd><%= view_index.update_seq %></dd>
+        <dd><%- view_index.update_seq %></dd>
         <dt>Purge Sequence</dt>
-        <dd><%= view_index.purge_seq %></dd>
+        <dd><%- view_index.purge_seq %></dd>
       </dl>
     </div>
     <div class="span6">
@@ -43,18 +43,18 @@ the License.
       </header>
       <dl>
         <dt>Language</dt>
-        <dd><%= view_index.language %></dd>
+        <dd><%- view_index.language %></dd>
         <dt>Signature</dt>
-        <dd><%= view_index.signature %></dd>
+        <dd><%- view_index.signature %></dd>
       </dl>
       <header>
         <h3>Storage</h3>
       </header>
       <dl>
         <dt>Data Size</dt>
-        <dd><%= formatSize(view_index.data_size) %></dd>
+        <dd><%- formatSize(view_index.data_size) %></dd>
         <dt>Disk Size</dt>
-        <dd><%= formatSize(view_index.disk_size) %></dd>
+        <dd><%- formatSize(view_index.disk_size) %></dd>
       </dl>
     </div>
   </div>
