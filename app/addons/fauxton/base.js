@@ -264,19 +264,45 @@ function(app, FauxtonAPI, resizeColumns, Components, ZeroClipboard) {
     endpoint: '_all_docs',
 
     documentation: 'docs',
+    apiBarVisible: false,
 
     events:  {
       "click .api-url-btn" : "toggleAPIbar"
     },
+    
+    initialize: function () {
+      var that = this;
 
-    toggleAPIbar: function(e){
-      var $currentTarget = $(e.currentTarget).find('span');
-      if ($currentTarget.hasClass("fonticon-plus")){
-        $currentTarget.removeClass("fonticon-plus").addClass("fonticon-minus");
-      }else{
-        $currentTarget.removeClass("fonticon-minus").addClass("fonticon-plus");
+      $('body').on('click.apibar',function(e) {
+        if (!that.apiBarVisible) { return;}
+        if ($(e.target).hasClass('.api-url-btn')) { return;}
+
+        if (!$(e.target).closest('.api-navbar').length){
+          that.hideAPIbar();
+        }
+      });
+    },
+
+    cleanup: function () {
+      $('body').off('click.apibar');
+    },
+
+    hideAPIbar: function () {
+      this.$('.api-navbar').hide();
+      this.apiBarVisible = false;
+    },
+
+    toggleAPIbar: function(event){
+      event.preventDefault();
+      event.stopPropagation();
+
+      if (this.apiBarVisible) {
+        this.apiBarVisible = false;
+      } else {
+        this.apiBarVisible = true;
       }
-      $('.api-navbar').toggle();
+      this.$('.api-navbar').toggle();
+      console.log('ap', this.apiBarVisible);
     },
 
     serialize: function() {
@@ -287,6 +313,7 @@ function(app, FauxtonAPI, resizeColumns, Components, ZeroClipboard) {
     },
 
     hide: function(){
+      this.apiBarVisible = false;
       this.$el.addClass('hide');
     },
     show: function(){
