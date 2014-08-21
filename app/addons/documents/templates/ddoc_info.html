@@ -12,17 +12,50 @@ License for the specific language governing permissions and limitations under
 the License.
 -->
 <div>
-  <h2>Design Doc MetaData:  _design/<%=Ddoc%> </h2>
+  <header class="page-header">
+    <h2>Design Document Metadata: _design/<%-Ddoc%> </h2>
+    <p class="help">Information about the specified design document, including the index, index size and current status of the design document and associated index information.<a href="<%- getDocUrl('design_doc_metadata') %>" class="help-link" target="_blank" data-bypass="true"><i class="icon-question-sign"></i></a></p>
+  </header>
   <div class="row-fluid">
-	<% i=0; _.map(view_index, function (val, key) { %>
-		<% if(i%2==0){%>
-			<div class="row-fluid">
-		<% }; %>
-	    <div class="span6 well-item"><strong> <%- key %></strong> : <%- val %>  </div>
-	    <% if(i%2==1){%>
-			</div>
-		<% }; %>
-	  	<% ++i;
-	}); %>
+    <div class="span6">
+      <header>
+        <h3>Status</h3>
+      </header>
+
+      <dl>
+        <dt>Updater</dt>
+        <dd><%- view_index.updater_running %></dd>
+        <dt>Compact</dt>
+        <dd><%- view_index.compact_running %></dd>
+        <dt>Waiting Commit</dt>
+        <dd><%- view_index.waiting_commit %></dd>
+        <dt>Waiting Clients</dt>
+        <dd><%- view_index.waiting_clients %></dd>
+        <dt>Update Sequence</dt>
+        <dd><%- view_index.update_seq %></dd>
+        <dt>Purge Sequence</dt>
+        <dd><%- view_index.purge_seq %></dd>
+      </dl>
+    </div>
+    <div class="span6">
+      <header>
+        <h3>Information</h3>
+      </header>
+      <dl>
+        <dt>Language</dt>
+        <dd><%- view_index.language %></dd>
+        <dt>Signature</dt>
+        <dd><%- view_index.signature %></dd>
+      </dl>
+      <header>
+        <h3>Storage</h3>
+      </header>
+      <dl>
+        <dt>Data Size</dt>
+        <dd><%- formatSize(view_index.data_size) %></dd>
+        <dt>Disk Size</dt>
+        <dd><%- formatSize(view_index.disk_size) %></dd>
+      </dl>
+    </div>
   </div>
 </div>

@@ -43,6 +43,7 @@ function(utils, d3) {
     "all_dbs": "/_utils/docs/api/server/common.html?highlight=all_dbs#get--_all_dbs",
     "replication_doc": "/_utils/docs/replication/replicator.html#basics",
     "design_doc": "/_utils/docs/couchapp/ddocs.html#design-docs",
+    "design_doc_metadata" : "/_utils/docs/api/ddoc/common.html#api-ddoc-view-index-info",
     "view_functions": "/_utils/docs/couchapp/ddocs.html#view-functions",
     "map_functions": "/_utils/docs/couchapp/ddocs.html#map-functions",
     "reduce_functions": "/_utils/docs/couchapp/ddocs.html#reduce-and-rereduce-functions",
