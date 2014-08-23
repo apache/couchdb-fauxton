@@ -27,11 +27,11 @@ define([
   "core/couchdbSession",
   // Plugins.
   "plugins/backbone.layoutmanager",
-  "plugins/jquery.form"
-
+  "plugins/jquery.form",
+  "velocity"
 ],
 
-function(app, $, _, Backbone, Bootstrap, Helpers, Utils, FauxtonAPI, Couchdb) {
+function(app, $, _, Backbone, Bootstrap, Helpers, Utils, FauxtonAPI, Couchdb, velocity) {
   // Make sure we have a console.log
   if (typeof console == "undefined") {
     console = {
