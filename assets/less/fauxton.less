@@ -383,11 +383,11 @@ table.databases {
         }
       }
       .bottom-container {
-	     height: 110px;
-	     position: fixed;
-	     bottom: 0;
-	     width: 220px;
-	     background: #3a2c2b;
+       height: 110px;
+       position: fixed;
+       bottom: 0;
+       width: 220px;
+       background: #3a2c2b;
        .brand {
          .box-sizing(content-box);
          .hide-text;
@@ -413,19 +413,19 @@ table.databases {
           }
        }
        #footer-nav-links {
-	     li {
-		   a {
-		     font-size: 12px;
-		     color: @red;
-		     padding: 12px;
-		     text-shadow: none;
-		   }
-		   &.active, &:hover{
+       li {
+       a {
+         font-size: 12px;
+         color: @red;
+         padding: 12px;
+         text-shadow: none;
+       }
+       &.active, &:hover{
              a {
                text-decoration: underline;
              }
            }
-		 }
+     }
        }
     }
     nav {
@@ -899,16 +899,19 @@ div.spinner {
   margin-top: 5px;
   margin-bottom: 5px;
   .icon {
-    font-size: 11px;
+    font-size: 12px;
   }
 }
 
 .api-navbar {
-  .border-radius(5px);
+  .border-radius(0px);
+  display: none;
   position: absolute;
   right: 5px;
   background-color: #333;
-  padding: 5px 20px;
+  border: 1px solid black;
+  padding: 16px 20px 28px;
+  .box-shadow(@boxShadowLeft);
   .input-append.input-prepend {
     margin-bottom: 0px;
     .copying {
@@ -918,29 +921,42 @@ div.spinner {
     .add-on {
       background: none;
       padding: 0px;
-      margin: 10px 0;
+      margin: 12px 0;
       border: none;
       display: block;
       text-align: left;
       color: #fff;
       text-shadow: none;
       height: auto;
+      font-size: 16px;
     }
     .input-xxlarge {
       .border-radius(5px 0 0 5px);
       border: none;
-      padding: 9px;
+      padding: 8px;
       font-size: 18px;
       -moz-transition: background-color 100ms linear;
       -webkit-transition: background-color 100ms linear;
       transition: background-color 100ms linear;
+
+      // background-color: rgba(113, 121, 129, 0.2);
+      // color: #308a75;
+      border: 1px solid;
+      border-color: rgba(113, 121, 129, 0);
     }
+    .input-xxlarge:focus{
+      box-shadow: none;
+      border: 1px solid rgba(218, 79, 73, 1);
+      color: rgba(85, 85, 85, 0.8);
+    }
+
     .btn{
       background-color: @red;
       color: #333;
       margin-left: -1px;
       padding: 10px 10px 8px;
       border: none;
+      height: 40px;
       .border-radius(5px);
       &:hover{
         background-color: #cbcbcb;

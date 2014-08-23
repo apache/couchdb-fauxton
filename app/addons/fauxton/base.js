@@ -15,10 +15,12 @@ define([
   "api",
   "addons/fauxton/resizeColumns",
   "addons/fauxton/components",
-  "plugins/zeroclipboard/ZeroClipboard"
+  "plugins/zeroclipboard/ZeroClipboard",
+  "velocity",
+  "velocity.ui"
 ],
 
-function(app, FauxtonAPI, resizeColumns, Components, ZeroClipboard) {
+function(app, FauxtonAPI, resizeColumns, Components, ZeroClipboard, velocity) {
 
   var Fauxton = FauxtonAPI.addon();
   FauxtonAPI.addNotification = function (options) {
@@ -288,7 +290,8 @@ function(app, FauxtonAPI, resizeColumns, Components, ZeroClipboard) {
     },
 
     hideAPIbar: function () {
-      this.$('.api-navbar').hide();
+      this.$('.api-navbar').velocity("reverse", 250);
+
       this.apiBarVisible = false;
     },
 
@@ -298,11 +301,15 @@ function(app, FauxtonAPI, resizeColumns, Components, ZeroClipboard) {
 
       if (this.apiBarVisible) {
         this.apiBarVisible = false;
+        
+        this.$('.api-navbar')
+        .velocity("reverse", 250);
       } else {
         this.apiBarVisible = true;
+        
+        this.$('.api-navbar')
+        .velocity("transition.slideUpIn", 250);
       }
-      this.$('.api-navbar').toggle();
-      console.log('ap', this.apiBarVisible);
     },
 
     serialize: function() {
