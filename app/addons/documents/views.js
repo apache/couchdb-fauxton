@@ -240,6 +240,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
         FauxtonAPI.addNotification({
           msg: 'The database <code>' + _.escape(databaseName) + '</code> has been deleted.',
           clear: true,
+          type: "error",
           escape: false // beware of possible XSS when the message changes
         });
       }).fail(function (rsp, error, msg) {
@@ -318,10 +319,11 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
       if (!window.confirm("Are you sure you want to delete this doc?")) {
         return false;
       }
-
+      var storeID = _.clone(this.model);
       this.model.destroy().then(function(resp) {
         FauxtonAPI.addNotification({
-          msg: "Succesfully deleted your doc",
+          msg: "Doc "+storeID.get('id')+" has been deleted.",
+          type: "error",
           clear:  true
         });
         that.$el.fadeOut(function () {

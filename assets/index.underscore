@@ -33,7 +33,6 @@
 <body id="home">
   <!-- Main container. -->
   <div role="main" id="main">
-    <div id="global-notifications" class="container errors-container"></div>
     <div id="app-container"></div>
   </div>
 
