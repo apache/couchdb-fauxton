@@ -22,6 +22,7 @@ function(app, FauxtonAPI, Replication, Views) {
     roles: ["_admin"],
     routes: {
       "replication": "defaultView",
+      "replication/new/:dbname": "defaultView",
       "replication/:dbname": "defaultView"
     },
     selectedHeader: "Replication",
@@ -29,7 +30,7 @@ function(app, FauxtonAPI, Replication, Views) {
       return [this.replication.url(), this.replication.documentation];
     },
     crumbs: [
-      {"name": "Replicate changes from: ", "link": "replication"}
+      {"name": "Replicate ", "link": "replication"}
     ],
     defaultView: function(dbname){
 			this.databases = new Replication.DBList({});
@@ -39,7 +40,7 @@ function(app, FauxtonAPI, Replication, Views) {
         selectedDB: dbname ||"",
 				collection: this.databases,
         status:  this.tasks
-			}));  
+			}));
     }
   });
 
