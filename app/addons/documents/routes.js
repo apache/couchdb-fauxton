@@ -158,7 +158,8 @@ function(app, FauxtonAPI, Components, Documents, Changes, DocEditor, Databases, 
       "route:paginate": "paginate",
       "route:perPageChange": "perPageChange",
       "route:changesFilterAdd": "addFilter",
-      "route:changesFilterRemove": "removeFilter"
+      "route:changesFilterRemove": "removeFilter",
+      "route:toggleSelectHeader": "toggleSelectheader"
     },
 
     initialize: function (route, masterLayout, options) {
@@ -202,7 +203,7 @@ function(app, FauxtonAPI, Components, Documents, Changes, DocEditor, Databases, 
         Show right header for all docs that includes:
         query options, api bar, search and select
       ----------------------------------------------------*/
-      this.changesHeader = true;
+      this.allDocsHeader = false;
       this.resetAllDocsHeader();
 
       /* --------------------------------------------------
@@ -263,12 +264,26 @@ function(app, FauxtonAPI, Components, Documents, Changes, DocEditor, Databases, 
 
     },
 
+    toggleSelectheader: function(){
+      /* --------------------------------------------------
+        Set up right header for the document select menu
+        or reset back to all docs header
+      ----------------------------------------------------*/
+      if (this.allDocsHeader){
+        this.allDocsHeader = false;
+        this.rightHeader = this.setView("#api-navbar", new Documents.Views.SelectMenuHeader({}));
+        this.rightHeader.forceRender();
+      } else {
+        this.resetAllDocsHeader();
+      }
+
+    },
     resetAllDocsHeader: function(){
-      if (this.changesHeader){
+      if (!this.allDocsHeader){
         this.rightHeader = this.setView("#api-navbar", new Documents.Views.RightAllDocsHeader({
           database: this.data.database
         }));
-        this.changesHeader = false;
+        this.allDocsHeader = true;
       }
     },
 
@@ -502,7 +517,7 @@ function(app, FauxtonAPI, Components, Documents, Changes, DocEditor, Databases, 
         documentation: this.data.database.documentation()
       }));
 
-      this.changesHeader = true;
+      this.allDocsHeader = true;
 
       /* --------------------------------------------------
         Set sidebar highlight

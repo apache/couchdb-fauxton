@@ -56,36 +56,8 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
     },
 
     selectAllMenu: function(e){
-      //trigger event to select all in other view
-      this.$('.toggle-select-menu').toggleClass('active');
-
-      //trigger event to change the header
-      this.toggleSelectMenu();
+      FauxtonAPI.triggerRouteEvent("toggleSelectHeader");
       FauxtonAPI.Events.trigger("documents:show-select-all",this.selectVisible);
-
-    },
-
-    toggleSelectMenu: function(){
-      if (this.selectVisible){
-        this.selectVisible = false;
-        this.selectMenu.remove();
-        this.addAllDocsMenu();
-      } else {
-        this.removeAllDocsMenu();
-        this.addSelectMenu();
-      }
-    },
-
-    addSelectMenu: function(){
-      this.selectVisible = true;
-      this.selectMenu =  this.insertView('#header-select-menu', new Views.SelectMenu({}));
-      this.selectMenu.render();
-    },
-
-    removeAllDocsMenu: function(){
-      this.headerSearch.remove();
-      this.queryOptions.remove();
-      this.apiBar.remove();
     },
 
     addAllDocsMenu: function(){
@@ -188,13 +160,21 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
   });
 
   // select docs header
-  Views.SelectMenu = FauxtonAPI.View.extend({
+  Views.SelectMenuHeader = FauxtonAPI.View.extend({
+    className: "header-right",
     template:"addons/documents/templates/select-doc-menu",
     events: {
       "click button.all": "selectAll",
       "click button.js-bulk-delete": "bulkDelete",
-      "click #collapse": "collapse"
+      "click #collapse": "collapse",
+      'click .toggle-select-menu': 'selectAllMenu'
     },
+
+    selectAllMenu: function(e){
+      FauxtonAPI.triggerRouteEvent("toggleSelectHeader");
+      FauxtonAPI.Events.trigger("documents:show-select-all",this.selectVisible);
+    },
+
     bulkDelete: function(){
       FauxtonAPI.Events.trigger("documents:bulkDelete");
     },
@@ -258,7 +238,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
   Views.Document = FauxtonAPI.View.extend({
     template: "addons/documents/templates/all_docs_item",
     className: function(){
-      return (this.showSelect? "showSelect":"") + " all-docs-item doc-row"
+      return (this.showSelect? "showSelect":"") + " all-docs-item doc-row";
     },
     initialize: function (options) {
       this.checked = options.checked;
