@@ -37,7 +37,7 @@ function (app, FauxtonAPI, Databases, Views, Documents, Resources, RouteCore, Co
       /* --------------------------------------------------
         remove right header
       ----------------------------------------------------*/
-      this.rightheader && this.rightheader.remove();
+      this.rightHeader && this.rightHeader.remove();
 
       /* --------------------------------------------------
         Insert Preview Screen View
@@ -114,17 +114,6 @@ function (app, FauxtonAPI, Databases, Views, Documents, Resources, RouteCore, Co
         }
       });
 
-
-      /* --------------------------------------------------
-        Set up right header
-      ----------------------------------------------------*/
-
-      this.rightheader = this.setView("#api-navbar", new Views.RightHeader({
-        database: this.data.database,
-        model: this.data.database,
-        endpoint: this.data.indexedDocs.urlRef("apiurl", urlParams),
-        documentation: "docs"
-      }));
 
       /* --------------------------------------------------
         Insert View Editor

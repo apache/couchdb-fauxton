@@ -26,6 +26,7 @@ function(app, FauxtonAPI, resizeColumns ) {
     className: "advanced-options well",
 
     initialize: function (options) {
+      FauxtonAPI.Events.on('AdvancedOptions:closeTray', this.closeTray);
       this.database = options.database;
       this.ddocName = options.ddocName;
       this.viewName = options.viewName;
@@ -64,18 +65,22 @@ function(app, FauxtonAPI, resizeColumns ) {
     toggleQuery: function(event) {
       $('#dashboard-content').scrollTop(0);
       this.$('#query-options-tray').toggle();
-      $('.api-navbar').hide();
+      FauxtonAPI.Events.trigger('APIbar:closeTray');
     }, 
 
+    closeTray: function(){
+      $('#query-options-tray').hide();
+    },
+
     resetForm: function() {
-      $('input, textarea').each(function(){
+      this.$('input, textarea').each(function(){
         $(this).val('');
       });
-      $('input:checkbox').attr('checked', false);
-      $("select").each(function(){
+      this.$('input:checkbox').attr('checked', false);
+      this.$("select").each(function(){
         this.selectedIndex = 0;
       });
-      $('#query-options-tray').hide();
+      this.$('#query-options-tray').hide();
     },
 
     showKeys: function(){

@@ -13,27 +13,17 @@
 
 /*for advanced options css*/
 .advanced-options.well {
-  display: inline-block;
-  background: none;
-  border: none;
   box-shadow: none;
+  border: none;
+  background: none;
 }
+
+#query-options-tray:before {
+  right: 140px;
+}
+
 #query-options-tray {
-  display: none;
-  .border-radius(5px);
   width: 490px;
-  position: absolute;
-  right: 5px;
-  z-index: 11;
-  background-color: #333;
-  color: #fff;
-  padding: 0;
-  margin: 0;
-  .add-on {
-    padding: 0;
-    margin: 0;
-    line-height: 1em;
-  }
   .query-group {
     padding: 20px;
     border-bottom: 1px solid #555;
@@ -126,15 +116,4 @@
   #skipRows {
     margin-left: 5px;
   }
-}
-#query-options-tray:before {
-  content: '';
-  position: absolute;
-  top: -25px;
-  right: 140px;
-  border-color: transparent transparent #333 transparent;
-  border-style: solid;
-  border-width: 15px;
-  width: 0;
-  height: 0;
 }

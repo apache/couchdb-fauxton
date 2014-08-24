@@ -24,6 +24,11 @@ function (app, FauxtonAPI, Databases, Views, Documents, Resources) {
     layout: "two_pane",
 
     initialize: function (route, masterLayout, options) {
+      _.bindAll(this);
+      var params = this.createParams(),
+      urlParams = params.urlParams,
+      docParams = params.docParams;
+
       this.databaseName = options[0];
 
       this.data = {
@@ -42,6 +47,19 @@ function (app, FauxtonAPI, Databases, Views, Documents, Resources) {
           limit: 500
         }
       });
+
+
+      /* --------------------------------------------------
+        Set up right header
+      ----------------------------------------------------*/
+
+      this.rightHeader = this.setView("#api-navbar", new Views.RightHeader({
+        database: this.data.database,
+        model: this.data.database,
+        endpoint: this.data.designDocs.urlRef("apiurl", urlParams),
+        documentation: "docs"
+      }));
+
     },
 
     events: {
@@ -162,8 +180,6 @@ function (app, FauxtonAPI, Databases, Views, Documents, Resources) {
       this.documentsView.setParams(docParams, urlParams);
 
       this.documentsView.forceRender();
-
-      this.rightHeader.updateApiUrl([collection.urlRef("apiurl", urlParams), "docs"]);
     },
 
     /* --------------------------------------------------

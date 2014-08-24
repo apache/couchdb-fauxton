@@ -97,6 +97,7 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
     },
 
     initialize: function(options){
+      FauxtonAPI.Events.on('APIbar:closeTray', this.closeTray);
       var _options = options || {};
       this.endpoint = _options.endpoint || '_all_docs';
       this.documentation = _options.documentation || 'docs';
@@ -109,8 +110,8 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
       }else{
         $currentTarget.removeClass("fonticon-minus").addClass("fonticon-plus");
       }
-      $('#query-options-tray').hide();
-      $('.api-navbar').toggle();
+      FauxtonAPI.Events.trigger('AdvancedOptions:closeTray');
+      this.$('.api-navbar').toggle();
     },
 
     serialize: function() {
@@ -123,15 +124,22 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
     hide: function(){
       this.$el.addClass('hide');
     },
+
     show: function(){
       this.$el.removeClass('hide');
     },
+
+    closeTray: function(){
+      $('.api-navbar').hide();
+    },
+
     update: function(endpoint) {
       this.show();
       this.endpoint = endpoint[0];
       this.documentation = endpoint[1];
       this.render();
     },
+
     afterRender: function(){
       ZeroClipboard.config({ moviePath: "/assets/js/plugins/zeroclipboard/ZeroClipboard.swf" });
       var client = new ZeroClipboard(this.$(".copy-url"));
@@ -147,7 +155,6 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
         });
       });
     }
-
   });
 
 
