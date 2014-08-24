@@ -154,6 +154,7 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
 
 
   Components.Pagination = FauxtonAPI.View.extend({
+    tagName: "ul",
     className: "pagination pagination-centered",
     template: "addons/fauxton/templates/pagination",
 

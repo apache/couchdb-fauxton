@@ -580,6 +580,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, pouchdb,
 
       this.designDocSelector = this.setView('.design-doc-group', new Views.DesignDocSelector({
         collection: designDocs,
+        newView: this.newView,
         ddocName: this.currentDdoc || this.model.id,
         database: this.database
       }));
@@ -646,6 +647,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, pouchdb,
     },
 
     initialize: function (options) {
+      this.newView = options.newView;
       this.ddocName = options.ddocName;
       this.database = options.database;
       this.listenTo(this.collection, 'add', this.ddocAdded);
@@ -659,6 +661,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, pouchdb,
 
     serialize: function () {
       return {
+        newView: this.newView,
         ddocName: this.ddocName,
         ddocs: this.collection
       };

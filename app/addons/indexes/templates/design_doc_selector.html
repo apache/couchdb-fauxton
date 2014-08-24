@@ -16,21 +16,19 @@ the License.
   <div class="select-wrapper span5">
     <select id="ddoc">
       <optgroup label="Select a document">
-        <option value="new-doc">New document</option>
+        <option value="new-doc" <% if(newView){ %>selected="selected" <%}%> >New document</option>
 
         <% ddocs.each(function(ddoc) { %>
-        <%= ddoc.id %>
-        <%= ddocName %>
-        <% if (ddoc.id === ddocName) { %>
-        <option selected="selected" value="<%- ddoc.id %>"><%- ddoc.id %></option>
-        <% } else { %>
-        <option value="<%- ddoc.id %>"><%- ddoc.id %></option>
-        <% } %>
+          <% if (ddoc.id === ddocName && !newView) { %>
+          <option selected="selected" value="<%- ddoc.id %>"><%- ddoc.id %></option>
+          <% } else { %>
+          <option value="<%- ddoc.id %>"><%- ddoc.id %></option>
+          <% } %>
         <% }); %>
       </optgroup>
     </select>
     <i></i>
   </div>
 
-  <input type="text" id="new-ddoc" class="span7" style="display:none" placeholder="Enter a design doc name" />
+  <input type="text" id="new-ddoc" class="span7" <% if(!newView){ %> style="display:none"<% } %> placeholder="Enter a design doc name" />
 </div>
