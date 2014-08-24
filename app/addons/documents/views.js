@@ -38,6 +38,75 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
     });
   }
 
+  //Header for alldocs with search, back, Menu, Query options, select etc
+  Views.AllDocsHeader = FauxtonAPI.View.extend({
+    template: "addons/documents/templates/header_alldocs",
+    events: {
+      'select .selectAllDocs': 'selectAllDocs'
+    },
+    initialize: function(options){
+
+    },
+    selectAllDocs: function(){
+      //trigger event to select all in other view
+    },
+    afterRender:function(){
+      //insert DB search dropdown
+
+      //insert top create level dropdown with gear icon
+
+      //search docs
+
+      //insert queryoptions
+
+    }
+  });
+
+
+  //header that shows up when a doc is selected
+  // when a Doc is selected, trigger a routeEvent to render this
+  // the routeEvent will determine which header to show (??)
+  Views.DocEditHeader = FauxtonAPI.View.extend({
+    template: "addons/documents/templates/header_doc_edit",
+    events: {
+      'select .selectAllDocs': 'selectAllDocs'
+    },
+    initialize: function(options){
+
+    },
+    selectAllDocs: function(){
+      //trigger event to select all in other view
+    },
+    afterRender:function(){
+      //insert DB search dropdown
+
+      //insert top create level dropdown with gear icon
+    }
+  });
+
+  Views.DocsHeader = FauxtonAPI.View.extend({
+    template: "addons/documents/templates/header_selecteddoc",
+    events: {
+      'select .selectAllDocs': 'selectAllDocs'
+    },
+    initialize: function(options){
+
+    },
+    selectAllDocs: function(){
+      //trigger event to select all in other view
+    },
+    afterRender:function(){
+      //insert DB search dropdown
+
+      //insert top create level dropdown with gear icon
+
+      //search docs
+
+      //insert queryoptions
+
+    }
+  });
+
 
   Views.DeleteDBModal = Components.ModalView.extend({
     template: "addons/documents/templates/delete_database_modal",
@@ -83,9 +152,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
 
   Views.Document = FauxtonAPI.View.extend({
     template: "addons/documents/templates/all_docs_item",
-    tagName: "tr",
-    className: "all-docs-item",
-
+    className: "all-docs-item doc-row",
     initialize: function (options) {
       this.checked = options.checked;
     },
@@ -103,6 +170,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
 
     serialize: function() {
       return {
+        docID: this.model.get('_id'),
         doc: this.model,
         checked: this.checked
       };
@@ -148,27 +216,6 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
     }
   });
 
-  Views.Row = FauxtonAPI.View.extend({
-    template: "addons/documents/templates/index_row_docular",
-    tagName: "tr",
-
-    events: {
-      "click button.delete": "destroy"
-    },
-
-    destroy: function (event) {
-      event.preventDefault();
-
-      window.alert('Cannot delete a document generated from a view.');
-    },
-
-    serialize: function() {
-      return {
-        doc: this.model,
-        url: this.model.url('app')
-      };
-    }
-  });
 
 
   Views.AllDocsNumber = FauxtonAPI.View.extend({
@@ -378,7 +425,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
     },
 
     toggleDocument: function (event) {
-      var $row = this.$(event.target).closest('tr'),
+      var $row = this.$(event.target).closest('.doc-row'),
           docId = $row.attr('data-id'),
           rev = this.collection.get(docId).get('_rev'),
           data = {_id: docId, _rev: rev, _deleted: true};
@@ -535,7 +582,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
         if (this.bulkDeleteDocsCollection) {
           isChecked = this.bulkDeleteDocsCollection.get(doc.id);
         }
-        this.rows[doc.id] = this.insertView("table.all-docs tbody", new this.nestedView({
+        this.rows[doc.id] = this.insertView("#doc-list", new this.nestedView({
           model: doc,
           checked: isChecked
         }));
