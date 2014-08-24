@@ -172,6 +172,11 @@ function(app, FauxtonAPI, Components, Documents, Changes, DocEditor, Databases, 
         }
       });
 
+      this.header = this.setView("#breadcrumbs", new Documents.Views.AllDocsHeader({
+        database: this.data.database
+      }));
+
+
       this.sidebar = this.setView("#sidebar-content", new Documents.Views.Sidebar({
         collection: this.data.designDocs,
         database: this.data.database
