@@ -62,7 +62,7 @@ function(Backbone, LayoutManager) {
     manage: true,
     disableLoader: false,
 
-    useRAF: true,
+    useRAF: false,
 
     forceRender: function () {
       this.hasRendered = false;
@@ -88,7 +88,7 @@ function(Backbone, LayoutManager) {
   _.each([FauxtonAPI.Model, FauxtonAPI.Collection], function (ctor) {
     _.extend(ctor.prototype, caching);
   });
-  
+
   var extensions = _.extend({}, Backbone.Events);
   // Can look at a remove function later.
   FauxtonAPI.registerExtension = function (name, view) {
@@ -102,7 +102,7 @@ function(Backbone, LayoutManager) {
 
   FauxtonAPI.unRegisterExtension = function (name) {
     var views = extensions[name];
-    
+
     if (!views) { return; }
     extensions.trigger('remove:' + name, views);
     delete extensions[name];
@@ -125,7 +125,7 @@ function(Backbone, LayoutManager) {
     var _cb = arguments[arguments.length -1];
     if (_.isObject(view) && !cb) {
       _cb = function (item) { return _.isEqual(item, view);};
-    } 
+    }
 
     views = _.filter(views, function (item) {
       return !_cb(item);
