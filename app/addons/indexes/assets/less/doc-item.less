@@ -13,18 +13,30 @@
   display: block;
 }
 
+
 #doc-list{
   padding-top: 30px;
-  div.doc-row {
-    margin-bottom:20px;
-    div.select {
-      width: 10%;
+  .all-docs-item {
+    .select {
+      display:none;
       float: left;
       vertical-align: top;
     }
+    &.showSelect{
+      .select {
+        display:block;
+        width: 10%;
+      }
+      .doc-item {
+        width:90%;
+      }
+    }
+  }
+  div.doc-row {
+    margin-bottom:20px;
     .doc-item {
       float:left;
-      width:90%;
+      width:100%;
       vertical-align: top;
       position: relative;
       .border-radius(5px 5px 5px 5px);

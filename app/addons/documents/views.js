@@ -257,7 +257,9 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
 
   Views.Document = FauxtonAPI.View.extend({
     template: "addons/documents/templates/all_docs_item",
-    className: "all-docs-item doc-row",
+    className: function(){
+      return (this.showSelect? "showSelect":"") + " all-docs-item doc-row"
+    },
     initialize: function (options) {
       this.checked = options.checked;
       this.expanded = options.expanded;
@@ -269,8 +271,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
     },
 
     showSelectBox: function(bool){
-      this.showSelect = bool;
-      this.$('.select').toggle(this.showSelect);
+      this.$el.toggleClass('showSelect');
     },
 
     selectAll: function(checked){
@@ -295,7 +296,6 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
 
     serialize: function() {
       return {
-        showSelect: this.showSelect,
         expanded: this.expanded,
         docID: this.model.get('_id'),
         doc: this.model,
