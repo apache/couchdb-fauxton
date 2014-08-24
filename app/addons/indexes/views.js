@@ -309,6 +309,8 @@ function(app, FauxtonAPI, Components, Documents, Databases, pouchdb,
 
       this.showIndex = false;
       _.bindAll(this);
+
+      FauxtonAPI.Events.on('index:delete', this.deleteView);
     },
 
     establish: function () {
@@ -342,7 +344,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, pouchdb,
     },
 
     deleteView: function (event) {
-      event.preventDefault();
+      event && event.preventDefault();
 
       if (this.newView) { return alert('Cannot delete a new view.'); }
       if (!confirm('Are you sure you want to delete this view?')) {return;}

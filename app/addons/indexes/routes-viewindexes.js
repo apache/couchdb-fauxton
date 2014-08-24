@@ -88,9 +88,11 @@ function (app, FauxtonAPI, Databases, Views, Documents, Resources, RouteCore, Co
         links: [{
           title: 'Duplicate Index',
           icon: 'fonticon-documents'
-        },{
+        },
+        {
           title: 'Delete',
-          icon: 'fonticon-trash'
+          icon: 'fonticon-trash',
+          trigger: 'index:delete'
         }]
       }];
 
