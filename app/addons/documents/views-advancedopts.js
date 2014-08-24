@@ -66,7 +66,7 @@ function(app, FauxtonAPI, resizeColumns ) {
       $('#dashboard-content').scrollTop(0);
       this.$('#query-options-tray').toggle();
       FauxtonAPI.Events.trigger('APIbar:closeTray');
-    }, 
+    },
 
     closeTray: function(){
       $('#query-options-tray').hide();
@@ -278,7 +278,9 @@ function(app, FauxtonAPI, resizeColumns ) {
         }
       }, this);
     },
-
+    cleanup: function (){
+      FauxtonAPI.Events.unbind('AdvancedOptions:closeTray');
+    },
     serialize: function () {
       return {
         hasReduce: this.hasReduce,

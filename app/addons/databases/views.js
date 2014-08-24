@@ -21,7 +21,6 @@ define([
 function(app, Components, FauxtonAPI, Databases) {
   var Views = {};
 
-  //Header for alldocs with search, Query options,& api bar
   Views.RightAllDBsHeader = FauxtonAPI.View.extend({
     className: "header-right",
     template: "addons/databases/templates/header_alldbs",

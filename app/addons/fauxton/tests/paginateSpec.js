@@ -13,17 +13,18 @@ define([
        'app',
        'addons/fauxton/components',
        'addons/documents/resources',
+       'addons/indexes/resources',
        'testUtils',
        'api'
-], function (app, Views, Models, testUtils, FauxtonAPI) {
+], function (app, Views, Models, IndexModels, testUtils, FauxtonAPI) {
   var assert = testUtils.assert,
   ViewSandbox = testUtils.ViewSandbox;
 
 
   describe('IndexPaginate', function () {
     var viewSandbox, paginate, collection, navigateMock;
-    beforeEach(function (done) {
-      collection = new Models.IndexCollection([{
+    beforeEach(function () {
+      collection = new IndexModels.IndexCollection([{
         id:'myId1',
         doc: 'num1'
       },
@@ -43,7 +44,7 @@ define([
         canShowNextfn: function () { return true;}
       });
       viewSandbox = new ViewSandbox();
-      viewSandbox.renderView(paginate, done); 
+      viewSandbox.renderView(paginate);
     });
 
     afterEach(function () {
@@ -55,7 +56,7 @@ define([
         //do this so it doesn't throw an error on other unwired up components
         FauxtonAPI.triggerRouteEvent = function () {};
         //FauxtonAPI.triggerRouteEvent.restore && FauxtonAPI.triggerRouteEvent.restore();
-        //FauxtonAPI.navigate.restore && FauxtonAPI.navigate.restore(); 
+        //FauxtonAPI.navigate.restore && FauxtonAPI.navigate.restore();
       });
 
       it('Should trigger routeEvent', function () {

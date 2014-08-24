@@ -392,19 +392,6 @@ function(app, FauxtonAPI, Components, Documents, Changes, DocEditor, Databases, 
       };
     },
 
-    // createViewDocumentsView: function (options) {
-
-    //   return this.setView("#dashboard-lower-content", new Documents.Views.AllDocsList({
-    //     database: options.database,
-    //     collection: options.indexedDocs,
-    //     nestedView: Documents.Views.Row,
-    //     viewList: true,
-    //     ddocInfo: this.ddocInfo(options.designDoc, options.designDocs, options.view),
-    //     docParams: options.docParams,
-    //     params: options.urlParams
-    //   }));
-    // },
-
     updateAllDocsFromView: function (event) {
       var view = event.view,
           params = this.createParams(),

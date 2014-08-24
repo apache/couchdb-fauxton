@@ -46,7 +46,6 @@ function(app, FauxtonAPI, Components, Documents, Databases, pouchdb,
       this.api = options.api;
       this.endpoint = options.endpoint;
       this.documentation = options.documentation;
-      this.eventer = _.extend({}, Backbone.Events);
       FauxtonAPI.Events.on('advancedOptions:updateView', this.updateView);
     },
     updateApiUrl: function(api){
@@ -66,10 +65,14 @@ function(app, FauxtonAPI, Components, Documents, Databases, pouchdb,
         viewName: this.viewName,
         ddocName: this.model.id,
         hasReduce: this.hasReduce(),
-        eventer: this.eventer,
         showStale: true
       }));
     },
+
+    cleanup: function(){
+      FauxtonAPI.Events.unbind('advancedOptions:updateView');
+    },
+
     hasReduce: function(){
 
     },
@@ -81,10 +84,6 @@ function(app, FauxtonAPI, Components, Documents, Databases, pouchdb,
 
        if (_.any(errorParams)) {
          _.map(errorParams, function(param) {
-
-           // TODO: Where to add this error?
-           // bootstrap wants the error on a control-group div, but we're not using that
-           //$('form.view-query-update input[name='+param+'], form.view-query-update select[name='+param+']').addClass('error');
            return FauxtonAPI.addNotification({
              msg: "JSON Parse Error on field: "+param.name,
              type: "error",
@@ -107,48 +106,6 @@ function(app, FauxtonAPI, Components, Documents, Databases, pouchdb,
 
        FauxtonAPI.navigate(fragment, {trigger: false});
        FauxtonAPI.triggerRouteEvent('updateAllDocs', {ddoc: this.ddocID, view: this.viewName});
-    },
-
-
-    previewView: function(event, paramsInfo) {
-      event.preventDefault();
-      var that = this,
-      mapVal = this.mapVal(),
-      reduceVal = this.reduceVal(),
-      paramsArr = [];
-
-      if (paramsInfo && paramsInfo.params) {
-        paramsArr = paramsInfo.params;
-      }
-
-      var params = _.reduce(paramsArr, function (params, param) {
-        params[param.name] = param.value;
-        return params;
-      }, {reduce: false});
-
-      FauxtonAPI.addNotification({
-        msg: "<strong>Warning!</strong> Preview executes the Map/Reduce functions in your browser, and may behave differently from CouchDB.",
-        type: "warning",
-        fade: true,
-        escape: false // beware of possible XSS when the message changes
-      });
-
-      var promise = FauxtonAPI.Deferred();
-
-      if (!this.database.allDocs || this.database.allDocs.params.include_docs !== true) {
-        this.database.buildAllDocs({limit: Databases.DocLimit.toString(), include_docs: true});
-        promise = this.database.allDocs.fetch();
-       } else {
-        promise.resolve();
-       }
-
-      promise.then(function () {
-        params.docs = that.database.allDocs.map(function (model) { return model.get('doc');});
-        var queryPromise = pouchdb.runViewQuery({map: mapVal, reduce: reduceVal}, params);
-        queryPromise.then(function (results) {
-          FauxtonAPI.triggerRouteEvent('updatePreviewDocs', {rows: results.rows, ddoc: that.getCurrentDesignDoc().id, view: that.viewName});
-        });
-      });
     }
   });
 
@@ -177,9 +134,6 @@ function(app, FauxtonAPI, Components, Documents, Databases, pouchdb,
     beforeRender: function(){
       var newLinks = [{
         links: [{
-          title: 'Table',
-          icon: 'fonticon-table'
-        },{
           title: 'JSON',
           icon: 'fonticon-json'
         }]
@@ -265,8 +219,6 @@ function(app, FauxtonAPI, Components, Documents, Databases, pouchdb,
   });
 
 
-
-
   Views.ViewEditor = FauxtonAPI.View.extend({
     template: "addons/indexes/templates/view_editor",
     builtinReduces: ['_sum', '_count', '_stats'],
@@ -275,7 +227,6 @@ function(app, FauxtonAPI, Components, Documents, Databases, pouchdb,
       "click button.save": "saveView",
       "click button.delete": "deleteView",
       "change select#reduce-function-selector": "updateReduce",
-      "click button.preview": "previewView",
       "click #db-views-tabs-nav": 'toggleIndexNav',
       "click .beautify_map":  "beautifyCode",
       "click .beautify_reduce":  "beautifyCode"
@@ -629,6 +580,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, pouchdb,
       targetEditor.setValue(beautifiedCode);
     },
     cleanup: function () {
+      FauxtonAPI.Events.unbind('index:delete');
       this.mapEditor && this.mapEditor.remove();
       this.reduceEditor && this.reduceEditor.remove();
     }

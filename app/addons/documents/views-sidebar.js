@@ -117,6 +117,10 @@ function(app, FauxtonAPI, Components, Documents, Databases) {
       },this);
     },
 
+    cleanup: function(){
+      FauxtonAPI.Events.unbind('database:delete');
+    },
+
     afterRender: function () {
       if (this.selectedTab) {
         this.setSelectedTab(this.selectedTab);
