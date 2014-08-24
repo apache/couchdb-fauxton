@@ -359,45 +359,6 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
 
   });
 
-  Views.AllDocsLayout = FauxtonAPI.View.extend({
-    template: "addons/documents/templates/all_docs_layout",
-
-    initialize: function (options) {
-      this.database = options.database;
-      this.params = options.params;
-    },
-
-    events: {
-      'click #toggle-query': "toggleQuery"
-    },
-
-    toggleQuery: function (event) {
-      $('#dashboard-content').scrollTop(0);
-      this.$('#query-options').toggle();
-    },
-
-    beforeRender: function () {
-      this.advancedOptions = this.insertView('#toggle-query', new QueryOptions.AdvancedOptions({
-        updateViewFn: this.updateAllDocs,
-        previewFn: this.previewView,
-        hasReduce: false,
-        showPreview: false,
-        database: this.database,
-      }));
-
-      this.toolsView = this.setView(".js-search", new Views.JumpToDoc({
-        database: this.database,
-        collection: this.database.allDocs
-      }));
-    },
-
-    afterRender: function () {
-      if (this.params) {
-        this.advancedOptions.updateFromParams(this.params);
-      }
-    }
-
-  });
 
   // TODO: Rename to reflect that this is a list of rows or documents
   Views.AllDocsList = FauxtonAPI.View.extend({
