@@ -27,25 +27,27 @@ function(app, FauxtonAPI, resizeColumns, Components, prettify, ZeroClipboard) {
   var Views = {};
 
   Views.ChangesHeader = FauxtonAPI.View.extend({
-    template: "addons/documents/templates/changes_header",
+    template: "addons/documents/templates/header_alldocs",
+    initialize: function (options) {
+      this.filterView = options.filterView;
+      this.endpoint = options.endpoint;
+      this.documentation = options.documentation;
 
-    events: {
-      'click .js-toggle-filter': "toggleQuery"
     },
+    beforeRender: function(){
+      this.setView("#header-search", this.filterView);
 
-    toggleQuery: function (event) {
-      $('#dashboard-content').scrollTop(0);
-      this.$('#query').toggle('slow');
-    },
-
-    initialize: function () {
-      this.setView(".js-filter", this.filterView);
+      //Moved the apibar view into the components file so you can include it in your views
+      this.apiBar = this.insertView("#header-api-bar", new Components.ApiBar({
+        endpoint: this.endpoint,
+        documentation: this.documentation
+      }));
     }
   });
 
   Views.Changes = Components.FilteredView.extend({
+    className: "changes-view",
     template: "addons/documents/templates/changes",
-
     initialize: function () {
       this.listenTo(this.model.changes, 'sync', this.render);
       this.listenTo(this.model.changes, 'cachesync', this.render);

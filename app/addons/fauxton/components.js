@@ -35,6 +35,40 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
   var Components = FauxtonAPI.addon();
 
 
+  //setting up the left header with the backbutton used in Views and All docs
+  Components.LeftHeader = FauxtonAPI.View.extend({
+    className: "header-left",
+    template: "addons/fauxton/templates/header_left",
+    initialize:function(options){
+      this.dropdownMenuLinks = options.dropdownMenu;
+      this.crumbs = options.crumbs || [];
+    },
+    updateCrumbs: function(crumbs){
+      this.breadcrumbs && this.breadcrumbs.update(crumbs);
+    },
+    updateDropdown: function(menuLinks){
+      this.dropdown && this.dropdown.update(menuLinks);
+    },
+    beforeRender: function(){
+      this.setUpCrumbs();
+      this.setUpDropDownMenu();
+    },
+    setUpCrumbs: function(){
+      this.breadcrumbs = this.insertView("#header-breadcrumbs", new Components.Breadcrumbs({
+        crumbs: this.crumbs
+      }));
+    },
+    setUpDropDownMenu: function(){
+      if (this.dropdownMenuLinks){
+        this.dropdown = this.insertView("#header-dropdown-menu", new Components.MenuDropDown({
+          icon: 'fonticon-cog',
+          links: this.dropdownMenuLinks,
+        }));
+      }
+    }
+  });
+
+
   Components.Breadcrumbs = FauxtonAPI.View.extend({
     className: "breadcrumb pull-left",
     tagName: "ul",
@@ -45,7 +79,10 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
         crumbs: crumbs
       };
     },
-
+    update: function(crumbs) {
+      this.crumbs = crumbs;
+      this.render();
+    },
     initialize: function(options) {
       this.crumbs = options.crumbs;
     }
@@ -53,12 +90,14 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
 
   Components.ApiBar = FauxtonAPI.View.extend({
     template: "addons/fauxton/templates/api_bar",
-    endpoint: '_all_docs',
-
-    documentation: 'docs',
-
     events:  {
       "click .api-url-btn" : "toggleAPIbar"
+    },
+
+    initialize: function(options){
+      var _options = options || {};
+      this.endpoint = _options.endpoint || '_all_docs';
+      this.documentation = _options.documentation || 'docs';
     },
 
     toggleAPIbar: function(e){
@@ -702,6 +741,10 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
     initialize: function(options){
       this.links = options.links;
       this.icon = options.icon || "fonticon-plus-circled2";
+    },
+    update: function(links){
+      this.links = links;
+      this.render();
     },
     serialize: function(){
       return {

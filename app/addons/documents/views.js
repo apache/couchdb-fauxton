@@ -39,8 +39,9 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
     });
   }
 
-  //Header for alldocs with search, back, Menu, Query options, select etc
-  Views.AllDocsHeader = FauxtonAPI.View.extend({
+  //Header for alldocs with search, Query options,& api bar
+  Views.RightAllDocsHeader = FauxtonAPI.View.extend({
+    className: "header-right",
     template: "addons/documents/templates/header_alldocs",
     events: {
       'select .selectAllDocs': 'selectAllDocs'
@@ -51,6 +52,11 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
     },
     selectAllDocs: function(){
       //trigger event to select all in other view
+    },
+    updateApiUrl: function(api){
+      //this will update the api bar when the route changes
+      //you can find the method that updates it in components.js Components.ApiBar()
+      this.apiBar && this.apiBar.update(api);
     },
     serialize: function() {
       //basically if you want something in a template, You can define it here
@@ -96,6 +102,9 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
         hasReduce: false,
         showPreview: false,
       }));
+
+      //Moved the apibar view into the components file so you can include it in your views
+      this.apiBar = this.insertView("#header-api-bar", new Components.ApiBar({}));
 
     },
     //moved from alldocs layout

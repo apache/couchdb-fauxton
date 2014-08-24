@@ -190,7 +190,7 @@ function(app, FauxtonAPI, Components, Documents, Databases) {
 
         menuLinks.push({
           title: link.title,
-          url: "#" + database.url('app') + "/_design/" + docSafe + "/" + link.url,
+          url: "#" + database.url('app')+ "/" + link.url + "/" + docSafe,
           icon: 'fonticon-plus-circled'
         });
 
