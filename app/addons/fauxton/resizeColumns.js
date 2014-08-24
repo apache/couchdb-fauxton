@@ -23,6 +23,25 @@ define([
 
 function(FauxtonAPI) {
 
+
+// Lets think about what this needs to do, so it can be rewritten.
+/*
+  I have 3 types of resizable layouts:
+    - full size which will span across the content area that is
+     window.innerWidth - primaryNavWidth
+    - 2 panel which is the above divided by 2 with the left set on the second div
+    - "sidebar" which is window.innerWidth - primaryNavWidth - sidebarwidth
+    Also everything needs to account for border width
+
+    Step 1:
+    - getPrimaryNavWidth
+    - get window.innerWidth
+    - get appContainerWidth AKA full width
+    - getPanelWidth (app container / 2)
+    - sidebarwidth (app container - sidebar)
+*/
+
+
   var Resize = function(options){
     this.options = options;
   };
@@ -32,6 +51,8 @@ function(FauxtonAPI) {
       var primaryNavWidth  = $('body').hasClass('closeMenu') ? 64 : 220;
       return primaryNavWidth;
     },
+
+    getSidebarWidth: function(){},
 
     getSinglePanelWidth: function(){
       var sidebarWidth = $('#sidebar-content').length > 0 ? $('#sidebar-content').outerWidth() : 0,
@@ -115,8 +136,10 @@ function(FauxtonAPI) {
         */
 
         var panelWidth = this.getPanelWidth();
+        var fullWidth = this.getPanelWidth();
         this.setPosition(panelWidth);
         $('.window-resizeable').innerWidth(panelWidth);
+        $('.window-resizeable-full').innerWidth(fullWidth);
       }
       //if there is a callback, run that
       if(this.options.callback) {

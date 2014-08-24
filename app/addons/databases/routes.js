@@ -45,6 +45,9 @@ function(app, FauxtonAPI, Databases, Views) {
     initialize: function() {
       this.databases = new Databases.List();
       this.deferred = FauxtonAPI.Deferred();
+      this.rightHeader = this.setView("#api-navbar", new Views.RightAllDBsHeader({
+        collection: this.databases
+      }));
     },
 
     allDatabases: function() {
