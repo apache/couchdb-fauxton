@@ -265,7 +265,7 @@ function(app, FauxtonAPI, Components, Documents, Changes, DocEditor, Databases, 
 
     resetAllDocsHeader: function(){
       if (this.changesHeader){
-        this.headerRight = this.setView("#api-navbar", new Documents.Views.RightAllDocsHeader({
+        this.rightHeader = this.setView("#api-navbar", new Documents.Views.RightAllDocsHeader({
           database: this.data.database
         }));
         this.changesHeader = false;
@@ -290,7 +290,7 @@ function(app, FauxtonAPI, Components, Documents, Changes, DocEditor, Databases, 
       /* --------------------------------------------------
         Update the apiUrl
       ----------------------------------------------------*/
-      this.headerRight.updateApiUrl([designDocInfo.url('apiurl'), designDocInfo.documentation()]);
+      this.rightHeader.updateApiUrl([designDocInfo.url('apiurl'), designDocInfo.documentation()]);
 
     },
 
@@ -365,7 +365,7 @@ function(app, FauxtonAPI, Components, Documents, Changes, DocEditor, Databases, 
       /* --------------------------------------------------
         update the api url
       ----------------------------------------------------*/
-      this.headerRight.updateApiUrl([this.data.database.allDocs.urlRef("apiurl", urlParams), this.data.database.allDocs.documentation()]);
+      this.rightHeader.updateApiUrl([this.data.database.allDocs.urlRef("apiurl", urlParams), this.data.database.allDocs.documentation()]);
     },
 
 
@@ -415,9 +415,12 @@ function(app, FauxtonAPI, Components, Documents, Changes, DocEditor, Databases, 
       this.leftheader.forceRender();
       this.documentsView.forceRender();
 
-      this.headerRight.updateApiUrl([collection.urlRef("apiurl", urlParams), "docs"]);
+      this.rightHeader.updateApiUrl([collection.urlRef("apiurl", urlParams), "docs"]);
     },
 
+    /* --------------------------------------------------
+      Called when you change the # of items to show in the pagination footer
+    ----------------------------------------------------*/
     perPageChange: function (perPage) {
       // We need to restore the collection parameters to the defaults (1st page)
       // and update the page size
@@ -427,6 +430,10 @@ function(app, FauxtonAPI, Components, Documents, Changes, DocEditor, Databases, 
       this.documentsView.collection.pageSizeReset(perPage, {fetch: false});
       this.setDocPerPageLimit(perPage);
     },
+
+    /* --------------------------------------------------
+      Triggers when you hit the paginate forward and backwards buttons
+    ----------------------------------------------------*/
 
     paginate: function (options) {
       var collection = this.documentsView.collection;

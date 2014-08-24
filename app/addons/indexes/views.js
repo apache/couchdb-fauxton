@@ -88,14 +88,12 @@ function(app, FauxtonAPI, Components, Documents, Databases, pouchdb,
            return FauxtonAPI.addNotification({
              msg: "JSON Parse Error on field: "+param.name,
              type: "error",
-             selector: ".advanced-options .errors-container",
              clear: true
            });
          });
          FauxtonAPI.addNotification({
            msg: "Make sure that strings are properly quoted and any other values are valid JSON structures",
            type: "warning",
-           selector: ".advanced-options .errors-container",
            clear: true
          });
 
@@ -131,7 +129,6 @@ function(app, FauxtonAPI, Components, Documents, Databases, pouchdb,
       FauxtonAPI.addNotification({
         msg: "<strong>Warning!</strong> Preview executes the Map/Reduce functions in your browser, and may behave differently from CouchDB.",
         type: "warning",
-        selector: ".advanced-options .errors-container",
         fade: true,
         escape: false // beware of possible XSS when the message changes
       });
@@ -310,7 +307,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, pouchdb,
       this.showIndex = false;
       _.bindAll(this);
 
-      FauxtonAPI.Events.on('index:delete', this.deleteView);
+      FauxtonAPI.Events.on('index:delete', this.deleteEvent);
     },
 
     establish: function () {
@@ -343,11 +340,15 @@ function(app, FauxtonAPI, Components, Documents, Databases, pouchdb,
       }
     },
 
+    deleteEvent: function(){
+      this.deleteView();
+    },
+
     deleteView: function (event) {
       event && event.preventDefault();
 
       if (this.newView) { return alert('Cannot delete a new view.'); }
-      if (!confirm('Are you sure you want to delete this view?')) {return;}
+      if (!confirm('Are you sure you want to delete this view?')) { return; }
 
       var that = this,
           promise,
@@ -394,7 +395,6 @@ function(app, FauxtonAPI, Components, Documents, Databases, pouchdb,
 
         notification = FauxtonAPI.addNotification({
           msg: "Saving document.",
-          selector: "#define-view .errors-container",
           clear: true
         });
 
@@ -419,7 +419,6 @@ function(app, FauxtonAPI, Components, Documents, Databases, pouchdb,
         notification = FauxtonAPI.addNotification({
           msg: errormessage,
           type: "error",
-          selector: "#define-view .errors-container",
           clear: true
         });
       }
@@ -439,7 +438,6 @@ function(app, FauxtonAPI, Components, Documents, Databases, pouchdb,
       FauxtonAPI.addNotification({
         msg: "View has been saved.",
         type: "success",
-        selector: "#define-view .errors-container",
         clear: true
       });
 
@@ -455,9 +453,6 @@ function(app, FauxtonAPI, Components, Documents, Databases, pouchdb,
         this.ddocInfo = ddoc;
         this.showIndex = true;
         this.render();
-        FauxtonAPI.triggerRouteEvent('reloadDesignDocs', {
-          selectedTab: app.utils.removeSpecialCharacters(ddocName.replace(/_design\//,'')) + '_' + app.utils.removeSpecialCharacters(viewName)
-        });
       }
 
       // TODO:// this should change to a trigger because we shouldn't define advanced options in this view

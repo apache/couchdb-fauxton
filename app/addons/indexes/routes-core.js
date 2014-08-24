@@ -47,7 +47,8 @@ function (app, FauxtonAPI, Databases, Views, Documents, Resources) {
     events: {
       "route:updatePreviewDocs": "updateAllDocsFromPreview",
       "route:perPageChange": "perPageChange",
-      "route:paginate": "paginate"
+      "route:paginate": "paginate",
+      "route:updateAllDocs": "updateAllDocsFromView"
     },
 
     /* --------------------------------------------------
@@ -134,6 +135,38 @@ function (app, FauxtonAPI, Databases, Views, Documents, Resources) {
       return this.data.designDocs.fetch({reset: true});
     },
 
+
+    /* --------------------------------------------------
+        Reload preview docs
+    -----------------------------------------------------*/
+    updateAllDocsFromView: function (event) {
+      var view = event.view,
+          params = this.createParams(),
+          urlParams = params.urlParams,
+          docParams = params.docParams,
+          ddoc = event.ddoc,
+          pageSize,
+          collection;
+
+      var defaultPageSize = _.isUndefined(this.documentsView) ? 20 : this.documentsView.perPage();
+      docParams.limit = pageSize = this.getDocPerPageLimit(urlParams, defaultPageSize);
+
+      if (event.allDocs) {
+        this.eventAllDocs = true; // this is horrible. But I cannot get the trigger not to fire the route!
+        this.data.database.buildAllDocs(docParams);
+        collection = this.data.database.allDocs;
+        collection.paging.pageSize = pageSize;
+
+      }
+
+      this.documentsView.setCollection(collection);
+      this.documentsView.setParams(docParams, urlParams);
+
+      this.leftheader.forceRender();
+      this.documentsView.forceRender();
+
+      this.rightHeader.updateApiUrl([collection.urlRef("apiurl", urlParams), "docs"]);
+    },
 
     /* --------------------------------------------------
       Docs that are returned from a view
