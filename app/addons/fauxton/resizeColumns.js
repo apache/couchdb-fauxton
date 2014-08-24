@@ -23,129 +23,72 @@ define([
 
 function(FauxtonAPI) {
 
-
-// Lets think about what this needs to do, so it can be rewritten.
-/*
-  I have 3 types of resizable layouts:
-    - full size which will span across the content area that is
-     window.innerWidth - primaryNavWidth
-    - 2 panel which is the above divided by 2 with the left set on the second div
-    - "sidebar" which is window.innerWidth - primaryNavWidth - sidebarwidth
-    Also everything needs to account for border width
-
-    Step 1:
-    - getPrimaryNavWidth
-    - get window.innerWidth
-    - get appContainerWidth AKA full width
-    - getPanelWidth (app container / 2)
-    - sidebarwidth (app container - sidebar)
-*/
-
-
   var Resize = function(options){
     this.options = options;
   };
 
   Resize.prototype = {
-    getPrimaryNavWidth: function(){
-      var primaryNavWidth  = $('body').hasClass('closeMenu') ? 64 : 220;
-      return primaryNavWidth;
-    },
-
-    getSidebarWidth: function(){},
-
-    getSinglePanelWidth: function(){
-      var sidebarWidth = $('#sidebar-content').length > 0 ? $('#sidebar-content').outerWidth() : 0,
-          borders = parseInt($('#dashboard').css('border-left-width'), 10) +
-                    parseInt($('#dashboard-content').css('border-left-width'), 10) +
-                    parseInt($('#dashboard-content').css('border-right-width'), 10);
-
-      return (this.getPrimaryNavWidth() + sidebarWidth + borders);
-    },
-
-    getTwoPanelWidth: function(){
-      var borders = parseInt($('#dashboard').css('border-left-width'), 10) +
-          parseInt($('#right-content').css('border-left-width'), 10) +
-          parseInt($('#left-content').css('border-right-width'), 10)+
-          parseInt($('#left-content').css('border-left-width'), 10) +
-          parseInt($('#right-content').css('border-right-width'), 10);
-      return (this.getPrimaryNavWidth()+ borders);
-    },
 
     initialize: function(){
-     // $(window).off('resize');
-      var that = this;
       //add throttler :)
+      var that = this;
       this.lazyLayout = _.debounce(that.onResizeHandler, 300).bind(this);
       FauxtonAPI.utils.addWindowResize(this.lazyLayout,"animation");
       FauxtonAPI.utils.initWindowResize();
       this.onResizeHandler();
     },
 
-    updateOptions:function(options){
-      this.options = {};
-      this.options = options;
-    },
+    onResizeHandler: function (){
+      var fullWidth = this.getFullWidth(),
+          halfWidth = this.getHalfWidth(),
+          sidebarWidth = this.getSidebarContentWidth(),
+          left = $('.window-resizeable-half').length > 0? halfWidth : sidebarWidth;
 
-    turnOff:function(){
-      FauxtonAPI.utils.removeWindowResize("animation");
+      $('.window-resizeable').innerWidth(sidebarWidth);
+      $('.window-resizeable-half').innerWidth(halfWidth);
+      $('.window-resizeable-full').innerWidth(fullWidth);
+
+      //set left
+      this.setLeftPosition(left);
+      //if there is a callback, run that
+      this.options.callback && this.options.callback();
+      this.trigger('resize');
     },
 
     cleanupCallback: function(){
       this.callback = null;
     },
 
-    singlePanelResize: function(){
-      var combinedWidth = window.innerWidth - this.getSinglePanelWidth(),
-      smallWidthConstraint = ($('#sidebar-content').length > 0)? 470:800,
-      panelWidth;
-
-      if (combinedWidth > smallWidthConstraint) {
-        panelWidth = combinedWidth;
-      } else if (combinedWidth < smallWidthConstraint){
-        panelWidth = smallWidthConstraint;
-      }
-      return panelWidth;
+    getPrimaryNavWidth: function(){
+      var primaryNavWidth  = $('body').hasClass('closeMenu') ? 64 : $('#primary-navbar').outerWidth();
+      //$('body').hasClass('closeMenu') ? 64 : 220;
+      return primaryNavWidth;
     },
 
-    getPanelWidth: function(){
-      var panelWidth;
-      if ($('#dashboard').hasClass('two-pane')){
-        panelWidth = (window.innerWidth - this.getTwoPanelWidth())/2;
-      } else {
-        panelWidth = this.singlePanelResize();
-      }
-      return panelWidth;
+    getWindowWidth: function(){
+      return window.innerWidth;
     },
 
-    setPosition: function(panelWidth){
+    getFullWidth: function(){
+      return this.getWindowWidth() - this.getPrimaryNavWidth();
+    },
+
+    getSidebarWidth: function(){
+      return $('#breadcrumbs').length > 0 ? $('#breadcrumbs').outerWidth() : 0;
+    },
+
+    getSidebarContentWidth: function(){
+      return this.getFullWidth() - this.getSidebarWidth() -5;
+    },
+
+    getHalfWidth: function(){
+      var fullWidth = this.getFullWidth();
+      return fullWidth/2;
+    },
+
+    setLeftPosition: function(panelWidth){
       var primary = this.getPrimaryNavWidth();
       $('.set-left-position').css('left',panelWidth+primary+4);
-    },
-
-    onResizeHandler: function (){
-      //if there is an override, do that instead
-      if (this.options.onResizeHandler){
-        this.options.onResizeHandler();
-      } else {
-        /*
-          Just so we all are aware:
-          This entire file and the html of the layouts is bonkers
-          crazy. I hate what horrible things happened in this file.
-          It will change soon with a layout overhaul.
-        */
-
-        var panelWidth = this.getPanelWidth();
-        var fullWidth = this.getPanelWidth();
-        this.setPosition(panelWidth);
-        $('.window-resizeable').innerWidth(panelWidth);
-        $('.window-resizeable-full').innerWidth(fullWidth);
-      }
-      //if there is a callback, run that
-      if(this.options.callback) {
-        this.options.callback();
-      }
-      this.trigger('resize');
     }
   };
 

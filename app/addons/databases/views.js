@@ -128,6 +128,7 @@ function(app, Components, FauxtonAPI, Databases) {
       this.$el.find(".js-db-graveyard").tooltip();
     }
   });
+
   Views.List = FauxtonAPI.View.extend({
     dbLimit: 20,
     perPage: 20,
@@ -187,24 +188,6 @@ function(app, Components, FauxtonAPI, Databases) {
     setPage: function(page) {
       this.page = page || 1;
     },
-
-    afterRender: function() {
-      var that = this,
-          AllDBsArray = _.map(this.collection.toJSON(), function(item, key){
-            return item.name;
-          });
-
-      this.dbSearchTypeahead = new Components.Typeahead({
-        el: "input.search-autocomplete",
-        source: AllDBsArray,
-        onUpdate: function (item) {
-          that.switchDatabase(null, item);
-        }
-      });
-      this.dbSearchTypeahead.render();
-      this.$el.find(".js-db-graveyard").tooltip();
-    },
-
     selectAll: function(evt){
       $("input:checkbox").attr('checked', !$(evt.target).hasClass('active'));
     }
