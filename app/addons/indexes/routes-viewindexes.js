@@ -85,10 +85,7 @@ function (app, FauxtonAPI, Databases, Views, Documents, Resources, RouteCore, Co
       ];
 
       var dropdown = [{
-        links: [{
-          title: 'Duplicate Index',
-          icon: 'fonticon-documents'
-        },
+        links: [
         {
           title: 'Delete',
           icon: 'fonticon-trash',

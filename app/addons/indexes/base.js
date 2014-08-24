@@ -44,14 +44,16 @@ function(app, FauxtonAPI, Routes) {
       ddocType:'view',
       icon: "fonticon-sidenav-map-reduce"
     });
-    FauxtonAPI.registerExtension('sidebar:list', {
-      selector:'list',
-      icon: "fonticon-sidenav-list-function"
-    });
-    FauxtonAPI.registerExtension('sidebar:list', {
-      selector:'show',
-      icon: "fonticon-sidenav-show-function"
-    });
+
+    //Commented out since they are just POCs
+    // FauxtonAPI.registerExtension('sidebar:list', {
+    //   selector:'list',
+    //   icon: "fonticon-sidenav-list-function"
+    // });
+    // FauxtonAPI.registerExtension('sidebar:list', {
+    //   selector:'show',
+    //   icon: "fonticon-sidenav-show-function"
+    // });
 
 
     /* show in the add new menu dropdown */
@@ -59,15 +61,17 @@ function(app, FauxtonAPI, Routes) {
       title: "Secondary View",
       url: "new_view"
     });
-    FauxtonAPI.registerExtension('sidebar:links', {
-      title: "List Function",
-      url: "new_list"
-    });
 
-    FauxtonAPI.registerExtension('sidebar:links', {
-      url: 'new_show',
-      title: 'Show Index'
-    });
+    //Commented out since they are just POCs
+    // FauxtonAPI.registerExtension('sidebar:links', {
+    //   title: "List Function",
+    //   url: "new_list"
+    // });
+
+    // FauxtonAPI.registerExtension('sidebar:links', {
+    //   url: 'new_show',
+    //   title: 'Show Index'
+    // });
 
   };
   return Routes;
