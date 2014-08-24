@@ -28,6 +28,7 @@ function(app, Components, FauxtonAPI, Databases) {
     initialize: function(options){
       //adding the database to the object
       _.bindAll(this);
+      this.endpoint = options.endpoint;
     },
 
     updateApiUrl: function(api){
@@ -47,7 +48,9 @@ function(app, Components, FauxtonAPI, Databases) {
 
 
       //Moved the apibar view into the components file so you can include it in your views
-      this.apiBar = this.insertView("#header-api-bar", new Components.ApiBar({}));
+      this.apiBar = this.insertView("#header-api-bar", new Components.ApiBar({
+        endpoint: this.endpoint
+      }));
     }
   });
 
