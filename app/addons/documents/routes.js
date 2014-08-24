@@ -412,7 +412,7 @@ function(app, FauxtonAPI, Components, Documents, Changes, DocEditor, Databases, 
 
       this.documentsView.setCollection(collection);
       this.documentsView.setParams(docParams, urlParams);
-      this.leftheader.forceRender();
+
       this.documentsView.forceRender();
 
       this.rightHeader.updateApiUrl([collection.urlRef("apiurl", urlParams), "docs"]);
@@ -425,7 +425,7 @@ function(app, FauxtonAPI, Components, Documents, Changes, DocEditor, Databases, 
       // We need to restore the collection parameters to the defaults (1st page)
       // and update the page size
       this.perPage = perPage;
-      this.leftheader.forceRender();
+
       this.documentsView.forceRender();
       this.documentsView.collection.pageSizeReset(perPage, {fetch: false});
       this.setDocPerPageLimit(perPage);
@@ -437,7 +437,7 @@ function(app, FauxtonAPI, Components, Documents, Changes, DocEditor, Databases, 
 
     paginate: function (options) {
       var collection = this.documentsView.collection;
-      this.leftheader.forceRender();
+
       this.documentsView.forceRender();
       collection.paging.pageSize = options.perPage;
       var promise = collection[options.direction]({fetch: false});
