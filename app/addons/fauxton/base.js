@@ -72,7 +72,7 @@ function(app, FauxtonAPI, resizeColumns, Components) {
     });
 
     FauxtonAPI.RouteObject.on('beforeEstablish', function (routeObject) {
-      FauxtonAPI.masterLayout.removeView('#breadcrumbs');
+      //FauxtonAPI.masterLayout.removeView('#breadcrumbs');
       var crumbs = routeObject.get('crumbs');
 
       if (crumbs.length) {
