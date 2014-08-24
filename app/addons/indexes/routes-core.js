@@ -45,9 +45,46 @@ function (app, FauxtonAPI, Databases, Views, Documents, Resources) {
     },
 
     events: {
-      "route:updatePreviewDocs": "updateAllDocsFromPreview"
+      "route:updatePreviewDocs": "updateAllDocsFromPreview",
+      "route:perPageChange": "perPageChange",
+      "route:paginate": "paginate"
     },
 
+    /* --------------------------------------------------
+      Called when you change the # of items to show in the pagination footer
+    ----------------------------------------------------*/
+    perPageChange: function (perPage) {
+      // We need to restore the collection parameters to the defaults (1st page)
+      // and update the page size
+      this.perPage = perPage;
+      this.leftheader.forceRender();
+      this.documentsView.forceRender();
+      this.documentsView.collection.pageSizeReset(perPage, {fetch: false});
+      this.setDocPerPageLimit(perPage);
+    },
+
+    /* --------------------------------------------------
+      Store the docs to show per page in local storage
+    ----------------------------------------------------*/
+    setDocPerPageLimit: function (perPage) {
+      window.localStorage.setItem('fauxton:perpage', perPage);
+    },
+
+    /* --------------------------------------------------
+      Triggers when you hit the paginate forward and backwards buttons
+    ----------------------------------------------------*/
+
+    paginate: function (options) {
+      var collection = this.documentsView.collection;
+      this.leftheader.forceRender();
+      this.documentsView.forceRender();
+      collection.paging.pageSize = options.perPage;
+      var promise = collection[options.direction]({fetch: false});
+    },
+
+    /* --------------------------------------------------
+     Get Design doc info
+    ----------------------------------------------------*/
     ddocInfo: function (designDoc, designDocs, view) {
       return {
         id: "_design/" + designDoc,
@@ -56,6 +93,9 @@ function (app, FauxtonAPI, Databases, Views, Documents, Resources) {
       };
     },
 
+    /* --------------------------------------------------
+      URL params from Advanced/ Query options
+    ----------------------------------------------------*/
     createParams: function (options) {
       var urlParams = app.getParams(options);
       var params = Documents.QueryParams.parse(urlParams);
@@ -66,6 +106,9 @@ function (app, FauxtonAPI, Databases, Views, Documents, Resources) {
       };
     },
 
+    /* --------------------------------------------------
+      Stored docs in preview
+    ----------------------------------------------------*/
     getDocPerPageLimit: function (urlParams, perPage) {
       var storedPerPage = perPage;
 
@@ -91,6 +134,10 @@ function (app, FauxtonAPI, Databases, Views, Documents, Resources) {
       return this.data.designDocs.fetch({reset: true});
     },
 
+
+    /* --------------------------------------------------
+      Docs that are returned from a view
+    ----------------------------------------------------*/
     createViewDocumentsView: function (options) {
       return this.setView("#right-content", new Documents.Views.AllDocsList({
         database: options.database,
@@ -103,6 +150,10 @@ function (app, FauxtonAPI, Databases, Views, Documents, Resources) {
       }));
     },
 
+
+    /* --------------------------------------------------
+      If Preview worked....
+    ----------------------------------------------------*/
     updateAllDocsFromPreview: function (event) {
       var view = event.view,
       rows = event.rows,

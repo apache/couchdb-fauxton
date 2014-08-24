@@ -747,7 +747,7 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
     className: "dropdown",
     initialize: function(options){
       this.links = options.links;
-      this.icon = options.icon || "fonticon-plus-circled2";
+      this.icon = options.icon || "fonticon-plus-circled";
       _.bindAll(this);
       this.setUpEvents();
     },
