@@ -336,8 +336,10 @@
 }
 
 #dashboard-lower-content{
-  padding: 20px;
   background-color: #F1F1F1;
+  .view {
+    padding: 20px;
+  }
 }
 
 #dashboard-upper-content{
@@ -467,7 +469,9 @@
 }
 #right-content{
   .two-pane &{
-    padding: 0 20px;
+    .view {
+      padding: 0 20px;
+    }
     border-left: 1px solid #999;
     .box-shadow(-6px 0 rgba(0, 0, 0, 0.1));
   }

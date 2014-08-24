@@ -29,8 +29,6 @@ function(app, FauxtonAPI, resizeColumns ) {
       this.database = options.database;
       this.ddocName = options.ddocName;
       this.viewName = options.viewName;
-      this.updateViewFn = options.updateViewFn;
-      this.previewFn = options.previewFn;
       this.showStale = _.isUndefined(options.showStale) ? false : options.showStale;
       this.hasReduce = _.isUndefined(options.hasReduce) ? true : options.hasReduce;
     },
@@ -66,14 +64,14 @@ function(app, FauxtonAPI, resizeColumns ) {
     toggleQuery: function(event) {
       $('#dashboard-content').scrollTop(0);
       this.$('#query-options-tray').toggle();
-    }, 
+    },
 
     resetForm: function() {
       $('input, textarea').each(function(){
         $(this).val('');
       });
       $('input:checkbox').attr('checked', false);
-      $("select").each(function(){ 
+      $("select").each(function(){
         this.selectedIndex = 0;
       });
     },
@@ -190,7 +188,8 @@ function(app, FauxtonAPI, resizeColumns ) {
       event.preventDefault();
       var params = this.queryParams();
       if (!params) { return;}
-      this.updateViewFn(event, params);
+      FauxtonAPI.Events.trigger('advancedOptions:updateView', event, params);
+      //this.updateViewFn(event, params);
     },
 
     updateFilters: function(event) {

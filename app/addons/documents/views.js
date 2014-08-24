@@ -1,4 +1,3 @@
-
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License. You may obtain a copy of
 // the License at
@@ -44,37 +43,57 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
     className: "header-right",
     template: "addons/documents/templates/header_alldocs",
     events: {
-      'select .selectAllDocs': 'selectAllDocs'
+      'click .toggle-select-menu': 'selectAllMenu'
     },
+
     initialize: function(options){
       //adding the database to the object
       this.database = options.database;
+      _.bindAll(this);
+      this.selectVisible = false;
+      FauxtonAPI.Events.on('advancedOptions:updateView', this.updateAllDocs);
+      FauxtonAPI.Events.on('success:bulkDelete', this.selectAllMenu);
     },
-    selectAllDocs: function(){
+
+    selectAllMenu: function(e){
       //trigger event to select all in other view
-    },
-    updateApiUrl: function(api){
-      //this will update the api bar when the route changes
-      //you can find the method that updates it in components.js Components.ApiBar()
-      this.apiBar && this.apiBar.update(api);
-    },
-    serialize: function() {
-      //basically if you want something in a template, You can define it here
-      return {
-        database: this.database.get('id')
-      };
-    },
-    beforeRender:function(){
-      //insert DB search dropdown
+      this.$('.toggle-select-menu').toggleClass('active');
 
-      //insert top create level dropdown with gear icon
+      //trigger event to change the header
+      this.toggleSelectMenu();
+      FauxtonAPI.Events.trigger("documents:show-select-all",this.selectVisible);
 
+    },
+
+    toggleSelectMenu: function(){
+      if (this.selectVisible){
+        this.selectVisible = false;
+        this.selectMenu.remove();
+        this.addAllDocsMenu();
+      } else {
+        this.removeAllDocsMenu();
+        this.addSelectMenu();
+      }
+    },
+
+    addSelectMenu: function(){
+      this.selectVisible = true;
+      this.selectMenu =  this.insertView('#header-select-menu', new Views.SelectMenu({}));
+      this.selectMenu.render();
+    },
+
+    removeAllDocsMenu: function(){
+      this.headerSearch.remove();
+      this.queryOptions.remove();
+      this.apiBar.remove();
+    },
+
+    addAllDocsMenu: function(){
       //search docs
-      this.setView("#header-search", new Views.JumpToDoc({
+      this.headerSearch = this.insertView("#header-search", new Views.JumpToDoc({
         database: this.database,
         collection: this.database.allDocs
       }));
-
       //insert queryoptions
       //that file is included in require() above and the argument is QueryOptions
       // and it wants all these params:
@@ -95,9 +114,8 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
         this.viewName = options.viewName;
         this.ddocName = options.ddocName;
       */
-      this.setView("#query-options", new QueryOptions.AdvancedOptions({
-        updateViewFn: this.updateAllDocs,
-        previewFn: this.previewView,
+
+      this.queryOptions = this.insertView("#query-options", new QueryOptions.AdvancedOptions({
         database: this.database,
         hasReduce: false,
         showPreview: false,
@@ -106,7 +124,28 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
       //Moved the apibar view into the components file so you can include it in your views
       this.apiBar = this.insertView("#header-api-bar", new Components.ApiBar({}));
 
+      this.apiBar.render();
+      this.queryOptions.render();
+      this.headerSearch.render();
     },
+
+    updateApiUrl: function(api){
+      //this will update the api bar when the route changes
+      //you can find the method that updates it in components.js Components.ApiBar()
+      this.apiBar && this.apiBar.update(api);
+    },
+
+    serialize: function() {
+      //basically if you want something in a template, You can define it here
+      return {
+        database: this.database.get('id')
+      };
+    },
+
+    beforeRender:function(){
+      this.addAllDocsMenu();
+    },
+
     //moved from alldocs layout
     updateAllDocs: function (event, paramInfo) {
       event.preventDefault();
@@ -145,54 +184,30 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
 
       FauxtonAPI.navigate(fragment, {trigger: false});
       FauxtonAPI.triggerRouteEvent('updateAllDocs', {allDocs: true});
-    },
-    previewView: function (event) {
-      event.preventDefault();
     }
   });
 
-
-  //header that shows up when a doc is selected
-  // when a Doc is selected, trigger a routeEvent to render this
-  // the routeEvent will determine which header to show (??)
-  Views.DocEditHeader = FauxtonAPI.View.extend({
-    template: "addons/documents/templates/header_doc_edit",
+  // select docs header
+  Views.SelectMenu = FauxtonAPI.View.extend({
+    template:"addons/documents/templates/select-doc-menu",
     events: {
-      'select .selectAllDocs': 'selectAllDocs'
+      "click button.all": "selectAll",
+      "click button.js-bulk-delete": "bulkDelete",
+      "click #collapse": "collapse"
     },
-    initialize: function(options){
-
+    bulkDelete: function(){
+      FauxtonAPI.Events.trigger("documents:bulkDelete");
     },
-    selectAllDocs: function(){
-      //trigger event to select all in other view
+    selectAll: function(evt){
+      this.$(evt.target).toggleClass('active');
+
+      FauxtonAPI.Events.trigger("documents:selectAll", this.$(evt.target).hasClass('active'));
     },
-    afterRender:function(){
-      //insert DB search dropdown
-
-      //insert top create level dropdown with gear icon
-    }
-  });
-
-  Views.DocsHeader = FauxtonAPI.View.extend({
-    template: "addons/documents/templates/header_selecteddoc",
-    events: {
-      'select .selectAllDocs': 'selectAllDocs'
-    },
-    initialize: function(options){
-
-    },
-    selectAllDocs: function(){
-      //trigger event to select all in other view
-    },
-    afterRender:function(){
-      //insert DB search dropdown
-
-      //insert top create level dropdown with gear icon
-
-      //search docs
-
-      //insert queryoptions
-
+    collapse: function(evt){
+      var icon = this.$(evt.target).find('i');
+      icon.toggleClass('icon-minus');
+      icon.toggleClass('icon-plus');
+      FauxtonAPI.Events.trigger("documents:collapse");
     }
   });
 
@@ -244,6 +259,26 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
     className: "all-docs-item doc-row",
     initialize: function (options) {
       this.checked = options.checked;
+      this.expanded = options.expanded;
+      this.showSelect = false;
+      _.bindAll(this);
+      FauxtonAPI.Events.on("documents:show-select-all", this.showSelectBox);
+      FauxtonAPI.Events.on("documents:collapse", this.collapse);
+      FauxtonAPI.Events.on("documents:selectAll", this.selectAll);
+    },
+
+    showSelectBox: function(bool){
+      this.showSelect = bool;
+      this.$('.select').toggle(this.showSelect);
+    },
+
+    selectAll: function(checked){
+      this.$("input:checkbox").prop('checked', checked).trigger('click');
+    },
+
+    collapse: function(bool){
+      this.collapse = bool;
+      this.$('.doc-data').toggle(this.collapse);
     },
 
     events: {
@@ -259,6 +294,8 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
 
     serialize: function() {
       return {
+        showSelect: this.showSelect,
+        expanded: this.expanded,
         docID: this.model.get('_id'),
         doc: this.model,
         checked: this.checked
@@ -373,14 +410,12 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
   Views.AllDocsList = FauxtonAPI.View.extend({
     template: "addons/documents/templates/all_docs_list",
     events: {
-      "click button.all": "selectAll",
-      "click button.js-bulk-delete": "bulkDelete",
-      "click #collapse": "collapse",
       "click .all-docs-item": "toggleDocument",
       "click #js-end-results": "scrollToQuery"
     },
 
     initialize: function (options) {
+      _.bindAll(this);
       this.nestedView = options.nestedView || Views.Document;
       this.rows = {};
       this.viewList = !!options.viewList;
@@ -399,6 +434,9 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
       if (!this.viewList) {
         this.bulkDeleteDocsCollection = options.bulkDeleteDocsCollection;
       }
+
+      FauxtonAPI.Events.on("documents:bulkDelete", this.bulkDelete);
+      FauxtonAPI.Events.on("documents:selectAll", this.toggleTrash);
     },
 
     removeDocuments: function (ids) {
@@ -484,54 +522,12 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
       });
     },
 
-    selectAll: function (evt) {
-      var $allDocs = this.$('.all-docs'),
-          $rows = $allDocs.find('tr'),
-          $checkboxes = $allDocs.find('input:checkbox'),
-          modelsAffected,
-          docs;
-
-      $checkboxes.prop('checked', !$(evt.target).hasClass('active')).trigger('change');
-
-      if ($(evt.target).hasClass('active')) {
-        modelsAffected = _.reduce($rows, function (acc, el) {
-          var docId = $(el).attr('data-id');
-          acc.push(docId);
-          return acc;
-        }, []);
-        this.bulkDeleteDocsCollection.remove(modelsAffected);
-      } else {
-        modelsAffected = _.reduce($rows, function (acc, el) {
-          var docId = $(el).attr('data-id'),
-              rev = this.collection.get(docId).get('_rev');
-
-          acc.push({_id: docId, _rev: rev, _deleted: true});
-          return acc;
-        }, [], this);
-        this.bulkDeleteDocsCollection.add(modelsAffected);
-      }
-
-      this.toggleTrash();
-    },
-
     serialize: function() {
       return {
         viewList: this.viewList,
         expandDocs: this.expandDocs,
         endOfResults: !this.pagination.canShowNextfn()
       };
-    },
-
-    collapse: function (event) {
-      event.preventDefault();
-
-      if (this.expandDocs) {
-        this.expandDocs = false;
-      } else {
-        this.expandDocs = true;
-      }
-
-      this.render();
     },
 
     bulkDelete: function() {
@@ -591,6 +587,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
         }
         this.rows[doc.id] = this.insertView("#doc-list", new this.nestedView({
           model: doc,
+          expanded: this.expandDocs,
           checked: isChecked
         }));
       }, this);
@@ -623,8 +620,11 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
       }
 
       this.toggleTrash();
+      this.setPaginationWidth();
     },
-
+    setPaginationWidth: function(){
+      this.$('#documents-pagination').css('width', this.$el.outerWidth());
+    },
     perPage: function () {
       return this.allDocsNumber.perPage();
     }

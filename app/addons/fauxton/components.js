@@ -40,6 +40,7 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
     className: "header-left",
     template: "addons/fauxton/templates/header_left",
     initialize:function(options){
+      this.dropdownEvents = options.dropdownEvents;
       this.dropdownMenuLinks = options.dropdownMenu;
       this.crumbs = options.crumbs || [];
     },
@@ -63,6 +64,7 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
         this.dropdown = this.insertView("#header-dropdown-menu", new Components.MenuDropDown({
           icon: 'fonticon-cog',
           links: this.dropdownMenuLinks,
+          events: this.dropdownEvents
         }));
       }
     }
@@ -151,6 +153,7 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
 
 
   Components.Pagination = FauxtonAPI.View.extend({
+    className: "pagination pagination-centered",
     template: "addons/fauxton/templates/pagination",
 
     initialize: function(options) {
@@ -173,6 +176,7 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
   });
 
   Components.IndexPagination = FauxtonAPI.View.extend({
+    className: "pagination pagination-centered",
     template: "addons/fauxton/templates/index_pagination",
     events: {
       "click a": 'scrollTo',
@@ -741,6 +745,24 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
     initialize: function(options){
       this.links = options.links;
       this.icon = options.icon || "fonticon-plus-circled2";
+      _.bindAll(this);
+      this.setUpEvents();
+    },
+    setUpEvents: function(){
+      this.events = {};
+      var parentLinkObj = this.links;
+      for (var i=0; i< parentLinkObj.length; i++){
+        for (var x=0; x< parentLinkObj[i].links.length; x++){
+          if(parentLinkObj[i].links[x].trigger){
+            this.events['click .'+parentLinkObj[i].links[x].icon] = "triggerEvent";
+          }
+        }
+      }
+    },
+    triggerEvent: function(e){
+      e.preventDefault();
+      var eventTrigger = $(e.currentTarget).attr('triggerEvent');
+      FauxtonAPI.Events.trigger(eventTrigger);
     },
     update: function(links){
       this.links = links;

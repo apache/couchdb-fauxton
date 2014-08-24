@@ -359,7 +359,7 @@ function(app, FauxtonAPI, PagingCollection) {
       if (ids.errorIds.length) {
         this.trigger('error', ids.errorIds);
       }
-
+      FauxtonAPI.Events.trigger('success:bulkDelete');
       this.trigger('updated');
     },
 
