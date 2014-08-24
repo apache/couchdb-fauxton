@@ -38,7 +38,7 @@ function(app, FauxtonAPI, Components, Documents, Databases) {
         this.ddocID = options.ddocInfo.id;
         this.currView = options.ddocInfo.currView;
       }
-      FauxtonAPI.Events.on('database:delete', this.showDeleteDatabaseModal)
+      FauxtonAPI.Events.on('database:delete', this.showDeleteDatabaseModal);
     },
     showDeleteDatabaseModal: function(event){
       this.deleteDBModal.showModal();
