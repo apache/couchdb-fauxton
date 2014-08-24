@@ -61,7 +61,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, pouchdb,
         documentation: this.documentation
       }));
 
-      this.advancedOptions = this.insertView('#header-query-options', new QueryOptions.AdvancedOptions({
+      this.advancedOptions = this.insertView('#query-options', new QueryOptions.AdvancedOptions({
         database: this.database,
         viewName: this.viewName,
         ddocName: this.model.id,

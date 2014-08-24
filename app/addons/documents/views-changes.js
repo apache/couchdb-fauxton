@@ -27,7 +27,8 @@ function(app, FauxtonAPI, resizeColumns, Components, prettify, ZeroClipboard) {
   var Views = {};
 
   Views.ChangesHeader = FauxtonAPI.View.extend({
-    template: "addons/documents/templates/header_alldocs",
+    className: "header-right",
+    template: "addons/documents/templates/header_changes",
     initialize: function (options) {
       this.filterView = options.filterView;
       this.endpoint = options.endpoint;
