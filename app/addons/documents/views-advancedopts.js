@@ -40,7 +40,8 @@ function(app, FauxtonAPI, resizeColumns ) {
       "change form.js-view-query-update select": "updateFilters",
       "submit form.js-view-query-update": "updateView",
       "click .toggle-btns > label":  "toggleQueryKeys",
-      "click #toggle-query": "toggleQuery"
+      "click #toggle-query": "toggleQuery",
+      "click .btn-cancel": "resetForm"
     },
 
     toggleQueryKeys: function(e){
@@ -62,10 +63,19 @@ function(app, FauxtonAPI, resizeColumns ) {
       }
     },
 
-    toggleQuery: function (event) {
-      console.log('togglequery');
+    toggleQuery: function(event) {
       $('#dashboard-content').scrollTop(0);
       this.$('#query-options-tray').toggle();
+    }, 
+
+    resetForm: function() {
+      $('input, textarea').each(function(){
+        $(this).val('');
+      });
+      $('input:checkbox').attr('checked', false);
+      $("select").each(function(){ 
+        this.selectedIndex = 0;
+      });
     },
 
     showKeys: function(){

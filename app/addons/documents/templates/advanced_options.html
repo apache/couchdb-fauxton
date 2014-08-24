@@ -20,21 +20,21 @@ the License.
   <form class="js-view-query-update custom-inputs">
 
     <div class="query-group">
-      <span class="add-on">
+      <div class="add-on">
         API Options
         <a class="help-link" href="<%-getDocUrl(documentation)%>" target="_blank">
           <i class="icon-question-sign"></i>
         </a>
-      </span>
+      </div>
 
       <div class="errors-container"></div>
       
         <div class="controls-group">
-          <div class="row-fluid">
+          <div class="row-fluid fieldsets">
 
               <div class="checkbox inline">
-                <input id="select2" name="include_docs" type="checkbox" value="true">
-                <label for="include_docs">Include Docs</label>
+                <input id="check1" name="include_docs" type="checkbox" value="true">
+                <label for="check1">Include Docs</label>
               </div>
 
               <% if (hasReduce) { %>
@@ -66,9 +66,9 @@ the License.
     </div>
 
     <div class="query-group">
-      <span class="add-on">
+      <div class="add-on">
         Keys
-      </span>
+      </div>
       <!-- tabs for choosing Keys or Start & end -->
       <div class="btn-group toggle-btns row-fluid">
         <label for="showKeys" class="drop-down btn">
@@ -110,25 +110,26 @@ the License.
 
     <div class="controls-group query-group">
       <!-- Limit and Skip are conditional -->
-      <span class="add-on">
+      <div class="add-on">
         Additional Parameters
-      </span>
+      </div>
 
-      <div class="row-fluid">
+      <div class="row-fluid fieldsets">
         <% if (showStale) { %>
           <div class="checkbox inline">
             <input id="check7" name="stale" type="checkbox" value="ok">
             <label for="check7">Stale</label>
           </div>
         <% } %>
-          <div class="checkbox inline">
-            <input id="check6" name="update_seq" type="checkbox" value="true">
-            <label for="check6">Update Sequence</label>
-          </div>
+
+        <div class="checkbox inline">
+          <input id="check6" name="update_seq" type="checkbox" value="true">
+          <label for="check6">Update Sequence</label>
+        </div>
 
         <div class="dropdown inline">
           <label class="drop-down">
-            Limit:
+            Limit 
             <select name="limit" class="input-small">
               <option selected="selected">None</option>
               <option>5</option>
@@ -144,10 +145,10 @@ the License.
 
       </div>
 
-      <div class="row-fluid">
+      <div class="row-fluid fieldsets">
         <div class="checkbox inline">
-          <input id="select2" name="descending" type="checkbox" value="true">
-          <label for="descending">Descending</label>
+          <input id="check3" name="descending" type="checkbox" value="true">
+          <label for="check3">Descending</label>
         </div>
 
         <div class="dropdown inline">
@@ -160,14 +161,18 @@ the License.
     </div>
 
     <div class="controls-group query-group">
-      <span class="add-on">
+      <div class="add-on">
         Query the DB
-      </span>
+      </div>
       <div id="button-options" class="controls controls-row">
         <button type="submit" class="btn btn-success">
           <i class="fonticon-play icon"></i>
           Query
         </button>
+
+        <a class="btn btn-cancel">
+          Cancel
+        </a>
       </div>
     </div>
 
