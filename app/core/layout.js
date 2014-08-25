@@ -48,7 +48,7 @@ define([
       // existing views in the layout.
       _.each(this.layoutViews, function(view){view.removeView();});
       this.layoutViews = {};
-      this.render();
+      return this.render().promise();
     },
 
     setView: function(selector, view, keep) {
