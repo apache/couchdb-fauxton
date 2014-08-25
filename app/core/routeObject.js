@@ -92,26 +92,36 @@ function(FauxtonAPI, Backbone) {
         args: args
       };
 
-      this.setTemplateOnFullRender(masterLayout);
+      var promiseLayout = this.setTemplateOnFullRender(masterLayout);
 
       this.triggerBroadcast('beforeEstablish');
 
       var renderAllViews = _.bind(this.renderAllViews, this, options),
           establishError = _.bind(this.establishError, this),
           renderComplete = _.bind(this.renderComplete, this),
+          callEstablish = _.bind(this.callEstablish, this),
           promise = this.establish();
 
-      this.callEstablish(promise)
-        .then(renderAllViews, establishError)
-        .then(renderComplete);
+      // Only start the view rendering process once the template has been rendered
+      // otherwise we get double renders
+      promiseLayout.then(function () {
+        callEstablish(promise)
+          .then(renderAllViews, establishError)
+          .then(renderComplete);
+      });
     },
 
     setTemplateOnFullRender: function(masterLayout){
+      var promise = $.Deferred();
       // Only want to redo the template if its a full render
       if (!this.renderedState) {
-        masterLayout.setTemplate(this.layout);
         this.triggerBroadcast('beforeFullRender');
+        masterLayout.setTemplate(this.layout).then(promise.resolve, promise.reject);
+      } else {
+        promise.resolve();
       }
+
+      return promise;
     },
 
     callEstablish: function(establishPromise) {
