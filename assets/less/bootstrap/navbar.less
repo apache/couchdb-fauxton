@@ -119,15 +119,21 @@
   .btn {
     display: inline-block;
     margin-bottom: 0;
+    .icon {
+      font-size: 16px !important; // more important then .input-append/.btn/.icon
+    }
   }
   input[type="image"],
   input[type="checkbox"],
   input[type="radio"] {
     margin-top: 3px;
   }
+  input[type=text],
+  input[type=password] {
+    padding: 10px;
+  }
   .input-append,
   .input-prepend {
-    margin-top: 5px;
     white-space: nowrap; // preven two  items from separating within a .navbar-form that has .pull-left
     input {
       margin-top: 0; // remove the margin on top since it's on the parent
