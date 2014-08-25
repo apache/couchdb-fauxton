@@ -266,23 +266,29 @@ function(app, FauxtonAPI, resizeColumns, Components, ZeroClipboard, velocity) {
     endpoint: '_all_docs',
 
     documentation: 'docs',
-    apiBarVisible: false,
 
     events:  {
       "click .api-url-btn" : "toggleAPIbar"
     },
     
     initialize: function () {
-      var that = this;
+      var hideAPIbar = _.bind(this.hideAPIbar, this),
+          navbarVisible = _.bind(this.navbarVisible, this);
+
 
       $('body').on('click.apibar',function(e) {
-        if (!that.apiBarVisible) { return;}
-        if ($(e.target).hasClass('.api-url-btn')) { return;}
+        var $navbar = $(e.target);
+        if (!navbarVisible()) { return;}
+        if ($navbar.hasClass('.api-url-btn')) { return;}
 
-        if (!$(e.target).closest('.api-navbar').length){
-          that.hideAPIbar();
+        if (!$navbar.closest('.api-navbar').length){
+          hideAPIbar();
         }
       });
+    },
+
+    navbarVisible: function () {
+      return this.$('.api-navbar').is(':visible');
     },
 
     cleanup: function () {
@@ -291,24 +297,14 @@ function(app, FauxtonAPI, resizeColumns, Components, ZeroClipboard, velocity) {
 
     hideAPIbar: function () {
       this.$('.api-navbar').velocity("reverse", 250);
-
-      this.apiBarVisible = false;
+      this.$('.api-navbar').hide();
     },
 
     toggleAPIbar: function(event){
-      event.preventDefault();
-      event.stopPropagation();
-
-      if (this.apiBarVisible) {
-        this.apiBarVisible = false;
-        
-        this.$('.api-navbar')
-        .velocity("reverse", 250);
+      if (this.navbarVisible()) {
+        this.$('.api-navbar').velocity("reverse", 250);
       } else {
-        this.apiBarVisible = true;
-        
-        this.$('.api-navbar')
-        .velocity("transition.slideUpIn", 250);
+        this.$('.api-navbar').velocity("transition.slideDownIn", 250);
       }
     },
 
@@ -320,7 +316,6 @@ function(app, FauxtonAPI, resizeColumns, Components, ZeroClipboard, velocity) {
     },
 
     hide: function(){
-      this.apiBarVisible = false;
       this.$el.addClass('hide');
     },
     show: function(){
