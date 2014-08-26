@@ -268,7 +268,7 @@ function(app, FauxtonAPI, resizeColumns, Components, ZeroClipboard, velocity) {
     documentation: 'docs',
 
     events:  {
-      "click .api-url-btn" : "toggleAPIbar"
+      "click .api-url-btn" : "showAPIbar"
     },
     
     initialize: function () {
@@ -302,10 +302,11 @@ function(app, FauxtonAPI, resizeColumns, Components, ZeroClipboard, velocity) {
       });
     },
 
-    toggleAPIbar: function(event){
-      if (this.navbarVisible()) {
-        this.$('.api-navbar').velocity("reverse", 250);
-      } else {
+    //we only need to show the api-bar here. The `click.apibar` event 
+    //in the initialize will close the api bar if a user clicks the api button
+    //and the api bar is visible.
+    showAPIbar: function(event){
+      if (!this.navbarVisible()) {
         this.$('.api-navbar').velocity("transition.slideDownIn", 250);
       }
     },
