@@ -12,14 +12,15 @@ License for the specific language governing permissions and limitations under
 the License.
 -->
 
-<td class="select"><input type="checkbox"></td>
-<td>
-  <div>
-    <pre class="prettyprint"><%- JSON.stringify(doc.get("key")) %></pre>
-  </div>
-</td>
-<td>
-  <div>
-    <pre class="prettyprint"><%- JSON.stringify(doc.get("value")) %></pre>
-  </div>
-</td>
+<!-- Select toggle -->
+<div id="header-select-all active" class="button">
+  <span class="toggle-select-menu icon fonticon-ok-circled">Select</span>
+</div>
+
+<button type="button" class="button btn btn-small all" data-toggle="button">✓ All</button>
+
+<button class="button btn btn-small disabled js-bulk-delete"><i class="icon-trash"></i></button>
+
+
+<button id="collapse" class="button btn btn-small"><i class="icon-minus"></i> Collapse</button>
+

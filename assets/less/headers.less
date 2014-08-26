@@ -1,0 +1,247 @@
+/*  Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ *  use this file except in compliance with the License. You may obtain a copy of
+ *  the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ *  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ *  License for the specific language governing permissions and limitations under
+ *  the License.
+ */
+
+.left-shadow-border{
+  border-left: 1px solid #999;
+  .box-shadow(-6px 0 rgba(0, 0, 0, 0.1));
+}
+
+.bottom-shadow-border{
+  border-bottom: 1px solid #999;
+  .box-shadow(0px 6px 0 0 rgba(0, 0, 0, 0.1));
+}
+
+.fixed-header{
+  height: 60px;
+  background-color: @breadcrumbBG;
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: @navWidth;
+  .closeMenu & {
+    left: @collapsedNavWidth;
+  }
+  z-index: 100;
+  .two-pane & {
+    border: none;
+  }
+  .two-pane &,
+  .with-sidebar & {
+    #api-navbar{
+      > div {
+        .bottom-shadow-border;
+        height: 60px;
+      }
+      .left-shadow-border;
+    }
+    #breadcrumbs{
+      .bottom-shadow-border;
+    }
+  }
+  .one-pane & {
+    .bottom-shadow-border;
+    left: auto;
+  }
+  /* these styles are for the new header*/
+  > div {
+    display:inline-block;
+    vertical-align: top;
+  }
+}
+
+#api-navbar{
+  height: 60px;
+  position: relative;
+  /* these styles are for the new header*/
+  .right-header{
+  }
+}
+
+#breadcrumbs {
+  height: 60px;
+  width: @sidebarWidth - 4;
+  /* these styles are for the new header*/
+  .header-left{
+    > div{
+      display:inline-block;
+    }
+    .breadcrumb {
+      li:first-child{
+        border-right: 1px solid #ccc;
+      }
+    }
+  }
+  .breadcrumb {
+    margin-bottom: 0;
+    background-color: transparent;
+    padding: 0;
+    li {
+      padding:15px 10px;
+      height: 60px;
+      vertical-align: top;
+      &:first-child {
+        font-size: 24px;
+        .with-sidebar &,
+        .two-pane & {
+          padding:20px 10px;
+          font-size: 19px;
+        }
+      }
+      color: @breadcrumbText;
+      font-size: 18px;
+      text-shadow: none;
+      &.active{
+        color: #333;
+      }
+      a{
+        text-decoration: none;
+        color: @breadcrumbText;
+      }
+    }
+  }
+}
+
+.fixed-header {
+
+}
+
+.header-left{
+  position: relative;
+  #header-dropdown-menu {
+    position: absolute;
+    right: 0;
+    top: 0;
+    .dropdown-toggle {
+      color: #666666;
+    }
+    a {
+      padding: 10px;
+      text-decoration: none;
+    }
+    .dropdown {
+      border-left: 1px solid #ccc;
+      padding: 20px 0px;
+    }
+    .dropdown-menu {
+      left: -115px;
+      top: 48px;
+    }
+  }
+}
+
+.tray {
+  display: none;
+  .border-radius(5px);
+  position: absolute;
+  right: 5px;
+  top: 55px;
+  z-index: 11;
+  background-color: #333;
+  color: #fff;
+  margin: 0;
+   .add-on {
+    font-size: 16px;
+    background: none;
+    padding: 0px;
+    margin: 10px 0;
+    border: none;
+    display: block;
+    text-align: left;
+    color: #fff;
+    text-shadow: none;
+    height: auto;
+    line-height: 1em;
+  }
+}
+.tray:before {
+  content: '';
+  position: absolute;
+  top: -25px;
+  border-color: transparent transparent #333 transparent;
+  border-style: solid;
+  border-width: 15px;
+  width: 0;
+  height: 0;
+}
+
+.fixed-header,
+.header-right {
+  > .btn {
+    padding: 0;
+    margin: 0;
+  }
+  > .button,
+  > .button a,
+  .api-url-btn > button,
+  .btn-primary {
+    color: #666;
+    font-size: 13px;
+    line-height: 3em;
+  }
+}
+
+.header-right {
+  .well {
+    padding: 0;
+    margin: 0;
+  }
+  .searchbox-container {
+    position: relative;
+    right: inherit;
+    input[type="text"] {
+      .border-radius(5px);
+      font-size: 13px;
+      padding: 8px 35px 8px 10px;
+      width: 275px;
+    }
+    .btn-primary {
+      background: none repeat scroll 0% 0% transparent;
+      border: none;
+      position: absolute;
+      right: 12px;
+      top: 0px;
+      height:60px;
+      z-index: 2;
+      color: #999;
+      .icon-search{
+        position: absolute;
+        top: 22px;
+        right: 15px;
+      }
+    }
+  }
+  > div {
+    float: right;
+    height: 60px;
+    border-left: 1px solid #ccc;
+    margin: 0;
+    padding: 10px 15px;
+    line-height: 40px;
+  }
+  > div:last-child {
+    border-left: none;
+  }
+}
+.api-navbar:before {
+  right: 25px;
+}
+
+#jump-to-doc{
+  .btn-primary {
+    .icon-search{
+      position: absolute;
+      top: 18px;
+      right: 15px;
+    }
+  }
+}

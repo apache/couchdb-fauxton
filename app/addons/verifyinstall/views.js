@@ -18,6 +18,7 @@ define([
 function(app, FauxtonAPI, VerifyInstall) {
 
   VerifyInstall.Main = FauxtonAPI.View.extend({
+    className: "view",
     template: 'addons/verifyinstall/templates/main',
 
     events: {
@@ -70,7 +71,7 @@ function(app, FauxtonAPI, VerifyInstall) {
       };
     },
 
-    
+
     startTest: function () {
       this.disableButton();
       this.$('.status').text('');

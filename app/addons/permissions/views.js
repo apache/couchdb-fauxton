@@ -20,6 +20,7 @@ function (app, FauxtonAPI, Permissions ) {
   Permissions.events = _.extend(events, Backbone.Events);
 
   Permissions.Permissions = FauxtonAPI.View.extend({
+    className: "view",
     template: "addons/permissions/templates/permissions",
 
     initialize: function (options) {
@@ -80,7 +81,7 @@ function (app, FauxtonAPI, Permissions ) {
 
     beforeRender: function () {
       var section = this.model.get(this.section);
-      
+
       this.nameViews = [];
       this.roleViews = [];
 
@@ -107,11 +108,11 @@ function (app, FauxtonAPI, Permissions ) {
 
     discardRemovedViews: function () {
       this.nameViews = _.filter(this.nameViews, function (view) {
-        return !view.removed; 
+        return !view.removed;
       });
 
       this.roleViews = _.filter(this.roleViews, function (view) {
-        return !view.removed; 
+        return !view.removed;
       });
     },
 
@@ -178,7 +179,7 @@ function (app, FauxtonAPI, Permissions ) {
     removeItem: function (event) {
       var that = this;
       event.preventDefault();
-      
+
       this.removed = true;
       Permissions.events.trigger('itemRemoved');
 

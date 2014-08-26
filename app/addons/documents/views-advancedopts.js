@@ -26,11 +26,10 @@ function(app, FauxtonAPI, resizeColumns ) {
     className: "advanced-options well",
 
     initialize: function (options) {
+      FauxtonAPI.Events.on('AdvancedOptions:closeTray', this.closeTray);
       this.database = options.database;
       this.ddocName = options.ddocName;
       this.viewName = options.viewName;
-      this.updateViewFn = options.updateViewFn;
-      this.previewFn = options.previewFn;
       this.showStale = _.isUndefined(options.showStale) ? false : options.showStale;
       this.hasReduce = _.isUndefined(options.hasReduce) ? true : options.hasReduce;
     },
@@ -39,10 +38,12 @@ function(app, FauxtonAPI, resizeColumns ) {
       "change form.js-view-query-update input": "updateFilters",
       "change form.js-view-query-update select": "updateFilters",
       "submit form.js-view-query-update": "updateView",
-      "click .toggle-btns > label":  "toggleQuery"
+      "click .toggle-btns > label":  "toggleQueryKeys",
+      "click #toggle-query": "toggleQuery",
+      "click .btn-cancel": "resetForm"
     },
 
-    toggleQuery: function(e){
+    toggleQueryKeys: function(e){
       e.preventDefault();
 
       if (this.$(e.currentTarget).hasClass("active")){
@@ -59,6 +60,27 @@ function(app, FauxtonAPI, resizeColumns ) {
         //show section & disable what needs to be disabled
         this[showFunctionName]();
       }
+    },
+
+    toggleQuery: function(event) {
+      $('#dashboard-content').scrollTop(0);
+      this.$('#query-options-tray').toggle();
+      FauxtonAPI.Events.trigger('APIbar:closeTray');
+    },
+
+    closeTray: function(){
+      $('#query-options-tray').hide();
+    },
+
+    resetForm: function() {
+      this.$('input, textarea').each(function(){
+        $(this).val('');
+      });
+      this.$('input:checkbox').attr('checked', false);
+      this.$("select").each(function(){
+        this.selectedIndex = 0;
+      });
+      this.$('#query-options-tray').hide();
     },
 
     showKeys: function(){
@@ -82,6 +104,7 @@ function(app, FauxtonAPI, resizeColumns ) {
           view.update(this.database, this.ddocName, this.viewName);
         }, this);
       }
+
     },
 
     renderOnUpdatehasReduce: function (hasReduce) {
@@ -172,7 +195,8 @@ function(app, FauxtonAPI, resizeColumns ) {
       event.preventDefault();
       var params = this.queryParams();
       if (!params) { return;}
-      this.updateViewFn(event, params);
+      FauxtonAPI.Events.trigger('advancedOptions:updateView', event, params);
+      //this.updateViewFn(event, params);
     },
 
     updateFilters: function(event) {
@@ -254,7 +278,9 @@ function(app, FauxtonAPI, resizeColumns ) {
         }
       }, this);
     },
-
+    cleanup: function (){
+      FauxtonAPI.Events.unbind('AdvancedOptions:closeTray');
+    },
     serialize: function () {
       return {
         hasReduce: this.hasReduce,

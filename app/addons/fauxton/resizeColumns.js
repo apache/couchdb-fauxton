@@ -28,60 +28,67 @@ function(FauxtonAPI) {
   };
 
   Resize.prototype = {
-    getPrimaryNavWidth: function(){
-      var primaryNavWidth  = $('body').hasClass('closeMenu') ? 64 : 220;
-      return primaryNavWidth;
-    },
-    getPanelWidth: function(){
-      var sidebarWidth = $('#sidebar-content').length > 0 ? $('#sidebar-content').outerWidth() : 0,
-          borders = parseInt($('#dashboard').css('border-left-width'), 10) +
-                    parseInt($('#dashboard-content').css('border-left-width'), 10) +
-                    parseInt($('#dashboard-content').css('border-right-width'), 10);
 
-      return (this.getPrimaryNavWidth() + sidebarWidth + borders);
-    },
     initialize: function(){
-     // $(window).off('resize');
-      var that = this;
       //add throttler :)
+      var that = this;
       this.lazyLayout = _.debounce(that.onResizeHandler, 300).bind(this);
       FauxtonAPI.utils.addWindowResize(this.lazyLayout,"animation");
       FauxtonAPI.utils.initWindowResize();
       this.onResizeHandler();
     },
-    updateOptions:function(options){
-      this.options = {};
-      this.options = options;
+
+    onResizeHandler: function (){
+      var fullWidth = this.getFullWidth(),
+          halfWidth = this.getHalfWidth(),
+          sidebarWidth = this.getSidebarContentWidth(),
+          left = $('.window-resizeable-half').length > 0? halfWidth : sidebarWidth;
+
+      $('.window-resizeable').innerWidth(sidebarWidth);
+      $('.window-resizeable-half').innerWidth(halfWidth);
+      $('.window-resizeable-full').innerWidth(fullWidth);
+
+      //set left
+      this.setLeftPosition(left);
+      //if there is a callback, run that
+      this.options.callback && this.options.callback();
+      this.trigger('resize');
     },
-    turnOff:function(){
-      FauxtonAPI.utils.removeWindowResize("animation");
-    },
+
     cleanupCallback: function(){
       this.callback = null;
     },
-    onResizeHandler: function (){
-      //if there is an override, do that instead
-      if (this.options.onResizeHandler){
-        this.options.onResizeHandler();
-      } else {
-        var combinedWidth = window.innerWidth - this.getPanelWidth(),
-        smallWidthConstraint = ($('#sidebar-content').length > 0)? 470:800,
-        panelWidth;
 
-        if (combinedWidth > smallWidthConstraint) {
-          panelWidth = window.innerWidth - this.getPanelWidth();
-        } else if (combinedWidth < smallWidthConstraint){
-          panelWidth = smallWidthConstraint;
-        }
+    getPrimaryNavWidth: function(){
+      var primaryNavWidth  = $('body').hasClass('closeMenu') ? 64 : $('#primary-navbar').outerWidth();
+      //$('body').hasClass('closeMenu') ? 64 : 220;
+      return primaryNavWidth;
+    },
 
-        $('.window-resizeable').innerWidth(panelWidth);
+    getWindowWidth: function(){
+      return window.innerWidth;
+    },
 
-      }
-      //if there is a callback, run that
-      if(this.options.callback) {
-        this.options.callback();
-      }
-      this.trigger('resize');
+    getFullWidth: function(){
+      return this.getWindowWidth() - this.getPrimaryNavWidth();
+    },
+
+    getSidebarWidth: function(){
+      return $('#breadcrumbs').length > 0 ? $('#breadcrumbs').outerWidth() : 0;
+    },
+
+    getSidebarContentWidth: function(){
+      return this.getFullWidth() - this.getSidebarWidth() -5;
+    },
+
+    getHalfWidth: function(){
+      var fullWidth = this.getFullWidth();
+      return fullWidth/2;
+    },
+
+    setLeftPosition: function(panelWidth){
+      var primary = this.getPrimaryNavWidth();
+      $('.set-left-position').css('left',panelWidth+primary+4);
     }
   };
 
