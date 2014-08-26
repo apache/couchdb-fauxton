@@ -41,7 +41,11 @@ define([
 
       // Need to find a better way of doing this
       mockLayout = {
-        setTemplate: sinon.spy(),
+        setTemplate: function () { 
+          var promise = $.Deferred();
+          promise.resolve();
+          return promise;
+        },
         clearBreadcrumbs: sinon.spy(),
         setView: setViewSpy,
         renderView: sinon.spy(),
