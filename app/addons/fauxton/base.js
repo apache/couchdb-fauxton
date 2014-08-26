@@ -296,8 +296,10 @@ function(app, FauxtonAPI, resizeColumns, Components, ZeroClipboard, velocity) {
     },
 
     hideAPIbar: function () {
-      this.$('.api-navbar').velocity("reverse", 250);
-      this.$('.api-navbar').hide();
+      var $navBar = this.$('.api-navbar');
+      $navBar.velocity("reverse", 250, function () {
+        $navBar.hide();
+      });
     },
 
     toggleAPIbar: function(event){
