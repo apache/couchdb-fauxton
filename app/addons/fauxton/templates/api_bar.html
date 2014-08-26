@@ -12,12 +12,12 @@ License for the specific language governing permissions and limitations under
 the License.
 -->
 
-<button class="btn btn-primary pull-right api-url-btn">
+<a class="btn btn-primary pull-right api-url-btn">
+  <i class="fonticon-link icon"></i>
   API URL
-  <i class="fonticon-plus icon"></i>
-</button>
+</a>
 <div class="clearfix"></div>
-<div class="api-navbar" style="display: none">
+<div class="api-navbar tray">
     <div class="input-prepend input-append">
       <span class="add-on">
         API URL
@@ -27,7 +27,7 @@ the License.
       </span>
       <input id="api-url-text" type="text" class="input-xxlarge" value="<%- endpoint %>">
       <a class="btn copy-url" data-clipboard-target="api-url-text">
-        <i class="fonticon-eye icon"></i>
+        <i class="fonticon-clipboard icon"></i>
         Copy
       </a>
 

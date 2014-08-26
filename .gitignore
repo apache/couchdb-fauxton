@@ -12,6 +12,7 @@ app/addons/*
 !app/addons/replication
 !app/addons/contribute
 !app/addons/auth
+!app/addons/indexes
 !app/addons/exampleAuth
 !app/addons/permissions
 !app/addons/verifyinstall

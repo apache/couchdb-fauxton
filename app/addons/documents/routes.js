@@ -14,21 +14,21 @@ define([
   "app",
 
   "api",
-
+ "addons/fauxton/components",
   // Modules
   //views
   "addons/documents/views",
   "addons/documents/views-changes",
-  "addons/documents/views-index",
   "addons/documents/views-doceditor",
 
   "addons/databases/base",
-  "addons/documents/resources",
-  "addons/fauxton/components"
+  "addons/documents/resources"
 ],
 
-function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resources, Components) {
-
+function(app, FauxtonAPI, Components, Documents, Changes, DocEditor, Databases, Resources) {
+  /* --------------------------------------------------
+    DOCUMENT EDITOR ROUTE OBJECT
+  ----------------------------------------------------*/
   var DocEditorRouteObject = FauxtonAPI.RouteObject.extend({
     layout: "one_pane",
     disableLoader: true,
@@ -57,6 +57,7 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
 
     crumbs: function() {
       return [
+        {"name": "", "className": "fonticon-left-open", "link": "/_all_dbs"},
         {"name": this.database.id, "link": Databases.databaseUrl(this.database)},
         {"name": this.docID, "link": "#"}
       ];
@@ -102,6 +103,10 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
     }
   });
 
+  /* --------------------------------------------------
+    NEW DOCUMENT EDITOR ROUTE OBJECT (for new documents)
+  ----------------------------------------------------*/
+
   var NewDocEditorRouteObject = DocEditorRouteObject.extend({
     initialize: function (route, masterLayout, options) {
       var databaseName = options[0];
@@ -114,6 +119,7 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
     },
     crumbs: function() {
       return [
+        {"name": "", "className": "fonticon-left-open", "link": "/_all_dbs"},
         {"name": this.database.id, "link": Databases.databaseUrl(this.database)},
         {"name": "New", "link": "#"}
       ];
@@ -125,6 +131,10 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
 
   });
 
+
+  /* --------------------------------------------------
+    ALL DOCS, METADATA AND CHANGES ROUTE OBJECT
+  ----------------------------------------------------*/
   var DocumentsRouteObject = FauxtonAPI.RouteObject.extend({
     layout: "with_tabs_sidebar",
     selectedHeader: "Databases",
@@ -134,48 +144,34 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
         route: "allDocs",
         roles: ["_reader","_writer","_admin"]
       },
-      "database/:database/_design/:ddoc/_views/:view": {
-        route: "viewFn",
-        roles: ['_admin']
-      },
-      "database/:database/_design/:ddoc/_lists/:fn": {
-        route: "tempFn",
-        roles: ['_admin']
-      },
-      "database/:database/_design/:ddoc/_filters/:fn": {
-        route: "tempFn",
-        roles: ['_admin']
-      },
-      "database/:database/_design/:ddoc/_show/:fn": {
-        route: "tempFn",
-        roles: ['_admin']
-      },
       "database/:database/_design/:ddoc/metadata": {
         route: "designDocMetadata",
         roles: ['_admin']
       },
-      "database/:database/new_view": "newViewEditor",
-      "database/:database/new_view/:designDoc": "newViewEditor",
       "database/:database/_changes(:params)": "changes"
     },
 
     events: {
       "route:updateAllDocs": "updateAllDocsFromView",
-      "route:updatePreviewDocs": "updateAllDocsFromPreview",
+      // "route:updatePreviewDocs": "updateAllDocsFromPreview",
       "route:reloadDesignDocs": "reloadDesignDocs",
       "route:paginate": "paginate",
       "route:perPageChange": "perPageChange",
       "route:changesFilterAdd": "addFilter",
-      "route:changesFilterRemove": "removeFilter"
+      "route:changesFilterRemove": "removeFilter",
+      "route:toggleSelectHeader": "toggleSelectheader"
     },
 
     initialize: function (route, masterLayout, options) {
       this.databaseName = options[0];
-
+      /* --------------------------------------------------
+        Set up Resources for the current database
+          &
+        get all design docs
+      ----------------------------------------------------*/
       this.data = {
         database: new Databases.Model({id:this.databaseName})
       };
-
       this.data.designDocs = new Documents.AllDocs(null, {
         database: this.data.database,
         paging: {
@@ -189,40 +185,127 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
         }
       });
 
+      /* --------------------------------------------------
+        Set up breadcrumb header
+      ----------------------------------------------------*/
+      var crumbs = [
+        {"name": "", "className": "fonticon-left-open", "link": "/_all_dbs"},
+        {"name": this.data.database.id, "link": Databases.databaseUrl(this.data.database)}
+      ];
+
+
+      this.leftheader = this.setView("#breadcrumbs", new Components.LeftHeader({
+        crumbs: crumbs,
+        dropdownMenu: this.setUpDropdown()
+      }));
+
+      /* --------------------------------------------------
+        Show right header for all docs that includes:
+        query options, api bar, search and select
+      ----------------------------------------------------*/
+      this.allDocsHeader = false;
+      this.resetAllDocsHeader();
+
+      /* --------------------------------------------------
+        Show the sidebar
+      ----------------------------------------------------*/
+
       this.sidebar = this.setView("#sidebar-content", new Documents.Views.Sidebar({
         collection: this.data.designDocs,
         database: this.data.database
       }));
     },
-    designDocMetadata:  function(database, ddoc){
-      this.toolsView && this.toolsView.remove();
-      this.viewEditor && this.viewEditor.remove();
 
+    setUpDropdown: function(){
+      var defaultMenuLinks = [{
+        links: [{
+          title: 'Replicate Database',
+          icon: 'fonticon-replicate',
+          url: '#/replication/'+this.databaseName
+        },{
+          title: 'Delete',
+          icon: 'fonticon-trash',
+          trigger: 'database:delete'
+        }]
+      }];
+
+      defaultMenuLinks.push({
+        title: 'Add new',
+        links: this.getExtensionLinks()
+      });
+
+      return defaultMenuLinks;
+    },
+
+    getExtensionLinks: function () {
+      var database = this.data.database,
+          newurlPrefix = "#" + database.url('app');
+
+      var menuLinks = [{
+          title: 'New Doc',
+          url: newurlPrefix + '/new',
+          icon: 'fonticon-plus-circled'
+        },{
+          title: 'New Design Doc',
+          url: newurlPrefix + '/new_view',
+          icon: 'fonticon-plus-circled'
+      }];
+
+      return _.reduce(FauxtonAPI.getExtensions('sidebar:links'), function (menuLinks, link) {
+
+        menuLinks.push({
+          title: link.title,
+          url: newurlPrefix + "/" + link.url,
+          icon: 'fonticon-plus-circled'
+        });
+
+        return menuLinks;
+     }, menuLinks);
+
+    },
+
+    toggleSelectheader: function(){
+      /* --------------------------------------------------
+        Set up right header for the document select menu
+        or reset back to all docs header
+      ----------------------------------------------------*/
+      if (this.allDocsHeader){
+        this.allDocsHeader = false;
+        this.rightHeader = this.setView("#api-navbar", new Documents.Views.SelectMenuHeader({}));
+        this.rightHeader.forceRender();
+      } else {
+        this.resetAllDocsHeader();
+      }
+
+    },
+    resetAllDocsHeader: function(){
+      if (!this.allDocsHeader){
+        this.rightHeader = this.setView("#api-navbar", new Documents.Views.RightAllDocsHeader({
+          database: this.data.database
+        }));
+        this.allDocsHeader = true;
+      }
+    },
+
+    designDocMetadata:  function(database, ddoc){
       var designDocInfo = new Resources.DdocInfo({_id: "_design/"+ddoc},{database: this.data.database });
 
+      /* --------------------------------------------------
+        Show design doc metadata
+      ----------------------------------------------------*/
       this.setView("#dashboard-lower-content", new Documents.Views.DdocInfo({
         ddocName: ddoc,
         model: designDocInfo
       }));
-
+      /* --------------------------------------------------
+        Set selected tab
+      ----------------------------------------------------*/
       this.sidebar.setSelectedTab(app.utils.removeSpecialCharacters(ddoc)+"_metadata");
 
-      this.crumbs = function () {
-        return [
-          {"name": this.data.database.id, "link": Databases.databaseUrl(this.data.database)},
-        ];
-      };
-
-      this.apiUrl = [designDocInfo.url('apiurl'), designDocInfo.documentation() ];
-
-    },
-    tempFn:  function(databaseName, ddoc, fn){
-      this.setView("#dashboard-upper-content", new Documents.Views.temp({}));
-      this.crumbs = function () {
-        return [
-          {"name": this.data.database.id, "link": Databases.databaseUrl(this.data.database)},
-        ];
-      };
+      /* --------------------------------------------------
+        Update the apiUrl
+      ----------------------------------------------------*/
+      this.rightHeader.updateApiUrl([designDocInfo.url('apiurl'), designDocInfo.documentation()]);
 
     },
 
@@ -255,25 +338,37 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
         return;
       }
 
+
+
+      /*--------------------------------------------------
+      reset header if you have to
+      ----------------------------------------------------*/
+      this.resetAllDocsHeader();
+
+      /* --------------------------------------------------
+        Build all docs
+      ----------------------------------------------------*/
+
       this.data.database.buildAllDocs(docParams);
 
+      /* --------------------------------------------------
+        Set sidebar highlight to all docs or design docs
+      ----------------------------------------------------*/
       if (docParams.startkey && docParams.startkey.indexOf('_design') > -1) {
         this.sidebar.setSelectedTab('design-docs');
       } else {
         this.sidebar.setSelectedTab('all-docs');
       }
 
-      this.viewEditor && this.viewEditor.remove();
+      /* --------------------------------------------------
+        Set page size
+      ----------------------------------------------------*/
 
       this.data.database.allDocs.paging.pageSize = this.getDocPerPageLimit(urlParams, parseInt(docParams.limit, 10));
 
-      this.viewEditor = this.setView("#dashboard-upper-content", new Documents.Views.AllDocsLayout({
-        database: this.data.database,
-        collection: this.data.database.allDocs,
-        params: urlParams,
-        docParams: docParams
-      }));
-
+      /* --------------------------------------------------
+        Show all docs
+      ----------------------------------------------------*/
       this.documentsView = this.setView("#dashboard-lower-content", new Documents.Views.AllDocsList({
         database: this.data.database,
         collection: this.data.database.allDocs,
@@ -282,104 +377,18 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
         bulkDeleteDocsCollection: new Documents.BulkDeleteDocCollection([], {databaseId: this.data.database.get('id')})
       }));
 
-      this.crumbs = [
-        {"name": this.data.database.id, "link": Databases.databaseUrl(this.data.database)}
-      ];
-
-      this.apiUrl = [this.data.database.allDocs.urlRef("apiurl", urlParams), this.data.database.allDocs.documentation() ];
+      /* --------------------------------------------------
+        update the api url
+      ----------------------------------------------------*/
+      this.rightHeader.updateApiUrl([this.data.database.allDocs.urlRef("apiurl", urlParams), this.data.database.allDocs.documentation()]);
     },
 
-    viewFn: function (databaseName, ddoc, view) {
-      var params = this.createParams(),
-          urlParams = params.urlParams,
-          docParams = params.docParams,
-          decodeDdoc = decodeURIComponent(ddoc);
-
-      view = view.replace(/\?.*$/,'');
-
-      this.data.indexedDocs = new Documents.IndexCollection(null, {
-        database: this.data.database,
-        design: decodeDdoc,
-        view: view,
-        params: docParams,
-        paging: {
-          pageSize: this.getDocPerPageLimit(urlParams, parseInt(docParams.limit, 10))
-        }
-      });
-
-      this.viewEditor = this.setView("#dashboard-upper-content", new Index.ViewEditor({
-        model: this.data.database,
-        ddocs: this.data.designDocs,
-        viewName: view,
-        params: urlParams,
-        newView: false,
-        database: this.data.database,
-        ddocInfo: this.ddocInfo(decodeDdoc, this.data.designDocs, view)
-      }));
-
-      this.toolsView && this.toolsView.remove();
-
-      this.documentsView = this.createViewDocumentsView({
-        designDoc: decodeDdoc,
-        docParams: docParams,
-        urlParams: urlParams,
-        database: this.data.database,
-        indexedDocs: this.data.indexedDocs,
-        designDocs: this.data.designDocs,
-        view: view
-      });
-
-      this.sidebar.setSelectedTab(app.utils.removeSpecialCharacters(ddoc) + '_' + app.utils.removeSpecialCharacters(view));
-
-      this.crumbs = function () {
-        return [
-          {"name": this.data.database.id, "link": Databases.databaseUrl(this.data.database)},
-        ];
-      };
-
-      this.apiUrl = [this.data.indexedDocs.urlRef("apiurl", urlParams), "docs"];
-    },
 
     ddocInfo: function (designDoc, designDocs, view) {
       return {
         id: "_design/" + designDoc,
         currView: view,
         designDocs: designDocs
-      };
-    },
-
-    createViewDocumentsView: function (options) {
-
-      return this.setView("#dashboard-lower-content", new Documents.Views.AllDocsList({
-        database: options.database,
-        collection: options.indexedDocs,
-        nestedView: Documents.Views.Row,
-        viewList: true,
-        ddocInfo: this.ddocInfo(options.designDoc, options.designDocs, options.view),
-        docParams: options.docParams,
-        params: options.urlParams
-      }));
-    },
-
-    newViewEditor: function (database, designDoc) {
-      var params = app.getParams();
-
-      this.toolsView && this.toolsView.remove();
-      this.documentsView && this.documentsView.remove();
-
-      this.viewEditor = this.setView("#dashboard-upper-content", new Index.ViewEditor({
-        currentddoc: "_design/"+designDoc || "",
-        ddocs: this.data.designDocs,
-        params: params,
-        database: this.data.database,
-        newView: true
-      }));
-
-      this.sidebar.setSelectedTab('new-view');
-      this.crumbs = function () {
-        return [
-          {"name": this.data.database.id, "link": Databases.databaseUrl(this.data.database)},
-        ];
       };
     },
 
@@ -401,65 +410,32 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
         collection = this.data.database.allDocs;
         collection.paging.pageSize = pageSize;
 
-      } else {
-        collection = this.data.indexedDocs = new Documents.IndexCollection(null, {
-          database: this.data.database,
-          design: ddoc,
-          view: view,
-          params: docParams,
-          paging: {
-            pageSize: pageSize
-          }
-        });
-
-        if (!this.documentsView) {
-          this.documentsView = this.createViewDocumentsView({
-            designDoc: ddoc,
-            docParams: docParams,
-            urlParams: urlParams,
-            database: this.data.database,
-            indexedDocs: this.indexedDocs,
-            designDocs: this.data.designDocs,
-            view: view
-          });
-        }
       }
 
       this.documentsView.setCollection(collection);
       this.documentsView.setParams(docParams, urlParams);
+
       this.documentsView.forceRender();
 
-      this.apiUrl = [collection.urlRef("apiurl", urlParams), "docs"];
+      this.rightHeader.updateApiUrl([collection.urlRef("apiurl", urlParams), "docs"]);
     },
 
-    updateAllDocsFromPreview: function (event) {
-      var view = event.view,
-      rows = event.rows,
-      ddoc = event.ddoc;
-
-      this.data.indexedDocs = new Documents.PouchIndexCollection(null, {
-        database: this.data.database,
-        design: ddoc,
-        view: view,
-        rows: rows
-      });
-
-      this.documentsView = this.setView("#dashboard-lower-content", new Documents.Views.AllDocsList({
-        database: this.data.database,
-        collection: this.data.indexedDocs,
-        nestedView: Documents.Views.Row,
-        viewList: true
-      }));
-    },
-
+    /* --------------------------------------------------
+      Called when you change the # of items to show in the pagination footer
+    ----------------------------------------------------*/
     perPageChange: function (perPage) {
       // We need to restore the collection parameters to the defaults (1st page)
       // and update the page size
       this.perPage = perPage;
+
       this.documentsView.forceRender();
       this.documentsView.collection.pageSizeReset(perPage, {fetch: false});
       this.setDocPerPageLimit(perPage);
     },
+
+    /* --------------------------------------------------
+      Triggers when you hit the paginate forward and backwards buttons
+    ----------------------------------------------------*/
 
     paginate: function (options) {
       var collection = this.documentsView.collection;
@@ -506,33 +482,48 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
     changes: function () {
       var docParams = app.getParams();
       this.data.database.buildChanges(docParams);
+      /* --------------------------------------------------
+        Set changes view
+      ----------------------------------------------------*/
 
       this.changesView = this.setView("#dashboard-lower-content", new Changes.Changes({
         model: this.data.database
       }));
 
+      /* --------------------------------------------------
+        Set up right header
+      ----------------------------------------------------*/
+
       this.filterView = new Components.FilterView({
         eventNamespace: "changes"
       });
-      this.headerView = this.setView("#dashboard-upper-content", new Changes.ChangesHeader({
-        filterView: this.filterView
+
+      this.headerView = this.setView("#api-navbar", new Changes.ChangesHeader({
+        filterView: this.filterView,
+        endpoint: this.data.database.url("apiurl"),
+        documentation: this.data.database.documentation()
       }));
 
-      this.toolsView && this.toolsView.remove();
-      this.viewEditor && this.viewEditor.remove();
+      this.allDocsHeader = true;
+
+      /* --------------------------------------------------
+        Set sidebar highlight
+      ----------------------------------------------------*/
 
       this.sidebar.setSelectedTab('changes');
 
-      this.crumbs = function () {
-        return [
-          {"name": this.data.database.id, "link": Databases.databaseUrl(this.data.database)},
-          {"name": "_changes", "link": "/_changes"}
-        ];
-      };
-
-      this.apiUrl = function() {
-        return [this.data.database.url("changes-apiurl"), this.data.database.documentation()];
-      };
+      /* --------------------------------------------------
+        Set up breadcrumb header
+      ----------------------------------------------------*/
+      var crumbs = [
+        {"name": "", "className": "fonticon-left-open", "link": "/_all_dbs"},
+        {"name": this.data.database.id, "link": Databases.databaseUrl(this.data.database)},
+        {"name": "_changes", "link": "/_changes"}
+      ];
+      /* Set up breadcrumb header */
+      this.leftheader = this.setView("#breadcrumbs", new Components.LeftHeader({
+        crumbs: crumbs
+      }));
     },
 
     addFilter: function (filter) {
@@ -543,7 +534,7 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
     removeFilter: function (filter) {
       this.changesView.filters.splice(this.changesView.filters.indexOf(filter), 1);
       this.changesView.render();
-    },
+    }
 
   });
 

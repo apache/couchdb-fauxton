@@ -9,25 +9,9 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
-define([
-        'addons/documents/views-index',
-        'testUtils'
-], function (Views, testUtils) {
-  var assert = testUtils.assert,
-      ViewSandbox = testUtils.ViewSandbox,
-      viewSandbox;
-
-  describe('Documents Indexes', function () {
-    var view;
-      beforeEach(function () {
-        viewSandbox = new ViewSandbox();
-        viewSandbox.renderView(view);
-      });
-
-      afterEach(function () {
-        viewSandbox.remove();
-      });
-  });
-});
-
-
+@import "../../../../../assets/less/variables.less";
+@import "../../../../../assets/less/bootstrap/variables.less";
+@import "../../../../../assets/less/bootstrap/mixins.less";
+@import "new-index-placeholder.less";
+@import "index-form.less";
+@import "doc-item.less";
