@@ -264,6 +264,7 @@ function (app, FauxtonAPI, CouchdbSession) {
 
   Auth.LoginView = FauxtonAPI.View.extend({
     template: 'addons/auth/templates/login',
+    className: "row-fluid",
     initialize: function (options) {
       this.urlBack = options.urlBack || "";
     },
@@ -368,6 +369,7 @@ function (app, FauxtonAPI, CouchdbSession) {
 
   Auth.NoAccessView = FauxtonAPI.View.extend({
     template: "addons/auth/templates/noAccess",
+    className: "row-fluid",
 
     initialize: function (options) {
       this.urlBack = options.urlBack || "";

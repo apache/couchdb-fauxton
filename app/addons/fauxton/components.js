@@ -34,7 +34,119 @@ define([
 function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
   var Components = FauxtonAPI.addon();
 
+  Components.Breadcrumbs = FauxtonAPI.View.extend({
+    className: "breadcrumb pull-left",
+    tagName: "ul",
+    template: "addons/fauxton/templates/breadcrumbs",
+    serialize: function() {
+      var crumbs = _.clone(this.crumbs);
+      return {
+        crumbs: crumbs
+      };
+    },
+    update: function(crumbs) {
+      this.crumbs = crumbs;
+      this.render();
+    },
+    initialize: function(options) {
+      this.crumbs = options.crumbs;
+    }
+  });
+
+  Components.ApiBar = FauxtonAPI.View.extend({
+    template: "addons/fauxton/templates/api_bar",
+
+    events:  {
+      "click .api-url-btn" : "showAPIbar"
+    },
+    
+    initialize: function (options) {
+      var _options = options || {};
+      this.endpoint = _options.endpoint || '_all_docs';
+      this.documentation = _options.documentation || 'docs';
+
+      var hideAPIbar = _.bind(this.hideAPIbar, this),
+          navbarVisible = _.bind(this.navbarVisible, this);
+
+      $('body').on('click.apibar',function(e) {
+        var $navbar = $(e.target);
+        if (!navbarVisible()) { return;}
+        if ($navbar.hasClass('.api-url-btn')) { return;}
+
+        if (!$navbar.closest('.api-navbar').length){
+          hideAPIbar();
+        }
+      });
+    },
+
+    navbarVisible: function () {
+      return this.$('.api-navbar').is(':visible');
+    },
+
+    cleanup: function () {
+      // a bit of a hack. The api bar is created twice so we cannot stop listening
+      // to this event until we refactor the api bars into one
+      //$('body').off('click.apibar');
+    },
+
+    hideAPIbar: function () {
+      var $navBar = this.$('.api-navbar');
+      $navBar.velocity("reverse", 250, function () {
+        $navBar.hide();
+      });
+    },
+
+    //we only need to show the api-bar here. The `click.apibar` event 
+    //in the initialize will close the api bar if a user clicks the api button
+    //and the api bar is visible.
+    showAPIbar: function(event){
+      if (!this.navbarVisible()) {
+        this.$('.api-navbar').velocity("transition.slideDownIn", 250);
+      }
+    },
+
+    serialize: function() {
+      return {
+        endpoint: this.endpoint,
+        documentation: this.documentation
+      };
+    },
+
+    hide: function(){
+      this.$el.addClass('hide');
+    },
+    show: function(){
+      this.$el.removeClass('hide');
+    },
+    update: function(endpoint) {
+      this.show();
+      this.endpoint = endpoint[0];
+      this.documentation = endpoint[1];
+      this.render();
+    },
+    afterRender: function(){
+      var client = new Components.Clipboard({
+        $el: this.$('.copy-url')
+      });
+
+      client.on("load", function(e){
+        var $apiInput = $('#api-navbar input');
+        var copyURLTimer;
+        client.on("mouseup", function(e){
+          $apiInput.css("background-color","#aaa");
+          window.clearTimeout(copyURLTimer);
+          copyURLTimer = setInterval(function () {
+            $apiInput.css("background-color","#fff");
+          }, 200);
+        });
+      });
+    }
+  });
+
+
   Components.Pagination = FauxtonAPI.View.extend({
+    tagName: "ul",
+    className: "pagination pagination-centered",
     template: "addons/fauxton/templates/pagination",
 
     initialize: function(options) {
@@ -43,6 +155,10 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
       this.total = options.total;
       this.totalPages = Math.ceil(this.total / this.perPage);
       this.urlFun = options.urlFun;
+    },
+
+    afterRender: function () {
+      app.resizeColumns.onResizeHandler();
     },
 
     serialize: function() {
@@ -55,6 +171,7 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
       };
     }
   });
+
 
   Components.IndexPagination = FauxtonAPI.View.extend({
     template: "addons/fauxton/templates/index_pagination",
