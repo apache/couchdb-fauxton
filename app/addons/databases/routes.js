@@ -36,15 +36,10 @@ function(app, FauxtonAPI, Databases, Views) {
       "_all_dbs(:params)": "allDatabases"
     },
 
-    apiUrl: function() {
-      return [this.databases.url("apiurl"), this.databases.documentation()];
-    },
-
     selectedHeader: "Databases",
 
     initialize: function() {
       this.databases = new Databases.List();
-      this.deferred = FauxtonAPI.Deferred();
     },
 
     allDatabases: function() {
@@ -53,6 +48,12 @@ function(app, FauxtonAPI, Databases, Views) {
 
       this.databasesView = this.setView("#dashboard-content", new Views.List({
         collection: this.databases
+      }));
+
+      this.rightHeader = this.setView("#api-navbar", new Views.RightAllDBsHeader({
+        collection: this.databases,
+        endpoint: this.databases.url("apiurl"),
+        documentation: this.databases.documentation()
       }));
 
       this.databasesView.setPage(dbPage);

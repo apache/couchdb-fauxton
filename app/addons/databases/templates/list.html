@@ -11,27 +11,19 @@ WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 License for the specific language governing permissions and limitations under
 the License.
 -->
-
-<div class="result-tools" style="">
-  <div id="newButton" class="pull-left"></div>
-  <form id="jump-to-db" class="navbar-form pull-right database-search">
-    <div class="input-append">
-      <input type="text" class="search-autocomplete" name="search-query" placeholder="Database name" />
-      <button class="btn btn-primary" type="submit"><i class="icon icon-search"></i></button>
-    </div>
-  </form>
-
-
+<div class="view">
+  <table class="databases table table-striped">
+    <thead>
+      <th>Name</th>
+      <th>Size</th>
+      <th># of Docs</th>
+      <th>Update Seq</th>
+      <th>Actions</th>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
 </div>
-<table class="databases table table-striped">
-  <thead>
-    <th>Name</th>
-    <th>Size</th>
-    <th># of Docs</th>
-    <th>Update Seq</th>
-    <th>Actions</th>
-  </thead>
-  <tbody>
-  </tbody>
-</table>
-<div id="database-pagination"></div>
+<footer class="pagination-footer window-resizeable-full">
+  <div id="database-pagination"></div>
+</footer>
