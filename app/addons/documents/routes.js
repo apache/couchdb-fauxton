@@ -193,6 +193,7 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
         collection: this.data.designDocs,
         database: this.data.database
       }));
+
     },
     designDocMetadata:  function(database, ddoc){
       this.toolsView && this.toolsView.remove();

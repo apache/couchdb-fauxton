@@ -21,6 +21,38 @@ define([
 function(app, Components, FauxtonAPI, Databases) {
   var Views = {};
 
+  Views.RightAllDBsHeader = FauxtonAPI.View.extend({
+    className: "header-right",
+    template: "addons/databases/templates/header_alldbs",
+    initialize: function(options){
+      //adding the database to the object
+      _.bindAll(this);
+      this.endpoint = options.endpoint;
+    },
+
+    updateApiUrl: function(api){
+      //this will update the api bar when the route changes
+      //you can find the method that updates it in components.js Components.ApiBar()
+      this.apiBar && this.apiBar.update(api);
+    },
+
+    beforeRender:function(){
+      this.headerSearch = this.insertView("#header-search", new Views.JumpToDB({
+        collection: this.collection
+      }));
+
+      this.newbutton = this.insertView("#add-db-button", new Views.NewDatabaseButton({
+        collection: this.collection
+      }));
+
+
+      //Moved the apibar view into the components file so you can include it in your views
+      this.apiBar = this.insertView("#header-api-bar", new Components.ApiBar({
+        endpoint: this.endpoint
+        }));
+    }
+  });
+
   Views.Item = FauxtonAPI.View.extend({
     template: "addons/databases/templates/item",
     tagName: "tr",
@@ -36,24 +68,15 @@ function(app, Components, FauxtonAPI, Databases) {
     }
   });
 
-  Views.List = FauxtonAPI.View.extend({
-    dbLimit: 20,
-    perPage: 20,
-    template: "addons/databases/templates/list",
+
+  Views.JumpToDB = FauxtonAPI.View.extend({
+    template: "addons/databases/templates/jump_to_db",
     events: {
-      "click button.all": "selectAll",
       "submit form#jump-to-db": "switchDatabase"
     },
-
     initialize: function(options) {
       var params = app.getParams();
       this.page = params.page ? parseInt(params.page, 10) : 1;
-    },
-
-    serialize: function() {
-      return {
-        databases: this.collection
-      };
     },
     establish: function(){
       var currentDBs = this.paginated();
@@ -90,6 +113,55 @@ function(app, Components, FauxtonAPI, Databases) {
         });
       }
     },
+    afterRender: function() {
+      var that = this,
+          AllDBsArray = _.map(this.collection.toJSON(), function(item, key){
+            return item.name;
+          });
+
+      this.dbSearchTypeahead = new Components.Typeahead({
+        el: "input.search-autocomplete",
+        source: AllDBsArray,
+        onUpdate: function (item) {
+          that.switchDatabase(null, item);
+        }
+      });
+      this.dbSearchTypeahead.render();
+      this.$el.find(".js-db-graveyard").tooltip();
+    }
+  });
+
+  Views.List = FauxtonAPI.View.extend({
+    dbLimit: 20,
+    perPage: 20,
+    template: "addons/databases/templates/list",
+    events: {
+      "click button.all": "selectAll"
+    },
+
+    initialize: function(options) {
+      var params = app.getParams();
+      this.page = params.page ? parseInt(params.page, 10) : 1;
+    },
+
+    serialize: function() {
+      return {
+        databases: this.collection
+      };
+    },
+    establish: function(){
+      var currentDBs = this.paginated();
+      var deferred = FauxtonAPI.Deferred();
+
+      FauxtonAPI.when(currentDBs.map(function(database) {
+        return database.status.fetchOnce();
+      })).always(function(resp) {
+        //make this always so that even if a user is not allowed access to a database
+        //they will still see a list of all databases
+        deferred.resolve();
+      });
+      return [deferred];
+    },
 
     paginated: function() {
       var start = (this.page - 1) * this.perPage;
@@ -98,10 +170,6 @@ function(app, Components, FauxtonAPI, Databases) {
     },
 
     beforeRender: function() {
-
-      this.insertView("#newButton", new Views.NewDatabaseButton({
-        collection: this.collection
-      }));
 
       _.each(this.paginated(), function(database) {
         this.insertView("table.databases tbody", new Views.Item({
@@ -122,24 +190,6 @@ function(app, Components, FauxtonAPI, Databases) {
     setPage: function(page) {
       this.page = page || 1;
     },
-
-    afterRender: function() {
-      var that = this,
-          AllDBsArray = _.map(this.collection.toJSON(), function(item, key){
-            return item.name;
-          });
-
-      this.dbSearchTypeahead = new Components.Typeahead({
-        el: "input.search-autocomplete",
-        source: AllDBsArray,
-        onUpdate: function (item) {
-          that.switchDatabase(null, item);
-        }
-      });
-      this.dbSearchTypeahead.render();
-      this.$el.find(".js-db-graveyard").tooltip();
-    },
-
     selectAll: function(evt){
       $("input:checkbox").attr('checked', !$(evt.target).hasClass('active'));
     }

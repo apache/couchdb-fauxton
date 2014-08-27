@@ -51,9 +51,8 @@ function(app, FauxtonAPI, resizeColumns, Components, ZeroClipboard, velocity) {
   });
 
   Fauxton.initialize = function () {
-    // app.footer = new Fauxton.Footer({el: "#footer-content"}),
     app.navBar = new Fauxton.NavBar();
-    app.apiBar = new Fauxton.ApiBar();
+    app.apiBar = new Components.ApiBar();
 
     FauxtonAPI.when.apply(null, app.navBar.establish()).done(function() {
       FauxtonAPI.masterLayout.setView("#primary-navbar", app.navBar, true);
@@ -79,7 +78,7 @@ function(app, FauxtonAPI, resizeColumns, Components, ZeroClipboard, velocity) {
       var crumbs = routeObject.get('crumbs');
 
       if (crumbs.length) {
-        FauxtonAPI.masterLayout.setView('#breadcrumbs', new Fauxton.Breadcrumbs({
+        FauxtonAPI.masterLayout.setView('#breadcrumbs', new Components.Breadcrumbs({
           crumbs: crumbs
         }), true).render();
       }
@@ -94,22 +93,7 @@ function(app, FauxtonAPI, resizeColumns, Components, ZeroClipboard, velocity) {
       }
     });
   };
-
-  Fauxton.Breadcrumbs = FauxtonAPI.View.extend({
-    template: "addons/fauxton/templates/breadcrumbs",
-
-    serialize: function() {
-      var crumbs = _.clone(this.crumbs);
-      return {
-        crumbs: crumbs
-      };
-    },
-
-    initialize: function(options) {
-      this.crumbs = options.crumbs;
-    }
-  });
-
+  
   Fauxton.VersionInfo = Backbone.Model.extend({
     url: function () {
       return app.host;
@@ -259,95 +243,6 @@ function(app, FauxtonAPI, resizeColumns, Components, ZeroClipboard, velocity) {
     }
 
     // TODO: ADD ACTIVE CLASS
-  });
-
-  Fauxton.ApiBar = FauxtonAPI.View.extend({
-    template: "addons/fauxton/templates/api_bar",
-    endpoint: '_all_docs',
-
-    documentation: 'docs',
-
-    events:  {
-      "click .api-url-btn" : "showAPIbar"
-    },
-    
-    initialize: function () {
-      var hideAPIbar = _.bind(this.hideAPIbar, this),
-          navbarVisible = _.bind(this.navbarVisible, this);
-
-
-      $('body').on('click.apibar',function(e) {
-        var $navbar = $(e.target);
-        if (!navbarVisible()) { return;}
-        if ($navbar.hasClass('.api-url-btn')) { return;}
-
-        if (!$navbar.closest('.api-navbar').length){
-          hideAPIbar();
-        }
-      });
-    },
-
-    navbarVisible: function () {
-      return this.$('.api-navbar').is(':visible');
-    },
-
-    cleanup: function () {
-      $('body').off('click.apibar');
-    },
-
-    hideAPIbar: function () {
-      var $navBar = this.$('.api-navbar');
-      $navBar.velocity("reverse", 250, function () {
-        $navBar.hide();
-      });
-    },
-
-    //we only need to show the api-bar here. The `click.apibar` event 
-    //in the initialize will close the api bar if a user clicks the api button
-    //and the api bar is visible.
-    showAPIbar: function(event){
-      if (!this.navbarVisible()) {
-        this.$('.api-navbar').velocity("transition.slideDownIn", 250);
-      }
-    },
-
-    serialize: function() {
-      return {
-        endpoint: this.endpoint,
-        documentation: this.documentation
-      };
-    },
-
-    hide: function(){
-      this.$el.addClass('hide');
-    },
-    show: function(){
-      this.$el.removeClass('hide');
-    },
-    update: function(endpoint) {
-      this.show();
-      this.endpoint = endpoint[0];
-      this.documentation = endpoint[1];
-      this.render();
-    },
-    afterRender: function(){
-      var client = new Components.Clipboard({
-        $el: this.$('.copy-url')
-      });
-
-      client.on("load", function(e){
-        var $apiInput = $('#api-navbar input');
-        var copyURLTimer;
-        client.on("mouseup", function(e){
-          $apiInput.css("background-color","#aaa");
-          window.clearTimeout(copyURLTimer);
-          copyURLTimer = setInterval(function () {
-            $apiInput.css("background-color","#fff");
-          }, 200);
-        });
-      });
-    }
-
   });
 
   Fauxton.Notification = FauxtonAPI.View.extend({

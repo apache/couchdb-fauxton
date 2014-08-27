@@ -258,10 +258,11 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
         database: this.database,
       }));
 
-      this.toolsView = this.setView(".js-search", new Views.JumpToDoc({
+      //disable for now. Will enable with new documents PR that will come next
+      /*this.toolsView = this.setView(".js-search", new Views.JumpToDoc({
         database: this.database,
         collection: this.database.allDocs
-      }));
+        }));*/
     },
 
     afterRender: function () {
