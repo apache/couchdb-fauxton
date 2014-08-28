@@ -35,6 +35,43 @@ define([
 function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
   var Components = FauxtonAPI.addon();
 
+  //setting up the left header with the backbutton used in Views and All docs
+  Components.LeftHeader = FauxtonAPI.View.extend({
+    className: "header-left",
+    template: "addons/fauxton/templates/header_left",
+    initialize:function(options){
+      this.dropdownEvents = options.dropdownEvents;
+      this.dropdownMenuLinks = options.dropdownMenu;
+      this.crumbs = options.crumbs || [];
+    },
+    updateCrumbs: function(crumbs){
+      this.crumbs = crumbs;
+      this.breadcrumbs && this.breadcrumbs.update(crumbs);
+    },
+    updateDropdown: function(menuLinks){
+      this.dropdownMenuLinks = menuLinks;
+      this.dropdown && this.dropdown.update(menuLinks);
+    },
+    beforeRender: function(){
+      this.setUpCrumbs();
+      this.setUpDropDownMenu();
+    },
+    setUpCrumbs: function(){
+      this.breadcrumbs = this.insertView("#header-breadcrumbs", new Components.Breadcrumbs({
+        crumbs: this.crumbs
+      }));
+    },
+    setUpDropDownMenu: function(){
+      if (this.dropdownMenuLinks){
+        this.dropdown = this.insertView("#header-dropdown-menu", new Components.MenuDropDown({
+          icon: 'fonticon-cog',
+          links: this.dropdownMenuLinks,
+          events: this.dropdownEvents
+        }));
+      }
+    }
+  });
+
   Components.Breadcrumbs = FauxtonAPI.View.extend({
     className: "breadcrumb pull-left",
     tagName: "ul",
@@ -742,11 +779,31 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
     className: "dropdown",
     initialize: function(options){
       this.links = options.links;
+      this.icon = options.icon || "fonticon-plus-circled";
+      this.setUpEvents();
+    },
+    setUpEvents: function(){
+      this.events = {};
+      _.each(this.links, function (parentLink) {
+        _.each(parentLink.links, function (link) {
+          if (!link.trigger) { return; }
+          this.events['click .' + link.icon] = "triggerEvent";
+        }, this);
+      }, this);
+    },
+    triggerEvent: function(e){
+      e.preventDefault();
+      var eventTrigger = $(e.currentTarget).attr('triggerEvent');
+      FauxtonAPI.Events.trigger(eventTrigger);
+    },
+    update: function(links){
+      this.links = links;
+      this.render();
     },
     serialize: function(){
-      var sidebarItem = FauxtonAPI.getExtensions('sidebar:links');
       return {
-        links: this.links
+        links: this.links,
+        icon: this.icon
       };
     }
   });
