@@ -595,7 +595,7 @@ table.databases {
   .closeMenu & {
     left: @collapsedNavWidth;
   }
-  border-bottom: 5px solid @breadcrumbBorder;
+  //border-bottom: 5px solid @breadcrumbBorder;
   .box-shadow(0 4px 6px -2px #808080);
   z-index: 100;
   .one-pane & {
@@ -1101,7 +1101,7 @@ div.add-dropdown {
 
 #breadcrumbs {
   height: 60px;
-  width: @sidebarWidth - 4;
+  width: @sidebarWidth;
   /* these styles are for the new header*/
   .header-left{
     > div{
@@ -1147,7 +1147,7 @@ div.add-dropdown {
   position: relative;
   #header-dropdown-menu {
     position: absolute;
-    right: 0;
+    right: 5px;
     top: 0;
     .dropdown-toggle {
       color: #666666;

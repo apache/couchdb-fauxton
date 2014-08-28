@@ -12,7 +12,7 @@ License for the specific language governing permissions and limitations under
 the License.
 -->
 
-<a class="dropdown-toggle icon fonticon-plus-circled2" data-toggle="dropdown" href="#" data-bypass="true"></a>
+<a class="dropdown-toggle icon <%=icon%>" data-toggle="dropdown" href="#" data-bypass="true"></a>
 <ul class="dropdown-menu arrow" role="menu" aria-labelledby="dLabel">
   <% _.each(links, function (linkSection) { %>
     <% if (linkSection.title) { %>
@@ -20,9 +20,10 @@ the License.
     <% } %>
     <% _.each(linkSection.links, function (link) { %>
       <li>
-        <a 
+        <a
+          <% if (link.trigger){ %> data-bypass="true" triggerEvent="<%-link.trigger%>" <%}%>
           <% if (link.icon) { %>
-          class="icon <%- link.icon %>" 
+          class="icon <%- link.icon %>"
           <% } %>
           href="<%- link.url %>">
           <%- link.title %>
@@ -31,3 +32,4 @@ the License.
     <%});%>
   <%});%>
  </ul>
+

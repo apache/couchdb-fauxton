@@ -38,6 +38,120 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
     });
   }
 
+  Views.RightAllDocsHeader = FauxtonAPI.View.extend({
+    className: "header-right",
+    template: "addons/documents/templates/header_alldocs",
+    events: {
+      'click .toggle-select-menu': 'selectAllMenu'
+    },
+
+    initialize: function(options){
+      //adding the database to the object
+      this.database = options.database;
+      _.bindAll(this);
+      this.selectVisible = false;
+      FauxtonAPI.Events.on('advancedOptions:updateView', this.updateAllDocs);
+      FauxtonAPI.Events.on('success:bulkDelete', this.selectAllMenu);
+    },
+
+    cleanup:function(){
+      FauxtonAPI.Events.unbind('advancedOptions:updateView');
+      FauxtonAPI.Events.unbind('success:bulkDelete');
+    },
+
+    selectAllMenu: function(e){
+      FauxtonAPI.triggerRouteEvent("toggleSelectHeader");
+      FauxtonAPI.Events.trigger("documents:showSelectAll",this.selectVisible);
+    },
+
+    addAllDocsMenu: function(){
+      //search docs
+      this.headerSearch = this.insertView("#header-search", new Views.JumpToDoc({
+        database: this.database,
+        collection: this.database.allDocs
+      }));
+      //insert queryoptions
+      //that file is included in require() above and the argument is QueryOptions
+      // and it wants all these params:
+      /* Sooooo I searched this file for where Advanced options was originally inserted to see what the hell
+         is happening.  and it's in AllDocsLayout.  So I'm going to move some of those functions over here
+
+        These are required:
+        this.database = options.database;
+        this.updateViewFn = options.updateViewFn;
+        this.previewFn = options.previewFn;
+
+        these are booleans:
+        this.showStale = _.isUndefined(options.showStale) ? false : options.showStale;
+        this.hasReduce = _.isUndefined(options.hasReduce) ? true : options.hasReduce;
+
+        these you only need for view indexes, not all docs because they are about
+        specific views and design docs (ddocs, also views live inside a ddoc):
+        this.viewName = options.viewName;
+        this.ddocName = options.ddocName;
+      */
+
+      /*this.queryOptions = this.insertView("#query-options", new QueryOptions.AdvancedOptions({
+        database: this.database,
+        hasReduce: false,
+        showPreview: false,
+      }));*/
+
+      //Moved the apibar view into the components file so you can include it in your views
+      this.apiBar = this.insertView("#header-api-bar", new Components.ApiBar({}));
+    },
+
+    updateApiUrl: function(api){
+      //this will update the api bar when the route changes
+      //you can find the method that updates it in components.js Components.ApiBar()
+      this.apiBar && this.apiBar.update(api);
+    },
+
+    serialize: function() {
+      //basically if you want something in a template, You can define it here
+      return {
+        database: this.database.get('id')
+      };
+    },
+
+    beforeRender:function(){
+      this.addAllDocsMenu();
+    },
+
+    //moved from alldocs layout
+    updateAllDocs: function (event, paramInfo) {
+      event.preventDefault();
+
+      var errorParams = paramInfo.errorParams,
+          params = paramInfo.params;
+
+      if (_.any(errorParams)) {
+        _.map(errorParams, function(param) {
+          return FauxtonAPI.addNotification({
+            msg: "JSON Parse Error on field: "+param.name,
+            type: "error",
+            clear:  true
+          });
+        });
+        FauxtonAPI.addNotification({
+          msg: "Make sure that strings are properly quoted and any other values are valid JSON structures",
+          type: "warning",
+          clear:  true
+        });
+
+        return false;
+      }
+
+      var fragment = window.location.hash.replace(/\?.*$/, '');
+
+      if (!_.isEmpty(params)) {
+        fragment = fragment + '?' + $.param(params);
+      }
+
+      FauxtonAPI.navigate(fragment, {trigger: false});
+      FauxtonAPI.triggerRouteEvent('updateAllDocs', {allDocs: true});
+    }
+  });
 
   Views.DeleteDBModal = Components.ModalView.extend({
     template: "addons/documents/templates/delete_database_modal",
