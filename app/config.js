@@ -32,8 +32,7 @@ require.config({
     "nv.d3": "../assets/js/libs/nv.d3",
     "ace":"../assets/js/libs/ace",
     "cloudant.pagingcollection": "../assets/js/plugins/cloudant.pagingcollection",
-    "velocity": "../assets/js/plugins/jquery.velocity",
-    "velocity.ui": "../assets/js/plugins/velocity.ui",
+    "velocity": "../assets/js/plugins/jquery.velocity"
   },
 
   baseUrl: '/',
@@ -60,9 +59,7 @@ require.config({
     "plugins/prettify": [],
     "plugins/beautify": [],
 
-    "plugins/jquery.form": ["jquery"],
-
-    "velocity.ui": ["velocity"]
+    "plugins/jquery.form": ["jquery"]
   }
 });
 
