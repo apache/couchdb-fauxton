@@ -62,9 +62,7 @@ require.config({
 
     "plugins/jquery.form": ["jquery"],
 
-    "velocity": ["jquery"],
-
-    "velocity.ui": ["jquery", "velocity"]
+    "velocity.ui": ["velocity"]
   }
 });
 

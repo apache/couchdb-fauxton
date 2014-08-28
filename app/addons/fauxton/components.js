@@ -28,7 +28,8 @@ define([
   "spin",
   // this should never be global available:
   // https://github.com/zeroclipboard/zeroclipboard/blob/master/docs/security.md
-  "plugins/zeroclipboard/ZeroClipboard"
+  "plugins/zeroclipboard/ZeroClipboard",
+  "velocity.ui"
 ],
 
 function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
