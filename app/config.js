@@ -64,7 +64,7 @@ require.config({
 
     "velocity": ["jquery"],
 
-    "velocity.ui": ["jquery"]
+    "velocity.ui": ["jquery", "velocity"]
   }
 });
 
