@@ -24,7 +24,6 @@ define([
         var docRoute = new DocumentRoute('changes', {}, ['fakeDB']);
         docRoute.changes();
 
-        console.log('docRoute.apiUrl()', docRoute.apiUrl());
         assert.ok(/\/database\/fakeDB\/_changes\?descending=true&limit=100&include_docs=true/.test(docRoute.apiUrl()[0]));
       });
 
