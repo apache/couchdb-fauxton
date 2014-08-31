@@ -107,6 +107,10 @@ module.exports = function (grunt) {
       proxy.web(req, res);
     }).listen(port);
 
+    proxy.on('error', function (e) {
+      // don't explode on cancelled requests
+    });
+
     // Fail this task if any errors have been logged
     if (grunt.errors) {
       return false;
