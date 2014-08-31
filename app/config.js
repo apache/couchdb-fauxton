@@ -32,7 +32,8 @@ require.config({
     "nv.d3": "../assets/js/libs/nv.d3",
     "ace":"../assets/js/libs/ace",
     "cloudant.pagingcollection": "../assets/js/plugins/cloudant.pagingcollection",
-    "velocity": "../assets/js/plugins/jquery.velocity"
+    "velocity": "../assets/js/plugins/velocity",
+    "velocity.ui": "../assets/js/plugins/velocity.ui",
   },
 
   baseUrl: '/',
@@ -55,11 +56,15 @@ require.config({
       deps: ["jquery"],
       exports: "Bootstrap"
     },
-    
+
     "plugins/prettify": [],
     "plugins/beautify": [],
 
-    "plugins/jquery.form": ["jquery"]
+    "plugins/jquery.form": ["jquery"],
+
+    "velocity": ["jquery"],
+
+    "velocity.ui": ["velocity"]
   }
 });
 
