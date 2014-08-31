@@ -19,7 +19,6 @@ define([
 function(app, FauxtonAPI, Replication, Views) {
   var  RepRouteObject = FauxtonAPI.RouteObject.extend({
     layout: "one_pane",
-    roles: ["_admin"],
     routes: {
       "replication": "defaultView",
       "replication/:dbname": "defaultView"
@@ -32,13 +31,24 @@ function(app, FauxtonAPI, Replication, Views) {
       {"name": "Replicate changes from: ", "link": "replication"}
     ],
     defaultView: function(dbname){
+      var isAdmin = FauxtonAPI.session.isAdmin();
+
       this.databases = new Replication.DBList({});
-      this.tasks = new Replication.Tasks({id: "ReplicationTasks"});
       this.replication = new Replication.Replicate({});
+
+      if (isAdmin) {
+        this.tasks = new Replication.Tasks({id: "ReplicationTasks"});
+        this.setView("#dashboard-content", new Views.ReplicationFormForAdmins({
+          selectedDB: dbname ||"",
+          collection: this.databases,
+          status: this.tasks
+        }));
+        return;
+      }
       this.setView("#dashboard-content", new Views.ReplicationForm({
         selectedDB: dbname ||"",
         collection: this.databases,
-        status:  this.tasks
+        status: this.tasks
       }));
     }
   });

@@ -10,18 +10,31 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 define([
-       'addons/replication/base',
-       'chai'
-], function (Replication, chai) {
-  var expect = chai.expect;
+        'addons/replication/base',
+        'addons/replication/views',
+        'addons/replication/resources',
+        'testUtils'
+], function (Replication, Views, Resources, testUtils) {
+  var assert = testUtils.assert,
+      ViewSandbox = testUtils.ViewSandbox,
+      viewSandbox;
 
-  describe('Replication Addon', function(){
+  describe('Replication Addon', function () {
+    describe('Replication View', function () {
+      var view = new Views.ReplicationForm({
+        collection: new Replication.DBList()
+      });
+      beforeEach(function (done) {
+        viewSandbox = new ViewSandbox();
+        viewSandbox.renderView(view, done);
+      });
 
-    describe('Replication DBList Collection', function () {
-      var rep;
+      afterEach(function () {
+        viewSandbox.remove();
+      });
 
-      beforeEach(function () {
-        rep = new rep.DBList(["foo","bar","baz","bo"]);
+      it("should render", function () {
+        assert.ok(view.$el.length > 0);
       });
     });
   });

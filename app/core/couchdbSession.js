@@ -27,6 +27,11 @@ function (FauxtonAPI) {
         };
       },
 
+      isAdmin: function () {
+        var userCtx = this.get('userCtx');
+        return userCtx.roles.indexOf('_admin') !== -1;
+      },
+
       fetchUser: function (opt) {
         var that = this,
             options = opt || {},
@@ -50,7 +55,7 @@ function (FauxtonAPI) {
 
           // this will return the user as a value to all function that calls done on this
           // eg. session.fetchUser().done(user) { .. do something with user ..}
-          return user; 
+          return user;
         });
       }
     })
