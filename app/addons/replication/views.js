@@ -101,18 +101,19 @@ function(app, FauxtonAPI, Components, Replication) {
           type: "error",
           clear: true
         });
+        return;
       }else if (this.$('input#to_name').is(':visible') && !this.$('input[name=create_target]').is(':checked')){
         var alreadyExists = this.collection.where({"name":this.$('input#to_name').val()});
-        if (alreadyExists.length === 0){
-          notification = FauxtonAPI.addNotification({
+        if (alreadyExists.length === 0) {
+          FauxtonAPI.addNotification({
             msg: "This database doesn't exist. Check create target if you want to create it.",
             type: "error",
             clear: true
           });
+          return;
         }
-      }else{
-        this.submit(e);
       }
+      this.submit(e);
     },
     formValidation: function(e){
       var $remote = this.$el.find('input:visible'),
