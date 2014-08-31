@@ -131,28 +131,22 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
     routes: {
 
       "database/:database/_all_docs(:extra)": {
-        route: "allDocs",
-        roles: ["_reader","_writer","_admin"]
+        route: "allDocs"
       },
       "database/:database/_design/:ddoc/_views/:view": {
-        route: "viewFn",
-        roles: ['_admin']
+        route: "viewFn"
       },
       "database/:database/_design/:ddoc/_lists/:fn": {
-        route: "tempFn",
-        roles: ['_admin']
+        route: "tempFn"
       },
       "database/:database/_design/:ddoc/_filters/:fn": {
-        route: "tempFn",
-        roles: ['_admin']
+        route: "tempFn"
       },
       "database/:database/_design/:ddoc/_show/:fn": {
-        route: "tempFn",
-        roles: ['_admin']
+        route: "tempFn"
       },
       "database/:database/_design/:ddoc/metadata": {
-        route: "designDocMetadata",
-        roles: ['_admin']
+        route: "designDocMetadata"
       },
       "database/:database/new_view": "newViewEditor",
       "database/:database/new_view/:designDoc": "newViewEditor",
