@@ -29,7 +29,7 @@ define([
   // this should never be global available:
   // https://github.com/zeroclipboard/zeroclipboard/blob/master/docs/security.md
   "plugins/zeroclipboard/ZeroClipboard",
-  "velocity"
+  "velocity.ui"
 ],
 
 function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
