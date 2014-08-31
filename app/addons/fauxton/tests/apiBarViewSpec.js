@@ -17,22 +17,19 @@ define([
 ], function (app, Components, testUtils) {
   var assert = testUtils.assert;
 
-  describe('FilteredView', function () {
-    var filteredView;
-
+  describe('ApiBarView', function () {
+    var apiBar;
 
     beforeEach(function () {
-      filteredView = new Components.FilteredView();
+      apiBar = new Components.ApiBar();
     });
 
-    it('should be case insensitive', function () {
-      filteredView.filters = ['ente'];
-      var res = filteredView.createFilteredData([
-        {id: 'LALA', bar: 'ENTE'},
-        {id: '1', bar: '1', deleted: true},
-        {id: '2', bar: '2'}
-      ]);
-      assert.equal(res.length, 1);
+    it('should get a location', function () {
+      var stub = sinon.stub(apiBar, "getLocation");
+      stub.returns("http://example.com");
+
+      var location = apiBar.getEndPointAbsoluteUrl('../../_stats');
+      assert.equal(location, 'http://example.com/_stats');
     });
   });
 });
