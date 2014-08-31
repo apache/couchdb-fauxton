@@ -32,19 +32,19 @@ function(app, FauxtonAPI, Replication, Views) {
       {"name": "Replicate changes from: ", "link": "replication"}
     ],
     defaultView: function(dbname){
-			this.databases = new Replication.DBList({});
+      this.databases = new Replication.DBList({});
       this.tasks = new Replication.Tasks({id: "ReplicationTasks"});
       this.replication = new Replication.Replicate({});
-			this.setView("#dashboard-content", new Views.ReplicationForm({
+      this.setView("#dashboard-content", new Views.ReplicationForm({
         selectedDB: dbname ||"",
-				collection: this.databases,
+        collection: this.databases,
         status:  this.tasks
-			}));  
+      }));
     }
   });
 
 
-	Replication.RouteObjects = [RepRouteObject];
+  Replication.RouteObjects = [RepRouteObject];
 
   return Replication;
 });

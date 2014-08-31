@@ -32,7 +32,7 @@ function(app, FauxtonAPI, Components, replication) {
   // -----------------------------------
   // afterRender: autocomplete on the target input field
   // beforeRender:  add the status table
-  // disableFields:  disable non active fields on submit 
+  // disableFields:  disable non active fields on submit
   // enableFields:  enable field when radio btns are clicked
   // establish:  get the DB list for autocomplete
   // formValidation:  make sure fields aren't empty
@@ -153,7 +153,7 @@ function(app, FauxtonAPI, Components, replication) {
         }
       });
       this.enableFields();
-    },		
+    },
     updateButtonText: function(wait){
       var $button = this.$('#replication button[type=submit]');
       if(wait){
@@ -163,7 +163,7 @@ function(app, FauxtonAPI, Components, replication) {
       }
     },
     submit: function(e){
-      this.disableFields(); 
+      this.disableFields();
       var formJSON = {};
       _.map(this.$(e.currentTarget).serializeArray(), function(formData){
         if(formData.value !== ''){
@@ -173,7 +173,7 @@ function(app, FauxtonAPI, Components, replication) {
 
       this.updateButtonText(true);
       this.startReplication(formJSON);
-    },	
+    },
     swapFields: function(e){
       //WALL O' VARIABLES
       var $fromSelect = this.$('#from_name'),
@@ -219,7 +219,7 @@ function(app, FauxtonAPI, Components, replication) {
     },
     beforeRender:  function(){
       this.collection.forEach(function(item) {
-        this.insertView(new View.replicationItem({ 
+        this.insertView(new View.replicationItem({
           model: item
         }));
       }, this);
