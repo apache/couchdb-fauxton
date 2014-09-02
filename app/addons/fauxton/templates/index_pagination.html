@@ -12,13 +12,9 @@ License for the specific language governing permissions and limitations under
 the License.
 -->
 
-<div class="pagination pagination-centered">
-  <ul>
-    <li <% if (!canShowPreviousfn()) {%> class="disabled" <% } %>>
-       <a id="previous" href="#"> Previous </a>
-     </li>
-     <li <% if (!canShowNextfn()) {%> class="disabled" <% } %>>
-       <a id="next" href="#"> Next </a></li>
-  </ul>
-</div>
-
+<li <% if (!canShowPreviousfn()) {%> class="disabled" <% } %>>
+ <a id="previous" class="icon fonticon-left-open" href="#"></a>
+</li>
+<li <% if (!canShowNextfn()) {%> class="disabled" <% } %>>
+ <a id="next" class="icon fonticon-right-open" href="#"></a>
+</li>

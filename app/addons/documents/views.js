@@ -578,6 +578,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
     serialize: function() {
       return {
         viewList: this.viewList,
+        resizeLayout: this.viewList ? "-half":"",
         expandDocs: this.expandDocs,
         endOfResults: !this.pagination.canShowNextfn()
       };

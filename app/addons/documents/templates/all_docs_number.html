@@ -12,9 +12,10 @@ License for the specific language governing permissions and limitations under
 the License.
 -->
 <% if (totalRows === "unknown" || totalRows === 0){ %>
-Showing 0 documents. <a href="#/database/<%=database%>/new"> Create your first document.</a>
+<p>Showing 0 documents.</p>
 <% } else { %>
-Showing <%=pageStart%> - <%= pageEnd %>
+
+<p>Showing <%=pageStart%> - <%= pageEnd %></p>
 <%}%>
 <% if (updateSeq) { %>
 -- Update Sequence: <%= updateSeq %>

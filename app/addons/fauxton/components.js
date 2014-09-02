@@ -212,6 +212,8 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
 
 
   Components.IndexPagination = FauxtonAPI.View.extend({
+    className: "pagination pagination-centered",
+    tagName: 'ul',
     template: "addons/fauxton/templates/index_pagination",
     events: {
       "click a": 'scrollTo',
@@ -254,6 +256,10 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
       }
 
       return this.collection.hasNext();
+    },
+
+    afterRender: function () {
+      app.resizeColumns.onResizeHandler();
     },
 
     previousClicked: function (event) {
