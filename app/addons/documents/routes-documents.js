@@ -185,11 +185,9 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
 
       this.sidebar.setSelectedTab(app.utils.removeSpecialCharacters(ddoc)+"_metadata");
 
-      this.crumbs = function () {
-        return [
-          {"name": this.database.id, "link": Databases.databaseUrl(this.database)},
-        ];
-      };
+
+      this.leftheader.updateCrumbs(crumbs.allDocs(this.database)); 
+      this.leftheader.forceRender();
 
       this.apiUrl = [designDocInfo.url('apiurl'), designDocInfo.documentation() ];
 
@@ -234,6 +232,7 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
       }
 
       this.leftheader.updateCrumbs(crumbs.allDocs(this.database)); 
+      this.leftheader.forceRender();
       this.database.buildAllDocs(docParams);
 
       if (docParams.startkey && docParams.startkey.indexOf('_design') > -1) {
@@ -307,6 +306,7 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
       this.sidebar.setSelectedTab(app.utils.removeSpecialCharacters(ddoc) + '_' + app.utils.removeSpecialCharacters(view));
 
       this.rightHeader.updateApiUrl([this.indexedDocs.urlRef("apiurl", urlParams), "docs"]);
+      this.leftheader.forceRender();
     },
 
     ddocInfo: function (designDoc, designDocs, view) {
