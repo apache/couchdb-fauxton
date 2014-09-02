@@ -26,12 +26,9 @@ define([
        "plugins/prettify"
 ],
 
-function(app, FauxtonAPI, Components, Documents, Databases,
-         resizeColumns, prettify) {
+function(app, FauxtonAPI, Components, Documents, Databases, resizeColumns, prettify) {
 
   var Views = {};
-
-  /* Attachments upload modal */
 
   Views.UploadModal = Components.ModalView.extend({
     template: "addons/documents/templates/upload_modal",
@@ -141,18 +138,19 @@ function(app, FauxtonAPI, Components, Documents, Databases,
           editorId: "string-editor-container",
           mode: "plain"
         });
-        this.subEditor.render();
+
+        this.subEditor.render().promise().then(function () {
         /* optimize by disabling auto sizing (35 is the lines fitting into the pop-up) */
-        this.subEditor.configureFixedHeightEditor(35);
+          this.subEditor.configureFixedHeightEditor(35);
+        }.bind(this));
       }
     },
 
     cleanup: function () {
-      if (this.subEditor) this.subEditor.remove();
+      if (this.subEditor) { this.subEditor.remove(); }
     }
 
   });
-
 
   /* Doc Duplication modal */
   Views.DuplicateDocModal = Components.ModalView.extend({
@@ -232,16 +230,15 @@ function(app, FauxtonAPI, Components, Documents, Databases,
       var selEnd = this.editor.getSelectionEnd().row;
       /* one JS(ON) string can't span more than one line - we edit one string, so ensure we don't select several lines */
       if (selStart >=0 && selEnd >= 0 && selStart === selEnd && this.editor.isRowExpanded(selStart)) {    
-        var editLine = this.editor.getLine(selStart);
-	var editMatch = editLine.match(/^([ \t]*)("[a-zA-Z0-9_]*": )?(".*",?[ \t]*)$/);
-	if (editMatch) {
+        var editLine = this.editor.getLine(selStart),
+            editMatch = editLine.match(/^([ \t]*)("[a-zA-Z0-9_]*": )?(".*",?[ \t]*)$/);
+
+        if (editMatch) {
           return editMatch;
-	} else {
-          return null;
-	}
-      } else {
-        return null;
-      }
+        }
+      } 
+
+      return null;
     }, 
 
     showHideEditDocString: function (event) {
@@ -312,14 +309,10 @@ function(app, FauxtonAPI, Components, Documents, Databases,
 
     beforeRender: function () {
       this.uploadModal = this.setView('#upload-modal', new Views.UploadModal({model: this.model}));
-      this.uploadModal.render();
-
       this.duplicateModal = this.setView('#duplicate-modal', new Views.DuplicateDocModal({model: this.model}));
 
       /* initialization is automatic - and make sure ONCE */
       this.stringEditModal = this.stringEditModal || this.setView('#string-edit-modal', new Views.StringEditModal());
-      /* this.stringEditModal.render(); */
-      this.duplicateModal.render();
     },
 
     upload: function (event) {
@@ -473,6 +466,8 @@ function(app, FauxtonAPI, Components, Documents, Databases,
           editor,
           model;
 
+      this.listenTo(this.model, "sync", this.updateValues);
+
       this.editor = new Components.Editor({
         editorId: "editor-container",
         forceMissingId: true,
@@ -485,46 +480,51 @@ function(app, FauxtonAPI, Components, Documents, Databases,
           readOnly: true // false if this command should not apply in readOnly mode
         }]
       });
+
       this.editor.render();
 
       editor = this.editor;
       model = this.model;
+      //only start listening to editor once it has been rendered
+      this.editor.promise().then(function () {
 
-      this.listenTo(this.model, "sync", this.updateValues);
-      this.listenTo(editor.editor, "change", function (event) {
-        var changedDoc;
-        try {
-          changedDoc = JSON.parse(editor.getValue());
-        } catch(exception) {
-          //not complete doc. Cannot work with it
-          return;
-        }
+        this.listenTo(editor.editor, "change", function (event) {
+          var changedDoc;
+          try {
+            changedDoc = JSON.parse(editor.getValue());
+          } catch(exception) {
+            //not complete doc. Cannot work with it
+            return;
+          }
 
-        var keyChecked = ["_id"];
-        if (model.get("_rev")) { keyChecked.push("_rev");}
+          var keyChecked = ["_id"];
+          if (model.get("_rev")) { keyChecked.push("_rev");}
 
-        //check the changedDoc has all the required standard keys
-        if (_.isEmpty(_.difference(keyChecked, _.keys(changedDoc)))) { return; }
+          //check the changedDoc has all the required standard keys
+          if (_.isEmpty(_.difference(keyChecked, _.keys(changedDoc)))) { return; }
 
-        editor.setReadOnly(true);
-        setTimeout(function () { editor.setReadOnly(false);}, 400);
-        // use extend so that _id stays at the top of the object with displaying the doc
-        changedDoc = _.extend({_id: model.id, _rev: model.get("_rev")}, changedDoc);
-        editor.setValue(JSON.stringify(changedDoc, null, "  "));
-        FauxtonAPI.addNotification({
-          type: "error",
-          msg: "Cannot remove a documents Id or Revision.",
-          clear:  true
+          editor.setReadOnly(true);
+          setTimeout(function () { editor.setReadOnly(false);}, 400);
+          // use extend so that _id stays at the top of the object with displaying the doc
+          changedDoc = _.extend({_id: model.id, _rev: model.get("_rev")}, changedDoc);
+          editor.setValue(JSON.stringify(changedDoc, null, "  "));
+          FauxtonAPI.addNotification({
+            type: "error",
+            msg: "Cannot remove a documents Id or Revision.",
+            clear:  true
+          });
         });
-      });
 
-      var that = this;
-      this.listenTo(editor.editor, "changeSelection", function (event) {
-        that.showHideEditDocString(event);
-      });
-      this.listenTo(editor.editor.session, "changeBackMarker", function (event) {
-        that.showHideEditDocString(event);
-      });
+        var showHideEditDocString = _.bind(this.showHideEditDocString, this);
+
+        this.listenTo(editor.editor, "changeSelection", function (event) {
+          showHideEditDocString(event);
+        });
+        this.listenTo(editor.editor.session, "changeBackMarker", function (event) {
+          showHideEditDocString(event);
+        });
+
+      }.bind(this));
     },
 
     cleanup: function () {

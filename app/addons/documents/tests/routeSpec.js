@@ -19,14 +19,6 @@ define([
   describe('Documents Route', function () {
 
     describe('changes route', function () {
-
-      it('Should set correct changes api url', function () {
-        var docRoute = new DocumentRoute('changes', {}, ['fakeDB']);
-        docRoute.changes();
-
-        assert.ok(/\/database\/fakeDB\/_changes\?descending=true&limit=100&include_docs=true/.test(docRoute.apiUrl()[0]));
-      });
-
     });
   });
 
