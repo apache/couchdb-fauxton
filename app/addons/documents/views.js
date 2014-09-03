@@ -193,8 +193,6 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
     }
   });
 
-
-
   Views.Document = FauxtonAPI.View.extend({
     template: "addons/documents/templates/all_docs_item",
     tagName: "tr",
@@ -578,7 +576,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
     serialize: function() {
       return {
         viewList: this.viewList,
-        resizeLayout: this.viewList ? "-half":"",
+        resizeLayout: "", //this.viewList ? "-half":"",
         expandDocs: this.expandDocs,
         endOfResults: !this.pagination.canShowNextfn()
       };
@@ -668,6 +666,9 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
 
     setCollection: function (collection) {
       this.collection = collection;
+      if (!this.pagination) {
+        this.addPagination();
+      }
       this.pagination.setCollection(collection);
       this.allDocsNumber.setCollection(collection);
     },

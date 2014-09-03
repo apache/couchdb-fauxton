@@ -22,6 +22,10 @@ define([
 
   describe('IndexPaginate', function () {
     var viewSandbox, paginate, collection, navigateMock;
+    app.resizeColumns = {
+      onResizeHandler: function () {}
+    };
+
     beforeEach(function (done) {
       collection = new Models.IndexCollection([{
         id:'myId1',

@@ -168,7 +168,6 @@ function(app, FauxtonAPI, Components, Documents, Databases, pouchdb,
           that.mapEditor.editSaved();
           that.reduceEditor && that.reduceEditor.editSaved();
 
-
           FauxtonAPI.addNotification({
             msg: "View has been saved.",
             type: "success",
@@ -177,7 +176,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, pouchdb,
           });
 
           if (that.newView || viewNameChange) {
-            var fragment = '/database/' + that.database.safeID() +'/' + ddoc.safeID() + '/_view/' + app.utils.safeURLName(viewName);
+            var fragment = '/database/' + that.database.safeID() +'/' + ddoc.safeID() + '/_views/' + app.utils.safeURLName(viewName);
 
             FauxtonAPI.navigate(fragment, {trigger: false});
             that.newView = false;

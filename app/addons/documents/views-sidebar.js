@@ -37,6 +37,8 @@ function(app, FauxtonAPI, Components, Documents, Databases) {
         this.ddocID = options.ddocInfo.id;
         this.currView = options.ddocInfo.currView;
       }
+
+      this.designDocList = [];
     },
     showDeleteDatabaseModal: function(event){
       this.deleteDBModal.showModal();
@@ -105,12 +107,18 @@ function(app, FauxtonAPI, Components, Documents, Databases) {
         links: newLinks,
       }));
 
+      _.each(this.designDocList, function (view) { view.remove();});
+      this.designDocList = [];
+
       this.collection.each(function(design) {
         if (design.has('doc')){
-          this.insertView(new Views.DdocSidenav({
+          design.collection = this.collection;
+          var view = this.insertView(new Views.DdocSidenav({
             model: design,
             collection: this.collection
           }));
+
+          this.designDocList.push(view);
         }
       },this);
     },
@@ -151,15 +159,16 @@ function(app, FauxtonAPI, Components, Documents, Databases) {
     toggleArrow:  function(e){
       this.$(e.currentTarget).toggleClass("down");
     },
-    buildIndexList: function(collection, info){
+    buildIndexList: function(designDocs, info){
       var design = this.model.id.replace(/^_design\//,"");
+      var databaseId = this.model.database.id;
 
       this.insertView(".accordion-body", new Views.IndexItem({
         selector: info.selector,
         ddoc: design,
-        collection: collection[info.selector],
+        collection: designDocs[info.selector],
         name: info.name,
-        database: this.model.collection.database.id
+        database: databaseId
       }));
     },
 
@@ -170,7 +179,7 @@ function(app, FauxtonAPI, Components, Documents, Databases) {
         designDoc: ddocName,
         ddoc_clean: app.utils.removeSpecialCharacters(ddocName),
         ddoc_encoded: app.utils.safeURLName(ddocName),
-        database_encoded: app.utils.safeURLName(this.model.collection.database.id),
+        database_encoded: app.utils.safeURLName(this.model.database.id),
       };
     },
 
