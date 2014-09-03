@@ -62,7 +62,7 @@ function(Backbone, LayoutManager) {
     manage: true,
     disableLoader: false,
 
-    useRAF: true,
+    useRAF: false,
 
     forceRender: function () {
       this.hasRendered = false;
