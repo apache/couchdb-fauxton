@@ -334,6 +334,7 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
 
       this.toolsView && this.toolsView.remove();
       this.documentsView && this.documentsView.remove();
+      this.leftheader.forceRender();
 
       this.viewEditor = this.setView("#dashboard-upper-content", new Index.ViewEditor({
         currentddoc: "_design/"+designDoc || "",
