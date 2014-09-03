@@ -334,6 +334,7 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
 
       this.toolsView && this.toolsView.remove();
       this.documentsView && this.documentsView.remove();
+      this.leftheader.forceRender();
 
       this.viewEditor = this.setView("#dashboard-upper-content", new Index.ViewEditor({
         currentddoc: "_design/"+designDoc || "",
@@ -344,11 +345,9 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
       }));
 
       this.sidebar.setSelectedTab('new-view');
-      this.crumbs = function () {
-        return [
-          {"name": this.database.id, "link": Databases.databaseUrl(this.database)},
-        ];
-      };
+
+      //this.rightHeader.updateApiUrl([this.indexedDocs.urlRef("apiurl", urlParams), "docs"]);
+      this.leftheader.forceRender();
     },
 
     updateAllDocsFromView: function (event) {
@@ -407,18 +406,21 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
       this.documentsView.forceRender();
       this.documentsView.collection.pageSizeReset(perPage, {fetch: false});
       this.setDocPerPageLimit(perPage);
+      this.leftheader.forceRender();
     },
 
     paginate: function (options) {
       var collection = this.documentsView.collection;
 
       this.documentsView.forceRender();
+      this.leftheader.forceRender();
       collection.paging.pageSize = options.perPage;
       var promise = collection[options.direction]({fetch: false});
     },
 
     reloadDesignDocs: function (event) {
       this.sidebar.forceRender();
+      this.leftheader.forceRender();
 
       if (event && event.selectedTab) {
         this.sidebar.setSelectedTab(event.selectedTab);
