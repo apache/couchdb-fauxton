@@ -44,7 +44,6 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
         {"name": "_changes", "link": "/_changes"}
       ];
     }
-
   };
 
   var DocumentsRouteObject = FauxtonAPI.RouteObject.extend({

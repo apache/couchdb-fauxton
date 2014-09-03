@@ -44,7 +44,6 @@ function(app, FauxtonAPI, PagingCollection) {
     };
   })();
 
-
   Documents.Doc = FauxtonAPI.Model.extend({
     idAttribute: "_id",
     documentation: function(){

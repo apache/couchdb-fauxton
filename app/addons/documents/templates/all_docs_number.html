@@ -15,10 +15,10 @@ the License.
 <p>Showing 0 documents.</p>
 <% } else { %>
 
-<p>Showing <%=pageStart%> - <%= pageEnd %></p>
+<p>Showing <%-pageStart%> - <%- pageEnd %></p>
 <%}%>
 <% if (updateSeq) { %>
--- Update Sequence: <%= updateSeq %>
+-- Update Sequence: <%- updateSeq %>
 <% } %>
 
 <div id="per-page">

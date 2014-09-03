@@ -624,6 +624,13 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
       _.each(this.rows, function (row) {row.remove();});
     },
 
+    removeNestedViews: function () {
+      _.each(this.rows, function (row) {
+        row.remove();
+      });
+      this.rows = {};
+    },
+
     beforeRender: function() {
       var docs;
 
@@ -643,6 +650,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
       }
 
       this.setView('#item-numbers', this.allDocsNumber);
+      this.removeNestedViews();
 
       docs = this.expandDocs ? this.collection : this.collection.simple();
 
