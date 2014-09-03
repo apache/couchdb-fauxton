@@ -237,6 +237,7 @@ function(app, FauxtonAPI, Components, Replication) {
       }, pollingInfo.rate*1000);
     },
     cleanup: function(){
+      Events.unbind('update:tasks');
       clearInterval(pollingInfo.intervalId);
     },
     beforeRender:  function(){
