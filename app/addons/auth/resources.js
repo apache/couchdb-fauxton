@@ -77,6 +77,7 @@ function (app, FauxtonAPI, CouchdbSession) {
     isAdminParty: function () {
       var userCtx = this.get('userCtx');
 
+
       if (!userCtx.name && userCtx.roles.indexOf("_admin") > -1) {
         return true;
       }
@@ -87,6 +88,7 @@ function (app, FauxtonAPI, CouchdbSession) {
     isLoggedIn: function () {
       var userCtx = this.get('userCtx');
 
+      if (!userCtx) { return false;}
       if (userCtx.name) {
         return true;
       }
