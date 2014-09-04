@@ -36,6 +36,8 @@ function(app, FauxtonAPI, Databases, Views) {
       "_all_dbs(:params)": "allDatabases"
     },
 
+    roles: ['fx_loggedIn'],
+
     selectedHeader: "Databases",
 
     initialize: function() {
