@@ -16,28 +16,33 @@ define([
       'testUtils'
 ], function (FauxtonAPI, Resources, Views, testUtils) {
   var assert = testUtils.assert,
-      ViewSandbox = testUtils.ViewSandbox;
+      ViewSandbox = testUtils.ViewSandbox,
+      collection;
 
-  describe("Config: Modal", function () {
-    var optionModels = [],
-        viewSandbox,
-        modal,
-        collection;
 
-    beforeEach(function (done) {
-      _.each([1, 2, 3], function (i) {
-        optionModels
-          .push(new Resources.OptionModel({
-            section: "foo" + i,
-            name: "bar" + i,
-            options: [{
-              name: "testname"
-            }]
-          }));
+  beforeEach(function () {
+    var optionModels = [];
+
+    _.each([1, 2, 3], function (i) {
+      var model = new Resources.OptionModel({
+        section: "foo" + i,
+        name: "bar" + i,
+        options: [{
+          name: "testname"
+        }]
       });
 
-      collection = new Resources.Collection(optionModels);
+      optionModels.push(model);
+    });
 
+    collection = new Resources.Collection(optionModels);
+  });
+
+  describe("Config: Modal", function () {
+    var viewSandbox,
+        modal;
+
+    beforeEach(function (done) {
       modal = new Views.Modal({
         collection: collection
       });
@@ -53,14 +58,19 @@ define([
     it("looks if entries are new", function () {
       modal.$('input[name="section"]').val("foo1");
       modal.$('input[name="name"]').val("testname");
-      assert.ok(modal.isNew(collection));
+      assert.ok(modal.isUniqueEntryInSection(collection));
 
       modal.$('input[name="name"]').val("testname2");
-      assert.notOk(modal.isNew(collection));
+      assert.notOk(modal.isUniqueEntryInSection(collection));
     });
-
   });
 
+  describe("Config: Collection", function () {
+    it("looks if entries are new", function () {
+      assert.ok(collection.findEntryInSection("foo1", "testname"));
+      assert.notOk(collection.findEntryInSection("foo1", "testname2"));
+    });
+  });
 
   describe("Config: TableRow", function () {
     var tabMenu, optionModel;
