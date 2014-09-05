@@ -63,12 +63,26 @@ define([
       modal.$('input[name="name"]').val("testname2");
       assert.notOk(modal.isUniqueEntryInSection(collection));
     });
+
+    it("does not send an error for a new section", function () {
+      modal.$('input[name="section"]').val("newsection");
+      modal.$('input[name="name"]').val("testname");
+      modal.$('input[name="value"]').val("testvalue");
+      var spy = sinon.spy(modal, "errorMessage");
+
+      modal.validate();
+      assert.notOk(spy.called);
+    });
   });
 
   describe("Config: Collection", function () {
     it("looks if entries are new", function () {
       assert.ok(collection.findEntryInSection("foo1", "testname"));
       assert.notOk(collection.findEntryInSection("foo1", "testname2"));
+    });
+
+    it("returns false if findEntryInSection does not have the section", function () {
+      assert.notOk(collection.findEntryInSection("foo-not-exists", "testname"));
     });
   });
 
