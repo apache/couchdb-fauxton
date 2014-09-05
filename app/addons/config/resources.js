@@ -67,7 +67,13 @@ function (app, FauxtonAPI) {
 
     findEntryInSection: function (sectionName, entry) {
       var section = _.findWhere(this.toJSON(), {"section": sectionName}),
-          options = _.findWhere(section.options, {name: entry});
+          options;
+
+      if (!section) {
+        return false;
+      }
+
+      options = _.findWhere(section.options, {name: entry});
 
       return options;
     },
