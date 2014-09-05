@@ -85,7 +85,7 @@ function(app, FauxtonAPI, Config, Components) {
         sectionName = this.model.get("section");
         nameInSectionExists = this.collection.findEntryInSection(sectionName, $input.val());
         if (nameInSectionExists) {
-          this.error = FauxtonAPI.addNotification({
+          FauxtonAPI.addNotification({
             msg: "This config already exists, enter a unique name",
             type: "error",
             clear: true
@@ -222,14 +222,16 @@ function(app, FauxtonAPI, Config, Components) {
         this.submitForm();
       }
     },
-    errorMessage: function(msg){
-      this.error = FauxtonAPI.addNotification({
-          msg: msg,
-          type: "error",
-          clear: true,
-          selector: ".js-form-error-config"
+
+    errorMessage: function (msg) {
+      FauxtonAPI.addNotification({
+        msg: msg,
+        type: "error",
+        clear: true,
+        selector: ".js-form-error-config"
       });
     },
+
     show: function(){
       this.$el.modal({show:true});
     },
