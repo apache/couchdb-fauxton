@@ -46,7 +46,7 @@ function(app, FauxtonAPI, Config, Components) {
 
     uniqueName: function(name){
       var section = _.findWhere(this.collection.toJSON(), {"section":this.model.get("section")});
-      
+
       return _.findWhere(section.options, {name: name});
     },
 
@@ -157,9 +157,9 @@ function(app, FauxtonAPI, Config, Components) {
     events: {
       "submit #js-add-section-form": "validate"
     },
-    initialize: function(){
-      this.sourceArray = _.map(this.collection.toJSON(), function(item, key){ 
-        return item.section; 
+    initialize: function () {
+      this.sourceArray = _.map(this.collection.toJSON(), function (item, key) {
+        return item.section;
       });
     },
     afterRender: function(){
@@ -200,7 +200,7 @@ function(app, FauxtonAPI, Config, Components) {
           name = this.$('input[name="name"]').val();
           var section = _.findWhere(collection.toJSON(), {"section":sectionName});
           var options = _.findWhere(section.options, {name: name});
-          
+
           return options;
     },
     isSection: function(){

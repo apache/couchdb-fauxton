@@ -18,6 +18,50 @@ define([
   var assert = testUtils.assert,
       ViewSandbox = testUtils.ViewSandbox;
 
+  describe("Config: Modal", function () {
+    var optionModels = [],
+        viewSandbox,
+        modal,
+        collection;
+
+    beforeEach(function (done) {
+      _.each([1, 2, 3], function (i) {
+        optionModels
+          .push(new Resources.OptionModel({
+            section: "foo" + i,
+            name: "bar" + i,
+            options: [{
+              name: "testname"
+            }]
+          }));
+      });
+
+      collection = new Resources.Collection(optionModels);
+
+      modal = new Views.Modal({
+        collection: collection
+      });
+
+      viewSandbox = new ViewSandbox();
+      viewSandbox.renderView(modal, done);
+    });
+
+    afterEach(function () {
+      viewSandbox.remove();
+    });
+
+    it("looks if entries are new", function () {
+      modal.$('input[name="section"]').val("foo1");
+      modal.$('input[name="name"]').val("testname");
+      assert.ok(modal.isNew(collection));
+
+      modal.$('input[name="name"]').val("testname2");
+      assert.notOk(modal.isNew(collection));
+    });
+
+  });
+
+
   describe("Config: TableRow", function () {
     var tabMenu, optionModel;
 
