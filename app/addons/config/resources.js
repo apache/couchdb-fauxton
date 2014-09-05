@@ -52,14 +52,24 @@ function (app, FauxtonAPI) {
 
   Config.Collection = Backbone.Collection.extend({
     model: Config.Model,
+
     documentation: "config",
+
     comparator: function (OptionModel) {
       if (OptionModel.get("section")) {
         return OptionModel.get("section");
       }
     },
+
     url: function () {
       return app.host + '/_config';
+    },
+
+    findEntryInSection: function (sectionName, entry) {
+      var section = _.findWhere(this.toJSON(), {"section": sectionName}),
+          options = _.findWhere(section.options, {name: entry});
+
+      return options;
     },
 
     parse: function (resp) {

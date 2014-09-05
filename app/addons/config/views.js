@@ -44,12 +44,6 @@ function(app, FauxtonAPI, Config, Components) {
       this.remove();
     },
 
-    uniqueName: function(name){
-      var section = _.findWhere(this.collection.toJSON(), {"section":this.model.get("section")});
-
-      return _.findWhere(section.options, {name: name});
-    },
-
     editValue: function (event) {
       this.$(event.currentTarget).find(".js-show-value").addClass("js-hidden");
       this.$(event.currentTarget).find(".js-edit-value-form").removeClass("js-hidden");
@@ -81,12 +75,16 @@ function(app, FauxtonAPI, Config, Components) {
     },
     saveAndRender: function (event) {
       var options = {},
-          $input = this.$(event.currentTarget).parents('td').find(".js-value-input");
+          $input = this.$(event.currentTarget).parents('td').find(".js-value-input"),
+          sectionName,
+          nameInSectionExists;
 
       options[$input.attr('name')] = $input.val();
 
-      if ($input.attr('name')==='name'){
-        if (this.uniqueName($input.val())){
+      if ($input.attr('name') === 'name') {
+        sectionName = this.model.get("section");
+        nameInSectionExists = this.collection.findEntryInSection(sectionName, $input.val());
+        if (nameInSectionExists) {
           this.error = FauxtonAPI.addNotification({
             msg: "This config already exists, enter a unique name",
             type: "error",
@@ -195,13 +193,11 @@ function(app, FauxtonAPI, Config, Components) {
       Views.Events.trigger("newSection");
 
     },
-    isNew: function(collection){
+    isUniqueEntryInSection: function (collection) {
       var sectionName = this.$('input[name="section"]').val(),
-          name = this.$('input[name="name"]').val();
-          var section = _.findWhere(collection.toJSON(), {"section":sectionName});
-          var options = _.findWhere(section.options, {name: name});
+          entry = this.$('input[name="name"]').val();
 
-          return options;
+      return collection.findEntryInSection(sectionName, entry);
     },
     isSection: function(){
       var section = this.$('input[name="section"]').val();
@@ -220,7 +216,7 @@ function(app, FauxtonAPI, Config, Components) {
         this.errorMessage("Add a name");
       } else if (!value) {
         this.errorMessage("Add a value");
-      } else if (this.isNew(collection)){
+      } else if (this.isUniqueEntryInSection(collection)) {
         this.errorMessage("Must have a unique name");
       } else {
         this.submitForm();
