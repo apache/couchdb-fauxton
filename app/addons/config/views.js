@@ -17,10 +17,7 @@ define([
   "addons/fauxton/components"
 ],
 function(app, FauxtonAPI, Config, Components) {
-  var Views ={},
-      Events = {};
-
-  Views.Events = _.extend(Events, Backbone.Events);
+  var Views = {};
 
   Views.TableRow = FauxtonAPI.View.extend({
     tagName: "tr",
@@ -35,12 +32,18 @@ function(app, FauxtonAPI, Config, Components) {
       "keyup .js-value-input": "processKeyEvents"
     },
 
-    deleteValue: function (event) {
-      var result = confirm("Are you sure you want to delete this configuration value?");
+    deleteValue: function () {
+      var collection = this.collection,
+          result = confirm("Are you sure you want to delete this configuration value?");
 
       if (!result) { return; }
 
-      this.model.destroy();
+      this.model.destroy().done(function () {
+        collection.fetch({reset: true}).done(function () {
+          FauxtonAPI.Events.trigger("config:rerender");
+        });
+      });
+
       this.remove();
     },
 
@@ -113,7 +116,8 @@ function(app, FauxtonAPI, Config, Components) {
     },
 
     initialize: function(){
-      this.listenTo(Views.Events, "newSection", this.render);
+      this.listenTo(FauxtonAPI.Events, "config:newSection", this.render);
+      this.listenTo(FauxtonAPI.Events, "config:rerender", this.render);
     },
 
     addSection: function (event) {
@@ -195,8 +199,7 @@ function(app, FauxtonAPI, Config, Components) {
       }
 
       this.hide();
-      Views.Events.trigger("newSection");
-
+      FauxtonAPI.Events.trigger("config:newSection");
     },
 
     isUniqueEntryInSection: function (collection) {
