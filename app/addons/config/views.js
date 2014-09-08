@@ -44,12 +44,6 @@ function(app, FauxtonAPI, Config, Components) {
       this.remove();
     },
 
-    uniqueName: function(name){
-      var section = _.findWhere(this.collection.toJSON(), {"section":this.model.get("section")});
-      
-      return _.findWhere(section.options, {name: name});
-    },
-
     editValue: function (event) {
       this.$(event.currentTarget).find(".js-show-value").addClass("js-hidden");
       this.$(event.currentTarget).find(".js-edit-value-form").removeClass("js-hidden");
@@ -81,13 +75,17 @@ function(app, FauxtonAPI, Config, Components) {
     },
     saveAndRender: function (event) {
       var options = {},
-          $input = this.$(event.currentTarget).parents('td').find(".js-value-input");
+          $input = this.$(event.currentTarget).parents('td').find(".js-value-input"),
+          sectionName,
+          nameInSectionExists;
 
       options[$input.attr('name')] = $input.val();
 
-      if ($input.attr('name')==='name'){
-        if (this.uniqueName($input.val())){
-          this.error = FauxtonAPI.addNotification({
+      if ($input.attr('name') === 'name') {
+        sectionName = this.model.get("section");
+        nameInSectionExists = this.collection.findEntryInSection(sectionName, $input.val());
+        if (nameInSectionExists) {
+          FauxtonAPI.addNotification({
             msg: "This config already exists, enter a unique name",
             type: "error",
             clear: true
@@ -153,23 +151,28 @@ function(app, FauxtonAPI, Config, Components) {
 
   Views.Modal = FauxtonAPI.View.extend({
     className: "modal hide fade",
+
     template:  "addons/config/templates/modal",
+
     events: {
-      "submit #js-add-section-form": "validate"
+      "submit #js-add-section-form": "submitClick"
     },
-    initialize: function(){
-      this.sourceArray = _.map(this.collection.toJSON(), function(item, key){ 
-        return item.section; 
+
+    initialize: function () {
+      this.sourceArray = _.map(this.collection.toJSON(), function (item, key) {
+        return item.section;
       });
     },
-    afterRender: function(){
+
+    afterRender: function () {
       this.sectionTypeAhead = new Components.Typeahead({
         source: this.sourceArray,
         el: 'input[name="section"]'
       });
       this.sectionTypeAhead.render();
     },
-    submitForm: function (event) {
+
+    submitForm: function () {
       var option = new Config.OptionModel({
         section: this.$('input[name="section"]').val(),
         name: this.$('input[name="name"]').val(),
@@ -195,45 +198,50 @@ function(app, FauxtonAPI, Config, Components) {
       Views.Events.trigger("newSection");
 
     },
-    isNew: function(collection){
+
+    isUniqueEntryInSection: function (collection) {
       var sectionName = this.$('input[name="section"]').val(),
-          name = this.$('input[name="name"]').val();
-          var section = _.findWhere(collection.toJSON(), {"section":sectionName});
-          var options = _.findWhere(section.options, {name: name});
-          
-          return options;
+          entry = this.$('input[name="name"]').val();
+
+      return collection.findEntryInSection(sectionName, entry);
     },
-    isSection: function(){
+
+    isSection: function () {
       var section = this.$('input[name="section"]').val();
       return _.find(this.sourceArray, function(item){ return item === section; });
     },
-    validate: function (event){
+
+    submitClick: function (event) {
       event.preventDefault();
+      this.validate();
+    },
+
+    validate: function () {
       var section = this.$('input[name="section"]').val(),
           name = this.$('input[name="name"]').val(),
           value = this.$('input[name="value"]').val(),
           collection = this.collection;
 
-      if(!this.isSection()){
-         this.errorMessage("You need to use an existing section");
-      } else if (!name) {
+      if (!name) {
         this.errorMessage("Add a name");
       } else if (!value) {
         this.errorMessage("Add a value");
-      } else if (this.isNew(collection)){
+      } else if (this.isUniqueEntryInSection(collection)) {
         this.errorMessage("Must have a unique name");
       } else {
         this.submitForm();
       }
     },
-    errorMessage: function(msg){
-      this.error = FauxtonAPI.addNotification({
-          msg: msg,
-          type: "error",
-          clear: true,
-          selector: ".js-form-error-config"
+
+    errorMessage: function (msg) {
+      FauxtonAPI.addNotification({
+        msg: msg,
+        type: "error",
+        clear: true,
+        selector: ".js-form-error-config"
       });
     },
+
     show: function(){
       this.$el.modal({show:true});
     },
