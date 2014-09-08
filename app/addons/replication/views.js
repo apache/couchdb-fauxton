@@ -16,7 +16,7 @@ define([
        "addons/fauxton/components",
        "addons/replication/resources"
 ],
-function(app, FauxtonAPI, Components, replication) {
+function(app, FauxtonAPI, Components, Replication) {
   var View = {},
   Events ={},
   pollingInfo ={
@@ -32,7 +32,7 @@ function(app, FauxtonAPI, Components, replication) {
   // -----------------------------------
   // afterRender: autocomplete on the target input field
   // beforeRender:  add the status table
-  // disableFields:  disable non active fields on submit 
+  // disableFields:  disable non active fields on submit
   // enableFields:  enable field when radio btns are clicked
   // establish:  get the DB list for autocomplete
   // formValidation:  make sure fields aren't empty
@@ -42,7 +42,7 @@ function(app, FauxtonAPI, Components, replication) {
   // swapFields:  change to and from target
   // toggleAdvancedOptions:  toggle advanced
 
-  View.ReplicationForm = FauxtonAPI.View.extend({
+  View.ReplicationFormForAdmins = FauxtonAPI.View.extend({
     template: "addons/replication/templates/form",
     events:  {
       "submit #replication": "validate",
@@ -53,7 +53,7 @@ function(app, FauxtonAPI, Components, replication) {
     initialize: function(options){
       this.status = options.status;
       this.selectedDB = options.selectedDB;
-      this.newRepModel = new replication.Replicate({});
+      this.newRepModel = new Replication.Replicate({});
     },
     afterRender: function(){
       this.dbSearchTypeahead = new Components.DbSearchTypeahead({
@@ -66,7 +66,7 @@ function(app, FauxtonAPI, Components, replication) {
     },
 
     beforeRender:  function(){
-      this.insertView("#replicationStatus", new View.ReplicationList({
+      this.insertView("#replicationStatus", new View.ReplicationListForAdmins({
         collection: this.status
       }));
     },
@@ -90,7 +90,7 @@ function(app, FauxtonAPI, Components, replication) {
       }
     },
     establish: function(){
-      return [ this.collection.fetch(), this.status.fetch()];
+      return [this.collection.fetch(), this.status.fetch()];
     },
     validate: function(e){
       e.preventDefault();
@@ -101,18 +101,19 @@ function(app, FauxtonAPI, Components, replication) {
           type: "error",
           clear: true
         });
+        return;
       }else if (this.$('input#to_name').is(':visible') && !this.$('input[name=create_target]').is(':checked')){
         var alreadyExists = this.collection.where({"name":this.$('input#to_name').val()});
-        if (alreadyExists.length === 0){
-          notification = FauxtonAPI.addNotification({
+        if (alreadyExists.length === 0) {
+          FauxtonAPI.addNotification({
             msg: "This database doesn't exist. Check create target if you want to create it.",
             type: "error",
             clear: true
           });
+          return;
         }
-      }else{
-        this.submit(e);
       }
+      this.submit(e);
     },
     formValidation: function(e){
       var $remote = this.$el.find('input:visible'),
@@ -153,7 +154,7 @@ function(app, FauxtonAPI, Components, replication) {
         }
       });
       this.enableFields();
-    },		
+    },
     updateButtonText: function(wait){
       var $button = this.$('#replication button[type=submit]');
       if(wait){
@@ -163,7 +164,7 @@ function(app, FauxtonAPI, Components, replication) {
       }
     },
     submit: function(e){
-      this.disableFields(); 
+      this.disableFields();
       var formJSON = {};
       _.map(this.$(e.currentTarget).serializeArray(), function(formData){
         if(formData.value !== ''){
@@ -173,7 +174,7 @@ function(app, FauxtonAPI, Components, replication) {
 
       this.updateButtonText(true);
       this.startReplication(formJSON);
-    },	
+    },
     swapFields: function(e){
       //WALL O' VARIABLES
       var $fromSelect = this.$('#from_name'),
@@ -196,8 +197,29 @@ function(app, FauxtonAPI, Components, replication) {
     }
   });
 
+  View.ReplicationForm = View.ReplicationFormForAdmins.extend({
+    template: "addons/replication/templates/form",
 
-  View.ReplicationList = FauxtonAPI.View.extend({
+    events: {
+      "submit #replication": "validate",
+      "click .btn-group .btn": "showFields",
+      "click .swap": "swapFields",
+      "click .options": "toggleAdvancedOptions"
+    },
+
+    initialize: function (options) {
+      this.selectedDB = options.selectedDB;
+      this.newRepModel = new Replication.Replicate({});
+    },
+
+    beforeRender: function () {},
+
+    establish: function () {
+      return [this.collection.fetch()];
+    },
+  });
+
+  View.ReplicationListForAdmins = FauxtonAPI.View.extend({
     tagName: "ul",
     initialize:  function(){
       Events.bind('update:tasks', this.establish, this);
@@ -215,21 +237,19 @@ function(app, FauxtonAPI, Components, replication) {
       }, pollingInfo.rate*1000);
     },
     cleanup: function(){
+      Events.unbind('update:tasks');
       clearInterval(pollingInfo.intervalId);
     },
     beforeRender:  function(){
       this.collection.forEach(function(item) {
-        this.insertView(new View.replicationItem({ 
+        this.insertView(new View.replicationItem({
           model: item
         }));
       }, this);
     },
     showHeader: function(){
-      if (this.collection.length > 0){
-        this.$el.parent().addClass('showHeader');
-      } else {
-        this.$el.parent().removeClass('showHeader');
-      }
+      this.$el.parent()
+        .toggleClass('showHeader', this.collection.length > 0);
     },
     afterRender: function(){
       this.showHeader();
@@ -246,7 +266,7 @@ function(app, FauxtonAPI, Components, replication) {
       "click .cancel": "cancelReplication"
     },
     initialize: function(){
-      this.newRepModel = new replication.Replicate({});
+      this.newRepModel = new Replication.Replicate({});
     },
     establish: function(){
       return [this.model.fetch()];
