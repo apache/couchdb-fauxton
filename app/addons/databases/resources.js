@@ -59,7 +59,7 @@ function(app, FauxtonAPI, Documents) {
       } else if (context === "changes") {
         return "/database/" + this.safeID() + "/_changes?descending=true&limit=100&include_docs=true";
       } else if (context === "changes-apiurl") { 
-        return window.location.origin + "/database/" + this.safeID() + "/_changes?descending=true&limit=100&include_docs=true";
+        return window.location.origin + "/" + this.safeID() + "/_changes?descending=true&limit=100&include_docs=true";
       } else if (context === "app") {
         return "/database/" + this.safeID();
       } else {
