@@ -157,7 +157,6 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
       this.$el.removeClass('hide');
     },
     update: function(endpoint) {
-      this.show();
       this.endpoint = endpoint[0];
       this.documentation = endpoint[1];
       this.render();
