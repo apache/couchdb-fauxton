@@ -68,7 +68,7 @@ It's best at this point to read through a couple of the modules and addons to ge
 Each module must have a `base.js` file, this is read and compile when Fauxton is deployed. A `resource.js` file is usually for your Backbone.Models and Backbone.Collections,
 `view.js` for your Backbone.Views. The `routes.js` is used to register a url path for your view along with what layout, data, breadcrumbs and api point is required for the view.
 
-Check out (writing_addons.md)[writing_addons.md] for more information on writing your own addons.
+Check out [writing_addons.md](writing_addons.md) for more information on writing your own addons.
 
 ## Todo items
 
