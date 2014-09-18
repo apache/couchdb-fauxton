@@ -1099,9 +1099,14 @@ div.add-dropdown {
   }
 }
 
+/* only specify the sidebar width when there’s a sidebar */
+.with-sidebar #breadcrumbs {
+  width: @sidebarWidth;
+}
+
 #breadcrumbs {
   height: 60px;
-  width: @sidebarWidth;
+
   /* these styles are for the new header*/
   .header-left{
     > div{
