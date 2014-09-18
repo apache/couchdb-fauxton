@@ -52,8 +52,8 @@ function(app, FauxtonAPI, Documents, DocEditor, Databases) {
 
     crumbs: function() {
       return [
-        {"name": this.database.id, "link": Databases.databaseUrl(this.database)}
-        //{"name": this.docID, "link": "#"}
+        {"name": this.database.id, "link": Databases.databaseUrl(this.database)},
+        {"name": this.docID, "link": "#"}
       ];
     },
 
