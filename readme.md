@@ -20,6 +20,16 @@ A recent of [node.js](http://nodejs.org/) and npm is required.
     4. npm install
 
 
+### Install the grunt-cli
+In case you don't have the grunt command line interface installed, run the following command:
+
+    npm install -g grunt-cli
+
+If you run into a permissions problem, run that last command as an administrator:
+
+    sudo npm install -g grunt-cli
+
+
 ### NOTE: Before you run fauxton, don't forget to start couchdb!
 
 ### Dev Server
@@ -31,7 +41,6 @@ And then...
     grunt dev
 
 You should be able to access fauxton on `http://localhost:8000`
-
 
 ### Prepare Fauxton Release
     Follow the "Fauxton Setup" section,
@@ -53,11 +62,13 @@ You should be able to access fauxton on `http://localhost:8000`
 
 ## Understanding the Fauxton Code layout
 
-Each bit of functionality is its own seperate module or addon. All core modules are stored under `app/module` and any addons that are optional are under `app/addons`.
+Each bit of functionality is its own separate module or addon. All core modules are stored under `app/module` and any addons that are optional are under `app/addons`.
 We use [backbone.js](http://backbonejs.org/) and [Backbone.layoutmanager](https://github.com/tbranyen/backbone.layoutmanager) quite heavily, so best to get an idea how they work.
-Its best at this point to read through a couple of the modules and addons to get an idea of how they work. Two good starting points are `app/addon/config` and `app/modules/databases`.
+It's best at this point to read through a couple of the modules and addons to get an idea of how they work. Two good starting points are `app/addon/config` and `app/modules/databases`.
 Each module must have a `base.js` file, this is read and compile when Fauxton is deployed. A `resource.js` file is usually for your Backbone.Models and Backbone.Collections,
 `view.js` for your Backbone.Views. The `routes.js` is used to register a url path for your view along with what layout, data, breadcrumbs and api point is required for the view.
+
+Check out [writing_addons.md](writing_addons.md) for more information on writing your own addons.
 
 ## Todo items
 
