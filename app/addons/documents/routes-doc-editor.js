@@ -19,7 +19,7 @@ define([
   //views
   "addons/documents/views",
   "addons/documents/views-doceditor",
-  "addons/databases/base",
+  "addons/databases/base"
 ],
 
 function(app, FauxtonAPI, Documents, DocEditor, Databases) {
@@ -28,6 +28,7 @@ function(app, FauxtonAPI, Documents, DocEditor, Databases) {
     layout: "one_pane",
     disableLoader: true,
     selectedHeader: "Databases",
+
     initialize: function(route, masterLayout, options) {
       var databaseName = options[0];
       this.docID = options[1]||'new';
@@ -104,8 +105,8 @@ function(app, FauxtonAPI, Documents, DocEditor, Databases) {
       this.doc = new Documents.NewDoc(null,{
         database: this.database
       });
-
     },
+
     crumbs: function() {
       return [
         {"name": this.database.id, "link": Databases.databaseUrl(this.database)},
@@ -115,8 +116,7 @@ function(app, FauxtonAPI, Documents, DocEditor, Databases) {
     routes: {
       "database/:database/new": "code_editor"
     },
-    selectedHeader: "Databases",
-
+    selectedHeader: "Databases"
   });
 
   

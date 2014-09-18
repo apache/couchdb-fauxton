@@ -85,6 +85,7 @@ function(app, FauxtonAPI, resizeColumns, Components, ZeroClipboard) {
     FauxtonAPI.RouteObject.on('renderComplete', function (routeObject) {
       var masterLayout = FauxtonAPI.masterLayout;
       if (routeObject.get('apiUrl')){
+        masterLayout.apiBar.show();
         masterLayout.apiBar.update(routeObject.get('apiUrl'));
       } else {
         masterLayout.apiBar.hide();
