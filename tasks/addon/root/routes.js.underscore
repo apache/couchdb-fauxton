@@ -16,7 +16,7 @@ define([
   "addons/{%= name.toLowerCase() %}/resources"
 ],
 function(app, FauxtonAPI, {%= name %}) {
-  {%= name.substr(0, 1).toUpperCase() + name.substr(1)%}RouteObject = FauxtonAPI.RouteObject.extend({
+  var {%= name.substr(0, 1).toUpperCase() + name.substr(1)%}RouteObject = FauxtonAPI.RouteObject.extend({
     layout: "with_sidebar",
 
     crumbs: [
@@ -32,10 +32,8 @@ function(app, FauxtonAPI, {%= name %}) {
     },
 
     initialize: function () {
-    },
-
+    }
   });
-
 
   {%= name %}.RouteObjects =  [{%= name.substr(0, 1).toUpperCase() + name.substr(1)%}RouteObject];
   return {%= name %};
