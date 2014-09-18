@@ -131,6 +131,12 @@ function(app, FauxtonAPI, Components, Documents, Databases, resizeColumns, prett
       this.showModal();
     },
 
+    beforeRender: function() {
+      this.apiBar = this.insertView("#header-api-bar", new Components.ApiBar({
+        endpoint: this.endpoint
+      }));
+    },
+
     afterRender: function() {
       /* make sure we init only ONCE */
       if (!this.subEditor) {
