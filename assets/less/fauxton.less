@@ -16,7 +16,6 @@
  * Fauxton less style files
  *
  */
-@import "bootstrap/variables.less";
 @import "variables.less";
 @import "bootstrap/bootstrap.less";
 @import "bootstrap/mixins.less";
@@ -54,7 +53,7 @@ a:active {
 }
 
 a:hover {
-  color: @red;
+  color: @linkColorHover;
 }
 
 input[type=text],
@@ -104,8 +103,8 @@ select {
     border-right: none;
     &:hover,
     &:focus {
-      background-color: @linkRed;
-      border-top: 1px solid @red;
+      background-color: @linkColor;
+      border-top: 1px solid @linkColor;
       color: white;
     }
   }
@@ -153,7 +152,7 @@ table tr td{
   }
 }
 thead {
-  border-bottom: 2px solid @redButton;
+  border-bottom: 2px solid @brandPrimary;
 }
 tbody {
   padding-top: 10px;
@@ -206,7 +205,7 @@ tbody {
   }
 }
 .btn-primary {
-  background: @redButton;
+  background: @brandPrimary;
 }
 
 .btn-primary a:visited {
@@ -392,7 +391,7 @@ table.databases {
           margin: 2px 0px;
         }
         &:hover div{
-          background-color: @orange;
+          background-color: @navBGHover;
         }
       }
       .bottom-container {
@@ -429,7 +428,7 @@ table.databases {
        li {
        a {
          font-size: 12px;
-         color: @red;
+         color: @linkColor;
          padding: 12px;
          text-shadow: none;
        }
@@ -462,7 +461,7 @@ table.databases {
             a{
               .box-shadow(none);
             }
-            background-color: @red;
+            background-color: @navBGHover;
           }
           &:hover .fonticon:before{
             color: @white;
@@ -501,20 +500,20 @@ table.databases {
       ul#footer-nav-links{
         li{
           background-color: @primaryNav;
-          border-top: 1px solid @red;
+          border-top: 1px solid @linkColor;
           border-bottom: none;
           font-size: 12px;
           padding: 12px;
           min-height: 44px;
           &.active, &:hover{
-            background-color: @linkRed;
-            border-top: 1px solid @red;
+            background-color: @navBGHover;
+            border-top: 1px solid @linkColor;
             a{
               color: white;
             }
           }
           a{
-            color: @red;
+            color: @linkColor;
           }
         }
 
@@ -526,7 +525,7 @@ table.databases {
           min-height: 55px;
           background-color: @bottomNav;
           &.active{
-            background-color:@linkRed;
+            background-color:@navBGHover;
           }
           &:hover{
             background-color: @navBGHover;
@@ -665,14 +664,14 @@ table.databases {
     }
     > li > a:hover,
     > li > a:focus{
-      background-color: @darkRed;
+      background-color: @linkColorHover;
       color: #fff;
     }
     li.active > a {
-      color: @darkRed;
+      color: @linkColorHover;
     }
     > li > a{
-      color: @linkRed;
+      color: @linkColor;
       padding: 10px 13px 10px 24px;
       border-bottom: 1px solid #d3d7db;
       span{
@@ -697,7 +696,7 @@ table.databases {
       text-shadow: none;
       color: #333333;
       & > span:hover {
-        color: @red;
+        color: @linkColor;
       }
     }
   }
@@ -798,7 +797,7 @@ table.databases {
     content: "\00d7";
     text-shadow: 1px 1px 1px rgba(0, 0, 0, .2);
     font-size: 16px;
-    background-color: @red;
+    background-color: @linkColor;
     color: white;
     text-align: center;
     line-height: 15px;
@@ -890,7 +889,7 @@ div.spinner {
       transition: background-color 100ms linear;
     }
     .btn{
-      background-color: @red;
+      background-color: @navBG;
       color: #fff;
       margin-left: -1px;
       padding: 10px 10px 8px;
@@ -953,7 +952,7 @@ div.add-dropdown {
         background-color: #202326;
         color: rgba(255, 255, 255, 0.8);
         &:hover{
-          background-color: @red;
+          background-color: @navBG;
           color: white;
         }
       }
