@@ -481,11 +481,13 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
     addFilter: function (filter) {
       this.changesView.filters.push(filter);
       this.changesView.render();
+      this.leftheader.forceRender();
     },
 
     removeFilter: function (filter) {
       this.changesView.filters.splice(this.changesView.filters.indexOf(filter), 1);
       this.changesView.render();
+      this.leftheader.forceRender();
     },
 
   });
