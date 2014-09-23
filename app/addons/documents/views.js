@@ -159,6 +159,18 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
 
   Views.DeleteDBModal = Components.ModalView.extend({
     template: "addons/documents/templates/delete_database_modal",
+    initialize: function (options) {
+      this.database = options.database;
+      FauxtonAPI.Events.on('database:delete', this.showDeleteDatabase, this);
+    },
+
+    showDeleteDatabase: function () {
+      this.showModal();
+    },
+
+    cleanup: function () {
+      FauxtonAPI.Events.off('database:delete', this.showDeleteDatabase);
+    },
 
     events: {
       "click #delete-db-btn": "deleteDatabase",
@@ -167,6 +179,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
 
     deleteDatabase: function (event) {
       event.preventDefault();
+
       var enterredName = this.$('#db_name')[0].value;
       if (this.database.id != enterredName) {
         this.set_error_msg(enterredName + " does not match database id - are you sure you want to delete " + this.database.id + "?");
