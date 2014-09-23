@@ -120,7 +120,6 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
         collection: this.designDocs,
         database: this.database
       }));
-
     },
 
     setUpDropdown: function(){
@@ -488,7 +487,7 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
       this.changesView.filters.splice(this.changesView.filters.indexOf(filter), 1);
       this.changesView.render();
       this.leftheader.forceRender();
-    },
+    }
 
   });
 
