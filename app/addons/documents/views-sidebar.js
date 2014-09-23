@@ -27,9 +27,6 @@ function(app, FauxtonAPI, Components, Documents, Databases) {
     template: "addons/documents/templates/sidebar",
     className: "sidenav",
     tagName: "nav",
-    events: {
-      "click button#delete-database": "showDeleteDatabaseModal"
-    },
 
     initialize: function(options) {
       this.database = options.database;
@@ -39,9 +36,6 @@ function(app, FauxtonAPI, Components, Documents, Databases) {
       }
 
       this.designDocList = [];
-    },
-    showDeleteDatabaseModal: function(event){
-      this.deleteDBModal.showModal();
     },
 
     serialize: function() {
