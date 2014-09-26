@@ -841,6 +841,10 @@ form.view-query-update, form.view-query-save {
   max-width: 100%;
 }
 
+.capitalize {
+  text-transform: capitalize;
+}
+
 /*documents and databases */
 .view.show{
   color: @fontGrey;
@@ -1137,6 +1141,7 @@ div.add-dropdown {
       }
     }
   }
+
   .breadcrumb {
     margin-bottom: 0;
     background-color: transparent;
@@ -1158,6 +1163,12 @@ div.add-dropdown {
       text-shadow: none;
       &.active{
         color: #333;
+      }
+      &.divider {
+        font-size: 14px;
+        color: #ccc;
+        padding: 20px 0px;
+        width: 10px;
       }
       a{
         text-decoration: none;
