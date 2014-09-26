@@ -12,11 +12,20 @@ License for the specific language governing permissions and limitations under
 the License.
 -->
 
-<% _.each(_.initial(crumbs), function(crumb) { %>
+<% _.each(_.initial(crumbs), function(crumb, index) { %>
 <li>
-<a href="#<%- crumb.link %>" class="fonticon <%- crumb.className %>"><%- crumb.name %></a>
+  <a href="#<%- crumb.link %>" class="fonticon <%- crumb.className %>"><%- crumb.name %></a>
 </li>
+
+<%
+// fussy logic to only place the divider between text entries
+var nextCrumbHasLabel = crumbs[index+1].name != "";
+if (index < crumbs.length && crumb.name && nextCrumbHasLabel) {
+%>
+<li class="divider fonticon-right-open"></li>
+<% } %>
+
 <% }); %>
+
 <% var last = _.last(crumbs) || {name: ''} %>
 <li class="active"><%- last.name %></li>
-
