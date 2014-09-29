@@ -204,20 +204,7 @@ function(app, FauxtonAPI, resizeColumns, Components, ZeroClipboard) {
 
     afterRender: function(){
       $('#primary-navbar li[data-nav-name="' + app.selectedHeader + '"]').addClass('active');
-
-      var $selectorList = $('body');
-      var that = this;
-      $('#primary-navbar').on("click", ".nav a", function(){
-        if (!($selectorList.hasClass('closeMenu'))){
-          setTimeout(
-            function(){
-            $selectorList.addClass('closeMenu');
-            that.resizeColumns.onResizeHandler();
-          },3000);
-
-        }
-      });
-
+      
       this.resizeColumns.initialize();
     },
 
