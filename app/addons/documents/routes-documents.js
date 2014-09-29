@@ -40,8 +40,7 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
     changes: function (database) {
       return [
         {"name": "", "className": "fonticon-left-open", "link": "/_all_dbs"},
-        {"name": database.id, "link": Databases.databaseUrl(database)},
-        {"name": "_changes", "link": "/_changes"}
+        {"name": database.id, "link": Databases.databaseUrl(database)}
       ];
     }
   };
