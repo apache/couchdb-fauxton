@@ -72,6 +72,8 @@ function(app, FauxtonAPI, resizeColumns, Components, ZeroClipboard) {
     });
 
     FauxtonAPI.RouteObject.on('beforeEstablish', function (routeObject) {
+      if (routeObject.overrideBreadcrumbs) { return; }
+
       FauxtonAPI.masterLayout.removeView('#breadcrumbs');
       var crumbs = routeObject.get('crumbs');
 

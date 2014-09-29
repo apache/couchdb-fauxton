@@ -88,6 +88,8 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
       "route:changesFilterRemove": "removeFilter"
     },
 
+    overrideBreadcrumbs: true,
+
     initialize: function (route, masterLayout, options) {
       this.databaseName = options[0];
 
@@ -184,7 +186,6 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
 
 
       this.leftheader.updateCrumbs(crumbs.allDocs(this.database)); 
-      this.leftheader.forceRender();
 
       this.apiUrl = [designDocInfo.url('apiurl'), designDocInfo.documentation() ];
 
@@ -229,7 +230,6 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
       }
 
       this.leftheader.updateCrumbs(crumbs.allDocs(this.database)); 
-      this.leftheader.forceRender();
       this.database.buildAllDocs(docParams);
 
       if (docParams.startkey && docParams.startkey.indexOf('_design') > -1) {
@@ -303,7 +303,6 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
       this.sidebar.setSelectedTab(app.utils.removeSpecialCharacters(ddoc) + '_' + app.utils.removeSpecialCharacters(view));
 
       this.rightHeader.updateApiUrl([this.indexedDocs.urlRef("apiurl", urlParams), "docs"]);
-      this.leftheader.forceRender();
     },
 
     ddocInfo: function (designDoc, designDocs, view) {
@@ -344,7 +343,6 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
       this.sidebar.setSelectedTab('new-view');
 
       //this.rightHeader.updateApiUrl([this.indexedDocs.urlRef("apiurl", urlParams), "docs"]);
-      this.leftheader.forceRender();
     },
 
     updateAllDocsFromView: function (event) {
@@ -403,21 +401,18 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
       this.documentsView.forceRender();
       this.documentsView.collection.pageSizeReset(perPage, {fetch: false});
       this.setDocPerPageLimit(perPage);
-      this.leftheader.forceRender();
     },
 
     paginate: function (options) {
       var collection = this.documentsView.collection;
 
       this.documentsView.forceRender();
-      this.leftheader.forceRender();
       collection.paging.pageSize = options.perPage;
       var promise = collection[options.direction]({fetch: false});
     },
 
     reloadDesignDocs: function (event) {
       this.sidebar.forceRender();
-      this.leftheader.forceRender();
 
       if (event && event.selectedTab) {
         this.sidebar.setSelectedTab(event.selectedTab);
@@ -472,20 +467,17 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
       this.sidebar.setSelectedTab('changes');
 
       this.leftheader.updateCrumbs(crumbs.changes(this.database));
-      this.leftheader.forceRender();
       this.rightHeader.updateApiUrl([this.database.url("changes-apiurl"), this.database.documentation()]);
     },
 
     addFilter: function (filter) {
       this.changesView.filters.push(filter);
       this.changesView.render();
-      this.leftheader.forceRender();
     },
 
     removeFilter: function (filter) {
       this.changesView.filters.splice(this.changesView.filters.indexOf(filter), 1);
       this.changesView.render();
-      this.leftheader.forceRender();
     }
 
   });
