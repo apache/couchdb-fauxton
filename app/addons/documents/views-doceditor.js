@@ -377,13 +377,11 @@ function(app, FauxtonAPI, Components, Documents, Databases, resizeColumns, prett
 
     saveDoc: function(event) {
       var json,
-      that = this,
-      editor = this.editor,
-      validDoc = this.getDocFromEditor();
+          that = this,
+          editor = this.editor,
+          validDoc = this.getDocFromEditor();
 
       if (validDoc) {
-        this.getDocFromEditor();
-
         FauxtonAPI.addNotification({msg: "Saving document."});
 
         this.model.save().then(function () {

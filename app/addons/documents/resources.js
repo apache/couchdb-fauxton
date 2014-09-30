@@ -193,8 +193,6 @@ function(app, FauxtonAPI, PagingCollection) {
         if (typeof(this.id) === "undefined") {
           resp._id = resp.id;
         }
-
-        delete resp.id;
       }
 
       if (resp.ok) {
@@ -514,7 +512,7 @@ function(app, FauxtonAPI, PagingCollection) {
 
     urlRef: function(context, params) {
       var query = "";
-      
+
       if (params) {
         if (!_.isEmpty(params)) {
           query = "?" + $.param(params);
