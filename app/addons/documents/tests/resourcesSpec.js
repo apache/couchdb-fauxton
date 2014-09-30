@@ -48,6 +48,19 @@ define([
       });
       assert.equal(res.id, 'foo');
     });
+
+    it('removes the id, if we create a document and get back an "id" instead of "_id"', function () {
+      // if we take the document {"_id": "mycustomid", "_rev": "18-9cdeb1b121137233e3466b06a1780c29", id: "foo"}
+      // and do a PUT request for an update, CouchDB will return:
+      // {"ok":true,"id":"mycustomid","rev":"18-9cdeb1b121137233e3466b06a1780c29"}
+      // and our Model will think it has the id "mycustomid" instead of "foo"
+      var res = doc.parse({
+        id: "be31e531fe131bdf416b479ac1000484",
+        _rev: "4-3a1b9f4b988b413e9245cd250769da72",
+        ok: true
+      });
+      assert.notOk(res.id);
+    });
   });
 
   describe('AllDocs', function () {

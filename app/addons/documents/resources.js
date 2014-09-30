@@ -196,6 +196,7 @@ function(app, FauxtonAPI, PagingCollection) {
       }
 
       if (resp.ok) {
+        delete resp.id;
         delete resp.ok;
       }
 
