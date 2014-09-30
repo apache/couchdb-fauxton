@@ -34,6 +34,22 @@ define([
 
   });
 
+  describe('Document', function () {
+    var doc;
+    beforeEach(function () {
+      doc = new Models.Doc({}, {});
+    });
+
+    it('does not remove an id attribute', function () {
+      var res = doc.parse({
+        _id: "be31e531fe131bdf416b479ac1000484",
+        _rev: "4-3a1b9f4b988b413e9245cd250769da72",
+        id: "foo"
+      });
+      assert.equal(res.id, 'foo');
+    });
+  });
+
   describe('AllDocs', function () {
     var collection;
     beforeEach(function () {
