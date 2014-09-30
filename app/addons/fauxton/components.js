@@ -78,8 +78,16 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
     template: "addons/fauxton/templates/breadcrumbs",
     serialize: function() {
       var crumbs = _.clone(this.crumbs);
+
+      // helper template function to determine when to insert a delimiter char
+      var nextCrumbHasLabel = function(crumb, index) {
+        var nextHasLabel = crumbs[index+1].name !== "";
+        return index < crumbs.length && crumb.name && nextHasLabel;
+      };
+
       return {
-        crumbs: crumbs
+        crumbs: crumbs,
+        nextCrumbHasLabel: nextCrumbHasLabel
       };
     },
     update: function(crumbs) {

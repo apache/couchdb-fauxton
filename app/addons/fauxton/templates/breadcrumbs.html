@@ -17,11 +17,7 @@ the License.
   <a href="#<%- crumb.link %>" class="fonticon <%- crumb.className %>"><%- crumb.name %></a>
 </li>
 
-<%
-// fussy logic to only place the divider between text entries
-var nextCrumbHasLabel = crumbs[index+1].name != "";
-if (index < crumbs.length && crumb.name && nextCrumbHasLabel) {
-%>
+<% if (nextCrumbHasLabel(crumb, index)) { %>
 <li class="divider fonticon-right-open"></li>
 <% } %>
 
