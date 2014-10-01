@@ -164,7 +164,6 @@ function(app, FauxtonAPI, Components, Documents, Databases, pouchdb,
 
         ddoc.save().then(function () {
           that.ddocs.add(ddoc);
-
           that.mapEditor.editSaved();
           that.reduceEditor && that.reduceEditor.editSaved();
 
@@ -184,6 +183,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, pouchdb,
             that.viewName = viewName;
             that.ddocInfo = ddoc;
             that.showIndex = true;
+            that.currentDdoc = ddoc;
             that.render();
             FauxtonAPI.triggerRouteEvent('reloadDesignDocs', {
               selectedTab: app.utils.removeSpecialCharacters(ddocName.replace(/_design\//,'')) + '_' + app.utils.removeSpecialCharacters(viewName)
@@ -419,7 +419,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, pouchdb,
 
       var viewFilters = FauxtonAPI.getExtensions('sidebar:viewFilters'),
           filteredModels = this.ddocs.models,
-          designDocs = this.ddocs.clone();
+          designDocs = this.ddocs;
 
       if (!_.isEmpty(viewFilters)) {
         _.each(viewFilters, function (filter) {
@@ -427,12 +427,14 @@ function(app, FauxtonAPI, Components, Documents, Databases, pouchdb,
         });
         designDocs.reset(filteredModels, {silent: true});
       }
-
-      this.designDocSelector = this.setView('.design-doc-group', new Views.DesignDocSelector({
-        collection: designDocs,
-        ddocName: this.currentDdoc || this.model.id,
-        database: this.database
-      }));
+      
+      if (!this.designDocSelector) { 
+        this.designDocSelector = this.setView('.design-doc-group', new Views.DesignDocSelector({
+          collection: designDocs,
+          ddocName: this.currentDdoc || this.model.id,
+          database: this.database
+        }));
+      }
 
       if (!this.newView) {
         this.eventer = _.extend({}, Backbone.Events);
@@ -524,7 +526,6 @@ function(app, FauxtonAPI, Components, Documents, Databases, pouchdb,
 
     ddocAdded: function (ddoc) {
       this.ddocName = ddoc.id;
-      this.render();
     },
 
     serialize: function () {
@@ -543,7 +544,6 @@ function(app, FauxtonAPI, Components, Documents, Databases, pouchdb,
     },
 
     newDesignDoc: function () {
-
       return this.$('#ddoc').val() === 'new-doc';
     },
 
@@ -558,14 +558,13 @@ function(app, FauxtonAPI, Components, Documents, Databases, pouchdb,
           language: "javascript"
         };
         var ddoc = new this.DocModel(doc, {database: this.database});
-        //this.collection.add(ddoc);
         return ddoc;
-      } else if ( !this.newDesignDoc() ) {
-        var ddocName = this.$('#ddoc').val();
-        return this.collection.find(function (ddoc) {
-          return ddoc.id === ddocName;
-        }).dDocModel();
-      }
+      } 
+
+      var ddocName = this.$('#ddoc').val();
+      return this.collection.find(function (ddoc) {
+        return ddoc.id === ddocName;
+      }).dDocModel();
     }
   });
 
