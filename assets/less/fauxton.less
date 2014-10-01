@@ -1150,6 +1150,7 @@ div.add-dropdown {
         .two-pane & {
           padding:20px 10px;
           font-size: 19px;
+          float: left;
         }
       }
       color: @breadcrumbText;
@@ -1157,6 +1158,10 @@ div.add-dropdown {
       text-shadow: none;
       &.active{
         color: #333;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        width: 259px;
+        white-space: nowrap;
       }
       &.divider {
         font-size: 14px;
