@@ -10,14 +10,14 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 define([
-        'addons/documents/views-advancedopts',
-        'testUtils'
+  'addons/documents/views-queryoptions',
+  'testUtils'
 ], function (Views, testUtils) {
   var assert = testUtils.assert,
       ViewSandbox = testUtils.ViewSandbox,
       viewSandbox;
 
-  describe('Documents AdvancedOptions', function () {
+  describe('Documents QueryOptions', function () {
     var view;
       beforeEach(function () {
         viewSandbox = new ViewSandbox();
