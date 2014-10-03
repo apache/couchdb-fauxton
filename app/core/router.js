@@ -102,7 +102,8 @@ function(FauxtonAPI, Auth, Backbone) {
     triggerRouteEvent: function(event, args) {
       if (this.activeRouteObject) {
         var eventArgs = [event].concat(args);
-        this.activeRouteObject.trigger.apply(this.activeRouteObject, eventArgs );
+
+        this.activeRouteObject.trigger.apply(this.activeRouteObject, eventArgs);
         this.activeRouteObject.renderWith(eventArgs, FauxtonAPI.masterLayout, args);
       }
     }

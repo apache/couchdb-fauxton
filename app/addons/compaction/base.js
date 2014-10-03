@@ -17,6 +17,7 @@ define([
 ],
 
 function(app, FauxtonAPI, Compaction) {
+
   Compaction.initialize = function() {
     FauxtonAPI.registerExtension('docLinks', {
       title: "Compact & Clean", 
@@ -24,7 +25,7 @@ function(app, FauxtonAPI, Compaction) {
       icon: "icon-cogs"
     });
 
-    FauxtonAPI.registerExtension('advancedOptions:ViewButton', new Compaction.CompactView({}));
+    FauxtonAPI.registerExtension('ViewEditor:ButtonRow', new Compaction.CompactView({}));
   };
 
   return Compaction;
