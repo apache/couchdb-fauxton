@@ -12,23 +12,23 @@
 
 define([
   "app",
-
   "api",
   "addons/fauxton/components",
   "addons/documents/resources",
   "addons/databases/resources",
 
-  //Views
+  // Views
   "addons/documents/views-sidebar",
-  "addons/documents/views-advancedopts",
+  "addons/documents/views-queryoptions",
+
   // Libs
   "addons/fauxton/resizeColumns",
+
   //plugins
   "plugins/prettify"
 ],
 
-function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
-         resizeColumns, prettify) {
+function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions) {
 
   function showError (msg) {
     FauxtonAPI.addNotification({
@@ -45,117 +45,87 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
       'click .toggle-select-menu': 'selectAllMenu'
     },
 
-    initialize: function(options){
-      //adding the database to the object
+    initialize: function(options) {
       this.database = options.database;
+      this.params = options.params;
+
       _.bindAll(this);
       this.selectVisible = false;
-      FauxtonAPI.Events.on('advancedOptions:updateView', this.updateAllDocs);
       FauxtonAPI.Events.on('success:bulkDelete', this.selectAllMenu);
-    },
 
-    cleanup:function(){
-      FauxtonAPI.Events.unbind('advancedOptions:updateView');
-      FauxtonAPI.Events.unbind('success:bulkDelete');
-    },
-
-    selectAllMenu: function(e){
-      FauxtonAPI.triggerRouteEvent("toggleSelectHeader");
-      FauxtonAPI.Events.trigger("documents:showSelectAll",this.selectVisible);
-    },
-
-    addAllDocsMenu: function(){
-      //search docs
+      // insert the Search Docs field
       this.headerSearch = this.insertView("#header-search", new Views.JumpToDoc({
         database: this.database,
         collection: this.database.allDocs
       }));
-      //insert queryoptions
-      //that file is included in require() above and the argument is QueryOptions
-      // and it wants all these params:
-      /* Sooooo I searched this file for where Advanced options was originally inserted to see what the hell
-         is happening.  and it's in AllDocsLayout.  So I'm going to move some of those functions over here
 
-        These are required:
-        this.database = options.database;
-        this.updateViewFn = options.updateViewFn;
-        this.previewFn = options.previewFn;
-
-        these are booleans:
-        this.showStale = _.isUndefined(options.showStale) ? false : options.showStale;
-        this.hasReduce = _.isUndefined(options.hasReduce) ? true : options.hasReduce;
-
-        these you only need for view indexes, not all docs because they are about
-        specific views and design docs (ddocs, also views live inside a ddoc):
-        this.viewName = options.viewName;
-        this.ddocName = options.ddocName;
-      */
-
-      /*this.queryOptions = this.insertView("#query-options", new QueryOptions.AdvancedOptions({
-        database: this.database,
+      // add the Query Options modal + header link
+      this.queryOptions = this.insertView("#query-options", new QueryOptions.QueryOptionsTray({
         hasReduce: false,
-        showPreview: false,
-      }));*/
-
-      //Moved the apibar view into the components file so you can include it in your views
-      this.apiBar = this.insertView("#header-api-bar", new Components.ApiBar({
-        endpoint: this.apiEndpoints[0],
-        documentation: this.apiEndpoints[1]
+        showStale: false
       }));
+
+      // insert the API Url header link
+      this.apiBar = this.insertView("#header-api-bar", new Components.ApiBar());
     },
 
-    updateApiUrl: function(api){
-      //this will update the api bar when the route changes
-      //you can find the method that updates it in components.js Components.ApiBar()
-      this.apiEndpoints = api;
+    afterRender: function() {
+      this.toggleQueryOptionsHeader(this.isHidden);
+    },
+
+    cleanup: function() {
+      FauxtonAPI.Events.unbind('success:bulkDelete');
+    },
+
+    selectAllMenu: function(e) {
+      FauxtonAPI.triggerRouteEvent("toggleSelectHeader");
+      FauxtonAPI.Events.trigger("documents:showSelectAll",this.selectVisible);
+    },
+
+    // updates the API bar when the route changes
+    updateApiUrl: function(api) {
       this.apiBar && this.apiBar.update(api);
     },
 
+    // these are similar, but different! resetQueryOptions() completely resets the settings then overlays the new ones;
+    // updateQueryOptions() just updates the existing settings with whatever is specified. Between them, the
+    resetQueryOptions: function(options) {
+      this.queryOptions.resetQueryOptions(options);
+    },
+
+    updateQueryOptions: function(options) {
+      this.queryOptions.updateQueryOptions(options);
+    },
+
+    hideQueryOptions: function() {
+      this.isHidden = true; // TODO should this be here...? move to subview?
+      if (this.hasRendered) {
+        this.toggleQueryOptionsHeader(this.isHidden);
+      }
+    },
+
+    showQueryOptions: function() {
+      this.isHidden = false;
+      if (this.hasRendered) {
+        this.toggleQueryOptionsHeader(this.isHidden);
+      }
+    },
+
+    toggleQueryOptionsHeader: function(hide) {
+      if (hide) {
+        $("#header-query-options").addClass("hide");
+      } else {
+        $("#header-query-options").removeClass("hide");
+      }
+    },
+
     serialize: function() {
-      //basically if you want something in a template, You can define it here
       return {
         database: this.database.get('id')
       };
-    },
-
-    beforeRender:function(){
-      this.addAllDocsMenu();
-    },
-
-    //moved from alldocs layout
-    updateAllDocs: function (event, paramInfo) {
-      event.preventDefault();
-
-      var errorParams = paramInfo.errorParams,
-          params = paramInfo.params;
-
-      if (_.any(errorParams)) {
-        _.map(errorParams, function(param) {
-          return FauxtonAPI.addNotification({
-            msg: "JSON Parse Error on field: "+param.name,
-            type: "error",
-            clear:  true
-          });
-        });
-        FauxtonAPI.addNotification({
-          msg: "Make sure that strings are properly quoted and any other values are valid JSON structures",
-          type: "warning",
-          clear:  true
-        });
-
-        return false;
-      }
-
-      var fragment = window.location.hash.replace(/\?.*$/, '');
-
-      if (!_.isEmpty(params)) {
-        fragment = fragment + '?' + $.param(params);
-      }
-
-      FauxtonAPI.navigate(fragment, {trigger: false});
-      FauxtonAPI.triggerRouteEvent('updateAllDocs', {allDocs: true});
     }
   });
+
 
   Views.DeleteDBModal = Components.ModalView.extend({
     template: "addons/documents/templates/delete_database_modal",
@@ -168,7 +138,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
       this.showModal();
     },
 
-    cleanup: function () {
+    cleanup: function() {
       FauxtonAPI.Events.off('database:delete', this.showDeleteDatabase);
     },
 
@@ -180,11 +150,12 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
     deleteDatabase: function (event) {
       event.preventDefault();
 
-      var enterredName = this.$('#db_name')[0].value;
-      if (this.database.id != enterredName) {
-        this.set_error_msg(enterredName + " does not match database id - are you sure you want to delete " + this.database.id + "?");
+      var enteredName = this.$('#db_name')[0].value;
+      if (this.database.id != enteredName) {
+        this.set_error_msg(enteredName + " does not match database id - are you sure you want to delete " + this.database.id + "?");
         return;
       }
+
       this.hideModal();
       var databaseName = this.database.id;
       FauxtonAPI.addNotification({
@@ -256,7 +227,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
 
       this.model.destroy().then(function(resp) {
         FauxtonAPI.addNotification({
-          msg: "Succesfully deleted your doc",
+          msg: "Successfully deleted your doc",
           clear:  true
         });
         that.$el.fadeOut(function () {
@@ -287,7 +258,6 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
 
     destroy: function (event) {
       event.preventDefault();
-
       window.alert('Cannot delete a document generated from a view.');
     },
 
@@ -358,92 +328,8 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
     setCollection: function (collection) {
       this.collection = collection;
     }
-
   });
 
-  Views.AllDocsLayout = FauxtonAPI.View.extend({
-    template: "addons/documents/templates/all_docs_layout",
-
-    initialize: function (options) {
-      this.database = options.database;
-      this.params = options.params;
-    },
-
-    events: {
-      'click #toggle-query': "toggleQuery"
-    },
-
-    toggleQuery: function (event) {
-      $('#dashboard-content').scrollTop(0);
-      this.$('#query').toggle('slow');
-    },
-
-    beforeRender: function () {
-      this.advancedOptions = this.insertView('#query', new QueryOptions.AdvancedOptions({
-        updateViewFn: this.updateAllDocs,
-        previewFn: this.previewView,
-        hasReduce: false,
-        showPreview: false,
-        database: this.database,
-      }));
-
-      //disable for now. Will enable with new documents PR that will come next
-      /*this.toolsView = this.setView(".js-search", new Views.JumpToDoc({
-        database: this.database,
-        collection: this.database.allDocs
-        }));*/
-    },
-
-    afterRender: function () {
-      if (this.params) {
-        this.advancedOptions.updateFromParams(this.params);
-      }
-    },
-
-    updateAllDocs: function (event, paramInfo) {
-      event.preventDefault();
-
-      var errorParams = paramInfo.errorParams,
-          params = paramInfo.params;
-
-      if (_.any(errorParams)) {
-        _.map(errorParams, function(param) {
-
-          // TODO: Where to add this error?
-          // bootstrap wants the error on a control-group div, but we're not using that
-          //$('form.view-query-update input[name='+param+'], form.view-query-update select[name='+param+']').addClass('error');
-          return FauxtonAPI.addNotification({
-            msg: "JSON Parse Error on field: "+param.name,
-            type: "error",
-            selector: ".advanced-options .errors-container",
-            clear:  true
-          });
-        });
-        FauxtonAPI.addNotification({
-          msg: "Make sure that strings are properly quoted and any other values are valid JSON structures",
-          type: "warning",
-          selector: ".advanced-options .errors-container",
-          clear:  true
-        });
-
-        return false;
-      }
-
-      var fragment = window.location.hash.replace(/\?.*$/, '');
-
-      if (!_.isEmpty(params)) {
-        fragment = fragment + '?' + $.param(params);
-      }
-
-      FauxtonAPI.navigate(fragment, {trigger: false});
-      FauxtonAPI.triggerRouteEvent('updateAllDocs', {allDocs: true});
-    },
-
-    previewView: function (event) {
-      event.preventDefault();
-    }
-
-  });
 
   // TODO: Rename to reflect that this is a list of rows or documents
   Views.AllDocsList = FauxtonAPI.View.extend({
@@ -453,7 +339,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
       "click button.js-bulk-delete": "bulkDelete",
       "click #collapse": "collapse",
       "click .all-docs-item": "toggleDocument",
-      "click #js-end-results": "scrollToQuery"
+      "click #js-end-results": "openQueryOptionsTray"
     },
 
     initialize: function (options) {
@@ -535,8 +421,9 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
       }
     },
 
-    scrollToQuery: function () {
-      $('#dashboard-content').animate({ scrollTop: 0 }, 'slow');
+    openQueryOptionsTray: function(e) {
+      e.preventDefault();
+      FauxtonAPI.Events.trigger("QueryOptions:openTray");
     },
 
     establish: function() {
@@ -701,6 +588,8 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
     },
 
     afterRender: function () {
+      $("#dashboard-content").scrollTop(0);
+
       prettyPrint();
 
       if (this.bulkDeleteDocsCollection) {
@@ -742,7 +631,6 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
      this.typeAhead.render();
     }
   });
-
 
 
 
@@ -791,5 +679,6 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
   });
 
   Documents.Views = Views;
+
   return Documents;
 });

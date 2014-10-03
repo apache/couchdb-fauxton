@@ -85,7 +85,8 @@ function(FauxtonAPI, Backbone) {
   }, {
 
     renderWith: function(route, masterLayout, args) {
-      //set the options for this render
+
+      // set the options for this render
       var options = {
         masterLayout: masterLayout,
         route: route,
@@ -112,7 +113,9 @@ function(FauxtonAPI, Backbone) {
     },
 
     setTemplateOnFullRender: function(masterLayout){
+
       var promise = $.Deferred();
+
       // Only want to redo the template if its a full render
       if (!this.renderedState) {
         this.triggerBroadcast('beforeFullRender');
@@ -175,7 +178,7 @@ function(FauxtonAPI, Backbone) {
     establishError: function(resp){
       if (!resp || !resp.responseText) { return; }
       FauxtonAPI.addNotification({
-            msg: 'An Error occurred' + JSON.parse(resp.responseText).reason,
+            msg: 'An Error occurred: ' + JSON.parse(resp.responseText).reason,
             type: 'error',
             clear: true
       });

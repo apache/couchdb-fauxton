@@ -249,7 +249,6 @@ function(app, FauxtonAPI, PagingCollection) {
       var ddoc = this.id.replace(/^_design\//,"");
       return "_design/"+app.utils.safeURLName(ddoc);
     }
-
   });
 
   Documents.ViewRow = FauxtonAPI.Model.extend({
