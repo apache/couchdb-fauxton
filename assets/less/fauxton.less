@@ -333,22 +333,35 @@ div.spinner {
 
 #api-navbar{
   > div{
-    > .api-url-btn {
+    > .api-url-btn, > .query-options-btn {
       padding:10px;
+    }
+  }
+
+  .header-icon {
+    font-size: 20px;
+    &:before {
+      float: left;
+      margin: 10px 6px 0px 0px;
     }
   }
 }
 
-.api-url-btn {
-  .icon {
-    font-size: 11px;
+header .header-icon {
+  font-size: 20px;
+  &:before {
+    float: left;
+    margin: 10px 6px 0px 0px;
   }
+}
+
+.api-url-btn, .query-options-btn {
   background: none;
   border: none;
   padding: 0;
   margin: 0;
 }
-.api-url-btn:hover {
+.api-url-btn:hover, .query-options-btn:hover {
   background: none;
 }
 .api-navbar {
@@ -620,8 +633,8 @@ REUSEABLE SHADOW BORDER
 }
 
 .tray {
+  .bottom-shadow-border;
   display: none;
-  .border-radius(5px);
   position: absolute;
   right: 5px;
   top: 55px;
@@ -666,7 +679,7 @@ REUSEABLE SHADOW BORDER
   .btn-primary {
     color: #666;
     font-size: 13px;
-    line-height: 3em;
+    line-height: 33px;
   }
 }
 
