@@ -813,7 +813,7 @@ table.databases {
     margin-right: 10px;
     position: absolute;
     left: 0;
-    bottom: 1px;
+    bottom: 3px;
     background-color: #aaa;
     box-shadow: inset 0px 2px 3px 0px rgba(0, 0, 0, .3), 0px 1px 0px 0px rgba(255, 255, 255, .8);
   }
@@ -854,13 +854,21 @@ div.spinner {
 
 #api-navbar{
   > div{
-    > .api-url-btn {
+    > .api-url-btn, > .query-options-btn {
       padding:10px;
+    }
+  }
+
+  .header-icon {
+    font-size: 16px;
+    &:before {
+      float: left;
+      margin: 12px 5px 0px 0px;
     }
   }
 }
 
-.api-url-btn {
+.api-url-btn, .query-options-btn {
   .icon {
     font-size: 11px;
   }
@@ -869,7 +877,7 @@ div.spinner {
   padding: 0;
   margin: 0;
 }
-.api-url-btn:hover {
+.api-url-btn:hover, .query-options-btn:hover {
   background: none;
 }
 .api-navbar {

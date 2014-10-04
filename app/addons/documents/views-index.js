@@ -438,20 +438,6 @@ function(app, FauxtonAPI, Components, Documents, Databases, pouchdb, QueryOption
       }
 
       if (!this.newView) {
-
-//        this.eventer = _.extend({}, Backbone.Events);
-//        this.queryOptions = this.insertView('#query', new QueryOptions.QueryOptionsTray({
-//          //updateViewFn: this.updateView,
-//          //previewFn: this.previewView,
-//          //database: this.database,
-//          viewName: this.viewName,
-//          ddocName: this.model.id,
-//          hasReduce: this.hasReduce(),
-//          //eventer: this.eventer,
-//          showStale: true
-//        }));
-
-
         this.rightHeader.resetQueryOptions({
           queryParams: this.params,
           hasReduce: this.hasReduce(),
