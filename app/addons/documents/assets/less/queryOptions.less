@@ -46,6 +46,7 @@
     .dropdown.inline {
       display: inline-block;
     }
+
     input[type="text"],
     textarea {
       .border-radius(5px);
@@ -73,11 +74,19 @@
       color: @red;
       line-height: 1em;
     }
+    select {
+      margin-top: -4px;
+      margin-bottom: 0px;
+    }
+    .include-end-key-row {
+      line-height: 20px;
+      margin-left: 8px;
+    }
   }
 
   .toggle-btns {
     .btn {
-      padding: 5px 5px 3px;
+      padding: 5px 12px 5px;
       background: #727A82;
       color: #fff;
       font-size: 12px;
@@ -105,13 +114,12 @@
     color: #777777;
   }
   div.controls-group.well{
-    height: 160px;
+    height: 156px;
     background: none;
     border: none;
     padding: 10px 0;
   }
   .row-fluid.fieldsets {
-    margin-bottom: 10px;
     .inline {
       width: 32%;
     }
@@ -125,5 +133,9 @@
   }
   #skipRows {
     margin-left: 5px;
+  }
+
+  .hide {
+    display: none;
   }
 }

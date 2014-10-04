@@ -41,7 +41,7 @@ function(app, FauxtonAPI) {
       inclusive_end: "true",
       reduce: "false",
       stale: "",
-      group_level: "999" // TODO the doc says I can pass group_level=exact, but it doesn't work
+      group_level: "999"
     }
   };
 
@@ -168,6 +168,9 @@ function(app, FauxtonAPI) {
       return $("#query-options-tray").is(":visible");
     },
 
+    // Note: this has been commented out temporarily until a decision has been made regarding the location
+    // of the "Compact View" button
+
 //    beforeRender: function () {
 //      //if (this.viewName && this.ddocName) {
 //      var buttonViews = FauxtonAPI.getExtensions('QueryOptions:ViewButton');
@@ -219,19 +222,7 @@ function(app, FauxtonAPI) {
      */
     onToggleReduceCheckbox: function(e) {
       e.preventDefault();
-
       var isChecked = $(e.currentTarget).prop("checked");
-
-      // nah! This seems really overkill now it visually
-//      if (isChecked && $("#qoIncludeDocs").is(":checked")) {
-//        FauxtonAPI.addNotification({
-//          msg: "include_docs has been disabled as you cannot include docs on a reduced view",
-//          type: "warn",
-//          selector: ".query-options .errors-container",
-//          clear: false
-//        });
-//      }
-
       this.updateReduceSettings(isChecked);
    },
 
@@ -240,30 +231,26 @@ function(app, FauxtonAPI) {
     updateReduceSettings: function(isChecked) {
       $("#qoReduce").prop("checked", isChecked);
 
-      var $qoGroupLevel = $("#qoGroupLevel"),
-          $qoIncludeDocs = $("#qoIncludeDocs"),
+      var $qoIncludeDocs = $("#qoIncludeDocs"),
           $qoIncludeDocsLabel = $("#qoIncludeDocsLabel"),
-          $qoGroupLevelLabel = $("#qoGroupLevelLabel");
+          $qoGroupLevelGroup = $("#qoGroupLevelGroup");
 
       if (this.options.hasReduce) {
-        $qoGroupLevel.prop("disabled", false).val(this.options.queryParams.group_level);
+        $("#qoGroupLevel").val(this.options.queryParams.group_level);
 
         if (isChecked) {
           $qoIncludeDocs.prop({ "checked": false, "disabled": true });
           $qoIncludeDocsLabel.addClass("disabled");
-          $qoGroupLevel.prop("disabled", false);
-          $qoGroupLevelLabel.removeClass("disabled");
+          $qoGroupLevelGroup.removeClass("hide");
         } else {
           $qoIncludeDocs.prop("disabled", false);
           $qoIncludeDocsLabel.removeClass("disabled");
-          $qoGroupLevel.prop("disabled", true);
-          $qoGroupLevelLabel.addClass("disabled");
+          $qoGroupLevelGroup.addClass("hide");
         }
       } else {
         $qoIncludeDocs.prop("disabled", false);
         $qoIncludeDocsLabel.removeClass("disabled");
-        $qoGroupLevel.prop("disabled", true).val(defaultOptions.queryParams.group_level);
-        $qoGroupLevelLabel.addClass("disabled");
+        $qoGroupLevelGroup.addClass("hide");
       }
     },
 
