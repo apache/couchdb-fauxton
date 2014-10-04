@@ -347,6 +347,9 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
 
       this.sidebar.setSelectedTab('new-view');
 
+      // clear out anything that was in the lower section
+      this.removeView("#dashboard-lower-content");
+
       //this.rightHeader.updateApiUrl([this.indexedDocs.urlRef("apiurl", urlParams), "docs"]);
     },
 

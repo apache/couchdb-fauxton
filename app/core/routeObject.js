@@ -129,7 +129,7 @@ function(FauxtonAPI, Backbone) {
       return FauxtonAPI.when(establishPromise);
     },
 
-    renderAllViews: function(options, resp){
+    renderAllViews: function(options, resp) {
       var routeObject = this,
           renderView = _.bind(this.renderView, this, routeObject, options);
 
@@ -148,7 +148,7 @@ function(FauxtonAPI, Backbone) {
 
       var renderViewOnLayout = _.bind(this.renderViewOnLayout, this, viewInfo);
 
-      if(view.hasRendered) { 
+      if (view.hasRendered) {
         this.triggerBroadcast('viewHasRendered', view, selector);
         return;
       }
@@ -232,6 +232,13 @@ function(FauxtonAPI, Backbone) {
 
     getViews: function() {
       return this.views;
+    },
+
+    removeView: function (selector) {
+      if (_.has(this.views, selector)) {
+        this.views[selector].remove();
+        this.views[selector] = null;
+      }
     },
 
     removeViews: function () {
