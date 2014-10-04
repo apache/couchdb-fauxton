@@ -335,9 +335,7 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
       this.sidebar.setSelectedTab("new-view");
       this.rightHeader.hideQueryOptions();
 
-      // TODO
-//      var apiUrl = this.database.url("app") + "/new_view/" + designDoc;
-//      this.rightHeader.updateApiUrl([apiUrl, "docs"]);
+      //this.rightHeader.updateApiUrl([this.indexedDocs.urlRef("apiurl", urlParams), "docs"]);
     },
 
     updateAllDocsFromView: function (event) {
@@ -385,7 +383,8 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
       this.documentsView.setParams(docParams, urlParams);
       this.documentsView.forceRender();
 
-      // problem. This
+      // this has been commented out because it causes the header bar to disappear after a search (i.e the "Query
+      // Options" link disappears). This issue is being addressed in a separate ticket (not sure about the Jira ID)
       //this.apiUrl = [collection.urlRef("apiurl", urlParams), "docs"];
     },
 
@@ -479,4 +478,3 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
 
   return DocumentsRouteObject;
 });
-

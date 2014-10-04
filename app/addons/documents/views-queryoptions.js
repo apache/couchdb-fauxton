@@ -83,11 +83,18 @@ function(app, FauxtonAPI) {
           self.closeTray();
         }
       });
+
+      $(window).on("resize", self.onResize);
+    },
+
+    afterRender: function() {
+      this.onResize();
     },
 
     cleanup: function() {
       FauxtonAPI.Events.unbind("QueryOptions:closeTray");
       FauxtonAPI.Events.unbind("QueryOptions:openTray");
+      $(window).off("resize", this.onResize);
     },
 
     events: {
@@ -101,10 +108,6 @@ function(app, FauxtonAPI) {
         $("#query-options-tray").velocity("transition.slideDownIn", 250); // TODO constant
         FauxtonAPI.Events.trigger("APIbar:closeTray");
       }
-    },
-
-    onCancel: function() {
-      this.closeTray();
     },
 
     // returns all applicable query parameters for the Query Options tray
@@ -139,6 +142,22 @@ function(app, FauxtonAPI) {
       }
       FauxtonAPI.navigate(fragment, { trigger: false });
       FauxtonAPI.triggerRouteEvent("updateAllDocs", { allDocs: true });
+    },
+
+    onCancel: function() {
+      this.closeTray();
+    },
+
+    // if the screen is so small there isn't space for the full tray height we manually shrink the height to allow scrolling.
+    // Technically this should handle width as well, but we won't bother because there are way bigger issues with a screen
+    // with such a small width!
+    onResize: function() {
+      var $tray = $("#query-options-tray");
+      var heightFromTop = parseInt($tray.css("top"), 10);
+      var windowHeight = $(window).height();
+
+      // we apply the max-height to the form rather than the entire tray to allow the little up arrow to appear normally
+      $tray.find("form").css("max-height", windowHeight - heightFromTop);
     },
 
     /*
@@ -441,9 +460,6 @@ function(app, FauxtonAPI) {
 
   var AdditionalParamsView = FauxtonAPI.View.extend({
     template: "addons/documents/templates/query_options_additional_params",
-    events: {
-      "change form.js-view-query-update select": "updateFilters" // TODO MOVE
-    },
 
     initialize: function(options) {
       this.options = options;
