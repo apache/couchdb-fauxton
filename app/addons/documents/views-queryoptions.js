@@ -82,7 +82,7 @@ function(app, FauxtonAPI) {
         }
       });
 
-      $(window).on("resize", this.onResize);
+      $(window).on("resize", self.onResize);
     },
 
     afterRender: function() {

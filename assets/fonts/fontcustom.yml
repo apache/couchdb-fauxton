@@ -19,8 +19,8 @@ quiet: false
 # --------------------------------------------------------------------------- #
 
 input:
-  vectors: /Applications/MAMP/htdocs/couchdb-fauxton/assets/icons         # required
-  templates: /Applications/MAMP/htdocs/couchdb-fauxton/assets/fonts/templates
+  vectors: PUT_YOUR_PATH_HERE/couchdb-fauxton/assets/icons         # required
+  templates: PUT_YOUR_PATH_HERE/couchdb-fauxton/assets/fonts/templates
 
 
 # --------------------------------------------------------------------------- #
@@ -28,10 +28,10 @@ input:
 # --------------------------------------------------------------------------- #
 
 output:
-  fonts: /Applications/MAMP/htdocs/couchdb-fauxton/assets/fonts                              # required
-  # css: /Applications/MAMP/htdocs/couchdb-fauxton/assets/less
-  preview: /Applications/MAMP/htdocs/couchdb-fauxton/assets/fonts/styleguide
-  icons.less: /Applications/MAMP/htdocs/couchdb-fauxton/assets/less
+  fonts: PUT_YOUR_PATH_HERE/couchdb-fauxton/assets/fonts                              # required
+  # css: PUT_YOUR_PATH_HERE/couchdb-fauxton/assets/less
+  preview: PUT_YOUR_PATH_HERE/couchdb-fauxton/assets/fonts/styleguide
+  icons.less: PUT_YOUR_PATH_HERE/couchdb-fauxton/assets/less 
   #my-custom-template.yml: path/to/template/output
 
 

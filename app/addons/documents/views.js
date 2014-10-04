@@ -98,7 +98,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
     },
 
     hideQueryOptions: function() {
-      this.isHidden = true; // TODO should this be here...? move to subview?
+      this.isHidden = true;
       if (this.hasRendered) {
         this.toggleQueryOptionsHeader(this.isHidden);
       }
@@ -112,11 +112,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
     },
 
     toggleQueryOptionsHeader: function(hide) {
-      if (hide) {
-        $("#header-query-options").addClass("hide");
-      } else {
-        $("#header-query-options").removeClass("hide");
-      }
+      $("#header-query-options").toggleClass("hide", hide);
     },
 
     serialize: function() {
@@ -150,7 +146,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
     deleteDatabase: function (event) {
       event.preventDefault();
 
-      var enteredName = this.$('#db_name')[0].value;
+      var enteredName = $('#db_name').val();
       if (this.database.id != enteredName) {
         this.set_error_msg(enteredName + " does not match database id - are you sure you want to delete " + this.database.id + "?");
         return;

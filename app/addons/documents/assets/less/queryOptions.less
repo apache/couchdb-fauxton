@@ -42,6 +42,7 @@
     margin: 0;
   }
   form {
+    overflow: scroll;
     margin-bottom: 0;
     .dropdown.inline {
       display: inline-block;
@@ -109,6 +110,13 @@
   label {
     margin-right: 0;
     font-size: 13px;
+
+    /*
+    due to: https://code.google.com/p/chromium/issues/detail?id=411065 - that bug causes the checkbox state not to
+    update when the user clicks on labels quickly. It can be removed once the fix is in Chrome stable
+    */
+    -webkit-user-select: none;
+
   }
   label.disabled {
     color: #777777;
