@@ -323,8 +323,8 @@ function(app, FauxtonAPI) {
 
         // if the startKey, endKey or inclusive_end differs from the defaults, show the section. Meh, this sucks...
         if (defaultOptions.queryParams.startkey !== this.queryParams.startkey ||
-          defaultOptions.queryParams.endkey !== this.queryParams.endkey ||
-          defaultOptions.queryParams.inclusive_end !== this.queryParams.inclusive_end) {
+            defaultOptions.queryParams.endkey !== this.queryParams.endkey ||
+            defaultOptions.queryParams.inclusive_end !== this.queryParams.inclusive_end) {
           this.$(".toggle-btns > label[data-action=showBetweenKeys]").addClass("active");
           this.$(".js-keys-section").addClass("hide");
           this.$(".js-query-keys-wrapper").removeClass("hide");

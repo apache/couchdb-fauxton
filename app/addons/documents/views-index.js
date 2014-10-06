@@ -424,7 +424,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, pouchdb, QueryOption
         designDocs.reset(filteredModels, {silent: true});
       }
 
-      if (!this.designDocSelector) { 
+      if (!this.designDocSelector) {
         this.designDocSelector = this.setView('.design-doc-group', new Views.DesignDocSelector({
           collection: designDocs,
           ddocName: this.currentDdoc || this.model.id,
