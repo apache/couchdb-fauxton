@@ -157,6 +157,8 @@ function(app, FauxtonAPI, Components, Documents, Databases) {
       var design = this.model.id.replace(/^_design\//,"");
       var databaseId = this.model.database.id;
 
+      if (_.isUndefined(designDocs[info.selector])) { return; }
+
       this.insertView(".accordion-body", new Views.IndexItem({
         selector: info.selector,
         ddoc: design,
