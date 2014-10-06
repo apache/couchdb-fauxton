@@ -82,10 +82,11 @@ function ($, _) {
       return name.replace(/[^\w\s]/gi,"");
     },
 
-    safeURLName: function(name){
-      var testName = name || "";
-      var checkforBad = testName.match(/[\$\-/,+-]/g);
-      return (checkforBad !== null)?encodeURIComponent(name):name;
+    safeURLName: function (name) {
+      var testName = name || "",
+          hasBadChar = /[\$\-/%,+-]/g.test(testName);
+
+      return hasBadChar ? encodeURIComponent(name) : name;
     }
   };
 
