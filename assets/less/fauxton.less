@@ -1152,6 +1152,9 @@ div.add-dropdown {
           font-size: 19px;
           float: left;
         }
+        a {
+	        float: left;
+        }
       }
       color: @breadcrumbText;
       font-size: 24px;
@@ -1173,6 +1176,19 @@ div.add-dropdown {
         text-decoration: none;
         color: @breadcrumbText;
       }
+    }
+    .fonticon-right-open {
+	    position: absolute;
+	    
+	    &.divider {
+		    padding: 23px 0;
+	    }
+	    +li {
+		    text-overflow: inherit;
+		    overflow: auto;
+		    width: auto;
+		    margin-left: 14px;
+	    }
     }
   }
 }
