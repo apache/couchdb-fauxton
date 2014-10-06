@@ -674,7 +674,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
         if (this.bulkDeleteDocsCollection) {
           isChecked = this.bulkDeleteDocsCollection.get(doc.id);
         }
-        this.rows[doc.id] = this.insertView("table.all-docs tbody", new this.nestedView({
+        this.rows[doc.get('id')] = this.insertView("table.all-docs tbody", new this.nestedView({
           model: doc,
           checked: isChecked
         }));

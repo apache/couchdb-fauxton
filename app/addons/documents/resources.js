@@ -190,7 +190,7 @@ function(app, FauxtonAPI, PagingCollection) {
         delete resp.rev;
       }
       if (resp.id) {
-        if (typeof(this.id) === "undefined") {
+        if (_.isUndefined(this.id)) {
           resp._id = resp.id;
         }
       }
