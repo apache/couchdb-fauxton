@@ -105,11 +105,12 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
     events:  {
       "click .api-url-btn" : "showAPIbar"
     },
-    
+
     initialize: function (options) {
       var _options = options || {};
       this.endpoint = _options.endpoint || '_all_docs';
       this.documentation = _options.documentation || 'docs';
+      this.endPointAbsoluteUrl = this.getEndPointAbsoluteUrl(this.endpoint);
 
       var hideAPIbar = _.bind(this.hideAPIbar, this),
           navbarVisible = _.bind(this.navbarVisible, this);
@@ -154,7 +155,8 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
     serialize: function() {
       return {
         endpoint: this.endpoint,
-        documentation: this.documentation
+        documentation: this.documentation,
+        endPointAbsoluteUrl: this.endPointAbsoluteUrl
       };
     },
 
@@ -164,8 +166,25 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
     show: function(){
       this.$el.removeClass('hide');
     },
+
+    getLocation: function () {
+      if (!window.location.origin) {
+        return window.location.protocol + '//' +  window.location.host;
+      }
+
+      return window.location.origin;
+    },
+
+    getEndPointAbsoluteUrl: function (endpoint) {
+      var tempArray = endpoint.split('/'),
+          partOfEndPoint = tempArray[tempArray.length - 1];
+
+      return this.getLocation() + '/' + partOfEndPoint;
+    },
+
     update: function(endpoint) {
       this.endpoint = endpoint[0];
+      this.endPointAbsoluteUrl = this.getEndPointAbsoluteUrl(this.endpoint);
       this.documentation = endpoint[1];
       this.render();
     },
