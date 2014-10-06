@@ -64,9 +64,6 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
         hasReduce: false,
         showStale: false
       }));
-
-      // insert the API Url header link
-      this.apiBar = this.insertView("#header-api-bar", new Components.ApiBar());
     },
 
     afterRender: function() {
