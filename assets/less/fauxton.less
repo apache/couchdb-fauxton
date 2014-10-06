@@ -1088,12 +1088,24 @@ div.add-dropdown {
   }
   .two-pane &,
   .with-sidebar & {
-    #api-navbar{
+    #right-header {
       > div {
         .bottom-shadow-border;
         height: 60px;
       }
       .left-shadow-border;
+    }
+    #api-navbar{
+      position: relative;
+      float: right;
+      left: -220px;
+      z-index: 200;
+      > div {
+        height: 60px;
+      }
+    }
+    #header-api-bar {
+	  width: 87px;
     }
     #breadcrumbs{
       .bottom-shadow-border;
@@ -1110,6 +1122,13 @@ div.add-dropdown {
   }
 }
 
+#right-header {
+  height: 60px;
+  position: absolute;
+  /* these styles are for the new header*/
+  .right-header{
+  }
+}
 #api-navbar{
   height: 60px;
   position: absolute;
