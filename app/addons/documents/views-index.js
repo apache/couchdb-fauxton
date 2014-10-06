@@ -59,7 +59,6 @@ function(app, FauxtonAPI, Components, Documents, Databases, pouchdb, QueryOption
     defaultLang: "javascript",
 
     initialize: function(options) {
-      this.rightHeader = options.rightHeader;
       this.newView = options.newView || false;
       this.ddocs = options.ddocs;
       this.params = options.params;
@@ -194,7 +193,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, pouchdb, QueryOption
 
           if (that.reduceFunStr !== reduceVal) {
             that.reduceFunStr = reduceVal;
-            that.rightHeader.updateQueryOptions({ hasReduce: that.hasReduce() });
+            FauxtonAPI.triggerRouteEvent("updateQueryOptions", { hasReduce: that.hasReduce() });
           }
 
           FauxtonAPI.triggerRouteEvent('updateAllDocs', {ddoc: ddocName, view: viewName});
@@ -249,13 +248,9 @@ function(app, FauxtonAPI, Components, Documents, Databases, pouchdb, QueryOption
          return false;
       }
 
-       var fragment = window.location.hash.replace(/\?.*$/, '');
-       if (!_.isEmpty(params)) {
-        fragment = fragment + '?' + $.param(params);
-       }
-
-       FauxtonAPI.navigate(fragment, {trigger: false});
-       FauxtonAPI.triggerRouteEvent('updateAllDocs', {ddoc: this.ddocID, view: this.viewName});
+      var url = app.utils.replaceQueryParams(params);
+      FauxtonAPI.navigate(url, {trigger: false});
+      FauxtonAPI.triggerRouteEvent('updateAllDocs', {ddoc: this.ddocID, view: this.viewName});
     },
 
 
@@ -434,19 +429,11 @@ function(app, FauxtonAPI, Components, Documents, Databases, pouchdb, QueryOption
         ddocName: this.currentDdoc || this.model.id,
         database: this.database
       }));
-
-      if (!this.newView) {
-        this.rightHeader.resetQueryOptions({
-          queryParams: this.params,
-          hasReduce: this.hasReduce(),
-          showStale: true
-        });
-      }
     },
 
     afterRender: function() {
       if (this.params && !this.newView) {
-        this.rightHeader.resetQueryOptions({
+        FauxtonAPI.triggerRouteEvent('resetQueryOptions', {
           queryParams: this.params,
           hasReduce: this.hasReduce(),
           showStale: true

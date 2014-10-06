@@ -69,22 +69,21 @@ function(app, FauxtonAPI) {
     },
 
     addEvents: function() {
-      var self = this;
-
-      FauxtonAPI.Events.on('QueryOptions:closeTray', self.closeTray);
-
-      // very bizarre. Need the anonymous function + "self" for this to work (?!)
-      FauxtonAPI.Events.on('QueryOptions:openTray', function() { self.toggleQueryOptionsTray(); });
+      FauxtonAPI.Events.on('QueryOptions:closeTray', this.closeTray, this);
+      FauxtonAPI.Events.on('QueryOptions:openTray', this.toggleQueryOptionsTray, this);
 
       // if the user just clicked outside the tray, close it [TODO be nice to generalize for all trays]
+      var trayIsVisible = this.trayIsVisible;
+      var closeTray = this.closeTray;
+
       $("body").on("click.queryOptions", function(e) {
-        if (!self.trayIsVisible()) { return; }
+        if (!trayIsVisible()) { return; }
         if ($(e.target).closest("#query-options-tray").length === 0) {
-          self.closeTray();
+          closeTray();
         }
       });
 
-      $(window).on("resize", self.onResize);
+      $(window).on("resize", this.onResize);
     },
 
     afterRender: function() {
@@ -117,7 +116,7 @@ function(app, FauxtonAPI) {
       var additionalParams = this.additionalParamsView.getParams();
 
       // assumption: there aren't conflicting keys
-      return $.extend({}, mainFieldParams, keySearchParams, additionalParams);
+      return _.extend({}, mainFieldParams, keySearchParams, additionalParams);
     },
 
     onSubmit: function(e) {
@@ -134,13 +133,9 @@ function(app, FauxtonAPI) {
       // this may be empty. That's ok! Perhaps the user just did a search with params, then removed them & wants the default
       var params = this.getQueryParams();
 
-      // all looks good! Close the tray and publish the message. This used to pass off the work to the parent View
-      // (Views.RightAllDocsHeader) but it feels cleaner to do it right here
-      var fragment = window.location.hash.replace(/\?.*$/, "");
-      if (!_.isEmpty(params)) {
-        fragment = fragment + "?" + $.param(params);
-      }
-      FauxtonAPI.navigate(fragment, { trigger: false });
+      // all looks good! Close the tray and publish the message
+      var url = app.utils.replaceQueryParams(params);
+      FauxtonAPI.navigate(url, { trigger: false });
       FauxtonAPI.triggerRouteEvent("updateAllDocs", { allDocs: true });
     },
 
@@ -217,11 +212,15 @@ function(app, FauxtonAPI) {
     },
 
     initialize: function(options) {
-      this.options = options;
+      this.queryParams = options.queryParams;
+      this.showStale = options.showStale;
+      this.hasReduce = options.hasReduce;
     },
 
     update: function(options) {
-      this.options = options;
+      this.queryParams = options.queryParams;
+      this.showStale = options.showStale;
+      this.hasReduce = options.hasReduce;
 
       // if the View hasn't already rendered we can rely on afterRender() to pre-fill the fields
       if (this.hasRendered) {
@@ -230,8 +229,8 @@ function(app, FauxtonAPI) {
     },
 
     afterRender: function() {
-      $("#qoIncludeDocs").prop("checked", this.options.queryParams.include_docs === "true");
-      this.updateReduceSettings(this.options.queryParams.reduce === "true");
+      $("#qoIncludeDocs").prop("checked", this.queryParams.include_docs === "true");
+      this.updateReduceSettings(this.queryParams.reduce === "true");
     },
 
     /*
@@ -254,8 +253,8 @@ function(app, FauxtonAPI) {
           $qoIncludeDocsLabel = $("#qoIncludeDocsLabel"),
           $qoGroupLevelGroup = $("#qoGroupLevelGroup");
 
-      if (this.options.hasReduce) {
-        $("#qoGroupLevel").val(this.options.queryParams.group_level);
+      if (this.hasReduce) {
+        $("#qoGroupLevel").val(this.queryParams.group_level);
 
         if (isChecked) {
           $qoIncludeDocs.prop({ "checked": false, "disabled": true });
@@ -288,8 +287,8 @@ function(app, FauxtonAPI) {
 
     serialize: function() {
       return {
-        hasReduce: this.options.hasReduce,
-        showStale: this.options.showStale
+        hasReduce: this.hasReduce,
+        showStale: this.showStale
       };
     }
   });
@@ -302,11 +301,14 @@ function(app, FauxtonAPI) {
     },
 
     initialize: function(options) {
-      this.options = options;
+      this.queryParams = options.queryParams;
+      this.hasReduce = options.hasReduce;
     },
 
     update: function(options) {
-      this.options = options;
+      this.queryParams = options.queryParams;
+      this.hasReduce = options.hasReduce;
+
       if (this.hasRendered) {
         this.render();
       }
@@ -314,27 +316,25 @@ function(app, FauxtonAPI) {
 
     // prefill the form fields
     afterRender: function() {
-      var qp = this.options.queryParams;
-
-      if (qp.keys) {
+      if (this.queryParams.keys) {
         this.$(".toggle-btns > label[data-action=showByKeys]").addClass("active");
         this.$(".js-query-keys-wrapper").removeClass("hide");
         this.showByKeysSection();
-        $("#keys-input").val(qp.keys);
+        $("#keys-input").val(this.queryParams.keys);
       } else {
 
         // if the startKey, endKey or inclusive_end differs from the defaults, show the section. Meh, this sucks...
-        if (defaultOptions.queryParams.startkey !== qp.startkey ||
-            defaultOptions.queryParams.endkey !== qp.endkey ||
-            defaultOptions.queryParams.inclusive_end !== qp.inclusive_end) {
+        if (defaultOptions.queryParams.startkey !== this.queryParams.startkey ||
+            defaultOptions.queryParams.endkey !== this.queryParams.endkey ||
+            defaultOptions.queryParams.inclusive_end !== this.queryParams.inclusive_end) {
           this.$(".toggle-btns > label[data-action=showBetweenKeys]").addClass("active");
           this.$(".js-keys-section").addClass("hide");
           this.$(".js-query-keys-wrapper").removeClass("hide");
           this.showBetweenKeysSection();
 
-          $("#startkey").prop("disabled", false).val(qp.startkey);
-          $("#endkey").prop("disabled", false).val(qp.endkey);
-          $("#qoIncludeEndKeyInResults").prop("checked", qp.inclusive_end === "true");
+          $("#startkey").prop("disabled", false).val(this.queryParams.startkey);
+          $("#endkey").prop("disabled", false).val(this.queryParams.endkey);
+          $("#qoIncludeEndKeyInResults").prop("checked", this.queryParams.inclusive_end === "true");
         }
       }
     },
@@ -386,7 +386,10 @@ function(app, FauxtonAPI) {
       // basically the gist of this is that it only actually returns *relevant* key-value pairs. Defaults
       // aren't included because they'd clutter up the URL
       if (selectedKeysSection === "showByKeys") {
-        params.keys = $("#keys-input").val();
+        var keys = $.trim($("#keys-input").val());
+        if (keys !== "") {
+          params.keys = keys;
+        }
       } else if (selectedKeysSection === "showBetweenKeys") {
         var startKey = $.trim($("#startkey").val());
         if (startKey !== defaultOptions.queryParams.startkey) {
@@ -412,9 +415,7 @@ function(app, FauxtonAPI) {
 
       if (selectedKeysSection === "showByKeys") {
         var keys = this.parseJSON($("#keys-input").val());
-        if (_.isUndefined(keys)) {
-          errorMsg = "Keys must be valid json.";
-        } else if (!_.isArray(keys)) {
+        if (keys && !_.isArray(keys)) {
           errorMsg = "Keys values must be in an array, e.g [1,2,3]";
         }
       } else {
@@ -443,7 +444,6 @@ function(app, FauxtonAPI) {
       return true;
     },
 
-    // move to helpers?
     parseJSON: function(value) {
       try {
         return JSON.parse(value);
@@ -453,7 +453,7 @@ function(app, FauxtonAPI) {
     },
 
     getSelectedKeysSection: function() {
-      return $(".toggle-btns > label.active").data("action");
+      return this.$(".toggle-btns > label.active").data("action");
     }
   });
 
@@ -462,24 +462,24 @@ function(app, FauxtonAPI) {
     template: "addons/documents/templates/query_options_additional_params",
 
     initialize: function(options) {
-      this.options = options;
+      this.queryParams = options.queryParams;
+      this.showStale = options.showStale;
     },
 
     update: function(options) {
-      this.options = options;
+      this.queryParams = options.queryParams;
+      this.showStale = options.showStale;
       if (this.hasRendered) {
         this.render();
       }
     },
 
     afterRender: function() {
-      var qp = this.options.queryParams;
-
-      $("#qoUpdateSeq").prop("checked", qp.update_seq === "true");
-      $("#qoDescending").prop("checked", qp.descending === "true");
-      $("#qoLimit").val(qp.limit);
-      $("#qoSkip").val(qp.skip);
-      $("#qoStale").prop("checked", qp.stale === "ok");
+      $("#qoUpdateSeq").prop("checked", this.queryParams.update_seq === "true");
+      $("#qoDescending").prop("checked", this.queryParams.descending === "true");
+      $("#qoLimit").val(this.queryParams.limit);
+      $("#qoSkip").val(this.queryParams.skip);
+      $("#qoStale").prop("checked", this.queryParams.stale === "ok");
     },
 
     getParams: function() {
@@ -516,7 +516,7 @@ function(app, FauxtonAPI) {
 
     serialize: function() {
       return {
-        showStale: this.options.showStale
+        showStale: this.showStale
       };
     }
   });

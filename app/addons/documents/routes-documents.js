@@ -84,7 +84,9 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
       "route:paginate": "paginate",
       "route:perPageChange": "perPageChange",
       "route:changesFilterAdd": "addFilter",
-      "route:changesFilterRemove": "removeFilter"
+      "route:changesFilterRemove": "removeFilter",
+      "route:updateQueryOptions": "updateQueryOptions",
+      "route:resetQueryOptions": "resetQueryOptions"
     },
 
     overrideBreadcrumbs: true,
@@ -265,7 +267,6 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
       });
 
       this.viewEditor = this.setView("#dashboard-upper-content", new Index.ViewEditor({
-        rightHeader: this.rightHeader,
         model: this.database,
         ddocs: this.designDocs,
         viewName: view,
@@ -472,8 +473,15 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
     removeFilter: function (filter) {
       this.changesView.filters.splice(this.changesView.filters.indexOf(filter), 1);
       this.changesView.render();
-    }
+    },
 
+    resetQueryOptions: function(options) {
+      this.rightHeader.resetQueryOptions(options);
+    },
+
+    updateQueryOptions: function(options) {
+      this.rightHeader.updateQueryOptions(options);
+    }
   });
 
   return DocumentsRouteObject;
