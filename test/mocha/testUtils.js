@@ -13,16 +13,15 @@
 define([
        "api",
        "chai",
-       "sinon-chai",
-       "underscore"
+       "sinon-chai"
 ],
-function(FauxtonAPI,chai, sinonChai) {
+function(FauxtonAPI, chai, sinonChai) {
   chai.use(sinonChai);
 
   var ViewSandbox = function () {
     this.initialize();
   };
-   
+
    _.extend(ViewSandbox.prototype, {
     initialize: function () {
       this.$el = $('<div style="display:none"></div>').appendTo('body');
