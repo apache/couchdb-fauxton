@@ -242,6 +242,7 @@ function(app, FauxtonAPI) {
       this.updateReduceSettings(isChecked);
     },
 
+
     // helper function to hide/show, disable/enable fields based on whether "Reduce" is an option and whether
     // it's checked
     updateReduceSettings: function(isChecked) {
@@ -409,7 +410,7 @@ function(app, FauxtonAPI) {
      */
     hasValidInputs: function() {
       var selectedKeysSection = this.getSelectedKeysSection(),
-        errorMsg = null;
+          errorMsg = null;
 
       if (selectedKeysSection === "showByKeys") {
         var keys = this.parseJSON($("#keys-input").val());
@@ -418,7 +419,8 @@ function(app, FauxtonAPI) {
         }
       } else {
         var startKey = $.trim($("#startkey").val()),
-          endKey = $.trim($("#endkey").val());
+            endKey = $.trim($("#endkey").val());
+
         if (startKey !== "" && _.isUndefined(this.parseJSON(startKey))) {
           errorMsg = "JSON Parse Error on the Start Key field";
         } else if (endKey !== "" && _.isUndefined(this.parseJSON(endKey))) {
@@ -520,3 +522,4 @@ function(app, FauxtonAPI) {
 
   return Views;
 });
+

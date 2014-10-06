@@ -553,3 +553,4 @@ function(app, FauxtonAPI, Components, Documents, Databases, pouchdb, QueryOption
 
   return Views;
 });
+

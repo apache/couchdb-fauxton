@@ -494,3 +494,4 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
 
   return DocumentsRouteObject;
 });
+
