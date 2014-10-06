@@ -28,6 +28,7 @@ function ($, _) {
   var onWindowResize = {};
 
   var utils = {
+
     // Thanks to: http://stackoverflow.com/a/2880929
     getParams: function(queryString) {
       if (queryString) {
@@ -54,6 +55,15 @@ function ($, _) {
       }
 
       return urlParams;
+    },
+
+    // this takes the current URL and replaces all ?x=x with whatever new params are passed
+    replaceQueryParams: function(params) {
+      var fragment = window.location.hash.replace(/\?.*$/, "");
+      if (!_.isEmpty(params)) {
+        fragment = fragment + "?" + $.param(params);
+      }
+      return fragment;
     },
 
     addWindowResize: function(fun, key){
