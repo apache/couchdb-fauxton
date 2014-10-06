@@ -179,6 +179,7 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
 
       this.sidebar.setSelectedTab(app.utils.removeSpecialCharacters(ddoc)+"_metadata");
       this.leftheader.updateCrumbs(crumbs.allDocs(this.database));
+      this.rightHeader.hideQueryOptions();
 
       // problem line again
       this.apiUrl = [designDocInfo.url('apiurl'), designDocInfo.documentation() ];
@@ -464,8 +465,8 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
       this.viewEditor && this.viewEditor.remove();
 
       this.sidebar.setSelectedTab('changes');
-
       this.leftheader.updateCrumbs(crumbs.changes(this.database));
+      this.rightHeader.showQueryOptions();
 
       this.apiUrl = function () {
         return [this.database.url("changes-apiurl"), this.database.documentation()];

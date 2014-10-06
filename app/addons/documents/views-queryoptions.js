@@ -419,7 +419,6 @@ function(app, FauxtonAPI) {
       } else {
         var startKey = $.trim($("#startkey").val()),
           endKey = $.trim($("#endkey").val());
-
         if (startKey !== "" && _.isUndefined(this.parseJSON(startKey))) {
           errorMsg = "JSON Parse Error on the Start Key field";
         } else if (endKey !== "" && _.isUndefined(this.parseJSON(endKey))) {
