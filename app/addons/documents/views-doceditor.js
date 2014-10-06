@@ -104,7 +104,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, resizeColumns, prett
     events: {
       "click #string-edit-save-btn":"saveString"
     },
-  
+
     saveString: function (event) {
       event.preventDefault();
       var newStr = this.subEditor.getValue();
@@ -117,12 +117,12 @@ function(app, FauxtonAPI, Components, Documents, Databases, resizeColumns, prett
       this.$('.bar').css({width: '0%'});
       this.$('.progress').addClass('hide');
       this.clear_error_msg();
-    }, 
+    },
 
     openWin: function(editor, indent, hashKey, jsonString, comma) {
       this.editor = editor;
       this.indent = indent;
-      this.hashKey = hashKey;      
+      this.hashKey = hashKey;
       this.$('#string-edit-header').text(hashKey);
       this.subEditor.setValue(JSON.parse(jsonString));
       /* make sure we don't have save warnings w/out change */
@@ -229,17 +229,17 @@ function(app, FauxtonAPI, Components, Documents, Databases, resizeColumns, prett
       var selStart = this.editor.getSelectionStart().row;
       var selEnd = this.editor.getSelectionEnd().row;
       /* one JS(ON) string can't span more than one line - we edit one string, so ensure we don't select several lines */
-      if (selStart >=0 && selEnd >= 0 && selStart === selEnd && this.editor.isRowExpanded(selStart)) {    
+      if (selStart >=0 && selEnd >= 0 && selStart === selEnd && this.editor.isRowExpanded(selStart)) {
         var editLine = this.editor.getLine(selStart),
             editMatch = editLine.match(/^([ \t]*)("[a-zA-Z0-9_]*": )?(".*",?[ \t]*)$/);
 
         if (editMatch) {
           return editMatch;
         }
-      } 
+      }
 
       return null;
-    }, 
+    },
 
     showHideEditDocString: function (event) {
       this.$("button.string-edit").attr("disabled", "true");
@@ -258,7 +258,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, resizeColumns, prett
     },
 
     stringEditing: function(event) {
-      event.preventDefault();   
+      event.preventDefault();
       if (!this.hasValidCode()) {
         return;
       }
@@ -269,7 +269,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, resizeColumns, prett
               editText = editMatch[3],
               comma = "";
         if (editText.substring(editText.length - 1) === ",") {
-          editText = editText.substring(0, editText.length - 1); 
+          editText = editText.substring(0, editText.length - 1);
           comma = ",";
         }
         this.stringEditModal.openWin(this.editor, indent, hashKey, editText, comma);

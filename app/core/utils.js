@@ -23,7 +23,7 @@ define([
   "lodash"
 ],
 
-function($, _ ) {
+function ($, _) {
 
   var onWindowResize = {};
 
