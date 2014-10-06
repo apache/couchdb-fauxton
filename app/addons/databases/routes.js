@@ -50,12 +50,6 @@ function(app, FauxtonAPI, Databases, Views) {
         collection: this.databases
       }));
 
-      this.rightHeader = this.setView("#api-navbar", new Views.RightAllDBsHeader({
-        collection: this.databases,
-        endpoint: this.databases.url("apiurl"),
-        documentation: this.databases.documentation()
-      }));
-
       this.databasesView.setPage(dbPage);
     },
 

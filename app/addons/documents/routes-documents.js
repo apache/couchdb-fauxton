@@ -108,7 +108,7 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
         }
       });
 
-      this.rightHeader = this.setView("#api-navbar", new Documents.Views.RightAllDocsHeader({
+      this.rightHeader = this.setView("#right-header", new Documents.Views.RightAllDocsHeader({
          database: this.database
       }));
 
@@ -256,8 +256,11 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
         params: urlParams,
         bulkDeleteDocsCollection: new Documents.BulkDeleteDocCollection([], {databaseId: this.database.get('id')})
       }));
+      
+      this.apiUrl = function() {
+       return [this.database.allDocs.urlRef("apiurl", urlParams), this.database.allDocs.documentation()];
+      };
 
-      this.rightHeader.updateApiUrl([this.database.allDocs.urlRef("apiurl", urlParams), this.database.allDocs.documentation()]);
     },
 
     viewFn: function (databaseName, ddoc, view) {
@@ -302,7 +305,9 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
 
       this.sidebar.setSelectedTab(app.utils.removeSpecialCharacters(ddoc) + '_' + app.utils.removeSpecialCharacters(view));
 
-      this.rightHeader.updateApiUrl([this.indexedDocs.urlRef("apiurl", urlParams), "docs"]);
+      this.apiUrl = function() {
+       return [this.indexedDocs.urlRef("apiurl", urlParams), "docs"];
+      };
     },
 
     ddocInfo: function (designDoc, designDocs, view) {
@@ -467,7 +472,11 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
       this.sidebar.setSelectedTab('changes');
 
       this.leftheader.updateCrumbs(crumbs.changes(this.database));
-      this.rightHeader.updateApiUrl([this.database.url("changes-apiurl"), this.database.documentation()]);
+
+      this.apiUrl = function () {
+        return [this.database.url("changes-apiurl"), this.database.documentation()];
+      };
+
     },
 
     addFilter: function (filter) {
