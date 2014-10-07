@@ -25,7 +25,8 @@ the License.
           <% if (link.icon) { %>
           class="icon <%- link.icon %>"
           <% } %>
-          href="<%- link.url %>">
+          href="<%- link.url %>"
+          <% if (link.external) { %> target="_blank" <% } %> >
           <%- link.title %>
         </a>
       </li>
