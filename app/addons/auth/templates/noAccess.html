@@ -19,7 +19,7 @@ the License.
     <% if (user) { %>
       Please request authorization from the server administrators.
     <% } else { %>
-      You might need to <a href="#login<% if (urlBack){ %>?urlback=<%-urlBack%>  <% } %> ">login</a>.
+      You might need to <a href="#login<% if (urlBack && urlBack != "noAccess"){ %>?urlback=<%-urlBack%>  <% } %> ">login</a>.
       </a>
     <% } %>
   </p>
