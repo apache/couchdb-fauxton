@@ -30,9 +30,7 @@ function (app, FauxtonAPI, ActiveTasks) {
 
   Views.View = FauxtonAPI.View.extend({
     tagName: "table",
-
     className: "table table-bordered table-striped active-tasks",
-
     template: "addons/activetasks/templates/table",
 
     events: {
@@ -121,7 +119,7 @@ function (app, FauxtonAPI, ActiveTasks) {
 
     events: {
       "click .task-tabs li": "requestByType",
-      "change #pollingRange": "changePollInterval"
+      "input #pollingRange": "changePollInterval"
     },
 
     serialize: function () {
@@ -165,7 +163,6 @@ function (app, FauxtonAPI, ActiveTasks) {
 
   Views.TableDetail = FauxtonAPI.View.extend({
     tagName: 'tr',
-
     template: "addons/activetasks/templates/tabledetail",
 
     initialize: function(){
