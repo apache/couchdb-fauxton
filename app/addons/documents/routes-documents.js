@@ -250,7 +250,8 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
       // update the rightHeader with the latest & greatest info
       this.rightHeader.resetQueryOptions({ queryParams: urlParams });
       this.rightHeader.showQueryOptions();
-      this.rightHeader.updateApiUrl([this.database.allDocs.urlRef("apiurl", urlParams), this.database.allDocs.documentation()]);
+
+      //this.rightHeader.updateApiUrl([this.database.allDocs.urlRef("apiurl", urlParams), this.database.allDocs.documentation()]);
     },
 
     viewFn: function (databaseName, ddoc, view) {
@@ -300,7 +301,10 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
         showStale: true,
         hasReduce: true
       });
-      this.rightHeader.updateApiUrl([this.indexedDocs.urlRef("apiurl", urlParams), "docs"]);
+
+      this.apiUrl = function() {
+        return [this.indexedDocs.urlRef("apiurl", urlParams), "docs"];
+      };
     },
 
     ddocInfo: function (designDoc, designDocs, view) {
@@ -330,7 +334,6 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
       this.documentsView && this.documentsView.remove();
 
       this.viewEditor = this.setView("#dashboard-upper-content", new Index.ViewEditor({
-        rightHeaderView: this.rightHeader,
         currentddoc: "_design/" + designDoc || "",
         ddocs: this.designDocs,
         params: params,
@@ -391,7 +394,9 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
 
       // this has been commented out because it causes the header bar to disappear after a search (i.e the "Query
       // Options" link disappears). This issue is being addressed in a separate ticket (not sure about the Jira ID)
-      //this.apiUrl = [collection.urlRef("apiurl", urlParams), "docs"];
+      this.apiUrl = function() {
+        return [this.indexedDocs.urlRef("apiurl", urlParams), "docs"];
+      }
     },
 
     perPageChange: function (perPage) {
