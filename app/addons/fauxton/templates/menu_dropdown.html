@@ -26,7 +26,7 @@ the License.
           class="icon <%- link.icon %>"
           <% } %>
           href="<%- link.url %>"
-          <% if (link.external) { %> target="_blank" <% } %> >
+          <% if (link.external) { %> data-bypass="true" target="_blank" <% } %> >
           <%- link.title %>
         </a>
       </li>
