@@ -431,6 +431,15 @@ function(app, FauxtonAPI, Components, Documents, Databases, pouchdb, QueryOption
           database: this.database
         }));
       }
+
+      // if this isn't a new View, add in whatever extensions have been associated with this location
+      if (!this.newView) {
+        var buttonViews = FauxtonAPI.getExtensions('ViewEditor:ButtonRow');
+        _.each(buttonViews, function (view) {
+          this.insertView("#viewBtnExtensions", view);
+          view.update(this.database, this.ddocInfo.safeID(), this.viewName);
+        }, this);
+      }
     },
 
     afterRender: function() {

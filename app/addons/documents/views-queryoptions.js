@@ -181,18 +181,6 @@ function(app, FauxtonAPI) {
       return $("#query-options-tray").is(":visible");
     },
 
-    // Note: this has been commented out temporarily until a decision has been made regarding the location
-    // of the "Compact View" button
-//    beforeRender: function () {
-//      //if (this.viewName && this.ddocName) {
-//      var buttonViews = FauxtonAPI.getExtensions('QueryOptions:ViewButton');
-//        _.each(buttonViews, function (view) {
-//          this.insertView('#button-options', view);
-//          //view.update(this.database, this.ddocName, this.viewName);
-//        }, this);
-//      //}
-//    },
-
     closeTray: function() {
       $("#query-options-tray").velocity("reverse", 250, function() { // TODO constant
         $("#query-options-tray").hide();

@@ -171,7 +171,7 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
       this.toolsView && this.toolsView.remove();
       this.viewEditor && this.viewEditor.remove();
 
-      var designDocInfo = new Resources.DdocInfo({_id: "_design/"+ddoc},{database: this.database });
+      var designDocInfo = new Resources.DdocInfo({ _id: "_design/" + ddoc }, { database: this.database });
       this.setView("#dashboard-lower-content", new Documents.Views.DdocInfo({
         ddocName: ddoc,
         model: designDocInfo

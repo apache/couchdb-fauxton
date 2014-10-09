@@ -25,7 +25,7 @@ function(app, FauxtonAPI, Compaction) {
       icon: "icon-cogs"
     });
 
-    FauxtonAPI.registerExtension('QueryOptions:ViewButton', new Compaction.CompactView({}));
+    FauxtonAPI.registerExtension('ViewEditor:ButtonRow', new Compaction.CompactView({}));
   };
 
   return Compaction;
