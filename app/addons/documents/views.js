@@ -661,7 +661,15 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions,
         if (this.bulkDeleteDocsCollection) {
           isChecked = this.bulkDeleteDocsCollection.get(doc.id);
         }
-        this.rows[doc.get('id')] = this.insertView("table.all-docs tbody", new this.nestedView({
+
+        // the location of the ID attribute varies depending on the model. Also, for reduced view searches, the ID isn't
+        // available so we use Backbone's own unique ID
+        var id = _.has(doc, 'id') ? doc.id : doc.get('id');
+        if (_.isUndefined(id)) {
+          id = doc.cid;
+        }
+
+        this.rows[id] = this.insertView("table.all-docs tbody", new this.nestedView({
           model: doc,
           checked: isChecked
         }));
