@@ -33,15 +33,12 @@ function (app, FauxtonAPI, CouchdbSession) {
   };
 
   var Admin = Backbone.Model.extend({
-
-    url: function () {
+    url: function() {
       return app.host + '/_config/admins/' + this.get("name");
     },
-
-    isNew: function () { return false; },
+    isNew: function() { return false; },
 
     sync: function (method, model, options) {
-
       var params = {
         url: model.url(),
         contentType: 'application/json',
@@ -141,7 +138,6 @@ function (app, FauxtonAPI, CouchdbSession) {
         deferred.rejectWith(this, [msg]);
         return deferred;
       }
-
     },
 
     createAdmin: function (username, password, login) {
@@ -259,7 +255,6 @@ function (app, FauxtonAPI, CouchdbSession) {
         errorHandler(msg);
       });
     }
-
   });
 
   Auth.LoginView = FauxtonAPI.View.extend({
@@ -276,13 +271,12 @@ function (app, FauxtonAPI, CouchdbSession) {
     login: function (event) {
       event.preventDefault();
 
-      var that = this,
-          username = this.$('#username').val(),
+      var username = this.$('#username').val(),
           password = this.$('#password').val(),
           urlBack = this.urlBack,
           promise = this.model.login(username, password);
 
-      promise.then(function () {
+      promise.then(function() {
         FauxtonAPI.addNotification({msg:  FauxtonAPI.session.messages.loggedIn });
 
         if (urlBack) {
@@ -293,8 +287,11 @@ function (app, FauxtonAPI, CouchdbSession) {
       });
 
       promise.fail(errorHandler);
-    }
+    },
 
+    afterRender: function() {
+      $("#username").focus();
+    }
   });
 
   Auth.ChangePassword = FauxtonAPI.View.extend({
