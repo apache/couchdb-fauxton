@@ -319,11 +319,11 @@ module.exports = function(grunt) {
       couchdb: {
         files: [
           // this gets built in the template task
-          {src: "dist/release/index.html", dest: "../../share/www/fauxton/index.html"},
-          {src: ["**"], dest: "../../share/www/fauxton/js/", cwd:'dist/release/js/',  expand: true},
-          {src: ["**"], dest: "../../share/www/fauxton/img/", cwd:'dist/release/img/', expand: true},
-          {src: ["**"], dest: "../../share/www/fauxton/fonts/", cwd:'dist/release/fonts/', expand: true},
-          {src: ["**"], dest: "../../share/www/fauxton/css/", cwd:"dist/release/css/", expand: true}
+          {src: "dist/release/index.html", dest: "../../share/www/index.html"},
+          {src: ["**"], dest: "../../share/www/js/", cwd:'dist/release/js/',  expand: true},
+          {src: ["**"], dest: "../../share/www/img/", cwd:'dist/release/img/', expand: true},
+          {src: ["**"], dest: "../../share/www/fonts/", cwd:'dist/release/fonts/', expand: true},
+          {src: ["**"], dest: "../../share/www/css/", cwd:"dist/release/css/", expand: true}
         ]
       },
       couchdebug: {
