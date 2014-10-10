@@ -41,7 +41,7 @@
           "cachebuster": "?v1.0"
         },
         "app": {
-          "root": "/_utils/fauxton/",
+          "root": "/_utils/",
           "host": "../..",
           "version": "1.0"
         }
