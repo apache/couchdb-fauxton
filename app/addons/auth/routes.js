@@ -62,7 +62,7 @@ function(app, FauxtonAPI, Auth) {
         urlBack: urlBack
       }));
       this.apiUrl = 'noAccess';
-    },
+    }
   });
 
   var userRouteObject = FauxtonAPI.RouteObject.extend({
@@ -75,12 +75,12 @@ function(app, FauxtonAPI, Auth) {
       },
       'addAdmin': {
         roles: ['_admin'],
-        route: 'addAdmin',
-      },
+        route: 'addAdmin'
+      }
     },
     
     initialize: function () {
-     this.navDrop = this.setView('#sidebar-content', new Auth.NavDropDown({model: FauxtonAPI.session}));
+      this.navDrop = this.setView('#sidebar-content', new Auth.NavDropDown({model: FauxtonAPI.session}));
     },
 
     changePassword: function () {
