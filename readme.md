@@ -50,7 +50,7 @@ You should be able to access fauxton on `http://localhost:8000`
 
     grunt couchdb
 
-    This will install the latest version of Fauxton into `/share/www/fauxton`
+    This will install the latest version of Fauxton into `/share/www/`
 
 ### Running Tests
     There are two ways to run the tests. `grunt test` will run the tests via the commandline. It is also possible to view them via the url
