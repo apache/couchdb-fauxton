@@ -76,6 +76,7 @@ function(app, FauxtonAPI, Config, Components) {
     serialize: function () {
       return {option: this.model.toJSON()};
     },
+
     saveAndRender: function (event) {
       var options = {},
           $input = this.$(event.currentTarget).parents('td').find(".js-value-input"),
@@ -155,8 +156,7 @@ function(app, FauxtonAPI, Config, Components) {
 
   Views.Modal = FauxtonAPI.View.extend({
     className: "modal hide fade",
-
-    template:  "addons/config/templates/modal",
+    template: "addons/config/templates/modal",
 
     events: {
       "submit #js-add-section-form": "submitClick"
@@ -248,10 +248,10 @@ function(app, FauxtonAPI, Config, Components) {
     show: function(){
       this.$el.modal({show:true});
     },
+
     hide: function(){
       this.$el.modal('hide');
     }
-
   });
 
   return Views;
