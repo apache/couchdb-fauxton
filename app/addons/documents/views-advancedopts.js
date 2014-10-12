@@ -169,7 +169,15 @@ function(app, FauxtonAPI, resizeColumns ) {
     },
 
     updateView: function (event) {
+      var currentSubmit = (new Date()).getTime();			
       event.preventDefault();
+      // only react when more than 200ms are between the "clicks"
+      if (this.lastSubmit) {
+        if ((currentSubmit - this.lastSubmit) < 200) {
+          return;
+        }
+      }
+      this.lastSubmit = currentSubmit;
       var params = this.queryParams();
       if (!params) { return;}
       this.updateViewFn(event, params);
