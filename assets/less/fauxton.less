@@ -533,6 +533,10 @@ REUSEABLE SHADOW BORDER
 /* only specify the sidebar width when there’s a sidebar */
 .with-sidebar #breadcrumbs {
   width: @sidebarWidth;
+
+  .active {
+    width: 259px;
+  }
 }
 
 #breadcrumbs {
@@ -561,7 +565,6 @@ REUSEABLE SHADOW BORDER
         .with-sidebar &,
         .two-pane & {
           padding:20px 10px;
-          font-size: 19px;
           float: left;
         }
         a {
@@ -575,7 +578,6 @@ REUSEABLE SHADOW BORDER
         color: #333;
         overflow: hidden;
         text-overflow: ellipsis;
-        width: 259px;
         white-space: nowrap;
       }
       &.divider {

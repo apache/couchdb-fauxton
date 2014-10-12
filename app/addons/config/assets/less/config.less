@@ -10,6 +10,9 @@
  *  License for the specific language governing permissions and limitations under
  *  the License.
  */
+button.addSection {
+  margin-bottom: 12px;
+}
 .config-item {
   height: 65px;
 
@@ -24,11 +27,26 @@
   .js-hidden {
     display: none;
   }
-  button {width: 7%;}
+
+  button { width: 7%;}
 }
 
 #add-section-modal .modal {
   width: 400px;
+  margin-left: -200px;
+  left: 50%;
+
+  input {
+    width: 100%;
+  }
+
+  form {
+    margin-bottom: 0px;
+  }
+
+  .modal-footer {
+    padding: 14px 0px 0px;
+  }
 }
 
 #config-trash {
@@ -45,3 +63,4 @@ table.config {
     }
   }
 }
+
