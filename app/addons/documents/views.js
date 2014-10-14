@@ -42,7 +42,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
     className: "header-right",
     template: "addons/documents/templates/header_alldocs",
     events: {
-      'click .toggle-select-menu': 'selectAllMenu'
+      'click .js-toggle-select-menu': 'selectAllMenu'
     },
 
     initialize: function(options) {
@@ -75,8 +75,8 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
     },
 
     selectAllMenu: function(e) {
-      FauxtonAPI.triggerRouteEvent("toggleSelectHeader");
-      FauxtonAPI.Events.trigger("documents:showSelectAll",this.selectVisible);
+      FauxtonAPI.triggerRouteEvent('toggleSelectHeader');
+      FauxtonAPI.Events.trigger('documents:showSelectAll', this.selectVisible);
     },
 
     // updates the API bar when the route changes
@@ -119,6 +119,47 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
     }
   });
 
+  Views.SelectMenuHeader = FauxtonAPI.View.extend({
+    className: 'header-right',
+    template: 'addons/documents/templates/select_doc_menu',
+    events: {
+      'click button.js-all': 'selectAll',
+      'click button.js-bulk-delete': 'bulkDelete',
+      'click #collapse': 'collapse',
+      'click .js-toggle-select-menu': 'selectAllMenu'
+    },
+
+    initialize: function () {
+      this.listenTo(FauxtonAPI.Events, 'documents:toggleTrashButton', this.toggleTrashButton);
+    },
+
+    toggleTrashButton: function (enabled) {
+      var $bulkDeleteButton = this.$('.js-bulk-delete');
+      $bulkDeleteButton.toggleClass('disabled', !enabled);
+    },
+
+    selectAllMenu: function (e) {
+      FauxtonAPI.triggerRouteEvent('toggleSelectHeader');
+      FauxtonAPI.Events.trigger('documents:showSelectAll', this.selectVisible);
+    },
+
+    bulkDelete: function () {
+      FauxtonAPI.Events.trigger('documents:bulkDelete');
+    },
+
+    selectAll: function (evt) {
+      this.$(evt.target).toggleClass('active');
+
+      FauxtonAPI.Events.trigger('documents:selectAll', this.$(evt.target).hasClass('active'));
+    },
+
+    collapse: function (evt) {
+      var icon = this.$(evt.target).find('i');
+      icon.toggleClass('icon-minus');
+      icon.toggleClass('icon-plus');
+      FauxtonAPI.Events.trigger('documents:collapse');
+    }
+  });
 
   Views.DeleteDBModal = Components.ModalView.extend({
     template: "addons/documents/templates/delete_database_modal",
@@ -176,11 +217,38 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
 
   Views.Document = FauxtonAPI.View.extend({
     template: "addons/documents/templates/all_docs_item",
-    tagName: "tr",
-    className: "all-docs-item",
+
+    className: function () {
+      return (this.showSelect ? 'showSelect' : '') + ' all-docs-item doc-row';
+    },
 
     initialize: function (options) {
       this.checked = options.checked;
+      this.expanded = options.expanded;
+      this.showSelect = false;
+      _.bindAll(this);
+
+      FauxtonAPI.Events.on('documents:showSelectAll', this.showSelectBox);
+      FauxtonAPI.Events.on('documents:collapse', this.collapse);
+      FauxtonAPI.Events.on('documents:selectAll', this.selectAll);
+    },
+
+    cleanup: function () {
+      FauxtonAPI.Events.unbind('documents:showSelectAll');
+      FauxtonAPI.Events.unbind('documents:collapse');
+      FauxtonAPI.Events.unbind('documents:selectAll');
+    },
+
+    showSelectBox: function () {
+      this.$el.toggleClass('showSelect');
+    },
+
+    selectAll: function (checked) {
+      this.$("input:checkbox").prop('checked', checked).trigger('click');
+    },
+
+    collapse: function (bool) {
+      this.$('.doc-data').toggle(bool);
     },
 
     events: {
@@ -196,6 +264,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
 
     serialize: function() {
       return {
+        docID: this.model.get('_id'),
         doc: this.model,
         checked: this.checked
       };
@@ -240,28 +309,6 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
       });
     }
   });
-
-  Views.Row = FauxtonAPI.View.extend({
-    template: "addons/documents/templates/index_row_docular",
-    tagName: "tr",
-
-    events: {
-      "click button.delete": "destroy"
-    },
-
-    destroy: function (event) {
-      event.preventDefault();
-      window.alert('Cannot delete a document generated from a view.');
-    },
-
-    serialize: function() {
-      return {
-        doc: this.model,
-        url: this.model.url('app')
-      };
-    }
-  });
-
 
   Views.AllDocsNumber = FauxtonAPI.View.extend({
     template: "addons/documents/templates/all_docs_number",
@@ -328,14 +375,12 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
   Views.AllDocsList = FauxtonAPI.View.extend({
     template: "addons/documents/templates/all_docs_list",
     events: {
-      "click button.all": "selectAll",
-      "click button.js-bulk-delete": "bulkDelete",
-      "click #collapse": "collapse",
       "click .all-docs-item": "toggleDocument",
       "click #js-end-results": "openQueryOptionsTray"
     },
 
     initialize: function (options) {
+      _.bindAll(this);
       this.nestedView = options.nestedView || Views.Document;
       this.rows = {};
       this.viewList = !!options.viewList;
@@ -354,6 +399,17 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
       if (!this.viewList) {
         this.bulkDeleteDocsCollection = options.bulkDeleteDocsCollection;
       }
+
+      FauxtonAPI.Events.on("documents:bulkDelete", this.bulkDelete);
+      FauxtonAPI.Events.on("documents:selectAll", this.toggleTrash);
+    },
+
+    toggleTrash: function () {
+      if (!this.bulkDeleteDocsCollection) {
+        return;
+      }
+
+      FauxtonAPI.Events.trigger('documents:toggleTrashButton', this.bulkDeleteDocsCollection.length > 0);
     },
 
     removeDocuments: function (ids) {
@@ -387,7 +443,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
     },
 
     toggleDocument: function (event) {
-      var $row = this.$(event.target).closest('tr'),
+      var $row = this.$(event.target).closest('.doc-row'),
           docId = $row.attr('data-id'),
           rev = this.collection.get(docId).get('_rev'),
           data = {_id: docId, _rev: rev, _deleted: true};
@@ -402,16 +458,6 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
       $row.toggleClass('js-to-delete');
 
       this.toggleTrash();
-    },
-
-    toggleTrash: function () {
-      var $bulkdDeleteButton = this.$('.js-bulk-delete');
-
-      if (this.bulkDeleteDocsCollection && this.bulkDeleteDocsCollection.length > 0) {
-        $bulkdDeleteButton.removeClass('disabled');
-      } else {
-        $bulkdDeleteButton.addClass('disabled');
-      }
     },
 
     openQueryOptionsTray: function(e) {
@@ -479,18 +525,6 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
       };
     },
 
-    collapse: function (event) {
-      event.preventDefault();
-
-      if (this.expandDocs) {
-        this.expandDocs = false;
-      } else {
-        this.expandDocs = true;
-      }
-
-      this.render();
-    },
-
     bulkDelete: function() {
       var that = this,
           documentsLength = this.bulkDeleteDocsCollection.length,
@@ -514,6 +548,9 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
     },
 
     cleanup: function () {
+      FauxtonAPI.Events.unbind("documents:bulkDelete");
+      FauxtonAPI.Events.unbind("documents:selectAll");
+
       this.pagination && this.pagination.remove();
       this.allDocsNumber && this.allDocsNumber.remove();
       _.each(this.rows, function (row) {row.remove();});
@@ -562,7 +599,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
           id = doc.cid;
         }
 
-        this.rows[id] = this.insertView("table.all-docs tbody", new this.nestedView({
+        this.rows[id] = this.insertView('#doc-list', new this.nestedView({
           model: doc,
           checked: isChecked
         }));
@@ -601,6 +638,11 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
       }
 
       this.toggleTrash();
+      this.setPaginationWidth();
+    },
+
+    setPaginationWidth: function () {
+      this.$('#documents-pagination').css('width', this.$el.outerWidth());
     },
 
     perPage: function () {

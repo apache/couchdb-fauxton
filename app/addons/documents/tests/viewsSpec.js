@@ -35,9 +35,13 @@ define([
       collection: database.allDocs
     });
 
+    var selectHeader = new Views.Views.SelectMenuHeader();
+
     beforeEach(function (done) {
       viewSandbox = new ViewSandbox();
-      viewSandbox.renderView(view, done);
+      viewSandbox.renderView(view, function () {
+        viewSandbox.renderView(selectHeader, done);
+      });
     });
 
     afterEach(function () {
@@ -50,7 +54,7 @@ define([
 
     it('pressing SelectAll should fill the delete-bulk-docs-collection', function () {
       assert.equal(bulkDeleteDocCollection.length, 0);
-      view.$('button.all').trigger('click');
+      selectHeader.$('button.js-all').trigger('click');
       assert.equal(bulkDeleteDocCollection.length, 1);
     });
   });

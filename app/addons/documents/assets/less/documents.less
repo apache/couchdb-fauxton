@@ -17,16 +17,6 @@
 @import "changes.less";
 @import "sidenav.less";
 
-tr.all-docs-item {
-  border: none;
-  background: transparent;
-  .btn-group {
-    position: absolute;
-    right: 0;
-    top: 6px;
-  }
-}
-
 button.beautify {
   margin-top: 20px;
 }
@@ -50,29 +40,6 @@ button.beautify {
   margin-right: 17px;
 }
 
-/** used in all_docs_list.html **/
-.view {
-  table td div {
-    position: relative;
-  }
-
-  table td div div {
-    display: none;
-    line-height: 1;
-    position: absolute;
-    right: 4px;
-    top: 4px;
-  }
-
-  table td div:hover div a.edits {
-    padding-left: 16px;
-    padding-right: 16px;
-  }
-
-  table td div:hover div {
-    display: block;
-  }
-}
 
 /** used in view_editor.html **/
 .design-doc-group {
@@ -88,6 +55,10 @@ button.beautify {
       margin-left: 100px;
     }
   }
+}
+
+.metadata-page {
+  padding: 20px;
 }
 
 #map-function, #reduce-function {

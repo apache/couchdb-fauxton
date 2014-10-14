@@ -3,6 +3,7 @@
   { "name": "fauxton" },
   { "name": "databases" },
   { "name": "documents" },
+  { "name": "indexes" },
   { "name": "pouchdb" },
   { "name": "activetasks" },
   { "name": "config" },

@@ -604,12 +604,13 @@ REUSEABLE SHADOW BORDER
   }
 }
 
-.header-left{
+.header-left {
   position: relative;
   #header-dropdown-menu {
     position: absolute;
     right: 5px;
     top: 0;
+    z-index: 210;
     .dropdown-toggle {
       color: #666666;
     }
@@ -617,7 +618,6 @@ REUSEABLE SHADOW BORDER
       padding: 10px;
       text-decoration: none;
       &:before {
-        font-size: 20px;
         margin-top: 4px;
       }
     }
@@ -628,6 +628,9 @@ REUSEABLE SHADOW BORDER
     .dropdown-menu {
       left: -115px;
       top: 48px;
+    }
+    .dropdown-toggle {
+      font-size: 20px;
     }
   }
 }
@@ -691,6 +694,9 @@ REUSEABLE SHADOW BORDER
   .btn:active {
     box-shadow: none;
   }
+  #header-select-all {
+    float: left;
+  }
 }
 
 .header-right {
@@ -734,9 +740,16 @@ REUSEABLE SHADOW BORDER
   > div:last-child {
     border-left: none;
   }
+  .all-doc-actions {
+    float: left;
+  }
 }
 .api-navbar:before {
   right: 25px;
+}
+
+#header-select-all {
+  cursor: pointer;
 }
 
 #jump-to-doc{
@@ -760,7 +773,11 @@ footer.pagination-footer {
   bottom:0;
   height: 50px;
   border-top:1px solid #ccc;
-  margin-left: -15px;
+  margin-left: -20px;
+  .with-sidebar &,
+  .two-pane & {
+    margin-left: -0;
+  }
   .pagination{
     .box-shadow(none);
     position: absolute;

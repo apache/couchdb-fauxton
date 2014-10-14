@@ -12,7 +12,7 @@
 define([
        'app',
        'addons/fauxton/components',
-       'addons/documents/resources',
+       'addons/indexes/resources',
        'testUtils',
        'api'
 ], function (app, Views, Models, testUtils, FauxtonAPI) {
@@ -47,7 +47,7 @@ define([
         canShowNextfn: function () { return true;}
       });
       viewSandbox = new ViewSandbox();
-      viewSandbox.renderView(paginate, done); 
+      viewSandbox.renderView(paginate, done);
     });
 
     afterEach(function () {
@@ -58,8 +58,6 @@ define([
       beforeEach(function () {
         //do this so it doesn't throw an error on other unwired up components
         FauxtonAPI.triggerRouteEvent = function () {};
-        //FauxtonAPI.triggerRouteEvent.restore && FauxtonAPI.triggerRouteEvent.restore();
-        //FauxtonAPI.navigate.restore && FauxtonAPI.navigate.restore(); 
       });
 
       it('Should trigger routeEvent', function () {

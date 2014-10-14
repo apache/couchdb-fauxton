@@ -21,6 +21,7 @@ app/addons/*
 !app/addons/databases
 !app/addons/documents
 !app/addons/styletests
+!app/addons/indexes
 settings.json*
 !settings.json.default
 !assets/js/plugins/zeroclipboard/ZeroClipboard.swf
