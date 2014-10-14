@@ -394,9 +394,9 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
 
       // this has been commented out because it causes the header bar to disappear after a search (i.e the "Query
       // Options" link disappears). This issue is being addressed in a separate ticket (not sure about the Jira ID)
-      this.apiUrl = function() {
-        return [this.indexedDocs.urlRef("apiurl", urlParams), "docs"];
-      };
+//      this.apiUrl = function() {
+//        return [this.indexedDocs.urlRef("apiurl", urlParams), "docs"];
+//      };
     },
 
     perPageChange: function (perPage) {
