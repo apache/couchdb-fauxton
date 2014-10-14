@@ -10,31 +10,31 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 /*ALL DOCS TABLE*/
-
 @import "../../../../../assets/less/variables.less";
 @import "../../../../../assets/less/bootstrap/variables.less";
 @import "../../../../../assets/less/bootstrap/mixins.less";
-@import "advancedOptions.less";
+@import "queryOptions.less";
 @import "changes.less";
 @import "sidenav.less";
 
 tr.all-docs-item {
   border: none;
   background: transparent;
-    .btn-group {
-        position: absolute;
-        right: 0;
-        top: 6px;
-    }
+  .btn-group {
+    position: absolute;
+    right: 0;
+    top: 6px;
+  }
 }
+
 button.beautify {
   margin-top: 20px;
 }
 
 .toggle-btns {
-    label{
-        margin-right: 0;
-    }
+  label {
+    margin-right: 0;
+  }
 }
 
 #per-page {
@@ -43,65 +43,66 @@ button.beautify {
   #select-per-page {
     margin-top: 10px;
   }
-
 }
 
-
-#query div.controls-group.well{
-    height: 180px;
-    margin-right: 17px;
+#query div.controls-group.well {
+  height: 180px;
+  margin-right: 17px;
 }
 
 /** used in all_docs_list.html **/
 .view {
-    table td div {
-        position: relative;
-    }
+  table td div {
+    position: relative;
+  }
 
-    table td div div {
-        display: none;
-        line-height: 1;
-        position: absolute;
-        right: 4px;
-        top: 4px;
-    }
+  table td div div {
+    display: none;
+    line-height: 1;
+    position: absolute;
+    right: 4px;
+    top: 4px;
+  }
 
-    table td div:hover div a.edits {
-        padding-left: 16px;
-        padding-right: 16px;
-    }
+  table td div:hover div a.edits {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
 
-    table td div:hover div {
-        display: block;
-    }
+  table td div:hover div {
+    display: block;
+  }
 }
 
 /** used in view_editor.html **/
-.design-doc-group{
-    .span3 { margin: 0;}
-    #new-ddoc-section {
-        margin-top: 10px;
-        label{ width: 100px}
-        .controls{
-            margin-left: 100px;
-        }
+.design-doc-group {
+  .span3 {
+    margin: 0;
+  }
+  #new-ddoc-section {
+    margin-top: 10px;
+    label {
+      width: 100px
     }
+    .controls {
+      margin-left: 100px;
+    }
+  }
 }
 
-
-#map-function, #reduce-function{
-    width: 100%;
-    font-size: 16px;
+#map-function, #reduce-function {
+  width: 100%;
+  font-size: 16px;
 }
 
 #doc-actions {
-	height: 42px;
+  height: 42px;
 }
 
 #editor-container {
-    width: 1316px;
-    height: 688px;
-    font-size: 16px;
+  width: 1316px;
+  height: 688px;
+  font-size: 16px;
 }
 
 button.string-edit {
@@ -137,21 +138,20 @@ button.string-edit[disabled] {
   display: inline-block;
 }
 
-
 .change-sequence {
   word-wrap: break-word;
 }
 
-
-#dashboard-upper-content{
-  .js-query-keys-wrapper{
+#dashboard-upper-content {
+  .js-query-keys-wrapper {
     padding-top: 0;
   }
-  /** used in advanced-options.html**/
+
+  /** used in query-options.html**/
   .custom-inputs {
-    .row-fluid{
+    .row-fluid {
       padding-top: 20px;
-      .radio, .checkbox{
+      .radio, .checkbox {
         padding-left: 0;
       }
       .checkbox.inline,
@@ -163,12 +163,14 @@ button.string-edit[disabled] {
   }
 }
 
-.nav-list{
+.nav-list {
   border-top: none;
 }
 
+.end-of-results {
+  margin-bottom: 30px;
 
-
-
-
-
+  .muted {
+    margin-bottom: 0px;
+  }
+}

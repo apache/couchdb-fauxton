@@ -243,7 +243,7 @@ tbody {
 .checkbox {
   label {
     display: inline-block;
-    padding-left:25px;
+    padding-left: 30px;
   }
 }
 
@@ -771,7 +771,7 @@ table.databases {
   }
 
   .checkbox label:before {
-    border-radius: 3px;
+    border-radius: 12px;
   }
 
   .controls > .radio:first-child, .controls > .checkbox:first-child {
@@ -786,29 +786,31 @@ table.databases {
   }
 
   input[type=checkbox]:checked + label:before {
-    /*content: "\2713"; */
-    content: "\00d7";
-    text-shadow: 1px 1px 1px rgba(0, 0, 0, .2);
-    font-size: 16px;
-    background-color: @linkColor;
-    color: white;
+    font-family: "fauxtonicon";
+    content: "\f143";
+    font-size: 12px;
+    background-color: inherit;
+    border: 2px solid #7C8085;
+    color: @linkColor;
     text-align: center;
-    line-height: 15px;
+    line-height: 19px;
+    box-shadow: none;
+    display: inline-block;
   }
 
   label:before {
     content: "";
     display: inline-block;
-
-    width: 16px;
-    height: 16px;
-
+    width: 22px;
+    height: 22px;
     margin-right: 10px;
     position: absolute;
     left: 0;
-    bottom: 1px;
-    background-color: #aaa;
-    box-shadow: inset 0px 2px 3px 0px rgba(0, 0, 0, .3), 0px 1px 0px 0px rgba(255, 255, 255, .8);
+    bottom: 0px;
+    background-color: #7C8085;
+    -webkit-box-shadow: inset 0px 3px 0px 0px rgba(50, 50, 50, 0.40);
+    -moz-box-shadow:    inset 0px 3px 0px 0px rgba(50, 50, 50, 0.40);
+    box-shadow:         inset 0px 3px 0px 0px rgba(50, 50, 50, 0.40);
   }
 
   .radio label:before {
@@ -847,22 +849,39 @@ div.spinner {
 
 #api-navbar{
   > div{
-    > .api-url-btn {
+    > .api-url-btn, > .query-options-btn {
       padding:10px;
+    }
+  }
+
+  .header-icon {
+    font-size: 16px;
+    &:before {
+      float: left;
+      margin: 12px 5px 0px 0px;
     }
   }
 }
 
-.api-url-btn {
+header .header-icon {
+  font-size: 16px;
+  &:before {
+    float: left;
+    margin: 12px 5px 0px 0px;
+  }
+}
+
+
+.api-url-btn, .query-options-btn {
   .icon {
-    font-size: 11px;
+    font-size: 14px;
   }
   background: none;
   border: none;
   padding: 0;
   margin: 0;
 }
-.api-url-btn:hover {
+.api-url-btn:hover, .query-options-btn:hover {
   background: none;
 }
 .api-navbar {

@@ -45,11 +45,10 @@ function(app, Components, FauxtonAPI, Databases) {
         collection: this.collection
       }));
 
-
-      //Moved the apibar view into the components file so you can include it in your views
+      // moved the apibar view into the components file so you can include it in your views
       this.apiBar = this.insertView("#header-api-bar", new Components.ApiBar({
         endpoint: this.endpoint
-        }));
+      }));
     }
   });
 

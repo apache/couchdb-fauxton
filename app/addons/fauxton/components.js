@@ -105,7 +105,7 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
     events:  {
       "click .api-url-btn" : "showAPIbar"
     },
-    
+
     initialize: function (options) {
       var _options = options || {};
       this.endpoint = _options.endpoint || '_all_docs';
@@ -167,9 +167,11 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
     update: function(endpoint) {
       this.endpoint = endpoint[0];
       this.documentation = endpoint[1];
+
       this.render();
     },
-    afterRender: function(){
+
+    afterRender: function() {
       var client = new Components.Clipboard({
         $el: this.$('.copy-url')
       });

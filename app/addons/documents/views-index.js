@@ -12,15 +12,15 @@
 
 define([
   "app",
-
   "api",
   "addons/fauxton/components",
-
   "addons/documents/resources",
   "addons/databases/resources",
   "addons/pouchdb/base",
+
   //views
-  "addons/documents/views-advancedopts",
+  "addons/documents/views-queryoptions",
+
   // Libs
   "addons/fauxton/resizeColumns",
 
@@ -29,10 +29,19 @@ define([
   "plugins/prettify"
 ],
 
-function(app, FauxtonAPI, Components, Documents, Databases, pouchdb,
-         QueryOptions, resizeColumns, beautify, prettify) {
+function(app, FauxtonAPI, Components, Documents, Databases, pouchdb, QueryOptions, resizeColumns, beautify) {
 
   var Views = {};
+
+
+  // this is a temporary workaround until I hear of a better on. The problem is that on initial page load (i.e. a refresh
+  // of the View page) the afterRender() functions calls a FauxtonAPI.triggerRouteEvent(). That causes this View to be
+  // rendered twice (at least, the afterRender() function then gets called twice) - and that causes the header content to
+  // disappear. This var tracks whether the View has been rendered and if not, doesn't call the triggerRouteEvent. btw,
+  // the reason the triggerRouteEvent('resetQueryOptions') code is there is that it ensures the Query Options tray shows
+  // the appropriate content for the current View (i.e. hasReduce or not)
+  var hasRenderedOnce = false;
+
 
   Views.ViewEditor = FauxtonAPI.View.extend({
     template: "addons/documents/templates/view_editor",
@@ -57,6 +66,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, pouchdb,
     },
 
     defaultLang: "javascript",
+    rendered: false,
 
     initialize: function(options) {
       this.newView = options.newView || false;
@@ -64,6 +74,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, pouchdb,
       this.params = options.params;
       this.database = options.database;
       this.currentDdoc = options.currentddoc;
+
       if (this.newView) {
         this.viewName = 'newView';
       } else {
@@ -133,14 +144,14 @@ function(app, FauxtonAPI, Components, Documents, Databases, pouchdb,
     },
 
     saveView: function(event) {
-      var json, notification,
-      that = this;
+      var notification,
+          that = this;
 
-      if (event) { event.preventDefault();}
+      if (event) { event.preventDefault(); }
 
       $('#dashboard-content').scrollTop(0); //scroll up
 
-      if (this.hasValidCode() && this.$('#new-ddoc:visible').val() !=="") {
+      if (this.hasValidCode() && this.$('#new-ddoc:visible').val() !== "") {
         var mapVal = this.mapEditor.getValue(),
         reduceVal = this.reduceVal(),
         viewName = this.$('#index-name').val(),
@@ -177,7 +188,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, pouchdb,
           if (that.newView || viewNameChange) {
             var fragment = '/database/' + that.database.safeID() +'/' + ddoc.safeID() + '/_views/' + app.utils.safeURLName(viewName);
 
-            FauxtonAPI.navigate(fragment, {trigger: false});
+            FauxtonAPI.navigate(fragment, { trigger: false });
             that.newView = false;
             that.ddocID = ddoc.safeID();
             that.viewName = viewName;
@@ -192,7 +203,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, pouchdb,
 
           if (that.reduceFunStr !== reduceVal) {
             that.reduceFunStr = reduceVal;
-            that.advancedOptions.renderOnUpdatehasReduce(that.hasReduce());
+            FauxtonAPI.triggerRouteEvent("updateQueryOptions", { hasReduce: that.hasReduce() });
           }
 
           FauxtonAPI.triggerRouteEvent('updateAllDocs', {ddoc: ddocName, view: viewName});
@@ -231,29 +242,25 @@ function(app, FauxtonAPI, Components, Documents, Databases, pouchdb,
            // bootstrap wants the error on a control-group div, but we're not using that
            //$('form.view-query-update input[name='+param+'], form.view-query-update select[name='+param+']').addClass('error');
            return FauxtonAPI.addNotification({
-             msg: "JSON Parse Error on field: "+param.name,
+             msg: "JSON Parse Error on field: " + param.name,
              type: "error",
-             selector: ".advanced-options .errors-container",
+             selector: ".query-options .errors-container",
              clear: true
            });
          });
          FauxtonAPI.addNotification({
            msg: "Make sure that strings are properly quoted and any other values are valid JSON structures",
            type: "warning",
-           selector: ".advanced-options .errors-container",
+           selector: ".query-options .errors-container",
            clear: true
          });
 
          return false;
       }
 
-       var fragment = window.location.hash.replace(/\?.*$/, '');
-       if (!_.isEmpty(params)) {
-        fragment = fragment + '?' + $.param(params);
-       }
-
-       FauxtonAPI.navigate(fragment, {trigger: false});
-       FauxtonAPI.triggerRouteEvent('updateAllDocs', {ddoc: this.ddocID, view: this.viewName});
+      var url = app.utils.replaceQueryParams(params);
+      FauxtonAPI.navigate(url, {trigger: false});
+      FauxtonAPI.triggerRouteEvent('updateAllDocs', {ddoc: this.ddocID, view: this.viewName});
     },
 
 
@@ -276,7 +283,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, pouchdb,
       FauxtonAPI.addNotification({
         msg: "<strong>Warning!</strong> Preview executes the Map/Reduce functions in your browser, and may behave differently from CouchDB.",
         type: "warning",
-        selector: ".advanced-options .errors-container",
+        selector: ".query-options .errors-container",
         fade: true,
         escape: false // beware of possible XSS when the message changes
       });
@@ -311,7 +318,6 @@ function(app, FauxtonAPI, Components, Documents, Databases, pouchdb,
       if (this.mapEditor) {
         return this.mapEditor.getValue();
       }
-
       return this.$('#map-function').text();
     },
 
@@ -401,8 +407,8 @@ function(app, FauxtonAPI, Components, Documents, Databases, pouchdb,
         $('.beautify-tooltip').tooltip();
       }
     },
-    beforeRender: function () {
 
+    beforeRender: function () {
       if (this.newView) {
         this.reduceFunStr = '';
         if (this.ddocs.length === 0) {
@@ -427,8 +433,8 @@ function(app, FauxtonAPI, Components, Documents, Databases, pouchdb,
         });
         designDocs.reset(filteredModels, {silent: true});
       }
-      
-      if (!this.designDocSelector) { 
+
+      if (!this.designDocSelector) {
         this.designDocSelector = this.setView('.design-doc-group', new Views.DesignDocSelector({
           collection: designDocs,
           ddocName: this.currentDdoc || this.model.id,
@@ -436,27 +442,23 @@ function(app, FauxtonAPI, Components, Documents, Databases, pouchdb,
         }));
       }
 
+      // if this isn't a new View, add in whatever extensions have been associated with this location
       if (!this.newView) {
-        this.eventer = _.extend({}, Backbone.Events);
-
-        this.advancedOptions = this.insertView('#query', new QueryOptions.AdvancedOptions({
-          updateViewFn: this.updateView,
-          previewFn: this.previewView,
-          database: this.database,
-          viewName: this.viewName,
-          ddocName: this.model.id,
-          hasReduce: this.hasReduce(),
-          eventer: this.eventer,
-          showStale: true
-        }));
+        var buttonViews = FauxtonAPI.getExtensions('ViewEditor:ButtonRow');
+        _.each(buttonViews, function (view) {
+          this.insertView("#viewBtnExtensions", view);
+          view.update(this.database, this.ddocInfo.safeID(), this.viewName);
+        }, this);
       }
-
     },
 
     afterRender: function() {
-
-      if (this.params && !this.newView) {
-        this.advancedOptions.updateFromParams(this.params);
+      if (this.params && !this.newView && hasRenderedOnce) {
+        FauxtonAPI.triggerRouteEvent('resetQueryOptions', {
+          queryParams: this.params,
+          hasReduce: this.hasReduce(),
+          showStale: true
+        });
       }
 
       this.designDocSelector.updateDesignDoc();
@@ -468,6 +470,8 @@ function(app, FauxtonAPI, Components, Documents, Databases, pouchdb,
         this.$('#index-nav').parent().removeClass('active');
       }
 
+      // note that this View has been rendered
+      hasRenderedOnce = true;
     },
 
     showEditors: function () {
@@ -550,6 +554,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, pouchdb,
     newDocValidation: function(){
       return this.newDesignDoc() && this.$('#new-ddoc').val()==="";
     },
+
     getCurrentDesignDoc: function () {
       if (this.newDesignDoc()) {
         var doc = {
@@ -570,3 +575,4 @@ function(app, FauxtonAPI, Components, Documents, Databases, pouchdb,
 
   return Views;
 });
+
