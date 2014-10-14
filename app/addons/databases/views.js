@@ -24,17 +24,6 @@ function(app, Components, FauxtonAPI, Databases) {
   Views.RightAllDBsHeader = FauxtonAPI.View.extend({
     className: "header-right",
     template: "addons/databases/templates/header_alldbs",
-    initialize: function(options){
-      //adding the database to the object
-      _.bindAll(this);
-      this.endpoint = options.endpoint;
-    },
-
-    updateApiUrl: function(api){
-      //this will update the api bar when the route changes
-      //you can find the method that updates it in components.js Components.ApiBar()
-      this.apiBar && this.apiBar.update(api);
-    },
 
     beforeRender:function(){
       this.headerSearch = this.insertView("#header-search", new Views.JumpToDB({
@@ -44,12 +33,6 @@ function(app, Components, FauxtonAPI, Databases) {
       this.newbutton = this.insertView("#add-db-button", new Views.NewDatabaseButton({
         collection: this.collection
       }));
-
-
-      //Moved the apibar view into the components file so you can include it in your views
-      this.apiBar = this.insertView("#header-api-bar", new Components.ApiBar({
-        endpoint: this.endpoint
-        }));
     }
   });
 
@@ -67,7 +50,6 @@ function(app, Components, FauxtonAPI, Databases) {
       };
     }
   });
-
 
   Views.JumpToDB = FauxtonAPI.View.extend({
     template: "addons/databases/templates/jump_to_db",

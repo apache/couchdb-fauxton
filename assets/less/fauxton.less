@@ -136,7 +136,7 @@ select {
     border-bottom: 1px solid #e5e5e5;
     padding: 8px 4px;
     strong {
-        font-size: 16px;
+      font-size: 16px;
     }
   }
 }
@@ -335,15 +335,15 @@ table.databases {
 }
 
 @media screen and ( max-height: 600px ){
- #primary-navbar{
-     overflow-y: scroll;
- }
+  #primary-navbar{
+    overflow-y: scroll;
+  }
 }
 
 @media screen and ( min-height: 600px ){
- #primary-navbar{
-     overflow-y: hidden;
- }
+  #primary-navbar{
+    overflow-y: hidden;
+  }
 }
 
 /* Fixed side navigation */
@@ -368,73 +368,73 @@ table.databases {
     font-size: 12px
   }
   .navbar {
-     .burger{
+    .burger{
+      .transition(all @transitionSpeed @transitionEaseType);
+      padding: 22px 0 0 18px;
+      position: fixed;
+      z-index: 100;
+      width: 64px;
+      top: 0;
+      background-color: @primaryNav;
+      width: @navWidth;
+      div{
         .transition(all @transitionSpeed @transitionEaseType);
-        padding: 22px 0 0 18px;
-        position: fixed;
-        z-index: 100;
-        width: 64px;
-        top: 0;
-        background-color: @primaryNav;
-        width: @navWidth;
-        div{
-          .transition(all @transitionSpeed @transitionEaseType);
-          height: 4px;
-          width: 24px;
-          .border-radius(2);
-          background-color: @navBG;
-          margin: 2px 0px;
+        height: 4px;
+        width: 24px;
+        .border-radius(2);
+        background-color: @navBG;
+        margin: 2px 0px;
+      }
+      &:hover div{
+        background-color: @navBGHover;
+      }
+    }
+    .bottom-container {
+      position: fixed;
+      bottom: 0;
+      width: 220px;
+      background: #3a2c2b;
+      .brand {
+        .box-sizing(content-box);
+        .hide-text;
+        .customTransition(left, 1s, 0.805, 0.005, 0.165, 0.985);
+        margin: 10px 0 0 0;
+        width: 200px;
+        height: 40px;
+        padding: 10px;
+        float: none;
+        background: #3a2c2b;
+        .icon {
+          .box-sizing(content-box);
+          background: url(../img/couchdb-site.png) no-repeat 0 0;
+          display: block;
+          height: 100%;
+          width: 100%;
         }
-        &:hover div{
-          background-color: @navBGHover;
+        .closeMenu & {
+          .icon {
+            background: url(../img/minilogo.png) no-repeat 0 0;
+          }
+          width: 45px;
         }
       }
-      .bottom-container {
-       position: fixed;
-       bottom: 0;
-       width: 220px;
-       background: #3a2c2b;
-       .brand {
-         .box-sizing(content-box);
-         .hide-text;
-         .customTransition(left, 1s, 0.805, 0.005, 0.165, 0.985);
-         margin: 10px 0 0 0;
-         width: 200px;
-         height: 40px;
-         padding: 10px;
-         float: none;
-         background: #3a2c2b;
-         .icon {
-           .box-sizing(content-box);
-           background: url(../img/couchdb-site.png) no-repeat 0 0;
-           display: block;
-           height: 100%;
-           width: 100%;
-         }
-         .closeMenu & {
-           .icon {
-              background: url(../img/minilogo.png) no-repeat 0 0;
-            }
-            width: 45px;
+      #footer-nav-links {
+        width: 100%;
+        margin: 0;
+        li {
+          a {
+            font-size: 12px;
+            color: @linkColor;
+            padding: 0 0 10px 10px;
+            text-shadow: none;
           }
-       }
-       #footer-nav-links {
-       width: 100%;
-       margin: 0;
-       li {
-       a {
-         font-size: 12px;
-         color: @linkColor;
-         padding: 0 0 10px 10px;
-         text-shadow: none;
-       }
-       &.active, &:hover{
-             a {
-               text-decoration: underline;
-             }
-           }
-     }
-       }
+          &.active, &:hover{
+            a {
+              text-decoration: underline;
+            }
+          }
+        }
+      }
     }
     nav {
       margin-top: 64px;
@@ -543,14 +543,14 @@ table.databases {
 
 /*
 
-  FIXED HEADER, DASHBOARD & BREADCRUMBS:
+FIXED HEADER, DASHBOARD & BREADCRUMBS:
 
-  one_pane.html
-  two_pane.html
-  with_sidebar.html
-  with_tabs.html
-  with_tabs_sidebar.html
-*/
+one_pane.html
+two_pane.html
+with_sidebar.html
+with_tabs.html
+with_tabs_sidebar.html
+ */
 #dashboard {
   .left-shadow-border;
   position: absolute;
@@ -825,7 +825,7 @@ table.databases {
 
   label.drop-down{
     &:before{
-    display: none;
+      display: none;
     }
   }
 }
@@ -947,17 +947,17 @@ div.add-dropdown {
     min-width: 0;
     top: 38px;
     .box-shadow(@boxShadow);
-      &.arrow:before{
-        right: 4px;
+    &.arrow:before{
+      right: 4px;
+    }
+    a {
+      background-color: #202326;
+      color: rgba(255, 255, 255, 0.8);
+      &:hover{
+        background-color: @navBG;
+        color: white;
       }
-      a {
-        background-color: #202326;
-        color: rgba(255, 255, 255, 0.8);
-        &:hover{
-          background-color: @navBG;
-          color: white;
-        }
-      }
+    }
     li a {
       padding: 10px 15px 10px 12px;
     }
@@ -978,9 +978,9 @@ div.add-dropdown {
 
 /*
 ---------------------------------------------------
-  REUSEABLE SHADOW BORDER
+REUSEABLE SHADOW BORDER
 ---------------------------------------------------
-*/
+ */
 
 .left-shadow-border{
   border-left: 1px solid #999;
@@ -1097,16 +1097,32 @@ div.add-dropdown {
         height: 60px;
       }
     }
-    #header-api-bar {
-	  width: 87px;
-    }
     #breadcrumbs{
       .bottom-shadow-border;
     }
   }
+
+  .one-pane &,
+  .two-pane &,
+  .with-sidebar & {
+    #header-api-bar {
+      width: 87px;
+    }
+  }
+
   .one-pane & {
     .bottom-shadow-border;
     left: auto;
+
+    #api-navbar{
+      position: relative;
+      float: right;
+      left: 0px;
+      z-index: 200;
+      > div {
+        height: 60px;
+      }
+    }
   }
   /* these styles are for the new header*/
   > div {
@@ -1165,7 +1181,7 @@ div.add-dropdown {
           float: left;
         }
         a {
-	        float: left;
+          float: left;
         }
       }
       color: @breadcrumbText;
@@ -1190,17 +1206,17 @@ div.add-dropdown {
       }
     }
     .fonticon-right-open {
-	    position: absolute;
-	    
-	    &.divider {
-		    padding: 23px 0;
-	    }
-	    +li {
-		    text-overflow: inherit;
-		    overflow: auto;
-		    width: auto;
-		    margin-left: 14px;
-	    }
+      position: absolute;
+
+      &.divider {
+        padding: 23px 0;
+      }
+      +li {
+        text-overflow: inherit;
+        overflow: auto;
+        width: auto;
+        margin-left: 14px;
+      }
     }
   }
 }
@@ -1239,7 +1255,7 @@ div.add-dropdown {
   background-color: #333;
   color: #fff;
   margin: 0;
-   .add-on {
+  .add-on {
     font-size: 16px;
     background: none;
     padding: 0px;

@@ -24,7 +24,7 @@ define([
 function(app, FauxtonAPI, Databases, Views) {
 
   var AllDbsRouteObject = FauxtonAPI.RouteObject.extend({
-    layout: "one_pane",
+    layout: "one_pane_db",
 
     crumbs: [
       {"name": "Databases", "link": "/_all_dbs"}
@@ -50,7 +50,15 @@ function(app, FauxtonAPI, Databases, Views) {
         collection: this.databases
       }));
 
+      this.rightHeader = this.setView("#right-header", new Views.RightAllDBsHeader({
+        collection: this.databases,
+      }));
+
       this.databasesView.setPage(dbPage);
+    },
+
+    apiUrl: function () {
+      return [this.databases.url("apiurl"), this.databases.documentation()];
     },
 
     establish: function() {
