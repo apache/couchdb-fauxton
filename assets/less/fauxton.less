@@ -22,6 +22,7 @@
 @import "prettyprint.less";
 @import "icons.less";
 @import "templates.less";
+@import "formstyles.less";
 @import "pagination.less";
 
 /**
@@ -56,30 +57,6 @@ a:active {
 a:hover {
   color: @linkColorHover;
 }
-
-input[type=text],
-input[type=password] {
-  .border-radius(0);
-  padding: 12px;
-  border: 1px solid #ccc;
-  height: auto;
-  font-size: 16px;
-  margin-top: 0;
-}
-
-input[type="checkbox"],
-input[type="radio"] {
-  box-sizing: border-box;
-  padding: 0;
-}
-
-input[type="file"],
-input[type="checkbox"],
-input[type="radio"],
-select {
-  margin: 0 0 1em 0;
-}
-
 
 /* bootstrap overrides */
 .page-header {
@@ -162,113 +139,8 @@ tbody {
   padding: 18px 5px;
 }
 .table-striped tbody > tr:nth-child(odd) > td,
-.table-striped tbody > tr:nth-child(odd) > th
-{
+.table-striped tbody > tr:nth-child(odd) > th {
   background-color: #F7F7F7;
-}
-
-/*form elements and buttons*/
-.btn-group {
-  > .btn + .dropdown-toggle,
-  > .btn:first-child,
-  > .btn:last-child,
-  > .dropdown-toggle {
-    .border-radius(0);
-    background-image: none;
-    text-shadow: none;
-  }
-}
-
-.btn {
-  .box-shadow(none);
-  .border-radius(@baseBorderRadius);
-  background-image: none;
-  text-shadow: none;
-  background-repeat: no-repeat;
-  padding: 10px;
-  margin-top: 0px;
-  .icon {
-    margin-right: 0.2em;
-  }
-  &.btn-small {
-    padding: 5px 10px;
-    .icon {
-      margin-right: 0;
-      font-size: inherit;
-    }
-  }
-  &.btn-mini {
-    padding: 3px 8px;
-    .icon {
-      margin-right: 0;
-      font-size: inherit;
-    }
-  }
-}
-.btn-primary {
-  background: @brandPrimary;
-}
-
-.btn-primary a:visited {
-  color: #fff;
-}
-
-.form-actions {
-  background: none;
-  border: none;
-}
-
-.input-append,
-.input-prepend {
-  .add-on {
-    font-size: 18px;
-    padding: 14px 5px 30px;
-  }
-  .btn .icon {
-    font-size: 16px;
-    margin-right: 0;
-  }
-}
-
-.row-fluid .input-append [class*="span"],
-.input-prepend input[class*="span"] {
-  width: auto;
-}
-
-.form-inline {
-  input[type=password],
-  input[type=text] {
-    width: auto;
-  }
-}
-.checkbox {
-  label {
-    display: inline-block;
-    padding-left:25px;
-  }
-}
-
-label {
-  margin-right: 15px;
-  padding-left:0;
-  display: block;
-  cursor: pointer;
-  position: relative;
-  font-size: 14px;
-  &.inline {
-    display: inline-block;
-  }
-}
-.help-block {
-  font-size: 12px;
-}
-
-a.help-link:hover {
-  text-decoration: none;
-}
-
-input[type=text].error {
-  border: red 1px solid;
 }
 
 /**
@@ -448,77 +320,6 @@ table.databases {
   }
 }
 
-.custom-inputs{
-
-  input[type=radio],
-  input[type=checkbox] {
-    display: none;
-  }
-
-  .checkbox label:before {
-    border-radius: 3px;
-  }
-
-  .controls > .radio:first-child, .controls > .checkbox:first-child {
-    padding-top: 15px;
-  }
-
-  .radio.inline, .checkbox.inline {
-    display: inline-block;
-    padding-top: 15px;
-    margin-bottom: 12px;
-    vertical-align: middle;
-  }
-
-  input[type=checkbox]:checked + label:before {
-    /*content: "\2713"; */
-    content: "\00d7";
-    text-shadow: 1px 1px 1px rgba(0, 0, 0, .2);
-    font-size: 16px;
-    background-color: @linkColor;
-    color: white;
-    text-align: center;
-    line-height: 15px;
-  }
-
-  label:before {
-    content: "";
-    display: inline-block;
-
-    width: 16px;
-    height: 16px;
-
-    margin-right: 10px;
-    position: absolute;
-    left: 0;
-    bottom: 1px;
-    background-color: #aaa;
-    box-shadow: inset 0px 2px 3px 0px rgba(0, 0, 0, .3), 0px 1px 0px 0px rgba(255, 255, 255, .8);
-  }
-
-  .radio label:before {
-    border-radius: 8px;
-  }
-
-  input[type=radio]:checked + label:before {
-    content: "\2022";
-    color: #f3f3f3;
-    font-size: 30px;
-    text-align: center;
-    line-height: 18px;
-  }
-
-  label.drop-down{
-    &:before{
-      display: none;
-    }
-  }
-}
-
-form.view-query-update, form.view-query-save {
-  max-width: 100%;
-}
-
 /*documents and databases */
 .view.show{
   color: @fontGrey;
@@ -620,46 +421,6 @@ div.spinner {
     list-style-type: none;
   }
 }
-
-div.add-dropdown {
-  position: absolute;
-  top: 2px;
-  right: 0px;
-  .dropdown-menu{
-    left: -110px;
-    padding-bottom: 0;
-    width: 148px;
-    min-width: 0;
-    top: 38px;
-    .box-shadow(@boxShadow);
-    &.arrow:before{
-      right: 4px;
-    }
-    a {
-      background-color: #202326;
-      color: rgba(255, 255, 255, 0.8);
-      &:hover{
-        background-color: @navBG;
-        color: white;
-      }
-    }
-    li a {
-      padding: 10px 15px 10px 12px;
-    }
-  }
-  .dropdown-toggle{
-    border-top: none !important;
-    text-decoration: none;
-  }
-  > a {
-    border-bottom: none;
-    text-decoration: none;
-    font-size: 16px;
-  }
-}
-
-
-//----templates//
 
 /*
 ---------------------------------------------------
