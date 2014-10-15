@@ -135,13 +135,27 @@
       width: 34%;
     }
   }
-  .row-fluid.fieldsets:last-child {
-    margin-bottom: 0;
+  .row-fluid.fieldsets {
+    margin-bottom: 5px;
+    :last-child {
+      margin-bottom: 2px;
+    }
   }
+
   #skipRows {
     margin-left: 5px;
   }
+  .add-on {
+    height: 28px;
+  }
   .hide {
     display: none;
+  }
+
+  .icon-question-sign:hover {
+    color: @red;
+  }
+  .additionalParams {
+    margin-bottom: 2px;
   }
 }

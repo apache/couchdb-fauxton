@@ -250,22 +250,20 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
       // update the rightHeader with the latest & greatest info
       this.rightHeader.resetQueryOptions({ queryParams: urlParams });
       this.rightHeader.showQueryOptions();
-
-      //this.rightHeader.updateApiUrl([this.database.allDocs.urlRef("apiurl", urlParams), this.database.allDocs.documentation()]);
     },
 
-    viewFn: function (databaseName, ddoc, view) {
+    viewFn: function (databaseName, ddoc, viewName) {
       var params = this.createParams(),
           urlParams = params.urlParams,
           docParams = params.docParams,
           decodeDdoc = decodeURIComponent(ddoc);
 
-      view = view.replace(/\?.*$/,'');
+      viewName = viewName.replace(/\?.*$/,'');
 
       this.indexedDocs = new Documents.IndexCollection(null, {
         database: this.database,
         design: decodeDdoc,
-        view: view,
+        view: viewName,
         params: docParams,
         paging: {
           pageSize: this.getDocPerPageLimit(urlParams, parseInt(docParams.limit, 10))
@@ -275,11 +273,11 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
       this.viewEditor = this.setView("#dashboard-upper-content", new Index.ViewEditor({
         model: this.database,
         ddocs: this.designDocs,
-        viewName: view,
+        viewName: viewName,
         params: urlParams,
         newView: false,
         database: this.database,
-        ddocInfo: this.ddocInfo(decodeDdoc, this.designDocs, view)
+        ddocInfo: this.ddocInfo(decodeDdoc, this.designDocs, viewName)
       }));
 
       this.toolsView && this.toolsView.remove();
@@ -291,10 +289,10 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
         database: this.database,
         indexedDocs: this.indexedDocs,
         designDocs: this.designDocs,
-        view: view
+        view: viewName
       });
 
-      this.sidebar.setSelectedTab(app.utils.removeSpecialCharacters(ddoc) + '_' + app.utils.removeSpecialCharacters(view));
+      this.sidebar.setSelectedTab(app.utils.removeSpecialCharacters(ddoc) + '_' + app.utils.removeSpecialCharacters(viewName));
 
       this.apiUrl = function() {
        return [this.indexedDocs.urlRef("apiurl", urlParams), "docs"];
@@ -304,12 +302,10 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
       this.rightHeader.resetQueryOptions({
         queryParams: urlParams,
         showStale: true,
-        hasReduce: true
+        hasReduce: true,
+        viewName: viewName,
+        ddocName: ddoc
       });
-
-      this.apiUrl = function() {
-        return [this.indexedDocs.urlRef("apiurl", urlParams), "docs"];
-      };
     },
 
     ddocInfo: function (designDoc, designDocs, view) {

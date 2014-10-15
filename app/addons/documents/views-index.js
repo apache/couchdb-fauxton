@@ -458,7 +458,9 @@ function(app, FauxtonAPI, Components, Documents, Databases, pouchdb, QueryOption
         FauxtonAPI.triggerRouteEvent('resetQueryOptions', {
           queryParams: this.params,
           hasReduce: this.hasReduce(),
-          showStale: true
+          showStale: true,
+          viewName: this.viewName,
+          ddocName: this.ddocInfo.get('name')
         });
       }
 

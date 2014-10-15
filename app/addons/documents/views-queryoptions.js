@@ -18,12 +18,14 @@ define([
   "addons/fauxton/resizeColumns"
 ],
 
-  function(app, FauxtonAPI) {
+  function (app, FauxtonAPI) {
 
     // our default settings for the Query Options tray
     var defaultOptions = {
       showStale: false,
       hasReduce: false,
+      viewName: null,
+      ddocName: null,
 
       // all the possible query search params. Ultimately these should probably be moved higher-up (route object?),
       // because they also apply to the actual search results. Seems better to place them there, then use them in
@@ -52,7 +54,7 @@ define([
       template: "addons/documents/templates/query_options",
       className: "query-options",
 
-      initialize: function(options) {
+      initialize: function (options) {
 
         // overlays whatever custom options were passed with defaultOptions above, so this.options
         // always contains all options. [This does a deep copy: we never overwrite defaultOptions!]
@@ -67,7 +69,7 @@ define([
         this.additionalParamsView = this.setView("#query-options-additional-params", new AdditionalParamsView(this.options));
       },
 
-      addEvents: function() {
+      addEvents: function () {
         FauxtonAPI.Events.on('QueryOptions:closeTray', this.closeTray, this);
         FauxtonAPI.Events.on('QueryOptions:openTray', this.toggleQueryOptionsTray, this);
 
@@ -75,7 +77,7 @@ define([
         var trayIsVisible = this.trayIsVisible;
         var closeTray = this.closeTray;
 
-        $("body").on("click.queryOptions", function(e) {
+        $("body").on("click.queryOptions", function (e) {
           if (!trayIsVisible()) { return; }
           if ($(e.target).closest("#query-options-tray").length === 0) {
             closeTray();
@@ -85,11 +87,11 @@ define([
         $(window).on("resize", this.onResize);
       },
 
-      afterRender: function() {
+      afterRender: function () {
         this.onResize();
       },
 
-      cleanup: function() {
+      cleanup: function () {
         FauxtonAPI.Events.unbind("QueryOptions:closeTray");
         FauxtonAPI.Events.unbind("QueryOptions:openTray");
         $(window).off("resize", this.onResize);
@@ -101,7 +103,7 @@ define([
         "click .btn-cancel": "onCancel"                  // closes the tray (doesn't reset the fields)
       },
 
-      toggleQueryOptionsTray: function() {
+      toggleQueryOptionsTray: function () {
         if (!this.trayIsVisible()) {
           $("#query-options-tray").velocity("transition.slideDownIn", 250); // TODO constant
           FauxtonAPI.Events.trigger("APIbar:closeTray");
@@ -109,7 +111,7 @@ define([
       },
 
       // returns all applicable query parameters for the Query Options tray
-      getQueryParams: function() {
+      getQueryParams: function () {
         var mainFieldParams = this.mainFieldsView.getParams();
         var keySearchParams = this.keySearchFieldsView.getParams();
         var additionalParams = this.additionalParamsView.getParams();
@@ -118,7 +120,7 @@ define([
         return _.extend({}, mainFieldParams, keySearchParams, additionalParams);
       },
 
-      onSubmit: function(e) {
+      onSubmit: function (e) {
         e.preventDefault();
 
         // validate the user-inputted fields. If anything is invalid, the sub-view will display the appropriate
@@ -135,17 +137,22 @@ define([
         // all looks good! Close the tray and publish the message
         var url = app.utils.replaceQueryParams(params);
         FauxtonAPI.navigate(url, { trigger: false });
-        FauxtonAPI.triggerRouteEvent("updateAllDocs", { allDocs: true });
+
+        if (this.options.viewName !== null && this.options.ddocName !== null) {
+          FauxtonAPI.triggerRouteEvent('updateAllDocs', { ddoc: this.options.ddocName, view: this.options.viewName });
+        } else {
+          FauxtonAPI.triggerRouteEvent("updateAllDocs", { allDocs: true });
+        }
       },
 
-      onCancel: function() {
+      onCancel: function () {
         this.closeTray();
       },
 
       // if the screen is so small there isn't space for the full tray height we manually shrink the height to allow scrolling.
       // Technically this should handle width as well, but we won't bother because there are way bigger issues with a screen
       // with such a small width!
-      onResize: function() {
+      onResize: function () {
         var $tray = $("#query-options-tray");
         var heightFromTop = parseInt($tray.css("top"), 10);
         var windowHeight = $(window).height();
@@ -157,7 +164,7 @@ define([
       /*
        * Updates specific query options, leaving any that have been set already intact.
        */
-      updateQueryOptions: function(options) {
+      updateQueryOptions: function (options) {
         this.options = $.extend(this.options, options);
         this.updateSubViews();
       },
@@ -165,24 +172,24 @@ define([
       /*
        * Reset the query options back to the defaults, then apply whatever new options are needed.
        */
-      resetQueryOptions: function(options) {
+      resetQueryOptions: function (options) {
         this.options = $.extend(true, {}, defaultOptions, options);
         this.updateSubViews();
       },
 
       // helper
-      updateSubViews: function() {
+      updateSubViews: function () {
         this.mainFieldsView.update(this.options);
         this.keySearchFieldsView.update(this.options);
         this.additionalParamsView.update(this.options);
       },
 
-      trayIsVisible: function() {
+      trayIsVisible: function () {
         return $("#query-options-tray").is(":visible");
       },
 
-      closeTray: function() {
-        $("#query-options-tray").velocity("reverse", 250, function() { // TODO constant
+      closeTray: function () {
+        $("#query-options-tray").velocity("reverse", 250, function () { // TODO constant
           $("#query-options-tray").hide();
         });
       }
@@ -197,13 +204,13 @@ define([
         "change #qoReduce": "onToggleReduceCheckbox"
       },
 
-      initialize: function(options) {
+      initialize: function (options) {
         this.queryParams = options.queryParams;
         this.showStale = options.showStale;
         this.hasReduce = options.hasReduce;
       },
 
-      update: function(options) {
+      update: function (options) {
         this.queryParams = options.queryParams;
         this.showStale = options.showStale;
         this.hasReduce = options.hasReduce;
@@ -214,7 +221,7 @@ define([
         }
       },
 
-      afterRender: function() {
+      afterRender: function () {
         $("#qoIncludeDocs").prop("checked", this.queryParams.include_docs === "true");
         this.updateReduceSettings(this.queryParams.reduce === "true");
       },
@@ -224,7 +231,7 @@ define([
        *   - we can't include_docs for reduce = true
        *   - can't include group_level for reduce = false
        */
-      onToggleReduceCheckbox: function(e) {
+      onToggleReduceCheckbox: function (e) {
         e.preventDefault();
         var isChecked = $(e.currentTarget).prop("checked");
         this.updateReduceSettings(isChecked);
@@ -233,7 +240,7 @@ define([
 
       // helper function to hide/show, disable/enable fields based on whether "Reduce" is an option and whether
       // it's checked
-      updateReduceSettings: function(isChecked) {
+      updateReduceSettings: function (isChecked) {
         $("#qoReduce").prop("checked", isChecked);
 
         var $qoIncludeDocs = $("#qoIncludeDocs"),
@@ -259,9 +266,9 @@ define([
         }
       },
 
-      getParams: function() {
+      getParams: function () {
         var params = {};
-        this.$("input:checked,select").each(function() {
+        this.$("input:checked,select").each(function () {
 
           // this ensures that only settings that differ from the defaults are passed along. If we didn't do this,
           // the query string would be loaded up with all possible vals for each search (which would work, but would be ugly)
@@ -272,7 +279,7 @@ define([
         return params;
       },
 
-      serialize: function() {
+      serialize: function () {
         return {
           hasReduce: this.hasReduce,
           showStale: this.showStale
@@ -287,12 +294,12 @@ define([
         "click .toggle-btns > label": "toggleKeysSection"
       },
 
-      initialize: function(options) {
+      initialize: function (options) {
         this.queryParams = options.queryParams;
         this.hasReduce = options.hasReduce;
       },
 
-      update: function(options) {
+      update: function (options) {
         this.queryParams = options.queryParams;
         this.hasReduce = options.hasReduce;
 
@@ -302,7 +309,7 @@ define([
       },
 
       // prefill the form fields
-      afterRender: function() {
+      afterRender: function () {
         if (this.queryParams.keys) {
           this.$(".toggle-btns > label[data-action=showByKeys]").addClass("active");
           this.$(".js-query-keys-wrapper").removeClass("hide");
@@ -326,7 +333,7 @@ define([
         }
       },
 
-      toggleKeysSection: function(e) {
+      toggleKeysSection: function (e) {
         e.preventDefault();
 
         var $clickedEl = $(e.currentTarget);
@@ -352,13 +359,13 @@ define([
         }
       },
 
-      showByKeysSection: function() {
+      showByKeysSection: function () {
         this.$("#js-showKeys, .js-disabled-message").show();
         this.$('[name="startkey"],[name="endkey"],[name="inclusive_end"]').prop("disabled", true);
         this.$('[name="keys"]').removeAttr("disabled");
       },
 
-      showBetweenKeysSection: function(){
+      showBetweenKeysSection: function (){
         this.$("#js-showStartEnd").show();
         this.$('[name="startkey"],[name="endkey"],[name="inclusive_end"]').removeAttr("disabled");
         this.$('.js-disabled-message').hide();
@@ -366,7 +373,7 @@ define([
       },
 
       // this assumes that hasValidInputs has been called. Otherwise the returned param data may be invalid
-      getParams: function() {
+      getParams: function () {
         var params = {};
         var selectedKeysSection = this.getSelectedKeysSection();
 
@@ -396,13 +403,13 @@ define([
        * Checks to see that the user-inputted values are valid. If not, it displays a message to the user.
        * @returns {boolean} true if all valid; false otherwise
        */
-      hasValidInputs: function() {
+      hasValidInputs: function () {
         var selectedKeysSection = this.getSelectedKeysSection(),
           errorMsg = null;
 
         if (selectedKeysSection === "showByKeys") {
           var keys = this.parseJSON($("#keys-input").val());
-          if (keys && !_.isArray(keys)) {
+          if (_.isUndefined(keys) || !_.isArray(keys)) {
             errorMsg = "Keys values must be in an array, e.g [1,2,3]";
           }
         } else {
@@ -431,7 +438,7 @@ define([
         return true;
       },
 
-      parseJSON: function(value) {
+      parseJSON: function (value) {
         try {
           return JSON.parse(value);
         } catch(e) {
@@ -439,7 +446,7 @@ define([
         }
       },
 
-      getSelectedKeysSection: function() {
+      getSelectedKeysSection: function () {
         return this.$(".toggle-btns > label.active").data("action");
       }
     });
@@ -448,12 +455,12 @@ define([
     var AdditionalParamsView = FauxtonAPI.View.extend({
       template: "addons/documents/templates/query_options_additional_params",
 
-      initialize: function(options) {
+      initialize: function (options) {
         this.queryParams = options.queryParams;
         this.showStale = options.showStale;
       },
 
-      update: function(options) {
+      update: function (options) {
         this.queryParams = options.queryParams;
         this.showStale = options.showStale;
         if (this.hasRendered) {
@@ -461,7 +468,7 @@ define([
         }
       },
 
-      afterRender: function() {
+      afterRender: function () {
         $("#qoUpdateSeq").prop("checked", this.queryParams.update_seq === "true");
         $("#qoDescending").prop("checked", this.queryParams.descending === "true");
         $("#qoLimit").val(this.queryParams.limit);
@@ -469,9 +476,9 @@ define([
         $("#qoStale").prop("checked", this.queryParams.stale === "ok");
       },
 
-      getParams: function() {
+      getParams: function () {
         var params = {};
-        this.$("input,select").each(function() {
+        this.$("input,select").each(function () {
           if ($(this).is(":checkbox")) {
             if (this.checked) {
               params[this.name] = this.value;
@@ -486,7 +493,7 @@ define([
         return params;
       },
 
-      hasValidInputs: function() {
+      hasValidInputs: function () {
         var allValid = true;
         var skipVal = $("#qoSkip").val();
         if (skipVal !== "" && /\D/.test(skipVal)) {
@@ -501,7 +508,7 @@ define([
         return allValid;
       },
 
-      serialize: function() {
+      serialize: function () {
         return {
           showStale: this.showStale
         };
