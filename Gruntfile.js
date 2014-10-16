@@ -136,7 +136,26 @@ module.exports = function(grunt) {
     return helper.readSettingsFile().couchserver || defaults;
   }();
 
-  grunt.initConfig({
+  /*
+   * This does one of the other: runs all tests, or a single test:
+   *     `grunt test`
+   * or a subset of the tests what match a filename argument:
+   *     `grunt test:myTestSpec.js`
+   * If there are multiple tests with the same filename, all will be executed.
+   */
+  var runTests = function (filename) {
+    if (_.isUndefined(filename)) {
+      // run all tests
+      grunt.task.run(['lint', 'dependencies', 'gen_initialize:development', 'test_inline']);
+    } else {
+      // run the subset of tests whose file matches the target
+      config.mochaSetup.subset.files.src = ['./app/**/' + filename];
+      grunt.task.run(['lint', 'dependencies', 'gen_initialize:development', 'mochaSetup:subset', 'jst',
+        'concat:test_config_js', 'mocha_phantomjs']);
+    }
+  };
+
+  var config = {
 
     // The clean task ensures all files are removed from the dist/ directory so
     // that no files linger from previous builds.
@@ -241,7 +260,7 @@ module.exports = function(grunt) {
       test_config_js: {
         src: ["dist/debug/templates.js", "test/test.config.js"],
         dest: 'test/test.config.js'
-      },
+      }
     },
 
     cssmin: {
@@ -274,11 +293,11 @@ module.exports = function(grunt) {
     watch: {
       js: {
         files: helper.watchFiles(['.js'], ["./app/**/*.js", '!./app/load_addons.js',"./assets/**/*.js", "./test/**/*.js"]),
-        tasks: ['watchRun'],
+        tasks: ['watchRun']
       },
       style: {
         files: helper.watchFiles(['.less','.css'],["./app/**/*.css","./app/**/*.less","./assets/**/*.css", "./assets/**/*.less"]),
-        tasks: ['clean:watch', 'dependencies','less', 'concat:index_css'],
+        tasks: ['clean:watch', 'dependencies','less', 'concat:index_css']
       },
       html: {
         // the index.html is added in as a dummy file incase there is no
@@ -389,14 +408,20 @@ module.exports = function(grunt) {
         files: { src: helper.watchFiles(['[Ss]pec.js'], ['./app/**/*[Ss]pec.js'])},
         template: 'test/test.config.underscore',
         config: './app/config.js'
+      },
+      subset: {
+        files: { src: [] }, // this is populated dynamically when `grunt test:xxx` is run
+        template: 'test/test.config.underscore',
+        config: './app/config.js'
       }
     },
 
     mocha_phantomjs: {
       all: ['test/runner.html']
     }
+  };
+  grunt.initConfig(config);
 
-  });
 
   // on watch events configure jshint:all to only run on changed file
   grunt.event.on('watch', function(action, filepath) {
@@ -449,11 +474,13 @@ module.exports = function(grunt) {
   /*
    * Transformation tasks
    */
-  // clean out previous build artefactsa and lint
+  // clean out previous build artifacts and lint
   grunt.registerTask('lint', ['clean', 'jshint']);
-  grunt.registerTask('test', ['lint', 'dependencies', 'gen_initialize:development', 'test_inline']);
+  grunt.registerTask('test', runTests);
+
   // lighter weight test task for use inside dev/watch
-  grunt.registerTask('test_inline', ['mochaSetup','jst', 'concat:test_config_js','mocha_phantomjs']);
+  grunt.registerTask('test_inline', ['mochaSetup:default', 'jst', 'concat:test_config_js', 'mocha_phantomjs']);
+
   // Fetch dependencies (from git or local dir), lint them and make load_addons
   grunt.registerTask('dependencies', ['get_deps', 'gen_load_addons:default']);
   // build templates, js and css
