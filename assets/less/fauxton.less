@@ -24,6 +24,8 @@
 @import "templates.less";
 @import "formstyles.less";
 @import "pagination.less";
+@import "trays.less";
+
 
 /**
  * HTML-wide overrides
@@ -332,12 +334,7 @@ div.spinner {
 }
 
 #api-navbar{
-  > div{
-    > .api-url-btn, > .query-options-btn {
-      padding:10px;
-    }
-  }
-
+  padding: 10px;
   .header-icon {
     font-size: 20px;
     &:before {
@@ -358,7 +355,7 @@ header .header-icon {
 .api-url-btn, .query-options-btn {
   background: none;
   border: none;
-  padding: 0;
+  padding: 0px 3px;
   margin: 0;
 }
 .api-url-btn:hover, .query-options-btn:hover {
@@ -374,17 +371,13 @@ header .header-icon {
     }
     .input-xxlarge {
       .border-radius(5px 0 0 5px);
-      border: none;
-      padding: 9px;
-      -moz-transition: background-color 100ms linear;
-      -webkit-transition: background-color 100ms linear;
-      transition: background-color 100ms linear;
+
     }
     .btn{
       background-color: @navBG;
       color: #fff;
       margin-left: -1px;
-      padding: 10px 10px 8px;
+      padding: 10px 10px 9px;
       border: none;
       line-height: 1.5em;
       .border-radius(5px);
@@ -483,6 +476,9 @@ REUSEABLE SHADOW BORDER
       > div {
         height: 60px;
       }
+      .closeMenu & {
+        left: -64px;
+      }
     }
     #breadcrumbs{
       .bottom-shadow-border;
@@ -493,7 +489,8 @@ REUSEABLE SHADOW BORDER
   .two-pane &,
   .with-sidebar & {
     #header-api-bar {
-      width: 87px;
+      width: 98px;
+      padding: 10px 15px;
     }
   }
 
@@ -501,7 +498,7 @@ REUSEABLE SHADOW BORDER
     .bottom-shadow-border;
     left: auto;
 
-    #api-navbar{
+    #api-navbar {
       position: relative;
       float: right;
       left: 0px;
@@ -619,10 +616,14 @@ REUSEABLE SHADOW BORDER
     a {
       padding: 10px;
       text-decoration: none;
+      &:before {
+        font-size: 20px;
+        margin-top: 4px;
+      }
     }
     .dropdown {
       border-left: 1px solid #ccc;
-      padding: 20px 0px;
+      padding: 17px 0px;
     }
     .dropdown-menu {
       left: -115px;
@@ -632,7 +633,7 @@ REUSEABLE SHADOW BORDER
 }
 
 .tray {
-  .bottom-shadow-border;
+  .bottom-left-shadow-border;
   display: none;
   position: absolute;
   right: 5px;
@@ -680,6 +681,16 @@ REUSEABLE SHADOW BORDER
     font-size: 13px;
     line-height: 33px;
   }
+  .query-options-btn.enabled,
+  .query-options-btn:hover,
+  .api-url-btn.enabled,
+  .api-url-btn:hover {
+    background-color: transparent;
+    color: @red;
+  }
+  .btn:active {
+    box-shadow: none;
+  }
 }
 
 .header-right {
@@ -717,7 +728,7 @@ REUSEABLE SHADOW BORDER
     height: 60px;
     border-left: 1px solid #ccc;
     margin: 0;
-    padding: 10px 15px;
+    padding: 10px;
     line-height: 40px;
   }
   > div:last-child {

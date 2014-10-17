@@ -107,8 +107,11 @@ define([
         if (!this.trayIsVisible()) {
           $("#query-options-tray").velocity("transition.slideDownIn", 250); // TODO constant
           FauxtonAPI.Events.trigger("APIbar:closeTray");
-          // make sure the query button is active again. As we can only expand for completed results, this is sufficient to prevent double submission
+
+          // make sure the query button is active again. As we can only expand for completed results, this is sufficient
+          // to prevent double submission
           this.$('#query-options-tray button[type="submit"]').removeAttr("disabled");
+          this.$('.query-options-btn').addClass('enabled');
         }
       },
 
@@ -197,6 +200,7 @@ define([
         $("#query-options-tray").velocity("reverse", 250, function () { // TODO constant
           $("#query-options-tray").hide();
         });
+        this.$('.query-options-btn').removeClass('enabled');
       }
     });
 

@@ -145,7 +145,6 @@ form.view-query-update, form.view-query-save {
 }
 
 .custom-inputs {
-
   input[type=radio],
   input[type=checkbox] {
     display: none;
@@ -153,6 +152,11 @@ form.view-query-update, form.view-query-save {
 
   .checkbox label:before {
     border-radius: 12px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    transition: linear .2s, box-shadow linear .2s;
+    -moz-transition: linear .2s, box-shadow linear .2s;
+    -webkit-transition: linear .2s, box-shadow linear .2s;
   }
 
   .controls > .radio:first-child, .controls > .checkbox:first-child {
@@ -167,7 +171,20 @@ form.view-query-update, form.view-query-save {
   }
 
   input[type=checkbox] + label:hover:before {
-    border: 2px solid #fff;
+    border: 2px solid @white;
+    transition: linear .2s, box-shadow linear .2s;
+    -moz-transition: linear .2s, box-shadow linear .2s;
+    -webkit-transition: linear .2s, box-shadow linear .2s;
+  }
+
+  /* if the checkbox is disabled, we don't want the red border on hover */
+  input[type=checkbox]:disabled + label:hover:before {
+    border: none;
+  }
+
+  /* if the checkbox is disabled, we don't want the white border on hover */
+  input[type=checkbox]:disabled + label:hover:before {
+    border: none;
   }
 
   input[type=checkbox]:checked + label:before {
@@ -193,9 +210,6 @@ form.view-query-update, form.view-query-save {
     left: 0;
     bottom: 0px;
     background-color: #7C8085;
-    -webkit-box-shadow: inset 0px 3px 0px 0px rgba(50, 50, 50, 0.40);
-    -moz-box-shadow:    inset 0px 3px 0px 0px rgba(50, 50, 50, 0.40);
-    box-shadow:         inset 0px 3px 0px 0px rgba(50, 50, 50, 0.40);
   }
 
   .radio label:before {

@@ -41,6 +41,7 @@
   .controls-group:last-child {
     margin: 0;
   }
+
   form {
     overflow: scroll;
     margin-bottom: 0;
@@ -48,17 +49,8 @@
       display: inline-block;
     }
 
-    input[type="text"],
-    textarea {
-      .border-radius(5px);
-      background-color: #666;
-      padding: 8px;
-      border: none;
-      color: #eee;
-      font-size: 13px;
-    }
     .input-small {
-      width: 70px;
+      width: 74px;
       margin-left: 5px;
     }
     .checkbox {
@@ -135,6 +127,16 @@
       width: 34%;
     }
   }
+  .qo-main-fields-row .row-fluid.fieldsets {
+    .inline:nth-child(2) {
+      width: 30%;
+    }
+    .inline:nth-child(3) {
+      text-align: right;
+      width: 36%;
+    }
+  }
+
   .row-fluid.fieldsets {
     margin-bottom: 5px;
     :last-child {
