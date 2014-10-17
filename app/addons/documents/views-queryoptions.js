@@ -107,6 +107,8 @@ define([
         if (!this.trayIsVisible()) {
           $("#query-options-tray").velocity("transition.slideDownIn", 250); // TODO constant
           FauxtonAPI.Events.trigger("APIbar:closeTray");
+          // make sure the query button is active again. As we can only expand for completed results, this is sufficient to prevent double submission
+          this.$('#query-options-tray button[type="submit"]').removeAttr("disabled");
         }
       },
 
@@ -128,6 +130,9 @@ define([
         if (!this.keySearchFieldsView.hasValidInputs() || !this.additionalParamsView.hasValidInputs()) {
           return;
         }
+
+        // make sure we can not submit twice which results in chaos (and no result ever)
+        this.$('#query-options-tray button[type="submit"]').attr("disabled", "disabled");
 
         this.closeTray();
 
