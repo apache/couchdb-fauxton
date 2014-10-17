@@ -103,7 +103,7 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
     template: "addons/fauxton/templates/api_bar",
 
     events:  {
-      "click .api-url-btn" : "showAPIbar"
+      "click .api-url-btn": "showAPIbar"
     },
 
     initialize: function (options) {
@@ -117,7 +117,7 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
       $('body').on('click.apibar',function(e) {
         var $navbar = $(e.target);
         if (!navbarVisible()) { return;}
-        if ($navbar.hasClass('.api-url-btn')) { return;}
+        if ($navbar.hasClass('.api-url-btn')) { return; }
 
         if (!$navbar.closest('.api-navbar').length){
           hideAPIbar();
@@ -140,14 +140,16 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
       $navBar.velocity("reverse", 250, function () {
         $navBar.hide();
       });
+      this.$('.api-url-btn').removeClass('enabled');
     },
 
     //we only need to show the api-bar here. The `click.apibar` event 
     //in the initialize will close the api bar if a user clicks the api button
     //and the api bar is visible.
-    showAPIbar: function(event){
+    showAPIbar: function() {
       if (!this.navbarVisible()) {
         this.$('.api-navbar').velocity("transition.slideDownIn", 250);
+        this.$('.api-url-btn').addClass('enabled');
       }
     },
 
@@ -158,12 +160,14 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
       };
     },
 
-    hide: function(){
+    hide: function () {
       this.$el.addClass('hide');
     },
-    show: function(){
+
+    show: function () {
       this.$el.removeClass('hide');
     },
+
     update: function(endpoint) {
       this.endpoint = endpoint[0];
       this.documentation = endpoint[1];
