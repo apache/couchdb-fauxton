@@ -107,10 +107,6 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
         }
       });
 
-      this.rightHeader = this.setView("#right-header", new Documents.Views.RightAllDocsHeader({
-         database: this.database
-      }));
-
       this.leftheader = this.setView("#breadcrumbs", new Components.LeftHeader({
         crumbs: crumbs.allDocs(this.database),
         dropdownMenu: this.setUpDropdown()
@@ -181,8 +177,7 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
       this.leftheader.updateCrumbs(crumbs.allDocs(this.database));
       this.rightHeader.hideQueryOptions();
 
-      // problem line again
-      this.apiUrl = [designDocInfo.url('apiurl'), designDocInfo.documentation() ];
+      this.apiUrl = [designDocInfo.url('apiurl'), designDocInfo.documentation()];
     },
 
     tempFn:  function(databaseName, ddoc, fn){
@@ -223,7 +218,11 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
         return;
       }
 
-      this.leftheader.updateCrumbs(crumbs.allDocs(this.database)); 
+      this.rightHeader = this.setView("#right-header", new Documents.Views.RightAllDocsHeader({
+        database: this.database
+      }));
+
+      this.leftheader.updateCrumbs(crumbs.allDocs(this.database));
       this.database.buildAllDocs(docParams);
 
       if (docParams.startkey && docParams.startkey.indexOf("_design") > -1) {
@@ -242,7 +241,7 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
         params: urlParams,
         bulkDeleteDocsCollection: new Documents.BulkDeleteDocCollection([], {databaseId: this.database.get('id')})
       }));
-      
+
       this.apiUrl = function() {
        return [this.database.allDocs.urlRef("apiurl", urlParams), this.database.allDocs.documentation()];
       };
@@ -454,6 +453,9 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
 
     changes: function () {
       var docParams = app.getParams();
+
+      this.rightHeader && this.rightHeader.remove();
+
       this.database.buildChanges(docParams);
 
       this.changesView = this.setView("#dashboard-lower-content", new Changes.Changes({
@@ -473,7 +475,6 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
 
       this.sidebar.setSelectedTab('changes');
       this.leftheader.updateCrumbs(crumbs.changes(this.database));
-      this.rightHeader.showQueryOptions();
 
       this.apiUrl = function () {
         return [this.database.url("changes-apiurl"), this.database.documentation()];
