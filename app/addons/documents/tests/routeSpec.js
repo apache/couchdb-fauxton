@@ -9,6 +9,7 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
+
 define([
         'addons/documents/routes',
         'testUtils'
@@ -18,9 +19,18 @@ define([
 
   describe('Documents Route', function () {
 
-    describe('changes route', function () {
+    it('the all-documents-list has a right header', function () {
+      var routeObj = new DocumentRoute(null, null, ['test']);
+
+      routeObj.allDocs('newdatabase', null);
+      assert.equal(typeof routeObj.rightHeader, 'object');
+    });
+
+    it('the view that shows a view has a right header', function () {
+      var routeObj = new DocumentRoute(null, null, ['test']);
+
+      routeObj.viewFn('newdatabase', 'ads', 'newView');
+      assert.equal(typeof routeObj.rightHeader, 'object');
     });
   });
-
 });
-
