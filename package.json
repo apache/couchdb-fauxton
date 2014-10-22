@@ -7,6 +7,24 @@
     "test": "test"
   },
   "dependencies": {
+  },
+  "scripts": {
+    "test": "grunt test",
+    "couchdebug": "grunt couchdebug",
+    "couchdb": "grunt couchdb"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://git-wip-us.apache.org/repos/asf/couchdb.git"
+  },
+  "keywords": [
+    "couchdb",
+    "futon",
+    "fauxton"
+  ],
+  "author": "",
+  "license": "Apache V2",
+  "devDependencies": {
     "async": "~0.2.6",
     "grunt": "~0.4.1",
     "grunt-cli": "~0.1.6",
@@ -29,22 +47,10 @@
     "urls": "~0.0.3",
     "http-proxy": "~1.1.4",
     "send": "~0.1.1",
-    "grunt-mocha-phantomjs": "~0.3.0"
-  },
-  "scripts": {
-    "test": "grunt test",
-    "couchdebug": "grunt couchdebug",
-    "couchdb": "grunt couchdb"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://git-wip-us.apache.org/repos/asf/couchdb.git"
-  },
-  "keywords": [
-    "couchdb",
-    "futon",
-    "fauxton"
-  ],
-  "author": "",
-  "license": "Apache V2"
+    "grunt-mocha-phantomjs": "~0.3.0",
+    "nightwatch": "~0.5.33",
+    "nano": "~5.12.0",
+    "grunt-chmod": "^1.0.3",
+    "grunt-selenium-webdriver": "^0.2.431"
+  }
 }

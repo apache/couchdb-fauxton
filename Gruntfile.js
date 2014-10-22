@@ -15,6 +15,9 @@
 // configuration file, which you can learn more about here:
 // https://github.com/cowboy/grunt/blob/master/docs/configuring.md
 
+/*jslint node: true */
+"use strict";
+
 module.exports = function(grunt) {
   var helper = require('./tasks/helper').init(grunt),
   _ = grunt.util._,
@@ -394,8 +397,20 @@ module.exports = function(grunt) {
 
     mocha_phantomjs: {
       all: ['test/runner.html']
-    }
+    },
 
+    exec: {
+      check_selenium: helper.check_selenium,
+      check_chrome_driver : helper.check_chrome_driver,
+      start_nightWatch: {
+         command: __dirname + '/node_modules/nightwatch/bin/nightwatch' +
+          ' -e chrome -c ' + __dirname + '/test/nightwatch_tests/' + 'nightwatch.json'
+      }
+    },
+    
+    selenium_start: {
+      options: { port: 4444 }
+    }
   });
 
   // on watch events configure jshint:all to only run on changed file
@@ -439,6 +454,9 @@ module.exports = function(grunt) {
   // Load CSSMin task
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-mocha-phantomjs');
+
+  //Selenium Server
+  grunt.loadNpmTasks('grunt-selenium-webdriver');
 
   /*
    * Default task
@@ -488,4 +506,11 @@ module.exports = function(grunt) {
   grunt.registerTask('couchapp_install', ['rmcouchdb:fauxton', 'mkcouchdb:fauxton', 'couchapp:fauxton']);
   // setup and install fauxton as couchapp
   grunt.registerTask('couchapp_deploy', ['couchapp_setup', 'couchapp_install']);
+
+  /* 
+   * Nightwatch functional testing
+   */
+  //Start Nightwatch test from terminal, using: $ grunt nightwatch
+  grunt.registerTask('nightwatch', [ 'exec:check_selenium', 'selenium_start', 'exec:check_chrome_driver', 'exec:start_nightWatch']);
+
 };

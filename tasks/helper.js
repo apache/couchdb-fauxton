@@ -14,7 +14,8 @@ var fs = require('fs'),
     path = require('path');
 
 exports.init = function(grunt) {
-  var _ = grunt.util._;
+  var _ = grunt.util._,
+      platform = process.platform;
 
   return { 
     readSettingsFile: function () {
@@ -40,6 +41,38 @@ exports.init = function(grunt) {
         }
         return files
       }, defaults);
+    },
+
+    check_selenium: {
+      command: 'test -s ./test/nightwatch_tests/selenium/selenium-server-standalone-2.43.1.jar || curl -o ./test/nightwatch_tests/selenium/selenium-server-standalone-2.43.1.jar  http://selenium-release.storage.googleapis.com/2.43/selenium-server-standalone-2.43.1.jar'
+    },
+
+    check_chrome_driver: {
+      command: function () {
+
+        var type;
+
+        switch (platform) {
+          case 'darwin':
+            type = 'mac32';
+            break;
+
+          case 'win32':
+            type = 'win32';
+            break;
+
+          case 'linux': 
+            var os = require('os');
+            if (os.arch() === 'x64') {
+              type = 'linux64';
+            }else{
+              type = 'linux32';
+            }
+            break;
+        }
+
+        return 'test -s ./test/nightwatch_tests/selenium/chromedriver || (curl -o ./test/nightwatch_tests/selenium/chromedriver_'+type+'.zip http://chromedriver.storage.googleapis.com/2.9/chromedriver_'+type+'.zip && open ./test/nightwatch_tests/selenium/chromedriver_'+type+'.zip)';
+      }
     }
   };
 };
