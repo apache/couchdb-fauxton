@@ -241,6 +241,7 @@ function(FauxtonAPI, Backbone) {
       if (_.has(this.views, selector)) {
         this.views[selector].remove();
         this.views[selector] = null;
+        delete this.views[selector];
       }
     },
 
