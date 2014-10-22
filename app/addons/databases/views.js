@@ -11,56 +11,66 @@
 // the License.
 
 define([
-  "app",
-
-  "addons/fauxton/components",
-  "api",
-  "addons/databases/resources"
+  'app',
+  'addons/fauxton/components',
+  'api',
+  'addons/databases/resources'
 ],
 
 function(app, Components, FauxtonAPI, Databases) {
+
   var Views = {};
 
   Views.RightAllDBsHeader = FauxtonAPI.View.extend({
-    className: "header-right",
-    template: "addons/databases/templates/header_alldbs",
+    className: 'header-right',
+    template: 'addons/databases/templates/header_alldbs',
 
-    beforeRender:function(){
-      this.headerSearch = this.insertView("#header-search", new Views.JumpToDB({
+    beforeRender: function () {
+      this.headerSearch = this.insertView('#header-search', new JumpToDBView({
         collection: this.collection
       }));
 
-      this.newbutton = this.insertView("#add-db-button", new Views.NewDatabaseButton({
+      this.newbutton = this.insertView('#add-db-button', new NewDatabaseView({
         collection: this.collection
       }));
     }
   });
 
   Views.Item = FauxtonAPI.View.extend({
-    template: "addons/databases/templates/item",
-    tagName: "tr",
-    establish: function(){
+    template: 'addons/databases/templates/item',
+    tagName: 'tr',
+
+    establish: function () {
       return [this.model.fetch()];
     },
-    serialize: function() {
 
+    serialize: function () {
       return {
-        encoded: app.utils.safeURLName(this.model.get("name")),
+        encoded: app.utils.safeURLName(this.model.get('name')),
         database: this.model
       };
     }
   });
 
-  Views.JumpToDB = FauxtonAPI.View.extend({
-    template: "addons/databases/templates/jump_to_db",
+  Views.List = FauxtonAPI.View.extend({
+    dbLimit: 20,
+    perPage: 20,
+    template: 'addons/databases/templates/list',
     events: {
-      "submit form#jump-to-db": "switchDatabase"
+      'click button.all': 'selectAll'
     },
-    initialize: function(options) {
+
+    initialize: function (options) {
       var params = app.getParams();
       this.page = params.page ? parseInt(params.page, 10) : 1;
     },
-    establish: function(){
+
+    serialize: function () {
+      return {
+        databases: this.collection
+      };
+    },
+    establish: function () {
       var currentDBs = this.paginated();
       var deferred = FauxtonAPI.Deferred();
 
@@ -73,20 +83,80 @@ function(app, Components, FauxtonAPI, Databases) {
       });
       return [deferred];
     },
-    switchDatabase: function(event, selectedName) {
+
+    paginated: function () {
+      var start = (this.page - 1) * this.perPage;
+      var end = this.page * this.perPage;
+      return this.collection.slice(start, end);
+    },
+
+    beforeRender: function () {
+      _.each(this.paginated(), function(database) {
+        this.insertView('table.databases tbody', new Views.Item({
+          model: database
+        }));
+      }, this);
+
+      this.insertView('#database-pagination', new Components.Pagination({
+        page: this.page,
+        perPage: this.perPage,
+        total: this.collection.length,
+        urlFun: function (page) {
+          return '#/_all_dbs?page=' + page;
+        }
+      }));
+    },
+
+    setPage: function (page) {
+      this.page = page || 1;
+    },
+
+    selectAll: function (event) {
+      $('input:checkbox').attr('checked', !$(event.target).hasClass('active'));
+    }
+  });
+
+
+  // private Views
+
+  var JumpToDBView = FauxtonAPI.View.extend({
+    template: 'addons/databases/templates/jump_to_db',
+    events: {
+      'submit form#jump-to-db': 'switchDatabase'
+    },
+
+    initialize: function () {
+      var params = app.getParams();
+      this.page = params.page ? parseInt(params.page, 10) : 1;
+    },
+
+    establish: function () {
+      var currentDBs = this.paginated();
+      var deferred = FauxtonAPI.Deferred();
+
+      FauxtonAPI.when(currentDBs.map(function (database) {
+        return database.status.fetchOnce();
+      })).always(function (resp) {
+        // make this always so that even if a user is not allowed access to a database
+        // they will still see a list of all databases
+        deferred.resolve();
+      });
+      return [deferred];
+    },
+
+    switchDatabase: function (event, selectedName) {
       event && event.preventDefault();
 
-      var dbname = this.$el.find("[name='search-query']").val().trim();
+      var dbname = this.$el.find('[name="search-query"]').val().trim();
 
       if (selectedName) {
         dbname = selectedName;
       }
-
-      if (dbname && this.collection.where({"id":app.utils.safeURLName(dbname)}).length > 0){
+      if (dbname && this.collection.where({ id: app.utils.safeURLName(dbname) }).length > 0) {
           // TODO: switch to using a model, or Databases.databaseUrl()
           // Neither of which are in scope right now
           // var db = new Database.Model({id: dbname});
-          var url = ["/database/", app.utils.safeURLName(dbname), "/_all_docs"].join('');
+          var url = ['/database/', app.utils.safeURLName(dbname), '/_all_docs'].join('');
           FauxtonAPI.navigate(url);
       } else {
         FauxtonAPI.addNotification({
@@ -95,131 +165,122 @@ function(app, Components, FauxtonAPI, Databases) {
         });
       }
     },
-    afterRender: function() {
+
+    afterRender: function () {
       var that = this,
-          AllDBsArray = _.map(this.collection.toJSON(), function(item, key){
+          AllDBsArray = _.map(this.collection.toJSON(), function (item, key) {
             return item.name;
           });
 
       this.dbSearchTypeahead = new Components.Typeahead({
-        el: "input.search-autocomplete",
+        el: 'input.search-autocomplete',
         source: AllDBsArray,
         onUpdate: function (item) {
           that.switchDatabase(null, item);
         }
       });
       this.dbSearchTypeahead.render();
-      this.$el.find(".js-db-graveyard").tooltip();
+      this.$el.find('.js-db-graveyard').tooltip();
     }
   });
 
-  Views.List = FauxtonAPI.View.extend({
-    dbLimit: 20,
-    perPage: 20,
-    template: "addons/databases/templates/list",
+  var NewDatabaseView = FauxtonAPI.View.extend({
+    template: 'addons/databases/templates/newdatabase',
     events: {
-      "click button.all": "selectAll"
+      'click #add-new-database': 'toggleTray',
+      'click #js-create-database': 'createDatabase'
     },
 
-    initialize: function(options) {
-      var params = app.getParams();
-      this.page = params.page ? parseInt(params.page, 10) : 1;
-    },
+    initialize: function () {
+      var hideTray = _.bind(this.hideTray, this),
+        trayVisible = _.bind(this.trayVisible, this);
 
-    serialize: function() {
-      return {
-        databases: this.collection
-      };
-    },
-    establish: function(){
-      var currentDBs = this.paginated();
-      var deferred = FauxtonAPI.Deferred();
+      $('body').on('click.add-new-database', function(e) {
+        var $clickEl = $(e.target);
 
-      FauxtonAPI.when(currentDBs.map(function(database) {
-        return database.status.fetchOnce();
-      })).always(function(resp) {
-        //make this always so that even if a user is not allowed access to a database
-        //they will still see a list of all databases
-        deferred.resolve();
-      });
-      return [deferred];
-    },
+        if (!trayVisible()) { return; }
+        if ($clickEl.closest('.add-new-database-btn').length) { return; }
 
-    paginated: function() {
-      var start = (this.page - 1) * this.perPage;
-      var end = this.page * this.perPage;
-      return this.collection.slice(start, end);
-    },
-
-    beforeRender: function() {
-
-      _.each(this.paginated(), function(database) {
-        this.insertView("table.databases tbody", new Views.Item({
-          model: database
-        }));
-      }, this);
-
-      this.insertView("#database-pagination", new Components.Pagination({
-        page: this.page,
-        perPage: this.perPage,
-        total: this.collection.length,
-        urlFun: function(page) {
-          return "#/_all_dbs?page=" + page;
+        if (!$clickEl.closest('.new-database-tray').length) {
+          hideTray();
         }
-      }));
-    },
-
-    setPage: function(page) {
-      this.page = page || 1;
-    },
-    selectAll: function(evt){
-      $("input:checkbox").attr('checked', !$(evt.target).hasClass('active'));
-    }
-  });
-
-
-  Views.NewDatabaseButton = FauxtonAPI.View.extend({
-    template: "addons/databases/templates/newdatabase",
-    events: {
-      "click a#new": "newDatabase"
-    },
-    newDatabase: function() {
-      var notification;
-      var db;
-      // TODO: use a modal here instead of the prompt
-      var name = prompt('Name of database', 'newdatabase');
-      if (name === null) {
-        return;
-      } else if (name.length === 0) {
-        notification = FauxtonAPI.addNotification({
-          msg: "Please enter a valid database name",
-          type: "error",
-          clear: true
-        });
-        return;
-      }
-      db = new this.collection.model({
-        id: name,
-        name: name
       });
-      notification = FauxtonAPI.addNotification({msg: "Creating database."});
-      db.save().done(function() {
-        notification = FauxtonAPI.addNotification({
-          msg: "Database created successfully",
-          type: "success",
+    },
+
+    cleanup: function() {
+      $('body').off('click.add-new-database');
+    },
+
+    toggleTray: function (e) {
+      e.preventDefault();
+
+      // curious. If we don't prevent bubbling, the parent View is redrawn (?)
+      e.stopImmediatePropagation();
+
+      if (this.trayVisible()) {
+        this.hideTray();
+      } else {
+        this.showTray();
+      }
+    },
+
+    hideTray: function () {
+      var $tray = this.$('.tray');
+      $tray.velocity('reverse', 250, function () {
+        $tray.hide();
+      });
+      this.$('#add-new-database').removeClass('enabled');
+    },
+
+    showTray: function () {
+      // boo! to be refactored out later (see COUCHDB-2401)
+      FauxtonAPI.Events.trigger("APIbar:closeTray");
+
+      this.$('.tray').velocity('transition.slideDownIn', 250);
+      this.$('#add-new-database').addClass('enabled');
+    },
+
+    trayVisible: function () {
+      return this.$('.tray').is(':visible');
+    },
+
+    createDatabase: function (e) {
+      e.preventDefault();
+
+      var databaseName = $.trim(this.$('#new-database-name').val());
+      if (databaseName.length === 0) {
+        FauxtonAPI.addNotification({
+          msg: 'Please enter a valid database name',
+          type: 'error',
           clear: true
         });
-        var route = "#/database/" +  app.utils.safeURLName(name) + "/_all_docs?limit=" + Databases.DocLimit;
-        app.router.navigate(route, { trigger: true });
+        return;
       }
-      ).error(function(xhr) {
-        var responseText = JSON.parse(xhr.responseText).reason;
-        notification = FauxtonAPI.addNotification({
-          msg: "Create database failed: " + responseText,
-          type: "error",
-          clear: true
-        });
-      }
+      this.hideTray();
+
+      var db = new this.collection.model({
+        id: databaseName,
+        name: databaseName
+      });
+      FauxtonAPI.addNotification({ msg: 'Creating database.' });
+
+      db.save().done(function () {
+          FauxtonAPI.addNotification({
+            msg: 'Database created successfully',
+            type: 'success',
+            clear: true
+          });
+          var route = '#/database/' + app.utils.safeURLName(databaseName) + '/_all_docs?limit=' + Databases.DocLimit;
+          app.router.navigate(route, { trigger: true });
+        }
+      ).error(function (xhr) {
+          var responseText = JSON.parse(xhr.responseText).reason;
+          FauxtonAPI.addNotification({
+            msg: 'Create database failed: ' + responseText,
+            type: 'error',
+            clear: true
+          });
+        }
       );
     }
   });

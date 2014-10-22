@@ -33,10 +33,41 @@
   }
 }
 
-#new {
+#add-new-database {
   line-height: 40px;
 
-  a {
+  &:hover {
+    transition: none;
     text-decoration: none;
+    color: @red;
+  }
+}
+
+.new-database-tray {
+  padding: 16px 20px 28px;
+  &:before {
+    right: 153px;
+  }
+
+  #new-database-name {
+    margin-bottom: 0px;
+    width: 250px;
+    .border-radius(5px 0 0 5px);
+  }
+
+  a.btn {
+    color: white;
+    background-color: #af2d24;
+    margin-left: -4px;
+    line-height: 1.5em;
+    border: 0px;
+    padding: 10px 10px 9px;
+    font-size: 14px;
+    .border-radius(0 5px 5px 0);
+
+    &:hover {
+      background-color: #cbcbcb;
+      color: white;
+    }
   }
 }
