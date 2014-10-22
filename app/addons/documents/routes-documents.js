@@ -347,10 +347,6 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
 
       // clear out anything that was in the lower section
       this.removeView("#dashboard-lower-content");
-
-      // TODO
-//      var apiUrl = this.database.url("app") + "/new_view/" + designDoc;
-//      this.rightHeader.updateApiUrl([apiUrl, "docs"]);
     },
 
     updateAllDocsFromView: function (event) {
