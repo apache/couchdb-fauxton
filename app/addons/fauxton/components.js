@@ -114,15 +114,18 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
       var hideAPIbar = _.bind(this.hideAPIbar, this),
           navbarVisible = _.bind(this.navbarVisible, this);
 
-      $('body').on('click.apibar',function(e) {
+      $('body').on('click.apibar', function(e) {
         var $navbar = $(e.target);
+
         if (!navbarVisible()) { return;}
         if ($navbar.hasClass('.api-url-btn')) { return; }
 
-        if (!$navbar.closest('.api-navbar').length){
+        if (!$navbar.closest('#api-navbar').length){
           hideAPIbar();
         }
       });
+
+      FauxtonAPI.Events.on('APIbar:closeTray', this.hideAPIbar, this);
     },
 
     navbarVisible: function () {
@@ -130,9 +133,8 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
     },
 
     cleanup: function () {
-      // a bit of a hack. The api bar is created twice so we cannot stop listening
-      // to this event until we refactor the api bars into one
-      //$('body').off('click.apibar');
+      $('body').off('click.apibar');
+      FauxtonAPI.Events.off('APIbar:closeTray');
     },
 
     hideAPIbar: function () {
