@@ -64,6 +64,30 @@ Browser: make sure the dev server is running, and enter the path (not URL) to yo
 
 Refreshing the URL will re-run the tests via PhantomJS and in the browser.
 
+#### Nightwatch Functional Browser Tests
+
+There is a bit of setup involved before you are able to run the Nightwatch tests.
+
+In your CouchDB admin accounts, add a user:  
+    
+> user: tester  
+password: testerpass  
+
+Then on the command line:  
+    
+    npm install
+
+Start fauxton with
+    
+    grunt dev 
+
+And to run the tests (in another terminal tab):
+    
+    grunt nightwatch
+
+
+
+
 ### To Deploy Fauxton
 
 To deploy to your local [CouchDB instance](http://localhost:5984/fauxton/_design/fauxton/index.html):
