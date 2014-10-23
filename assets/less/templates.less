@@ -86,7 +86,7 @@
   .navbar {
     .burger {
       .transition(all @transitionSpeed @transitionEaseType);
-      padding: 22px 0 0 18px;
+      padding: 22px 0 22px 18px;
       position: fixed;
       z-index: 100;
       width: 64px;
@@ -161,7 +161,7 @@
           padding: 0;
           font-size: 16px;
           letter-spacing: 1px;
-          line-height: 23px;
+          line-height: 24px;
           width: @navWidth;
           font-weight: normal;
           font-family: helvetica;
@@ -196,7 +196,6 @@
               position: relative;
               &:before {
                 position: absolute;
-                top: -5px;
                 left: -41px;
                 font-size: 24px;
                 color: @NavIcon;
@@ -229,9 +228,8 @@
       }
       ul#bottom-nav-links {
         margin-top: 0;
-        padding-bottom: 70px;
+        padding-bottom: 136px;
         li {
-          min-height: 55px;
           background-color: @bottomNav;
           &.active {
             background-color:@navBGHover;
