@@ -22,8 +22,8 @@ module.exports = {
       .click('#start')
       .waitForElementVisible('.alert-success', waitTime, false)
       .getText('html', function (result) {
-        var testPassed = result.value.indexOf('Success! Your CouchDB installation is working. Time to Relax.');
-        this.verify.ok(testPassed > 0, 'Checking the verification set passed.');
+        var testPassed = result.value.indexOf('Success! Your CouchDB installation is working. Time to Relax.') !== -1;
+        this.verify.ok(testPassed, 'Checking the verification set passed.');
       })
       .end();
   }
