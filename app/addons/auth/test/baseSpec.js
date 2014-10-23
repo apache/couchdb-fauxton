@@ -25,6 +25,7 @@ define([
       it("redirects with replace: true set", function () {
         var navigateSpy = sinon.spy(FauxtonAPI, 'navigate');
         FauxtonAPI.auth = new Auth();
+        FauxtonAPI.session.isLoggedIn = function () { return false; };
         Base.initialize();
         FauxtonAPI.auth.authDeniedCb();
         assert.ok(navigateSpy.withArgs('/noAccess?urlback=', {replace: true}).calledOnce);
