@@ -11,14 +11,15 @@
 // the License.
 
 define([
-       "core/base",
-       "core/layout",
-       "core/router",
-       "core/routeObject",
-       "core/utils"
+  'core/base',
+  'core/layout',
+  'core/router',
+  'core/routeObject',
+  'core/utils',
+  'core/constants'
 ],
 
-function(FauxtonAPI, Layout, Router, RouteObject, utils) {
+function(FauxtonAPI, Layout, Router, RouteObject, utils, constants) {
   FauxtonAPI = _.extend(FauxtonAPI, {
     Layout: Layout,
     Router: Router,
@@ -26,9 +27,11 @@ function(FauxtonAPI, Layout, Router, RouteObject, utils) {
     utils: utils
   });
 
+  FauxtonAPI.constants = constants;
+
   FauxtonAPI.Events = _.extend({}, Backbone.Events);
 
-  FauxtonAPI.navigate = function(url, _opts) {
+  FauxtonAPI.navigate = function (url, _opts) {
     var options = _.extend({trigger: true}, _opts );
     FauxtonAPI.router.navigate(url,options);
   };
@@ -41,12 +44,12 @@ function(FauxtonAPI, Layout, Router, RouteObject, utils) {
     FauxtonAPI.router.removeBeforeUnload.apply(FauxtonAPI.router, arguments);
   };
 
-  FauxtonAPI.addRoute = function(route) {
+  FauxtonAPI.addRoute = function (route) {
     FauxtonAPI.router.route(route.route, route.name, route.callback);
   };
 
   FauxtonAPI.triggerRouteEvent = function (routeEvent, args) {
-    FauxtonAPI.router.triggerRouteEvent("route:"+routeEvent, args);
+    FauxtonAPI.router.triggerRouteEvent("route:" + routeEvent, args);
   };
 
   
