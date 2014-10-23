@@ -105,7 +105,7 @@ define([
 
       toggleQueryOptionsTray: function () {
         if (!this.trayIsVisible()) {
-          $("#query-options-tray").velocity("transition.slideDownIn", 250); // TODO constant
+          $("#query-options-tray").velocity("transition.slideDownIn", FauxtonAPI.constants.TRAY_TOGGLE_SPEED);
           FauxtonAPI.Events.trigger("APIbar:closeTray");
 
           // make sure the query button is active again. As we can only expand for completed results, this is sufficient
@@ -197,7 +197,7 @@ define([
       },
 
       closeTray: function () {
-        $("#query-options-tray").velocity("reverse", 250, function () { // TODO constant
+        $("#query-options-tray").velocity("reverse", FauxtonAPI.constants.TRAY_TOGGLE_SPEED, function () {
           $("#query-options-tray").hide();
         });
         this.$('.query-options-btn').removeClass('enabled');
