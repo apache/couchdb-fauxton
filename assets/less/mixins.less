@@ -20,9 +20,9 @@
         transition-timing-function: cubic-bezier(@a, @b, @c, @d); /* custom */
 }
 
-.bottom-shadow-border() {
+.bottom-shadow-border(@height: 6px) {
   border-bottom: 1px solid #999;
-  .box-shadow(0px 6px 0 0 rgba(0, 0, 0, 0.1));
+  .box-shadow(0px @height 0 0 rgba(0, 0, 0, 0.1));
 }
 
 .left-shadow-border() {
