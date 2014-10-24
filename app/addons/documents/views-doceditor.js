@@ -386,7 +386,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, resizeColumns, prett
 
         this.model.save().then(function () {
           editor.editSaved();
-          FauxtonAPI.navigate('/database/' + that.database.safeID() + '/' + app.utils.safeURLName(that.model.id));
+          FauxtonAPI.navigate('/database/' + that.database.safeID() + '/' + that.model.id);
         }).fail(function(xhr) {
           var responseText = JSON.parse(xhr.responseText).reason;
           FauxtonAPI.addNotification({
@@ -423,7 +423,6 @@ function(app, FauxtonAPI, Components, Documents, Databases, resizeColumns, prett
       }
 
       json = JSON.parse(this.editor.getValue());
-      json._id = app.utils.safeURLName(json._id);
 
       this.model.clear().set(json, {validate: true});
       if (this.model.validationError) {
