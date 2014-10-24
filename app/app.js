@@ -11,32 +11,35 @@
 // the License.
 
 define([
-  // Application.
-  "initialize",
+  // application.
+  'initialize',
 
-  // Libraries
-  "jquery",
-  "lodash",
-  "backbone",
-  "bootstrap",
+  // libraries
+  'jquery',
+  'lodash',
+  'backbone',
+  'bootstrap',
+  'helpers',
+  'constants',
+  'core/utils',
 
-  "helpers",
-  "core/utils",
-  // Modules
-  "core/api",
-  "core/couchdbSession",
-  // Plugins.
-  "plugins/backbone.layoutmanager",
-  "plugins/jquery.form"
+  // modules
+  'core/api',
+  'core/couchdbSession',
+
+  // plugins
+  'plugins/backbone.layoutmanager',
+  'plugins/jquery.form'
 ],
 
-function(app, $, _, Backbone, Bootstrap, Helpers, Utils, FauxtonAPI, Couchdb) {
+function(app, $, _, Backbone, Bootstrap, Helpers, constants, Utils, FauxtonAPI, Couchdb) {
+
   // Make sure we have a console.log
-  if (typeof console == "undefined") {
+  if (_.isUndefined(console)) {
     console = {
-      log: function(){},
-      trace: function(){},
-      debug: function(){}
+      log: function () {},
+      trace: function () {},
+      debug: function () {}
     };
   }
 
@@ -47,15 +50,17 @@ function(app, $, _, Backbone, Bootstrap, Helpers, Utils, FauxtonAPI, Couchdb) {
     getParams: FauxtonAPI.utils.getParams
   });
 
-  // Localize or create a new JavaScript Template object.
+  // Localize or create a new JavaScript Template object
   var JST = window.JST = window.JST || {};
 
-  // Configure LayoutManager with Backbone Boilerplate defaults.
+  // Pass along all constants
+  FauxtonAPI.constants = constants;
+
+  // Configure LayoutManager with Backbone Boilerplate defaults
   FauxtonAPI.Layout.configure({
     // Allow LayoutManager to augment Backbone.View.prototype.
     manage: true,
-
-    prefix: "app/",
+    prefix: 'app/',
 
     // Inject app/helper.js for shared functionality across all html templates
     renderTemplate: function(template, context) {
@@ -67,7 +72,7 @@ function(app, $, _, Backbone, Bootstrap, Helpers, Utils, FauxtonAPI, Couchdb) {
       var done;
 
       // Concatenate the file extension.
-      path = path + ".html";
+      path = path + '.html';
 
       // If cached, use the compiled template.
       if (JST[path]) {
@@ -88,7 +93,7 @@ function(app, $, _, Backbone, Bootstrap, Helpers, Utils, FauxtonAPI, Couchdb) {
   // Define your master router on the application namespace and trigger all
   // navigation from this instance.
   FauxtonAPI.config({
-    el: "#app-container",
+    el: '#app-container',
     masterLayout: new FauxtonAPI.Layout(),
     
     addHeaderLink: function(link) {

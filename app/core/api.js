@@ -15,8 +15,7 @@ define([
   'core/layout',
   'core/router',
   'core/routeObject',
-  'core/utils',
-  'core/constants'
+  'core/utils'
 ],
 
 function(FauxtonAPI, Layout, Router, RouteObject, utils, constants) {
@@ -26,8 +25,6 @@ function(FauxtonAPI, Layout, Router, RouteObject, utils, constants) {
     RouteObject: RouteObject,
     utils: utils
   });
-
-  FauxtonAPI.constants = constants;
 
   FauxtonAPI.Events = _.extend({}, Backbone.Events);
 
