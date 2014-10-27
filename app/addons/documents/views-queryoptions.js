@@ -42,7 +42,7 @@ define([
         inclusive_end: "true",
         reduce: "false",
         stale: "",
-        group_level: "999"
+        group_level: "exact"
       }
     };
 
@@ -285,6 +285,14 @@ define([
             params[this.name] = this.value;
           }
         });
+
+        // this is weird, but necessary. ?group_level=exact used to work in older version of couchDB but no longer.
+        // Instead, to specify exact, you need to pass group=true instead. Since group_level=999 (exact) was the default
+        // value, it won't be in params
+        if (_.has(params, 'reduce') && !_.has(params, 'group_level')) {
+          params.group = 'true';
+        }
+
         return params;
       },
 
