@@ -189,7 +189,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, pouchdb, QueryOption
           if (that.newView || viewNameChange) {
             var fragment = '/database/' + that.database.safeID() +'/' + ddoc.safeID() + '/_views/' + app.utils.safeURLName(viewName);
 
-            FauxtonAPI.navigate(fragment, { trigger: false });
+            FauxtonAPI.navigate(fragment);
             that.newView = false;
             that.ddocID = ddoc.safeID();
             that.viewName = viewName;
