@@ -297,6 +297,9 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
        return [this.indexedDocs.urlRef("apiurl", urlParams), "docs"];
       };
 
+      this.rightHeader = this.setView("#right-header", new Documents.Views.RightAllDocsHeader({
+        database: this.database
+      }));
       this.rightHeader.showQueryOptions();
       this.rightHeader.resetQueryOptions({
         queryParams: urlParams,
