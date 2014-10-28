@@ -357,10 +357,13 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
           urlParams = params.urlParams,
           docParams = params.docParams,
           ddoc = event.ddoc,
+          defaultPageSize,
+          isLazyInit,
           pageSize,
           collection;
 
-      var defaultPageSize = _.isUndefined(this.documentsView) ? 20 : this.documentsView.perPage();
+      isLazyInit = _.isUndefined(this.documentsView) || _.isUndefined(this.documentsView.allDocsNumber);
+      defaultPageSize = isLazyInit ? 20 : this.documentsView.perPage();
       docParams.limit = pageSize = this.getDocPerPageLimit(urlParams, defaultPageSize);
 
       if (event.allDocs) {
@@ -392,15 +395,10 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
         }
       }
 
-      this.documentsView.setCollection(collection);
       this.documentsView.setParams(docParams, urlParams);
-      this.documentsView.forceRender();
 
-      // this has been commented out because it causes the header bar to disappear after a search (i.e the "Query
-      // Options" link disappears). This issue is being addressed in a separate ticket (not sure about the Jira ID)
-//      this.apiUrl = function() {
-//        return [this.indexedDocs.urlRef("apiurl", urlParams), "docs"];
-//      };
+      // this will lazily initialize all sub-views and render them
+      this.documentsView.forceRender();
     },
 
     perPageChange: function (perPage) {
