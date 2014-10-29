@@ -10,10 +10,11 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-define([], function() {
+define([], function () {
 
   var constants = {
-    TRAY_TOGGLE_SPEED: 250
+    TRAY_TOGGLE_SPEED: 250,
+    DEFAULT_PAGE_SIZE: 20
   };
 
   return constants;

@@ -363,7 +363,7 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
           collection;
 
       isLazyInit = _.isUndefined(this.documentsView) || _.isUndefined(this.documentsView.allDocsNumber);
-      defaultPageSize = isLazyInit ? 20 : this.documentsView.perPage();
+      defaultPageSize = isLazyInit ? FauxtonAPI.constants.DEFAULT_PAGE_SIZE : this.documentsView.perPage();
       docParams.limit = pageSize = this.getDocPerPageLimit(urlParams, defaultPageSize);
 
       if (event.allDocs) {
