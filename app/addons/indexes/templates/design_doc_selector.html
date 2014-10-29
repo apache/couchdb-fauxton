@@ -19,7 +19,7 @@ the License.
         <option value="new-doc" <% if(newView){ %>selected="selected" <%}%> >New document</option>
 
         <% ddocs.each(function(ddoc) { %>
-          <% if (ddoc.id === ddocName && !newView) { %>
+          <% if (ddoc.id === ddocName) { %>
           <option selected="selected" value="<%- ddoc.id %>"><%- ddoc.id %></option>
           <% } else { %>
           <option value="<%- ddoc.id %>"><%- ddoc.id %></option>
