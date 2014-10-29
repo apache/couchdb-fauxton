@@ -144,7 +144,7 @@ define([
 
         // all looks good! Close the tray and publish the message
         var url = app.utils.replaceQueryParams(params);
-        FauxtonAPI.navigate(url, { trigger: false });
+        FauxtonAPI.navigate(url);
 
         if (this.options.viewName !== null && this.options.ddocName !== null) {
           FauxtonAPI.triggerRouteEvent('updateAllDocs', { ddoc: this.options.ddocName, view: this.options.viewName });
