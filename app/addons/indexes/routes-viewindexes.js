@@ -17,10 +17,11 @@ define([
   'addons/documents/views',
   'addons/indexes/resources',
   'addons/indexes/routes-core',
-  'addons/fauxton/components'
+  'addons/fauxton/components',
+  'addons/documents/views-queryoptions'
 ],
 
-function (app, FauxtonAPI, Databases, Views, Documents, Resources, RouteCore, Components) {
+function (app, FauxtonAPI, Databases, Views, Documents, Resources, RouteCore, Components, QueryOptions) {
 
   var ViewIndexes = RouteCore.extend({
     routes: {
@@ -136,23 +137,14 @@ function (app, FauxtonAPI, Databases, Views, Documents, Resources, RouteCore, Co
         view: cleanedViewName
       });
 
-      this.apiUrl = function() {
-        return [this.data.indexedDocs.urlRef("apiurl", urlParams), "docs"];
+      this.apiUrl = function () {
+        return [this.data.indexedDocs.urlRef('apiurl', urlParams), 'docs'];
       };
 
-      this.rightHeader = this.setView("#right-header", new Documents.Views.RightAllDocsHeader({
-        database: this.data.database
+      this.queryOptions = this.setView('#header-query-options', new QueryOptions.QueryOptionsTray({
+        hasReduce: false,
+        showStale: false
       }));
-
-      this.rightHeader.showQueryOptions();
-      this.rightHeader.resetQueryOptions({
-        queryParams: urlParams,
-        showStale: true,
-        hasReduce: true,
-        viewName: viewName,
-        ddocName: ddoc
-      });
-
     }
   });
 

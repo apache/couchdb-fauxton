@@ -458,6 +458,15 @@ REUSEABLE SHADOW BORDER
   z-index: 100;
   .two-pane & {
     border: none;
+    .right-container {
+      position: relative;
+      float: right;
+    }
+  }
+  .with-sidebar & {
+    #api-navbar {
+      left: -220px;
+    }
   }
   .two-pane &,
   .with-sidebar & {
@@ -471,8 +480,6 @@ REUSEABLE SHADOW BORDER
     #api-navbar{
       position: relative;
       float: right;
-      left: -220px;
-      z-index: 200;
       > div {
         height: 60px;
       }
@@ -518,9 +525,6 @@ REUSEABLE SHADOW BORDER
 #right-header {
   height: 60px;
   position: absolute;
-  /* these styles are for the new header*/
-  .right-header{
-  }
 }
 #api-navbar {
   height: 60px;
