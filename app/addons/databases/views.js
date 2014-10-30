@@ -188,7 +188,8 @@ function(app, Components, FauxtonAPI, Databases) {
     template: 'addons/databases/templates/newdatabase',
     events: {
       'click #add-new-database': 'toggleTray',
-      'click #js-create-database': 'createDatabase'
+      'click #js-create-database': 'createDatabase',
+      'keyup #js-new-database-name': 'processKey'
     },
 
     initialize: function () {
@@ -209,6 +210,12 @@ function(app, Components, FauxtonAPI, Databases) {
 
     cleanup: function() {
       $('body').off('click.add-new-database');
+    },
+
+    processKey: function (e) {
+      if (e.which === 13) {
+        this.createDatabase(e);
+      }
     },
 
     toggleTray: function (e) {
@@ -247,7 +254,7 @@ function(app, Components, FauxtonAPI, Databases) {
     createDatabase: function (e) {
       e.preventDefault();
 
-      var databaseName = $.trim(this.$('#new-database-name').val());
+      var databaseName = $.trim(this.$('#js-new-database-name').val());
       if (databaseName.length === 0) {
         FauxtonAPI.addNotification({
           msg: 'Please enter a valid database name',
