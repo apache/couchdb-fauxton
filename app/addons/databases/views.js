@@ -189,7 +189,7 @@ function(app, Components, FauxtonAPI, Databases) {
     events: {
       'click #add-new-database': 'toggleTray',
       'click #js-create-database': 'createDatabase',
-      'keyup #new-database-name': 'processKey'
+      'keyup #js-new-database-name': 'processKey'
     },
 
     initialize: function () {
@@ -254,7 +254,7 @@ function(app, Components, FauxtonAPI, Databases) {
     createDatabase: function (e) {
       e.preventDefault();
 
-      var databaseName = $.trim(this.$('#new-database-name').val());
+      var databaseName = $.trim(this.$('#js-new-database-name').val());
       if (databaseName.length === 0) {
         FauxtonAPI.addNotification({
           msg: 'Please enter a valid database name',
