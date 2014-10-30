@@ -142,8 +142,8 @@ function (app, FauxtonAPI, Databases, Views, Documents, Resources, RouteCore, Co
       };
 
       this.queryOptions = this.setView('#header-query-options', new QueryOptions.QueryOptionsTray({
-        hasReduce: false,
-        showStale: false
+        hasReduce: true,
+        showStale: true
       }));
     }
   });
