@@ -188,7 +188,8 @@ function(app, Components, FauxtonAPI, Databases) {
     template: 'addons/databases/templates/newdatabase',
     events: {
       'click #add-new-database': 'toggleTray',
-      'click #js-create-database': 'createDatabase'
+      'click #js-create-database': 'createDatabase',
+      'keyup #new-database-name': 'processKey'
     },
 
     initialize: function () {
@@ -209,6 +210,12 @@ function(app, Components, FauxtonAPI, Databases) {
 
     cleanup: function() {
       $('body').off('click.add-new-database');
+    },
+
+    processKey: function (e) {
+      if (e.which === 13) {
+        this.createDatabase(e);
+      }
     },
 
     toggleTray: function (e) {
