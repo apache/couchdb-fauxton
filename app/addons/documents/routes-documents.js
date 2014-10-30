@@ -194,12 +194,13 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
     },
 
     createParams: function (options) {
-      var urlParams = app.getParams(options);
-      var params = Documents.QueryParams.parse(urlParams);
+      var urlParams = app.getParams(options),
+          params = Documents.QueryParams.parse(urlParams),
+          limit = this.getDocPerPageLimit(params, FauxtonAPI.constants.DEFAULT_PAGE_SIZE);
 
       return {
         urlParams: urlParams,
-        docParams: _.extend(params, {limit: this.getDocPerPageLimit(params, 20)})
+        docParams: _.extend(params, {limit: limit})
       };
     },
 
