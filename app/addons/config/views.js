@@ -23,7 +23,6 @@ function(app, FauxtonAPI, Config, Components) {
     tagName: "tr",
     className: "config-item",
     template: "addons/config/templates/item",
-
     events: {
       "dblclick .js-edit-value": "editValue",
       "click .js-delete-value": "deleteValue",
@@ -112,26 +111,12 @@ function(app, FauxtonAPI, Config, Components) {
   Views.Table = FauxtonAPI.View.extend({
     template: "addons/config/templates/dashboard",
 
-    events: {
-      "click #js-add-section": "addSection"
-    },
-
     initialize: function(){
       this.listenTo(FauxtonAPI.Events, "config:newSection", this.render);
       this.listenTo(FauxtonAPI.Events, "config:rerender", this.render);
     },
 
-    addSection: function (event) {
-      event.preventDefault();
-      this.modal.show();
-    },
-
     beforeRender: function() {
-      this.modal = this.insertView("#add-section-modal", new Views.Modal({
-                      collection: this.collection
-                    }));
-
-      this.modal.render();
       var collection = this.collection;
 
       this.collection.each(function(config) {
@@ -155,11 +140,11 @@ function(app, FauxtonAPI, Config, Components) {
   });
 
   Views.Modal = FauxtonAPI.View.extend({
-    className: "modal hide fade",
-    template: "addons/config/templates/modal",
+    className: 'add-section-modal modal hide fade',
+    template: 'addons/config/templates/modal',
 
     events: {
-      "submit #js-add-section-form": "submitClick"
+      'submit #js-add-section-form': 'submitClick'
     },
 
     initialize: function () {
@@ -186,20 +171,20 @@ function(app, FauxtonAPI, Config, Components) {
       option.save();
 
       var section = this.collection.find(function (section) {
-        return section.get("section") === option.get("section");
+        return section.get('section') === option.get('section');
       });
 
       if (section) {
-        section.get("options").push(option.attributes);
+        section.get('options').push(option.attributes);
       } else {
         this.collection.add({
-          section: option.get("section"),
+          section: option.get('section'),
           options: [option.attributes]
         });
       }
 
       this.hide();
-      FauxtonAPI.Events.trigger("config:newSection");
+      FauxtonAPI.Events.trigger('config:newSection');
     },
 
     isUniqueEntryInSection: function (collection) {
@@ -226,11 +211,11 @@ function(app, FauxtonAPI, Config, Components) {
           collection = this.collection;
 
       if (!name) {
-        this.errorMessage("Add a name");
+        this.errorMessage('Add a name');
       } else if (!value) {
-        this.errorMessage("Add a value");
+        this.errorMessage('Add a value');
       } else if (this.isUniqueEntryInSection(collection)) {
-        this.errorMessage("Must have a unique name");
+        this.errorMessage('Must have a unique name');
       } else {
         this.submitForm();
       }
@@ -239,9 +224,9 @@ function(app, FauxtonAPI, Config, Components) {
     errorMessage: function (msg) {
       FauxtonAPI.addNotification({
         msg: msg,
-        type: "error",
+        type: 'error',
         clear: true,
-        selector: ".js-form-error-config"
+        selector: '.js-form-error-config'
       });
     },
 
@@ -254,6 +239,27 @@ function(app, FauxtonAPI, Config, Components) {
     }
   });
 
-  return Views;
+  Views.AddSectionButton = FauxtonAPI.View.extend({
+    template: 'addons/config/templates/addsection',
+    className: 'header-right',
 
+    events: {
+      'click #add-new-section': 'addSection'
+    },
+
+    addSection: function (e) {
+      e.preventDefault();
+      this.modal.show();
+    },
+
+    beforeRender: function () {
+      this.modal = this.insertView('body', new Views.Modal({
+        collection: this.collection
+      }));
+
+      this.modal.render();
+    }
+  });
+
+  return Views;
 });
