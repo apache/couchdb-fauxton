@@ -10,9 +10,9 @@
  *  License for the specific language governing permissions and limitations under
  *  the License.
  */
-button.addSection {
-  margin-bottom: 12px;
-}
+@import "../../../../../assets/less/variables.less";
+
+
 .config-item {
   height: 65px;
 
@@ -31,7 +31,7 @@ button.addSection {
   button { width: 7%;}
 }
 
-#add-section-modal .modal {
+.modal.add-section-modal {
   width: 400px;
   margin-left: -200px;
   left: 50%;
@@ -64,3 +64,18 @@ table.config {
   }
 }
 
+#add-new-section {
+  line-height: 40px;
+  cursor: pointer;
+
+  &:hover {
+    transition: none;
+    text-decoration: none;
+    color: @red;
+  }
+}
+
+#add-section-button {
+  border-left: 1px solid #ccc;
+  padding: 10px 14px;
+}
