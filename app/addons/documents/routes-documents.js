@@ -66,7 +66,6 @@ function(app, FauxtonAPI, Documents, Changes, DocEditor, Databases, Resources, C
       "route:perPageChange": "perPageChange",
       "route:changesFilterAdd": "addFilter",
       "route:changesFilterRemove": "removeFilter",
-      "route:updateQueryOptions": "updateQueryOptions",
       "route:resetQueryOptions": "resetQueryOptions",
       "route:toggleSelectHeader": "toggleSelectheader"
     },
@@ -393,10 +392,6 @@ function(app, FauxtonAPI, Documents, Changes, DocEditor, Databases, Resources, C
 
     resetQueryOptions: function(options) {
       this.rightHeader.resetQueryOptions(options);
-    },
-
-    updateQueryOptions: function(options) {
-      this.rightHeader.updateQueryOptions(options);
     }
   });
 
