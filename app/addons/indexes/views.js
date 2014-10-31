@@ -36,15 +36,7 @@ function (app, FauxtonAPI, Components, Documents, Databases, pouchdb,
 
   Views.PreviewScreen = FauxtonAPI.View.extend({
     template: 'addons/indexes/templates/preview_screen',
-    className: 'watermark-logo',
-
-    initialize: function () {
-      this.listenTo(FauxtonAPI.Events, 'indexes:newView', this.changeText);
-    },
-
-    changeText: function () {
-      this.$('.js-status').text('Index is building');
-    }
+    className: 'watermark-logo'
   });
 
 
