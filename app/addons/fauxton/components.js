@@ -26,6 +26,7 @@ define([
   "api",
   "ace_configuration",
   "spin",
+
   // this should never be global available:
   // https://github.com/zeroclipboard/zeroclipboard/blob/master/docs/security.md
   "plugins/zeroclipboard/ZeroClipboard",
@@ -35,32 +36,57 @@ define([
 function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
   var Components = FauxtonAPI.addon();
 
-  //setting up the left header with the backbutton used in Views and All docs
+  // setting up the left header with the backbutton used in Views and All docs
   Components.LeftHeader = FauxtonAPI.View.extend({
     className: "header-left",
     template: "addons/fauxton/templates/header_left",
-    initialize:function(options){
+
+    initialize: function (options) {
       this.dropdownEvents = options.dropdownEvents;
       this.dropdownMenuLinks = options.dropdownMenu;
+      this.lookaheadTrayOptions = options.lookaheadTrayOptions || null;
       this.crumbs = options.crumbs || [];
+
+      // listen for breadcrumb clicks
+      this.listenTo(FauxtonAPI.Events, 'breadcrumb:click', this.toggleTray);
+      this.listenTo(FauxtonAPI.Events, 'lookaheadTray:close', this.unselectLastBreadcrumb);
     },
+
     updateCrumbs: function(crumbs){
       this.crumbs = crumbs;
       this.breadcrumbs && this.breadcrumbs.update(crumbs);
     },
+
+    unselectLastBreadcrumb: function () {
+      this.breadcrumbs.unselectLastBreadcrumb();
+    },
+
     updateDropdown: function(menuLinks){
       this.dropdownMenuLinks = menuLinks;
       this.dropdown && this.dropdown.update(menuLinks);
     },
+
+    toggleTray: function () {
+      if (this.lookaheadTray !== null) {
+        this.lookaheadTray.toggleTray();
+      }
+    },
+
     beforeRender: function(){
       this.setUpCrumbs();
       this.setUpDropDownMenu();
+
+      if (this.lookaheadTray !== null) {
+        this.setUpLookaheadTray();
+      }
     },
+
     setUpCrumbs: function(){
       this.breadcrumbs = this.insertView("#header-breadcrumbs", new Components.Breadcrumbs({
         crumbs: this.crumbs
       }));
     },
+
     setUpDropDownMenu: function(){
       if (this.dropdownMenuLinks){
         this.dropdown = this.insertView("#header-dropdown-menu", new Components.MenuDropDown({
@@ -69,6 +95,22 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
           events: this.dropdownEvents
         }));
       }
+    },
+
+    setUpLookaheadTray: function () {
+      var options = this.lookaheadTrayOptions,
+          dbNames = options.databaseCollection.getDatabaseNames(),
+          currentDBName = this.crumbs[1].name;
+
+      // remove the current database name from the list
+      dbNames = _.without(dbNames, currentDBName);
+
+      this.lookaheadTray = this.insertView("#header-lookahead", new Components.LookaheadTray({
+        data: dbNames,
+        toggleEventName: options.toggleEventName,
+        onUpdateEventName: options.onUpdateEventName,
+        placeholder: options.placeholder
+      }));
     }
   });
 
@@ -76,6 +118,11 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
     className: "breadcrumb pull-left",
     tagName: "ul",
     template: "addons/fauxton/templates/breadcrumbs",
+
+    events:  {
+      "click .js-lastelement": "toggleLastElement"
+    },
+
     serialize: function() {
       var crumbs = _.clone(this.crumbs);
 
@@ -90,14 +137,26 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
         nextCrumbHasLabel: nextCrumbHasLabel
       };
     },
+
+    toggleLastElement: function (event) {
+      this.$(event.currentTarget).toggleClass('js-enabled');
+      FauxtonAPI.Events.trigger('breadcrumb:click');
+    },
+
+    unselectLastBreadcrumb: function () {
+      this.$('.js-enabled').removeClass('js-enabled');
+    },
+
     update: function(crumbs) {
       this.crumbs = crumbs;
       this.render();
     },
+
     initialize: function(options) {
       this.crumbs = options.crumbs;
     }
   });
+
 
   Components.ApiBar = FauxtonAPI.View.extend({
     template: "addons/fauxton/templates/api_bar",
@@ -423,38 +482,29 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
     }
   });
 
-  //TODO allow more of the typeahead options.
-  //Current this just does what we need but we
-  //need to support the other typeahead options.
   Components.Typeahead = FauxtonAPI.View.extend({
 
     initialize: function (options) {
       this.source = options.source;
-      this.onUpdate = options.onUpdate;
-      _.bindAll(this);
+      this.onUpdateEventName = options.onUpdateEventName;
     },
 
     afterRender: function () {
-      var onUpdate = this.onUpdate;
+      var onUpdateEventName = this.onUpdateEventName;
 
       this.$el.typeahead({
         source: this.source,
         updater: function (item) {
-          if (onUpdate) {
-            onUpdate(item);
-          }
-
+          FauxtonAPI.Events.trigger(onUpdateEventName, item);
           return item;
         }
       });
     }
-
   });
 
   Components.DbSearchTypeahead = Components.Typeahead.extend({
     initialize: function (options) {
       this.dbLimit = options.dbLimit || 30;
-      this.onUpdate = options.onUpdate;
       _.bindAll(this);
     },
     source: function(query, process) {
@@ -845,12 +895,93 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
     on: function () {
       return this.client.on.apply(this.client, arguments);
     }
+  });
 
+
+  Components.LookaheadTray = FauxtonAPI.View.extend({
+    className: "lookahead-tray tray",
+    template: "addons/fauxton/templates/lookahead_tray",
+    placeholder: "Enter to search",
+
+    events: {
+      'click #js-close-tray': 'closeTray',
+      'keyup': 'onKeyup'
+    },
+
+    serialize: function () {
+      return {
+        placeholder: this.placeholder
+      };
+    },
+
+    initialize: function (opts) {
+      this.data = opts.data;
+      this.toggleEventName = opts.toggleEventName;
+      this.onUpdateEventName = opts.onUpdateEventName;
+
+      var trayIsVisible = _.bind(this.trayIsVisible, this);
+      var closeTray = _.bind(this.closeTray, this);
+      $("body").on("click.lookaheadTray", function (e) {
+        if (!trayIsVisible()) { return; }
+        if ($(e.target).closest(".lookahead-tray").length === 0 &&
+            $(e.target).closest('.lookahead-tray-link').length === 0) {
+          closeTray();
+        }
+      });
+    },
+
+    afterRender: function () {
+      var that = this;
+      this.dbSearchTypeahead = new Components.Typeahead({
+        el: 'input.search-autocomplete',
+        source: that.data,
+        onUpdateEventName: that.onUpdateEventName
+      });
+      this.dbSearchTypeahead.render();
+    },
+
+    cleanup: function () {
+      $("body").off("click.lookaheadTray");
+    },
+
+    trayIsVisible: function () {
+      return this.$el.is(":visible");
+    },
+
+    toggleTray: function () {
+      if (this.trayIsVisible()) {
+        this.closeTray();
+      } else {
+        this.openTray();
+      }
+    },
+
+    openTray: function () {
+      this.$el.velocity("transition.slideDownIn", FauxtonAPI.constants.TRAY_TOGGLE_SPEED, function () {
+        this.$el.find('input').focus();
+      }.bind(this));
+
+    },
+
+    closeTray: function () {
+      var $tray = this.$el;
+      $tray.velocity("reverse", FauxtonAPI.constants.TRAY_TOGGLE_SPEED, function () {
+        $tray.hide();
+      });
+      FauxtonAPI.Events.trigger('lookaheadTray:close');
+    },
+
+    onKeyup: function (e) {
+      if (e.which === 27) {
+        this.closeTray();
+      }
+    }
   });
 
 
   //need to make this into a backbone view...
   var routeObjectSpinner;
+
   FauxtonAPI.RouteObject.on('beforeEstablish', function (routeObject) {
     if (!routeObject.disableLoader){ 
       var opts = {
@@ -931,4 +1062,3 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
 
   return Components;
 });
-

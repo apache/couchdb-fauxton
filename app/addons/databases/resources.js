@@ -162,6 +162,12 @@ function(app, FauxtonAPI, Documents) {
       return "all_dbs";
     },
 
+    getDatabaseNames: function () {
+      return _.map(this.toArray(), function (model) {
+        return model.get('name');
+      });
+    },
+
     cache: {
       expires: 60
     },

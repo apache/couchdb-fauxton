@@ -35,5 +35,20 @@ define([
         assert.ok(!modelWithoutGraveYard.isGraveYard());
       });
     });
+
+    describe('List of Databases', function () {
+      it('returns the names of databases in a list in an array', function () {
+        var listCollection = new Resources.List([{
+          name: 'ente'
+        },
+        {
+          name: 'rocko'
+        }]);
+        var databaseNames = listCollection.getDatabaseNames();
+
+        assert.equal(databaseNames[0], 'ente');
+        assert.equal(databaseNames[1], 'rocko');
+      });
+    });
   });
 });
