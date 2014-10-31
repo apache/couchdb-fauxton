@@ -39,6 +39,7 @@ function (app, FauxtonAPI, Databases, Views, Documents, Resources, RouteCore, Co
 
     updateAllDocsFromView: function () {
       this.documentsView.forceRender();
+      this.leftheader.forceRender();
     },
 
     newViewEditor: function (database, designDoc) {

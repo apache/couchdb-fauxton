@@ -293,8 +293,6 @@ function (app, FauxtonAPI, Components, Documents, Databases, pouchdb,
         clear: true
       });
 
-      FauxtonAPI.Events.trigger('indexes:newView');
-
       if (this.newView || this.viewNameChange) {
         fragment = '/database/' + this.database.safeID() +'/' + ddoc.safeID() + '/_views/' + app.utils.safeURLName(viewName);
         FauxtonAPI.navigate(fragment, {trigger: true});
