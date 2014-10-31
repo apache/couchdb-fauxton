@@ -298,10 +298,9 @@ function(app, FauxtonAPI, Documents, Changes, DocEditor, Databases, Resources, C
         }
       }
 
-      this.documentsView.setParams(docParams, urlParams);
-
       // this will lazily initialize all sub-views and render them
       this.documentsView.forceRender();
+      this.documentsView.setParams(docParams, urlParams);
     },
 
     perPageChange: function (perPage) {
