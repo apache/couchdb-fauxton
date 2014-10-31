@@ -320,7 +320,7 @@ function (app, FauxtonAPI, Components, Documents, Databases, pouchdb,
 
       if (this.reduceFunStr !== reduceVal) {
         this.reduceFunStr = reduceVal;
-        FauxtonAPI.triggerRouteEvent('updateQueryOptions', { hasReduce: that.hasReduce() });
+        FauxtonAPI.triggerRouteEvent('updateQueryOptions', { hasReduce: this.hasReduce() });
       }
 
       FauxtonAPI.triggerRouteEvent('updateAllDocs', {ddoc: ddocName, view: viewName});
