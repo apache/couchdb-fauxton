@@ -20,12 +20,14 @@ define([
   "addons/documents/views-changes",
   "addons/documents/views-doceditor",
 
+  "addons/indexes/resources",
+
   "addons/databases/base",
   "addons/documents/resources",
   "addons/fauxton/components"
 ],
 
-function(app, FauxtonAPI, Documents, Changes, DocEditor, Databases, Resources, Components) {
+function(app, FauxtonAPI, Documents, Changes, DocEditor, IndexResources, Databases, Resources, Components) {
 
   var crumbs = {
     allDocs: function (database) {
@@ -274,7 +276,7 @@ function(app, FauxtonAPI, Documents, Changes, DocEditor, Databases, Resources, C
         collection = this.database.allDocs;
         collection.paging.pageSize = pageSize;
       } else {
-        collection = this.indexedDocs = new Documents.IndexCollection(null, {
+        collection = this.indexedDocs = new IndexResources.IndexCollection(null, {
           database: this.database,
           design: ddoc,
           view: view,
@@ -283,18 +285,6 @@ function(app, FauxtonAPI, Documents, Changes, DocEditor, Databases, Resources, C
             pageSize: pageSize
           }
         });
-
-        if (!this.documentsView) {
-          this.documentsView = this.createViewDocumentsView({
-            designDoc: ddoc,
-            docParams: docParams,
-            urlParams: urlParams,
-            database: this.database,
-            indexedDocs: this.indexedDocs,
-            designDocs: this.designDocs,
-            view: view
-          });
-        }
       }
 
       // this will lazily initialize all sub-views and render them
