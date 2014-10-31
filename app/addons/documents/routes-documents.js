@@ -283,18 +283,6 @@ function(app, FauxtonAPI, Documents, Changes, DocEditor, Databases, Resources, C
             pageSize: pageSize
           }
         });
-
-        if (!this.documentsView) {
-          this.documentsView = this.createViewDocumentsView({
-            designDoc: ddoc,
-            docParams: docParams,
-            urlParams: urlParams,
-            database: this.database,
-            indexedDocs: this.indexedDocs,
-            designDocs: this.designDocs,
-            view: view
-          });
-        }
       }
 
       // this will lazily initialize all sub-views and render them
