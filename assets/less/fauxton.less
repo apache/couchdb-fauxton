@@ -465,7 +465,10 @@ REUSEABLE SHADOW BORDER
   }
   .with-sidebar & {
     #api-navbar {
-      right: 220px;
+      right: @navWidth;
+      .closeMenu & {
+        right: @collapsedNavWidth;
+      }
       position: absolute;
       z-index: 10;
     }

@@ -238,8 +238,8 @@ function (app, FauxtonAPI, Components, Documents, Databases, pouchdb,
 
       $('#dashboard-content').scrollTop(0);
 
-      if (!this.hasValidCode() || this.$('#new-ddoc:visible').val() === '') {
-        designDocNameEmpty = this.$('#new-ddoc:visible').val() === '';
+      if (!this.hasValidCode() || this.$('.js-new-ddoc-input:visible').val() === '') {
+        designDocNameEmpty = this.$('.js-new-ddoc-input:visible').val() === '';
         errormessage = 'Please fix the Javascript errors and try again.';
         if (designDocNameEmpty) {
           errormessage = 'Enter a design doc name';
@@ -313,10 +313,14 @@ function (app, FauxtonAPI, Components, Documents, Databases, pouchdb,
         this.viewName = viewName;
         this.ddocInfo = ddoc;
         this.render();
+        FauxtonAPI.triggerRouteEvent('reloadDesignDocs', {
+          selectedTab: app.utils.removeSpecialCharacters(ddocName.replace(/_design\//,'')) + '_' + app.utils.removeSpecialCharacters(viewName)
+        });
       }
 
       if (this.reduceFunStr !== reduceVal) {
         this.reduceFunStr = reduceVal;
+        FauxtonAPI.triggerRouteEvent('updateQueryOptions', { hasReduce: that.hasReduce() });
       }
 
       FauxtonAPI.triggerRouteEvent('updateAllDocs', {ddoc: ddocName, view: viewName});
@@ -514,9 +518,9 @@ function (app, FauxtonAPI, Components, Documents, Databases, pouchdb,
 
     updateDesignDoc: function () {
       if (this.isNewDesignDoc()) {
-        this.$('#new-ddoc').show();
+        this.$('.js-new-ddoc-input').show();
       } else {
-        this.$('#new-ddoc').hide();
+        this.$('.js-new-ddoc-input').hide();
       }
     },
 
@@ -531,7 +535,7 @@ function (app, FauxtonAPI, Components, Documents, Databases, pouchdb,
 
       if (this.isNewDesignDoc()) {
         doc = {
-          _id: '_design/' + this.$('#new-ddoc').val(),
+          _id: '_design/' + this.$('.js-new-ddoc-input').val(),
           views: {},
           language: 'javascript'
         };
