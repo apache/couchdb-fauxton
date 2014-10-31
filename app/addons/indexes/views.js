@@ -294,20 +294,21 @@ function (app, FauxtonAPI, Components, Documents, Databases, pouchdb,
       });
 
       FauxtonAPI.Events.trigger('indexes:newView');
+
+      if (this.newView || this.viewNameChange) {
+        fragment = '/database/' + this.database.safeID() +'/' + ddoc.safeID() + '/_views/' + app.utils.safeURLName(viewName);
+        FauxtonAPI.navigate(fragment, {trigger: true});
+        this.newView = false;
+        this.ddocID = ddoc.safeID();
+        this.viewName = viewName;
+        this.ddocInfo = ddoc;
+        this.render();
+      }
+
       if (this.reduceFunStr !== reduceVal) {
         this.reduceFunStr = reduceVal;
         FauxtonAPI.Events.trigger('QueryOptions:updateQueryOptions', {hasReduce: this.hasReduce()});
       }
-      fragment = '/database/' + this.database.safeID() +'/' + ddoc.safeID() + '/_views/' + app.utils.safeURLName(viewName);
-      FauxtonAPI.navigate(fragment);
-      this.newView = false;
-      this.ddocID = ddoc.safeID();
-      this.viewName = viewName;
-      this.ddocInfo = ddoc;
-      this.render();
-
-
-
     },
 
     getCurrentDesignDoc: function () {
