@@ -33,6 +33,14 @@ function (app, FauxtonAPI, Databases, Views, Documents, Resources, RouteCore, Co
       'database/:database/new_view/:designDoc': 'newViewEditor'
     },
 
+    events: {
+      "route:updateAllDocs": "updateAllDocsFromView"
+    },
+
+    updateAllDocsFromView: function () {
+      this.documentsView.forceRender();
+    },
+
     newViewEditor: function (database, designDoc) {
       var params = app.getParams(),
           crumbs;

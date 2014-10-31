@@ -309,6 +309,8 @@ function (app, FauxtonAPI, Components, Documents, Databases, pouchdb,
         this.reduceFunStr = reduceVal;
         FauxtonAPI.Events.trigger('QueryOptions:updateQueryOptions', {hasReduce: this.hasReduce()});
       }
+
+      FauxtonAPI.triggerRouteEvent('updateAllDocs');
     },
 
     getCurrentDesignDoc: function () {
