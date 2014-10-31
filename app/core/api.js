@@ -18,7 +18,7 @@ define([
   'core/utils'
 ],
 
-function(FauxtonAPI, Layout, Router, RouteObject, utils, constants) {
+function(FauxtonAPI, Layout, Router, RouteObject, utils) {
   FauxtonAPI = _.extend(FauxtonAPI, {
     Layout: Layout,
     Router: Router,
@@ -29,8 +29,8 @@ function(FauxtonAPI, Layout, Router, RouteObject, utils, constants) {
   FauxtonAPI.Events = _.extend({}, Backbone.Events);
 
   FauxtonAPI.navigate = function (url, _opts) {
-    var options = _.extend({trigger: true}, _opts );
-    FauxtonAPI.router.navigate(url,options);
+    var options = _.extend({trigger: true}, _opts);
+    FauxtonAPI.router.navigate(url, options);
   };
 
   FauxtonAPI.beforeUnload = function () {

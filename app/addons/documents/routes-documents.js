@@ -28,18 +28,19 @@ define([
 
 function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resources, Components) {
 
+  // TODO these are the same. Legacy code?
   var crumbs = {
     allDocs: function (database) {
       return [
-        {"name": "", "className": "fonticon-left-open", "link": "/_all_dbs"},
-        {"name": database.id, "link": Databases.databaseUrl(database)}
+        { "name": "", "className": "fonticon-left-open", "link": "/_all_dbs" },
+        { "name": database.id, "link": Databases.databaseUrl(database), className: "lookahead-tray-link" }
       ];
     },
 
     changes: function (database) {
       return [
-        {"name": "", "className": "fonticon-left-open", "link": "/_all_dbs"},
-        {"name": database.id, "link": Databases.databaseUrl(database)}
+        { "name": "", "className": "fonticon-left-open", "link": "/_all_dbs" },
+        { "name": database.id, "link": Databases.databaseUrl(database), className: "lookahead-tray-link" }
       ];
     }
   };
@@ -92,8 +93,15 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
     overrideBreadcrumbs: true,
 
     initialize: function (route, masterLayout, options) {
-      this.databaseName = options[0];
-      this.database = new Databases.Model({id:this.databaseName});
+      this.initViews(options[0]);
+      this.listenTo(FauxtonAPI.Events, 'lookaheadTray:update', this.onSelectDatabase);
+    },
+
+    initViews: function (dbName) {
+      this.databaseName = dbName;
+      this.database = new Databases.Model({id: this.databaseName});
+      this.allDatabases = new Databases.List();
+
       this.designDocs = new Documents.AllDocs(null, {
         database: this.database,
         paging: {
@@ -113,13 +121,28 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
 
       this.leftheader = this.setView("#breadcrumbs", new Components.LeftHeader({
         crumbs: crumbs.allDocs(this.database),
-        dropdownMenu: this.setUpDropdown()
+        dropdownMenu: this.setUpDropdown(),
+        lookaheadTrayOptions: {
+          databaseCollection: this.allDatabases,
+          toggleEventName: 'lookaheadTray:toggle',
+          onUpdateEventName: 'lookaheadTray:update',
+          placeholder: 'Enter database name'
+        }
       }));
 
       this.sidebar = this.setView("#sidebar-content", new Documents.Views.Sidebar({
         collection: this.designDocs,
         database: this.database
       }));
+    },
+
+    // this safely assumes the db name is valid
+    onSelectDatabase: function (dbName) {
+      this.cleanup();
+      this.initViews(dbName);
+      FauxtonAPI.navigate('/database/' + app.utils.safeURLName(dbName) + '/_all_docs', {
+        trigger: true
+      });
     },
 
     setUpDropdown: function() {
@@ -194,7 +217,7 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
     },
 
     establish: function () {
-      return this.designDocs.fetch({reset: true});
+      return [this.designDocs.fetch({reset: true}), this.allDatabases.fetchOnce()];
     },
 
     createParams: function (options) {
@@ -224,6 +247,7 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
       }
 
       this.leftheader.updateCrumbs(crumbs.allDocs(this.database));
+
       this.database.buildAllDocs(docParams);
 
       if (docParams.startkey && docParams.startkey.indexOf("_design") > -1) {
@@ -243,9 +267,9 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
         bulkDeleteDocsCollection: new Documents.BulkDeleteDocCollection([], {databaseId: this.database.get('id')})
       }));
 
-      this.apiUrl = function() {
-       return [this.database.allDocs.urlRef("apiurl", urlParams), this.database.allDocs.documentation()];
-      };
+      // this used to be a function that returned the object, but be warned: it caused a closure with a reference to
+      // the initial this.database object which can change
+      this.apiUrl = [this.database.allDocs.urlRef("apiurl", urlParams), this.database.allDocs.documentation()];
 
       // update the rightHeader with the latest & greatest info
       this.rightHeader.resetQueryOptions({ queryParams: urlParams });
@@ -493,7 +517,17 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
 
     updateQueryOptions: function(options) {
       this.rightHeader.updateQueryOptions(options);
+    },
+
+    cleanup: function () {
+      if (this.leftheader) {
+        this.removeView('#breadcrumbs');
+      }
+      if (this.sidebar) {
+        this.removeView('#sidebar');
+      }
     }
+
   });
 
   return DocumentsRouteObject;

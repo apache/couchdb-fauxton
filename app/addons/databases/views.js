@@ -122,12 +122,13 @@ function(app, Components, FauxtonAPI, Databases) {
   var JumpToDBView = FauxtonAPI.View.extend({
     template: 'addons/databases/templates/jump_to_db',
     events: {
-      'submit form#jump-to-db': 'switchDatabase'
+      'submit form#jump-to-db': 'switchDatabaseHandler'
     },
 
     initialize: function () {
       var params = app.getParams();
       this.page = params.page ? parseInt(params.page, 10) : 1;
+      this.listenTo(FauxtonAPI.Events, 'jumptodb:update', this.switchDatabase);
     },
 
     establish: function () {
@@ -144,9 +145,7 @@ function(app, Components, FauxtonAPI, Databases) {
       return [deferred];
     },
 
-    switchDatabase: function (event, selectedName) {
-      event && event.preventDefault();
-
+    switchDatabase: function (selectedName) {
       var dbname = this.$el.find('[name="search-query"]').val().trim();
 
       if (selectedName) {
@@ -166,18 +165,20 @@ function(app, Components, FauxtonAPI, Databases) {
       }
     },
 
+    switchDatabaseHandler: function (event) {
+      event.preventDefault();
+      this.switchDatabase();
+    },
+
     afterRender: function () {
-      var that = this,
-          AllDBsArray = _.map(this.collection.toJSON(), function (item, key) {
+      var AllDBsArray = _.map(this.collection.toJSON(), function (item, key) {
             return item.name;
           });
 
       this.dbSearchTypeahead = new Components.Typeahead({
         el: 'input.search-autocomplete',
         source: AllDBsArray,
-        onUpdate: function (item) {
-          that.switchDatabase(null, item);
-        }
+        onUpdateEventName: 'jumptodb:update'
       });
       this.dbSearchTypeahead.render();
       this.$el.find('.js-db-graveyard').tooltip();
