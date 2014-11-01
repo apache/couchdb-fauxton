@@ -18,82 +18,72 @@
 // "purely functional" helper system.
 
 define([
-  "api"
-],
+    "api"
+  ],
 
-function(FauxtonAPI) {
+  function(FauxtonAPI) {
 
-  var Resize = function(options){
-    this.options = options;
-  };
+    var Resize = function(options){
+      this.options = options;
+    };
 
-  Resize.prototype = {
+    Resize.prototype = {
 
-    initialize: function(){
-      //add throttler :)
-      this.lazyLayout = _.debounce(this.onResizeHandler, 300).bind(this);
-      FauxtonAPI.utils.addWindowResize(this.lazyLayout,"animation");
-      FauxtonAPI.utils.initWindowResize();
-      this.onResizeHandler();
-    },
+      initialize: function(){
+        //add throttler :)
+        this.lazyLayout = _.debounce(this.onResizeHandler, 300).bind(this);
+        FauxtonAPI.utils.addWindowResize(this.lazyLayout,"animation");
+        FauxtonAPI.utils.initWindowResize();
+        this.onResizeHandler();
+      },
 
-    onResizeHandler: function (){
-      var fullWidth = this.getFullWidth(),
-          halfWidth = this.getHalfWidth(),
+      onResizeHandler: function (){
+        var fullWidth = this.getFullWidth(),
           sidebarWidth = this.getSidebarContentWidth(),
-          left = $('.window-resizeable-half').length > 0? halfWidth : sidebarWidth;
+          widthMinusBreadcrumb = this.getFullWidthMinusBreadcrumb();
 
-      $('.window-resizeable').innerWidth(sidebarWidth);
-      $('.window-resizeable-half').innerWidth(halfWidth);
-      $('.window-resizeable-full').innerWidth(fullWidth);
+        $('.window-resizeable').innerWidth(sidebarWidth);
+        $('.window-resizeable-right').innerWidth(widthMinusBreadcrumb);
+        $('.window-resizeable-full').innerWidth(fullWidth);
 
-      //set left
-      this.setLeftPosition(left);
-      //if there is a callback, run that
-      this.options.callback && this.options.callback();
-      this.trigger('resize');
-    },
+        //if there is a callback, run that
+        this.options.callback && this.options.callback();
+        this.trigger('resize');
+      },
 
-    cleanupCallback: function(){
-      this.callback = null;
-    },
+      cleanupCallback: function(){
+        this.callback = null;
+      },
 
-    getPrimaryNavWidth: function(){
-      var primaryNavWidth  = $('body').hasClass('closeMenu') ? 64 : $('#primary-navbar').outerWidth();
-      //$('body').hasClass('closeMenu') ? 64 : 220;
-      return primaryNavWidth;
-    },
+      getPrimaryNavWidth: function(){
+        var primaryNavWidth  = $('body').hasClass('closeMenu') ? 64 : $('#primary-navbar').outerWidth();
+        return primaryNavWidth;
+      },
 
-    getWindowWidth: function(){
-      return window.innerWidth;
-    },
+      getWindowWidth: function(){
+        return window.innerWidth;
+      },
 
-    getFullWidth: function(){
-      return this.getWindowWidth() - this.getPrimaryNavWidth();
-    },
+      getFullWidth: function () {
+        return this.getWindowWidth() - this.getPrimaryNavWidth();
+      },
 
-    getSidebarWidth: function(){
-      return $('#breadcrumbs').length > 0 ? $('#breadcrumbs').outerWidth() : 0;
-    },
+      getFullWidthMinusBreadcrumb: function () {
+        var breadcrumbWidth = ($('#breadcrumbs').length) ? $('#breadcrumbs').outerWidth() : 0;
+        return this.getFullWidth() - breadcrumbWidth;
+      },
 
-    getSidebarContentWidth: function(){
-      return this.getFullWidth() - this.getSidebarWidth() -5;
-    },
+      getSidebarWidth: function () {
+        return ($('#sidebar-content').length) ? $('#sidebar-content').outerWidth() : 0;
+      },
 
-    getHalfWidth: function(){
-      var fullWidth = this.getFullWidth();
-      return fullWidth/2;
-    },
+      getSidebarContentWidth: function(){
+        return this.getFullWidth() - this.getSidebarWidth();
+      }
+    };
 
-    setLeftPosition: function(panelWidth){
-      var primary = this.getPrimaryNavWidth();
-      $('.set-left-position').css('left',panelWidth+primary+4);
-    }
-  };
+    _.extend(Resize.prototype, Backbone.Events);
 
-  _.extend(Resize.prototype, Backbone.Events);
-
-  return Resize;
-});
-
+    return Resize;
+  });
 
