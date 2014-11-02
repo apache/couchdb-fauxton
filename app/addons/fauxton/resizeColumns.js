@@ -39,16 +39,13 @@ function(FauxtonAPI) {
 
     onResizeHandler: function (){
       var fullWidth = this.getFullWidth(),
-          halfWidth = this.getHalfWidth(),
           sidebarWidth = this.getSidebarContentWidth(),
-          left = $('.window-resizeable-half').length > 0? halfWidth : sidebarWidth;
+          widthMinusBreadcrumb = this.getFullWidthMinusBreadcrumb();
 
       $('.window-resizeable').innerWidth(sidebarWidth);
-      $('.window-resizeable-half').innerWidth(halfWidth);
+      $('.window-resizeable-right').innerWidth(widthMinusBreadcrumb);
       $('.window-resizeable-full').innerWidth(fullWidth);
 
-      //set left
-      this.setLeftPosition(left);
       //if there is a callback, run that
       this.options.callback && this.options.callback();
       this.trigger('resize');
@@ -58,9 +55,13 @@ function(FauxtonAPI) {
       this.callback = null;
     },
 
+    getFullWidthMinusBreadcrumb: function () {
+      var breadcrumbWidth = ($('#breadcrumbs').length) ? $('#breadcrumbs').outerWidth() : 0;
+      return this.getFullWidth() - breadcrumbWidth;
+    },
+
     getPrimaryNavWidth: function(){
       var primaryNavWidth  = $('body').hasClass('closeMenu') ? 64 : $('#primary-navbar').outerWidth();
-      //$('body').hasClass('closeMenu') ? 64 : 220;
       return primaryNavWidth;
     },
 
@@ -73,21 +74,11 @@ function(FauxtonAPI) {
     },
 
     getSidebarWidth: function(){
-      return $('#breadcrumbs').length > 0 ? $('#breadcrumbs').outerWidth() : 0;
+      return ($('#sidebar-content').length) ? $('#sidebar-content').outerWidth() : 0;
     },
 
     getSidebarContentWidth: function(){
-      return this.getFullWidth() - this.getSidebarWidth() -5;
-    },
-
-    getHalfWidth: function(){
-      var fullWidth = this.getFullWidth();
-      return fullWidth/2;
-    },
-
-    setLeftPosition: function(panelWidth){
-      var primary = this.getPrimaryNavWidth();
-      $('.set-left-position').css('left',panelWidth+primary+4);
+      return this.getFullWidth() - this.getSidebarWidth();
     }
   };
 
