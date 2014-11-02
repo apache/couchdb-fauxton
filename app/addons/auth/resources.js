@@ -216,6 +216,7 @@ function (app, FauxtonAPI, CouchdbSession) {
 
   Auth.CreateAdminView = FauxtonAPI.View.extend({
     template: 'addons/auth/templates/create_admin',
+    className: "auth-page",
 
     initialize: function (options) {
       options = options || {};
@@ -256,6 +257,10 @@ function (app, FauxtonAPI, CouchdbSession) {
         msg = FauxtonAPI.session.messages.adminCreationFailedPrefix + ' ' + msg;
         errorHandler(msg);
       });
+    },
+
+    afterRender: function() {
+      $("#username").focus();
     }
   });
 
@@ -298,6 +303,7 @@ function (app, FauxtonAPI, CouchdbSession) {
 
   Auth.ChangePassword = FauxtonAPI.View.extend({
     template: 'addons/auth/templates/change_password',
+    className: "auth-page",
 
     events: {
       "submit #change-password": "changePassword"
@@ -319,6 +325,10 @@ function (app, FauxtonAPI, CouchdbSession) {
       });
 
       promise.fail(errorHandler);
+    },
+
+    afterRender: function () {
+      $("#password").focus();
     }
   });
 
