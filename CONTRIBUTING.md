@@ -11,7 +11,7 @@ To fix an issue in Fauxton, fork the project to your GitHub account. The [Readme
 
 If there is no Jira ticket for the issue you have, please create one.
 
-When you're ready for a review, submit a Pull Request. We regularly check the PR list for Fauxton and should get back to you with a code review.  If no one has responded to you yet, you can find us on IRC in #couchdb-dev.  Ping **Garren** or **Deathbear**, though anyone in the room should be able to help you.
+When you're ready for a review, submit a Pull Request. We regularly check the PR list for Fauxton and should get back to you with a code review.  If no one has responded to you yet, you can find us on IRC in #couchdb-dev.  Ping **Garren**, **robertkowalski** or **Deathbear**, though anyone in the room should be able to help you.
 
 We appreciate constructive feedback from people who use CouchDB, so don't be shy. We know there are bugs and we know there is room for improvement.
 
