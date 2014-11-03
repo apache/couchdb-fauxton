@@ -96,6 +96,34 @@ function ($, _) {
       var testName = name || "";
       var checkforBad = testName.match(/[\$\-/,+-]/g);
       return (checkforBad !== null)?encodeURIComponent(name):name;
+    },
+
+    // a pair of simple local storage wrapper functions. These ward against problems getting or
+    // setting (e.g. local storage full) and allow you to get/set complex data structures
+    localStorageSet: function (key, value) {
+      if (_.isObject(value) || _.isArray(value)) {
+        value = JSON.stringify(value);
+      }
+      var success = true;
+      try {
+        window.localStorage.setItem(key, value);
+      } catch (e) {
+        success = false;
+      }
+      return success;
+    },
+
+    localStorageGet: function (key) {
+      var data;
+      if (_.has(window.localStorage, key)) {
+        data = window.localStorage[key];
+        try {
+          return JSON.parse(data);
+        } catch (e) {
+          return data;
+        }
+      }
+      return data;
     }
   };
 

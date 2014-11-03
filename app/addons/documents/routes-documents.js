@@ -425,15 +425,14 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
     },
 
     setDocPerPageLimit: function (perPage) {
-      window.localStorage.setItem('fauxton:perpage', perPage);
+      app.utils.localStorageSet('fauxton:perpage', perPage);
     },
-
 
     getDocPerPageLimit: function (urlParams, perPage) {
       var storedPerPage = perPage;
 
       if (window.localStorage) {
-        storedPerPage = window.localStorage.getItem('fauxton:perpage');
+        storedPerPage = app.utils.localStorageGet('fauxton:perpage');
 
         if (!storedPerPage) {
           this.setDocPerPageLimit(perPage);
