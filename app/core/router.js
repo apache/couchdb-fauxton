@@ -97,6 +97,15 @@ function(FauxtonAPI, Auth, Backbone) {
 
       $(FauxtonAPI.el).html(FauxtonAPI.masterLayout.el);
       FauxtonAPI.masterLayout.render();
+
+      this.lastPage = [];
+      //keep last pages visited in Fauxton
+      Backbone.history.on('route', function () { 
+        this.lastPage.push(Backbone.history.fragment);
+        if (this.lastPage.length > 2) {
+          this.lastPage.shift();
+        }
+      }, this);
     },
 
     triggerRouteEvent: function(event, args) {
