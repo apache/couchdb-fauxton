@@ -62,7 +62,7 @@ function (app, FauxtonAPI) {
     },
 
     url: function () {
-      return app.host + '/_config';
+      return window.location.origin + '/_config';
     },
 
     findEntryInSection: function (sectionName, entry) {
