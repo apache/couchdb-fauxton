@@ -1,7 +1,7 @@
-# JavaScript Style Guide
+# Style Guide
 
-This document attempts to codify the JavaScript code style rules for Fauxton. This has been patched together from
-a few sources, including [Pootle's style guide](http://pootle.readthedocs.org/en/latest/developers/styleguide.html#javascript),
+This document attempts to codify the JavaScript, HTML and CSS style rules for Fauxton. This has been patched together from
+a few sources, including [Pootle's style guide](http://pootle.readthedocs.org/en/latest/developers/styleguide.html),
 [Google JS style guide](https://google-styleguide.googlecode.com/svn/trunk/javascriptguide.xml), and from
 reverse-engineering our own codebase.
 
@@ -9,11 +9,18 @@ This is intended to be a living document: any disagreements about style should b
 [mailing list](http://markmail.org/search/?q=couchdb#query:couchdb%20list%3Aorg.apache.couchdb.dev%20order%3Adate-backward),
 discussed, agreed upon and documented here.
 
+- [Javascript](#js)
+- [HTML](#html)
+- [CSS / Less](#css)
+
+
+<a name="js" />
+## JavaScript
+
 Note: We have JSHint running as a grunt task which will catch the more egregious errors (missing `vars`, missing
 semicolons etc). See the `Gruntfile.js` for the settings being used.
 
-
-## Programming Style
+### Programming Style
 
 #### Indentation
 - 2-space indentation. Don't use tabs. JSHint will whine if you have mixed tabs and spaces.
@@ -119,7 +126,7 @@ var myObj = new Object(); // boooo!
 Use object literal notation for map/hash/associative arrays.
 
 
-## Examples
+### Examples
 
 #### `if` statements
 
@@ -143,7 +150,7 @@ if (condition) {
 }
 ```
 
-### `for` statements
+#### `for` statements
 
 As mentioned above, using Underscore's looping methods is favoured here.
 
@@ -159,7 +166,7 @@ for (variable in object) {
 }
 ```
 
-### `switch` statements
+#### `switch` statements
 
 ```javascript
 switch (condition) {
@@ -176,7 +183,7 @@ switch (condition) {
 }
 ```
 
-### Functions
+#### Functions
 
 ```javascript
 function myFunction () {
@@ -195,3 +202,49 @@ var anonymousFunction = function () {
   // more stuff!
 }
 ```
+
+
+<a name="html" />
+## HTML
+
+In Fauxton, all our HTML documents are all Underscore templates so this section contains a few Underscore-related 
+style recommendations as well.
+
+#### Indentation
+- 2-space indentation using spaces, not tabs.
+- Avoid lines longer than 120 characters.
+
+### Naming
+- IDs and class names with multiple words should be lowercase and separated with hyphens (`-`), like `my-class` and 
+`fixed-header`.
+- Please try to name your classes and IDs something that makes sense for the current component and won't conflict with
+other markup in the page.
+- IDs or classes that are to be used for javascript only should be named with a `js-` prefix. Note: these should NOT be 
+styled; they should be used for JS hooks only.
+
+#### Other
+- Always use double quotes for attribute strings.
+
+### Underscore-related
+- If a template name consists of multiple words, separate it with underscores, like `my_template.html`.
+- Unless they're explicitly needed, always use `<%- %>` over `<%= %>`.
+
+
+
+<a name="css" />
+## CSS / Less
+
+We use Less to generate our CSS.
+
+#### Indentation
+- Indent using 2 spaces. Don’t use tabs.
+- Put selectors and braces on their own lines.
+
+#### Naming 
+- As noted in the HTML section above, selectors should be lowercase. 
+- Selectors with multiple words should be separated with hyphens (`-`), like `.my-class` and `.fixed-header`. 
+
+#### Other
+- Avoid deep-nesting of rules. Always try to style an element with the minimum specificity required.
+
+
