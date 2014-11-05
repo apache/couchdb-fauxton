@@ -132,7 +132,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
     },
 
     cleanup: function() {
-      FauxtonAPI.Events.off('database:delete', this.showDeleteDatabase);
+      FauxtonAPI.Events.off('database:delete', this.showDeleteDatabase, this);
     },
 
     events: {
