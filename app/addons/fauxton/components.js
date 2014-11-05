@@ -835,7 +835,7 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
       this.moviePath = FauxtonAPI.getExtensions('zeroclipboard:movielist')[0];
 
       if (_.isUndefined(this.moviePath)) {
-       this.moviePath = app.host + app.root + "js/zeroclipboard/ZeroClipboard.swf";
+       this.moviePath = 'js/zeroclipboard/ZeroClipboard.swf';
       }
 
       ZeroClipboard.config({ moviePath: this.moviePath });
