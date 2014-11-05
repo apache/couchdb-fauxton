@@ -20,7 +20,7 @@ define([
 function(app, FauxtonAPI, Config, Views) {
 
   var ConfigRouteObject = FauxtonAPI.RouteObject.extend({
-    layout: 'one_pane_db',
+    layout: 'one_pane',
 
     initialize: function () {
       this.configs = new Config.Collection();

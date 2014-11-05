@@ -1,4 +1,4 @@
-<!--
+<%/*
 Licensed under the Apache License, Version 2.0 (the "License"); you may not
 use this file except in compliance with the License. You may obtain a copy of
 the License at
@@ -10,21 +10,20 @@ distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
 WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 License for the specific language governing permissions and limitations under
 the License.
--->
+*/%>
 
 <div id="primary-navbar"></div>
 <div id="dashboard" class="container-fluid one-pane">
   <div id="global-notifications" class="container errors-container window-resizeable"></div>
-  <div class="fixed-header">
+  <header class="fixed-header">
     <div id="breadcrumbs"></div>
     <div id="api-navbar"></div>
-  </div>
+    <div id="right-header" class="window-resizeable-right"></div>
+  </header>
 
 
   <div class="row-fluid content-area">
-  	<div id="tabs" class="row"></div>
+    <div id="tabs" class="row"></div>
     <div id="dashboard-content" class="window-resizeable-full"></div>
   </div>
 </div>
-
-
