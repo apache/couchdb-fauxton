@@ -61,7 +61,6 @@ function(app, FauxtonAPI, Auth) {
       this.setView('#dashboard-content', new Auth.NoAccessView({
         urlBack: urlBack
       }));
-      this.apiUrl = 'noAccess';
     }
   });
 
