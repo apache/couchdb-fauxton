@@ -11,37 +11,37 @@
 // the License.
 
 define([
-  "app",
-  "api",
-  "addons/activetasks/resources",
-  "addons/activetasks/views"
+  'app',
+  'api',
+  'addons/activetasks/resources',
+  'addons/activetasks/views'
 ],
 
 function (app, FauxtonAPI, Activetasks, Views) {
 
   var ActiveTasksRouteObject = FauxtonAPI.RouteObject.extend({
-    layout: "with_tabs_sidebar",
+    layout: 'with_tabs_sidebar',
 
     routes: {
-      "activetasks/:id": "defaultView",
-      "activetasks": "defaultView"
+      'activetasks/:id': 'defaultView',
+      'activetasks': 'defaultView'
     },
 
     events: {
-      "route:changeFilter": "changeFilter",
+      'route:changeFilter': 'changeFilter'
     },
 
     selectedHeader: 'Active Tasks',
 
     crumbs: [
-      {"name": "Active tasks", "link": "activetasks"}
+      {'name': 'Active tasks', 'link': 'activetasks'}
     ],
 
     apiUrl: function () {
-      return [this.allTasks.url("apiurl"), this.allTasks.documentation];
+      return [this.allTasks.url('apiurl'), this.allTasks.documentation];
     },
 
-    roles: ["_admin"],
+    roles: ['_admin'],
 
     initialize: function () {
       this.allTasks = new Activetasks.AllTasks();
@@ -49,15 +49,15 @@ function (app, FauxtonAPI, Activetasks, Views) {
     },
 
     defaultView: function () {
-      this.setView("#dashboard-lower-content", new Views.View({
+      this.setView('#dashboard-lower-content', new Views.View({
         collection: this.allTasks,
-        currentView: "all",
+        currentView: 'all',
         searchModel: this.search
       }));
 
-      this.setView("#sidebar-content", new Views.TabMenu({}));
+      this.setView('#sidebar-content', new Views.TabMenu({}));
 
-      this.headerView = this.setView("#dashboard-upper-content", new Views.TabHeader({
+      this.headerView = this.setView('#dashboard-upper-content', new Views.TabHeader({
         searchModel: this.search
       }));
     },

@@ -11,15 +11,15 @@
 // the License.
 
 define([
-  "app",
-  "api",
-  "addons/activetasks/routes"
+  'app',
+  'api',
+  'addons/activetasks/routes'
 ],
 
 function (app, FauxtonAPI, Activetasks) {
 
-  Activetasks.initialize = function() {
-    FauxtonAPI.addHeaderLink({title: "Active Tasks", icon: "fonticon-activetasks", href: "#/activetasks"});
+  Activetasks.initialize = function () {
+    FauxtonAPI.addHeaderLink({title: 'Active Tasks', icon: 'fonticon-activetasks', href: '#/activetasks'});
   };
 
   return Activetasks;

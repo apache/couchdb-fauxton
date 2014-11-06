@@ -11,9 +11,9 @@
 // the License.
 
 define([
-        "app",
-        "api",
-        "addons/activetasks/resources"
+  'app',
+  'api',
+  'addons/activetasks/resources'
 ],
 
 function (app, FauxtonAPI, ActiveTasks) {
@@ -21,25 +21,24 @@ function (app, FauxtonAPI, ActiveTasks) {
   var Views = {},
       Events = {},
       pollingInfo = {
-        rate: "5",
+        rate: '5',
         intervalId: null
       };
-
 
   Views.Events = _.extend(Events, Backbone.Events);
 
   Views.View = FauxtonAPI.View.extend({
-    tagName: "table",
-    className: "table table-bordered table-striped active-tasks",
-    template: "addons/activetasks/templates/table",
+    tagName: 'table',
+    className: 'table table-bordered table-striped active-tasks',
+    template: 'addons/activetasks/templates/table',
 
     events: {
-      "click th": "sortByType"
+      'click th': 'sortByType'
     },
 
-    initialize: function (options) {
-      this.listenTo(this.searchModel, "change", this.render);
-      this.listenTo(this.collection, "reset", this.render);
+    initialize: function () {
+      this.listenTo(this.searchModel, 'change', this.render);
+      this.listenTo(this.collection, 'reset', this.render);
     },
 
     beforeRender: function () {
@@ -47,35 +46,34 @@ function (app, FauxtonAPI, ActiveTasks) {
     },
 
     filterAndInsertView: function () {
-      var that = this,
-          database = this.searchModel.get("filterDatabase"),
-          filter = this.searchModel.get("filterType"),
-          databaseRegex = new RegExp(database, "g");
+      var database = this.searchModel.get('filterDatabase'),
+          filter = this.searchModel.get('filterType'),
+          databaseRegex = new RegExp(database, 'g');
 
-      this.removeView(".js-tasks-go-here");
+      this.removeView('.js-tasks-go-here');
 
       this.collection.forEach(function (item) {
 
-        if (filter && filter !== "all" && item.get("type") !== filter) {
+        if (filter && filter !== 'all' && item.get('type') !== filter) {
           return;
         }
 
         if (database &&
-            !databaseRegex.test(item.get("source")) &&
-            !databaseRegex.test(item.get("target")) &&
-            !databaseRegex.test(item.get("database"))) {
+            !databaseRegex.test(item.get('source')) &&
+            !databaseRegex.test(item.get('target')) &&
+            !databaseRegex.test(item.get('database'))) {
           return;
         }
 
         var view = new Views.TableDetail({
           model: item
         });
-        this.insertView(".js-tasks-go-here", view);
+        this.insertView('.js-tasks-go-here', view);
       }, this);
     },
 
     afterRender: function () {
-      Events.bind("update:poll", this.setPolling, this);
+      Events.bind('update:poll', this.setPolling, this);
       this.setPolling();
     },
 
@@ -92,7 +90,7 @@ function (app, FauxtonAPI, ActiveTasks) {
 
     sortByType: function (e) {
       var currentTarget = e.currentTarget,
-          datatype = this.$(currentTarget).attr("data-type");
+          datatype = this.$(currentTarget).attr('data-type');
 
       this.collection.sortByColumn(datatype);
       this.render();
@@ -113,28 +111,28 @@ function (app, FauxtonAPI, ActiveTasks) {
   });
 
   Views.TabMenu = FauxtonAPI.View.extend({
-    tagName: "nav",
-    className: "sidenav",
-    template: "addons/activetasks/templates/tabs",
+    tagName: 'nav',
+    className: 'sidenav',
+    template: 'addons/activetasks/templates/tabs',
 
     events: {
-      "click .task-tabs li": "requestByType",
-      "input #pollingRange": "changePollInterval"
+      'click .task-tabs li': 'requestByType',
+      'input #pollingRange': 'changePollInterval'
     },
 
     serialize: function () {
       return {
         filters: {
-          "all": "All tasks",
-          "replication": "Replication",
-          "database_compaction":" Database Compaction",
-          "indexer": "Indexer",
-          "view_compaction": "View Compaction"
+          'all': 'All tasks',
+          'replication': 'Replication',
+          'database_compaction': 'Database Compaction',
+          'indexer': 'Indexer',
+          'view_compaction': 'View Compaction'
         }
       };
     },
 
-    afterRender: function(){
+    afterRender: function () {
       this.$('.task-tabs').find('li').eq(0).addClass('active');
     },
 
@@ -152,7 +150,7 @@ function (app, FauxtonAPI, ActiveTasks) {
 
     requestByType: function(e){
       var currentTarget = e.currentTarget,
-          filter = this.$(currentTarget).attr("data-type");
+          filter = this.$(currentTarget).attr('data-type');
 
       this.$('.task-tabs').find('li').removeClass('active');
       this.$(currentTarget).addClass('active');
@@ -163,46 +161,46 @@ function (app, FauxtonAPI, ActiveTasks) {
 
   Views.TableDetail = FauxtonAPI.View.extend({
     tagName: 'tr',
-    template: "addons/activetasks/templates/tabledetail",
+    template: 'addons/activetasks/templates/tabledetail',
 
-    initialize: function(){
+    initialize: function () {
       this.type = this.model.get('type');
     },
 
-    getObject: function(){
+    getObject: function () {
       var objectField = this.model.get('database');
-      if (this.type === "replication"){
-        objectField = this.model.get('source') + " to " + this.model.get('target');
-      } else if (this.type === "indexer") {
-        objectField = this.model.get("database") + " (View: " + this.model.get("design_document") + ")";
+      if (this.type === 'replication') {
+        objectField = this.model.get('source') + ' to ' + this.model.get('target');
+      } else if (this.type === 'indexer') {
+        objectField = this.model.get('database') + ' (View: ' + this.model.get('design_document') + ')';
       }
       return objectField;
     },
 
-    getProgress:  function(){
-      var progress = "";
-      if (this.type === "indexer"){
-        progress = "Processed " +this.model.get('changes_done')+ " of "+this.model.get('total_changes')+ ' changes. ';
-      } else if (this.type === "replication"){
-        progress = this.model.get('docs_written')+ " docs written. ";
-        if (this.model.get('changes_pending') !== undefined) {
+    getProgress: function () {
+      var progress = '';
+      if (this.type === 'indexer') {
+        progress = 'Processed ' + this.model.get('changes_done') + ' of ' + this.model.get('total_changes') + ' changes. ';
+      } else if (this.type === 'replication') {
+        progress = this.model.get('docs_written')+ ' docs written. ';
+        if (!_.isUndefined(this.model.get('changes_pending'))) {
           progress += this.model.get('changes_pending') + ' pending changes. ';
         }
       }
-      if (this.model.get('source_seq') !== undefined) {
-        progress += "Current source sequence: " + this.model.get('source_seq') + ". ";
+      if (!_.isUndefined(this.model.get('source_seq'))) {
+        progress += 'Current source sequence: ' + this.model.get('source_seq') + '. ';
       }
-      if (this.model.get('changes_done') !== undefined) {
-        progress += this.model.get('changes_done') + " Changes done. ";
+      if (!_.isUndefined(this.model.get('changes_done'))) {
+        progress += this.model.get('changes_done') + ' Changes done. ';
       }
-      if (this.model.get('progress') !== undefined) {
-        progress += "Progress: " + this.model.get('progress') + "% ";
+      if (!_.isUndefined(this.model.get('progress'))) {
+        progress += 'Progress: ' + this.model.get('progress') + '% ';
       }
 
       return progress;
     },
 
-    serialize: function(){
+    serialize: function () {
       return {
         model: this.model,
         objectField: this.getObject(),
@@ -212,14 +210,14 @@ function (app, FauxtonAPI, ActiveTasks) {
   });
 
   Views.TabHeader = FauxtonAPI.View.extend({
-    template: "addons/activetasks/templates/tab_header",
+    template: 'addons/activetasks/templates/tab_header',
 
     events: {
-      "keyup input": "searchDb",
-      "click .js-toggle-filter": "toggleQuery"
+      'keyup input': 'searchDb',
+      'click .js-toggle-filter': 'toggleQuery'
     },
 
-    toggleQuery: function (event) {
+    toggleQuery: function () {
       $('#dashboard-content').scrollTop(0);
       this.$('#query').toggle('slow');
     },

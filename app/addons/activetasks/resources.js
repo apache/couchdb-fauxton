@@ -11,15 +11,13 @@
 // the License.
 
 define([
-  "app",
-  "addons/fauxton/base",
+  'app'
 ],
 
-function (app, Fauxton) {
-  var Active = {},
-      apiv = app.versionAPI;
-      app.taskSortBy = 'type';
+function (app) {
+  app.taskSortBy = 'type';
 
+  var Active = {};
 
   Active.events = {};
   _.extend(Active.events, Backbone.Events);
@@ -48,24 +46,23 @@ function (app, Fauxton) {
           }
         });
       }
-
       return item.get(value);
     },
 
-    documentation: "_active_tasks",
+    documentation: '_active_tasks',
 
     url: function (context) {
-      if (context === "apiurl") {
-        return window.location.origin + "/_active_tasks";
+      if (context === 'apiurl') {
+        return window.location.origin + '/_active_tasks';
       } else {
-        return app.host + "/_active_tasks";
+        return app.host + '/_active_tasks';
       }
     }
   });
 
   Active.Search = Backbone.Model.extend({
     filterDatabase: null,
-    filterType: "all"
+    filterType: 'all'
   });
 
   return Active;
