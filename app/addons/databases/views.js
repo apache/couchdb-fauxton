@@ -233,7 +233,7 @@ function(app, Components, FauxtonAPI, Databases) {
 
     hideTray: function () {
       var $tray = this.$('.tray');
-      $tray.velocity('reverse', 250, function () {
+      $tray.velocity('reverse', FauxtonAPI.constants.TRAY_TOGGLE_SPEED, function () {
         $tray.hide();
       });
       this.$('#add-new-database').removeClass('enabled');
@@ -243,7 +243,7 @@ function(app, Components, FauxtonAPI, Databases) {
       // boo! to be refactored out later (see COUCHDB-2401)
       FauxtonAPI.Events.trigger("APIbar:closeTray");
 
-      this.$('.tray').velocity('transition.slideDownIn', 250);
+      this.$('.tray').velocity('transition.slideDownIn', FauxtonAPI.constants.TRAY_TOGGLE_SPEED);
       this.$('#add-new-database').addClass('enabled');
     },
 
