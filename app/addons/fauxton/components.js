@@ -157,61 +157,121 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
     }
   });
 
+  /**
+   * Our generic Tray component. All trays should extend this guy - it offers some convenient boilerplate code for
+   * hiding/showing, event publishing and so on. The important functions that can be called on the child Views are:
+   * - hideTray
+   * - showTray
+   * - toggleTray
+   */
+  Components.Tray = FauxtonAPI.View.extend({
 
-  Components.ApiBar = FauxtonAPI.View.extend({
-    template: "addons/fauxton/templates/api_bar",
+    // populated dynamically
+    events: {},
 
-    events:  {
-      "click .api-url-btn": "showAPIbar"
+    initTray: function (opts) {
+      this.toggleTrayBtnSelector = (_.has(opts, 'toggleTrayBtnSelector')) ? opts.toggleTrayBtnSelector : null;
+      this.onShowTray = (_.has(opts, 'onShowTray')) ? opts.onShowTray : null;
+
+      // if the component extending this one passed along the selector of the element that toggles the tray,
+      // add the appropriate events
+      if (!_.isNull(this.toggleTrayBtnSelector)) {
+        this.events['click ' + this.toggleTrayBtnSelector] = 'toggleTray';
+      }
+
+      _.bind(this.toggleTray, this);
+      _.bind(this.trayVisible, this);
+      _.bind(this.hideTray, this);
+      _.bind(this.showTray, this);
+
+      // a unique identifier for this tray
+      this.trayId = 'tray-' + this.cid;
+
+      var that = this;
+      $('body').on('click.' + this.trayId, function(e) {
+        var $clickEl = $(e.target);
+
+        if (!that.trayVisible()) {
+          return;
+        }
+        if (!_.isNull(that.toggleTrayBtnSelector) && $clickEl.closest(that.toggleTrayBtnSelector).length) {
+          return;
+        }
+        if (!$clickEl.closest('.tray').length) {
+          that.hideTray();
+        }
+      });
+
+      FauxtonAPI.Events.on(FauxtonAPI.constants.EVENT_TRAY_OPENED, this.onTrayOpenEvent, this);
     },
+
+    cleanup: function() {
+      $('body').off('click.' + this.trayId);
+    },
+
+    // all trays publish a EVENT_TRAY_OPENED event containing their unique ID. This listens for those events and
+    // closes the current tray if it's already open
+    onTrayOpenEvent: function (msg) {
+      if (!_.has(msg, 'trayId')) {
+        return;
+      }
+      if (msg.trayId !== this.trayId && this.trayVisible()) {
+        this.hideTray();
+      }
+    },
+
+    toggleTray: function (e) {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+
+      if (this.trayVisible()) {
+        this.hideTray();
+      } else {
+        this.showTray();
+      }
+    },
+
+    hideTray: function () {
+      var $tray = this.$('.tray');
+      $tray.velocity('reverse', FauxtonAPI.constants.TRAY_TOGGLE_SPEED, function () {
+        $tray.hide();
+      });
+
+      if (!_.isNull(this.toggleTrayBtnSelector)) {
+        this.$(this.toggleTrayBtnSelector).removeClass('enabled');
+      }
+      // announce that the tray is being closed
+      FauxtonAPI.Events.trigger(FauxtonAPI.constants.EVENT_TRAY_CLOSED, { trayId: this.trayId });
+    },
+
+    showTray: function () {
+      this.$('.tray').velocity('transition.slideDownIn', FauxtonAPI.constants.TRAY_TOGGLE_SPEED);
+      if (!_.isNull(this.toggleTrayBtnSelector)) {
+        this.$(this.toggleTrayBtnSelector).addClass('enabled');
+      }
+
+      if (!_.isNull(this.onShowTray)) {
+        this.onShowTray();
+      }
+
+      FauxtonAPI.Events.trigger(FauxtonAPI.constants.EVENT_TRAY_OPENED, { trayId: this.trayId });
+    },
+
+    trayVisible: function () {
+      return this.$('.tray').is(':visible');
+    }
+  });
+
+
+  Components.ApiBar = Components.Tray.extend({
+    template: "addons/fauxton/templates/api_bar",
 
     initialize: function (options) {
       var _options = options || {};
       this.endpoint = _options.endpoint || '_all_docs';
       this.documentation = _options.documentation || 'docs';
 
-      var hideAPIbar = _.bind(this.hideAPIbar, this),
-          navbarVisible = _.bind(this.navbarVisible, this);
-
-      $('body').on('click.apibar', function(e) {
-        var $navbar = $(e.target);
-
-        if (!navbarVisible()) { return;}
-        if ($navbar.hasClass('.api-url-btn')) { return; }
-
-        if (!$navbar.closest('#api-navbar').length){
-          hideAPIbar();
-        }
-      });
-
-      FauxtonAPI.Events.on('APIbar:closeTray', this.hideAPIbar, this);
-    },
-
-    navbarVisible: function () {
-      return this.$('.api-navbar').is(':visible');
-    },
-
-    cleanup: function () {
-      $('body').off('click.apibar');
-      FauxtonAPI.Events.off('APIbar:closeTray');
-    },
-
-    hideAPIbar: function () {
-      var $navBar = this.$('.api-navbar');
-      $navBar.velocity("reverse", FauxtonAPI.constants.TRAY_TOGGLE_SPEED, function () {
-        $navBar.hide();
-      });
-      this.$('.api-url-btn').removeClass('enabled');
-    },
-
-    //we only need to show the api-bar here. The `click.apibar` event 
-    //in the initialize will close the api bar if a user clicks the api button
-    //and the api bar is visible.
-    showAPIbar: function() {
-      if (!this.navbarVisible()) {
-        this.$('.api-navbar').velocity("transition.slideDownIn", FauxtonAPI.constants.TRAY_TOGGLE_SPEED);
-        this.$('.api-url-btn').addClass('enabled');
-      }
+      this.initTray({ toggleTrayBtnSelector: '.api-url-btn' });
     },
 
     serialize: function() {
@@ -232,7 +292,6 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
     update: function(endpoint) {
       this.endpoint = endpoint[0];
       this.documentation = endpoint[1];
-
       this.render();
     },
 
@@ -254,7 +313,6 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
       });
     }
   });
-
 
   Components.Pagination = FauxtonAPI.View.extend({
     tagName: "ul",

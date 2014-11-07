@@ -15,10 +15,11 @@ define([
   "api",
 
   // libs
+  'addons/fauxton/components',
   "addons/fauxton/resizeColumns"
 ],
 
-  function (app, FauxtonAPI) {
+  function (app, FauxtonAPI, Components) {
 
     // our default settings for the Query Options tray
     var defaultOptions = {
@@ -50,7 +51,7 @@ define([
     var Views = {};
 
     // our main View. This is the only View exposed externally
-    Views.QueryOptionsTray = FauxtonAPI.View.extend({
+    Views.QueryOptionsTray = Components.Tray.extend({
       template: "addons/documents/templates/query_options",
       className: "query-options",
 
@@ -61,7 +62,16 @@ define([
         this.options = $.extend(true, {}, defaultOptions, options);
 
         // add any general events relating to the Query Options tray
-        this.addEvents();
+        FauxtonAPI.Events.on('QueryOptions:openTray', this.showTray, this);
+        $(window).on("resize", this.onResize);
+
+        // initialize the parent View
+        this.initTray({
+          toggleTrayBtnSelector: '#toggle-query',
+          onShowTray: function () {
+            this.$('#query-options-tray button[type="submit"]').removeAttr("disabled");
+          }
+        });
 
         // add the sub-views
         this.mainFieldsView       = this.setView("#query-options-main-fields", new MainFieldsView(this.options));
@@ -69,50 +79,18 @@ define([
         this.additionalParamsView = this.setView("#query-options-additional-params", new AdditionalParamsView(this.options));
       },
 
-      addEvents: function () {
-        FauxtonAPI.Events.on('QueryOptions:closeTray', this.closeTray, this);
-        FauxtonAPI.Events.on('QueryOptions:openTray', this.toggleQueryOptionsTray, this);
-
-        // if the user just clicked outside the tray, close it [TODO be nice to generalize for all trays]
-        var trayIsVisible = this.trayIsVisible;
-        var closeTray = this.closeTray;
-
-        $("body").on("click.queryOptions", function (e) {
-          if (!trayIsVisible()) { return; }
-          if ($(e.target).closest("#query-options-tray").length === 0) {
-            closeTray();
-          }
-        });
-
-        $(window).on("resize", this.onResize);
-      },
-
       afterRender: function () {
         this.onResize();
       },
 
       cleanup: function () {
-        FauxtonAPI.Events.unbind("QueryOptions:closeTray");
-        FauxtonAPI.Events.unbind("QueryOptions:openTray");
+        FauxtonAPI.Events.off("QueryOptions:openTray");
         $(window).off("resize", this.onResize);
       },
 
       events: {
-        "click #toggle-query": "toggleQueryOptionsTray", // hide/show the Query Options tray
         "submit form.js-view-query-update": "onSubmit",  // submits the form
-        "click .btn-cancel": "onCancel"                  // closes the tray (doesn't reset the fields)
-      },
-
-      toggleQueryOptionsTray: function () {
-        if (!this.trayIsVisible()) {
-          $("#query-options-tray").velocity("transition.slideDownIn", FauxtonAPI.constants.TRAY_TOGGLE_SPEED);
-          FauxtonAPI.Events.trigger("APIbar:closeTray");
-
-          // make sure the query button is active again. As we can only expand for completed results, this is sufficient
-          // to prevent double submission
-          this.$('#query-options-tray button[type="submit"]').removeAttr("disabled");
-          this.$('.query-options-btn').addClass('enabled');
-        }
+        "click .btn-cancel": "hideTray"                  // closes the tray (doesn't reset the fields)
       },
 
       // returns all applicable query parameters for the Query Options tray
@@ -137,7 +115,7 @@ define([
         // make sure we can not submit twice which results in chaos (and no result ever)
         this.$('#query-options-tray button[type="submit"]').attr("disabled", "disabled");
 
-        this.closeTray();
+        this.hideTray();
 
         // this may be empty. That's ok! Perhaps the user just did a search with params, then removed them & wants the default
         var params = this.getQueryParams();
@@ -151,10 +129,6 @@ define([
         } else {
           FauxtonAPI.triggerRouteEvent("updateAllDocs", { allDocs: true });
         }
-      },
-
-      onCancel: function () {
-        this.closeTray();
       },
 
       // if the screen is so small there isn't space for the full tray height we manually shrink the height to allow scrolling.
@@ -190,17 +164,6 @@ define([
         this.mainFieldsView.update(this.options);
         this.keySearchFieldsView.update(this.options);
         this.additionalParamsView.update(this.options);
-      },
-
-      trayIsVisible: function () {
-        return $("#query-options-tray").is(":visible");
-      },
-
-      closeTray: function () {
-        $("#query-options-tray").velocity("reverse", FauxtonAPI.constants.TRAY_TOGGLE_SPEED, function () {
-          $("#query-options-tray").hide();
-        });
-        this.$('.query-options-btn').removeClass('enabled');
       }
     });
 

@@ -14,7 +14,11 @@ define([], function () {
 
   var constants = {
     TRAY_TOGGLE_SPEED: 250,
-    DEFAULT_PAGE_SIZE: 20
+    DEFAULT_PAGE_SIZE: 20,
+
+    // events
+    EVENT_TRAY_CLOSED: 'tray:closed',
+    EVENT_TRAY_OPENED: 'tray:opened'
   };
 
   return constants;
