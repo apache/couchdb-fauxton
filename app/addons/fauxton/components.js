@@ -139,7 +139,7 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
 
     hideAPIbar: function () {
       var $navBar = this.$('.api-navbar');
-      $navBar.velocity("reverse", 250, function () {
+      $navBar.velocity("reverse", FauxtonAPI.constants.TRAY_TOGGLE_SPEED, function () {
         $navBar.hide();
       });
       this.$('.api-url-btn').removeClass('enabled');
@@ -150,7 +150,7 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
     //and the api bar is visible.
     showAPIbar: function() {
       if (!this.navbarVisible()) {
-        this.$('.api-navbar').velocity("transition.slideDownIn", 250);
+        this.$('.api-navbar').velocity("transition.slideDownIn", FauxtonAPI.constants.TRAY_TOGGLE_SPEED);
         this.$('.api-url-btn').addClass('enabled');
       }
     },
