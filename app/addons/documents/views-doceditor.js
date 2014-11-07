@@ -221,9 +221,11 @@ function (app, FauxtonAPI, Components, Documents, Databases, resizeColumns, pret
     },
 
     goback: function () {
-      var lastPageLength = FauxtonAPI.router.lastPage.length;
+      var lastPages = FauxtonAPI.router.lastPages;
 
-      if (lastPageLength < 2) {
+      // we copy/pasted the url into the browser or came from
+      // creating a document with "/new" in the end of the path
+      if (lastPages.length < 2 || /\/new$/.test(lastPages[0])) {
         FauxtonAPI.navigate(this.database.url('index') + '?limit=100');
       } else {
         window.history.back();
