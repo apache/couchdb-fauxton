@@ -42,7 +42,7 @@ function(app, FauxtonAPI, Config, Views) {
     },
 
     config: function () {
-      this.newSection = this.setView('#right-header', new Views.AddSectionButton({ collection: this.configs }));
+      this.newSection = this.setView('#right-header', new Views.ConfigHeader({ collection: this.configs }));
       this.setView('#dashboard-content', new Views.Table({ collection: this.configs }));
     },
 

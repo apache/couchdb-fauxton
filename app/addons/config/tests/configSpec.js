@@ -38,17 +38,17 @@ define([
     collection = new Resources.Collection(optionModels);
   });
 
-  describe("Config: Modal", function () {
+  describe("Config: Add Option Tray", function () {
     var viewSandbox,
-        modal;
+        tray;
 
     beforeEach(function (done) {
-      modal = new Views.Modal({
+      tray = new Views.AddConfigOptionsButton({
         collection: collection
       });
 
       viewSandbox = new ViewSandbox();
-      viewSandbox.renderView(modal, done);
+      viewSandbox.renderView(tray, done);
     });
 
     afterEach(function () {
@@ -56,21 +56,21 @@ define([
     });
 
     it("looks if entries are new", function () {
-      modal.$('input[name="section"]').val("foo1");
-      modal.$('input[name="name"]').val("testname");
-      assert.ok(modal.isUniqueEntryInSection(collection));
+      tray.$('input[name="section"]').val("foo1");
+      tray.$('input[name="name"]').val("testname");
+      assert.ok(tray.isUniqueEntryInSection(collection));
 
-      modal.$('input[name="name"]').val("testname2");
-      assert.notOk(modal.isUniqueEntryInSection(collection));
+      tray.$('input[name="name"]').val("testname2");
+      assert.notOk(tray.isUniqueEntryInSection(collection));
     });
 
     it("does not send an error for a new section", function () {
-      modal.$('input[name="section"]').val("newsection");
-      modal.$('input[name="name"]').val("testname");
-      modal.$('input[name="value"]').val("testvalue");
-      var spy = sinon.spy(modal, "errorMessage");
+      tray.$('input[name="section"]').val("newsection");
+      tray.$('input[name="name"]').val("testname");
+      tray.$('input[name="value"]').val("testvalue");
+      var spy = sinon.spy(tray, "showError");
 
-      modal.validate();
+      tray.createConfigOption();
       assert.notOk(spy.called);
     });
   });
