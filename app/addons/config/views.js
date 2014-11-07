@@ -139,26 +139,113 @@ function(app, FauxtonAPI, Config, Components) {
     }
   });
 
-  Views.Modal = FauxtonAPI.View.extend({
-    className: 'add-section-modal modal hide fade',
-    template: 'addons/config/templates/modal',
+  Views.ConfigHeader = FauxtonAPI.View.extend({
+    template: 'addons/config/templates/header',
+    className: 'header-right',
+
+    initialize: function () {
+      this.rightHeader = this.setView('#add-section-button', new Views.AddConfigOptionsButton({ collection: this.collection }));
+    }
+  });
+
+
+  Views.AddConfigOptionsButton = FauxtonAPI.View.extend({
+    template: 'addons/config/templates/add_config_option',
 
     events: {
-      'submit #js-add-section-form': 'submitClick'
+      'click #add-new-section': 'toggleTray',
+      'click #js-create-config-section': 'createConfigOption'
     },
 
     initialize: function () {
-      this.sourceArray = _.map(this.collection.toJSON(), function (item, key) {
-        return item.section;
+      var hideTray = _.bind(this.hideTray, this),
+        trayVisible = _.bind(this.trayVisible, this);
+
+      $('body').on('click.add-new-section', function(e) {
+        var $clickEl = $(e.target);
+
+        if (!trayVisible()) { return; }
+        if ($clickEl.closest('.add-new-section').length) { return; }
+        if (!$clickEl.closest('.add-section-tray').length) {
+          hideTray();
+        }
       });
     },
 
+    cleanup: function () {
+      $('body').off('click.add-new-section');
+    },
+
+    processKey: function (e) {
+      if (e.which === 13) {
+        e.preventDefault();
+        this.createConfigOption();
+      }
+    },
+
+    toggleTray: function (e) {
+      e.preventDefault();
+      if (this.trayVisible()) {
+        this.hideTray();
+      } else {
+        this.showTray();
+      }
+    },
+
+    hideTray: function () {
+      var $tray = this.$('.tray');
+      $tray.velocity('reverse', FauxtonAPI.constants.TRAY_TOGGLE_SPEED, function () {
+        $tray.hide();
+      });
+      this.$('#add-new-section').removeClass('enabled');
+    },
+
+    showTray: function () {
+      // to be refactored out later (see COUCHDB-2401)
+      FauxtonAPI.Events.trigger("APIbar:closeTray");
+
+      this.$('.tray').velocity('transition.slideDownIn', FauxtonAPI.constants.TRAY_TOGGLE_SPEED);
+      this.$('#add-new-section').addClass('enabled');
+    },
+
+    trayVisible: function () {
+      return this.$('.tray').is(':visible');
+    },
+
     afterRender: function () {
+      this.sectionNames = _.map(this.collection.toJSON(), function (item) {
+        return item.section;
+      });
+
       this.sectionTypeAhead = new Components.Typeahead({
-        source: this.sourceArray,
+        source: this.sectionNames,
         el: 'input[name="section"]'
       });
       this.sectionTypeAhead.render();
+    },
+
+    createConfigOption: function (e) {
+      if (e) {
+        e.preventDefault();
+      }
+
+      var section = this.$('input[name="section"]').val(),
+          name = this.$('input[name="name"]').val(),
+          value = this.$('input[name="value"]').val(),
+          collection = this.collection;
+
+      // perform a little validation, then submit
+      if (!section) {
+        this.showError('Please enter or select a section.');
+      } else if (!name) {
+        this.showError('Please add an option name.');
+      } else if (this.isUniqueEntryInSection(collection)) {
+        this.showError('The option have a unique name.');
+      } else if (!value) {
+        this.showError('Please add a value.');
+      } else {
+        this.submitForm();
+      }
     },
 
     submitForm: function () {
@@ -167,7 +254,6 @@ function(app, FauxtonAPI, Config, Components) {
         name: this.$('input[name="name"]').val(),
         value: this.$('input[name="value"]').val()
       });
-
       option.save();
 
       var section = this.collection.find(function (section) {
@@ -183,7 +269,7 @@ function(app, FauxtonAPI, Config, Components) {
         });
       }
 
-      this.hide();
+      this.hideTray();
       FauxtonAPI.Events.trigger('config:newSection');
     },
 
@@ -194,70 +280,13 @@ function(app, FauxtonAPI, Config, Components) {
       return collection.findEntryInSection(sectionName, entry);
     },
 
-    isSection: function () {
-      var section = this.$('input[name="section"]').val();
-      return _.find(this.sourceArray, function(item){ return item === section; });
-    },
-
-    submitClick: function (event) {
-      event.preventDefault();
-      this.validate();
-    },
-
-    validate: function () {
-      var section = this.$('input[name="section"]').val(),
-          name = this.$('input[name="name"]').val(),
-          value = this.$('input[name="value"]').val(),
-          collection = this.collection;
-
-      if (!name) {
-        this.errorMessage('Add a name');
-      } else if (!value) {
-        this.errorMessage('Add a value');
-      } else if (this.isUniqueEntryInSection(collection)) {
-        this.errorMessage('Must have a unique name');
-      } else {
-        this.submitForm();
-      }
-    },
-
-    errorMessage: function (msg) {
+    showError: function (msg) {
       FauxtonAPI.addNotification({
         msg: msg,
         type: 'error',
         clear: true,
         selector: '.js-form-error-config'
       });
-    },
-
-    show: function(){
-      this.$el.modal({show:true});
-    },
-
-    hide: function(){
-      this.$el.modal('hide');
-    }
-  });
-
-  Views.AddSectionButton = FauxtonAPI.View.extend({
-    template: 'addons/config/templates/addsection',
-    className: 'header-right',
-
-    events: {
-      'click #add-new-section': 'addSection'
-    },
-
-    addSection: function (e) {
-      e.preventDefault();
-      this.modal.show();
-    },
-
-    beforeRender: function () {
-      this.modal = this.insertView('body', new Views.Modal({
-        collection: this.collection
-      }));
-
-      this.modal.render();
     }
   });
 
