@@ -184,71 +184,21 @@ function(app, Components, FauxtonAPI, Databases) {
     }
   });
 
-  var NewDatabaseView = FauxtonAPI.View.extend({
+  var NewDatabaseView = Components.Tray.extend({
     template: 'addons/databases/templates/newdatabase',
     events: {
-      'click #add-new-database': 'toggleTray',
       'click #js-create-database': 'createDatabase',
       'keyup #js-new-database-name': 'processKey'
     },
 
     initialize: function () {
-      var hideTray = _.bind(this.hideTray, this),
-        trayVisible = _.bind(this.trayVisible, this);
-
-      $('body').on('click.add-new-database', function(e) {
-        var $clickEl = $(e.target);
-
-        if (!trayVisible()) { return; }
-        if ($clickEl.closest('.add-new-database-btn').length) { return; }
-
-        if (!$clickEl.closest('.new-database-tray').length) {
-          hideTray();
-        }
-      });
-    },
-
-    cleanup: function() {
-      $('body').off('click.add-new-database');
+      this.initTray({ toggleTrayBtnSelector: '#add-new-database' });
     },
 
     processKey: function (e) {
       if (e.which === 13) {
         this.createDatabase(e);
       }
-    },
-
-    toggleTray: function (e) {
-      e.preventDefault();
-
-      // curious. If we don't prevent bubbling, the parent View is redrawn (?)
-      e.stopImmediatePropagation();
-
-      if (this.trayVisible()) {
-        this.hideTray();
-      } else {
-        this.showTray();
-      }
-    },
-
-    hideTray: function () {
-      var $tray = this.$('.tray');
-      $tray.velocity('reverse', 250, function () {
-        $tray.hide();
-      });
-      this.$('#add-new-database').removeClass('enabled');
-    },
-
-    showTray: function () {
-      // boo! to be refactored out later (see COUCHDB-2401)
-      FauxtonAPI.Events.trigger("APIbar:closeTray");
-
-      this.$('.tray').velocity('transition.slideDownIn', 250);
-      this.$('#add-new-database').addClass('enabled');
-    },
-
-    trayVisible: function () {
-      return this.$('.tray').is(':visible');
     },
 
     createDatabase: function (e) {
