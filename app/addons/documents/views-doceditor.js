@@ -11,30 +11,30 @@
 // the License.
 
 define([
-       "app",
+  'app',
 
-       "api",
-       "addons/fauxton/components",
+  'api',
+  'addons/fauxton/components',
 
-       "addons/documents/resources",
-       "addons/databases/resources",
+  'addons/documents/resources',
+  'addons/databases/resources',
 
-       // Libs
-       "addons/fauxton/resizeColumns",
+  // Libs
+  'addons/fauxton/resizeColumns',
 
-       // Plugins
-       "plugins/prettify"
+  // Plugins
+  'plugins/prettify'
 ],
 
-function(app, FauxtonAPI, Components, Documents, Databases, resizeColumns, prettify) {
+function (app, FauxtonAPI, Components, Documents, Databases, resizeColumns, prettify) {
 
   var Views = {};
 
   Views.UploadModal = Components.ModalView.extend({
-    template: "addons/documents/templates/upload_modal",
+    template: 'addons/documents/templates/upload_modal',
 
     events: {
-      "click #upload-btn": "uploadFile"
+      'click #upload-btn': 'uploadFile'
     },
 
     uploadFile: function (event) {
@@ -80,7 +80,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, resizeColumns, prett
       }, 1000);
     },
 
-    uploadProgress: function(event, position, total, percentComplete) {
+    uploadProgress: function (event, position, total, percentComplete) {
       this.$('.bar').css({width: percentComplete + '%'});
     },
 
@@ -95,21 +95,21 @@ function(app, FauxtonAPI, Components, Documents, Databases, resizeColumns, prett
   });
 
   Views.StringEditModal = Components.ModalView.extend({
-    template: "addons/documents/templates/string_edit_modal",
+    template: 'addons/documents/templates/string_edit_modal',
 
     initialize: function () {
       _.bindAll(this);
     },
 
     events: {
-      "click #string-edit-save-btn":"saveString"
+      'click #string-edit-save-btn':'saveString'
     },
 
     saveString: function (event) {
       event.preventDefault();
       var newStr = this.subEditor.getValue();
       this.subEditor.editSaved();
-      this.editor.replaceCurrentLine(this.indent + this.hashKey + JSON.stringify(newStr) + this.comma + "\n");
+      this.editor.replaceCurrentLine(this.indent + this.hashKey + JSON.stringify(newStr) + this.comma + '\n');
       this.hideModal();
     },
 
@@ -119,7 +119,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, resizeColumns, prett
       this.clear_error_msg();
     },
 
-    openWin: function(editor, indent, hashKey, jsonString, comma) {
+    openWin: function (editor, indent, hashKey, jsonString, comma) {
       this.editor = editor;
       this.indent = indent;
       this.hashKey = hashKey;
@@ -131,12 +131,12 @@ function(app, FauxtonAPI, Components, Documents, Databases, resizeColumns, prett
       this.showModal();
     },
 
-    afterRender: function() {
+    afterRender: function () {
       /* make sure we init only ONCE */
       if (!this.subEditor) {
         this.subEditor = new Components.Editor({
-          editorId: "string-editor-container",
-          mode: "plain"
+          editorId: 'string-editor-container',
+          mode: 'plain'
         });
 
         this.subEditor.render().promise().then(function () {
@@ -154,24 +154,23 @@ function(app, FauxtonAPI, Components, Documents, Databases, resizeColumns, prett
 
   /* Doc Duplication modal */
   Views.DuplicateDocModal = Components.ModalView.extend({
-    template: "addons/documents/templates/duplicate_doc_modal",
+    template: 'addons/documents/templates/duplicate_doc_modal',
 
     initialize: function () {
       _.bindAll(this);
     },
 
     events: {
-      "click #duplicate-btn":"duplicate",
-      "submit #doc-duplicate": "duplicate"
-
+      'click #duplicate-btn':'duplicate',
+      'submit #doc-duplicate': 'duplicate'
     },
 
     duplicate: function (event) {
       event.preventDefault();
       var newId = this.$('#dup-id').val(),
           isDDoc = newId.match(/^_design\//),
-          removeDDocID = newId.replace(/^_design\//,""),
-          encodedID = isDDoc? "_design/"+ app.utils.safeURLName(removeDDocID):app.utils.safeURLName(newId);
+          removeDDocID = newId.replace(/^_design\//,''),
+          encodedID = isDDoc? '_design/'+ app.utils.safeURLName(removeDDocID):app.utils.safeURLName(newId);
 
       this.hideModal();
       FauxtonAPI.triggerRouteEvent('duplicateDoc', encodedID);
@@ -204,14 +203,14 @@ function(app, FauxtonAPI, Components, Documents, Databases, resizeColumns, prett
 
   /* Document editor*/
    Views.CodeEditor = FauxtonAPI.View.extend({
-    template: "addons/documents/templates/code_editor",
+    template: 'addons/documents/templates/code_editor',
     events: {
-      "click button.save-doc": "saveDoc",
-      "click button.delete": "destroy",
-      "click button.duplicate": "duplicate",
-      "click button.upload": "upload",
-      "click button.cancel-button": "goback",
-      "click button.string-edit": "stringEditing"
+      'click button.save-doc': 'saveDoc',
+      'click button.delete': 'destroy',
+      'click button.duplicate': 'duplicate',
+      'click button.upload': 'upload',
+      'click button.cancel-button': 'goback',
+      'click button.string-edit': 'stringEditing'
     },
 
     disableLoader: true,
@@ -224,20 +223,20 @@ function(app, FauxtonAPI, Components, Documents, Databases, resizeColumns, prett
     goback: function () {
       var lastPageLength = FauxtonAPI.router.lastPage.length;
 
-      if ( lastPageLength < 2 ) {
-        FauxtonAPI.navigate( this.database.url('index') + '?limit=100' );
-      }else{
+      if (lastPageLength < 2) {
+        FauxtonAPI.navigate(this.database.url('index') + '?limit=100');
+      } else {
         window.history.back();
       }
     },
 
-    determineStringEditMatch: function(event) {
+    determineStringEditMatch: function (event) {
       var selStart = this.editor.getSelectionStart().row;
       var selEnd = this.editor.getSelectionEnd().row;
       /* one JS(ON) string can't span more than one line - we edit one string, so ensure we don't select several lines */
       if (selStart >=0 && selEnd >= 0 && selStart === selEnd && this.editor.isRowExpanded(selStart)) {
         var editLine = this.editor.getLine(selStart),
-            editMatch = editLine.match(/^([ \t]*)("[a-zA-Z0-9_]*": )?(".*",?[ \t]*)$/);
+            editMatch = editLine.match(/^([ \t]*)('[a-zA-Z0-9_]*': )?('.*',?[ \t]*)$/);
 
         if (editMatch) {
           return editMatch;
@@ -248,41 +247,41 @@ function(app, FauxtonAPI, Components, Documents, Databases, resizeColumns, prett
     },
 
     showHideEditDocString: function (event) {
-      this.$("button.string-edit").attr("disabled", "true");
+      this.$('button.string-edit').attr('disabled', 'true');
       if (!this.hasValidCode()) {
         return false;
       }
       var editMatch = this.determineStringEditMatch(event);
       if (editMatch) {
-        this.$("button.string-edit").removeAttr("disabled");
+        this.$('button.string-edit').removeAttr('disabled');
         /* remove the following line (along with CSS) to go back to the toolbar: take the offset top of the editor, go down as many lines as we are positioned including fold and adjust by two pixels as the button is slightly larger than a line */
-        var positionFromTop = (this.$("#editor-container").offset().top - 2 + this.editor.getRowHeight() * this.editor.documentToScreenRow(this.editor.getSelectionStart().row));
-        this.$("button.string-edit").css("top", positionFromTop + "px");
+        var positionFromTop = (this.$('#editor-container').offset().top - 2 + this.editor.getRowHeight() * this.editor.documentToScreenRow(this.editor.getSelectionStart().row));
+        this.$('button.string-edit').css('top', positionFromTop + 'px');
         return true;
       }
       return false;
     },
 
-    stringEditing: function(event) {
+    stringEditing: function (event) {
       event.preventDefault();
       if (!this.hasValidCode()) {
         return;
       }
       var editMatch = this.determineStringEditMatch(event);
       if (editMatch) {
-        var indent = editMatch[1] || "",
-              hashKey = editMatch[2] || "",
+        var indent = editMatch[1] || '',
+              hashKey = editMatch[2] || '',
               editText = editMatch[3],
-              comma = "";
-        if (editText.substring(editText.length - 1) === ",") {
+              comma = '';
+        if (editText.substring(editText.length - 1) === ',') {
           editText = editText.substring(0, editText.length - 1);
-          comma = ",";
+          comma = ',';
         }
         this.stringEditModal.openWin(this.editor, indent, hashKey, editText, comma);
       }
     },
 
-    destroy: function(event) {
+    destroy: function (event) {
       if (this.model.isNewDoc()) {
         FauxtonAPI.addNotification({
           msg: 'This document has not been saved yet.',
@@ -292,22 +291,22 @@ function(app, FauxtonAPI, Components, Documents, Databases, resizeColumns, prett
         return;
       }
 
-      if (!window.confirm("Are you sure you want to delete this doc?")) {
+      if (!window.confirm('Are you sure you want to delete this doc?')) {
         return false;
       }
 
       var database = this.model.database;
 
-      this.model.destroy().then(function(resp) {
+      this.model.destroy().then(function (resp) {
         FauxtonAPI.addNotification({
-          msg: "Succesfully deleted your doc",
+          msg: 'Succesfully deleted your doc',
           clear:  true
         });
-        FauxtonAPI.navigate(database.url("index"));
-      }, function(resp) {
+        FauxtonAPI.navigate(database.url('index'));
+      }, function (resp) {
         FauxtonAPI.addNotification({
-          msg: "Failed to delete your doc!",
-          type: "error",
+          msg: 'Failed to delete your doc!',
+          type: 'error',
           clear:  true
         });
       });
@@ -334,7 +333,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, resizeColumns, prett
       this.uploadModal.showModal();
     },
 
-    duplicate: function(event) {
+    duplicate: function (event) {
       if (this.model.isNewDoc()) {
         FauxtonAPI.addNotification({
           msg: 'Please save the document before duplicating it.',
@@ -347,18 +346,18 @@ function(app, FauxtonAPI, Components, Documents, Databases, resizeColumns, prett
       this.duplicateModal.showModal();
     },
 
-    updateValues: function() {
+    updateValues: function () {
       if (this.model.changedAttributes()) {
         FauxtonAPI.addNotification({
-          msg: "Document saved successfully.",
-          type: "success",
+          msg: 'Document saved successfully.',
+          type: 'success',
           clear: true
         });
         this.editor.setValue(this.model.prettyJSON());
       }
     },
 
-    establish: function() {
+    establish: function () {
       var promise = this.model.fetch(),
           databaseId = this.database.safeID(),
           deferred = $.Deferred(),
@@ -381,41 +380,41 @@ function(app, FauxtonAPI, Components, Documents, Databases, resizeColumns, prett
       return deferred;
     },
 
-    saveDoc: function(event) {
+    saveDoc: function (event) {
       var json,
           that = this,
           editor = this.editor,
           validDoc = this.getDocFromEditor();
 
       if (validDoc) {
-        FauxtonAPI.addNotification({msg: "Saving document."});
+        FauxtonAPI.addNotification({msg: 'Saving document.'});
 
         this.model.save().then(function () {
           editor.editSaved();
           FauxtonAPI.navigate('/database/' + that.database.safeID() + '/' + that.model.id);
-        }).fail(function(xhr) {
+        }).fail(function (xhr) {
           var responseText = JSON.parse(xhr.responseText).reason;
           FauxtonAPI.addNotification({
-            msg: "Save failed: " + responseText,
-            type: "error",
+            msg: 'Save failed: ' + responseText,
+            type: 'error',
             fade: false,
             clear: true,
-            selector: "#doc .errors-container"
+            selector: '#doc .errors-container'
           });
         });
       } else if(this.model.validationError && this.model.validationError === 'Cannot change a documents id.') {
           FauxtonAPI.addNotification({
-            msg: "Cannot save: " + 'Cannot change a documents _id, try Duplicate doc instead!',
-            type: "error",
-            selector: "#doc .errors-container",
+            msg: 'Cannot save: ' + 'Cannot change a documents _id, try Duplicate doc instead!',
+            type: 'error',
+            selector: '#doc .errors-container',
             clear:  true
           });
         delete this.model.validationError;
       } else {
         FauxtonAPI.addNotification({
-          msg: "Please fix the JSON errors and try again.",
-          type: "error",
-          selector: "#doc .errors-container",
+          msg: 'Please fix the JSON errors and try again.',
+          type: 'error',
+          selector: '#doc .errors-container',
           clear:  true
         });
       }
@@ -438,12 +437,12 @@ function(app, FauxtonAPI, Components, Documents, Databases, resizeColumns, prett
       return this.model;
     },
 
-    hasValidCode: function() {
+    hasValidCode: function () {
       var errors = this.editor.getAnnotations();
       return errors.length === 0;
     },
 
-    serialize: function() {
+    serialize: function () {
       return {
         doc: this.model,
         attachments: this.getAttachments()
@@ -465,20 +464,20 @@ function(app, FauxtonAPI, Components, Documents, Databases, resizeColumns, prett
       }, this);
     },
 
-    afterRender: function() {
+    afterRender: function () {
       var saveDoc = this.saveDoc,
           editor,
           model;
 
-      this.listenTo(this.model, "sync", this.updateValues);
+      this.listenTo(this.model, 'sync', this.updateValues);
 
       this.editor = new Components.Editor({
-        editorId: "editor-container",
+        editorId: 'editor-container',
         forceMissingId: true,
         commands: [{
           name: 'save',
           bindKey: {win: 'Ctrl-S',  mac: 'Ctrl-S'},
-          exec: function(editor) {
+          exec: function (editor) {
             saveDoc();
           },
           readOnly: true // false if this command should not apply in readOnly mode
@@ -492,7 +491,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, resizeColumns, prett
       //only start listening to editor once it has been rendered
       this.editor.promise().then(function () {
 
-        this.listenTo(editor.editor, "change", function (event) {
+        this.listenTo(editor.editor, 'change', function (event) {
           var changedDoc;
           try {
             changedDoc = JSON.parse(editor.getValue());
@@ -501,30 +500,32 @@ function(app, FauxtonAPI, Components, Documents, Databases, resizeColumns, prett
             return;
           }
 
-          var keyChecked = ["_id"];
-          if (model.get("_rev")) { keyChecked.push("_rev");}
+          var keyChecked = ['_id'];
+          if (model.get('_rev')) {
+            keyChecked.push('_rev');
+          }
 
           //check the changedDoc has all the required standard keys
           if (_.isEmpty(_.difference(keyChecked, _.keys(changedDoc)))) { return; }
 
           editor.setReadOnly(true);
-          setTimeout(function () { editor.setReadOnly(false);}, 400);
+          setTimeout(function () { editor.setReadOnly(false) ;}, 400);
           // use extend so that _id stays at the top of the object with displaying the doc
-          changedDoc = _.extend({_id: model.id, _rev: model.get("_rev")}, changedDoc);
-          editor.setValue(JSON.stringify(changedDoc, null, "  "));
+          changedDoc = _.extend({_id: model.id, _rev: model.get('_rev')}, changedDoc);
+          editor.setValue(JSON.stringify(changedDoc, null, '  '));
           FauxtonAPI.addNotification({
-            type: "error",
-            msg: "Cannot remove a documents Id or Revision.",
+            type: 'error',
+            msg: 'Cannot remove a documents Id or Revision.',
             clear:  true
           });
         });
 
         var showHideEditDocString = _.bind(this.showHideEditDocString, this);
 
-        this.listenTo(editor.editor, "changeSelection", function (event) {
+        this.listenTo(editor.editor, 'changeSelection', function (event) {
           showHideEditDocString(event);
         });
-        this.listenTo(editor.editor.session, "changeBackMarker", function (event) {
+        this.listenTo(editor.editor.session, 'changeBackMarker', function (event) {
           showHideEditDocString(event);
         });
 
