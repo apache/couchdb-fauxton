@@ -42,6 +42,9 @@ And then...
 
 You should be able to access Fauxton on `http://localhost:8000`
 
+### Styleguide
+We follow our coding-styleguide to make it easier for everyone to write, read and review code: [https://github.com/apache/couchdb-fauxton/blob/master/styleguide.md](https://github.com/apache/couchdb-fauxton/blob/master/styleguide.md)
+
 ### Prepare Fauxton Release
 Follow the "Fauxton Setup" section, edit settings.json variable root where the document will live,
 e.g. "/_utils/fauxton/" then:
