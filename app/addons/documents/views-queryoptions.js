@@ -25,8 +25,6 @@ define([
     var defaultOptions = {
       showStale: false,
       hasReduce: false,
-      viewName: null,
-      ddocName: null,
 
       // all the possible query search params. Ultimately these should probably be moved higher-up (route object?),
       // because they also apply to the actual search results. Seems better to place them there, then use them in
@@ -120,15 +118,9 @@ define([
         // this may be empty. That's ok! Perhaps the user just did a search with params, then removed them & wants the default
         var params = this.getQueryParams();
 
-        // all looks good! Close the tray and publish the message
+        // all looks good! Use navigate() to update the page URL and trigger the appropriate route
         var url = app.utils.replaceQueryParams(params);
         FauxtonAPI.navigate(url);
-
-        if (this.options.viewName !== null && this.options.ddocName !== null) {
-          FauxtonAPI.triggerRouteEvent('updateAllDocs', { ddoc: this.options.ddocName, view: this.options.viewName });
-        } else {
-          FauxtonAPI.triggerRouteEvent("updateAllDocs", { allDocs: true });
-        }
       },
 
       // if the screen is so small there isn't space for the full tray height we manually shrink the height to allow scrolling.
