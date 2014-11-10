@@ -63,7 +63,7 @@ the License.
       <% _.each(footerNavLinks, function(link) { %>
       <% if (link.view) {return;}  %>
         <li data-nav-name= "<%- link.title %>">
-          <a href="<%- link.href %>">
+          <a data-bypass="true" href="<%- link.href %>" class="<%- link.className %>">
             <i class="<%- link.icon %> fonticon"></i>
             <%- link.title %>
           </a>
