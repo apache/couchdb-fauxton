@@ -236,9 +236,16 @@ styled; they should be used for JS hooks only.
 
 We use Less to generate our CSS.
 
-#### Indentation
+#### Indentation / Whitespace
 - Indent using 2 spaces. Don’t use tabs.
 - Put selectors and braces on their own lines.
+- One space between the end of the selector and the opening brace, e.g. 
+ 
+```
+.my-class {
+    /* rules here */
+}
+```
 
 #### Naming 
 - As noted in the HTML section above, selectors should be lowercase. 
