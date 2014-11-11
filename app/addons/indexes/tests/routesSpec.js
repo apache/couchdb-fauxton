@@ -11,19 +11,19 @@
 // the License.
 
 define([
-        'addons/documents/routes',
+        'addons/indexes/routes',
         'testUtils'
 ], function (Documents, testUtils) {
   var assert = testUtils.assert;
-  var DocumentRoute = Documents.RouteObjects[2];
+  var DocumentRoute = Documents.RouteObjects[0];
 
   describe('Documents Route', function () {
 
-    it('the all-documents-list has a right header', function () {
+    it('the view that shows a view has a queryoptions', function () {
       var routeObj = new DocumentRoute(null, null, ['test']);
 
-      routeObj.allDocs('newdatabase', null);
-      assert.equal(typeof routeObj.rightHeader, 'object');
+      routeObj.viewFn('newdatabase', 'ads', 'newView');
+      assert.equal(typeof routeObj.queryOptions, 'object');
     });
   });
 });

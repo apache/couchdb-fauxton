@@ -10,20 +10,18 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-define([
-        'addons/documents/routes',
-        'testUtils'
-], function (Documents, testUtils) {
-  var assert = testUtils.assert;
-  var DocumentRoute = Documents.RouteObjects[2];
-
-  describe('Documents Route', function () {
-
-    it('the all-documents-list has a right header', function () {
-      var routeObj = new DocumentRoute(null, null, ['test']);
-
-      routeObj.allDocs('newdatabase', null);
-      assert.equal(typeof routeObj.rightHeader, 'object');
-    });
-  });
-});
+.watermark-logo {
+  background: transparent url('../img/couch-watermark.png') no-repeat 50% 50%;
+  min-height: 400px;
+  padding-top: 60%;
+  text-align: center;
+  margin: 0 20%;
+  h3 {
+    border-bottom: 1px solid #ccc;
+    padding-bottom:10px;
+    margin-bottom:20px;
+  }
+  .preview {
+    margin: 0 10px;
+  }
+}

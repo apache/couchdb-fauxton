@@ -70,8 +70,9 @@ define([
       },
 
       addEvents: function () {
-        FauxtonAPI.Events.on('QueryOptions:closeTray', this.closeTray, this);
-        FauxtonAPI.Events.on('QueryOptions:openTray', this.toggleQueryOptionsTray, this);
+        this.listenTo(FauxtonAPI.Events, 'QueryOptions:closeTray', this.closeTray);
+        this.listenTo(FauxtonAPI.Events, 'QueryOptions:openTray', this.toggleQueryOptionsTray);
+        this.listenTo(FauxtonAPI.Events, 'QueryOptions:updateQueryOptions', this.updateQueryOptions);
 
         // if the user just clicked outside the tray, close it [TODO be nice to generalize for all trays]
         var trayIsVisible = this.trayIsVisible;
@@ -92,8 +93,6 @@ define([
       },
 
       cleanup: function () {
-        FauxtonAPI.Events.unbind("QueryOptions:closeTray");
-        FauxtonAPI.Events.unbind("QueryOptions:openTray");
         $(window).off("resize", this.onResize);
       },
 

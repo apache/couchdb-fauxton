@@ -10,20 +10,9 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-define([
-        'addons/documents/routes',
-        'testUtils'
-], function (Documents, testUtils) {
-  var assert = testUtils.assert;
-  var DocumentRoute = Documents.RouteObjects[2];
-
-  describe('Documents Route', function () {
-
-    it('the all-documents-list has a right header', function () {
-      var routeObj = new DocumentRoute(null, null, ['test']);
-
-      routeObj.allDocs('newdatabase', null);
-      assert.equal(typeof routeObj.rightHeader, 'object');
-    });
-  });
-});
+@import "../../../../../assets/less/variables.less";
+@import "../../../../../assets/less/bootstrap/variables.less";
+@import "../../../../../assets/less/bootstrap/mixins.less";
+@import "new-index-placeholder.less";
+@import "index-form.less";
+@import "doc-item.less";

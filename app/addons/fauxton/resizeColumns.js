@@ -86,5 +86,3 @@ function(FauxtonAPI) {
 
   return Resize;
 });
-
-

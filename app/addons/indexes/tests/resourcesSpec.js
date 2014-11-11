@@ -10,24 +10,18 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 define([
-        'addons/documents/views-index',
-        'testUtils'
-], function (Views, testUtils) {
+      'api',
+      'addons/indexes/resources',
+      'testUtils'
+], function (FauxtonAPI, Resources, testUtils) {
   var assert = testUtils.assert,
-      ViewSandbox = testUtils.ViewSandbox,
-      viewSandbox;
+      ViewSandbox = testUtils.ViewSandbox;
 
-  describe('Documents Indexes', function () {
-    var view;
-      beforeEach(function () {
-        viewSandbox = new ViewSandbox();
-        viewSandbox.renderView(view);
-      });
+  describe('Indexes: ViewRow', function () {
+    it('returns the doctype', function () {
+      var designDoc = new Resources.ViewRow({_id: '_design/foo'});
 
-      afterEach(function () {
-        viewSandbox.remove();
-      });
+      assert.equal(designDoc.docType(), 'design doc');
+    });
   });
 });
-
-
