@@ -149,31 +149,15 @@ function(app, FauxtonAPI, Config, Components) {
   });
 
 
-  Views.AddConfigOptionsButton = FauxtonAPI.View.extend({
+  Views.AddConfigOptionsButton = Components.Tray.extend({
     template: 'addons/config/templates/add_config_option',
 
     events: {
-      'click #add-new-section': 'toggleTray',
       'click #js-create-config-section': 'createConfigOption'
     },
 
     initialize: function () {
-      var hideTray = _.bind(this.hideTray, this),
-        trayVisible = _.bind(this.trayVisible, this);
-
-      $('body').on('click.add-new-section', function(e) {
-        var $clickEl = $(e.target);
-
-        if (!trayVisible()) { return; }
-        if ($clickEl.closest('.add-new-section').length) { return; }
-        if (!$clickEl.closest('.add-section-tray').length) {
-          hideTray();
-        }
-      });
-    },
-
-    cleanup: function () {
-      $('body').off('click.add-new-section');
+      this.initTray({ toggleTrayBtnSelector: '#add-new-section' });
     },
 
     processKey: function (e) {
@@ -181,35 +165,6 @@ function(app, FauxtonAPI, Config, Components) {
         e.preventDefault();
         this.createConfigOption();
       }
-    },
-
-    toggleTray: function (e) {
-      e.preventDefault();
-      if (this.trayVisible()) {
-        this.hideTray();
-      } else {
-        this.showTray();
-      }
-    },
-
-    hideTray: function () {
-      var $tray = this.$('.tray');
-      $tray.velocity('reverse', FauxtonAPI.constants.TRAY_TOGGLE_SPEED, function () {
-        $tray.hide();
-      });
-      this.$('#add-new-section').removeClass('enabled');
-    },
-
-    showTray: function () {
-      // to be refactored out later (see COUCHDB-2401)
-      FauxtonAPI.Events.trigger("APIbar:closeTray");
-
-      this.$('.tray').velocity('transition.slideDownIn', FauxtonAPI.constants.TRAY_TOGGLE_SPEED);
-      this.$('#add-new-section').addClass('enabled');
-    },
-
-    trayVisible: function () {
-      return this.$('.tray').is(':visible');
     },
 
     afterRender: function () {
