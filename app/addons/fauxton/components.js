@@ -564,6 +564,7 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
       _.bindAll(this);
     },
     source: function(query, process) {
+      query = encodeURIComponent(query);
       var url = [
         app.host,
         "/_all_dbs?startkey=%22",
