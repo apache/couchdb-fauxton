@@ -344,7 +344,6 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
       return this.setView("#dashboard-lower-content", new Documents.Views.AllDocsList({
         database: options.database,
         collection: options.indexedDocs,
-        nestedView: Documents.Views.Row,
         viewList: true,
         ddocInfo: this.ddocInfo(options.designDoc, options.designDocs, options.view),
         docParams: options.docParams,

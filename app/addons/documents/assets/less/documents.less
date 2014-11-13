@@ -17,16 +17,6 @@
 @import "changes.less";
 @import "sidenav.less";
 
-tr.all-docs-item {
-  border: none;
-  background: transparent;
-  .btn-group {
-    position: absolute;
-    right: 0;
-    top: 6px;
-  }
-}
-
 button.beautify {
   margin-top: 20px;
 }
@@ -48,30 +38,6 @@ button.beautify {
 #query div.controls-group.well {
   height: 180px;
   margin-right: 17px;
-}
-
-/** used in all_docs_list.html **/
-.view {
-  table td div {
-    position: relative;
-  }
-
-  table td div div {
-    display: none;
-    line-height: 1;
-    position: absolute;
-    right: 4px;
-    top: 4px;
-  }
-
-  table td div:hover div a.edits {
-    padding-left: 16px;
-    padding-right: 16px;
-  }
-
-  table td div:hover div {
-    display: block;
-  }
 }
 
 /** used in view_editor.html **/
@@ -107,6 +73,10 @@ button.beautify {
 
 .editor-content-page {
   padding-right: 20px;
+}
+
+.metadata-page {
+  padding: 20px;
 }
 
 button.string-edit {
@@ -176,5 +146,45 @@ button.string-edit[disabled] {
 
   .muted {
     margin-bottom: 0px;
+  }
+}
+
+#doc-list{
+  padding-top: 30px;
+  .all-docs-item {
+    .show-select {
+      .select {
+        display:block;
+        width: 10%;
+      }
+      .doc-item {
+        width: 90%;
+      }
+    }
+  }
+  div.doc-row {
+    margin-bottom: 20px;
+    .doc-item {
+      float: left;
+      width: 100%;
+      vertical-align: top;
+      position: relative;
+      .border-radius(5px 5px 5px 5px);
+      .box-shadow(3px 4px 0 rgba(0, 0, 0, 0.3));
+      border: 1px solid #000;
+      header {
+        font-weight: bold;
+        position: relative;
+        padding: 20px;
+        background-color: #777;
+        color: #3a2c2b;
+        border-bottom: 1px solid #000;
+        .header-id-number {
+          color: #fff;
+          margin-left: 10px;
+        }
+      }
+
+    }
   }
 }
