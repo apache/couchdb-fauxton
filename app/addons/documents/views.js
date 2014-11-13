@@ -196,7 +196,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
 
     serialize: function() {
       return {
-        docId: this.model.get('_id'),
+        docIdentifier: this.model.isEditable() ? this.model.get('_id') : this.model.get('key'),
         doc: this.model,
         checked: this.checked
       };
@@ -369,7 +369,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
     },
 
     toggleDocument: function (event) {
-      var $row = this.$(event.target).closest('tr'),
+      var $row = this.$(event.target).closest('.doc-row'),
           docId = $row.attr('data-id'),
           rev = this.collection.get(docId).get('_rev'),
           data = {_id: docId, _rev: rev, _deleted: true};

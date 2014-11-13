@@ -12,11 +12,16 @@ License for the specific language governing permissions and limitations under
 the License.
 */%>
 
-<div class="select"><input <%- checked ? 'checked="checked"' : '' %> type="checkbox" class="js-row-select"></div>
-<div class="doc-item">
+<div class="custom-inputs">
+  <div class="checkbox inline">
 
+    <input id="checkbox-<%- docIdentifier %>" <%- checked ? 'checked="checked"' : '' %> type="checkbox" class="js-row-select">
+    <label class="label-checkbox-doclist" for="checkbox-<%- docIdentifier %>"></label>
+  </div>
+</div>
+<div class="doc-item">
   <header>
-    <span class="header-keylabel"><%- doc.isEditable() ? 'id' : 'key' %></span> <span class="header-doc-id">"<%- doc.isEditable() ? docId : doc.get('key') %>"</span>
+    <span class="header-keylabel"><%- doc.isEditable() ? 'id' : 'key' %></span> <span class="header-doc-id">"<%- docIdentifier %>"</span>
 
   <% if (doc.isEditable()) { %>
     <div class="pull-right">
