@@ -16,7 +16,7 @@ the License.
 <div class="doc-item">
 
   <header>
-    <span class="header-keylabel"><%- doc.isEditable() ? 'id' : 'key' %></span> <span class="header-doc-id">"<%- docId %>"</span>
+    <span class="header-keylabel"><%- doc.isEditable() ? 'id' : 'key' %></span> <span class="header-doc-id">"<%- doc.isEditable() ? docId : doc.get('key') %>"</span>
 
   <% if (doc.isEditable()) { %>
     <div class="pull-right">

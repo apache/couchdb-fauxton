@@ -174,18 +174,18 @@ button.string-edit[disabled] {
         font-weight: bold;
         position: relative;
         padding: 20px;
-        background-color: #3a3a3a;
-        border-bottom: 1px solid #2a2a2a;
-        border-left: 1px solid #000;
-        border-right: 1px solid #000;
-        border-top: 1px solid #000;
+        background-color: @docHeaderBG;
+        border-bottom: 1px solid @docHeaderBorderBottom;
+        border-left: 1px solid @docHeaderOtherBorders;
+        border-right: 1px solid @docHeaderOtherBorders;
+        border-top: 1px solid @docHeaderOtherBorders;
         .header-doc-id {
-          color: #e33f3b;
+          color: @docHeaderDocId;
           margin-left: 10px;
         }
         .header-keylabel,
         .fonticon-pencil {
-          color: #909090;
+          color: @docHeaderLabels;
         }
       }
 
