@@ -149,8 +149,8 @@ button.string-edit[disabled] {
   }
 }
 
-#doc-list{
-  padding-top: 30px;
+#doc-list {
+  padding: 30px 12px 0 12px;
   .all-docs-item {
     .show-select {
       .select {
@@ -169,19 +169,23 @@ button.string-edit[disabled] {
       width: 100%;
       vertical-align: top;
       position: relative;
-      .border-radius(5px 5px 5px 5px);
       .box-shadow(3px 4px 0 rgba(0, 0, 0, 0.3));
-      border: 1px solid #000;
       header {
         font-weight: bold;
         position: relative;
         padding: 20px;
-        background-color: #777;
-        color: #3a2c2b;
-        border-bottom: 1px solid #000;
-        .header-id-number {
-          color: #fff;
+        background-color: #3a3a3a;
+        border-bottom: 1px solid #2a2a2a;
+        border-left: 1px solid #000;
+        border-right: 1px solid #000;
+        border-top: 1px solid #000;
+        .header-doc-id {
+          color: #e33f3b;
           margin-left: 10px;
+        }
+        .header-keylabel,
+        .fonticon-pencil {
+          color: #909090;
         }
       }
 
