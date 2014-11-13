@@ -20,10 +20,15 @@ module.exports = {
 
     client
       .loginToGUI()
+      .createDocument(newDocumentName1, newDatabaseName)
+      .createDocument(newDocumentName2, newDatabaseName)
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
-      .waitForElementPresent('.all', waitTime, false)
-      .click('.all')
+      .waitForElementPresent('.js-all', waitTime, false)
+      .click('.js-all')
       .click('.js-bulk-delete')
+      .acceptAlert()
+      .waitForElementVisible('#global-notifications .alert.alert-info', waitTime, false)
+      .waitForElementNotPresent('[data-id="' + newDocumentName1 + '"]', waitTime, false)
       .getText('body', function (result) {
         var data = result.value,
             isPresentFirstDoc = data.indexOf(newDocumentName1) !== -1,
@@ -33,6 +38,24 @@ module.exports = {
         this.verify.ok(bothMissing,
           'Checking if documents were deleted');
       })
+      .end();
+  },
+
+  'Select all works after changing the page': function (client) {
+    var waitTime = 10000,
+        newDatabaseName = client.globals.testDatabaseName,
+        baseUrl = client.globals.baseUrl;
+
+    client
+      .loginToGUI()
+      .createManyDocuments(25, newDatabaseName)
+      .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
+      .waitForElementVisible('.js-all', waitTime, false)
+      .click('.js-all')
+      .click('#next')
+      .waitForElementPresent('#previous', waitTime, false)
+      .click('#previous')
+      .waitForElementPresent('.js-all.active', waitTime, false)
       .end();
   }
 };
