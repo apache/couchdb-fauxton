@@ -176,8 +176,8 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
 
   Views.Document = FauxtonAPI.View.extend({
     template: "addons/documents/templates/all_docs_item",
-    tagName: "tr",
-    className: "all-docs-item",
+
+    className: 'show-select all-docs-item doc-row',
 
     initialize: function (options) {
       this.checked = options.checked;
@@ -196,6 +196,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
 
     serialize: function() {
       return {
+        docId: this.model.get('_id'),
         doc: this.model,
         checked: this.checked
       };
@@ -240,28 +241,6 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
       });
     }
   });
-
-  Views.Row = FauxtonAPI.View.extend({
-    template: "addons/documents/templates/index_row_docular",
-    tagName: "tr",
-
-    events: {
-      "click button.delete": "destroy"
-    },
-
-    destroy: function (event) {
-      event.preventDefault();
-      window.alert('Cannot delete a document generated from a view.');
-    },
-
-    serialize: function() {
-      return {
-        doc: this.model,
-        url: this.model.url('app')
-      };
-    }
-  });
-
 
   Views.AllDocsNumber = FauxtonAPI.View.extend({
     template: "addons/documents/templates/all_docs_number",
@@ -336,7 +315,6 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
     },
 
     initialize: function (options) {
-      this.nestedView = options.nestedView || Views.Document;
       this.rows = {};
       this.viewList = !!options.viewList;
 
@@ -566,7 +544,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
           id = doc.cid;
         }
 
-        this.rows[id] = this.insertView("table.all-docs tbody", new this.nestedView({
+        this.rows[id] = this.insertView('#doc-list', new Views.Document({
           model: doc,
           checked: isChecked
         }));
