@@ -149,17 +149,32 @@ button.string-edit[disabled] {
   }
 }
 
+
 #doc-list {
+  label.label-checkbox-doclist {
+    // https://code.google.com/p/chromium/issues/detail?id=411065
+    -webkit-user-select: none;
+  }
+  /* checkboxes in doc-list */
+  label.label-checkbox-doclist:before {
+    background-color: @docCheckBoxUncheckedBG;
+    border: @docCheckBoxUncheckedBorder;
+  }
+  label.label-checkbox-doclist:hover:before {
+    border: @docCheckBoxHoverBorder;
+  }
+  input[type='checkbox']:checked + label::before {
+    border: @docCheckBoxCheckedBorder;
+    background-color: @docCheckBoxCheckedBG;
+  }
   padding: 30px 12px 0 12px;
   .all-docs-item {
-    .show-select {
-      .select {
-        display:block;
-        width: 10%;
-      }
-      .doc-item {
-        width: 90%;
-      }
+    .custom-inputs {
+      display:block;
+      width: 10%;
+    }
+    .doc-item {
+      width: 90%;
     }
   }
   div.doc-row {
