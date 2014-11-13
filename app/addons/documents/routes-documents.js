@@ -520,6 +520,12 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
     },
 
     cleanup: function () {
+      if (this.documentsView) {
+        this.removeView('#dashboard-lower-content');
+      }
+      if (this.rightHeader) {
+        this.removeView('#right-header');
+      }
       if (this.leftheader) {
         this.removeView('#breadcrumbs');
       }
