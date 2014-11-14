@@ -295,20 +295,18 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
       this.render();
     },
 
-    afterRender: function() {
+    afterRender: function () {
       var client = new Components.Clipboard({
         $el: this.$('.copy-url')
       });
 
-      client.on("load", function(e){
-        var $apiInput = $('#api-navbar input');
-        var copyURLTimer;
-        client.on("mouseup", function(e){
-          $apiInput.css("background-color","#aaa");
-          window.clearTimeout(copyURLTimer);
-          copyURLTimer = setInterval(function () {
-            $apiInput.css("background-color","#fff");
-          }, 200);
+      client.on('load', function () {
+        client.on('mouseup', function () {
+          FauxtonAPI.addNotification({
+            msg: 'The API URL has been copied to the clipboard.',
+            type: 'success',
+            clear: true
+          });
         });
       });
     }
