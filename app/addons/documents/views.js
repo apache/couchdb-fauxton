@@ -310,7 +310,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
       "click button.all": "selectAll",
       "click button.js-bulk-delete": "bulkDelete",
       "click #collapse": "collapse",
-      "click .all-docs-item": "toggleDocument",
+      'change input': 'toggleDocument',
       "click #js-end-results": "openQueryOptionsTray"
     },
 
