@@ -62,7 +62,7 @@ function(app, FauxtonAPI, Auth) {
 
 
     var addLogoutLink = function () {
-      FauxtonAPI.addHeaderLink({footerNav: true, href: "#logout", title: "Logout", icon: "", className: 'logout'});
+      FauxtonAPI.addHeaderLink({footerNav: true, title: "Logout", icon: "", className: 'js-logout'});
     };
 
     var removeLogoutLink = function () {

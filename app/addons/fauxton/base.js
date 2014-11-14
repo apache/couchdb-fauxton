@@ -126,7 +126,8 @@ function(app, FauxtonAPI, resizeColumns, Components, ZeroClipboard) {
     template: "addons/fauxton/templates/nav_bar",
 
     events:  {
-      "click .burger" : "toggleMenu"
+      "click .burger" : "toggleMenu",
+      "click .js-logout": "logout"
     },
 
     toggleMenu: function(){
@@ -164,6 +165,13 @@ function(app, FauxtonAPI, resizeColumns, Components, ZeroClipboard) {
 
     establish: function(){
       return [this.versionFooter.establish()];
+    },
+
+    logout: function (e) {
+      e.preventDefault();
+      FauxtonAPI.session.logout().then(function () {
+        FauxtonAPI.addNotification({msg: 'You have been logged out.'});
+      });
     },
 
     addLink: function(link) {

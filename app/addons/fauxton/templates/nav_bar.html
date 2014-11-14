@@ -22,40 +22,40 @@ the License.
   <ul id="nav-links" class="nav">
     <% _.each(navLinks, function(link) { %>
     <% if (link.view) {return;}  %>
-        <li data-nav-name= "<%- link.title %>" >
-          <a href="<%- link.href %>">
-            <i class="<%- link.icon %> fonticon"></i>
-            <%- link.title %>
-          </a>
-        </li>
+      <li data-nav-name= "<%- link.title %>" >
+        <a href="<%- link.href %>">
+          <i class="<%- link.icon %> fonticon"></i>
+          <%- link.title %>
+        </a>
+      </li>
     <% }); %>
   </ul>
 
   <div id="bottom-nav">
-  	<ul id="bottom-nav-links" class="nav">
-        <li data-nav-name= "Documentation">
-            <a data-bypass="true" href="<%-getDocUrl('docs')%>" target="_blank">
-              <i class="fonticon-bookmark fonticon"></i>
-                Documentation
-            </a>
-        </li>
+    <ul id="bottom-nav-links" class="nav">
+      <li data-nav-name= "Documentation">
+        <a data-bypass="true" href="<%-getDocUrl('docs')%>" target="_blank">
+          <i class="fonticon-bookmark fonticon"></i>
+            Documentation
+        </a>
+      </li>
 
-      <% _.each(bottomNavLinks, function(link) { %>
-      <% if (link.view) {return;}  %>
-        <li data-nav-name= "<%- link.title %>">
-            <a href="<%- link.href %>">
-              <i class="<%- link.icon %> fonticon"></i>
-              <%- link.title %>
-            </a>
-        </li>
-      <% }); %>
+    <% _.each(bottomNavLinks, function(link) { %>
+    <% if (link.view) {return;}  %>
+      <li data-nav-name= "<%- link.title %>">
+        <a href="<%- link.href %>">
+          <i class="<%- link.icon %> fonticon"></i>
+          <%- link.title %>
+        </a>
+      </li>
+    <% }); %>
     </ul>
   </div>
 </nav>
 
 <div class="bottom-container">
   <div class="brand">
-     <div class="icon">Apache Fauxton</div>
+    <div class="icon">Apache Fauxton</div>
   </div>
   <div class="js-version"></div>
   <div id="footer-links">
@@ -63,10 +63,10 @@ the License.
       <% _.each(footerNavLinks, function(link) { %>
       <% if (link.view) {return;}  %>
         <li data-nav-name= "<%- link.title %>">
-            <a href="<%- link.href %>">
-              <i class="<%- link.icon %> fonticon"></i>
-              <%- link.title %>
-            </a>
+          <a data-bypass="true" href="<%- link.href %>" class="<%- link.className %>">
+            <i class="<%- link.icon %> fonticon"></i>
+            <%- link.title %>
+          </a>
         </li>
       <% }); %>
     </ul>

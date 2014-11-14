@@ -23,7 +23,6 @@ function(app, FauxtonAPI, Auth) {
     routes: {
       'login?*extra': 'login',
       'login': 'login',
-      'logout': 'logout',
       'createAdmin': 'createAdmin',
       'noAccess?*extra': 'noAccess',
       'noAccess': 'noAccess'
@@ -36,13 +35,6 @@ function(app, FauxtonAPI, Auth) {
         model: FauxtonAPI.session,
         urlBack: urlBack
       }));
-    },
-
-    logout: function () {
-      FauxtonAPI.addNotification({msg: 'You have been logged out.'});
-      FauxtonAPI.session.logout().then(function () {
-        FauxtonAPI.navigate('/');
-      });
     },
 
     changePassword: function () {
