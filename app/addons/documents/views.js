@@ -177,7 +177,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
   Views.Document = FauxtonAPI.View.extend({
     template: "addons/documents/templates/all_docs_item",
 
-    className: 'show-select all-docs-item doc-row',
+    className: 'all-docs-item doc-row',
 
     initialize: function (options) {
       this.checked = options.checked;
@@ -306,6 +306,9 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
   // TODO: Rename to reflect that this is a list of rows or documents
   Views.AllDocsList = FauxtonAPI.View.extend({
     template: "addons/documents/templates/all_docs_list",
+
+    className: 'show-select',
+
     events: {
       "click button.all": "selectAll",
       "click button.js-bulk-delete": "bulkDelete",
@@ -423,9 +426,9 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
     },
 
     selectAll: function (evt) {
-      var $allDocs = this.$('.all-docs'),
-          $rows = $allDocs.find('tr'),
-          $checkboxes = $allDocs.find('input:checkbox'),
+      var $allDocs = this.$('#doc-list'),
+          $rows = $allDocs.find('.all-docs-item'),
+          $checkboxes = $rows.find('input:checkbox'),
           modelsAffected,
           docs;
 
