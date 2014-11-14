@@ -344,7 +344,7 @@ function(app, FauxtonAPI, PagingCollection) {
           ids.errorIds.push(doc.id);
         }
 
-        if (doc.ok === true) {
+        if (!doc.error) {
           ids.successIds.push(doc.id);
         }
 
