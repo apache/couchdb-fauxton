@@ -762,6 +762,14 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
           return 'Your changes have not been saved. Click cancel to return to the document.';
         }
       });
+
+      var resizeEditor = _.debounce(function () {
+        that.editor.resize(true);
+      }, 500);
+    
+      $(window).resize(resizeEditor);
+      this.listenTo(FauxtonAPI.Events, FauxtonAPI.constants.EVENT_BURGER_CLICK, resizeEditor);
+
     },
 
     cleanup: function () {

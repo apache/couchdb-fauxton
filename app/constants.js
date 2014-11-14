@@ -18,7 +18,8 @@ define([], function () {
 
     // events
     EVENT_TRAY_CLOSED: 'tray:closed',
-    EVENT_TRAY_OPENED: 'tray:opened'
+    EVENT_TRAY_OPENED: 'tray:opened',
+    EVENT_BURGER_CLICKED: 'burger:clicked'
   };
 
   return constants;
