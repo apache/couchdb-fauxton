@@ -149,8 +149,24 @@ button.string-edit[disabled] {
   }
 }
 
-
-#doc-list {
+.show-select {
+  #doc-list {
+    padding: 30px 0 0 0;
+  }
+  .custom-inputs {
+    display: block;
+    float: left;
+  }
+  .checkbox {
+    padding-left: 0;
+    label {
+      padding-left: 23px; // 7px to the right-border + 16px around
+    }
+  }
+  .doc-item {
+    width: auto;
+    overflow: hidden;
+  }
   label.label-checkbox-doclist {
     // https://code.google.com/p/chromium/issues/detail?id=411065
     -webkit-user-select: none;
@@ -167,21 +183,13 @@ button.string-edit[disabled] {
     border: @docCheckBoxCheckedBorder;
     background-color: @docCheckBoxCheckedBG;
   }
+}
+
+#doc-list {
   padding: 30px 12px 0 12px;
-  .all-docs-item {
-    .custom-inputs {
-      display:block;
-      width: 10%;
-    }
-    .doc-item {
-      width: 90%;
-    }
-  }
   div.doc-row {
     margin-bottom: 20px;
     .doc-item {
-      float: left;
-      width: 100%;
       vertical-align: top;
       position: relative;
       .box-shadow(3px 4px 0 rgba(0, 0, 0, 0.3));
