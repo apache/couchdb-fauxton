@@ -52,7 +52,13 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
       this.listenTo(FauxtonAPI.Events, 'lookaheadTray:close', this.unselectLastBreadcrumb);
     },
 
-    updateCrumbs: function(crumbs){
+    updateCrumbs: function (crumbs) {
+
+      // if the breadcrumbs haven't changed, don't bother re-rendering the component
+      if (_.isEqual(this.crumbs, crumbs)) {
+        return;
+      }
+
       this.crumbs = crumbs;
       this.breadcrumbs && this.breadcrumbs.update(crumbs);
     },
