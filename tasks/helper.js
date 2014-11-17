@@ -43,6 +43,26 @@ exports.init = function(grunt) {
       }, defaults);
     },
 
+    getSourceDirectoriesForNightwatch : function () {
+      var directories = [
+          '**/nightwatch',
+          '!node_modules/nightwatch',
+          '!test/nightwatch_tests/reports/nightwatch'
+        ],
+        dir = [],
+        nightwatchDirectories =  grunt.file.expand({filter: 'isDirectory'}, directories),
+        projectFile = "./test/nightwatch_tests/nightwatch.json",
+        project = grunt.file.readJSON(projectFile); //get file as json object
+
+      if (!grunt.file.exists(projectFile)) {
+          grunt.log.error("file " + projectFile + " not found");
+          return true; //return false to abort the execution
+      }
+
+      project.src_folders = nightwatchDirectories;
+      grunt.file.write(projectFile, JSON.stringify(project, null, 2)+grunt.util.linefeed); //serialize it back to file
+    },
+
     check_selenium: {
       command: 'test -s ./test/nightwatch_tests/selenium/selenium-server-standalone-2.43.1.jar || curl -o ./test/nightwatch_tests/selenium/selenium-server-standalone-2.43.1.jar  http://selenium-release.storage.googleapis.com/2.43/selenium-server-standalone-2.43.1.jar'
     },
@@ -69,6 +89,9 @@ exports.init = function(grunt) {
               type = 'linux32';
             }
             break;
+
+          default:
+            type = 'linux64';
         }
 
         return 'test -s ./test/nightwatch_tests/selenium/chromedriver || (curl -o ./test/nightwatch_tests/selenium/chromedriver_'+type+'.zip http://chromedriver.storage.googleapis.com/2.9/chromedriver_'+type+'.zip && open ./test/nightwatch_tests/selenium/chromedriver_'+type+'.zip)';
