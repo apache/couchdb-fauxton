@@ -357,16 +357,17 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
     },
 
     removeDocuments: function (ids) {
-      _.each(ids, function (id) {
-        this.removeDocument(id);
-      }, this);
-
-      this.pagination.updatePerPage(parseInt(this.$('#select-per-page :selected').val(), 10));
-      FauxtonAPI.triggerRouteEvent('perPageChange', this.pagination.documentsLeftToFetch());
+      FauxtonAPI.when(ids.map(function (id) {
+        return this.removeDocument(id);
+      }.bind(this))).done(function () {
+        this.pagination.updatePerPage(parseInt(this.$('#select-per-page :selected').val(), 10));
+        FauxtonAPI.triggerRouteEvent('perPageChange', this.pagination.documentsLeftToFetch());
+      }.bind(this));
     },
 
     removeDocument: function (id) {
-      var that = this;
+      var that = this,
+          deferred = FauxtonAPI.Deferred();
 
       if (!this.rows[id]) {
         return;
@@ -374,7 +375,10 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
 
       this.rows[id].$el.fadeOut('slow', function () {
         that.rows[id].remove();
+        deferred.resolve();
       });
+
+      return deferred;
     },
 
     showError: function (ids) {
