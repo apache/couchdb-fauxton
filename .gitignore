@@ -7,7 +7,6 @@ app/addons/*
 !app/addons/activetasks
 !app/addons/config
 !app/addons/plugins
-!app/addons/stats
 !app/addons/replication
 !app/addons/contribute
 !app/addons/auth
