@@ -244,16 +244,17 @@ function(app, FauxtonAPI, Components, Documents, Databases) {
       this.selected = !! options.selected;
       this.selector = options.selector;
       this.name = options.name;
-      this.icons = {
-        "Views": "fonticon-sidenav-map-reduce",
-        "indexes": "fonticon-sidenav-search"
-      };
 
+      this.indexTypeMap = {
+        views:   { icon: 'fonticon-sidenav-map-reduce', urlFolder: '_view' },
+        indexes: { icon: 'fonticon-sidenav-search', urlFolder: '_indexes' }
+      };
     },
 
     serialize: function() {
       return {
-        icon: this.icons[this.ddocType],
+        icon: this.indexTypeMap[this.selector].icon,
+        urlFolder: this.indexTypeMap[this.selector].urlFolder,
         ddocType:  this.selector,
         name: this.name,
         index: this.index,
