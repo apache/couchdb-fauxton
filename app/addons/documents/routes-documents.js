@@ -54,7 +54,7 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
         route: "allDocs",
         roles: ["fx_loggedIn"]
       },
-      "database/:database/_design/:ddoc/_views/:view": {
+      "database/:database/_design/:ddoc/_view/:view": {
         route: "viewFn",
         roles: ['fx_loggedIn']
       },
