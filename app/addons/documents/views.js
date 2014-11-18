@@ -310,7 +310,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
     className: 'show-select',
 
     events: {
-      "click button.all": "selectAll",
+      'click button.js-all': 'selectAll',
       "click button.js-bulk-delete": "bulkDelete",
       "click #collapse": "collapse",
       'change input': 'toggleDocument',
@@ -376,16 +376,15 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
           docId = $row.attr('data-id'),
           rev = this.collection.get(docId).get('_rev'),
           data = {_id: docId, _rev: rev, _deleted: true};
-
       if (!$row.hasClass('js-to-delete')) {
         this.bulkDeleteDocsCollection.add(data);
+        $row.find('.js-row-select').prop('checked', true);
       } else {
         this.bulkDeleteDocsCollection.remove(this.bulkDeleteDocsCollection.get(docId));
+        $row.find('.js-row-select').prop('checked', false);
       }
 
-      $row.find('.js-row-select').prop('checked', !$row.hasClass('js-to-delete'));
       $row.toggleClass('js-to-delete');
-
       this.toggleTrash();
     },
 
@@ -429,18 +428,15 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
       var $allDocs = this.$('#doc-list'),
           $rows = $allDocs.find('.all-docs-item'),
           $checkboxes = $rows.find('input:checkbox'),
+          isActive = $(evt.target).hasClass('active'),
           modelsAffected,
           docs;
 
-      $checkboxes.prop('checked', !$(evt.target).hasClass('active')).trigger('change');
+      $checkboxes.prop('checked', !isActive);
+      $rows.toggleClass('js-to-delete', !isActive);
 
-      if ($(evt.target).hasClass('active')) {
-        modelsAffected = _.reduce($rows, function (acc, el) {
-          var docId = $(el).attr('data-id');
-          acc.push(docId);
-          return acc;
-        }, []);
-        this.bulkDeleteDocsCollection.remove(modelsAffected);
+      if (isActive) {
+        this.bulkDeleteDocsCollection.reset();
       } else {
         modelsAffected = _.reduce($rows, function (acc, el) {
           var docId = $(el).attr('data-id'),
