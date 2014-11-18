@@ -10,8 +10,7 @@ exports.command = function () {
     .waitForElementPresent('#username', 8000, false)
     .setValue('#username', ['tester'])
     .setValue('#password', ['testerpass', client.Keys.ENTER])
-    .waitForElementVisible('#global-notifications', 8000, false)
-    .click('#global-notifications button.close')
+    .closeNotification()
     .waitForElementPresent('#jump-to-db', 8000, false);
       
   return this;
