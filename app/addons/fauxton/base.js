@@ -133,6 +133,7 @@ function(app, FauxtonAPI, resizeColumns, Components, ZeroClipboard) {
        var $selectorList = $('body');
        $selectorList.toggleClass('closeMenu');
        this.resizeColumns.onResizeHandler();
+       FauxtonAPI.Events.trigger(FauxtonAPI.constants.EVENT_BURGER_CLICK);
     },
 
     // TODO: can we generate this list from the router?

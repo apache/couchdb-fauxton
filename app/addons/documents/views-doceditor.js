@@ -204,6 +204,7 @@ function (app, FauxtonAPI, Components, Documents, Databases, resizeColumns, pret
   /* Document editor*/
    Views.CodeEditor = FauxtonAPI.View.extend({
     template: 'addons/documents/templates/code_editor',
+    className: 'editor-content-page',
     events: {
       'click button.save-doc': 'saveDoc',
       'click button.delete': 'destroy',
