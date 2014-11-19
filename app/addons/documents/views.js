@@ -381,8 +381,6 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
     },
 
     maybeHighlightAllButton: function () {
-      console.log(this.$('.js-to-delete').length , this.$('.all-docs-item').length);
-
       if (this.$('.js-to-delete').length < this.$('.all-docs-item').length) {
         return;
       }
