@@ -18,6 +18,12 @@ Then, to run the the test:
     $ grunt nightwatch
 
 
+You can run individual single tests by running
+
+    $ grunt nightwatch --file="createsDatabase"
+
+if you want to run the testfile `createsDatabase.js`.
+
 ##Writing Tests
 You can contribute by writing tests for Fauxton as well.  
   

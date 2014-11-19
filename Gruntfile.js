@@ -424,8 +424,11 @@ module.exports = function(grunt) {
     }
   });
 
-  var fileArg = grunt.option('file') + '.js';
+
+  // enable running of a single test with nightwatch
+  var fileArg = grunt.option('file');
   if (fileArg) {
+    fileArg = fileArg + '.js';
     var nightwatchConf = require('./test/nightwatch_tests/nightwatch.json'),
         paths;
 
