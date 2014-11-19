@@ -50,7 +50,7 @@ define([
 
     it('pressing SelectAll should fill the delete-bulk-docs-collection', function () {
       assert.equal(bulkDeleteDocCollection.length, 0);
-      view.$('button.all').trigger('click');
+      view.$('button.js-all').trigger('click');
       assert.equal(bulkDeleteDocCollection.length, 1);
     });
   });
