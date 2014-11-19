@@ -184,7 +184,6 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
     },
 
     events: {
-      "click button.delete": "destroy",
       "dblclick pre.prettyprint": "edit"
     },
 
@@ -209,36 +208,6 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
     edit: function(event) {
       event.preventDefault();
       FauxtonAPI.navigate("#" + this.model.url('web-index'));
-    },
-
-    destroy: function(event) {
-      event.preventDefault();
-      var that = this;
-
-      if (!window.confirm("Are you sure you want to delete this doc?")) {
-        return false;
-      }
-
-      this.model.destroy().then(function(resp) {
-        FauxtonAPI.addNotification({
-          msg: "Successfully deleted your doc",
-          clear:  true
-        });
-        that.$el.fadeOut(function () {
-          that.remove();
-        });
-
-        that.model.collection.remove(that.model.id);
-        if (!!that.model.id.match('_design')) {
-          FauxtonAPI.triggerRouteEvent('reloadDesignDocs');
-        }
-      }, function(resp) {
-        FauxtonAPI.addNotification({
-          msg: "Failed to deleted your doc!",
-          type: "error",
-          clear:  true
-        });
-      });
     }
   });
 
@@ -343,6 +312,10 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
       }.bind(this))).done(function () {
         this.pagination.updatePerPage(parseInt(this.$('#select-per-page :selected').val(), 10));
         FauxtonAPI.triggerRouteEvent('perPageChange', this.pagination.documentsLeftToFetch());
+        FauxtonAPI.addNotification({
+          msg: 'Successfully deleted your docs',
+          clear:  true
+        });
       }.bind(this));
     },
 

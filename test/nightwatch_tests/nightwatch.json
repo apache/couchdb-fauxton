@@ -44,7 +44,10 @@
       "desiredCapabilities" : {
         "browserName" : "chrome",
         "javascriptEnabled" : true,
-        "acceptSslCerts" : true
+        "acceptSslCerts" : true,
+        "chromeOptions" : {
+          "args" : ["window-size=1400,900"]
+        }
       }
     },
 
