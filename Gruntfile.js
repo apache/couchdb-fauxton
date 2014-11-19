@@ -424,6 +424,40 @@ module.exports = function(grunt) {
     }
   });
 
+
+  // enable running of a single test with nightwatch
+  var fileArg = grunt.option('file');
+  if (fileArg) {
+    fileArg = fileArg + '.js';
+    var nightwatchConf = require('./test/nightwatch_tests/nightwatch.json'),
+        paths;
+
+    paths = nightwatchConf.src_folders.reduce(function (acc, dir) {
+      if (fs.existsSync(dir + '/' + fileArg)) {
+        acc.push(dir + '/' + fileArg);
+      }
+      return acc;
+    }, []);
+
+    if (paths.length > 1) {
+      throw new Error('Found multiple tests');
+    }
+
+    if (!paths.length) {
+      throw new Error('Found no testfile named ' + fileArg);
+    }
+
+    grunt.config.merge({
+      exec: {
+        start_nightWatch: {
+           command: __dirname + '/node_modules/nightwatch/bin/nightwatch' +
+            ' -t ' + paths[0] +
+            ' -e chrome -c ' + __dirname + '/test/nightwatch_tests/nightwatch.json'
+        }
+      }
+    });
+  }
+
   /*
    * Load Grunt plugins
    */
