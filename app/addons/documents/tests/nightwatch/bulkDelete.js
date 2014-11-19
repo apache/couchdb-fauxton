@@ -21,8 +21,8 @@ module.exports = {
     client
       .loginToGUI()
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
-      .waitForElementPresent('.all', waitTime, false)
-      .click('.all')
+      .waitForElementPresent('.js-all', waitTime, false)
+      .click('.js-all')
       .click('.js-bulk-delete')
       .getText('body', function (result) {
         var data = result.value,
