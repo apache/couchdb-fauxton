@@ -49,7 +49,7 @@ module.exports = {
     var waitTime = 10000;
 
     client
-      .clickWhenVisible('#doc-editor-actions-panel .js-back')
+      .clickWhenVisible('#dashboard a[href="#database/fauxton-selenium-tests/_design/abc/_view/evens"]')
       .clickWhenVisible('#toggle-query')
       .clickWhenVisible('#query-options-tray label[for="qoReduce"]')
       .clickWhenVisible('#button-options button[type="submit"]')
