@@ -54,14 +54,12 @@ function(app, FauxtonAPI, Documents, PagingCollection) {
       this.database = options.database;
     },
 
-    url: function(context) {
-      if (context === "app") {
-        return this.database.url("app") + "/" + this.safeID() + '/_info';
-      } else if (context === "apiurl"){
-        return window.location.origin + "/" + this.database.safeID() + "/" + this.safeID() + '/_info';
-      } else {
-        return app.host + "/" + this.database.safeID() + "/" + this.safeID() + '/_info';
+    url: function (context) {
+      if (!context) {
+        context = 'server';
       }
+
+      return FauxtonAPI.urls('designDocs', context, this.database.safeID(), this.safeID());
     },
 
     // Need this to work around backbone router thinking _design/foo
@@ -216,11 +214,13 @@ function(app, FauxtonAPI, Documents, PagingCollection) {
       } else if (context === "apiurl"){
         startOfUrl = window.location.origin;
       }
-      var design = app.utils.safeURLName(this.design),
-          view = app.utils.safeURLName(this.view);
 
-      var url = [startOfUrl, this.database.safeID(), "_design", design, this.idxType, view];
-      return url.join("/") + query;
+      var database = this.database.safeID(),
+          design = app.utils.safeURLName(this.design),
+          view = app.utils.safeURLName(this.view),
+          url = FauxtonAPI.urls('view', 'server', database, design, view);
+
+      return url + query;
     },
 
     url: function () {
@@ -385,7 +385,7 @@ function(app, FauxtonAPI, Documents, PagingCollection) {
       links: [{
         title: 'Replicate Database',
         icon: 'fonticon-replicate',
-        url: '#/replication/' + database.get('id')
+        url: FauxtonAPI.urls('replication', 'app', database.get('id'))
       },{
         title: 'Delete',
         icon: 'fonticon-trash',
@@ -402,8 +402,7 @@ function(app, FauxtonAPI, Documents, PagingCollection) {
   };
 
   Documents.getExtensionLinks = function (database) {
-    var newUrlPrefix = "#" + database.url('app');
-
+    var newUrlPrefix = '#' + FauxtonAPI.urls('databaseBaseURL', 'app', database.get('id'));
     var menuLinks = [{
       title: 'New Doc',
       url: newUrlPrefix + '/new',

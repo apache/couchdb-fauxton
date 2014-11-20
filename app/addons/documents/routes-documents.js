@@ -52,7 +52,7 @@ function(app, FauxtonAPI, BaseRoute, Documents, Changes, Index, DocEditor, Datab
         route: "tempFn",
         roles: ['fx_loggedIn']
       },
-      "database/:database/_design/:ddoc/metadata": {
+      "database/:database/_design/:ddoc/_info": {
         route: "designDocMetadata",
         roles: ['fx_loggedIn']
       },
@@ -86,7 +86,7 @@ function(app, FauxtonAPI, BaseRoute, Documents, Changes, Index, DocEditor, Datab
     initViews: function (dbName) {
       this.databaseName = dbName;
       this.database = new Databases.Model({id: this.databaseName});
-      this.allDatabases = new Databases.List();
+      this.allDatabases = this.getAllDatabases();
 
       this.createDesignDocsCollection();
 
@@ -98,12 +98,17 @@ function(app, FauxtonAPI, BaseRoute, Documents, Changes, Index, DocEditor, Datab
       this.addSidebar();
     },
 
+    getAllDatabases: function () {
+      return new Databases.List();  //getAllDatabases() can be overwritten instead of hard coded into initViews
+    },
+
     // this safely assumes the db name is valid
     onSelectDatabase: function (dbName) {
       this.cleanup();
       this.initViews(dbName);
 
-      FauxtonAPI.navigate('/database/' + app.utils.safeURLName(dbName) + '/_all_docs', {
+      var url = FauxtonAPI.urls('allDocs', 'app',  app.utils.safeURLName(dbName), '');
+      FauxtonAPI.navigate(url, {
         trigger: true
       });
 
@@ -502,7 +507,7 @@ function(app, FauxtonAPI, BaseRoute, Documents, Changes, Index, DocEditor, Datab
       this.rightHeader.hideQueryOptions();
 
       this.apiUrl = function () {
-        return [this.database.url("changes-apiurl"), this.database.documentation()];
+        return [FauxtonAPI.urls('changes', 'apiurl', this.database.id, ''), this.database.documentation()];
       };
     },
 

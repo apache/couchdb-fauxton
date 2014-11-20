@@ -648,19 +648,14 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
       this.database = options.database;
       _.bindAll(this);
     },
-    source: function(query, process) {
-      var url = [
-        app.host,
-        "/",
-        this.database.id,
-        "/_all_docs?startkey=%22",
-        query,
-        "%22&endkey=%22",
-        query,
-        "\u9999",
-        "%22&limit=",
-        this.docLimit
-      ].join('');
+    source: function(id, process) {
+      var query = '?' + $.param({
+        startkey: JSON.stringify(id),
+        endkey: JSON.stringify(id + "\u9999"),
+        limit: this.docLimit
+      });
+
+      var url = FauxtonAPI.urls('allDocs', 'server', this.database.safeID(), query);
 
       if (this.ajaxReq) { this.ajaxReq.abort(); }
 

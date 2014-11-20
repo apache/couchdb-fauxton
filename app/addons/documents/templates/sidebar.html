@@ -13,17 +13,17 @@ the License.
 -->
 
 <ul class="nav nav-list">
-  <li><a id="permissions" href="<%= permissions_url %>">Permissions</a><li>
-  <li><a id="changes" href="<%= changes_url %>">Changes</a><li>
+  <li><a id="permissions" href="<%- permissions_url %>">Permissions</a><li>
+  <li><a id="changes" href="<%- changes_url %>">Changes</a><li>
   <% _.each(docLinks, function (link) { %>
-  <li><a id="docLink_<%=link.url%>" href="<%= database_url + '/' + link.url %>"><%= link.title %></a></li>
+  <li><a id="docLink_<%-link.url%>" href="<%- base + link.url %>"><%- link.title %></a></li>
   <% }); %>
   <li class="active"> 
-      <a id="all-docs" href="#<%= database.url('index') %>" class="toggle-view"> All Documents</a> 
+      <a id="all-docs" href="#/<%- databaseUrl %>" class="toggle-view"> All Documents</a> 
       <div id="new-all-docs-button" class="add-dropdown"> </div>
    </li>
   <li>
-      <a id="design-docs" href='#<%= database.url("index") %>?startkey="_design"&endkey="_design0"'  class="toggle-view"> All Design Docs</a>
+      <a id="design-docs" href='#/<%- databaseUrl %>?startkey="_design"&endkey="_design0"'  class="toggle-view"> All Design Docs</a>
       <div id="new-design-docs-button" class="add-dropdown"> </div>
     </li>
 </ul>

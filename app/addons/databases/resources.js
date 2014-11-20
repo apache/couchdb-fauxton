@@ -57,9 +57,9 @@ function(app, FauxtonAPI, Documents) {
       } else if (context === "apiurl") { 
         return window.location.origin + "/database/" + this.safeID() + "/_all_docs";
       } else if (context === "changes") {
-        return "/database/" + this.safeID() + "/_changes?descending=true&limit=100&include_docs=true";
+        return FauxtonAPI.urls('changes', 'app', this.safeID(), '?descending=true&limit=100&include_docs=true');
       } else if (context === "changes-apiurl") { 
-        return window.location.origin + "/" + this.safeID() + "/_changes?descending=true&limit=100&include_docs=true";
+        return FauxtonAPI.urls('changes', 'apiurl' , this.safeID(), '?descending=true&limit=100&include_docs=true');
       } else if (context === "app") {
         return "/database/" + this.safeID();
       } else {
@@ -96,12 +96,10 @@ function(app, FauxtonAPI, Documents) {
       if (this.params) {
         query = "?" + $.param(this.params);
       }
-      if (context === "apiurl") { 
-        return window.location.origin + '/' + this.database.safeID() + '/_changes' + query;
-      } else {
 
-      return app.host + '/' + this.database.safeID() + '/_changes' + query;
-      }
+     if (!context) { context = 'server';}
+
+      return FauxtonAPI.urls('changes', context, this.database.safeID(), query);
     },
 
     parse: function (resp) {

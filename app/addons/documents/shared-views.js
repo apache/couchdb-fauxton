@@ -42,41 +42,51 @@ function(app, FauxtonAPI, Components, Documents, Databases) {
       var docLinks = FauxtonAPI.getExtensions('docLinks'),
           newLinks = FauxtonAPI.getExtensions('sidebar:newLinks'),
           addLinks = FauxtonAPI.getExtensions('sidebar:links'),
-          extensionList = FauxtonAPI.getExtensions('sidebar:list');
+          extensionList = FauxtonAPI.getExtensions('sidebar:list'),
+          safeDatabaseName = this.database.safeID(),
+          changesLink = '#' + FauxtonAPI.urls('changes', 'app', safeDatabaseName, ''),
+          permissionsLink = '#' + FauxtonAPI.urls('permissions', 'app', safeDatabaseName),
+          databaseUrl = FauxtonAPI.urls('allDocs', 'app', safeDatabaseName, ''),
+          db_url = FauxtonAPI.urls('allDocs', 'server', safeDatabaseName, ''),
+          base = FauxtonAPI.urls('base', 'app', safeDatabaseName);
+
       return {
-        changes_url: '#' + this.database.url('changes'),
-        permissions_url: '#' + this.database.url('app') + '/permissions',
-        db_url: '#' + this.database.url('index'),
+        changes_url: changesLink,
+        permissions_url: permissionsLink,
+        db_url: db_url,
+        database_url: '#' + databaseUrl,
         database: this.collection.database,
-        database_url: '#' + this.database.url('app'),
         docLinks: docLinks,
         addLinks: addLinks,
         newLinks: newLinks,
-        extensionList: extensionList > 0
+        extensionList: extensionList > 0,
+        databaseUrl: databaseUrl,
+        base: base
       };
     },
 
-    getNewButtonLinks: function () {
+    getNewButtonLinks: function () {  //these are links for the sidebar '+' on All Docs and All Design Docs
       var database = this.collection.database,
-          newurlPrefix = "#" + database.url('app'),
-          addLinks = FauxtonAPI.getExtensions('sidebar:links');
+          addLinks = FauxtonAPI.getExtensions('sidebar:links'),
+          databaseName = database.id,
+          newUrlPrefix = '#' + FauxtonAPI.urls('databaseBaseURL','app', databaseName);
 
-      return _.reduce(FauxtonAPI.getExtensions('sidebar:links'), function (menuLinks, link) {
+      return _.reduce(addLinks, function (menuLinks, link) {
 
         menuLinks.push({
           title: link.title,
-          url: newurlPrefix + "/" + link.url,
+          url: newUrlPrefix + '/' + link.url,
           icon: 'fonticon-plus-circled'
         });
 
         return menuLinks; 
      }, [{
           title: 'New Doc',
-          url: newurlPrefix + '/new',
+          url: newUrlPrefix + '/new',
           icon: 'fonticon-plus-circled'
         },{
           title: 'New View',
-          url: newurlPrefix + '/new_view',
+          url: newUrlPrefix + '/new_view',
           icon: 'fonticon-plus-circled'
         }]);
     },
@@ -169,33 +179,35 @@ function(app, FauxtonAPI, Components, Documents, Databases) {
     },
 
     serialize: function(){
-      var ddocName = this.model.id.replace(/^_design\//,"");
+      var ddocName = this.model.id.replace(/^_design\//,""),
+          docSafe = app.utils.safeURLName(ddocName),
+          databaseName = this.collection.database.safeID();
+
       return{
-        database: this.collection.database,
+        designDocMetaUrl: FauxtonAPI.urls('designDocs', 'app', databaseName, docSafe),
         designDoc: ddocName,
-        ddoc_clean: app.utils.removeSpecialCharacters(ddocName),
-        ddoc_encoded: app.utils.safeURLName(ddocName),
-        database_encoded: app.utils.safeURLName(this.model.database.id),
+        ddoc_clean: docSafe,
       };
     },
 
-    getSidebarLinks: function () {
+    getSidebarLinks: function () {  //these are for each Design doc '+' links
       var ddocName = this.model.id.replace(/^_design\//,""),
-          docSafe = app.utils.safeURLName(ddocName), 
-          database = this.collection.database;
+          docSafe = app.utils.safeURLName(ddocName),
+          databaseName = this.collection.database.id,
+          newUrlPrefix = FauxtonAPI.urls('databaseBaseURL','app', databaseName);
+
 
       return _.reduce(FauxtonAPI.getExtensions('sidebar:links'), function (menuLinks, link) {
-
         menuLinks.push({
           title: link.title,
-          url: "#" + database.url('app') + "/" + link.url + "/" + docSafe,
+          url: '#' + newUrlPrefix + '/' + link.url + '/' + docSafe,
           icon: 'fonticon-plus-circled'
         });
 
         return menuLinks; 
      }, [{
       title: 'New View',
-      url: "#" + database.url('app') + "/new_view/" + docSafe,
+      url: '#' + FauxtonAPI.urls('new', 'addView', databaseName, docSafe),
       icon: 'fonticon-plus-circled'
      }]);
 
@@ -246,8 +258,8 @@ function(app, FauxtonAPI, Components, Documents, Databases) {
       this.name = options.name;
 
       this.indexTypeMap = {
-        views:   { icon: 'fonticon-sidenav-map-reduce', urlFolder: '_view' },
-        indexes: { icon: 'fonticon-sidenav-search', urlFolder: '_indexes' }
+        views:   { icon: 'fonticon-sidenav-map-reduce', urlFolder: '_view', type: 'view' },
+        indexes: { icon: 'fonticon-sidenav-search', urlFolder: '_indexes', type: 'search' }
       };
     },
 
@@ -261,7 +273,8 @@ function(app, FauxtonAPI, Components, Documents, Databases) {
         ddoc: this.ddoc,
         database: this.database,
         selected: this.selected,
-        collection: this.collection
+        collection: this.collection,
+        href: FauxtonAPI.urls(this.indexTypeMap[this.selector].type, 'app', this.database, this.ddoc)
       };
     },
 

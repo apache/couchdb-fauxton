@@ -67,7 +67,7 @@ function(app, FauxtonAPI, Compaction, Databases, BaseRoute) {
 
     cleanup: function () {
       if (this.pageContent) {
-        this.removeView('#dashboard-upper-content');
+        this.removeView('#dashboard-content');
       }
       if (this.leftheader) {
         this.removeView('#breadcrumbs');

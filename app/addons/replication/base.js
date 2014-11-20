@@ -20,5 +20,12 @@ function(app, FauxtonAPI, replication) {
 	replication.initialize = function() {
     FauxtonAPI.addHeaderLink({ title: 'Replication', href: '#/replication', icon: 'fonticon-replicate' });
   };
+
+  FauxtonAPI.registerUrls( 'replication', {
+    app: function (db) {
+      return '#/replication/' + db;
+    }
+  });
+
   return replication;
 });

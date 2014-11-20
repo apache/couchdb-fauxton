@@ -27,15 +27,10 @@ define([
       return FauxtonAPI.constants.DOC_URLS.GENERAL;
     },
     url: function(context) {
-      if (context === "app") {
-        return this.getDatabase().url("app") + "/" + this.safeID();
-      } else if (context === "web-index") {
-        return this.getDatabase().url("app") + "/" + app.utils.safeURLName(this.id);
-      } else if (context === "apiurl"){
-        return window.location.origin + "/" + this.getDatabase().safeID() + "/" + this.safeID();
-      } else {
-        return app.host + "/" + this.getDatabase().safeID() + "/" + this.safeID();
+      if (context === undefined) {
+        context = 'server';
       }
+      return FauxtonAPI.urls('document', context, this.getDatabase().safeID(), this.safeID());
     },
 
     initialize: function(_attrs, options) {
@@ -98,7 +93,9 @@ define([
     },
 
     getDdocView: function(view) {
-      if (!this.isDdoc() || !this.hasViews()) return false;
+      if (!this.isDdoc() || !this.hasViews()) {
+        return false;
+      }
 
       var doc = this.get('doc');
       if (doc) {
@@ -109,7 +106,9 @@ define([
     },
 
     setDdocView: function (view, map, reduce) {
-      if (!this.isDdoc()) return false;
+      if (!this.isDdoc()) {
+        return false;
+      }
       var views = this.get('views'),
         tempView = views[view] || {};
 
@@ -242,14 +241,10 @@ define([
       } else if (this.params) {
         query = "?" + $.param(this.params);
       }
-
-      if (context === 'app') {
-        return 'database/' + this.database.safeID() + "/_all_docs" + query;
-      } else if (context === "apiurl"){
-        return window.location.origin + "/" + this.database.safeID() + "/_all_docs" + query;
-      } else {
-        return app.host + "/" + this.database.safeID() + "/_all_docs" + query;
+      if (_.isUndefined(context)) {
+        context = 'server';
       }
+      return FauxtonAPI.urls('allDocs', context, this.database.safeID(), query);
     },
 
     url: function () {

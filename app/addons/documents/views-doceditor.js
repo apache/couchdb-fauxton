@@ -225,7 +225,7 @@ function (app, FauxtonAPI, Components, Documents, Databases, prettify) {
     },
 
     goBack: function () {
-      FauxtonAPI.navigate(this.previousPage);
+      FauxtonAPI.navigate(FauxtonAPI.urls('allDocs', 'app', this.database.id, '?limit=20'));
     },
 
     destroy: function () {
@@ -248,7 +248,7 @@ function (app, FauxtonAPI, Components, Documents, Databases, prettify) {
           msg: 'Your document has been successfully deleted.',
           clear: true
         });
-        FauxtonAPI.navigate(database.url('index'));
+        FauxtonAPI.navigate(FauxtonAPI.urls('allDocs', 'app', database.id, '?limit=20'));
       }, function () {
         FauxtonAPI.addNotification({
           msg: 'Failed to delete your document!',
@@ -294,7 +294,7 @@ function (app, FauxtonAPI, Components, Documents, Databases, prettify) {
 
         this.model.save().then(function () {
           editor.editSaved();
-          FauxtonAPI.navigate('/database/' + that.database.safeID() + '/' + that.model.id);
+          FauxtonAPI.navigate(FauxtonAPI.urls('document', 'app', that.database.safeID(), that.model.id));
         }).fail(function (xhr) {
           var responseText = JSON.parse(xhr.responseText).reason;
           FauxtonAPI.addNotification({
