@@ -20,7 +20,7 @@ module.exports = {
       .loginToGUI()
       .url(baseUrl+'/#/database/'+newDatabaseName+'/_all_docs')
       .waitForElementPresent('#header-dropdown-menu a.dropdown-toggle.icon.fonticon-cog', waitTime, false)
-      .execute('$("#header-dropdown-menu a.dropdown-toggle.icon.fonticon-cog").click();')
+      .click("#header-dropdown-menu a.dropdown-toggle.icon.fonticon-cog")
       .waitForElementPresent('#header-dropdown-menu .fonticon-trash', waitTime, false)
       .click('#header-dropdown-menu .fonticon-trash')
       .waitForElementVisible('#db_name', waitTime, false)
