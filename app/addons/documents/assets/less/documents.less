@@ -175,11 +175,11 @@ button.string-edit[disabled] {
     width: 1px;
   }
   /* checkboxes in doc-list */
-  label.label-checkbox-doclist:before {
+  input[type=checkbox] + label:before {
     background-color: @docCheckBoxUncheckedBG;
     border: @docCheckBoxUncheckedBorder;
   }
-  label.label-checkbox-doclist:hover:before {
+  input[type=checkbox] + label:hover:before {
     border: @docCheckBoxHoverBorder;
   }
   input[type='checkbox']:checked + label::before {
