@@ -27,8 +27,8 @@ module.exports = {
       .click('.js-all')
       .click('.js-bulk-delete')
       .acceptAlert()
-      .waitForElementVisible('#global-notifications .alert.alert-info', waitTime)
-      .waitForElementNotPresent('[data-id="' + newDocumentName1 + '"]', waitTime)
+      .waitForElementVisible('#global-notifications .alert.alert-info', waitTime, false)
+      .waitForElementNotPresent('[data-id="' + newDocumentName1 + '"]', waitTime, false)
       .getText('body', function (result) {
         var data = result.value,
             isPresentFirstDoc = data.indexOf(newDocumentName1) !== -1,
