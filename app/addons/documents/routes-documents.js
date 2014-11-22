@@ -223,7 +223,7 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
     createParams: function (options) {
       var urlParams = app.getParams(options),
           params = Documents.QueryParams.parse(urlParams),
-          limit = this.getDocPerPageLimit(params, FauxtonAPI.constants.DEFAULT_PAGE_SIZE);
+          limit = this.getDocPerPageLimit(params, FauxtonAPI.constants.MISC.DEFAULT_PAGE_SIZE);
 
       return {
         urlParams: urlParams,
@@ -319,7 +319,7 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
       this.sidebar.setSelectedTab(app.utils.removeSpecialCharacters(ddoc) + '_' + app.utils.removeSpecialCharacters(viewName));
 
       this.apiUrl = function() {
-       return [this.indexedDocs.urlRef("apiurl", urlParams), "docs"];
+        return [this.indexedDocs.urlRef("apiurl", urlParams), FauxtonAPI.constants.DOC_URLS.GENERAL];
       };
 
       this.rightHeader.showQueryOptions();
@@ -384,7 +384,7 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
           collection;
 
       isLazyInit = _.isUndefined(this.documentsView) || _.isUndefined(this.documentsView.allDocsNumber);
-      defaultPageSize = isLazyInit ? FauxtonAPI.constants.DEFAULT_PAGE_SIZE : this.documentsView.perPage();
+      defaultPageSize = isLazyInit ? FauxtonAPI.constants.MISC.DEFAULT_PAGE_SIZE : this.documentsView.perPage();
       docParams.limit = pageSize = this.getDocPerPageLimit(urlParams, defaultPageSize);
 
       if (event.allDocs) {

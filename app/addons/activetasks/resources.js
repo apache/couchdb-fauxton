@@ -11,10 +11,11 @@
 // the License.
 
 define([
-  'app'
+  'app',
+  'api'
 ],
 
-function (app) {
+function (app, FauxtonAPI) {
   app.taskSortBy = 'type';
 
   var Active = {};
@@ -49,7 +50,7 @@ function (app) {
       return item.get(value);
     },
 
-    documentation: '_active_tasks',
+    documentation: FauxtonAPI.constants.DOC_URLS.ACTIVE_TASKS,
 
     url: function (context) {
       if (context === 'apiurl') {

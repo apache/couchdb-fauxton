@@ -59,7 +59,7 @@ function (app, FauxtonAPI, ActiveTasks) {
   });
 
   Replication.Replicate = Backbone.Model.extend({
-    documentation: "replication_doc",
+    documentation: FauxtonAPI.constants.DOC_URLS.REPLICATION,
     url: function(){
       return window.location.origin + "/_replicate";
     }
