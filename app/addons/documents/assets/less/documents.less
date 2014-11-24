@@ -17,16 +17,6 @@
 @import "changes.less";
 @import "sidenav.less";
 
-tr.all-docs-item {
-  border: none;
-  background: transparent;
-  .btn-group {
-    position: absolute;
-    right: 0;
-    top: 6px;
-  }
-}
-
 button.beautify {
   margin-top: 20px;
 }
@@ -48,30 +38,6 @@ button.beautify {
 #query div.controls-group.well {
   height: 180px;
   margin-right: 17px;
-}
-
-/** used in all_docs_list.html **/
-.view {
-  table td div {
-    position: relative;
-  }
-
-  table td div div {
-    display: none;
-    line-height: 1;
-    position: absolute;
-    right: 4px;
-    top: 4px;
-  }
-
-  table td div:hover div a.edits {
-    padding-left: 16px;
-    padding-right: 16px;
-  }
-
-  table td div:hover div {
-    display: block;
-  }
 }
 
 /** used in view_editor.html **/
@@ -107,6 +73,10 @@ button.beautify {
 
 .editor-content-page {
   padding-right: 20px;
+}
+
+.metadata-page {
+  padding: 20px;
 }
 
 button.string-edit {
@@ -176,5 +146,83 @@ button.string-edit[disabled] {
 
   .muted {
     margin-bottom: 0px;
+  }
+}
+
+.show-select {
+  #doc-list {
+    padding: 30px 0 0 0;
+  }
+  .custom-inputs {
+    display: block;
+    float: left;
+  }
+  .checkbox.inline {
+    padding-top: 32px;
+    padding-left: 0;
+    label {
+      padding-left: 23px; // 7px to the right-border + 16px around
+    }
+  }
+  .doc-item {
+    width: auto;
+    overflow: hidden;
+  }
+  label.label-checkbox-doclist {
+    // https://code.google.com/p/chromium/issues/detail?id=411065
+    -webkit-user-select: none;
+    height: 1px;
+    width: 1px;
+  }
+  /* checkboxes in doc-list */
+  input[type="checkbox"] + label:before {
+    background-color: @docCheckBoxUncheckedBG;
+    border: @docCheckBoxUncheckedBorder;
+  }
+  input[type="checkbox"] + label:hover:before {
+    border: @docCheckBoxHoverBorder;
+  }
+  input[type="checkbox"]:checked + label::before {
+    border: @docCheckBoxCheckedBorder;
+    background-color: @docCheckBoxCheckedBG;
+  }
+}
+
+#doc-list {
+  padding: 30px 12px 0 12px;
+  div.doc-row {
+    margin-bottom: 20px;
+    .doc-item {
+      vertical-align: top;
+      position: relative;
+      .box-shadow(3px 4px 0 rgba(0, 0, 0, 0.3));
+      header {
+        font-weight: bold;
+        position: relative;
+        padding: 20px;
+        background-color: @docHeaderBG;
+        border-bottom: 1px solid @docHeaderBorderBottom;
+        border-left: 1px solid @docHeaderOtherBorders;
+        border-right: 1px solid @docHeaderOtherBorders;
+        border-top: 1px solid @docHeaderOtherBorders;
+        .header-doc-id {
+          color: @docHeaderDocId;
+          margin-left: 10px;
+        }
+        .header-keylabel,
+        .fonticon-pencil {
+          color: @docHeaderLabels;
+        }
+        .doc-edit-symbol {
+          margin-top: -3px;
+        }
+        .fonticon-pencil {
+          font-size: 20px;
+        }
+        .fonticon-pencil:hover {
+          color: @docHeaderDocId;
+        }
+      }
+    }
   }
 }
