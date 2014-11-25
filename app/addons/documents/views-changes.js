@@ -15,14 +15,13 @@ define([
 
        "api",
        // Libs
-       "addons/fauxton/resizeColumns",
        "addons/fauxton/components",
 
        // Plugins
        "plugins/prettify"
 ],
 
-function(app, FauxtonAPI, resizeColumns, Components, prettify, ZeroClipboard) {
+function(app, FauxtonAPI, Components, prettify, ZeroClipboard) {
 
   var Views = {};
 

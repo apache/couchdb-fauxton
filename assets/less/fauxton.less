@@ -25,6 +25,7 @@
 @import "formstyles.less";
 @import "pagination.less";
 @import "trays.less";
+@import "mixins.less";
 
 
 /**
@@ -35,12 +36,16 @@
   .box-sizing(border-box);
 }
 
+html {
+  height: 100%;
+}
+
 body {
   font-size: 16px;
   line-height:1.3;
   padding-bottom: 0px;
   color: #333;
-  padding-top: 90px;
+  height: 100%;
   background-color: @sidebarBG;
 }
 
@@ -156,27 +161,6 @@ table.databases {
   font-size: 16px;
 }
 
-.fixed-header{
-  background-color: @breadcrumbBG;
-  position: fixed;
-  top: 0;
-  right: 0;
-  left: @navWidth;
-  .closeMenu & {
-    left: @collapsedNavWidth;
-  }
-  //border-bottom: 5px solid @breadcrumbBorder;
-  .box-shadow(0 4px 6px -2px #808080);
-  z-index: 100;
-  .one-pane & {
-    position: relative;
-    border: none;
-    .box-shadow(none);
-    left: auto;
-  }
-}
-
-
 #dashboard-upper-content{
   .tab-content {
     padding-top: 70px;
@@ -238,30 +222,6 @@ table.databases {
   }
 }
 
-#sidebar-content {
-  position: absolute;
-  top: 60px;
-  width: @sidebarWidth;
-  left: 0;
-  background-color: @secondarySidebar;
-  > div.inner {
-    display: block;
-  }
-}
-
-.scrollable {
-  height: auto;
-  overflow-y: scroll;
-  overflow-x: hidden;
-  width: 100%;
-  position: absolute;
-  padding: 0;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  top: 60px;
-}
 
 /*ONE PANEL TEMPLATE ONLY STYLES  AKA _all_dbs */
 
@@ -330,22 +290,19 @@ div.spinner {
   top: 50%;
 }
 
-#api-navbar{
-  padding: 10px;
-  .header-icon {
-    font-size: 20px;
-    &:before {
-      float: left;
-      margin: 10px 6px 0px 0px;
-    }
-  }
-}
 
-header .header-icon {
+
+.header-icon {
   font-size: 20px;
   &:before {
     float: left;
     margin: 10px 6px 0px 0px;
+  }
+}
+
+#api-navbar {
+  > div:not(.hide) {
+    border-left: 1px solid #ccc;
   }
 }
 
@@ -357,6 +314,10 @@ header .header-icon {
 }
 .api-url-btn:hover, .query-options-btn:hover {
   background: none;
+}
+
+.api-navbar:before {
+  right: 25px;
 }
 .api-navbar {
   padding: 16px 20px;
@@ -420,86 +381,19 @@ header .header-icon {
   }
 }
 
-/*
----------------------------------------------------
-REUSEABLE SHADOW BORDER
----------------------------------------------------
- */
-
-.left-shadow-border{
-  border-left: 1px solid #999;
-  .box-shadow(-6px 0 rgba(0, 0, 0, 0.1));
-}
-
-.bottom-shadow-border{
-  border-bottom: 1px solid #999;
-  .box-shadow(0px 6px 0 0 rgba(0, 0, 0, 0.1));
-}
-
 //---header--//
 .fixed-header{
-  height: 60px;
+  height: @collapsedNavWidth;
   background-color: @breadcrumbBG;
-  position: fixed;
   top: 0;
   right: 0;
-  left: @navWidth;
-  .closeMenu & {
-    left: @collapsedNavWidth;
-  }
+  left: 0;
+  background-color: @breadcrumbBG;
+  position: absolute;
+
+  .bottom-shadow-border();
   z-index: 100;
-  .two-pane & {
-    border: none;
-  }
-  .two-pane &,
-  .with-sidebar & {
-    #right-header {
-      > div {
-        .bottom-shadow-border;
-        height: 60px;
-      }
-      .left-shadow-border;
-    }
-    #api-navbar{
-      position: relative;
-      float: right;
-      left: -220px;
-      z-index: 200;
-      > div {
-        height: 60px;
-      }
-      .closeMenu & {
-        left: -64px;
-      }
-    }
-    #breadcrumbs{
-      .bottom-shadow-border;
-    }
-  }
 
-  .one-pane &,
-  .two-pane &,
-  .with-sidebar & {
-    #header-api-bar {
-      width: 98px;
-      padding: 10px 15px;
-    }
-  }
-
-  .one-pane & {
-    .bottom-shadow-border;
-    left: auto;
-
-    #api-navbar {
-      position: relative;
-      float: right;
-      left: 0px;
-      z-index: 200;
-      > div {
-        height: 60px;
-      }
-    }
-  }
   /* these styles are for the new header*/
   > div {
     display:inline-block;
@@ -508,37 +402,32 @@ REUSEABLE SHADOW BORDER
 }
 
 #right-header {
-  height: 60px;
-  position: absolute;
-  /* these styles are for the new header*/
-  .right-header{
-  }
-}
-#api-navbar {
-  height: 60px;
   float: right;
 }
 
-/* only specify the sidebar width when there’s a sidebar */
-.with-sidebar #breadcrumbs {
-  width: @sidebarWidth;
-
-  .active {
-    width: 259px;
+.with-sidebar {
+  #breadcrumbs {
+    border-right: 1px solid @grayLight;
+    width: @sidebarWidth + 1px;
+    .active {
+      width: 244px;
+    }
   }
 }
 
-#breadcrumbs {
-  height: 60px;
 
+#breadcrumbs {
+  height: @collapsedNavWidth;
+  float: left;
   /* these styles are for the new header*/
   .header-left{
     > div{
       display:inline-block;
     }
     .breadcrumb {
-      li:first-child{
+      li:first-child {
         border-right: 1px solid #ccc;
+        font-size: 16px;
       }
     }
   }
@@ -547,13 +436,11 @@ REUSEABLE SHADOW BORDER
     background-color: transparent;
     padding: 0;
     li {
-      padding: 20px 10px;
-      height: 60px;
+      padding: 22px 10px;
       &:first-child {
         font-size: 24px;
         .with-sidebar &,
         .two-pane & {
-          padding:20px 10px;
           float: left;
         }
         a {
@@ -600,7 +487,6 @@ REUSEABLE SHADOW BORDER
   position: relative;
   #header-dropdown-menu {
     position: absolute;
-    right: 5px;
     top: 0;
     .dropdown-toggle {
       color: #666666;
@@ -610,12 +496,13 @@ REUSEABLE SHADOW BORDER
       text-decoration: none;
       &:before {
         font-size: 20px;
-        margin-top: 4px;
+        margin-top: 6px;
       }
     }
     .dropdown {
+      height: @collapsedNavWidth;
       border-left: 1px solid #ccc;
-      padding: 17px 0px;
+      padding: 18px 0px;
     }
     .dropdown-menu {
       left: -115px;
@@ -659,6 +546,7 @@ REUSEABLE SHADOW BORDER
   height: 0;
 }
 
+.right-header-wrapper,
 .fixed-header,
 .header-right {
   > .btn {
@@ -690,8 +578,11 @@ REUSEABLE SHADOW BORDER
     padding: 0;
     margin: 0;
   }
+  .searchbox-wrapper {
+    width: 295px;
+  }
   .searchbox-container {
-    position: relative;
+    position: absolute;
     right: inherit;
     input[type="text"] {
       .border-radius(5px);
@@ -705,58 +596,51 @@ REUSEABLE SHADOW BORDER
       position: absolute;
       right: 12px;
       top: 0px;
-      height:60px;
+      height: @collapsedNavWidth;
       z-index: 2;
       color: #999;
-      .icon-search{
+      .icon-search {
         position: absolute;
-        top: 20px;
-        right: 15px;
+        top: 11px;
+        right: 5px;
       }
     }
   }
   > div {
     float: right;
-    height: 60px;
-    border-left: 1px solid #ccc;
     margin: 0;
-    padding: 10px;
     line-height: 40px;
+    border-left: 1px solid #ccc;
   }
   > div:last-child {
     border-left: none;
   }
 }
-.api-navbar:before {
-  right: 25px;
-}
 
-#jump-to-doc{
-  .btn-primary {
-    .icon-search{
-      position: absolute;
-      top: 20px;
-      right: 15px;
-    }
+.header-right,
+#api-navbar {
+  float: right;
+  height: @collapsedNavWidth;
+  > div {
+    padding: 12px;
+    height: @collapsedNavWidth;
   }
 }
-
-
 
 //----footer--///
 footer.pagination-footer {
   z-index: 1;
-  position:fixed;
-  background-color:#fff;
-  bottom:0;
+  position: absolute;
+  left: 0;
+  right: 0;
   height: 50px;
-  border-top:1px solid #ccc;
-  margin-left: -15px;
-  .pagination{
+  bottom: 0;
+  background-color: #fff;
+  border-top: 1px solid #ccc;
+
+  .pagination {
     .box-shadow(none);
-    position: absolute;
-    right:0;
-    top: 0;
+
     margin:0px;
     height: 50px;
     border-left: 1px solid #ccc;
@@ -768,20 +652,32 @@ footer.pagination-footer {
       }
     }
   }
-}
-
-#item-numbers{
-  p {
-    margin: 20px;
-    font-size: 14px;
+  .index-indicator {
+    float: left;
+    p {
+      margin: 20px;
+      font-size: 14px;
+    }
+  }
+  #documents-pagination {
+    float: right;
+  }
+  #per-page {
+    float: right;
+    top: 2px;
+    #select-per-page {
+      margin-top: 10px;
+    }
   }
 }
 
-div#per-page {
+#primary-nav-right-shadow {
   position: absolute;
-  right: 86px;
-  top: 2px;
-  #select-per-page {
-    margin-top: 10px;
-  }
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  background-color: rgba(0, 0, 0, 0.1);
+  width: 6px;
+  z-index: 6;
 }
+

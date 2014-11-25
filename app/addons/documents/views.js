@@ -21,9 +21,6 @@ define([
   "addons/documents/views-sidebar",
   "addons/documents/views-queryoptions",
 
-  // Libs
-  "addons/fauxton/resizeColumns",
-
   //plugins
   "plugins/prettify"
 ],

@@ -19,34 +19,24 @@
   min-height:  100px;
 }
 
+#main {
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+}
+
 #global-notifications {
   position: fixed;
   top: 0px;
   display: block;
   z-index: 100000;
-  .closeMenu & {
-    left: @collapsedNavWidth;
-  }
   width: 100%;
 }
 
-/*container where the layout is injected*/
 #app-container {
-  padding: 0;
   height: 100%;
-  width: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
-  > .row-fluid {
-    height: 100%;
-  }
-  &.loader {
-    min-height: 400px;
-    > *{
-      display: none;
-    }
-  }
+  position: relative;
+  overflow: hidden;
 }
 
 @media screen and (max-height: 600px) {
@@ -63,11 +53,17 @@
 
 /* Fixed side navigation */
 #primary-navbar {
+  z-index: 5;
   height: 100%;
-  position: fixed;
-  width: @navWidth;
+  left: 0;
   top: 0;
   bottom: 0;
+  position: absolute;
+  width: @navWidth;
+  .closeMenu & {
+    width: @collapsedNavWidth;
+    overflow-x: hidden;
+  }
   background-color: @primaryNav;
   .js-version {
     color: #fff;
@@ -83,17 +79,20 @@
     font-size: 12px
   }
   .navbar {
+    .closeMenu & {
+      width: @collapsedNavWidth;
+    }
     .burger {
-      .transition(all @transitionSpeed @transitionEaseType);
       padding: 22px 0 22px 18px;
       position: fixed;
       z-index: 100;
-      width: 64px;
       top: 0;
       background-color: @primaryNav;
       width: @navWidth;
+      .closeMenu & {
+        width: @collapsedNavWidth;
+      }
       div {
-        .transition(all @transitionSpeed @transitionEaseType);
         height: 4px;
         width: 24px;
         .border-radius(2);
@@ -107,12 +106,10 @@
     .bottom-container {
       position: fixed;
       bottom: 0;
-      width: 220px;
       background: #3a2c2b;
       .brand {
         .box-sizing(content-box);
         .hide-text;
-        .customTransition(left, 1s, 0.805, 0.005, 0.165, 0.985);
         margin: 10px 0 0 0;
         width: 200px;
         height: 40px;
@@ -156,18 +153,23 @@
       .nav {
         margin: 0;
         li {
-          .transition(all @transitionSpeed @transitionEaseType);
           padding: 0;
           font-size: 16px;
           letter-spacing: 1px;
           line-height: 24px;
           width: @navWidth;
+          .closeMenu & {
+            width: @collapsedNavWidth;
+          }
           font-weight: normal;
           font-family: helvetica;
           .box-sizing(border-box);
           background-color: @navBG;
           border-bottom:  1px solid @primaryNav;
+          height: 48px;
           min-height: 48px;
+          position: relative;
+
           &.active, &:hover {
             a {
               .box-shadow(none);
@@ -188,11 +190,12 @@
             background-color: transparent;
             color: #fff;
             text-shadow: @textShadowOff;
-            &.closeMenu {
-              color: transparent;
-            }
+            height: 48px;
+            display: flex;
+
             .fonticon {
               position: relative;
+
               &:before {
                 position: absolute;
                 left: -41px;
@@ -203,6 +206,9 @@
             }
             .closeMenu & {
               color: transparent;
+              span {
+                display: none;
+              }
             }
           }
         }
@@ -252,11 +258,6 @@
   }
 }
 
-.left-shadow-border {
-  border-left: 1px solid #999;
-  .box-shadow(-6px 0 rgba(0, 0, 0, 0.1));
-}
-
 .bottom-shadow-border {
   border-bottom: 1px solid #999;
   .box-shadow(0px 6px 0 0 rgba(0, 0, 0, 0.1));
@@ -279,27 +280,89 @@ with_tabs.html
 with_tabs_sidebar.html
  */
 #dashboard {
-  .left-shadow-border;
-  position: absolute;
+  position: relative;
   left: @navWidth;
-  margin-left: 0;
-  padding-left: 0;
-  padding-right: 0;
   background-color: @sidebarBG;
-  min-width: 600px;
   height: 100%;
+  width: 100%;
   .closeMenu & {
     left: @collapsedNavWidth;
   }
-  &.one-pane {
-    min-width: 800px;
-    margin-top: 0;
-    overflow-x: hidden;
+}
+
+.wrapper {
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+}
+
+.one-pane {
+  #dashboard-content {
+    padding-bottom: 30px;
+    top: @collapsedNavWidth;
   }
-  &.two-pane {
-    margin-top: 0;
-    overflow-x: hidden;
+}
+
+.sidebar {
+  width: @sidebarWidth;
+}
+
+#sidebar-content {
+  position: absolute;
+  top: @collapsedNavWidth;
+  left: 0;
+  background-color: @secondarySidebar;
+  > div.inner {
+    display: block;
   }
+  margin-top: 6px;
+}
+
+.scrollable {
+  height: auto;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  width: 100%;
+  position: absolute;
+  padding: 0;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
+
+.pusher {
+  overflow: hidden;
+  position: relative;
+  height: 100%;
+  left: 0;
+  padding-right: @navWidth;
+  .closeMenu & {
+    padding-right: @collapsedNavWidth;
+  }
+}
+
+.right-header-wrapper {
+  overflow-x: hidden;
+  height: @collapsedNavWidth;
+}
+
+.with-sidebar .right-header-wrapper {
+  .box-shadow(-7px 0 rgba(0, 0, 0, 0.1));
+}
+
+.header-wrapper {
+  .bottom-shadow-border();
+  .box-shadow(0 6px 0 0 rgba(0, 0, 0, 0.1));
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 50;
+}
+
+#app-container > div {
+  position: relative;
+  height: 100%;
 }
 
 /* SIDEBAR TEMPLATE STYLES */
@@ -311,6 +374,7 @@ with_tabs_sidebar.html
 
 /* USED IN TEMPLATE: with_tabs_sidebar.html */
 .dashboard-upper-menu {
+  border-left: 1px solid #999;
   right: 0;
   left: @sidebarWidth+@navWidth;
   position: fixed;
@@ -333,25 +397,19 @@ with_tabs_sidebar.html
   padding-right: 15px;
   padding-top: 20px;
 
-  &.row-fluid,
-  &.window-resizeable {
+  &.row-fluid {
     /*remove gutter without rewriting variable*/
     margin-left: 0px;
   }
-  .one-pane & {
-    //margin-top:60px;
-    padding-bottom:25px;
-  }
   .with-sidebar & {
-    .left-shadow-border;
-    border-right: 1px solid #999;
+    border-left: 1px solid @grayLight;
+    .left-shadow-border();
     width: auto;
     padding: 15px;
     bottom: 0px;
-    top: 0px;
+    top: @collapsedNavWidth;
     position: fixed;
-    overflow-x: hidden;
-    overflow-y: auto;
+    overflow: hidden;
     left: @sidebarWidth+@navWidth;
     right: 0;
     .box-sizing(border-box);
@@ -361,15 +419,6 @@ with_tabs_sidebar.html
   }
   > div.inner {
     display: block;
-  }
-}
-
-#global-notifications {
-  .with-sidebar & {
-    left: @sidebarWidth + @navWidth;
-    .closeMenu & {
-      left: @sidebarWidth + @collapsedNavWidth;
-    }
   }
 }
 
