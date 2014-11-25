@@ -19,14 +19,11 @@ define([
   'addons/documents/resources',
   'addons/databases/resources',
 
-  // Libs
-  'addons/fauxton/resizeColumns',
-
   // Plugins
   'plugins/prettify'
 ],
 
-function (app, FauxtonAPI, Components, Documents, Databases, resizeColumns, prettify) {
+function (app, FauxtonAPI, Components, Documents, Databases, prettify) {
 
   var Views = {};
 

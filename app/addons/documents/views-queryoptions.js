@@ -15,8 +15,7 @@ define([
   "api",
 
   // libs
-  'addons/fauxton/components',
-  "addons/fauxton/resizeColumns"
+  'addons/fauxton/components'
 ],
 
   function (app, FauxtonAPI, Components) {

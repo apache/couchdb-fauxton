@@ -331,10 +331,6 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
       this.urlFun = options.urlFun;
     },
 
-    afterRender: function () {
-      app.resizeColumns.onResizeHandler();
-    },
-
     serialize: function() {
       return {
         page: this.page,
@@ -392,10 +388,6 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
       }
 
       return this.collection.hasNext();
-    },
-
-    afterRender: function () {
-      app.resizeColumns.onResizeHandler();
     },
 
     previousClicked: function (event) {

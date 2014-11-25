@@ -13,12 +13,11 @@
 define([
   "app",
   "api",
-  "addons/fauxton/resizeColumns",
   "addons/fauxton/components",
   "plugins/zeroclipboard/ZeroClipboard"
 ],
 
-function(app, FauxtonAPI, resizeColumns, Components, ZeroClipboard) {
+function(app, FauxtonAPI, Components, ZeroClipboard) {
 
   var Fauxton = FauxtonAPI.addon();
   FauxtonAPI.addNotification = function (options) {
@@ -132,7 +131,6 @@ function(app, FauxtonAPI, resizeColumns, Components, ZeroClipboard) {
     toggleMenu: function(){
        var $selectorList = $('body');
        $selectorList.toggleClass('closeMenu');
-       this.resizeColumns.onResizeHandler();
        FauxtonAPI.Events.trigger(FauxtonAPI.constants.EVENT_BURGER_CLICK);
     },
 
@@ -146,9 +144,6 @@ function(app, FauxtonAPI, resizeColumns, Components, ZeroClipboard) {
 
     initialize: function () {
       _.bindAll(this);
-      //resizeAnimation
-      app.resizeColumns = this.resizeColumns = new resizeColumns({});
-      this.resizeColumns.onResizeHandler();
 
       FauxtonAPI.extensions.on('add:navbar:addHeaderLink', this.addLink);
       FauxtonAPI.extensions.on('removeItem:navbar:addHeaderLink', this.removeLink);
@@ -208,8 +203,6 @@ function(app, FauxtonAPI, resizeColumns, Components, ZeroClipboard) {
 
     afterRender: function(){
       $('#primary-navbar li[data-nav-name="' + app.selectedHeader + '"]').addClass('active');
-      
-      this.resizeColumns.initialize();
     },
 
     beforeRender: function () {

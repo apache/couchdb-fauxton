@@ -21,15 +21,12 @@ define([
   //views
   "addons/documents/views-queryoptions",
 
-  // Libs
-  "addons/fauxton/resizeColumns",
-
   // Plugins
   "plugins/beautify",
   "plugins/prettify"
 ],
 
-function(app, FauxtonAPI, Components, Documents, Databases, pouchdb, QueryOptions, resizeColumns, beautify) {
+function(app, FauxtonAPI, Components, Documents, Databases, pouchdb, QueryOptions, beautify) {
 
   var Views = {};
 

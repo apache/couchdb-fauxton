@@ -19,34 +19,24 @@
   min-height:  100px;
 }
 
+#main {
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+}
+
 #global-notifications {
   position: fixed;
   top: 0px;
   display: block;
   z-index: 100000;
-  .closeMenu & {
-    left: @collapsedNavWidth;
-  }
   width: 100%;
 }
 
-/*container where the layout is injected*/
 #app-container {
-  padding: 0;
   height: 100%;
-  width: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
-  > .row-fluid {
-    height: 100%;
-  }
-  &.loader {
-    min-height: 400px;
-    > *{
-      display: none;
-    }
-  }
+  position: relative;
+  overflow: hidden;
 }
 
 @media screen and (max-height: 600px) {
@@ -63,8 +53,10 @@
 
 /* Fixed side navigation */
 #primary-navbar {
+  z-index: 5;
   height: 100%;
-  position: fixed;
+  position: absolute;
+  left: 0;
   width: @navWidth;
   top: 0;
   bottom: 0;
@@ -280,26 +272,66 @@ with_tabs_sidebar.html
  */
 #dashboard {
   .left-shadow-border;
-  position: absolute;
+  position: relative;
   left: @navWidth;
-  margin-left: 0;
-  padding-left: 0;
-  padding-right: 0;
   background-color: @sidebarBG;
-  min-width: 600px;
   height: 100%;
+  width: 100%;
   .closeMenu & {
     left: @collapsedNavWidth;
   }
-  &.one-pane {
-    min-width: 800px;
-    margin-top: 0;
-    overflow-x: hidden;
+}
+
+.wrapper {
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+}
+
+.one-pane {
+  padding-bottom: 25px;
+}
+
+
+#sidebar-content {
+  position: absolute;
+  top: @collapsedNavWidth;
+  width: @sidebarWidth;
+  left: 0;
+  background-color: @secondarySidebar;
+  > div.inner {
+    display: block;
   }
-  &.two-pane {
-    margin-top: 0;
-    overflow-x: hidden;
+}
+
+.scrollable {
+  height: auto;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  width: 100%;
+  position: absolute;
+  padding: 0;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  top: 60px;
+}
+
+.pusher {
+  overflow: hidden;
+  position: relative;
+  height: 100%;
+  left: 0;
+  padding-right: @navWidth;
+  .closeMenu & {
+    padding-right: @collapsedNavWidth;
   }
+}
+
+#app-container > div {
+  position: relative;
+  height: 100%;
 }
 
 /* SIDEBAR TEMPLATE STYLES */
@@ -333,14 +365,9 @@ with_tabs_sidebar.html
   padding-right: 15px;
   padding-top: 20px;
 
-  &.row-fluid,
-  &.window-resizeable {
+  &.row-fluid {
     /*remove gutter without rewriting variable*/
     margin-left: 0px;
-  }
-  .one-pane & {
-    //margin-top:60px;
-    padding-bottom:25px;
   }
   .with-sidebar & {
     .left-shadow-border;
@@ -348,7 +375,7 @@ with_tabs_sidebar.html
     width: auto;
     padding: 15px;
     bottom: 0px;
-    top: 0px;
+    top: @collapsedNavWidth;
     position: fixed;
     overflow-x: hidden;
     overflow-y: auto;
@@ -361,15 +388,6 @@ with_tabs_sidebar.html
   }
   > div.inner {
     display: block;
-  }
-}
-
-#global-notifications {
-  .with-sidebar & {
-    left: @sidebarWidth + @navWidth;
-    .closeMenu & {
-      left: @sidebarWidth + @collapsedNavWidth;
-    }
   }
 }
 
