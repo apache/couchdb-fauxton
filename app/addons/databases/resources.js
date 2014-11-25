@@ -31,8 +31,8 @@ function(app, FauxtonAPI, Documents) {
       });
     },
 
-    documentation: function(){
-      return "all_dbs";
+    documentation: function () {
+      return FauxtonAPI.constants.DOC_URLS.ALL_DBS;
     },
     
     buildAllDocs: function(params) {
@@ -89,7 +89,7 @@ function(app, FauxtonAPI, Documents) {
       this.params = options.params;
     },
     documentation: function(){
-      return "changes";
+      return FauxtonAPI.constants.DOC_URLS.CHANGES;
     },
     url: function (context) {
       var query = "";
@@ -158,8 +158,8 @@ function(app, FauxtonAPI, Documents) {
   // TODO: shared databases - read from the user doc
   Databases.List = FauxtonAPI.Collection.extend({
     model: Databases.Model,
-    documentation: function(){
-      return "all_dbs";
+    documentation: function () {
+      return FauxtonAPI.constants.DOC_URLS.ALL_DBS;
     },
 
     getDatabaseNames: function () {

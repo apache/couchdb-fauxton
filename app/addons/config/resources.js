@@ -23,7 +23,7 @@ function (app, FauxtonAPI) {
 
   Config.Model = Backbone.Model.extend({});
   Config.OptionModel = Backbone.Model.extend({
-    documentation: "config",
+    documentation: FauxtonAPI.constants.DOC_URLS.CONFIG,
 
     url: function () {
       return app.host + '/_config/' + this.get("section") + '/' + encodeURIComponent(this.get("name"));
@@ -53,7 +53,7 @@ function (app, FauxtonAPI) {
   Config.Collection = Backbone.Collection.extend({
     model: Config.Model,
 
-    documentation: "config",
+    documentation: FauxtonAPI.constants.DOC_URLS.CONFIG,
 
     comparator: function (OptionModel) {
       if (OptionModel.get("section")) {

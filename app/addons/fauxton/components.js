@@ -208,14 +208,14 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
         }
       });
 
-      FauxtonAPI.Events.on(FauxtonAPI.constants.EVENT_TRAY_OPENED, this.onTrayOpenEvent, this);
+      FauxtonAPI.Events.on(FauxtonAPI.constants.EVENTS.TRAY_OPENED, this.onTrayOpenEvent, this);
     },
 
     cleanup: function() {
       $('body').off('click.' + this.trayId);
     },
 
-    // all trays publish a EVENT_TRAY_OPENED event containing their unique ID. This listens for those events and
+    // all trays publish a EVENTS.TRAY_OPENED event containing their unique ID. This listens for those events and
     // closes the current tray if it's already open
     onTrayOpenEvent: function (msg) {
       if (!_.has(msg, 'trayId')) {
@@ -239,7 +239,7 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
 
     hideTray: function () {
       var $tray = this.$('.tray');
-      $tray.velocity('reverse', FauxtonAPI.constants.TRAY_TOGGLE_SPEED, function () {
+      $tray.velocity('reverse', FauxtonAPI.constants.MISC.TRAY_TOGGLE_SPEED, function () {
         $tray.hide();
       });
 
@@ -247,11 +247,11 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
         this.$(this.toggleTrayBtnSelector).removeClass('enabled');
       }
       // announce that the tray is being closed
-      FauxtonAPI.Events.trigger(FauxtonAPI.constants.EVENT_TRAY_CLOSED, { trayId: this.trayId });
+      FauxtonAPI.Events.trigger(FauxtonAPI.constants.EVENTS.TRAY_CLOSED, { trayId: this.trayId });
     },
 
     showTray: function () {
-      this.$('.tray').velocity('transition.slideDownIn', FauxtonAPI.constants.TRAY_TOGGLE_SPEED);
+      this.$('.tray').velocity('transition.slideDownIn', FauxtonAPI.constants.MISC.TRAY_TOGGLE_SPEED);
       if (!_.isNull(this.toggleTrayBtnSelector)) {
         this.$(this.toggleTrayBtnSelector).addClass('enabled');
       }
@@ -260,7 +260,7 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
         this.onShowTray();
       }
 
-      FauxtonAPI.Events.trigger(FauxtonAPI.constants.EVENT_TRAY_OPENED, { trayId: this.trayId });
+      FauxtonAPI.Events.trigger(FauxtonAPI.constants.EVENTS.TRAY_OPENED, { trayId: this.trayId });
     },
 
     trayVisible: function () {
@@ -275,7 +275,7 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
     initialize: function (options) {
       var _options = options || {};
       this.endpoint = _options.endpoint || '_all_docs';
-      this.documentation = _options.documentation || 'docs';
+      this.documentation = _options.documentation || FauxtonAPI.constants.DOC_URLS.GENERAL;
 
       this.initTray({ toggleTrayBtnSelector: '.api-url-btn' });
     },
@@ -1036,7 +1036,7 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
 
     closeTray: function () {
       var $tray = this.$el;
-      $tray.velocity("reverse", FauxtonAPI.constants.TRAY_TOGGLE_SPEED, function () {
+      $tray.velocity("reverse", FauxtonAPI.constants.MISC.TRAY_TOGGLE_SPEED, function () {
         $tray.hide();
       });
       FauxtonAPI.Events.trigger('lookaheadTray:close');

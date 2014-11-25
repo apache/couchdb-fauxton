@@ -47,7 +47,7 @@ function(app, FauxtonAPI, PagingCollection) {
   Documents.Doc = FauxtonAPI.Model.extend({
     idAttribute: "_id",
     documentation: function(){
-      return "docs";
+      return FauxtonAPI.constants.DOC_URLS.GENERAL;
     },
     url: function(context) {
       if (context === "app") {
@@ -225,7 +225,7 @@ function(app, FauxtonAPI, PagingCollection) {
   Documents.DdocInfo = FauxtonAPI.Model.extend({
     idAttribute: "_id",
     documentation: function(){
-      return "docs";
+      return FauxtonAPI.constants.DOC_URLS.GENERAL;
     },
     initialize: function (_attrs, options) {
       this.database = options.database;
@@ -262,7 +262,7 @@ function(app, FauxtonAPI, PagingCollection) {
       return this.id.match(/^_design/) ? "design doc" : "doc";
     },
     documentation: function(){
-      return "docs";
+      return FauxtonAPI.constants.DOC_URLS.GENERAL;
     },
     url: function(context) {
       return this.collection.database.url(context) + "/" + this.safeID();
@@ -390,7 +390,7 @@ function(app, FauxtonAPI, PagingCollection) {
   Documents.AllDocs = PagingCollection.extend({
     model: Documents.Doc,
     documentation: function(){
-      return "docs";
+      return FauxtonAPI.constants.DOC_URLS.GENERAL;
     },
     initialize: function(_models, options) {
       this.viewMeta = options.viewMeta;
@@ -494,7 +494,7 @@ function(app, FauxtonAPI, PagingCollection) {
   Documents.IndexCollection = PagingCollection.extend({
     model: Documents.ViewRow,
     documentation: function(){
-      return "docs";
+      return FauxtonAPI.constants.DOC_URLS.GENERAL;
     },
     initialize: function(_models, options) {
       this.database = options.database;
@@ -629,7 +629,7 @@ function(app, FauxtonAPI, PagingCollection) {
   Documents.PouchIndexCollection = PagingCollection.extend({
     model: Documents.ViewRow,
     documentation: function(){
-      return "docs";
+      return FauxtonAPI.constants.DOC_URLS.GENERAL;
     },
     initialize: function(_models, options) {
       this.database = options.database;
