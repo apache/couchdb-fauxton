@@ -14,7 +14,7 @@ module.exports = {
   'Deletes a database': function (client) {
     var waitTime = 8000,
         newDatabaseName = client.globals.testDatabaseName,
-        baseUrl = client.globals.baseUrl;
+        baseUrl = client.globals.test_settings.launch_url;
 
     client
       .loginToGUI()
