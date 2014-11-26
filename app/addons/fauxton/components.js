@@ -1028,10 +1028,10 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
     },
 
     openTray: function () {
-      this.$el.velocity("transition.slideDownIn", FauxtonAPI.constants.TRAY_TOGGLE_SPEED, function () {
+      var speed = FauxtonAPI.constants.MISC.TRAY_TOGGLE_SPEED;
+      this.$el.velocity('transition.slideDownIn', speed, function () {
         this.$el.find('input').focus();
       }.bind(this));
-
     },
 
     closeTray: function () {
