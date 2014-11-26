@@ -1,7 +1,7 @@
 {
-  "src_folders": ["app/addons/databases/tests/nightwatch","app/addons/documents/tests/nightwatch"],
-  "custom_commands_path": "test/nightwatch_tests/custom-commands",
-  "globals_path": "test/nightwatch_tests/helpers/helpers.js",
+  "src_folders": <%= src_folders %>,
+  "custom_commands_path": <%= custom_commands_path %>,
+  "globals_path": "<%- globals_path %>",
 
   "output_folder" : "./test/nightwatch_tests/reports",
   "custom_assertions_path" : "",
@@ -22,9 +22,9 @@
 
   "test_settings" : {
     "default" : {
-      "username": "tester",
-      "password": "testerpass",
-      "launch_url" : "localhost:8000",
+      "username": "<%- username %>",
+      "password": "<%- password %>",
+      "launch_url" : "<%- launch_url %>",
       "selenium_host" : "127.0.0.1",
       "selenium_port" : 4444,
       "silent" : true,

@@ -410,6 +410,15 @@ module.exports = function(grunt) {
     
     selenium_start: {
       options: { port: 4444 }
+    },
+
+    // generates the nightwatch.json file with appropriate content for this env
+    initNightwatch: {
+      default: {
+        settings: helper.readSettingsFile(),
+        template: 'test/nightwatch_tests/nightwatch.json.underscore',
+        dest: 'test/nightwatch_tests/nightwatch.json'
+      }
     }
   });
 
@@ -424,39 +433,6 @@ module.exports = function(grunt) {
     }
   });
 
-
-  // enable running of a single test with nightwatch
-  var fileArg = grunt.option('file');
-  if (fileArg) {
-    fileArg = fileArg + '.js';
-    var nightwatchConf = require('./test/nightwatch_tests/nightwatch.json'),
-        paths;
-
-    paths = nightwatchConf.src_folders.reduce(function (acc, dir) {
-      if (fs.existsSync(dir + '/' + fileArg)) {
-        acc.push(dir + '/' + fileArg);
-      }
-      return acc;
-    }, []);
-
-    if (paths.length > 1) {
-      throw new Error('Found multiple tests');
-    }
-
-    if (!paths.length) {
-      throw new Error('Found no testfile named ' + fileArg);
-    }
-
-    grunt.config.merge({
-      exec: {
-        start_nightWatch: {
-           command: __dirname + '/node_modules/nightwatch/bin/nightwatch' +
-            ' -t ' + paths[0] +
-            ' -e chrome -c ' + __dirname + '/test/nightwatch_tests/nightwatch.json'
-        }
-      }
-    });
-  }
 
   /*
    * Load Grunt plugins
@@ -545,6 +521,5 @@ module.exports = function(grunt) {
    * Nightwatch functional testing
    */
   //Start Nightwatch test from terminal, using: $ grunt nightwatch
-  grunt.registerTask('nightwatch', [ 'exec:check_selenium', 'selenium_start', 'exec:check_chrome_driver', 'exec:start_nightWatch']);
-
+  grunt.registerTask('nightwatch', [ 'exec:check_selenium', 'selenium_start', 'exec:check_chrome_driver', 'initNightwatch', 'exec:start_nightWatch']);
 };

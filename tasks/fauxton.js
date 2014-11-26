@@ -133,4 +133,98 @@ module.exports = function(grunt) {
 
     grunt.file.write('./test/test.config.js', configTemplate({configInfo: configInfo, testFiles: testFiles}));
   });
+
+
+  // run every time nightwatch is executed from the command line
+  grunt.registerMultiTask('initNightwatch', 'Sets up Nightwatch', function () {
+
+    // perform a little validation on the settings
+    _validateNightwatchSettings(this.data.settings);
+
+    // figure out what tests we need to run by examining the settings.json file content
+    var addonsWithTests = _getNightwatchTests(this.data.settings);
+
+    // if the user passed a --file="X" on the command line, filter out
+    var singleTestToRun = grunt.option('file');
+    if (singleTestToRun) {
+      addonsWithTests = _findSpecificNightwatchTest(addonsWithTests, singleTestToRun);
+    }
+
+    // now generate the new nightwatch.json file
+    var nightwatchTemplate = _.template(grunt.file.read(this.data.template));
+    grunt.file.write(this.data.dest, nightwatchTemplate({
+      src_folders: JSON.stringify(addonsWithTests),
+      custom_commands_path: JSON.stringify(this.data.settings.nightwatch.custom_commands_path),
+      globals_path: this.data.settings.nightwatch.globals_path,
+      username: this.data.settings.nightwatch.username,
+      password: this.data.settings.nightwatch.password,
+      launch_url: this.data.settings.nightwatch.launch_url
+    }));
+  });
+
+
+  // HELPERS
+
+  function _validateNightwatchSettings (data) {
+    var error = '';
+
+    // if the settings file didn't contain any addons, it points to bigger problems!
+    if (!data.deps.length) {
+      error = 'No addons listed in settings.json - no tests to run!';
+
+    // check the requires nightwatch settings. These should always exist in the settings.json file
+    } else if (!_.has(data, 'nightwatch') ||
+      !_.has(data.nightwatch, 'username') ||
+      !_.has(data.nightwatch, 'password') ||
+      !_.has(data.nightwatch, 'launch_url')) {
+      error = 'Your settings.json file doesn\'t contain valid nightwatch settings. Please check the user doc.';
+    }
+
+    if (error) {
+      grunt.fail.fatal(error);
+    }
+  };
+
+  function _findSpecificNightwatchTest (addonsWithTests, file) {
+    var filename = file + '.js';
+
+    var paths = addonsWithTests.reduce(function (acc, dir) {
+      if (fs.existsSync(dir + '/' + filename)) {
+        acc.push(dir + '/' + filename);
+      }
+      return acc;
+    }, []);
+
+    if (paths.length > 1) {
+      grunt.fail.fatal('Found multiple nightwatch tests with that filename.');
+    } else if (!paths.length) {
+      grunt.fail.fatal('Found no testfile named ' + filename);
+    }
+
+    return paths[0];
+  };
+
+  function _getNightwatchTests (settings) {
+    var addonBlacklist = (_.has(settings.nightwatch, 'addonBlacklist')) ? settings.nightwatch.addonBlacklist : [];
+
+    return _.filter(settings.deps, function(addon) {
+
+      // if we've explicitly been told to ignore this addon's test, ignore 'em!
+      if (_.contains(addonBlacklist, addon.name)) {
+        return false;
+      }
+
+      var fileLocation = 'app/addons/' + addon.name + '/tests/nightwatch';
+      if (_.has(addon, 'path')) {
+        fileLocation = addon.path + '/tests/nightwatch';
+      }
+
+      // see if the addon has any tests
+      return fs.existsSync(fileLocation);
+
+    }).map(function(addon) {
+      return 'app/addons/' + addon.name + '/tests/nightwatch';
+    });
+  }
+
 };

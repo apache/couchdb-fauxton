@@ -16,7 +16,7 @@ module.exports = {
         newDatabaseName = client.globals.testDatabaseName,
         newDocumentName1 = 'bulktest1',
         newDocumentName2 = 'bulktest2',
-        baseUrl = client.globals.baseUrl;
+        baseUrl = client.globals.test_settings.launch_url;
 
     client
       .loginToGUI()
@@ -44,7 +44,7 @@ module.exports = {
   'Select all works after changing the page': function (client) {
     var waitTime = 10000,
         newDatabaseName = client.globals.testDatabaseName,
-        baseUrl = client.globals.baseUrl;
+        baseUrl = client.globals.test_settings.launch_url;
 
     client
       .loginToGUI()

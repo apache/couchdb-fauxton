@@ -17,7 +17,7 @@ module.exports = {
   'Navigate to and from New View Page' : function (client) {
     var waitTime = 10000,
       newDatabaseName = client.globals.testDatabaseName,
-      baseUrl = client.globals.baseUrl;
+      baseUrl = client.globals.test_settings.launch_url;
 
     client
       .loginToGUI()
