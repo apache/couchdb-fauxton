@@ -284,7 +284,12 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
   Views.AllDocsList = FauxtonAPI.View.extend({
     template: "addons/documents/templates/all_docs_list",
 
-    className: 'show-select',
+    className: function () {
+      if (this.viewList) {
+        return '';
+      }
+      return 'show-select';
+    },
 
     events: {
       'click button.js-all': 'selectAll',
