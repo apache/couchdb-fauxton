@@ -249,6 +249,19 @@ table.databases {
   }
 }
 
+.scrollable {
+  height: auto;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  width: 100%;
+  position: absolute;
+  padding: 0;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  top: 60px;
+}
 
 /*ONE PANEL TEMPLATE ONLY STYLES  AKA _all_dbs */
 
@@ -733,7 +746,6 @@ REUSEABLE SHADOW BORDER
 //----footer--///
 footer.pagination-footer {
   z-index: 1;
-  min-width: 600px;
   position:fixed;
   background-color:#fff;
   bottom:0;
@@ -756,10 +768,6 @@ footer.pagination-footer {
       }
     }
   }
-}
-
-footer.index-pagination {
-  margin-left: -20px;
 }
 
 #item-numbers{

@@ -38,9 +38,13 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
     });
   }
 
+  Views.Footer = FauxtonAPI.View.extend({
+    template: "addons/documents/templates/all_docs_footer",
+  });
+
   Views.RightAllDocsHeader = FauxtonAPI.View.extend({
     className: "header-right",
-    template: "addons/documents/templates/header_alldocs",
+    template: "addons/documents/templates/all_docs_header",
     events: {
       'click .toggle-select-menu': 'selectAllMenu'
     },
@@ -235,6 +239,12 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
       'change #select-per-page': 'updatePerPage'
     },
 
+    establish: function () {
+      return this.collection.fetch({
+        reset: true
+      });
+    },
+
     updatePerPage: function (event) {
       this._perPage = parseInt(this.$('#select-per-page :selected').val(), 10);
       this.pagination.updatePerPage(this.perPage());
@@ -279,8 +289,6 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
     }
   });
 
-
-  // TODO: Rename to reflect that this is a list of rows or documents
   Views.AllDocsList = FauxtonAPI.View.extend({
     template: "addons/documents/templates/all_docs_list",
 
@@ -307,11 +315,9 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
         this.designDocs = options.ddocInfo.designDocs;
         this.ddocID = options.ddocInfo.id;
       }
-      this.newView = options.newView || false;
       this.docParams = options.docParams || {};
-      this.params = options.params || {};
       this.expandDocs = true;
-      this.perPageDefault = this.docParams.limit || 20;
+      this.perPageDefault = options.perPageDefault;
 
       // some doclists don't have an option to delete
       if (!this.viewList) {
@@ -323,7 +329,8 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
       FauxtonAPI.when(ids.map(function (id) {
         return this.removeDocument(id);
       }.bind(this))).done(function () {
-        this.pagination.updatePerPage(parseInt(this.$('#select-per-page :selected').val(), 10));
+        var perPage = this.pagination.getPerPage();
+        this.pagination.updatePerPage(perPage);
         FauxtonAPI.triggerRouteEvent('perPageChange', this.pagination.documentsLeftToFetch());
         FauxtonAPI.addNotification({
           msg: 'Successfully deleted your docs',
@@ -448,7 +455,6 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
     serialize: function() {
       return {
         viewList: this.viewList,
-        resizeLayout: "", //this.viewList ? "-half":"",
         expandDocs: this.expandDocs,
         endOfResults: !this.pagination.canShowNextfn()
       };
@@ -479,17 +485,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
       this.bulkDeleteDocsCollection.bulkDelete();
     },
 
-    addPagination: function () {
-      this.pagination = new Components.IndexPagination({
-        collection: this.collection,
-        scrollToSelector: '#dashboard-content',
-        docLimit: this.params.limit,
-        perPage: this.perPageDefault
-      });
-    },
-
     cleanup: function () {
-      this.pagination && this.pagination.remove();
       this.allDocsNumber && this.allDocsNumber.remove();
       _.each(this.rows, function (row) {row.remove();});
     },
@@ -504,23 +500,10 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
     beforeRender: function() {
       var docs;
 
-      if (!this.pagination) {
-        this.addPagination();
-      }
-
-      this.insertView('#documents-pagination', this.pagination);
-
-      if (!this.allDocsNumber) {
-        this.allDocsNumber = new Views.AllDocsNumber({
-          collection: this.collection,
-          newView: this.newView,
-          pagination: this.pagination,
-          perPageDefault: this.perPageDefault
-        });
-      }
-
-      this.setView('#item-numbers', this.allDocsNumber);
       this.removeNestedViews();
+
+      this.pagination.setCollection(this.collection);
+      this.allDocsNumber.setCollection(this.collection);
 
       docs = this.expandDocs ? this.collection : this.collection.simple();
 
@@ -546,9 +529,6 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
 
     setCollection: function (collection) {
       this.collection = collection;
-      if (!this.pagination) {
-        this.addPagination();
-      }
       this.pagination.setCollection(collection);
       this.allDocsNumber.setCollection(collection);
     },

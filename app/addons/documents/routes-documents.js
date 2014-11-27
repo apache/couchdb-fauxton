@@ -97,10 +97,19 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
       this.listenTo(FauxtonAPI.Events, 'lookaheadTray:update', this.onSelectDatabase);
     },
 
+    establish: function () {
+      return [
+        this.designDocs.fetch({reset: true}),
+        this.allDatabases.fetchOnce()
+      ];
+    },
+
     initViews: function (dbName) {
       this.databaseName = dbName;
       this.database = new Databases.Model({id: this.databaseName});
       this.allDatabases = new Databases.List();
+
+      this.footer = this.setView("#footer", new Documents.Views.Footer());
 
       this.designDocs = new Documents.AllDocs(null, {
         database: this.database,
@@ -116,7 +125,7 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
       });
 
       this.rightHeader = this.setView("#right-header", new Documents.Views.RightAllDocsHeader({
-         database: this.database
+        database: this.database
       }));
 
       this.leftheader = this.setView("#breadcrumbs", new Components.LeftHeader({
@@ -216,10 +225,6 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
       };
     },
 
-    establish: function () {
-      return [this.designDocs.fetch({reset: true}), this.allDatabases.fetchOnce()];
-    },
-
     createParams: function (options) {
       var urlParams = app.getParams(options),
           params = Documents.QueryParams.parse(urlParams),
@@ -239,7 +244,8 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
     allDocs: function(databaseName, options) {
       var params = this.createParams(options),
           urlParams = params.urlParams,
-          docParams = params.docParams;
+          docParams = params.docParams,
+          collection;
 
       if (this.eventAllDocs) {
         this.eventAllDocs = false;
@@ -249,6 +255,7 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
       this.leftheader.updateCrumbs(crumbs.allDocs(this.database));
 
       this.database.buildAllDocs(docParams);
+      collection = this.database.allDocs;
 
       if (docParams.startkey && docParams.startkey.indexOf("_design") > -1) {
         this.sidebar.setSelectedTab("design-docs");
@@ -259,11 +266,35 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
       this.viewEditor && this.viewEditor.remove();
       this.database.allDocs.paging.pageSize = this.getDocPerPageLimit(urlParams, parseInt(docParams.limit, 10));
 
+      if (!docParams) {
+        docParams = {};
+      }
+      this.perPageDefault = docParams.limit || FauxtonAPI.constants.MISC.DEFAULT_PAGE_SIZE;
+
+      this.pagination = new Components.IndexPagination({
+        collection: collection,
+        scrollToSelector: '.scrollable',
+        docLimit: urlParams.limit,
+        perPage: this.perPageDefault
+      });
+      this.setView('#documents-pagination', this.pagination);
+
+      this.allDocsNumber = new Documents.Views.AllDocsNumber({
+        collection: collection,
+        pagination: this.pagination,
+        perPageDefault: this.perPageDefault
+      });
+
+      this.setView('#item-numbers', this.allDocsNumber);
+
+      // documentsView will populate the collection
       this.documentsView = this.setView("#dashboard-lower-content", new Documents.Views.AllDocsList({
+        pagination: this.pagination,
+        allDocsNumber: this.allDocsNumber,
         database: this.database,
-        collection: this.database.allDocs,
+        collection: collection,
         docParams: docParams,
-        params: urlParams,
+        perPageDefault: this.perPageDefault,
         bulkDeleteDocsCollection: new Documents.BulkDeleteDocCollection([], {databaseId: this.database.get('id')})
       }));
 
@@ -341,13 +372,37 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
     },
 
     createViewDocumentsView: function (options) {
+      if (!options.docParams) {
+        options.docParams = {};
+      }
+
+      this.perPageDefault = options.docParams.limit || FauxtonAPI.constants.MISC.DEFAULT_PAGE_SIZE;
+
+      this.pagination = new Components.IndexPagination({
+        collection: options.indexedDocs,
+        scrollToSelector: '.scrollable',
+        docLimit: options.urlParams.limit,
+        perPage: this.perPageDefault
+      });
+      this.setView('#documents-pagination', this.pagination);
+
+      this.allDocsNumber = new Documents.Views.AllDocsNumber({
+        collection: options.indexedDocs,
+        pagination: this.pagination,
+        perPageDefault: this.perPageDefault
+      });
+
+      this.setView('#item-numbers', this.allDocsNumber);
+
       return this.setView("#dashboard-lower-content", new Documents.Views.AllDocsList({
+        pagination: this.pagination,
+        allDocsNumber: this.allDocsNumber,
         database: options.database,
         collection: options.indexedDocs,
         viewList: true,
         ddocInfo: this.ddocInfo(options.designDoc, options.designDocs, options.view),
         docParams: options.docParams,
-        params: options.urlParams
+        perPageDefault: this.perPageDefault,
       }));
     },
 
@@ -533,6 +588,9 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
       }
       if (this.sidebar) {
         this.removeView('#sidebar');
+      }
+      if (this.footer) {
+        this.removeView('#footer');
       }
     }
 

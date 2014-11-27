@@ -496,7 +496,12 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
     setCollection: function (collection) {
       this.collection = collection;
       this.setDefaults();
+      this.render();
     },
+
+    getPerPage: function () {
+      return this.perPage;
+    }
 
   });
 

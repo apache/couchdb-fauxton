@@ -637,8 +637,13 @@ function(app, FauxtonAPI, PagingCollection) {
       this.view = options.view;
       this.design = options.design.replace('_design/','');
       this.params = _.extend({limit: 20, reduce: false}, options.params);
-
       this.idxType = "_view";
+
+      this.viewMeta = {
+        total_rows: this.rows.length,
+        offset: 0,
+        update_seq: false
+      };
     },
 
     url: function () {
@@ -667,12 +672,6 @@ function(app, FauxtonAPI, PagingCollection) {
     fetch: function() {
       var deferred = FauxtonAPI.Deferred();
       this.reset(this.rows, {silent: true});
-
-      this.viewMeta = {
-        total_rows: this.rows.length,
-        offset: 0,
-        update_seq: false
-      };
 
       deferred.resolve();
       return deferred;
