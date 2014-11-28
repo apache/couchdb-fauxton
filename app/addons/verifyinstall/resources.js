@@ -11,10 +11,10 @@
 // the License.
 
 define([
-  "app",
-  "api",
-  "addons/databases/resources",
-  "addons/documents/resources"
+  'app',
+  'api',
+  'addons/databases/resources',
+  'addons/documents/resources'
 ],
 
 function (app, FauxtonAPI, Databases, Documents) {
@@ -33,7 +33,6 @@ function (app, FauxtonAPI, Databases, Documents) {
   var doc, viewDoc;
 
   Verifyinstall.testProcess = {
-
     saveDoc: function () {
       doc = new Documents.Doc({_id: 'test_doc_1', a: 1}, {
         database: db
@@ -47,7 +46,7 @@ function (app, FauxtonAPI, Databases, Documents) {
     },
 
     updateDoc: function () {
-      doc.set({b: "hello"});
+      doc.set({b: 'hello'});
       return doc.save(); 
     },
 
@@ -66,7 +65,7 @@ function (app, FauxtonAPI, Databases, Documents) {
       .then(function () {
         deferred.resolve();
       }, function (xhr, error, reason) {
-        if (reason === "Unauthorized") {
+        if (reason === 'Unauthorized') {
           deferred.reject(xhr, error, reason);
         }
       });
@@ -92,8 +91,8 @@ function (app, FauxtonAPI, Databases, Documents) {
           return deferred.resolve();
         }
         var reason = {
-            reason: 'Values expect 6, got ' + row.value
-          };
+          reason: 'Values expect 6, got ' + row.value
+        };
 
         deferred.reject({responseText: JSON.stringify(reason)});
       }, deferred.reject);
@@ -102,31 +101,23 @@ function (app, FauxtonAPI, Databases, Documents) {
     },
 
     setupView: function () {
-      var doc1 = new Documents.Doc({_id: 'test_doc10', a: 1}, {
-        database: db
-      });
-
-      var doc2 = new Documents.Doc({_id: 'test_doc_20', a: 2}, {
-        database: db
-      });
-
-      var doc3 = new Documents.Doc({_id: 'test_doc_30', a: 3}, {
-        database: db
-      });
+      var doc1 = new Documents.Doc({_id: 'test_doc_10', a: 1}, { database: db });
+      var doc2 = new Documents.Doc({_id: 'test_doc_20', a: 2}, { database: db });
+      var doc3 = new Documents.Doc({_id: 'test_doc_30', a: 3}, { database: db });
 
       viewDoc = new Documents.Doc({
         _id: '_design/view_check',
         views: {
           'testview': { 
-            map:'function (doc) { emit(doc._id, doc.a); }',
+            map: 'function (doc) { emit(doc._id, doc.a); }',
             reduce: '_sum'
           }
         } 
       },{
-        database: db,
+        database: db
       });
 
-      return FauxtonAPI.when([doc1.save(),doc2.save(), doc3.save(), viewDoc.save()]);
+      return FauxtonAPI.when([doc1.save(), doc2.save(), doc3.save(), viewDoc.save()]);
     },
 
     setupReplicate: function () {
@@ -140,7 +131,7 @@ function (app, FauxtonAPI, Databases, Documents) {
           create_target: true,
           source: 'verifytestdb',
           target: 'verifytestdb_replicate'
-        }),
+        })
       });
     },
 
@@ -168,7 +159,6 @@ function (app, FauxtonAPI, Databases, Documents) {
     removeDBs: function () {
       dbReplicate.destroy();
       db.destroy();
-
     }
   };
 
