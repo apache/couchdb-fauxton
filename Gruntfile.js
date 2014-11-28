@@ -405,6 +405,10 @@ module.exports = function(grunt) {
       start_nightWatch: {
          command: __dirname + '/node_modules/nightwatch/bin/nightwatch' +
           ' -e chrome -c ' + __dirname + '/test/nightwatch_tests/' + 'nightwatch.json'
+      },
+      start_nightWatch_saucelabs: {
+         command: __dirname + '/node_modules/nightwatch/bin/nightwatch' +
+          ' -e saucelabs -c ' + __dirname + '/test/nightwatch_tests/' + 'nightwatch.json'
       }
     },
     
@@ -429,6 +433,7 @@ module.exports = function(grunt) {
   var fileArg = grunt.option('file');
   if (fileArg) {
     fileArg = fileArg + '.js';
+    helper.getSourceDirectoriesForNightwatch();
     var nightwatchConf = require('./test/nightwatch_tests/nightwatch.json'),
         paths;
 
@@ -544,7 +549,9 @@ module.exports = function(grunt) {
   /* 
    * Nightwatch functional testing
    */
+  grunt.registerTask('write_nightwatch_json', helper.getSourceDirectoriesForNightwatch);
   //Start Nightwatch test from terminal, using: $ grunt nightwatch
-  grunt.registerTask('nightwatch', [ 'exec:check_selenium', 'selenium_start', 'exec:check_chrome_driver', 'exec:start_nightWatch']);
+  grunt.registerTask('nightwatch', [ 'write_nightwatch_json', 'exec:check_selenium', 'selenium_start', 'exec:check_chrome_driver', 'exec:start_nightWatch']);
+  grunt.registerTask('nightwatch_saucelabs', [ 'write_nightwatch_json', 'exec:start_nightWatch_saucelabs']);
 
 };

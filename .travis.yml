@@ -1,5 +1,22 @@
 language: node_js
 node_js:
-  - "0.10"
+- '0.10'
 git:
   depth: 10
+services:
+- couchdb
+addons:
+  sauce_connect: true
+before_install:
+- HOST="http://127.0.0.1:5984"
+- curl -X PUT $HOST/_config/admins/tester -d '"testerpass"'
+before_script:
+- npm install -g grunt-cli
+- grunt dev &
+- cat test/nightwatch_tests/nightwatch.json
+script:
+- grunt nightwatch_saucelabs
+env:
+  global:
+  - secure: trGh/ErlpS0w8hIXQbo79SC3tFaL5uw7ESEZIXHmEodzICMU2OD/u6ZMrOrAX5w+tHFMpyWPEPygV33UO1RDZ1GDK1b0RjEDSR0ZSDCOfLKRkFxbGj/5bWVMjN9/EE5WO3ifiYwOQ+rF/+28TxlukxQAz8/Sa9HgLp1YkL/S9zI=
+  - secure: VzIhrss7tKhH6A7q1j5SVL2m0fFtSrjczEMG+rJzzNGt4GLcOAcGMhbOe9Xa4X+pufaK56rOyuCFlFy4MHeJ6gIpkTtcJjIb2KkHlnBJ6BJVJePc3JmTfyhCnEUrYz2iHJiM0OvDhU+1rb1yVM9ofT22RjnDBYxuXvXEmBB3EKE=
