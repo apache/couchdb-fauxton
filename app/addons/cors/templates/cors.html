@@ -1,0 +1,50 @@
+<!--
+Licensed under the Apache License, Version 2.0 (the "License"); you may not
+use this file except in compliance with the License. You may obtain a copy of
+the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+License for the specific language governing permissions and limitations under
+the License.
+-->
+
+<header id="cors-header">
+  <p>Cross-Origin Resource Sharing (CORS) lets you connect to remote servers directly from the browser, so you can host browser-based apps on static pages and talk directly with CouchDB to load your data.</p>
+</header>
+
+<form id="corsForm">
+
+  <div class="cors-enable">
+    <label class="checkbox">
+      <input type="checkbox" class="js-enable-cors" name="enable_cors" <% if  (typeof enableCors !== 'undefined' && enableCors === 'true') { %> checked="checked" <% } %>> Enable CORS
+    </label>
+  </div>
+  
+  <div id="collapsing-container">
+    <p><strong>Origin Domains</strong></p>
+    
+    <p>Databases will accept requests from these domains:</p>
+    
+    <label class="checkbox"><input type="checkbox" class="js-all-origin-domains" name="all_origin_domains"> All origin domains ( * )</label></li>
+        
+    <label class="checkbox"><input type="checkbox" class="js-restrict-origin-domains" name="restrict_origin_domains"> Restrict to specific origin domains</label>
+      
+    <div id="origin-domains-container">
+      <div class="origin-domains"></div>
+      <input type="text" class="new-origin-domain" name="new_origin_domain" value="" placeholder="e.g., https://site.com" />
+    </div>
+    
+    </div>
+    
+  </div>
+
+  <div class="form-actions">
+    <input class="btn btn-success" type="submit" value="Save" />
+  </div>
+
+</form>
+

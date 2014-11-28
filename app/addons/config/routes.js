@@ -14,16 +14,33 @@ define([
   'app',
   'api',
   'addons/config/resources',
-  'addons/config/views'
+  'addons/config/views',
+  'addons/cors/views'
 ],
 
-function(app, FauxtonAPI, Config, Views) {
+function(app, FauxtonAPI, Config, Views, CORS) {
 
   var ConfigRouteObject = FauxtonAPI.RouteObject.extend({
-    layout: 'one_pane',
+    layout: 'with_tabs_sidebar',
 
     initialize: function () {
       this.configs = new Config.Collection();
+      this.cors = new CORS.config();
+      
+      this.sidebar = this.setView("#sidebar-content", new Views.Tabs({
+        sidebarItems: [
+          {
+            title: 'Main config',
+            typeSelect: 'main',
+            link: '_config'
+          },
+          {
+            title: 'CORS',
+            typeSelect: 'cors',
+            link: '_config/cors'
+          }
+        ]
+      }));
     },
 
     roles: ['_admin'],
@@ -38,12 +55,20 @@ function(app, FauxtonAPI, Config, Views) {
     },
 
     routes: {
-      '_config': 'config'
+      '_config': 'config',
+      '_config/cors':'configCORS'
     },
 
     config: function () {
       this.newSection = this.setView('#right-header', new Views.ConfigHeader({ collection: this.configs }));
       this.setView('#dashboard-content', new Views.Table({ collection: this.configs }));
+      this.sidebar.setSelectedTab("main");
+    },
+    
+    configCORS: function() {
+      this.removeView('#right-header');
+      this.newSection = this.setView('#dashboard-content', new CORS.Views.CORSMain({ model: this.cors }));
+      this.sidebar.setSelectedTab("cors");
     },
 
     establish: function () {
