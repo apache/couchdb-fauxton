@@ -11,9 +11,9 @@
 // the License.
 
 define([
-  "app",
-  "api",
-  "addons/verifyinstall/views"
+  'app',
+  'api',
+  'addons/verifyinstall/views'
 ],
 function(app, FauxtonAPI, VerifyInstall) {
 
@@ -21,9 +21,9 @@ function(app, FauxtonAPI, VerifyInstall) {
     layout: 'one_pane',
 
     routes: {
-      'verifyinstall': "verifyInstall"
+      'verifyinstall': 'verifyInstall'
     },
-    selectedHeader: "Verify",
+    selectedHeader: 'Verify',
 
     verifyInstall: function () {
       this.setView('#dashboard-content', new VerifyInstall.Main({}));
@@ -33,5 +33,6 @@ function(app, FauxtonAPI, VerifyInstall) {
   });
 
   VerifyInstall.RouteObjects = [VerifyRouteObject];
+
   return VerifyInstall;
 });
