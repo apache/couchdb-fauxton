@@ -1,0 +1,10 @@
+<ul class="nav nav-list">
+  <% _.each(sidebarItems, function (item) { %>
+    <li>
+    <a data-type-select="<%- item.typeSelect %>" href="#<%- item.link %>">
+      <span class="<%- item.icon %>"></span>
+      <%- item.title %>
+    </a>
+    </li>
+  <% }); %>
+</ul>

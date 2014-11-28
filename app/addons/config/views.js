@@ -244,6 +244,30 @@ function(app, FauxtonAPI, Config, Components) {
       });
     }
   });
+  
+  Views.Tabs = FauxtonAPI.View.extend({
+    className: "sidenav",
+    tagName: "nav",
+    template: 'addons/config/templates/sidebartabs',
+    initialize: function (options) {
+      this.sidebarItems = options.sidebarItems;
+    },
+
+    setSelectedTab: function (selectedTab) {
+      this.selectedTab = selectedTab;
+      this.$('li').removeClass('active');
+      this.$('a[data-type-select="'+this.selectedTab+'"]').parent("li").addClass('active');
+    },
+    afterRender: function(){
+      this.setSelectedTab(this.selectedTab);
+    },
+
+    serialize: function () {
+      return {
+        sidebarItems: this.sidebarItems
+      };
+    }
+  });
 
   return Views;
 });

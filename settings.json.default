@@ -7,6 +7,7 @@
   { "name": "activetasks" },
   { "name": "config" },
   { "name": "replication" },
+  { "name": "cors" },
   { "name": "plugins" },
   { "name": "contribute" },
   { "name": "permissions" },
