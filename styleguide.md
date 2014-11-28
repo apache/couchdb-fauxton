@@ -52,6 +52,7 @@ var $ul = $('#myList');
 - Prefix selectors that deal with JavaScript with `js-`. This way it’s clear the separation between class selectors that
 deal with presentation (CSS) and functionality (JavaScript).
 - Use the same naming criterion as with CSS selector names, ie, lowercase and consequent words separated by dashes.
+- Inside Backbone Views, always use `this.$("...")` to target elements, even IDs.
 
 #### Control statements
 Use Underscore's more concise looping methods (`_.each`, `_.filter`) over plain vanilla `for` loops.
