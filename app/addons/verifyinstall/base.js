@@ -11,21 +11,20 @@
 // the License.
 
 define([
-  "app",
-  "api",
-  "addons/verifyinstall/routes"
+  'app',
+  'api',
+  'addons/verifyinstall/routes'
 ],
 
 function(app, FauxtonAPI, VerifyInstall) {
   VerifyInstall.initialize = function () {
     FauxtonAPI.addHeaderLink({
-        title: "Verify", 
-        href: "#verifyinstall",
-        icon: "fonticon-ok-circled",
-        bottomNav: true,
+        title: 'Verify',
+        href: '#verifyinstall',
+        icon: 'fonticon-ok-circled',
+        bottomNav: true
       });
   };
-
 
   return VerifyInstall;
 });

@@ -11,9 +11,9 @@
 // the License.
 
 define([
-  "app",
-  "api",
-  "addons/verifyinstall/resources",
+  'app',
+  'api',
+  'addons/verifyinstall/resources'
 ],
 function(app, FauxtonAPI, VerifyInstall) {
 
@@ -21,10 +21,10 @@ function(app, FauxtonAPI, VerifyInstall) {
     template: 'addons/verifyinstall/templates/main',
 
     events: {
-      "click #start": "startTest"
+      'click #start': 'startTest'
     },
 
-    initialize: function (options) {
+    initialize: function () {
       _.bindAll(this);
     },
 
@@ -69,7 +69,6 @@ function(app, FauxtonAPI, VerifyInstall) {
         setError(id, JSON.parse(xhr.responseText).reason);
       };
     },
-
     
     startTest: function () {
       this.disableButton();
@@ -78,7 +77,6 @@ function(app, FauxtonAPI, VerifyInstall) {
       var testProcess = VerifyInstall.testProcess,
           setPass = this.setPass,
           complete = this.complete,
-          setError = this.setError,
           formatError = this.formatError;
 
       testProcess.setup()
