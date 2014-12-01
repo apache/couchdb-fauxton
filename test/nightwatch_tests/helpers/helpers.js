@@ -1,12 +1,11 @@
+var nano = require('nano');
+
 module.exports = {
 
   testDatabaseName : 'fauxton-selenium-tests',
 
-  getNanoInstance : function () {
-    var user = this.test_settings.username,
-        pass = this.test_settings.password,
-        launch_url = this.test_settings.launch_url;
-    return require('nano')('http://' + user + ':' + pass + '@' + launch_url);
+  getNanoInstance: function () {
+    return nano(this.test_settings.db_url);
   },
 
   beforeEach: function (done) {

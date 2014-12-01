@@ -158,7 +158,11 @@ module.exports = function(grunt) {
       globals_path: this.data.settings.nightwatch.globals_path,
       username: this.data.settings.nightwatch.username,
       password: this.data.settings.nightwatch.password,
-      launch_url: this.data.settings.nightwatch.launch_url
+      launch_url: this.data.settings.nightwatch.launch_url,
+      fauxton_host: this.data.settings.nightwatch.fauxton_host,
+      fauxton_port: this.data.settings.nightwatch.fauxton_port,
+      db_host: this.data.settings.nightwatch.db_host,
+      db_port: this.data.settings.nightwatch.db_port
     }));
   });
 
@@ -175,8 +179,7 @@ module.exports = function(grunt) {
     // check the requires nightwatch settings. These should always exist in the settings.json file
     } else if (!_.has(data, 'nightwatch') ||
       !_.has(data.nightwatch, 'username') ||
-      !_.has(data.nightwatch, 'password') ||
-      !_.has(data.nightwatch, 'launch_url')) {
+      !_.has(data.nightwatch, 'password')) {
       error = 'Your settings.json file doesn\'t contain valid nightwatch settings. Please check the user doc.';
     }
 
