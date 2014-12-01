@@ -13,10 +13,8 @@ before_install:
 before_script:
 - npm install -g grunt-cli
 - grunt dev &
-- cat test/nightwatch_tests/nightwatch.json
 script:
 - grunt nightwatch_saucelabs
 env:
   global:
-  - secure: trGh/ErlpS0w8hIXQbo79SC3tFaL5uw7ESEZIXHmEodzICMU2OD/u6ZMrOrAX5w+tHFMpyWPEPygV33UO1RDZ1GDK1b0RjEDSR0ZSDCOfLKRkFxbGj/5bWVMjN9/EE5WO3ifiYwOQ+rF/+28TxlukxQAz8/Sa9HgLp1YkL/S9zI=
-  - secure: VzIhrss7tKhH6A7q1j5SVL2m0fFtSrjczEMG+rJzzNGt4GLcOAcGMhbOe9Xa4X+pufaK56rOyuCFlFy4MHeJ6gIpkTtcJjIb2KkHlnBJ6BJVJePc3JmTfyhCnEUrYz2iHJiM0OvDhU+1rb1yVM9ofT22RjnDBYxuXvXEmBB3EKE=
+    secure: ReVyiiHg5+Q7G3270JmhyUdYzMmQKAKPIX7Wzo3dBjlv5IU0sGZwoI0I1DeDrTYb+6SMScV70/Ac4eI75kto7xPIIky1JJGSB0FlvEWlDEgrt6WejyWJUmmnEgBZ85R9KfBtLMlnbEI/1fNaevzQg9I9yCdlasPSezHsGzEOpdc=
