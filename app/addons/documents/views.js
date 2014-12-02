@@ -396,6 +396,10 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
       if (this.$('.js-to-delete').length < this.$('.all-docs-item').length) {
         return;
       }
+
+      if (this.bulkDeleteDocsCollection.length === 0) {
+        return;
+      }
       this.$('.js-all').addClass('active');
     },
 
@@ -488,6 +492,8 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
     cleanup: function () {
       this.allDocsNumber && this.allDocsNumber.remove();
       _.each(this.rows, function (row) {row.remove();});
+
+      this.bulkDeleteDocsCollection.reset();
     },
 
     removeNestedViews: function () {
