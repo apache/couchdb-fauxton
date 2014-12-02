@@ -144,7 +144,7 @@ module.exports = function(grunt) {
     // figure out what tests we need to run by examining the settings.json file content
     var addonsWithTests = _getNightwatchTests(this.data.settings);
 
-    // if the user passed a --file="X" on the command line, filter out
+    // if the user passed a --file="X" on the command line, find the matched file
     var singleTestToRun = grunt.option('file');
     if (singleTestToRun) {
       addonsWithTests = _findSpecificNightwatchTest(addonsWithTests, singleTestToRun);
@@ -152,17 +152,21 @@ module.exports = function(grunt) {
 
     // now generate the new nightwatch.json file
     var nightwatchTemplate = _.template(grunt.file.read(this.data.template));
+
+    // pick a random test account to use
+    var account = _getTestAccount(this.data.settings.nightwatch.accounts);
+
     grunt.file.write(this.data.dest, nightwatchTemplate({
       src_folders: JSON.stringify(addonsWithTests),
       custom_commands_path: JSON.stringify(this.data.settings.nightwatch.custom_commands_path),
       globals_path: this.data.settings.nightwatch.globals_path,
-      username: this.data.settings.nightwatch.username,
-      password: this.data.settings.nightwatch.password,
-      launch_url: this.data.settings.nightwatch.launch_url,
-      fauxton_host: this.data.settings.nightwatch.fauxton_host,
-      fauxton_port: this.data.settings.nightwatch.fauxton_port,
-      db_host: this.data.settings.nightwatch.db_host,
-      db_port: this.data.settings.nightwatch.db_port
+      username: account.username,
+      password: account.password,
+      launch_url: account.launch_url,
+      fauxton_host: account.fauxton_host,
+      fauxton_port: account.fauxton_port,
+      db_host: account.db_host,
+      db_port: account.db_port
     }));
   });
 
@@ -176,11 +180,23 @@ module.exports = function(grunt) {
     if (!data.deps.length) {
       error = 'No addons listed in settings.json - no tests to run!';
 
-    // check the requires nightwatch settings. These should always exist in the settings.json file
-    } else if (!_.has(data, 'nightwatch') ||
-      !_.has(data.nightwatch, 'username') ||
-      !_.has(data.nightwatch, 'password')) {
-      error = 'Your settings.json file doesn\'t contain valid nightwatch settings. Please check the user doc.';
+    } else if (!_.has(data, 'nightwatch')) {
+      error = 'Your settings.json file is missing the nightwatch section. Please check the user doc.';
+
+    // some basic validation to confirm the accounts section appears
+    } else if (!_.has(data.nightwatch, 'accounts') || data.nightwatch.accounts.length === 0) {
+      error = 'Your settings.json file doesn\'t contain any test accounts.';
+
+    } else {
+
+      // confirm all listed test accounts have at least a username and password
+      var invalidTestAccounts = _.filter(data.nightwatch.accounts, function(account) {
+        return (!_.has(account, 'username') || account.username === '' ||
+                !_.has(account, 'password') || account.password === '');
+      });
+      if (invalidTestAccounts.length) {
+        error = 'Your settings.json file contains missing data from the nightwatch accounts.';
+      }
     }
 
     if (error) {
@@ -212,7 +228,7 @@ module.exports = function(grunt) {
 
     return _.filter(settings.deps, function(addon) {
 
-      // if we've explicitly been told to ignore this addon's test, ignore 'em!
+      // if we've been told to ignore this addon's test, ignore 'em!
       if (_.contains(addonBlacklist, addon.name)) {
         return false;
       }
@@ -228,6 +244,25 @@ module.exports = function(grunt) {
     }).map(function(addon) {
       return 'app/addons/' + addon.name + '/tests/nightwatch';
     });
+  };
+
+  /**
+   * By default, we randomly pick a test account to use from the nightwatch.accounts array in the settings file.
+   * However, it may be overridden by including a `grunt nightwatch --username=X` param.
+   * @param accounts
+   * @private
+   */
+  function _getTestAccount(accounts) {
+    var account;
+    var username = grunt.option('username');
+    if (username) {
+      account = _.find(accounts, function(account) {
+        return account.username == username;
+      });
+    } else {
+      account = accounts[Math.floor(Math.random() * accounts.length)];
+    }
+    return account;
   }
 
 };
