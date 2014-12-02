@@ -69,6 +69,9 @@ exports.init = function(grunt) {
               type = 'linux32';
             }
             break;
+
+          default:
+            type = 'linux64';
         }
 
         return 'test -s ./test/nightwatch_tests/selenium/chromedriver || (curl -o ./test/nightwatch_tests/selenium/chromedriver_'+type+'.zip http://chromedriver.storage.googleapis.com/2.9/chromedriver_'+type+'.zip && open ./test/nightwatch_tests/selenium/chromedriver_'+type+'.zip)';

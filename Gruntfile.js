@@ -405,6 +405,10 @@ module.exports = function(grunt) {
       start_nightWatch: {
          command: __dirname + '/node_modules/nightwatch/bin/nightwatch' +
           ' -e chrome -c ' + __dirname + '/test/nightwatch_tests/' + 'nightwatch.json'
+      },
+      start_nightWatch_saucelabs: {
+         command: __dirname + '/node_modules/nightwatch/bin/nightwatch' +
+          ' -e saucelabs -c ' + __dirname + '/test/nightwatch_tests/' + 'nightwatch.json'
       }
     },
     
@@ -521,5 +525,6 @@ module.exports = function(grunt) {
    * Nightwatch functional testing
    */
   //Start Nightwatch test from terminal, using: $ grunt nightwatch
+  grunt.registerTask('nightwatch_saucelabs', [ 'initNightwatch', 'exec:start_nightWatch_saucelabs']);
   grunt.registerTask('nightwatch', [ 'exec:check_selenium', 'selenium_start', 'exec:check_chrome_driver', 'initNightwatch', 'exec:start_nightWatch']);
 };
