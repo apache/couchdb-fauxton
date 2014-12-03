@@ -73,13 +73,17 @@
     },
 
     "nightwatch": {
-      "username": "tester",
-      "password": "testerpass",
-      "fauxton_host": "localhost",
-      "fauxton_port": "8000",
-      "db_host": "localhost",
-      "db_port": "5984",
       "custom_commands_path": "test/nightwatch_tests/custom-commands",
-      "globals_path": "test/nightwatch_tests/helpers/helpers.js"
+      "globals_path": "test/nightwatch_tests/helpers/helpers.js",
+      "accounts": [
+        {
+          "username": "tester",
+          "password": "testerpass",
+          "fauxton_host": "localhost",
+          "fauxton_port": "8000",
+          "db_host": "localhost",
+          "db_port": "5984"
+        }
+      ]
     }
 }
