@@ -11,14 +11,14 @@
 // the License.
 
 define([
-  "app",
-  "api",
-  "addons/replication/route"
+  'app',
+  'api',
+  'addons/replication/route'
 ],
 
 function(app, FauxtonAPI, replication) {
 	replication.initialize = function() {
-    FauxtonAPI.addHeaderLink({title: "Replication", href: "#/replication", icon: "fonticon-replicate",});
+    FauxtonAPI.addHeaderLink({ title: 'Replication', href: '#/replication', icon: 'fonticon-replicate' });
   };
   return replication;
 });

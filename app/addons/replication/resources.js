@@ -12,25 +12,24 @@
 
 define([
   "app",
-  "api",
-  'addons/activetasks/resources'
+  "api"
 ],
 
-function (app, FauxtonAPI, ActiveTasks) {
+function (app, FauxtonAPI) {
   var Replication = {};
 
-  //these are probably dupes from the database modules. I'm going to keep them seperate for now.
+  // these are probably dupes from the database modules. I'm going to keep them separate for now
   Replication.DBModel = Backbone.Model.extend({
     label: function () {
-      //for autocomplete
-        return this.get("name");
+      // for autocomplete
+      return this.get('name');
     }
   });
 
   Replication.DBList = Backbone.Collection.extend({
     model: Replication.DBModel,
     url: function() {
-      return app.host + "/_all_dbs";
+      return app.host + '/_all_dbs';
     },
     parse: function(resp) {
       // TODO: pagination!
@@ -53,7 +52,7 @@ function (app, FauxtonAPI, ActiveTasks) {
     parse: function(resp){
       //only want replication tasks to return
       return _.filter(resp, function(task){
-        return task.type === "replication";
+        return task.type === 'replication';
       });
     }
   });
@@ -61,7 +60,7 @@ function (app, FauxtonAPI, ActiveTasks) {
   Replication.Replicate = Backbone.Model.extend({
     documentation: FauxtonAPI.constants.DOC_URLS.REPLICATION,
     url: function(){
-      return window.location.origin + "/_replicate";
+      return window.location.origin + '/_replicate';
     }
   });
 
