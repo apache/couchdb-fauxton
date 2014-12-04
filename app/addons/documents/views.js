@@ -397,7 +397,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
         return;
       }
 
-      if (this.bulkDeleteDocsCollection.length === 0) {
+      if (!this.bulkDeleteDocsCollection || this.bulkDeleteDocsCollection.length === 0) {
         return;
       }
       this.$('.js-all').addClass('active');
@@ -493,7 +493,9 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
       this.allDocsNumber && this.allDocsNumber.remove();
       _.each(this.rows, function (row) {row.remove();});
 
-      this.bulkDeleteDocsCollection.reset();
+      if (this.bulkDeleteDocsCollection) {
+        this.bulkDeleteDocsCollection.reset();
+      }
     },
 
     removeNestedViews: function () {
