@@ -30,15 +30,11 @@ function(app, FauxtonAPI, Documents, DocEditor, Databases) {
     selectedHeader: "Databases",
 
     initialize: function(route, masterLayout, options) {
-      var databaseName = options[0];
-      this.docID = options[1]||'new';
+      this.databaseName = options[0];
+      this.docID = options[1] || 'new';
 
-      this.database = this.database || new Databases.Model({id: databaseName});
-      this.doc = new Documents.Doc({
-        _id: this.docID
-      }, {
-        database: this.database
-      });
+      this.database = this.database || new Databases.Model({ id: this.databaseName });
+      this.doc = new Documents.Doc({ _id: this.docID }, { database: this.database });
     },
 
     routes: {
@@ -59,6 +55,17 @@ function(app, FauxtonAPI, Documents, DocEditor, Databases) {
     },
 
     code_editor: function (database, doc) {
+
+      // if either the database or document just changed, we need to get the latest doc/db info
+      if (this.databaseName !== database) {
+        this.databaseName = database;
+        this.database = new Databases.Model({ id: this.databaseName });
+      }
+      if (this.docID !== doc) {
+        this.docID = doc;
+        this.doc = new Documents.Doc({ _id: this.docID }, { database: this.database });
+      }
+
       this.docView = this.setView("#dashboard-content", new DocEditor.CodeEditor({
         model: this.doc,
         database: this.database
