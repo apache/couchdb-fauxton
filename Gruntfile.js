@@ -113,8 +113,8 @@ module.exports = function(grunt) {
         "src": "assets/index.underscore",
         "dest": "dist/debug/index.html",
         "variables": {
-          "requirejs": "./js/require.js",
-          "css": "./css/index.css",
+          "requirejs": "./js/{REQUIREJS_FILE}",
+          "css": "./css/{CSS_FILE}",
           "base": null
         }
       }
@@ -139,7 +139,7 @@ module.exports = function(grunt) {
     return helper.readSettingsFile().couchserver || defaults;
   }();
 
-  grunt.initConfig({
+  var config = {
 
     // The clean task ensures all files are removed from the dist/ directory so
     // that no files linger from previous builds.
@@ -159,7 +159,7 @@ module.exports = function(grunt) {
 
     // The jshint option for scripturl is set to lax, because the anchor
     // override inside main.js needs to test for them so as to not accidentally
-    // route. Settings expr true so we can do `migtBeNullObject && mightBeNullObject.coolFunction()`
+    // route. Settings expr true so we can do `mightBeNullObject && mightBeNullObject.coolFunction()`
     jshint: {
       all: ['app/**/*.js', 'Gruntfile.js', "!app/**/assets/js/*.js"],
       options: {
@@ -244,14 +244,15 @@ module.exports = function(grunt) {
       test_config_js: {
         src: ["dist/debug/templates.js", "test/test.config.js"],
         dest: 'test/test.config.js'
-      },
+      }
     },
 
     cssmin: {
       compress: {
         files: {
           "dist/release/css/index.css": [
-            "dist/debug/css/index.css", 'assets/css/*.css',
+            'dist/debug/css/index.css',
+            'assets/css/*.css',
             "app/addons/**/assets/css/*.css"
           ]
         },
@@ -404,11 +405,11 @@ module.exports = function(grunt) {
       check_chrome_driver : helper.check_chrome_driver,
       start_nightWatch: {
          command: __dirname + '/node_modules/nightwatch/bin/nightwatch' +
-          ' -e chrome -c ' + __dirname + '/test/nightwatch_tests/' + 'nightwatch.json'
+          ' -e chrome -c ' + __dirname + '/test/nightwatch_tests/nightwatch.json'
       },
       start_nightWatch_saucelabs: {
          command: __dirname + '/node_modules/nightwatch/bin/nightwatch' +
-          ' -e saucelabs -c ' + __dirname + '/test/nightwatch_tests/' + 'nightwatch.json'
+          ' -e saucelabs -c ' + __dirname + '/test/nightwatch_tests/nightwatch.json'
       }
     },
     
@@ -423,8 +424,41 @@ module.exports = function(grunt) {
         template: 'test/nightwatch_tests/nightwatch.json.underscore',
         dest: 'test/nightwatch_tests/nightwatch.json'
       }
+    },
+
+    // these rename the already-bundled, minified requireJS and CSS files to include their hash
+    md5: {
+      requireJS: {
+        files: { "dist/release/js/" : "dist/release/js/require.js" },
+        options: {
+          afterEach: function (fileChanges) {
+            // replace the REQUIREJS_FILE placeholder with the actual filename
+            var newFilename = fileChanges.newPath.match(/[^\/]+$/)[0];
+            config.template.release.variables.requirejs = config.template.release.variables.requirejs.replace(/REQUIREJS_FILE/, newFilename);
+
+            // remove the original requireJS file, we don't need it anymore
+            fs.unlinkSync(fileChanges.oldPath);
+          }
+        }
+      },
+
+      css: {
+        files: { "dist/release/css/": 'dist/release/css/index.css' },
+        options: {
+          afterEach: function (fileChanges) {
+            // replace the CSS_FILE placeholder with the actual filename
+            var newFilename = fileChanges.newPath.match(/[^\/]+$/)[0];
+            config.template.release.variables.css = config.template.release.variables.css.replace(/CSS_FILE/, newFilename);
+
+            // remove the original CSS file
+            fs.unlinkSync(fileChanges.oldPath);
+          }
+        }
+      }
     }
-  });
+  };
+
+  grunt.initConfig(config);
 
   // on watch events configure jshint:all to only run on changed file
   grunt.event.on('watch', function(action, filepath) {
@@ -443,34 +477,22 @@ module.exports = function(grunt) {
    */
   // Load fauxton specific tasks
   grunt.loadTasks('tasks');
-  // Load the couchapp task
+
   grunt.loadNpmTasks('grunt-couchapp');
-  // Load the copy task
   grunt.loadNpmTasks('grunt-contrib-watch');
-  // Load the exec task
   grunt.loadNpmTasks('grunt-exec');
-  // Load Require.js task
   grunt.loadNpmTasks('grunt-contrib-requirejs');
-  // Load Copy task
   grunt.loadNpmTasks('grunt-contrib-copy');
-  // Load Clean task
   grunt.loadNpmTasks('grunt-contrib-clean');
-  // Load jshint task
   grunt.loadNpmTasks('grunt-contrib-jshint');
-  // Load jst task
   grunt.loadNpmTasks('grunt-contrib-jst');
-  // Load less task
   grunt.loadNpmTasks('grunt-contrib-less');
-  // Load concat task
   grunt.loadNpmTasks('grunt-contrib-concat');
-  // Load UglifyJS task
   grunt.loadNpmTasks('grunt-contrib-uglify');
-  // Load CSSMin task
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-mocha-phantomjs');
-
-  //Selenium Server
   grunt.loadNpmTasks('grunt-selenium-webdriver');
+  grunt.loadNpmTasks('grunt-md5');
 
   /*
    * Default task
@@ -481,31 +503,33 @@ module.exports = function(grunt) {
   /*
    * Transformation tasks
    */
-  // clean out previous build artefactsa and lint
+  // clean out previous build artifacts and lint
   grunt.registerTask('lint', ['clean', 'jshint']);
   grunt.registerTask('test', ['lint', 'dependencies', 'gen_initialize:development', 'test_inline']);
   // lighter weight test task for use inside dev/watch
   grunt.registerTask('test_inline', ['mochaSetup','jst', 'concat:test_config_js','mocha_phantomjs']);
   // Fetch dependencies (from git or local dir), lint them and make load_addons
   grunt.registerTask('dependencies', ['get_deps', 'gen_load_addons:default']);
+
   // build templates, js and css
-  grunt.registerTask('build', ['less', 'concat:index_css', 'jst', 'requirejs', 'concat:requirejs', 'template:release']);
-  // minify code and css, ready for release.
-  grunt.registerTask('minify', ['uglify', 'cssmin:compress']);
+  grunt.registerTask('build', ['less', 'concat:index_css', 'jst', 'requirejs', 'concat:requirejs', 'uglify',
+    'cssmin:compress', 'md5:requireJS', 'md5:css', 'template:release']);
 
   /*
    * Build the app in either dev, debug, or release mode
    */
   // dev server
   grunt.registerTask('dev', ['debugDev', 'couchserver']);
+
   // build a debug release
-  grunt.registerTask('debug', ['lint', 'dependencies', "gen_initialize:development", 'concat:requirejs','less', 'concat:index_css', 'template:development', 'copy:debug']);
-  grunt.registerTask('debugDev', ['clean', 'dependencies', "gen_initialize:development",'jshint','less', 'concat:index_css', 'template:development', 'copy:debug']);
+  grunt.registerTask('debug',    ['lint', 'dependencies', "gen_initialize:development", 'concat:requirejs','less', 'concat:index_css', 'template:development', 'copy:debug']);
+  grunt.registerTask('debugDev', ['clean', 'dependencies', "gen_initialize:development", 'jshint', 'less', 'concat:index_css', 'template:development', 'copy:debug']);
 
   grunt.registerTask('watchRun', ['clean:watch', 'dependencies', 'jshint']);
+
   // build a release
-  grunt.registerTask('release', ['clean' ,'dependencies', "gen_initialize:release", 'jshint', 'build', 'minify', 'copy:dist', 'copy:ace', 'copy:zeroclip']);
-  grunt.registerTask('couchapp_release', ['clean' ,'dependencies', "gen_initialize:couchapp", 'jshint', 'build', 'minify', 'copy:dist', 'copy:ace', 'copy:zeroclip']);
+  grunt.registerTask('release', ['clean' ,'dependencies', "gen_initialize:release", 'jshint', 'build', 'copy:dist', 'copy:ace', 'copy:zeroclip']);
+  grunt.registerTask('couchapp_release', ['clean' ,'dependencies', "gen_initialize:couchapp", 'jshint', 'build', 'copy:dist', 'copy:ace', 'copy:zeroclip']);
 
   /*
    * Install into CouchDB in either debug, release, or couchapp mode
