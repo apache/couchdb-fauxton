@@ -320,23 +320,23 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
 
   Components.Pagination = FauxtonAPI.View.extend({
     tagName: "ul",
-    className: "pagination pagination-centered",
+    className: 'pagination',
     template: "addons/fauxton/templates/pagination",
 
     initialize: function(options) {
       this.page = parseInt(options.page, 10);
       this.perPage = options.perPage;
-      this.total = options.total;
-      this.totalPages = Math.ceil(this.total / this.perPage);
       this.urlFun = options.urlFun;
     },
 
     serialize: function() {
+      var total = this.collection.length;
+      var totalPages = Math.ceil(total / this.perPage);
       return {
         page: this.page,
         perPage: this.perPage,
-        total: this.total,
-        totalPages: this.totalPages,
+        total: total,
+        totalPages: totalPages,
         urlFun: this.urlFun
       };
     }
@@ -344,7 +344,7 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
 
 
   Components.IndexPagination = FauxtonAPI.View.extend({
-    className: "pagination pagination-centered",
+    className: 'pagination',
     tagName: 'ul',
     template: "addons/fauxton/templates/index_pagination",
     events: {

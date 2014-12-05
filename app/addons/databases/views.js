@@ -21,6 +21,10 @@ function(app, Components, FauxtonAPI, Databases) {
 
   var Views = {};
 
+  Views.Footer = FauxtonAPI.View.extend({
+    template: 'addons/databases/templates/footer_alldbs',
+  });
+
   Views.RightAllDBsHeader = FauxtonAPI.View.extend({
     className: 'header-right',
     template: 'addons/databases/templates/header_alldbs',
@@ -53,8 +57,6 @@ function(app, Components, FauxtonAPI, Databases) {
   });
 
   Views.List = FauxtonAPI.View.extend({
-    dbLimit: 20,
-    perPage: 20,
     template: 'addons/databases/templates/list',
     events: {
       'click button.all': 'selectAll'
@@ -62,7 +64,6 @@ function(app, Components, FauxtonAPI, Databases) {
 
     initialize: function (options) {
       var params = app.getParams();
-      this.page = params.page ? parseInt(params.page, 10) : 1;
     },
 
     serialize: function () {
@@ -96,15 +97,6 @@ function(app, Components, FauxtonAPI, Databases) {
           model: database
         }));
       }, this);
-
-      this.insertView('#database-pagination', new Components.Pagination({
-        page: this.page,
-        perPage: this.perPage,
-        total: this.collection.length,
-        urlFun: function (page) {
-          return '#/_all_dbs?page=' + page;
-        }
-      }));
     },
 
     setPage: function (page) {
