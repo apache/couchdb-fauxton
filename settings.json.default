@@ -21,8 +21,7 @@
         "variables": {
           "requirejs": "/assets/js/libs/require.js",
           "css": "./css/index.css",
-          "base": null,
-          "cachebuster": ""
+          "base": null
         },
         "app": {
           "root": "/",
@@ -34,10 +33,9 @@
         "src": "assets/index.underscore",
         "dest": "dist/debug/index.html",
         "variables": {
-          "requirejs": "./js/require.js",
-          "css": "./css/index.css",
-          "base": null,
-          "cachebuster": "?v1.0"
+          "requirejs": "./js/REQUIREJS_FILE",
+          "css": "./css/CSS_FILE",
+          "base": null
         },
         "app": {
           "root": "/_utils/fauxton/",
@@ -49,10 +47,9 @@
         "src": "assets/index.underscore",
         "dest": "dist/debug/index.html",
         "variables": {
-          "requirejs": "./js/require.js",
-          "css": "./css/index.css",
-          "base": null,
-          "cachebuster": "?v1.0"
+          "requirejs": "./js/REQUIREJS_FILE",
+          "css": "./css/CSS_FILE",
+          "base": null
         },
         "app": {
           "root": "/",
