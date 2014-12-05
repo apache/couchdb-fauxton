@@ -407,7 +407,7 @@ module.exports = function(grunt) {
           ' -e chrome -c ' + __dirname + '/test/nightwatch_tests/' + 'nightwatch.json'
       },
       start_nightWatch_saucelabs: {
-         command: __dirname + '/node_modules/nightwatch/bin/nightwatch' +
+         command: 'sleep 10s; '+ __dirname + '/node_modules/nightwatch/bin/nightwatch' +
           ' -e saucelabs -c ' + __dirname + '/test/nightwatch_tests/' + 'nightwatch.json'
       }
     },

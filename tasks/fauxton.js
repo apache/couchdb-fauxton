@@ -156,7 +156,7 @@ module.exports = function(grunt) {
       src_folders: JSON.stringify(addonsWithTests),
       custom_commands_path: JSON.stringify(this.data.settings.nightwatch.custom_commands_path),
       globals_path: this.data.settings.nightwatch.globals_path,
-      username: this.data.settings.nightwatch.username,
+      fauxton_username: this.data.settings.nightwatch.fauxton_username,
       password: this.data.settings.nightwatch.password,
       launch_url: this.data.settings.nightwatch.launch_url,
       fauxton_host: this.data.settings.nightwatch.fauxton_host,
@@ -178,7 +178,7 @@ module.exports = function(grunt) {
 
     // check the requires nightwatch settings. These should always exist in the settings.json file
     } else if (!_.has(data, 'nightwatch') ||
-      !_.has(data.nightwatch, 'username') ||
+      !_.has(data.nightwatch, 'fauxton_username') ||
       !_.has(data.nightwatch, 'password')) {
       error = 'Your settings.json file doesn\'t contain valid nightwatch settings. Please check the user doc.';
     }

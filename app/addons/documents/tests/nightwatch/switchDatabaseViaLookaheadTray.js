@@ -12,7 +12,7 @@
 
 module.exports = {
   'Confirm switching databases via lookahead tray': function (client) {
-    var waitTime = 8000,
+    var waitTime = 10000,
       newDatabaseName = client.globals.testDatabaseName,
       secondDatabaseName = newDatabaseName + "2",
       baseUrl = client.globals.test_settings.launch_url;

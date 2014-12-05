@@ -22,10 +22,10 @@
 
   "test_settings" : {
     "default" : {
-      "username": "<%- username %>",
+      "fauxton_username": "<%- fauxton_username %>",
       "password": "<%- password %>",
       "launch_url": "http://<%- fauxton_host %>:<%- fauxton_port %>",
-      "db_url": "http://<%- username %>:<%- password %>@<%- db_host %>:<%- db_port %>",
+      "db_url": "http://<%- fauxton_username %>:<%- password %>@<%- db_host %>:<%- db_port %>",
       "selenium_host" : "127.0.0.1",
       "selenium_port" : 4444,
       "silent" : true,

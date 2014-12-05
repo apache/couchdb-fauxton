@@ -73,7 +73,7 @@
     },
 
     "nightwatch": {
-      "username": "tester",
+      "fauxton_username": "tester",
       "password": "testerpass",
       "fauxton_host": "localhost",
       "fauxton_port": "8000",
