@@ -55,11 +55,14 @@
 #primary-navbar {
   z-index: 5;
   height: 100%;
-  position: absolute;
   left: 0;
-  width: @navWidth;
   top: 0;
   bottom: 0;
+  position: absolute;
+  width: @navWidth;
+  .closeMenu & {
+    width: @collapsedNavWidth;
+  }
   background-color: @primaryNav;
   .js-version {
     color: #fff;
@@ -75,17 +78,20 @@
     font-size: 12px
   }
   .navbar {
+    .closeMenu & {
+      width: @collapsedNavWidth;
+    }
     .burger {
-      .transition(all @transitionSpeed @transitionEaseType);
       padding: 22px 0 22px 18px;
       position: fixed;
       z-index: 100;
-      width: 64px;
       top: 0;
       background-color: @primaryNav;
       width: @navWidth;
+      .closeMenu & {
+        width: @collapsedNavWidth;
+      }
       div {
-        .transition(all @transitionSpeed @transitionEaseType);
         height: 4px;
         width: 24px;
         .border-radius(2);
@@ -99,12 +105,10 @@
     .bottom-container {
       position: fixed;
       bottom: 0;
-      width: 220px;
       background: #3a2c2b;
       .brand {
         .box-sizing(content-box);
         .hide-text;
-        .customTransition(left, 1s, 0.805, 0.005, 0.165, 0.985);
         margin: 10px 0 0 0;
         width: 200px;
         height: 40px;
@@ -148,12 +152,14 @@
       .nav {
         margin: 0;
         li {
-          .transition(all @transitionSpeed @transitionEaseType);
           padding: 0;
           font-size: 16px;
           letter-spacing: 1px;
           line-height: 24px;
           width: @navWidth;
+          .closeMenu & {
+            width: @collapsedNavWidth;
+          }
           font-weight: normal;
           font-family: helvetica;
           .box-sizing(border-box);
