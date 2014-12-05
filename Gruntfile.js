@@ -145,12 +145,7 @@ module.exports = function(grunt) {
     // that no files linger from previous builds.
     clean: {
       release:  cleanable,
-      watch: cleanableAddons,
-
-      // used during release and couchapp_deploy steps to remove unnecessary un-md5-ified files
-      oldResources: {
-        src: ['dist/release/js/require.js', 'dist/release/css/index.css']
-      }
+      watch: cleanableAddons
     },
 
     less: {
@@ -440,6 +435,10 @@ module.exports = function(grunt) {
             // replace the REQUIREJS_FILE placeholder with the actual filename
             var newFilename = fileChanges.newPath.match(/[^\/]+$/)[0];
             config.template.release.variables.requirejs = config.template.release.variables.requirejs.replace(/REQUIREJS_FILE/, newFilename);
+
+            // remove the original requireJS file, we don't need it anymore
+            config.clean.removeRequireJS = { src: [fileChanges.oldPath] };
+            grunt.task.run("clean:removeRequireJS");
           }
         }
       },
@@ -451,6 +450,10 @@ module.exports = function(grunt) {
             // replace the CSS_FILE placeholder with the actual filename
             var newFilename = fileChanges.newPath.match(/[^\/]+$/)[0];
             config.template.release.variables.css = config.template.release.variables.css.replace(/CSS_FILE/, newFilename);
+
+            // remove the original CSS file
+            config.clean.removeCSSFile = { src: [fileChanges.oldPath] };
+            grunt.task.run("clean:removeCSSFile");
           }
         }
       }
@@ -512,7 +515,7 @@ module.exports = function(grunt) {
 
   // build templates, js and css
   grunt.registerTask('build', ['less', 'concat:index_css', 'jst', 'requirejs', 'concat:requirejs', 'uglify',
-    'cssmin:compress', 'md5:requireJS', 'md5:css', 'clean:oldResources', 'template:release']);
+    'cssmin:compress', 'md5:requireJS', 'md5:css', 'template:release']);
 
   /*
    * Build the app in either dev, debug, or release mode
