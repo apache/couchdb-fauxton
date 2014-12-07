@@ -353,13 +353,26 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
         return [this.indexedDocs.urlRef("apiurl", urlParams), FauxtonAPI.constants.DOC_URLS.GENERAL];
       };
 
-      this.rightHeader.showQueryOptions();
-      this.rightHeader.resetQueryOptions({
-        queryParams: urlParams,
-        showStale: true,
-        hasReduce: true,
-        viewName: viewName,
-        ddocName: ddoc
+      this.showQueryOptions(urlParams, ddoc, viewName);
+    },
+
+    showQueryOptions: function (urlParams, ddoc, viewName) {
+      var promise = this.designDocs.fetch({reset: true}),
+          that = this,
+          hasReduceFunction;
+
+      promise.then(function(resp) {
+        var design = _.findWhere(that.designDocs.models, {id: '_design/'+ddoc}); 
+        !_.isUndefined(hasReduceFunction = design.attributes.doc.views[viewName].reduce);
+
+        that.rightHeader.showQueryOptions();
+        that.rightHeader.resetQueryOptions({
+          queryParams: urlParams,
+          showStale: true,
+          hasReduce: hasReduceFunction,
+          viewName: viewName,
+          ddocName: ddoc
+        });
       });
     },
 

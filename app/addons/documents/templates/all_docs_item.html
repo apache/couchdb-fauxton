@@ -20,15 +20,18 @@ the License.
 </div>
 <div class="doc-item">
   <header>
-    <span class="header-keylabel"><%- doc.isEditable() ? 'id' : 'key' %></span> <span class="header-doc-id">"<%- docIdentifier %>"</span>
-
-  <% if (doc.isEditable()) { %>
+    <span class="header-keylabel"><%- doc.isFromView() ? 'key' : 'id' %></span> <span class="header-doc-id">"<%- docIdentifier %>"</span>
+    <% if (!doc.isReducedShown()) { %>
     <div class="doc-edit-symbol pull-right">
-      <a href="#<%- doc.url('web-index') %>">
+    <% if (doc.isFromView()) { %>
+      <a href="#<%- doc.url('app') %>">
+    <% } else {  %>
+      <a href="#<%- doc.url('web-index')%>">
+    <% } %>
         <i class="fonticon-pencil"></i>
       </a>
     </div>
-  <% } %>
+    <% }; %>
   </header>
   <div class="doc-data">
     <pre class="prettyprint"><%- doc.prettyJSON() %></pre>

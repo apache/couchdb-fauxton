@@ -39,7 +39,8 @@ function(app, FauxtonAPI, Documents, DocEditor, Databases) {
 
     routes: {
       "database/:database/:doc/code_editor": "code_editor",
-      "database/:database/:doc": "code_editor"
+      "database/:database/:doc": "code_editor",
+      "database/:database/_design/:ddoc" :"showDesignDoc"
     },
 
     events: {
@@ -70,6 +71,11 @@ function(app, FauxtonAPI, Documents, DocEditor, Databases) {
         model: this.doc,
         database: this.database
       }));
+
+    },
+
+    showDesignDoc: function (database, ddoc) {
+      this.code_editor(database, '_design/' + ddoc);
     },
 
     reRenderDoc: function () {
