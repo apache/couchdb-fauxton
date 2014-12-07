@@ -196,7 +196,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
     },
 
     events: {
-      "dblclick pre.prettyprint": "edit"
+      "dblclick .doc-item": "edit"
     },
 
     attributes: function() {
@@ -207,7 +207,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
 
     serialize: function() {
       return {
-        docIdentifier: this.model.isEditable() ? this.model.get('_id') : this.model.get('key'),
+        docIdentifier: this.model.isReducedShown() ? this.model.get('key') : this.model.get('_id'),
         doc: this.model,
         checked: this.checked
       };
@@ -219,7 +219,9 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
 
     edit: function(event) {
       event.preventDefault();
-      FauxtonAPI.navigate("#" + this.model.url('web-index'));
+      if (!this.model.isReducedShown()) {
+        FauxtonAPI.navigate(this.model.url('app'));
+      }
     }
   });
 

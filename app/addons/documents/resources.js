@@ -89,6 +89,18 @@ function(app, FauxtonAPI, PagingCollection) {
       return this.docType() != "reduction";
     },
 
+    isFromView: function(){
+      return !this.id;
+    },
+
+    isReducedShown : function () {
+      if (this.collection) {
+        return this.collection.params.reduce;
+      } else {
+        return false;
+      }
+    },
+
     isDdoc: function() {
       return this.docType() === "design doc";
     },
@@ -248,38 +260,6 @@ function(app, FauxtonAPI, PagingCollection) {
     safeID: function() {
       var ddoc = this.id.replace(/^_design\//,"");
       return "_design/"+app.utils.safeURLName(ddoc);
-    }
-  });
-
-  Documents.ViewRow = FauxtonAPI.Model.extend({
-    // this is a hack so that backbone.collections doesn't group
-    // these by id and reduce the number of items returned.
-    idAttribute: "_id",
-
-    docType: function() {
-      if (!this.id) return "reduction";
-
-      return this.id.match(/^_design/) ? "design doc" : "doc";
-    },
-    documentation: function(){
-      return FauxtonAPI.constants.DOC_URLS.GENERAL;
-    },
-    url: function(context) {
-      return this.collection.database.url(context) + "/" + this.safeID();
-    },
-
-    isEditable: function() {
-      return this.docType() != "reduction";
-    },
-    safeID: function() {
-      var id = this.id || this.get("id");
-
-      return app.utils.safeURLName(id);
-    },
-
-    prettyJSON: function() {
-      //var data = this.get("doc") ? this.get("doc") : this;
-      return JSON.stringify(this, null, "  ");
     }
   });
 
@@ -492,7 +472,7 @@ function(app, FauxtonAPI, PagingCollection) {
   });
 
   Documents.IndexCollection = PagingCollection.extend({
-    model: Documents.ViewRow,
+    model: Documents.Doc,
     documentation: function(){
       return FauxtonAPI.constants.DOC_URLS.GENERAL;
     },

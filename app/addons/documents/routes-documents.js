@@ -86,8 +86,7 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
       "route:perPageChange": "perPageChange",
       "route:changesFilterAdd": "addFilter",
       "route:changesFilterRemove": "removeFilter",
-      "route:updateQueryOptions": "updateQueryOptions",
-      "route:resetQueryOptions": "resetQueryOptions"
+      "route:updateQueryOptions": "updateQueryOptions"
     },
 
     overrideBreadcrumbs: true,
@@ -356,13 +355,26 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
         return [this.indexedDocs.urlRef("apiurl", urlParams), FauxtonAPI.constants.DOC_URLS.GENERAL];
       };
 
-      this.rightHeader.showQueryOptions();
-      this.rightHeader.resetQueryOptions({
-        queryParams: urlParams,
-        showStale: true,
-        hasReduce: true,
-        viewName: viewName,
-        ddocName: ddoc
+      this.showQueryOptions(urlParams, ddoc, viewName);
+    },
+
+    showQueryOptions: function (urlParams, ddoc, viewName) {
+      var promise = this.designDocs.fetch({reset: true}),
+          that = this,
+          hasReduceFunction;
+
+      promise.then(function(resp) {
+        var design = _.findWhere(that.designDocs.models, {id: '_design/'+ddoc}); 
+        !_.isUndefined(hasReduceFunction = design.attributes.doc.views[viewName].reduce);
+
+        that.rightHeader.showQueryOptions();
+        that.rightHeader.resetQueryOptions({
+          queryParams: urlParams,
+          showStale: true,
+          hasReduce: hasReduceFunction,
+          viewName: viewName,
+          ddocName: ddoc
+        });
       });
     },
 
@@ -492,6 +504,7 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
 
     paginate: function (options) {
       var collection = this.documentsView.collection;
+      this.documentsView.collection.reset(collection);
 
       this.documentsView.forceRender();
       collection.paging.pageSize = options.perPage;
@@ -568,10 +581,6 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
     removeFilter: function (filter) {
       this.changesView.filters.splice(this.changesView.filters.indexOf(filter), 1);
       this.changesView.render();
-    },
-
-    resetQueryOptions: function(options) {
-      this.rightHeader.resetQueryOptions(options);
     },
 
     updateQueryOptions: function(options) {

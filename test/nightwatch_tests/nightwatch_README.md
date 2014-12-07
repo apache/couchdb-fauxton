@@ -51,8 +51,10 @@ has failed, and will not exit or skip subsequent tests.
 3. `.waitForElementNotPresent()`, `.waitForElementNotVisible()`, `.waitForElementPresent()`, `.waitForElementVisible()`, 
 will exit testing by default if the Element is not found. There is a third argument, 'abortOnFailure', if you set this 
 to 'false', the rest of the tests will continue even if this assertion fails.
+> there is a custom function called clickWhenReady which will wait for an element to visible, then click on it
+
 4. Sometimes `.click()` doesn't work reliably (most likely if the element you are clicking on doesn't have an 
-individual ID selector). You can use jquery to simulate a click by using `.execute($("#CSS Selector.HERE").click();)`
+individual ID selector). You can use jquery to simulate a click by using `.execute('$("#CSS Selector.HERE").click();')`.  
 5. The function `.pause(time)` is sometimes necessary, although we have tried to avoid excessive use of a hard coded 
 pausing. Instead try and make use of the `.waitForElement` functions instead of `.pause(time)`. 
 
