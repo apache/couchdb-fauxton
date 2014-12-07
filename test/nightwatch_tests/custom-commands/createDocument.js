@@ -9,12 +9,16 @@ function CreateDocument () {
 // inherit from node's event emitter
 util.inherits(CreateDocument, events.EventEmitter);
 
-CreateDocument.prototype.command = function (documentName, databaseName) {
+CreateDocument.prototype.command = function (documentName, databaseName, docContents) {
   var that = this,
       nano = helpers.getNanoInstance(),
       database = nano.use(databaseName);
 
-  database.insert({ dummyKey: "testingValue" }, documentName, function (err, body, header) {
+  if (docContents === undefined) {
+    docContents = { dummyKey: "testingValue" }; 
+  }
+
+  database.insert(docContents, documentName, function (err, body, header) {
   
     if (err) {
       console.log('Error in nano CreateDocument Function: '+documentName+', in database: '+databaseName, err.message);

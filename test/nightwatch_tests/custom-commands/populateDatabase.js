@@ -19,7 +19,7 @@ PopulateDatabase.prototype.command = function (databaseName) {
     function () { return i < 20; },
     function (cb) {
         i++;
-        var document_id = 'document_ '+ i;
+        var document_id = 'document_'+ i;
         database.insert({ number: i }, document_id, cb);
     },
     function (err) {
