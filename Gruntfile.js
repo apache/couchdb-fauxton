@@ -329,11 +329,11 @@ module.exports = function(grunt) {
       couchdebug: {
         files: [
           // this gets built in the template task
-          {src: 'dist/debug/index.html', dest: '../../share/www/index.html'},
-          {src: ['**'], dest: '../../share/www/js/', cwd:'dist/debug/js/',  expand: true},
-          {src: ['**'], dest: '../../share/www/img/', cwd:'dist/debug/img/', expand: true},
-          {src: ['**'], dest: '../../share/www/fonts/', cwd:'dist/debug/fonts/', expand: true},
-          {src: ['**'], dest: '../../share/www/css/', cwd:"dist/debug/css/", expand: true}
+          {src: "dist/debug/index.html", dest: "../../share/www/index.html"},
+          {src: ["**"], dest: "../../share/www/js/", cwd:"dist/debug/js/",  expand: true},
+          {src: ["**"], dest: "../../share/www/img/", cwd:"dist/debug/img/", expand: true},
+          {src: ["**"], dest: "../../share/www/fonts/", cwd:"dist/debug/fonts/", expand: true},
+          {src: ["**"], dest: "../../share/www/css/", cwd:"dist/debug/css/", expand: true}
         ]
       },
       ace: {
