@@ -44,7 +44,7 @@ You should be able to access fauxton on `http://localhost:8000`
 
 ### Prepare Fauxton Release
     Follow the "Fauxton Setup" section,
-    Edit settings.json variable root where the document will live.  eg.  "/_utils/fauxton/"
+    Edit settings.json variable root where the document will live.  eg.  "/_utils/"
 
     then:
 
