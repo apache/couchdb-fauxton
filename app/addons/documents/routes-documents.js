@@ -499,6 +499,7 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
       this.perPage = perPage;
       this.documentsView.forceRender();
       this.documentsView.collection.pageSizeReset(perPage, {fetch: false});
+      this.allDocsNumber.forceRender();
       this.setDocPerPageLimit(perPage);
     },
 
@@ -507,6 +508,8 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
       this.documentsView.collection.reset(collection);
 
       this.documentsView.forceRender();
+      this.allDocsNumber.forceRender();
+
       collection.paging.pageSize = options.perPage;
       var promise = collection[options.direction]({fetch: false});
     },

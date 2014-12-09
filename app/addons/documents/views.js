@@ -230,7 +230,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
       this.pagination = options.pagination;
       _.bindAll(this);
 
-      this._perPage = options.perPageDefault || 20;
+      this._perPage = options.perPageDefault || FauxtonAPI.constants.MISC.DEFAULT_PAGE_SIZE;
       this.listenTo(this.collection, 'totalRows:decrement', this.render);
     },
 
