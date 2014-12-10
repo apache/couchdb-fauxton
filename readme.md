@@ -47,11 +47,11 @@ We follow our coding-styleguide to make it easier for everyone to write, read an
 
 ### Prepare Fauxton Release
 Follow the "Fauxton Setup" section, edit settings.json variable root where the document will live,
-e.g. "/_utils/fauxton/" then:
+e.g. "/_utils/" then:
 
     grunt couchdb
 
-This will install the latest version of Fauxton into `/share/www/fauxton`
+This will install the latest version of Fauxton into `/share/www/`
 
 ### Running Tests
 
