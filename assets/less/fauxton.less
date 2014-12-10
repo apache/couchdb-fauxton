@@ -430,15 +430,21 @@ REUSEABLE SHADOW BORDER
   }
 }
 
-/* only specify the sidebar width when there’s a sidebar */
-#header-breadcrumbs {
-  width: @sidebarWidth;
-  .active {
-    width: 244px;
+.with-sidebar {
+  #breadcrumbs {
+    .bottom-shadow-border;
+    border-right: 1px solid @grayLight;
+    width: @sidebarWidth;
+    .active {
+      width: 244px;
+    }
   }
 }
 
+
 #breadcrumbs {
+  height: @collapsedNavWidth;
+  float: left;
   /* these styles are for the new header*/
   .header-left{
     > div{
@@ -567,6 +573,7 @@ REUSEABLE SHADOW BORDER
   height: 0;
 }
 
+.right-header-wrapper,
 .fixed-header,
 .header-right {
   > .btn {

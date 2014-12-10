@@ -301,15 +301,19 @@ with_tabs_sidebar.html
   }
 }
 
+.sidebar {
+  width: @sidebarWidth;
+}
+
 #sidebar-content {
   position: absolute;
   top: @collapsedNavWidth;
-  width: @sidebarWidth;
   left: 0;
   background-color: @secondarySidebar;
   > div.inner {
     display: block;
   }
+  margin-top: 6px;
 }
 
 .scrollable {
@@ -323,8 +327,10 @@ with_tabs_sidebar.html
   right: 0;
   top: 0;
   bottom: 0;
-  top: 0;
+  top: 6px;
+  .box-shadow(-6px 0 rgba(0, 0, 0, 0.1));
 }
+
 
 .pusher {
   overflow: hidden;
@@ -335,6 +341,16 @@ with_tabs_sidebar.html
   .closeMenu & {
     padding-right: @collapsedNavWidth;
   }
+}
+
+.right-header-wrapper {
+  overflow: hidden;
+  height: @collapsedNavWidth;
+}
+
+.right-header-wrapper,
+.fixed-header {
+  .bottom-shadow-border;
 }
 
 #app-container > div {
@@ -378,8 +394,7 @@ with_tabs_sidebar.html
     margin-left: 0px;
   }
   .with-sidebar & {
-    .left-shadow-border;
-    border-right: 1px solid #999;
+    border-left: 1px solid @grayLight;
     width: auto;
     padding: 15px;
     bottom: 0px;
