@@ -89,14 +89,6 @@ function(app, FauxtonAPI, PagingCollection) {
       return this.docType() != "reduction";
     },
 
-    isFromView: function(){
-      return !this.id;
-    },
-
-    isReducedShown : function () {
-      return this.collection.params.reduce;
-    },
-
     isDdoc: function() {
       return this.docType() === "design doc";
     },
@@ -279,15 +271,6 @@ function(app, FauxtonAPI, PagingCollection) {
     isEditable: function() {
       return this.docType() != "reduction";
     },
-
-    isFromView: function(){
-      return !this.id;
-    },
-
-    isReducedShown : function () {
-      return this.collection.params.reduce;
-    },
-
     safeID: function() {
       var id = this.id || this.get("id");
 

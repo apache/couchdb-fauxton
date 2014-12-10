@@ -196,7 +196,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
     },
 
     events: {
-      "dblclick .doc-item": "edit"
+      "dblclick pre.prettyprint": "edit"
     },
 
     attributes: function() {
@@ -219,9 +219,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
 
     edit: function(event) {
       event.preventDefault();
-      if (!this.model.isReducedShown()) {
-        FauxtonAPI.navigate(this.model.url('app'));
-      }
+      FauxtonAPI.navigate("#" + this.model.url('web-index'));
     }
   });
 
