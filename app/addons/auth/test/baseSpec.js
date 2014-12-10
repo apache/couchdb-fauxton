@@ -28,7 +28,7 @@ define([
         FauxtonAPI.session.isLoggedIn = function () { return false; };
         Base.initialize();
         FauxtonAPI.auth.authDeniedCb();
-        assert.ok(navigateSpy.withArgs('/noAccess?urlback=', {replace: true}).calledOnce);
+        assert.ok(navigateSpy.withArgs('/login?urlback=', {replace: true}).calledOnce);
       });
     });
   });

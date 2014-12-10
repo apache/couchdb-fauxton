@@ -24,9 +24,7 @@ function(app, FauxtonAPI, Auth) {
       'login?*extra': 'login',
       'login': 'login',
       'logout': 'logout',
-      'createAdmin': 'createAdmin',
-      'noAccess?*extra': 'noAccess',
-      'noAccess': 'noAccess'
+      'createAdmin': 'createAdmin'
     },
 
     login: function () {
@@ -53,14 +51,6 @@ function(app, FauxtonAPI, Auth) {
     createAdmin: function () {
       this.crumbs = [{name: 'Create Admin', link:"#"}];
       this.setView('#dashboard-content', new Auth.CreateAdminView({model: FauxtonAPI.session}));
-    },
-
-    noAccess: function () {
-      var urlBack = app.getParams().urlback;
-      this.crumbs = [{name: 'Access Denied', link:"#"}];
-      this.setView('#dashboard-content', new Auth.NoAccessView({
-        urlBack: urlBack
-      }));
     }
   });
 
