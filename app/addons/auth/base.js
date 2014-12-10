@@ -54,7 +54,7 @@ function(app, FauxtonAPI, Auth) {
 
     var authDenied = function () {
       var url = window.location.hash.replace('#','');
-      FauxtonAPI.navigate('/noAccess?urlback=' + url, {replace: true});
+      FauxtonAPI.navigate('/login?urlback=' + url, {replace: true});
     };
 
     FauxtonAPI.auth.registerAuth(auth);
