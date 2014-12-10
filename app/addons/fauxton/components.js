@@ -572,10 +572,14 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
   Components.DbSearchTypeahead = Components.Typeahead.extend({
     initialize: function (options) {
       this.dbLimit = options.dbLimit || 30;
+      if (options.filter) { 
+        this.resultFilter = options.resultFilter;
+      }
       _.bindAll(this);
     },
     source: function(query, process) {
       query = encodeURIComponent(query);
+      var resultFilter = this.resultFilter;
       var url = [
         app.host,
         "/_all_dbs?startkey=%22",
@@ -594,6 +598,9 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
         url: url,
         dataType: 'json',
         success: function(data) {
+          if (resultFilter) {
+            data = resultFilter(data);
+          }
           process(data);
         }
       });
