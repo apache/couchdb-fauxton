@@ -239,7 +239,7 @@ function (app, FauxtonAPI, Components, Documents, Databases, resizeColumns, pret
       /* one JS(ON) string can't span more than one line - we edit one string, so ensure we don't select several lines */
       if (selStart >=0 && selEnd >= 0 && selStart === selEnd && this.editor.isRowExpanded(selStart)) {
         var editLine = this.editor.getLine(selStart),
-            editMatch = editLine.match(/^([ \t]*)('[a-zA-Z0-9_]*': )?('.*',?[ \t]*)$/);
+            editMatch = editLine.match(/^([ \t]*)(["|'][a-zA-Z0-9_]*["|']: )?(["|'].*["|'],?[ \t]*)$/);
 
         if (editMatch) {
           return editMatch;
