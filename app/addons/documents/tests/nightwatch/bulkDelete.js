@@ -53,7 +53,7 @@ module.exports = {
       .waitForElementVisible('.js-all', waitTime, false)
       .click('.js-all')
       .click('#next')
-      .waitForElementPresent('#previous', waitTime, false)
+      .waitForElementVisible('[data-id="27"]', waitTime, false)
       .click('#previous')
       .waitForElementPresent('.js-all.active', waitTime, false)
       .end();
