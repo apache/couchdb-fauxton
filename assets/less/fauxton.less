@@ -291,7 +291,7 @@ div.spinner {
 
 
 
-header .header-icon {
+.header-icon {
   font-size: 20px;
   &:before {
     float: left;
@@ -411,25 +411,6 @@ REUSEABLE SHADOW BORDER
   float: right;
 }
 
-#api-navbar {
-  float: right;
-  height: @collapsedNavWidth;
-  .header-icon {
-    font-size: 20px;
-    &:before {
-      float: left;
-      margin: 10px 6px 0px 0px;
-    }
-  }
-  > div:not(.hide) {
-    border-left: 1px solid #ccc;
-  }
-  > div {
-    padding: 12px;
-    height: @collapsedNavWidth;
-  }
-}
-
 .with-sidebar {
   #breadcrumbs {
     .bottom-shadow-border;
@@ -513,7 +494,6 @@ REUSEABLE SHADOW BORDER
   position: relative;
   #header-dropdown-menu {
     position: absolute;
-    right: 5px;
     top: 0;
     .dropdown-toggle {
       color: #666666;
@@ -632,19 +612,27 @@ REUSEABLE SHADOW BORDER
   }
   > div {
     float: right;
-    height: @collapsedNavWidth;
-    border-left: 1px solid #ccc;
     margin: 0;
-    padding: 13px;
     line-height: 40px;
   }
   > div:last-child {
     border-left: none;
   }
 }
-.api-navbar:before {
-  right: 25px;
+
+.header-right,
+#api-navbar {
+   float: right;
+  height: @collapsedNavWidth;
+  > div:not(.hide) {
+    border-left: 1px solid #ccc;
+  }
+  > div {
+    padding: 12px;
+    height: @collapsedNavWidth;
+  }
 }
+
 
 #jump-to-doc{
   .btn-primary {
