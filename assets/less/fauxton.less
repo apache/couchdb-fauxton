@@ -299,6 +299,12 @@ div.spinner {
   }
 }
 
+#api-navbar {
+  > div:not(.hide) {
+    border-left: 1px solid #ccc;
+  }
+}
+
 .api-url-btn, .query-options-btn {
   background: none;
   border: none;
@@ -604,7 +610,7 @@ REUSEABLE SHADOW BORDER
       color: #999;
       .icon-search{
         position: absolute;
-        top: 20px;
+        top: 23px;
         right: 15px;
       }
     }
@@ -623,15 +629,11 @@ REUSEABLE SHADOW BORDER
 #api-navbar {
    float: right;
   height: @collapsedNavWidth;
-  > div:not(.hide) {
-    border-left: 1px solid #ccc;
-  }
   > div {
     padding: 12px;
     height: @collapsedNavWidth;
   }
 }
-
 
 #jump-to-doc{
   .btn-primary {
