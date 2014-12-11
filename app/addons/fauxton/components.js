@@ -536,7 +536,6 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
   });
 
   Components.ModalView = FauxtonAPI.View.extend({
-
     disableLoader: true,
 
     initialize: function (options) {
@@ -554,6 +553,7 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
       if (this._showModal){ this._showModal();}
       this.clear_error_msg();
       this.$('.modal').modal();
+
       // hack to get modal visible
       $('.modal-backdrop').css('z-index', FauxtonAPI.constants.MISC.MODAL_BACKDROP_Z_INDEX);
     },
@@ -773,7 +773,7 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
       this.editorId = options.editorId;
       this.mode = options.mode || "json";
       this.commands = options.commands;
-      this.theme = options.theme || 'crimson_editor';
+      this.theme = options.theme || 'idle_fingers';
       this.couchJSHINT = options.couchJSHINT;
       this.edited = false;
 
@@ -783,14 +783,14 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
     afterRender: function () {
       this.editor = ace.edit(this.editorId);
       this.setHeightToLineCount();
-
       this.editor.setTheme("ace/theme/" + this.theme);
 
       if (this.mode != "plain") {
         this.editor.getSession().setMode("ace/mode/" + this.mode);
       }
-      
+
       this.editor.setShowPrintMargin(false);
+      this.editor.autoScrollEditorIntoView = true;
       this.addCommands();
 
       if (this.couchJSHINT) {
@@ -821,7 +821,6 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
     
       $(window).resize(resizeEditor);
       this.listenTo(FauxtonAPI.Events, FauxtonAPI.constants.EVENTS.BURGER_CLICKED, resizeEditor);
-
     },
 
     cleanup: function () {

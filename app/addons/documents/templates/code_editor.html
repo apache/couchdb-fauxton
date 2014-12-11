@@ -12,44 +12,65 @@ License for the specific language governing permissions and limitations under
 the License.
 */%>
 
-<div id="doc">
-  <div class="errors-container"></div>
-   
-<div id="doc-actions" class="nav">
-  <div class="span3">
+<div id="doc-editor-actions-panel">
+  <div class="doc-actions-left">
     <button class="save-doc btn btn-success save" type="button"><i class="icon fonticon-ok-circled"></i> Save</button>
-    <button class="btn js-back">Back</button>
+    <div>
+      <a href="#" class="js-back cancel-button">Cancel</a>
+    </div>
   </div>
 
-  <div class="span7">
-    <button class="btn string-edit" title="Edit line" disabled="true"><i class="icon icon-edit"></i></button>  
+  <div class="alignRight">
+    <button class="btn string-edit" title="Edit line" disabled="true"><i class="icon icon-edit"></i></button>
+
     <% if (attachments) { %>
-    <div class="btn-group">
-      <button class="dropdown-toggle btn" data-bypass="true" data-toggle="dropdown">
-        View Attachments
+    <div class="panel-section btn-group">
+      <button class="panel-button dropdown-toggle btn" data-bypass="true" data-toggle="dropdown" title="View Attachments"
+        id="view-attachments-menu">
+        <i class="icon fonticon-picture"></i>
+        <span>View Attachments</span>
         <span class="caret"></span>
       </button>
-      <ul class="dropdown-menu">
+
+      <ul class="dropdown-menu" role="menu" aria-labelledby="view-attachments-menu">
         <%_.each(attachments, function (att) { %>
         <li>
-        <a href="<%- att.url %>" target="_blank" data-bypass="true"> <strong> <%- att.fileName %> </strong> -
-          <span> <%- att.contentType %>, <%- formatSize(att.size)%> </span>
-        </a>
+          <a href="<%- att.url %>" target="_blank" data-bypass="true"> <strong> <%- att.fileName %> </strong> -
+            <span> <%- att.contentType %>, <%- formatSize(att.size)%> </span>
+          </a>
         </li>
         <% }) %>
       </ul>
     </div>
-    <% } %> 
-    <button class="btn upload"><i class="icon icon-circle-arrow-up"></i> Upload Attachment</button>
-    <button class="btn duplicate"><i class="icon icon-repeat"></i> Clone document</button>
-    <button class="btn btn-danger delete"><i class="icon icon-trash"></i></button>
+    <% } %>
+
+    <div class="panel-section">
+      <button class="panel-button upload" title="Upload attachment">
+        <i class="icon icon-circle-arrow-up"></i>
+        <span>Upload Attachment</span>
+      </button>
+    </div>
+    <div class="panel-section">
+      <button class="panel-button duplicate" title="Clone document">
+        <i class="icon icon-repeat"></i>
+        <span>Clone Document</span>
+      </button>
+    </div>
+    <div class="panel-section">
+      <button class="panel-button delete" title="Delete">
+        <i class="icon icon-trash"></i>
+        <span>Delete</span>
+      </button>
+    </div>
   </div>
+</div>
+
+<div class="scrollable">
+  <div class="bgEditorGutter"></div>
+  <div id="editor-container" class="doc-code"><%- JSON.stringify(doc.attributes, null, "  ") %></div>
+</div>
 
 <div id="upload-modal"> </div>
-<div id="duplicate-modal"> </div> 
-<div id="string-edit-modal"> </div> 
-</div>
-
-  <div id="editor-container" class="doc-code"><%- JSON.stringify(doc.attributes, null, "  ") %></div>
-
-</div>
+<div id="duplicate-modal"> </div>
+<div id="delete-doc-modal"> </div>
+<div id="string-edit-modal"> </div>

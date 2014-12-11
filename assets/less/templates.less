@@ -382,6 +382,7 @@ with_tabs_sidebar.html
   position: fixed;
   z-index: 11;
   display: block;
+
   .topmenu-defaults;
   background-color: #CBCBCB;
   .closeMenu & {
@@ -395,9 +396,12 @@ with_tabs_sidebar.html
 }
 
 #dashboard-content {
-  padding-left: 15px;
-  padding-right: 15px;
-  padding-top: 20px;
+
+  & > div {
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 20px;
+  }
 
   &.row-fluid {
     /*remove gutter without rewriting variable*/

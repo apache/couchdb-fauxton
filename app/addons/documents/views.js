@@ -360,7 +360,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
         return;
       }
 
-      showError('Failed to delete your doc!');
+      showError('Failed to delete your document!');
     },
 
     toggleDocument: function (event) {

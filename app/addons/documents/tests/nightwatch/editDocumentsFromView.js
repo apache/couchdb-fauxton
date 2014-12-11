@@ -47,7 +47,7 @@ module.exports = {
     var waitTime = 10000;
 
     client
-      .clickWhenVisible('#doc-actions .js-back')
+      .clickWhenVisible('#doc-editor-actions-panel .js-back')
       .clickWhenVisible('#toggle-query')
       .clickWhenVisible('#query-options-tray label[for="qoReduce"]')
       .clickWhenVisible('#button-options button[type="submit"]')

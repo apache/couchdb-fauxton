@@ -21,6 +21,7 @@
 @import "bootstrap/mixins.less";
 @import "prettyprint.less";
 @import "icons.less";
+@import "codeeditor.less";
 @import "templates.less";
 @import "formstyles.less";
 @import "pagination.less";
@@ -222,6 +223,29 @@ table.databases {
   }
 }
 
+#sidebar-content {
+  position: absolute;
+  top: 60px;
+  width: @sidebarWidth;
+  left: 0;
+  background-color: @secondarySidebar;
+  > div.inner {
+    display: block;
+  }
+}
+
+#dashboard-content .scrollable {
+  height: auto;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  width: 100%;
+  position: absolute;
+  padding: 0;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
 
 /*ONE PANEL TEMPLATE ONLY STYLES  AKA _all_dbs */
 
@@ -428,12 +452,17 @@ div.spinner {
 
   .breadcrumb-back-link {
     border-right: 1px solid #ccc;
+    a {
+      font-size: 20px;
+      margin-top: 1px;
+    }
   }
 
   .breadcrumb {
     margin-bottom: 0;
     background-color: transparent;
     padding: 0;
+
     li {
       padding: 22px 10px;
       &:first-child {

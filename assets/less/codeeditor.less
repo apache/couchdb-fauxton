@@ -1,0 +1,131 @@
+@import "mixins.less";
+
+
+#dashboard.doc-editor-page {
+  background-color: #4d4d4d;
+
+  #dashboard-content {
+    padding-bottom: 0px;
+    top: 0px;
+  }
+}
+
+.doc-editor-page {
+  border-left: none;
+
+  .fixed-header {
+    height: 65px;
+    .box-shadow(none);
+  }
+
+  #breadcrumbs {
+    white-space: nowrap;
+  }
+
+  #doc-editor-actions-panel {
+    position: absolute;
+    top: 64px;
+    right: 0px;
+    left: 0px;
+    width: 100%;
+    background-color: #f1f1f1;
+    height: 61px;
+  }
+
+  #editor-container {
+    margin-top: 0px;
+    font-size: 13px;
+    line-height: 22px;
+    padding-bottom: 15px;
+  }
+
+  .doc-actions-left {
+    float: left;
+    padding: 9px 0px;
+    button {
+      margin: 0px 10px 0px 30px;
+    }
+    div {
+      display: inline-block;
+    }
+  }
+
+  .cancel-button {
+    font-size: 14px;
+  }
+
+  .bgEditorGutter {
+    width: 49px;
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    background-color: #3b3b3b;
+  }
+
+  .panel-button {
+    border: 0px;
+    background-color: #f1f1f1;
+    padding: 11px;
+    color: #555555;
+
+    span:first-of-type {
+      margin-left: 4px;
+    }
+
+    .icon {
+      font-size: 18px;
+    }
+  }
+  .panel-section {
+    border-left: 1px solid #cccccc;
+    text-align: center;
+    padding: 9px 0px;
+    display: inline-block;
+
+    &.open .dropdown-toggle {
+      box-shadow: none;
+      background-color: white;
+    }
+  }
+  .alignRight {
+    text-align: right;
+    font-size: 0; // prevents whitespace gaps between elements
+  }
+  .row-fluid.content-area {
+    background-color: #4d4d4d;
+  }
+
+  // overriding the ace editor inline styles
+  .ace_gutter-layer {
+    min-width: 49px;
+  }
+  .ace_gutter-cell {
+    min-width: 49px;
+  }
+  .ace_scrollbar-h {
+    overflow: hidden !important;
+  }
+
+  .ace_marker-layer .ace_bracket {
+    margin: 0px;
+    border: 1px solid #999999;
+  }
+
+  // hide the labels on the buttons when the screen is shrunk too small,
+  @media screen and (max-width: 1000px) {
+    .panel-button span {
+      display: none;
+    }
+  }
+
+  // hides the API Url header link when the page is too small (prevents wrapping)
+  @media screen and (max-width: 835px) {
+    #api-navbar {
+      display: none;
+    }
+  }
+
+  #dashboard-content .scrollable {
+    top: 125px;
+  }
+}

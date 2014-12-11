@@ -12,22 +12,22 @@
 
 define([
   "app",
-
   "api",
 
   // Modules
-  //views
+  "addons/documents/helpers",
   "addons/documents/views",
   "addons/documents/views-doceditor",
   "addons/databases/base"
 ],
 
-function(app, FauxtonAPI, Documents, DocEditor, Databases) {
+function(app, FauxtonAPI, Helpers, Documents, DocEditor, Databases) {
+
 
   var DocEditorRouteObject = FauxtonAPI.RouteObject.extend({
-    layout: "one_pane",
+    layout: 'doc_editor',
     disableLoader: true,
-    selectedHeader: "Databases",
+    selectedHeader: 'Databases',
 
     initialize: function(route, masterLayout, options) {
       this.databaseName = options[0];
@@ -38,20 +38,22 @@ function(app, FauxtonAPI, Documents, DocEditor, Databases) {
     },
 
     routes: {
-      "database/:database/:doc/code_editor": "code_editor",
-      "database/:database/:doc": "code_editor",
-      "database/:database/_design/:ddoc" :"showDesignDoc"
+      'database/:database/:doc/code_editor': 'code_editor',
+      'database/:database/:doc': 'code_editor',
+      'database/:database/_design/:ddoc': 'showDesignDoc'
     },
 
     events: {
-      "route:reRenderDoc": "reRenderDoc",
-      "route:duplicateDoc": "duplicateDoc"
+      'route:reRenderDoc': 'reRenderDoc',
+      'route:duplicateDoc': 'duplicateDoc'
     },
 
-    crumbs: function() {
+    crumbs: function () {
+      var previousPage = Helpers.getPreviousPage(this.database, this.wasCloned);
+
       return [
-        {"name": this.database.id, "link": Databases.databaseUrl(this.database)},
-        {"name": this.docID, "link": "#"}
+        { type: 'back', link: previousPage },
+        { name: this.docID, link: '#' }
       ];
     },
 
@@ -67,11 +69,11 @@ function(app, FauxtonAPI, Documents, DocEditor, Databases) {
         this.doc = new Documents.Doc({ _id: this.docID }, { database: this.database });
       }
 
-      this.docView = this.setView("#dashboard-content", new DocEditor.CodeEditor({
+      this.docView = this.setView('#dashboard-content', new DocEditor.CodeEditor({
         model: this.doc,
-        database: this.database
+        database: this.database,
+        previousPage: Helpers.getPreviousPage(this.database)
       }));
-
     },
 
     showDesignDoc: function (database, ddoc) {
@@ -88,25 +90,28 @@ function(app, FauxtonAPI, Documents, DocEditor, Databases) {
       database = this.database;
       this.docID = newId;
 
+      var that = this;
       doc.copy(newId).then(function () {
-        doc.set({_id: newId});
+        doc.set({ _id: newId });
+        that.wasCloned = true;
+
         docView.forceRender();
-        FauxtonAPI.navigate('/database/' + database.safeID() + '/' + app.utils.safeURLName(newId), {trigger: true});
+        FauxtonAPI.navigate('/database/' + database.safeID() + '/' + app.utils.safeURLName(newId), { trigger: true });
         FauxtonAPI.addNotification({
-          msg: "Document has been duplicated."
+          msg: 'Document has been duplicated.'
         });
 
       }, function (error) {
-        var errorMsg = "Could not duplicate document, reason: " + error.responseText + ".";
+        var errorMsg = 'Could not duplicate document, reason: ' + error.responseText + '.';
         FauxtonAPI.addNotification({
           msg: errorMsg,
-          type: "error"
+          type: 'error'
         });
       });
     },
 
     apiUrl: function() {
-      return [this.doc.url("apiurl"), this.doc.documentation()];
+      return [this.doc.url('apiurl'), this.doc.documentation()];
     }
   });
 
@@ -120,19 +125,22 @@ function(app, FauxtonAPI, Documents, DocEditor, Databases) {
       });
     },
 
-    crumbs: function() {
+    crumbs: function () {
+      var previousPage = Helpers.getPreviousPage(this.database);
       return [
-        {"name": this.database.id, "link": Databases.databaseUrl(this.database)},
-        {"name": "New", "link": "#"}
+        { type: 'back', link: 'previousPage' },
+        { name: 'New', link: '#' }
       ];
     },
+
     routes: {
-      "database/:database/new": "code_editor"
+      'database/:database/new': 'code_editor'
     },
-    selectedHeader: "Databases"
+
+    selectedHeader: 'Databases'
   });
 
-  
+
   return {
     NewDocEditorRouteObject: NewDocEditorRouteObject,
     DocEditorRouteObject: DocEditorRouteObject
