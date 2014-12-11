@@ -505,7 +505,45 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
 
   });
 
+  // A super-simple replacement for window.confirm()
+  Components.ConfirmationModal = FauxtonAPI.View.extend({
+    template: 'addons/fauxton/templates/confirmation_modal',
 
+    events: {
+      'click .js-btn-success': 'onSelectOkay'
+    },
+
+    initialize: function (options) {
+      this.options = _.extend({
+        title: 'Please confirm',
+        text: '',
+        action: null
+      }, options);
+    },
+
+    onSelectOkay: function () {
+      this.hideModal();
+      if (_.isFunction(this.options.action)) {
+        this.options.action();
+      }
+    },
+
+    showModal: function () {
+      this.$('.modal').modal();
+      $('.modal-backdrop').css('z-index', FauxtonAPI.constants.MISC.MODAL_BACKDROP_Z_INDEX);
+    },
+
+    hideModal: function () {
+      this.$('.modal').modal('hide');
+    },
+
+    serialize: function () {
+      return {
+        title: this.options.title,
+        text: this.options.text
+      };
+    }
+  });
 
   Components.ModalView = FauxtonAPI.View.extend({
 
@@ -520,7 +558,7 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
       this.clear_error_msg();
       this.$('.modal').modal();
       // hack to get modal visible
-      $('.modal-backdrop').css('z-index',1025);
+      $('.modal-backdrop').css('z-index', FauxtonAPI.constants.MISC.MODAL_BACKDROP_Z_INDEX);
     },
 
     hideModal: function () {
