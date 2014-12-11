@@ -109,8 +109,6 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
       this.database = new Databases.Model({id: this.databaseName});
       this.allDatabases = new Databases.List();
 
-      this.footer = this.setView("#footer", new Documents.Views.Footer());
-
       this.designDocs = new Documents.AllDocs(null, {
         database: this.database,
         paging: {
@@ -199,7 +197,8 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
       }, menuLinks);
     },
 
-    designDocMetadata:  function(database, ddoc){
+    designDocMetadata: function (database, ddoc) {
+      this.footer && this.footer.remove();
       this.toolsView && this.toolsView.remove();
       this.viewEditor && this.viewEditor.remove();
 
@@ -251,6 +250,8 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
         this.eventAllDocs = false;
         return;
       }
+
+      this.footer = this.setView('#footer', new Documents.Views.Footer());
 
       this.leftheader.updateCrumbs(crumbs.allDocs(this.database));
 
@@ -314,6 +315,8 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
           decodeDdoc = decodeURIComponent(ddoc);
 
       viewName = viewName.replace(/\?.*$/,'');
+
+      this.footer = this.setView('#footer', new Documents.Views.Footer());
 
       this.indexedDocs = new Documents.IndexCollection(null, {
         database: this.database,
@@ -409,6 +412,7 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
     newViewEditor: function (database, designDoc) {
       var params = app.getParams();
 
+      this.footer && this.footer.remove();
       this.toolsView && this.toolsView.remove();
       this.documentsView && this.documentsView.remove();
 
@@ -543,6 +547,7 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
         filterView: this.filterView
       }));
 
+      this.footer && this.footer.remove();
       this.toolsView && this.toolsView.remove();
       this.viewEditor && this.viewEditor.remove();
 
