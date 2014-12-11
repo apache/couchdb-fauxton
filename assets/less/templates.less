@@ -328,7 +328,6 @@ with_tabs_sidebar.html
   top: 0;
   bottom: 0;
   top: 6px;
-  .box-shadow(-6px 0 rgba(0, 0, 0, 0.1));
 }
 
 
@@ -346,6 +345,15 @@ with_tabs_sidebar.html
 .right-header-wrapper {
   overflow: hidden;
   height: @collapsedNavWidth;
+}
+
+.with-sidebar .right-header-wrapper {
+  .box-shadow(-6px 0 rgba(0, 0, 0, 0.1));
+}
+
+.header-wrapper {
+  .bottom-shadow-border;
+  .box-shadow(0 4px 6px -2px #808080);
 }
 
 .right-header-wrapper,
@@ -395,6 +403,7 @@ with_tabs_sidebar.html
   }
   .with-sidebar & {
     border-left: 1px solid @grayLight;
+    .left-shadow-border;
     width: auto;
     padding: 15px;
     bottom: 0px;
