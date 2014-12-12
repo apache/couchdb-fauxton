@@ -593,8 +593,11 @@ REUSEABLE SHADOW BORDER
     padding: 0;
     margin: 0;
   }
+  .searchbox-wrapper {
+    width: 295px;
+  }
   .searchbox-container {
-    position: relative;
+    position: absolute;
     right: inherit;
     input[type="text"] {
       .border-radius(5px);
@@ -611,10 +614,10 @@ REUSEABLE SHADOW BORDER
       height: @collapsedNavWidth;
       z-index: 2;
       color: #999;
-      .icon-search{
+      .icon-search {
         position: absolute;
-        top: 23px;
-        right: 15px;
+        top: 11px;
+        right: 5px;
       }
     }
   }
@@ -636,16 +639,6 @@ REUSEABLE SHADOW BORDER
   > div {
     padding: 12px;
     height: @collapsedNavWidth;
-  }
-}
-
-#jump-to-doc{
-  .btn-primary {
-    .icon-search{
-      position: absolute;
-      top: 23px;
-      right: 15px;
-    }
   }
 }
 
