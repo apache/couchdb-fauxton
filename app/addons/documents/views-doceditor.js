@@ -210,7 +210,7 @@ function (app, FauxtonAPI, Components, Documents, Databases, resizeColumns, pret
       'click button.delete': 'destroy',
       'click button.duplicate': 'duplicate',
       'click button.upload': 'upload',
-      'click button.cancel-button': 'goback',
+      'click button.js-back': 'goback',
       'click button.string-edit': 'stringEditing'
     },
 
