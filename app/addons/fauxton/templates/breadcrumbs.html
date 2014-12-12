@@ -13,13 +13,20 @@ the License.
 */%>
 
 <% _.each(_.initial(crumbs), function(crumb, index) { %>
-<li class="pull-left">
-  <a href="#<%- crumb.link %>" class="fonticon <%- crumb.className %>"><%- crumb.name %></a>
-</li>
 
-<% if (nextCrumbHasLabel(crumb, index)) { %>
-<li class="divider fonticon-right-open"></li>
-<% } %>
+  <% if (crumb.type === 'back') { %>
+    <li class="pull-left breadcrumb-back-link">
+      <a href="#<%- crumb.link %>" class="fonticon fonticon-left-open"></a>
+    </li>
+  <% } else { %>
+    <li class="pull-left">
+      <a href="#<%- crumb.link %>" class="fonticon <%- crumb.className %>"><%- crumb.name %></a>
+    </li>
+
+    <% if (nextCrumbHasLabel(crumb, index)) { %>
+    <li class="divider fonticon-right-open"></li>
+    <% } %>
+  <% }  %>
 
 <% }); %>
 

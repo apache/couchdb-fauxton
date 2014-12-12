@@ -32,14 +32,14 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
   var crumbs = {
     allDocs: function (database) {
       return [
-        { "name": "", "className": "fonticon-left-open", "link": "/_all_dbs" },
+        { "type": "back", "link": "/_all_dbs" },
         { "name": database.id, "link": Databases.databaseUrl(database), className: "lookahead-tray-link" }
       ];
     },
 
     changes: function (database) {
       return [
-        { "name": "", "className": "fonticon-left-open", "link": "/_all_dbs" },
+        { "type": "back", "link": "/_all_dbs" },
         { "name": database.id, "link": Databases.databaseUrl(database), className: "lookahead-tray-link" }
       ];
     }
