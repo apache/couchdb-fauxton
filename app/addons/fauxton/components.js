@@ -553,6 +553,13 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
       _.bindAll(this);
     },
 
+    afterRender: function () {
+      var that = this;
+      this.$('.modal').on('shown', function () {
+        that.$('input:text:visible:first').focus();
+      });
+    },
+
     showModal: function () {
       if (this._showModal){ this._showModal();}
       this.clear_error_msg();

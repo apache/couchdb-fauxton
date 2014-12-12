@@ -149,7 +149,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
 
       var enteredName = $('#db_name').val();
       if (this.database.id != enteredName) {
-        this.set_error_msg(enteredName + " does not match database id - are you sure you want to delete " + this.database.id + "?");
+        this.set_error_msg(enteredName + " does not match the database name.");
         return;
       }
 
