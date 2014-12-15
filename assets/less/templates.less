@@ -250,11 +250,6 @@
   }
 }
 
-.left-shadow-border {
-  border-left: 1px solid #999;
-  .box-shadow(-6px 0 rgba(0, 0, 0, 0.1));
-}
-
 .bottom-shadow-border {
   border-bottom: 1px solid #999;
   .box-shadow(0px 6px 0 0 rgba(0, 0, 0, 0.1));
@@ -277,7 +272,8 @@ with_tabs.html
 with_tabs_sidebar.html
  */
 #dashboard {
-  .left-shadow-border;
+  z-index: 10;
+  .left-shadow-border();
   position: relative;
   left: @navWidth;
   background-color: @sidebarBG;
@@ -350,8 +346,8 @@ with_tabs_sidebar.html
 }
 
 .header-wrapper {
-  .bottom-shadow-border;
-  .box-shadow(0 4px 6px -2px #808080);
+  .bottom-shadow-border();
+  .box-shadow(0 6px 0 0 rgba(0, 0, 0, 0.1));
   position: absolute;
   left: 0;
   right: 0;
@@ -372,6 +368,7 @@ with_tabs_sidebar.html
 
 /* USED IN TEMPLATE: with_tabs_sidebar.html */
 .dashboard-upper-menu {
+  border-left: 1px solid #999;
   right: 0;
   left: @sidebarWidth+@navWidth;
   position: fixed;
@@ -400,7 +397,7 @@ with_tabs_sidebar.html
   }
   .with-sidebar & {
     border-left: 1px solid @grayLight;
-    .left-shadow-border;
+    .left-shadow-border();
     width: auto;
     padding: 15px;
     bottom: 0px;

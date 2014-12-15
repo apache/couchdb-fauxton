@@ -25,6 +25,7 @@
 @import "formstyles.less";
 @import "pagination.less";
 @import "trays.less";
+@import "mixins.less";
 
 
 /**
@@ -380,22 +381,6 @@ div.spinner {
   }
 }
 
-/*
----------------------------------------------------
-REUSEABLE SHADOW BORDER
----------------------------------------------------
- */
-
-.left-shadow-border{
-  border-left: 1px solid #999;
-  .box-shadow(-6px 0 rgba(0, 0, 0, 0.1));
-}
-
-.bottom-shadow-border{
-  border-bottom: 1px solid #999;
-  .box-shadow(0px 6px 0 0 rgba(0, 0, 0, 0.1));
-}
-
 //---header--//
 .fixed-header{
   height: @collapsedNavWidth;
@@ -406,7 +391,7 @@ REUSEABLE SHADOW BORDER
   background-color: @breadcrumbBG;
   position: absolute;
 
-  .box-shadow(0 4px 6px -2px #808080);
+  .bottom-shadow-border();
   z-index: 100;
 
   /* these styles are for the new header*/
