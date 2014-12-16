@@ -62,6 +62,7 @@
   width: @navWidth;
   .closeMenu & {
     width: @collapsedNavWidth;
+    overflow-x: hidden;
   }
   background-color: @primaryNav;
   .js-version {
@@ -165,7 +166,10 @@
           .box-sizing(border-box);
           background-color: @navBG;
           border-bottom:  1px solid @primaryNav;
+          height: 48px;
           min-height: 48px;
+          position: relative;
+
           &.active, &:hover {
             a {
               .box-shadow(none);
@@ -186,11 +190,12 @@
             background-color: transparent;
             color: #fff;
             text-shadow: @textShadowOff;
-            &.closeMenu {
-              color: transparent;
-            }
+            height: 48px;
+            display: flex;
+
             .fonticon {
               position: relative;
+
               &:before {
                 position: absolute;
                 left: -41px;
@@ -201,6 +206,9 @@
             }
             .closeMenu & {
               color: transparent;
+              span {
+                display: none;
+              }
             }
           }
         }
@@ -272,7 +280,6 @@ with_tabs.html
 with_tabs_sidebar.html
  */
 #dashboard {
-  .left-shadow-border();
   position: relative;
   left: @navWidth;
   background-color: @sidebarBG;

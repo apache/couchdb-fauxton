@@ -25,7 +25,7 @@ the License.
       <li data-nav-name= "<%- link.title %>" >
         <a href="<%- link.href %>">
           <i class="<%- link.icon %> fonticon"></i>
-          <%- link.title %>
+          <span><%- link.title %></span>
         </a>
       </li>
     <% }); %>
@@ -36,7 +36,7 @@ the License.
       <li data-nav-name= "Documentation">
         <a data-bypass="true" href="<%-getDocUrl('GENERAL')%>" target="_blank">
           <i class="fonticon-bookmark fonticon"></i>
-            Documentation
+            <span>Documentation</span>
         </a>
       </li>
 
@@ -45,7 +45,7 @@ the License.
       <li data-nav-name= "<%- link.title %>">
         <a href="<%- link.href %>">
           <i class="<%- link.icon %> fonticon"></i>
-          <%- link.title %>
+          <span><%- link.title %></span>
         </a>
       </li>
     <% }); %>
@@ -72,3 +72,5 @@ the License.
     </ul>
   </div>
 </div>
+
+<div id="primary-nav-right-shadow"></div>
