@@ -1,7 +1,7 @@
 Contributing to Fauxton
 =======================
 
-CouchDB is an Apache project, which is why we keep all our issues in Jira.  You can find or submit issues for Fauxton [here](https://issues.apache.org/jira/issues/?filter=12326543).
+CouchDB is an Apache project, which is why we keep all our issues in Jira.  You can find or submit issues for Fauxton [here](https://issues.apache.org/jira/issues/?jql=project%20%3D%20COUCHDB%20AND%20resolution%20%3D%20Unresolved%20AND%20component%20%3D%20Fauxton%20ORDER%20BY%20priority%20DESC).
 
 We try to keep all tickets up to date with Skill level for you to have an idea of the level of effort or comfortability with the framework you'd need to complete the task.
 
