@@ -15,7 +15,6 @@ define([
   "api",
 
   // Modules
-  //views
   "addons/documents/views",
   "addons/documents/views-changes",
   "addons/documents/views-index",
@@ -93,7 +92,7 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
 
     initialize: function (route, masterLayout, options) {
       this.initViews(options[0]);
-      this.listenTo(FauxtonAPI.Events, 'lookaheadTray:update', this.onSelectDatabase);
+      this.listenToLookaheadTray();
     },
 
     establish: function () {
@@ -146,9 +145,18 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
     onSelectDatabase: function (dbName) {
       this.cleanup();
       this.initViews(dbName);
+
       FauxtonAPI.navigate('/database/' + app.utils.safeURLName(dbName) + '/_all_docs', {
         trigger: true
       });
+
+      // we need to start listening again because cleanup() removed the listener, but in this case
+      // initialize() doesn't fire to re-set up the listener
+      this.listenToLookaheadTray();
+    },
+
+    listenToLookaheadTray: function () {
+      this.listenTo(FauxtonAPI.Events, 'lookaheadTray:update', this.onSelectDatabase);
     },
 
     setUpDropdown: function() {
@@ -214,7 +222,7 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
       this.apiUrl = [designDocInfo.url('apiurl'), designDocInfo.documentation()];
     },
 
-    tempFn:  function(databaseName, ddoc, fn){
+    tempFn: function(databaseName, ddoc, fn){
       this.setView("#dashboard-upper-content", new Documents.Views.temp({}));
       this.crumbs = function () {
         return [
@@ -609,6 +617,9 @@ function(app, FauxtonAPI, Documents, Changes, Index, DocEditor, Databases, Resou
       if (this.footer) {
         this.removeView('#footer');
       }
+
+      // we're no longer interested in listening to the lookahead tray event on this route object
+      this.stopListening(FauxtonAPI.Events, 'lookaheadTray:update', this.onSelectDatabase);
     }
 
   });
