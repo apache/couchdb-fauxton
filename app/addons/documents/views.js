@@ -18,7 +18,7 @@ define([
   "addons/databases/resources",
 
   // Views
-  "addons/documents/views-sidebar",
+  "addons/documents/shared-views",
   "addons/documents/views-queryoptions",
 
   //plugins
@@ -36,7 +36,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
   }
 
   Views.Footer = FauxtonAPI.View.extend({
-    template: "addons/documents/templates/all_docs_footer",
+    template: "addons/documents/templates/all_docs_footer"
   });
 
   Views.RightAllDocsHeader = FauxtonAPI.View.extend({

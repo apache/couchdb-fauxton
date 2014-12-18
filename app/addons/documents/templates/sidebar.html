@@ -16,7 +16,7 @@ the License.
   <li><a id="permissions" href="<%= permissions_url %>">Permissions</a><li>
   <li><a id="changes" href="<%= changes_url %>">Changes</a><li>
   <% _.each(docLinks, function (link) { %>
-  <li><a href="<%= database_url + '/' + link.url %>"><%= link.title %></a></li>
+  <li><a id="docLink_<%=link.url%>" href="<%= database_url + '/' + link.url %>"><%= link.title %></a></li>
   <% }); %>
   <li class="active"> 
       <a id="all-docs" href="#<%= database.url('index') %>" class="toggle-view"> All Documents</a> 

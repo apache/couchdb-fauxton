@@ -13,7 +13,7 @@
 define([
   "addons/documents/views",
   "addons/documents/routes-documents",
-  "addons/documents/routes-doc-editor",
+  "addons/documents/routes-doc-editor"
 ],
 
 function(Documents, DocumentsRouteObject, docEditor) {

@@ -10,8 +10,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 define([
-        'addons/documents/views-sidebar',
-        'testUtils'
+  'addons/documents/shared-views',
+  'testUtils'
 ], function (Views, testUtils) {
   var assert = testUtils.assert,
       ViewSandbox = testUtils.ViewSandbox,

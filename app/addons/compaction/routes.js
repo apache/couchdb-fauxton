@@ -11,35 +11,30 @@
 // the License.
 
 define([
-       "app",
+  'app',
+  'api',
 
-       "api",
-
-       // Modules
-       "addons/compaction/views",
-       "addons/databases/resources"
+  // Modules
+  'addons/compaction/views',
+  'addons/databases/resources',
+  'addons/documents/shared-routes'
 ],
 
-function(app, FauxtonAPI, Compaction, Databases) {
+function(app, FauxtonAPI, Compaction, Databases, BaseRoute) {
 
-  var  CompactionRouteObject = FauxtonAPI.RouteObject.extend({
-    layout: "one_pane",
-
-    crumbs: function () {
-      return [
-        {"name": this.database.id, "link": Databases.databaseUrl(this.database)},
-        {"name": "Compact & Clean", "link": "compact"}
-      ];
-    },
-
+  var CompactionRouteObject = BaseRoute.extend({
     routes: {
       "database/:database/compact": "compaction"
     },
 
-    initialize: function(route, masterLayout, options) {
+    initialize: function (route, masterLayout, options) {
       var databaseName = options[0];
+      this.database = this.database || new Databases.Model({ id: databaseName });
+      this.allDatabases = new Databases.List();
 
-      this.database = this.database || new Databases.Model({id: databaseName});
+      this.createDesignDocsCollection();
+      this.addLeftHeader();
+      this.addSidebar('docLink_compact');
     },
 
     compaction: function () {
@@ -47,13 +42,11 @@ function(app, FauxtonAPI, Compaction, Databases) {
     },
 
     establish: function () {
-      return this.database.fetch();
+      return [
+        this.designDocs.fetch({reset: true}),
+        this.allDatabases.fetchOnce()
+      ];
     }
-
-    /*apiUrl: function() {
-      return [this.compactions.url(), this.compactions.documentation];
-    },*/
-
   });
 
   Compaction.RouteObjects = [CompactionRouteObject];
