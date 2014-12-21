@@ -35,7 +35,7 @@ function(app, FauxtonAPI, Config, Views, CORS) {
             link: '_config'
           },
           {
-            title: 'CORS config',
+            title: 'CORS',
             typeSelect: 'cors',
             link: '_config/cors'
           }

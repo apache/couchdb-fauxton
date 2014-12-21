@@ -29,6 +29,15 @@ function (app, FauxtonAPI, CORS) {
     establish: function(){
       return [this.model.fetch()];
     },
+    serialize: function () {
+	  var isCorsEnabled = false;
+	  if (!_.isUndefined(enable_cors) && enable_cors =="true") {
+	    isCorsEnabled = true;
+	  }
+	  return {
+       isCorsEnabled: isCorsEnabled
+      };
+	},
     submit: function(e){
       e.preventDefault();
 
