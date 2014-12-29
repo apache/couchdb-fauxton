@@ -1058,6 +1058,10 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
       this.dbSearchTypeahead.render();
     },
 
+    clearValue: function () {
+      this.$('.search-autocomplete').val('');
+    },
+
     cleanup: function () {
       $("body").off("click.lookaheadTray");
     },
