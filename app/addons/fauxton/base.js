@@ -131,7 +131,7 @@ function(app, FauxtonAPI, Components, ZeroClipboard) {
     toggleMenu: function(){
        var $selectorList = $('body');
        $selectorList.toggleClass('closeMenu');
-       FauxtonAPI.Events.trigger(FauxtonAPI.constants.EVENT_BURGER_CLICK);
+      FauxtonAPI.Events.trigger(FauxtonAPI.constants.EVENTS.BURGER_CLICKED);
     },
 
     // TODO: can we generate this list from the router?
