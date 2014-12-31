@@ -130,8 +130,10 @@ function(app, FauxtonAPI, Components, ZeroClipboard) {
 
     toggleMenu: function(){
        var $selectorList = $('body');
+      var minimized = !$selectorList.hasClass('closeMenu');
+      this.setState(minimized);
        $selectorList.toggleClass('closeMenu');
-      FauxtonAPI.Events.trigger(FauxtonAPI.constants.EVENTS.BURGER_CLICKED);
+       FauxtonAPI.Events.trigger(FauxtonAPI.constants.EVENT_BURGER_CLICK, { minimized: minimized });
     },
 
     // TODO: can we generate this list from the router?
@@ -148,6 +150,11 @@ function(app, FauxtonAPI, Components, ZeroClipboard) {
       FauxtonAPI.extensions.on('add:navbar:addHeaderLink', this.addLink);
       FauxtonAPI.extensions.on('removeItem:navbar:addHeaderLink', this.removeLink);
       this.versionFooter = new Fauxton.Footer({});
+
+      // if needed, minimize the sidebar
+      if (this.isMinimized()) {
+        $('body').addClass('closeMenu');
+      }
     },
 
     serialize: function() {
@@ -223,6 +230,15 @@ function(app, FauxtonAPI, Components, ZeroClipboard) {
           that.insertView(selector, link.view).render();
         });
       }, this);
+    },
+
+    setState: function (minimized) {
+      app.utils.localStorageSet(FauxtonAPI.constants.LOCAL_STORAGE.SIDEBAR_MINIMIZED, minimized);
+    },
+
+    isMinimized: function () {
+      var isMinimized = app.utils.localStorageGet(FauxtonAPI.constants.LOCAL_STORAGE.SIDEBAR_MINIMIZED);
+      return (_.isUndefined(isMinimized)) ? false : isMinimized;
     }
 
     // TODO: ADD ACTIVE CLASS

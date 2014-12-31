@@ -45,6 +45,10 @@ define([], function () {
       CONFIG: '/_utils/docs/config/index.html',
       VIEWS: '/_utils/docs/intro/overview.html#views',
       CHANGES: '/_utils/docs/api/database/changes.html?highlight=changes#post--db-_changes'
+    },
+
+    LOCAL_STORAGE: {
+      SIDEBAR_MINIMIZED: 'sidebar-minimized'
     }
   };
 
