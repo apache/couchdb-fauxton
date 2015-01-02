@@ -22,9 +22,9 @@ function (app, FauxtonAPI, CORS) {
   
   Views.CORSMain = FauxtonAPI.View.extend({
     className: 'cors-page',
-    template: "addons/cors/templates/cors",
+    template: 'addons/cors/templates/cors',
     events: {
-      "submit form#corsForm": "submit"
+      'submit form#corsForm': 'submit'
     },
     establish: function(){
       return [this.model.fetch()];
@@ -32,64 +32,64 @@ function (app, FauxtonAPI, CORS) {
     submit: function(e){
       e.preventDefault();
 
-      if ($('#corsForm .enable_cors').is(':checked')) {
-        var enable_option = new CORS.ConfigModel({
-          section: "httpd",
-          attribute: "enable_cors",
-          value: "true"
+      if ($('#corsForm .js-enable-cors').is(':checked')) {
+        var enableOption = new CORS.ConfigModel({
+          section: 'httpd',
+          attribute: 'enable_cors',
+          value: 'true'
         });
         
-        var enable_creds = new CORS.ConfigModel({
-          section: "cors",
-          attribute: "credentials",
-          value: "true"
+        var enableCreds = new CORS.ConfigModel({
+          section: 'cors',
+          attribute: 'credentials',
+          value: 'true'
         });
 
-        enable_option.save().then(function (response) {
+        enableOption.save().then(function (response) {
           var notification = FauxtonAPI.addNotification({
-            msg: "Your settings have been saved.",
-            type: "success",
+            msg: 'Your settings have been saved.',
+            type: 'success',
             clear: true
           });
         },
         function (response, errorCode, errorMsg) {
           var notification = FauxtonAPI.addNotification({
-            msg: "Sorry! There was an error. Code " + errorCode  + ".",
-            type: "error",
+            msg: 'Sorry! There was an error. Code ' + errorCode  + '.',
+            type: 'error',
             clear: true
           });
         });
           
-        enable_creds.save();
+        enableCreds.save();
       } else {
-        var disable_option = new CORS.ConfigModel({
-          section: "httpd",
-          attribute: "enable_cors",
-          value: "false"
+        var disableOption = new CORS.ConfigModel({
+          section: 'httpd',
+          attribute: 'enable_cors',
+          value: 'false'
         });
         
-        var disable_creds = new CORS.ConfigModel({
-          section: "cors",
-          attribute: "credentials",
-          value: "false"
+        var disableCreds = new CORS.ConfigModel({
+          section: 'cors',
+          attribute: 'credentials',
+          value: 'false'
         });
         
-        disable_option.save().then(function (response) {
+        disableOption.save().then(function (response) {
           var notification = FauxtonAPI.addNotification({
-            msg: "Your settings have been saved.",
-            type: "success",
+            msg: 'Your settings have been saved.',
+            type: 'success',
             clear: true
           });
         },
         function (response, errorCode, errorMsg) {
           var notification = FauxtonAPI.addNotification({
-            msg: "Sorry! There was an error. Code " + errorCode  + ".",
-            type: "error",
+            msg: 'Sorry! There was an error. Code ' + errorCode  + '.',
+            type: 'error',
             clear: true
           });
         });
           
-        disable_creds.save();
+        disableCreds.save();
       }
     }
   });

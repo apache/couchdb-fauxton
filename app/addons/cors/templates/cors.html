@@ -13,14 +13,14 @@ the License.
 -->
 
 <header id="cors-header">
-  <p><a href="">Cross-Origin Resource Sharing</a> (CORS) lets you connect to remote servers directly from the browser, so you can host browser-based apps on static pages and talk directly with CouchDB to load your data.</p>
+  <p>Cross-Origin Resource Sharing (CORS) lets you connect to remote servers directly from the browser, so you can host browser-based apps on static pages and talk directly with CouchDB to load your data.</p>
 </header>
 
 <form id="corsForm">
 
   <div class="cors-enable">
     <label class="checkbox">
-      <input type="checkbox" class="enable_cors" name="enable_cors" <% if  (typeof enable_cors !== 'undefined' && enable_cors) { %> checked="checked" <% } %>> Enable CORS
+      <input type="checkbox" class="js-enable-cors" name="enable_cors" <% if  (typeof enable_cors !== 'undefined' && enable_cors) { %> checked="checked" <% } %>> Enable CORS
     </label>
   </div>
 
