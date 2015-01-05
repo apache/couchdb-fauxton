@@ -303,11 +303,8 @@ with_tabs_sidebar.html
   }
 }
 
-.sidebar {
-  width: @sidebarWidth;
-}
-
 #sidebar-content {
+  width: @sidebarWidth;
   position: absolute;
   top: @collapsedNavWidth;
   left: 0;
@@ -316,6 +313,11 @@ with_tabs_sidebar.html
     display: block;
   }
   margin-top: 6px;
+  
+  .nav-list:last-child {
+    margin-bottom: 30px;
+  }
+
 }
 
 .scrollable {
