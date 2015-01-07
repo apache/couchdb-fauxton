@@ -412,10 +412,6 @@ module.exports = function(grunt) {
         ' -e saucelabs -c ' + __dirname + '/test/nightwatch_tests/nightwatch.json'
       }
     },
-    
-    selenium_start: {
-      options: { port: 4444 }
-    },
 
     // generates the nightwatch.json file with appropriate content for this env
     initNightwatch: {
@@ -491,7 +487,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-mocha-phantomjs');
-  grunt.loadNpmTasks('grunt-selenium-webdriver');
   grunt.loadNpmTasks('grunt-md5');
 
   /*
@@ -545,10 +540,10 @@ module.exports = function(grunt) {
   // setup and install fauxton as couchapp
   grunt.registerTask('couchapp_deploy', ['couchapp_setup', 'couchapp_install']);
 
-  /* 
+  /*
    * Nightwatch functional testing
    */
   //Start Nightwatch test from terminal, using: $ grunt nightwatch
   grunt.registerTask('nightwatch_saucelabs', [ 'initNightwatch', 'exec:start_nightWatch_saucelabs']);
-  grunt.registerTask('nightwatch', [ 'exec:check_selenium', 'selenium_start', 'exec:check_chrome_driver', 'initNightwatch', 'exec:start_nightWatch']);
+  grunt.registerTask('nightwatch', [ 'exec:check_selenium', 'exec:check_chrome_driver', 'initNightwatch', 'exec:start_nightWatch']);
 };
