@@ -51,7 +51,6 @@
     "nightwatch": "~0.5.33",
     "nano": "~5.12.0",
     "grunt-chmod": "^1.0.3",
-    "grunt-selenium-webdriver": "^0.2.431",
     "grunt-md5": "^0.1.11"
   }
 }

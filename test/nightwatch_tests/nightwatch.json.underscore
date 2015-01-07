@@ -8,13 +8,13 @@
   "live_output" : false,
 
   "selenium" : {
-    "start_process" : false,
-    "server_path" : "",
+    "start_process" : true,
+    "server_path" : "test/nightwatch_tests/selenium/selenium-server-standalone-2.43.1.jar",
     "log_path" : "",
     "host" : "127.0.0.1",
     "port" : 4444,
     "cli_args" : {
-      "webdriver.chrome.driver" : "",
+      "webdriver.chrome.driver" : "test/nightwatch_tests/selenium/chromedriver",
       "webdriver.ie.driver" : "",
       "webdriver.firefox.profile" : ""
     }
