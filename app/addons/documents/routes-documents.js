@@ -23,10 +23,11 @@ define([
 
   "addons/databases/base",
   "addons/documents/resources",
-  "addons/fauxton/components"
+  "addons/fauxton/components",
+  "addons/documents/stores"
 ],
 
-function(app, FauxtonAPI, BaseRoute, Documents, Changes, Index, DocEditor, Databases, Resources, Components) {
+function(app, FauxtonAPI, BaseRoute, Documents, Changes, Index, DocEditor, Databases, Resources, Components, Stores) {
 
 
   var DocumentsRouteObject = BaseRoute.extend({
@@ -145,8 +146,8 @@ function(app, FauxtonAPI, BaseRoute, Documents, Changes, Index, DocEditor, Datab
 
     createParams: function (options) {
       var urlParams = app.getParams(options),
-          params = Documents.QueryParams.parse(urlParams),
-          limit = this.getDocPerPageLimit(params, FauxtonAPI.constants.MISC.DEFAULT_PAGE_SIZE);
+      params = Documents.QueryParams.parse(urlParams),
+      limit = this.getDocPerPageLimit(params, FauxtonAPI.constants.MISC.DEFAULT_PAGE_SIZE);
 
       return {
         urlParams: urlParams,
@@ -161,9 +162,9 @@ function(app, FauxtonAPI, BaseRoute, Documents, Changes, Index, DocEditor, Datab
      */
     allDocs: function(databaseName, options) {
       var params = this.createParams(options),
-          urlParams = params.urlParams,
-          docParams = params.docParams,
-          collection;
+      urlParams = params.urlParams,
+      docParams = params.docParams,
+      collection;
 
       if (this.eventAllDocs) {
         this.eventAllDocs = false;
@@ -229,9 +230,9 @@ function(app, FauxtonAPI, BaseRoute, Documents, Changes, Index, DocEditor, Datab
 
     viewFn: function (databaseName, ddoc, viewName) {
       var params = this.createParams(),
-          urlParams = params.urlParams,
-          docParams = params.docParams,
-          decodeDdoc = decodeURIComponent(ddoc);
+      urlParams = params.urlParams,
+      docParams = params.docParams,
+      decodeDdoc = decodeURIComponent(ddoc);
 
       viewName = viewName.replace(/\?.*$/,'');
 
@@ -247,14 +248,13 @@ function(app, FauxtonAPI, BaseRoute, Documents, Changes, Index, DocEditor, Datab
         }
       });
 
-      this.viewEditor = this.setView("#dashboard-upper-content", new Index.ViewEditor({
-        model: this.database,
-        ddocs: this.designDocs,
+      this.viewEditor && this.viewEditor.remove();
+      this.viewEditor = this.setView("#dashboard-upper-content", new Index.ViewEditorReact({
         viewName: viewName,
-        params: urlParams,
         newView: false,
         database: this.database,
-        ddocInfo: this.ddocInfo(decodeDdoc, this.designDocs, viewName)
+        designDocs: this.designDocs,
+        designDocId: "_design/" + decodeDdoc
       }));
 
       this.toolsView && this.toolsView.remove();
@@ -280,8 +280,8 @@ function(app, FauxtonAPI, BaseRoute, Documents, Changes, Index, DocEditor, Datab
 
     showQueryOptions: function (urlParams, ddoc, viewName) {
       var promise = this.designDocs.fetch({reset: true}),
-          that = this,
-          hasReduceFunction;
+      that = this,
+      hasReduceFunction;
 
       promise.then(function(resp) {
         var design = _.findWhere(that.designDocs.models, {id: '_design/'+ddoc}); 
@@ -341,19 +341,27 @@ function(app, FauxtonAPI, BaseRoute, Documents, Changes, Index, DocEditor, Datab
       }));
     },
 
-    newViewEditor: function (database, designDoc) {
+    newViewEditor: function (database, _designDoc) {
       var params = app.getParams();
+      var newDesignDoc = true;
+      var designDoc;
+        
+      if (!_.isUndefined(_designDoc)) {
+        designDoc = "_design/" + _designDoc;
+        newDesignDoc = false;
+      }
 
       this.footer && this.footer.remove();
       this.toolsView && this.toolsView.remove();
       this.documentsView && this.documentsView.remove();
 
-      this.viewEditor = this.setView("#dashboard-upper-content", new Index.ViewEditor({
-        currentddoc: "_design/" + designDoc || "",
-        ddocs: this.designDocs,
-        params: params,
+      this.viewEditor = this.setView("#dashboard-upper-content", new Index.ViewEditorReact({
+        viewName: 'new-view',
+        newView: true,
         database: this.database,
-        newView: true
+        designDocs: this.designDocs,
+        designDocId: designDoc,
+        newDesignDoc: newDesignDoc
       }));
 
       this.sidebar.setSelectedTab("new-view");
@@ -365,14 +373,14 @@ function(app, FauxtonAPI, BaseRoute, Documents, Changes, Index, DocEditor, Datab
 
     updateAllDocsFromView: function (event) {
       var view = event.view,
-          params = this.createParams(),
-          urlParams = params.urlParams,
-          docParams = params.docParams,
-          ddoc = event.ddoc,
-          defaultPageSize,
-          isLazyInit,
-          pageSize,
-          collection;
+      params = this.createParams(),
+      urlParams = params.urlParams,
+      docParams = params.docParams,
+      ddoc = event.ddoc,
+      defaultPageSize,
+      isLazyInit,
+      pageSize,
+      collection;
 
       isLazyInit = _.isUndefined(this.documentsView) || _.isUndefined(this.documentsView.allDocsNumber);
       defaultPageSize = isLazyInit ? FauxtonAPI.constants.MISC.DEFAULT_PAGE_SIZE : this.documentsView.perPage();
