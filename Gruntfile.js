@@ -395,7 +395,7 @@ module.exports = function(grunt) {
 
     mochaSetup: {
       default: {
-        files: { src: helper.watchFiles(['[Ss]pec.js'], ['./app/addons/**/*[Ss]pec.js'])},
+        files: { src: helper.watchFiles(['[Ss]pec.js'], ['./app/addons/**/*[Ss]pec.js', './app/addons/**/*[Ss]pec.react.js'])},
         template: 'test/test.config.underscore',
         config: './app/config.js'
       }
@@ -408,7 +408,7 @@ module.exports = function(grunt) {
     shell: {
         'build-jsx': {
             command: [
-              'jsx -x jsx app/addons/ app/addons/',
+              './node_modules/react-tools/bin/jsx -x jsx app/addons/ app/addons/',
                 'rm -rf <%= src_path %>/js/app/views/.module-cache/'
             ].join(' && '),
             stdout: true,
