@@ -31,7 +31,7 @@ module.exports = {
       .populateDatabase(newDatabaseName)
       .url(baseUrl+'/#/database/'+newDatabaseName+'/_all_docs')
       .waitForElementPresent('#new-design-docs-button', waitTime, false)
-      .click('#new-design-docs-button')
+      .click('#new-design-docs-button a')
       .click('#new-design-docs-button a[href="#/database/'+newDatabaseName+'/new_view"]')
       .waitForElementPresent('#new-ddoc', waitTime, false)
       .setValue('#new-ddoc','test_design_doc')
