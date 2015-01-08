@@ -406,7 +406,6 @@ module.exports = function(grunt) {
         command: __dirname + '/node_modules/nightwatch/bin/nightwatch' +
         ' -c ' + __dirname + '/test/nightwatch_tests/nightwatch.json'
       }
-      }
     },
 
     // generates the nightwatch.json file with appropriate content for this env
