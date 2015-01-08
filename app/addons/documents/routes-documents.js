@@ -146,8 +146,8 @@ function(app, FauxtonAPI, BaseRoute, Documents, Changes, Index, DocEditor, Datab
 
     createParams: function (options) {
       var urlParams = app.getParams(options),
-      params = Documents.QueryParams.parse(urlParams),
-      limit = this.getDocPerPageLimit(params, FauxtonAPI.constants.MISC.DEFAULT_PAGE_SIZE);
+          params = Documents.QueryParams.parse(urlParams),
+          limit = this.getDocPerPageLimit(params, FauxtonAPI.constants.MISC.DEFAULT_PAGE_SIZE);
 
       return {
         urlParams: urlParams,
@@ -230,9 +230,9 @@ function(app, FauxtonAPI, BaseRoute, Documents, Changes, Index, DocEditor, Datab
 
     viewFn: function (databaseName, ddoc, viewName) {
       var params = this.createParams(),
-      urlParams = params.urlParams,
-      docParams = params.docParams,
-      decodeDdoc = decodeURIComponent(ddoc);
+          urlParams = params.urlParams,
+          docParams = params.docParams,
+          decodeDdoc = decodeURIComponent(ddoc);
 
       viewName = viewName.replace(/\?.*$/,'');
 
