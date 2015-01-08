@@ -402,7 +402,6 @@ module.exports = function(grunt) {
 
     exec: {
       check_selenium: helper.check_selenium,
-      check_chrome_driver : helper.check_chrome_driver,
       start_nightWatch: {
         command: __dirname + '/node_modules/nightwatch/bin/nightwatch' +
         ' -c ' + __dirname + '/test/nightwatch_tests/nightwatch.json'
@@ -541,5 +540,5 @@ module.exports = function(grunt) {
    * Nightwatch functional testing
    */
   //Start Nightwatch test from terminal, using: $ grunt nightwatch
-  grunt.registerTask('nightwatch', [ 'exec:check_selenium', 'exec:check_chrome_driver', 'initNightwatch', 'exec:start_nightWatch']);
+  grunt.registerTask('nightwatch', [ 'exec:check_selenium', 'initNightwatch', 'exec:start_nightWatch']);
 };
