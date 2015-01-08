@@ -6,21 +6,16 @@ git:
 services:
   - couchdb
 addons:
-  sauce_connect: true
+  firefox: "34.0"
 before_install:
+  - export DISPLAY=:99.0
+  - "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1400x900x16"
   - HOST="http://127.0.0.1:5984"
   - curl -X PUT $HOST/_config/admins/tester -d '"testerpass"'
 before_script:
   - npm install -g grunt-cli
   - grunt test
   - grunt dev &
+  - sleep 5
 script:
-  - grunt nightwatch_saucelabs
-branches:
-  only:
-    - master
-env:
-  global:
-  - secure: GZfXnEV5hwH5FKcnbFK57WZLy2C8i650rCFFU4JaHNMNqsqGN/FH4CNyPO//BveZRQWJFRAaH7WclK/4L45NeX4/iufwGf8ypcGR2GvzQtGe1VdoQCNiiDv42BVvX7riT9aCcCdJNqjoKRIL9NkFo+gln1hEymZrQGUC7dojeFY=
-  - secure: THafpI+3svqxOa9gf5wFxuF/QIngKPlNpKPo7rKTnI76pfTuG7MGeBw1S1Da3hkMx3XIYciHcoqnb7LEwI7+s6UWA7eLA1FBcsRqJbSDI5VqSfOcYVJ05oFQ21/Iofk8r8R/LtJGQWwwZxem6P74cwu2iR2VcuWdImSHGiESOKg=
-
+  - grunt nightwatch
