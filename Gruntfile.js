@@ -161,7 +161,7 @@ module.exports = function(grunt) {
     // override inside main.js needs to test for them so as to not accidentally
     // route. Settings expr true so we can do `mightBeNullObject && mightBeNullObject.coolFunction()`
     jshint: {
-      all: ['app/**/*.js', 'Gruntfile.js', "!app/**/assets/js/*.js"],
+      all: ['app/**/*.js', 'Gruntfile.js', "!app/**/assets/js/*.js", "!app/**/*.jsx"],
       options: {
         scripturl: true,
         evil: true,
@@ -280,6 +280,10 @@ module.exports = function(grunt) {
         files: helper.watchFiles(['.js'], ["./app/**/*.js", '!./app/load_addons.js',"./assets/**/*.js", "./test/**/*.js"]),
         tasks: ['watchRun'],
       },
+      jsx: {
+        files: helper.watchFiles(['.jsx'], ["./app/**/*.jsx", '!./app/load_addons.jsx',"./assets/**/*.jsx", "./test/**/*.jsx"]),
+        tasks: ['watchRun'],
+      },
       style: {
         files: helper.watchFiles(['.less','.css'],["./app/**/*.css","./app/**/*.less","./assets/**/*.css", "./assets/**/*.less"]),
         tasks: ['clean:watch', 'dependencies','less', 'concat:index_css'],
@@ -391,7 +395,7 @@ module.exports = function(grunt) {
 
     mochaSetup: {
       default: {
-        files: { src: helper.watchFiles(['[Ss]pec.js'], ['./app/**/*[Ss]pec.js'])},
+        files: { src: helper.watchFiles(['[Ss]pec.js'], ['./app/addons/**/*[Ss]pec.js'])},
         template: 'test/test.config.underscore',
         config: './app/config.js'
       }
@@ -399,6 +403,17 @@ module.exports = function(grunt) {
 
     mocha_phantomjs: {
       all: ['test/runner.html']
+    },
+
+    shell: {
+        'build-jsx': {
+            command: [
+              'jsx -x jsx app/addons/ app/addons/',
+                'rm -rf <%= src_path %>/js/app/views/.module-cache/'
+            ].join(' && '),
+            stdout: true,
+            failOnError: true
+        }
     },
 
     exec: {
@@ -458,6 +473,10 @@ module.exports = function(grunt) {
       grunt.config(['jshint', 'all'], filepath);
     }
 
+    if (!!filepath.match(/.jsx$/)) {
+      grunt.task.run(['jsx']);
+    }
+
     if (!!filepath.match(/[Ss]pec.js$/)) {
       //grunt.task.run(['mochaSetup','jst', 'concat:test_config_js', 'mocha_phantomjs']);
     }
@@ -483,6 +502,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-mocha-phantomjs');
+  grunt.loadNpmTasks('grunt-shell');
   grunt.loadNpmTasks('grunt-md5');
 
   /*
@@ -496,13 +516,15 @@ module.exports = function(grunt) {
    */
   // clean out previous build artifacts and lint
   grunt.registerTask('lint', ['clean', 'jshint']);
-  grunt.registerTask('test', ['lint', 'dependencies', 'gen_initialize:development', 'test_inline']);
+  grunt.registerTask('test', ['jsx', 'lint', 'dependencies', 'gen_initialize:development', 'test_inline']);
   // lighter weight test task for use inside dev/watch
   grunt.registerTask('test_inline', ['mochaSetup','jst', 'concat:test_config_js','mocha_phantomjs']);
   // Fetch dependencies (from git or local dir), lint them and make load_addons
   grunt.registerTask('dependencies', ['get_deps', 'gen_load_addons:default']);
 
-  // build templates, js and css
+  // minify code and css, ready for release.
+  grunt.registerTask('minify', ['uglify', 'cssmin:compress']);
+  grunt.registerTask('jsx', ['shell:build-jsx']);
   grunt.registerTask('build', ['less', 'concat:index_css', 'jst', 'requirejs', 'concat:requirejs', 'uglify',
     'cssmin:compress', 'md5:requireJS', 'md5:css', 'template:release']);
 
@@ -513,8 +535,8 @@ module.exports = function(grunt) {
   grunt.registerTask('dev', ['debugDev', 'couchserver']);
 
   // build a debug release
-  grunt.registerTask('debug',    ['lint', 'dependencies', "gen_initialize:development", 'concat:requirejs','less', 'concat:index_css', 'template:development', 'copy:debug']);
-  grunt.registerTask('debugDev', ['clean', 'dependencies', "gen_initialize:development", 'jshint', 'less', 'concat:index_css', 'template:development', 'copy:debug']);
+  grunt.registerTask('debug', ['lint', 'dependencies', "gen_initialize:development", 'jsx', 'concat:requirejs','less', 'concat:index_css', 'template:development', 'copy:debug']);
+  grunt.registerTask('debugDev', ['clean', 'dependencies', "gen_initialize:development",'jsx', 'jshint','less', 'concat:index_css', 'template:development', 'copy:debug']);
 
   grunt.registerTask('watchRun', ['clean:watch', 'dependencies', 'jshint']);
 
