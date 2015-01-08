@@ -112,8 +112,10 @@ module.exports = function(grunt) {
     var data = this.data,
         configInfo,
         _ = grunt.util._,
-        configTemplateSrc = data.template,
-        testFiles = grunt.file.expand(data.files.src);
+        configTemplateSrc = data.template;
+
+   var fileSrc = grunt.option('file') || data.files.src;
+   var testFiles =  grunt.file.expand(fileSrc);
 
     var configTemplate = _.template(grunt.file.read(configTemplateSrc));
     // a bit of a nasty hack to read our current config.js and get the info so we can change it 
