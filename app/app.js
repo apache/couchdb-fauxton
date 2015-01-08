@@ -43,6 +43,7 @@ function(app, $, _, Backbone, Bootstrap, Helpers, constants, Utils, FauxtonAPI, 
     };
   }
 
+
   // Provide a global location to place configuration settings and module
   // creation also mix in Backbone.Events
   _.extend(app, {
@@ -90,23 +91,34 @@ function(app, $, _, Backbone, Bootstrap, Helpers, constants, Utils, FauxtonAPI, 
 
   FauxtonAPI.setSession(new Couchdb.Session());
 
+
   // Define your master router on the application namespace and trigger all
   // navigation from this instance.
   FauxtonAPI.config({
-    el: '#app-container',
+    el: '.wrapper',
     masterLayout: new FauxtonAPI.Layout(),
     
+    // I haven't wrapped these dispatch methods in a action 
+    // because I don't want to require fauxton/actions in this method.
     addHeaderLink: function(link) {
-      FauxtonAPI.registerExtension('navbar:addHeaderLink', link);
+      FauxtonAPI.dispatch({
+          type: 'ADD_NAVBAR_LINK',
+          link: link
+      });
+    },
+    
+    updateHeaderLink: function (link) {
+      FauxtonAPI.dispatch({
+        type: 'UPDATE_NAVBAR_LINK',
+        link: link
+      });
+
     },
 
     removeHeaderLink: function(link) {
-      FauxtonAPI.removeExtensionItem('navbar:addHeaderLink', link, function (item) {
-        if (item.title === link.title) {
-          return true;
-        }
-
-        return false;
+      FauxtonAPI.dispatch({
+          type: 'REMOVE_NAVBAR_LINK',
+          link: link
       });
     }
   });

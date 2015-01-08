@@ -20,6 +20,10 @@ define([], function () {
       MODAL_BACKDROP_Z_INDEX: 1025
     },
 
+    DATABASES: {
+      DOCUMENT_LIMIT: 100
+    },
+
     // events
     EVENTS: {
       TRAY_CLOSED: 'tray:closed',

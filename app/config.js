@@ -33,6 +33,9 @@ require.config({
     "cloudant.pagingcollection": "../assets/js/plugins/cloudant.pagingcollection",
     "velocity": "../assets/js/plugins/velocity",
     "velocity.ui": "../assets/js/plugins/velocity.ui",
+    react: "../assets/js/libs/react",
+    flux: "../assets/js/libs/flux",
+    "es5-shim": "../as
     moment: '../assets/js/libs/moment'
   },
 

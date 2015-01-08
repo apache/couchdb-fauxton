@@ -36,7 +36,11 @@
 
   <div role="main" id="main">
 
-    <div id="app-container"></div>
+    <div id="app-container">
+      <div class="wrapper">
+        <div id="primary-navbar"></div>
+      </div>
+    </div>
   </div>
 
   <!-- Application source. -->

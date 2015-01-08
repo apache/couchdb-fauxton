@@ -11,9 +11,9 @@
 // the License.
 
 define([
-       "app",
-       "api",
-       "addons/auth/routes"
+  "app",
+  "api",
+  "addons/auth/routes"
 ],
 
 function(app, FauxtonAPI, Auth) {
@@ -24,17 +24,60 @@ function(app, FauxtonAPI, Auth) {
 
   Auth.initialize = function() {
 
-    Auth.navLink = new Auth.NavLink({model: Auth.session});
-
     FauxtonAPI.addHeaderLink({
-      title: "Auth",
-      href: "#_auth",
-      view: Auth.navLink,
+      id: "auth",
+      title: "Login", 
+      href: "#login",
       icon: "fonticon-user",
       bottomNav: true,
-      establish: [FauxtonAPI.session.fetchUser()]
     });
 
+    Auth.session.on('change', function () {
+      var session = Auth.session;
+      var link = {};
+
+      if (session.isAdminParty()) {
+        link = {
+          id: "auth",
+          title: "Admin Party!", 
+          href: "#createAdmin",
+          icon: "fonticon-user",
+          bottomNav: true,
+        };
+      } else if (session.isLoggedIn()) {
+        link = {
+          id: "auth",
+          title: session.user().name, 
+          href: "#changePassword",
+          icon: "fonticon-user",
+          bottomNav: true,
+        };
+
+        FauxtonAPI.addHeaderLink({
+          id: 'logout',
+          footerNav: true, 
+          href: "#logout", 
+          title: "Logout", 
+          icon: "", 
+          className: 'logout'
+        });
+      } else {
+        link = {
+          id: "auth",
+          title: 'Login', 
+          href: "#login",
+          icon: "fonticon-user",
+          bottomNav: true,
+        };
+        FauxtonAPI.removeHeaderLink({id: "logout", footerNav: true});
+      }
+      FauxtonAPI.updateHeaderLink(link);
+
+    });
+
+    Auth.session.fetchUser().then(function () {
+      Auth.session.trigger('change');
+    });
 
     var auth = function (session, roles) {
       var deferred = $.Deferred();
@@ -59,28 +102,6 @@ function(app, FauxtonAPI, Auth) {
 
     FauxtonAPI.auth.registerAuth(auth);
     FauxtonAPI.auth.registerAuthDenied(authDenied);
-
-
-    var addLogoutLink = function () {
-      FauxtonAPI.addHeaderLink({footerNav: true, href: "#logout", title: "Logout", icon: "", className: 'logout'});
-    };
-
-    var removeLogoutLink = function () {
-      FauxtonAPI.removeHeaderLink({title: "Logout", footerNav: true});
-    };
-
-    if (FauxtonAPI.session.isLoggedIn()) {
-      addLogoutLink();
-    }
-
-    FauxtonAPI.session.on('change', function () {
-      if (FauxtonAPI.session.isLoggedIn()) {
-        addLogoutLink();
-      } else {
-        removeLogoutLink();
-      }
-    });
-
   };
 
   return Auth;

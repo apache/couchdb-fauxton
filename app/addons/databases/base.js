@@ -25,6 +25,15 @@ define([
 function(app, FauxtonAPI, Databases, Views) {
   Databases.Views = Views;
 
+  Databases.initialize = function () {
+    FauxtonAPI.addHeaderLink({
+      href:"#/_all_dbs", 
+      title:"Databases", 
+      icon: "fonticon-database", 
+      className: 'databases'
+    });
+  };
+
   // Utility functions
   Databases.databaseUrl = function(database) {
     var name = _.isObject(database) ? database.id : database,

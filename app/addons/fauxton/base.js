@@ -14,10 +14,12 @@ define([
   "app",
   "api",
   "addons/fauxton/components",
+  "addons/fauxton/components.react",
+  "addons/fauxton/actions",
   "plugins/zeroclipboard/ZeroClipboard"
 ],
 
-function(app, FauxtonAPI, Components, ZeroClipboard) {
+function(app, FauxtonAPI, Components, ReactComponents, Actions, ZeroClipboard) {
 
   var Fauxton = FauxtonAPI.addon();
   FauxtonAPI.addNotification = function (options) {
@@ -48,26 +50,23 @@ function(app, FauxtonAPI, Components, ZeroClipboard) {
   });
 
   Fauxton.initialize = function () {
-    app.navBar = new Fauxton.NavBar();
     app.apiBar = new Components.ApiBar();
 
-    FauxtonAPI.when.apply(null, app.navBar.establish()).done(function() {
-      FauxtonAPI.masterLayout.setView("#primary-navbar", app.navBar, true);
-      FauxtonAPI.masterLayout.setView("#api-navbar", app.apiBar, true);
-      app.navBar.render();
-      app.apiBar.render();
+    FauxtonAPI.dispatcher.register(function (action) {
+      //this is pretty nasty but once we move the main page into react
+      //we can clean this up to be part of an action
+      if (action.type === 'TOGGLE_NAVBAR_MENU') {
+        $('body').toggleClass('closeMenu');
+      }
+
     });
 
-    FauxtonAPI.masterLayout.navBar = app.navBar;
+    FauxtonAPI.masterLayout.setView("#api-navbar", app.apiBar, true);
+    app.apiBar.render();
     FauxtonAPI.masterLayout.apiBar = app.apiBar;
 
     FauxtonAPI.RouteObject.on('beforeFullRender', function (routeObject) {
-      $('#primary-navbar li').removeClass('active');
-
-      if (routeObject.selectedHeader) {
-        app.selectedHeader = routeObject.selectedHeader;
-        $('#primary-navbar li[data-nav-name="' + routeObject.selectedHeader + '"]').addClass('active');
-      }
+      Actions.setNavbarActiveLink(routeObject.selectedHeader);
     });
 
     FauxtonAPI.RouteObject.on('beforeEstablish', function (routeObject) {
@@ -93,155 +92,23 @@ function(app, FauxtonAPI, Components, ZeroClipboard) {
         masterLayout.apiBar.hide();
       }
     });
+
+    var primaryNavBarEl = $('#primary-navbar')[0];
+    if (primaryNavBarEl) {
+      ReactComponents.renderNavBar(primaryNavBarEl);
+    }
+
+    var versionInfo = new Fauxton.VersionInfo();
+
+    versionInfo.fetch().then(function () {
+      Actions.setNavbarVersionInfo(versionInfo.get("version"));
+    });
   };
   
   Fauxton.VersionInfo = Backbone.Model.extend({
     url: function () {
       return app.host;
     }
-  });
-
-  Fauxton.Footer = FauxtonAPI.View.extend({
-    tagName: "p",
-    template: "addons/fauxton/templates/footer",
-
-    initialize: function() {
-      this.versionInfo = new Fauxton.VersionInfo();
-    },
-
-    establish: function() {
-      return [this.versionInfo.fetch()];
-    },
-
-    serialize: function() {
-      return {
-        version: this.versionInfo.get("version")
-      };
-    }
-  });
-
-  Fauxton.NavBar = FauxtonAPI.View.extend({
-    className:"navbar",
-    template: "addons/fauxton/templates/nav_bar",
-
-    events:  {
-      "click .burger" : "toggleMenu"
-    },
-
-    toggleMenu: function(){
-       var $selectorList = $('body');
-      var minimized = !$selectorList.hasClass('closeMenu');
-      this.setState(minimized);
-       $selectorList.toggleClass('closeMenu');
-       FauxtonAPI.Events.trigger(FauxtonAPI.constants.EVENTS.BURGER_CLICKED, { minimized: minimized });
-    },
-
-    // TODO: can we generate this list from the router?
-    navLinks: [
-      {href:"#/_all_dbs", title:"Databases", icon: "fonticon-database", className: 'databases'}
-    ],
-
-    bottomNavLinks: [],
-    footerNavLinks: [],
-
-    initialize: function () {
-      _.bindAll(this);
-
-      FauxtonAPI.extensions.on('add:navbar:addHeaderLink', this.addLink);
-      FauxtonAPI.extensions.on('removeItem:navbar:addHeaderLink', this.removeLink);
-      this.versionFooter = new Fauxton.Footer({});
-
-      // if needed, minimize the sidebar
-      if (this.isMinimized()) {
-        $('body').addClass('closeMenu');
-      }
-    },
-
-    serialize: function() {
-      return {
-        navLinks: this.navLinks,
-        bottomNavLinks: this.bottomNavLinks,
-        footerNavLinks: this.footerNavLinks
-      };
-    },
-
-    establish: function(){
-      return [this.versionFooter.establish()];
-    },
-
-    addLink: function(link) {
-      // link.top means it gets pushed to the top of the array,
-      // link.bottomNav means it goes to the additional bottom nav
-      // link.footerNav means goes to the footer nav
-      if (link.top && !link.bottomNav){
-        this.navLinks.unshift(link);
-      } else if (link.top && link.bottomNav){
-        this.bottomNavLinks.unshift(link);
-      } else if (link.bottomNav) {
-        this.bottomNavLinks.push(link);
-      } else if (link.footerNav) {
-        this.footerNavLinks.push(link);
-      } else {
-        this.navLinks.push(link);
-      }
-    },
-
-    removeLink: function (removeLink) {
-      var links = this.navlinks;
-
-      if (removeLink.bottomNav) {
-        links = this.bottomNavLinks;
-      } else if (removeLink.footerNav) {
-        links = this.footerNavLinks;
-      }
-
-      var foundIndex = -1;
-
-      _.each(links, function (link, index) {
-        if (link.title === removeLink.title) {
-          foundIndex = index;
-        }
-      });
-
-      if (foundIndex === -1) {return;}
-      links.splice(foundIndex, 1);
-      this.render();
-    },
-
-    afterRender: function(){
-      $('#primary-navbar li[data-nav-name="' + app.selectedHeader + '"]').addClass('active');
-    },
-
-    beforeRender: function () {
-      this.insertView(".js-version", this.versionFooter);
-      this.addLinkViews();
-    },
-
-    addLinkViews: function () {
-      var that = this;
-
-      _.each(_.union(this.navLinks, this.bottomNavLinks), function (link) {
-        if (!link.view) { return; }
-
-        //TODO check if establish is a function
-        var establish = link.establish || [];
-        $.when.apply(null, establish).then( function () {
-          var selector =  link.bottomNav ? '#bottom-nav-links' : '#nav-links';
-          that.insertView(selector, link.view).render();
-        });
-      }, this);
-    },
-
-    setState: function (minimized) {
-      app.utils.localStorageSet(FauxtonAPI.constants.LOCAL_STORAGE.SIDEBAR_MINIMIZED, minimized);
-    },
-
-    isMinimized: function () {
-      var isMinimized = app.utils.localStorageGet(FauxtonAPI.constants.LOCAL_STORAGE.SIDEBAR_MINIMIZED);
-      return (_.isUndefined(isMinimized)) ? false : isMinimized;
-    }
-
-    // TODO: ADD ACTIVE CLASS
   });
 
   Fauxton.Notification = FauxtonAPI.View.extend({
