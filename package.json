@@ -6,7 +6,36 @@
   "directories": {
     "test": "test"
   },
-  "dependencies": {
+  "devDependencies": {
+    "async": "~0.2.6",
+    "couchapp": "~0.11.0",
+    "grunt": "~0.4.1",
+    "grunt-cli": "~0.1.6",
+    "grunt-contrib-clean": "~0.4.1",
+    "grunt-contrib-concat": "~0.3.0",
+    "grunt-contrib-copy": "~0.4.1",
+    "grunt-contrib-cssmin": "~0.5.0",
+    "grunt-contrib-jshint": "~0.6.0",
+    "grunt-contrib-jst": "~0.5.0",
+    "grunt-contrib-less": "~0.11.0",
+    "grunt-contrib-requirejs": "~0.4.1",
+    "grunt-contrib-uglify": "~0.2.0",
+    "grunt-contrib-watch": "~0.6.1",
+    "grunt-couchapp": "~0.2.1",
+    "grunt-exec": "~0.4.0",
+    "grunt-init": "~0.2.0",
+    "grunt-shell": "^1.1.1",
+    "http-proxy": "~1.1.4",
+    "react-tools": "^0.12.0",
+    "send": "~0.1.1",
+    "underscore": "~1.4.2",
+    "url": "~0.7.9",
+    "urls": "~0.0.3",
+    "grunt-mocha-phantomjs": "~0.3.0",
+    "nightwatch": "~0.5.33",
+    "nano": "~5.12.0",
+    "grunt-chmod": "^1.0.3",
+    "grunt-md5": "^0.1.11"
   },
   "scripts": {
     "test": "grunt test",
@@ -23,34 +52,5 @@
     "fauxton"
   ],
   "author": "",
-  "license": "Apache V2",
-  "devDependencies": {
-    "async": "~0.2.6",
-    "grunt": "~0.4.1",
-    "grunt-cli": "~0.1.6",
-    "couchapp": "~0.11.0",
-    "grunt-contrib-cssmin": "~0.5.0",
-    "grunt-contrib-clean": "~0.4.1",
-    "grunt-contrib-jshint": "~0.6.0",
-    "grunt-contrib-concat": "~0.3.0",
-    "grunt-contrib-less": "~0.11.0",
-    "grunt-contrib-jst": "~0.5.0",
-    "grunt-contrib-watch": "~0.6.1",
-    "grunt-contrib-uglify": "~0.2.0",
-    "grunt-contrib-copy": "~0.4.1",
-    "grunt-couchapp": "~0.2.1",
-    "grunt-exec": "~0.4.0",
-    "grunt-init": "~0.2.0",
-    "grunt-contrib-requirejs": "~0.4.1",
-    "underscore": "~1.4.2",
-    "url": "~0.7.9",
-    "urls": "~0.0.3",
-    "http-proxy": "~1.1.4",
-    "send": "~0.1.1",
-    "grunt-mocha-phantomjs": "~0.3.0",
-    "nightwatch": "~0.5.33",
-    "nano": "~5.12.0",
-    "grunt-chmod": "^1.0.3",
-    "grunt-md5": "^0.1.11"
-  }
+  "license": "Apache V2"
 }
