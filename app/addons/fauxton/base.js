@@ -133,7 +133,7 @@ function(app, FauxtonAPI, Components, ZeroClipboard) {
       var minimized = !$selectorList.hasClass('closeMenu');
       this.setState(minimized);
        $selectorList.toggleClass('closeMenu');
-       FauxtonAPI.Events.trigger(FauxtonAPI.constants.EVENT_BURGER_CLICK, { minimized: minimized });
+       FauxtonAPI.Events.trigger(FauxtonAPI.constants.EVENTS.BURGER_CLICKED, { minimized: minimized });
     },
 
     // TODO: can we generate this list from the router?
