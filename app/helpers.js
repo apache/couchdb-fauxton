@@ -17,14 +17,14 @@
 // want to change this later, but for now this should be thought of as a
 // "purely functional" helper system.
 
-
 define([
   'constants',
   "core/utils",
-  "d3"
+  "d3",
+  'moment'
 ],
 
-function(constants, utils, d3) {
+function(constants, utils, d3, moment) {
 
   var Helpers = {};
 
@@ -54,9 +54,8 @@ function(constants, utils, d3) {
       return size.toFixed(1) + ' ' + units[i - 1];
     };
 
-  Helpers.formatDate = function(timestamp){
-    var format = d3.time.format("%b. %e at %H:%M%p");
-    return format(new Date(timestamp*1000));
+  Helpers.formatDate = function (timestamp) {
+    return moment(timestamp, 'X').format('MMM Do, h:m:ss a');
   };
 
   return Helpers;

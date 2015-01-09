@@ -33,6 +33,7 @@ require.config({
     "cloudant.pagingcollection": "../assets/js/plugins/cloudant.pagingcollection",
     "velocity": "../assets/js/plugins/velocity",
     "velocity.ui": "../assets/js/plugins/velocity.ui",
+    moment: '../assets/js/plugins/moment'
   },
 
   baseUrl: '/',
