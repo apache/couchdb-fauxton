@@ -22,7 +22,7 @@ module.exports = {
       .loginToGUI()
       .url(baseUrl+'/#/database/'+newDatabaseName+'/_all_docs')
       .waitForElementPresent('#new-all-docs-button', waitTime, false)
-      .click('#new-all-docs-button')
+      .click('#new-all-docs-button a')
       .waitForElementPresent('#new-all-docs-button a[href="#/database/'+newDatabaseName+'/new"]', waitTime, false)
       .click('#new-all-docs-button a[href="#/database/'+newDatabaseName+'/new"]') 
       .waitForElementPresent('#doc', waitTime, false)
