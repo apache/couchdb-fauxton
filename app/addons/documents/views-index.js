@@ -155,7 +155,6 @@ function(app, FauxtonAPI, Components, Documents, Databases, pouchdb, QueryOption
 
         notification = FauxtonAPI.addNotification({
           msg: "Saving document.",
-          selector: "#define-view .errors-container",
           clear: true
         });
 
@@ -169,7 +168,6 @@ function(app, FauxtonAPI, Components, Documents, Databases, pouchdb, QueryOption
           FauxtonAPI.addNotification({
             msg: "View has been saved.",
             type: "success",
-            selector: "#define-view .errors-container",
             clear: true
           });
 
@@ -209,7 +207,6 @@ function(app, FauxtonAPI, Components, Documents, Databases, pouchdb, QueryOption
         notification = FauxtonAPI.addNotification({
           msg: errormessage,
           type: "error",
-          selector: "#define-view .errors-container",
           clear: true
         });
       }
@@ -225,21 +222,15 @@ function(app, FauxtonAPI, Components, Documents, Databases, pouchdb, QueryOption
 
        if (_.any(errorParams)) {
          _.map(errorParams, function(param) {
-
-           // TODO: Where to add this error?
-           // bootstrap wants the error on a control-group div, but we're not using that
-           //$('form.view-query-update input[name='+param+'], form.view-query-update select[name='+param+']').addClass('error');
-           return FauxtonAPI.addNotification({
-             msg: "JSON Parse Error on field: " + param.name,
-             type: "error",
-             selector: ".query-options .errors-container",
-             clear: true
-           });
+            return FauxtonAPI.addNotification({
+              msg: 'JSON Parse Error on field: ' + param.name,
+              type: 'error',
+              clear: true
+            });
          });
          FauxtonAPI.addNotification({
            msg: "Make sure that strings are properly quoted and any other values are valid JSON structures",
            type: "warning",
-           selector: ".query-options .errors-container",
            clear: true
          });
 
@@ -271,7 +262,6 @@ function(app, FauxtonAPI, Components, Documents, Databases, pouchdb, QueryOption
       FauxtonAPI.addNotification({
         msg: "<strong>Warning!</strong> Preview executes the Map/Reduce functions in your browser, and may behave differently from CouchDB.",
         type: "warning",
-        selector: ".query-options .errors-container",
         fade: true,
         escape: false // beware of possible XSS when the message changes
       });

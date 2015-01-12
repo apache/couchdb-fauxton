@@ -400,8 +400,7 @@ define([
           FauxtonAPI.addNotification({
             type: "error",
             msg: errorMsg,
-            clear:  false,
-            selector: ".query-options .errors-container"
+            clear:  false
           });
           return false;
         }
@@ -471,7 +470,6 @@ define([
           FauxtonAPI.addNotification({
             msg: "Please only enter numbers only for the Skip field.",
             type: "error",
-            selector: ".query-options .errors-container",
             clear:  true
           });
           allValid = false;

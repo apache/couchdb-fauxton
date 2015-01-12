@@ -239,8 +239,7 @@ function(app, FauxtonAPI, Config, Components) {
       FauxtonAPI.addNotification({
         msg: msg,
         type: 'error',
-        clear: true,
-        selector: '.js-form-error-config'
+        clear: true
       });
     }
   });

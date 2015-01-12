@@ -36,16 +36,14 @@ function(app, FauxtonAPI, VerifyInstall) {
       this.$('#' + id).html('&#x2717;');
       FauxtonAPI.addNotification({
         msg: 'Error: ' + msg,
-        type: 'error',
-        selector: '#error'
+        type: 'error'
       });
     },
 
     complete: function () {
       FauxtonAPI.addNotification({
         msg: 'Success! Your CouchDB installation is working. Time to Relax.',
-        type: 'success',
-        selector: '#error'
+        type: 'success'
       });
     },
 
