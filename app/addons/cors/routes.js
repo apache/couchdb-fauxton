@@ -17,35 +17,5 @@ define([
 ],
 
 function (app, FauxtonAPI, CORS) {
-
-  var CORSRouteObject = FauxtonAPI.RouteObject.extend({
-
-    layout: 'one_pane',
-    
-    routes: {
-      "cors": "showCORS",
-      "_cors": "showCORS"
-    },
-    
-    selectedHeader: 'CORS',
-    
-    crumbs: [
-      {'name': 'CORS', 'link': 'cors'}
-    ],
-
-    roles: ['_admin'],
-    
-    initialize: function () {
-      this.cors = new CORS.config();
-    },
-    
-    showCORS: function () {
-      this.setView("#dashboard-content", new CORS.Views.CORSMain({
-        model: this.cors
-      }));
-    },
-  });
-
-  CORS.RouteObjects = [CORSRouteObject];
   return CORS;
 });
