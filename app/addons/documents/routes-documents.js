@@ -162,9 +162,9 @@ function(app, FauxtonAPI, BaseRoute, Documents, Changes, Index, DocEditor, Datab
      */
     allDocs: function(databaseName, options) {
       var params = this.createParams(options),
-      urlParams = params.urlParams,
-      docParams = params.docParams,
-      collection;
+          urlParams = params.urlParams,
+          docParams = params.docParams,
+          collection;
 
       if (this.eventAllDocs) {
         this.eventAllDocs = false;
@@ -372,14 +372,14 @@ function(app, FauxtonAPI, BaseRoute, Documents, Changes, Index, DocEditor, Datab
 
     updateAllDocsFromView: function (event) {
       var view = event.view,
-      params = this.createParams(),
-      urlParams = params.urlParams,
-      docParams = params.docParams,
-      ddoc = event.ddoc,
-      defaultPageSize,
-      isLazyInit,
-      pageSize,
-      collection;
+          params = this.createParams(),
+          urlParams = params.urlParams,
+          docParams = params.docParams,
+          ddoc = event.ddoc,
+          defaultPageSize,
+          isLazyInit,
+          pageSize,
+          collection;
 
       isLazyInit = _.isUndefined(this.documentsView) || _.isUndefined(this.documentsView.allDocsNumber);
       defaultPageSize = isLazyInit ? FauxtonAPI.constants.MISC.DEFAULT_PAGE_SIZE : this.documentsView.perPage();
