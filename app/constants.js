@@ -55,6 +55,5 @@ define([], function () {
       SIDEBAR_MINIMIZED: 'sidebar-minimized'
     }
   };
-
   return constants;
 });

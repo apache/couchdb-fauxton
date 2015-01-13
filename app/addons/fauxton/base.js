@@ -52,15 +52,6 @@ function(app, FauxtonAPI, Components, ReactComponents, Actions, ZeroClipboard) {
   Fauxton.initialize = function () {
     app.apiBar = new Components.ApiBar();
 
-    FauxtonAPI.dispatcher.register(function (action) {
-      //this is pretty nasty but once we move the main page into react
-      //we can clean this up to be part of an action
-      if (action.type === 'TOGGLE_NAVBAR_MENU') {
-        $('body').toggleClass('closeMenu');
-      }
-
-    });
-
     FauxtonAPI.masterLayout.setView("#api-navbar", app.apiBar, true);
     app.apiBar.render();
     FauxtonAPI.masterLayout.apiBar = app.apiBar;

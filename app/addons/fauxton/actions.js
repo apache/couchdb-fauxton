@@ -26,28 +26,28 @@ function (app, FauxtonAPI, ActionTypes) {
 
     addHeaderLink: function (link) {
       FauxtonAPI.dispatch({
-        type: 'ADD_NAVBAR_LINK',
+        type: ActionTypes.ADD_NAVBAR_LINK,
         link: link
       });
     },
 
     removeHeaderLink: function(link) {
       FauxtonAPI.dispatch({
-        type: 'REMOVE_NAVBAR_LINK',
+        type: ActionTypes.REMOVE_NAVBAR_LINK,
         link: link
       });
     },
 
     setNavbarVersionInfo: function (versionInfo) {
       FauxtonAPI.dispatch({
-        type: 'NAVBAR_SET_VERSION_INFO',
+        type: ActionTypes.NAVBAR_SET_VERSION_INFO,
         version: versionInfo
       });
     },
 
     setNavbarActiveLink: function (header) {
       FauxtonAPI.dispatch({
-        type: 'NAVBAR_ACTIVE_LINK',
+        type: ActionTypes.NAVBAR_ACTIVE_LINK,
         name: header
       });
     }

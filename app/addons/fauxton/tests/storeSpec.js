@@ -10,10 +10,11 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 define([
+  'app',
   'testUtils',
   'api',
   'addons/fauxton/stores',
-], function (testUtils, FauxtonAPI, Stores) {
+], function (app, testUtils, FauxtonAPI, Stores) {
   var assert = testUtils.assert;
   var navBarStore = Stores.navBarStore;
 
@@ -191,6 +192,46 @@ define([
         });
 
         assert.equal(navBarStore.getVersion(), 1234);
+      });
+
+    });
+
+    describe('is Minimized', function () {
+
+      it('returns true if localstorage is true', function () {
+        app.utils.localStorageSet(FauxtonAPI.constants.LOCAL_STORAGE.SIDEBAR_MINIMIZED, true);
+        assert.ok(navBarStore.isMinimized());
+      });
+
+      it('returns false if localstorage is false', function () {
+        app.utils.localStorageSet(FauxtonAPI.constants.LOCAL_STORAGE.SIDEBAR_MINIMIZED, false);
+        assert.notOk(navBarStore.isMinimized(), false);
+      });
+
+      it('returns false if localstorage is undefined', function () {
+        window.localStorage.removeItem(FauxtonAPI.constants.LOCAL_STORAGE.SIDEBAR_MINIMIZED);
+        assert.notOk(navBarStore.isMinimized(), false);
+      });
+    });
+
+    describe('toggleMenu', function () {
+
+      it('that is minimized changes to false', function () {
+        app.utils.localStorageSet(FauxtonAPI.constants.LOCAL_STORAGE.SIDEBAR_MINIMIZED, true);
+        navBarStore.toggleMenu();
+        assert.notOk(navBarStore.isMinimized());
+      });
+
+      it('that is not minimized changes to true', function () {
+        app.utils.localStorageSet(FauxtonAPI.constants.LOCAL_STORAGE.SIDEBAR_MINIMIZED, false);
+        navBarStore.toggleMenu();
+        assert.ok(navBarStore.isMinimized());
+      });
+
+      it('that is undefined changes to true', function () {
+        window.localStorage.removeItem(FauxtonAPI.constants.LOCAL_STORAGE.SIDEBAR_MINIMIZED);
+        navBarStore.toggleMenu();
+        assert.ok(navBarStore.isMinimized());
       });
 
     });

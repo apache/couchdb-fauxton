@@ -83,7 +83,7 @@ function(FauxtonAPI, React, Stores, Actions) {
         <li data-nav-name={link.title} className={liClassName} >
           <a href={link.href}>
             <i className={link.icon + " fonticon "}></i>
-            {link.title}
+            <span dangerouslySetInnerHTML={{__html: link.title }} /> 
           </a>
         </li>
       );
@@ -96,7 +96,8 @@ function(FauxtonAPI, React, Stores, Actions) {
         navLinks: navBarStore.getNavLinks(),
         bottomNavLinks: navBarStore.getBottomNavLinks(),
         footerNavLinks: navBarStore.getFooterNavLinks(),
-        activeLink: navBarStore.getActiveLink()
+        activeLink: navBarStore.getActiveLink(),
+        isMinimized: navBarStore.isMinimized()
       };
     },
 
@@ -114,8 +115,17 @@ function(FauxtonAPI, React, Stores, Actions) {
       this.setState(this.getStoreState());
     },
 
+    toggleMenu: function () {
+      $('body').toggleClass('closeMenu', this.state.isMinimized);
+    },
+
     componentDidMount: function () {
       navBarStore.on('change', this.onChange, this);
+      this.toggleMenu();
+    },
+
+    componentDidUpdate: function () {
+      this.toggleMenu();
     },
 
     componentWillUnmount: function() {
@@ -141,10 +151,11 @@ function(FauxtonAPI, React, Stores, Actions) {
               </ul>
             </div>
           </nav>
+          <div id="primary-nav-right-shadow"/>
 
           <div className="bottom-container">
             <div className="brand">
-              <div className="icon">Apache Fauxton</div>
+              <div className="icon">Apache Couchdb</div>
             </div>
             <Footer />
             <div id="footer-links">

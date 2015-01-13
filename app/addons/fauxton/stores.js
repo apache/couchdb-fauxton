@@ -11,11 +11,12 @@
 // the License.
 
 define([
+  'app',
   'api',
   'addons/fauxton/actiontypes'
 ],
 
-function(FauxtonAPI, ActionTypes) {
+function(app, FauxtonAPI, ActionTypes) {
   var Stores = {};
 
   Stores.NavBarStore = FauxtonAPI.Store.extend({
@@ -26,7 +27,6 @@ function(FauxtonAPI, ActionTypes) {
     reset: function () {
       this.activeLink = null;
       this.version = null;
-      this.menuVisible = true;
       this.navLinks = [];
       this.footerNavLinks = [];
       this.bottomNavLinks = [{
@@ -83,11 +83,8 @@ function(FauxtonAPI, ActionTypes) {
     },
 
     toggleMenu: function () {
-      this.menuVisible = !this.menuVisible;
-    },
-
-    getMenuVisible: function () {
-      return this.menuVisible;
+      app.utils.localStorageSet(FauxtonAPI.constants.LOCAL_STORAGE.SIDEBAR_MINIMIZED, 
+                                !this.isMinimized());
     },
 
     getLinkSection: function (link) {
@@ -134,6 +131,10 @@ function(FauxtonAPI, ActionTypes) {
       this.activeLink = activeLink;
     },
 
+    isMinimized: function () {
+      var isMinimized = app.utils.localStorageGet(FauxtonAPI.constants.LOCAL_STORAGE.SIDEBAR_MINIMIZED);
+      return (_.isUndefined(isMinimized)) ? false : isMinimized;
+    },
 
     dispatch: function (action) {
       switch(action.type) {
