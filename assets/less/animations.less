@@ -1,0 +1,40 @@
+.keyframes (@name, @fromRules, @toRules) {
+    @-webkit-keyframes ~'@{name}' { 0% { @fromRules(); } 100% { @toRules(); } }
+       @-moz-keyframes ~'@{name}' { 0% { @fromRules(); } 100% { @toRules(); } }
+            @keyframes ~'@{name}' { 0% { @fromRules(); } 100% { @toRules(); } }
+}
+
+/* Use it like so: */
+
+.keyframes(fadeInDown, {
+    opacity: 0;
+    height: 0px;
+},
+{
+    opacity: 1;
+    height: 690px;
+});
+
+
+.keyframes(fadeOutUp, {
+    opacity: 1;
+    height: 690px;
+},
+{
+    opacity: 0;
+    height: 0px;
+});
+
+.animation(@options) {
+  -webkit-animation: @options;
+  -moz-animation: @options;
+  animation: @options;
+}
+
+.fadeInDown-enter {
+ .animation(fadeInDown 1s both);
+}
+
+.fadeInDown-leave {
+ .animation(fadeOutUp 1s both);
+}

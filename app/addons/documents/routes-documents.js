@@ -248,7 +248,6 @@ function(app, FauxtonAPI, BaseRoute, Documents, Changes, Index, DocEditor, Datab
         }
       });
 
-      this.viewEditor && this.viewEditor.remove();
       this.viewEditor = this.setView("#dashboard-upper-content", new Index.ViewEditorReact({
         viewName: viewName,
         newView: false,

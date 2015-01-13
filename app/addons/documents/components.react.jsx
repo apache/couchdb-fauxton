@@ -376,7 +376,7 @@ function(FauxtonAPI, React, Stores, Actions, Components) {
 
     render: function () {
       return (
-        <div className="tab-content">
+        <div className="tab-content" >
           <div className="tab-pane active" id="index">
             <div id="define-view" className="ddoc-alert well">
               <div className="errors-container"> </div>
@@ -406,6 +406,8 @@ function(FauxtonAPI, React, Stores, Actions, Components) {
     }
   });
 
+  var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
+
   var EditorContainer = React.createClass({
     getInitialState: function () {
       return {
@@ -430,16 +432,18 @@ function(FauxtonAPI, React, Stores, Actions, Components) {
       //a bit of hack for now.
       var wrapperClassName = "editorWrapper";
 
-
       if (this.state.showEditor) {
-        editor = <Editor/>;
+        //key is needed for animation;
+        editor = <Editor key={1} />;
         wrapperClassName = '';
       }
 
       return (
         <div className={wrapperClassName}>
           <ToggleButton />
-          {editor}
+          <ReactCSSTransitionGroup transitionName="fadeInDown">
+            {editor}
+          </ReactCSSTransitionGroup>
         </div>
       );
     }
