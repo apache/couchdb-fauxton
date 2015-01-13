@@ -49,6 +49,11 @@ define([
         toggleEl = TestUtils.renderIntoDocument(<Views.ToggleButton />, container);
       });
 
+      afterEach(function () {
+        React.unmountComponentAtNode(container);
+      });
+
+
       it('should toggle editor on click', function () {
         var spy = sinon.spy(Actions, 'toggleEditor');
         //TestUtils.Simulate.click(toggleEl.refs.toggle.getDOMNode());
@@ -65,6 +70,10 @@ define([
 
     beforeEach(function () {
       container = document.createElement('div');
+    });
+
+    afterEach(function () {
+      React.unmountComponentAtNode(container);
     });
 
     describe('getReduceValue', function () {
@@ -126,9 +135,11 @@ define([
       selectorEl = TestUtils.renderIntoDocument(<Views.DesignDocSelector/>, container);
     });
 
+
     afterEach(function () {
       Actions.newDesignDoc.restore && Actions.newDesignDoc.restore();
       Actions.designDocChange.restore && Actions.designDocChange.restore();
+      React.unmountComponentAtNode(container);
     });
 
     it('calls new design doc on new selected', function () {
@@ -161,8 +172,8 @@ define([
           value: 'new-doc-entered'
         }
       });
-
-      expect(spy.calledWith('new-doc-entered', true)).to.be.true;
+      
+      expect(spy.calledWith('_design/new-doc-entered', true)).to.be.true;
     });
 
   });
@@ -175,6 +186,10 @@ define([
       $('body').append('<div id="map-function"></div>');
       $('body').append('<div id="editor"></div>');
       editorEl = TestUtils.renderIntoDocument(<Views.Editor/>, container);
+    });
+
+    afterEach(function () {
+      React.unmountComponentAtNode(container);
     });
 
     it('returns false on invalid map editor code', function () {

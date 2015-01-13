@@ -77,6 +77,8 @@ define([
   var VelocityTransitionGroupChild = React.createClass({
     propTypes: {
       transitionName: React.PropTypes.string.isRequired,
+      enter: React.PropTypes.bool,
+      leave: React.PropTypes.bool
     },
     _getTransition: function() {
       if (!transitions[this.props.transitionName]) {
@@ -86,6 +88,8 @@ define([
     },
 
     componentWillEnter: function(done) {
+      if (!this.props.enter) { return; }
+
       var node = this.getDOMNode();
       var transition = this._getTransition();
       Velocity(
@@ -98,6 +102,8 @@ define([
     },
 
     componentWillLeave: function(done) {
+      if (!this.props.leave) { return; }
+
       var node = this.getDOMNode();
       var transition = this._getTransition();
       Velocity(
@@ -117,12 +123,23 @@ define([
   var VelocityTransitionGroup = React.createClass({
     propTypes: {
       transitionName: React.PropTypes.string.isRequired,
+      transitionEnter: React.PropTypes.bool,
+      transitionLeave: React.PropTypes.bool
+    },
+
+    getDefaultProps: function() {
+      return {
+        transitionEnter: true,
+        transitionLeave: true
+      };
     },
 
     _wrapChild: function(child) {
       return (
         <VelocityTransitionGroupChild
           transitionName={this.props.transitionName}
+          enter={this.props.transitionEnter}
+          leave={this.props.transitionLeave}
           >
           {child}
         </VelocityTransitionGroupChild>

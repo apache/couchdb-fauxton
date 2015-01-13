@@ -48,7 +48,8 @@ function(app, $, _, Backbone, Bootstrap, Helpers, constants, Utils, FauxtonAPI, 
   // creation also mix in Backbone.Events
   _.extend(app, {
     utils: Utils,
-    getParams: FauxtonAPI.utils.getParams
+    getParams: FauxtonAPI.utils.getParams,
+    helpers: Helpers
   });
 
   // Localize or create a new JavaScript Template object

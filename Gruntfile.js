@@ -395,7 +395,7 @@ module.exports = function(grunt) {
 
     mochaSetup: {
       default: {
-        files: { src: helper.watchFiles(['[Ss]pec.js'], ['./app/addons/**/*[Ss]pec.js'])},
+        files: { src: helper.watchFiles(['[Ss]pec.js'], ['./app/addons/**/*[Ss]pec.js', './app/addons/**/*[Ss]pec.react.js'])},
         template: 'test/test.config.underscore',
         config: './app/config.js'
       }

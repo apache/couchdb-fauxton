@@ -1,4 +1,5 @@
 define([
+  "app",
   "api",
   "react",
   "addons/documents/stores",
@@ -7,8 +8,9 @@ define([
   'addons/documents/animate.react'
 ],
 
-function(FauxtonAPI, React, Stores, Actions, Components, VelocityTransitionGroup) {
+function(app, FauxtonAPI, React, Stores, Actions, Components, VelocityTransitionGroup) {
   var indexEditorStore = Stores.indexEditorStore;
+  var getDocUrl = app.helpers.getDocUrl;
   
   var ToggleButton = React.createClass({
     getInitialState: function () {
@@ -86,7 +88,7 @@ function(FauxtonAPI, React, Stores, Actions, Components, VelocityTransitionGroup
         <div className="control-group design-doc-group">
           <div className="span3">
             <label htmlFor="ddoc">Save to Design Document 
-              <a className="help-link" data-bypass="true" href="<%-getDocUrl('DOC_URL_DESIGN_DOCS')%>" target="_blank">
+              <a className="help-link" data-bypass="true" href={getDocUrl('DESIGN_DOCS')} target="_blank">
                 <i className="icon-question-sign">
                 </i>
               </a>
@@ -138,7 +140,7 @@ function(FauxtonAPI, React, Stores, Actions, Components, VelocityTransitionGroup
     render: function () {
       return (
         <div className="control-group">
-          <label htmlFor="map-function">Map function <a className="help-link" data-bypass="true" href="<%-getDocUrl('map_functions')%>" target="_blank"><i className="icon-question-sign"></i></a></label>
+          <label htmlFor="map-function">Map function <a className="help-link" data-bypass="true" href={getDocUrl('MAP_FUNCS')} target="_blank"><i className="icon-question-sign"></i></a></label>
           <div className="js-editor" id="map-function"> {this.state.map}</div>
           <button className="beautify beautify_map btn btn-primary btn-large hide beautify-tooltip" type="button" data-toggle="tooltip" title="Reformat your minified code to make edits to it.">beautify this code</button>
         </div>
@@ -216,7 +218,7 @@ function(FauxtonAPI, React, Stores, Actions, Components, VelocityTransitionGroup
       return (
         <div>
           <div className="control-group">
-            <label htmlFor="reduce-function-selector">Reduce (optional) <a className="help-link" data-bypass="true" href="<%-getDocUrl('reduce_functions')%>" target="_blank"><i className="icon-question-sign"></i></a></label>
+            <label htmlFor="reduce-function-selector">Reduce (optional) <a className="help-link" data-bypass="true" href={getDocUrl('REDUCE_FUNCS')} target="_blank"><i className="icon-question-sign"></i></a></label>
 
             <select id="reduce-function-selector" value={this.state.reduceSelectedOption} onChange={this.selectChange}>
               {reduceOptions}
@@ -386,7 +388,7 @@ function(FauxtonAPI, React, Stores, Actions, Components, VelocityTransitionGroup
                 <DesignDocSelector />
 
                 <div className="control-group">
-                  <label htmlFor="index-name">Index name <a className="help-link" data-bypass="true" href="getDocUrl('view_functions')" target="_blank"><i className="icon-question-sign"></i></a></label>
+                  <label htmlFor="index-name">Index name <a className="help-link" data-bypass="true" href={getDocUrl('VIEW_FUNCS')} target="_blank"><i className="icon-question-sign"></i></a></label>
                   <input type="text" id="index-name" value={this.state.viewName} onChange={this.viewChange} placeholder="Index name" />
                 </div>
 
@@ -403,7 +405,6 @@ function(FauxtonAPI, React, Stores, Actions, Components, VelocityTransitionGroup
           </div>
         </div>
       );
-
     }
   });
 
@@ -412,7 +413,8 @@ function(FauxtonAPI, React, Stores, Actions, Components, VelocityTransitionGroup
   var EditorContainer = React.createClass({
     getInitialState: function () {
       return {
-        showEditor: indexEditorStore.showEditor()
+        showEditor: indexEditorStore.showEditor(),
+        isNewView: indexEditorStore.isNewView()
       };
     },
 
@@ -432,6 +434,7 @@ function(FauxtonAPI, React, Stores, Actions, Components, VelocityTransitionGroup
       var editor = null;
       //a bit of hack for now.
       var wrapperClassName = "editorWrapper";
+      var doTransitions = !this.state.isNewView;
 
       if (this.state.showEditor) {
         //key is needed for animation;
@@ -442,7 +445,7 @@ function(FauxtonAPI, React, Stores, Actions, Components, VelocityTransitionGroup
       return (
         <div className={wrapperClassName}>
           <ToggleButton />
-          <VelocityTransitionGroup transitionName="fadeInDown">
+          <VelocityTransitionGroup transitionName="fadeInDown" transitionLeave={doTransitions} transitionEnter={doTransitions}>
             {editor}
           </VelocityTransitionGroup>
         </div>

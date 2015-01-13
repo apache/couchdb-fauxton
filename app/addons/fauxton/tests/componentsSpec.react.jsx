@@ -30,6 +30,9 @@ define([
         burgerEl = TestUtils.renderIntoDocument(<Views.Burger />, container);
       });
 
+      afterEach(function () {
+        React.unmountComponentAtNode(container);
+      });
 
       it('dispatch TOGGLE_NAVBAR_MENU on click', function () {
         var spy = sinon.spy(Actions, 'toggleNavbarMenu');
@@ -38,9 +41,6 @@ define([
       });
 
     });
-
-    
-
   });
 
 });
