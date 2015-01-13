@@ -4,9 +4,10 @@ define([
   "addons/documents/stores",
   "addons/documents/actions",
   "addons/fauxton/components",
+  'addons/documents/animate.react'
 ],
 
-function(FauxtonAPI, React, Stores, Actions, Components) {
+function(FauxtonAPI, React, Stores, Actions, Components, VelocityTransitionGroup) {
   var indexEditorStore = Stores.indexEditorStore;
   
   var ToggleButton = React.createClass({
@@ -54,7 +55,7 @@ function(FauxtonAPI, React, Stores, Actions, Components) {
 
     getNewDesignDocInput: function () {
       return <div id="new-ddoc-section" className="span5">
-        <label className="control-label" for="new-ddoc"> _design/ </label>
+        <label className="control-label" htmlFor="new-ddoc"> _design/ </label>
         <div className="controls">
           <input value={this.state.designDoc} type="text" id="new-ddoc" onChange={this.onDesignDocChange} placeholder="newDesignDoc" />
         </div>
@@ -84,7 +85,7 @@ function(FauxtonAPI, React, Stores, Actions, Components) {
       return (
         <div className="control-group design-doc-group">
           <div className="span3">
-            <label for="ddoc">Save to Design Document 
+            <label htmlFor="ddoc">Save to Design Document 
               <a className="help-link" data-bypass="true" href="<%-getDocUrl('DOC_URL_DESIGN_DOCS')%>" target="_blank">
                 <i className="icon-question-sign">
                 </i>
@@ -137,7 +138,7 @@ function(FauxtonAPI, React, Stores, Actions, Components) {
     render: function () {
       return (
         <div className="control-group">
-          <label for="map-function">Map function <a className="help-link" data-bypass="true" href="<%-getDocUrl('map_functions')%>" target="_blank"><i className="icon-question-sign"></i></a></label>
+          <label htmlFor="map-function">Map function <a className="help-link" data-bypass="true" href="<%-getDocUrl('map_functions')%>" target="_blank"><i className="icon-question-sign"></i></a></label>
           <div className="js-editor" id="map-function"> {this.state.map}</div>
           <button className="beautify beautify_map btn btn-primary btn-large hide beautify-tooltip" type="button" data-toggle="tooltip" title="Reformat your minified code to make edits to it.">beautify this code</button>
         </div>
@@ -207,7 +208,7 @@ function(FauxtonAPI, React, Stores, Actions, Components) {
 
       if (this.state.hasCustomReduce) {
         customReduceSection = <div className="control-group reduce-function">
-          <label for="reduce-function">Custom Reduce function</label>
+          <label htmlFor="reduce-function">Custom Reduce function</label>
           <div className="js-editor" id="reduce-function"> {this.state.reduce}</div>
         </div>;
       }
@@ -215,7 +216,7 @@ function(FauxtonAPI, React, Stores, Actions, Components) {
       return (
         <div>
           <div className="control-group">
-            <label for="reduce-function-selector">Reduce (optional) <a className="help-link" data-bypass="true" href="<%-getDocUrl('reduce_functions')%>" target="_blank"><i className="icon-question-sign"></i></a></label>
+            <label htmlFor="reduce-function-selector">Reduce (optional) <a className="help-link" data-bypass="true" href="<%-getDocUrl('reduce_functions')%>" target="_blank"><i className="icon-question-sign"></i></a></label>
 
             <select id="reduce-function-selector" value={this.state.reduceSelectedOption} onChange={this.selectChange}>
               {reduceOptions}
@@ -385,7 +386,7 @@ function(FauxtonAPI, React, Stores, Actions, Components) {
                 <DesignDocSelector />
 
                 <div className="control-group">
-                  <label for="index-name">Index name <a className="help-link" data-bypass="true" href="getDocUrl('view_functions')" target="_blank"><i className="icon-question-sign"></i></a></label>
+                  <label htmlFor="index-name">Index name <a className="help-link" data-bypass="true" href="getDocUrl('view_functions')" target="_blank"><i className="icon-question-sign"></i></a></label>
                   <input type="text" id="index-name" value={this.state.viewName} onChange={this.viewChange} placeholder="Index name" />
                 </div>
 
@@ -441,9 +442,9 @@ function(FauxtonAPI, React, Stores, Actions, Components) {
       return (
         <div className={wrapperClassName}>
           <ToggleButton />
-          <ReactCSSTransitionGroup transitionName="fadeInDown">
+          <VelocityTransitionGroup transitionName="fadeInDown">
             {editor}
-          </ReactCSSTransitionGroup>
+          </VelocityTransitionGroup>
         </div>
       );
     }
