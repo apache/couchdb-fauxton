@@ -66,6 +66,7 @@ function(app, FauxtonAPI, Config, Views, CORS) {
     },
     
     configCORS: function() {
+      this.removeView('#right-header');
       this.newSection = this.setView('#dashboard-content', new CORS.Views.CORSMain({ model: this.cors }));
       this.sidebar.setSelectedTab("cors");
     },

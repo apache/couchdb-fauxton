@@ -36,6 +36,12 @@ function (app, FauxtonAPI, CORS) {
       }));
     },
     
+    serialize: function () {
+      return {
+        enableCors: this.model.get('credentials')    
+      };
+    },
+    
     establish: function(){
       return [this.model.fetch()];
     },
@@ -91,7 +97,7 @@ function (app, FauxtonAPI, CORS) {
 
         // CORS checked, save data  
         if (data.restrict_origin_domains === 'on') {
-          var storedOrigins = this.model.get('origins');
+          var storedOrigins = this.model.get('origins').split(',');
           var newDomain = $.trim(data.new_origin_domain);
 	
           // if a new domain has been entered, check it's valid
@@ -106,9 +112,8 @@ function (app, FauxtonAPI, CORS) {
           
           // check that the user has entered at least one new origin domain
           if (storedOrigins && storedOrigins.length > 0 && storedOrigins !== '*') {
-            this.originData = storedOrigins.concat(newDomain);
+            this.originData = storedOrigins.concat(newDomain).toString();            
           } else {
-
             if (_.isEmpty(newDomain)) {
               FauxtonAPI.addNotification({
                 msg: 'Please enter a new origin domain.',
@@ -161,6 +166,7 @@ function (app, FauxtonAPI, CORS) {
         
         enableCreds.save();
         allowOrigins.save();
+        this.$('.new-origin-domain').val('');
       
       } else {
           
