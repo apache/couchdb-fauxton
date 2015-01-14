@@ -81,7 +81,6 @@ function (app, FauxtonAPI, Documents, ActionTypes) {
         FauxtonAPI.addNotification({
           msg:  "Please enter a design doc name.",
           type: "error",
-          selector: "#define-view .errors-container",
           clear: true
         });
 
@@ -107,7 +106,6 @@ function (app, FauxtonAPI, Documents, ActionTypes) {
         FauxtonAPI.addNotification({
           msg:  "Saving View...",
           type: "info",
-          selector: "#define-view .errors-container",
           clear: true
         });
 
@@ -115,7 +113,6 @@ function (app, FauxtonAPI, Documents, ActionTypes) {
           FauxtonAPI.addNotification({
             msg:  "View Saved.",
             type: "success",
-            selector: "#define-view .errors-container",
             clear: true
           });
 

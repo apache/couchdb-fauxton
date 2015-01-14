@@ -349,7 +349,6 @@ function(app, FauxtonAPI, React, Stores, Actions, Components, VelocityTransition
         FauxtonAPI.addNotification({
           msg:  "Please fix the Javascript errors and try again.",
           type: "error",
-          selector: "#define-view .errors-container",
           clear: true
         });
         return;
@@ -377,7 +376,6 @@ function(app, FauxtonAPI, React, Stores, Actions, Components, VelocityTransition
         <div className="tab-content" >
           <div className="tab-pane active" id="index">
             <div id="define-view" className="ddoc-alert well">
-              <div className="errors-container"> </div>
               <form className="form-horizontal view-query-save" onSubmit={this.saveView}>
 
                 <DesignDocSelector />
