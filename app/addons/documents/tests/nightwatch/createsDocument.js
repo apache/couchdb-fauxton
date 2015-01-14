@@ -25,7 +25,7 @@ module.exports = {
       .click('#new-all-docs-button a')
       .waitForElementPresent('#new-all-docs-button a[href="#/database/'+newDatabaseName+'/new"]', waitTime, false)
       .click('#new-all-docs-button a[href="#/database/'+newDatabaseName+'/new"]') 
-      .waitForElementPresent('#doc', waitTime, false)
+      .waitForElementPresent('#editor-container', waitTime, false)
       .verify.urlEquals(baseUrl+'/#/database/'+ newDatabaseName+'/new')
       .execute('\
         var editor = ace.edit("editor-container");\
@@ -33,8 +33,8 @@ module.exports = {
         editor.removeWordRight();\
         editor.insert("'+newDocumentName+'");\
       ')
-      .waitForElementPresent('#doc button.save-doc.btn.btn-success.save', waitTime, false)
-      .click('#doc button.save-doc.btn.btn-success.save')
+      .waitForElementPresent('#doc-editor-actions-panel .save-doc', waitTime, false)
+      .click('#doc-editor-actions-panel .save-doc')
       .pause(1000)
       .url(baseUrl+'/'+newDatabaseName+'/_all_docs')
       .waitForElementPresent('body', waitTime, false)
