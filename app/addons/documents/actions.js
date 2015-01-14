@@ -73,8 +73,9 @@ function (app, FauxtonAPI, Documents, ActionTypes) {
       });
     },
 
-    saveView: function (viewInfo, designDocs) {
+    saveView: function (viewInfo) {
       var designDoc;
+      var designDocs = viewInfo.designDocs;
 
       if (_.isUndefined(viewInfo.designDocId)) {
         FauxtonAPI.addNotification({

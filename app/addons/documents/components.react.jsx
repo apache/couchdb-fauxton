@@ -11,36 +11,25 @@ define([
 function(app, FauxtonAPI, React, Stores, Actions, Components, VelocityTransitionGroup) {
   var indexEditorStore = Stores.indexEditorStore;
   var getDocUrl = app.helpers.getDocUrl;
-  
+
   var ToggleButton = React.createClass({
-    getInitialState: function () {
-      return {
-        title: indexEditorStore.getTitle()
-      };
-    },
 
     render: function() {
       return (
         <div className="dashboard-upper-menu">
           <ul className="nav nav-tabs" id="db-views-tabs-nav">
             <li className="active"> 
-              <a ref="toggle" data-bypass="true" id="index-nav" data-toggle="tab" href="#index" onClick={this.toggleEditor}>
+              <a ref="toggle" data-bypass="true" id="index-nav" data-toggle="tab" href="#index" onClick={this.props.toggleEditor}>
                 <i className="fonticon-wrench fonticon"></i>
-                {this.state.title}
+                {this.props.title}
               </a>
             </li>
           </ul>
         </div>
       );
-    },
-
-    toggleEditor: function () {
-      Actions.toggleEditor();
     }
   });
 
-  //create a new store for this
-  //it has the current select one and list of them
   var DesignDocSelector = React.createClass({
 
     getStoreState: function () {
@@ -56,12 +45,14 @@ function(app, FauxtonAPI, React, Stores, Actions, Components, VelocityTransition
     },
 
     getNewDesignDocInput: function () {
-      return <div id="new-ddoc-section" className="span5">
-        <label className="control-label" htmlFor="new-ddoc"> _design/ </label>
-        <div className="controls">
-          <input value={this.state.designDoc} type="text" id="new-ddoc" onChange={this.onDesignDocChange} placeholder="newDesignDoc" />
+      return (
+        <div id="new-ddoc-section" className="span5">
+          <label className="control-label" htmlFor="new-ddoc"> _design/ </label>
+          <div className="controls">
+            <input value={this.state.designDoc} type="text" id="new-ddoc" onChange={this.onDesignDocChange} placeholder="newDesignDoc" />
+          </div>
         </div>
-      </div>;
+      );
     },
 
     onDesignDocChange: function (event) {
@@ -317,7 +308,11 @@ function(app, FauxtonAPI, React, Stores, Actions, Components, VelocityTransition
       return {
         database: indexEditorStore.getDatabase(),
         isNewView: indexEditorStore.isNewView(),
-        viewName: indexEditorStore.getViewName()
+        viewName: indexEditorStore.getViewName(),
+        designDocs: indexEditorStore.getDesignDocs(),
+        hasDesignDocChanged: indexEditorStore.hasDesignDocChanged(),
+        newDesignDoc: indexEditorStore.isNewDesignDoc(),
+        designDocId: indexEditorStore.getDesignDocId()
       };
     },
 
@@ -364,13 +359,13 @@ function(app, FauxtonAPI, React, Stores, Actions, Components, VelocityTransition
         database: this.state.database,
         newView: this.state.isNewView,
         viewName: this.state.viewName,
-        designDocId: indexEditorStore.getDesignDocId(),
-        newDesignDoc: indexEditorStore.isNewDesignDoc(),
-        designDocChanged: indexEditorStore.hasDesignDocChanged(),
+        designDocId: this.state.designDocId,
+        newDesignDoc: this.state.newDesignDoc,
+        designDocChanged: this.state.hasDesignDocChanged,
         map: this.refs.mapEditor.getMapValue(),
-        reduce: this.refs.reduceEditor.getReduceValue()
-      }, 
-      indexEditorStore.getDesignDocs());
+        reduce: this.refs.reduceEditor.getReduceValue(),
+        designDocs: this.state.designDocs
+      });
     },
 
     viewChange: function (event) {
@@ -410,11 +405,12 @@ function(app, FauxtonAPI, React, Stores, Actions, Components, VelocityTransition
 
   var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 
-  var EditorContainer = React.createClass({
+  var EditorController = React.createClass({
     getInitialState: function () {
       return {
         showEditor: indexEditorStore.showEditor(),
-        isNewView: indexEditorStore.isNewView()
+        isNewView: indexEditorStore.isNewView(),
+        title: indexEditorStore.getTitle()
       };
     },
 
@@ -428,6 +424,10 @@ function(app, FauxtonAPI, React, Stores, Actions, Components, VelocityTransition
 
     componentWillUnmount: function() {
       indexEditorStore.off('change', this.onChange);
+    },
+
+    toggleEditor: function () {
+      Actions.toggleEditor();
     },
 
     render: function () {
@@ -444,7 +444,7 @@ function(app, FauxtonAPI, React, Stores, Actions, Components, VelocityTransition
 
       return (
         <div className={wrapperClassName}>
-          <ToggleButton />
+          <ToggleButton title={this.state.title} toggleEditor={this.toggleEditor} />
           <VelocityTransitionGroup transitionName="fadeInDown" transitionLeave={doTransitions} transitionEnter={doTransitions}>
             {editor}
           </VelocityTransitionGroup>
@@ -456,7 +456,7 @@ function(app, FauxtonAPI, React, Stores, Actions, Components, VelocityTransition
 
   var Views = {
     renderEditor: function (el) {
-      React.render(<EditorContainer/>, el);
+      React.render(<EditorController/>, el);
     },
     removeEditor: function (el) {
       React.unmountComponentAtNode(el);

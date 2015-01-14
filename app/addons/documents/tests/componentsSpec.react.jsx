@@ -42,11 +42,12 @@ define([
   describe('View editor', function () {
 
     describe('Toggle button', function () {
-      var container, toggleEl;
+      var container, toggleEl, toggleEditor;
 
       beforeEach(function () {
+        toggleEditor = sinon.spy();
         container = document.createElement('div');
-        toggleEl = TestUtils.renderIntoDocument(<Views.ToggleButton />, container);
+        toggleEl = TestUtils.renderIntoDocument(<Views.ToggleButton toggleEditor={toggleEditor} />, container);
       });
 
       afterEach(function () {
@@ -55,10 +56,8 @@ define([
 
 
       it('should toggle editor on click', function () {
-        var spy = sinon.spy(Actions, 'toggleEditor');
-        //TestUtils.Simulate.click(toggleEl.refs.toggle.getDOMNode());
         TestUtils.Simulate.click($(toggleEl.getDOMNode()).find('a')[0]);
-        assert.ok(spy.calledOnce);
+        assert.ok(toggleEditor.calledOnce);
       });
 
     });

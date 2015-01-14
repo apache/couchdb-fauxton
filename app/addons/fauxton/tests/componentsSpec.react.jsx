@@ -23,11 +23,12 @@ define([
   describe('NavBar', function () {
 
     describe('burger', function () {
-      var container, burgerEl;
+      var container, burgerEl, toggleMenu;
 
       beforeEach(function () {
+        toggleMenu = sinon.spy();
         container = document.createElement('div');
-        burgerEl = TestUtils.renderIntoDocument(<Views.Burger />, container);
+        burgerEl = TestUtils.renderIntoDocument(<Views.Burger toggleMenu={toggleMenu} />, container);
       });
 
       afterEach(function () {
@@ -35,9 +36,8 @@ define([
       });
 
       it('dispatch TOGGLE_NAVBAR_MENU on click', function () {
-        var spy = sinon.spy(Actions, 'toggleNavbarMenu');
         TestUtils.Simulate.click(burgerEl.getDOMNode());
-        assert.ok(spy.calledOnce);
+        assert.ok(toggleMenu.calledOnce);
       });
 
     });

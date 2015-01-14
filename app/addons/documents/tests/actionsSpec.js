@@ -59,10 +59,11 @@ define([
           map: 'map',
           reduce: '_sum',
           newDesignDoc: true,
-          newView: true
+          newView: true,
+          designDocs: designDocs
         };
 
-        Actions.saveView(viewInfo, designDocs);
+        Actions.saveView(viewInfo);
         assert.ok(spy.calledOnce);
         FauxtonAPI.addNotification.restore();
       });
@@ -77,10 +78,11 @@ define([
           map: 'map',
           reduce: '_sum',
           newDesignDoc: true,
-          newView: true
+          newView: true,
+          designDocs: designDocs
         };
 
-        Actions.saveView(viewInfo, designDocs);
+        Actions.saveView(viewInfo);
         assert.ok(spy.calledOnce);
       });
 
@@ -92,9 +94,10 @@ define([
           reduce: '_sum',
           newDesignDoc: false,
           newView: true,
+          designDocs: designDocs
         };
 
-        Actions.saveView(viewInfo, designDocs);
+        Actions.saveView(viewInfo);
 
         var updatedDesignDoc = designDocs.first().dDocModel();
         assert.equal(updatedDesignDoc.get('views')['test-view'].reduce, '_sum');
@@ -107,12 +110,13 @@ define([
           map: 'map',
           reduce: '_sum',
           newDesignDoc: false,
-          newView: true
+          newView: true,
+          designDocs: designDocs
         };
 
         var updatedDesignDoc = designDocs.first().dDocModel();
         var spy = sinon.spy(updatedDesignDoc, 'save');
-        Actions.saveView(viewInfo, designDocs);
+        Actions.saveView(viewInfo);
 
         assert.ok(spy.calledOnce);
       });
@@ -127,7 +131,8 @@ define([
           map: 'map',
           reduce: '_sum',
           newDesignDoc: false,
-          newView: true
+          newView: true,
+          designDocs: designDocs
         };
         var designDoc = designDocs.first();
 
@@ -137,7 +142,7 @@ define([
           return promise;
         };
 
-        Actions.saveView(viewInfo, designDocs);
+        Actions.saveView(viewInfo);
         assert.ok(spy.calledOnce);
         assert.ok(spy.getCall(0).args[0].match(/_view\/test-view/));
       });
@@ -151,7 +156,8 @@ define([
           map: 'map',
           reduce: '_sum',
           newDesignDoc: false,
-          newView: false
+          newView: false,
+          designDocs: designDocs
         };
         var designDoc = designDocs.first();
 
@@ -161,7 +167,7 @@ define([
           return promise;
         };
 
-        Actions.saveView(viewInfo, designDocs);
+        Actions.saveView(viewInfo);
         assert.ok(spy.calledOnce);
         assert.equal(spy.getCall(0).args[0], 'updateAllDocs');
       });

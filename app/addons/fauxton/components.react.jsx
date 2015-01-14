@@ -21,36 +21,14 @@ function(FauxtonAPI, React, Stores, Actions) {
   var navBarStore = Stores.navBarStore;
 
   var Footer = React.createClass({
-    getStoreState: function () {
-      return {
-        version: navBarStore.getVersion()
-      };
-    },
-
-    getInitialState: function () {
-      return this.getStoreState();
-    },
-
-    onChange: function () {
-      this.setState(this.getStoreState());
-    },
-
-    componentDidMount: function () {
-      navBarStore.on('change', this.onChange, this);
-    },
-
-    componentWillUnmount: function() {
-      navBarStore.off('change', this.onChange);
-    },
-
     render: function () {
-      var version = this.state.version;
+      var version = this.props.version;
 
       if (!version) { return null; }
       return (
         <div className="version-footer">
           Fauxton on 
-          <a href="http://couchdb.apache.org/">Apache CouchDB</a>
+          <a href="http://couchdb.apache.org/"> Apache CouchDB</a>
           <br/> 
           v. {version}
         </div>
@@ -61,16 +39,12 @@ function(FauxtonAPI, React, Stores, Actions) {
   var Burger = React.createClass({
     render: function () {
       return (
-        <div className="burger" onClick={this.toggleMenu}>
+        <div className="burger" onClick={this.props.toggleMenu}>
           <div></div>
           <div></div>
           <div></div>
         </div>
       );
-    },
-
-    toggleMenu: function () {
-      Actions.toggleNavbarMenu();
     }
   });
 
@@ -97,6 +71,7 @@ function(FauxtonAPI, React, Stores, Actions) {
         bottomNavLinks: navBarStore.getBottomNavLinks(),
         footerNavLinks: navBarStore.getFooterNavLinks(),
         activeLink: navBarStore.getActiveLink(),
+        version: navBarStore.getVersion(),
         isMinimized: navBarStore.isMinimized()
       };
     },
@@ -115,21 +90,25 @@ function(FauxtonAPI, React, Stores, Actions) {
       this.setState(this.getStoreState());
     },
 
-    toggleMenu: function () {
+    setMenuState: function () {
       $('body').toggleClass('closeMenu', this.state.isMinimized);
     },
 
     componentDidMount: function () {
       navBarStore.on('change', this.onChange, this);
-      this.toggleMenu();
+      this.setMenuState();
     },
 
     componentDidUpdate: function () {
-      this.toggleMenu();
+      this.setMenuState();
     },
 
     componentWillUnmount: function() {
       navBarStore.off('change', this.onChange);
+    },
+
+    toggleMenu: function () {
+      Actions.toggleNavbarMenu();
     },
 
     render: function () {
@@ -139,7 +118,7 @@ function(FauxtonAPI, React, Stores, Actions) {
 
       return (
         <div className="navbar">
-          <Burger />
+          <Burger toggleMenu={this.toggleMenu}/>
           <nav id="main_navigation">
             <ul id="nav-links" className="nav">
               {navLinks}
@@ -155,9 +134,9 @@ function(FauxtonAPI, React, Stores, Actions) {
 
           <div className="bottom-container">
             <div className="brand">
-              <div className="icon">Apache Couchdb</div>
+              <div className="icon">Apache Fauxton</div>
             </div>
-            <Footer />
+            <Footer version={this.state.version}/>
             <div id="footer-links">
               <ul id="footer-nav-links" className="nav">
                 {footerNavLinks}
