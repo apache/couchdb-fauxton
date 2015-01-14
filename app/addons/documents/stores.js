@@ -186,6 +186,10 @@ function(FauxtonAPI, ActionTypes) {
           this.triggerChange();
         break;
 
+        case ActionTypes.VIEW_SAVED:
+          this.triggerChange();
+        break;
+
         default:
           return;
         // do nothing

@@ -130,6 +130,9 @@ function (app, FauxtonAPI, Documents, ActionTypes) {
               selectedTab: app.utils.removeSpecialCharacters(designDoc.id.replace(/_design\//,'')) + '_' + app.utils.removeSpecialCharacters(viewInfo.viewName)
             });
           } else {
+            FauxtonAPI.dispatch({
+              type: ActionTypes.VIEW_SAVED
+            });
             //This will should be changed to a dispatch once implemented
             FauxtonAPI.triggerRouteEvent('updateAllDocs', {ddoc: designDoc.id, view: viewInfo.viewName});
           }

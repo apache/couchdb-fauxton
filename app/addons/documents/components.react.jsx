@@ -122,17 +122,11 @@ function(app, FauxtonAPI, React, Stores, Actions, Components, VelocityTransition
   });
 
   var MapEditor = React.createClass({
-    getInitialState: function () {
-      return {
-        map: indexEditorStore.getMap()
-      };
-    },
-
     render: function () {
       return (
         <div className="control-group">
           <label htmlFor="map-function">Map function <a className="help-link" data-bypass="true" href={getDocUrl('MAP_FUNCS')} target="_blank"><i className="icon-question-sign"></i></a></label>
-          <div className="js-editor" id="map-function"> {this.state.map}</div>
+          <div className="js-editor" id="map-function">{this.props.map}</div>
           <button className="beautify beautify_map btn btn-primary btn-large hide beautify-tooltip" type="button" data-toggle="tooltip" title="Reformat your minified code to make edits to it.">beautify this code</button>
         </div>
       );
@@ -153,8 +147,51 @@ function(app, FauxtonAPI, React, Stores, Actions, Components, VelocityTransition
         couchJSHINT: true
       });
       this.mapEditor.render();
+    },
+
+    componentWillUnmount: function () {
+      this.mapEditor.remove();
+    },
+
+    componentDidUpdate: function () {
+      this.mapEditor.editSaved();
     }
+
   }); 
+
+  var CustomReduce = React.createClass({
+
+    render: function () {
+      return (
+        <div className="control-group reduce-function">
+          <label htmlFor="reduce-function">Custom Reduce function</label>
+          <div className="js-editor" id="reduce-function">{this.props.reduce}</div>
+        </div>
+      );
+    },
+
+    componentDidMount: function () {
+      this.reduceEditor = new Components.Editor({
+        editorId: "reduce-function",
+        mode: "javascript",
+        couchJSHINT: true
+      });
+      this.reduceEditor.render();
+    },
+
+    componentDidUpdate: function () {
+      this.reduceEditor.editSaved();
+    },
+
+    componentWillUnmount: function () {
+      this.reduceEditor.remove();
+    },
+
+    getValue: function () {
+      return this.reduceEditor.getValue();
+    }
+
+  });
 
   var ReduceEditor = React.createClass({
 
@@ -188,11 +225,11 @@ function(app, FauxtonAPI, React, Stores, Actions, Components, VelocityTransition
         return this.state.reduce;
       }
 
-      return this.reduceEditor.getValue();
+      return this.refs.reduceEditor.getValue();
     },
 
     getEditor: function () {
-      return this.reduceEditor;
+      return this.refs.reduceEditor.reduceEditor;
     },
 
     render: function () {
@@ -200,10 +237,7 @@ function(app, FauxtonAPI, React, Stores, Actions, Components, VelocityTransition
       customReduceSection;
 
       if (this.state.hasCustomReduce) {
-        customReduceSection = <div className="control-group reduce-function">
-          <label htmlFor="reduce-function">Custom Reduce function</label>
-          <div className="js-editor" id="reduce-function"> {this.state.reduce}</div>
-        </div>;
+        customReduceSection = <CustomReduce ref="reduceEditor" reduce={this.state.reduce} />;
       }
 
       return (
@@ -229,34 +263,13 @@ function(app, FauxtonAPI, React, Stores, Actions, Components, VelocityTransition
       this.setState(this.getStoreState());
     },
 
-    renderEditor: function () {
-      if (!this.state.hasReduce) {
-        return;
-      }
-
-      if (this.state.hasCustomReduce) {
-        this.reduceEditor = new Components.Editor({
-          editorId: "reduce-function",
-          mode: "javascript",
-          couchJSHINT: true
-        });
-        this.reduceEditor.render();
-      }
-    },
-
     componentDidMount: function () {
       indexEditorStore.on('change', this.onChange, this);
-      this.renderEditor();
-
     },
 
     componentWillUnmount: function() {
       indexEditorStore.off('change', this.onChange);
     },
-
-    componentDidUpdate: function () {
-      this.renderEditor();
-    }
 
   });
 
@@ -312,7 +325,8 @@ function(app, FauxtonAPI, React, Stores, Actions, Components, VelocityTransition
         designDocs: indexEditorStore.getDesignDocs(),
         hasDesignDocChanged: indexEditorStore.hasDesignDocChanged(),
         newDesignDoc: indexEditorStore.isNewDesignDoc(),
-        designDocId: indexEditorStore.getDesignDocId()
+        designDocId: indexEditorStore.getDesignDocId(),
+        map: indexEditorStore.getMap()
       };
     },
 
@@ -334,10 +348,10 @@ function(app, FauxtonAPI, React, Stores, Actions, Components, VelocityTransition
 
     hasValidCode: function() {
       return _.every(["mapEditor", "reduceEditor"], function(editorName) {
-        var editor = this.refs[editorName].getEditor();
         if (editorName === "reduceEditor" && !indexEditorStore.hasCustomReduce()) {
           return true;
         }
+        var editor = this.refs[editorName].getEditor();
         return editor.hadValidCode();
       }, this);
     },
@@ -385,7 +399,7 @@ function(app, FauxtonAPI, React, Stores, Actions, Components, VelocityTransition
                   <input type="text" id="index-name" value={this.state.viewName} onChange={this.viewChange} placeholder="Index name" />
                 </div>
 
-                <MapEditor ref="mapEditor"/>
+                <MapEditor ref="mapEditor" map={this.state.map}/>
                 <ReduceEditor ref="reduceEditor"/>
 
                 <div className="control-group">

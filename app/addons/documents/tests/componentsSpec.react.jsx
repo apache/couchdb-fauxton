@@ -178,7 +178,7 @@ define([
   });
 
   describe('Editor', function () {
-    var container, editorEl;
+    var container, editorEl, reduceStub;
 
     beforeEach(function () {
       container = document.createElement('div');
