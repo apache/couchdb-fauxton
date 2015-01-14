@@ -17,7 +17,7 @@ define([
   'addons/documents/actiontypes',
   'testUtils'
 ], function (FauxtonAPI, Actions, Documents, ActionTypes, testUtils) {
-  var expect = testUtils.chai.expect;
+  var assert = testUtils.assert;
 
   FauxtonAPI.router = new FauxtonAPI.Router([]);
 
@@ -63,7 +63,7 @@ define([
         };
 
         Actions.saveView(viewInfo, designDocs);
-        expect(spy.calledOnce).to.be.true;
+        assert.ok(spy.calledOnce);
         FauxtonAPI.addNotification.restore();
       });
 
@@ -81,7 +81,7 @@ define([
         };
 
         Actions.saveView(viewInfo, designDocs);
-        expect(spy.calledOnce).to.be.true;
+        assert.ok(spy.calledOnce);
       });
 
       it('sets the design doc with updated view', function () {
@@ -97,7 +97,7 @@ define([
         Actions.saveView(viewInfo, designDocs);
 
         var updatedDesignDoc = designDocs.first().dDocModel();
-        expect(updatedDesignDoc.get('views')['test-view'].reduce).to.equal('_sum');
+        assert.equal(updatedDesignDoc.get('views')['test-view'].reduce, '_sum');
       });
 
       it('saves doc', function () {
@@ -114,7 +114,7 @@ define([
         var spy = sinon.spy(updatedDesignDoc, 'save');
         Actions.saveView(viewInfo, designDocs);
 
-        expect(spy.calledOnce).to.be.true;
+        assert.ok(spy.calledOnce);
       });
 
       it('navigates to new url for new view', function () {
@@ -138,8 +138,8 @@ define([
         };
 
         Actions.saveView(viewInfo, designDocs);
-        expect(spy.calledOnce).to.be.true;
-        expect(spy.getCall(0).args[0]).to.match(/_view\/test-view/);
+        assert.ok(spy.calledOnce);
+        assert.ok(spy.getCall(0).args[0].match(/_view\/test-view/));
       });
 
       it('triggers update all docs', function () {
@@ -162,8 +162,8 @@ define([
         };
 
         Actions.saveView(viewInfo, designDocs);
-        expect(spy.calledOnce).to.be.true;
-        expect(spy.getCall(0).args[0]).to.equal('updateAllDocs');
+        assert.ok(spy.calledOnce);
+        assert.equal(spy.getCall(0).args[0], 'updateAllDocs');
       });
     });
 
@@ -209,7 +209,7 @@ define([
           designDocs: designDocs
         });
 
-        expect(designDoc.getDdocView(viewName)).to.equal(undefined);
+        assert.ok(_.isUndefined(designDoc.getDdocView(viewName)));
       });
 
       it('saves design do if has other views', function () {
@@ -222,7 +222,7 @@ define([
           designDocs: designDocs
         });
 
-        expect(spy.calledOnce).to.be.true;
+        assert.ok(spy.calledOnce);
       });
 
       it('deletes design doc if has no other views', function () {
@@ -236,7 +236,7 @@ define([
           designDocs: designDocs
         });
 
-        expect(spy.calledOnce).to.be.true;
+        assert.ok(spy.calledOnce);
 
       });
 
@@ -257,8 +257,8 @@ define([
         });
 
 
-        expect(spy.getCall(0).args[0]).to.match(/_all_docs/);
-        expect(spy.calledOnce).to.be.true;
+        assert.ok(spy.getCall(0).args[0].match(/_all_docs/));
+        assert.ok(spy.calledOnce);
       });
 
       it('triggers design doc reload', function () {
@@ -277,8 +277,8 @@ define([
           designDocs: designDocs
         });
 
-        expect(spy.calledOnce).to.be.true;
-        expect(spy.getCall(0).args[0]).to.equal('reloadDesignDocs');
+        assert.ok(spy.calledOnce);
+        assert.equal(spy.getCall(0).args[0], 'reloadDesignDocs');
       });
 
     });

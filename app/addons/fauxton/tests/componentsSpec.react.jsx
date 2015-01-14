@@ -17,7 +17,7 @@ define([
   "react"
 ], function (FauxtonAPI, Views, Actions, utils, React) {
 
-  var expect = utils.chai.expect;
+  var assert = utils.assert;
   var TestUtils = React.addons.TestUtils;
 
   describe('NavBar', function () {
@@ -37,7 +37,7 @@ define([
       it('dispatch TOGGLE_NAVBAR_MENU on click', function () {
         var spy = sinon.spy(Actions, 'toggleNavbarMenu');
         TestUtils.Simulate.click(burgerEl.getDOMNode());
-        expect(spy.calledOnce).to.be.true;
+        assert.ok(spy.calledOnce);
       });
 
     });

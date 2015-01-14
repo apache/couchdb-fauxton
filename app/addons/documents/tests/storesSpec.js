@@ -17,7 +17,7 @@ define([
   'addons/documents/resources',
   'testUtils'
 ], function (FauxtonAPI, Stores, ActionTypes, Documents, testUtils) {
-  var expect = testUtils.chai.expect;
+  var assert = testUtils.assert;
   var store;
   var dispatchToken;
 
@@ -66,7 +66,7 @@ define([
           type: ActionTypes.TOGGLE_EDITOR
         });
 
-        expect(store.showEditor()).to.be.true;
+        assert.ok(store.showEditor());
       });
 
     });
@@ -86,11 +86,11 @@ define([
         });
 
         it('returns default map', function () {
-          expect(store.getMap()).to.equal( 'function(doc) {\n  emit(doc._id, 1);\n}');
+          assert.equal(store.getMap(), 'function(doc) {\n  emit(doc._id, 1);\n}');
         });
 
         it('Edit Index as title', function () {
-          expect(store.getTitle()).to.equal('Create Index');
+          assert.equal(store.getTitle(), 'Create Index');
         });
       });
 
@@ -127,7 +127,7 @@ define([
             }
           });
 
-          expect(store.hasCustomReduce()).to.be.false;
+          assert.notOk(store.hasCustomReduce());
         });
 
         it('is false for built in reduce', function () {
@@ -157,7 +157,7 @@ define([
             }
           });
 
-          expect(store.hasCustomReduce()).to.be.false;
+          assert.notOk(store.hasCustomReduce());
         });
 
         it('is true for custom reduce', function () {
@@ -188,7 +188,7 @@ define([
             }
           });
 
-          expect(store.hasCustomReduce()).to.be.true;
+          assert.ok(store.hasCustomReduce());
         });
 
       });
@@ -229,7 +229,7 @@ define([
             type: ActionTypes.SELECT_REDUCE_CHANGE,
             reduceSelectedOption: 'NONE'
           });
-          expect(store.getReduce()).to.be.null;
+          assert.ok(_.isNull(store.getReduce()));
         });
 
         it('builtin returns bultin reduce', function () {
@@ -237,7 +237,7 @@ define([
             type: ActionTypes.SELECT_REDUCE_CHANGE,
             reduceSelectedOption: '_sum'
           });
-          expect(store.getReduce()).to.equal('_sum');
+          assert.equal(store.getReduce(), '_sum');
         });
 
         it('custom returns custom reduce', function () {
@@ -245,7 +245,7 @@ define([
             type: ActionTypes.SELECT_REDUCE_CHANGE,
             reduceSelectedOption: 'CUSTOM'
           });
-          expect(store.getReduce()).to.equal( 'function(keys, values, rereduce){\n  if (rereduce){\n    return sum(values);\n  } else {\n    return values.length;\n  }\n}');
+          assert.equal(store.getReduce(), 'function(keys, values, rereduce){\n  if (rereduce){\n    return sum(values);\n  } else {\n    return values.length;\n  }\n}');
         });
       });
     });
@@ -290,8 +290,8 @@ define([
           newDesignDoc: false
         });
 
-        expect(store.getDesignDocId()).to.equal(designDocId);
-        expect(store.isNewDesignDoc()).to.false;
+        assert.equal(store.getDesignDocId(), designDocId);
+        assert.notOk(store.isNewDesignDoc());
       });
 
       it('sets new design doc on NEW_DESIGN_DOC', function () {
@@ -299,8 +299,8 @@ define([
           type: ActionTypes.NEW_DESIGN_DOC
         });
 
-        expect(store.isNewDesignDoc()).to.true;
-        expect(store.getDesignDocId()).to.equal('');
+        assert.ok(store.isNewDesignDoc());
+        assert.equal(store.getDesignDocId(), '');
       });
     });
 
@@ -343,7 +343,7 @@ define([
           reduceSelectedOption: '_sum'
         });
 
-        expect(store.getReduce()).to.equal('_sum');
+        assert.equal(store.getReduce(), '_sum');
       });
 
       it('showEditor() is false for editing index', function () {
@@ -357,7 +357,7 @@ define([
           }
         });
 
-        expect(store.showEditor()).to.be.false;
+        assert.notOk(store.showEditor());
       });
 
       it('showEditor() is true for creating index', function () {
@@ -372,7 +372,7 @@ define([
           }
         });
 
-        expect(store.showEditor()).to.be.true;
+        assert.ok(store.showEditor());
       });
 
     });

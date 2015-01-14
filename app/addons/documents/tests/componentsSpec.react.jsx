@@ -20,7 +20,7 @@ define([
 ], function (FauxtonAPI, Views, Stores, Actions, Documents, utils, React) {
   FauxtonAPI.router = new FauxtonAPI.Router([]);
 
-  var expect = utils.chai.expect;
+  var assert = utils.assert;
   var TestUtils = React.addons.TestUtils;
 
   var resetStore = function (designDoc) {
@@ -58,7 +58,7 @@ define([
         var spy = sinon.spy(Actions, 'toggleEditor');
         //TestUtils.Simulate.click(toggleEl.refs.toggle.getDOMNode());
         TestUtils.Simulate.click($(toggleEl.getDOMNode()).find('a')[0]);
-        expect(spy.calledOnce).to.be.true;
+        assert.ok(spy.calledOnce);
       });
 
     });
@@ -100,7 +100,7 @@ define([
         resetStore(designDoc);
 
         reduceEl = TestUtils.renderIntoDocument(<Views.ReduceEditor/>, container);
-        expect(reduceEl.getReduceValue()).to.be.null;
+        assert.ok(_.isNull(reduceEl.getReduceValue()));
       });
 
       it('returns built in for built in reduce', function () {
@@ -119,7 +119,7 @@ define([
         resetStore(designDoc);
 
         reduceEl = TestUtils.renderIntoDocument(<Views.ReduceEditor/>, container);
-        expect(reduceEl.getReduceValue()).to.equal('_sum');
+        assert.equal(reduceEl.getReduceValue(), '_sum');
       });
 
     });
@@ -150,7 +150,7 @@ define([
         }
       });
 
-      expect(spy.calledOnce).to.be.true;
+      assert.ok(spy.calledOnce);
     });
 
     it('calls design doc changed on a different design doc selected', function () {
@@ -161,7 +161,7 @@ define([
         }
       });
 
-      expect(spy.calledWith('another-doc', false)).to.be.true;
+      assert.ok(spy.calledWith('another-doc', false));
     });
 
     it('calls design doc changed on new design doc entered', function () {
@@ -173,7 +173,7 @@ define([
         }
       });
       
-      expect(spy.calledWith('_design/new-doc-entered', true)).to.be.true;
+      assert.ok(spy.calledWith('_design/new-doc-entered', true));
     });
 
   });
@@ -195,19 +195,19 @@ define([
     it('returns false on invalid map editor code', function () {
       var stub = sinon.stub(editorEl.refs.mapEditor.mapEditor, 'hadValidCode');
       stub.returns(false);
-      expect(editorEl.hasValidCode()).to.be.false;
+      assert.notOk(editorEl.hasValidCode());
     });
 
     it('returns true on valid map editor code', function () {
       var stub = sinon.stub(editorEl.refs.mapEditor.mapEditor, 'hadValidCode');
       stub.returns(true);
-      expect(editorEl.hasValidCode()).to.be.true;
+      assert.ok(editorEl.hasValidCode());
     });
 
     it('returns true on non-custom reduce', function () {
       var stub = sinon.stub(Stores.indexEditorStore, 'hasCustomReduce');
       stub.returns(false);
-      expect(editorEl.hasValidCode()).to.be.true;
+      assert.ok(editorEl.hasValidCode());
     });
 
   });

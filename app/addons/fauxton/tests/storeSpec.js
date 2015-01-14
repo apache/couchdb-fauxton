@@ -38,7 +38,6 @@ define([
         });
 
         assert.equal(navBarStore.getNavLinks()[0].id, link.id);
-
       });
 
       it('to top nav links', function () {
@@ -62,7 +61,6 @@ define([
         });
 
         assert.equal(navBarStore.getNavLinks()[0].id, link2.id);
-
       });
 
       it('to bottom nav', function () {

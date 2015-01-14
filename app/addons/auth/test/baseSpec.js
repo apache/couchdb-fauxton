@@ -16,8 +16,6 @@ define([
       'testUtils'
 ], function (FauxtonAPI, Base, Auth, testUtils) {
   var assert = testUtils.assert;
-  var expect = testUtils.chai.expect;
-
 
   describe("Auth: Login", function () {
 
@@ -38,6 +36,7 @@ define([
 
     afterEach(function () {
       FauxtonAPI.updateHeaderLink.restore && FauxtonAPI.updateHeaderLink.restore();
+      FauxtonAPI.session.isAdminParty.restore && FauxtonAPI.session.isAdminParty.restore();
     });
 
     it('for admin party changes title to admin party', function () {
@@ -45,10 +44,10 @@ define([
       var stub = sinon.stub(FauxtonAPI.session, 'isAdminParty').returns(true);
       FauxtonAPI.session.trigger('change');
 
-      expect(spy.calledOnce).to.be.true;
+      assert.ok(spy.calledOnce);
       var args = spy.getCall(0).args[0];
 
-      expect(args.title).to.match(/Admin Party/);
+      assert.ok(args.title.match(/Admin Party/));
       FauxtonAPI.session.isAdminParty.restore();
     });
 
@@ -59,10 +58,10 @@ define([
       sinon.stub(FauxtonAPI.session, 'isLoggedIn').returns(true);
       FauxtonAPI.session.trigger('change');
 
-      expect(spy.calledOnce).to.be.true;
+      assert.ok(spy.calledOnce);
       var args = spy.getCall(0).args[0];
 
-      expect(args.title).to.equal('test-user');
+      assert.equal(args.title, 'test-user');
       FauxtonAPI.session.isLoggedIn.restore();
       FauxtonAPI.session.user.restore();
       FauxtonAPI.session.isAdminParty.restore();
@@ -75,10 +74,10 @@ define([
       sinon.stub(FauxtonAPI.session, 'isLoggedIn').returns(true);
       FauxtonAPI.session.trigger('change');
 
-      expect(spy.calledOnce).to.be.true;
+      assert.ok(spy.calledOnce);
       var args = spy.getCall(0).args[0];
 
-      expect(args.title).to.equal('Logout');
+      assert.equal(args.title, 'Logout');
       FauxtonAPI.session.isLoggedIn.restore();
       FauxtonAPI.session.user.restore();
       FauxtonAPI.session.isAdminParty.restore();
@@ -90,10 +89,10 @@ define([
       sinon.stub(FauxtonAPI.session, 'isLoggedIn').returns(false);
       FauxtonAPI.session.trigger('change');
 
-      expect(spy.calledOnce).to.be.true;
+      assert.ok(spy.calledOnce);
       var args = spy.getCall(0).args[0];
 
-      expect(args.id).to.equal('logout');
+      assert.equal(args.id, 'logout');
       FauxtonAPI.session.isLoggedIn.restore();
       FauxtonAPI.session.isAdminParty.restore();
     });
