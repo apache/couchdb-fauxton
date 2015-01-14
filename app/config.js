@@ -35,7 +35,7 @@ require.config({
     "velocity.ui": "../assets/js/plugins/velocity.ui",
     react: "../assets/js/libs/react",
     flux: "../assets/js/libs/flux",
-    "es5-shim": "../as
+    "es5-shim": "../assets/js/libs/es5-shim",
     moment: '../assets/js/libs/moment'
   },
 
