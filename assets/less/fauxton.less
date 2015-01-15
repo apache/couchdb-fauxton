@@ -164,12 +164,18 @@ table.databases {
 
 // customize the twitter bootstrap alert
 .alert {
+  padding-left: 20px;
   padding-top: 20px;
   min-height: @collapsedNavWidth;
   margin-bottom: auto;
   text-shadow: none;
   .border-radius(0);
-  .bottom-shadow-border(4px);
+  border-bottom: 1px solid #3a2c2b; 
+  box-shadow: 0px 4px 0 0 rgba(0, 0, 0, 0.4); 
+}
+
+.alert-icon {
+  padding-right:8px;
 }
 
 .tray .alert {
