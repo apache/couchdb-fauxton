@@ -1,10 +1,11 @@
 exports.command = function () {
   var waitTime = 8000,
-      client = this;
+      client = this,
+      dismissSelector = '#global-notifications [data-dismiss="alert"]';
 
   client
-    .waitForElementPresent('#global-notifications button.close', waitTime, false)
-    .click('#global-notifications button.close');
+    .waitForElementPresent(dismissSelector, waitTime, false)
+    .click(dismissSelector);
 
   return this;
 };
