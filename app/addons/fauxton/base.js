@@ -245,7 +245,11 @@ function(app, FauxtonAPI, Components, ZeroClipboard) {
   });
 
   Fauxton.Notification = FauxtonAPI.View.extend({
-    fadeTimer: 5000,
+    animationTimer: 5000,
+
+    events: {
+      'click .js-dismiss': 'removeWithAnimation'
+    },
 
     initialize: function(options) {
       this.htmlToRender = options.msg;
@@ -256,7 +260,6 @@ function(app, FauxtonAPI, Components, ZeroClipboard) {
       this.type = options.type || "info";
       this.selector = options.selector;
       this.fade = options.fade === undefined ? true : options.fade;
-      this.clear = options.clear;
       this.data = options.data || "";
       this.template = options.template || "addons/fauxton/templates/notification";
     },
@@ -269,13 +272,16 @@ function(app, FauxtonAPI, Components, ZeroClipboard) {
       };
     },
 
-    delayedFade: function() {
-      var that = this;
-      if (this.fade) {
-        setTimeout(function() {
-          that.$el.fadeOut();
-        }, this.fadeTimer);
-      }
+    removeWithAnimation: function () {
+      this.$el.velocity('reverse', FauxtonAPI.constants.MISC.TRAY_TOGGLE_SPEED, function () {
+        this.$el.remove();
+      }.bind(this));
+    },
+
+    delayedRemoval: function () {
+      setTimeout(function () {
+        this.removeWithAnimation();
+      }.bind(this), this.animationTimer);
     },
 
     renderNotification: function(selector) {
@@ -284,7 +290,8 @@ function(app, FauxtonAPI, Components, ZeroClipboard) {
         $(selector).html('');
       }
       this.render().$el.appendTo(selector);
-      this.delayedFade();
+      this.$el.velocity('transition.slideDownIn', FauxtonAPI.constants.MISC.TRAY_TOGGLE_SPEED);
+      this.delayedRemoval();
       return this;
     }
   });
