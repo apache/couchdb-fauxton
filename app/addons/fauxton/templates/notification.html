@@ -13,7 +13,7 @@ the License.
 */%>
 
 <div class="alert alert-<%- type %>">
-  <i class="pull-right fonticon-cancel js-dismiss"></i>
-  <i class="alert-icon fonticon-attention-circled"></i>
+  <a data-bypass href="#" class="js-dismiss"><i class="pull-right fonticon-cancel"></i></a>
+  <i class="notification-icon <%- icon %>"></i>
   <%= htmlToRender %><!-- every caller has to escape on it's own -->
 </div>

@@ -264,8 +264,26 @@ function(app, FauxtonAPI, Components, ZeroClipboard) {
       this.template = options.template || "addons/fauxton/templates/notification";
     },
 
-    serialize: function() {
+    serialize: function () {
+      var icon;
+
+      switch (this.type) {
+        case 'error':
+          icon = 'fonticon-attention-circled';
+          break;
+        case 'info':
+          icon = 'fonticon-info-circled';
+          break;
+        case 'success':
+          icon = 'fonticon-ok-circled';
+          break;
+        default:
+          icon = 'fonticon-info-circled';
+          break;
+      }
+
       return {
+        icon: icon,
         data: this.data,
         htmlToRender: this.htmlToRender,
         type: this.type
