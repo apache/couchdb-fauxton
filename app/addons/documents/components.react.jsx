@@ -160,13 +160,17 @@ function(app, FauxtonAPI, React, Stores, Actions, Components) {
       this.mapEditor.render();
     },
 
+    shouldComponentUpdate: function () {
+      //we don't want to re-render the map editor has we using backbone underneath 
+      //which will cause the editor to break
+      this.mapEditor.editSaved();
+      
+      return false;
+    },
+
     componentWillUnmount: function () {
       this.mapEditor.remove();
     },
-
-    componentDidUpdate: function () {
-      this.mapEditor.editSaved();
-    }
 
   }); 
 
@@ -190,8 +194,9 @@ function(app, FauxtonAPI, React, Stores, Actions, Components) {
       this.reduceEditor.render();
     },
 
-    componentDidUpdate: function () {
+    shouldComponentUpdate: function () {
       this.reduceEditor.editSaved();
+      return false;
     },
 
     componentWillUnmount: function () {
