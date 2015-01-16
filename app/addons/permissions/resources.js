@@ -11,23 +11,16 @@
 // the License.
 
 define([
-       "app",
-       "api"
+  'app',
+  'api'
 ],
 function (app, FauxtonAPI ) {
   var Permissions = FauxtonAPI.addon();
 
   Permissions.Security = Backbone.Model.extend({
     defaults: {
-      admins: {
-        names: [],
-        roles: []
-      },
-
-      members: {
-        names: [],
-        roles: []
-      }
+      admins:  { names: [], roles: [] },
+      members: { names: [], roles: [] }
     },
 
     isNew: function () {
@@ -39,7 +32,7 @@ function (app, FauxtonAPI ) {
     },
 
     url: function () {
-      return window.location.origin +"/"+ this.database.safeID() + '/_security';
+      return window.location.origin + '/' + this.database.safeID() + '/_security';
     },
 
     addItem: function (value, type, section) {
@@ -62,7 +55,6 @@ function (app, FauxtonAPI ) {
       sectionValues[type].push(value);
       return this.set(section, sectionValues);
     }
-
   });
 
   return Permissions;

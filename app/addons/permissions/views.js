@@ -11,23 +11,24 @@
 // the License.
 
 define([
-       "app",
-       "api",
-       "addons/permissions/resources"
+  'app',
+  'api',
+  'addons/permissions/resources'
 ],
-function (app, FauxtonAPI, Permissions ) {
+function (app, FauxtonAPI, Permissions) {
+
   var events = {};
   Permissions.events = _.extend(events, Backbone.Events);
 
   Permissions.Permissions = FauxtonAPI.View.extend({
-    template: "addons/permissions/templates/permissions",
+    template: 'addons/permissions/templates/permissions',
 
     initialize: function (options) {
       this.database = options.database;
       this.listenTo(Permissions.events, 'itemRemoved', this.itemRemoved);
     },
 
-    itemRemoved: function (event) {
+    itemRemoved: function () {
       this.model.set({
         admins: this.adminsView.items(),
         members: this.membersView.items()
@@ -37,7 +38,7 @@ function (app, FauxtonAPI, Permissions ) {
         FauxtonAPI.addNotification({
           msg: 'Database permissions has been updated.'
         });
-        }, function (xhr) {
+      }, function (xhr) {
         FauxtonAPI.addNotification({
           msg: 'Could not update permissions - reason: ' + xhr.responseText,
           type: 'error'
@@ -61,21 +62,21 @@ function (app, FauxtonAPI, Permissions ) {
 
     serialize: function () {
       return {
-        databaseName: this.database.id,
+        databaseName: this.database.id
       };
     }
   });
 
   Permissions.PermissionSection = FauxtonAPI.View.extend({
-    template: "addons/permissions/templates/section",
+    template: 'addons/permissions/templates/section',
     initialize: function (options) {
       this.section = options.section;
       this.help = options.help;
     },
 
     events: {
-      "submit .permission-item-form": "addItem",
-      'click button.close': "removeItem"
+      'submit .permission-item-form': 'addItem',
+      'click button.close': 'removeItem'
     },
 
     beforeRender: function () {
@@ -85,15 +86,15 @@ function (app, FauxtonAPI, Permissions ) {
       this.roleViews = [];
 
       _.each(section.names, function (name) {
-        var nameView = this.insertView('#'+this.section+'-items-names', new Permissions.PermissionItem({
-          item: name,
+        var nameView = this.insertView('#' + this.section + '-items-names', new Permissions.PermissionItem({
+          item: name
         }));
         this.nameViews.push(nameView);
       }, this);
 
       _.each(section.roles, function (role) {
-        var roleView = this.insertView('#'+this.section+'-items-roles', new Permissions.PermissionItem({
-          item: role,
+        var roleView = this.insertView('#' + this.section + '-items-roles', new Permissions.PermissionItem({
+          item: role
         }));
         this.roleViews.push(roleView);
       }, this);
@@ -160,19 +161,18 @@ function (app, FauxtonAPI, Permissions ) {
         help: this.help
       };
     }
-
   });
 
   Permissions.PermissionItem = FauxtonAPI.View.extend({
-    tagName: "li",
-    template: "addons/permissions/templates/item",
+    tagName: 'li',
+    template: 'addons/permissions/templates/item',
     initialize: function (options) {
       this.item = options.item;
       this.viewsList = options.viewsList;
     },
 
     events: {
-      'click .close': "removeItem"
+      'click .close': 'removeItem'
     },
 
     removeItem: function (event) {
@@ -187,13 +187,11 @@ function (app, FauxtonAPI, Permissions ) {
       });
     },
 
-
     serialize: function () {
       return {
         item: this.item
       };
     }
-
   });
 
   return Permissions;
