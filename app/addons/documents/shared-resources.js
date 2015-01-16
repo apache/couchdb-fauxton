@@ -256,20 +256,6 @@ define([
       return this.urlRef.apply(this, arguments);
     },
 
-    simple: function () {
-      var docs = this.map(function (item) {
-        return {
-          _id: item.id,
-          _rev: item.get('_rev'),
-        };
-      });
-
-      return new Documents.AllDocs(docs, {
-        database: this.database,
-        params: this.params
-      });
-    },
-
     totalRows: function() {
       return this.viewMeta.total_rows || "unknown";
     },

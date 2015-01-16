@@ -424,5 +424,18 @@ function(app, FauxtonAPI, Documents, PagingCollection) {
     }, menuLinks);
   };
 
+  Documents.ListExpandedState = {
+    set: function (isExpanded) {
+      app.utils.localStorageSet('docListCollapsedState', isExpanded);
+    },
+
+    // returns a boolean indicating whether the doc list is expanded or not. Defaults to true if the user
+    // hasn't selected anything
+    get: function () {
+      var docListCollapsedState = app.utils.localStorageGet('docListCollapsedState');
+      return !_.isUndefined(docListCollapsedState) ? docListCollapsedState : true;
+    }
+  };
+
   return Documents;
 });
