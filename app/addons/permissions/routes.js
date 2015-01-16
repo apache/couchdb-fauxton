@@ -11,17 +11,15 @@
 // the License.
 
 define([
-       "app",
-       "api",
-       "addons/databases/base",
-       "addons/permissions/views"
+  'app',
+  'api',
+  'addons/databases/base',
+  'addons/permissions/views',
+  'addons/documents/shared-routes'
 ],
-function (app, FauxtonAPI, Databases, Permissions) {
-  
-  var PermissionsRouteObject = FauxtonAPI.RouteObject.extend({
-    layout: 'one_pane',
-    selectedHeader: 'Databases',
+function (app, FauxtonAPI, Databases, Permissions, BaseRoute) {
 
+  var PermissionsRouteObject = BaseRoute.extend({
     routes: {
       'database/:database/permissions': 'permissions'
     },
@@ -30,34 +28,74 @@ function (app, FauxtonAPI, Databases, Permissions) {
       var docOptions = app.getParams();
       docOptions.include_docs = true;
 
-      this.databaseName = options[0];
-      this.database = new Databases.Model({id:this.databaseName});
+      this.initViews(options[0]);
+      this.listenToLookaheadTray();
+    },
+
+    initViews: function (databaseName) {
+      this.database = new Databases.Model({ id: databaseName });
       this.security = new Permissions.Security(null, {
         database: this.database
       });
+      this.allDatabases = new Databases.List();
+
+      this.createDesignDocsCollection();
+      this.addLeftHeader();
+      this.addSidebar('permissions');
     },
 
     establish: function () {
-      return [this.database.fetch(), this.security.fetch()];
+      return [
+        this.database.fetch(),
+        this.security.fetch(),
+        this.designDocs.fetch({reset: true}),
+        this.allDatabases.fetchOnce()
+      ];
+    },
+
+    listenToLookaheadTray: function () {
+      this.listenTo(FauxtonAPI.Events, 'lookaheadTray:update', this.onSelectDatabase);
+    },
+
+    onSelectDatabase: function (dbName) {
+      this.cleanup();
+      this.initViews(dbName);
+
+      FauxtonAPI.navigate('/database/' + app.utils.safeURLName(dbName) + '/permissions', {
+        trigger: true
+      });
+      this.listenToLookaheadTray();
     },
 
     permissions: function () {
-      this.setView('#dashboard-content', new Permissions.Permissions({
+      this.pageContent = this.setView('#dashboard-content', new Permissions.Permissions({
         database: this.database,
         model: this.security
       }));
-
     },
 
     crumbs: function () {
       return [
-        {"name": this.database.id, "link": Databases.databaseUrl(this.database)},
-        {"name": "Permissions", "link": "/permissions"}
+        { name: this.database.id, link: Databases.databaseUrl(this.database)},
+        { name: 'Permissions', link: '/permissions' }
       ];
     },
 
+    cleanup: function () {
+      if (this.pageContent) {
+        this.removeView('#dashboard-content');
+      }
+      if (this.leftheader) {
+        this.removeView('#breadcrumbs');
+      }
+      if (this.sidebar) {
+        this.removeView('#sidebar');
+      }
+      this.stopListening(FauxtonAPI.Events, 'lookaheadTray:update', this.onSelectDatabase);
+    }
   });
-  
+
   Permissions.RouteObjects = [PermissionsRouteObject];
+
   return Permissions;
 });
