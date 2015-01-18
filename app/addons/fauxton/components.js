@@ -803,13 +803,13 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
         that.edited = true;
       });
 
-      $(window).on('beforeunload.editor', function() {
+      $(window).on('beforeunload.editor_'+this.editorId, function() {
         if (that.edited) {
           return 'Your changes have not been saved. Click cancel to return to the document.';
         }
       });
 
-      FauxtonAPI.beforeUnload("editor", function (deferred) {
+      FauxtonAPI.beforeUnload("editor_"+this.editorId, function (deferred) {
         if (that.edited) {
           return 'Your changes have not been saved. Click cancel to return to the document.';
         }
@@ -824,8 +824,8 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
     },
 
     cleanup: function () {
-      $(window).off('beforeunload.editor');
-      FauxtonAPI.removeBeforeUnload("editor");
+      $(window).off('beforeunload.editor_'+this.editorId);
+      FauxtonAPI.removeBeforeUnload("editor_"+this.editorId);
       this.editor.destroy();
     },
 

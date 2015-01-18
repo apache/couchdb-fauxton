@@ -574,6 +574,17 @@ function (app, FauxtonAPI, Components, Documents, Databases, prettify) {
     },
 
     afterRender: function () {
+      var that = this;
+      this.$('.modal').on('hide', function (e) {
+        if(that.subEditor.edited){
+          if(!confirm("Close without saving changes?")){
+            e.preventDefault();
+            return;
+          }
+        }
+        /* make sure we don't have save warnings w/out change */
+        that.subEditor.editSaved();
+      });
       /* make sure we init only ONCE */
       if (!this.subEditor) {
         this.subEditor = new Components.Editor({
