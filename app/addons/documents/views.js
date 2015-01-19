@@ -21,11 +21,16 @@ define([
   "addons/documents/shared-views",
   "addons/documents/views-queryoptions",
 
+  // React
+  'addons/documents/header/header.react',
+  'addons/documents/header/header.actions',
+
   //plugins
   "plugins/prettify"
 ],
 
-function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions) {
+function (app, FauxtonAPI, Components, Documents,
+  Databases, Views, QueryOptions, ReactHeader, ReactHeaderActions) {
 
   function showError (msg) {
     FauxtonAPI.addNotification({
@@ -37,6 +42,21 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
 
   Views.Footer = FauxtonAPI.View.extend({
     template: "addons/documents/templates/all_docs_footer"
+  });
+
+  Views.ReactHeaderbar = FauxtonAPI.View.extend({
+    afterRender: function () {
+      ReactHeader.renderHeaderController(this.el);
+    },
+
+    cleanup: function () {
+      this.disableHeader();
+      ReactHeader.removeHeaderController(this.el);
+    },
+
+    disableHeader: function () {
+      ReactHeaderActions.resetHeaderController();
+    }
   });
 
   Views.RightAllDocsHeader = FauxtonAPI.View.extend({
@@ -299,15 +319,13 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
     },
 
     events: {
-      'click button.js-all': 'selectAll',
-      "click button.js-bulk-delete": "bulkDelete",
-      "click #collapse": "collapse",
       'change input': 'toggleDocument',
       "click #js-end-results": "openQueryOptionsTray"
     },
 
     initialize: function (options) {
       this.rows = {};
+
       this.viewList = !!options.viewList;
 
       if (options.ddocInfo) {
@@ -335,6 +353,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
           msg: 'Successfully deleted your docs',
           clear:  true
         });
+
       }.bind(this));
     },
 
@@ -378,28 +397,11 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
       }
 
       $row.toggleClass('js-to-delete');
-      this.toggleTrash();
-    },
 
-    toggleTrash: function () {
-      var $bulkdDeleteButton = this.$('.js-bulk-delete');
-
-      if (this.bulkDeleteDocsCollection && this.bulkDeleteDocsCollection.length > 0) {
-        $bulkdDeleteButton.removeClass('disabled');
-      } else {
-        $bulkdDeleteButton.addClass('disabled');
-      }
-    },
-
-    maybeHighlightAllButton: function () {
-      if (this.$('.js-to-delete').length < this.$('.all-docs-item').length) {
-        return;
-      }
-
-      if (!this.bulkDeleteDocsCollection || this.bulkDeleteDocsCollection.length === 0) {
-        return;
-      }
-      this.$('.js-all').addClass('active');
+      ReactHeaderActions.updateDocumentCount({
+        selectedOnPage: this.$('.js-to-delete').length,
+        documentsOnPageCount: this.perPage()
+      });
     },
 
     openQueryOptionsTray: function(e) {
@@ -428,11 +430,14 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
       });
     },
 
-    selectAll: function (evt) {
+    toggleSelectAll: function (on) {
+      this.selectAllBasedOnBoolean(on);
+    },
+
+    selectAllBasedOnBoolean: function (isActive) {
       var $allDocs = this.$('#doc-list'),
           $rows = $allDocs.find('.all-docs-item'),
           $checkboxes = $rows.find('input:checkbox'),
-          isActive = $(evt.target).hasClass('active'),
           modelsAffected,
           docs;
 
@@ -440,7 +445,15 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
       $rows.toggleClass('js-to-delete', !isActive);
 
       if (isActive) {
-        this.bulkDeleteDocsCollection.reset();
+        modelsAffected = _.reduce($rows, function (acc, el) {
+          var docId = $(el).attr('data-id'),
+              model = this.collection.get(docId);
+
+          acc.push(model);
+          return acc;
+        }, [], this);
+
+        this.bulkDeleteDocsCollection.remove(modelsAffected);
       } else {
         modelsAffected = _.reduce($rows, function (acc, el) {
           var docId = $(el).attr('data-id'),
@@ -452,20 +465,19 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
         this.bulkDeleteDocsCollection.add(modelsAffected);
       }
 
-      this.toggleTrash();
+      ReactHeaderActions.updateDocumentCount({
+        selectedOnPage: this.$('.js-to-delete').length,
+        documentsOnPageCount: this.perPage()
+      });
     },
 
     serialize: function() {
       return {
-        viewList: this.viewList,
-        expandDocs: this.expandDocs,
         endOfResults: !this.pagination.canShowNextfn()
       };
     },
 
-    collapse: function (event) {
-      event.preventDefault();
-
+    collapse: function () {
       if (this.expandDocs) {
         this.expandDocs = false;
       } else {
@@ -555,15 +567,21 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
 
       prettyPrint();
 
+      this.stopListening(FauxtonAPI.Events);
+      this.listenTo(FauxtonAPI.Events, 'headerbar:collapse', this.collapse);
+      this.listenTo(FauxtonAPI.Events, 'headerbar:selectall', this.toggleSelectAll);
+      this.listenTo(FauxtonAPI.Events, 'headerbar:deleteselected', this.bulkDelete);
+
       if (this.bulkDeleteDocsCollection) {
         this.stopListening(this.bulkDeleteDocsCollection);
         this.listenTo(this.bulkDeleteDocsCollection, 'error', this.showError);
         this.listenTo(this.bulkDeleteDocsCollection, 'removed', this.removeDocuments);
-        this.listenTo(this.bulkDeleteDocsCollection, 'updated', this.toggleTrash);
       }
 
-      this.toggleTrash();
-      this.maybeHighlightAllButton();
+      ReactHeaderActions.updateDocumentCount({
+        selectedOnPage: this.$('.js-to-delete').length,
+        documentsOnPageCount: this.perPage()
+      });
     },
 
     perPage: function () {

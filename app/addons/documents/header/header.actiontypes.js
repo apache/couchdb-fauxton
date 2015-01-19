@@ -9,20 +9,14 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
-define([
-        'addons/documents/views',
-        'addons/documents/resources',
-        'addons/databases/base',
-        'addons/fauxton/components',
-        'testUtils'
-], function (Documents, Resources, Databases, Components, testUtils) {
-  var assert = testUtils.assert,
-      ViewSandbox = testUtils.ViewSandbox,
-      viewSandbox;
 
-  describe('AllDocsList', function () {
-    it('should load', function () {
-      assert.equal(typeof Documents.Views.AllDocsList, 'function');
-    });
-  });
+define([], function () {
+  return {
+    UPDATE_DOCUMENT_COUNT: 'UPDATE_DOCUMENT_COUNT',
+    COLLAPSE_DOCUMENTS: 'COLLAPSE_DOCUMENTS',
+    TOGGLE_HEADER_CONTROLS: 'TOGGLE_HEADER_CONTROLS',
+    RESET_HEADER_BAR: 'RESET_HEADER_BAR',
+    DELETE_SELECTED_DOCUMENTS: 'DELETE_SELECTED_DOCUMENTS'
+  };
 });
+
