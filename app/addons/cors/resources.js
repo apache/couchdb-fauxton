@@ -25,11 +25,12 @@ function (app, FauxtonAPI) {
     }
   });
   
+  CORS.Model = Backbone.Model.extend({});
   CORS.ConfigModel = Backbone.Model.extend({
     documentation: "cors",
     
     url: function () {
-      return app.host + '/_config/' + encodeURIComponent(this.get("section")) + '/' + encodeURIComponent(this.get("attribute"));
+      return app.host + '/_config/' + this.get('section') + '/' + encodeURIComponent(this.get("name"));
     },
     
     isNew: function () { return false; },
@@ -52,6 +53,25 @@ function (app, FauxtonAPI) {
       return $.ajax(params);
     }
   
+  });
+  
+  CORS.Collection = Backbone.Collection.extend({
+    model: CORS.Model,
+
+    documentation: "cors",
+
+    url: function () {
+      return app.host + '/_config/cors';
+    },
+    
+    parse: function (resp) {
+      return _.map(resp, function (option, option_name) {
+        return {
+          name: option_name,
+          value: option
+        };
+      });
+    }
   });
   
     // simple helper function to validate the user entered a valid domain starting with http(s) and
