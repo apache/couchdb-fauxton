@@ -210,4 +210,43 @@ define([
     });
 
   });
+
+  describe('Beautify', function () {
+    var container, beautifyEl, reduceStub;
+
+    beforeEach(function () {
+      container = document.createElement('div');
+    });
+
+    afterEach(function () {
+      React.unmountComponentAtNode(container);
+    });
+
+    it('should be empty for multi-lined code', function () {
+      var correctCode = 'function() {\n    console.log("hello");\n}'; 
+      beautifyEl = TestUtils.renderIntoDocument(<Views.Beautify code={correctCode}/>, container);
+      assert.ok(_.isNull(beautifyEl.getDOMNode()));
+    });
+
+    it('should have button to beautify for single line code', function () {
+      var badCode = 'function () { console.log("hello"); }';
+      beautifyEl = TestUtils.renderIntoDocument(<Views.Beautify code={badCode}/>, container);
+      assert.ok($(beautifyEl.getDOMNode()).hasClass('beautify'));
+    });
+
+    it('on click beautifies code', function () {
+      var fixedCode;
+      var correctCode = 'function() {\n    console.log("hello");\n}'; 
+
+      var beautifiedCode = function (code) {
+        fixedCode = code;
+      };
+
+      beautifyEl = TestUtils.renderIntoDocument(<Views.Beautify beautifiedCode={beautifiedCode} code={'function () { console.log("hello"); }'} noOfLines={1}/>, container);
+      TestUtils.Simulate.click(beautifyEl.getDOMNode());
+      assert.equal(fixedCode, correctCode);
+
+    });
+
+  });
 });

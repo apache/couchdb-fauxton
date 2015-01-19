@@ -16,10 +16,11 @@ define([
   "react",
   "addons/documents/stores",
   "addons/documents/actions",
-  "addons/fauxton/components"
+  "addons/fauxton/components",
+  "plugins/beautify"
 ],
 
-function(app, FauxtonAPI, React, Stores, Actions, Components) {
+function(app, FauxtonAPI, React, Stores, Actions, Components, beautifyHelper) {
   var indexEditorStore = Stores.indexEditorStore;
   var getDocUrl = app.helpers.getDocUrl;
 
@@ -132,15 +133,67 @@ function(app, FauxtonAPI, React, Stores, Actions, Components) {
 
   });
 
+  var Beautify = React.createClass({
+    noOfLines: function () {
+      return this.props.code.split(/\r\n|\r|\n/).length;
+    },
+
+    canBeautify: function () {
+      if (this.noOfLines() === 1) {
+        return true;
+      }
+
+      return false;
+    },
+
+    addTooltip: function () {
+      if (this.canBeautify) {
+        $('.beautify-tooltip').tooltip();
+      }
+    },
+
+    componentDidMount: function () {
+      this.addTooltip();
+    },
+
+    beautify: function (event) {
+      event.preventDefault();
+      var beautifiedCode = beautifyHelper(this.props.code);
+      this.props.beautifiedCode(beautifiedCode);
+
+    },
+
+    render: function () {
+      if(!this.canBeautify()) {
+        return null;
+      }
+
+      return (
+        <button onClick={this.beautify} className="beautify beautify_map btn btn-primary btn-large beautify-tooltip" type="button" data-toggle="tooltip" title="Reformat your minified code to make edits to it.">
+          beautify this code
+        </button>
+      );
+    }
+
+  });
+
   var MapEditor = React.createClass({
     render: function () {
+      var code = this.mapEditor ? this.mapEditor.getValue() : this.props.map;
       return (
         <div className="control-group">
           <label htmlFor="map-function">Map function <a className="help-link" data-bypass="true" href={getDocUrl('MAP_FUNCS')} target="_blank"><i className="icon-question-sign"></i></a></label>
           <div className="js-editor" id="map-function">{this.props.map}</div>
-          <button className="beautify beautify_map btn btn-primary btn-large hide beautify-tooltip" type="button" data-toggle="tooltip" title="Reformat your minified code to make edits to it.">beautify this code</button>
+          <Beautify code={code} beautifiedCode={this.setEditorValue} />
         </div>
       );
+    },
+
+    setEditorValue: function (newMap) {
+      this.mapEditor.setValue(newMap);
+      //this is not a good practice normally but because we working with a backbone view as the mapeditor 
+      //that keeps the map code state this is the best way to force a render so that the beautify button will hide
+      this.forceUpdate();
     },
 
     getMapValue: function () {
@@ -177,12 +230,21 @@ function(app, FauxtonAPI, React, Stores, Actions, Components) {
   var CustomReduce = React.createClass({
 
     render: function () {
+      var code = this.reduceEditor ? this.reduceEditor.getValue() : this.props.reduce;
       return (
         <div className="control-group reduce-function">
           <label htmlFor="reduce-function">Custom Reduce function</label>
           <div className="js-editor" id="reduce-function">{this.props.reduce}</div>
+          <Beautify code={code} beautifiedCode={this.setEditorValue} />
         </div>
       );
+    },
+
+    setEditorValue: function (newMap) {
+      this.reduceEditor.setValue(newMap);
+      //this is not a good practice normally but because we working with a backbone view as the reduce editor 
+      //that keeps the map code state this is the best way to force a render so that the beautify button will hide
+      this.forceUpdate();
     },
 
     componentDidMount: function () {
@@ -498,7 +560,8 @@ function(app, FauxtonAPI, React, Stores, Actions, Components) {
     ToggleButton: ToggleButton,
     ReduceEditor: ReduceEditor,
     Editor: Editor,
-    DesignDocSelector: DesignDocSelector
+    DesignDocSelector: DesignDocSelector,
+    Beautify: Beautify
   };
 
   return Views;
