@@ -248,7 +248,7 @@ function(app, FauxtonAPI, Components, ZeroClipboard) {
     animationTimer: 5000,
 
     events: {
-      'click .js-dismiss': 'removeWithAnimation'
+      'click .js-dismiss': 'onClickRemoveWithAnimation'
     },
 
     initialize: function(options) {
@@ -290,15 +290,20 @@ function(app, FauxtonAPI, Components, ZeroClipboard) {
       };
     },
 
-    removeWithAnimation: function (event) {
+    onClickRemoveWithAnimation: function (event) {
       event.preventDefault();
+      window.clearTimeout(this.timeout);
+      this.removeWithAnimation();
+    },
+
+    removeWithAnimation: function (event) {
       this.$el.velocity('reverse', FauxtonAPI.constants.MISC.TRAY_TOGGLE_SPEED, function () {
         this.$el.remove();
       }.bind(this));
     },
 
     delayedRemoval: function () {
-      setTimeout(function () {
+      this.timeout = setTimeout(function () {
         this.removeWithAnimation();
       }.bind(this), this.animationTimer);
     },
