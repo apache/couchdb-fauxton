@@ -19,3 +19,9 @@ before_script:
   - sleep 5
 script:
   - grunt nightwatch
+notifications:
+  irc:
+    channels:
+      - "chat.freenode.net#couchdb-dev"
+    on_success: "never"
+    on_failure: "always"
