@@ -290,7 +290,8 @@ function(app, FauxtonAPI, Components, ZeroClipboard) {
       };
     },
 
-    removeWithAnimation: function () {
+    removeWithAnimation: function (event) {
+      event.preventDefault();
       this.$el.velocity('reverse', FauxtonAPI.constants.MISC.TRAY_TOGGLE_SPEED, function () {
         this.$el.remove();
       }.bind(this));
