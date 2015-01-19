@@ -332,22 +332,6 @@ function (app, FauxtonAPI, CouchdbSession) {
     }
   });
 
-  Auth.NavLink = FauxtonAPI.View.extend({
-    template: 'addons/auth/templates/nav_link_title',
-    tagName: 'li',
-
-    beforeRender: function () {
-      this.listenTo(this.model, 'change', this.render);
-    },
-
-    serialize: function () {
-      return {
-        admin_party: this.model.isAdminParty(),
-        user: this.model.user()
-      };
-    }
-  });
-
   Auth.NavDropDown = FauxtonAPI.View.extend({
     template: 'addons/auth/templates/nav_dropdown',
 
@@ -386,7 +370,8 @@ function (app, FauxtonAPI, CouchdbSession) {
 
     serialize: function () {
       return {
-        urlBack: this.urlBack
+        urlBack: this.urlBack,
+        user: FauxtonAPI.session.user()
       };
     }
   });

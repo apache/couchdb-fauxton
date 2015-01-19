@@ -94,7 +94,7 @@ function(FauxtonAPI, Auth, Backbone) {
       // FauxtonAPI header links and others depend on existence of the layout
       this.setModuleRoutes(addons);
 
-      $(FauxtonAPI.el).html(FauxtonAPI.masterLayout.el);
+      $(FauxtonAPI.el).append(FauxtonAPI.masterLayout.el);
       FauxtonAPI.masterLayout.render();
 
       this.lastPages = [];
