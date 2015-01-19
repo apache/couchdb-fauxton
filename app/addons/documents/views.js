@@ -21,11 +21,16 @@ define([
   "addons/documents/shared-views",
   "addons/documents/views-queryoptions",
 
+  // React
+  'addons/documents/header/header.react',
+  'addons/documents/header/header.actions',
+
   //plugins
   "plugins/prettify"
 ],
 
-function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions) {
+function (app, FauxtonAPI, Components, Documents,
+  Databases, Views, QueryOptions, ReactHeader, ReactHeaderActions) {
 
   function showError (msg) {
     FauxtonAPI.addNotification({
@@ -37,6 +42,21 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
 
   Views.Footer = FauxtonAPI.View.extend({
     template: "addons/documents/templates/all_docs_footer"
+  });
+
+  Views.ReactHeaderbar = FauxtonAPI.View.extend({
+    afterRender: function () {
+      ReactHeader.renderHeaderController(this.el);
+    },
+
+    cleanup: function () {
+      this.disableHeader();
+      ReactHeader.removeHeaderController(this.el);
+    },
+
+    disableHeader: function () {
+      ReactHeaderActions.resetHeaderController();
+    }
   });
 
   Views.RightAllDocsHeader = FauxtonAPI.View.extend({
@@ -299,15 +319,14 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
     },
 
     events: {
-      'click button.js-all': 'selectAll',
-      "click button.js-bulk-delete": "bulkDelete",
-      "click #collapse": "collapse",
       'change input': 'toggleDocument',
       "click #js-end-results": "openQueryOptionsTray"
     },
 
     initialize: function (options) {
       this.rows = {};
+      this.allDocsSelected = false;
+
       this.viewList = !!options.viewList;
 
       if (options.ddocInfo) {
@@ -428,13 +447,18 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
       });
     },
 
-    selectAll: function (evt) {
+    toggleSelectAll: function () {
+      this.selectAllBasedOnBoolean(this.allDocsSelected);
+      this.allDocsSelected = !this.allDocsSelected;
+    },
+
+    selectAllBasedOnBoolean: function (isActive) {
       var $allDocs = this.$('#doc-list'),
           $rows = $allDocs.find('.all-docs-item'),
           $checkboxes = $rows.find('input:checkbox'),
-          isActive = $(evt.target).hasClass('active'),
           modelsAffected,
           docs;
+
 
       $checkboxes.prop('checked', !isActive);
       $rows.toggleClass('js-to-delete', !isActive);
@@ -457,15 +481,11 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
 
     serialize: function() {
       return {
-        viewList: this.viewList,
-        expandDocs: this.expandDocs,
         endOfResults: !this.pagination.canShowNextfn()
       };
     },
 
-    collapse: function (event) {
-      event.preventDefault();
-
+    collapse: function () {
       if (this.expandDocs) {
         this.expandDocs = false;
       } else {
@@ -554,6 +574,11 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
       $("#dashboard-content").scrollTop(0);
 
       prettyPrint();
+
+      this.stopListening(FauxtonAPI.Events);
+      this.listenTo(FauxtonAPI.Events, 'headerbar:collapse', this.collapse);
+      this.listenTo(FauxtonAPI.Events, 'headerbar:selectall', this.toggleSelectAll);
+      this.listenTo(FauxtonAPI.Events, 'headerbar:deleteselected', this.bulkDelete);
 
       if (this.bulkDeleteDocsCollection) {
         this.stopListening(this.bulkDeleteDocsCollection);

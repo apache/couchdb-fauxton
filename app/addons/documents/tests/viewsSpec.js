@@ -20,7 +20,7 @@ define([
       ViewSandbox = testUtils.ViewSandbox,
       viewSandbox;
 
-      /* describe('AllDocsList', function () {
+  describe('AllDocsList', function () {
     var database = new Databases.Model({id: 'registry'}),
         bulkDeleteDocCollection = new Resources.BulkDeleteDocCollection([], {databaseId: 'registry'});
 
@@ -64,10 +64,7 @@ define([
       assert.equal(typeof Documents.Views.AllDocsList, 'function');
     });
 
-    it('pressing SelectAll should fill the delete-bulk-docs-collection', function () {
-      assert.equal(bulkDeleteDocCollection.length, 0);
-      view.$('button.js-all').trigger('click');
-      assert.equal(bulkDeleteDocCollection.length, 1);
-    });
-  });*/
+  });
+
+  });
 });

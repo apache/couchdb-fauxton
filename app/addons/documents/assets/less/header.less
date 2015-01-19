@@ -1,0 +1,49 @@
+.header-control-box {
+  color: #666;
+  font-size: 13px;
+  line-height: 33px;
+  padding: 12px;
+  height: @collapsedNavWidth;
+  background-color: transparent;
+  border: none;
+  border-right: 1px solid @btnBorder;
+  text-decoration: none;
+  float: left;
+  .icon {
+    font-size: 16px;
+  }
+}
+
+button.header-control-box:focus {
+  outline: 0;
+}
+
+.js-headerbar-togglebutton-selected {
+  .icon, span {
+    color: #e33f3b;
+  }
+}
+
+.control-toggle-alternative-header {
+  .icon {
+    padding: 5px;
+  }
+}
+
+.control-toggle-alternative-header:hover,
+.control-cancel:hover,
+.control-delete:hover {
+  .icon, span {
+    color: #e33f3b;
+  }
+}
+
+.header-control-square {
+  height: @collapsedNavWidth;
+  width: @collapsedNavWidth;
+  float: left;
+}
+
+.alternative-header {
+  float: left;
+}

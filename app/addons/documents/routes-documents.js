@@ -170,6 +170,8 @@ function(app, FauxtonAPI, BaseRoute, Documents, Changes, Index, DocEditor, Datab
         return;
       }
 
+      this.reactHeader = this.setView('#react-headerbar', new Documents.Views.ReactHeaderbar());
+
       this.footer = this.setView('#footer', new Documents.Views.Footer());
 
       this.leftheader.updateCrumbs(this.getCrumbs(this.database));
@@ -519,6 +521,9 @@ function(app, FauxtonAPI, BaseRoute, Documents, Changes, Index, DocEditor, Datab
     },
 
     cleanup: function () {
+      if (this.reactHeader) {
+        this.removeView('#react-headerbar');
+      }
       if (this.viewEditor) {
         this.removeView('#dashboard-upper-content');
       }
