@@ -1,0 +1,12 @@
+.keyframes (@name, @fromRules, @toRules) {
+    @-webkit-keyframes ~'@{name}' { 0% { @fromRules(); } 100% { @toRules(); } }
+       @-moz-keyframes ~'@{name}' { 0% { @fromRules(); } 100% { @toRules(); } }
+            @keyframes ~'@{name}' { 0% { @fromRules(); } 100% { @toRules(); } }
+}
+
+.animation(@options) {
+  -webkit-animation: @options;
+  -moz-animation: @options;
+  animation: @options;
+}
+

@@ -826,6 +826,7 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
     cleanup: function () {
       $(window).off('beforeunload.editor');
       FauxtonAPI.removeBeforeUnload("editor");
+      this.editor.destroy();
     },
 
     setHeightToLineCount: function () {

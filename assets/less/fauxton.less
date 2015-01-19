@@ -27,6 +27,7 @@
 @import "pagination.less";
 @import "trays.less";
 @import "mixins.less";
+@import "animations.less";
 
 
 /**
@@ -199,6 +200,7 @@ table.databases {
   .tab-content {
     padding-top: 70px;
   }
+
   .well{
     padding: 20px;
     .border-radius(0);
@@ -337,6 +339,7 @@ table.databases {
 }
 
 /*documents and databases */
+
 .view.show{
   color: @fontGrey;
 }
@@ -690,7 +693,7 @@ div.spinner {
 
 //----footer--///
 footer.pagination-footer {
-  z-index: 1;
+  z-index: 10;
   position: absolute;
   left: 0;
   right: 0;
