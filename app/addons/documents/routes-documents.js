@@ -247,14 +247,12 @@ function(app, FauxtonAPI, BaseRoute, Documents, Changes, Index, DocEditor, Datab
         }
       });
 
-      this.viewEditor = this.setView("#dashboard-upper-content", new Index.ViewEditor({
-        model: this.database,
-        ddocs: this.designDocs,
+      this.viewEditor = this.setView("#dashboard-upper-content", new Index.ViewEditorReact({
         viewName: viewName,
-        params: urlParams,
         newView: false,
         database: this.database,
-        ddocInfo: this.ddocInfo(decodeDdoc, this.designDocs, viewName)
+        designDocs: this.designDocs,
+        designDocId: "_design/" + decodeDdoc
       }));
 
       this.toolsView && this.toolsView.remove();
@@ -280,8 +278,8 @@ function(app, FauxtonAPI, BaseRoute, Documents, Changes, Index, DocEditor, Datab
 
     showQueryOptions: function (urlParams, ddoc, viewName) {
       var promise = this.designDocs.fetch({reset: true}),
-          that = this,
-          hasReduceFunction;
+      that = this,
+      hasReduceFunction;
 
       promise.then(function(resp) {
         var design = _.findWhere(that.designDocs.models, {id: '_design/'+ddoc}); 
@@ -341,19 +339,27 @@ function(app, FauxtonAPI, BaseRoute, Documents, Changes, Index, DocEditor, Datab
       }));
     },
 
-    newViewEditor: function (database, designDoc) {
+    newViewEditor: function (database, _designDoc) {
       var params = app.getParams();
+      var newDesignDoc = true;
+      var designDoc;
+        
+      if (!_.isUndefined(_designDoc)) {
+        designDoc = "_design/" + _designDoc;
+        newDesignDoc = false;
+      }
 
       this.footer && this.footer.remove();
       this.toolsView && this.toolsView.remove();
       this.documentsView && this.documentsView.remove();
 
-      this.viewEditor = this.setView("#dashboard-upper-content", new Index.ViewEditor({
-        currentddoc: "_design/" + designDoc || "",
-        ddocs: this.designDocs,
-        params: params,
+      this.viewEditor = this.setView("#dashboard-upper-content", new Index.ViewEditorReact({
+        viewName: 'new-view',
+        newView: true,
         database: this.database,
-        newView: true
+        designDocs: this.designDocs,
+        designDocId: designDoc,
+        newDesignDoc: newDesignDoc
       }));
 
       this.sidebar.setSelectedTab("new-view");

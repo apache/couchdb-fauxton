@@ -10,30 +10,17 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-define([
-  "api",
-  "addons/documents/index-editor/components.react",
-  "addons/documents/index-editor/actions",
-],
-
-function(FauxtonAPI, ViewEditor, Actions) {
-
-  var Views = {};
-
-  Views.ViewEditorReact = FauxtonAPI.View.extend({
-    initialize: function (options) {
-      this.options = options;
-    },
-
-    afterRender: function () {
-      Actions.editIndex(this.options);
-      ViewEditor.renderEditor(this.el);
-    },
-
-    cleanup: function () {
-      ViewEditor.removeEditor(this.el);
-    }
-  });
-
-  return Views;
+define([], function () {
+  return {
+    EDIT_INDEX: 'EDIT_INDEX',
+    EDIT_NEW_INDEX: 'EDIT_NEW_INDEX',
+    TOGGLE_EDITOR: 'TOGGLE_EDITOR',
+    SELECT_REDUCE_CHANGE: 'SELECT_REDUCE_CHANGE',
+    VIEW_SAVED: 'VIEW_SAVED',
+    VIEW_CREATED: 'VIEW_CREATED',
+    SAVE_VIEW: 'SAVE_VIEW',
+    DESIGN_DOC_CHANGE: 'DESIGN_DOC_CHANGE',
+    NEW_DESIGN_DOC: 'NEW_DESIGN_DOC'
+  };
 });
+

@@ -48,7 +48,9 @@ module.exports = {
       .click('#nav-header-test_design_doc .dropdown-toggle.icon.fonticon-plus-circled')
       .waitForElementPresent('#nav-header-test_design_doc', waitTime, false)
       .click('#nav-header-test_design_doc a[href="#/database/'+newDatabaseName+'/new_view/test_design_doc"]')
-      .verify.valueContains('#index-name','newView')
+      .waitForElementPresent('#db-views-tabs-nav', waitTime, false)
+      .click('#db-views-tabs-nav')
+      .verify.valueContains('#index-name','new-view')
       .clearValue('#index-name')
       .setValue('#index-name','odd_ids')
       .execute('\
