@@ -24,9 +24,10 @@ settings.json*
 !assets/js/plugins/zeroclipboard/ZeroClipboard.swf
 test/test.config.js
 app/initialize.js
+.module-cache
 test/nightwatch_tests/nightwatch.json
 test/nightwatch_tests/reports/*
 test/nightwatch_tests/selenium/*
 !test/nightwatch_tests/selenium/.gitkeep
 .DS_Store
-
+*.react.js

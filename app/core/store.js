@@ -11,29 +11,24 @@
 // the License.
 
 define([
-  "api",
-  "addons/documents/components.react",
-  "addons/documents/actions",
+  "backbone"
 ],
+function(Backbone) {
 
-function(FauxtonAPI, ViewEditor, Actions) {
+  var Store = function () {
+    this.initialize.apply(this, arguments);
+    _.bindAll(this);
+  };
 
-  var Views = {};
-
-  Views.ViewEditorReact = FauxtonAPI.View.extend({
-    initialize: function (options) {
-      this.options = options;
+  Store.extend = Backbone.Model.extend;
+  _.extend(Store.prototype, Backbone.Events, {
+    triggerChange: function () {
+      this.trigger('change');
     },
 
-    afterRender: function () {
-      Actions.editIndex(this.options);
-      ViewEditor.renderEditor(this.el);
-    },
-
-    cleanup: function () {
-      ViewEditor.removeEditor(this.el);
-    }
+    initialize: function () {}
   });
 
-  return Views;
+  return Store; 
 });
+

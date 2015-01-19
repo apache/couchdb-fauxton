@@ -10,30 +10,15 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-define([
-  "api",
-  "addons/documents/components.react",
-  "addons/documents/actions",
-],
-
-function(FauxtonAPI, ViewEditor, Actions) {
-
-  var Views = {};
-
-  Views.ViewEditorReact = FauxtonAPI.View.extend({
-    initialize: function (options) {
-      this.options = options;
-    },
-
-    afterRender: function () {
-      Actions.editIndex(this.options);
-      ViewEditor.renderEditor(this.el);
-    },
-
-    cleanup: function () {
-      ViewEditor.removeEditor(this.el);
-    }
-  });
-
-  return Views;
+define([], function() {
+  return {
+    ADD_NAVBAR_LINK: 'ADD_NAVBAR_LINK',
+    TOGGLE_NAVBAR_MENU: 'TOGGLE_NAVBAR_MENU',
+    UPDATE_NAVBAR_LINK: 'UPDATE_NAVBAR_LINK',
+    CLEAR_NAVBAR_LINK: 'CLEAR_NAVBAR_LINK',
+    REMOVE_NAVBAR_LINK: 'REMOVE_NAVBAR_LINK',
+    NAVBAR_SET_VERSION_INFO: 'NAVBAR_SET_VERSION_INFO',
+    NAVBAR_ACTIVE_LINK: 'NAVBAR_ACTIVE_LINK'
+  };
 });
+

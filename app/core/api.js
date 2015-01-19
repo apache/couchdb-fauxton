@@ -11,22 +11,27 @@
 // the License.
 
 define([
-  'core/base',
-  'core/layout',
-  'core/router',
-  'core/routeObject',
-  'core/utils'
+  "./base",
+       "core/layout",
+       "core/router",
+       "core/routeObject",
+       "core/utils",
+       "core/store",
+       "flux"
 ],
 
-function(FauxtonAPI, Layout, Router, RouteObject, utils) {
+function(FauxtonAPI, Layout, Router, RouteObject, utils, Store, Flux) {
   FauxtonAPI = _.extend(FauxtonAPI, {
     Layout: Layout,
     Router: Router,
     RouteObject: RouteObject,
-    utils: utils
+    utils: utils,
+    Store: Store,
+    Events: _.extend({}, Backbone.Events),
+    dispatcher: new Flux.Dispatcher()
   });
 
-  FauxtonAPI.Events = _.extend({}, Backbone.Events);
+  FauxtonAPI.dispatch = _.bind(FauxtonAPI.dispatcher.dispatch, FauxtonAPI.dispatcher);
 
   FauxtonAPI.navigate = function (url, _opts) {
     var options = _.extend({trigger: true}, _opts);
