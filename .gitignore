@@ -31,3 +31,4 @@ test/nightwatch_tests/selenium/*
 !test/nightwatch_tests/selenium/.gitkeep
 .DS_Store
 *.react.js
+selenium-debug.log
