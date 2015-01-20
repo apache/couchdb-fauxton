@@ -48,23 +48,19 @@
     border-bottom: 1px solid #ccc;
   }
   #origin-domains-container {
-    display: none;
-    
-    .new-origin-domain {
-      width: 100%;
-      border-radius: 6px;
+    button.add-domain {
+      height: 46px;
     }
   }
   #collapsing-container {
     border-top: 1px solid #fff;
     border-bottom: 1px solid #ccc;
     padding: 18px 30px;
-    display: none;
   }
   .origin-domains {
     margin: 0;
     padding: 18px 0px;
-    
+
     p {
       line-height: 36px;
     }
@@ -82,6 +78,14 @@
     margin-top: 0;
     border-top: 1px solid #fff;
   }
+
+  .input-append {
+      width: 90%;
+  }
+
+  input[type='text'] {
+    width: 100%;
+  }
 }
 
 #origin-domain-table {
@@ -96,24 +100,12 @@
   }
 
   .edit-domain-section {
-    position: relative;
-    margin-right: 20px;
-
-    .field-wrapper {
-      margin-right: 78px;
-    }
-    input {
-      width: 100%;
-      padding: 9px;
-      margin: 0 0 0 4px;
+    .btn {
+      height: 46px;
     }
   }
   .url-display {
     padding: 10px;
-  }
-
-  .hide {
-    display: none;
   }
 
   .update-domain-btn {

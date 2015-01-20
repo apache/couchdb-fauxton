@@ -13,7 +13,7 @@
 define([
   "app",
   "api",
-  "addons/cors/routes"
+  "addons/cors/views"
 ],
 
 function (app, FauxtonAPI, CORS) {
