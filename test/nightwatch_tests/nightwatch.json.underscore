@@ -31,8 +31,8 @@
       "silent" : true,
       "disable_colors": false,
       "screenshots" : {
-        "enabled" : false,
-        "path" : ""
+        "enabled" : true,
+        "path" : "./test/nightwatch_tests/reports"
       },
       "desiredCapabilities" : {
         "browserName" : "firefox",
