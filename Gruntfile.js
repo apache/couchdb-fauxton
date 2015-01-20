@@ -540,7 +540,7 @@ module.exports = function(grunt) {
   grunt.registerTask('watchRun', ['clean:watch', 'dependencies', 'jshint']);
 
   // build a release
-  grunt.registerTask('release', ['clean' ,'dependencies', "gen_initialize:release", 'jshint', 'build', 'copy:dist', 'copy:ace', 'copy:zeroclip']);
+  grunt.registerTask('release', ['clean' ,'dependencies', "gen_initialize:release", 'jshint', 'shell:build-jsx', 'build', 'copy:dist', 'copy:ace', 'copy:zeroclip']);
   grunt.registerTask('couchapp_release', ['clean' ,'dependencies', "gen_initialize:couchapp", 'jshint', 'build', 'copy:dist', 'copy:ace', 'copy:zeroclip']);
 
   /*
