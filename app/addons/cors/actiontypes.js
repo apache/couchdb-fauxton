@@ -9,13 +9,15 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
-
-define([
-  'app',
-  'api',
-  'addons/cors/views'
-],
-
-function (app, FauxtonAPI, CORS) {
-  return CORS;
+define([], function () {
+  return {
+    TOGGLE_ENABLE_CORS: 'TOGGLE_ENABLE_CORS',
+    EDIT_CORS: 'EDIT_CORS',
+    CORS_ADD_ORIGIN: 'CORS_ADD_ORIGIN',
+    CORS_IS_ALL_ORIGINS: 'CORS_IS_ALL_ORIGINS',
+    CORS_DELETE_ORIGIN: 'CORS_DELETE_ORIGIN',
+    CORS_UPDATE_ORIGIN: 'CORS_UPDATE_ORIGIN',
+    CORS_METHOD_CHANGE: 'CORS_METHOD_CHANGE'
+  };
 });
+

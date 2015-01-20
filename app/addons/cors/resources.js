@@ -15,25 +15,42 @@ define([
   "api"
 ],
 
-function (app, FauxtonAPI) {  
+function (app, FauxtonAPI) {
   var CORS = FauxtonAPI.addon();
 
 
-  CORS.config = FauxtonAPI.Model.extend({
+  CORS.Config = FauxtonAPI.Model.extend({
     url: function() {
       return app.host+"/_config/cors";
     }
   });
-  
+
+  CORS.Httpd = FauxtonAPI.Model.extend({
+    url: function() {
+      return app.host+"/_config/httpd";
+    },
+
+    corsEnabled: function () {
+      var enabledCors = this.get('enable_cors');
+
+      if (_.isUndefined(enabledCors)) {
+        return false;
+      }
+
+      return enabledCors === "true";
+    }
+
+  });
+
   CORS.ConfigModel = Backbone.Model.extend({
     documentation: "cors",
-    
+
     url: function () {
       return app.host + '/_config/' + encodeURIComponent(this.get("section")) + '/' + encodeURIComponent(this.get("attribute"));
     },
-    
+
     isNew: function () { return false; },
-    
+
     sync: function (method, model, options) {
 
       var params = {
@@ -51,9 +68,9 @@ function (app, FauxtonAPI) {
 
       return $.ajax(params);
     }
-  
+
   });
-  
+
     // simple helper function to validate the user entered a valid domain starting with http(s) and
   // not including any subfolder
   CORS.validateCORSDomain = function (str) {

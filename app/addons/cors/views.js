@@ -13,13 +13,35 @@
 define([
   "app",
   "api",
-  "addons/cors/resources"
+  "addons/cors/resources",
+  "addons/cors/components.react",
+  "addons/cors/actions"
 ],
 
 
-function (app, FauxtonAPI, CORS) {
+function (app, FauxtonAPI, CORS, Components, Actions) {
   var Views= {};
-  
+
+  Views.CORSWrapper = FauxtonAPI.View.extend({
+    className: 'list',
+    initialize: function (options) {
+      this.options = options;
+    },
+
+    afterRender: function () {
+      Actions.editCors({
+        cors: this.options.cors,
+        httpd: this.options.httpd
+      });
+      Components.renderCORS(this.el);
+    },
+
+    cleanup: function () {
+      Components.removeCORS(this.el);
+    }
+
+  });
+
   Views.CORSMain = FauxtonAPI.View.extend({
     className: 'cors-page',
     template: 'addons/cors/templates/cors',
@@ -29,36 +51,36 @@ function (app, FauxtonAPI, CORS) {
       'click .js-restrict-origin-domains': 'restrictOrigins',
       'click .js-all-origin-domains': 'allOrigins'
     },
-    
+
     initialize: function () {
       this.originDomainTable = this.setView('.origin-domains', new Views.OriginDomainTable({
         model: this.model
       }));
     },
-    
+
     serialize: function () {
       return {
-        enableCors: this.model.get('credentials')    
+        enableCors: this.model.get('credentials')
       };
     },
-    
+
     establish: function(){
       return [this.model.fetch()];
     },
-    
-    afterRender: function () {        
+
+    afterRender: function () {
       var corsEnabled = this.$('.js-enable-cors').is(':checked');
       this.$('#collapsing-container').toggle(corsEnabled);
       this.setupOrigins();
     },
-    
+
     corsClick: function (e) {
       var isChecked = this.$(e.target).prop('checked');
       this.$('#collapsing-container').toggle(isChecked);
       this.setupOrigins();
     },
-    
-    
+
+
     setupOrigins: function() {
       var storedOrigins = this.model.get('origins');
       if (storedOrigins && storedOrigins != '*') {
@@ -67,7 +89,7 @@ function (app, FauxtonAPI, CORS) {
         this.allOrigins();
       }
     },
-    
+
     allOrigins: function() {
       this.$('.js-all-origin-domains').prop('checked', true);
       this.$('.js-restrict-origin-domains').prop('checked', false);
@@ -79,7 +101,7 @@ function (app, FauxtonAPI, CORS) {
       this.$('.js-all-origin-domains').prop('checked', false);
       this.$('#origin-domains-container').show();
     },
-    
+
     formToJSON: function(formSelector){
       var formObject = $(formSelector).serializeArray(),
         formJSON={};
@@ -88,18 +110,18 @@ function (app, FauxtonAPI, CORS) {
       });
       return formJSON;
     },
-    
+
     submit: function(e){
-      e.preventDefault();      
+      e.preventDefault();
       var data = this.formToJSON(e.currentTarget);
 
       if (data.enable_cors === 'on') {
 
-        // CORS checked, save data  
+        // CORS checked, save data
         if (data.restrict_origin_domains === 'on') {
           var storedOrigins = this.model.get('origins').split(',');
           var newDomain = $.trim(data.new_origin_domain);
-	
+
           // if a new domain has been entered, check it's valid
           if (!_.isEmpty(newDomain) && !CORS.validateCORSDomain(newDomain)) {
             FauxtonAPI.addNotification({
@@ -109,10 +131,10 @@ function (app, FauxtonAPI, CORS) {
             });
             return;
           }
-          
+
           // check that the user has entered at least one new origin domain
           if (storedOrigins && storedOrigins.length > 0 && storedOrigins !== '*') {
-            this.originData = storedOrigins.concat(newDomain).toString();            
+            this.originData = storedOrigins.concat(newDomain).toString();
           } else {
             if (_.isEmpty(newDomain)) {
               FauxtonAPI.addNotification({
@@ -125,24 +147,24 @@ function (app, FauxtonAPI, CORS) {
             }
             this.originData = data.new_origin_domain;
           }
-          
+
         } else {
           this.originData = "*";
         }
-        
-          
+
+
         var enableOption = new CORS.ConfigModel({
           section: 'httpd',
           attribute: 'enable_cors',
           value: 'true'
         });
-        
+
         var enableCreds = new CORS.ConfigModel({
           section: 'cors',
           attribute: 'credentials',
           value: 'true'
         });
-        
+
         var allowOrigins = new CORS.ConfigModel({
           section: 'cors',
           attribute: 'origins',
@@ -163,32 +185,32 @@ function (app, FauxtonAPI, CORS) {
             clear: true
           });
         });
-        
+
         enableCreds.save();
         allowOrigins.save();
         this.$('.new-origin-domain').val('');
-      
+
       } else {
-          
+
         // Disable CORS
         var disableOption = new CORS.ConfigModel({
           section: 'httpd',
           attribute: 'enable_cors',
           value: 'false'
         });
-        
+
         var disableCreds = new CORS.ConfigModel({
           section: 'cors',
           attribute: 'credentials',
           value: 'false'
         });
-        
+
         var disableOrigins = new CORS.ConfigModel({
           section: 'cors',
           attribute: 'origins',
           value: ''
         });
-        
+
         disableOption.save().then(function (response) {
           var notification = FauxtonAPI.addNotification({
             msg: 'Your settings have been saved.',
@@ -203,13 +225,13 @@ function (app, FauxtonAPI, CORS) {
             clear: true
           });
         });
-          
+
         disableCreds.save();
         disableOrigins.save();
       }
     }
   });
-  
+
   Views.OriginDomainTable = FauxtonAPI.View.extend({
     template: 'addons/cors/templates/origin_domain_table',
 
@@ -307,13 +329,13 @@ function (app, FauxtonAPI, CORS) {
 
     saveOrigins: function (origins) {
       var originDomains = origins.toString();
-      
+
       var allowOrigins = new CORS.ConfigModel({
         section: 'cors',
         attribute: 'origins',
         value: originDomains
       });
-      
+
       allowOrigins.save().then(function (response) {
         var notification = FauxtonAPI.addNotification({
           msg: 'Your origin domains have been updated.',
@@ -330,7 +352,7 @@ function (app, FauxtonAPI, CORS) {
       });
     }
   });
-  
+
   CORS.Views = Views;
 
   return CORS;
