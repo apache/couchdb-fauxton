@@ -164,7 +164,7 @@ table.databases {
 }
 
 // customize the twitter bootstrap alert
-.alert {
+.global-notification.alert {
   padding-left: 20px;
   padding-top: 20px;
   min-height: @collapsedNavWidth;
@@ -185,15 +185,32 @@ table.databases {
   }
 }
 
-.notification-icon {
-  padding-right: 8px;
+.global-notification.alert-success {
+  background-color: #448c11;
+  color: #CBDFBD;
+}
+.global-notification.alert-success h4 {
+  color: #CBDFBD;
+}
+.global-notification.alert-danger,
+.global-notification.alert-error {
+  background-color: #222;
+  color: #ff0c35;
+}
+.global-notification.alert-danger h4,
+.global-notification.alert-error h4 {
+  color: #ff0c35;
+}
+.global-notification.alert-info {
+  background-color: #329898;
+  color: #fff;
+}
+.global-notification.alert-info h4 {
+  color: #fff;
 }
 
-.tray .alert {
-  padding: 15px 14px 8px 14px;
-  .bottom-shadow-border(0px);
-  border-bottom: none;
-  margin-bottom: 10px;
+.notification-icon {
+  padding-right: 8px;
 }
 
 #dashboard-upper-content{
