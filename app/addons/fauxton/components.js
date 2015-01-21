@@ -777,11 +777,22 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
       this.couchJSHINT = options.couchJSHINT;
       this.edited = false;
 
+      var that = this;
+      this.onPageResize = _.debounce(function () {
+        that.setAvailableEditorHeight();
+        that.setHeightToLineCount();
+        that.editor.resize(true);
+      }, 300);
+
+      $(window).on('resize.editor', this.onPageResize);
+      this.listenTo(FauxtonAPI.Events, FauxtonAPI.constants.EVENTS.NAVBAR_SIZE_CHANGED, this.onPageResize);
+
       _.bindAll(this);
     },
 
     afterRender: function () {
       this.editor = ace.edit(this.editorId);
+      this.setAvailableEditorHeight();
       this.setHeightToLineCount();
       this.editor.setTheme("ace/theme/" + this.theme);
 
@@ -814,28 +825,32 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
           return 'Your changes have not been saved. Click cancel to return to the document.';
         }
       });
-
-      var resizeEditor = _.debounce(function () {
-        that.editor.resize(true);
-      }, 500);
-    
-      $(window).resize(resizeEditor);
-      this.listenTo(FauxtonAPI.Events, FauxtonAPI.constants.EVENTS.NAVBAR_SIZE_CHANGED, resizeEditor);
     },
 
     cleanup: function () {
       $(window).off('beforeunload.editor_'+this.editorId);
+      $(window).off('resize.editor', this.onPageResize);
       FauxtonAPI.removeBeforeUnload("editor_"+this.editorId);
       this.editor.destroy();
+      this.stopListening(FauxtonAPI.Events, FauxtonAPI.constants.EVENTS.NAVBAR_SIZE_CHANGED);
+    },
+
+    // we need to track the possible available height of the editor to tell it how large it can grow vertically
+    setAvailableEditorHeight: function () {
+      this.availableEditorHeight = $('.code-region').height();
     },
 
     setHeightToLineCount: function () {
       var lines = this.editor.getSession().getDocument().getLength();
+      var maxLines = this.getMaxAvailableLinesOnPage();
       this.editor.setOptions({
-        maxLines: lines
+        maxLines: lines < maxLines ? lines : maxLines
       });
+    },
 
-      this.editor.resize();
+    getMaxAvailableLinesOnPage: function () {
+      var singleLine = this.getRowHeight();
+      return Math.floor(this.availableEditorHeight  / singleLine);
     },
 
     getLines: function(){

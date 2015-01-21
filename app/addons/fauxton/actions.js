@@ -22,6 +22,9 @@ function (app, FauxtonAPI, ActionTypes) {
       FauxtonAPI.dispatch({
         type: ActionTypes.TOGGLE_NAVBAR_MENU 
       });
+
+      // TODO temporary patch for COUCHDB-2555
+      FauxtonAPI.Events.trigger(FauxtonAPI.constants.EVENTS.BURGER_CLICKED);
     },
 
     addHeaderLink: function (link) {

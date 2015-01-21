@@ -102,9 +102,6 @@
   .ace_gutter-cell {
     min-width: 49px;
   }
-  .ace_scrollbar-h {
-    overflow: hidden !important;
-  }
 
   .ace_marker-layer .ace_bracket {
     margin: 0px;
@@ -125,7 +122,24 @@
     }
   }
 
-  #dashboard-content .scrollable {
+  #dashboard-content .code-region {
+    overflow-y: hidden;
+    position: absolute;
     top: 125px;
+    height: auto;
+    width: 100%;
+    padding: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
   }
+}
+
+.ace_scrollbar-h {
+  right: 0px !important;
+  height: 15px !important;
+}
+
+#editor-container {
+  height: 100% !important;
 }

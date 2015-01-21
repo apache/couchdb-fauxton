@@ -207,7 +207,7 @@ function (app, FauxtonAPI, Components, Documents, Databases, prettify) {
       'click button.upload': 'upload',
       'click button.string-edit': 'stringEditing',
       'click a.js-back': 'onClickGoBack',
-      'click .scrollable': 'focusOnLastLine'
+      'click .code-region': 'focusOnLastLine'
     },
 
     disableLoader: true,
