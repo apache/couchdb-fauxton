@@ -820,7 +820,7 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
       }, 500);
     
       $(window).resize(resizeEditor);
-      this.listenTo(FauxtonAPI.Events, FauxtonAPI.constants.EVENTS.BURGER_CLICKED, resizeEditor);
+      this.listenTo(FauxtonAPI.Events, FauxtonAPI.constants.EVENTS.NAVBAR_SIZE_CHANGED, resizeEditor);
     },
 
     cleanup: function () {

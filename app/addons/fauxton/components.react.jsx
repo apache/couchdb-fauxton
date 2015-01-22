@@ -11,10 +11,10 @@
 // the License.
 
 define([
-  "api",
-  "react",
-  "addons/fauxton/stores",
-  "addons/fauxton/actions"
+  'api',
+  'react',
+  'addons/fauxton/stores',
+  'addons/fauxton/actions'
 ],
 
 function(FauxtonAPI, React, Stores, Actions) {
@@ -92,6 +92,7 @@ function(FauxtonAPI, React, Stores, Actions) {
 
     setMenuState: function () {
       $('body').toggleClass('closeMenu', this.state.isMinimized);
+      FauxtonAPI.Events.trigger(FauxtonAPI.constants.EVENTS.NAVBAR_SIZE_CHANGED, this.state.isMinimized);
     },
 
     componentDidMount: function () {

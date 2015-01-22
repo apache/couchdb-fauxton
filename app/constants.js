@@ -28,7 +28,7 @@ define([], function () {
     EVENTS: {
       TRAY_CLOSED: 'tray:closed',
       TRAY_OPENED: 'tray:opened',
-      BURGER_CLICKED: 'burger:clicked'
+      NAVBAR_SIZE_CHANGED: 'navbar:size_changed'
     },
 
     // documentation URLs
