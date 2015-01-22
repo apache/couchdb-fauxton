@@ -532,7 +532,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
         }
       }
 
-      this.collection.each(function(doc) {
+      this.collection.each(function (doc) {
         var isChecked;
         if (this.bulkDeleteDocsCollection) {
           isChecked = this.bulkDeleteDocsCollection.get(doc.id);

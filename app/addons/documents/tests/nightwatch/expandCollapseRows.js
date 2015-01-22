@@ -19,11 +19,11 @@ module.exports = {
 
     client
       .loginToGUI()
-      .createDocument("doc 1", newDatabaseName)
-      .createDocument("doc 2", newDatabaseName)
-      .createDocument("doc 3", newDatabaseName)
-      .createDocument("doc 4", newDatabaseName)
-      .createDocument("doc 5", newDatabaseName)
+      .createDocument('doc 1', newDatabaseName)
+      .createDocument('doc 2', newDatabaseName)
+      .createDocument('doc 3', newDatabaseName)
+      .createDocument('doc 4', newDatabaseName)
+      .createDocument('doc 5', newDatabaseName)
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
       .waitForElementVisible('#collapse', waitTime, false)
 
@@ -38,11 +38,9 @@ module.exports = {
       .waitForElementNotPresent('.doc-data', waitTime, false)
 
       // lastly, expand a single one and confirm there's only one that's been expanded
-
-      // this is done because we're unable to click() on hidden input, or the :before styled checkbox
-      .execute('$(".js-row-select").first().trigger("click");')
-      .pause(500)
+      .click('.label-checkbox-doclist')
       .click('#collapse')
+      .waitForElementPresent('.doc-data', waitTime, false)
       .source(function (result) {
         var numExpandedDocs = result.value.match(/doc-data/g).length;
         this.verify.ok(numExpandedDocs === 1, 'Checking there is 1 expanded row');
