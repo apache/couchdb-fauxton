@@ -28,8 +28,12 @@ function(app, FauxtonAPI, Compaction, Databases, BaseRoute) {
     },
 
     initialize: function (route, masterLayout, options) {
-      var databaseName = options[0];
-      this.database = this.database || new Databases.Model({ id: databaseName });
+      this.initViews(options[0]);
+      this.listenToLookaheadTray();
+    },
+
+    initViews: function (databaseName) {
+      this.database = new Databases.Model({ id: databaseName });
       this.allDatabases = new Databases.List();
 
       this.createDesignDocsCollection();
@@ -37,8 +41,21 @@ function(app, FauxtonAPI, Compaction, Databases, BaseRoute) {
       this.addSidebar('docLink_compact');
     },
 
+    onSelectDatabase: function (dbName) {
+      this.cleanup();
+      this.initViews(dbName);
+      FauxtonAPI.navigate('/database/' + app.utils.safeURLName(dbName) + '/compact', {
+        trigger: true
+      });
+      this.listenToLookaheadTray();
+    },
+
+    listenToLookaheadTray: function () {
+      this.listenTo(FauxtonAPI.Events, 'lookaheadTray:update', this.onSelectDatabase);
+    },
+
     compaction: function () {
-      this.setView('#dashboard-content', new Compaction.Layout({model: this.database}));
+      this.pageContent = this.setView('#dashboard-content', new Compaction.Layout({model: this.database}));
     },
 
     establish: function () {
@@ -46,6 +63,21 @@ function(app, FauxtonAPI, Compaction, Databases, BaseRoute) {
         this.designDocs.fetch({reset: true}),
         this.allDatabases.fetchOnce()
       ];
+    },
+
+    cleanup: function () {
+      if (this.pageContent) {
+        this.removeView('#dashboard-upper-content');
+      }
+      if (this.leftheader) {
+        this.removeView('#breadcrumbs');
+      }
+      if (this.sidebar) {
+        this.removeView('#sidebar');
+      }
+
+      // we're no longer interested in listening to the lookahead tray event on this route object
+      this.stopListening(FauxtonAPI.Events, 'lookaheadTray:update', this.onSelectDatabase);
     }
   });
 
