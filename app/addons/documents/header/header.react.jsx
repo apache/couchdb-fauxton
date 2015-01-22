@@ -19,7 +19,7 @@ define([
 ],
 
 function (app, FauxtonAPI, React, Stores, Actions) {
-
+  var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
   var headerBarStore = Stores.headerBarStore;
   var alternativeHeaderBarStore = Stores.alternativeHeaderBarStore;
 
@@ -197,6 +197,11 @@ function (app, FauxtonAPI, React, Stores, Actions) {
         'control-toggle-alternative-header ' + this.state.toggleClass;
       var innerClasses = '';
 
+      var headerbar = null;
+      if (this.state.isToggled) {
+        headerbar = (<AlternateHeaderControlBarController key={1} />);
+      }
+
       return (
         <div>
           <div>
@@ -206,7 +211,9 @@ function (app, FauxtonAPI, React, Stores, Actions) {
               containerClasses={containerClasses}
               innerClasses={innerClasses}
               text={'Select'} />
-              { this.state.isToggled ? <AlternateHeaderControlBarController /> : null }
+              <ReactCSSTransitionGroup transitionName={'fade'}>
+                {headerbar}
+              </ReactCSSTransitionGroup>
           </div>
         </div>
       );
