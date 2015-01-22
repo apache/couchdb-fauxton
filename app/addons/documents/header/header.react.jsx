@@ -189,7 +189,9 @@ function (app, FauxtonAPI, React, Stores, Actions) {
         return;
       }
 
-      $oldHeader.show();
+      setTimeout(function () {
+        $oldHeader.velocity('fadeIn', 250);
+      }, 250);
     },
 
     render: function () {
