@@ -777,9 +777,15 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
       this.couchJSHINT = options.couchJSHINT;
       this.edited = false;
 
+      // the full-page document editor does some extra work to adjust the total height of the editor based
+      // on available space. This setting ensures that only takes place there, and not with other editor locations
+      this.isFullPageEditor = options.isFullPageEditor || false;
+
       var that = this;
       this.onPageResize = _.debounce(function () {
-        that.setAvailableEditorHeight();
+        if (that.isFullPageEditor) {
+          that.setAvailableEditorHeight();
+        }
         that.setHeightToLineCount();
         that.editor.resize(true);
       }, 300);
@@ -842,9 +848,13 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
 
     setHeightToLineCount: function () {
       var lines = this.editor.getSession().getDocument().getLength();
-      var maxLines = this.getMaxAvailableLinesOnPage();
+
+      if (this.isFullPageEditor) {
+        var maxLines = this.getMaxAvailableLinesOnPage();
+        lines = lines < maxLines ? lines : maxLines;
+      }
       this.editor.setOptions({
-        maxLines: lines < maxLines ? lines : maxLines
+        maxLines: lines
       });
     },
 

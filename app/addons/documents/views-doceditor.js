@@ -386,6 +386,7 @@ function (app, FauxtonAPI, Components, Documents, Databases, prettify) {
       this.listenTo(this.model, 'sync', this.updateValues);
       this.editor = new Components.Editor({
         editorId: 'editor-container',
+        isFullPageEditor: true,
         forceMissingId: true,
         commands: [{
           name: 'save',
