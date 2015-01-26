@@ -33,8 +33,10 @@ the License.
       </div>
     <% } %>
   </header>
-  <div class="doc-data">
-    <pre class="prettyprint"><%- doc.prettyJSON() %></pre>
-  </div>
+  <% if (doc.get('expanded')) { %>
+    <div class="doc-data">
+      <pre class="prettyprint"><%- doc.prettyJSON() %></pre>
+    </div>
+  <% } %>
 </div>
 <div class="clearfix"></div>

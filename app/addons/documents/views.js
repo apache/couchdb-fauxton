@@ -190,6 +190,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
 
     initialize: function (options) {
       this.checked = options.checked;
+      this.expanded = options.expanded;
     },
 
     events: {
@@ -204,6 +205,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
 
     serialize: function() {
       return {
+        expanded: this.expanded,
         docIdentifier: this.model.isReducedShown() ? this.model.get('key') : this.model.get('_id'),
         doc: this.model,
         checked: this.checked
@@ -301,7 +303,7 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
     events: {
       'click button.js-all': 'selectAll',
       "click button.js-bulk-delete": "bulkDelete",
-      "click #collapse": "collapse",
+      "click #collapse": "toggleExpandCollapse",
       'change input': 'toggleDocument',
       "click #js-end-results": "openQueryOptionsTray"
     },
@@ -315,7 +317,9 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
         this.ddocID = options.ddocInfo.id;
       }
       this.docParams = options.docParams || {};
-      this.expandDocs = true;
+
+      // specifies whether the default state for the docs are expanded (true) or collapsed (false)
+      this.defaultDocsStateExpanded = Documents.ListExpandedState.get();
       this.perPageDefault = options.perPageDefault;
 
       // some doclists don't have an option to delete
@@ -369,7 +373,8 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
           rev = this.collection.get(docId).get('_rev'),
           data = {_id: docId, _rev: rev, _deleted: true};
 
-      if (!$row.hasClass('js-to-delete')) {
+      var addItem = !$row.hasClass('js-to-delete');
+      if (addItem) {
         this.bulkDeleteDocsCollection.add(data);
         $row.find('.js-row-select').prop('checked', true);
       } else {
@@ -379,15 +384,16 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
 
       $row.toggleClass('js-to-delete');
       this.toggleTrash();
+      this.updateExpandButtonLabel();
     },
 
     toggleTrash: function () {
-      var $bulkdDeleteButton = this.$('.js-bulk-delete');
+      var $bulkDeleteButton = this.$('.js-bulk-delete');
 
       if (this.bulkDeleteDocsCollection && this.bulkDeleteDocsCollection.length > 0) {
-        $bulkdDeleteButton.removeClass('disabled');
+        $bulkDeleteButton.removeClass('disabled');
       } else {
-        $bulkdDeleteButton.addClass('disabled');
+        $bulkDeleteButton.addClass('disabled');
       }
     },
 
@@ -395,7 +401,6 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
       if (this.$('.js-to-delete').length < this.$('.all-docs-item').length) {
         return;
       }
-
       if (!this.bulkDeleteDocsCollection || this.bulkDeleteDocsCollection.length === 0) {
         return;
       }
@@ -453,25 +458,31 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
       }
 
       this.toggleTrash();
+      this.updateExpandButtonLabel();
     },
 
     serialize: function() {
       return {
         viewList: this.viewList,
-        expandDocs: this.expandDocs,
         endOfResults: !this.pagination.canShowNextfn()
       };
     },
 
-    collapse: function (event) {
-      event.preventDefault();
+    toggleExpandCollapse: function (e) {
+      e.preventDefault();
+      var expand = this.$(e.target).find("i").hasClass('icon-plus');
 
-      if (this.expandDocs) {
-        this.expandDocs = false;
+      // only change the actual (local storage + in memory) expand / collapse button state if all or none are
+      // selected. Otherwise just toggle selected rows
+      var rowsToToggle = this.collection.models;
+      if (this.pageHasSelectedSubset()) {
+        rowsToToggle = this.getSelectedRows();
       } else {
-        this.expandDocs = true;
+        this.defaultDocsStateExpanded = !this.defaultDocsStateExpanded;
+        Documents.ListExpandedState.set(this.defaultDocsStateExpanded);
       }
 
+      this.setRowExpandedState(rowsToToggle, expand);
       this.render();
     },
 
@@ -505,19 +516,35 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
     },
 
     beforeRender: function() {
-      var docs;
-
       this.removeNestedViews();
 
       this.pagination.setCollection(this.collection);
       this.allDocsNumber.setCollection(this.collection);
 
-      docs = this.expandDocs ? this.collection : this.collection.simple();
+      // on new page loads, the doc models don't have their state defined
+      var isNewPage = true;
+      var allSelected = false;
+      if (this.collection.length) {
+        var firstItem = this.collection.first();
+        isNewPage = _.isUndefined(firstItem.get('expanded'));
+        if (this.numSelectedOnPage() === this.collection.length) {
+          allSelected = true;
+        }
+      }
 
-      docs.each(function(doc) {
+      this.collection.each(function (doc) {
         var isChecked;
         if (this.bulkDeleteDocsCollection) {
           isChecked = this.bulkDeleteDocsCollection.get(doc.id);
+        }
+
+        // if we're loading a new page we need to set the expanded state on the item
+        if (isNewPage) {
+          if (allSelected) {
+            doc.set('expanded', this.defaultDocsStateExpanded);
+          } else {
+            doc.set('expanded', (isChecked) ? !this.defaultDocsStateExpanded : this.defaultDocsStateExpanded);
+          }
         }
 
         // the location of the ID attribute varies depending on the model. Also, for reduced view searches, the ID isn't
@@ -564,13 +591,77 @@ function(app, FauxtonAPI, Components, Documents, Databases, Views, QueryOptions)
 
       this.toggleTrash();
       this.maybeHighlightAllButton();
+      this.updateExpandButtonLabel();
     },
 
     perPage: function () {
       return this.allDocsNumber.perPage();
+    },
+
+    // a bit dense, but necessary. It decides on what the Expand/Collapse button label should be and takes into
+    // account the default expand/collapse state, what rows are checked and their states
+    updateExpandButtonLabel: function () {
+
+      if (this.defaultDocsStateExpanded) {
+        this.setExpandButtonLabel(false);
+
+        // override the default label and show "Expand" if ALL checked rows have state === collapse (false)
+        if (this.numSelectedOnPage() && this.allCheckedRowsHaveState(false)) {
+          this.setExpandButtonLabel(true);
+        }
+      } else {
+        this.setExpandButtonLabel(true); // default show "Expand"
+
+        // show "Collapse" if ALL checked rows have state === expanded (true)
+        if (this.numSelectedOnPage() && this.allCheckedRowsHaveState(true)) {
+          this.setExpandButtonLabel(false);
+        }
+      }
+    },
+
+    setExpandButtonLabel: function(expanded) {
+      if (expanded) {
+        this.$('#collapse').html('<i class="icon-plus"></i> Expand');
+      } else {
+        this.$('#collapse').html('<i class="icon-minus"></i> Collapse');
+      }
+    },
+
+    setRowExpandedState: function (rows, state) {
+      _.each(rows, function(model) {
+        model.set('expanded', state);
+      });
+    },
+
+    allCheckedRowsHaveState: function (expanded) {
+      return _.every(this.getSelectedRows(), function (item) {
+        return item.get('expanded') === expanded;
+      });
+    },
+
+    // returns true if a subset of the rows on this page (1 to N-1) have been checked. That info is needed in
+    // determining the behaviour of the expand/collapse button
+    pageHasSelectedSubset: function () {
+      var numSelectedInPage = this.numSelectedOnPage();
+      return (numSelectedInPage !== 0 && numSelectedInPage !== this.collection.models.length);
+    },
+
+    // returns the models of selected items in the current page
+    getSelectedRows: function () {
+      if (!this.bulkDeleteDocsCollection) {
+        return [];
+      }
+      var allSelectedIDs = this.bulkDeleteDocsCollection.pluck('_id');
+      return _.filter(this.collection.models, function(item) {
+        return _.contains(allSelectedIDs, item.id);
+      }, this);
+    },
+
+    numSelectedOnPage: function () {
+      var selectedRows = this.getSelectedRows();
+      return selectedRows.length;
     }
   });
-
 
 
   Views.JumpToDoc = FauxtonAPI.View.extend({
