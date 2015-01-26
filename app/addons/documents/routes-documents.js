@@ -184,6 +184,8 @@ function(app, FauxtonAPI, BaseRoute, Documents, Changes, Index, DocEditor, Datab
       }
 
       this.viewEditor && this.viewEditor.remove();
+      this.headerView && this.headerView.remove();
+
       this.database.allDocs.paging.pageSize = this.getDocPerPageLimit(urlParams, parseInt(docParams.limit, 10));
 
       if (!docParams) {
@@ -528,6 +530,9 @@ function(app, FauxtonAPI, BaseRoute, Documents, Changes, Index, DocEditor, Datab
       }
       if (this.footer) {
         this.removeView('#footer');
+      }
+      if (this.headerView) {
+        this.removeView('#dashboard-upper-content');
       }
 
       // we're no longer interested in listening to the lookahead tray event on this route object
