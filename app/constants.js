@@ -24,7 +24,7 @@ define([], function () {
       DOCUMENT_LIMIT: 100
     },
 
-    // events
+    // global events for common used components
     EVENTS: {
       TRAY_CLOSED: 'tray:closed',
       TRAY_OPENED: 'tray:opened',
