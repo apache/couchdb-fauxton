@@ -79,7 +79,7 @@ define([
     });
   });
 
-  describe('Alternative Headerbar Controller', function () {
+  describe('Bulkdocument Headerbar Controller', function () {
     var container, header, viewSandbox, bulkDeleteDocCollection;
     beforeEach(function () {
       // needed for "pressing SelectAll should fill the delete-bulk-docs-collection"
@@ -131,7 +131,7 @@ define([
 
     it('should trigger an event to communicate with the backbone elements', function () {
       var spy = sinon.spy(FauxtonAPI.Events, 'trigger');
-      header = TestUtils.renderIntoDocument(<Views.AlternateHeaderControlBarController />, container);
+      header = TestUtils.renderIntoDocument(<Views.BulkDocumentHeaderController />, container);
       TestUtils.Simulate.click($(header.getDOMNode()).find('.control-collapse')[0]);
 
       assert.ok(spy.calledOnce);

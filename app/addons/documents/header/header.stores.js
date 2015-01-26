@@ -18,7 +18,7 @@ define([
 function (FauxtonAPI, ActionTypes) {
   var Stores = {};
 
-  Stores.AlternativeHeaderBarStore = FauxtonAPI.Store.extend({
+  Stores.BulkDocumentHeaderStore = FauxtonAPI.Store.extend({
     initialize: function () {
       this.reset();
     },
@@ -121,8 +121,8 @@ function (FauxtonAPI, ActionTypes) {
   Stores.headerBarStore = new Stores.HeaderBarStore();
   Stores.headerBarStore.dispatchToken = FauxtonAPI.dispatcher.register(Stores.headerBarStore.dispatch);
 
-  Stores.alternativeHeaderBarStore = new Stores.AlternativeHeaderBarStore();
-  Stores.alternativeHeaderBarStore.dispatchToken = FauxtonAPI.dispatcher.register(Stores.alternativeHeaderBarStore.dispatch);
+  Stores.bulkDocumentHeaderStore = new Stores.BulkDocumentHeaderStore();
+  Stores.bulkDocumentHeaderStore.dispatchToken = FauxtonAPI.dispatcher.register(Stores.bulkDocumentHeaderStore.dispatch);
 
   return Stores;
 });

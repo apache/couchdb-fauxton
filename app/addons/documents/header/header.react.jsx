@@ -21,7 +21,7 @@ define([
 function (app, FauxtonAPI, React, Stores, Actions) {
   var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
   var headerBarStore = Stores.headerBarStore;
-  var alternativeHeaderBarStore = Stores.alternativeHeaderBarStore;
+  var bulkDocumentHeaderStore = Stores.bulkDocumentHeaderStore;
 
   // this will be a global component
   var ToggleHeaderButton = React.createClass({
@@ -46,11 +46,11 @@ function (app, FauxtonAPI, React, Stores, Actions) {
     }
   });
 
-  var AlternateHeaderControlBarController = React.createClass({
+  var BulkDocumentHeaderController = React.createClass({
     getStoreState: function () {
       return {
-        areDocumentsCollapsed: alternativeHeaderBarStore.getCollapsedState(),
-        areAllDocumentsSelected: alternativeHeaderBarStore.getSelectedAllState()
+        areDocumentsCollapsed: bulkDocumentHeaderStore.getCollapsedState(),
+        areAllDocumentsSelected: bulkDocumentHeaderStore.getSelectedAllState()
       };
     },
 
@@ -59,11 +59,11 @@ function (app, FauxtonAPI, React, Stores, Actions) {
     },
 
     componentDidMount: function () {
-      alternativeHeaderBarStore.on('change', this.onChange, this);
+      bulkDocumentHeaderStore.on('change', this.onChange, this);
     },
 
     componentWillUnmount: function() {
-      alternativeHeaderBarStore.off('change', this.onChange);
+      bulkDocumentHeaderStore.off('change', this.onChange);
     },
 
     onChange: function () {
@@ -201,7 +201,7 @@ function (app, FauxtonAPI, React, Stores, Actions) {
 
       var headerbar = null;
       if (this.state.isToggled) {
-        headerbar = (<AlternateHeaderControlBarController key={1} />);
+        headerbar = (<BulkDocumentHeaderController key={1} />);
       }
 
       return (
@@ -229,7 +229,7 @@ function (app, FauxtonAPI, React, Stores, Actions) {
     removeHeaderController: function (el) {
       React.unmountComponentAtNode(el);
     },
-    AlternateHeaderControlBarController: AlternateHeaderControlBarController,
+    BulkDocumentHeaderController: BulkDocumentHeaderController,
     HeaderBarController: HeaderBarController,
     ToggleHeaderButton: ToggleHeaderButton
   };
