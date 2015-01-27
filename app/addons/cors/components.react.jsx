@@ -174,7 +174,6 @@ define([
   var Origins = React.createClass({
 
     onOriginChange: function (event) {
-      console.log('boom');
       this.props.originChange(event.target.value === 'all');
     },
 

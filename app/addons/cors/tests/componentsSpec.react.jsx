@@ -74,11 +74,15 @@ define([
         React.unmountComponentAtNode(container);
       });
 
-      /*it('calls change Origin on add radio button change', function () {
-        TestUtils.Simulate.click($(originEl.getDOMNode()).find('input[type="radio"]')[1]);
-        console.log(changeOrigin.calledOnce, $(originEl.getDOMNode()).html());
+      it('calls change Origin on all origins selected', function () {
+        TestUtils.Simulate.change($(originEl.getDOMNode()).find('input[value="all"]')[0]);
+        assert.ok(changeOrigin.calledWith(true));
+      });
+
+      it('calls change Origin on selected origins selected', function () {
+        TestUtils.Simulate.change($(originEl.getDOMNode()).find('input[value="selected"]')[0]);
         assert.ok(changeOrigin.calledWith(false));
-      });*/
+      });
     });
 
     describe('OriginRow', function () {
