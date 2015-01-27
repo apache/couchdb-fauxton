@@ -30,7 +30,7 @@ function(app, FauxtonAPI, React, Stores, Actions, Components, beautifyHelper) {
       return (
         <div className="dashboard-upper-menu">
           <ul className="nav nav-tabs" id="db-views-tabs-nav">
-            <li className="active">
+            <li>
               <a ref="toggle" data-bypass="true" id="index-nav" data-toggle="tab" href="#index" onClick={this.props.toggleEditor}>
                 <i className="fonticon-wrench fonticon"></i>
                 {this.props.title}
@@ -287,7 +287,7 @@ function(app, FauxtonAPI, React, Stores, Actions, Components, beautifyHelper) {
       return (
         <div>
           <div className="control-group">
-            <label htmlFor="reduce-function-selector">Reduce (optional) <a className="help-link" data-bypass="true" href={getDocUrl('REDUCE_FUNCS')} target="_blank"><i className="icon-question-sign"></i></a></label>
+            <label htmlFor="reduce-function-selector">Reduce (optional)<a className="help-link" data-bypass="true" href={getDocUrl('REDUCE_FUNCS')} target="_blank"><i className="icon-question-sign"></i></a></label>
 
             <select id="reduce-function-selector" value={this.state.reduceSelectedOption} onChange={this.selectChange}>
               {reduceOptions}
@@ -439,7 +439,7 @@ function(app, FauxtonAPI, React, Stores, Actions, Components, beautifyHelper) {
                 <DesignDocSelector />
 
                 <div className="control-group">
-                  <label htmlFor="index-name">Index name <a className="help-link" data-bypass="true" href={getDocUrl('VIEW_FUNCS')} target="_blank"><i className="icon-question-sign"></i></a></label>
+                  <label htmlFor="index-name">Index name<a className="help-link" data-bypass="true" href={getDocUrl('VIEW_FUNCS')} target="_blank"><i className="icon-question-sign"></i></a></label>
                   <input type="text" id="index-name" value={this.state.viewName} onChange={this.viewChange} placeholder="Index name" />
                 </div>
 
