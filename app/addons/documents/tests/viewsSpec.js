@@ -21,50 +21,8 @@ define([
       viewSandbox;
 
   describe('AllDocsList', function () {
-    var database = new Databases.Model({id: 'registry'}),
-        bulkDeleteDocCollection = new Resources.BulkDeleteDocCollection([], {databaseId: 'registry'});
-
-    database.allDocs = new Resources.AllDocs({_id: "ente"}, {
-      database: database,
-      viewMeta: {update_seq: 1},
-      params: {}
-    });
-
-    var pagination = new Components.IndexPagination({
-      collection: database.allDocs,
-      scrollToSelector: '#dashboard-content',
-      docLimit: 20,
-      perPage: 20
-    });
-
-    var allDocsNumber = new Documents.Views.AllDocsNumber({
-      collection: database.allDocs,
-      pagination: pagination,
-      perPageDefault: 20
-    });
-
-    var view = new Documents.Views.AllDocsList({
-      viewList: false,
-      bulkDeleteDocsCollection: bulkDeleteDocCollection,
-      collection: database.allDocs,
-      pagination: pagination,
-      allDocsNumber: allDocsNumber
-    });
-
-    beforeEach(function (done) {
-      viewSandbox = new ViewSandbox();
-      viewSandbox.renderView(view, done);
-    });
-
-    afterEach(function () {
-      viewSandbox.remove();
-    });
-
     it('should load', function () {
       assert.equal(typeof Documents.Views.AllDocsList, 'function');
     });
-
-  });
-
   });
 });
