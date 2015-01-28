@@ -73,7 +73,7 @@ define([
       if (this.state.edit) {
         return (
           <div className="input-append edit-domain-section">
-            <input type="text" className="span11" name="update_origin_domain" onChange={this.onInputChange} value={this.state.updatedOrigin}/>
+            <input type="text" name="update_origin_domain" onChange={this.onInputChange} value={this.state.updatedOrigin} />
             <button onClick={this.updateOrigin} className="btn btn-primary update-origin"> Update </button>
           </div>
         );
@@ -161,7 +161,7 @@ define([
         <div id= "origin-domains-container">
           <div className= "origin-domains">
             <div className="input-append">
-              <input type="text" className="span12" name="new_origin_domain" onChange={this.onInputChange} value={this.state.origin} placeholder="e.g., https://site.com"/>
+              <input type="text" name="new_origin_domain" onChange={this.onInputChange} value={this.state.origin} placeholder="e.g., https://site.com"/>
               <button onClick={this.addOrigin} className="btn btn-primary add-domain"> Add </button>
             </div>
           </div>

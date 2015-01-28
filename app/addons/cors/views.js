@@ -25,7 +25,12 @@ function (app, FauxtonAPI, CORS, Components, Actions) {
   Views.CORSWrapper = FauxtonAPI.View.extend({
     className: 'list',
     initialize: function (options) {
-      this.options = options;
+      this.cors = options.cors;
+      this.httpd = options.httpd;
+    },
+
+    establish: function () {
+      return [this.cors.fetch(), this.httpd.fetch()];
     },
 
     afterRender: function () {

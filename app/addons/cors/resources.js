@@ -22,6 +22,15 @@ function (app, FauxtonAPI) {
   CORS.Config = FauxtonAPI.Model.extend({
     url: function() {
       return app.host + '/_config/cors';
+    },
+
+    getOrigins: function () {
+      var origins = this.get('origins');
+      if (_.isUndefined(origins)) {
+        return [];
+      }
+
+      return origins.split(',');
     }
   });
 

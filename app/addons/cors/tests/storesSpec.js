@@ -20,20 +20,6 @@ define([
 
   describe('CORS store', function () {
 
-    describe('create origins', function () {
-
-      it('Splits up origins into array', function () {
-        var origins = ['http://hello.com', 'http://another.co.a'];
-
-        assert.deepEqual(store.createOrigins(origins.join(',')), origins);
-      });
-
-      it('returns empty array for undefined', function () {
-        assert.deepEqual(store.createOrigins(undefined), []);
-      });
-
-    });
-
     describe('isAllOrigins', function () {
 
       it('returns true for all origins', function () {

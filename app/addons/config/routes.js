@@ -27,7 +27,7 @@ function(app, FauxtonAPI, Config, Views, CORS) {
       this.configs = new Config.Collection();
       this.cors = new CORS.Config();
       this.httpd = new CORS.Httpd();
-      
+
       this.sidebar = this.setView("#sidebar-content", new Views.Tabs({
         sidebarItems: [
           {
@@ -65,11 +65,10 @@ function(app, FauxtonAPI, Config, Views, CORS) {
       this.setView('#dashboard-content', new Views.Table({ collection: this.configs }));
       this.sidebar.setSelectedTab("main");
     },
-    
+
     configCORS: function() {
       this.removeView('#right-header');
-      //this.newSection = this.setView('#dashboard-content', new CORS.Views.CORSMain({ model: this.cors }));
-      this.newSection = this.setView('#dashboard-content', new CORS.Views.CORSWrapper({ 
+      this.newSection = this.setView('#dashboard-content', new CORS.Views.CORSWrapper({
         cors: this.cors,
         httpd: this.httpd
       }));
@@ -77,7 +76,7 @@ function(app, FauxtonAPI, Config, Views, CORS) {
     },
 
     establish: function () {
-      return [this.configs.fetch(), this.cors.fetch(), this.httpd.fetch()];
+      return [this.configs.fetch()];
     }
   });
 

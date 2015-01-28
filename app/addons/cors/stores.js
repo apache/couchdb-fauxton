@@ -21,15 +21,7 @@ define([
       this._cors = options.cors;
       this._httpd = options.httpd;
       this._isEnabled = this._httpd.corsEnabled();
-      this._origins = this.createOrigins(this._cors.get('origins'));
-    },
-
-    createOrigins: function (origins) {
-      if (_.isUndefined(origins)) {
-        return [];
-      }
-
-      return origins.split(',');
+      this._origins = this._cors.getOrigins();
     },
 
     isEnabled: function () {
