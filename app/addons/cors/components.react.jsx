@@ -204,7 +204,8 @@ define([
       return {
         corsEnabled: corsStore.isEnabled(),
         origins: corsStore.getOrigins(),
-        isAllOrigins: corsStore.isAllOrigins()
+        isAllOrigins: corsStore.isAllOrigins(),
+        configChanged: corsStore.hasConfigChanged()
       };
     },
 
@@ -214,10 +215,20 @@ define([
 
     componentDidMount: function () {
       corsStore.on('change', this.onChange, this);
+      $(window).on('beforeunload.corsChanges', _.bind(this.changesWarning, this));
+      FauxtonAPI.beforeUnload('beforeunload.corsChanges', _.bind(this.changesWarning, this));
     },
 
     componentWillUnmount: function() {
       corsStore.off('change', this.onChange);
+      $(window).off('beforeunload.corsChanges');
+      FauxtonAPI.removeBeforeUnload('beforeunload.corsChanges');
+    },
+
+    changesWarning: function () {
+      if (this.state.configChanged) {
+        return 'You have unsaved CORS changes. Click cancel to return and save your changes.';
+      }
     },
 
     onChange: function () {
@@ -257,6 +268,15 @@ define([
       Actions.methodChange(httpMethod);
     },
 
+    getCorsNotice: function () {
+      var msg = FauxtonAPI.getExtensions('cors:notice');
+      if (_.isUndefined(msg)) {
+        return 'Cross-Origin Resource Sharing (CORS) lets you connect to remote servers directly from the browser, so you can host browser-based apps on static pages and talk directly with CouchDB to load your data.';
+      }
+
+      return msg;
+    },
+
     render: function () {
       var isVisible = _.all([this.state.corsEnabled, !this.state.isAllOrigins]);
       var className = this.state.corsEnabled ? 'collapsing-container' : '';
@@ -264,7 +284,7 @@ define([
       return (
         <div className="cors-page">
           <header id="cors-header">
-            <p>Cross-Origin Resource Sharing (CORS) lets you connect to remote servers directly from the browser, so you can host browser-based apps on static pages and talk directly with CouchDB to load your data.</p>
+            <p> {this.getCorsNotice()}</p>
           </header>
 
           <form id="corsForm" onSubmit={this.save}>
@@ -280,7 +300,7 @@ define([
             </div>
 
             <div className="form-actions">
-              <input className="btn btn-success" type="submit" value="Save" />
+              <input className="btn btn-success" disabled={!this.state.configChanged} type="submit" value="Save" />
             </div>
 
           </form>

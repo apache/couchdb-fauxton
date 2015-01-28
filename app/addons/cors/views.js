@@ -35,8 +35,8 @@ function (app, FauxtonAPI, CORS, Components, Actions) {
 
     afterRender: function () {
       Actions.editCors({
-        cors: this.options.cors,
-        httpd: this.options.httpd
+        origins: this.cors.getOrigins(),
+        isEnabled: this.httpd.corsEnabled()
       });
       Components.renderCORS(this.el);
     },

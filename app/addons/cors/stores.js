@@ -18,10 +18,21 @@ define([
   var CorsStore = FauxtonAPI.Store.extend({
 
     editCors: function (options) {
-      this._cors = options.cors;
-      this._httpd = options.httpd;
-      this._isEnabled = this._httpd.corsEnabled();
-      this._origins = this._cors.getOrigins();
+      this._isEnabled = options.isEnabled;
+      this._origins = options.origins;
+      this._configChanged = false;
+    },
+
+    hasConfigChanged: function () {
+      return this._configChanged;
+    },
+
+    setConfigChanged: function () {
+      this._configChanged = true;
+    },
+
+    setConfigSaved: function () {
+      this._configChanged = false;
     },
 
     isEnabled: function () {
@@ -81,31 +92,36 @@ define([
 
         case ActionTypes.TOGGLE_ENABLE_CORS:
           this.toggleEnableCors();
+          this.setConfigChanged();
           this.triggerChange();
         break;
 
         case ActionTypes.CORS_ADD_ORIGIN:
           this.addOrigin(action.origin);
+          this.setConfigChanged();
           this.triggerChange();
         break;
 
         case ActionTypes.CORS_IS_ALL_ORIGINS:
           this.originChange(action.isAllOrigins);
+          this.setConfigChanged();
           this.triggerChange();
         break;
 
         case ActionTypes.CORS_DELETE_ORIGIN:
           this.deleteOrigin(action.origin);
+          this.setConfigChanged();
           this.triggerChange();
         break;
 
         case ActionTypes.CORS_UPDATE_ORIGIN:
           this.updateOrigin(action.updatedOrigin, action.originalOrigin);
+          this.setConfigChanged();
           this.triggerChange();
         break;
 
-        case ActionTypes.CORS_METHOD_CHANGE:
-          this.methodChange(action.httpMethod);
+        case ActionTypes.CORS_SAVED:
+          this.setConfigSaved();
           this.triggerChange();
         break;
 

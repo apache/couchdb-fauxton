@@ -68,7 +68,7 @@ define([
         assert.ok(spy.calledOnce);
       });
 
-      it('saves cors allow headers', function () {
+      it('saves cors headers', function () {
         var spy = sinon.spy(Actions, 'saveCorsHeaders');
 
         Actions.saveCors({
@@ -79,7 +79,7 @@ define([
         assert.ok(spy.calledOnce);
       });
 
-      it('saves cors allow methods', function () {
+      it('saves cors methods', function () {
         var spy = sinon.spy(Actions, 'saveCorsMethods');
 
         Actions.saveCors({
@@ -106,6 +106,30 @@ define([
         assert.ok(spy.calledOnce);
         FauxtonAPI.when.restore();
         FauxtonAPI.addNotification.restore();
+      });
+
+      it('dispatches CORS_SAVED', function () {
+        var stub = sinon.stub(FauxtonAPI, 'when');
+        var called = false;
+        var promise = FauxtonAPI.Deferred();
+        promise.resolve();
+        stub.returns(promise);
+
+        FauxtonAPI.dispatcher.register(function (actions) {
+
+          if (actions.type === 'CORS_SAVED') {
+            called = true;
+          }
+
+        });
+
+        Actions.saveCors({
+          enableCors: true,
+          origins: ['https://testdomain.com']
+        });
+
+        assert.ok(called);
+        FauxtonAPI.when.restore();
       });
 
     });

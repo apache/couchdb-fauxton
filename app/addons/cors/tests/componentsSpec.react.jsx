@@ -36,6 +36,7 @@ define([
       afterEach(function () {
         Resources.validateCORSDomain.restore && Resources.validateCORSDomain.restore();
         React.unmountComponentAtNode(container);
+        FauxtonAPI.addNotification.restore && FauxtonAPI.addNotification.restore();
       });
 
       it('calls validates each domain', function () {

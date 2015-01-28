@@ -13,131 +13,135 @@ define([
   'api',
   'addons/cors/actiontypes',
   'addons/cors/resources'
-], function (FauxtonAPI, ActionTypes, Resources) {
-  return {
-    editCors: function (options) {
-      FauxtonAPI.dispatch({
-        type: ActionTypes.EDIT_CORS,
-        options: options
-      });
-    },
+  ], function (FauxtonAPI, ActionTypes, Resources) {
+    return {
+      editCors: function (options) {
+        FauxtonAPI.dispatch({
+          type: ActionTypes.EDIT_CORS,
+          options: options
+        });
+      },
 
-    toggleEnableCors: function () {
-      FauxtonAPI.dispatch({
-        type: ActionTypes.TOGGLE_ENABLE_CORS
-      });
-    },
+      toggleEnableCors: function () {
+        FauxtonAPI.dispatch({
+          type: ActionTypes.TOGGLE_ENABLE_CORS
+        });
+      },
 
-    addOrigin: function (origin) {
-      FauxtonAPI.dispatch({
-        type: ActionTypes.CORS_ADD_ORIGIN,
-        origin: origin
-      });
-    },
+      addOrigin: function (origin) {
+        FauxtonAPI.dispatch({
+          type: ActionTypes.CORS_ADD_ORIGIN,
+          origin: origin
+        });
+      },
 
-    originChange: function (isAllOrigins) {
-      FauxtonAPI.dispatch({
-        type: ActionTypes.CORS_IS_ALL_ORIGINS,
-        isAllOrigins: isAllOrigins
-      });
-    },
+      originChange: function (isAllOrigins) {
+        FauxtonAPI.dispatch({
+          type: ActionTypes.CORS_IS_ALL_ORIGINS,
+          isAllOrigins: isAllOrigins
+        });
+      },
 
-    deleteOrigin: function (origin) {
-      FauxtonAPI.dispatch({
-        type: ActionTypes.CORS_DELETE_ORIGIN,
-        origin: origin
-      });
-    },
+      deleteOrigin: function (origin) {
+        FauxtonAPI.dispatch({
+          type: ActionTypes.CORS_DELETE_ORIGIN,
+          origin: origin
+        });
+      },
 
-    updateOrigin: function (updatedOrigin, originalOrigin) {
-      FauxtonAPI.dispatch({
-        type: ActionTypes.CORS_UPDATE_ORIGIN,
-        updatedOrigin: updatedOrigin,
-        originalOrigin: originalOrigin
-      });
-    },
-    methodChange: function (httpMethod) {
-      FauxtonAPI.dispatch({
-        type: ActionTypes.CORS_METHOD_CHANGE,
-        httpMethod: httpMethod
-      });
-    },
+      updateOrigin: function (updatedOrigin, originalOrigin) {
+        FauxtonAPI.dispatch({
+          type: ActionTypes.CORS_UPDATE_ORIGIN,
+          updatedOrigin: updatedOrigin,
+          originalOrigin: originalOrigin
+        });
+      },
+      methodChange: function (httpMethod) {
+        FauxtonAPI.dispatch({
+          type: ActionTypes.CORS_METHOD_CHANGE,
+          httpMethod: httpMethod
+        });
+      },
 
-    saveEnableCorsToHttpd: function (enableCors) {
-      var enableOption = new Resources.ConfigModel({
-        section: 'httpd',
-        attribute: 'enable_cors',
-        value: enableCors.toString()
-      });
+      saveEnableCorsToHttpd: function (enableCors) {
+        var enableOption = new Resources.ConfigModel({
+          section: 'httpd',
+          attribute: 'enable_cors',
+          value: enableCors.toString()
+        });
 
-      return enableOption.save();
-    },
+        return enableOption.save();
+      },
 
-    saveCorsOrigins: function (origins) {
-      var allowOrigins = new Resources.ConfigModel({
-        section: 'cors',
-        attribute: 'origins',
-        value: origins.join(',')
-      });
+      saveCorsOrigins: function (origins) {
+        var allowOrigins = new Resources.ConfigModel({
+          section: 'cors',
+          attribute: 'origins',
+          value: origins.join(',')
+        });
 
-      return allowOrigins.save();
-    },
+        return allowOrigins.save();
+      },
 
-    saveCorsCredentials: function () {
-      var allowCredentials = new Resources.ConfigModel({
-        section: 'cors',
-        attribute: 'credentials',
-        value: "true"
-      });
+      saveCorsCredentials: function () {
+        var allowCredentials = new Resources.ConfigModel({
+          section: 'cors',
+          attribute: 'credentials',
+          value: "true"
+        });
 
-      return allowCredentials.save();
-    },
+        return allowCredentials.save();
+      },
 
-    saveCorsHeaders: function () {
-      var corsHeaders = new Resources.ConfigModel({
-        section: 'cors',
-        attribute: 'headers',
-        value: 'accept, authorization, content-type, origin, referer'
-      });
+      saveCorsHeaders: function () {
+        var corsHeaders = new Resources.ConfigModel({
+          section: 'cors',
+          attribute: 'headers',
+          value: 'accept, authorization, content-type, origin, referer'
+        });
 
-      return corsHeaders.save();
-    },
+        return corsHeaders.save();
+      },
 
-    saveCorsMethods: function () {
-      var corsMethods = new Resources.ConfigModel({
-        section: 'cors',
-        attribute: 'methods',
-        value: 'GET, PUT, POST, HEAD, DELETE'
-      });
+      saveCorsMethods: function () {
+        var corsMethods = new Resources.ConfigModel({
+          section: 'cors',
+          attribute: 'methods',
+          value: 'GET, PUT, POST, HEAD, DELETE'
+        });
 
-      return corsMethods.save();
-    },
+        return corsMethods.save();
+      },
 
-    saveCors: function (options) {
-      var promises = [];
-      promises.push(this.saveEnableCorsToHttpd(options.enableCors));
+      saveCors: function (options) {
+        var promises = [];
+        promises.push(this.saveEnableCorsToHttpd(options.enableCors));
 
-      if(options.enableCors) {
-        promises.push(this.saveCorsOrigins(options.origins));
-        promises.push(this.saveCorsCredentials());
-        promises.push(this.saveCorsHeaders());
-        promises.push(this.saveCorsMethods());
+        if(options.enableCors) {
+          promises.push(this.saveCorsOrigins(options.origins));
+          promises.push(this.saveCorsCredentials());
+          promises.push(this.saveCorsHeaders());
+          promises.push(this.saveCorsMethods());
+        }
+
+        FauxtonAPI.when(promises).then(function () {
+          FauxtonAPI.addNotification({
+            msg: 'Cors settings updated',
+            type: 'success',
+            clear: true
+          });
+
+          FauxtonAPI.dispatch({
+            type: ActionTypes.CORS_SAVED
+          });
+        }, function () {
+          FauxtonAPI.addNotification({
+            msg: 'Error! Could not save your CORS settings. Please try again.',
+            type: 'error',
+            clear: true
+          });
+
+        });
       }
-
-      FauxtonAPI.when(promises).then(function () {
-        FauxtonAPI.addNotification({
-          msg: 'Cors settings updated',
-          type: 'success',
-          clear: true
-        });
-      }, function () {
-        FauxtonAPI.addNotification({
-          msg: 'Error! Could not save your CORS settings. Please try again.',
-          type: 'error',
-          clear: true
-        });
-
-      });
-    }
-  };
-});
+    };
+  });
