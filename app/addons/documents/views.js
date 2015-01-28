@@ -400,7 +400,7 @@ function (app, FauxtonAPI, Components, Documents,
 
       ReactHeaderActions.updateDocumentCount({
         selectedOnPage: this.$('.js-to-delete').length,
-        documentsOnPageCount: this.perPage()
+        documentsOnPageCount: this.$('.doc-row').length
       });
     },
 
@@ -467,7 +467,7 @@ function (app, FauxtonAPI, Components, Documents,
 
       ReactHeaderActions.updateDocumentCount({
         selectedOnPage: this.$('.js-to-delete').length,
-        documentsOnPageCount: this.perPage()
+        documentsOnPageCount: this.$('.doc-row').length
       });
     },
 
@@ -580,7 +580,7 @@ function (app, FauxtonAPI, Components, Documents,
 
       ReactHeaderActions.updateDocumentCount({
         selectedOnPage: this.$('.js-to-delete').length,
-        documentsOnPageCount: this.perPage()
+        documentsOnPageCount: this.$('.doc-row').length
       });
     },
 
