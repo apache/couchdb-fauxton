@@ -26,6 +26,9 @@ function (FauxtonAPI, ActionTypes) {
     reset: function () {
       this._collapsedDocuments = false;
       this._selectedAllDocuments = false;
+
+      this._selectedDocumentsCount = 0;
+      this._documentsOnPageCount = FauxtonAPI.constants.MISC.DEFAULT_PAGE_SIZE;
     },
 
     toggleCollapse: function () {
@@ -44,6 +47,25 @@ function (FauxtonAPI, ActionTypes) {
       return this._selectedAllDocuments;
     },
 
+    getIsDeselectPossible: function () {
+      if (this._selectedDocumentsonPageCount > 0) {
+        return true;
+      }
+      return false;
+    },
+
+    getIsSelectAllPossible: function () {
+      if (this._selectedDocumentsonPageCount < this._documentsOnPageCount) {
+        return true;
+      }
+      return false;
+    },
+
+    setSelectedDocumentCount: function (options) {
+      this._selectedDocumentsonPageCount = options.selectedOnPage;
+      this._documentsOnPageCount = options.documentsOnPageCount;
+    },
+
     dispatch: function (action) {
       switch (action.type) {
 
@@ -52,8 +74,8 @@ function (FauxtonAPI, ActionTypes) {
           this.triggerChange();
         break;
 
-        case ActionTypes.SELECT_ALL_DOCUMENTS:
-          this.toggleSelectAll();
+        case ActionTypes.UPDATE_DOCUMENT_COUNT:
+          this.setSelectedDocumentCount(action.options);
           this.triggerChange();
         break;
 

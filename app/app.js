@@ -43,7 +43,6 @@ function(app, $, _, Backbone, Bootstrap, Helpers, constants, Utils, FauxtonAPI, 
     };
   }
 
-
   // Provide a global location to place configuration settings and module
   // creation also mix in Backbone.Events
   _.extend(app, {

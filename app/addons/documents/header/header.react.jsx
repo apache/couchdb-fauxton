@@ -50,7 +50,8 @@ function (app, FauxtonAPI, React, Stores, Actions) {
     getStoreState: function () {
       return {
         areDocumentsCollapsed: bulkDocumentHeaderStore.getCollapsedState(),
-        areAllDocumentsSelected: bulkDocumentHeaderStore.getSelectedAllState()
+        isDeselectPossible: bulkDocumentHeaderStore.getIsDeselectPossible(),
+        isSelectAllPossible: bulkDocumentHeaderStore.getIsSelectAllPossible()
       };
     },
 
@@ -72,7 +73,8 @@ function (app, FauxtonAPI, React, Stores, Actions) {
 
     render: function () {
       var baseClass = 'header-control-box header-control-square ',
-          areAllDocumentsSelected = this.state.areAllDocumentsSelected,
+          isDeselectPossible = this.state.isDeselectPossible,
+          isSelectAllPossible = this.state.isSelectAllPossible,
           areDocumentsCollapsed = this.state.areDocumentsCollapsed;
 
       return (
@@ -83,18 +85,18 @@ function (app, FauxtonAPI, React, Stores, Actions) {
             innerClasses={''}
             containerClasses={baseClass + 'control-select-all'}
             text={''}
-            setEnabledClass={areAllDocumentsSelected}
-            disabled={areAllDocumentsSelected}
+            setEnabledClass={!isSelectAllPossible}
+            disabled={!isSelectAllPossible}
             title={'Select all Documents'} />
 
           <ToggleHeaderButton
             fonticon={'fonticon-deselect-all'}
-            toggleCallback={this.selectAllDocuments}
+            toggleCallback={this.deSelectAllDocuments}
             innerClasses={''}
             containerClasses={baseClass + 'control-de-select-all'}
             text={''}
-            setEnabledClass={!areAllDocumentsSelected}
-            disabled={!areAllDocumentsSelected}
+            setEnabledClass={!isDeselectPossible}
+            disabled={!isDeselectPossible}
             title={'Deselect all Documents'} />
 
           <ToggleHeaderButton
@@ -141,7 +143,11 @@ function (app, FauxtonAPI, React, Stores, Actions) {
     },
 
     selectAllDocuments: function () {
-      Actions.toggleSelectAllDocuments();
+      Actions.toggleSelectAllDocuments(false);
+    },
+
+    deSelectAllDocuments: function () {
+      Actions.toggleSelectAllDocuments(true);
     },
 
     cancelView: function () {

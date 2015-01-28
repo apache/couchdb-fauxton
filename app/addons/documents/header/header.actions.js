@@ -26,21 +26,20 @@ function (app, FauxtonAPI, ActionTypes) {
       FauxtonAPI.Events.trigger('headerbar:collapse');
     },
 
-    toggleSelectAllDocuments: function () {
-      FauxtonAPI.dispatch({
-        type: ActionTypes.SELECT_ALL_DOCUMENTS
-      });
+    toggleSelectAllDocuments: function (on) {
+      FauxtonAPI.Events.trigger('headerbar:selectall', on);
+    },
 
-      FauxtonAPI.Events.trigger('headerbar:selectall');
+    updateDocumentCount: function (options) {
+      FauxtonAPI.dispatch({
+        type: ActionTypes.UPDATE_DOCUMENT_COUNT,
+        options: options
+      });
     },
 
     deleteSelected: function () {
       FauxtonAPI.dispatch({
         type: ActionTypes.DELETE_SELECTED
-      });
-
-      FauxtonAPI.dispatch({
-        type: ActionTypes.SELECT_ALL_DOCUMENTS
       });
 
       FauxtonAPI.Events.trigger('headerbar:deleteselected');
