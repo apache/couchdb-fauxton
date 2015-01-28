@@ -205,7 +205,8 @@ define([
         corsEnabled: corsStore.isEnabled(),
         origins: corsStore.getOrigins(),
         isAllOrigins: corsStore.isAllOrigins(),
-        configChanged: corsStore.hasConfigChanged()
+        configChanged: corsStore.hasConfigChanged(),
+        savingStatus: corsStore.getSavingStatus()
       };
     },
 
@@ -277,9 +278,23 @@ define([
       return msg;
     },
 
+    saveButtonDisabled: function () {
+
+      if (!this.state.configChanged) {
+        return true;
+      }
+
+      if (this.state.savingStatus === 'Saving') {
+        return true;
+      }
+
+      return false;
+    },
+
     render: function () {
       var isVisible = _.all([this.state.corsEnabled, !this.state.isAllOrigins]);
       var className = this.state.corsEnabled ? 'collapsing-container' : '';
+      var saveDisabled = this.saveButtonDisabled();
 
       return (
         <div className="cors-page">
@@ -300,7 +315,7 @@ define([
             </div>
 
             <div className="form-actions">
-              <input className="btn btn-success" disabled={!this.state.configChanged} type="submit" value="Save" />
+              <input className="btn btn-success" disabled={saveDisabled} type="submit" value={this.state.savingStatus} />
             </div>
 
           </form>

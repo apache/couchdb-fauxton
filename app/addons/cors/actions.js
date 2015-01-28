@@ -124,6 +124,10 @@ define([
           promises.push(this.saveCorsMethods());
         }
 
+        FauxtonAPI.dispatch({
+          type: ActionTypes.CORS_SAVING
+        });
+
         FauxtonAPI.when(promises).then(function () {
           FauxtonAPI.addNotification({
             msg: 'Cors settings updated',
@@ -139,6 +143,10 @@ define([
             msg: 'Error! Could not save your CORS settings. Please try again.',
             type: 'error',
             clear: true
+          });
+
+          FauxtonAPI.dispatch({
+            type: ActionTypes.CORS_SAVED
           });
 
         });

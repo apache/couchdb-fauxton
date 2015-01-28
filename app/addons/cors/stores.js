@@ -21,6 +21,19 @@ define([
       this._isEnabled = options.isEnabled;
       this._origins = options.origins;
       this._configChanged = false;
+      this.savingDone();
+    },
+
+    saving: function () {
+        this._savingStatus = 'Saving';
+    },
+
+    savingDone: function () {
+      this._savingStatus = 'Save';
+    },
+
+    getSavingStatus: function () {
+      return this._savingStatus;
     },
 
     hasConfigChanged: function () {
@@ -120,8 +133,14 @@ define([
           this.triggerChange();
         break;
 
+        case ActionTypes.CORS_SAVING:
+          this.saving();
+          this.triggerChange();
+        break;
+
         case ActionTypes.CORS_SAVED:
           this.setConfigSaved();
+          this.savingDone();
           this.triggerChange();
         break;
 
