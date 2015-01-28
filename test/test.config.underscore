@@ -5,6 +5,7 @@ require.config(
 );
 
 require([
+        'app',
         "es5-shim",
         <% _.each(testFiles, function (test) {%>
            <% if (test[0] === '.') { %>
