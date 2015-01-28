@@ -25,8 +25,6 @@ function (FauxtonAPI, ActionTypes) {
 
     reset: function () {
       this._collapsedDocuments = false;
-      this._selectedAllDocuments = false;
-
       this._selectedDocumentsCount = 0;
       this._documentsOnPageCount = FauxtonAPI.constants.MISC.DEFAULT_PAGE_SIZE;
     },
@@ -37,10 +35,6 @@ function (FauxtonAPI, ActionTypes) {
 
     getCollapsedState: function () {
       return this._collapsedDocuments;
-    },
-
-    toggleSelectAll: function () {
-      this._selectedAllDocuments = !this._selectedAllDocuments;
     },
 
     getSelectedAllState: function () {
