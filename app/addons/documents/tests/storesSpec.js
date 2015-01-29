@@ -33,44 +33,6 @@ define([
       FauxtonAPI.dispatcher.unregister(dispatchToken);
     });
 
-    describe('TOGGLE EDITOR', function () {
-
-      it('toggles editor', function () {
-        var designDoc = {
-          _id: '_design/test-doc',
-          views: {
-            'test-view': {
-              map: 'boom'
-            }
-          }
-        };
-
-        var designDocs = new Documents.AllDocs([designDoc], {
-          params: { limit: 10 },
-          database: {
-            safeID: function () { return 'id';}
-          }
-        });
-
-        FauxtonAPI.dispatch({
-          type: ActionTypes.EDIT_NEW_INDEX,
-          options: {
-            newView: false,
-            designDocs: designDocs,
-            designDocId: '_design/test-doc'
-          }
-        });
-
-
-        FauxtonAPI.dispatch({
-          type: ActionTypes.TOGGLE_EDITOR
-        });
-
-        assert.ok(store.showEditor());
-      });
-
-    });
-
     describe('map editor', function () {
 
       describe('new view', function () {
@@ -344,35 +306,6 @@ define([
         });
 
         assert.equal(store.getReduce(), '_sum');
-      });
-
-      it('showEditor() is false for editing index', function () {
-        FauxtonAPI.dispatch({
-          type: ActionTypes.EDIT_INDEX,
-          options: {
-            newView: false,
-            viewName: 'test-view',
-            designDocs: designDocs,
-            designDocId: designDoc._id
-          }
-        });
-
-        assert.notOk(store.showEditor());
-      });
-
-      it('showEditor() is true for creating index', function () {
-        FauxtonAPI.dispatch({
-          type: ActionTypes.EDIT_INDEX,
-          options: {
-            newView: true,
-            viewName: 'test-view',
-            newDesignDoc: false,
-            designDocs: designDocs,
-            designDocId: designDoc._id
-          }
-        });
-
-        assert.ok(store.showEditor());
       });
 
     });

@@ -10,76 +10,223 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-@import "../../../../../assets/less/animations.less";
 @import "../../../../../assets/less/variables.less";
 
-.keyframes(fadeInDownNoReduce, {
-    opacity: 0;
-    height: 0px;
-},
-{
-    opacity: 1;
-    height: 546px;
-});
+.editor-wrapper {
 
 
-.keyframes(fadeInDownReduce, {
-    opacity: 0;
-    height: 0px;
-},
-{
-    opacity: 1;
-    height: 745px;
-});
-
-.keyframes(fadeOutUpReduce, {
-    opacity: 1;
-    height: 745px;
-},
-{
-    opacity: 0;
-    height: 0px;
-});
-
-.keyframes(fadeOutUpNoReduce, {
-    opacity: 1;
-    height: 546px;
-},
-{
-    opacity: 0;
-    height: 0px;
-});
-
-
-.fadeInDownNoReduce-enter {
- .animation(fadeInDownNoReduce 1s both);
-}
-
-.fadeInDownNoReduce-leave {
- .animation(fadeOutUpNoReduce 1s both);
-}
-
-.fadeInDownReduce-enter {
- .animation(fadeInDownReduce 1s both);
-}
-
-.fadeInDownReduce-leave {
- .animation(fadeOutUpReduce 1s both);
-}
-
-#dashboard-upper-content{
-  .editor-wrapper {
+  .define-view {
     padding-bottom: 70px;
   }
 
-  .tab-content {
-    height: auto;
-    padding-top: 70px;
-  }
-
-  #define-view {
+  .define-view {
     .help-link {
       margin-left: 3px;
     }
+  }
+  label {
+    font-size: 16px;
+  }
+  .bordered-box {
+    border-bottom: 1px solid #ccc;
+  }
+  .padded-box {
+    margin: 25px 30px;
+  }
+  .db-title {
+    color: @brandPrimary;
+    line-height: 30px;
+  }
+  .new-ddoc-input {
+    margin-top: 25px;
+  }
+
+  .styled-select {
+    width: 250px;
+  }
+  .styled-select label {
+    margin: 0;
+  }
+  .styled-select select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-color: #e6e6e6;
+    border: 1px solid #b3b3b3;
+    height: 45px;
+    width: 250px;
+  }
+  .styled-select select:-moz-focusring {
+    color: transparent;
+    text-shadow: 0 0 0 #000;
+  }
+  .styled-select select::-ms-expand {
+    display: none;
+  }
+  .styled-select i {
+    position: absolute;
+    right: 10px;
+    top: 12px;
+    pointer-events: none;
+  }
+}
+
+// 940px grid without margin
+// -------------------------
+@gridColumnWidthNoMargin:         60px;
+@gridGutterWidthNoMargin:         0px;
+@gridRowWidthNoMargin:            (@gridColumns * @gridColumnWidthNoMargin) + (@gridGutterWidthNoMargin * (@gridColumns - 1));
+
+// 1200px min
+@gridColumnWidth1200NoMargin:     70px;
+@gridGutterWidth1200NoMargin:     0px;
+@gridRowWidth1200NoMargin:        (@gridColumns * @gridColumnWidth1200NoMargin) + (@gridGutterWidth1200NoMargin * (@gridColumns - 1));
+
+// 768px-979px
+@gridColumnWidth768NoMargin:      42px;
+@gridGutterWidth768NoMargin:      0px;
+@gridRowWidth768NoMargin:         (@gridColumns * @gridColumnWidth768NoMargin) + (@gridGutterWidth768NoMargin * (@gridColumns - 1));
+// Fluid grid
+// -------------------------
+@fluidGridColumnWidthNoMargin:    percentage(@gridColumnWidthNoMargin/@gridRowWidthNoMargin);
+@fluidGridGutterWidthNoMargin:    percentage(@gridGutterWidthNoMargin/@gridRowWidthNoMargin);
+// 1200px min
+@fluidGridColumnWidth1200NoMargin:     percentage(@gridColumnWidth1200NoMargin/@gridRowWidth1200NoMargin);
+@fluidGridGutterWidth1200NoMargin:     percentage(@gridGutterWidth1200NoMargin/@gridRowWidth1200NoMargin);
+// 768px-979px
+@fluidGridColumnWidth768NoMargin:      percentage(@gridColumnWidth768NoMargin/@gridRowWidth768NoMargin);
+@fluidGridGutterWidth768NoMargin:      percentage(@gridGutterWidth768NoMargin/@gridRowWidth768NoMargin);
+
+
+.two-pane > .fluid(@fluidGridColumnWidth1200NoMargin, @fluidGridGutterWidth1200NoMargin);
+
+.two-pane {
+
+  .core (@gridColumnWidth, @gridGutterWidth) {
+
+    .spanX (@index) when (@index > 0) {
+      .span@{index} { .span(@index); }
+      .spanX(@index - 1);
+    }
+    .spanX (0) {}
+
+    .offsetX (@index) when (@index > 0) {
+      .offset@{index} { .offset(@index); }
+      .offsetX(@index - 1);
+    }
+    .offsetX (0) {}
+
+    .offset (@columns) {
+      margin-left: (@gridColumnWidth * @columns) + (@gridGutterWidth * (@columns + 1));
+    }
+
+    .span (@columns) {
+      width: (@gridColumnWidth * @columns) + (@gridGutterWidth * (@columns - 1));
+    }
+
+    .row {
+      margin-left: @gridGutterWidth * -1;
+      .clearfix();
+    }
+
+    [class*="span"] {
+      float: left;
+      min-height: 1px; // prevent collapsing columns
+      margin-left: @gridGutterWidth;
+    }
+
+    // Set the container width, and override it for fixed navbars in media queries
+    .container,
+    .navbar-static-top .container,
+    .navbar-fixed-top .container,
+    .navbar-fixed-bottom .container { .span(@gridColumns); }
+
+    // generate .spanX and .offsetX
+    .spanX (@gridColumns);
+    .offsetX (@gridColumns);
+
+  }
+
+  .fluid (@fluidGridColumnWidth, @fluidGridGutterWidth) {
+
+    .spanX (@index) when (@index > 0) {
+      .span@{index} { .span(@index); }
+      .spanX(@index - 1);
+    }
+    .spanX (0) {}
+
+    .offsetX (@index) when (@index > 0) {
+      .offset@{index} { .offset(@index); }
+      .offset@{index}:first-child { .offsetFirstChild(@index); }
+      .offsetX(@index - 1);
+    }
+    .offsetX (0) {}
+
+    .offset (@columns) {
+      margin-left: (@fluidGridColumnWidth * @columns) + (@fluidGridGutterWidth * (@columns - 1)) + (@fluidGridGutterWidth*2);
+      *margin-left: (@fluidGridColumnWidth * @columns) + (@fluidGridGutterWidth * (@columns - 1)) - (.5 / @gridRowWidth * 100 * 1%) + (@fluidGridGutterWidth*2) - (.5 / @gridRowWidth * 100 * 1%);
+    }
+
+    .offsetFirstChild (@columns) {
+      margin-left: (@fluidGridColumnWidth * @columns) + (@fluidGridGutterWidth * (@columns - 1)) + (@fluidGridGutterWidth);
+      *margin-left: (@fluidGridColumnWidth * @columns) + (@fluidGridGutterWidth * (@columns - 1)) - (.5 / @gridRowWidth * 100 * 1%) + @fluidGridGutterWidth - (.5 / @gridRowWidth * 100 * 1%);
+    }
+
+    .span (@columns) {
+      width: (@fluidGridColumnWidth * @columns) + (@fluidGridGutterWidth * (@columns - 1));
+      *width: (@fluidGridColumnWidth * @columns) + (@fluidGridGutterWidth * (@columns - 1)) - (.5 / @gridRowWidth * 100 * 1%);
+    }
+
+    .row-fluid {
+      width: 100%;
+      .clearfix();
+      [class*="span"] {
+        .input-block-level();
+        float: left;
+        margin-left: @fluidGridGutterWidth;
+        *margin-left: @fluidGridGutterWidth - (.5 / @gridRowWidth * 100 * 1%);
+      }
+      [class*="span"]:first-child {
+        margin-left: 0;
+      }
+
+      // Space grid-sized controls properly if multiple per line
+      .controls-row [class*="span"] + [class*="span"] {
+        margin-left: @fluidGridGutterWidth;
+      }
+
+      // generate .spanX and .offsetX
+      .spanX (@gridColumns);
+      .offsetX (@gridColumns);
+    }
+
+  }
+
+  .input(@gridColumnWidth, @gridGutterWidth) {
+
+    .spanX (@index) when (@index > 0) {
+      input.span@{index}, textarea.span@{index}, .uneditable-input.span@{index} { .span(@index); }
+      .spanX(@index - 1);
+    }
+    .spanX (0) {}
+
+    .span(@columns) {
+      width: ((@gridColumnWidth) * @columns) + (@gridGutterWidth * (@columns - 1)) - 14;
+    }
+
+    input,
+    textarea,
+    .uneditable-input {
+      margin-left: 0; // override margin-left from core grid system
+    }
+
+    // Space grid-sized controls properly if multiple per line
+    .controls-row [class*="span"] + [class*="span"] {
+      margin-left: @gridGutterWidth;
+    }
+
+    // generate .spanX
+    .spanX (@gridColumns);
+
   }
 }

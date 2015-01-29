@@ -32,36 +32,13 @@ define([
     });
 
     Actions.editIndex({
+      database: {id: 'rockos-db'},
       newView: false,
       viewName: 'test-view',
       designDocs: designDocs,
       designDocId: designDoc._id
     });
   };
-
-  describe('View editor', function () {
-
-    describe('Toggle button', function () {
-      var container, toggleEl, toggleEditor;
-
-      beforeEach(function () {
-        toggleEditor = sinon.spy();
-        container = document.createElement('div');
-        toggleEl = TestUtils.renderIntoDocument(<Views.ToggleButton toggleEditor={toggleEditor} />, container);
-      });
-
-      afterEach(function () {
-        React.unmountComponentAtNode(container);
-      });
-
-      it('should toggle editor on click', function () {
-        TestUtils.Simulate.click($(toggleEl.getDOMNode()).find('a')[0]);
-        assert.ok(toggleEditor.calledOnce);
-      });
-
-    });
-
-  });
 
   describe('reduce editor', function () {
     var container, reduceEl;
@@ -121,6 +98,44 @@ define([
       });
 
     });
+  });
+
+  describe('styled select', function () {
+    var container, selectorEl, spy = sinon.spy();
+
+    beforeEach(function () {
+      container = document.createElement('div');
+
+      var selectContent = (
+        <optgroup label="Select a document">
+          <option value="new">New Design Document</option>
+          <option value="foo">New Design Document</option>
+        </optgroup>
+      );
+
+      selectorEl = TestUtils.renderIntoDocument(
+        <Views.StyledSelect
+          selectId="new-ddoc"
+          selectClass=""
+          selectContent={selectContent}
+          selectChange={spy} />,
+        container
+      );
+    });
+
+    afterEach(function () {
+      React.unmountComponentAtNode(container);
+    });
+
+    it('calls the callback on select', function () {
+      TestUtils.Simulate.change($(selectorEl.getDOMNode()).find('#new-ddoc')[0], {
+        target: {
+          value: 'new'
+        }
+      });
+      assert.ok(spy.calledOnce);
+    });
+
   });
 
   describe('design Doc Selector', function () {

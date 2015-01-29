@@ -14,9 +14,10 @@ define([
   "api",
   "addons/documents/index-editor/components.react",
   "addons/documents/index-editor/actions",
+  'addons/documents/index-results/index-results.components.react'
 ],
 
-function(FauxtonAPI, ViewEditor, Actions) {
+function (FauxtonAPI, ViewEditor, ActionsIndexEditor, ViewResultList) {
 
   var Views = {};
 
@@ -26,12 +27,26 @@ function(FauxtonAPI, ViewEditor, Actions) {
     },
 
     afterRender: function () {
-      Actions.editIndex(this.options);
+      ActionsIndexEditor.editIndex(this.options);
       ViewEditor.renderEditor(this.el);
     },
 
     cleanup: function () {
       ViewEditor.removeEditor(this.el);
+    }
+  });
+
+  Views.ViewResultListReact = FauxtonAPI.View.extend({
+    initialize: function (options) {
+      this.options = options;
+    },
+
+    afterRender: function () {
+      ViewResultList.renderViewResultList(this.el);
+    },
+
+    cleanup: function () {
+      ViewResultList.removeViewResultList(this.el);
     }
   });
 

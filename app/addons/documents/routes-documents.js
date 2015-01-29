@@ -36,39 +36,20 @@ function(app, FauxtonAPI, BaseRoute, Documents, Changes, Index, DocEditor, Datab
         route: "allDocs",
         roles: ["fx_loggedIn"]
       },
-      "database/:database/_design/:ddoc/_view/:view": {
-        route: "viewFn",
-        roles: ['fx_loggedIn']
-      },
-      "database/:database/_design/:ddoc/_lists/:fn": {
-        route: "tempFn",
-        roles: ['fx_loggedIn']
-      },
-      "database/:database/_design/:ddoc/_filters/:fn": {
-        route: "tempFn",
-        roles: ['fx_loggedIn']
-      },
-      "database/:database/_design/:ddoc/_show/:fn": {
-        route: "tempFn",
-        roles: ['fx_loggedIn']
-      },
       "database/:database/_design/:ddoc/_info": {
         route: "designDocMetadata",
         roles: ['fx_loggedIn']
       },
-      "database/:database/new_view": "newViewEditor",
-      "database/:database/new_view/:designDoc": "newViewEditor",
       "database/:database/_changes(:params)": "changes"
     },
 
     events: {
-      "route:updateAllDocs": "updateAllDocsFromView",
       "route:reloadDesignDocs": "reloadDesignDocs",
-      "route:paginate": "paginate",
-      "route:perPageChange": "perPageChange",
       "route:changesFilterAdd": "addFilter",
       "route:changesFilterRemove": "removeFilter",
-      "route:updateQueryOptions": "updateQueryOptions"
+      'route:updateAllDocs': 'updateAllDocsFromView',
+      'route:paginate': 'paginate',
+      'route:perPageChange': 'perPageChange',
     },
 
     initialize: function (route, masterLayout, options) {
@@ -137,26 +118,6 @@ function(app, FauxtonAPI, BaseRoute, Documents, Changes, Index, DocEditor, Datab
       this.rightHeader.hideQueryOptions();
 
       this.apiUrl = [designDocInfo.url('apiurl'), designDocInfo.documentation()];
-    },
-
-    tempFn: function(databaseName, ddoc, fn){
-      this.setView("#dashboard-upper-content", new Documents.Views.temp({}));
-      this.crumbs = function () {
-        return [
-          {"name": this.database.id, "link": Databases.databaseUrl(this.database)},
-        ];
-      };
-    },
-
-    createParams: function (options) {
-      var urlParams = app.getParams(options),
-          params = Documents.QueryParams.parse(urlParams),
-          limit = this.getDocPerPageLimit(params, FauxtonAPI.constants.MISC.DEFAULT_PAGE_SIZE);
-
-      return {
-        urlParams: urlParams,
-        docParams: _.extend(params, {limit: limit})
-      };
     },
 
     /*
@@ -236,249 +197,11 @@ function(app, FauxtonAPI, BaseRoute, Documents, Changes, Index, DocEditor, Datab
       this.rightHeader.showQueryOptions();
     },
 
-    viewFn: function (databaseName, ddoc, viewName) {
-      var params = this.createParams(),
-          urlParams = params.urlParams,
-          docParams = params.docParams,
-          decodeDdoc = decodeURIComponent(ddoc);
-
-      viewName = viewName.replace(/\?.*$/,'');
-
-      this.footer = this.setView('#footer', new Documents.Views.Footer());
-
-      this.indexedDocs = new Documents.IndexCollection(null, {
-        database: this.database,
-        design: decodeDdoc,
-        view: viewName,
-        params: docParams,
-        paging: {
-          pageSize: this.getDocPerPageLimit(urlParams, parseInt(docParams.limit, 10))
-        }
-      });
-
-      this.viewEditor = this.setView("#dashboard-upper-content", new Index.ViewEditorReact({
-        viewName: viewName,
-        newView: false,
-        database: this.database,
-        designDocs: this.designDocs,
-        designDocId: "_design/" + decodeDdoc
-      }));
-
-      this.toolsView && this.toolsView.remove();
-
-      this.documentsView = this.createViewDocumentsView({
-        designDoc: decodeDdoc,
-        docParams: docParams,
-        urlParams: urlParams,
-        database: this.database,
-        indexedDocs: this.indexedDocs,
-        designDocs: this.designDocs,
-        view: viewName
-      });
-
-      this.sidebar.setSelectedTab(app.utils.removeSpecialCharacters(ddoc) + '_' + app.utils.removeSpecialCharacters(viewName));
-
-      this.apiUrl = function() {
-        return [this.indexedDocs.urlRef("apiurl", urlParams), FauxtonAPI.constants.DOC_URLS.GENERAL];
-      };
-
-      this.showQueryOptions(urlParams, ddoc, viewName);
-    },
-
-    showQueryOptions: function (urlParams, ddoc, viewName) {
-      var promise = this.designDocs.fetch({reset: true}),
-      that = this,
-      hasReduceFunction;
-
-      promise.then(function(resp) {
-        var design = _.findWhere(that.designDocs.models, {id: '_design/'+ddoc}); 
-        !_.isUndefined(hasReduceFunction = design.attributes.doc.views[viewName].reduce);
-
-        that.rightHeader.showQueryOptions();
-        that.rightHeader.resetQueryOptions({
-          queryParams: urlParams,
-          showStale: true,
-          hasReduce: hasReduceFunction,
-          viewName: viewName,
-          ddocName: ddoc
-        });
-      });
-    },
-
-    ddocInfo: function (designDoc, designDocs, view) {
-      return {
-        id: "_design/" + designDoc,
-        currView: view,
-        designDocs: designDocs
-      };
-    },
-
-    createViewDocumentsView: function (options) {
-      if (!options.docParams) {
-        options.docParams = {};
-      }
-
-      this.perPageDefault = options.docParams.limit || FauxtonAPI.constants.MISC.DEFAULT_PAGE_SIZE;
-
-      this.pagination = new Components.IndexPagination({
-        collection: options.indexedDocs,
-        scrollToSelector: '.scrollable',
-        docLimit: options.urlParams.limit,
-        perPage: this.perPageDefault
-      });
-      this.setView('#documents-pagination', this.pagination);
-
-      this.allDocsNumber = new Documents.Views.AllDocsNumber({
-        collection: options.indexedDocs,
-        pagination: this.pagination,
-        perPageDefault: this.perPageDefault
-      });
-
-      this.setView('#item-numbers', this.allDocsNumber);
-
-      return this.setView("#dashboard-lower-content", new Documents.Views.AllDocsList({
-        pagination: this.pagination,
-        allDocsNumber: this.allDocsNumber,
-        database: options.database,
-        collection: options.indexedDocs,
-        viewList: true,
-        ddocInfo: this.ddocInfo(options.designDoc, options.designDocs, options.view),
-        docParams: options.docParams,
-        perPageDefault: this.perPageDefault,
-      }));
-    },
-
-    newViewEditor: function (database, _designDoc) {
-      var params = app.getParams();
-      var newDesignDoc = true;
-      var designDoc;
-        
-      if (!_.isUndefined(_designDoc)) {
-        designDoc = "_design/" + _designDoc;
-        newDesignDoc = false;
-      }
-
-      this.footer && this.footer.remove();
-      this.toolsView && this.toolsView.remove();
-      this.documentsView && this.documentsView.remove();
-
-      this.viewEditor = this.setView("#dashboard-upper-content", new Index.ViewEditorReact({
-        viewName: 'new-view',
-        newView: true,
-        database: this.database,
-        designDocs: this.designDocs,
-        designDocId: designDoc,
-        newDesignDoc: newDesignDoc
-      }));
-
-      this.sidebar.setSelectedTab("new-view");
-      this.rightHeader.hideQueryOptions();
-
-      // clear out anything that was in the lower section
-      this.removeView("#dashboard-lower-content");
-    },
-
-    updateAllDocsFromView: function (event) {
-      var view = event.view,
-          params = this.createParams(),
-          urlParams = params.urlParams,
-          docParams = params.docParams,
-          ddoc = event.ddoc,
-          defaultPageSize,
-          isLazyInit,
-          pageSize,
-          collection;
-
-      isLazyInit = _.isUndefined(this.documentsView) || _.isUndefined(this.documentsView.allDocsNumber);
-      defaultPageSize = isLazyInit ? FauxtonAPI.constants.MISC.DEFAULT_PAGE_SIZE : this.documentsView.perPage();
-      docParams.limit = pageSize = this.getDocPerPageLimit(urlParams, defaultPageSize);
-
-      if (event.allDocs) {
-        this.eventAllDocs = true; // this is horrible. But I cannot get the trigger not to fire the route!
-        this.database.buildAllDocs(docParams);
-        collection = this.database.allDocs;
-        collection.paging.pageSize = pageSize;
-      } else {
-        collection = this.indexedDocs = new Documents.IndexCollection(null, {
-          database: this.database,
-          design: ddoc,
-          view: view,
-          params: docParams,
-          paging: {
-            pageSize: pageSize
-          }
-        });
-
-        if (!this.documentsView) {
-          this.documentsView = this.createViewDocumentsView({
-            designDoc: ddoc,
-            docParams: docParams,
-            urlParams: urlParams,
-            database: this.database,
-            indexedDocs: this.indexedDocs,
-            designDocs: this.designDocs,
-            view: view
-          });
-        }
-      }
-
-      this.documentsView.setParams(docParams, urlParams);
-
-      // this will lazily initialize all sub-views and render them
-      this.documentsView.forceRender();
-    },
-
-    perPageChange: function (perPage) {
-      // We need to restore the collection parameters to the defaults (1st page)
-      // and update the page size
-      this.perPage = perPage;
-      this.documentsView.forceRender();
-      this.documentsView.collection.pageSizeReset(perPage, {fetch: false});
-      this.allDocsNumber.forceRender();
-      this.setDocPerPageLimit(perPage);
-    },
-
-    paginate: function (options) {
-      var collection = this.documentsView.collection;
-      this.documentsView.collection.reset(collection);
-
-      this.documentsView.forceRender();
-      this.allDocsNumber.forceRender();
-
-      collection.paging.pageSize = options.perPage;
-      var promise = collection[options.direction]({fetch: false});
-    },
-
     reloadDesignDocs: function (event) {
       this.sidebar.forceRender();
 
       if (event && event.selectedTab) {
         this.sidebar.setSelectedTab(event.selectedTab);
-      }
-    },
-
-    setDocPerPageLimit: function (perPage) {
-      app.utils.localStorageSet('fauxton:perpage', perPage);
-    },
-
-    getDocPerPageLimit: function (urlParams, perPage) {
-      var storedPerPage = perPage;
-
-      if (window.localStorage) {
-        storedPerPage = app.utils.localStorageGet('fauxton:perpage');
-
-        if (!storedPerPage) {
-          this.setDocPerPageLimit(perPage);
-          storedPerPage = perPage;
-        } else {
-          storedPerPage = parseInt(storedPerPage, 10);
-        }
-      }
-
-      if (!urlParams.limit || urlParams.limit > storedPerPage) {
-        return parseInt(storedPerPage, 10);
-      } else {
-        return parseInt(urlParams.limit, 10);
       }
     },
 
@@ -519,10 +242,6 @@ function(app, FauxtonAPI, BaseRoute, Documents, Changes, Index, DocEditor, Datab
     removeFilter: function (filter) {
       this.changesView.filters.splice(this.changesView.filters.indexOf(filter), 1);
       this.changesView.render();
-    },
-
-    updateQueryOptions: function(options) {
-      this.rightHeader.updateQueryOptions(options);
     },
 
     cleanup: function () {

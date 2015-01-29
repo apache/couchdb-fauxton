@@ -26,13 +26,6 @@ define([
       assert.equal(typeof routeObj.rightHeader, 'object');
     });
 
-    it('the view that shows a view has a right header', function () {
-      var routeObj = new DocumentRoute(null, null, ['test']);
-
-      routeObj.viewFn('newdatabase', 'ads', 'newView');
-      assert.equal(typeof routeObj.rightHeader, 'object');
-    });
-
     // after saving a new CouchDB-View we are calling the updateAllDocsFromView function.
     // The backbone-view AllDocsList is lazily initializing other views, in particular the
     // view AllDocsNumber and the pagination in the beforeRender method.

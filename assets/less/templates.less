@@ -305,6 +305,12 @@ with_tabs_sidebar.html
   }
 }
 
+.two-pane {
+  .inner {
+    padding-bottom: @collapsedNavWidth;
+  }
+}
+
 #sidebar-content {
   width: @sidebarWidth;
   position: absolute;
@@ -417,7 +423,7 @@ with_tabs_sidebar.html
     bottom: 0px;
     top: @collapsedNavWidth;
     position: fixed;
-    overflow-x: hidden;
+    overflow: hidden;
     left: @sidebarWidth+@navWidth;
     right: 0;
     .box-sizing(border-box);
@@ -488,13 +494,28 @@ with_tabs_sidebar.html
   background-color: @background;
 }
 
-#right-content {
-  .two-pane & {
+.two-pane {
+  .content-area {
+    height: 100%;
+    top: @collapsedNavWidth;
+    position: relative;
+  }
+
+  #right-content {
+    position: relative;
+    height: 100%;
     .view {
       padding: 0 20px 40px;
     }
     border-left: 1px solid #999;
     .box-shadow(-6px 0 rgba(0, 0, 0, 0.1));
+  }
+  .right-header-wrapper {
+    border-left: 1px solid #999;
+    .box-shadow(-6px 0 rgba(0, 0, 0, 0.1));
+    .searchbox-wrapper {
+      display: none;
+    }
   }
 }
 
