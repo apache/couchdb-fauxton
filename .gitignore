@@ -8,9 +8,7 @@ app/addons/*
 !app/addons/config
 !app/addons/plugins
 !app/addons/replication
-!app/addons/contribute
 !app/addons/auth
-!app/addons/exampleAuth
 !app/addons/permissions
 !app/addons/verifyinstall
 !app/addons/compaction
