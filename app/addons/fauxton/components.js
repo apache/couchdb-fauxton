@@ -67,11 +67,6 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
       this.breadcrumbs.unselectLastBreadcrumb();
     },
 
-    updateDropdown: function(menuLinks){
-      this.dropdownMenuLinks = menuLinks;
-      this.dropdown && this.dropdown.update(menuLinks);
-    },
-
     toggleTray: function () {
       if (this.lookaheadTray !== null) {
         this.lookaheadTray.toggleTray();
@@ -139,17 +134,24 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
       };
 
       return {
+        toggleDisabled: this.toggleDisabled,
         crumbs: crumbs,
         nextCrumbHasLabel: nextCrumbHasLabel
       };
     },
 
     toggleLastElement: function (event) {
+      if (this.toggleDisabled) {
+        return;
+      }
       this.$(event.currentTarget).toggleClass('js-enabled');
       FauxtonAPI.Events.trigger('breadcrumb:click');
     },
 
     unselectLastBreadcrumb: function () {
+      if (this.toggleDisabled) {
+        return;
+      }
       this.$('.js-enabled').removeClass('js-enabled');
     },
 
@@ -160,6 +162,7 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
 
     initialize: function(options) {
       this.crumbs = options.crumbs;
+      this.toggleDisabled = options.toggleDisabled || false;
     }
   });
 

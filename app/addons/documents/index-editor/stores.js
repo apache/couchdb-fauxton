@@ -30,7 +30,6 @@ function(FauxtonAPI, ActionTypes) {
       this._viewName = options.viewName || 'viewName';
       this._designDocs = options.designDocs;
       this._designDocId = options.designDocId;
-      this._showEditor = this._newView;
       this._designDocChanged = false;
 
       if (!this._newView && !this._newDesignDoc) {
@@ -108,12 +107,8 @@ function(FauxtonAPI, ActionTypes) {
       this._viewName = name;
     },
 
-    showEditor: function () {
-      return this._showEditor;
-    },
-
     hasCustomReduce: function () {
-      if (!this.hasReduce()) {return false; }
+      if (!this.hasReduce()) { return false; }
 
       return !_.contains(this.builtInReduces(), this.getReduce());
     },
@@ -172,11 +167,6 @@ function(FauxtonAPI, ActionTypes) {
 
         case ActionTypes.EDIT_NEW_INDEX:
           this.editIndex(action.options);
-          this.triggerChange();
-        break;
-
-        case ActionTypes.TOGGLE_EDITOR:
-          this._showEditor = !this._showEditor;
           this.triggerChange();
         break;
 

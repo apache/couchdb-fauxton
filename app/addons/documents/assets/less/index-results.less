@@ -10,21 +10,18 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-define([
-  "addons/documents/views",
-  "addons/documents/routes-documents",
-  'addons/documents/routes-doc-editor',
-  'addons/documents/routes-index-editor'
-],
-
-function(Documents, DocumentsRouteObject, docEditor, IndexEditorRouteObject) {
-
-  Documents.RouteObjects = [
-    docEditor.DocEditorRouteObject, 
-    docEditor.NewDocEditorRouteObject, 
-    DocumentsRouteObject,
-    IndexEditorRouteObject
-  ];
-
-  return Documents;
-});
+.watermark-logo {
+  background: transparent url('../img/couch-watermark.png') no-repeat 50% 50%;
+  min-height: 400px;
+  padding-top: 60%;
+  text-align: center;
+  margin: 0 20%;
+  h3 {
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+  }
+  .preview {
+    margin: 0 10px;
+  }
+}

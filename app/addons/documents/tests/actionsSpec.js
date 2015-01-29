@@ -158,7 +158,12 @@ define([
           reduce: '_sum',
           newDesignDoc: false,
           newView: false,
-          designDocs: designDocs
+          designDocs: designDocs,
+          database: {
+            safeID: function () {
+              return 'foo';
+            }
+          }
         };
         var designDoc = designDocs.first();
 

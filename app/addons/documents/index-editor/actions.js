@@ -39,11 +39,6 @@ function (app, FauxtonAPI, Documents, ActionTypes) {
   return {
     //helpers are added here for use in testing actions
     helpers: ActionHelpers,
-    toggleEditor: function () {
-      FauxtonAPI.dispatch({
-        type: ActionTypes.TOGGLE_EDITOR
-      });
-    },
 
     selectReduceChanged: function (reduceOption) {
       FauxtonAPI.dispatch({
@@ -96,7 +91,6 @@ function (app, FauxtonAPI, Documents, ActionTypes) {
 
       if (viewInfo.newDesignDoc) {
         designDoc = ActionHelpers.createNewDesignDoc(viewInfo.designDocId, viewInfo.database);
-
       } else {
         designDoc = ActionHelpers.findDesignDoc(designDocs, viewInfo.designDocId);
       }
@@ -123,30 +117,18 @@ function (app, FauxtonAPI, Documents, ActionTypes) {
             clear: true
           });
 
-          if (_.any([viewInfo.designDocChanged, viewInfo.newDesignDoc, viewInfo.newView])) {
-            FauxtonAPI.dispatch({
-              type: ActionTypes.VIEW_SAVED
-            });
+          FauxtonAPI.dispatch({
+            type: ActionTypes.VIEW_SAVED
+          });
 
-            var fragment = '/database/' +
+          var fragment = '/database/' +
               viewInfo.database.safeID() +
               '/' + designDoc.safeID() +
               '/_view/' +
               app.utils.safeURLName(viewInfo.viewName);
 
-            FauxtonAPI.navigate(fragment);
-
-            //This should be changed to a dispatch once implemented
-            FauxtonAPI.triggerRouteEvent('reloadDesignDocs', {
-              selectedTab: app.utils.removeSpecialCharacters(designDoc.id.replace(/_design\//,'')) + '_' + app.utils.removeSpecialCharacters(viewInfo.viewName)
-            });
-          } else {
-            FauxtonAPI.dispatch({
-              type: ActionTypes.VIEW_SAVED
-            });
-            //This will should be changed to a dispatch once implemented
-            FauxtonAPI.triggerRouteEvent('updateAllDocs', {ddoc: designDoc.id, view: viewInfo.viewName});
-          }
+          FauxtonAPI.navigate(fragment, {trigger: true});
+          FauxtonAPI.triggerRouteEvent('updateAllDocs', {ddoc: designDoc.id, view: viewInfo.viewName});
         });
       }
     },

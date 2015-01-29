@@ -32,36 +32,13 @@ define([
     });
 
     Actions.editIndex({
+      database: {id: 'rockos-db'},
       newView: false,
       viewName: 'test-view',
       designDocs: designDocs,
       designDocId: designDoc._id
     });
   };
-
-  describe('View editor', function () {
-
-    describe('Toggle button', function () {
-      var container, toggleEl, toggleEditor;
-
-      beforeEach(function () {
-        toggleEditor = sinon.spy();
-        container = document.createElement('div');
-        toggleEl = TestUtils.renderIntoDocument(<Views.ToggleButton toggleEditor={toggleEditor} />, container);
-      });
-
-      afterEach(function () {
-        React.unmountComponentAtNode(container);
-      });
-
-      it('should toggle editor on click', function () {
-        TestUtils.Simulate.click($(toggleEl.getDOMNode()).find('a')[0]);
-        assert.ok(toggleEditor.calledOnce);
-      });
-
-    });
-
-  });
 
   describe('reduce editor', function () {
     var container, reduceEl;

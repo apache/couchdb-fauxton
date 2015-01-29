@@ -24,24 +24,6 @@ function(app, FauxtonAPI, React, Stores, Actions, Components, beautifyHelper) {
   var indexEditorStore = Stores.indexEditorStore;
   var getDocUrl = app.helpers.getDocUrl;
 
-  var ToggleButton = React.createClass({
-
-    render: function() {
-      return (
-        <div className="dashboard-upper-menu">
-          <ul className="nav nav-tabs" id="db-views-tabs-nav">
-            <li>
-              <a ref="toggle" data-bypass="true" id="index-nav" data-toggle="tab" href="#index" onClick={this.props.toggleEditor}>
-                <i className="fonticon-wrench fonticon"></i>
-                {this.props.title}
-              </a>
-            </li>
-          </ul>
-        </div>
-      );
-    }
-  });
-
   var DesignDocSelector = React.createClass({
 
     getStoreState: function () {
@@ -58,10 +40,9 @@ function(app, FauxtonAPI, React, Stores, Actions, Components, beautifyHelper) {
 
     getNewDesignDocInput: function () {
       return (
-        <div id="new-ddoc-section" className="span5">
-          <label className="control-label" htmlFor="new-ddoc"> _design/ </label>
-          <div className="controls">
-            <input value={this.state.designDoc} type="text" id="new-ddoc" onChange={this.onDesignDocChange} placeholder="newDesignDoc" />
+        <div className="new-ddoc-section">
+          <div className="new-ddoc-input">
+            <input value={this.state.designDoc} type="text" id="new-ddoc" onChange={this.onDesignDocChange} placeholder="Enter a Design Doc name" />
           </div>
         </div>
       );
@@ -88,23 +69,35 @@ function(app, FauxtonAPI, React, Stores, Actions, Components, beautifyHelper) {
       }
 
       return (
-        <div className="control-group design-doc-group">
-          <div className="span3">
-            <label htmlFor="ddoc">Save to Design Document
-              <a className="help-link" data-bypass="true" href={getDocUrl('DESIGN_DOCS')} target="_blank">
-                <i className="icon-question-sign">
-                </i>
-              </a>
-            </label>
-            <select id="ddoc" value={designDocId} onChange={this.selectChange}>
-              <optgroup label="Select a document">
-                <option value="new">New Design Document </option>
-                {designDocOptions}
-              </optgroup>
-            </select>
+        <div className="new-ddoc-section">
+          <div className="bordered-box">
+            <div className="padded-box">
+              <div className="control-group design-doc-group">
+                <div className="pull-left">
+                  <label htmlFor="ddoc"><strong>Design Document</strong>
+                    <a className="help-link" data-bypass="true" href={getDocUrl('DESIGN_DOCS')} target="_blank">
+                      <i className="icon-question-sign">
+                      </i>
+                    </a>
+                  </label>
+                  <div className="styled-select">
+                    <label htmlFor="ddoc">
+                      <i className="fonticon-arrow-box-down"></i>
+                      <select id="ddoc" className={designDocId} onChange={this.selectChange}>
+                        <optgroup label="Select a document">
+                          <option value="new">New Design Document </option>
+                          {designDocOptions}
+                        </optgroup>
+                      </select>
+                    </label>
+                  </div>
+                </div>
+                <div className="pull-left">
+                  {designDocInput}
+                </div>
+              </div>
+            </div>
           </div>
-
-          {designDocInput}
         </div>
       );
     },
@@ -189,7 +182,7 @@ function(app, FauxtonAPI, React, Stores, Actions, Components, beautifyHelper) {
       return (
         <div className="control-group">
           <label htmlFor="ace-function">
-            {this.props.title}
+            <strong>{this.props.title}</strong>
             {docsLink}
           </label>
           <div className="js-editor" id={this.props.id}>{this.props.code}</div>
@@ -280,15 +273,23 @@ function(app, FauxtonAPI, React, Stores, Actions, Components, beautifyHelper) {
       customReduceSection;
 
       if (this.state.hasCustomReduce) {
-        //customReduceSection = <CustomReduce ref="reduceEditor" reduce={this.state.reduce} />;
         customReduceSection = <CodeEditor ref='reduceEditor' id={'reduce-function'} code={this.state.reduce} docs={false} title={'Custom Reduce function'} />;
       }
 
       return (
         <div>
           <div className="control-group">
-            <label htmlFor="reduce-function-selector">Reduce (optional)<a className="help-link" data-bypass="true" href={getDocUrl('REDUCE_FUNCS')} target="_blank"><i className="icon-question-sign"></i></a></label>
-
+            <label htmlFor="reduce-function-selector">
+              <strong>Reduce (optional)</strong>
+              <a
+                className="help-link"
+                data-bypass="true"
+                href={getDocUrl('REDUCE_FUNCS')}
+                target="_blank"
+              >
+                <i className="icon-question-sign"></i>
+              </a>
+            </label>
             <select id="reduce-function-selector" value={this.state.reduceSelectedOption} onChange={this.selectChange}>
               {reduceOptions}
             </select>
@@ -431,29 +432,68 @@ function(app, FauxtonAPI, React, Stores, Actions, Components, beautifyHelper) {
 
     render: function () {
       return (
-        <div className="tab-content" >
-          <div className="tab-pane active" id="index">
-            <div id="define-view" className="ddoc-alert well">
-              <form className="form-horizontal view-query-save" onSubmit={this.saveView}>
-
-                <DesignDocSelector />
-
-                <div className="control-group">
-                  <label htmlFor="index-name">Index name<a className="help-link" data-bypass="true" href={getDocUrl('VIEW_FUNCS')} target="_blank"><i className="icon-question-sign"></i></a></label>
-                  <input type="text" id="index-name" value={this.state.viewName} onChange={this.viewChange} placeholder="Index name" />
-                </div>
-
-                <CodeEditor id={'map-function'} ref="mapEditor" title={"Map function"} docs={'MAP_FUNCS'} code={this.state.map}/>
-                <ReduceEditor ref="reduceEditor"/>
-
-                <div className="control-group">
-                  <button className="btn btn-success save"><i className="icon fonticon-ok-circled"></i> Save &amp; Build Index</button>
-                  <DeleteView />
-                </div>
-              </form>
+        <div className="define-view">
+          <div className="bordered-box">
+            <div className="padded-box">
+              Views are the primary tools for querying and reporting.
             </div>
-
           </div>
+          <div className="bordered-box">
+            <div className="padded-box">
+              <strong>Database</strong>
+              <div className="db-title">{this.state.database.id}</div>
+            </div>
+          </div>
+          <form className="form-horizontal view-query-save" onSubmit={this.saveView}>
+            <DesignDocSelector />
+            <div className="control-group">
+              <div className="bordered-box">
+                <div className="padded-box">
+                  <label htmlFor="index-name">
+                    <strong>Index name</strong>
+                    <a
+                      className="help-link"
+                      data-bypass="true"
+                      href={getDocUrl('VIEW_FUNCS')}
+                      target="_blank">
+                      <i className="icon-question-sign"></i>
+                    </a>
+                  </label>
+                  <input
+                    type="text"
+                    id="index-name"
+                    value={this.state.viewName}
+                    onChange={this.viewChange}
+                    placeholder="Index name" />
+                 </div>
+              </div>
+            </div>
+            <div className="control-group">
+              <div className="bordered-box">
+                <div className="padded-box">
+                  <CodeEditor
+                    id={'map-function'}
+                    ref="mapEditor"
+                    title={"Map function"}
+                    docs={'MAP_FUNCS'}
+                    code={this.state.map} />
+                 </div>
+              </div>
+            </div>
+            <div className="bordered-box">
+              <div className="padded-box">
+                <ReduceEditor ref="reduceEditor" />
+              </div>
+            </div>
+            <div className="padded-box">
+              <div className="control-group">
+                <button className="btn btn-success save">
+                  <i className="icon fonticon-ok-circled"></i> Save &amp; Build Index
+                </button>
+                <DeleteView />
+              </div>
+            </div>
+          </form>
         </div>
       );
     }
@@ -464,15 +504,8 @@ function(app, FauxtonAPI, React, Stores, Actions, Components, beautifyHelper) {
   var EditorController = React.createClass({
     getInitialState: function () {
       return {
-        showEditor: indexEditorStore.showEditor(),
-        isNewView: indexEditorStore.isNewView(),
-        title: indexEditorStore.getTitle(),
-        hasCustomReduce: indexEditorStore.hasCustomReduce()
+        title: indexEditorStore.getTitle()
       };
-    },
-
-    onChange: function () {
-      this.setState({showEditor: indexEditorStore.showEditor()});
     },
 
     componentDidMount: function() {
@@ -488,28 +521,9 @@ function(app, FauxtonAPI, React, Stores, Actions, Components, beautifyHelper) {
     },
 
     render: function () {
-      var editor = null;
-      //a bit of hack for now.
-      var wrapperClassName = 'editor-wrapper';
-      var doTransitions = !this.state.isNewView;
-      var editorTransitionName = 'fadeInDownNoReduce';
-
-      if (this.state.showEditor) {
-        //key is needed for animation;
-        editor = <Editor key={1} />;
-        wrapperClassName = '';
-
-        if (this.state.hasCustomReduce) {
-          editorTransitionName = 'fadeInDownReduce';
-        }
-      }
-
       return (
-        <div className={wrapperClassName}>
-          <ToggleButton title={this.state.title} toggleEditor={this.toggleEditor} />
-          <ReactCSSTransitionGroup transitionName={editorTransitionName} transitionLeave={doTransitions} transitionEnter={doTransitions}>
-            {editor}
-          </ReactCSSTransitionGroup>
+        <div className="editor-wrapper span5 scrollable">
+          <Editor />
         </div>
       );
     }
@@ -523,7 +537,6 @@ function(app, FauxtonAPI, React, Stores, Actions, Components, beautifyHelper) {
     removeEditor: function (el) {
       React.unmountComponentAtNode(el);
     },
-    ToggleButton: ToggleButton,
     ReduceEditor: ReduceEditor,
     Editor: Editor,
     DesignDocSelector: DesignDocSelector,
