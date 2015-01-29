@@ -45,7 +45,6 @@ function (app, FauxtonAPI) {
       } else {
         params.type = 'PUT';
       }
-
       return $.ajax(params);
     }
   });
