@@ -54,7 +54,7 @@ define([
           origins: ['*']
         });
 
-        assert.ok(spy.calledWith(['*']));
+        assert.ok(spy.calledWith('*'));
       });
 
       it('saves cors allow credentials', function () {
@@ -132,6 +132,21 @@ define([
         FauxtonAPI.when.restore();
       });
 
+    });
+
+    describe('Sanitize origins', function () {
+
+      it('joins array into string', function () {
+        var origins = ['https://hello.com', 'https://hello2.com'];
+
+        assert.deepEqual(Actions.sanitizeOrigins(origins), origins.join(','));
+      });
+
+      it('returns empty string for no origins', function () {
+        var origins = [];
+
+        assert.deepEqual(Actions.sanitizeOrigins(origins), '');
+      });
     });
   });
 

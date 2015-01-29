@@ -14,14 +14,54 @@ define([
   'addons/cors/components.react',
   'addons/cors/actions',
   'addons/cors/resources',
+  'addons/cors/stores',
   'testUtils',
   "react"
-], function (FauxtonAPI, Views, Actions, Resources, utils, React) {
+], function (FauxtonAPI, Views, Actions, Resources, Stores, utils, React) {
 
+  FauxtonAPI.router = new FauxtonAPI.Router([]);
   var assert = utils.assert;
   var TestUtils = React.addons.TestUtils;
+  var corsStore = Stores.corsStore;
 
   describe('CORS Components', function () {
+
+    describe('CorsController', function () {
+      var container, corsEl;
+
+      beforeEach(function () {
+        container = document.createElement('div');
+        corsStore._origins = [];
+        corsStore._isEnabled = true;
+        corsStore._configChanged = true;
+        corsEl = TestUtils.renderIntoDocument(<Views.CORSController />, container);
+      });
+
+      afterEach(function () {
+        React.unmountComponentAtNode(container);
+        window.alert.restore && window.alert.restore();
+      });
+
+      it('shows alert if restricted origins with no origins added', function () {
+        var spy = sinon.spy(window, 'alert');
+        corsEl.save({preventDefault: function () {}});
+        assert.ok(spy.calledOnce);
+      });
+
+      it('does not shows alert if "*" origins', function () {
+        var spy = sinon.spy(window, 'alert');
+        corsEl.state.origins = ['*'];
+        corsEl.save({preventDefault: function () {}});
+        assert.notOk(spy.calledOnce);
+      });
+
+      it('does not show if cors disabled', function () {
+        var spy = sinon.spy(window, 'alert');
+        corsEl.state.corsEnabled = false;
+        corsEl.save({preventDefault: function () {}});
+        assert.notOk(spy.calledOnce);
+      });
+    });
 
     describe('OriginInput', function () {
       var container, inputEl, addOrigin;
@@ -58,8 +98,6 @@ define([
         TestUtils.Simulate.click($(inputEl.getDOMNode()).find('.btn')[0]);
         assert.ok(spy.calledOnce);
       });
-
-
     });
 
     describe('Origins', function () {

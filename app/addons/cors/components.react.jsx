@@ -243,6 +243,9 @@ define([
     save: function (event) {
       event.preventDefault();
 
+      if (_.isEmpty(this.state.origins) && this.state.corsEnabled) {
+        return window.alert('Cannot save your CORS settings without adding one or more origins.');
+      }
       Actions.saveCors({
         enableCors: this.state.corsEnabled,
         origins: this.state.origins
@@ -326,13 +329,13 @@ define([
 
   return {
     renderCORS: function (el) {
-      React.render(React.createElement(CORSController, null), el);
+      React.render(<CORSController />, el);
     },
 
     removeCORS: function (el) {
       React.unmountComponentAtNode(el);
     },
-
+    CORSController: CORSController,
     OriginInput: OriginInput,
     Origins: Origins,
     OriginTable: OriginTable,

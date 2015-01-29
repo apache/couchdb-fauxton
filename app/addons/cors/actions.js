@@ -77,7 +77,7 @@ define([
         var allowOrigins = new Resources.ConfigModel({
           section: 'cors',
           attribute: 'origins',
-          value: origins.join(',')
+          value: origins
         });
 
         return allowOrigins.save();
@@ -113,12 +113,20 @@ define([
         return corsMethods.save();
       },
 
+      sanitizeOrigins: function (origins) {
+        if(_.isEmpty(origins)) {
+          return '';
+        }
+
+        return origins.join(',');
+      },
+
       saveCors: function (options) {
         var promises = [];
         promises.push(this.saveEnableCorsToHttpd(options.enableCors));
 
         if(options.enableCors) {
-          promises.push(this.saveCorsOrigins(options.origins));
+          promises.push(this.saveCorsOrigins(this.sanitizeOrigins(options.origins)));
           promises.push(this.saveCorsCredentials());
           promises.push(this.saveCorsHeaders());
           promises.push(this.saveCorsMethods());
