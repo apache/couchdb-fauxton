@@ -216,20 +216,14 @@ define([
 
     componentDidMount: function () {
       corsStore.on('change', this.onChange, this);
-      $(window).on('beforeunload.corsChanges', _.bind(this.changesWarning, this));
-      FauxtonAPI.beforeUnload('beforeunload.corsChanges', _.bind(this.changesWarning, this));
     },
 
     componentWillUnmount: function() {
       corsStore.off('change', this.onChange);
-      $(window).off('beforeunload.corsChanges');
-      FauxtonAPI.removeBeforeUnload('beforeunload.corsChanges');
     },
 
-    changesWarning: function () {
-      if (this.state.configChanged) {
-        return 'You have unsaved CORS changes. Click cancel to return and save your changes.';
-      }
+    componentDidUpdate: function () {
+      this.save();
     },
 
     onChange: function () {
@@ -237,15 +231,15 @@ define([
     },
 
     enableCorsChange: function (event) {
+      if (this.state.corsEnabled && !this.state.isAllOrigins) {
+        var result = window.confirm('Are you sure? Disabling CORS will overwrite your specific origin domains.');
+        if (!result) { return; }
+      }
+
       Actions.toggleEnableCors();
     },
 
     save: function (event) {
-      event.preventDefault();
-
-      if (_.isEmpty(this.state.origins) && this.state.corsEnabled) {
-        return window.alert('Cannot save your CORS settings without adding one or more origins.');
-      }
       Actions.saveCors({
         enableCors: this.state.corsEnabled,
         origins: this.state.origins
@@ -257,6 +251,11 @@ define([
     },
 
     originChange: function (isAllOrigins) {
+      if (isAllOrigins) {
+        var result = window.confirm('Are you sure? Switching to all origin domains will overwrite your specific origin domains.');
+        if (!result) { return; }
+      }
+
       Actions.originChange(isAllOrigins);
     },
 
@@ -281,23 +280,9 @@ define([
       return msg;
     },
 
-    saveButtonDisabled: function () {
-
-      if (!this.state.configChanged) {
-        return true;
-      }
-
-      if (this.state.savingStatus === 'Saving') {
-        return true;
-      }
-
-      return false;
-    },
-
     render: function () {
       var isVisible = _.all([this.state.corsEnabled, !this.state.isAllOrigins]);
       var className = this.state.corsEnabled ? 'collapsing-container' : '';
-      var saveDisabled = this.saveButtonDisabled();
 
       return (
         <div className="cors-page">
@@ -318,7 +303,6 @@ define([
             </div>
 
             <div className="form-actions">
-              <input className="btn btn-success" disabled={saveDisabled} type="submit" value={this.state.savingStatus} />
             </div>
 
           </form>

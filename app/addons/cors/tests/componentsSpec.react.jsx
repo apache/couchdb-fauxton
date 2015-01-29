@@ -26,8 +26,9 @@ define([
 
   describe('CORS Components', function () {
 
+
     describe('CorsController', function () {
-      var container, corsEl;
+      var container, corsEl, saveStub;
 
       beforeEach(function () {
         container = document.createElement('div');
@@ -35,31 +36,32 @@ define([
         corsStore._isEnabled = true;
         corsStore._configChanged = true;
         corsEl = TestUtils.renderIntoDocument(<Views.CORSController />, container);
+        //stub this out so it doesn't keep trying to save cors and crash phantomjs
+        saveStub = sinon.stub(corsEl, 'save');
       });
 
       afterEach(function () {
+        corsEl.save.restore();
         React.unmountComponentAtNode(container);
-        window.alert.restore && window.alert.restore();
+        window.confirm.restore && window.confirm.restore();
       });
 
-      it('shows alert if restricted origins with no origins added', function () {
-        var spy = sinon.spy(window, 'alert');
-        corsEl.save({preventDefault: function () {}});
+      it('confirms user change from restricted origin to disabled cors', function () {
+        var spy = sinon.stub(window, 'confirm');
+        spy.returns(false);
+        corsEl.state.isAllOrigins = false;
+        corsEl.state.corsEnabled = true;
+        corsEl.enableCorsChange();
         assert.ok(spy.calledOnce);
       });
 
-      it('does not shows alert if "*" origins', function () {
-        var spy = sinon.spy(window, 'alert');
-        corsEl.state.origins = ['*'];
-        corsEl.save({preventDefault: function () {}});
-        assert.notOk(spy.calledOnce);
-      });
-
-      it('does not show if cors disabled', function () {
-        var spy = sinon.spy(window, 'alert');
-        corsEl.state.corsEnabled = false;
-        corsEl.save({preventDefault: function () {}});
-        assert.notOk(spy.calledOnce);
+      it('confirms user change when moving from selected origins to all origins', function () {
+        var spy = sinon.stub(window, 'confirm');
+        spy.returns(false);
+        corsEl.state.corsEnabled = true;
+        corsEl.state.isAllOrigins = false;
+        corsEl.originChange(true);
+        assert.ok(spy.calledOnce);
       });
     });
 
