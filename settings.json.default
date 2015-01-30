@@ -25,7 +25,8 @@
         "app": {
           "root": "/",
           "host": "../..",
-          "version": "1.0.dev"
+          "version": "1.0.dev",
+          "zeroClipboardPath": "js/zeroclipboard/ZeroClipboard.swf"
         }
       },
       "release": {
@@ -39,7 +40,8 @@
         "app": {
           "root": "/_utils/",
           "host": "../..",
-          "version": "1.0"
+          "version": "1.0",
+          "zeroClipboardPath": "js/zeroclipboard/ZeroClipboard.swf"
         }
       },
       "couchapp": {
@@ -53,7 +55,8 @@
         "app": {
           "root": "/",
           "host": "../../..",
-          "version": "1.0"
+          "version": "1.0",
+          "zeroClipboardPath": "js/zeroclipboard/ZeroClipboard.swf"
         }
       }
     },
