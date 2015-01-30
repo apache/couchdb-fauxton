@@ -1023,13 +1023,8 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
   Components.Clipboard = FauxtonAPI.View.extend({
     initialize: function (options) {
       this.$el = options.$el;
-      this.moviePath = FauxtonAPI.getExtensions('zeroclipboard:movielist')[0];
 
-      if (_.isUndefined(this.moviePath)) {
-       this.moviePath = 'js/zeroclipboard/ZeroClipboard.swf';
-      }
-
-      ZeroClipboard.config({ moviePath: this.moviePath });
+      ZeroClipboard.config({ moviePath: app.zeroClipboardPath });
       this.client = new ZeroClipboard(this.$el);
     },
 

@@ -8,6 +8,8 @@ services:
 addons:
   firefox: "34.0"
 before_install:
+  - sudo apt-get update -qq
+  - sudo apt-get install -qq flashplugin-installer
   - export DISPLAY=:99.0
   - "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1400x900x16"
   - HOST="http://127.0.0.1:5984"
