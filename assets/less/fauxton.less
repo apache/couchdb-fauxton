@@ -771,3 +771,44 @@ footer.pagination-footer {
   z-index: 6;
 }
 
+// left navigationbar is opened
+@media (max-width: 780px) {
+  .closeMenu {
+    .one-pane {
+      .searchbox-wrapper {
+        display: none;
+      }
+    }
+  }
+}
+
+@media (max-width: 1050px) {
+  .closeMenu {
+    .with-sidebar {
+      .searchbox-wrapper {
+        display: none;
+      }
+    }
+  }
+}
+
+// left navigationbar is closed
+@media (max-width: 925px) {
+  body:not(.closeMenu) {
+    .one-pane {
+      .searchbox-wrapper {
+        display: none;
+      }
+    }
+  }
+}
+
+@media (max-width: 1225px) {
+  body:not(.closeMenu) {
+    .with-sidebar {
+      .searchbox-wrapper {
+        display: none;
+      }
+    }
+  }
+}
