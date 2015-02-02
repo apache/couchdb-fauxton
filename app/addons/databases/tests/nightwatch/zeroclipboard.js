@@ -10,6 +10,9 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+var os = require('os');
+var controlOrCommandKey = os.type() === 'Darwin' ? client.Keys.COMMAND : client.Keys.CONTROL;
+
 module.exports = {
   'ZeroClipboard copies' : function (client) {
     var waitTime = 10000,
@@ -30,7 +33,7 @@ module.exports = {
       .mouseButtonUp('left')
       .closeNotification()
       .setValue('.search-autocomplete', '')
-      .keys([client.Keys.COMMAND, 'v'])
+      .keys([controlOrCommandKey, 'v'])
       .assert.value('.search-autocomplete', 'http://localhost:8000/_all_dbs')
 
     .end();
