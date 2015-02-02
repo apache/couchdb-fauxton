@@ -48,6 +48,7 @@ function(app, FauxtonAPI, Components, prettify, ZeroClipboard) {
     initialize: function () {
       this.listenTo(this.model.changes, 'sync', this.render);
       this.listenTo(this.model.changes, 'cachesync', this.render);
+      this.filters = [];
     },
 
     events: {
@@ -89,10 +90,7 @@ function(app, FauxtonAPI, Components, prettify, ZeroClipboard) {
     },
 
     createFilteredData: function (json) {
-      var that = this;
-
       return _.reduce(this.filters, function (elements, filter) {
-
         return _.filter(elements, function (element) {
           var match = false;
 
