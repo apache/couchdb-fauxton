@@ -128,8 +128,8 @@ function(app, FauxtonAPI, Helpers, Documents, DocEditor, Databases) {
     crumbs: function () {
       var previousPage = Helpers.getPreviousPage(this.database);
       return [
-        { type: 'back', link: 'previousPage' },
-        { name: 'New', link: '#' }
+        { type: 'back', link: previousPage },
+        { name: 'New Document', link: '#' }
       ];
     },
 
@@ -146,4 +146,3 @@ function(app, FauxtonAPI, Helpers, Documents, DocEditor, Databases) {
     DocEditorRouteObject: DocEditorRouteObject
   };
 });
-
