@@ -32,7 +32,7 @@ function(FauxtonAPI, chai, sinonChai) {
       this.views.push(view);
       this.$el.append(view.el);
       view.render();
-      if (done) { 
+      if (done) {
         view.promise().done(function () { done(); });
       }
       return view;
@@ -40,7 +40,7 @@ function(FauxtonAPI, chai, sinonChai) {
 
     remove: function () {
       _.each(this.views, function (view) {
-        view.removeView();
+        view.remove();
       }, this);
     }
   });
@@ -51,4 +51,3 @@ function(FauxtonAPI, chai, sinonChai) {
     ViewSandbox: ViewSandbox
   };
 });
-

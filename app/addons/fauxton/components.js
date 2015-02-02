@@ -607,7 +607,7 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
   Components.DbSearchTypeahead = Components.Typeahead.extend({
     initialize: function (options) {
       this.dbLimit = options.dbLimit || 30;
-      if (options.filter) { 
+      if (options.filter) {
         this.resultFilter = options.resultFilter;
       }
       _.bindAll(this);
@@ -679,9 +679,7 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
   });
 
   Components.FilteredView = FauxtonAPI.View.extend({
-    filters: [],
     createFilteredData: function (json) {
-      var that = this;
       return _.reduce(this.filters, function (elements, filter) {
         return _.filter(elements, function (element) {
           var match = false;
@@ -1130,7 +1128,7 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
   var routeObjectSpinner;
 
   FauxtonAPI.RouteObject.on('beforeEstablish', function (routeObject) {
-    if (!routeObject.disableLoader){ 
+    if (!routeObject.disableLoader){
       var opts = {
         lines: 16, // The number of lines to draw
         length: 8, // The length of each line
@@ -1176,7 +1174,7 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
   FauxtonAPI.RouteObject.on('beforeRender', function (routeObject, view, selector) {
     removeRouteObjectSpinner();
 
-    if (!view.disableLoader){ 
+    if (!view.disableLoader){
       var opts = {
         lines: 16, // The number of lines to draw
         length: 8, // The length of each line

@@ -19,21 +19,24 @@ define([
       viewSandbox;
 
   describe('Documents Changes', function () {
-    var model = new Databases.Model({id: 'foo'}),
+    var model,
         filteredView,
-        view,
-        handlerSpy;
+        handlerSpy,
+        view;
 
-    model.buildChanges();
-
-    handlerSpy = sinon.spy(Views.Changes.prototype, 'toggleJson');
 
     beforeEach(function (done) {
       var database = new Databases.Model({id: 'bla'});
+
+      model = new Databases.Model({id: 'foo'});
+      model.buildChanges();
+
       database.buildChanges({descending: 'true', limit: '100', include_docs: 'true'} );
       filteredView = new Views.Changes({
         model: database
       });
+
+      handlerSpy = sinon.spy(Views.Changes.prototype, 'toggleJson');
 
       view = new Views.Changes({
         model: model,
@@ -44,7 +47,21 @@ define([
     });
 
     afterEach(function () {
+      handlerSpy.restore();
+      view.afterRender.restore && view.afterRender.restore();
       viewSandbox.remove();
+    });
+
+    it('does not keep filters in memory', function () {
+      view.filters.push('cat');
+      view = new Views.Changes({
+        model: model,
+        useRAF: false
+      });
+
+      view.filters.push('mat');
+
+      assert.deepEqual(view.filters, ['mat']);
     });
 
     it('filter false in case of deleted documents in the changes feed', function () {
@@ -66,7 +83,7 @@ define([
     it('rerenders on the sync event', function () {
       var spy = sinon.spy(view, 'afterRender');
       model.changes.trigger('sync');
-      view.afterRender.restore();
+
       assert.ok(spy.calledOnce);
     });
 
@@ -74,7 +91,6 @@ define([
       var spy = sinon.spy(view, 'afterRender');
       model.changes.trigger('cachesync');
       assert.ok(spy.calledOnce);
-      view.afterRender.restore();
     });
   });
 });
