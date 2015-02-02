@@ -11,13 +11,17 @@
 // the License.
 
 var os = require('os');
-var controlOrCommandKey = os.type() === 'Darwin' ? client.Keys.COMMAND : client.Keys.CONTROL;
 
 module.exports = {
   'ZeroClipboard copies' : function (client) {
     var waitTime = 10000,
         newDatabaseName = client.globals.testDatabaseName,
         baseUrl = client.globals.test_settings.launch_url;
+
+    var controlOrCommandKey = client.Keys.CONTROL;
+    if (os.type() === 'Darwin') {
+      controlOrCommandKey = client.Keys.COMMAND;
+    }
 
     client
       .loginToGUI()
