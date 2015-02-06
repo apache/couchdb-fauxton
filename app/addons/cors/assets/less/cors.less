@@ -86,6 +86,20 @@
   input[type='text'] {
     width: 100%;
   }
+
+  .input-append.edit-domain-section {
+    width : 100%;
+    margin-bottom: 0px;
+
+    input {
+      width: calc(100% ~"-" 82px);
+      /*
+        the 'update' button is 76 px wide,
+        so 82px gives it a little room
+        compatible browsers: http://caniuse.com/#feat=calc
+      */
+    }
+  }
 }
 
 #origin-domain-table {

@@ -24,13 +24,15 @@ function (app, FauxtonAPI) {
       return app.host + '/_config/cors';
     },
 
-    getOrigins: function () {
-      var origins = this.get('origins');
-      if (_.isUndefined(origins)) {
-        return [];
-      }
+    parse: function (resp) {
+      var origins = !resp.origins ? [] : resp.origins.split(',');
 
-      return origins.split(',');
+      return {
+        origins: origins,
+        methods: resp.methods,
+        credentials: resp.credentials,
+        headers: resp.headers
+     };
     }
   });
 

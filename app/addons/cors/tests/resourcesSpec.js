@@ -25,15 +25,21 @@ define([
 
     it('Splits up origins into array', function () {
       var origins = ['http://hello.com', 'http://another.co.a'];
-      cors.set({origins: origins.join(',')});
-
-      assert.deepEqual(cors.getOrigins(), origins);
+      cors.set(cors.parse({origins: origins.join(',')}));
+      assert.deepEqual(cors.get('origins'), origins);
     });
 
     it('returns empty array for undefined', function () {
-
-      assert.deepEqual(cors.getOrigins(), []);
+      var origins = { origins : undefined };
+      cors.set(cors.parse(origins));
+      assert.deepEqual(cors.get('origins'), []);
     });
+
+    it('does not return an empty string (empty origin), when "specific origins" is set, but there are no domains on that list', function () {
+        var emptyOrigins = {origins: ''};
+        cors.set(cors.parse(emptyOrigins));
+        assert.deepEqual(cors.get('origins') , []);
+      });
 
 
   });

@@ -69,11 +69,17 @@ define([
       this.setState({updatedOrigin: event.target.value});
     },
 
+    onKeyUp: function (e) {
+      if (e.keyCode === 13) {   //enter key
+       return this.updateOrigin(e);
+      }
+    },
+
     createOriginDisplay: function () {
       if (this.state.edit) {
         return (
           <div className="input-append edit-domain-section">
-            <input type="text" name="update_origin_domain" onChange={this.onInputChange} value={this.state.updatedOrigin} />
+            <input type="text" name="update_origin_domain" onChange={this.onInputChange}  onKeyUp={this.onKeyUp} value={this.state.updatedOrigin} />
             <button onClick={this.updateOrigin} className="btn btn-primary update-origin"> Update </button>
           </div>
         );
@@ -152,6 +158,12 @@ define([
       this.setState({origin: ''});
     },
 
+    onKeyUp: function (e) {
+      if (e.keyCode == 13) {   //enter key
+       return this.addOrigin(e);
+      }
+    },
+
     render: function () {
       if (!this.props.isVisible) {
         return null;
@@ -161,7 +173,7 @@ define([
         <div id= "origin-domains-container">
           <div className= "origin-domains">
             <div className="input-append">
-              <input type="text" name="new_origin_domain" onChange={this.onInputChange} value={this.state.origin} placeholder="e.g., https://site.com"/>
+              <input type="text" name="new_origin_domain" onChange={this.onInputChange} onKeyUp={this.onKeyUp} value={this.state.origin} placeholder="e.g., https://site.com"/>
               <button onClick={this.addOrigin} className="btn btn-primary add-domain"> Add </button>
             </div>
           </div>
@@ -174,6 +186,13 @@ define([
   var Origins = React.createClass({
 
     onOriginChange: function (event) {
+      if (event.target.value === 'all' && this.props.isAllOrigins) {
+        return;   // do nothing if all origins is already selected
+      }
+      if (event.target.value === 'selected' && !this.props.isAllOrigins) {
+        return;   // do nothing if specific origins is already selected
+      }
+
       this.props.originChange(event.target.value === 'all');
     },
 
@@ -188,10 +207,10 @@ define([
           <p><strong> Origin Domains </strong> </p>
           <p>Databases will accept requests from these domains: </p>
           <label className="radio">
-            <input type="radio" checked={this.props.isAllOrigins} value="all" onChange={this.onOriginChange} name="all-domains"/> All origin domains ( * )
+            <input type="radio" checked={this.props.isAllOrigins} value="all" onChange={this.onOriginChange} name="all-domains"/> All domains ( * )
           </label>
           <label className="radio">
-            <input type="radio" checked={!this.props.isAllOrigins} value="selected" onChange={this.onOriginChange} name="selected-domains"/> Restrict to specific origin domains
+            <input type="radio" checked={!this.props.isAllOrigins} value="selected" onChange={this.onOriginChange} name="selected-domains"/> Restrict to specific domains
           </label>
         </div>
       );
@@ -307,9 +326,6 @@ define([
               <Origins corsEnabled={this.state.corsEnabled} originChange={this.originChange} isAllOrigins={this.state.isAllOrigins}/>
               <OriginTable updateOrigin={this.updateOrigin} deleteOrigin={this.deleteOrigin} isVisible={isVisible} origins={this.state.origins} />
               <OriginInput addOrigin={this.addOrigin} isVisible={isVisible} />
-            </div>
-
-            <div className="form-actions">
             </div>
 
           </form>
