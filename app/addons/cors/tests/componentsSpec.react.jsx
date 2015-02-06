@@ -47,41 +47,43 @@ define([
       });
 
       it('confirms user change from restricted origin to disabled cors', function () {
-        var spy = sinon.stub(window, 'confirm');
-        spy.returns(false);
+        var spy = sinon.spy(corsStore, 'showDisableCorsPrompt');
+        var mockEvent = $.Event('click');
         corsEl.state.isAllOrigins = false;
         corsEl.state.corsEnabled = true;
-        corsEl.enableCorsChange();
+        corsEl.enableCorsChange(mockEvent);
         assert.ok(spy.calledOnce);
+        corsStore.showDisableCorsPrompt.restore();
       });
 
       it('does not confirm for selected origins are emtpy for disabled cors change', function () {
-        var spy = sinon.stub(window, 'confirm');
-        spy.returns(false);
+        var spy = sinon.spy(corsStore, 'showDisableCorsPrompt');
+        var mockEvent = $.Event('click');
         corsEl.state.corsEnabled = true;
         corsEl.state.isAllOrigins = false;
         corsEl.state.origins = [];
-        corsEl.enableCorsChange();
+        corsEl.enableCorsChange(mockEvent);
         assert.notOk(spy.calledOnce);
+        corsStore.showDisableCorsPrompt.restore();
       });
 
       it('confirms user change when moving from selected origins to all origins', function () {
-        var spy = sinon.stub(window, 'confirm');
-        spy.returns(false);
+        var spy = sinon.spy(corsStore, 'showSwitchDomainsWarning');
         corsEl.state.corsEnabled = true;
         corsEl.state.isAllOrigins = false;
         corsEl.originChange(true);
         assert.ok(spy.calledOnce);
+        corsStore.showSwitchDomainsWarning.restore();
       });
 
       it('does not confirm all origins change if selected origins are emtpy', function () {
-        var spy = sinon.stub(window, 'confirm');
-        spy.returns(false);
+        var spy = sinon.spy(corsStore, 'showSwitchDomainsWarning');
         corsEl.state.corsEnabled = true;
         corsEl.state.isAllOrigins = false;
         corsEl.state.origins = [];
         corsEl.originChange(true);
         assert.notOk(spy.calledOnce);
+        corsStore.showSwitchDomainsWarning.restore();
       });
     });
 
@@ -133,16 +135,19 @@ define([
 
       afterEach(function () {
         React.unmountComponentAtNode(container);
+        corsStore.originChange.restore();
       });
 
       it('calls change Origin on all origins selected', function () {
+        var spy = sinon.spy(corsStore, 'originChange');
         TestUtils.Simulate.change($(originEl.getDOMNode()).find('input[value="all"]')[0]);
         assert.ok(changeOrigin.calledWith(true));
       });
 
       it('calls change Origin on selected origins selected', function () {
+        var spy = sinon.spy(corsStore, 'originChange');
         TestUtils.Simulate.change($(originEl.getDOMNode()).find('input[value="selected"]')[0]);
-        assert.ok(changeOrigin.calledWith(false));
+        assert.notOk(changeOrigin.calledWith(true));
       });
     });
 

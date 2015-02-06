@@ -69,11 +69,17 @@ define([
       this.setState({updatedOrigin: event.target.value});
     },
 
+    onKeyDown: function (e) {
+      if (e.keyCode == 13 ) {   //enter key
+       return this.updateOrigin(e);
+      }
+    },
+
     createOriginDisplay: function () {
       if (this.state.edit) {
         return (
           <div className="input-append edit-domain-section">
-            <input type="text" name="update_origin_domain" onChange={this.onInputChange} value={this.state.updatedOrigin} />
+            <input type="text" name="update_origin_domain" onChange={this.onInputChange}  onKeyDown={this.onKeyDown} value={this.state.updatedOrigin} />
             <button onClick={this.updateOrigin} className="btn btn-primary update-origin"> Update </button>
           </div>
         );
@@ -114,7 +120,7 @@ define([
     },
 
     render: function () {
-      if (!this.props.isVisible || this.props.origins.length === 0) {
+      if (!this.props.isVisible || this.props.origins.length === 0 || this.props.origins[0] === "") {
         return null;
       }
 
@@ -152,6 +158,12 @@ define([
       this.setState({origin: ''});
     },
 
+    onKeyDown: function (e) {
+      if (e.keyCode == 13 ) {   //enter key
+       return this.addOrigin(e);
+      }
+    },
+
     render: function () {
       if (!this.props.isVisible) {
         return null;
@@ -161,7 +173,7 @@ define([
         <div id= "origin-domains-container">
           <div className= "origin-domains">
             <div className="input-append">
-              <input type="text" name="new_origin_domain" onChange={this.onInputChange} value={this.state.origin} placeholder="e.g., https://site.com"/>
+              <input type="text" name="new_origin_domain" onChange={this.onInputChange} onKeyDown={this.onKeyDown} value={this.state.origin} placeholder="e.g., https://site.com"/>
               <button onClick={this.addOrigin} className="btn btn-primary add-domain"> Add </button>
             </div>
           </div>
@@ -174,10 +186,18 @@ define([
   var Origins = React.createClass({
 
     onOriginChange: function (event) {
+      if (event.target.value === 'all' && this.props.isAllOrigins) {
+        return;   // do nothing if all origins is already selected
+      }
+      if (event.target.value === 'selected' && !this.props.isAllOrigins) {
+        return;   // do nothing if specific origins is already selected
+      }
+
       this.props.originChange(event.target.value === 'all');
     },
 
     render: function () {
+      var switchDomainsWarningShowing = corsStore.isSwitchDomainsWarningShowing();
 
       if (!this.props.corsEnabled) {
         return null;
@@ -188,13 +208,44 @@ define([
           <p><strong> Origin Domains </strong> </p>
           <p>Databases will accept requests from these domains: </p>
           <label className="radio">
-            <input type="radio" checked={this.props.isAllOrigins} value="all" onChange={this.onOriginChange} name="all-domains"/> All origin domains ( * )
+            <input type="radio" checked={this.props.isAllOrigins} value="all" onChange={this.onOriginChange} name="all-domains"/> All domains ( * )
           </label>
+          <SwitchDomainsWarning isShown={switchDomainsWarningShowing}/>
           <label className="radio">
-            <input type="radio" checked={!this.props.isAllOrigins} value="selected" onChange={this.onOriginChange} name="selected-domains"/> Restrict to specific origin domains
+            <input type="radio" checked={!this.props.isAllOrigins} value="selected" onChange={this.onOriginChange} name="selected-domains"/> Restrict to specific domains
           </label>
         </div>
       );
+    }
+  });
+
+  var SwitchDomainsWarning = React.createClass({
+    cancelAllOrigins: function (event) {
+      event.preventDefault();
+      Actions.showSwitchDomainsWarning(false);
+      Actions.originChange(false);
+    },
+
+    confirmAllOrigins: function (event) {
+      event.preventDefault();
+      Actions.showSwitchDomainsWarning(false);
+      Actions.originChange(true);
+    },
+
+    render: function () {
+
+      if (!this.props.isShown) {
+        return null;
+      }
+
+      return (
+        <div id="all-origins-prompt" className="cors-prompts">
+          <div id="all-origins-prompt-text" className="cors-prompt-text">Switching to 'All domains' will overwrite your specific origin domain list.</div>
+          <button id="cancel-all-origins" className="cancel" onClick={this.cancelAllOrigins}>Keep list</button>
+          <button id="confirm-all-origins"  className="confirm" onClick={this.confirmAllOrigins}>Overwrite list and switch to All Domains</button>
+        </div>
+      );
+
     }
   });
 
@@ -231,13 +282,16 @@ define([
     },
 
     enableCorsChange: function (event) {
-      if (this.state.corsEnabled && !_.isEmpty(this.state.origins) && !this.state.isAllOrigins) {
-        var result = window.confirm('Are you sure? Disabling CORS will overwrite your specific origin domains.');
-        if (!result) { return; }
+      if (this.state.corsEnabled && !_.isEmpty(this.state.origins)) {
+        event.preventDefault();
+        Actions.showDisableCorsPrompt(true);
+      } else {
+        Actions.toggleEnableCors();
+        this.save();
       }
-
-      Actions.toggleEnableCors();
+      this.onChange();
     },
+
 
     save: function (event) {
       Actions.saveCors({
@@ -252,11 +306,10 @@ define([
 
     originChange: function (isAllOrigins) {
       if (isAllOrigins && !_.isEmpty(this.state.origins)) {
-        var result = window.confirm('Are you sure? Switching to all origin domains will overwrite your specific origin domains.');
-        if (!result) { return; }
+        Actions.showSwitchDomainsWarning(true);
+      } else {
+        Actions.originChange(isAllOrigins);
       }
-
-      Actions.originChange(isAllOrigins);
     },
 
     addOrigin: function (origin) {
@@ -283,6 +336,7 @@ define([
     render: function () {
       var isVisible = _.all([this.state.corsEnabled, !this.state.isAllOrigins]);
       var className = this.state.corsEnabled ? 'collapsing-container' : '';
+      var isCorsDisablePromptShown = corsStore.isDisableCorsPromptShown();
 
       return (
         <div className="cors-page">
@@ -290,11 +344,12 @@ define([
             <p> {this.getCorsNotice()}</p>
           </header>
 
-          <form id="corsForm" onSubmit={this.save}>
+          <form id="corsForm" >
             <div className="cors-enable">
               <label className="checkbox">
                 <input type="checkbox" checked={this.state.corsEnabled} onChange={this.enableCorsChange} /> Enable CORS
               </label>
+              <CORSDisablePrompt isShown={isCorsDisablePromptShown} />
             </div>
             <div id={className}>
               <Origins corsEnabled={this.state.corsEnabled} originChange={this.originChange} isAllOrigins={this.state.isAllOrigins}/>
@@ -302,10 +357,43 @@ define([
               <OriginInput addOrigin={this.addOrigin} isVisible={isVisible} />
             </div>
 
-            <div className="form-actions">
-            </div>
-
           </form>
+        </div>
+      );
+    }
+  });
+
+  var CORSDisablePrompt = React.createClass({
+
+    confirmDisableCors: function (event) {
+      event.preventDefault();
+      Actions.toggleEnableCors();
+      this.save();
+      Actions.showDisableCorsPrompt(false);
+
+    },
+
+    cancelDisableCors: function (event) {
+      event.preventDefault();
+      Actions.showDisableCorsPrompt(false);
+    },
+
+    save: function (event) {
+      Actions.saveCors({
+        enableCors: corsStore.isEnabled(),
+        origins: corsStore.getOrigins()
+      });
+    },
+
+    render: function () {
+      if(!this.props.isShown){
+        return null;
+      }
+      return (
+        <div id="cors-disable-prompt" className="cors-prompts">
+          <div id="cors-disable-prompt-text" className="cors-prompt-text">Disabling CORS will prevent browsers from being able to access your databases.</div>
+          <button id="cancel-disable-cors" className="cancel" onClick={this.cancelDisableCors}>Keep CORS enabled</button>
+          <button id="confirm-disable-cors" className="confirm" onClick={this.confirmDisableCors}>Disable CORS</button>
         </div>
       );
     }

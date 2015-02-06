@@ -79,6 +79,11 @@ define([
 
     isAllOrigins: function () {
       var origins = this.getOrigins();
+      if(_.include(origins, "") ){
+        this.deleteOrigin("");
+        //if you load window with empty specific origins enabled,
+        //it shows up as part of the origins list as empty string
+      }
       if (_.include(origins, '*')) {
         return true;
       }
@@ -93,6 +98,22 @@ define([
     updateOrigin: function (updatedOrigin, originalOrigin) {
       this.deleteOrigin(originalOrigin);
       this.addOrigin(updatedOrigin);
+    },
+
+    showDisableCorsPrompt: function (show) {
+      this._isCorsDisablePromptShown = show;
+    },
+
+    isDisableCorsPromptShown: function () {
+      return this._isCorsDisablePromptShown;
+    },
+
+    showSwitchDomainsWarning: function (show) {
+      this._isSwitchDomainsWarningShowing = show;
+    },
+
+    isSwitchDomainsWarningShowing: function () {
+      return this._isSwitchDomainsWarningShowing;
     },
 
     dispatch: function (action) {
@@ -141,6 +162,16 @@ define([
         case ActionTypes.CORS_SAVED:
           this.setConfigSaved();
           this.savingDone();
+          this.triggerChange();
+        break;
+
+        case ActionTypes.SHOW_DISABLE_CORS_PROMPT:
+          this.showDisableCorsPrompt(action.visible);
+          this.triggerChange();
+        break;
+
+        case ActionTypes.SHOW_SWITCH_DOMAIN_WARNING:
+          this.showSwitchDomainsWarning(action.visible);
           this.triggerChange();
         break;
 

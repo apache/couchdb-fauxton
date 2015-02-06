@@ -38,6 +38,8 @@ function (app, FauxtonAPI, CORS, Components, Actions) {
         origins: this.cors.getOrigins(),
         isEnabled: this.httpd.corsEnabled()
       });
+      Actions.showDisableCorsPrompt(false);
+      Actions.showSwitchDomainsWarning(false);
       Components.renderCORS(this.el);
     },
 
