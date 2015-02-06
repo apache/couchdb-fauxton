@@ -108,7 +108,7 @@ define([
         assert.ok(spy.calledWith(newOrigin));
       });
 
-      it('calls addOrogin AddOrigin on add click with valid domain', function () {
+      it('calls addOrigin on add click with valid domain', function () {
         TestUtils.Simulate.change($(inputEl.getDOMNode()).find('input')[0],{target: {value: newOrigin}});
         TestUtils.Simulate.click($(inputEl.getDOMNode()).find('.btn')[0]);
         assert.ok(addOrigin.calledWith(newOrigin));
@@ -140,7 +140,14 @@ define([
         assert.ok(changeOrigin.calledWith(true));
       });
 
-      it('calls change Origin on selected origins selected', function () {
+      it('calls changeOrigin() when you switch from "Allow All Origins" to "Select List of Origins"', function () {
+        //changeOrigin(true) = sets origins to ['*']
+        //changeOrigin(false) = sets origins to [] (an empty array which user can populate with URLs)
+
+        //this test begins with 'select origins' checked,
+        //1. render radio buttons with 'all origins'
+        originEl = TestUtils.renderIntoDocument(<Views.Origins corsEnabled={true} isAllOrigins={true} originChange={changeOrigin}/>, container);
+        //2. switch back to 'select origins'
         TestUtils.Simulate.change($(originEl.getDOMNode()).find('input[value="selected"]')[0]);
         assert.ok(changeOrigin.calledWith(false));
       });
