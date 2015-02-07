@@ -51,7 +51,8 @@ function (app, FauxtonAPI, React, Stores, Actions) {
       return {
         areDocumentsCollapsed: bulkDocumentHeaderStore.getCollapsedState(),
         isDeselectPossible: bulkDocumentHeaderStore.getIsDeselectPossible(),
-        isSelectAllPossible: bulkDocumentHeaderStore.getIsSelectAllPossible()
+        isSelectAllPossible: bulkDocumentHeaderStore.getIsSelectAllPossible(),
+        isCouchEmpty: bulkDocumentHeaderStore.getIsCouchEmpty()
       };
     },
 
@@ -79,6 +80,7 @@ function (app, FauxtonAPI, React, Stores, Actions) {
 
       return (
         <div className='alternative-header'>
+          <div>{this.state.isCouchEmpty === 'notempty' ? "Hello From CouchDB Day" : ""}</div>
           <ToggleHeaderButton
             fonticon={'fonticon-select-all'}
             toggleCallback={this.selectAllDocuments}
@@ -134,6 +136,14 @@ function (app, FauxtonAPI, React, Stores, Actions) {
             containerClasses={baseClass + 'control-cancel'}
             text={'Cancel'}
             title={'Switch to other view'} />
+
+          <ToggleHeaderButton
+            fonticon={''}
+            toggleCallback={this.couchdbButtonSelected}
+            innerClasses={''}
+            containerClasses={baseClass + 'control-couchdb'}
+            text={'CouchDB Day'}
+            title={'toggle awesomeness'} />
         </div>
       );
     },
@@ -152,6 +162,10 @@ function (app, FauxtonAPI, React, Stores, Actions) {
 
     cancelView: function () {
       Actions.toggleHeaderControls();
+    },
+
+    couchdbButtonSelected: function () {
+      Actions.toggleCouchDBState();
     },
 
     deleteSelected: function () {
