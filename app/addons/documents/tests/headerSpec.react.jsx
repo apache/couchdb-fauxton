@@ -139,8 +139,14 @@ define([
 
     it('pressing SelectAll should fill the delete-bulk-docs-collection', function () {
       TestUtils.Simulate.click($(header.getDOMNode()).find('.control-select-all')[0]);
-
       assert.equal(bulkDeleteDocCollection.length, 1);
+    });
+
+    it('ppressing th e couchday button gives a message', function () {
+      TestUtils.Simulate.click($(header.getDOMNode())
+        .find('.control-couchdb')[0]);
+      var foundElement = /Hello/.test($(header.getDOMNode()).html());
+      assert.ok(foundElement);
     });
   });
 });

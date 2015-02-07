@@ -51,6 +51,12 @@ function (app, FauxtonAPI, ActionTypes) {
       });
     },
 
+    toggleCouchDBState: function () {
+      FauxtonAPI.dispatch({
+        type: ActionTypes.COUCHDB_ACTION_TYPE_XY
+      });
+    },
+
     resetHeaderController: function () {
       FauxtonAPI.dispatch({
         type: ActionTypes.RESET_HEADER_BAR

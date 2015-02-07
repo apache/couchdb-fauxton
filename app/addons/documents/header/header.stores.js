@@ -24,6 +24,7 @@ function (FauxtonAPI, ActionTypes) {
     },
 
     reset: function () {
+      this._couch = 'empty';
       this._collapsedDocuments = false;
       this._selectedDocumentsCount = 0;
       this._documentsOnPageCount = FauxtonAPI.constants.MISC.DEFAULT_PAGE_SIZE;
@@ -41,11 +42,23 @@ function (FauxtonAPI, ActionTypes) {
       return this._selectedAllDocuments;
     },
 
+    getIsCouchEmpty: function () {
+      console.log("getIsCouchEmpty");
+
+      return this._couch;
+    },
+
     getIsDeselectPossible: function () {
       if (this._selectedDocumentsonPageCount > 0) {
         return true;
       }
       return false;
+    },
+
+    changeCouchState: function () {
+      console.log("i'll change the state", this._couch);
+      this._couch = 'notempty';
+      console.log("new state ", this._couch);
     },
 
     getIsSelectAllPossible: function () {
@@ -75,6 +88,11 @@ function (FauxtonAPI, ActionTypes) {
 
         case ActionTypes.RESET_HEADER_BAR:
           this.reset();
+          this.triggerChange();
+        break;
+
+        case ActionTypes.COUCHDB_ACTION_TYPE_XY:
+          this.changeCouchState();
           this.triggerChange();
         break;
 
