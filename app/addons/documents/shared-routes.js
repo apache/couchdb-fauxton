@@ -45,7 +45,8 @@ define([
     addSidebar: function (selectedTab) {
       var params = {
         collection: this.designDocs,
-        database: this.database
+        database: this.database,
+        isSystemDatabaseModel: new Databases.IsSystemDatabaseModel({name: this.database.get('id')})
       };
       if (selectedTab) {
         params.selectedTab = selectedTab;

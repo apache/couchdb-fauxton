@@ -50,5 +50,17 @@ define([
         assert.equal(databaseNames[1], 'rocko');
       });
     });
+    describe('Is system Database', function () {
+      it('checks if the current database is a systemDatabase if /_stats returns json', function () {
+        var isSystemDatabase = new Resources.IsSystemDatabaseModel({name: '_users'});
+        isSystemDatabase.parse('{"couch_replicator":{}}');
+        assert.ok(isSystemDatabase.get('isSystemDatabase'));
+      });
+      it('checks if the current database is a systemDatabase if /_stats returns no json', function () {
+        var isSystemDatabase = new Resources.IsSystemDatabaseModel({name: '_users'});
+        isSystemDatabase.parse('<html></html>');
+        assert.notOk(isSystemDatabase.get('isSystemDatabase'));
+      });
+    });
   });
 });

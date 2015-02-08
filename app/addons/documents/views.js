@@ -145,7 +145,15 @@ function (app, FauxtonAPI, Components, Documents,
     template: "addons/documents/templates/delete_database_modal",
     initialize: function (options) {
       this.database = options.database;
+      this.isSystemDatabase = options.isSystemDatabase;
       FauxtonAPI.Events.on('database:delete', this.showDeleteDatabase, this);
+    },
+
+    serialize: function () {
+      return {
+        isSystemDatabase: this.isSystemDatabase,
+        database: this.database
+      };
     },
 
     showDeleteDatabase: function () {
