@@ -30,6 +30,8 @@ function(app, FauxtonAPI, Components, Documents, Databases) {
 
     initialize: function(options) {
       this.database = options.database;
+      this.isSystemDatabaseModel = options.isSystemDatabaseModel;
+
       if (options.ddocInfo) {
         this.ddocID = options.ddocInfo.id;
         this.currView = options.ddocInfo.currView;
@@ -69,7 +71,7 @@ function(app, FauxtonAPI, Components, Documents, Databases) {
           icon: 'fonticon-plus-circled'
         });
 
-        return menuLinks; 
+        return menuLinks;
      }, [{
           title: 'New Doc',
           url: newurlPrefix + '/new',
@@ -81,11 +83,15 @@ function(app, FauxtonAPI, Components, Documents, Databases) {
         }]);
     },
 
+    establish: function () {
+      return [this.isSystemDatabaseModel.fetch({reset: true})];
+
+    },
 
     beforeRender: function(manage) {
       this.deleteDBModal = this.setView(
         '#delete-db-modal',
-        new Views.DeleteDBModal({database: this.database})
+        new Views.DeleteDBModal({database: this.database, isSystemDatabase: this.isSystemDatabaseModel.get('isSystemDatabase')})
       );
 
       var newLinks = [{
