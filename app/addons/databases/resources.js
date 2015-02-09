@@ -94,7 +94,6 @@ function(app, FauxtonAPI, Documents) {
 
     sync: function (method, model, options) {
       options.url = this.url();
-      console.log('sync');
       return $.ajax(options);
     },
 
@@ -117,7 +116,6 @@ function(app, FauxtonAPI, Documents) {
       if (systemDatabases.indexOf(this.name) !== -1 && !isOnFrontendNode) {
         isSystemDatabase = true;
       }
-      console.log("-->", systemDatabases.indexOf(this.name));
       this.set('isSystemDatabase', isSystemDatabase);
     }
   });
