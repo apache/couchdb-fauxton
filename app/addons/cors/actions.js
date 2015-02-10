@@ -146,6 +146,21 @@ define([
             clear: true
           });
         });
+      },
+
+      showDisableCorsPrompt: function (show) {
+        FauxtonAPI.dispatch({
+          type: ActionTypes.SHOW_DISABLE_CORS_PROMPT,
+          visible: show
+        });
+      },
+
+      showSwitchDomainsWarning: function (show) {
+        FauxtonAPI.dispatch({
+          type: ActionTypes.SHOW_SWITCH_DOMAIN_WARNING,
+          visible: show
+        });
       }
+
     };
   });

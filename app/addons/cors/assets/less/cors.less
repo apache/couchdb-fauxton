@@ -86,6 +86,49 @@
   input[type='text'] {
     width: 100%;
   }
+
+  .input-append.edit-domain-section {
+    width : 100%;
+    margin-bottom: 0px;
+
+    input {
+      width: calc(100% ~"-" 82px);
+      /*
+        the 'update' button is 76 px wide,
+        so 82px gives it a little room
+        compatible browsers: http://caniuse.com/#feat=calc
+      */
+    }
+  }
+}
+
+.cors-prompts {
+  font-size: 14px;
+ // display: none;
+  border: 1px solid #E7B4B4;
+  background: #DFBEBE;
+  width: 100%;
+  padding: 10px;
+
+ .cors-prompt-text {
+    text-align: left;
+    padding: 0 0 10px 0;
+  }
+
+  button {
+    border: none;
+    padding: 10px;
+    margin: 0 10px 0 0;
+  }
+
+  .cancel {
+    background: #D27979;
+  }
+
+  .confirm {
+    background: #8BBD8B;
+  }
+
 }
 
 #origin-domain-table {
