@@ -18,9 +18,7 @@ color: #FFFFFF\
 color: #ffffff\
 }\
 .ace-idle-fingers .ace_marker-layer .ace_selection {\
-background: #000000;\
-opacity: 0.4;\
-left: 0px !important;\
+background: #00281f;\
 }\
 .ace-idle-fingers.ace_multiselect .ace_selection.ace_start {\
 box-shadow: 0 0 3px 0px #4d4d4d;\
