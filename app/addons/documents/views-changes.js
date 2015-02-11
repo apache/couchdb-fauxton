@@ -14,33 +14,31 @@ define([
        "app",
 
        "api",
+
        // Libs
        "addons/fauxton/components",
+  'addons/documents/changes/components.react',
 
        // Plugins
        "plugins/prettify"
 ],
 
-function(app, FauxtonAPI, Components, prettify, ZeroClipboard) {
+function(app, FauxtonAPI, Components, Changes, prettify, ZeroClipboard) {
 
   var Views = {};
 
-  Views.ChangesHeader = FauxtonAPI.View.extend({
-    template: "addons/documents/templates/changes_header",
 
-    events: {
-      'click .js-toggle-filter': "toggleQuery"
+  // wrapper for React component. The wrapper allows us to tie the React component into the Fauxton
+  // page load lifecycle
+  Views.ChangesHeaderReactWrapper = FauxtonAPI.View.extend({
+    afterRender: function () {
+      Changes.renderHeader(this.el);
     },
-
-    toggleQuery: function (event) {
-      $('#dashboard-content').scrollTop(0);
-      this.$('#query').toggle('slow');
-    },
-
-    initialize: function () {
-      this.setView(".js-filter", this.filterView);
+    cleanup: function () {
+      Changes.removeHeader(this.el);
     }
   });
+
 
   Views.Changes = Components.FilteredView.extend({
     template: "addons/documents/templates/changes",

@@ -204,13 +204,7 @@ function(app, FauxtonAPI, BaseRoute, Documents, Changes, Index, DocEditor, Datab
         model: this.database
       }));
 
-      this.filterView = new Components.FilterView({
-        eventNamespace: "changes"
-      });
-
-      this.headerView = this.setView("#dashboard-upper-content", new Changes.ChangesHeader({
-        filterView: this.filterView
-      }));
+      this.headerView = this.setView('#dashboard-upper-content', new Changes.ChangesHeaderReactWrapper());
 
       this.footer && this.footer.remove();
       this.toolsView && this.toolsView.remove();
