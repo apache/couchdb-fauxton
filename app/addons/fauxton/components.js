@@ -807,31 +807,29 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
         this.removeIncorrectAnnotations();
       }
 
-      var that = this;
       this.editor.getSession().on('change', function () {
-        that.setHeightToLineCount();
-        that.edited = true;
-      });
+        this.setHeightToLineCount();
+        this.edited = true;
+      }.bind(this));
 
-      $(window).on('beforeunload.editor_'+this.editorId, function() {
-        if (that.edited) {
+      $(window).on('beforeunload.editor_' + this.editorId, function () {
+        if (this.edited) {
           return 'Your changes have not been saved. Click cancel to return to the document.';
         }
-      });
+      }.bind(this));
 
-      FauxtonAPI.beforeUnload("editor_"+this.editorId, function (deferred) {
-        if (that.edited) {
+      FauxtonAPI.beforeUnload('editor_' + this.editorId, function (deferred) {
+        if (this.edited) {
           return 'Your changes have not been saved. Click cancel to return to the document.';
         }
-      });
+      }.bind(this));
     },
 
     cleanup: function () {
-      $(window).off('beforeunload.editor_'+this.editorId);
+      $(window).off('beforeunload.editor_' + this.editorId);
       $(window).off('resize.editor', this.onPageResize);
-      FauxtonAPI.removeBeforeUnload("editor_"+this.editorId);
+      FauxtonAPI.removeBeforeUnload('editor_' + this.editorId);
       this.editor.destroy();
-      this.stopListening(FauxtonAPI.Events, FauxtonAPI.constants.EVENTS.NAVBAR_SIZE_CHANGED);
     },
 
     // we need to track the possible available height of the editor to tell it how large it can grow vertically
