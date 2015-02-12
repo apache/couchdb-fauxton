@@ -55,7 +55,7 @@ function(FauxtonAPI, React, Stores, Actions) {
 
       return (
         <li data-nav-name={link.title} className={liClassName} >
-          <a href={link.href} target={link.target ? '_blank' : ''} data-bypass={link.target ? 'true' : 'false'}>
+          <a href={link.href} target={link.target ? '_blank' : null} data-bypass={link.target ? 'true' : null}>
             <i className={link.icon + " fonticon "}></i>
             <span dangerouslySetInnerHTML={{__html: link.title }} /> 
           </a>
