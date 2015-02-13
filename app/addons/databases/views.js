@@ -53,6 +53,10 @@ function(app, Components, FauxtonAPI, Databases) {
         encoded: app.utils.safeURLName(this.model.get('name')),
         database: this.model
       };
+    },
+
+    afterRender: function () {
+      this.$el.find('.js-db-graveyard').tooltip();
     }
   });
 
@@ -173,7 +177,6 @@ function(app, Components, FauxtonAPI, Databases) {
         onUpdateEventName: 'jumptodb:update'
       });
       this.dbSearchTypeahead.render();
-      this.$el.find('.js-db-graveyard').tooltip();
     }
   });
 
