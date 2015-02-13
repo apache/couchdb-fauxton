@@ -27,9 +27,9 @@ function(app, FauxtonAPI, LoadAddons) {
 
 
   // All navigation that is relative should be passed through the navigate
-  // method, to be processed by the router. If the link has a `data-bypass`
+  // method, to be processed by the router. If the link has a `data-bypass=true`
   // attribute, bypass the delegation completely.
-  $(document).on("click", "a:not([data-bypass])", function(evt) {
+  $(document).on("click", "a:not([data-bypass=true])", function(evt) {
 
     // Get the absolute anchor href.
     var href = { prop: $(this).prop("href"), attr: $(this).attr("href") };
