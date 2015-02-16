@@ -120,7 +120,7 @@ define([
       e.preventDefault();
       e.stopPropagation();
 
-      var filter = this.refs.addItem.getDOMNode().value.trim();
+      var filter = changesFilterStore.getCurrentFilter();
       if (!filter) {
         return;
       }
