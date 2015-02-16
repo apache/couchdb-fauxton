@@ -57,7 +57,7 @@ function(app, FauxtonAPI, Components, ReactComponents, Actions, ZeroClipboard) {
     FauxtonAPI.masterLayout.apiBar = app.apiBar;
 
     FauxtonAPI.RouteObject.on('beforeFullRender', function (routeObject) {
-      Actions.setNavbarActiveLink(routeObject.selectedHeader);
+      Actions.setNavbarActiveLink(_.result(routeObject, 'selectedHeader'));
     });
 
     FauxtonAPI.RouteObject.on('beforeEstablish', function (routeObject) {
@@ -95,7 +95,7 @@ function(app, FauxtonAPI, Components, ReactComponents, Actions, ZeroClipboard) {
       Actions.setNavbarVersionInfo(versionInfo.get("version"));
     });
   };
-  
+
   Fauxton.VersionInfo = Backbone.Model.extend({
     url: function () {
       return app.host;

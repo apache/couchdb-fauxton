@@ -67,7 +67,9 @@ function(app, FauxtonAPI, Auth) {
         route: 'addAdmin'
       }
     },
-    selectedHeader: "", // TODO prevents "Databases" being selected at least
+    selectedHeader: function () {
+      return FauxtonAPI.session.user().name;
+    },
 
     initialize: function () {
       this.navDrop = this.setView('#sidebar-content', new Auth.NavDropDown({model: FauxtonAPI.session}));
@@ -87,6 +89,6 @@ function(app, FauxtonAPI, Auth) {
   });
 
   Auth.RouteObjects = [authRouteObject, userRouteObject];
-  
+
   return Auth;
 });
