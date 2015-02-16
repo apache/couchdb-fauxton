@@ -24,6 +24,26 @@ function(app, FauxtonAPI, React, Stores, Actions, Components, beautifyHelper) {
   var indexEditorStore = Stores.indexEditorStore;
   var getDocUrl = app.helpers.getDocUrl;
 
+  // global component
+  var StyledSelect = React.createClass({
+    render: function () {
+      return (
+        <div className="styled-select">
+          <label htmlFor={this.props.selectId}>
+            <i className="fonticon-down-dir"></i>
+            <select
+              id={this.props.selectId}
+              className={this.props.selectClass}
+              onChange={this.props.selectChange}
+            >
+              {this.props.selectContent}
+            </select>
+          </label>
+        </div>
+      );
+    }
+  });
+
   var DesignDocSelector = React.createClass({
 
     getStoreState: function () {
@@ -58,8 +78,18 @@ function(app, FauxtonAPI, React, Stores, Actions, Components, beautifyHelper) {
       });
     },
 
-    render: function () {
+    getSelectContent: function () {
       var designDocOptions = this.getDesignDocOptions();
+
+      return (
+        <optgroup label="Select a document">
+          <option value="new">New Design Document </option>
+          {designDocOptions}
+        </optgroup>
+      );
+    },
+
+    render: function () {
       var designDocInput;
       var designDocId = this.state.designDocId;
 
@@ -80,17 +110,12 @@ function(app, FauxtonAPI, React, Stores, Actions, Components, beautifyHelper) {
                       </i>
                     </a>
                   </label>
-                  <div className="styled-select">
-                    <label htmlFor="ddoc">
-                      <i className="fonticon-arrow-box-down"></i>
-                      <select id="ddoc" className={designDocId} onChange={this.selectChange}>
-                        <optgroup label="Select a document">
-                          <option value="new">New Design Document </option>
-                          {designDocOptions}
-                        </optgroup>
-                      </select>
-                    </label>
-                  </div>
+                  <StyledSelect
+                    selectContent={this.getSelectContent()}
+                    selectChange={this.selectChange}
+                    selectId="ddoc"
+                    selectClass={designDocId}
+                  />
                 </div>
                 <div className="pull-left">
                   {designDocInput}
@@ -290,9 +315,11 @@ function(app, FauxtonAPI, React, Stores, Actions, Components, beautifyHelper) {
                 <i className="icon-question-sign"></i>
               </a>
             </label>
-            <select id="reduce-function-selector" value={this.state.reduceSelectedOption} onChange={this.selectChange}>
-              {reduceOptions}
-            </select>
+            <StyledSelect
+              selectContent={reduceOptions}
+              selectChange={this.selectChange}
+              selectId="reduce-function-selector"
+              selectClass="" />
           </div>
 
           {customReduceSection}
@@ -540,7 +567,8 @@ function(app, FauxtonAPI, React, Stores, Actions, Components, beautifyHelper) {
     ReduceEditor: ReduceEditor,
     Editor: Editor,
     DesignDocSelector: DesignDocSelector,
-    Beautify: Beautify
+    Beautify: Beautify,
+    StyledSelect: StyledSelect
   };
 
   return Views;

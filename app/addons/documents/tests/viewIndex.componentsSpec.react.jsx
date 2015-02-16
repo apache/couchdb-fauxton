@@ -100,6 +100,44 @@ define([
     });
   });
 
+  describe('styled select', function () {
+    var container, selectorEl, spy = sinon.spy();
+
+    beforeEach(function () {
+      container = document.createElement('div');
+
+      var selectContent = (
+        <optgroup label="Select a document">
+          <option value="new">New Design Document</option>
+          <option value="foo">New Design Document</option>
+        </optgroup>
+      );
+
+      selectorEl = TestUtils.renderIntoDocument(
+        <Views.StyledSelect
+          selectId="new-ddoc"
+          selectClass=""
+          selectContent={selectContent}
+          selectChange={spy} />,
+        container
+      );
+    });
+
+    afterEach(function () {
+      React.unmountComponentAtNode(container);
+    });
+
+    it('calls the callback on select', function () {
+      TestUtils.Simulate.change($(selectorEl.getDOMNode()).find('#new-ddoc')[0], {
+        target: {
+          value: 'new'
+        }
+      });
+      assert.ok(spy.calledOnce);
+    });
+
+  });
+
   describe('design Doc Selector', function () {
     var container, selectorEl;
 
