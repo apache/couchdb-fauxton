@@ -13,27 +13,27 @@
 define([
   'react',
   'addons/documents/changes/actions',
-  'addons/documents/changes/stores'
-], function (React, Actions, Stores) {
+  'addons/documents/changes/stores',
+  'addons/fauxton/mixins'
+], function (React, Actions, Stores, Mixins) {
 
-  var changesFilterStore = Stores.changesFilterStore;
   var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 
 
+  // the top-level component for the Changes Filter section. Handles hiding/showing
   var ChangesHeader = React.createClass({
+    store: Stores.changesHeaderStore,
+    mixins: [Mixins.StoreListener],
+
     getInitialState: function () {
       return {
-        showTabContent: changesFilterStore.isTabVisible()
+        showTabContent: this.store.isTabVisible()
       };
-    },
-
-    componentDidMount: function () {
-      changesFilterStore.on('change', this.onChange, this);
     },
 
     onChange: function () {
       this.setState({
-        showTabContent: changesFilterStore.isTabVisible()
+        showTabContent: this.store.isTabVisible()
       });
     },
 
@@ -45,7 +45,7 @@ define([
       var tabContent = '';
 
       if (this.state.showTabContent) {
-        tabContent = <ChangesHeaderTabContent key="changesFilterSection" />;
+        tabContent = <ChangesFilter key="changesFilterSection" />;
       }
 
       return (
@@ -58,6 +58,7 @@ define([
       );
     }
   });
+
 
   var ChangesHeaderTab = React.createClass({
     propTypes: {
@@ -79,25 +80,14 @@ define([
     }
   });
 
-  var ChangesHeaderTabContent = React.createClass({
-    render: function () {
-      return (
-        <div className="tab-content">
-          <div className="tab-pane active" ref="filterTab">
-            <div className="changes-header js-filter">
-              <ChangesFilter />
-            </div>
-          </div>
-        </div>
-      );
-    }
-  });
 
   var ChangesFilter = React.createClass({
+    store: Stores.changesFilterStore,
+    mixins: [Mixins.StoreListener],
+
     getStoreState: function () {
       return {
-        filter: changesFilterStore.getFilter(),
-        filters: changesFilterStore.getFilters()
+        filters: this.store.getFilters()
       };
     },
 
@@ -109,41 +99,23 @@ define([
       return this.getStoreState();
     },
 
-    submitForm: function (e) {
-      e.preventDefault();
-      e.stopPropagation();
-
-      if (_.isEmpty(this.state.filter)) {
-        return;
-      }
-      Actions.addFilter(this.state.filter);
-    },
-
-    componentDidMount: function () {
-      changesFilterStore.on('change', this.onChange, this);
-    },
-
-    componentWillUnmount: function() {
-      changesFilterStore.off('change', this.onChange);
-    },
-
     getFilters: function () {
       return _.map(this.state.filters, function (filter) {
-        return <Filter key={filter} label={filter} onRemoveFilter={this.removeFilter} />;
+        return <Filter key={filter} label={filter} />;
       }, this);
-    },
-
-    removeFilter: function (label) {
-      Actions.removeFilter(label);
     },
 
     render: function () {
       var filters = this.getFilters();
 
       return (
-        <div>
-          <AddFilterForm tooltip={this.props.tooltip} filter={this.state.filter} onSubmit={this.submitForm} />
-          <ul className="filter-list">{filters}</ul>
+        <div className="tab-content">
+          <div className="tab-pane active" ref="filterTab">
+            <div className="changes-header js-filter">
+              <AddFilterForm tooltip={this.props.tooltip} filter={this.state.filter} onSubmit={this.submitForm} />
+              <ul className="filter-list">{filters}</ul>
+            </div>
+          </div>
         </div>
       );
     }
@@ -151,12 +123,57 @@ define([
 
 
   var AddFilterForm = React.createClass({
+    store: Stores.filterFormStore,
+    mixins: [Mixins.StoreListener],
+
+    getInitialState: function () {
+      return this.getStoreState();
+    },
+
+    getStoreState: function () {
+      return {
+        filter: this.store.getFilter()
+      };
+    },
+
     getDefaultProps: function () {
       return {
         tooltip: ''
       };
     },
 
+    submitForm: function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      if (_.isEmpty(this.state.filter)) {
+        return;
+      }
+      Actions.addFilter(this.state.filter);
+    },
+
+    onChange: function () {
+      this.setState(this.getStoreState());
+    },
+
+    componentDidMount: function () {
+      this.store.on('change', this.onChange, this);
+    },
+
+    componentWillUnmount: function() {
+      this.store.off('change', this.onChange);
+    },
+
+    render: function () {
+      return (
+        <form className="form-inline js-filter-form" onSubmit={this.submitForm}>
+          <AddFilterFormContent filter={this.state.filter} tooltip={this.props.tooltip} />
+        </form>
+      );
+    }
+  });
+
+
+  var AddFilterFormContent = React.createClass({
     componentDidMount: function () {
       this.focusFilterField();
     },
@@ -175,21 +192,20 @@ define([
 
     render: function () {
       return (
-        <form className="form-inline js-filter-form" onSubmit={this.props.onSubmit}>
-          <fieldset>
-            <input type="text" ref="addItem" className="js-changes-filter-field" placeholder="Type a filter"
-              onChange={this.onChangeFilter} value={this.props.filter} />
-            <button type="submit" className="btn btn-primary">Filter</button>
-              <div className="help-block">
-              <strong ref="helpText">e.g. _design or document ID</strong>
-              {' '}
-              <FilterTooltip tooltip={this.props.tooltip} />
-            </div>
-            </fieldset>
-          </form>
+        <fieldset>
+          <input type="text" ref="addItem" className="js-changes-filter-field" placeholder="Type a filter"
+            onChange={this.onChangeFilter} value={this.props.filter} />
+          <button type="submit" className="btn btn-primary">Filter</button>
+          <div className="help-block">
+            <strong ref="helpText">e.g. _design or document ID</strong>
+            {' '}
+            <FilterTooltip tooltip={this.props.tooltip} />
+          </div>
+        </fieldset>
       );
     }
   });
+
 
   var FilterTooltip = React.createClass({
     componentDidMount: function () {
@@ -209,22 +225,22 @@ define([
     }
   });
 
+
   var Filter = React.createClass({
     propTypes: {
-      label: React.PropTypes.string.isRequired,
-      onRemoveFilter: React.PropTypes.func.isRequired
+      label: React.PropTypes.string.isRequired
     },
 
-    removeFilter: function (e) {
+    remove: function (e) {
       e.preventDefault();
-      this.props.onRemoveFilter(this.props.label);
+      Actions.removeFilter(this.props.label);
     },
 
     render: function () {
       return (
         <li>
           <span className="label label-info">{this.props.label}</span>
-          <a href="#" className="label label-info js-remove-filter" onClick={this.removeFilter} data-bypass="true">&times;</a>
+          <a href="#" className="label label-info js-remove-filter" onClick={this.remove} data-bypass="true">&times;</a>
         </li>
       );
     }

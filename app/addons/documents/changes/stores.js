@@ -15,7 +15,44 @@ define([
   'addons/documents/changes/actiontypes'
 ], function (FauxtonAPI, ActionTypes) {
 
+  var Stores = {};
 
+
+  // tracks the state of the header (open/closed)
+  var ChangesHeaderStore = FauxtonAPI.Store.extend({
+    initialize: function () {
+      this.reset();
+    },
+
+    reset: function () {
+      this._tabVisible = false;
+    },
+
+    toggleTabVisibility: function () {
+      this._tabVisible = !this._tabVisible;
+    },
+
+    isTabVisible: function () {
+      return this._tabVisible;
+    },
+
+    dispatch: function (action) {
+
+      // can I use an if-statement for a single item?
+      switch (action.type) {
+        case ActionTypes.TOGGLE_CHANGES_TAB_VISIBILITY:
+          this.toggleTabVisibility();
+          this.triggerChange();
+          break;
+      }
+    }
+  });
+
+  Stores.changesHeaderStore = new ChangesHeaderStore();
+  Stores.changesHeaderStore.dispatchToken = FauxtonAPI.dispatcher.register(Stores.changesHeaderStore.dispatch);
+
+
+  // tracks the list of filters
   var ChangesFilterStore = FauxtonAPI.Store.extend({
     initialize: function () {
       this.reset();
@@ -23,8 +60,6 @@ define([
 
     reset: function () {
       this._filters = [];
-      this._filter = '';
-      this._tabVisible = false;
     },
 
     addFilter: function (filter) {
@@ -39,34 +74,10 @@ define([
       return this._filters;
     },
 
-    updateFilter: function (filter) {
-      this._filter = filter;
-    },
-
-    getFilter: function () {
-      return this._filter;
-    },
-
-    isTabVisible: function () {
-      return this._tabVisible;
-    },
-
-    toggleTabVisibility: function () {
-      this._tabVisible = !this._tabVisible;
-    },
-
     dispatch: function (action) {
       switch (action.type) {
-        case ActionTypes.TOGGLE_CHANGES_TAB_VISIBILITY:
-          this.toggleTabVisibility();
-          this.triggerChange();
-          break;
         case ActionTypes.ADD_CHANGES_FILTER_ITEM:
           this.addFilter(action.filter);
-          this.triggerChange();
-          break;
-        case ActionTypes.UPDATE_CHANGES_FILTER:
-          this.updateFilter(action.filter);
           this.triggerChange();
           break;
         case ActionTypes.REMOVE_CHANGES_FILTER_ITEM:
@@ -77,10 +88,46 @@ define([
     }
   });
 
-  // return the instantiated store
-  var Stores = {};
   Stores.changesFilterStore = new ChangesFilterStore();
   Stores.changesFilterStore.dispatchToken = FauxtonAPI.dispatcher.register(Stores.changesFilterStore.dispatch);
+
+
+
+  // tracks the state of the form (i.e. content in the textfield)
+  var FilterFormStore = FauxtonAPI.Store.extend({
+    initialize: function () {
+      this.reset();
+    },
+
+    reset: function () {
+      this._filter = '';
+    },
+
+    getFilter: function () {
+      return this._filter;
+    },
+
+    updateFilter: function (filter) {
+      this._filter = filter;
+    },
+
+    dispatch: function (action) {
+      switch (action.type) {
+        case ActionTypes.ADD_CHANGES_FILTER_ITEM:
+          this.reset();
+          this.triggerChange();
+          break;
+        case ActionTypes.UPDATE_CHANGES_FILTER:
+          this.updateFilter(action.filter);
+          this.triggerChange();
+          break;
+      }
+    }
+  });
+
+  Stores.filterFormStore = new FilterFormStore();
+  Stores.filterFormStore.dispatchToken = FauxtonAPI.dispatcher.register(Stores.filterFormStore.dispatch);
+
 
   return Stores;
 });
