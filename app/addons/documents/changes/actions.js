@@ -31,7 +31,7 @@ function (app, FauxtonAPI, ActionTypes) {
       });
     },
 
-    addFilterViewItem: function (filter) {
+    addFilter: function (filter) {
       FauxtonAPI.dispatch({
         type: ActionTypes.ADD_CHANGES_FILTER_ITEM,
         filter: filter
@@ -41,7 +41,7 @@ function (app, FauxtonAPI, ActionTypes) {
       FauxtonAPI.triggerRouteEvent('changesFilterAdd', filter);
     },
 
-    removeFilterViewItem: function (filter) {
+    removeFilter: function (filter) {
       FauxtonAPI.dispatch({
         type: ActionTypes.REMOVE_CHANGES_FILTER_ITEM,
         filter: filter

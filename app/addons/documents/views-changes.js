@@ -23,7 +23,7 @@ define([
        "plugins/prettify"
 ],
 
-function(app, FauxtonAPI, Components, ChangesHeader, prettify, ZeroClipboard) {
+function(app, FauxtonAPI, Components, Changes, prettify, ZeroClipboard) {
 
   var Views = {};
 
@@ -32,10 +32,10 @@ function(app, FauxtonAPI, Components, ChangesHeader, prettify, ZeroClipboard) {
   // page load lifecycle
   Views.ChangesHeaderReactWrapper = FauxtonAPI.View.extend({
     afterRender: function () {
-      ChangesHeader.render(this.el);
+      Changes.renderHeader(this.el);
     },
     cleanup: function () {
-      ChangesHeader.remove(this.el);
+      Changes.removeHeader(this.el);
     }
   });
 

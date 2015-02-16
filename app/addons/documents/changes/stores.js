@@ -16,14 +16,14 @@ define([
 ], function (FauxtonAPI, ActionTypes) {
 
 
-  var FilterViewStore = FauxtonAPI.Store.extend({
+  var ChangesFilterStore = FauxtonAPI.Store.extend({
     initialize: function () {
       this.reset();
     },
 
     reset: function () {
       this._filters = [];
-      this._currentFilter = '';
+      this._filter = '';
       this._tabVisible = false;
     },
 
@@ -39,12 +39,12 @@ define([
       return this._filters;
     },
 
-    updateCurrentFilter: function (filter) {
-      this._currentFilter = filter;
+    updateFilter: function (filter) {
+      this._filter = filter;
     },
 
-    getCurrentFilter: function () {
-      return this._currentFilter;
+    getFilter: function () {
+      return this._filter;
     },
 
     isTabVisible: function () {
@@ -66,7 +66,7 @@ define([
           this.triggerChange();
           break;
         case ActionTypes.UPDATE_CHANGES_FILTER:
-          this.updateCurrentFilter(action.filter);
+          this.updateFilter(action.filter);
           this.triggerChange();
           break;
         case ActionTypes.REMOVE_CHANGES_FILTER_ITEM:
@@ -79,7 +79,7 @@ define([
 
   // return the instantiated store
   var Stores = {};
-  Stores.changesFilterStore = new FilterViewStore();
+  Stores.changesFilterStore = new ChangesFilterStore();
   Stores.changesFilterStore.dispatchToken = FauxtonAPI.dispatcher.register(Stores.changesFilterStore.dispatch);
 
   return Stores;

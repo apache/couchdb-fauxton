@@ -14,10 +14,10 @@ define([
   'app',
   'api',
   'react',
-  'addons/documents/changes/changes-header.react',
+  'addons/documents/changes/components.react',
   'addons/documents/changes/stores',
   'testUtils'
-], function (app, FauxtonAPI, React, ChangesHeader, Stores, utils) {
+], function (app, FauxtonAPI, React, Changes, Stores, utils) {
   FauxtonAPI.router = new FauxtonAPI.Router([]);
 
   var assert = utils.assert;
@@ -30,7 +30,7 @@ define([
       beforeEach(function () {
         toggleTabVisibility = sinon.spy();
         container = document.createElement('div');
-        tab = TestUtils.renderIntoDocument(<ChangesHeader.ChangesHeaderTab onToggle={toggleTabVisibility} />, container);
+        tab = TestUtils.renderIntoDocument(<Changes.ChangesHeaderTab onToggle={toggleTabVisibility} />, container);
       });
 
       afterEach(function () {
@@ -51,7 +51,7 @@ define([
 
     beforeEach(function () {
       container = document.createElement('div');
-      changesFilterEl = TestUtils.renderIntoDocument(<ChangesHeader.ChangesFilter />, container);
+      changesFilterEl = TestUtils.renderIntoDocument(<Changes.ChangesFilter />, container);
     });
 
     afterEach(function () {
@@ -62,12 +62,14 @@ define([
     it('should add filter markup', function () {
       var $el = $(changesFilterEl.getDOMNode()),
           submitBtn = $el.find('[type="submit"]')[0],
-          addItemField = changesFilterEl.refs.addItem.getDOMNode();
+          addItemField = $el.find('.js-changes-filter-field')[0];
 
       addItemField.value = 'I wandered lonely as a filter';
+      TestUtils.Simulate.change(addItemField);
       TestUtils.Simulate.submit(submitBtn);
 
       addItemField.value = 'A second filter';
+      TestUtils.Simulate.change(addItemField);
       TestUtils.Simulate.submit(submitBtn);
 
       assert.equal(2, $el.find('.js-remove-filter').length);
@@ -77,12 +79,14 @@ define([
     it('should remove filter markup', function () {
       var $el = $(changesFilterEl.getDOMNode()),
         submitBtn = $el.find('[type="submit"]')[0],
-        addItemField = changesFilterEl.refs.addItem.getDOMNode();
+        addItemField = $el.find('.js-changes-filter-field')[0];
 
       addItemField.value = 'Bloop';
+      TestUtils.Simulate.change(addItemField);
       TestUtils.Simulate.submit(submitBtn);
 
       addItemField.value = 'Flibble';
+      TestUtils.Simulate.change(addItemField);
       TestUtils.Simulate.submit(submitBtn);
 
       // clicks ALL 'remove' elements
@@ -96,9 +100,10 @@ define([
     it('should not add empty filters', function () {
       var $el = $(changesFilterEl.getDOMNode()),
         submitBtn = $el.find('[type="submit"]')[0],
-        addItemField = changesFilterEl.refs.addItem.getDOMNode();
+        addItemField = $el.find('.js-changes-filter-field')[0];
 
       addItemField.value = '';
+      TestUtils.Simulate.change(addItemField);
       TestUtils.Simulate.submit(submitBtn);
 
       assert.equal(0, $el.find('.js-remove-filter').length);
@@ -112,7 +117,7 @@ define([
 
     it('should add tooltips when some text is supplied', function () {
       var customContainer = document.createElement('div');
-      var customChangesFilterEl = TestUtils.renderIntoDocument(<ChangesHeader.ChangesFilter tooltip="holy cow this is a tooltip" />, customContainer);
+      var customChangesFilterEl = TestUtils.renderIntoDocument(<Changes.ChangesFilter tooltip="holy cow this is a tooltip" />, customContainer);
       assert.equal(1, $(customChangesFilterEl.getDOMNode()).find('.js-filter-tooltip').length);
     });
   });

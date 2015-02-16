@@ -96,20 +96,13 @@ define([
   var ChangesFilter = React.createClass({
     getStoreState: function () {
       return {
-        currentFilter: changesFilterStore.getCurrentFilter(),
+        filter: changesFilterStore.getFilter(),
         filters: changesFilterStore.getFilters()
       };
     },
 
     onChange: function () {
       this.setState(this.getStoreState());
-    },
-
-    // props belong to the parent, so these aren't stored in the related store
-    getDefaultProps: function () {
-      return {
-        tooltip: ''
-      };
     },
 
     getInitialState: function () {
@@ -120,35 +113,56 @@ define([
       e.preventDefault();
       e.stopPropagation();
 
-      var filter = changesFilterStore.getCurrentFilter();
-      if (!filter) {
+      if (_.isEmpty(this.state.filter)) {
         return;
       }
-
-      Actions.addFilterViewItem(filter);
+      Actions.addFilter(this.state.filter);
     },
 
     componentDidMount: function () {
       changesFilterStore.on('change', this.onChange, this);
-      this.focusFilterField();
     },
 
     componentWillUnmount: function() {
       changesFilterStore.off('change', this.onChange);
     },
 
-    componentDidUpdate: function () {
-      this.focusFilterField();
-    },
-
     getFilters: function () {
       return _.map(this.state.filters, function (filter) {
-        return <ChangesFilterItem key={filter} label={filter} onRemoveFilter={this.removeFilter} />;
+        return <Filter key={filter} label={filter} onRemoveFilter={this.removeFilter} />;
       }, this);
     },
 
     removeFilter: function (label) {
-      Actions.removeFilterViewItem(label);
+      Actions.removeFilter(label);
+    },
+
+    render: function () {
+      var filters = this.getFilters();
+
+      return (
+        <div>
+          <AddFilterForm tooltip={this.props.tooltip} filter={this.state.filter} onSubmit={this.submitForm} />
+          <ul className="filter-list">{filters}</ul>
+        </div>
+      );
+    }
+  });
+
+
+  var AddFilterForm = React.createClass({
+    getDefaultProps: function () {
+      return {
+        tooltip: ''
+      };
+    },
+
+    componentDidMount: function () {
+      this.focusFilterField();
+    },
+
+    componentDidUpdate: function () {
+      this.focusFilterField();
     },
 
     focusFilterField: function () {
@@ -160,24 +174,19 @@ define([
     },
 
     render: function () {
-      var filters = this.getFilters();
-
       return (
-        <div>
-          <form className="form-inline js-filter-form" onSubmit={this.submitForm}>
-            <fieldset>
-              <input type="text" ref="addItem" className="js-changes-filter-field" placeholder="Type a filter"
-                onChange={this.onChangeFilter} value={this.state.currentFilter} />
-              <button type="submit" className="btn btn-primary">Filter</button>
+        <form className="form-inline js-filter-form" onSubmit={this.props.onSubmit}>
+          <fieldset>
+            <input type="text" ref="addItem" className="js-changes-filter-field" placeholder="Type a filter"
+              onChange={this.onChangeFilter} value={this.props.filter} />
+            <button type="submit" className="btn btn-primary">Filter</button>
               <div className="help-block">
-                <strong ref="helpText">e.g. _design or document ID</strong>
-                {' '}
-                <FilterTooltip tooltip={this.props.tooltip} />
-              </div>
+              <strong ref="helpText">e.g. _design or document ID</strong>
+              {' '}
+              <FilterTooltip tooltip={this.props.tooltip} />
+            </div>
             </fieldset>
           </form>
-          <ul className="filter-list">{filters}</ul>
-        </div>
       );
     }
   });
@@ -200,7 +209,7 @@ define([
     }
   });
 
-  var ChangesFilterItem = React.createClass({
+  var Filter = React.createClass({
     propTypes: {
       label: React.PropTypes.string.isRequired,
       onRemoveFilter: React.PropTypes.func.isRequired
@@ -223,10 +232,10 @@ define([
 
 
   return {
-    render: function (el) {
+    renderHeader: function (el) {
       React.render(<ChangesHeader />, el);
     },
-    remove: function (el) {
+    removeHeader: function (el) {
       React.unmountComponentAtNode(el);
     },
 
