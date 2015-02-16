@@ -70,10 +70,11 @@ function (app, FauxtonAPI, BaseRoute, Documents, Index, Databases, Components) {
         database: this.database
       }));
 
+
       this.breadcrumbs = this.setView('#breadcrumbs', new Components.Breadcrumbs({
         toggleDisabled: true,
         crumbs: [
-          {'type': 'back', 'link': '/_all_dbs'},
+          {'type': 'back', 'link': Databases.databaseUrl(this.database)},
           {'name': this.database.id, 'link': Databases.databaseUrl(this.database) }
         ]
       }));
@@ -130,8 +131,8 @@ function (app, FauxtonAPI, BaseRoute, Documents, Index, Databases, Components) {
       this.breadcrumbs = this.setView('#breadcrumbs', new Components.Breadcrumbs({
         toggleDisabled: true,
         crumbs: [
-          {'type': 'back', 'link': '/_all_dbs'},
-          {'name': 'Create new index', 'link': Databases.databaseUrl(database) }
+          {'type': 'back', 'link': Databases.databaseUrl(this.database)},
+          {'name': 'Create new index', 'link': Databases.databaseUrl(this.database) }
         ]
       }));
 
