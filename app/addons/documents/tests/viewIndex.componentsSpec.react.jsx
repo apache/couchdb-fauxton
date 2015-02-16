@@ -54,7 +54,6 @@ define([
         React.unmountComponentAtNode(container);
       });
 
-
       it('should toggle editor on click', function () {
         TestUtils.Simulate.click($(toggleEl.getDOMNode()).find('a')[0]);
         assert.ok(toggleEditor.calledOnce);
@@ -171,7 +170,7 @@ define([
           value: 'new-doc-entered'
         }
       });
-      
+
       assert.ok(spy.calledWith('_design/new-doc-entered', true));
     });
 
@@ -209,6 +208,18 @@ define([
       assert.ok(editorEl.hasValidCode());
     });
 
+    it('calls changeViewName on view name change', function () {
+      var viewName = 'new-name';
+      var spy = sinon.spy(Actions, 'changeViewName');
+      var el = $(editorEl.getDOMNode()).find('#index-name')[0];
+      TestUtils.Simulate.change(el, {
+        target: {
+          value: viewName
+        }
+      });
+      assert.ok(spy.calledWith(viewName));
+    });
+
   });
 
   describe('Beautify', function () {
@@ -223,7 +234,7 @@ define([
     });
 
     it('should be empty for multi-lined code', function () {
-      var correctCode = 'function() {\n    console.log("hello");\n}'; 
+      var correctCode = 'function() {\n    console.log("hello");\n}';
       beautifyEl = TestUtils.renderIntoDocument(<Views.Beautify code={correctCode}/>, container);
       assert.ok(_.isNull(beautifyEl.getDOMNode()));
     });
@@ -236,7 +247,7 @@ define([
 
     it('on click beautifies code', function () {
       var fixedCode;
-      var correctCode = 'function() {\n    console.log("hello");\n}'; 
+      var correctCode = 'function() {\n    console.log("hello");\n}';
 
       var beautifiedCode = function (code) {
         fixedCode = code;

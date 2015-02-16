@@ -104,6 +104,10 @@ function(FauxtonAPI, ActionTypes) {
       return this._viewName;
     },
 
+    setViewName: function (name) {
+      this._viewName = name;
+    },
+
     showEditor: function () {
       return this._showEditor;
     },
@@ -161,6 +165,11 @@ function(FauxtonAPI, ActionTypes) {
           this.triggerChange();
         break;
 
+        case ActionTypes.VIEW_NAME_CHANGE:
+          this.setViewName(action.name);
+          this.triggerChange();
+        break;
+
         case ActionTypes.EDIT_NEW_INDEX:
           this.editIndex(action.options);
           this.triggerChange();
@@ -177,12 +186,12 @@ function(FauxtonAPI, ActionTypes) {
         break;
 
         case ActionTypes.DESIGN_DOC_CHANGE:
-          this.setDesignDocId(action.designDocId, action.newDesignDoc); 
+          this.setDesignDocId(action.designDocId, action.newDesignDoc);
           this.triggerChange();
         break;
 
         case ActionTypes.NEW_DESIGN_DOC:
-          this.setDesignDocId('', true); 
+          this.setDesignDocId('', true);
           this.triggerChange();
         break;
 

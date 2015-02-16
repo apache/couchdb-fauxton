@@ -189,7 +189,7 @@ function(app, FauxtonAPI, React, Stores, Actions, Components, beautifyHelper) {
       return (
         <div className="control-group">
           <label htmlFor="ace-function">
-            {this.props.title} 
+            {this.props.title}
             {docsLink}
           </label>
           <div className="js-editor" id={this.props.id}>{this.props.code}</div>
@@ -426,7 +426,7 @@ function(app, FauxtonAPI, React, Stores, Actions, Components, beautifyHelper) {
     },
 
     viewChange: function (event) {
-      this.setState({viewName: event.target.value});
+      Actions.changeViewName(event.target.value);
     },
 
     render: function () {
