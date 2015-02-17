@@ -32,8 +32,9 @@ function(app, FauxtonAPI, React, Stores, Actions, Components, beautifyHelper) {
           <label htmlFor={this.props.selectId}>
             <i className="fonticon-down-dir"></i>
             <select
+              value={this.props.selectValue}
               id={this.props.selectId}
-              className={this.props.selectClass}
+              className={this.props.selectValue}
               onChange={this.props.selectChange}
             >
               {this.props.selectContent}
@@ -114,7 +115,7 @@ function(app, FauxtonAPI, React, Stores, Actions, Components, beautifyHelper) {
                     selectContent={this.getSelectContent()}
                     selectChange={this.selectChange}
                     selectId="ddoc"
-                    selectClass={designDocId}
+                    selectValue={designDocId}
                   />
                 </div>
                 <div className="pull-left">
@@ -319,7 +320,7 @@ function(app, FauxtonAPI, React, Stores, Actions, Components, beautifyHelper) {
               selectContent={reduceOptions}
               selectChange={this.selectChange}
               selectId="reduce-function-selector"
-              selectClass="" />
+              selectValue={this.state.reduceSelectedOption} />
           </div>
 
           {customReduceSection}
