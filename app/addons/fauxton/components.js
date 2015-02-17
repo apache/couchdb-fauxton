@@ -615,19 +615,24 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
       }
       _.bindAll(this);
     },
-    source: function(query, process) {
+
+    getURL: function (query, dbLimit) {
       query = encodeURIComponent(query);
-      var resultFilter = this.resultFilter;
-      var url = [
+      return [
         app.host,
         "/_all_dbs?startkey=%22",
         query,
         "%22&endkey=%22",
         query,
-        "\u9999",
+        encodeURIComponent("\u9999"),
         "%22&limit=",
-        this.dbLimit
+        dbLimit
       ].join('');
+    },
+
+    source: function(query, process) {
+      var url = this.getURL(query, this.dbLimit);
+      var resultFilter = this.resultFilter;
 
       if (this.ajaxReq) { this.ajaxReq.abort(); }
 
