@@ -117,17 +117,19 @@ function (app, FauxtonAPI, Documents, ActionTypes) {
             clear: true
           });
 
-          FauxtonAPI.dispatch({
-            type: ActionTypes.VIEW_SAVED
-          });
+          if (_.any([viewInfo.designDocChanged, viewInfo.hasViewNameChanged, viewInfo.newDesignDoc, viewInfo.newView])) {
+            FauxtonAPI.dispatch({
+              type: ActionTypes.VIEW_SAVED
+            });
+            var fragment = '/database/' +
+                viewInfo.database.safeID() +
+                '/' + designDoc.safeID() +
+                '/_view/' +
+                app.utils.safeURLName(viewInfo.viewName);
 
-          var fragment = '/database/' +
-              viewInfo.database.safeID() +
-              '/' + designDoc.safeID() +
-              '/_view/' +
-              app.utils.safeURLName(viewInfo.viewName);
+            FauxtonAPI.navigate(fragment, {trigger: true});
+          }
 
-          FauxtonAPI.navigate(fragment, {trigger: true});
           FauxtonAPI.triggerRouteEvent('updateAllDocs', {ddoc: designDoc.id, view: viewInfo.viewName});
         });
       }

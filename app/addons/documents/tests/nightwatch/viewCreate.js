@@ -72,7 +72,7 @@ var tests = {
   },
 };
 
-function openDifferentDropdownsAndClick  (client, dropDownElement) {
+function openDifferentDropdownsAndClick (client, dropDownElement) {
   modifier =  + dropDownElement.slice(1);
   newDatabaseName = client.globals.testDatabaseName;
   newDocumentName = 'create_view_doc' + modifier;

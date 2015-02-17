@@ -392,6 +392,7 @@ function(app, FauxtonAPI, React, Stores, Actions, Components, beautifyHelper) {
   var Editor = React.createClass({
     getStoreState: function () {
       return {
+        hasViewNameChanged: indexEditorStore.hasViewNameChanged(),
         database: indexEditorStore.getDatabase(),
         isNewView: indexEditorStore.isNewView(),
         viewName: indexEditorStore.getViewName(),
@@ -448,6 +449,7 @@ function(app, FauxtonAPI, React, Stores, Actions, Components, beautifyHelper) {
         designDocId: this.state.designDocId,
         newDesignDoc: this.state.newDesignDoc,
         designDocChanged: this.state.hasDesignDocChanged,
+        hasViewNameChanged: this.state.hasViewNameChanged,
         map: this.refs.mapEditor.getValue(),
         reduce: this.refs.reduceEditor.getReduceValue(),
         designDocs: this.state.designDocs
@@ -515,7 +517,7 @@ function(app, FauxtonAPI, React, Stores, Actions, Components, beautifyHelper) {
             </div>
             <div className="padded-box">
               <div className="control-group">
-                <button className="btn btn-success save">
+                <button type="submit" className="btn btn-success save">
                   <i className="icon fonticon-ok-circled"></i> Save &amp; Build Index
                 </button>
                 <DeleteView />

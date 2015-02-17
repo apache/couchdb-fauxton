@@ -31,6 +31,7 @@ function(FauxtonAPI, ActionTypes) {
       this._designDocs = options.designDocs;
       this._designDocId = options.designDocId;
       this._designDocChanged = false;
+      this._viewNameChanged = false;
 
       if (!this._newView && !this._newDesignDoc) {
         this._view = this.getDesignDoc().get('views')[this._viewName];
@@ -105,6 +106,7 @@ function(FauxtonAPI, ActionTypes) {
 
     setViewName: function (name) {
       this._viewName = name;
+      this._viewNameChanged = true;
     },
 
     hasCustomReduce: function () {
@@ -117,6 +119,10 @@ function(FauxtonAPI, ActionTypes) {
       if (!this.getReduce()) { return false; }
 
       return true;
+    },
+
+    hasViewNameChanged: function () {
+      return this._viewNameChanged;
     },
 
     builtInReduces: function () {

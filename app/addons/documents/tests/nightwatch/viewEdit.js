@@ -11,14 +11,15 @@
 // the License.
 
 module.exports = {
-  'Edits a design doc': function (client) {
+
+  'Edits a design doc - set new index name': function (client) {
     /*jshint multistr: true */
     var waitTime = 10000,
         newDatabaseName = client.globals.testDatabaseName,
         baseUrl = client.globals.test_settings.launch_url;
 
     client
-       .populateDatabase(newDatabaseName)
+      .populateDatabase(newDatabaseName)
       .loginToGUI()
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_design/testdesigndoc/_view/stubview')
       .waitForElementPresent('.prettyprint', waitTime, false)
@@ -27,12 +28,62 @@ module.exports = {
       .setValue('#index-name', 'hasenindex5000')
       .execute('\
         var editor = ace.edit("map-function");\
-        editor.getSession().setValue("function (doc) { emit(\'hasehase5000\'); }");\
+        editor.getSession().setValue("function (doc) { emit(\'hasehase5000\', 1); }");\
       ')
-      .waitForElementPresent('button.btn-success.save', waitTime, false)
+      .execute('$(".save")[0].scrollIntoView();')
       .click('button.btn-success.save')
+
       .waitForElementNotVisible('.global-notification', waitTime, false)
       .assert.containsText('.prettyprint', 'hasehase5000')
+    .end();
+  },
+
+  'Edits a design doc': function (client) {
+    /*jshint multistr: true */
+    var waitTime = 10000,
+        newDatabaseName = client.globals.testDatabaseName,
+        baseUrl = client.globals.test_settings.launch_url;
+
+    client
+      .populateDatabase(newDatabaseName)
+      .loginToGUI()
+      .url(baseUrl + '/#/database/' + newDatabaseName + '/_design/testdesigndoc/_view/stubview')
+      .waitForElementPresent('.prettyprint', waitTime, false)
+      .assert.containsText('.prettyprint', 'stub')
+
+      .execute('\
+        var editor = ace.edit("map-function");\
+        editor.getSession().setValue("function (doc) { emit(\'hasehase5000\', 1); }");\
+      ')
+      .execute('$(".save")[0].scrollIntoView();')
+      .click('button.btn-success.save')
+
+      .waitForElementNotVisible('.global-notification', waitTime, false)
+      .assert.containsText('.prettyprint', 'hasehase5000')
+    .end();
+  },
+
+  'Query Options are kept after a new reduce method is chosen': function (client) {
+    /*jshint multistr: true */
+    var waitTime = 10000,
+        newDatabaseName = client.globals.testDatabaseName,
+        baseUrl = client.globals.test_settings.launch_url;
+
+    client
+      .populateDatabase(newDatabaseName)
+      .loginToGUI()
+      .url(baseUrl + '/#/database/' + newDatabaseName + '/_design/testdesigndoc/_view/stubview?reduce=true&group_level=0')
+      .waitForElementPresent('.prettyprint', waitTime, false)
+      .assert.containsText('.prettyprint', '20')
+      .clickWhenVisible('#reduce-function-selector option[value="_sum"]')
+      .execute('\
+        var editor = ace.edit("map-function");\
+        editor.getSession().setValue("function (doc) { emit(\'newstub\', 2); }");\
+      ')
+      .execute('$(".save")[0].scrollIntoView();')
+      .click('button.btn-success.save')
+      .waitForElementNotVisible('.global-notification', waitTime, false)
+      .assert.containsText('.prettyprint', '40')
     .end();
   }
 };

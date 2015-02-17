@@ -31,7 +31,8 @@ PopulateDatabase.prototype.command = function (databaseName, count) {
       database.insert({
         views: {
           "stubview": {
-            "map": "function(doc) {\n  emit(doc._id, 'stub');\n}"
+            "map": "function(doc) {\n  emit('stub', 2);\n}",
+            "reduce": "_count"
           }
         }
       },
