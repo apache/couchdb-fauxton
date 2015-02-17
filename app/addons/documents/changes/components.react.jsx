@@ -13,28 +13,32 @@
 define([
   'react',
   'addons/documents/changes/actions',
-  'addons/documents/changes/stores',
-  'addons/fauxton/mixins'
-], function (React, Actions, Stores, Mixins) {
+  'addons/documents/changes/stores'
+], function (React, Actions, Stores) {
 
   var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 
 
   // the top-level component for the Changes Filter section. Handles hiding/showing
   var ChangesHeader = React.createClass({
-    store: Stores.changesHeaderStore,
-    mixins: [Mixins.StoreListener],
-
     getInitialState: function () {
       return {
-        showTabContent: this.store.isTabVisible()
+        showTabContent: Stores.changesHeaderStore.isTabVisible()
       };
     },
 
     onChange: function () {
       this.setState({
-        showTabContent: this.store.isTabVisible()
+        showTabContent: Stores.changesHeaderStore.isTabVisible()
       });
+    },
+
+    componentDidMount: function () {
+      Stores.changesHeaderStore.on('change', this.onChange, this);
+    },
+
+    componentWillUnmount: function () {
+      Stores.changesHeaderStore.off('change', this.onChange);
     },
 
     toggleFilterSection: function () {
@@ -43,7 +47,6 @@ define([
 
     render: function () {
       var tabContent = '';
-
       if (this.state.showTabContent) {
         tabContent = <ChangesFilter key="changesFilterSection" />;
       }
@@ -82,17 +85,22 @@ define([
 
 
   var ChangesFilter = React.createClass({
-    store: Stores.changesFilterStore,
-    mixins: [Mixins.StoreListener],
-
     getStoreState: function () {
       return {
-        filters: this.store.getFilters()
+        filters: Stores.changesFilterStore.getFilters()
       };
     },
 
     onChange: function () {
       this.setState(this.getStoreState());
+    },
+
+    componentDidMount: function () {
+      Stores.changesFilterStore.on('change', this.onChange, this);
+    },
+
+    componentWillUnmount: function () {
+      Stores.changesFilterStore.off('change', this.onChange);
     },
 
     getInitialState: function () {
@@ -123,16 +131,9 @@ define([
 
 
   var AddFilterForm = React.createClass({
-    store: Stores.filterFormStore,
-    mixins: [Mixins.StoreListener],
-
     getInitialState: function () {
-      return this.getStoreState();
-    },
-
-    getStoreState: function () {
       return {
-        filter: this.store.getFilter()
+        filter: ''
       };
     },
 
@@ -151,29 +152,6 @@ define([
       Actions.addFilter(this.state.filter);
     },
 
-    onChange: function () {
-      this.setState(this.getStoreState());
-    },
-
-    componentDidMount: function () {
-      this.store.on('change', this.onChange, this);
-    },
-
-    componentWillUnmount: function() {
-      this.store.off('change', this.onChange);
-    },
-
-    render: function () {
-      return (
-        <form className="form-inline js-filter-form" onSubmit={this.submitForm}>
-          <AddFilterFormContent filter={this.state.filter} tooltip={this.props.tooltip} />
-        </form>
-      );
-    }
-  });
-
-
-  var AddFilterFormContent = React.createClass({
     componentDidMount: function () {
       this.focusFilterField();
     },
@@ -187,21 +165,23 @@ define([
     },
 
     onChangeFilter: function (e) {
-      Actions.filterChange(e.target.value);
+      this.setState({ filter: e.target.value });
     },
 
     render: function () {
       return (
-        <fieldset>
-          <input type="text" ref="addItem" className="js-changes-filter-field" placeholder="Type a filter"
-            onChange={this.onChangeFilter} value={this.props.filter} />
-          <button type="submit" className="btn btn-primary">Filter</button>
-          <div className="help-block">
-            <strong ref="helpText">e.g. _design or document ID</strong>
-            {' '}
-            <FilterTooltip tooltip={this.props.tooltip} />
-          </div>
-        </fieldset>
+        <form className="form-inline js-filter-form" onSubmit={this.submitForm}>
+          <fieldset>
+            <input type="text" ref="addItem" className="js-changes-filter-field" placeholder="Type a filter"
+              onChange={this.onChangeFilter} value={this.state.filter} />
+            <button type="submit" className="btn btn-primary">Filter</button>
+            <div className="help-block">
+              <strong ref="helpText">e.g. _design or document ID</strong>
+              {' '}
+              <FilterTooltip tooltip={this.props.tooltip} />
+            </div>
+          </fieldset>
+        </form>
       );
     }
   });
@@ -256,6 +236,7 @@ define([
     },
 
     // exposed for testing purposes only
+    ChangesHeader: ChangesHeader,
     ChangesHeaderTab: ChangesHeaderTab,
     ChangesFilter: ChangesFilter
   };

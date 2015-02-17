@@ -92,42 +92,5 @@ define([
   Stores.changesFilterStore.dispatchToken = FauxtonAPI.dispatcher.register(Stores.changesFilterStore.dispatch);
 
 
-
-  // tracks the state of the form (i.e. content in the textfield)
-  var FilterFormStore = FauxtonAPI.Store.extend({
-    initialize: function () {
-      this.reset();
-    },
-
-    reset: function () {
-      this._filter = '';
-    },
-
-    getFilter: function () {
-      return this._filter;
-    },
-
-    updateFilter: function (filter) {
-      this._filter = filter;
-    },
-
-    dispatch: function (action) {
-      switch (action.type) {
-        case ActionTypes.ADD_CHANGES_FILTER_ITEM:
-          this.reset();
-          this.triggerChange();
-          break;
-        case ActionTypes.UPDATE_CHANGES_FILTER:
-          this.updateFilter(action.filter);
-          this.triggerChange();
-          break;
-      }
-    }
-  });
-
-  Stores.filterFormStore = new FilterFormStore();
-  Stores.filterFormStore.dispatchToken = FauxtonAPI.dispatcher.register(Stores.filterFormStore.dispatch);
-
-
   return Stores;
 });

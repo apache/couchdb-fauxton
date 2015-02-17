@@ -16,21 +16,23 @@ define([
   'react',
   'addons/documents/changes/components.react',
   'addons/documents/changes/stores',
+  'addons/documents/changes/actions',
   'testUtils'
-], function (app, FauxtonAPI, React, Changes, Stores, utils) {
+], function (app, FauxtonAPI, React, Changes, Stores, Actions, utils) {
   FauxtonAPI.router = new FauxtonAPI.Router([]);
 
   var assert = utils.assert;
   var TestUtils = React.addons.TestUtils;
 
-  describe('ChangesHeader', function () {
-    describe('Toggle tab content button', function () {
-      var container, tab, toggleTabVisibility;
 
+  describe('ChangesHeader', function () {
+    var container, tab, spy;
+
+    describe('Testing DOM', function () {
       beforeEach(function () {
-        toggleTabVisibility = sinon.spy();
+        spy = sinon.spy(Actions, 'toggleTabVisibility');
         container = document.createElement('div');
-        tab = TestUtils.renderIntoDocument(<Changes.ChangesHeaderTab onToggle={toggleTabVisibility} />, container);
+        tab = TestUtils.renderIntoDocument(<Changes.ChangesHeader />, container);
       });
 
       afterEach(function () {
@@ -38,10 +40,59 @@ define([
         React.unmountComponentAtNode(container);
       });
 
-      it('should call toggle function on clicking tab', function () {
+      // similar as previous, except it confirms that the action gets fired, not the custom toggle func
+      it('calls toggleTabVisibility action on selecting a tab', function () {
         TestUtils.Simulate.click($(tab.getDOMNode()).find('a')[0]);
-        assert.ok(toggleTabVisibility.calledOnce);
+        assert.ok(spy.calledOnce);
       });
+    });
+
+    it('toggleTabVisibility() changes state in store', function() {
+      assert.ok(Stores.changesHeaderStore.isTabVisible() === false);
+      Stores.changesHeaderStore.toggleTabVisibility();
+      assert.ok(Stores.changesHeaderStore.isTabVisible() === true);
+    });
+
+    it('reset() changes tab visiblity to hidden', function() {
+      Stores.changesHeaderStore.toggleTabVisibility();
+      Stores.changesHeaderStore.reset();
+      assert.ok(Stores.changesHeaderStore.isTabVisible() === false);
+    });
+
+//    reset: function () {
+//      this._filters = [];
+//    },
+//
+//    addFilter: function (filter) {
+//      this._filters.push(filter);
+//    },
+//
+//    removeFilter: function (filter) {
+//      this._filters = _.without(this._filters, filter);
+//    },
+//
+//    getFilters: function () {
+//      return this._filters;
+//    },
+  });
+
+  describe('ChangesHeaderTab', function () {
+    var container, tab, toggleTabVisibility;
+
+    beforeEach(function () {
+      toggleTabVisibility = sinon.spy();
+      container = document.createElement('div');
+      tab = TestUtils.renderIntoDocument(<Changes.ChangesHeaderTab onToggle={toggleTabVisibility} />, container);
+    });
+
+    afterEach(function () {
+      Stores.changesFilterStore.reset();
+      React.unmountComponentAtNode(container);
+    });
+
+    it('should call toggle function on clicking tab', function () {
+      TestUtils.Simulate.click($(tab.getDOMNode()).find('a')[0]);
+      assert.ok(toggleTabVisibility.calledOnce);
     });
   });
 
@@ -75,6 +126,19 @@ define([
       assert.equal(2, $el.find('.js-remove-filter').length);
     });
 
+    it('should call addFilter action on click', function () {
+      var $el = $(changesFilterEl.getDOMNode()),
+        submitBtn = $el.find('[type="submit"]')[0],
+        addItemField = $el.find('.js-changes-filter-field')[0];
+
+      var spy = sinon.spy(Actions, 'addFilter');
+
+      addItemField.value = 'I wandered lonely as a filter';
+      TestUtils.Simulate.change(addItemField);
+      TestUtils.Simulate.submit(submitBtn);
+
+      assert.ok(spy.calledOnce);
+    });
 
     it('should remove filter markup', function () {
       var $el = $(changesFilterEl.getDOMNode()),
@@ -96,6 +160,20 @@ define([
       assert.equal(0, $el.find('.js-remove-filter').length);
     });
 
+    it('should call removeFilter action on click', function () {
+      var $el = $(changesFilterEl.getDOMNode()),
+        submitBtn = $el.find('[type="submit"]')[0],
+        addItemField = $el.find('.js-changes-filter-field')[0];
+
+      var spy = sinon.spy(Actions, 'removeFilter');
+
+      addItemField.value = 'I wandered lonely as a filter';
+      TestUtils.Simulate.change(addItemField);
+      TestUtils.Simulate.submit(submitBtn);
+      TestUtils.Simulate.click($el.find('.js-remove-filter')[0]);
+
+      assert.ok(spy.calledOnce);
+    });
 
     it('should not add empty filters', function () {
       var $el = $(changesFilterEl.getDOMNode()),
@@ -109,17 +187,29 @@ define([
       assert.equal(0, $el.find('.js-remove-filter').length);
     });
 
-
     it('should not add tooltips by default', function () {
       assert.equal(0, $(changesFilterEl.getDOMNode()).find('.js-remove-filter').length);
     });
 
-
-    it('should add tooltips when some text is supplied', function () {
-      var customContainer = document.createElement('div');
-      var customChangesFilterEl = TestUtils.renderIntoDocument(<Changes.ChangesFilter tooltip="holy cow this is a tooltip" />, customContainer);
-      assert.equal(1, $(customChangesFilterEl.getDOMNode()).find('.js-filter-tooltip').length);
+    it('addFilter() adds item in store', function () {
+      var filter = 'My filter';
+      Stores.changesFilterStore.addFilter(filter);
+      var filters = Stores.changesFilterStore.getFilters();
+      assert.ok(filters.length === 1);
+      assert.ok(filters[0] === filter);
     });
+
+    it('removeFilter() removes item from store', function () {
+      var filter1 = 'My filter 1';
+      var filter2 = 'My filter 2';
+      Stores.changesFilterStore.addFilter(filter1);
+      Stores.changesFilterStore.addFilter(filter2);
+      Stores.changesFilterStore.removeFilter(filter1);
+      var filters = Stores.changesFilterStore.getFilters();
+      assert.ok(filters.length === 1);
+      assert.ok(filters[0] === filter2);
+    });
+
   });
 
 });

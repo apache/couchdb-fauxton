@@ -24,13 +24,6 @@ function (app, FauxtonAPI, ActionTypes) {
       });
     },
 
-    filterChange: function (filter) {
-      FauxtonAPI.dispatch({
-        type: ActionTypes.UPDATE_CHANGES_FILTER,
-        filter: filter
-      });
-    },
-
     addFilter: function (filter) {
       FauxtonAPI.dispatch({
         type: ActionTypes.ADD_CHANGES_FILTER_ITEM,
