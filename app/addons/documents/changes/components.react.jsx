@@ -107,10 +107,21 @@ define([
       return this.getStoreState();
     },
 
+    remove: function (label) {
+      Actions.removeFilter(label);
+    },
+
     getFilters: function () {
       return _.map(this.state.filters, function (filter) {
-        return <Filter key={filter} label={filter} />;
+        return <Filter key={filter} label={filter} onRemove={this.remove} />;
       }, this);
+    },
+
+    onSubmit: function (newFilter) {
+      if (_.isEmpty(newFilter)) {
+        return;
+      }
+      Actions.addFilter(newFilter);
     },
 
     render: function () {
@@ -120,7 +131,7 @@ define([
         <div className="tab-content">
           <div className="tab-pane active" ref="filterTab">
             <div className="changes-header js-filter">
-              <AddFilterForm tooltip={this.props.tooltip} filter={this.state.filter} onSubmit={this.submitForm} />
+              <AddFilterForm tooltip={this.props.tooltip} filter={this.state.filter} onSubmit={this.onSubmit} />
               <ul className="filter-list">{filters}</ul>
             </div>
           </div>
@@ -131,6 +142,10 @@ define([
 
 
   var AddFilterForm = React.createClass({
+    propTypes: {
+      onSubmit: React.PropTypes.func.isRequired
+    },
+
     getInitialState: function () {
       return {
         filter: ''
@@ -146,10 +161,8 @@ define([
     submitForm: function (e) {
       e.preventDefault();
       e.stopPropagation();
-      if (_.isEmpty(this.state.filter)) {
-        return;
-      }
-      Actions.addFilter(this.state.filter);
+      this.props.onSubmit(this.state.filter);
+      this.setState({ filter: '' });
     },
 
     componentDidMount: function () {
@@ -208,12 +221,13 @@ define([
 
   var Filter = React.createClass({
     propTypes: {
-      label: React.PropTypes.string.isRequired
+      label: React.PropTypes.string.isRequired,
+      onRemove: React.PropTypes.func.isRequired
     },
 
     remove: function (e) {
       e.preventDefault();
-      Actions.removeFilter(this.props.label);
+      this.props.onRemove(this.props.label);
     },
 
     render: function () {

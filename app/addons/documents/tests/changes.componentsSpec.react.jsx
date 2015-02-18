@@ -46,34 +46,6 @@ define([
         assert.ok(spy.calledOnce);
       });
     });
-
-    it('toggleTabVisibility() changes state in store', function() {
-      assert.ok(Stores.changesHeaderStore.isTabVisible() === false);
-      Stores.changesHeaderStore.toggleTabVisibility();
-      assert.ok(Stores.changesHeaderStore.isTabVisible() === true);
-    });
-
-    it('reset() changes tab visiblity to hidden', function() {
-      Stores.changesHeaderStore.toggleTabVisibility();
-      Stores.changesHeaderStore.reset();
-      assert.ok(Stores.changesHeaderStore.isTabVisible() === false);
-    });
-
-//    reset: function () {
-//      this._filters = [];
-//    },
-//
-//    addFilter: function (filter) {
-//      this._filters.push(filter);
-//    },
-//
-//    removeFilter: function (filter) {
-//      this._filters = _.without(this._filters, filter);
-//    },
-//
-//    getFilters: function () {
-//      return this._filters;
-//    },
   });
 
   describe('ChangesHeaderTab', function () {
@@ -190,26 +162,6 @@ define([
     it('should not add tooltips by default', function () {
       assert.equal(0, $(changesFilterEl.getDOMNode()).find('.js-remove-filter').length);
     });
-
-    it('addFilter() adds item in store', function () {
-      var filter = 'My filter';
-      Stores.changesFilterStore.addFilter(filter);
-      var filters = Stores.changesFilterStore.getFilters();
-      assert.ok(filters.length === 1);
-      assert.ok(filters[0] === filter);
-    });
-
-    it('removeFilter() removes item from store', function () {
-      var filter1 = 'My filter 1';
-      var filter2 = 'My filter 2';
-      Stores.changesFilterStore.addFilter(filter1);
-      Stores.changesFilterStore.addFilter(filter2);
-      Stores.changesFilterStore.removeFilter(filter1);
-      var filters = Stores.changesFilterStore.getFilters();
-      assert.ok(filters.length === 1);
-      assert.ok(filters[0] === filter2);
-    });
-
   });
 
 });
