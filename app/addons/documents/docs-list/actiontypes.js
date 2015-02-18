@@ -12,7 +12,6 @@
 
 define([], function () {
   return {
-    SHOW_ALL_DOCS_NUMBER: 'SHOW_ALL_DOCS_NUMBER',
     COLLECTION_CHANGED: 'COLLECTION_CHANGED',
     PER_PAGE_CHANGE: 'PER_PAGE_CHANGE'
   };

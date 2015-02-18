@@ -68,13 +68,7 @@ define([
     },
 
     dispatch: function (action) {
-
       switch (action.type) {
-        case ActionTypes.SHOW_ALL_DOCS_NUMBER:
-          this.showAllDocsNumber(action.options);
-          this.triggerChange();
-          break;
-
         case ActionTypes.COLLECTION_CHANGED:
           this.collectionChanged(action.collection, action.pagination, action.perPage);
           this.triggerChange();
