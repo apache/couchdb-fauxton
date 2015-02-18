@@ -69,6 +69,7 @@ var tests = {
       .click('[data-target="#testdesigndoc"]')
       .clickWhenVisible('[data-target="#testdesigndocviews"]', waitTime, false)
       .clickWhenVisible('#testdesigndoc_testnewview', waitTime, false)
+      .waitForElementPresent('.prettyprint', waitTime, false)
       .assert.containsText('.prettyprint', 'enteente')
     .end();
   },
