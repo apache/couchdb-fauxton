@@ -16,17 +16,20 @@ define([
 
   // Modules
   'addons/documents/shared-routes',
-  "addons/documents/views",
-  "addons/documents/views-changes",
-  "addons/documents/views-index",
-  "addons/documents/views-doceditor",
+  'addons/documents/views',
+  'addons/documents/views-changes',
+  'addons/documents/views-index',
+  'addons/documents/views-doceditor',
 
-  "addons/databases/base",
-  "addons/documents/resources",
-  "addons/fauxton/components"
+  'addons/databases/base',
+  'addons/documents/resources',
+  'addons/fauxton/components',
+  'addons/documents/pagination/actions',
+  'addons/documents/pagination/stores'
 ],
 
-function(app, FauxtonAPI, BaseRoute, Documents, Changes, Index, DocEditor, Databases, Resources, Components) {
+function(app, FauxtonAPI, BaseRoute, Documents, Changes, Index, DocEditor,
+        Databases, Resources, Components, PaginationActions, PaginationStores) {
 
 
   var DocumentsRouteObject = BaseRoute.extend({
@@ -154,28 +157,19 @@ function(app, FauxtonAPI, BaseRoute, Documents, Changes, Index, DocEditor, Datab
       this.viewEditor && this.viewEditor.remove();
       this.headerView && this.headerView.remove();
 
-      this.database.allDocs.paging.pageSize = this.getDocPerPageLimit(urlParams, parseInt(docParams.limit, 10));
 
       if (!docParams) {
         docParams = {};
       }
-      this.perPageDefault = docParams.limit || FauxtonAPI.constants.MISC.DEFAULT_PAGE_SIZE;
 
-      this.pagination = new Components.IndexPagination({
-        collection: collection,
-        scrollToSelector: '.scrollable',
-        docLimit: urlParams.limit,
-        perPage: this.perPageDefault
-      });
-      this.setView('#documents-pagination', this.pagination);
+      PaginationActions.newPagination(collection);
+      this.database.allDocs.paging.pageSize = PaginationStores.indexPaginationStore.getPerPage();
 
       // documentsView will populate the collection
       this.documentsView = this.setView("#dashboard-lower-content", new Documents.Views.AllDocsList({
-        pagination: this.pagination,
         database: this.database,
         collection: collection,
         docParams: docParams,
-        perPageDefault: this.perPageDefault,
         bulkDeleteDocsCollection: new Documents.BulkDeleteDocCollection([], {databaseId: this.database.get('id')})
       }));
 

@@ -20,10 +20,11 @@ define([
   'addons/documents/resources',
   'addons/databases/base',
   'addons/fauxton/components',
+  'addons/documents/pagination/actions',
 
   'testUtils',
   'react'
-], function (FauxtonAPI, Views, Stores, Actions, Documents, Resources, Databases, Components, utils, React) {
+], function (FauxtonAPI, Views, Stores, Actions, Documents, Resources, Databases, Components, PaginationActions, utils, React) {
 
   var assert = utils.assert;
   var TestUtils = React.addons.TestUtils;
@@ -68,25 +69,18 @@ define([
       var database = new Databases.Model({id: 'registry'});
       bulkDeleteDocCollection = new Resources.BulkDeleteDocCollection([], {databaseId: 'registry'});
 
-
       database.allDocs = new Resources.AllDocs({_id: "ente"}, {
         database: database,
         viewMeta: {update_seq: 1},
         params: {}
       });
 
-      var pagination = new Components.IndexPagination({
-        collection: database.allDocs,
-        scrollToSelector: '#dashboard-content',
-        docLimit: 20,
-        perPage: 20
-      });
+      PaginationActions.newPagination(database.allDocs);
 
       var view = new Documents.Views.AllDocsList({
         viewList: false,
         bulkDeleteDocsCollection: bulkDeleteDocCollection,
         collection: database.allDocs,
-        pagination: pagination,
       });
 
       viewSandbox = new ViewSandbox();

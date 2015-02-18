@@ -3,8 +3,10 @@ define([
   'api',
   'addons/documents/shared-resources',
   'addons/databases/base',
-  'addons/fauxton/components'
-], function (app, FauxtonAPI, Documents, Databases, Components) {
+  'addons/fauxton/components',
+  'addons/documents/pagination/actions',
+  'addons/documents/pagination/stores'
+], function (app, FauxtonAPI, Documents, Databases, Components, PaginationActions, PaginationStores ) {
 
 
   // The Documents section is built up a lot of different route object which share code. This contains
@@ -83,36 +85,17 @@ define([
       ];
     },
 
-    // document-list
-
-    setDocPerPageLimit: function (perPage) {
-      app.utils.localStorageSet('fauxton:perpage', perPage);
-    },
-
     createViewDocumentsView: function (options) {
       if (!options.docParams) {
         options.docParams = {};
       }
 
-      this.perPageDefault = options.docParams.limit || FauxtonAPI.constants.MISC.DEFAULT_PAGE_SIZE;
-
-      this.pagination = new Components.IndexPagination({
-        collection: options.indexedDocs,
-        scrollToSelector: '.scrollable',
-        docLimit: options.urlParams.limit,
-        perPage: this.perPageDefault
-      });
-      this.setView('#documents-pagination', this.pagination);
-
       return this.setView("#dashboard-lower-content", new Documents.Views.AllDocsList({
-        pagination: this.pagination,
-        allDocsNumber: this.allDocsNumber,
         database: options.database,
         collection: options.indexedDocs,
         viewList: true,
         ddocInfo: this.ddocInfo(options.designDoc, options.designDocs, options.view),
-        docParams: options.docParams,
-        perPageDefault: this.perPageDefault,
+        docParams: options.docParams
       }));
     },
 
@@ -124,32 +107,13 @@ define([
       };
     },
 
-    getDocPerPageLimit: function (urlParams, perPage) {
-      var storedPerPage = perPage;
-
-      if (window.localStorage) {
-        storedPerPage = app.utils.localStorageGet('fauxton:perpage');
-
-        if (!storedPerPage) {
-          this.setDocPerPageLimit(perPage);
-          storedPerPage = perPage;
-        } else {
-          storedPerPage = parseInt(storedPerPage, 10);
-        }
-      }
-
-      if (!urlParams.limit || urlParams.limit > storedPerPage) {
-        return parseInt(storedPerPage, 10);
-      } else {
-        return parseInt(urlParams.limit, 10);
-      }
-    },
-
     createParams: function (options) {
       var urlParams = app.getParams(options),
-          params = Documents.QueryParams.parse(urlParams),
-          limit = this.getDocPerPageLimit(params, FauxtonAPI.constants.MISC.DEFAULT_PAGE_SIZE);
+          params = Documents.QueryParams.parse(urlParams);
 
+      PaginationActions.setDocumentLimit(parseInt(urlParams.limit, 10));
+
+      var limit = PaginationStores.indexPaginationStore.getPerPage();
       return {
         urlParams: urlParams,
         docParams: _.extend(params, {limit: limit})
@@ -162,14 +126,8 @@ define([
           urlParams = params.urlParams,
           docParams = params.docParams,
           ddoc = event.ddoc,
-          defaultPageSize,
-          isLazyInit,
-          pageSize,
+          pageSize = PaginationStores.indexPaginationStore.getPerPage(),
           collection;
-
-      isLazyInit = _.isUndefined(this.documentsView) || _.isUndefined(this.documentsView.allDocsNumber);
-      defaultPageSize = isLazyInit ? FauxtonAPI.constants.MISC.DEFAULT_PAGE_SIZE : this.documentsView.perPage();
-      docParams.limit = pageSize = this.getDocPerPageLimit(urlParams, defaultPageSize);
 
       if (event.allDocs) {
         this.eventAllDocs = true; // this is horrible. But I cannot get the trigger not to fire the route!
@@ -200,21 +158,13 @@ define([
         }
       }
 
-      this.documentsView.setParams(docParams, urlParams);
-
       // this will lazily initialize all sub-views and render them
       this.documentsView.forceRender();
     },
 
     perPageChange: function (perPage) {
-      // We need to restore the collection parameters to the defaults (1st page)
-      // and update the page size
-      this.perPage = perPage;
-
       this.documentsView.forceRender();
       this.documentsView.collection.pageSizeReset(perPage, {fetch: false});
-
-      this.setDocPerPageLimit(perPage);
     },
 
     paginate: function (options) {
