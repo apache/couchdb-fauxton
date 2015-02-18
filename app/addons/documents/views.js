@@ -24,13 +24,16 @@ define([
   // React
   'addons/documents/header/header.react',
   'addons/documents/header/header.actions',
+  'addons/documents/docs-list/components.react',
+  'addons/documents/docs-list/actions',
 
   //plugins
   "plugins/prettify"
 ],
 
 function (app, FauxtonAPI, Components, Documents,
-  Databases, Views, QueryOptions, ReactHeader, ReactHeaderActions) {
+  Databases, Views, QueryOptions, ReactHeader, ReactHeaderActions,
+  ReactAllDocsList, AllDocsListActions) {
 
   function showError (msg) {
     FauxtonAPI.addNotification({
@@ -41,7 +44,26 @@ function (app, FauxtonAPI, Components, Documents,
   }
 
   Views.Footer = FauxtonAPI.View.extend({
-    template: "addons/documents/templates/all_docs_footer"
+    template: "addons/documents/templates/all_docs_footer",
+
+    beforeRender: function () {
+     this.allDocsNumber = new Views.ReactAllDocsNumber();
+     this.setView('#item-numbers', this.allDocsNumber);
+    },
+
+    cleanup: function () {
+      this.allDocsNumber.remove();
+    }
+  });
+
+  Views.ReactAllDocsNumber = FauxtonAPI.View.extend({
+    afterRender: function () {
+      ReactAllDocsList.renderAllDocsNumber(this.el);
+    },
+
+    cleanup: function () {
+      ReactAllDocsList.removeAllDocsNumber(this.el);
+    }
   });
 
   Views.ReactHeaderbar = FauxtonAPI.View.extend({
@@ -249,72 +271,6 @@ function (app, FauxtonAPI, Components, Documents,
       if (!this.model.isReducedShown()) {
         FauxtonAPI.navigate(this.model.url('app'));
       }
-    }
-  });
-
-  Views.AllDocsNumber = FauxtonAPI.View.extend({
-    template: "addons/documents/templates/all_docs_number",
-
-    initialize: function (options) {
-      this.newView = options.newView || false;
-      this.pagination = options.pagination;
-      _.bindAll(this);
-
-      this._perPage = options.perPageDefault || FauxtonAPI.constants.MISC.DEFAULT_PAGE_SIZE;
-      this.listenTo(this.collection, 'totalRows:decrement', this.render);
-    },
-
-    events: {
-      'change #select-per-page': 'updatePerPage'
-    },
-
-    establish: function () {
-      return this.collection.fetch({
-        reset: true
-      });
-    },
-
-    updatePerPage: function (event) {
-      this._perPage = parseInt(this.$('#select-per-page :selected').val(), 10);
-      this.pagination.updatePerPage(this.perPage());
-      FauxtonAPI.triggerRouteEvent('perPageChange', this.pagination.documentsLeftToFetch());
-    },
-
-    afterRender: function () {
-      this.$('option[value="' + this.perPage() + '"]').attr('selected', "selected");
-    },
-
-    serialize: function () {
-       var totalRows = 0,
-          updateSeq = false,
-          pageStart = 0,
-          pageEnd = 20;
-
-      if (!this.newView) {
-        totalRows = this.collection.length;
-        updateSeq = this.collection.updateSeq();
-      }
-
-      if (this.pagination) {
-        pageStart = this.pagination.pageStart();
-        pageEnd =  this.pagination.pageEnd();
-      }
-
-      return {
-        database: app.utils.safeURLName(this.collection.database.id),
-        updateSeq: updateSeq,
-        totalRows: totalRows,
-        pageStart: pageStart,
-        pageEnd: pageEnd
-      };
-    },
-
-    perPage: function () {
-      return this._perPage;
-    },
-
-    setCollection: function (collection) {
-      this.collection = collection;
     }
   });
 
@@ -532,7 +488,7 @@ function (app, FauxtonAPI, Components, Documents,
       this.removeNestedViews();
 
       this.pagination.setCollection(this.collection);
-      this.allDocsNumber.setCollection(this.collection);
+      AllDocsListActions.collectionChanged(this.collection, this.pagination, this.perPageDefault);
 
       docs = this.expandDocs ? this.collection : this.collection.simple();
 
@@ -598,8 +554,6 @@ function (app, FauxtonAPI, Components, Documents,
       return this.allDocsNumber.perPage();
     }
   });
-
-
 
   Views.JumpToDoc = FauxtonAPI.View.extend({
     template: "addons/documents/templates/jumpdoc",

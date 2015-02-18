@@ -139,7 +139,7 @@ define([
 
         designDoc.save = function () {
           var promise = $.Deferred();
-          promise.resolve(); 
+          promise.resolve();
           return promise;
         };
 
@@ -169,7 +169,7 @@ define([
 
         designDoc.save = function () {
           var promise = $.Deferred();
-          promise.resolve(); 
+          promise.resolve();
           return promise;
         };
 
@@ -257,7 +257,7 @@ define([
 
         designDoc.save = function () {
           var promise = $.Deferred();
-          promise.resolve(); 
+          promise.resolve();
           return promise;
         };
 
@@ -278,7 +278,7 @@ define([
 
         designDoc.save = function () {
           var promise = $.Deferred();
-          promise.resolve(); 
+          promise.resolve();
           return promise;
         };
 
