@@ -20,7 +20,7 @@ module.exports = {
     client
       .populateDatabase(newDatabaseName, 3)
       .loginToGUI()
-      .url(baseUrl + '/#/database/' + newDatabaseName + '/_design/testdesigndoc/_view/stubview')
+      .url(baseUrl + '/#/database/' + newDatabaseName + '/_design/keyview/_view/keyview')
       .clickWhenVisible('#toggle-query')
       .clickWhenVisible('[data-action="showByKeys"]')
       .setValue('#keys-input', '["document_1"]')

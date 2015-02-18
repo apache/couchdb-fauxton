@@ -41,11 +41,30 @@ PopulateDatabase.prototype.command = function (databaseName, count) {
           console.log('Error in nano populateDatabase Function: ' +
             err.message);
         }
-        that.emit('complete');
-      });
 
+        createKeyView(null, function () {
+          that.emit('complete');
+        });
+      });
     }
   );
+
+  function createKeyView (err, cb) {
+    database.insert({
+      views: {
+        "keyview": {
+          "map": "function(doc) {\n  emit(doc._id, 1);\n}"
+        }
+      }
+    },
+    '_design/keyview', function (er) {
+      if (err) {
+        console.log('Error in nano populateDatabase Function: ' +
+          err.message);
+      }
+      cb();
+    });
+  }
   return this;
 };
 
