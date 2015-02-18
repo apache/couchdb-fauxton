@@ -431,11 +431,11 @@ function(app, FauxtonAPI, React, Stores, Actions, Components, beautifyHelper) {
     },
 
     clearNotifications: function () {
-      ['mapEditor', 'reduceEditor'].forEach(function (editor) {
-        if (editor === 'reduceEditor' && !indexEditorStore.hasCustomReduce()) {
+      ['mapEditor', 'reduceEditor'].forEach(function (editorName) {
+        if (editorName === 'reduceEditor' && !indexEditorStore.hasCustomReduce()) {
           return;
         }
-        var editor = this.refs[editor].getEditor();
+        var editor = this.refs[editorName].getEditor();
         editor.editSaved();
       }.bind(this));
     },
