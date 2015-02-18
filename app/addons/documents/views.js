@@ -151,7 +151,8 @@ function (app, FauxtonAPI, Components, Documents,
 
     serialize: function () {
       return {
-        isSystemDatabase: this.isSystemDatabase
+        isSystemDatabase: this.isSystemDatabase,
+        database: this.database
       };
     },
 
