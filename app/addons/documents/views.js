@@ -24,8 +24,9 @@ define([
   // React
   'addons/documents/header/header.react',
   'addons/documents/header/header.actions',
-  'addons/documents/docs-list/docs-list.react',
-  'addons/documents/docs-list/actions',
+  'addons/documents/pagination/pagination.react',
+  'addons/documents/pagination/actions',
+  'addons/documents/pagination/stores',
 
   //plugins
   "plugins/prettify"
@@ -33,7 +34,7 @@ define([
 
 function (app, FauxtonAPI, Components, Documents,
   Databases, Views, QueryOptions, ReactHeader, ReactHeaderActions,
-  ReactAllDocsList, AllDocsListActions) {
+  ReactPagination, PaginationActions, PaginationStores) {
 
   function showError (msg) {
     FauxtonAPI.addNotification({
@@ -44,25 +45,12 @@ function (app, FauxtonAPI, Components, Documents,
   }
 
   Views.Footer = FauxtonAPI.View.extend({
-    template: "addons/documents/templates/all_docs_footer",
-
-    beforeRender: function () {
-     this.allDocsNumber = new Views.ReactAllDocsNumber();
-     this.setView('#item-numbers', this.allDocsNumber);
-    },
-
-    cleanup: function () {
-      this.allDocsNumber && this.allDocsNumber.remove();
-    }
-  });
-
-  Views.ReactAllDocsNumber = FauxtonAPI.View.extend({
     afterRender: function () {
-      ReactAllDocsList.renderAllDocsNumber(this.el);
+      ReactPagination.renderFooter(this.el);
     },
 
     cleanup: function () {
-      ReactAllDocsList.removeAllDocsNumber(this.el);
+      ReactPagination.removeFooter(this.el);
     }
   });
 
@@ -300,7 +288,6 @@ function (app, FauxtonAPI, Components, Documents,
       }
       this.docParams = options.docParams || {};
       this.expandDocs = true;
-      this.perPageDefault = options.perPageDefault;
 
       // some doclists don't have an option to delete
       if (!this.viewList) {
@@ -312,9 +299,7 @@ function (app, FauxtonAPI, Components, Documents,
       FauxtonAPI.when(ids.map(function (id) {
         return this.removeDocument(id);
       }.bind(this))).done(function () {
-        var perPage = this.pagination.getPerPage();
-        this.pagination.updatePerPage(perPage);
-        FauxtonAPI.triggerRouteEvent('perPageChange', this.pagination.documentsLeftToFetch());
+        FauxtonAPI.triggerRouteEvent('perPageChange', PaginationStores.indexPaginationStore.documentsLeftToFetch());
         FauxtonAPI.addNotification({
           msg: 'Successfully deleted your docs',
           clear:  true
@@ -378,10 +363,9 @@ function (app, FauxtonAPI, Components, Documents,
     establish: function() {
       if (this.newView) { return null; }
 
-      return this.collection.fetch({
-        reset: true,
-        success:  function() { },
-        error: function(model, xhr, options){
+      return this.collection.fetch({reset: true}).then(function () {
+        PaginationActions.collectionReset();
+      }, function (model, xhr, options) {
           // TODO: handle error requests that slip through
           // This should just throw a notification, not break the page
           FauxtonAPI.addNotification({
@@ -392,7 +376,6 @@ function (app, FauxtonAPI, Components, Documents,
 
           //now redirect back to alldocs
           FauxtonAPI.navigate(model.database.url("index") + "?limit=100");
-        }
       });
     },
 
@@ -439,7 +422,7 @@ function (app, FauxtonAPI, Components, Documents,
 
     serialize: function() {
       return {
-        endOfResults: !this.pagination.canShowNextfn()
+        endOfResults: !PaginationStores.indexPaginationStore.canShowNext()
       };
     },
 
@@ -487,9 +470,6 @@ function (app, FauxtonAPI, Components, Documents,
 
       this.removeNestedViews();
 
-      this.pagination.setCollection(this.collection);
-      AllDocsListActions.collectionChanged(this.collection, this.pagination, this.perPageDefault);
-
       docs = this.expandDocs ? this.collection : this.collection.simple();
 
       docs.each(function(doc) {
@@ -512,22 +492,6 @@ function (app, FauxtonAPI, Components, Documents,
       }, this);
     },
 
-    setCollection: function (collection) {
-      this.collection = collection;
-      this.pagination.setCollection(collection);
-      this.allDocsNumber.setCollection(collection);
-    },
-
-    setParams: function (docParams, urlParams) {
-      this.docParams = docParams;
-      this.params = urlParams;
-      this.perPageDefault = this.docParams.limit;
-
-      if (this.params.limit) {
-        this.pagination.docLimit = this.params.limit;
-      }
-    },
-
     afterRender: function () {
       $("#dashboard-content").scrollTop(0);
 
@@ -548,11 +512,8 @@ function (app, FauxtonAPI, Components, Documents,
         selectedOnPage: this.$('.js-to-delete').length,
         documentsOnPageCount: this.$('.doc-row').length
       });
-    },
-
-    perPage: function () {
-      return this.allDocsNumber.perPage();
     }
+
   });
 
   Views.JumpToDoc = FauxtonAPI.View.extend({

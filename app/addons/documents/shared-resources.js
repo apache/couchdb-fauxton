@@ -277,6 +277,9 @@ define([
     },
 
     updateSeq: function() {
+      if (!this.viewMeta) {
+          return false;
+      }
       return this.viewMeta.update_seq || false;
     },
 

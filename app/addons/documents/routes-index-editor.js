@@ -20,11 +20,14 @@ define([
   'addons/documents/views',
   'addons/documents/views-index',
   'addons/databases/base',
-  'addons/fauxton/components'
+  'addons/fauxton/components',
+  'addons/documents/pagination/actions',
+  'addons/documents/pagination/stores'
 
 ],
 
-function (app, FauxtonAPI, Helpers, BaseRoute, Documents, Index, Databases, Components) {
+function (app, FauxtonAPI, Helpers, BaseRoute, Documents, Index,
+        Databases, Components, PaginationActions, PaginationStores) {
 
 
   var IndexEditorAndResults = BaseRoute.extend({
@@ -71,7 +74,6 @@ function (app, FauxtonAPI, Helpers, BaseRoute, Documents, Index, Databases, Comp
         database: this.database
       }));
 
-
       this.breadcrumbs = this.setView('#breadcrumbs', new Components.Breadcrumbs({
         toggleDisabled: true,
         crumbs: [
@@ -90,9 +92,11 @@ function (app, FauxtonAPI, Helpers, BaseRoute, Documents, Index, Databases, Comp
         view: viewName,
         params: docParams,
         paging: {
-          pageSize: this.getDocPerPageLimit(urlParams, parseInt(docParams.limit, 10))
+          pageSize: PaginationStores.indexPaginationStore.getPerPage()
         }
       });
+
+      PaginationActions.newPagination(this.indexedDocs);
 
       this.viewEditor = this.setView('#left-content', new Index.ViewEditorReact({
         viewName: viewName,

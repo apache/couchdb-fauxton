@@ -26,40 +26,4 @@ define([
     });
   });
 
-  describe('Footer', function (done) {
-    var footer;
-
-    beforeEach(function () {
-      footer = new Documents.Views.Footer();
-      viewSandbox = new ViewSandbox();
-      viewSandbox.renderView(footer, done);
-    });
-
-    afterEach(function () {
-      viewSandbox.remove();
-    });
-
-    it('removes allDocs if it exists', function () {
-      var spy = sinon.spy(footer.allDocsNumber, 'remove');
-
-      footer.remove();
-
-      assert.ok(spy.calledOnce);
-    });
-
-
-    it('does not remove allDocs if it exists', function () {
-      var error = false;
-      footer.allDocsNumber = false;
-
-      try {
-        footer.remove();
-      } catch(e) {
-        error = true;
-      }
-
-      assert.notOk(error);
-    });
-
-  });
 });
