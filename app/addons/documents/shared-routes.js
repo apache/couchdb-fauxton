@@ -105,14 +105,6 @@ define([
       });
       this.setView('#documents-pagination', this.pagination);
 
-      this.allDocsNumber = new Documents.Views.AllDocsNumber({
-        collection: options.indexedDocs,
-        pagination: this.pagination,
-        perPageDefault: this.perPageDefault
-      });
-
-      this.setView('#item-numbers', this.allDocsNumber);
-
       return this.setView("#dashboard-lower-content", new Documents.Views.AllDocsList({
         pagination: this.pagination,
         allDocsNumber: this.allDocsNumber,

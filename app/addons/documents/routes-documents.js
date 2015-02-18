@@ -169,18 +169,9 @@ function(app, FauxtonAPI, BaseRoute, Documents, Changes, Index, DocEditor, Datab
       });
       this.setView('#documents-pagination', this.pagination);
 
-      this.allDocsNumber = new Documents.Views.AllDocsNumber({
-        collection: collection,
-        pagination: this.pagination,
-        perPageDefault: this.perPageDefault
-      });
-
-      this.setView('#item-numbers', this.allDocsNumber);
-
       // documentsView will populate the collection
       this.documentsView = this.setView("#dashboard-lower-content", new Documents.Views.AllDocsList({
         pagination: this.pagination,
-        allDocsNumber: this.allDocsNumber,
         database: this.database,
         collection: collection,
         docParams: docParams,
