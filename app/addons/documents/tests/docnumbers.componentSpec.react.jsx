@@ -28,7 +28,13 @@ define([
       beforeEach(function () {
         perPageChange = sinon.spy();
         container = document.createElement('div');
-        selectorEl = TestUtils.renderIntoDocument(<Views.PerPageSelector perPageChange={perPageChange} perPage={10} />, container);
+        selectorEl = TestUtils.renderIntoDocument(
+          <Views.PerPageSelector
+            perPageChange={perPageChange}
+            perPage={10}
+          />,
+          container
+        );
       });
 
       afterEach(function () {
@@ -48,15 +54,5 @@ define([
       });
 
     });
-
-
   });
-
-
-
-
-
-
-
-
 });

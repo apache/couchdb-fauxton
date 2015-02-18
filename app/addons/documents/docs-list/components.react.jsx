@@ -76,16 +76,16 @@ define([
       pageNumber: function () {
         if (this.state.totalRows === 0) {
           return <p> Showing 0 documents. </p>;
-          } else {
-            return <p>Showing {this.state.pageStart} - {this.state.pageEnd}</p>;
-            }
+        }
+
+        return <p>Showing {this.state.pageStart} - {this.state.pageEnd}</p>;
       },
 
       updateSequence: function () {
         if (this.state.updateSeq) {
           return <span> Update Sequence: {this.state.updateSeq} </span>;
-          }
-        },
+        }
+      },
 
       perPageChange: function (perPage) {
         Actions.updatePerPage(perPage);

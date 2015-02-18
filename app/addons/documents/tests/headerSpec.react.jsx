@@ -101,18 +101,11 @@ define([
         perPage: 20
       });
 
-      var allDocsNumber = new Documents.Views.AllDocsNumber({
-        collection: database.allDocs,
-        pagination: pagination,
-        perPageDefault: 20
-      });
-
       var view = new Documents.Views.AllDocsList({
         viewList: false,
         bulkDeleteDocsCollection: bulkDeleteDocCollection,
         collection: database.allDocs,
         pagination: pagination,
-        allDocsNumber: allDocsNumber
       });
 
       viewSandbox = new ViewSandbox();
