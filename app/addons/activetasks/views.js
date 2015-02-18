@@ -117,7 +117,8 @@ function (app, FauxtonAPI, ActiveTasks) {
 
     events: {
       'click .task-tabs li': 'requestByType',
-      'input #pollingRange': 'changePollInterval'
+      'input #pollingRange': 'changePollInterval',
+      'change #pollingRange': 'changePollInterval'
     },
 
     serialize: function () {

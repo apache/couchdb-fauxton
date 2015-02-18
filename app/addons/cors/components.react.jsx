@@ -231,8 +231,15 @@ define([
     },
 
     enableCorsChange: function (event) {
-      if (this.state.corsEnabled && !_.isEmpty(this.state.origins) && !this.state.isAllOrigins) {
-        var result = window.confirm('Are you sure? Disabling CORS will overwrite your specific origin domains.');
+      if (this.state.corsEnabled && !_.isEmpty(this.state.origins) ) {
+        var msg = FauxtonAPI.getExtensions('cors:disableCorsPrompt');
+        if (_.isUndefined(msg[0])) {
+          msg =  'Are you sure? Disabling CORS will overwrite your specific origin domains.';
+        } else {
+          msg = msg[0];
+        }
+
+        var result = window.confirm(msg);
         if (!result) { return; }
       }
 
@@ -273,11 +280,11 @@ define([
 
     getCorsNotice: function () {
       var msg = FauxtonAPI.getExtensions('cors:notice');
-      if (_.isUndefined(msg)) {
+      if (_.isUndefined(msg[0])) {
         return 'Cross-Origin Resource Sharing (CORS) lets you connect to remote servers directly from the browser, so you can host browser-based apps on static pages and talk directly with CouchDB to load your data.';
       }
 
-      return msg;
+      return msg[0];
     },
 
     render: function () {

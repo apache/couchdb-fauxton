@@ -185,8 +185,10 @@ function (app, FauxtonAPI, Components, Documents,
         clear: true
       });
 
+      this.database.url = FauxtonAPI.urls('databaseBaseURL', 'server', this.database.id, '');
+
       this.database.destroy().then(function () {
-        FauxtonAPI.navigate('#/_all_dbs');
+        FauxtonAPI.navigate(FauxtonAPI.urls('allDBs', 'app'));
         FauxtonAPI.addNotification({
           msg: 'The database <code>' + _.escape(databaseName) + '</code> has been deleted.',
           clear: true,

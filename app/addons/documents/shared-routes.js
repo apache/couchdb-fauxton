@@ -55,9 +55,12 @@ define([
     },
 
     getCrumbs: function (database) {
+      var name = _.isObject(database) ? database.id : database,
+        dbname = app.utils.safeURLName(name);
+
       return [
-        { "type": "back", "link": "/_all_dbs" },
-        { "name": database.id, "link": Databases.databaseUrl(database), className: "lookahead-tray-link" }
+        { "type": "back", "link": FauxtonAPI.urls('allDBs', 'app')},
+        { "name": database.id, "link": FauxtonAPI.urls('allDocs', 'app', dbname, '?limit=' + Databases.DocLimit), className: "lookahead-tray-link" }
       ];
     }
   });

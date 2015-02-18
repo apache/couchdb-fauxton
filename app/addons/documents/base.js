@@ -20,5 +20,95 @@ define([
 ],
 
 function(app, FauxtonAPI, Documents) {
+
+  FauxtonAPI.registerUrls( 'allDocs', {
+    server: function (id, query) {
+      return app.host + '/' + id + '/_all_docs' + query;
+    },
+    app: function (id, query) {
+      return 'database/' + id + '/_all_docs' + query;
+    },
+    apiurl: function (id, query) {
+      return window.location.origin + '/' + id + '/_all_docs' + query;
+    }
+  });
+
+  FauxtonAPI.registerUrls( 'designDocs', {
+    server: function (id, designDoc) {
+      return app.host + '/' + id + '/' + designDoc + '/_info';
+    },
+
+    app: function (id, designDoc) {
+      return 'database/' + id + '/_design/' + app.utils.safeURLName(designDoc) + '/_info';
+    },
+
+    apiurl: function (id, designDoc) {
+      return window.location.origin + '/' + id + '/' + designDoc + '/_info';
+    }
+  });
+
+  FauxtonAPI.registerUrls( 'view', {
+    server: function (id, designDoc, viewName) {
+      return app.host + '/' + id + '/_design/' + designDoc + '/_view/' + viewName;
+    },
+
+    app: function (id, designDoc) {
+      return 'database/' + id + '/_design/' + designDoc + '/_view/';
+    },
+
+    apiurl: function (id, designDoc, viewName) {
+      return window.location.origin + '/' + id + '/_design/' + designDoc + '/_view/' + viewName;
+    },
+
+    showNewlySavedView: function (database, designDocs, viewName) {
+      return '/database/' + database +'/' + designDocs + '/_view/' + viewName;
+    },
+
+    fragment: function (database, designDocs, viewName) {
+      return 'database/' + database + designDocs + '/_view/' + viewName;
+    }
+  });
+
+  FauxtonAPI.registerUrls( 'document', {
+    server: function (database, doc) {
+      return app.host + '/' + database + '/' + doc;
+    },
+
+    app: function (database, doc) {
+      return '/database/' + database + '/' + doc;
+    },
+
+    apiurl: function (database, doc) {
+      return window.location.origin + '/' + database + '/' + doc;
+    },
+
+    'web-index': function (database, doc) {
+      return '/database/' + database + '/' + doc;
+    }
+  });
+
+  FauxtonAPI.registerUrls( 'new', {
+    newDocument: function (database) {
+      return '/database/' + database + '/new' ;
+    },
+
+    newView: function (database) {
+      return '/database/' + database + '/new_view' ;
+    },
+
+    addView: function (database, ddoc) {
+      return '/database/' + database + '/new_view/' + ddoc;
+    }
+  });
+
+  FauxtonAPI.registerUrls( 'base', {
+    server: function (database) {
+      return app.host + '/' + database + '/' ;
+    },
+
+    app: function (database) {
+      return '/database/' + database + '/' ;
+    },
+  });
   return Documents;
 });

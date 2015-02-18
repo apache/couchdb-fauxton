@@ -27,9 +27,9 @@ function(FauxtonAPI, React, Stores, Actions) {
       if (!version) { return null; }
       return (
         <div className="version-footer">
-          Fauxton on 
+          Fauxton on
           <a href="http://couchdb.apache.org/"> Apache CouchDB</a>
-          <br/> 
+          <br/>
           v. {version}
         </div>
       );
@@ -55,9 +55,9 @@ function(FauxtonAPI, React, Stores, Actions) {
 
       return (
         <li data-nav-name={link.title} className={liClassName} >
-          <a href={link.href} target={link.target ? '_blank' : ''} data-bypass={link.target ? 'true' : 'false'}>
+          <a href={link.href} target={link.target ? '_blank' : null} data-bypass={link.target ? 'true' : null}>
             <i className={link.icon + " fonticon "}></i>
-            <span dangerouslySetInnerHTML={{__html: link.title }} /> 
+            <span dangerouslySetInnerHTML={{__html: link.title }} />
           </a>
         </li>
       );

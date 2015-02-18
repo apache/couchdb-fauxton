@@ -10,22 +10,19 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-define([
-  'app',
-  'api',
-  'addons/replication/route'
-],
+module.exports = {
+  'Highlight Sidebar' : function (client) {
+    var waitTime = 10000,
+        baseUrl = client.globals.test_settings.launch_url;
 
-function(app, FauxtonAPI, replication) {
-	replication.initialize = function() {
-    FauxtonAPI.addHeaderLink({ title: 'Replication', href: '#/replication', icon: 'fonticon-replicate' });
-  };
-
-  FauxtonAPI.registerUrls( 'replication', {
-    app: function (db) {
-      return '#/replication/' + db;
-    }
-  });
-
-  return replication;
-});
+    client
+      .loginToGUI()
+      .url(baseUrl)
+      .waitForElementPresent('#add-new-database', waitTime, false)
+      .click('a[href="#changePassword"]')
+      .pause(1000)
+      .waitForElementVisible('.auth-page', waitTime, false)
+      .assert.cssClassPresent('li[data-nav-name="' + client.globals.test_settings.fauxton_username + '"]', "active")
+    .end();
+  }
+};

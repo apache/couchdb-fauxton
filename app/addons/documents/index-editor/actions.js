@@ -66,6 +66,13 @@ function (app, FauxtonAPI, Documents, ActionTypes) {
       });
     },
 
+    changeViewName: function (name) {
+      FauxtonAPI.dispatch({
+        type: ActionTypes.VIEW_NAME_CHANGE,
+        name: name
+      });
+    },
+
     editIndex: function (options) {
       FauxtonAPI.dispatch({
         type: ActionTypes.EDIT_INDEX,
@@ -97,7 +104,7 @@ function (app, FauxtonAPI, Documents, ActionTypes) {
       var result = designDoc.setDdocView(viewInfo.viewName,
                             viewInfo.map,
                             viewInfo.reduce);
-      
+
       if (result) {
         FauxtonAPI.dispatch({
          type: ActionTypes.SAVE_VIEW
@@ -121,9 +128,9 @@ function (app, FauxtonAPI, Documents, ActionTypes) {
               type: ActionTypes.VIEW_SAVED
             });
 
-            var fragment = '/database/' + 
+            var fragment = '/database/' +
               viewInfo.database.safeID() +
-              '/' + designDoc.safeID() + 
+              '/' + designDoc.safeID() +
               '/_view/' +
               app.utils.safeURLName(viewInfo.viewName);
 
@@ -166,4 +173,3 @@ function (app, FauxtonAPI, Documents, ActionTypes) {
     }
   };
 });
-

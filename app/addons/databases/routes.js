@@ -82,7 +82,7 @@ function (app, FauxtonAPI, Databases, Views, Components) {
     },
 
     establish: function() {
-     return [this.databases.fetchOnce()];
+      return [this.databases.fetch({ cache: false })];
     }
   });
 

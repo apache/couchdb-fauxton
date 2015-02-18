@@ -15,7 +15,8 @@ define([
   'addons/documents/index-editor/actions',
   'addons/documents/resources',
   'addons/documents/index-editor/actiontypes',
-  'testUtils'
+  'testUtils',
+  'addons/documents/base'
 ], function (FauxtonAPI, Actions, Documents, ActionTypes, testUtils) {
   var assert = testUtils.assert;
 

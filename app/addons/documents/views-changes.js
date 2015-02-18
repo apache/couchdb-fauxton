@@ -85,7 +85,10 @@ function(app, FauxtonAPI, Components, prettify, ZeroClipboard) {
 
       return {
         changes: filteredData,
-        database: this.model
+        database: this.model,
+        href: function (db, id) {
+          return FauxtonAPI.urls('document', 'app', db, id);
+        }
       };
     },
 
