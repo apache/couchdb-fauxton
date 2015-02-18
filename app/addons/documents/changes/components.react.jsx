@@ -107,21 +107,25 @@ define([
       return this.getStoreState();
     },
 
-    remove: function (label) {
+    removeFilter: function (label) {
       Actions.removeFilter(label);
     },
 
     getFilters: function () {
       return _.map(this.state.filters, function (filter) {
-        return <Filter key={filter} label={filter} onRemove={this.remove} />;
+        return <Filter key={filter} label={filter} removeFilter={this.removeFilter} />;
       }, this);
     },
 
-    onSubmit: function (newFilter) {
+    addFilter: function (newFilter) {
       if (_.isEmpty(newFilter)) {
         return;
       }
       Actions.addFilter(newFilter);
+    },
+
+    hasFilter: function (filter) {
+      return Stores.changesFilterStore.hasFilter(filter);
     },
 
     render: function () {
@@ -131,7 +135,8 @@ define([
         <div className="tab-content">
           <div className="tab-pane active" ref="filterTab">
             <div className="changes-header js-filter">
-              <AddFilterForm tooltip={this.props.tooltip} filter={this.state.filter} onSubmit={this.onSubmit} />
+              <AddFilterForm tooltip={this.props.tooltip} filter={this.state.filter} addFilter={this.addFilter}
+                hasFilter={this.hasFilter} />
               <ul className="filter-list">{filters}</ul>
             </div>
           </div>
@@ -143,12 +148,14 @@ define([
 
   var AddFilterForm = React.createClass({
     propTypes: {
-      onSubmit: React.PropTypes.func.isRequired
+      addFilter: React.PropTypes.func.isRequired,
+      hasFilter: React.PropTypes.func.isRequired
     },
 
     getInitialState: function () {
       return {
-        filter: ''
+        filter: '',
+        error: false
       };
     },
 
@@ -161,8 +168,20 @@ define([
     submitForm: function (e) {
       e.preventDefault();
       e.stopPropagation();
-      this.props.onSubmit(this.state.filter);
-      this.setState({ filter: '' });
+
+      if (this.props.hasFilter(this.state.filter)) {
+        this.setState({ error: true });
+
+        // Yuck. This removes the class after the effect has completed so it can occur again. The
+        // other option is to use jQuery to add the flash. This seemed slightly less crumby
+        var component = this;
+        setTimeout(function () {
+          component.setState({ error: false });
+        }, 1000);
+      } else {
+        this.props.addFilter(this.state.filter);
+        this.setState({ filter: '', error: false });
+      }
     },
 
     componentDidMount: function () {
@@ -181,11 +200,19 @@ define([
       this.setState({ filter: e.target.value });
     },
 
+    inputClassNames: function () {
+      var className = 'js-changes-filter-field';
+      if (this.state.error) {
+        className += ' errorHighlight';
+      }
+      return className;
+    },
+
     render: function () {
       return (
         <form className="form-inline js-filter-form" onSubmit={this.submitForm}>
           <fieldset>
-            <input type="text" ref="addItem" className="js-changes-filter-field" placeholder="Type a filter"
+            <input type="text" ref="addItem" className={this.inputClassNames()} placeholder="Type a filter"
               onChange={this.onChangeFilter} value={this.state.filter} />
             <button type="submit" className="btn btn-primary">Filter</button>
             <div className="help-block">
@@ -222,19 +249,19 @@ define([
   var Filter = React.createClass({
     propTypes: {
       label: React.PropTypes.string.isRequired,
-      onRemove: React.PropTypes.func.isRequired
+      removeFilter: React.PropTypes.func.isRequired
     },
 
-    remove: function (e) {
+    removeFilter: function (e) {
       e.preventDefault();
-      this.props.onRemove(this.props.label);
+      this.props.removeFilter(this.props.label);
     },
 
     render: function () {
       return (
         <li>
           <span className="label label-info">{this.props.label}</span>
-          <a href="#" className="label label-info js-remove-filter" onClick={this.remove} data-bypass="true">&times;</a>
+          <a href="#" className="label label-info js-remove-filter" onClick={this.removeFilter} data-bypass="true">&times;</a>
         </li>
       );
     }

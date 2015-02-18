@@ -37,14 +37,17 @@ define([
 
 
   describe('ChangesFilterStore', function () {
+
+    afterEach(function () {
+      Stores.changesFilterStore.reset();
+    });
+
     it('addFilter() adds item in store', function () {
       var filter = 'My filter';
       Stores.changesFilterStore.addFilter(filter);
       var filters = Stores.changesFilterStore.getFilters();
       assert.ok(filters.length === 1);
       assert.ok(filters[0] === filter);
-
-      Stores.changesFilterStore.reset();
     });
 
     it('removeFilter() removes item from store', function () {
@@ -58,6 +61,13 @@ define([
       assert.ok(filters.length === 1);
       assert.ok(filters[0] === filter2);
     });
+
+    it('hasFilter() finds item in store', function () {
+      var filter = 'My filter';
+      Stores.changesFilterStore.addFilter(filter);
+      assert.ok(Stores.changesFilterStore.hasFilter(filter) === true);
+    });
+
   });
 
 });

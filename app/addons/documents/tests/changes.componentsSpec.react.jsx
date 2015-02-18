@@ -162,6 +162,24 @@ define([
     it('should not add tooltips by default', function () {
       assert.equal(0, $(changesFilterEl.getDOMNode()).find('.js-remove-filter').length);
     });
+
+    it('should not add the same filter twice', function () {
+      var $el = $(changesFilterEl.getDOMNode()),
+        submitBtn = $el.find('[type="submit"]')[0],
+        addItemField = $el.find('.js-changes-filter-field')[0];
+
+      var filter = 'I am unique in the whole wide world';
+      addItemField.value = filter;
+      TestUtils.Simulate.change(addItemField);
+      TestUtils.Simulate.submit(submitBtn);
+
+      addItemField.value = filter;
+      TestUtils.Simulate.change(addItemField);
+      TestUtils.Simulate.submit(submitBtn);
+
+      assert.equal(1, $el.find('.js-remove-filter').length);
+    });
+
   });
 
 });

@@ -74,6 +74,10 @@ define([
       return this._filters;
     },
 
+    hasFilter: function (filter) {
+      return _.contains(this._filters, filter);
+    },
+
     dispatch: function (action) {
       switch (action.type) {
         case ActionTypes.ADD_CHANGES_FILTER_ITEM:
