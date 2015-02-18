@@ -80,16 +80,16 @@ function(FauxtonAPI, Layout, Router, RouteObject, utils, Store, constants, Flux)
       }
       return false;
     });
-    
+
     if (!_.isUndefined(url)) { return url; }
 
     if (!urlPaths[name]) {
-      console.log('could not find name ', name);
+      console.error('could not find name ', name);
       return '';
     }
 
     if (!urlPaths[name][context]) {
-      console.log('could not find context ', context);
+      console.error('could not find context ', context);
       return '';
     }
 
