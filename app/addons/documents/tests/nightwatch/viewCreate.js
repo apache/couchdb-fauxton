@@ -45,7 +45,8 @@ var tests = {
         var editor = ace.edit("map-function");\
         editor.getSession().setValue("function (doc) { emit(\'gansgans\'); }");\
       ')
-      .click('button.btn.btn-success.save')
+      .execute('$(".save")[0].scrollIntoView();')
+      .click('button.btn-success.save')
       .waitForElementPresent('.prettyprint', waitTime, false)
       .assert.containsText('.prettyprint', 'gansgans')
     .end();
@@ -59,9 +60,10 @@ var tests = {
       .setValue('#index-name', 'test-new-view')
       .execute('\
         var editor = ace.edit("map-function");\
-        editor.getSession().setValue("function (doc) { emit(\'enteente\'); }");\
+        editor.getSession().setValue("function (doc) { emit(\'enteente\', 1); }");\
       ')
-      .click('button.btn.btn-success.save')
+      .execute('$(".save")[0].scrollIntoView();')
+      .click('button.btn-success.save')
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
       .waitForElementPresent('[data-target="#testdesigndoc"]', waitTime, false)
       .click('[data-target="#testdesigndoc"]')
