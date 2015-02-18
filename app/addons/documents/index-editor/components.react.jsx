@@ -430,6 +430,16 @@ function(app, FauxtonAPI, React, Stores, Actions, Components, beautifyHelper) {
       }, this);
     },
 
+    clearNotifications: function () {
+      ['mapEditor', 'reduceEditor'].forEach(function (editor) {
+        if (editor === 'reduceEditor' && !indexEditorStore.hasCustomReduce()) {
+          return;
+        }
+        var editor = this.refs[editor].getEditor();
+        editor.editSaved();
+      }.bind(this));
+    },
+
     saveView: function (event) {
       event.preventDefault();
 
@@ -441,6 +451,8 @@ function(app, FauxtonAPI, React, Stores, Actions, Components, beautifyHelper) {
         });
         return;
       }
+
+      this.clearNotifications();
 
       Actions.saveView({
         database: this.state.database,
