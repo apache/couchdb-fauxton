@@ -104,7 +104,8 @@ function(app, FauxtonAPI, Documents) {
           '_replicator',
           '_users',
           'nodes',
-          'dbs'
+          'dbs',
+          'cassim'
         ];
       try {
         JSON.parse(data);

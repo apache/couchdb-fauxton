@@ -61,6 +61,11 @@ define([
         isSystemDatabase.parse('<html></html>');
         assert.notOk(isSystemDatabase.get('isSystemDatabase'));
       });
+      it('checks if the "cassim" internal database is a system database', function () {
+        var isSystemDatabase = new Resources.IsSystemDatabaseModel({name: 'cassim'});
+        isSystemDatabase.parse('{"couch_replicator":{}}');
+        assert.ok(isSystemDatabase.get('isSystemDatabase'));
+      });
     });
   });
 });
