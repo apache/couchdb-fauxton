@@ -12,7 +12,7 @@
     "server_path" : "test/nightwatch_tests/selenium/selenium-server-standalone-2.43.1.jar",
     "log_path" : "",
     "host" : "127.0.0.1",
-    "port" : 4444,
+    "port" : "<%- selenium_port %>",
     "cli_args" : {
       "webdriver.chrome.driver" : "test/nightwatch_tests/selenium/chromedriver",
       "webdriver.ie.driver" : "",
@@ -27,7 +27,7 @@
       "launch_url": "http://<%- fauxton_host %>:<%- fauxton_port %>",
       "db_url": "http://<%- fauxton_username %>:<%- password %>@<%- db_host %>:<%- db_port %>",
       "selenium_host" : "127.0.0.1",
-      "selenium_port" : 4444,
+      "selenium_port" : "<%- selenium_port %>",
       "silent" : true,
       "disable_colors": false,
       "screenshots" : {

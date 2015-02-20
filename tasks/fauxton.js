@@ -164,7 +164,8 @@ module.exports = function(grunt) {
       fauxton_host: this.data.settings.nightwatch.fauxton_host,
       fauxton_port: this.data.settings.nightwatch.fauxton_port,
       db_host: this.data.settings.nightwatch.db_host,
-      db_port: this.data.settings.nightwatch.db_port
+      db_port: this.data.settings.nightwatch.db_port,
+      selenium_port: this.data.settings.nightwatch.selenium_port
     }));
   });
 
