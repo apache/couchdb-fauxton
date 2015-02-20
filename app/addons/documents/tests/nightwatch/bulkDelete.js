@@ -56,6 +56,7 @@ module.exports = {
       .click('.control-toggle-alternative-header')
       .waitForElementPresent('.control-select-all', waitTime, false)
       .click('.control-select-all')
+      .waitForElementVisible('#next', waitTime, false)
       .click('#next')
       .waitForElementVisible('[data-id="27"]', waitTime, false)
       .click('#previous')
