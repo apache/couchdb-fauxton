@@ -1,3 +1,5 @@
+@import "../../../../../assets/less/animations.less";
+
 /** used in changes.html **/
 .change-box {
   margin: 0 20px 20px 20px;
@@ -32,7 +34,7 @@
 }
 
 .changes-header {
-  padding-top: 30px;
+  padding: 30px;
   height: 160px;
   border-bottom: 1px solid #999999;
   .label {
@@ -44,3 +46,40 @@
     margin: 0;
   }
 }
+
+.changes-tab-content {
+  padding-top: 70px;
+}
+
+#dashboard-upper-content .changes-header-section .tab-content {
+  padding: 0px;
+  overflow: hidden;
+}
+
+.keyframes(slideDownChangesFilter, {
+  opacity: 0;
+  height: 0px;
+},
+{
+  opacity: 1;
+  height: 160px;
+});
+
+.keyframes(slideUpChangesFilter, {
+  opacity: 1;
+  height: 160px;
+},
+{
+  opacity: 0;
+  height: 0px;
+});
+
+
+.toggleChangesFilter-enter {
+  .animation(slideDownChangesFilter 1s both);
+}
+
+.toggleChangesFilter-leave {
+  .animation(slideUpChangesFilter 1s both);
+}
+
