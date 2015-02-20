@@ -39,8 +39,7 @@ define([
       handlerSpy = sinon.spy(Views.Changes.prototype, 'toggleJson');
 
       view = new Views.Changes({
-        model: model,
-        useRAF: false
+        model: model
       });
       viewSandbox = new ViewSandbox();
       viewSandbox.renderView(view, done);
@@ -55,8 +54,7 @@ define([
     it('does not keep filters in memory', function () {
       view.filters.push('cat');
       view = new Views.Changes({
-        model: model,
-        useRAF: false
+        model: model
       });
 
       view.filters.push('mat');

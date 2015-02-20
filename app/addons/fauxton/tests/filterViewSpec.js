@@ -32,8 +32,6 @@ define([
         eventNamespace: 'mynamespace'
       });
 
-      Components.FilterItemView.prototype.useRAF = false;
-
       viewSandbox = new ViewSandbox();
       viewSandbox.renderView(filterView, done);
     });
@@ -74,8 +72,7 @@ define([
     it('should add tooltips when a text for it is defined', function () {
       filterView = new Components.FilterView({
         eventNamespace: 'mynamespace',
-        tooltipText: 'ente ente',
-        useRAF: false
+        tooltipText: 'ente ente'
       });
       viewSandbox.renderView(filterView);
       assert.equal(1, filterView.$('.js-filter-tooltip').length);
