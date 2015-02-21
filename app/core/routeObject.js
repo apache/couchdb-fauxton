@@ -272,6 +272,7 @@ function(FauxtonAPI, Backbone) {
 
     rejectPromises: function () {
       _.each(this._promises, function (promise) {
+        if (_.isUndefined(promise)) { return; }
         if (promise.state() === "resolved") { return; }
         if (promise.abort) {
           return promise.abort("Route change");
