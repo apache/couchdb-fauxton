@@ -76,7 +76,7 @@ function (app, FauxtonAPI, Helpers, BaseRoute, Documents, Index, Databases, Comp
         toggleDisabled: true,
         crumbs: [
           {'type': 'back', 'link': Helpers.getPreviousPage(this.database)},
-          {'name': this.database.id, 'link': Databases.databaseUrl(this.database) }
+          {'name': this.database.id, 'link':  FauxtonAPI.urls('allDocs', 'app', this.database.id, '?limit=100')}
         ]
       }));
 
@@ -133,7 +133,7 @@ function (app, FauxtonAPI, Helpers, BaseRoute, Documents, Index, Databases, Comp
         toggleDisabled: true,
         crumbs: [
           {'type': 'back', 'link': Helpers.getPreviousPage(this.database)},
-          {'name': 'Create new index', 'link': Databases.databaseUrl(this.database) }
+          {'name': 'Create new index', 'link': FauxtonAPI.urls('allDocs', 'app', this.database.safeID(), '?limit=' + FauxtonAPI.constants.DATABASES.DOCUMENT_LIMIT) }
         ]
       }));
 
