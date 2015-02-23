@@ -11,7 +11,7 @@
 // the License.
 define([
   'api',
-  'addons/documents/docs-list/components.react',
+  'addons/documents/docs-list/docs-list.react',
   'testUtils',
   "react"
 ], function (FauxtonAPI, Views, utils, React) {

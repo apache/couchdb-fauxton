@@ -24,7 +24,7 @@ define([
   // React
   'addons/documents/header/header.react',
   'addons/documents/header/header.actions',
-  'addons/documents/docs-list/components.react',
+  'addons/documents/docs-list/docs-list.react',
   'addons/documents/docs-list/actions',
 
   //plugins
