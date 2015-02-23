@@ -1,9 +1,9 @@
 define("ace/theme/idle_fingers",["require","exports","module","ace/lib/dom"], function(require, exports, module) {
 
-  exports.isDark = true;
-  exports.cssClass = "ace-idle-fingers";
-  exports.cssText = ".ace-idle-fingers .ace_gutter {\
-background: #3A3A3A;\
+exports.isDark = true;
+exports.cssClass = "ace-idle-fingers";
+exports.cssText = ".ace-idle-fingers .ace_gutter {\
+background: #3b3b3b;\
 color: rgb(153,153,153)\
 }\
 .ace-idle-fingers .ace_print-margin {\
@@ -11,17 +11,17 @@ width: 1px;\
 background: #3b3b3b\
 }\
 .ace-idle-fingers {\
-background-color: #4d4d4d;\
+background-color: #323232;\
 color: #FFFFFF\
 }\
 .ace-idle-fingers .ace_cursor {\
-color: #ffffff\
+color: #91FF00\
 }\
 .ace-idle-fingers .ace_marker-layer .ace_selection {\
 background: rgba(90, 100, 126, 0.88)\
 }\
 .ace-idle-fingers.ace_multiselect .ace_selection.ace_start {\
-box-shadow: 0 0 3px 0px #4d4d4d;\
+box-shadow: 0 0 3px 0px #323232;\
 border-radius: 2px\
 }\
 .ace-idle-fingers .ace_marker-layer .ace_step {\
@@ -32,12 +32,10 @@ margin: -1px 0 0 -1px;\
 border: 1px solid #404040\
 }\
 .ace-idle-fingers .ace_marker-layer .ace_active-line {\
-background: #000000;\
-opacity: 0.4;\
+background: #353637\
 }\
 .ace-idle-fingers .ace_gutter-active-line {\
-background-color: #000000;\
-opacity: 0.4;\
+background-color: #353637\
 }\
 .ace-idle-fingers .ace_marker-layer .ace_selected-word {\
 border: 1px solid rgba(90, 100, 126, 0.88)\
@@ -54,10 +52,7 @@ color: #CC7833\
 .ace-idle-fingers .ace_constant.ace_character.ace_escape,\
 .ace-idle-fingers .ace_constant.ace_other,\
 .ace-idle-fingers .ace_support.ace_constant {\
-color: #72cdf4\
-}\
-.ace-idle-fingers .ace_boolean {\
-color: #ff6532\
+color: #6C99BB\
 }\
 .ace-idle-fingers .ace_invalid {\
 color: #FFFFFF;\
@@ -74,7 +69,7 @@ color: #B83426\
 font-style: italic\
 }\
 .ace-idle-fingers .ace_string {\
-color: #29be9d\
+color: #A5C261\
 }\
 .ace-idle-fingers .ace_string.ace_regexp {\
 color: #CCCC33\
@@ -90,13 +85,13 @@ color: #FFE5BB\
 color: #FFC66D\
 }\
 .ace-idle-fingers .ace_collab.ace_user1 {\
-color: #4d4d4d;\
+color: #323232;\
 background-color: #FFF980\
 }\
 .ace-idle-fingers .ace_indent-guide {\
 background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAACCAYAAACZgbYnAAAAEklEQVQImWMwMjLyZYiPj/8PAAreAwAI1+g0AAAAAElFTkSuQmCC) right repeat-y\
 }";
 
-  var dom = require("../lib/dom");
-  dom.importCssString(exports.cssText, exports.cssClass);
+var dom = require("../lib/dom");
+dom.importCssString(exports.cssText, exports.cssClass);
 });
