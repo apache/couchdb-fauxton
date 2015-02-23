@@ -88,7 +88,30 @@ And to run the tests (in another terminal tab):
     
     grunt nightwatch
 
+##### Omitting nightwatch tests
 
+If you need to omit particular tests from running you can add a `testBlacklist` option to the nightwatch section of 
+your settings.json file. That defines an object of the following form:
+
+```javascript
+// ... 
+"nightwatch": {
+  // ... 
+  "testBlacklist": {
+    "documents": ["*"],
+    "databases": [
+      "checkDatabaseTooltip.js",
+      "createsDatabase.js"
+    ]
+  }
+}
+// ...
+
+```
+
+The properties (`documents`, `databases`) map to a particular addon folder name (see `app/addons`). The values 
+should be an array of tests that you don't want to run. `*` will flag all tests from being ran, otherwise you 
+just enter the names of the files to omit.
 
 
 ### To Deploy Fauxton

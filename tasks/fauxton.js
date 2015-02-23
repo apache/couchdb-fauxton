@@ -23,8 +23,8 @@ module.exports = function (grunt) {
   });
 
   grunt.registerMultiTask('get_deps', 'Fetch external dependencies', function (version) {
-    grunt.log.writeln("Fetching external dependencies");
 
+    grunt.log.writeln("Fetching external dependencies");
     var done = this.async(),
         data = this.data,
         target = data.target || "app/addons/",
@@ -142,8 +142,11 @@ module.exports = function (grunt) {
     // perform a little validation on the settings
     _validateNightwatchSettings(this.data.settings);
 
-    // figure out what tests we need to run by examining the settings.json file content
-    var addonsWithTests = _getNightwatchTests(this.data.settings);
+    // figure out what tests we need to run by examining the settings.json file content. This method returns
+    // the list of addon folders to test, plus a list of files to exclude
+    var result = _getNightwatchTests(this.data.settings);
+    var addonsWithTests = result.addonFolders;
+    var excludeTests = result.excludeTests;
 
     // if the user passed a --file="X" on the command line, filter out
     var singleTestToRun = grunt.option('file');
@@ -155,6 +158,7 @@ module.exports = function (grunt) {
     var nightwatchTemplate = _.template(grunt.file.read(this.data.template));
     grunt.file.write(this.data.dest, nightwatchTemplate({
       src_folders: JSON.stringify(addonsWithTests),
+      exclude_tests: JSON.stringify(excludeTests, null, '\t'),
       custom_commands_path: JSON.stringify(this.data.settings.nightwatch.custom_commands_path),
       globals_path: this.data.settings.nightwatch.globals_path,
       fauxton_username: this.data.settings.nightwatch.fauxton_username,
@@ -210,26 +214,51 @@ module.exports = function (grunt) {
   };
 
   function _getNightwatchTests (settings) {
-    var addonBlacklist = (_.has(settings.nightwatch, 'addonBlacklist')) ? settings.nightwatch.addonBlacklist : [];
+    var testBlacklist = (_.has(settings.nightwatch, 'testBlacklist')) ? settings.nightwatch.testBlacklist : {};
+    var addonFolders = [],
+        excludeTests = [];
 
-    return _.filter(settings.deps, function (addon) {
-
-      // if we've explicitly been told to ignore this addon's test, ignore 'em!
-      if (_.contains(addonBlacklist, addon.name)) {
-        return false;
-      }
-
-      var fileLocation = 'app/addons/' + addon.name + '/tests/nightwatch';
+    _.each(settings.deps, function (addon) {
+      var addonTestsFolder = 'app/addons/' + addon.name + '/tests/nightwatch';
       if (_.has(addon, 'path')) {
-        fileLocation = addon.path + '/tests/nightwatch';
+        addonTestsFolder = addon.path + '/tests/nightwatch';
       }
 
-      // see if the addon has any tests
-      return fs.existsSync(fileLocation);
+      // if this addon doesn't have any tests, just move along. Nothing to see here.
+      if (!fs.existsSync(addonTestsFolder)) {
+        return;
+      }
 
-    }).map(function (addon) {
-      return 'app/addons/' + addon.name + '/tests/nightwatch';
+      // next up: see if this addon has anything blacklisted
+      if (_.has(testBlacklist, addon.name) && _.isArray(testBlacklist[addon.name]) && testBlacklist[addon.name].length > 0) {
+
+        // a '*' means the user wants to blacklist all tests in the addon
+        if (_.contains(testBlacklist[addon.name], '*')) {
+          return;
+        }
+
+        // add the folder to test. Any specific files will be blacklisted separately
+        addonFolders.push(addonTestsFolder);
+
+        _.each(fs.readdirSync(addonTestsFolder), function (file) {
+          if (_.contains(testBlacklist[addon.name], file)) {
+            // the relative path is added to work around an oddity with nightwatch. It evaluates all exclude paths
+            // relative to the current src_folder being examined, so we need to return to the root first
+            excludeTests.push('../../../../../' + addonTestsFolder + '/' + file);
+          }
+        });
+
+      } else {
+
+        // add the whole folder
+        addonFolders.push(addonTestsFolder);
+      }
     });
+
+    return {
+      addonFolders: addonFolders,
+      excludeTests: excludeTests
+    };
   }
 
 };
