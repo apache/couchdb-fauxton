@@ -79,7 +79,7 @@
       "fauxton_port": "8000",
       "db_host": "localhost",
       "db_port": "5984",
-      "custom_commands_path": "test/nightwatch_tests/custom-commands",
+      "custom_commands_path": ["test/nightwatch_tests/custom-commands", "test/nightwatch_tests/custom-commands/auth"],
       "globals_path": "test/nightwatch_tests/helpers/helpers.js",
       "selenium_port": "4444"
     }
