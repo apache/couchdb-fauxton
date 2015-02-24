@@ -223,7 +223,6 @@ define([
       this.documentsView.collection.reset(collection);
 
       this.documentsView.forceRender();
-      this.allDocsNumber.forceRender();
 
       collection.paging.pageSize = options.perPage;
       var promise = collection[options.direction]({fetch: false});

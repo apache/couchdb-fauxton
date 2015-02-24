@@ -52,7 +52,7 @@ function (app, FauxtonAPI, Components, Documents,
     },
 
     cleanup: function () {
-      this.allDocsNumber.remove();
+      this.allDocsNumber && this.allDocsNumber.remove();
     }
   });
 

@@ -15,6 +15,7 @@ define([
   'api',
 
   // Modules
+  "addons/documents/helpers",
   'addons/documents/shared-routes',
   'addons/documents/views',
   'addons/documents/views-index',
@@ -23,7 +24,7 @@ define([
 
 ],
 
-function (app, FauxtonAPI, BaseRoute, Documents, Index, Databases, Components) {
+function (app, FauxtonAPI, Helpers, BaseRoute, Documents, Index, Databases, Components) {
 
 
   var IndexEditorAndResults = BaseRoute.extend({
@@ -74,7 +75,7 @@ function (app, FauxtonAPI, BaseRoute, Documents, Index, Databases, Components) {
       this.breadcrumbs = this.setView('#breadcrumbs', new Components.Breadcrumbs({
         toggleDisabled: true,
         crumbs: [
-          {'type': 'back', 'link': Databases.databaseUrl(this.database)},
+          {'type': 'back', 'link': Helpers.getPreviousPage(this.database)},
           {'name': this.database.id, 'link': Databases.databaseUrl(this.database) }
         ]
       }));
@@ -131,7 +132,7 @@ function (app, FauxtonAPI, BaseRoute, Documents, Index, Databases, Components) {
       this.breadcrumbs = this.setView('#breadcrumbs', new Components.Breadcrumbs({
         toggleDisabled: true,
         crumbs: [
-          {'type': 'back', 'link': Databases.databaseUrl(this.database)},
+          {'type': 'back', 'link': Helpers.getPreviousPage(this.database)},
           {'name': 'Create new index', 'link': Databases.databaseUrl(this.database) }
         ]
       }));
