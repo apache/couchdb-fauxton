@@ -43,6 +43,16 @@ function(app, $, _, Backbone, Bootstrap, Helpers, constants, Utils, FauxtonAPI, 
     };
   }
 
+  // make sure we have location.origin
+  if (_.isUndefined(window.location.origin)) {
+    var port = '';
+    if (window.location.port) {
+      port = ':' + window.location.port;
+    }
+    window.location.origin = window.location.protocol + '//' +
+      window.location.hostname + port;
+  }
+
   // Provide a global location to place configuration settings and module
   // creation also mix in Backbone.Events
   _.extend(app, {
