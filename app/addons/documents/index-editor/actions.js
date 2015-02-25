@@ -150,7 +150,7 @@ function (app, FauxtonAPI, Documents, ActionTypes) {
       }
 
       promise.then(function () {
-        FauxtonAPI.navigate('/database/' + database.safeID() + '/_all_docs?limit=' + FauxtonAPI.constants.DATABASES.DOCUMENT_LIMIT);
+        FauxtonAPI.navigate(FauxtonAPI.urls('allDocs', 'app', database.safeID(), '?limit=' + FauxtonAPI.constants.DATABASES.DOCUMENT_LIMIT));
         FauxtonAPI.triggerRouteEvent('reloadDesignDocs');
       });
 
