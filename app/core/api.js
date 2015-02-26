@@ -17,10 +17,12 @@ define([
   'core/routeObject',
   'core/utils',
   'core/store',
+  'constants',
+
   'flux'
 ],
 
-function(FauxtonAPI, Layout, Router, RouteObject, utils, Store, Flux) {
+function(FauxtonAPI, Layout, Router, RouteObject, utils, Store, constants, Flux) {
   FauxtonAPI = _.extend(FauxtonAPI, {
     Layout: Layout,
     Router: Router,
@@ -30,6 +32,9 @@ function(FauxtonAPI, Layout, Router, RouteObject, utils, Store, Flux) {
     Events: _.extend({}, Backbone.Events),
     dispatcher: new Flux.Dispatcher()
   });
+
+  // Pass along all constants
+  FauxtonAPI.constants = constants;
 
   FauxtonAPI.dispatch = _.bind(FauxtonAPI.dispatcher.dispatch, FauxtonAPI.dispatcher);
 

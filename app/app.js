@@ -20,7 +20,6 @@ define([
   'backbone',
   'bootstrap',
   'helpers',
-  'constants',
   'core/utils',
 
   // modules
@@ -32,7 +31,7 @@ define([
   'plugins/jquery.form'
 ],
 
-function(app, $, _, Backbone, Bootstrap, Helpers, constants, Utils, FauxtonAPI, Couchdb) {
+function(app, $, _, Backbone, Bootstrap, Helpers, Utils, FauxtonAPI, Couchdb) {
 
   // Make sure we have a console.log
   if (_.isUndefined(console)) {
@@ -63,9 +62,6 @@ function(app, $, _, Backbone, Bootstrap, Helpers, constants, Utils, FauxtonAPI, 
 
   // Localize or create a new JavaScript Template object
   var JST = window.JST = window.JST || {};
-
-  // Pass along all constants
-  FauxtonAPI.constants = constants;
 
   // Configure LayoutManager with Backbone Boilerplate defaults
   FauxtonAPI.Layout.configure({
