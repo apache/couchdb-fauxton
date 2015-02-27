@@ -16,7 +16,7 @@ define([
   'react',
   'addons/documents/changes/actions',
   'addons/documents/changes/stores',
-  'addons/fauxton/components',
+  'addons/fauxton/components.react',
   'plugins/prettify'
 ], function (app, FauxtonAPI, React, Actions, Stores, Components) {
 
@@ -347,11 +347,7 @@ define([
 
     componentDidMount: function () {
       this.store.on('change', this.onChange, this);
-      //prettyPrint(); // TODO
-
-      // set up the clipboards
-      new Components.Clipboard({ $el: $(this.refs.copySeq.getDOMNode()) });
-      new Components.Clipboard({ $el: $(this.refs.copyId.getDOMNode()) });
+      prettyPrint(); // TODO
     },
 
     componentWillUnmount: function () {
@@ -374,7 +370,12 @@ define([
 
     render: function () {
       var attrs = this.props.change.attributes;
-      var code = JSON.stringify({ changes: attrs.changes, doc: attrs.doc }, null, " ");
+
+      var code = '';
+      if (this.state.showCode) {
+        code = '<pre className="prettyprint">' + JSON.stringify({ changes: attrs.changes, doc: attrs.doc }, null, " ") + '</pre>';
+      }
+
       var deletedLabel = attrs.deleted ? 'True' : 'False';
       var jsonBtnClasses = "btn btn-small " + ((this.state.showCode) ? 'btn-secondary' : 'btn-primary');
 
@@ -385,9 +386,7 @@ define([
               <div className="span2">seq</div>
               <div className="span8">{attrs.seq}</div>
               <div className="span2 text-right">
-                <a href="#" ref="copySeq" data-clipboard-text={attrs.seq} data-bypass="true" title="Copy to clipboard">
-                  <i className="fonticon-clipboard"></i>
-                </a>
+                <Components.Clipboard text={attrs.seq} />
               </div>
             </div>
 
@@ -397,9 +396,7 @@ define([
                 <ChangeID id={attrs.id} deleted={attrs.deleted} databaseURL={this.props.databaseURL} />
               </div>
               <div className="span2 text-right">
-                <a href="#" ref="copyId" data-clipboard-text={attrs.id} data-bypass="true" title="Copy to clipboard">
-                  <i className="fonticon-clipboard"></i>
-                </a>
+                <Components.Clipboard text={attrs.id} />
               </div>
             </div>
 
@@ -410,9 +407,7 @@ define([
               </div>
             </div>
 
-            <ReactCSSTransitionGroup transitionName="toggleChangesCode" component="div">
-              <pre className="prettyprint">{code}</pre>
-            </ReactCSSTransitionGroup>
+            <ReactCSSTransitionGroup transitionName="toggleChangesCode" component="div">{code}</ReactCSSTransitionGroup>
 
             <div className="row-fluid">
               <div className="span2">deleted</div>
@@ -423,6 +418,7 @@ define([
       );
     }
   });
+
 
   var ChangeID = React.createClass({
     render: function () {

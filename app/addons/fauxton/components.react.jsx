@@ -11,13 +11,15 @@
 // the License.
 
 define([
+  'app',
   'api',
   'react',
   'addons/fauxton/stores',
-  'addons/fauxton/actions'
+  'addons/fauxton/actions',
+  'plugins/zeroclipboard/ZeroClipboard'
 ],
 
-function(FauxtonAPI, React, Stores, Actions) {
+function(app, FauxtonAPI, React, Stores, Actions, ZeroClipboard) {
   var navBarStore = Stores.navBarStore;
 
   var Footer = React.createClass({
@@ -150,12 +152,38 @@ function(FauxtonAPI, React, Stores, Actions) {
   });
 
 
+  // super basic right now, but can be expanded later to handle all the varieties of copy-to-clipboards
+  // (target content element, custom label, classes, notifications, etc.)
+  var Clipboard = React.createClass({
+    propTypes: function () {
+      text: React.PropTypes.string.isRequired
+    },
+
+    componentWillMount: function () {
+      ZeroClipboard.config({ moviePath: app.zeroClipboardPath });
+    },
+
+    componentDidMount: function () {
+      var el = this.getDOMNode();
+      this.clipboard = new ZeroClipboard(el);
+    },
+
+    render: function () {
+      return (
+        <a href="#" ref="copy" data-clipboard-text={this.props.text} data-bypass="true" title="Copy to clipboard">
+          <i className="fonticon-clipboard"></i>
+        </a>
+      );
+    }
+  });
+
   return {
     renderNavBar: function (el) {
       React.render(<NavBar/>, el);
     },
 
-    Burger: Burger
+    Burger: Burger,
+    Clipboard: Clipboard
   };
 
 });
