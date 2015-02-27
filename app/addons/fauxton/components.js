@@ -326,22 +326,58 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
     className: 'pagination',
     template: "addons/fauxton/templates/pagination",
 
-    initialize: function(options) {
+    initialize: function (options) {
       this.page = parseInt(options.page, 10);
       this.perPage = options.perPage;
       this.urlFun = options.urlFun;
     },
 
-    serialize: function() {
+    serialize: function () {
       var total = this.collection.length;
       var totalPages = Math.ceil(total / this.perPage);
+
+      var visiblePagesObject = this.getVisiblePages(this.page, totalPages);
+
+      var from = visiblePagesObject.from,
+          to = visiblePagesObject.to;
+
       return {
         page: this.page,
         perPage: this.perPage,
         total: total,
         totalPages: totalPages,
-        urlFun: this.urlFun
+        urlFun: this.urlFun,
+        from: from,
+        to: to
       };
+    },
+
+    getVisiblePages: function (page, totalPages) {
+      var from, to;
+
+      if (totalPages < 10) {
+        from = 1;
+        to = totalPages + 1;
+      } else { // if totalPages is more than 10
+        from = page - 5;
+        to = page + 5;
+
+        if (from <= 1) {
+          from = 1;
+          to = 11;
+        }
+        if (to > totalPages + 1) {
+          from =  totalPages - 9;
+          to = totalPages + 1;
+        }
+
+      }
+
+      return {
+        from: from,
+        to: to
+      };
+
     }
   });
 

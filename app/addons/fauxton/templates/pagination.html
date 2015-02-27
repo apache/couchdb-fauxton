@@ -16,7 +16,7 @@ the License.
 <% } else { %>
   <li class="disabled"> <a href="<%- urlFun(page) %>">&laquo;</a></li>
 <% } %>
-<% _.each(_.range(1, totalPages+1), function(i) { %>
+<% _.each(_.range(from, to), function(i) { %>
   <li <% if (page == i) { %>class="active"<% } %>> <a href="<%- urlFun(i) %>"><%- i %></a></li>
 <% }) %>
 <% if (page < totalPages) { %>
