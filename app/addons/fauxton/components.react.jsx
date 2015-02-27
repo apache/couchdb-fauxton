@@ -156,7 +156,9 @@ function(app, FauxtonAPI, React, Stores, Actions, ZeroClipboard) {
   // (target content element, custom label, classes, notifications, etc.)
   var Clipboard = React.createClass({
     propTypes: function () {
-      text: React.PropTypes.string.isRequired
+      return {
+        text: React.PropTypes.string.isRequired
+      };
     },
 
     componentWillMount: function () {
@@ -177,13 +179,52 @@ function(app, FauxtonAPI, React, Stores, Actions, ZeroClipboard) {
     }
   });
 
+  // formats a block of code and pretty-prints it in the page. Relies on the prettyPrint plugin
+  var CodeBlock = React.createClass({
+    getDefaultProps: function () {
+      return {
+        lang: "js"
+      };
+    },
+
+    getClasses: function () {
+      // added for forward compatibility. This component defines an api via it's props so you can pass lang="N" and
+      // not the class that prettyprint requires for that lang. If (when, hopefully!) we drop prettyprint we won't
+      // have any change this component's props API and break things
+      var classMap = {
+        js: 'lang-js'
+      };
+
+      var classNames = 'prettyprint';
+      if (_.has(classMap, this.props.lang)) {
+        classNames += ' ' + classMap[this.props.lang];
+      }
+      return classNames;
+    },
+
+    componentDidMount: function () {
+      // this one function is all the lib offers. It parses the entire page and pretty-prints anything with
+      // a .prettyprint class; only executes on an element once
+      prettyPrint();
+    },
+
+    render: function () {
+      var code = JSON.stringify(this.props.code, null, " ");
+      return (
+        <pre className={this.getClasses()}>{code}</pre>
+      );
+    }
+  });
+
+
   return {
     renderNavBar: function (el) {
       React.render(<NavBar/>, el);
     },
 
     Burger: Burger,
-    Clipboard: Clipboard
+    Clipboard: Clipboard,
+    CodeBlock: CodeBlock
   };
 
 });

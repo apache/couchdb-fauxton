@@ -21,6 +21,7 @@ define([
 ], function (app, FauxtonAPI, React, Actions, Stores, Components) {
 
   var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
+  var ReactCSSTransitionGroup2 = React.addons.CSSTransitionGroup;
 
 
   // the top-level component for the Changes Filter section. Handles hiding/showing
@@ -322,16 +323,19 @@ define([
       if (!this.store) {
         this.initStore();
       }
-
-      return {
-        jsonBtnLabel: this.store.getJsonBtnLabel(),
-        showCode: this.store.isCodeVisible()
-      };
+      return this.getState();
     },
 
     initStore: function () {
       this.store = new Stores.ChangeStore();
       this.dispatchToken = FauxtonAPI.dispatcher.register(this.store.dispatch);
+    },
+
+    getState: function () {
+      return {
+        jsonBtnLabel: this.store.getJsonBtnLabel(),
+        showCode: this.store.isCodeVisible()
+      };
     },
 
     toggleJSON: function (e) {
@@ -340,9 +344,7 @@ define([
     },
 
     onChange: function () {
-      this.setState({
-        showTabContent: Stores.changesHeaderStore.isTabVisible()
-      });
+      this.setState(this.getState());
     },
 
     componentDidMount: function () {
@@ -368,16 +370,23 @@ define([
     },
     */
 
+    getChangesCode: function () {
+      var json = '';
+      if (this.state.showCode) {
+        var code = {
+          changes: this.props.change.attributes.changes,
+          doc: this.props.change.attributes.doc
+        };
+        //json = <div key="changesCodeSection" className="changesCodeSection"><Components.CodeBlock code={code} /></div>;
+        json = <Components.CodeBlock key="changesCodeSection" code={code} />;
+      }
+      return json;
+    },
+
     render: function () {
       var attrs = this.props.change.attributes;
-
-      var code = '';
-      if (this.state.showCode) {
-        code = '<pre className="prettyprint">' + JSON.stringify({ changes: attrs.changes, doc: attrs.doc }, null, " ") + '</pre>';
-      }
-
       var deletedLabel = attrs.deleted ? 'True' : 'False';
-      var jsonBtnClasses = "btn btn-small " + ((this.state.showCode) ? 'btn-secondary' : 'btn-primary');
+      var jsonBtnClasses = "btn btn-small " + (this.state.showCode ? 'btn-secondary' : 'btn-primary');
 
       return (
         <div className="change-wrapper">
@@ -407,7 +416,9 @@ define([
               </div>
             </div>
 
-            <ReactCSSTransitionGroup transitionName="toggleChangesCode" component="div">{code}</ReactCSSTransitionGroup>
+            <ReactCSSTransitionGroup2 transitionName="toggleChangesCode" component="div" className="changesCodeSectionWrapper">
+              {this.getChangesCode()}
+            </ReactCSSTransitionGroup2>
 
             <div className="row-fluid">
               <div className="span2">deleted</div>
@@ -420,6 +431,7 @@ define([
   });
 
 
+
   var ChangeID = React.createClass({
     render: function () {
       if (this.props.deleted) {
@@ -428,7 +440,6 @@ define([
         );
       } else {
 //        FauxtonAPI.urls('document', 'app', db, id);
-
         var link = "#" + this.props.databaseURL + "/" + app.utils.safeURLName(this.props.id);
         return (
           <a href={link}>{this.props.id}</a>
