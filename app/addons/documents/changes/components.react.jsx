@@ -279,73 +279,13 @@ define([
       }, this);
     },
 
-    render: function () {
-      return (
-        <div>
-          {this.getRows()}
-        </div>
-      );
-    }
-  });
-
-
-  var ChangeRow = React.createClass({
-    getInitialState: function () {
-      if (!this.store) {
-        this.initStore();
-      }
-      return {
-        jsonButtonLabel: this.store.getJsonButtonLabel(),
-        showCode: this.store.isCodeVisible()
-      };
+    componentWillMount: function () {
+      //console.log("changing.");
     },
 
-    // I don't see a better way to do this. Having the component set up its own store feels elegant; the ugly part
-    // is having to do it in getInitialState()
-    initStore: function () {
-      this.store = new Stores.ChangeStore();
-      this.dispatchToken = FauxtonAPI.dispatcher.register(Stores.changesHeaderStore.dispatch);
-    },
-
-    toggleJSON: function (e) {
-      e.preventDefault();
-      Actions.toggleCodeVisibility();
-    },
-
-    onChange: function () {
-      this.setState({
-        showTabContent: Stores.changesHeaderStore.isTabVisible()
-      });
-    },
-
-    componentDidMount: function () {
-      this.store.on('change', this.onChange, this);
-
-      prettyPrint();
-      var clip1 = new Components.Clipboard({ $el: $(this.refs.copySeq) });
-      var clip2 = new Components.Clipboard({ $el: $(this.refs.copyId) });
-    },
-
-    componentWillUnmount: function () {
-      this.store.off('change', this.onChange);
-    },
-
-    /*
-    serialize: function () {
-      var json = this.model.changes.toJSON(),
-        filteredData = this.createFilteredData(json);
-
-      return {
-        changes: filteredData,
-        database: this.model,
-        href: function (db, id) {
-          return FauxtonAPI.urls('document', 'app', db, id);
-        }
-      };
-    },
-
-    createFilteredData: function (json) {
-      return _.reduce(this.filters, function (elements, filter) {
+    // filters the list of changes as per whatever the user's entered in the UI
+    filterList: function (json) {
+      return _.reduce(this.props.filters, function (elements, filter) {
         return _.filter(elements, function (element) {
           var match = false;
 
@@ -362,14 +302,81 @@ define([
         });
 
       }, json, this);
+    },
+
+    render: function () {
+      return (
+        <div>
+          {this.getRows()}
+        </div>
+      );
     }
+  });
+
+
+  var ChangeRow = React.createClass({
+    getInitialState: function () {
+
+      // I don't see a better way to do this. Having the component set up its own store feels elegant; the ugly part
+      // is having to do it like this
+      if (!this.store) {
+        this.initStore();
+      }
+
+      return {
+        jsonBtnLabel: this.store.getJsonBtnLabel(),
+        showCode: this.store.isCodeVisible()
+      };
+    },
+
+    initStore: function () {
+      this.store = new Stores.ChangeStore();
+      this.dispatchToken = FauxtonAPI.dispatcher.register(this.store.dispatch);
+    },
+
+    toggleJSON: function (e) {
+      e.preventDefault();
+      Actions.toggleCodeVisibility();
+    },
+
+    onChange: function () {
+      this.setState({
+        showTabContent: Stores.changesHeaderStore.isTabVisible()
+      });
+    },
+
+    componentDidMount: function () {
+      this.store.on('change', this.onChange, this);
+      //prettyPrint(); // TODO
+
+      // set up the clipboards
+      new Components.Clipboard({ $el: $(this.refs.copySeq.getDOMNode()) });
+      new Components.Clipboard({ $el: $(this.refs.copyId.getDOMNode()) });
+    },
+
+    componentWillUnmount: function () {
+      this.store.off('change', this.onChange);
+    },
+
+    /*
+    serialize: function () {
+      var json = this.model.changes.toJSON(),
+        filteredData = this.createFilteredData(json);
+
+      return {
+        database: this.model,
+        href: function (db, id) {
+          return FauxtonAPI.urls('document', 'app', db, id);
+        }
+      };
+    },
     */
 
     render: function () {
       var attrs = this.props.change.attributes;
       var code = JSON.stringify({ changes: attrs.changes, doc: attrs.doc }, null, " ");
       var deletedLabel = attrs.deleted ? 'True' : 'False';
-      var jsonButtonClasses = "btn btn-small " + ((this.state.showCode) ? 'btn-secondary' : 'btn-primary');
+      var jsonBtnClasses = "btn btn-small " + ((this.state.showCode) ? 'btn-secondary' : 'btn-primary');
 
       return (
         <div className="change-wrapper">
@@ -378,7 +385,7 @@ define([
               <div className="span2">seq</div>
               <div className="span8">{attrs.seq}</div>
               <div className="span2 text-right">
-                <a href="#" ref="copySeq" data-clipboard-text={attrs.seq} data-bypass="true">
+                <a href="#" ref="copySeq" data-clipboard-text={attrs.seq} data-bypass="true" title="Copy to clipboard">
                   <i className="fonticon-clipboard"></i>
                 </a>
               </div>
@@ -390,7 +397,7 @@ define([
                 <ChangeID id={attrs.id} deleted={attrs.deleted} databaseURL={this.props.databaseURL} />
               </div>
               <div className="span2 text-right">
-                <a href="#" ref="copyId" data-clipboard-text={attrs.id} data-bypass="true">
+                <a href="#" ref="copyId" data-clipboard-text={attrs.id} data-bypass="true" title="Copy to clipboard">
                   <i className="fonticon-clipboard"></i>
                 </a>
               </div>
@@ -399,9 +406,7 @@ define([
             <div className="row-fluid">
               <div className="span2">changes</div>
               <div className="span10">
-                <button type="button" className={jsonButtonClasses} onClick={this.toggleJSON}>
-                  {this.state.jsonButtonLabel}
-                </button>
+                <button type="button" className={jsonBtnClasses} onClick={this.toggleJSON}>{this.state.jsonBtnLabel}</button>
               </div>
             </div>
 
@@ -426,7 +431,7 @@ define([
           <span>{this.props.id}</span>
         );
       } else {
-        FauxtonAPI.urls('document', 'app', db, id);
+//        FauxtonAPI.urls('document', 'app', db, id);
 
         var link = "#" + this.props.databaseURL + "/" + app.utils.safeURLName(this.props.id);
         return (

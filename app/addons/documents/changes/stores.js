@@ -104,25 +104,25 @@ define([
 
     reset: function () {
       this._codeVisible = false;
-      this._jsonButtonLabel = 'View JSON';
+      this._jsonBtnLabel = 'View JSON';
     },
 
     toggleCodeVisibility: function () {
       this._codeVisible = !this._codeVisible;
-      this._jsonButtonLabel = (this._codeVisible) ? 'Close JSON' : 'ViewJSON';
+      this._jsonBtnLabel = (this._codeVisible) ? 'Close JSON' : 'ViewJSON';
     },
 
     isCodeVisible: function () {
       return this._codeVisible;
     },
 
-    getJsonButtonLabel: function () {
-      return this._jsonButtonLabel;
+    getJsonBtnLabel: function () {
+      return this._jsonBtnLabel;
     },
 
     dispatch: function (action) {
       switch (action.type) {
-        case ActionTypes.TOGGLE_CHANGES_JSON:
+        case ActionTypes.TOGGLE_CHANGES_CODE_VISIBILITY:
           this.toggleCodeVisibility();
           this.triggerChange();
           break;

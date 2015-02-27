@@ -39,19 +39,20 @@ function(app, FauxtonAPI, Components, Changes) {
 
   Views.ChangesReactWrapper = FauxtonAPI.View.extend({
     initialize: function () {
-
       // needed any more, or will React automatically recognize the model content change?
 //      this.listenTo(this.model.changes, 'sync', this.render);
 //      this.listenTo(this.model.changes, 'cachesync', this.render);
-
       this.filters = [];
     },
+
     afterRender: function () {
       Changes.renderChanges(this.el, {
         model: this.model,
+        filters: this.filters,
         databaseURL: "" // TODO
       });
     },
+
     establish: function() {
       return [this.model.changes.fetchOnce({ prefill: true })];
     },
