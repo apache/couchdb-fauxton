@@ -41,8 +41,31 @@ function (app, FauxtonAPI, React) {
     }
   });
 
+  // global component
+  var StyledSelect = React.createClass({
+    render: function () {
+      return (
+        <div className="styled-select">
+          <label htmlFor={this.props.selectId}>
+            <i className="fonticon-down-dir"></i>
+            <select
+              value={this.props.selectValue}
+              id={this.props.selectId}
+              className={this.props.selectValue}
+              onChange={this.props.selectChange}
+            >
+              {this.props.selectContent}
+            </select>
+          </label>
+        </div>
+      );
+    }
+  });
+
+
   var Components = {
-    ToggleHeaderButton: ToggleHeaderButton
+    ToggleHeaderButton: ToggleHeaderButton,
+    StyledSelect: StyledSelect
   };
 
   return Components;

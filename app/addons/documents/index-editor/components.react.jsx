@@ -17,33 +17,15 @@ define([
   'addons/documents/index-editor/stores',
   'addons/documents/index-editor/actions',
   'addons/fauxton/components',
+  'addons/components/react-components.react',
   'plugins/beautify'
 ],
 
-function(app, FauxtonAPI, React, Stores, Actions, Components, beautifyHelper) {
+function (app, FauxtonAPI, React, Stores, Actions, Components, ReactComponents, beautifyHelper) {
   var indexEditorStore = Stores.indexEditorStore;
   var getDocUrl = app.helpers.getDocUrl;
+  var StyledSelect = ReactComponents.StyledSelect;
 
-  // global component
-  var StyledSelect = React.createClass({
-    render: function () {
-      return (
-        <div className="styled-select">
-          <label htmlFor={this.props.selectId}>
-            <i className="fonticon-down-dir"></i>
-            <select
-              value={this.props.selectValue}
-              id={this.props.selectId}
-              className={this.props.selectValue}
-              onChange={this.props.selectChange}
-            >
-              {this.props.selectContent}
-            </select>
-          </label>
-        </div>
-      );
-    }
-  });
 
   var DesignDocSelector = React.createClass({
 
