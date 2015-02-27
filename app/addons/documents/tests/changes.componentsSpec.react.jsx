@@ -32,7 +32,7 @@ define([
       beforeEach(function () {
         spy = sinon.spy(Actions, 'toggleTabVisibility');
         container = document.createElement('div');
-        tab = TestUtils.renderIntoDocument(<Changes.ChangesHeader />, container);
+        tab = TestUtils.renderIntoDocument(<Changes.ChangesHeaderController />, container);
       });
 
       afterEach(function () {

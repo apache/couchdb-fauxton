@@ -11,16 +11,20 @@
 // the License.
 
 define([
+  'app',
+  'api',
   'react',
   'addons/documents/changes/actions',
-  'addons/documents/changes/stores'
-], function (React, Actions, Stores) {
+  'addons/documents/changes/stores',
+  'addons/fauxton/components',
+  'plugins/prettify'
+], function (app, FauxtonAPI, React, Actions, Stores, Components) {
 
   var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 
 
   // the top-level component for the Changes Filter section. Handles hiding/showing
-  var ChangesHeader = React.createClass({
+  var ChangesHeaderController = React.createClass({
     getInitialState: function () {
       return {
         showTabContent: Stores.changesHeaderStore.isTabVisible()
@@ -268,16 +272,184 @@ define([
   });
 
 
+  var ChangesController = React.createClass({
+    getRows: function () {
+      return _.map(this.props.model.changes.models, function(change) {
+        return <ChangeRow change={change} key={change.cid} databaseURL={this.props.databaseURL} />;
+      }, this);
+    },
+
+    render: function () {
+      return (
+        <div>
+          {this.getRows()}
+        </div>
+      );
+    }
+  });
+
+
+  var ChangeRow = React.createClass({
+    getInitialState: function () {
+      if (!this.store) {
+        this.initStore();
+      }
+      return {
+        jsonButtonLabel: this.store.getJsonButtonLabel(),
+        showCode: this.store.isCodeVisible()
+      };
+    },
+
+    // I don't see a better way to do this. Having the component set up its own store feels elegant; the ugly part
+    // is having to do it in getInitialState()
+    initStore: function () {
+      this.store = new Stores.ChangeStore();
+      this.dispatchToken = FauxtonAPI.dispatcher.register(Stores.changesHeaderStore.dispatch);
+    },
+
+    toggleJSON: function (e) {
+      e.preventDefault();
+      Actions.toggleCodeVisibility();
+    },
+
+    onChange: function () {
+      this.setState({
+        showTabContent: Stores.changesHeaderStore.isTabVisible()
+      });
+    },
+
+    componentDidMount: function () {
+      this.store.on('change', this.onChange, this);
+
+      prettyPrint();
+      var clip1 = new Components.Clipboard({ $el: $(this.refs.copySeq) });
+      var clip2 = new Components.Clipboard({ $el: $(this.refs.copyId) });
+    },
+
+    componentWillUnmount: function () {
+      this.store.off('change', this.onChange);
+    },
+
+    /*
+    serialize: function () {
+      var json = this.model.changes.toJSON(),
+        filteredData = this.createFilteredData(json);
+
+      return {
+        changes: filteredData,
+        database: this.model,
+        href: function (db, id) {
+          return FauxtonAPI.urls('document', 'app', db, id);
+        }
+      };
+    },
+
+    createFilteredData: function (json) {
+      return _.reduce(this.filters, function (elements, filter) {
+        return _.filter(elements, function (element) {
+          var match = false;
+
+          // make deleted searchable
+          if (!element.deleted) {
+            element.deleted = false;
+          }
+          _.each(element, function (value) {
+            if (new RegExp(filter, 'i').test(value.toString())) {
+              match = true;
+            }
+          });
+          return match;
+        });
+
+      }, json, this);
+    }
+    */
+
+    render: function () {
+      var attrs = this.props.change.attributes;
+      var code = JSON.stringify({ changes: attrs.changes, doc: attrs.doc }, null, " ");
+      var deletedLabel = attrs.deleted ? 'True' : 'False';
+      var jsonButtonClasses = "btn btn-small " + ((this.state.showCode) ? 'btn-secondary' : 'btn-primary');
+
+      return (
+        <div className="change-wrapper">
+          <div className="change-box">
+            <div className="row-fluid">
+              <div className="span2">seq</div>
+              <div className="span8">{attrs.seq}</div>
+              <div className="span2 text-right">
+                <a href="#" ref="copySeq" data-clipboard-text={attrs.seq} data-bypass="true">
+                  <i className="fonticon-clipboard"></i>
+                </a>
+              </div>
+            </div>
+
+            <div className="row-fluid">
+              <div className="span2">id</div>
+              <div className="span8">
+                <ChangeID id={attrs.id} deleted={attrs.deleted} databaseURL={this.props.databaseURL} />
+              </div>
+              <div className="span2 text-right">
+                <a href="#" ref="copyId" data-clipboard-text={attrs.id} data-bypass="true">
+                  <i className="fonticon-clipboard"></i>
+                </a>
+              </div>
+            </div>
+
+            <div className="row-fluid">
+              <div className="span2">changes</div>
+              <div className="span10">
+                <button type="button" className={jsonButtonClasses} onClick={this.toggleJSON}>
+                  {this.state.jsonButtonLabel}
+                </button>
+              </div>
+            </div>
+
+            <ReactCSSTransitionGroup transitionName="toggleChangesCode" component="div">
+              <pre className="prettyprint">{code}</pre>
+            </ReactCSSTransitionGroup>
+
+            <div className="row-fluid">
+              <div className="span2">deleted</div>
+              <div className="span10">{deletedLabel}</div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+  });
+
+  var ChangeID = React.createClass({
+    render: function () {
+      if (this.props.deleted) {
+        return (
+          <span>{this.props.id}</span>
+        );
+      } else {
+        FauxtonAPI.urls('document', 'app', db, id);
+
+        var link = "#" + this.props.databaseURL + "/" + app.utils.safeURLName(this.props.id);
+        return (
+          <a href={link}>{this.props.id}</a>
+        );
+      }
+    }
+  });
+
+
   return {
     renderHeader: function (el) {
-      React.render(<ChangesHeader />, el);
+      React.render(<ChangesHeaderController />, el);
     },
-    removeHeader: function (el) {
+    renderChanges: function (el, params) {
+      React.render(<ChangesController {...params} />, el);
+    },
+    remove: function (el) {
       React.unmountComponentAtNode(el);
     },
 
     // exposed for testing purposes only
-    ChangesHeader: ChangesHeader,
+    ChangesHeaderController: ChangesHeaderController,
     ChangesHeaderTab: ChangesHeaderTab,
     ChangesFilter: ChangesFilter
   };

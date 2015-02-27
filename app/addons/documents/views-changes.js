@@ -17,108 +17,48 @@ define([
 
        // Libs
        "addons/fauxton/components",
-  'addons/documents/changes/components.react',
-
-       // Plugins
-       "plugins/prettify"
+  'addons/documents/changes/components.react'
 ],
 
-function(app, FauxtonAPI, Components, Changes, prettify, ZeroClipboard) {
+function(app, FauxtonAPI, Components, Changes) {
 
   var Views = {};
 
 
-  // wrapper for React component. The wrapper allows us to tie the React component into the Fauxton
+  // wrappers for React components. The wrapper allows us to tie the React component into the Fauxton
   // page load lifecycle
   Views.ChangesHeaderReactWrapper = FauxtonAPI.View.extend({
     afterRender: function () {
       Changes.renderHeader(this.el);
     },
     cleanup: function () {
-      Changes.removeHeader(this.el);
+      Changes.remove(this.el); // TODO move this to a Fauxton helper? All it does is remove a component
     }
   });
 
 
-  Views.Changes = Components.FilteredView.extend({
-    template: "addons/documents/templates/changes",
-
+  Views.ChangesReactWrapper = FauxtonAPI.View.extend({
     initialize: function () {
-      this.listenTo(this.model.changes, 'sync', this.render);
-      this.listenTo(this.model.changes, 'cachesync', this.render);
+
+      // needed any more, or will React automatically recognize the model content change?
+//      this.listenTo(this.model.changes, 'sync', this.render);
+//      this.listenTo(this.model.changes, 'cachesync', this.render);
+
       this.filters = [];
     },
-
-    events: {
-      "click button.js-toggle-json": "toggleJson"
-    },
-
-    toggleJson: function(event) {
-      event.preventDefault();
-
-      var $button = this.$(event.target),
-          $container = $button.closest('.change-box').find(".js-json-container");
-
-      if (!$container.is(":visible")) {
-        $button
-          .text("Close JSON")
-          .addClass("btn-secondary")
-          .removeClass("btn-primary");
-      } else {
-        $button.text("View JSON")
-          .addClass("btn-primary")
-          .removeClass("btn-secondary");
-      }
-
-      $container.slideToggle();
-    },
-
-    establish: function() {
-      return [ this.model.changes.fetchOnce({prefill: true})];
-    },
-
-    serialize: function () {
-      var json = this.model.changes.toJSON(),
-          filteredData = this.createFilteredData(json);
-
-      return {
-        changes: filteredData,
-        database: this.model,
-        href: function (db, id) {
-          return FauxtonAPI.urls('document', 'app', db, id);
-        }
-      };
-    },
-
-    createFilteredData: function (json) {
-      return _.reduce(this.filters, function (elements, filter) {
-        return _.filter(elements, function (element) {
-          var match = false;
-
-          // make deleted searchable
-          if (!element.deleted) {
-            element.deleted = false;
-          }
-          _.each(element, function (value) {
-            if (new RegExp(filter, 'i').test(value.toString())) {
-              match = true;
-            }
-          });
-          return match;
-        });
-
-
-      }, json, this);
-    },
-
-    afterRender: function(){
-      prettyPrint();
-      var client = new Components.Clipboard({
-        $el: this.$('.js-copy')
+    afterRender: function () {
+      Changes.renderChanges(this.el, {
+        model: this.model,
+        databaseURL: "" // TODO
       });
+    },
+    establish: function() {
+      return [this.model.changes.fetchOnce({ prefill: true })];
+    },
+    cleanup: function () {
+      Changes.remove(this.el);
     }
   });
-
 
 
   return Views;
