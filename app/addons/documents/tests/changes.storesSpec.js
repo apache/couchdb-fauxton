@@ -21,31 +21,30 @@ define([
   var assert = utils.assert;
 
 
-  describe('ChangesHeaderStore', function () {
+  describe('ChangesStore', function () {
+
+    var collection = new Backbone.Collection();
+
+    afterEach(function () {
+      Stores.changesStore.reset();
+    });
+
     it('toggleTabVisibility() changes state in store', function() {
-      assert.ok(Stores.changesHeaderStore.isTabVisible() === false);
-      Stores.changesHeaderStore.toggleTabVisibility();
-      assert.ok(Stores.changesHeaderStore.isTabVisible() === true);
+      assert.ok(Stores.changesStore.isTabVisible() === false);
+      Stores.changesStore.toggleTabVisibility();
+      assert.ok(Stores.changesStore.isTabVisible() === true);
     });
 
     it('reset() changes tab visibility to hidden', function() {
-      Stores.changesHeaderStore.toggleTabVisibility();
-      Stores.changesHeaderStore.reset();
-      assert.ok(Stores.changesHeaderStore.isTabVisible() === false);
-    });
-  });
-
-
-  describe('ChangesFilterStore', function () {
-
-    afterEach(function () {
-      Stores.changesFilterStore.reset();
+      Stores.changesStore.toggleTabVisibility();
+      Stores.changesStore.reset();
+      assert.ok(Stores.changesStore.isTabVisible() === false);
     });
 
     it('addFilter() adds item in store', function () {
       var filter = 'My filter';
-      Stores.changesFilterStore.addFilter(filter);
-      var filters = Stores.changesFilterStore.getFilters();
+      Stores.changesStore.addFilter(filter);
+      var filters = Stores.changesStore.getFilters();
       assert.ok(filters.length === 1);
       assert.ok(filters[0] === filter);
     });
@@ -53,21 +52,50 @@ define([
     it('removeFilter() removes item from store', function () {
       var filter1 = 'My filter 1';
       var filter2 = 'My filter 2';
-      Stores.changesFilterStore.addFilter(filter1);
-      Stores.changesFilterStore.addFilter(filter2);
-      Stores.changesFilterStore.removeFilter(filter1);
+      Stores.changesStore.addFilter(filter1);
+      Stores.changesStore.addFilter(filter2);
+      Stores.changesStore.removeFilter(filter1);
 
-      var filters = Stores.changesFilterStore.getFilters();
+      var filters = Stores.changesStore.getFilters();
       assert.ok(filters.length === 1);
       assert.ok(filters[0] === filter2);
     });
 
     it('hasFilter() finds item in store', function () {
       var filter = 'My filter';
-      Stores.changesFilterStore.addFilter(filter);
-      assert.ok(Stores.changesFilterStore.hasFilter(filter) === true);
+      Stores.changesStore.addFilter(filter);
+      assert.ok(Stores.changesStore.hasFilter(filter) === true);
     });
 
+
+    it('getDatabaseName() returns database name', function () {
+      var dbName = 'hoopoes';
+      Stores.changesStore.setChanges({ databaseName: dbName, changes: collection });
+      assert.equal(Stores.changesStore.getDatabaseName(), dbName);
+
+      Stores.changesStore.reset();
+      assert.equal(Stores.changesStore.getDatabaseName(), '');
+    });
+
+    it("getChanges() should return a subset if there are a lot of changes", function () {
+
+      // to keep the test speedy, override the default max value
+      var maxChanges = 10;
+      Stores.changesStore.setMaxChanges(maxChanges);
+
+      var changes = [];
+      _.times(maxChanges + 10, function (i) {
+        changes.push(new Backbone.Model({ id: 'doc_' + i, seq: 1, changes: { } }));
+      });
+      var changesCollection = new Backbone.Collection(changes);
+      Stores.changesStore.setChanges({
+        changes: changesCollection,
+        databaseName: "test"
+      });
+
+      var results = Stores.changesStore.getChanges();
+      assert.equal(maxChanges, results.length);
+    });
   });
 
 });

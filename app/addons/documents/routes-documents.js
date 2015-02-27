@@ -48,8 +48,6 @@ function(app, FauxtonAPI, BaseRoute, Documents, Changes, Index, DocEditor,
 
     events: {
       "route:reloadDesignDocs": "reloadDesignDocs",
-      "route:changesFilterAdd": "addFilter",
-      "route:changesFilterRemove": "removeFilter",
       'route:updateAllDocs': 'updateAllDocsFromView',
       'route:paginate': 'paginate',
       'route:perPageChange': 'perPageChange',
@@ -194,7 +192,7 @@ function(app, FauxtonAPI, BaseRoute, Documents, Changes, Index, DocEditor,
       var docParams = app.getParams();
       this.database.buildChanges(docParams);
 
-      this.changesView = this.setView("#dashboard-lower-content", new Changes.Changes({
+      this.changesView = this.setView("#dashboard-lower-content", new Changes.ChangesReactWrapper({
         model: this.database
       }));
 
@@ -212,16 +210,6 @@ function(app, FauxtonAPI, BaseRoute, Documents, Changes, Index, DocEditor,
       this.apiUrl = function () {
         return [FauxtonAPI.urls('changes', 'apiurl', this.database.id, ''), this.database.documentation()];
       };
-    },
-
-    addFilter: function (filter) {
-      this.changesView.filters.push(filter);
-      this.changesView.render();
-    },
-
-    removeFilter: function (filter) {
-      this.changesView.filters.splice(this.changesView.filters.indexOf(filter), 1);
-      this.changesView.render();
     },
 
     cleanup: function () {

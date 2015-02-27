@@ -15,17 +15,54 @@ define([
   'addons/documents/changes/actiontypes'
 ], function (FauxtonAPI, ActionTypes) {
 
-  var Stores = {};
 
-
-  // tracks the state of the header (open/closed)
-  var ChangesHeaderStore = FauxtonAPI.Store.extend({
+  var ChangesStore = FauxtonAPI.Store.extend({
     initialize: function () {
       this.reset();
     },
 
     reset: function () {
       this._tabVisible = false;
+      this._filters = [];
+      this._changes = [];
+      this._databaseName = '';
+      this._maxChangesListed = 100;
+      this._showingSubset = false;
+    },
+
+    setChanges: function (options) {
+      this._filters = options.filters;
+      this._databaseName = options.databaseName;
+      this._changes = _.map(options.changes.models, function (change) {
+        return {
+          id: change.get('id'),
+          seq: change.get('seq'),
+          deleted: change.get('deleted') ? change.get('deleted') : false,
+          changes: change.get('changes'),
+          doc: change.get('doc') // only populated with ?include_docs=true
+        };
+      });
+    },
+
+    getChanges: function () {
+      this._showingSubset = false;
+      var numMatches = 0;
+
+      return _.filter(this._changes, function (change) {
+        if (numMatches >= this._maxChangesListed) {
+          this._showingSubset = true;
+          return false;
+        }
+        var changeStr = JSON.stringify(change);
+        var match = _.every(this._filters, function (filter) {
+          return new RegExp(filter, 'i').test(changeStr);
+        });
+
+        if (match) {
+          numMatches++;
+        }
+        return match;
+      }, this);
     },
 
     toggleTabVisibility: function () {
@@ -34,32 +71,6 @@ define([
 
     isTabVisible: function () {
       return this._tabVisible;
-    },
-
-    dispatch: function (action) {
-
-      // can I use an if-statement for a single item?
-      switch (action.type) {
-        case ActionTypes.TOGGLE_CHANGES_TAB_VISIBILITY:
-          this.toggleTabVisibility();
-          this.triggerChange();
-          break;
-      }
-    }
-  });
-
-  Stores.changesHeaderStore = new ChangesHeaderStore();
-  Stores.changesHeaderStore.dispatchToken = FauxtonAPI.dispatcher.register(Stores.changesHeaderStore.dispatch);
-
-
-  // tracks the list of filters
-  var ChangesFilterStore = FauxtonAPI.Store.extend({
-    initialize: function () {
-      this.reset();
-    },
-
-    reset: function () {
-      this._filters = [];
     },
 
     addFilter: function (filter) {
@@ -78,8 +89,29 @@ define([
       return _.contains(this._filters, filter);
     },
 
+    getDatabaseName: function () {
+      return this._databaseName;
+    },
+
+    isShowingSubset: function () {
+      return this._showingSubset;
+    },
+
+    // added to speed up the tests
+    setMaxChanges: function (num) {
+      this._maxChangesListed = num;
+    },
+
     dispatch: function (action) {
       switch (action.type) {
+        case ActionTypes.SET_CHANGES:
+          this.setChanges(action.options);
+          this.triggerChange();
+          break;
+        case ActionTypes.TOGGLE_CHANGES_TAB_VISIBILITY:
+          this.toggleTabVisibility();
+          this.triggerChange();
+          break;
         case ActionTypes.ADD_CHANGES_FILTER_ITEM:
           this.addFilter(action.filter);
           this.triggerChange();
@@ -92,9 +124,10 @@ define([
     }
   });
 
-  Stores.changesFilterStore = new ChangesFilterStore();
-  Stores.changesFilterStore.dispatchToken = FauxtonAPI.dispatcher.register(Stores.changesFilterStore.dispatch);
 
+  var Stores = {};
+  Stores.changesStore = new ChangesStore();
+  Stores.changesStore.dispatchToken = FauxtonAPI.dispatcher.register(Stores.changesStore.dispatch);
 
   return Stores;
 });

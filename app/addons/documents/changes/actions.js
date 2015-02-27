@@ -29,9 +29,6 @@ function (app, FauxtonAPI, ActionTypes) {
         type: ActionTypes.ADD_CHANGES_FILTER_ITEM,
         filter: filter
       });
-
-      // TODO for backward compatibility. Remove later.
-      FauxtonAPI.triggerRouteEvent('changesFilterAdd', filter);
     },
 
     removeFilter: function (filter) {
@@ -39,9 +36,13 @@ function (app, FauxtonAPI, ActionTypes) {
         type: ActionTypes.REMOVE_CHANGES_FILTER_ITEM,
         filter: filter
       });
+    },
 
-      // TODO for backward compatibility. Remove later.
-      FauxtonAPI.triggerRouteEvent('changesFilterRemove', filter);
+    setChanges: function (options) {
+      FauxtonAPI.dispatch({
+        type: ActionTypes.SET_CHANGES,
+        options: options
+      });
     }
   };
 

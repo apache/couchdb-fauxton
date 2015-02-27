@@ -77,6 +77,10 @@ function(app, FauxtonAPI, Documents) {
       return app.utils.safeURLName(this.id);
     },
     buildChanges: function (params) {
+      if (!params.limit) {
+        params.limit = 100;
+      }
+
       this.changes = new Databases.Changes({
         database: this,
         params: params
