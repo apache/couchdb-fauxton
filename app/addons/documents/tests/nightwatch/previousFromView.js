@@ -24,7 +24,7 @@ module.exports = {
       .clickWhenVisible('#nav-design-function-keyviewviews')
       .clickWhenVisible('#keyview_keyview')
       .clickWhenVisible('.breadcrumb-back-link .fonticon-left-open')
-      .waitForElementPresent('.changes-view', waitTime)
+      .waitForElementPresent('.js-changes-view', waitTime)
     .end();
   }
 };

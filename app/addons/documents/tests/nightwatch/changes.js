@@ -21,7 +21,7 @@ module.exports = {
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
       .waitForElementPresent('.control-toggle-alternative-header', waitTime, false)
       .click('#changes')
-      .waitForElementVisible('.changes-view', waitTime, false)
+      .waitForElementPresent('.js-changes-view', waitTime, false)
       .assert.elementNotPresent('.control-toggle-alternative-header')
     .end();
   }

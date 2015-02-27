@@ -25,6 +25,15 @@ define([
   var TestUtils = React.addons.TestUtils;
 
 
+  // suppresses unwanted console.log()'s on missing URLs
+  FauxtonAPI.registerUrls('document', {
+    server: function (database, doc) { return app.host + '/' + database + '/' + doc; },
+    app: function (database, doc) { return '/database/' + database + '/' + doc; },
+    apiurl: function (database, doc) { return window.location.origin + '/' + database + '/' + doc; },
+    'web-index': function (database, doc) { return '/database/' + database + '/' + doc; }
+  });
+
+
   describe('ChangesHeader', function () {
     var container, tab, spy;
 
@@ -32,11 +41,11 @@ define([
       beforeEach(function () {
         spy = sinon.spy(Actions, 'toggleTabVisibility');
         container = document.createElement('div');
-        tab = TestUtils.renderIntoDocument(<Changes.ChangesHeader />, container);
+        tab = TestUtils.renderIntoDocument(<Changes.ChangesHeaderController />, container);
       });
 
       afterEach(function () {
-        Stores.changesFilterStore.reset();
+        Stores.changesStore.reset();
         React.unmountComponentAtNode(container);
       });
 
@@ -58,7 +67,7 @@ define([
     });
 
     afterEach(function () {
-      Stores.changesFilterStore.reset();
+      Stores.changesStore.reset();
       React.unmountComponentAtNode(container);
     });
 
@@ -78,7 +87,7 @@ define([
     });
 
     afterEach(function () {
-      Stores.changesFilterStore.reset();
+      Stores.changesStore.reset();
       React.unmountComponentAtNode(container);
     });
 
@@ -179,7 +188,185 @@ define([
 
       assert.equal(1, $el.find('.js-remove-filter').length);
     });
+  });
 
+
+  // tests Changes Controller; includes tests in conjunction with ChangesHeaderController
+  describe('ChangesController', function () {
+    var containerEl, headerEl, $headerEl, changesEl, $changesEl;
+
+    var changesCollection = new Backbone.Collection([
+      { id: 'doc_1', seq: 4, deleted: false, changes: { code: 'here' } },
+      { id: 'doc_2', seq: 1, deleted: false, changes: { code: 'here' } },
+      { id: 'doc_3', seq: 6, deleted: true, changes: { code: 'here' } },
+      { id: 'doc_4', seq: 7, deleted: false, changes: { code: 'here' } },
+      { id: 'doc_5', seq: 1, deleted: true, changes: { code: 'here' } }
+    ]);
+
+    beforeEach(function () {
+      Actions.setChanges({
+        changes: changesCollection,
+        filters: [],
+        databaseName: 'testDatabase'
+      });
+      headerEl  = TestUtils.renderIntoDocument(<Changes.ChangesHeaderController />, containerEl);
+      $headerEl = $(headerEl.getDOMNode());
+      changesEl = TestUtils.renderIntoDocument(<Changes.ChangesController />, containerEl);
+      $changesEl = $(changesEl.getDOMNode());
+    });
+
+    afterEach(function () {
+      Stores.changesStore.reset();
+      React.unmountComponentAtNode(containerEl);
+    });
+
+
+    it('should list the right number of changes', function () {
+      assert.equal(changesCollection.length, $changesEl.find('.change-box').length);
+    });
+
+
+    it('"false"/"true" filter strings should apply to change deleted status', function () {
+      // expand the header
+      TestUtils.Simulate.click($headerEl.find('a')[0]);
+
+      // add a filter
+      var addItemField = $headerEl.find('.js-changes-filter-field')[0];
+      var submitBtn = $headerEl.find('[type="submit"]')[0];
+      addItemField.value = 'true';
+      TestUtils.Simulate.change(addItemField);
+      TestUtils.Simulate.submit(submitBtn);
+
+      // confirm only the two deleted items shows up and the IDs maps to the deleted rows
+      assert.equal(2, $changesEl.find('.change-box').length);
+      assert.equal('doc_3', $($changesEl.find('.js-doc-id').get(0)).html());
+      assert.equal('doc_5', $($changesEl.find('.js-doc-id').get(1)).html());
+    });
+
+
+    it('confirms that a filter affects the actual search results', function () {
+      // expand the header
+      TestUtils.Simulate.click($headerEl.find('a')[0]);
+
+      // add a filter
+      var addItemField = $headerEl.find('.js-changes-filter-field')[0];
+      var submitBtn = $headerEl.find('[type="submit"]')[0];
+      addItemField.value = '6'; // should match doc_3's sequence ID
+      TestUtils.Simulate.change(addItemField);
+      TestUtils.Simulate.submit(submitBtn);
+
+      // confirm only one item shows up and the ID maps to what we'd expect
+      assert.equal(1, $changesEl.find('.change-box').length);
+      assert.equal('doc_3', $($changesEl.find('.js-doc-id').get(0)).html());
+    });
+
+
+    // confirms that if there are multiple filters, ALL are applied to return the subset of results that match
+    // all filters
+    it('multiple filters should all be applied to results', function () {
+      TestUtils.Simulate.click($headerEl.find('a')[0]);
+
+      // add the filters
+      var addItemField = $headerEl.find('.js-changes-filter-field')[0];
+      var submitBtn = $headerEl.find('[type="submit"]')[0];
+
+      // *** should match doc_1, doc_2 and doc_5
+      addItemField.value = '1';
+      TestUtils.Simulate.change(addItemField);
+      TestUtils.Simulate.submit(submitBtn);
+
+      // *** should match doc_3 and doc_5
+      addItemField.value = 'true';
+      TestUtils.Simulate.change(addItemField);
+      TestUtils.Simulate.submit(submitBtn);
+
+      // confirm only one item shows up and that it's doc_5
+      assert.equal(1, $changesEl.find('.change-box').length);
+      assert.equal('doc_5', $($changesEl.find('.js-doc-id').get(0)).html());
+    });
+  });
+
+
+  describe('ChangesController max results', function () {
+    var containerEl, changesEl;
+    var maxChanges = 10;
+
+    beforeEach(function () {
+
+      // to keep the test speedy, override the default value (1000)
+      Stores.changesStore.setMaxChanges(maxChanges);
+
+      var changes = [];
+      _.times(maxChanges + 10, function (i) {
+        changes.push(new Backbone.Model({ id: 'doc_' + i, seq: 1, changes: { code: 'here' } }));
+      });
+      var changesCollection = new Backbone.Collection(changes);
+
+      Actions.setChanges({
+        changes: changesCollection,
+        filters: [],
+        databaseName: 'test'
+      });
+      changesEl = TestUtils.renderIntoDocument(<Changes.ChangesController />, containerEl);
+    });
+
+    afterEach(function () {
+      Stores.changesStore.reset();
+      React.unmountComponentAtNode(containerEl);
+    });
+
+    it('should truncate the number of results with very large # of changes', function () {
+      // check there's no more than maxChanges results
+      assert.equal(maxChanges, $(changesEl.getDOMNode()).find('.change-box').length);
+    });
+
+    it('should show a message if the results are truncated', function () {
+      assert.equal(1, $(changesEl.getDOMNode()).find('.changes-result-limit').length);
+    });
+
+  });
+
+
+  describe('ChangeRow', function () {
+    var container;
+    var change = {
+      id: '123',
+      seq: 5,
+      deleted: false,
+      changes: { code: 'here' }
+    };
+
+    beforeEach(function () {
+      container = document.createElement('div');
+    });
+
+    afterEach(function () {
+      React.unmountComponentAtNode(container);
+    });
+
+
+    it('clicking the toggle-json button shows the code section', function () {
+      var changeRow = TestUtils.renderIntoDocument(<Changes.ChangeRow change={change} databaseName="testDatabase" />, container);
+
+      // confirm it's hidden by default
+      assert.equal(0, $(changeRow.getDOMNode()).find('.prettyprint').length);
+
+      // confirm clicking it shows the element
+      TestUtils.Simulate.click($(changeRow.getDOMNode()).find('button.btn')[0]);
+      assert.equal(1, $(changeRow.getDOMNode()).find('.prettyprint').length);
+    });
+
+    it('deleted docs should not be clickable', function () {
+      change.deleted = true;
+      var changeRow = TestUtils.renderIntoDocument(<Changes.ChangeRow change={change} databaseName="testDatabase" />, container);
+      assert.equal(0, $(changeRow.getDOMNode()).find('a.js-doc-link').length);
+    });
+
+    it('non-deleted docs should be clickable', function () {
+      change.deleted = false;
+      var changeRow = TestUtils.renderIntoDocument(<Changes.ChangeRow change={change} databaseName="testDatabase" />, container);
+      assert.equal(1, $(changeRow.getDOMNode()).find('a.js-doc-link').length);
+    });
   });
 
 });

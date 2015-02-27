@@ -11,34 +11,40 @@
 // the License.
 
 define([
+  'app',
+  'api',
   'react',
   'addons/documents/changes/actions',
-  'addons/documents/changes/stores'
-], function (React, Actions, Stores) {
+  'addons/documents/changes/stores',
+  'addons/fauxton/components.react',
+  'plugins/prettify'
+], function (app, FauxtonAPI, React, Actions, Stores, Components) {
 
+  var changesStore = Stores.changesStore;
   var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 
-
-  // the top-level component for the Changes Filter section. Handles hiding/showing
-  var ChangesHeader = React.createClass({
+  // the top-level component for the Changes Filter section. Handles hiding/showing of the filters form
+  var ChangesHeaderController = React.createClass({
     getInitialState: function () {
+      return this.getStoreState();
+    },
+
+    getStoreState: function () {
       return {
-        showTabContent: Stores.changesHeaderStore.isTabVisible()
+        showTabContent: changesStore.isTabVisible()
       };
     },
 
     onChange: function () {
-      this.setState({
-        showTabContent: Stores.changesHeaderStore.isTabVisible()
-      });
+      this.setState(this.getStoreState());
     },
 
     componentDidMount: function () {
-      Stores.changesHeaderStore.on('change', this.onChange, this);
+      changesStore.on('change', this.onChange, this);
     },
 
     componentWillUnmount: function () {
-      Stores.changesHeaderStore.off('change', this.onChange);
+      changesStore.off('change', this.onChange);
     },
 
     toggleFilterSection: function () {
@@ -54,7 +60,7 @@ define([
       return (
         <div className="changes-header-section">
           <ChangesHeaderTab onToggle={this.toggleFilterSection} />
-          <ReactCSSTransitionGroup transitionName="toggleChangesFilter" component="div" className="changes-tab-content">
+          <ReactCSSTransitionGroup transitionName="toggle-changes-filter" component="div" className="changes-tab-content">
             {tabContent}
           </ReactCSSTransitionGroup>
         </div>
@@ -87,7 +93,7 @@ define([
   var ChangesFilter = React.createClass({
     getStoreState: function () {
       return {
-        filters: Stores.changesFilterStore.getFilters()
+        filters: changesStore.getFilters()
       };
     },
 
@@ -96,11 +102,11 @@ define([
     },
 
     componentDidMount: function () {
-      Stores.changesFilterStore.on('change', this.onChange, this);
+      changesStore.on('change', this.onChange, this);
     },
 
     componentWillUnmount: function () {
-      Stores.changesFilterStore.off('change', this.onChange);
+      changesStore.off('change', this.onChange);
     },
 
     getInitialState: function () {
@@ -125,19 +131,17 @@ define([
     },
 
     hasFilter: function (filter) {
-      return Stores.changesFilterStore.hasFilter(filter);
+      return changesStore.hasFilter(filter);
     },
 
     render: function () {
-      var filters = this.getFilters();
-
       return (
         <div className="tab-content">
           <div className="tab-pane active" ref="filterTab">
             <div className="changes-header js-filter">
               <AddFilterForm tooltip={this.props.tooltip} filter={this.state.filter} addFilter={this.addFilter}
                 hasFilter={this.hasFilter} />
-              <ul className="filter-list">{filters}</ul>
+              <ul className="filter-list">{this.getFilters()}</ul>
             </div>
           </div>
         </div>
@@ -268,18 +272,172 @@ define([
   });
 
 
+  var ChangesController = React.createClass({
+    getInitialState: function () {
+      return this.getStoreState();
+    },
+
+    getStoreState: function () {
+      return {
+        changes: changesStore.getChanges(),
+        databaseName: changesStore.getDatabaseName(),
+        isShowingSubset: changesStore.isShowingSubset()
+      };
+    },
+
+    onChange: function () {
+      this.setState(this.getStoreState());
+    },
+
+    componentDidMount: function () {
+      changesStore.on('change', this.onChange, this);
+    },
+
+    componentWillUnmount: function () {
+      changesStore.off('change', this.onChange);
+    },
+
+    showingSubsetMsg: function () {
+      var msg = '';
+      if (this.state.isShowingSubset) {
+        var numChanges = this.state.changes.length;
+        msg = <p className="changes-result-limit">Limiting results to latest <b>{numChanges}</b> changes.</p>;
+      }
+      return msg;
+    },
+
+    getRows: function () {
+      return _.map(this.state.changes, function (change) {
+        return <ChangeRow change={change} key={change.id} databaseName={this.state.databaseName} />;
+      }, this);
+    },
+
+    render: function () {
+      return (
+        <div className="js-changes-view">
+          {this.showingSubsetMsg()}
+          {this.getRows()}
+        </div>
+      );
+    }
+  });
+
+
+  var ChangeRow = React.createClass({
+    propTypes: function () {
+      return {
+        change: React.PropTypes.object,
+        databaseName: React.PropTypes.string.isRequired
+      };
+    },
+
+    getInitialState: function () {
+      return {
+        codeVisible: false
+      };
+    },
+
+    toggleJSON: function (e) {
+      e.preventDefault();
+      this.setState({ codeVisible: !this.state.codeVisible });
+    },
+
+    getChangesCode: function () {
+      var json = '';
+      if (this.state.codeVisible) {
+        json = <Components.CodeFormat key="changesCodeSection" code={this.getChangeCode()} />;
+      }
+      return json;
+    },
+
+    getChangeCode: function () {
+      return {
+        changes: this.props.change.changes,
+        doc: this.props.change.doc
+      };
+    },
+
+    render: function () {
+      var jsonBtnClasses = "btn btn-small " + (this.state.codeVisible ? 'btn-secondary' : 'btn-primary');
+
+      return (
+        <div className="change-wrapper">
+          <div className="change-box" data-id={this.props.change.id}>
+            <div className="row-fluid">
+              <div className="span2">seq</div>
+              <div className="span8">{this.props.change.seq}</div>
+              <div className="span2 text-right">
+                <Components.Clipboard text={this.props.change.seq} />
+              </div>
+            </div>
+
+            <div className="row-fluid">
+              <div className="span2">id</div>
+              <div className="span8">
+                <ChangeID id={this.props.change.id} deleted={this.props.change.deleted} databaseName={this.props.databaseName} />
+              </div>
+              <div className="span2 text-right">
+                <Components.Clipboard text={this.props.change.id} />
+              </div>
+            </div>
+
+            <div className="row-fluid">
+              <div className="span2">changes</div>
+              <div className="span10">
+                <button type="button" className={jsonBtnClasses} onClick={this.toggleJSON}>
+                  {this.state.codeVisible ? 'Close JSON' : 'View JSON'}
+                </button>
+              </div>
+            </div>
+
+            <ReactCSSTransitionGroup transitionName="toggle-changes-code" component="div" className="changesCodeSectionWrapper">
+              {this.getChangesCode()}
+            </ReactCSSTransitionGroup>
+
+            <div className="row-fluid">
+              <div className="span2">deleted</div>
+              <div className="span10">{this.props.change.deleted ? 'True' : 'False'}</div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+  });
+
+
+  var ChangeID = React.createClass({
+    render: function () {
+      if (this.props.deleted) {
+        return (
+          <span className="js-doc-id">{this.props.id}</span>
+        );
+      } else {
+        var link = FauxtonAPI.urls('document', 'app', this.props.databaseName, this.props.id);
+        return (
+          <a href={link} className="js-doc-link">{this.props.id}</a>
+        );
+      }
+    }
+  });
+
+
   return {
     renderHeader: function (el) {
-      React.render(<ChangesHeader />, el);
+      React.render(<ChangesHeaderController />, el);
     },
-    removeHeader: function (el) {
+    renderChanges: function (el) {
+      React.render(<ChangesController />, el);
+    },
+    remove: function (el) {
       React.unmountComponentAtNode(el);
     },
 
     // exposed for testing purposes only
-    ChangesHeader: ChangesHeader,
+    ChangesHeaderController: ChangesHeaderController,
     ChangesHeaderTab: ChangesHeaderTab,
-    ChangesFilter: ChangesFilter
+    ChangesFilter: ChangesFilter,
+    ChangesController: ChangesController,
+    ChangeRow: ChangeRow
   };
 
 });

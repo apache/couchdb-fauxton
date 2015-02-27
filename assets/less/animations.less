@@ -46,3 +46,22 @@
   from { background: @red; }
   to { background: white; }
 }
+
+/* a generic slide-up/down effect that looks smooth for items with unknown heights */
+.keyframes(slideDown, {
+  opacity: 0;
+  max-height: 0px;
+},
+{
+  opacity: 1;
+  max-height: 1000px;
+});
+
+.keyframes(slideUp, {
+  max-height: 1000px;
+  opacity: 1;
+},
+{
+  max-height: 0px;
+  opacity: 0;
+});
