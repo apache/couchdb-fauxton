@@ -28,25 +28,6 @@ define([
   var assert = utils.assert;
   var TestUtils = React.addons.TestUtils;
 
-  describe('Header Togglebutton', function () {
-    var container, toggleEl, toggleCallback;
-    beforeEach(function () {
-      container = document.createElement('div');
-      toggleCallback = sinon.spy();
-      toggleEl = TestUtils.renderIntoDocument(<Views.ToggleHeaderButton fonticon={'foo'}
-        classString={'bar'} toggleCallback={toggleCallback} />, container);
-    });
-
-    afterEach(function () {
-      React.unmountComponentAtNode(container);
-    });
-
-    it('should call the passed callback', function () {
-      TestUtils.Simulate.click(toggleEl.getDOMNode());
-      assert.ok(toggleCallback.calledOnce);
-    });
-  });
-
   describe('Header Controller', function () {
     var container, toggleEl;
     beforeEach(function () {

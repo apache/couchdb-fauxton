@@ -1,6 +1,7 @@
 {
   "deps": [
   { "name": "fauxton" },
+  { "name": "components" },
   { "name": "databases" },
   { "name": "documents" },
   { "name": "activetasks" },

@@ -15,36 +15,15 @@ define([
   'api',
   'react',
   'addons/documents/header/header.stores',
-  'addons/documents/header/header.actions'
+  'addons/documents/header/header.actions',
+  'addons/components/react-components.react',
 ],
 
-function (app, FauxtonAPI, React, Stores, Actions) {
+function (app, FauxtonAPI, React, Stores, Actions, ReactComponents) {
   var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
   var headerBarStore = Stores.headerBarStore;
   var bulkDocumentHeaderStore = Stores.bulkDocumentHeaderStore;
-
-  // this will be a global component
-  var ToggleHeaderButton = React.createClass({
-    render: function () {
-      var iconClasses = 'icon ' + this.props.fonticon + ' ' + this.props.innerClasses,
-          containerClasses = 'button ' + this.props.containerClasses;
-
-      if (this.props.setEnabledClass) {
-        containerClasses = containerClasses + ' js-headerbar-togglebutton-selected';
-      }
-
-      return (
-        <button
-          title={this.props.title}
-          disabled={this.props.disabled}
-          onClick={this.props.toggleCallback}
-          className={containerClasses}
-          >
-          <i className={iconClasses}></i><span>{this.props.text}</span>
-        </button>
-      );
-    }
-  });
+  var ToggleHeaderButton = ReactComponents.ToggleHeaderButton;
 
   var BulkDocumentHeaderController = React.createClass({
     getStoreState: function () {
