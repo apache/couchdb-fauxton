@@ -112,7 +112,7 @@ define([
 
     toggleCodeVisibility: function () {
       this._codeVisible = !this._codeVisible;
-      this._jsonBtnLabel = (this._codeVisible) ? 'Close JSON' : 'ViewJSON';
+      this._jsonBtnLabel = (this._codeVisible) ? 'Close JSON' : 'View JSON';
     },
 
     isCodeVisible: function () {
@@ -126,7 +126,7 @@ define([
     dispatch: function (action) {
       switch (action.type) {
         case ActionTypes.TOGGLE_CHANGES_CODE_VISIBILITY:
-          if (action.key === this.key) {
+          if (action.key === this.key) { // boo sir, I say boo!
             this.toggleCodeVisibility();
             this.triggerChange();
           }

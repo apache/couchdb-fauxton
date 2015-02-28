@@ -379,7 +379,7 @@ define([
           changes: this.props.change.attributes.changes,
           doc: this.props.change.attributes.doc
         };
-        json = <Components.CodeBlock key="changesCodeSection" code={code} />;
+        json = <Components.CodeFormat key="changesCodeSection" code={code} />;
       }
       return json;
     },

@@ -179,8 +179,8 @@ function(app, FauxtonAPI, React, Stores, Actions, ZeroClipboard) {
     }
   });
 
-  // formats a block of code and pretty-prints it in the page. Relies on the prettyPrint plugin
-  var CodeBlock = React.createClass({
+  // formats a block of code and pretty-prints it in the page. Currently uses the prettyPrint plugin
+  var CodeFormat = React.createClass({
     getDefaultProps: function () {
       return {
         lang: "js"
@@ -224,7 +224,7 @@ function(app, FauxtonAPI, React, Stores, Actions, ZeroClipboard) {
 
     Burger: Burger,
     Clipboard: Clipboard,
-    CodeBlock: CodeBlock
+    CodeFormat: CodeFormat
   };
 
 });
