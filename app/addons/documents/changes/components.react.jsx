@@ -21,7 +21,6 @@ define([
 ], function (app, FauxtonAPI, React, Actions, Stores, Components) {
 
   var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
-  var ReactCSSTransitionGroup2 = React.addons.CSSTransitionGroup;
 
 
   // the top-level component for the Changes Filter section. Handles hiding/showing
@@ -327,7 +326,7 @@ define([
     },
 
     initStore: function () {
-      this.store = new Stores.ChangeStore();
+      this.store = new Stores.ChangeStore(this.props.change.cid);
       this.dispatchToken = FauxtonAPI.dispatcher.register(this.store.dispatch);
     },
 
@@ -340,7 +339,10 @@ define([
 
     toggleJSON: function (e) {
       e.preventDefault();
-      Actions.toggleCodeVisibility();
+
+      // blurgh. I want to bypass the actions here, and just all my own store's event. That way I don't
+      // announce this to
+      Actions.toggleCodeVisibility(this.props.change.cid); // this.props.change.cid
     },
 
     onChange: function () {
@@ -377,7 +379,6 @@ define([
           changes: this.props.change.attributes.changes,
           doc: this.props.change.attributes.doc
         };
-        //json = <div key="changesCodeSection" className="changesCodeSection"><Components.CodeBlock code={code} /></div>;
         json = <Components.CodeBlock key="changesCodeSection" code={code} />;
       }
       return json;
@@ -416,9 +417,9 @@ define([
               </div>
             </div>
 
-            <ReactCSSTransitionGroup2 transitionName="toggleChangesCode" component="div" className="changesCodeSectionWrapper">
+            <ReactCSSTransitionGroup transitionName="toggleChangesCode" component="div" className="changesCodeSectionWrapper">
               {this.getChangesCode()}
-            </ReactCSSTransitionGroup2>
+            </ReactCSSTransitionGroup>
 
             <div className="row-fluid">
               <div className="span2">deleted</div>
@@ -429,7 +430,6 @@ define([
       );
     }
   });
-
 
 
   var ChangeID = React.createClass({

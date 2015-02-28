@@ -44,9 +44,10 @@ function (app, FauxtonAPI, ActionTypes) {
       FauxtonAPI.triggerRouteEvent('changesFilterRemove', filter);
     },
 
-    toggleCodeVisibility: function () {
+    toggleCodeVisibility: function (key) {
       FauxtonAPI.dispatch({
-        type: ActionTypes.TOGGLE_CHANGES_CODE_VISIBILITY
+        type: ActionTypes.TOGGLE_CHANGES_CODE_VISIBILITY,
+        key: key
       });
     }
   };

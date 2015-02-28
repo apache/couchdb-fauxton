@@ -96,9 +96,12 @@ define([
   Stores.changesFilterStore.dispatchToken = FauxtonAPI.dispatcher.register(Stores.changesFilterStore.dispatch);
 
 
-  // store for the individual changes row. This isn't instantiated here, but for each row
+  // store for the individual changes row. This isn't instantiated here, but in each ChangeRow
   Stores.ChangeStore = FauxtonAPI.Store.extend({
-    initialize: function () {
+    initialize: function (key) {
+
+      // this sucks. To be discussed.
+      this.key = key;
       this.reset();
     },
 
@@ -123,8 +126,10 @@ define([
     dispatch: function (action) {
       switch (action.type) {
         case ActionTypes.TOGGLE_CHANGES_CODE_VISIBILITY:
-          this.toggleCodeVisibility();
-          this.triggerChange();
+          if (action.key === this.key) {
+            this.toggleCodeVisibility();
+            this.triggerChange();
+          }
           break;
       }
     }
