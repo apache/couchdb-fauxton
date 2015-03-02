@@ -82,45 +82,6 @@ function(app, FauxtonAPI, Documents) {
     }
   });
 
-  Databases.IsSystemDatabaseModel = FauxtonAPI.Model.extend({
-
-    initialize: function (options) {
-      this.name = options.name;
-    },
-
-    url: function () {
-      return app.host + '/_stats';
-    },
-
-    sync: function (method, model, options) {
-      options.url = this.url();
-      return $.ajax(options);
-    },
-
-    parse: function (data) {
-      var isOnFrontendNode,
-        isSystemDatabase = false,
-        systemDatabases = [
-          '_replicator',
-          '_users',
-          'nodes',
-          'dbs',
-          'cassim'
-        ];
-      try {
-        JSON.parse(data);
-        isOnFrontendNode = false;
-
-      } catch (e) {
-        isOnFrontendNode = true;
-      }
-      if (systemDatabases.indexOf(this.name) !== -1 && !isOnFrontendNode) {
-        isSystemDatabase = true;
-      }
-      this.set('isSystemDatabase', isSystemDatabase);
-    }
-  });
-
   Databases.Changes = FauxtonAPI.Collection.extend({
 
     initialize: function(options) {

@@ -20,7 +20,7 @@ the License.
   <div class="modal-body">
     <form id="delete-db-check" class="form" method="post">
       <% if (isSystemDatabase) { %>
-      <p>You are about to delete a system database, be careful!</p>
+      <p class="warning"><b>You are about to delete a system database, be careful!</b></p>
       <% } %>
       <p>
       You've asked to <b>permanently delete</b> <code><%- database.id %></code>.
