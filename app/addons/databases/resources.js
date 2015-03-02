@@ -49,6 +49,10 @@ function(app, FauxtonAPI, Documents) {
       return false;
     },
 
+    isSystemDatabase: function () {
+      return /^_/.test(this.id);
+    },
+
     url: function(context) {
       if (context === "index") {
         return "/database/" + this.safeID() + "/_all_docs";

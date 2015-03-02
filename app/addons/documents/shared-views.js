@@ -97,7 +97,7 @@ function(app, FauxtonAPI, Components, Documents, Databases) {
         '#delete-db-modal',
         new Views.DeleteDBModal({
           database: this.database,
-          isSystemDatabase: /^_/.test(this.database.id)
+          isSystemDatabase: this.database.isSystemDatabase()
         })
       );
 
