@@ -22,9 +22,11 @@ module.exports = {
       // create a new database
       nano.db.create(database, function (err, body, header) {
         if (err) {
-         console.log('Error in setting up '+database, err.message);
+         console.log('Error in setting up ' + database, err.message);
         }
-      done();
+        nano.db.create('_replicator', function (err, body, header) {
+          done();
+        });
       });
     });
   },
