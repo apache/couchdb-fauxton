@@ -42,6 +42,13 @@ function (app, FauxtonAPI, ActionTypes) {
 
       // TODO for backward compatibility. Remove later.
       FauxtonAPI.triggerRouteEvent('changesFilterRemove', filter);
+    },
+
+    toggleCodeVisibility: function (key) {
+      FauxtonAPI.dispatch({
+        type: ActionTypes.TOGGLE_CHANGES_CODE_VISIBILITY,
+        key: key
+      });
     }
   };
 

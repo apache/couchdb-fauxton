@@ -74,6 +74,24 @@
   height: 0px;
 });
 
+/** move to somewhere generic */
+.keyframes(slideDown, {
+  opacity: 0;
+  max-height: 0px;
+},
+{
+  opacity: 1;
+  max-height: 1000px;
+});
+
+.keyframes(slideUp, {
+  max-height: 100px;
+  opacity: 1;
+},
+{
+  max-height: 0px;
+  opacity: 0;
+});
 
 .toggleChangesFilter-enter {
   .animation(slideDownChangesFilter 1s both);
@@ -83,3 +101,10 @@
   .animation(slideUpChangesFilter 1s both);
 }
 
+.toggleChangesCode-enter {
+  .animation(slideDown .6s both);
+}
+
+.toggleChangesCode-leave {
+  .animation(slideUp .6s both);
+}

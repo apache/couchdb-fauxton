@@ -96,5 +96,45 @@ define([
   Stores.changesFilterStore.dispatchToken = FauxtonAPI.dispatcher.register(Stores.changesFilterStore.dispatch);
 
 
+  // store for the individual changes row. This isn't instantiated here, but in each ChangeRow
+  Stores.ChangeStore = FauxtonAPI.Store.extend({
+    initialize: function (key) {
+
+      // this sucks. To be discussed.
+      this.key = key;
+      this.reset();
+    },
+
+    reset: function () {
+      this._codeVisible = false;
+      this._jsonBtnLabel = 'View JSON';
+    },
+
+    toggleCodeVisibility: function () {
+      this._codeVisible = !this._codeVisible;
+      this._jsonBtnLabel = (this._codeVisible) ? 'Close JSON' : 'View JSON';
+    },
+
+    isCodeVisible: function () {
+      return this._codeVisible;
+    },
+
+    getJsonBtnLabel: function () {
+      return this._jsonBtnLabel;
+    },
+
+    dispatch: function (action) {
+      switch (action.type) {
+        case ActionTypes.TOGGLE_CHANGES_CODE_VISIBILITY:
+          if (action.key === this.key) { // boo sir, I say boo!
+            this.toggleCodeVisibility();
+            this.triggerChange();
+          }
+          break;
+      }
+    }
+  });
+
+
   return Stores;
 });

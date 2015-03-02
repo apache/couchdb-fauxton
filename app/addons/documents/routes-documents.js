@@ -200,7 +200,7 @@ function(app, FauxtonAPI, BaseRoute, Documents, Changes, Index, DocEditor, Datab
       var docParams = app.getParams();
       this.database.buildChanges(docParams);
 
-      this.changesView = this.setView("#dashboard-lower-content", new Changes.Changes({
+      this.changesView = this.setView("#dashboard-lower-content", new Changes.ChangesReactWrapper({
         model: this.database
       }));
 
