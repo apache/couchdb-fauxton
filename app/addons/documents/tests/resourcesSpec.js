@@ -29,7 +29,11 @@ define([
         database: {id: 'databaseId', safeID: function () { return this.id; }},
         design: '_design/myDoc'
       });
+    });
 
+    it('does not remove an id attribute', function () {
+
+      assert.ok(/file:/.test(collection.urlRef('')));
     });
 
   });

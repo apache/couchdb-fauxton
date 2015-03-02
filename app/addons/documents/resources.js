@@ -194,7 +194,7 @@ function(app, FauxtonAPI, Documents, PagingCollection) {
       }
     },
 
-    urlRef: function(context, params) {
+    urlRef: function (params) {
       var query = "";
 
       if (params) {
@@ -208,17 +208,10 @@ function(app, FauxtonAPI, Documents, PagingCollection) {
         query = "?" + $.param(parsedParam);
       }
 
-      var startOfUrl = app.host;
-      if (context === 'app') {
-        startOfUrl = 'database';
-      } else if (context === "apiurl"){
-        startOfUrl = window.location.origin;
-      }
-
       var database = this.database.safeID(),
           design = app.utils.safeURLName(this.design),
           view = app.utils.safeURLName(this.view),
-          url = FauxtonAPI.urls('view', 'server', database, design, view);
+          url = FauxtonAPI.urls('view', 'apiurl', database, design, view);
 
       return url + query;
     },

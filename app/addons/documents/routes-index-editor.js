@@ -113,7 +113,7 @@ function (app, FauxtonAPI, Helpers, BaseRoute, Documents, Index, Databases, Comp
       });
 
       this.apiUrl = function () {
-        return [this.indexedDocs.urlRef('apiurl', urlParams), FauxtonAPI.constants.DOC_URLS.GENERAL];
+        return [this.indexedDocs.urlRef(urlParams), FauxtonAPI.constants.DOC_URLS.GENERAL];
       };
 
       this.showQueryOptions(urlParams, ddoc, viewName);
