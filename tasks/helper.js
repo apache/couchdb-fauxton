@@ -17,7 +17,7 @@ exports.init = function(grunt) {
   var _ = grunt.util._,
       platform = process.platform;
 
-  return { 
+  return {
     readSettingsFile: function () {
       if (fs.existsSync("settings.json")) {
         return grunt.file.readJSON("settings.json");
@@ -33,8 +33,8 @@ exports.init = function(grunt) {
     },
 
     watchFiles: function (fileExtensions, defaults) {
-      return _.reduce(this.readSettingsFile().deps, function (files, dep) { 
-        if (dep.path) { 
+      return _.reduce(this.readSettingsFile().deps, function (files, dep) {
+        if (dep.path) {
           _.each(fileExtensions, function (fileExtension) {
             files.push(path.join(dep.path, '**/*' + fileExtension ));
           });
@@ -44,9 +44,9 @@ exports.init = function(grunt) {
     },
 
     check_selenium: {
-      command: 'test -s ./test/nightwatch_tests/selenium/selenium-server-standalone-2.43.1.jar || ' +
-        'curl -o ./test/nightwatch_tests/selenium/selenium-server-standalone-2.43.1.jar ' +
-        'http://selenium-release.storage.googleapis.com/2.43/selenium-server-standalone-2.43.1.jar'
+      command: 'test -s ./test/nightwatch_tests/selenium/selenium-server-standalone-2.45.0.jar || ' +
+        'curl -o ./test/nightwatch_tests/selenium/selenium-server-standalone-2.45.0.jar ' +
+        'http://selenium-release.storage.googleapis.com/2.45/selenium-server-standalone-2.45.0.jar'
     }
   };
 };
