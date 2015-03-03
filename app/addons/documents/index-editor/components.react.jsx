@@ -437,10 +437,6 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, ReactComponents, 
       indexEditorStore.off('change', this.onChange);
     },
 
-    toggleEditor: function () {
-      Actions.toggleEditor();
-    },
-
     render: function () {
       return (
         <div className="editor-wrapper span5 scrollable">
