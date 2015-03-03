@@ -121,12 +121,7 @@ function (app, FauxtonAPI, Documents, ActionTypes) {
             FauxtonAPI.dispatch({
               type: ActionTypes.VIEW_SAVED
             });
-            var fragment = '/database/' +
-                viewInfo.database.safeID() +
-                '/' + designDoc.safeID() +
-                '/_view/' +
-                app.utils.safeURLName(viewInfo.viewName);
-
+            var fragment = FauxtonAPI.urls('view', 'showNewlySavedView', viewInfo.database.safeID(), designDoc.safeID(), app.utils.safeURLName(viewInfo.viewName));
             FauxtonAPI.navigate(fragment, {trigger: true});
           }
 
@@ -150,7 +145,8 @@ function (app, FauxtonAPI, Documents, ActionTypes) {
       }
 
       promise.then(function () {
-        FauxtonAPI.navigate('/database/' + database.safeID() + '/_all_docs?limit=' + FauxtonAPI.constants.DATABASES.DOCUMENT_LIMIT);
+        var url = FauxtonAPI.urls('allDocs', 'app', database.safeID(), '?limit=' + FauxtonAPI.constants.DATABASES.DOCUMENT_LIMIT);
+        FauxtonAPI.navigate(url);
         FauxtonAPI.triggerRouteEvent('reloadDesignDocs');
       });
 
