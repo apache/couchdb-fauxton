@@ -13,11 +13,12 @@
 define([
   'app',
   'api',
-
   'react',
+  'addons/fauxton/components',
+  'plugins/beautify'
 ],
 
-function (app, FauxtonAPI, React) {
+function (app, FauxtonAPI, React, Components, beautifyHelper) {
 
   var ToggleHeaderButton = React.createClass({
     render: function () {
@@ -41,7 +42,6 @@ function (app, FauxtonAPI, React) {
     }
   });
 
-  // global component
   var StyledSelect = React.createClass({
     render: function () {
       return (
@@ -62,12 +62,127 @@ function (app, FauxtonAPI, React) {
     }
   });
 
+  var CodeEditor = React.createClass({
+    render: function () {
+      var code = this.aceEditor ? this.aceEditor.getValue() : this.props.code;
+      var docsLink;
+      if (this.props.docs) {
+        docsLink = <a
+                      className="help-link"
+                      data-bypass="true"
+                      href={this.props.docs}
+                      target="_blank"
+                    >
+                    <i className="icon-question-sign"></i>
+                   </a>;
 
-  var Components = {
+      }
+      return (
+        <div className="control-group">
+          <label htmlFor="ace-function">
+            <strong>{this.props.title}</strong>
+            {docsLink}
+          </label>
+          <div className="js-editor" id={this.props.id}>{this.props.code}</div>
+          <Beautify code={code} beautifiedCode={this.setEditorValue} />
+        </div>
+      );
+    },
+
+    setEditorValue: function (code) {
+      this.aceEditor.setValue(code);
+      //this is not a good practice normally but because we working with a backbone view as the mapeditor
+      //that keeps the map code state this is the best way to force a render so that the beautify button will hide
+      this.forceUpdate();
+    },
+
+    getValue: function () {
+      return this.aceEditor.getValue();
+    },
+
+    getEditor: function () {
+      return this.aceEditor;
+    },
+
+    componentDidMount: function () {
+      this.aceEditor = new Components.Editor({
+        editorId: this.props.id,
+        mode: 'javascript',
+        couchJSHINT: true
+      });
+      this.aceEditor.render();
+    },
+
+    shouldComponentUpdate: function () {
+      //we don't want to re-render the map editor as we are using backbone underneath
+      //which will cause the editor to break
+      this.aceEditor.editSaved();
+
+      return false;
+    },
+
+    componentWillUnmount: function () {
+      this.aceEditor.remove();
+    }
+
+  });
+
+  var Beautify = React.createClass({
+    noOfLines: function () {
+      return this.props.code.split(/\r\n|\r|\n/).length;
+    },
+
+    canBeautify: function () {
+      if (this.noOfLines() === 1) {
+        return true;
+      }
+
+      return false;
+    },
+
+    addTooltip: function () {
+      if (this.canBeautify) {
+        $('.beautify-tooltip').tooltip();
+      }
+    },
+
+    componentDidMount: function () {
+      this.addTooltip();
+    },
+
+    beautify: function (event) {
+      event.preventDefault();
+      var beautifiedCode = beautifyHelper(this.props.code);
+      this.props.beautifiedCode(beautifiedCode);
+
+    },
+
+    render: function () {
+      if (!this.canBeautify()) {
+        return null;
+      }
+
+      return (
+        <button
+          onClick={this.beautify}
+          className="beautify beautify_map btn btn-primary btn-large beautify-tooltip"
+          type="button"
+          data-toggle="tooltip"
+          title="Reformat your minified code to make edits to it."
+        >
+          beautify this code
+        </button>
+      );
+    }
+  });
+
+  var ReactComponents = {
     ToggleHeaderButton: ToggleHeaderButton,
-    StyledSelect: StyledSelect
+    StyledSelect: StyledSelect,
+    CodeEditor: CodeEditor,
+    Beautify: Beautify
   };
 
-  return Components;
+  return ReactComponents;
 
 });
