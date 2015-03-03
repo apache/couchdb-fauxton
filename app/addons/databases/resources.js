@@ -50,7 +50,7 @@ function(app, FauxtonAPI, Documents) {
     },
 
     isSystemDatabase: function () {
-      return /^_/.test(this.id);
+      return (/^_/).test(this.id);
     },
 
     url: function(context) {
