@@ -176,11 +176,24 @@ function (app, FauxtonAPI, React, Components, beautifyHelper) {
     }
   });
 
+  var PaddedBorderedBox = React.createClass({
+    render: function () {
+      return (
+        <div className="bordered-box">
+          <div className="padded-box">
+            {this.props.children}
+          </div>
+        </div>
+      );
+    }
+  });
+
   var ReactComponents = {
     ToggleHeaderButton: ToggleHeaderButton,
     StyledSelect: StyledSelect,
     CodeEditor: CodeEditor,
-    Beautify: Beautify
+    Beautify: Beautify,
+    PaddedBorderedBox: PaddedBorderedBox
   };
 
   return ReactComponents;
