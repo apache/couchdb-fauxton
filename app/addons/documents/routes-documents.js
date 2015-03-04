@@ -43,7 +43,7 @@ function(app, FauxtonAPI, BaseRoute, Documents, Changes, Index, DocEditor,
         route: "designDocMetadata",
         roles: ['fx_loggedIn']
       },
-      "database/:database/_changes(:params)": "changes"
+      'database/:database/_changes': 'changes'
     },
 
     events: {
@@ -203,6 +203,7 @@ function(app, FauxtonAPI, BaseRoute, Documents, Changes, Index, DocEditor,
       this.footer && this.footer.remove();
       this.toolsView && this.toolsView.remove();
       this.viewEditor && this.viewEditor.remove();
+      this.reactHeader && this.reactHeader.remove();
 
       this.sidebar.setSelectedTab('changes');
       this.leftheader.updateCrumbs(this.getCrumbs(this.database));
