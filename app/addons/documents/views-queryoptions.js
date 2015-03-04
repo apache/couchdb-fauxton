@@ -58,8 +58,6 @@ define([
         // always contains all options. [This does a deep copy: we never overwrite defaultOptions!]
         this.options = $.extend(true, {}, defaultOptions, options);
 
-        // add any general events relating to the Query Options tray
-        FauxtonAPI.Events.on('QueryOptions:openTray', this.showTray, this);
         $(window).on("resize", this.onResize);
 
         // initialize the parent View
@@ -81,7 +79,6 @@ define([
       },
 
       cleanup: function () {
-        FauxtonAPI.Events.off("QueryOptions:openTray");
         $(window).off("resize", this.onResize);
       },
 

@@ -273,8 +273,7 @@ function (app, FauxtonAPI, Components, Documents,
     },
 
     events: {
-      'change input': 'toggleDocument',
-      "click #js-end-results": "openQueryOptionsTray"
+      'change input': 'toggleDocument'
     },
 
     initialize: function (options) {
@@ -353,11 +352,6 @@ function (app, FauxtonAPI, Components, Documents,
         selectedOnPage: this.$('.js-to-delete').length,
         documentsOnPageCount: this.$('.doc-row').length
       });
-    },
-
-    openQueryOptionsTray: function(e) {
-      e.preventDefault();
-      FauxtonAPI.Events.trigger("QueryOptions:openTray");
     },
 
     establish: function() {
