@@ -26,6 +26,7 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, ReactComponents, 
   var getDocUrl = app.helpers.getDocUrl;
   var StyledSelect = ReactComponents.StyledSelect;
   var CodeEditor = ReactComponents.CodeEditor;
+  var PaddedBorderedBox = ReactComponents.PaddedBorderedBox;
 
   var DesignDocSelector = React.createClass({
 
@@ -83,29 +84,27 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, ReactComponents, 
 
       return (
         <div className="new-ddoc-section">
-          <div className="bordered-box">
-            <div className="padded-box">
-              <div className="control-group design-doc-group">
-                <div className="pull-left">
-                  <label htmlFor="ddoc"><strong>Design Document</strong>
-                    <a className="help-link" data-bypass="true" href={getDocUrl('DESIGN_DOCS')} target="_blank">
-                      <i className="icon-question-sign">
-                      </i>
-                    </a>
-                  </label>
-                  <StyledSelect
-                    selectContent={this.getSelectContent()}
-                    selectChange={this.selectChange}
-                    selectId="ddoc"
-                    selectValue={designDocId}
-                  />
-                </div>
-                <div className="pull-left">
-                  {designDocInput}
-                </div>
+          <PaddedBorderedBox>
+            <div className="control-group design-doc-group">
+              <div className="pull-left">
+                <label htmlFor="ddoc"><strong>Design Document</strong>
+                  <a className="help-link" data-bypass="true" href={getDocUrl('DESIGN_DOCS')} target="_blank">
+                    <i className="icon-question-sign">
+                    </i>
+                  </a>
+                </label>
+                <StyledSelect
+                  selectContent={this.getSelectContent()}
+                  selectChange={this.selectChange}
+                  selectId="ddoc"
+                  selectValue={designDocId}
+                />
+              </div>
+              <div className="pull-left">
+                {designDocInput}
               </div>
             </div>
-          </div>
+          </PaddedBorderedBox>
         </div>
       );
     },
@@ -354,58 +353,48 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, ReactComponents, 
     render: function () {
       return (
         <div className="define-view">
-          <div className="bordered-box">
-            <div className="padded-box">
-              Views are the primary tools for querying and reporting.
-            </div>
-          </div>
-          <div className="bordered-box">
-            <div className="padded-box">
-              <strong>Database</strong>
-              <div className="db-title">{this.state.database.id}</div>
-            </div>
-          </div>
+          <PaddedBorderedBox>
+            Views are the primary tools for querying and reporting.
+          </PaddedBorderedBox>
+          <PaddedBorderedBox>
+            <strong>Database</strong>
+            <div className="db-title">{this.state.database.id}</div>
+          </PaddedBorderedBox>
           <form className="form-horizontal view-query-save" onSubmit={this.saveView}>
             <DesignDocSelector />
             <div className="control-group">
-              <div className="bordered-box">
-                <div className="padded-box">
-                  <label htmlFor="index-name">
-                    <strong>Index name</strong>
-                    <a
-                      className="help-link"
-                      data-bypass="true"
-                      href={getDocUrl('VIEW_FUNCS')}
-                      target="_blank">
-                      <i className="icon-question-sign"></i>
-                    </a>
-                  </label>
-                  <input
-                    type="text"
-                    id="index-name"
-                    value={this.state.viewName}
-                    onChange={this.viewChange}
-                    placeholder="Index name" />
-                 </div>
-              </div>
+              <PaddedBorderedBox>
+                <label htmlFor="index-name">
+                  <strong>Index name</strong>
+                  <a
+                    className="help-link"
+                    data-bypass="true"
+                    href={getDocUrl('VIEW_FUNCS')}
+                    target="_blank">
+                    <i className="icon-question-sign"></i>
+                  </a>
+                </label>
+                <input
+                  type="text"
+                  id="index-name"
+                  value={this.state.viewName}
+                  onChange={this.viewChange}
+                  placeholder="Index name" />
+              </PaddedBorderedBox>
             </div>
             <div className="control-group">
-              <div className="bordered-box">
-                <div className="padded-box">
-                  <CodeEditor
-                    id={'map-function'}
-                    ref="mapEditor"
-                    title={"Map function"}
-                    docs={getDocUrl('MAP_FUNCS')}
-                    code={this.state.map} />
-                 </div>
-              </div>
+              <PaddedBorderedBox>
+                <CodeEditor
+                  id={'map-function'}
+                  ref="mapEditor"
+                  title={"Map function"}
+                  docs={getDocUrl('MAP_FUNCS')}
+                  code={this.state.map} />
+              </PaddedBorderedBox>
             </div>
-            <div className="bordered-box">
-              <div className="padded-box">
-                <ReduceEditor ref="reduceEditor" />
-              </div>
-            </div>
+            <PaddedBorderedBox>
+              <ReduceEditor ref="reduceEditor" />
+            </PaddedBorderedBox>
             <div className="padded-box">
               <div className="control-group">
                 <button type="submit" className="btn btn-success save">
