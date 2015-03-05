@@ -15,18 +15,18 @@ define([
   'addons/documents/header/header.stores',
   'addons/documents/header/header.actions',
 
-  // importing the legacy
-  'addons/documents/views',
-  'addons/documents/resources',
   'addons/databases/base',
-  'addons/fauxton/components',
-  'addons/documents/pagination/actions',
+  'addons/documents/resources',
+  'addons/documents/index-results/actions',
+  'addons/documents/index-results/stores',
 
   'testUtils',
   'react'
-], function (FauxtonAPI, Views, Stores, Actions, Documents, Resources, Databases, Components, PaginationActions, utils, React) {
+], function (FauxtonAPI, Views, Stores, Actions, Databases, Resources,
+             IndexResultsActions, IndexResultsStore, utils, React) {
 
   var assert = utils.assert;
+  var restore = utils.restore;
   var TestUtils = React.addons.TestUtils;
 
   describe('Header Controller', function () {
@@ -62,12 +62,9 @@ define([
   });
 
   describe('Bulkdocument Headerbar Controller', function () {
-    var container, header, viewSandbox, bulkDeleteDocCollection;
+    var container, header;
     beforeEach(function () {
-      // needed for "pressing SelectAll should fill the delete-bulk-docs-collection"
-      var ViewSandbox = utils.ViewSandbox;
       var database = new Databases.Model({id: 'registry'});
-      bulkDeleteDocCollection = new Resources.BulkDeleteDocCollection([], {databaseId: 'registry'});
 
       database.allDocs = new Resources.AllDocs({_id: "ente"}, {
         database: database,
@@ -75,40 +72,32 @@ define([
         params: {}
       });
 
-      PaginationActions.newPagination(database.allDocs);
-
-      var view = new Documents.Views.AllDocsList({
-        viewList: false,
-        bulkDeleteDocsCollection: bulkDeleteDocCollection,
+      IndexResultsActions.newResultsList({
         collection: database.allDocs,
+        deleteable: false
       });
-
-      viewSandbox = new ViewSandbox();
-      viewSandbox.renderView(view);
 
 
       container = document.createElement('div');
     });
 
     afterEach(function () {
-      bulkDeleteDocCollection.off();
-      viewSandbox.remove();
-
       React.unmountComponentAtNode(container);
+      restore(Actions.collapseDocuments);
     });
 
-    it('should trigger an event to communicate with the backbone elements', function () {
-      var spy = sinon.spy(FauxtonAPI.Events, 'trigger');
+    it('should trigger action', function () {
+      var spy = sinon.spy(Actions, 'collapseDocuments');
       header = TestUtils.renderIntoDocument(<Views.BulkDocumentHeaderController />, container);
       TestUtils.Simulate.click($(header.getDOMNode()).find('.control-collapse')[0]);
 
       assert.ok(spy.calledOnce);
     });
 
-    it('pressing SelectAll should fill the delete-bulk-docs-collection', function () {
+    it('pressing SelectAll should fill the selected items list', function () {
       TestUtils.Simulate.click($(header.getDOMNode()).find('.control-select-all')[0]);
 
-      assert.equal(bulkDeleteDocCollection.length, 1);
+      assert.equal(IndexResultsStore.indexResultsStore.getSelectedItemsLength(), 1);
     });
   });
 });

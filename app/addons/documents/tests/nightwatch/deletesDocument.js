@@ -25,11 +25,10 @@ module.exports = {
       .click('#dashboard-content a[href="#/database/' + newDatabaseName + '/_all_docs"]')
       .waitForElementVisible('label[for="checkbox-' + newDocumentName + '"]', waitTime, false)
       .click('label[for="checkbox-' + newDocumentName + '"]')
-      .click('.control-toggle-alternative-header')
       .waitForElementPresent('.control-select-all', waitTime, false)
       .click('.control-delete')
       .acceptAlert()
-      .waitForElementVisible('#global-notifications .alert.alert-info', waitTime, false)
+      .waitForElementVisible('.alert.alert-info', waitTime, false)
       .url(baseUrl + '/' + newDatabaseName + '/_all_docs')
       .waitForElementPresent('pre', waitTime, false)
       .getText('pre', function (result) {

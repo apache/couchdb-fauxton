@@ -97,20 +97,6 @@ define([
       ];
     },
 
-    createViewDocumentsView: function (options) {
-      if (!options.docParams) {
-        options.docParams = {};
-      }
-
-      return this.setView("#dashboard-lower-content", new Documents.Views.AllDocsList({
-        database: options.database,
-        collection: options.indexedDocs,
-        viewList: true,
-        ddocInfo: this.ddocInfo(options.designDoc, options.designDocs, options.view),
-        docParams: options.docParams
-      }));
-    },
-
     ddocInfo: function (designDoc, designDocs, view) {
       return {
         id: "_design/" + designDoc,
@@ -130,63 +116,6 @@ define([
         urlParams: urlParams,
         docParams: _.extend(params, {limit: limit})
       };
-    },
-
-    updateAllDocsFromView: function (event) {
-      var view = event.view,
-          params = this.createParams(),
-          urlParams = params.urlParams,
-          docParams = params.docParams,
-          ddoc = event.ddoc,
-          pageSize = PaginationStores.indexPaginationStore.getPerPage(),
-          collection;
-
-      if (event.allDocs) {
-        this.eventAllDocs = true; // this is horrible. But I cannot get the trigger not to fire the route!
-        this.database.buildAllDocs(docParams);
-        collection = this.database.allDocs;
-        collection.paging.pageSize = pageSize;
-      } else {
-        collection = this.indexedDocs = new Documents.IndexCollection(null, {
-          database: this.database,
-          design: ddoc,
-          view: view,
-          params: docParams,
-          paging: {
-            pageSize: pageSize
-          }
-        });
-
-        if (!this.documentsView) {
-          this.documentsView = this.createViewDocumentsView({
-            designDoc: ddoc,
-            docParams: docParams,
-            urlParams: urlParams,
-            database: this.database,
-            indexedDocs: this.indexedDocs,
-            designDocs: this.designDocs,
-            view: view
-          });
-        }
-      }
-
-      // this will lazily initialize all sub-views and render them
-      this.documentsView.forceRender();
-    },
-
-    perPageChange: function (perPage) {
-      this.documentsView.forceRender();
-      this.documentsView.collection.pageSizeReset(perPage, {fetch: false});
-    },
-
-    paginate: function (options) {
-      var collection = this.documentsView.collection;
-      this.documentsView.collection.reset(collection);
-
-      this.documentsView.forceRender();
-
-      collection.paging.pageSize = options.perPage;
-      var promise = collection[options.direction]({fetch: false});
     }
   });
 

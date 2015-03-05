@@ -34,7 +34,7 @@ module.exports = {
       .waitForElementPresent('.control-select-all', waitTime, false)
       .click('.control-delete')
       .acceptAlert()
-      .waitForElementVisible('#global-notifications .alert.alert-info', waitTime, false)
+      .waitForElementVisible('.alert.alert-info', waitTime, false)
       .click('#nav-links a[href="#/_all_dbs"]')
 
       // now let's look at the actual UI to confirm the tooltip appears

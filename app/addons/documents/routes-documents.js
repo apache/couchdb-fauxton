@@ -24,225 +24,220 @@ define([
   'addons/databases/base',
   'addons/documents/resources',
   'addons/fauxton/components',
-  'addons/documents/pagination/actions',
-  'addons/documents/pagination/stores'
+  'addons/documents/pagination/stores',
+  'addons/documents/index-results/actions'
 ],
 
 function (app, FauxtonAPI, BaseRoute, Documents, Changes, Index, DocEditor,
-        Databases, Resources, Components, PaginationActions, PaginationStores) {
+  Databases, Resources, Components, PaginationStores, IndexResultsActions) {
 
 
-  var DocumentsRouteObject = BaseRoute.extend({
-    layout: "with_tabs_sidebar",
-    routes: {
-      "database/:database/_all_docs(:extra)": {
-        route: "allDocs",
-        roles: ["fx_loggedIn"]
+    var DocumentsRouteObject = BaseRoute.extend({
+      layout: "with_tabs_sidebar",
+      routes: {
+        "database/:database/_all_docs(:extra)": {
+          route: "allDocs",
+          roles: ["fx_loggedIn"]
+        },
+        "database/:database/_design/:ddoc/_info": {
+          route: "designDocMetadata",
+          roles: ['fx_loggedIn']
+        },
+        'database/:database/_changes': 'changes'
       },
-      "database/:database/_design/:ddoc/_info": {
-        route: "designDocMetadata",
-        roles: ['fx_loggedIn']
+
+      events: {
+        "route:reloadDesignDocs": "reloadDesignDocs"
       },
-      'database/:database/_changes': 'changes'
-    },
 
-    events: {
-      "route:reloadDesignDocs": "reloadDesignDocs",
-      'route:updateAllDocs': 'updateAllDocsFromView',
-      'route:paginate': 'paginate',
-      'route:perPageChange': 'perPageChange',
-    },
+      initialize: function (route, masterLayout, options) {
+        this.initViews(options[0]);
+        this.listenToLookaheadTray();
+      },
 
-    initialize: function (route, masterLayout, options) {
-      this.initViews(options[0]);
-      this.listenToLookaheadTray();
-    },
+      establish: function () {
+        return [
+          this.designDocs.fetch({reset: true}),
+          this.allDatabases.fetchOnce()
+        ];
+      },
 
-    establish: function () {
-      return [
-        this.designDocs.fetch({reset: true}),
-        this.allDatabases.fetchOnce()
-      ];
-    },
+      initViews: function (dbName) {
+        this.databaseName = dbName;
+        this.database = new Databases.Model({id: this.databaseName});
+        this.allDatabases = this.getAllDatabases();
 
-    initViews: function (dbName) {
-      this.databaseName = dbName;
-      this.database = new Databases.Model({id: this.databaseName});
-      this.allDatabases = this.getAllDatabases();
+        this.createDesignDocsCollection();
 
-      this.createDesignDocsCollection();
+        this.rightHeader = this.setView("#right-header", new Documents.Views.RightAllDocsHeader({
+          database: this.database
+        }));
 
-      this.rightHeader = this.setView("#right-header", new Documents.Views.RightAllDocsHeader({
-        database: this.database
-      }));
+        this.addLeftHeader();
+        this.addSidebar();
+      },
 
-      this.addLeftHeader();
-      this.addSidebar();
-    },
+      getAllDatabases: function () {
+        return new Databases.List();  //getAllDatabases() can be overwritten instead of hard coded into initViews
+      },
 
-    getAllDatabases: function () {
-      return new Databases.List();  //getAllDatabases() can be overwritten instead of hard coded into initViews
-    },
+      // this safely assumes the db name is valid
+      onSelectDatabase: function (dbName) {
+        this.cleanup();
+        this.initViews(dbName);
 
-    // this safely assumes the db name is valid
-    onSelectDatabase: function (dbName) {
-      this.cleanup();
-      this.initViews(dbName);
+        var url = FauxtonAPI.urls('allDocs', 'app',  app.utils.safeURLName(dbName), '');
+        FauxtonAPI.navigate(url, {
+          trigger: true
+        });
 
-      var url = FauxtonAPI.urls('allDocs', 'app',  app.utils.safeURLName(dbName), '');
-      FauxtonAPI.navigate(url, {
-        trigger: true
-      });
+        // we need to start listening again because cleanup() removed the listener, but in this case
+        // initialize() doesn't fire to re-set up the listener
+        this.listenToLookaheadTray();
+      },
 
-      // we need to start listening again because cleanup() removed the listener, but in this case
-      // initialize() doesn't fire to re-set up the listener
-      this.listenToLookaheadTray();
-    },
+      listenToLookaheadTray: function () {
+        this.listenTo(FauxtonAPI.Events, 'lookaheadTray:update', this.onSelectDatabase);
+      },
 
-    listenToLookaheadTray: function () {
-      this.listenTo(FauxtonAPI.Events, 'lookaheadTray:update', this.onSelectDatabase);
-    },
+      designDocMetadata: function (database, ddoc) {
+        this.footer && this.footer.remove();
+        this.toolsView && this.toolsView.remove();
+        this.viewEditor && this.viewEditor.remove();
 
-    designDocMetadata: function (database, ddoc) {
-      this.footer && this.footer.remove();
-      this.toolsView && this.toolsView.remove();
-      this.viewEditor && this.viewEditor.remove();
+        var designDocInfo = new Resources.DdocInfo({ _id: "_design/" + ddoc }, { database: this.database });
+        this.setView("#dashboard-lower-content", new Documents.Views.DdocInfo({
+          ddocName: ddoc,
+          model: designDocInfo
+        }));
 
-      var designDocInfo = new Resources.DdocInfo({ _id: "_design/" + ddoc }, { database: this.database });
-      this.setView("#dashboard-lower-content", new Documents.Views.DdocInfo({
-        ddocName: ddoc,
-        model: designDocInfo
-      }));
+        this.sidebar.setSelectedTab(app.utils.removeSpecialCharacters(ddoc) + "_metadata");
+        this.leftheader.updateCrumbs(this.getCrumbs(this.database));
+        this.rightHeader.hideQueryOptions();
 
-      this.sidebar.setSelectedTab(app.utils.removeSpecialCharacters(ddoc) + "_metadata");
-      this.leftheader.updateCrumbs(this.getCrumbs(this.database));
-      this.rightHeader.hideQueryOptions();
+        this.apiUrl = [designDocInfo.url('apiurl'), designDocInfo.documentation()];
+      },
 
-      this.apiUrl = [designDocInfo.url('apiurl'), designDocInfo.documentation()];
-    },
+      /*
+      * docParams are the options collection uses to fetch from the server
+      * urlParams are what are shown in the url and to the user
+      * They are not the same when paginating
+      */
+      allDocs: function (databaseName, options) {
+        var params = this.createParams(options),
+        urlParams = params.urlParams,
+        docParams = params.docParams,
+        collection;
 
-    /*
-     * docParams are the options collection uses to fetch from the server
-     * urlParams are what are shown in the url and to the user
-     * They are not the same when paginating
-     */
-    allDocs: function (databaseName, options) {
-      var params = this.createParams(options),
-          urlParams = params.urlParams,
-          docParams = params.docParams,
-          collection;
+        if (this.eventAllDocs) {
+          this.eventAllDocs = false;
+          return;
+        }
 
-      if (this.eventAllDocs) {
-        this.eventAllDocs = false;
-        return;
+        this.reactHeader = this.setView('#react-headerbar', new Documents.Views.ReactHeaderbar());
+
+        this.footer = this.setView('#footer', new Documents.Views.Footer());
+
+        this.leftheader.updateCrumbs(this.getCrumbs(this.database));
+
+        this.database.buildAllDocs(docParams);
+        collection = this.database.allDocs;
+
+        if (docParams.startkey && docParams.startkey.indexOf("_design") > -1) {
+          this.sidebar.setSelectedTab("design-docs");
+        } else {
+          this.sidebar.setSelectedTab("all-docs");
+        }
+
+        this.viewEditor && this.viewEditor.remove();
+        this.headerView && this.headerView.remove();
+
+
+        if (!docParams) {
+          docParams = {};
+        }
+
+        IndexResultsActions.newResultsList({
+          collection: collection,
+          deleteable: true
+        });
+
+        this.database.allDocs.paging.pageSize = PaginationStores.indexPaginationStore.getPerPage();
+
+        this.resultList = this.setView('#dashboard-lower-content', new Index.ViewResultListReact({}));
+
+        // this used to be a function that returned the object, but be warned: it caused a closure with a reference to
+        // the initial this.database object which can change
+        this.apiUrl = [this.database.allDocs.urlRef("apiurl", urlParams), this.database.allDocs.documentation()];
+
+        // update the rightHeader with the latest & greatest info
+        this.rightHeader.resetQueryOptions({ queryParams: urlParams });
+        this.rightHeader.showQueryOptions();
+      },
+
+      reloadDesignDocs: function (event) {
+        this.sidebar.forceRender();
+
+        if (event && event.selectedTab) {
+          this.sidebar.setSelectedTab(event.selectedTab);
+        }
+      },
+
+      changes: function () {
+        var docParams = app.getParams();
+        this.database.buildChanges(docParams);
+
+        this.changesView = this.setView("#dashboard-lower-content", new Changes.ChangesReactWrapper({
+          model: this.database
+        }));
+
+        this.headerView = this.setView('#dashboard-upper-content', new Changes.ChangesHeaderReactWrapper());
+
+        this.footer && this.footer.remove();
+        this.toolsView && this.toolsView.remove();
+        this.viewEditor && this.viewEditor.remove();
+        this.reactHeader && this.reactHeader.remove();
+
+        this.sidebar.setSelectedTab('changes');
+        this.leftheader.updateCrumbs(this.getCrumbs(this.database));
+        this.rightHeader.hideQueryOptions();
+
+        this.apiUrl = function () {
+          return [FauxtonAPI.urls('changes', 'apiurl', this.database.id, ''), this.database.documentation()];
+        };
+      },
+
+      cleanup: function () {
+        if (this.reactHeader) {
+          this.removeView('#react-headerbar');
+        }
+        if (this.viewEditor) {
+          this.removeView('#dashboard-upper-content');
+        }
+        if (this.documentsView) {
+          this.removeView('#dashboard-lower-content');
+        }
+        if (this.rightHeader) {
+          this.removeView('#right-header');
+        }
+        if (this.leftheader) {
+          this.removeView('#breadcrumbs');
+        }
+        if (this.sidebar) {
+          this.removeView('#sidebar');
+        }
+        if (this.footer) {
+          this.removeView('#footer');
+        }
+        if (this.headerView) {
+          this.removeView('#dashboard-upper-content');
+        }
+
+        // we're no longer interested in listening to the lookahead tray event on this route object
+        this.stopListening(FauxtonAPI.Events, 'lookaheadTray:update', this.onSelectDatabase);
       }
 
-      this.reactHeader = this.setView('#react-headerbar', new Documents.Views.ReactHeaderbar());
+    });
 
-      this.footer = this.setView('#footer', new Documents.Views.Footer());
-
-      this.leftheader.updateCrumbs(this.getCrumbs(this.database));
-
-      this.database.buildAllDocs(docParams);
-      collection = this.database.allDocs;
-
-      if (docParams.startkey && docParams.startkey.indexOf("_design") > -1) {
-        this.sidebar.setSelectedTab("design-docs");
-      } else {
-        this.sidebar.setSelectedTab("all-docs");
-      }
-
-      this.viewEditor && this.viewEditor.remove();
-      this.headerView && this.headerView.remove();
-
-
-      if (!docParams) {
-        docParams = {};
-      }
-
-      PaginationActions.newPagination(collection);
-      this.database.allDocs.paging.pageSize = PaginationStores.indexPaginationStore.getPerPage();
-
-      // documentsView will populate the collection
-      this.documentsView = this.setView("#dashboard-lower-content", new Documents.Views.AllDocsList({
-        database: this.database,
-        collection: collection,
-        docParams: docParams,
-        bulkDeleteDocsCollection: new Documents.BulkDeleteDocCollection([], {databaseId: this.database.get('id')})
-      }));
-
-      // this used to be a function that returned the object, but be warned: it caused a closure with a reference to
-      // the initial this.database object which can change
-      this.apiUrl = [this.database.allDocs.urlRef("apiurl", urlParams), this.database.allDocs.documentation()];
-
-      // update the rightHeader with the latest & greatest info
-      this.rightHeader.resetQueryOptions({ queryParams: urlParams });
-      this.rightHeader.showQueryOptions();
-    },
-
-    reloadDesignDocs: function (event) {
-      this.sidebar.forceRender();
-
-      if (event && event.selectedTab) {
-        this.sidebar.setSelectedTab(event.selectedTab);
-      }
-    },
-
-    changes: function () {
-      var docParams = app.getParams();
-      this.database.buildChanges(docParams);
-
-      this.changesView = this.setView("#dashboard-lower-content", new Changes.ChangesReactWrapper({
-        model: this.database
-      }));
-
-      this.headerView = this.setView('#dashboard-upper-content', new Changes.ChangesHeaderReactWrapper());
-
-      this.footer && this.footer.remove();
-      this.toolsView && this.toolsView.remove();
-      this.viewEditor && this.viewEditor.remove();
-      this.reactHeader && this.reactHeader.remove();
-
-      this.sidebar.setSelectedTab('changes');
-      this.leftheader.updateCrumbs(this.getCrumbs(this.database));
-      this.rightHeader.hideQueryOptions();
-
-      this.apiUrl = function () {
-        return [FauxtonAPI.urls('changes', 'apiurl', this.database.id, ''), this.database.documentation()];
-      };
-    },
-
-    cleanup: function () {
-      if (this.reactHeader) {
-        this.removeView('#react-headerbar');
-      }
-      if (this.viewEditor) {
-        this.removeView('#dashboard-upper-content');
-      }
-      if (this.documentsView) {
-        this.removeView('#dashboard-lower-content');
-      }
-      if (this.rightHeader) {
-        this.removeView('#right-header');
-      }
-      if (this.leftheader) {
-        this.removeView('#breadcrumbs');
-      }
-      if (this.sidebar) {
-        this.removeView('#sidebar');
-      }
-      if (this.footer) {
-        this.removeView('#footer');
-      }
-      if (this.headerView) {
-        this.removeView('#dashboard-upper-content');
-      }
-
-      // we're no longer interested in listening to the lookahead tray event on this route object
-      this.stopListening(FauxtonAPI.Events, 'lookaheadTray:update', this.onSelectDatabase);
-    }
-
+    return DocumentsRouteObject;
   });
-
-  return DocumentsRouteObject;
-});

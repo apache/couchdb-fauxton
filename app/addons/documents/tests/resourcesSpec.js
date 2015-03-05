@@ -10,12 +10,13 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 define([
+        'api',
         'addons/documents/resources',
         'testUtils',
 
         'addons/documents/base'
 
-], function (Models, testUtils) {
+], function (FauxtonAPI, Models, testUtils) {
   var assert = testUtils.assert;
 
   describe('IndexCollection', function () {
@@ -49,9 +50,9 @@ define([
 
     it('does not remove an id attribute', function () {
       var res = doc.parse({
-        _id: "be31e531fe131bdf416b479ac1000484",
-        _rev: "4-3a1b9f4b988b413e9245cd250769da72",
-        id: "foo"
+        _id: 'be31e531fe131bdf416b479ac1000484',
+        _rev: '4-3a1b9f4b988b413e9245cd250769da72',
+        id: 'foo'
       });
       assert.equal(res.id, 'foo');
     });
@@ -62,8 +63,8 @@ define([
       // {"ok":true,"id":"mycustomid","rev":"18-9cdeb1b121137233e3466b06a1780c29"}
       // and our Model will think it has the id "mycustomid" instead of "foo"
       var res = doc.parse({
-        id: "be31e531fe131bdf416b479ac1000484",
-        _rev: "4-3a1b9f4b988b413e9245cd250769da72",
+        id: 'be31e531fe131bdf416b479ac1000484',
+        _rev: '4-3a1b9f4b988b413e9245cd250769da72',
         ok: true
       });
       assert.notOk(res.id);
@@ -91,7 +92,7 @@ define([
   describe('QueryParams', function () {
     describe('parse', function () {
       it('should not parse arbitrary parameters', function () {
-        var params = {"foo": "[1]]"};
+        var params = {'foo': '[1]]'};
         var result = Models.QueryParams.parse(params);
 
         assert.deepEqual(result, params);
@@ -99,29 +100,29 @@ define([
 
       it('parses startkey, endkey', function () {
         var params = {
-          "startkey":"[\"a\",\"b\"]",
-          "endkey":"[\"c\",\"d\"]"
+          'startkey':'[\"a\",\"b\"]',
+          'endkey':'[\"c\",\"d\"]'
         };
         var result = Models.QueryParams.parse(params);
 
         assert.deepEqual(result, {
-          "startkey": ["a", "b"],
-          "endkey": ["c", "d"]
+          'startkey': ['a', 'b'],
+          'endkey': ['c', 'd']
         });
       });
 
       it('parses key', function () {
         var params = {
-          "key":"[1,2]"
+          key:'[1,2]'
         };
         var result = Models.QueryParams.parse(params);
 
-        assert.deepEqual(result, {"key": [1, 2]});
+        assert.deepEqual(result, {'key': [1, 2]});
       });
 
       it('does not modify input', function () {
         var params = {
-          "key":"[\"a\",\"b\"]"
+          key:'[\"a\",\"b\"]'
         };
         var clone = _.clone(params);
         var result = Models.QueryParams.parse(params);
@@ -132,7 +133,7 @@ define([
 
     describe('stringify', function () {
       it('should not stringify arbitrary parameters', function () {
-        var params = {"foo": [1, 2, 3]};
+        var params = {'foo': [1, 2, 3]};
         var result = Models.QueryParams.stringify(params);
 
         assert.deepEqual(result, params);
@@ -140,27 +141,27 @@ define([
 
       it('stringifies startkey, endkey', function () {
         var params = {
-          "startkey": ["a", "b"],
-          "endkey": ["c", "d"]
+          'startkey': ['a', 'b'],
+          'endkey': ['c', 'd']
         };
 
         var result = Models.QueryParams.stringify(params);
 
         assert.deepEqual(result, {
-          "startkey":"[\"a\",\"b\"]",
-          "endkey":"[\"c\",\"d\"]"
+          'startkey':'[\"a\",\"b\"]',
+          'endkey':'[\"c\",\"d\"]'
         });
       });
 
       it('stringifies key', function () {
-        var params = {"key":[ "a", "b"]};
+        var params = {'key':[ 'a', 'b']};
         var result = Models.QueryParams.stringify(params);
 
-        assert.deepEqual(result, { "key": "[\"a\",\"b\"]" });
+        assert.deepEqual(result, { 'key': '[\"a\",\"b\"]' });
       });
 
       it('does not modify input', function () {
-        var params = {"key": ["a", "b"]};
+        var params = {'key': ['a', 'b']};
         var clone = _.clone(params);
         var result = Models.QueryParams.stringify(params);
 
@@ -169,10 +170,10 @@ define([
 
       it('is symmetrical with parse', function () {
         var params = {
-          "startkey": ["a", "b"],
-          "endkey": ["c", "d"],
-          "foo": "[1,2]",
-          "bar": "abc"
+          'startkey': ['a', 'b'],
+          'endkey': ['c', 'd'],
+          'foo': '[1,2]',
+          'bar': 'abc'
         };
 
         var clone = _.clone(params);
@@ -187,6 +188,7 @@ define([
   describe('Bulk Delete', function () {
     var databaseId = 'ente',
         collection,
+        promise,
         values;
 
     values = [{
@@ -209,9 +211,11 @@ define([
       collection = new Models.BulkDeleteDocCollection(values, {
         databaseId: databaseId
       });
+
+      promise = FauxtonAPI.Deferred();
     });
 
-    it("contains the models", function () {
+    it('contains the models', function () {
       collection = new Models.BulkDeleteDocCollection(values, {
         databaseId: databaseId
       });
@@ -219,45 +223,89 @@ define([
       assert.equal(collection.length, 3);
     });
 
-    it("clears the memory if no errors happened", function () {
+    it('clears the memory if no errors happened', function () {
       collection.handleResponse([
-        {"ok": true, "id": "1", "rev": "10-72cd2edbcc0d197ce96188a229a7af01"},
-        {"ok": true, "id": "2", "rev": "6-da537822b9672a4b2f42adb1be04a5b1"}
-      ]);
+        {'ok': true, 'id': '1', 'rev': '10-72cd2edbcc0d197ce96188a229a7af01'},
+        {'ok': true, 'id': '2', 'rev': '6-da537822b9672a4b2f42adb1be04a5b1'}
+      ], promise);
 
       assert.equal(collection.length, 1);
     });
 
-    it("triggers a removed event with all ids", function () {
+    it('triggers a removed event with all ids', function () {
       collection.listenToOnce(collection, 'removed', function (ids) {
         assert.deepEqual(ids, ['Deferred', 'DeskSet']);
       });
 
       collection.handleResponse([
-        {"ok": true, "id": "Deferred", "rev":"10-72cd2edbcc0d197ce96188a229a7af01"},
-        {"ok": true, "id": "DeskSet", "rev":"6-da537822b9672a4b2f42adb1be04a5b1"}
-      ]);
+        {'ok': true, 'id': 'Deferred', 'rev':'10-72cd2edbcc0d197ce96188a229a7af01'},
+        {'ok': true, 'id': 'DeskSet', 'rev':'6-da537822b9672a4b2f42adb1be04a5b1'}
+      ], promise);
     });
 
-    it("triggers a error event with all errored ids", function () {
+    it('triggers a error event with all errored ids', function () {
       collection.listenToOnce(collection, 'error', function (ids) {
         assert.deepEqual(ids, ['Deferred']);
       });
       collection.handleResponse([
-        {"error": "confclict", "id": "Deferred", "rev":"10-72cd2edbcc0d197ce96188a229a7af01"},
-        {"ok": true, "id": "DeskSet", "rev": "6-da537822b9672a4b2f42adb1be04a5b1"}
-      ]);
+        {'error':'conflict', 'id':'Deferred', 'rev':'10-72cd2edbcc0d197ce96188a229a7af01'},
+        {'ok':true, 'id':'DeskSet', 'rev':'6-da537822b9672a4b2f42adb1be04a5b1'}
+      ], promise);
     });
 
-    it("removes successfull deleted from the collection but keeps one with errors", function () {
+    it('removes successfull deleted from the collection but keeps one with errors', function () {
       collection.handleResponse([
-        {"error": "confclict", "id": "1", "rev": "10-72cd2edbcc0d197ce96188a229a7af01"},
-        {"ok": true, "id":"2", "rev": "6-da537822b9672a4b2f42adb1be04a5b1"},
-        {"error": "conflict", "id":"3", "rev": "6-da537822b9672a4b2f42adb1be04a5b1"}
-      ]);
+        {'error':'conflict', 'id':'1', 'rev':'10-72cd2edbcc0d197ce96188a229a7af01'},
+        {'ok':true, 'id':'2', 'rev':'6-da537822b9672a4b2f42adb1be04a5b1'},
+        {'error':'conflict', 'id':'3', 'rev':'6-da537822b9672a4b2f42adb1be04a5b1'}
+      ], promise);
       assert.ok(collection.get('1'));
       assert.ok(collection.get('3'));
       assert.notOk(collection.get('2'));
     });
+
+    it('triggers resolve for successful delete', function () {
+      var spy = sinon.spy();
+      promise.then(spy);
+
+      collection.handleResponse([
+        {'ok':true, 'id':'Deferred', 'rev':'10-72cd2edbcc0d197ce96188a229a7af01'},
+        {'ok':true, 'id':'DeskSet', 'rev':'6-da537822b9672a4b2f42adb1be04a5b1'}
+      ], promise);
+
+      assert.ok(spy.calledOnce);
+
+    });
+
+    it('triggers resolve for successful delete with errors as well', function () {
+      var spy = sinon.spy();
+      promise.then(spy);
+      var ids = {
+        errorIds: ['1'],
+        successIds: ['Deferred', 'DeskSet']
+      };
+
+      collection.handleResponse([
+        {'ok':true, 'id':'Deferred', 'rev':'10-72cd2edbcc0d197ce96188a229a7af01'},
+        {'ok':true, 'id':'DeskSet', 'rev':'6-da537822b9672a4b2f42adb1be04a5b1'},
+        {'error':'conflict', 'id':'1', 'rev':'10-72cd2edbcc0d197ce96188a229a7af01'},
+      ], promise);
+
+      assert.ok(spy.calledWith(ids));
+    });
+
+    it('triggers reject for failed delete', function () {
+      var spy = sinon.spy();
+      promise.fail(spy);
+
+      collection.handleResponse([
+        {'error':'conflict', 'id':'1', 'rev':'10-72cd2edbcc0d197ce96188a229a7af01'}
+      ], promise);
+
+      assert.ok(spy.calledWith(['1']));
+
+    });
+
+
   });
 });

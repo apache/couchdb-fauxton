@@ -13,8 +13,9 @@
 define([
   'app',
   'api',
-  'addons/documents/pagination/actiontypes'
-], function (app, FauxtonAPI, ActionTypes) {
+  'addons/documents/pagination/actiontypes',
+  'addons/documents/index-results/actiontypes'
+], function (app, FauxtonAPI, ActionTypes, IndexResultsActionTypes) {
 
   var Stores = {};
   var maxDocLimit = 10000;
@@ -49,6 +50,10 @@ define([
       this.reset();
     },
 
+    getCollection: function () {
+      return this._collection;
+    },
+
     canShowPrevious: function () {
       if (!this._enabled) { return false; }
       return this._collection.hasPrevious();
@@ -67,6 +72,7 @@ define([
     paginateNext: function () {
       this._currentPage += 1;
       this._pageStart += this.getPerPage();
+      this._collection.paging.pageSize = this.documentsLeftToFetch();
     },
 
     paginatePrevious: function () {
@@ -76,6 +82,8 @@ define([
       if (this._pageStart < 1) {
         this._pageStart = 1;
       }
+
+      this._collection.paging.pageSize = this.getPerPage();
     },
 
     getCurrentPage: function () {
@@ -121,6 +129,10 @@ define([
     setPerPage: function (perPage) {
       this._perPage = perPage;
       app.utils.localStorageSet('fauxton:perpage', perPage);
+
+      if (this._collection && this._collection.pageSizeReset) {
+        this._collection.pageSizeReset(perPage, {fetch: false});
+      }
     },
 
     getTotalRows: function () {
@@ -142,15 +154,15 @@ define([
     dispatch: function (action) {
 
       switch (action.type) {
-        case ActionTypes.NEW_PAGINATION:
-          this.newPagination(action.collection);
+        case IndexResultsActionTypes.INDEX_RESULTS_NEW_RESULTS:
+          this.newPagination(action.options.collection);
           this.triggerChange();
         break;
         case ActionTypes.SET_PAGINATION_DOCUMENT_LIMIT:
           this.setDocumentLimit(action.docLimit);
           this.triggerChange();
         break;
-        case ActionTypes.PAGINATION_COLLECTION_RESET:
+        case IndexResultsActionTypes.INDEX_RESULTS_RESET:
           this.triggerChange();
         break;
         case ActionTypes.PAGINATE_NEXT:

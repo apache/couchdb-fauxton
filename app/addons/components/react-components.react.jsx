@@ -191,7 +191,13 @@ function (app, FauxtonAPI, React, Components, beautifyHelper) {
   var Document = React.createClass({
 
     propTypes: {
-      docIdentifier: React.PropTypes.string.isRequired
+      docIdentifier: React.PropTypes.string.isRequired,
+      docChecked: React.PropTypes.func.isRequired
+    },
+
+    onChange: function (e) {
+      e.preventDefault();
+      this.props.docChecked(this.props.docIdentifier, this.props.doc, e);
     },
 
     getUrlFragment: function () {
@@ -213,19 +219,22 @@ function (app, FauxtonAPI, React, Components, beautifyHelper) {
             id={'checkbox-' + this.props.docIdentifier}
             checked={this.props.checked ? 'checked="checked"': null}
             type="checkbox"
-            onChange={this.props.onChange}
+            onChange={this.onChange}
             className="js-row-select" />
-          <label
+          <label onClick={this.onChange}
             className="label-checkbox-doclist"
             htmlFor={'checkbox-' + this.props.docIdentifier} />
         </div>
       );
     },
 
+    onDoubleClick: function (e) {
+      this.props.onDoubleClick(this.props.docIdentifier, this.props.doc, e);
+    },
 
     render: function () {
       return (
-        <div onDoubleClick={this.props.onDoubleClick} className="doc-row">
+        <div data-id={this.props.docIdentifier} onDoubleClick={this.onDoubleClick} className="doc-row">
           <div className="custom-inputs">
             {this.getCheckbox()}
           </div>

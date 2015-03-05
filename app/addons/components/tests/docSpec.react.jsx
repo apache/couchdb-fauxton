@@ -54,7 +54,7 @@ define([
         <ReactComponents.Document checked={true} docIdentifier="foo" />,
         container
       );
-      assert.equal($(el.getDOMNode()).find('#checkbox-foo').attr('checked'), 'checked');
+      assert.equal($(el.getDOMNode()).find('input[type="checkbox"]').attr('checked'), 'checked');
     });
 
     it('you can uncheck it', function () {
@@ -62,17 +62,17 @@ define([
         <ReactComponents.Document docIdentifier="foo" />,
         container
       );
-      assert.equal($(el.getDOMNode()).find('#checkbox-foo').attr('checked'), undefined);
+      assert.equal($(el.getDOMNode()).find('input[type="checkbox"]').attr('checked'), undefined);
     });
 
     it('it calls an onchange callback', function () {
       var spy = sinon.spy();
 
       el = TestUtils.renderIntoDocument(
-        <ReactComponents.Document onChange={spy} docIdentifier="foo" />,
+        <ReactComponents.Document docChecked={spy} docIdentifier="foo" />,
         container
       );
-      var testEl = $(el.getDOMNode()).find('#checkbox-foo')[0];
+      var testEl = $(el.getDOMNode()).find('input[type="checkbox"]')[0];
       React.addons.TestUtils.Simulate.change(testEl, {target: {value: 'Hello, world'}});
       assert.ok(spy.calledOnce);
     });

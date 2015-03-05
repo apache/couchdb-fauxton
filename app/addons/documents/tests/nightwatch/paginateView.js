@@ -12,7 +12,7 @@
 
 module.exports = {
 
-  'change number of items per page': function (client) {
+	'change number of items per page': function (client) {
     /*jshint multistr: true */
     var waitTime = 10000,
         newDatabaseName = client.globals.testDatabaseName,
@@ -27,10 +27,11 @@ module.exports = {
       // hack to get select working by clicking on it and using keyboard to select
       // http://www.w3.org/TR/2012/WD-webdriver-20120710/
       .keys(['\uE013', '\uE006'])
-      .waitForElementNotPresent('.spinner', waitTime)
+      .waitForElementNotPresent('div[data-id="document_9"]', waitTime)
       .execute(function () {
         return $('.doc-row').length;
       }, function (result) {
+        console.log(result.value);
         client.assert.equal(result.value, 10);
       })
       .end();
@@ -50,12 +51,11 @@ module.exports = {
       .click('#select-per-page')
       // http://www.w3.org/TR/2012/WD-webdriver-20120710/
       .keys(['\uE013', '\uE006'])
-      .waitForElementNotPresent('.spinner', waitTime)
       .click('#next')
-      .waitForElementNotPresent('.spinner', waitTime)
+      .waitForElementNotPresent('div[data-id="document_1"]', waitTime)
       .waitForElementPresent('div[data-id="document_19"]', waitTime)
       .click('#previous')
-      .waitForElementNotPresent('.spinner', waitTime)
+      .waitForElementNotPresent('div[data-id="document_19"]', waitTime)
       .waitForElementPresent('div[data-id="document_1"]', waitTime)
       .end();
   },
@@ -74,13 +74,11 @@ module.exports = {
       .click('#select-per-page')
       // http://www.w3.org/TR/2012/WD-webdriver-20120710/
       .keys(['\uE013', '\uE006'])
-      .waitForElementNotPresent('.spinner', waitTime)
       .click('#next')
-      .waitForElementNotPresent('.spinner', waitTime)
+      .waitForElementNotPresent('div[data-id="document_1"]', waitTime)
       .click('#select-per-page')
       // http://www.w3.org/TR/2012/WD-webdriver-20120710/
       .keys(['\uE013', '\uE006'])
-      .waitForElementNotPresent('.spinner', waitTime)
       .waitForElementPresent('div[data-id="document_1"]', waitTime)
       .end();
   }

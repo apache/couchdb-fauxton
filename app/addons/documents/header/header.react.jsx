@@ -17,20 +17,24 @@ define([
   'addons/documents/header/header.stores',
   'addons/documents/header/header.actions',
   'addons/components/react-components.react',
+  'addons/documents/index-results/stores',
+  'addons/documents/index-results/actions',
 ],
 
-function (app, FauxtonAPI, React, Stores, Actions, ReactComponents) {
+function (app, FauxtonAPI, React, Stores, Actions, ReactComponents, IndexResultsStore, IndexResultsActions) {
   var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
   var headerBarStore = Stores.headerBarStore;
   var bulkDocumentHeaderStore = Stores.bulkDocumentHeaderStore;
+  var indexResultsStore = IndexResultsStore.indexResultsStore;
   var ToggleHeaderButton = ReactComponents.ToggleHeaderButton;
 
   var BulkDocumentHeaderController = React.createClass({
     getStoreState: function () {
       return {
-        areDocumentsCollapsed: bulkDocumentHeaderStore.getCollapsedState(),
-        isDeselectPossible: bulkDocumentHeaderStore.getIsDeselectPossible(),
-        isSelectAllPossible: bulkDocumentHeaderStore.getIsSelectAllPossible()
+        canCollapseDocs: indexResultsStore.canCollapseDocs(),
+        canUncollapseDocs: indexResultsStore.canUncollapseDocs(),
+        canDeselectAll: indexResultsStore.canDeselectAll(),
+        canSelectAll: indexResultsStore.canSelectAll()
       };
     },
 
@@ -39,11 +43,11 @@ function (app, FauxtonAPI, React, Stores, Actions, ReactComponents) {
     },
 
     componentDidMount: function () {
-      bulkDocumentHeaderStore.on('change', this.onChange, this);
+      indexResultsStore.on('change', this.onChange, this);
     },
 
     componentWillUnmount: function () {
-      bulkDocumentHeaderStore.off('change', this.onChange);
+      indexResultsStore.off('change', this.onChange);
     },
 
     onChange: function () {
@@ -52,9 +56,10 @@ function (app, FauxtonAPI, React, Stores, Actions, ReactComponents) {
 
     render: function () {
       var baseClass = 'header-control-box header-control-square ',
-          isDeselectPossible = this.state.isDeselectPossible,
-          isSelectAllPossible = this.state.isSelectAllPossible,
-          areDocumentsCollapsed = this.state.areDocumentsCollapsed;
+          canDeselectAll = this.state.canDeselectAll,
+          canSelectAll = this.state.canSelectAll,
+          canCollapseDocs = this.state.canCollapseDocs,
+          canUncollapseDocs = this.state.canUncollapseDocs;
 
       return (
         <div className='alternative-header'>
@@ -64,8 +69,8 @@ function (app, FauxtonAPI, React, Stores, Actions, ReactComponents) {
             innerClasses={''}
             containerClasses={baseClass + 'control-select-all'}
             text={''}
-            setEnabledClass={!isSelectAllPossible}
-            disabled={!isSelectAllPossible}
+            setEnabledClass={!canSelectAll}
+            disabled={!canSelectAll}
             title={'Select all Documents'} />
 
           <ToggleHeaderButton
@@ -74,29 +79,30 @@ function (app, FauxtonAPI, React, Stores, Actions, ReactComponents) {
             innerClasses={''}
             containerClasses={baseClass + 'control-de-select-all'}
             text={''}
-            setEnabledClass={!isDeselectPossible}
-            disabled={!isDeselectPossible}
+            setEnabledClass={!canDeselectAll}
+            disabled={!canDeselectAll}
             title={'Deselect all Documents'} />
+
 
           <ToggleHeaderButton
             fonticon={'fonticon-collapse'}
-            toggleCallback={this.toggleCollapseDocuments}
+            toggleCallback={this.collapseDocuments}
             innerClasses={''}
             containerClasses={baseClass + 'control-collapse'}
             text={''}
-            setEnabledClass={areDocumentsCollapsed}
-            disabled={areDocumentsCollapsed}
-            title={'Collapse all'} />
+            setEnabledClass={!canCollapseDocs}
+            disabled={!canCollapseDocs}
+            title={'Collapse Selected'} />
 
           <ToggleHeaderButton
             fonticon={'fonticon-expand'}
-            toggleCallback={this.toggleCollapseDocuments}
+            toggleCallback={this.unCollapseDocuments}
             innerClasses={''}
             containerClasses={baseClass + 'control-expand'}
             text={''}
-            setEnabledClass={!areDocumentsCollapsed}
-            disabled={!areDocumentsCollapsed}
-            title={'Expand all'} />
+            setEnabledClass={!canUncollapseDocs}
+            disabled={!canUncollapseDocs}
+            title={'Expand Selected'} />
 
           <ToggleHeaderButton
             fonticon={'fonticon-trash'}
@@ -117,16 +123,20 @@ function (app, FauxtonAPI, React, Stores, Actions, ReactComponents) {
       );
     },
 
-    toggleCollapseDocuments: function () {
-      Actions.toggleCollapseDocuments();
+    collapseDocuments: function () {
+      Actions.collapseDocuments();
+    },
+
+    unCollapseDocuments: function () {
+      Actions.unCollapseDocuments();
     },
 
     selectAllDocuments: function () {
-      Actions.toggleSelectAllDocuments(false);
+      Actions.selectAllDocuments();
     },
 
     deSelectAllDocuments: function () {
-      Actions.toggleSelectAllDocuments(true);
+      Actions.deSelectAllDocuments();
     },
 
     cancelView: function () {
@@ -134,7 +144,7 @@ function (app, FauxtonAPI, React, Stores, Actions, ReactComponents) {
     },
 
     deleteSelected: function () {
-      Actions.deleteSelected();
+      IndexResultsActions.deleteSelected();
     }
   });
 

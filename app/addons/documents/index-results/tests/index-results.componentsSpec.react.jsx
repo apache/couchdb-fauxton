@@ -10,20 +10,22 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 define([
-        'addons/documents/views',
-        'addons/documents/resources',
-        'addons/databases/base',
-        'addons/fauxton/components',
-        'testUtils'
-], function (Documents, Resources, Databases, Components, testUtils) {
-  var assert = testUtils.assert,
-      ViewSandbox = testUtils.ViewSandbox,
-      viewSandbox;
+  'api',
+  'addons/documents/index-results/index-results.components.react',
+  'testUtils',
+  "react"
+], function (FauxtonAPI, Views, utils, React) {
+  FauxtonAPI.router = new FauxtonAPI.Router([]);
 
-  describe('AllDocsList', function () {
-    it('should load', function () {
-      assert.equal(typeof Documents.Views.AllDocsList, 'function');
+  var assert = utils.assert;
+  var TestUtils = React.addons.TestUtils;
+
+  describe('Index Results', function () {
+    var container;
+
+    afterEach(function () {
+      React.unmountComponentAtNode(container);
     });
-  });
 
+  });
 });

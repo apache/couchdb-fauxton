@@ -21,13 +21,13 @@ define([
   'addons/documents/views-index',
   'addons/databases/base',
   'addons/fauxton/components',
-  'addons/documents/pagination/actions',
-  'addons/documents/pagination/stores'
+  'addons/documents/pagination/stores',
+  'addons/documents/index-results/actions'
 
 ],
 
 function (app, FauxtonAPI, Helpers, BaseRoute, Documents, Index,
-        Databases, Components, PaginationActions, PaginationStores) {
+        Databases, Components, PaginationStores, IndexResultsActions) {
 
 
   var IndexEditorAndResults = BaseRoute.extend({
@@ -39,12 +39,6 @@ function (app, FauxtonAPI, Helpers, BaseRoute, Documents, Index,
         route: 'viewFn',
         roles: ['fx_loggedIn']
       }
-    },
-
-    events: {
-      'route:updateAllDocs': 'updateAllDocsFromView',
-      'route:paginate': 'paginate',
-      'route:perPageChange': 'perPageChange',
     },
 
     initialize: function (route, masterLayout, options) {
@@ -96,7 +90,10 @@ function (app, FauxtonAPI, Helpers, BaseRoute, Documents, Index,
         }
       });
 
-      PaginationActions.newPagination(this.indexedDocs);
+      IndexResultsActions.newResultsList({
+        collection: this.indexedDocs,
+        deleteable: false
+      });
 
       this.viewEditor = this.setView('#left-content', new Index.ViewEditorReact({
         viewName: viewName,
@@ -106,15 +103,7 @@ function (app, FauxtonAPI, Helpers, BaseRoute, Documents, Index,
         designDocId: '_design/' + decodeDdoc
       }));
 
-      this.documentsView = this.createViewDocumentsView({
-        designDoc: decodeDdoc,
-        docParams: docParams,
-        urlParams: urlParams,
-        database: this.database,
-        indexedDocs: this.indexedDocs,
-        designDocs: this.designDocs,
-        view: viewName
-      });
+      this.resultList = this.setView('#dashboard-lower-content', new Index.ViewResultListReact({}));
 
       this.apiUrl = function () {
         return [this.indexedDocs.urlRef(urlParams), FauxtonAPI.constants.DOC_URLS.GENERAL];
@@ -150,9 +139,11 @@ function (app, FauxtonAPI, Helpers, BaseRoute, Documents, Index,
         newDesignDoc: newDesignDoc
       }));
 
-      this.resultList = this.setView('#dashboard-lower-content', new Index.ViewResultListReact({
-        documents: null
-      }));
+      this.resultList = this.setView('#dashboard-lower-content', new Index.ViewResultListReact({}));
+      IndexResultsActions.newResultsList({
+        collection: [],
+        deleteable: false
+      });
     }
 
   });

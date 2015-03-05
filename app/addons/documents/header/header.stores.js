@@ -12,78 +12,12 @@
 
 define([
   'api',
-  'addons/documents/header/header.actiontypes'
+  'addons/documents/header/header.actiontypes',
+  'addons/documents/index-results/actiontypes'
 ],
 
-function (FauxtonAPI, ActionTypes) {
+function (FauxtonAPI, ActionTypes, IndexResultsActions) {
   var Stores = {};
-
-  Stores.BulkDocumentHeaderStore = FauxtonAPI.Store.extend({
-    initialize: function () {
-      this.reset();
-    },
-
-    reset: function () {
-      this._collapsedDocuments = false;
-      this._selectedDocumentsCount = 0;
-      this._documentsOnPageCount = FauxtonAPI.constants.MISC.DEFAULT_PAGE_SIZE;
-    },
-
-    toggleCollapse: function () {
-      this._collapsedDocuments = !this._collapsedDocuments;
-    },
-
-    getCollapsedState: function () {
-      return this._collapsedDocuments;
-    },
-
-    getSelectedAllState: function () {
-      return this._selectedAllDocuments;
-    },
-
-    getIsDeselectPossible: function () {
-      if (this._selectedDocumentsonPageCount > 0) {
-        return true;
-      }
-      return false;
-    },
-
-    getIsSelectAllPossible: function () {
-      if (this._selectedDocumentsonPageCount < this._documentsOnPageCount) {
-        return true;
-      }
-      return false;
-    },
-
-    setSelectedDocumentCount: function (options) {
-      this._selectedDocumentsonPageCount = options.selectedOnPage;
-      this._documentsOnPageCount = options.documentsOnPageCount;
-    },
-
-    dispatch: function (action) {
-      switch (action.type) {
-
-        case ActionTypes.COLLAPSE_DOCUMENTS:
-          this.toggleCollapse();
-          this.triggerChange();
-        break;
-
-        case ActionTypes.UPDATE_DOCUMENT_COUNT:
-          this.setSelectedDocumentCount(action.options);
-          this.triggerChange();
-        break;
-
-        case ActionTypes.RESET_HEADER_BAR:
-          this.reset();
-          this.triggerChange();
-        break;
-
-        default:
-        return;
-      }
-    }
-
-  });
 
   Stores.HeaderBarStore = FauxtonAPI.Store.extend({
     initialize: function (options) {
@@ -136,9 +70,6 @@ function (FauxtonAPI, ActionTypes) {
 
   Stores.headerBarStore = new Stores.HeaderBarStore();
   Stores.headerBarStore.dispatchToken = FauxtonAPI.dispatcher.register(Stores.headerBarStore.dispatch);
-
-  Stores.bulkDocumentHeaderStore = new Stores.BulkDocumentHeaderStore();
-  Stores.bulkDocumentHeaderStore.dispatchToken = FauxtonAPI.dispatcher.register(Stores.bulkDocumentHeaderStore.dispatch);
 
   return Stores;
 });

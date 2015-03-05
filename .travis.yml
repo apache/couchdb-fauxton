@@ -18,7 +18,7 @@ before_script:
   - npm install -g grunt-cli
   - grunt test
   - grunt dev &
-  - sleep 5
+  - sleep 10
 script:
   - grunt nightwatch
 notifications:

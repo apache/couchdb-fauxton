@@ -14,8 +14,9 @@ define([
   'api',
   'addons/documents/pagination/stores',
   'addons/documents/pagination/actiontypes',
+  'addons/documents/shared-resources',
   'testUtils'
-], function (FauxtonAPI, Stores, ActionTypes, testUtils) {
+], function (FauxtonAPI, Stores, ActionTypes, Documents, testUtils) {
   var assert = testUtils.assert;
   var dispatchToken;
   var store;
@@ -34,7 +35,12 @@ define([
     describe('#collectionChanged', function () {
       var collection;
       beforeEach(function () {
-        collection = new Backbone.Collection([{id:1}, {id: 2}]);
+        collection = new Documents.AllDocs([{id:1}, {id: 2}], {
+          params: {},
+          database: {
+            safeID: function () { return '1';}
+          }
+        });
         collection.updateSeq = function () { return 'updateSeq';};
         store.reset();
       });
@@ -93,6 +99,12 @@ define([
     describe('paginateNext', function () {
       beforeEach(function () {
         store.setPerPage(20);
+        store._collection = new Documents.AllDocs(null, {
+          params: {},
+          database: {
+            safeID: function () { return '1';}
+          }
+        });
       });
 
       it('should increment page number', function () {
@@ -112,18 +124,30 @@ define([
       });
 
       it('should set correct page end', function () {
-        store._collection = new Backbone.Collection();
         store._collection.length = 20;
         store.reset();
         store.paginateNext();
 
         assert.equal(store.getPageEnd(), 40);
       });
+
+      it('should set collection pageSize', function () {
+        store.reset();
+        store.paginateNext();
+
+        assert.equal(store.getCollection().paging.pageSize, 20);
+      });
     });
 
     describe('paginatePrevious', function () {
       beforeEach(function () {
         store.reset();
+        store._collection = new Documents.AllDocs(null, {
+          params: {},
+          database: {
+            safeID: function () { return '1';}
+          }
+        });
       });
 
       it('should decrement page number', function () {
@@ -141,12 +165,19 @@ define([
       });
 
       it('should decrement page end', function () {
-        store._collection = new Backbone.Collection();
         store._collection.length = 20;
         store.paginateNext();
         store.paginatePrevious();
 
         assert.equal(store.getPageEnd(), 20);
+      });
+
+      it('should set collection pageSize', function () {
+        store.reset();
+        store.paginateNext();
+        store.paginatePrevious();
+
+        assert.equal(store.getCollection().paging.pageSize, 20);
       });
 
     });
@@ -226,7 +257,36 @@ define([
         store.setDocumentLimit(NaN);
         assert.equal(store._docLimit, 10000);
       });
+    });
 
+    describe('#setPerPage', function () {
+      beforeEach(function () {
+        store.reset();
+        store._collection = new Documents.AllDocs(null, {
+          params: {},
+          database: {
+            safeID: function () { return '1';}
+          }
+        });
+
+      });
+
+      it('stores per page in local storage', function () {
+        var testPerPage = 111;
+        store.setPerPage(testPerPage);
+        var perPage = window.localStorage.getItem('fauxton:perpage');
+        assert.equal(perPage, testPerPage );
+      });
+
+      it('sets collections perPage', function () {
+        var spy = sinon.spy(store._collection, 'pageSizeReset');
+        var testPerPage = 110;
+
+        store.setPerPage(testPerPage);
+        assert.equal(spy.getCall(0).args[0], testPerPage);
+
+
+      });
     });
   });
 });

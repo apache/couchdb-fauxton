@@ -14,8 +14,10 @@ define([
   'api',
   'addons/documents/pagination/actions',
   'addons/documents/pagination/stores',
+  'addons/documents/index-results/actions',
+  'addons/documents/shared-resources',
   'testUtils',
-], function (FauxtonAPI, Actions, Stores, testUtils) {
+], function (FauxtonAPI, Actions, Stores, IndexResultsActions, Documents, testUtils) {
   var assert = testUtils.assert;
 
   FauxtonAPI.router = new FauxtonAPI.Router([]);
@@ -26,47 +28,74 @@ define([
       Stores.indexPaginationStore.documentsLeftToFetch.restore && Stores.indexPaginationStore.documentsLeftToFetch.restore();
       Stores.indexPaginationStore.getCurrentPage.restore && Stores.indexPaginationStore.getCurrentPage.restore();
       Stores.indexPaginationStore.getPerPage.restore && Stores.indexPaginationStore.getPerPage.restore();
-      FauxtonAPI.triggerRouteEvent.restore();
+
+      IndexResultsActions.resultsListReset.restore && IndexResultsActions.resultsListReset.restore();
+      Stores.indexPaginationStore.getCollection.restore && Stores.indexPaginationStore.getCollection.restore();
     });
 
     describe('updatePerPage', function () {
 
-      it('triggers routeEvent', function () {
-        var stub = sinon.stub(Stores.indexPaginationStore, 'documentsLeftToFetch');
-        stub.returns(30);
-        var spy = sinon.spy(FauxtonAPI, 'triggerRouteEvent');
+      beforeEach(function () {
+        Stores.indexPaginationStore._collection = new Documents.AllDocs([{id:1}, {id: 2}], {
+          params: {},
+          database: {
+            safeID: function () { return '1';}
+          }
+        });
+
+      });
+
+      it('fetches collection', function () {
+        var spy = sinon.spy(Stores.indexPaginationStore, 'getCollection');
         Actions.updatePerPage(30);
 
-        assert.ok(spy.calledWith('perPageChange', 30));
+        assert.ok(spy.calledOnce);
+      });
+
+      it('sends results list reset', function () {
+        var promise = $.Deferred();
+        promise.resolve();
+        var stub = sinon.stub(Stores.indexPaginationStore, 'getCollection');
+        var spy = sinon.spy(IndexResultsActions, 'resultsListReset');
+        stub.returns({
+          fetch: function () { return promise; }
+        });
+
+        Actions.updatePerPage(30);
+        assert.ok(spy.calledOnce);
       });
     });
 
     describe('paginateNext', function () {
 
-      it('triggers routeEvent', function () {
-        var spyEvent = sinon.spy(FauxtonAPI, 'triggerRouteEvent');
-        var spyDocuments = sinon.spy(Stores.indexPaginationStore, 'documentsLeftToFetch');
-        var spyPage = sinon.spy(Stores.indexPaginationStore, 'getCurrentPage');
-        Actions.paginateNext();
+      it('sends results list reset', function () {
+        var promise = $.Deferred();
+        promise.resolve();
+        var stub = sinon.stub(Stores.indexPaginationStore, 'getCollection');
+        var spy = sinon.spy(IndexResultsActions, 'resultsListReset');
+        stub.returns({
+          next: function () { return promise; }
+        });
 
-        assert.ok(spyEvent.calledOnce);
-        assert.ok(spyDocuments.calledOnce);
-        assert.ok(spyPage.calledOnce);
+        Actions.paginateNext();
+        assert.ok(spy.calledOnce);
       });
 
     });
 
     describe('paginatePrevious', function () {
 
-      it('triggers routeEvent', function () {
-        var spyEvent = sinon.spy(FauxtonAPI, 'triggerRouteEvent');
-        var spyPerPage = sinon.spy(Stores.indexPaginationStore, 'getPerPage');
-        var spyPage = sinon.spy(Stores.indexPaginationStore, 'getCurrentPage');
-        Actions.paginatePrevious();
+      it('sends results list reset', function () {
+        var promise = $.Deferred();
+        promise.resolve();
+        var stub = sinon.stub(Stores.indexPaginationStore, 'getCollection');
+        var spy = sinon.spy(IndexResultsActions, 'resultsListReset');
+        stub.returns({
+          previous: function () { return promise; }
+        });
 
-        assert.ok(spyEvent.calledOnce);
-        assert.ok(spyPerPage.called);
-        assert.ok(spyPage.calledOnce);
+        Actions.paginatePrevious();
+        assert.ok(spy.calledOnce);
       });
 
     });

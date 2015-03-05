@@ -28,3 +28,21 @@
     opacity: 0;
   }
 }
+
+.slow-fade-enter {
+  opacity: 0;
+  transition: opacity .75s;
+
+  &.slow-fade-enter-active {
+    opacity: 1;
+  }
+}
+
+.slow-fade-leave {
+  opacity: 1;
+  transition: opacity .75s;
+
+  &.slow-fade-leave-active {
+    opacity: 0;
+  }
+}

@@ -14,9 +14,10 @@ define([
   'app',
   'api',
   'addons/documents/pagination/actiontypes',
-  'addons/documents/pagination/stores'
+  'addons/documents/pagination/stores',
+  'addons/documents/index-results/actions'
 ],
-function (app, FauxtonAPI, ActionTypes, Stores) {
+function (app, FauxtonAPI, ActionTypes, Stores, IndexResultsActions) {
 
   var store = Stores.indexPaginationStore;
 
@@ -27,13 +28,10 @@ function (app, FauxtonAPI, ActionTypes, Stores) {
         perPage: perPage
       });
 
-      FauxtonAPI.triggerRouteEvent('perPageChange', store.documentsLeftToFetch());
-    },
+      IndexResultsActions.clearResults();
 
-    newPagination: function (collection) {
-      FauxtonAPI.dispatch({
-        type: ActionTypes.NEW_PAGINATION,
-        collection: collection
+      store.getCollection().fetch().then(function () {
+        IndexResultsActions.resultsListReset();
       });
     },
 
@@ -44,21 +42,13 @@ function (app, FauxtonAPI, ActionTypes, Stores) {
       });
     },
 
-    collectionReset: function () {
-      FauxtonAPI.dispatch({
-        type: ActionTypes.PAGINATION_COLLECTION_RESET,
-      });
-    },
-
     paginateNext: function () {
       FauxtonAPI.dispatch({
         type: ActionTypes.PAGINATE_NEXT,
       });
 
-      FauxtonAPI.triggerRouteEvent('paginate', {
-       direction: 'next',
-       perPage: store.documentsLeftToFetch(),
-       currentPage: store.getCurrentPage()
+      store.getCollection().next().then(function () {
+        IndexResultsActions.resultsListReset();
       });
     },
 
@@ -67,10 +57,8 @@ function (app, FauxtonAPI, ActionTypes, Stores) {
         type: ActionTypes.PAGINATE_PREVIOUS,
       });
 
-      FauxtonAPI.triggerRouteEvent('paginate', {
-       direction: 'previous',
-       perPage: store.getPerPage(),
-       currentPage: store.getCurrentPage()
+      store.getCollection().previous().then(function () {
+        IndexResultsActions.resultsListReset();
       });
     },
 

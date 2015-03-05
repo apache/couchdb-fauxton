@@ -45,9 +45,16 @@ function(FauxtonAPI, chai, sinonChai) {
     }
   });
 
+  var restore = function (fn) {
+    if (fn.restore) {
+      fn.restore();
+    }
+  };
+
   return {
     chai: chai,
     assert: chai.assert,
-    ViewSandbox: ViewSandbox
+    ViewSandbox: ViewSandbox,
+    restore: restore
   };
 });

@@ -13,10 +13,18 @@
 define([
   'app',
   'api',
-  'react'
+  'react',
+  'addons/documents/index-results/stores',
+  'addons/documents/index-results/actions',
+  'addons/components/react-components.react',
+  'addons/documents/resources',
+
+  "plugins/prettify"
 ],
 
-function (app, FauxtonAPI, React) {
+function (app, FauxtonAPI, React, Stores, Actions, Components, Documents) {
+  var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
+  var store = Stores.indexResultsStore;
 
   var NoResultScreen = React.createClass({
     render: function () {
@@ -28,9 +36,117 @@ function (app, FauxtonAPI, React) {
     }
   });
 
+  var ResultsScreen = React.createClass({
+
+    onDoubleClick: function (id, doc) {
+      FauxtonAPI.navigate(doc.url);
+    },
+
+    getUrlFragment: function (url) {
+      if (this.props.hasReduce) {
+        return null;
+      }
+
+
+      return (
+        <a href={url}>
+          <i className="fonticon-pencil"></i>
+        </a>);
+    },
+
+    getDocumentList: function () {
+      return _.map(this.props.results, function (doc) {
+        return (
+         <Components.Document
+           key={doc.id}
+           doc={doc}
+           onDoubleClick={this.onDoubleClick}
+           keylabel={doc.keylabel}
+           docContent={doc.content}
+           checked={this.props.isSelected(doc.id)}
+           docChecked={this.props.docChecked}
+           docIdentifier={doc.id} >
+           {this.getUrlFragment('#' + doc.url)}
+         </Components.Document>
+       );
+      }, this);
+    },
+
+    render: function () {
+      var classNames = 'view';
+
+      if (this.props.isDeleteable) {
+        classNames += ' show-select';
+      }
+
+      return (
+      <div className={classNames}>
+        <div id="doc-list">
+          <ReactCSSTransitionGroup transitionName={'slow-fade'}>
+            {this.getDocumentList()}
+          </ReactCSSTransitionGroup>
+        </div>
+      </div>
+      );
+    },
+
+    componentDidMount: function () {
+      prettyPrint();
+    },
+
+    componentDidUpdate: function () {
+      prettyPrint();
+    },
+
+  });
+
   var ViewResultListController = React.createClass({
+    getStoreState: function () {
+      return {
+        hasResults: store.hasResults(),
+        results: store.getResults(),
+        isDeleteable: store.isDeleteable(),
+        isSelected: store.isSelected,
+        hasReduce: store.hasReduce()
+      };
+    },
+
+    isSelected: function (id) {
+      return this.state.isSelected(id);
+    },
+
+    getInitialState: function () {
+      return this.getStoreState();
+    },
+
+    componentDidMount: function () {
+      store.on('change', this.onChange, this);
+    },
+
+    componentWillUnmount: function () {
+      store.off('change', this.onChange);
+    },
+
+    onChange: function () {
+      this.setState(this.getStoreState());
+    },
+
+    docChecked: function (id) {
+      Actions.selectDoc(id);
+    },
+
     render: function () {
       var view = <NoResultScreen />;
+
+      if (this.state.hasResults) {
+        view = <ResultsScreen
+          isCollapsed={this.isCollapsed}
+          isSelected={this.isSelected}
+          hasReduce={this.state.hasReduce}
+          isDeleteable={this.state.isDeleteable}
+          docChecked={this.docChecked}
+          results={this.state.results} />;
+      }
 
       return (
         view

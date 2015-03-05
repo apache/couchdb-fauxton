@@ -106,6 +106,7 @@ function (app, FauxtonAPI, Documents, PagingCollection) {
 
     bulkDelete: function () {
       var payload = this.createPayload(this.toJSON()),
+          promise = FauxtonAPI.Deferred(),
           that = this;
 
       $.ajax({
@@ -116,7 +117,7 @@ function (app, FauxtonAPI, Documents, PagingCollection) {
         data: JSON.stringify(payload),
       })
       .then(function (res) {
-        that.handleResponse(res);
+        that.handleResponse(res, promise);
       })
       .fail(function () {
         var ids = _.reduce(that.toArray(), function (acc, doc) {
@@ -124,10 +125,13 @@ function (app, FauxtonAPI, Documents, PagingCollection) {
           return acc;
         }, []);
         that.trigger('error', ids);
+        promise.reject(ids);
       });
+
+      return promise;
     },
 
-    handleResponse: function (res) {
+    handleResponse: function (res, promise) {
       var ids = _.reduce(res, function (ids, doc) {
         if (doc.error) {
           ids.errorIds.push(doc.id);
@@ -144,6 +148,14 @@ function (app, FauxtonAPI, Documents, PagingCollection) {
 
       if (ids.errorIds.length) {
         this.trigger('error', ids.errorIds);
+      }
+
+      // This is kind of tricky. If there are no documents deleted then rejects
+      // otherwise resolve with list of successful and failed documents
+      if (!_.isEmpty(ids.successIds)) {
+        promise.resolve(ids);
+      } else {
+        promise.reject(ids.errorIds);
       }
 
       this.trigger('updated');

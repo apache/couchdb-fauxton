@@ -18,16 +18,30 @@ define([
 function (app, FauxtonAPI, ActionTypes) {
 
   return {
-    toggleCollapseDocuments: function () {
+    collapseDocuments: function () {
       FauxtonAPI.dispatch({
         type: ActionTypes.COLLAPSE_DOCUMENTS
       });
 
-      FauxtonAPI.Events.trigger('headerbar:collapse');
     },
 
-    toggleSelectAllDocuments: function (on) {
-      FauxtonAPI.Events.trigger('headerbar:selectall', on);
+    unCollapseDocuments: function () {
+      FauxtonAPI.dispatch({
+        type: ActionTypes.EXPAND_DOCUMENTS
+      });
+
+    },
+
+    selectAllDocuments: function () {
+      FauxtonAPI.dispatch({
+        type: ActionTypes.SELECT_ALL_DOCUMENTS
+      });
+    },
+
+    deSelectAllDocuments: function () {
+      FauxtonAPI.dispatch({
+        type: ActionTypes.DESELECT_ALL_DOCUMENTS
+      });
     },
 
     updateDocumentCount: function (options) {
@@ -35,14 +49,6 @@ function (app, FauxtonAPI, ActionTypes) {
         type: ActionTypes.UPDATE_DOCUMENT_COUNT,
         options: options
       });
-    },
-
-    deleteSelected: function () {
-      FauxtonAPI.dispatch({
-        type: ActionTypes.DELETE_SELECTED
-      });
-
-      FauxtonAPI.Events.trigger('headerbar:deleteselected');
     },
 
     toggleHeaderControls: function () {

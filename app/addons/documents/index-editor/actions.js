@@ -14,9 +14,10 @@ define([
   'app',
   'api',
   'addons/documents/resources',
-  'addons/documents/index-editor/actiontypes'
+  'addons/documents/index-editor/actiontypes',
+  'addons/documents/index-results/actions'
 ],
-function (app, FauxtonAPI, Documents, ActionTypes) {
+function (app, FauxtonAPI, Documents, ActionTypes, IndexResultsActions) {
   var ActionHelpers = {
     createNewDesignDoc: function (id, database) {
       var designDoc = {
@@ -125,7 +126,7 @@ function (app, FauxtonAPI, Documents, ActionTypes) {
             FauxtonAPI.navigate(fragment, {trigger: true});
           }
 
-          FauxtonAPI.triggerRouteEvent('updateAllDocs', {ddoc: designDoc.id, view: viewInfo.viewName});
+          IndexResultsActions.reloadResultsList();
         });
       }
     },

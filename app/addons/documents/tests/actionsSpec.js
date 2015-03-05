@@ -16,9 +16,11 @@ define([
   'addons/documents/resources',
   'addons/documents/index-editor/actiontypes',
   'testUtils',
+  'addons/documents/index-results/actions',
   'addons/documents/base'
-], function (FauxtonAPI, Actions, Documents, ActionTypes, testUtils) {
+], function (FauxtonAPI, Actions, Documents, ActionTypes, testUtils, IndexResultsActions) {
   var assert = testUtils.assert;
+  var restore = testUtils.restore;
 
   FauxtonAPI.router = new FauxtonAPI.Router([]);
 
@@ -46,8 +48,9 @@ define([
       });
 
       afterEach(function () {
-        FauxtonAPI.navigate.restore && FauxtonAPI.navigate.restore();
-        FauxtonAPI.triggerRouteEvent.restore && FauxtonAPI.triggerRouteEvent.restore();
+        restore(FauxtonAPI.navigate);
+        restore(FauxtonAPI.triggerRouteEvent);
+        restore(IndexResultsActions.reloadResultsList);
       });
 
       it('shows a notification if no design doc id given', function () {
@@ -148,8 +151,8 @@ define([
         assert.ok(spy.getCall(0).args[0].match(/_view\/test-view/));
       });
 
-      it('triggers update all docs', function () {
-        var spy = sinon.spy(FauxtonAPI, 'triggerRouteEvent');
+      it('triggers reload results list', function () {
+        var spy = sinon.spy(IndexResultsActions, 'reloadResultsList');
 
         var viewInfo = {
           viewName: 'test-view',
@@ -175,7 +178,6 @@ define([
 
         Actions.saveView(viewInfo);
         assert.ok(spy.calledOnce);
-        assert.equal(spy.getCall(0).args[0], 'updateAllDocs');
       });
     });
 
