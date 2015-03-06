@@ -72,7 +72,8 @@ define([
         <ReactComponents.Document onChange={spy} docIdentifier="foo" />,
         container
       );
-      React.addons.TestUtils.Simulate.change($(el.getDOMNode()).find('#checkbox-foo')[0], {target: {value: 'Hello, world'}});
+      var testEl = $(el.getDOMNode()).find('#checkbox-foo')[0];
+      React.addons.TestUtils.Simulate.change(testEl, {target: {value: 'Hello, world'}});
       assert.ok(spy.calledOnce);
     });
 
