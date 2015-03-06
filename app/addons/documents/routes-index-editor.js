@@ -78,7 +78,7 @@ function (app, FauxtonAPI, Helpers, BaseRoute, Documents, Index,
         toggleDisabled: true,
         crumbs: [
           {'type': 'back', 'link': Helpers.getPreviousPage(this.database)},
-          {'name': this.database.id, 'link': Databases.databaseUrl(this.database) }
+          {'name': viewName, 'link': Databases.databaseUrl(this.database) }
         ]
       }));
 
