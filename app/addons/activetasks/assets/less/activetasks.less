@@ -15,32 +15,33 @@
   cursor: pointer;
 }
 
-.activetasks-header .task-search-database {
+.task-search-database {
   margin: 20px;
 }
 
 .active-tasks th {
+
   &.type {
     width: 10%;
   }
 
   &.database {
-    width: 23%;
+    width: 30%;
   }
 
-  &.started {
-    width: 17%;
+  &.started_on {
+    width: 13%;
   }
 
-  &.updated {
-    width: 17%;
+  &.updated_on {
+    width: 13%;
   }
 
   &.pid {
     width: 10%;
   }
 
-  &.status {
+  &.progress {
     width: 23%;
   }
 }
@@ -63,3 +64,148 @@
   }
 }
 
+.no-matching-database-on-search {
+  color: #e33f3b;
+}
+
+p.multiline-active-tasks-message {
+  margin: 0;
+
+  &.time:nth-child(2) {
+    color: #888;
+  }
+}
+
+#dashboard-upper-content {
+  padding-right: 20px;
+}
+
+.active-tasks.dashboard-upper-menu {
+  left: 220px;
+
+  .closeMenu & {
+    left: 64px;
+  }
+}
+
+.dashboard-lower-menu {
+  padding-top: 90px;
+  padding-left: 20px;
+}
+
+input[type="text"].searchbox {
+  width: 200px;
+  height: 40px;
+  float: right;
+  margin:0px;
+}
+
+#toggle-filter-tab:hover {
+  color: white;
+  background-color: #e33f3b;
+}
+
+.filter-tray.toggleFilterTray-enter {     // starting css
+  overflow: hidden;
+  padding-top: 0px;
+  max-height: 0px;
+}
+                                          // animate opening 
+.filter-tray.toggleFilterTray-enter.toggleFilterTray-enter-active {     
+  max-height: 300px;
+  height: auto;
+  transition: max-height 0.5s linear;
+}
+
+.filter-tray {                            // final css 
+  height: auto;
+  max-height: 300px;                      
+  overflow: hidden;
+}
+                                          // animate closing 
+.filter-tray.toggleFilterTray-leave.toggleFilterTray-leave-active {     
+  max-height: 0;
+  padding-top: 0px;
+  transition: max-height 0.5s linear;
+}
+
+.filter-checkboxes {
+  float: left;
+  height: auto;
+  width: auto;
+  margin-top: 10px;
+}
+
+.active-tasks-one-checkbox {
+  input {
+    vertical-align: middle;
+    margin-right: 5px;
+    margin-bottom: 3px;
+  }
+  margin-right: 10px;
+  display: inline-block;
+}
+
+.active-tasks-checkbox-label {
+  display: inline-block;
+  color: #666;
+}
+
+@media (max-width: 940px) {
+  .filter-checkboxes li {
+    display: inline-block;
+    text-align: left;
+    width: 175px;
+  }
+}
+
+.filter-checkboxes-form {
+  margin:0px;
+}
+
+.polling-interval-widget {
+
+  width: 250px;
+  margin-right: 20px;
+  margin-top: 10px;
+  color: #666;
+
+  li {
+    list-style-type: none;
+  }
+
+  .polling-interval-time-label {
+    display: inline-block;
+    float: right;
+    margin-right: 0px;
+    cursor: default;
+  }
+  
+  #pollingRange {
+    width: 250px;
+  }
+}
+
+.header-field {
+  &.radio {
+    display: none;
+  }
+  
+  &.label-text {
+    display: block;
+    font-weight: bold;
+    padding:10px;
+    margin: 0px;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+
+  .table th& {
+    padding: 0px;
+    margin: 0px;
+  }
+}

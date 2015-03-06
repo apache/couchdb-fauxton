@@ -55,7 +55,10 @@ function (constants, utils, d3, moment) {
     };
 
   Helpers.formatDate = function (timestamp) {
-    return moment(timestamp, 'X').format('MMM Do, h:m:ss a');
+    return moment(timestamp, 'X').format('MMM Do, h:mm:ss a');
+  };
+  Helpers.getDateFromNow = function (timestamp) {
+    return moment(timestamp, 'X').fromNow();
   };
 
   return Helpers;

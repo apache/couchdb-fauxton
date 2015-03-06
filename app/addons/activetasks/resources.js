@@ -16,54 +16,34 @@ define([
 ],
 
 function (app, FauxtonAPI) {
-  app.taskSortBy = 'type';
-
   var Active = {};
 
-  Active.events = {};
-  _.extend(Active.events, Backbone.Events);
-
-  Active.Task = Backbone.Model.extend({
-    idAttribute: "pid"
-  });
-
   Active.AllTasks = Backbone.Collection.extend({
-    model: Active.Task,
 
-    sortByColumn: function (colName) {
-      app.taskSortBy = colName;
-      this.sort();
+    url: function () {
+      return app.host + '/_active_tasks';
     },
 
-    comparator: function (item) {
-      var value = app.taskSortBy,
-          values;
-
-      if (value.indexOf(',') !== -1) {
-        values = value.split(',');
-        _.each(values, function (val) {
-          if (item.get(val)) {
-            value = val;
-          }
-        });
-      }
-      return item.get(value);
+    pollingFetch: function () { //still need this for the polling
+      this.fetch({reset: true, parse: true});
+      return this;
     },
 
-    documentation: FauxtonAPI.constants.DOC_URLS.ACTIVE_TASKS,
+    parse: function (resp) {
+      //no more backbone models, collection is converted into an array of objects
+      var collectionTable = [];
 
-    url: function (context) {
-      if (context === 'apiurl') {
-        return window.location.origin + '/_active_tasks';
-      } else {
-        return app.host + '/_active_tasks';
-      }
-    }
-  });
+      _.each(resp, function (item) {
+        collectionTable.push(item);
+      });
 
-  Active.Search = Backbone.Model.extend({
-    filterDatabase: null,
-    filterType: 'all'
+      //collection is an array of objects
+      this.table = collectionTable;
+      return resp;
+    },
+
+    table: []
+
   });
 
   return Active;

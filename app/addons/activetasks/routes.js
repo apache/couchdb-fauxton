@@ -14,60 +14,40 @@ define([
   'app',
   'api',
   'addons/activetasks/resources',
-  'addons/activetasks/views'
+  'addons/activetasks/components.react',
+  'addons/activetasks/actions'
 ],
 
-function (app, FauxtonAPI, Activetasks, Views) {
+function (app, FauxtonAPI, ActiveTasksResources, ActiveTasksComponents, Actions) {
 
   var ActiveTasksRouteObject = FauxtonAPI.RouteObject.extend({
-    layout: 'with_tabs_sidebar',
-
-    routes: {
-      'activetasks/:id': 'defaultView',
-      'activetasks': 'defaultView'
-    },
-
-    events: {
-      'route:changeFilter': 'changeFilter'
-    },
-
     selectedHeader: 'Active Tasks',
-
+    layout: 'one_pane',
+    routes: {
+      'activetasks/:id': 'showActiveTasks',
+      'activetasks': 'showActiveTasks'
+    },
     crumbs: [
       {'name': 'Active tasks', 'link': 'activetasks'}
     ],
-
     apiUrl: function () {
-      return [this.allTasks.url('apiurl'), this.allTasks.documentation];
+      var apiurl = window.location.origin + '/_active_tasks';
+      return [ apiurl, FauxtonAPI.constants.DOC_URLS.ACTIVE_TASKS];
     },
-
     roles: ['_admin'],
-
     initialize: function () {
-      this.allTasks = new Activetasks.AllTasks();
-      this.search = new Activetasks.Search();
+      this.allTasks = new ActiveTasksResources.AllTasks();
     },
+    showActiveTasks: function () {
+      Actions.fetchAndSetActiveTasks(this.allTasks);
+      Actions.changePollingInterval(5);
 
-    defaultView: function () {
-      this.setView('#dashboard-lower-content', new Views.View({
-        collection: this.allTasks,
-        currentView: 'all',
-        searchModel: this.search
-      }));
-
-      this.setView('#sidebar-content', new Views.TabMenu({}));
-
-      this.headerView = this.setView('#dashboard-upper-content', new Views.TabHeader({
-        searchModel: this.search
-      }));
-    },
-
-    changeFilter: function (filterType) {
-      this.search.set('filterType', filterType);
+      this.setComponent('#dashboard-content', ActiveTasksComponents.ActiveTasksController);
+      this.setComponent('#right-header', ActiveTasksComponents.ActiveTasksPollingWidgetController);
     }
   });
 
-  Activetasks.RouteObjects = [ActiveTasksRouteObject];
+  ActiveTasksResources.RouteObjects = [ActiveTasksRouteObject];
 
-  return Activetasks;
+  return ActiveTasksResources;
 });
