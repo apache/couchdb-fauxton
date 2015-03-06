@@ -188,12 +188,74 @@ function (app, FauxtonAPI, React, Components, beautifyHelper) {
     }
   });
 
+  var Document = React.createClass({
+
+    propTypes: {
+      docIdentifier: React.PropTypes.string.isRequired
+    },
+
+    getUrlFragment: function () {
+      if (!this.props.children) {
+        return '';
+      }
+
+      return (
+        <div className="doc-edit-symbol pull-right">
+          {this.props.children}
+        </div>
+      );
+    },
+
+    getCheckbox: function () {
+      return (
+        <div className="checkbox inline">
+          <input
+            id={'checkbox-' + this.props.docIdentifier}
+            checked={this.props.checked ? 'checked="checked"': null}
+            type="checkbox"
+            onChange={this.props.onChange}
+            className="js-row-select" />
+          <label
+            className="label-checkbox-doclist"
+            htmlFor={'checkbox-' + this.props.docIdentifier} />
+        </div>
+      );
+    },
+
+
+    render: function () {
+      return (
+        <div onDoubleClick={this.props.onDoubleClick} className="doc-row">
+          <div className="custom-inputs">
+            {this.getCheckbox()}
+          </div>
+          <div className="doc-item">
+            <header>
+              <span className="header-keylabel">
+                {this.props.keylabel}
+              </span>
+              <span className="header-doc-id">
+                "{this.props.docIdentifier}"
+              </span>
+              {this.getUrlFragment()}
+            </header>
+            <div className="doc-data">
+              <pre className="prettyprint">{this.props.docContent}</pre>
+            </div>
+          </div>
+          <div className="clearfix"></div>
+        </div>
+      );
+    }
+  });
+
   var ReactComponents = {
     ToggleHeaderButton: ToggleHeaderButton,
     StyledSelect: StyledSelect,
     CodeEditor: CodeEditor,
     Beautify: Beautify,
-    PaddedBorderedBox: PaddedBorderedBox
+    PaddedBorderedBox: PaddedBorderedBox,
+    Document: Document
   };
 
   return ReactComponents;
