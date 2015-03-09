@@ -342,6 +342,11 @@ function (app, FauxtonAPI, Components, Documents, Databases, prettify) {
 
       // ensures it's initialized only once
       this.stringEditModal = this.stringEditModal || this.setView('#string-edit-modal', new Views.StringEditModal());
+
+      var extensions = FauxtonAPI.getExtensions('DocEditor:icons');
+      _.each(extensions, function (View) {
+        this.insertView('.doc-editor-extension-icons', new View({ doc: this.model }));
+      }, this);
     },
 
     updateValues: function () {
