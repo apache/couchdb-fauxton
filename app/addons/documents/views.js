@@ -250,6 +250,13 @@ function (app, FauxtonAPI, Components, Documents,
       };
     },
 
+    beforeRender: function () {
+      var extensions = FauxtonAPI.getExtensions('DocList:icons');
+      _.each(extensions, function (View) {
+        this.insertView('.doc-item-extension-icons', new View({ doc: this.model }));
+      }, this);
+    },
+
     establish: function() {
       return [this.model.fetch()];
     },
