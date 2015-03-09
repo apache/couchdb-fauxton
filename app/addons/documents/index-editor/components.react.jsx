@@ -27,6 +27,7 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, ReactComponents, 
   var StyledSelect = ReactComponents.StyledSelect;
   var CodeEditor = ReactComponents.CodeEditor;
   var PaddedBorderedBox = ReactComponents.PaddedBorderedBox;
+  var ConfirmButton = ReactComponents.ConfirmButton;
 
   var DesignDocSelector = React.createClass({
 
@@ -397,9 +398,7 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, ReactComponents, 
             </PaddedBorderedBox>
             <div className="padded-box">
               <div className="control-group">
-                <button type="submit" className="btn btn-success save">
-                  <i className="icon fonticon-ok-circled"></i> Save &amp; Build Index
-                </button>
+                <ConfirmButton text="Save &amp; Build Index" />
                 <DeleteView />
               </div>
             </div>
