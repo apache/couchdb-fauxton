@@ -229,7 +229,8 @@ function (app, FauxtonAPI, Components, Documents,
     jumpToDoc: function (event) {
       event.preventDefault();
       var docId = this.$('#jump-to-doc-id').val().trim();
-      FauxtonAPI.navigate('/database/' + app.utils.safeURLName(this.database.id) + '/' + app.utils.safeURLName(docId), {trigger: true});
+      var url = FauxtonAPI.urls('document', 'app', app.utils.safeURLName(this.database.id), app.utils.safeURLName(docId) );
+      FauxtonAPI.navigate(url, {trigger: true});
     },
 
     afterRender: function () {
