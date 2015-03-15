@@ -407,7 +407,7 @@ module.exports = function(grunt) {
     shell: {
         'build-jsx': {
             command: [
-              './node_modules/react-tools/bin/jsx -x jsx app/addons/ app/addons/',
+              'node ./node_modules/react-tools/bin/jsx -x jsx app/addons/ app/addons/',
                 'rm -rf <%= src_path %>/js/app/views/.module-cache/'
             ].join(' && '),
             stdout: true,
