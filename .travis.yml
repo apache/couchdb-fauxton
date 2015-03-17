@@ -1,26 +1,39 @@
-language: node_js
-node_js:
-  - '0.10'
+language: erlang
+otp_release:
+   - 17.4
 git:
   depth: 10
-services:
-  - couchdb
+
 addons:
   firefox: "34.0"
 before_install:
   - sudo apt-get update -qq
   - sudo apt-get install -qq flashplugin-installer
+  - sudo apt-get -y install libicu-dev libmozjs-dev pkg-config help2man libcurl4-openssl-dev
+  - sudo apt-get -y install libtool automake autoconf autoconf-archive
+  - sudo apt-get -y install haproxy
+
+  - nvm install 0.10 && nvm use 0.10
+
+  - cd ..
+  - git clone --depth=1 https://github.com/apache/couchdb
+  - cd couchdb
+  - ./configure
+  - make
+  - ./dev/run --admin=tester:testerpass &
+  - haproxy -f rel/haproxy.cfg &
+  - cd .. && cd couchdb-fauxton
+  - npm install
+
   - export DISPLAY=:99.0
   - "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1400x900x16"
-  - HOST="http://127.0.0.1:5984"
-  - curl -X PUT $HOST/_config/admins/tester -d '"testerpass"'
+
 before_script:
-  - npm install -g grunt-cli
-  - grunt test
-  - grunt dev &
-  - sleep 10
+  - ./node_modules/grunt-cli/bin/grunt test
+  - ./node_modules/grunt-cli/bin/grunt dev &
+  - sleep 25
 script:
-  - grunt nightwatch
+  - ./node_modules/grunt-cli/bin/grunt nightwatch
 notifications:
   irc:
     channels:
@@ -30,3 +43,8 @@ notifications:
     skip_join: true
     on_success: "never"
     on_failure: "change"
+
+cache: apt
+
+git:
+  depth: 1
