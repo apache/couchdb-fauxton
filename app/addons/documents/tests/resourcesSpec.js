@@ -31,9 +31,9 @@ define([
       });
     });
 
-    it('does not remove an id attribute', function () {
+    it('creates the right api-url with an absolute url', function () {
 
-      assert.ok(/file:/.test(collection.urlRef('')));
+      assert.ok(/file:/.test(collection.urlRef()));
     });
 
   });
