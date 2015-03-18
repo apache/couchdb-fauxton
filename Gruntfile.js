@@ -537,9 +537,11 @@ module.exports = function(grunt) {
   grunt.registerTask('watchRun', ['clean:watch', 'dependencies', 'jshint']);
 
   // build a release
-  grunt.registerTask('release_commons', ['clean' ,'dependencies', 'jshint', 'shell:build-jsx', 'build', 'copy:dist', 'copy:ace', 'copy:zeroclip']);
-  grunt.registerTask('release', ['release_commons', 'gen_initialize:release']);
-  grunt.registerTask('couchapp_release', ['release_commons', 'gen_initialize:couchapp']);
+  grunt.registerTask('release_commons_prefix', ['clean' ,'dependencies']);
+  grunt.registerTask('release_commons_suffix', ['jshint', 'shell:build-jsx', 'build', 'copy:dist', 'copy:ace', 'copy:zeroclip']);
+
+  grunt.registerTask('release', ['release_commons_prefix', 'gen_initialize:release', 'release_commons_suffix']);
+  grunt.registerTask('couchapp_release', ['release_commons_prefix', 'gen_initialize:couchapp', 'release_commons_suffix']);
 
   /*
    * Install into CouchDB in either debug, release, or couchapp mode
