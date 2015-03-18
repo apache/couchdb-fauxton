@@ -11,7 +11,10 @@
 // the License.
 define([
         'addons/documents/resources',
-        'testUtils'
+        'testUtils',
+
+        'addons/documents/base'
+
 ], function (Models, testUtils) {
   var assert = testUtils.assert;
 
