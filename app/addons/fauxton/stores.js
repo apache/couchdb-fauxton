@@ -16,7 +16,7 @@ define([
   'addons/fauxton/actiontypes'
 ],
 
-function(app, FauxtonAPI, ActionTypes) {
+function (app, FauxtonAPI, ActionTypes) {
   var Stores = {};
 
   Stores.NavBarStore = FauxtonAPI.Store.extend({
@@ -111,7 +111,7 @@ function(app, FauxtonAPI, ActionTypes) {
         return oldLink.id === link.id;
       });
 
-      if(!oldLink) { return; }
+      if (!oldLink) { return; }
 
       oldLink.title = link.title;
       oldLink.href = link.href;
@@ -139,7 +139,7 @@ function(app, FauxtonAPI, ActionTypes) {
     },
 
     dispatch: function (action) {
-      switch(action.type) {
+      switch (action.type) {
 
         case ActionTypes.ADD_NAVBAR_LINK:
           this.addLink(action.link);

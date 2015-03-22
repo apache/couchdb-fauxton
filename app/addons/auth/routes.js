@@ -16,7 +16,7 @@ define([
        "addons/auth/resources"
 ],
 
-function(app, FauxtonAPI, Auth) {
+function (app, FauxtonAPI, Auth) {
   var authRouteObject = FauxtonAPI.RouteObject.extend({
     layout: 'one_pane',
 

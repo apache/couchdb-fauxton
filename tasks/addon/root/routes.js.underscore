@@ -15,7 +15,7 @@ define([
   "api",
   "addons/{%= name.toLowerCase() %}/resources"
 ],
-function(app, FauxtonAPI, {%= name %}) {
+function (app, FauxtonAPI, {%= name %}) {
   var {%= name.substr(0, 1).toUpperCase() + name.substr(1)%}RouteObject = FauxtonAPI.RouteObject.extend({
     layout: "with_sidebar",
 
@@ -27,7 +27,7 @@ function(app, FauxtonAPI, {%= name %}) {
 
     roles: [],
 
-    apiUrl: function() {
+    apiUrl: function () {
       return ["insert url here..."];
     },
 

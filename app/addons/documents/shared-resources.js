@@ -23,17 +23,17 @@ define([
 
   Documents.Doc = FauxtonAPI.Model.extend({
     idAttribute: "_id",
-    documentation: function() {
+    documentation: function () {
       return FauxtonAPI.constants.DOC_URLS.GENERAL;
     },
-    url: function(context) {
+    url: function (context) {
       if (context === undefined) {
         context = 'server';
       }
       return FauxtonAPI.urls('document', context, this.getDatabase().safeID(), this.safeID());
     },
 
-    initialize: function(_attrs, options) {
+    initialize: function (_attrs, options) {
       if (this.collection && this.collection.database) {
         this.database = this.collection.database;
       } else if (options.database) {
@@ -43,25 +43,25 @@ define([
 
     // HACK: the doc needs to know about the database, but it may be
     // set directly or indirectly in all docs
-    getDatabase: function() {
+    getDatabase: function () {
       return this.database ? this.database : this.collection.database;
     },
 
-    validate: function(attrs, options) {
+    validate: function (attrs, options) {
       if (this.id && this.id !== attrs._id && this.get('_rev') ) {
         return "Cannot change a documents id.";
       }
     },
 
-    docType: function() {
+    docType: function () {
       return this.id && this.id.match(/^_design\//) ? "design doc" : "doc";
     },
 
-    isEditable: function() {
+    isEditable: function () {
       return this.docType() != "reduction";
     },
 
-    isFromView: function() {
+    isFromView: function () {
       return !this.id;
     },
 
@@ -73,11 +73,11 @@ define([
       }
     },
 
-    isDdoc: function() {
+    isDdoc: function () {
       return this.docType() === "design doc";
     },
 
-    hasViews: function() {
+    hasViews: function () {
       if (!this.isDdoc()) return false;
       var doc = this.get('doc');
       if (doc) {
@@ -92,7 +92,7 @@ define([
       return !!this.get('_attachments');
     },
 
-    getDdocView: function(view) {
+    getDdocView: function (view) {
       if (!this.isDdoc() || !this.hasViews()) {
         return false;
       }
@@ -144,7 +144,7 @@ define([
       return this;
     },
 
-    viewHasReduce: function(viewName) {
+    viewHasReduce: function (viewName) {
       var view = this.getDdocView(viewName);
 
       return view && view.reduce;
@@ -154,16 +154,16 @@ define([
     // is a separate route. Alternatively, maybe these should be
     // treated separately. For instance, we could default into the
     // json editor for docs, or into a ddoc specific page.
-    safeID: function() {
+    safeID: function () {
       if (this.isDdoc()) {
         var ddoc = this.id.replace(/^_design\//, "");
         return "_design/" + app.utils.safeURLName(ddoc);
-      }else{
+      }else {
         return app.utils.safeURLName(this.id);
       }
     },
 
-    destroy: function() {
+    destroy: function () {
       var url = this.url() + "?rev=" + this.get('_rev');
       return $.ajax({
         url: url,
@@ -172,7 +172,7 @@ define([
       });
     },
 
-    parse: function(resp) {
+    parse: function (resp) {
       if (resp.rev) {
         resp._rev = resp.rev;
         delete resp.rev;
@@ -191,7 +191,7 @@ define([
       return resp;
     },
 
-    prettyJSON: function() {
+    prettyJSON: function () {
       var data = this.get("doc") ? this.get("doc") : this.attributes;
 
       return JSON.stringify(data, null, "  ");
@@ -216,7 +216,7 @@ define([
     documentation: function () {
       return FauxtonAPI.constants.DOC_URLS.GENERAL;
     },
-    initialize: function(_models, options) {
+    initialize: function (_models, options) {
       this.viewMeta = options.viewMeta;
       this.database = options.database;
       this.params = _.clone(options.params);
@@ -229,7 +229,7 @@ define([
       }
     },
 
-    urlRef: function(context, params) {
+    urlRef: function (context, params) {
       var query = "";
 
       if (params) {
@@ -265,7 +265,7 @@ define([
       });
     },
 
-    totalRows: function() {
+    totalRows: function () {
       return this.viewMeta.total_rows || "unknown";
     },
 
@@ -276,23 +276,23 @@ define([
       }
     },
 
-    updateSeq: function() {
+    updateSeq: function () {
       if (!this.viewMeta) {
         return false;
       }
       return this.viewMeta.update_seq || false;
     },
 
-    parse: function(resp) {
+    parse: function (resp) {
       var rows = resp.rows;
 
       // remove any query errors that may return without doc info
       // important for when querying keys on all docs
-      var cleanRows = _.filter(rows, function(row) {
+      var cleanRows = _.filter(rows, function (row) {
         return row.value;
       });
 
-      resp.rows = _.map(cleanRows, function(row) {
+      resp.rows = _.map(cleanRows, function (row) {
         return {
           _id: row.id,
           _rev: row.value.rev,

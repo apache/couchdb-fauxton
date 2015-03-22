@@ -237,7 +237,7 @@ define([
       corsStore.on('change', this.onChange, this);
     },
 
-    componentWillUnmount: function() {
+    componentWillUnmount: function () {
       corsStore.off('change', this.onChange);
     },
 

@@ -15,7 +15,7 @@ define([
   "plugins/backbone.layoutmanager"
 ],
 
-function(Backbone, LayoutManager) {
+function (Backbone, LayoutManager) {
   var FauxtonAPI = {
     //add default objects
     router: {
@@ -31,7 +31,7 @@ function(Backbone, LayoutManager) {
     }
   };
 
-  FauxtonAPI.Deferred = function() {
+  FauxtonAPI.Deferred = function () {
     return $.Deferred();
   };
 
@@ -44,18 +44,18 @@ function(Backbone, LayoutManager) {
   };
 
   FauxtonAPI.addonExtensions = {
-    initialize: function() {},
+    initialize: function () {},
     RouteObjects: {},
     Views: {}
   };
 
-  FauxtonAPI.addon = function(extra) {
+  FauxtonAPI.addon = function (extra) {
     return _.extend(_.clone(FauxtonAPI.addonExtensions), extra);
   };
 
   FauxtonAPI.View = Backbone.View.extend({
     // This should return an array of promises, an empty array, or null
-    establish: function() {
+    establish: function () {
       return null;
     },
     loaderClassname: 'loader',

@@ -119,7 +119,7 @@ function (app, FauxtonAPI, Permissions) {
     items: function () {
       this.discardRemovedViews();
 
-      return  {
+      return {
         names: this.getItemFromView(this.nameViews),
         roles: this.getItemFromView(this.roleViews)
       };

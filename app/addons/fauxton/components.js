@@ -33,7 +33,7 @@ define([
   "velocity.ui"
 ],
 
-function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
+function (app, FauxtonAPI, ace, spin, ZeroClipboard) {
   var Components = FauxtonAPI.addon();
 
   // setting up the left header with the backbutton used in Views and All docs
@@ -73,7 +73,7 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
       }
     },
 
-    beforeRender: function() {
+    beforeRender: function () {
       this.setUpCrumbs();
       this.setUpDropDownMenu();
 
@@ -82,13 +82,13 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
       }
     },
 
-    setUpCrumbs: function() {
+    setUpCrumbs: function () {
       this.breadcrumbs = this.insertView("#header-breadcrumbs", new Components.Breadcrumbs({
         crumbs: this.crumbs
       }));
     },
 
-    setUpDropDownMenu: function() {
+    setUpDropDownMenu: function () {
       if (this.dropdownMenuLinks) {
         this.dropdown = this.insertView("#header-dropdown-menu", new Components.MenuDropDown({
           icon: 'fonticon-cog',
@@ -124,11 +124,11 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
       "click .js-lastelement": "toggleLastElement"
     },
 
-    serialize: function() {
+    serialize: function () {
       var crumbs = _.clone(this.crumbs);
 
       // helper template function to determine when to insert a delimiter char
-      var nextCrumbHasLabel = function(crumb, index) {
+      var nextCrumbHasLabel = function (crumb, index) {
         var nextHasLabel = crumbs[index + 1].name !== "";
         return index < crumbs.length && crumb.name && nextHasLabel;
       };
@@ -155,12 +155,12 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
       this.$('.js-enabled').removeClass('js-enabled');
     },
 
-    update: function(crumbs) {
+    update: function (crumbs) {
       this.crumbs = crumbs;
       this.render();
     },
 
-    initialize: function(options) {
+    initialize: function (options) {
       this.crumbs = options.crumbs;
       this.toggleDisabled = options.toggleDisabled || false;
     }
@@ -197,7 +197,7 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
       this.trayId = 'tray-' + this.cid;
 
       var that = this;
-      $('body').on('click.' + this.trayId, function(e) {
+      $('body').on('click.' + this.trayId, function (e) {
         var $clickEl = $(e.target);
 
         if (!that.trayVisible()) {
@@ -214,7 +214,7 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
       FauxtonAPI.Events.on(FauxtonAPI.constants.EVENTS.TRAY_OPENED, this.onTrayOpenEvent, this);
     },
 
-    cleanup: function() {
+    cleanup: function () {
       $('body').off('click.' + this.trayId);
     },
 
@@ -283,7 +283,7 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
       this.initTray({ toggleTrayBtnSelector: '.api-url-btn' });
     },
 
-    serialize: function() {
+    serialize: function () {
       return {
         endpoint: this.endpoint,
         documentation: this.documentation
@@ -298,7 +298,7 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
       this.$el.removeClass('hide');
     },
 
-    update: function(endpoint) {
+    update: function (endpoint) {
       this.endpoint = endpoint[0];
       this.documentation = endpoint[1];
       this.render();
@@ -514,7 +514,7 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
       ].join('');
     },
 
-    source: function(query, process) {
+    source: function (query, process) {
       var url = this.getURL(query, this.dbLimit);
       var resultFilter = this.resultFilter;
 
@@ -524,7 +524,7 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
         cache: false,
         url: url,
         dataType: 'json',
-        success: function(data) {
+        success: function (data) {
           if (resultFilter) {
             data = resultFilter(data);
           }
@@ -540,7 +540,7 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
       this.database = options.database;
       _.bindAll(this);
     },
-    source: function(id, process) {
+    source: function (id, process) {
       var query = '?' + $.param({
         startkey: JSON.stringify(id),
         endkey: JSON.stringify(id + "\u9999"),
@@ -555,7 +555,7 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
         cache: false,
         url: url,
         dataType: 'json',
-        success: function(data) {
+        success: function (data) {
           var ids = _.map(data.rows, function (row) {
             return row.id;
           });
@@ -674,7 +674,7 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
       return Math.floor(this.availableEditorHeight  / singleLine);
     },
 
-    getLines: function() {
+    getLines: function () {
       return this.editor.getSession().getDocument().getLength();
     },
 
@@ -728,7 +728,7 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
     hadValidCode: function () {
       var errors = this.getAnnotations();
       // By default CouchDB view functions don't pass lint
-      return _.every(errors, function(error) {
+      return _.every(errors, function (error) {
         return this.isIgnorableError(error.raw);
       }, this);
     },
@@ -740,15 +740,15 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
       "['{a}'] is better written in dot notation."
     ],
 
-    isIgnorableError: function(msg) {
+    isIgnorableError: function (msg) {
       return _.contains(this.excludedViewErrors, msg);
     },
 
-    configureFixedHeightEditor: function(numLines) {
+    configureFixedHeightEditor: function (numLines) {
       this.editor.renderer.setVScrollBarAlwaysVisible(true);
       this.editor.renderer.setHScrollBarAlwaysVisible(true);
       /* customize the ace scrolling for static edit height */
-      this.editor.renderer.$autosize = function() {
+      this.editor.renderer.$autosize = function () {
         this.$size.height = numLines * this.lineHeight;
         this.desiredHeight = numLines * this.lineHeight;
         this.container.style.height = this.desiredHeight + "px";
@@ -757,33 +757,33 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
       };
     },
 
-    replaceCurrentLine: function(replacement) {
+    replaceCurrentLine: function (replacement) {
       this.editor.getSelection().selectLine();
       this.editor.insert(replacement);
       this.editor.getSelection().moveCursorUp();
     },
 
-    getLine: function(lineNum) {
+    getLine: function (lineNum) {
       return this.editor.session.getLine(lineNum);
     },
 
-    getSelectionStart: function() {
+    getSelectionStart: function () {
       return this.editor.getSelectionRange().start;
     },
 
-    getSelectionEnd: function() {
+    getSelectionEnd: function () {
       return this.editor.getSelectionRange().end;
     },
 
-    getRowHeight: function() {
+    getRowHeight: function () {
       return this.editor.renderer.layerConfig.lineHeight;
     },
 
-    isRowExpanded: function(row) {
+    isRowExpanded: function (row) {
       return !this.editor.getSession().isRowFolded(row);
     },
 
-    documentToScreenRow: function(row) {
+    documentToScreenRow: function (row) {
       return this.editor.getSession().documentToScreenRow(row, 0);
     }
 
@@ -802,12 +802,12 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
   Components.MenuDropDown = FauxtonAPI.View.extend({
     template: "addons/fauxton/templates/menu_dropdown",
     className: "dropdown",
-    initialize: function(options) {
+    initialize: function (options) {
       this.links = options.links;
       this.icon = options.icon || "fonticon-plus-circled";
       this.setUpEvents();
     },
-    setUpEvents: function() {
+    setUpEvents: function () {
       this.events = {};
       _.each(this.links, function (parentLink) {
         _.each(parentLink.links, function (link) {
@@ -816,16 +816,16 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
         }, this);
       }, this);
     },
-    triggerEvent: function(e) {
+    triggerEvent: function (e) {
       e.preventDefault();
       var eventTrigger = $(e.currentTarget).attr('triggerEvent');
       FauxtonAPI.Events.trigger(eventTrigger);
     },
-    update: function(links) {
+    update: function (links) {
       this.links = links;
       this.render();
     },
-    serialize: function() {
+    serialize: function () {
       return {
         links: this.links,
         icon: this.icon

@@ -16,9 +16,9 @@ define([
   'addons/permissions/routes'
 ],
 
-function(app, FauxtonAPI, Permissions) {
+function (app, FauxtonAPI, Permissions) {
 
-  Permissions.initialize = function() {};
+  Permissions.initialize = function () {};
 
   return Permissions;
 });

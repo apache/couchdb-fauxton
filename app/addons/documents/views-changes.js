@@ -21,7 +21,7 @@ define([
   'addons/documents/changes/actions'
 ],
 
-function(app, FauxtonAPI, Components, Changes, ChangesActions) {
+function (app, FauxtonAPI, Components, Changes, ChangesActions) {
 
   var Views = {};
 
@@ -52,7 +52,7 @@ function(app, FauxtonAPI, Components, Changes, ChangesActions) {
       Changes.renderChanges(this.el);
     },
 
-    establish: function() {
+    establish: function () {
       return [this.model.changes.fetchOnce({ prefill: true })];
     },
 

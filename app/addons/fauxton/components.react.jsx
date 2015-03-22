@@ -19,7 +19,7 @@ define([
   'plugins/zeroclipboard/ZeroClipboard'
 ],
 
-function(app, FauxtonAPI, React, Stores, Actions, ZeroClipboard) {
+function (app, FauxtonAPI, React, Stores, Actions, ZeroClipboard) {
   var navBarStore = Stores.navBarStore;
 
   var Footer = React.createClass({
@@ -106,7 +106,7 @@ function(app, FauxtonAPI, React, Stores, Actions, ZeroClipboard) {
       this.setMenuState();
     },
 
-    componentWillUnmount: function() {
+    componentWillUnmount: function () {
       navBarStore.off('change', this.onChange);
     },
 

@@ -28,12 +28,12 @@ function (app, FauxtonAPI) {
 
   Replication.DBList = Backbone.Collection.extend({
     model: Replication.DBModel,
-    url: function() {
+    url: function () {
       return app.host + '/_all_dbs';
     },
-    parse: function(resp) {
+    parse: function (resp) {
       // TODO: pagination!
-      return _.map(resp, function(database) {
+      return _.map(resp, function (database) {
         return {
           id: database,
           name: database
@@ -49,9 +49,9 @@ function (app, FauxtonAPI) {
     url: function () {
       return app.host + '/_active_tasks';
     },
-    parse: function(resp) {
+    parse: function (resp) {
       //only want replication tasks to return
-      return _.filter(resp, function(task) {
+      return _.filter(resp, function (task) {
         return task.type === 'replication';
       });
     }
@@ -59,7 +59,7 @@ function (app, FauxtonAPI) {
 
   Replication.Replicate = Backbone.Model.extend({
     documentation: FauxtonAPI.constants.DOC_URLS.REPLICATION,
-    url: function() {
+    url: function () {
       return window.location.origin + '/_replicate';
     }
   });

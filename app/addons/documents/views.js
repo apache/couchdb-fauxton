@@ -76,7 +76,7 @@ function (app, FauxtonAPI, Components, Documents,
       'click .toggle-select-menu': 'selectAllMenu'
     },
 
-    initialize: function(options) {
+    initialize: function (options) {
       this.database = options.database;
       this.params = options.params;
 
@@ -97,53 +97,53 @@ function (app, FauxtonAPI, Components, Documents,
       }));
     },
 
-    afterRender: function() {
+    afterRender: function () {
       this.toggleQueryOptionsHeader(this.isHidden);
     },
 
-    cleanup: function() {
+    cleanup: function () {
       FauxtonAPI.Events.unbind('success:bulkDelete');
     },
 
-    selectAllMenu: function(e) {
+    selectAllMenu: function (e) {
       FauxtonAPI.triggerRouteEvent("toggleSelectHeader");
       FauxtonAPI.Events.trigger("documents:showSelectAll", this.selectVisible);
     },
 
     // updates the API bar when the route changes
-    updateApiUrl: function(api) {
+    updateApiUrl: function (api) {
       this.apiBar && this.apiBar.update(api);
     },
 
     // these are similar, but different! resetQueryOptions() completely resets the settings then overlays the new ones;
     // updateQueryOptions() just updates the existing settings with whatever is specified. Between them, the
-    resetQueryOptions: function(options) {
+    resetQueryOptions: function (options) {
       this.queryOptions.resetQueryOptions(options);
     },
 
-    updateQueryOptions: function(options) {
+    updateQueryOptions: function (options) {
       this.queryOptions.updateQueryOptions(options);
     },
 
-    hideQueryOptions: function() {
+    hideQueryOptions: function () {
       this.isHidden = true;
       if (this.hasRendered) {
         this.toggleQueryOptionsHeader(this.isHidden);
       }
     },
 
-    showQueryOptions: function() {
+    showQueryOptions: function () {
       this.isHidden = false;
       if (this.hasRendered) {
         this.toggleQueryOptionsHeader(this.isHidden);
       }
     },
 
-    toggleQueryOptionsHeader: function(hide) {
+    toggleQueryOptionsHeader: function (hide) {
       $("#header-query-options").toggleClass("hide", hide);
     },
 
-    serialize: function() {
+    serialize: function () {
       return {
         database: this.database.get('id')
       };
@@ -170,7 +170,7 @@ function (app, FauxtonAPI, Components, Documents,
       this.showModal();
     },
 
-    cleanup: function() {
+    cleanup: function () {
       FauxtonAPI.Events.off('database:delete', this.showDeleteDatabase);
     },
 
@@ -236,13 +236,13 @@ function (app, FauxtonAPI, Components, Documents,
       "dblclick .doc-item": "edit"
     },
 
-    attributes: function() {
+    attributes: function () {
       return {
         "data-id": this.model.id
       };
     },
 
-    serialize: function() {
+    serialize: function () {
       return {
         docIdentifier: this.model.isReducedShown() ? this.model.get('key') : this.model.get('_id'),
         doc: this.model,
@@ -257,11 +257,11 @@ function (app, FauxtonAPI, Components, Documents,
       }, this);
     },
 
-    establish: function() {
+    establish: function () {
       return [this.model.fetch()];
     },
 
-    edit: function(event) {
+    edit: function (event) {
       event.preventDefault();
       if (!this.model.isReducedShown()) {
         FauxtonAPI.navigate(this.model.url('app'));
@@ -361,7 +361,7 @@ function (app, FauxtonAPI, Components, Documents,
       });
     },
 
-    establish: function() {
+    establish: function () {
       if (this.newView) { return null; }
 
       return this.collection.fetch({reset: true}).then(function () {
@@ -421,7 +421,7 @@ function (app, FauxtonAPI, Components, Documents,
       });
     },
 
-    serialize: function() {
+    serialize: function () {
       return {
         endOfResults: !PaginationStores.indexPaginationStore.canShowNext()
       };
@@ -437,7 +437,7 @@ function (app, FauxtonAPI, Components, Documents,
       this.render();
     },
 
-    bulkDelete: function() {
+    bulkDelete: function () {
       var that = this,
           documentsLength = this.bulkDeleteDocsCollection.length,
           msg;
@@ -466,14 +466,14 @@ function (app, FauxtonAPI, Components, Documents,
       this.rows = {};
     },
 
-    beforeRender: function() {
+    beforeRender: function () {
       var docs;
 
       this.removeNestedViews();
 
       docs = this.expandDocs ? this.collection : this.collection.simple();
 
-      docs.each(function(doc) {
+      docs.each(function (doc) {
         var isChecked;
         if (this.bulkDeleteDocsCollection) {
           isChecked = this.bulkDeleteDocsCollection.get(doc.id);
@@ -555,7 +555,7 @@ function (app, FauxtonAPI, Components, Documents,
       return this.model.fetch();
     },
 
-    afterRender: function() {
+    afterRender: function () {
       this.startRefreshInterval();
     },
 

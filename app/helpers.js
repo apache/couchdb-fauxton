@@ -24,7 +24,7 @@ define([
   'moment'
 ],
 
-function(constants, utils, d3, moment) {
+function (constants, utils, d3, moment) {
 
   var Helpers = {};
 
@@ -32,7 +32,7 @@ function(constants, utils, d3, moment) {
 
   Helpers.safeURL = utils.safeURLName;
 
-  Helpers.imageUrl = function(path) {
+  Helpers.imageUrl = function (path) {
     // TODO: add dynamic path for different deploy targets
     return path;
   };
@@ -42,7 +42,7 @@ function(constants, utils, d3, moment) {
   };
 
   // File size pretty printing, taken from futon.format.js
-  Helpers.formatSize = function(size) {
+  Helpers.formatSize = function (size) {
       var jump = 512;
       if (size < jump) return size + " bytes";
       var units = ["KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];

@@ -17,7 +17,7 @@ define([
   'addons/databases/resources'
 ],
 
-function(app, Components, FauxtonAPI, Databases) {
+function (app, Components, FauxtonAPI, Databases) {
 
   var Views = {};
 
@@ -79,9 +79,9 @@ function(app, Components, FauxtonAPI, Databases) {
       var currentDBs = this.paginated();
       var deferred = FauxtonAPI.Deferred();
 
-      FauxtonAPI.when(currentDBs.map(function(database) {
+      FauxtonAPI.when(currentDBs.map(function (database) {
         return database.status.fetchOnce();
-      })).always(function(resp) {
+      })).always(function (resp) {
         //make this always so that even if a user is not allowed access to a database
         //they will still see a list of all databases
         deferred.resolve();
@@ -96,7 +96,7 @@ function(app, Components, FauxtonAPI, Databases) {
     },
 
     beforeRender: function () {
-      _.each(this.paginated(), function(database) {
+      _.each(this.paginated(), function (database) {
         this.insertView('table.databases tbody', new Views.Item({
           model: database
         }));

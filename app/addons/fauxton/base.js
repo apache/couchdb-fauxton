@@ -19,7 +19,7 @@ define([
   "plugins/zeroclipboard/ZeroClipboard"
 ],
 
-function(app, FauxtonAPI, Components, ReactComponents, Actions, ZeroClipboard) {
+function (app, FauxtonAPI, Components, ReactComponents, Actions, ZeroClipboard) {
 
   var Fauxton = FauxtonAPI.addon();
   FauxtonAPI.addNotification = function (options) {
@@ -35,16 +35,16 @@ function(app, FauxtonAPI, Components, ReactComponents, Actions, ZeroClipboard) {
   };
 
   FauxtonAPI.UUID = FauxtonAPI.Model.extend({
-    initialize: function(options) {
+    initialize: function (options) {
       options = _.extend({count: 1}, options);
       this.count = options.count;
     },
 
-    url: function() {
+    url: function () {
       return app.host + "/_uuids?count=" + this.count;
     },
 
-    next: function() {
+    next: function () {
       return this.get("uuids").pop();
     }
   });
@@ -109,7 +109,7 @@ function(app, FauxtonAPI, Components, ReactComponents, Actions, ZeroClipboard) {
       'click .js-dismiss': 'onClickRemoveWithAnimation'
     },
 
-    initialize: function(options) {
+    initialize: function (options) {
       this.htmlToRender = options.msg;
       // escape always, except the value is false
       if (options.escape !== false) {
@@ -166,7 +166,7 @@ function(app, FauxtonAPI, Components, ReactComponents, Actions, ZeroClipboard) {
       }.bind(this), this.animationTimer);
     },
 
-    renderNotification: function(selector) {
+    renderNotification: function (selector) {
       selector = selector || this.selector;
       if (this.clear) {
         $(selector).html('');

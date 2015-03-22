@@ -17,7 +17,7 @@ require([
   "load_addons"
 ],
 
-function(app, FauxtonAPI, LoadAddons) {
+function (app, FauxtonAPI, LoadAddons) {
 
   app.addons = LoadAddons.addons;
   FauxtonAPI.router = app.router = new FauxtonAPI.Router(app.addons);
@@ -29,7 +29,7 @@ function(app, FauxtonAPI, LoadAddons) {
   // All navigation that is relative should be passed through the navigate
   // method, to be processed by the router. If the link has a `data-bypass`
   // attribute, bypass the delegation completely.
-  $(document).on("click", "a:not([data-bypass])", function(evt) {
+  $(document).on("click", "a:not([data-bypass])", function (evt) {
 
     // Get the absolute anchor href.
     var href = { prop: $(this).prop("href"), attr: $(this).attr("href") };

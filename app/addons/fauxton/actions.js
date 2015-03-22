@@ -34,7 +34,7 @@ function (app, FauxtonAPI, ActionTypes) {
       });
     },
 
-    removeHeaderLink: function(link) {
+    removeHeaderLink: function (link) {
       FauxtonAPI.dispatch({
         type: ActionTypes.REMOVE_NAVBAR_LINK,
         link: link

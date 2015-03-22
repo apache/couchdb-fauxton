@@ -114,7 +114,7 @@ define([
       },
 
       sanitizeOrigins: function (origins) {
-        if(_.isEmpty(origins)) {
+        if (_.isEmpty(origins)) {
           return '';
         }
 
@@ -125,7 +125,7 @@ define([
         var promises = [];
         promises.push(this.saveEnableCorsToHttpd(options.enableCors));
 
-        if(options.enableCors) {
+        if (options.enableCors) {
           promises.push(this.saveCorsOrigins(this.sanitizeOrigins(options.origins)));
           promises.push(this.saveCorsCredentials());
           promises.push(this.saveCorsHeaders());

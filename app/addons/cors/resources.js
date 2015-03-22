@@ -20,7 +20,7 @@ function (app, FauxtonAPI) {
 
 
   CORS.Config = FauxtonAPI.Model.extend({
-    url: function() {
+    url: function () {
       return app.host + '/_config/cors';
     },
 
@@ -37,7 +37,7 @@ function (app, FauxtonAPI) {
   });
 
   CORS.Httpd = FauxtonAPI.Model.extend({
-    url: function() {
+    url: function () {
       return app.host + '/_config/httpd';
     },
 

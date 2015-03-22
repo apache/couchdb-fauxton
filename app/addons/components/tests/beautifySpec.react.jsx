@@ -57,7 +57,7 @@ define([
       beautifyEl = TestUtils.renderIntoDocument(
         <ReactComponents.Beautify
           beautifiedCode={beautifiedCode}
-          code={'function () { console.log("hello"); }'}
+          code={'function() { console.log("hello"); }'}
           noOfLines={1}/>,
         container
       );

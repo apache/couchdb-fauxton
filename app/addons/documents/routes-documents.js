@@ -28,7 +28,7 @@ define([
   'addons/documents/pagination/stores'
 ],
 
-function(app, FauxtonAPI, BaseRoute, Documents, Changes, Index, DocEditor,
+function (app, FauxtonAPI, BaseRoute, Documents, Changes, Index, DocEditor,
         Databases, Resources, Components, PaginationActions, PaginationStores) {
 
 
@@ -126,7 +126,7 @@ function(app, FauxtonAPI, BaseRoute, Documents, Changes, Index, DocEditor,
      * urlParams are what are shown in the url and to the user
      * They are not the same when paginating
      */
-    allDocs: function(databaseName, options) {
+    allDocs: function (databaseName, options) {
       var params = this.createParams(options),
           urlParams = params.urlParams,
           docParams = params.docParams,

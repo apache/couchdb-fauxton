@@ -16,9 +16,9 @@ define([
   "addons/compaction/routes"
 ],
 
-function(app, FauxtonAPI, Compaction) {
+function (app, FauxtonAPI, Compaction) {
 
-  Compaction.initialize = function() {
+  Compaction.initialize = function () {
     FauxtonAPI.registerExtension('docLinks', {
       title: "Compact & Clean",
       url: "compact",

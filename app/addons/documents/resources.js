@@ -17,7 +17,7 @@ define([
   'cloudant.pagingcollection'
 ],
 
-function(app, FauxtonAPI, Documents, PagingCollection) {
+function (app, FauxtonAPI, Documents, PagingCollection) {
 
   Documents.QueryParams = (function () {
     var _eachParams = function (params, action) {
@@ -47,7 +47,7 @@ function(app, FauxtonAPI, Documents, PagingCollection) {
 
   Documents.DdocInfo = FauxtonAPI.Model.extend({
     idAttribute: "_id",
-    documentation: function() {
+    documentation: function () {
       return FauxtonAPI.constants.DOC_URLS.GENERAL;
     },
     initialize: function (_attrs, options) {
@@ -66,19 +66,19 @@ function(app, FauxtonAPI, Documents, PagingCollection) {
     // is a separate route. Alternatively, maybe these should be
     // treated separately. For instance, we could default into the
     // json editor for docs, or into a ddoc specific page.
-    safeID: function() {
+    safeID: function () {
       var ddoc = this.id.replace(/^_design\//, "");
       return "_design/" + app.utils.safeURLName(ddoc);
     }
   });
 
   Documents.NewDoc = Documents.Doc.extend({
-    fetch: function() {
+    fetch: function () {
       var uuid = new FauxtonAPI.UUID();
       var deferred = this.deferred = $.Deferred();
       var that = this;
 
-      uuid.fetch().done(function() {
+      uuid.fetch().done(function () {
         that.set("_id", uuid.next());
         deferred.resolve();
       });
@@ -177,10 +177,10 @@ function(app, FauxtonAPI, Documents, PagingCollection) {
 
   Documents.IndexCollection = PagingCollection.extend({
     model: Documents.Doc,
-    documentation: function() {
+    documentation: function () {
       return FauxtonAPI.constants.DOC_URLS.GENERAL;
     },
-    initialize: function(_models, options) {
+    initialize: function (_models, options) {
       this.database = options.database;
       this.params = _.extend({limit: 20, reduce: false}, options.params);
 
@@ -220,13 +220,13 @@ function(app, FauxtonAPI, Documents, PagingCollection) {
       return this.urlRef.apply(this, arguments);
     },
 
-    totalRows: function() {
+    totalRows: function () {
       if (this.params.reduce) { return "unknown_reduce";}
 
       return this.viewMeta.total_rows || "unknown";
     },
 
-    updateSeq: function() {
+    updateSeq: function () {
       if (!this.viewMeta) {
         return false;
       }
@@ -251,7 +251,7 @@ function(app, FauxtonAPI, Documents, PagingCollection) {
       });
     },
 
-    parse: function(resp) {
+    parse: function (resp) {
       var rows = resp.rows;
       this.endTime = new Date().getTime();
       this.requestDuration = (this.endTime - this.startTime);
@@ -259,7 +259,7 @@ function(app, FauxtonAPI, Documents, PagingCollection) {
       return PagingCollection.prototype.parse.apply(this, arguments);
     },
 
-    buildAllDocs: function() {
+    buildAllDocs: function () {
       this.fetch();
     },
 
@@ -270,7 +270,7 @@ function(app, FauxtonAPI, Documents, PagingCollection) {
       return PagingCollection.prototype.fetch.call(this);
     },
 
-    allDocs: function() {
+    allDocs: function () {
       return this.models;
     },
 
@@ -311,10 +311,10 @@ function(app, FauxtonAPI, Documents, PagingCollection) {
 
   Documents.PouchIndexCollection = PagingCollection.extend({
     model: Documents.ViewRow,
-    documentation: function() {
+    documentation: function () {
       return FauxtonAPI.constants.DOC_URLS.GENERAL;
     },
-    initialize: function(_models, options) {
+    initialize: function (_models, options) {
       this.database = options.database;
       this.rows = options.rows;
       this.view = options.view;
@@ -352,7 +352,7 @@ function(app, FauxtonAPI, Documents, PagingCollection) {
 
     },
 
-    fetch: function() {
+    fetch: function () {
       var deferred = FauxtonAPI.Deferred();
       this.reset(this.rows, {silent: true});
 
@@ -360,19 +360,19 @@ function(app, FauxtonAPI, Documents, PagingCollection) {
       return deferred;
     },
 
-    totalRows: function() {
+    totalRows: function () {
       return this.viewMeta.total_rows || "unknown";
     },
 
-    updateSeq: function() {
+    updateSeq: function () {
       return this.viewMeta.update_seq || false;
     },
 
-    buildAllDocs: function() {
+    buildAllDocs: function () {
       this.fetch();
     },
 
-    allDocs: function() {
+    allDocs: function () {
       return this.models;
     }
   });

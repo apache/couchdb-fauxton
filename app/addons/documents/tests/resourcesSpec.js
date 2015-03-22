@@ -85,16 +85,16 @@ define([
     });
   });
 
-  describe('QueryParams', function() {
-    describe('parse', function() {
-      it('should not parse arbitrary parameters', function() {
+  describe('QueryParams', function () {
+    describe('parse', function () {
+      it('should not parse arbitrary parameters', function () {
         var params = {"foo": "[1]]"};
         var result = Models.QueryParams.parse(params);
 
         assert.deepEqual(result, params);
       });
 
-      it('parses startkey, endkey', function() {
+      it('parses startkey, endkey', function () {
         var params = {
           "startkey":"[\"a\",\"b\"]",
           "endkey":"[\"c\",\"d\"]"
@@ -107,7 +107,7 @@ define([
         });
       });
 
-      it('parses key', function() {
+      it('parses key', function () {
         var params = {
           "key":"[1,2]"
         };
@@ -116,7 +116,7 @@ define([
         assert.deepEqual(result, {"key": [1, 2]});
       });
 
-      it('does not modify input', function() {
+      it('does not modify input', function () {
         var params = {
           "key":"[\"a\",\"b\"]"
         };
@@ -127,15 +127,15 @@ define([
       });
     });
 
-    describe('stringify', function() {
-      it('should not stringify arbitrary parameters', function() {
+    describe('stringify', function () {
+      it('should not stringify arbitrary parameters', function () {
         var params = {"foo": [1, 2, 3]};
         var result = Models.QueryParams.stringify(params);
 
         assert.deepEqual(result, params);
       });
 
-      it('stringifies startkey, endkey', function() {
+      it('stringifies startkey, endkey', function () {
         var params = {
           "startkey": ["a", "b"],
           "endkey": ["c", "d"]
@@ -149,14 +149,14 @@ define([
         });
       });
 
-      it('stringifies key', function() {
+      it('stringifies key', function () {
         var params = {"key":[ "a", "b"]};
         var result = Models.QueryParams.stringify(params);
 
         assert.deepEqual(result, { "key": "[\"a\",\"b\"]" });
       });
 
-      it('does not modify input', function() {
+      it('does not modify input', function () {
         var params = {"key": ["a", "b"]};
         var clone = _.clone(params);
         var result = Models.QueryParams.stringify(params);
@@ -164,7 +164,7 @@ define([
         assert.deepEqual(params, clone);
       });
 
-      it('is symmetrical with parse', function() {
+      it('is symmetrical with parse', function () {
         var params = {
           "startkey": ["a", "b"],
           "endkey": ["c", "d"],

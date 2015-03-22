@@ -23,7 +23,7 @@ exports.after = "Created your addon! Don't forget to update your" +
 // exports.warnOn = '*';
 
 // The actual init template.
-exports.template = function(grunt, init, done) {
+exports.template = function (grunt, init, done) {
 
   // destpath
   init.process(

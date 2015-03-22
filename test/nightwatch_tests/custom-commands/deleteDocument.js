@@ -16,8 +16,8 @@ DeleteDocument.prototype.command = function (databaseName, documentName) {
       database = nano.use(databaseName),
       documentRev;
 
-  database.get(documentName, function(err, body) {
-    if (!err){
+  database.get(documentName, function (err, body) {
+    if (!err) {
       documentRev = body._rev;
 
       database.destroy(documentName, documentRev, function (err, body, header) {

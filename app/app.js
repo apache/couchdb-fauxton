@@ -31,7 +31,7 @@ define([
   'plugins/jquery.form'
 ],
 
-function(app, $, _, Backbone, Bootstrap, Helpers, Utils, FauxtonAPI, Couchdb) {
+function (app, $, _, Backbone, Bootstrap, Helpers, Utils, FauxtonAPI, Couchdb) {
 
   // Make sure we have a console.log
   if (_.isUndefined(console)) {
@@ -70,11 +70,11 @@ function(app, $, _, Backbone, Bootstrap, Helpers, Utils, FauxtonAPI, Couchdb) {
     prefix: 'app/',
 
     // Inject app/helper.js for shared functionality across all html templates
-    renderTemplate: function(template, context) {
+    renderTemplate: function (template, context) {
       return template(_.extend(Helpers, context));
     },
 
-    fetchTemplate: function(path) {
+    fetchTemplate: function (path) {
       // Initialize done for use in async-mode
       var done;
 
@@ -88,7 +88,7 @@ function(app, $, _, Backbone, Bootstrap, Helpers, Utils, FauxtonAPI, Couchdb) {
         // Put fetch into `async-mode`.
         done = this.async();
         // Seek out the template asynchronously.
-        return $.ajax({ url: app.root + path }).then(function(contents) {
+        return $.ajax({ url: app.root + path }).then(function (contents) {
           done(JST[path] = _.template(contents));
         });
       }
@@ -106,7 +106,7 @@ function(app, $, _, Backbone, Bootstrap, Helpers, Utils, FauxtonAPI, Couchdb) {
 
     // I haven't wrapped these dispatch methods in a action
     // because I don't want to require fauxton/actions in this method.
-    addHeaderLink: function(link) {
+    addHeaderLink: function (link) {
       FauxtonAPI.dispatch({
           type: 'ADD_NAVBAR_LINK',
           link: link
@@ -121,7 +121,7 @@ function(app, $, _, Backbone, Bootstrap, Helpers, Utils, FauxtonAPI, Couchdb) {
 
     },
 
-    removeHeaderLink: function(link) {
+    removeHeaderLink: function (link) {
       FauxtonAPI.dispatch({
           type: 'REMOVE_NAVBAR_LINK',
           link: link

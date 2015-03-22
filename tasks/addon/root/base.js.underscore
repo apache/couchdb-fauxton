@@ -16,6 +16,6 @@ define([
   "addons/{%= name.toLowerCase() %}/routes"
 ],
 
-function(app, FauxtonAPI, {%= name %}) {
+function (app, FauxtonAPI, {%= name %}) {
   return {%= name %};
 });

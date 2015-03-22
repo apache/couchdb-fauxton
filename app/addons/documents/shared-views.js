@@ -20,7 +20,7 @@ define([
        "addons/databases/resources"
 ],
 
-function(app, FauxtonAPI, Components, Documents, Databases) {
+function (app, FauxtonAPI, Components, Documents, Databases) {
   var Views = {};
 
   Views.Sidebar = FauxtonAPI.View.extend({
@@ -28,7 +28,7 @@ function(app, FauxtonAPI, Components, Documents, Databases) {
     className: "sidenav",
     tagName: "nav",
 
-    initialize: function(options) {
+    initialize: function (options) {
       this.database = options.database;
 
       if (options.ddocInfo) {
@@ -39,7 +39,7 @@ function(app, FauxtonAPI, Components, Documents, Databases) {
       this.designDocList = [];
     },
 
-    serialize: function() {
+    serialize: function () {
       var docLinks = FauxtonAPI.getExtensions('docLinks'),
           newLinks = FauxtonAPI.getExtensions('sidebar:newLinks'),
           addLinks = FauxtonAPI.getExtensions('sidebar:links'),
@@ -92,7 +92,7 @@ function(app, FauxtonAPI, Components, Documents, Databases) {
       }]);
     },
 
-    beforeRender: function(manage) {
+    beforeRender: function (manage) {
       this.deleteDBModal = this.setView(
         '#delete-db-modal',
         new Views.DeleteDBModal({
@@ -117,7 +117,7 @@ function(app, FauxtonAPI, Components, Documents, Databases) {
       _.each(this.designDocList, function (view) { view.remove(); view = undefined;});
       this.designDocList = [];
 
-      this.collection.each(function(design) {
+      this.collection.each(function (design) {
         if (design.has('doc')) {
           design.collection = this.collection;
           var view = this.insertView(new Views.DdocSidenav({
@@ -163,10 +163,10 @@ function(app, FauxtonAPI, Components, Documents, Databases) {
       "click .js-collapse-toggle": "toggleArrow"
     },
 
-    toggleArrow:  function(e) {
+    toggleArrow:  function (e) {
       this.$(e.currentTarget).toggleClass("down");
     },
-    buildIndexList: function(designDocs, info) {
+    buildIndexList: function (designDocs, info) {
       var design = this.model.id.replace(/^_design\//, "");
       var databaseId = this.model.database.id;
 
@@ -181,12 +181,12 @@ function(app, FauxtonAPI, Components, Documents, Databases) {
       }));
     },
 
-    serialize: function() {
+    serialize: function () {
       var ddocName = this.model.id.replace(/^_design\//, ""),
           docSafe = app.utils.safeURLName(ddocName),
           databaseName = this.collection.database.safeID();
 
-      return{
+      return {
         designDocMetaUrl: FauxtonAPI.urls('designDocs', 'app', databaseName, docSafe),
         designDoc: ddocName,
         ddoc_clean: docSafe,
@@ -233,7 +233,7 @@ function(app, FauxtonAPI, Components, Documents, Databases) {
 
     },
 
-    beforeRender: function(manage) {
+    beforeRender: function (manage) {
       var sideBarMenuLinks = [];
 
       sideBarMenuLinks.push({
@@ -252,7 +252,7 @@ function(app, FauxtonAPI, Components, Documents, Databases) {
     template: "addons/documents/templates/index_menu_item",
     tagName: 'li',
 
-    initialize: function(options) {
+    initialize: function (options) {
       this.index = options.index;
       this.ddoc = options.ddoc;
       this.database = options.database;
@@ -266,7 +266,7 @@ function(app, FauxtonAPI, Components, Documents, Databases) {
       };
     },
 
-    serialize: function() {
+    serialize: function () {
       return {
         icon: this.indexTypeMap[this.selector].icon,
         urlFolder: this.indexTypeMap[this.selector].urlFolder,
@@ -281,7 +281,7 @@ function(app, FauxtonAPI, Components, Documents, Databases) {
       };
     },
 
-    afterRender: function() {
+    afterRender: function () {
       if (this.selected) {
         $(".sidenav ul.nav-list li").removeClass("active");
         this.$el.addClass("active");

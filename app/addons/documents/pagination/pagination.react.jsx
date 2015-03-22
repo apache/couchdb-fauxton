@@ -31,11 +31,11 @@ define([
         return this.getStoreState();
       },
 
-      componentDidMount: function() {
+      componentDidMount: function () {
         indexPaginationStore.on('change', this.onChange, this);
       },
 
-      componentWillUnmount: function() {
+      componentWillUnmount: function () {
         indexPaginationStore.off('change', this.onChange);
       },
 
@@ -125,11 +125,11 @@ define([
         return this.getStoreState();
       },
 
-      componentDidMount: function() {
+      componentDidMount: function () {
         indexPaginationStore.on('change', this.onChange, this);
       },
 
-      componentWillUnmount: function() {
+      componentWillUnmount: function () {
         indexPaginationStore.off('change', this.onChange);
       },
 

@@ -16,7 +16,7 @@ define([
   "addons/styletests/views"
 ],
 
-function(app, FauxtonAPI, Views) {
+function (app, FauxtonAPI, Views) {
 
   var TestRouteObject = FauxtonAPI.RouteObject.extend({
     layout: "one_pane",
@@ -25,10 +25,10 @@ function(app, FauxtonAPI, Views) {
     },
     selectedHeader: 'theme tests',
     crumbs:[],
-    apiUrl: function() {
+    apiUrl: function () {
       return false;
     },
-    initialize: function() {
+    initialize: function () {
       this.setView("#dashboard-content", new Views.tests({}));
     }
   });

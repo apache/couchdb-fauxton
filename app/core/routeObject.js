@@ -14,9 +14,9 @@ define([
   "core/base",
   "backbone"
 ],
-function(FauxtonAPI, Backbone) {
+function (FauxtonAPI, Backbone) {
 
-  var RouteObject = function(options) {
+  var RouteObject = function (options) {
     this._options = options;
 
     this._configure(options || {});
@@ -77,14 +77,14 @@ function(FauxtonAPI, Backbone) {
     disableLoader: false,
     loaderClassname: 'loader',
     renderedState: false,
-    establish: function() {},
-    route: function() {},
+    establish: function () {},
+    route: function () {},
     roles: [],
     _promises: [],
-    initialize: function() {}
+    initialize: function () {}
   }, {
 
-    renderWith: function(route, masterLayout, args) {
+    renderWith: function (route, masterLayout, args) {
 
       // set the options for this render
       var options = {
@@ -112,7 +112,7 @@ function(FauxtonAPI, Backbone) {
       });
     },
 
-    setTemplateOnFullRender: function(masterLayout) {
+    setTemplateOnFullRender: function (masterLayout) {
 
       var promise = $.Deferred();
 
@@ -127,12 +127,12 @@ function(FauxtonAPI, Backbone) {
       return promise;
     },
 
-    callEstablish: function(establishPromise) {
+    callEstablish: function (establishPromise) {
       this.addPromise(establishPromise);
       return FauxtonAPI.when(establishPromise);
     },
 
-    renderAllViews: function(options, resp) {
+    renderAllViews: function (options, resp) {
       var routeObject = this,
           renderView = _.bind(this.renderView, this, routeObject, options);
 
@@ -142,7 +142,7 @@ function(FauxtonAPI, Backbone) {
       return FauxtonAPI.when(promises);
     },
 
-    renderView: function(routeObject, options, view, selector) {
+    renderView: function (routeObject, options, view, selector) {
       var viewInfo = {
         view: view,
         selector: selector,
@@ -161,7 +161,7 @@ function(FauxtonAPI, Backbone) {
       return this.callEstablish(view.establish()).then(renderViewOnLayout, this.establishError);
     },
 
-    renderViewOnLayout: function(viewInfo, resp, xhr) {
+    renderViewOnLayout: function (viewInfo, resp, xhr) {
       var masterLayout = viewInfo.masterLayout,
           triggerBroadcast = _.bind(this.triggerBroadcast, this);
 
@@ -175,7 +175,7 @@ function(FauxtonAPI, Backbone) {
       return promise;
     },
 
-    establishError: function(resp) {
+    establishError: function (resp) {
       if (!resp || !resp.responseText) { return; }
       FauxtonAPI.addNotification({
             msg: 'An Error occurred: ' + JSON.parse(resp.responseText).reason,
@@ -190,7 +190,7 @@ function(FauxtonAPI, Backbone) {
       this.triggerBroadcast('renderComplete');
     },
 
-    setRenderedState: function(bool) {
+    setRenderedState: function (bool) {
       this.renderedState = bool;
     },
 
@@ -202,14 +202,14 @@ function(FauxtonAPI, Backbone) {
       broadcaster.trigger.apply(broadcaster, args);
     },
 
-    get: function(key) {
+    get: function (key) {
       return _.isFunction(this[key]) ? this[key]() : this[key];
     },
 
-    addEvents: function(events) {
+    addEvents: function (events) {
       events = events || this.get('events');
-      _.each(events, function(method, event) {
-        if (!_.isFunction(method) && !_.isFunction(this[method])) {
+      _.each(events, function (method, event) {
+        if (!_.isFunction(method) && !_.isFunction (this[method])) {
           throw new Error("Invalid method: " + method);
         }
         method = _.isFunction(method) ? method : this[method];
@@ -218,22 +218,22 @@ function(FauxtonAPI, Backbone) {
       }, this);
     },
 
-    _configure: function(options) {
-      _.each(_.intersection(_.keys(options), routeObjectOptions), function(key) {
+    _configure: function (options) {
+      _.each(_.intersection(_.keys(options), routeObjectOptions), function (key) {
         this[key] = options[key];
       }, this);
     },
 
-    getView: function(selector) {
+    getView: function (selector) {
       return this.views[selector];
     },
 
-    setView: function(selector, view) {
+    setView: function (selector, view) {
       this.views[selector] = view;
       return view;
     },
 
-    getViews: function() {
+    getViews: function () {
       return this.views;
     },
 

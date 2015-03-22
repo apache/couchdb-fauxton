@@ -10,7 +10,7 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-define([], function() {
+define([], function () {
   return {
     ADD_NAVBAR_LINK: 'ADD_NAVBAR_LINK',
     TOGGLE_NAVBAR_MENU: 'TOGGLE_NAVBAR_MENU',

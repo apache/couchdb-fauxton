@@ -20,7 +20,7 @@ define([
   'addons/documents/shared-routes'
 ],
 
-function(app, FauxtonAPI, Compaction, Databases, BaseRoute) {
+function (app, FauxtonAPI, Compaction, Databases, BaseRoute) {
 
   var CompactionRouteObject = BaseRoute.extend({
     routes: {

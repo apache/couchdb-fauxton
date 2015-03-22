@@ -13,7 +13,7 @@
 var fs = require('fs'),
     path = require('path');
 
-exports.init = function(grunt) {
+exports.init = function (grunt) {
   var _ = grunt.util._,
       platform = process.platform;
 

@@ -12,7 +12,7 @@
 
 exports.command = function (element, waitTime) {
 
-  if(waitTime === undefined){
+  if (waitTime === undefined) {
     waitTime = 10000;
   }
 

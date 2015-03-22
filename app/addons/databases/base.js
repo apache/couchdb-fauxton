@@ -22,7 +22,7 @@ define([
 
 ],
 
-function(app, FauxtonAPI, Databases, Views) {
+function (app, FauxtonAPI, Databases, Views) {
   Databases.Views = Views;
 
   Databases.initialize = function () {
@@ -35,7 +35,7 @@ function(app, FauxtonAPI, Databases, Views) {
   };
 
   // Utility functions
-  Databases.databaseUrl = function(database) {
+  Databases.databaseUrl = function (database) {
     var name = _.isObject(database) ? database.id : database,
         dbname = app.utils.safeURLName(name);
 
@@ -57,7 +57,7 @@ function(app, FauxtonAPI, Databases, Views) {
   });
 
   FauxtonAPI.registerUrls('allDBs', {
-    app: function() {
+    app: function () {
       return '_all_dbs' ;
     }
   });
@@ -67,7 +67,7 @@ function(app, FauxtonAPI, Databases, Views) {
       return window.location.origin + '/' + database;
     },
     app: function (database) {
-      return  '/database/' + database;
+      return '/database/' + database;
     }
   });
 

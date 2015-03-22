@@ -29,13 +29,13 @@ define([
       Stores.changesStore.reset();
     });
 
-    it('toggleTabVisibility() changes state in store', function() {
+    it('toggleTabVisibility() changes state in store', function () {
       assert.ok(Stores.changesStore.isTabVisible() === false);
       Stores.changesStore.toggleTabVisibility();
       assert.ok(Stores.changesStore.isTabVisible() === true);
     });
 
-    it('reset() changes tab visibility to hidden', function() {
+    it('reset() changes tab visibility to hidden', function () {
       Stores.changesStore.toggleTabVisibility();
       Stores.changesStore.reset();
       assert.ok(Stores.changesStore.isTabVisible() === false);

@@ -13,7 +13,7 @@
 define([
   "backbone",
   "plugins/backbone.layoutmanager"
-], function(Backbone) {
+], function (Backbone) {
 
   // A wrapper of the main Backbone.layoutmanager
   // Allows the main layout of the page to be changed by any plugin.
@@ -39,20 +39,20 @@ define([
       return this.layout.render();
     },
 
-    setTemplate: function(template) {
+    setTemplate: function (template) {
       if (template.prefix) {
         this.layout.template = template.prefix + template.name;
-      } else{
+      } else {
         this.layout.template = "templates/layouts/" + template;
       }
       // If we're changing layouts all bets are off, so kill off all the
       // existing views in the layout.
-      _.each(this.layoutViews, function(view) {view.removeView();});
+      _.each(this.layoutViews, function (view) {view.removeView();});
       this.layoutViews = {};
       return this.render().promise();
     },
 
-    setView: function(selector, view, keep) {
+    setView: function (selector, view, keep) {
       this.layout.setView(selector, view, false);
 
       if (!keep) {
@@ -64,7 +64,7 @@ define([
       return view;
     },
 
-    renderView: function(selector) {
+    renderView: function (selector) {
       var view = this.layoutViews[selector];
       if (!view) {
         return false;

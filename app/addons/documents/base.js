@@ -19,7 +19,7 @@ define([
   "addons/documents/routes"
 ],
 
-function(app, FauxtonAPI, Documents) {
+function (app, FauxtonAPI, Documents) {
 
   FauxtonAPI.registerUrls( 'allDocs', {
     server: function (id, query) {

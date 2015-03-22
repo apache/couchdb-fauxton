@@ -14,7 +14,7 @@ define([
   "core/base",
   "backbone"
 ],
-function(FauxtonAPI, Backbone) {
+function (FauxtonAPI, Backbone) {
 
   // This is not exposed externally as it should not need to be accessed or overridden
   var Auth = function (options) {
@@ -26,9 +26,9 @@ function(FauxtonAPI, Backbone) {
   Auth.extend = Backbone.Model.extend;
 
   _.extend(Auth.prototype, Backbone.Events, {
-    authDeniedCb: function() {},
+    authDeniedCb: function () {},
 
-    initialize: function() {
+    initialize: function () {
       var that = this;
     },
 

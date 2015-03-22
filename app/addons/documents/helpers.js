@@ -12,7 +12,7 @@
 
 define([
   'api'
-], function(FauxtonAPI) {
+], function (FauxtonAPI) {
 
   var Helpers = {};
 

@@ -22,7 +22,7 @@ define([
   'flux'
 ],
 
-function(FauxtonAPI, Layout, Router, RouteObject, utils, Store, constants, Flux) {
+function (FauxtonAPI, Layout, Router, RouteObject, utils, Store, constants, Flux) {
   FauxtonAPI = _.extend(FauxtonAPI, {
     Layout: Layout,
     Router: Router,

@@ -16,13 +16,13 @@ define([
   "addons/auth/routes"
 ],
 
-function(app, FauxtonAPI, Auth) {
+function (app, FauxtonAPI, Auth) {
 
   Auth.session = new Auth.Session();
   FauxtonAPI.setSession(Auth.session);
   app.session = Auth.session;
 
-  Auth.initialize = function() {
+  Auth.initialize = function () {
 
     FauxtonAPI.addHeaderLink({
       id: "auth",
@@ -85,7 +85,7 @@ function(app, FauxtonAPI, Auth) {
       if (session.isAdminParty()) {
         session.trigger("authenticated");
         deferred.resolve();
-      } else if(session.matchesRoles(roles)) {
+      } else if (session.matchesRoles(roles)) {
         session.trigger("authenticated");
         deferred.resolve();
       } else {

@@ -13,7 +13,7 @@
 define([
   "backbone"
 ],
-function(Backbone) {
+function (Backbone) {
 
   var Store = function () {
     this.initialize.apply(this, arguments);
