@@ -38,18 +38,18 @@ function (app, FauxtonAPI ) {
     addItem: function (value, type, section) {
       var sectionValues = this.get(section);
 
-      if (!sectionValues || !sectionValues[type]) { 
+      if (!sectionValues || !sectionValues[type]) {
         return {
           error: true,
           msg: 'Section ' + section + 'does not exist'
         };
       }
 
-      if (sectionValues[type].indexOf(value) > -1) { 
+      if (sectionValues[type].indexOf(value) > -1) {
         return {
           error: true,
           msg: 'Role/Name has already been added'
-        }; 
+        };
       }
 
       sectionValues[type].push(value);

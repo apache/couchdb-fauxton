@@ -97,7 +97,7 @@ module.exports = function(grunt) {
         dest = "app/initialize.js"
         tmpl = _.template(grunt.file.read(template)),
         app = {};
-      
+
 
     _.defaults(app, settings.app, {
       root: '/',
@@ -118,7 +118,7 @@ module.exports = function(grunt) {
    var testFiles =  grunt.file.expand(fileSrc);
 
     var configTemplate = _.template(grunt.file.read(configTemplateSrc));
-    // a bit of a nasty hack to read our current config.js and get the info so we can change it 
+    // a bit of a nasty hack to read our current config.js and get the info so we can change it
     // for our testing setup
     var require = {
       config: function (args) {

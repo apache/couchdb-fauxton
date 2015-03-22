@@ -36,5 +36,5 @@ function(app, FauxtonAPI, Views) {
 	Views.RouteObjects = [TestRouteObject];
 
 	return Views;
- 
+
 });

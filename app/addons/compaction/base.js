@@ -20,8 +20,8 @@ function(app, FauxtonAPI, Compaction) {
 
   Compaction.initialize = function() {
     FauxtonAPI.registerExtension('docLinks', {
-      title: "Compact & Clean", 
-      url: "compact", 
+      title: "Compact & Clean",
+      url: "compact",
       icon: "icon-cogs"
     });
 

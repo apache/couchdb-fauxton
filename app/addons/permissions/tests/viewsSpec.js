@@ -34,7 +34,7 @@ define([
       });
 
       viewSandbox = new ViewSandbox();
-      viewSandbox.renderView(section, done); 
+      viewSandbox.renderView(section, done);
     });
 
     afterEach(function () {
@@ -48,7 +48,7 @@ define([
         Views.events.trigger('itemRemoved');
 
         assert.ok(saveMock.calledOnce);
-        var args = saveMock.args; 
+        var args = saveMock.args;
         assert.deepEqual(args[0][0], {"admins":{"names":["_user"],"roles":[]},"members":{"names":[],"roles":[]}});
       });
 
@@ -80,7 +80,7 @@ define([
       });
 
       viewSandbox = new ViewSandbox();
-      viewSandbox.renderView(section, done); 
+      viewSandbox.renderView(section, done);
     });
 
     afterEach(function () {
@@ -136,7 +136,7 @@ define([
       });
 
       viewSandbox = new ViewSandbox();
-      viewSandbox.renderView(item, done); 
+      viewSandbox.renderView(item, done);
     });
 
     afterEach(function () {
@@ -149,14 +149,14 @@ define([
       Views.events.on('itemRemoved', eventSpy);
 
       item.$('.close').click();
-      
-      assert.ok(eventSpy.calledOnce); 
+
+      assert.ok(eventSpy.calledOnce);
     });
 
     it('should set removed to true', function () {
       item.$('.close').click();
-      
-      assert.ok(item.removed); 
+
+      assert.ok(item.removed);
     });
   });
 

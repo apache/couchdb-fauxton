@@ -17,14 +17,14 @@ module.exports = {
         newDatabaseName = client.globals.testDatabaseName,
         newDocumentName = 'create_doc_document',
         baseUrl = client.globals.test_settings.launch_url;
-    
+
     client
       .loginToGUI()
       .url(baseUrl+'/#/database/'+newDatabaseName+'/_all_docs')
       .waitForElementPresent('#new-all-docs-button', waitTime, false)
       .click('#new-all-docs-button a')
       .waitForElementPresent('#new-all-docs-button a[href="#/database/'+newDatabaseName+'/new"]', waitTime, false)
-      .click('#new-all-docs-button a[href="#/database/'+newDatabaseName+'/new"]') 
+      .click('#new-all-docs-button a[href="#/database/'+newDatabaseName+'/new"]')
       .waitForElementPresent('#editor-container', waitTime, false)
       .verify.urlEquals(baseUrl+'/#/database/'+ newDatabaseName+'/new')
       .execute('\
@@ -41,8 +41,8 @@ module.exports = {
       .getText('body', function (result) {
         var data = result.value,
             createdDocIsPresent = data.indexOf(newDocumentName);
-     
-        this.verify.ok(createdDocIsPresent > 0, 
+
+        this.verify.ok(createdDocIsPresent > 0,
           'Checking if new document shows up in _all_docs.');
       })
     .end();

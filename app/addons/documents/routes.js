@@ -20,8 +20,8 @@ define([
 function(Documents, DocumentsRouteObject, docEditor, IndexEditorRouteObject) {
 
   Documents.RouteObjects = [
-    docEditor.DocEditorRouteObject, 
-    docEditor.NewDocEditorRouteObject, 
+    docEditor.DocEditorRouteObject,
+    docEditor.NewDocEditorRouteObject,
     DocumentsRouteObject,
     IndexEditorRouteObject
   ];

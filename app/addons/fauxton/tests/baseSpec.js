@@ -41,7 +41,7 @@ define([
 
       // Need to find a better way of doing this
       mockLayout = {
-        setTemplate: function () { 
+        setTemplate: function () {
           var promise = $.Deferred();
           promise.resolve();
           return promise;

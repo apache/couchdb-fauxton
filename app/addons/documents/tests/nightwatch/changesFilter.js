@@ -19,7 +19,7 @@ module.exports = {
     var waitTime = 10000,
         newDatabaseName = client.globals.testDatabaseName,
         baseUrl = client.globals.test_settings.launch_url;
-    
+
     client
       .loginToGUI()
       .createDocument('doc_1', newDatabaseName)

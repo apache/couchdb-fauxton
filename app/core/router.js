@@ -71,7 +71,7 @@ function(FauxtonAPI, Auth, Backbone) {
             FauxtonAPI.auth.authDeniedCb();
           });
 
-        }); 
+        });
       }, this);
     },
 

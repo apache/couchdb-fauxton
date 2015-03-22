@@ -33,7 +33,7 @@ module.exports = {
         var data = result.value,
             createdDatabaseIsPresent = data.indexOf(newDatabaseName);
 
-        this.verify.ok(createdDatabaseIsPresent > 0, 
+        this.verify.ok(createdDatabaseIsPresent > 0,
           'Checking if new database shows up in _all_dbs.');
       })
     .end();

@@ -20,7 +20,7 @@ define([
 
     describe('#addItem', function () {
       var security;
-      
+
       beforeEach(function () {
         security = new Models.Security(null, {database: 'fakedb'});
       });
