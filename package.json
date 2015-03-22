@@ -42,7 +42,10 @@
     "stylecheck": "jsxcs app && jsxcs test/nightwatch_tests && jsxcs tasks && jsxcs Gruntfile.js",
     "test": "grunt test",
     "couchdebug": "grunt couchdebug",
-    "couchdb": "grunt couchdb"
+    "couchdb": "grunt couchdb",
+    "couchapp": "grunt couchapp_deploy",
+    "dev": "grunt dev",
+    "nightwatch": "grunt nightwatch"
   },
   "repository": {
     "type": "git",
