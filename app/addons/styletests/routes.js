@@ -25,10 +25,10 @@ function(app, FauxtonAPI, Views) {
     },
     selectedHeader: 'theme tests',
     crumbs:[],
-    apiUrl: function(){
+    apiUrl: function() {
       return false;
     },
-    initialize: function(){
+    initialize: function() {
       this.setView("#dashboard-content", new Views.tests({}));
     }
   });

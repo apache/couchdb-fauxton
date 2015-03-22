@@ -19,7 +19,7 @@ module.exports = {
         ddocContents = {
           "views": {
             "evens": {
-              "map": "function (doc) { if (doc.number%2 === 0){ emit(doc._id, doc.number); } }",
+              "map": "function (doc) { if (doc.number%2 === 0) { emit(doc._id, doc.number); } }",
               "reduce" : "_count"
             }
           },

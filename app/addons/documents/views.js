@@ -555,7 +555,7 @@ function (app, FauxtonAPI, Components, Documents,
       return this.model.fetch();
     },
 
-    afterRender: function(){
+    afterRender: function() {
       this.startRefreshInterval();
     },
 

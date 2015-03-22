@@ -14,7 +14,7 @@ module.exports = function(grunt) {
   var _ = grunt.util._,
       fs = require('fs');
 
-  grunt.registerMultiTask('template', 'generates an html file from a specified template', function(){
+  grunt.registerMultiTask('template', 'generates an html file from a specified template', function() {
     var data = this.data,
         _ = grunt.util._,
         tmpl = _.template(grunt.file.read(data.src), null, data.variables);
@@ -33,7 +33,7 @@ module.exports = function(grunt) {
         _ = grunt.util._;
 
     // This should probably be a helper, though they seem to have been removed
-    var fetch = function(deps, command){
+    var fetch = function(deps, command) {
       var child_process = require('child_process');
       var async = require('async');
       async.forEach(deps, function(dep, cb) {
@@ -58,13 +58,13 @@ module.exports = function(grunt) {
 
     var remoteDeps = _.filter(settings.deps, function(dep) { return !! dep.url; });
     grunt.log.writeln(remoteDeps.length + " remote dependencies");
-    var remote = fetch(remoteDeps, function(dep, destination){
+    var remote = fetch(remoteDeps, function(dep, destination) {
       return "git clone " + dep.url + " " + destination;
     });
 
     var localDeps = _.filter(settings.deps, function(dep) { return !! dep.path; });
     grunt.log.writeln(localDeps.length + " local dependencies");
-    var local = fetch(localDeps, function(dep, destination){
+    var local = fetch(localDeps, function(dep, destination) {
       // TODO: Windows
       var command = "cp -r " + dep.path + " " + destination;
       grunt.log.writeln(command);
@@ -108,7 +108,7 @@ module.exports = function(grunt) {
     grunt.file.write(dest, tmpl(app));
   });
 
-  grunt.registerMultiTask('mochaSetup', 'Generate a config.js and runner.html for tests', function(){
+  grunt.registerMultiTask('mochaSetup', 'Generate a config.js and runner.html for tests', function() {
     var data = this.data,
         configInfo,
         _ = grunt.util._,

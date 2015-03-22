@@ -111,7 +111,7 @@ function(app, FauxtonAPI, Config, Components) {
   Views.Table = FauxtonAPI.View.extend({
     template: "addons/config/templates/dashboard",
 
-    initialize: function(){
+    initialize: function() {
       this.listenTo(FauxtonAPI.Events, "config:newSection", this.render);
       this.listenTo(FauxtonAPI.Events, "config:rerender", this.render);
     },
@@ -257,7 +257,7 @@ function(app, FauxtonAPI, Config, Components) {
       this.$('li').removeClass('active');
       this.$('a[data-type-select="' + this.selectedTab + '"]').parent("li").addClass('active');
     },
-    afterRender: function(){
+    afterRender: function() {
       this.setSelectedTab(this.selectedTab);
     },
 

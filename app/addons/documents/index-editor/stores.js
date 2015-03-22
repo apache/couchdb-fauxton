@@ -21,7 +21,7 @@ function(FauxtonAPI, ActionTypes) {
   Stores.IndexEditorStore = FauxtonAPI.Store.extend({
 
     defaultMap: 'function(doc) {\n  emit(doc._id, 1);\n}',
-    defaultReduce: 'function(keys, values, rereduce){\n  if (rereduce){\n    return sum(values);\n  } else {\n    return values.length;\n  }\n}',
+    defaultReduce: 'function(keys, values, rereduce) {\n  if (rereduce) {\n    return sum(values);\n  } else {\n    return values.length;\n  }\n}',
 
     editIndex: function (options) {
       this._database = options.database;

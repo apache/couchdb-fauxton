@@ -582,8 +582,8 @@ function (app, FauxtonAPI, Components, Documents, Databases, prettify) {
     afterRender: function () {
       var that = this;
       this.$('.modal').on('hide', function (e) {
-        if(that.subEditor.edited){
-          if(!confirm("Close without saving changes?")){
+        if(that.subEditor.edited) {
+          if(!confirm("Close without saving changes?")) {
             e.preventDefault();
             return;
           }

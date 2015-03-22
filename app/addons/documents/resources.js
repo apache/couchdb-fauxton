@@ -47,7 +47,7 @@ function(app, FauxtonAPI, Documents, PagingCollection) {
 
   Documents.DdocInfo = FauxtonAPI.Model.extend({
     idAttribute: "_id",
-    documentation: function(){
+    documentation: function() {
       return FauxtonAPI.constants.DOC_URLS.GENERAL;
     },
     initialize: function (_attrs, options) {
@@ -177,7 +177,7 @@ function(app, FauxtonAPI, Documents, PagingCollection) {
 
   Documents.IndexCollection = PagingCollection.extend({
     model: Documents.Doc,
-    documentation: function(){
+    documentation: function() {
       return FauxtonAPI.constants.DOC_URLS.GENERAL;
     },
     initialize: function(_models, options) {
@@ -259,7 +259,7 @@ function(app, FauxtonAPI, Documents, PagingCollection) {
       return PagingCollection.prototype.parse.apply(this, arguments);
     },
 
-    buildAllDocs: function(){
+    buildAllDocs: function() {
       this.fetch();
     },
 
@@ -270,7 +270,7 @@ function(app, FauxtonAPI, Documents, PagingCollection) {
       return PagingCollection.prototype.fetch.call(this);
     },
 
-    allDocs: function(){
+    allDocs: function() {
       return this.models;
     },
 
@@ -311,7 +311,7 @@ function(app, FauxtonAPI, Documents, PagingCollection) {
 
   Documents.PouchIndexCollection = PagingCollection.extend({
     model: Documents.ViewRow,
-    documentation: function(){
+    documentation: function() {
       return FauxtonAPI.constants.DOC_URLS.GENERAL;
     },
     initialize: function(_models, options) {
@@ -368,11 +368,11 @@ function(app, FauxtonAPI, Documents, PagingCollection) {
       return this.viewMeta.update_seq || false;
     },
 
-    buildAllDocs: function(){
+    buildAllDocs: function() {
       this.fetch();
     },
 
-    allDocs: function(){
+    allDocs: function() {
       return this.models;
     }
   });

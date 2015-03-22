@@ -30,7 +30,7 @@ function(app, FauxtonAPI, Replication, Views) {
     crumbs: [
       { "name": 'Replicate changes from: ', 'link': 'replication' }
     ],
-    defaultView: function(dbname){
+    defaultView: function(dbname) {
       var isAdmin = FauxtonAPI.session.isAdmin();
 
       this.tasks = [];

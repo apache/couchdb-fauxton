@@ -77,7 +77,7 @@ function(FauxtonAPI, Auth, Backbone) {
 
     setModuleRoutes: function(addons) {
       _.each(addons, function(module) {
-        if (module){
+        if (module) {
           module.initialize();
           // This is pure routes the addon provides
           if (module.RouteObjects) {

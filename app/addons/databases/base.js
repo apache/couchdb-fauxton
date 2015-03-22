@@ -57,7 +57,7 @@ function(app, FauxtonAPI, Databases, Views) {
   });
 
   FauxtonAPI.registerUrls('allDBs', {
-    app: function(){
+    app: function() {
       return '_all_dbs' ;
     }
   });

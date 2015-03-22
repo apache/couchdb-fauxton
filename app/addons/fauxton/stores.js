@@ -41,9 +41,9 @@ function(app, FauxtonAPI, ActionTypes) {
     },
 
     addLink: function (link) {
-      if (link.top && !link.bottomNav){
+      if (link.top && !link.bottomNav) {
         this.navLinks.unshift(link);
-      } else if (link.top && link.bottomNav){
+      } else if (link.top && link.bottomNav) {
         this.bottomNavLinks.unshift(link);
       } else if (link.bottomNav) {
         this.bottomNavLinks.push(link);
