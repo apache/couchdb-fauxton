@@ -82,7 +82,7 @@ function (app, FauxtonAPI, Helpers, BaseRoute, Documents, Index,
         ]
       }));
 
-      viewName = viewName.replace(/\?.*$/,'');
+      viewName = viewName.replace(/\?.*$/, '');
 
       this.footer = this.setView('#footer', new Documents.Views.Footer());
 

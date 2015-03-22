@@ -120,7 +120,7 @@ function(app, FauxtonAPI, Helpers, Documents, DocEditor, Databases) {
       var databaseName = options[0];
 
       this.database = this.database || new Databases.Model({id: databaseName});
-      this.doc = new Documents.NewDoc(null,{
+      this.doc = new Documents.NewDoc(null, {
         database: this.database
       });
     },

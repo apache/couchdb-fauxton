@@ -41,7 +41,7 @@ module.exports = {
 
       //navigated to editor
       .waitForElementVisible('#editor-container', waitTime, false)
-      .verify.urlContains('#/database/' + newDatabaseName +'/document_10');
+      .verify.urlContains('#/database/' + newDatabaseName + '/document_10');
   },
 
   'Edit is not allowed for Map Views where reduce is checked' : function (client) {

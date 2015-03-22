@@ -108,7 +108,7 @@ module.exports = function(grunt) {
     grunt.file.write(dest, tmpl(app));
   });
 
-  grunt.registerMultiTask('mochaSetup','Generate a config.js and runner.html for tests', function(){
+  grunt.registerMultiTask('mochaSetup', 'Generate a config.js and runner.html for tests', function(){
     var data = this.data,
         configInfo,
         _ = grunt.util._,
@@ -131,7 +131,7 @@ module.exports = function(grunt) {
       }
     };
 
-    eval(grunt.file.read(data.config) +'');
+    eval(grunt.file.read(data.config) + '');
 
     grunt.file.write('./test/test.config.js', configTemplate({configInfo: configInfo, testFiles: testFiles}));
   });

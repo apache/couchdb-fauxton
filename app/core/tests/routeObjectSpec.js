@@ -73,7 +73,7 @@ define([
 
 
       it("Should call establish of routeObject", function () {
-        var establishSpy = sinon.spy(testRouteObject,"establish");
+        var establishSpy = sinon.spy(testRouteObject, "establish");
 
         testRouteObject.renderWith('the-route', mockLayout, 'args');
         assert.ok(establishSpy.calledOnce, 'Calls establish');
@@ -81,7 +81,7 @@ define([
 
       it("Should render views", function () {
         var view = new FauxtonAPI.View(),
-            getViewsSpy = sinon.stub(testRouteObject,"getViews"),
+            getViewsSpy = sinon.stub(testRouteObject, "getViews"),
             viewSpy = sinon.stub(view, "establish");
 
         view.hasRendered = false;
@@ -99,7 +99,7 @@ define([
 
       it("Should not re-render a view", function () {
         var view = new FauxtonAPI.View(),
-            getViewsSpy = sinon.stub(testRouteObject,"getViews"),
+            getViewsSpy = sinon.stub(testRouteObject, "getViews"),
             viewSpy = sinon.stub(view, "establish");
 
         view.hasRendered = true;

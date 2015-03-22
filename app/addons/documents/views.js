@@ -107,7 +107,7 @@ function (app, FauxtonAPI, Components, Documents,
 
     selectAllMenu: function(e) {
       FauxtonAPI.triggerRouteEvent("toggleSelectHeader");
-      FauxtonAPI.Events.trigger("documents:showSelectAll",this.selectVisible);
+      FauxtonAPI.Events.trigger("documents:showSelectAll", this.selectVisible);
     },
 
     // updates the API bar when the route changes
@@ -531,7 +531,7 @@ function (app, FauxtonAPI, Components, Documents,
     jumpToDoc: function (event) {
       event.preventDefault();
       var docId = this.$('#jump-to-doc-id').val().trim();
-      FauxtonAPI.navigate('/database/' + app.utils.safeURLName(this.database.id) +'/' + app.utils.safeURLName(docId), {trigger: true});
+      FauxtonAPI.navigate('/database/' + app.utils.safeURLName(this.database.id) + '/' + app.utils.safeURLName(docId), {trigger: true});
     },
 
     afterRender: function () {

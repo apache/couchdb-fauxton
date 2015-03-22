@@ -342,7 +342,7 @@ function (app, FauxtonAPI, CouchdbSession) {
     setTab: function (selectedTab) {
       this.selectedTab = selectedTab;
       this.$('.active').removeClass('active');
-      var $tab = this.$('a[data-select="' + selectedTab +'"]');
+      var $tab = this.$('a[data-select="' + selectedTab + '"]');
       $tab.parent().addClass('active');
     },
 

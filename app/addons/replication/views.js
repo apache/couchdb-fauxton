@@ -77,11 +77,11 @@ function(app, FauxtonAPI, Components, Replication) {
     },
 
     enableFields: function () {
-      this.$el.find('input','select').attr('disabled', false);
+      this.$el.find('input', 'select').attr('disabled', false);
     },
 
     disableFields: function () {
-      this.$el.find('input:hidden','select:hidden').attr('disabled', true);
+      this.$el.find('input:hidden', 'select:hidden').attr('disabled', true);
     },
 
     showFields: function (e) {

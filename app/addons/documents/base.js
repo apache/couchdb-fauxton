@@ -61,7 +61,7 @@ function(app, FauxtonAPI, Documents) {
     },
 
     showNewlySavedView: function (database, designDocs, viewName) {
-      return '/database/' + database +'/' + designDocs + '/_view/' + viewName;
+      return '/database/' + database + '/' + designDocs + '/_view/' + viewName;
     },
 
     fragment: function (database, designDocs, viewName) {

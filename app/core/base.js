@@ -120,7 +120,7 @@ function(Backbone, LayoutManager) {
     var views = extensions[name];
     if (!views) { return; }
 
-    var _cb = arguments[arguments.length -1];
+    var _cb = arguments[arguments.length - 1];
     if (_.isObject(view) && !cb) {
       _cb = function (item) { return _.isEqual(item, view);};
     }

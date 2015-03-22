@@ -33,7 +33,7 @@ function ($, _) {
     getParams: function(queryString) {
       if (queryString) {
         // I think this could be combined into one if
-        if (queryString.substring(0,1) === "?") {
+        if (queryString.substring(0, 1) === "?") {
           queryString = queryString.substring(1);
         } else if (queryString.indexOf('?') > -1) {
           queryString = queryString.split('?')[1];
@@ -89,7 +89,7 @@ function ($, _) {
     },
 
     removeSpecialCharacters: function(name){
-      return name.replace(/[^\w\s]/gi,"");
+      return name.replace(/[^\w\s]/gi, "");
     },
 
     safeURLName: function(name){

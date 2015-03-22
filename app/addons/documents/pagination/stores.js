@@ -14,7 +14,7 @@ define([
   'app',
   'api',
   'addons/documents/pagination/actiontypes'
-],function (app, FauxtonAPI, ActionTypes) {
+], function (app, FauxtonAPI, ActionTypes) {
 
   var Stores = {};
   var maxDocLimit = 10000;

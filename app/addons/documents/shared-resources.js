@@ -156,7 +156,7 @@ define([
     // json editor for docs, or into a ddoc specific page.
     safeID: function() {
       if (this.isDdoc()){
-        var ddoc = this.id.replace(/^_design\//,"");
+        var ddoc = this.id.replace(/^_design\//, "");
         return "_design/" + app.utils.safeURLName(ddoc);
       }else{
         return app.utils.safeURLName(this.id);
@@ -221,7 +221,7 @@ define([
       this.database = options.database;
       this.params = _.clone(options.params);
 
-      this.on("remove",this.decrementTotalRows , this);
+      this.on("remove", this.decrementTotalRows, this);
       this.perPageLimit = options.perPageLimit || 20;
 
       if (!this.params.limit) {
@@ -271,7 +271,7 @@ define([
 
     decrementTotalRows: function () {
       if (this.viewMeta.total_rows) {
-        this.viewMeta.total_rows = this.viewMeta.total_rows -1;
+        this.viewMeta.total_rows = this.viewMeta.total_rows - 1;
         this.trigger('totalRows:decrement');
       }
     },

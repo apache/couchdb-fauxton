@@ -47,7 +47,7 @@ define([
 
       it("Should clearInterval", function () {
         var $range = tabMenu.$('#pollingRange');
-        var clearIntervalMock = sinon.spy(window,'clearInterval');
+        var clearIntervalMock = sinon.spy(window, 'clearInterval');
         $range.trigger('input');
 
         assert.ok(clearIntervalMock.calledOnce);

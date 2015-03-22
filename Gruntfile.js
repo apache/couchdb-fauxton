@@ -67,7 +67,7 @@ module.exports = function(grunt) {
           "dist/debug/css/fauxton.css": "assets/less/fauxton.less"
         }
       },
-      fonts: ["assets/fonts/*.eot", "assets/fonts/*.svg", "assets/fonts/*.ttf", "assets/fonts/*.woff",],
+      fonts: ["assets/fonts/*.eot", "assets/fonts/*.svg", "assets/fonts/*.ttf", "assets/fonts/*.woff"],
       img: ["assets/img/**"],
       // used in concat:index_css to keep file ordering intact
       // fauxton.css should load first
@@ -277,16 +277,16 @@ module.exports = function(grunt) {
 
     watch: {
       js: {
-        files: helper.watchFiles(['.js'], ["./app/**/*.js", '!./app/load_addons.js',"./assets/**/*.js", "./test/**/*.js"]),
+        files: helper.watchFiles(['.js'], ["./app/**/*.js", '!./app/load_addons.js', "./assets/**/*.js", "./test/**/*.js"]),
         tasks: ['watchRun'],
       },
       jsx: {
-        files: helper.watchFiles(['.jsx'], ["./app/**/*.jsx", '!./app/load_addons.jsx',"./assets/**/*.jsx", "./test/**/*.jsx"]),
+        files: helper.watchFiles(['.jsx'], ["./app/**/*.jsx", '!./app/load_addons.jsx', "./assets/**/*.jsx", "./test/**/*.jsx"]),
         tasks: ['watchRun'],
       },
       style: {
-        files: helper.watchFiles(['.less','.css'],["./app/**/*.css","./app/**/*.less","./assets/**/*.css", "./assets/**/*.less"]),
-        tasks: ['clean:watch', 'dependencies','less', 'concat:index_css'],
+        files: helper.watchFiles(['.less', '.css'], ["./app/**/*.css", "./app/**/*.less", "./assets/**/*.css", "./assets/**/*.less"]),
+        tasks: ['clean:watch', 'dependencies', 'less', 'concat:index_css'],
       },
       html: {
         // the index.html is added in as a dummy file incase there is no
@@ -510,7 +510,7 @@ module.exports = function(grunt) {
   grunt.registerTask('lint', ['clean', 'jshint']);
   grunt.registerTask('test', ['jsx', 'lint', 'dependencies', 'gen_initialize:development', 'test_inline']);
   // lighter weight test task for use inside dev/watch
-  grunt.registerTask('test_inline', ['mochaSetup','jst', 'concat:test_config_js','mocha_phantomjs']);
+  grunt.registerTask('test_inline', ['mochaSetup', 'jst', 'concat:test_config_js', 'mocha_phantomjs']);
   // Fetch dependencies (from git or local dir), lint them and make load_addons
   grunt.registerTask('dependencies', ['get_deps', 'gen_load_addons:default']);
 
@@ -527,13 +527,13 @@ module.exports = function(grunt) {
   grunt.registerTask('dev', ['debugDev', 'couchserver']);
 
   // build a debug release
-  grunt.registerTask('debug', ['lint', 'dependencies', "gen_initialize:development", 'jsx', 'concat:requirejs','less', 'concat:index_css', 'template:development', 'copy:debug']);
-  grunt.registerTask('debugDev', ['clean', 'dependencies', "gen_initialize:development",'jsx', 'jshint','less', 'concat:index_css', 'template:development', 'copy:debug']);
+  grunt.registerTask('debug', ['lint', 'dependencies', "gen_initialize:development", 'jsx', 'concat:requirejs', 'less', 'concat:index_css', 'template:development', 'copy:debug']);
+  grunt.registerTask('debugDev', ['clean', 'dependencies', "gen_initialize:development", 'jsx', 'jshint', 'less', 'concat:index_css', 'template:development', 'copy:debug']);
 
   grunt.registerTask('watchRun', ['clean:watch', 'dependencies', 'jshint']);
 
   // build a release
-  grunt.registerTask('release_commons_prefix', ['clean' ,'dependencies']);
+  grunt.registerTask('release_commons_prefix', ['clean', 'dependencies']);
   grunt.registerTask('release_commons_suffix', ['jshint', 'shell:build-jsx', 'build', 'copy:dist', 'copy:ace', 'copy:zeroclip']);
 
   grunt.registerTask('release', ['release_commons_prefix', 'gen_initialize:release', 'release_commons_suffix']);

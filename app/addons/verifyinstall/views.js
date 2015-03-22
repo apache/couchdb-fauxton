@@ -52,7 +52,7 @@ function(app, FauxtonAPI, VerifyInstall) {
     },
 
     disableButton: function () {
-      this.$('#start').attr('disabled','disabled').text('Verifying');
+      this.$('#start').attr('disabled', 'disabled').text('Verifying');
     },
 
     formatError: function (id) {

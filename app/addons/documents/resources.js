@@ -67,7 +67,7 @@ function(app, FauxtonAPI, Documents, PagingCollection) {
     // treated separately. For instance, we could default into the
     // json editor for docs, or into a ddoc specific page.
     safeID: function() {
-      var ddoc = this.id.replace(/^_design\//,"");
+      var ddoc = this.id.replace(/^_design\//, "");
       return "_design/" + app.utils.safeURLName(ddoc);
     }
   });
@@ -186,7 +186,7 @@ function(app, FauxtonAPI, Documents, PagingCollection) {
 
       this.idxType = "_view";
       this.view = options.view;
-      this.design = options.design.replace('_design/','');
+      this.design = options.design.replace('_design/', '');
       this.perPageLimit = options.perPageLimit || 20;
 
       if (!this.params.limit) {
@@ -318,7 +318,7 @@ function(app, FauxtonAPI, Documents, PagingCollection) {
       this.database = options.database;
       this.rows = options.rows;
       this.view = options.view;
-      this.design = options.design.replace('_design/','');
+      this.design = options.design.replace('_design/', '');
       this.params = _.extend({limit: 20, reduce: false}, options.params);
       this.idxType = "_view";
 
@@ -383,7 +383,7 @@ function(app, FauxtonAPI, Documents, PagingCollection) {
         title: 'Replicate Database',
         icon: 'fonticon-replicate',
         url: FauxtonAPI.urls('replication', 'app', database.get('id'))
-      },{
+      }, {
         title: 'Delete',
         icon: 'fonticon-trash',
         trigger: 'database:delete'
@@ -404,7 +404,7 @@ function(app, FauxtonAPI, Documents, PagingCollection) {
       title: 'New Doc',
       url: newUrlPrefix + '/new',
       icon: 'fonticon-plus-circled'
-    },{
+    }, {
       title: 'New View',
       url: newUrlPrefix + '/new_view',
       icon: 'fonticon-plus-circled'
