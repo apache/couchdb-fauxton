@@ -40,14 +40,14 @@ define([
     },
 
     setTemplate: function(template) {
-      if (template.prefix){
+      if (template.prefix) {
         this.layout.template = template.prefix + template.name;
       } else{
         this.layout.template = "templates/layouts/" + template;
       }
       // If we're changing layouts all bets are off, so kill off all the
       // existing views in the layout.
-      _.each(this.layoutViews, function(view){view.removeView();});
+      _.each(this.layoutViews, function(view) {view.removeView();});
       this.layoutViews = {};
       return this.render().promise();
     },

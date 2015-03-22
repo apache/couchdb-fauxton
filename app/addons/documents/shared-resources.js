@@ -23,7 +23,7 @@ define([
 
   Documents.Doc = FauxtonAPI.Model.extend({
     idAttribute: "_id",
-    documentation: function(){
+    documentation: function() {
       return FauxtonAPI.constants.DOC_URLS.GENERAL;
     },
     url: function(context) {
@@ -61,7 +61,7 @@ define([
       return this.docType() != "reduction";
     },
 
-    isFromView: function(){
+    isFromView: function() {
       return !this.id;
     },
 
@@ -155,7 +155,7 @@ define([
     // treated separately. For instance, we could default into the
     // json editor for docs, or into a ddoc specific page.
     safeID: function() {
-      if (this.isDdoc()){
+      if (this.isDdoc()) {
         var ddoc = this.id.replace(/^_design\//, "");
         return "_design/" + app.utils.safeURLName(ddoc);
       }else{
@@ -288,11 +288,11 @@ define([
 
       // remove any query errors that may return without doc info
       // important for when querying keys on all docs
-      var cleanRows = _.filter(rows, function(row){
+      var cleanRows = _.filter(rows, function(row) {
         return row.value;
       });
 
-      resp.rows = _.map(cleanRows, function(row){
+      resp.rows = _.map(cleanRows, function(row) {
         return {
           _id: row.id,
           _rev: row.value.rev,

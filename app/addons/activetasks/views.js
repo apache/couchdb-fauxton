@@ -137,7 +137,7 @@ function (app, FauxtonAPI, ActiveTasks) {
       this.$('.task-tabs').find('li').eq(0).addClass('active');
     },
 
-    changePollInterval: function(e){
+    changePollInterval: function(e) {
       var range = this.$(e.currentTarget).val();
       this.$('label[for="pollingRange"] span').text(range);
       pollingInfo.rate = range;
@@ -149,7 +149,7 @@ function (app, FauxtonAPI, ActiveTasks) {
       clearInterval(pollingInfo.intervalId);
     },
 
-    requestByType: function(e){
+    requestByType: function(e) {
       var currentTarget = e.currentTarget,
           filter = this.$(currentTarget).attr('data-type');
 

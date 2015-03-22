@@ -118,7 +118,7 @@ function(app, FauxtonAPI, Components, Documents, Databases) {
       this.designDocList = [];
 
       this.collection.each(function(design) {
-        if (design.has('doc')){
+        if (design.has('doc')) {
           design.collection = this.collection;
           var view = this.insertView(new Views.DdocSidenav({
             model: design,
@@ -143,7 +143,7 @@ function(app, FauxtonAPI, Components, Documents, Databases) {
       this.$('li').removeClass('active');
       $selectedTab.parent().addClass('active');
 
-      if ($selectedTab.parents(".accordion-body").length !== 0){
+      if ($selectedTab.parents(".accordion-body").length !== 0) {
         $selectedTab
         .parents(".accordion-body")
         .addClass("in")
@@ -163,10 +163,10 @@ function(app, FauxtonAPI, Components, Documents, Databases) {
       "click .js-collapse-toggle": "toggleArrow"
     },
 
-    toggleArrow:  function(e){
+    toggleArrow:  function(e) {
       this.$(e.currentTarget).toggleClass("down");
     },
-    buildIndexList: function(designDocs, info){
+    buildIndexList: function(designDocs, info) {
       var design = this.model.id.replace(/^_design\//, "");
       var databaseId = this.model.database.id;
 
@@ -181,7 +181,7 @@ function(app, FauxtonAPI, Components, Documents, Databases) {
       }));
     },
 
-    serialize: function(){
+    serialize: function() {
       var ddocName = this.model.id.replace(/^_design\//, ""),
           docSafe = app.utils.safeURLName(ddocName),
           databaseName = this.collection.database.safeID();
@@ -220,7 +220,7 @@ function(app, FauxtonAPI, Components, Documents, Databases) {
       var ddocDocs = this.model.get("doc"),
           sidebarListTypes = FauxtonAPI.getExtensions('sidebar:list');
 
-      if (!ddocDocs){ return; }
+      if (!ddocDocs) { return; }
 
       this.buildIndexList(ddocDocs, {
         selector: "views",
@@ -252,7 +252,7 @@ function(app, FauxtonAPI, Components, Documents, Databases) {
     template: "addons/documents/templates/index_menu_item",
     tagName: 'li',
 
-    initialize: function(options){
+    initialize: function(options) {
       this.index = options.index;
       this.ddoc = options.ddoc;
       this.database = options.database;

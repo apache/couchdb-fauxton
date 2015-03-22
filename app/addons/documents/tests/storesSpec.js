@@ -207,7 +207,7 @@ define([
             type: ActionTypes.SELECT_REDUCE_CHANGE,
             reduceSelectedOption: 'CUSTOM'
           });
-          assert.equal(store.getReduce(), 'function(keys, values, rereduce){\n  if (rereduce){\n    return sum(values);\n  } else {\n    return values.length;\n  }\n}');
+          assert.equal(store.getReduce(), 'function(keys, values, rereduce) {\n  if (rereduce) {\n    return sum(values);\n  } else {\n    return values.length;\n  }\n}');
         });
       });
     });

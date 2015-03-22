@@ -44,7 +44,7 @@ function(app, FauxtonAPI, Documents) {
       return this.allDocs;
     },
 
-    isNew: function(){
+    isNew: function() {
       // Databases are never new, to make Backbone do a PUT
       return false;
     },
@@ -70,7 +70,7 @@ function(app, FauxtonAPI, Documents) {
         return app.host + "/" + this.safeID();
       }
     },
-    safeName: function(){
+    safeName: function() {
       return app.utils.safeURLName(this.get("name"));
     },
     safeID: function() {
@@ -96,7 +96,7 @@ function(app, FauxtonAPI, Documents) {
       this.database = options.database;
       this.params = options.params;
     },
-    documentation: function(){
+    documentation: function() {
       return FauxtonAPI.constants.DOC_URLS.CHANGES;
     },
     url: function (context) {
@@ -149,7 +149,7 @@ function(app, FauxtonAPI, Documents) {
     },
 
     dataSize: function () {
-      if (this.get("other")){
+      if (this.get("other")) {
         return this.get("other").data_size;
       } else if (this.get('data_size')) {
         return this.get('data_size');

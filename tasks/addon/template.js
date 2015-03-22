@@ -54,7 +54,7 @@ exports.template = function(grunt, init, done) {
       init.copyAndProcess(files, props);
 
       // Make the assets dir if requested
-      if (props.assets == "y"){
+      if (props.assets == "y") {
         var asspath = props.path + "/" + props.name.toLowerCase() + "/assets";
         grunt.file.mkdir(asspath);
         grunt.log.writeln("Created " + asspath);

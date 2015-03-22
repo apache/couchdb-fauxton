@@ -137,7 +137,7 @@ function(app, FauxtonAPI, Components, Replication) {
       return error;
     },
 
-    serialize: function(){
+    serialize: function() {
       return {
         databases:  this.collection.toJSON(),
         selectedDB: this.selectedDB
@@ -169,7 +169,7 @@ function(app, FauxtonAPI, Components, Replication) {
       this.enableFields();
     },
 
-    updateButtonText: function(wait){
+    updateButtonText: function(wait) {
       var $button = this.$('#replication button[type=submit]');
       if (wait) {
         $button.text('Starting replication...').attr('disabled', true);

@@ -307,7 +307,7 @@ define([
         var $clickedEl = $(e.currentTarget);
         var $keyFieldsWrapper = this.$(".js-query-keys-wrapper");
 
-        if ($clickedEl.hasClass("active")){
+        if ($clickedEl.hasClass("active")) {
           $clickedEl.removeClass("active");
           $keyFieldsWrapper.addClass("hide");
         } else {
@@ -333,7 +333,7 @@ define([
         this.$('[name="keys"]').removeAttr("disabled");
       },
 
-      showBetweenKeysSection: function (){
+      showBetweenKeysSection: function () {
         this.$("#js-showStartEnd").show();
         this.$('[name="startkey"],[name="endkey"],[name="inclusive_end"]').removeAttr("disabled");
         this.$('.js-disabled-message').hide();

@@ -73,7 +73,7 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
       }
     },
 
-    beforeRender: function(){
+    beforeRender: function() {
       this.setUpCrumbs();
       this.setUpDropDownMenu();
 
@@ -82,14 +82,14 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
       }
     },
 
-    setUpCrumbs: function(){
+    setUpCrumbs: function() {
       this.breadcrumbs = this.insertView("#header-breadcrumbs", new Components.Breadcrumbs({
         crumbs: this.crumbs
       }));
     },
 
-    setUpDropDownMenu: function(){
-      if (this.dropdownMenuLinks){
+    setUpDropDownMenu: function() {
+      if (this.dropdownMenuLinks) {
         this.dropdown = this.insertView("#header-dropdown-menu", new Components.MenuDropDown({
           icon: 'fonticon-cog',
           links: this.dropdownMenuLinks,
@@ -437,7 +437,7 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
     },
 
     showModal: function () {
-      if (this._showModal){ this._showModal();}
+      if (this._showModal) { this._showModal();}
       this.clear_error_msg();
       this.$('.modal').modal();
 
@@ -464,7 +464,7 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
     },
 
     serialize: function () {
-      if (this.model){
+      if (this.model) {
         return this.model.toJSON();
       }
       return {};
@@ -674,7 +674,7 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
       return Math.floor(this.availableEditorHeight  / singleLine);
     },
 
-    getLines: function(){
+    getLines: function() {
       return this.editor.getSession().getDocument().getLength();
     },
 
@@ -802,12 +802,12 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
   Components.MenuDropDown = FauxtonAPI.View.extend({
     template: "addons/fauxton/templates/menu_dropdown",
     className: "dropdown",
-    initialize: function(options){
+    initialize: function(options) {
       this.links = options.links;
       this.icon = options.icon || "fonticon-plus-circled";
       this.setUpEvents();
     },
-    setUpEvents: function(){
+    setUpEvents: function() {
       this.events = {};
       _.each(this.links, function (parentLink) {
         _.each(parentLink.links, function (link) {
@@ -816,16 +816,16 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
         }, this);
       }, this);
     },
-    triggerEvent: function(e){
+    triggerEvent: function(e) {
       e.preventDefault();
       var eventTrigger = $(e.currentTarget).attr('triggerEvent');
       FauxtonAPI.Events.trigger(eventTrigger);
     },
-    update: function(links){
+    update: function(links) {
       this.links = links;
       this.render();
     },
-    serialize: function(){
+    serialize: function() {
       return {
         links: this.links,
         icon: this.icon
@@ -936,7 +936,7 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
   var routeObjectSpinner;
 
   FauxtonAPI.RouteObject.on('beforeEstablish', function (routeObject) {
-    if (!routeObject.disableLoader){
+    if (!routeObject.disableLoader) {
       var opts = {
         lines: 16, // The number of lines to draw
         length: 8, // The length of each line
@@ -971,7 +971,7 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
   var removeViewSpinner = function (selector) {
     var viewSpinner = viewSpinners[selector];
 
-    if (viewSpinner){
+    if (viewSpinner) {
       viewSpinner.stop();
       $(selector).find('.spinner').remove();
       delete viewSpinners[selector];
@@ -982,7 +982,7 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
   FauxtonAPI.RouteObject.on('beforeRender', function (routeObject, view, selector) {
     removeRouteObjectSpinner();
 
-    if (!view.disableLoader){
+    if (!view.disableLoader) {
       var opts = {
         lines: 16, // The number of lines to draw
         length: 8, // The length of each line

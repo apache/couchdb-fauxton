@@ -194,13 +194,13 @@ define([
         assert.equal(store.getPerPage(), 20);
       });
 
-      it('uses localstorage when available', function (){
+      it('uses localstorage when available', function () {
         window.localStorage.setItem('fauxton:perpage', 44);
         store.initPerPage();
         assert.equal(store.getPerPage(), 44);
       });
 
-      it('uses doc limit when its less than perPage', function (){
+      it('uses doc limit when its less than perPage', function () {
         window.localStorage.setItem('fauxton:perpage', 100);
         store._docLimit = 6;
         store.initPerPage();

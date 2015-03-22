@@ -112,7 +112,7 @@ function(FauxtonAPI, Backbone) {
       });
     },
 
-    setTemplateOnFullRender: function(masterLayout){
+    setTemplateOnFullRender: function(masterLayout) {
 
       var promise = $.Deferred();
 
@@ -161,7 +161,7 @@ function(FauxtonAPI, Backbone) {
       return this.callEstablish(view.establish()).then(renderViewOnLayout, this.establishError);
     },
 
-    renderViewOnLayout: function(viewInfo, resp, xhr){
+    renderViewOnLayout: function(viewInfo, resp, xhr) {
       var masterLayout = viewInfo.masterLayout,
           triggerBroadcast = _.bind(this.triggerBroadcast, this);
 
@@ -175,7 +175,7 @@ function(FauxtonAPI, Backbone) {
       return promise;
     },
 
-    establishError: function(resp){
+    establishError: function(resp) {
       if (!resp || !resp.responseText) { return; }
       FauxtonAPI.addNotification({
             msg: 'An Error occurred: ' + JSON.parse(resp.responseText).reason,
@@ -190,7 +190,7 @@ function(FauxtonAPI, Backbone) {
       this.triggerBroadcast('renderComplete');
     },
 
-    setRenderedState: function(bool){
+    setRenderedState: function(bool) {
       this.renderedState = bool;
     },
 

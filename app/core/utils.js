@@ -66,19 +66,19 @@ function ($, _) {
       return fragment;
     },
 
-    addWindowResize: function(fun, key){
+    addWindowResize: function(fun, key) {
       onWindowResize[key] = fun;
       // You shouldn't need to call it here. Just define it at startup and each time it will loop
       // through all the functions in the hash.
       //app.initWindowResize();
     },
 
-    removeWindowResize: function(key){
+    removeWindowResize: function(key) {
       delete onWindowResize[key];
       utils.initWindowResize();
     },
 
-    initWindowResize: function(){
+    initWindowResize: function() {
       //when calling this it should be overriding what was called previously
       window.onresize = function(e) {
         // could do this instead of the above for loop
@@ -88,11 +88,11 @@ function ($, _) {
       };
     },
 
-    removeSpecialCharacters: function(name){
+    removeSpecialCharacters: function(name) {
       return name.replace(/[^\w\s]/gi, "");
     },
 
-    safeURLName: function(name){
+    safeURLName: function(name) {
       var testName = name || "";
       var checkforBad = testName.match(/[\$\-/,+-]/g);
       return (checkforBad !== null) ? encodeURIComponent(name) : name;
