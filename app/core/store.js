@@ -29,6 +29,6 @@ function(Backbone) {
     initialize: function () {}
   });
 
-  return Store; 
+  return Store;
 });
 

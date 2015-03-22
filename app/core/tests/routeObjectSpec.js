@@ -32,7 +32,7 @@ define([
 
         // Need to find a better way of doing this
         mockLayout = {
-          setTemplate: function () { 
+          setTemplate: function () {
             var promise = $.Deferred();
             promise.resolve();
             return promise;
@@ -71,7 +71,7 @@ define([
         assert.ok(setTemplateSpy.calledOnce, 'SetTemplate not meant to be called');
       });
 
-      
+
       it("Should call establish of routeObject", function () {
         var establishSpy = sinon.spy(testRouteObject,"establish");
 
@@ -83,9 +83,9 @@ define([
         var view = new FauxtonAPI.View(),
             getViewsSpy = sinon.stub(testRouteObject,"getViews"),
             viewSpy = sinon.stub(view, "establish");
-        
+
         view.hasRendered = false;
-        view.promise = function () { 
+        view.promise = function () {
           var promise = $.Deferred();
           promise.resolve();
           return promise;
@@ -101,7 +101,7 @@ define([
         var view = new FauxtonAPI.View(),
             getViewsSpy = sinon.stub(testRouteObject,"getViews"),
             viewSpy = sinon.stub(view, "establish");
-        
+
         view.hasRendered = true;
         getViewsSpy.returns({'#view': view});
 

@@ -28,7 +28,7 @@ CreateDatabase.prototype.command = function (databaseName) {
   nano.db.create(databaseName, function (err, body, header) {
     if (err) {
       console.log('Error in nano CreateDatabase Function: '+ databaseName, err.message);
-      
+
     }
     console.log('nano - created a database: ' + databaseName);
     // emit the complete event

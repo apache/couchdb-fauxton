@@ -47,7 +47,7 @@ function (app, FauxtonAPI, Databases, Documents) {
 
     updateDoc: function () {
       doc.set({b: 'hello'});
-      return doc.save(); 
+      return doc.save();
     },
 
     saveDB: function () {
@@ -75,7 +75,7 @@ function (app, FauxtonAPI, Databases, Documents) {
 
     setup: function () {
       return FauxtonAPI.when([
-        this.setupDB(db), 
+        this.setupDB(db),
         this.setupDB(dbReplicate)
       ]);
     },
@@ -84,7 +84,7 @@ function (app, FauxtonAPI, Databases, Documents) {
       var deferred = FauxtonAPI.Deferred();
       var promise = $.get(viewDoc.url() + '/_view/testview');
 
-      promise.then(function (resp) { 
+      promise.then(function (resp) {
         resp = _.isString(resp) ? JSON.parse(resp) : resp;
         var row = resp.rows[0];
         if (row.value === 6) {
@@ -108,11 +108,11 @@ function (app, FauxtonAPI, Databases, Documents) {
       viewDoc = new Documents.Doc({
         _id: '_design/view_check',
         views: {
-          'testview': { 
+          'testview': {
             map: 'function (doc) { emit(doc._id, doc.a); }',
             reduce: '_sum'
           }
-        } 
+        }
       },{
         database: db
       });

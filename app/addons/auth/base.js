@@ -26,7 +26,7 @@ function(app, FauxtonAPI, Auth) {
 
     FauxtonAPI.addHeaderLink({
       id: "auth",
-      title: "Login", 
+      title: "Login",
       href: "#login",
       icon: "fonticon-user",
       bottomNav: true,
@@ -39,7 +39,7 @@ function(app, FauxtonAPI, Auth) {
       if (session.isAdminParty()) {
         link = {
           id: "auth",
-          title: "Admin Party!", 
+          title: "Admin Party!",
           href: "#createAdmin",
           icon: "fonticon-user",
           bottomNav: true,
@@ -47,7 +47,7 @@ function(app, FauxtonAPI, Auth) {
       } else if (session.isLoggedIn()) {
         link = {
           id: "auth",
-          title: session.user().name, 
+          title: session.user().name,
           href: "#changePassword",
           icon: "fonticon-user",
           bottomNav: true,
@@ -55,16 +55,16 @@ function(app, FauxtonAPI, Auth) {
 
         FauxtonAPI.addHeaderLink({
           id: 'logout',
-          footerNav: true, 
-          href: "#logout", 
-          title: "Logout", 
-          icon: "", 
+          footerNav: true,
+          href: "#logout",
+          title: "Logout",
+          icon: "",
           className: 'logout'
         });
       } else {
         link = {
           id: "auth",
-          title: 'Login', 
+          title: 'Login',
           href: "#login",
           icon: "fonticon-user",
           bottomNav: true,

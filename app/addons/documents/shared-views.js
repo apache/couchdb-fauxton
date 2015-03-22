@@ -207,7 +207,7 @@ function(app, FauxtonAPI, Components, Documents, Databases) {
           icon: 'fonticon-plus-circled'
         });
 
-        return menuLinks; 
+        return menuLinks;
      }, [{
       title: 'New View',
       url: '#' + FauxtonAPI.urls('new', 'addView', databaseName, docSafe),

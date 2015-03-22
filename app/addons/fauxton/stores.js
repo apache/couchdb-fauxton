@@ -31,7 +31,7 @@ function(app, FauxtonAPI, ActionTypes) {
       this.footerNavLinks = [];
       this.bottomNavLinks = [{
         id: 'Documentation',
-        title: "Documentation", 
+        title: "Documentation",
         icon: "fonticon-bookmark",
         href: app.helpers.getDocUrl('GENERAL'),
         bottomNav: true,
@@ -85,7 +85,7 @@ function(app, FauxtonAPI, ActionTypes) {
     },
 
     toggleMenu: function () {
-      app.utils.localStorageSet(FauxtonAPI.constants.LOCAL_STORAGE.SIDEBAR_MINIMIZED, 
+      app.utils.localStorageSet(FauxtonAPI.constants.LOCAL_STORAGE.SIDEBAR_MINIMIZED,
                                 !this.isMinimized());
     },
 

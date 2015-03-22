@@ -67,7 +67,7 @@ function(app, FauxtonAPI, VerifyInstall) {
         setError(id, JSON.parse(xhr.responseText).reason);
       };
     },
-    
+
     startTest: function () {
       this.disableButton();
       this.$('.status').text('');

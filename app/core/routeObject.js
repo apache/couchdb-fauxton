@@ -28,9 +28,9 @@ function(FauxtonAPI, Backbone) {
   _.extend(broadcaster, Backbone.Events);
 
   RouteObject.on = function (eventName, fn) {
-    broadcaster.on(eventName, fn); 
+    broadcaster.on(eventName, fn);
   };
-  
+
   /* How Route Object events work
    To listen to a specific route objects events:
 
@@ -44,7 +44,7 @@ function(FauxtonAPI, Backbone) {
     },
    });
 
-    It is also possible to listen to events triggered from all Routeobjects. 
+    It is also possible to listen to events triggered from all Routeobjects.
     This is great for more general things like adding loaders, hooks.
 
     FauxtonAPI.RouteObject.on('beforeRender', function (routeObject, view, selector) {
@@ -58,7 +58,7 @@ function(FauxtonAPI, Backbone) {
     * beforeRender -- before a view is rendered
     * afterRender -- a view is finished being rendered
     * renderComplete -- all rendering is complete
-    
+
   */
 
   // Piggy-back on Backbone's self-propagating extend function
@@ -141,10 +141,10 @@ function(FauxtonAPI, Backbone) {
       var promises = _.map(routeObject.getViews(), renderView, this);
       return FauxtonAPI.when(promises);
     },
-    
+
     renderView: function(routeObject, options, view, selector) {
       var viewInfo = {
-        view: view, 
+        view: view,
         selector: selector,
         masterLayout: options.masterLayout
       };
@@ -157,7 +157,7 @@ function(FauxtonAPI, Backbone) {
       }
 
       this.triggerBroadcast('beforeRender', view, selector);
-      
+
       return this.callEstablish(view.establish()).then(renderViewOnLayout, this.establishError);
     },
 
@@ -193,7 +193,7 @@ function(FauxtonAPI, Backbone) {
     setRenderedState: function(bool){
       this.renderedState = bool;
     },
-    
+
     triggerBroadcast: function (eventName) {
       var args = Array.prototype.slice.call(arguments);
       this.trigger.apply(this, args);
@@ -275,7 +275,7 @@ function(FauxtonAPI, Backbone) {
         if (promise.state() === "resolved") { return; }
         if (promise.abort) {
           return promise.abort("Route change");
-        } 
+        }
 
         promise.reject && promise.reject();
       }, this);
@@ -312,7 +312,7 @@ function(FauxtonAPI, Backbone) {
       var route = this.get('routes')[routeUrl];
 
       if ((typeof route === 'object') && route.roles) {
-        return route.roles; 
+        return route.roles;
       }
 
       return this.roles;

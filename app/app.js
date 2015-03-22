@@ -103,8 +103,8 @@ function(app, $, _, Backbone, Bootstrap, Helpers, Utils, FauxtonAPI, Couchdb) {
   FauxtonAPI.config({
     el: '.wrapper',
     masterLayout: new FauxtonAPI.Layout(),
-    
-    // I haven't wrapped these dispatch methods in a action 
+
+    // I haven't wrapped these dispatch methods in a action
     // because I don't want to require fauxton/actions in this method.
     addHeaderLink: function(link) {
       FauxtonAPI.dispatch({
@@ -112,7 +112,7 @@ function(app, $, _, Backbone, Bootstrap, Helpers, Utils, FauxtonAPI, Couchdb) {
           link: link
       });
     },
-    
+
     updateHeaderLink: function (link) {
       FauxtonAPI.dispatch({
         type: 'UPDATE_NAVBAR_LINK',

@@ -27,11 +27,11 @@ CreateDocument.prototype.command = function (documentName, databaseName, docCont
       database = nano.use(databaseName);
 
   if (docContents === undefined) {
-    docContents = { dummyKey: "testingValue" }; 
+    docContents = { dummyKey: "testingValue" };
   }
 
   database.insert(docContents, documentName, function (err, body, header) {
-  
+
     if (err) {
       console.log('Error in nano CreateDocument Function: '+documentName+', in database: '+databaseName, err.message);
     }

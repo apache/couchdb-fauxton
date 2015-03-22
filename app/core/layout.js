@@ -11,7 +11,7 @@
 // the License.
 
 define([
-  "backbone", 
+  "backbone",
   "plugins/backbone.layoutmanager"
 ], function(Backbone) {
 
@@ -81,7 +81,7 @@ define([
         }
 
       this.layout.removeView(selector);
-      
+
       if (this.layoutViews[selector]) {
         delete this.layoutViews[selector];
       }

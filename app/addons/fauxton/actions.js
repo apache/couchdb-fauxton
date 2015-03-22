@@ -20,7 +20,7 @@ function (app, FauxtonAPI, ActionTypes) {
   return {
     toggleNavbarMenu: function () {
       FauxtonAPI.dispatch({
-        type: ActionTypes.TOGGLE_NAVBAR_MENU 
+        type: ActionTypes.TOGGLE_NAVBAR_MENU
       });
 
       // TODO temporary patch for COUCHDB-2555

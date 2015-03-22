@@ -243,7 +243,7 @@ function(app, FauxtonAPI, Config, Components) {
       });
     }
   });
-  
+
   Views.Tabs = FauxtonAPI.View.extend({
     className: "sidenav",
     tagName: "nav",
