@@ -95,7 +95,7 @@ function ($, _) {
     safeURLName: function(name){
       var testName = name || "";
       var checkforBad = testName.match(/[\$\-/,+-]/g);
-      return (checkforBad !== null)?encodeURIComponent(name):name;
+      return (checkforBad !== null) ? encodeURIComponent(name) : name;
     },
 
     // a pair of simple local storage wrapper functions. These ward against problems getting or
