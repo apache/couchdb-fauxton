@@ -16,8 +16,8 @@ define([
   'addons/replication/route'
 ],
 
-function(app, FauxtonAPI, replication) {
-  replication.initialize = function() {
+function (app, FauxtonAPI, replication) {
+  replication.initialize = function () {
     FauxtonAPI.addHeaderLink({ title: 'Replication', href: '#/replication', icon: 'fonticon-replicate' });
   };
 

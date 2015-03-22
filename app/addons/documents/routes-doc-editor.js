@@ -21,7 +21,7 @@ define([
   "addons/databases/base"
 ],
 
-function(app, FauxtonAPI, Helpers, Documents, DocEditor, Databases) {
+function (app, FauxtonAPI, Helpers, Documents, DocEditor, Databases) {
 
 
   var DocEditorRouteObject = FauxtonAPI.RouteObject.extend({
@@ -29,7 +29,7 @@ function(app, FauxtonAPI, Helpers, Documents, DocEditor, Databases) {
     disableLoader: true,
     selectedHeader: 'Databases',
 
-    initialize: function(route, masterLayout, options) {
+    initialize: function (route, masterLayout, options) {
       this.databaseName = options[0];
       this.docID = options[1] || 'new';
 
@@ -110,7 +110,7 @@ function(app, FauxtonAPI, Helpers, Documents, DocEditor, Databases) {
       });
     },
 
-    apiUrl: function() {
+    apiUrl: function () {
       return [this.doc.url('apiurl'), this.doc.documentation()];
     }
   });

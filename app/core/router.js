@@ -16,7 +16,7 @@ define([
        "backbone"
 ],
 
-function(FauxtonAPI, Auth, Backbone) {
+function (FauxtonAPI, Auth, Backbone) {
 
   var beforeUnloads = {};
 
@@ -46,13 +46,13 @@ function(FauxtonAPI, Auth, Backbone) {
       }
     },
 
-    addModuleRouteObject: function(RouteObject) {
+    addModuleRouteObject: function (RouteObject) {
       var that = this;
       var masterLayout = FauxtonAPI.masterLayout,
       routeUrls = RouteObject.prototype.getRouteUrls();
 
-      _.each(routeUrls, function(route) {
-        this.route(route, route.toString(), function() {
+      _.each(routeUrls, function (route) {
+        this.route(route, route.toString(), function () {
           var args = Array.prototype.slice.call(arguments),
           roles = RouteObject.prototype.getRouteRoles(route),
           authPromise = FauxtonAPI.auth.checkAccess(roles);
@@ -75,8 +75,8 @@ function(FauxtonAPI, Auth, Backbone) {
       }, this);
     },
 
-    setModuleRoutes: function(addons) {
-      _.each(addons, function(module) {
+    setModuleRoutes: function (addons) {
+      _.each(addons, function (module) {
         if (module) {
           module.initialize();
           // This is pure routes the addon provides
@@ -87,7 +87,7 @@ function(FauxtonAPI, Auth, Backbone) {
       }, this);
     },
 
-    initialize: function(addons) {
+    initialize: function (addons) {
       this.addons = addons;
       this.auth = FauxtonAPI.auth = new Auth();
       // NOTE: This must be below creation of the layout
@@ -107,7 +107,7 @@ function(FauxtonAPI, Auth, Backbone) {
       }, this);
     },
 
-    triggerRouteEvent: function(event, args) {
+    triggerRouteEvent: function (event, args) {
       if (this.activeRouteObject) {
         var eventArgs = [event].concat(args);
 

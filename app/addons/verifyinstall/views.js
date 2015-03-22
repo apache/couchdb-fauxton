@@ -15,7 +15,7 @@ define([
   'api',
   'addons/verifyinstall/resources'
 ],
-function(app, FauxtonAPI, VerifyInstall) {
+function (app, FauxtonAPI, VerifyInstall) {
 
   VerifyInstall.Main = FauxtonAPI.View.extend({
     template: 'addons/verifyinstall/templates/main',

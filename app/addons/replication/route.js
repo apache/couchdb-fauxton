@@ -16,7 +16,7 @@ define([
   'addons/replication/resources',
   'addons/replication/views'
 ],
-function(app, FauxtonAPI, Replication, Views) {
+function (app, FauxtonAPI, Replication, Views) {
   var RepRouteObject = FauxtonAPI.RouteObject.extend({
     layout: 'one_pane',
     routes: {
@@ -30,7 +30,7 @@ function(app, FauxtonAPI, Replication, Views) {
     crumbs: [
       { "name": 'Replicate changes from: ', 'link': 'replication' }
     ],
-    defaultView: function(dbname) {
+    defaultView: function (dbname) {
       var isAdmin = FauxtonAPI.session.isAdmin();
 
       this.tasks = [];

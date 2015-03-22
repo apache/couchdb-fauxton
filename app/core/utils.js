@@ -30,7 +30,7 @@ function ($, _) {
   var utils = {
 
     // Thanks to: http://stackoverflow.com/a/2880929
-    getParams: function(queryString) {
+    getParams: function (queryString) {
       if (queryString) {
         // I think this could be combined into one if
         if (queryString.substring(0, 1) === "?") {
@@ -58,7 +58,7 @@ function ($, _) {
     },
 
     // this takes the current URL and replaces all ?x=x with whatever new params are passed
-    replaceQueryParams: function(params) {
+    replaceQueryParams: function (params) {
       var fragment = window.location.hash.replace(/\?.*$/, "");
       if (!_.isEmpty(params)) {
         fragment = fragment + "?" + $.param(params);
@@ -66,21 +66,21 @@ function ($, _) {
       return fragment;
     },
 
-    addWindowResize: function(fun, key) {
+    addWindowResize: function (fun, key) {
       onWindowResize[key] = fun;
       // You shouldn't need to call it here. Just define it at startup and each time it will loop
       // through all the functions in the hash.
       //app.initWindowResize();
     },
 
-    removeWindowResize: function(key) {
+    removeWindowResize: function (key) {
       delete onWindowResize[key];
       utils.initWindowResize();
     },
 
-    initWindowResize: function() {
+    initWindowResize: function () {
       //when calling this it should be overriding what was called previously
-      window.onresize = function(e) {
+      window.onresize = function (e) {
         // could do this instead of the above for loop
         _.each(onWindowResize, function (fn) {
           fn();
@@ -88,11 +88,11 @@ function ($, _) {
       };
     },
 
-    removeSpecialCharacters: function(name) {
+    removeSpecialCharacters: function (name) {
       return name.replace(/[^\w\s]/gi, "");
     },
 
-    safeURLName: function(name) {
+    safeURLName: function (name) {
       var testName = name || "";
       var checkforBad = testName.match(/[\$\-/,+-]/g);
       return (checkforBad !== null) ? encodeURIComponent(name) : name;

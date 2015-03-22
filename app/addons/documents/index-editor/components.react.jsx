@@ -127,7 +127,7 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, ReactComponents, 
       indexEditorStore.on('change', this.onChange, this);
     },
 
-    componentWillUnmount: function() {
+    componentWillUnmount: function () {
       indexEditorStore.off('change', this.onChange);
     },
 
@@ -218,7 +218,7 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, ReactComponents, 
       indexEditorStore.on('change', this.onChange, this);
     },
 
-    componentWillUnmount: function() {
+    componentWillUnmount: function () {
       indexEditorStore.off('change', this.onChange);
     },
 
@@ -294,12 +294,12 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, ReactComponents, 
       indexEditorStore.on('change', this.onChange, this);
     },
 
-    componentWillUnmount: function() {
+    componentWillUnmount: function () {
       indexEditorStore.off('change', this.onChange);
     },
 
-    hasValidCode: function() {
-      return _.every(['mapEditor', 'reduceEditor'], function(editorName) {
+    hasValidCode: function () {
+      return _.every(['mapEditor', 'reduceEditor'], function (editorName) {
         if (editorName === 'reduceEditor' && !indexEditorStore.hasCustomReduce()) {
           return true;
         }
@@ -418,11 +418,11 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, ReactComponents, 
       };
     },
 
-    componentDidMount: function() {
+    componentDidMount: function () {
       indexEditorStore.on('change', this.onChange, this);
     },
 
-    componentWillUnmount: function() {
+    componentWillUnmount: function () {
       indexEditorStore.off('change', this.onChange);
     },
 

@@ -42,11 +42,11 @@ function (app, FauxtonAPI, Databases, Views, Components) {
 
     selectedHeader: "Databases",
 
-    initialize: function() {
+    initialize: function () {
       this.databases = new Databases.List();
     },
 
-    allDatabases: function() {
+    allDatabases: function () {
       var params = app.getParams(),
           dbPage = params.page ? parseInt(params.page, 10) : 1,
           perPage = FauxtonAPI.constants.MISC.DEFAULT_PAGE_SIZE,
@@ -81,7 +81,7 @@ function (app, FauxtonAPI, Databases, Views, Components) {
       return [this.databases.url("apiurl"), this.databases.documentation()];
     },
 
-    establish: function() {
+    establish: function () {
       return [this.databases.fetch({ cache: false })];
     }
   });

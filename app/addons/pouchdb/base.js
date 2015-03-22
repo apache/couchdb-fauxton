@@ -25,11 +25,11 @@ define([
   "addons/pouchdb/pouchdb.mapreduce"
 ],
 
-function(app, FauxtonAPI, MapReduce) {
+function (app, FauxtonAPI, MapReduce) {
   var Pouch = FauxtonAPI.addon();
   Pouch.MapReduce = MapReduce;
 
-  Pouch.runViewQuery = function(fun, opts) {
+  Pouch.runViewQuery = function (fun, opts) {
     /*docs = [
       {_id: 'test_doc_1', foo: 'bar-1'},
       {_id: 'test_doc_2', foo: 'bar-2'},
@@ -44,7 +44,7 @@ function(app, FauxtonAPI, MapReduce) {
     ];*/
 
     var deferred = FauxtonAPI.Deferred();
-    var complete = function(resp, rows) {
+    var complete = function (resp, rows) {
       deferred.resolve(rows);
     };
 
@@ -53,6 +53,6 @@ function(app, FauxtonAPI, MapReduce) {
     Pouch.MapReduce.query(fun, options);
     return deferred;
   };
-  //pdb.runViewQuery({map:function(doc) { emit(doc._id, doc.foo) }})
+  //pdb.runViewQuery({map:function (doc) { emit(doc._id, doc.foo) }})
   return Pouch;
 });

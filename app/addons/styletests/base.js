@@ -16,9 +16,9 @@ define([
   "addons/styletests/routes"
 ],
 
-function(app, FauxtonAPI, tests) {
+function (app, FauxtonAPI, tests) {
 
-  tests.initialize = function() {
+  tests.initialize = function () {
 
     FauxtonAPI.addHeaderLink({
       title: "Tests",

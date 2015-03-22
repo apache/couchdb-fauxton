@@ -15,7 +15,7 @@ define([
   'api',
   'addons/verifyinstall/views'
 ],
-function(app, FauxtonAPI, VerifyInstall) {
+function (app, FauxtonAPI, VerifyInstall) {
 
   var VerifyRouteObject = FauxtonAPI.RouteObject.extend({
     layout: 'one_pane',

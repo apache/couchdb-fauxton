@@ -16,7 +16,7 @@ define([
   'addons/verifyinstall/routes'
 ],
 
-function(app, FauxtonAPI, VerifyInstall) {
+function (app, FauxtonAPI, VerifyInstall) {
   VerifyInstall.initialize = function () {
     FauxtonAPI.addHeaderLink({
       title: 'Verify',

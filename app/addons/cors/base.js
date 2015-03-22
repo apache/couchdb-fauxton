@@ -18,7 +18,7 @@ define([
 
 function (app, FauxtonAPI, CORS) {
 
-  CORS.initialize = function() {};
+  CORS.initialize = function () {};
 
   return CORS;
 });

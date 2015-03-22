@@ -44,13 +44,13 @@ specific language governing permissions and limitations under the License.
     </div>
   </div></body>
   <script>
-    $('.install-plugin').each(function() {
+    $('.install-plugin').each(function () {
       var button = $(this);
       var name = button.data('name');
       var version = button.data('version');
-      $.get("/_config/plugins/" + name + "/", function(body, textStatus) {
+      $.get("/_config/plugins/" + name + "/", function (body, textStatus) {
         body = JSON.parse(body);
-        if(body == version) {
+        if (body == version) {
           button.html('Already Installed. Click to Uninstall');
           button.data('delete', true);
         } else {
@@ -60,7 +60,7 @@ specific language governing permissions and limitations under the License.
       });
     });
 
-    $('.install-plugin').click(function(event) {
+    $('.install-plugin').click(function (event) {
       var button = $(this);
       var delete_plugin = button.data('delete') || false;
       var plugin_spec = JSON.stringify({
@@ -78,8 +78,8 @@ specific language governing permissions and limitations under the License.
         contentType: 'application/json', // what we send to the server
         dataType: 'json', // expected from the server
         processData: false, // keep our precious JSON
-        success: function(data, textStatus, jqXhr) {
-          if(textStatus == "success") {
+        success: function (data, textStatus, jqXhr) {
+          if (textStatus == "success") {
             var action = delete_plugin ? 'Uninstalled' : 'Installed';
             button.html('Sucessfully ' + action);
             button.attr('disabled', true);
@@ -87,7 +87,7 @@ specific language governing permissions and limitations under the License.
             button.html(textStatus);
           }
         },
-        beforeSend: function(xhr) {
+        beforeSend: function (xhr) {
           xhr.setRequestHeader('Accept', 'application/json');
         },
       });

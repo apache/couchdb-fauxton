@@ -19,13 +19,13 @@ define([
   "addons/documents/resources"
 ],
 
-function(app, FauxtonAPI, Documents) {
+function (app, FauxtonAPI, Documents) {
   var Databases = FauxtonAPI.addon();
 
   Databases.DocLimit = 100;
 
   Databases.Model = FauxtonAPI.Model.extend({
-    initialize: function(options) {
+    initialize: function (options) {
       this.status = new Databases.Status({
         database: this
       });
@@ -35,7 +35,7 @@ function(app, FauxtonAPI, Documents) {
       return FauxtonAPI.constants.DOC_URLS.ALL_DBS;
     },
 
-    buildAllDocs: function(params) {
+    buildAllDocs: function (params) {
       this.allDocs = new Documents.AllDocs(null, {
         database: this,
         params: params
@@ -44,7 +44,7 @@ function(app, FauxtonAPI, Documents) {
       return this.allDocs;
     },
 
-    isNew: function() {
+    isNew: function () {
       // Databases are never new, to make Backbone do a PUT
       return false;
     },
@@ -53,7 +53,7 @@ function(app, FauxtonAPI, Documents) {
       return (/^_/).test(this.id);
     },
 
-    url: function(context) {
+    url: function (context) {
       if (context === "index") {
         return "/database/" + this.safeID() + "/_all_docs";
       } else if (context === "web-index") {
@@ -70,10 +70,10 @@ function(app, FauxtonAPI, Documents) {
         return app.host + "/" + this.safeID();
       }
     },
-    safeName: function() {
+    safeName: function () {
       return app.utils.safeURLName(this.get("name"));
     },
-    safeID: function() {
+    safeID: function () {
       return app.utils.safeURLName(this.id);
     },
     buildChanges: function (params) {
@@ -92,11 +92,11 @@ function(app, FauxtonAPI, Documents) {
 
   Databases.Changes = FauxtonAPI.Collection.extend({
 
-    initialize: function(options) {
+    initialize: function (options) {
       this.database = options.database;
       this.params = options.params;
     },
-    documentation: function() {
+    documentation: function () {
       return FauxtonAPI.constants.DOC_URLS.CHANGES;
     },
     url: function (context) {
@@ -117,27 +117,27 @@ function(app, FauxtonAPI, Documents) {
   });
 
   Databases.Status = FauxtonAPI.Model.extend({
-    url: function() {
+    url: function () {
       return app.host + "/" + this.database.safeID();
     },
 
-    initialize: function(options) {
+    initialize: function (options) {
       this.database = options.database;
     },
 
-    numDocs: function() {
+    numDocs: function () {
       return this.get("doc_count");
     },
 
-    numDeletedDocs: function() {
+    numDeletedDocs: function () {
       return this.get("doc_del_count");
     },
 
-    isGraveYard: function() {
+    isGraveYard: function () {
       return this.numDeletedDocs() > this.numDocs();
     },
 
-    updateSeq: function(full) {
+    updateSeq: function (full) {
       var updateSeq = this.get("update_seq");
       if (full || (typeof(updateSeq) === 'number')) {
         return updateSeq;
@@ -178,7 +178,7 @@ function(app, FauxtonAPI, Documents) {
       expires: 60
     },
 
-    url: function(context) {
+    url: function (context) {
       if (context === "apiurl") {
         return window.location.origin + "/_all_dbs";
       } else {
@@ -186,9 +186,9 @@ function(app, FauxtonAPI, Documents) {
       }
     },
 
-    parse: function(resp) {
+    parse: function (resp) {
       // TODO: pagination!
-      return _.map(resp, function(database) {
+      return _.map(resp, function (database) {
         return {
           id: app.utils.safeURLName(database),
           name: database

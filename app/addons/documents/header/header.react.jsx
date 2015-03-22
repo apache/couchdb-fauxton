@@ -42,7 +42,7 @@ function (app, FauxtonAPI, React, Stores, Actions, ReactComponents) {
       bulkDocumentHeaderStore.on('change', this.onChange, this);
     },
 
-    componentWillUnmount: function() {
+    componentWillUnmount: function () {
       bulkDocumentHeaderStore.off('change', this.onChange);
     },
 
@@ -158,7 +158,7 @@ function (app, FauxtonAPI, React, Stores, Actions, ReactComponents) {
       headerBarStore.on('change', this.onChange, this);
     },
 
-    componentWillUnmount: function() {
+    componentWillUnmount: function () {
       headerBarStore.off('change', this.onChange);
     },
 

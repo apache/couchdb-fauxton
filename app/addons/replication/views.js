@@ -16,7 +16,7 @@ define([
   'addons/fauxton/components',
   'addons/replication/resources'
 ],
-function(app, FauxtonAPI, Components, Replication) {
+function (app, FauxtonAPI, Components, Replication) {
   var View = {},
     Events = {},
     pollingInfo = {
@@ -90,7 +90,7 @@ function(app, FauxtonAPI, Components, Replication) {
 
       if (targetVal === 'local') {
         $currentTarget.parents('.form_set').addClass('local');
-      }else{
+      }else {
         $currentTarget.parents('.form_set').removeClass('local');
       }
     },
@@ -129,7 +129,7 @@ function(app, FauxtonAPI, Components, Replication) {
     formValidation: function () {
       var $remote = this.$el.find('input:visible'),
           error = false;
-      _.each($remote, function(item) {
+      _.each($remote, function (item) {
         if (item.value === 'http://' || item.value === '') {
           error = true;
         }
@@ -137,7 +137,7 @@ function(app, FauxtonAPI, Components, Replication) {
       return error;
     },
 
-    serialize: function() {
+    serialize: function () {
       return {
         databases:  this.collection.toJSON(),
         selectedDB: this.selectedDB
@@ -169,7 +169,7 @@ function(app, FauxtonAPI, Components, Replication) {
       this.enableFields();
     },
 
-    updateButtonText: function(wait) {
+    updateButtonText: function (wait) {
       var $button = this.$('#replication button[type=submit]');
       if (wait) {
         $button.text('Starting replication...').attr('disabled', true);
@@ -262,7 +262,7 @@ function(app, FauxtonAPI, Components, Replication) {
     },
 
     beforeRender: function () {
-      this.collection.forEach(function(item) {
+      this.collection.forEach(function (item) {
         this.insertView(new View.replicationItem({
           model: item
         }));
@@ -307,14 +307,14 @@ function(app, FauxtonAPI, Components, Replication) {
         "cancel": true
       },
       {
-        success: function(model, xhr, options) {
+        success: function (model, xhr, options) {
           FauxtonAPI.addNotification({
             msg: 'Replication stopped.',
             type: 'success',
             clear: true
           });
         },
-        error: function(model, xhr, options) {
+        error: function (model, xhr, options) {
           var errorMessage = JSON.parse(xhr.responseText);
           FauxtonAPI.addNotification({
             msg: errorMessage.reason,

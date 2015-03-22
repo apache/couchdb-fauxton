@@ -18,7 +18,7 @@ define([
   'addons/cors/views'
 ],
 
-function(app, FauxtonAPI, Config, Views, CORS) {
+function (app, FauxtonAPI, Config, Views, CORS) {
 
   var ConfigRouteObject = FauxtonAPI.RouteObject.extend({
     layout: 'with_tabs_sidebar',
@@ -66,7 +66,7 @@ function(app, FauxtonAPI, Config, Views, CORS) {
       this.sidebar.setSelectedTab("main");
     },
 
-    configCORS: function() {
+    configCORS: function () {
       this.removeView('#right-header');
       this.newSection = this.setView('#dashboard-content', new CORS.Views.CORSWrapper({
         cors: this.cors,

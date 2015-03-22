@@ -15,13 +15,13 @@ define([
   'addons/documents/index-editor/actiontypes'
 ],
 
-function(FauxtonAPI, ActionTypes) {
+function (FauxtonAPI, ActionTypes) {
   var Stores = {};
 
   Stores.IndexEditorStore = FauxtonAPI.Store.extend({
 
-    defaultMap: 'function(doc) {\n  emit(doc._id, 1);\n}',
-    defaultReduce: 'function(keys, values, rereduce) {\n  if (rereduce) {\n    return sum(values);\n  } else {\n    return values.length;\n  }\n}',
+    defaultMap: 'function (doc) {\n  emit(doc._id, 1);\n}',
+    defaultReduce: 'function (keys, values, rereduce) {\n  if (rereduce) {\n    return sum(values);\n  } else {\n    return values.length;\n  }\n}',
 
     editIndex: function (options) {
       this._database = options.database;
@@ -160,7 +160,7 @@ function(FauxtonAPI, ActionTypes) {
     },
 
     dispatch: function (action) {
-      switch(action.type) {
+      switch (action.type) {
         case ActionTypes.EDIT_INDEX:
           this.editIndex(action.options);
           this.triggerChange();

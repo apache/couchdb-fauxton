@@ -15,7 +15,7 @@ define([
   "api",
   "addons/plugins/resources"
 ],
-function(app, FauxtonAPI, plugins) {
+function (app, FauxtonAPI, plugins) {
   var  PluginsRouteObject = FauxtonAPI.RouteObject.extend({
     layout: "one_pane",
 

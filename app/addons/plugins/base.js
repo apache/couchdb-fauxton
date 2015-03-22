@@ -16,8 +16,8 @@ define([
   "addons/plugins/routes"
 ],
 
-function(app, FauxtonAPI, plugins) {
-  plugins.initialize = function() {
+function (app, FauxtonAPI, plugins) {
+  plugins.initialize = function () {
     //FauxtonAPI.addHeaderLink({title: "Plugins", href: "#_plugins", icon: "fonticon-plugins", className: 'plugins'});
   };
   return plugins;

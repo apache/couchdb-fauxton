@@ -18,7 +18,7 @@
 /*jslint node: true */
 "use strict";
 
-module.exports = function(grunt) {
+module.exports = function (grunt) {
   var helper = require('./tasks/helper').init(grunt),
   _ = grunt.util._,
   fs = require('fs');
@@ -41,7 +41,7 @@ module.exports = function(grunt) {
 
   var cleanableAddons =  function () {
     var theListToClean = [];
-    helper.processAddons(function(addon) {
+    helper.processAddons(function (addon) {
       // Only clean addons that are included from a local dir
       if (addon.path) {
         theListToClean.push("app/addons/" + addon.name);
@@ -51,14 +51,14 @@ module.exports = function(grunt) {
     return theListToClean;
   }();
 
-  var cleanable = function() {
+  var cleanable = function () {
     // Whitelist files and directories to be cleaned
     // You'll always want to clean these two directories
     // Now find the external addons you have and add them for cleaning up
     return _.union(["dist/", "app/load_addons.js"], cleanableAddons);
   }();
 
-  var assets = function() {
+  var assets = function () {
     // Base assets
     var theAssets = {
       less:{
@@ -73,11 +73,11 @@ module.exports = function(grunt) {
       // fauxton.css should load first
       css: ["assets/css/*.css", "dist/debug/css/fauxton.css"]
     };
-    helper.processAddons(function(addon) {
+    helper.processAddons(function (addon) {
       // Less files from addons
       var root = addon.path || "app/addons/" + addon.name;
       var lessPath = root + "/assets/less";
-      if(fs.existsSync(lessPath)) {
+      if (fs.existsSync(lessPath)) {
         // .less files exist for this addon
         theAssets.less.paths.push(lessPath);
         theAssets.less.files["dist/debug/css/" + addon.name + ".css"] =
@@ -87,18 +87,18 @@ module.exports = function(grunt) {
       // Images
       root = addon.path || "app/addons/" + addon.name;
       var imgPath = root + "/assets/img";
-      if(fs.existsSync(imgPath)) {
+      if (fs.existsSync(imgPath)) {
         theAssets.img.push(imgPath + "/**");
       }
       var fontsPath = root + "/assets/fonts";
-      if(fs.existsSync(fontsPath)) {
+      if (fs.existsSync(fontsPath)) {
         theAssets.fonts.push(fontsPath + "/**");
       }
     });
     return theAssets;
   }();
 
-  var templateSettings = function() {
+  var templateSettings = function () {
     var defaultSettings = {
      "development": {
         "src": "assets/index.underscore",
@@ -159,7 +159,7 @@ module.exports = function(grunt) {
 
     // The jshint option for scripturl is set to lax, because the anchor
     // override inside main.js needs to test for them so as to not accidentally
-    // route. Settings expr true so we can do `mightBeNullObject && mightBeNullObject.coolFunction()`
+    // route. Settings expr true so we can do `mightBeNullObject && mightBeNullObject.coolfunction()`
     jshint: {
       all: ['app/**/*.js', 'Gruntfile.js', "!app/**/assets/js/*.js", "!app/**/*.jsx"],
       options: {
@@ -211,7 +211,7 @@ module.exports = function(grunt) {
     jst: {
       compile: {
         options: {
-          processContent: function(src) {
+          processContent: function (src) {
             return src.replace(/<!--[\s\S]*?-->/gm, '');
           }
         },
@@ -464,7 +464,7 @@ module.exports = function(grunt) {
   grunt.initConfig(config);
 
   // on watch events configure jshint:all to only run on changed file
-  grunt.event.on('watch', function(action, filepath) {
+  grunt.event.on('watch', function (action, filepath) {
     if (!!filepath.match(/.js$/) && filepath.indexOf('test.config.js') === -1) {
       grunt.config(['jshint', 'all'], filepath);
     }

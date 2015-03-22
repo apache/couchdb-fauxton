@@ -16,7 +16,7 @@ define([
   "addons/config/resources",
   "addons/fauxton/components"
 ],
-function(app, FauxtonAPI, Config, Components) {
+function (app, FauxtonAPI, Config, Components) {
   var Views = {};
 
   Views.TableRow = FauxtonAPI.View.extend({
@@ -111,15 +111,15 @@ function(app, FauxtonAPI, Config, Components) {
   Views.Table = FauxtonAPI.View.extend({
     template: "addons/config/templates/dashboard",
 
-    initialize: function() {
+    initialize: function () {
       this.listenTo(FauxtonAPI.Events, "config:newSection", this.render);
       this.listenTo(FauxtonAPI.Events, "config:rerender", this.render);
     },
 
-    beforeRender: function() {
+    beforeRender: function () {
       var collection = this.collection;
 
-      this.collection.each(function(config) {
+      this.collection.each(function (config) {
         _.each(config.get("options"), function (option, index) {
           this.insertView("table.config tbody", new Views.TableRow({
             collection: collection,
@@ -134,7 +134,7 @@ function(app, FauxtonAPI, Config, Components) {
       }, this);
     },
 
-    establish: function() {
+    establish: function () {
       return [this.collection.fetch()];
     }
   });
@@ -257,7 +257,7 @@ function(app, FauxtonAPI, Config, Components) {
       this.$('li').removeClass('active');
       this.$('a[data-type-select="' + this.selectedTab + '"]').parent("li").addClass('active');
     },
-    afterRender: function() {
+    afterRender: function () {
       this.setSelectedTab(this.selectedTab);
     },
 

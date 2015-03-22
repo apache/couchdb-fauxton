@@ -10,11 +10,11 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-module.exports = function(grunt) {
+module.exports = function (grunt) {
   var _ = grunt.util._,
       fs = require('fs');
 
-  grunt.registerMultiTask('template', 'generates an html file from a specified template', function() {
+  grunt.registerMultiTask('template', 'generates an html file from a specified template', function () {
     var data = this.data,
         _ = grunt.util._,
         tmpl = _.template(grunt.file.read(data.src), null, data.variables);
@@ -22,7 +22,7 @@ module.exports = function(grunt) {
     grunt.file.write(data.dest, tmpl(data.variables));
   });
 
-  grunt.registerMultiTask('get_deps', 'Fetch external dependencies', function(version) {
+  grunt.registerMultiTask('get_deps', 'Fetch external dependencies', function (version) {
     grunt.log.writeln("Fetching external dependencies");
 
     var done = this.async(),
@@ -33,20 +33,20 @@ module.exports = function(grunt) {
         _ = grunt.util._;
 
     // This should probably be a helper, though they seem to have been removed
-    var fetch = function(deps, command) {
+    var fetch = function (deps, command) {
       var child_process = require('child_process');
       var async = require('async');
-      async.forEach(deps, function(dep, cb) {
+      async.forEach(deps, function (dep, cb) {
         var path = target + dep.name;
         var location = dep.url || dep.path;
         grunt.log.writeln("Fetching: " + dep.name + " (" + location + ")");
 
-        child_process.exec(command(dep, path), function(error, stdout, stderr) {
+        child_process.exec(command(dep, path), function (error, stdout, stderr) {
           grunt.log.writeln(stderr);
           grunt.log.writeln(stdout);
           cb(error);
         });
-      }, function(error) {
+      }, function (error) {
         if (error) {
           grunt.log.writeln("ERROR: " + error.message);
           return false;
@@ -56,15 +56,15 @@ module.exports = function(grunt) {
       });
     };
 
-    var remoteDeps = _.filter(settings.deps, function(dep) { return !! dep.url; });
+    var remoteDeps = _.filter(settings.deps, function (dep) { return !! dep.url; });
     grunt.log.writeln(remoteDeps.length + " remote dependencies");
-    var remote = fetch(remoteDeps, function(dep, destination) {
+    var remote = fetch(remoteDeps, function (dep, destination) {
       return "git clone " + dep.url + " " + destination;
     });
 
-    var localDeps = _.filter(settings.deps, function(dep) { return !! dep.path; });
+    var localDeps = _.filter(settings.deps, function (dep) { return !! dep.path; });
     grunt.log.writeln(localDeps.length + " local dependencies");
-    var local = fetch(localDeps, function(dep, destination) {
+    var local = fetch(localDeps, function (dep, destination) {
       // TODO: Windows
       var command = "cp -r " + dep.path + " " + destination;
       grunt.log.writeln(command);
@@ -75,14 +75,14 @@ module.exports = function(grunt) {
 
   });
 
-  grunt.registerMultiTask('gen_load_addons', 'Generate the load_addons.js file', function() {
+  grunt.registerMultiTask('gen_load_addons', 'Generate the load_addons.js file', function () {
     var data = this.data,
         _ = grunt.util._,
         settingsFile = fs.existsSync(data.src) ? data.src : "settings.json.default",
         settings = grunt.file.readJSON(settingsFile),
         template = "app/load_addons.js.underscore",
         dest = "app/load_addons.js",
-        deps = _.map(settings.deps, function(dep) {
+        deps = _.map(settings.deps, function (dep) {
           return "addons/" + dep.name + "/base";
         });
 
@@ -90,7 +90,7 @@ module.exports = function(grunt) {
     grunt.file.write(dest, tmpl({deps: deps}));
   });
 
-  grunt.registerMultiTask('gen_initialize', 'Generate the app.js file', function() {
+  grunt.registerMultiTask('gen_initialize', 'Generate the app.js file', function () {
     var _ = grunt.util._,
       settings = this.data,
       template = "app/initialize.js.underscore",
@@ -108,7 +108,7 @@ module.exports = function(grunt) {
     grunt.file.write(dest, tmpl(app));
   });
 
-  grunt.registerMultiTask('mochaSetup', 'Generate a config.js and runner.html for tests', function() {
+  grunt.registerMultiTask('mochaSetup', 'Generate a config.js and runner.html for tests', function () {
     var data = this.data,
         configInfo,
         _ = grunt.util._,
@@ -213,7 +213,7 @@ module.exports = function(grunt) {
   function _getNightwatchTests (settings) {
     var addonBlacklist = (_.has(settings.nightwatch, 'addonBlacklist')) ? settings.nightwatch.addonBlacklist : [];
 
-    return _.filter(settings.deps, function(addon) {
+    return _.filter(settings.deps, function (addon) {
 
       // if we've explicitly been told to ignore this addon's test, ignore 'em!
       if (_.contains(addonBlacklist, addon.name)) {
@@ -228,7 +228,7 @@ module.exports = function(grunt) {
       // see if the addon has any tests
       return fs.existsSync(fileLocation);
 
-    }).map(function(addon) {
+    }).map(function (addon) {
       return 'app/addons/' + addon.name + '/tests/nightwatch';
     });
   }

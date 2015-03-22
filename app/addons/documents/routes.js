@@ -17,7 +17,7 @@ define([
   'addons/documents/routes-index-editor'
 ],
 
-function(Documents, DocumentsRouteObject, docEditor, IndexEditorRouteObject) {
+function (Documents, DocumentsRouteObject, docEditor, IndexEditorRouteObject) {
 
   Documents.RouteObjects = [
     docEditor.DocEditorRouteObject,
