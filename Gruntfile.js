@@ -472,10 +472,6 @@ module.exports = function(grunt) {
     if (!!filepath.match(/.jsx$/)) {
       grunt.task.run(['jsx']);
     }
-
-    if (!!filepath.match(/[Ss]pec.js$/)) {
-      //grunt.task.run(['mochaSetup','jst', 'concat:test_config_js', 'mocha_phantomjs']);
-    }
   });
 
 
