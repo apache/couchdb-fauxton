@@ -18,16 +18,16 @@ define([
 
 function(app, FauxtonAPI, tests) {
 
-	tests.initialize = function() {
+  tests.initialize = function() {
 
-		FauxtonAPI.addHeaderLink({
-			title: "Tests",
-			href: '#/tests',
-			bottomNav: true,
-			icon: "fonticon-wrench"
-		});
+    FauxtonAPI.addHeaderLink({
+      title: "Tests",
+      href: '#/tests',
+      bottomNav: true,
+      icon: "fonticon-wrench"
+    });
 
-	};
+  };
 
-	return tests;
+  return tests;
 });

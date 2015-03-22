@@ -282,7 +282,7 @@ function(app, FauxtonAPI, Documents, PagingCollection) {
       min = Math.floor(sec / 60.0);
       sec = (sec % 60.0).toString();
       if (sec.length < 2) {
-         sec = "0" + sec;
+        sec = "0" + sec;
       }
 
       h = (Math.floor(min / 60.0)).toString();

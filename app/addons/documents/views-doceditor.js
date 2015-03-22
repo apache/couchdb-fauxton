@@ -377,7 +377,7 @@ function (app, FauxtonAPI, Components, Documents, Databases, prettify) {
           goBack();
         }
         deferred.reject();
-     });
+      });
 
       return deferred;
     },

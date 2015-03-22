@@ -25,7 +25,7 @@ define([
     },
 
     saving: function () {
-        this._savingStatus = 'Saving';
+      this._savingStatus = 'Saving';
     },
 
     savingDone: function () {
@@ -145,7 +145,7 @@ define([
         break;
 
         default:
-          return;
+        return;
       }
     }
 

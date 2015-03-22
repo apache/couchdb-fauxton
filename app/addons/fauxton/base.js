@@ -128,16 +128,16 @@ function(app, FauxtonAPI, Components, ReactComponents, Actions, ZeroClipboard) {
       switch (this.type) {
         case 'error':
           icon = 'fonticon-attention-circled';
-          break;
+        break;
         case 'info':
           icon = 'fonticon-info-circled';
-          break;
+        break;
         case 'success':
           icon = 'fonticon-ok-circled';
-          break;
+        break;
         default:
           icon = 'fonticon-info-circled';
-          break;
+        break;
       }
 
       return {

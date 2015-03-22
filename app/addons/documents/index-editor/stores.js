@@ -200,7 +200,7 @@ function(FauxtonAPI, ActionTypes) {
         break;
 
         default:
-          return;
+        return;
         // do nothing
       }
     }

@@ -107,19 +107,19 @@ define([
         case ActionTypes.SET_CHANGES:
           this.setChanges(action.options);
           this.triggerChange();
-          break;
+        break;
         case ActionTypes.TOGGLE_CHANGES_TAB_VISIBILITY:
           this.toggleTabVisibility();
           this.triggerChange();
-          break;
+        break;
         case ActionTypes.ADD_CHANGES_FILTER_ITEM:
           this.addFilter(action.filter);
           this.triggerChange();
-          break;
+        break;
         case ActionTypes.REMOVE_CHANGES_FILTER_ITEM:
           this.removeFilter(action.filter);
           this.triggerChange();
-          break;
+        break;
       }
     }
   });

@@ -52,7 +52,7 @@ function(app, FauxtonAPI, Databases, Views) {
     },
 
     apiurl: function (id, query) {
-        return window.location.origin + '/' + id + '/_changes' + query;
+      return window.location.origin + '/' + id + '/_changes' + query;
     }
   });
 

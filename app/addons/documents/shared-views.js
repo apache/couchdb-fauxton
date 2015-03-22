@@ -81,15 +81,15 @@ function(app, FauxtonAPI, Components, Documents, Databases) {
         });
 
         return menuLinks;
-     }, [{
-          title: 'New Doc',
-          url: newUrlPrefix + '/new',
-          icon: 'fonticon-plus-circled'
-        },{
-          title: 'New View',
-          url: newUrlPrefix + '/new_view',
-          icon: 'fonticon-plus-circled'
-        }]);
+      }, [{
+        title: 'New Doc',
+        url: newUrlPrefix + '/new',
+        icon: 'fonticon-plus-circled'
+      },{
+        title: 'New View',
+        url: newUrlPrefix + '/new_view',
+        icon: 'fonticon-plus-circled'
+      }]);
     },
 
     beforeRender: function(manage) {
@@ -208,11 +208,11 @@ function(app, FauxtonAPI, Components, Documents, Databases) {
         });
 
         return menuLinks;
-     }, [{
-      title: 'New View',
-      url: '#' + FauxtonAPI.urls('new', 'addView', databaseName, docSafe),
-      icon: 'fonticon-plus-circled'
-     }]);
+      }, [{
+        title: 'New View',
+        url: '#' + FauxtonAPI.urls('new', 'addView', databaseName, docSafe),
+        icon: 'fonticon-plus-circled'
+      }]);
 
     },
 

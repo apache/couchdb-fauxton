@@ -92,11 +92,11 @@ module.exports = function(grunt) {
 
   grunt.registerMultiTask('gen_initialize', 'Generate the app.js file', function() {
     var _ = grunt.util._,
-        settings = this.data,
-        template = "app/initialize.js.underscore",
-        dest = "app/initialize.js"
-        tmpl = _.template(grunt.file.read(template)),
-        app = {};
+      settings = this.data,
+      template = "app/initialize.js.underscore",
+      dest = "app/initialize.js",
+      tmpl = _.template(grunt.file.read(template)),
+      app = {};
 
 
     _.defaults(app, settings.app, {
@@ -114,8 +114,8 @@ module.exports = function(grunt) {
         _ = grunt.util._,
         configTemplateSrc = data.template;
 
-   var fileSrc = grunt.option('file') || data.files.src;
-   var testFiles =  grunt.file.expand(fileSrc);
+    var fileSrc = grunt.option('file') || data.files.src;
+    var testFiles =  grunt.file.expand(fileSrc);
 
     var configTemplate = _.template(grunt.file.read(configTemplateSrc));
     // a bit of a nasty hack to read our current config.js and get the info so we can change it

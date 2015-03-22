@@ -42,7 +42,7 @@ function (app, FauxtonAPI, Databases, Documents) {
     },
 
     destroyDoc: function () {
-     return doc.destroy();
+      return doc.destroy();
     },
 
     updateDoc: function () {
