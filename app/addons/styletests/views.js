@@ -17,7 +17,7 @@ define([
 
 
 function (app, FauxtonAPI) {
-  var Views= {};
+  var Views = {};
 
   Views.tests = FauxtonAPI.View.extend({
     template: "addons/styletests/templates/theme"

@@ -166,7 +166,7 @@ function (app, FauxtonAPI, Components, Documents, Databases, prettify) {
       var newId = this.$('#dup-id').val(),
           isDDoc = newId.match(/^_design\//),
           removeDDocID = newId.replace(/^_design\//,''),
-          encodedID = isDDoc? '_design/'+ app.utils.safeURLName(removeDDocID):app.utils.safeURLName(newId);
+          encodedID = isDDoc? '_design/' + app.utils.safeURLName(removeDDocID) : app.utils.safeURLName(newId);
 
       this.hideModal();
       FauxtonAPI.triggerRouteEvent('duplicateDoc', encodedID);
@@ -463,7 +463,7 @@ function (app, FauxtonAPI, Components, Documents, Databases, prettify) {
         this.editor.editor.focus();
         var session = this.editor.editor.getSession();
         var count = session.getLength();
-        this.editor.editor.gotoLine(count, session.getLine(count-1).length);
+        this.editor.editor.gotoLine(count, session.getLine(count - 1).length);
       }
     },
 

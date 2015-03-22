@@ -210,7 +210,7 @@ function(FauxtonAPI, Backbone) {
       events = events || this.get('events');
       _.each(events, function(method, event) {
         if (!_.isFunction(method) && !_.isFunction(this[method])) {
-          throw new Error("Invalid method: "+method);
+          throw new Error("Invalid method: " + method);
         }
         method = _.isFunction(method) ? method : this[method];
 

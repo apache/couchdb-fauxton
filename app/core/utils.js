@@ -67,7 +67,7 @@ function ($, _) {
     },
 
     addWindowResize: function(fun, key){
-      onWindowResize[key]=fun;
+      onWindowResize[key] = fun;
       // You shouldn't need to call it here. Just define it at startup and each time it will loop
       // through all the functions in the hash.
       //app.initWindowResize();

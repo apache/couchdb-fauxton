@@ -18,7 +18,7 @@ exports.command = function () {
       password = client.globals.test_settings.password;
 
   client
-    .url(baseUrl+'/#login')
+    .url(baseUrl + '/#login')
     .waitForElementPresent('a[href="#login"]', 15000, false)
     .click('a[href="#login"]')
     .waitForElementPresent('#username', 10000, false)

@@ -113,11 +113,11 @@ define([
         tempView = views[view] || {};
 
       if (reduce) {
-        tempView.reduce=reduce;
+        tempView.reduce = reduce;
       } else {
         delete tempView.reduce;
       }
-      tempView.map= map;
+      tempView.map  = map;
 
       views[view] = tempView;
       this.set({views: views});
@@ -157,7 +157,7 @@ define([
     safeID: function() {
       if (this.isDdoc()){
         var ddoc = this.id.replace(/^_design\//,"");
-        return "_design/"+app.utils.safeURLName(ddoc);
+        return "_design/" + app.utils.safeURLName(ddoc);
       }else{
         return app.utils.safeURLName(this.id);
       }

@@ -129,7 +129,7 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
 
       // helper template function to determine when to insert a delimiter char
       var nextCrumbHasLabel = function(crumb, index) {
-        var nextHasLabel = crumbs[index+1].name !== "";
+        var nextHasLabel = crumbs[index + 1].name !== "";
         return index < crumbs.length && crumb.name && nextHasLabel;
       };
 

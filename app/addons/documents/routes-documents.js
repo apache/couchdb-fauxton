@@ -114,7 +114,7 @@ function(app, FauxtonAPI, BaseRoute, Documents, Changes, Index, DocEditor,
         model: designDocInfo
       }));
 
-      this.sidebar.setSelectedTab(app.utils.removeSpecialCharacters(ddoc)+"_metadata");
+      this.sidebar.setSelectedTab(app.utils.removeSpecialCharacters(ddoc) + "_metadata");
       this.leftheader.updateCrumbs(this.getCrumbs(this.database));
       this.rightHeader.hideQueryOptions();
 

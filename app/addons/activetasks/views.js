@@ -183,7 +183,7 @@ function (app, FauxtonAPI, ActiveTasks) {
       if (this.type === 'indexer') {
         progress = 'Processed ' + this.model.get('changes_done') + ' of ' + this.model.get('total_changes') + ' changes. ';
       } else if (this.type === 'replication') {
-        progress = this.model.get('docs_written')+ ' docs written. ';
+        progress = this.model.get('docs_written') + ' docs written. ';
         if (!_.isUndefined(this.model.get('changes_pending'))) {
           progress += this.model.get('changes_pending') + ' pending changes. ';
         }

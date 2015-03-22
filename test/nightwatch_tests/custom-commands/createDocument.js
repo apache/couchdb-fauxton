@@ -33,9 +33,9 @@ CreateDocument.prototype.command = function (documentName, databaseName, docCont
   database.insert(docContents, documentName, function (err, body, header) {
 
     if (err) {
-      console.log('Error in nano CreateDocument Function: '+documentName+', in database: '+databaseName, err.message);
+      console.log('Error in nano CreateDocument Function: ' + documentName + ', in database: ' + databaseName, err.message);
     }
-    console.log('nano  - created a doc: '+documentName+', in database: '+databaseName);
+    console.log('nano  - created a doc: ' + documentName + ', in database: ' + databaseName);
     that.emit('complete');
   });
 
