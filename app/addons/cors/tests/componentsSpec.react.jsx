@@ -103,20 +103,20 @@ define([
 
       it('calls validates each domain', function () {
         var spy = sinon.spy(Resources, 'validateCORSDomain');
-        TestUtils.Simulate.change($(inputEl.getDOMNode()).find('input')[0],{target: {value: newOrigin}});
+        TestUtils.Simulate.change($(inputEl.getDOMNode()).find('input')[0], {target: {value: newOrigin}});
         TestUtils.Simulate.click($(inputEl.getDOMNode()).find('.btn')[0]);
         assert.ok(spy.calledWith(newOrigin));
       });
 
       it('calls addOrigin on add click with valid domain', function () {
-        TestUtils.Simulate.change($(inputEl.getDOMNode()).find('input')[0],{target: {value: newOrigin}});
+        TestUtils.Simulate.change($(inputEl.getDOMNode()).find('input')[0], {target: {value: newOrigin}});
         TestUtils.Simulate.click($(inputEl.getDOMNode()).find('.btn')[0]);
         assert.ok(addOrigin.calledWith(newOrigin));
       });
 
       it('shows notification if origin is not valid', function () {
         var spy = sinon.spy(FauxtonAPI, 'addNotification');
-        TestUtils.Simulate.change($(inputEl.getDOMNode()).find('input')[0],{target: {value: 'badOrigin'}});
+        TestUtils.Simulate.change($(inputEl.getDOMNode()).find('input')[0], {target: {value: 'badOrigin'}});
         TestUtils.Simulate.click($(inputEl.getDOMNode()).find('.btn')[0]);
         assert.ok(spy.calledOnce);
       });

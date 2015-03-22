@@ -91,7 +91,7 @@ define([
   describe('QueryParams', function() {
     describe('parse', function() {
       it('should not parse arbitrary parameters', function() {
-        var params = {"foo":"[1]]"};
+        var params = {"foo": "[1]]"};
         var result = Models.QueryParams.parse(params);
 
         assert.deepEqual(result, params);
@@ -105,8 +105,8 @@ define([
         var result = Models.QueryParams.parse(params);
 
         assert.deepEqual(result, {
-          "startkey":["a","b"],
-          "endkey":["c","d"]
+          "startkey": ["a", "b"],
+          "endkey": ["c", "d"]
         });
       });
 
@@ -116,7 +116,7 @@ define([
         };
         var result = Models.QueryParams.parse(params);
 
-        assert.deepEqual(result, {"key":[1,2]});
+        assert.deepEqual(result, {"key": [1, 2]});
       });
 
       it('does not modify input', function() {
@@ -132,7 +132,7 @@ define([
 
     describe('stringify', function() {
       it('should not stringify arbitrary parameters', function() {
-        var params = {"foo":[1,2,3]};
+        var params = {"foo": [1, 2, 3]};
         var result = Models.QueryParams.stringify(params);
 
         assert.deepEqual(result, params);
@@ -140,8 +140,8 @@ define([
 
       it('stringifies startkey, endkey', function() {
         var params = {
-          "startkey":["a","b"],
-          "endkey":["c","d"]
+          "startkey": ["a", "b"],
+          "endkey": ["c", "d"]
         };
 
         var result = Models.QueryParams.stringify(params);
@@ -153,14 +153,14 @@ define([
       });
 
       it('stringifies key', function() {
-        var params = {"key":["a","b"]};
+        var params = {"key":[ "a", "b"]};
         var result = Models.QueryParams.stringify(params);
 
-        assert.deepEqual(result, { "key":"[\"a\",\"b\"]" });
+        assert.deepEqual(result, { "key": "[\"a\",\"b\"]" });
       });
 
       it('does not modify input', function() {
-        var params = {"key":["a","b"]};
+        var params = {"key": ["a", "b"]};
         var clone = _.clone(params);
         var result = Models.QueryParams.stringify(params);
 
@@ -169,8 +169,8 @@ define([
 
       it('is symmetrical with parse', function() {
         var params = {
-          "startkey":["a","b"],
-          "endkey":["c","d"],
+          "startkey": ["a", "b"],
+          "endkey": ["c", "d"],
           "foo": "[1,2]",
           "bar": "abc"
         };
@@ -221,8 +221,8 @@ define([
 
     it("clears the memory if no errors happened", function () {
       collection.handleResponse([
-        {"ok":true,"id":"1","rev":"10-72cd2edbcc0d197ce96188a229a7af01"},
-        {"ok":true,"id":"2","rev":"6-da537822b9672a4b2f42adb1be04a5b1"}
+        {"ok": true, "id": "1", "rev": "10-72cd2edbcc0d197ce96188a229a7af01"},
+        {"ok": true, "id": "2", "rev": "6-da537822b9672a4b2f42adb1be04a5b1"}
       ]);
 
       assert.equal(collection.length, 1);
@@ -234,8 +234,8 @@ define([
       });
 
       collection.handleResponse([
-        {"ok":true,"id":"Deferred","rev":"10-72cd2edbcc0d197ce96188a229a7af01"},
-        {"ok":true,"id":"DeskSet","rev":"6-da537822b9672a4b2f42adb1be04a5b1"}
+        {"ok": true, "id": "Deferred", "rev":"10-72cd2edbcc0d197ce96188a229a7af01"},
+        {"ok": true, "id": "DeskSet", "rev":"6-da537822b9672a4b2f42adb1be04a5b1"}
       ]);
     });
 
@@ -244,16 +244,16 @@ define([
         assert.deepEqual(ids, ['Deferred']);
       });
       collection.handleResponse([
-        {"error":"confclict","id":"Deferred","rev":"10-72cd2edbcc0d197ce96188a229a7af01"},
-        {"ok":true,"id":"DeskSet","rev":"6-da537822b9672a4b2f42adb1be04a5b1"}
+        {"error": "confclict", "id": "Deferred", "rev":"10-72cd2edbcc0d197ce96188a229a7af01"},
+        {"ok": true, "id": "DeskSet", "rev": "6-da537822b9672a4b2f42adb1be04a5b1"}
       ]);
     });
 
     it("removes successfull deleted from the collection but keeps one with errors", function () {
       collection.handleResponse([
-        {"error":"confclict","id":"1","rev":"10-72cd2edbcc0d197ce96188a229a7af01"},
-        {"ok":true,"id":"2","rev":"6-da537822b9672a4b2f42adb1be04a5b1"},
-        {"error":"conflict","id":"3","rev":"6-da537822b9672a4b2f42adb1be04a5b1"}
+        {"error": "confclict", "id": "1", "rev": "10-72cd2edbcc0d197ce96188a229a7af01"},
+        {"ok": true, "id":"2", "rev": "6-da537822b9672a4b2f42adb1be04a5b1"},
+        {"error": "conflict", "id":"3", "rev": "6-da537822b9672a4b2f42adb1be04a5b1"}
       ]);
       assert.ok(collection.get('1'));
       assert.ok(collection.get('3'));

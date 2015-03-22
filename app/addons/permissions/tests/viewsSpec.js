@@ -49,7 +49,8 @@ define([
 
         assert.ok(saveMock.calledOnce);
         var args = saveMock.args;
-        assert.deepEqual(args[0][0], {"admins":{"names":["_user"],"roles":[]},"members":{"names":[],"roles":[]}});
+        assert.deepEqual(args[0][0],
+          {"admins": {"names": ["_user"], "roles":[]}, "members": {"names":[], "roles":[]}});
       });
 
       it('Should save model', function () {

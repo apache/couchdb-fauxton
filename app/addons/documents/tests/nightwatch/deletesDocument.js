@@ -32,7 +32,7 @@ module.exports = {
       .waitForElementVisible('#global-notifications .alert.alert-info', waitTime, false)
       .url(baseUrl + '/' + newDatabaseName + '/_all_docs')
       .waitForElementPresent('pre', waitTime, false)
-      .getText('pre',function (result) {
+      .getText('pre', function (result) {
         var data = result.value,
             createdDocumentNotPresent = data.indexOf(newDocumentName);
 

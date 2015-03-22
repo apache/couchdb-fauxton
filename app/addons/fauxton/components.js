@@ -14,8 +14,8 @@ define('ace_configuration', ["app", "ace/ace"], function (app, ace) {
   var path = app.host + app.root + 'js/ace';
   var config = require("ace/config");
   config.set("packaged", true);
-  config.set("workerPath",path);
-  config.set("modePath",path);
+  config.set("workerPath", path);
+  config.set("modePath", path);
   config.set("themePath", path);
   return ace;
 });
@@ -730,7 +730,7 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
       // By default CouchDB view functions don't pass lint
       return _.every(errors, function(error) {
         return this.isIgnorableError(error.raw);
-      },this);
+      }, this);
     },
 
     // List of JSHINT errors to ignore

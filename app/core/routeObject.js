@@ -198,7 +198,7 @@ function(FauxtonAPI, Backbone) {
       var args = Array.prototype.slice.call(arguments);
       this.trigger.apply(this, args);
 
-      args.splice(0,1, eventName, this);
+      args.splice(0, 1, eventName, this);
       broadcaster.trigger.apply(broadcaster, args);
     },
 

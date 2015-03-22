@@ -20,7 +20,7 @@ function(app, FauxtonAPI, plugins) {
     layout: "one_pane",
 
     crumbs: [
-      {"name": "Plugins","link": "_plugins"}
+      {"name": "Plugins", "link": "_plugins"}
     ],
 
     routes: {

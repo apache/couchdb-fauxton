@@ -70,7 +70,7 @@ function(app, FauxtonAPI, Components, Documents, Databases) {
       var database = this.collection.database,
           addLinks = FauxtonAPI.getExtensions('sidebar:links'),
           databaseName = database.id,
-          newUrlPrefix = '#' + FauxtonAPI.urls('databaseBaseURL','app', databaseName);
+          newUrlPrefix = '#' + FauxtonAPI.urls('databaseBaseURL', 'app', databaseName);
 
       return _.reduce(addLinks, function (menuLinks, link) {
 
@@ -85,7 +85,7 @@ function(app, FauxtonAPI, Components, Documents, Databases) {
         title: 'New Doc',
         url: newUrlPrefix + '/new',
         icon: 'fonticon-plus-circled'
-      },{
+      }, {
         title: 'New View',
         url: newUrlPrefix + '/new_view',
         icon: 'fonticon-plus-circled'
@@ -127,7 +127,7 @@ function(app, FauxtonAPI, Components, Documents, Databases) {
 
           this.designDocList.push(view);
         }
-      },this);
+      }, this);
     },
 
     afterRender: function () {
@@ -167,7 +167,7 @@ function(app, FauxtonAPI, Components, Documents, Databases) {
       this.$(e.currentTarget).toggleClass("down");
     },
     buildIndexList: function(designDocs, info){
-      var design = this.model.id.replace(/^_design\//,"");
+      var design = this.model.id.replace(/^_design\//, "");
       var databaseId = this.model.database.id;
 
       if (_.isUndefined(designDocs[info.selector])) { return; }
@@ -182,7 +182,7 @@ function(app, FauxtonAPI, Components, Documents, Databases) {
     },
 
     serialize: function(){
-      var ddocName = this.model.id.replace(/^_design\//,""),
+      var ddocName = this.model.id.replace(/^_design\//, ""),
           docSafe = app.utils.safeURLName(ddocName),
           databaseName = this.collection.database.safeID();
 
@@ -194,10 +194,10 @@ function(app, FauxtonAPI, Components, Documents, Databases) {
     },
 
     getSidebarLinks: function () {  //these are for each Design doc '+' links
-      var ddocName = this.model.id.replace(/^_design\//,""),
+      var ddocName = this.model.id.replace(/^_design\//, ""),
           docSafe = app.utils.safeURLName(ddocName),
           databaseName = this.collection.database.id,
-          newUrlPrefix = FauxtonAPI.urls('databaseBaseURL','app', databaseName);
+          newUrlPrefix = FauxtonAPI.urls('databaseBaseURL', 'app', databaseName);
 
 
       return _.reduce(FauxtonAPI.getExtensions('sidebar:links'), function (menuLinks, link) {
@@ -229,7 +229,7 @@ function(app, FauxtonAPI, Components, Documents, Databases) {
 
       _.each(sidebarListTypes, function (info) {
         this.buildIndexList(ddocDocs, info);
-      },this);
+      }, this);
 
     },
 

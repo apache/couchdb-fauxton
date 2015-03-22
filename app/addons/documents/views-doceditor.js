@@ -165,8 +165,8 @@ function (app, FauxtonAPI, Components, Documents, Databases, prettify) {
       event.preventDefault();
       var newId = this.$('#dup-id').val(),
           isDDoc = newId.match(/^_design\//),
-          removeDDocID = newId.replace(/^_design\//,''),
-          encodedID = isDDoc? '_design/' + app.utils.safeURLName(removeDDocID) : app.utils.safeURLName(newId);
+          removeDDocID = newId.replace(/^_design\//, ''),
+          encodedID = isDDoc ? '_design/' + app.utils.safeURLName(removeDDocID) : app.utils.safeURLName(newId);
 
       this.hideModal();
       FauxtonAPI.triggerRouteEvent('duplicateDoc', encodedID);
@@ -178,7 +178,7 @@ function (app, FauxtonAPI, Components, Documents, Databases, prettify) {
       this.clear_error_msg();
       this.$('.modal').modal();
       // hack to get modal visible
-      $('.modal-backdrop').css('z-index',1025);
+      $('.modal-backdrop').css('z-index', 1025);
     },
 
     showModal: function () {
@@ -493,7 +493,7 @@ function (app, FauxtonAPI, Components, Documents, Databases, prettify) {
       var selEnd = this.editor.getSelectionEnd().row;
 
       // one JS(ON) string can't span more than one line - we edit one string, so ensure we don't select several lines
-      if (selStart >=0 && selEnd >= 0 && selStart === selEnd && this.editor.isRowExpanded(selStart)) {
+      if (selStart >= 0 && selEnd >= 0 && selStart === selEnd && this.editor.isRowExpanded(selStart)) {
         var editLine = this.editor.getLine(selStart),
             editMatch = editLine.match(/^([ \t]*)(["|'][a-zA-Z0-9_]*["|']: )?(["|'].*["|'],?[ \t]*)$/);
 

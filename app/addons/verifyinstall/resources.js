@@ -113,7 +113,7 @@ function (app, FauxtonAPI, Databases, Documents) {
             reduce: '_sum'
           }
         }
-      },{
+      }, {
         database: db
       });
 

@@ -41,7 +41,7 @@ module.exports = function (grunt) {
     var proxy = httpProxy.createServer(proxy_settings);
 
     http.createServer(function (req, res) {
-      var url = req.url.replace('app/',''),
+      var url = req.url.replace('app/', ''),
           accept = req.headers.accept.split(','),
           filePath;
 
@@ -52,21 +52,21 @@ module.exports = function (grunt) {
       }
 
       if (!!url.match(/^\/addons\/.*\/assets\/js/)) {
-        filePath = path.join(app_dir, url.replace('/_utils/fauxton/',''));
+        filePath = path.join(app_dir, url.replace('/_utils/fauxton/', ''));
       } else if (!!url.match(/assets/)) {
         // serve any javascript or css files from here assets dir
         url = url.replace(/\?.*/, '');
-        filePath = path.join('./',url);
+        filePath = path.join('./', url);
       } else if (!!url.match(/mocha|\/test\/core\/|test\.config/)) {
-        filePath = path.join('./test', url.replace('/test/',''));
+        filePath = path.join('./test', url.replace('/test/', ''));
       } else if (!!url.match(/fonts/)) {
-        filePath = path.join(dist_dir,url.split('?v=')[0]);
+        filePath = path.join(dist_dir, url.split('?v=')[0]);
       } else if (!!url.match(/\.css|img/)) {
         url = url.replace(/\?.*/, '');
-        filePath = path.join(dist_dir,url);
+        filePath = path.join(dist_dir, url);
       } else if (!!url.match(/\.js$|\.html$/)) {
         // server js from app directory
-        filePath = path.join(app_dir, url.replace('/_utils/fauxton/',''));
+        filePath = path.join(app_dir, url.replace('/_utils/fauxton/', ''));
       } else if (!!url.match(/ZeroClipboard/)) {
         filePath = "./assets/js/plugins/zeroclipboard/ZeroClipboard.swf"
       } else if (!!url.match(/testrunner/)) {
