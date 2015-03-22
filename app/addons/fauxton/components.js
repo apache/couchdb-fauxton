@@ -675,7 +675,7 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
     },
 
     getLines: function(){
-     return this.editor.getSession().getDocument().getLength();
+      return this.editor.getSession().getDocument().getLength();
     },
 
     addCommands: function () {
@@ -726,10 +726,10 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
     },
 
     hadValidCode: function () {
-     var errors = this.getAnnotations();
-     // By default CouchDB view functions don't pass lint
-     return _.every(errors, function(error) {
-      return this.isIgnorableError(error.raw);
+      var errors = this.getAnnotations();
+      // By default CouchDB view functions don't pass lint
+      return _.every(errors, function(error) {
+        return this.isIgnorableError(error.raw);
       },this);
     },
 
@@ -946,18 +946,18 @@ function(app, FauxtonAPI, ace, spin, ZeroClipboard) {
         speed: 1, // Rounds per second
         trail: 10, // Afterglow percentage
         shadow: false // Whether to render a shadow
-     };
+      };
 
-     if (routeObjectSpinner) { return; }
+      if (routeObjectSpinner) { return; }
 
-     if (!$('.spinner').length) {
-       $('<div class="spinner"></div>')
-        .appendTo('#app-container');
-     }
+      if (!$('.spinner').length) {
+        $('<div class="spinner"></div>')
+          .appendTo('#app-container');
+      }
 
-     routeObjectSpinner = new Spinner(opts).spin();
-     $('.spinner').append(routeObjectSpinner.el);
-   }
+      routeObjectSpinner = new Spinner(opts).spin();
+      $('.spinner').append(routeObjectSpinner.el);
+    }
   });
 
   var removeRouteObjectSpinner = function () {

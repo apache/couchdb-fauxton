@@ -79,7 +79,7 @@ define([
 
   });
 
-describe('Fauxton Notifications', function () {
+  describe('Fauxton Notifications', function () {
 
     it('should escape by default', function () {
       window.fauxton_xss_test_escaped = true;
@@ -107,14 +107,15 @@ describe('Fauxton Notifications', function () {
       });
     });
 
-    it('should render escaped if the escape value is not explicitly false,' +
-        'e.g. was forgotten in a direct call', function () {
+    it('should render escaped if the escape value is not explicitly false, ' +
+    'e.g. was forgotten in a direct call', function () {
 
       window.fauxton_xss_test2_escaped = true;
       var view = new Base.Notification({
         msg: '<script>window.fauxton_xss_test2_escaped = false;</script>',
         selector: 'body'
       }).render();
+
       view.$el.remove();
       assert.ok(window.fauxton_xss_test2_escaped);
       delete window.fauxton_xss_test2_escaped;

@@ -145,29 +145,29 @@ define([
         case ActionTypes.NEW_PAGINATION:
           this.newPagination(action.collection);
           this.triggerChange();
-          break;
+        break;
         case ActionTypes.SET_PAGINATION_DOCUMENT_LIMIT:
           this.setDocumentLimit(action.docLimit);
           this.triggerChange();
-          break;
+        break;
         case ActionTypes.PAGINATION_COLLECTION_RESET:
           this.triggerChange();
-          break;
+        break;
         case ActionTypes.PAGINATE_NEXT:
           this.paginateNext();
           this.triggerChange();
-          break;
+        break;
         case ActionTypes.PAGINATE_PREVIOUS:
           this.paginatePrevious();
           this.triggerChange();
-          break;
+        break;
         case ActionTypes.PER_PAGE_CHANGE:
           this.reset();
           this.setPerPage(action.perPage);
           this.triggerChange();
-          break;
+        break;
         default:
-          return;
+        return;
       }
     }
   });

@@ -261,7 +261,7 @@ function(FauxtonAPI, Backbone) {
       }
 
       _.each(promise, function (p) {
-          this._promises.push(p);
+        this._promises.push(p);
       }, this);
     },
 

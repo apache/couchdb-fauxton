@@ -157,7 +157,7 @@ function (app, FauxtonAPI, CouchdbSession) {
         if (login) {
           return that.login(username, password);
         } else {
-         return that.fetchUser({forceFetch: true});
+          return that.fetchUser({forceFetch: true});
         }
       });
     },
@@ -176,7 +176,7 @@ function (app, FauxtonAPI, CouchdbSession) {
         dataType: "json",
         data: {name: username, password: password}
       }).then(function () {
-         return that.fetchUser({forceFetch: true});
+        return that.fetchUser({forceFetch: true});
       });
     },
 
@@ -190,7 +190,7 @@ function (app, FauxtonAPI, CouchdbSession) {
         username : "_",
         password : "_"
       }).then(function () {
-       return that.fetchUser({forceFetch: true });
+        return that.fetchUser({forceFetch: true });
       });
     },
 
@@ -203,7 +203,7 @@ function (app, FauxtonAPI, CouchdbSession) {
            info = this.get('info'),
            userCtx = this.get('userCtx');
 
-       var admin = new Admin({
+      var admin = new Admin({
         name: userCtx.name,
         value: password
       });

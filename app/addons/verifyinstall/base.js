@@ -19,11 +19,11 @@ define([
 function(app, FauxtonAPI, VerifyInstall) {
   VerifyInstall.initialize = function () {
     FauxtonAPI.addHeaderLink({
-        title: 'Verify',
-        href: '#verifyinstall',
-        icon: 'fonticon-ok-circled',
-        bottomNav: true
-      });
+      title: 'Verify',
+      href: '#verifyinstall',
+      icon: 'fonticon-ok-circled',
+      bottomNav: true
+    });
   };
 
   return VerifyInstall;

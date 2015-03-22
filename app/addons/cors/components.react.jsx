@@ -71,7 +71,7 @@ define([
 
     onKeyUp: function (e) {
       if (e.keyCode === 13) {   //enter key
-       return this.updateOrigin(e);
+        return this.updateOrigin(e);
       }
     },
 
@@ -160,7 +160,7 @@ define([
 
     onKeyUp: function (e) {
       if (e.keyCode == 13) {   //enter key
-       return this.addOrigin(e);
+        return this.addOrigin(e);
       }
     },
 

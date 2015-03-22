@@ -19,14 +19,14 @@ define([
 
   describe('Documents QueryOptions', function () {
     var view;
-      beforeEach(function () {
-        viewSandbox = new ViewSandbox();
-        viewSandbox.renderView(view);
-      });
+    beforeEach(function () {
+      viewSandbox = new ViewSandbox();
+      viewSandbox.renderView(view);
+    });
 
-      afterEach(function () {
-        viewSandbox.remove();
-      });
+    afterEach(function () {
+      viewSandbox.remove();
+    });
   });
 });
 

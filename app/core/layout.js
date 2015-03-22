@@ -78,7 +78,7 @@ define([
 
       if (!view) {
         return false;
-        }
+      }
 
       this.layout.removeView(selector);
 

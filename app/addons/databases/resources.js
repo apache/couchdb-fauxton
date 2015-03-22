@@ -105,7 +105,7 @@ function(app, FauxtonAPI, Documents) {
         query = "?" + $.param(this.params);
       }
 
-     if (!context) { context = 'server';}
+      if (!context) { context = 'server';}
 
       return FauxtonAPI.urls('changes', context, this.database.safeID(), query);
     },

@@ -79,7 +79,7 @@ function (FauxtonAPI, ActionTypes) {
         break;
 
         default:
-          return;
+        return;
       }
     }
 
@@ -129,7 +129,7 @@ function (FauxtonAPI, ActionTypes) {
         break;
 
         default:
-          return;
+        return;
       }
     }
   });

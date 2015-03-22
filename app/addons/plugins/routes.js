@@ -16,32 +16,32 @@ define([
   "addons/plugins/resources"
 ],
 function(app, FauxtonAPI, plugins) {
-      var  PluginsRouteObject = FauxtonAPI.RouteObject.extend({
-        layout: "one_pane",
+  var  PluginsRouteObject = FauxtonAPI.RouteObject.extend({
+    layout: "one_pane",
 
-        crumbs: [
-          {"name": "Plugins","link": "_plugins"}
-        ],
+    crumbs: [
+      {"name": "Plugins","link": "_plugins"}
+    ],
 
-        routes: {
-           "_plugins": "pluginsRoute"
-        },
+    routes: {
+       "_plugins": "pluginsRoute"
+    },
 
-        selectedHeader: "Plugins",
+    selectedHeader: "Plugins",
 
-        roles: ["_admin"],
+    roles: ["_admin"],
 
-        apiUrl:'plugins',
+    apiUrl:'plugins',
 
-        initialize: function () {
-            //put common views used on all your routes here (eg:  sidebars )
-        },
+    initialize: function () {
+        //put common views used on all your routes here (eg:  sidebars )
+    },
 
-        pluginsRoute: function () {
-          this.setView("#dashboard-content", new plugins.Hello({}));
-        }
-      });
+    pluginsRoute: function () {
+      this.setView("#dashboard-content", new plugins.Hello({}));
+    }
+  });
 
-      plugins.RouteObjects = [PluginsRouteObject];
+  plugins.RouteObjects = [PluginsRouteObject];
   return plugins;
 });

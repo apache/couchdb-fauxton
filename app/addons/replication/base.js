@@ -17,7 +17,7 @@ define([
 ],
 
 function(app, FauxtonAPI, replication) {
-	replication.initialize = function() {
+  replication.initialize = function() {
     FauxtonAPI.addHeaderLink({ title: 'Replication', href: '#/replication', icon: 'fonticon-replicate' });
   };
 

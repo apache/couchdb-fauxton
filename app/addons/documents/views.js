@@ -367,16 +367,16 @@ function (app, FauxtonAPI, Components, Documents,
       return this.collection.fetch({reset: true}).then(function () {
         PaginationActions.collectionReset();
       }, function (model, xhr, options) {
-          // TODO: handle error requests that slip through
-          // This should just throw a notification, not break the page
-          FauxtonAPI.addNotification({
-            msg: "Bad Request",
-            type: "error",
-            clear:  true
-          });
+        // TODO: handle error requests that slip through
+        // This should just throw a notification, not break the page
+        FauxtonAPI.addNotification({
+          msg: "Bad Request",
+          type: "error",
+          clear:  true
+        });
 
-          //now redirect back to alldocs
-          FauxtonAPI.navigate(model.database.url("index") + "?limit=100");
+        //now redirect back to alldocs
+        FauxtonAPI.navigate(model.database.url("index") + "?limit=100");
       });
     },
 
@@ -535,8 +535,8 @@ function (app, FauxtonAPI, Components, Documents,
     },
 
     afterRender: function () {
-     this.typeAhead = new Components.DocSearchTypeahead({el: '#jump-to-doc-id', database: this.database});
-     this.typeAhead.render();
+      this.typeAhead = new Components.DocSearchTypeahead({el: '#jump-to-doc-id', database: this.database});
+      this.typeAhead.render();
     }
   });
 
