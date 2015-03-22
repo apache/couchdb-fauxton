@@ -1,0 +1,42 @@
+{
+  "disallowEmptyBlocks": true,
+  "disallowKeywordsOnNewLine": ["else"],
+  "disallowTrailingWhitespace": true,
+  "validateIndentation": 2,
+  "fileExtensions": [".js", ".jsx"],
+  "excludeFiles": [
+    "app/**/*.react.js",
+    "app/addons/.module-cache",
+    "app/addons/pouchdb/pouchdb.mapreduce.js",
+    "app/addons/pouchdb/pouch.collate.js",
+    "app/load_addons.js"
+  ],
+  "disallowMixedSpacesAndTabs": true,
+  "requireSpaceBeforeBinaryOperators": [
+    "=", "+=", "-=", "*=", "/=", "%=", "<<=", ">>=", ">>>=",
+    "&=", "|=", "^=", "+=",
+
+    "+", "-", "*", "/", "%", "<<", ">>", ">>>", "&",
+    "|", "^", "&&", "||", "===", "==", ">=",
+    "<=", "<", ">", "!=", "!=="
+  ],
+  "requireSpaceAfterBinaryOperators": true,
+  "requireSpacesInConditionalExpression": true,
+  "requireSpaceBeforeBlockStatements": true,
+  "requireLineFeedAtFileEnd": true,
+  "requireSpacesInFunctionExpression": {
+    "beforeOpeningCurlyBrace": true
+  },
+  "requireSpaceAfterKeywords": [
+    "if",
+    "else",
+    "for",
+    "while",
+    "do",
+    "switch",
+    "return",
+    "try",
+    "catch",
+    "function"
+  ]
+}
