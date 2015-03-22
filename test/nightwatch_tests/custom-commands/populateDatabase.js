@@ -31,7 +31,7 @@ PopulateDatabase.prototype.command = function (databaseName, count) {
     function () { return i < (count ? count : 20); },
     function (cb) {
       i++;
-      var document_id = 'document_'+ i;
+      var document_id = 'document_' + i;
       database.insert({ number: i }, document_id, cb);
     },
     function (err) {

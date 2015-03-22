@@ -49,7 +49,7 @@ define([
       hasReduceFunction;
 
       promise.then(function (resp) {
-        var design = _.findWhere(that.designDocs.models, {id: '_design/'+ddoc});
+        var design = _.findWhere(that.designDocs.models, {id: '_design/' + ddoc});
         !_.isUndefined(hasReduceFunction = design.attributes.doc.views[viewName].reduce);
 
         that.rightHeader.showQueryOptions();

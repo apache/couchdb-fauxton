@@ -16,7 +16,7 @@ exports.description = 'Generate a skeleton for an addon.';
 
 exports.notes = '';
 
-exports.after = "Created your addon! Don't forget to update your"+
+exports.after = "Created your addon! Don't forget to update your" +
                 " settings.json for it to be compiled and deployed";
 
 // Any existing file or directory matching this wildcard will cause a warning.

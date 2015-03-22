@@ -255,7 +255,7 @@ function(app, FauxtonAPI, Config, Components) {
     setSelectedTab: function (selectedTab) {
       this.selectedTab = selectedTab;
       this.$('li').removeClass('active');
-      this.$('a[data-type-select="'+this.selectedTab+'"]').parent("li").addClass('active');
+      this.$('a[data-type-select="' + this.selectedTab + '"]').parent("li").addClass('active');
     },
     afterRender: function(){
       this.setSelectedTab(this.selectedTab);

@@ -28,7 +28,7 @@ module.exports = {
     nano.db.destroy(database, function (err, body, header) {
       if (err) {
         if (err.message != 'Database does not exist.' && err.message != 'missing') {
-          console.log('Error in setting up '+database, err.message);
+          console.log('Error in setting up ' + database, err.message);
         }
       }
       // create a new database
@@ -49,7 +49,7 @@ module.exports = {
     console.log('nano cleaning up');
     nano.db.destroy(database, function (err, header, body) {
       if (err) {
-        console.log('Error in cleaning up '+database, err.message);
+        console.log('Error in cleaning up ' + database, err.message);
       }
       done();
     });

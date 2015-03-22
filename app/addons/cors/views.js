@@ -20,7 +20,7 @@ define([
 
 
 function (app, FauxtonAPI, CORS, Components, Actions) {
-  var Views= {};
+  var Views = {};
 
   Views.CORSWrapper = FauxtonAPI.View.extend({
     className: 'list',

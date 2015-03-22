@@ -68,7 +68,7 @@ function(app, FauxtonAPI, Documents, PagingCollection) {
     // json editor for docs, or into a ddoc specific page.
     safeID: function() {
       var ddoc = this.id.replace(/^_design\//,"");
-      return "_design/"+app.utils.safeURLName(ddoc);
+      return "_design/" + app.utils.safeURLName(ddoc);
     }
   });
 

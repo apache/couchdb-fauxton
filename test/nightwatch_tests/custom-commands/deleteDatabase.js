@@ -26,9 +26,9 @@ DeleteDatabase.prototype.command = function (databaseName) {
 
   nano.db.destroy(databaseName, function (err, body, header) {
     if (err) {
-      console.log('Error in nano DeleteDatabase Function: '+ databaseName, err.message);
+      console.log('Error in nano DeleteDatabase Function: ' + databaseName, err.message);
     }
-    console.log('nano - database: '+databaseName+' is deleted: ', body);
+    console.log('nano - database: ' + databaseName + ' is deleted: ', body);
     // emit the complete event
     that.emit('complete');
   });

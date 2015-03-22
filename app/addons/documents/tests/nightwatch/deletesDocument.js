@@ -30,7 +30,7 @@ module.exports = {
       .click('.control-delete')
       .acceptAlert()
       .waitForElementVisible('#global-notifications .alert.alert-info', waitTime, false)
-      .url(baseUrl+'/'+newDatabaseName+'/_all_docs')
+      .url(baseUrl + '/' + newDatabaseName + '/_all_docs')
       .waitForElementPresent('pre', waitTime, false)
       .getText('pre',function (result) {
         var data = result.value,
