@@ -14,7 +14,7 @@ define([
   'app',
   'api'
 ],
-function (app, FauxtonAPI ) {
+function (app, FauxtonAPI) {
   var Permissions = FauxtonAPI.addon();
 
   Permissions.Security = Backbone.Model.extend({
@@ -34,6 +34,8 @@ function (app, FauxtonAPI ) {
     url: function () {
       return window.location.origin + '/' + this.database.safeID() + '/_security';
     },
+
+    documentation: FauxtonAPI.constants.DOC_URLS.DB_PERMISSION,
 
     addItem: function (value, type, section) {
       var sectionValues = this.get(section);

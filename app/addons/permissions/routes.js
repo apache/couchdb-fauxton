@@ -44,6 +44,10 @@ function (app, FauxtonAPI, Databases, Permissions, BaseRoute) {
       this.addSidebar('permissions');
     },
 
+    apiUrl: function () {
+      return [this.security.url('apiurl'), this.security.documentation];
+    },
+
     establish: function () {
       return [
         this.database.fetch(),
