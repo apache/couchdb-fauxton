@@ -365,7 +365,7 @@ define([
           <div className="change-box" data-id={this.props.change.id}>
             <div className="row-fluid">
               <div className="span2">seq</div>
-              <div className="span8">{this.props.change.seq}</div>
+              <div className="span8 change-sequence">{this.props.change.seq}</div>
               <div className="span2 text-right">
                 <Components.Clipboard text={this.props.change.seq} />
               </div>
