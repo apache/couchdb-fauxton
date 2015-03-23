@@ -409,6 +409,10 @@ module.exports = function (grunt) {
           command: 'node ./node_modules/react-tools/bin/jsx -x jsx app/addons/ app/addons/',
           stdout: true,
           failOnError: true
+      },
+
+      'stylecheck': {
+        command: 'npm run stylecheck',
       }
     },
 
@@ -508,7 +512,7 @@ module.exports = function (grunt) {
    */
   // clean out previous build artifacts and lint
   grunt.registerTask('lint', ['clean', 'jshint']);
-  grunt.registerTask('test', ['jsx', 'lint', 'dependencies', 'gen_initialize:development', 'test_inline']);
+  grunt.registerTask('test', ['jsx', 'lint', 'shell:stylecheck', 'dependencies', 'gen_initialize:development', 'test_inline']);
   // lighter weight test task for use inside dev/watch
   grunt.registerTask('test_inline', ['mochaSetup', 'jst', 'concat:test_config_js', 'mocha_phantomjs']);
   // Fetch dependencies (from git or local dir), lint them and make load_addons
@@ -528,9 +532,9 @@ module.exports = function (grunt) {
 
   // build a debug release
   grunt.registerTask('debug', ['lint', 'dependencies', "gen_initialize:development", 'jsx', 'concat:requirejs', 'less', 'concat:index_css', 'template:development', 'copy:debug']);
-  grunt.registerTask('debugDev', ['clean', 'dependencies', "gen_initialize:development", 'jsx', 'jshint', 'less', 'concat:index_css', 'template:development', 'copy:debug']);
+  grunt.registerTask('debugDev', ['clean', 'dependencies', "gen_initialize:development", 'jsx', 'jshint', 'shell:stylecheck', 'less', 'concat:index_css', 'template:development', 'copy:debug']);
 
-  grunt.registerTask('watchRun', ['clean:watch', 'dependencies', 'jshint']);
+  grunt.registerTask('watchRun', ['clean:watch', 'dependencies', 'jshint', 'shell:stylecheck']);
 
   // build a release
   grunt.registerTask('release_commons_prefix', ['clean', 'dependencies']);
