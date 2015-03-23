@@ -84,10 +84,17 @@
       .accordion-list-item p{
         .transition(all 0.25s linear);
       }
-      .accordion-list-item p{
+      .design-doc-name {
+        cursor: pointer;
         margin: 0;
-        padding: 10px 13px 10px 36px;
         color: @linkColor;
+        span {
+          width: @sidebarWidth - 30px;
+          display: block;
+          padding: 10px 13px 10px 36px;
+          text-overflow: ellipsis;
+          overflow: hidden;
+        }
       }
       .fonticon-play{
         font-size: 12px;
