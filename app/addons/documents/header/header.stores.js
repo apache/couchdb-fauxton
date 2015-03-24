@@ -91,6 +91,7 @@ function (FauxtonAPI, ActionTypes) {
     },
 
     reset: function () {
+      this._toggleClass = '';
       this._isToggled = false;
     },
 

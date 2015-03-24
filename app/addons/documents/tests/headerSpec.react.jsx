@@ -33,11 +33,16 @@ define([
     var container, toggleEl;
     beforeEach(function () {
       container = document.createElement('div');
-      Actions.resetHeaderController();
     });
 
     afterEach(function () {
       React.unmountComponentAtNode(container);
+    });
+
+    it('should not include invalid calssname', function () {
+      toggleEl = TestUtils.renderIntoDocument(<Views.HeaderBarController />, container);
+      var $el = $(toggleEl.getDOMNode()).find('.control-toggle-alternative-header');
+      assert.equal($(toggleEl.getDOMNode()).find('.undefined').length, 0);
     });
 
     it('should use the passed classname', function () {
@@ -48,6 +53,7 @@ define([
     });
 
     it('should not render the alternative header if the button is not clicked', function () {
+      Actions.resetHeaderController();
       toggleEl = TestUtils.renderIntoDocument(<Views.HeaderBarController />, container);
       var $el = $(toggleEl.getDOMNode()).find('.control-toggle-alternative-header');
       assert.equal($(toggleEl.getDOMNode()).find('.alternative-header').length, 0);
