@@ -41,7 +41,29 @@ define([
         assert.deepEqual(cors.get('origins') , []);
       });
 
+    it('allows valid domains', function () {
+      var urls = [
+        'http://something.com',
+        'https://a.ca',
+        'https://something.com:8000',
+        'https://www.some-valid-domain.com:80'
+      ];
+      _.each(urls, function (url) {
+        assert.isTrue(CORS.validateCORSDomain(url));
+      });
+    });
+
+    it('fails on invalid domains', function () {
+      var urls = [
+        'whoahnellythisaintright',
+        'http://something',
+        'ftp://site.com',
+        'https://this.has/subfolder'
+      ];
+      _.each(urls, function (url) {
+        assert.isFalse(CORS.validateCORSDomain(url));
+      });
+    });
 
   });
-
 });
