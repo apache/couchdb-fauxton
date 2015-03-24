@@ -59,6 +59,12 @@ define([
       TestUtils.Simulate.click($el[0]);
       assert.equal($(toggleEl.getDOMNode()).find('.alternative-header').length, 1);
     });
+
+    it('should not include invalid calssname', function () {
+      toggleEl = TestUtils.renderIntoDocument(<Views.HeaderBarController />, container);
+      var $el = $(toggleEl.getDOMNode()).find('.control-toggle-alternative-header');
+      assert.equal($(toggleEl.getDOMNode()).find('.undefined').length, 0);
+    });
   });
 
   describe('Bulkdocument Headerbar Controller', function () {
