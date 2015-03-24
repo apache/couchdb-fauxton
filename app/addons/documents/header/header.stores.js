@@ -25,6 +25,7 @@ function (FauxtonAPI, ActionTypes, IndexResultsActions) {
     },
 
     reset: function () {
+      this._toggleClass = '';
       this._isToggled = false;
     },
 
