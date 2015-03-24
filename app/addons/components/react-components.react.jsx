@@ -188,7 +188,20 @@ function (app, FauxtonAPI, React, Components, beautifyHelper) {
     }
   });
 
+  var ConfirmButton = React.createClass({
+    render: function () {
+      return (
+        <button type="submit" className="btn btn-success save">
+          <i className="icon fonticon-ok-circled"></i>
+          {this.props.text}
+        </button>
+      );
+    }
+  });
+
+
   var ReactComponents = {
+    ConfirmButton: ConfirmButton,
     ToggleHeaderButton: ToggleHeaderButton,
     StyledSelect: StyledSelect,
     CodeEditor: CodeEditor,
