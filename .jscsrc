@@ -9,6 +9,7 @@
     "app/addons/.module-cache",
     "app/addons/pouchdb/pouchdb.mapreduce.js",
     "app/addons/pouchdb/pouch.collate.js",
+    "app/addons/**/assets/*",
     "app/load_addons.js"
   ],
   "disallowMixedSpacesAndTabs": true,
