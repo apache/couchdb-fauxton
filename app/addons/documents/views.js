@@ -366,17 +366,25 @@ function (app, FauxtonAPI, Components, Documents,
 
       return this.collection.fetch({reset: true}).then(function () {
         PaginationActions.collectionReset();
-      }, function (model, xhr, options) {
+      }, function (xhr, error, options) {
         // TODO: handle error requests that slip through
         // This should just throw a notification, not break the page
+        var errorMsg = 'Bad Request';
+
+        try {
+          var responseText = JSON.parse(xhr.responseText);
+          if (responseText.reason) {
+            errorMsg = responseText.reason;
+          }
+        } catch (e) {
+          console.log(e);
+        }
+
         FauxtonAPI.addNotification({
-          msg: "Bad Request",
+          msg: errorMsg,
           type: "error",
           clear:  true
         });
-
-        //now redirect back to alldocs
-        FauxtonAPI.navigate(model.database.url("index") + "?limit=100");
       });
     },
 

@@ -45,6 +45,10 @@ PopulateDatabase.prototype.command = function (databaseName, count) {
           "stubview": {
             "map": "function(doc) {\n  emit('stub', 2);\n}",
             "reduce": "_count"
+          },
+          'brokenview': {
+            'map': 'function (doc) {\n emit(doc._id, doc._id); \n}',
+            'reduce': '_sum'
           }
         }
       },
