@@ -26,7 +26,7 @@ module.exports = {
       .waitForElementVisible('label[for="checkbox-' + newDocumentName + '"]', waitTime, false)
       .click('label[for="checkbox-' + newDocumentName + '"]')
       .waitForElementPresent('.control-select-all', waitTime, false)
-      .click('.control-delete')
+      .clickWhenVisible('.control-delete')
       .acceptAlert()
       .waitForElementVisible('.alert.alert-info', waitTime, false)
       .url(baseUrl + '/' + newDatabaseName + '/_all_docs')
