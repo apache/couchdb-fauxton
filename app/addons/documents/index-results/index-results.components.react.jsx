@@ -30,7 +30,7 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, Documents) {
     render: function () {
       return (
         <div className="watermark-logo">
-          <h3>No Index Created Yet!</h3>
+          <h3>{this.props.text}</h3>
         </div>
       );
     }
@@ -116,7 +116,8 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, Documents) {
         isListDeletable: store.isListDeletable(),
         isSelected: store.isSelected,
         isLoading: store.isLoading(),
-        isEditable: store.isEditable()
+        isEditable: store.isEditable(),
+        textEmptyIndex: store.getTextEmptyIndex()
       };
     },
 
@@ -145,7 +146,7 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, Documents) {
     },
 
     render: function () {
-      var view = <NoResultScreen />;
+      var view = <NoResultScreen text={this.state.textEmptyIndex}/>;
 
       if (this.state.hasResults) {
         view = <ResultsScreen

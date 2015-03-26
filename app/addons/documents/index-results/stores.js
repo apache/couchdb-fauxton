@@ -32,6 +32,7 @@ function (FauxtonAPI, ActionTypes, HeaderActionTypes, Documents) {
       this.clearSelectedItems();
       this.clearCollapsedDocs();
       this._isLoading = false;
+      this._textEmptyIndex = 'No Index Created Yet!';
     },
 
     clearSelectedItems: function () {
@@ -47,6 +48,10 @@ function (FauxtonAPI, ActionTypes, HeaderActionTypes, Documents) {
       this._isListDeletable = options.isListDeletable;
       this.clearSelectedItems();
       this.clearCollapsedDocs();
+
+      if (options.textEmptyIndex) {
+        this._textEmptyIndex = options.textEmptyIndex;
+      }
     },
 
     isEditable: function (doc) {
@@ -165,6 +170,10 @@ function (FauxtonAPI, ActionTypes, HeaderActionTypes, Documents) {
 
     getDatabase: function () {
       return this._collection.database;
+    },
+
+    getTextEmptyIndex: function () {
+      return this._textEmptyIndex;
     },
 
     createBulkDeleteFromSelected: function () {

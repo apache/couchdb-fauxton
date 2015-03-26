@@ -12,16 +12,17 @@
 define([
   'api',
   'addons/documents/index-results/index-results.components.react',
+  'addons/documents/index-results/actions',
   'testUtils',
   "react"
-], function (FauxtonAPI, Views, utils, React) {
+], function (FauxtonAPI, Views, IndexResultsActions, utils, React) {
   FauxtonAPI.router = new FauxtonAPI.Router([]);
 
   var assert = utils.assert;
   var TestUtils = React.addons.TestUtils;
 
   describe('Index Results', function () {
-    var container;
+    var container, el;
 
     beforeEach(function () {
       container = document.createElement('div');
@@ -30,6 +31,31 @@ define([
 
     afterEach(function () {
       React.unmountComponentAtNode(container);
+    });
+
+    it('renders a default text', function () {
+      IndexResultsActions.newResultsList({
+        collection: [],
+        deleteable: true
+      });
+      IndexResultsActions.resultsListReset();
+
+      el = TestUtils.renderIntoDocument(<Views.List />, container);
+      var $el = $(el.getDOMNode());
+      assert.equal($el.text(), 'No Index Created Yet!');
+    });
+
+    it('you can change the default text', function () {
+      IndexResultsActions.newResultsList({
+        collection: [],
+        deleteable: true,
+        textEmptyIndex: 'No Document Created Yet!'
+      });
+      IndexResultsActions.resultsListReset();
+
+      el = TestUtils.renderIntoDocument(<Views.List />, container);
+      var $el = $(el.getDOMNode());
+      assert.equal($el.text(), 'No Document Created Yet!');
     });
 
     describe('loading', function () {
@@ -53,8 +79,6 @@ define([
 
         assert.ok($el.find('.loading-lines').length === 0);
       });
-
     });
-
   });
 });
