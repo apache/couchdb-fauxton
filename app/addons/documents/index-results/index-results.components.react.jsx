@@ -47,7 +47,6 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, Documents) {
         return null;
       }
 
-
       return (
         <a href={url}>
           <i className="fonticon-pencil"></i>
@@ -74,6 +73,11 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, Documents) {
 
     render: function () {
       var classNames = 'view';
+      var loadLines = null;
+
+      if (this.props.isLoading) {
+        loadLines = <Components.LoadLines />;
+      }
 
       if (this.props.isDeleteable) {
         classNames += ' show-select';
@@ -81,6 +85,8 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, Documents) {
 
       return (
       <div className={classNames}>
+        {loadLines}
+
         <div id="doc-list">
           <ReactCSSTransitionGroup transitionName={'slow-fade'}>
             {this.getDocumentList()}
@@ -107,7 +113,8 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, Documents) {
         results: store.getResults(),
         isDeleteable: store.isDeleteable(),
         isSelected: store.isSelected,
-        hasReduce: store.hasReduce()
+        hasReduce: store.hasReduce(),
+        isLoading: store.isLoading()
       };
     },
 
@@ -145,6 +152,7 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, Documents) {
           hasReduce={this.state.hasReduce}
           isDeleteable={this.state.isDeleteable}
           docChecked={this.docChecked}
+          isLoading={this.state.isLoading}
           results={this.state.results} />;
       }
 
@@ -161,7 +169,8 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, Documents) {
     removeViewResultList: function (el) {
       React.unmountComponentAtNode(el);
     },
-    List: ViewResultListController
+    List: ViewResultListController,
+    ResultsScreen: ResultsScreen
   };
 
   return Views;

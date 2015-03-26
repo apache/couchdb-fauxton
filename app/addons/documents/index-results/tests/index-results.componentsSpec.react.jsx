@@ -23,8 +23,37 @@ define([
   describe('Index Results', function () {
     var container;
 
+    beforeEach(function () {
+      container = document.createElement('div');
+
+    });
+
     afterEach(function () {
       React.unmountComponentAtNode(container);
+    });
+
+    describe('loading', function () {
+
+      it('should show loading component', function () {
+        var resultsEl = TestUtils.renderIntoDocument(<Views.ResultsScreen
+          isLoading={true}
+          />, container);
+
+        var $el = $(resultsEl.getDOMNode());
+
+        assert.ok($el.find('.loading-lines').length === 1);
+      });
+
+      it('should not show loading component', function () {
+        var resultsEl = TestUtils.renderIntoDocument(<Views.ResultsScreen
+          isLoading={false}
+          />, container);
+
+        var $el = $(resultsEl.getDOMNode());
+
+        assert.ok($el.find('.loading-lines').length === 0);
+      });
+
     });
 
   });
