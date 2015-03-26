@@ -258,6 +258,23 @@ function (app, FauxtonAPI, React, Components, beautifyHelper) {
     }
   });
 
+  var LoadLines = React.createClass({
+
+    render: function () {
+
+      return (
+        <div className="loading-lines">
+          <div id="line1"> </div>
+          <div id="line2"> </div>
+          <div id="line3"> </div>
+          <div id="line4"> </div>
+        </div>
+      );
+    }
+
+  });
+
+
   var ConfirmButton = React.createClass({
     render: function () {
       return (
@@ -277,7 +294,8 @@ function (app, FauxtonAPI, React, Components, beautifyHelper) {
     CodeEditor: CodeEditor,
     Beautify: Beautify,
     PaddedBorderedBox: PaddedBorderedBox,
-    Document: Document
+    Document: Document,
+    LoadLines: LoadLines
   };
 
   return ReactComponents;

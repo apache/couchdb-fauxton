@@ -45,6 +45,7 @@ function (app, FauxtonAPI, ActionTypes, Stores, HeaderStores, HeaderActions, Doc
       });
 
       if (!options.collection.fetch) { return; }
+      this.clearResults();
 
       return options.collection.fetch({reset: true}).then(function () {
         this.resultsListReset();

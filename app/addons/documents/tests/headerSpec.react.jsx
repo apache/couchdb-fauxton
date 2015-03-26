@@ -72,6 +72,9 @@ define([
         params: {}
       });
 
+      //override reset so we don't loose the added doc needed for testing
+      database.allDocs.reset = function () {};
+
       IndexResultsActions.newResultsList({
         collection: database.allDocs,
         deleteable: false

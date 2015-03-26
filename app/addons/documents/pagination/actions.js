@@ -47,6 +47,8 @@ function (app, FauxtonAPI, ActionTypes, Stores, IndexResultsActions) {
         type: ActionTypes.PAGINATE_NEXT,
       });
 
+      IndexResultsActions.clearResults();
+
       store.getCollection().next().then(function () {
         IndexResultsActions.resultsListReset();
       });
@@ -56,6 +58,8 @@ function (app, FauxtonAPI, ActionTypes, Stores, IndexResultsActions) {
       FauxtonAPI.dispatch({
         type: ActionTypes.PAGINATE_PREVIOUS,
       });
+
+      IndexResultsActions.clearResults();
 
       store.getCollection().previous().then(function () {
         IndexResultsActions.resultsListReset();

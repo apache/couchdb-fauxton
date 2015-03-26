@@ -98,8 +98,12 @@ function (FauxtonAPI, ActionTypes, HeaderActionTypes, Documents) {
     },
 
     hasResults: function () {
-      if (this._isLoading) { return this._isLoading; }
+      if (this.isLoading()) { return this.isLoading(); }
       return this._collection.length > 0;
+    },
+
+    isLoading: function () {
+      return this._isLoading;
     },
 
     isDeleteable: function () {
@@ -207,7 +211,9 @@ function (FauxtonAPI, ActionTypes, HeaderActionTypes, Documents) {
     },
 
     clearResultsBeforeFetch: function () {
-      this.getCollection().reset();
+      if (this._collection && this._collection.reset) {
+        this._collection.reset();
+      }
       this._isLoading = true;
     },
 
