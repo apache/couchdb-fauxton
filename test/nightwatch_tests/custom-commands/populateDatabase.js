@@ -45,10 +45,6 @@ PopulateDatabase.prototype.command = function (databaseName, count) {
           "stubview": {
             "map": "function(doc) {\n  emit('stub', 2);\n}",
             "reduce": "_count"
-          },
-          'brokenview': {
-            'map': 'function (doc) {\n emit(doc._id, doc._id); \n}',
-            'reduce': '_sum'
           }
         }
       },
@@ -59,7 +55,9 @@ PopulateDatabase.prototype.command = function (databaseName, count) {
         }
 
         createKeyView(null, function () {
-          that.emit('complete');
+          createBrokenView(null, function () {
+            that.emit('complete');
+          });
         });
       });
     }
@@ -74,6 +72,24 @@ PopulateDatabase.prototype.command = function (databaseName, count) {
       }
     },
     '_design/keyview', function (er) {
+      if (err) {
+        console.log('Error in nano populateDatabase Function: ' +
+          err.message);
+      }
+      cb();
+    });
+  }
+
+  function createBrokenView (err, cb) {
+    database.insert({
+      views: {
+        'brokenview': {
+          'map': 'function (doc) {\n emit(doc._id, doc._id); \n}',
+          'reduce': '_sum'
+        }
+      }
+    },
+    '_design/brokenview', function (er) {
       if (err) {
         console.log('Error in nano populateDatabase Function: ' +
           err.message);

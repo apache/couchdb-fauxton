@@ -43,7 +43,6 @@ module.exports = {
   },
 
   'Visit url of broken view displays error': function (client) {
-    /*jshint multistr: true */
     var waitTime = 10000,
         newDatabaseName = client.globals.testDatabaseName,
         baseUrl = client.globals.test_settings.launch_url;
@@ -51,7 +50,7 @@ module.exports = {
     client
       .loginToGUI()
       .populateDatabase(newDatabaseName)
-      .url(baseUrl + '/#/database/' + newDatabaseName + '/_design/testdesigndoc/_view/brokenview')
+      .url(baseUrl + '/#/database/' + newDatabaseName + '/_design/brokenview/_view/brokenview')
       .waitForElementVisible('.alert-error', waitTime, false)
       .assert.containsText('.alert-error', 'builtin _sum function requires map values to be numbers or lists of numbers')
       .end();
