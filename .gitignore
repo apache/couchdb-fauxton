@@ -32,3 +32,4 @@ test/nightwatch_tests/selenium/*
 .DS_Store
 *.react.js
 selenium-debug.log
+npm-debug.log
