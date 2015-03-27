@@ -215,60 +215,6 @@ function (app, FauxtonAPI, Components, Documents,
     }
   });
 
-  Views.Document = FauxtonAPI.View.extend({
-    template: "addons/documents/templates/all_docs_item",
-
-    className: function () {
-      var classNames = 'all-docs-item doc-row';
-
-      if (this.checked) {
-        classNames = classNames + ' js-to-delete';
-      }
-
-      return classNames;
-    },
-
-    initialize: function (options) {
-      this.checked = options.checked;
-    },
-
-    events: {
-      "dblclick .doc-item": "edit"
-    },
-
-    attributes: function () {
-      return {
-        "data-id": this.model.id
-      };
-    },
-
-    serialize: function () {
-      return {
-        docIdentifier: this.model.isReducedShown() ? this.model.get('key') : this.model.get('_id'),
-        doc: this.model,
-        checked: this.checked
-      };
-    },
-
-    beforeRender: function () {
-      var extensions = FauxtonAPI.getExtensions('DocList:icons');
-      _.each(extensions, function (View) {
-        this.insertView('.doc-item-extension-icons', new View({ doc: this.model }));
-      }, this);
-    },
-
-    establish: function () {
-      return [this.model.fetch()];
-    },
-
-    edit: function (event) {
-      event.preventDefault();
-      if (!this.model.isReducedShown()) {
-        FauxtonAPI.navigate(this.model.url('app'));
-      }
-    }
-  });
-
   Views.JumpToDoc = FauxtonAPI.View.extend({
     template: "addons/documents/templates/jumpdoc",
 

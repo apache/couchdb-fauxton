@@ -57,10 +57,6 @@ define([
       return this.id && this.id.match(/^_design\//) ? "design doc" : "doc";
     },
 
-    isEditable: function () {
-      return this.docType() != "reduction";
-    },
-
     isFromView: function () {
       return !this.id;
     },
@@ -88,10 +84,6 @@ define([
       return views && _.keys(views).length > 0;
     },
 
-    hasAttachments: function () {
-      return !!this.get('_attachments');
-    },
-
     getDdocView: function (view) {
       if (!this.isDdoc() || !this.hasViews()) {
         return false;
@@ -117,7 +109,7 @@ define([
       } else {
         delete tempView.reduce;
       }
-      tempView.map  = map;
+      tempView.map = map;
 
       views[view] = tempView;
       this.set({views: views});
@@ -142,12 +134,6 @@ define([
       }
 
       return this;
-    },
-
-    viewHasReduce: function (viewName) {
-      var view = this.getDdocView(viewName);
-
-      return view && view.reduce;
     },
 
     // Need this to work around backbone router thinking _design/foo
