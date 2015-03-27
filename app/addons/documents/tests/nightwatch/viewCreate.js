@@ -64,10 +64,10 @@ var tests = {
         editor.getSession().setValue("function (doc) { emit(\'enteente\', 1); }");\
       ')
       .execute('$(".save")[0].scrollIntoView();')
-      .click('button.btn-success.save')
+      .clickWhenVisible('button.btn-success.save')
+      .waitForElementPresent('.prettyprint', waitTime, false)
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
-      .waitForElementPresent('[data-target="#testdesigndoc"]', waitTime, false)
-      .click('[data-target="#testdesigndoc"]')
+      .clickWhenVisible('[data-target="#testdesigndoc"]')
       .clickWhenVisible('[data-target="#testdesigndocviews"]', waitTime, false)
       .clickWhenVisible('#testdesigndoc_testnewview', waitTime, false)
       .waitForElementPresent('.prettyprint', waitTime, false)
