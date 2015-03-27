@@ -28,6 +28,7 @@ var tests = {
         var editor = ace.edit("map-function");\
         editor.getSession().setValue("function (doc) { emit(\'hasehase\'); }");\
       ')
+      .execute('$(".save")[0].scrollIntoView();')
       .click('button.btn.btn-success.save')
       .waitForElementPresent('.prettyprint', waitTime, false)
       .assert.containsText('.prettyprint', 'hasehase')
