@@ -72,6 +72,73 @@ function (app, FauxtonAPI, Documents, PagingCollection) {
     }
   });
 
+  Documents.MangoIndex = Documents.Doc.extend({
+    idAttribute: 'name',
+
+    isNew: function () {
+      // never use put
+      return true;
+    },
+
+    isDeletable: function () {
+      return this.get('type') !== 'special';
+    },
+
+    isFromView: function () {
+      return false;
+    },
+
+    url: function () {
+      var database = this.database.safeID();
+
+      return FauxtonAPI.urls('mango', 'index-server', database);
+    }
+  });
+
+  Documents.MangoIndexCollection = PagingCollection.extend({
+    model: Documents.MangoIndex,
+    initialize: function (_attr, options) {
+      var defaultLimit = FauxtonAPI.constants.MISC.DEFAULT_PAGE_SIZE;
+
+      this.database = options.database;
+      this.params = _.extend({limit: defaultLimit}, options.params);
+    },
+
+    url: function () {
+      return this.urlRef.apply(this, arguments);
+    },
+
+    updateSeq: function () {
+      return false;
+    },
+
+    isEditable: function () {
+      return false;
+    },
+
+    parse: function (res) {
+      return res.indexes;
+    },
+
+    urlRef: function (params) {
+      var database = this.database.safeID(),
+          query = '';
+
+      if (params) {
+        if (!_.isEmpty(params)) {
+          query = '?' + $.param(params);
+        } else {
+          query = '';
+        }
+      } else if (this.params) {
+        var parsedParam = Documents.QueryParams.stringify(this.params);
+        query = '?' + $.param(parsedParam);
+      }
+
+      return FauxtonAPI.urls('mango', 'index-apiurl', database, query);
+    }
+  });
+
   Documents.NewDoc = Documents.Doc.extend({
     fetch: function () {
       var uuid = new FauxtonAPI.UUID();
@@ -204,6 +271,10 @@ function (app, FauxtonAPI, Documents, PagingCollection) {
       if (!this.params.limit) {
         this.params.limit = this.perPageLimit;
       }
+    },
+
+    isEditable: function () {
+      return !this.params.reduce;
     },
 
     urlRef: function (params) {

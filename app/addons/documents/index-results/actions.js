@@ -74,7 +74,7 @@ function (app, FauxtonAPI, ActionTypes, Stores, HeaderStores, HeaderActions, Doc
     reloadResultsList: function () {
       return this.newResultsList({
         collection: indexResultsStore.getCollection(),
-        deleteable: indexResultsStore.isDeleteable()
+        isListDeletable: indexResultsStore.isListDeletable()
       });
     },
 

@@ -28,6 +28,17 @@ exports.init = function (grunt) {
       }
     },
 
+    readI18nFile: function () {
+      if (fs.existsSync('i18n.json')) {
+        return grunt.file.readJSON('i18n.json');
+      }
+      if (fs.existsSync('i18n.json.default')) {
+        return grunt.file.readJSON('i18n.json.default');
+      }
+
+      throw new Error('i18n file missing');
+    },
+
     processAddons: function (callback) {
       this.readSettingsFile().deps.forEach(callback);
     },

@@ -65,27 +65,32 @@ function (app, FauxtonAPI, React, Components, beautifyHelper) {
   var CodeEditor = React.createClass({
     render: function () {
       var code = this.aceEditor ? this.aceEditor.getValue() : this.props.code;
-      var docsLink;
-      if (this.props.docs) {
-        docsLink = <a
-                      className="help-link"
-                      data-bypass="true"
-                      href={this.props.docs}
-                      target="_blank"
-                    >
-                    <i className="icon-question-sign"></i>
-                   </a>;
-
-      }
       return (
         <div className="control-group">
-          <label htmlFor="ace-function">
-            <strong>{this.props.title}</strong>
-            {docsLink}
-          </label>
+          {this.getTitleFragment()}
           <div className="js-editor" id={this.props.id}>{this.props.code}</div>
           <Beautify code={code} beautifiedCode={this.setEditorValue} />
         </div>
+      );
+    },
+
+    getTitleFragment: function () {
+      if (!this.props.docs) {
+        return <strong>{this.props.title}</strong>;
+      }
+
+      return (
+        <label>
+          <strong>{this.props.title}</strong>
+          <a
+            className="help-link"
+            data-bypass="true"
+            href={this.props.docs}
+            target="_blank"
+          >
+          <i className="icon-question-sign"></i>
+          </a>;
+        </label>
       );
     },
 
@@ -213,6 +218,11 @@ function (app, FauxtonAPI, React, Components, beautifyHelper) {
     },
 
     getCheckbox: function () {
+
+      if (!this.props.isDeletable) {
+        return <div className="checkbox-dummy"></div>;
+      }
+
       return (
         <div className="checkbox inline">
           <input
@@ -285,7 +295,6 @@ function (app, FauxtonAPI, React, Components, beautifyHelper) {
       );
     }
   });
-
 
   var ReactComponents = {
     ConfirmButton: ConfirmButton,

@@ -92,7 +92,7 @@ function (app, FauxtonAPI, Helpers, BaseRoute, Documents, Index,
 
       IndexResultsActions.newResultsList({
         collection: this.indexedDocs,
-        deleteable: false
+        isListDeletable: false
       });
 
       this.viewEditor = this.setView('#left-content', new Index.ViewEditorReact({
@@ -142,7 +142,7 @@ function (app, FauxtonAPI, Helpers, BaseRoute, Documents, Index,
       this.resultList = this.setView('#dashboard-lower-content', new Index.ViewResultListReact({}));
       IndexResultsActions.newResultsList({
         collection: [],
-        deleteable: false
+        isListDeletable: false
       });
     }
 
