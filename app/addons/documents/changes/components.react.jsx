@@ -412,7 +412,7 @@ define([
           <span className="js-doc-id">{this.props.id}</span>
         );
       } else {
-        var link = FauxtonAPI.urls('document', 'app', this.props.databaseName, this.props.id);
+        var link = '#' + FauxtonAPI.urls('document', 'app', this.props.databaseName, this.props.id);
         return (
           <a href={link} className="js-doc-link">{this.props.id}</a>
         );
