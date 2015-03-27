@@ -43,6 +43,28 @@ define([
       });
     },
 
+    onSelectDatabase: function (dbName) {
+      this.cleanup();
+      this.initViews(dbName);
+
+      var url = FauxtonAPI.urls('allDocs', 'app',  app.utils.safeURLName(dbName), '');
+      FauxtonAPI.navigate(url, {
+        trigger: true
+      });
+
+      // we need to start listening again because cleanup() removed the listener, but in this case
+      // initialize() doesn't fire to re-set up the listener
+      this.listenToLookaheadTray();
+    },
+
+    listenToLookaheadTray: function () {
+      this.listenTo(FauxtonAPI.Events, 'lookaheadTray:update', this.onSelectDatabase);
+    },
+
+    getAllDatabases: function () {
+      return new Databases.List();  //getAllDatabases() can be overwritten instead of hard coded into initViews
+    },
+
     showQueryOptions: function (urlParams, ddoc, viewName) {
       var promise = this.designDocs.fetch({reset: true}),
       that = this,

@@ -51,7 +51,7 @@ define([
 
     it('you can check it', function () {
       el = TestUtils.renderIntoDocument(
-        <ReactComponents.Document checked={true} docIdentifier="foo" />,
+        <ReactComponents.Document isDeletable={true} checked={true} docIdentifier="foo" />,
         container
       );
       assert.equal($(el.getDOMNode()).find('input[type="checkbox"]').attr('checked'), 'checked');
@@ -59,7 +59,7 @@ define([
 
     it('you can uncheck it', function () {
       el = TestUtils.renderIntoDocument(
-        <ReactComponents.Document docIdentifier="foo" />,
+        <ReactComponents.Document isDeletable={true} docIdentifier="foo" />,
         container
       );
       assert.equal($(el.getDOMNode()).find('input[type="checkbox"]').attr('checked'), undefined);
@@ -69,7 +69,7 @@ define([
       var spy = sinon.spy();
 
       el = TestUtils.renderIntoDocument(
-        <ReactComponents.Document docChecked={spy} docIdentifier="foo" />,
+        <ReactComponents.Document isDeletable={true} docChecked={spy} docIdentifier="foo" />,
         container
       );
       var testEl = $(el.getDOMNode()).find('input[type="checkbox"]')[0];
@@ -81,11 +81,22 @@ define([
       var spy = sinon.spy();
 
       el = TestUtils.renderIntoDocument(
-        <ReactComponents.Document onDoubleClick={spy} docIdentifier="foo" />,
+        <ReactComponents.Document isDeletable={true} onDoubleClick={spy} docIdentifier="foo" />,
         container
       );
       React.addons.TestUtils.Simulate.doubleClick(el.getDOMNode());
       assert.ok(spy.calledOnce);
+    });
+
+    it('can render without checkbox', function () {
+      var spy = sinon.spy();
+
+      el = TestUtils.renderIntoDocument(
+        <ReactComponents.Document isDeletable={false} onDoubleClick={spy} docIdentifier="foo" />,
+        container
+      );
+      assert.notOk($(el.getDOMNode()).find('input[type="checkbox"]').length);
+      assert.ok($(el.getDOMNode()).find('.checkbox-dummy').length);
     });
   });
 

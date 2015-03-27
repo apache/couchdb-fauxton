@@ -71,21 +71,110 @@ define([
     });
   });
 
-  describe('AllDocs', function () {
+  describe('MangoIndex', function () {
+    var doc;
+
+    it('is deleteable', function () {
+      var index = {
+        ddoc: null,
+        name: '_all_docs',
+        type: 'json',
+        def: {fields: [{_id: 'asc'}]}
+      };
+      doc = new Models.MangoIndex(index, {});
+
+      assert.ok(doc.isDeletable());
+    });
+
+    it('special docs are not deleteable', function () {
+      var index = {
+        ddoc: null,
+        name: '_all_docs',
+        type: 'special',
+        def: {fields: [{_id: 'asc'}]}
+      };
+      doc = new Models.MangoIndex(index, {});
+
+      assert.notOk(doc.isDeletable());
+    });
+  });
+
+  describe('MangoIndexCollection', function () {
     var collection;
-    beforeEach(function () {
-      collection = new Models.AllDocs([{
-        _id:'myId1',
+
+    it('is not editable', function () {
+      collection = new Models.MangoIndexCollection([{
+        name: 'myId1',
         doc: 'num1'
       },
       {
-        _id:'myId2',
+        name: 'myId2',
         doc: 'num2'
       }], {
         database: {id: 'databaseId', safeID: function () { return this.id; }},
         params: {limit: 20}
       });
 
+      assert.notOk(collection.isEditable());
+    });
+  });
+
+
+  describe('IndexCollection', function () {
+    var collection;
+
+    it('design docs are editable', function () {
+      collection = new Models.IndexCollection([{
+        _id: 'myId1',
+        doc: 'num1'
+      },
+      {
+        _id: 'myId2',
+        doc: 'num2'
+      }], {
+        database: {id: 'databaseId', safeID: function () { return this.id; }},
+        params: {limit: 20},
+        design: '_design/foobar'
+      });
+
+      assert.ok(collection.isEditable());
+    });
+
+    it('reduced design docs are NOT editable', function () {
+      collection = new Models.IndexCollection([{
+        _id: 'myId1',
+        doc: 'num1'
+      },
+      {
+        _id: 'myId2',
+        doc: 'num2'
+      }], {
+        database: {id: 'databaseId', safeID: function () { return this.id; }},
+        params: {limit: 20, reduce: true},
+        design: '_design/foobar'
+      });
+
+      assert.notOk(collection.isEditable());
+    });
+  });
+
+  describe('AllDocs', function () {
+    var collection;
+
+    it('all-docs-list documents are always editable', function () {
+      collection = new Models.AllDocs([{
+        _id: 'myId1',
+        doc: 'num1'
+      },
+      {
+        _id: 'myId2',
+        doc: 'num2'
+      }], {
+        database: {id: 'databaseId', safeID: function () { return this.id; }},
+        params: {limit: 20}
+      });
+
+      assert.ok(collection.isEditable());
     });
   });
 

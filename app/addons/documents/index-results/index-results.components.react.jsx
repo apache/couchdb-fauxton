@@ -43,7 +43,7 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, Documents) {
     },
 
     getUrlFragment: function (url) {
-      if (this.props.hasReduce) {
+      if (!this.props.isEditable) {
         return null;
       }
 
@@ -55,6 +55,7 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, Documents) {
 
     getDocumentList: function () {
       return _.map(this.props.results, function (doc) {
+
         return (
          <Components.Document
            key={doc.id}
@@ -64,6 +65,7 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, Documents) {
            docContent={doc.content}
            checked={this.props.isSelected(doc.id)}
            docChecked={this.props.docChecked}
+           isDeletable={doc.isDeletable}
            docIdentifier={doc.id} >
            {this.getUrlFragment('#' + doc.url)}
          </Components.Document>
@@ -79,7 +81,7 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, Documents) {
         loadLines = <Components.LoadLines />;
       }
 
-      if (this.props.isDeleteable) {
+      if (this.props.isListDeletable) {
         classNames += ' show-select';
       }
 
@@ -111,10 +113,10 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, Documents) {
       return {
         hasResults: store.hasResults(),
         results: store.getResults(),
-        isDeleteable: store.isDeleteable(),
+        isListDeletable: store.isListDeletable(),
         isSelected: store.isSelected,
-        hasReduce: store.hasReduce(),
-        isLoading: store.isLoading()
+        isLoading: store.isLoading(),
+        isEditable: store.isEditable()
       };
     },
 
@@ -149,8 +151,8 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, Documents) {
         view = <ResultsScreen
           isCollapsed={this.isCollapsed}
           isSelected={this.isSelected}
-          hasReduce={this.state.hasReduce}
-          isDeleteable={this.state.isDeleteable}
+          isEditable={this.state.isEditable}
+          isListDeletable={this.state.isListDeletable}
           docChecked={this.docChecked}
           isLoading={this.state.isLoading}
           results={this.state.results} />;

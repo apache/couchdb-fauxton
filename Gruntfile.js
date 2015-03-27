@@ -121,6 +121,13 @@ module.exports = function (grunt) {
     };
 
     var settings = helper.readSettingsFile();
+
+    var i18n = JSON.stringify(helper.readI18nFile(), null, ' ');
+
+    ['development', 'release', 'couchapp'].forEach(function (key) {
+      settings.template[key].app.i18n = i18n;
+    });
+
     return settings.template || defaultSettings;
   }();
 

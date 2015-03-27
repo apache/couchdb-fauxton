@@ -153,6 +153,10 @@ define([
       };
       var stub = sinon.stub(store, 'createBulkDeleteFromSelected');
       stub.returns(bulkDelete);
+      var reloadResultsListStub = sinon.stub(Actions, 'reloadResultsList');
+      var stubPromise = FauxtonAPI.Deferred();
+      stubPromise.resolve();
+      reloadResultsListStub.returns(stubPromise);
 
       Actions.deleteSelected();
 
@@ -196,6 +200,10 @@ define([
       };
       var stub = sinon.stub(store, 'createBulkDeleteFromSelected');
       stub.returns(bulkDelete);
+      var reloadResultsListStub = sinon.stub(Actions, 'reloadResultsList');
+      var stubPromise = FauxtonAPI.Deferred();
+      stubPromise.resolve();
+      reloadResultsListStub.returns(stubPromise);
 
       Actions.deleteSelected();
 

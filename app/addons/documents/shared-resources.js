@@ -57,6 +57,10 @@ define([
       return this.id && this.id.match(/^_design\//) ? "design doc" : "doc";
     },
 
+    isDeletable: function () {
+      return true;
+    },
+
     isFromView: function () {
       return !this.id;
     },
@@ -213,6 +217,10 @@ define([
       if (!this.params.limit) {
         this.params.limit = this.perPageLimit;
       }
+    },
+
+    isEditable: function () {
+      return true;
     },
 
     urlRef: function (context, params) {

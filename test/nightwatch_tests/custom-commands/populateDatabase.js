@@ -13,7 +13,8 @@
 var util = require('util'),
     events = require('events'),
     helpers = require('../helpers/helpers.js'),
-    async = require('async');
+    async = require('async'),
+    request = require('request');
 
 function PopulateDatabase () {
   events.EventEmitter.call(this);
@@ -56,7 +57,9 @@ PopulateDatabase.prototype.command = function (databaseName, count) {
 
         createKeyView(null, function () {
           createBrokenView(null, function () {
-            that.emit('complete');
+            createMangoIndex(null, function () {
+              that.emit('complete');
+            });
           });
         });
       });
@@ -97,6 +100,29 @@ PopulateDatabase.prototype.command = function (databaseName, count) {
       cb();
     });
   }
+
+  function createMangoIndex (err, cb) {
+    request({
+      uri: helpers.test_settings.db_url + '/' + databaseName + '/_index',
+      method: 'POST',
+      json: true,
+      body: {
+        index: {
+          fields: ['ente_ente_mango_ananas']
+        },
+        name: 'rocko-artischockbert',
+        type: 'json'
+      }
+    }, function (err, res, body) {
+      if (err) {
+        console.log('Error in nano populateDatabase Function: ' +
+          err.message);
+      }
+
+      cb && cb();
+    });
+  }
+
   return this;
 };
 

@@ -20,6 +20,7 @@ define([
   'addons/documents/views-changes',
   'addons/documents/views-index',
   'addons/documents/views-doceditor',
+  'addons/documents/views-mango',
 
   'addons/databases/base',
   'addons/documents/resources',
@@ -28,7 +29,7 @@ define([
   'addons/documents/index-results/actions'
 ],
 
-function (app, FauxtonAPI, BaseRoute, Documents, Changes, Index, DocEditor,
+function (app, FauxtonAPI, BaseRoute, Documents, Changes, Index, DocEditor, Mango,
   Databases, Resources, Components, PaginationStores, IndexResultsActions) {
 
 
@@ -44,6 +45,7 @@ function (app, FauxtonAPI, BaseRoute, Documents, Changes, Index, DocEditor,
           roles: ['fx_loggedIn']
         },
         'database/:database/_changes': 'changes'
+
       },
 
       events: {
@@ -75,29 +77,6 @@ function (app, FauxtonAPI, BaseRoute, Documents, Changes, Index, DocEditor,
 
         this.addLeftHeader();
         this.addSidebar();
-      },
-
-      getAllDatabases: function () {
-        return new Databases.List();  //getAllDatabases() can be overwritten instead of hard coded into initViews
-      },
-
-      // this safely assumes the db name is valid
-      onSelectDatabase: function (dbName) {
-        this.cleanup();
-        this.initViews(dbName);
-
-        var url = FauxtonAPI.urls('allDocs', 'app',  app.utils.safeURLName(dbName), '');
-        FauxtonAPI.navigate(url, {
-          trigger: true
-        });
-
-        // we need to start listening again because cleanup() removed the listener, but in this case
-        // initialize() doesn't fire to re-set up the listener
-        this.listenToLookaheadTray();
-      },
-
-      listenToLookaheadTray: function () {
-        this.listenTo(FauxtonAPI.Events, 'lookaheadTray:update', this.onSelectDatabase);
       },
 
       designDocMetadata: function (database, ddoc) {
@@ -159,7 +138,7 @@ function (app, FauxtonAPI, BaseRoute, Documents, Changes, Index, DocEditor,
 
         IndexResultsActions.newResultsList({
           collection: collection,
-          deleteable: true
+          isListDeletable: true
         });
 
         this.database.allDocs.paging.pageSize = PaginationStores.indexPaginationStore.getPerPage();

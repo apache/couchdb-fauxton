@@ -347,26 +347,22 @@ define([
     });
   });
 
-  describe('hasReduce', function () {
+  describe('isEditable', function () {
 
     it('returns false for no collection', function () {
       store._collection = null;
-      assert.notOk(store.hasReduce());
+      assert.notOk(store.isEditable());
     });
 
-    it('returns false for no params', function () {
+    it('returns false for empty collection', function () {
       store._collection = [];
-      assert.notOk(store.hasReduce());
+      assert.notOk(store.isEditable());
     });
 
-    it('returns true for reduce param', function () {
-      store._collection = [];
-      store._collection.param = {
-        reduce: true
-      };
-      assert.notOk(store.hasReduce());
-
+    it('delegates to collection', function () {
+      store._collection = {};
+      store._collection.isEditable = function () { return 'stub'; };
+      assert.equal(store.isEditable(), 'stub');
     });
-
   });
 });

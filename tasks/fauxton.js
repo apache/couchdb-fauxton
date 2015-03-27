@@ -92,12 +92,11 @@ module.exports = function (grunt) {
 
   grunt.registerMultiTask('gen_initialize', 'Generate the app.js file', function () {
     var _ = grunt.util._,
-      settings = this.data,
-      template = "app/initialize.js.underscore",
-      dest = "app/initialize.js",
-      tmpl = _.template(grunt.file.read(template)),
-      app = {};
-
+        settings = this.data,
+        template = "app/initialize.js.underscore",
+        dest = "app/initialize.js",
+        tmpl = _.template(grunt.file.read(template)),
+        app = {};
 
     _.defaults(app, settings.app, {
       root: '/',

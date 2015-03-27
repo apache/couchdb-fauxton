@@ -71,7 +71,9 @@ function (FauxtonAPI, ActionTypes) {
     },
 
     getDesignDocs: function () {
-      return this._designDocs;
+      return this._designDocs.filter(function (ddoc) {
+        return ddoc.get('doc').language !== 'query';
+      });
     },
 
     getDesignDocId: function () {

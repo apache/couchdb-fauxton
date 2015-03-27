@@ -27,7 +27,7 @@ function (FauxtonAPI, ActionTypes, HeaderActionTypes, Documents) {
   Stores.IndexResultsStore = FauxtonAPI.Store.extend({
 
     initialize: function () {
-      this._deleteable = false;
+      this._isListDeletable = false;
       this._collection = [];
       this.clearSelectedItems();
       this.clearCollapsedDocs();
@@ -44,16 +44,29 @@ function (FauxtonAPI, ActionTypes, HeaderActionTypes, Documents) {
 
     newResults: function (options) {
       this._collection = options.collection;
-      this._deleteable = options.deleteable;
+      this._isListDeletable = options.isListDeletable;
       this.clearSelectedItems();
       this.clearCollapsedDocs();
     },
 
-    hasReduce: function () {
-      if (!this._collection || !this._collection.params) {
+    isEditable: function (doc) {
+      if (!this._collection) {
         return false;
       }
-      return this._collection.params.reduce;
+
+      if (!this._collection.isEditable) {
+        return false;
+      }
+
+      return this._collection.isEditable();
+    },
+
+    isDeletable: function (doc) {
+      return doc.isDeletable();
+    },
+
+    isListDeletable: function () {
+      return this._isListDeletable;
     },
 
     getCollection: function () {
@@ -79,7 +92,7 @@ function (FauxtonAPI, ActionTypes, HeaderActionTypes, Documents) {
         return doc.id;
       }
 
-      if (!_.isNull(doc.get('key'))) {
+      if (doc.get('key')) {
         return doc.get('key').toString();
       }
 
@@ -92,7 +105,9 @@ function (FauxtonAPI, ActionTypes, HeaderActionTypes, Documents) {
           content: this.getDocContent(doc),
           id: this.getDocId(doc),
           keylabel: doc.isFromView() ? 'key' : 'id',
-          url: doc.isFromView() ? doc.url('app') : doc.url('web-index')
+          url: doc.isFromView() ? doc.url('app') : doc.url('web-index'),
+          isDeletable: this.isDeletable(doc),
+          isEditable: this.isEditable(doc),
         };
       }, this);
     },

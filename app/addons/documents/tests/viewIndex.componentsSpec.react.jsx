@@ -23,8 +23,20 @@ define([
   var assert = utils.assert;
   var TestUtils = React.addons.TestUtils;
 
-  var resetStore = function (designDoc) {
-    var designDocs = new Documents.AllDocs([designDoc], {
+  var resetStore = function (designDocs) {
+    designDocs = designDocs.map(function (doc) {
+      return Documents.Doc.prototype.parse(doc);
+    });
+
+    designDocs.map(function (ddoc) {
+      return new Documents.Doc(ddoc, {
+        database: {
+          safeID: function () { return 'id'; }
+        }
+      });
+    });
+
+    var ddocs = new Documents.AllDocs(designDocs, {
       params: { limit: 10 },
       database: {
         safeID: function () { return 'id';}
@@ -35,8 +47,8 @@ define([
       database: {id: 'rockos-db'},
       newView: false,
       viewName: 'test-view',
-      designDocs: designDocs,
-      designDocId: designDoc._id
+      designDocs: ddocs,
+      designDocId: designDocs[0]._id
     });
   };
 
@@ -72,7 +84,7 @@ define([
           }
         };
 
-        resetStore(designDoc);
+        resetStore([designDoc]);
 
         reduceEl = TestUtils.renderIntoDocument(<Views.ReduceEditor/>, container);
         assert.ok(_.isNull(reduceEl.getReduceValue()));
@@ -91,7 +103,7 @@ define([
           }
         };
 
-        resetStore(designDoc);
+        resetStore([designDoc]);
 
         reduceEl = TestUtils.renderIntoDocument(<Views.ReduceEditor/>, container);
         assert.equal(reduceEl.getReduceValue(), '_sum');
@@ -107,6 +119,61 @@ define([
       container = document.createElement('div');
       $('body').append('<div id="map-function"></div>');
       $('body').append('<div id="editor"></div>');
+      var designDoc = {
+        "id": "_design/test-doc",
+        "key": "_design/test-doc",
+        "value": {
+          "rev": "20-9e4bc8b76fd7d752d620bbe6e0ea9a80"
+        },
+        "doc": {
+          "_id": "_design/test-doc",
+          "_rev": "20-9e4bc8b76fd7d752d620bbe6e0ea9a80",
+          "views": {
+            "test-view": {
+              "map": "function(doc) {\n  emit(doc._id, 2);\n}"
+            },
+            "new-view": {
+              "map": "function(doc) {\n  if (doc.class === \"mammal\" && doc.diet === \"herbivore\")\n    emit(doc._id, 1);\n}",
+              "reduce": "_sum"
+            }
+          },
+          "language": "javascript",
+          "indexes": {
+            "newSearch": {
+              "analyzer": "standard",
+              "index": "function(doc){\n index(\"default\", doc._id);\n}"
+            }
+          }
+        }
+      };
+      var mangodoc = {
+        "id": "_design/123mango",
+        "key": "_design/123mango",
+        "value": {
+          "rev": "20-9e4bc8b76fd7d752d620bbe6e0ea9a80"
+        },
+        "doc": {
+          "_id": "_design/123mango",
+          "_rev": "20-9e4bc8b76fd7d752d620bbe6e0ea9a80",
+          "views": {
+            "test-view": {
+              "map": "function(doc) {\n  emit(doc._id, 2);\n}"
+            },
+            "new-view": {
+              "map": "function(doc) {\n  if (doc.class === \"mammal\" && doc.diet === \"herbivore\")\n    emit(doc._id, 1);\n}",
+              "reduce": "_sum"
+            }
+          },
+          "language": "query",
+          "indexes": {
+            "newSearch": {
+              "analyzer": "standard",
+              "index": "function(doc){\n index(\"default\", doc._id);\n}"
+            }
+          }
+        }
+      };
+      resetStore([designDoc, mangodoc]);
       selectorEl = TestUtils.renderIntoDocument(<Views.DesignDocSelector/>, container);
     });
 
@@ -151,6 +218,14 @@ define([
       assert.ok(spy.calledWith('_design/new-doc-entered', true));
     });
 
+    it('does not filter usual design docs', function () {
+      assert.ok(/_design\/test-doc/.test($(selectorEl.getDOMNode()).text()));
+    });
+
+    it('filters mango docs', function () {
+      selectorEl = TestUtils.renderIntoDocument(<Views.DesignDocSelector/>, container);
+      assert.notOk(/_design\/123mango/.test($(selectorEl.getDOMNode()).text()));
+    });
   });
 
   describe('Editor', function () {

@@ -83,7 +83,7 @@ define([
 
       IndexResultsActions.newResultsList({
         collection: database.allDocs,
-        deleteable: false
+        isListDeletable: false
       });
 
 
