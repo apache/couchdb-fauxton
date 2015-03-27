@@ -12,7 +12,7 @@
 
 module.exports = {
 
-  'Edits a design doc - set new index name': function (client) {
+  'Displays an error if reduce is not possible': function (client) {
     /*jshint multistr: true */
     var waitTime = 10000,
         newDatabaseName = client.globals.testDatabaseName,
@@ -36,6 +36,7 @@ module.exports = {
       ')
       .click('#reduce-function-selector')
       .keys(['\uE013', '\uE013', '\uE013', '\uE013', '\uE006'])
+      .execute('$(".save")[0].scrollIntoView();')
       .click('button.btn-success.save')
       .waitForElementVisible('.alert-error', waitTime, false)
       .assert.containsText('.alert-error', 'builtin _sum function requires map values to be numbers or lists of numbers')
