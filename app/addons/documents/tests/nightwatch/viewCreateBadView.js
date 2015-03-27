@@ -22,11 +22,7 @@ module.exports = {
     client
       .loginToGUI()
       .populateDatabase(newDatabaseName)
-      .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
-      .waitForElementPresent(dropDownElement, waitTime, false)
-      .click(dropDownElement + ' a')
-      .click(dropDownElement + ' a[href*="new_view"]')
-      .waitForElementPresent('.editor-wrapper', waitTime, false)
+      .url(baseUrl + '/#/database/' + newDatabaseName + '/new_view')
       .setValue('#new-ddoc', 'test_design_doc-selenium-bad-reduce')
       .clearValue('#index-name')
       .setValue('#index-name', 'hasenindex')
@@ -39,7 +35,7 @@ module.exports = {
       .execute('$(".save")[0].scrollIntoView();')
       .click('button.btn-success.save')
       .waitForElementVisible('.alert-error', waitTime, false)
-      .assert.containsText('.alert-error', 'builtin _sum function requires map values to be numbers or lists of numbers')
+      .assert.containsText('.alert-error', '_sum function requires that map values be numbers')
       .end();
   },
 
@@ -53,7 +49,7 @@ module.exports = {
       .populateDatabase(newDatabaseName)
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_design/brokenview/_view/brokenview')
       .waitForElementVisible('.alert-error', waitTime, false)
-      .assert.containsText('.alert-error', 'builtin _sum function requires map values to be numbers or lists of numbers')
+      .assert.containsText('.alert-error', '_sum function requires that map values be numbers')
       .end();
   }
 
