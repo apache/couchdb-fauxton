@@ -20,9 +20,27 @@ module.exports = {
       .loginToGUI()
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
       .waitForElementPresent('.control-toggle-alternative-header', waitTime, false)
-      .click('#changes')
+      .clickWhenVisible('#changes')
       .waitForElementPresent('.js-changes-view', waitTime, false)
       .assert.elementNotPresent('.control-toggle-alternative-header')
-    .end();
+      .end();
+  },
+
+  'Check doc link in Changes feed links properly': function (client) {
+    var waitTime = 10000,
+        newDatabaseName = client.globals.testDatabaseName,
+        baseUrl = client.globals.test_settings.launch_url;
+
+    client
+      .loginToGUI()
+      .createDocument('doc_1', newDatabaseName)
+      .url(baseUrl + '/#/database/' + newDatabaseName + '/_changes')
+      .waitForElementPresent('.change-box[data-id="doc_1"]', waitTime, false)
+
+      // confirm only the single result is now listed in the page
+      .waitForElementVisible('.js-doc-link', waitTime, false)
+      .click('.js-doc-link')
+      .waitForElementPresent('#doc-editor-actions-panel', waitTime, false)
+      .end();
   }
 };
