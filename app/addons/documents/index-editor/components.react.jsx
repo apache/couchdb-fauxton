@@ -17,11 +17,10 @@ define([
   'addons/documents/index-editor/stores',
   'addons/documents/index-editor/actions',
   'addons/fauxton/components',
-  'addons/components/react-components.react',
-  'plugins/beautify'
+  'addons/components/react-components.react'
 ],
 
-function (app, FauxtonAPI, React, Stores, Actions, Components, ReactComponents, beautifyHelper) {
+function (app, FauxtonAPI, React, Stores, Actions, Components, ReactComponents) {
   var indexEditorStore = Stores.indexEditorStore;
   var getDocUrl = app.helpers.getDocUrl;
   var StyledSelect = ReactComponents.StyledSelect;
@@ -408,23 +407,7 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, ReactComponents, 
     }
   });
 
-  var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
-
-  var EditorController = React.createClass({
-    getInitialState: function () {
-      return {
-        title: indexEditorStore.getTitle()
-      };
-    },
-
-    componentDidMount: function () {
-      indexEditorStore.on('change', this.onChange, this);
-    },
-
-    componentWillUnmount: function () {
-      indexEditorStore.off('change', this.onChange);
-    },
-
+  var EditorWrapper = React.createClass({
     render: function () {
       return (
         <div className="editor-wrapper span5 scrollable">
@@ -432,12 +415,11 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, ReactComponents, 
         </div>
       );
     }
-
   });
 
   var Views = {
     renderEditor: function (el) {
-      React.render(<EditorController/>, el);
+      React.render(<EditorWrapper/>, el);
     },
     removeEditor: function (el) {
       React.unmountComponentAtNode(el);

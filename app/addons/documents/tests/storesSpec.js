@@ -50,10 +50,6 @@ define([
         it('returns default map', function () {
           assert.equal(store.getMap(), 'function (doc) {\n  emit(doc._id, 1);\n}');
         });
-
-        it('Edit Index as title', function () {
-          assert.equal(store.getTitle(), 'Create Index');
-        });
       });
 
     });

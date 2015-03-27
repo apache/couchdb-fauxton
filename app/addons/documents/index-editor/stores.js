@@ -96,10 +96,6 @@ function (FauxtonAPI, ActionTypes) {
       return this._newView;
     },
 
-    getTitle: function () {
-      return this._newView ? 'Create Index' : 'Edit Index';
-    },
-
     getViewName: function () {
       return this._viewName;
     },
