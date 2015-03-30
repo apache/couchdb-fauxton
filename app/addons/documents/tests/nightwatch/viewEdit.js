@@ -80,8 +80,9 @@ module.exports = {
         var editor = ace.edit("map-function");\
         editor.getSession().setValue("function (doc) { emit(\'newstub\', 2); }");\
       ')
-      .execute('$(".save")[0].scrollIntoView();')
-      .click('button.btn-success.save')
+      .execute('$("button.save").scrollIntoView();')
+      .clickWhenVisible('button.btn-success.save', waitTime, false)
+      .waitForElementVisible('.global-notification', waitTime, false)
       .waitForElementNotVisible('.global-notification', waitTime, false)
       .assert.containsText('.prettyprint', '40')
     .end();

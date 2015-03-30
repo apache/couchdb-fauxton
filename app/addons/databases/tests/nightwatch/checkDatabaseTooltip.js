@@ -28,11 +28,10 @@ module.exports = {
       // delete the document manually. This'll ensure the database page has at least one "!" icon
       .waitForElementPresent('#dashboard-content a[href="#/database/' + newDatabaseName + '/_all_docs"]', waitTime, false)
       .click('#dashboard-content a[href="#/database/' + newDatabaseName + '/_all_docs"]')
-      .waitForElementVisible('label[for="checkbox-' + newDocumentName + '"]', waitTime, false)
-      .click('label[for="checkbox-' + newDocumentName + '"]')
-      .click('.control-toggle-alternative-header')
-      .waitForElementPresent('.control-select-all', waitTime, false)
-      .click('.control-delete')
+
+      //this opens the alternative header
+      .clickWhenVisible('label[for="checkbox-' + newDocumentName + '"]', waitTime, false)
+      .clickWhenVisible('.control-delete', waitTime, false)
       .acceptAlert()
       .waitForElementVisible('.alert.alert-info', waitTime, false)
       .click('#nav-links a[href="#/_all_dbs"]')
