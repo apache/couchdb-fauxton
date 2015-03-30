@@ -164,8 +164,15 @@ function (app, FauxtonAPI, Components, Documents, Databases) {
     },
 
     toggleArrow:  function (e) {
-      this.$(e.currentTarget).toggleClass("down");
+      this.$('[id*="' + this.sanitizeForJquery(e.currentTarget.id) + '"]').toggleClass('down');
+      // if there is a '.' in the design doc name, jquery interprets that as a class
+      // see: couchdb-fauxton/assets/js/libs/bootstrap.js line 1739
     },
+
+    sanitizeForJquery: function (jquerySelector) {
+      return jquerySelector.replace(/\//g, '\\\/').replace(/\./g, '\\.').replace(/\%/g, '\\%');
+    },
+
     buildIndexList: function (designDocs, info) {
       var design = this.model.id.replace(/^_design\//, "");
       var databaseId = this.model.database.id;
@@ -184,12 +191,14 @@ function (app, FauxtonAPI, Components, Documents, Databases) {
     serialize: function () {
       var ddocName = this.model.id.replace(/^_design\//, ""),
           docSafe = app.utils.safeURLName(ddocName),
-          databaseName = this.collection.database.safeID();
+          databaseName = this.collection.database.safeID(),
+          data_target = app.utils.safeURLName(ddocName).replace(/%/g, '_percent_').replace(/\./g, '_dot_');
 
       return {
-        designDocMetaUrl: FauxtonAPI.urls('designDocs', 'app', databaseName, docSafe),
+        designDocMetaUrl: FauxtonAPI.urls('designDocs', 'app', databaseName, docSafe).replace(/\./g, '%2E'),
         designDoc: ddocName,
         ddoc_clean: docSafe,
+        data_target: data_target
       };
     },
 
@@ -277,7 +286,7 @@ function (app, FauxtonAPI, Components, Documents, Databases) {
         database: this.database,
         selected: this.selected,
         collection: this.collection,
-        href: FauxtonAPI.urls(this.indexTypeMap[this.selector].type, 'app', this.database, this.ddoc)
+        href: FauxtonAPI.urls(this.indexTypeMap[this.selector].type, 'app', this.database, this.ddoc.replace(/\//g, '%2F')).replace(/\./g, '%2E')
       };
     },
 

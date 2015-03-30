@@ -22,7 +22,7 @@ the License.
   <a
     data-ddoctype="<%- ddocType %>"
     id="<%- removeSpecialCharacters(ddoc) %>_<%- removeSpecialCharacters(index) %>"
-    href="#/<%- href%><%- index%>"
+    href="#/<%- href%><%- safeURL(index)%>"
     class="toggle-view">
     <%- index %>
   </a>
