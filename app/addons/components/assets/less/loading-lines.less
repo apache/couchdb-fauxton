@@ -1,0 +1,68 @@
+@import "../../../../../assets/less/variables.less";
+
+
+@loadingLinesHeight: 30px;
+@loadingLinesMargin: 3px;
+@loadingLinesWidth: 10px;
+@loadingLinesTime: 0.8s;
+@loadingLinesEffect: linear;
+@loadingLinesColor: @red;
+
+.loading-lines {
+  display: block;
+  width: 50px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#line1 {
+  background-color: @loadingLinesColor;
+  width: @loadingLinesWidth;
+  -webkit-animation: height-change @loadingLinesTime infinite @loadingLinesEffect;
+   float: left;
+  height: 1px;
+}
+
+#line2 {
+  background-color: @loadingLinesColor;
+  width: @loadingLinesWidth;
+  -webkit-animation: height-change @loadingLinesTime infinite @loadingLinesEffect;
+  -webkit-animation-delay: 0.1s;
+  float:left;
+  margin-left: @loadingLinesMargin;
+  height: 1px;
+
+}
+
+#line3 {
+  background-color: @loadingLinesColor;
+  width: @loadingLinesWidth;
+  -webkit-animation: height-change @loadingLinesTime infinite @loadingLinesEffect;
+  -webkit-animation-delay: 0.2s;
+  float:left;
+  margin-left: @loadingLinesMargin;
+  height: 1px;
+
+}
+
+#line4 {
+  background-color: @loadingLinesColor;
+  width: @loadingLinesWidth;
+  -webkit-animation: height-change @loadingLinesTime infinite @loadingLinesEffect;
+  -webkit-animation-delay: 0.3s;
+  float: left;
+  margin-left: @loadingLinesMargin;
+  height:1px;
+}
+
+@-webkit-keyframes height-change {
+  0% {
+    height:1px;
+  }
+  50% {
+    height: @loadingLinesHeight;
+  }
+  100% {
+    height: 1px;
+  }
+}
