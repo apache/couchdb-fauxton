@@ -27,7 +27,7 @@ module.exports = {
       // hack to get select working by clicking on it and using keyboard to select
       // http://www.w3.org/TR/2012/WD-webdriver-20120710/
       .keys(['\uE013', '\uE006'])
-      .waitForElementNotPresent('.spinner', waitTime)
+      .waitForElementNotPresent('div[data-id="document_16"]', waitTime)
       .execute(function () {
         return $('.doc-row').length;
       }, function (result) {
@@ -50,12 +50,10 @@ module.exports = {
       .click('#select-per-page')
       // http://www.w3.org/TR/2012/WD-webdriver-20120710/
       .keys(['\uE013', '\uE006'])
-      .waitForElementNotPresent('.spinner', waitTime)
+      .waitForElementNotPresent('div[data-id="document_16"]', waitTime)
       .click('#next')
-      .waitForElementNotPresent('.spinner', waitTime)
       .waitForElementPresent('div[data-id="document_17"]', waitTime)
       .click('#previous')
-      .waitForElementNotPresent('.spinner', waitTime)
       .waitForElementPresent('div[data-id="document_1"]', waitTime)
       .end();
   },
@@ -74,13 +72,12 @@ module.exports = {
       .click('#select-per-page')
       // http://www.w3.org/TR/2012/WD-webdriver-20120710/
       .keys(['\uE013', '\uE006'])
-      .waitForElementNotPresent('.spinner', waitTime)
+      .waitForElementNotPresent('div[data-id="document_16"]', waitTime)
       .click('#next')
-      .waitForElementNotPresent('.spinner', waitTime)
+      .waitForElementPresent('div[data-id="document_17"]', waitTime)
       .click('#select-per-page')
       // http://www.w3.org/TR/2012/WD-webdriver-20120710/
       .keys(['\uE013', '\uE006'])
-      .waitForElementNotPresent('.spinner', waitTime)
       .waitForElementPresent('div[data-id="document_1"]', waitTime)
       .end();
   }
