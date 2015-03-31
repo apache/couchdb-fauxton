@@ -68,7 +68,7 @@ module.exports = function (grunt) {
         // server js from app directory
         filePath = path.join(app_dir, url.replace('/_utils/fauxton/', ''));
       } else if (!!url.match(/ZeroClipboard/)) {
-        filePath = "./assets/js/plugins/zeroclipboard/ZeroClipboard.swf"
+        filePath = "./assets/js/plugins/zeroclipboard/ZeroClipboard.swf";
       } else if (!!url.match(/testrunner/)) {
         var testSetup = grunt.util.spawn({cmd: 'grunt', grunt: true, args: ['test_inline']}, function (error, result, code) {/* log.writeln(String(result));*/ });
         testSetup.stdout.pipe(process.stdout);
@@ -77,7 +77,7 @@ module.exports = function (grunt) {
       } else if (url === '/' && accept[0] !== 'application/json') {
         // serve main index file from here
         filePath = path.join(dist_dir, 'index.html');
-      };
+      }
 
       if (/_utils\/docs/.test(filePath)) {
         filePath = false;
@@ -102,13 +102,22 @@ module.exports = function (grunt) {
       // This sets the Host header in the proxy so that one can use external
       // CouchDB instances and not have the Host set to 'localhost'
       var urlObj = urlLib.parse(req.url);
-      req.headers['host'] = urlObj.host;
+      req.headers.host = urlObj.host;
+
 
       proxy.web(req, res);
     }).listen(port);
 
     proxy.on('error', function (e) {
       // don't explode on cancelled requests
+    });
+
+    //Remove Secure on the cookie if the proxy is communicating to a CouchDB instance
+    // via https.
+    proxy.on('proxyRes', function (proxyRes, req, res) {
+      if (proxyRes.headers['set-cookie']) {
+        proxyRes.headers['set-cookie'][0] = proxyRes.headers["set-cookie"][0].replace('Secure', '');
+      }
     });
 
     // Fail this task if any errors have been logged
