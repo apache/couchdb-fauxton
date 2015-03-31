@@ -211,10 +211,17 @@ function (app, FauxtonAPI, React, Components, beautifyHelper) {
       }
 
       return (
-        <div className="doc-edit-symbol pull-right">
+        <div className="doc-edit-symbol pull-right" title="Edit document">
           {this.props.children}
         </div>
       );
+    },
+
+    getExtensionIcons: function () {
+      var extensions = FauxtonAPI.getExtensions('DocList:icons');
+      return _.map(extensions, function (Extension, i) {
+        return (<Extension doc={this.props.doc} key={i} />);
+      }, this);
     },
 
     getCheckbox: function () {
@@ -257,6 +264,7 @@ function (app, FauxtonAPI, React, Components, beautifyHelper) {
                 "{this.props.docIdentifier}"
               </span>
               {this.getUrlFragment()}
+              <div className="doc-item-extension-icons pull-right">{this.getExtensionIcons()}</div>
             </header>
             <div className="doc-data">
               <pre className="prettyprint">{this.props.docContent}</pre>
