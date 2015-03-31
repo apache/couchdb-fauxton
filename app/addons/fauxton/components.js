@@ -588,6 +588,10 @@ function (app, FauxtonAPI, ace, spin, ZeroClipboard) {
       this.commands = options.commands;
       this.theme = options.theme || 'idle_fingers';
       this.couchJSHINT = options.couchJSHINT;
+
+      // going forward we can use flexbox for all editors with a fixed height and drop all custom JS to adjust its height
+      this.setHeightWithJS = _.has(options, 'setHeightWithJS') ? options.setHeightWithJS : true;
+
       this.edited = false;
 
       // the full-page document editor does some extra work to adjust the total height of the editor based
@@ -658,6 +662,9 @@ function (app, FauxtonAPI, ace, spin, ZeroClipboard) {
     },
 
     setHeightToLineCount: function () {
+      if (!this.setHeightWithJS) {
+        return;
+      }
       var lines = this.editor.getSession().getDocument().getLength();
 
       if (this.isFullPageEditor) {
