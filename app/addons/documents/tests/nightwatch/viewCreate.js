@@ -63,7 +63,7 @@ var tests = {
     var waitTime = client.globals.maxWaitTime;
     /*jshint multistr: true */
 
-    openDifferentDropdownsAndClick(client, '[data-target="#testdesigndoc"]')
+    openDifferentDropdownsAndClick(client, '#nav-header-testdesigndoc')
       .clearValue('#index-name')
       .setValue('#index-name', 'test-new-view')
       .execute('\
@@ -77,7 +77,7 @@ var tests = {
       })
       //go back to all docs
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
-      .clickWhenVisible('[data-target="#testdesigndoc"]', waitTime, false)
+      .clickWhenVisible('#nav-header-testdesigndoc', waitTime, false)
       .clickWhenVisible('[data-target="#testdesigndocviews"]', waitTime, false)
       .clickWhenVisible('#testdesigndoc_testnewview', waitTime, false)
       .waitForElementPresent('.prettyprint', waitTime, false)
