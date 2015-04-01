@@ -124,7 +124,7 @@ module.exports = function (grunt) {
 
     var i18n = JSON.stringify(helper.readI18nFile(), null, ' ');
 
-    ['development', 'release', 'couchapp'].forEach(function (key) {
+    Object.keys(settings.template).forEach(function (key) {
       settings.template[key].app.i18n = i18n;
     });
 
