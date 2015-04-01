@@ -631,6 +631,8 @@ function (app, FauxtonAPI, ace, spin, ZeroClipboard) {
         this.removeIncorrectAnnotations();
       }
 
+      this.editor.getSession().setTabSize(2);
+
       this.editor.getSession().on('change', function () {
         this.setHeightToLineCount();
         this.edited = true;

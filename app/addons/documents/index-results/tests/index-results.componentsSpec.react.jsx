@@ -13,9 +13,11 @@ define([
   'api',
   'addons/documents/index-results/index-results.components.react',
   'addons/documents/index-results/actions',
+  'addons/documents/resources',
+  'addons/databases/resources',
   'testUtils',
   "react"
-], function (FauxtonAPI, Views, IndexResultsActions, utils, React) {
+], function (FauxtonAPI, Views, IndexResultsActions, Resources, Databases, utils, React) {
   FauxtonAPI.router = new FauxtonAPI.Router([]);
 
   var assert = utils.assert;
@@ -26,7 +28,6 @@ define([
 
     beforeEach(function () {
       container = document.createElement('div');
-
     });
 
     afterEach(function () {
@@ -59,7 +60,13 @@ define([
     });
 
     describe('loading', function () {
+      beforeEach(function () {
+        container = document.createElement('div');
+      });
 
+      afterEach(function () {
+        React.unmountComponentAtNode(container);
+      });
       it('should show loading component', function () {
         var resultsEl = TestUtils.renderIntoDocument(<Views.ResultsScreen
           isLoading={true}

@@ -48,6 +48,7 @@ define([], function () {
       LOG: '/_utils/docs/api/server/common.html?highlight=stats#log',
       CONFIG: '/_utils/docs/config/index.html',
       VIEWS: '/_utils/docs/intro/overview.html#views',
+      MANGO: '/_utils/docs/intro/api.html#documents',
       CHANGES: '/_utils/docs/api/database/changes.html?highlight=changes#post--db-_changes'
     },
 
