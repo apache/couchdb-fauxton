@@ -10,11 +10,13 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 define([
-       'api',
-      'testUtils'
-], function (FauxtonAPI, testUtils) {
+  'api',
+  'react',
+  'testUtils'
+], function (FauxtonAPI, React, testUtils) {
   var assert = testUtils.assert,
-      RouteObject = FauxtonAPI.RouteObject;
+  restore = testUtils.restore,
+  RouteObject = FauxtonAPI.RouteObject;
 
   describe('RouteObjects', function () {
 
@@ -49,7 +51,7 @@ define([
 
       it('Should set template for first render ', function () {
         var setTemplateSpy = sinon.stub(mockLayout, 'setTemplate'),
-            promise = $.Deferred();
+        promise = $.Deferred();
 
         promise.resolve();
         setTemplateSpy.returns(promise);
@@ -60,7 +62,7 @@ define([
 
       it('Should not set template after first render', function () {
         var setTemplateSpy = sinon.stub(mockLayout, 'setTemplate'),
-            promise = $.Deferred();
+        promise = $.Deferred();
 
         promise.resolve();
         setTemplateSpy.returns(promise);
@@ -71,6 +73,12 @@ define([
         assert.ok(setTemplateSpy.calledOnce, 'SetTemplate not meant to be called');
       });
 
+      it('Should call renderReactComponents', function () {
+        var renderSpy = sinon.spy(testRouteObject, "renderReactComponents");
+
+        testRouteObject.renderWith('the-route', mockLayout, 'args');
+        assert.ok(renderSpy.calledOnce);
+      });
 
       it("Should call establish of routeObject", function () {
         var establishSpy = sinon.spy(testRouteObject, "establish");
@@ -81,8 +89,8 @@ define([
 
       it("Should render views", function () {
         var view = new FauxtonAPI.View(),
-            getViewsSpy = sinon.stub(testRouteObject, "getViews"),
-            viewSpy = sinon.stub(view, "establish");
+        getViewsSpy = sinon.stub(testRouteObject, "getViews"),
+        viewSpy = sinon.stub(view, "establish");
 
         view.hasRendered = false;
         view.promise = function () {
@@ -99,14 +107,119 @@ define([
 
       it("Should not re-render a view", function () {
         var view = new FauxtonAPI.View(),
-            getViewsSpy = sinon.stub(testRouteObject, "getViews"),
-            viewSpy = sinon.stub(view, "establish");
+        getViewsSpy = sinon.stub(testRouteObject, "getViews"),
+        viewSpy = sinon.stub(view, "establish");
 
         view.hasRendered = true;
         getViewsSpy.returns({'#view': view});
 
         testRouteObject.renderWith('the-route', mockLayout, 'args');
         assert.notOk(viewSpy.calledOnce, 'Should render view');
+      });
+    });
+
+    describe('React Integration', function () {
+      var testRouteObject;
+
+      beforeEach(function () {
+        var TestRouteObject = RouteObject.extend({
+          crumbs: ['mycrumbs']
+        });
+
+        testRouteObject = new TestRouteObject();
+        var apiBar = {};
+        //apiBar.hide = sinon.spy();
+
+        var mockLayout = {
+          setTemplate: function () {
+            var promise = $.Deferred();
+            promise.resolve();
+            return promise;
+          },
+          clearBreadcrumbs: sinon.spy(),
+          setView: sinon.spy(),
+          renderView: sinon.spy(),
+          hooks: [],
+          setBreadcrumbs: sinon.spy(),
+          apiBar: apiBar
+        };
+
+      });
+
+      describe('setComponent', function () {
+
+        afterEach(function () {
+          restore(testRouteObject.removeComponent);
+          restore(testRouteObject.removeView);
+        });
+
+        it('removes existing view for selector', function () {
+          var fakeReactComponent = React.createElement('div');
+          var fakeSelector = '.fake-selector';
+          var spy = sinon.spy(testRouteObject, 'removeView');
+
+          testRouteObject.setComponent(fakeSelector, fakeReactComponent);
+
+          assert.ok(spy.calledWith(fakeSelector));
+        });
+
+        it('removes existing component for selector', function () {
+          var fakeReactComponent = React.createElement('div');
+          var fakeSelector = '.fake-selector';
+          var spy = sinon.spy(testRouteObject, 'removeComponent');
+
+          testRouteObject.setComponent(fakeSelector, fakeReactComponent);
+
+          assert.ok(spy.calledWith(fakeSelector));
+        });
+
+        it('sets component for selector', function () {
+          var fakeReactComponent = React.createElement('div');
+          var fakeSelector = '.fake-selector';
+
+          testRouteObject.setComponent(fakeSelector, fakeReactComponent);
+          assert.deepEqual(fakeReactComponent, testRouteObject.reactComponents[fakeSelector]);
+        });
+
+      });
+
+      describe('removeComponent', function () {
+
+        afterEach(function () {
+          restore(React.unmountComponentAtNode);
+        });
+
+        it('removes existing component via react', function () {
+          var spy = sinon.spy(React, 'unmountComponentAtNode');
+          var fakeSelector = 'remove-selector';
+          testRouteObject.reactComponents[fakeSelector] = React.createElement('div');
+
+          testRouteObject.removeComponent(fakeSelector);
+
+          assert.ok(spy.calledOnce);
+
+        });
+
+        it('removes existing components key', function () {
+          var fakeSelector = 'remove-selector';
+          testRouteObject.reactComponents[fakeSelector] = React.createElement('div');
+
+          testRouteObject.removeComponent(fakeSelector);
+
+          assert.ok(_.isUndefined(testRouteObject.reactComponents[fakeSelector]));
+
+        });
+
+        it('does nothing for non existing component', function () {
+          var spy = sinon.spy(React, 'unmountComponentAtNode');
+          var fakeSelector = 'remove-selector';
+
+          testRouteObject.removeComponent(fakeSelector);
+
+          assert.notOk(spy.calledOnce);
+
+        });
+
       });
     });
 

@@ -119,4 +119,3 @@ function (FauxtonAPI, Auth, Backbone) {
 
   return Router;
 });
-

@@ -407,7 +407,7 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, ReactComponents) 
     }
   });
 
-  var EditorWrapper = React.createClass({
+  var EditorController = React.createClass({
     render: function () {
       return (
         <div className="editor-wrapper span5 scrollable">
@@ -418,12 +418,7 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, ReactComponents) 
   });
 
   var Views = {
-    renderEditor: function (el) {
-      React.render(<EditorWrapper/>, el);
-    },
-    removeEditor: function (el) {
-      React.unmountComponentAtNode(el);
-    },
+    EditorController: EditorController,
     ReduceEditor: ReduceEditor,
     Editor: Editor,
     DesignDocSelector: DesignDocSelector,

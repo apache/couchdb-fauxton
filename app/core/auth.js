@@ -62,4 +62,3 @@ function (FauxtonAPI, Backbone) {
 
   return Auth;
 });
-

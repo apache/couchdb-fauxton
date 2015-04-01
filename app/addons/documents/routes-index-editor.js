@@ -18,16 +18,18 @@ define([
   "addons/documents/helpers",
   'addons/documents/shared-routes',
   'addons/documents/views',
-  'addons/documents/views-index',
+  'addons/documents/index-editor/components.react',
+  'addons/documents/index-editor/actions',
   'addons/databases/base',
   'addons/fauxton/components',
   'addons/documents/pagination/stores',
-  'addons/documents/index-results/actions'
+  'addons/documents/index-results/actions',
+  'addons/documents/index-results/index-results.components.react'
 
 ],
 
-function (app, FauxtonAPI, Helpers, BaseRoute, Documents, Index,
-        Databases, Components, PaginationStores, IndexResultsActions) {
+function (app, FauxtonAPI, Helpers, BaseRoute, Documents, IndexEditorComponents, ActionsIndexEditor,
+          Databases, Components, PaginationStores, IndexResultsActions, IndexResultsComponents) {
 
 
   var IndexEditorAndResults = BaseRoute.extend({
@@ -52,7 +54,6 @@ function (app, FauxtonAPI, Helpers, BaseRoute, Documents, Index,
 
     establish: function () {
       return [
-        this.designDocs.fetch({reset: true}),
         this.allDatabases.fetchOnce()
       ];
     },
@@ -62,7 +63,6 @@ function (app, FauxtonAPI, Helpers, BaseRoute, Documents, Index,
           urlParams = params.urlParams,
           docParams = params.docParams,
           decodeDdoc = decodeURIComponent(ddoc);
-
 
       this.rightHeader = this.setView('#right-header', new Documents.Views.RightAllDocsHeader({
         database: this.database
@@ -95,15 +95,16 @@ function (app, FauxtonAPI, Helpers, BaseRoute, Documents, Index,
         isListDeletable: false
       });
 
-      this.viewEditor = this.setView('#left-content', new Index.ViewEditorReact({
+      ActionsIndexEditor.fetchDesignDocsBeforeEdit({
         viewName: viewName,
         newView: false,
         database: this.database,
         designDocs: this.designDocs,
         designDocId: '_design/' + decodeDdoc
-      }));
+      });
 
-      this.resultList = this.setView('#dashboard-lower-content', new Index.ViewResultListReact({}));
+      this.setComponent('#left-content', IndexEditorComponents.EditorController);
+      this.setComponent('#dashboard-lower-content', IndexResultsComponents.List);
 
       this.apiUrl = function () {
         return [this.indexedDocs.urlRef(urlParams), FauxtonAPI.constants.DOC_URLS.GENERAL];
@@ -130,16 +131,18 @@ function (app, FauxtonAPI, Helpers, BaseRoute, Documents, Index,
         ]
       }));
 
-      this.viewEditor = this.setView('#left-content', new Index.ViewEditorReact({
+      ActionsIndexEditor.fetchDesignDocsBeforeEdit({
         viewName: 'new-view',
         newView: true,
         database: this.database,
         designDocs: this.designDocs,
         designDocId: designDoc,
         newDesignDoc: newDesignDoc
-      }));
+      });
 
-      this.resultList = this.setView('#dashboard-lower-content', new Index.ViewResultListReact({}));
+      this.setComponent('#left-content', IndexEditorComponents.EditorController);
+      this.setComponent('#dashboard-lower-content', IndexResultsComponents.List);
+
       IndexResultsActions.newResultsList({
         collection: [],
         isListDeletable: false

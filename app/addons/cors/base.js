@@ -12,11 +12,11 @@
 
 define([
   "app",
-  "api",
-  "addons/cors/views"
+  "api"
 ],
 
-function (app, FauxtonAPI, CORS) {
+function (app, FauxtonAPI) {
+  var CORS = FauxtonAPI.addon();
 
   CORS.initialize = function () {};
 

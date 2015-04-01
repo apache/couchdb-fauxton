@@ -11,8 +11,8 @@
 // the License.
 
 define([
-  "backbone",
-  "plugins/backbone.layoutmanager"
+  'backbone',
+  'plugins/backbone.layoutmanager'
 ], function (Backbone) {
 
   // A wrapper of the main Backbone.layoutmanager
@@ -24,6 +24,7 @@ define([
     });
 
     this.layoutViews = {};
+    this.reactComponents = {};
     //this views don't ever get removed. An example of this is the main navigation sidebar
     this.permanentViews = {};
     this.el = this.layout.el;

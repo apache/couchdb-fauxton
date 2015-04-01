@@ -76,6 +76,12 @@ function (app, FauxtonAPI, Documents, ActionTypes, IndexResultsActions) {
       });
     },
 
+    fetchDesignDocsBeforeEdit: function (options) {
+      options.designDocs.fetch({reset: true}).then(function () {
+        this.editIndex(options);
+      }.bind(this));
+    },
+
     saveView: function (viewInfo) {
       var designDoc;
       var designDocs = viewInfo.designDocs;

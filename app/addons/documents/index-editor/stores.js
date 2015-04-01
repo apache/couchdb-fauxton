@@ -23,6 +23,17 @@ function (FauxtonAPI, ActionTypes) {
     defaultMap: 'function (doc) {\n  emit(doc._id, 1);\n}',
     defaultReduce: 'function (keys, values, rereduce) {\n  if (rereduce) {\n    return sum(values);\n  } else {\n    return values.length;\n  }\n}',
 
+    initialize: function () {
+      this._designDocs = [];
+      this._view = {
+        reduce: this.defaultMap,
+        map: this.defaultReduce
+      };
+      this._database = {
+        id: '0'
+      };
+    },
+
     editIndex: function (options) {
       this._database = options.database;
       this._newView = options.newView;

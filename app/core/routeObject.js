@@ -11,13 +11,15 @@
 // the License.
 
 define([
-  "core/base",
-  "backbone"
+  'core/base',
+  'react',
+  'backbone'
 ],
-function (FauxtonAPI, Backbone) {
+function (FauxtonAPI, React, Backbone) {
 
   var RouteObject = function (options) {
     this._options = options;
+    this.reactComponents = {};
 
     this._configure(options || {});
     this.initialize.apply(this, arguments);
@@ -101,11 +103,13 @@ function (FauxtonAPI, Backbone) {
           establishError = _.bind(this.establishError, this),
           renderComplete = _.bind(this.renderComplete, this),
           callEstablish = _.bind(this.callEstablish, this),
+          renderReactComponents = _.bind(this.renderReactComponents, this),
           promise = this.establish();
 
       // Only start the view rendering process once the template has been rendered
       // otherwise we get double renders
       promiseLayout.then(function () {
+        renderReactComponents();
         callEstablish(promise)
           .then(renderAllViews, establishError)
           .then(renderComplete);
@@ -125,6 +129,12 @@ function (FauxtonAPI, Backbone) {
       }
 
       return promise;
+    },
+
+    renderReactComponents: function () {
+      _.each(this.reactComponents, function (component, selector) {
+        React.render(React.createElement(component, null), $(selector)[0]);
+      });
     },
 
     callEstablish: function (establishPromise) {
@@ -229,8 +239,32 @@ function (FauxtonAPI, Backbone) {
     },
 
     setView: function (selector, view) {
+      this.removeView(selector);
+      this.removeComponent(selector);
       this.views[selector] = view;
       return view;
+    },
+
+    setComponent: function (selector, component) {
+      this.removeView(selector);
+      this.removeComponent(selector);
+      this.reactComponents[selector] = component;
+    },
+
+    removeComponent: function (selector) {
+      if (_.has(this.reactComponents, selector)) {
+        React.unmountComponentAtNode($(selector)[0]);
+        this.reactComponents[selector] = null;
+        delete this.reactComponents[selector];
+      }
+    },
+
+    removeComponents: function () {
+      _.each(this.reactComponents, function (component, selector) {
+        this.removeComponent(selector);
+      }, this);
+
+      this.reactComponents = {};
     },
 
     getViews: function () {
@@ -246,6 +280,7 @@ function (FauxtonAPI, Backbone) {
     },
 
     removeViews: function () {
+      this.reactComponents = {};
       _.each(this.views, function (view, selector) {
         view.remove();
         delete this.views[selector];
@@ -267,6 +302,7 @@ function (FauxtonAPI, Backbone) {
 
     cleanup: function () {
       this.removeViews();
+      this.removeComponents();
       this.rejectPromises();
     },
 

@@ -15,18 +15,17 @@ define([
   'api',
   'addons/config/resources',
   'addons/config/views',
-  'addons/cors/views'
+  'addons/cors/components.react',
+  'addons/cors/actions'
 ],
 
-function (app, FauxtonAPI, Config, Views, CORS) {
+function (app, FauxtonAPI, Config, Views, CORSComponents, CORSActions) {
 
   var ConfigRouteObject = FauxtonAPI.RouteObject.extend({
     layout: 'with_tabs_sidebar',
 
     initialize: function () {
       this.configs = new Config.Collection();
-      this.cors = new CORS.Config();
-      this.httpd = new CORS.Httpd();
 
       this.sidebar = this.setView("#sidebar-content", new Views.Tabs({
         sidebarItems: [
@@ -68,10 +67,8 @@ function (app, FauxtonAPI, Config, Views, CORS) {
 
     configCORS: function () {
       this.removeView('#right-header');
-      this.newSection = this.setView('#dashboard-content', new CORS.Views.CORSWrapper({
-        cors: this.cors,
-        httpd: this.httpd
-      }));
+      this.newSection = this.setComponent('#dashboard-content', CORSComponents.CORSController);
+      CORSActions.FetchAndEditCors();
       this.sidebar.setSelectedTab("cors");
     },
 

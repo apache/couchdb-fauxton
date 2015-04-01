@@ -225,7 +225,7 @@ define([
         origins: corsStore.getOrigins(),
         isAllOrigins: corsStore.isAllOrigins(),
         configChanged: corsStore.hasConfigChanged(),
-        savingStatus: corsStore.getSavingStatus()
+        shouldSaveChange: corsStore.shouldSaveChange()
       };
     },
 
@@ -242,7 +242,9 @@ define([
     },
 
     componentDidUpdate: function () {
-      this.save();
+      if (this.state.shouldSaveChange) {
+        this.save();
+      }
     },
 
     onChange: function () {
@@ -335,13 +337,6 @@ define([
   });
 
   return {
-    renderCORS: function (el) {
-      React.render(<CORSController />, el);
-    },
-
-    removeCORS: function (el) {
-      React.unmountComponentAtNode(el);
-    },
     CORSController: CORSController,
     OriginInput: OriginInput,
     Origins: Origins,

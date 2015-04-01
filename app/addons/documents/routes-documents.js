@@ -17,8 +17,8 @@ define([
   // Modules
   'addons/documents/shared-routes',
   'addons/documents/views',
-  'addons/documents/views-changes',
-  'addons/documents/views-index',
+  'addons/documents/changes/components.react',
+  'addons/documents/changes/actions',
   'addons/documents/views-doceditor',
   'addons/documents/views-mango',
 
@@ -26,11 +26,12 @@ define([
   'addons/documents/resources',
   'addons/fauxton/components',
   'addons/documents/pagination/stores',
-  'addons/documents/index-results/actions'
+  'addons/documents/index-results/actions',
+  'addons/documents/index-results/index-results.components.react'
 ],
 
-function (app, FauxtonAPI, BaseRoute, Documents, Changes, Index, DocEditor, Mango,
-  Databases, Resources, Components, PaginationStores, IndexResultsActions) {
+function (app, FauxtonAPI, BaseRoute, Documents, Changes, ChangesActions, DocEditor, Mango,
+  Databases, Resources, Components, PaginationStores, IndexResultsActions, IndexResultsComponents) {
 
 
     var DocumentsRouteObject = BaseRoute.extend({
@@ -82,7 +83,8 @@ function (app, FauxtonAPI, BaseRoute, Documents, Changes, Index, DocEditor, Mang
       designDocMetadata: function (database, ddoc) {
         this.footer && this.footer.remove();
         this.toolsView && this.toolsView.remove();
-        this.viewEditor && this.viewEditor.remove();
+
+        this.removeComponent('#dashboard-upper-content');
 
         var designDocInfo = new Resources.DdocInfo({ _id: "_design/" + ddoc }, { database: this.database });
         this.setView("#dashboard-lower-content", new Documents.Views.DdocInfo({
@@ -108,11 +110,6 @@ function (app, FauxtonAPI, BaseRoute, Documents, Changes, Index, DocEditor, Mang
         docParams = params.docParams,
         collection;
 
-        if (this.eventAllDocs) {
-          this.eventAllDocs = false;
-          return;
-        }
-
         this.reactHeader = this.setView('#react-headerbar', new Documents.Views.ReactHeaderbar());
 
         this.footer = this.setView('#footer', new Documents.Views.Footer());
@@ -128,9 +125,7 @@ function (app, FauxtonAPI, BaseRoute, Documents, Changes, Index, DocEditor, Mang
           this.sidebar.setSelectedTab("all-docs");
         }
 
-        this.viewEditor && this.viewEditor.remove();
-        this.headerView && this.headerView.remove();
-
+        this.removeComponent('#dashboard-upper-content');
 
         if (!docParams) {
           docParams = {};
@@ -144,7 +139,8 @@ function (app, FauxtonAPI, BaseRoute, Documents, Changes, Index, DocEditor, Mang
 
         this.database.allDocs.paging.pageSize = PaginationStores.indexPaginationStore.getPerPage();
 
-        this.resultList = this.setView('#dashboard-lower-content', new Index.ViewResultListReact({}));
+        //this.resultList = this.setView('#dashboard-lower-content', new Index.ViewResultListReact({}));
+        this.setComponent('#dashboard-lower-content', IndexResultsComponents.List);
 
         // this used to be a function that returned the object, but be warned: it caused a closure with a reference to
         // the initial this.database object which can change
@@ -167,11 +163,14 @@ function (app, FauxtonAPI, BaseRoute, Documents, Changes, Index, DocEditor, Mang
         var docParams = app.getParams();
         this.database.buildChanges(docParams);
 
-        this.changesView = this.setView("#dashboard-lower-content", new Changes.ChangesReactWrapper({
-          model: this.database
-        }));
+        ChangesActions.fetchChanges({
+          changes: this.database.changes,
+          filters: [],
+          databaseName: this.database.id
+        });
 
-        this.headerView = this.setView('#dashboard-upper-content', new Changes.ChangesHeaderReactWrapper());
+        this.setComponent("#dashboard-lower-content", Changes.ChangesController);
+        this.setComponent('#dashboard-upper-content', Changes.ChangesHeaderController);
 
         this.footer && this.footer.remove();
         this.toolsView && this.toolsView.remove();
@@ -188,33 +187,9 @@ function (app, FauxtonAPI, BaseRoute, Documents, Changes, Index, DocEditor, Mang
       },
 
       cleanup: function () {
-        if (this.reactHeader) {
-          this.removeView('#react-headerbar');
-        }
-        if (this.viewEditor) {
-          this.removeView('#dashboard-upper-content');
-        }
-        if (this.documentsView) {
-          this.removeView('#dashboard-lower-content');
-        }
-        if (this.rightHeader) {
-          this.removeView('#right-header');
-        }
-        if (this.leftheader) {
-          this.removeView('#breadcrumbs');
-        }
-        if (this.sidebar) {
-          this.removeView('#sidebar');
-        }
-        if (this.footer) {
-          this.removeView('#footer');
-        }
-        if (this.headerView) {
-          this.removeView('#dashboard-upper-content');
-        }
-
         // we're no longer interested in listening to the lookahead tray event on this route object
         this.stopListening(FauxtonAPI.Events, 'lookaheadTray:update', this.onSelectDatabase);
+        FauxtonAPI.RouteObject.prototype.cleanup.apply(this);
       }
 
     });

@@ -43,6 +43,13 @@ function (app, FauxtonAPI, ActionTypes) {
         type: ActionTypes.SET_CHANGES,
         options: options
       });
+    },
+
+    fetchChanges: function (options) {
+      var changes = options.changes;
+      changes.fetch().then(function () {
+        this.setChanges(options);
+      }.bind(this));
     }
   };
 

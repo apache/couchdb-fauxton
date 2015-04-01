@@ -15,6 +15,18 @@ define([
   'addons/cors/resources'
   ], function (FauxtonAPI, ActionTypes, Resources) {
     return {
+      FetchAndEditCors: function () {
+        var cors = new Resources.Config();
+        var httpd = new Resources.Httpd();
+
+        FauxtonAPI.when([cors.fetch(), httpd.fetch()]).then(function () {
+          this.editCors({
+            origins: cors.get('origins'),
+            isEnabled: httpd.corsEnabled()
+          });
+        }.bind(this));
+      },
+
       editCors: function (options) {
         FauxtonAPI.dispatch({
           type: ActionTypes.EDIT_CORS,

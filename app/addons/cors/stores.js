@@ -21,19 +21,11 @@ define([
       this._isEnabled = options.isEnabled;
       this._origins = options.origins;
       this._configChanged = false;
-      this.savingDone();
+      this._shouldSaveChange = false;
     },
 
-    saving: function () {
-      this._savingStatus = 'Saving';
-    },
-
-    savingDone: function () {
-      this._savingStatus = 'Save';
-    },
-
-    getSavingStatus: function () {
-      return this._savingStatus;
+    shouldSaveChange: function () {
+      return this._shouldSaveChange;
     },
 
     hasConfigChanged: function () {
@@ -96,6 +88,9 @@ define([
     },
 
     dispatch: function (action) {
+      // it should save after any change is triggered except for EDIT_CORS which is just to update
+      // cors after the first change
+      this._shouldSaveChange = true;
 
       switch (action.type) {
         case ActionTypes.EDIT_CORS:
