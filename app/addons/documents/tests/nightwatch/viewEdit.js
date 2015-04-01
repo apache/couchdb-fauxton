@@ -80,11 +80,11 @@ module.exports = {
         var editor = ace.edit("map-function");\
         editor.getSession().setValue("function (doc) { emit(\'newstub\', 2); }");\
       ')
-      .execute('$("button.save").scrollIntoView();')
-      .clickWhenVisible('button.btn-success.save', waitTime, false)
-      .waitForElementVisible('.global-notification', waitTime, false)
-      .waitForElementNotVisible('.global-notification', waitTime, false)
-      .assert.containsText('.prettyprint', '40')
+      .execute('$("button.save")[0].scrollIntoView();')
+      .clickWhenVisible('button.save', waitTime, false)
+      .waitForAttribute('.prettyprint', 'textContent', function (docContents) {
+        return (/40/).test(docContents);
+      })
     .end();
   }
 };
