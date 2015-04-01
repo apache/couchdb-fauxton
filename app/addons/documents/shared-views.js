@@ -17,7 +17,8 @@ define([
        "addons/fauxton/components",
 
        "addons/documents/resources",
-       "addons/databases/resources"
+       "addons/databases/resources",
+       "css.escape"
 ],
 
 function (app, FauxtonAPI, Components, Documents, Databases) {
@@ -168,9 +169,14 @@ function (app, FauxtonAPI, Components, Documents, Databases) {
       "click .js-collapse-toggle": "toggleArrow"
     },
 
-    toggleArrow:  function (e) {
-      this.$(e.currentTarget).toggleClass("down");
+    toggleArrow: function (e) {
+      var escapedId = window.CSS.escape(e.currentTarget.id),
+          $toggleElement = this.$('#' + escapedId).next();
+
+      this.$('#' + escapedId).toggleClass('down');
+      $toggleElement.collapse('toggle');
     },
+
     buildIndexList: function (designDocs, info) {
       var design = this.model.id.replace(/^_design\//, "");
       var databaseId = this.model.database.id;
@@ -188,13 +194,14 @@ function (app, FauxtonAPI, Components, Documents, Databases) {
 
     serialize: function () {
       var ddocName = this.model.id.replace(/^_design\//, ""),
+          escapedId = window.CSS.escape(ddocName),
           docSafe = app.utils.safeURLName(ddocName),
           databaseName = this.collection.database.safeID();
 
       return {
         designDocMetaUrl: FauxtonAPI.urls('designDocs', 'app', databaseName, docSafe),
         designDoc: ddocName,
-        ddoc_clean: docSafe,
+        escapedId: escapedId
       };
     },
 
