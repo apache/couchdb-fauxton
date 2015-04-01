@@ -77,6 +77,7 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
         autoScrollEditorIntoView: true,
         setHeightWithJS: true,
         isFullPageEditor: false,
+        disableUnload: false,
         change: function () {}
       };
     },
@@ -108,14 +109,18 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
       this.editor.getSession().setMode("ace/mode/" + props.mode);
       this.editor.setTheme("ace/theme/" + props.theme);
       this.editor.setFontSize(props.fontSize);
-
+      this.editor.getSession().setUseSoftTabs(true);
     },
 
     setupEvents: function () {
+      this.editor.on('blur', _.bind(this.saveCodeChange, this));
+
+      if (this.props.disableUnload) {
+        return;
+      }
+
       $(window).on('beforeunload.editor_' + this.props.id, _.bind(this.quitWarningMsg));
       FauxtonAPI.beforeUnload('editor_' + this.props.id, _.bind(this.quitWarningMsg, this));
-
-      this.editor.on('blur', _.bind(this.saveCodeChange, this));
     },
 
     saveCodeChange: function () {
@@ -129,6 +134,10 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
     },
 
     removeEvents: function () {
+      if (this.props.disableUnload) {
+        return;
+      }
+
       $(window).off('beforeunload.editor_' + this.props.id);
       FauxtonAPI.removeBeforeUnload('editor_' + this.props.id);
     },
@@ -201,12 +210,12 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
 
     getTitleFragment: function () {
       if (!this.props.docs) {
-        return <strong>{this.props.title}</strong>;
+        return (<strong>{this.props.title}</strong>);
       }
 
       return (
         <label>
-          <strong>{this.props.title}</strong>
+          <strong>{this.props.title + ' '}</strong>
           <a
             className="help-link"
             data-bypass="true"
@@ -391,7 +400,7 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
                 {this.props.keylabel}
               </span>
               <span className="header-doc-id">
-                "{this.props.docIdentifier}"
+                {this.props.header ? '"' + this.props.header + '"' : null}
               </span>
               {this.getUrlFragment()}
               <div className="doc-item-extension-icons pull-right">{this.getExtensionIcons()}</div>

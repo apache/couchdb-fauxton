@@ -12,8 +12,9 @@
 
 module.exports = {
 
-  'Creating new indexes with mango': function (client) {
+  'Creating new indexes with mango (mangoIndex.js)': function (client) {
     /*jshint multistr: true */
+
     var waitTime = client.globals.maxWaitTime,
         newDatabaseName = client.globals.testDatabaseName,
         baseUrl = client.globals.test_settings.launch_url;
@@ -22,12 +23,13 @@ module.exports = {
       .populateDatabase(newDatabaseName)
       .loginToGUI()
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_index')
-      .waitForElementPresent('.watermark-logo', waitTime, false)
+      .waitForElementPresent('.prettyprint', waitTime, false)
+      .waitForElementNotPresent('.loading-lines', waitTime, false)
       .assert.containsText('.editor-description', 'is an easy way to find documents on predefined indexes')
       .execute('\
         var json = \'{\
           "index": {\
-            "fields": ["ente_ente_mango"]\
+            "fields": ["gans_gans_mango"]\
           },\
           "name": "rocko-artischocko",\
           "type" : "json"\
@@ -36,14 +38,39 @@ module.exports = {
         editor.getSession().setValue(json);\
       ')
       .execute('$(".save")[0].scrollIntoView();')
-      .click('button.btn-success.save')
-      .waitForAttribute('#global-notifications', 'textContent', function (successAlertText) {
-        return (/Index created/).test(successAlertText);
-      })
-      .waitForElementNotVisible('.global-notification', waitTime, false)
-      .url(baseUrl + '/#/database/' + newDatabaseName + '/_indexlist')
-      .waitForElementPresent('.prettyprint', waitTime, false)
-      .assert.containsText('#dashboard-lower-content', 'ente_ente_mango')
+      .clickWhenVisible('button.btn-success.save')
+
+      .waitForElementVisible('#global-notifications .alert.alert-success', waitTime, false)
+      .waitForElementNotVisible('#global-notifications .alert.alert-success', waitTime, false)
+      .assert.containsText('#dashboard-lower-content', 'gans_gans_mango')
     .end();
+  },
+
+  'Deleting new named indexes with mango': function (client) {
+    var waitTime = 10000,
+        newDatabaseName = client.globals.testDatabaseName,
+        baseUrl = client.globals.test_settings.launch_url;
+
+    client
+      .populateDatabase(newDatabaseName)
+      .loginToGUI()
+      .url(baseUrl + '/#/database/' + newDatabaseName + '/_index')
+      .waitForElementPresent('.control-toggle-alternative-header', waitTime, false)
+      .clickWhenVisible('.control-toggle-alternative-header')
+      .assert.containsText('#dashboard-lower-content', 'ente_ente_mango_ananas')
+      .waitForElementPresent('.control-select-all', waitTime, false)
+      .clickWhenVisible('.control-select-all')
+      .clickWhenVisible('.control-delete')
+      .acceptAlert()
+
+      .waitForElementVisible('#global-notifications .alert.alert-info', waitTime, false)
+      .waitForElementNotVisible('#global-notifications .alert.alert-info', waitTime, false)
+      .getText('body', function (result) {
+        var data = result.value;
+
+        this.verify.ok(data.indexOf('ente_ente_mango_ananas') === -1,
+          'Checking if documents were deleted');
+      })
+      .end();
   }
 };

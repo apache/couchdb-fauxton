@@ -25,8 +25,7 @@ function (Documents, DocumentsRouteObject, docEditor, IndexEditorRouteObject, Ma
     docEditor.NewDocEditorRouteObject,
     DocumentsRouteObject,
     IndexEditorRouteObject,
-    Mango.MangoIndexList,
-    Mango.MangoIndexEditorAndResults
+    Mango.MangoIndexEditorAndQueryEditor
   ];
 
   return Documents;

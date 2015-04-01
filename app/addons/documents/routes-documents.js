@@ -20,7 +20,6 @@ define([
   'addons/documents/changes/components.react',
   'addons/documents/changes/actions',
   'addons/documents/views-doceditor',
-  'addons/documents/views-mango',
 
   'addons/databases/base',
   'addons/documents/resources',
@@ -33,10 +32,9 @@ define([
   'addons/documents/header/header.actions'
 ],
 
-function (app, FauxtonAPI, BaseRoute, Documents, Changes, ChangesActions, DocEditor, Mango,
+function (app, FauxtonAPI, BaseRoute, Documents, Changes, ChangesActions, DocEditor,
   Databases, Resources, Components, PaginationStores, IndexResultsActions,
   IndexResultsComponents, ReactPagination, ReactHeader, ReactActions) {
-
 
     var DocumentsRouteObject = BaseRoute.extend({
       layout: "with_tabs_sidebar",
@@ -138,7 +136,8 @@ function (app, FauxtonAPI, BaseRoute, Documents, Changes, ChangesActions, DocEdi
         IndexResultsActions.newResultsList({
           collection: collection,
           isListDeletable: true,
-          textEmptyIndex: 'No Document Created Yet!'
+          textEmptyIndex: 'No Document Created Yet!',
+          bulkCollection: Documents.BulkDeleteDocCollection
         });
 
         this.database.allDocs.paging.pageSize = PaginationStores.indexPaginationStore.getPerPage();

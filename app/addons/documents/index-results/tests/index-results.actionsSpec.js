@@ -99,6 +99,7 @@ define([
           safeID: function () { return '1';}
         }
       });
+      store._bulkDeleteDocCollection = Documents.BulkDeleteDocCollection;
 
       store._selectedItems = {
         'testId1': true,
