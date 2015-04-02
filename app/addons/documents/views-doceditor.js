@@ -209,8 +209,10 @@ function (app, FauxtonAPI, Components, Documents, Databases, prettify) {
       'click a.js-back': 'onClickGoBack',
       'click .code-region': 'focusOnLastLine'
     },
-
-    disableLoader: true,
+    loaderStyles: {
+      color: '#ffffff',
+      opacity: 0.15
+    },
 
     initialize: function (options) {
       this.database = options.database;

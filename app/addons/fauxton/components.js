@@ -990,7 +990,7 @@ function (app, FauxtonAPI, ace, spin, ZeroClipboard) {
     removeRouteObjectSpinner();
 
     if (!view.disableLoader) {
-      var opts = {
+      var opts = _.extend({
         lines: 16, // The number of lines to draw
         length: 8, // The length of each line
         width: 4, // The line thickness
@@ -999,7 +999,7 @@ function (app, FauxtonAPI, ace, spin, ZeroClipboard) {
         speed: 1, // Rounds per second
         trail: 10, // Afterglow percentage
         shadow: false // Whether to render a shadow
-      };
+      }, view.loaderStyles);
 
       var viewSpinner = new Spinner(opts).spin();
       $('<div class="spinner"></div>')
