@@ -13,7 +13,7 @@ define([
   'app',
   'testUtils',
   'api',
-  'addons/fauxton/stores',
+  'addons/fauxton/navigation/stores',
 ], function (app, testUtils, FauxtonAPI, Stores) {
   var assert = testUtils.assert;
   var navBarStore = Stores.navBarStore;

@@ -13,7 +13,7 @@
 define([
   'app',
   'api',
-  'addons/fauxton/actiontypes'
+  'addons/fauxton/navigation/actiontypes'
 ],
 function (app, FauxtonAPI, ActionTypes) {
 
