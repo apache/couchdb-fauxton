@@ -268,5 +268,10 @@ function (app, FauxtonAPI, Config, Components) {
     }
   });
 
+  Views.BackdoorPortInfo = FauxtonAPI.View.extend({
+    tagName: 'div',
+    template: 'addons/config/templates/infoscreen'
+  });
+
   return Views;
 });

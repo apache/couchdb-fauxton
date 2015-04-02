@@ -26,7 +26,6 @@ define([
 
   describe('CORS Components', function () {
 
-
     describe('CorsController', function () {
       var container, corsEl, saveStub;
 

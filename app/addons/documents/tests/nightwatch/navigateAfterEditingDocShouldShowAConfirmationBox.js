@@ -30,8 +30,8 @@ module.exports = {
       .verify.urlEquals(baseUrl + '/' + newLink)
 
       .keys(['.ace_variable', 'v'])
-      .click('a[href="#_config"]')
+      .click('a[href="#/replication"]')
       .accept_alert()
-      .verify.urlEquals(baseUrl + '/#_config');
+      .verify.urlEquals(baseUrl + '/#/replication');
   }
 };

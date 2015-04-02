@@ -39,7 +39,28 @@ define([
         utils.localStorageSet(key, obj);
         assert.deepEqual(utils.localStorageGet(key), obj);
       });
+    });
 
+    describe('sessionStorage', function () {
+
+      it('returns null when getting a non-existent key', function () {
+        assert.isNull(utils.sessionStorageGet('qwerty'));
+      });
+
+      it('Should get value after setting it', function () {
+        utils.sessionStorageSet('key1', 1);
+        assert.equal(utils.sessionStorageGet('key1'), 1);
+      });
+
+      it('Set and retrieve complex object', function () {
+        var key = 'key2',
+          obj = {
+            one: 1,
+            two: ['1', 'string', 3]
+          };
+        utils.sessionStorageSet(key, obj);
+        assert.deepEqual(utils.sessionStorageGet(key), obj);
+      });
     });
   });
 
