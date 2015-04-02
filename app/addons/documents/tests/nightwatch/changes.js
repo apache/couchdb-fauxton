@@ -11,6 +11,7 @@
 // the License.
 
 module.exports = {
+
   'Does not display the Select-all-button': function (client) {
     var waitTime = client.globals.maxWaitTime,
         newDatabaseName = client.globals.testDatabaseName,
@@ -42,5 +43,35 @@ module.exports = {
       .click('.js-doc-link')
       .waitForElementPresent('#doc-editor-actions-panel', waitTime, false)
       .end();
+  },
+
+  'Check auto-update feature': function (client) {
+    var waitTime = client.globals.maxWaitTime,
+        newDatabaseName = client.globals.testDatabaseName,
+        newDocName = 'totally-new-doc',
+        baseUrl = client.globals.test_settings.launch_url;
+
+    client
+      .loginToGUI()
+
+      // create a single document
+      .createDocument('doc_1', newDatabaseName)
+
+      // go to the changes page and enable the auto-update feature
+      .url(baseUrl + '/#/database/' + newDatabaseName + '/_changes')
+
+      .clickWhenVisible('#db-views-tabs-nav a', waitTime, false)
+      .waitForElementPresent('#changes-toggle-polling', waitTime, false)
+      .clickWhenVisible('#changes-toggle-polling', waitTime, false)
+
+      // now add a new item behind the scenes with nano. Before it's added, confirm it's not already in the page
+      .waitForElementNotPresent('.change-box[data-id="' + newDocName + '"]', waitTime, false)
+      .createDocument(newDocName, newDatabaseName)
+
+      .waitForElementPresent('.change-box[data-id="' + newDocName + '"]', waitTime, false)
+
+      // we win!
+      .end();
   }
+
 };

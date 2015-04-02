@@ -23,8 +23,6 @@ define([
 
   describe('ChangesStore', function () {
 
-    var collection = new Backbone.Collection();
-
     afterEach(function () {
       Stores.changesStore.reset();
     });
@@ -67,10 +65,9 @@ define([
       assert.ok(Stores.changesStore.hasFilter(filter) === true);
     });
 
-
     it('getDatabaseName() returns database name', function () {
       var dbName = 'hoopoes';
-      Stores.changesStore.setChanges({ databaseName: dbName, changes: collection });
+      Stores.changesStore.initChanges({ databaseName: dbName });
       assert.equal(Stores.changesStore.getDatabaseName(), dbName);
 
       Stores.changesStore.reset();
@@ -79,23 +76,32 @@ define([
 
     it("getChanges() should return a subset if there are a lot of changes", function () {
 
-      // to keep the test speedy, override the default max value
+      // to keep the test speedy, we override the default max value
       var maxChanges = 10;
-      Stores.changesStore.setMaxChanges(maxChanges);
-
       var changes = [];
       _.times(maxChanges + 10, function (i) {
-        changes.push(new Backbone.Model({ id: 'doc_' + i, seq: 1, changes: { } }));
+        changes.push({ id: 'doc_' + i, seq: 1, changes: {}});
       });
-      var changesCollection = new Backbone.Collection(changes);
-      Stores.changesStore.setChanges({
-        changes: changesCollection,
-        databaseName: "test"
-      });
+      Stores.changesStore.initChanges({ databaseName: "test" });
+      Stores.changesStore.setMaxChanges(maxChanges);
+
+      var seqNum = 123;
+      Stores.changesStore.updateChanges(seqNum, changes);
 
       var results = Stores.changesStore.getChanges();
       assert.equal(maxChanges, results.length);
     });
+
+    it("tracks last sequence number", function () {
+      assert.equal(null, Stores.changesStore.getLastSeqNum());
+
+      var seqNum = 123;
+      Stores.changesStore.updateChanges(seqNum, []);
+
+      // confirm it's been stored
+      assert.equal(seqNum, Stores.changesStore.getLastSeqNum());
+    });
+
   });
 
 });

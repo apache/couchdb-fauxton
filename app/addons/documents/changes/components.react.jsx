@@ -54,7 +54,7 @@ define([
     render: function () {
       var tabContent = '';
       if (this.state.showTabContent) {
-        tabContent = <ChangesFilter key="changesFilterSection" />;
+        tabContent = <ChangesTabContent key="changesFilterSection" />;
       }
 
       return (
@@ -90,10 +90,11 @@ define([
   });
 
 
-  var ChangesFilter = React.createClass({
+  var ChangesTabContent = React.createClass({
     getStoreState: function () {
       return {
-        filters: changesStore.getFilters()
+        filters: changesStore.getFilters(),
+        pollingEnabled: changesStore.pollingEnabled()
       };
     },
 
@@ -134,14 +135,29 @@ define([
       return changesStore.hasFilter(filter);
     },
 
+    togglePolling: function () {
+      Actions.togglePolling();
+    },
+
     render: function () {
       return (
         <div className="tab-content">
           <div className="tab-pane active" ref="filterTab">
             <div className="changes-header js-filter">
+              <div className="changes-polling">
+                <input
+                  type="checkbox"
+                  id="changes-toggle-polling"
+                  checked={this.state.pollingEnabled}
+                  onChange={this.togglePolling}
+                />
+                <label htmlFor="changes-toggle-polling">Auto-update changes list</label>
+              </div>
               <AddFilterForm tooltip={this.props.tooltip} filter={this.state.filter} addFilter={this.addFilter}
                 hasFilter={this.hasFilter} />
               <ul className="filter-list">{this.getFilters()}</ul>
+            </div>
+            <div className="changes-auto-update">
             </div>
           </div>
         </div>
@@ -308,7 +324,8 @@ define([
 
     getRows: function () {
       return _.map(this.state.changes, function (change) {
-        return <ChangeRow change={change} key={change.id} databaseName={this.state.databaseName} />;
+        var key = change.id + '-' + change.seq;
+        return <ChangeRow change={change} key={key} databaseName={this.state.databaseName} />;
       }, this);
     },
 
@@ -358,10 +375,11 @@ define([
     },
 
     render: function () {
-      var jsonBtnClasses = "btn btn-small " + (this.state.codeVisible ? 'btn-secondary' : 'btn-primary');
+      var jsonBtnClasses = 'btn btn-small' + (this.state.codeVisible ? ' btn-secondary' : ' btn-primary');
+      var wrapperClass = 'change-wrapper' + (this.props.change.isNew ? ' new-change-row' : '');
 
       return (
-        <div className="change-wrapper">
+        <div className={wrapperClass}>
           <div className="change-box" data-id={this.props.change.id}>
             <div className="row-fluid">
               <div className="span2">seq</div>
@@ -432,10 +450,9 @@ define([
       React.unmountComponentAtNode(el);
     },
 
-    // exposed for testing purposes only
     ChangesHeaderController: ChangesHeaderController,
     ChangesHeaderTab: ChangesHeaderTab,
-    ChangesFilter: ChangesFilter,
+    ChangesTabContent: ChangesTabContent,
     ChangesController: ChangesController,
     ChangeRow: ChangeRow
   };

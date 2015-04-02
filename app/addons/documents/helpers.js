@@ -33,5 +33,11 @@ define([
     return previousPage;
   };
 
+
+  // sequence info is an array in couchdb2 with two indexes. On couch 1.x, it's just a string / number
+  Helpers.getSeqNum = function (val) {
+    return _.isArray(val) ? val[1] : val;
+  };
+
   return Helpers;
 });

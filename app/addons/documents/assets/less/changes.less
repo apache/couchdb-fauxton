@@ -70,7 +70,7 @@
 
 .keyframes(slideDownChangesFilter, {
   opacity: 0;
-  height: 0px;
+  height: 0;
 },
 {
   opacity: 1;
@@ -83,7 +83,7 @@
 },
 {
   opacity: 0;
-  height: 0px;
+  height: 0;
 });
 
 .toggle-changes-filter-enter {
@@ -106,3 +106,16 @@
   margin-left: 20px;
 }
 
+.changes-polling {
+  float: right;
+  input {
+    margin: 0 8px 1px;
+  }
+  label {
+    display: inline-block;
+  }
+}
+
+.new-change-row {
+  -webkit-animation: slideDown 1.5s both, highlight-element 2.0s 1;
+}

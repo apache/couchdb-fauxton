@@ -12,8 +12,9 @@
 
 define([
   'api',
-  'addons/documents/changes/actiontypes'
-], function (FauxtonAPI, ActionTypes) {
+  'addons/documents/changes/actiontypes',
+  'addons/documents/helpers'
+], function (FauxtonAPI, ActionTypes, Helpers) {
 
 
   var ChangesStore = FauxtonAPI.Store.extend({
@@ -28,20 +29,41 @@ define([
       this._databaseName = '';
       this._maxChangesListed = 100;
       this._showingSubset = false;
+      this._pollingEnabled = false;
+      this._lastSequenceNum = null;
     },
 
-    setChanges: function (options) {
-      this._filters = options.filters;
+    initChanges: function (options) {
+      this.reset();
       this._databaseName = options.databaseName;
-      this._changes = _.map(options.changes.models, function (change) {
+    },
+
+    updateChanges: function (seqNum, changes) {
+
+      // make a note of the most recent sequence number. This is used for a point of reference for polling for new changes
+      this._lastSequenceNum = seqNum;
+
+      // mark any additional changes that come after first page load as "new" so we can add a nice highlight effect
+      // when the new row is rendered
+      var firstBatch = this._changes.length === 0;
+      _.each(this._changes, function (change) {
+        change.isNew = false;
+      });
+
+      var newChanges = _.map(changes, function (change) {
+        var seq = Helpers.getSeqNum(change.seq);
         return {
-          id: change.get('id'),
-          seq: change.get('seq'),
-          deleted: change.get('deleted') ? change.get('deleted') : false,
-          changes: change.get('changes'),
-          doc: change.get('doc') // only populated with ?include_docs=true
+          id: change.id,
+          seq: seq,
+          deleted: _.has(change, 'deleted') ? change.deleted : false,
+          changes: change.changes,
+          doc: change.doc, // only populated with ?include_docs=true
+          isNew: !firstBatch
         };
       });
+
+      // add the new changes to the start of the list
+      this._changes = newChanges.concat(this._changes);
     },
 
     getChanges: function () {
@@ -102,10 +124,29 @@ define([
       this._maxChangesListed = num;
     },
 
+    togglePolling: function () {
+      this._pollingEnabled = !this._pollingEnabled;
+
+      // if polling was just enabled, reset the last sequence num to 'now' so only future changes will appear
+      this._lastSequenceNum = 'now';
+    },
+
+    pollingEnabled: function () {
+      return this._pollingEnabled;
+    },
+
+    getLastSeqNum: function () {
+      return this._lastSequenceNum;
+    },
+
     dispatch: function (action) {
       switch (action.type) {
-        case ActionTypes.SET_CHANGES:
-          this.setChanges(action.options);
+        case ActionTypes.INIT_CHANGES:
+          this.initChanges(action.options);
+          this.triggerChange();
+        break;
+        case ActionTypes.UPDATE_CHANGES:
+          this.updateChanges(action.seqNum, action.changes);
           this.triggerChange();
         break;
         case ActionTypes.TOGGLE_CHANGES_TAB_VISIBILITY:
@@ -118,6 +159,10 @@ define([
         break;
         case ActionTypes.REMOVE_CHANGES_FILTER_ITEM:
           this.removeFilter(action.filter);
+          this.triggerChange();
+        break;
+        case ActionTypes.TOGGLE_CHANGES_POLLING:
+          this.togglePolling();
           this.triggerChange();
         break;
       }

@@ -160,17 +160,11 @@ function (app, FauxtonAPI, BaseRoute, Documents, Changes, ChangesActions, DocEdi
       },
 
       changes: function () {
-        var docParams = app.getParams();
-        this.database.buildChanges(docParams);
-
-        ChangesActions.fetchChanges({
-          changes: this.database.changes,
-          filters: [],
+        ChangesActions.initChanges({
           databaseName: this.database.id
         });
-
-        this.setComponent("#dashboard-lower-content", Changes.ChangesController);
         this.setComponent('#dashboard-upper-content', Changes.ChangesHeaderController);
+        this.setComponent("#dashboard-lower-content", Changes.ChangesController);
 
         this.footer && this.footer.remove();
         this.toolsView && this.toolsView.remove();

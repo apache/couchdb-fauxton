@@ -78,12 +78,12 @@ define([
   });
 
 
-  describe('ChangesFilter', function () {
+  describe('ChangesTabContent', function () {
     var container, changesFilterEl;
 
     beforeEach(function () {
       container = document.createElement('div');
-      changesFilterEl = TestUtils.renderIntoDocument(<Changes.ChangesFilter />, container);
+      changesFilterEl = TestUtils.renderIntoDocument(<Changes.ChangesTabContent />, container);
     });
 
     afterEach(function () {
@@ -195,24 +195,25 @@ define([
   describe('ChangesController', function () {
     var containerEl, headerEl, $headerEl, changesEl, $changesEl;
 
-    var changesCollection = new Backbone.Collection([
+    var results = [
       { id: 'doc_1', seq: 4, deleted: false, changes: { code: 'here' } },
       { id: 'doc_2', seq: 1, deleted: false, changes: { code: 'here' } },
       { id: 'doc_3', seq: 6, deleted: true, changes: { code: 'here' } },
       { id: 'doc_4', seq: 7, deleted: false, changes: { code: 'here' } },
       { id: 'doc_5', seq: 1, deleted: true, changes: { code: 'here' } }
-    ]);
+    ];
+    var changesResponse = JSON.stringify({
+      last_seq: 123,
+      'results': results
+    });
 
     beforeEach(function () {
-      Actions.setChanges({
-        changes: changesCollection,
-        filters: [],
-        databaseName: 'testDatabase'
-      });
+      Actions.initChanges({ databaseName: 'testDatabase' });
       headerEl  = TestUtils.renderIntoDocument(<Changes.ChangesHeaderController />, containerEl);
       $headerEl = $(headerEl.getDOMNode());
       changesEl = TestUtils.renderIntoDocument(<Changes.ChangesController />, containerEl);
       $changesEl = $(changesEl.getDOMNode());
+      Actions.updateChanges(changesResponse);
     });
 
     afterEach(function () {
@@ -222,7 +223,7 @@ define([
 
 
     it('should list the right number of changes', function () {
-      assert.equal(changesCollection.length, $changesEl.find('.change-box').length);
+      assert.equal(results.length, $changesEl.find('.change-box').length);
     });
 
 
@@ -293,20 +294,22 @@ define([
 
     beforeEach(function () {
 
+      var changes = [];
+      _.times(maxChanges + 10, function (i) {
+        changes.push({ id: 'doc_' + i, seq: 1, changes: { code: 'here' } });
+      });
+
+      var response = JSON.stringify({
+        last_seq: 1,
+        results: changes
+      });
+
+      Actions.initChanges({ databaseName: 'test' });
+
       // to keep the test speedy, override the default value (1000)
       Stores.changesStore.setMaxChanges(maxChanges);
 
-      var changes = [];
-      _.times(maxChanges + 10, function (i) {
-        changes.push(new Backbone.Model({ id: 'doc_' + i, seq: 1, changes: { code: 'here' } }));
-      });
-      var changesCollection = new Backbone.Collection(changes);
-
-      Actions.setChanges({
-        changes: changesCollection,
-        filters: [],
-        databaseName: 'test'
-      });
+      Actions.updateChanges(response);
       changesEl = TestUtils.renderIntoDocument(<Changes.ChangesController />, containerEl);
     });
 

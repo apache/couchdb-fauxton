@@ -48,7 +48,7 @@
 /* a generic slide-up/down effect that looks smooth for items with unknown heights */
 .keyframes(slideDown, {
   opacity: 0;
-  max-height: 0px;
+  max-height: 0;
 },
 {
   opacity: 1;
@@ -60,6 +60,20 @@
   opacity: 1;
 },
 {
-  max-height: 0px;
+  max-height: 0;
   opacity: 0;
 });
+
+.highlight {
+  -webkit-animation: highlight-element 2.5s 1;
+  -moz-animation: highlight-element 2.5s 1;
+}
+
+@-webkit-keyframes highlight-element {
+  0% { background-color: @highlightEffectColor; }
+  100% { background-color: #f1f1f1; }
+}
+@-moz-keyframes highlight-element {
+  0% { background-color: @highlightEffectColor; }
+  100% { background-color: #f1f1f1; }
+}
