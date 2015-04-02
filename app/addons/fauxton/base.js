@@ -14,12 +14,12 @@ define([
   "app",
   "api",
   "addons/fauxton/components",
-  "addons/fauxton/components.react",
-  "addons/fauxton/actions",
+  "addons/fauxton/navigation/components.react",
+  "addons/fauxton/navigation/actions",
   "plugins/zeroclipboard/ZeroClipboard"
 ],
 
-function (app, FauxtonAPI, Components, ReactComponents, Actions, ZeroClipboard) {
+function (app, FauxtonAPI, Components, NavbarReactComponents, NavigationActions, ZeroClipboard) {
 
   var Fauxton = FauxtonAPI.addon();
   FauxtonAPI.addNotification = function (options) {
@@ -57,7 +57,7 @@ function (app, FauxtonAPI, Components, ReactComponents, Actions, ZeroClipboard) 
     FauxtonAPI.masterLayout.apiBar = app.apiBar;
 
     FauxtonAPI.RouteObject.on('beforeFullRender', function (routeObject) {
-      Actions.setNavbarActiveLink(_.result(routeObject, 'selectedHeader'));
+      NavigationActions.setNavbarActiveLink(_.result(routeObject, 'selectedHeader'));
     });
 
     FauxtonAPI.RouteObject.on('beforeEstablish', function (routeObject) {
@@ -86,13 +86,13 @@ function (app, FauxtonAPI, Components, ReactComponents, Actions, ZeroClipboard) 
 
     var primaryNavBarEl = $('#primary-navbar')[0];
     if (primaryNavBarEl) {
-      ReactComponents.renderNavBar(primaryNavBarEl);
+      NavbarReactComponents.renderNavBar(primaryNavBarEl);
     }
 
     var versionInfo = new Fauxton.VersionInfo();
 
     versionInfo.fetch().then(function () {
-      Actions.setNavbarVersionInfo(versionInfo.get("version"));
+      NavigationActions.setNavbarVersionInfo(versionInfo.get("version"));
     });
   };
 
