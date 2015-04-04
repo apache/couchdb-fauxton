@@ -360,21 +360,5 @@ function (app, FauxtonAPI, CouchdbSession) {
     }
   });
 
-  Auth.NoAccessView = FauxtonAPI.View.extend({
-    template: "addons/auth/templates/noAccess",
-    className: "row-fluid",
-
-    initialize: function (options) {
-      this.urlBack = options.urlBack || "";
-    },
-
-    serialize: function () {
-      return {
-        urlBack: this.urlBack,
-        user: FauxtonAPI.session.user()
-      };
-    }
-  });
-
   return Auth;
 });
