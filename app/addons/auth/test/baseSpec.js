@@ -53,6 +53,7 @@ define([
       testUtils.restore(FauxtonAPI.isRunningOnBackdoorPort);
       testUtils.restore(FauxtonAPI.session.isLoggedIn);
       testUtils.restore(FauxtonAPI.session.user);
+      testUtils.restore(FauxtonAPI.removeHeaderLink);
       FauxtonAPI.session.off('change');
     });
 
@@ -70,6 +71,22 @@ define([
       var args = spy.getCall(0).args[0];
 
       assert.ok(args.title.match(/Admin Party/));
+    });
+
+    it('for admin party on cluster do not show admin-party-fix-link', function () {
+      var spy = sinon.spy(FauxtonAPI, 'removeHeaderLink');
+      var stub = sinon.stub(FauxtonAPI.session, 'isAdminParty').returns(true);
+      var deferred = FauxtonAPI.Deferred();
+      sinon.stub(FauxtonAPI, 'isRunningOnBackdoorPort').returns(deferred);
+      Base.initialize();
+      deferred.resolve({runsOnBackportPort: false});
+
+      FauxtonAPI.session.trigger('change');
+
+      assert.ok(spy.calledOnce);
+      var args = spy.getCall(0).args[0];
+
+      assert.equal(args.id, 'auth');
     });
 
     it('for login changes title to login', function () {

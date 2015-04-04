@@ -19,10 +19,9 @@ module.exports = {
       .loginToGUI()
       .url(baseUrl)
       .waitForElementPresent('#add-new-database', waitTime, false)
-      .click('a[href="#changePassword"]')
-      .pause(1000)
-      .waitForElementVisible('.auth-page', waitTime, false)
-      .assert.cssClassPresent('li[data-nav-name="' + client.globals.test_settings.fauxton_username + '"]', "active")
+      .click('a[href="#/replication"]')
+      .waitForElementVisible('#replication', waitTime, false)
+      .assert.cssClassPresent('li[data-nav-name="Replication"]', "active")
     .end();
   }
 };

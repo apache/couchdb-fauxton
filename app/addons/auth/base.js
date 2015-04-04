@@ -35,35 +35,45 @@ function (app, FauxtonAPI, Auth) {
     });
 
     Auth.session.on('change', function () {
+
       var session = Auth.session;
       var link = {};
 
       if (session.isAdminParty()) {
+        if (!isRunningOnBackdoorPort) {
+          FauxtonAPI.removeHeaderLink({id: 'auth', bottomNav: true});
+          return;
+        }
 
         link = {
           id: "auth",
           title: "Admin Party!",
-          href: '#createAdmin',
+          href: "#createAdmin",
           icon: "fonticon-user",
           bottomNav: true,
         };
       } else if (session.isLoggedIn()) {
-        link = {
-          id: "auth",
-          title: session.user().name,
-          href: '#changePassword',
-          icon: "fonticon-user",
-          bottomNav: true,
-        };
-
         FauxtonAPI.addHeaderLink({
           id: 'logout',
           footerNav: true,
-          href: "#logout",
-          title: "Logout",
-          icon: "",
+          href: '#logout',
+          title: 'Logout',
+          icon: '',
           className: 'logout'
         });
+
+        if (!isRunningOnBackdoorPort) {
+          FauxtonAPI.removeHeaderLink({id: 'auth', bottomNav: true});
+          return;
+        }
+
+        link = {
+          id: "auth",
+          title: session.user().name,
+          href: "#changePassword",
+          icon: "fonticon-user",
+          bottomNav: true,
+        };
       } else {
         link = {
           id: "auth",

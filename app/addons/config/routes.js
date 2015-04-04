@@ -95,7 +95,6 @@ function (app, FauxtonAPI, Config, Views, CORS) {
       }.bind(this));
 
       return [deferred];
-
     },
 
     fetchConfig: function (deferred) {
@@ -112,6 +111,23 @@ function (app, FauxtonAPI, Config, Views, CORS) {
 
     routes: {
       'createAdmin': 'createAdmin'
+    },
+
+    establish: function () {
+      var deferred = FauxtonAPI.Deferred(),
+          checked = FauxtonAPI.isRunningOnBackdoorPort();
+
+      FauxtonAPI.when(checked).then(function (res) {
+        if (!res.runsOnBackportPort) {
+          FauxtonAPI.navigate('_config/backdoorportinfo');
+          deferred.resolve();
+          return;
+        }
+
+        deferred.resolve();
+      }.bind(this));
+
+      return [deferred];
     },
 
     createAdmin: function () {
@@ -132,6 +148,23 @@ function (app, FauxtonAPI, Config, Views, CORS) {
         roles: ['_admin'],
         route: 'addAdmin'
       }
+    },
+
+    establish: function () {
+      var deferred = FauxtonAPI.Deferred(),
+          checked = FauxtonAPI.isRunningOnBackdoorPort();
+
+      FauxtonAPI.when(checked).then(function (res) {
+        if (!res.runsOnBackportPort) {
+          FauxtonAPI.navigate('_config/backdoorportinfo');
+          deferred.resolve();
+          return;
+        }
+
+        deferred.resolve();
+      }.bind(this));
+
+      return [deferred];
     },
 
     selectedHeader: function () {
