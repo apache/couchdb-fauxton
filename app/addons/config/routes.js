@@ -107,7 +107,55 @@ function (app, FauxtonAPI, Config, Views, CORS) {
     }
   });
 
-  Config.RouteObjects = [ConfigRouteObject];
+  var CreateAdminRouteObject = FauxtonAPI.RouteObject.extend({
+    layout: 'one_pane',
+
+    routes: {
+      'createAdmin': 'createAdmin'
+    },
+
+    createAdmin: function () {
+      this.crumbs = [{name: 'Create Admin', link: '#'}];
+      this.setView('#dashboard-content', new Views.CreateAdminView({model: new Config.UserManagment()}));
+    }
+  });
+
+  var UserRouteObject = FauxtonAPI.RouteObject.extend({
+    layout: 'with_sidebar',
+
+    routes: {
+      'changePassword': {
+        route: 'changePassword',
+        roles: ['fx_loggedIn']
+      },
+      'addAdmin': {
+        roles: ['_admin'],
+        route: 'addAdmin'
+      }
+    },
+
+    selectedHeader: function () {
+      return FauxtonAPI.session.user().name;
+    },
+
+    initialize: function () {
+      this.navDrop = this.setView('#sidebar-content', new Views.NavDropDown({model: new Config.UserManagment()}));
+    },
+
+    changePassword: function () {
+      this.navDrop.setTab('change-password');
+      this.setView('#dashboard-content', new Views.ChangePassword({model: new Config.UserManagment()}));
+    },
+
+    addAdmin: function () {
+      this.navDrop.setTab('add-admin');
+      this.setView('#dashboard-content', new Views.CreateAdminView({loginAfter: false, model: new Config.UserManagment()}));
+    },
+
+    crumbs: [{name: 'User Management', link: '#'}]
+  });
+
+  Config.RouteObjects = [ConfigRouteObject, CreateAdminRouteObject, UserRouteObject];
 
   return Config;
 });

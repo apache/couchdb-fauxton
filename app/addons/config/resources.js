@@ -12,11 +12,12 @@
 
 define([
   "app",
-  "api"
+  'api',
+  'addons/auth/resources'
 
 ],
 
-function (app, FauxtonAPI) {
+function (app, FauxtonAPI, Auth) {
 
   var Config = FauxtonAPI.addon();
 
@@ -92,7 +93,92 @@ function (app, FauxtonAPI) {
     }
   });
 
+  // -- user config
 
+  var errorHandler = function (xhr, type, msg) {
+    msg = xhr;
+    if (arguments.length === 3) {
+      msg = xhr.responseJSON.reason;
+    }
 
+    FauxtonAPI.addNotification({
+      msg: msg,
+      type: 'error'
+    });
+  };
+
+  var Admin = Backbone.Model.extend({
+    url: function () {
+      return app.host + '/_config/admins/' + this.get("name");
+    },
+    isNew: function () { return false; },
+
+    sync: function (method, model, options) {
+      var params = {
+        url: model.url(),
+        contentType: 'application/json',
+        dataType: 'json',
+        data: JSON.stringify(model.get('value'))
+      };
+
+      if (method === 'delete') {
+        params.type = 'DELETE';
+      } else {
+        params.type = 'PUT';
+      }
+
+      return $.ajax(params);
+    }
+  });
+
+  Config.UserManagment = Auth.Session.extend({
+
+    validatePasswords: function (password, passwordConfirm, msg) {
+      if (_.isEmpty(password) || _.isEmpty(passwordConfirm) || (password !== passwordConfirm)) {
+        var deferred = FauxtonAPI.Deferred();
+
+        deferred.rejectWith(this, [msg]);
+        return deferred;
+      }
+    },
+
+    createAdmin: function (username, password, login) {
+      var errorPromise = this.validateUser(username, password, this.messages.missingCredentials);
+
+      if (errorPromise) { return errorPromise; }
+
+      var admin = new Admin({
+        name: username,
+        value: password
+      });
+
+      return admin.save().then(function () {
+        if (login) {
+          return this.login(username, password);
+        } else {
+          return this.fetchUser({forceFetch: true});
+        }
+      }.bind(this));
+    },
+
+    changePassword: function (password, passwordConfirm) {
+      var errorPromise = this.validatePasswords(password, passwordConfirm, this.messages.passwordsNotMatch);
+
+      if (errorPromise) { return errorPromise; }
+
+      var info = app.session.get('info'),
+          userCtx = FauxtonAPI.session.get('userCtx');
+
+      var admin = new Admin({
+        name: userCtx.name,
+        value: password
+      });
+
+      return admin.save().then(function () {
+        return this.login(userCtx.name, password);
+      }.bind(this));
+    }
+
+  });
   return Config;
 });

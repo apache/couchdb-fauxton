@@ -20,42 +20,6 @@ function (app, FauxtonAPI, CouchdbSession) {
 
   var Auth = new FauxtonAPI.addon();
 
-  var errorHandler = function (xhr, type, msg) {
-    msg = xhr;
-    if (arguments.length === 3) {
-      msg = xhr.responseJSON.reason;
-    }
-
-    FauxtonAPI.addNotification({
-      msg: msg,
-      type: 'error'
-    });
-  };
-
-  var Admin = Backbone.Model.extend({
-    url: function () {
-      return app.host + '/_config/admins/' + this.get("name");
-    },
-    isNew: function () { return false; },
-
-    sync: function (method, model, options) {
-      var params = {
-        url: model.url(),
-        contentType: 'application/json',
-        dataType: 'json',
-        data: JSON.stringify(model.get('value'))
-      };
-
-      if (method === 'delete') {
-        params.type = 'DELETE';
-      } else {
-        params.type = 'PUT';
-      }
-
-      return $.ajax(params);
-    }
-  });
-
   Auth.Session = CouchdbSession.Session.extend({
     url: app.host + '/_session',
 
@@ -133,35 +97,6 @@ function (app, FauxtonAPI, CouchdbSession) {
       }
     },
 
-    validatePasswords: function (password, password_confirm, msg) {
-      if (_.isEmpty(password) || _.isEmpty(password_confirm) || (password !== password_confirm)) {
-        var deferred = FauxtonAPI.Deferred();
-
-        deferred.rejectWith(this, [msg]);
-        return deferred;
-      }
-    },
-
-    createAdmin: function (username, password, login) {
-      var that = this,
-          error_promise =  this.validateUser(username, password, this.messages.missingCredentials);
-
-      if (error_promise) { return error_promise; }
-
-      var admin = new Admin({
-        name: username,
-        value: password
-      });
-
-      return admin.save().then(function () {
-        if (login) {
-          return that.login(username, password);
-        } else {
-          return that.fetchUser({forceFetch: true});
-        }
-      });
-    },
-
     login: function (username, password) {
       var error_promise =  this.validateUser(username, password, this.messages.missingCredentials);
 
@@ -192,77 +127,21 @@ function (app, FauxtonAPI, CouchdbSession) {
       }).then(function () {
         return that.fetchUser({forceFetch: true });
       });
-    },
-
-    changePassword: function (password, password_confirm) {
-      var error_promise =  this.validatePasswords(password, password_confirm, this.messages.passwordsNotMatch);
-
-      if (error_promise) { return error_promise; }
-
-      var  that = this,
-           info = this.get('info'),
-           userCtx = this.get('userCtx');
-
-      var admin = new Admin({
-        name: userCtx.name,
-        value: password
-      });
-
-      return admin.save().then(function () {
-        return that.login(userCtx.name, password);
-      });
     }
   });
 
-  Auth.CreateAdminView = FauxtonAPI.View.extend({
-    template: 'addons/auth/templates/create_admin',
-    className: "auth-page",
 
-    initialize: function (options) {
-      options = options || {};
-      this.login_after = options.login_after === false ? false : true;
-    },
-
-    events: {
-      "submit #create-admin-form": "createAdmin"
-    },
-
-    createAdmin: function (event) {
-      event.preventDefault();
-
-      var that = this,
-          username = this.$('#username').val(),
-          password = this.$('#password').val();
-
-      var promise = this.model.createAdmin(username, password, this.login_after);
-
-      promise.then(function () {
-        FauxtonAPI.addNotification({
-          msg: FauxtonAPI.session.messages.adminCreated,
-        });
-
-        if (that.login_after) {
-          FauxtonAPI.navigate('/');
-        } else {
-          that.$('#username').val('');
-          that.$('#password').val('');
-        }
-      });
-
-      promise.fail(function (xhr, type, msg) {
-        msg = xhr;
-        if (arguments.length === 3) {
-          msg = xhr.responseJSON.reason;
-        }
-        msg = FauxtonAPI.session.messages.adminCreationFailedPrefix + ' ' + msg;
-        errorHandler(msg);
-      });
-    },
-
-    afterRender: function () {
-      $("#username").focus();
+  var errorHandler = function (xhr, type, msg) {
+    msg = xhr;
+    if (arguments.length === 3) {
+      msg = xhr.responseJSON.reason;
     }
-  });
+
+    FauxtonAPI.addNotification({
+      msg: msg,
+      type: 'error'
+    });
+  };
 
   Auth.LoginView = FauxtonAPI.View.extend({
     template: 'addons/auth/templates/login',
@@ -300,65 +179,5 @@ function (app, FauxtonAPI, CouchdbSession) {
       $("#username").focus();
     }
   });
-
-  Auth.ChangePassword = FauxtonAPI.View.extend({
-    template: 'addons/auth/templates/change_password',
-    className: "auth-page",
-
-    events: {
-      "submit #change-password": "changePassword"
-    },
-
-    changePassword: function (event) {
-      event.preventDefault();
-
-      var that = this,
-          new_password = this.$('#password').val(),
-          password_confirm = this.$('#password-confirm').val();
-
-      var promise = this.model.changePassword(new_password, password_confirm);
-
-      promise.done(function () {
-        FauxtonAPI.addNotification({msg: FauxtonAPI.session.messages.changePassword});
-        that.$('#password').val('');
-        that.$('#password-confirm').val('');
-      });
-
-      promise.fail(errorHandler);
-    },
-
-    afterRender: function () {
-      $("#password").focus();
-    }
-  });
-
-  Auth.NavDropDown = FauxtonAPI.View.extend({
-    template: 'addons/auth/templates/nav_dropdown',
-
-    beforeRender: function () {
-      this.listenTo(this.model, 'change', this.render);
-    },
-
-    setTab: function (selectedTab) {
-      this.selectedTab = selectedTab;
-      this.$('.active').removeClass('active');
-      var $tab = this.$('a[data-select="' + selectedTab + '"]');
-      $tab.parent().addClass('active');
-    },
-
-    afterRender: function () {
-      if (this.selectedTab) {
-        this.setTab(this.selectedTab);
-      }
-    },
-
-    serialize: function () {
-      return {
-        admin_party: this.model.isAdminParty(),
-        user: this.model.user()
-      };
-    }
-  });
-
   return Auth;
 });

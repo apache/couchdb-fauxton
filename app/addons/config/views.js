@@ -273,5 +273,123 @@ function (app, FauxtonAPI, Config, Components) {
     template: 'addons/config/templates/infoscreen'
   });
 
+  var errorHandler = function (xhr, type, msg) {
+    msg = xhr;
+    if (arguments.length === 3) {
+      msg = xhr.responseJSON.reason;
+    }
+
+    FauxtonAPI.addNotification({
+      msg: msg,
+      type: 'error'
+    });
+  };
+
+  Views.CreateAdminView = FauxtonAPI.View.extend({
+    template: 'addons/config/templates/create_admin',
+    className: 'auth-page',
+
+    initialize: function (options) {
+      options = options || {};
+      this.loginAfter = options.loginAfter === false ? false : true;
+    },
+
+    events: {
+      'submit #create-admin-form': 'createAdmin'
+    },
+
+    createAdmin: function (event) {
+      event.preventDefault();
+
+      var username = this.$('#username').val(),
+          password = this.$('#password').val();
+
+      var promise = this.model.createAdmin(username, password, this.loginAfter);
+
+      promise.then(function () {
+        FauxtonAPI.addNotification({
+          msg: FauxtonAPI.session.messages.adminCreated,
+        });
+
+        if (this.login_after) {
+          FauxtonAPI.navigate('/');
+        } else {
+          this.$('#username').val('');
+          this.$('#password').val('');
+        }
+      }.bind(this));
+
+      promise.fail(function (xhr, type, msg) {
+        msg = xhr;
+        if (arguments.length === 3) {
+          msg = xhr.responseJSON.reason;
+        }
+        msg = FauxtonAPI.session.messages.adminCreationFailedPrefix + ' ' + msg;
+        errorHandler(msg);
+      });
+    },
+
+    afterRender: function () {
+      $('#username').focus();
+    }
+  });
+
+  Views.ChangePassword = FauxtonAPI.View.extend({
+    template: 'addons/config/templates/change_password',
+    className: 'auth-page',
+
+    events: {
+      'submit #change-password': 'changePassword'
+    },
+
+    changePassword: function (event) {
+      event.preventDefault();
+
+      var newPassword = this.$('#password').val(),
+          passwordConfirm = this.$('#password-confirm').val();
+
+      var promise = this.model.changePassword(newPassword, passwordConfirm);
+
+      promise.done(function () {
+        FauxtonAPI.addNotification({msg: FauxtonAPI.session.messages.changePassword});
+        this.$('#password').val('');
+        this.$('#password-confirm').val('');
+      }.bind(this));
+
+      promise.fail(errorHandler);
+    },
+
+    afterRender: function () {
+      $('#password').focus();
+    }
+  });
+
+  Views.NavDropDown = FauxtonAPI.View.extend({
+    template: 'addons/config/templates/nav_dropdown',
+
+    beforeRender: function () {
+      this.listenTo(FauxtonAPI.session, 'change', this.render);
+    },
+
+    setTab: function (selectedTab) {
+      this.selectedTab = selectedTab;
+      this.$('.active').removeClass('active');
+      var $tab = this.$('a[data-select="' + selectedTab + '"]');
+      $tab.parent().addClass('active');
+    },
+
+    afterRender: function () {
+      if (this.selectedTab) {
+        this.setTab(this.selectedTab);
+      }
+    },
+
+    serialize: function () {
+      return {
+        user: FauxtonAPI.session.user()
+      };
+    }
+  });
+
   return Views;
 });
