@@ -24,11 +24,11 @@ module.exports = function (grunt) {
 
   grunt.registerMultiTask('get_deps', 'Fetch external dependencies', function (version) {
 
-    grunt.log.writeln("Fetching external dependencies");
+    grunt.log.writeln('Fetching external dependencies');
     var done = this.async(),
         data = this.data,
-        target = data.target || "app/addons/",
-        settingsFile = fs.existsSync(data.src) ? data.src : "settings.json.default",
+        target = data.target || 'app/addons/',
+        settingsFile = fs.existsSync(data.src) ? data.src : 'settings.json.default',
         settings = grunt.file.readJSON(settingsFile),
         _ = grunt.util._;
 
@@ -39,7 +39,7 @@ module.exports = function (grunt) {
       async.forEach(deps, function (dep, cb) {
         var path = target + dep.name;
         var location = dep.url || dep.path;
-        grunt.log.writeln("Fetching: " + dep.name + " (" + location + ")");
+        grunt.log.writeln('Fetching: ' + dep.name + ' (' + location + ')');
 
         child_process.exec(command(dep, path), function (error, stdout, stderr) {
           grunt.log.writeln(stderr);
@@ -48,7 +48,7 @@ module.exports = function (grunt) {
         });
       }, function (error) {
         if (error) {
-          grunt.log.writeln("ERROR: " + error.message);
+          grunt.log.writeln('ERROR: ' + error.message);
           return false;
         } else {
           return true;
@@ -57,16 +57,16 @@ module.exports = function (grunt) {
     };
 
     var remoteDeps = _.filter(settings.deps, function (dep) { return !! dep.url; });
-    grunt.log.writeln(remoteDeps.length + " remote dependencies");
+    grunt.log.writeln(remoteDeps.length + ' remote dependencies');
     var remote = fetch(remoteDeps, function (dep, destination) {
-      return "git clone " + dep.url + " " + destination;
+      return 'git clone ' + dep.url + ' ' + destination;
     });
 
     var localDeps = _.filter(settings.deps, function (dep) { return !! dep.path; });
-    grunt.log.writeln(localDeps.length + " local dependencies");
+    grunt.log.writeln(localDeps.length + ' local dependencies');
     var local = fetch(localDeps, function (dep, destination) {
       // TODO: Windows
-      var command = "cp -r " + dep.path + " " + destination;
+      var command = 'cp -r ' + dep.path + ' ' + destination;
       grunt.log.writeln(command);
       return command;
     });
@@ -78,12 +78,12 @@ module.exports = function (grunt) {
   grunt.registerMultiTask('gen_load_addons', 'Generate the load_addons.js file', function () {
     var data = this.data,
         _ = grunt.util._,
-        settingsFile = fs.existsSync(data.src) ? data.src : "settings.json.default",
+        settingsFile = fs.existsSync(data.src) ? data.src : 'settings.json.default',
         settings = grunt.file.readJSON(settingsFile),
-        template = "app/load_addons.js.underscore",
-        dest = "app/load_addons.js",
+        template = 'app/load_addons.js.underscore',
+        dest = 'app/load_addons.js',
         deps = _.map(settings.deps, function (dep) {
-          return "addons/" + dep.name + "/base";
+          return 'addons/' + dep.name + '/base';
         });
 
     var tmpl = _.template(grunt.file.read(template));
@@ -93,8 +93,8 @@ module.exports = function (grunt) {
   grunt.registerMultiTask('gen_initialize', 'Generate the app.js file', function () {
     var _ = grunt.util._,
         settings = this.data,
-        template = "app/initialize.js.underscore",
-        dest = "app/initialize.js",
+        template = 'app/initialize.js.underscore',
+        dest = 'app/initialize.js',
         tmpl = _.template(grunt.file.read(template)),
         app = {};
 
@@ -122,9 +122,9 @@ module.exports = function (grunt) {
     var require = {
       config: function (args) {
         configInfo = args;
-        configInfo.paths['chai'] = "../test/mocha/chai";
-        configInfo.paths['sinon-chai'] = "../test/mocha/sinon-chai";
-        configInfo.paths['testUtils'] = "../test/mocha/testUtils";
+        configInfo.paths['chai'] = '../test/mocha/chai';
+        configInfo.paths['sinon-chai'] = '../test/mocha/sinon-chai';
+        configInfo.paths['testUtils'] = '../test/mocha/testUtils';
         configInfo.baseUrl = '../app';
         delete configInfo.deps;
       }
@@ -192,7 +192,7 @@ module.exports = function (grunt) {
     if (error) {
       grunt.fail.fatal(error);
     }
-  };
+  }
 
   function _findSpecificNightwatchTest (addonsWithTests, file) {
     var filename = file + '.js';
@@ -211,7 +211,7 @@ module.exports = function (grunt) {
     }
 
     return paths[0];
-  };
+  }
 
   function _getNightwatchTests (settings) {
     var testBlacklist = (_.has(settings.nightwatch, 'testBlacklist')) ? settings.nightwatch.testBlacklist : {};
