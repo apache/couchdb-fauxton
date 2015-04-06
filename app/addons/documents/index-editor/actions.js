@@ -30,7 +30,7 @@ function (app, FauxtonAPI, Documents, ActionTypes, IndexResultsActions) {
     },
 
     findDesignDoc: function (designDocs, designDocId) {
-      return designDocs.find(function (doc) {
+      return _.find(designDocs, function (doc) {
         return doc.id === designDocId;
       }).dDocModel();
 

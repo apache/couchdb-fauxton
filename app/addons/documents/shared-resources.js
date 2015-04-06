@@ -105,8 +105,9 @@ define([
       if (!this.isDdoc()) {
         return false;
       }
+
       var views = this.get('views'),
-        tempView = views[view] || {};
+          tempView = views[view] || {};
 
       if (reduce) {
         tempView.reduce = reduce;

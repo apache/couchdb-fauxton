@@ -45,6 +45,8 @@ define([
           params: { limit: 10 },
           database: database
         });
+
+        designDocs = designDocs.models;
       });
 
       afterEach(function () {
@@ -103,7 +105,7 @@ define([
 
         Actions.saveView(viewInfo);
 
-        var updatedDesignDoc = designDocs.first().dDocModel();
+        var updatedDesignDoc = _.first(designDocs).dDocModel();
         assert.equal(updatedDesignDoc.get('views')['test-view'].reduce, '_sum');
       });
 
@@ -118,7 +120,7 @@ define([
           designDocs: designDocs
         };
 
-        var updatedDesignDoc = designDocs.first().dDocModel();
+        var updatedDesignDoc = _.first(designDocs).dDocModel();
         var spy = sinon.spy(updatedDesignDoc, 'save');
         Actions.saveView(viewInfo);
 
@@ -138,7 +140,7 @@ define([
           newView: true,
           designDocs: designDocs
         };
-        var designDoc = designDocs.first();
+        var designDoc = _.first(designDocs);
 
         designDoc.save = function () {
           var promise = $.Deferred();
@@ -168,7 +170,7 @@ define([
             }
           }
         };
-        var designDoc = designDocs.first();
+        var designDoc = _.first(designDocs);
 
         designDoc.save = function () {
           var promise = $.Deferred();
@@ -204,8 +206,8 @@ define([
           params: { limit: 10 },
           database: database
         });
-
-        designDoc = designDocs.first();
+        designDocs = designDocs.models;
+        designDoc = _.first(designDocs);
 
       });
 
@@ -226,7 +228,7 @@ define([
         assert.ok(_.isUndefined(designDoc.getDdocView(viewName)));
       });
 
-      it('saves design do if has other views', function () {
+      it('saves design doc if has other views', function () {
         var spy = sinon.spy(designDoc, 'save');
 
         Actions.deleteView({
