@@ -11,17 +11,19 @@
 // the License.
 
 module.exports = {
-  'Highlight Sidebar' : function (client) {
+  'No Nav Link on Cluster and a warning text' : function (client) {
     var waitTime = 10000,
+        newDatabaseName = client.globals.testDatabaseName,
         baseUrl = client.globals.test_settings.launch_url;
 
     client
       .loginToGUI()
       .url(baseUrl)
-      .waitForElementPresent('#add-new-database', waitTime, false)
-      .click('a[href="#/replication"]')
-      .waitForElementVisible('#replication', waitTime, false)
-      .assert.cssClassPresent('li[data-nav-name="Replication"]', "active")
+      .waitForElementPresent('#nav-links', waitTime, false)
+      .assert.elementNotPresent('a[href="#_config"]')
+      .assert.elementNotPresent('li[data-nav-name="Config"]')
+      .url(baseUrl + '/#_config')
+      .waitForElementPresent('.config-cluster-warning', waitTime, false)
     .end();
   }
 };

@@ -23,8 +23,7 @@ function (app, FauxtonAPI, Auth) {
     routes: {
       'login?*extra': 'login',
       'login': 'login',
-      'logout': 'logout',
-      'createAdmin': 'createAdmin'
+      'logout': 'logout'
     },
 
     login: function () {
@@ -41,54 +40,10 @@ function (app, FauxtonAPI, Auth) {
       FauxtonAPI.session.logout().then(function () {
         FauxtonAPI.navigate('/');
       });
-    },
-
-    changePassword: function () {
-      this.crumbs = [{name: 'Change Password', link:"#"}];
-      this.setView('#dashboard-content', new Auth.ChangePassword({model: FauxtonAPI.session}));
-    },
-
-    createAdmin: function () {
-      this.crumbs = [{name: 'Create Admin', link:"#"}];
-      this.setView('#dashboard-content', new Auth.CreateAdminView({model: FauxtonAPI.session}));
     }
   });
 
-  var userRouteObject = FauxtonAPI.RouteObject.extend({
-    layout: 'with_sidebar',
-
-    routes: {
-      'changePassword': {
-        route: 'changePassword',
-        roles: ['fx_loggedIn']
-      },
-      'addAdmin': {
-        roles: ['_admin'],
-        route: 'addAdmin'
-      }
-    },
-    selectedHeader: function () {
-      return FauxtonAPI.session.user().name;
-    },
-
-    initialize: function () {
-      this.navDrop = this.setView('#sidebar-content', new Auth.NavDropDown({model: FauxtonAPI.session}));
-    },
-
-    changePassword: function () {
-      this.navDrop.setTab('change-password');
-      this.setView('#dashboard-content', new Auth.ChangePassword({model: FauxtonAPI.session}));
-    },
-
-    addAdmin: function () {
-      this.navDrop.setTab('add-admin');
-      this.setView('#dashboard-content', new Auth.CreateAdminView({login_after: false, model: FauxtonAPI.session}));
-    },
-
-    crumbs: [{name: 'User Management', link: '#'}]
-  });
-
-  Auth.RouteObjects = [authRouteObject, userRouteObject];
+  Auth.RouteObjects = [authRouteObject];
 
   return Auth;
 });

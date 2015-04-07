@@ -13,10 +13,12 @@
 define([
   "app",
   "api",
-  "addons/auth/routes"
+  'addons/auth/routes'
 ],
 
 function (app, FauxtonAPI, Auth) {
+
+  var isRunningOnBackdoorPort = null;
 
   Auth.session = new Auth.Session();
   FauxtonAPI.setSession(Auth.session);
@@ -33,10 +35,16 @@ function (app, FauxtonAPI, Auth) {
     });
 
     Auth.session.on('change', function () {
+
       var session = Auth.session;
       var link = {};
 
       if (session.isAdminParty()) {
+        if (!isRunningOnBackdoorPort) {
+          FauxtonAPI.removeHeaderLink({id: 'auth', bottomNav: true});
+          return;
+        }
+
         link = {
           id: "auth",
           title: "Admin Party!",
@@ -45,6 +53,20 @@ function (app, FauxtonAPI, Auth) {
           bottomNav: true,
         };
       } else if (session.isLoggedIn()) {
+        FauxtonAPI.addHeaderLink({
+          id: 'logout',
+          footerNav: true,
+          href: '#logout',
+          title: 'Logout',
+          icon: '',
+          className: 'logout'
+        });
+
+        if (!isRunningOnBackdoorPort) {
+          FauxtonAPI.removeHeaderLink({id: 'auth', bottomNav: true});
+          return;
+        }
+
         link = {
           id: "auth",
           title: session.user().name,
@@ -52,15 +74,6 @@ function (app, FauxtonAPI, Auth) {
           icon: "fonticon-user",
           bottomNav: true,
         };
-
-        FauxtonAPI.addHeaderLink({
-          id: 'logout',
-          footerNav: true,
-          href: "#logout",
-          title: "Logout",
-          icon: "",
-          className: 'logout'
-        });
       } else {
         link = {
           id: "auth",
@@ -75,8 +88,11 @@ function (app, FauxtonAPI, Auth) {
 
     });
 
-    Auth.session.fetchUser().then(function () {
-      Auth.session.trigger('change');
+    FauxtonAPI.isRunningOnBackdoorPort().then(function (res) {
+      isRunningOnBackdoorPort = res.runsOnBackportPort;
+      Auth.session.fetchUser().then(function () {
+        Auth.session.trigger('change');
+      });
     });
 
     var auth = function (session, roles) {

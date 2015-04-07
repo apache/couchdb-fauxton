@@ -126,7 +126,35 @@ function (app, $, _, Backbone, Bootstrap, Helpers, Utils, FauxtonAPI, Couchdb) {
           type: 'REMOVE_NAVBAR_LINK',
           link: link
       });
+    },
+
+    isRunningOnBackdoorPort: function () {
+      var deferred = FauxtonAPI.Deferred();
+
+      // cache
+      var cacheKey = 'isRunningOnBackdoorPort';
+      var cache = app.utils.sessionStorageGet(cacheKey);
+      if (cache) {
+        return deferred.resolve(cache);
+      }
+
+      $.ajax({
+        type: 'GET',
+        url: app.host + '/_config'
+      })
+      .then(function () {
+        app.utils.sessionStorageSet(cacheKey, {runsOnBackportPort: true});
+        deferred.resolve({runsOnBackportPort: true});
+      })
+      .fail(function (res) {
+
+        app.utils.sessionStorageSet(cacheKey, {runsOnBackportPort: false});
+        deferred.resolve({runsOnBackportPort: false});
+      });
+
+      return deferred;
     }
+
   });
 
   return app;

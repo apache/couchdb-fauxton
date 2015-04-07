@@ -26,7 +26,6 @@ define([
 
   describe('CORS Components', function () {
 
-
     describe('CorsController', function () {
       var container, corsEl, saveStub;
 
@@ -172,9 +171,11 @@ define([
       });
 
       it('should confirm on delete', function () {
-        var spy = sinon.spy(window, 'confirm');
+        var stub = sinon.stub(window, 'confirm');
+        stub.returns(true);
+
         TestUtils.Simulate.click($(originTableEl.getDOMNode()).find('.fonticon-trash')[0]);
-        assert.ok(spy.calledOnce);
+        assert.ok(stub.calledOnce);
       });
 
       it('should deleteOrigin on confirm true', function () {

@@ -21,12 +21,25 @@ define([
 
     describe("failed login", function () {
 
+      after(function () {
+        FauxtonAPI.session.off('change');
+        testUtils.restore(FauxtonAPI.session.isAdminParty);
+        testUtils.restore(FauxtonAPI.isRunningOnBackdoorPort);
+        testUtils.restore(FauxtonAPI.navigate);
+      });
+
       it("redirects with replace: true set", function () {
         var navigateSpy = sinon.spy(FauxtonAPI, 'navigate');
-        FauxtonAPI.auth = new Auth();
-        FauxtonAPI.session.isLoggedIn = function () { return false; };
+
+        var stub = sinon.stub(FauxtonAPI.session, 'isAdminParty').returns(true);
+        var deferred = FauxtonAPI.Deferred();
+        sinon.stub(FauxtonAPI, 'isRunningOnBackdoorPort').returns(deferred);
         Base.initialize();
+
+        deferred.resolve({runsOnBackportPort: false});
+
         FauxtonAPI.auth.authDeniedCb();
+
         assert.ok(navigateSpy.withArgs('/login?urlback=', {replace: true}).calledOnce);
       });
     });
@@ -35,20 +48,45 @@ define([
   describe('auth session change', function () {
 
     afterEach(function () {
-      FauxtonAPI.updateHeaderLink.restore && FauxtonAPI.updateHeaderLink.restore();
-      FauxtonAPI.session.isAdminParty.restore && FauxtonAPI.session.isAdminParty.restore();
+      testUtils.restore(FauxtonAPI.updateHeaderLink);
+      testUtils.restore(FauxtonAPI.session.isAdminParty);
+      testUtils.restore(FauxtonAPI.isRunningOnBackdoorPort);
+      testUtils.restore(FauxtonAPI.session.isLoggedIn);
+      testUtils.restore(FauxtonAPI.session.user);
+      testUtils.restore(FauxtonAPI.removeHeaderLink);
+      FauxtonAPI.session.off('change');
     });
 
     it('for admin party changes title to admin party', function () {
       var spy = sinon.spy(FauxtonAPI, 'updateHeaderLink');
       var stub = sinon.stub(FauxtonAPI.session, 'isAdminParty').returns(true);
+      var deferred = FauxtonAPI.Deferred();
+      sinon.stub(FauxtonAPI, 'isRunningOnBackdoorPort').returns(deferred);
+      Base.initialize();
+      deferred.resolve({runsOnBackportPort: true});
+
       FauxtonAPI.session.trigger('change');
 
       assert.ok(spy.calledOnce);
       var args = spy.getCall(0).args[0];
 
       assert.ok(args.title.match(/Admin Party/));
-      FauxtonAPI.session.isAdminParty.restore();
+    });
+
+    it('for admin party on cluster do not show admin-party-fix-link', function () {
+      var spy = sinon.spy(FauxtonAPI, 'removeHeaderLink');
+      var stub = sinon.stub(FauxtonAPI.session, 'isAdminParty').returns(true);
+      var deferred = FauxtonAPI.Deferred();
+      sinon.stub(FauxtonAPI, 'isRunningOnBackdoorPort').returns(deferred);
+      Base.initialize();
+      deferred.resolve({runsOnBackportPort: false});
+
+      FauxtonAPI.session.trigger('change');
+
+      assert.ok(spy.calledOnce);
+      var args = spy.getCall(0).args[0];
+
+      assert.equal(args.id, 'auth');
     });
 
     it('for login changes title to login', function () {
@@ -56,47 +94,53 @@ define([
       var stub = sinon.stub(FauxtonAPI.session, 'isAdminParty').returns(false);
       sinon.stub(FauxtonAPI.session, 'user').returns({name: 'test-user'});
       sinon.stub(FauxtonAPI.session, 'isLoggedIn').returns(true);
+      var deferred = FauxtonAPI.Deferred();
+      sinon.stub(FauxtonAPI, 'isRunningOnBackdoorPort').returns(deferred);
+      Base.initialize();
+      deferred.resolve({runsOnBackportPort: true});
+
       FauxtonAPI.session.trigger('change');
 
       assert.ok(spy.calledOnce);
       var args = spy.getCall(0).args[0];
 
       assert.equal(args.title, 'test-user');
-      FauxtonAPI.session.isLoggedIn.restore();
-      FauxtonAPI.session.user.restore();
-      FauxtonAPI.session.isAdminParty.restore();
+
     });
 
     it('for login adds logout link', function () {
-      var spy = sinon.spy(FauxtonAPI, 'addHeaderLink');
       var stub = sinon.stub(FauxtonAPI.session, 'isAdminParty').returns(false);
       sinon.stub(FauxtonAPI.session, 'user').returns({name: 'test-user'});
       sinon.stub(FauxtonAPI.session, 'isLoggedIn').returns(true);
+      var deferred = FauxtonAPI.Deferred();
+      sinon.stub(FauxtonAPI, 'isRunningOnBackdoorPort').returns(deferred);
+      Base.initialize();
+      deferred.resolve({runsOnBackportPort: false});
+      var spy = sinon.spy(FauxtonAPI, 'addHeaderLink');
       FauxtonAPI.session.trigger('change');
 
       assert.ok(spy.calledOnce);
       var args = spy.getCall(0).args[0];
 
       assert.equal(args.title, 'Logout');
-      FauxtonAPI.session.isLoggedIn.restore();
-      FauxtonAPI.session.user.restore();
-      FauxtonAPI.session.isAdminParty.restore();
     });
 
     it('for logout, removes logout link', function () {
       var spy = sinon.spy(FauxtonAPI, 'removeHeaderLink');
       var stub = sinon.stub(FauxtonAPI.session, 'isAdminParty').returns(false);
       sinon.stub(FauxtonAPI.session, 'isLoggedIn').returns(false);
+      var deferred = FauxtonAPI.Deferred();
+      sinon.stub(FauxtonAPI, 'isRunningOnBackdoorPort').returns(deferred);
+      Base.initialize();
+      deferred.resolve({runsOnBackportPort: true});
+
       FauxtonAPI.session.trigger('change');
 
       assert.ok(spy.calledOnce);
       var args = spy.getCall(0).args[0];
 
       assert.equal(args.id, 'logout');
-      FauxtonAPI.session.isLoggedIn.restore();
-      FauxtonAPI.session.isAdminParty.restore();
     });
-
 
   });
 });

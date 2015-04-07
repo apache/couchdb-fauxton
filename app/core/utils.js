@@ -124,7 +124,41 @@ function ($, _) {
         }
       }
       return data;
-    }
+    },
+
+    sessionStorageGet: function (key) {
+      var data;
+      if (!window.sessionStorage) {
+        return;
+      }
+
+      data = window.sessionStorage.getItem(key);
+      try {
+        return JSON.parse(data);
+      } catch (e) {
+        return data;
+      }
+
+      return data;
+    },
+
+    sessionStorageSet: function (key, value) {
+      var success = false;
+
+      if (_.isObject(value) || _.isArray(value)) {
+        value = JSON.stringify(value);
+      }
+
+      try {
+        window.sessionStorage.setItem(key, value);
+        success = true;
+
+      } catch (e) {
+        success = false;
+      }
+
+      return success;
+    },
   };
 
   return utils;
