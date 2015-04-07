@@ -34,6 +34,7 @@ module.exports = {
       .click('button.btn-success.save')
 
       .waitForElementNotVisible('.global-notification', waitTime, false)
+      .waitForElementNotPresent('.loading-lines', waitTime, false)
       .assert.containsText('.prettyprint', 'hasehase5000')
     .end();
   },
@@ -59,6 +60,7 @@ module.exports = {
       .click('button.btn-success.save')
 
       .waitForElementNotVisible('.global-notification', waitTime, false)
+      .waitForElementNotPresent('.loading-lines', waitTime, false)
       .assert.containsText('.prettyprint', 'hasehase5000')
     .end();
   },
@@ -82,6 +84,7 @@ module.exports = {
       ')
       .execute('$("button.save")[0].scrollIntoView();')
       .clickWhenVisible('button.save', waitTime, false)
+      .waitForElementNotPresent('.loading-lines', waitTime, false)
       .waitForAttribute('.prettyprint', 'textContent', function (docContents) {
         return (/40/).test(docContents);
       })

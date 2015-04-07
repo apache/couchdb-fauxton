@@ -23,6 +23,7 @@ module.exports = {
       .loginToGUI()
       .populateDatabase(newDatabaseName)
       .url(baseUrl + '/#/database/' + newDatabaseName + '/new_view')
+      .waitForElementVisible('#new-ddoc', waitTime, false)
       .setValue('#new-ddoc', 'test_design_doc-selenium-bad-reduce')
       .clearValue('#index-name')
       .setValue('#index-name', 'hasenindex')

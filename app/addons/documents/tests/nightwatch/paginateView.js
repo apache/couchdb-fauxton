@@ -13,7 +13,6 @@
 module.exports = {
 
 	'change number of items per page': function (client) {
-    /*jshint multistr: true */
     var waitTime = 10000,
         newDatabaseName = client.globals.testDatabaseName,
         baseUrl = client.globals.test_settings.launch_url;
@@ -23,7 +22,12 @@ module.exports = {
       .loginToGUI()
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_design/keyview/_view/keyview')
       .waitForElementPresent('#toggle-query', waitTime, false)
-      .click('#select-per-page')
+
+      // ensure the page content has loaded
+      .waitForElementPresent('.prettyprint', waitTime, false)
+
+      .clickWhenVisible('#select-per-page', waitTime, false)
+
       // hack to get select working by clicking on it and using keyboard to select
       // http://www.w3.org/TR/2012/WD-webdriver-20120710/
       .keys(['\uE013', '\uE006'])
@@ -38,7 +42,6 @@ module.exports = {
   },
 
   'paginate to page two and back': function (client) {
-    /*jshint multistr: true */
     var waitTime = 10000,
         newDatabaseName = client.globals.testDatabaseName,
         baseUrl = client.globals.test_settings.launch_url;
@@ -48,20 +51,26 @@ module.exports = {
       .loginToGUI()
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_design/keyview/_view/keyview')
       .waitForElementPresent('#toggle-query', waitTime, false)
-      .click('#select-per-page')
+
+      // ensure the page content has loaded
+      .waitForElementPresent('.prettyprint', waitTime, false)
+
+      .clickWhenVisible('#select-per-page', waitTime, false)
+
       // http://www.w3.org/TR/2012/WD-webdriver-20120710/
       .keys(['\uE013', '\uE006'])
-      .click('#next')
+      .clickWhenVisible('#next', waitTime, false)
       .waitForElementNotPresent('div[data-id="document_1"]', waitTime)
+      .waitForElementNotPresent('.loading-lines', waitTime, false)
       .waitForElementPresent('div[data-id="document_19"]', waitTime)
-      .click('#previous')
+      .clickWhenVisible('#previous', waitTime, false)
       .waitForElementNotPresent('div[data-id="document_19"]', waitTime)
+      .waitForElementNotPresent('.loading-lines', waitTime, false)
       .waitForElementPresent('div[data-id="document_1"]', waitTime)
       .end();
   },
 
   'PerPage change resets to page 1': function (client) {
-    /*jshint multistr: true */
     var waitTime = 10000,
         newDatabaseName = client.globals.testDatabaseName,
         baseUrl = client.globals.test_settings.launch_url;
@@ -71,14 +80,23 @@ module.exports = {
       .loginToGUI()
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_design/keyview/_view/keyview')
       .waitForElementPresent('#toggle-query', waitTime, false)
-      .click('#select-per-page')
+
+      // ensure the page content has loaded
+      .waitForElementPresent('.prettyprint', waitTime, false)
+      .clickWhenVisible('#select-per-page', waitTime, false)
+
       // http://www.w3.org/TR/2012/WD-webdriver-20120710/
       .keys(['\uE013', '\uE006'])
-      .click('#next')
+      .waitForElementNotPresent('.loading-lines', waitTime, false)
+
+      .clickWhenVisible('#next', waitTime, false)
       .waitForElementNotPresent('div[data-id="document_1"]', waitTime)
-      .click('#select-per-page')
+      .waitForElementNotPresent('.loading-lines', waitTime, false)
+
+      .clickWhenVisible('#select-per-page', waitTime, false)
       // http://www.w3.org/TR/2012/WD-webdriver-20120710/
       .keys(['\uE013', '\uE006'])
+
       .waitForElementPresent('div[data-id="document_1"]', waitTime)
       .end();
   }

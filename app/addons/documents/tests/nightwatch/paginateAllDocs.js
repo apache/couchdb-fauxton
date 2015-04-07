@@ -22,8 +22,16 @@ module.exports = {
       .populateDatabase(newDatabaseName)
       .loginToGUI()
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
+
+      // ensures the header has been rendered
       .waitForElementPresent('.control-toggle-alternative-header', waitTime, false)
-      .click('#select-per-page')
+
+      // ensures the main body (results list) has been rendered
+      .waitForElementPresent('.prettyprint', waitTime, false)
+
+      // ensures the select dropdown is rendered
+      .clickWhenVisible('#select-per-page', waitTime, false)
+
       // hack to get select working by clicking on it and using keyboard to select
       // http://www.w3.org/TR/2012/WD-webdriver-20120710/
       .keys(['\uE013', '\uE006'])
@@ -46,14 +54,20 @@ module.exports = {
       .populateDatabase(newDatabaseName)
       .loginToGUI()
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
+
+      // ensures the header is rendered
       .waitForElementPresent('.control-toggle-alternative-header', waitTime, false)
-      .click('#select-per-page')
+
+      // ensures the main body (results list) has been rendered
+      .waitForElementPresent('.prettyprint', waitTime, false)
+
+      .clickWhenVisible('#select-per-page', waitTime, false)
       // http://www.w3.org/TR/2012/WD-webdriver-20120710/
       .keys(['\uE013', '\uE006'])
       .waitForElementNotPresent('div[data-id="document_16"]', waitTime)
-      .click('#next')
+      .clickWhenVisible('#next', waitTime, false)
       .waitForElementPresent('div[data-id="document_17"]', waitTime)
-      .click('#previous')
+      .clickWhenVisible('#previous', waitTime, false)
       .waitForElementPresent('div[data-id="document_1"]', waitTime)
       .end();
   },
@@ -69,13 +83,17 @@ module.exports = {
       .loginToGUI()
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
       .waitForElementPresent('.control-toggle-alternative-header', waitTime, false)
-      .click('#select-per-page')
+
+      // ensures the main body (results list) has been rendered
+      .waitForElementPresent('.prettyprint', waitTime, false)
+
+      .clickWhenVisible('#select-per-page', waitTime, false)
       // http://www.w3.org/TR/2012/WD-webdriver-20120710/
       .keys(['\uE013', '\uE006'])
       .waitForElementNotPresent('div[data-id="document_16"]', waitTime)
-      .click('#next')
+      .clickWhenVisible('#next', waitTime, false)
       .waitForElementPresent('div[data-id="document_17"]', waitTime)
-      .click('#select-per-page')
+      .clickWhenVisible('#select-per-page', waitTime, false)
       // http://www.w3.org/TR/2012/WD-webdriver-20120710/
       .keys(['\uE013', '\uE006'])
       .waitForElementPresent('div[data-id="document_1"]', waitTime)

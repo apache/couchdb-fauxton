@@ -31,6 +31,7 @@ var tests = {
       .execute('$(".save")[0].scrollIntoView();')
       .click('button.btn.btn-success.save')
       .waitForElementPresent('.prettyprint', waitTime, false)
+      .waitForElementNotPresent('.loading-lines', waitTime, false)
       .assert.containsText('.prettyprint', 'hasehase')
     .end();
   },
@@ -49,6 +50,7 @@ var tests = {
       .execute('$(".save")[0].scrollIntoView();')
       .click('button.btn-success.save')
       .waitForElementPresent('.prettyprint', waitTime, false)
+      .waitForElementNotPresent('.loading-lines', waitTime, false)
       .assert.containsText('.prettyprint', 'gansgans')
     .end();
   },
@@ -64,20 +66,24 @@ var tests = {
         editor.getSession().setValue("function (doc) { emit(\'enteente\', 1); }");\
       ')
       .execute('$(".save")[0].scrollIntoView();')
-      .clickWhenVisible('button.btn-success.save')
-      .waitForElementPresent('.prettyprint', waitTime, false)
+      .click('button.btn-success.save')
+      .waitForAttribute('#global-notifications', 'textContent', function (notification) {
+        return (/View Saved./).test(notification.trim());
+      })
+      //go back to all docs
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
-      .clickWhenVisible('[data-target="#testdesigndoc"]')
+      .clickWhenVisible('[data-target="#testdesigndoc"]', waitTime, false)
       .clickWhenVisible('[data-target="#testdesigndocviews"]', waitTime, false)
       .clickWhenVisible('#testdesigndoc_testnewview', waitTime, false)
       .waitForElementPresent('.prettyprint', waitTime, false)
+      .waitForElementNotPresent('.loading-lines', waitTime, false)
       .assert.containsText('.prettyprint', 'enteente')
     .end();
-  },
+  }
 };
 
 function openDifferentDropdownsAndClick (client, dropDownElement) {
-  modifier =  + dropDownElement.slice(1);
+  modifier = dropDownElement.slice(1);
   newDatabaseName = client.globals.testDatabaseName;
   newDocumentName = 'create_view_doc' + modifier;
   baseUrl = client.globals.test_settings.launch_url;
