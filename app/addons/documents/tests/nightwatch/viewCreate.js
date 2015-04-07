@@ -10,7 +10,7 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-var waitTime = 10000,
+var waitTime,
     baseUrl,
     newDatabaseName,
     newDocumentName,
@@ -19,6 +19,8 @@ var waitTime = 10000,
 var tests = {
 
   'Creates a Design Doc using the dropdown at "all documents"': function (client) {
+    var waitTime = client.globals.maxWaitTime;
+
     /*jshint multistr: true */
     openDifferentDropdownsAndClick(client, '#header-dropdown-menu')
       .setValue('#new-ddoc', 'test_design_doc-selenium-1')
@@ -38,6 +40,8 @@ var tests = {
 
 
   'Creates a Design Doc using the dropdown at "the upper dropdown in the header"': function (client) {
+    var waitTime = client.globals.maxWaitTime;
+
     /*jshint multistr: true */
     openDifferentDropdownsAndClick(client, '#header-dropdown-menu')
       .setValue('#new-ddoc', 'test_design_doc-selenium-2')
@@ -56,6 +60,7 @@ var tests = {
   },
 
   'Adds a View to a DDoc using an existing DDoc': function (client) {
+    var waitTime = client.globals.maxWaitTime;
     /*jshint multistr: true */
 
     openDifferentDropdownsAndClick(client, '[data-target="#testdesigndoc"]')
@@ -84,6 +89,7 @@ var tests = {
 
 function openDifferentDropdownsAndClick (client, dropDownElement) {
   modifier = dropDownElement.slice(1);
+  waitTime = client.globals.maxWaitTime;
   newDatabaseName = client.globals.testDatabaseName;
   newDocumentName = 'create_view_doc' + modifier;
   baseUrl = client.globals.test_settings.launch_url;

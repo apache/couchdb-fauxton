@@ -14,7 +14,7 @@ module.exports = {
 
   'Displays an error if reduce is not possible': function (client) {
     /*jshint multistr: true */
-    var waitTime = 10000,
+    var waitTime = client.globals.maxWaitTime,
         newDatabaseName = client.globals.testDatabaseName,
         baseUrl = client.globals.test_settings.launch_url,
         dropDownElement = '#header-dropdown-menu';
@@ -41,7 +41,7 @@ module.exports = {
   },
 
   'Visit url of broken view displays error': function (client) {
-    var waitTime = 10000,
+    var waitTime = client.globals.maxWaitTime,
         newDatabaseName = client.globals.testDatabaseName,
         baseUrl = client.globals.test_settings.launch_url;
 

@@ -12,7 +12,7 @@
 
 module.exports = {
   'Deletes a document': function (client) {
-    var waitTime = 10000,
+    var waitTime = client.globals.maxWaitTime,
         newDatabaseName = client.globals.testDatabaseName,
         newDocumentName = 'delete_doc_doc',
         baseUrl = client.globals.test_settings.launch_url;

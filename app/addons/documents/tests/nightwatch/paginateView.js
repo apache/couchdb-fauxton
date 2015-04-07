@@ -13,7 +13,7 @@
 module.exports = {
 
 	'change number of items per page': function (client) {
-    var waitTime = 10000,
+    var waitTime = client.globals.maxWaitTime,
         newDatabaseName = client.globals.testDatabaseName,
         baseUrl = client.globals.test_settings.launch_url;
 
@@ -42,7 +42,7 @@ module.exports = {
   },
 
   'paginate to page two and back': function (client) {
-    var waitTime = 10000,
+    var waitTime = client.globals.maxWaitTime,
         newDatabaseName = client.globals.testDatabaseName,
         baseUrl = client.globals.test_settings.launch_url;
 
@@ -71,7 +71,7 @@ module.exports = {
   },
 
   'PerPage change resets to page 1': function (client) {
-    var waitTime = 10000,
+    var waitTime = client.globals.maxWaitTime,
         newDatabaseName = client.globals.testDatabaseName,
         baseUrl = client.globals.test_settings.launch_url;
 

@@ -12,7 +12,7 @@
 
 module.exports = {
   'View: Navigate previous works correctly': function (client) {
-    var waitTime = 15000,
+    var waitTime = client.globals.maxWaitTime,
         newDatabaseName = client.globals.testDatabaseName,
         baseUrl = client.globals.test_settings.launch_url;
 

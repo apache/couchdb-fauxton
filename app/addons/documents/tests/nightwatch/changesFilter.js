@@ -16,7 +16,7 @@ module.exports = {
   // changes.componentsSpec.react.jsx mocha tests; this is more of a sanity end-to-end test
   'Check changes filter results' : function (client) {
 
-    var waitTime = 10000,
+    var waitTime = client.globals.maxWaitTime,
         newDatabaseName = client.globals.testDatabaseName,
         baseUrl = client.globals.test_settings.launch_url;
 

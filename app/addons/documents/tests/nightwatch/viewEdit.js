@@ -14,7 +14,7 @@ module.exports = {
 
   'Edits a design doc - set new index name': function (client) {
     /*jshint multistr: true */
-    var waitTime = 10000,
+    var waitTime = client.globals.maxWaitTime,
         newDatabaseName = client.globals.testDatabaseName,
         baseUrl = client.globals.test_settings.launch_url;
 
@@ -41,7 +41,7 @@ module.exports = {
 
   'Edits a design doc': function (client) {
     /*jshint multistr: true */
-    var waitTime = 10000,
+    var waitTime = client.globals.maxWaitTime,
         newDatabaseName = client.globals.testDatabaseName,
         baseUrl = client.globals.test_settings.launch_url;
 
@@ -67,7 +67,7 @@ module.exports = {
 
   'Query Options are kept after a new reduce method is chosen': function (client) {
     /*jshint multistr: true */
-    var waitTime = 10000,
+    var waitTime = client.globals.maxWaitTime,
         newDatabaseName = client.globals.testDatabaseName,
         baseUrl = client.globals.test_settings.launch_url;
 

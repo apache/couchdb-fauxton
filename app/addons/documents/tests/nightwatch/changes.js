@@ -12,7 +12,7 @@
 
 module.exports = {
   'Does not display the Select-all-button': function (client) {
-    var waitTime = 10000,
+    var waitTime = client.globals.maxWaitTime,
         newDatabaseName = client.globals.testDatabaseName,
         baseUrl = client.globals.test_settings.launch_url;
 
@@ -27,7 +27,7 @@ module.exports = {
   },
 
   'Check doc link in Changes feed links properly': function (client) {
-    var waitTime = 10000,
+    var waitTime = client.globals.maxWaitTime,
         newDatabaseName = client.globals.testDatabaseName,
         baseUrl = client.globals.test_settings.launch_url;
 

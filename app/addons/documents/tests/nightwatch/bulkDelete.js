@@ -11,8 +11,9 @@
 // the License.
 
 module.exports = {
+
   'Bulk deletes': function (client) {
-    var waitTime = 10000,
+    var waitTime = client.globals.maxWaitTime,
         newDatabaseName = client.globals.testDatabaseName,
         newDocumentName1 = 'bulktest1',
         newDocumentName2 = 'bulktest2',
@@ -44,7 +45,7 @@ module.exports = {
   },
 
   'Select all works after changing the page': function (client) {
-    var waitTime = 10000,
+    var waitTime = client.globals.maxWaitTime,
         newDatabaseName = client.globals.testDatabaseName,
         baseUrl = client.globals.test_settings.launch_url;
 
@@ -63,4 +64,5 @@ module.exports = {
       .waitForElementPresent('.control-select-all.js-headerbar-togglebutton-selected', waitTime, false)
       .end();
   }
+
 };
