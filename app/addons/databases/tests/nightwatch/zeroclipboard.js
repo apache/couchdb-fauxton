@@ -14,7 +14,7 @@ var os = require('os');
 
 module.exports = {
   'ZeroClipboard copies' : function (client) {
-    var waitTime = 10000,
+    var waitTime = client.globals.maxWaitTime,
         newDatabaseName = client.globals.testDatabaseName,
         baseUrl = client.globals.test_settings.launch_url;
 

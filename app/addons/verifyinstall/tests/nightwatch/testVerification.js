@@ -12,7 +12,7 @@
 
 module.exports = {
   'Run the Verification test' : function (client) {
-    var waitTime = 10000,
+    var waitTime = client.globals.maxWaitTime,
       baseUrl = client.globals.test_settings.launch_url;
 
     client

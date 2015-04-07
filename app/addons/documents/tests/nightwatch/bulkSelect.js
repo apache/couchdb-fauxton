@@ -15,7 +15,7 @@ module.exports = {
   // And there are less documents than I have set to display per page
   // Then I want the select-all-button to be selected
   'Bulk Documents: selector': function (client) {
-    var waitTime = 10000,
+    var waitTime = client.globals.maxWaitTime,
         newDatabaseName = client.globals.testDatabaseName,
         newDocumentName1 = 'bulktest1',
         newDocumentName2 = 'bulktest2',

@@ -13,7 +13,7 @@
 var nano = require('nano');
 
 module.exports = {
-
+  maxWaitTime: 20000,
   testDatabaseName : 'fauxton-selenium-tests',
 
   getNanoInstance: function () {

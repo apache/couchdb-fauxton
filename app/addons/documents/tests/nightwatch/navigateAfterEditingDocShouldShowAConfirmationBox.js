@@ -13,7 +13,7 @@
 module.exports = {
 
   'Navigate to New Doc Page, editing and then clicking on the sidebar should show a confirmation dialog': function (client) {
-    var waitTime = 10000,
+    var waitTime = client.globals.maxWaitTime,
         newDatabaseName = client.globals.testDatabaseName,
         baseUrl = client.globals.test_settings.launch_url;
 

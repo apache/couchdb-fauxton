@@ -12,7 +12,7 @@
 
 module.exports = {
   'Deletes a database with special chars': function (client) {
-    var waitTime = 8000,
+    var waitTime = client.globals.maxWaitTime,
         newDatabaseName = 'one/two-three/_four', // add any other chars here you want to test
         baseUrl = client.globals.test_settings.launch_url;
 

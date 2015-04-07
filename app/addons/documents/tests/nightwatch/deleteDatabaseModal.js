@@ -12,7 +12,7 @@
 
 module.exports = {
   'Shows a warning for system databases (prefixed with _)': function (client) {
-    var waitTime = 8000,
+    var waitTime = client.globals.maxWaitTime,
         baseUrl = client.globals.test_settings.launch_url;
 
     client
@@ -28,7 +28,7 @@ module.exports = {
   },
 
   'Shows no warning for non system databases': function (client) {
-    var waitTime = 8000,
+    var waitTime = client.globals.maxWaitTime,
         newDatabaseName = client.globals.testDatabaseName,
         baseUrl = client.globals.test_settings.launch_url;
 

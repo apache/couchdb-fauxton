@@ -12,7 +12,7 @@
 
 module.exports = {
   'Creates a Database' : function (client) {
-    var waitTime = 10000,
+    var waitTime = client.globals.maxWaitTime,
         newDatabaseName = client.globals.testDatabaseName,
         baseUrl = client.globals.test_settings.launch_url;
 
@@ -21,7 +21,7 @@ module.exports = {
       .deleteDatabase(newDatabaseName) //need to delete the automatic database 'fauxton-selenium-tests' that has been set up before each test
       .url(baseUrl)
       .waitForElementPresent('#add-new-database', waitTime, false)
-      .click('#add-new-database')
+      .clickWhenVisible('#add-new-database', waitTime, false)
       .pause(1000)
       .waitForElementVisible('#js-new-database-name', waitTime, false)
       .setValue('#js-new-database-name', [newDatabaseName])

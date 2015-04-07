@@ -12,7 +12,7 @@
 
 module.exports = {
   'Edit is allowed from default Map Views' : function (client) {
-    var waitTime = 10000,
+    var waitTime = client.globals.maxWaitTime,
         newDatabaseName = client.globals.testDatabaseName,
         newDocumentName = '_design/abc',
         baseUrl = client.globals.test_settings.launch_url,
@@ -45,7 +45,7 @@ module.exports = {
   },
 
   'Edit is not allowed for Map Views where reduce is checked' : function (client) {
-    var waitTime = 10000;
+    var waitTime = client.globals.maxWaitTime;
 
     client
       .clickWhenVisible('#dashboard a[href="#database/fauxton-selenium-tests/_design/abc/_view/evens"]')

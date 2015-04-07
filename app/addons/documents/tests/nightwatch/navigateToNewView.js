@@ -15,7 +15,7 @@ module.exports = {
   // this tests that the user is able to just navigate to and from the New View page without errors [it confirms
   // a bug fix for where the Ace Editor threw a JS error preventing the subsequent page from loading]
   'Navigate to and from New View Page' : function (client) {
-    var waitTime = 10000,
+    var waitTime = client.globals.maxWaitTime,
       newDatabaseName = client.globals.testDatabaseName,
       baseUrl = client.globals.test_settings.launch_url;
 
