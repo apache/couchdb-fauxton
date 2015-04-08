@@ -13,19 +13,20 @@
 exports.command = function () {
 
   var client = this,
+      waitTime = client.globals.maxWaitTime,
       baseUrl = client.globals.test_settings.launch_url,
       username = client.globals.test_settings.fauxton_username,
       password = client.globals.test_settings.password;
 
   client
     .url(baseUrl + '/#login')
-    .waitForElementPresent('a[href="#login"]', 15000, false)
+    .waitForElementPresent('a[href="#login"]', waitTime, false)
     .click('a[href="#login"]')
-    .waitForElementPresent('#username', 10000, false)
+    .waitForElementPresent('#username', waitTime, false)
     .setValue('#username', [username])
     .setValue('#password', [password, client.Keys.ENTER])
     .closeNotification()
-    .waitForElementPresent('#jump-to-db', 10000, false);
+    .waitForElementPresent('#jump-to-db', waitTime, false);
 
   return this;
 };
