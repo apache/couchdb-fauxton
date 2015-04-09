@@ -249,6 +249,16 @@ function (app, FauxtonAPI, React, Components, beautifyHelper) {
       this.props.onDoubleClick(this.props.docIdentifier, this.props.doc, e);
     },
 
+    getDocContent: function () {
+      if (!_.isEmpty(this.props.docContent)) {
+        return (
+          <div className="doc-data">
+            <pre className="prettyprint">{this.props.docContent}</pre>
+          </div>
+        );
+      }
+    },
+
     render: function () {
       return (
         <div data-id={this.props.docIdentifier} onDoubleClick={this.onDoubleClick} className="doc-row">
@@ -266,9 +276,7 @@ function (app, FauxtonAPI, React, Components, beautifyHelper) {
               {this.getUrlFragment()}
               <div className="doc-item-extension-icons pull-right">{this.getExtensionIcons()}</div>
             </header>
-            <div className="doc-data">
-              <pre className="prettyprint">{this.props.docContent}</pre>
-            </div>
+            {this.getDocContent()}
           </div>
           <div className="clearfix"></div>
         </div>

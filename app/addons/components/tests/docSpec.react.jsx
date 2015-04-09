@@ -98,6 +98,22 @@ define([
       assert.notOk($(el.getDOMNode()).find('input[type="checkbox"]').length);
       assert.ok($(el.getDOMNode()).find('.checkbox-dummy').length);
     });
+
+    it('contains a doc-data element when there\'s doc content', function () {
+      el = TestUtils.renderIntoDocument(
+        <ReactComponents.Document isDeletable={true} checked={true} docIdentifier="foo" docContent='{ "content": true }' />,
+        container
+      );
+      assert.equal(1, $(el.getDOMNode()).find('.doc-data').length);
+    });
+
+    it('doesn\'t contain a doc-data element when there\'s no doc content', function () {
+      el = TestUtils.renderIntoDocument(
+        <ReactComponents.Document isDeletable={true} checked={true} docIdentifier="foo" docContent='' />,
+        container
+      );
+      assert.equal(0, $(el.getDOMNode()).find('.doc-data').length);
+    });
   });
 
 });

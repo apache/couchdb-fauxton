@@ -169,7 +169,7 @@ define([
       assert.equal(JSON.parse(result).value, 'one');
     });
 
-    it('returns collapsed doc if collapsed', function () {
+    it('returns no doc content if collapsed', function () {
       store._collection = new Documents.AllDocs([{_id: 'testId1', 'value': 'one'}] , {
         params: {},
         database: {
@@ -181,7 +181,7 @@ define([
       store._collapsedDocs = {'testId1': true};
       var result = store.getDocContent(doc);
 
-      assert.ok(_.isUndefined(JSON.parse(result).value));
+      assert.equal('', result);
     });
 
   });

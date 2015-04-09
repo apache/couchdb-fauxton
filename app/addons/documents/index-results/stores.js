@@ -80,15 +80,7 @@ function (FauxtonAPI, ActionTypes, HeaderActionTypes, Documents) {
 
     getDocContent: function (originalDoc) {
       var doc = originalDoc.toJSON();
-
-      if (this.isCollapsed(doc._id)) {
-        doc = {
-          _id: _.isUndefined(doc._id),
-          _rev: doc._rev
-        };
-      }
-
-      return JSON.stringify(doc, null, "  ");
+      return (this.isCollapsed(doc._id)) ? '' : JSON.stringify(doc, null, ' ');
     },
 
     getDocId: function (doc) {
@@ -112,7 +104,7 @@ function (FauxtonAPI, ActionTypes, HeaderActionTypes, Documents) {
           keylabel: doc.isFromView() ? 'key' : 'id',
           url: doc.isFromView() ? doc.url('app') : doc.url('web-index'),
           isDeletable: this.isDeletable(doc),
-          isEditable: this.isEditable(doc),
+          isEditable: this.isEditable(doc)
         };
       }, this);
     },
