@@ -89,7 +89,7 @@ function (app, FauxtonAPI, React, Components, beautifyHelper) {
             target="_blank"
           >
           <i className="icon-question-sign"></i>
-          </a>;
+          </a>
         </label>
       );
     },
@@ -138,16 +138,12 @@ function (app, FauxtonAPI, React, Components, beautifyHelper) {
     },
 
     canBeautify: function () {
-      if (this.noOfLines() === 1) {
-        return true;
-      }
-
-      return false;
+      return this.noOfLines() === 1;
     },
 
     addTooltip: function () {
       if (this.canBeautify) {
-        $('.beautify-tooltip').tooltip();
+        $('.beautify-tooltip').tooltip({ placement: 'right' });
       }
     },
 
@@ -159,7 +155,7 @@ function (app, FauxtonAPI, React, Components, beautifyHelper) {
       event.preventDefault();
       var beautifiedCode = beautifyHelper(this.props.code);
       this.props.beautifiedCode(beautifiedCode);
-
+      $('.beautify-tooltip').tooltip('hide');
     },
 
     render: function () {
@@ -170,7 +166,7 @@ function (app, FauxtonAPI, React, Components, beautifyHelper) {
       return (
         <button
           onClick={this.beautify}
-          className="beautify beautify_map btn btn-primary btn-large beautify-tooltip"
+          className="beautify beautify_map btn btn-primary beautify-tooltip"
           type="button"
           data-toggle="tooltip"
           title="Reformat your minified code to make edits to it."
