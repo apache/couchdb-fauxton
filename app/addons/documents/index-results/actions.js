@@ -117,9 +117,15 @@ function (app, FauxtonAPI, ActionTypes, Stores, HeaderStores, HeaderActions, Doc
 
     deleteSelected: function () {
       var itemsLength = indexResultsStore.getSelectedItemsLength();
-      var msg = "Are you sure you want to delete these " + itemsLength + " docs?";
+      var msg = (itemsLength === 1) ? 'Are you sure you want to delete this doc?' :
+        'Are you sure you want to delete these ' + itemsLength + ' docs?';
 
-      if (itemsLength === 0 || !window.confirm(msg)) {
+      if (itemsLength === 0) {
+        window.alert('Please select the document rows you want to delete.');
+        return false;
+      }
+
+      if (!window.confirm(msg)) {
         return false;
       }
 
