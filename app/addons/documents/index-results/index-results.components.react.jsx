@@ -150,7 +150,6 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, Documents) {
 
       if (this.state.hasResults) {
         view = <ResultsScreen
-          isCollapsed={this.isCollapsed}
           isSelected={this.isSelected}
           isEditable={this.state.isEditable}
           isListDeletable={this.state.isListDeletable}
