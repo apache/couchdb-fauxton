@@ -49,9 +49,9 @@ function (app, FauxtonAPI, ActionTypes, Stores, HeaderStores, HeaderActions, Doc
 
       return options.collection.fetch({reset: true}).then(function () {
         this.resultsListReset();
-      }.bind(this), function (xhr) {
-        // TODO: handle error requests that slip through
-        // This should just throw a notification, not break the page
+      }.bind(this), function (collection, _xhr) {
+        //Make this more robust as sometimes the colection is passed through here.
+        var xhr = collection.responseText ? collection : _xhr;
         var errorMsg = 'Bad Request';
 
         try {

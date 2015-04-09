@@ -36,7 +36,7 @@ module.exports = {
       .execute('$(".save")[0].scrollIntoView();')
       .click('button.btn-success.save')
       .waitForElementVisible('.alert-error', waitTime, false)
-      .assert.containsText('.alert-error', '_sum function requires that map values be numbers')
+      .assert.containsText('.alert-error', '_sum function requires')
       .end();
   },
 
@@ -50,7 +50,7 @@ module.exports = {
       .populateDatabase(newDatabaseName)
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_design/brokenview/_view/brokenview')
       .waitForElementVisible('.alert-error', waitTime, false)
-      .assert.containsText('.alert-error', '_sum function requires that map values be numbers')
+      .assert.containsText('.alert-error', '_sum function requires')
       .end();
   }
 
