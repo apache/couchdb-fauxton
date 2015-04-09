@@ -12,9 +12,8 @@
 define([
       'api',
       'addons/databases/resources',
-      'addons/databases/views',
       'testUtils'
-], function (FauxtonAPI, Resources, Views, testUtils) {
+], function (FauxtonAPI, Resources, testUtils) {
   var assert = testUtils.assert,
       ViewSandbox = testUtils.ViewSandbox;
 

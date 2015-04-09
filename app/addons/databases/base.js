@@ -12,18 +12,11 @@
 
 define([
   "app",
-
   "api",
-
-  // Modules
-  "addons/databases/routes",
-  // Views
-  "addons/databases/views"
-
+  "addons/databases/routes"
 ],
 
-function (app, FauxtonAPI, Databases, Views) {
-  Databases.Views = Views;
+function (app, FauxtonAPI, Databases) {
 
   Databases.initialize = function () {
     FauxtonAPI.addHeaderLink({
