@@ -12,6 +12,7 @@
 
 var util = require('util');
 var events = require('events');
+var helpers = require('../helpers/helpers.js');
 
 /*
  * This custom command allows us to locate an HTML element on the page and then wait until the value of a specified
@@ -33,7 +34,7 @@ WaitForAttribute.prototype.command = function (element, attribute, checker, time
   var message;
 
   if (typeof timeoutInMilliseconds !== 'number') {
-    timeoutInMilliseconds = 8000;
+    timeoutInMilliseconds = helpers.maxWaitTime;
   }
 
   this.check(element, attribute, checker, function (result, loadedTimeInMilliseconds) {

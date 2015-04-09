@@ -23,15 +23,14 @@ module.exports = {
 
       // ensure the page has fully loaded
       .waitForElementPresent('.databases.table', waitTime, false)
-
       .waitForElementPresent('#add-new-database', waitTime, false)
       .clickWhenVisible('#add-new-database', waitTime, false)
-      .pause(1000)
       .waitForElementVisible('#js-new-database-name', waitTime, false)
       .setValue('#js-new-database-name', [newDatabaseName])
-
       .clickWhenVisible('#js-create-database', waitTime, false)
-      .waitForElementVisible('#global-notifications .alert.alert-success', waitTime, false)
+      .waitForAttribute('#global-notifications', 'textContent', function (successAlertText) {
+        return (/Database created successfully/).test(successAlertText);
+      })
       .url(baseUrl + '/_all_dbs')
       .waitForElementVisible('html', waitTime, false)
       .getText('html', function (result) {
