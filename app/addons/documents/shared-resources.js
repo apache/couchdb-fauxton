@@ -130,11 +130,25 @@ define([
       this.set({views: views});
     },
 
+    isMangoDoc: function () {
+      if (!this.isDdoc()) return false;
+      if (this.get('language') === 'query') {
+        return true;
+      }
+
+      if (this.get('doc') && this.get('doc').language === 'query') {
+        return true;
+      }
+
+      return false;
+    },
+
     dDocModel: function () {
       if (!this.isDdoc()) return false;
       var doc = this.get('doc');
 
       if (doc) {
+        doc._rev = this.get('_rev');
         return new Documents.Doc(doc, {database: this.database});
       }
 

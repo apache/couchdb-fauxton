@@ -22,18 +22,11 @@ define([
 
   var assert = utils.assert;
   var TestUtils = React.addons.TestUtils;
+  var restore = utils.restore;
 
   var resetStore = function (designDocs) {
     designDocs = designDocs.map(function (doc) {
       return Documents.Doc.prototype.parse(doc);
-    });
-
-    designDocs.map(function (ddoc) {
-      return new Documents.Doc(ddoc, {
-        database: {
-          safeID: function () { return 'id'; }
-        }
-      });
     });
 
     var ddocs = new Documents.AllDocs(designDocs, {
@@ -179,8 +172,8 @@ define([
 
 
     afterEach(function () {
-      Actions.newDesignDoc.restore && Actions.newDesignDoc.restore();
-      Actions.designDocChange.restore && Actions.designDocChange.restore();
+      restore(Actions.newDesignDoc);
+      restore(Actions.designDocChange);
       React.unmountComponentAtNode(container);
     });
 
@@ -243,13 +236,13 @@ define([
     });
 
     it('returns false on invalid map editor code', function () {
-      var stub = sinon.stub(editorEl.refs.mapEditor.aceEditor, 'hadValidCode');
+      var stub = sinon.stub(editorEl.refs.mapEditor, 'hadValidCode');
       stub.returns(false);
       assert.notOk(editorEl.hasValidCode());
     });
 
     it('returns true on valid map editor code', function () {
-      var stub = sinon.stub(editorEl.refs.mapEditor.aceEditor, 'hadValidCode');
+      var stub = sinon.stub(editorEl.refs.mapEditor, 'hadValidCode');
       stub.returns(true);
       assert.ok(editorEl.hasValidCode());
     });
@@ -271,6 +264,5 @@ define([
       });
       assert.ok(spy.calledWith(viewName));
     });
-
   });
 });
