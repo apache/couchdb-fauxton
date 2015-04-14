@@ -23,6 +23,7 @@ function (app, FauxtonAPI, ActiveTasksResources, ActiveTasksComponents, Actions)
   var ActiveTasksRouteObject = FauxtonAPI.RouteObject.extend({
     selectedHeader: 'Active Tasks',
     layout: 'one_pane',
+    disableLoader: true,
     routes: {
       'activetasks/:id': 'showActiveTasks',
       'activetasks': 'showActiveTasks'
@@ -40,7 +41,7 @@ function (app, FauxtonAPI, ActiveTasksResources, ActiveTasksComponents, Actions)
     },
     showActiveTasks: function () {
       Actions.fetchAndSetActiveTasks(this.allTasks);
-      Actions.changePollingInterval(5);
+      Actions.changePollingInterval(1);
 
       this.setComponent('#dashboard-content', ActiveTasksComponents.ActiveTasksController);
       this.setComponent('#right-header', ActiveTasksComponents.ActiveTasksPollingWidgetController);

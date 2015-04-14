@@ -78,7 +78,7 @@ define([
       var setSearchTerm = this.setNewSearchTerm;
       var onTableHeaderClick = this.tableHeaderOnClick;
 
-      if (collection.length === 0 ) {
+      if (_.isUndefined(collection) || collection.length === 0) {
         return (<div className="active-tasks"><tr><td><p>  No active tasks. </p></td></tr></div>);
       }
       return (
