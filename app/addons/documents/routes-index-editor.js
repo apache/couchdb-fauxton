@@ -126,8 +126,8 @@ function (app, FauxtonAPI, Helpers, BaseRoute, Documents, IndexEditorComponents,
       this.breadcrumbs = this.setView('#breadcrumbs', new Components.Breadcrumbs({
         toggleDisabled: true,
         crumbs: [
-          {'type': 'back', 'link': Helpers.getPreviousPage(this.database)},
-          {'name': 'Create new index', 'link': Databases.databaseUrl(this.database) }
+          { type: 'back', link: Helpers.getPreviousPage(this.database) },
+          { name: 'Create new index', link: Databases.databaseUrl(this.database) }
         ]
       }));
 

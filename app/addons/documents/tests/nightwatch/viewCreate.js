@@ -10,16 +10,11 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-var waitTime,
-    baseUrl,
-    newDatabaseName,
-    newDocumentName,
-    modifier;
-
-var tests = {
+module.exports = {
 
   'Creates a Design Doc using the dropdown at "all documents"': function (client) {
     var waitTime = client.globals.maxWaitTime;
+    var baseUrl = client.globals.test_settings.launch_url;
 
     /*jshint multistr: true */
     openDifferentDropdownsAndClick(client, '#header-dropdown-menu')
@@ -41,6 +36,7 @@ var tests = {
 
   'Creates a Design Doc using the dropdown at "the upper dropdown in the header"': function (client) {
     var waitTime = client.globals.maxWaitTime;
+    var baseUrl = client.globals.test_settings.launch_url;
 
     /*jshint multistr: true */
     openDifferentDropdownsAndClick(client, '#header-dropdown-menu')
@@ -48,6 +44,7 @@ var tests = {
       .setValue('#new-ddoc', 'test_design_doc-selenium-2')
       .clearValue('#index-name')
       .setValue('#index-name', 'gaenseindex')
+      .sendKeys("textarea.ace_text-input", client.Keys.Enter)
       .execute('\
         var editor = ace.edit("map-function");\
         editor.getSession().setValue("function (doc) { emit(\'gansgans\'); }");\
@@ -62,11 +59,14 @@ var tests = {
 
   'Adds a View to a DDoc using an existing DDoc': function (client) {
     var waitTime = client.globals.maxWaitTime;
+    var baseUrl = client.globals.test_settings.launch_url;
+    var newDatabaseName = client.globals.testDatabaseName;
     /*jshint multistr: true */
 
     openDifferentDropdownsAndClick(client, '#nav-header-testdesigndoc')
       .clearValue('#index-name')
       .setValue('#index-name', 'test-new-view')
+      .sendKeys("textarea.ace_text-input", client.Keys.Enter)
       .execute('\
         var editor = ace.edit("map-function");\
         editor.getSession().setValue("function (doc) { emit(\'enteente\', 1); }");\
@@ -89,11 +89,11 @@ var tests = {
 };
 
 function openDifferentDropdownsAndClick (client, dropDownElement) {
-  modifier = dropDownElement.slice(1);
-  waitTime = client.globals.maxWaitTime;
-  newDatabaseName = client.globals.testDatabaseName;
-  newDocumentName = 'create_view_doc' + modifier;
-  baseUrl = client.globals.test_settings.launch_url;
+  var modifier = dropDownElement.slice(1);
+  var waitTime = client.globals.maxWaitTime;
+  var newDatabaseName = client.globals.testDatabaseName;
+  var newDocumentName = 'create_view_doc' + modifier;
+  var baseUrl = client.globals.test_settings.launch_url;
 
   return client
     .loginToGUI()
@@ -104,5 +104,3 @@ function openDifferentDropdownsAndClick (client, dropDownElement) {
     .click(dropDownElement + ' a[href*="new_view"]')
     .waitForElementPresent('.editor-wrapper', waitTime, false);
 }
-
-module.exports = tests;
