@@ -28,7 +28,7 @@
     "grunt-md5": "^0.1.11",
     "grunt-mocha-phantomjs": "~0.3.0",
     "grunt-shell": "^1.1.1",
-    "http-proxy": "~1.1.4",
+    "http-proxy": "~1.10.1",
     "jsxcs": "~0.2.1",
     "nano": "~5.12.0",
     "nightwatch": "^0.6.0",
