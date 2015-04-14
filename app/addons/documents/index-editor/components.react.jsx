@@ -58,7 +58,7 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, ReactComponents) 
 
     getDesignDocOptions: function () {
       return this.state.designDocs.map(function (doc, i) {
-        return <option key={i} value={doc.id}> {doc.id} </option>;
+        return <option key={i} value={doc.id}>{doc.id}</option>;
       });
     },
 
@@ -67,7 +67,7 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, ReactComponents) 
 
       return (
         <optgroup label="Select a document">
-          <option value="new">New Design Document </option>
+          <option value="new">New Design Document</option>
           {designDocOptions}
         </optgroup>
       );
