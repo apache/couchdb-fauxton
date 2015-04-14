@@ -27,7 +27,7 @@ function (FauxtonAPI, ActionTypes) {
       this._designDocs = [];
       this._view = {
         reduce: this.defaultMap,
-        map: this.defaultReduce
+        map: ''
       };
       this._database = {
         id: '0'
@@ -83,7 +83,7 @@ function (FauxtonAPI, ActionTypes) {
 
     getDesignDocs: function () {
       return this._designDocs.filter(function (ddoc) {
-        return ddoc.get('doc').language !== 'query';
+        return !ddoc.isMangoDoc();
       });
     },
 
@@ -168,6 +168,10 @@ function (FauxtonAPI, ActionTypes) {
       this.setReduce(selectedReduce);
     },
 
+    updateDesignDoc: function (designDoc) {
+      this._designDocs.add(designDoc, {merge: true});
+    },
+
     dispatch: function (action) {
       switch (action.type) {
         case ActionTypes.EDIT_INDEX:
@@ -205,6 +209,11 @@ function (FauxtonAPI, ActionTypes) {
         break;
 
         case ActionTypes.VIEW_CREATED:
+          this.triggerChange();
+        break;
+
+        case ActionTypes.VIEW_UPDATE_DESIGN_DOC:
+          this.updateDesignDoc(action.designDoc);
           this.triggerChange();
         break;
 
