@@ -15,10 +15,11 @@ define([
   'addons/documents/index-editor/actions',
   'addons/documents/resources',
   'addons/documents/index-editor/actiontypes',
+  'addons/documents/index-editor/stores',
   'testUtils',
   'addons/documents/index-results/actions',
   'addons/documents/base'
-], function (FauxtonAPI, Actions, Documents, ActionTypes, testUtils, IndexResultsActions) {
+], function (FauxtonAPI, Actions, Documents, ActionTypes, Stores, testUtils, IndexResultsActions) {
   var assert = testUtils.assert;
   var restore = testUtils.restore;
 
@@ -34,6 +35,7 @@ define([
       beforeEach(function () {
         designDoc = {
           _id: '_design/test-doc',
+          _rev: '1-231313',
           views: {
             'test-view': {
               map: 'function () {};',
@@ -53,6 +55,7 @@ define([
         restore(FauxtonAPI.navigate);
         restore(FauxtonAPI.triggerRouteEvent);
         restore(IndexResultsActions.reloadResultsList);
+        restore(Actions.updateDesignDoc);
       });
 
       it('shows a notification if no design doc id given', function () {
@@ -127,6 +130,35 @@ define([
         assert.ok(spy.calledOnce);
       });
 
+      it('updates design doc', function () {
+        var viewInfo = {
+          viewName: 'test-view',
+          designDocId: '_design/test-doc',
+          map: 'map',
+          reduce: '_sum',
+          newDesignDoc: false,
+          newView: false,
+          designDocs: designDocs,
+          database: {
+            safeID: function () { return '1';}
+          }
+        };
+
+        designDocs.add = function () {};
+
+        var promise = FauxtonAPI.Deferred();
+        promise.resolve();
+
+        var updatedDesignDoc = _.first(designDocs).dDocModel();
+        var stub = sinon.stub(updatedDesignDoc, 'save');
+        stub.returns(promise);
+
+        var spy = sinon.spy(Actions, 'updateDesignDoc');
+        Actions.saveView(viewInfo);
+
+        assert.ok(spy.calledOnce);
+      });
+
       it('navigates to new url for new view', function () {
         var spy = sinon.spy(FauxtonAPI, 'navigate');
 
@@ -178,6 +210,9 @@ define([
           return promise;
         };
 
+        var stub = sinon.stub(Actions, 'updateDesignDoc');
+        stub.returns(true);
+
         Actions.saveView(viewInfo);
         assert.ok(spy.calledOnce);
       });
@@ -194,6 +229,7 @@ define([
         designDocId = '_design/test-doc';
         designDocs = new Documents.AllDocs([{
           _id: designDocId ,
+          _rev: '1-231',
           views: {
               'test-view': {
                 map: 'function () {};',
@@ -212,8 +248,8 @@ define([
       });
 
       afterEach(function () {
-        FauxtonAPI.navigate.restore && FauxtonAPI.navigate.restore();
-        FauxtonAPI.triggerRouteEvent.restore && FauxtonAPI.triggerRouteEvent.restore();
+        restore(FauxtonAPI.navigate);
+        restore(FauxtonAPI.triggerRouteEvent);
       });
 
       it('removes view from design doc', function () {

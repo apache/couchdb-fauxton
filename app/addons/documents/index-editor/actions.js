@@ -124,17 +124,27 @@ function (app, FauxtonAPI, Documents, ActionTypes, IndexResultsActions) {
             clear: true
           });
 
+
           if (_.any([viewInfo.designDocChanged, viewInfo.hasViewNameChanged, viewInfo.newDesignDoc, viewInfo.newView])) {
             FauxtonAPI.dispatch({
               type: ActionTypes.VIEW_SAVED
             });
             var fragment = FauxtonAPI.urls('view', 'showNewlySavedView', viewInfo.database.safeID(), designDoc.safeID(), app.utils.safeURLName(viewInfo.viewName));
             FauxtonAPI.navigate(fragment, {trigger: true});
+          } else {
+            this.updateDesignDoc(designDoc);
           }
 
           IndexResultsActions.reloadResultsList();
-        });
+        }.bind(this));
       }
+    },
+
+    updateDesignDoc: function (designDoc) {
+      FauxtonAPI.dispatch({
+        type: ActionTypes.VIEW_UPDATE_DESIGN_DOC,
+        designDoc: designDoc.toJSON()
+      });
     },
 
     deleteView: function (options) {
