@@ -24,6 +24,10 @@ module.exports = function (grunt) {
         _ = grunt.util._,
         helper = require('./helper.js');
 
+    if (process.env.FAUXTON_PORT) {
+      options.port = process.env.FAUXTON_PORT;
+    }
+
     // Options
     var dist_dir = options.dist || './dist/debug/',
         app_dir = './app',
