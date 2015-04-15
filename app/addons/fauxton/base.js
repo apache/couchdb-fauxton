@@ -154,10 +154,26 @@ function (app, FauxtonAPI, Components, NavbarReactComponents, NavigationActions,
       this.removeWithAnimation();
     },
 
-    removeWithAnimation: function (event) {
+    removeWithAnimation: function () {
       this.$el.velocity('reverse', FauxtonAPI.constants.MISC.TRAY_TOGGLE_SPEED, function () {
         this.$el.remove();
+        this.removeCloseListener();
       }.bind(this));
+    },
+
+    addCloseListener: function () {
+      $(document).on('keydown.notificationClose', this.onKeyDown.bind(this));
+    },
+
+    onKeyDown: function (e) {
+      var code = e.keyCode || e.which;
+      if (code === 27) { // ESC key
+        this.removeWithAnimation();
+      }
+    },
+
+    removeCloseListener: function () {
+      $(document).off('keydown.notificationClose', this.removeWithAnimation);
     },
 
     delayedRemoval: function () {
@@ -174,6 +190,7 @@ function (app, FauxtonAPI, Components, NavbarReactComponents, NavigationActions,
       this.render().$el.appendTo(selector);
       this.$el.velocity('transition.slideDownIn', FauxtonAPI.constants.MISC.TRAY_TOGGLE_SPEED);
       this.delayedRemoval();
+      this.addCloseListener();
       return this;
     }
   });
