@@ -121,5 +121,21 @@ define([
       delete window.fauxton_xss_test2_escaped;
     });
 
+    it('should close notification when ESCAPE key used', function () {
+      var notification = FauxtonAPI.addNotification({
+        msg: 'Close me!',
+        selector: 'body'
+      });
+      var removeWithAnimationSpy = sinon.spy(notification, 'removeWithAnimation');
+
+      notification.render();
+
+      // manually trigger an ESCAPE key click
+      $(document).trigger($.Event("keydown", { keyCode: 27 }));
+
+      // confirm the remove method has now been called
+      assert.ok(removeWithAnimationSpy.calledOnce);
+    });
+
   });
 });
