@@ -43,7 +43,11 @@ function (FauxtonAPI, ActionTypes) {
       this._designDocId = options.designDocId;
       this._designDocChanged = false;
       this._viewNameChanged = false;
+      this.setView();
 
+    },
+
+    setView: function () {
       if (!this._newView && !this._newDesignDoc) {
         this._view = this.getDesignDoc().get('views')[this._viewName];
       } else {
@@ -214,6 +218,7 @@ function (FauxtonAPI, ActionTypes) {
 
         case ActionTypes.VIEW_UPDATE_DESIGN_DOC:
           this.updateDesignDoc(action.designDoc);
+          this.setView();
           this.triggerChange();
         break;
 
