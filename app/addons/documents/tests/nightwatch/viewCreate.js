@@ -44,6 +44,7 @@ var tests = {
 
     /*jshint multistr: true */
     openDifferentDropdownsAndClick(client, '#header-dropdown-menu')
+      .waitForElementPresent('#new-ddoc', waitTime, false)
       .setValue('#new-ddoc', 'test_design_doc-selenium-2')
       .clearValue('#index-name')
       .setValue('#index-name', 'gaenseindex')
