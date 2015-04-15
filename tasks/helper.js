@@ -13,6 +13,9 @@
 var fs = require('fs'),
     path = require('path');
 
+exports.devServerPort = 8000;
+exports.couch = 'http://localhost:5984/';
+
 exports.init = function (grunt) {
   var _ = grunt.util._,
       platform = process.platform;

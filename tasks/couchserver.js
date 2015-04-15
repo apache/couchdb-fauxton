@@ -21,17 +21,18 @@ module.exports = function (grunt) {
         send = require('send'),
         urlLib = require('url'),
         options = grunt.config('couchserver'),
-        _ = grunt.util._;
+        _ = grunt.util._,
+        helper = require('./helper.js');
 
     // Options
     var dist_dir = options.dist || './dist/debug/',
         app_dir = './app',
-        port = options.port || 8000,
+        port = options.port,
         setContentSecurityPolicy = _.isUndefined(options.contentSecurityPolicy) ? true : options.contentSecurityPolicy;
 
     // Proxy options with default localhost
     var proxy_settings = options.proxy || {
-      target: "http://localhost:5984/"
+      target: helper.couch
     };
 
     // inform grunt that this task is async
