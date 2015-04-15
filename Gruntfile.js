@@ -19,15 +19,15 @@
 "use strict";
 
 module.exports = function (grunt) {
-  var helper = require('./tasks/helper').init(grunt),
-  _ = grunt.util._,
-  fs = require('fs');
+  var helper = require('./tasks/helper.js'),
+      initHelper = helper.init(grunt),
+      _ = grunt.util._,
+      fs = require('fs');
 
   var couch_config = function () {
-
     var default_couch_config = {
       fauxton: {
-        db: 'http://localhost:5984/fauxton',
+        db: helper.couch + 'fauxton',
         app: './couchapp.js',
         options: {
           okay_if_missing: true
@@ -35,13 +35,13 @@ module.exports = function (grunt) {
       }
     };
 
-    var settings_couch_config = helper.readSettingsFile().couch_config;
+    var settings_couch_config = initHelper.readSettingsFile().couch_config;
     return settings_couch_config || default_couch_config;
   }();
 
   var cleanableAddons =  function () {
     var theListToClean = [];
-    helper.processAddons(function (addon) {
+    initHelper.processAddons(function (addon) {
       // Only clean addons that are included from a local dir
       if (addon.path) {
         theListToClean.push("app/addons/" + addon.name);
@@ -73,7 +73,7 @@ module.exports = function (grunt) {
       // fauxton.css should load first
       css: ["assets/css/*.css", "dist/debug/css/fauxton.css"]
     };
-    helper.processAddons(function (addon) {
+    initHelper.processAddons(function (addon) {
       // Less files from addons
       var root = addon.path || "app/addons/" + addon.name;
       var lessPath = root + "/assets/less";
@@ -120,9 +120,9 @@ module.exports = function (grunt) {
       }
     };
 
-    var settings = helper.readSettingsFile();
+    var settings = initHelper.readSettingsFile();
 
-    var i18n = JSON.stringify(helper.readI18nFile(), null, ' ');
+    var i18n = JSON.stringify(initHelper.readI18nFile(), null, ' ');
 
     Object.keys(settings.template).forEach(function (key) {
       settings.template[key].app.i18n = i18n;
@@ -137,13 +137,13 @@ module.exports = function (grunt) {
     // against a remote CouchDB-compatible server.
     var defaults = {
       dist: './dist/debug/',
-      port: 8000,
+      port: helper.devServerPort,
       proxy: {
-        target: "http://localhost:5984/"
+        target: helper.couch
       }
     };
 
-    return helper.readSettingsFile().couchserver || defaults;
+    return initHelper.readSettingsFile().couchserver || defaults;
   }();
 
   var config = {
@@ -284,21 +284,21 @@ module.exports = function (grunt) {
 
     watch: {
       js: {
-        files: helper.watchFiles(['.js'], ["./app/**/*.js", '!./app/load_addons.js', "./assets/**/*.js", "./test/**/*.js"]),
+        files: initHelper.watchFiles(['.js'], ["./app/**/*.js", '!./app/load_addons.js', "./assets/**/*.js", "./test/**/*.js"]),
         tasks: ['watchRun'],
       },
       jsx: {
-        files: helper.watchFiles(['.jsx'], ["./app/**/*.jsx", '!./app/load_addons.jsx', "./assets/**/*.jsx", "./test/**/*.jsx"]),
+        files: initHelper.watchFiles(['.jsx'], ["./app/**/*.jsx", '!./app/load_addons.jsx', "./assets/**/*.jsx", "./test/**/*.jsx"]),
         tasks: ['watchRun'],
       },
       style: {
-        files: helper.watchFiles(['.less', '.css'], ["./app/**/*.css", "./app/**/*.less", "./assets/**/*.css", "./assets/**/*.less"]),
+        files: initHelper.watchFiles(['.less', '.css'], ["./app/**/*.css", "./app/**/*.less", "./assets/**/*.css", "./assets/**/*.less"]),
         tasks: ['clean:watch', 'dependencies', 'less', 'concat:index_css'],
       },
       html: {
         // the index.html is added in as a dummy file incase there is no
         // html dependancies this will break. So we need one include pattern
-        files: helper.watchFiles(['.html'], ['./index.html']),
+        files: initHelper.watchFiles(['.html'], ['./index.html']),
         tasks: ['clean:watch', 'dependencies']
       },
       options: {
@@ -402,7 +402,7 @@ module.exports = function (grunt) {
     mochaSetup: {
       default: {
         files: {
-          src: helper.watchFiles(['[Ss]pec.js'], ['./app/addons/**/*[Ss]pec.js', './app/addons/**/*[Ss]pec.react.js', './app/core/**/*[Ss]pec.js'])
+          src: initHelper.watchFiles(['[Ss]pec.js'], ['./app/addons/**/*[Ss]pec.js', './app/addons/**/*[Ss]pec.react.js', './app/core/**/*[Ss]pec.js'])
         },
         template: 'test/test.config.underscore',
         config: './app/config.js'
@@ -426,7 +426,7 @@ module.exports = function (grunt) {
     },
 
     exec: {
-      check_selenium: helper.check_selenium,
+      check_selenium: initHelper.check_selenium,
       start_nightWatch: {
         command: __dirname + '/node_modules/nightwatch/bin/nightwatch' +
         ' -c ' + __dirname + '/test/nightwatch_tests/nightwatch.json'
@@ -436,7 +436,7 @@ module.exports = function (grunt) {
     // generates the nightwatch.json file with appropriate content for this env
     initNightwatch: {
       default: {
-        settings: helper.readSettingsFile(),
+        settings: initHelper.readSettingsFile(),
         template: 'test/nightwatch_tests/nightwatch.json.underscore',
         dest: 'test/nightwatch_tests/nightwatch.json'
       }
