@@ -29,7 +29,7 @@ define([
     var spy;
 
     beforeEach(function () {
-      activeTasksStore.init(activeTasksCollection.table, activeTasksCollection);
+      activeTasksStore.initAfterFetching(activeTasksCollection.table, activeTasksCollection);
       this.clock = sinon.useFakeTimers();
     });
 
@@ -42,7 +42,7 @@ define([
       var pollingWidgetDiv, pollingWidget;
 
       beforeEach(function () {
-        activeTasksStore.init(activeTasksCollection.table, activeTasksCollection);
+        activeTasksStore.initAfterFetching(activeTasksCollection.table, activeTasksCollection);
         this.clock = sinon.useFakeTimers();
       });
 

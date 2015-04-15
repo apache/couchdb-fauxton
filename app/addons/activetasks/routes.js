@@ -40,9 +40,7 @@ function (app, FauxtonAPI, ActiveTasksResources, ActiveTasksComponents, Actions)
       this.allTasks = new ActiveTasksResources.AllTasks();
     },
     showActiveTasks: function () {
-      Actions.fetchAndSetActiveTasks(this.allTasks);
-      Actions.changePollingInterval(1);
-
+      Actions.init(this.allTasks);
       this.setComponent('#dashboard-content', ActiveTasksComponents.ActiveTasksController);
       this.setComponent('#right-header', ActiveTasksComponents.ActiveTasksPollingWidgetController);
     }

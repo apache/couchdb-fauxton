@@ -16,8 +16,10 @@ define([
   'react',
   'addons/activetasks/stores',
   'addons/activetasks/resources',
-  'addons/activetasks/actions'
-], function (app, FauxtonAPI, React, Stores, Resources, Actions) {
+  'addons/activetasks/actions',
+  'addons/components/react-components.react',
+  'addons/fauxton/components.react'
+], function (app, FauxtonAPI, React, Stores, Resources, Actions, Components, ComponentsReact) {
 
   var activeTasksStore = Stores.activeTasksStore;
   var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
@@ -34,7 +36,7 @@ define([
         headerIsAscending: activeTasksStore.getHeaderIsAscending(),
 
         setPolling: activeTasksStore.setPolling,
-        clearPolling: activeTasksStore.clearPolling,
+        clearPolling: activeTasksStore.clearPolling
       };
     },
 
@@ -60,7 +62,7 @@ define([
       Actions.setSearchTerm(searchTerm);
     },
 
-    switchTab: function (newRadioButton) {  //radio buttons
+    switchTab: function (newRadioButton) {  //tabs buttons
       Actions.switchTab(newRadioButton);
     },
 
@@ -84,7 +86,7 @@ define([
       return (
         <div className="scrollable">
           <div className="inner">
-            <ActiveTasksFilter 
+            <ActiveTasksFilterTabs 
               searchTerm={searchTerm} 
               selectedRadio={selectedRadio} 
               onSearch={setSearchTerm} 
@@ -102,93 +104,7 @@ define([
     }
   });
 
-  var ActiveTasksFilter = React.createClass({
-    getStoreState: function () {
-      return {
-        isFilterTrayVisible: false
-      };
-    },
-
-    getInitialState: function () {
-      return this.getStoreState();
-    },
-
-    toggleFilterTray: function () {
-      this.setState({
-        isFilterTrayVisible : !this.state.isFilterTrayVisible
-      });
-    },
-
-    render: function () {
-      var filterTray = '';
-
-      if (this.state.isFilterTrayVisible) {
-        filterTray = <ActiveTasksFilterTray 
-                        key="filter-tray" 
-                        selectedRadio={this.props.selectedRadio}
-                        onSearch={this.props.onSearch} 
-                        onRadioClick={this.props.onRadioClick} />;
-      }
-
-      return (
-        <div id="dashboard-upper-content">
-          <div className="dashboard-upper-menu active-tasks">
-            <ActiveTasksFilterTab onClick={this.toggleFilterTray} />
-          </div>
-          <ReactCSSTransitionGroup 
-            className="dashboard-lower-menu" 
-            transitionName="toggleFilterTray" 
-            component="div" >
-            {filterTray}
-          </ReactCSSTransitionGroup>
-        </div>
-      );
-    }
-  });
-
-  var ActiveTasksFilterTab = React.createClass({
-    render: function () {
-      return (
-        <ul className="nav nav-tabs" id="db-views-tabs-nav">
-          <li>
-            <a id="toggle-filter-tab"
-               className="toggle-filter-tab"
-               data-bypass="true" 
-               data-toggle="button"
-               onClick={this.props.onClick}>
-              <i className="fonticon fonticon-plus"></i>
-              Filter
-            </a>
-          </li>
-        </ul>);
-    }
-  });
-
-  var ActiveTasksFilterTray = React.createClass({
-    searchTermChange: function (e) {
-      var searchTerm = e.target.value;
-      this.props.onSearch(searchTerm);
-    },
-
-    render: function () {
-      return (
-        <div className="filter-tray">
-          <ActiveTasksFilterTrayCheckBoxes 
-            onRadioClick={this.props.onRadioClick} 
-            selectedRadio={this.props.selectedRadio} />
-          <input  
-            className="searchbox" 
-            type="text" 
-            name="search" 
-            placeholder="Search for databases..." 
-            value={this.props.searchTerm}
-            onChange={this.searchTermChange} />  
-        </div>
-      );
-    }
-  });
-
-  var ActiveTasksFilterTrayCheckBoxes = React.createClass({
+  var ActiveTasksFilterTabs = React.createClass({
     getDefaultProps: function () {
       return {
         radioNames : [
@@ -210,17 +126,20 @@ define([
       this.props.onRadioClick(radioName);
     },
 
-    createCheckboxes: function () {
+    createFilterTabs: function () {
       return (
         this.props.radioNames.map(function (radioName) {
           var checked = this.checked(radioName);
           var id = radioName.replace(' ', '-');
           var radioClassName = "radio-" + id;
           var radioClick = this.onRadioClick;
+          var checkedClassName = checked ? 'active-tasks-checked' : '';
 
           return (
-            <li className="active-tasks-one-checkbox" key={radioName + "li"}>
+            <li className={"active-tasks-one-checkbox " + checkedClassName} key={radioName + "li"}>
               <input
+                  className="toggle-filter-tab"
+                  data-bypass="true"
                   id={id}
                   type="radio"
                   key ={radioName} 
@@ -237,15 +156,27 @@ define([
       );
     },
 
+    searchTermChange: function (e) {
+      var searchTerm = e.target.value;
+      this.props.onSearch(searchTerm);
+    },
+
     render: function () {
-      var filterCheckboxes = this.createCheckboxes();
+      var filterTabs = this.createFilterTabs();
       return (
-        <ul className="filter-checkboxes">
-          <form className="filter-checkboxes-form">
-          {filterCheckboxes}
-          </form>
-        </ul>
-      );
+        <ul className="nav nav-tabs" id="active-tasks-filter-tabs">
+          {filterTabs}
+          <li>
+            <input  
+              id="active-tasks-search-box"
+              className="searchbox" 
+              type="text" 
+              name="search" 
+              placeholder="Search for databases..." 
+              value={this.props.searchTerm}
+              onChange={this.searchTermChange} />  
+          </li>
+        </ul>);
     }
   });
 
@@ -349,7 +280,7 @@ define([
           onChange={this.onTableHeaderClick}>
           <th className={th_class} value={this.props.headerName}>
             <label 
-              className="header-field label-text"
+              className="header-field label-text active-tasks-header"
               htmlFor={this.props.headerName}>
               {this.props.displayName} {arrow}
             </label>
@@ -453,9 +384,66 @@ define([
           <td>{startedOnMsg}</td>
           <td>{updatedOnMsg}</td>
           <td>{rowData.pid}</td>
-          <td>{progressMsg}</td>
+          <td>{progressMsg}<ActiveTasksViewSourceSequence item={this.props.item}/></td>
         </tr>
       );
+    }
+  });
+
+  var ActiveTasksViewSourceSequence = React.createClass({
+    onTrayToggle: function (e) {
+      e.preventDefault();
+      this.refs.view_source_sequence_btn.toggle(function (shown) {
+        if (shown) {
+          this.refs.view_source_sequence_btn.getDOMNode().focus();
+        }
+      }.bind(this));
+    },
+
+    sequences: function (item) {
+      if (_.isNumber(item) || _.isString(item)) {
+        return (
+          <ComponentsReact.ClipboardWithTextField textToCopy={item} uniqueKey={item}>
+          </ComponentsReact.ClipboardWithTextField>
+        );
+      } else if (_.isArray(item)) {
+        return (
+          _.map(item, function (seq, i) {
+            return (
+              <ComponentsReact.ClipboardWithTextField textToCopy={seq} uniqueKey={i + Math.random(100)} key={i}>
+              </ComponentsReact.ClipboardWithTextField>
+            );
+          })
+        );
+      } else {
+        return (
+          <ComponentsReact.ClipboardWithTextField textToCopy="???" uniqueKey='unknownRevision'>
+          </ComponentsReact.ClipboardWithTextField>
+        );
+      }
+    },
+
+    render: function () {
+
+      if (_.has(this.props.item, 'source_seq')) {
+        var sequences = this.sequences(this.props.item.source_seq);
+        return (
+          <div>
+            Current source sequence: 
+            <a href="#" 
+              className="view-source-sequence-btn" 
+              onClick={this.onTrayToggle} 
+              data-bypass="true">
+              View
+            </a>
+            <ComponentsReact.Tray ref="view_source_sequence_btn" className="view_source_sequence_tray">
+              <span className="add-on">Source Sequence</span>
+              {sequences}
+            </ComponentsReact.Tray>
+          </div>
+        );
+      }
+      return null;
     }
   });
 
@@ -463,7 +451,8 @@ define([
 
     getStoreState: function () {
       return {
-        pollingInterval:  activeTasksStore.getPollingInterval()
+        pollingInterval:  activeTasksStore.getPollingInterval(),
+        isLoading: activeTasksStore.isLoading()
       };
     },
 
@@ -517,8 +506,22 @@ define([
 
     render: function () {
       var pollingWidget = this.createPollingWidget();
+      var loadLines = null;
 
-      return  <div>{pollingWidget}</div>;
+      if (this.state.isLoading || this.state.pollingInterval === "1") {
+        // show loading lines constantly if the polling interval is
+        // 1 second, so that the lines aren't choppy
+        loadLines = <Components.LoadLines />;
+      }
+
+      return (
+        <div>
+          <span className="active-tasks-loading-lines">
+            {loadLines}
+          </span>
+          {pollingWidget}
+        </div>
+      );
     }
   });
 
@@ -568,29 +571,29 @@ define([
         }
       }
 
-      if (_.has(item, 'source_seq')) {
-        progressMessage.push('Current source sequence: ' + item.source_seq + '. ');
-      }
-
       if (_.has(item, 'changes_done')) {
         progressMessage.push(item.changes_done + ' Changes done.');
       }
 
       return progressMessage;
+    },
+
+    getSourceSequence: function (item) {
+      return item.source_seq;
     }
+
   };
 
   return {
     ActiveTasksController: ActiveTasksController,
-    ActiveTasksFilter: ActiveTasksFilter,
-    ActiveTasksFilterTab: ActiveTasksFilterTab,
-    ActiveTasksFilterTray: ActiveTasksFilterTray,
+    ActiveTasksFilterTabs: ActiveTasksFilterTabs,
 
     ActiveTaskTable: ActiveTaskTable,
     ActiveTasksTableHeader: ActiveTasksTableHeader,
     TableHeader: TableHeader,
     ActiveTasksTableBody: ActiveTasksTableBody,
     ActiveTaskTableBodyContents: ActiveTaskTableBodyContents,
+    ActiveTasksViewSourceSequence: ActiveTasksViewSourceSequence,
 
     ActiveTasksPollingWidgetController: ActiveTasksPollingWidgetController
   };
