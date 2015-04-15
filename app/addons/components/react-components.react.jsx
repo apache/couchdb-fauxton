@@ -15,10 +15,11 @@ define([
   'api',
   'react',
   'addons/fauxton/components',
+  'ace/ace',
   'plugins/beautify'
 ],
 
-function (app, FauxtonAPI, React, Components, beautifyHelper) {
+function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
 
   var ToggleHeaderButton = React.createClass({
     render: function () {
@@ -63,7 +64,195 @@ function (app, FauxtonAPI, React, Components, beautifyHelper) {
   });
 
   var CodeEditor = React.createClass({
+    getDefaultProps: function () {
+      return {
+        id   : 'code-editor',
+        mode : 'javascript',
+        theme : 'idle_fingers',
+        fontSize : 13,
+        code  : '',
+        showGutter : true,
+        onChange   : null,
+        highlightActiveLine : true,
+        showPrintMargin     : false,
+        autoScrollEditorIntoView: true,
+        setHeightWithJS: true,
+        isFullPageEditor: false,
+      };
+    },
+
+    setupAce: function (props) {
+      this.editor = ace.edit(props.id);
+      // Automatically scrolling cursor into view after selection
+      // change this will be disabled in the next version
+      // set editor.$blockScrolling = Infinity to disable this message
+      this.editor.$blockScrolling = Infinity;
+
+      this.editor.setShowPrintMargin(props.showPrintMargin);
+      this.editor.autoScrollEditorIntoView = props.autoScrollEditorIntoView;
+      this.setEditorValue(props.code);
+      this.setHeightToLineCount();
+      this.removeIncorrectAnnotations();
+      this.editor.getSession().setMode("ace/mode/" + props.mode);
+      this.editor.setTheme("ace/theme/" + props.theme);
+      this.editor.setFontSize(this.props.fontSize);
+    },
+
+    setupChange: function () {
+      this.editor.getSession().on('change', function () {
+        this.setHeightToLineCount();
+        this.edited = true;
+      }.bind(this));
+
+      $(window).on('beforeunload.editor_' + this.editorId, function () {
+        if (this.edited) {
+          return 'Your changes have not been saved. Click cancel to return to the document.';
+        }
+      }.bind(this));
+
+      FauxtonAPI.beforeUnload('editor_' + this.editorId, function (deferred) {
+        if (this.edited) {
+          return 'Your changes have not been saved. Click cancel to return to the document.';
+        }
+      }.bind(this));
+    },
+
+    setHeightToLineCount: function () {
+      if (!this.props.setHeightWithJS) {
+        return;
+      }
+
+      var lines = this.editor.getSession().getDocument().getLength();
+
+      if (this.props.isFullPageEditor) {
+        var maxLines = this.getMaxAvailableLinesOnPage();
+        lines = lines < maxLines ? lines : maxLines;
+      }
+      this.editor.setOptions({
+        maxLines: lines
+      });
+    },
+
+    // List of JSHINT errors to ignore
+    // Gets around problem of anonymous functions not being a valid statement
+    excludedViewErrors: [
+      "Missing name in function declaration.",
+      "['{a}'] is better written in dot notation."
+    ],
+
+    isIgnorableError: function (msg) {
+      return _.contains(this.excludedViewErrors, msg);
+    },
+
+    removeIncorrectAnnotations: function () {
+      var editor = this.editor,
+          isIgnorableError = this.isIgnorableError;
+
+      this.editor.getSession().on("changeAnnotation", function () {
+        var annotations = editor.getSession().getAnnotations();
+
+        var newAnnotations = _.reduce(annotations, function (annotations, error) {
+          if (!isIgnorableError(error.raw)) {
+            annotations.push(error);
+          }
+          return annotations;
+        }, []);
+
+        if (annotations.length !== newAnnotations.length) {
+          editor.getSession().setAnnotations(newAnnotations);
+        }
+      });
+    },
+
+    componentDidMount: function () {
+      this.edited = false;
+      this.setupAce(this.props);
+      this.setupChange();
+    },
+
+    componentWillUnmount: function () {
+      $(window).off('beforeunload.editor_' + this.editorId);
+      $(window).off('resize.editor', this.onPageResize);
+      FauxtonAPI.removeBeforeUnload('editor_' + this.editorId);
+      this.editor.destroy();
+    },
+
+    componentWillReceiveProps: function (nextProps) {
+      this.setupAce(nextProps);
+    },
+
+    editSaved: function () {
+      this.edited = false;
+    },
+
+    getTitleFragment: function () {
+      if (!this.props.docs) {
+        return <strong>{this.props.title}</strong>;
+      }
+
+      return (
+        <label>
+          <strong>{this.props.title}</strong>
+          <a
+            className="help-link"
+            data-bypass="true"
+            href={this.props.docs}
+            target="_blank"
+          >
+          <i className="icon-question-sign"></i>
+          </a>
+        </label>
+      );
+    },
+
+    getAnnotations: function () {
+      return this.editor.getSession().getAnnotations();
+    },
+
+    hadValidCode: function () {
+      var errors = this.getAnnotations();
+      // By default CouchDB view functions don't pass lint
+      return _.every(errors, function (error) {
+        return this.isIgnorableError(error.raw);
+      }, this);
+    },
+
+    setEditorValue: function (code, lineNumber) {
+      if (this.edited) { return; }
+
+
+      if (this.editor.getValue() !== code) {
+        lineNumber = lineNumber ? lineNumber : -1;
+        this.editor.setValue(code, lineNumber);
+      }
+    },
+
+    getValue: function () {
+      return this.editor.getValue();
+    },
+
+    getEditor: function () {
+      return this;
+    },
+
     render: function () {
+      return (
+        <div className="control-group">
+          {this.getTitleFragment()}
+          <div className="js-editor" id={this.props.id}></div>
+          <Beautify code={this.props.code} beautifiedCode={this.setEditorValue} />
+        </div>
+      );
+    }
+
+  });
+
+  /*var CodeEditor = React.createClass({
+    render: function () {
+      if (!this.props.code .aceEditor.getValue())) {
+        return null;
+      }
+
       var code = this.aceEditor ? this.aceEditor.getValue() : this.props.code;
       return (
         <div className="control-group">
@@ -118,7 +307,13 @@ function (app, FauxtonAPI, React, Components, beautifyHelper) {
       this.aceEditor.render();
     },
 
-    shouldComponentUpdate: function () {
+    shouldComponentUpdate: function (props) {
+      console.log('should update', arguments, _.isEmpty(this.aceEditor.getValue()), this.aceEditor.getValue());
+      if (props.code && _.isEmpty(this.aceEditor.getValue())) {
+        console.log('update');
+        //this.setEditorValue(props.code);
+        return true;
+      }
       //we don't want to re-render the map editor as we are using backbone underneath
       //which will cause the editor to break
       this.aceEditor.editSaved();
@@ -130,7 +325,7 @@ function (app, FauxtonAPI, React, Components, beautifyHelper) {
       this.aceEditor.remove();
     }
 
-  });
+  });*/
 
   var Beautify = React.createClass({
     noOfLines: function () {

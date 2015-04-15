@@ -351,6 +351,7 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, ReactComponents) 
     },
 
     render: function () {
+      console.log('render', this.state.map);
       return (
         <div className="define-view">
           <PaddedBorderedBox>
