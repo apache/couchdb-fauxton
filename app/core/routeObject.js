@@ -132,8 +132,8 @@ function (FauxtonAPI, React, Backbone) {
     },
 
     renderReactComponents: function () {
-      _.each(this.reactComponents, function (component, selector) {
-        React.render(React.createElement(component, null), $(selector)[0]);
+      _.each(this.reactComponents, function (componentInfo, selector) {
+        React.render(React.createElement(componentInfo.component, componentInfo.props), $(selector)[0]);
       });
     },
 
@@ -245,10 +245,13 @@ function (FauxtonAPI, React, Backbone) {
       return view;
     },
 
-    setComponent: function (selector, component) {
+    setComponent: function (selector, component, props) {
       this.removeView(selector);
       this.removeComponent(selector);
-      this.reactComponents[selector] = component;
+      this.reactComponents[selector] = {
+        component: component,
+        props: props || null
+      };
     },
 
     removeComponent: function (selector) {

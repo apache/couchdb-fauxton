@@ -178,7 +178,15 @@ define([
           var fakeSelector = '.fake-selector';
 
           testRouteObject.setComponent(fakeSelector, fakeReactComponent);
-          assert.deepEqual(fakeReactComponent, testRouteObject.reactComponents[fakeSelector]);
+          assert.deepEqual(fakeReactComponent, testRouteObject.reactComponents[fakeSelector].component);
+        });
+
+        it('sets props for the selector', function () {
+          var fakeReactComponent = React.createElement('div');
+          var fakeSelector = '.fake-selector';
+
+          testRouteObject.setComponent(fakeSelector, fakeReactComponent, {foo: 'bar baromat'});
+          assert.deepEqual(fakeReactComponent, testRouteObject.reactComponents[fakeSelector].component);
         });
 
       });
