@@ -65,12 +65,23 @@ define([
       });
 
       afterEach(function () {
-        spy.restore();
         React.unmountComponentAtNode(tableDiv);
         window.confirm.restore && window.confirm.restore();
       });
 
+
+      it('it displays a message instead of an empty table, if there are undefined active tasks', function () {
+        Actions.setCollection(undefined);
+        var tableText = $(table.getDOMNode())[0].innerText;
+        assert.equal(tableText.trim(), 'No active tasks.');
+      });
+
       describe('Active Tasks Filter tray', function () {
+        
+        afterEach(function () {
+          spy.restore();
+        });
+        
         var radioIDs = [
           'Replication',
           'Database-Compaction',
