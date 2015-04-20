@@ -57,7 +57,7 @@ module.exports = {
         editor.getSession().setValue("function (doc) { emit(\'hasehase5000\', 1); }");\
       ')
       .execute('$(".save")[0].scrollIntoView();')
-      .click('button.btn-success.save')
+      .clickWhenVisible('button.btn-success.save')
 
       .waitForElementNotVisible('.global-notification', waitTime, false)
       .waitForElementNotPresent('.loading-lines', waitTime, false)
