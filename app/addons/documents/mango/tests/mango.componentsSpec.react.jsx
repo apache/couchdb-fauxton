@@ -25,6 +25,7 @@ define([
 
   var assert = utils.assert;
   var TestUtils = React.addons.TestUtils;
+  FauxtonAPI.router = new FauxtonAPI.Router([]);
 
   var fakeData = [
       {
@@ -60,18 +61,16 @@ define([
       MangoActions.setDatabase({
         database: database
       });
-      $('body').append('<div id="query-field"></div>');
     });
 
     afterEach(function () {
       React.unmountComponentAtNode(container);
-      $('#query-field').remove();
     });
 
     it('renders a default index definition', function () {
       editor = TestUtils.renderIntoDocument(<Views.MangoIndexEditorController description="foo" />, container);
       var $el = $(editor.getDOMNode());
-      var payload = JSON.parse($el.find('.js-editor').text());
+      var payload = JSON.parse(editor.refs.indexQueryEditor.getValue());
       assert.equal(payload.index.fields[0], '_id');
     });
 

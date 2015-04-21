@@ -82,7 +82,7 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
     },
 
     setupAce: function (props) {
-      this.editor = ace.edit(props.id);
+      this.editor = ace.edit(this.getDOMNode(this.refs.ace));
       // Automatically scrolling cursor into view after selection
       // change this will be disabled in the next version
       // set editor.$blockScrolling = Infinity to disable this message
@@ -239,7 +239,7 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
       return (
         <div className="control-group">
           {this.getTitleFragment()}
-          <div className="js-editor" id={this.props.id}></div>
+          <div ref="ace" className="js-editor" id={this.props.id}></div>
           <Beautify code={this.props.code} beautifiedCode={this.setEditorValue} />
         </div>
       );
