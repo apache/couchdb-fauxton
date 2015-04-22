@@ -151,7 +151,7 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, ReactComponents) 
 
     getOptionsList: function () {
       return _.map(this.state.reduceOptions, function (reduce, i) {
-        return <option key={i} value={reduce}> {reduce} </option>;
+        return <option key={i} value={reduce}>{reduce}</option>;
       }, this);
 
     },
@@ -358,7 +358,7 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, ReactComponents) 
           </PaddedBorderedBox>
           <PaddedBorderedBox>
             <strong>Database</strong>
-            <div className="db-title">{this.state.database.id}</div>
+            <div className="db-title">{this.state.database.safeID()}</div>
           </PaddedBorderedBox>
           <form className="form-horizontal view-query-save" onSubmit={this.saveView}>
             <DesignDocSelector />

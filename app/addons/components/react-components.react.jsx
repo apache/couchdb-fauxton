@@ -72,13 +72,16 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
         fontSize : 13,
         code  : '',
         showGutter : true,
-        onChange   : null,
         highlightActiveLine : true,
         showPrintMargin     : false,
         autoScrollEditorIntoView: true,
         setHeightWithJS: true,
         isFullPageEditor: false,
       };
+    },
+
+    hasChanged: function () {
+      return !_.isEqual(this.props.code, this.getValue());
     },
 
     setupAce: function (props) {
@@ -98,23 +101,21 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
       this.editor.setFontSize(this.props.fontSize);
     },
 
-    setupChange: function () {
-      this.editor.getSession().on('change', function () {
-        this.setHeightToLineCount();
-        this.edited = true;
-      }.bind(this));
+    setupEvents: function () {
+      $(window).on('beforeunload.editor_' + this.editorId, _.bind(this.quitWarningMsg));
+      FauxtonAPI.beforeUnload('editor_' + this.editorId, _.bind(this.quitWarningMsg, this));
+    },
 
-      $(window).on('beforeunload.editor_' + this.editorId, function () {
-        if (this.edited) {
-          return 'Your changes have not been saved. Click cancel to return to the document.';
-        }
-      }.bind(this));
+    quitWarningMsg: function () {
+      if (this.hasChanged()) {
+        return 'Your changes have not been saved. Click cancel to return to the document.';
+      }
+    },
 
-      FauxtonAPI.beforeUnload('editor_' + this.editorId, function (deferred) {
-        if (this.edited) {
-          return 'Your changes have not been saved. Click cancel to return to the document.';
-        }
-      }.bind(this));
+    removeEvents: function () {
+      $(window).off('beforeunload.editor_' + this.editorId);
+      $(window).off('resize.editor', this.onPageResize);
+      FauxtonAPI.removeBeforeUnload('editor_' + this.editorId);
     },
 
     setHeightToLineCount: function () {
@@ -165,15 +166,12 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
     },
 
     componentDidMount: function () {
-      this.edited = false;
       this.setupAce(this.props);
-      this.setupChange();
+      this.setupEvents();
     },
 
     componentWillUnmount: function () {
-      $(window).off('beforeunload.editor_' + this.editorId);
-      $(window).off('resize.editor', this.onPageResize);
-      FauxtonAPI.removeBeforeUnload('editor_' + this.editorId);
+      this.removeEvents();
       this.editor.destroy();
     },
 
@@ -182,7 +180,7 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
     },
 
     editSaved: function () {
-      this.edited = false;
+      return this.hasChanged();
     },
 
     getTitleFragment: function () {
@@ -218,13 +216,8 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
     },
 
     setEditorValue: function (code, lineNumber) {
-      if (this.edited) { return; }
-
-
-      if (this.editor.getValue() !== code) {
-        lineNumber = lineNumber ? lineNumber : -1;
-        this.editor.setValue(code, lineNumber);
-      }
+      lineNumber = lineNumber ? lineNumber : -1;
+      this.editor.setValue(code, lineNumber);
     },
 
     getValue: function () {
