@@ -184,8 +184,7 @@
         update_seq: resp.update_seq
       };
 
-      var skipLimit = this.paging.defaultParams.skip || 0;
-      if(this.paging.params.skip > skipLimit) {
+      if (this.paging.params.skip > 0) {
         this.paging.hasPrevious = true;
       }
 

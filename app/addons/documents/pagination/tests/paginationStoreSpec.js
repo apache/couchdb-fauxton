@@ -284,8 +284,14 @@ define([
 
         store.setPerPage(testPerPage);
         assert.equal(spy.getCall(0).args[0], testPerPage);
+      });
+    });
 
-
+    describe('#setPage', function () {
+      it('sets the page', function () {
+        var page = 4;
+        store.setPerPage(page);
+        assert.equal(page, store.getCurrentPage());
       });
     });
   });

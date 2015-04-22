@@ -121,7 +121,8 @@ function (app, FauxtonAPI, ace, spin, ZeroClipboard) {
     template: "addons/fauxton/templates/breadcrumbs",
 
     events:  {
-      "click .js-lastelement": "toggleLastElement"
+      "click .js-lastelement": "toggleLastElement",
+      'click .breadcrumb-back-link a': 'onClickBack'
     },
 
     serialize: function () {
@@ -163,6 +164,11 @@ function (app, FauxtonAPI, ace, spin, ZeroClipboard) {
     initialize: function (options) {
       this.crumbs = options.crumbs;
       this.toggleDisabled = options.toggleDisabled || false;
+      this.clickBack = options.clickBack || null;
+    },
+
+    onClickBack: function (e) {
+      this.clickBack && this.clickBack(e);
     }
   });
 

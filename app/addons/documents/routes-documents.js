@@ -13,6 +13,7 @@
 define([
   "app",
   "api",
+  'addons/fauxton/memory',
 
   // Modules
   'addons/documents/shared-routes',
@@ -25,13 +26,14 @@ define([
   'addons/databases/base',
   'addons/documents/resources',
   'addons/fauxton/components',
+  'addons/documents/pagination/actions',
   'addons/documents/pagination/stores',
   'addons/documents/index-results/actions',
   'addons/documents/index-results/index-results.components.react'
 ],
 
-function (app, FauxtonAPI, BaseRoute, Documents, Changes, ChangesActions, DocEditor, Mango,
-  Databases, Resources, Components, PaginationStores, IndexResultsActions, IndexResultsComponents) {
+function (app, FauxtonAPI, memory, BaseRoute, Documents, Changes, ChangesActions, DocEditor, Mango,
+  Databases, Resources, Components, PaginationActions, PaginationStores, IndexResultsActions, IndexResultsComponents) {
 
 
     var DocumentsRouteObject = BaseRoute.extend({
@@ -46,7 +48,6 @@ function (app, FauxtonAPI, BaseRoute, Documents, Changes, ChangesActions, DocEdi
           roles: ['fx_loggedIn']
         },
         'database/:database/_changes': 'changes'
-
       },
 
       events: {
@@ -56,6 +57,7 @@ function (app, FauxtonAPI, BaseRoute, Documents, Changes, ChangesActions, DocEdi
       initialize: function (route, masterLayout, options) {
         this.initViews(options[0]);
         this.listenToLookaheadTray();
+        this.once('afterEstablish', this.onEstablish);
       },
 
       establish: function () {
@@ -106,9 +108,24 @@ function (app, FauxtonAPI, BaseRoute, Documents, Changes, ChangesActions, DocEdi
       */
       allDocs: function (databaseName, options) {
         var params = this.createParams(options),
-        urlParams = params.urlParams,
-        docParams = params.docParams,
-        collection;
+          urlParams = params.urlParams,
+          docParams = params.docParams,
+          collection;
+
+        if (this.eventAllDocs) {
+          this.eventAllDocs = false;
+          return;
+        }
+
+        // if we want to return the user to a specific page, set the appropriate value
+        var page = 1;
+        if (memory.get(FauxtonAPI.constants.MEMORY.RETURN_TO_LAST_RESULTS_PAGE) === true) {
+          var key = FauxtonAPI.constants.MEMORY.RESULTS_PAGE_PREFIX + this.database.id;
+          if (memory.has(key)) {
+            page = memory.get(key);
+          }
+        }
+        docParams.skip = (page - 1) * docParams.limit;
 
         this.reactHeader = this.setView('#react-headerbar', new Documents.Views.ReactHeaderbar());
 
@@ -127,19 +144,14 @@ function (app, FauxtonAPI, BaseRoute, Documents, Changes, ChangesActions, DocEdi
 
         this.removeComponent('#dashboard-upper-content');
 
-        if (!docParams) {
-          docParams = {};
-        }
-
         IndexResultsActions.newResultsList({
           collection: collection,
           isListDeletable: true,
           textEmptyIndex: 'No Document Created Yet!'
         });
 
+        PaginationActions.setPage(page);
         this.database.allDocs.paging.pageSize = PaginationStores.indexPaginationStore.getPerPage();
-
-        //this.resultList = this.setView('#dashboard-lower-content', new Index.ViewResultListReact({}));
         this.setComponent('#dashboard-lower-content', IndexResultsComponents.List);
 
         // this used to be a function that returned the object, but be warned: it caused a closure with a reference to
@@ -149,6 +161,16 @@ function (app, FauxtonAPI, BaseRoute, Documents, Changes, ChangesActions, DocEdi
         // update the rightHeader with the latest & greatest info
         this.rightHeader.resetQueryOptions({ queryParams: urlParams });
         this.rightHeader.showQueryOptions();
+      },
+
+      // this runs on the establish event because we need the initial route layout to have been added to the page
+      onEstablish: function () {
+        // return the height of the scrollable region to where-ever the user was last
+        if (memory.get(FauxtonAPI.constants.MEMORY.RETURN_TO_LAST_RESULTS_PAGE) === true) {
+          this.getScrollableRegion().scrollTop(memory.get(FauxtonAPI.constants.MEMORY.RESULTS_PAGE_SCROLLTOP));
+          memory.clear(FauxtonAPI.constants.MEMORY.RESULTS_PAGE_SCROLLTOP);
+          memory.clear(FauxtonAPI.constants.MEMORY.RETURN_TO_LAST_RESULTS_PAGE);
+        }
       },
 
       reloadDesignDocs: function (event) {
@@ -180,12 +202,22 @@ function (app, FauxtonAPI, BaseRoute, Documents, Changes, ChangesActions, DocEdi
         };
       },
 
+      getScrollableRegion: function () {
+        return $('#dashboard-content>div.scrollable');
+      },
+
       cleanup: function () {
+
+        // store the last scroll height for the scrollable region
+        memory.set(FauxtonAPI.constants.MEMORY.RESULTS_PAGE_SCROLLTOP, this.getScrollableRegion().scrollTop());
+
+        // to ensure garbage collection on the React components
+        this.removeComponent('#dashboard-lower-content');
+
         // we're no longer interested in listening to the lookahead tray event on this route object
         this.stopListening(FauxtonAPI.Events, 'lookaheadTray:update', this.onSelectDatabase);
         FauxtonAPI.RouteObject.prototype.cleanup.apply(this);
       }
-
     });
 
     return DocumentsRouteObject;

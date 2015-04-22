@@ -13,13 +13,20 @@
 define([
   'app',
   'api',
+  'addons/fauxton/memory',
   'addons/documents/pagination/actiontypes',
   'addons/documents/pagination/stores',
   'addons/documents/index-results/actions'
 ],
-function (app, FauxtonAPI, ActionTypes, Stores, IndexResultsActions) {
+function (app, FauxtonAPI, memory, ActionTypes, Stores, IndexResultsActions) {
 
   var store = Stores.indexPaginationStore;
+
+  function trackPage () {
+    var collection = store.getCollection();
+    var identifier = (collection.view) ? collection.view : collection.database.id;
+    memory.set(FauxtonAPI.constants.MEMORY.RESULTS_PAGE_PREFIX + identifier, store.getCurrentPage());
+  }
 
   return {
     updatePerPage: function (perPage) {
@@ -42,6 +49,13 @@ function (app, FauxtonAPI, ActionTypes, Stores, IndexResultsActions) {
       });
     },
 
+    setPage: function (page) {
+      FauxtonAPI.dispatch({
+        type: ActionTypes.SET_PAGE,
+        page: page
+      });
+    },
+
     paginateNext: function () {
       FauxtonAPI.dispatch({
         type: ActionTypes.PAGINATE_NEXT,
@@ -51,6 +65,7 @@ function (app, FauxtonAPI, ActionTypes, Stores, IndexResultsActions) {
 
       store.getCollection().next().then(function () {
         IndexResultsActions.resultsListReset();
+        trackPage();
       });
     },
 
@@ -63,6 +78,7 @@ function (app, FauxtonAPI, ActionTypes, Stores, IndexResultsActions) {
 
       store.getCollection().previous().then(function () {
         IndexResultsActions.resultsListReset();
+        trackPage();
       });
     },
 

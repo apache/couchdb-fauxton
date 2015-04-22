@@ -29,7 +29,6 @@ define([
       this._pageStart = 1;
       this._enabled = true;
       this._currentPage = 1;
-      this._pageStart = 1;
       this._newView = false;
       this._docLimit = _.isUndefined(this._docLimit) ? maxDocLimit : this._docLimit;
       this.initPerPage();
@@ -135,6 +134,11 @@ define([
       }
     },
 
+    setPage: function (page) {
+      this._currentPage = page;
+      this._pageStart = ((this._currentPage - 1) * this.getPerPage()) + 1;
+    },
+
     getTotalRows: function () {
       return this._collection.length;
     },
@@ -171,6 +175,10 @@ define([
         break;
         case ActionTypes.PAGINATE_PREVIOUS:
           this.paginatePrevious();
+          this.triggerChange();
+        break;
+        case ActionTypes.SET_PAGE:
+          this.setPage(action.page);
           this.triggerChange();
         break;
         case ActionTypes.PER_PAGE_CHANGE:
