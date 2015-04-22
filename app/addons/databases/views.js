@@ -151,7 +151,7 @@ function (app, Components, FauxtonAPI, Databases) {
         // TODO: switch to using a model, or Databases.databaseUrl()
         // Neither of which are in scope right now
         // var db = new Database.Model({id: dbname});
-        var url = FauxtonAPI.urls('allDocs', 'app', app.utils.safeURLName(dbname));
+        var url = FauxtonAPI.urls('allDocs', 'app', app.utils.safeURLName(dbname), '');
         FauxtonAPI.navigate(url);
       } else {
         FauxtonAPI.addNotification({
