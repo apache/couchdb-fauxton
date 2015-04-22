@@ -25,7 +25,6 @@ define([
 
   var assert = utils.assert;
   var TestUtils = React.addons.TestUtils;
-  FauxtonAPI.router = new FauxtonAPI.Router([]);
 
   var fakeData = [
       {
