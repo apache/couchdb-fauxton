@@ -10,11 +10,24 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-define([], function () {
-  return {
-    VERIFY_INSTALL_START: 'VERIFY_INSTALL_START',
-    VERIFY_INSTALL_RESET: 'VERIFY_INSTALL_RESET',
-    VERIFY_INSTALL_SINGLE_TEST_COMPLETE: 'VERIFY_INSTALL_SINGLE_TEST_COMPLETE',
-    VERIFY_INSTALL_ALL_TESTS_COMPLETE: 'VERIFY_INSTALL_ALL_TESTS_COMPLETE'
-  };
+define([
+  'app',
+  'api',
+  'testUtils',
+  'addons/verifyinstall/stores',
+  'addons/verifyinstall/actiontypes'
+], function (app, FauxtonAPI, testUtils, Stores, ActionTypes) {
+
+  var assert = testUtils.assert;
+
+  describe('Verify Install Actions', function () {
+
+    it('resets the store when action called', function () {
+      var spy = sinon.spy(Stores.verifyInstallStore, 'reset');
+      FauxtonAPI.dispatch({ type: ActionTypes.VERIFY_INSTALL_RESET });
+      assert.ok(spy.calledOnce);
+    });
+
+  });
+
 });

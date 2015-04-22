@@ -28,12 +28,10 @@ function (FauxtonAPI, Constants, ActionTypes) {
 
       // reset all the tests
       this._tests = {};
-      this._tests[Constants.TESTS.CREATE_DATABASE] = { complete: false };
-      this._tests[Constants.TESTS.CREATE_DOCUMENT] = { complete: false };
-      this._tests[Constants.TESTS.UPDATE_DOCUMENT] = { complete: false };
-      this._tests[Constants.TESTS.DELETE_DOCUMENT] = { complete: false };
-      this._tests[Constants.TESTS.CREATE_VIEW] = { complete: false };
-      this._tests[Constants.TESTS.REPLICATION] = { complete: false };
+      var keys = ['CREATE_DATABASE', 'CREATE_DOCUMENT', 'UPDATE_DOCUMENT', 'DELETE_DOCUMENT', 'CREATE_VIEW', 'REPLICATION'];
+      _.each(keys, function (key) {
+        this._tests[Constants.TESTS[key]] = { complete: false };
+      }, this);
     },
 
     startVerification: function () {
@@ -71,12 +69,17 @@ function (FauxtonAPI, Constants, ActionTypes) {
           this.triggerChange();
         break;
 
-        case ActionTypes.VERIFY_INSTALL_TEST_COMPLETE:
+        case ActionTypes.VERIFY_INSTALL_RESET:
+          this.reset();
+          this.triggerChange();
+        break;
+
+        case ActionTypes.VERIFY_INSTALL_SINGLE_TEST_COMPLETE:
           this.updateTestStatus(action.test, action.success);
           this.triggerChange();
         break;
 
-        case ActionTypes.VERIFY_INSTALL_COMPLETE:
+        case ActionTypes.VERIFY_INSTALL_ALL_TESTS_COMPLETE:
           this.stopVerification();
           this.triggerChange();
         break;

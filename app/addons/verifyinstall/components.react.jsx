@@ -108,27 +108,27 @@ function (app, FauxtonAPI, React, Constants, VerifyInstall, Actions, Stores) {
           <tbody>
             <tr>
               <td>Create Database</td>
-              <td>{this.showTestResult(Constants.TESTS.CREATE_DATABASE)}</td>
+              <td id="js-test-create-db">{this.showTestResult(Constants.TESTS.CREATE_DATABASE)}</td>
             </tr>
             <tr>
               <td>Create Document</td>
-              <td>{this.showTestResult(Constants.TESTS.CREATE_DOCUMENT)}</td>
+              <td id="js-test-create-doc">{this.showTestResult(Constants.TESTS.CREATE_DOCUMENT)}</td>
             </tr>
             <tr>
               <td>Update Document</td>
-              <td>{this.showTestResult(Constants.TESTS.CREATE_DATABASE)}</td>
+              <td id="js-test-update-doc">{this.showTestResult(Constants.TESTS.UPDATE_DOCUMENT)}</td>
             </tr>
             <tr>
               <td>Delete Document</td>
-              <td>{this.showTestResult(Constants.TESTS.DELETE_DOCUMENT)}</td>
+              <td id="js-test-delete-doc">{this.showTestResult(Constants.TESTS.DELETE_DOCUMENT)}</td>
             </tr>
             <tr>
               <td>Create View</td>
-              <td>{this.showTestResult(Constants.TESTS.CREATE_VIEW)}</td>
+              <td id="js-test-create-view">{this.showTestResult(Constants.TESTS.CREATE_VIEW)}</td>
             </tr>
             <tr>
               <td>Replication</td>
-              <td>{this.showTestResult(Constants.TESTS.REPLICATION)}</td>
+              <td id="js-test-replication">{this.showTestResult(Constants.TESTS.REPLICATION)}</td>
             </tr>
           </tbody>
         </table>

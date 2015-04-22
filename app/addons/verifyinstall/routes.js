@@ -14,9 +14,10 @@ define([
   'app',
   'api',
   'addons/verifyinstall/resources',
+  'addons/verifyinstall/actions',
   'addons/verifyinstall/components.react'
 ],
-function (app, FauxtonAPI, VerifyInstall, Components) {
+function (app, FauxtonAPI, VerifyInstall, Actions, Components) {
 
   var VerifyRouteObject = FauxtonAPI.RouteObject.extend({
     layout: 'one_pane',
@@ -27,6 +28,7 @@ function (app, FauxtonAPI, VerifyInstall, Components) {
     selectedHeader: 'Verify',
 
     verifyInstall: function () {
+      Actions.resetStore();
       this.setComponent('#dashboard-content', Components.VerifyInstallController);
     },
 

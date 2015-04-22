@@ -23,7 +23,7 @@ function (app, FauxtonAPI, Constants, VerifyInstall, ActionTypes) {
   // helper function to publish success/fail result of a single test having been ran
   var testPassed = function (test) {
     FauxtonAPI.dispatch({
-      type: ActionTypes.VERIFY_INSTALL_TEST_COMPLETE,
+      type: ActionTypes.VERIFY_INSTALL_SINGLE_TEST_COMPLETE,
       test: test,
       success: true
     });
@@ -34,7 +34,7 @@ function (app, FauxtonAPI, Constants, VerifyInstall, ActionTypes) {
       if (!xhr) { return; }
 
       FauxtonAPI.dispatch({
-        type: ActionTypes.VERIFY_INSTALL_TEST_COMPLETE,
+        type: ActionTypes.VERIFY_INSTALL_SINGLE_TEST_COMPLETE,
         test: test,
         success: false
       });
@@ -46,7 +46,12 @@ function (app, FauxtonAPI, Constants, VerifyInstall, ActionTypes) {
     };
   };
 
+
   return {
+    resetStore: function () {
+      FauxtonAPI.dispatch({ type: ActionTypes.VERIFY_INSTALL_RESET });
+    },
+
     startVerification: function () {
 
       // announce that we're starting the verification tests
@@ -88,7 +93,7 @@ function (app, FauxtonAPI, Constants, VerifyInstall, ActionTypes) {
           testPassed(Constants.TESTS.REPLICATION);
 
           // now announce the tests have been ran
-          FauxtonAPI.dispatch({ type: ActionTypes.VERIFY_INSTALL_COMPLETE });
+          FauxtonAPI.dispatch({ type: ActionTypes.VERIFY_INSTALL_ALL_TESTS_COMPLETE });
 
           FauxtonAPI.addNotification({
             msg: 'Success! Your CouchDB installation is working. Time to Relax.',
