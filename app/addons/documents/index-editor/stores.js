@@ -26,8 +26,8 @@ function (FauxtonAPI, ActionTypes) {
     initialize: function () {
       this._designDocs = [];
       this._view = {
-        reduce: this.defaultMap,
-        map: ''
+        reduce: this.defaultReduce,
+        map: this.defaultMap
       };
       this._database = {
         id: '0'

@@ -177,7 +177,12 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, ReactComponents) 
       customReduceSection;
 
       if (this.state.hasCustomReduce) {
-        customReduceSection = <CodeEditor ref='reduceEditor' id={'reduce-function'} code={this.state.reduce} docs={false} title={'Custom Reduce function'} />;
+        customReduceSection = <CodeEditor
+          ref='reduceEditor'
+          id='reduce-function'
+          code={this.state.reduce}
+          docs={false} title={'Custom Reduce function'}
+           />;
       }
 
       return (
@@ -358,7 +363,7 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, ReactComponents) 
           </PaddedBorderedBox>
           <PaddedBorderedBox>
             <strong>Database</strong>
-            <div className="db-title">{this.state.database.safeID()}</div>
+            <div className="db-title">{this.state.database.id}</div>
           </PaddedBorderedBox>
           <form className="form-horizontal view-query-save" onSubmit={this.saveView}>
             <DesignDocSelector />
