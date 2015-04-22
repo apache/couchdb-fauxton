@@ -85,7 +85,12 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
     },
 
     setupAce: function (props) {
-      this.editor = ace.edit(this.getDOMNode(this.refs.ace));
+      var el = this.getDOMNode(this.refs.ace);
+      //set the id so our nightwatch tests can find it
+      el.id = props.id;
+
+      this.editor = ace.edit(el);
+
       // Automatically scrolling cursor into view after selection
       // change this will be disabled in the next version
       // set editor.$blockScrolling = Infinity to disable this message
@@ -170,7 +175,6 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
     },
 
     componentWillUnmount: function () {
-      console.log('hello unmount', this.props.id);
       this.removeEvents();
       this.editor.destroy();
     },
