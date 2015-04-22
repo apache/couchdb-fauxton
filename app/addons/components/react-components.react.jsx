@@ -66,14 +66,14 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
   var CodeEditor = React.createClass({
     getDefaultProps: function () {
       return {
-        id   : 'code-editor',
-        mode : 'javascript',
-        theme : 'idle_fingers',
-        fontSize : 13,
-        code  : '',
-        showGutter : true,
-        highlightActiveLine : true,
-        showPrintMargin     : false,
+        id: 'code-editor',
+        mode: 'javascript',
+        theme: 'idle_fingers',
+        fontSize: 13,
+        code: '',
+        showGutter: true,
+        highlightActiveLine: true,
+        showPrintMargin: false,
         autoScrollEditorIntoView: true,
         setHeightWithJS: true,
         isFullPageEditor: false,
@@ -98,12 +98,12 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
       this.removeIncorrectAnnotations();
       this.editor.getSession().setMode("ace/mode/" + props.mode);
       this.editor.setTheme("ace/theme/" + props.theme);
-      this.editor.setFontSize(this.props.fontSize);
+      this.editor.setFontSize(props.fontSize);
     },
 
     setupEvents: function () {
-      $(window).on('beforeunload.editor_' + this.editorId, _.bind(this.quitWarningMsg));
-      FauxtonAPI.beforeUnload('editor_' + this.editorId, _.bind(this.quitWarningMsg, this));
+      $(window).on('beforeunload.editor_' + this.props.id, _.bind(this.quitWarningMsg));
+      FauxtonAPI.beforeUnload('editor_' + this.props.id, _.bind(this.quitWarningMsg, this));
     },
 
     quitWarningMsg: function () {
@@ -113,9 +113,8 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
     },
 
     removeEvents: function () {
-      $(window).off('beforeunload.editor_' + this.editorId);
-      $(window).off('resize.editor', this.onPageResize);
-      FauxtonAPI.removeBeforeUnload('editor_' + this.editorId);
+      $(window).off('beforeunload.editor_' + this.props.id);
+      FauxtonAPI.removeBeforeUnload('editor_' + this.props.id);
     },
 
     setHeightToLineCount: function () {
@@ -171,6 +170,7 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
     },
 
     componentWillUnmount: function () {
+      console.log('hello unmount', this.props.id);
       this.removeEvents();
       this.editor.destroy();
     },
@@ -239,86 +239,6 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
     }
 
   });
-
-  /*var CodeEditor = React.createClass({
-    render: function () {
-      if (!this.props.code .aceEditor.getValue())) {
-        return null;
-      }
-
-      var code = this.aceEditor ? this.aceEditor.getValue() : this.props.code;
-      return (
-        <div className="control-group">
-          {this.getTitleFragment()}
-          <div className="js-editor" id={this.props.id}>{this.props.code}</div>
-          <Beautify code={code} beautifiedCode={this.setEditorValue} />
-        </div>
-      );
-    },
-
-    getTitleFragment: function () {
-      if (!this.props.docs) {
-        return <strong>{this.props.title}</strong>;
-      }
-
-      return (
-        <label>
-          <strong>{this.props.title}</strong>
-          <a
-            className="help-link"
-            data-bypass="true"
-            href={this.props.docs}
-            target="_blank"
-          >
-          <i className="icon-question-sign"></i>
-          </a>
-        </label>
-      );
-    },
-
-    setEditorValue: function (code) {
-      this.aceEditor.setValue(code);
-      //this is not a good practice normally but because we working with a backbone view as the mapeditor
-      //that keeps the map code state this is the best way to force a render so that the beautify button will hide
-      this.forceUpdate();
-    },
-
-    getValue: function () {
-      return this.aceEditor.getValue();
-    },
-
-    getEditor: function () {
-      return this.aceEditor;
-    },
-
-    componentDidMount: function () {
-      this.aceEditor = new Components.Editor({
-        editorId: this.props.id,
-        mode: 'javascript',
-        couchJSHINT: true
-      });
-      this.aceEditor.render();
-    },
-
-    shouldComponentUpdate: function (props) {
-      console.log('should update', arguments, _.isEmpty(this.aceEditor.getValue()), this.aceEditor.getValue());
-      if (props.code && _.isEmpty(this.aceEditor.getValue())) {
-        console.log('update');
-        //this.setEditorValue(props.code);
-        return true;
-      }
-      //we don't want to re-render the map editor as we are using backbone underneath
-      //which will cause the editor to break
-      this.aceEditor.editSaved();
-
-      return false;
-    },
-
-    componentWillUnmount: function () {
-      this.aceEditor.remove();
-    }
-
-  });*/
 
   var Beautify = React.createClass({
     noOfLines: function () {
