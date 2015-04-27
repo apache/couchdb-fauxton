@@ -332,15 +332,17 @@ module.exports = function (grunt) {
 
       dist:{
         files:[
-          {src: "dist/debug/index.html", dest: "dist/release/index.html"},
-          {src: assets.img, dest: "dist/release/img/", flatten: true, expand: true},
-          {src: assets.fonts, dest: "dist/release/fonts/", flatten: true, expand: true}
+          {src: 'dist/debug/index.html', dest: 'dist/release/index.html'},
+          {src: assets.img, dest: 'dist/release/img/', flatten: true, expand: true},
+          {src: assets.fonts, dest: 'dist/release/fonts/', flatten: true, expand: true},
+          {src: './favicon.ico', dest: "dist/release/favicon.ico"}
         ]
       },
       debug:{
         files:[
           {src: assets.fonts, dest: "dist/debug/fonts/", flatten: true, expand: true},
-          {src: assets.img, dest: "dist/debug/img/", flatten: true, expand: true}
+          {src: assets.img, dest: "dist/debug/img/", flatten: true, expand: true},
+          {src: './favicon.ico', dest: "dist/debug/favicon.ico"}
         ]
       }
     },

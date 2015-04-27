@@ -3,6 +3,15 @@ Fauxton
 
 Fauxton is the new Web UI for CouchDB. To get it running in development on your machine. Follow the steps below.
 
+## Install via NPM
+
+You can use the latest release of Fauxton via npm:
+
+    npm install -g fauxton
+    fauxton
+
+See `fauxton --help` for extra options.
+
 ## CouchDB is Required
 
 Install couchdb from docs here: http://couchdb.readthedocs.org/en/latest/install/index.html
@@ -72,31 +81,31 @@ Refreshing the URL will re-run the tests via PhantomJS and in the browser.
 There is a bit of setup involved before you are able to run the Nightwatch tests.
 
 In your CouchDB admin accounts, add a user:  
-    
+
 > user: tester  
 password: testerpass  
 
 Then on the command line:  
-    
+
     npm install
 
 Start fauxton with
-    
-    grunt dev 
+
+    grunt dev
 
 And to run the tests (in another terminal tab):
-    
+
     grunt nightwatch
 
 ##### Omitting nightwatch tests
 
-If you need to omit particular tests from running you can add a `testBlacklist` option to the nightwatch section of 
+If you need to omit particular tests from running you can add a `testBlacklist` option to the nightwatch section of
 your settings.json file. That defines an object of the following form:
 
 ```javascript
-// ... 
+// ...
 "nightwatch": {
-  // ... 
+  // ...
   "testBlacklist": {
     "documents": ["*"],
     "databases": [
@@ -109,8 +118,8 @@ your settings.json file. That defines an object of the following form:
 
 ```
 
-The properties (`documents`, `databases`) map to a particular addon folder name (see `app/addons`). The values 
-should be an array of tests that you don't want to run. `*` will flag all tests from being ran, otherwise you 
+The properties (`documents`, `databases`) map to a particular addon folder name (see `app/addons`). The values
+should be an array of tests that you don't want to run. `*` will flag all tests from being ran, otherwise you
 just enter the names of the files to omit.
 
 
@@ -133,8 +142,6 @@ The `routes.js` is used to register a URL path for your view along with what lay
 point is required for the view.
 
 Check out [writing_addons.md](writing_addons.md) for more information on writing your own addons.
-
-## Todo Items
 
 Want to get involved? Check out [Jira](https://issues.apache.org/jira/browse/COUCHDB/component/12320406) for a list
 of items to do.

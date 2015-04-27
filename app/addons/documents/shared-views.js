@@ -48,7 +48,7 @@ function (app, FauxtonAPI, Components, Documents, Databases) {
           permissionsLink = '#' + FauxtonAPI.urls('permissions', 'app', safeDatabaseName),
           databaseUrl = FauxtonAPI.urls('allDocs', 'app', safeDatabaseName, ''),
           db_url = FauxtonAPI.urls('allDocs', 'server', safeDatabaseName, ''),
-          base = FauxtonAPI.urls('base', 'app', safeDatabaseName);
+          base = '#' + FauxtonAPI.urls('base', 'app', safeDatabaseName);
 
       return {
         changesUrl: changesLink,
@@ -318,4 +318,3 @@ function (app, FauxtonAPI, Components, Documents, Databases) {
 
   return Views;
 });
-
