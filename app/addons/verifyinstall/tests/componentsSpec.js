@@ -38,7 +38,7 @@ define([
     ];
 
     var testResults = {};
-    _.each(tests, function (test) {
+    tests.forEach(function (test) {
       testResults[Constants.TESTS[test.key]] = { complete: false };
     });
 
@@ -50,13 +50,13 @@ define([
       container = document.createElement('div');
       el = ReactTestUtils.renderIntoDocument(React.createElement(Components.VerifyInstallResults, {testResults: testResults}), container);
 
-      _.each(tests, function (test) {
+      tests.forEach(function (test) {
         assert.equal($(el.getDOMNode()).find('#' + test.id).html(), '');
       });
     });
 
     it('confirm each result field shows success after successful test', function () {
-      _.each(tests, function (test) {
+      tests.forEach(function (test) {
         var copy = _.clone(testResults);
 
         // mark this single test as complete
@@ -73,7 +73,7 @@ define([
     });
 
     it('confirm each result field shows error marker after failed test', function () {
-      _.each(tests, function (test) {
+      tests.forEach(function (test) {
         var copy = _.clone(testResults);
 
         // mark this single test as complete

@@ -85,15 +85,13 @@ function (app, FauxtonAPI, React, Constants, VerifyInstall, Actions, Stores) {
     },
 
     showTestResult: function (test) {
-      var result = '';
       if (!this.props.testResults[test].complete) {
-        result = '';
-      } else if (this.props.testResults[test].success) {
-        result = <span>&#10003;</span>;
-      } else {
-        result = <span>&#x2717;</span>;
+        return '';
       }
-      return result;
+      if (this.props.testResults[test].success) {
+        return <span>&#10003;</span>;
+      }
+      return <span>&#x2717;</span>;
     },
 
     render: function () {

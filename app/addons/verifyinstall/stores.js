@@ -28,8 +28,7 @@ function (FauxtonAPI, Constants, ActionTypes) {
 
       // reset all the tests
       this._tests = {};
-      var keys = ['CREATE_DATABASE', 'CREATE_DOCUMENT', 'UPDATE_DOCUMENT', 'DELETE_DOCUMENT', 'CREATE_VIEW', 'REPLICATION'];
-      _.each(keys, function (key) {
+      _.each(Object.keys(Constants.TESTS), function (key) {
         this._tests[Constants.TESTS[key]] = { complete: false };
       }, this);
     },
@@ -50,8 +49,7 @@ function (FauxtonAPI, Constants, ActionTypes) {
 
       // shouldn't ever occur since we're using constants for the test names
       if (!_.has(this._tests, test)) {
-        console.error("Invalid test name passed to updateTestStatus()");
-        return;
+        throw new Error('Invalid test name passed to updateTestStatus()');
       }
 
       // mark this test as complete, and track whether it was a success or failure
