@@ -12,7 +12,13 @@
 
 module.exports = function (grunt) {
   var _ = grunt.util._,
-      fs = require('fs');
+      fs = require('fs'),
+      vm = require('vm');
+
+  var includeInScope = function (path) {
+    var code = fs.readFileSync(path);
+    vm.runInThisContext(code, path);
+  }.bind(this);
 
   grunt.registerMultiTask('template', 'generates an html file from a specified template', function () {
     var data = this.data,
@@ -109,7 +115,6 @@ module.exports = function (grunt) {
 
   grunt.registerMultiTask('mochaSetup', 'Generate a config.js and runner.html for tests', function () {
     var data = this.data,
-        configInfo,
         _ = grunt.util._,
         configTemplateSrc = data.template;
 
@@ -123,22 +128,23 @@ module.exports = function (grunt) {
     });
 
     var configTemplate = _.template(grunt.file.read(configTemplateSrc));
-    // a bit of a nasty hack to read our current config.js and get the info so we can change it
-    // for our testing setup
-    var require = {
-      config: function (args) {
-        configInfo = args;
-        configInfo.paths['chai'] = '../test/mocha/chai';
-        configInfo.paths['sinon-chai'] = '../test/mocha/sinon-chai';
-        configInfo.paths['testUtils'] = '../test/mocha/testUtils';
-        configInfo.baseUrl = '../app';
-        delete configInfo.deps;
-      }
-    };
 
-    eval(grunt.file.read(data.config) + '');
+    // include the config file source. That contains a requireConfig var that's included in this scope
+    includeInScope(data.config);
 
-    grunt.file.write('./test/test.config.js', configTemplate({configInfo: configInfo, testFiles: testFiles}));
+    // if the settings file specifies a file that extends Require's config.js file, include it as well
+    if (data.templateSettings.development.variables && data.templateSettings.development.variables.config_extend_file) {
+      includeInScope(data.templateSettings.development.variables.config_extend_file);
+    }
+
+    // now apply whatever additional requireJS config changes we need
+    requireConfig.paths['chai'] = '../test/mocha/chai';
+    requireConfig.paths['sinon-chai'] = '../test/mocha/sinon-chai';
+    requireConfig.paths['testUtils'] = '../test/mocha/testUtils';
+    requireConfig.baseUrl = '../app';
+    delete requireConfig.deps;
+
+    grunt.file.write('./test/test.config.js', configTemplate({ configInfo: requireConfig, testFiles: testFiles }));
   });
 
 

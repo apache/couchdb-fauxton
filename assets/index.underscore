@@ -42,6 +42,8 @@
   </div>
 
   <!-- Application source. -->
+  <script src="/app/config-source.js"></script>
   <script data-main="/config" src="<%= requirejs %>"></script>
+
 </body>
 </html>
