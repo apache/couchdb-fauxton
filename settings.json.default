@@ -8,7 +8,6 @@
   { "name": "config" },
   { "name": "replication" },
   { "name": "cors" },
-  { "name": "plugins" },
   { "name": "permissions" },
   { "name": "compaction" },
   { "name": "auth" },
