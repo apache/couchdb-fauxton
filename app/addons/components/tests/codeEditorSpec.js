@@ -107,33 +107,5 @@ define([
 
     });
 
-    //I cannot get these to work as I cannot get the mode-javascript to load
-    /*describe('hadValidCode', function () {
-
-      it('returns true for valid code', function () {
-        codeEditorEl = TestUtils.renderIntoDocument(
-          <ReactComponents.CodeEditor code={code}/>,
-          container
-        );
-
-        assert.ok(codeEditorEl.hadValidCode());
-      });
-
-      it('returns false for invalid code', function (done) {
-        var badCode = 'function () \n { emit( \n';
-        codeEditorEl = TestUtils.renderIntoDocument(
-          <ReactComponents.CodeEditor code={code}/>,
-          container
-        );
-        codeEditorEl.editor.getSession().on("changeAnnotation", function () {
-          console.log('aa2', codeEditorEl.getValue(), codeEditorEl.getAnnotations());
-          assert.notOk(codeEditorEl.hadValidCode());
-          done();
-        });
-
-        codeEditorEl.setEditorValue(badCode);
-      });
-    });*/
-
   });
 });
