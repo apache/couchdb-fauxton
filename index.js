@@ -46,7 +46,7 @@ module.exports = function (options) {
     if (url === '/' && accept[0] !== 'application/json') {
       // serve main index file from here
       return sendFile(req, res, path.join(dist_dir, 'index.html'));
-    } else if (accept[0] !== 'application/json') {
+    } else if (accept[0] !== 'application/json' && !/_utils\/docs/.test(url)) {
       return sendFile(req, res, path.join(dist_dir, url.split(/\?v=|\?noCache/)[0]));
     }
 
