@@ -164,47 +164,10 @@ module.exports = function (grunt) {
       }
     },
 
-    // The jshint option for scripturl is set to lax, because the anchor
-    // override inside main.js needs to test for them so as to not accidentally
-    // route. Settings expr true so we can do `mightBeNullObject && mightBeNullObject.coolfunction()`
     jshint: {
       all: ['app/**/*.js', 'Gruntfile.js', "!app/**/assets/js/*.js", "!app/**/*.jsx"],
       options: {
-        scripturl: true,
-        evil: true,
-        expr: true,
-        undef: true,
-        globals: {
-          document: true,
-          window: true,
-          location: true,
-          alert: true,
-          console: true,
-          clearInterval: true,
-          setInterval: true,
-          setTimeout: true,
-          prompt: true,
-          confirm: true,
-
-          jQuery: true,
-          Backbone: true,
-          $: true,
-          _: true,
-          require: true,
-          module: true,
-          sinon: true,
-          it: true,
-          describe: true,
-          beforeEach: true,
-          afterEach: true,
-          before: true,
-          after: true,
-          define: true,
-
-          Spinner: true,
-          prettyPrint: true
-
-        }
+        jshintrc: '.jshintrc'
       }
     },
 
