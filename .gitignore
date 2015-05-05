@@ -7,14 +7,12 @@ app/addons/*
 !app/addons/activetasks
 !app/addons/config
 !app/addons/components
-!app/addons/plugins
 !app/addons/replication
 !app/addons/auth
 !app/addons/permissions
 !app/addons/verifyinstall
 !app/addons/compaction
 !app/addons/fauxton
-!app/addons/pouchdb
 !app/addons/databases
 !app/addons/documents
 !app/addons/styletests
