@@ -25,8 +25,9 @@ function (FauxtonAPI, ActionTypes) {
 
     initialize: function () {
       this._designDocs = [];
+      this._isLoading = true;
       this._view = {
-        reduce: this.defaultReduce,
+        reduce: '',
         map: this.defaultMap
       };
       this._database = {
@@ -44,17 +45,16 @@ function (FauxtonAPI, ActionTypes) {
       this._designDocChanged = false;
       this._viewNameChanged = false;
       this.setView();
+      this._isLoading = false;
+    },
 
+    isLoading: function () {
+      return this._isLoading;
     },
 
     setView: function () {
       if (!this._newView && !this._newDesignDoc) {
         this._view = this.getDesignDoc().get('views')[this._viewName];
-      } else {
-        this._view = {
-          reduce: '',
-          map: ''
-        };
       }
     },
 
@@ -63,11 +63,11 @@ function (FauxtonAPI, ActionTypes) {
     },
 
     getMap: function () {
-      if (this._newView) {
-        return this.defaultMap;
-      }
-
       return this._view.map;
+    },
+
+    setMap: function (map) {
+      this._view.map = map;
     },
 
     getReduce: function () {
@@ -219,6 +219,11 @@ function (FauxtonAPI, ActionTypes) {
         case ActionTypes.VIEW_UPDATE_DESIGN_DOC:
           this.updateDesignDoc(action.designDoc);
           this.setView();
+          this.triggerChange();
+        break;
+
+        case ActionTypes.VIEW_UPDATE_MAP_CODE:
+          this.setMap(action.code);
           this.triggerChange();
         break;
 

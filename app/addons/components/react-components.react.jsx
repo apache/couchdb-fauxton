@@ -77,6 +77,7 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
         autoScrollEditorIntoView: true,
         setHeightWithJS: true,
         isFullPageEditor: false,
+        change: function () {}
       };
     },
 
@@ -84,31 +85,40 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
       return !_.isEqual(this.props.code, this.getValue());
     },
 
-    setupAce: function (props) {
+    setupAce: function (props, shouldUpdateCode) {
       var el = this.getDOMNode(this.refs.ace);
       //set the id so our nightwatch tests can find it
       el.id = props.id;
 
       this.editor = ace.edit(el);
-
       // Automatically scrolling cursor into view after selection
       // change this will be disabled in the next version
       // set editor.$blockScrolling = Infinity to disable this message
       this.editor.$blockScrolling = Infinity;
 
+      if (shouldUpdateCode) {
+        this.setEditorValue(props.code);
+      }
+
       this.editor.setShowPrintMargin(props.showPrintMargin);
       this.editor.autoScrollEditorIntoView = props.autoScrollEditorIntoView;
-      this.setEditorValue(props.code);
       this.setHeightToLineCount();
       this.removeIncorrectAnnotations();
       this.editor.getSession().setMode("ace/mode/" + props.mode);
       this.editor.setTheme("ace/theme/" + props.theme);
       this.editor.setFontSize(props.fontSize);
+
     },
 
     setupEvents: function () {
       $(window).on('beforeunload.editor_' + this.props.id, _.bind(this.quitWarningMsg));
       FauxtonAPI.beforeUnload('editor_' + this.props.id, _.bind(this.quitWarningMsg, this));
+
+      this.editor.on('blur', _.bind(this.saveCodeChange, this));
+    },
+
+    saveCodeChange: function () {
+      this.props.change(this.getValue());
     },
 
     quitWarningMsg: function () {
@@ -170,7 +180,7 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
     },
 
     componentDidMount: function () {
-      this.setupAce(this.props);
+      this.setupAce(this.props, true);
       this.setupEvents();
     },
 
@@ -180,7 +190,7 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
     },
 
     componentWillReceiveProps: function (nextProps) {
-      this.setupAce(nextProps);
+      this.setupAce(nextProps, false);
     },
 
     editSaved: function () {

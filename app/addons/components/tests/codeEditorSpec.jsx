@@ -23,12 +23,13 @@ define([
   var code2 = 'function (doc) {\n if(doc._id) { \n emit(doc._id, 2); \n } \n}';
 
   describe('Code Editor', function () {
-    var container, codeEditorEl;
+    var container, codeEditorEl, spy;
 
     beforeEach(function () {
+      spy = sinon.spy();
       container = document.createElement('div');
       codeEditorEl = TestUtils.renderIntoDocument(
-        <ReactComponents.CodeEditor code={code} />,
+        <ReactComponents.CodeEditor code={code} change={spy} />,
         container
       );
     });
@@ -43,16 +44,19 @@ define([
         assert.notOk(codeEditorEl.hasChanged());
       });
 
-      it('no change on update', function () {
-        codeEditorEl.setProps({code: code2});
-
-        assert.notOk(codeEditorEl.hasChanged());
-      });
-
       it('detects change on user input', function () {
         codeEditorEl.editor.setValue(code2, -1);
 
         assert.ok(codeEditorEl.hasChanged());
+      });
+
+    });
+
+    describe('onBlur', function () {
+
+      it('calls changed function', function () {
+        codeEditorEl.editor._emit('blur');
+        assert.ok(spy.calledOnce);
       });
 
     });
