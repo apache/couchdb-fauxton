@@ -26,13 +26,8 @@ function (FauxtonAPI, ActionTypes) {
     initialize: function () {
       this._designDocs = [];
       this._isLoading = true;
-      this._view = {
-        reduce: '',
-        map: this.defaultMap
-      };
-      this._database = {
-        id: '0'
-      };
+      this._view = { reduce: '', map: this.defaultMap };
+      this._database = { id: '0' };
     },
 
     editIndex: function (options) {
@@ -53,7 +48,9 @@ function (FauxtonAPI, ActionTypes) {
     },
 
     setView: function () {
-      if (!this._newView && !this._newDesignDoc) {
+      if (this._newView || this._newDesignDoc) {
+        this._view = { reduce: '', map: this.defaultMap };
+      } else {
         this._view = this.getDesignDoc().get('views')[this._viewName];
       }
     },
