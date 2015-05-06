@@ -22,7 +22,10 @@ module.exports = {
     client
       .loginToGUI()
       .populateDatabase(newDatabaseName)
-      .url(baseUrl + '/#/database/' + newDatabaseName + '/new_view')
+      .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
+      .waitForElementPresent(dropDownElement, waitTime, false)
+      .click(dropDownElement + ' a')
+      .click(dropDownElement + ' a[href*="new_view"]')
       .waitForElementVisible('#new-ddoc', waitTime, false)
       .setValue('#new-ddoc', 'test_design_doc-selenium-bad-reduce')
       .clearValue('#index-name')

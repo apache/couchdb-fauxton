@@ -166,7 +166,13 @@ function (app, FauxtonAPI, Documents, ActionTypes, IndexResultsActions) {
         FauxtonAPI.navigate(url);
         FauxtonAPI.triggerRouteEvent('reloadDesignDocs');
       });
+    },
 
+    updateMapCode: function (code) {
+      FauxtonAPI.dispatch({
+        type: ActionTypes.VIEW_UPDATE_MAP_CODE,
+        code: code
+      });
     }
   };
 });

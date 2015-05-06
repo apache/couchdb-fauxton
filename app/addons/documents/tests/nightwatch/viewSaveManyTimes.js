@@ -30,9 +30,11 @@ module.exports = {
     .setValue('#new-ddoc', 'test_design_doc-save-many-times')
     .clearValue('#index-name')
     .setValue('#index-name', 'multiple-saves')
+    .sendKeys("textarea.ace_text-input", client.Keys.Enter)
     .execute('\
       var editor = ace.edit("map-function");\
       editor.getSession().setValue("function (doc) { emit(\'boom\', doc._id); }");\
+      editor._emit(\'blur\');\
     ')
     .click('button.btn-success.save')
     .waitForElementVisible('.alert-success', waitTime, false)
@@ -41,6 +43,7 @@ module.exports = {
     .waitForElementVisible('.alert-success', waitTime, false)
     .waitForElementNotVisible('.alert-success', waitTime, false)
     .click('button.btn-success.save')
+    .waitForElementVisible('.alert-success', waitTime, false)
     .assert.containsText('.alert-success', 'View Saved.')
     .end();
   },
