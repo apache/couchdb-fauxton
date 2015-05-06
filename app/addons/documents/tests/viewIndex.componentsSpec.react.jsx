@@ -177,7 +177,7 @@ define([
       React.unmountComponentAtNode(container);
     });
 
-    /*it('calls new design doc on new selected', function () {
+    it('calls new design doc on new selected', function () {
       var spy = sinon.spy(Actions, 'newDesignDoc');
       TestUtils.Simulate.change($(selectorEl.getDOMNode()).find('#ddoc')[0], {
         target: {
@@ -213,7 +213,7 @@ define([
 
     it('does not filter usual design docs', function () {
       assert.ok(/_design\/test-doc/.test($(selectorEl.getDOMNode()).text()));
-    });*/
+    });
 
     it('filters mango docs', function () {
       selectorEl = TestUtils.renderIntoDocument(<Views.DesignDocSelector/>, container);
@@ -221,7 +221,7 @@ define([
     });
   });
 
-/*  describe('Editor', function () {
+  describe('Editor', function () {
     var container, editorEl, reduceStub;
 
     beforeEach(function () {
@@ -236,13 +236,13 @@ define([
     });
 
     it('returns false on invalid map editor code', function () {
-      var stub = sinon.stub(editorEl.refs.mapEditor.aceEditor, 'hadValidCode');
+      var stub = sinon.stub(editorEl.refs.mapEditor, 'hadValidCode');
       stub.returns(false);
       assert.notOk(editorEl.hasValidCode());
     });
 
     it('returns true on valid map editor code', function () {
-      var stub = sinon.stub(editorEl.refs.mapEditor.aceEditor, 'hadValidCode');
+      var stub = sinon.stub(editorEl.refs.mapEditor, 'hadValidCode');
       stub.returns(true);
       assert.ok(editorEl.hasValidCode());
     });
@@ -264,5 +264,5 @@ define([
       });
       assert.ok(spy.calledWith(viewName));
     });
-  });*/
+  });
 });
