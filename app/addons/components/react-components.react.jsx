@@ -107,14 +107,13 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
       this.editor.getSession().setMode("ace/mode/" + props.mode);
       this.editor.setTheme("ace/theme/" + props.theme);
       this.editor.setFontSize(props.fontSize);
-
     },
 
     setupEvents: function () {
       $(window).on('beforeunload.editor_' + this.props.id, _.bind(this.quitWarningMsg));
       FauxtonAPI.beforeUnload('editor_' + this.props.id, _.bind(this.quitWarningMsg, this));
-
       this.editor.on('blur', _.bind(this.saveCodeChange, this));
+      this.editor.on('change', this.setHeightToLineCount);
     },
 
     saveCodeChange: function () {
