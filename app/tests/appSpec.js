@@ -33,7 +33,7 @@ define([
       });
 
       it('caches content', function (done) {
-        server.respondWith('GET', 'http://example.com/_config',
+        server.respondWith('GET', 'http://example.com/_cluster_setup',
             [200, { "Content-Type": "application/json" },
              '[{ "id": 12, "comment": "Hey there" }]']);
 
@@ -51,9 +51,9 @@ define([
         });
       });
 
-      it('returns false on a 404', function (done) {
-        server.respondWith('GET', 'http://example.com/_config',
-            [404, { "Content-Type": "application/json" }, '']);
+      it('returns false on a 401', function (done) {
+        server.respondWith('GET', 'http://example.com/_cluster_setup',
+            [401, { "Content-Type": "application/json" }, '']);
 
         var promise = FauxtonAPI.isRunningOnBackdoorPort();
         server.respond();
@@ -64,9 +64,23 @@ define([
         });
       });
 
-      it('returns true on a 200', function (done) {
-        server.respondWith('GET', 'http://example.com/_config',
-            [200, {'Content-Type': 'application/json' },
+      it('returns false on a 200', function (done) {
+        server.respondWith('GET', 'http://example.com/_cluster_setup',
+            [200, { "Content-Type": "application/json" }, '']);
+
+        var promise = FauxtonAPI.isRunningOnBackdoorPort();
+        server.respond();
+
+        promise.then(function (res) {
+          assert.deepEqual({runsOnBackportPort: false}, res);
+          done();
+        });
+      });
+
+
+      it('returns true on a 400', function (done) {
+        server.respondWith('GET', 'http://example.com/_cluster_setup',
+            [400, {'Content-Type': 'application/json' },
              '[{ "id": 12, "comment": "Hey there" }]']);
 
         var promise = FauxtonAPI.isRunningOnBackdoorPort();

@@ -129,7 +129,6 @@ function (app, $, _, Backbone, Bootstrap, Helpers, Utils, FauxtonAPI, Couchdb) {
     },
 
     isRunningOnBackdoorPort: function () {
-
       if (this._backdoorDeferred) {
         return this._backdoorDeferred;
       }
@@ -138,13 +137,15 @@ function (app, $, _, Backbone, Bootstrap, Helpers, Utils, FauxtonAPI, Couchdb) {
 
       $.ajax({
         type: 'GET',
-        url: app.host + '/_config'
+        url: app.host + '/_cluster_setup'
       })
       .then(function () {
-        this._backdoorDeferred.resolve({runsOnBackportPort: true});
+        this._backdoorDeferred.resolve({runsOnBackportPort: false});
       }.bind(this))
       .fail(function (res) {
-        this._backdoorDeferred.resolve({runsOnBackportPort: false});
+        this._backdoorDeferred.resolve({
+          runsOnBackportPort: res.status === 400
+        });
       }.bind(this));
 
       return this._backdoorDeferred;
