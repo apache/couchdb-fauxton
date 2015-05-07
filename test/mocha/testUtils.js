@@ -18,10 +18,6 @@ define([
 function(FauxtonAPI, chai, sinonChai) {
   chai.use(sinonChai);
 
-  //Adding this here so we don't need to add it to each test filter
-  //Just initialise the router so tests can run.
-  FauxtonAPI.router = new FauxtonAPI.Router([]);
-
   var ViewSandbox = function () {
     this.initialize();
   };
