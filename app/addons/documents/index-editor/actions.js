@@ -107,9 +107,6 @@ function (app, FauxtonAPI, Documents, ActionTypes, IndexResultsActions) {
                             viewInfo.reduce);
 
       if (result) {
-        FauxtonAPI.dispatch({
-         type: ActionTypes.SAVE_VIEW
-        });
 
         FauxtonAPI.addNotification({
           msg:  "Saving View...",

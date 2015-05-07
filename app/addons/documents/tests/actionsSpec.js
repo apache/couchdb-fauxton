@@ -42,8 +42,8 @@ define([
             }
           }
         };
-
-        designDocs = new Documents.AllDocs([designDoc], {
+        var doc = new Documents.Doc(designDoc, {database: database});
+        designDocs = new Documents.AllDocs([doc], {
           params: { limit: 10 },
           database: database
         });
@@ -144,7 +144,17 @@ define([
           }
         };
 
+        designDocs.find = function () {};
         designDocs.add = function () {};
+        designDocs.dDocModel = function () {};
+
+        Actions.editIndex({
+          database: {id: 'rockos-db'},
+          newView: true,
+          viewName: 'test-view',
+          designDocs: designDocs,
+          designDocId: designDocs[0]._id
+        });
 
         var promise = FauxtonAPI.Deferred();
         promise.resolve();
