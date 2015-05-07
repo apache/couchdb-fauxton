@@ -1,8 +1,12 @@
 define([
   "app",
   "api",
-  "react"
-  ], function(app,FauxtonAPI, React){
+  "react",
+  'addons/documents/revisionTree/stores',
+  'addons/documents/revisionTree/actions',
+  ], function(app,FauxtonAPI, React,Stores){
+
+    var store = Stores.revTreeStore;
 
     var lineObjs = [];
     var nodeObjs = [];
@@ -234,8 +238,11 @@ define([
         var result = [];
         var paths = [];
         var deleted = {};
-        var winner = this.props.data.winnerRev;
-        var url = '/'+this.props.data.db+'/'+this.props.data.docID;
+        var optionsVal = store.getTreeOptions();
+        // var winner = this.props.data.winnerRev;
+        var winner = optionsVal.winnerRev;
+        // var url = '/'+this.props.data.db+'/'+this.props.data.docID;
+        var url = '/'+optionsVal.db+'/'+optionsVal.docID;
         // var winner = this.props.data.;
         var minUniq = 0;
         $.get(app.host+url+'?open_revs=all&revs=true', function(rslt) {
@@ -313,9 +320,11 @@ define([
 
 
 return {
-  renderContent: function(el,field){
-    React.render(<App data={field}/>, el);
-  }
+  // renderContent: function(el,field){
+  //   React.render(<App data={field}/>, el);
+  // }
+
+  App: App
 };
 
 });

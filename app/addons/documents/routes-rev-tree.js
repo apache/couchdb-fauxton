@@ -2,10 +2,13 @@ define([
   "app",
   "api",
   "addons/documents/resources",
-  "addons/documents/views-rev-tree"
+  "addons/documents/views-rev-tree",
+  "addons/documents/revisionTree/actions",
+  "addons/documents/revisionTree/component.react"
+
 ],
 
-function(app, FauxtonAPI, Resources, Views) {
+function(app, FauxtonAPI, Resources, Views, RevisionTreeActions,AppComponent) {
   var  RevTreeRouteObject = FauxtonAPI.RouteObject.extend({
     layout: "one_pane",
 
@@ -31,7 +34,11 @@ function(app, FauxtonAPI, Resources, Views) {
         docID: doc,
         winnerRev: winner
       };
-      this.setView("#dashboard-content", new Resources.WRAP.Wrapper({params: parameters}));
+
+      RevisionTreeActions.newRevisionTree(parameters);
+      this.setComponent("#dashboard-content",AppComponent.App);
+
+      // this.setView("#dashboard-content", new Resources.WRAP.Wrapper({params: parameters}));
     }
   });
 
