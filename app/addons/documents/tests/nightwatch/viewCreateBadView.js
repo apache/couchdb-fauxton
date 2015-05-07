@@ -30,12 +30,12 @@ module.exports = {
       .setValue('#new-ddoc', 'test_design_doc-selenium-bad-reduce')
       .clearValue('#index-name')
       .setValue('#index-name', 'hasenindex')
+      .click('#reduce-function-selector')
+      .keys(['\uE013', '\uE013', '\uE013', '\uE013', '\uE006'])
       .execute('\
         var editor = ace.edit("map-function");\
         editor.getSession().setValue("function (doc) { emit(\'boom\', doc._id); }");\
       ')
-      .click('#reduce-function-selector')
-      .keys(['\uE013', '\uE013', '\uE013', '\uE013', '\uE006'])
       .execute('$(".save")[0].scrollIntoView();')
       .click('button.btn-success.save')
       .waitForElementVisible('.alert-error', waitTime, false)
