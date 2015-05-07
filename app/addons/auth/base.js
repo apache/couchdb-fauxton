@@ -13,10 +13,12 @@
 define([
   "app",
   "api",
-  "addons/auth/routes"
+  'addons/auth/routes'
 ],
 
 function (app, FauxtonAPI, Auth) {
+
+  var isRunningOnBackdoorPort = null;
 
   Auth.session = new Auth.Session();
   FauxtonAPI.setSession(Auth.session);
@@ -37,6 +39,7 @@ function (app, FauxtonAPI, Auth) {
       var link = {};
 
       if (session.isAdminParty()) {
+
         link = {
           id: "auth",
           title: "Admin Party!",
@@ -75,8 +78,11 @@ function (app, FauxtonAPI, Auth) {
 
     });
 
-    Auth.session.fetchUser().then(function () {
-      Auth.session.trigger('change');
+    FauxtonAPI.isRunningOnBackdoorPort().then(function (res) {
+      isRunningOnBackdoorPort = res.runsOnBackportPort;
+      Auth.session.fetchUser().then(function () {
+        Auth.session.trigger('change');
+      });
     });
 
     var auth = function (session, roles) {
