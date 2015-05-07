@@ -42,8 +42,8 @@ define([
             }
           }
         };
-
-        designDocs = new Documents.AllDocs([designDoc], {
+        var doc = new Documents.Doc(designDoc, {database: database});
+        designDocs = new Documents.AllDocs([doc], {
           params: { limit: 10 },
           database: database
         });

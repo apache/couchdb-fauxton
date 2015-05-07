@@ -190,7 +190,8 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
     },
 
     componentWillReceiveProps: function (nextProps) {
-      this.setupAce(nextProps, false);
+      var codeChanged = !_.isEqual(nextProps.code, this.getValue());
+      this.setupAce(nextProps, codeChanged);
     },
 
     editSaved: function () {

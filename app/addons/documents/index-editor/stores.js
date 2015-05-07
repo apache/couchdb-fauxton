@@ -53,7 +53,9 @@ function (FauxtonAPI, ActionTypes) {
     },
 
     setView: function () {
-      if (!this._newView && !this._newDesignDoc) {
+      if (this._newView || this._newDesignDoc) {
+        this._view = { reduce: '', map: this.defaultMap };
+      } else {
         this._view = this.getDesignDoc().get('views')[this._viewName];
       }
     },
