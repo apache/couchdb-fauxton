@@ -13,15 +13,15 @@
 define([
   "app",
   "api",
-
-  // Modules
+  'addons/fauxton/memory',
   "addons/documents/helpers",
   "addons/documents/views",
   "addons/documents/views-doceditor",
-  "addons/databases/base"
+  "addons/databases/base",
+  'addons/fauxton/components'
 ],
 
-function (app, FauxtonAPI, Helpers, Documents, DocEditor, Databases) {
+function (app, FauxtonAPI, memory, Helpers, Documents, DocEditor, Databases, Components) {
 
 
   var DocEditorRouteObject = FauxtonAPI.RouteObject.extend({
@@ -35,6 +35,7 @@ function (app, FauxtonAPI, Helpers, Documents, DocEditor, Databases) {
 
       this.database = this.database || new Databases.Model({ id: this.databaseName });
       this.doc = new Documents.Doc({ _id: this.docID }, { database: this.database });
+      this.title = this.docID;
     },
 
     routes: {
@@ -48,16 +49,15 @@ function (app, FauxtonAPI, Helpers, Documents, DocEditor, Databases) {
       'route:duplicateDoc': 'duplicateDoc'
     },
 
-    crumbs: function () {
-      var previousPage = Helpers.getPreviousPage(this.database, this.wasCloned);
-
-      return [
-        { type: 'back', link: previousPage },
-        { name: this.docID, link: '#' }
-      ];
-    },
-
     code_editor: function (database, doc) {
+      this.breadcrumbs = this.setView('#breadcrumbs', new Components.Breadcrumbs({
+        toggleDisabled: true,
+        crumbs: [
+          { type: 'back', link: Helpers.getPreviousPage(this.database, this.wasCloned) },
+          { name: this.title, link: '#' }
+        ],
+        clickBack: this.onClickBack
+      }));
 
       // if either the database or document just changed, we need to get the latest doc/db info
       if (this.databaseName !== database) {
@@ -74,6 +74,11 @@ function (app, FauxtonAPI, Helpers, Documents, DocEditor, Databases) {
         database: this.database,
         previousPage: Helpers.getPreviousPage(this.database)
       }));
+    },
+
+    // ensure the list page knows to return the user to the last selected page of results
+    onClickBack: function () {
+      memory.set(FauxtonAPI.constants.MEMORY.RETURN_TO_LAST_RESULTS_PAGE, true);
     },
 
     showDesignDoc: function (database, ddoc) {
@@ -123,14 +128,8 @@ function (app, FauxtonAPI, Helpers, Documents, DocEditor, Databases) {
       this.doc = new Documents.NewDoc(null, {
         database: this.database
       });
-    },
 
-    crumbs: function () {
-      var previousPage = Helpers.getPreviousPage(this.database);
-      return [
-        { type: 'back', link: previousPage },
-        { name: 'New Document', link: '#' }
-      ];
+      this.title = 'New Document';
     },
 
     routes: {

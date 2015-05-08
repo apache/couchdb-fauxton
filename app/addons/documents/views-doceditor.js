@@ -12,8 +12,8 @@
 
 define([
   'app',
-
   'api',
+  'addons/fauxton/memory',
   'addons/fauxton/components',
   'addons/documents/resources',
   'addons/databases/resources',
@@ -22,7 +22,7 @@ define([
   'plugins/prettify'
 ],
 
-function (app, FauxtonAPI, Components, Documents, Databases, prettify) {
+function (app, FauxtonAPI, memory, Components, Documents, Databases, prettify) {
 
   var Views = {};
 
@@ -227,7 +227,8 @@ function (app, FauxtonAPI, Components, Documents, Databases, prettify) {
     },
 
     goBack: function () {
-      FauxtonAPI.navigate(FauxtonAPI.urls('allDocs', 'app', this.database.id, '?limit=20'));
+      memory.set(FauxtonAPI.constants.MEMORY.RETURN_TO_LAST_RESULTS_PAGE, true);
+      FauxtonAPI.navigate(FauxtonAPI.urls('allDocs', 'app', this.database.id, ''));
     },
 
     destroy: function () {
@@ -250,7 +251,7 @@ function (app, FauxtonAPI, Components, Documents, Databases, prettify) {
           msg: 'Your document has been successfully deleted.',
           clear: true
         });
-        FauxtonAPI.navigate(FauxtonAPI.urls('allDocs', 'app', database.id, '?limit=20'));
+        FauxtonAPI.navigate(FauxtonAPI.urls('allDocs', 'app', database.id, ''));
       }, function () {
         FauxtonAPI.addNotification({
           msg: 'Failed to delete your document!',

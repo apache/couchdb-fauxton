@@ -211,6 +211,7 @@ define([
       this.viewMeta = options.viewMeta;
       this.database = options.database;
       this.params = _.clone(options.params);
+      //this.
 
       this.on("remove", this.decrementTotalRows, this);
       this.perPageLimit = options.perPageLimit || 20;

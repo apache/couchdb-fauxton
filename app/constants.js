@@ -53,7 +53,14 @@ define([], function () {
 
     LOCAL_STORAGE: {
       SIDEBAR_MINIMIZED: 'sidebar-minimized'
+    },
+
+    MEMORY: {
+      RESULTS_PAGE_PREFIX: 'results-page-',
+      RETURN_TO_LAST_RESULTS_PAGE: 'return-to-last-results-page',
+      RESULTS_PAGE_SCROLLTOP: 'results-page-scrolltop'
     }
   };
+
   return constants;
 });
