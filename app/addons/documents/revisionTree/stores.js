@@ -17,7 +17,7 @@ function (FauxtonAPI, ActionTypes){
       this._treeOptions = options;
     },
 
-    getTreeOptions: function (){
+    getTreeOptions: function () {
       return this._treeOptions;
     },
 
@@ -37,6 +37,6 @@ function (FauxtonAPI, ActionTypes){
   Stores.revTreeStore = new Stores.RevTreeStore();
   Stores.revTreeStore.dispatchToken = FauxtonAPI.dispatcher.register(Stores.revTreeStore.dispatch);
 
-    return Stores;
+  return Stores;
 
 });

@@ -53,8 +53,6 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, Documents) {
         </a>);
     },
 
-    //My Edit
-
     getRevTreeUrlFragment: function (url) {
       return (
         <a href={url}>
@@ -65,7 +63,7 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, Documents) {
     getDocumentList: function () {
       return _.map(this.props.results, function (doc) {
         
-        var splitArr = (doc.url).split("/");
+        var splitArr = doc.url.split("/");
         var docID = JSON.parse(doc.content)._id;
         var winner = JSON.parse(doc.content)._rev;
         return (
