@@ -186,5 +186,20 @@ define([
 
   });
 
+  describe('DatabasePagination', function () {
+    it ('uses custom URL prefix on the navigation if passed through props', function () {
+      var container = document.createElement('div');
+      var pagination = TestUtils.renderIntoDocument(<Views.DatabasePagination linkPath="_custom_path" />, container);
+
+      var links = $(pagination.getDOMNode()).find("a");
+      assert.equal(links.length, 3, "pagination contains links");
+
+      links.each(function () {
+        assert.include(this.href, '_custom_path', 'link contains custom path');
+      });
+    });
+
+  });
+
 });
 
