@@ -19,73 +19,10 @@ define([
 ],
 function (app, FauxtonAPI, Compaction) {
 
-  Compaction.Layout = FauxtonAPI.View.extend({
-    template: 'addons/compaction/templates/layout',
+  // This is no longer used. We need to come up with a solution to allow to compact a specific view with CouchDB 2.0
+  // Once that is supported we can convert this to React.
 
-    initialize: function () {
-      _.bindAll(this);
-    },
-
-    events: {
-      "click #compact-db": "compactDB",
-      "click #compact-view": "compactDB",
-      "click #cleanup-views": "cleanupViews"
-    },
-
-    disableButton: function (selector, text) {
-      this.$(selector).attr('disabled', 'disabled').text(text);
-    },
-
-    enableButton: function (selector, text) {
-      this.$(selector).removeAttr('disabled').text(text);
-    },
-
-    compactDB: function (event) {
-      var enableButton = this.enableButton;
-      event.preventDefault();
-
-      this.disableButton('#compact-db', 'Compacting...');
-
-      Compaction.compactDB(this.model).then(function () {
-        FauxtonAPI.addNotification({
-          type: 'success',
-          msg: 'Database compaction has started. Visit <a href="#activetasks">Active Tasks</a> to view the compaction progress.',
-          escape: false // beware of possible XSS when the message changes
-        });
-      }, function (xhr, error, reason) {
-        FauxtonAPI.addNotification({
-          type: 'error',
-          msg: 'Error: ' + JSON.parse(xhr.responseText).reason
-        });
-      }).always(function () {
-        enableButton('#compact-db', 'Run');
-      });
-    },
-
-    cleanupViews: function (event) {
-      var enableButton = this.enableButton;
-      event.preventDefault();
-
-      this.disableButton('#cleanup-view', 'Cleaning...');
-
-      Compaction.cleanupViews(this.model).then(function () {
-        FauxtonAPI.addNotification({
-          type: 'success',
-          msg: 'View cleanup has started. Visit <a href="#activetasks">Active Tasks</a> to view progress.',
-          escape: false // beware of possible XSS when the message changes
-        });
-      }, function (xhr, error, reason) {
-        FauxtonAPI.addNotification({
-          type: 'error',
-          msg: 'Error: ' + JSON.parse(xhr.responseText).reason
-        });
-      }).always(function () {
-        enableButton('#cleanup-views', 'Run');
-      });
-    }
-  });
-
-  Compaction.CompactView = FauxtonAPI.View.extend({
+  /*Compaction.CompactView = FauxtonAPI.View.extend({
     template: 'addons/compaction/templates/compact_view',
     className: 'btn btn-info pull-right',
     tagName: 'button',
@@ -136,7 +73,7 @@ function (app, FauxtonAPI, Compaction) {
 
     }
 
-  });
+  });*/
 
   return Compaction;
 });

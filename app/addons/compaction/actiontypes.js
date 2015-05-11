@@ -10,22 +10,12 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-define([
-  "app",
-  "api",
-  "addons/compaction/routes"
-],
-
-function (app, FauxtonAPI, Compaction) {
-
-  Compaction.initialize = function () {
-    FauxtonAPI.registerExtension('docLinks', {
-      title: "Compact & Clean",
-      url: "compact",
-      icon: "icon-cogs"
-    });
-
+define([], function () {
+  return {
+    COMPACTION_SET_UP: 'COMPACTION_SET_UP',
+    COMPACTION_COMPACTION_STARTING: 'COMPACTION_COMPACTION_STARTING',
+    COMPACTION_COMPACTION_FINISHED: 'COMPACTION_COMPACTION_FINISHED',
+    COMPACTION_CLEANUP_STARTED: 'COMPACTION_CLEANUP_STARTED',
+    COMPACTION_CLEANUP_FINISHED: 'COMPACTION_CLEANUP_FINISHED'
   };
-
-  return Compaction;
 });
