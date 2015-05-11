@@ -27,6 +27,7 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, ReactComponents) 
   var CodeEditor = ReactComponents.CodeEditor;
   var PaddedBorderedBox = ReactComponents.PaddedBorderedBox;
   var ConfirmButton = ReactComponents.ConfirmButton;
+  var LoadLines = ReactComponents.LoadLines;
 
   var DesignDocSelector = React.createClass({
 
@@ -58,7 +59,7 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, ReactComponents) 
 
     getDesignDocOptions: function () {
       return this.state.designDocs.map(function (doc, i) {
-        return <option key={i} value={doc.id}> {doc.id} </option>;
+        return <option key={i} value={doc.id}>{doc.id}</option>;
       });
     },
 
@@ -67,7 +68,7 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, ReactComponents) 
 
       return (
         <optgroup label="Select a document">
-          <option value="new">New Design Document </option>
+          <option value="new">New Design Document</option>
           {designDocOptions}
         </optgroup>
       );
@@ -151,7 +152,7 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, ReactComponents) 
 
     getOptionsList: function () {
       return _.map(this.state.reduceOptions, function (reduce, i) {
-        return <option key={i} value={reduce}> {reduce} </option>;
+        return <option key={i} value={reduce}>{reduce}</option>;
       }, this);
 
     },
@@ -177,7 +178,12 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, ReactComponents) 
       customReduceSection;
 
       if (this.state.hasCustomReduce) {
-        customReduceSection = <CodeEditor ref='reduceEditor' id={'reduce-function'} code={this.state.reduce} docs={false} title={'Custom Reduce function'} />;
+        customReduceSection = <CodeEditor
+          ref='reduceEditor'
+          id='reduce-function'
+          code={this.state.reduce}
+          docs={false} title={'Custom Reduce function'}
+           />;
       }
 
       return (
@@ -278,7 +284,8 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, ReactComponents) 
         hasDesignDocChanged: indexEditorStore.hasDesignDocChanged(),
         newDesignDoc: indexEditorStore.isNewDesignDoc(),
         designDocId: indexEditorStore.getDesignDocId(),
-        map: indexEditorStore.getMap()
+        map: indexEditorStore.getMap(),
+        isLoading: indexEditorStore.isLoading()
       };
     },
 
@@ -331,6 +338,9 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, ReactComponents) 
       }
 
       this.clearNotifications();
+      // Update map code. This is actually so that seleniumn tests work
+      // because they do not pick up the blur event that updates the code
+      this.updateMapCode(this.refs.mapEditor.getValue());
 
       Actions.saveView({
         database: this.state.database,
@@ -350,7 +360,19 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, ReactComponents) 
       Actions.changeViewName(event.target.value);
     },
 
+    updateMapCode: function (code) {
+      Actions.updateMapCode(code);
+    },
+
     render: function () {
+      if (this.state.isLoading) {
+        return (
+          <div className="define-view">
+            <LoadLines />
+          </div>
+        );
+      }
+
       return (
         <div className="define-view">
           <PaddedBorderedBox>
@@ -389,6 +411,7 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, ReactComponents) 
                   ref="mapEditor"
                   title={"Map function"}
                   docs={getDocUrl('MAP_FUNCS')}
+                  change={this.updateMapCode}
                   code={this.state.map} />
               </PaddedBorderedBox>
             </div>

@@ -25,9 +25,10 @@ function (FauxtonAPI, ActionTypes) {
 
     initialize: function () {
       this._designDocs = [];
+      this._isLoading = true;
       this._view = {
-        reduce: this.defaultMap,
-        map: this.defaultReduce
+        reduce: '',
+        map: this.defaultMap
       };
       this._database = {
         id: '0'
@@ -43,14 +44,17 @@ function (FauxtonAPI, ActionTypes) {
       this._designDocId = options.designDocId;
       this._designDocChanged = false;
       this._viewNameChanged = false;
+      this.setView();
+      this._isLoading = false;
+    },
 
+    isLoading: function () {
+      return this._isLoading;
+    },
+
+    setView: function () {
       if (!this._newView && !this._newDesignDoc) {
         this._view = this.getDesignDoc().get('views')[this._viewName];
-      } else {
-        this._view = {
-          reduce: '',
-          map: ''
-        };
       }
     },
 
@@ -59,11 +63,11 @@ function (FauxtonAPI, ActionTypes) {
     },
 
     getMap: function () {
-      if (this._newView) {
-        return this.defaultMap;
-      }
-
       return this._view.map;
+    },
+
+    setMap: function (map) {
+      this._view.map = map;
     },
 
     getReduce: function () {
@@ -83,7 +87,7 @@ function (FauxtonAPI, ActionTypes) {
 
     getDesignDocs: function () {
       return this._designDocs.filter(function (ddoc) {
-        return ddoc.get('doc').language !== 'query';
+        return !ddoc.isMangoDoc();
       });
     },
 
@@ -168,6 +172,10 @@ function (FauxtonAPI, ActionTypes) {
       this.setReduce(selectedReduce);
     },
 
+    updateDesignDoc: function (designDoc) {
+      this._designDocs.add(designDoc, {merge: true});
+    },
+
     dispatch: function (action) {
       switch (action.type) {
         case ActionTypes.EDIT_INDEX:
@@ -205,6 +213,17 @@ function (FauxtonAPI, ActionTypes) {
         break;
 
         case ActionTypes.VIEW_CREATED:
+          this.triggerChange();
+        break;
+
+        case ActionTypes.VIEW_UPDATE_DESIGN_DOC:
+          this.updateDesignDoc(action.designDoc);
+          this.setView();
+          this.triggerChange();
+        break;
+
+        case ActionTypes.VIEW_UPDATE_MAP_CODE:
+          this.setMap(action.code);
           this.triggerChange();
         break;
 
