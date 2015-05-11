@@ -107,9 +107,6 @@ function (app, FauxtonAPI, Documents, ActionTypes, IndexResultsActions) {
                             viewInfo.reduce);
 
       if (result) {
-        FauxtonAPI.dispatch({
-         type: ActionTypes.SAVE_VIEW
-        });
 
         FauxtonAPI.addNotification({
           msg:  "Saving View...",
@@ -124,17 +121,27 @@ function (app, FauxtonAPI, Documents, ActionTypes, IndexResultsActions) {
             clear: true
           });
 
+
           if (_.any([viewInfo.designDocChanged, viewInfo.hasViewNameChanged, viewInfo.newDesignDoc, viewInfo.newView])) {
             FauxtonAPI.dispatch({
               type: ActionTypes.VIEW_SAVED
             });
             var fragment = FauxtonAPI.urls('view', 'showNewlySavedView', viewInfo.database.safeID(), designDoc.safeID(), app.utils.safeURLName(viewInfo.viewName));
             FauxtonAPI.navigate(fragment, {trigger: true});
+          } else {
+            this.updateDesignDoc(designDoc);
           }
 
           IndexResultsActions.reloadResultsList();
-        });
+        }.bind(this));
       }
+    },
+
+    updateDesignDoc: function (designDoc) {
+      FauxtonAPI.dispatch({
+        type: ActionTypes.VIEW_UPDATE_DESIGN_DOC,
+        designDoc: designDoc.toJSON()
+      });
     },
 
     deleteView: function (options) {
@@ -156,7 +163,13 @@ function (app, FauxtonAPI, Documents, ActionTypes, IndexResultsActions) {
         FauxtonAPI.navigate(url);
         FauxtonAPI.triggerRouteEvent('reloadDesignDocs');
       });
+    },
 
+    updateMapCode: function (code) {
+      FauxtonAPI.dispatch({
+        type: ActionTypes.VIEW_UPDATE_MAP_CODE,
+        code: code
+      });
     }
   };
 });

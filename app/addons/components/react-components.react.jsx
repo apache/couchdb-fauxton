@@ -15,10 +15,11 @@ define([
   'api',
   'react',
   'addons/fauxton/components',
+  'ace/ace',
   'plugins/beautify'
 ],
 
-function (app, FauxtonAPI, React, Components, beautifyHelper) {
+function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
 
   var ToggleHeaderButton = React.createClass({
     render: function () {
@@ -63,15 +64,137 @@ function (app, FauxtonAPI, React, Components, beautifyHelper) {
   });
 
   var CodeEditor = React.createClass({
-    render: function () {
-      var code = this.aceEditor ? this.aceEditor.getValue() : this.props.code;
-      return (
-        <div className="control-group">
-          {this.getTitleFragment()}
-          <div className="js-editor" id={this.props.id}>{this.props.code}</div>
-          <Beautify code={code} beautifiedCode={this.setEditorValue} />
-        </div>
-      );
+    getDefaultProps: function () {
+      return {
+        id: 'code-editor',
+        mode: 'javascript',
+        theme: 'idle_fingers',
+        fontSize: 13,
+        code: '',
+        showGutter: true,
+        highlightActiveLine: true,
+        showPrintMargin: false,
+        autoScrollEditorIntoView: true,
+        setHeightWithJS: true,
+        isFullPageEditor: false,
+        change: function () {}
+      };
+    },
+
+    hasChanged: function () {
+      return !_.isEqual(this.props.code, this.getValue());
+    },
+
+    setupAce: function (props, shouldUpdateCode) {
+      var el = this.getDOMNode(this.refs.ace);
+      //set the id so our nightwatch tests can find it
+      el.id = props.id;
+
+      this.editor = ace.edit(el);
+      // Automatically scrolling cursor into view after selection
+      // change this will be disabled in the next version
+      // set editor.$blockScrolling = Infinity to disable this message
+      this.editor.$blockScrolling = Infinity;
+
+      if (shouldUpdateCode) {
+        this.setEditorValue(props.code);
+      }
+
+      this.editor.setShowPrintMargin(props.showPrintMargin);
+      this.editor.autoScrollEditorIntoView = props.autoScrollEditorIntoView;
+      this.setHeightToLineCount();
+      this.removeIncorrectAnnotations();
+      this.editor.getSession().setMode("ace/mode/" + props.mode);
+      this.editor.setTheme("ace/theme/" + props.theme);
+      this.editor.setFontSize(props.fontSize);
+    },
+
+    setupEvents: function () {
+      $(window).on('beforeunload.editor_' + this.props.id, _.bind(this.quitWarningMsg));
+      FauxtonAPI.beforeUnload('editor_' + this.props.id, _.bind(this.quitWarningMsg, this));
+      this.editor.on('blur', _.bind(this.saveCodeChange, this));
+      this.editor.on('change', this.setHeightToLineCount);
+    },
+
+    saveCodeChange: function () {
+      this.props.change(this.getValue());
+    },
+
+    quitWarningMsg: function () {
+      if (this.hasChanged()) {
+        return 'Your changes have not been saved. Click cancel to return to the document.';
+      }
+    },
+
+    removeEvents: function () {
+      $(window).off('beforeunload.editor_' + this.props.id);
+      FauxtonAPI.removeBeforeUnload('editor_' + this.props.id);
+    },
+
+    setHeightToLineCount: function () {
+      if (!this.props.setHeightWithJS) {
+        return;
+      }
+
+      var lines = this.editor.getSession().getDocument().getLength();
+
+      if (this.props.isFullPageEditor) {
+        var maxLines = this.getMaxAvailableLinesOnPage();
+        lines = lines < maxLines ? lines : maxLines;
+      }
+      this.editor.setOptions({
+        maxLines: lines
+      });
+    },
+
+    // List of JSHINT errors to ignore
+    // Gets around problem of anonymous functions not being a valid statement
+    excludedViewErrors: [
+      "Missing name in function declaration.",
+      "['{a}'] is better written in dot notation."
+    ],
+
+    isIgnorableError: function (msg) {
+      return _.contains(this.excludedViewErrors, msg);
+    },
+
+    removeIncorrectAnnotations: function () {
+      var editor = this.editor,
+          isIgnorableError = this.isIgnorableError;
+
+      this.editor.getSession().on("changeAnnotation", function () {
+        var annotations = editor.getSession().getAnnotations();
+
+        var newAnnotations = _.reduce(annotations, function (annotations, error) {
+          if (!isIgnorableError(error.raw)) {
+            annotations.push(error);
+          }
+          return annotations;
+        }, []);
+
+        if (annotations.length !== newAnnotations.length) {
+          editor.getSession().setAnnotations(newAnnotations);
+        }
+      });
+    },
+
+    componentDidMount: function () {
+      this.setupAce(this.props, true);
+      this.setupEvents();
+    },
+
+    componentWillUnmount: function () {
+      this.removeEvents();
+      this.editor.destroy();
+    },
+
+    componentWillReceiveProps: function (nextProps) {
+      var codeChanged = !_.isEqual(nextProps.code, this.getValue());
+      this.setupAce(nextProps, codeChanged);
+    },
+
+    editSaved: function () {
+      return this.hasChanged();
     },
 
     getTitleFragment: function () {
@@ -94,40 +217,39 @@ function (app, FauxtonAPI, React, Components, beautifyHelper) {
       );
     },
 
-    setEditorValue: function (code) {
-      this.aceEditor.setValue(code);
-      //this is not a good practice normally but because we working with a backbone view as the mapeditor
-      //that keeps the map code state this is the best way to force a render so that the beautify button will hide
-      this.forceUpdate();
+    getAnnotations: function () {
+      return this.editor.getSession().getAnnotations();
+    },
+
+    hadValidCode: function () {
+      var errors = this.getAnnotations();
+      // By default CouchDB view functions don't pass lint
+      return _.every(errors, function (error) {
+        return this.isIgnorableError(error.raw);
+      }, this);
+    },
+
+    setEditorValue: function (code, lineNumber) {
+      lineNumber = lineNumber ? lineNumber : -1;
+      this.editor.setValue(code, lineNumber);
     },
 
     getValue: function () {
-      return this.aceEditor.getValue();
+      return this.editor.getValue();
     },
 
     getEditor: function () {
-      return this.aceEditor;
+      return this;
     },
 
-    componentDidMount: function () {
-      this.aceEditor = new Components.Editor({
-        editorId: this.props.id,
-        mode: 'javascript',
-        couchJSHINT: true
-      });
-      this.aceEditor.render();
-    },
-
-    shouldComponentUpdate: function () {
-      //we don't want to re-render the map editor as we are using backbone underneath
-      //which will cause the editor to break
-      this.aceEditor.editSaved();
-
-      return false;
-    },
-
-    componentWillUnmount: function () {
-      this.aceEditor.remove();
+    render: function () {
+      return (
+        <div className="control-group">
+          {this.getTitleFragment()}
+          <div ref="ace" className="js-editor" id={this.props.id}></div>
+          <Beautify code={this.props.code} beautifiedCode={this.setEditorValue} />
+        </div>
+      );
     }
 
   });

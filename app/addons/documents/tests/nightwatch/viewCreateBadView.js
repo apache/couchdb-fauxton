@@ -22,17 +22,20 @@ module.exports = {
     client
       .loginToGUI()
       .populateDatabase(newDatabaseName)
-      .url(baseUrl + '/#/database/' + newDatabaseName + '/new_view')
+      .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
+      .waitForElementPresent(dropDownElement, waitTime, false)
+      .click(dropDownElement + ' a')
+      .click(dropDownElement + ' a[href*="new_view"]')
       .waitForElementVisible('#new-ddoc', waitTime, false)
       .setValue('#new-ddoc', 'test_design_doc-selenium-bad-reduce')
       .clearValue('#index-name')
       .setValue('#index-name', 'hasenindex')
+      .click('#reduce-function-selector')
+      .keys(['\uE013', '\uE013', '\uE013', '\uE013', '\uE006'])
       .execute('\
         var editor = ace.edit("map-function");\
         editor.getSession().setValue("function (doc) { emit(\'boom\', doc._id); }");\
       ')
-      .click('#reduce-function-selector')
-      .keys(['\uE013', '\uE013', '\uE013', '\uE013', '\uE006'])
       .execute('$(".save")[0].scrollIntoView();')
       .click('button.btn-success.save')
       .waitForElementVisible('.alert-error', waitTime, false)

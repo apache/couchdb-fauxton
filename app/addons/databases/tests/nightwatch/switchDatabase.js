@@ -19,7 +19,7 @@ module.exports = {
       .loginToGUI()
 
       // wait for the DB name typeahead field to appear in the header
-      .waitForElementPresent('#jump-to-db .search-autocomplete', waitTime, false)
+      .waitForElementVisible('#jump-to-db .search-autocomplete', waitTime, false)
       .setValue('#jump-to-db .search-autocomplete', [newDatabaseName, client.Keys.ENTER])
       .waitForElementPresent('.index-pagination', waitTime, false)
 
