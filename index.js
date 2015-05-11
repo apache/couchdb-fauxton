@@ -46,8 +46,9 @@ module.exports = function (options) {
   });
 
   http.createServer(function (req, res) {
-    var url = req.url.split(/\?v=|\?noCache/)[0],
-    accept = req.headers.accept.split(',');
+    var isDocLink = /_utils\/docs/.test(req.url) ? true : false;
+    var url = req.url.split(/\?v=|\?noCache/)[0].replace('_utils', '');
+    var accept = req.headers.accept.split(',');
 
     if (setContentSecurityPolicy) {
       var headerValue = "default-src 'self'; img-src 'self' data:; font-src 'self'; " +
@@ -58,8 +59,7 @@ module.exports = function (options) {
     if (url === '/' && accept[0] !== 'application/json') {
       // serve main index file from here
       return sendFile(req, res, path.join(dist_dir, 'index.html'));
-    } else if (isFile(url) && !/_utils\/docs/.test(url)) {
-      url = url.replace('_utils', '');
+    } else if (isFile(url) && !isDocLink ) {
       return sendFile(req, res, path.join(dist_dir, url));
     }
 
