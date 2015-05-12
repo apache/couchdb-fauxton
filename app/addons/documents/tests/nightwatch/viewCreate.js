@@ -18,6 +18,7 @@ module.exports = {
 
     /*jshint multistr: true */
     openDifferentDropdownsAndClick(client, '#header-dropdown-menu')
+      .waitForElementPresent('#new-ddoc', waitTime, false)
       .setValue('#new-ddoc', 'test_design_doc-selenium-1')
       .clearValue('#index-name')
       .setValue('#index-name', 'hasenindex')

@@ -27,6 +27,7 @@ module.exports = {
     .click(dropDownElement + ' a')
     .click(dropDownElement + ' a[href*="new_view"]')
     .waitForElementPresent('.editor-wrapper', waitTime, false)
+    .waitForElementPresent('#new-ddoc', waitTime, false)
     .setValue('#new-ddoc', 'test_design_doc-save-many-times')
     .clearValue('#index-name')
     .setValue('#index-name', 'multiple-saves')
@@ -36,15 +37,16 @@ module.exports = {
       editor.getSession().setValue("function (doc) { emit(\'boom\', doc._id); }");\
       editor._emit(\'blur\');\
     ')
-    .click('button.btn-success.save')
-    .waitForElementVisible('.alert-success', waitTime, false)
-    .waitForElementNotVisible('.alert-success', waitTime, false)
-    .click('button.btn-success.save')
-    .waitForElementVisible('.alert-success', waitTime, false)
-    .waitForElementNotVisible('.alert-success', waitTime, false)
-    .click('button.btn-success.save')
-    .waitForElementVisible('.alert-success', waitTime, false)
-    .assert.containsText('.alert-success', 'View Saved.')
+    .clickWhenVisible('button#save-view')
+    .waitForElementVisible('#global-notifications', waitTime, false)
+    .waitForElementNotVisible('#global-notifications', waitTime, false)
+
+    .clickWhenVisible('button#save-view')
+    .waitForElementVisible('#global-notifications', waitTime, false)
+    .waitForElementNotVisible('#global-notifications', waitTime, false)
+
+    .clickWhenVisible('button#save-view')
+    .waitForElementVisible('#global-notifications', waitTime, false)
     .end();
   },
 };

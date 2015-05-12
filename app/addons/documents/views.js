@@ -149,7 +149,7 @@ function (app, FauxtonAPI, Components, Documents,
     deleteDatabase: function (event) {
       event.preventDefault();
 
-      var enteredName = $('#db_name').val();
+      var enteredName = $('#db-name').val();
       if (this.database.id != enteredName) {
         this.set_error_msg(enteredName + " does not match the database name.");
         return;

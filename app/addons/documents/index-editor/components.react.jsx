@@ -433,7 +433,7 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, ReactComponents) 
             </PaddedBorderedBox>
             <div className="padded-box">
               <div className="control-group">
-                <ConfirmButton text="Save &amp; Build Index" />
+                <ConfirmButton id="save-view" text="Save &amp; Build Index" />
                 <DeleteView />
                 {this.getCompactButton()}
               </div>
