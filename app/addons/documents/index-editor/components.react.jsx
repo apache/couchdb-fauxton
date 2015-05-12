@@ -374,6 +374,14 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, ReactComponents) 
         );
       }
 
+      var CompactButton = FauxtonAPI.getExtensions('view-editor:compaction-button');
+
+      if (_.isEmpty(CompactButton)) {
+        CompactButton = 'span';
+      } else {
+        CompactButton = CompactButton[0];
+      }
+
       return (
         <div className="define-view">
           <PaddedBorderedBox>
@@ -423,6 +431,8 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, ReactComponents) 
               <div className="control-group">
                 <ConfirmButton text="Save &amp; Build Index" />
                 <DeleteView />
+                <CompactButton database={this.state.database}
+                  designDoc={this.state.designDocId}/>
               </div>
             </div>
           </form>

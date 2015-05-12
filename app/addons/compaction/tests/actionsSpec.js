@@ -169,5 +169,79 @@ define([
 
     });
 
+    describe('Compact View', function () {
+      var database = {};
+      var designDoc = '_design/test-doc';
+
+      afterEach(function () {
+        restore(FauxtonAPI.addNotification);
+      });
+
+      it('compacts database', function () {
+        var spy = false;
+        var promise = FauxtonAPI.Deferred();
+
+        Compaction.compactView = function () {
+          spy = true;
+          return promise;
+        };
+
+        Actions.compactView(database, designDoc);
+        assert.ok(spy);
+      });
+
+      it('notifies on success', function () {
+        var spy = sinon.spy(FauxtonAPI, 'addNotification');
+        var promise = FauxtonAPI.Deferred();
+        promise.resolve();
+
+        Compaction.compactView = function () {
+          return promise;
+        };
+
+        Actions.compactView(database, designDoc);
+        assert.ok(spy.calledOnce);
+      });
+
+      it('notifies on failure', function () {
+        var spy = sinon.spy(FauxtonAPI, 'addNotification');
+        var promise = FauxtonAPI.Deferred();
+        promise.reject({
+          responseText: JSON.stringify({reason: 'testing'})
+        });
+
+        Compaction.compactView = function () {
+          return promise;
+        };
+
+        Actions.compactView(database, designDoc);
+        assert.ok(spy.calledOnce);
+      });
+
+      it('sets compacting view to true on start', function () {
+        var promise = FauxtonAPI.Deferred();
+
+        Compaction.compactView = function () {
+          return promise;
+        };
+
+        Actions.compactView(database, designDoc);
+        assert.ok(store.isCompactingView());
+      });
+
+      it('sets compacting view to false on completion of request', function () {
+        var promise = FauxtonAPI.Deferred();
+        promise.resolve();
+
+        Compaction.compactView = function () {
+          return promise;
+        };
+
+        Actions.compactView(database, designDoc);
+        assert.notOk(store.isCompactingView());
+      });
+
+    });
+
   });
 });

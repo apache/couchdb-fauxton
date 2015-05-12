@@ -40,7 +40,7 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, ReactComponents) 
           <div className="span12 compaction-option">
             <h3> Compact Database </h3>
             <p>Compacting a database removes deleted documents and previous revisions. It is an irreversible operation and may take a while to complete for large databases.</p>
-            <button disabled={this.props.isCompacting} onClick={this.run} className="btn btn-large btn-primary">{btnText}</button>
+            <button id="compact-db" disabled={this.props.isCompacting} onClick={this.run} className="btn btn-large btn-primary">{btnText}</button>
           </div>
         </div>
       );
@@ -65,7 +65,7 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, ReactComponents) 
           <div className="span12 compaction-option">
             <h3> Cleanup Views </h3>
             <p>Cleaning up views in a database removes old view files still stored on the filesystem. It is an irreversible operation.</p>
-            <button onClick={this.run} className="btn btn-large btn-primary">{btnText}</button>
+            <button id="cleanup-views" onClick={this.run} className="btn btn-large btn-primary">{btnText}</button>
           </div>
         </div>
       );
@@ -116,9 +116,54 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, ReactComponents) 
     }
   });
 
+  var ViewCompactionButton = React.createClass({
+    onClick: function (e) {
+      e.preventDefault();
+      Actions.compactView(this.props.database, this.props.designDoc);
+    },
+
+    getStoreState: function () {
+      return {
+        isCompactingView: compactionStore.isCompactingView()
+      };
+    },
+
+    getInitialState: function () {
+      return this.getStoreState();
+    },
+
+    componentDidMount: function () {
+      compactionStore.on('change', this.onChange, this);
+    },
+
+    componentWillUnmount: function () {
+      compactionStore.off('change', this.onChange);
+    },
+
+    onChange: function () {
+      this.setState(this.getStoreState());
+    },
+
+    render: function () {
+      var btnMsg = 'Compact View';
+
+      if (this.state.isCompactingView) {
+        btnMsg = 'Compacting View';
+      }
+
+      return (
+        <button disabled={this.state.isCompactingView}
+          className="btn btn-info pull-right"
+          onClick={this.onClick}>{btnMsg}</button>
+      );
+    }
+
+  });
+
   return {
     CompactDatabase: CompactDatabase,
     CleanView: CleanView,
-    CompactionController: CompactionController
+    CompactionController: CompactionController,
+    ViewCompactionButton: ViewCompactionButton
   };
 });

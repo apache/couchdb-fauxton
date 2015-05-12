@@ -51,6 +51,18 @@ function (app, FauxtonAPI, ActionTypes, Compaction) {
       });
     },
 
+    compactViewStarted: function () {
+      FauxtonAPI.dispatch({
+        type: ActionTypes.COMPACTION_VIEW_STARTED
+      });
+    },
+
+    compactViewFinished: function () {
+      FauxtonAPI.dispatch({
+        type: ActionTypes.COMPACTION_VIEW_FINISHED
+      });
+    },
+
     compactDatabase: function (database) {
       this.compactionStarted();
       Compaction.compactDB(database).then(function () {
@@ -84,6 +96,25 @@ function (app, FauxtonAPI, ActionTypes, Compaction) {
         });
       }).always(function () {
         this.cleaningViewsFinished();
+      }.bind(this));
+    },
+
+    compactView: function (database, designDoc) {
+      this.compactViewStarted();
+
+      Compaction.compactView(database, designDoc).then(function () {
+        FauxtonAPI.addNotification({
+          type: 'success',
+          msg: 'View compaction has started. Visit <a href="#activetasks">Active Tasks</a> to view progress.',
+          escape: false // beware of possible XSS when the message changes
+        });
+      }, function (xhr, error, reason) {
+        FauxtonAPI.addNotification({
+          type: 'error',
+          msg: 'Error: ' + JSON.parse(xhr.responseText).reason
+        });
+      }).always(function () {
+        this.compactViewFinished();
       }.bind(this));
     }
 

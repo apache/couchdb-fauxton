@@ -23,6 +23,7 @@ function (FauxtonAPI, ActionTypes) {
     initialize: function () {
       this._isCompacting = false;
       this._isCleaningView = false;
+      this._isCompactingView = false;
     },
 
     isCompacting: function () {
@@ -31,6 +32,10 @@ function (FauxtonAPI, ActionTypes) {
 
     isCleaningViews: function () {
       return this._isCleaningViews;
+    },
+
+    isCompactingView: function () {
+      return this._isCompactingView;
     },
 
     setDatabase: function (database) {
@@ -61,6 +66,14 @@ function (FauxtonAPI, ActionTypes) {
         break;
         case ActionTypes.COMPACTION_CLEANUP_FINISHED:
           this._isCleaningViews = false;
+          this.triggerChange();
+        break;
+        case ActionTypes.COMPACTION_VIEW_STARTED:
+          this._isCompactingView = true;
+          this.triggerChange();
+        break;
+        case ActionTypes.COMPACTION_VIEW_FINISHED:
+          this._isCompactingView = false;
           this.triggerChange();
         break;
 
