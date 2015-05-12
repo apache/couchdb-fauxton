@@ -23,14 +23,16 @@ define([
   'addons/documents/resources',
   'addons/documents/views',
 
-
   'addons/documents/index-results/actions',
   'addons/documents/pagination/stores',
+  'addons/documents/header/header.react',
+  'addons/documents/header/header.actions'
 
 ],
 
 function (app, FauxtonAPI, Helpers, BaseRoute, Mango, Databases,
-  Components, Resources, Documents, IndexResultsActions, PaginationStores) {
+  Components, Resources, Documents, IndexResultsActions,
+  PaginationStores, ReactHeader, ReactActions) {
 
   var MangoIndexList = BaseRoute.extend({
     layout: 'with_tabs_sidebar',
@@ -76,6 +78,8 @@ function (app, FauxtonAPI, Helpers, BaseRoute, Mango, Databases,
             }
           });
 
+      ReactActions.resetHeaderController();
+
       this.viewEditor && this.viewEditor.remove();
       this.headerView && this.headerView.remove();
 
@@ -86,7 +90,7 @@ function (app, FauxtonAPI, Helpers, BaseRoute, Mango, Databases,
         isListDeletable: false
       });
 
-      this.reactHeader = this.setView('#react-headerbar', new Documents.Views.ReactHeaderbar());
+      this.setComponent('#react-headerbar', ReactHeader.HeaderBarController);
 
       this.leftheader.updateCrumbs(this.getCrumbs(this.database));
       this.rightHeader.hideQueryOptions();

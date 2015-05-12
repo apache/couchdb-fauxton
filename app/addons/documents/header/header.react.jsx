@@ -218,12 +218,6 @@ function (app, FauxtonAPI, React, Stores, Actions, ReactComponents, IndexResults
   });
 
   var Views = {
-    renderHeaderController: function (el) {
-      React.render(<HeaderBarController/>, el);
-    },
-    removeHeaderController: function (el) {
-      React.unmountComponentAtNode(el);
-    },
     BulkDocumentHeaderController: BulkDocumentHeaderController,
     HeaderBarController: HeaderBarController,
     ToggleHeaderButton: ToggleHeaderButton
