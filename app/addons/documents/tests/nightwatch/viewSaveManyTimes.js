@@ -27,6 +27,7 @@ module.exports = {
     .click(dropDownElement + ' a')
     .click(dropDownElement + ' a[href*="new_view"]')
     .waitForElementPresent('.editor-wrapper', waitTime, false)
+    .waitForElementPresent('#new-ddoc', waitTime, false)
     .setValue('#new-ddoc', 'test_design_doc-save-many-times')
     .clearValue('#index-name')
     .setValue('#index-name', 'multiple-saves')
