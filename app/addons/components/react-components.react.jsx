@@ -419,7 +419,6 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
 
   });
 
-
   var ConfirmButton = React.createClass({
     render: function () {
       return (

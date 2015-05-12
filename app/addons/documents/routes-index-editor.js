@@ -24,12 +24,14 @@ define([
   'addons/fauxton/components',
   'addons/documents/pagination/stores',
   'addons/documents/index-results/actions',
-  'addons/documents/index-results/index-results.components.react'
+  'addons/documents/index-results/index-results.components.react',
+  'addons/documents/pagination/pagination.react'
 
 ],
 
 function (app, FauxtonAPI, Helpers, BaseRoute, Documents, IndexEditorComponents, ActionsIndexEditor,
-          Databases, Components, PaginationStores, IndexResultsActions, IndexResultsComponents) {
+          Databases, Components, PaginationStores, IndexResultsActions,
+          IndexResultsComponents, ReactPagination) {
 
 
   var IndexEditorAndResults = BaseRoute.extend({
@@ -78,7 +80,7 @@ function (app, FauxtonAPI, Helpers, BaseRoute, Documents, IndexEditorComponents,
 
       viewName = viewName.replace(/\?.*$/, '');
 
-      this.footer = this.setView('#footer', new Documents.Views.Footer());
+      this.setComponent('#footer', ReactPagination.Footer);
 
       this.indexedDocs = new Documents.IndexCollection(null, {
         database: this.database,
