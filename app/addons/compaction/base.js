@@ -26,7 +26,6 @@ function (app, FauxtonAPI, Compaction) {
     });
 
     FauxtonAPI.registerExtension('view-editor:compaction-button', Compaction.ViewCompactionButton);
-
   };
 
   return Compaction;

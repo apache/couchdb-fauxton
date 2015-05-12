@@ -38,7 +38,7 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, ReactComponents) 
       return (
         <div className="row-fluid">
           <div className="span12 compaction-option">
-            <h3> Compact Database </h3>
+            <h3>Compact Database</h3>
             <p>Compacting a database removes deleted documents and previous revisions. It is an irreversible operation and may take a while to complete for large databases.</p>
             <button id="compact-db" disabled={this.props.isCompacting} onClick={this.run} className="btn btn-large btn-primary">{btnText}</button>
           </div>
@@ -63,7 +63,7 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, ReactComponents) 
       return (
         <div className="row-fluid">
           <div className="span12 compaction-option">
-            <h3> Cleanup Views </h3>
+            <h3>Cleanup Views</h3>
             <p>Cleaning up views in a database removes old view files still stored on the filesystem. It is an irreversible operation.</p>
             <button id="cleanup-views" onClick={this.run} className="btn btn-large btn-primary">{btnText}</button>
           </div>
