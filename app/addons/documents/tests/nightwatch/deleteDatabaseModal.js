@@ -18,10 +18,10 @@ module.exports = {
     client
       .loginToGUI()
       .url(baseUrl + '/#/database/_replicator/_all_docs')
-      .waitForElementPresent('#header-dropdown-menu a.dropdown-toggle.icon.fonticon-cog', waitTime, false)
-      .click("#header-dropdown-menu a.dropdown-toggle.icon.fonticon-cog")
-      .waitForElementPresent('#header-dropdown-menu .fonticon-trash', waitTime, false)
-      .click('#header-dropdown-menu .fonticon-trash')
+      .waitForElementPresent("#header-dropdown-menu a.dropdown-toggle.icon.fonticon-cog", waitTime, false)
+      .clickWhenVisible("#header-dropdown-menu a.dropdown-toggle.icon.fonticon-cog", waitTime, false)
+      .waitForElementPresent("#header-dropdown-menu .fonticon-trash", waitTime, false)
+      .clickWhenVisible('#header-dropdown-menu .fonticon-trash', waitTime, false)
       .waitForElementVisible('#db_name', waitTime, false)
       .assert.elementPresent('.warning')
     .end();
@@ -35,10 +35,10 @@ module.exports = {
     client
       .loginToGUI()
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
-      .waitForElementPresent('#header-dropdown-menu a.dropdown-toggle.icon.fonticon-cog', waitTime, false)
-      .click("#header-dropdown-menu a.dropdown-toggle.icon.fonticon-cog")
-      .waitForElementPresent('#header-dropdown-menu .fonticon-trash', waitTime, false)
-      .click('#header-dropdown-menu .fonticon-trash')
+      .waitForElementPresent("#header-dropdown-menu a.dropdown-toggle.icon.fonticon-cog", waitTime, false)
+      .clickWhenVisible('#header-dropdown-menu a.dropdown-toggle.icon.fonticon-cog', waitTime, false)
+      .waitForElementPresent("#header-dropdown-menu .fonticon-trash", waitTime, false)
+      .clickWhenVisible('#header-dropdown-menu .fonticon-trash', waitTime, false)
       .waitForElementVisible('#db_name', waitTime, false)
       .assert.elementNotPresent('.warning')
     .end();
