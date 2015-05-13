@@ -5,7 +5,7 @@ define([
   "addons/documents/revisionTree/component.react"
 ],
 
-function (app, FauxtonAPI,SAMPLE, Components) {
+function (app, FauxtonAPI, SAMPLE, Components) {
   var Views = {};
 
   Views.Wrapper = FauxtonAPI.View.extend({
@@ -20,5 +20,4 @@ function (app, FauxtonAPI,SAMPLE, Components) {
   SAMPLE.WRAP = Views;
 
   return SAMPLE;
-}
-);
+});

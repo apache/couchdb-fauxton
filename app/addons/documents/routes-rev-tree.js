@@ -47,5 +47,4 @@ function (app, FauxtonAPI, Resources, Views, RevisionTreeActions, AppComponent) 
   // return Resources;
   return RevTreeRouteObject;
 
-}
-);
+});

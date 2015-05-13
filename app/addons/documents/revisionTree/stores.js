@@ -37,7 +37,6 @@ function (FauxtonAPI, ActionTypes) {
           this.newDocData(action.options);
           this.triggerChange();
         break;
-        
         default:
         return;
       }

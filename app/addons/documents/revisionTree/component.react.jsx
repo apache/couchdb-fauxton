@@ -318,7 +318,7 @@ function (app, FauxtonAPI, React, Stores) {
       }.bind(this));
     },
 
-    render: function() {
+    render: function () {
       return (
         <div>
           <Box>
@@ -341,5 +341,4 @@ function (app, FauxtonAPI, React, Stores) {
     App: App
   };
 
-}
-);
+});
