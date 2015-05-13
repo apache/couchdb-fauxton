@@ -198,7 +198,7 @@ define([
         });
 
         it('removes existing component via react', function () {
-          var spy = sinon.spy(React, 'unmountComponentAtNode');
+          var spy = sinon.stub(React, 'unmountComponentAtNode');
           var fakeSelector = 'remove-selector';
           testRouteObject.reactComponents[fakeSelector] = React.createElement('div');
 
@@ -209,6 +209,7 @@ define([
         });
 
         it('removes existing components key', function () {
+          var spy = sinon.stub(React, 'unmountComponentAtNode');
           var fakeSelector = 'remove-selector';
           testRouteObject.reactComponents[fakeSelector] = React.createElement('div');
 

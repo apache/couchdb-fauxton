@@ -175,8 +175,8 @@ define([
 
     it('should not add the same filter twice', function () {
       var $el = $(changesFilterEl.getDOMNode()),
-        submitBtn = $el.find('[type="submit"]')[0],
-        addItemField = $el.find('.js-changes-filter-field')[0];
+          submitBtn = $el.find('[type="submit"]')[0],
+          addItemField = $el.find('.js-changes-filter-field')[0];
 
       var filter = 'I am unique in the whole wide world';
       addItemField.value = filter;
@@ -194,7 +194,7 @@ define([
 
   // tests Changes Controller; includes tests in conjunction with ChangesHeaderController
   describe('ChangesController', function () {
-    var containerEl, headerEl, $headerEl, changesEl, $changesEl;
+    var container, container2, headerEl, $headerEl, changesEl, $changesEl;
 
     var results = [
       { id: 'doc_1', seq: 4, deleted: false, changes: { code: 'here' } },
@@ -209,17 +209,20 @@ define([
     });
 
     beforeEach(function () {
+      container = document.createElement('div');
+      container2 = document.createElement('div');
       Actions.initChanges({ databaseName: 'testDatabase' });
-      headerEl  = TestUtils.renderIntoDocument(<Changes.ChangesHeaderController />, containerEl);
+      headerEl  = TestUtils.renderIntoDocument(<Changes.ChangesHeaderController />, container);
       $headerEl = $(headerEl.getDOMNode());
-      changesEl = TestUtils.renderIntoDocument(<Changes.ChangesController />, containerEl);
+      changesEl = TestUtils.renderIntoDocument(<Changes.ChangesController />, container2);
       $changesEl = $(changesEl.getDOMNode());
       Actions.updateChanges(changesResponse);
     });
 
     afterEach(function () {
       Stores.changesStore.reset();
-      React.unmountComponentAtNode(containerEl);
+      React.unmountComponentAtNode(container);
+      React.unmountComponentAtNode(container2);
     });
 
 
@@ -290,11 +293,12 @@ define([
 
 
   describe('ChangesController max results', function () {
-    var containerEl, changesEl;
+    var changesEl;
+    var container;
     var maxChanges = 10;
 
     beforeEach(function () {
-
+      container = document.createElement('div');
       var changes = [];
       _.times(maxChanges + 10, function (i) {
         changes.push({ id: 'doc_' + i, seq: 1, changes: { code: 'here' } });
@@ -311,12 +315,12 @@ define([
       Stores.changesStore.setMaxChanges(maxChanges);
 
       Actions.updateChanges(response);
-      changesEl = TestUtils.renderIntoDocument(<Changes.ChangesController />, containerEl);
+      changesEl = TestUtils.renderIntoDocument(<Changes.ChangesController />, container);
     });
 
     afterEach(function () {
       Stores.changesStore.reset();
-      React.unmountComponentAtNode(containerEl);
+      React.unmountComponentAtNode(container);
     });
 
     it('should truncate the number of results with very large # of changes', function () {
