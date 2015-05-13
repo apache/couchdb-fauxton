@@ -8,12 +8,12 @@ define([
 
 ],
 
-function(app, FauxtonAPI, Resources, Views, RevisionTreeActions,AppComponent) {
+function (app, FauxtonAPI, Resources, Views, RevisionTreeActions, AppComponent) {
   var  RevTreeRouteObject = FauxtonAPI.RouteObject.extend({
     layout: "one_pane",
 
     crumbs: [
-      {"name": "Revision Tree","link": "_revtree"}
+      {"name": "Revision Tree" , "link": "_revtree"}
     ],
 
     routes: {
@@ -28,7 +28,7 @@ function(app, FauxtonAPI, Resources, Views, RevisionTreeActions,AppComponent) {
         //put common views used on all your routes here (eg:  sidebars )
     },
 
-    revtreeRoute: function (database,doc,winner) {
+    revtreeRoute: function (database, doc, winner) {
       var parameters = {
         db: database,
         docID: doc,
@@ -36,7 +36,7 @@ function(app, FauxtonAPI, Resources, Views, RevisionTreeActions,AppComponent) {
       };
 
       RevisionTreeActions.newRevisionTree(parameters);
-      this.setComponent("#dashboard-content",AppComponent.App);
+      this.setComponent("#dashboard-content", AppComponent.App);
 
       // this.setView("#dashboard-content", new Resources.WRAP.Wrapper({params: parameters}));
     }
@@ -47,4 +47,5 @@ function(app, FauxtonAPI, Resources, Views, RevisionTreeActions,AppComponent) {
   // return Resources;
   return RevTreeRouteObject;
 
-});
+}
+);

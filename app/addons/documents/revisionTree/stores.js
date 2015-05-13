@@ -3,7 +3,7 @@ define([
   'addons/documents/revisionTree/actiontypes'
 ],
 
-function (FauxtonAPI, ActionTypes){
+function (FauxtonAPI, ActionTypes) {
 
   var Stores = {};
 
@@ -11,10 +11,15 @@ function (FauxtonAPI, ActionTypes){
 
     initialize: function () {
       this._treeOptions;
+      this._revDocData;
     },
 
     newRevTree: function (options) {
       this._treeOptions = options;
+    },
+
+    newDocData: function (docData) {
+      this._revDocData = docData;
     },
 
     getTreeOptions: function () {
@@ -27,6 +32,12 @@ function (FauxtonAPI, ActionTypes){
           this.newRevTree(action.options);
           this.triggerChange();
         break;
+
+        case ActionTypes.REV_TREE_DOC_REV_DATA:
+          this.newDocData(action.options);
+          this.triggerChange();
+        break;
+        
         default:
         return;
       }
@@ -39,4 +50,5 @@ function (FauxtonAPI, ActionTypes){
 
   return Stores;
 
-});
+}
+);

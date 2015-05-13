@@ -20,7 +20,7 @@ define([
 ],
 
 
-function (Documents, DocumentsRouteObject, docEditor, IndexEditorRouteObject, Mango,RevTree) {
+function (Documents, DocumentsRouteObject, docEditor, IndexEditorRouteObject, Mango, RevTree) {
   Documents.RouteObjects = [
     docEditor.DocEditorRouteObject,
     docEditor.NewDocEditorRouteObject,

@@ -4,9 +4,9 @@ define([
   "react",
   'addons/documents/revisionTree/stores',
   'addons/documents/revisionTree/actions',
-], 
+],
 
-function (app,FauxtonAPI, React,Stores) {
+function (app, FauxtonAPI, React, Stores) {
 
   var store = Stores.revTreeStore;
   var lineObjs = [];
@@ -120,10 +120,13 @@ function (app,FauxtonAPI, React,Stores) {
     }
   });
 
-  var draw = function(paths, deleted, winner, minUniq){
+  var draw = function (paths, deleted, winner, minUniq) {
     var maxX = grid;
     var maxY = grid;
     var levelCount = []; // numer of nodes on some level (pos)
+    lineObjs.length = 0;
+    nodeObjs.length = 0;
+    textObjs.length = 0;
 
     var map = {}; // map from rev to position
 
@@ -141,7 +144,7 @@ function (app,FauxtonAPI, React,Stores) {
         var y = pos * grid;
 
         if (!isLeaf) {
-          var nextRev = path[i-1];
+          var nextRev = path[i - 1];
           var nextX = map[nextRev][0];
           var nextY = map[nextRev][1];
 
@@ -176,8 +179,8 @@ function (app,FauxtonAPI, React,Stores) {
     paths.forEach(drawPath);
   };
 
-  var minUniqueLength = function(arr){
-    function strCommon(a, b){
+  var minUniqueLength = function (arr) {
+    function strCommon(a, b) {
 
       if (a === b) {
         return a.length;
@@ -185,8 +188,8 @@ function (app,FauxtonAPI, React,Stores) {
 
       var i = 0;
 
-      while(++i){
-        if(a[i - 1] !== b[i - 1]) return i;
+      while (++i) {
+        if (a[i - 1] !== b[i - 1]) return i;
       }
     }
 
@@ -194,7 +197,7 @@ function (app,FauxtonAPI, React,Stores) {
     var com = 1;
     array.sort();
 
-    for (var i = 1; i < array.length; i++){
+    for (var i = 1; i < array.length; i++) {
       com = Math.max(com, strCommon(array[i], array[i - 1]));
     }
 
@@ -208,8 +211,8 @@ function (app,FauxtonAPI, React,Stores) {
     var opened = false;
 
     var textObj = {
-      "stLeft": (x-40) + "px",
-      "stTop": (y-30) + "px",
+      "stLeft": (x - 40) + "px",
+      "stTop": (y - 30) + "px",
       "short": pos + '-' + id.substr(0, shortDescLen),
       "long": pos + '-' + id
     };
@@ -229,7 +232,7 @@ function (app,FauxtonAPI, React,Stores) {
     }
     if (isDeleted) {
       leafStat = "deleted";
-    }      
+    }
 
     var nodeObj = {
       "x" : x,
@@ -242,7 +245,7 @@ function (app,FauxtonAPI, React,Stores) {
 
   var App = React.createClass({
 
-    getInitialState: function() {
+    getInitialState: function () {
       return {
         lines: [],
         treeNodes: [],
@@ -250,25 +253,25 @@ function (app,FauxtonAPI, React,Stores) {
       };
     },
 
-    componentDidMount: function() {
+    componentDidMount: function () {
       var result = [];
       var paths = [];
       var deleted = {};
       var optionsVal = store.getTreeOptions();
       var winner = optionsVal.winnerRev;
-      var url = '/'+optionsVal.db+'/'+optionsVal.docID;
+      var url = '/' + optionsVal.db + '/' + optionsVal.docID;
       var minUniq = 0;
 
-      $.get(app.host+url+'?open_revs=all&revs=true', function(rslt) {
+      $.get(app.host + url + '?open_revs=all&revs=true', function (rslt) {
 
         var data = rslt;
 
         if (this.isMounted()) {
           var x = data.split(/(\n|\r\n|\r)/);
 
-          for (var i = 0; i <x.length; i++) {
+          for (var i = 0; i < x.length; i++) {
 
-            if(String(x[i]).charAt(0) == "{") {
+            if (String(x[i]).charAt(0) == "{") {
               result.push(JSON.parse(x[i]));
             }
           }
@@ -286,7 +289,7 @@ function (app,FauxtonAPI, React,Stores) {
 
             revs.ids.forEach( function (id, i) {
 
-              var rev = (revs.start-i) + '-' + id;
+              var rev = (revs.start - i) + '-' + id;
 
               if (allRevs.indexOf(rev) === -1) {
                 allRevs.push(rev);
@@ -295,8 +298,8 @@ function (app,FauxtonAPI, React,Stores) {
               i--;
             });
 
-            return revs.ids.map(function(id, i) {
-              return (revs.start-i) + '-' + id;
+            return revs.ids.map(function (id, i) {
+              return (revs.start - i) + '-' + id;
             });
           });
 
@@ -315,7 +318,7 @@ function (app,FauxtonAPI, React,Stores) {
       }.bind(this));
     },
 
-    render: function(){
+    render: function() {
       return (
         <div>
           <Box>
@@ -338,4 +341,5 @@ function (app,FauxtonAPI, React,Stores) {
     App: App
   };
 
-});
+}
+);

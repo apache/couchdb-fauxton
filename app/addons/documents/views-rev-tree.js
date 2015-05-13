@@ -6,13 +6,13 @@ define([
 ],
 
 function (app, FauxtonAPI,SAMPLE, Components) {
-  var Views= {};
+  var Views = {};
 
   Views.Wrapper = FauxtonAPI.View.extend({
     className: 'list',
 
     afterRender: function () {
-      Components.renderContent(this.el,this.params);
+      Components.renderContent(this.el, this.params);
     }
 
   });
@@ -20,4 +20,5 @@ function (app, FauxtonAPI,SAMPLE, Components) {
   SAMPLE.WRAP = Views;
 
   return SAMPLE;
-});
+}
+);
