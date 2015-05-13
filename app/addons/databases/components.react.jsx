@@ -269,11 +269,6 @@ define([
   });
 
   var DatabasePagination = React.createClass({
-    getDefaultProps: function () {
-      return {
-        linkPath: '_all_dbs'
-      };
-    },
 
     getStoreState: function () {
       return {
@@ -301,12 +296,10 @@ define([
     render: function () {
       var page = this.state.page;
       var total = this.props.total || this.state.databaseNames.length;
-      var urlPrefix = '#/' + this.props.linkPath + '?page=';
-
       return (
         <footer className="all-db-footer pagination-footer">
           <div id="database-pagination">
-            <ComponentsReact.Pagination page={page} total={total} urlPrefix={urlPrefix} />
+            <ComponentsReact.Pagination page={page} total={total} urlPrefix="#/_all_dbs?page=" />
           </div>
         </footer>
       );
