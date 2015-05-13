@@ -23,7 +23,6 @@ module.exports = {
       .loginToGUI()
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_index')
       .waitForElementPresent('.watermark-logo', waitTime, false)
-      .assert.containsText('.watermark-logo', 'Mango')
       .assert.containsText('.editor-description', 'is an easy way to find documents on predefined indexes')
       .execute('\
         var json = \'{\
