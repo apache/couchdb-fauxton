@@ -1,6 +1,6 @@
 # Style Guide
 
-BLAH1
+TEST6
 
 This document attempts to codify the JavaScript, HTML and CSS style rules for Fauxton. This has been patched together from
 a few sources, including [Pootle's style guide](http://pootle.readthedocs.org/en/latest/developers/styleguide.html),
