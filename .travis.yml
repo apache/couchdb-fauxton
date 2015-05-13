@@ -32,7 +32,6 @@ before_install:
 before_script:
   - ./node_modules/grunt-cli/bin/grunt test
   - ./node_modules/grunt-cli/bin/grunt dev &
-  - sleep 25
 script:
   - ./node_modules/grunt-cli/bin/grunt nightwatch
 notifications:
