@@ -13,9 +13,10 @@
 module.exports = {
   'Confirm selecting database via typeahead redirects properly': function (client) {
     var waitTime = client.globals.maxWaitTime,
-      newDatabaseName = client.globals.testDatabaseName;
+        newDatabaseName = client.globals.testDatabaseName;
 
     client
+      .createDatabase(newDatabaseName)
       .loginToGUI()
 
       // wait for the DB name typeahead field to appear in the header
