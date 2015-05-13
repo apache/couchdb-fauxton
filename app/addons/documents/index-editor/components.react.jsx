@@ -365,6 +365,18 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, ReactComponents) 
       Actions.updateMapCode(code);
     },
 
+    getCompactButton: function () {
+      var extension = FauxtonAPI.getExtensions('view-editor:compaction-button');
+
+      if (_.isEmpty(extension)) {
+        return null;
+      } else {
+        var CompactButton = extension[0];
+        return <CompactButton database={this.state.database}
+                          designDoc={this.state.designDocId}/>;
+      }
+    },
+
     render: function () {
       if (this.state.isLoading) {
         return (
@@ -423,6 +435,7 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, ReactComponents) 
               <div className="control-group">
                 <ConfirmButton text="Save &amp; Build Index" />
                 <DeleteView />
+                {this.getCompactButton()}
               </div>
             </div>
           </form>

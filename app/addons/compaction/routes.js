@@ -15,12 +15,13 @@ define([
   'api',
 
   // Modules
-  'addons/compaction/views',
+  'addons/compaction/components.react',
+  'addons/compaction/actions',
   'addons/databases/resources',
   'addons/documents/shared-routes'
 ],
 
-function (app, FauxtonAPI, Compaction, Databases, BaseRoute) {
+function (app, FauxtonAPI, Compaction, Actions, Databases, BaseRoute) {
 
   var CompactionRouteObject = BaseRoute.extend({
     routes: {
@@ -55,7 +56,8 @@ function (app, FauxtonAPI, Compaction, Databases, BaseRoute) {
     },
 
     compaction: function () {
-      this.pageContent = this.setView('#dashboard-content', new Compaction.Layout({model: this.database}));
+      Actions.setCompactionFor(this.database);
+      this.pageContent = this.setComponent('#dashboard-content', Compaction.CompactionController);
     },
 
     establish: function () {
@@ -86,5 +88,3 @@ function (app, FauxtonAPI, Compaction, Databases, BaseRoute) {
   return Compaction;
 
 });
-
-
