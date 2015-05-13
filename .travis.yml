@@ -31,7 +31,7 @@ before_install:
 
 before_script:
   - ./node_modules/grunt-cli/bin/grunt dev &
-  - sleep 50
+  - sleep 40
   - ./node_modules/grunt-cli/bin/grunt test
 script:
   - ./node_modules/grunt-cli/bin/grunt nightwatch
