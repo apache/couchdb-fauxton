@@ -31,7 +31,7 @@ before_install:
 
 before_script:
   - ./node_modules/grunt-cli/bin/grunt dev &
-  - sleep 40
+  - sleep 180
   - ./node_modules/grunt-cli/bin/grunt test
   - ./node_modules/grunt-cli/bin/grunt debugDev
 script:
