@@ -33,7 +33,7 @@ before_script:
   - ./node_modules/grunt-cli/bin/grunt dev &
   - sleep 40
   - ./node_modules/grunt-cli/bin/grunt test
-  - ./node_modules/grunt-cli/bin/grunt devDebug
+  - ./node_modules/grunt-cli/bin/grunt debugDev
 script:
   - ./node_modules/grunt-cli/bin/grunt nightwatch
 notifications:
