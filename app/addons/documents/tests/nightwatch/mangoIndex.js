@@ -37,7 +37,9 @@ module.exports = {
       ')
       .execute('$(".save")[0].scrollIntoView();')
       .click('button.btn-success.save')
-
+      .waitForAttribute('#global-notifications', 'textContent', function (successAlertText) {
+        return (/Index created/).test(successAlertText);
+      })
       .waitForElementNotVisible('.global-notification', waitTime, false)
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_indexlist')
       .waitForElementPresent('.prettyprint', waitTime, false)

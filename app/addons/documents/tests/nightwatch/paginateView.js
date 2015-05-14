@@ -20,12 +20,18 @@ module.exports = {
     client
       .populateDatabase(newDatabaseName)
       .loginToGUI()
+
+      // wait for the db page to fully load
+      .waitForElementVisible('#dashboard-content table.databases', waitTime, false)
+
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_design/keyview/_view/keyview')
+
       .waitForElementPresent('#toggle-query', waitTime, false)
 
       // ensure the page content has loaded
       .waitForElementPresent('.prettyprint', waitTime, false)
 
+      .waitForElementPresent('#select-per-page', waitTime, false)
       .clickWhenVisible('#select-per-page', waitTime, false)
 
       // hack to get select working by clicking on it and using keyboard to select
@@ -49,6 +55,10 @@ module.exports = {
     client
       .populateDatabase(newDatabaseName)
       .loginToGUI()
+
+      // wait for the db page to fully load
+      .waitForElementVisible('#dashboard-content table.databases', waitTime, false)
+
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_design/keyview/_view/keyview')
       .waitForElementPresent('#toggle-query', waitTime, false)
 
@@ -59,6 +69,7 @@ module.exports = {
 
       // http://www.w3.org/TR/2012/WD-webdriver-20120710/
       .keys(['\uE013', '\uE006'])
+      .waitForElementPresent('#next', waitTime, false)
       .clickWhenVisible('#next', waitTime, false)
       .waitForElementNotPresent('div[data-id="document_1"]', waitTime)
       .waitForElementNotPresent('.loading-lines', waitTime, false)
@@ -78,6 +89,10 @@ module.exports = {
     client
       .populateDatabase(newDatabaseName)
       .loginToGUI()
+
+      // wait for the db page to fully load
+      .waitForElementVisible('#dashboard-content table.databases', waitTime, false)
+
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_design/keyview/_view/keyview')
       .waitForElementPresent('#toggle-query', waitTime, false)
 

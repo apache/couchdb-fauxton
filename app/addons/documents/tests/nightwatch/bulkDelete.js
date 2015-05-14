@@ -25,6 +25,10 @@ module.exports = {
       .createDocument(newDocumentName2, newDatabaseName)
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
       .waitForElementPresent('.control-toggle-alternative-header', waitTime, false)
+
+      // ensures page content has loaded before proceeding
+      .waitForElementVisible('.prettyprint', waitTime, false)
+
       .clickWhenVisible('.control-toggle-alternative-header')
       .waitForElementPresent('.control-select-all', waitTime, false)
       .clickWhenVisible('.control-select-all', waitTime, false)
@@ -54,6 +58,10 @@ module.exports = {
       .createManyDocuments(25, newDatabaseName)
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
       .waitForElementPresent('.control-toggle-alternative-header', waitTime, false)
+
+      // ensures page content has loaded before proceeding
+      .waitForElementVisible('.prettyprint', waitTime, false)
+
       .clickWhenVisible('.control-toggle-alternative-header')
       .waitForElementPresent('.control-select-all', waitTime, false)
       .clickWhenVisible('.control-select-all', waitTime, false)

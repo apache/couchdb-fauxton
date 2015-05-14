@@ -39,8 +39,8 @@ module.exports = {
       .waitForElementPresent("#header-dropdown-menu a.dropdown-toggle.icon.fonticon-cog", waitTime, false)
       .clickWhenVisible('#header-dropdown-menu a.dropdown-toggle.icon.fonticon-cog', waitTime, false)
       .waitForElementPresent("#header-dropdown-menu .fonticon-trash", waitTime, false)
-      .clickWhenVisible('#header-dropdown-menu .fonticon-trash', waitTime, false)
       .waitForElementPresent('#delete-db-modal', waitTime, false)
+      .clickWhenVisible('#header-dropdown-menu .fonticon-trash', waitTime, false)
       .waitForElementVisible('input#db-name', waitTime, false)
       .assert.elementNotPresent('.warning')
     .end();
