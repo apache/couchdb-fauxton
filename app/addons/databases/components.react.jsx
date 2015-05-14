@@ -226,6 +226,9 @@ define([
 
     componentDidMount: function () {
       databasesStore.on('change', this.onChange, this);
+    },
+
+    componentDidUpdate: function () {
       $(this.refs.searchDbName.getDOMNode()).typeahead({
         source: this.state.databaseNames,
         updater: function (item) {
