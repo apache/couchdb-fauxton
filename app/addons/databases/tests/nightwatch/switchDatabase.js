@@ -21,9 +21,9 @@ module.exports = {
 
       // wait for the DB name typeahead field to appear in the header
       .waitForElementPresent('#jump-to-db .search-autocomplete', waitTime, false)
+      .waitForElementPresent('#dashboard-content table.databases', waitTime, false)
       .setValue('#jump-to-db .search-autocomplete', [newDatabaseName, client.Keys.ENTER])
       .waitForElementPresent('.index-pagination', waitTime, false)
-
       // now check we've redirected and the URL ends with /_all_docs
       .url(function (result) {
         var endsWithAllDocs = /all_docs$/.test(result.value);
