@@ -13,10 +13,11 @@ define([
   'api',
   'addons/databases/components.react',
   'addons/databases/actions',
+  'addons/databases/actiontypes',
   'addons/databases/stores',
   'testUtils',
   "react"
-], function (FauxtonAPI, Views, Actions, Stores, utils, React) {
+], function (FauxtonAPI, Views, Actions, ActionTypes, Stores, utils, React) {
 
   var assert = utils.assert;
   var TestUtils = React.addons.TestUtils;
@@ -184,7 +185,28 @@ define([
       assert.equal("db2", passedDbName);
     });
 
+    it("updates DB list if data is sent after initially mounted", function () {
+      var newCollection = new Backbone.Collection();
+      newCollection.add(new Backbone.Model({ name: 'new-db1' }));
+      newCollection.add(new Backbone.Model({ name: 'new-db2' }));
+
+      var spy = sinon.spy(jumpEl, 'componentDidUpdate');
+
+      FauxtonAPI.dispatch({
+        type: ActionTypes.DATABASES_INIT,
+        options: {
+          collection: newCollection.toJSON(),
+          backboneCollection: newCollection,
+          page: 1
+        }
+      });
+
+      // because of the need to override typeahead, this just does a spy on the componentDidUpdate method to ensure
+      // it gets called
+      assert.ok(spy.calledOnce);
+    });
   });
+
 
   describe('DatabasePagination', function () {
     it('uses custom URL prefix on the navigation if passed through props', function () {
@@ -198,6 +220,7 @@ define([
       });
     });
   });
+
 
 });
 
