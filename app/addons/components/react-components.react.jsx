@@ -86,7 +86,8 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
     },
 
     setupAce: function (props, shouldUpdateCode) {
-      var el = this.getDOMNode(this.refs.ace);
+      var el = this.refs.ace.getDOMNode();
+
       //set the id so our nightwatch tests can find it
       el.id = props.id;
 
