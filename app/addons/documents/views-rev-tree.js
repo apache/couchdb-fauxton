@@ -1,11 +1,11 @@
 define([
-	"app",
+  "app",
   "api",
   "addons/documents/resources",
   "addons/documents/revisionTree/component.react"
 ],
 
-function (app, FauxtonAPI, SAMPLE, Components) {
+function (app, FauxtonAPI, Resources, Components) {
   var Views = {};
 
   Views.Wrapper = FauxtonAPI.View.extend({
@@ -17,7 +17,7 @@ function (app, FauxtonAPI, SAMPLE, Components) {
 
   });
 
-  SAMPLE.WRAP = Views;
+  Resources.WRAP = Views;
 
-  return SAMPLE;
+  return Resources;
 });

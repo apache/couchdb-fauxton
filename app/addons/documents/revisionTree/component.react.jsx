@@ -254,68 +254,56 @@ function (app, FauxtonAPI, React, Stores) {
     },
 
     componentDidMount: function () {
-      var result = [];
       var paths = [];
       var deleted = {};
-      var optionsVal = store.getTreeOptions();
-      var winner = optionsVal.winnerRev;
-      var url = '/' + optionsVal.db + '/' + optionsVal.docID;
+      var treeDataOptions = store.getTreeOptions();
+      var result = treeDataOptions.data;
+      var winner = treeDataOptions.winner;
+      console.log(result);
+      console.log(winner);
       var minUniq = 0;
 
-      $.get(app.host + url + '?open_revs=all&revs=true', function (rslt) {
+      if (this.isMounted()) {
 
-        var data = rslt;
+        var allRevs = [];
 
-        if (this.isMounted()) {
-          var x = data.split(/(\n|\r\n|\r)/);
+        paths = result.map(function (res) {
 
-          for (var i = 0; i < x.length; i++) {
-
-            if (String(x[i]).charAt(0) == "{") {
-              result.push(JSON.parse(x[i]));
-            }
+        // TODO: what about missing
+          if (res._deleted) {
+            deleted[res._rev] = true;
           }
 
-          var allRevs = [];
+          var revs = res._revisions;
 
-          paths = result.map(function (res) {
+          revs.ids.forEach( function (id, i) {
 
-          // TODO: what about missing
-            if (res._deleted) {
-              deleted[res._rev] = true;
+            var rev = (revs.start - i) + '-' + id;
+
+            if (allRevs.indexOf(rev) === -1) {
+              allRevs.push(rev);
             }
 
-            var revs = res._revisions;
-
-            revs.ids.forEach( function (id, i) {
-
-              var rev = (revs.start - i) + '-' + id;
-
-              if (allRevs.indexOf(rev) === -1) {
-                allRevs.push(rev);
-              }
-
-              i--;
-            });
-
-            return revs.ids.map(function (id, i) {
-              return (revs.start - i) + '-' + id;
-            });
+            i--;
           });
 
-          minUniq = minUniqueLength(allRevs.map( function (rev) {
-            return rev.split('-')[1];
-          }));
-
-          draw(paths, deleted, winner, minUniq);
-
-          this.setState({
-            lines: lineObjs,
-            treeNodes: nodeObjs,
-            nodeTextObjs: textObjs
+          return revs.ids.map(function (id, i) {
+            return (revs.start - i) + '-' + id;
           });
-        }
-      }.bind(this));
+        });
+
+        minUniq = minUniqueLength(allRevs.map( function (rev) {
+          return rev.split('-')[1];
+        }));
+
+        draw(paths, deleted, winner, minUniq);
+
+        this.setState({
+          lines: lineObjs,
+          treeNodes: nodeObjs,
+          nodeTextObjs: textObjs
+        });
+      }
     },
 
     render: function () {

@@ -28,14 +28,12 @@ function (app, FauxtonAPI, Resources, Views, RevisionTreeActions, AppComponent) 
         //put common views used on all your routes here (eg:  sidebars )
     },
 
-    revtreeRoute: function (database, doc, winner) {
-      var parameters = {
-        db: database,
-        docID: doc,
-        winnerRev: winner
-      };
+    revtreeRoute: function (database, docId, winner) {
+      var treeDataUrl = app.host + '/' + database + '/' + docId + '?open_revs=all&revs=true';
 
-      RevisionTreeActions.newRevisionTree(parameters);
+      var revTreeData = new Resources.RevTreeDataModel(treeDataUrl);
+
+      RevisionTreeActions.newRevisionTree(revTreeData, winner);
       this.setComponent("#dashboard-content", AppComponent.App);
 
       // this.setView("#dashboard-content", new Resources.WRAP.Wrapper({params: parameters}));
