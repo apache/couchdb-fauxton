@@ -21,20 +21,12 @@ define([
   "addons/documents/shared-views",
   "addons/documents/views-queryoptions",
 
-  // React
-  'addons/documents/header/header.react',
-  'addons/documents/header/header.actions',
-  'addons/documents/pagination/pagination.react',
-  'addons/documents/index-results/actions',
-  'addons/documents/pagination/stores',
-
   //plugins
   "plugins/prettify"
 ],
 
 function (app, FauxtonAPI, Components, Documents,
-  Databases, Views, QueryOptions, ReactHeader, ReactHeaderActions,
-  ReactPagination, IndexResultsActions, PaginationStores) {
+  Databases, Views, QueryOptions) {
 
   function showError (msg) {
     FauxtonAPI.addNotification({
@@ -43,31 +35,6 @@ function (app, FauxtonAPI, Components, Documents,
       clear:  true
     });
   }
-
-  Views.Footer = FauxtonAPI.View.extend({
-    afterRender: function () {
-      ReactPagination.renderFooter(this.el);
-    },
-
-    cleanup: function () {
-      ReactPagination.removeFooter(this.el);
-    }
-  });
-
-  Views.ReactHeaderbar = FauxtonAPI.View.extend({
-    afterRender: function () {
-      ReactHeader.renderHeaderController(this.el);
-    },
-
-    cleanup: function () {
-      this.disableHeader();
-      ReactHeader.removeHeaderController(this.el);
-    },
-
-    disableHeader: function () {
-      ReactHeaderActions.resetHeaderController();
-    }
-  });
 
   Views.RightAllDocsHeader = FauxtonAPI.View.extend({
     className: "header-right",
@@ -182,7 +149,7 @@ function (app, FauxtonAPI, Components, Documents,
     deleteDatabase: function (event) {
       event.preventDefault();
 
-      var enteredName = $('#db_name').val();
+      var enteredName = $('#db-name').val();
       if (this.database.id != enteredName) {
         this.set_error_msg(enteredName + " does not match the database name.");
         return;

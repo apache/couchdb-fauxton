@@ -13,9 +13,11 @@
 define([
   'app',
   'api',
-  'addons/verifyinstall/views'
+  'addons/verifyinstall/resources',
+  'addons/verifyinstall/actions',
+  'addons/verifyinstall/components.react'
 ],
-function (app, FauxtonAPI, VerifyInstall) {
+function (app, FauxtonAPI, VerifyInstall, Actions, Components) {
 
   var VerifyRouteObject = FauxtonAPI.RouteObject.extend({
     layout: 'one_pane',
@@ -26,7 +28,8 @@ function (app, FauxtonAPI, VerifyInstall) {
     selectedHeader: 'Verify',
 
     verifyInstall: function () {
-      this.setView('#dashboard-content', new VerifyInstall.Main({}));
+      Actions.resetStore();
+      this.setComponent('#dashboard-content', Components.VerifyInstallController);
     },
 
     crumbs: [{name: 'Verify CouchDB Installation', link: '#'}]

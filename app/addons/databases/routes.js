@@ -12,18 +12,13 @@
 
 define([
   "app",
-
   "api",
-
-  // Modules
   "addons/databases/resources",
-  // TODO:: fix the include flow modules so we don't have to require views here
-  'addons/databases/views',
-  'addons/fauxton/components'
-
+  "addons/databases/actions",
+  'addons/databases/components.react'
 ],
 
-function (app, FauxtonAPI, Databases, Views, Components) {
+function (app, FauxtonAPI, Databases, Actions, Components) {
 
   var AllDbsRouteObject = FauxtonAPI.RouteObject.extend({
     layout: 'one_pane',
@@ -47,42 +42,14 @@ function (app, FauxtonAPI, Databases, Views, Components) {
     },
 
     allDatabases: function () {
-      var params = app.getParams(),
-          dbPage = params.page ? parseInt(params.page, 10) : 1,
-          perPage = FauxtonAPI.constants.MISC.DEFAULT_PAGE_SIZE,
-          pagination;
-
-      pagination = new Components.Pagination({
-        page: dbPage,
-        perPage: perPage,
-        collection: this.databases,
-        urlFun: function (page) {
-          return '#/_all_dbs?page=' + page;
-        }
-      });
-
-      this.footer = this.setView('#footer', new Views.Footer());
-      this.setView('#database-pagination', pagination);
-
-      this.databasesView = this.setView("#dashboard-content", new Views.List({
-        collection: this.databases,
-        perPage: perPage,
-        page: dbPage
-      }));
-
-      this.rightHeader = this.setView("#right-header", new Views.RightAllDBsHeader({
-        collection: this.databases,
-      }));
-
-      this.databasesView.setPage(dbPage);
+      Actions.init(this.databases);
+      this.setComponent("#right-header", Components.RightDatabasesHeader);
+      this.setComponent("#dashboard-content", Components.DatabasesController);
+      this.setComponent("#footer", Components.DatabasePagination);
     },
 
     apiUrl: function () {
       return [this.databases.url("apiurl"), this.databases.documentation()];
-    },
-
-    establish: function () {
-      return [this.databases.fetch({ cache: false })];
     }
   });
 

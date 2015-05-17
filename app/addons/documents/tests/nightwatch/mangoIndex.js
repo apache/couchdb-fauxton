@@ -23,7 +23,6 @@ module.exports = {
       .loginToGUI()
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_index')
       .waitForElementPresent('.watermark-logo', waitTime, false)
-      .assert.containsText('.watermark-logo', 'Mango')
       .assert.containsText('.editor-description', 'is an easy way to find documents on predefined indexes')
       .execute('\
         var json = \'{\
@@ -38,7 +37,9 @@ module.exports = {
       ')
       .execute('$(".save")[0].scrollIntoView();')
       .click('button.btn-success.save')
-
+      .waitForAttribute('#global-notifications', 'textContent', function (successAlertText) {
+        return (/Index created/).test(successAlertText);
+      })
       .waitForElementNotVisible('.global-notification', waitTime, false)
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_indexlist')
       .waitForElementPresent('.prettyprint', waitTime, false)

@@ -27,11 +27,15 @@ define([
   'addons/fauxton/components',
   'addons/documents/pagination/stores',
   'addons/documents/index-results/actions',
-  'addons/documents/index-results/index-results.components.react'
+  'addons/documents/index-results/index-results.components.react',
+  'addons/documents/pagination/pagination.react',
+  'addons/documents/header/header.react',
+  'addons/documents/header/header.actions'
 ],
 
 function (app, FauxtonAPI, BaseRoute, Documents, Changes, ChangesActions, DocEditor, Mango,
-  Databases, Resources, Components, PaginationStores, IndexResultsActions, IndexResultsComponents) {
+  Databases, Resources, Components, PaginationStores, IndexResultsActions,
+  IndexResultsComponents, ReactPagination, ReactHeader, ReactActions) {
 
 
     var DocumentsRouteObject = BaseRoute.extend({
@@ -81,9 +85,8 @@ function (app, FauxtonAPI, BaseRoute, Documents, Changes, ChangesActions, DocEdi
       },
 
       designDocMetadata: function (database, ddoc) {
-        this.footer && this.footer.remove();
-        this.toolsView && this.toolsView.remove();
-
+        this.removeComponent('#footer');
+        this.removeComponent('#react-headerbar');
         this.removeComponent('#dashboard-upper-content');
 
         var designDocInfo = new Resources.DdocInfo({ _id: "_design/" + ddoc }, { database: this.database });
@@ -106,13 +109,14 @@ function (app, FauxtonAPI, BaseRoute, Documents, Changes, ChangesActions, DocEdi
       */
       allDocs: function (databaseName, options) {
         var params = this.createParams(options),
-        urlParams = params.urlParams,
-        docParams = params.docParams,
-        collection;
+            urlParams = params.urlParams,
+            docParams = params.docParams,
+            collection;
 
-        this.reactHeader = this.setView('#react-headerbar', new Documents.Views.ReactHeaderbar());
+        ReactActions.resetHeaderController();
 
-        this.footer = this.setView('#footer', new Documents.Views.Footer());
+        this.setComponent('#react-headerbar', ReactHeader.HeaderBarController);
+        this.setComponent('#footer', ReactPagination.Footer);
 
         this.leftheader.updateCrumbs(this.getCrumbs(this.database));
 
@@ -139,7 +143,6 @@ function (app, FauxtonAPI, BaseRoute, Documents, Changes, ChangesActions, DocEdi
 
         this.database.allDocs.paging.pageSize = PaginationStores.indexPaginationStore.getPerPage();
 
-        //this.resultList = this.setView('#dashboard-lower-content', new Index.ViewResultListReact({}));
         this.setComponent('#dashboard-lower-content', IndexResultsComponents.List);
 
         // this used to be a function that returned the object, but be warned: it caused a closure with a reference to
@@ -166,10 +169,10 @@ function (app, FauxtonAPI, BaseRoute, Documents, Changes, ChangesActions, DocEdi
         this.setComponent('#dashboard-upper-content', Changes.ChangesHeaderController);
         this.setComponent("#dashboard-lower-content", Changes.ChangesController);
 
-        this.footer && this.footer.remove();
-        this.toolsView && this.toolsView.remove();
+        this.removeComponent('#footer');
+        this.removeComponent('#react-headerbar');
+
         this.viewEditor && this.viewEditor.remove();
-        this.reactHeader && this.reactHeader.remove();
 
         this.sidebar.setSelectedTab('changes');
         this.leftheader.updateCrumbs(this.getCrumbs(this.database));

@@ -200,6 +200,12 @@ function (app, FauxtonAPI, Documents) {
           name: database
         };
       });
+    },
+
+    paginated: function (page, perPage) {
+      var start = (page - 1) * perPage;
+      var end = page * perPage;
+      return this.slice(start, end);
     }
   });
 

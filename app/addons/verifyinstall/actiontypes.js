@@ -10,15 +10,11 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-define([
-  "app",
-  "api",
-  "addons/plugins/routes"
-],
-
-function (app, FauxtonAPI, plugins) {
-  plugins.initialize = function () {
-    //FauxtonAPI.addHeaderLink({title: "Plugins", href: "#_plugins", icon: "fonticon-plugins", className: 'plugins'});
+define([], function () {
+  return {
+    VERIFY_INSTALL_START: 'VERIFY_INSTALL_START',
+    VERIFY_INSTALL_RESET: 'VERIFY_INSTALL_RESET',
+    VERIFY_INSTALL_SINGLE_TEST_COMPLETE: 'VERIFY_INSTALL_SINGLE_TEST_COMPLETE',
+    VERIFY_INSTALL_ALL_TESTS_COMPLETE: 'VERIFY_INSTALL_ALL_TESTS_COMPLETE'
   };
-  return plugins;
 });
