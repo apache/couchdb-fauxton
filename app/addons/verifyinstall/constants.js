@@ -9,24 +9,19 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
-define([
-  'addons/documents/views-queryoptions',
-  'testUtils'
-], function (Views, testUtils) {
-  var assert = testUtils.assert,
-      ViewSandbox = testUtils.ViewSandbox,
-      viewSandbox;
 
-  describe('Documents QueryOptions', function () {
-    var view;
-    beforeEach(function () {
-      viewSandbox = new ViewSandbox();
-      viewSandbox.renderView(view);
-    });
+define([], function () {
 
-    afterEach(function () {
-      viewSandbox.remove();
-    });
-  });
+  var CONSTANTS = {
+    TESTS: {
+      CREATE_DATABASE: 'TEST_CREATE_DATABASE',
+      CREATE_DOCUMENT: 'TEST_CREATE_DOCUMENT',
+      UPDATE_DOCUMENT: 'TEST_UPDATE_DOCUMENT',
+      DELETE_DOCUMENT: 'TEST_DELETE_DOCUMENT',
+      CREATE_VIEW: 'TEST_CREATE_VIEW',
+      REPLICATION: 'TEST_REPLICATION'
+    }
+  };
+
+  return CONSTANTS;
 });
-

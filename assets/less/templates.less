@@ -414,6 +414,7 @@ with_tabs_sidebar.html
     /*remove gutter without rewriting variable*/
     margin-left: 0px;
   }
+
   .with-sidebar & {
     border-left: 1px solid @grayLight;
     .left-shadow-border();
@@ -422,7 +423,6 @@ with_tabs_sidebar.html
     bottom: 0px;
     top: @collapsedNavWidth;
     position: fixed;
-    overflow: hidden;
     left: @sidebarWidth+@navWidth;
     right: 0;
     .box-sizing(border-box);
@@ -430,6 +430,10 @@ with_tabs_sidebar.html
       left: @sidebarWidth+@collapsedNavWidth;
     }
   }
+  .with-tabs-sidebar & {
+    overflow: hidden;
+  }
+
   > div.inner {
     display: block;
   }

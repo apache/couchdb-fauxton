@@ -9,18 +9,12 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
-
-define([
-  "app",
-  "api"
-],
-
-function (app, FauxtonAPI) {
-  var plugins = FauxtonAPI.addon();
-
-  plugins.Hello = FauxtonAPI.View.extend({
-    template: "addons/plugins/templates/plugins"
-  });
-
-  return plugins;
+define([], function () {
+  return {
+    DATABASES_INIT: 'DATABASES_INIT',
+    DATABASES_SETPAGE: 'DATABASES_SETPAGE',
+    DATABASES_SET_PROMPT_VISIBLE: 'DATABASES_SET_PROMPT_VISIBLE',
+    DATABASES_STARTLOADING: 'DATABASES_STARTLOADING',
+    DATABASES_LOADCOMPLETE: 'DATABASES_LOADCOMPLETE'
+  };
 });

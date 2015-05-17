@@ -10,19 +10,15 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-var waitTime,
-    baseUrl,
-    newDatabaseName,
-    newDocumentName,
-    modifier;
-
-var tests = {
+module.exports = {
 
   'Creates a Design Doc using the dropdown at "all documents"': function (client) {
     var waitTime = client.globals.maxWaitTime;
+    var baseUrl = client.globals.test_settings.launch_url;
 
     /*jshint multistr: true */
     openDifferentDropdownsAndClick(client, '#header-dropdown-menu')
+      .waitForElementPresent('#new-ddoc', waitTime, false)
       .setValue('#new-ddoc', 'test_design_doc-selenium-1')
       .clearValue('#index-name')
       .setValue('#index-name', 'hasenindex')
@@ -31,7 +27,8 @@ var tests = {
         editor.getSession().setValue("function (doc) { emit(\'hasehase\'); }");\
       ')
       .execute('$(".save")[0].scrollIntoView();')
-      .click('button.btn.btn-success.save')
+      .waitForElementPresent('button.btn.btn-success.save', waitTime, false)
+      .clickWhenVisible('button.btn.btn-success.save', waitTime, false)
       .waitForElementPresent('.prettyprint', waitTime, false)
       .waitForElementNotPresent('.loading-lines', waitTime, false)
       .assert.containsText('.prettyprint', 'hasehase')
@@ -41,13 +38,16 @@ var tests = {
 
   'Creates a Design Doc using the dropdown at "the upper dropdown in the header"': function (client) {
     var waitTime = client.globals.maxWaitTime;
+    var baseUrl = client.globals.test_settings.launch_url;
 
     /*jshint multistr: true */
     openDifferentDropdownsAndClick(client, '#header-dropdown-menu')
       .waitForElementPresent('#new-ddoc', waitTime, false)
+      .waitForElementVisible('#new-ddoc', waitTime, false)
       .setValue('#new-ddoc', 'test_design_doc-selenium-2')
       .clearValue('#index-name')
       .setValue('#index-name', 'gaenseindex')
+      .sendKeys("textarea.ace_text-input", client.Keys.Enter)
       .execute('\
         var editor = ace.edit("map-function");\
         editor.getSession().setValue("function (doc) { emit(\'gansgans\'); }");\
@@ -62,11 +62,16 @@ var tests = {
 
   'Adds a View to a DDoc using an existing DDoc': function (client) {
     var waitTime = client.globals.maxWaitTime;
+    var baseUrl = client.globals.test_settings.launch_url;
+    var newDatabaseName = client.globals.testDatabaseName;
     /*jshint multistr: true */
 
     openDifferentDropdownsAndClick(client, '#nav-header-testdesigndoc')
+      .waitForElementPresent('#index-name', waitTime, false)
+      .waitForElementVisible('#index-name', waitTime, false)
       .clearValue('#index-name')
       .setValue('#index-name', 'test-new-view')
+      .sendKeys("textarea.ace_text-input", client.Keys.Enter)
       .execute('\
         var editor = ace.edit("map-function");\
         editor.getSession().setValue("function (doc) { emit(\'enteente\', 1); }");\
@@ -89,20 +94,20 @@ var tests = {
 };
 
 function openDifferentDropdownsAndClick (client, dropDownElement) {
-  modifier = dropDownElement.slice(1);
-  waitTime = client.globals.maxWaitTime;
-  newDatabaseName = client.globals.testDatabaseName;
-  newDocumentName = 'create_view_doc' + modifier;
-  baseUrl = client.globals.test_settings.launch_url;
+  var modifier = dropDownElement.slice(1);
+  var waitTime = client.globals.maxWaitTime;
+  var newDatabaseName = client.globals.testDatabaseName;
+  var newDocumentName = 'create_view_doc' + modifier;
+  var baseUrl = client.globals.test_settings.launch_url;
 
   return client
     .loginToGUI()
     .populateDatabase(newDatabaseName)
     .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
     .waitForElementPresent(dropDownElement, waitTime, false)
-    .click(dropDownElement + ' a')
-    .click(dropDownElement + ' a[href*="new_view"]')
+    .waitForElementPresent(dropDownElement + ' a', waitTime, false)
+    .clickWhenVisible(dropDownElement + ' a', waitTime, false)
+    .waitForElementPresent(dropDownElement + ' a[href*="new_view"]', waitTime, false)
+    .clickWhenVisible(dropDownElement + ' a[href*="new_view"]', waitTime, false)
     .waitForElementPresent('.editor-wrapper', waitTime, false);
 }
-
-module.exports = tests;

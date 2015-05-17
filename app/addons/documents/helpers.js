@@ -23,7 +23,7 @@ define([
     if (!wasCloned && lastPages.length >= 2) {
 
       // if we came from "/new", we don't want to link the user there
-      if (/new$/.test(lastPages[1])) {
+      if (/(new|new_view)$/.test(lastPages[1])) {
         previousPage = lastPages[0];
       } else {
         previousPage = lastPages[1];

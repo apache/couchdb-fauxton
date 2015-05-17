@@ -283,7 +283,6 @@ function (FauxtonAPI, React, Backbone) {
     },
 
     removeViews: function () {
-      this.reactComponents = {};
       _.each(this.views, function (view, selector) {
         view.remove();
         delete this.views[selector];
@@ -304,8 +303,8 @@ function (FauxtonAPI, React, Backbone) {
     },
 
     cleanup: function () {
-      this.removeViews();
       this.removeComponents();
+      this.removeViews();
       this.rejectPromises();
     },
 

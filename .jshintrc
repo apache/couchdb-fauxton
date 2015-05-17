@@ -1,0 +1,37 @@
+{
+  "scripturl": true,
+  "evil": true,
+  "expr": true,
+  "undef": true,
+  "globals": {
+    "document": true,
+    "window": true,
+    "location": true,
+    "alert": true,
+    "console": true,
+    "clearInterval": true,
+    "setInterval": true,
+    "setTimeout": true,
+    "prompt": true,
+    "confirm": true,
+
+    "jQuery": true,
+    "Backbone": true,
+    "$": true,
+    "_": true,
+    "require": true,
+    "module": true,
+    "sinon": true,
+    "it": true,
+    "describe": true,
+    "beforeEach": true,
+    "afterEach": true,
+    "before": true,
+    "after": true,
+    "define": true,
+
+    "Spinner": true,
+    "prettyPrint": true
+
+  }
+}

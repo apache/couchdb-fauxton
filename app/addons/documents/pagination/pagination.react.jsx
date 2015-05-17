@@ -187,12 +187,7 @@ define([
     return {
       AllDocsNumber: AllDocsNumberController,
       PerPageSelector: PerPageSelector,
-      renderFooter: function (el) {
-        React.render(<Footer/>, el);
-      },
-      removeFooter: function (el) {
-        React.unmountComponentAtNode(el);
-      }
+      Footer: Footer
     };
 
   });

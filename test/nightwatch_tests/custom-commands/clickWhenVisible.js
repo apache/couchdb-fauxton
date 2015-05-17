@@ -17,6 +17,8 @@ exports.command = function (element, waitTime) {
   }
 
   this
+    .waitForElementPresent(element, waitTime, false)
+    .execute('$("' + element + '").get(0).scrollIntoView();')
     .waitForElementVisible(element, waitTime, false)
     .click(element);
 
