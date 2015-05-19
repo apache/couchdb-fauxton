@@ -37,6 +37,7 @@ module.exports = {
       .keys(['\uE013', '\uE006'])
       .waitForElementPresent('.prettyprint', waitTime, false)
       .waitForElementNotPresent('div[data-id="document_16"]', waitTime)
+      .waitForElementPresent('.doc-row', waitTime, false)
       .execute(function () {
         return $('.doc-row').length;
       }, function (result) {

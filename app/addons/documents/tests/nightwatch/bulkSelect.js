@@ -26,10 +26,8 @@ module.exports = {
       .createDocument(newDocumentName1, newDatabaseName)
       .createDocument(newDocumentName2, newDatabaseName)
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
-      .waitForElementPresent('.control-toggle-alternative-header', waitTime, false)
-      .click('.control-toggle-alternative-header')
-      .waitForElementPresent('.control-select-all', waitTime, false)
-      .click('.control-select-all')
+      .clickWhenVisible('.control-toggle-alternative-header')
+      .clickWhenVisible('.control-select-all')
       .assert.attributeEquals('.control-select-all', 'disabled', 'true')
       .end();
   }

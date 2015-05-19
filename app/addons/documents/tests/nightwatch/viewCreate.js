@@ -29,6 +29,7 @@ module.exports = {
       .execute('$(".save")[0].scrollIntoView();')
       .waitForElementPresent('button.btn.btn-success.save', waitTime, false)
       .clickWhenVisible('button.btn.btn-success.save', waitTime, false)
+      .checkForDocumentCreated('_design/test_design_doc-selenium-1')
       .waitForElementPresent('.prettyprint', waitTime, false)
       .waitForElementNotPresent('.loading-lines', waitTime, false)
       .assert.containsText('.prettyprint', 'hasehase')
@@ -53,7 +54,8 @@ module.exports = {
         editor.getSession().setValue("function (doc) { emit(\'gansgans\'); }");\
       ')
       .execute('$(".save")[0].scrollIntoView();')
-      .click('button.btn-success.save')
+      .clickWhenVisible('button.btn-success.save')
+      .checkForDocumentCreated('_design/test_design_doc-selenium-2')
       .waitForElementPresent('.prettyprint', waitTime, false)
       .waitForElementNotPresent('.loading-lines', waitTime, false)
       .assert.containsText('.prettyprint', 'gansgans')
@@ -67,7 +69,6 @@ module.exports = {
     /*jshint multistr: true */
 
     openDifferentDropdownsAndClick(client, '#nav-header-testdesigndoc')
-      .waitForElementPresent('#index-name', waitTime, false)
       .waitForElementVisible('#index-name', waitTime, false)
       .clearValue('#index-name')
       .setValue('#index-name', 'test-new-view')
@@ -77,10 +78,11 @@ module.exports = {
         editor.getSession().setValue("function (doc) { emit(\'enteente\', 1); }");\
       ')
       .execute('$(".save")[0].scrollIntoView();')
-      .click('button.btn-success.save')
-      .waitForAttribute('#global-notifications', 'textContent', function (notification) {
-        return (/View Saved./).test(notification.trim());
-      })
+      .clickWhenVisible('button.btn-success.save')
+      .checkForDocumentCreated('_design/testdesigndoc/_view/test-new-view')
+
+      .waitForElementPresent('.prettyprint', waitTime, false)
+      .waitForElementNotPresent('.loading-lines', waitTime, false)
       //go back to all docs
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
       .clickWhenVisible('#nav-header-testdesigndoc', waitTime, false)

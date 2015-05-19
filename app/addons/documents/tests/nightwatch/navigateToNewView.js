@@ -22,15 +22,13 @@ module.exports = {
     client
       .loginToGUI()
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
-      .waitForElementPresent('#new-all-docs-button', waitTime, false)
-      .click('#new-all-docs-button a')
-      .waitForElementPresent('#new-all-docs-button a[href="#/database/' + newDatabaseName + '/new_view"]', waitTime, false)
-      .click('#new-all-docs-button a[href="#/database/' + newDatabaseName + '/new_view"]')
+      .clickWhenVisible('#new-all-docs-button a')
+      .clickWhenVisible('#new-all-docs-button a[href="#/database/' + newDatabaseName + '/new_view"]')
       .waitForElementPresent('.define-view', waitTime, false)
       .verify.urlEquals(baseUrl + '/#/database/' + newDatabaseName + '/new_view')
 
       // now redirect back to the database page and check it's loaded properly
-      .click('#nav-links a[href="#/_all_dbs"]')
+      .clickWhenVisible('#nav-links a[href="#/_all_dbs"]')
       .waitForElementPresent('#dashboard-content .databases', waitTime, false);
   }
 };
