@@ -28,9 +28,7 @@ module.exports = {
       .waitForElementVisible('#js-new-database-name', waitTime, false)
       .setValue('#js-new-database-name', [newDatabaseName])
       .clickWhenVisible('#js-create-database', waitTime, false)
-      .waitForAttribute('#global-notifications', 'textContent', function (successAlertText) {
-        return (/Database created successfully/).test(successAlertText);
-      })
+      .waitForElementVisible('#global-notifications .alert.alert-success', waitTime, false)
       .url(baseUrl + '/_all_dbs')
       .waitForElementVisible('html', waitTime, false)
       .getText('html', function (result) {
