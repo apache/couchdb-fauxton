@@ -24,13 +24,13 @@ module.exports = {
       .populateDatabase(newDatabaseName)
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
       .waitForElementPresent(dropDownElement, waitTime, false)
-      .click(dropDownElement + ' a')
-      .click(dropDownElement + ' a[href*="new_view"]')
+      .clickWhenVisible(dropDownElement + ' a')
+      .clickWhenVisible(dropDownElement + ' a[href*="new_view"]')
       .waitForElementVisible('#new-ddoc', waitTime, false)
       .setValue('#new-ddoc', 'test_design_doc-selenium-bad-reduce')
       .clearValue('#index-name')
       .setValue('#index-name', 'hasenindex')
-      .click('#reduce-function-selector')
+      .clickWhenVisible('#reduce-function-selector')
       .keys(['\uE013', '\uE013', '\uE013', '\uE013', '\uE006'])
       .execute('\
         var editor = ace.edit("map-function");\
