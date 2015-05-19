@@ -11,7 +11,7 @@ function (app, FauxtonAPI, ActionTypes, Stores) {
 
   return {
     newRevisionTree: function (revTreeDataModel, winner) {
-      revTreeDataModel.toJSON();
+      // revTreeDataModel.toJSON();
       FauxtonAPI.when(revTreeDataModel.fetch()).done(function () {
         FauxtonAPI.dispatch({
           type: ActionTypes.REV_TREE_NEW_REV_TREE,

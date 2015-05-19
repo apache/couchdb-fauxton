@@ -17,7 +17,7 @@ function (app, FauxtonAPI, Resources, Views, RevisionTreeActions, AppComponent) 
     ],
 
     routes: {
-       "_revtree/:database/:doc/:winner": "revtreeRoute"
+       ":database/:doc/_revtree/:winner": "revtreeRoute"
     },
 
     roles: ["_admin"],
@@ -35,8 +35,6 @@ function (app, FauxtonAPI, Resources, Views, RevisionTreeActions, AppComponent) 
 
       RevisionTreeActions.newRevisionTree(revTreeData, winner);
       this.setComponent("#dashboard-content", AppComponent.App);
-
-      // this.setView("#dashboard-content", new Resources.WRAP.Wrapper({params: parameters}));
     }
   });
 

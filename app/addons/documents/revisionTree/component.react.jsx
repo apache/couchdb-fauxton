@@ -36,7 +36,7 @@ function (app, FauxtonAPI, React, Stores) {
       return (
         <g>
           {
-            this.props.data.map (function (element, i) {
+            this.props.data.map(function (element, i) {
               return <Circle key={i} data={element}/>;
             })
           }
@@ -50,7 +50,7 @@ function (app, FauxtonAPI, React, Stores) {
     render: function () {
       var cx = this.props.data.x;
       var cy = this.props.data.y;
-      var radius = r;
+      var radius = this.props.data.radius;
       var classVal = this.props.data.class;
 
       return (
@@ -96,7 +96,7 @@ function (app, FauxtonAPI, React, Stores) {
 
     render: function () {
       return (
-        <div className = "visualizeRevTree">
+        <div className="visualizeRevTree">
           {this.props.children}
         </div>
       );
@@ -112,7 +112,7 @@ function (app, FauxtonAPI, React, Stores) {
       };
 
       return (
-          <div className = "box" style={styleVals} short={this.props.data.short} long={this.props.data.long}>
+          <div className="box" style={styleVals} short={this.props.data.short} long={this.props.data.long}>
             <p>{this.props.data.short}</p>
             {this.props.children}
           </div>
@@ -130,7 +130,7 @@ function (app, FauxtonAPI, React, Stores) {
 
     var map = {}; // map from rev to position
 
-    function drawPath(path) {
+    function drawPath (path) {
       for (var i = 0; i < path.length; i++) {
         var rev = path[i];
         var isLeaf = i === 0;
@@ -171,7 +171,7 @@ function (app, FauxtonAPI, React, Stores) {
         maxY = Math.max(y, maxY);
         levelCount[pos]++;
 
-        node(x, y, rev, isLeaf, rev in deleted, rev === winner, minUniq);
+        node (x, y, rev, isLeaf, rev in deleted, rev === winner, minUniq);
         map[rev] = [x, y];
       }
     }
@@ -237,7 +237,8 @@ function (app, FauxtonAPI, React, Stores) {
     var nodeObj = {
       "x" : x,
       "y" : y,
-      "class" : leafStat
+      "class" : leafStat,
+      "radius" : r
     };
 
     nodeObjs.push(nodeObj);
@@ -247,75 +248,80 @@ function (app, FauxtonAPI, React, Stores) {
 
     getInitialState: function () {
       return {
-        lines: [],
-        treeNodes: [],
-        nodeTextObjs: []
+        treeDataOptions: store.getTreeOptions()
       };
     },
 
+    onChangeSetData: function (lines, treeNodes, nodeTextObjs) {
+      this.setState({
+        treeDataOptions: store.getTreeOptions()
+      });
+    },
+
     componentDidMount: function () {
+      store.on('change', this.onChangeSetData, this);
+    },
+
+    componentWillUnmount: function () {
+      store.off('change', this.onChangeSetData, this);
+    },
+
+    render: function () {
+
       var paths = [];
       var deleted = {};
-      var treeDataOptions = store.getTreeOptions();
+      var treeDataOptions = this.state.treeDataOptions;
       var result = treeDataOptions.data;
       var winner = treeDataOptions.winner;
       console.log(result);
       console.log(winner);
       var minUniq = 0;
 
-      if (this.isMounted()) {
+      var allRevs = [];
 
-        var allRevs = [];
+      paths = result.map(function (res) {
 
-        paths = result.map(function (res) {
+        if (res._deleted) {
+          deleted[res._rev] = true;
+        }
 
-        // TODO: what about missing
-          if (res._deleted) {
-            deleted[res._rev] = true;
+        var revs = res._revisions;
+
+        revs.ids.forEach( function (id, i) {
+
+          var rev = (revs.start - i) + '-' + id;
+
+          if (allRevs.indexOf(rev) === -1) {
+            allRevs.push(rev);
           }
 
-          var revs = res._revisions;
-
-          revs.ids.forEach( function (id, i) {
-
-            var rev = (revs.start - i) + '-' + id;
-
-            if (allRevs.indexOf(rev) === -1) {
-              allRevs.push(rev);
-            }
-
-            i--;
-          });
-
-          return revs.ids.map(function (id, i) {
-            return (revs.start - i) + '-' + id;
-          });
+          i--;
         });
 
-        minUniq = minUniqueLength(allRevs.map( function (rev) {
-          return rev.split('-')[1];
-        }));
-
-        draw(paths, deleted, winner, minUniq);
-
-        this.setState({
-          lines: lineObjs,
-          treeNodes: nodeObjs,
-          nodeTextObjs: textObjs
+        return revs.ids.map(function (id, i) {
+          return (revs.start - i) + '-' + id;
         });
-      }
-    },
+      });
 
-    render: function () {
+      minUniq = minUniqueLength(allRevs.map(function (rev) {
+        return rev.split('-')[1];
+      }));
+
+      draw(paths, deleted, winner, minUniq);
+
+      var lines = lineObjs;
+      var treeNodes = nodeObjs;
+      var nodeTextObjs = textObjs;
+
       return (
         <div>
           <Box>
             <SVGComponent>
-              <LinesBox data = {this.state.lines} />
-              <CirclesBox data = {this.state.treeNodes} />
+              <LinesBox data = {lines} />
+              <CirclesBox data = {treeNodes} />
             </SVGComponent>
             {
-              this.state.nodeTextObjs.map(function (element, i) {
+              nodeTextObjs.map(function (element, i) {
                 return <Text key={i} data = {element} />;
               })
             }

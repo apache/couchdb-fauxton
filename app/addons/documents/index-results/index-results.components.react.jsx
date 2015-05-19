@@ -77,7 +77,7 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, Documents) {
            isDeletable={doc.isDeletable}
            docIdentifier={doc.id} >
            {this.getUrlFragment('#' + doc.url)}
-           {this.getRevTreeUrlFragment('#_revtree/'+splitArr[2]+'/'+docID+'/'+winner)}
+           {this.getRevTreeUrlFragment('#' + splitArr[2] + '/' + docID + '/_revtree/' + winner)}
          </Components.Document>
        );
       }, this);
