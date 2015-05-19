@@ -68,6 +68,13 @@ define([
       });
     },
 
+    getExtensionColumns: function () {
+      var cols = FauxtonAPI.getExtensions('DatabaseTable:head');
+      return _.map(cols, function (Item, index) {
+        return <Item key={index} />;
+      });
+    },
+
     render: function () {
       if (this.props.loading) {
         return (
@@ -85,6 +92,7 @@ define([
               <th>Size</th>
               <th># of Docs</th>
               <th>Update Seq</th>
+              {this.getExtensionColumns()}
               <th>Actions</th>
             </thead>
             <tbody>
@@ -108,6 +116,13 @@ define([
       }
     },
 
+    getExtensionColumns: function (row) {
+      var cols = FauxtonAPI.getExtensions('DatabaseTable:databaseRow');
+      return _.map(cols, function (Item, index) {
+        return <Item row={row} key={index} />;
+      });
+    },
+
     render: function () {
       var row = this.props.row;
       var name = row.get("name");
@@ -121,6 +136,7 @@ define([
           <td>{size}</td>
           <td>{row.status.numDocs()} {this.renderGraveyard(row)}</td>
           <td>{row.status.updateSeq()}</td>
+          {this.getExtensionColumns(row)}
           <td>
             <a className="db-actions btn fonticon-replicate set-replication-start" title={"Replicate "+name} href={"#/replication/"+encoded}></a>&#160;
             <a className="db-actions btn icon-lock set-permissions" title={"Set permissions for "+name} href={"#/database/"+encoded+"/permissions"}></a>
