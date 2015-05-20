@@ -206,52 +206,6 @@ function (app, FauxtonAPI, Components, Documents,
     }
   });
 
-
-
-  Views.DdocInfo = FauxtonAPI.View.extend({
-    template: "addons/documents/templates/ddoc_info",
-
-    initialize: function (options) {
-      this.ddocName = options.ddocName;
-      this.refreshTime = options.refreshTime || 5000;
-      this.listenTo(this.model, 'change', this.render);
-    },
-
-    establish: function () {
-      return this.model.fetch();
-    },
-
-    afterRender: function () {
-      this.startRefreshInterval();
-    },
-
-    serialize: function () {
-      return {
-        Ddoc: this.ddocName,
-        view_index: this.model.get('view_index')
-      };
-    },
-
-    startRefreshInterval: function () {
-      var model = this.model;
-
-      // Interval already set
-      if (this.intervalId) { this.stopRefreshInterval(); }
-
-      this.intervalId = setInterval(function () {
-        model.fetch();
-      }, this.refreshTime);
-    },
-
-    stopRefreshInterval: function () {
-      clearInterval(this.intervalId);
-    },
-
-    cleanup: function () {
-      this.stopRefreshInterval();
-    }
-  });
-
   Documents.Views = Views;
 
   return Documents;

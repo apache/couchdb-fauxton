@@ -29,12 +29,15 @@ define([
   'addons/documents/index-results/index-results.components.react',
   'addons/documents/pagination/pagination.react',
   'addons/documents/header/header.react',
-  'addons/documents/header/header.actions'
+  'addons/documents/header/header.actions',
+  'addons/documents/designdocinfo/actions',
+  'addons/documents/designdocinfo/components.react'
 ],
 
 function (app, FauxtonAPI, BaseRoute, Documents, Changes, ChangesActions, DocEditor,
   Databases, Resources, Components, PaginationStores, IndexResultsActions,
-  IndexResultsComponents, ReactPagination, ReactHeader, ReactActions) {
+  IndexResultsComponents, ReactPagination, ReactHeader, ReactActions,
+  DesignDocInfoActions, DesignDocInfoComponents) {
 
     var DocumentsRouteObject = BaseRoute.extend({
       layout: "with_tabs_sidebar",
@@ -88,10 +91,11 @@ function (app, FauxtonAPI, BaseRoute, Documents, Changes, ChangesActions, DocEdi
         this.removeComponent('#dashboard-upper-content');
 
         var designDocInfo = new Resources.DdocInfo({ _id: "_design/" + ddoc }, { database: this.database });
-        this.setView("#dashboard-lower-content", new Documents.Views.DdocInfo({
+        DesignDocInfoActions.fetchDesignDocInfo({
           ddocName: ddoc,
-          model: designDocInfo
-        }));
+          designDocInfo: designDocInfo
+        });
+        this.setComponent("#dashboard-lower-content", DesignDocInfoComponents.DesignDocInfo);
 
         this.sidebar.setSelectedTab(app.utils.removeSpecialCharacters(ddoc) + "_metadata");
         this.leftheader.updateCrumbs(this.getCrumbs(this.database));
