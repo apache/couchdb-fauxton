@@ -146,7 +146,7 @@ function (app, FauxtonAPI, Helpers, BaseRoute, Databases,
         toggleDisabled: true,
         crumbs: [
           {'type': 'back', 'link': Databases.databaseUrl(this.database)},
-          {'name': 'Create new index', 'link': Databases.databaseUrl(this.database) }
+          {'name': app.i18n.en_US['mango-indexeditor-title'], 'link': Databases.databaseUrl(this.database) }
         ]
       }));
 
