@@ -32,7 +32,7 @@ module.exports = {
       ')
       .execute('$(".save")[0].scrollIntoView();')
       .clickWhenVisible('button.btn-success.save')
-
+      .waitForElementVisible('.global-notification', waitTime, false)
       .waitForElementNotVisible('.global-notification', waitTime, false)
       .waitForElementNotPresent('.loading-lines', waitTime, false)
       .waitForElementPresent('.prettyprint', waitTime, false)
@@ -60,6 +60,7 @@ module.exports = {
       ')
       .execute('$(".save")[0].scrollIntoView();')
       .clickWhenVisible('button.btn-success.save')
+      .waitForElementVisible('.global-notification', waitTime, false)
       .waitForElementNotVisible('.global-notification', waitTime, false)
       .waitForElementNotPresent('.loading-lines', waitTime, false)
       .waitForElementPresent('.prettyprint', waitTime, false)
@@ -86,6 +87,8 @@ module.exports = {
       ')
       .execute('$("button.save")[0].scrollIntoView();')
       .clickWhenVisible('button.save', waitTime, false)
+      .waitForElementVisible('.global-notification', waitTime, false)
+      .waitForElementNotVisible('.global-notification', waitTime, false)
       .waitForElementNotPresent('.loading-lines', waitTime, false)
       .waitForElementPresent('.prettyprint', waitTime, false)
       .waitForAttribute('.prettyprint', 'textContent', function (docContents) {
