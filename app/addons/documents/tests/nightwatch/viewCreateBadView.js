@@ -37,7 +37,7 @@ module.exports = {
         editor.getSession().setValue("function (doc) { emit(\'boom\', doc._id); }");\
       ')
       .execute('$(".save")[0].scrollIntoView();')
-      .click('button.btn-success.save')
+      .clickWhenVisible('button.btn-success.save')
       .waitForElementVisible('.alert-error', waitTime, false)
       .assert.containsText('.alert-error', '_sum function requires')
       .end();
