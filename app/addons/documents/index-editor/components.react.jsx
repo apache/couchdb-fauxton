@@ -396,7 +396,7 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, ReactComponents) 
           <PaddedBorderedBox>
             <strong>Database</strong>
             <div className="db-title">
-              <a href={url}>{this.state.database.id}</a>
+              <a href={url}>this.state.database.id</a>
             </div>
           </PaddedBorderedBox>
           <form className="form-horizontal view-query-save" onSubmit={this.saveView}>
