@@ -119,7 +119,7 @@ function (app, FauxtonAPI, Helpers, BaseRoute, Databases,
       this.setComponent('#dashboard-lower-content', IndexResultsComponents.List);
 
       this.apiUrl = function () {
-        return [mangoResultCollection.urlRef('query-apiurl', urlParams), FauxtonAPI.constants.DOC_URLS.MANGO];
+        return [mangoResultCollection.urlRef('query-apiurl', urlParams), FauxtonAPI.constants.DOC_URLS.MANGO_SEARCH];
       };
     },
 
@@ -160,7 +160,7 @@ function (app, FauxtonAPI, Helpers, BaseRoute, Databases,
       });
 
       this.apiUrl = function () {
-        return [mangoIndexCollection.urlRef('index-apiurl', urlParams), FauxtonAPI.constants.DOC_URLS.MANGO];
+        return [mangoIndexCollection.urlRef('index-apiurl', urlParams), FauxtonAPI.constants.DOC_URLS.MANGO_INDEX];
       };
     }
   });
