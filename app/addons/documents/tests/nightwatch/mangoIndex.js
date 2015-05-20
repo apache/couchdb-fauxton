@@ -25,7 +25,6 @@ module.exports = {
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_index')
       .waitForElementPresent('.prettyprint', waitTime, false)
       .waitForElementNotPresent('.loading-lines', waitTime, false)
-      .assert.containsText('.editor-description', 'is an easy way to find documents on predefined indexes')
       .execute('\
         var json = \'{\
           "index": {\
