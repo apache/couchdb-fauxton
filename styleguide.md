@@ -13,7 +13,6 @@ discussed, agreed upon and documented here.
 - [HTML](#html)
 - [CSS / Less](#css)
 
-
 <a name="js" />
 ## JavaScript
 

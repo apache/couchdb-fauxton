@@ -31,7 +31,7 @@ module.exports = {
         editor.getSession().setValue("function (doc) { emit(\'hasehase5000\', 1); }");\
       ')
       .execute('$(".save")[0].scrollIntoView();')
-      .click('button.btn-success.save')
+      .clickWhenVisible('button.btn-success.save')
 
       .waitForElementNotVisible('.global-notification', waitTime, false)
       .waitForElementNotPresent('.loading-lines', waitTime, false)
@@ -54,14 +54,14 @@ module.exports = {
 
       .execute('\
         var editor = ace.edit("map-function");\
-        editor.getSession().setValue("function (doc) { emit(\'hasehase5000\', 1); }");\
+        editor.getSession().setValue("function (doc) { emit(\'hasehase6000\', 1); }");\
         editor._emit(\'blur\');\
       ')
       .execute('$(".save")[0].scrollIntoView();')
       .clickWhenVisible('button.btn-success.save')
       .waitForElementNotVisible('.global-notification', waitTime, false)
       .waitForElementNotPresent('.loading-lines', waitTime, false)
-      .assert.containsText('.prettyprint', 'hasehase5000')
+      .assert.containsText('.prettyprint', 'hasehase6000')
     .end();
   },
 
