@@ -126,6 +126,8 @@ function (app, FauxtonAPI, React, Stores, Actions,
     },
 
     render: function () {
+      var url = FauxtonAPI.urls('allDocs', 'app', this.props.dbName, '');
+
       return (
         <div className="editor-wrapper span5 scrollable">
           <PaddedBorderedBox>
@@ -136,7 +138,9 @@ function (app, FauxtonAPI, React, Stores, Actions,
           </PaddedBorderedBox>
           <PaddedBorderedBox>
             <strong>Database</strong>
-            <div className="db-title">{this.props.dbName}</div>
+            <div className="db-title">
+              <a href={url}>{this.props.dbName}</a>
+            </div>
           </PaddedBorderedBox>
           <form className="form-horizontal" onSubmit={this.props.onSubmit}>
             <PaddedBorderedBox>
