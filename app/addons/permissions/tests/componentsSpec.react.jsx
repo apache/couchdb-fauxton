@@ -85,8 +85,14 @@ define([
         });
 
         it('adds user on submit', function () {
-          var dom = $(el.getDOMNode()).find('.permission-item-form')[0];
-          TestUtils.Simulate.submit(dom);
+          var input = $(el.getDOMNode()).find('input')[0];
+          TestUtils.Simulate.change(input, {
+            target: {
+              value: 'newusername'
+            }
+          });
+          var form = $(el.getDOMNode()).find('.permission-item-form')[0];
+          TestUtils.Simulate.submit(form);
 
           var options = addSpy.args[0][0];
           assert.ok(addSpy.calledOnce);
@@ -95,8 +101,14 @@ define([
         });
 
         it('adds role on submit', function () {
-          var dom = $(el.getDOMNode()).find('.permission-item-form')[1];
-          TestUtils.Simulate.submit(dom);
+          var input = $(el.getDOMNode()).find('input')[1];
+          TestUtils.Simulate.change(input, {
+            target: {
+              value: 'newrole'
+            }
+          });
+          var form = $(el.getDOMNode()).find('.permission-item-form')[1];
+          TestUtils.Simulate.submit(form);
 
           var options = addSpy.args[0][0];
           assert.ok(addSpy.calledOnce);

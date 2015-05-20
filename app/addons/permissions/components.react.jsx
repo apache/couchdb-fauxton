@@ -65,7 +65,6 @@ function (app, FauxtonAPI, React, Components, Stores, Actions) {
       if (!_.isEmpty(value)) {
         return false;
       }
-
       FauxtonAPI.addNotification({
         msg: 'Cannot add an empty value for ' + type + '.',
         type: 'warning'
@@ -76,7 +75,7 @@ function (app, FauxtonAPI, React, Components, Stores, Actions) {
 
     addNames: function (e) {
       e.preventDefault();
-      if (this.isEmptyValue(this.state.newRole, 'names')) {
+      if (this.isEmptyValue(this.state.newName, 'names')) {
         return;
       }
       this.props.addItem({
