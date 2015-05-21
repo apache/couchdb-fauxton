@@ -19,8 +19,7 @@ module.exports = {
     client
       .loginToGUI()
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
-      .waitForElementVisible('.lookahead-tray-link', waitTime, false)
-      .click('.lookahead-tray-link')
+      .clickWhenVisible('.lookahead-tray-link')
       .waitForElementVisible('.lookahead-tray', waitTime, false)
       .end();
   }

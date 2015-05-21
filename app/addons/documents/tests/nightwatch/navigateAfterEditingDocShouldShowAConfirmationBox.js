@@ -22,15 +22,13 @@ module.exports = {
     client
       .loginToGUI()
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
-      .waitForElementPresent('#new-all-docs-button', waitTime, false)
-      .click('#new-all-docs-button a')
-      .waitForElementPresent('#new-all-docs-button a[href="' + newLink + '"]', waitTime, false)
-      .click('#new-all-docs-button a[href="' + newLink + '"]')
+      .clickWhenVisible('#new-all-docs-button a')
+      .clickWhenVisible('#new-all-docs-button a[href="' + newLink + '"]')
       .waitForElementPresent('.code-region', waitTime, false)
       .verify.urlEquals(baseUrl + '/' + newLink)
 
       .keys(['.ace_variable', 'v'])
-      .click('a[href="#/activetasks"]')
+      .clickWhenVisible('a[href="#/activetasks"]')
       .accept_alert()
       .verify.urlEquals(baseUrl + '/#/activetasks');
   }

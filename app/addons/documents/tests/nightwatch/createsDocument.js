@@ -21,10 +21,8 @@ module.exports = {
     client
       .loginToGUI()
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
-      .waitForElementPresent('#new-all-docs-button', waitTime, false)
-      .click('#new-all-docs-button a')
-      .waitForElementPresent('#new-all-docs-button a[href="#/database/' + newDatabaseName + '/new"]', waitTime, false)
-      .click('#new-all-docs-button a[href="#/database/' + newDatabaseName + '/new"]')
+      .clickWhenVisible('#new-all-docs-button a')
+      .clickWhenVisible('#new-all-docs-button a[href="#/database/' + newDatabaseName + '/new"]')
       .waitForElementPresent('#editor-container', waitTime, false)
       .verify.urlEquals(baseUrl + '/#/database/' + newDatabaseName + '/new')
       .execute('\
@@ -33,8 +31,7 @@ module.exports = {
         editor.removeWordRight();\
         editor.insert("' + newDocumentName + '");\
       ')
-      .waitForElementPresent('#doc-editor-actions-panel .save-doc', waitTime, false)
-      .click('#doc-editor-actions-panel .save-doc')
+      .clickWhenVisible('#doc-editor-actions-panel .save-doc')
       .pause(1000)
       .url(baseUrl + '/' + newDatabaseName + '/_all_docs')
       .waitForElementPresent('body', waitTime, false)

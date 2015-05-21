@@ -39,8 +39,7 @@ module.exports = {
       .waitForElementPresent('.change-box[data-id="doc_1"]', waitTime, false)
 
       // confirm only the single result is now listed in the page
-      .waitForElementVisible('.js-doc-link', waitTime, false)
-      .click('.js-doc-link')
+      .clickWhenVisible('.js-doc-link')
       .waitForElementPresent('#doc-editor-actions-panel', waitTime, false)
       .end();
   },

@@ -24,15 +24,13 @@ module.exports = {
     client
       .loginToGUI()
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
-      .waitForElementPresent('#new-all-docs-button', waitTime, false)
-      .click('#new-all-docs-button a')
-      .waitForElementPresent('#new-all-docs-button a[href="' + newLink + '"]', waitTime, false)
-      .click('#new-all-docs-button a[href="' + newLink + '"]')
+      .clickWhenVisible('#new-all-docs-button a')
+      .clickWhenVisible('#new-all-docs-button a[href="' + newLink + '"]')
       .waitForElementPresent('.code-region', waitTime, false)
       .verify.urlEquals(baseUrl + '/' + newLink)
 
       // now redirect back to the all docs page and check it's loaded properly
-      .click('.fonticon-left-open')
+      .clickWhenVisible('.fonticon-left-open')
       .verify.urlEquals(baseUrl + '/#database/' + newDatabaseName + '/_all_docs');
   }
 };
