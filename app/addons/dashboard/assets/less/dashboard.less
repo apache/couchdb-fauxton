@@ -1,0 +1,118 @@
+//  Licensed under the Apache License, Version 2.0 (the "License"); you may not
+//  use this file except in compliance with the License. You may obtain a copy of
+//  the License at
+//
+//    http://www.apache.org/licenses/LICENSE-2.0
+//
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+//  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+//  License for the specific language governing permissions and limitations under
+//  the License.
+@import "../../../../../assets/less/bootstrap/variables.less";
+@import "../../../../../assets/less/variables.less";
+@import "../../../../../assets/less/bootstrap/mixins.less";
+
+#dashboard-content {
+  .widget-container {
+    margin: 10px;
+    padding: 10px;
+    background: @white;
+    border-radius: 5px;
+    border: 1px solid @greyBrownLighter;
+  }
+
+  .active-task-box {
+    width: 450px;
+    height: 250px;
+  }
+}
+
+.widget-container {
+  .widget-header {
+    width: 115px;
+    height: 30px;
+    margin: 0 auto;
+    font-size: 14pt;
+    font-weight: bold;
+    color: @defaultHTag;
+  }
+
+  .widget-header-separator {
+    width: 95%;
+    color: @defaultHTag;
+    margin: 0 auto;
+  }
+
+}
+
+.widget-activeTask-table {
+  width: 100%;
+  text-align: center;
+
+  thead {
+    display: block;
+    font-size: 10pt;
+
+    tr {
+      padding-top: 5px;
+      padding-bottom: 5px;
+      height: 25px;
+
+      th {
+        float: left;
+      }
+    }
+  }
+
+  tbody {
+    display: block;
+    font-size: 9pt;
+    height: 169px;
+    overflow-y: auto;
+
+    tr {
+      padding-top: 5px;
+      padding-bottom: 5px;
+      height: 30px;
+      border-bottom: 1px solid @greyBrownLighter;
+    }
+
+    td {
+      float: left;
+    }
+  }
+
+  tr {
+    display: block;
+
+    .pid-column {
+      width: 25%;
+    }
+
+    .type-column {
+      width: 25%;
+    }
+
+    .progress-column {
+      width: 20%;
+    }
+
+    .updateOn-column {
+      width: 30%;
+    }
+
+    .noResult {
+      width: 100%;
+    }
+  }
+
+  td {
+    display: block;
+  }
+
+  th {
+    display: block;
+  }
+
+}
