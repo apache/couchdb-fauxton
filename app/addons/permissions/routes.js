@@ -14,12 +14,15 @@ define([
   'app',
   'api',
   'addons/databases/base',
-  'addons/permissions/views',
+  'addons/permissions/resources',
+  'addons/permissions/actions',
+  'addons/permissions/components.react',
   'addons/documents/shared-routes'
 ],
-function (app, FauxtonAPI, Databases, Permissions, BaseRoute) {
+function (app, FauxtonAPI, Databases, Resources, Actions, Permissions, BaseRoute) {
 
   var PermissionsRouteObject = BaseRoute.extend({
+    roles: ['fx_loggedIn'],
     routes: {
       'database/:database/permissions': 'permissions'
     },
@@ -34,7 +37,7 @@ function (app, FauxtonAPI, Databases, Permissions, BaseRoute) {
 
     initViews: function (databaseName) {
       this.database = new Databases.Model({ id: databaseName });
-      this.security = new Permissions.Security(null, {
+      this.security = new Resources.Security(null, {
         database: this.database
       });
       this.allDatabases = new Databases.List();
@@ -50,8 +53,6 @@ function (app, FauxtonAPI, Databases, Permissions, BaseRoute) {
 
     establish: function () {
       return [
-        this.database.fetch(),
-        this.security.fetch(),
         this.designDocs.fetch({reset: true}),
         this.allDatabases.fetchOnce()
       ];
@@ -72,10 +73,8 @@ function (app, FauxtonAPI, Databases, Permissions, BaseRoute) {
     },
 
     permissions: function () {
-      this.pageContent = this.setView('#dashboard-content', new Permissions.Permissions({
-        database: this.database,
-        model: this.security
-      }));
+      Actions.fetchPermissions(this.database, this.security);
+      this.setComponent('#dashboard-content', Permissions.PermissionsController);
     },
 
     crumbs: function () {

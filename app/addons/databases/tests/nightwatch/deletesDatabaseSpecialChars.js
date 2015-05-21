@@ -26,7 +26,7 @@ module.exports = {
       .clickWhenVisible('#header-dropdown-menu .fonticon-trash', waitTime, false)
       .waitForElementPresent('#db-name', waitTime, false)
       .clickWhenVisible('#db-name', waitTime, false)
-      .setValue('input#db-name', [newDatabaseName, client.Keys.ENTER])
+      .setValue('#db-name', [newDatabaseName, client.Keys.ENTER])
       .waitForElementVisible('#global-notifications .alert.alert-info', waitTime, false)
       .url(baseUrl + '/_all_dbs')
       .waitForElementPresent('pre', waitTime, false)

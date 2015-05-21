@@ -20,12 +20,22 @@ define([
   var assert = testUtils.assert;
   var dispatchToken;
   var store;
+  var opts;
 
   describe('Index Results Store', function () {
-
     beforeEach(function () {
       store = new Stores.IndexResultsStore();
       dispatchToken = FauxtonAPI.dispatcher.register(store.dispatch);
+      opts = {
+        params: {},
+        database: {
+          safeID: function () { return '1';}
+        }
+      };
+    });
+
+    afterEach(function () {
+      FauxtonAPI.dispatcher.unregister(dispatchToken);
     });
 
     describe('#hasResults', function () {
@@ -47,12 +57,7 @@ define([
     describe('#getResults', function () {
 
       it('has correct doc format', function () {
-        store._collection = new Documents.AllDocs([{_id: 'testId'}], {
-          params: {},
-          database: {
-            safeID: function () { return '1';}
-          }
-        });
+        store._collection = new Documents.AllDocs([{_id: 'testId'}], opts);
 
         var doc = store.getResults()[0];
         assert.equal(doc.id, 'testId');
@@ -60,33 +65,19 @@ define([
       });
 
     });
-
-    afterEach(function () {
-      FauxtonAPI.dispatcher.unregister(dispatchToken);
-    });
   });
 
   describe('canSelectAll', function () {
 
     it('returns true for selected docs less than collection', function () {
-      store._collection = new Documents.AllDocs([{_id: 'testId1'}, {_id: 'testId2'}], {
-        params: {},
-        database: {
-          safeID: function () { return '1';}
-        }
-      });
+      store._collection = new Documents.AllDocs([{_id: 'testId1'}, {_id: 'testId2'}], opts);
 
       store._selectedItems = {'testId1': true};
       assert.ok(store.canSelectAll());
     });
 
     it('returns false for selected docs same as collection', function () {
-      store._collection = new Documents.AllDocs([{_id: 'testId1'}, {_id: 'testId2'}], {
-        params: {},
-        database: {
-          safeID: function () { return '1';}
-        }
-      });
+      store._collection = new Documents.AllDocs([{_id: 'testId1'}, {_id: 'testId2'}], opts);
 
       store._selectedItems = {
         'testId1': true,
@@ -96,6 +87,20 @@ define([
       assert.notOk(store.canSelectAll());
     });
 
+    it('returns true even with _all_docs (mango)', function () {
+      store._collection = new Documents.AllDocs([
+        {_id: 'testId1'},
+        {_id: 'testId2'},
+        {_id: '_all_docs'}
+      ], opts);
+
+      store._selectedItems = {
+        'testId1': true,
+        'testId2': true
+      };
+
+      assert.notOk(store.canSelectAll());
+    });
   });
 
   describe('canDeselectAll', function () {
@@ -121,12 +126,7 @@ define([
     });
 
     it('returns false for all collapsed docs', function () {
-      store._collection = new Documents.AllDocs([{_id: 'testId1'}, {_id: 'testId2'}], {
-        params: {},
-        database: {
-          safeID: function () { return '1';}
-        }
-      });
+      store._collection = new Documents.AllDocs([{_id: 'testId1'}, {_id: 'testId2'}], opts);
 
       store._collapsedDocs = {
         'testId1': true,
@@ -156,12 +156,7 @@ define([
   describe('getDocContent', function () {
 
     it('returns full doc if not collapsed', function () {
-      store._collection = new Documents.AllDocs([{_id: 'testId1', 'value': 'one'}] , {
-        params: {},
-        database: {
-          safeID: function () { return '1';}
-        }
-      });
+      store._collection = new Documents.AllDocs([{_id: 'testId1', 'value': 'one'}], opts);
 
       var doc = store._collection.first();
       var result = store.getDocContent(doc);
@@ -170,12 +165,7 @@ define([
     });
 
     it('returns no doc content if collapsed', function () {
-      store._collection = new Documents.AllDocs([{_id: 'testId1', 'value': 'one'}] , {
-        params: {},
-        database: {
-          safeID: function () { return '1';}
-        }
-      });
+      store._collection = new Documents.AllDocs([{_id: 'testId1', 'value': 'one'}], opts);
 
       var doc = store._collection.first();
       store._collapsedDocs = {'testId1': true};
@@ -204,12 +194,7 @@ define([
   describe('#selectAllDocuments', function () {
 
     it('selects all documents', function () {
-      store._collection = new Documents.AllDocs([{_id: 'testId1', 'value': 'one'}] , {
-        params: {},
-        database: {
-          safeID: function () { return '1';}
-        }
-      });
+      store._collection = new Documents.AllDocs([{_id: 'testId1', 'value': 'one'}], opts);
 
       store.selectAllDocuments();
       assert.ok(store.getSelectedItems().testId1);
@@ -220,12 +205,7 @@ define([
   describe('#deSelectAllDocuments', function () {
 
     it('deselects all documents', function () {
-      store._collection = new Documents.AllDocs([{_id: 'testId1', 'value': 'one'}] , {
-        params: {},
-        database: {
-          safeID: function () { return '1';}
-        }
-      });
+      store._collection = new Documents.AllDocs([{_id: 'testId1', 'value': 'one'}], opts);
 
       store.selectAllDocuments();
       assert.ok(store.getSelectedItems().testId1);
@@ -237,12 +217,7 @@ define([
   describe('#collapseSelectedDocs', function () {
 
     it('collapses all selected docs', function () {
-      store._collection = new Documents.AllDocs([{_id: 'testId1'}, {_id: 'testId2'}], {
-        params: {},
-        database: {
-          safeID: function () { return '1';}
-        }
-      });
+      store._collection = new Documents.AllDocs([{_id: 'testId1'}, {_id: 'testId2'}], opts);
 
       store.clearCollapsedDocs();
 
@@ -260,12 +235,7 @@ define([
   describe('#unCollapseSelectedDocs', function () {
 
     it('uncollapses all selected docs', function () {
-      store._collection = new Documents.AllDocs([{_id: 'testId1'}, {_id: 'testId2'}], {
-        params: {},
-        database: {
-          safeID: function () { return '1';}
-        }
-      });
+      store._collection = new Documents.AllDocs([{_id: 'testId1'}, {_id: 'testId2'}], opts);
 
       store.clearCollapsedDocs();
 
@@ -284,12 +254,9 @@ define([
   describe('#createBulkDeleteFromSelected', function () {
 
     it('correctly creates BulkDeleteDocCollection', function () {
-      store._collection = new Documents.AllDocs([{_id: 'testId1'}, {_id: 'testId2'}], {
-        params: {},
-        database: {
-          safeID: function () { return '1';}
-        }
-      });
+      store._collection = new Documents.AllDocs([{_id: 'testId1'}, {_id: 'testId2'}], opts);
+
+      store._bulkDeleteDocCollection = Documents.BulkDeleteDocCollection;
 
       store._selectedItems = {
         'testId1': true,
@@ -304,16 +271,62 @@ define([
 
   });
 
+  describe('#getMangoDoc', function () {
+    var store = new Stores.IndexResultsStore();
+    var fakeMango = {
+      ddoc: '_design/e4d338e5d6f047749f5399ab998b4fa04ba0c816',
+      def: {
+        fields: [
+          {'_id': 'asc'},
+          {'foo': 'bar'},
+          {'ente': 'gans'}
+        ]
+      },
+      name: 'e4d338e5d6f047749f5399ab998b4fa04ba0c816',
+      type: 'json'
+    };
+
+    it('creates a special id from the header fields', function () {
+      var doc = new Documents.MangoIndex(fakeMango, opts);
+      assert.equal(store.getMangoDoc(doc).header, 'json: _id, foo, ente');
+    });
+
+    it('supports custom header fields', function () {
+      FauxtonAPI.registerExtension('mango:additionalIndexes', {
+        createHeader: function (doc) {
+          return ['foobar'];
+        }
+      });
+
+      var doc = new Documents.MangoIndex({
+        ddoc: '_design/e4d338e5d6f047749f5399ab998b4fa04ba0c816',
+        def: {
+          fields: []
+        },
+        name: 'e4d338e5d6f047749f5399ab998b4fa04ba0c816',
+        type: 'json'
+      }, opts);
+      assert.equal(store.getMangoDoc(doc).header, 'foobar');
+    });
+
+    it('removes the name and ddoc field', function () {
+      var doc = new Documents.MangoIndex(fakeMango, opts);
+      assert.ok(doc.get('name'));
+      assert.ok(doc.get('ddoc'));
+
+      var newDoc = store.getMangoDoc(doc);
+      assert.notOk(JSON.parse(newDoc.content).name);
+      assert.notOk(JSON.parse(newDoc.content).ddoc);
+      assert.ok(JSON.parse(newDoc.content).type);
+    });
+  });
+
   describe('#getDocId', function () {
 
     it('returns id if it exists', function () {
       var doc = new Documents.Doc({
         _id: 'doc-id'
-      }, {
-        database: {
-          safeID: function () { return '1';}
-        }
-      });
+      }, opts);
 
       assert.equal(store.getDocId(doc), 'doc-id');
 
@@ -322,11 +335,7 @@ define([
     it('returns key if it exists', function () {
       var doc = new Documents.Doc({
         key: 'doc-key'
-      }, {
-        database: {
-          safeID: function () { return '1';}
-        }
-      });
+      }, opts);
 
       assert.equal(store.getDocId(doc), 'doc-key');
 
@@ -336,11 +345,7 @@ define([
       var doc = new Documents.Doc({
         key: null,
         value: 'the-value'
-      }, {
-        database: {
-          safeID: function () { return '1';}
-        }
-      });
+      }, opts);
 
       assert.equal(store.getDocId(doc), '');
 
@@ -348,6 +353,7 @@ define([
   });
 
   describe('isEditable', function () {
+    store = new Stores.IndexResultsStore();
 
     it('returns false for no collection', function () {
       store._collection = null;
@@ -360,9 +366,27 @@ define([
     });
 
     it('delegates to collection', function () {
+      store._collection = {
+        attributes: {
+          fields: ["foo"]
+        }
+      };
+      store._collection.isEditable = function () { return {'stub': true}; };
+      assert.deepEqual(store.isEditable(), {'stub': true});
       store._collection = {};
-      store._collection.isEditable = function () { return 'stub'; };
-      assert.equal(store.isEditable(), 'stub');
+    });
+
+    it('retuns false for ghost-docs that are filtered away', function () {
+      store._collection = {};
+      assert.equal(store.isEditable({}), false);
+    });
+  });
+
+  describe('isDeletable', function () {
+    store = new Stores.IndexResultsStore();
+
+    it('retuns false for ghost-docs that are filtered away', function () {
+      assert.equal(store.isDeletable({}), false);
     });
   });
 });

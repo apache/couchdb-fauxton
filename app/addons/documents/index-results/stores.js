@@ -14,10 +14,11 @@ define([
   'api',
   'addons/documents/index-results/actiontypes',
   'addons/documents/header/header.actiontypes',
-  "addons/documents/resources"
+  'addons/documents/resources',
+  'addons/documents/mango/mango.helper'
 ],
 
-function (FauxtonAPI, ActionTypes, HeaderActionTypes, Documents) {
+function (FauxtonAPI, ActionTypes, HeaderActionTypes, Documents, MangoHelper) {
   var Stores = {};
 
   /*TODO:
@@ -33,6 +34,9 @@ function (FauxtonAPI, ActionTypes, HeaderActionTypes, Documents) {
       this.clearCollapsedDocs();
       this._isLoading = false;
       this._textEmptyIndex = 'No Index Created Yet!';
+      this._typeOfIndex = 'view';
+      this._lastQuery = null;
+      this._bulkDeleteDocCollection = null;
     },
 
     clearSelectedItems: function () {
@@ -49,13 +53,39 @@ function (FauxtonAPI, ActionTypes, HeaderActionTypes, Documents) {
       this.clearSelectedItems();
       this.clearCollapsedDocs();
 
+      this._bulkDeleteDocCollection = options.bulkCollection;
+
       if (options.textEmptyIndex) {
         this._textEmptyIndex = options.textEmptyIndex;
       }
+
+      if (options.typeOfIndex) {
+        this._typeOfIndex = options.typeOfIndex;
+      }
+
+      if (options.query) {
+        this._lastQuery = options.query;
+      }
+    },
+
+    getTypeOfIndex: function () {
+      return this._typeOfIndex;
+    },
+
+    getLastQuery: function () {
+      return this._lastQuery;
     },
 
     isEditable: function (doc) {
       if (!this._collection) {
+        return false;
+      }
+
+      if (doc && this.isGhostDoc(doc)) {
+        return false;
+      }
+
+      if (doc && !doc.get('_id')) {
         return false;
       }
 
@@ -66,7 +96,17 @@ function (FauxtonAPI, ActionTypes, HeaderActionTypes, Documents) {
       return this._collection.isEditable();
     },
 
+    isGhostDoc: function (doc) {
+      // ghost docs are empty results where all properties were
+      // filtered away by mango
+      return !doc || !doc.attributes || !Object.keys(doc.attributes).length;
+    },
+
     isDeletable: function (doc) {
+      if (this.isGhostDoc(doc)) {
+        return false;
+      }
+
       return doc.isDeletable();
     },
 
@@ -80,7 +120,8 @@ function (FauxtonAPI, ActionTypes, HeaderActionTypes, Documents) {
 
     getDocContent: function (originalDoc) {
       var doc = originalDoc.toJSON();
-      return (this.isCollapsed(doc._id)) ? '' : JSON.stringify(doc, null, ' ');
+
+      return this.isCollapsed(doc._id) ? '' : JSON.stringify(doc, null, ' ');
     },
 
     getDocId: function (doc) {
@@ -96,17 +137,68 @@ function (FauxtonAPI, ActionTypes, HeaderActionTypes, Documents) {
       return '';
     },
 
-    getResults: function () {
-      return this._collection.map(function (doc) {
+    getMangoDocContent: function (originalDoc) {
+      var doc = originalDoc.toJSON();
+
+      delete doc.ddoc;
+      delete doc.name;
+
+      return this.isCollapsed(originalDoc.id) ? '' : JSON.stringify(doc, null, ' ');
+    },
+
+    getMangoDoc: function (doc, index) {
+      var selector,
+          header;
+
+      if (doc.get('def') && doc.get('def').fields) {
+
+        header = MangoHelper.getIndexName(doc);
+
         return {
-          content: this.getDocContent(doc),
-          id: this.getDocId(doc),
-          keylabel: doc.isFromView() ? 'key' : 'id',
+          content: this.getMangoDocContent(doc),
+          header: header,
+          id: doc.getId(),
+          keylabel: '',
           url: doc.isFromView() ? doc.url('app') : doc.url('web-index'),
           isDeletable: this.isDeletable(doc),
           isEditable: this.isEditable(doc)
         };
-      }, this);
+      }
+
+      // we filtered away our content with the fields param
+      return {
+        content: ' ',
+        header: header,
+        id: this.getDocId(doc) + index,
+        keylabel: '',
+        url: this.isEditable(doc) ? doc.url('app') : null,
+        isDeletable: this.isDeletable(doc),
+        isEditable: this.isEditable(doc)
+      };
+
+    },
+
+    getResults: function () {
+      function filterOutGeneratedMangoDocs (doc) {
+        return doc.get('language') !== 'query';
+      }
+
+      return this._collection
+        .filter(filterOutGeneratedMangoDocs)
+        .map(function (doc, i) {
+          if (doc.get('def') || this.isGhostDoc(doc)) {
+            return this.getMangoDoc(doc, i);
+          }
+          return {
+            content: this.getDocContent(doc),
+            id: this.getDocId(doc),
+            header: this.getDocId(doc),
+            keylabel: doc.isFromView() ? 'key' : 'id',
+            url: this.getDocId(doc) ? doc.url('app') : null,
+            isDeletable: this.isDeletable(doc),
+            isEditable: this.isEditable(doc)
+          };
+        }, this);
     },
 
     hasResults: function () {
@@ -118,11 +210,11 @@ function (FauxtonAPI, ActionTypes, HeaderActionTypes, Documents) {
       return this._isLoading;
     },
 
-    isDeleteable: function () {
-      return this._deleteable;
-    },
-
     selectDoc: function (id) {
+      if (!id || id === '_all_docs') {
+        return;
+      }
+
       if (!this._selectedItems[id]) {
         this._selectedItems[id] = true;
       } else {
@@ -168,6 +260,10 @@ function (FauxtonAPI, ActionTypes, HeaderActionTypes, Documents) {
       return this._textEmptyIndex;
     },
 
+    setbulkDeleteDocCollection: function (bulkDeleteDocCollection) {
+      this._bulkDeleteDocCollection = bulkDeleteDocCollection;
+    },
+
     createBulkDeleteFromSelected: function () {
       var items = _.map(_.keys(this._selectedItems), function (id) {
         var doc = this._collection.get(id);
@@ -179,7 +275,7 @@ function (FauxtonAPI, ActionTypes, HeaderActionTypes, Documents) {
         };
       }, this);
 
-      var bulkDelete = new Documents.BulkDeleteDocCollection(items, {
+      var bulkDelete = new this._bulkDeleteDocCollection(items, {
         databaseId: this.getDatabase().safeID()
       });
 
@@ -187,7 +283,13 @@ function (FauxtonAPI, ActionTypes, HeaderActionTypes, Documents) {
     },
 
     canSelectAll: function () {
-      return this._collection.length > this.getSelectedItemsLength();
+      var length = this._collection.length;
+
+      if (this._collection.get && this._collection.get('_all_docs')) {
+        length = length - 1;
+      }
+
+      return length > this.getSelectedItemsLength();
     },
 
     canDeselectAll: function () {
