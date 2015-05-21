@@ -53,7 +53,7 @@ module.exports = {
         editor.getSession().setValue("function (doc) { emit(\'gansgans\'); }");\
       ')
       .execute('$(".save")[0].scrollIntoView();')
-      .click('button.btn-success.save')
+      .clickWhenVisible('button.btn-success.save')
       .waitForElementPresent('.prettyprint', waitTime, false)
       .waitForElementNotPresent('.loading-lines', waitTime, false)
       .assert.containsText('.prettyprint', 'gansgans')
@@ -77,10 +77,8 @@ module.exports = {
         editor.getSession().setValue("function (doc) { emit(\'enteente\', 1); }");\
       ')
       .execute('$(".save")[0].scrollIntoView();')
-      .click('button.btn-success.save')
-      .waitForAttribute('#global-notifications', 'textContent', function (notification) {
-        return (/View Saved./).test(notification.trim());
-      })
+      .clickWhenVisible('button.btn-success.save')
+
       //go back to all docs
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
       .clickWhenVisible('#nav-header-testdesigndoc', waitTime, false)
