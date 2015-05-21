@@ -114,6 +114,22 @@ define([
       );
       assert.equal(0, $(el.getDOMNode()).find('.doc-data').length);
     });
+
+    it('allows empty headers', function () {
+      el = TestUtils.renderIntoDocument(
+        <ReactComponents.Document header={null} isDeletable={true} checked={true} docIdentifier="foo" docContent='' />,
+        container
+      );
+      assert.equal('', $(el.getDOMNode()).find('.header-doc-id').text());
+    });
+
+    it('allows supports headers with "', function () {
+      el = TestUtils.renderIntoDocument(
+        <ReactComponents.Document header="foo" isDeletable={true} checked={true} docIdentifier="foo" docContent='' />,
+        container
+      );
+      assert.equal('"foo"', $(el.getDOMNode()).find('.header-doc-id').text());
+    });
   });
 
 });

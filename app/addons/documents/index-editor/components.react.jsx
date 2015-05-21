@@ -386,6 +386,8 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, ReactComponents) 
         );
       }
 
+      var url = FauxtonAPI.urls('allDocs', this.state.database.id, '');
+
       return (
         <div className="define-view">
           <PaddedBorderedBox>
@@ -393,7 +395,9 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, ReactComponents) 
           </PaddedBorderedBox>
           <PaddedBorderedBox>
             <strong>Database</strong>
-            <div className="db-title">{this.state.database.id}</div>
+            <div className="db-title">
+              <a href={url}>this.state.database.id</a>
+            </div>
           </PaddedBorderedBox>
           <form className="form-horizontal view-query-save" onSubmit={this.saveView}>
             <DesignDocSelector />

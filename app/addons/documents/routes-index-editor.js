@@ -94,7 +94,8 @@ function (app, FauxtonAPI, Helpers, BaseRoute, Documents, IndexEditorComponents,
 
       IndexResultsActions.newResultsList({
         collection: this.indexedDocs,
-        isListDeletable: false
+        isListDeletable: false,
+        bulkCollection: Documents.BulkDeleteDocCollection
       });
 
       ActionsIndexEditor.fetchDesignDocsBeforeEdit({
@@ -147,7 +148,8 @@ function (app, FauxtonAPI, Helpers, BaseRoute, Documents, IndexEditorComponents,
 
       IndexResultsActions.newResultsList({
         collection: [],
-        isListDeletable: false
+        isListDeletable: false,
+        bulkCollection: Documents.BulkDeleteDocCollection
       });
     }
 
