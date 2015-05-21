@@ -61,13 +61,11 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, Documents) {
     },
 
     getDocumentList: function () {
-      return _.map(this.props.results, function (doc) {
+      return _.map(this.props.results, function (doc, i) {
         var splitArr = doc.url.split("/");
         var docID = JSON.parse(doc.content)._id;
         var winner = JSON.parse(doc.content)._rev;
         var noop = function () {};
-
-      return _.map(this.props.results, function (doc, i) {
         return (
          <Components.Document
            key={doc.id + i}
@@ -84,7 +82,7 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, Documents) {
            {this.getRevTreeUrlFragment('#_revtree/'+splitArr[2]+'/'+docID+'/'+winner)}
            {doc.url ? this.getUrlFragment('#' + doc.url) : doc.url}
          </Components.Document>
-       );
+        );
       }, this);
     },
 
