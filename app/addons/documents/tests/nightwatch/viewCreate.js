@@ -67,7 +67,6 @@ module.exports = {
     /*jshint multistr: true */
 
     openDifferentDropdownsAndClick(client, '#nav-header-testdesigndoc')
-      .waitForElementPresent('#index-name', waitTime, false)
       .waitForElementVisible('#index-name', waitTime, false)
       .clearValue('#index-name')
       .setValue('#index-name', 'test-new-view')
@@ -78,7 +77,8 @@ module.exports = {
       ')
       .execute('$(".save")[0].scrollIntoView();')
       .clickWhenVisible('button.btn-success.save')
-
+      .waitForElementPresent('.prettyprint', waitTime, false)
+      .waitForElementNotPresent('.loading-lines', waitTime, false)
       //go back to all docs
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
       .clickWhenVisible('#nav-header-testdesigndoc', waitTime, false)
