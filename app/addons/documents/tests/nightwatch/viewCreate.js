@@ -29,6 +29,7 @@ module.exports = {
       .execute('$(".save")[0].scrollIntoView();')
       .waitForElementPresent('button.btn.btn-success.save', waitTime, false)
       .clickWhenVisible('button.btn.btn-success.save', waitTime, false)
+      .checkForDocumentCreated('_design/test_design_doc-selenium-1')
       .waitForElementPresent('.prettyprint', waitTime, false)
       .waitForElementNotPresent('.loading-lines', waitTime, false)
       .assert.containsText('.prettyprint', 'hasehase')
@@ -54,6 +55,7 @@ module.exports = {
       ')
       .execute('$(".save")[0].scrollIntoView();')
       .clickWhenVisible('button.btn-success.save')
+      .checkForDocumentCreated('_design/test_design_doc-selenium-2')
       .waitForElementPresent('.prettyprint', waitTime, false)
       .waitForElementNotPresent('.loading-lines', waitTime, false)
       .assert.containsText('.prettyprint', 'gansgans')
@@ -77,6 +79,8 @@ module.exports = {
       ')
       .execute('$(".save")[0].scrollIntoView();')
       .clickWhenVisible('button.btn-success.save')
+      .checkForDocumentCreated('_design/testdesigndoc/_view/test-new-view')
+
       .waitForElementPresent('.prettyprint', waitTime, false)
       .waitForElementNotPresent('.loading-lines', waitTime, false)
       //go back to all docs

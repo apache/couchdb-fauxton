@@ -32,7 +32,7 @@ module.exports = {
         editor.insert("' + newDocumentName + '");\
       ')
       .clickWhenVisible('#doc-editor-actions-panel .save-doc')
-      .pause(1000)
+      .checkForDocumentCreated(newDocumentName)
       .url(baseUrl + '/' + newDatabaseName + '/_all_docs')
       .waitForElementPresent('body', waitTime, false)
       .getText('body', function (result) {
