@@ -37,7 +37,6 @@ module.exports = {
       // hack to get select working by clicking on it and using keyboard to select
       // http://www.w3.org/TR/2012/WD-webdriver-20120710/
       .keys(['\uE013', '\uE006'])
-      .waitForElementPresent('.prettyprint', waitTime, false)
       .waitForElementNotPresent('div[data-id="document_9"]', waitTime)
       .execute(function () {
         return $('.doc-row').length;

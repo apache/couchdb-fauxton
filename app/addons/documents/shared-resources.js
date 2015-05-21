@@ -58,24 +58,11 @@ define([
     },
 
     isDeletable: function () {
-      return !!this.id;
+      return true;
     },
 
     isFromView: function () {
       return !this.id;
-    },
-
-    isMangoDoc: function () {
-      if (!this.isDdoc()) return false;
-      if (this.get('language') === 'query') {
-        return true;
-      }
-
-      if (this.get('doc') && this.get('doc').language === 'query') {
-        return true;
-      }
-
-      return false;
     },
 
     isReducedShown : function () {
@@ -141,6 +128,19 @@ define([
 
       delete views[viewName];
       this.set({views: views});
+    },
+
+    isMangoDoc: function () {
+      if (!this.isDdoc()) return false;
+      if (this.get('language') === 'query') {
+        return true;
+      }
+
+      if (this.get('doc') && this.get('doc').language === 'query') {
+        return true;
+      }
+
+      return false;
     },
 
     dDocModel: function () {

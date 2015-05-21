@@ -99,62 +99,7 @@ define([
     });
   });
 
-  describe('MangoDocumentCollection', function () {
-    var collection;
-
-    it('gets 1 doc more to know if there are more than 20', function () {
-      collection = new Models.MangoDocumentCollection([{
-        name: 'myId1',
-        doc: 'num1'
-      },
-      {
-        name: 'myId2',
-        doc: 'num2'
-      }], {
-        database: {id: 'databaseId', safeID: function () { return this.id; }},
-        params: {limit: 20}
-      });
-      collection.setQuery({
-        selector: '$foo',
-        fields: 'bla'
-      });
-
-      assert.deepEqual({
-        selector: '$foo',
-        fields: 'bla',
-        limit: 21,
-        skip: undefined
-      }, collection.getPaginatedQuery());
-    });
-
-    it('on next page, skips first 20', function () {
-      collection = new Models.MangoDocumentCollection([{
-        name: 'myId1',
-        doc: 'num1'
-      },
-      {
-        name: 'myId2',
-        doc: 'num2'
-      }], {
-        database: {id: 'databaseId', safeID: function () { return this.id; }},
-        params: {limit: 20}
-      });
-      collection.setQuery({
-        selector: '$foo',
-        fields: 'bla'
-      });
-      collection.next();
-      assert.deepEqual({
-        selector: '$foo',
-        fields: 'bla',
-        limit: 21,
-        skip: 20
-      }, collection.getPaginatedQuery());
-    });
-
-  });
-
-  describe('MangoDocumentCollection', function () {
+  describe('MangoIndexCollection', function () {
     var collection;
 
     it('is not editable', function () {
@@ -173,6 +118,7 @@ define([
       assert.notOk(collection.isEditable());
     });
   });
+
 
   describe('IndexCollection', function () {
     var collection;

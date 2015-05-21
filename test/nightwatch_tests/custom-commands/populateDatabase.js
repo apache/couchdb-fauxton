@@ -32,12 +32,8 @@ PopulateDatabase.prototype.command = function (databaseName, count) {
     function () { return i < (count ? count : 20); },
     function (cb) {
       i++;
-      var documentId = 'document_' + i;
-      database.insert({
-        number: i,
-        ente_ente_mango_ananas: i,
-        ente_ente_mango_ananas_res: 'foo'
-      }, documentId, cb);
+      var document_id = 'document_' + i;
+      database.insert({ number: i }, document_id, cb);
     },
     function (err) {
       if (err) {

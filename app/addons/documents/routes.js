@@ -28,8 +28,7 @@ function (Documents, DocumentsRouteObject, docEditor, IndexEditorRouteObject, Ma
     IndexEditorRouteObject,
     Mango.MangoIndexList,
     Mango.MangoIndexEditorAndResults,
-    RevTree,
-    Mango.MangoIndexEditorAndQueryEditor
+    RevTree
   ];
 
   return Documents;

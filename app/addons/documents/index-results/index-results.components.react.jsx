@@ -19,7 +19,7 @@ define([
   'addons/components/react-components.react',
   'addons/documents/resources',
 
-  'plugins/prettify'
+  "plugins/prettify"
 ],
 
 function (app, FauxtonAPI, React, Stores, Actions, Components, Documents) {
@@ -61,28 +61,25 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, Documents) {
     },
 
     getDocumentList: function () {
-      return _.map(this.props.results, function (doc, i) {
+      return _.map(this.props.results, function (doc) {
         var splitArr = doc.url.split("/");
         var docID = JSON.parse(doc.content)._id;
         var winner = JSON.parse(doc.content)._rev;
-        var noop = function () {};
         return (
          <Components.Document
-           key={doc.id + i}
+           key={doc.id}
            doc={doc}
-           onDoubleClick={this.props.isEditable ? this.onDoubleClick : noop}
+           onDoubleClick={this.onDoubleClick}
            keylabel={doc.keylabel}
            docContent={doc.content}
            checked={this.props.isSelected(doc.id)}
-           header={doc.header}
            docChecked={this.props.docChecked}
            isDeletable={doc.isDeletable}
            docIdentifier={doc.id} >
            {this.getUrlFragment('#' + doc.url)}
-           {this.getRevTreeUrlFragment('#_revtree/'+splitArr[2]+'/'+docID+'/'+winner)}
-           {doc.url ? this.getUrlFragment('#' + doc.url) : doc.url}
+           {this.getRevTreeUrlFragment('#' + splitArr[2] + '/' + docID + '/_revtree/' + winner)}
          </Components.Document>
-        );
+       );
       }, this);
     },
 

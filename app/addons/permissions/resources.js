@@ -40,20 +40,10 @@ function (app, FauxtonAPI) {
     addItem: function (value, type, section) {
       var sectionValues = this.get(section);
 
-      var check = this.canAddItem(value, type, section);
-      if (check.error) { return check;}
-
-      sectionValues[type].push(value);
-      return this.set(section, sectionValues);
-    },
-
-    canAddItem: function (value, type, section) {
-      var sectionValues = this.get(section);
-
       if (!sectionValues || !sectionValues[type]) {
         return {
           error: true,
-          msg: 'Section ' + section + ' does not exist'
+          msg: 'Section ' + section + 'does not exist'
         };
       }
 
@@ -64,24 +54,11 @@ function (app, FauxtonAPI) {
         };
       }
 
-      return {
-        error: false
-      };
-    },
-
-    removeItem: function (value, type, section) {
-      var sectionValues = this.get(section);
-      var types = sectionValues[type];
-      var indexOf = _.indexOf(types, value);
-
-      if (indexOf  === -1) { return;}
-
-      types.splice(indexOf, 1);
-      sectionValues[type] = types;
+      sectionValues[type].push(value);
       return this.set(section, sectionValues);
     }
-
   });
 
   return Permissions;
 });
+

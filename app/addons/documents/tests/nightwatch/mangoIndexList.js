@@ -12,33 +12,20 @@
 
 module.exports = {
 
-  'Finding things with with mango': function (client) {
-    /*jshint multistr: true */
-    var waitTime = 10000,
+  'Creating new indexes with mango': function (client) {
+    var waitTime = client.globals.maxWaitTime,
         newDatabaseName = client.globals.testDatabaseName,
         baseUrl = client.globals.test_settings.launch_url;
 
     client
       .populateDatabase(newDatabaseName)
       .loginToGUI()
-      .url(baseUrl + '/#/database/' + newDatabaseName + '/_find')
-      .waitForElementPresent('.watermark-logo', waitTime, false)
-      .assert.containsText('.editor-description', 'is an easy way to find documents on predefined indexes')
-      .execute('\
-        var json = \'{\
-          "selector": {\
-            "ente_ente_mango_ananas": {"$gt": null}\
-          }\
-        }\';\
-        var editor = ace.edit("query-field");\
-        editor.getSession().setValue(json);\
-      ')
-      .execute('$(".save")[0].scrollIntoView();')
-      .click('button.btn-success.save')
-
+      .url(baseUrl + '/#/database/' + newDatabaseName + '/_indexlist')
       .waitForElementPresent('.prettyprint', waitTime, false)
-      .assert.containsText('#dashboard-lower-content', 'number')
-      .assert.containsText('#dashboard-lower-content', 'ente_ente_mango_ananas_res')
+      .waitForElementVisible('.header-doc-id', waitTime, false)
+      .assert.containsText('.header-doc-id', '_all_docs')
+      .waitForElementVisible('#doc-list', waitTime, false)
+      .assert.containsText('#doc-list', 'ente_ente_mango_ananas')
     .end();
   }
 };

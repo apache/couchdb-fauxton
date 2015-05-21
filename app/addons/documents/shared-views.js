@@ -42,6 +42,8 @@ function (app, FauxtonAPI, Components, Documents, Databases) {
 
     serialize: function () {
       var docLinks = FauxtonAPI.getExtensions('docLinks'),
+          newLinks = FauxtonAPI.getExtensions('sidebar:newLinks'),
+          addLinks = FauxtonAPI.getExtensions('sidebar:links'),
           extensionList = FauxtonAPI.getExtensions('sidebar:list'),
           safeDatabaseName = this.database.safeID(),
           changesLink = '#' + FauxtonAPI.urls('changes', 'app', safeDatabaseName, ''),
@@ -51,13 +53,17 @@ function (app, FauxtonAPI, Components, Documents, Databases) {
           base = FauxtonAPI.urls('base', 'app', safeDatabaseName);
 
       return {
-        changesUrl: changesLink,
-        permissionsUrl: permissionsLink,
+        changes_url: changesLink,
+        permissions_url: permissionsLink,
+        db_url: db_url,
+        database_url: '#' + databaseUrl,
+        database: this.collection.database,
         docLinks: docLinks,
+        addLinks: addLinks,
+        newLinks: newLinks,
+        extensionList: extensionList > 0,
         databaseUrl: databaseUrl,
-        base: base,
-        mangoQueryUrl: FauxtonAPI.urls('mango', 'query-app', safeDatabaseName),
-        runQueryWithMangoText: app.i18n.en_US['run-query-with-mango']
+        base: base
       };
     },
 
@@ -84,19 +90,7 @@ function (app, FauxtonAPI, Components, Documents, Databases) {
         title: 'New View',
         url: newUrlPrefix + '/new_view',
         icon: 'fonticon-plus-circled'
-      }, this.getMangoLink()]);
-    },
-
-    getMangoLink: function () {
-      var database = this.collection.database,
-          databaseName = database.id,
-          newUrlPrefix = '#' + FauxtonAPI.urls('databaseBaseURL', 'app', databaseName);
-
-      return {
-        title: app.i18n.en_US['new-mango-index'],
-        url: newUrlPrefix + '/_index',
-        icon: 'fonticon-plus-circled'
-      };
+      }]);
     },
 
     beforeRender: function (manage) {
@@ -113,22 +107,13 @@ function (app, FauxtonAPI, Components, Documents, Databases) {
         links: this.getNewButtonLinks()
       }];
 
-      [
-        '#new-all-docs-button',
-        '#new-design-docs-button'
-      ].forEach(function (id) {
-        this.setView(id, new Components.MenuDropDown({
-          links: newLinks,
-        }));
-      }.bind(this));
-
-      this.setView('#mango-query-button', new Components.MenuDropDown({
-        links: [{
-          title: 'Add new',
-          links: [this.getMangoLink()]
-        }]
+      this.setView("#new-all-docs-button", new Components.MenuDropDown({
+        links: newLinks,
       }));
 
+      this.setView("#new-design-docs-button", new Components.MenuDropDown({
+        links: newLinks,
+      }));
 
       _.each(this.designDocList, function (view) { view.remove(); view = undefined;});
       this.designDocList = [];

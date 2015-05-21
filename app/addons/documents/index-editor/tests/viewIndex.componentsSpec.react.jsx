@@ -110,7 +110,8 @@ define([
 
     beforeEach(function () {
       container = document.createElement('div');
-
+      $('body').append('<div id="map-function"></div>');
+      $('body').append('<div id="editor"></div>');
       var designDoc = {
         "id": "_design/test-doc",
         "key": "_design/test-doc",

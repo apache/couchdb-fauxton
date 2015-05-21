@@ -18,7 +18,6 @@ app/addons/*
 !app/addons/styletests
 !app/addons/cors
 settings.json*
-i18n.json
 !settings.json.default
 !assets/js/plugins/zeroclipboard/ZeroClipboard.swf
 test/test.config.js

@@ -73,17 +73,7 @@ function (app, FauxtonAPI, Documents, PagingCollection) {
   });
 
   Documents.MangoIndex = Documents.Doc.extend({
-    idAttribute: 'ddoc',
-
-    getId: function () {
-
-      if (this.id) {
-        return this.id;
-      }
-
-
-      return '_all_docs';
-    },
+    idAttribute: 'name',
 
     isNew: function () {
       // never use put
@@ -130,168 +120,22 @@ function (app, FauxtonAPI, Documents, PagingCollection) {
       return res.indexes;
     },
 
-    urlRef: function (context, params) {
+    urlRef: function (params) {
       var database = this.database.safeID(),
           query = '';
 
-      if (!context) {
-        context = 'index-server';
-      }
-
-      return FauxtonAPI.urls('mango', context, database, query);
-    }
-  });
-
-  // MANGO INDEX EDITOR
-  Documents.MangoDoc = Documents.Doc.extend({
-    isMangoDoc: function () {
-      return true;
-    }
-  });
-
-  Documents.MangoDocumentCollection = PagingCollection.extend({
-    model: Documents.MangoDoc,
-    initialize: function (_attr, options) {
-      var defaultLimit = FauxtonAPI.constants.MISC.DEFAULT_PAGE_SIZE;
-
-      this.database = options.database;
-      this.params = _.extend({limit: defaultLimit}, options.params);
-
-      this.paging = _.defaults((options.paging || {}), {
-        defaultParams: _.defaults({}, options.params),
-        hasNext: false,
-        hasPrevious: false,
-        params: {},
-        pageSize: FauxtonAPI.constants.MISC.DEFAULT_PAGE_SIZE,
-        direction: undefined
-      });
-
-      this.paging.params = _.clone(this.paging.defaultParams);
-    },
-
-    url: function () {
-      return this.urlRef.apply(this, arguments);
-    },
-
-    updateSeq: function () {
-      return false;
-    },
-
-    isEditable: function () {
-      return true;
-    },
-
-    setQuery: function (query) {
-      this.query = query;
-      return this;
-    },
-
-    pageSizeReset: function (pageSize, opts) {
-      var options = _.defaults((opts || {}), {fetch: true});
-      this.paging.direction = undefined;
-      this.paging.pageSize = pageSize;
-      this.paging.params = this.paging.defaultParams;
-      this.paging.params.limit = pageSize;
-
-      if (options.fetch) {
-        return this.fetch();
-      }
-    },
-
-    _iterate: function (offset, opts) {
-      var options = _.defaults((opts || {}), {fetch: true});
-
-      this.paging.params = this.calculateParams(this.paging.params, offset, this.paging.pageSize);
-
-      return this.fetch();
-    },
-
-    getPaginatedQuery: function () {
-      var paginatedQuery = JSON.parse(JSON.stringify(this.query));
-
-      if (!this.paging.direction && this.paging.params.limit > 0) {
-        this.paging.direction = 'fetch';
-        this.paging.params.limit = this.paging.params.limit + 1;
-      }
-
-      // just update if NOT provided by editor
-      if (!paginatedQuery.limit) {
-        paginatedQuery.limit = this.paging.params.limit;
-      }
-
-      if (!paginatedQuery.skip) {
-        paginatedQuery.skip = this.paging.params.skip;
-      }
-
-      return paginatedQuery;
-    },
-
-    fetch: function () {
-      var url = this.urlRef(),
-                promise = FauxtonAPI.Deferred(),
-                query = this.getPaginatedQuery();
-
-      $.ajax({
-        type: 'POST',
-        url: url,
-        contentType: 'application/json',
-        dataType: 'json',
-        data: JSON.stringify(query),
-      })
-      .then(function (res) {
-        this.handleResponse(res, promise);
-      }.bind(this))
-      .fail(function (res) {
-        promise.reject(res.responseJSON);
-      }.bind(this));
-
-      return promise;
-    },
-
-    parse: function (resp) {
-      var rows = resp.docs;
-
-      this.paging.hasNext = this.paging.hasPrevious = false;
-
-      this.viewMeta = {
-        total_rows: resp.total_rows,
-        offset: resp.offset,
-        update_seq: resp.update_seq
-      };
-
-      var skipLimit = this.paging.defaultParams.skip || 0;
-      if (this.paging.params.skip > skipLimit) {
-        this.paging.hasPrevious = true;
-      }
-
-      if (rows.length === this.paging.pageSize + 1) {
-        this.paging.hasNext = true;
-
-        // remove the next page marker result
-        rows.pop();
-        this.viewMeta.total_rows = this.viewMeta.total_rows - 1;
-      }
-
-      return rows;
-    },
-
-    handleResponse: function (res, promise) {
-      var models = this.parse(res);
-
-      this.reset(models);
-
-      promise.resolve();
-    },
-
-    urlRef: function (context) {
-      var database = this.database.safeID(),
+      if (params) {
+        if (!_.isEmpty(params)) {
+          query = '?' + $.param(params);
+        } else {
           query = '';
-
-      if (!context) {
-        context = 'query-server';
+        }
+      } else if (this.params) {
+        var parsedParam = Documents.QueryParams.stringify(this.params);
+        query = '?' + $.param(parsedParam);
       }
 
-      return FauxtonAPI.urls('mango', context, database, query);
+      return FauxtonAPI.urls('mango', 'index-apiurl', database, query);
     }
   });
 
@@ -327,10 +171,6 @@ function (app, FauxtonAPI, Documents, PagingCollection) {
       this.databaseId = options.databaseId;
     },
 
-    url: function () {
-      return app.host + '/' + this.databaseId + '/_bulk_docs';
-    },
-
     bulkDelete: function () {
       var payload = this.createPayload(this.toJSON()),
           promise = FauxtonAPI.Deferred(),
@@ -338,7 +178,7 @@ function (app, FauxtonAPI, Documents, PagingCollection) {
 
       $.ajax({
         type: 'POST',
-        url: this.url(),
+        url: app.host + '/' + this.databaseId + '/_bulk_docs',
         contentType: 'application/json',
         dataType: 'json',
         data: JSON.stringify(payload),
@@ -412,27 +252,6 @@ function (app, FauxtonAPI, Documents, PagingCollection) {
         docs: documentList
       };
     }
-  });
-
-  Documents.MangoBulkDeleteDocCollection = Documents.BulkDeleteDocCollection.extend({
-    url: function () {
-      return app.host + '/' + this.databaseId + '/_index/_bulk_delete';
-    },
-
-    createPayload: function (documents) {
-      var documentList = documents
-        .filter(function (doc) {
-          return doc._id !== '_all_docs';
-        })
-        .map(function (doc) {
-          return doc._id;
-        });
-
-      return {
-        docids: documentList
-      };
-    }
-
   });
 
   Documents.IndexCollection = PagingCollection.extend({
@@ -602,10 +421,6 @@ function (app, FauxtonAPI, Documents, PagingCollection) {
     }, {
       title: 'New View',
       url: newUrlPrefix + '/new_view',
-      icon: 'fonticon-plus-circled'
-    }, {
-      title: app.i18n.en_US['new-mango-index'],
-      url: newUrlPrefix + '/_index',
       icon: 'fonticon-plus-circled'
     }];
 
