@@ -218,9 +218,71 @@ define([
       links.each(function () {
         assert.include(this.href, '_custom_path', 'link contains custom path');
       });
+
+      React.unmountComponentAtNode(container);
     });
   });
 
+  describe('DatabaseTable', function () {
+    var container;
+
+    beforeEach(function () {
+      container = document.createElement('div');
+    });
+
+    afterEach(function () {
+      React.unmountComponentAtNode(container);
+    });
+
+    it('adds multiple extra columns if extended', function () {
+      var ColHeader1 = React.createClass({
+        render: function () { return <th>EXTRA COL 1</th>; }
+      });
+      var ColHeader2 = React.createClass({
+        render: function () { return <th>EXTRA COL 2</th>; }
+      });
+      var ColHeader3 = React.createClass({
+        render: function () { return <th>EXTRA COL 3</th>; }
+      });
+
+      FauxtonAPI.registerExtension('DatabaseTable:head', ColHeader1);
+      FauxtonAPI.registerExtension('DatabaseTable:head', ColHeader2);
+      FauxtonAPI.registerExtension('DatabaseTable:head', ColHeader3);
+
+      var table = TestUtils.renderIntoDocument(<Views.DatabaseTable loading={false} body={[]} />, container);
+      var cols = $(table.getDOMNode()).find('th');
+
+      // (default # of rows is 5)
+      assert.equal(cols.length, 8, 'extra columns show up');
+
+      FauxtonAPI.unRegisterExtension('DatabaseTable:head');
+    });
+
+    it('adds multiple extra column in DatabaseRow if extended', function () {
+      var Cell = React.createClass({
+        render: function () { return <td>EXTRA CELL</td>; }
+      });
+
+      FauxtonAPI.registerExtension('DatabaseTable:databaseRow', Cell);
+
+      var row = new Backbone.Model({ name: 'db name' });
+      row.status = {
+        dataSize: function () { return 0; },
+        numDocs: function () { return 0; },
+        updateSeq: function () { return 0; },
+        isGraveYard: function () { return false; }
+      };
+
+      var databaseRow = TestUtils.renderIntoDocument(<Views.DatabaseTable body={[row]} />, container);
+      var links = $(databaseRow.getDOMNode()).find('td');
+
+      // (default # of rows is 5)
+      assert.equal(links.length, 6, 'extra column shows up');
+
+      FauxtonAPI.unRegisterExtension('DatabaseTable:databaseRow');
+    });
+
+  });
 
 });
 

@@ -46,6 +46,28 @@ define([
       });
     });
 
+    describe('#removeItem', function () {
+      var security;
+
+      beforeEach(function () {
+        security = new Models.Security(null, {database: 'fakedb'});
+      });
+
+      it('removes value from section', function () {
+        security.addItem('_user', 'names', 'admins');
+        security.removeItem('_user', 'names', 'admins');
+
+        assert.equal(security.get('admins').names.length, 0);
+      });
+
+      it('ignores non-existing value', function () {
+        security.addItem('_user', 'names', 'admins');
+        security.removeItem('wrong_user', 'names', 'admins');
+        assert.equal(security.get('admins').names.length, 1);
+      });
+
+    });
+
   });
 
 });
