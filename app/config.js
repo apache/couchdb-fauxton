@@ -37,7 +37,8 @@ require.config({
     flux: "../assets/js/libs/flux",
     "es5-shim": "../assets/js/libs/es5-shim",
     "css.escape": "../assets/js/libs/css.escape",
-    moment: '../assets/js/libs/moment'
+    moment: '../assets/js/libs/moment',
+    revTree: '..app/addons/documents/revision-tree'
   },
 
   baseUrl: '/',
