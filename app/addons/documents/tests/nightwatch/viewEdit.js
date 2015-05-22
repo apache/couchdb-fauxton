@@ -35,7 +35,7 @@ module.exports = {
       .clickWhenVisible('button.btn-success.save')
       .checkForStringPresent(viewUrl, 'hasehase5000')
       .waitForElementNotPresent('.loading-lines', waitTime, false)
-      .waitForElementPresent('.prettyprint', waitTime, false)
+      .waitForElementVisible('.prettyprint', waitTime, false)
       .assert.containsText('.prettyprint', 'hasehase5000')
     .end();
   },
@@ -66,7 +66,7 @@ module.exports = {
 
       .checkForStringPresent(viewUrl, 'hasehase6000')
       .waitForElementNotPresent('.loading-lines', waitTime, false)
-      .waitForElementPresent('.prettyprint', waitTime, false)
+      .waitForElementVisible('.prettyprint', waitTime, false)
       .assert.containsText('.prettyprint', 'hasehase6000')
     .end();
   },
@@ -94,7 +94,7 @@ module.exports = {
       .clickWhenVisible('button.save', waitTime, false)
       .checkForStringPresent(viewUrl, '40')
       .waitForElementNotPresent('.loading-lines', waitTime, false)
-      .waitForElementPresent('.prettyprint', waitTime, false)
+      .waitForElementVisible('.prettyprint', waitTime, false)
       .waitForAttribute('.prettyprint', 'textContent', function (docContents) {
         return (/40/).test(docContents);
       })
