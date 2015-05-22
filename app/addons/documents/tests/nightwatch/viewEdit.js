@@ -67,7 +67,9 @@ module.exports = {
       .checkForStringPresent(viewUrl, 'hasehase6000')
       .waitForElementNotPresent('.loading-lines', waitTime, false)
       .waitForElementVisible('.prettyprint', waitTime, false)
-      .assert.containsText('.prettyprint', 'hasehase6000')
+      .waitForAttribute('#doc-list', 'textContent', function (docContents) {
+        return (/hasehase6000/).test(docContents);
+      })
     .end();
   },
 
