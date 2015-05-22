@@ -38,8 +38,9 @@ module.exports = {
       ')
       .execute('$(".save")[0].scrollIntoView();')
       .clickWhenVisible('button.btn-success.save')
-      .waitForElementVisible('#global-notifications .alert.alert-error', waitTime, false)
-      .assert.containsText('#global-notifications .alert.alert-error', '_sum function requires')
+      .waitForAttribute('#global-notifications', 'textContent', function (docContents) {
+        return (/_sum function requires/).test(docContents);
+      })
       .end();
   },
 
@@ -52,8 +53,9 @@ module.exports = {
       .loginToGUI()
       .populateDatabase(newDatabaseName)
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_design/brokenview/_view/brokenview')
-      .waitForElementVisible('#global-notifications .alert.alert-error', waitTime, false)
-      .assert.containsText('#global-notifications .alert.alert-error', '_sum function requires')
+      .waitForAttribute('#global-notifications', 'textContent', function (docContents) {
+        return (/_sum function requires/).test(docContents);
+      })
       .end();
   }
 
