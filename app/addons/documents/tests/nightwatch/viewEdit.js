@@ -18,6 +18,7 @@ module.exports = {
         newDatabaseName = client.globals.testDatabaseName,
         baseUrl = client.globals.test_settings.launch_url;
 
+    var viewUrl = newDatabaseName + '/_design/testdesigndoc/_view/hasenindex5000?limit=6&reduce=false';
     client
       .populateDatabase(newDatabaseName)
       .loginToGUI()
@@ -32,6 +33,7 @@ module.exports = {
       ')
       .execute('$(".save")[0].scrollIntoView();')
       .clickWhenVisible('button.btn-success.save')
+      .checkForStringPresent(viewUrl, 'hasehase5000')
       .waitForElementNotPresent('.loading-lines', waitTime, false)
       .waitForElementPresent('.prettyprint', waitTime, false)
       .assert.containsText('.prettyprint', 'hasehase5000')
@@ -43,6 +45,8 @@ module.exports = {
     var waitTime = client.globals.maxWaitTime,
         newDatabaseName = client.globals.testDatabaseName,
         baseUrl = client.globals.test_settings.launch_url;
+
+    var viewUrl = newDatabaseName + '/_design/testdesigndoc/_view/stubview?limit=6&reduce=false';
 
     client
       .populateDatabase(newDatabaseName)
@@ -57,7 +61,10 @@ module.exports = {
         editor._emit(\'blur\');\
       ')
       .execute('$(".save")[0].scrollIntoView();')
+
       .clickWhenVisible('button.btn-success.save')
+
+      .checkForStringPresent(viewUrl, 'hasehase6000')
       .waitForElementNotPresent('.loading-lines', waitTime, false)
       .waitForElementPresent('.prettyprint', waitTime, false)
       .assert.containsText('.prettyprint', 'hasehase6000')
@@ -70,10 +77,12 @@ module.exports = {
         newDatabaseName = client.globals.testDatabaseName,
         baseUrl = client.globals.test_settings.launch_url;
 
+    var viewUrl = newDatabaseName + '/_design/testdesigndoc/_view/stubview?reduce=true&group_level=0';
+
     client
       .populateDatabase(newDatabaseName)
       .loginToGUI()
-      .url(baseUrl + '/#/database/' + newDatabaseName + '/_design/testdesigndoc/_view/stubview?reduce=true&group_level=0')
+      .url(baseUrl + '/#/database/' + viewUrl)
       .waitForElementPresent('.prettyprint', waitTime, false)
       .assert.containsText('.prettyprint', '20')
       .clickWhenVisible('#reduce-function-selector option[value="_sum"]')
@@ -83,6 +92,7 @@ module.exports = {
       ')
       .execute('$("button.save")[0].scrollIntoView();')
       .clickWhenVisible('button.save', waitTime, false)
+      .checkForStringPresent(viewUrl, '40')
       .waitForElementNotPresent('.loading-lines', waitTime, false)
       .waitForElementPresent('.prettyprint', waitTime, false)
       .waitForAttribute('.prettyprint', 'textContent', function (docContents) {
