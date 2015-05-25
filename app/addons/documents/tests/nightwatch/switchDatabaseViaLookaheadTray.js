@@ -27,10 +27,11 @@ module.exports = {
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
       .clickWhenVisible('#breadcrumbs .lookahead-tray-link')
       .setValue('#breadcrumbs .search-autocomplete', [secondDatabaseName, client.Keys.ENTER])
+      .waitForElementVisible('#breadcrumbs .lookahead-tray-link', waitTime, false)
       .getText('body', function (result) {
 
         // check the breadcrumb title is now the second database name. That indicates a successful redirect
-        client.assert.containsText("#breadcrumbs .lookahead-tray-link", secondDatabaseName);
+        client.assert.containsText('#breadcrumbs .lookahead-tray-link', secondDatabaseName);
       })
 
       .deleteDatabase(secondDatabaseName)

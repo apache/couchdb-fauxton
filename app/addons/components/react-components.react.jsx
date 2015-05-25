@@ -620,6 +620,62 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
     }
   });
 
+  var MenuDropDown = React.createClass({
+
+    getDefaultProps: function () {
+      return {
+        icon: 'fonticon-plus-circled'
+      };
+    },
+
+    createSectionLinks: function (links) {
+      if (!links) { return null; }
+      return links.map(function (link, key) {
+        return (
+          <li key={key}>
+            <a className={link.icon ? 'icon ' + link.icon : ''}
+              data-bypass={link.external ? 'true' : ''}
+              href={link.url}
+              target={link.external ? '_blank' : ''}>
+              {link.title}
+            </a>
+          </li>
+        );
+      });
+    },
+
+    createSectionTitle: function (title) {
+      if (!title) {
+        return null;
+      }
+
+      return (
+        <li className="header-label">{title}</li>
+      );
+    },
+
+    createSection: function () {
+      return this.props.links.map(function (linkSection, key) {
+        return (
+          <ul className="dropdown-menu arrow" key={key} role="menu" aria-labelledby="dLabel">
+            {this.createSectionTitle(linkSection.title)}
+            {this.createSectionLinks(linkSection.links)}
+        </ul>
+      );
+      }.bind(this));
+    },
+
+    render: function () {
+      return (
+        <div className="dropdown">
+          <a className={"dropdown-toggle icon " + this.props.icon} data-toggle="dropdown" href="#" data-bypass="true"></a>
+            {this.createSection()}
+        </div>
+      );
+    }
+
+  });
+
   var ReactComponents = {
     ConfirmButton: ConfirmButton,
     ToggleHeaderButton: ToggleHeaderButton,
@@ -629,7 +685,8 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
     Beautify: Beautify,
     PaddedBorderedBox: PaddedBorderedBox,
     Document: Document,
-    LoadLines: LoadLines
+    LoadLines: LoadLines,
+    MenuDropDown: MenuDropDown
   };
 
   return ReactComponents;

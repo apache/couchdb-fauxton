@@ -18,7 +18,6 @@ define([
   "addons/databases/resources",
 
   // Views
-  "addons/documents/shared-views",
   "addons/documents/views-queryoptions",
 
   //plugins
@@ -26,7 +25,9 @@ define([
 ],
 
 function (app, FauxtonAPI, Components, Documents,
-  Databases, Views, QueryOptions) {
+  Databases, QueryOptions) {
+
+  var Views = {};
 
   function showError (msg) {
     FauxtonAPI.addNotification({

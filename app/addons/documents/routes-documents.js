@@ -30,13 +30,14 @@ define([
   'addons/documents/pagination/pagination.react',
   'addons/documents/header/header.react',
   'addons/documents/header/header.actions',
+  'addons/documents/sidebar/actions',
   'addons/documents/designdocinfo/actions',
   'addons/documents/designdocinfo/components.react'
 ],
 
 function (app, FauxtonAPI, BaseRoute, Documents, Changes, ChangesActions, DocEditor,
   Databases, Resources, Components, PaginationStores, IndexResultsActions,
-  IndexResultsComponents, ReactPagination, ReactHeader, ReactActions,
+  IndexResultsComponents, ReactPagination, ReactHeader, ReactActions, SidebarActions,
   DesignDocInfoActions, DesignDocInfoComponents) {
 
     var DocumentsRouteObject = BaseRoute.extend({
@@ -97,7 +98,8 @@ function (app, FauxtonAPI, BaseRoute, Documents, Changes, ChangesActions, DocEdi
         });
         this.setComponent("#dashboard-lower-content", DesignDocInfoComponents.DesignDocInfo);
 
-        this.sidebar.setSelectedTab(app.utils.removeSpecialCharacters(ddoc) + "_metadata");
+        SidebarActions.setSelectedTab(app.utils.removeSpecialCharacters(ddoc) + "_metadata");
+
         this.leftheader.updateCrumbs(this.getCrumbs(this.database));
         this.rightHeader.hideQueryOptions();
 
@@ -125,11 +127,12 @@ function (app, FauxtonAPI, BaseRoute, Documents, Changes, ChangesActions, DocEdi
         this.database.buildAllDocs(docParams);
         collection = this.database.allDocs;
 
+        var tab = 'all-docs';
         if (docParams.startkey && docParams.startkey.indexOf("_design") > -1) {
-          this.sidebar.setSelectedTab("design-docs");
-        } else {
-          this.sidebar.setSelectedTab("all-docs");
+          tab = 'design-docs';
         }
+
+        SidebarActions.setSelectedTab(tab);
 
         this.removeComponent('#dashboard-upper-content');
 
@@ -157,11 +160,10 @@ function (app, FauxtonAPI, BaseRoute, Documents, Changes, ChangesActions, DocEdi
         this.rightHeader.showQueryOptions();
       },
 
+      //TODO: REMOVE
       reloadDesignDocs: function (event) {
-        this.sidebar.forceRender();
-
         if (event && event.selectedTab) {
-          this.sidebar.setSelectedTab(event.selectedTab);
+          SidebarActions.setSelectedTab(event.selectedTab);
         }
       },
 
@@ -177,7 +179,7 @@ function (app, FauxtonAPI, BaseRoute, Documents, Changes, ChangesActions, DocEdi
 
         this.viewEditor && this.viewEditor.remove();
 
-        this.sidebar.setSelectedTab('changes');
+        SidebarActions.setSelectedTab('changes');
         this.leftheader.updateCrumbs(this.getCrumbs(this.database));
         this.rightHeader.hideQueryOptions();
 
