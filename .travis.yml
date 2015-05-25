@@ -1,51 +1,25 @@
-language: erlang
-otp_release:
-   - 17.4
+language: node_js
+node_js:
+- '0.10'
 git:
   depth: 10
-
+services:
+- couchdb
 addons:
-  firefox: "38.0.1"
+  sauce_connect: true
 before_install:
-  - sudo apt-get update -qq
-  - sudo apt-get install -qq flashplugin-installer
-  - sudo apt-get -y install libicu-dev libmozjs-dev pkg-config help2man libcurl4-openssl-dev
-  - sudo apt-get -y install libtool automake autoconf autoconf-archive
-  - sudo apt-get -y install haproxy
-
-  - nvm install 0.10 && nvm use 0.10
-
-  - cd ..
-  - git clone --depth=100 https://github.com/apache/couchdb
-  - cd couchdb
-  - git reset --hard d881dcf5ac990c44d00b2cd49c0e4ff67ae861c5
-  - ./configure
-  - make
-  - ./dev/run --admin=tester:testerpass &
-  - haproxy -f rel/haproxy.cfg &
-  - cd .. && cd couchdb-fauxton
-  - npm install
-
-  - export DISPLAY=:99.0
-  - "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1400x900x16"
-
+- HOST="http://127.0.0.1:5984"
+- curl -X PUT $HOST/_config/admins/tester -d '"testerpass"'
 before_script:
-  - ./node_modules/grunt-cli/bin/grunt test
-  - ./node_modules/grunt-cli/bin/grunt dev &
-  - sleep 25
+- npm install -g grunt-cli
+- grunt test
+- grunt dev &
 script:
-  - ./node_modules/grunt-cli/bin/grunt nightwatch
-notifications:
-  irc:
-    channels:
-      - "chat.freenode.net#couchdb-dev"
-    template:
-      - "%{repository}#%{build_number} (%{branch} - %{commit} : %{author}): %{message} Amazing details: %{build_url}"
-    skip_join: true
-    on_success: "never"
-    on_failure: "change"
-
-cache: apt
-
-git:
-  depth: 1
+  - grunt nightwatch_saucelabs
+branches:
+  only:
+    - master
+env:
+  global:
+  - secure: GZfXnEV5hwH5FKcnbFK57WZLy2C8i650rCFFU4JaHNMNqsqGN/FH4CNyPO//BveZRQWJFRAaH7WclK/4L45NeX4/iufwGf8ypcGR2GvzQtGe1VdoQCNiiDv42BVvX7riT9aCcCdJNqjoKRIL9NkFo+gln1hEymZrQGUC7dojeFY=
+  - secure: THafpI+3svqxOa9gf5wFxuF/QIngKPlNpKPo7rKTnI76pfTuG7MGeBw1S1Da3hkMx3XIYciHcoqnb7LEwI7+s6UWA7eLA1FBcsRqJbSDI5VqSfOcYVJ05oFQ21/Iofk8r8R/LtJGQWwwZxem6P74cwu2iR2VcuWdImSHGiESOKg=
