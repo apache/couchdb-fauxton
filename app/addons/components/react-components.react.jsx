@@ -71,6 +71,7 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
         theme: 'idle_fingers',
         fontSize: 13,
         code: '',
+        showEditorOnly: false,
         showGutter: true,
         highlightActiveLine: true,
         showPrintMargin: false,
@@ -254,6 +255,10 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
     },
 
     render: function () {
+      if (this.props.showEditorOnly) {
+        return (<div ref="ace" className="js-editor" id={this.props.id}></div>);
+      }
+
       return (
         <div className="control-group">
           {this.getTitleFragment()}
