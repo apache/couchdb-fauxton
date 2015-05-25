@@ -392,7 +392,12 @@ module.exports = function (grunt) {
       check_selenium: initHelper.check_selenium,
       start_nightWatch: {
         command: __dirname + '/node_modules/nightwatch/bin/nightwatch' +
-        ' -c ' + __dirname + '/test/nightwatch_tests/nightwatch.json'
+        ' -c ' + __dirname + '/test/nightwatch_tests/nightwatch.json' +
+       },   
+      
+      start_nightWatch_saucelabs: {    
+        command: 'sleep 30s; '+ __dirname + '/node_modules/nightwatch/bin/nightwatch' +    
+        ' -e saucelabs -c ' + __dirname + '/test/nightwatch_tests/nightwatch.json'
       }
     },
 
@@ -402,7 +407,8 @@ module.exports = function (grunt) {
         settings: initHelper.readSettingsFile(),
         template: 'test/nightwatch_tests/nightwatch.json.underscore',
         dest: 'test/nightwatch_tests/nightwatch.json'
-      }
+      },
+
     },
 
     // these rename the already-bundled, minified requireJS and CSS files to include their hash
@@ -533,5 +539,6 @@ module.exports = function (grunt) {
    * Nightwatch functional testing
    */
   //Start Nightwatch test from terminal, using: $ grunt nightwatch
+  grunt.registerTask('nightwatch_saucelabs', [ 'initNightwatch', 'exec:start_nightWatch_saucelabs']);
   grunt.registerTask('nightwatch', [ 'exec:check_selenium', 'initNightwatch', 'exec:start_nightWatch']);
 };
