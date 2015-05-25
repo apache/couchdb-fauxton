@@ -24,8 +24,8 @@ module.exports = {
       .populateDatabase(newDatabaseName)
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
       .waitForElementPresent(dropDownElement, waitTime, false)
-      .click(dropDownElement + ' a')
-      .click(dropDownElement + ' a[href*="new_view"]')
+      .clickWhenVisible(dropDownElement + ' a', waitTime, false)
+      .clickWhenVisible(dropDownElement + ' a[href*="new_view"]', waitTime, false)
       .waitForElementVisible('#new-ddoc', waitTime, false)
       .setValue('#new-ddoc', 'test_design_doc-selenium-bad-reduce')
       .clearValue('#index-name')
@@ -37,7 +37,9 @@ module.exports = {
         editor.getSession().setValue("function (doc) { emit(\'boom\', doc._id); }");\
       ')
       .execute('$(".save")[0].scrollIntoView();')
-      .click('button.btn-success.save')
+      .waitForElementPresent('button.btn.btn-success.save', waitTime, false)
+      .clickWhenVisible('button.btn-success.save', waitTime, false)
+      .waitForElementVisible('.global-notification', waitTime, false)
       .waitForElementVisible('.alert-error', waitTime, false)
       .assert.containsText('.alert-error', '_sum function requires')
       .end();
@@ -52,6 +54,7 @@ module.exports = {
       .loginToGUI()
       .populateDatabase(newDatabaseName)
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_design/brokenview/_view/brokenview')
+      .waitForElementVisible('.global-notification', waitTime, false)
       .waitForElementVisible('.alert-error', waitTime, false)
       .assert.containsText('.alert-error', '_sum function requires')
       .end();
