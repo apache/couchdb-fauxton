@@ -39,7 +39,7 @@ function (app, FauxtonAPI, Compaction, Actions, Databases, BaseRoute) {
 
       this.createDesignDocsCollection();
       this.addLeftHeader();
-      this.addSidebar('docLink_compact');
+      this.addSidebar('compact');
     },
 
     onSelectDatabase: function (dbName) {

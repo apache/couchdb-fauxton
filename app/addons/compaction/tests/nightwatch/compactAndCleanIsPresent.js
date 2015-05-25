@@ -22,7 +22,7 @@ module.exports = {
 
       //navigate to 'Compact & Clean' view
       .clickWhenVisible('#dashboard-content a[href="#/database/' + newDatabaseName + '/_all_docs"]')
-      .clickWhenVisible('#docLink_compact')
+      .clickWhenVisible('#compact')
       .waitForElementVisible('#compact-db', waitTime, false)
       .waitForElementVisible('#cleanup-views', waitTime, false)
       .end();

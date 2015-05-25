@@ -36,6 +36,7 @@ module.exports = {
       .mouseButtonDown('left')
       .mouseButtonUp('left')
       .closeNotification()
+      .clickWhenVisible('.search-autocomplete', waitTime, false)
       .setValue('.search-autocomplete', '')
       .keys([controlOrCommandKey, 'v'])
       .assert.value('.search-autocomplete', 'http://localhost:8000/_all_dbs')
