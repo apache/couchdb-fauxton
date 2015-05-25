@@ -45,6 +45,7 @@ define([
       });
 
       afterEach(function () {
+        spy.restore();
         Stores.changesStore.reset();
         React.unmountComponentAtNode(container);
       });

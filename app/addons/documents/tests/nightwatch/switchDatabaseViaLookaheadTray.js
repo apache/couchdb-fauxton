@@ -25,8 +25,7 @@ module.exports = {
 
       // now select the first database, and select the second db from the lookahead tray
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
-      .waitForElementPresent('#breadcrumbs .lookahead-tray-link', waitTime, false)
-      .click('#breadcrumbs .lookahead-tray-link')
+      .clickWhenVisible('#breadcrumbs .lookahead-tray-link')
       .setValue('#breadcrumbs .search-autocomplete', [secondDatabaseName, client.Keys.ENTER])
       .getText('body', function (result) {
 

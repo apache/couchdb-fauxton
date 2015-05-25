@@ -10,15 +10,31 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+var newDatabaseName = 'fauxton-selenium-tests-db-create';
+var helpers = require('../../../../../test/nightwatch_tests/helpers/helpers.js');
 module.exports = {
+
+  before: function (client, done) {
+    var nano = helpers.getNanoInstance();
+    nano.db.destroy(newDatabaseName, function (err, body, header) {
+      done();
+    });
+  },
+
+  after: function (client, done) {
+    var nano = helpers.getNanoInstance();
+    nano.db.destroy(newDatabaseName, function (err, body, header) {
+      done();
+    });
+  },
+
   'Creates a Database' : function (client) {
     var waitTime = client.globals.maxWaitTime,
-        newDatabaseName = client.globals.testDatabaseName,
         baseUrl = client.globals.test_settings.launch_url;
 
     client
       .loginToGUI()
-      .deleteDatabase(newDatabaseName) //need to delete the automatic database 'fauxton-selenium-tests' that has been set up before each test
+      .checkForDatabaseDeleted(newDatabaseName, waitTime)
       .url(baseUrl)
 
       // ensure the page has fully loaded
@@ -28,9 +44,7 @@ module.exports = {
       .waitForElementVisible('#js-new-database-name', waitTime, false)
       .setValue('#js-new-database-name', [newDatabaseName])
       .clickWhenVisible('#js-create-database', waitTime, false)
-      .waitForAttribute('#global-notifications', 'textContent', function (successAlertText) {
-        return (/Database created successfully/).test(successAlertText);
-      })
+      .checkForDatabaseCreated(newDatabaseName, waitTime)
       .url(baseUrl + '/_all_dbs')
       .waitForElementVisible('html', waitTime, false)
       .getText('html', function (result) {

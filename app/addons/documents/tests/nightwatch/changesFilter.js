@@ -25,6 +25,11 @@ module.exports = {
       .createDocument('doc_1', newDatabaseName)
       .createDocument('doc_2', newDatabaseName)
       .createDocument('doc_3', newDatabaseName)
+
+      .checkForStringPresent(newDatabaseName + '/_changes', 'doc_1')
+      .checkForStringPresent(newDatabaseName + '/_changes', 'doc_2')
+      .checkForStringPresent(newDatabaseName + '/_changes', 'doc_3')
+
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_changes')
 
       // confirm all 3 changes are there

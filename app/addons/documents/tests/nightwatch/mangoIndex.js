@@ -25,7 +25,6 @@ module.exports = {
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_index')
       .waitForElementPresent('.prettyprint', waitTime, false)
       .waitForElementNotPresent('.loading-lines', waitTime, false)
-      .assert.containsText('.editor-description', 'is an easy way to find documents on predefined indexes')
       .execute('\
         var json = \'{\
           "index": {\
@@ -39,9 +38,9 @@ module.exports = {
       ')
       .execute('$(".save")[0].scrollIntoView();')
       .clickWhenVisible('button.btn-success.save')
-
-      .waitForElementVisible('#global-notifications .alert.alert-success', waitTime, false)
-      .waitForElementNotVisible('#global-notifications .alert.alert-success', waitTime, false)
+      .checkForStringPresent(newDatabaseName + '/_index', 'rocko-artischocko')
+      .checkForStringPresent(newDatabaseName + '/_index', 'gans_gans_mango')
+      .waitForElementPresent('.prettyprint', waitTime, false)
       .assert.containsText('#dashboard-lower-content', 'gans_gans_mango')
     .end();
   },
@@ -63,8 +62,8 @@ module.exports = {
       .clickWhenVisible('.control-delete')
       .acceptAlert()
 
-      .waitForElementVisible('#global-notifications .alert.alert-info', waitTime, false)
-      .waitForElementNotVisible('#global-notifications .alert.alert-info', waitTime, false)
+      .checkForStringNotPresent(newDatabaseName + '/_index', '"name":"rocko-artischocko"')
+      .checkForStringNotPresent(newDatabaseName + '/_index', 'gans_gans_mango')
       .getText('body', function (result) {
         var data = result.value;
 

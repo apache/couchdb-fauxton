@@ -24,7 +24,7 @@ module.exports = {
       .clickWhenVisible('#toggle-query', waitTime, false)
       .clickWhenVisible('[data-action="showByKeys"]', waitTime, false)
       .setValue('#keys-input', '["document_1"]')
-      .click('#query-options .btn-success')
+      .clickWhenVisible('#query-options .btn-success')
       .waitForElementNotPresent('#right-content [data-id="document_2"]', waitTime, false)
       .assert.elementNotPresent('#right-content [data-id="document_2"]')
       .assert.elementNotPresent('#right-content [data-id="document_0"]')
