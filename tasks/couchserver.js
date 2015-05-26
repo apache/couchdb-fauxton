@@ -47,7 +47,7 @@ module.exports = function (grunt) {
 
     http.createServer(function (req, res) {
       var url = req.url.replace('app/', ''),
-          accept = req.headers.accept.split(','),
+          accept = req.headers.accept && req.headers.accept.split(','),
           filePath;
 
       if (setContentSecurityPolicy) {
@@ -79,7 +79,7 @@ module.exports = function (grunt) {
         testSetup.stdout.pipe(process.stdout);
         testSetup.stderr.pipe(process.stderr);
         filePath = path.join('./test/runner.html');
-      } else if (url === '/' && accept[0] !== 'application/json') {
+      } else if (url === '/' && accept && accept[0] !== 'application/json') {
         // serve main index file from here
         filePath = path.join(dist_dir, 'index.html');
       }
