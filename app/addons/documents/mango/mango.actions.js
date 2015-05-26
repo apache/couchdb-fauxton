@@ -55,37 +55,46 @@ function (app, FauxtonAPI, Documents, ActionTypes, Stores, PaginationStores, Ind
         clear: true
       });
 
-      mangoIndex.save().then(function (res) {
-        var url = '#' + FauxtonAPI.urls('mango', 'query-app', options.database.safeID());
+      mangoIndex
+        .save()
+        .then(function (res) {
+          var url = '#' + FauxtonAPI.urls('mango', 'query-app', options.database.safeID());
 
-        FauxtonAPI.dispatch({
-          type: ActionTypes.MANGO_NEW_QUERY_FIND_CODE_FROM_FIELDS,
-          options: {
-            fields: queryCode.index.fields
-          }
-        });
-
-        var mangoIndexCollection = new Documents.MangoIndexCollection(null, {
-          database: options.database,
-          params: null,
-          paging: {
-            pageSize: PaginationStores.indexPaginationStore.getPerPage()
-          }
-        });
-
-        this.getIndexList({indexList: mangoIndexCollection}).then(function () {
-
-          IndexResultActions.reloadResultsList();
-
-          FauxtonAPI.addNotification({
-            msg:  'Index is ready for querying. <a href="' + url + '">Run a Query.</a>',
-            type: 'success',
-            clear: true,
-            escape: false
+          FauxtonAPI.dispatch({
+            type: ActionTypes.MANGO_NEW_QUERY_FIND_CODE_FROM_FIELDS,
+            options: {
+              fields: queryCode.index.fields
+            }
           });
-        }.bind(this));
 
-      }.bind(this));
+          var mangoIndexCollection = new Documents.MangoIndexCollection(null, {
+            database: options.database,
+            params: null,
+            paging: {
+              pageSize: PaginationStores.indexPaginationStore.getPerPage()
+            }
+          });
+
+          this.getIndexList({indexList: mangoIndexCollection}).then(function () {
+
+            IndexResultActions.reloadResultsList();
+
+            FauxtonAPI.addNotification({
+              msg: 'Index is ready for querying. <a href="' + url + '">Run a Query.</a>',
+              type: 'success',
+              clear: true,
+              escape: false
+            });
+          }.bind(this));
+
+        }.bind(this))
+        .fail(function (res) {
+          FauxtonAPI.addNotification({
+            msg: res.responseJSON.reason,
+            type: 'error',
+            clear: true
+          });
+        });
     },
 
     mangoResetIndexList: function (options) {
