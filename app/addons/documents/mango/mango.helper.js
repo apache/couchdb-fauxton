@@ -20,7 +20,7 @@ define([
 
     nameArray = doc.get('def').fields.reduce(function (acc, el, i) {
       if (i === 0) {
-        acc.push('json: ' + Object.keys(el)[0]);
+        acc.push(doc.get('type') + ': ' + Object.keys(el)[0]);
       } else {
         acc.push(Object.keys(el)[0]);
       }
