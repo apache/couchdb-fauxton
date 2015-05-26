@@ -20,7 +20,7 @@ define([
   var DatabasesStore = FauxtonAPI.Store.extend({
 
     initialize: function () {
-      this._collection = {};
+      this._collection = new Backbone.Collection();
       this._loading = false;
       this._promptVisible = false;
     },
