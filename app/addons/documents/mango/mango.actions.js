@@ -56,7 +56,7 @@ function (app, FauxtonAPI, Documents, ActionTypes, Stores, PaginationStores, Ind
       });
 
       mangoIndex.save().then(function (res) {
-        var url = FauxtonAPI.urls('mango', 'query-app', options.database.safeID());
+        var url = '#' + FauxtonAPI.urls('mango', 'query-app', options.database.safeID());
 
         FauxtonAPI.dispatch({
           type: ActionTypes.MANGO_NEW_QUERY_FIND_CODE_FROM_FIELDS,
