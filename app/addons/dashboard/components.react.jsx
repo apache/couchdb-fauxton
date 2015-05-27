@@ -14,10 +14,10 @@ define([
   'app',
   'api',
   'react',
-  'addons/activetasks/stores'
-], function (App, FauxtonAPI, React, ActiveTaskStore) {
+  'addons/dashboard/stores'
+], function (App, FauxtonAPI, React, Store) {
 
-  var activeTaskList = ActiveTaskStore.activeTasksStore;
+  var activeTaskList = Store.dashboardStore;
 
   var DashboardController = React.createClass({
 
@@ -66,11 +66,11 @@ define([
       var isEmpty = this.props.isEmpty;
       return (
         <div className="widget-container active-task-box">
-          <div className = "widget-header">
+          <div className="widget-header">
             <span>Active Tasks</span>
           </div>
-          <hr className = "widget-header-separator"/>
-          <div className = "active-task-table">
+          <hr className="widget-header-separator"/>
+          <div className="active-task-table">
             <ActiveTaskTable collection={collection} isEmpty={isEmpty}/>
           </div>
         </div>
@@ -90,6 +90,12 @@ define([
       return this.getStoreState();
     },
 
+    componentWillReceiveProps: function (nextProps) {
+      this.setState({
+        filteredTable: activeTaskList.getFilteredTable(this.props.collection)
+      });
+    },
+
     createRows: function () {
       var isThereResults = this.props.isEmpty;
       if (this.state.filteredTable.length === 0) {
@@ -104,7 +110,7 @@ define([
     noActiveTasks: function () {
       return (
         <tr>
-          <td className = "noResult">No active tasks.</td>
+          <td className="noResult">No active tasks.</td>
         </tr>
         );
     },
@@ -112,7 +118,7 @@ define([
     noActiveTasksMatchFilter: function () {
       return (
         <tr>
-          <td className = "noResult">No active tasks match with filter.</td>
+          <td className="noResult">No active tasks match with filter.</td>
         </tr>
         );
     },
@@ -120,13 +126,13 @@ define([
     render: function () {
       var rows = this.createRows();
       return (
-        <table className = "widget-activeTask-table">
+        <table className="widget-activeTask-table">
           <thead>
             <tr>
-              <th className = "pid-column">PID</th>
-              <th className = "type-column">Type</th>
-              <th className = "progress-column">Progress</th>
-              <th className = "updateOn-column">Updated On</th>
+              <th className="pid-column">PID</th>
+              <th className="type-column">Type</th>
+              <th className="progress-column">Progress</th>
+              <th className="updateOn-column">Updated On</th>
             </tr>
           </thead>
           <tbody>
@@ -151,10 +157,10 @@ define([
       var rowData = this.getInfo(this.props.item);
       return (
         <tr>
-          <td className = "pid-column">{rowData.pid}</td>
-          <td className = "type-column">{rowData.type}</td>
-          <td className = "progress-column">{rowData.progress}</td>
-          <td className = "updateOn-column">{rowData.updated_on}</td>
+          <td className="pid-column">{rowData.pid}</td>
+          <td className="type-column">{rowData.type}</td>
+          <td className="progress-column">{rowData.progress}</td>
+          <td className="updateOn-column">{rowData.updated_on}</td>
         </tr>
         );
     }

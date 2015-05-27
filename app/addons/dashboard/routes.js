@@ -15,11 +15,10 @@ define([
   "api",
   "addons/dashboard/resources",
   "addons/dashboard/components.react",
-  'addons/activetasks/resources',
-  'addons/activetasks/actions'
+  'addons/dashboard/actions'
 ],
 
-function (app, FauxtonAPI, Resources, Components, ActiveTasksResources, Actions) {
+function (app, FauxtonAPI, Resources, Components, Actions) {
 
   var DashboardRoutObject = FauxtonAPI.RouteObject.extend({
     layout : 'one_pane',
@@ -37,7 +36,7 @@ function (app, FauxtonAPI, Resources, Components, ActiveTasksResources, Actions)
     selectedHeader: "Dashboard",
 
     initialize: function () {
-      this.allTasks = new ActiveTasksResources.AllTasks();
+      this.allTasks = new Resources.AllTasks();
     },
 
     showDashboard: function () {

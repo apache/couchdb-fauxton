@@ -13,18 +13,38 @@
 define([
   "app",
 
-  "api",
-
-  // Modules
-  "addons/documents/resources"
+  "api"
 ],
+function (app, FauxtonAPI) {
+  var Dashboard = {};
 
-function (app, FauxtonAPI, Documents) {
-  var Resources = {};
+  Dashboard.AllTasks = Backbone.Collection.extend({
 
-  Resources.Hello = FauxtonAPI.View.extend({
+    url: function () {
+      return app.host + '/_active_tasks';
+    },
+
+    pollingFetch: function () { //still need this for the polling
+      this.fetch({reset: true, parse: true});
+      return this;
+    },
+
+    parse: function (resp) {
+      //no more backbone models, collection is converted into an array of objects
+      var collectionTable = [];
+
+      _.each(resp, function (item) {
+        collectionTable.push(item);
+      });
+
+      //collection is an array of objects
+      this.table = collectionTable;
+      return resp;
+    },
+
+    table: []
 
   });
 
-  return Resources;
+  return Dashboard;
 });
