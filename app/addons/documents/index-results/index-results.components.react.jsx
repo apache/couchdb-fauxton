@@ -66,7 +66,6 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, Documents) {
       return _.map(this.props.results, function (doc, i) {
 
         var splitArr = (doc.url).split("/");
-        var docID = JSON.parse(doc.content)._id;
         var winner = JSON.parse(doc.content)._rev;
 
         return (
@@ -82,7 +81,7 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, Documents) {
            isDeletable={doc.isDeletable}
            docIdentifier={doc.id} >
            {doc.url ? this.getUrlFragment('#' + doc.url) : doc.url}
-           {this.getRevTreeUrlFragment('#' + splitArr[2] + '/' + docID + '/_revtree/' + winner)}
+           {this.getRevTreeUrlFragment('#' + splitArr[2] + '/' + doc.id + '/_revtree/' + winner)}
          </Components.Document>
        );
       }, this);

@@ -1,7 +1,7 @@
 define([
-  "app",
-  "api",
-  "react",
+  'app',
+  'api',
+  'react',
   'addons/documents/revision-tree/stores',
   'addons/documents/revision-tree/actions',
 ],
@@ -9,9 +9,7 @@ define([
 function (app, FauxtonAPI, React, Stores) {
 
   var store = Stores.revTreeStore;
-  var lineObjs = [];
-  var nodeObjs = [];
-  var textObjs = [];
+  // var nodeObjs = [];
   var grid = 100;
   var scale = 7;
   var r = 15;
@@ -124,9 +122,10 @@ function (app, FauxtonAPI, React, Stores) {
     var maxX = grid;
     var maxY = grid;
     var levelCount = []; // numer of nodes on some level (pos)
-    lineObjs.length = 0;
-    nodeObjs.length = 0;
-    textObjs.length = 0;
+    var lineObjs = [];
+    // nodeObjs.length = 0;
+    var nodeObjs = [];
+    var textObjs = [];
 
     var map = {}; // map from rev to position
 
@@ -171,12 +170,18 @@ function (app, FauxtonAPI, React, Stores) {
         maxY = Math.max(y, maxY);
         levelCount[pos]++;
 
-        node (x, y, rev, isLeaf, rev in deleted, rev === winner, minUniq);
+        node (x, y, rev, isLeaf, rev in deleted, rev === winner, minUniq, textObjs, nodeObjs);
         map[rev] = [x, y];
       }
     }
 
     paths.forEach(drawPath);
+
+    return {
+      "lineObjs": lineObjs,
+      "textObjs": textObjs,
+      "nodeObjs": nodeObjs
+    };
   };
 
   var minUniqueLength = function (arr) {
@@ -204,8 +209,8 @@ function (app, FauxtonAPI, React, Stores) {
     return com;
   };
 
-  function node(x, y, rev, isLeaf, isDeleted, isWinner, shortDescLen) {
-    circ(x, y, r, isLeaf, isDeleted, isWinner);
+  function node(x, y, rev, isLeaf, isDeleted, isWinner, shortDescLen, textObjs, nodeObjs) {
+    circ(x, y, r, isLeaf, isDeleted, isWinner, nodeObjs);
     var pos = rev.split('-')[0];
     var id = rev.split('-')[1];
     var opened = false;
@@ -220,18 +225,18 @@ function (app, FauxtonAPI, React, Stores) {
     textObjs.push(textObj);
   }
 
-  var circ = function (x, y, r, isLeaf, isDeleted, isWinner) {
+  var circ = function (x, y, r, isLeaf, isDeleted, isWinner, nodeObjs) {
 
-    var leafStat = "";
+    var leafStat = '';
 
     if (isLeaf) {
-      leafStat = "leaf";
+      leafStat = 'leaf';
     }
     if (isWinner) {
-      leafStat = "winner";
+      leafStat = 'winner';
     }
     if (isDeleted) {
-      leafStat = "deleted";
+      leafStat = 'deleted';
     }
 
     var nodeObj = {
@@ -295,7 +300,6 @@ function (app, FauxtonAPI, React, Stores) {
             allRevs.push(rev);
           }
 
-          i--;
         });
 
         return revs.ids.map(function (id, i) {
@@ -307,11 +311,11 @@ function (app, FauxtonAPI, React, Stores) {
         return rev.split('-')[1];
       }));
 
-      draw(paths, deleted, winner, minUniq);
+      var treeComponents = draw(paths, deleted, winner, minUniq);
 
-      var lines = lineObjs;
-      var treeNodes = nodeObjs;
-      var nodeTextObjs = textObjs;
+      var lines = treeComponents.lineObjs;
+      var nodeTextObjs = treeComponents.textObjs;
+      var treeNodes = treeComponents.nodeObjs;
 
       return (
         <div>
