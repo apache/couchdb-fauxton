@@ -26,5 +26,19 @@ module.exports = {
       .clickWhenVisible('.breadcrumb-back-link .fonticon-left-open')
       .waitForElementPresent('.js-changes-view', waitTime)
     .end();
+  },
+
+  'Mango: Navigate back works correctly': function (client) {
+    var waitTime = client.globals.maxWaitTime,
+        newDatabaseName = client.globals.testDatabaseName,
+        baseUrl = client.globals.test_settings.launch_url;
+
+    client
+      .populateDatabase(newDatabaseName, 3)
+      .loginToGUI()
+      .url(baseUrl + '/#/database/' + newDatabaseName + '/_index')
+      .clickWhenVisible('.breadcrumb-back-link .fonticon-left-open')
+      .assert.urlContains('_all_docs')
+    .end();
   }
 };
