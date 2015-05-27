@@ -1,0 +1,31 @@
+#!/usr/bin/env node
+
+var optimist = require('optimist')
+  .usage('Fauxton server \nUsage: $0')
+  .options('couchdb', {
+    alias : 'c',
+    default : 'http://localhost:5984',
+    describe: 'Url to your CouchDB instance'
+  })
+  .options('port', {
+    alias : 'p',
+    default : 8000,
+    describe: 'Local port that Fauxton will run on'
+  })
+  .options('help', {
+    alias : 'h',
+    describe: 'Show this message'
+  })
+  .options('contentSecurityPolicy', {
+    alias : 'csp',
+    default : true,
+    describe: 'Configure the content security policy'
+  });
+
+var argv = optimist.argv;
+
+if (argv.help || argv.h) {
+  return optimist.showHelp(console.log);
+}
+
+var server = require('..')(argv);

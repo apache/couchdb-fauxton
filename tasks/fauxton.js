@@ -116,6 +116,12 @@ module.exports = function (grunt) {
     var fileSrc = grunt.option('file') || data.files.src;
     var testFiles =  grunt.file.expand(fileSrc);
 
+    // filter out any tests that aren't found in the /app/ folder. For scripts that are extending Fauxton, we still
+    // know that all addons will have been copied into /app. This prevent tests being ran twice
+    testFiles = _.filter(testFiles, function (filePath) {
+      return /\/app\//.test(filePath);
+    });
+
     var configTemplate = _.template(grunt.file.read(configTemplateSrc));
     // a bit of a nasty hack to read our current config.js and get the info so we can change it
     // for our testing setup

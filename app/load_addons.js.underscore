@@ -16,7 +16,7 @@
  * THIS IS A GENERATED FILE. DO NOT EDIT.
  */
 define([
-  <%= '"' + deps.join('","') + '"' %>
+  <%= '"' + deps.join('",\n"') + '"' %>
 ],
 function () {
   var LoadAddons = {

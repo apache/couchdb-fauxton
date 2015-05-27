@@ -56,6 +56,8 @@ define([
 
     canShowPrevious: function () {
       if (!this._enabled) { return false; }
+      if (!this._collection.hasPrevious) { return false; }
+
       return this._collection.hasPrevious();
     },
 
@@ -65,6 +67,8 @@ define([
       if ((this._pageStart + this._perPage) >= this._docLimit) {
         return false;
       }
+
+      if (!this._collection.hasNext) { return false; }
 
       return this._collection.hasNext();
     },
@@ -148,6 +152,7 @@ define([
     },
 
     getUpdateSeq: function () {
+      if (!this._collection.updateSeq) { return false; }
       return this._collection.updateSeq();
     },
 

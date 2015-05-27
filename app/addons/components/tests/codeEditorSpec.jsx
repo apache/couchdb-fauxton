@@ -111,5 +111,24 @@ define([
 
     });
 
+    describe('showEditorOnly', function () {
+
+      it('only shows editor when showEditorOnly=true', function () {
+        codeEditorEl = TestUtils.renderIntoDocument(
+          <ReactComponents.CodeEditor code={code} showEditorOnly={true} />,
+          container
+        );
+        assert.notOk($(codeEditorEl.getDOMNode()).hasClass('control-group'));
+      });
+
+      it('shows everything by default', function () {
+        var codeEditorEl = TestUtils.renderIntoDocument(
+          <ReactComponents.CodeEditor code={code} />,
+          container
+        );
+        assert.ok($(codeEditorEl.getDOMNode()).hasClass('control-group'));
+      });
+
+    });
   });
 });

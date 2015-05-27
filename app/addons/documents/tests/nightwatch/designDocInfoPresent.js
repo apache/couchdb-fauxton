@@ -11,23 +11,16 @@
 // the License.
 
 module.exports = {
-  'Run the Verification test' : function (client) {
+  'Design Doc Metadata present' : function (client) {
     var waitTime = client.globals.maxWaitTime,
+        newDatabaseName = client.globals.testDatabaseName,
         baseUrl = client.globals.test_settings.launch_url;
 
     client
+      .populateDatabase(newDatabaseName)
       .loginToGUI()
-      .url(baseUrl + '#verifyinstall')
-      .clickWhenVisible('#start')
-      .waitForElementVisible('.alert-success', waitTime, false)
-      .getText('html', function (result) {
-        var testPassed = result.value.indexOf('Success! Your CouchDB installation is working. Time to Relax.') !== -1;
-        if (!testPassed) {
-          console.error(result.value);
-        }
-
-        this.verify.ok(testPassed, 'Checking the verification set passed.');
-      })
+      .url(baseUrl + '/#/database/' + newDatabaseName + '/_design/testdesigndoc/_info')
+      .waitForElementVisible('.metadata-page', waitTime, false)
       .end();
   }
 };

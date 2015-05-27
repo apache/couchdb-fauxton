@@ -27,16 +27,8 @@ module.exports = {
       .waitForElementVisible('#db-name', waitTime, false)
       .clickWhenVisible('#db-name', waitTime, false)
       .setValue('#db-name', [newDatabaseName, client.Keys.ENTER])
-      .waitForElementVisible('#global-notifications .alert.alert-info', waitTime, false)
-      .url(baseUrl + '/_all_dbs')
-      .waitForElementPresent('pre', waitTime, false)
-      .getText('body', function (result) {
-        var data = result.value,
-            createdDatabaseIsNotPresent = data.indexOf('"' + newDatabaseName + '"');
+      .checkForDatabaseDeleted(newDatabaseName, waitTime)
 
-        this.verify.ok(createdDatabaseIsNotPresent === -1,
-          'Checking if new database no longer shows up in _all_dbs.');
-      })
     .end();
   }
 };

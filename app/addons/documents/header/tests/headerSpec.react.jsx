@@ -48,6 +48,7 @@ define([
     it('should use the passed classname', function () {
       toggleEl = TestUtils.renderIntoDocument(<Views.HeaderBarController />, container);
       var $el = $(toggleEl.getDOMNode()).find('.control-toggle-alternative-header');
+
       TestUtils.Simulate.click($el[0]);
       assert.ok($el.hasClass('js-headerbar-togglebutton-selected'));
     });

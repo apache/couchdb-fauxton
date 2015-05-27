@@ -114,12 +114,15 @@ define([
         return <OriginRow
           updateOrigin={this.props.updateOrigin}
           deleteOrigin={this.props.deleteOrigin}
-          key={i} origin={origin}
-        />;
+          key={i} origin={origin} />;
       }, this);
     },
 
     render: function () {
+      if (!this.props.origins) {
+        return null;
+      }
+
       if (!this.props.isVisible || this.props.origins.length === 0) {
         return null;
       }

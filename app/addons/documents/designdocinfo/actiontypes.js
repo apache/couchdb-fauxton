@@ -10,17 +10,10 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-module.exports = {
-  'The tray opens': function (client) {
-    var waitTime = client.globals.maxWaitTime,
-        newDatabaseName = client.globals.testDatabaseName,
-        baseUrl = client.globals.test_settings.launch_url;
-
-    client
-      .loginToGUI()
-      .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
-      .clickWhenVisible('.lookahead-tray-link')
-      .waitForElementVisible('.lookahead-tray', waitTime, false)
-      .end();
-  }
-};
+define([], function () {
+  return {
+    DESIGN_DOC_MONITOR: 'DESIGN_DOC_MONITOR',
+    DESIGN_FETCHING: 'DESIGN_FETCHING',
+    DESIGN_REFRESH: 'DESIGN_REFRESH'
+  };
+});

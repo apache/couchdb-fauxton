@@ -179,6 +179,17 @@ define([
         assert.ok(stub.calledOnce);
       });
 
+      it('does not throw on origins being undefined', function () {
+        TestUtils.renderIntoDocument(
+          <Views.OriginTable
+            updateOrigin={updateOrigin}
+            deleteOrigin={deleteOrigin}
+            isVisible={true}
+            origins={false} />,
+          container
+        );
+      });
+
       it('should deleteOrigin on confirm true', function () {
         var stub = sinon.stub(window, 'confirm');
         stub.returns(true);
