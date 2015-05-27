@@ -70,11 +70,12 @@ function (app, FauxtonAPI, Helpers, BaseRoute, Documents, IndexEditorComponents,
         database: this.database
       }));
 
+      var url = FauxtonAPI.urls('allDocs', 'app', this.database.safeID(), '?limit=' + FauxtonAPI.constants.DATABASES.DOCUMENT_LIMIT);
       this.breadcrumbs = this.setView('#breadcrumbs', new Components.Breadcrumbs({
         toggleDisabled: true,
         crumbs: [
           {'type': 'back', 'link': Helpers.getPreviousPage(this.database)},
-          {'name': this.database.id, 'link': Databases.databaseUrl(this.database) }
+          {'name': this.database.id, 'link': url }
         ]
       }));
 
@@ -126,11 +127,12 @@ function (app, FauxtonAPI, Helpers, BaseRoute, Documents, IndexEditorComponents,
         newDesignDoc = false;
       }
 
+      var url = FauxtonAPI.urls('allDocs', 'app', this.database.safeID(), '?limit=' + FauxtonAPI.constants.DATABASES.DOCUMENT_LIMIT);
       this.breadcrumbs = this.setView('#breadcrumbs', new Components.Breadcrumbs({
         toggleDisabled: true,
         crumbs: [
           { type: 'back', link: Helpers.getPreviousPage(this.database) },
-          { name: 'Create new index', link: Databases.databaseUrl(this.database) }
+          { name: 'Create new index', link: url }
         ]
       }));
 
