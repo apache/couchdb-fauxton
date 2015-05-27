@@ -36,6 +36,31 @@ module.exports = {
     .end();
   },
 
+  'Creates a Design Doc and does not crash after navigating': function (client) {
+    var waitTime = client.globals.maxWaitTime;
+    var baseUrl = client.globals.test_settings.launch_url;
+
+    /*jshint multistr: true */
+    openDifferentDropdownsAndClick(client, '#header-dropdown-menu')
+      .waitForElementPresent('#new-ddoc', waitTime, false)
+      .setValue('#new-ddoc', 'test_design_doc-selenium-3')
+      .clearValue('#index-name')
+      .setValue('#index-name', 'hasenindex')
+      .execute('\
+        var editor = ace.edit("map-function");\
+        editor.getSession().setValue("function (doc) { emit(\'hasehase\'); }");\
+      ')
+      .execute('$(".save")[0].scrollIntoView();')
+      .waitForElementPresent('button.btn.btn-success.save', waitTime, false)
+      .clickWhenVisible('button.btn.btn-success.save', waitTime, false)
+      .checkForDocumentCreated('_design/test_design_doc-selenium-1')
+      .waitForElementPresent('.prettyprint', waitTime, false)
+      .waitForElementNotPresent('.loading-lines', waitTime, false)
+      .assert.containsText('.prettyprint', 'hasehase')
+      .back()
+      .waitForElementPresent('.watermark-logo', waitTime, false)
+    .end();
+  },
 
   'Creates a Design Doc using the dropdown at "the upper dropdown in the header"': function (client) {
     var waitTime = client.globals.maxWaitTime;

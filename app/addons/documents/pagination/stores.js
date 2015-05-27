@@ -55,11 +55,13 @@ define([
     },
 
     canShowPrevious: function () {
+      if (!this._collection.hasPrevious) { return false; }
       if (!this._enabled) { return false; }
       return this._collection.hasPrevious();
     },
 
     canShowNext: function () {
+      if (!this._collection.hasNext) { return false; }
       if (!this._enabled) { return this._enabled; }
 
       if ((this._pageStart + this._perPage) >= this._docLimit) {
@@ -148,6 +150,7 @@ define([
     },
 
     getUpdateSeq: function () {
+      if (!this._collection.updateSeq) { return false; }
       return this._collection.updateSeq();
     },
 
