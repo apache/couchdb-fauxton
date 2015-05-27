@@ -486,7 +486,8 @@ module.exports = function (grunt) {
    */
   // clean out previous build artifacts and lint
   grunt.registerTask('lint', ['clean', 'jshint']);
-  grunt.registerTask('test', ['jsx', 'lint', 'shell:stylecheck', 'dependencies', 'gen_initialize:development', 'test_inline']);
+  grunt.registerTask('test', ['clean:release', 'dependencies', 'jsx', 'jshint', 'shell:stylecheck', 'gen_initialize:development', 'test_inline']);
+
   // lighter weight test task for use inside dev/watch
   grunt.registerTask('test_inline', ['mochaSetup', 'jst', 'concat:test_config_js', 'mocha_phantomjs']);
   // Fetch dependencies (from git or local dir), lint them and make load_addons
