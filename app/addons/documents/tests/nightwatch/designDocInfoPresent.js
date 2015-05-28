@@ -11,20 +11,16 @@
 // the License.
 
 module.exports = {
-  'View: Navigate previous works correctly': function (client) {
+  'Design Doc Metadata present' : function (client) {
     var waitTime = client.globals.maxWaitTime,
         newDatabaseName = client.globals.testDatabaseName,
         baseUrl = client.globals.test_settings.launch_url;
 
     client
-      .populateDatabase(newDatabaseName, 3)
+      .populateDatabase(newDatabaseName)
       .loginToGUI()
-      .url(baseUrl + '/#/database/' + newDatabaseName + '/_changes')
-      .clickWhenVisible('#nav-header-keyview')
-      .clickWhenVisible('#nav-design-function-keyviewviews')
-      .clickWhenVisible('#keyview_keyview')
-      .clickWhenVisible('.breadcrumb-back-link .fonticon-left-open')
-      .waitForElementPresent('.js-changes-view', waitTime)
-    .end();
+      .url(baseUrl + '/#/database/' + newDatabaseName + '/_design/testdesigndoc/_info')
+      .waitForElementVisible('.metadata-page', waitTime, false)
+      .end();
   }
 };

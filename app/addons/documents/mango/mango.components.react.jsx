@@ -88,7 +88,7 @@ function (app, FauxtonAPI, React, Stores, Actions,
           onSubmit={this.runQuery}
           title={this.props.editorTitle}
           additionalIndexesText={this.props.additionalIndexesText}
-          docs={getDocUrl('MANGO')}
+          docs={getDocUrl('MANGO_SEARCH')}
           exampleCode={this.state.queryCode}
           changedQuery={this.state.changedQuery}
           availableIndexes={this.state.availableIndexes}
@@ -185,6 +185,7 @@ function (app, FauxtonAPI, React, Stores, Actions,
       return (
         <PaddedBorderedBox>
           <strong>Your available Indexes:</strong>
+          <a className="edit-link" href={'#' + FauxtonAPI.urls('mango', 'index-app', this.props.dbName)}>edit</a>
           <pre
             className="mango-available-indexes">
             {this.getIndexes('index', this.props.availableIndexes)}
@@ -258,7 +259,7 @@ function (app, FauxtonAPI, React, Stores, Actions,
           dbName={this.state.database.id}
           onSubmit={this.saveQuery}
           title="Index"
-          docs={getDocUrl('MANGO')}
+          docs={getDocUrl('MANGO_INDEX')}
           exampleCode={this.state.queryIndexCode}
           confirmbuttonText="Create Index" />
       );

@@ -23,7 +23,6 @@ module.exports = {
       .loginToGUI()
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_find')
       .waitForElementPresent('.watermark-logo', waitTime, false)
-      .assert.containsText('.editor-description', 'is an easy way to find documents on predefined indexes')
       .execute('\
         var json = \'{\
           "selector": {\
@@ -34,7 +33,7 @@ module.exports = {
         editor.getSession().setValue(json);\
       ')
       .execute('$(".save")[0].scrollIntoView();')
-      .click('button.btn-success.save')
+      .clickWhenVisible('button.btn-success.save')
 
       .waitForElementPresent('.prettyprint', waitTime, false)
       .assert.containsText('#dashboard-lower-content', 'number')

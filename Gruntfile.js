@@ -332,15 +332,17 @@ module.exports = function (grunt) {
 
       dist:{
         files:[
-          {src: "dist/debug/index.html", dest: "dist/release/index.html"},
-          {src: assets.img, dest: "dist/release/img/", flatten: true, expand: true},
-          {src: assets.fonts, dest: "dist/release/fonts/", flatten: true, expand: true}
+          {src: 'dist/debug/index.html', dest: 'dist/release/index.html'},
+          {src: assets.img, dest: 'dist/release/img/', flatten: true, expand: true},
+          {src: assets.fonts, dest: 'dist/release/fonts/', flatten: true, expand: true},
+          {src: './favicon.ico', dest: "dist/release/favicon.ico"}
         ]
       },
       debug:{
         files:[
           {src: assets.fonts, dest: "dist/debug/fonts/", flatten: true, expand: true},
-          {src: assets.img, dest: "dist/debug/img/", flatten: true, expand: true}
+          {src: assets.img, dest: "dist/debug/img/", flatten: true, expand: true},
+          {src: './favicon.ico', dest: "dist/debug/favicon.ico"}
         ]
       }
     },
@@ -484,7 +486,8 @@ module.exports = function (grunt) {
    */
   // clean out previous build artifacts and lint
   grunt.registerTask('lint', ['clean', 'jshint']);
-  grunt.registerTask('test', ['jsx', 'lint', 'shell:stylecheck', 'dependencies', 'gen_initialize:development', 'test_inline']);
+  grunt.registerTask('test', ['clean:release', 'dependencies', 'jsx', 'jshint', 'shell:stylecheck', 'gen_initialize:development', 'test_inline']);
+
   // lighter weight test task for use inside dev/watch
   grunt.registerTask('test_inline', ['mochaSetup', 'jst', 'concat:test_config_js', 'mocha_phantomjs']);
   // Fetch dependencies (from git or local dir), lint them and make load_addons

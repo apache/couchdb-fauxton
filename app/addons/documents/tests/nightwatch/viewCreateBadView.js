@@ -24,22 +24,23 @@ module.exports = {
       .populateDatabase(newDatabaseName)
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
       .waitForElementPresent(dropDownElement, waitTime, false)
-      .click(dropDownElement + ' a')
-      .click(dropDownElement + ' a[href*="new_view"]')
+      .clickWhenVisible(dropDownElement + ' a')
+      .clickWhenVisible(dropDownElement + ' a[href*="new_view"]')
       .waitForElementVisible('#new-ddoc', waitTime, false)
       .setValue('#new-ddoc', 'test_design_doc-selenium-bad-reduce')
       .clearValue('#index-name')
       .setValue('#index-name', 'hasenindex')
-      .click('#reduce-function-selector')
+      .clickWhenVisible('#reduce-function-selector')
       .keys(['\uE013', '\uE013', '\uE013', '\uE013', '\uE006'])
       .execute('\
         var editor = ace.edit("map-function");\
         editor.getSession().setValue("function (doc) { emit(\'boom\', doc._id); }");\
       ')
       .execute('$(".save")[0].scrollIntoView();')
-      .click('button.btn-success.save')
-      .waitForElementVisible('.alert-error', waitTime, false)
-      .assert.containsText('.alert-error', '_sum function requires')
+      .clickWhenVisible('button.btn-success.save')
+      .waitForAttribute('#global-notifications', 'textContent', function (docContents) {
+        return (/_sum function requires/).test(docContents);
+      })
       .end();
   },
 
@@ -52,8 +53,9 @@ module.exports = {
       .loginToGUI()
       .populateDatabase(newDatabaseName)
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_design/brokenview/_view/brokenview')
-      .waitForElementVisible('.alert-error', waitTime, false)
-      .assert.containsText('.alert-error', '_sum function requires')
+      .waitForAttribute('#global-notifications', 'textContent', function (docContents) {
+        return (/_sum function requires/).test(docContents);
+      })
       .end();
   }
 

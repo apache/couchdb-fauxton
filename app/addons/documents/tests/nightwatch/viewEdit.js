@@ -18,6 +18,7 @@ module.exports = {
         newDatabaseName = client.globals.testDatabaseName,
         baseUrl = client.globals.test_settings.launch_url;
 
+    var viewUrl = newDatabaseName + '/_design/testdesigndoc/_view/hasenindex5000?limit=6&reduce=false';
     client
       .populateDatabase(newDatabaseName)
       .loginToGUI()
@@ -31,10 +32,10 @@ module.exports = {
         editor.getSession().setValue("function (doc) { emit(\'hasehase5000\', 1); }");\
       ')
       .execute('$(".save")[0].scrollIntoView();')
-      .click('button.btn-success.save')
-
-      .waitForElementNotVisible('.global-notification', waitTime, false)
+      .clickWhenVisible('button.btn-success.save')
+      .checkForStringPresent(viewUrl, 'hasehase5000')
       .waitForElementNotPresent('.loading-lines', waitTime, false)
+      .waitForElementVisible('.prettyprint', waitTime, false)
       .assert.containsText('.prettyprint', 'hasehase5000')
     .end();
   },
@@ -45,6 +46,8 @@ module.exports = {
         newDatabaseName = client.globals.testDatabaseName,
         baseUrl = client.globals.test_settings.launch_url;
 
+    var viewUrl = newDatabaseName + '/_design/testdesigndoc/_view/stubview?limit=6&reduce=false';
+
     client
       .populateDatabase(newDatabaseName)
       .loginToGUI()
@@ -54,14 +57,19 @@ module.exports = {
 
       .execute('\
         var editor = ace.edit("map-function");\
-        editor.getSession().setValue("function (doc) { emit(\'hasehase5000\', 1); }");\
+        editor.getSession().setValue("function (doc) { emit(\'hasehase6000\', 1); }");\
         editor._emit(\'blur\');\
       ')
       .execute('$(".save")[0].scrollIntoView();')
+
       .clickWhenVisible('button.btn-success.save')
-      .waitForElementNotVisible('.global-notification', waitTime, false)
+
+      .checkForStringPresent(viewUrl, 'hasehase6000')
       .waitForElementNotPresent('.loading-lines', waitTime, false)
-      .assert.containsText('.prettyprint', 'hasehase5000')
+      .waitForElementVisible('.prettyprint', waitTime, false)
+      .waitForAttribute('#doc-list', 'textContent', function (docContents) {
+        return (/hasehase6000/).test(docContents);
+      })
     .end();
   },
 
@@ -71,10 +79,12 @@ module.exports = {
         newDatabaseName = client.globals.testDatabaseName,
         baseUrl = client.globals.test_settings.launch_url;
 
+    var viewUrl = newDatabaseName + '/_design/testdesigndoc/_view/stubview?reduce=true&group_level=0';
+
     client
       .populateDatabase(newDatabaseName)
       .loginToGUI()
-      .url(baseUrl + '/#/database/' + newDatabaseName + '/_design/testdesigndoc/_view/stubview?reduce=true&group_level=0')
+      .url(baseUrl + '/#/database/' + viewUrl)
       .waitForElementPresent('.prettyprint', waitTime, false)
       .assert.containsText('.prettyprint', '20')
       .clickWhenVisible('#reduce-function-selector option[value="_sum"]')
@@ -84,7 +94,9 @@ module.exports = {
       ')
       .execute('$("button.save")[0].scrollIntoView();')
       .clickWhenVisible('button.save', waitTime, false)
+      .checkForStringPresent(viewUrl, '40')
       .waitForElementNotPresent('.loading-lines', waitTime, false)
+      .waitForElementVisible('.prettyprint', waitTime, false)
       .waitForAttribute('.prettyprint', 'textContent', function (docContents) {
         return (/40/).test(docContents);
       })
