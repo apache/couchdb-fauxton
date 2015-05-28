@@ -204,9 +204,6 @@ define([
       // because of the need to override typeahead, this just does a spy on the componentDidUpdate method to ensure
       // it gets called
       assert.ok(spy.calledOnce);
-
-      // reset the store for future use
-      Stores.databasesStore.reset();
     });
   });
 
