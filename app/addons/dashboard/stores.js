@@ -18,7 +18,11 @@ define([
 
   var DashboardStore = FauxtonAPI.Store.extend({
 
-    init: function (collectionTable, backboneCollection) {
+    dashboardWidgetActiveTaskInitialize: function (collectionTable, backboneCollection) {
+      this.reset(collectionTable, backboneCollection);
+    },
+
+    reset: function (collectionTable, backboneCollection) {
       this._prevSortbyHeader = 'started_on';
       this._headerIsAscending = true;
       this._selectedRadio = 'All Tasks';
@@ -48,14 +52,12 @@ define([
 
     setPolling: function () {
       clearInterval(this.getIntervalID());
-      var id = setInterval(function () {
+      this._intervalID = setInterval(function () {
         this._backboneCollection.pollingFetch();
-        this.setCollection(this._backboneCollection.table);
+        this._collection = this._backboneCollection.table;
         this.sortCollectionByColumnHeader(this._prevSortbyHeader, false);
         this.triggerChange();
       }.bind(this), this.getPollingInterval() * 1000);
-
-      this.setIntervalID(id);
     },
 
     clearPolling: function () {
@@ -66,22 +68,12 @@ define([
       return this._intervalID;
     },
 
-    setIntervalID: function (id) {
-      this._intervalID = id;
-    },
-
-    setCollection: function (collection) {
-      this._collection = collection;
-    },
-
     getCollection: function () {
       return this._collection;
     },
 
     sortCollectionByColumnHeader: function (colName) {
-      var collectionTable = this._collection;
-
-      var sorted = _.sortBy(collectionTable, function (item) {
+      var sorted = _.sortBy(this._collection, function (item) {
         var variable = colName;
 
         if (_.isUndefined(item[variable])) {
@@ -95,32 +87,19 @@ define([
     },
 
     getFilteredTable: function (collection) {
-      var table = [];
-
       //sort the table here
       this.sortCollectionByColumnHeader(this._sortByHeader);
 
       //insert all matches into table
-      this._collection.map(function (item) {
-        var passesRadioFilter = this.passesRadioFilter(item);
-        var passesSearchFilter = this.passesSearchFilter(item);
-
-        if (passesRadioFilter && passesSearchFilter) {
-          table.push(item);
-        }
-      }.bind(this));
-
-      // reverse if descending
-      if (!this._headerIsAscending) {
-        table.reverse();
-      }
+      var table = this._collection.filter(function (item) {
+        return this.passesRadioFilter(item) && this.passesSearchFilter(item);
+      }, this);
 
       return table;
     },
 
     passesSearchFilter: function (item) {
-      var searchTerm = this._searchTerm;
-      var regex = new RegExp(searchTerm, 'g');
+      var regex = new RegExp(this._searchTerm, 'g');
 
       var itemDatabasesTerm = '';
       if (_.has(item, 'database')) {
@@ -145,7 +124,7 @@ define([
       switch (action.type) {
 
         case ActionTypes.ACTIVE_TASKS_INIT:
-          this.init(action.options.collectionTable, action.options.backboneCollection);
+          this.dashboardWidgetActiveTaskInitialize(action.options.collectionTable, action.options.backboneCollection);
         break;
 
         case ActionTypes.ACTIVE_TASKS_CHANGE_POLLING_INTERVAL:

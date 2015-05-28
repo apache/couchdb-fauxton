@@ -11,9 +11,8 @@
 // the License.
 
 define([
-  "app",
-
-  "api"
+  'app',
+  'api'
 ],
 function (app, FauxtonAPI) {
   var Dashboard = {};
@@ -25,8 +24,7 @@ function (app, FauxtonAPI) {
     },
 
     pollingFetch: function () { //still need this for the polling
-      this.fetch({reset: true, parse: true});
-      return this;
+      return this.fetch({reset: true, parse: true});
     },
 
     parse: function (resp) {

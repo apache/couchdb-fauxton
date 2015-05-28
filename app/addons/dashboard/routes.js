@@ -11,10 +11,10 @@
 // the License.
 
 define([
-  "app",
-  "api",
-  "addons/dashboard/resources",
-  "addons/dashboard/components.react",
+  'app',
+  'api',
+  'addons/dashboard/resources',
+  'addons/dashboard/components.react',
   'addons/dashboard/actions'
 ],
 

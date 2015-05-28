@@ -97,13 +97,12 @@ define([
     },
 
     createRows: function () {
-      var isThereResults = this.props.isEmpty;
       if (this.state.filteredTable.length === 0) {
-        return isThereResults ? this.noActiveTasks() : this.noActiveTasksMatchFilter();
+        return this.props.isEmpty ? this.noActiveTasks() : this.noActiveTasksMatchFilter();
       }
 
       return _.map(this.state.filteredTable, function (item, iteration) {
-        return <ActiveTaskTableBodyContents key={Math.random()} item={item} />;
+        return <ActiveTaskTableBodyContents key={iteration} item={item} />;
       });
     },
 
@@ -147,7 +146,7 @@ define([
     getInfo: function (item) {
       return {
         type: item.type,
-        updated_on: activeTasksHelpers.getTimeInfo(item.updated_on),
+        updatedOn: activeTasksHelpers.getTimeInfo(item.updated_on),
         pid: item.pid.replace(/[<>]/g, ''),
         progress: activeTasksHelpers.getProgress(item.progress)
       };
@@ -160,7 +159,7 @@ define([
           <td className="pid-column">{rowData.pid}</td>
           <td className="type-column">{rowData.type}</td>
           <td className="progress-column">{rowData.progress}</td>
-          <td className="updateOn-column">{rowData.updated_on}</td>
+          <td className="updateOn-column">{rowData.updatedOn}</td>
         </tr>
         );
     }
