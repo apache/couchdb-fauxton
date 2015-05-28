@@ -14,9 +14,10 @@ define([
         'addons/documents/resources',
         'testUtils',
 
-        'addons/documents/base'
+        'addons/documents/base',
+        'addons/documents/tests/dummyResponse'
 
-], function (FauxtonAPI, Models, testUtils) {
+], function (FauxtonAPI, Models, testUtils, dummyResponse) {
   var assert = testUtils.assert;
 
   describe('IndexCollection', function () {
@@ -450,5 +451,19 @@ define([
     });
 
 
+  });
+
+  describe('Parsing the Response', function () {
+
+    var url = 'foo/bar';
+    var response;
+    beforeEach(function () {
+      response = new Models.RevTreeDataModel({url: url});
+    });
+
+    it('Trigger the Parse and out the response array', function () {
+      var parsedResult = response.parse(dummyResponse);
+      assert.ok(parsedResult.content.length, 4);
+    });
   });
 });

@@ -16,7 +16,7 @@ function (app, FauxtonAPI, Resources, RevisionTreeActions, AppComponent) {
     ],
 
     routes: {
-       ":database/:doc/_revtree/:winner": "revtreeRoute"
+       "database/:db/:doc/_revtree/:winner": "revtreeRoute"
     },
 
     roles: ["_admin"],
