@@ -103,11 +103,12 @@ function (app, FauxtonAPI, Helpers, BaseRoute, Databases,
         indexList: mangoIndexList
       });
 
+      var url = FauxtonAPI.urls('allDocs', 'app', this.database.safeID(), '?limit=' + FauxtonAPI.constants.DATABASES.DOCUMENT_LIMIT);
       this.breadcrumbs = this.setView('#breadcrumbs', new Components.Breadcrumbs({
         toggleDisabled: true,
         crumbs: [
-          {'type': 'back', 'link': Databases.databaseUrl(this.database)},
-          {'name': app.i18n.en_US['mango-title-editor'], 'link': Databases.databaseUrl(this.database)}
+          {'type': 'back', 'link': url},
+          {'name': app.i18n.en_US['mango-title-editor'], 'link': url}
         ]
       }));
 
@@ -142,11 +143,12 @@ function (app, FauxtonAPI, Helpers, BaseRoute, Databases,
         typeOfIndex: 'mango'
       });
 
+      var url = FauxtonAPI.urls('allDocs', 'app', this.database.safeID(), '?limit=' + FauxtonAPI.constants.DATABASES.DOCUMENT_LIMIT);
       this.breadcrumbs = this.setView('#breadcrumbs', new Components.Breadcrumbs({
         toggleDisabled: true,
         crumbs: [
-          {'type': 'back', 'link': Databases.databaseUrl(this.database)},
-          {'name': app.i18n.en_US['mango-indexeditor-title'], 'link': Databases.databaseUrl(this.database) }
+          {'type': 'back', 'link': url},
+          {'name': app.i18n.en_US['mango-indexeditor-title'], 'link': url }
         ]
       }));
 

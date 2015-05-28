@@ -283,6 +283,8 @@ define([
       assert.equal(links.length, 6, 'extra column shows up');
 
       FauxtonAPI.unRegisterExtension('DatabaseTable:databaseRow');
+
+      Stores.databasesStore.reset();
     });
 
   });
