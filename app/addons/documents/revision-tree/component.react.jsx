@@ -123,16 +123,17 @@ function (app, FauxtonAPI, React, Stores) {
     var maxY = grid;
     var levelCount = []; // numer of nodes on some level (pos)
     var lineObjs = [];
-    // nodeObjs.length = 0;
     var nodeObjs = [];
     var textObjs = [];
 
     var map = {}; // map from rev to position
 
     function drawPath (path) {
-      for (var i = 0; i < path.length; i++) {
-        var rev = path[i];
-        var isLeaf = i === 0;
+
+      path.reduce(function (prev, current, index, array) {
+
+        var rev = current;
+        var isLeaf = index === 0;
         var pos = +rev.split('-')[0];
 
         if (!levelCount[pos]) {
@@ -143,7 +144,7 @@ function (app, FauxtonAPI, React, Stores) {
         var y = pos * grid;
 
         if (!isLeaf) {
-          var nextRev = path[i - 1];
+          var nextRev = path[index - 1];
           var nextX = map[nextRev][0];
           var nextY = map[nextRev][1];
 
@@ -162,17 +163,15 @@ function (app, FauxtonAPI, React, Stores) {
           lineObjs.push(lineObj);
         }
 
-        if (map[rev]) {
-          break;
+        if (!map[rev]) {
+          maxX = Math.max(x, maxX);
+          maxY = Math.max(y, maxY);
+          levelCount[pos]++;
+
+          node (x, y, rev, isLeaf, rev in deleted, rev === winner, minUniq, textObjs, nodeObjs);
+          map[rev] = [x, y];
         }
-
-        maxX = Math.max(x, maxX);
-        maxY = Math.max(y, maxY);
-        levelCount[pos]++;
-
-        node (x, y, rev, isLeaf, rev in deleted, rev === winner, minUniq, textObjs, nodeObjs);
-        map[rev] = [x, y];
-      }
+      }, 0);
     }
 
     paths.forEach(drawPath);
