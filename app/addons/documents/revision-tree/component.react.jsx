@@ -50,9 +50,10 @@ function (app, FauxtonAPI, React, Stores) {
       var cy = this.props.data.y;
       var radius = this.props.data.radius;
       var classVal = this.props.data.class;
+      var id = this.props.data.id;
 
       return (
-        <circle cx={cx} cy={cy} r={radius} className={classVal}>{this.props.children}</circle>
+        <circle cx={cx} cy={cy} r={radius} className={classVal} title={id}>{this.props.children}</circle>
       );
     }
   });
@@ -84,7 +85,7 @@ function (app, FauxtonAPI, React, Stores) {
 
     render: function () {
       return (
-        <svg height="500" width="500">{this.props.children}
+        <svg>{this.props.children}
         </svg>
       );
     }
@@ -209,10 +210,10 @@ function (app, FauxtonAPI, React, Stores) {
   };
 
   function node(x, y, rev, isLeaf, isDeleted, isWinner, shortDescLen, textObjs, nodeObjs) {
-    circ(x, y, r, isLeaf, isDeleted, isWinner, nodeObjs);
     var pos = rev.split('-')[0];
     var id = rev.split('-')[1];
     var opened = false;
+    circ(x, y, r, isLeaf, isDeleted, isWinner, nodeObjs, rev);
 
     var textObj = {
       "stLeft": (x - 40) + "px",
@@ -224,7 +225,7 @@ function (app, FauxtonAPI, React, Stores) {
     textObjs.push(textObj);
   }
 
-  var circ = function (x, y, r, isLeaf, isDeleted, isWinner, nodeObjs) {
+  var circ = function (x, y, r, isLeaf, isDeleted, isWinner, nodeObjs, id) {
 
     var leafStat = '';
 
@@ -242,7 +243,8 @@ function (app, FauxtonAPI, React, Stores) {
       "x" : x,
       "y" : y,
       "class" : leafStat,
-      "radius" : r
+      "radius" : r,
+      "id" : id
     };
 
     nodeObjs.push(nodeObj);
@@ -317,18 +319,35 @@ function (app, FauxtonAPI, React, Stores) {
       var treeNodes = treeComponents.nodeObjs;
 
       return (
-        <div>
-          <Box>
-            <SVGComponent>
-              <LinesBox data = {lines} />
-              <CirclesBox data = {treeNodes} />
-            </SVGComponent>
-            {
-              nodeTextObjs.map(function (element, i) {
-                return <Text key={i} data = {element} />;
-              })
-            }
-          </Box>
+        <div className = "parent-graph-div">
+          <div className="outer-graph-area">
+            <div className="inner-graph-area">
+              <Box>
+                <SVGComponent>
+                  <LinesBox data = {lines} />
+                  <CirclesBox data = {treeNodes} />
+                </SVGComponent>
+                {
+                  nodeTextObjs.map(function (element, i) {
+                    return <Text key={i} data = {element} />;
+                  })
+                }
+              </Box>
+            </div>
+          </div>
+          <div className="legend">
+            <svg>
+              <circle cx="20" cy="25" r="10" className="leaf"/>
+              <text x="40" y="31" fill="black">Leaf Nodes</text>
+              <circle cx="220" cy="25" r="10" className="deleted"/>
+              <text x="240" y="31" fill="black">Deleted Nodes</text>
+              <circle cx="450" cy="25" r="10" className="winner"/>
+              <text x="470" y="31" fill="black">Winner Nodes</text>
+              <circle cx="620" cy="25" r="10" className=""/>
+              <text x="680" y="31" fill="black">Internal Nodes</text>
+
+            </svg>
+          </div>
         </div>
       );
     }
