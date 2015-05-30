@@ -84,8 +84,11 @@ function (app, FauxtonAPI, React, Stores) {
   var SVGComponent = React.createClass({
 
     render: function () {
+
+      var maxX = this.props.data.maxX + 150 + 'px';
+      var maxY = this.props.data.maxY + 150 + 'px';
       return (
-        <svg>{this.props.children}
+        <svg width={maxX} height={maxY}>{this.props.children}
         </svg>
       );
     }
@@ -180,7 +183,9 @@ function (app, FauxtonAPI, React, Stores) {
     return {
       "lineObjs": lineObjs,
       "textObjs": textObjs,
-      "nodeObjs": nodeObjs
+      "nodeObjs": nodeObjs,
+      "maxX": maxX,
+      "maxY": maxY
     };
   };
 
@@ -317,13 +322,17 @@ function (app, FauxtonAPI, React, Stores) {
       var lines = treeComponents.lineObjs;
       var nodeTextObjs = treeComponents.textObjs;
       var treeNodes = treeComponents.nodeObjs;
+      var svgMetrics = {
+        maxX: treeComponents.maxX,
+        maxY: treeComponents.maxY
+      };
 
       return (
         <div className = "parent-graph-div">
           <div className="outer-graph-area">
             <div className="inner-graph-area">
               <Box>
-                <SVGComponent>
+                <SVGComponent data = {svgMetrics}>
                   <LinesBox data = {lines} />
                   <CirclesBox data = {treeNodes} />
                 </SVGComponent>
