@@ -657,5 +657,34 @@ function (app, FauxtonAPI, Documents, PagingCollection) {
     }
   });
 
+  Documents.RevDocDataModel = Backbone.Model.extend({
+    initialize: function (url) {
+      alert(url);
+      this.url = url;
+      // console.log("inside initialize");
+    },
+    url: function () {
+      return this.url;
+    },
+
+    sync: function (method, model, options) {
+      // console.log("inside Sync-----" + this.url);
+      var params = {
+        error: options.error,
+        success: options.success,
+        url: this.url,
+        type: 'GET',
+        dataType: 'text',
+        async: false
+      };
+
+      return $.ajax(params);
+    },
+    parse: function (response) {
+      // console.log(response);
+      return {content: response};
+    }
+  });
+
   return Documents;
 });

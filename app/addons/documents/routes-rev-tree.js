@@ -32,7 +32,7 @@ function (app, FauxtonAPI, Resources, RevisionTreeActions, AppComponent) {
 
       var revTreeData = new Resources.RevTreeDataModel(treeDataUrl);
 
-      RevisionTreeActions.newRevisionTree(revTreeData, winner);
+      RevisionTreeActions.newRevisionTree(revTreeData, winner, database, docId);
       this.setComponent("#dashboard-content", AppComponent.App);
     }
   });

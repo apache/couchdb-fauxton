@@ -17,7 +17,6 @@ define([
     describe("Rendering Revision", function () {
 
       var revTreeDiv, revComponent, dummyData;
-      // dummyData = dummyTreeData;
 
       beforeEach(function () {
         revTreeDiv = document.createElement('div');
@@ -28,7 +27,7 @@ define([
       });
 
       it("Revision Test Running", function () {
-        Actions.init(dummyTreeData);
+        Actions.newRevisionTreeInit(dummyTreeData);
         revComponent = TestUtils.renderIntoDocument(React.createElement(Components.App, null), revTreeDiv);
         var $el = $(revComponent.getDOMNode());
 

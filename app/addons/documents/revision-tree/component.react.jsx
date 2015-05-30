@@ -3,13 +3,12 @@ define([
   'api',
   'react',
   'addons/documents/revision-tree/stores',
-  'addons/documents/revision-tree/actions',
+  'addons/documents/revision-tree/actions'
 ],
 
-function (app, FauxtonAPI, React, Stores) {
+function (app, FauxtonAPI, React, Stores, Actions) {
 
   var store = Stores.revTreeStore;
-  // var nodeObjs = [];
   var grid = 100;
   var scale = 7;
   var r = 15;
@@ -45,15 +44,21 @@ function (app, FauxtonAPI, React, Stores) {
 
   var Circle = React.createClass({
 
+    handleClick: function () {
+      var url = app.host + '/' + this.props.data.db + '/' + this.props.data.docId + '?rev=' + this.props.data.rev;
+      Actions.newRevisionDocData(url);
+    },
+
     render: function () {
+
       var cx = this.props.data.x;
       var cy = this.props.data.y;
       var radius = this.props.data.radius;
       var classVal = this.props.data.class;
-      var id = this.props.data.id;
+      var rev = this.props.data.rev;
 
       return (
-        <circle cx={cx} cy={cy} r={radius} className={classVal} title={id}>{this.props.children}</circle>
+        <circle cx={cx} cy={cy} r={radius} className={classVal} title={rev} onClick={this.handleClick}>{this.props.children}</circle>
       );
     }
   });
@@ -68,6 +73,38 @@ function (app, FauxtonAPI, React, Stores) {
 
       return (
         <line x1={x1} y1={y1} x2={x2} y2={y2}>{this.props.children}</line>
+      );
+    }
+  });
+
+  var DocDataField = React.createClass({
+    getInitialState: function () {
+      return {
+        docData: "Initial"
+      };
+    },
+
+    componentDidMount: function () {
+      if (this.isMounted()) {
+        store.on('change', this.onChange, this);
+      }
+    },
+
+    componentWillUnmount: function () {
+      store.off('change', this.onChange, this);
+    },
+
+    onChange: function () {
+      this.setState({
+        docData: store.getRevDocData()
+      });
+    },
+
+    render: function () {
+      return (
+        <div>
+          {this.state.docData}
+        </div>
       );
     }
   });
@@ -122,7 +159,7 @@ function (app, FauxtonAPI, React, Stores) {
     }
   });
 
-  var draw = function (paths, deleted, winner, minUniq) {
+  var draw = function (paths, deleted, winner, minUniq, db, docId) {
     var maxX = grid;
     var maxY = grid;
     var levelCount = []; // numer of nodes on some level (pos)
@@ -172,7 +209,7 @@ function (app, FauxtonAPI, React, Stores) {
           maxY = Math.max(y, maxY);
           levelCount[pos]++;
 
-          node (x, y, rev, isLeaf, rev in deleted, rev === winner, minUniq, textObjs, nodeObjs);
+          node (x, y, rev, isLeaf, rev in deleted, rev === winner, minUniq, textObjs, nodeObjs, db, docId);
           map[rev] = [x, y];
         }
       }, 0);
@@ -214,11 +251,11 @@ function (app, FauxtonAPI, React, Stores) {
     return com;
   };
 
-  function node(x, y, rev, isLeaf, isDeleted, isWinner, shortDescLen, textObjs, nodeObjs) {
+  function node(x, y, rev, isLeaf, isDeleted, isWinner, shortDescLen, textObjs, nodeObjs, db, docId) {
     var pos = rev.split('-')[0];
     var id = rev.split('-')[1];
     var opened = false;
-    circ(x, y, r, isLeaf, isDeleted, isWinner, nodeObjs, rev);
+    circ(x, y, r, isLeaf, isDeleted, isWinner, nodeObjs, rev, db, docId);
 
     var textObj = {
       "stLeft": (x - 40) + "px",
@@ -230,7 +267,7 @@ function (app, FauxtonAPI, React, Stores) {
     textObjs.push(textObj);
   }
 
-  var circ = function (x, y, r, isLeaf, isDeleted, isWinner, nodeObjs, id) {
+  var circ = function (x, y, r, isLeaf, isDeleted, isWinner, nodeObjs, rev, db, docId) {
 
     var leafStat = '';
 
@@ -249,7 +286,9 @@ function (app, FauxtonAPI, React, Stores) {
       "y" : y,
       "class" : leafStat,
       "radius" : r,
-      "id" : id
+      "rev" : rev,
+      "db": db,
+      "docId": docId
     };
 
     nodeObjs.push(nodeObj);
@@ -270,7 +309,9 @@ function (app, FauxtonAPI, React, Stores) {
     },
 
     componentDidMount: function () {
-      store.on('change', this.onChangeSetData, this);
+      if (this.isMounted()) {
+        store.on('change', this.onChangeSetData, this);
+      }
     },
 
     componentWillUnmount: function () {
@@ -284,6 +325,8 @@ function (app, FauxtonAPI, React, Stores) {
       var treeDataOptions = this.state.treeDataOptions;
       var result = treeDataOptions.data;
       var winner = treeDataOptions.winner;
+      var db = treeDataOptions.db;
+      var docId = treeDataOptions.docId;
       console.log(result);
       console.log(winner);
       var minUniq = 0;
@@ -317,7 +360,7 @@ function (app, FauxtonAPI, React, Stores) {
         return rev.split('-')[1];
       }));
 
-      var treeComponents = draw(paths, deleted, winner, minUniq);
+      var treeComponents = draw(paths, deleted, winner, minUniq, db, docId);
 
       var lines = treeComponents.lineObjs;
       var nodeTextObjs = treeComponents.textObjs;
@@ -357,6 +400,7 @@ function (app, FauxtonAPI, React, Stores) {
 
             </svg>
           </div>
+          <DocDataField />
         </div>
       );
     }

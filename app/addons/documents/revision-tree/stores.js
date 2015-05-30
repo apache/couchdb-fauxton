@@ -11,6 +11,7 @@ function (FauxtonAPI, ActionTypes) {
 
     initialize: function () {
       this._treeOptions;
+      this._treeData;
     },
 
     newRevTree: function (options) {
@@ -19,11 +20,16 @@ function (FauxtonAPI, ActionTypes) {
       this._treeOptions = options;
     },
 
+    setRevDocData: function (options) {
+      // console.log(options);
+      this._treeData = options.data;
+    },
+
     getTreeOptions: function () {
       return this._treeOptions;
     },
 
-    getTreeData: function () {
+    getRevDocData: function () {
       return this._treeData;
     },
 
@@ -31,6 +37,12 @@ function (FauxtonAPI, ActionTypes) {
       switch (action.type) {
         case ActionTypes.REV_TREE_NEW_REV_TREE:
           this.newRevTree(action.options);
+          this.triggerChange();
+        break;
+
+        case ActionTypes.REV_TREE_DOC_REV_DATA:
+          // console.log(this._treeOptions);
+          this.setRevDocData(action.options);
           this.triggerChange();
         break;
         default:
