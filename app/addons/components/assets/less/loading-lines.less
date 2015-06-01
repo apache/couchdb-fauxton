@@ -13,51 +13,46 @@
   width: 80px;
   margin-left: auto;
   margin-right: auto;
-}
-
-#line1 {
-  background-color: @loadingLinesColor;
-  width: @loadingLinesWidth;
-  -webkit-animation: height-change @loadingLinesTime infinite @loadingLinesEffect;
-   float: left;
-  height: 1px;
+  div {
+    background-color: @loadingLinesColor;
+    width: @loadingLinesWidth;
+    height: 1px;
+    float: left;
+    animation: height-change @loadingLinesTime infinite @loadingLinesEffect;
+    -webkit-animation: height-change @loadingLinesTime infinite @loadingLinesEffect;
+  }
 }
 
 #line2 {
-  background-color: @loadingLinesColor;
-  width: @loadingLinesWidth;
-  -webkit-animation: height-change @loadingLinesTime infinite @loadingLinesEffect;
+  animation-delay: 0.1s;
   -webkit-animation-delay: 0.1s;
-  float:left;
   margin-left: @loadingLinesMargin;
-  height: 1px;
-
 }
-
 #line3 {
-  background-color: @loadingLinesColor;
-  width: @loadingLinesWidth;
-  -webkit-animation: height-change @loadingLinesTime infinite @loadingLinesEffect;
+  animation-delay: 0.2s;
   -webkit-animation-delay: 0.2s;
-  float:left;
   margin-left: @loadingLinesMargin;
-  height: 1px;
-
 }
-
 #line4 {
-  background-color: @loadingLinesColor;
-  width: @loadingLinesWidth;
-  -webkit-animation: height-change @loadingLinesTime infinite @loadingLinesEffect;
+  animation-delay: 0.3s;
   -webkit-animation-delay: 0.3s;
-  float: left;
   margin-left: @loadingLinesMargin;
-  height:1px;
 }
 
 @-webkit-keyframes height-change {
   0% {
-    height:1px;
+    height: 1px;
+  }
+  50% {
+    height: @loadingLinesHeight;
+  }
+  100% {
+    height: 1px;
+  }
+}
+@keyframes height-change {
+  0% {
+    height: 1px;
   }
   50% {
     height: @loadingLinesHeight;
