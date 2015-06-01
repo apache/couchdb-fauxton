@@ -18,8 +18,9 @@ module.exports = {
         baseUrl = client.globals.test_settings.launch_url;
 
     client
-      .loginToGUI()
       .createDocument(newDocumentName, newDatabaseName)
+      .createDocument(newDocumentName + '2', newDatabaseName)
+      .loginToGUI()
       .url(baseUrl)
       .waitForElementPresent('#dashboard-content a[href="#/database/' + newDatabaseName + '/_all_docs"]', waitTime, false)
       .clickWhenVisible('#dashboard-content a[href="#/database/' + newDatabaseName + '/_all_docs"]', waitTime, false)
@@ -28,15 +29,25 @@ module.exports = {
       .waitForElementPresent('.control-select-all', waitTime, false)
       .clickWhenVisible('.control-delete')
       .acceptAlert()
+      .waitForElementVisible('label[for="checkbox-' + newDocumentName + '2' + '"]', waitTime, false)
+      .clickWhenVisible('label[for="checkbox-' + newDocumentName + '2' + '"]', waitTime, false)
+      .waitForElementPresent('.control-select-all', waitTime, false)
+      .clickWhenVisible('.control-delete')
+      .acceptAlert()
+
       .waitForElementVisible('.alert.alert-info', waitTime, false)
+      .checkForStringNotPresent(newDatabaseName + '/_all_docs', newDocumentName)
+      .checkForStringNotPresent(newDatabaseName + '/_all_docs', newDocumentName + '2')
       .url(baseUrl + '/' + newDatabaseName + '/_all_docs')
+
       .waitForElementPresent('pre', waitTime, false)
       .getText('pre', function (result) {
         var data = result.value,
-            createdDocumentNotPresent = data.indexOf(newDocumentName);
+            createdDocumentANotPresent = data.indexOf(newDocumentName) === -1,
+            createdDocumentBNotPresent = data.indexOf(newDocumentName + '2') === -1;
 
-        this.verify.ok(createdDocumentNotPresent === -1,
-          'Checking if new document no longer shows up in _all_docs.');
+        this.verify.ok(createdDocumentANotPresent && createdDocumentBNotPresent,
+          'Checking if new documents no longer shows up in _all_docs.');
       })
     .end();
   }

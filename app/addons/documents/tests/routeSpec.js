@@ -12,8 +12,11 @@
 
 define([
         'addons/documents/routes',
+        'addons/documents/header/header.actions',
+        'addons/documents/index-results/actions',
+
         'testUtils'
-], function (Documents, testUtils) {
+], function (Documents, HeaderActions, IndexResultsActions, testUtils) {
   var assert = testUtils.assert;
   var DocumentRoute = Documents.RouteObjects[2];
 
@@ -24,6 +27,26 @@ define([
 
       routeObj.allDocs('newdatabase', null);
       assert.equal(typeof routeObj.rightHeader, 'object');
+    });
+
+  });
+
+  var MangoRoute = Documents.RouteObjects[4];
+  describe('Mango Route', function () {
+
+    afterEach(function () {
+      testUtils.restore(HeaderActions.resetHeaderController);
+      testUtils.restore(IndexResultsActions.newMangoResultsList);
+    });
+
+    it('resets the header', function () {
+      var spy = sinon.spy(HeaderActions, 'resetHeaderController');
+      var stub = sinon.stub(IndexResultsActions, 'newMangoResultsList');
+
+      var routeObj = new MangoRoute(null, null, ['test']);
+
+      routeObj.findUsingIndex();
+      assert.ok(spy.calledOnce);
     });
 
   });
