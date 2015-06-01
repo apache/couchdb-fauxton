@@ -37,6 +37,12 @@ function (FauxtonAPI, ActionTypes, Resources) {
         type: ActionTypes.ACTIVE_TASKS_CHANGE_POLLING_INTERVAL,
         options: interval
       });
+    },
+    setCollection: function (collection) {
+      FauxtonAPI.dispatch({
+        type: ActionTypes.ACTIVE_TASKS_SET_COLLECTION,
+        options: collection
+      });
     }
   };
 });

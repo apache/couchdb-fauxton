@@ -72,6 +72,10 @@ define([
       return this._collection;
     },
 
+    setCollection: function (collection) {
+      this._collection = collection;
+    },
+
     sortCollectionByColumnHeader: function (colName) {
       var sorted = _.sortBy(this._collection, function (item) {
         var variable = colName;
@@ -130,6 +134,11 @@ define([
         case ActionTypes.ACTIVE_TASKS_CHANGE_POLLING_INTERVAL:
           this.setPollingInterval(action.options);
           this.setPolling();
+          this.triggerChange();
+        break;
+
+        case ActionTypes.ACTIVE_TASKS_SET_COLLECTION:
+          this.setCollection(action.options);
           this.triggerChange();
         break;
 
