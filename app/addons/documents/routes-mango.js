@@ -87,6 +87,8 @@ function (app, FauxtonAPI, Helpers, BaseRoute, Databases,
             }
           });
 
+      ReactActions.resetHeaderController();
+
       // magic method
       this.sidebar.setSelectedTab('mango-query');
       this.setComponent('#react-headerbar', ReactHeader.HeaderBarController);
