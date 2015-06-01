@@ -28,22 +28,16 @@ define([
   describe('Dashboard  -- Components', function () {
 
     describe('Active Task Widget (Components)', function () {
-      var activeTasksTableDiv, activeTasksWidget, activeTasksTable;
+      var activeTasksTableDiv, activeTasksWidget;
 
       beforeEach(function () {
         activeTasksTableDiv = document.createElement('div');
         dashboardStore.dashboardWidgetActiveTaskInitialize(allActiveTasksCollection.table, allActiveTasksCollection);
         activeTasksWidget = TestUtils.renderIntoDocument(React.createElement(Components.DashboardController, null), activeTasksTableDiv);
-        activeTasksTable = TestUtils.renderIntoDocument(React.createElement(Components.ActiveTaskTable, null), activeTasksWidget);
-      });
-
-      afterEach(function () {
-        React.unmountComponentAtNode(activeTasksTableDiv);
-        window.confirm.restore && window.confirm.restore();
       });
 
       it('active tasks widget header should be "Active Tasks"', function () {
-        var widgetHeader = $(activeTasksWidget.getDOMNode()).find('.widget-header')[0].innerText;
+        var widgetHeader = $(activeTasksWidget.getDOMNode()).find('.widget-header').text();
         assert.equal(widgetHeader.trim(), 'Active Tasks');
       });
 
@@ -54,10 +48,13 @@ define([
 
       it('if there are no active tasks, it display a message instead of empty table rows', function () {
         Actions.setCollection(undefined);
-        var tableText = $(activeTasksWidget.getDOMNode()).find('.noResult')[0].innerText;
+        var tableText = $(activeTasksWidget.getDOMNode()).find('.noResult').text();
         assert.equal(tableText.trim(), 'No active tasks.');
       });
 
+      it('render the data into the active task table if there are not empty collection', function () {
+        assert.ok(!_.isNull(activeTasksWidget.getCollection()));
+      });
     });
   });
 });

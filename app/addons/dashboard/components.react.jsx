@@ -48,6 +48,10 @@ define([
       this.setState(this.getStoreState());
     },
 
+    getCollection: function () {
+      return this.state.collection;
+    },
+
     render: function () {
       var collection = this.state.collection;
       var isEmpty = _.isEmpty(collection);
