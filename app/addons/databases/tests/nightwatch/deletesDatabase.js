@@ -17,6 +17,7 @@ module.exports = {
         baseUrl = client.globals.test_settings.launch_url;
 
     client
+      .createDatabase(newDatabaseName)
       .loginToGUI()
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
       .waitForElementPresent('#header-dropdown-menu a.dropdown-toggle.icon.fonticon-cog', waitTime, false)

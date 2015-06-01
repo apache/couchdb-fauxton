@@ -20,6 +20,7 @@ module.exports = {
 
     var viewUrl = newDatabaseName + '/_design/testdesigndoc/_view/hasenindex5000?limit=6&reduce=false';
     client
+      .createDatabase(newDatabaseName)
       .populateDatabase(newDatabaseName)
       .loginToGUI()
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_design/testdesigndoc/_view/stubview')
@@ -49,6 +50,7 @@ module.exports = {
     var viewUrl = newDatabaseName + '/_design/testdesigndoc/_view/stubview?limit=6&reduce=false';
 
     client
+      .createDatabase(newDatabaseName)
       .populateDatabase(newDatabaseName)
       .loginToGUI()
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_design/testdesigndoc/_view/stubview')
@@ -82,6 +84,7 @@ module.exports = {
     var viewUrl = newDatabaseName + '/_design/testdesigndoc/_view/stubview?reduce=true&group_level=0';
 
     client
+      .createDatabase(newDatabaseName)
       .populateDatabase(newDatabaseName)
       .loginToGUI()
       .url(baseUrl + '/#/database/' + viewUrl)
