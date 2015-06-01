@@ -119,7 +119,8 @@ function (app, FauxtonAPI, ActionTypes, Stores, HeaderStores, HeaderActions, Doc
 
       return this.newResultsList({
         collection: indexResultsStore.getCollection(),
-        isListDeletable: indexResultsStore.isListDeletable()
+        isListDeletable: indexResultsStore.isListDeletable(),
+        bulkCollection: Documents.BulkDeleteDocCollection
       });
     },
 
