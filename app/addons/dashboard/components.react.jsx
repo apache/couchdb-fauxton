@@ -65,6 +65,10 @@ define([
 
   var ActiveTaskWidget = React.createClass({
 
+    getCollection: function () {
+      return this.props.collection;
+    },
+
     render: function () {
       var collection = this.props.collection;
       var isEmpty = this.props.isEmpty;

@@ -53,7 +53,10 @@ define([
       });
 
       it('render the data into the active task table if there are not empty collection', function () {
-        assert.ok(!_.isNull(activeTasksWidget.getCollection()));
+        var collection = dashboardStore.getCollection();
+        var isEmpty = _.isEmpty(collection);
+        var activeTasksWidget = TestUtils.renderIntoDocument(<Components.ActiveTaskWidget collection={collection} isEmpty={isEmpty}/>, activeTasksWidget);
+        assert.ok(!_.isEmpty(activeTasksWidget.getCollection()));
       });
     });
   });
