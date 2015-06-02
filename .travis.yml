@@ -16,9 +16,8 @@ before_install:
   - nvm install 0.10 && nvm use 0.10
 
   - cd ..
-  - git clone --depth=100 https://github.com/apache/couchdb
+  - git clone --depth=1 https://github.com/apache/couchdb
   - cd couchdb
-  - git reset --hard d881dcf5ac990c44d00b2cd49c0e4ff67ae861c5
   - ./configure
   - make
   - ./dev/run --admin=tester:testerpass &
