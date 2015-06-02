@@ -56,12 +56,8 @@ define([
 
       beforeEach(function () {
         tableDiv = document.createElement('div');
-        activeTasksStore.init(activeTasksCollection.table, activeTasksCollection);
+        activeTasksStore.initAfterFetching(activeTasksCollection.table, activeTasksCollection);
         table = TestUtils.renderIntoDocument(React.createElement(Components.ActiveTasksController, null), tableDiv);
-
-        // open filter tray
-        filterTab = TestUtils.findRenderedDOMComponentWithClass(table, 'toggle-filter-tab');
-        TestUtils.Simulate.click(filterTab);
       });
 
       afterEach(function () {
@@ -75,7 +71,13 @@ define([
         assert.equal(tableText.trim(), 'No active tasks.');
       });
 
-      describe('Active Tasks Filter tray', function () {
+      it('should show Active Task View Source Sequence', function () {
+        TestUtils.Simulate.click($(table.getDOMNode()).find('.view-source-sequence-btn')[0]);
+        var el = $(table.getDOMNode()).find('.view_source_sequence_tray')[0];
+        assert.equal( $(el).css('display'), 'block');
+      });
+
+      describe('Active Tasks Filter tabs', function () {
 
         afterEach(function () {
           spy.restore();

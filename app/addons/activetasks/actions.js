@@ -16,17 +16,17 @@ define([
 ],
 function (FauxtonAPI, ActionTypes, Resources) {
   return {
-    fetchAndSetActiveTasks: function (options) {
-      var activeTasks = options;
-
+    init: function (activeTasks) {
+      this.fetchAndSetActiveTasks(activeTasks.table, activeTasks);
       FauxtonAPI.when(activeTasks.fetch()).then(function () {
-        this.init(activeTasks.table, activeTasks);
+        this.fetchAndSetActiveTasks(activeTasks.table, activeTasks);
+        this.setActiveTaskIsLoading(false);
       }.bind(this));
     },
 
-    init: function (collection, backboneCollection) {
+    fetchAndSetActiveTasks: function (collection, backboneCollection) {
       FauxtonAPI.dispatch({
-        type: ActionTypes.ACTIVE_TASKS_INIT,
+        type: ActionTypes.ACTIVE_TASKS_FETCH_AND_SET,
         options: {
           collectionTable: collection,
           backboneCollection: backboneCollection
@@ -63,6 +63,12 @@ function (FauxtonAPI, ActionTypes, Resources) {
         options: {
           columnName: columnName
         }
+      });
+    },
+    setActiveTaskIsLoading: function (boolean) {
+      FauxtonAPI.dispatch({
+        type: ActionTypes.ACTIVE_TASKS_SET_IS_LOADING,
+        options: boolean
       });
     }
   };
