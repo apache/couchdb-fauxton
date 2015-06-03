@@ -46,6 +46,40 @@ function (app, FauxtonAPI, React, ZeroClipboard) {
     }
   });
 
+  // use like this:
+  //  <ComponentsReact.ClipboardWithTextField textToCopy={yourText} uniqueKey={someUniqueValue}>
+  //  </ComponentsReact.ClipboardWithTextField>
+  // pass in the text and a unique key, the key has to be unique or you'll get a warning
+  var ClipboardWithTextField = React.createClass({
+    componentWillMount: function () {
+      ZeroClipboard.config({ moviePath: app.zeroClipboardPath });
+    },
+
+    componentDidUpdate: function () {
+      this.clipboard = new ZeroClipboard(document.getElementById("copy-text-" + this.props.uniqueKey));
+    },
+
+    render: function () {
+      return (
+        <p key={this.props.uniqueKey}>
+          <input
+            type="text"
+            className="input-xxlarge text-field-to-copy"
+            readOnly
+            value={this.props.textToCopy} />
+          <a 
+            id={"copy-text-" + this.props.uniqueKey}
+            className="fonticon-clipboard icon btn copy-button" 
+            data-clipboard-text={this.props.textToCopy} 
+            data-bypass="true" 
+            title="Copy to clipboard" >
+            Copy
+          </a>
+        </p>
+      );
+    }
+  });
+
   // formats a block of code and pretty-prints it in the page. Currently uses the prettyPrint plugin
   var CodeFormat = React.createClass({
     getDefaultProps: function () {
@@ -223,6 +257,7 @@ function (app, FauxtonAPI, React, ZeroClipboard) {
 
   return {
     Clipboard: Clipboard,
+    ClipboardWithTextField: ClipboardWithTextField,
     CodeFormat: CodeFormat,
     Tray: Tray,
     Pagination: Pagination

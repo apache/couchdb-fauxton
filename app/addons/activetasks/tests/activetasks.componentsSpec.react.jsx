@@ -18,8 +18,9 @@ define([
   'react',
   'addons/activetasks/actions',
   'testUtils'
-], function (FauxtonAPI, ActiveTasks, Components, Stores, fakedResponse, React, Actions, testUtils) {
-  var assert = testUtils.assert;
+], function (FauxtonAPI, ActiveTasks, Components, Stores, fakedResponse, React, Actions, utils) {
+  var assert = utils.assert;
+  var restore = utils.restore;
   var TestUtils = React.addons.TestUtils;
   var activeTasksStore = Stores.activeTasksStore;
   var activeTasksCollection = new ActiveTasks.AllTasks({});
@@ -33,12 +34,13 @@ define([
       beforeEach(function () {
         pollingWidgetDiv = document.createElement('div');
         pollingWidget = TestUtils.renderIntoDocument(
-          React.createElement(Components.ActiveTasksPollingWidgetController, null), pollingWidgetDiv
+          <Components.ActiveTasksPollingWidgetController />, pollingWidgetDiv
         );
       });
 
       afterEach(function () {
         React.unmountComponentAtNode(pollingWidgetDiv);
+        restore(Actions.changePollingInterval);
       });
 
       it('should trigger update polling interval', function () {
@@ -56,17 +58,17 @@ define([
 
       beforeEach(function () {
         tableDiv = document.createElement('div');
-        activeTasksStore.init(activeTasksCollection.table, activeTasksCollection);
-        table = TestUtils.renderIntoDocument(React.createElement(Components.ActiveTasksController, null), tableDiv);
+        activeTasksStore.initAfterFetching(activeTasksCollection.table, activeTasksCollection);
+        table = TestUtils.renderIntoDocument(<Components.ActiveTasksController />, tableDiv);
 
         // open filter tray
-        filterTab = TestUtils.findRenderedDOMComponentWithClass(table, 'toggle-filter-tab');
-        TestUtils.Simulate.click(filterTab);
+        //filterTab = TestUtils.findRenderedDOMComponentWithClass(table, 'toggle-filter-tab');
+        //TestUtils.Simulate.click(filterTab);
       });
 
       afterEach(function () {
         React.unmountComponentAtNode(tableDiv);
-        window.confirm.restore && window.confirm.restore();
+        restore(window.confirm);
       });
 
       it('it displays a message instead of an empty table, if there are undefined active tasks', function () {
@@ -78,7 +80,8 @@ define([
       describe('Active Tasks Filter tray', function () {
 
         afterEach(function () {
-          spy.restore();
+          restore(Actions.switchTab);
+          restore(Actions.setSearchTerm);
         });
 
         var radioIDs = [
@@ -113,6 +116,10 @@ define([
           'pid',
           'progress'
         ];
+
+        afterEach(function () {
+          restore(Actions.sortByColumnHeader);
+        });
 
         it('should trigger change to which header to sort by', function () {
           _.each(headerNames, function (header) {

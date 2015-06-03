@@ -18,7 +18,7 @@ define([
 
   var ActiveTasksStore = FauxtonAPI.Store.extend({
 
-    init: function (collectionTable, backboneCollection) {
+    initAfterFetching: function (collectionTable, backboneCollection) {
       this._prevSortbyHeader = 'started_on';
       this._headerIsAscending = true;
       this._selectedRadio = 'All Tasks';
@@ -28,6 +28,29 @@ define([
       this._pollingIntervalSeconds = 5;
       this.sortCollectionByColumnHeader(this._sortByHeader);
       this._backboneCollection = backboneCollection;
+      this.setIsLoading(true, new Date());
+    },
+
+    isLoading: function () {
+      return this._isLoading;
+    },
+
+    setIsLoading: function (bool, time) {
+      if (bool) {
+        this._startTimeForLoading = time;
+        this._isLoading = true;
+      } else {
+        var stoptime = time;
+        var responseTime = stoptime - this._startTimeForLoading;
+        if (responseTime < 800) {
+          setTimeout(function () {
+            this._isLoading = false;
+            this.triggerChange();
+          }.bind(this), 800);  //stop after 800ms for smooth animation
+        } else {
+          this._isLoading = false;
+        }
+      }
     },
 
     getSelectedRadio: function () {
@@ -47,7 +70,7 @@ define([
     },
 
     setPolling: function () {
-      clearInterval(this.getIntervalID());
+      this.clearPolling();
       var id = setInterval(function () {
         this._backboneCollection.pollingFetch();
         this.setCollection(this._backboneCollection.table);
@@ -170,8 +193,8 @@ define([
     dispatch: function (action) {
       switch (action.type) {
 
-        case ActionTypes.ACTIVE_TASKS_INIT:
-          this.init(action.options.collectionTable, action.options.backboneCollection);
+        case ActionTypes.ACTIVE_TASKS_FETCH_AND_SET:
+          this.initAfterFetching(action.options.collectionTable, action.options.backboneCollection);
         break;
 
         case ActionTypes.ACTIVE_TASKS_CHANGE_POLLING_INTERVAL:
@@ -199,6 +222,11 @@ define([
           this.toggleHeaderIsAscending();
           this.setSortByHeader(action.options.columnName);
           this.sortCollectionByColumnHeader(action.options.columnName);
+          this.triggerChange();
+        break;
+
+        case ActionTypes.ACTIVE_TASKS_SET_IS_LOADING:
+          this.setIsLoading(action.options, new Date());
           this.triggerChange();
         break;
 
