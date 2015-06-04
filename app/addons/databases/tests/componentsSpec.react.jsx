@@ -83,7 +83,7 @@ define([
         ];
       };
       container = document.createElement('div');
-      dbEl = React.renderComponent(React.createElement(Views.DatabasesController, {}), container);
+      dbEl = React.render(React.createElement(Views.DatabasesController, {}), container);
     });
 
     afterEach(function () {
@@ -116,7 +116,7 @@ define([
         passedDbName = dbName;
       };
       container = document.createElement('div');
-      addEl = React.renderComponent(React.createElement(Views.AddDatabaseWidget, {}), container);
+      addEl = React.render(React.createElement(Views.AddDatabaseWidget, {}), container);
     });
 
     afterEach(function () {
@@ -158,7 +158,7 @@ define([
         return ["db1", "db2"];
       };
       container = document.createElement('div');
-      jumpEl = React.renderComponent(React.createElement(Views.JumpToDatabaseWidget, {}), container);
+      jumpEl = React.render(React.createElement(Views.JumpToDatabaseWidget, {}), container);
     });
 
     afterEach(function () {

@@ -12,13 +12,13 @@
 define([
   'api',
   'addons/activetasks/resources',
-  'addons/activetasks/components.react',
   'addons/activetasks/stores',
   'addons/activetasks/tests/fakeActiveTaskResponse',
   'react',
   'testUtils'
-], function (FauxtonAPI, ActiveTasks, Components, Stores, fakedResponse, React, testUtils) {
-  var assert = testUtils.assert;
+], function (FauxtonAPI, ActiveTasks, Stores, fakedResponse, React, utils) {
+  var assert = utils.assert;
+  var restore = utils.restore;
   var TestUtils = React.addons.TestUtils;
 
   var activeTasksStore = Stores.activeTasksStore;
@@ -26,29 +26,30 @@ define([
   activeTasksCollection.parse(fakedResponse);
 
   describe('Active Tasks -- Stores', function () {
-    var spy;
+    var spy, clock;
 
     beforeEach(function () {
-      activeTasksStore.init(activeTasksCollection.table, activeTasksCollection);
-      this.clock = sinon.useFakeTimers();
+      activeTasksStore.initAfterFetching(activeTasksCollection.table, activeTasksCollection);
+      clock = sinon.useFakeTimers();
     });
 
     afterEach(function () {
-      testUtils.restore(spy);
-      testUtils.restore(this.clock);
+      restore(spy);
+      restore(clock);
     });
 
     describe('Active Task Stores - Polling', function () {
       var pollingWidgetDiv, pollingWidget;
 
       beforeEach(function () {
-        activeTasksStore.init(activeTasksCollection.table, activeTasksCollection);
-        this.clock = sinon.useFakeTimers();
+        activeTasksStore.initAfterFetching(activeTasksCollection.table, activeTasksCollection);
+        clock = sinon.useFakeTimers();
       });
 
       afterEach(function () {
-        testUtils.restore(spy);
-        testUtils.restore(this.clock);
+        restore(activeTasksStore.getPollingInterval);
+        restore(window.clearInterval);
+        restore(clock);
       });
 
       it('should poll at the min time', function () {
@@ -59,10 +60,10 @@ define([
         assert.ok(spy.calledOnce);
 
         setInterval(spy, minTime * 1000);
-        this.clock.tick(minTime * 1000);
+        clock.tick(minTime * 1000);
         assert.ok(spy.calledTwice);
 
-        this.clock.tick(minTime * 1000);
+        clock.tick(minTime * 1000);
         assert.ok(spy.calledThrice);
       });
 
@@ -75,10 +76,10 @@ define([
         assert.ok(spy.calledOnce);
 
         setInterval(spy, maxTime * 1000);
-        this.clock.tick(maxTime * 1000);
+        clock.tick(maxTime * 1000);
         assert.ok(spy.calledTwice);
 
-        this.clock.tick(maxTime * 1000);
+        clock.tick(maxTime * 1000);
         assert.ok(spy.calledThrice);
       });
 
@@ -91,10 +92,10 @@ define([
         assert.ok(spy.calledOnce);
 
         setInterval(spy, midtime * 1000);
-        this.clock.tick(midtime * 1000);
+        clock.tick(midtime * 1000);
         assert.ok(spy.calledTwice);
 
-        this.clock.tick(midtime * 1000);
+        clock.tick(midtime * 1000);
         assert.ok(spy.calledThrice);
       });
 
@@ -132,7 +133,7 @@ define([
         //parse table and check that it only contains objects with type: Replication
         _.each(storeFilteredtable, function (activeTask) {
           assert.ok(activeTasksStore.passesRadioFilter(activeTask));
-          assert.ok(activeTask.type === activeTasksStore.getSelectedRadio());
+          assert.deepEqual(activeTask.type, activeTasksStore.getSelectedRadio());
         });
       });
 
@@ -158,20 +159,20 @@ define([
       it('should set header as ascending, on default', function () {
         activeTasksStore.setSelectedRadio('all_tasks');
         activeTasksStore._headerIsAscending = true;
-        assert.ok(activeTasksStore.getHeaderIsAscending() === true);
+        assert.ok(activeTasksStore.getHeaderIsAscending());
       });
 
       it('should set header as descending, if same header is selected again', function () {
         activeTasksStore._prevSortbyHeader = 'sameHeader';
         activeTasksStore._sortByHeader = 'sameHeader';
         activeTasksStore.toggleHeaderIsAscending();
-        assert.ok(activeTasksStore.getHeaderIsAscending() === false);
+        assert.notOk(activeTasksStore.getHeaderIsAscending());
       });
 
       it('should set header as ascending, if different header is selected', function () {
         activeTasksStore._sortByHeader = 'differentHeader';
         activeTasksStore.toggleHeaderIsAscending();
-        assert.ok(activeTasksStore.getHeaderIsAscending() === true);
+        assert.ok(activeTasksStore.getHeaderIsAscending());
       });
     });
   });

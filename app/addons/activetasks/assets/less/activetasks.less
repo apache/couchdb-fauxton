@@ -10,6 +10,10 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+@import "../../../../../assets/less/bootstrap/variables.less";
+@import "../../../../../assets/less/variables.less";
+@import "../../../../../assets/less/bootstrap/mixins.less";
+
 .task-tabs li,
 .active-tasks th {
   cursor: pointer;
@@ -65,7 +69,7 @@
 }
 
 .no-matching-database-on-search {
-  color: #e33f3b;
+  color: #af2d24;
 }
 
 p.multiline-active-tasks-message {
@@ -88,67 +92,63 @@ p.multiline-active-tasks-message {
   }
 }
 
+#active-tasks-filter-tabs {
+
+  height: 100px;
+  background-color: #CBCBCB;
+  padding-left: 20px;
+  min-width: 550px;
+  overflow: scroll;
+
+
+  input {
+    display:none;
+  }
+
+  li {
+    background-color: #eee;
+    margin-top: 65px;
+    margin-left: 3px;
+    &.active-tasks-checked {
+      background-color: #af2d24;
+
+      label {
+        color: #fff;
+      }
+    };
+
+    &:hover {
+      border: 1px solid #af2d24;
+      color: #af2d24;
+    };
+
+    label {
+      height: 35px;
+      width: 100%;
+      line-height: 35px;
+      text-align: center;
+    } 
+  }
+
+  #active-tasks-search-box {
+    display: inline;
+    font-size: 14px;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    height: 36px;
+    background-color: #eee;
+    width: 200px;
+    margin: 0px;
+
+    &:focus {
+      background-color: #fff;
+      outline-color: #fff;
+    };
+  }
+}
+
 .dashboard-lower-menu {
   padding-top: 90px;
   padding-left: 20px;
-}
-
-input[type="text"].searchbox {
-  width: 200px;
-  height: 40px;
-  float: right;
-  margin:0px;
-}
-
-#toggle-filter-tab:hover {
-  color: white;
-  background-color: #e33f3b;
-}
-
-.filter-tray.toggleFilterTray-enter {     // starting css
-  overflow: hidden;
-  padding-top: 0px;
-  max-height: 0px;
-}
-                                          // animate opening 
-.filter-tray.toggleFilterTray-enter.toggleFilterTray-enter-active {     
-  max-height: 300px;
-  height: auto;
-  transition: max-height 0.5s linear;
-}
-
-.filter-tray {                            // final css 
-  height: auto;
-  max-height: 300px;                      
-  overflow: hidden;
-}
-                                          // animate closing 
-.filter-tray.toggleFilterTray-leave.toggleFilterTray-leave-active {     
-  max-height: 0;
-  padding-top: 0px;
-  transition: max-height 0.5s linear;
-}
-
-.filter-checkboxes {
-  float: left;
-  height: auto;
-  width: auto;
-  margin-top: 10px;
-}
-
-.active-tasks-one-checkbox {
-  input {
-    vertical-align: middle;
-    margin-right: 5px;
-    margin-bottom: 3px;
-  }
-  margin-right: 10px;
-  display: inline-block;
-}
-
-.active-tasks-checkbox-label {
-  display: inline-block;
-  color: #666;
 }
 
 @media (max-width: 940px) {
@@ -159,16 +159,13 @@ input[type="text"].searchbox {
   }
 }
 
-.filter-checkboxes-form {
-  margin:0px;
-}
-
 .polling-interval-widget {
 
   width: 250px;
   margin-right: 20px;
   margin-top: 10px;
   color: #666;
+  float:right;
 
   li {
     list-style-type: none;
@@ -207,5 +204,65 @@ input[type="text"].searchbox {
   .table th& {
     padding: 0px;
     margin: 0px;
+  }
+
+  .active-tasks-header {
+    background-color: #ccc;
+  }
+
+  .icon-caret-up, .icon-caret-down {
+    color: #af2d24;
+  }
+}
+
+.active-tasks-loading-lines {
+  padding-top: 15px;
+  float: left;
+  margin-left: -40px;
+
+  #line1, #line2, #line3, #line4 {
+    background-color: #bbb;
+  }
+}
+
+.view-source-sequence-btn { // "View" Button
+  background-color: #666;
+  display: inline;
+  border-radius: 3px; 
+  padding: 5px;
+  color: #fff !important; 
+}
+
+.view_source_sequence_tray {
+  padding: 16px 20px 28px;
+
+  position: relative;
+  min-width: 360px;
+  top: 15px;
+  float: right;
+
+  &:before {
+    right: 20px;
+  }
+  input.input-xxlarge {
+    margin-bottom: 0px;
+    width: 250px;
+    .border-radius(5px 0 0 5px);
+  }
+
+  a.btn {
+    color: white;
+    background-color: #af2d24;
+    margin-left: 0;
+    line-height: 1.5em;
+    border: 0px;
+    padding: 10px 10px 9px;
+    font-size: 14px;
+    .border-radius(0 5px 5px 0);
+
+    &:hover, &.copy-button.zeroclipboard-is-hover {
+      background-color: #cbcbcb;
+      color: white;
+    }
   }
 }
