@@ -12,6 +12,7 @@
 define([
   'api',
   'addons/components/react-components.react',
+
   'testUtils',
   'react'
 ], function (FauxtonAPI, ReactComponents, utils, React) {
@@ -28,7 +29,7 @@ define([
       spy = sinon.spy();
       container = document.createElement('div');
       codeEditorEl = TestUtils.renderIntoDocument(
-        <ReactComponents.CodeEditor code={code} change={spy} />,
+        React.createElement(ReactComponents.CodeEditor, {code: code, change: spy}),
         container
       );
     });
@@ -64,7 +65,7 @@ define([
 
       beforeEach(function () {
         codeEditorEl = TestUtils.renderIntoDocument(
-          <ReactComponents.CodeEditor code={code} isFullPageEditor={false}  setHeightWithJS={true}/>,
+          React.createElement(ReactComponents.CodeEditor, {code: code, isFullPageEditor: false, setHeightWithJS: true}),
           container
         );
 
@@ -84,7 +85,7 @@ define([
 
       beforeEach(function () {
         codeEditorEl = TestUtils.renderIntoDocument(
-          <ReactComponents.CodeEditor code={code}/>,
+          React.createElement(ReactComponents.CodeEditor, {code: code}),
           container
         );
 
@@ -100,7 +101,7 @@ define([
 
       it('sets new code', function () {
         codeEditorEl = TestUtils.renderIntoDocument(
-          <ReactComponents.CodeEditor code={code}/>,
+          React.createElement(ReactComponents.CodeEditor, {code: code}),
           container
         );
 
@@ -114,7 +115,7 @@ define([
 
       it('only shows editor when showEditorOnly=true', function () {
         codeEditorEl = TestUtils.renderIntoDocument(
-          <ReactComponents.CodeEditor code={code} showEditorOnly={true} />,
+          React.createElement(ReactComponents.CodeEditor, {code: code, showEditorOnly: true}),
           container
         );
         assert.notOk($(codeEditorEl.getDOMNode()).hasClass('control-group'));
@@ -122,40 +123,12 @@ define([
 
       it('shows everything by default', function () {
         var codeEditorEl = TestUtils.renderIntoDocument(
-          <ReactComponents.CodeEditor code={code} />,
+          React.createElement(ReactComponents.CodeEditor, {code: code}),
           container
         );
         assert.ok($(codeEditorEl.getDOMNode()).hasClass('control-group'));
       });
 
-    });
-
-    describe('Zen Mode', function () {
-      it('shows zen mode by default', function () {
-        var container = document.createElement('div');
-        var codeEditorEl = TestUtils.renderIntoDocument(
-          <ReactComponents.CodeEditor code={code} change={spy} docs="http://link.com" />,
-          container
-        );
-        assert.equal($(codeEditorEl.getDOMNode()).find('.zen-editor-icon').length, 1);
-      });
-
-      it('omits zen mode if explicitly turned off', function () {
-        var container = document.createElement('div');
-        var codeEditorEl = TestUtils.renderIntoDocument(
-          <ReactComponents.CodeEditor code={code} change={spy} docs="http://link.com" allowZenMode={false} />,
-          container
-        );
-        assert.equal($(codeEditorEl.getDOMNode()).find('.zen-editor-icon').length, 0);
-      });
-
-      it('updates parent editor after changing content in zen mode', function () {
-        var container = document.createElement('div');
-        var codeEditorEl = TestUtils.renderIntoDocument(
-          <ReactComponents.CodeEditor code={code} change={spy} docs="http://link.com" />,
-          container
-        );
-      });
     });
   });
 });
