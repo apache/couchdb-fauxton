@@ -56,7 +56,7 @@ define([
       var collection = this.state.collection;
       var isEmpty = _.isEmpty(collection);
       return (
-        <div>
+        <div className="dashboard-container">
           <ActiveTaskWidget collection={collection} isEmpty={isEmpty}/>
         </div>
         );
@@ -73,20 +73,17 @@ define([
       var collection = this.props.collection;
       var isEmpty = this.props.isEmpty;
       return (
-        <div className="widget-container active-task-box">
+        <div className="widget-container-row">
           <div className="widget-header">
-            <span>Active Tasks</span>
+            <span>Active Replications</span>
           </div>
-          <hr className="widget-header-separator"/>
-          <div className="active-task-table">
-            <ActiveTaskTable collection={collection} isEmpty={isEmpty}/>
-          </div>
+          <ActiveTaskContent collection={collection} isEmpty={isEmpty}/>
         </div>
         );
     }
   });
 
-  var ActiveTaskTable = React.createClass({
+  var ActiveTaskContent = React.createClass({
 
     getStoreState: function () {
       return {
@@ -110,88 +107,66 @@ define([
       }
 
       return _.map(this.state.filteredTable, function (item, iteration) {
-        return <ActiveTaskTableBodyContents key={iteration} item={item} />;
+        return <ActiveTaskBox key={iteration} item={item} />;
       });
     },
 
     noActiveTasks: function () {
       return (
-        <tr>
-          <td className="noResult">No active tasks.</td>
-        </tr>
+        <span>No Result</span>
         );
     },
 
     noActiveTasksMatchFilter: function () {
       return (
-        <tr>
-          <td className="noResult">No active tasks match with filter.</td>
-        </tr>
+        <span>No Result</span>
         );
     },
 
     render: function () {
-      var rows = this.createRows();
+      var boxes = this.createRows();
       return (
-        <table className="widget-activeTask-table">
-          <thead>
-            <tr>
-              <th className="pid-column">PID</th>
-              <th className="type-column">Type</th>
-              <th className="progress-column">Progress</th>
-              <th className="updateOn-column">Updated On</th>
-            </tr>
-          </thead>
-          <tbody>
-          {rows}
-          </tbody>
-        </table>
-        );
+        <div className="widget-body">
+        {boxes}
+        </div>
+        )
+        ;
     }
   });
 
-  var ActiveTaskTableBodyContents = React.createClass({
+  var ActiveTaskBox = React.createClass({
     getInfo: function (item) {
       return {
-        type: item.type,
-        updatedOn: activeTasksHelpers.getTimeInfo(item.updated_on),
-        pid: item.pid.replace(/[<>]/g, ''),
+        toDatabase: item.target,
+        fromDatabase: item.source,
         progress: activeTasksHelpers.getProgress(item.progress)
       };
     },
 
     render: function () {
-      var rowData = this.getInfo(this.props.item);
+      var data = this.getInfo(this.props.item);
       return (
-        <tr>
-          <td className="pid-column">{rowData.pid}</td>
-          <td className="type-column">{rowData.type}</td>
-          <td className="progress-column">{rowData.progress}</td>
-          <td className="updateOn-column">{rowData.updatedOn}</td>
-        </tr>
+        <div className="active-tasks-box">
+            <div className="active-tasks-toDatabase">{data.toDatabase}</div>
+            <div className="active-tasks-arrow"><i className="fonticon-up size-36"></i></div>
+            <div className="active-tasks-fromDatabase">{data.fromDatabase}</div>
+            <div className="active-tasks-complete">{data.progress}</div>
+        </div>
         );
     }
-
   });
 
   var activeTasksHelpers = {
-    getTimeInfo: function (timeStamp) {
-      var timeMessage = [
-        App.helpers.formatDate(timeStamp)
-      ];
-      return timeMessage;
-    },
-
     getProgress: function (item) {
-      return item + '%';
+      return item + '% Complete';
     }
   };
 
   return {
     DashboardController: DashboardController,
-    ActiveTaskTable: ActiveTaskTable,
+    ActiveTaskContent: ActiveTaskContent,
     ActiveTaskWidget: ActiveTaskWidget,
-    ActiveTaskTableBodyContents: ActiveTaskTableBodyContents
+    ActiveTaskBox: ActiveTaskBox
   };
 });
 
