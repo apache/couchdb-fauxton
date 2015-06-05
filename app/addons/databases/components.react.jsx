@@ -70,8 +70,12 @@ define([
 
     getExtensionColumns: function () {
       var cols = FauxtonAPI.getExtensions('DatabaseTable:head');
-      return _.map(cols, function (Item, index) {
-        return <Item key={index} />;
+
+      // regrettable, but necessary. This hack gets around a current React bug where you can't return an empty node
+      // within a table tr: https://github.com/glittershark/reactable/issues/133
+      return _.filter(cols, function (Item, index) {
+        var item = React.renderToStaticMarkup(<Item />);
+        return (item === '<noscript></noscript>') ? null : <Item key={index} />;
       });
     },
 
@@ -118,8 +122,11 @@ define([
 
     getExtensionColumns: function (row) {
       var cols = FauxtonAPI.getExtensions('DatabaseTable:databaseRow');
-      return _.map(cols, function (Item, index) {
-        return <Item row={row} key={index} />;
+
+      // see comment above reg. https://github.com/glittershark/reactable/issues/133
+      return _.filter(cols, function (Item, index) {
+        var item = React.renderToStaticMarkup(<Item row={row} />);
+        return (item === '<noscript></noscript>') ? null : <Item row={row} key={index} />;
       });
     },
 
