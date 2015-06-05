@@ -75,7 +75,7 @@ define([
       return (
         <div className="widget-container-row">
           <div className="widget-header">
-            <span>Active Replications</span>
+            <a href={"#/activetasks"}>Active Replications</a>
           </div>
           <ActiveTaskContent collection={collection} isEmpty={isEmpty}/>
         </div>
@@ -87,7 +87,7 @@ define([
 
     getStoreState: function () {
       return {
-        filteredTable: activeTaskList.getFilteredTable(this.props.collection)
+        filteredActiveTasks: activeTaskList.getFilteredTable(this.props.collection)
       };
     },
 
@@ -97,34 +97,34 @@ define([
 
     componentWillReceiveProps: function (nextProps) {
       this.setState({
-        filteredTable: activeTaskList.getFilteredTable(this.props.collection)
+        filteredActiveTasks: activeTaskList.getFilteredTable(this.props.collection)
       });
     },
 
-    createRows: function () {
-      if (this.state.filteredTable.length === 0) {
+    createActiveTasksBox: function () {
+      if (this.state.filteredActiveTasks.length === 0) {
         return this.props.isEmpty ? this.noActiveTasks() : this.noActiveTasksMatchFilter();
       }
 
-      return _.map(this.state.filteredTable, function (item, iteration) {
+      return _.map(this.state.filteredActiveTasks, function (item, iteration) {
         return <ActiveTaskBox key={iteration} item={item} />;
       });
     },
 
     noActiveTasks: function () {
       return (
-        <span>No Result</span>
+        <span className="noResult">No Result</span>
         );
     },
 
     noActiveTasksMatchFilter: function () {
       return (
-        <span>No Result</span>
+        <span className="noResult">No Result</span>
         );
     },
 
     render: function () {
-      var boxes = this.createRows();
+      var boxes = this.createActiveTasksBox();
       return (
         <div className="widget-body">
         {boxes}
@@ -139,18 +139,33 @@ define([
       return {
         toDatabase: item.target,
         fromDatabase: item.source,
-        progress: activeTasksHelpers.getProgress(item.progress)
+        progress: item.progress
       };
     },
 
     render: function () {
       var data = this.getInfo(this.props.item);
+      var className = 'active-tasks-box';
+      var progress = data.progress;
+      if (progress > 50) {
+        className = className + ' high-contrast';
+      } else {
+        className = className + ' low-contrast';
+      }
+      data.progress = activeTasksHelpers.getProgress(progress);
+      progress = progress / 100;
+      var style = {
+        opacity: progress
+      };
       return (
-        <div className="active-tasks-box">
-            <div className="active-tasks-toDatabase">{data.toDatabase}</div>
-            <div className="active-tasks-arrow"><i className="fonticon-up size-36"></i></div>
-            <div className="active-tasks-fromDatabase">{data.fromDatabase}</div>
-            <div className="active-tasks-complete">{data.progress}</div>
+        <div className={className}>
+          <div className="active-tasks-box-background" style={style}></div>
+          <div className="active-tasks-toDatabase">{data.toDatabase}</div>
+          <div className="active-tasks-arrow">
+            <i className="fonticon-up size-36"></i>
+          </div>
+          <div className="active-tasks-fromDatabase">{data.fromDatabase}</div>
+          <div className="active-tasks-complete">{data.progress}</div>
         </div>
         );
     }

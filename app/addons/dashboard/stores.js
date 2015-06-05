@@ -25,21 +25,11 @@ define([
     reset: function (collectionTable, backboneCollection) {
       this._prevSortbyHeader = 'started_on';
       this._headerIsAscending = true;
-      this._selectedRadio = 'All Tasks';
       this._sortByHeader = 'started_on';
-      this._searchTerm = '';
       this._collection = collectionTable;
       this._pollingIntervalSeconds = 5;
       this.sortCollectionByColumnHeader(this._sortByHeader);
       this._backboneCollection = backboneCollection;
-    },
-
-    getSelectedRadio: function () {
-      return this._selectedRadio;
-    },
-
-    setSelectedRadio: function (selectedRadio) {
-      this._selectedRadio = selectedRadio;
     },
 
     getPollingInterval: function () {
@@ -96,38 +86,16 @@ define([
 
       //insert all matches into table
       var table = this._collection.filter(function (item) {
-        return this.passesRadioFilter(item) && this.passesSearchFilter(item);
+        return item.type ===  'replication';
       }, this);
 
       return table;
     },
 
-    passesSearchFilter: function (item) {
-      var regex = new RegExp(this._searchTerm, 'g');
-
-      var itemDatabasesTerm = '';
-      if (_.has(item, 'database')) {
-        itemDatabasesTerm += item.database;
-      }
-      if (_.has(item, 'source')) {
-        itemDatabasesTerm += item.source;
-      }
-      if (_.has(item, 'target')) {
-        itemDatabasesTerm += item.target;
-      }
-
-      return regex.test(itemDatabasesTerm);
-    },
-
-    passesRadioFilter: function (item) {
-      var selectedRadio = this._selectedRadio.toLowerCase().replace(' ', '_') ;
-      return item.type ===  selectedRadio ||  selectedRadio === 'all_tasks';
-    },
-
     dispatch: function (action) {
       switch (action.type) {
 
-        case ActionTypes.ACTIVE_TASKS_INIT:
+        case ActionTypes.ACTIVE_TASKS_FETCH_AND_SET:
           this.dashboardWidgetActiveTaskInitialize(action.options.collectionTable, action.options.backboneCollection);
         break;
 

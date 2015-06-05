@@ -25,7 +25,7 @@ function (FauxtonAPI, ActionTypes, Resources) {
 
     init: function (collection, backboneCollection) {
       FauxtonAPI.dispatch({
-        type: ActionTypes.ACTIVE_TASKS_INIT,
+        type: ActionTypes.ACTIVE_TASKS_FETCH_AND_SET,
         options: {
           collectionTable: collection,
           backboneCollection: backboneCollection
