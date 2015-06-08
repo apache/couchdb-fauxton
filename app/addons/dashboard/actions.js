@@ -11,9 +11,9 @@
 // the License.
 define([
   'api',
-  'addons/activetasks/actiontypes'
+  'addons/dashboard/actiontypes'
 ],
-function (FauxtonAPI, ActionTypes, Resources) {
+function (FauxtonAPI, ActionTypes) {
   return {
     fetchAndSetActiveTasks: function (options) {
       var activeTasks = options;
@@ -32,16 +32,20 @@ function (FauxtonAPI, ActionTypes, Resources) {
         }
       });
     },
-    changePollingInterval: function (interval) {
-      FauxtonAPI.dispatch({
-        type: ActionTypes.ACTIVE_TASKS_CHANGE_POLLING_INTERVAL,
-        options: interval
-      });
-    },
     setCollection: function (collection) {
       FauxtonAPI.dispatch({
         type: ActionTypes.ACTIVE_TASKS_SET_COLLECTION,
         options: collection
+      });
+    },
+    setPolling: function () {
+      FauxtonAPI.dispatch({
+        type: ActionTypes.ACTIVE_TASKS_SET_POLLING
+      });
+    },
+    clearPolling: function () {
+      FauxtonAPI.dispatch({
+        type: ActionTypes.ACTIVE_TASKS_CLEAR_POLLING
       });
     }
   };
