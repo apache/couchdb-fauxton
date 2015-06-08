@@ -14,8 +14,9 @@ define([
   'app',
   'api',
   'react',
-  'addons/dashboard/stores'
-], function (App, FauxtonAPI, React, Store) {
+  'addons/dashboard/stores',
+  'addons/dashboard/actions'
+], function (App, FauxtonAPI, React, Store, Action) {
 
   var activeTaskList = Store.dashboardStore;
 
@@ -23,10 +24,7 @@ define([
 
     getStoreState: function () {
       return {
-        collection: activeTaskList.getCollection(),
-
-        setPolling: activeTaskList.setPolling,
-        clearPolling: activeTaskList.clearPolling
+        collection: activeTaskList.getCollection()
       };
     },
 
@@ -35,12 +33,12 @@ define([
     },
 
     componentDidMount: function () {
-      this.state.setPolling();
+      Action.setPolling();
       activeTaskList.on('change', this.onChange, this);
     },
 
     componentWillUnmount: function () {
-      this.state.clearPolling();
+      Action.clearPolling();
       activeTaskList.off('change', this.onChange, this);
     },
 

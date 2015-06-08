@@ -13,7 +13,7 @@
 define([
   'app',
   'api',
-  'addons/activetasks/actiontypes'
+  'addons/dashboard/actiontypes'
 ], function (app, FauxtonAPI, ActionTypes) {
 
   var DashboardStore = FauxtonAPI.Store.extend({
@@ -99,14 +99,18 @@ define([
           this.dashboardWidgetActiveTaskInitialize(action.options.collectionTable, action.options.backboneCollection);
         break;
 
-        case ActionTypes.ACTIVE_TASKS_CHANGE_POLLING_INTERVAL:
-          this.setPollingInterval(action.options);
+        case ActionTypes.ACTIVE_TASKS_SET_COLLECTION:
+          this.setCollection(action.options);
+          this.triggerChange();
+        break;
+
+        case ActionTypes.ACTIVE_TASKS_SET_POLLING:
           this.setPolling();
           this.triggerChange();
         break;
 
-        case ActionTypes.ACTIVE_TASKS_SET_COLLECTION:
-          this.setCollection(action.options);
+        case ActionTypes.ACTIVE_TASKS_CLEAR_POLLING:
+          this.clearPolling();
           this.triggerChange();
         break;
 
