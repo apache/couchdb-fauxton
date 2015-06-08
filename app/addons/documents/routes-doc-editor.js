@@ -11,17 +11,16 @@
 // the License.
 
 define([
-  "app",
-  "api",
-
-  // Modules
-  "addons/documents/helpers",
-  "addons/documents/views",
-  "addons/documents/views-doceditor",
-  "addons/databases/base"
+  'app',
+  'api',
+  'addons/documents/helpers',
+  'addons/documents/resources',
+  'addons/databases/base',
+  'addons/documents/doc-editor/actions',
+  'addons/documents/doc-editor/components.react'
 ],
 
-function (app, FauxtonAPI, Helpers, Documents, DocEditor, Databases) {
+function (app, FauxtonAPI, Helpers, Documents, Databases, Actions, ReactComponents) {
 
 
   var DocEditorRouteObject = FauxtonAPI.RouteObject.extend({
@@ -29,22 +28,24 @@ function (app, FauxtonAPI, Helpers, Documents, DocEditor, Databases) {
     disableLoader: true,
     selectedHeader: 'Databases',
 
+    roles: ['fx_loggedIn'],
+
     initialize: function (route, masterLayout, options) {
       this.databaseName = options[0];
       this.docID = options[1] || 'new';
-
       this.database = this.database || new Databases.Model({ id: this.databaseName });
       this.doc = new Documents.Doc({ _id: this.docID }, { database: this.database });
+      this.isNewDoc = false;
+      this.wasCloned = false;
     },
 
     routes: {
-      'database/:database/:doc/code_editor': 'code_editor',
-      'database/:database/:doc': 'code_editor',
+      'database/:database/:doc/code_editor': 'codeEditor',
+      'database/:database/:doc': 'codeEditor',
       'database/:database/_design/:ddoc': 'showDesignDoc'
     },
 
     events: {
-      'route:reRenderDoc': 'reRenderDoc',
       'route:duplicateDoc': 'duplicateDoc'
     },
 
@@ -57,7 +58,7 @@ function (app, FauxtonAPI, Helpers, Documents, DocEditor, Databases) {
       ];
     },
 
-    code_editor: function (database, doc) {
+    codeEditor: function (database, doc) {
 
       // if either the database or document just changed, we need to get the latest doc/db info
       if (this.databaseName !== database) {
@@ -69,25 +70,22 @@ function (app, FauxtonAPI, Helpers, Documents, DocEditor, Databases) {
         this.doc = new Documents.Doc({ _id: this.docID }, { database: this.database });
       }
 
-      this.docView = this.setView('#dashboard-content', new DocEditor.CodeEditor({
-        model: this.doc,
+      Actions.initDocEditor({ doc: this.doc, database: this.database });
+      this.setComponent('#dashboard-content', ReactComponents.DocEditorController, {
         database: this.database,
-        previousPage: Helpers.getPreviousPageForDoc(this.database)
-      }));
+        isNewDoc: this.isNewDoc,
+        previousPage: '#/' + Helpers.getPreviousPageForDoc(this.database)
+      });
     },
 
     showDesignDoc: function (database, ddoc) {
-      this.code_editor(database, '_design/' + ddoc);
-    },
-
-    reRenderDoc: function () {
-      this.docView.forceRender();
+      this.codeEditor(database, '_design/' + ddoc);
     },
 
     duplicateDoc: function (newId) {
       var doc = this.doc,
-      docView = this.docView,
-      database = this.database;
+          database = this.database;
+
       this.docID = newId;
 
       var that = this;
@@ -95,7 +93,6 @@ function (app, FauxtonAPI, Helpers, Documents, DocEditor, Databases) {
         doc.set({ _id: newId });
         that.wasCloned = true;
 
-        docView.forceRender();
         FauxtonAPI.navigate('/database/' + database.safeID() + '/' + app.utils.safeURLName(newId), { trigger: true });
         FauxtonAPI.addNotification({
           msg: 'Document has been duplicated.'
@@ -115,14 +112,15 @@ function (app, FauxtonAPI, Helpers, Documents, DocEditor, Databases) {
     }
   });
 
+
   var NewDocEditorRouteObject = DocEditorRouteObject.extend({
     initialize: function (route, masterLayout, options) {
       var databaseName = options[0];
-
-      this.database = this.database || new Databases.Model({id: databaseName});
+      this.database = this.database || new Databases.Model({ id: databaseName });
       this.doc = new Documents.NewDoc(null, {
         database: this.database
       });
+      this.isNewDoc = true;
     },
 
     crumbs: function () {
@@ -134,7 +132,7 @@ function (app, FauxtonAPI, Helpers, Documents, DocEditor, Databases) {
     },
 
     routes: {
-      'database/:database/new': 'code_editor'
+      'database/:database/new': 'codeEditor'
     },
 
     selectedHeader: 'Databases'
@@ -145,4 +143,5 @@ function (app, FauxtonAPI, Helpers, Documents, DocEditor, Databases) {
     NewDocEditorRouteObject: NewDocEditorRouteObject,
     DocEditorRouteObject: DocEditorRouteObject
   };
+
 });

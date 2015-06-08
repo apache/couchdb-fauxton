@@ -26,8 +26,11 @@ module.exports = {
       .clickWhenVisible('#new-all-docs-button a[href="#/database/' + newDatabaseName + '/new"]')
       .waitForElementPresent('#editor-container', waitTime, false)
       .verify.urlEquals(baseUrl + '/#/database/' + newDatabaseName + '/new')
+      .waitForElementPresent('.ace_layer.ace_cursor-layer.ace_hidden-cursors', waitTime, false)
+
+      //.pause(1000) // looks like auto-focus happens during the next execute() line, so this slows it down
       .execute('\
-        var editor = ace.edit("editor-container");\
+        var editor = ace.edit("doc-editor");\
         editor.gotoLine(2,10);\
         editor.removeWordRight();\
         editor.insert("' + newDocumentName + '");\

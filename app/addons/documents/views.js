@@ -25,8 +25,7 @@ define([
   "plugins/prettify"
 ],
 
-function (app, FauxtonAPI, Components, Documents,
-  Databases, QueryOptions, QueryActions) {
+function (app, FauxtonAPI, Components, Documents, Databases, QueryOptions, QueryActions) {
 
   var Views = {};
 
