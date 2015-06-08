@@ -100,7 +100,7 @@ function (app, FauxtonAPI, React, Stores, Actions,
     runQuery: function (event) {
       event.preventDefault();
 
-      if (!this.getMangoEditor().hasValidCode()) {
+      if (this.getMangoEditor().hasErrors()) {
         FauxtonAPI.addNotification({
           msg:  'Please fix the Javascript errors and try again.',
           type: 'error',
@@ -155,7 +155,7 @@ function (app, FauxtonAPI, React, Stores, Actions,
             {this.getIndexBox()}
             <div className="padded-box">
               <div className="control-group">
-                <ConfirmButton text={this.props.confirmbuttonText} />
+                <ConfirmButton text={this.props.confirmbuttonText} id="create-index-btn" />
               </div>
             </div>
           </form>
@@ -216,9 +216,8 @@ function (app, FauxtonAPI, React, Stores, Actions,
       return this.refs.field.getEditor();
     },
 
-    hasValidCode: function () {
-      var editor = this.getEditor();
-      return editor.hadValidCode();
+    hasErrors: function () {
+      return this.getEditor().hasErrors();
     }
   });
 
@@ -267,7 +266,7 @@ function (app, FauxtonAPI, React, Stores, Actions,
     saveQuery: function (event) {
       event.preventDefault();
 
-      if (!this.getMangoEditor().hasValidCode()) {
+      if (this.getMangoEditor().hasErrors()) {
         FauxtonAPI.addNotification({
           msg:  'Please fix the Javascript errors and try again.',
           type: 'error',

@@ -19,8 +19,6 @@ define([
   'addons/documents/views',
   'addons/documents/changes/components.react',
   'addons/documents/changes/actions',
-  'addons/documents/views-doceditor',
-
   'addons/databases/base',
   'addons/documents/resources',
   'addons/fauxton/components',
@@ -35,10 +33,9 @@ define([
   'addons/documents/designdocinfo/components.react'
 ],
 
-function (app, FauxtonAPI, BaseRoute, Documents, Changes, ChangesActions, DocEditor,
-  Databases, Resources, Components, PaginationStores, IndexResultsActions,
-  IndexResultsComponents, ReactPagination, ReactHeader, ReactActions, SidebarActions,
-  DesignDocInfoActions, DesignDocInfoComponents) {
+function (app, FauxtonAPI, BaseRoute, Documents, Changes, ChangesActions, Databases, Resources, Components,
+  PaginationStores, IndexResultsActions, IndexResultsComponents, ReactPagination, ReactHeader, ReactActions,
+  SidebarActions, DesignDocInfoActions, DesignDocInfoComponents) {
 
     var DocumentsRouteObject = BaseRoute.extend({
       layout: "with_tabs_sidebar",

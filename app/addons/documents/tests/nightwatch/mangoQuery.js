@@ -32,8 +32,8 @@ module.exports = {
         var editor = ace.edit("query-field");\
         editor.getSession().setValue(json);\
       ')
-      .execute('$(".save")[0].scrollIntoView();')
-      .clickWhenVisible('button.btn-success.save')
+      .execute('$("#create-index-btn")[0].scrollIntoView();')
+      .clickWhenVisible('#create-index-btn')
 
       .waitForElementPresent('.prettyprint', waitTime, false)
       .assert.containsText('#dashboard-lower-content', 'number')

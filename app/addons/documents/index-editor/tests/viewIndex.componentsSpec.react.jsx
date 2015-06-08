@@ -65,8 +65,6 @@ define([
       });
 
       it('returns null for none', function () {
-        var store = Stores.indexEditorStore;
-
         var designDoc = {
           _id: '_design/test-doc',
           views: {
@@ -84,8 +82,6 @@ define([
       });
 
       it('returns built in for built in reduce', function () {
-        var store = Stores.indexEditorStore;
-
         var designDoc = {
           _id: '_design/test-doc',
           views: {
@@ -221,40 +217,42 @@ define([
   });
 
   describe('Editor', function () {
-    var container, editorEl;
+    var container, editorEl, sandbox;
 
     beforeEach(function () {
       container = document.createElement('div');
       $('body').append('<div id="map-function"></div>');
       $('body').append('<div id="editor"></div>');
       editorEl = TestUtils.renderIntoDocument(<Views.Editor/>, container);
+      sandbox = sinon.sandbox.create();
     });
 
     afterEach(function () {
       React.unmountComponentAtNode(container);
+      sandbox.restore();
     });
 
     it('returns false on invalid map editor code', function () {
-      var stub = sinon.stub(editorEl.refs.mapEditor.getEditor(), 'hadValidCode');
+      var stub = sandbox.stub(editorEl.refs.mapEditor.getEditor(), 'hasErrors');
       stub.returns(false);
-      assert.notOk(editorEl.hasValidCode());
+      assert.notOk(editorEl.hasErrors());
     });
 
     it('returns true on valid map editor code', function () {
-      var stub = sinon.stub(editorEl.refs.mapEditor.getEditor(), 'hadValidCode');
+      var stub = sandbox.stub(editorEl.refs.mapEditor.getEditor(), 'hasErrors');
       stub.returns(true);
-      assert.ok(editorEl.hasValidCode());
+      assert.ok(editorEl.hasErrors());
     });
 
-    it('returns true on non-custom reduce', function () {
-      var stub = sinon.stub(Stores.indexEditorStore, 'hasCustomReduce');
+    it('returns false on non-custom reduce', function () {
+      var stub = sandbox.stub(Stores.indexEditorStore, 'hasCustomReduce');
       stub.returns(false);
-      assert.ok(editorEl.hasValidCode());
+      assert.notOk(editorEl.hasErrors());
     });
 
     it('calls changeViewName on view name change', function () {
       var viewName = 'new-name';
-      var spy = sinon.spy(Actions, 'changeViewName');
+      var spy = sandbox.spy(Actions, 'changeViewName');
       var el = $(editorEl.getDOMNode()).find('#index-name')[0];
       TestUtils.Simulate.change(el, {
         target: {

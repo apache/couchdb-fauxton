@@ -36,8 +36,8 @@ module.exports = {
         var editor = ace.edit("map-function");\
         editor.getSession().setValue("function (doc) { emit(\'boom\', doc._id); }");\
       ')
-      .execute('$(".save")[0].scrollIntoView();')
-      .clickWhenVisible('button.btn-success.save')
+      .execute('$("#save-view")[0].scrollIntoView();')
+      .clickWhenVisible('#save-view')
       .waitForAttribute('#global-notifications', 'textContent', function (docContents) {
         return (/_sum function requires/).test(docContents);
       })

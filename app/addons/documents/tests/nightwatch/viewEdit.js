@@ -32,8 +32,8 @@ module.exports = {
         var editor = ace.edit("map-function");\
         editor.getSession().setValue("function (doc) { emit(\'hasehase5000\', 1); }");\
       ')
-      .execute('$(".save")[0].scrollIntoView();')
-      .clickWhenVisible('button.btn-success.save')
+      .execute('$("#save-view")[0].scrollIntoView();')
+      .clickWhenVisible('#save-view')
       .checkForStringPresent(viewUrl, 'hasehase5000')
       .waitForElementNotPresent('.loading-lines', waitTime, false)
       .waitForElementVisible('.prettyprint', waitTime, false)
@@ -62,9 +62,9 @@ module.exports = {
         editor.getSession().setValue("function (doc) { emit(\'hasehase6000\', 1); }");\
         editor._emit(\'blur\');\
       ')
-      .execute('$(".save")[0].scrollIntoView();')
+      .execute('$("#save-view")[0].scrollIntoView();')
 
-      .clickWhenVisible('button.btn-success.save')
+      .clickWhenVisible('#save-view')
 
       .checkForStringPresent(viewUrl, 'hasehase6000')
       .waitForElementNotPresent('.loading-lines', waitTime, false)
@@ -95,8 +95,8 @@ module.exports = {
         var editor = ace.edit("map-function");\
         editor.getSession().setValue("function (doc) { emit(\'newstub\', 2); }");\
       ')
-      .execute('$("button.save")[0].scrollIntoView();')
-      .clickWhenVisible('button.save', waitTime, false)
+      .execute('$("#save-view")[0].scrollIntoView();')
+      .clickWhenVisible('#save-view', waitTime, false)
       .checkForStringPresent(viewUrl, '40')
       .waitForElementNotPresent('.loading-lines', waitTime, false)
       .waitForElementVisible('.prettyprint', waitTime, false)
