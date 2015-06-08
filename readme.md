@@ -129,26 +129,17 @@ To deploy to your local [CouchDB instance](http://localhost:5984/fauxton/_design
 
     grunt couchapp_deploy
 
-## Understanding the Fauxton Code Layout
-
-Each bit of functionality is its own separate module or addon. All core modules are stored under `app/module` and
-any addons that are optional are under `app/addons`. We use [backbone.js](http://backbonejs.org/) and
-[Backbone.layoutmanager](https://github.com/tbranyen/backbone.layoutmanager) quite heavily, so best to get an
-idea how they work. It's best at this point to read through a couple of the modules and addons to get an idea
-of how they work. Two good starting points are `app/addon/config` and `app/modules/databases`.
-Each module must have a `base.js` file, this is read and compiled when Fauxton is deployed. A `resources.js` file
-is usually used for your Backbone.Models and Backbone.Collections, `view.js` for your Backbone.Views.
-The `routes.js` is used to register a URL path for your view along with what layout, data, breadcrumbs and api
-point is required for the view.
-
-Check out [writing_addons.md](writing_addons.md) for more information on writing your own addons.
-
-Want to get involved? Check out [Jira](https://issues.apache.org/jira/browse/COUCHDB/component/12320406) for a list
-of items to do.
-
 ## (Optional) To avoid a npm global install
     # Development mode, non minified files
     npm run couchdebug
 
     # Or fully compiled install
     npm run couchdb
+
+## Understanding the Fauxton Code Layout
+
+Interested in writing learning more? Give [this file](code-layout.md) a read over for a little more information about 
+how Fauxton's organized. 
+
+Want to get involved? Check out [Jira](https://issues.apache.org/jira/browse/COUCHDB/component/12320406) for a list
+of items to do.

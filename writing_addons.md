@@ -1,6 +1,6 @@
 # Addons
-Addons allow you to extend Fauxton for a specific use case. Addons will usually
-have the following structure:
+
+Addons allow you to extend Fauxton for a specific use case. Addons will usually have the following structure:
 
  * templates/
    * my_addon.html - _underscore template fragments_
@@ -14,10 +14,11 @@ have the following structure:
    * my_addon.less
 
 ## Generating an addon
-We have a `grunt-init` template that lets you create a skeleton addon,
-including all the boiler plate code. Run
-`./node_modules/.bin/grunt-init tasks/addon` and answer the questions
-it asks to create an addon:
+
+*** N.B. This is out of date: the addon should generate a React component rather than a Backbone View *** 
+
+We have a `grunt-init` template that lets you create a skeleton addon, including all the boiler plate code. Run
+`./node_modules/.bin/grunt-init tasks/addon` and answer the questions it asks to create an addon:
 
     $ ./node_modules/.bin/grunt-init tasks/addon
     path.existsSync is now called `fs.existsSync`.
@@ -33,13 +34,14 @@ it asks to create an addon:
 
     Done, without errors.
 
-Once the addon is created add the name to the settings.json file to get it
-compiled and added on the next install.
+Once the addon is created add the name to the settings.json file to get it compiled and added on the next install.
 
 ## Routes and hooks
+
 An addon can insert itself into fauxton in two ways; via a route or via a hook.
 
 ### Routes
+
 An addon will override an existing route should one exist, but in all other
 ways is just a normal backbone route/view. This is how you would add a whole
 new feature.
