@@ -21,6 +21,11 @@ define([
   var code = 'function (doc) {\n  emit(doc._id, 1);\n}';
   var code2 = 'function (doc) {\n if(doc._id) { \n emit(doc._id, 2); \n } \n}';
 
+  var ignorableErrors = [
+    'Missing name in function declaration.',
+    "['{a}'] is better written in dot notation."
+  ];
+
   describe('Code Editor', function () {
     var container, codeEditorEl, spy;
 
@@ -28,7 +33,7 @@ define([
       spy = sinon.spy();
       container = document.createElement('div');
       codeEditorEl = TestUtils.renderIntoDocument(
-        <ReactComponents.CodeEditor code={code} change={spy} />,
+        <ReactComponents.CodeEditor defaultCode={code} blur={spy} />,
         container
       );
     });
@@ -38,124 +43,58 @@ define([
     });
 
     describe('Tracking edits', function () {
-
       it('no change on mount', function () {
         assert.notOk(codeEditorEl.hasChanged());
       });
 
       it('detects change on user input', function () {
         codeEditorEl.editor.setValue(code2, -1);
-
         assert.ok(codeEditorEl.hasChanged());
       });
-
     });
 
     describe('onBlur', function () {
-
-      it('calls changed function', function () {
+      it('calls blur function', function () {
         codeEditorEl.editor._emit('blur');
         assert.ok(spy.calledOnce);
       });
-
     });
 
     describe('setHeightToLineCount', function () {
-
-      beforeEach(function () {
+      it('check default num lines #1', function () {
         codeEditorEl = TestUtils.renderIntoDocument(
-          <ReactComponents.CodeEditor code={code} isFullPageEditor={false}  setHeightWithJS={true}/>,
+          <ReactComponents.CodeEditor code={code} setHeightToLineCount={true} />,
           container
         );
-
+        assert.ok(codeEditorEl.editor.getSession().getDocument().getLength(), 3);
       });
-
-      it('sets line height correctly for non full page', function () {
-        var spy = sinon.spy(codeEditorEl.editor, 'setOptions');
-
-        codeEditorEl.setHeightToLineCount();
-        assert.ok(spy.calledOnce);
-        assert.equal(spy.getCall(0).args[0].maxLines, 3);
+      it('check default num lines #2', function () {
+        codeEditorEl = TestUtils.renderIntoDocument(
+          <ReactComponents.CodeEditor code={code2} setHeightToLineCount={true} />,
+          container
+        );
+        assert.ok(codeEditorEl.editor.getSession().getDocument().getLength(), 5);
       });
-
+      it('check maxLines', function () {
+        codeEditorEl = TestUtils.renderIntoDocument(
+          <ReactComponents.CodeEditor code={code2} setHeightToLineCount={true} maxLines={2} />,
+          container
+        );
+        assert.ok(codeEditorEl.editor.getSession().getDocument().getLength(), 2);
+      });
     });
 
     describe('removeIncorrectAnnotations', function () {
-
       beforeEach(function () {
         codeEditorEl = TestUtils.renderIntoDocument(
-          <ReactComponents.CodeEditor code={code}/>,
+          <ReactComponents.CodeEditor defaultCode={code} ignorableErrors={ignorableErrors} />,
           container
         );
-
       });
-
       it('removes default errors that do not apply to CouchDB Views', function () {
         assert.equal(codeEditorEl.getAnnotations(), 0);
       });
-
     });
 
-    describe('setEditorValue', function () {
-
-      it('sets new code', function () {
-        codeEditorEl = TestUtils.renderIntoDocument(
-          <ReactComponents.CodeEditor code={code}/>,
-          container
-        );
-
-        codeEditorEl.setEditorValue(code2);
-        assert.deepEqual(codeEditorEl.getValue(), code2);
-      });
-
-    });
-
-    describe('showEditorOnly', function () {
-
-      it('only shows editor when showEditorOnly=true', function () {
-        codeEditorEl = TestUtils.renderIntoDocument(
-          <ReactComponents.CodeEditor code={code} showEditorOnly={true} />,
-          container
-        );
-        assert.notOk($(codeEditorEl.getDOMNode()).hasClass('control-group'));
-      });
-
-      it('shows everything by default', function () {
-        var codeEditorEl = TestUtils.renderIntoDocument(
-          <ReactComponents.CodeEditor code={code} />,
-          container
-        );
-        assert.ok($(codeEditorEl.getDOMNode()).hasClass('control-group'));
-      });
-
-    });
-
-    describe('Zen Mode', function () {
-      it('shows zen mode by default', function () {
-        var container = document.createElement('div');
-        var codeEditorEl = TestUtils.renderIntoDocument(
-          <ReactComponents.CodeEditor code={code} change={spy} docs="http://link.com" />,
-          container
-        );
-        assert.equal($(codeEditorEl.getDOMNode()).find('.zen-editor-icon').length, 1);
-      });
-
-      it('omits zen mode if explicitly turned off', function () {
-        var container = document.createElement('div');
-        var codeEditorEl = TestUtils.renderIntoDocument(
-          <ReactComponents.CodeEditor code={code} change={spy} docs="http://link.com" allowZenMode={false} />,
-          container
-        );
-        assert.equal($(codeEditorEl.getDOMNode()).find('.zen-editor-icon').length, 0);
-      });
-
-      it('updates parent editor after changing content in zen mode', function () {
-        var container = document.createElement('div');
-        var codeEditorEl = TestUtils.renderIntoDocument(
-          <ReactComponents.CodeEditor code={code} change={spy} docs="http://link.com" />,
-          container
-        );
-      });
-    });
   });
 });

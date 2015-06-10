@@ -64,25 +64,20 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
     }
   });
 
-  var CodeEditor = React.createClass({
+
+  /**
+   * A pre-packaged JS editor panel for use on the Edit Index / Mango pages. Includes options for a title, zen mode
+   * icon and beautify button.
+   */
+  var CodeEditorPanel = React.createClass({
     getDefaultProps: function () {
       return {
         id: 'code-editor',
-        mode: 'javascript',
-        theme: 'idle_fingers',
-        fontSize: 13,
-        code: '',
-        showEditorOnly: false,
-        showGutter: true,
-        highlightActiveLine: true,
-        showPrintMargin: false,
-        autoScrollEditorIntoView: true,
-        setHeightWithJS: true,
-        isFullPageEditor: false,
-        disableUnload: false,
+        defaultCode: '',
+        title: '',
+        docLink: '',
         allowZenMode: true,
-        allowAnonFunction: true, // allows JS fragments, like `function (doc) { emit(doc._id, 1); `}. Suppresses JS errors
-        change: function () {}
+        blur: function () {}
       };
     },
 
@@ -92,61 +87,216 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
 
     getStoreState: function () {
       return {
-        zenModeEnabled: false
+        zenModeEnabled: false,
+        code: this.props.defaultCode
+      };
+    },
+
+    componentWillReceiveProps: function (nextProps) {
+      if (nextProps.defaultCode !== this.props.defaultCode) {
+        this.setState({ code: nextProps.defaultCode });
+      }
+    },
+
+    // list of JSHINT errors to ignore: gets around problem of anonymous functions not being valid
+    ignorableErrors: [
+      'Missing name in function declaration.',
+      "['{a}'] is better written in dot notation."
+    ],
+
+    getZenModeIcon: function () {
+      if (this.props.allowZenMode) {
+        return <span className="fonticon fonticon-resize-full zen-editor-icon" title="Enter Zen mode" onClick={this.enterZenMode}></span>;
+      }
+    },
+
+    getDocIcon: function () {
+      if (this.props.docLink) {
+        return (
+          <a className="help-link"
+            data-bypass="true"
+            href={this.props.docLink}
+            target="_blank"
+          >
+            <i className="icon-question-sign"></i>
+          </a>
+        );
+      }
+    },
+
+    getZenModeOverlay: function () {
+      if (this.state.zenModeEnabled) {
+        return (
+          <ZenModeOverlay
+            defaultCode={this.state.code}
+            mode={this.props.mode}
+            ignorableErrors={this.ignorableErrors}
+            onExit={this.exitZenMode}
+          />
+        );
+      }
+    },
+
+    enterZenMode: function () {
+      this.setState({
+        zenModeEnabled: true,
+        code: this.refs.codeEditor.getValue()
+      });
+    },
+
+    exitZenMode: function (content) {
+      this.setState({
+        zenModeEnabled: false,
+        code: content
+      });
+    },
+
+    getEditor: function () {
+      return this.refs.codeEditor;
+    },
+
+    getValue: function () {
+      return this.getEditor().getValue();
+    },
+
+    beautify: function (code) {
+      this.setState({ code: code });
+    },
+
+    render: function () {
+      return (
+        <div className="control-group">
+          <label>
+            <strong>{this.props.title + ' '}</strong>
+            {this.getDocIcon()}
+            {this.getZenModeIcon()}
+          </label>
+          <CodeEditor
+            id={this.props.id}
+            ref="codeEditor"
+            mode="javascript"
+            defaultCode={this.state.code}
+            showGutter={true}
+            ignorableErrors={this.ignorableErrors}
+            setHeightToLineCount={true}
+            blur={this.props.blur}
+          />
+          <Beautify code={this.state.code} beautifiedCode={this.beautify} />
+          {this.getZenModeOverlay()}
+        </div>
+      );
+    }
+  });
+
+
+  // a generic Ace Editor component. This should be the only place in the app that instantiates an editor
+  var CodeEditor = React.createClass({
+    getDefaultProps: function () {
+      return {
+        id: 'code-editor',
+        mode: 'javascript',
+        theme: 'idle_fingers',
+        fontSize: 13,
+        defaultCode: '',
+        showGutter: true,
+        highlightActiveLine: true,
+        showPrintMargin: false,
+        autoScrollEditorIntoView: true,
+        autoFocus: false,
+
+        // these two options create auto-resizeable code editors, with a maximum number of lines
+        setHeightToLineCount: false,
+        maxLines: 10,
+
+        // optional editor key commands (e.g. specific save action)
+        editorCommands: [],
+
+        // notifies users that there is unsaved changes in the editor when navigating away from the page
+        notifyUnsavedChanges: false,
+
+        // an optional array of ignorable Ace editors. Lets us filter out errors based on context
+        ignorableErrors: [],
+
+        // un-Reacty, but the code editor is a self-contained component and it's helpful to be able to tie into
+        // editor specific events like content changes and leaving the editor
+        change: function () {},
+        blur: function () {}
+      };
+    },
+
+    // used purely to keep track of content changes. This is only reset via an explicit clearChanges() call
+    getInitialState: function () {
+      return {
+        originalCode: this.props.defaultCode
       };
     },
 
     hasChanged: function () {
-      return !_.isEqual(this.props.code, this.getValue());
+      return !_.isEqual(this.state.originalCode, this.getValue());
+    },
+
+    clearChanges: function () {
+      this.setState({
+        originalCode: this.getValue()
+      });
     },
 
     setupAce: function (props, shouldUpdateCode) {
-      var el = this.refs.ace.getDOMNode();
+      this.editor = ace.edit(this.refs.ace.getDOMNode());
 
-      //set the id so our nightwatch tests can find it
-      el.id = props.id;
-
-      this.editor = ace.edit(el);
-      // Automatically scrolling cursor into view after selection
-      // change this will be disabled in the next version
-      // set editor.$blockScrolling = Infinity to disable this message
+      // suppresses an Ace editor error
       this.editor.$blockScrolling = Infinity;
 
       if (shouldUpdateCode) {
-        this.setEditorValue(props.code);
+        this.setEditorValue(props.defaultCode);
       }
 
       this.editor.setShowPrintMargin(props.showPrintMargin);
       this.editor.autoScrollEditorIntoView = props.autoScrollEditorIntoView;
       this.editor.setOption('highlightActiveLine', this.props.highlightActiveLine);
-      this.setHeightToLineCount();
 
-      if (this.props.allowAnonFunction) {
-        this.removeIncorrectAnnotations(this.editor);
+      if (this.props.setHeightToLineCount) {
+        this.setHeightToLineCount();
       }
 
-      this.editor.getSession().setMode("ace/mode/" + props.mode);
-      this.editor.setTheme("ace/theme/" + props.theme);
+      if (this.props.ignorableErrors) {
+        this.removeIgnorableAnnotations();
+      }
+
+      this.addCommands();
+      this.editor.getSession().setMode('ace/mode/' + props.mode);
+      this.editor.setTheme('ace/theme/' + props.theme);
       this.editor.setFontSize(props.fontSize);
       this.editor.getSession().setUseSoftTabs(true);
+
+      if (this.props.autoFocus) {
+        this.editor.focus();
+      }
     },
 
-    onChange: function () {
-      this.setState(this.getStoreState());
+    addCommands: function () {
+      _.each(this.props.editorCommands, function (command) {
+        this.editor.commands.addCommand(command);
+      }, this);
     },
 
     setupEvents: function () {
-      this.editor.on('blur', _.bind(this.saveCodeChange, this));
-
-      if (this.props.disableUnload) {
-        return;
+      this.editor.on('blur', _.bind(this.onBlur, this));
+      this.editor.on('change', _.bind(this.onContentChange, this));
+      if (this.props.notifyUnsavedChanges) {
+        $(window).on('beforeunload.editor_' + this.props.id, _.bind(this.quitWarningMsg));
+        FauxtonAPI.beforeUnload('editor_' + this.props.id, _.bind(this.quitWarningMsg, this));
       }
-
-      $(window).on('beforeunload.editor_' + this.props.id, _.bind(this.quitWarningMsg));
-      FauxtonAPI.beforeUnload('editor_' + this.props.id, _.bind(this.quitWarningMsg, this));
     },
 
-    saveCodeChange: function () {
+    onBlur: function () {
+      this.props.blur(this.getValue());
+    },
+
+    onContentChange: function () {
+      if (this.props.setHeightToLineCount) {
+        this.setHeightToLineCount();
+      }
       this.props.change(this.getValue());
     },
 
@@ -157,55 +307,17 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
     },
 
     removeEvents: function () {
-      if (this.props.disableUnload) {
-        return;
+      if (this.props.notifyUnsavedChanges) {
+        $(window).off('beforeunload.editor_' + this.props.id);
+        FauxtonAPI.removeBeforeUnload('editor_' + this.props.id);
       }
-
-      $(window).off('beforeunload.editor_' + this.props.id);
-      FauxtonAPI.removeBeforeUnload('editor_' + this.props.id);
     },
 
     setHeightToLineCount: function () {
-      if (!this.props.setHeightWithJS) {
-        return;
-      }
-
-      var lines = this.editor.getSession().getDocument().getLength();
-
-      if (this.props.isFullPageEditor) {
-        var maxLines = this.getMaxAvailableLinesOnPage();
-        lines = lines < maxLines ? lines : maxLines;
-      }
+      var numLines = this.editor.getSession().getDocument().getLength();
+      var maxLines = (numLines > this.props.maxLines) ? this.props.maxLines : numLines;
       this.editor.setOptions({
-        maxLines: lines
-      });
-    },
-
-    // List of JSHINT errors to ignore
-    // Gets around problem of anonymous functions not being a valid statement
-    excludedViewErrors: [
-      "Missing name in function declaration.",
-      "['{a}'] is better written in dot notation."
-    ],
-
-    isIgnorableError: function (msg) {
-      return _.contains(this.excludedViewErrors, msg);
-    },
-
-    removeIncorrectAnnotations: function (editor) {
-      var isIgnorableError = this.isIgnorableError;
-      editor.getSession().on("changeAnnotation", function () {
-        var annotations = editor.getSession().getAnnotations();
-        var newAnnotations = _.reduce(annotations, function (annotations, error) {
-          if (!isIgnorableError(error.raw)) {
-            annotations.push(error);
-          }
-          return annotations;
-        }, []);
-
-        if (annotations.length !== newAnnotations.length) {
-          editor.getSession().setAnnotations(newAnnotations);
-        }
+        maxLines: maxLines
       });
     },
 
@@ -220,56 +332,45 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
     },
 
     componentWillReceiveProps: function (nextProps) {
-      var codeChanged = !_.isEqual(nextProps.code, this.getValue());
+      var codeChanged = !_.isEqual(nextProps.defaultCode, this.getValue());
       this.setupAce(nextProps, codeChanged);
-    },
-
-    editSaved: function () {
-      return this.hasChanged();
-    },
-
-    zenModeIcon: function () {
-      if (this.props.allowZenMode) {
-        return <span className="fonticon fonticon-resize-full zen-editor-icon" title="Enter Zen mode" onClick={this.enterZenMode}></span>;
-      }
-    },
-
-    enterZenMode: function () {
-      this.setState({ zenModeEnabled: true });
-    },
-
-    getTitleFragment: function () {
-      if (!this.props.docs) {
-        return (<strong>{this.props.title}</strong>);
-      }
-
-      return (
-        <label>
-          <strong>{this.props.title + ' '}</strong>
-          <a
-            className="help-link"
-            data-bypass="true"
-            href={this.props.docs}
-            target="_blank"
-          >
-          <i className="icon-question-sign"></i>
-          </a>
-          {this.zenModeIcon()}
-        </label>
-      );
     },
 
     getAnnotations: function () {
       return this.editor.getSession().getAnnotations();
     },
 
+    isIgnorableError: function (msg) {
+      return _.contains(this.props.ignorableErrors, msg);
+    },
+
+    removeIgnorableAnnotations: function () {
+      var isIgnorableError = this.isIgnorableError;
+      this.editor.getSession().on('changeAnnotation', function () {
+        var annotations = this.editor.getSession().getAnnotations();
+        var newAnnotations = _.reduce(annotations, function (annotations, error) {
+          if (!isIgnorableError(error.raw)) {
+            annotations.push(error);
+          }
+          return annotations;
+        }, []);
+
+        if (annotations.length !== newAnnotations.length) {
+          this.editor.getSession().setAnnotations(newAnnotations);
+        }
+      }.bind(this));
+    },
+
+    // ------------------
+    // TODO two things to do after full page doc editor refactor:
+    // 1. rename to hasErrors()
     hadValidCode: function () {
       var errors = this.getAnnotations();
-      // By default CouchDB view functions don't pass lint
       return _.every(errors, function (error) {
         return this.isIgnorableError(error.raw);
       }, this);
     },
+    // ------------------
 
     setEditorValue: function (code, lineNumber) {
       lineNumber = lineNumber ? lineNumber : -1;
@@ -280,41 +381,9 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
       return this.editor.getValue();
     },
 
-    getEditor: function () {
-      return this;
-    },
-
-    getZenModeOverlay: function () {
-      if (this.state.zenModeEnabled) {
-        return (
-          <ZenModeOverlay
-            visible={this.state.zenModeEnabled}
-            defaultCode={this.getValue()}
-            mode={this.props.mode}
-            removeIncorrectAnnotations={this.removeIncorrectAnnotations}
-            onExit={this.onExitZenMode}
-          />
-        );
-      }
-    },
-
-    onExitZenMode: function (content) {
-      this.setEditorValue(content);
-      this.setState({ zenModeEnabled: false });
-    },
-
     render: function () {
-      if (this.props.showEditorOnly) {
-        return (<div ref="ace" className="js-editor" id={this.props.id}></div>);
-      }
-
       return (
-        <div className="control-group">
-          {this.getTitleFragment()}
-          <div ref="ace" className="js-editor" id={this.props.id}></div>
-          <Beautify code={this.props.code} beautifiedCode={this.setEditorValue} />
-          {this.getZenModeOverlay()}
-        </div>
+        <div ref="ace" className="js-editor" id={this.props.id}></div>
       );
     }
   });
@@ -330,10 +399,15 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
       return {
         mode: 'javascript',
         defaultCode: '',
-        removeIncorrectAnnotations: null,
+        ignorableErrors: [],
         onExit: null,
         highlightActiveLine: false
       };
+    },
+
+    themes: {
+      dark: 'idle_fingers',
+      light: 'dawn'
     },
 
     getInitialState: function () {
@@ -357,55 +431,25 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
     },
 
     componentDidMount: function () {
-      this.update();
-      this.editor.focus();
       $(this.refs.exit.getDOMNode()).tooltip({ placement: 'left' });
       $(this.refs.theme.getDOMNode()).tooltip({ placement: 'left' });
     },
 
-    componentDidUpdate: function () {
-      this.update();
+    exitZenMode: function () {
+      this.props.onExit(this.getValue());
     },
 
-    exitZenMode: function () {
-      this.props.onExit(this.editor.getValue());
+    getValue: function () {
+      return this.refs.ace.getValue();
     },
 
     toggleTheme: function () {
       var newTheme = (this.state.theme === 'dark') ? 'light' : 'dark';
       this.setState({
         theme: newTheme,
-        code: this.editor.getValue()
+        code: this.getValue()
       });
       app.utils.localStorageSet('zenTheme', newTheme);
-    },
-
-    update: function () {
-      var el = this.refs.ace.getDOMNode();
-      this.editor = ace.edit(el);
-      this.editor.$blockScrolling = Infinity;
-      this.setEditorValue(this.state.code);
-
-      var theme = this.state.theme === 'dark' ? 'idle_fingers' : 'dawn';
-      this.editor.setTheme('ace/theme/' + theme);
-      this.editor.getSession().setMode('ace/mode/' + this.props.mode);
-      this.editor.getSession().setUseSoftTabs(true);
-      this.editor.setOption('highlightActiveLine', this.props.highlightActiveLine);
-      this.editor.setShowPrintMargin(false);
-
-      // escape exits zen mode. Add the key binding
-      this.editor.commands.addCommand({
-        name: "close",
-        bindKey: { win: "ESC", mac: "ESC" },
-        exec: function () {
-          this.exitZenMode();
-        }.bind(this)
-      });
-
-      // if an annotation removal method has been passed, ensure it's called so that error messages are cleaned
-      if (this.props.removeIncorrectAnnotations) {
-        this.props.removeIncorrectAnnotations(this.editor);
-      }
     },
 
     setEditorValue: function (code, lineNumber) {
@@ -414,7 +458,14 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
     },
 
     render: function () {
-      var classes = "full-page-editor-modal-wrapper zen-theme-" + this.state.theme;
+      var classes = 'full-page-editor-modal-wrapper zen-theme-' + this.state.theme;
+
+      var editorCommands = [{
+        name: 'close',
+        bindKey: { win: 'ESC', mac: 'ESC' },
+        exec: this.exitZenMode
+      }];
+
       return (
         <div className={classes}>
           <div className="zen-mode-controls">
@@ -438,7 +489,15 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
             </ul>
             <div className="tooltips"></div>
           </div>
-          <div ref="ace" className="js-editor"></div>
+          <CodeEditor
+            ref="ace"
+            autoFocus={true}
+            theme={this.themes[this.state.theme]}
+            defaultCode={this.props.defaultCode}
+            editorCommands={editorCommands}
+            ignorableErrors={this.props.ignorableErrors}
+            highlightActiveLine={this.props.highlightActiveLine}
+          />
         </div>
       );
     }
@@ -503,7 +562,6 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
   });
 
   var Document = React.createClass({
-
     propTypes: {
       docIdentifier: React.PropTypes.string.isRequired,
       docChecked: React.PropTypes.func.isRequired
@@ -534,7 +592,6 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
     },
 
     getCheckbox: function () {
-
       if (!this.props.isDeletable) {
         return <div className="checkbox-dummy"></div>;
       }
@@ -594,9 +651,7 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
   });
 
   var LoadLines = React.createClass({
-
     render: function () {
-
       return (
         <div className="loading-lines">
           <div id="line1"> </div>
@@ -606,7 +661,6 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
         </div>
       );
     }
-
   });
 
   var ConfirmButton = React.createClass({
@@ -660,8 +714,8 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
           <ul className="dropdown-menu arrow" key={key} role="menu" aria-labelledby="dLabel">
             {this.createSectionTitle(linkSection.title)}
             {this.createSectionLinks(linkSection.links)}
-        </ul>
-      );
+          </ul>
+        );
       }.bind(this));
     },
 
@@ -676,10 +730,12 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
 
   });
 
-  var ReactComponents = {
+
+  return {
     ConfirmButton: ConfirmButton,
     ToggleHeaderButton: ToggleHeaderButton,
     StyledSelect: StyledSelect,
+    CodeEditorPanel: CodeEditorPanel,
     CodeEditor: CodeEditor,
     ZenModeOverlay: ZenModeOverlay,
     Beautify: Beautify,
@@ -688,7 +744,5 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
     LoadLines: LoadLines,
     MenuDropDown: MenuDropDown
   };
-
-  return ReactComponents;
 
 });

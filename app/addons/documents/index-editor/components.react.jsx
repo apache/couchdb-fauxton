@@ -24,7 +24,7 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, ReactComponents) 
   var indexEditorStore = Stores.indexEditorStore;
   var getDocUrl = app.helpers.getDocUrl;
   var StyledSelect = ReactComponents.StyledSelect;
-  var CodeEditor = ReactComponents.CodeEditor;
+  var CodeEditorPanel = ReactComponents.CodeEditorPanel;
   var PaddedBorderedBox = ReactComponents.PaddedBorderedBox;
   var ConfirmButton = ReactComponents.ConfirmButton;
   var LoadLines = ReactComponents.LoadLines;
@@ -178,12 +178,13 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, ReactComponents) 
           customReduceSection;
 
       if (this.state.hasCustomReduce) {
-        customReduceSection = <CodeEditor
+        customReduceSection = <CodeEditorPanel
           ref='reduceEditor'
           id='reduce-function'
-          code={this.state.reduce}
-          change={this.updateReduceCode}
-          docs={false} title={'Custom Reduce function'} />;
+          title={'Custom Reduce function'}
+          defaultCode={this.state.reduce}
+          blur={this.updateReduceCode}
+        />;
       }
 
       return (
@@ -319,16 +320,6 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, ReactComponents) 
       }, this);
     },
 
-    clearNotifications: function () {
-      ['mapEditor', 'reduceEditor'].forEach(function (editorName) {
-        if (editorName === 'reduceEditor' && !indexEditorStore.hasCustomReduce()) {
-          return;
-        }
-        var editor = this.refs[editorName].getEditor();
-        editor.editSaved();
-      }.bind(this));
-    },
-
     saveView: function (event) {
       event.preventDefault();
 
@@ -340,8 +331,6 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, ReactComponents) 
         });
         return;
       }
-
-      this.clearNotifications();
 
       Actions.saveView({
         database: this.state.database,
@@ -423,13 +412,13 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, ReactComponents) 
             </div>
             <div className="control-group">
               <PaddedBorderedBox>
-                <CodeEditor
+                <CodeEditorPanel
                   id={'map-function'}
                   ref="mapEditor"
                   title={"Map function"}
-                  docs={getDocUrl('MAP_FUNCS')}
-                  change={this.updateMapCode}
-                  code={this.state.map} />
+                  docLink={getDocUrl('MAP_FUNCS')}
+                  blur={this.updateMapCode}
+                  defaultCode={this.state.map} />
               </PaddedBorderedBox>
             </div>
             <PaddedBorderedBox>

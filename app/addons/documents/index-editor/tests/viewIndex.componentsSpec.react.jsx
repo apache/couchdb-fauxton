@@ -221,7 +221,7 @@ define([
   });
 
   describe('Editor', function () {
-    var container, editorEl, reduceStub;
+    var container, editorEl;
 
     beforeEach(function () {
       container = document.createElement('div');
@@ -235,13 +235,13 @@ define([
     });
 
     it('returns false on invalid map editor code', function () {
-      var stub = sinon.stub(editorEl.refs.mapEditor, 'hadValidCode');
+      var stub = sinon.stub(editorEl.refs.mapEditor.getEditor(), 'hadValidCode');
       stub.returns(false);
       assert.notOk(editorEl.hasValidCode());
     });
 
     it('returns true on valid map editor code', function () {
-      var stub = sinon.stub(editorEl.refs.mapEditor, 'hadValidCode');
+      var stub = sinon.stub(editorEl.refs.mapEditor.getEditor(), 'hadValidCode');
       stub.returns(true);
       assert.ok(editorEl.hasValidCode());
     });
