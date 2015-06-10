@@ -33,7 +33,14 @@
     font-size: 16pt;
     float: left;
     margin-bottom: 10px;
-    color: #a91e25;
+
+    a {
+      color: #a91e25;
+    }
+
+    a:hover {
+      color: #e33f3b;
+    }
   }
 
   .widget-body {
@@ -55,10 +62,12 @@
 
     &.low-contrast {
       color: #EAEAEA;
+      border: 1px solid #EAEAEA;
     }
 
     &.high-contrast {
       color: #171414;
+      border: 1px solid #171414;
     }
 
     .active-tasks-box-background {
@@ -76,6 +85,10 @@
       text-overflow: ellipsis;
       white-space: nowrap;
       overflow: hidden;
+
+      a {
+        color: inherit;
+      }
     }
 
     .active-tasks-arrow {
@@ -89,6 +102,10 @@
       text-overflow: ellipsis;
       white-space: nowrap;
       overflow: hidden;
+
+      a {
+        color: inherit;
+      }
     }
 
     .active-tasks-complete {
@@ -98,7 +115,19 @@
   }
 
   .noResult {
+    width: 240px;
+    height: 240px;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    padding: 15px;
     font-size: 16pt;
-    color: #c1c1c1;
+    white-space: normal;
+    text-align: center;
+    color: #EAEAEA;
+    border: 1px solid #EAEAEA;
+
+    .noResultText {
+      margin-top: 75px;
+    }
   }
 }

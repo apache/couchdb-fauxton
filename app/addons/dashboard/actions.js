@@ -47,6 +47,13 @@ function (FauxtonAPI, ActionTypes) {
       FauxtonAPI.dispatch({
         type: ActionTypes.ACTIVE_TASKS_CLEAR_POLLING
       });
+    },
+    getDocCount: function (database) {
+      FauxtonAPI.dispatch({
+        type: ActionTypes.ACTIVE_TASKS_GET_DOC_COUNT,
+        options: database
+      });
     }
+
   };
 });

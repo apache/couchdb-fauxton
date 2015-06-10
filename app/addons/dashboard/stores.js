@@ -13,8 +13,9 @@
 define([
   'app',
   'api',
-  'addons/dashboard/actiontypes'
-], function (app, FauxtonAPI, ActionTypes) {
+  'addons/dashboard/actiontypes',
+  'addons/dashboard/resources'
+], function (app, FauxtonAPI, ActionTypes, Resources) {
 
   var DashboardStore = FauxtonAPI.Store.extend({
 
@@ -92,6 +93,11 @@ define([
       return table;
     },
 
+    getNumberOfDocs: function (database) {
+      var databaseList = new Resources.DatabaseDocCount({database : database});
+      databaseList.fetch();
+    },
+
     dispatch: function (action) {
       switch (action.type) {
 
@@ -112,6 +118,10 @@ define([
         case ActionTypes.ACTIVE_TASKS_CLEAR_POLLING:
           this.clearPolling();
           this.triggerChange();
+        break;
+
+        case ActionTypes.ACTIVE_TASKS_GET_DOC_COUNT:
+          this.getNumberOfDocs(action.options);
         break;
 
         default:

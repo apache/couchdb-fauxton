@@ -111,13 +111,17 @@ define([
 
     noActiveTasks: function () {
       return (
-        <span className="noResult">No Result</span>
+        <div className="noResult">
+          <div className="noResultText">There are no current Active Tasks</div>
+        </div>
         );
     },
 
     noActiveTasksMatchFilter: function () {
       return (
-        <span className="noResult">No Result</span>
+        <div className="noResult">
+          <div className="noResultText">There are no current Active Tasks</div>
+        </div>
         );
     },
 
@@ -135,14 +139,22 @@ define([
   var ActiveTaskBox = React.createClass({
     getInfo: function (item) {
       return {
-        toDatabase: item.target,
-        fromDatabase: item.source,
-        progress: item.progress
+        toDatabase: activeTasksHelpers.parseDbName(item.target),
+        fromDatabase: activeTasksHelpers.parseDbName(item.source),
+        progress: activeTasksHelpers.calculateProgress(item.docs_written, item.docs_read)
       };
     },
 
     render: function () {
       var data = this.getInfo(this.props.item);
+
+      var toDatabaseName = data.toDatabase;
+      var toDatabaseNameEncoded = App.utils.safeURLName(toDatabaseName);
+      var fromDatabaseName = data.fromDatabase;
+      var fromDatabaseNameEncoded = App.utils.safeURLName(fromDatabaseName);
+
+      var sourceDatabaseDocCount = Action.getDocCount(fromDatabaseName);
+
       var className = 'active-tasks-box';
       var progress = data.progress;
       if (progress > 50) {
@@ -155,14 +167,20 @@ define([
       var style = {
         opacity: progress
       };
+
+
       return (
         <div className={className}>
           <div className="active-tasks-box-background" style={style}></div>
-          <div className="active-tasks-toDatabase">{data.toDatabase}</div>
+          <div className="active-tasks-toDatabase">
+            <a href={"#/database/" + toDatabaseNameEncoded + "/_all_docs"}>{toDatabaseName}</a>
+          </div>
           <div className="active-tasks-arrow">
             <i className="fonticon-up size-36"></i>
           </div>
-          <div className="active-tasks-fromDatabase">{data.fromDatabase}</div>
+          <div className="active-tasks-fromDatabase">
+            <a href={"#/database/" + fromDatabaseNameEncoded + "/_all_docs"}>{fromDatabaseName}</a>
+          </div>
           <div className="active-tasks-complete">{data.progress}</div>
         </div>
         );
@@ -172,6 +190,12 @@ define([
   var activeTasksHelpers = {
     getProgress: function (item) {
       return item + '% Complete';
+    },
+    calculateProgress: function (docs_written, docs_read) {
+      return (docs_written / docs_read) * 100;
+    },
+    parseDbName: function (item) {
+      return item.split('/')[3];
     }
   };
 
