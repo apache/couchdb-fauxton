@@ -21,6 +21,7 @@ define([
 
 function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
 
+
   var ToggleHeaderButton = React.createClass({
     render: function () {
       var iconClasses = 'icon ' + this.props.fonticon + ' ' + this.props.innerClasses,
@@ -79,7 +80,19 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
         setHeightWithJS: true,
         isFullPageEditor: false,
         disableUnload: false,
+        allowZenMode: true,
+        allowAnonFunction: true, // allows JS fragments, like `function (doc) { emit(doc._id, 1); `}. Suppresses JS errors
         change: function () {}
+      };
+    },
+
+    getInitialState: function () {
+      return this.getStoreState();
+    },
+
+    getStoreState: function () {
+      return {
+        zenModeEnabled: false
       };
     },
 
@@ -105,12 +118,21 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
 
       this.editor.setShowPrintMargin(props.showPrintMargin);
       this.editor.autoScrollEditorIntoView = props.autoScrollEditorIntoView;
+      this.editor.setOption('highlightActiveLine', this.props.highlightActiveLine);
       this.setHeightToLineCount();
-      this.removeIncorrectAnnotations();
+
+      if (this.props.allowAnonFunction) {
+        this.removeIncorrectAnnotations(this.editor);
+      }
+
       this.editor.getSession().setMode("ace/mode/" + props.mode);
       this.editor.setTheme("ace/theme/" + props.theme);
       this.editor.setFontSize(props.fontSize);
       this.editor.getSession().setUseSoftTabs(true);
+    },
+
+    onChange: function () {
+      this.setState(this.getStoreState());
     },
 
     setupEvents: function () {
@@ -170,13 +192,10 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
       return _.contains(this.excludedViewErrors, msg);
     },
 
-    removeIncorrectAnnotations: function () {
-      var editor = this.editor,
-          isIgnorableError = this.isIgnorableError;
-
-      this.editor.getSession().on("changeAnnotation", function () {
+    removeIncorrectAnnotations: function (editor) {
+      var isIgnorableError = this.isIgnorableError;
+      editor.getSession().on("changeAnnotation", function () {
         var annotations = editor.getSession().getAnnotations();
-
         var newAnnotations = _.reduce(annotations, function (annotations, error) {
           if (!isIgnorableError(error.raw)) {
             annotations.push(error);
@@ -209,6 +228,16 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
       return this.hasChanged();
     },
 
+    zenModeIcon: function () {
+      if (this.props.allowZenMode) {
+        return <span className="fonticon fonticon-resize-full zen-editor-icon" title="Enter Zen mode" onClick={this.enterZenMode}></span>;
+      }
+    },
+
+    enterZenMode: function () {
+      this.setState({ zenModeEnabled: true });
+    },
+
     getTitleFragment: function () {
       if (!this.props.docs) {
         return (<strong>{this.props.title}</strong>);
@@ -225,6 +254,7 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
           >
           <i className="icon-question-sign"></i>
           </a>
+          {this.zenModeIcon()}
         </label>
       );
     },
@@ -254,6 +284,25 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
       return this;
     },
 
+    getZenModeOverlay: function () {
+      if (this.state.zenModeEnabled) {
+        return (
+          <ZenModeOverlay
+            visible={this.state.zenModeEnabled}
+            defaultCode={this.getValue()}
+            mode={this.props.mode}
+            removeIncorrectAnnotations={this.removeIncorrectAnnotations}
+            onExit={this.onExitZenMode}
+          />
+        );
+      }
+    },
+
+    onExitZenMode: function (content) {
+      this.setEditorValue(content);
+      this.setState({ zenModeEnabled: false });
+    },
+
     render: function () {
       if (this.props.showEditorOnly) {
         return (<div ref="ace" className="js-editor" id={this.props.id}></div>);
@@ -264,11 +313,137 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
           {this.getTitleFragment()}
           <div ref="ace" className="js-editor" id={this.props.id}></div>
           <Beautify code={this.props.code} beautifiedCode={this.setEditorValue} />
+          {this.getZenModeOverlay()}
         </div>
       );
     }
-
   });
+
+
+  // Zen mode editing has very few options:
+  // - It covers the full screen hiding everything else.
+  // - It has two themes: light & dark (choice stored in local storage)
+  // - It has no save option, but has a 1-1 map with a <CodeEditor /> element which gets updated when the user leaves
+  // - [Escape] closes the mode, as does clicking the shrink icon at the top right
+  var ZenModeOverlay = React.createClass({
+    getDefaultProps: function () {
+      return {
+        mode: 'javascript',
+        defaultCode: '',
+        removeIncorrectAnnotations: null,
+        onExit: null,
+        highlightActiveLine: false
+      };
+    },
+
+    getInitialState: function () {
+      return this.getStoreState();
+    },
+
+    getStoreState: function () {
+      return {
+        theme: this.getZenTheme(),
+        code: this.props.defaultCode
+      };
+    },
+
+    getZenTheme: function () {
+      var selectedTheme = app.utils.localStorageGet('zenTheme');
+      return _.isUndefined(selectedTheme) ? 'dark' : selectedTheme;
+    },
+
+    onChange: function () {
+      this.setState(this.getStoreState());
+    },
+
+    componentDidMount: function () {
+      this.update();
+      this.editor.focus();
+      $(this.refs.exit.getDOMNode()).tooltip({ placement: 'left' });
+      $(this.refs.theme.getDOMNode()).tooltip({ placement: 'left' });
+    },
+
+    componentDidUpdate: function () {
+      this.update();
+    },
+
+    exitZenMode: function () {
+      this.props.onExit(this.editor.getValue());
+    },
+
+    toggleTheme: function () {
+      var newTheme = (this.state.theme === 'dark') ? 'light' : 'dark';
+      this.setState({
+        theme: newTheme,
+        code: this.editor.getValue()
+      });
+      app.utils.localStorageSet('zenTheme', newTheme);
+    },
+
+    update: function () {
+      var el = this.refs.ace.getDOMNode();
+      this.editor = ace.edit(el);
+      this.editor.$blockScrolling = Infinity;
+      this.setEditorValue(this.state.code);
+
+      var theme = this.state.theme === 'dark' ? 'idle_fingers' : 'dawn';
+      this.editor.setTheme('ace/theme/' + theme);
+      this.editor.getSession().setMode('ace/mode/' + this.props.mode);
+      this.editor.getSession().setUseSoftTabs(true);
+      this.editor.setOption('highlightActiveLine', this.props.highlightActiveLine);
+      this.editor.setShowPrintMargin(false);
+
+      // escape exits zen mode. Add the key binding
+      this.editor.commands.addCommand({
+        name: "close",
+        bindKey: { win: "ESC", mac: "ESC" },
+        exec: function () {
+          this.exitZenMode();
+        }.bind(this)
+      });
+
+      // if an annotation removal method has been passed, ensure it's called so that error messages are cleaned
+      if (this.props.removeIncorrectAnnotations) {
+        this.props.removeIncorrectAnnotations(this.editor);
+      }
+    },
+
+    setEditorValue: function (code, lineNumber) {
+      lineNumber = lineNumber ? lineNumber : -1;
+      this.editor.setValue(code, lineNumber);
+    },
+
+    render: function () {
+      var classes = "full-page-editor-modal-wrapper zen-theme-" + this.state.theme;
+      return (
+        <div className={classes}>
+          <div className="zen-mode-controls">
+            <ul>
+              <li>
+                <span ref="exit"
+                  className="fonticon fonticon-resize-small js-exit-zen-mode"
+                  data-toggle="tooltip"
+                  data-container=".zen-mode-controls .tooltips"
+                  title="Exit zen mode (`esc`)"
+                  onClick={this.exitZenMode}></span>
+              </li>
+              <li>
+                <span ref="theme"
+                  className="fonticon fonticon-picture js-toggle-theme"
+                  data-toggle="tooltip"
+                  data-container=".zen-mode-controls .tooltips"
+                  title="Switch zen theme"
+                  onClick={this.toggleTheme}></span>
+              </li>
+            </ul>
+            <div className="tooltips"></div>
+          </div>
+          <div ref="ace" className="js-editor"></div>
+        </div>
+      );
+    }
+  });
+
 
   var Beautify = React.createClass({
     noOfLines: function () {
@@ -450,6 +625,7 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
     ToggleHeaderButton: ToggleHeaderButton,
     StyledSelect: StyledSelect,
     CodeEditor: CodeEditor,
+    ZenModeOverlay: ZenModeOverlay,
     Beautify: Beautify,
     PaddedBorderedBox: PaddedBorderedBox,
     Document: Document,
