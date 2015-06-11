@@ -100,7 +100,7 @@ module.exports = function (grunt) {
 
   var templateSettings = function () {
     var defaultSettings = {
-     "development": {
+      "development": {
         "src": "assets/index.underscore",
         "dest": "dist/debug/index.html",
         "variables": {
@@ -248,15 +248,15 @@ module.exports = function (grunt) {
     watch: {
       js: {
         files: initHelper.watchFiles(['.js'], ["./app/**/*.js", '!./app/load_addons.js', "./assets/**/*.js", "./test/**/*.js"]),
-        tasks: ['watchRun'],
+        tasks: []
       },
       jsx: {
         files: initHelper.watchFiles(['.jsx'], ["./app/**/*.jsx", '!./app/load_addons.jsx', "./assets/**/*.jsx", "./test/**/*.jsx"]),
-        tasks: ['watchRun'],
+        tasks: []
       },
       style: {
         files: initHelper.watchFiles(['.less', '.css'], ["./app/**/*.css", "./app/**/*.less", "./assets/**/*.css", "./assets/**/*.less"]),
-        tasks: ['clean:watch', 'dependencies', 'less', 'concat:index_css'],
+        tasks: ['clean:watch', 'dependencies', 'less', 'concat:index_css']
       },
       html: {
         // the index.html is added in as a dummy file incase there is no
@@ -345,6 +345,11 @@ module.exports = function (grunt) {
           {src: assets.img, dest: "dist/debug/img/", flatten: true, expand: true},
           {src: './favicon.ico', dest: "dist/debug/favicon.ico"}
         ]
+      },
+
+      // populated dynamically by watch tasks
+      changedFiles: {
+        files: []
       }
     },
 
@@ -381,13 +386,23 @@ module.exports = function (grunt) {
 
     shell: {
       'build-jsx': {
-          command: 'node ./node_modules/react-tools/bin/jsx -x jsx app/addons/ app/addons/',
-          stdout: true,
-          failOnError: true
+        command: 'node ./node_modules/react-tools/bin/jsx -x jsx app/addons/ app/addons/ --no-cache-dir',
+        stdout: true,
+        failOnError: true
       },
 
-      'stylecheck': {
-        command: 'npm run stylecheck',
+      'build-single-jsx': {
+        command: '', // populated dynamically
+        stdout: true,
+        failOnError: true
+      },
+
+      stylecheck: {
+        command: 'npm run stylecheck'
+      },
+
+      stylecheckSingleFile: {
+        command: '' // populated dynamically
       }
     },
 
@@ -442,14 +457,52 @@ module.exports = function (grunt) {
 
   grunt.initConfig(config);
 
-  // on watch events configure jshint:all to only run on changed file
+
+  // This makes the watch tasks FAR more performant by only doing JSX compiling, jshinting, copying, etc. on the changed
+  // files instead of everything every time. Oddly, grunt-contrib-watch doesn't pass the changed filenames to the task:
+  // https://github.com/gruntjs/grunt-contrib-watch/issues/149 - hence running it here
   grunt.event.on('watch', function (action, filepath) {
-    if (!!filepath.match(/.js$/) && filepath.indexOf('test.config.js') === -1) {
-      grunt.config(['jshint', 'all'], filepath);
+    var isJS  = /\.js$/.test(filepath);
+    var isJSX = /\.jsx$/.test(filepath);
+
+    if (!isJS && !isJSX) {
+      return;
     }
 
-    if (!!filepath.match(/.jsx$/)) {
-      grunt.task.run(['jsx']);
+    // compile the single JSX file into the appropriate Fauxton folder
+    var targetFilepath = filepath;
+    if (isJSX) {
+      var folder = filepath.replace(/\/[^\/]*$/, '');
+      var targetFolder = folder;
+
+      // if the JSX file ISN'T in Fauxton, generate the .js file there
+      if (!(/^app\/addons/.test(folder))) {
+        targetFolder = folder.replace(/.*\/addons/, 'app/addons');
+      }
+      targetFilepath = filepath.replace(/.*\/addons/, 'app/addons');
+      targetFilepath = targetFilepath.replace(/\.jsx$/, '.js');
+
+      config.shell['build-single-jsx'].command = 'node ./node_modules/react-tools/bin/jsx -x jsx ' + folder + ' ' + targetFolder + ' --no-cache-dir';
+      grunt.task.run(['shell:build-single-jsx']);
+    }
+
+    // if the JS file that just changed was outside of Fauxton, copy it over
+    if (isJS && !(/^app\/addons/.test(filepath))) {
+      config.copy.changedFiles.files = [{
+        src: filepath,
+        dest: filepath.replace(/.*\/addons/, 'app/addons')
+      }];
+      grunt.task.run(['copy:changedFiles']);
+    }
+
+    // lastly, run jshint + stylecheck the file. Note: this run multiple times when you save a single file because the
+    // jsx command above doesn't allow targeting a specific file, just a folder. So any JSX file in the changed file
+    // folder or subfolder are copied over, causing every one of the files to be jshinted. Still far faster than before
+    if (targetFilepath.indexOf('test.config.js') === -1) {
+      grunt.config(['jshint', 'all'], targetFilepath);
+      grunt.task.run(['jshint']);
+      config.shell.stylecheckSingleFile.command = 'node ./node_modules/jsxcs/bin/jsxcs ' + targetFilepath;
+      grunt.task.run(['shell:stylecheckSingleFile']);
     }
   });
 
@@ -507,8 +560,11 @@ module.exports = function (grunt) {
   grunt.registerTask('dev', ['debugDev', 'couchserver']);
 
   // build a debug release
-  grunt.registerTask('debug', ['lint', 'dependencies', "gen_initialize:development", 'jsx', 'concat:requirejs', 'less', 'concat:index_css', 'template:development', 'copy:debug']);
-  grunt.registerTask('debugDev', ['clean', 'dependencies', "gen_initialize:development", 'jsx', 'jshint', 'shell:stylecheck', 'less', 'concat:index_css', 'template:development', 'copy:debug']);
+  grunt.registerTask('debug', ['lint', 'dependencies', "gen_initialize:development", 'jsx', 'concat:requirejs', 'less',
+    'concat:index_css', 'template:development', 'copy:debug']);
+
+  grunt.registerTask('debugDev', ['clean', 'dependencies', "gen_initialize:development", 'jsx', 'jshint', 'shell:stylecheck',
+    'less', 'concat:index_css', 'template:development', 'copy:debug']);
 
   grunt.registerTask('watchRun', ['clean:watch', 'dependencies', 'jshint', 'shell:stylecheck']);
 
