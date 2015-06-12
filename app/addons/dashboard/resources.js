@@ -44,14 +44,14 @@ function (app, FauxtonAPI) {
 
   });
 
-  Dashboard.DatabaseDocCount = Backbone.Collection.extend({
+  Dashboard.DatabaseList = FauxtonAPI.Model.extend({
 
     initialize: function (options) {
       this.database = options.database;
     },
 
     url: function () {
-      return app.host + "/" + this.database + "/_all_docs";
+      return app.host + '/' + this.database + '/_all_docs';
     }
 
   });

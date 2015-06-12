@@ -24,12 +24,8 @@ define([
     },
 
     reset: function (collectionTable, backboneCollection) {
-      this._prevSortbyHeader = 'started_on';
-      this._headerIsAscending = true;
-      this._sortByHeader = 'started_on';
       this._collection = collectionTable;
       this._pollingIntervalSeconds = 5;
-      this.sortCollectionByColumnHeader(this._sortByHeader);
       this._backboneCollection = backboneCollection;
     },
 
@@ -46,7 +42,6 @@ define([
       this._intervalID = setInterval(function () {
         this._backboneCollection.pollingFetch();
         this._collection = this._backboneCollection.table;
-        this.sortCollectionByColumnHeader(this._prevSortbyHeader, false);
         this.triggerChange();
       }.bind(this), this.getPollingInterval() * 1000);
     },
@@ -67,25 +62,8 @@ define([
       this._collection = collection;
     },
 
-    sortCollectionByColumnHeader: function (colName) {
-      var sorted = _.sortBy(this._collection, function (item) {
-        var variable = colName;
-
-        if (_.isUndefined(item[variable])) {
-          variable = 'source';
-        }
-        return item[variable];
-      });
-
-      this._prevSortbyHeader = colName;
-      this._collection = sorted;
-    },
-
-    getFilteredTable: function (collection) {
-      //sort the table here
-      this.sortCollectionByColumnHeader(this._sortByHeader);
-
-      //insert all matches into table
+    getFilteredActiveTasks: function (collection) {
+      //insert all replications into table
       var table = this._collection.filter(function (item) {
         return item.type ===  'replication';
       }, this);
@@ -93,35 +71,38 @@ define([
       return table;
     },
 
-    getNumberOfDocs: function (database) {
-      var databaseList = new Resources.DatabaseDocCount({database : database});
-      databaseList.fetch();
+    setDocumentCount: function (database) {
+      this.documentCount = database;
+    },
+
+    getDocumentCount: function () {
+      return this.documentCount;
     },
 
     dispatch: function (action) {
       switch (action.type) {
 
-        case ActionTypes.ACTIVE_TASKS_FETCH_AND_SET:
+        case ActionTypes.ACTIVE_TASKS_WIDGET_FETCH_AND_SET:
           this.dashboardWidgetActiveTaskInitialize(action.options.collectionTable, action.options.backboneCollection);
         break;
 
-        case ActionTypes.ACTIVE_TASKS_SET_COLLECTION:
+        case ActionTypes.ACTIVE_TASKS_WIDGET_SET_COLLECTION:
           this.setCollection(action.options);
           this.triggerChange();
         break;
 
-        case ActionTypes.ACTIVE_TASKS_SET_POLLING:
+        case ActionTypes.ACTIVE_TASKS_WIDGET_SET_POLLING:
           this.setPolling();
           this.triggerChange();
         break;
 
-        case ActionTypes.ACTIVE_TASKS_CLEAR_POLLING:
+        case ActionTypes.ACTIVE_TASKS_WIDGET_CLEAR_POLLING:
           this.clearPolling();
           this.triggerChange();
         break;
 
-        case ActionTypes.ACTIVE_TASKS_GET_DOC_COUNT:
-          this.getNumberOfDocs(action.options);
+        case ActionTypes.ACTIVE_TASKS_WIDGET_SET_DOC_COUNT:
+          this.setDocumentCount(action.options);
         break;
 
         default:

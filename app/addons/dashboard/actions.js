@@ -15,7 +15,7 @@ define([
 ],
 function (FauxtonAPI, ActionTypes) {
   return {
-    fetchAndSetActiveTasks: function (options) {
+    fetchAndSetActiveTasksForDashboard: function (options) {
       var activeTasks = options;
 
       FauxtonAPI.when(activeTasks.fetch()).then(function () {
@@ -25,7 +25,7 @@ function (FauxtonAPI, ActionTypes) {
 
     init: function (collection, backboneCollection) {
       FauxtonAPI.dispatch({
-        type: ActionTypes.ACTIVE_TASKS_FETCH_AND_SET,
+        type: ActionTypes.ACTIVE_TASKS_WIDGET_FETCH_AND_SET,
         options: {
           collectionTable: collection,
           backboneCollection: backboneCollection
@@ -34,26 +34,32 @@ function (FauxtonAPI, ActionTypes) {
     },
     setCollection: function (collection) {
       FauxtonAPI.dispatch({
-        type: ActionTypes.ACTIVE_TASKS_SET_COLLECTION,
+        type: ActionTypes.ACTIVE_TASKS_WIDGET_SET_COLLECTION,
         options: collection
       });
     },
     setPolling: function () {
       FauxtonAPI.dispatch({
-        type: ActionTypes.ACTIVE_TASKS_SET_POLLING
+        type: ActionTypes.ACTIVE_TASKS_WIDGET_SET_POLLING
       });
     },
     clearPolling: function () {
       FauxtonAPI.dispatch({
-        type: ActionTypes.ACTIVE_TASKS_CLEAR_POLLING
+        type: ActionTypes.ACTIVE_TASKS_WIDGET_CLEAR_POLLING
       });
     },
-    getDocCount: function (database) {
+    getDatabaseDetail: function (options) {
+      var databaseDetail = options;
+
+      FauxtonAPI.when(databaseDetail.fetch()).then(function () {
+        this.setDocumentCount(databaseDetail);
+      }.bind(this));
+    },
+    setDocumentCount: function (detail) {
       FauxtonAPI.dispatch({
-        type: ActionTypes.ACTIVE_TASKS_GET_DOC_COUNT,
-        options: database
+        type: ActionTypes.ACTIVE_TASKS_WIDGET_SET_DOC_COUNT,
+        options: detail
       });
     }
-
   };
 });

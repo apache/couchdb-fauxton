@@ -40,7 +40,7 @@ function (app, FauxtonAPI, Resources, Components, Actions) {
     },
 
     showDashboard: function () {
-      Actions.fetchAndSetActiveTasks(this.allTasks);
+      Actions.fetchAndSetActiveTasksForDashboard(this.allTasks);
 
       this.setComponent("#dashboard-content", Components.DashboardController);
     }

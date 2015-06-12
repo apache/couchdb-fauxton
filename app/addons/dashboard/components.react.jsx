@@ -15,8 +15,9 @@ define([
   'api',
   'react',
   'addons/dashboard/stores',
-  'addons/dashboard/actions'
-], function (App, FauxtonAPI, React, Store, Action) {
+  'addons/dashboard/actions',
+  'addons/dashboard/resources'
+], function (App, FauxtonAPI, React, Store, Action, Resources) {
 
   var activeTaskList = Store.dashboardStore;
 
@@ -63,10 +64,6 @@ define([
 
   var ActiveTaskWidget = React.createClass({
 
-    getCollection: function () {
-      return this.props.collection;
-    },
-
     render: function () {
       var collection = this.props.collection;
       var isEmpty = this.props.isEmpty;
@@ -85,7 +82,7 @@ define([
 
     getStoreState: function () {
       return {
-        filteredActiveTasks: activeTaskList.getFilteredTable(this.props.collection)
+        filteredActiveTasks: activeTaskList.getFilteredActiveTasks(this.props.collection)
       };
     },
 
@@ -95,7 +92,7 @@ define([
 
     componentWillReceiveProps: function (nextProps) {
       this.setState({
-        filteredActiveTasks: activeTaskList.getFilteredTable(this.props.collection)
+        filteredActiveTasks: activeTaskList.getFilteredActiveTasks(this.props.collection)
       });
     },
 
@@ -145,6 +142,11 @@ define([
       };
     },
 
+    getDatabaseDetail: function (databaseName) {
+      var database = new Resources.DatabaseList({database: databaseName});
+      Action.getDatabaseDetail(database);
+    },
+
     render: function () {
       var data = this.getInfo(this.props.item);
 
@@ -153,7 +155,8 @@ define([
       var fromDatabaseName = data.fromDatabase;
       var fromDatabaseNameEncoded = App.utils.safeURLName(fromDatabaseName);
 
-      var sourceDatabaseDocCount = Action.getDocCount(fromDatabaseName);
+      this.getDatabaseDetail(fromDatabaseNameEncoded);
+      console.log(activeTaskList.getDocumentCount());
 
       var className = 'active-tasks-box';
       var progress = data.progress;
@@ -195,7 +198,12 @@ define([
       return (docs_written / docs_read) * 100;
     },
     parseDbName: function (item) {
-      return item.split('/')[3];
+      if (item.includes("http://")) {
+        return item.split('/')[3];
+      } else {
+        return item;
+      }
+
     }
   };
 
