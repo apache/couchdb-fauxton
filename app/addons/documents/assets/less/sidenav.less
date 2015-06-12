@@ -10,7 +10,38 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+#sidebar-content {
+  .loading-lines {
+    margin-top: 20px;
+  }  
+}
+
 .sidenav{
+  .sidebar-toggler {
+    top: 5px;
+    position: absolute;
+    right: 7px;
+    z-index: 100;
+    width: 60px;
+    height: 35px;
+    text-align: center;
+    line-height: 35px;
+    text-decoration: none;
+    .icon {
+      padding-right: 3px;
+    }
+
+    &.sidebar-hidden {
+      &:hover {
+        background-color: rgba(153, 153, 153, 0.1);
+      }
+      width: 120px;
+      right: 210px;
+    }
+  }
+  .nav li + .nav-header {
+    margin-top: 0px;
+  }
   .nav-list > .active > a{
     text-shadow: none;
     background-color: rgba(0, 0, 0, 0.05);
@@ -159,7 +190,3 @@
     }
   }
 }
-
-
-
-

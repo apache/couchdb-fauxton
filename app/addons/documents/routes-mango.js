@@ -31,15 +31,15 @@ define([
   'addons/documents/mango/mango.components.react',
   'addons/documents/mango/mango.actions',
   'addons/documents/mango/mango.stores',
-  'addons/documents/index-results/index-results.components.react'
-
+  'addons/documents/index-results/index-results.components.react',
+  'addons/documents/sidebar/actions',
 ],
 
 
 function (app, FauxtonAPI, Helpers, BaseRoute, Databases,
   Components, Resources, Documents, IndexResultsActions, PaginationStores,
   ReactHeader, ReactActions, ReactPagination,
-  MangoComponents, MangoActions, MangoStores, IndexResultsComponents) {
+  MangoComponents, MangoActions, MangoStores, IndexResultsComponents, SidebarActions) {
 
   var MangoIndexEditorAndQueryEditor = BaseRoute.extend({
     layout: 'two_pane',
@@ -63,7 +63,6 @@ function (app, FauxtonAPI, Helpers, BaseRoute, Databases,
       this.allDatabases = this.getAllDatabases();
       this.createDesignDocsCollection();
       this.addLeftHeader();
-      this.addSidebar();
 
       MangoActions.setDatabase({
         database: this.database
@@ -89,8 +88,7 @@ function (app, FauxtonAPI, Helpers, BaseRoute, Databases,
 
       ReactActions.resetHeaderController();
 
-      // magic method
-      this.sidebar.setSelectedTab('mango-query');
+      SidebarActions.setSelectedTab('mango-query');
       this.setComponent('#react-headerbar', ReactHeader.HeaderBarController);
       this.setComponent('#footer', ReactPagination.Footer);
 

@@ -17,8 +17,11 @@ define([
   'addons/databases/base',
   'addons/fauxton/components',
   'addons/documents/pagination/actions',
-  'addons/documents/pagination/stores'
-], function (app, FauxtonAPI, Documents, Databases, Components, PaginationActions, PaginationStores ) {
+  'addons/documents/pagination/stores',
+  'addons/documents/sidebar/sidebar.react',
+  'addons/documents/sidebar/actions'
+], function (app, FauxtonAPI, Documents, Databases, Components, PaginationActions, PaginationStores,
+  SidebarComponents, SidebarActions) {
 
 
   // The Documents section is built up a lot of different route object which share code. This contains
@@ -99,14 +102,17 @@ define([
     },
 
     addSidebar: function (selectedTab) {
-      var params = {
-        collection: this.designDocs,
+      var options = {
+        designDocs: this.designDocs,
         database: this.database
       };
+
       if (selectedTab) {
-        params.selectedTab = selectedTab;
+        options.selectedTab = selectedTab;
       }
-      this.sidebar = this.setView("#sidebar-content", new Documents.Views.Sidebar(params));
+
+      SidebarActions.newOptions(options);
+      this.setComponent("#sidebar-content", SidebarComponents.SidebarController);
     },
 
     getCrumbs: function (database) {

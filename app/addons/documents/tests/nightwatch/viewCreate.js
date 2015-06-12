@@ -93,7 +93,12 @@ module.exports = {
     var newDatabaseName = client.globals.testDatabaseName;
     /*jshint multistr: true */
 
-    openDifferentDropdownsAndClick(client, '#nav-header-testdesigndoc')
+    client
+      .loginToGUI()
+      .populateDatabase(newDatabaseName)
+      .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
+      .clickWhenVisible('#sidebar-tab-testdesigndoc a.dropdown-toggle.icon.fonticon-plus-circled', waitTime, false)
+      .clickWhenVisible('#sidebar-tab-testdesigndoc a[href*="new_view"]', waitTime, false)
       .waitForElementVisible('#index-name', waitTime, false)
       .clearValue('#index-name')
       .setValue('#index-name', 'test-new-view')
@@ -111,8 +116,8 @@ module.exports = {
       //go back to all docs
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
       .clickWhenVisible('#nav-header-testdesigndoc', waitTime, false)
-      .clickWhenVisible('[data-target="#testdesigndocviews"]', waitTime, false)
-      .clickWhenVisible('#testdesigndoc_testnewview', waitTime, false)
+      .clickWhenVisible('#nav-design-function-testdesigndocviews', waitTime, false)
+      .clickWhenVisible('#testdesigndoc_test-new-view', waitTime, false)
       .waitForElementPresent('.prettyprint', waitTime, false)
       .waitForElementNotPresent('.loading-lines', waitTime, false)
       .assert.containsText('.prettyprint', 'enteente')
