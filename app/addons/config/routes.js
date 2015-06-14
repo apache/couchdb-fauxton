@@ -22,7 +22,7 @@ define([
 function (app, FauxtonAPI, Config, Views, CORSComponents, CORSActions) {
 
   var ConfigRouteObject = FauxtonAPI.RouteObject.extend({
-    layout: 'with_tabs_sidebar',
+    layout: 'with_tabs_sidebar_scroll',
 
     initialize: function () {
       this.configs = new Config.Collection();
