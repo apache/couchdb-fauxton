@@ -138,15 +138,8 @@ define([
       return {
         toDatabase: activeTasksHelpers.parseDbName(item.target),
         fromDatabase: activeTasksHelpers.parseDbName(item.source),
-        progress: activeTasksHelpers.calculateProgress(item.docs_written, item.docs_read),
-        totalDocInSource: activeTaskList.getSourceDocumentCount(activeTasksHelpers.parseDbName(item.source)),
-        totalDocInTarget: activeTaskList.getTargetDocumentCount(activeTasksHelpers.parseDbName(item.target))
+        progress: activeTasksHelpers.calculateProgress(item.checkpointed_source_seq[0], item.source_seq[0])
       };
-    },
-
-    getDatabaseDetail: function (databaseName) {
-      var database = new Resources.DatabaseList({database: databaseName});
-      Action.getDatabaseDetail(database);
     },
 
     render: function () {
@@ -157,8 +150,6 @@ define([
       var fromDatabaseName = data.fromDatabase;
       var fromDatabaseNameEncoded = App.utils.safeURLName(fromDatabaseName);
 
-      this.getDatabaseDetail(fromDatabaseNameEncoded);
-
       var className = 'active-tasks-box';
       var progress = data.progress;
       if (progress > 50) {
@@ -166,7 +157,7 @@ define([
       } else {
         className = className + ' low-contrast';
       }
-      data.progress = activeTasksHelpers.getProgress(progress);
+      var progressStr = activeTasksHelpers.getProgressStr(progress);
       progress = progress / 100;
       var style = {
         opacity: progress
@@ -185,19 +176,21 @@ define([
           <div className="active-tasks-fromDatabase">
             <a href={"#/database/" + fromDatabaseNameEncoded + "/_all_docs"}>{fromDatabaseName}</a>
           </div>
-          <div className="active-tasks-complete">{data.totalDocInTarget}/{data.totalDocInSource}</div>
+          <div className="active-tasks-complete">{progressStr}</div>
         </div>
         );
     }
   });
 
   var activeTasksHelpers = {
-    getProgress: function (item) {
+    getProgressStr: function (item) {
       return item + '% Complete';
     },
-    calculateProgress: function (docs_written, docs_read) {
-      return (docs_written / docs_read) * 100;
+
+    calculateProgress: function (checkpointed_source_seq, source_seq) {
+      return (checkpointed_source_seq / source_seq) * 100;
     },
+
     parseDbName: function (item) {
       if (item.includes("http://")) {
         return item.split('/')[3];

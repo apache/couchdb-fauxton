@@ -47,19 +47,6 @@ function (FauxtonAPI, ActionTypes) {
       FauxtonAPI.dispatch({
         type: ActionTypes.ACTIVE_TASKS_WIDGET_CLEAR_POLLING
       });
-    },
-    getDatabaseDetail: function (options) {
-      var databaseDetail = options;
-
-      FauxtonAPI.when(databaseDetail.fetch()).then(function () {
-        this.setDocumentCount(databaseDetail);
-      }.bind(this));
-    },
-    setDocumentCount: function (detail) {
-      FauxtonAPI.dispatch({
-        type: ActionTypes.ACTIVE_TASKS_WIDGET_SET_DOC_COUNT,
-        options: detail
-      });
     }
   };
 });

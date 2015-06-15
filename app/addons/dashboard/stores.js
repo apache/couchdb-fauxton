@@ -71,29 +71,6 @@ define([
       return table;
     },
 
-    setDocumentCount: function (database) {
-      this.documentCount = database;
-    },
-
-    getDocumentCount: function () {
-      return this.documentCount;
-    },
-
-    getSourceDocumentCount: function (sourceDB) {
-      var task = _.find(this._collection, function (task) {
-        return task.source.search(sourceDB) > 0;
-      });
-      return task.sourceTotDocs.sourceTotalDocs;
-    },
-
-    getTargetDocumentCount: function (targetDB) {
-      var task = _.find(this._collection, function (task) {
-        return task.target.search(targetDB) > 0;
-      });
-
-      return task.targetTotDocs.targetTotalDocs;
-    },
-
     dispatch: function (action) {
       switch (action.type) {
 
@@ -114,10 +91,6 @@ define([
         case ActionTypes.ACTIVE_TASKS_WIDGET_CLEAR_POLLING:
           this.clearPolling();
           this.triggerChange();
-        break;
-
-        case ActionTypes.ACTIVE_TASKS_WIDGET_SET_DOC_COUNT:
-          this.setDocumentCount(action.options);
         break;
 
         default:
