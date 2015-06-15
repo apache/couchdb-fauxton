@@ -79,6 +79,21 @@ define([
       return this.documentCount;
     },
 
+    getSourceDocumentCount: function (sourceDB) {
+      var task = _.find(this._collection, function (task) {
+        return task.source.search(sourceDB) > 0;
+      });
+      return task.sourceTotDocs.sourceTotalDocs;
+    },
+
+    getTargetDocumentCount: function (targetDB) {
+      var task = _.find(this._collection, function (task) {
+        return task.target.search(targetDB) > 0;
+      });
+
+      return task.targetTotDocs.targetTotalDocs;
+    },
+
     dispatch: function (action) {
       switch (action.type) {
 

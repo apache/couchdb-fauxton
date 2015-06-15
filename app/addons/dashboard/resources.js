@@ -12,9 +12,10 @@
 
 define([
   'app',
-  'api'
+  'api',
+  'addons/databases/resources'
 ],
-function (app, FauxtonAPI) {
+function (app, FauxtonAPI, Databases) {
   var Dashboard = {};
 
   Dashboard.AllTasks = Backbone.Collection.extend({
@@ -32,15 +33,36 @@ function (app, FauxtonAPI) {
       var collectionTable = [];
 
       _.each(resp, function (item) {
-        collectionTable.push(item);
-      });
+
+        var source = this.parseDbName(item.source);
+        var target = this.parseDbName(item.target);
+        var s_helper = new Dashboard.SourceDatabaseInfo(source);
+        var t_helper = new Dashboard.TargetDatabaseInfo(target);
+
+        s_helper.fetch();
+        t_helper.fetch();
+
+        collectionTable.push(_.extend(item, {
+          sourceTotDocs: s_helper,
+          targetTotDocs: t_helper
+        }));
+
+      }.bind(this));
 
       //collection is an array of objects
       this.table = collectionTable;
       return resp;
     },
 
-    table: []
+    table: [],
+
+    parseDbName: function (databaseURL) {
+      if (databaseURL.includes("http://")) {
+        return databaseURL.split('/')[3];
+      } else {
+        return databaseURL;
+      }
+    }
 
   });
 
@@ -54,6 +76,38 @@ function (app, FauxtonAPI) {
       return app.host + '/' + this.database + '/_all_docs';
     }
 
+  });
+
+  Dashboard.SourceDatabaseInfo = Databases.Model.extend({
+    initialize: function (sourceDB) {
+      this.id = sourceDB;
+    },
+
+    url: function () {
+      return app.host + "/" + this.id;
+    },
+
+    parse: function (resp) {
+      this.sourceTotalDocs = resp.doc_count;
+    },
+
+    sourceTotalDocs: 0
+  });
+
+  Dashboard.TargetDatabaseInfo = FauxtonAPI.Model.extend({
+    initialize: function (targetDB) {
+      this.id = targetDB;
+    },
+
+    url: function () {
+      return app.host + "/" + this.id;
+    },
+
+    parse: function (resp) {
+      this.targetTotalDocs = resp.doc_count;
+    },
+
+    targetTotalDocs: 0
   });
 
   return Dashboard;

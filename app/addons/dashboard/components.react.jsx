@@ -138,7 +138,9 @@ define([
       return {
         toDatabase: activeTasksHelpers.parseDbName(item.target),
         fromDatabase: activeTasksHelpers.parseDbName(item.source),
-        progress: activeTasksHelpers.calculateProgress(item.docs_written, item.docs_read)
+        progress: activeTasksHelpers.calculateProgress(item.docs_written, item.docs_read),
+        totalDocInSource: activeTaskList.getSourceDocumentCount(activeTasksHelpers.parseDbName(item.source)),
+        totalDocInTarget: activeTaskList.getTargetDocumentCount(activeTasksHelpers.parseDbName(item.target))
       };
     },
 
@@ -156,7 +158,6 @@ define([
       var fromDatabaseNameEncoded = App.utils.safeURLName(fromDatabaseName);
 
       this.getDatabaseDetail(fromDatabaseNameEncoded);
-      console.log(activeTaskList.getDocumentCount());
 
       var className = 'active-tasks-box';
       var progress = data.progress;
@@ -184,7 +185,7 @@ define([
           <div className="active-tasks-fromDatabase">
             <a href={"#/database/" + fromDatabaseNameEncoded + "/_all_docs"}>{fromDatabaseName}</a>
           </div>
-          <div className="active-tasks-complete">{data.progress}</div>
+          <div className="active-tasks-complete">{data.totalDocInTarget}/{data.totalDocInSource}</div>
         </div>
         );
     }
