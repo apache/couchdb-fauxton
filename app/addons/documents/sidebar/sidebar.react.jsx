@@ -178,6 +178,10 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, DocumentViews) {
       };
     },
 
+    clickOnLinkToIndex: function (event) {
+      event.stopPropagation();
+    },
+
     createItems: function () {
       return _.map(this.props.items, function (index, key) {
         var href = FauxtonAPI.urls(this.props.indexTypeMap[this.props.selector].type, 'app', this.props.databaseName, this.props.designDocName);
@@ -186,7 +190,8 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, DocumentViews) {
           <a
             id={this.props.designDocName + '_' + index}
             href={"#/" + href + index}
-            className="toggle-view">
+            className="toggle-view"
+            onClick={this.clickOnLinkToIndex}>
             {index}
           </a>
           </li>
