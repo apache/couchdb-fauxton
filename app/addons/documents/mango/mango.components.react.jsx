@@ -126,7 +126,7 @@ function (app, FauxtonAPI, React, Stores, Actions,
     },
 
     render: function () {
-      var url = FauxtonAPI.urls('allDocs', 'app', this.props.dbName, '');
+      var url = '#/' + FauxtonAPI.urls('allDocs', 'app', this.props.dbName, '');
 
       return (
         <div className="editor-wrapper span5 scrollable">
