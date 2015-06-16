@@ -49,6 +49,13 @@
     overflow-x: auto;
   }
 
+  .widget-inner-body {
+    width: 95%;
+    white-space: nowrap;
+    overflow-x: auto;
+    float: left;
+  }
+
   .active-tasks-box {
     width: 240px;
     height: 240px;
@@ -128,6 +135,26 @@
 
     .noResultText {
       margin-top: 75px;
+    }
+  }
+
+  .cornerBtns {
+    margin-top: 106px;
+    width: 20px;
+    color: @white;
+
+    &.left {
+      margin-right: 2px;
+      float: left;
+    }
+
+    &.right {
+      margin-left: 9px;
+      float: right;
+    }
+
+    &:hover {
+      cursor: pointer;
     }
   }
 }

@@ -21,6 +21,8 @@ define([
 
   var activeTaskList = Store.dashboardStore;
 
+  var currentIndex = 0;
+
   var DashboardController = React.createClass({
 
     getStoreState: function () {
@@ -122,11 +124,35 @@ define([
         );
     },
 
+    onClick: function (buttonId) {
+      var endIndex = $('.active-tasks-box').length - 3;
+      if (buttonId == 1) {
+        if (currentIndex > 0) {
+          currentIndex--;
+          $('.active-tasks-box').animate({'left': '+=260px'});
+        }
+      } else {
+        if (currentIndex < endIndex) {
+          currentIndex++;
+          $('.active-tasks-box').animate({'left': '-=260px'});
+        }
+      }
+
+    },
+
     render: function () {
       var boxes = this.createActiveTasksBox();
       return (
         <div className="widget-body">
-        {boxes}
+          <div className="cornerBtns left" onClick={this.onClick.bind(this, 1)}>
+            <i className="fonticon-left-open size-60"></i>
+          </div>
+          <div className="widget-inner-body">
+          {boxes}
+          </div>
+          <div className="cornerBtns right" onClick={this.onClick.bind(this, -1)}>
+            <i className="fonticon-right-open size-60"></i>
+          </div>
         </div>
         )
         ;
