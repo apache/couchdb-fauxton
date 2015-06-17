@@ -370,8 +370,7 @@ module.exports = function (grunt) {
           src: initHelper.watchFiles(['[Ss]pec.js'], ['./app/addons/**/*[Ss]pec.js', './app/addons/**/*[Ss]pec.react.js', './app/core/**/*[Ss]pec.js', './app/**/*[Ss]pec.js'])
         },
         template: 'test/test.config.underscore',
-        config: './app/config-source.js',
-        templateSettings: templateSettings
+        config: './app/config.js'
       }
     },
 

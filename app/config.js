@@ -10,6 +10,65 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-/* global requireConfig */
-require.config(requireConfig);
+// Set the require.js configuration for your application.
+require.config({
+
+  // Initialize the application with the main application file.
+  deps: ["main"],
+
+  paths: {
+    // JavaScript folders.
+    libs: "../assets/js/libs",
+    plugins: "../assets/js/plugins",
+
+    // Libraries.
+    jquery: "../assets/js/libs/jquery",
+    lodash: "../assets/js/libs/lodash",
+    backbone: "../assets/js/libs/backbone",
+    "backbone.layoutmanager": "../assets/js/plugins/backbone.layoutmanager",
+    bootstrap: "../assets/js/libs/bootstrap",
+    spin: "../assets/js/libs/spin.min",
+    d3: "../assets/js/libs/d3",
+    "ace":"../assets/js/libs/ace",
+    "cloudant.pagingcollection": "../assets/js/plugins/cloudant.pagingcollection",
+    "velocity": "../assets/js/plugins/velocity",
+    "velocity.ui": "../assets/js/plugins/velocity.ui",
+    react: "../assets/js/libs/react",
+    flux: "../assets/js/libs/flux",
+    "es5-shim": "../assets/js/libs/es5-shim",
+    "css.escape": "../assets/js/libs/css.escape",
+    moment: '../assets/js/libs/moment'
+  },
+
+  baseUrl: '/',
+
+  map: {
+    "*": {
+      'underscore': 'lodash',
+      'api':'core/api'
+    }
+  },
+
+  shim: {
+    // Backbone library depends on lodash and jQuery.
+    backbone: {
+      deps: ["lodash", "jquery"],
+      exports: "Backbone"
+    },
+
+    bootstrap: {
+      deps: ["jquery"],
+      exports: "Bootstrap"
+    },
+
+    "plugins/prettify": [],
+    "plugins/beautify": [],
+
+    "plugins/jquery.form": ["jquery"],
+
+    "velocity": ["jquery"],
+
+    "velocity.ui": ["velocity"]
+  }
+});
 
