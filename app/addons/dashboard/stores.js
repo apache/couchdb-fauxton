@@ -54,20 +54,18 @@ define([
       return this._intervalID;
     },
 
-    getCollection: function () {
-      return this._collection;
-    },
-
     setCollection: function (collection) {
       this._collection = collection;
     },
 
-    getFilteredActiveTasks: function (collection) {
+    getFilteredActiveTasks: function () {
       //insert all replications into table
-      var table = this._collection.filter(function (item) {
-        return item.type ===  'replication';
-      }, this);
-
+      var table = [];
+      if (typeof this._collection !== "undefined") {
+        table = this._collection.filter(function (item) {
+          return item.type ===  'replication';
+        }, this);
+      }
       return table;
     },
 

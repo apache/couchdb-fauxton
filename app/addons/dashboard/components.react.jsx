@@ -27,7 +27,7 @@ define([
 
     getStoreState: function () {
       return {
-        collection: activeTaskList.getCollection()
+        collection: activeTaskList.getFilteredActiveTasks()
       };
     },
 
@@ -94,7 +94,7 @@ define([
 
     componentWillReceiveProps: function (nextProps) {
       this.setState({
-        filteredActiveTasks: activeTaskList.getFilteredActiveTasks(this.props.collection)
+        filteredActiveTasks: this.props.collection
       });
     },
 
@@ -137,7 +137,6 @@ define([
           $('.active-tasks-box').animate({'left': '-=260px'});
         }
       }
-
     },
 
     render: function () {
@@ -218,12 +217,10 @@ define([
     },
 
     parseDbName: function (item) {
-      if (item.includes("http://")) {
+      if (item.indexOf("http://") !== -1) {
         return item.split('/')[3];
-      } else {
-        return item;
       }
-
+      return item;
     }
   };
 

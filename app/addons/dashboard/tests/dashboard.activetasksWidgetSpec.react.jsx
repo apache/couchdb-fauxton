@@ -16,7 +16,7 @@ define([
   'addons/dashboard/stores',
   'react',
   'addons/dashboard/actions',
-  'addons/activetasks/tests/fakeActiveTaskResponse',
+  'addons/dashboard/tests/fakeActiveTaskResponseForWidget',
   'testUtils'
 ], function (FauxtonAPI, Dashboard, Components, Stores, React, Actions, fakedResponse, testUtils) {
   var assert = testUtils.assert;
@@ -28,36 +28,28 @@ define([
   describe('Dashboard  -- Components', function () {
 
     describe('Active Task Widget (Components)', function () {
-      var activeTasksTableDiv, activeTasksWidget;
+      var activeTasksDiv, activeTasksWidget;
 
       beforeEach(function () {
-        activeTasksTableDiv = document.createElement('div');
+        activeTasksDiv = document.createElement('div');
         dashboardStore.dashboardWidgetActiveTaskInitialize(allActiveTasksCollection.table, allActiveTasksCollection);
-        activeTasksWidget = TestUtils.renderIntoDocument(React.createElement(Components.DashboardController, null), activeTasksTableDiv);
+        activeTasksWidget = TestUtils.renderIntoDocument(<Components.DashboardController/>, activeTasksDiv);
       });
 
-      it('active tasks widget header should be "Active Tasks"', function () {
+      it('active tasks widget header should be "Active Replications"', function () {
         var widgetHeader = $(activeTasksWidget.getDOMNode()).find('.widget-header').text();
-        assert.equal(widgetHeader.trim(), 'Active Tasks');
+        assert.equal(widgetHeader.trim(), 'Active Replications');
       });
 
-      it('active tasks table should display, although there are no active tasks', function () {
+      it('show active tasks boxes when there is not empty collection', function () {
+        assert.equal($(activeTasksWidget.getDOMNode()).find('.active-tasks-box').length, 3);
+      });
+
+      it('when there are no active replications, it should display a box with a message', function () {
         Actions.setCollection(undefined);
-        assert.equal($(activeTasksWidget.getDOMNode()).find('.active-task-table').length, 1);
+        assert.equal($(activeTasksWidget.getDOMNode()).find('.active-tasks-box').length, 3);
       });
 
-      it('if there are no active tasks, it display a message instead of empty table rows', function () {
-        Actions.setCollection(undefined);
-        var tableText = $(activeTasksWidget.getDOMNode()).find('.noResult').text();
-        assert.equal(tableText.trim(), 'No active tasks.');
-      });
-
-      it('render the data into the active task table if there are not empty collection', function () {
-        var collection = dashboardStore.getCollection();
-        var isEmpty = _.isEmpty(collection);
-        var activeTasksWidget = TestUtils.renderIntoDocument(<Components.ActiveTaskWidget collection={collection} isEmpty={isEmpty}/>, activeTasksWidget);
-        assert.ok(!_.isEmpty(activeTasksWidget.getCollection()));
-      });
     });
   });
 });
