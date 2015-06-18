@@ -34,6 +34,7 @@ define([
 
     afterEach(function () {
       React.unmountComponentAtNode(container);
+      window.localStorage.removeItem('zenTheme');
     });
 
     describe('Toggle theme', function () {
@@ -44,11 +45,13 @@ define([
       it('switch to light theme on click', function () {
         TestUtils.Simulate.click($(el.getDOMNode()).find('.js-toggle-theme')[0]);
         assert.ok($(el.getDOMNode()).hasClass('zen-theme-light'));
+        // reset
+        TestUtils.Simulate.click($(el.getDOMNode()).find('.js-toggle-theme')[0]);
       });
     });
 
     describe('Closing zen mode', function () {
-      it('defaults to dark theme', function () {
+      it('method called', function () {
         TestUtils.Simulate.click($(el.getDOMNode()).find('.js-exit-zen-mode')[0]);
         assert.ok(spy.calledOnce);
       });

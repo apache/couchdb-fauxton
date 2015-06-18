@@ -30,7 +30,7 @@ function (app, FauxtonAPI, React, Stores, Actions,
   var getDocUrl = app.helpers.getDocUrl;
 
   var PaddedBorderedBox = ReactComponents.PaddedBorderedBox;
-  var CodeEditor = ReactComponents.CodeEditor;
+  var CodeEditorPanel = ReactComponents.CodeEditorPanel;
   var ConfirmButton = ReactComponents.ConfirmButton;
 
   var MangoQueryEditorController = React.createClass({
@@ -45,7 +45,7 @@ function (app, FauxtonAPI, React, Stores, Actions,
         changedQuery: mangoStore.getQueryFindCodeChanged(),
         availableIndexes: mangoStore.getAvailableQueryIndexes(),
         additionalIndexes: mangoStore.getAvailableAdditionalIndexes(),
-        isLoading: mangoStore.getLoadingIndexes(),
+        isLoading: mangoStore.getLoadingIndexes()
       };
     },
 
@@ -126,7 +126,7 @@ function (app, FauxtonAPI, React, Stores, Actions,
     },
 
     render: function () {
-      var url = FauxtonAPI.urls('allDocs', 'app', this.props.dbName, '');
+      var url = '#/' + FauxtonAPI.urls('allDocs', 'app', this.props.dbName, '');
 
       return (
         <div className="editor-wrapper span5 scrollable">
@@ -144,13 +144,12 @@ function (app, FauxtonAPI, React, Stores, Actions,
           </PaddedBorderedBox>
           <form className="form-horizontal" onSubmit={this.props.onSubmit}>
             <PaddedBorderedBox>
-              <CodeEditor
+              <CodeEditorPanel
                 id="query-field"
                 ref="field"
                 title={this.props.title}
-                docs={this.props.docs}
-                code={this.props.exampleCode}
-                disableUnload={true} />
+                docLink={this.props.docs}
+                defaultCode={this.props.exampleCode} />
               {this.getChangedQueryText()}
             </PaddedBorderedBox>
             {this.getIndexBox()}

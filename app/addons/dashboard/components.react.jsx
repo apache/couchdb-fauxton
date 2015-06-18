@@ -125,7 +125,7 @@ define([
     },
 
     onClick: function (buttonId) {
-      var endIndex = $('.active-tasks-box').length - 3;
+      var endIndex = $('.active-tasks-box').length - 1;
       if (buttonId == 1) {
         if (currentIndex > 0) {
           currentIndex--;
