@@ -96,5 +96,17 @@ define([
       });
     });
 
+    describe('getEditor', function () {
+      beforeEach(function () {
+        codeEditorEl = TestUtils.renderIntoDocument(
+          <ReactComponents.CodeEditor defaultCode={code} />,
+          container
+        );
+      });
+      it('returns a reference to get access to the editor', function () {
+        assert.ok(codeEditorEl.getEditor());
+      });
+    });
+
   });
 });

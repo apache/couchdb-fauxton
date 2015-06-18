@@ -381,6 +381,10 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
       return this.editor.getValue();
     },
 
+    getEditor: function () {
+      return this;
+    },
+
     render: function () {
       return (
         <div ref="ace" className="js-editor" id={this.props.id}></div>
