@@ -16,7 +16,7 @@ define([
   'addons/dashboard/stores',
   'react',
   'addons/dashboard/actions',
-  'addons/dashboard/tests/fakeActiveTaskResponseForWidget',
+  'addons/activetasks/tests/fakeActiveTaskResponse',
   'testUtils'
 ], function (FauxtonAPI, Dashboard, Components, Stores, React, Actions, fakedResponse, testUtils) {
   var assert = testUtils.assert;

@@ -58,7 +58,7 @@
 
   .active-tasks-box {
     width: 240px;
-    height: 240px;
+    height: 260px;
     position: relative;
     z-index: 5;
     margin-right: 20px;
@@ -67,19 +67,23 @@
     text-align: center;
     font-size: 16pt;
 
-    &.low-contrast {
+    .low-contrast {
+      width: 240px;
+      height: 240px;
       color: #EAEAEA;
       border: 1px solid #EAEAEA;
     }
 
-    &.high-contrast {
+    .high-contrast {
+      width: 240px;
+      height: 240px;
       color: #171414;
       border: 1px solid #171414;
     }
 
     .active-tasks-box-background {
-      height: 100%;
-      width: 100%;
+      width: 239px;
+      height: 239px;
       position: absolute;
       z-index: -1;
       background: @white;
@@ -107,7 +111,8 @@
       margin: 20px 0;
       padding: 0 10px;
       text-overflow: ellipsis;
-      white-space: nowrap;
+      white-space: pre-wrap;
+      height: 54px;
       overflow: hidden;
 
       a {
@@ -116,8 +121,14 @@
     }
 
     .active-tasks-complete {
-      margin-top: 40px;
+      margin-top: 20px;
       margin-bottom: 30px;
+    }
+
+    .non-continuous-tag {
+      text-align: center;
+      color: @white;
+      font-size: 10pt;
     }
   }
 

@@ -84,7 +84,7 @@ define([
 
     getStoreState: function () {
       return {
-        filteredActiveTasks: activeTaskList.getFilteredActiveTasks(this.props.collection)
+        filteredActiveTasks: this.props.collection
       };
     },
 
@@ -153,34 +153,32 @@ define([
             <i className="fonticon-right-open size-60"></i>
           </div>
         </div>
-        )
-        ;
+        );
     }
   });
 
   var ActiveTaskBox = React.createClass({
     getInfo: function (item) {
       return {
-        toDatabase: activeTasksHelpers.parseDbName(item.target),
-        fromDatabase: activeTasksHelpers.parseDbName(item.source),
-        progress: activeTasksHelpers.calculateProgress(item.checkpointed_source_seq[0], item.source_seq[0])
+        toDatabase: item.target,
+        fromDatabase: item.source,
+        progress: activeTasksHelpers.calculateProgress(item.checkpointed_source_seq[0], item.source_seq[0]),
+        continuous: item.continuous
       };
     },
 
     render: function () {
       var data = this.getInfo(this.props.item);
 
-      var toDatabaseName = data.toDatabase;
-      var toDatabaseNameEncoded = App.utils.safeURLName(toDatabaseName);
+      var toDatabaseName = activeTasksHelpers.parseDbName(data.toDatabase);
       var fromDatabaseName = data.fromDatabase;
-      var fromDatabaseNameEncoded = App.utils.safeURLName(fromDatabaseName);
-
-      var className = 'active-tasks-box';
+      var parsedFromDatabaseName = activeTasksHelpers.parseDbName(fromDatabaseName);
+      var className = '';
       var progress = data.progress;
       if (progress > 50) {
-        className = className + ' high-contrast';
+        className = ' high-contrast';
       } else {
-        className = className + ' low-contrast';
+        className = ' low-contrast';
       }
       var progressStr = activeTasksHelpers.getProgressStr(progress);
       progress = progress / 100;
@@ -190,21 +188,41 @@ define([
 
 
       return (
-        <div className={className}>
-          <div className="active-tasks-box-background" style={style}></div>
-          <div className="active-tasks-toDatabase">
-            <a href={"#/database/" + toDatabaseNameEncoded + "/_all_docs"}>{toDatabaseName}</a>
+        <div className="active-tasks-box">
+          <div className={className}>
+            <div className="active-tasks-box-background" style={style}></div>
+            <div className="active-tasks-toDatabase">
+              <a href={activeTasksHelpers.getDbUrl(toDatabaseName)}>{toDatabaseName}</a>
+            </div>
+            <div className="active-tasks-arrow">
+              <i className="fonticon-up size-36"></i>
+            </div>
+            <div className="active-tasks-fromDatabase">
+              <a href={activeTasksHelpers.getDbUrl(fromDatabaseName)}>{parsedFromDatabaseName}</a>
+            </div>
+            <div className="active-tasks-complete">{progressStr}</div>
           </div>
-          <div className="active-tasks-arrow">
-            <i className="fonticon-up size-36"></i>
-          </div>
-          <div className="active-tasks-fromDatabase">
-            <a href={"#/database/" + fromDatabaseNameEncoded + "/_all_docs"}>{fromDatabaseName}</a>
-          </div>
-          <div className="active-tasks-complete">{progressStr}</div>
+          <NonContinuousTag isContinuous={data.continuous}/>
         </div>
         );
     }
+  });
+
+  var NonContinuousTag = React.createClass({
+    getTag: function () {
+      var tag = '';
+      if (!this.props.isContinuous) {
+        tag = 'non-continuous';
+      }
+      return tag;
+    },
+
+    render: function () {
+      return (
+        <div className="non-continuous-tag">{this.getTag()}</div>
+        );
+    }
+
   });
 
   var activeTasksHelpers = {
@@ -213,14 +231,32 @@ define([
     },
 
     calculateProgress: function (checkpointed_source_seq, source_seq) {
-      return (checkpointed_source_seq / source_seq) * 100;
+      return Math.round((checkpointed_source_seq / source_seq) * 10000) / 100;
     },
 
     parseDbName: function (item) {
       if (item.indexOf("http://") !== -1) {
-        return item.split('/')[3];
+        if (item.indexOf("http://0.0.0.0") !== -1) {
+          return item.split('/')[3];
+        } else {
+          var lastIndex = item.length;
+          var splitIndex = item.indexOf(item.split('/')[3]);
+          return item.substring(0, splitIndex) + " " + item.substring(splitIndex, lastIndex);
+        }
       }
       return item;
+    },
+
+    getDbUrl: function (item) {
+      if (item.indexOf("http://") !== -1) {
+        if (item.indexOf("http://0.0.0.0") !== -1) {
+          return '#/database/' + item.split('/')[3] + '/_all_docs';
+        } else {
+          return item;
+        }
+      } else {
+        return '#/database/' + item + '/_all_docs';
+      }
     }
   };
 
@@ -228,7 +264,8 @@ define([
     DashboardController: DashboardController,
     ActiveTaskContent: ActiveTaskContent,
     ActiveTaskWidget: ActiveTaskWidget,
-    ActiveTaskBox: ActiveTaskBox
+    ActiveTaskBox: ActiveTaskBox,
+    NonContinuousTag: NonContinuousTag
   };
 });
 

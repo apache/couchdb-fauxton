@@ -17,6 +17,7 @@ app/addons/*
 !app/addons/documents
 !app/addons/styletests
 !app/addons/cors
+!app/addons/dashboard
 settings.json*
 i18n.json
 !settings.json.default

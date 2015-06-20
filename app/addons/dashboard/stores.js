@@ -25,7 +25,7 @@ define([
 
     reset: function (collectionTable, backboneCollection) {
       this._collection = collectionTable;
-      this._pollingIntervalSeconds = 5;
+      this._pollingIntervalSeconds = 1;
       this._backboneCollection = backboneCollection;
     },
 
