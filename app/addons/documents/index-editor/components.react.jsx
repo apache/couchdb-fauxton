@@ -375,7 +375,7 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, ReactComponents) 
         );
       }
 
-      var url = FauxtonAPI.urls('allDocs', 'app', this.state.database.id, '');
+      var url = '#/' + FauxtonAPI.urls('allDocs', 'app', this.state.database.id, '');
 
       return (
         <div className="define-view">
