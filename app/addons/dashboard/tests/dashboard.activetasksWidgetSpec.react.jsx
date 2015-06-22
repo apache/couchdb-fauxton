@@ -12,7 +12,7 @@
 define([
   'api',
   'addons/dashboard/resources',
-  'addons/dashboard/components.react',
+  'addons/dashboard/activetasksWidget.components.react',
   'addons/dashboard/stores',
   'react',
   'addons/dashboard/actions',
@@ -33,7 +33,7 @@ define([
       beforeEach(function () {
         activeTasksDiv = document.createElement('div');
         dashboardStore.dashboardWidgetActiveTaskInitialize(allActiveTasksCollection.table, allActiveTasksCollection);
-        activeTasksWidget = TestUtils.renderIntoDocument(<Components.DashboardController/>, activeTasksDiv);
+        activeTasksWidget = TestUtils.renderIntoDocument(<Components.ActiveTasksWidgetController/>, activeTasksDiv);
       });
 
       it('active tasks widget header should be "Active Replications"', function () {
