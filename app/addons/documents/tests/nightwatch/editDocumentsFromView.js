@@ -15,7 +15,6 @@ module.exports = {
     var waitTime = client.globals.maxWaitTime,
         newDatabaseName = client.globals.testDatabaseName,
         newDocumentName = '_design/abc',
-        baseUrl = client.globals.test_settings.launch_url,
         ddocContents = {
           "views": {
             "evens": {
@@ -28,13 +27,13 @@ module.exports = {
 
     client
       .loginToGUI()
-      .createDocument(newDocumentName, newDatabaseName, ddocContents )
+      .createDocument(newDocumentName, newDatabaseName, ddocContents)
       .populateDatabase(newDatabaseName)
 
       //navigate to 'evens' view (declared above), then click on first document's pencil icon
       .clickWhenVisible('#dashboard-content a[href="#/database/' + newDatabaseName + '/_all_docs"]')
       .clickWhenVisible('#nav-header-abc')
-      .clickWhenVisible('#nav-design-function-abcviews')
+      .clickWhenVisible('#nav-design-function-abcviews a')
       .clickWhenVisible('#abc_evens')
       .clickWhenVisible('a[href="#/database/fauxton-selenium-tests/document_10"]')
 

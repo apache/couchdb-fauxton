@@ -215,14 +215,14 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, DocumentViews) {
       var designDocName = this.props.designDocName;
       var linkId = "nav-design-function-" + designDocName + this.props.selector;
       return (
-        <li id={linkId} onClick={this.toggle}>
-          <a className={toggleClassNames} data-toggle="collapse">
+        <li id={linkId}>
+          <a className={toggleClassNames} data-toggle="collapse" onClick={this.toggle}>
             <div className="fonticon-play"></div>
             <span className={icon + " fonticon"}></span>
             {title}
-            </a>
-            <ul className={toggleBodyClassNames}>
-              {this.createItems()}
+          </a>
+          <ul className={toggleBodyClassNames}>
+            {this.createItems()}
           </ul>
         </li>
       );
