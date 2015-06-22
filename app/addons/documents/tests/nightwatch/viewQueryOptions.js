@@ -22,7 +22,7 @@ module.exports = {
       .loginToGUI()
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_design/keyview/_view/keyview')
       .clickWhenVisible('#toggle-query', waitTime, false)
-      .clickWhenVisible('[data-action="showByKeys"]', waitTime, false)
+      .clickWhenVisible('#byKeys', waitTime, false)
       .setValue('#keys-input', '["document_1"]')
       .clickWhenVisible('#query-options .btn-success')
       .waitForElementNotPresent('#right-content [data-id="document_2"]', waitTime, false)

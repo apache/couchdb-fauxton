@@ -20,7 +20,7 @@ define([
 ],
 
 function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
-
+  var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 
   var ToggleHeaderButton = React.createClass({
     render: function () {
@@ -731,9 +731,114 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
         </div>
       );
     }
-
   });
 
+  var TrayLink = React.createClass({
+
+    onClick: function (e) {
+      e.preventDefault();
+      this.props.toggleTray();
+    },
+
+    render: function () {
+      return (
+        <a
+          onClick={this.onClick}
+          id={this.props.id}
+          data-bypass="true"
+          data-toggle="tab"
+          className={this.props.className}
+        >
+          <i className={this.props.icon} />
+          {this.props.text}
+        </a>
+      );
+    }
+  });
+
+  var TrayContents = React.createClass({
+    getChildren: function () {
+      if (!this.props.trayVisible) {
+        return null;
+      }
+
+      var className = "tray show-tray " + this.props.className;
+      return (
+        <div key={1} id={this.props.id} className={className}>
+          {this.props.children}
+        </div>);
+    },
+
+    render: function () {
+      return (
+        <ReactCSSTransitionGroup transitionName="tray" transitionAppear={true}>
+          {this.getChildren()}
+        </ReactCSSTransitionGroup>
+      );
+    }
+  });
+
+  // The tray components work as follows:
+  // <Tray> Outer wrapper for all components in the tray
+  // <TrayLink></TrayLink> The tray button to activate the tray
+  // <TrayContents> </TrayContents> What is displayed when the tray is active
+  // </Tray>
+  // See documents/queryoptions/queryoptions.react.jsx for a complete example
+
+  var Tray = React.createClass({
+
+    propTypes: {
+      id: React.PropTypes.string.isRequired
+    },
+
+    componentDidMount: function () {
+      $('body').on('click.' + this.props.id, _.bind(this.closeIfOpen, this));
+      FauxtonAPI.Events.on(FauxtonAPI.constants.EVENTS.TRAY_HIDE, this.closeIfOpen, this);
+    },
+
+    componentWillUnmount: function () {
+      FauxtonAPI.Events.off(FauxtonAPI.constants.EVENTS.TRAY_HIDE);
+      $('body').off('click.' + this.props.id);
+    },
+
+    getInitialState: function () {
+      return {
+        trayVisible: false
+      };
+    },
+
+    toggleTray: function () {
+      this.setState({trayVisible: !this.state.trayVisible});
+    },
+
+    renderChildren: function () {
+      return React.Children.map(this.props.children, function (child, key) {
+        return React.addons.cloneWithProps(child, {
+          trayVisible: this.state.trayVisible,
+          toggleTray: this.toggleTray,
+          key: key
+        });
+      }.bind(this));
+    },
+
+    render: function () {
+      return (
+        <div>
+            {this.renderChildren()}
+        </div>
+      );
+    },
+
+    closeIfOpen: function (e) {
+      if (!this.state.trayVisible) { return; }
+      var trayEl = $(this.getDOMNode());
+
+      if (!trayEl.is(e.target) && trayEl.has(e.target).length === 0) {
+        this.toggleTray();
+      }
+    },
+
+  });
 
   return {
     ConfirmButton: ConfirmButton,
@@ -746,7 +851,10 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
     PaddedBorderedBox: PaddedBorderedBox,
     Document: Document,
     LoadLines: LoadLines,
-    MenuDropDown: MenuDropDown
+    MenuDropDown: MenuDropDown,
+    Tray: Tray,
+    TrayContents: TrayContents,
+    TrayLink: TrayLink
   };
 
 });

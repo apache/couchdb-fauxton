@@ -82,6 +82,7 @@ define([
           queryParams: urlParams,
           showStale: true,
           hasReduce: hasReduceFunction,
+          showReduce: !_.isUndefined(hasReduceFunction),
           viewName: viewName,
           ddocName: ddoc
         });

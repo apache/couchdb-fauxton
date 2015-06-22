@@ -231,7 +231,6 @@ function (app, FauxtonAPI, ace, spin, ZeroClipboard) {
 
     toggleTray: function (e) {
       e.preventDefault();
-      e.stopImmediatePropagation();
 
       if (this.trayVisible()) {
         this.hideTray();
