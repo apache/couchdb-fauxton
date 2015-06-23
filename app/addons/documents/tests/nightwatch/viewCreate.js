@@ -116,8 +116,10 @@ module.exports = {
       //go back to all docs
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
       .clickWhenVisible('#nav-header-testdesigndoc', waitTime, false)
-      .clickWhenVisible('#nav-design-function-testdesigndocviews', waitTime, false)
+      .clickWhenVisible('#nav-design-function-testdesigndocviews a', waitTime, false)
+      .execute('$("#testdesigndoc_test-new-view")[0].scrollIntoView();')
       .clickWhenVisible('#testdesigndoc_test-new-view', waitTime, false)
+      .execute('$(".save")[0].scrollIntoView();')
       .waitForElementPresent('.prettyprint', waitTime, false)
       .waitForElementNotPresent('.loading-lines', waitTime, false)
       .assert.containsText('.prettyprint', 'enteente')

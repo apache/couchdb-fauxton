@@ -21,7 +21,7 @@ module.exports = {
       .loginToGUI()
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_changes')
       .clickWhenVisible('#nav-header-keyview')
-      .clickWhenVisible('#nav-design-function-keyviewviews')
+      .clickWhenVisible('#nav-design-function-keyviewviews a')
       .clickWhenVisible('#keyview_keyview')
       .clickWhenVisible('.breadcrumb-back-link .fonticon-left-open')
       .waitForElementPresent('.js-changes-view', waitTime)
