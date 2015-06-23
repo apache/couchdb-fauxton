@@ -27,7 +27,7 @@ function (app, FauxtonAPI, Config, Views, CORSComponents, CORSActions) {
     initialize: function () {
       this.configs = new Config.Collection();
 
-      this.sidebar = this.setView("#sidebar-content", new Views.Tabs({
+      this.sidebar = this.setView('#sidebar-content', new Views.Tabs({
         sidebarItems: [
           {
             title: 'Main config',
@@ -62,14 +62,14 @@ function (app, FauxtonAPI, Config, Views, CORSComponents, CORSActions) {
     config: function () {
       this.newSection = this.setView('#right-header', new Views.ConfigHeader({ collection: this.configs }));
       this.setView('#dashboard-content', new Views.Table({ collection: this.configs }));
-      this.sidebar.setSelectedTab("main");
+      this.sidebar.setSelectedTab('main');
     },
 
     configCORS: function () {
       this.removeView('#right-header');
       this.newSection = this.setComponent('#dashboard-content', CORSComponents.CORSController);
       CORSActions.FetchAndEditCors();
-      this.sidebar.setSelectedTab("cors");
+      this.sidebar.setSelectedTab('cors');
     },
 
     establish: function () {

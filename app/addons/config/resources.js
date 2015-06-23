@@ -11,8 +11,8 @@
 // the License.
 
 define([
-  "app",
-  "api"
+  'app',
+  'api'
 
 ],
 
@@ -26,7 +26,7 @@ function (app, FauxtonAPI) {
     documentation: FauxtonAPI.constants.DOC_URLS.CONFIG,
 
     url: function () {
-      return app.host + '/_config/' + this.get("section") + '/' + encodeURIComponent(this.get("name"));
+      return app.host + '/_config/' + this.get('section') + '/' + encodeURIComponent(this.get('name'));
     },
 
     isNew: function () { return false; },
@@ -55,8 +55,8 @@ function (app, FauxtonAPI) {
     documentation: FauxtonAPI.constants.DOC_URLS.CONFIG,
 
     comparator: function (OptionModel) {
-      if (OptionModel.get("section")) {
-        return OptionModel.get("section");
+      if (OptionModel.get('section')) {
+        return OptionModel.get('section');
       }
     },
 
@@ -65,7 +65,7 @@ function (app, FauxtonAPI) {
     },
 
     findEntryInSection: function (sectionName, entry) {
-      var section = _.findWhere(this.toJSON(), {"section": sectionName}),
+      var section = _.findWhere(this.toJSON(), {'section': sectionName}),
           options;
 
       if (!section) {
