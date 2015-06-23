@@ -11,7 +11,7 @@
 // the License.
 
 module.exports = {
-  'View: Navigate previous works correctly': function (client) {
+  'View: Navigate previous navigates to _all_docs': function (client) {
     var waitTime = client.globals.maxWaitTime,
         newDatabaseName = client.globals.testDatabaseName,
         baseUrl = client.globals.test_settings.launch_url;
@@ -24,11 +24,11 @@ module.exports = {
       .clickWhenVisible('#nav-design-function-keyviewviews a')
       .clickWhenVisible('#keyview_keyview')
       .clickWhenVisible('.breadcrumb-back-link .fonticon-left-open')
-      .waitForElementPresent('.js-changes-view', waitTime)
+      .assert.urlContains('_all_docs')
     .end();
   },
 
-  'Mango: Navigate back works correctly': function (client) {
+  'Mango: Navigate back to _all_docs': function (client) {
     var waitTime = client.globals.maxWaitTime,
         newDatabaseName = client.globals.testDatabaseName,
         baseUrl = client.globals.test_settings.launch_url;
