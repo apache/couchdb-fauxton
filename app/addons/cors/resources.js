@@ -21,7 +21,11 @@ function (app, FauxtonAPI) {
 
   CORS.Config = FauxtonAPI.Model.extend({
     url: function () {
-      return app.host + '/_config/cors';
+      if (!this.get('node')) {
+        throw new Error('node not set');
+      }
+
+      return window.location.origin + '/_node/' + this.get('node') + '/_config/cors';
     },
 
     parse: function (resp) {
@@ -38,7 +42,11 @@ function (app, FauxtonAPI) {
 
   CORS.Httpd = FauxtonAPI.Model.extend({
     url: function () {
-      return app.host + '/_config/httpd';
+      if (!this.get('node')) {
+        throw new Error('node not set');
+      }
+
+      return window.location.origin + '/_node/' + this.get('node') + '/_config/httpd';
     },
 
     corsEnabled: function () {
@@ -57,7 +65,12 @@ function (app, FauxtonAPI) {
     documentation: 'cors',
 
     url: function () {
-      return app.host + '/_config/' + encodeURIComponent(this.get('section')) + '/' + encodeURIComponent(this.get('attribute'));
+      if (!this.get('node')) {
+        throw new Error('node not set');
+      }
+
+      return app.host + '/_node/' + this.get('node') + '/_config/' +
+        encodeURIComponent(this.get('section')) + '/' + encodeURIComponent(this.get('attribute'));
     },
 
     isNew: function () { return false; },

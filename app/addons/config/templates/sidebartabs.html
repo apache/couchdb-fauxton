@@ -14,11 +14,16 @@ the License.
 
 <ul class="nav nav-list">
   <% _.each(sidebarItems, function (item) { %>
-    <li>
-    <a data-type-select="<%- item.typeSelect %>" href="#<%- item.link %>">
-      <span class="<%- item.icon %>"></span>
-      <%- item.title %>
-    </a>
-    </li>
+
+    <% if (item.link) { %>
+      <li>
+        <a data-type-select="<%- item.typeSelect %>" href="#<%- item.link %>">
+          <span class="<%- item.icon %>"></span>
+          <%- item.title %>
+        </a>
+      </li>
+    <% } else { %>
+      <li class="config-nav-header"><%- item.title %></li>
+    <% } %>
   <% }); %>
 </ul>

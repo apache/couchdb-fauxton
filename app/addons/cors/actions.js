@@ -15,14 +15,15 @@ define([
   'addons/cors/resources'
   ], function (FauxtonAPI, ActionTypes, Resources) {
     return {
-      FetchAndEditCors: function () {
-        var cors = new Resources.Config();
-        var httpd = new Resources.Httpd();
+      fetchAndEditCors: function (node) {
+        var cors = new Resources.Config({node: node});
+        var httpd = new Resources.Httpd({node: node});
 
         FauxtonAPI.when([cors.fetch(), httpd.fetch()]).then(function () {
           this.editCors({
             origins: cors.get('origins'),
-            isEnabled: httpd.corsEnabled()
+            isEnabled: httpd.corsEnabled(),
+            node: node
           });
         }.bind(this));
       },
@@ -75,51 +76,56 @@ define([
         });
       },
 
-      saveEnableCorsToHttpd: function (enableCors) {
+      saveEnableCorsToHttpd: function (enableCors, node) {
         var enableOption = new Resources.ConfigModel({
           section: 'httpd',
           attribute: 'enable_cors',
-          value: enableCors.toString()
+          value: enableCors.toString(),
+          node: node
         });
 
         return enableOption.save();
       },
 
-      saveCorsOrigins: function (origins) {
+      saveCorsOrigins: function (origins, node) {
         var allowOrigins = new Resources.ConfigModel({
           section: 'cors',
           attribute: 'origins',
-          value: origins
+          value: origins,
+          node: node
         });
 
         return allowOrigins.save();
       },
 
-      saveCorsCredentials: function () {
+      saveCorsCredentials: function (node) {
         var allowCredentials = new Resources.ConfigModel({
           section: 'cors',
           attribute: 'credentials',
-          value: "true"
+          value: 'true',
+          node: node
         });
 
         return allowCredentials.save();
       },
 
-      saveCorsHeaders: function () {
+      saveCorsHeaders: function (node) {
         var corsHeaders = new Resources.ConfigModel({
           section: 'cors',
           attribute: 'headers',
-          value: 'accept, authorization, content-type, origin, referer'
+          value: 'accept, authorization, content-type, origin, referer',
+          node: node
         });
 
         return corsHeaders.save();
       },
 
-      saveCorsMethods: function () {
+      saveCorsMethods: function (node) {
         var corsMethods = new Resources.ConfigModel({
           section: 'cors',
           attribute: 'methods',
-          value: 'GET, PUT, POST, HEAD, DELETE'
+          value: 'GET, PUT, POST, HEAD, DELETE',
+          node: node
         });
 
         return corsMethods.save();
@@ -135,13 +141,13 @@ define([
 
       saveCors: function (options) {
         var promises = [];
-        promises.push(this.saveEnableCorsToHttpd(options.enableCors));
+        promises.push(this.saveEnableCorsToHttpd(options.enableCors, options.node));
 
         if (options.enableCors) {
-          promises.push(this.saveCorsOrigins(this.sanitizeOrigins(options.origins)));
-          promises.push(this.saveCorsCredentials());
-          promises.push(this.saveCorsHeaders());
-          promises.push(this.saveCorsMethods());
+          promises.push(this.saveCorsOrigins(this.sanitizeOrigins(options.origins), options.node));
+          promises.push(this.saveCorsCredentials(options.node));
+          promises.push(this.saveCorsHeaders(options.node));
+          promises.push(this.saveCorsMethods(options.node));
         }
 
         FauxtonAPI.when(promises).then(function () {

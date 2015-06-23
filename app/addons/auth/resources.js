@@ -25,6 +25,7 @@ function (app, FauxtonAPI, CouchdbSession) {
     url: function () {
       return app.host + '/_config/admins/' + this.get("name");
     },
+
     isNew: function () { return false; },
 
     sync: function (method, model, options) {

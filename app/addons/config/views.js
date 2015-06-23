@@ -128,7 +128,7 @@ function (app, FauxtonAPI, Config, Components) {
               name: option.name,
               value: option.value,
               index: index
-            })
+            }, {node: this.collection.node})
           }));
         }, this);
       }, this);
@@ -204,11 +204,12 @@ function (app, FauxtonAPI, Config, Components) {
     },
 
     submitForm: function () {
+
       var option = new Config.OptionModel({
         section: this.$('input[name="section"]').val(),
         name: this.$('input[name="name"]').val(),
         value: this.$('input[name="value"]').val()
-      });
+      }, {node: this.collection.node});
       option.save();
 
       var section = this.collection.find(function (section) {

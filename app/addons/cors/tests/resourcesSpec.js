@@ -20,7 +20,7 @@ define([
     var cors;
 
     beforeEach(function () {
-      cors = new CORS.Config({});
+      cors = new CORS.Config(null, {node: 'node2@127.0.0.1'});
     });
 
     it('Splits up origins into array', function () {
