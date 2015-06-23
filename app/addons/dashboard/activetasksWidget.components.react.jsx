@@ -159,7 +159,7 @@ define([
       return {
         toDatabase: item.target,
         fromDatabase: item.source,
-        progress: activeTasksHelpers.calculateProgress(item.checkpointed_source_seq[0], item.source_seq[0]),
+        progress: activeTasksHelpers.calculateProgress(item.checkpointed_source_seq, item.source_seq),
         continuous: item.continuous
       };
     },
@@ -232,7 +232,11 @@ define([
     },
 
     calculateProgress: function (checkpointed_source_seq, source_seq) {
-      return Math.round((checkpointed_source_seq / source_seq) * 10000) / 100;
+      if (_.isNumber(checkpointed_source_seq) && _.isNumber(source_seq)) {
+        return Math.round((checkpointed_source_seq / source_seq) * 10000) / 100;
+      } else {
+        return Math.round((checkpointed_source_seq[0] / source_seq[0]) * 10000) / 100;
+      }
     },
 
     parseDbName: function (item) {
