@@ -126,31 +126,7 @@ function (app, $, _, Backbone, Bootstrap, Helpers, Utils, FauxtonAPI, Couchdb) {
           type: 'REMOVE_NAVBAR_LINK',
           link: link
       });
-    },
-
-    isRunningOnBackdoorPort: function () {
-      if (this._backdoorDeferred) {
-        return this._backdoorDeferred;
-      }
-
-      this._backdoorDeferred = FauxtonAPI.Deferred();
-
-      $.ajax({
-        type: 'GET',
-        url: app.host + '/_cluster_setup'
-      })
-      .then(function () {
-        this._backdoorDeferred.resolve({runsOnBackportPort: false});
-      }.bind(this))
-      .fail(function (res) {
-        this._backdoorDeferred.resolve({
-          runsOnBackportPort: res.status === 400
-        });
-      }.bind(this));
-
-      return this._backdoorDeferred;
     }
-
   });
 
   return app;
