@@ -27,33 +27,6 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, DocumentViews) {
   var store = Stores.sidebarStore;
   var LoadLines = Components.LoadLines;
 
-  var SidebarToggle = React.createClass({
-    getInitialState: function () {
-      return {
-        hidden: false
-      };
-    },
-
-    toggle: function (e) {
-      e.preventDefault();
-      var newHiddenState = !this.state.hidden;
-      this.setState({hidden: newHiddenState});
-      var $dashboard = $('#dashboard-content');
-
-      if (newHiddenState) {
-        $dashboard.animate({left: '210px'}, 300);
-      } else {
-        $dashboard.animate({left: '550px'}, 300);
-      }
-
-    },
-
-    render: function () {
-      return null;
-    }
-
-  });
-
   var MainSidebar = React.createClass({
 
     getNewButtonLinks: function () {  //these are links for the sidebar '+' on All Docs and All Design Docs
@@ -427,7 +400,6 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, DocumentViews) {
 
       return (
         <nav className="sidenav">
-          <SidebarToggle />
           <MainSidebar isActive={this.isActive} databaseName={this.state.databaseName} />
           <DesignDocList
             toggle={Actions.toggleContent}

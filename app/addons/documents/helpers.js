@@ -16,7 +16,7 @@ define([
 
   var Helpers = {};
 
-  Helpers.getPreviousPage = function (database, wasCloned) {
+  Helpers.getPreviousPageForDoc = function (database, wasCloned) {
     var previousPage = database.url('index'), // default to the current database's all_docs page
         lastPages = FauxtonAPI.router.lastPages;
 
@@ -33,6 +33,9 @@ define([
     return previousPage;
   };
 
+  Helpers.getPreviousPage = function (database) {
+    return database.url('index');
+  };
 
   // sequence info is an array in couchdb2 with two indexes. On couch 1.x, it's just a string / number
   Helpers.getSeqNum = function (val) {

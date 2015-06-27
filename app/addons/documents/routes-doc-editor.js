@@ -49,7 +49,7 @@ function (app, FauxtonAPI, Helpers, Documents, DocEditor, Databases) {
     },
 
     crumbs: function () {
-      var previousPage = Helpers.getPreviousPage(this.database, this.wasCloned);
+      var previousPage = Helpers.getPreviousPageForDoc(this.database, this.wasCloned);
 
       return [
         { type: 'back', link: previousPage },
@@ -72,7 +72,7 @@ function (app, FauxtonAPI, Helpers, Documents, DocEditor, Databases) {
       this.docView = this.setView('#dashboard-content', new DocEditor.CodeEditor({
         model: this.doc,
         database: this.database,
-        previousPage: Helpers.getPreviousPage(this.database)
+        previousPage: Helpers.getPreviousPageForDoc(this.database)
       }));
     },
 
@@ -126,7 +126,7 @@ function (app, FauxtonAPI, Helpers, Documents, DocEditor, Databases) {
     },
 
     crumbs: function () {
-      var previousPage = Helpers.getPreviousPage(this.database);
+      var previousPage = Helpers.getPreviousPageForDoc(this.database);
       return [
         { type: 'back', link: previousPage },
         { name: 'New Document', link: '#' }

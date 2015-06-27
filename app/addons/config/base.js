@@ -11,17 +11,22 @@
 // the License.
 
 define([
-  "app",
+  'app',
 
-  "api",
+  'api',
 
   // Modules
-  "addons/config/routes"
+  'addons/config/routes'
 ],
 
 function (app, FauxtonAPI, Config) {
   Config.initialize = function () {
-    FauxtonAPI.addHeaderLink({title: "Config", href: "#_config", icon:"fonticon-cog", className: 'config'});
+    FauxtonAPI.addHeaderLink({
+      title: 'Config',
+      href: '#_config',
+      icon: 'fonticon-cog',
+      className: 'config'
+    });
   };
 
   return Config;

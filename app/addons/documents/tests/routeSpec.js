@@ -11,12 +11,14 @@
 // the License.
 
 define([
+        'api',
+        'addons/documents/base',
         'addons/documents/routes',
         'addons/documents/header/header.actions',
         'addons/documents/index-results/actions',
 
         'testUtils'
-], function (Documents, HeaderActions, IndexResultsActions, testUtils) {
+], function (FauxtonAPI, Base, Documents, HeaderActions, IndexResultsActions, testUtils) {
   var assert = testUtils.assert;
   var DocumentRoute = Documents.RouteObjects[2];
 
@@ -47,6 +49,16 @@ define([
 
       routeObj.findUsingIndex();
       assert.ok(spy.calledOnce);
+    });
+
+  });
+
+  describe('Fauxton Urls', function () {
+
+    it('document app encodes document id', function () {
+      var id = "\foo";
+      var url = FauxtonAPI.urls('document', 'app', 'fake-db', id);
+      assert.deepEqual("/database/fake-db/%0Coo", url);
     });
 
   });
