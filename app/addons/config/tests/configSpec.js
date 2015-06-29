@@ -20,6 +20,46 @@ define([
       collection;
 
 
+  describe('Membership Model', function () {
+    var data = {
+      'all_nodes': ['node1@127.0.0.1', 'node2@127.0.0.1', 'node3@127.0.0.1', 'notpartofclusternode'],
+      'cluster_nodes': ['node1@127.0.0.1', 'node2@127.0.0.1', 'node3@127.0.0.1']
+    };
+
+    it('reorders the data', function () {
+      var memberships = new Resources.Memberships();
+      var res = memberships.parse(data);
+
+      assert.deepEqual([
+        {node: 'node1@127.0.0.1', isInCluster: true},
+        {node: 'node2@127.0.0.1', isInCluster: true},
+        {node: 'node3@127.0.0.1', isInCluster: true},
+        {node: 'notpartofclusternode', isInCluster: false}
+      ],
+      res.nodes_mapped);
+    });
+
+    it('keeps the exiting data', function () {
+      var memberships = new Resources.Memberships();
+      var res = memberships.parse(data);
+
+      assert.deepEqual([
+        'node1@127.0.0.1',
+        'node2@127.0.0.1',
+        'node3@127.0.0.1',
+        'notpartofclusternode'
+      ],
+      res.all_nodes);
+
+      assert.deepEqual([
+        'node1@127.0.0.1',
+        'node2@127.0.0.1',
+        'node3@127.0.0.1'
+      ],
+      res.cluster_nodes);
+    });
+  });
+
   beforeEach(function () {
     var optionModels = [];
 

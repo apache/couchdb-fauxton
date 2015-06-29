@@ -228,7 +228,8 @@ define([
         origins: corsStore.getOrigins(),
         isAllOrigins: corsStore.isAllOrigins(),
         configChanged: corsStore.hasConfigChanged(),
-        shouldSaveChange: corsStore.shouldSaveChange()
+        shouldSaveChange: corsStore.shouldSaveChange(),
+        node: corsStore.getNode()
       };
     },
 
@@ -273,7 +274,8 @@ define([
     save: function (event) {
       Actions.saveCors({
         enableCors: this.state.corsEnabled,
-        origins: this.state.origins
+        origins: this.state.origins,
+        node: this.state.node
       });
     },
 

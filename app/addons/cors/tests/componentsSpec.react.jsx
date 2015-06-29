@@ -33,6 +33,7 @@ define([
       beforeEach(function () {
         container = document.createElement('div');
         corsStore._origins = ['http://hello.com'];
+        corsStore._node = 'node2@127.0.0.1';
         corsStore._isEnabled = true;
         corsStore._configChanged = true;
         corsEl = TestUtils.renderIntoDocument(<Views.CORSController />, container);

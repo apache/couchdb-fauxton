@@ -13,12 +13,10 @@
 define([
   "app",
   "api",
-  'addons/auth/routes'
+  "addons/auth/routes"
 ],
 
 function (app, FauxtonAPI, Auth) {
-
-  var isRunningOnBackdoorPort = null;
 
   Auth.session = new Auth.Session();
   FauxtonAPI.setSession(Auth.session);
@@ -26,45 +24,30 @@ function (app, FauxtonAPI, Auth) {
 
   Auth.initialize = function () {
 
-    FauxtonAPI.addHeaderLink({
-      id: "auth",
-      title: "Login",
-      href: "#login",
-      icon: "fonticon-user",
-      bottomNav: true,
-    });
+    if (!Auth.session.isAdminParty()) {
+      FauxtonAPI.addHeaderLink({
+        id: 'auth',
+        title: 'Login',
+        href: '#login',
+        icon: 'fonticon-user',
+        bottomNav: true
+      });
+    }
 
     Auth.session.on('change', function () {
       var session = Auth.session;
       var link = {};
 
-      if (session.isAdminParty()) {
-
+      if (session.isLoggedIn()) {
         link = {
-          id: "auth",
-          title: "Admin Party!",
-          href: "#createAdmin",
-          icon: "fonticon-user",
-          bottomNav: true,
-        };
-      } else if (session.isLoggedIn()) {
-        link = {
-          id: "auth",
-          title: session.user().name,
-          href: "#changePassword",
-          icon: "fonticon-user",
-          bottomNav: true,
-        };
-
-        FauxtonAPI.addHeaderLink({
           id: 'logout',
           footerNav: true,
-          href: "#logout",
-          title: "Logout",
-          icon: "",
+          href: '#logout',
+          title: 'Logout',
+          icon: '',
           className: 'logout'
-        });
-      } else {
+        };
+      } else if (!session.isAdminParty()) {
         link = {
           id: "auth",
           title: 'Login',
@@ -78,11 +61,8 @@ function (app, FauxtonAPI, Auth) {
 
     });
 
-    FauxtonAPI.isRunningOnBackdoorPort().then(function (res) {
-      isRunningOnBackdoorPort = res.runsOnBackportPort;
-      Auth.session.fetchUser().then(function () {
-        Auth.session.trigger('change');
-      });
+    Auth.session.fetchUser().then(function () {
+      Auth.session.trigger('change');
     });
 
     var auth = function (session, roles) {
