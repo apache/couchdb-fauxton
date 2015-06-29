@@ -7,6 +7,7 @@
     "mango-title-editor": "Mango Query",
     "mango-descripton-index-editor": "Mango is an easy way to find documents on predefined indexes. <br/><br/>Create an Index to query it afterwards. The example in the editor shows how to create an index for the field '_id'. <br/><br/>The Indexes that you already created are listed on the right.",
     "mango-additional-indexes-heading": "Your additional Indexes:",
-    "mango-indexeditor-title": "Mango"
+    "mango-indexeditor-title": "Mango",
+    "couchdb-productname": "Apache CouchDB"
   }
 }

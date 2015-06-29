@@ -907,7 +907,7 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
   var ConfirmButton = React.createClass({
     render: function () {
       return (
-        <button type="submit" className="btn btn-success save" id={this.props.id}>
+        <button onClick={this.props.onClick} type="submit" className="btn btn-success save" id={this.props.id}>
           <i className="icon fonticon-ok-circled"></i>
           {this.props.text}
         </button>

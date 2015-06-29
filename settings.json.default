@@ -4,6 +4,7 @@
   { "name": "components" },
   { "name": "databases" },
   { "name": "documents" },
+  { "name": "setup" },
   { "name": "activetasks" },
   { "name": "cluster" },
   { "name": "config" },
