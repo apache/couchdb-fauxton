@@ -24,44 +24,30 @@ function (app, FauxtonAPI, Auth) {
 
   Auth.initialize = function () {
 
-    FauxtonAPI.addHeaderLink({
-      id: "auth",
-      title: "Login",
-      href: "#login",
-      icon: "fonticon-user",
-      bottomNav: true,
-    });
+    if (!Auth.session.isAdminParty()) {
+      FauxtonAPI.addHeaderLink({
+        id: 'auth',
+        title: 'Login',
+        href: '#login',
+        icon: 'fonticon-user',
+        bottomNav: true
+      });
+    }
 
     Auth.session.on('change', function () {
       var session = Auth.session;
       var link = {};
 
-      if (session.isAdminParty()) {
+      if (session.isLoggedIn()) {
         link = {
-          id: "auth",
-          title: "Admin Party!",
-          href: "#createAdmin",
-          icon: "fonticon-user",
-          bottomNav: true,
-        };
-      } else if (session.isLoggedIn()) {
-        link = {
-          id: "auth",
-          title: session.user().name,
-          href: "#changePassword",
-          icon: "fonticon-user",
-          bottomNav: true,
-        };
-
-        FauxtonAPI.addHeaderLink({
           id: 'logout',
           footerNav: true,
-          href: "#logout",
-          title: "Logout",
-          icon: "",
+          href: '#logout',
+          title: 'Logout',
+          icon: '',
           className: 'logout'
-        });
-      } else {
+        };
+      } else if (!session.isAdminParty()) {
         link = {
           id: "auth",
           title: 'Login',
