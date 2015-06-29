@@ -37,5 +37,17 @@ define([
       );
       assert.equal($(button.getDOMNode()).text(), 'Click here to render Rocko Artischocko');
     });
+
+    it('should use onClick handler if provided', function () {
+      var spy = sinon.spy();
+
+      button = TestUtils.renderIntoDocument(
+        <ReactComponents.ConfirmButton text="Click here" onClick={spy} />,
+        container
+      );
+
+      React.addons.TestUtils.Simulate.click(button.getDOMNode());
+      assert.ok(spy.calledOnce);
+    });
   });
 });

@@ -12,22 +12,18 @@
 
 define([
   'app',
-
   'api',
-
-  // Modules
-  'addons/config/routes'
+  'addons/setup/route'
 ],
 
-function (app, FauxtonAPI, Config) {
-  Config.initialize = function () {
+function (app, FauxtonAPI, Setup) {
+  Setup.initialize = function () {
     FauxtonAPI.addHeaderLink({
-      title: 'Configuration',
-      href: '#_config',
-      icon: 'fonticon-cog',
-      className: 'config'
+      title: 'Setup',
+      href: "#setup",
+      icon: 'fonticon-wrench'
     });
   };
 
-  return Config;
+  return Setup;
 });
