@@ -18,7 +18,7 @@ before_install:
   - cd ..
   - git clone --depth=1 https://github.com/apache/couchdb
   - cd couchdb
-  - ./configure
+  - ./configure --disable-docs
   - make
   - ./dev/run --admin=tester:testerpass &
   - haproxy -f rel/haproxy.cfg &
