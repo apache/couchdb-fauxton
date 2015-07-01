@@ -19,10 +19,10 @@ define([
   var ActiveTasksStore = FauxtonAPI.Store.extend({
 
     initAfterFetching: function (collectionTable, backboneCollection) {
-      this._prevSortbyHeader = 'started_on';
+      this._prevSortbyHeader = 'started-on';
       this._headerIsAscending = true;
       this._selectedRadio = 'All Tasks';
-      this._sortByHeader = 'started_on';
+      this._sortByHeader = 'started-on';
       this._searchTerm = '';
       this._collection = collectionTable;
       this._pollingIntervalSeconds = 5;

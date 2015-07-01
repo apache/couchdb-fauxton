@@ -80,11 +80,8 @@ define([
       var setSearchTerm = this.setNewSearchTerm;
       var onTableHeaderClick = this.tableHeaderOnClick;
 
-      if (_.isUndefined(collection) || collection.length === 0) {
-        return (<div className="active-tasks"><tr><td><p>  No active tasks. </p></td></tr></div>);
-      }
       return (
-        <div className="scrollable">
+        <div id="active-tasks-page" className="scrollable">
           <div className="inner">
             <ActiveTasksFilterTabs
               searchTerm={searchTerm}
@@ -191,7 +188,7 @@ define([
 
       return (
         <div id="dashboard-lower-content">
-          <table className="table table-bordered table-striped active-tasks">
+          <table id="active-tasks-table" className="table table-bordered table-striped active-tasks">
             <ActiveTasksTableHeader
               onTableHeaderClick={onTableHeaderClick}
               sortByHeader={sortByHeader}
@@ -212,8 +209,8 @@ define([
         headerNames : [
           ['type', 'Type'],
           ['database', 'Database'],
-          ['started_on', 'Started On'],
-          ['updated_on', 'Updated On'],
+          ['started-on', 'Started On'],
+          ['updated-on', 'Updated On'],
           ['pid', 'PID'],
           ['progress', 'Status']
         ]
@@ -273,13 +270,13 @@ define([
           value={this.props.headerName}
           className="header-field radio"
           onChange={this.onTableHeaderClick}>
-          <th className={th_class} value={this.props.headerName}>
+          <td className={th_class + " tableheader"} value={this.props.headerName}>
             <label
-              className="header-field label-text active-tasks-header"
+              className="header-field label-text active-tasks-header noselect"
               htmlFor={this.props.headerName}>
               {this.props.displayName} {arrow}
             </label>
-          </th>
+          </td>
         </input>
       );
     }
@@ -316,17 +313,27 @@ define([
     },
 
     noActiveTasks: function () {
+      var type = this.props.selectedRadio;
+      if (type === "All Tasks") {
+        type = "";
+      }
+
       return (
         <tr className="no-matching-database-on-search">
-          <td  colSpan="6">No active {this.props.selectedRadio} tasks.</td>
+          <td  colSpan="6">No active {type} tasks.</td>
         </tr>
       );
     },
 
     noActiveTasksMatchFilter: function () {
+      var type = this.props.selectedRadio;
+      if (type === "All Tasks") {
+        type = "";
+      }
+
       return (
         <tr className="no-matching-database-on-search">
-          <td colSpan="6">No active {this.props.selectedRadio} tasks match with filter: "{this.props.searchTerm}".</td>
+          <td colSpan="6">No active {type} tasks match with filter: "{this.props.searchTerm}"</td>
         </tr>
       );
     },
@@ -366,7 +373,7 @@ define([
 
     render: function () {
       var rowData =  this.getInfo(this.props.item);
-      var objectFieldMsg = this.multilineMessage(rowData.objectField);
+      var objectFieldMsg = this.multilineMessage(rowData.objectField, 'to-from-database');
       var startedOnMsg = this.multilineMessage(rowData.started_on, 'time');
       var updatedOnMsg = this.multilineMessage(rowData.updated_on, 'time');
       var progressMsg = this.multilineMessage(rowData.progress);
@@ -421,7 +428,7 @@ define([
               data-bypass="true">
               View
             </a>
-            <ComponentsReact.Tray ref="view_source_sequence_btn" className="view_source_sequence_tray">
+            <ComponentsReact.Tray ref="view_source_sequence_btn" className="view-source-sequence-tray">
               <span className="add-on">Source Sequence</span>
               {sequences}
             </ComponentsReact.Tray>
@@ -471,13 +478,13 @@ define([
       return (
         <ul className="polling-interval-widget">
           <li className="polling-interval-name">Polling interval
-            <label className="polling-interval-time-label" htmlFor="pollingRange">
+            <label className="polling-interval-time-label" htmlFor="polling-range">
               <span>{pollingInterval}</span> second{s}
             </label>
           </li>
           <li>
             <input
-              id="pollingRange"
+              id="polling-range"
               type="range"
               min="1"
               max="30"

@@ -71,12 +71,6 @@ define([
         restore(window.confirm);
       });
 
-      it('it displays a message instead of an empty table, if there are undefined active tasks', function () {
-        Actions.setCollection(undefined);
-        var tableText = $(table.getDOMNode())[0].innerText;
-        assert.equal(tableText.trim(), 'No active tasks.');
-      });
-
       describe('Active Tasks Filter tray', function () {
 
         afterEach(function () {
@@ -111,8 +105,8 @@ define([
         var headerNames = [
           'type',
           'database',
-          'started_on',
-          'updated_on',
+          'started-on',
+          'updated-on',
           'pid',
           'progress'
         ];

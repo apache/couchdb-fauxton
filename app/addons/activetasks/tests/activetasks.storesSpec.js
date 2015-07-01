@@ -110,7 +110,7 @@ define([
       var fakeFilteredTable, storeFilteredtable;
       function sort (a, b, sortBy) {  //sorts array by objects with key 'sortBy', with default started_on
         if (_.isUndefined(sortBy)) {
-          sortBy = 'started_on';
+          sortBy = 'started-on';
         }
         return b[sortBy] - a[sortBy];
       }
@@ -157,7 +157,7 @@ define([
     describe('Active Task Stores - Table Header Sort - Select Ascending/Descending', function () {
 
       it('should set header as ascending, on default', function () {
-        activeTasksStore.setSelectedRadio('all_tasks');
+        activeTasksStore.setSelectedRadio('all-tasks');
         activeTasksStore._headerIsAscending = true;
         assert.ok(activeTasksStore.getHeaderIsAscending());
       });
