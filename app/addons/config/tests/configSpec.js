@@ -30,12 +30,12 @@ define([
         options: [{
           name: "testname"
         }]
-      });
+      }, {node: 'foo'});
 
       optionModels.push(model);
     });
 
-    collection = new Resources.Collection(optionModels);
+    collection = new Resources.Collection(optionModels, {node: 'foo'}, "foo");
   });
 
   describe("Config: Add Option Tray", function () {
@@ -93,7 +93,7 @@ define([
       optionModel = new Resources.OptionModel({
         section: "foo",
         name: "bar"
-      });
+      }, {node: 'foo'});
 
       tabMenu = new Views.TableRow({
         model: optionModel,

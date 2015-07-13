@@ -11,10 +11,12 @@
 // the License.
 define([
   'api',
-  'addons/auth/actiontypes'
+  'addons/auth/actiontypes',
+  'addons/cluster/cluster.stores'
 ],
-function (FauxtonAPI, ActionTypes) {
+function (FauxtonAPI, ActionTypes, ClusterStore) {
 
+  var nodesStore = ClusterStore.nodesStore;
 
   var errorHandler = function (xhr, type, msg) {
     msg = xhr;
@@ -45,7 +47,8 @@ function (FauxtonAPI, ActionTypes) {
     },
 
     changePassword: function (password, passwordConfirm) {
-      var promise = FauxtonAPI.session.changePassword(password, passwordConfirm);
+      var nodes = nodesStore.getNodes();
+      var promise = FauxtonAPI.session.changePassword(password, passwordConfirm, nodes[0].node);
 
       promise.done(function () {
         FauxtonAPI.addNotification({ msg: FauxtonAPI.session.messages.changePassword });
@@ -70,7 +73,8 @@ function (FauxtonAPI, ActionTypes) {
     },
 
     createAdmin: function (username, password, loginAfter) {
-      var promise = FauxtonAPI.session.createAdmin(username, password, loginAfter);
+      var nodes = nodesStore.getNodes();
+      var promise = FauxtonAPI.session.createAdmin(username, password, loginAfter, nodes[0].node);
 
       promise.then(function () {
         FauxtonAPI.addNotification({ msg: FauxtonAPI.session.messages.adminCreated });
@@ -84,7 +88,6 @@ function (FauxtonAPI, ActionTypes) {
       promise.fail(function (xhr, type, msg) {
         msg = xhr;
         if (arguments.length === 3) {
-          console.log("here...", xhr.responseJSON);
           msg = xhr.responseJSON.reason;
         }
         errorHandler(FauxtonAPI.session.messages.adminCreationFailedPrefix + ' ' + msg);

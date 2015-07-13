@@ -15,10 +15,11 @@ define([
        "api",
   'addons/auth/resources',
   'addons/auth/actions',
-  'addons/auth/components.react'
+  'addons/auth/components.react',
+  'addons/cluster/cluster.actions'
 ],
 
-function (app, FauxtonAPI, Auth, AuthActions, Components) {
+function (app, FauxtonAPI, Auth, AuthActions, Components, ClusterActions) {
 
   var AuthRouteObject = FauxtonAPI.RouteObject.extend({
     layout: 'one_pane',
@@ -27,7 +28,12 @@ function (app, FauxtonAPI, Auth, AuthActions, Components) {
       'login?*extra': 'login',
       'login': 'login',
       'logout': 'logout',
-      'createAdmin': 'createAdmin'
+      'createAdmin': 'checkNodes',
+      'createAdmin/:node': 'createAdminForNode',
+    },
+
+    checkNodes: function () {
+      ClusterActions.navigateToNodeBasedOnNodeCount('/createAdmin/');
     },
 
     login: function () {
@@ -43,13 +49,9 @@ function (app, FauxtonAPI, Auth, AuthActions, Components) {
       });
     },
 
-    changePassword: function () {
-      this.crumbs = [{name: 'Change Password', link: "#" }];
-      this.setComponent('#dashboard-content', Components.ChangePasswordForm);
-    },
-
-    createAdmin: function () {
-      this.crumbs = [{name: 'Create Admin', link:"#"}];
+    createAdminForNode: function () {
+      ClusterActions.fetchNodes();
+      this.crumbs = [{name: 'Create Admin', link: '#'}];
       this.setComponent('#dashboard-content', Components.CreateAdminForm, { loginAfter: true });
     }
   });
@@ -60,13 +62,29 @@ function (app, FauxtonAPI, Auth, AuthActions, Components) {
 
     routes: {
       'changePassword': {
+        route: 'checkNodesForPasswordChange',
+        roles: ['fx_loggedIn']
+      },
+      'changePassword/:node': {
         route: 'changePassword',
         roles: ['fx_loggedIn']
       },
       'addAdmin': {
+        route: 'checkNodesForAddAdmin',
+        roles: ['_admin']
+      },
+      'addAdmin/:node': {
         route: 'addAdmin',
         roles: ['_admin']
       }
+    },
+
+    checkNodesForPasswordChange: function () {
+      ClusterActions.navigateToNodeBasedOnNodeCount('/changePassword/');
+    },
+
+    checkNodesForAddAdmin: function () {
+      ClusterActions.navigateToNodeBasedOnNodeCount('/addAdmin/');
     },
 
     selectedHeader: function () {
@@ -78,11 +96,13 @@ function (app, FauxtonAPI, Auth, AuthActions, Components) {
     },
 
     changePassword: function () {
+      ClusterActions.fetchNodes();
       AuthActions.selectPage('changePassword');
       this.setComponent('#dashboard-content', Components.ChangePasswordForm);
     },
 
     addAdmin: function () {
+      ClusterActions.fetchNodes();
       AuthActions.selectPage('addAdmin');
       this.setComponent('#dashboard-content', Components.CreateAdminForm, { loginAfter: false });
     },

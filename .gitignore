@@ -6,6 +6,7 @@ app/load_addons.js
 app/addons/*
 !app/addons/activetasks
 !app/addons/config
+!app/addons/cluster
 !app/addons/components
 !app/addons/replication
 !app/addons/auth
