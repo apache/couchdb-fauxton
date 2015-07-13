@@ -16,8 +16,8 @@ define([
   'addons/auth/components.react',
   'addons/auth/stores',
   'addons/auth/actions'
-], function (FauxtonAPI, React, testUtils, Components, Stores, Actions) {
-  var assert = testUtils.assert;
+], function (FauxtonAPI, React, utils, Components, Stores, Actions) {
+  var assert = utils.assert;
 
   var TestUtils = React.addons.TestUtils;
   var createAdminSidebarStore = Stores.createAdminSidebarStore;
@@ -50,6 +50,7 @@ define([
       beforeEach(function () {
         container = document.createElement('div');
         changePasswordForm = TestUtils.renderIntoDocument(<Components.ChangePasswordForm />, container);
+        utils.restore(Actions.changePassword);
       });
 
       afterEach(function () {
@@ -69,9 +70,9 @@ define([
       });
 
       it('should call action to submit form', function () {
-        var spy = sinon.spy(Actions, 'changePassword');
+        var stub = sinon.stub(Actions, 'changePassword', function () {});
         TestUtils.Simulate.submit($(changePasswordForm.getDOMNode()).find('#change-password')[0]);
-        assert.ok(spy.calledOnce);
+        assert.ok(stub.calledOnce);
       });
     });
 

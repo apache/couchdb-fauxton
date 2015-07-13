@@ -22,6 +22,7 @@ define([
       this._origins = options.origins;
       this._configChanged = false;
       this._shouldSaveChange = false;
+      this._node = options.node;
     },
 
     shouldSaveChange: function () {
@@ -67,6 +68,10 @@ define([
 
     getOrigins: function () {
       return this._origins;
+    },
+
+    getNode: function () {
+      return this._node;
     },
 
     isAllOrigins: function () {

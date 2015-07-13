@@ -22,9 +22,19 @@ function (app, FauxtonAPI, CouchdbSession) {
 
 
   var Admin = Backbone.Model.extend({
-    url: function () {
-      return app.host + '/_config/admins/' + this.get("name");
+
+    initialize: function (props, options) {
+      this.node = options.node;
     },
+
+    url: function () {
+      if (!this.node) {
+        throw new Error('no node set');
+      }
+
+      return app.host + '/_node/' + this.node + '/_config/admins/' + this.get('name');
+    },
+
     isNew: function () { return false; },
 
     sync: function (method, model, options) {
@@ -130,7 +140,7 @@ function (app, FauxtonAPI, CouchdbSession) {
       }
     },
 
-    createAdmin: function (username, password, login) {
+    createAdmin: function (username, password, login, node) {
       var errorPromise = this.validateUser(username, password, this.messages.missingCredentials);
 
       if (errorPromise) { return errorPromise; }
@@ -138,7 +148,7 @@ function (app, FauxtonAPI, CouchdbSession) {
       var admin = new Admin({
         name: username,
         value: password
-      });
+      }, {node: node});
 
       return admin.save().then(function () {
         if (login) {
@@ -180,7 +190,7 @@ function (app, FauxtonAPI, CouchdbSession) {
       });
     },
 
-    changePassword: function (password, confirmedPassword) {
+    changePassword: function (password, confirmedPassword, node) {
       var errorMessage = 'Passwords do not match.';
       var errorPromise = this.validatePasswords(password, confirmedPassword, errorMessage);
 
@@ -190,7 +200,7 @@ function (app, FauxtonAPI, CouchdbSession) {
       var admin = new Admin({
         name: userName,
         value: password
-      });
+      }, {node: node});
 
       return admin.save().then(function () {
         return this.login(userName, password);

@@ -10,19 +10,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-module.exports = {
-  'Highlight Sidebar' : function (client) {
-    var waitTime = client.globals.maxWaitTime,
-        baseUrl = client.globals.test_settings.launch_url;
-
-    client
-      .loginToGUI()
-      .url(baseUrl)
-      .waitForElementPresent('#add-new-database', waitTime, false)
-      .click('a[href="#/replication"]')
-      .pause(1000)
-      .waitForElementVisible('#replication', waitTime, false)
-      .assert.cssClassPresent('li[data-nav-name="Replication"]', 'active')
-    .end();
-  }
-};
+define([], function () {
+  return {
+    CLUSTER_FETCH_NODES: 'CLUSTER_FETCH_NODES'
+  };
+});

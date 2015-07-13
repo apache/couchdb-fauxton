@@ -21,12 +21,20 @@ function (app, FauxtonAPI) {
   var Config = FauxtonAPI.addon();
 
 
-  Config.Model = Backbone.Model.extend({});
   Config.OptionModel = Backbone.Model.extend({
     documentation: FauxtonAPI.constants.DOC_URLS.CONFIG,
 
+    initialize: function (_, options) {
+      this.node = options.node;
+    },
+
     url: function () {
-      return app.host + '/_config/' + this.get('section') + '/' + encodeURIComponent(this.get('name'));
+      if (!this.node) {
+        throw new Error('no node set');
+      }
+
+      return app.host + '/_node/' + this.node + '/_config/' +
+        this.get('section') + '/' + encodeURIComponent(this.get('name'));
     },
 
     isNew: function () { return false; },
@@ -49,10 +57,15 @@ function (app, FauxtonAPI) {
     }
   });
 
+  Config.Model = Backbone.Model.extend({});
   Config.Collection = Backbone.Collection.extend({
     model: Config.Model,
 
     documentation: FauxtonAPI.constants.DOC_URLS.CONFIG,
+
+    initialize: function (_, options) {
+      this.node = options.node;
+    },
 
     comparator: function (OptionModel) {
       if (OptionModel.get('section')) {
@@ -61,7 +74,11 @@ function (app, FauxtonAPI) {
     },
 
     url: function () {
-      return window.location.origin + '/_config';
+      if (!this.node) {
+        throw new Error('no node set');
+      }
+
+      return app.host + '/_node/' + this.node + '/_config';
     },
 
     findEntryInSection: function (sectionName, entry) {

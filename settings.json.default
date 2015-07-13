@@ -5,6 +5,7 @@
   { "name": "databases" },
   { "name": "documents" },
   { "name": "activetasks" },
+  { "name": "cluster" },
   { "name": "config" },
   { "name": "replication" },
   { "name": "cors" },

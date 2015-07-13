@@ -16,32 +16,32 @@ define([
   'addons/config/resources',
   'addons/config/views',
   'addons/cors/components.react',
-  'addons/cors/actions'
+  'addons/cors/actions',
+  'addons/cluster/cluster.actions'
 ],
 
-function (app, FauxtonAPI, Config, Views, CORSComponents, CORSActions) {
+function (app, FauxtonAPI, Config, Views, CORSComponents, CORSActions, ClusterActions) {
 
-  var ConfigRouteObject = FauxtonAPI.RouteObject.extend({
-    layout: 'with_tabs_sidebar_scroll',
 
-    initialize: function () {
-      this.configs = new Config.Collection();
+  var ConfigDisabledRouteObject = FauxtonAPI.RouteObject.extend({
+    layout: 'one_pane',
 
-      this.sidebar = this.setView('#sidebar-content', new Views.Tabs({
-        sidebarItems: [
-          {
-            title: 'Main config',
-            typeSelect: 'main',
-            link: '_config'
-          },
-          {
-            title: 'CORS',
-            typeSelect: 'cors',
-            link: '_config/cors'
-          }
-        ]
-      }));
+    routes: {
+      '_config': 'checkNodes',
     },
+
+    crumbs: [
+      { name: 'Config disabled', link: '_config' }
+    ],
+
+    checkNodes: function () {
+      ClusterActions.navigateToNodeBasedOnNodeCount('/_config/');
+    }
+  });
+
+
+  var ConfigPerNodeRouteObject = FauxtonAPI.RouteObject.extend({
+    layout: 'with_tabs_sidebar_scroll',
 
     roles: ['_admin'],
     selectedHeader: 'Config',
@@ -55,29 +55,46 @@ function (app, FauxtonAPI, Config, Views, CORSComponents, CORSActions) {
     },
 
     routes: {
-      '_config': 'config',
-      '_config/cors':'configCORS'
+      '_config/:node': 'configForNode',
+      '_config/:node/cors': 'configCorsForNode'
     },
 
-    config: function () {
+    initialize: function (_a, _b, options) {
+      var node = options[0];
+
+      this.configs = new Config.Collection(null, {node: node});
+
+      this.sidebar = this.setView('#sidebar-content', new Views.Tabs({
+        sidebarItems: [
+          {
+            title: 'Main config',
+            typeSelect: 'main',
+            link: '_config/' + node
+          },
+          {
+            title: 'CORS',
+            typeSelect: 'cors',
+            link: '_config/' + node + '/cors'
+          }
+        ]
+      }));
+    },
+
+    configForNode: function () {
       this.newSection = this.setView('#right-header', new Views.ConfigHeader({ collection: this.configs }));
       this.setView('#dashboard-content', new Views.Table({ collection: this.configs }));
       this.sidebar.setSelectedTab('main');
     },
 
-    configCORS: function () {
+    configCorsForNode: function (node) {
       this.removeView('#right-header');
       this.newSection = this.setComponent('#dashboard-content', CORSComponents.CORSController);
-      CORSActions.FetchAndEditCors();
+      CORSActions.fetchAndEditCors(node);
       this.sidebar.setSelectedTab('cors');
-    },
-
-    establish: function () {
-      return [this.configs.fetch()];
     }
   });
 
-  Config.RouteObjects = [ConfigRouteObject];
+  Config.RouteObjects = [ConfigPerNodeRouteObject, ConfigDisabledRouteObject];
 
   return Config;
 });

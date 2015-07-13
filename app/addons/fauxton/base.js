@@ -49,6 +49,7 @@ function (app, FauxtonAPI, Components, NavbarReactComponents, NavigationActions,
     }
   });
 
+
   Fauxton.initialize = function () {
     app.apiBar = new Components.ApiBar();
 
