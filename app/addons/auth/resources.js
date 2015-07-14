@@ -55,7 +55,6 @@ function (app, FauxtonAPI, CouchdbSession) {
 
       this.messages = _.extend({},  {
           missingCredentials: 'Username or password cannot be blank.',
-          passwordsNotMatch:  'Passwords do not match.',
           loggedIn: 'You have been logged in.',
           adminCreated: 'CouchDB admin created',
           changePassword: 'Your password has been updated.',
@@ -132,10 +131,9 @@ function (app, FauxtonAPI, CouchdbSession) {
     },
 
     createAdmin: function (username, password, login) {
-      var that = this,
-          error_promise =  this.validateUser(username, password, this.messages.missingCredentials);
+      var errorPromise = this.validateUser(username, password, this.messages.missingCredentials);
 
-      if (error_promise) { return error_promise; }
+      if (errorPromise) { return errorPromise; }
 
       var admin = new Admin({
         name: username,
@@ -144,19 +142,18 @@ function (app, FauxtonAPI, CouchdbSession) {
 
       return admin.save().then(function () {
         if (login) {
-          return that.login(username, password);
-        } else {
-          return that.fetchUser({forceFetch: true});
+          return this.login(username, password);
         }
-      });
+
+        return this.fetchUser({forceFetch: true});
+
+      }.bind(this));
     },
 
     login: function (username, password) {
-      var error_promise =  this.validateUser(username, password, this.messages.missingCredentials);
+      var errorPromise = this.validateUser(username, password, this.messages.missingCredentials);
 
-      if (error_promise) { return error_promise; }
-
-      var that = this;
+      if (errorPromise) { return errorPromise; }
 
       return $.ajax({
         cache: false,
@@ -165,8 +162,8 @@ function (app, FauxtonAPI, CouchdbSession) {
         dataType: "json",
         data: {name: username, password: password}
       }).then(function () {
-        return that.fetchUser({forceFetch: true});
-      });
+        return this.fetchUser({forceFetch: true});
+      }.bind(this));
     },
 
     logout: function () {
@@ -183,23 +180,21 @@ function (app, FauxtonAPI, CouchdbSession) {
       });
     },
 
-    changePassword: function (password, password_confirm) {
-      var error_promise =  this.validatePasswords(password, password_confirm, this.messages.passwordsNotMatch);
+    changePassword: function (password, confirmedPassword) {
+      var errorMessage = 'Passwords do not match.';
+      var errorPromise = this.validatePasswords(password, confirmedPassword, errorMessage);
 
-      if (error_promise) { return error_promise; }
+      if (errorPromise) { return errorPromise; }
 
-      var  that = this,
-           info = this.get('info'),
-           userCtx = this.get('userCtx');
-
+      var userName = this.get('userCtx').name;
       var admin = new Admin({
-        name: userCtx.name,
+        name: userName,
         value: password
       });
 
       return admin.save().then(function () {
-        return that.login(userCtx.name, password);
-      });
+        return this.login(userName, password);
+      }.bind(this));
     }
   });
 
