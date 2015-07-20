@@ -35,8 +35,7 @@ function (FauxtonAPI) {
       },
 
       fetchUser: function (opt) {
-        var that = this,
-            options = opt || {},
+        var options = opt || {},
             currentUser = this.user(),
             fetch = _.bind(this.fetchOnce, this);
 
@@ -45,20 +44,22 @@ function (FauxtonAPI) {
         }
 
         return fetch(opt).then(function () {
-          var user = that.user();
+          var user = this.user();
 
           // Notify anyone listening on these events that either a user has changed
           // or current user is the same
           if (currentUser !== user) {
-            that.trigger('session:userChanged');
+            this.trigger('session:userChanged');
           } else {
-            that.trigger('session:userFetched');
+            this.trigger('session:userFetched');
           }
 
           // this will return the user as a value to all function that calls done on this
           // eg. session.fetchUser().done(user) { .. do something with user ..}
           return user;
-        });
+        }.bind(this), function (session, xhr, type, message) {
+          this.trigger('session:error', xhr, type, message);
+        }.bind(this));
       }
     })
   };
