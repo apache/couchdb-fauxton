@@ -14,7 +14,10 @@ define([
   'app',
   'api',
   'react',
-  'plugins/zeroclipboard/ZeroClipboard'
+  'plugins/zeroclipboard/ZeroClipboard',
+
+  // needed to run the test individually. Don't remove
+  'velocity.ui'
 ],
 
 function (app, FauxtonAPI, React, ZeroClipboard) {
@@ -120,6 +123,16 @@ function (app, FauxtonAPI, React, ZeroClipboard) {
   var _NextTrayInternalId = 0;
   var Tray = React.createClass({
 
+    propTypes: {
+      onAutoHide: React.PropTypes.func
+    },
+
+    getDefaultProps: function () {
+      return {
+        onAutoHide: function () { }
+      };
+    },
+
     getInitialState: function () {
       return {
         show: false,
@@ -148,6 +161,7 @@ function (app, FauxtonAPI, React, ZeroClipboard) {
         var tgt = $(e.target);
         if (this.state.show && tgt.closest('.tray').length === 0) {
           this.hide();
+          this.props.onAutoHide();
         }
       }.bind(this));
     },
