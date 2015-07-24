@@ -19,19 +19,26 @@ define([
   var assert = utils.assert;
   var TestUtils = React.addons.TestUtils;
 
+
   describe('Tray', function () {
 
-    var container, trayEl, done;
+    var container, trayEl, oldToggleSpeed;
 
     beforeEach(function () {
       container = document.createElement('div');
+
       // when we want to control the diff, we have to render directly
       trayEl = React.render(<Views.Tray className="traytest" />, container);
-      done = sinon.spy();
+
+      oldToggleSpeed = FauxtonAPI.constants.MISC.TRAY_TOGGLE_SPEED;
+
+      // makes velocity toggle immediately
+      FauxtonAPI.constants.MISC.TRAY_TOGGLE_SPEED = 0;
     });
 
     afterEach(function () {
       React.unmountComponentAtNode(container);
+      FauxtonAPI.constants.MISC.TRAY_TOGGLE_SPEED = oldToggleSpeed;
     });
 
     it('renders trayid and custom classes', function () {
@@ -74,6 +81,38 @@ define([
           assert.equal('none', trayEl.getDOMNode().style.display);
         });
       });
+    });
+
+    it('calls props.onAutoHide when closing tray by clicking outside of it', function () {
+      var container = document.createElement('div');
+      var onClose = function () { };
+      var spy = sinon.spy();
+
+      var wrapper = React.createClass({
+
+        runTest: function () {
+          var trayEl = this.refs.tray;
+          var externalEl = this.refs.externalElement;
+          trayEl.show(function () {
+            TestUtils.Simulate.click(externalEl.getDOMNode());
+            assert.ok(spy.calledOnce);
+          });
+        },
+
+        render: function () {
+          return (
+            <div>
+              <p ref="externalElement">Click me!</p>
+              <Views.Tray ref="tray" onAutoHide={onClose} />
+            </div>
+          );
+        }
+      });
+
+      var reactEl = React.render(React.createElement(wrapper), container);
+      reactEl.runTest();
+
+      React.unmountComponentAtNode(container);
     });
 
   });
