@@ -104,6 +104,19 @@ define([
         activeTasksStore.setPolling();
         assert.ok(spy.calledOnce);
       });
+
+      it('should set the isLoading variable so that the loading lines show up', function () {
+        spy = sinon.spy(activeTasksStore, 'setIsLoading');
+        var date = new Date();
+
+        activeTasksCollection.pollingFetch();
+        assert.ok(spy.withArgs(true, date).calledOnce);
+
+        activeTasksCollection.parse(fakedResponse);
+        assert.ok(spy.withArgs(false, date).calledOnce);
+
+        restore(activeTasksStore.setIsLoading);
+      });
     });
 
     describe('Active Task Stores - Filter Tab Tray', function () {

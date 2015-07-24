@@ -179,16 +179,6 @@
     }
   }
 
-  .active-tasks-loading-lines {
-    padding-top: 15px;
-    float: left;
-    margin-left: -40px;
-
-    #line1, #line2, #line3, #line4 {
-      background-color: #bbb;
-    }
-  }
-
   .view-source-sequence-btn { // "View" Button
     background-color: #999;
     display: inline;
@@ -255,8 +245,7 @@
 
 .polling-interval-widget {
   width: 250px;
-  margin-right: 20px;
-  margin-top: 10px;
+  margin: 10px 20px 0px 0px;
   color: #666;
   float:right;
 
@@ -273,5 +262,21 @@
   
   #polling-range {
     width: 250px;
+  }
+}
+
+.active-tasks-loading-lines-container {
+    
+  width: 350px;
+  
+  .active-tasks-loading-lines {
+    border: 0px;
+    position: relative;
+    top: 17px;
+    float: left;
+
+    #line1, #line2, #line3, #line4 {
+      background-color: #bbb;
+    }
   }
 }

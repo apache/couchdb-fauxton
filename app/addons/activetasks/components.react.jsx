@@ -444,7 +444,7 @@ define([
     getStoreState: function () {
       return {
         pollingInterval:  activeTasksStore.getPollingInterval(),
-        isLoading: false//activeTasksStore.isLoading()
+        isLoading: activeTasksStore.isLoading()
       };
     },
 
@@ -507,7 +507,7 @@ define([
       }
 
       return (
-        <div>
+        <div className="active-tasks-loading-lines-container">
           <span className="active-tasks-loading-lines">
             {loadLines}
           </span>

@@ -11,10 +11,9 @@
 // the License.
 define([
   'api',
-  'addons/activetasks/actiontypes',
-  'addons/activetasks/resources'
+  'addons/activetasks/actiontypes'
 ],
-function (FauxtonAPI, ActionTypes, Resources) {
+function (FauxtonAPI, ActionTypes) {
   return {
     init: function (activeTasks) {
       this.fetchAndSetActiveTasks(activeTasks.table, activeTasks);

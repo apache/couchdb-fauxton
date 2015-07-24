@@ -12,10 +12,11 @@
 
 define([
   'app',
-  'api'
+  'api',
+  'addons/activetasks/actions'
 ],
 
-function (app, FauxtonAPI) {
+function (app, FauxtonAPI, Actions) {
   var Active = {};
 
   Active.AllTasks = Backbone.Collection.extend({
@@ -26,11 +27,13 @@ function (app, FauxtonAPI) {
 
     pollingFetch: function () { //still need this for the polling
       this.fetch({reset: true, parse: true});
+      Actions.setActiveTaskIsLoading(true);
       return this;
     },
 
     parse: function (resp) {
       //no more backbone models, collection is converted into an array of objects
+      Actions.setActiveTaskIsLoading(false);
       var collectionTable = [];
 
       _.each(resp, function (item) {
