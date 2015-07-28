@@ -380,10 +380,6 @@ module.exports = function (grunt) {
       }
     },
 
-    mocha_phantomjs: {
-      all: ['test/runner.html']
-    },
-
     shell: {
       'build-jsx': {
         command: 'node ./node_modules/react-tools/bin/jsx -x jsx app/addons/ app/addons/ --no-cache-dir',
@@ -403,6 +399,12 @@ module.exports = function (grunt) {
 
       stylecheckSingleFile: {
         command: '' // populated dynamically
+      },
+
+      phantomjs: {
+        command: './node_modules/phantomjs/bin/phantomjs --debug=false ' +
+          '--ssl-protocol=sslv2 --web-security=false --ignore-ssl-errors=true ' +
+          './node_modules/mocha-phantomjs/lib/mocha-phantomjs.coffee test/runner.html'
       }
     },
 
@@ -525,7 +527,6 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
-  grunt.loadNpmTasks('grunt-mocha-phantomjs');
   grunt.loadNpmTasks('grunt-shell');
   grunt.loadNpmTasks('grunt-md5');
 
@@ -543,7 +544,7 @@ module.exports = function (grunt) {
   grunt.registerTask('test', ['clean:release', 'dependencies', 'jsx', 'jshint', 'shell:stylecheck', 'gen_initialize:development', 'test_inline']);
 
   // lighter weight test task for use inside dev/watch
-  grunt.registerTask('test_inline', ['mochaSetup', 'jst', 'concat:test_config_js', 'mocha_phantomjs']);
+  grunt.registerTask('test_inline', ['mochaSetup', 'jst', 'concat:test_config_js', 'shell:phantomjs']);
   // Fetch dependencies (from git or local dir), lint them and make load_addons
   grunt.registerTask('dependencies', ['get_deps', 'gen_load_addons:default']);
 
