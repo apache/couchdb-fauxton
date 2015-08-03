@@ -75,7 +75,7 @@ function (app, FauxtonAPI, Documents) {
     },
 
     app: function (database, doc) {
-      return '/database/' + database + '/' + encodeURI(doc);
+      return '/database/' + database + '/' + doc;
     },
 
     apiurl: function (database, doc) {
