@@ -63,6 +63,33 @@ function (app, $, _, Backbone, Bootstrap, Helpers, Utils, FauxtonAPI, Couchdb) {
   // Localize or create a new JavaScript Template object
   var JST = window.JST = window.JST || {};
 
+  var parseCookies = function (cookies) {
+    if (!cookies) {
+      return {};
+    }
+    return _.reduce(cookies.split(';'), function (list, cookie) {
+      var parts = cookie.split('=');
+      list[parts.shift().trim()] = decodeURI(parts.join('='));
+      return list;
+    }, {});
+  };
+
+  $._ajax = $.ajax;
+
+  $.ajax = function (settings) {
+    var cookies = parseCookies(document.cookie);
+    var csrf = cookies['CouchDB-CSRF'] ? cookies['CouchDB-CSRF'] : 'true';
+    var origBeforeSend = settings.beforeSend;
+    var newBeforeSend = function (xhr) {
+      if (origBeforeSend) {
+        origBeforeSend(xhr);
+      }
+      xhr.setRequestHeader('X-CouchDB-CSRF', csrf);
+    };
+    settings.beforeSend = newBeforeSend;
+    return $._ajax(settings);
+  };
+
   // Configure LayoutManager with Backbone Boilerplate defaults
   FauxtonAPI.Layout.configure({
     // Allow LayoutManager to augment Backbone.View.prototype.
