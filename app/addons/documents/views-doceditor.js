@@ -37,8 +37,7 @@ function (app, FauxtonAPI, Components, Documents, Databases, prettify) {
       event.preventDefault();
 
       var docRev = this.model.get('_rev'),
-          that = this,
-          $form = this.$('#file-upload');
+          file = $('#_attachments')[0].files[0];
 
       if (!docRev) {
         return this.set_error_msg('The document needs to be saved before adding an attachment.');
@@ -50,16 +49,20 @@ function (app, FauxtonAPI, Components, Documents, Databases, prettify) {
 
       this.$('#_rev').val(docRev);
 
-      $form.ajaxSubmit({
-        url: this.model.url(),
-        type: 'POST',
-        beforeSend: this.beforeSend,
-        uploadProgress: this.uploadProgress,
+      $.ajax({
+        url: this.model.url() + '/' + file.name + '?rev=' + docRev,
+        xhrFields: {
+          withCredentials: true
+        },
+        type: 'PUT',
+        data: file,
+        processData: false,
+        contentType: file.type,
         success: this.success,
         error: function (resp) {
-          console.log('ERR on upload', resp);
-          return that.set_error_msg('Could not upload document: ' + JSON.parse(resp.responseText).reason);
-        }
+          this.set_error_msg('Could not upload attachment: ' + JSON.parse(resp.responseText).reason);
+          return;
+        }.bind(this)
       });
     },
 

@@ -27,8 +27,7 @@ define([
   'core/couchdbSession',
 
   // plugins
-  'plugins/backbone.layoutmanager',
-  'plugins/jquery.form'
+  'plugins/backbone.layoutmanager'
 ],
 
 function (app, $, _, Backbone, Bootstrap, Helpers, Utils, FauxtonAPI, Couchdb) {

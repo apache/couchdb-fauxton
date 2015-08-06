@@ -63,9 +63,6 @@ require.config({
 
     "plugins/prettify": [],
     "plugins/beautify": [],
-
-    "plugins/jquery.form": ["jquery"],
-
     "velocity": ["jquery"],
 
     "velocity.ui": ["velocity"]
