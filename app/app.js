@@ -80,9 +80,9 @@ function (app, $, _, Backbone, Bootstrap, Helpers, Utils, FauxtonAPI, Couchdb) {
     var cookies = parseCookies(document.cookie);
     var csrf = cookies['CouchDB-CSRF'] ? cookies['CouchDB-CSRF'] : 'true';
     var origBeforeSend = settings.beforeSend;
-    var newBeforeSend = function (xhr) {
+    var newBeforeSend = function (xhr, o) {
       if (origBeforeSend) {
-        origBeforeSend(xhr);
+        origBeforeSend(xhr, o);
       }
       xhr.setRequestHeader('X-CouchDB-CSRF', csrf);
     };
