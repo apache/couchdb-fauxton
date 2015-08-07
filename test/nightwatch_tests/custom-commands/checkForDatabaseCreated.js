@@ -34,10 +34,10 @@ CheckForDatabaseCreated.prototype.command = function (databaseName, timeout) {
   }, timeout);
 
   var intervalId = setInterval(function () {
-    helpers.reuseNanoCookie(checkForDatabaseDeleted);
+    helpers.reuseNanoCookie(checkForDatabaseCreated);
   }.bind(this), 1000);
 
-  function CheckForDatabaseCreated () {
+  function checkForDatabaseCreated () {
     helpers.nano.db.list(function (err, body, headers) {
       // body is an array
       if (err) {
