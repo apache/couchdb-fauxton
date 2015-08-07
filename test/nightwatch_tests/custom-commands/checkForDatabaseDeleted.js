@@ -37,7 +37,7 @@ CheckForDatabaseDeleted.prototype.command = function (databaseName, timeout) {
   var intervalId = setInterval(function () {
     helpers.reuseNanoCookie(checkForDatabaseDeleted);
   }.bind(this), 1000);
-  
+
   function checkForDatabaseDeleted () {
     helpers.nano.db.list(function (err, body, headers) {
       // body is an array
