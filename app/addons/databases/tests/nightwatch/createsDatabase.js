@@ -30,7 +30,7 @@ module.exports = {
 
   'Creates a Database' : function (client) {
     var waitTime = client.globals.maxWaitTime,
-        baseUrl = client.globals.test_settings.launch_url;
+        baseUrl = client.globals.test_settings.db_url;
 
     client
       .loginToGUI()
