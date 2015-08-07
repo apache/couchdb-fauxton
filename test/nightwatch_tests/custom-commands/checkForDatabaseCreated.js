@@ -33,7 +33,7 @@ CheckForDatabaseCreated.prototype.command = function (databaseName, timeout) {
     throw new Error('timeout waiting for db to appear');
   }, timeout);
 
-   var intervalId = setInterval(function () {
+  var intervalId = setInterval(function () {
     helpers.reuseNanoCookie(checkForDatabaseDeleted);
   }.bind(this), 1000);
 
@@ -51,7 +51,7 @@ CheckForDatabaseCreated.prototype.command = function (databaseName, timeout) {
       body.forEach(function (db) {
         if (db.indexOf(databaseName) === -1) {
           clearTimeout(timeOutId);
-          console.log('database not there: ' + databaseName);
+          console.log('database is there: ' + databaseName);
           clearInterval(intervalId);
           that.emit('complete');
         }
