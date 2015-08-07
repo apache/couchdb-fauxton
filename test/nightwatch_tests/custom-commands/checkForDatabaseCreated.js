@@ -41,7 +41,7 @@ CheckForDatabaseCreated.prototype.command = function (databaseName, timeout) {
     helpers.nano.db.list(function (err, body, headers) {
       // body is an array
       if (err) {
-        console.log('Error in nano checkForDatabaseDeleted: ' + databaseName, err.message);
+        console.log('Error in nano checkForDatabaseCreated: ' + databaseName, err.message);
       }
       // change the cookie if couchdb tells us to
       if (headers && headers['set-cookie']) {
@@ -49,7 +49,7 @@ CheckForDatabaseCreated.prototype.command = function (databaseName, timeout) {
       }
 
       body.forEach(function (db) {
-        if (db.indexOf(databaseName) === -1) {
+        if (db.indexOf(databaseName) !== -1) {
           clearTimeout(timeOutId);
           console.log('database is there: ' + databaseName);
           clearInterval(intervalId);
