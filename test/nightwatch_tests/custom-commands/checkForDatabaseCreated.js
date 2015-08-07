@@ -35,6 +35,9 @@ CheckForDatabaseCreated.prototype.command = function (databaseName, timeout) {
 
   var intervalId = setInterval(function () {
     request(couchUrl + '/_all_dbs', function (er, res, body) {
+      console.log("err:", er);
+      console.log("res:", res);
+      console.log("body:", body);
       if (body) {
         if (body.indexOf(databaseName) !== -1) {
           clearTimeout(timeOutId);

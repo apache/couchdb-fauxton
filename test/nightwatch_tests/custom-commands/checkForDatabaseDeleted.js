@@ -23,10 +23,10 @@ function CheckForDatabaseDeleted () {
 util.inherits(CheckForDatabaseDeleted, events.EventEmitter);
 
 CheckForDatabaseDeleted.prototype.command = function (databaseName, timeout) {
-  var couchUrl = helpers.test_settings.db_url;
+  var couchUrl = helpers.test_settings.fauxton_username + ':' + helpers.test_settings.password + '@' + helpers.test_settings.db_url;
 
   if (!timeout) {
-    timeout = 10000;
+    timeout = 15000;
   }
 
   var timeOutId = setTimeout(function () {
@@ -34,8 +34,24 @@ CheckForDatabaseDeleted.prototype.command = function (databaseName, timeout) {
   }, timeout);
 
   var intervalId = setInterval(function () {
-    request(couchUrl + '/_all_dbs', function (er, res, body) {
+
+    helpers.reuseNanoCookie(checkForDatabaseDeleted);
+  }.bind(this), 1000);
+  
+  
+  function checkForDatabaseDeleted () {
+
+    helpers.nano.db.get(couchUrl + '/_all_dbs', function(err, body, headers) {
+      if (err) {
+        console.log('Error in nano CreateDatabase Function: ' + databaseName, err.message);
+      }
+      // change the cookie if couchdb tells us to
+      if (headers && headers['set-cookie']) {
+        helpers.auth = headers['set-cookie'];
+      }
+
       if (body) {
+        console.log(body);
         if (body.indexOf(databaseName) === -1) {
           clearTimeout(timeOutId);
           console.log('database not there: ' + databaseName);
@@ -44,9 +60,40 @@ CheckForDatabaseDeleted.prototype.command = function (databaseName, timeout) {
         }
       }
     }.bind(this));
-  }.bind(this), 1000);
+  }
+
+  
 
   return this;
 };
 
 module.exports = CheckForDatabaseDeleted;
+    // module.exports.nano.db.create(databaseName, function (err, body, headers) {
+    //     if (err) {
+    //       console.log('Error in nano CreateDatabase Function: ' + databaseName, err.message);
+
+    //     }
+
+    //     // change the cookie if couchdb tells us to
+    //     if (headers && headers['set-cookie']) {
+    //       module.exports.auth = headers['set-cookie'];
+    //     }
+
+    //     console.log('nano - created a database: ' + databaseName);
+    //     // emit the complete event
+    //     that.emit('complete');
+    //   });
+    //   return this;
+    // }
+
+
+    // request(couchUrl + '/_all_dbs', function (er, res, body) {
+    //   if (body) {
+    //     if (body.indexOf(databaseName) === -1) {
+    //       clearTimeout(timeOutId);
+    //       console.log('database not there: ' + databaseName);
+    //       clearInterval(intervalId);
+    //       this.emit('complete');
+    //     }
+    //   }
+    // }.bind(this));

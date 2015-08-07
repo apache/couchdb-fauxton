@@ -22,11 +22,12 @@ function CreateDatabase () {
 util.inherits(CreateDatabase, events.EventEmitter);
 
 CreateDatabase.prototype.command = function (databaseName) {
-  var that = this,
-      nano = helpers.getNanoInstance(callback);
-  
- function createDB () {
-    nano.db.create(databaseName, function (err, body, headers) {
+  var that = this;
+
+  module.exports.reuseNanoCookie(createDB);
+
+  function createDB () {
+    module.exports.nano.db.create(databaseName, function (err, body, headers) {
       if (err) {
         console.log('Error in nano CreateDatabase Function: ' + databaseName, err.message);
 
@@ -42,9 +43,7 @@ CreateDatabase.prototype.command = function (databaseName) {
       that.emit('complete');
     });
     return this;
- } 
-
- 
+  }
 };
 
 module.exports = CreateDatabase;

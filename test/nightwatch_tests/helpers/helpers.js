@@ -46,13 +46,13 @@ module.exports = {
       cookies: 'AuthSession=' + auth
     });
 
-    callback(done);
+    callback();
   },
 
   beforeEach: function (done) {
-    console.log("nano setting up database");
     // clean up the database we created previously
-    
+    console.log("nano setting up database");
+
     module.exports.initNanoInstance();
     module.exports.reuseNanoCookie(beforeEachTest);
 
@@ -87,15 +87,17 @@ module.exports = {
   },
 
   afterEach: function (done) {
-    var nano = module.exports.getNanoInstance(),
-        database = module.exports.testDatabaseName;
-
     console.log('nano cleaning up');
-    nano.db.destroy(database, function (err, header, body) {
-      if (err) {
-        console.log('Error in cleaning up ' + database, err.message);
-      }
-      done();
-    });
+
+    module.exports.reuseNanoCookie(afterEachTest);
+    function afterEachTest () {
+      var database = module.exports.testDatabaseName;
+      module.exports.nano.db.destroy(database, function (err, header, body) {
+        if (err) {
+          console.log('Error in cleaning up ' + database, err.message);
+        }
+        done();
+      });
+    }
   }
 };
