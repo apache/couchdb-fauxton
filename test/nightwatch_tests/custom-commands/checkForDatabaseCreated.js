@@ -33,21 +33,44 @@ CheckForDatabaseCreated.prototype.command = function (databaseName, timeout) {
     throw new Error('timeout waiting for db to appear');
   }, timeout);
 
-  var intervalId = setInterval(function () {
-    request(couchUrl + '/_all_dbs', function (er, res, body) {
-      console.log("err:", er);
-      console.log("res:", res);
-      console.log("body:", body);
-      if (body) {
-        if (body.indexOf(databaseName) !== -1) {
-          clearTimeout(timeOutId);
-          console.log('database created: ' + databaseName);
-          clearInterval(intervalId);
-          this.emit('complete');
-        }
-      }
-    }.bind(this));
+   var intervalId = setInterval(function () {
+    helpers.reuseNanoCookie(checkForDatabaseDeleted);
   }.bind(this), 1000);
+
+  function CheckForDatabaseCreated () {
+    helpers.nano.db.list(function (err, body, headers) {
+      // body is an array
+      if (err) {
+        console.log('Error in nano checkForDatabaseDeleted: ' + databaseName, err.message);
+      }
+      // change the cookie if couchdb tells us to
+      if (headers && headers['set-cookie']) {
+        helpers.auth = headers['set-cookie'];
+      }
+
+      body.forEach(function (db) {
+        if (db.indexOf(databaseName) === -1) {
+          clearTimeout(timeOutId);
+          console.log('database not there: ' + databaseName);
+          clearInterval(intervalId);
+          that.emit('complete');
+        }
+      });
+    });
+  }
+
+  // var intervalId = setInterval(function () {
+  //   request(couchUrl + '/_all_dbs', function (er, res, body) {
+  //     if (body) {
+  //       if (body.indexOf(databaseName) !== -1) {
+  //         clearTimeout(timeOutId);
+  //         console.log('database created: ' + databaseName);
+  //         clearInterval(intervalId);
+  //         this.emit('complete');
+  //       }
+  //     }
+  //   }.bind(this));
+  // }.bind(this), 1000);
 
   return this;
 };

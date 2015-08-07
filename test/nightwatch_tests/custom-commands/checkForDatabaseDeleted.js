@@ -27,7 +27,7 @@ CheckForDatabaseDeleted.prototype.command = function (databaseName, timeout) {
   var that = this;
 
   if (!timeout) {
-    timeout = 15000;
+    timeout = 10000;
   }
 
   var timeOutId = setTimeout(function () {
