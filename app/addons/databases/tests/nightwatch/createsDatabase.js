@@ -50,7 +50,7 @@ module.exports = {
       .getText('html', function (result) {
         var data = result.value,
             createdDatabaseIsPresent = data.indexOf(newDatabaseName);
-
+        console.log(result);
         this.verify.ok(createdDatabaseIsPresent > 0,
           'Checking if new database shows up in _all_dbs.');
       })
