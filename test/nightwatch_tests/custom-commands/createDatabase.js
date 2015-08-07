@@ -23,18 +23,28 @@ util.inherits(CreateDatabase, events.EventEmitter);
 
 CreateDatabase.prototype.command = function (databaseName) {
   var that = this,
-      nano = helpers.getNanoInstance();
+      nano = helpers.getNanoInstance(callback);
+  
+ function createDB () {
+    nano.db.create(databaseName, function (err, body, headers) {
+      if (err) {
+        console.log('Error in nano CreateDatabase Function: ' + databaseName, err.message);
 
-  nano.db.create(databaseName, function (err, body, header) {
-    if (err) {
-      console.log('Error in nano CreateDatabase Function: ' + databaseName, err.message);
+      }
 
-    }
-    console.log('nano - created a database: ' + databaseName);
-    // emit the complete event
-    that.emit('complete');
-  });
-  return this;
+      // change the cookie if couchdb tells us to
+      if (headers && headers['set-cookie']) {
+        module.exports.auth = headers['set-cookie'];
+      }
+
+      console.log('nano - created a database: ' + databaseName);
+      // emit the complete event
+      that.emit('complete');
+    });
+    return this;
+ } 
+
+ 
 };
 
 module.exports = CreateDatabase;

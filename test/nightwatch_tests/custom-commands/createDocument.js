@@ -30,11 +30,17 @@ CreateDocument.prototype.command = function (documentName, databaseName, docCont
     docContents = { dummyKey: "testingValue" };
   }
 
-  database.insert(docContents, documentName, function (err, body, header) {
+  database.insert(docContents, documentName, function (err, body, headers) {
 
     if (err) {
       console.log('Error in nano CreateDocument Function: ' + documentName + ', in database: ' + databaseName, err.message);
     }
+
+    // change the cookie if couchdb tells us to
+    if (headers && headers['set-cookie']) {
+      module.exports.auth = headers['set-cookie'];
+    }
+
     console.log('nano  - created a doc: ' + documentName + ', in database: ' + databaseName);
     that.emit('complete');
   });

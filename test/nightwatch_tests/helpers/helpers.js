@@ -16,29 +16,72 @@ var async = require('async');
 module.exports = {
   maxWaitTime: 30000,
   testDatabaseName : 'fauxton-selenium-tests',
+  cookies: {},
+  auth: '0',
 
-  getNanoInstance: function () {
-    return nano(this.test_settings.db_url);
+  initNanoInstance: function () {
+    this.nano = nano(this.test_settings.db_url),
+        user = this.test_settings.fauxton_username,
+        pass = this.test_settings.password;
+
+    this.nano.auth(user, pass, function (err, body, headers) {
+      console.log("err", err);
+      console.log("body", body);
+      console.log("headers", headers);
+
+      if (err) return console.log(err);
+
+      if (headers && headers['Set-Cookie']) {
+        module.exports.cookies[user] = headers['set-cookie'];
+      }
+
+      console.log("Auth worked!");
+    });
   },
-  beforeEach: function (done) {
-    var nano = module.exports.getNanoInstance(),
-        database = module.exports.testDatabaseName;
 
+  reuseNanoCookie: function (callback) {
+    var auth = module.exports.cookies[this.test_settings.fauxton_username];
+      this.nano = nano({
+        url: this.test_settings.db_url,
+        cookies: 'AuthSession=' + auth
+      });
+  },
+
+  beforeEach: function (done) {
     console.log("nano setting up database");
     // clean up the database we created previously
+    
+    module.exports.initNanoInstance();
+    module.exports.reuseNanoCookie(beforeEachTest);
 
-    nano.db.destroy(database, function (err, body, header) {
-      if (err && err.message !== 'Database does not exist.' && err.message !== 'missing') {
-        console.log('Error in setting up ' + database, err.message);
-      }
-      // create a new database
-      nano.db.create(database, function (err, body, header) {
-        if (err) {
+    function beforeEachTest () {
+
+      var database = module.exports.testDatabaseName;
+      this.nano.db.destroy(database, function (err, body, headers) {
+        if (err && err.message !== 'Database does not exist.' && err.message !== 'missing') {
           console.log('Error in setting up ' + database, err.message);
         }
-        done();
-      });
-    });
+
+        // change the cookie if couchdb tells us to
+        if (headers && headers['set-cookie']) {
+          module.exports.auth = headers['set-cookie'];
+        }
+
+        // create a new database
+        this.nano.db.create(database, function (err, body, header) {
+          if (err) {
+            console.log('Error in setting up ' + database, err.message);
+          }
+
+          // change the cookie if couchdb tells us to
+          if (headers && headers['set-cookie']) {
+            module.exports.auth = headers['set-cookie'];
+          }
+
+          done();
+        }.bind(this));
+      }.bind(this));
+    }
   },
 
   afterEach: function (done) {
