@@ -38,9 +38,8 @@ CheckForDatabaseDeleted.prototype.command = function (databaseName, timeout) {
     helpers.reuseNanoCookie(checkForDatabaseDeleted);
   }.bind(this), 1000);
   
-  
   function checkForDatabaseDeleted () {
-    helpers.nano.db.list(function(err, body, headers) {
+    helpers.nano.db.list(function (err, body, headers) {
       // body is an array
       if (err) {
         console.log('Error in nano checkForDatabaseDeleted: ' + databaseName, err.message);
@@ -50,7 +49,7 @@ CheckForDatabaseDeleted.prototype.command = function (databaseName, timeout) {
         helpers.auth = headers['set-cookie'];
       }
 
-      body.forEach(function(db) {
+      body.forEach(function (db) {
         if (db.indexOf(databaseName) === -1) {
           clearTimeout(timeOutId);
           console.log('database not there: ' + databaseName);
