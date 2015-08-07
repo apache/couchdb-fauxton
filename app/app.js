@@ -76,7 +76,8 @@ function (app, $, _, Backbone, Bootstrap, Helpers, Utils, FauxtonAPI, Couchdb) {
 
   $._ajax = $.ajax;
 
-  $.ajax = function (settings) {
+  $.ajax = function () {
+    var settings = arguments.length == 2 ? arguments[1] : arguments[0];
     var cookies = parseCookies(document.cookie);
     var csrf = cookies['CouchDB-CSRF'] ? cookies['CouchDB-CSRF'] : 'true';
     var origBeforeSend = settings.beforeSend;
@@ -87,7 +88,7 @@ function (app, $, _, Backbone, Bootstrap, Helpers, Utils, FauxtonAPI, Couchdb) {
       xhr.setRequestHeader('X-CouchDB-CSRF', csrf);
     };
     settings.beforeSend = newBeforeSend;
-    return $._ajax(settings);
+    return $._ajax.apply($, arguments);
   };
 
   // Configure LayoutManager with Backbone Boilerplate defaults
