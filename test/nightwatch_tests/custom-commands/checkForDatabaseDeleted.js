@@ -23,7 +23,8 @@ function CheckForDatabaseDeleted () {
 util.inherits(CheckForDatabaseDeleted, events.EventEmitter);
 
 CheckForDatabaseDeleted.prototype.command = function (databaseName, timeout) {
-  var couchUrl = helpers.test_settings.fauxton_username + ':' + helpers.test_settings.password + '@' + helpers.test_settings.db_url;
+  var couchUrl = helpers.test_settings.db_url;
+  var that = this;
 
   if (!timeout) {
     timeout = 15000;
@@ -34,36 +35,31 @@ CheckForDatabaseDeleted.prototype.command = function (databaseName, timeout) {
   }, timeout);
 
   var intervalId = setInterval(function () {
-
     helpers.reuseNanoCookie(checkForDatabaseDeleted);
   }.bind(this), 1000);
   
   
   function checkForDatabaseDeleted () {
-
-    helpers.nano.db.get(couchUrl + '/_all_dbs', function(err, body, headers) {
+    helpers.nano.db.list(function(err, body, headers) {
+      // body is an array
       if (err) {
-        console.log('Error in nano CreateDatabase Function: ' + databaseName, err.message);
+        console.log('Error in nano checkForDatabaseDeleted: ' + databaseName, err.message);
       }
       // change the cookie if couchdb tells us to
       if (headers && headers['set-cookie']) {
         helpers.auth = headers['set-cookie'];
       }
 
-      if (body) {
-        console.log(body);
-        if (body.indexOf(databaseName) === -1) {
+      body.forEach(function(db) {
+        if (db.indexOf(databaseName) === -1) {
           clearTimeout(timeOutId);
           console.log('database not there: ' + databaseName);
           clearInterval(intervalId);
-          this.emit('complete');
+          that.emit('complete');
         }
-      }
-    }.bind(this));
+      });
+    });
   }
-
-  
-
   return this;
 };
 

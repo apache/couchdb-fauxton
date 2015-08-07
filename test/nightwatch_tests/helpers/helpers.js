@@ -25,9 +25,9 @@ module.exports = {
         pass = this.test_settings.password;
 
     module.exports.nano.auth(user, pass, function (err, body, headers) {
-      console.log("err", err);
-      console.log("body", body);
-      console.log("headers", headers);
+      // console.log("err", err);
+      // console.log("body", body);
+      // console.log("headers", headers);
 
       if (err) return console.log(err);
 
