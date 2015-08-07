@@ -39,7 +39,8 @@ module.exports = {
       .getText('body', function (result) {
         var data = result.value,
             createdDocIsPresent = data.indexOf(newDocumentName);
-
+        console.log(data);
+        console.log("^^returned from " + baseUrl + '/' + newDatabaseName + '/_all_docs' );
         this.verify.ok(createdDocIsPresent > 0,
           'Checking if new document shows up in _all_docs.');
       })

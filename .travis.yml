@@ -33,7 +33,7 @@ before_script:
   - ./node_modules/grunt-cli/bin/grunt dev &
   - sleep 25
 script:
-  - ./node_modules/grunt-cli/bin/grunt nightwatch
+  - ./node_modules/grunt-cli/bin/grunt nightwatch --file="createsDocument"
 notifications:
   irc:
     channels:
