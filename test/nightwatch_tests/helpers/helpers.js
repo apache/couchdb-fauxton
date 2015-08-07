@@ -31,7 +31,7 @@ module.exports = {
 
       if (err) return console.log(err);
 
-      if (headers && headers['Set-Cookie']) {
+      if (headers && headers['set-cookie']) {
         module.exports.cookies[user] = headers['set-cookie'];
       }
 
