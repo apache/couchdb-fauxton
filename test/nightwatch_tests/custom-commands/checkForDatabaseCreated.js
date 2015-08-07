@@ -24,6 +24,7 @@ util.inherits(CheckForDatabaseCreated, events.EventEmitter);
 
 CheckForDatabaseCreated.prototype.command = function (databaseName, timeout) {
   var couchUrl = helpers.test_settings.db_url;
+  var that = this;
 
   if (!timeout) {
     timeout = 10000;
