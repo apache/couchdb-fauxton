@@ -24,7 +24,7 @@ module.exports = {
         user = this.test_settings.fauxton_username,
         pass = this.test_settings.password;
 
-    this.nano.auth(user, pass, function (err, body, headers) {
+    module.exports.nano.auth(user, pass, function (err, body, headers) {
       console.log("err", err);
       console.log("body", body);
       console.log("headers", headers);
@@ -41,10 +41,12 @@ module.exports = {
 
   reuseNanoCookie: function (callback) {
     var auth = module.exports.cookies[this.test_settings.fauxton_username];
-      this.nano = nano({
-        url: this.test_settings.db_url,
-        cookies: 'AuthSession=' + auth
-      });
+    module.exports.nano = nano({
+      url: this.test_settings.db_url,
+      cookies: 'AuthSession=' + auth
+    });
+
+    callback(done);
   },
 
   beforeEach: function (done) {
@@ -57,7 +59,7 @@ module.exports = {
     function beforeEachTest () {
 
       var database = module.exports.testDatabaseName;
-      this.nano.db.destroy(database, function (err, body, headers) {
+      module.exports.nano.db.destroy(database, function (err, body, headers) {
         if (err && err.message !== 'Database does not exist.' && err.message !== 'missing') {
           console.log('Error in setting up ' + database, err.message);
         }
@@ -68,7 +70,7 @@ module.exports = {
         }
 
         // create a new database
-        this.nano.db.create(database, function (err, body, header) {
+        module.exports.nano.db.create(database, function (err, body, header) {
           if (err) {
             console.log('Error in setting up ' + database, err.message);
           }
@@ -79,8 +81,8 @@ module.exports = {
           }
 
           done();
-        }.bind(this));
-      }.bind(this));
+        });
+      });
     }
   },
 
