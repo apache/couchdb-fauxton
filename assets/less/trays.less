@@ -12,6 +12,14 @@
 
 @import "bootstrap/mixins.less";
 
+.hide-tray {
+  display: none;
+}
+
+.show-tray {
+  display: block !important; //nasty hack until we convert all trays to React
+}
+
 .tray {
   .bottom-left-shadow-border;
   display: none;

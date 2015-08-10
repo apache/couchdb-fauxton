@@ -18,14 +18,15 @@ define([
   "addons/databases/resources",
 
   // Views
-  "addons/documents/views-queryoptions",
+  "addons/documents/queryoptions/queryoptions.react",
+  "addons/documents/queryoptions/actions",
 
   //plugins
   "plugins/prettify"
 ],
 
 function (app, FauxtonAPI, Components, Documents,
-  Databases, QueryOptions) {
+  Databases, QueryOptions, QueryActions) {
 
   var Views = {};
 
@@ -57,15 +58,10 @@ function (app, FauxtonAPI, Components, Documents,
         database: this.database,
         collection: this.database.allDocs
       }));
-
-      // add the Query Options modal + header link
-      this.queryOptions = this.insertView("#query-options", new QueryOptions.QueryOptionsTray({
-        hasReduce: false,
-        showStale: false
-      }));
     },
 
     afterRender: function () {
+      QueryOptions.render('#query-options');
       this.toggleQueryOptionsHeader(this.isHidden);
     },
 
@@ -83,14 +79,8 @@ function (app, FauxtonAPI, Components, Documents,
       this.apiBar && this.apiBar.update(api);
     },
 
-    // these are similar, but different! resetQueryOptions() completely resets the settings then overlays the new ones;
-    // updateQueryOptions() just updates the existing settings with whatever is specified. Between them, the
     resetQueryOptions: function (options) {
-      this.queryOptions.resetQueryOptions(options);
-    },
-
-    updateQueryOptions: function (options) {
-      this.queryOptions.updateQueryOptions(options);
+      QueryActions.reset(options);
     },
 
     hideQueryOptions: function () {

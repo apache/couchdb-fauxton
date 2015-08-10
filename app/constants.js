@@ -28,6 +28,7 @@ define([], function () {
     EVENTS: {
       TRAY_CLOSED: 'tray:closed',
       TRAY_OPENED: 'tray:opened',
+      TRAY_HIDE: 'tray:hide',
       NAVBAR_SIZE_CHANGED: 'navbar:size_changed'
     },
 

@@ -10,6 +10,52 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+.tray-enter,
+.tray-appear {
+  opacity: 0.01;
+  animation: slidefadeIn .2s ease-in;
+  -webkit-animation: slidefadeIn .2s ease-in;
+}
+
+.tray-enter.tray-enter-active,
+.tray-appear.tray-appear-active {
+  opacity: 1;
+}
+
+@keyframes slidefadeIn {
+  from {
+    opacity: 0.01;
+    top: 30px
+  }
+
+  to {
+    opacity: 1;
+    top: 55px;
+  }
+}
+
+@keyframes slidefadeOut {
+  from {
+    opacity: 1;
+    top: 55px;
+  }
+
+  to {
+    opacity: 0.01;
+    top: 30px
+  }
+}
+
+.tray-leave {
+  opacity: 1;
+  animation: slidefadeOut .2s ease-out;
+  -webkit-animation: slidefadeOut .2s ease-out;
+
+  &.tray-leave-active {
+    opacity: 0;
+  }
+}
+
 #query-options-tray:before {
   right: 140px;
 }
@@ -44,10 +90,18 @@
   }
 
   form {
-    overflow: scroll;
+    overflow: auto;
     margin-bottom: 0;
     .dropdown.inline {
       display: inline-block;
+    }
+
+    #keys-input {
+      resize: none;
+    }
+
+    #qoGroupLevelGroup {
+      width: 34%;
     }
 
     .input-small {
