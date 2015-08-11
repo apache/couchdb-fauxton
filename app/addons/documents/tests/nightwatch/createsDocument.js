@@ -34,7 +34,7 @@ module.exports = {
       ')
       .clickWhenVisible('#doc-editor-actions-panel .save-doc')
       .checkForDocumentCreated(newDocumentName)
-      .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
+      .url(baseUrl + '/' + newDatabaseName + '/_all_docs')
       .waitForElementPresent('body', waitTime, false)
       .getText('body', function (result) {
         var data = result.value,
