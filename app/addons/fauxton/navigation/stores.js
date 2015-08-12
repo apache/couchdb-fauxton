@@ -58,7 +58,8 @@ function (app, FauxtonAPI, ActionTypes) {
       var links = this.getLinkSection(removeLink);
       var indexOf = 0;
 
-      var res = _.first(links, function (link) {
+      var res = _.filter(links, function (link) {
+
         if (link.id === removeLink.id) {
           return true;
         }
@@ -67,7 +68,7 @@ function (app, FauxtonAPI, ActionTypes) {
         return false;
       });
 
-      if (!res) { return; }
+      if (!res.length) { return; }
 
       links.splice(indexOf, 1);
     },

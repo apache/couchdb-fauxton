@@ -122,6 +122,36 @@ define([
         assert.equal(navBarStore.getNavLinks().length, 0);
       });
 
+      it('remove link from list', function () {
+        function addLink (id) {
+          FauxtonAPI.dispatch({
+            type: 'ADD_NAVBAR_LINK',
+            link: {
+              id: id,
+              footerNav: true
+            }
+          });
+        }
+        function removeLink () {
+          FauxtonAPI.dispatch({
+            type: 'REMOVE_NAVBAR_LINK',
+            link: {
+              id: 'remove_link3',
+              footerNav: true
+            }
+          });
+        }
+        addLink('remove_link1');
+        addLink('remove_link2');
+        addLink('remove_link3');
+
+        removeLink();
+        removeLink();
+        removeLink();
+
+        assert.equal(navBarStore.getFooterNavLinks().length, 2);
+      });
+
       it('from bottom nav links', function () {
         var link = {
           id: 'remove_link',
@@ -140,7 +170,7 @@ define([
         assert.equal(navBarStore.getBottomNavLinks().length, 1);
       });
 
-      it('from bottom nav links', function () {
+      it('from footer nav links', function () {
         var link = {
           id: 'remove_link',
           footerNav: true
