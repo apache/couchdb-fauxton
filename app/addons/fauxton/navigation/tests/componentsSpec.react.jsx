@@ -41,6 +41,51 @@ define([
       });
 
     });
+
+    describe('CSRF info', function () {
+      var container, el, server;
+
+      beforeEach(function () {
+        server = sinon.fakeServer.create();
+        container = document.createElement('div');
+        el = TestUtils.renderIntoDocument(<Views.NavBar />, container);
+      });
+
+      afterEach(function () {
+        utils.restore(server);
+        React.unmountComponentAtNode(container);
+      });
+
+      it('hides the info if header is not set in ajax calls', function (done) {
+        server.respondWith('GET', 'http://example.com/_cluster_setup',
+          [200, { 'Content-Type': 'application/json' },
+            '[{ "id": 12, "comment": "yow sprunkmän und uschi" }]']);
+
+        var promise = $.get('http://example.com/_cluster_setup');
+        server.respond();
+        promise.then(function () {
+          el = TestUtils.renderIntoDocument(<Views.NavBar />, container);
+          var $el = $(el.getDOMNode());
+          assert.equal($el.find('.nav-status-area').length, 0);
+          done();
+        });
+      });
+
+      it('shows the info if header is set in ajax calls', function (done) {
+        server.respondWith('GET', 'http://example.com/_cluster_setup',
+          [200, { 'Content-Type': 'application/json', 'x-couchdb-csrf-valid': 'true' },
+            '[{ "id": 12, "comment": "yow sprunkmän und uschi" }]']);
+
+        var promise = $.get('http://example.com/_cluster_setup');
+        server.respond();
+        promise.then(function () {
+          var $el = $(el.getDOMNode());
+          assert.equal($el.find('.nav-status-area').length, 1);
+          done();
+        });
+      });
+
+    });
   });
 
 });
