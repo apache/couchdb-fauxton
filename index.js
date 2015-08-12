@@ -56,6 +56,8 @@ module.exports = function (options) {
       res.setHeader('Content-Security-Policy', headerValue);
     }
 
+    res.setHeader('x-couchdb-csrf-valid', 'true');
+
     if (url === '/' && accept[0] !== 'application/json') {
       // serve main index file from here
       return sendFile(req, res, path.join(dist_dir, 'index.html'));

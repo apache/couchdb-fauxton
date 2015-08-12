@@ -56,6 +56,8 @@ module.exports = function (grunt) {
         res.setHeader('Content-Security-Policy', headerValue);
       }
 
+      res.setHeader('x-couchdb-csrf-valid', 'true');
+
       if (!!url.match(/^\/addons\/.*\/assets\/js/)) {
         filePath = path.join(app_dir, url.replace('/_utils/fauxton/', ''));
       } else if (!!url.match(/assets/)) {
