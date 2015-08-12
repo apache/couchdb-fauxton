@@ -128,8 +128,8 @@ function (app, $, _, Backbone, Bootstrap, Helpers, Utils, FauxtonAPI, Couchdb) {
     // because I don't want to require fauxton/actions in this method.
     addHeaderLink: function (link) {
       FauxtonAPI.dispatch({
-          type: 'ADD_NAVBAR_LINK',
-          link: link
+        type: 'ADD_NAVBAR_LINK',
+        link: link
       });
     },
 
@@ -138,13 +138,12 @@ function (app, $, _, Backbone, Bootstrap, Helpers, Utils, FauxtonAPI, Couchdb) {
         type: 'UPDATE_NAVBAR_LINK',
         link: link
       });
-
     },
 
     removeHeaderLink: function (link) {
       FauxtonAPI.dispatch({
-          type: 'REMOVE_NAVBAR_LINK',
-          link: link
+        type: 'REMOVE_NAVBAR_LINK',
+        link: link
       });
     }
   });

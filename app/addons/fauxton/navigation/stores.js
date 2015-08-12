@@ -43,15 +43,22 @@ function (app, FauxtonAPI, ActionTypes) {
     addLink: function (link) {
       if (link.top && !link.bottomNav) {
         this.navLinks.unshift(link);
-      } else if (link.top && link.bottomNav) {
-        this.bottomNavLinks.unshift(link);
-      } else if (link.bottomNav) {
-        this.bottomNavLinks.push(link);
-      } else if (link.footerNav) {
-        this.footerNavLinks.push(link);
-      } else {
-        this.navLinks.push(link);
+        return;
       }
+      if (link.top && link.bottomNav) {
+        this.bottomNavLinks.unshift(link);
+        return;
+      }
+      if (link.bottomNav) {
+        this.bottomNavLinks.push(link);
+        return;
+      }
+      if (link.footerNav) {
+        this.footerNavLinks.push(link);
+        return;
+      }
+
+      this.navLinks.push(link);
     },
 
     removeLink: function (removeLink) {
