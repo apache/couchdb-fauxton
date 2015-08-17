@@ -63,7 +63,7 @@ function (app, $, _, Backbone, Bootstrap, Helpers, Utils, FauxtonAPI, Couchdb) {
   // Localize or create a new JavaScript Template object
   var JST = window.JST = window.JST || {};
 
-  $(document).on('ajaxSend', function (elm, xhr, s) {
+  $(document).on('ajaxSend.csrf', function (elm, xhr, s) {
 
     function parseCookies (cookies) {
       if (!cookies) {
