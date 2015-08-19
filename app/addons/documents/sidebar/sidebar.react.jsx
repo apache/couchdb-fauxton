@@ -88,7 +88,7 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, DocumentViews) {
       var docLinks = this.buildDocLinks();
       var changesUrl = '#' + FauxtonAPI.urls('changes', 'app', this.props.databaseName, '');
       var permissionsUrl = '#' + FauxtonAPI.urls('permissions', 'app', this.props.databaseName);
-      var databaseUrl = FauxtonAPI.urls('allDocs', 'app', this.props.databaseName, '');
+      var databaseUrl = FauxtonAPI.urls('allDocs', 'app', this.props.databaseName, '?include_docs=true&startkey="_design"&endkey="_design0"');
       var mangoQueryUrl = FauxtonAPI.urls('mango', 'query-app', this.props.databaseName);
       var runQueryWithMangoText = app.i18n.en_US['run-query-with-mango'];
       var buttonLinks = this.getNewButtonLinks();
@@ -126,7 +126,7 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, DocumentViews) {
           <li className={isActive('design-docs')}>
             <a
               id="design-docs"
-              href={"#/" + databaseUrl + '?startkey="_design"&endkey="_design0"'}
+              href={"#/" + databaseUrl}
               className="toggle-view">
               All Design Docs
             </a>

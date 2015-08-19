@@ -55,7 +55,7 @@ function (app, FauxtonAPI, Documents) {
 
     url: function (context) {
       if (context === "index") {
-        return "/database/" + this.safeID() + "/_all_docs";
+        return '/database/' + this.safeID() + '/_all_docs&include_docs=true';
       } else if (context === "web-index") {
         return "#/database/" + this.safeID() + "/_all_docs?limit=" + Databases.DocLimit;
       } else if (context === "apiurl") {

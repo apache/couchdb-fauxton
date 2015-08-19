@@ -50,7 +50,7 @@ define([
       this.cleanup();
       this.initViews(dbName);
 
-      var url = FauxtonAPI.urls('allDocs', 'app',  app.utils.safeURLName(dbName), '');
+      var url = FauxtonAPI.urls('allDocs', 'app',  app.utils.safeURLName(dbName), '?include_docs=true');
       FauxtonAPI.navigate(url, {
         trigger: true
       });

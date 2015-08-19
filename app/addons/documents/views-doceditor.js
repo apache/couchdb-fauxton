@@ -227,7 +227,7 @@ function (app, FauxtonAPI, Components, Documents, Databases, prettify) {
     },
 
     goBack: function () {
-      FauxtonAPI.navigate(FauxtonAPI.urls('allDocs', 'app', this.database.id));
+      FauxtonAPI.navigate(FauxtonAPI.urls('allDocs', 'app', this.database.id, '?include_docs=true'));
     },
 
     destroy: function () {

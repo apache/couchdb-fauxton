@@ -103,7 +103,7 @@ function (app, FauxtonAPI, Helpers, BaseRoute, Databases,
         indexList: mangoIndexList
       });
 
-      var url = FauxtonAPI.urls('allDocs', 'app', this.database.safeID(), '?limit=' + FauxtonAPI.constants.DATABASES.DOCUMENT_LIMIT);
+      var url = FauxtonAPI.urls('allDocs', 'app', this.database.safeID(), '?include_docs=true');
       this.breadcrumbs = this.setView('#breadcrumbs', new Components.Breadcrumbs({
         toggleDisabled: true,
         crumbs: [
@@ -143,7 +143,7 @@ function (app, FauxtonAPI, Helpers, BaseRoute, Databases,
         typeOfIndex: 'mango'
       });
 
-      var url = FauxtonAPI.urls('allDocs', 'app', this.database.safeID(), '?limit=' + FauxtonAPI.constants.DATABASES.DOCUMENT_LIMIT);
+      var url = FauxtonAPI.urls('allDocs', 'app', this.database.safeID(), '?include_docs=true');
       this.breadcrumbs = this.setView('#breadcrumbs', new Components.Breadcrumbs({
         toggleDisabled: true,
         crumbs: [
