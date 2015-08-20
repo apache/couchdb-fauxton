@@ -12,7 +12,8 @@
   { "name": "permissions" },
   { "name": "compaction" },
   { "name": "auth" },
-  { "name": "verifyinstall" }
+  { "name": "verifyinstall" },
+  { "name": "dataimporter"}
   ],
     "template": {
       "development": {

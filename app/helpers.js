@@ -61,6 +61,10 @@ function (constants, utils, d3, moment) {
     return moment(timestamp, 'X').fromNow();
   };
 
+  Helpers.moment = function () {
+    return moment();
+  };
+
   return Helpers;
 });
 

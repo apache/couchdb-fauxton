@@ -1263,6 +1263,232 @@ function (app, FauxtonAPI, React, Stores, FauxtonComponents, ace, beautifyHelper
     }
   });
 
+  var TrayLink = React.createClass({
+
+    onClick: function (e) {
+      e.preventDefault();
+      this.props.toggleTray();
+    },
+
+    render: function () {
+      return (
+        <a
+          onClick={this.onClick}
+          id={this.props.id}
+          data-bypass="true"
+          data-toggle="tab"
+          className={this.props.className}
+        >
+          <i className={this.props.icon} />
+          {this.props.text}
+        </a>
+      );
+    }
+  });
+
+  var ToggleButton = React.createClass({
+    propTypes: {
+      id: React.PropTypes.string.isRequired,
+      labelText: React.PropTypes.string.isRequired,
+      onClick: React.PropTypes.func.isRequired,
+      selected: React.PropTypes.bool.isRequired,
+      disabled: React.PropTypes.bool.isRequired
+    },
+
+    render: function () {
+      var id = this.props.id;
+
+      return (
+        <div>
+          <input type="radio"
+            id={"toggle-state-id-" + id}
+            name="toggle-button-switch"
+            className="input-toggle-hidden"
+            checked={this.props.selected}
+            onChange={this.props.onClick}
+            disabled={this.props.disabled} />
+          <label
+            htmlFor={"toggle-state-id-" + id}
+            className={"checkbox-label toggle-state-button " + this.props.toggleClassName}>
+            {this.props.labelText}
+          </label>
+        </div>
+      );
+    }
+
+  });
+
+  var ToggleStateController = React.createClass({
+    propTypes: {
+      // example button
+      // [{
+      //   id: 'left',
+      //   className: 'somethingsomething'
+      //   onClick: callbackForLeftButton,
+      //   selected: true,
+      //   labelText: 'foo'
+      // },
+      // {
+      //   id: 'right',
+      //   className: 'somethingsomething'
+      //   onClick: callbackForRightButton,
+      //   selected: false,
+      //   labelText: 'bar'
+      // }]
+      buttons: React.PropTypes.array.isRequired,
+      title: React.PropTypes.string.isRequired,
+      disabled: React.PropTypes.bool.isRequired
+    },
+
+    getInitialState: function () {
+      return {
+        buttons: this.props.buttons
+      };
+    },
+
+    onClick: function (index, cb) {
+      var newButtons = this.state.buttons.map(function (button, i) {
+        var selected = false;
+        if (i === index) {
+          selected = true;
+        }
+
+        button.selected = selected;
+        return button;
+      });
+
+      this.setState({buttons: newButtons});
+      cb();
+    },
+
+    getToggleButtons: function () {
+
+      return this.state.buttons.map(function (config, i) {
+        return (
+          <ToggleButton
+            index={i}
+            id={config.id}
+            toggleClassName={config.className}
+            key={i}
+            onClick={this.onClick.bind(this, i, config.onClick)}
+            selected={config.selected}
+            labelText={config.labelText}
+            disabled={this.props.disabled} />
+        );
+      }.bind(this));
+    },
+
+    getDocIcon: function () {
+      if (!this.state.docURL) {
+        return false;
+      }
+      return (
+        <a className="help-link" data-bypass="true" href={this.state.docURL} target="_blank">
+          <i className="icon icon-question-sign"></i>
+        </a>
+      );
+    },
+
+    render: function () {
+
+      return (
+        <div className="toggle-states">
+          <div className="toggle-title">{this.props.title}</div>
+          <form className="toggles">
+            {this.getToggleButtons()}
+          </form>
+        </div>
+      );
+    }
+  });
+
+  var SimpleDoc = React.createClass({
+    //must be enclosed in tag with id = "doc-list"
+    render: function () {
+      return (
+        <div className="doc-row">
+          <div className="doc-item">
+            <header>
+              <span className="header-keylabel">_id</span>
+              <span className="header-doc-id">{this.props.id}</span>
+            </header>
+            <div className="doc-data">
+              <pre className="prettyprint">{this.props.content}</pre>
+            </div>
+          </div>
+          <div className="clearfix"></div>
+        </div>
+      );
+    }
+  });
+
+  var SmallDropdown = React.createClass({
+    propTypes: {
+      dropdownSetup: React.PropTypes.object.isRequired
+      // this dropdownSetup object should look like this:
+      // {
+      //   title: 'Choose a database',       // title of dropdown
+      //   id: 'data-importer-choose-db',    // html tag ID
+      //   selected: selected,               // the option that is default selected
+      //   selectOptions: xyz                // array of objs that will populate the dropdown list
+      // };
+      // -----------------^
+      // xyy would look like this:
+      //
+      // xyz = [
+      //   {name: selectionA, onClick: function_for_when_selectA_is_chosen_from_dropdown },
+      //   {name: selectionB, onClick: function_for_when_selectB_is_chosen_from_dropdown } ]
+    },
+
+    getInitialState: function () {
+      return {
+        show: false
+      };
+    },
+
+    toggleMenu: function () {
+      this.setState({ show: !this.state.show});
+    },
+
+    selectOptions: function () {
+      var selects = this.props.dropdownSetup.selectOptions;
+
+      return selects.map(function (opt, i) {
+        var name = opt.name,
+            fn = opt.onClick;
+
+        return (
+          <li key={i}
+            onClick={fn}
+            className="dropdown-options">
+          {name}
+          </li>
+        );
+      }.bind(this));
+    },
+
+    render: function () {
+      var setup = this.props.dropdownSetup,
+          show = this.state.show ? 'show' : '';
+
+      return (
+        <div id={setup.id} className="small-dropdown">
+          <h1 className="title">{setup.title}</h1>
+          <div className="selected" onClick={this.toggleMenu}>
+            {setup.selected}
+            <div id="dropdown-icon" className="icon icon-caret-down">
+            </div>
+          </div>
+          <ul
+            onClick={this.toggleMenu}
+            className={"dropdown-select " + show}>
+            {this.selectOptions()}
+          </ul>
+        </div>
+      );
+    }
+  });
+
   return {
     BulkActionComponent: BulkActionComponent,
     ConfirmButton: ConfirmButton,
@@ -1279,7 +1505,11 @@ function (app, FauxtonAPI, React, Stores, FauxtonComponents, ace, beautifyHelper
     MenuDropDown: MenuDropDown,
     Tray: Tray,
     TrayContents: TrayContents,
-    ApiBarController: ApiBarController
+    ApiBarController: ApiBarController,
+    TrayLink: TrayLink,
+    ToggleStateController: ToggleStateController,
+    SimpleDoc: SimpleDoc,
+    SmallDropdown: SmallDropdown
   };
 
 });
