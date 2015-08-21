@@ -36,6 +36,7 @@ function (app, FauxtonAPI, Databases, Actions, Components) {
     roles: ['fx_loggedIn'],
 
     selectedHeader: "Databases",
+    disableLoader: true,
 
     initialize: function () {
       this.databases = new Databases.List();
