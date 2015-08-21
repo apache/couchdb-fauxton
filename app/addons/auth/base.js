@@ -97,6 +97,11 @@ function (app, FauxtonAPI, Auth) {
 
     var authDenied = function () {
       var url = window.location.hash.replace('#', '');
+      var pattern = /login\?urlback=/g;
+
+      if (pattern.test(url)) {
+        url = url.replace('login?urlback=', '');
+      }
       FauxtonAPI.navigate('/login?urlback=' + url, {replace: true});
     };
 
