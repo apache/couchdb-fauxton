@@ -16,41 +16,88 @@ var async = require('async');
 module.exports = {
   maxWaitTime: 30000,
   testDatabaseName : 'fauxton-selenium-tests',
+  cookies: {},
+  auth: '0',
 
-  getNanoInstance: function () {
-    return nano(this.test_settings.db_url);
-  },
-  beforeEach: function (done) {
-    var nano = module.exports.getNanoInstance(),
-        database = module.exports.testDatabaseName;
+  initNanoInstance: function () {
+    this.nano = nano(this.test_settings.db_url),
+        user = this.test_settings.fauxton_username,
+        pass = this.test_settings.password;
 
-    console.log("nano setting up database");
-    // clean up the database we created previously
+    module.exports.nano.auth(user, pass, function (err, body, headers) {
+      // console.log("err", err);
+      // console.log("body", body);
+      // console.log("headers", headers);
 
-    nano.db.destroy(database, function (err, body, header) {
-      if (err && err.message !== 'Database does not exist.' && err.message !== 'missing') {
-        console.log('Error in setting up ' + database, err.message);
+      if (err) return console.log(err);
+
+      if (headers && headers['set-cookie']) {
+        module.exports.cookies[user] = headers['set-cookie'];
       }
-      // create a new database
-      nano.db.create(database, function (err, body, header) {
-        if (err) {
+
+      console.log("Auth worked!");
+    });
+  },
+
+  reuseNanoCookie: function (callback) {
+    var auth = module.exports.cookies[this.test_settings.fauxton_username];
+    module.exports.nano = nano({
+      url: this.test_settings.db_url,
+      cookies: 'AuthSession=' + auth
+    });
+
+    callback();
+  },
+
+  beforeEach: function (done) {
+    // clean up the database we created previously
+    console.log("nano setting up database");
+
+    module.exports.initNanoInstance();
+    module.exports.reuseNanoCookie(beforeEachTest);
+
+    function beforeEachTest () {
+
+      var database = module.exports.testDatabaseName;
+      module.exports.nano.db.destroy(database, function (err, body, headers) {
+        if (err && err.message !== 'Database does not exist.' && err.message !== 'missing') {
           console.log('Error in setting up ' + database, err.message);
         }
-        done();
+
+        // change the cookie if couchdb tells us to
+        if (headers && headers['set-cookie']) {
+          module.exports.auth = headers['set-cookie'];
+        }
+
+        // create a new database
+        module.exports.nano.db.create(database, function (err, body, header) {
+          if (err) {
+            console.log('Error in setting up ' + database, err.message);
+          }
+
+          // change the cookie if couchdb tells us to
+          if (headers && headers['set-cookie']) {
+            module.exports.auth = headers['set-cookie'];
+          }
+
+          done();
+        });
       });
-    });
+    }
   },
 
   afterEach: function (done) {
-    var nano = module.exports.getNanoInstance(),
-        database = module.exports.testDatabaseName;
-
     console.log('nano cleaning up');
-    nano.db.destroy(database, function (err, header, body) {
-      if (err) {
-        console.log('Error in cleaning up ' + database, err.message);
-      }
-      done();
-    });
+
+    module.exports.reuseNanoCookie(afterEachTest);
+    function afterEachTest () {
+      var database = module.exports.testDatabaseName;
+      module.exports.nano.db.destroy(database, function (err, header, body) {
+        if (err) {
+          console.log('Error in cleaning up ' + database, err.message);
+        }
+        done();
+      });
+    }
   }
 };

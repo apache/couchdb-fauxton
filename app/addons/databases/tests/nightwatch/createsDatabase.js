@@ -14,19 +14,19 @@ var newDatabaseName = 'fauxton-selenium-tests-db-create';
 var helpers = require('../../../../../test/nightwatch_tests/helpers/helpers.js');
 module.exports = {
 
-  before: function (client, done) {
-    var nano = helpers.getNanoInstance();
-    nano.db.destroy(newDatabaseName, function (err, body, header) {
-      done();
-    });
-  },
+  // before: function (client, done) {
+  //   var nano = helpers.getNanoInstance();
+  //   nano.db.destroy(newDatabaseName, function (err, body, header) {
+  //     done();
+  //   });
+  // },
 
-  after: function (client, done) {
-    var nano = helpers.getNanoInstance();
-    nano.db.destroy(newDatabaseName, function (err, body, header) {
-      done();
-    });
-  },
+  // after: function (client, done) {
+  //   var nano = helpers.getNanoInstance();
+  //   nano.db.destroy(newDatabaseName, function (err, body, header) {
+  //     done();
+  //   });
+  // },
 
   'Creates a Database' : function (client) {
     var waitTime = client.globals.maxWaitTime,
@@ -50,7 +50,7 @@ module.exports = {
       .getText('html', function (result) {
         var data = result.value,
             createdDatabaseIsPresent = data.indexOf(newDatabaseName);
-
+        console.log(result);
         this.verify.ok(createdDatabaseIsPresent > 0,
           'Checking if new database shows up in _all_dbs.');
       })
