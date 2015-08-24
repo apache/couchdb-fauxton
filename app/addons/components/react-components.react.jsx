@@ -771,7 +771,7 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
 
     render: function () {
       return (
-        <ReactCSSTransitionGroup transitionName="tray" transitionAppear={true}>
+        <ReactCSSTransitionGroup transitionName="tray" transitionAppear={true} component="div">
           {this.getChildren()}
         </ReactCSSTransitionGroup>
       );
@@ -811,6 +811,10 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
       this.setState({trayVisible: !this.state.trayVisible});
     },
 
+    hideTray: function () {
+      this.setState({ trayVisible: false });
+    },
+
     renderChildren: function () {
       return React.Children.map(this.props.children, function (child, key) {
         return React.addons.cloneWithProps(child, {
@@ -836,7 +840,7 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
       if (!trayEl.is(e.target) && trayEl.has(e.target).length === 0) {
         this.toggleTray();
       }
-    },
+    }
 
   });
 

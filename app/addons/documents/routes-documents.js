@@ -143,7 +143,7 @@ function (app, FauxtonAPI, BaseRoute, Documents, Changes, ChangesActions, DocEdi
         IndexResultsActions.newResultsList({
           collection: collection,
           isListDeletable: true,
-          textEmptyIndex: 'No Document Created Yet!',
+          textEmptyIndex: 'No Documents Found',
           bulkCollection: Documents.BulkDeleteDocCollection
         });
 

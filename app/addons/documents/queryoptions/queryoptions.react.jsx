@@ -333,58 +333,58 @@ A key value is the first parameter emitted in a map function. For example emit("
     runQuery: function (e) {
       e.preventDefault();
 
+      this.refs.tray.hideTray();
       Actions.runQuery(store.getQueryParams());
     },
 
     render: function () {
       return (
-        <Tray id="query-options-tray">
+        <Tray id="query-options-tray" ref="tray">
           <TrayLink
             id="toggle-query"
             className="btn btn-primary pull-right query-options-btn"
             text="Query Options"
             icon="icon header-icon fonticon-gears"
           />
+          <TrayContents
+            className="query-options"
+            id="query-options-tray">
 
-        <TrayContents
-          className="query-options"
-          id="query-options-tray">
+            <form onSubmit={this.runQuery} className="js-view-query-update custom-inputs">
+              <MainFieldsView
+                includeDocs={this.state.includeDocs}
+                toggleIncludeDocs={Actions.toggleIncludeDocs}
+                showReduce={this.state.showReduce}
+                reduce={this.state.reduce}
+                toggleReduce={Actions.toggleReduce}
+                groupLevel={this.state.groupLevel}
+                updateGroupLevel={Actions.updateGroupLevel}
+              />
+              <KeySearchFields
+                key={1}
+                showByKeys={this.state.showByKeys}
+                showBetweenKeys={this.state.showBetweenKeys}
+                toggleByKeys={Actions.toggleByKeys}
+                toggleBetweenKeys={Actions.toggleBetweenKeys}
+                betweenKeys={this.state.betweenKeys}
+                updateBetweenKeys={Actions.updateBetweenKeys}
+                byKeys={this.state.byKeys}
+                updateByKeys={Actions.updateByKeys}
+               />
+              <AdditionalParams
+                updateSeq={this.state.updateSeq}
+                toggleUpdateSeq={Actions.toggleUpdateSeq}
+                descending={this.state.descending}
+                toggleDescending={Actions.toggleDescending}
+                skip={this.state.skip}
+                updateSkip={Actions.updateSkip}
+                updateLimit={Actions.updateLimit}
+                limit={this.state.limit}
+              />
+              <QueryButtons />
+            </form>
 
-          <form onSubmit={this.runQuery} className="js-view-query-update custom-inputs">
-            <MainFieldsView
-              includeDocs={this.state.includeDocs}
-              toggleIncludeDocs={Actions.toggleIncludeDocs}
-              showReduce={this.state.showReduce}
-              reduce={this.state.reduce}
-              toggleReduce={Actions.toggleReduce}
-              groupLevel={this.state.groupLevel}
-              updateGroupLevel={Actions.updateGroupLevel}
-            />
-            <KeySearchFields
-              key={1}
-              showByKeys={this.state.showByKeys}
-              showBetweenKeys={this.state.showBetweenKeys}
-              toggleByKeys={Actions.toggleByKeys}
-              toggleBetweenKeys={Actions.toggleBetweenKeys}
-              betweenKeys={this.state.betweenKeys}
-              updateBetweenKeys={Actions.updateBetweenKeys}
-              byKeys={this.state.byKeys}
-              updateByKeys={Actions.updateByKeys}
-             />
-            <AdditionalParams
-              updateSeq={this.state.updateSeq}
-              toggleUpdateSeq={Actions.toggleUpdateSeq}
-              descending={this.state.descending}
-              toggleDescending={Actions.toggleDescending}
-              skip={this.state.skip}
-              updateSkip={Actions.updateSkip}
-              updateLimit={Actions.updateLimit}
-              limit={this.state.limit}
-            />
-            <QueryButtons />
-          </form>
-
-        </TrayContents>
+          </TrayContents>
         </Tray>
       );
     }
