@@ -148,20 +148,21 @@ function (app, FauxtonAPI, ActionTypes) {
         this._includeDocs = true;
       }
 
-      if (params.start_key) {
+      if (params.start_key || params.end_key) {
         var include = true;
 
         if (params.inclusive_end) {
-          include = params.inclusive_end === "true" ? true : false;
+          include = params.inclusive_end === 'true';
         }
-
-        this._betweenKeys = {
-          startkey: JSON.parse(params.start_key),
-          endkey: JSON.parse(params.end_key),
-          include: include
-        };
-
+        this._betweenKeys = { include: include };
+        if (params.start_key) {
+          this._betweenKeys.startkey = params.start_key;
+        }
+        if (params.end_key) {
+          this._betweenKeys.endkey = params.end_key;
+        }
         this._showBetweenKeys = true;
+
       } else if (params.keys) {
         this._byKeys = params.keys;
         this._showByKeys = true;
@@ -202,12 +203,13 @@ function (app, FauxtonAPI, ActionTypes) {
 
       if (this._showBetweenKeys) {
         var betweenKeys = this._betweenKeys;
-        _.extend(params, {
-          inclusive_end: betweenKeys.include,
-          start_key: JSON.stringify(betweenKeys.startkey),
-          end_key: JSON.stringify(betweenKeys.endkey)
-        });
-
+        params.inclusive_end = betweenKeys.include;
+        if (betweenKeys.startkey && betweenKeys.startkey !== '') {
+          params.start_key = betweenKeys.startkey;
+        }
+        if (betweenKeys.endkey && betweenKeys.endkey !== '') {
+          params.end_key = betweenKeys.endkey;
+        }
       } else if (this._showByKeys) {
         params.keys = this._byKeys;
       }

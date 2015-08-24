@@ -75,8 +75,8 @@ define([
 
         assert.deepEqual(store.getQueryParams(), {
           inclusive_end: true,
-          start_key: JSON.stringify("a"),
-          end_key: JSON.stringify("z")
+          start_key: 'a',
+          end_key: 'z'
         });
       });
 
