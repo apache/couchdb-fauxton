@@ -17,7 +17,7 @@
 
 #active-tasks-page {
   overflow: auto;
-  
+
   .inner {
     overflow: auto;
     height: 100%;
@@ -27,7 +27,7 @@
   .active-tasks td.tableheader {
     cursor: pointer;
     padding-bottom: 15px;
-    
+
     &.type {
       width: 10%;
     }
@@ -74,7 +74,7 @@
         }
         padding-bottom: 15px;
       }
-    }   
+    }
   }
 
   .task-search-database {
@@ -105,9 +105,9 @@
       background-color: #eee;
       margin-top: 65px;
       margin-left: 3px;
-      
+
       &.active-tasks-checked {
-        background-color: #af2d24;
+        background-color: @linkColorHover;
 
         label {
           color: #fff;
@@ -115,7 +115,7 @@
       };
 
       &:hover {
-        color: #af2d24;
+        color: @linkColorHover;
       };
 
       label {
@@ -124,7 +124,7 @@
         line-height: 35px;
         text-align: center;
         .noselect()
-      } 
+      }
     }
 
     #active-tasks-search-box {
@@ -151,11 +151,11 @@
   .header-field {
     background-color: #ccc;
 
-    
+
     &.radio {
       display: none;
     }
-    
+
     &.label-text {
       display: block;
       font-weight: bold;
@@ -175,17 +175,17 @@
     }
 
     .icon-caret-up, .icon-caret-down {
-      color: #af2d24;
+      color: @brandPrimaryDark;
     }
   }
 
   .view-source-sequence-btn { // "View" Button
     background-color: #999;
     display: inline;
-    border-radius: 3px; 
+    border-radius: 3px;
     padding: 2px;
     margin: 3px;
-    color: #fff !important; 
+    color: #fff !important;
     white-space: nowrap;
   }
 
@@ -208,7 +208,7 @@
 
     a.btn {
       color: white;
-      background-color: #af2d24;
+      background-color: @linkColor;
       margin-left: 0;
       line-height: 1.5em;
       border: 0px;
@@ -259,16 +259,16 @@
     margin-right: 0px;
     cursor: default;
   }
-  
+
   #polling-range {
     width: 250px;
   }
 }
 
 .active-tasks-loading-lines-container {
-    
+
   width: 350px;
-  
+
   .active-tasks-loading-lines {
     border: 0px;
     position: relative;
