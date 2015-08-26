@@ -36,8 +36,7 @@ define([
     });
 
     it('creates the right api-url with an absolute url', function () {
-
-      assert.ok(/file:/.test(collection.urlRef()));
+      assert.ok(/file:/.test(collection.urlRef('apiurl')));
     });
 
   });

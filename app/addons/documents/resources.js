@@ -458,7 +458,7 @@ function (app, FauxtonAPI, Documents, PagingCollection) {
       return !this.params.reduce;
     },
 
-    urlRef: function (params) {
+    urlRef: function (context, params) {
       var query = "";
 
       if (params) {
@@ -472,10 +472,14 @@ function (app, FauxtonAPI, Documents, PagingCollection) {
         query = "?" + $.param(parsedParam);
       }
 
+      if (!context) {
+        context = 'server';
+      }
+
       var database = this.database.safeID(),
           design = app.utils.safeURLName(this.design),
           view = app.utils.safeURLName(this.view),
-          url = FauxtonAPI.urls('view', 'apiurl', database, design, view);
+          url = FauxtonAPI.urls('view', context, database, design, view);
 
       return url + query;
     },
