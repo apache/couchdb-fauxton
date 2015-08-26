@@ -111,7 +111,7 @@ function (app, FauxtonAPI, Helpers, BaseRoute, Documents, IndexEditorComponents,
       this.setComponent('#dashboard-lower-content', IndexResultsComponents.List);
 
       this.apiUrl = function () {
-        return [this.indexedDocs.urlRef(urlParams), FauxtonAPI.constants.DOC_URLS.GENERAL];
+        return [this.indexedDocs.urlRef('apiurl'), FauxtonAPI.constants.DOC_URLS.GENERAL];
       };
 
       this.showQueryOptions(urlParams, ddoc, viewName);
