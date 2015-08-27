@@ -11,30 +11,35 @@
 // the License.
 
 define([
-  "app",
-  "api",
-  "addons/{%= name.toLowerCase() %}/resources"
+  'app',
+  'api',
+  'addons/{%= name.toLowerCase() %}/resources',
+  'addons/{%= name.toLowerCase() %}/components.react'
 ],
-function (app, FauxtonAPI, {%= name %}) {
+
+function (app, FauxtonAPI, {%= name %}, Components) {
+
   var {%= name.substr(0, 1).toUpperCase() + name.substr(1)%}RouteObject = FauxtonAPI.RouteObject.extend({
-    layout: "with_sidebar",
-
-    crumbs: [
-    ],
-
-    routes: {
-    },
-
+    layout: 'one_pane',
     roles: [],
-
-    apiUrl: function () {
-      return ["insert url here..."];
+    routes: {
+      'example/{%= name %}': 'helloWorld'
     },
 
     initialize: function () {
+      // this executes just once, whenever the routeobject first matches a route
+    },
+
+    helloWorld: function () {
+      this.setComponent('#dashboard-content', Components.{%= name.substr(0, 1).toUpperCase() + name.substr(1)%}Controller);
+    },
+
+    apiUrl: function () {
+      return ['insert url here...'];
     }
   });
 
-  {%= name %}.RouteObjects =  [{%= name.substr(0, 1).toUpperCase() + name.substr(1)%}RouteObject];
+  {%= name %}.RouteObjects = [{%= name.substr(0, 1).toUpperCase() + name.substr(1)%}RouteObject];
+
   return {%= name %};
 });

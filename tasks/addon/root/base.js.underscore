@@ -11,11 +11,17 @@
 // the License.
 
 define([
-  "app",
-  "api",
-  "addons/{%= name.toLowerCase() %}/routes"
+  'app',
+  'api',
+  'addons/{%= name.toLowerCase() %}/routes'
 ],
 
 function (app, FauxtonAPI, {%= name %}) {
+
+  {%= name %}.initialize = function () {
+    FauxtonAPI.addHeaderLink({title: '{%= name %}', icon: 'fonticon-attention-circled', href: '#/example/{%= name %}'});
+  };
+
   return {%= name %};
+
 });
