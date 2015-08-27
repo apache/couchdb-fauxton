@@ -31,21 +31,22 @@ exports.template = function (grunt, init, done) {
     [
       {
         name: "name",
-        message: "Add on Name",
+        message: "Addon Name",
         validator: /^[\w\-\.]+$/,
         default: "WickedCool"
       },
       {
         name: "path",
-        message: "Location of add ons",
+        message: "Location of addons",
         default: "app/addons"
       },
       {
         name: "assets",
-        message: "Do you need an assets folder? (for .less)",
+        message: "Do you need an assets folder? (for .less or external JS libs)",
         default: 'y/N'
       }
     ],
+
     function (err, props) {
       // Files to copy (and process).
       var files = init.filesToCopy(props);
@@ -60,9 +61,6 @@ exports.template = function (grunt, init, done) {
         grunt.log.writeln("Created " + asspath);
       }
 
-      var tmplpath = props.path + "/" + props.name.toLowerCase() + "/templates";
-      grunt.file.mkdir(tmplpath);
-      grunt.log.writeln("Created " + tmplpath);
       // All done!
       done();
     }
