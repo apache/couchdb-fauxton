@@ -69,14 +69,12 @@ function (app, FauxtonAPI, ActionTypes, Stores, Helpers) {
       var query = $.param(params);
       var db = app.utils.safeURLName(changesStore.getDatabaseName());
 
-      var endpoint = FauxtonAPI.urls('changes', 'apiurl', db, '');
-      currentRequest = $.get(endpoint);
+      var endpoint = FauxtonAPI.urls('changes', 'server', db, '');
+      currentRequest = $.getJSON(endpoint);
       currentRequest.then(_.bind(this.updateChanges, this));
     },
 
-    updateChanges: function (resp) {
-      var json = JSON.parse(resp);
-
+    updateChanges: function (json) {
       // only bother updating the list of changes if the seq num has changed
       var latestSeqNum = Helpers.getSeqNum(json.last_seq);
       if (latestSeqNum !== changesStore.getLastSeqNum()) {
