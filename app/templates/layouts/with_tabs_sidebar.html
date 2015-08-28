@@ -12,7 +12,7 @@ License for the specific language governing permissions and limitations under
 the License.
 */%>
 
-<div id="dashboard" class="container-fluid with-sidebar">
+<div id="dashboard" class="container-fluid with-sidebar flexbox-layout">
 
   <div class="with-sidebar tabs-with-sidebar content-area">
     <div class="header-wrapper">
@@ -26,14 +26,11 @@ the License.
 
     <aside id="sidebar-content" class="scrollable"></aside>
 
-    <section id="dashboard-content" class="list">
-      <div class="scrollable">
-        <div class="inner">
-          <div id="dashboard-upper-content"></div>
-          <div id="dashboard-lower-content"></div>
-        </div>
-      </div>
+    <section id="dashboard-content">
+      <div id="dashboard-upper-content"></div>
+      <div id="dashboard-lower-content" class="flex-body"></div>
       <div id="footer"></div>
     </section>
+
   </div>
 </div>

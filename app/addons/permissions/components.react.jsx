@@ -211,7 +211,7 @@ function (app, FauxtonAPI, React, Components, Stores, Actions) {
       }
 
       return (
-        <div className="scrollable permissions-page">
+        <div className="permissions-page flex-body">
           <div id="sections">
             <PermissionsSection roles={this.state.adminRoles}
               names={this.state.adminNames}
