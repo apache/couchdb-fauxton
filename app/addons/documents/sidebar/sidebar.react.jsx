@@ -115,7 +115,7 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, DocumentViews) {
           <li className={isActive('mango-query')}>
             <a
               id="mango-query"
-              href={'#/' + mangoQueryUrl}
+              href={'#' + mangoQueryUrl}
               className="toggle-view">
               {runQueryWithMangoText}
             </a>
