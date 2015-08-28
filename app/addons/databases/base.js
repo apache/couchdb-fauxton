@@ -65,14 +65,16 @@ function (app, FauxtonAPI, Databases) {
   });
 
   FauxtonAPI.registerUrls('permissions', {
-    server: function (id) {
-      return app.host + '/' + id + '/permissions';
+    server: function (db) {
+      return app.host + '/' + db + '/_security';
     },
-    app: function (id) {
-      return '/database/' + id + '/permissions';
+
+    app: function (db) {
+      return '/database/' + db + '/permissions';
     },
-    apiurl: function (id) {
-      return window.location.origin + '/_api/v2/db/' + id + '/_security' ;
+
+    apiurl: function (db) {
+      return window.location.origin + '/' + db + '/_security' ;
     }
   });
 
