@@ -73,7 +73,8 @@ function (app, FauxtonAPI, Components, Documents, Databases, prettify) {
       FauxtonAPI.triggerRouteEvent('reRenderDoc');
       //slight delay to make this transistion a little more fluid and less jumpy
       setTimeout(function () {
-        $form.clearForm();
+        this.$('#_attachments').val('');
+        this.$('#_rev').val('');
         hideModal();
         $('.modal-backdrop').remove();
       }, 1000);

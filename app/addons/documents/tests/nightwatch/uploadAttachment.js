@@ -28,6 +28,7 @@ module.exports = {
       .setValue('input#_attachments', require('path').resolve(__dirname + '/uploadAttachment.js'))
       .clickWhenVisible('#upload-btn')
       .waitForElementVisible('#global-notification-id', waitTime, false)
+      .assert.attributeEquals('#_rev', 'value', '')
       .getText('#global-notification-id', function (result) {
         var data = result.value;
         this.verify.ok(data, 'Document saved successfully.');
