@@ -69,7 +69,7 @@ function (app, FauxtonAPI, ActionTypes, Stores, Helpers) {
       var query = $.param(params);
       var db = app.utils.safeURLName(changesStore.getDatabaseName());
 
-      var endpoint = FauxtonAPI.urls('changes', 'apiurl', db, '');
+      var endpoint = FauxtonAPI.urls('changes', 'server', db, '');
       currentRequest = $.get(endpoint);
       currentRequest.then(_.bind(this.updateChanges, this));
     },
