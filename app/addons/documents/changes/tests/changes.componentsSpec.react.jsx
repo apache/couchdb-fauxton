@@ -203,10 +203,10 @@ define([
       { id: 'doc_4', seq: 7, deleted: false, changes: { code: 'here' } },
       { id: 'doc_5', seq: 1, deleted: true, changes: { code: 'here' } }
     ];
-    var changesResponse = JSON.stringify({
+    var changesResponse = {
       last_seq: 123,
       'results': results
-    });
+    };
 
     beforeEach(function () {
       container = document.createElement('div');
@@ -304,10 +304,10 @@ define([
         changes.push({ id: 'doc_' + i, seq: 1, changes: { code: 'here' } });
       });
 
-      var response = JSON.stringify({
+      var response = {
         last_seq: 1,
         results: changes
-      });
+      };
 
       Actions.initChanges({ databaseName: 'test' });
 
