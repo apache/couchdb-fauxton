@@ -1,0 +1,54 @@
+@import "variables.less";
+
+
+/* new flex layout for templates */
+
+#dashboard.flexbox-layout #dashboard-content {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+
+  /* overrides */
+  padding: 0;
+  &>div {
+    padding: 0;
+  }
+  /* end overrides */
+
+  /* always default all child elements as flex items */
+  &>* {
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+  }
+
+  /* notice we don't set heights. Flex will expand to fill the content but no more */
+  #dashboard-upper-content {
+    -webkit-flex: 0 0 auto;
+    -ms-flex: 0 0 auto;
+    flex: 0 0 auto;
+  }
+
+  #dashboard-lower-content {
+    padding: @panelPadding;
+  }
+
+  #footer {
+    -webkit-flex: 0 0 auto;
+    -ms-flex: 0 0 auto;
+    flex: 0 0 auto;
+  }
+}
+
+/* can be added to any element in a display:flex element that you want to act as the main body. It expands to the
+   available space and shows a scrollbar */
+.flex-body {
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+  overflow: auto;
+}

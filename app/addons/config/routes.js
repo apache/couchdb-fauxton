@@ -41,7 +41,7 @@ function (app, FauxtonAPI, Config, Views, CORSComponents, CORSActions, ClusterAc
 
 
   var ConfigPerNodeRouteObject = FauxtonAPI.RouteObject.extend({
-    layout: 'with_tabs_sidebar_scroll',
+    layout: 'with_tabs_sidebar',
 
     roles: ['_admin'],
     selectedHeader: 'Config',
@@ -82,7 +82,7 @@ function (app, FauxtonAPI, Config, Views, CORSComponents, CORSActions, ClusterAc
 
     configForNode: function () {
       this.newSection = this.setView('#right-header', new Views.ConfigHeader({ collection: this.configs }));
-      this.setView('#dashboard-content', new Views.Table({ collection: this.configs }));
+      this.setView('#dashboard-lower-content', new Views.Table({ collection: this.configs }));
       this.sidebar.setSelectedTab('main');
     },
 

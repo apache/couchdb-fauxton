@@ -108,7 +108,7 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, ReactComponents) 
 
     render: function () {
       return (
-        <div>
+        <div className="compaction-page flex-body">
           <CompactDatabase isCompacting={this.state.isCompacting} compactDatabase={this.compactDatabase} />
           <CleanView isCleaningView={this.state.isCleaningViews} cleanupView={this.cleanupView}/>
         </div>

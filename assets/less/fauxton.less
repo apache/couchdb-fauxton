@@ -13,6 +13,7 @@
 @import "variables.less";
 @import "bootstrap/bootstrap.less";
 @import "bootstrap/mixins.less";
+@import "layouts.less";
 @import "prettyprint.less";
 @import "icons.less";
 @import "codeeditor.less";
@@ -657,19 +658,14 @@ div.spinner {
 
 //----footer--///
 footer.pagination-footer {
-  z-index: 10;
-  position: absolute;
-  left: 0;
-  right: 0;
-  height: 50px;
-  bottom: 0;
   background-color: #fff;
   border-top: 1px solid #ccc;
+  height: 50px;
+  overflow: hidden;
 
   .pagination {
     .box-shadow(none);
-
-    margin:0px;
+    margin: 0;
     height: 50px;
     border-left: 1px solid #ccc;
     li {
