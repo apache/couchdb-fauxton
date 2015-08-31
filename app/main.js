@@ -25,6 +25,11 @@ function (app, FauxtonAPI, LoadAddons) {
   // root folder to '/' by default.  Change in app.js.
   Backbone.history.start({ pushState: false, root: app.root });
 
+  // feature detect IE
+  if ('ActiveXObject' in window) {
+    $.ajaxSetup({ cache: false });
+  }
+
 
   // All navigation that is relative should be passed through the navigate
   // method, to be processed by the router. If the link has a `data-bypass`
