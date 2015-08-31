@@ -10,13 +10,14 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+var helpers = require('../helpers/helpers.js');
+
 exports.command = function () {
-  var waitTime = 8000,
-      client = this,
+  var client = this,
       dismissSelector = '#global-notifications .js-dismiss';
 
   client
-    .waitForElementPresent(dismissSelector, waitTime, false)
+    .waitForElementPresent(dismissSelector, helpers.maxWaitTime, false)
     .click(dismissSelector);
 
   return this;

@@ -10,10 +10,12 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+var helpers = require('../helpers/helpers.js');
+
 exports.command = function (element, waitTime) {
 
   if (waitTime === undefined) {
-    waitTime = 10000;
+    waitTime = helpers.maxWaitTime;
   }
 
   this

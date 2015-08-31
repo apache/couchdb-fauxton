@@ -27,7 +27,7 @@ CheckForStringPresent.prototype.command = function (path, string, timeout) {
       db = helpers.testDatabaseName;
 
   if (!timeout) {
-    timeout = 10000;
+    timeout = helpers.maxWaitTime;
   }
 
   var timeOutId = setTimeout(function () {
