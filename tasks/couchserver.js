@@ -67,12 +67,14 @@ module.exports = function (grunt) {
       } else if (!!url.match(/mocha|\/test\/core\/|test\.config/)) {
         filePath = path.join('./test', url.replace('/test/', ''));
       } else if (!!url.match(/fonts/)) {
+        url = url.replace(/\?.*/, ''); // IE
         filePath = path.join(dist_dir, url.split('?v=')[0]);
       } else if (!!url.match(/\.css|img/)) {
         url = url.replace(/\?.*/, '');
         filePath = path.join(dist_dir, url);
-      } else if (!!url.match(/\.js$|\.html$/)) {
+      } else if (!!url.match(/\.js(\?_.*)?$|\.html(\?_.*)?$/)) {
         // server js from app directory
+        url = url.replace(/\?_.*/, '');
         filePath = path.join(app_dir, url.replace('/_utils/fauxton/', ''));
       } else if (!!url.match(/ZeroClipboard/)) {
         filePath = "./assets/js/plugins/zeroclipboard/ZeroClipboard.swf";
