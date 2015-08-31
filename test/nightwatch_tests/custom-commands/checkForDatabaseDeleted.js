@@ -26,7 +26,7 @@ CheckForDatabaseDeleted.prototype.command = function (databaseName, timeout) {
   var couchUrl = helpers.test_settings.db_url;
 
   if (!timeout) {
-    timeout = 10000;
+    timeout = helpers.maxWaitTime;
   }
 
   var timeOutId = setTimeout(function () {
