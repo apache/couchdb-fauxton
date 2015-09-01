@@ -36,7 +36,8 @@ CheckForDatabaseDeleted.prototype.command = function (databaseName, timeout) {
   var intervalId = setInterval(function () {
     request(couchUrl + '/_all_dbs', function (er, res, body) {
       if (body) {
-        if (body.indexOf(databaseName) === -1) {
+        var reg = new RegExp('"' + databaseName + '"', 'g');
+        if (!reg.test(body)) {
           clearTimeout(timeOutId);
           console.log('database not there: ' + databaseName);
           clearInterval(intervalId);
