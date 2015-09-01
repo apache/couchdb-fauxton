@@ -34,15 +34,6 @@ before_script:
   - sleep 25
 script:
   - ./node_modules/grunt-cli/bin/grunt nightwatch
-notifications:
-  irc:
-    channels:
-      - "chat.freenode.net#couchdb-dev"
-    template:
-      - "%{repository}#%{build_number} (%{branch} - %{commit} : %{author}): %{message} Amazing details: %{build_url}"
-    skip_join: true
-    on_success: "never"
-    on_failure: "change"
 
 cache: apt
 
