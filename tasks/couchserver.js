@@ -53,6 +53,11 @@ module.exports = function (grunt) {
       if (setContentSecurityPolicy) {
         var headerValue = "default-src 'self'; img-src 'self' data:; font-src 'self'; " +
                           "script-src 'self' 'unsafe-eval'; style-src 'self' 'unsafe-inline';";
+
+        if (options.contentSecurityPolicyHeader) {
+          headerValue = options.contentSecurityPolicyHeader;
+        }
+
         res.setHeader('Content-Security-Policy', headerValue);
       }
 
