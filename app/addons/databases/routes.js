@@ -28,8 +28,6 @@ function (app, FauxtonAPI, Databases, Actions, Components) {
     ],
 
     routes: {
-      "": "allDatabases",
-      "index.html": "allDatabases",
       "_all_dbs(:params)": "allDatabases"
     },
 

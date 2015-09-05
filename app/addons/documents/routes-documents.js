@@ -35,10 +35,7 @@ define([
   'addons/documents/designdocinfo/components.react'
 ],
 
-function (app, FauxtonAPI, BaseRoute, Documents, Changes, ChangesActions, DocEditor,
-  Databases, Resources, Components, PaginationStores, IndexResultsActions,
-  IndexResultsComponents, ReactPagination, ReactHeader, ReactActions, SidebarActions,
-  DesignDocInfoActions, DesignDocInfoComponents) {
+  function (app, FauxtonAPI, BaseRoute, Documents, Changes, ChangesActions, DocEditor, Databases, Resources, Components, PaginationStores, IndexResultsActions, IndexResultsComponents, ReactPagination, ReactHeader, ReactActions, SidebarActions, DesignDocInfoActions, DesignDocInfoComponents) {
 
     var DocumentsRouteObject = BaseRoute.extend({
       layout: "with_tabs_sidebar",
@@ -84,6 +81,17 @@ function (app, FauxtonAPI, BaseRoute, Documents, Changes, ChangesActions, DocEdi
 
         this.addLeftHeader();
         this.addSidebar();
+        this.addDatabase(dbName);
+      },
+
+      addDatabase: function (name) {
+        var current = app.utils.localStorageGet("recent");
+        var recentDbs = current ? current.split(",") : [];
+        if ($.inArray(name, recentDbs) == -1) {
+          recentDbs.unshift(name);
+          if (recentDbs.length > 10) recentDbs.length = 10;
+          app.utils.localStorageSet("recent", recentDbs.join(","));
+        }
       },
 
       designDocMetadata: function (database, ddoc) {
@@ -107,15 +115,15 @@ function (app, FauxtonAPI, BaseRoute, Documents, Changes, ChangesActions, DocEdi
       },
 
       /*
-      * docParams are the options collection uses to fetch from the server
-      * urlParams are what are shown in the url and to the user
-      * They are not the same when paginating
-      */
+       * docParams are the options collection uses to fetch from the server
+       * urlParams are what are shown in the url and to the user
+       * They are not the same when paginating
+       */
       allDocs: function (databaseName, options) {
         var params = this.createParams(options),
-            urlParams = params.urlParams,
-            docParams = params.docParams,
-            collection;
+          urlParams = params.urlParams,
+          docParams = params.docParams,
+          collection;
 
         ReactActions.resetHeaderController();
 
