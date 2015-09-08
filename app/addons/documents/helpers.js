@@ -33,7 +33,7 @@ define([
     return previousPage;
   };
 
-  Helpers.getPreviousPage = function (database) {
+  Helpers.getIndexPage = function (database) {
     return database.url('index');
   };
 

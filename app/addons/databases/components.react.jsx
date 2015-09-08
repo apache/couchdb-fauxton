@@ -131,7 +131,7 @@ define([
       return (
         <tr>
           <td>
-            <a href={"#/database/"+encoded+"/_all_docs"}>{name}</a>
+            <a href={"#/database/" + encoded + "/_all_docs?include_docs=true"}>{name}</a>
           </td>
           <td>{size}</td>
           <td>{row.status.numDocs()} {this.renderGraveyard(row)}</td>
