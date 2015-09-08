@@ -104,7 +104,7 @@ function (app, FauxtonAPI, Components, NavbarReactComponents, NavigationActions,
   });
 
   Fauxton.Notification = FauxtonAPI.View.extend({
-    animationTimer: 5000,
+    animationTimer: 8000,
     id: 'global-notification-id',
     events: {
       'click .js-dismiss': 'onClickRemoveWithAnimation'
