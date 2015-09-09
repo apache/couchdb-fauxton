@@ -29,6 +29,8 @@ module.exports = {
       .waitForElementPresent('.control-select-all', waitTime, false)
       .clickWhenVisible('.control-delete')
       .acceptAlert()
+      .waitForElementVisible('.alert.alert-info', waitTime, false)
+
       .waitForElementVisible('label[for="checkbox-' + newDocumentName + '2' + '"]', waitTime, false)
       .clickWhenVisible('label[for="checkbox-' + newDocumentName + '2' + '"]', waitTime, false)
       .waitForElementPresent('.control-select-all', waitTime, false)

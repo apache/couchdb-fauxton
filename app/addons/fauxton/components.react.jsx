@@ -269,12 +269,63 @@ function (app, FauxtonAPI, React, ZeroClipboard) {
   });
 
 
+  // A super-simple replacement for window.confirm()
+  var ConfirmationModal = React.createClass({
+    propTypes: {
+      visible: React.PropTypes.bool.isRequired,
+      text: React.PropTypes.string.isRequired,
+      onClose: React.PropTypes.func.isRequired,
+      onSubmit: React.PropTypes.func.isRequired
+    },
+
+    getDefaultProps: function () {
+      return {
+        visible: false,
+        title: 'Please confirm',
+        text: '',
+        onClose: function () { },
+        onSubmit: function () { }
+      };
+    },
+
+    componentDidUpdate: function () {
+      var params = (this.props.visible) ? { show: true, backdrop: 'static', keyboard: true } : 'hide';
+      $(this.getDOMNode()).modal(params);
+
+      $(this.getDOMNode()).on('hidden.bs.modal', function () {
+        this.props.onClose();
+      }.bind(this));
+    },
+
+    render: function () {
+      return (
+        <div className="modal hide confirmation-modal fade" tabIndex="-1" data-js-visible={this.props.visible}>
+          <div className="modal-header">
+            <button type="button" className="close" onClick={this.props.onClose} aria-hidden="true">&times;</button>
+            <h3>{this.props.title}</h3>
+          </div>
+          <div className="modal-body">
+            <p>
+              {this.props.text}
+            </p>
+          </div>
+          <div className="modal-footer">
+            <button className="btn" onClick={this.props.onClose}><i className="icon fonticon-cancel-circled"></i> Cancel</button>
+            <button className="btn btn-success js-btn-success" onClick={this.props.onSubmit}><i className="fonticon-ok-circled"></i> Okay</button>
+          </div>
+        </div>
+      );
+    }
+  });
+
+
   return {
     Clipboard: Clipboard,
     ClipboardWithTextField: ClipboardWithTextField,
     CodeFormat: CodeFormat,
     Tray: Tray,
-    Pagination: Pagination
+    Pagination: Pagination,
+    ConfirmationModal: ConfirmationModal
   };
 
 });

@@ -24,11 +24,10 @@ module.exports = {
       .createDocument('my_doc', newDatabaseName)
       .url(baseUrl + '/#/database/' + newDatabaseName + '/my_doc')
       .clickWhenVisible('.panel-button.upload')
-      .waitForElementVisible('input#_attachments', waitTime)
-      .setValue('input#_attachments', require('path').resolve(__dirname + '/uploadAttachment.js'))
+      .waitForElementVisible('input[name="_attachments"]', waitTime)
+      .setValue('input[name="_attachments"]', require('path').resolve(__dirname + '/uploadAttachment.js'))
       .clickWhenVisible('#upload-btn')
       .waitForElementVisible('#global-notification-id', waitTime, false)
-      .assert.attributeEquals('#_rev', 'value', '')
       .getText('#global-notification-id', function (result) {
         var data = result.value;
         this.verify.ok(data, 'Document saved successfully.');

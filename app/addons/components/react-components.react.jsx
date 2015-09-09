@@ -73,6 +73,7 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
     getDefaultProps: function () {
       return {
         id: 'code-editor',
+        className: '',
         defaultCode: '',
         title: '',
         docLink: '',
@@ -145,10 +146,8 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
     },
 
     exitZenMode: function (content) {
-      this.setState({
-        zenModeEnabled: false,
-        code: content
-      });
+      this.setState({ zenModeEnabled: false });
+      this.getEditor().setValue(content);
     },
 
     getEditor: function () {
@@ -163,9 +162,17 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
       this.setState({ code: code });
     },
 
+    update: function () {
+      this.getEditor().setValue(this.state.code);
+    },
+
     render: function () {
+      var classes = 'control-group';
+      if (this.props.className) {
+        classes += ' ' + this.props.className;
+      }
       return (
-        <div className="control-group">
+        <div className={classes}>
           <label>
             <strong>{this.props.title + ' '}</strong>
             {this.getDocIcon()}
@@ -189,7 +196,6 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
   });
 
 
-  // a generic Ace Editor component. This should be the only place in the app that instantiates an editor
   var CodeEditor = React.createClass({
     getDefaultProps: function () {
       return {
@@ -197,12 +203,17 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
         mode: 'javascript',
         theme: 'idle_fingers',
         fontSize: 13,
+
+        // this sets the default value for the editor. On the fly changes are stored in state in this component only. To
+        // change the editor content after initial construction use CodeEditor.setValue()
         defaultCode: '',
+
         showGutter: true,
         highlightActiveLine: true,
         showPrintMargin: false,
         autoScrollEditorIntoView: true,
         autoFocus: false,
+        stringEditModalEnabled: false,
 
         // these two options create auto-resizeable code editors, with a maximum number of lines
         setHeightToLineCount: false,
@@ -214,7 +225,7 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
         // notifies users that there is unsaved changes in the editor when navigating away from the page
         notifyUnsavedChanges: false,
 
-        // an optional array of ignorable Ace editors. Lets us filter out errors based on context
+        // an optional array of ignorable Ace errors. Lets us filter out errors based on context
         ignorableErrors: [],
 
         // un-Reacty, but the code editor is a self-contained component and it's helpful to be able to tie into
@@ -224,10 +235,15 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
       };
     },
 
-    // used purely to keep track of content changes. This is only reset via an explicit clearChanges() call
     getInitialState: function () {
       return {
-        originalCode: this.props.defaultCode
+        originalCode: this.props.defaultCode,
+
+        // these are all related to the (optional) string edit modal
+        stringEditModalVisible: false,
+        stringEditIconVisible: false,
+        stringEditIconStyle: {},
+        stringEditModalDefaultString: ''
       };
     },
 
@@ -248,11 +264,12 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
       this.editor.$blockScrolling = Infinity;
 
       if (shouldUpdateCode) {
-        this.setEditorValue(props.defaultCode);
+        this.setValue(props.defaultCode);
       }
 
       this.editor.setShowPrintMargin(props.showPrintMargin);
       this.editor.autoScrollEditorIntoView = props.autoScrollEditorIntoView;
+
       this.editor.setOption('highlightActiveLine', this.props.highlightActiveLine);
 
       if (this.props.setHeightToLineCount) {
@@ -267,6 +284,7 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
       this.editor.getSession().setMode('ace/mode/' + props.mode);
       this.editor.setTheme('ace/theme/' + props.theme);
       this.editor.setFontSize(props.fontSize);
+      this.editor.getSession().setTabSize(2);
       this.editor.getSession().setUseSoftTabs(true);
 
       if (this.props.autoFocus) {
@@ -283,6 +301,13 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
     setupEvents: function () {
       this.editor.on('blur', _.bind(this.onBlur, this));
       this.editor.on('change', _.bind(this.onContentChange, this));
+
+      if (this.props.stringEditModalEnabled) {
+        this.editor.on('changeSelection', _.bind(this.showHideEditStringGutterIcon, this));
+        this.editor.getSession().on('changeBackMarker', _.bind(this.showHideEditStringGutterIcon, this));
+        this.editor.getSession().on('changeScrollTop', _.bind(this.updateEditStringGutterIconPosition, this));
+      }
+
       if (this.props.notifyUnsavedChanges) {
         $(window).on('beforeunload.editor_' + this.props.id, _.bind(this.quitWarningMsg));
         FauxtonAPI.beforeUnload('editor_' + this.props.id, _.bind(this.quitWarningMsg, this));
@@ -302,7 +327,7 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
 
     quitWarningMsg: function () {
       if (this.hasChanged()) {
-        return 'Your changes have not been saved. Click cancel to return to the document.';
+        return 'Your changes have not been saved. Click Cancel to return to the document, or OK to proceed.';
       }
     },
 
@@ -324,6 +349,10 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
     componentDidMount: function () {
       this.setupAce(this.props, true);
       this.setupEvents();
+
+      if (this.props.autoFocus) {
+        this.editor.focus();
+      }
     },
 
     componentWillUnmount: function () {
@@ -332,8 +361,7 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
     },
 
     componentWillReceiveProps: function (nextProps) {
-      var codeChanged = !_.isEqual(nextProps.defaultCode, this.getValue());
-      this.setupAce(nextProps, codeChanged);
+      this.setupAce(nextProps, false);
     },
 
     getAnnotations: function () {
@@ -361,18 +389,100 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
       }.bind(this));
     },
 
-    // ------------------
-    // TODO two things to do after full page doc editor refactor:
-    // 1. rename to hasErrors()
-    hadValidCode: function () {
-      var errors = this.getAnnotations();
-      return _.every(errors, function (error) {
+    showHideEditStringGutterIcon: function (e) {
+      if (this.hasErrors() || !this.parseLineForStringMatch()) {
+        this.setState({ stringEditIconVisible: false });
+        return false;
+      }
+
+      this.setState({
+        stringEditIconVisible: true,
+        stringEditIconStyle: {
+          top: this.getGutterIconPosition()
+        }
+      });
+
+      return true;
+    },
+
+    updateEditStringGutterIconPosition: function () {
+      if (!this.state.stringEditIconVisible) {
+        return;
+      }
+      this.setState({
+        stringEditIconStyle: {
+          top: this.getGutterIconPosition()
+        }
+      });
+    },
+
+    getGutterIconPosition: function () {
+      var rowHeight = this.getRowHeight();
+      var scrollTop = this.editor.session.getScrollTop();
+      var positionFromTop = (rowHeight * this.documentToScreenRow(this.getSelectionStart().row)) - scrollTop;
+      return positionFromTop + 'px';
+    },
+
+    parseLineForStringMatch: function () {
+      var selStart = this.getSelectionStart().row;
+      var selEnd   = this.getSelectionEnd().row;
+
+      // one JS(ON) string can't span more than one line - we edit one string, so ensure we don't select several lines
+      if (selStart >= 0 && selEnd >= 0 && selStart === selEnd && this.isRowExpanded(selStart)) {
+        var editLine = this.getLine(selStart),
+            editMatch = editLine.match(/^([ \t]*)("[a-zA-Z0-9_]*["|']: )?(["|'].*",?[ \t]*)$/);
+
+        if (editMatch) {
+          return editMatch;
+        }
+      }
+      return false;
+    },
+
+    openStringEditModal: function () {
+      var matches = this.parseLineForStringMatch();
+      var string = matches[3];
+      var lastChar = string.length - 1;
+      if (string.substring(string.length - 1) === ',') {
+        lastChar = string.length - 2;
+      }
+      string = string.substring(1, lastChar);
+
+      this.setState({ stringEditModalVisible: true });
+      this.refs.stringEditModal.setValue(string);
+    },
+
+    saveStringEditModal: function (newString) {
+      // replace the string on the selected line
+      var line = this.parseLineForStringMatch();
+      var indent = line[1] || '',
+          key = line[2] || '',
+          originalString = line[3],
+          comma = '';
+      if (originalString.substring(originalString.length - 1) === ',') {
+        comma = ',';
+      }
+      this.replaceCurrentLine(indent + key + JSON.stringify(newString) + comma + '\n');
+      this.closeStringEditModal();
+    },
+
+    closeStringEditModal: function () {
+      this.setState({
+        stringEditModalVisible: false
+      });
+    },
+
+    hasErrors: function () {
+      return !_.every(this.getAnnotations(), function (error) {
         return this.isIgnorableError(error.raw);
       }, this);
     },
-    // ------------------
 
-    setEditorValue: function (code, lineNumber) {
+    setReadOnly: function (readonly) {
+      this.editor.setReadOnly(readonly);
+    },
+
+    setValue: function (code, lineNumber) {
       lineNumber = lineNumber ? lineNumber : -1;
       this.editor.setValue(code, lineNumber);
     },
@@ -385,18 +495,145 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
       return this;
     },
 
+    getLine: function (lineNum) {
+      return this.editor.session.getLine(lineNum);
+    },
+
+    getSelectionStart: function () {
+      return this.editor.getSelectionRange().start;
+    },
+
+    getSelectionEnd: function () {
+      return this.editor.getSelectionRange().end;
+    },
+
+    getRowHeight: function () {
+      return this.editor.renderer.layerConfig.lineHeight;
+    },
+
+    isRowExpanded: function (row) {
+      return !this.editor.getSession().isRowFolded(row);
+    },
+
+    documentToScreenRow: function (row) {
+      return this.editor.getSession().documentToScreenRow(row, 0);
+    },
+
+    replaceCurrentLine: function (replacement) {
+      this.editor.getSelection().selectLine();
+      this.editor.insert(replacement);
+      this.editor.getSelection().moveCursorUp();
+    },
+
     render: function () {
       return (
-        <div ref="ace" className="js-editor" id={this.props.id}></div>
+        <div>
+          <div ref="ace" className="js-editor" id={this.props.id}></div>
+          <button ref="stringEditIcon" className="btn string-edit" title="Edit string" disabled={!this.state.stringEditIconVisible}
+            style={this.state.stringEditIconStyle} onClick={this.openStringEditModal}>
+            <i className="icon icon-edit"></i>
+          </button>
+          <StringEditModal
+            ref="stringEditModal"
+            visible={this.state.stringEditModalVisible}
+            onSave={this.saveStringEditModal}
+            onClose={this.closeStringEditModal} />
+        </div>
+      );
+    }
+  });
+
+
+  // this appears when the cursor is over a string. It shows an icon in the gutter that opens the modal.
+  var StringEditModal = React.createClass({
+
+    propTypes: {
+      visible: React.PropTypes.bool.isRequired,
+      onClose: React.PropTypes.func.isRequired,
+      onSave: React.PropTypes.func.isRequired
+    },
+
+    getDefaultProps: function () {
+      return {
+        visible: false,
+        onClose: function () { },
+        onSave: function () { }
+      };
+    },
+
+    componentDidUpdate: function () {
+      var params = (this.props.visible) ? { show: true, backdrop: 'static', keyboard: true } : 'hide';
+      $(this.getDOMNode()).modal(params);
+
+      $(this.getDOMNode()).on('shown.bs.modal', function () {
+        this.editor.focus();
+
+        // re-opening the modal to edit a second string doesn't update the content. This forces the editor to redraw
+        // to show the latest content each time it opens
+        this.editor.resize();
+        this.editor.renderer.updateFull();
+      }.bind(this));
+    },
+
+    // ensure that if the user clicks ESC to close the window, the store gets wind of it
+    componentDidMount: function () {
+      $(this.getDOMNode()).on('hidden.bs.modal', function () {
+        this.props.onClose();
+      }.bind(this));
+
+      this.editor = ace.edit(this.refs.stringEditor.getDOMNode());
+
+      // suppresses an Ace editor error
+      this.editor.$blockScrolling = Infinity;
+
+      this.editor.setShowPrintMargin(false);
+      this.editor.setOption('highlightActiveLine', true);
+      this.editor.setTheme('ace/theme/idle_fingers');
+    },
+
+    setValue: function (val) {
+      this.editor.setValue(val, -1);
+    },
+
+    componentWillUnmount: function () {
+      $(this.getDOMNode()).off('hidden.bs.modal shown.bs.modal');
+    },
+
+    closeModal: function () {
+      this.props.onClose();
+    },
+
+    save: function () {
+      this.props.onSave(this.editor.getValue());
+    },
+
+    render: function () {
+      return (
+        <div className="modal hide fade string-editor-modal" tabIndex="-1">
+          <div className="modal-header">
+            <button type="button" className="close" onClick={this.closeModal} aria-hidden="true">&times;</button>
+            <h3>Edit text <span id="string-edit-header"></span></h3>
+          </div>
+          <div className="modal-body">
+            <div id="modal-error" className="hide alert alert-error"/>
+            <div id="string-editor-wrapper"><div ref="stringEditor" className="doc-code"></div></div>
+          </div>
+          <div className="modal-footer">
+            <button className="cancel-button btn" onClick={this.closeModal}><i className="icon fonticon-circle-x"></i> Cancel</button>
+            <button id="string-edit-save-btn" onClick={this.save} className="btn btn-success save">
+              <i className="fonticon-circle-check"></i> Save
+            </button>
+          </div>
+        </div>
       );
     }
   });
 
 
   // Zen mode editing has very few options:
-  // - It covers the full screen hiding everything else.
-  // - It has two themes: light & dark (choice stored in local storage)
-  // - It has no save option, but has a 1-1 map with a <CodeEditor /> element which gets updated when the user leaves
+  // - It covers the full screen, hiding everything else
+  // - Two themes: light & dark (choice stored in local storage)
+  // - No save option, but has a 1-1 map with a <CodeEditor /> element which gets updated when the user leaves
   // - [Escape] closes the mode, as does clicking the shrink icon at the top right
   var ZenModeOverlay = React.createClass({
     getDefaultProps: function () {
@@ -456,7 +693,7 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
       app.utils.localStorageSet('zenTheme', newTheme);
     },
 
-    setEditorValue: function (code, lineNumber) {
+    setValue: function (code, lineNumber) {
       lineNumber = lineNumber ? lineNumber : -1;
       this.editor.setValue(code, lineNumber);
     },
@@ -850,6 +1087,7 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
     StyledSelect: StyledSelect,
     CodeEditorPanel: CodeEditorPanel,
     CodeEditor: CodeEditor,
+    StringEditModal: StringEditModal,
     ZenModeOverlay: ZenModeOverlay,
     Beautify: Beautify,
     PaddedBorderedBox: PaddedBorderedBox,

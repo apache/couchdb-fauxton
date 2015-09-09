@@ -130,7 +130,7 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, ReactComponents) 
 
     componentWillUnmount: function () {
       indexEditorStore.off('change', this.onChange);
-    },
+    }
 
   });
 
@@ -154,7 +154,6 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, ReactComponents) 
       return _.map(this.state.reduceOptions, function (reduce, i) {
         return <option key={i} value={reduce}>{reduce}</option>;
       }, this);
-
     },
 
     getReduceValue: function () {
@@ -231,8 +230,7 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, ReactComponents) 
 
     componentWillUnmount: function () {
       indexEditorStore.off('change', this.onChange);
-    },
-
+    }
   });
 
   var DeleteView = React.createClass({
@@ -310,20 +308,16 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, ReactComponents) 
       indexEditorStore.off('change', this.onChange);
     },
 
-    hasValidCode: function () {
-      return _.every(['mapEditor', 'reduceEditor'], function (editorName) {
-        if (editorName === 'reduceEditor' && !indexEditorStore.hasCustomReduce()) {
-          return true;
-        }
-        var editor = this.refs[editorName].getEditor();
-        return editor.hadValidCode();
-      }, this);
+    hasErrors: function () {
+      var mapEditorErrors = this.refs.mapEditor.getEditor().hasErrors();
+      var customReduceErrors = (indexEditorStore.hasCustomReduce()) ? this.refs.reduceEditor.getEditor().hasErrors() : false;
+      return mapEditorErrors || customReduceErrors;
     },
 
     saveView: function (event) {
       event.preventDefault();
 
-      if (!this.hasValidCode()) {
+      if (this.hasErrors()) {
         FauxtonAPI.addNotification({
           msg:  'Please fix the Javascript errors and try again.',
           type: 'error',

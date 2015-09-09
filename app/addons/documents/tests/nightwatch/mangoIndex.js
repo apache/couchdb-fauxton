@@ -36,8 +36,8 @@ module.exports = {
         var editor = ace.edit("query-field");\
         editor.getSession().setValue(json);\
       ')
-      .execute('$(".save")[0].scrollIntoView();')
-      .clickWhenVisible('button.btn-success.save')
+      .execute('$("#create-index-btn")[0].scrollIntoView();')
+      .clickWhenVisible('#create-index-btn')
       .checkForStringPresent(newDatabaseName + '/_index', 'rocko-artischocko')
       .checkForStringPresent(newDatabaseName + '/_index', 'gans_gans_mango')
       .waitForElementPresent('.prettyprint', waitTime, false)

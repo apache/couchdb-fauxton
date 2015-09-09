@@ -26,9 +26,9 @@ module.exports = {
         var editor = ace.edit("map-function");\
         editor.getSession().setValue("function (doc) { emit(\'hasehase\'); }");\
       ')
-      .execute('$(".save")[0].scrollIntoView();')
-      .waitForElementPresent('button.btn.btn-success.save', waitTime, false)
-      .clickWhenVisible('button.btn.btn-success.save', waitTime, false)
+      .execute('$("#save-view")[0].scrollIntoView();')
+      .waitForElementPresent('#save-view', waitTime, false)
+      .clickWhenVisible('#save-view', waitTime, false)
       .checkForDocumentCreated('_design/test_design_doc-selenium-1')
       .waitForElementPresent('.prettyprint', waitTime, false)
       .waitForElementNotPresent('.loading-lines', waitTime, false)
@@ -50,9 +50,9 @@ module.exports = {
         var editor = ace.edit("map-function");\
         editor.getSession().setValue("function (doc) { emit(\'hasehase\'); }");\
       ')
-      .execute('$(".save")[0].scrollIntoView();')
-      .waitForElementPresent('button.btn.btn-success.save', waitTime, false)
-      .clickWhenVisible('button.btn.btn-success.save', waitTime, false)
+      .execute('$("#save-view")[0].scrollIntoView();')
+      .waitForElementPresent('#save-view', waitTime, false)
+      .clickWhenVisible('#save-view', waitTime, false)
       .checkForDocumentCreated('_design/test_design_doc-selenium-1')
       .waitForElementPresent('.prettyprint', waitTime, false)
       .waitForElementNotPresent('.loading-lines', waitTime, false)
@@ -78,8 +78,8 @@ module.exports = {
         var editor = ace.edit("map-function");\
         editor.getSession().setValue("function (doc) { emit(\'gansgans\'); }");\
       ')
-      .execute('$(".save")[0].scrollIntoView();')
-      .clickWhenVisible('button.btn-success.save')
+      .execute('$("#save-view")[0].scrollIntoView();')
+      .clickWhenVisible('#save-view')
       .checkForDocumentCreated('_design/test_design_doc-selenium-2')
       .waitForElementPresent('.prettyprint', waitTime, false)
       .waitForElementNotPresent('.loading-lines', waitTime, false)
@@ -107,8 +107,8 @@ module.exports = {
         var editor = ace.edit("map-function");\
         editor.getSession().setValue("function (doc) { emit(\'enteente\', 1); }");\
       ')
-      .execute('$(".save")[0].scrollIntoView();')
-      .clickWhenVisible('button.btn-success.save')
+      .execute('$("#save-view")[0].scrollIntoView();')
+      .clickWhenVisible('#save-view')
       .checkForDocumentCreated('_design/testdesigndoc/_view/test-new-view')
 
       .waitForElementPresent('.prettyprint', waitTime, false)

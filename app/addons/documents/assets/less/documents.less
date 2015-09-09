@@ -18,7 +18,7 @@
 @import "changes.less";
 @import "sidenav.less";
 @import "index-results.less";
-
+@import "doc-editor.less";
 @import "header.less";
 
 button.beautify {
@@ -107,6 +107,10 @@ button.string-edit[disabled] {
 #string-editor-wrapper {
   height: 500px;
   width: 100%;
+
+  &>div {
+    height: 100%;
+  }
 }
 
 #keys-input {
