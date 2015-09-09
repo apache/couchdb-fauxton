@@ -29,8 +29,11 @@ define([
     }, []);
 
     if (!nameArray.length) {
-      indexes = FauxtonAPI.getExtensions('mango:additionalIndexes')[0];
-      nameArray = indexes.createHeader(doc);
+      indexes = FauxtonAPI.getExtensions('mango:additionalIndexes');
+
+      if (!_.isUndefined(indexes) && indexes.length > 0) {
+        nameArray = indexes[0].createHeader(doc);
+      }
     }
 
     return nameArray.join(', ');
