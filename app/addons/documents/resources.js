@@ -623,5 +623,72 @@ function (app, FauxtonAPI, Documents, PagingCollection) {
     }, menuLinks);
   };
 
+  Documents.RevTreeDataModel = Backbone.Model.extend({
+    initialize: function (url) {
+      this.url = url;
+      console.log("inside initialize");
+    },
+    url: function () {
+      return this.url;
+    },
+
+    sync: function (method, model, options) {
+      console.log("inside Sync-----" + this.url);
+      var params = {
+        error: options.error,
+        success: options.success,
+        url: this.url,
+        type: 'GET',
+        dataType: 'text',
+        async: false
+      };
+
+      return $.ajax(params);
+    },
+    parse: function (response) {
+
+      var parsedResult = [];
+      var splitResponse = response.split(/(\n|\r\n|\r)/);
+
+      for (var i = 0; i < splitResponse.length; i++) {
+        if (String(splitResponse[i]).charAt(0) == "{") {
+          parsedResult.push(JSON.parse(splitResponse[i]));
+        }
+      }
+      console.log(parsedResult);
+
+      return {content: parsedResult};
+    }
+  });
+
+  Documents.RevDocDataModel = Backbone.Model.extend({
+    initialize: function (url) {
+      alert(url);
+      this.url = url;
+      // console.log("inside initialize");
+    },
+    url: function () {
+      return this.url;
+    },
+
+    sync: function (method, model, options) {
+      // console.log("inside Sync-----" + this.url);
+      var params = {
+        error: options.error,
+        success: options.success,
+        url: this.url,
+        type: 'GET',
+        dataType: 'text',
+        async: false
+      };
+
+      return $.ajax(params);
+    },
+    parse: function (response) {
+      // console.log(response);
+      return {content: response};
+    }
+  });
+
   return Documents;
 });

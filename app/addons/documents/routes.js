@@ -15,17 +15,19 @@ define([
   "addons/documents/routes-documents",
   'addons/documents/routes-doc-editor',
   'addons/documents/routes-index-editor',
-  'addons/documents/routes-mango'
+  'addons/documents/routes-mango',
+  'addons/documents/routes-rev-tree'
 ],
 
 
-function (Documents, DocumentsRouteObject, docEditor, IndexEditorRouteObject, Mango) {
+function (Documents, DocumentsRouteObject, docEditor, IndexEditorRouteObject, Mango, RevTree) {
   Documents.RouteObjects = [
     docEditor.DocEditorRouteObject,
     docEditor.NewDocEditorRouteObject,
     DocumentsRouteObject,
     IndexEditorRouteObject,
-    Mango.MangoIndexEditorAndQueryEditor
+    Mango.MangoIndexEditorAndQueryEditor,
+    RevTree
   ];
 
   return Documents;
