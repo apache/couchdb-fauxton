@@ -43,5 +43,8 @@
 
   <!-- Application source. -->
   <script data-main="/config" src="<%= requirejs %>"></script>
+
+  <!-- Generated: <%= generationDate %> -->
+
 </body>
 </html>

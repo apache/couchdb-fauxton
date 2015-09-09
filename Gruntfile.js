@@ -125,8 +125,12 @@ module.exports = function (grunt) {
     var i18n = JSON.stringify(initHelper.readI18nFile(), null, ' ');
 
     Object.keys(settings.template).forEach(function (key) {
+      settings.template[key].variables.generationDate = new Date().toISOString();
       settings.template[key].app.i18n = i18n;
     });
+
+    // add the generation date to all
+//    settings.template[key].generationDate": new Date().toISOString()
 
     return settings.template || defaultSettings;
   }();
