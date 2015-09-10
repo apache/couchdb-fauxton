@@ -38,3 +38,23 @@
   -ms-user-select: none;
   user-select: none;
 }
+
+.display-flex() {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+/* rather than run through all permutations of the shorthand options for flex, this just pulls all arguments */
+.flex(...) {
+  -webkit-flex: @arguments;
+  -ms-flex: @arguments;
+  flex: @arguments;
+}
+
+/* @dir: column or row */
+.flex-direction(@dir) {
+  -webkit-flex-direction: @dir;
+  -ms-flex-direction: @dir;
+  flex-direction: @dir;
+}
