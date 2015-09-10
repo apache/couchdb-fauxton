@@ -141,9 +141,13 @@ function (app, FauxtonAPI, ActionTypes) {
     // store the xhr in parent scope to allow us to cancel any uploads if the user closes the modal
     xhr = $.ajaxSettings.xhr();
 
+    var query = '?rev=' + params.rev;
+    var db = params.doc.getDatabase().safeID();
+    var docId = params.doc.safeID();
     var file = params.files[0];
+
     $.ajax({
-      url: params.doc.url() + '/' + file.name + '?rev=' + params.rev,
+      url: FauxtonAPI.urls('document', 'attachment', db, docId, file.name, query),
       type: 'PUT',
       data: file,
       contentType: file.type,
