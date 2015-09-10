@@ -69,9 +69,13 @@ function (app, FauxtonAPI, Documents) {
     }
   });
 
-  FauxtonAPI.registerUrls( 'document', {
+  FauxtonAPI.registerUrls('document', {
     server: function (database, doc) {
       return app.host + '/' + database + '/' + doc;
+    },
+
+    attachment: function (database, doc, filename, query) {
+      return app.host + '/' + database + '/' + doc + '/' + filename + query;
     },
 
     app: function (database, doc) {
