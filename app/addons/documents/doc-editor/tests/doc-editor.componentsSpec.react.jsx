@@ -184,4 +184,23 @@ define([
     });
   });
 
+
+  describe("Custom Extension Buttons", function () {
+    it('supports buttons', function () {
+      var CustomButton = React.createClass({
+        render: function () {
+          return (
+            <button>Oh no she di'n't!</button>
+          );
+        }
+      });
+      FauxtonAPI.registerExtension('DocEditor:icons', CustomButton);
+
+      var container = document.createElement('div');
+      var el = TestUtils.renderIntoDocument(<Components.DocEditorController database={database} />, container);
+      assert.isTrue(/Oh\sno\sshe\sdi'n't!/.test(el.getDOMNode().outerHTML));
+      React.unmountComponentAtNode(container);
+    });
+  });
+
 });

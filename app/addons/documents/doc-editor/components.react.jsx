@@ -155,6 +155,13 @@ define([
       this.refs.docEditor.clearChanges();
     },
 
+    getExtensionIcons: function () {
+      var extensions = FauxtonAPI.getExtensions('DocEditor:icons');
+      return _.map(extensions, function (Extension, i) {
+        return (<Extension doc={this.state.doc} key={i} />);
+      }, this);
+    },
+
     getButtonRow: function () {
       if (this.props.isNewDoc) {
         return false;
@@ -162,7 +169,7 @@ define([
       return (
         <div>
           <AttachmentsPanelButton doc={this.state.doc} isLoading={this.state.isLoading} />
-          <div className="doc-editor-extension-icons"></div>
+          <div className="doc-editor-extension-icons">{this.getExtensionIcons()}</div>
           <PanelButton title="Upload Attachment" iconClass="icon-circle-arrow-up" onClick={Actions.showUploadModal} />
           <PanelButton title="Clone Document" iconClass="icon-repeat" onClick={Actions.showCloneDocModal} />
           <PanelButton title="Delete" iconClass="icon-trash" onClick={Actions.showDeleteDocModal} />
