@@ -20,14 +20,16 @@ module.exports = {
   getNanoInstance: function () {
     return nano(this.test_settings.db_url);
   },
-  beforeEach: function (done) {
+
+  beforeEach: function (browser, done) {
     var nano = module.exports.getNanoInstance(),
         database = module.exports.testDatabaseName;
 
-    console.log("nano setting up database");
-    // clean up the database we created previously
+    console.log('nano setting up database');
 
+    // clean up the database we created previously
     nano.db.destroy(database, function (err, body, header) {
+
       if (err && err.message !== 'Database does not exist.' && err.message !== 'missing') {
         console.log('Error in setting up ' + database, err.message);
       }
@@ -41,7 +43,7 @@ module.exports = {
     });
   },
 
-  afterEach: function (done) {
+  afterEach: function (browser, done) {
     var nano = module.exports.getNanoInstance(),
         database = module.exports.testDatabaseName;
 
