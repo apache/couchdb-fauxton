@@ -20,7 +20,7 @@ before_install:
   - cd couchdb
   - ./configure --disable-docs
   - make
-  - ./dev/run --admin=tester:testerpass &
+  - ./dev/run --admin=tester:testerpass --nodes=1 &
   - haproxy -f rel/haproxy.cfg &
   - cd .. && cd couchdb-fauxton
   - npm install
