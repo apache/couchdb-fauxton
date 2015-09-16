@@ -9,14 +9,13 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
-
 define([
   'app',
   'api',
   'react',
   'addons/fauxton/navigation/stores',
   'addons/fauxton/navigation/actions',
-  'plugins/zeroclipboard/ZeroClipboard'
+  'addons/fauxton/dependencies/ZeroClipboard'
 ],
 
 function (app, FauxtonAPI, React, Stores, Actions, ZeroClipboard) {

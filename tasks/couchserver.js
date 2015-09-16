@@ -81,8 +81,10 @@ module.exports = function (grunt) {
         // server js from app directory
         url = url.replace(/\?_.*/, '');
         filePath = path.join(app_dir, url.replace('/_utils/fauxton/', ''));
-      } else if (!!url.match(/ZeroClipboard/)) {
-        filePath = "./assets/js/plugins/zeroclipboard/ZeroClipboard.swf";
+      // handles local references to any addon dependencies (e.g. ZeroClipboard.swf)
+      } else if (!!url.match(/addons\/[^\/]+\/dependencies\/.+/)) {
+        var urlNoQueryStr = url.replace(/\?.*$/, '');
+        filePath = './app' + urlNoQueryStr;
       } else if (!!url.match(/testrunner/)) {
         var testSetup = grunt.util.spawn({cmd: 'grunt', grunt: true, args: ['test_inline']}, function (error, result, code) {/* log.writeln(String(result));*/ });
         testSetup.stdout.pipe(process.stdout);

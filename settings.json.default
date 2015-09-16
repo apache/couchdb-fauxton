@@ -27,7 +27,7 @@
           "root": "/",
           "host": "../..",
           "version": "1.0.dev",
-          "zeroClipboardPath": "js/zeroclipboard/ZeroClipboard.swf"
+          "bundled": false
         }
       },
       "release": {
@@ -42,7 +42,7 @@
           "root": "/_utils/",
           "host": "../..",
           "version": "1.0",
-          "zeroClipboardPath": "js/zeroclipboard/ZeroClipboard.swf"
+          "bundled": true
         }
       },
       "couchapp": {
@@ -57,7 +57,7 @@
           "root": "/",
           "host": "../../..",
           "version": "1.0",
-          "zeroClipboardPath": "js/zeroclipboard/ZeroClipboard.swf"
+          "bundled": true
         }
       }
     },
