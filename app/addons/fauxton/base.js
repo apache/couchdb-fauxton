@@ -16,7 +16,7 @@ define([
   "addons/fauxton/components",
   "addons/fauxton/navigation/components.react",
   "addons/fauxton/navigation/actions",
-  "plugins/zeroclipboard/ZeroClipboard"
+  'addons/fauxton/dependencies/ZeroClipboard'
 ],
 
 function (app, FauxtonAPI, Components, NavbarReactComponents, NavigationActions, ZeroClipboard) {

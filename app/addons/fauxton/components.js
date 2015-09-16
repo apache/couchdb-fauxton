@@ -29,7 +29,7 @@ define([
 
   // this should never be global available:
   // https://github.com/zeroclipboard/zeroclipboard/blob/master/docs/security.md
-  "plugins/zeroclipboard/ZeroClipboard",
+  'addons/fauxton/dependencies/ZeroClipboard',
   "velocity.ui"
 ],
 
@@ -628,7 +628,9 @@ function (app, FauxtonAPI, ace, spin, ZeroClipboard) {
     initialize: function (options) {
       this.$el = options.$el;
 
-      ZeroClipboard.config({ moviePath: app.zeroClipboardPath });
+      // the path to the swf depends on whether we're in a bundled environment (e.g. prod) or local
+      var path = (app.bundled) ? 'js/fauxton' : 'app/addons/fauxton/dependencies';
+      ZeroClipboard.config({ moviePath: app.root + path + '/ZeroClipboard.swf' });
       this.client = new ZeroClipboard(this.$el);
     },
 

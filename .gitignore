@@ -21,7 +21,6 @@ app/addons/*
 settings.json*
 i18n.json
 !settings.json.default
-!assets/js/plugins/zeroclipboard/ZeroClipboard.swf
 test/test.config.js
 app/initialize.js
 .module-cache

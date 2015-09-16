@@ -129,9 +129,6 @@ module.exports = function (grunt) {
       settings.template[key].app.i18n = i18n;
     });
 
-    // add the generation date to all
-//    settings.template[key].generationDate": new Date().toISOString()
-
     return settings.template || defaultSettings;
   }();
 
@@ -169,7 +166,7 @@ module.exports = function (grunt) {
     },
 
     jshint: {
-      all: ['app/**/*.js', 'Gruntfile.js', "!app/**/assets/js/*.js", "!app/**/*.jsx"],
+      all: ['app/**/*.js', 'Gruntfile.js', "!app/**/assets/js/*.js", "!app/**/dependencies/*", "!app/**/*.jsx"],
       options: {
         jshintrc: '.jshintrc'
       }
@@ -329,10 +326,8 @@ module.exports = function (grunt) {
         ]
       },
 
-      zeroclip: {
-        files: [
-          {src: "assets/js/plugins/zeroclipboard/ZeroClipboard.swf", dest: "dist/release/js/zeroclipboard/ZeroClipboard.swf"},
-        ]
+      addonDependencies: {
+        files: initHelper.getAddonDependencies()
       },
 
       dist:{
@@ -575,7 +570,7 @@ module.exports = function (grunt) {
 
   // build a release
   grunt.registerTask('release_commons_prefix', ['clean', 'dependencies']);
-  grunt.registerTask('release_commons_suffix', ['jshint', 'shell:build-jsx', 'build', 'copy:dist', 'copy:ace', 'copy:zeroclip']);
+  grunt.registerTask('release_commons_suffix', ['jshint', 'shell:build-jsx', 'build', 'copy:dist', 'copy:ace', 'copy:addonDependencies']);
 
   grunt.registerTask('release', ['release_commons_prefix', 'gen_initialize:release', 'release_commons_suffix']);
   grunt.registerTask('couchapp_release', ['release_commons_prefix', 'gen_initialize:couchapp', 'release_commons_suffix']);
