@@ -592,6 +592,8 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
     },
 
     setValue: function (val) {
+      // we do the JSON.parse so the string editor modal shows newlines
+      val = JSON.parse('"' + val + '"');      //returns an object, expects a JSON string
       this.editor.setValue(val, -1);
     },
 

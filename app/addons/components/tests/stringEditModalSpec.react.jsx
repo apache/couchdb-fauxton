@@ -68,8 +68,20 @@ define([
         assert.ok(spy.calledOnce);
         assert.ok(spy.calledWith(string));
       });
+
+      it('replaces "\\n" with actual newlines', function () {
+        var spy = sinon.spy();
+        modalEl = TestUtils.renderIntoDocument(
+          <ReactComponents.StringEditModal visible={true} onSave={spy} />,
+          container
+        );
+
+        var string = 'I am a string\\nwith\\nlinebreaks\\nin\\nit';
+
+        modalEl.setValue(string);
+        TestUtils.Simulate.click($(modalEl.getDOMNode()).find('#string-edit-save-btn')[0]);
+        assert.ok(spy.calledOnce);
+      });
     });
-
   });
-
 });
