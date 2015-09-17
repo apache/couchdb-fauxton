@@ -55,6 +55,7 @@ define([
   };
 
   var database = {
+    id: 'id',
     safeID: function () { return 'id'; }
   };
 
@@ -190,7 +191,10 @@ define([
       var CustomButton = React.createClass({
         render: function () {
           return (
-            <button>Oh no she di'n't!</button>
+            <div>
+              <button>Oh no she di'n't!</button>
+              <span id="testDatabaseName">{this.props.database.id}</span>
+            </div>
           );
         }
       });
@@ -199,6 +203,10 @@ define([
       var container = document.createElement('div');
       var el = TestUtils.renderIntoDocument(<Components.DocEditorController database={database} />, container);
       assert.isTrue(/Oh\sno\sshe\sdi'n't!/.test(el.getDOMNode().outerHTML));
+
+      // confirm the database name was also included
+      assert.equal($(el.getDOMNode()).find("#testDatabaseName").html(), database.id);
+
       React.unmountComponentAtNode(container);
     });
   });

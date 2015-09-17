@@ -25,7 +25,7 @@ define([
         cloneDocModalVisible: store.isCloneDocModalVisible(),
         uploadModalVisible: store.isUploadModalVisible(),
         deleteDocModalVisible: store.isDeleteDocModalVisible(),
-        numFilesUploaded: store.getNumFilesUploaded(),
+        numFilesUploaded: store.getNumFilesUploaded()
       };
     },
 
@@ -158,7 +158,7 @@ define([
     getExtensionIcons: function () {
       var extensions = FauxtonAPI.getExtensions('DocEditor:icons');
       return _.map(extensions, function (Extension, i) {
-        return (<Extension doc={this.state.doc} key={i} />);
+        return (<Extension doc={this.state.doc} key={i} database={this.props.database} />);
       }, this);
     },
 
