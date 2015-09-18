@@ -12,25 +12,22 @@ License for the specific language governing permissions and limitations under
 the License.
 */%>
 
-<div id="dashboard" class="container-fluid with-sidebar">
+<div id="dashboard" class="with-sidebar">
+  <header class="flex-layout flex-row two-panel-header">
+    <div id="breadcrumbs" class="sidebar"></div>
+    <div class="right-header-wrapper flex-body">
+      <div id="react-headerbar"></div>
+      <div id="api-navbar"></div>
+      <div id="right-header"></div>
+    </div>
+  </header>
 
   <div class="with-sidebar tabs-with-sidebar content-area">
-    <div class="header-wrapper">
-      <div id="breadcrumbs" class="sidebar"></div>
-      <div class="right-header-wrapper">
-        <div id="react-headerbar"></div>
-        <div id="api-navbar"></div>
-        <div id="right-header"></div>
-      </div>
-    </div>
-
     <aside id="sidebar-content" class="scrollable"></aside>
-
-    <section id="dashboard-content" class="flex-layout flex-cols">
+    <section id="dashboard-content" class="flex-layout flex-col">
       <div id="dashboard-upper-content"></div>
       <div id="dashboard-lower-content" class="flex-body"></div>
       <div id="footer"></div>
     </section>
-
   </div>
 </div>

@@ -6,10 +6,10 @@
 body #dashboard .flex-layout {
   .display-flex();
 
-  &.flex-cols {
+  &.flex-col {
     .flex-direction(column);
   }
-  &.flex-rows {
+  &.flex-row {
     .flex-direction(row);
   }
 
@@ -20,9 +20,12 @@ body #dashboard .flex-layout {
   }
   /* end overrides */
 
-  /* always default all child elements as flex items */
+  /*
+  always default all child elements as flex items that neither shrink nor expand. Assumes all flex-layout containers
+  contain at least one .flex-body to indicate that's the one that expands
+  */
   &>* {
-    .flex(1);
+    .flex(0);
   }
 
   /* notice we don't set heights. Flex will expand to fill the content but no more */
@@ -40,7 +43,7 @@ body #dashboard .flex-layout {
 
 /* can be added to any element in a display:flex element that you want to act as the main body. It expands to the
    available space and shows a scrollbar */
-.flex-body {
+body #dashboard .flex-body {
   .flex(1);
   overflow: auto;
 }
@@ -52,3 +55,44 @@ body #dashboard .flex-layout {
   width: 100%;
   margin: 0 -20px;
 }
+
+/* this drops .fixed-header, which was a position:absolute'd element, and switches it and all children to use flexbox. */
+.one-pane > header {
+  width: 100%;
+
+  /* TODO move all style stuff out of this file. layouts.less should be entirely layout CSS, nothing else */
+  .bottom-shadow-border();
+
+  #breadcrumbs {
+    overflow: hidden;
+
+    /* overrides - can be removed later */
+    float: none;
+  }
+  #right-header {
+    /* TODO. How come .flex(0 0 inherit) is invalid? */
+    flex-grow: 0;
+    flex-shrink: 0;
+    flex-basis: inherit;
+  }
+  #api-navbar {
+    .flex(0 0 108px);
+  }
+}
+
+
+/* temporary wedge. Can be replaced at end */
+.with-sidebar {
+  #breadcrumbs {
+    float: left;
+  }
+  #api-navbar {
+    float: right;
+  }
+}
+.right-header-wrapper {
+  #api-navbar {
+    float: right;
+  }
+}
+
