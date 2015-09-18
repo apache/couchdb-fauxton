@@ -20,6 +20,11 @@
     padding-bottom: 0;
     top: 0;
   }
+
+  /* temporary wedge: can be removed at end of flexbox refactor */
+  #api-navbar {
+    float: right;
+  }
 }
 
 #editor-container {
@@ -39,11 +44,6 @@
     }
   }
 
-  .fixed-header {
-    height: 65px;
-    .box-shadow(none);
-  }
-
   #breadcrumbs {
     white-space: nowrap;
   }
@@ -56,6 +56,10 @@
     width: 100%;
     background-color: #f1f1f1;
     height: 61px;
+  }
+
+  &#dashboard > header {
+    .box-shadow(none);
   }
 
   #editor-container {

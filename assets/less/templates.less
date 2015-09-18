@@ -326,15 +326,13 @@ with_tabs_sidebar.html
   top: @collapsedNavWidth;
   left: 0;
   background-color: @secondarySidebar;
+  margin-top: 6px;
   > div.inner {
     display: block;
   }
-  margin-top: 6px;
-
   .nav-list:last-child {
     margin-bottom: 30px;
   }
-
 }
 
 .scrollable {
@@ -415,9 +413,7 @@ with_tabs_sidebar.html
 #dashboard-content {
 
   & > div {
-    padding-left: 15px;
-    padding-right: 15px;
-    padding-top: 20px;
+    padding: @panelPadding;
   }
 
   &.row-fluid {
@@ -533,7 +529,7 @@ with_tabs_sidebar.html
 
 .with-sidebar.content-area {
   position: absolute;
-  top: 0;
+  top: 65px;
   bottom: 0;
   left: 0;
   right: 0;

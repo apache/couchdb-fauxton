@@ -224,7 +224,7 @@ table.databases {
 
 #sidebar-content {
   position: absolute;
-  top: 60px;
+  top: 0;
   width: @sidebarWidth;
   left: 0;
   background-color: @secondarySidebar;
@@ -325,6 +325,10 @@ div.spinner {
 }
 
 #api-navbar {
+  /* prevents a slight shift on page load */
+  width: 108px;
+  overflow: hidden;
+
   > div:not(.hide) {
     border-left: 1px solid #ccc;
   }
@@ -398,7 +402,7 @@ div.spinner {
 
 .js-filter {
   ul {
-    margin-left: 0px;
+    margin-left: 0;
   }
   li {
     list-style-type: none;
@@ -406,22 +410,20 @@ div.spinner {
 }
 
 //---header--//
-.fixed-header{
-  height: @collapsedNavWidth;
+#dashboard > header {
+  height: 65px;
   background-color: @breadcrumbBG;
-  top: 0;
-  right: 0;
-  left: 0;
-  background-color: @breadcrumbBG;
-  position: absolute;
-
   .bottom-shadow-border();
-  z-index: 100;
 
-  /* these styles are for the new header*/
-  > div {
-    display:inline-block;
-    vertical-align: top;
+  /* this is necessary to allow the 6px box shadow overlap the panels below */
+  position: absolute;
+  width: 100%;
+  z-index: 1;
+}
+
+body #dashboard .two-panel-header {
+  #breadcrumbs {
+    .flex(0 0 331px);
   }
 }
 
@@ -442,7 +444,7 @@ div.spinner {
 
 #breadcrumbs {
   height: @collapsedNavWidth;
-  float: left;
+
   /* these styles are for the new header*/
   .header-left{
     > div{
@@ -648,11 +650,9 @@ div.spinner {
 
 .header-right,
 #api-navbar {
-  float: right;
-  height: @collapsedNavWidth;
   > div {
     padding: 12px;
-    height: @collapsedNavWidth;
+    height: @collapsedNavWidth - 1;
   }
 }
 
