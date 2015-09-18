@@ -129,7 +129,7 @@ function (app, FauxtonAPI, React, Stores, Actions,
       var url = '#/' + FauxtonAPI.urls('allDocs', 'app', this.props.dbName, '');
 
       return (
-        <div className="editor-wrapper span5 scrollable">
+        <div className="editor-wrapper">
           <PaddedBorderedBox>
             <div
               dangerouslySetInnerHTML={{__html: this.props.description}}
