@@ -22,46 +22,37 @@ function (app, FauxtonAPI, ActionTypes) {
       FauxtonAPI.dispatch({
         type: ActionTypes.COLLAPSE_DOCUMENTS
       });
-
     },
 
     unCollapseDocuments: function () {
       FauxtonAPI.dispatch({
         type: ActionTypes.EXPAND_DOCUMENTS
       });
-
     },
 
-    selectAllDocuments: function () {
+    collapseAllDocuments: function () {
       FauxtonAPI.dispatch({
-        type: ActionTypes.SELECT_ALL_DOCUMENTS
+        type: ActionTypes.COLLAPSE_ALL_DOCUMENTS
       });
     },
 
-    deSelectAllDocuments: function () {
+    unCollapseAllDocuments: function () {
       FauxtonAPI.dispatch({
-        type: ActionTypes.DESELECT_ALL_DOCUMENTS
+        type: ActionTypes.EXPAND_ALL_DOCUMENTS
       });
     },
 
-    updateDocumentCount: function (options) {
+    enableTableView: function () {
       FauxtonAPI.dispatch({
-        type: ActionTypes.UPDATE_DOCUMENT_COUNT,
-        options: options
+        type: ActionTypes.ENABLE_TABLE_VIEW
       });
     },
 
-    toggleHeaderControls: function () {
+    disableTableView: function () {
       FauxtonAPI.dispatch({
-        type: ActionTypes.TOGGLE_HEADER_CONTROLS
+        type: ActionTypes.DISABLE_TABLE_VIEW
       });
     },
-
-    resetHeaderController: function () {
-      FauxtonAPI.dispatch({
-        type: ActionTypes.RESET_HEADER_BAR
-      });
-    }
 
   };
 });

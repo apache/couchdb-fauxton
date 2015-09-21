@@ -26,15 +26,13 @@ module.exports = {
       .clickWhenVisible('#dashboard-content a[href="#/database/' + newDatabaseName + '/_all_docs"]', waitTime, false)
       .waitForElementVisible('label[for="checkbox-' + newDocumentName + '"]', waitTime, false)
       .clickWhenVisible('label[for="checkbox-' + newDocumentName + '"]', waitTime, false)
-      .waitForElementPresent('.control-select-all', waitTime, false)
-      .clickWhenVisible('.control-delete')
+      .clickWhenVisible('.bulk-actions button.fonticon-trash', waitTime, false)
       .acceptAlert()
       .waitForElementVisible('.alert.alert-info', waitTime, false)
 
       .waitForElementVisible('label[for="checkbox-' + newDocumentName + '2' + '"]', waitTime, false)
       .clickWhenVisible('label[for="checkbox-' + newDocumentName + '2' + '"]', waitTime, false)
-      .waitForElementPresent('.control-select-all', waitTime, false)
-      .clickWhenVisible('.control-delete')
+      .clickWhenVisible('.bulk-actions button.fonticon-trash', waitTime, false)
       .acceptAlert()
 
       .waitForElementVisible('.alert.alert-info', waitTime, false)

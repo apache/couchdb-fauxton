@@ -86,15 +86,12 @@ function (app, FauxtonAPI, Helpers, BaseRoute, Databases,
             }
           });
 
-      ReactActions.resetHeaderController();
-
       SidebarActions.setSelectedTab('mango-query');
-      this.setComponent('#react-headerbar', ReactHeader.HeaderBarController);
+      this.setComponent('#react-headerbar', ReactHeader.BulkDocumentHeaderController);
       this.setComponent('#footer', ReactPagination.Footer);
 
       IndexResultsActions.newMangoResultsList({
         collection: mangoResultCollection,
-        isListDeletable: true,
         textEmptyIndex: 'No Results',
         bulkCollection: Documents.BulkDeleteDocCollection
       });
@@ -135,10 +132,8 @@ function (app, FauxtonAPI, Helpers, BaseRoute, Databases,
             }
           });
 
-
       IndexResultsActions.newResultsList({
         collection: mangoIndexCollection,
-        isListDeletable: true,
         bulkCollection: Documents.MangoBulkDeleteDocCollection,
         typeOfIndex: 'mango'
       });
@@ -152,8 +147,7 @@ function (app, FauxtonAPI, Helpers, BaseRoute, Databases,
         ]
       }));
 
-      ReactActions.resetHeaderController();
-      this.setComponent('#react-headerbar', ReactHeader.HeaderBarController);
+      this.setComponent('#react-headerbar', ReactHeader.BulkDocumentHeaderController);
       this.setComponent('#footer', ReactPagination.Footer);
 
       this.setComponent('#dashboard-lower-content', IndexResultsComponents.List);

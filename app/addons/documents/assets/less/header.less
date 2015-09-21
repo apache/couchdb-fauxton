@@ -10,10 +10,45 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-.control-cancel {
+
+button.control-toggle-alternative-header {
   border-right: none;
 }
 
-.alternative-header {
-  float: left;
+#react-headerbar .dropdown {
+  a {
+    text-decoration: none;
+    div {
+      margin-left: 30px;
+    }
+  }
+  li {
+    cursor: pointer;
+    i {
+      font-size: 17px;
+      position: absolute;
+    }
+  }
+  .fonticon-eye {
+    position: relative;
+    font-size: 22px;
+  }
+  .fonticon-eye::before {
+    margin-top: 8px;
+  }
+  .dropdown-menu {
+    left: -101px;
+    top: 55px;
+  }
+}
+
+#react-headerbar {
+  // dropdown needs position absolute
+  .add-dropdown {
+    right: initial;
+    top: initial;
+  }
+  .control-select-all {
+    margin-left: 95px;
+  }
 }

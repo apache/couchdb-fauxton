@@ -24,14 +24,13 @@ module.exports = {
       .createDocument(newDocumentName1, newDatabaseName)
       .createDocument(newDocumentName2, newDatabaseName)
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
-      .waitForElementPresent('.control-toggle-alternative-header', waitTime, false)
+      .waitForElementPresent('.bulk-action-component-selector-group', waitTime, false)
 
       // ensures page content has loaded before proceeding
       .waitForElementVisible('.prettyprint', waitTime, false)
 
-      .clickWhenVisible('.control-toggle-alternative-header')
-      .clickWhenVisible('.control-select-all', waitTime, false)
-      .clickWhenVisible('.control-delete', waitTime, false)
+      .clickWhenVisible('.bulk-action-component-selector-group input[type="checkbox"]')
+      .clickWhenVisible('.bulk-actions button.fonticon-trash', waitTime, false)
       .acceptAlert()
       .waitForElementVisible('#global-notifications .alert.alert-info', waitTime, false)
       .waitForElementNotPresent('[data-id="' + newDocumentName1 + '"]', waitTime, false)
@@ -60,15 +59,14 @@ module.exports = {
       // ensures page content has loaded before proceeding
       .waitForElementVisible('.prettyprint', waitTime, false)
 
-      .clickWhenVisible('.control-toggle-alternative-header')
-      .waitForElementPresent('.control-select-all', waitTime, false)
-      .clickWhenVisible('.control-select-all', waitTime, false)
+      .clickWhenVisible('.bulk-action-component-selector-group input[type="checkbox"]')
+
       .waitForElementPresent('#next', waitTime, false)
       .clickWhenVisible('#next', waitTime, false)
       .waitForElementVisible('[data-id="27"]', waitTime, false)
       .waitForElementPresent('#previous', waitTime, false)
       .clickWhenVisible('#previous', waitTime, false)
-      .waitForElementPresent('.control-select-all.js-headerbar-togglebutton-selected', waitTime, false)
+      .waitForElementPresent('.bulk-action-component-selector-group input[type="checkbox"]:checked', waitTime, false)
       .end();
   }
 };

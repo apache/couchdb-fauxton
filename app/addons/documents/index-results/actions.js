@@ -15,13 +15,11 @@ define([
   'api',
   'addons/documents/index-results/actiontypes',
   'addons/documents/index-results/stores',
-  'addons/documents/header/header.stores',
   'addons/documents/header/header.actions',
   'addons/documents/resources'
 ],
-function (app, FauxtonAPI, ActionTypes, Stores, HeaderStores, HeaderActions, Documents) {
+function (app, FauxtonAPI, ActionTypes, Stores, HeaderActions, Documents) {
   var indexResultsStore = Stores.indexResultsStore;
-  var headerBarStore = HeaderStores.headerBarStore;
 
   var errorMessage = function (ids) {
     var msg = 'Failed to delete your document!';
@@ -38,11 +36,16 @@ function (app, FauxtonAPI, ActionTypes, Stores, HeaderStores, HeaderActions, Doc
   };
 
   return {
-    newResultsList: function (options) {
+
+    sendMessageNewResultList: function (options) {
       FauxtonAPI.dispatch({
         type: ActionTypes.INDEX_RESULTS_NEW_RESULTS,
         options: options
       });
+    },
+
+    newResultsList: function (options) {
+      this.sendMessageNewResultList(options);
 
       if (!options.collection.fetch) { return; }
       this.clearResults();
@@ -91,7 +94,6 @@ function (app, FauxtonAPI, ActionTypes, Stores, HeaderStores, HeaderActions, Doc
           this.resultsListReset();
           this.newMangoResultsList({
             collection: collection,
-            isListDeletable: indexResultsStore.isListDeletable(),
             query: options.queryCode,
             textEmptyIndex: 'No Results Found!',
             bulkCollection: Documents.BulkDeleteDocCollection
@@ -111,7 +113,6 @@ function (app, FauxtonAPI, ActionTypes, Stores, HeaderStores, HeaderActions, Doc
       if (indexResultsStore.getTypeOfIndex() === 'mango') {
         return this.newResultsList({
           collection: indexResultsStore.getCollection(),
-          isListDeletable: true,
           bulkCollection: Documents.MangoBulkDeleteDocCollection,
           typeOfIndex: 'mango'
         });
@@ -119,7 +120,6 @@ function (app, FauxtonAPI, ActionTypes, Stores, HeaderStores, HeaderActions, Doc
 
       return this.newResultsList({
         collection: indexResultsStore.getCollection(),
-        isListDeletable: indexResultsStore.isListDeletable(),
         bulkCollection: Documents.BulkDeleteDocCollection
       });
     },
@@ -135,17 +135,18 @@ function (app, FauxtonAPI, ActionTypes, Stores, HeaderStores, HeaderActions, Doc
         type: ActionTypes.INDEX_RESULTS_SELECT_DOC,
         id: id
       });
+    },
 
-      //show menu
-      if (!headerBarStore.getToggleStatus()) {
-        HeaderActions.toggleHeaderControls();
-        return;
-      }
+    selectAllDocuments: function () {
+      FauxtonAPI.dispatch({
+        type: ActionTypes.INDEX_RESULTS_SELECT_ALL_DOCUMENTS
+      });
+    },
 
-      //hide menu
-      if (headerBarStore.getToggleStatus() && indexResultsStore.getSelectedItemsLength() === 0) {
-        HeaderActions.toggleHeaderControls();
-      }
+    toggleAllDocuments: function () {
+      FauxtonAPI.dispatch({
+        type: ActionTypes.INDEX_RESULTS_TOOGLE_SELECT_ALL_DOCUMENTS
+      });
     },
 
     selectListOfDocs: function (ids) {

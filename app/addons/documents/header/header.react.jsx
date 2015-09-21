@@ -14,104 +14,63 @@ define([
   'app',
   'api',
   'react',
-  'addons/documents/header/header.stores',
   'addons/documents/header/header.actions',
   'addons/components/react-components.react',
   'addons/documents/index-results/stores',
   'addons/documents/index-results/actions',
 ],
 
-function (app, FauxtonAPI, React, Stores, Actions, ReactComponents, IndexResultsStore, IndexResultsActions) {
+function (app, FauxtonAPI, React, Actions, ReactComponents, IndexResultsStore, IndexResultsActions) {
   var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
-  var headerBarStore = Stores.headerBarStore;
-  var bulkDocumentHeaderStore = Stores.bulkDocumentHeaderStore;
+
   var indexResultsStore = IndexResultsStore.indexResultsStore;
   var ToggleHeaderButton = ReactComponents.ToggleHeaderButton;
+  var MenuDropDown = ReactComponents.MenuDropDown;
 
   var BulkDocumentHeaderController = React.createClass({
-    getStoreState: function () {
-      return {
-        canCollapseDocs: indexResultsStore.canCollapseDocs(),
-        canUncollapseDocs: indexResultsStore.canUncollapseDocs(),
-        canDeselectAll: indexResultsStore.canDeselectAll(),
-        canSelectAll: indexResultsStore.canSelectAll()
-      };
-    },
+    getCollapseDocsButton: function () {
+      return (
+        <div className="add-dropdown">
+          <div className="dropdown">
+            <button data-toggle="dropdown" className="button header-control-box control-view">
+              <i className="dropdown-toggle icon fonticon-eye"></i> View
+            </button>
+            <ul className="dropdown-menu arrow" role="menu" aria-labelledby="dLabel">
+              <li>
+                <a onClick={this.collapseAllDocuments}>
+                  <i className="fonticon-list-alt" />
+                  <div>
+                    Collapsed View
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a onClick={this.toggleToNormalJson}>
+                  <i className="fonticon-json" />
+                  <div>
+                    Expanded View
+                  </div>
+                </a>
+              </li>
+              <li>
+                <a onClick={this.tablelizeView}>
+                  <i className="fonticon-table" />
+                  <div>
+                    Table View
+                  </div>
+                </a>
+              </li>
+            </ul>
 
-    getInitialState: function () {
-      return this.getStoreState();
-    },
-
-    componentDidMount: function () {
-      indexResultsStore.on('change', this.onChange, this);
-    },
-
-    componentWillUnmount: function () {
-      indexResultsStore.off('change', this.onChange);
-    },
-
-    onChange: function () {
-      this.setState(this.getStoreState());
+          </div>
+        </div>
+      );
     },
 
     render: function () {
-      var baseClass = 'header-control-box header-control-square ',
-          canDeselectAll = this.state.canDeselectAll,
-          canSelectAll = this.state.canSelectAll,
-          canCollapseDocs = this.state.canCollapseDocs,
-          canUncollapseDocs = this.state.canUncollapseDocs;
-
       return (
         <div className='alternative-header'>
-          <ToggleHeaderButton
-            fonticon={'fonticon-select-all'}
-            toggleCallback={this.selectAllDocuments}
-            containerClasses={baseClass + 'control-select-all'}
-            text={''}
-            selected={!canSelectAll}
-            disabled={!canSelectAll}
-            title={'Select all Documents'} />
-
-          <ToggleHeaderButton
-            fonticon={'fonticon-deselect-all'}
-            toggleCallback={this.deSelectAllDocuments}
-            containerClasses={baseClass + 'control-de-select-all'}
-            text={''}
-            selected={!canDeselectAll}
-            disabled={!canDeselectAll}
-            title={'Deselect all Documents'} />
-
-          <ToggleHeaderButton
-            fonticon={'fonticon-collapse'}
-            toggleCallback={this.collapseDocuments}
-            containerClasses={baseClass + 'control-collapse'}
-            text={''}
-            selected={!canCollapseDocs}
-            disabled={!canCollapseDocs}
-            title={'Collapse Selected'} />
-
-          <ToggleHeaderButton
-            fonticon={'fonticon-expand'}
-            toggleCallback={this.unCollapseDocuments}
-            containerClasses={baseClass + 'control-expand'}
-            text={''}
-            selected={!canUncollapseDocs}
-            disabled={!canUncollapseDocs}
-            title={'Expand Selected'} />
-
-          <ToggleHeaderButton
-            fonticon={'fonticon-trash'}
-            toggleCallback={this.deleteSelected}
-            containerClasses={baseClass + 'control-delete'}
-            text={''}
-            title={'Delete selected'} />
-
-          <ToggleHeaderButton
-            fonticon={''}
-            toggleCallback={this.cancelView}
-            containerClasses={baseClass + 'control-cancel'}
-            text={'Cancel'}
-            title={'Switch to other view'} />
+          {this.getCollapseDocsButton()}
         </div>
       );
     },
@@ -124,95 +83,21 @@ function (app, FauxtonAPI, React, Stores, Actions, ReactComponents, IndexResults
       Actions.unCollapseDocuments();
     },
 
-    selectAllDocuments: function () {
-      Actions.selectAllDocuments();
+    toggleToNormalJson: function () {
+      Actions.unCollapseAllDocuments();
     },
 
-    deSelectAllDocuments: function () {
-      Actions.deSelectAllDocuments();
+    collapseAllDocuments: function () {
+      Actions.collapseAllDocuments();
     },
 
-    cancelView: function () {
-      Actions.toggleHeaderControls();
-    },
-
-    deleteSelected: function () {
-      IndexResultsActions.deleteSelected();
-    }
-  });
-
-  var HeaderBarController = React.createClass({
-    getStoreState: function () {
-      return {
-        isToggled: headerBarStore.getToggleStatus(),
-        toggleClass: headerBarStore.getToggleClass()
-      };
-    },
-
-    getInitialState: function () {
-      return this.getStoreState();
-    },
-
-    onChange: function () {
-      this.setState(this.getStoreState());
-    },
-
-    componentDidMount: function () {
-      headerBarStore.on('change', this.onChange, this);
-    },
-
-    componentWillUnmount: function () {
-      headerBarStore.off('change', this.onChange);
-    },
-
-    toggleCallback: function () {
-      Actions.toggleHeaderControls();
-    },
-
-    componentDidUpdate: function () {
-      // todo reactify right header (api bar, query options)
-      var $oldHeader = $('#api-navbar, #right-header, #notification-center-btn');
-      if (this.state.isToggled) {
-        $oldHeader.hide();
-        return;
-      }
-
-      setTimeout(function () {
-        $oldHeader.velocity('fadeIn', 250);
-      }, 250);
-    },
-
-    render: function () {
-      var containerClasses = 'header-control-box ' +
-        'control-toggle-alternative-header ' + this.state.toggleClass;
-      var innerClasses = '';
-
-      var headerbar = null;
-      if (this.state.isToggled) {
-        headerbar = (<BulkDocumentHeaderController key={1} />);
-      }
-
-      return (
-        <div>
-          <div>
-            <ToggleHeaderButton
-              fonticon={'fonticon-ok-circled'}
-              toggleCallback={this.toggleCallback}
-              containerClasses={containerClasses}
-              innerClasses={innerClasses}
-              text={'Select'} />
-              <ReactCSSTransitionGroup transitionName={'fade'}>
-                {headerbar}
-              </ReactCSSTransitionGroup>
-          </div>
-        </div>
-      );
+    tablelizeView: function () {
+      Actions.enableTableView();
     }
   });
 
   var Views = {
     BulkDocumentHeaderController: BulkDocumentHeaderController,
-    HeaderBarController: HeaderBarController,
     ToggleHeaderButton: ToggleHeaderButton
   };
 

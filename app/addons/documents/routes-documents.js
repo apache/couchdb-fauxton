@@ -114,9 +114,7 @@ function (app, FauxtonAPI, BaseRoute, Documents, Changes, ChangesActions, Databa
             docParams = params.docParams,
             collection;
 
-        ReactActions.resetHeaderController();
-
-        this.setComponent('#react-headerbar', ReactHeader.HeaderBarController);
+        this.setComponent('#react-headerbar', ReactHeader.BulkDocumentHeaderController);
         this.setComponent('#footer', ReactPagination.Footer);
 
         this.leftheader.updateCrumbs(this.getCrumbs(this.database));
@@ -139,7 +137,6 @@ function (app, FauxtonAPI, BaseRoute, Documents, Changes, ChangesActions, Databa
 
         IndexResultsActions.newResultsList({
           collection: collection,
-          isListDeletable: true,
           textEmptyIndex: 'No Documents Found',
           bulkCollection: Documents.BulkDeleteDocCollection
         });

@@ -33,26 +33,6 @@ define([
 
   });
 
-  var MangoRoute = Documents.RouteObjects[4];
-  describe('Mango Route', function () {
-
-    afterEach(function () {
-      testUtils.restore(HeaderActions.resetHeaderController);
-      testUtils.restore(IndexResultsActions.newMangoResultsList);
-    });
-
-    it('resets the header', function () {
-      var spy = sinon.spy(HeaderActions, 'resetHeaderController');
-      var stub = sinon.stub(IndexResultsActions, 'newMangoResultsList');
-
-      var routeObj = new MangoRoute(null, null, ['test']);
-
-      routeObj.findUsingIndex();
-      assert.ok(spy.calledOnce);
-    });
-
-  });
-
   //    until there is consensus on how to encode json responses
   //    https://issues.apache.org/jira/browse/COUCHDB-2748
   //    taking out this test for https://github.com/apache/couchdb-fauxton/pull/489
