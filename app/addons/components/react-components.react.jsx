@@ -17,10 +17,12 @@ define([
   'addons/components/stores',
   'addons/fauxton/components.react',
   'ace/ace',
-  'plugins/beautify'
+  'plugins/beautify',
+  'libs/react-bootstrap'
 ],
 
-function (app, FauxtonAPI, React, Stores, FauxtonComponents, ace, beautifyHelper) {
+function (app, FauxtonAPI, React, Stores, FauxtonComponents, ace, beautifyHelper, ReactBootstrap) {
+
   var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
   var componentStore = Stores.componentStore;
 
@@ -58,6 +60,101 @@ function (app, FauxtonAPI, React, Stores, FauxtonComponents, ace, beautifyHelper
         </button>
       );
     }
+  });
+
+
+  var BulkActionComponent = React.createClass({
+
+    propTypes: {
+      hasSelectedItem: React.PropTypes.bool.isRequired,
+      removeItem: React.PropTypes.func.isRequired,
+      selectAll: React.PropTypes.func.isRequired,
+      toggleSelect: React.PropTypes.func.isRequired,
+      isChecked: React.PropTypes.bool.isRequired
+    },
+
+    getDefaultProps: function () {
+      return {
+        disabled: false,
+        title: 'Select rows that can be...',
+        bulkIcon: 'fonticon-trash',
+        buttonTitle: 'Delete all selected',
+        dropdownContentText: 'Deleted',
+        enableOverlay: false
+      };
+    },
+
+    render: function () {
+      return (
+        <div className="bulk-action-component">
+          <div className="bulk-action-component-selector-group">
+            {this.getMasterSelector()}
+            {this.getMultiSelectOptions()}
+          </div>
+        </div>
+      );
+    },
+
+    getMultiSelectOptions: function () {
+      if (!this.props.hasSelectedItem) {
+        return null;
+      }
+
+      return (
+        <button
+          onClick={this.props.removeItem}
+          className={'fonticon ' + this.props.bulkIcon}
+          title={this.props.buttonTitle} />
+      );
+    },
+
+    getPopupContent: function () {
+      return (
+        <ul className="bulk-action-component-popover-actions">
+          <li onClick={this.selectAll} >
+            <i className="icon fonticon-cancel"></i> {this.props.dropdownContentText}
+          </li>
+        </ul>
+      );
+    },
+
+    selectAll: function () {
+      this.refs.bulkActionPopover.hide();
+      this.props.selectAll();
+    },
+
+    getOverlay: function () {
+      return (
+        <ReactBootstrap.OverlayTrigger
+          ref="bulkActionPopover"
+          trigger="click"
+          placement="bottom"
+          rootClose={true}
+          overlay={
+            <ReactBootstrap.Popover id="bulk-action-component-popover" title={this.props.title}>
+              {this.getPopupContent()}
+            </ReactBootstrap.Popover>
+          }>
+          <div className="arrow-button">
+            <i className="fonticon fonticon-play"></i>
+          </div>
+        </ReactBootstrap.OverlayTrigger>
+      );
+    },
+
+    getMasterSelector: function () {
+      return (
+        <div className="bulk-action-component-panel">
+          <input type="checkbox"
+            checked={this.props.isChecked}
+            onChange={this.props.toggleSelect}
+            disabled={this.props.disabled} />
+          {this.props.enableOverlay ? <div className="separator"></div> : null}
+          {this.props.enableOverlay ? this.getOverlay() : null}
+        </div>
+      );
+    },
+
   });
 
   var StyledSelect = React.createClass({
@@ -1167,6 +1264,7 @@ function (app, FauxtonAPI, React, Stores, FauxtonComponents, ace, beautifyHelper
   });
 
   return {
+    BulkActionComponent: BulkActionComponent,
     ConfirmButton: ConfirmButton,
     ToggleHeaderButton: ToggleHeaderButton,
     StyledSelect: StyledSelect,

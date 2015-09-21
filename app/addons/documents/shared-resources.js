@@ -293,13 +293,18 @@ define([
       });
 
       resp.rows = _.map(cleanRows, function (row) {
-        return {
+        var res = {
           _id: row.id,
           _rev: row.value.rev,
           value: row.value,
-          key: row.key,
-          doc: row.doc || undefined
+          key: row.key
         };
+
+        if (row.doc) {
+          res.doc = row.doc;
+        }
+
+        return res;
       });
 
       return PagingCollection.prototype.parse.call(this, resp);

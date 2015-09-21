@@ -59,7 +59,7 @@ define([
       it('has correct doc format', function () {
         store._collection = new Documents.AllDocs([{_id: 'testId'}], opts);
 
-        var doc = store.getResults()[0];
+        var doc = store.getResults().results[0];
         assert.equal(doc.id, 'testId');
         assert.equal(doc.keylabel, 'id');
       });
@@ -118,41 +118,6 @@ define([
 
   });
 
-  describe('canCollapseDocs', function () {
-
-    it('returns true for no collapsed docs', function () {
-      store._collapsedDocs = {};
-      assert.ok(store.canCollapseDocs());
-    });
-
-    it('returns false for all collapsed docs', function () {
-      store._collection = new Documents.AllDocs([{_id: 'testId1'}, {_id: 'testId2'}], opts);
-
-      store._collapsedDocs = {
-        'testId1': true,
-        'testId2': true
-      };
-
-      assert.notOk(store.canCollapseDocs());
-    });
-
-  });
-
-  describe('canUncollapseDocs', function () {
-
-    it('returns true for collapsed docs', function () {
-      store._collapsedDocs = {'testId1': true};
-      assert.ok(store.canUncollapseDocs());
-    });
-
-    it('returns false for no collapsed docs', function () {
-      store.clearCollapsedDocs();
-
-      assert.notOk(store.canUncollapseDocs());
-    });
-
-  });
-
   describe('getDocContent', function () {
 
     it('returns full doc if not collapsed', function () {
@@ -164,14 +129,14 @@ define([
       assert.equal(JSON.parse(result).value, 'one');
     });
 
-    it('returns no doc content if collapsed', function () {
-      store._collection = new Documents.AllDocs([{_id: 'testId1', 'value': 'one'}], opts);
+    it('returns just the revision as content if collapsed', function () {
+      store._collection = new Documents.AllDocs([{_id: 'testId1', _rev: 'a', 'value': 'one'}], opts);
 
       var doc = store._collection.first();
-      store._collapsedDocs = {'testId1': true};
+      store._allCollapsed = true;
       var result = store.getDocContent(doc);
 
-      assert.equal('', result);
+      assert.deepEqual({"rev": "a"}, JSON.parse(result));
     });
 
   });
@@ -202,52 +167,24 @@ define([
 
   });
 
-  describe('#deSelectAllDocuments', function () {
+  describe('toggleSelectAllDocuments', function () {
 
     it('deselects all documents', function () {
       store._collection = new Documents.AllDocs([{_id: 'testId1', 'value': 'one'}], opts);
 
       store.selectAllDocuments();
       assert.ok(store.getSelectedItems().testId1);
-      store.deSelectAllDocuments();
+      store.toggleSelectAllDocuments();
       assert.equal(store.getSelectedItemsLength(), 0);
     });
-  });
 
-  describe('#collapseSelectedDocs', function () {
+    it('deselects all documents', function () {
+      store.reset();
+      store._collection = new Documents.AllDocs([{_id: 'testId1', 'value': 'one'}], opts);
 
-    it('collapses all selected docs', function () {
-      store._collection = new Documents.AllDocs([{_id: 'testId1'}, {_id: 'testId2'}], opts);
-
-      store.clearCollapsedDocs();
-
-      store._selectedItems = {
-        'testId1': true,
-        'testId2': true
-      };
-
-      store.collapseSelectedDocs();
-      assert.equal(store.getCollapsedDocsLength(), 2);
-    });
-
-  });
-
-  describe('#unCollapseSelectedDocs', function () {
-
-    it('uncollapses all selected docs', function () {
-      store._collection = new Documents.AllDocs([{_id: 'testId1'}, {_id: 'testId2'}], opts);
-
-      store.clearCollapsedDocs();
-
-      store._selectedItems = {
-        'testId1': true,
-        'testId2': true
-      };
-
-      store.collapseSelectedDocs();
-      assert.equal(store.getCollapsedDocsLength(), 2);
-      store.unCollapseSelectedDocs();
-      assert.equal(store.getCollapsedDocsLength(), 0);
+      assert.equal(Object.keys(store.getSelectedItems()).length, 0);
+      store.toggleSelectAllDocuments();
+      assert.equal(store.getSelectedItemsLength(), 1);
     });
   });
 
@@ -268,11 +205,97 @@ define([
       assert.equal(bulkDelete.length, 2);
       assert.ok(bulkDelete.at(0).get('_deleted'));
     });
-
   });
 
+  it('tries to guess a pseudo schema for table views', function () {
+    var doclist = [
+      {_id: 'testId1', value: 'one'},
+      {_id: 'testId2', foo: 'one'},
+      {_id: 'testId3', bar: 'one'},
+    ];
+
+    var schema = store.getPseudoSchema(doclist);
+
+    assert.ok(schema.indexOf('_id') !== -1);
+    assert.ok(schema.indexOf('value') !== -1);
+    assert.ok(schema.indexOf('foo') !== -1);
+    assert.ok(schema.indexOf('bar') !== -1);
+  });
+
+  it('uses unique values for the pseudo schema', function () {
+    var doclist = [
+      {_id: 'testId1', foo: 'one'},
+      {_id: 'testId2', foo: 'one'}
+    ];
+
+    var schema = store.getPseudoSchema(doclist);
+
+    assert.equal(schema.length, 2);
+    assert.equal(schema.length, 2);
+    assert.ok(schema.indexOf('foo') !== -1);
+    assert.ok(schema.indexOf('_id') !== -1);
+  });
+
+  it('puts the id into the array as first element', function () {
+    var doclist = [
+      {foo: 'one', _id: 'testId1'},
+      {foo: 'one', _id: 'testId2'}
+    ];
+
+    var schema = store.getPseudoSchema(doclist);
+
+    assert.equal(schema.shift(), '_id');
+  });
+
+  it('normalizes different content from include_docs enabled', function () {
+    var doclist = [
+      {_id: 'testId2', foo: 'one', doc: {"_rev": "1", "ente": "gans", "fuchs": "hase"}},
+      {_id: 'testId3', foo: 'two', doc: {"_rev": "2", "haus": "blau", "tanne": "acht"}}
+    ];
+
+    var res = store.normalizeTableData(doclist);
+    assert.deepEqual(res[0], {"_rev": "1", "ente": "gans", "fuchs": "hase"});
+  });
+
+  it('normalizes different content from include_docs disabled', function () {
+    var doclist = [
+      {id: 'testId2', foo: 'one'},
+      {id: 'testId3', foo: 'two'}
+    ];
+
+    var res = store.normalizeTableData(doclist);
+    assert.deepEqual(doclist, res);
+  });
+
+  it('finds out if we have at least one editable/deleteable doc which needs an id', function () {
+    var doclist = [
+      {id: 'testId2', foo: 'one'},
+      {id: 'testId3', foo: 'two'}
+    ];
+
+    assert.ok(store.getHasEditableAndDeletableDoc(doclist));
+
+    doclist = [
+      {foo: 'one'},
+      {foo: 'two'}
+    ];
+
+    assert.notOk(store.getHasEditableAndDeletableDoc(doclist));
+  });
+
+
   describe('#getMangoDoc', function () {
-    var store = new Stores.IndexResultsStore();
+    beforeEach(function () {
+      store = new Stores.IndexResultsStore();
+      dispatchToken = FauxtonAPI.dispatcher.register(store.dispatch);
+      opts = {
+        params: {},
+        database: {
+          safeID: function () { return '1';}
+        }
+      };
+    });
+
     var fakeMango = {
       ddoc: '_design/e4d338e5d6f047749f5399ab998b4fa04ba0c816',
       def: {
@@ -314,6 +337,7 @@ define([
       assert.ok(doc.get('name'));
       assert.ok(doc.get('ddoc'));
 
+      store._allCollapsed = false;
       var newDoc = store.getMangoDoc(doc);
       assert.notOk(JSON.parse(newDoc.content).name);
       assert.notOk(JSON.parse(newDoc.content).ddoc);

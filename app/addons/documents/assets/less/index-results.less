@@ -10,6 +10,15 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+@import "../../../../../assets/less/variables.less";
+
+
+.document-result-screen {
+  .bulk-action-component {
+    padding-bottom: 15px;
+  }
+}
+
 .watermark-logo {
   background: transparent url('../img/couch-watermark.png') no-repeat 50% 50%;
   min-height: 400px;
@@ -23,5 +32,39 @@
   }
   .preview {
     margin: 0 10px;
+  }
+}
+
+.table-view-docs {
+  .tableview-data-cell-id {
+    font-weight: 700;
+    a {
+      color: @linkColor;
+    }
+  }
+  .tableview-header-el-checkbox {
+    border: none;
+  }
+
+  td, th, td a {
+    vertical-align: middle;
+    line-height: 20px;
+    font-size: 14px;
+    color: @defaultHTag;
+  }
+  td {
+    height: 49px;
+  }
+  td, th {
+    max-width: 160px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  td.tableview-checkbox-cell, th.tableview-header-el-checkbox {
+    width: 28px;
+  }
+  .tableview-checkbox-cell input {
+    margin: 0px;
   }
 }

@@ -25,13 +25,14 @@ define([
   'addons/documents/pagination/stores',
   'addons/documents/index-results/actions',
   'addons/documents/index-results/index-results.components.react',
-  'addons/documents/pagination/pagination.react'
-
+  'addons/documents/pagination/pagination.react',
+  'addons/documents/header/header.react',
+  'addons/documents/header/header.actions',
 ],
 
 function (app, FauxtonAPI, Helpers, BaseRoute, Documents, IndexEditorComponents, ActionsIndexEditor,
           Databases, Components, PaginationStores, IndexResultsActions,
-          IndexResultsComponents, ReactPagination) {
+          IndexResultsComponents, ReactPagination, ReactHeader, ReactHeaderActions) {
 
 
   var IndexEditorAndResults = BaseRoute.extend({
@@ -97,7 +98,6 @@ function (app, FauxtonAPI, Helpers, BaseRoute, Documents, IndexEditorComponents,
 
       IndexResultsActions.newResultsList({
         collection: this.indexedDocs,
-        isListDeletable: false,
         bulkCollection: Documents.BulkDeleteDocCollection
       });
 
@@ -108,6 +108,8 @@ function (app, FauxtonAPI, Helpers, BaseRoute, Documents, IndexEditorComponents,
         designDocs: this.designDocs,
         designDocId: '_design/' + decodeDdoc
       });
+
+      this.setComponent('#react-headerbar', ReactHeader.BulkDocumentHeaderController);
 
       this.setComponent('#left-content', IndexEditorComponents.EditorController);
       this.setComponent('#dashboard-lower-content', IndexResultsComponents.List);
@@ -152,7 +154,6 @@ function (app, FauxtonAPI, Helpers, BaseRoute, Documents, IndexEditorComponents,
 
       IndexResultsActions.newResultsList({
         collection: [],
-        isListDeletable: false,
         bulkCollection: Documents.BulkDeleteDocCollection
       });
     }

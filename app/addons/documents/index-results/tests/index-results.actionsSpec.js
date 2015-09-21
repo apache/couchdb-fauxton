@@ -14,11 +14,9 @@ define([
   'api',
   'addons/documents/index-results/actions',
   'addons/documents/index-results/stores',
-  'addons/documents/header/header.stores',
-  'addons/documents/header/header.actions',
   'addons/documents/resources',
   'testUtils',
-], function (FauxtonAPI, Actions, Stores, HeaderStores, HeaderActions, Documents, testUtils) {
+], function (FauxtonAPI, Actions, Stores, Documents, testUtils) {
   var assert = testUtils.assert;
   var restore = testUtils.restore;
   var store = Stores.indexResultsStore;
@@ -48,46 +46,6 @@ define([
 
   });
 
-  describe('#selectDoc', function () {
-    afterEach(function () {
-      restore(HeaderStores.headerBarStore.getToggleStatus);
-      restore(HeaderActions.toggleHeaderControls);
-    });
-
-    it('toggles header controls if not active', function () {
-      var stub = sinon.stub(HeaderStores.headerBarStore, 'getToggleStatus');
-      stub.returns(false);
-
-      var spy = sinon.spy(HeaderActions, 'toggleHeaderControls');
-
-      Actions.selectDoc('id');
-      assert.ok(spy.calledOnce);
-    });
-
-    it('does not toggles header controls if active', function () {
-      store.clearSelectedItems();
-      var stub = sinon.stub(HeaderStores.headerBarStore, 'getToggleStatus');
-      stub.returns(true);
-
-      var spy = sinon.spy(HeaderActions, 'toggleHeaderControls');
-
-      Actions.selectDoc('id');
-      assert.notOk(spy.calledOnce);
-    });
-
-    it('hides header control if active and no items selected', function () {
-      var stub = sinon.stub(HeaderStores.headerBarStore, 'getToggleStatus');
-      stub.returns(true);
-      store._selectedItems = {'id': true};
-
-      var spy = sinon.spy(HeaderActions, 'toggleHeaderControls');
-
-      Actions.selectDoc('id');
-      assert.ok(spy.calledOnce);
-
-    });
-
-  });
 
   describe('#deleteSelected', function () {
     var confirmStub;

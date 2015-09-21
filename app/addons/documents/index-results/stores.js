@@ -11,6 +11,7 @@
 // the License.
 
 define([
+  'app',
   'api',
   'addons/documents/index-results/actiontypes',
   'addons/documents/header/header.actiontypes',
@@ -18,7 +19,7 @@ define([
   'addons/documents/mango/mango.helper'
 ],
 
-function (FauxtonAPI, ActionTypes, HeaderActionTypes, Documents, MangoHelper) {
+function (app, FauxtonAPI, ActionTypes, HeaderActionTypes, Documents, MangoHelper) {
   var Stores = {};
 
   /*TODO:
@@ -28,10 +29,12 @@ function (FauxtonAPI, ActionTypes, HeaderActionTypes, Documents, MangoHelper) {
   Stores.IndexResultsStore = FauxtonAPI.Store.extend({
 
     initialize: function () {
-      this._isListDeletable = false;
+      this.reset();
+    },
+
+    reset: function () {
       this._collection = [];
       this.clearSelectedItems();
-      this.clearCollapsedDocs();
       this._isLoading = false;
       this._textEmptyIndex = 'No Index Created Yet!';
       this._typeOfIndex = 'view';
@@ -43,15 +46,9 @@ function (FauxtonAPI, ActionTypes, HeaderActionTypes, Documents, MangoHelper) {
       this._selectedItems = {};
     },
 
-    clearCollapsedDocs: function () {
-      this._collapsedDocs = {};
-    },
-
     newResults: function (options) {
       this._collection = options.collection;
-      this._isListDeletable = options.isListDeletable;
       this.clearSelectedItems();
-      this.clearCollapsedDocs();
 
       this._bulkDeleteDocCollection = options.bulkCollection;
 
@@ -110,10 +107,6 @@ function (FauxtonAPI, ActionTypes, HeaderActionTypes, Documents, MangoHelper) {
       return doc.isDeletable();
     },
 
-    isListDeletable: function () {
-      return this._isListDeletable;
-    },
-
     getCollection: function () {
       return this._collection;
     },
@@ -121,7 +114,11 @@ function (FauxtonAPI, ActionTypes, HeaderActionTypes, Documents, MangoHelper) {
     getDocContent: function (originalDoc) {
       var doc = originalDoc.toJSON();
 
-      return this.isCollapsed(doc._id) ? '' : JSON.stringify(doc, null, ' ');
+      if (this._allCollapsed) {
+        return JSON.stringify({id: doc.id, rev: doc._rev}, null, ' ');
+      }
+
+      return JSON.stringify(doc, null, ' ');
     },
 
     getDocId: function (doc) {
@@ -143,7 +140,11 @@ function (FauxtonAPI, ActionTypes, HeaderActionTypes, Documents, MangoHelper) {
       delete doc.ddoc;
       delete doc.name;
 
-      return this.isCollapsed(originalDoc.id) ? '' : JSON.stringify(doc, null, ' ');
+      if (this._allCollapsed) {
+        return '';
+      }
+
+      return JSON.stringify(doc, null, ' ');
     },
 
     getMangoDoc: function (doc, index) {
@@ -179,11 +180,27 @@ function (FauxtonAPI, ActionTypes, HeaderActionTypes, Documents, MangoHelper) {
     },
 
     getResults: function () {
+      var hasEditableAndDeletableDoc;
+      var res;
+      var collection;
+
+
       function filterOutGeneratedMangoDocs (doc) {
-        return doc.get('language') !== 'query';
+        if (doc.get && typeof doc.get === 'function') {
+          return doc.get('language') !== 'query';
+        }
+
+        return doc.language !== 'query';
       }
 
-      return this._collection
+      // Table sytle view
+      if (this.getIsTableView()) {
+        collection = this._collection.toJSON().filter(filterOutGeneratedMangoDocs);
+        return this.getTableViewData(collection);
+      }
+
+      // JSON style views
+      res = this._collection
         .filter(filterOutGeneratedMangoDocs)
         .map(function (doc, i) {
           if (doc.get('def') || this.isGhostDoc(doc)) {
@@ -199,6 +216,100 @@ function (FauxtonAPI, ActionTypes, HeaderActionTypes, Documents, MangoHelper) {
             isEditable: this.isEditable(doc)
           };
         }, this);
+
+      hasEditableAndDeletableDoc = this.getHasEditableAndDeletableDoc(res);
+
+      return {
+        hasEditableAndDeletableDoc: hasEditableAndDeletableDoc,
+        results: res
+      };
+    },
+
+    getPseudoSchema: function (data) {
+      var cache = [];
+
+      data.forEach(function (el) {
+        Object.keys(el).forEach(function (k) {
+          cache.push(k);
+        });
+      });
+
+      cache = _.uniq(cache);
+
+      // always begin with _id
+      var i = cache.indexOf('_id');
+      if (i !== -1) {
+        cache.splice(i, 1);
+        cache.unshift('_id');
+      }
+
+      return cache;
+    },
+
+    // filter out cruft and JSONify strings
+    normalizeTableData: function (data) {
+      // include_docs enabled
+      if (data[0] && data[0].doc && data[0].doc._rev) {
+        return data.map(function (el) {
+          el = el.doc;
+          return el;
+        });
+      }
+
+      return data;
+    },
+
+    getTableViewData: function (data, hasEditableAndDeletableDoc) {
+      var res;
+      var schema;
+      var database;
+
+      data = this.normalizeTableData(data);
+      schema = this.getPseudoSchema(data);
+      database = this.getDatabase().safeID();
+
+      res = data.map(function (doc) {
+        var safeId = app.utils.getSafeIdForDoc(doc._id);
+        var url;
+
+        if (safeId) {
+          url = FauxtonAPI.urls('document', 'app', database, safeId);
+        }
+
+        return {
+          content: doc,
+          id: safeId,
+          header: '',
+          keylabel: '',
+          url: url,
+          isDeletable: !!safeId,
+          isEditable: !!safeId
+        };
+      });
+
+      hasEditableAndDeletableDoc = this.getHasEditableAndDeletableDoc(res);
+
+      return {
+        hasEditableAndDeletableDoc: hasEditableAndDeletableDoc,
+        schema: schema,
+        results: res
+      };
+    },
+
+    getHasEditableAndDeletableDoc: function (data) {
+      var found = false;
+      var length = data.length;
+      var i;
+
+      // use a for loop here as we can end it once we found the first id
+      for (i = 0; i < length; i++) {
+        if (data[i].id) {
+          found = true;
+          break;
+        }
+      }
+
+      return found;
     },
 
     hasResults: function () {
@@ -236,20 +347,20 @@ function (FauxtonAPI, ActionTypes, HeaderActionTypes, Documents, MangoHelper) {
       }, this);
     },
 
-    deSelectAllDocuments: function () {
-      this.clearSelectedItems();
+    toggleSelectAllDocuments: function () {
+      if (this.areAllDocumentsSelected()) {
+        return this.clearSelectedItems();
+      }
+
+      return this.selectAllDocuments();
+    },
+
+    areAllDocumentsSelected: function () {
+      return Object.keys(this._selectedItems).length === this._collection.length;
     },
 
     getSelectedItemsLength: function () {
-      return _.keys(this._selectedItems).length;
-    },
-
-    getCollapsedDocsLength: function () {
-      return _.keys(this._collapsedDocs).length;
-    },
-
-    getCollapsedDocs: function () {
-      return this._collapsedDocs;
+      return Object.keys(this._selectedItems).length;
     },
 
     getDatabase: function () {
@@ -300,32 +411,47 @@ function (FauxtonAPI, ActionTypes, HeaderActionTypes, Documents, MangoHelper) {
       return this._selectedItems;
     },
 
-    canCollapseDocs: function () {
-      return this._collection.length > this.getCollapsedDocsLength();
+    hasSelectedItem: function () {
+      return this.getSelectedItemsLength() > 0;
     },
 
-    canUncollapseDocs: function () {
-      return this.getCollapsedDocsLength() > 0;
+    collapseAllDocs: function () {
+      this.disableTableView();
+
+      this._allCollapsed = true;
     },
 
-    isSelected: function (id) {
-      return !!this._selectedItems[id];
+    unCollapseAllDocs: function () {
+      this.disableTableView();
+
+      this._allCollapsed = false;
     },
 
-    isCollapsed: function (id) {
-      return !!this._collapsedDocs[id];
+    enableTableView: function () {
+      this._allCollapsed = false;
+      this._tableView = true;
     },
 
-    collapseSelectedDocs: function () {
-      _.each(this._selectedItems, function (val, key) {
-        this._collapsedDocs[key] = true;
-      }, this);
+    disableTableView: function () {
+      this._allCollapsed = false;
+      this._tableView = false;
     },
 
-    unCollapseSelectedDocs: function () {
-      _.each(this._selectedItems, function (val, key) {
-        delete this._collapsedDocs[key];
-      }, this);
+    getIsTableView: function () {
+      return this._tableView;
+    },
+
+    getCurrentViewType: function () {
+
+      if (this._tableView) {
+        return 'table';
+      }
+
+      if (this._allCollapsed) {
+        return 'collapsed';
+      }
+
+      return 'expanded';
     },
 
     clearResultsBeforeFetch: function () {
@@ -343,44 +469,50 @@ function (FauxtonAPI, ActionTypes, HeaderActionTypes, Documents, MangoHelper) {
       switch (action.type) {
         case ActionTypes.INDEX_RESULTS_NEW_RESULTS:
           this.newResults(action.options);
-          this.triggerChange();
         break;
         case ActionTypes.INDEX_RESULTS_RESET:
           this.resultsResetFromFetch();
-          this.triggerChange();
         break;
         case ActionTypes.INDEX_RESULTS_SELECT_DOC:
           this.selectDoc(action.id);
-          this.triggerChange();
         break;
         case ActionTypes.INDEX_RESULTS_SELECT_LIST_OF_DOCS:
           this.selectListOfDocs(action.ids);
-          this.triggerChange();
         break;
         case ActionTypes.INDEX_RESULTS_CLEAR_RESULTS:
           this.clearResultsBeforeFetch();
-          this.triggerChange();
         break;
-        case HeaderActionTypes.SELECT_ALL_DOCUMENTS:
+        case ActionTypes.INDEX_RESULTS_SELECT_ALL_DOCUMENTS:
           this.selectAllDocuments();
-          this.triggerChange();
         break;
-        case HeaderActionTypes.DESELECT_ALL_DOCUMENTS:
-          this.deSelectAllDocuments();
-          this.triggerChange();
+        case ActionTypes.INDEX_RESULTS_TOOGLE_SELECT_ALL_DOCUMENTS:
+          this.toggleSelectAllDocuments();
         break;
         case HeaderActionTypes.COLLAPSE_DOCUMENTS:
           this.collapseSelectedDocs();
-          this.triggerChange();
         break;
         case HeaderActionTypes.EXPAND_DOCUMENTS:
           this.unCollapseSelectedDocs();
-          this.triggerChange();
         break;
+        case HeaderActionTypes.COLLAPSE_ALL_DOCUMENTS:
+          this.collapseAllDocs();
+        break;
+        case HeaderActionTypes.EXPAND_ALL_DOCUMENTS:
+          this.unCollapseAllDocs();
+        break;
+        case HeaderActionTypes.DISABLE_TABLE_VIEW:
+          this.disableTableView();
+        break;
+        case HeaderActionTypes.ENABLE_TABLE_VIEW:
+          this.enableTableView();
+        break;
+
         default:
         return;
         // do nothing
       }
+
+      this.triggerChange();
     }
 
   });
