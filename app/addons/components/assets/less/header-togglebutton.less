@@ -24,6 +24,22 @@
   float: left;
   .icon {
     font-size: 20px;
+    &:before {
+      float: left;
+      margin: 10px 6px 0px 0px;
+    }
+  }
+}
+
+.header-control-square {
+  height: @collapsedNavWidth;
+  width: @collapsedNavWidth;
+  float: left;
+  .icon {
+    &:before {
+      margin: 0px;
+      float: none;
+    }
   }
 }
 
@@ -41,16 +57,4 @@ button.header-control-box:focus {
   .icon, span {
     color: @linkColor;
   }
-}
-
-.control-toggle-alternative-header {
-  .icon {
-    padding: 0px 8px 0px 0px;
-  }
-}
-
-.header-control-square {
-  height: @collapsedNavWidth;
-  width: @collapsedNavWidth;
-  float: left;
 }

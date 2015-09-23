@@ -18,7 +18,7 @@ module.exports = {
     client
       .loginToGUI()
       .url(baseUrl)
-      .waitForElementPresent('#add-new-database', waitTime, false)
+      .waitForElementPresent('.add-new-database-btn', waitTime, false)
       .click('a[href="#/replication"]')
       .pause(1000)
       .waitForElementVisible('#replication', waitTime, false)

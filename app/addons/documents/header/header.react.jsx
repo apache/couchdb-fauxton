@@ -66,48 +66,42 @@ function (app, FauxtonAPI, React, Stores, Actions, ReactComponents, IndexResults
           <ToggleHeaderButton
             fonticon={'fonticon-select-all'}
             toggleCallback={this.selectAllDocuments}
-            innerClasses={''}
             containerClasses={baseClass + 'control-select-all'}
             text={''}
-            setEnabledClass={!canSelectAll}
+            selected={!canSelectAll}
             disabled={!canSelectAll}
             title={'Select all Documents'} />
 
           <ToggleHeaderButton
             fonticon={'fonticon-deselect-all'}
             toggleCallback={this.deSelectAllDocuments}
-            innerClasses={''}
             containerClasses={baseClass + 'control-de-select-all'}
             text={''}
-            setEnabledClass={!canDeselectAll}
+            selected={!canDeselectAll}
             disabled={!canDeselectAll}
             title={'Deselect all Documents'} />
-
 
           <ToggleHeaderButton
             fonticon={'fonticon-collapse'}
             toggleCallback={this.collapseDocuments}
-            innerClasses={''}
             containerClasses={baseClass + 'control-collapse'}
             text={''}
-            setEnabledClass={!canCollapseDocs}
+            selected={!canCollapseDocs}
             disabled={!canCollapseDocs}
             title={'Collapse Selected'} />
 
           <ToggleHeaderButton
             fonticon={'fonticon-expand'}
             toggleCallback={this.unCollapseDocuments}
-            innerClasses={''}
             containerClasses={baseClass + 'control-expand'}
             text={''}
-            setEnabledClass={!canUncollapseDocs}
+            selected={!canUncollapseDocs}
             disabled={!canUncollapseDocs}
             title={'Expand Selected'} />
 
           <ToggleHeaderButton
             fonticon={'fonticon-trash'}
             toggleCallback={this.deleteSelected}
-            innerClasses={''}
             containerClasses={baseClass + 'control-delete'}
             text={''}
             title={'Delete selected'} />
@@ -115,7 +109,6 @@ function (app, FauxtonAPI, React, Stores, Actions, ReactComponents, IndexResults
           <ToggleHeaderButton
             fonticon={''}
             toggleCallback={this.cancelView}
-            innerClasses={''}
             containerClasses={baseClass + 'control-cancel'}
             text={'Cancel'}
             title={'Switch to other view'} />

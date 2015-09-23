@@ -315,7 +315,8 @@ div.spinner {
 }
 
 
-
+// legacy - remove when soft migration to header toggles is complete
+// missing: add_config_option
 .header-icon {
   font-size: 20px;
   &:before {
@@ -324,23 +325,18 @@ div.spinner {
   }
 }
 
-#api-navbar {
-  /* prevents a slight shift on page load */
-  width: 108px;
-  overflow: hidden;
-
-  > div:not(.hide) {
-    border-left: 1px solid #ccc;
-  }
+#header-search {
+  height: @collapsedNavWidth;
 }
 
-.api-url-btn, .query-options-btn {
+// remove when migration is complete
+.api-url-btn {
   background: none;
   border: none;
   padding: 0px 3px;
   margin: 0;
 }
-.api-url-btn:hover, .query-options-btn:hover {
+.api-url-btn:hover {
   background: none;
 }
 
@@ -572,6 +568,8 @@ body #dashboard .two-panel-header {
   height: 0;
 }
 
+
+// remove when migration to headerbuttons is complete
 #api-navbar,
 .right-header-wrapper,
 .fixed-header,
@@ -588,8 +586,6 @@ body #dashboard .two-panel-header {
     font-size: 13px;
     line-height: 33px;
   }
-  .query-options-btn.enabled,
-  .query-options-btn:hover,
   .api-url-btn.enabled,
   .api-url-btn:hover {
     background-color: transparent;
@@ -609,6 +605,7 @@ body #dashboard .two-panel-header {
     width: 295px;
   }
   .searchbox-container {
+    margin: 12px;
     position: absolute;
     right: inherit;
     input[type="text"] {
@@ -644,8 +641,18 @@ body #dashboard .two-panel-header {
   }
 }
 
-.header-right,
+// remove when migration is complete
+.right-header-wrapper #api-navbar > div:not(.hide) {
+  border-left: none;
+}
+#api-navbar > div:not(.hide) {
+  border-left: 1px solid #ccc;
+}
+
 #api-navbar {
+  // prevents a slight shift on page load
+  width: 108px;
+  overflow: hidden;
   > div {
     padding: 12px;
     height: @collapsedNavWidth - 1;

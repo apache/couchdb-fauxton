@@ -47,7 +47,7 @@ module.exports = {
 
     client
       .clickWhenVisible('#dashboard a[href="#database/fauxton-selenium-tests/_design/abc/_view/evens"]')
-      .clickWhenVisible('#toggle-query')
+      .clickWhenVisible('.control-toggle-queryoptions')
       .clickWhenVisible('#query-options-tray label[for="qoReduce"]')
       .clickWhenVisible('#button-options button[type="submit"]')
       .waitForElementNotPresent('i.fonticon-pencil', waitTime)

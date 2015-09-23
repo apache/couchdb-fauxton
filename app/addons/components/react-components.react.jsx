@@ -23,11 +23,24 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
   var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 
   var ToggleHeaderButton = React.createClass({
+    getDefaultProps: function () {
+      return {
+        innerClasses: '',
+        fonticon: '',
+        containerClasses: '',
+        selected: false,
+        title: '',
+        disabled: false,
+        toggleCallback: null,
+        text: ''
+      };
+    },
+
     render: function () {
       var iconClasses = 'icon ' + this.props.fonticon + ' ' + this.props.innerClasses,
           containerClasses = 'button ' + this.props.containerClasses;
 
-      if (this.props.setEnabledClass) {
+      if (this.props.selected) {
         containerClasses = containerClasses + ' js-headerbar-togglebutton-selected';
       }
 
@@ -132,8 +145,7 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
             defaultCode={this.state.code}
             mode={this.props.mode}
             ignorableErrors={this.ignorableErrors}
-            onExit={this.exitZenMode}
-          />
+            onExit={this.exitZenMode} />
         );
       }
     },
@@ -972,29 +984,6 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
     }
   });
 
-  var TrayLink = React.createClass({
-
-    onClick: function (e) {
-      e.preventDefault();
-      this.props.toggleTray();
-    },
-
-    render: function () {
-      return (
-        <a
-          onClick={this.onClick}
-          id={this.props.id}
-          data-bypass="true"
-          data-toggle="tab"
-          className={this.props.className}
-        >
-          <i className={this.props.icon} />
-          {this.props.text}
-        </a>
-      );
-    }
-  });
-
   var TrayContents = React.createClass({
     getChildren: function () {
       if (!this.props.trayVisible) {
@@ -1019,7 +1008,7 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
 
   // The tray components work as follows:
   // <Tray> Outer wrapper for all components in the tray
-  // <TrayLink></TrayLink> The tray button to activate the tray
+  // <ToggleHeaderButton /> The tray button to activate the tray, e.g the ToggleHeaderButton
   // <TrayContents> </TrayContents> What is displayed when the tray is active
   // </Tray>
   // See documents/queryoptions/queryoptions.react.jsx for a complete example
@@ -1058,7 +1047,8 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
       return React.Children.map(this.props.children, function (child, key) {
         return React.addons.cloneWithProps(child, {
           trayVisible: this.state.trayVisible,
-          toggleTray: this.toggleTray,
+          selected: this.state.trayVisible,
+          toggleCallback: this.toggleTray,
           key: key
         });
       }.bind(this));
@@ -1067,7 +1057,7 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
     render: function () {
       return (
         <div>
-            {this.renderChildren()}
+          {this.renderChildren()}
         </div>
       );
     },
@@ -1098,7 +1088,6 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
     MenuDropDown: MenuDropDown,
     Tray: Tray,
     TrayContents: TrayContents,
-    TrayLink: TrayLink
   };
 
 });
