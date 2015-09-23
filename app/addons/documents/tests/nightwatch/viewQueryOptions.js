@@ -21,7 +21,7 @@ module.exports = {
       .populateDatabase(newDatabaseName, 3)
       .loginToGUI()
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_design/keyview/_view/keyview')
-      .clickWhenVisible('#toggle-query', waitTime, false)
+      .clickWhenVisible('.control-toggle-queryoptions')
       .clickWhenVisible('#byKeys', waitTime, false)
       .setValue('#keys-input', '["document_1"]')
       .clickWhenVisible('#query-options .btn-success')

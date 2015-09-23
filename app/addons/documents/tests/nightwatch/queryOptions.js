@@ -22,7 +22,7 @@ module.exports = {
       .populateDatabase(newDatabaseName, 3)
       .loginToGUI()
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
-      .clickWhenVisible('#toggle-query', waitTime, false)
+      .clickWhenVisible('.control-toggle-queryoptions')
       .clickWhenVisible('#betweenKeys', waitTime, false)
       .setValue('#startkey', '"document_2"')
       .clickWhenVisible('#query-options .btn-success')

@@ -24,7 +24,7 @@ function (app, FauxtonAPI, React, Stores, Actions, Components) {
   var LoadLines = Components.LoadLines;
   var Tray = Components.Tray;
   var TrayContents = Components.TrayContents;
-  var TrayLink = Components.TrayLink;
+  var ToggleHeaderButton = Components.ToggleHeaderButton;
 
   var MainFieldsView = React.createClass({
 
@@ -297,7 +297,6 @@ A key value is the first parameter emitted in a map function. For example emit("
   var QueryOptionsController = React.createClass({
     getStoreState: function () {
       return {
-        isVisible: store.isVisible(),
         includeDocs: store.includeDocs(),
         showBetweenKeys: store.showBetweenKeys(),
         showByKeys: store.showByKeys(),
@@ -340,12 +339,13 @@ A key value is the first parameter emitted in a map function. For example emit("
     render: function () {
       return (
         <Tray id="query-options-tray" ref="tray">
-          <TrayLink
-            id="toggle-query"
-            className="btn btn-primary pull-right query-options-btn"
-            text="Query Options"
-            icon="icon header-icon fonticon-gears"
-          />
+
+          <ToggleHeaderButton
+            containerClasses="header-control-box control-toggle-queryoptions"
+            title="Query Options"
+            fonticon="fonticon-gears"
+            text="Query Options" />
+
           <TrayContents
             className="query-options"
             id="query-options-tray">

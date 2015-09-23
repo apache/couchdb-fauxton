@@ -22,6 +22,7 @@ define([
   'helpers'
 ], function (app, FauxtonAPI, React, Components, ComponentsReact, Stores, Resources, Actions, Helpers) {
 
+  var ToggleHeaderButton = Components.ToggleHeaderButton;
   var databasesStore = Stores.databasesStore;
 
   var DatabasesController = React.createClass({
@@ -178,6 +179,9 @@ define([
 
     onTrayToggle: function (e) {
       e.preventDefault();
+
+      this.setState({isPromptVisible: !this.state.isPromptVisible});
+
       this.refs.newDbTray.toggle(function (shown) {
         if (shown) {
           this.refs.newDbName.getDOMNode().focus();
@@ -191,18 +195,10 @@ define([
       }
     },
 
-    componentDidMount: function () {
-      databasesStore.on('change', this.onChange, this);
-    },
-
-    componentWillUnmount: function () {
-      databasesStore.off('change', this.onChange, this);
-    },
-
-    onChange: function () {
-      if (this.isMounted()) {
-        this.refs.newDbTray.setVisible(databasesStore.isPromptVisible());
-      }
+    getInitialState: function () {
+      return {
+        isPromptVisible: false
+      };
     },
 
     onAddDatabase: function () {
@@ -211,13 +207,19 @@ define([
     },
 
     render: function () {
+      var headerButtonContainerClasses = 'header-control-box add-new-database-btn';
 
       return (
-        <div className="button" id="add-db-button">
-          <a id="add-new-database" href="#" className="add-new-database-btn" onClick={this.onTrayToggle} data-bypass="true">
-                <i className="header-icon fonticon-new-database"></i>
-                Add New Database
-          </a>
+        <div>
+
+          <ToggleHeaderButton
+            selected={this.state.isPromptVisible}
+            toggleCallback={this.onTrayToggle}
+            containerClasses={headerButtonContainerClasses}
+            title="Add New Database"
+            fonticon="fonticon-new-database"
+            text="Add New Database" />
+
           <ComponentsReact.Tray ref="newDbTray" className="new-database-tray">
             <span className="add-on">Add New Database</span>
             <input id="js-new-database-name" type="text" onKeyUp={this.onKeyUpInInput} ref="newDbName" className="input-xxlarge" placeholder="Name of database" />

@@ -39,8 +39,7 @@ module.exports = {
 
       // ensure the page has fully loaded
       .waitForElementPresent('.databases.table', waitTime, false)
-      .waitForElementPresent('#add-new-database', waitTime, false)
-      .clickWhenVisible('#add-new-database', waitTime, false)
+      .clickWhenVisible('.add-new-database-btn')
       .waitForElementVisible('#js-new-database-name', waitTime, false)
       .setValue('#js-new-database-name', [newDatabaseName])
       .clickWhenVisible('#js-create-database', waitTime, false)
