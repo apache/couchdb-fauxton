@@ -14,8 +14,8 @@ before_install:
   - sudo apt-get -y install haproxy
 
   - git clone git://github.com/rebar/rebar.git
-  - git checkout 2.6.0
   - cd rebar
+  - git checkout 2.6.0
   - ./bootstrap
   - cd ..
   - cp bootstrap/rebar rebar
