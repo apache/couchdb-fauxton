@@ -19,7 +19,7 @@ before_install:
   - ./bootstrap
   - cd ..
   - mv rebar rebar-build
-  - sudo mv rebar-build/rebar /bin/rebar
+  - sudo mv rebar-build/rebar /usr/local/bin/rebar
   - rebar --version
   - which rebar
 
