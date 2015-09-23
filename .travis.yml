@@ -19,7 +19,7 @@ before_install:
   - ./bootstrap
   - cd ..
   - mv rebar rebar-build
-  - mv rebar-build/rebar /bin/rebar
+  - sudo mv rebar-build/rebar /bin/rebar
   - rebar --version
 
   - nvm install 0.10 && nvm use 0.10
