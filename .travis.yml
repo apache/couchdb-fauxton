@@ -21,6 +21,7 @@ before_install:
   - mv rebar rebar-build
   - sudo mv rebar-build/rebar /bin/rebar
   - rebar --version
+  - which rebar
 
   - nvm install 0.10 && nvm use 0.10
 
