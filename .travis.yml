@@ -18,7 +18,7 @@ before_install:
   - git checkout 2.6.0
   - ./bootstrap
   - cd ..
-  - cp bootstrap/rebar rebar
+  - cp rebar/rebar rebar
 
   - nvm install 0.10 && nvm use 0.10
 
