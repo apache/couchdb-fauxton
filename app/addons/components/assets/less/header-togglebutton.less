@@ -19,7 +19,7 @@
   height: @collapsedNavWidth;
   background-color: transparent;
   border: none;
-  border-right: 1px solid @btnBorder;
+  border-left: 1px solid @btnBorder;
   text-decoration: none;
   float: left;
   .icon {
@@ -57,4 +57,13 @@ button.header-control-box:focus {
   .icon, span {
     color: @linkColor;
   }
+
+}
+
+button.control-toggle-alternative-header {
+  border-right: 1px solid @btnBorder;
+}
+
+button.control-toggle-alternative-header.js-headerbar-togglebutton-selected {
+  border-right: none;
 }

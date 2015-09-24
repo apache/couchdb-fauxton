@@ -14,12 +14,12 @@ define([
   'app',
   'api',
   'react',
-  'addons/fauxton/components',
+  'addons/fauxton/components.react',
   'ace/ace',
   'plugins/beautify'
 ],
 
-function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
+function (app, FauxtonAPI, React, FauxtonComponents, ace, beautifyHelper) {
   var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 
   var ToggleHeaderButton = React.createClass({
@@ -1073,6 +1073,65 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
 
   });
 
+
+  var ApiBarController = React.createClass({
+
+    getDefaultProps: function () {
+      return {
+        endpoint: '_all_docs',
+        documentation: FauxtonAPI.constants.DOC_URLS.GENERAL
+      };
+    },
+
+    showCopiedMessage: function () {
+      FauxtonAPI.addNotification({
+        msg: 'The API URL has been copied to the clipboard.',
+        type: 'success',
+        clear: true
+      });
+    },
+
+    render: function () {
+      return (
+        <Tray id="api-bar-controller" ref="tray">
+
+          <ToggleHeaderButton
+            containerClasses="header-control-box control-toggle-api-url"
+            title="API URL"
+            fonticon="fonticon-link"
+            text="API URL" />
+
+          <TrayContents
+            className="api-bar-tray"
+          >
+            <div className="input-prepend input-append">
+              <span className="add-on">
+                API URL
+                <a className="help-link" data-bypass="true" href={this.props.documentation} target="_blank">
+                  <i className="icon icon-question-sign"></i>
+                </a>
+              </span>
+
+              <FauxtonComponents.ClipboardWithTextField
+                onClipBoardClick={this.showCopiedMessage}
+                text="Copy"
+                textToCopy={this.props.endpoint}
+                uniqueKey="clipboard-apiurl" />
+
+              <div className="add-on">
+                <a data-bypass="true" href={this.props.endpoint} target="_blank" className="btn">
+                  <i className="fonticon-eye icon"></i>
+                  View JSON
+                </a>
+              </div>
+            </div>
+
+          </TrayContents>
+        </Tray>
+      );
+    },
+  });
+
   return {
     ConfirmButton: ConfirmButton,
     ToggleHeaderButton: ToggleHeaderButton,
@@ -1088,6 +1147,7 @@ function (app, FauxtonAPI, React, Components, ace, beautifyHelper) {
     MenuDropDown: MenuDropDown,
     Tray: Tray,
     TrayContents: TrayContents,
+    ApiBarController: ApiBarController
   };
 
 });

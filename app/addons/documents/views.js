@@ -73,11 +73,6 @@ function (app, FauxtonAPI, Components, Documents, Databases, QueryOptions, Query
       FauxtonAPI.Events.trigger("documents:showSelectAll", this.selectVisible);
     },
 
-    // updates the API bar when the route changes
-    updateApiUrl: function (api) {
-      this.apiBar && this.apiBar.update(api);
-    },
-
     resetQueryOptions: function (options) {
       QueryActions.reset(options);
     },
