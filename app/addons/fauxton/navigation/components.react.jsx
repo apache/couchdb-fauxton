@@ -14,11 +14,10 @@ define([
   'api',
   'react',
   'addons/fauxton/navigation/stores',
-  'addons/fauxton/navigation/actions',
-  'addons/fauxton/dependencies/ZeroClipboard'
+  'addons/fauxton/navigation/actions'
 ],
 
-function (app, FauxtonAPI, React, Stores, Actions, ZeroClipboard) {
+function (app, FauxtonAPI, React, Stores, Actions) {
   var navBarStore = Stores.navBarStore;
 
   var Footer = React.createClass({

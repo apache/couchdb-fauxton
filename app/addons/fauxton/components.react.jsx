@@ -65,8 +65,14 @@ function (app, FauxtonAPI, React, ZeroClipboard) {
       ZeroClipboard.config({ moviePath: getZeroClipboardSwfPath() });
     },
 
-    componentDidUpdate: function () {
-      this.clipboard = new ZeroClipboard(document.getElementById("copy-text-" + this.props.uniqueKey));
+    componentDidMount: function () {
+      var el = this.refs["copy-text-" + this.props.uniqueKey].getDOMNode();
+      this.clipboard = new ZeroClipboard(el);
+      this.clipboard.on('load', function () {
+        this.clipboard.on('mouseup', function () {
+          this.props.onClipBoardClick();
+        }.bind(this));
+      }.bind(this));
     },
 
     render: function () {
@@ -79,10 +85,12 @@ function (app, FauxtonAPI, React, ZeroClipboard) {
             value={this.props.textToCopy} />
           <a 
             id={"copy-text-" + this.props.uniqueKey}
-            className="fonticon-clipboard icon btn copy-button" 
+            className="fonticon-clipboard icon btn copy-button"
             data-clipboard-text={this.props.textToCopy} 
-            data-bypass="true" 
-            title="Copy to clipboard" >
+            data-bypass="true"
+            ref={"copy-text-" + this.props.uniqueKey}
+            title="Copy to clipboard"
+          >
             Copy
           </a>
         </p>
