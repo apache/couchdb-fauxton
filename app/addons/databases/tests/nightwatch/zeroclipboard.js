@@ -28,11 +28,10 @@ module.exports = {
       .deleteDatabase(newDatabaseName) //need to delete the automatic database 'fauxton-selenium-tests' that has been set up before each test
       .url(baseUrl)
 
-      .waitForElementPresent('.api-url-btn', waitTime, false)
-      .click('.api-url-btn')
-      .waitForElementVisible('.copy-url', waitTime, false)
-      .moveTo('.copy-url')
-      .click('.copy-url')
+      .clickWhenVisible('.control-toggle-api-url')
+      .waitForElementVisible('.copy-button', waitTime, false)
+      .moveTo('.copy-button')
+      .click('.copy-button')
       .mouseButtonDown('left')
       .mouseButtonUp('left')
       .closeNotification()

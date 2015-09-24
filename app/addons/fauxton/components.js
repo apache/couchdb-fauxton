@@ -271,55 +271,6 @@ function (app, FauxtonAPI, ace, spin, ZeroClipboard) {
   });
 
 
-  Components.ApiBar = Components.Tray.extend({
-    template: "addons/fauxton/templates/api_bar",
-
-    initialize: function (options) {
-      var _options = options || {};
-      this.endpoint = _options.endpoint || '_all_docs';
-      this.documentation = _options.documentation || FauxtonAPI.constants.DOC_URLS.GENERAL;
-
-      this.initTray({ toggleTrayBtnSelector: '.api-url-btn' });
-    },
-
-    serialize: function () {
-      return {
-        endpoint: this.endpoint,
-        documentation: this.documentation
-      };
-    },
-
-    hide: function () {
-      this.$el.addClass('hide');
-    },
-
-    show: function () {
-      this.$el.removeClass('hide');
-    },
-
-    update: function (endpoint) {
-      this.endpoint = endpoint[0];
-      this.documentation = endpoint[1];
-      this.render();
-    },
-
-    afterRender: function () {
-      var client = new Components.Clipboard({
-        $el: this.$('.copy-url')
-      });
-
-      client.on('load', function () {
-        client.on('mouseup', function () {
-          FauxtonAPI.addNotification({
-            msg: 'The API URL has been copied to the clipboard.',
-            type: 'success',
-            clear: true
-          });
-        });
-      });
-    }
-  });
-
   Components.Pagination = FauxtonAPI.View.extend({
     tagName: "ul",
     className: 'pagination',
@@ -623,22 +574,6 @@ function (app, FauxtonAPI, ace, spin, ZeroClipboard) {
       };
     }
   });
-
-  Components.Clipboard = FauxtonAPI.View.extend({
-    initialize: function (options) {
-      this.$el = options.$el;
-
-      // the path to the swf depends on whether we're in a bundled environment (e.g. prod) or local
-      var path = (app.bundled) ? 'js/fauxton' : 'app/addons/fauxton/dependencies';
-      ZeroClipboard.config({ moviePath: app.root + path + '/ZeroClipboard.swf' });
-      this.client = new ZeroClipboard(this.$el);
-    },
-
-    on: function () {
-      return this.client.on.apply(this.client, arguments);
-    }
-  });
-
 
   Components.LookaheadTray = FauxtonAPI.View.extend({
     className: "lookahead-tray tray",

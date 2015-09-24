@@ -16,10 +16,12 @@ define([
   "addons/fauxton/components",
   "addons/fauxton/navigation/components.react",
   "addons/fauxton/navigation/actions",
-  'addons/fauxton/dependencies/ZeroClipboard'
+  'addons/fauxton/dependencies/ZeroClipboard',
+  'addons/components/react-components.react',
 ],
 
-function (app, FauxtonAPI, Components, NavbarReactComponents, NavigationActions, ZeroClipboard) {
+function (app, FauxtonAPI, Components, NavbarReactComponents,
+          NavigationActions, ZeroClipboard, ReactComponents) {
 
   var Fauxton = FauxtonAPI.addon();
   FauxtonAPI.addNotification = function (options) {
@@ -51,14 +53,18 @@ function (app, FauxtonAPI, Components, NavbarReactComponents, NavigationActions,
 
 
   Fauxton.initialize = function () {
-    app.apiBar = new Components.ApiBar();
-
-    FauxtonAPI.masterLayout.setView("#api-navbar", app.apiBar, true);
-    app.apiBar.render();
-    FauxtonAPI.masterLayout.apiBar = app.apiBar;
-
     FauxtonAPI.RouteObject.on('beforeFullRender', function (routeObject) {
       NavigationActions.setNavbarActiveLink(_.result(routeObject, 'selectedHeader'));
+
+      if (!routeObject.get('apiUrl')) {
+        return;
+      }
+
+      var apiAndDocs = routeObject.get('apiUrl');
+      routeObject.setComponent('#api-navbar', ReactComponents.ApiBarController, {
+        endpoint: apiAndDocs[0],
+        documentation: apiAndDocs[1]
+      });
     });
 
     FauxtonAPI.RouteObject.on('beforeEstablish', function (routeObject) {
@@ -72,17 +78,7 @@ function (app, FauxtonAPI, Components, NavbarReactComponents, NavigationActions,
           crumbs: crumbs
         }), true).render();
       }
-    });
 
-    FauxtonAPI.RouteObject.on('renderComplete', function (routeObject) {
-      var masterLayout = FauxtonAPI.masterLayout;
-
-      if (routeObject.get('apiUrl')) {
-        masterLayout.apiBar.show();
-        masterLayout.apiBar.update(routeObject.get('apiUrl'));
-      } else {
-        masterLayout.apiBar.hide();
-      }
     });
 
     var primaryNavBarEl = $('#primary-navbar')[0];

@@ -329,30 +329,15 @@ div.spinner {
   height: @collapsedNavWidth;
 }
 
-// remove when migration is complete
-.api-url-btn {
-  background: none;
-  border: none;
-  padding: 0px 3px;
-  margin: 0;
-}
-.api-url-btn:hover {
-  background: none;
-}
-
-.api-navbar:before {
-  right: 25px;
-}
-.api-navbar {
+.api-bar-tray {
   padding: 16px 20px;
   .input-append.input-prepend {
     margin-bottom: 0px;
 
     .input-xxlarge {
       .border-radius(5px 0 0 5px);
-
     }
-    .btn{
+    .btn {
       background-color: @navBG;
       color: #fff;
       margin-left: -1px;
@@ -364,27 +349,23 @@ div.spinner {
         background-color: #cbcbcb;
       }
     }
-    .copy-url {
+
+    .copy-button {
       .border-radius(0 5px 5px 0);
     }
 
     .zeroclipboard-is-hover {
       background-color: #cbcbcb;
     }
-    .icon-question-sign,
-    .icon {
-      font-size: 17.5px;
-    }
-
-    .icon {
-      vertical-align: bottom;
-    }
 
     .icon-question-sign {
-      position: fixed;
       margin-left: 3px;
     }
   }
+}
+
+.api-bar-tray:before {
+  right: 25px;
 }
 
 .js-filter-form {
@@ -533,69 +514,6 @@ body #dashboard .two-panel-header {
   }
 }
 
-.tray {
-  .bottom-left-shadow-border;
-  display: none;
-  position: absolute;
-  right: 5px;
-  top: 55px;
-  z-index: 11;
-  background-color: #333;
-  color: #fff;
-  margin: 0;
-  .add-on {
-    font-size: 16px;
-    background: none;
-    padding: 0px;
-    margin: 10px 0;
-    border: none;
-    display: block;
-    text-align: left;
-    color: #fff;
-    text-shadow: none;
-    height: auto;
-    line-height: 1em;
-  }
-}
-.tray:before {
-  content: '';
-  position: absolute;
-  top: -25px;
-  border-color: transparent transparent #333 transparent;
-  border-style: solid;
-  border-width: 15px;
-  width: 0;
-  height: 0;
-}
-
-
-// remove when migration to headerbuttons is complete
-#api-navbar,
-.right-header-wrapper,
-.fixed-header,
-.header-right {
-  > .btn {
-    padding: 0;
-    margin: 0;
-  }
-  > .button,
-  > .button a,
-  .api-url-btn > button,
-  .btn-primary {
-    color: #666;
-    font-size: 13px;
-    line-height: 33px;
-  }
-  .api-url-btn.enabled,
-  .api-url-btn:hover {
-    background-color: transparent;
-    color: @linkColorHover;
-  }
-  .btn:active {
-    box-shadow: none;
-  }
-}
-
 .header-right {
   .well {
     padding: 0;
@@ -633,29 +551,9 @@ body #dashboard .two-panel-header {
   > div {
     float: right;
     margin: 0;
-    line-height: 40px;
-    border-left: 1px solid #ccc;
   }
   > div:last-child {
     border-left: none;
-  }
-}
-
-// remove when migration is complete
-.right-header-wrapper #api-navbar > div:not(.hide) {
-  border-left: none;
-}
-#api-navbar > div:not(.hide) {
-  border-left: 1px solid #ccc;
-}
-
-#api-navbar {
-  // prevents a slight shift on page load
-  width: 108px;
-  overflow: hidden;
-  > div {
-    padding: 12px;
-    height: @collapsedNavWidth - 1;
   }
 }
 
