@@ -75,6 +75,74 @@ module.exports = {
     .end();
   },
 
+  'Edits two design docs to confirm Map Editor correct on second': function (client) {
+    /*jshint multistr: true */
+    var waitTime = client.globals.maxWaitTime,
+      newDatabaseName = client.globals.testDatabaseName,
+      baseUrl = client.globals.test_settings.launch_url,
+      dropDownElement = '#header-dropdown-menu';
+
+    client
+      .createDatabase(newDatabaseName)
+      .populateDatabase(newDatabaseName)
+      .loginToGUI()
+
+      // create the first view
+      .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
+      .waitForElementPresent(dropDownElement, waitTime, false)
+      .clickWhenVisible(dropDownElement + ' a')
+      .clickWhenVisible(dropDownElement + ' a[href*="new_view"]')
+      .waitForElementVisible('#new-ddoc', waitTime, false)
+      .setValue('#new-ddoc', 'view1-name')
+      .clearValue('#index-name')
+      .setValue('#index-name', 'view1')
+      .clickWhenVisible('#reduce-function-selector')
+      .keys(['\uE013', '\uE013', '\uE013', '\uE013', '\uE006'])
+      .execute('\
+        var editor = ace.edit("map-function");\
+        editor.getSession().setValue("function (doc) { emit(doc._id, 100); }");\
+      ')
+      .execute('$("#save-view")[0].scrollIntoView();')
+      .clickWhenVisible('#save-view')
+      .checkForDocumentCreated('_design/view1-name')
+      .waitForElementPresent('.btn.btn-danger.delete', waitTime, false)
+
+      // create the second view
+      .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
+      .waitForElementPresent(dropDownElement, waitTime, false)
+      .clickWhenVisible(dropDownElement + ' a')
+      .clickWhenVisible(dropDownElement + ' a[href*="new_view"]')
+      .waitForElementVisible('#new-ddoc', waitTime, false)
+      .setValue('#new-ddoc', 'view2-name')
+      .clearValue('#index-name')
+      .setValue('#index-name', 'view2')
+      .clickWhenVisible('#reduce-function-selector')
+      .keys(['\uE013', '\uE013', '\uE013', '\uE013', '\uE006'])
+      .execute('\
+        var editor = ace.edit("map-function");\
+        editor.getSession().setValue("function (doc) { emit(doc._id, 200); }");\
+      ')
+      .execute('$("#save-view")[0].scrollIntoView();')
+      .clickWhenVisible('#save-view')
+      .checkForDocumentCreated('_design/view2-name')
+      .waitForElementPresent('.btn.btn-danger.delete', waitTime, false)
+
+      // go back to the all docs page to ensure a page reload when we return to the Edit View page
+      .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
+      .waitForElementPresent(dropDownElement, waitTime, false)
+
+      // now redirect back to first view and confirm the fields are all populated properly
+      .url(baseUrl + '/#/database/' + newDatabaseName + '/_design/view1-name/_view/view1')
+      .waitForElementVisible('#save-view', waitTime, false)
+      .execute(function () {
+        var editor = window.ace.edit("map-function");
+        return editor.getSession().getValue();
+      }, [], function (resp) {
+        this.assert.equal(resp.value, 'function (doc) { emit(doc._id, 100); }');
+      })
+      .end();
+  },
+
   'Query Options are kept after a new reduce method is chosen': function (client) {
     /*jshint multistr: true */
     var waitTime = client.globals.maxWaitTime,

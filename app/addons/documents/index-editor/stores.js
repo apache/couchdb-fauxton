@@ -24,6 +24,10 @@ function (FauxtonAPI, ActionTypes) {
     defaultReduce: 'function (keys, values, rereduce) {\n  if (rereduce) {\n    return sum(values);\n  } else {\n    return values.length;\n  }\n}',
 
     initialize: function () {
+      this.reset();
+    },
+
+    reset: function () {
       this._designDocs = [];
       this._isLoading = true;
       this._view = { reduce: '', map: this.defaultMap };
@@ -175,6 +179,10 @@ function (FauxtonAPI, ActionTypes) {
 
     dispatch: function (action) {
       switch (action.type) {
+        case ActionTypes.CLEAR_INDEX:
+          this.reset();
+        break;
+
         case ActionTypes.EDIT_INDEX:
           this.editIndex(action.options);
           this.triggerChange();

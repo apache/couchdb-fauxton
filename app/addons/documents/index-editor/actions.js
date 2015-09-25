@@ -76,6 +76,10 @@ function (app, FauxtonAPI, Documents, ActionTypes, IndexResultsActions) {
       });
     },
 
+    clearIndex: function () {
+      FauxtonAPI.dispatch({ type: ActionTypes.CLEAR_INDEX });
+    },
+
     fetchDesignDocsBeforeEdit: function (options) {
       options.designDocs.fetch({reset: true}).then(function () {
         this.editIndex(options);

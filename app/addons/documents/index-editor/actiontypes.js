@@ -12,6 +12,7 @@
 
 define([], function () {
   return {
+    CLEAR_INDEX: 'CLEAR_INDEX',
     EDIT_INDEX: 'EDIT_INDEX',
     EDIT_NEW_INDEX: 'EDIT_NEW_INDEX',
     SELECT_REDUCE_CHANGE: 'SELECT_REDUCE_CHANGE',

@@ -93,6 +93,8 @@ function (app, FauxtonAPI, Helpers, BaseRoute, Documents, IndexEditorComponents,
         }
       });
 
+      ActionsIndexEditor.clearIndex();
+
       IndexResultsActions.newResultsList({
         collection: this.indexedDocs,
         isListDeletable: false,
