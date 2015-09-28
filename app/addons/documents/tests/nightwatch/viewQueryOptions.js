@@ -30,5 +30,26 @@ module.exports = {
       .assert.elementNotPresent('#right-content [data-id="document_0"]')
       .assert.elementPresent('#right-content [data-id="document_1"]')
     .end();
+  },
+
+  'Edit view: Queryoptions works querying index with newlines in key field': function (client) {
+    /*jshint multistr: true */
+    var waitTime = client.globals.maxWaitTime,
+      newDatabaseName = client.globals.testDatabaseName,
+      baseUrl = client.globals.test_settings.launch_url;
+
+    client
+      .populateDatabase(newDatabaseName, 3)
+      .loginToGUI()
+      .url(baseUrl + '/#/database/' + newDatabaseName + '/_design/keyview/_view/keyview')
+      .clickWhenVisible('#toggle-query', waitTime, false)
+      .clickWhenVisible('#byKeys', waitTime, false)
+      .setValue('#keys-input', '["document_1",\n"document_2"]')
+      .clickWhenVisible('#query-options .btn-success')
+      .waitForElementNotPresent('#right-content [data-id="document_0"]', waitTime, false)
+      .assert.elementNotPresent('#right-content [data-id="document_0"]')
+      .assert.elementPresent('#right-content [data-id="document_1"]')
+      .end();
   }
+
 };

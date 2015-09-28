@@ -211,7 +211,7 @@ function (app, FauxtonAPI, ActionTypes) {
           params.end_key = betweenKeys.endkey;
         }
       } else if (this._showByKeys) {
-        params.keys = this._byKeys;
+        params.keys = this._byKeys.replace(/\r?\n/g, '');
       }
 
       if (this._updateSeq) {
