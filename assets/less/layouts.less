@@ -70,7 +70,8 @@ body #dashboard .flex-body {
     float: none;
   }
   #right-header {
-    /* TODO. How come .flex(0 0 inherit) is invalid? */
+    -ms-flex-preferred-size: auto;
+    -webkit-flex: 0 0 auto;
     flex-grow: 0;
     flex-shrink: 0;
     flex-basis: inherit;
