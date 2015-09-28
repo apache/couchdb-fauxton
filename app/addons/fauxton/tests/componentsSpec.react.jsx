@@ -28,7 +28,7 @@ define([
       container = document.createElement('div');
 
       // when we want to control the diff, we have to render directly
-      trayEl = React.render(<Views.Tray className="traytest" />, container);
+      trayEl = TestUtils.renderIntoDocument(<Views.Tray className="traytest" />, container);
 
       oldToggleSpeed = FauxtonAPI.constants.MISC.TRAY_TOGGLE_SPEED;
 
@@ -109,7 +109,7 @@ define([
         }
       });
 
-      var reactEl = React.render(React.createElement(wrapper), container);
+      var reactEl = TestUtils.renderIntoDocument(React.createElement(wrapper), container);
       reactEl.runTest();
 
       React.unmountComponentAtNode(container);
@@ -135,7 +135,7 @@ define([
     });
 
     it('renders 20-wise pages per default', function () {
-      var pageEl = React.render(
+      var pageEl = TestUtils.renderIntoDocument(
         <Views.Pagination page={3} total={55} urlPrefix="?prefix=" urlSuffix="&suffix=88" />,
         container
       );
@@ -152,7 +152,7 @@ define([
     });
 
     it("can overwrite collection size", function () {
-      var pageEl = React.render(
+      var pageEl = TestUtils.renderIntoDocument(
         <Views.Pagination perPage={10} page={3} total={55} urlPrefix="?prefix=" urlSuffix="&suffix=88" />,
         container
       );
@@ -162,7 +162,7 @@ define([
     });
 
     it("handles large collections properly - beginning", function () {
-      var pageEl = React.render(
+      var pageEl = TestUtils.renderIntoDocument(
         <Views.Pagination page={3} total={600} />,
         container
       );
@@ -175,7 +175,7 @@ define([
     });
 
     it("handles large collections properly - middle", function () {
-      var pageEl = React.render(
+      var pageEl = TestUtils.renderIntoDocument(
         <Views.Pagination page={10} total={600} />,
         container
       );
@@ -189,7 +189,7 @@ define([
     });
 
     it("handles large collections properly - end", function () {
-      var pageEl = React.render(
+      var pageEl = TestUtils.renderIntoDocument(
         <Views.Pagination page={29} total={600} />,
         container
       );
@@ -204,5 +204,32 @@ define([
 
   });
 
-});
 
+  describe('Clipboard', function () {
+    var container;
+    beforeEach(function () {
+      container = document.createElement('div');
+    });
+
+    afterEach(function () {
+      React.unmountComponentAtNode(container);
+    });
+
+    it('shows a clipboard icon by default', function () {
+      var clipboard = TestUtils.renderIntoDocument(<Views.Clipboard text="copy me" />, container);
+      assert.equal($(clipboard.getDOMNode()).find('.fonticon-clipboard').length, 1);
+    });
+
+    it('shows text if specified', function () {
+      var clipboard = TestUtils.renderIntoDocument(<Views.Clipboard displayType="text" text="copy me" />, container);
+      assert.equal($(clipboard.getDOMNode()).find('.fonticon-clipboard').length, 0);
+    });
+
+    it('shows custom text if specified ', function () {
+      var clipboard = TestUtils.renderIntoDocument(<Views.Clipboard displayType="text" textDisplay='booyah!' text="copy me" />, container);
+      assert.ok(/booyah!/.test($(clipboard.getDOMNode())[0].outerHTML));
+    });
+
+  });
+
+});

@@ -24,6 +24,7 @@
 @import "mixins.less";
 @import "animations.less";
 @import "react-animations.less";
+@import "notification-center.less";
 
 /**
  * HTML-wide overrides
@@ -326,6 +327,7 @@ div.spinner {
 }
 
 #header-search {
+  position: relative;
   height: @collapsedNavWidth;
 }
 
@@ -365,7 +367,7 @@ div.spinner {
 }
 
 .api-bar-tray:before {
-  right: 25px;
+  right: 95px;
 }
 
 .js-filter-form {
@@ -519,18 +521,13 @@ body #dashboard .two-panel-header {
     padding: 0;
     margin: 0;
   }
-  .searchbox-wrapper {
-    width: 295px;
-  }
   .searchbox-container {
     margin: 12px;
-    position: absolute;
-    right: inherit;
     input[type="text"] {
       .border-radius(5px);
       font-size: 13px;
       padding: 8px 35px 8px 10px;
-      width: 275px;
+      width: 200px;
     }
     .btn-primary {
       background: none repeat scroll 0% 0% transparent;
@@ -544,16 +541,8 @@ body #dashboard .two-panel-header {
       .icon-search {
         position: absolute;
         top: 11px;
-        right: 5px;
       }
     }
-  }
-  > div {
-    float: right;
-    margin: 0;
-  }
-  > div:last-child {
-    border-left: none;
   }
 }
 
@@ -611,6 +600,7 @@ footer.pagination-footer {
   width: 6px;
   z-index: 6;
 }
+
 
 // left navigationbar is opened
 @media (max-width: 780px) {

@@ -19,25 +19,23 @@ define([
 
 
   describe('Fauxton RouteObject:beforeEstablish', function () {
-    var TestRouteObject, testRouteObject, mockLayout, _layout;
+    var TestRouteObject, testRouteObject, mockLayout, _layout, setViewCalled;
 
     before(function () {
       Base.initialize();
       _layout = FauxtonAPI.masterLayout;
+      setViewCalled = false;
     });
 
     beforeEach(function () {
       TestRouteObject = FauxtonAPI.RouteObject.extend({
-        crumbs: ['mycrumbs']
+        crumbs: ['mycrumbs'],
+        hideNotificationCenter: true
       });
 
       testRouteObject = new TestRouteObject();
       var apiBar = {};
       apiBar.hide = sinon.spy();
-      var setViewSpy = sinon.stub();
-      setViewSpy.returns({
-        render: function () {}
-      });
 
       // Need to find a better way of doing this
       mockLayout = {
@@ -47,8 +45,18 @@ define([
           return promise;
         },
         clearBreadcrumbs: sinon.spy(),
-        setView: setViewSpy,
-        renderView: sinon.spy(),
+        setView: function () {
+          return {
+            render: function () {
+              setViewCalled = true;
+            }
+          };
+        },
+        renderView: function () {
+          var d = $.Deferred();
+          d.resolve();
+          return d.promise();
+        },
         removeView: sinon.spy(),
         hooks: [],
         setBreadcrumbs: sinon.spy(),
@@ -74,7 +82,7 @@ define([
     it('Should set breadcrumbs when breadcrumbs exist', function () {
       FauxtonAPI.masterLayout = mockLayout;
       testRouteObject.renderWith('the-route', mockLayout, 'args');
-      assert.ok(mockLayout.setView.calledOnce, 'Set Breadcrumbs was called');
+      assert.ok(setViewCalled, 'Set Breadcrumbs was called');
     });
 
   });

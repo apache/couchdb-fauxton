@@ -145,6 +145,12 @@ function ($, _) {
         }
       }
       return data;
+    },
+
+    stripHTML: function (str) {
+      var tmpElement = document.createElement("div");
+      tmpElement.innerHTML = str;
+      return tmpElement.textContent || tmpElement.innerText;
     }
   };
 

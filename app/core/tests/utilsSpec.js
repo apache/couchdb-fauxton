@@ -71,6 +71,17 @@ define([
         assert.deepEqual(utils.localStorageGet(key), obj);
       });
 
+      it ('stripHTML removes HTML', function () {
+        [
+          { html: '<span>okay</span>', text: 'okay' },
+          { html: 'test <span>before</span> and after', text: 'test before and after' },
+          { html: 'testing <a href="#whatever">attributes</span>', text: 'testing attributes' },
+          { html: '<span>testing</span> multiple <p>elements</p>', text: 'testing multiple elements' }
+        ].forEach(function (item) {
+          assert.equal(utils.stripHTML(item.html), item.text);
+        });
+      });
+
     });
   });
 

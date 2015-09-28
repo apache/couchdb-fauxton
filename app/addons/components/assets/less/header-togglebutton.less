@@ -21,12 +21,11 @@
   border: none;
   border-left: 1px solid @btnBorder;
   text-decoration: none;
-  float: left;
   .icon {
     font-size: 20px;
     &:before {
       float: left;
-      margin: 10px 6px 0px 0px;
+      margin: 10px 6px 0 0;
     }
   }
 }
@@ -37,7 +36,7 @@
   float: left;
   .icon {
     &:before {
-      margin: 0px;
+      margin: 0;
       float: none;
     }
   }
@@ -61,6 +60,7 @@ button.header-control-box:focus {
 }
 
 button.control-toggle-alternative-header {
+  float: left;
   border-right: 1px solid @btnBorder;
 }
 

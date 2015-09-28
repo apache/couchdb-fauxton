@@ -29,9 +29,10 @@ function (app, FauxtonAPI, Auth, AuthActions, Components, ClusterActions) {
       'login': 'login',
       'logout': 'logout',
       'createAdmin': 'checkNodes',
-      'createAdmin/:node': 'createAdminForNode',
+      'createAdmin/:node': 'createAdminForNode'
     },
     disableLoader: true,
+    hideNotificationCenter: true,
 
     checkNodes: function () {
       ClusterActions.navigateToNodeBasedOnNodeCount('/createAdmin/');

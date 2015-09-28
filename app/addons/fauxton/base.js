@@ -14,14 +14,16 @@ define([
   "app",
   "api",
   "addons/fauxton/components",
+  'addons/fauxton/notifications/notifications.react',
+  'addons/fauxton/notifications/actions',
   "addons/fauxton/navigation/components.react",
   "addons/fauxton/navigation/actions",
   'addons/fauxton/dependencies/ZeroClipboard',
-  'addons/components/react-components.react',
+  'addons/components/react-components.react'
 ],
 
-function (app, FauxtonAPI, Components, NavbarReactComponents,
-          NavigationActions, ZeroClipboard, ReactComponents) {
+function (app, FauxtonAPI, Components, NotificationComponents, Actions, NavbarReactComponents, NavigationActions,
+          ZeroClipboard, ReactComponents) {
 
   var Fauxton = FauxtonAPI.addon();
   FauxtonAPI.addNotification = function (options) {
@@ -31,6 +33,9 @@ function (app, FauxtonAPI, Components, NavbarReactComponents,
       selector: "#global-notifications",
       escape: true
     }, options);
+
+    // log all notifications in a store
+    Actions.addNotification(options);
 
     var view = new Fauxton.Notification(options);
     return view.renderNotification();
@@ -56,15 +61,17 @@ function (app, FauxtonAPI, Components, NavbarReactComponents,
     FauxtonAPI.RouteObject.on('beforeFullRender', function (routeObject) {
       NavigationActions.setNavbarActiveLink(_.result(routeObject, 'selectedHeader'));
 
-      if (!routeObject.get('apiUrl')) {
-        return;
+      if (routeObject.get('apiUrl')) {
+        var apiAndDocs = routeObject.get('apiUrl');
+        routeObject.setComponent('#api-navbar', ReactComponents.ApiBarController, {
+          endpoint: apiAndDocs[0],
+          documentation: apiAndDocs[1]
+        });
       }
 
-      var apiAndDocs = routeObject.get('apiUrl');
-      routeObject.setComponent('#api-navbar', ReactComponents.ApiBarController, {
-        endpoint: apiAndDocs[0],
-        documentation: apiAndDocs[1]
-      });
+      if (!routeObject.get('hideNotificationCenter')) {
+        routeObject.setComponent('#notification-center-btn', NotificationComponents.NotificationCenterButton);
+      }
     });
 
     FauxtonAPI.RouteObject.on('beforeEstablish', function (routeObject) {
@@ -78,12 +85,16 @@ function (app, FauxtonAPI, Components, NavbarReactComponents,
           crumbs: crumbs
         }), true).render();
       }
-
     });
 
     var primaryNavBarEl = $('#primary-navbar')[0];
     if (primaryNavBarEl) {
       NavbarReactComponents.renderNavBar(primaryNavBarEl);
+    }
+
+    var notificationCenterEl = $('#notification-center')[0];
+    if (notificationCenterEl) {
+      NotificationComponents.renderNotificationCenter(notificationCenterEl);
     }
 
     var versionInfo = new Fauxton.VersionInfo();

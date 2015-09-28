@@ -171,7 +171,7 @@ function (app, FauxtonAPI, React, Stores, Actions, ReactComponents, IndexResults
 
     componentDidUpdate: function () {
       // todo reactify right header (api bar, query options)
-      var $oldHeader = $('#api-navbar, #right-header');
+      var $oldHeader = $('#api-navbar, #right-header, #notification-center-btn');
       if (this.state.isToggled) {
         $oldHeader.hide();
         return;

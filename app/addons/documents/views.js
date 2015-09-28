@@ -38,7 +38,7 @@ function (app, FauxtonAPI, Components, Documents, Databases, QueryOptions, Query
   }
 
   Views.RightAllDocsHeader = FauxtonAPI.View.extend({
-    className: "header-right",
+    className: "header-right right-db-header flex-layout flex-row",
     template: "addons/documents/templates/all_docs_header",
     events: {
       'click .toggle-select-menu': 'selectAllMenu'

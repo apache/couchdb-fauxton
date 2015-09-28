@@ -34,12 +34,27 @@ function (app, FauxtonAPI, React, ZeroClipboard) {
   var Clipboard = React.createClass({
     propTypes: function () {
       return {
-        text: React.PropTypes.string.isRequired
+        text: React.PropTypes.string.isRequired,
+        displayType: React.PropTypes.string.oneOf(['icon', 'text'])
+      };
+    },
+
+    getDefaultProps: function () {
+      return {
+        displayType: 'icon',
+        textDisplay: 'Copy'
       };
     },
 
     componentWillMount: function () {
       ZeroClipboard.config({ moviePath: getZeroClipboardSwfPath() });
+    },
+
+    getClipboardElement: function () {
+      if (this.props.displayType === 'icon') {
+        return (<i className="fonticon-clipboard"></i>);
+      }
+      return this.props.textDisplay;
     },
 
     componentDidMount: function () {
@@ -49,8 +64,8 @@ function (app, FauxtonAPI, React, ZeroClipboard) {
 
     render: function () {
       return (
-        <a href="#" ref="copy" data-clipboard-text={this.props.text} data-bypass="true" title="Copy to clipboard">
-          <i className="fonticon-clipboard"></i>
+        <a href="#" ref="copy" className="copy" data-clipboard-text={this.props.text} data-bypass="true" title="Copy to clipboard">
+          {this.getClipboardElement()}
         </a>
       );
     }

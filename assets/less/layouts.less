@@ -2,8 +2,10 @@
 @import "mixins.less";
 
 
-/* new flex layout for templates. "body #dashboard" needed for specificity: will remove at end */
-body #dashboard .flex-layout, body #dashboard.flex-layout {
+/* new flex layout for templates. Specificity needed for now. Will remove at end */
+body #dashboard .flex-layout,
+body #dashboard.flex-layout,
+body #notification-center .flex-layout {
   .display-flex();
 
   &.flex-col {
@@ -43,9 +45,14 @@ body #dashboard .flex-layout, body #dashboard.flex-layout {
 
 /* can be added to any element in a display:flex element that you want to act as the main body. It expands to the
    available space and shows a scrollbar */
-body #dashboard .flex-body {
+body #dashboard .flex-body, body #notification-center .flex-body {
   .flex(1);
   overflow: auto;
+
+  /* yet more stuff that can be removed at end */
+  &.right-header-wrapper {
+    overflow: hidden;
+  }
 }
 
 /* used on the databases page. To be removed once moved to flexbox */
@@ -59,16 +66,8 @@ body #dashboard .flex-body {
 /* this drops .fixed-header, which was a position:absolute'd element, and switches it and all children to use flexbox. */
 .one-pane > header {
   width: 100%;
-
-  /* TODO move all style stuff out of this file. layouts.less should be entirely layout CSS, nothing else */
   .bottom-shadow-border();
 
-  #breadcrumbs {
-    overflow: hidden;
-
-    /* overrides - can be removed later */
-    float: none;
-  }
   #right-header {
     -ms-flex-preferred-size: auto;
     -webkit-flex: 0 0 auto;
@@ -76,23 +75,47 @@ body #dashboard .flex-body {
     flex-shrink: 0;
     flex-basis: inherit;
   }
-  #api-navbar {
-    .flex(0 0 117px);
+  #breadcrumbs {
+    overflow: hidden;
   }
+}
+
+body #dashboard .flex-body#right-header {
+  .flex(0 1 auto);
+  overflow: hidden;
+}
+
+body #dashboard .flex-layout #api-navbar {
+  .flex(0 0 auto);
 }
 
 /* temporary wedge. Can be replaced at end */
 .with-sidebar {
+
+  /* temporary wedge. Can be replaced at end */
   #breadcrumbs {
     float: left;
   }
   #api-navbar {
     float: right;
   }
+  /* end tmp wedge */
 }
+
+body #dashboard .header-right-panel {
+  overflow: hidden;
+}
+
 .right-header-wrapper {
   #api-navbar {
     float: right;
+  }
+}
+
+body #dashboard .right-db-header {
+  &>div {
+    .flex(1 0 auto);
+    /*overflow: hidden; */
   }
 }
 
@@ -104,9 +127,6 @@ body #dashboard.two-pane {
   #two-pane-content {
     .display-flex();
     .flex-direction(row);
-  }
-  .right-header-wrapper {
-    .flex(1);
   }
   #left-content {
     .flex(0 0 440px);

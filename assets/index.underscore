@@ -29,11 +29,12 @@
 </head>
 
 <body id="home">
-  <!-- Main container. -->
+
   <div id="global-notifications" class="container errors-container"></div>
+  <div id="notification-center"></div>
 
+  <!-- Main container. -->
   <div role="main" id="main">
-
     <div id="app-container">
       <div class="wrapper">
         <div id="primary-navbar"></div>

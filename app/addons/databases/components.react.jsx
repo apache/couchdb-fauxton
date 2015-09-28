@@ -167,9 +167,9 @@ define([
 
     render: function () {
       return (
-        <div className="header-right">
-          <AddDatabaseWidget />
+        <div className="header-right right-db-header flex-layout flex-row">
           <JumpToDatabaseWidget />
+          <AddDatabaseWidget />
         </div>
       );
     }
@@ -211,7 +211,6 @@ define([
 
       return (
         <div>
-
           <ToggleHeaderButton
             selected={this.state.isPromptVisible}
             toggleCallback={this.onTrayToggle}
@@ -219,7 +218,6 @@ define([
             title="Add New Database"
             fonticon="fonticon-new-database"
             text="Add New Database" />
-
           <ComponentsReact.Tray ref="newDbTray" className="new-database-tray">
             <span className="add-on">Add New Database</span>
             <input id="js-new-database-name" type="text" onKeyUp={this.onKeyUpInInput} ref="newDbName" className="input-xxlarge" placeholder="Name of database" />

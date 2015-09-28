@@ -76,6 +76,7 @@ function (FauxtonAPI, React, Backbone) {
     crumbs: [],
     layout: "with_sidebar",
     apiUrl: null,
+    hideNotificationPanel: null,
     disableLoader: false,
     loaderClassname: 'loader',
     renderedState: false,
