@@ -26,20 +26,36 @@ function (app, FauxtonAPI, Stores, ActionTypes, Resources) {
 
       this.setStartLoading();
       FauxtonAPI.when(databases.fetch({ cache: false })).then(function () {
-        FauxtonAPI.when(databases.paginated(page, perPage).map(function (database) {
-          return database.status.fetchOnce();
-        })).always(function () {
-          //make this always so that even if a user is not allowed access to a database
-          //they will still see a list of all databases
+
+        // if there are no databases, publish the init message anyway
+        if (!databases.paginated(page, perPage).length) {
           FauxtonAPI.dispatch({
             type: ActionTypes.DATABASES_INIT,
             options: {
-              collection: databases.paginated(page, perPage),
+              collection: [],
               backboneCollection: databases,
               page: page
             }
           });
-        }.bind(this));
+        }
+
+        var numComplete = 0;
+        _.each(databases.paginated(page, perPage), function (db) {
+          db.status.fetchOnce().always(function () {
+            numComplete++;
+            if (numComplete < databases.paginated(page, perPage).length) {
+              return;
+            }
+            FauxtonAPI.dispatch({
+              type: ActionTypes.DATABASES_INIT,
+              options: {
+                collection: databases.paginated(page, perPage),
+                backboneCollection: databases,
+                page: page
+              }
+            });
+          });
+        });
       }.bind(this));
     },
 

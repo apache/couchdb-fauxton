@@ -123,6 +123,7 @@ function (app, FauxtonAPI, Documents) {
 
     initialize: function (options) {
       this.database = options.database;
+      this.loadSuccess = false;
     },
 
     numDocs: function () {
@@ -158,6 +159,11 @@ function (app, FauxtonAPI, Documents) {
       } else {
         return 0;
       }
+    },
+
+    parse: function (resp) {
+      this.loadSuccess = true;
+      return resp;
     },
 
     // a sure-fire way to know when the DB size info is actually available; dataSize() may return 0 before or after

@@ -40,6 +40,7 @@ define([
               }
             },
             "status": {
+              "loadSuccess": true,
               "dataSize": function () {
                 return 2 * 1024 * 1024;
               },
@@ -63,6 +64,7 @@ define([
               }
             },
             "status": {
+              "loadSuccess": true,
               "dataSize": function () {
                 return 1024;
               },
@@ -270,6 +272,7 @@ define([
 
       var row = new Backbone.Model({ name: 'db name' });
       row.status = {
+        loadSuccess: true,
         dataSize: function () { return 0; },
         numDocs: function () { return 0; },
         updateSeq: function () { return 0; },
@@ -285,6 +288,35 @@ define([
       FauxtonAPI.unRegisterExtension('DatabaseTable:databaseRow');
 
       Stores.databasesStore.reset();
+    });
+
+    it('shows error message if row marked as failed to load', function () {
+      var row = new Backbone.Model({ name: 'db name' });
+      row.status = {
+        loadSuccess: false,
+        dataSize: function () { return 0; },
+        numDocs: function () { return 0; },
+        updateSeq: function () { return 0; },
+        isGraveYard: function () { return false; }
+      };
+
+      var databaseRow = TestUtils.renderIntoDocument(<Views.DatabaseTable body={[row]} />, container);
+      assert.equal($(databaseRow.getDOMNode()).find('.database-load-fail').length, 1);
+    });
+
+    it('shows no error if row marked as loaded', function () {
+      var row = new Backbone.Model({ name: 'db name' });
+      row.status = {
+        loadSuccess: true,
+        dataSize: function () { return 0; },
+        numDocs: function () { return 0; },
+        updateSeq: function () { return 0; },
+        isGraveYard: function () { return false; }
+      };
+
+      var databaseRow = TestUtils.renderIntoDocument(<Views.DatabaseTable body={[row]} />, container);
+
+      assert.equal($(databaseRow.getDOMNode()).find('.database-load-fail').length, 0);
     });
 
   });

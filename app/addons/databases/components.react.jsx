@@ -107,6 +107,10 @@ define([
 
   var DatabaseRow = React.createClass({
 
+    propTypes: {
+      row: React.PropTypes.object
+    },
+
     renderGraveyard: function (row) {
       if (row.status.isGraveYard()) {
         return (
@@ -127,8 +131,19 @@ define([
     render: function () {
       var row = this.props.row;
       var name = row.get("name");
+
+      // if the row status failed to load, inform the user
+      if (!row.status.loadSuccess) {
+        return (
+          <tr>
+            <td>{name}</td>
+            <td colSpan="4" className="database-load-fail">This database failed to load.</td>
+          </tr>
+        );
+      }
       var encoded = app.utils.safeURLName(name);
       var size = Helpers.formatSize(row.status.dataSize());
+
       return (
         <tr>
           <td>
