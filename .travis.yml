@@ -13,6 +13,16 @@ before_install:
   - sudo apt-get -y install libtool automake autoconf autoconf-archive
   - sudo apt-get -y install haproxy
 
+  - git clone git://github.com/rebar/rebar.git
+  - cd rebar
+  - git checkout 2.6.0
+  - ./bootstrap
+  - cd ..
+  - mv rebar rebar-build
+  - sudo mv rebar-build/rebar /usr/local/bin/rebar
+  - rebar --version
+  - which rebar
+
   - nvm install 0.10 && nvm use 0.10
 
   - cd ..
