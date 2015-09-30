@@ -107,6 +107,16 @@ module.exports = function (grunt) {
     grunt.file.write(dest, tmpl(app));
   });
 
+  // quick sanity check to run immediately when the user specifies a specific mocha test to run, like
+  //     `grunt test --file=./my/test.js`
+  // This dies immediately if the file doesn't exist and notifies the user.
+  grunt.registerMultiTask('checkTestExists', 'Confirms that if a specific mocha test exists', function () {
+    var fileSrc = grunt.option('file');
+    if (fileSrc && !fs.existsSync(fileSrc)) {
+      grunt.fail.fatal('Mocha test file not found: ' + fileSrc);
+    }
+  });
+
   grunt.registerMultiTask('mochaSetup', 'Generate a config.js and runner.html for tests', function () {
     var data = this.data,
         configInfo,
