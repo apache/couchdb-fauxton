@@ -364,6 +364,7 @@ module.exports = function (grunt) {
       }
     },
     gen_initialize: templateSettings,
+    checkTestExists: templateSettings,
 
     mkcouchdb: couch_config,
     rmcouchdb: couch_config,
@@ -540,7 +541,7 @@ module.exports = function (grunt) {
    */
   // clean out previous build artifacts and lint
   grunt.registerTask('lint', ['clean', 'jshint']);
-  grunt.registerTask('test', ['clean:release', 'dependencies', 'jsx', 'jshint', 'shell:stylecheck', 'gen_initialize:development', 'test_inline']);
+  grunt.registerTask('test', ['checkTestExists', 'clean:release', 'dependencies', 'jsx', 'jshint', 'shell:stylecheck', 'gen_initialize:development', 'test_inline']);
 
   // lighter weight test task for use inside dev/watch
   grunt.registerTask('test_inline', ['mochaSetup', 'jst', 'concat:test_config_js', 'shell:phantomjs']);
