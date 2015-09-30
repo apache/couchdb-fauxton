@@ -74,7 +74,7 @@ function (app, FauxtonAPI, React, Stores, Actions,
       var loadLines;
       if (this.state.isLoading) {
         return (
-          <div className="editor-wrapper span5 scrollable">
+          <div className="editor-wrapper">
             <ReactComponents.LoadLines />
           </div>
         );
