@@ -434,7 +434,7 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, ReactComponents) 
   var EditorController = React.createClass({
     render: function () {
       return (
-        <div className="editor-wrapper span5 scrollable">
+        <div className="editor-wrapper">
           <Editor />
         </div>
       );
