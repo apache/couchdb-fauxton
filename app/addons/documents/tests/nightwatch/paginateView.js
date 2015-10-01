@@ -26,7 +26,7 @@ module.exports = {
 
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_design/keyview/_view/keyview')
 
-      .waitForElementPresent('#toggle-query', waitTime, false)
+      .waitForElementPresent('.control-toggle-queryoptions', waitTime, false)
 
       // ensure the page content has loaded
       .waitForElementPresent('.prettyprint', waitTime, false)
@@ -61,7 +61,7 @@ module.exports = {
       .waitForElementVisible('#dashboard-content table.databases', waitTime, false)
 
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_design/keyview/_view/keyview')
-      .waitForElementPresent('#toggle-query', waitTime, false)
+      .waitForElementPresent('.control-toggle-queryoptions', waitTime, false)
 
       // ensure the page content has loaded
       .waitForElementPresent('.prettyprint', waitTime, false)
@@ -95,7 +95,7 @@ module.exports = {
       .waitForElementVisible('#dashboard-content table.databases', waitTime, false)
 
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_design/keyview/_view/keyview')
-      .waitForElementPresent('#toggle-query', waitTime, false)
+      .waitForElementPresent('.control-toggle-queryoptions', waitTime, false)
 
       // ensure the page content has loaded
       .waitForElementPresent('.prettyprint', waitTime, false)
