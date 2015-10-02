@@ -26,22 +26,43 @@ define([
   describe('Auth -- Components', function () {
 
     describe('LoginForm', function () {
-      var container, loginForm;
+      var container, loginForm, stub;
 
       beforeEach(function () {
+        stub = sinon.stub(Actions, 'login');
         container = document.createElement('div');
-        loginForm = TestUtils.renderIntoDocument(<Components.LoginForm />, container);
       });
 
       afterEach(function () {
         React.unmountComponentAtNode(container);
+        createAdminSidebarStore.reset();
+        Actions.login.restore();
       });
 
       it('should trigger login event when form submitted', function () {
-        var spy = sinon.spy(Actions, 'login');
+        loginForm = TestUtils.renderIntoDocument(<Components.LoginForm />, container);
         TestUtils.Simulate.submit($(loginForm.getDOMNode()).find('#login')[0]);
-        assert.ok(spy.calledOnce);
+        assert.ok(stub.calledOnce);
       });
+
+      it('in case of nothing in state, should pass actual values to Actions.login()', function () {
+        var username = 'bob';
+        var password = 'smith';
+
+        loginForm = TestUtils.renderIntoDocument(
+          <Components.LoginForm
+            testBlankUsername={username}
+            testBlankPassword={password}
+          />, container);
+
+        TestUtils.Simulate.submit($(loginForm.getDOMNode()).find('#login')[0]);
+        assert.ok(stub.calledOnce);
+
+        // confirm Actions.login() received the values that weren't in the DOM
+        assert.equal(stub.args[0][0], username);
+        assert.equal(stub.args[0][1], password);
+      });
+
     });
 
     describe('ChangePasswordForm', function () {
