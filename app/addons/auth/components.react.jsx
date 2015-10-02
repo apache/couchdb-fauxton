@@ -37,7 +37,11 @@ define([
 
     getDefaultProps: function () {
       return {
-        urlBack: ''
+        urlBack: '',
+
+        // for testing purposes only
+        testBlankUsername: null,
+        testBlankPassword: null
       };
     },
 
@@ -46,9 +50,30 @@ define([
       this.setState(change);
     },
 
-    login: function (e) {
+    submit: function (e) {
       e.preventDefault();
-      AuthActions.login(this.state.username, this.state.password, this.props.urlBack);
+
+      if (!this.checkUnrecognizedAutoFill()) {
+        this.login(this.state.username, this.state.password);
+      }
+    },
+
+    // Safari has a bug where autofill doesn't trigger a change event. This checks for the condition where the state
+    // and form fields have a mismatch. See: https://issues.apache.org/jira/browse/COUCHDB-2829
+    checkUnrecognizedAutoFill: function () {
+      if (this.state.username !== '' || this.state.password !== '') {
+        return false;
+      }
+      var username = (this.props.testBlankUsername) ? this.props.testBlankUsername : this.refs.username.getDOMNode().value;
+      var password = (this.props.testBlankPassword) ? this.props.testBlankPassword : this.refs.password.getDOMNode().value;
+      this.setState({ username: username, password: password }); // doesn't set immediately, hence separate login() call
+      this.login(username, password);
+
+      return true;
+    },
+
+    login: function (username, password) {
+      AuthActions.login(username, password, this.props.urlBack);
     },
 
     componentDidMount: function () {
@@ -59,14 +84,14 @@ define([
       return (
         <div className="row-fluid">
           <div className="span12">
-            <form id="login" onSubmit={this.login}>
+            <form id="login" onSubmit={this.submit}>
               <p className="help-block">
                 Login with your username and password
               </p>
               <input id="username" type="text" name="name" ref="username" placeholder="Username" size="24"
                 onChange={this.onInputChange} value={this.state.username} />
               <br/>
-              <input id="password" type="password" name="password" placeholder="Password" size="24"
+              <input id="password" type="password" name="password" ref="password" placeholder="Password" size="24"
                 onChange={this.onInputChange} value={this.state.password} />
               <br/>
               <button id="submit" className="btn" type="submit">Login</button>
