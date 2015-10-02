@@ -133,7 +133,11 @@ function (FauxtonAPI, React, Backbone) {
 
     renderReactComponents: function () {
       _.each(this.reactComponents, function (componentInfo, selector) {
-        React.render(React.createElement(componentInfo.component, componentInfo.props), $(selector)[0]);
+        if ($(selector)[0]) {
+          React.render(React.createElement(componentInfo.component, componentInfo.props), $(selector)[0]);
+        } else {
+          console.warn("Unable to mount reactor component. Missing selector: ", selector);
+        }
       });
     },
 
@@ -256,7 +260,11 @@ function (FauxtonAPI, React, Backbone) {
 
     removeComponent: function (selector) {
       if (_.has(this.reactComponents, selector)) {
-        React.unmountComponentAtNode($(selector)[0]);
+        if ($(selector)[0]) {
+          React.unmountComponentAtNode($(selector)[0]);
+        } else {
+          console.warn("Unable to unmount react component. Missing selector: ", selector);
+        }
         this.reactComponents[selector] = null;
         delete this.reactComponents[selector];
       }

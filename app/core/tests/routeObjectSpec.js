@@ -15,8 +15,10 @@ define([
   'testUtils'
 ], function (FauxtonAPI, React, testUtils) {
   var assert = testUtils.assert,
-  restore = testUtils.restore,
-  RouteObject = FauxtonAPI.RouteObject;
+      restore = testUtils.restore,
+      RouteObject = FauxtonAPI.RouteObject,
+      TestUtils = React.addons.TestUtils;
+
 
   describe('RouteObjects', function () {
 
@@ -197,15 +199,24 @@ define([
           restore(React.unmountComponentAtNode);
         });
 
-        it('removes existing component via react', function () {
+        it('removes existing components via React', function () {
           var spy = sinon.stub(React, 'unmountComponentAtNode');
           var fakeSelector = 'remove-selector';
-          testRouteObject.reactComponents[fakeSelector] = React.createElement('div');
 
+          var container = document.createElement('div');
+          var Hmm = React.createClass({displayName: "Hmm",
+            render: function () {
+              return (
+                React.createElement("div", {id: "remove-selector"})
+              );
+            }
+          });
+
+          TestUtils.renderIntoDocument(React.createElement('Hmm'), container);
+          testRouteObject.reactComponents[fakeSelector] = React.createElement('div');
           testRouteObject.removeComponent(fakeSelector);
 
-          assert.ok(spy.calledOnce);
-
+          assert.ok(_.isUndefined(testRouteObject.reactComponents[fakeSelector]));
         });
 
         it('removes existing components key', function () {
