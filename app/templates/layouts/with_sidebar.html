@@ -11,15 +11,17 @@ WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 License for the specific language governing permissions and limitations under
 the License.
 */%>
-<div id="dashboard">
+<div id="dashboard" class="template-with-sidebar flex-layout flex-col">
   <header class="flex-layout flex-row">
-    <div id="breadcrumbs" class="flex-body"></div>
-    <div id="api-navbar"></div>
-    <div id="notification-center-btn"></div>
+    <div class="flex-layout flex-row">
+      <div id="breadcrumbs" class="flex-body"></div>
+      <div id="api-navbar" class="flex-fill"></div>
+      <div id="notification-center-btn" class="flex-fill"></div>
+    </div>
   </header>
 
-  <div class="with-sidebar content-area">
+  <div class="template-content flex-body flex-layout flex-row">
     <div id="sidebar-content"></div>
-    <div id="dashboard-content" class="scrollable list"></div>
+    <div id="dashboard-content" class="flex-body"></div>
   </div>
 </div>

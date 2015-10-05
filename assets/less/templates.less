@@ -291,6 +291,7 @@ with_tabs_sidebar.html
 #dashboard {
   position: relative;
   left: @navWidth;
+  padding-left: 0;
   background-color: @sidebarBG;
   height: 100%;
   width: 100%;
@@ -322,9 +323,6 @@ with_tabs_sidebar.html
 
 #sidebar-content {
   width: @sidebarWidth;
-  position: absolute;
-  top: @collapsedNavWidth;
-  left: 0;
   background-color: @secondarySidebar;
   margin-top: 6px;
   > div.inner {
@@ -522,12 +520,4 @@ with_tabs_sidebar.html
       display: none;
     }
   }
-}
-
-.with-sidebar.content-area {
-  position: absolute;
-  top: 65px;
-  bottom: 0;
-  left: 0;
-  right: 0;
 }

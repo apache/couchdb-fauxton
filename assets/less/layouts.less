@@ -55,6 +55,11 @@ body #dashboard .flex-body, body #notification-center .flex-body {
   }
 }
 
+/* tells an element to be as large as the content. This will replace the hardcoded ones */
+body #dashboard .flex-fill {
+  .flex(0 0 auto);
+}
+
 /* used on the databases page. To be removed once moved to flexbox */
 .one-pane #footer {
   position: absolute;
@@ -66,7 +71,15 @@ body #dashboard .flex-body, body #notification-center .flex-body {
 /* this drops .fixed-header, which was a position:absolute'd element, and switches it and all children to use flexbox. */
 .one-pane > header {
   width: 100%;
-  .bottom-shadow-border();
+
+//  .bottom-shadow-border();
+
+  #breadcrumbs {
+    overflow: hidden;
+
+    /* overrides - can be removed later */
+    float: none;
+  }
 
   #right-header {
     -ms-flex-preferred-size: auto;
@@ -75,8 +88,8 @@ body #dashboard .flex-body, body #notification-center .flex-body {
     flex-shrink: 0;
     flex-basis: inherit;
   }
-  #breadcrumbs {
-    overflow: hidden;
+  #api-navbar {
+    .flex(0 0 auto);
   }
 }
 
@@ -146,8 +159,32 @@ body #dashboard.two-pane {
     position: inherit;
 
     #breadcrumbs {
+      height: 64px;
       .flex(0 0 440px);
       overflow: hidden;
     }
   }
+}
+
+body #dashboard.template-with-sidebar {
+  header {
+    .flex(0 0 65px);
+  }
+  #sidebar-content {
+    .flex(0 0 330px);
+    overflow: auto;
+    overflow-x: hidden;
+  }
+  .template-content {
+    overflow: hidden;
+  }
+  #dashboard-content {
+    border-left: 1px solid @grayLight;
+    .left-shadow-border();
+  }
+}
+
+/* tmp. Will be removed at end of flexbox refactor */
+aside#sidebar-content {
+  top: 64px;
 }
