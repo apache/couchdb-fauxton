@@ -112,7 +112,9 @@ module.exports = function (grunt) {
   // This dies immediately if the file doesn't exist and notifies the user.
   grunt.registerMultiTask('checkTestExists', 'Confirms that if a specific mocha test exists', function () {
     var fileSrc = grunt.option('file');
-    if (fileSrc && !fs.existsSync(fileSrc)) {
+
+    // the + 'x' check checks for jsx files that haven't been compiled yet
+    if (fileSrc && !fs.existsSync(fileSrc) && !fs.existsSync(fileSrc + 'x')) {
       grunt.fail.fatal('Mocha test file not found: ' + fileSrc);
     }
   });
