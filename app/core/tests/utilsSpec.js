@@ -18,6 +18,37 @@ define([
 
   describe('Utils', function () {
 
+    describe('getDocTypeFromId', function () {
+
+      it('returns doc if id not given', function () {
+        var res = utils.getDocTypeFromId();
+        assert.equal(res, 'doc');
+      });
+
+      it('returns design doc for design docs', function () {
+        var res = utils.getDocTypeFromId('_design/foobar');
+        assert.equal(res, 'design doc');
+      });
+
+      it('returns doc for all others', function () {
+        var res = utils.getDocTypeFromId('blerg');
+        assert.equal(res, 'doc');
+      });
+    });
+
+    describe('getSafeIdForDoc', function () {
+
+      it('keeps _design/ intact', function () {
+        var res = utils.getSafeIdForDoc('_design/foo/do');
+        assert.equal(res, '_design/foo%2Fdo');
+      });
+
+      it('encodes all other', function () {
+        var res = utils.getSafeIdForDoc('_redesign/foobar');
+        assert.equal(res, '_redesign%2Ffoobar');
+      });
+    });
+
     describe('localStorage', function () {
 
       it('Should get undefined when getting a non-existent key', function () {

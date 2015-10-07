@@ -98,6 +98,27 @@ function ($, _) {
       return (checkforBad !== null) ? encodeURIComponent(name) : name;
     },
 
+    getDocTypeFromId: function (id) {
+      if (id && /^_design\//.test(id)) {
+        return 'design doc';
+      }
+
+      return 'doc';
+    },
+
+    // Need this to work around backbone router thinking _design/foo
+    // is a separate route. Alternatively, maybe these should be
+    // treated separately. For instance, we could default into the
+    // json editor for docs, or into a ddoc specific page.
+    getSafeIdForDoc: function (id) {
+      if (utils.getDocTypeFromId(id) === 'design doc') {
+        var ddoc = id.replace(/^_design\//, '');
+        return '_design/' + utils.safeURLName(ddoc);
+      }
+
+      return utils.safeURLName(id);
+    },
+
     // a pair of simple local storage wrapper functions. These ward against problems getting or
     // setting (e.g. local storage full) and allow you to get/set complex data structures
     localStorageSet: function (key, value) {
