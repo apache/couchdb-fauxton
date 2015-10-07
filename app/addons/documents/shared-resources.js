@@ -54,7 +54,7 @@ define([
     },
 
     docType: function () {
-      return this.id && this.id.match(/^_design\//) ? "design doc" : "doc";
+      return app.utils.getDocTypeFromId(this.id);
     },
 
     isDeletable: function () {
@@ -155,17 +155,8 @@ define([
       return this;
     },
 
-    // Need this to work around backbone router thinking _design/foo
-    // is a separate route. Alternatively, maybe these should be
-    // treated separately. For instance, we could default into the
-    // json editor for docs, or into a ddoc specific page.
     safeID: function () {
-      if (this.isDdoc()) {
-        var ddoc = this.id.replace(/^_design\//, "");
-        return "_design/" + app.utils.safeURLName(ddoc);
-      }else {
-        return app.utils.safeURLName(this.id);
-      }
+      return app.utils.getSafeIdForDoc(this.id);
     },
 
     destroy: function () {
