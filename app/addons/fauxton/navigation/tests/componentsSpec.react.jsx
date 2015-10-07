@@ -13,9 +13,11 @@ define([
   'api',
   'addons/fauxton/navigation/components.react',
   'addons/fauxton/navigation/actions',
+  'core/auth',
+  'addons/auth/base',
   'testUtils',
   "react"
-], function (FauxtonAPI, Views, Actions, utils, React) {
+], function (FauxtonAPI, Views, Actions, Auth, BaseAuth, utils, React) {
 
   var assert = utils.assert;
   var TestUtils = React.addons.TestUtils;
@@ -40,6 +42,33 @@ define([
         assert.ok(toggleMenu.calledOnce);
       });
 
+    });
+
+    it('logout link only ever appears once', function () {
+      FauxtonAPI.auth = new Auth();
+      sinon.stub(FauxtonAPI.session, 'isLoggedIn').returns(true);
+      sinon.stub(FauxtonAPI.session, 'isAdminParty').returns(false);
+      sinon.stub(FauxtonAPI.session, 'user').returns({ name: 'test-user' });
+      BaseAuth.initialize();
+
+      var container = document.createElement('div');
+      var el = TestUtils.renderIntoDocument(<Views.NavBar />, container);
+
+      FauxtonAPI.session.trigger('change');
+
+      // confirm the logout link is present
+      var matches = React.findDOMNode(el).outerHTML.match(/Logout/);
+      assert.equal(matches.length, 1);
+
+      // now confirm there's still only a single logout link after publishing multiple
+      FauxtonAPI.session.trigger('change');
+      FauxtonAPI.session.trigger('change');
+      matches = React.findDOMNode(el).outerHTML.match(/Logout/);
+      assert.equal(matches.length, 1);
+
+      FauxtonAPI.session.isLoggedIn.restore();
+      FauxtonAPI.session.user.restore();
+      FauxtonAPI.session.isAdminParty.restore();
     });
 
     describe('CSRF info', function () {

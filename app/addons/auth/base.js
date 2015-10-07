@@ -29,7 +29,7 @@ function (app, FauxtonAPI, Auth) {
       title: "Login",
       href: "#login",
       icon: "fonticon-user",
-      bottomNav: true,
+      bottomNav: true
     });
 
     Auth.session.on('change', function () {
@@ -42,7 +42,7 @@ function (app, FauxtonAPI, Auth) {
           title: "Admin Party!",
           href: "#createAdmin",
           icon: "fonticon-user",
-          bottomNav: true,
+          bottomNav: true
         };
       } else if (session.isLoggedIn()) {
         link = {
@@ -50,8 +50,11 @@ function (app, FauxtonAPI, Auth) {
           title: session.user().name,
           href: "#changePassword",
           icon: "fonticon-user",
-          bottomNav: true,
+          bottomNav: true
         };
+
+        // ensure the footer link is removed before adding it
+        FauxtonAPI.removeHeaderLink({id: "logout", footerNav: true});
 
         FauxtonAPI.addHeaderLink({
           id: 'logout',

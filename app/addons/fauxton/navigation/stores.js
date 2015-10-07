@@ -171,13 +171,14 @@ function (app, FauxtonAPI, ActionTypes) {
 
     dispatch: function (action) {
       switch (action.type) {
-
         case ActionTypes.ADD_NAVBAR_LINK:
           this.addLink(action.link);
         break;
+
         case ActionTypes.TOGGLE_NAVBAR_MENU:
           this.toggleMenu();
         break;
+
         case ActionTypes.UPDATE_NAVBAR_LINK:
           this.updateLink(action.link);
         break;
