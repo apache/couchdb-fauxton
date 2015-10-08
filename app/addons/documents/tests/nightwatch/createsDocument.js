@@ -28,6 +28,10 @@ module.exports = {
       .verify.urlEquals(baseUrl + '/#/database/' + newDatabaseName + '/new')
       .waitForElementPresent('.ace_layer.ace_cursor-layer.ace_hidden-cursors', waitTime, false)
 
+      // confirm the header elements are showing up
+      .waitForElementVisible('.js-lastelement', waitTime, true)
+      .waitForElementVisible('#api-navbar', waitTime, true)
+
       //.pause(1000) // looks like auto-focus happens during the next execute() line, so this slows it down
       .execute('\
         var editor = ace.edit("doc-editor");\
