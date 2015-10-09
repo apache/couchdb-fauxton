@@ -19,11 +19,12 @@ define([
   "addons/fauxton/navigation/components.react",
   "addons/fauxton/navigation/actions",
   'addons/fauxton/dependencies/ZeroClipboard',
-  'addons/components/react-components.react'
+  'addons/components/react-components.react',
+  'addons/components/actions'
 ],
 
 function (app, FauxtonAPI, Components, NotificationComponents, Actions, NavbarReactComponents, NavigationActions,
-          ZeroClipboard, ReactComponents) {
+          ZeroClipboard, ReactComponents, ComponentActions) {
 
   var Fauxton = FauxtonAPI.addon();
   FauxtonAPI.addNotification = function (options) {
@@ -61,12 +62,18 @@ function (app, FauxtonAPI, Components, NotificationComponents, Actions, NavbarRe
     FauxtonAPI.RouteObject.on('beforeFullRender', function (routeObject) {
       NavigationActions.setNavbarActiveLink(_.result(routeObject, 'selectedHeader'));
 
+      // always attempt to render the API Bar. Even if it's hidden on initial load, it may be enabled later
+      routeObject.setComponent('#api-navbar', ReactComponents.ApiBarController);
+
       if (routeObject.get('apiUrl')) {
         var apiAndDocs = routeObject.get('apiUrl');
-        routeObject.setComponent('#api-navbar', ReactComponents.ApiBarController, {
+        ComponentActions.updateAPIBar({
+          visible: true,
           endpoint: apiAndDocs[0],
-          documentation: apiAndDocs[1]
+          docURL: apiAndDocs[1]
         });
+      } else {
+        ComponentActions.hideAPIBar();
       }
 
       if (!routeObject.get('hideNotificationCenter')) {

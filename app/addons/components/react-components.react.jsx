@@ -14,13 +14,16 @@ define([
   'app',
   'api',
   'react',
+  'addons/components/stores',
   'addons/fauxton/components.react',
   'ace/ace',
   'plugins/beautify'
 ],
 
-function (app, FauxtonAPI, React, FauxtonComponents, ace, beautifyHelper) {
+function (app, FauxtonAPI, React, Stores, FauxtonComponents, ace, beautifyHelper) {
   var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
+  var componentStore = Stores.componentStore;
+
 
   var ToggleHeaderButton = React.createClass({
     getDefaultProps: function () {
@@ -1076,11 +1079,30 @@ function (app, FauxtonAPI, React, FauxtonComponents, ace, beautifyHelper) {
 
   var ApiBarController = React.createClass({
 
-    getDefaultProps: function () {
+    getInitialState: function () {
+      return this.getStoreState();
+    },
+
+    getStoreState: function () {
       return {
-        endpoint: '_all_docs',
-        documentation: FauxtonAPI.constants.DOC_URLS.GENERAL
+        visible: componentStore.isAPIBarVisible(),
+        endpoint: componentStore.getEndpoint(),
+        docURL: componentStore.getDocURL()
       };
+    },
+
+    onChange: function () {
+      if (this.isMounted()) {
+        this.setState(this.getStoreState());
+      }
+    },
+
+    componentDidMount: function () {
+      componentStore.on('change', this.onChange, this);
+    },
+
+    componentWillUnmount: function () {
+      componentStore.off('change', this.onChange);
     },
 
     showCopiedMessage: function () {
@@ -1091,7 +1113,22 @@ function (app, FauxtonAPI, React, FauxtonComponents, ace, beautifyHelper) {
       });
     },
 
+    getDocIcon: function () {
+      if (!this.state.docURL) {
+        return false;
+      }
+      return (
+        <a className="help-link" data-bypass="true" href={this.state.docURL} target="_blank">
+          <i className="icon icon-question-sign"></i>
+        </a>
+      );
+    },
+
     render: function () {
+      if (!this.state.visible || !this.state.endpoint) {
+        return null;
+      }
+
       return (
         <Tray id="api-bar-controller" ref="tray">
 
@@ -1102,24 +1139,21 @@ function (app, FauxtonAPI, React, FauxtonComponents, ace, beautifyHelper) {
             text="API URL" />
 
           <TrayContents
-            className="api-bar-tray"
-          >
+            className="api-bar-tray">
             <div className="input-prepend input-append">
               <span className="add-on">
                 API URL
-                <a className="help-link" data-bypass="true" href={this.props.documentation} target="_blank">
-                  <i className="icon icon-question-sign"></i>
-                </a>
+                {this.getDocIcon()}
               </span>
 
               <FauxtonComponents.ClipboardWithTextField
                 onClipBoardClick={this.showCopiedMessage}
                 text="Copy"
-                textToCopy={this.props.endpoint}
+                textToCopy={this.state.endpoint}
                 uniqueKey="clipboard-apiurl" />
 
               <div className="add-on">
-                <a data-bypass="true" href={this.props.endpoint} target="_blank" className="btn">
+                <a data-bypass="true" href={this.state.endpoint} target="_blank" className="btn">
                   <i className="fonticon-eye icon"></i>
                   View JSON
                 </a>
@@ -1129,7 +1163,7 @@ function (app, FauxtonAPI, React, FauxtonComponents, ace, beautifyHelper) {
           </TrayContents>
         </Tray>
       );
-    },
+    }
   });
 
   return {
