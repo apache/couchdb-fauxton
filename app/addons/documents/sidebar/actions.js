@@ -47,6 +47,10 @@ function (app, FauxtonAPI, ActionTypes, Stores) {
         type: ActionTypes.SIDEBAR_SET_SELECTED_TAB,
         tab: tab
       });
+    },
+
+    refresh: function () {
+      FauxtonAPI.dispatch({ type: ActionTypes.SIDEBAR_REFRESH });
     }
   };
 });

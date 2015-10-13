@@ -136,6 +136,10 @@ function (app, FauxtonAPI, ActionTypes) {
           this._loading = true;
           this.triggerChange();
         break;
+        case ActionTypes.SIDEBAR_REFRESH:
+          this.triggerChange();
+        break;
+
         default:
         return;
         // do nothing

@@ -15,10 +15,10 @@ define([
   'api',
   'addons/documents/index-results/actiontypes',
   'addons/documents/index-results/stores',
-  'addons/documents/header/header.actions',
-  'addons/documents/resources'
+  'addons/documents/resources',
+  'addons/documents/sidebar/actions'
 ],
-function (app, FauxtonAPI, ActionTypes, Stores, HeaderActions, Documents) {
+function (app, FauxtonAPI, ActionTypes, Stores, Documents, SidebarActions) {
   var indexResultsStore = Stores.indexResultsStore;
 
   var errorMessage = function (ids) {
@@ -198,6 +198,7 @@ function (app, FauxtonAPI, ActionTypes, Stores, HeaderActions, Documents) {
       .always(function () {
         reloadResultsList().then(function () {
           selectListOfDocs(selectedIds);
+          SidebarActions.refresh();
         });
       });
     }

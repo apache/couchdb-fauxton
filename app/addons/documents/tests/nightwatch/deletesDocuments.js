@@ -50,5 +50,54 @@ module.exports = {
           'Checking if new documents no longer shows up in _all_docs.');
       })
     .end();
+  },
+
+  'Deleting a new Design Doc automatically removes it from the sidebar': function (client) {
+    var waitTime = client.globals.maxWaitTime;
+    var newDatabaseName = client.globals.testDatabaseName;
+    var baseUrl = client.globals.test_settings.launch_url;
+
+    /*jshint multistr: true */
+    client
+      .loginToGUI()
+      .populateDatabase(newDatabaseName)
+      .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
+      .waitForElementPresent('#header-dropdown-menu', waitTime, false)
+      .waitForElementPresent('#header-dropdown-menu a', waitTime, false)
+      .clickWhenVisible('#header-dropdown-menu a', waitTime, false)
+      .waitForElementPresent('#header-dropdown-menu  a[href*="new_view"]', waitTime, false)
+      .clickWhenVisible('#header-dropdown-menu a[href*="new_view"]', waitTime, false)
+      .waitForElementPresent('.editor-wrapper', waitTime, false)
+      .waitForElementPresent('#new-ddoc', waitTime, false)
+      .setValue('#new-ddoc', 'sidebar-update')
+      .clearValue('#index-name')
+      .setValue('#index-name', 'sidebar-update-index')
+      .execute('\
+        var editor = ace.edit("map-function");\
+        editor.getSession().setValue("function (doc) { emit(\'1\'); }");\
+      ')
+      .execute('$("#save-view")[0].scrollIntoView();')
+      .waitForElementPresent('#save-view', waitTime, false)
+      .clickWhenVisible('#save-view', waitTime, false)
+      .waitForElementVisible('#global-notifications .alert.alert-success', waitTime, false)
+      .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
+      .waitForElementPresent('.prettyprint', waitTime, false)
+      .waitForElementNotPresent('.loading-lines', waitTime, false)
+
+      // confirm the design doc appears in the sidebar
+      .waitForElementPresent('#sidebar-content span[title="_design/sidebar-update"]', waitTime, false)
+      .waitForElementPresent('label[for="checkbox-_design/sidebar-update"]', waitTime, false)
+      .execute('$("label[for=\'checkbox-_design/sidebar-update\']")[0].scrollIntoView();')
+      .clickWhenVisible('label[for="checkbox-_design/sidebar-update"]', waitTime, false)
+
+      .waitForElementPresent('.bulk-action-component-selector-group .fonticon-trash', waitTime, false)
+      .execute('$(".bulk-action-component-selector-group .fonticon-trash")[0].scrollIntoView();')
+      .clickWhenVisible('.bulk-action-component-selector-group .fonticon-trash')
+      .acceptAlert()
+
+      // now confirm it's gone
+      .waitForElementNotPresent('#sidebar-content span[title="_design/sidebar-update"]', waitTime, false)
+      .end();
   }
+
 };
