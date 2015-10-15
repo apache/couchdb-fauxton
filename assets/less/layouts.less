@@ -48,11 +48,6 @@ body #notification-center .flex-layout {
 body #dashboard .flex-body, body #notification-center .flex-body {
   .flex(1);
   overflow: auto;
-
-  /* yet more stuff that can be removed at end */
-  &.right-header-wrapper {
-    overflow: hidden;
-  }
 }
 
 /* tells an element to be as large as the content. This will replace the hardcoded ones */
@@ -72,7 +67,9 @@ body #dashboard .flex-fill {
 .one-pane > header {
   width: 100%;
 
-//  .bottom-shadow-border();
+  #header-search {
+    position: relative;
+  }
 
   #breadcrumbs {
     overflow: hidden;

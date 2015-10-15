@@ -314,7 +314,6 @@ div.spinner {
 }
 
 #header-search {
-  position: relative;
   height: @collapsedNavWidth;
 }
 
@@ -517,7 +516,7 @@ body #dashboard .flex-body#breadcrumbs {
     margin: 0;
   }
   .searchbox-container {
-    margin: 12px;
+    padding: 12px;
     input[type="text"] {
       .border-radius(5px);
       font-size: 13px;
@@ -529,14 +528,18 @@ body #dashboard .flex-body#breadcrumbs {
       border: none;
       position: absolute;
       right: 12px;
-      top: 0px;
+      top: 0;
       height: @collapsedNavWidth;
       z-index: 2;
       color: #999;
       .icon-search {
         position: absolute;
-        top: 11px;
+        top: 22px;
+        right: 7px;
       }
+    }
+    form {
+      margin: 0;
     }
   }
 }
