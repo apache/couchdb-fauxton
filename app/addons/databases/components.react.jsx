@@ -278,7 +278,7 @@ define([
             <form onSubmit={this.jumpToDbHandler} id="jump-to-db" className="navbar-form pull-right database-search">
               <div className="input-append">
                 <input type="text" className="search-autocomplete" ref="searchDbName" name="search-query" placeholder="Database name" autoComplete="off" />
-                <button className="btn btn-primary" type="submit"><i className="icon icon-search"></i></button>
+                <span><button className="btn btn-primary" type="submit"><i className="icon icon-search"></i></button></span>
               </div>
             </form>
           </div>
