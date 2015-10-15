@@ -22,7 +22,7 @@ module.exports = {
       .loginToGUI()
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
       .waitForElementPresent('#jump-to-doc-id', waitTime, false)
-      //.click('.burger')
+      .click('.burger')
       .waitForElementPresent('.prettyprint', waitTime, false)
       .waitForElementPresent('#documents-pagination', waitTime, false)
       .waitForElementPresent('.breadcrumb .js-lastelement', waitTime, false)
