@@ -26,7 +26,7 @@ module.exports = {
       .waitForElementPresent('.prettyprint', waitTime, false)
       .waitForElementPresent('#documents-pagination', waitTime, false)
       .waitForElementPresent('.breadcrumb .js-lastelement', waitTime, false)
-      .waitForElementPresent('#jump-to-doc-id', waitTime, false)
+      .waitForElementVisible('#jump-to-doc-id', waitTime, false)
       .setValue('#jump-to-doc-id', '_des')
       .waitForElementPresent('li[data-value="_design/testdesigndoc"]', waitTime, false)
       .waitForElementVisible('li[data-value="_design/testdesigndoc"]', waitTime, false)
