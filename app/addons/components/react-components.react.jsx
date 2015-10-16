@@ -858,7 +858,7 @@ function (app, FauxtonAPI, React, Stores, FauxtonComponents, ace, beautifyHelper
         <div className="checkbox inline">
           <input
             id={'checkbox-' + this.props.docIdentifier}
-            checked={this.props.checked ? 'checked="checked"': null}
+            checked={this.props.checked ? 'checked="checked"' : null}
             type="checkbox"
             onChange={this.onChange}
             className="js-row-select" />

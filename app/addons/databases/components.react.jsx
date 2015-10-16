@@ -132,15 +132,20 @@ define([
       return (
         <tr>
           <td>
-            <a href={"#/database/"+encoded+"/_all_docs"}>{name}</a>
+            <a href={"#/database/" + encoded + "/_all_docs"}>{name}</a>
           </td>
           <td>{size}</td>
           <td>{row.status.numDocs()} {this.renderGraveyard(row)}</td>
           <td>{row.status.updateSeq()}</td>
           {this.getExtensionColumns(row)}
           <td>
-            <a className="db-actions btn fonticon-replicate set-replication-start" title={"Replicate "+name} href={"#/replication/"+encoded}></a>&#160;
-            <a className="db-actions btn icon-lock set-permissions" title={"Set permissions for "+name} href={"#/database/"+encoded+"/permissions"}></a>
+            <a
+              className="db-actions btn fonticon-replicate set-replication-start"
+              title={"Replicate " + name}
+              href={"#/replication/" + encoded}></a>&#160;
+            <a
+              className="db-actions btn icon-lock set-permissions"
+              title={"Set permissions for " + name} href={"#/database/" + encoded + "/permissions"}></a>
           </td>
         </tr>
       );
