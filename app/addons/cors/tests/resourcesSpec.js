@@ -38,7 +38,7 @@ define([
     it('does not return an empty string (empty origin), when "specific origins" is set, but there are no domains on that list', function () {
         var emptyOrigins = {origins: ''};
         cors.set(cors.parse(emptyOrigins));
-        assert.deepEqual(cors.get('origins') , []);
+        assert.deepEqual(cors.get('origins'), []);
       });
 
     it('allows valid domains', function () {
