@@ -10,14 +10,15 @@
     "fauxton": "./bin/fauxton"
   },
   "devDependencies": {
-    "nightwatch": "^0.6.0",
+    "grunt-contrib-watch": "~0.6.1",
     "mocha-phantomjs": "~3.2.x",
-    "phantomjs": "~1.9.1",
-    "grunt-contrib-watch": "~0.6.1"
+    "nightwatch": "^0.6.0",
+    "phantomjs": "~1.9.1"
   },
   "dependencies": {
     "async": "~0.2.6",
     "couchapp": "~0.11.0",
+    "eslint": "^1.6.0",
     "grunt": "~0.4.1",
     "grunt-chmod": "^1.0.3",
     "grunt-cli": "~0.1.6",
@@ -25,7 +26,6 @@
     "grunt-contrib-concat": "~0.3.0",
     "grunt-contrib-copy": "~0.4.1",
     "grunt-contrib-cssmin": "~0.5.0",
-    "grunt-contrib-jshint": "~0.6.0",
     "grunt-contrib-jst": "~0.5.0",
     "grunt-contrib-less": "~0.11.0",
     "grunt-contrib-requirejs": "~0.4.1",
@@ -36,7 +36,6 @@
     "grunt-md5": "^0.1.11",
     "grunt-shell": "^1.1.1",
     "http-proxy": "~1.10.1",
-    "jsxcs": "~0.2.1",
     "lodash": "^3.6.0",
     "nano": "~5.12.0",
     "optimist": "^0.6.1",
@@ -48,7 +47,7 @@
     "urls": "~0.0.3"
   },
   "scripts": {
-    "stylecheck": "jsxcs app && jsxcs test/nightwatch_tests && jsxcs tasks && jsxcs Gruntfile.js",
+    "stylecheck": "eslint .",
     "test": "grunt test",
     "couchdebug": "grunt couchdebug",
     "couchdb": "grunt couchdb",
