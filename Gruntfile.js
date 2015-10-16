@@ -203,7 +203,7 @@ module.exports = function (grunt) {
     // index.html.
     concat: {
       requirejs: {
-        src: [ "assets/js/libs/require.js", "dist/debug/templates.js", "dist/debug/require.js"],
+        src: ["assets/js/libs/require.js", "dist/debug/templates.js", "dist/debug/require.js"],
         dest: "dist/debug/js/require.js"
       },
 
@@ -594,5 +594,5 @@ module.exports = function (grunt) {
    * Nightwatch functional testing
    */
   //Start Nightwatch test from terminal, using: $ grunt nightwatch
-  grunt.registerTask('nightwatch', [ 'exec:check_selenium', 'initNightwatch', 'exec:start_nightWatch']);
+  grunt.registerTask('nightwatch', ['exec:check_selenium', 'initNightwatch', 'exec:start_nightWatch']);
 };

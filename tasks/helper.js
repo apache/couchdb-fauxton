@@ -53,7 +53,7 @@ exports.init = function (grunt) {
             files.push(path.join(dep.path, '**/*' + fileExtension ));
           });
         }
-        return files
+        return files;
       }, defaults);
     },
 

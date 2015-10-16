@@ -296,7 +296,7 @@ define([
       });
 
       it('stringifies key', function () {
-        var params = {'key':[ 'a', 'b']};
+        var params = {'key':['a', 'b']};
         var result = Models.QueryParams.stringify(params);
 
         assert.deepEqual(result, { 'key': '[\"a\",\"b\"]' });

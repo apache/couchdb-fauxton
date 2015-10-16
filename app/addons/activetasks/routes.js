@@ -33,7 +33,7 @@ function (app, FauxtonAPI, ActiveTasksResources, ActiveTasksComponents, Actions)
     ],
     apiUrl: function () {
       var apiurl = window.location.origin + '/_active_tasks';
-      return [ apiurl, FauxtonAPI.constants.DOC_URLS.ACTIVE_TASKS];
+      return [apiurl, FauxtonAPI.constants.DOC_URLS.ACTIVE_TASKS];
     },
     roles: ['_admin'],
     initialize: function () {
