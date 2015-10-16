@@ -28,7 +28,7 @@ module.exports = function (options) {
     .pipe(res);
   }
 
-  var fileTypes = ['js', 'css','png', 'swf', 'eot', 'woff', 'svg', 'ttf', 'swf'];
+  var fileTypes = ['js', 'css', 'png', 'swf', 'eot', 'woff', 'svg', 'ttf', 'swf'];
 
   function isFile (url) {
     var arr = url.split('.');

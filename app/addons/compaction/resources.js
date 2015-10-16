@@ -38,7 +38,7 @@ function (app, FauxtonAPI) {
   Compaction.compactView = function (db, designDoc) {
     // /some_database/_compact/designname
     return $.ajax({
-      url: db.url() + '/_compact/' + designDoc.replace('_design/', '') ,
+      url: db.url() + '/_compact/' + designDoc.replace('_design/', ''),
       contentType: 'application/json',
       type: 'POST'
     });

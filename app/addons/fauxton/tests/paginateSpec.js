@@ -29,7 +29,7 @@ define([
       for (totalPages = 1; totalPages < 11; totalPages++) {
         for (currentPage = 1; currentPage < totalPages; currentPage++) {
           testObject = pageComponent.getVisiblePages(currentPage, totalPages);
-          assert.deepEqual(testObject , {from: 1, to: totalPages + 1});
+          assert.deepEqual(testObject, {from: 1, to: totalPages + 1});
         }
       }
     });
@@ -49,7 +49,7 @@ define([
       totalPages = 50;
       for (currentPage = 1; currentPage <= 6; currentPage++) {
         testObject = pageComponent.getVisiblePages(currentPage, totalPages);
-        assert.deepEqual(testObject , {from: 1, to: 11});
+        assert.deepEqual(testObject, {from: 1, to: 11});
       }
 
     });
@@ -58,7 +58,7 @@ define([
       totalPages = 50;
       for (currentPage = 46; currentPage <= totalPages; currentPage++) {
         testObject = pageComponent.getVisiblePages(currentPage, totalPages);
-        assert.deepEqual(testObject , {from: 41, to: 51});
+        assert.deepEqual(testObject, {from: 41, to: 51});
       }
     });
 

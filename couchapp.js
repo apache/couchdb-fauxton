@@ -17,9 +17,9 @@ var couchapp = require('couchapp'),
 ddoc = {
   _id: '_design/fauxton',
   rewrites: [
-    { "from": "_db" ,    "to"  : "../.." },
-    { "from": "_db/*" ,  "to"  : "../../*" },
-    { "from": "_ddoc" ,  "to"  : "" },
+    { "from": "_db",     "to"  : "../.." },
+    { "from": "_db/*",   "to"  : "../../*" },
+    { "from": "_ddoc",   "to"  : "" },
     { "from": "_ddoc/*", "to"  : "*"},
     {from: '/', to: 'index.html'},
     {from: '/*', to: '*'}

@@ -238,7 +238,7 @@ define([
         viewName = 'test-view';
         designDocId = '_design/test-doc';
         designDocs = new Documents.AllDocs([{
-          _id: designDocId ,
+          _id: designDocId,
           _rev: '1-231',
           views: {
               'test-view': {
