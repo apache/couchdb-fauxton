@@ -90,9 +90,10 @@ function (app, FauxtonAPI, Components, Replication) {
 
       if (targetVal === 'local') {
         $currentTarget.parents('.form_set').addClass('local');
-      }else {
-        $currentTarget.parents('.form_set').removeClass('local');
+        return;
       }
+
+      $currentTarget.parents('.form_set').removeClass('local');
     },
 
     establish: function () {
