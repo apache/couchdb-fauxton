@@ -98,10 +98,10 @@ function (app, FauxtonAPI, React, ZeroClipboard) {
             className="input-xxlarge text-field-to-copy"
             readOnly
             value={this.props.textToCopy} />
-          <a 
+          <a
             id={"copy-text-" + this.props.uniqueKey}
             className="fonticon-clipboard icon btn copy-button"
-            data-clipboard-text={this.props.textToCopy} 
+            data-clipboard-text={this.props.textToCopy}
             data-bypass="true"
             ref={"copy-text-" + this.props.uniqueKey}
             title="Copy to clipboard"
