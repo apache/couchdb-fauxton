@@ -1,0 +1,73 @@
+{
+  "root": true,
+
+  "ecmaFeatures": {
+    "jsx": true
+  },
+
+  "rules-todo": {
+    "space-in-parens": 2,
+    "space-unary-ops": 2,
+    "camelcase": 2
+  },
+
+  "rules": {
+    "semi": [2, "always"],
+    "no-undef": 2,
+    "space-after-keywords": 2,
+    "space-before-keywords": 2,
+    "space-before-function-paren": 2,
+    "space-infix-ops": 2,
+    "space-return-throw-case": 2,
+    "array-bracket-spacing": [2, "never"],
+    "brace-style": [2, "1tbs", { "allowSingleLine": true }],
+    "comma-spacing": [2, {"before": false, "after": true}],
+    "computed-property-spacing": [2, "never"],
+    "eol-last": 2,
+    "no-mixed-spaces-and-tabs": [2, "smart-tabs"],
+    "no-trailing-spaces": 2,
+    "semi-spacing": [2, {"before": false, "after": true}],
+    "no-empty": 2
+  },
+
+  "env": {
+    "browser": true,
+    "node": true,
+    "jquery": true,
+    "amd": true,
+    "mocha": true,
+    "phantomjs": true,
+  },
+
+  "globals": {
+    "document": true,
+    "window": true,
+    "location": true,
+    "alert": true,
+    "console": true,
+    "clearInterval": true,
+    "setInterval": true,
+    "setTimeout": true,
+    "prompt": true,
+    "confirm": true,
+
+    "jQuery": true,
+    "Backbone": true,
+    "$": true,
+    "_": true,
+    "require": true,
+    "module": true,
+    "sinon": true,
+    "it": true,
+    "describe": true,
+    "beforeEach": true,
+    "afterEach": true,
+    "before": true,
+    "after": true,
+    "define": true,
+
+    "Spinner": true,
+    "prettyPrint": true
+  }
+
+}

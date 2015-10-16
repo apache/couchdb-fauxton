@@ -165,13 +165,6 @@ module.exports = function (grunt) {
       }
     },
 
-    jshint: {
-      all: ['app/**/*.js', 'Gruntfile.js', "!app/**/assets/js/*.js", "!app/**/dependencies/*", "!app/**/*.jsx"],
-      options: {
-        jshintrc: '.jshintrc'
-      }
-    },
-
     // The jst task compiles all application templates into JavaScript
     // functions with the underscore.js template function from 1.2.4.  You can
     // change the namespace and the template options, by reading this:
@@ -501,9 +494,9 @@ module.exports = function (grunt) {
     // jsx command above doesn't allow targeting a specific file, just a folder. So any JSX file in the changed file
     // folder or subfolder are copied over, causing every one of the files to be jshinted. Still far faster than before
     if (targetFilepath.indexOf('test.config.js') === -1) {
-      grunt.config(['jshint', 'all'], targetFilepath);
-      grunt.task.run(['jshint']);
-      config.shell.stylecheckSingleFile.command = 'node ./node_modules/jsxcs/bin/jsxcs ' + targetFilepath;
+
+      config.shell.stylecheckSingleFile.command = 'node ./node_modules/eslint/bin/eslint.js ' + targetFilepath;
+
       grunt.task.run(['shell:stylecheckSingleFile']);
     }
   });
@@ -521,7 +514,6 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-requirejs');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-clean');
-  grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-jst');
   grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-contrib-concat');
@@ -540,8 +532,8 @@ module.exports = function (grunt) {
    * Transformation tasks
    */
   // clean out previous build artifacts and lint
-  grunt.registerTask('lint', ['clean', 'jshint']);
-  grunt.registerTask('test', ['checkTestExists', 'clean:release', 'dependencies', 'jsx', 'jshint', 'shell:stylecheck', 'gen_initialize:development', 'test_inline']);
+  grunt.registerTask('lint', ['clean', 'shell:stylecheck']);
+  grunt.registerTask('test', ['checkTestExists', 'clean:release', 'dependencies', 'jsx', 'shell:stylecheck', 'gen_initialize:development', 'test_inline']);
 
   // lighter weight test task for use inside dev/watch
   grunt.registerTask('test_inline', ['mochaSetup', 'jst', 'concat:test_config_js', 'shell:phantomjs']);
@@ -564,14 +556,14 @@ module.exports = function (grunt) {
   grunt.registerTask('debug', ['lint', 'dependencies', "gen_initialize:development", 'jsx', 'concat:requirejs', 'less',
     'concat:index_css', 'template:development', 'copy:debug']);
 
-  grunt.registerTask('debugDev', ['clean', 'dependencies', "gen_initialize:development", 'jsx', 'jshint', 'shell:stylecheck',
+  grunt.registerTask('debugDev', ['clean', 'dependencies', "gen_initialize:development", 'jsx', 'shell:stylecheck',
     'less', 'concat:index_css', 'template:development', 'copy:debug']);
 
-  grunt.registerTask('watchRun', ['clean:watch', 'dependencies', 'jshint', 'shell:stylecheck']);
+  grunt.registerTask('watchRun', ['clean:watch', 'dependencies', 'shell:stylecheck']);
 
   // build a release
   grunt.registerTask('release_commons_prefix', ['clean', 'dependencies']);
-  grunt.registerTask('release_commons_suffix', ['jshint', 'shell:build-jsx', 'build', 'copy:dist', 'copy:ace', 'copy:addonDependencies']);
+  grunt.registerTask('release_commons_suffix', ['shell:stylecheck', 'shell:build-jsx', 'build', 'copy:dist', 'copy:ace', 'copy:addonDependencies']);
 
   grunt.registerTask('release', ['release_commons_prefix', 'gen_initialize:release', 'release_commons_suffix']);
   grunt.registerTask('couchapp_release', ['release_commons_prefix', 'gen_initialize:couchapp', 'release_commons_suffix']);
