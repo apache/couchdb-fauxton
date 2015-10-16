@@ -47,7 +47,7 @@
     "urls": "~0.0.3"
   },
   "scripts": {
-    "stylecheck": "eslint .",
+    "stylecheck": "eslint --ext=js,jsx .",
     "test": "grunt test",
     "couchdebug": "grunt couchdebug",
     "couchdb": "grunt couchdb",
