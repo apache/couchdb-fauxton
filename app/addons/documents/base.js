@@ -93,11 +93,11 @@ function (app, FauxtonAPI, Documents) {
 
   FauxtonAPI.registerUrls( 'new', {
     newDocument: function (database) {
-      return '/database/' + database + '/new' ;
+      return '/database/' + database + '/new';
     },
 
     newView: function (database) {
-      return '/database/' + database + '/new_view' ;
+      return '/database/' + database + '/new_view';
     },
 
     addView: function (database, ddoc) {
@@ -107,11 +107,11 @@ function (app, FauxtonAPI, Documents) {
 
   FauxtonAPI.registerUrls( 'base', {
     server: function (database) {
-      return app.host + '/' + database + '/' ;
+      return app.host + '/' + database + '/';
     },
 
     app: function (database) {
-      return '/database/' + database + '/' ;
+      return '/database/' + database + '/';
     },
   });
 
