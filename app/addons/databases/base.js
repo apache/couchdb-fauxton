@@ -51,7 +51,7 @@ function (app, FauxtonAPI, Databases) {
 
   FauxtonAPI.registerUrls('allDBs', {
     app: function () {
-      return '_all_dbs' ;
+      return '_all_dbs';
     }
   });
 
@@ -74,7 +74,7 @@ function (app, FauxtonAPI, Databases) {
     },
 
     apiurl: function (db) {
-      return window.location.origin + '/' + db + '/_security' ;
+      return window.location.origin + '/' + db + '/_security';
     }
   });
 

@@ -186,7 +186,7 @@ define([
     },
 
     passesRadioFilter: function (item) {
-      var selectedRadio = this._selectedRadio.toLowerCase().replace(' ', '_') ;
+      var selectedRadio = this._selectedRadio.toLowerCase().replace(' ', '_');
       return item.type ===  selectedRadio ||  selectedRadio === 'all_tasks';
     },
 
