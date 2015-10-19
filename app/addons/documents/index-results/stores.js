@@ -289,11 +289,11 @@ function (app, FauxtonAPI, ActionTypes, HeaderActionTypes, Documents, MangoHelpe
 
     getHasEditableAndDeleteableDoc: function (data) {
       var found = false;
-      var i = 0;
       var length = data.length;
+      var i;
 
       // use a for loop here as we can end it once we found the first id
-      for (; i < length; i++) {
+      for (i = 0; i < length; i++) {
         if (data[i].id) {
           found = true;
           break;

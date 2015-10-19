@@ -120,7 +120,7 @@ function (app, FauxtonAPI, React, Stores, FauxtonComponents, ace, beautifyHelper
     },
 
     selectAll: function () {
-      this.refs.popover.hide();
+      this.refs.bulkActionPopover.hide();
       this.props.selectAll();
     },
 
@@ -133,7 +133,7 @@ function (app, FauxtonAPI, React, Stores, FauxtonComponents, ace, beautifyHelper
             disabled={this.props.disabled} />
           <div className="separator"></div>
           <ReactBootstrap.OverlayTrigger
-            ref='popover'
+            ref="bulkActionPopover"
             trigger="click"
             placement="bottom"
             rootClose={true}
