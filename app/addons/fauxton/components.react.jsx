@@ -42,7 +42,8 @@ function (app, FauxtonAPI, React, ZeroClipboard) {
     getDefaultProps: function () {
       return {
         displayType: 'icon',
-        textDisplay: 'Copy'
+        textDisplay: 'Copy',
+        onClipboardClick: function () { }
       };
     },
 
@@ -60,6 +61,11 @@ function (app, FauxtonAPI, React, ZeroClipboard) {
     componentDidMount: function () {
       var el = this.getDOMNode();
       this.clipboard = new ZeroClipboard(el);
+      this.clipboard.on('load', function () {
+        this.clipboard.on('mouseup', function () {
+          this.props.onClipboardClick();
+        }.bind(this));
+      }.bind(this));
     },
 
     render: function () {
