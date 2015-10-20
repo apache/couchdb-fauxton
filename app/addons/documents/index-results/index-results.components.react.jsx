@@ -93,7 +93,7 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, Documents) {
       return (
         <td className="tableview-checkbox-cell" key={"tableview-checkbox-cell-" + i}>
           <input
-            id={'checkbox-' + this.props.docIdentifier}
+            id={"checkbox-" + this.props.docIdentifier}
             checked={this.props.isSelected}
             type="checkbox"
             onChange={this.onChange} />
@@ -126,7 +126,7 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, Documents) {
             index={i}
             data={el}
             docId={el.id}
-            docIdentifier={el.id || 'tableview-row-component-' + i}
+            docIdentifier={el.id || "tableview-row-component-" + i}
             docChecked={this.props.docChecked}
             isSelected={this.props.isSelected(el.id)}
             schema={schema} />

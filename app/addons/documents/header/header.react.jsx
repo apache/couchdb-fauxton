@@ -27,13 +27,50 @@ function (app, FauxtonAPI, React, Actions, ReactComponents, IndexResultsStore, I
   var ToggleHeaderButton = ReactComponents.ToggleHeaderButton;
   var MenuDropDown = ReactComponents.MenuDropDown;
 
+
   var BulkDocumentHeaderController = React.createClass({
+    getStoreState: function () {
+      return {
+        selectedView: indexResultsStore.getCurrentViewType()
+      };
+    },
+
+    getInitialState: function () {
+      return this.getStoreState();
+    },
+
+    componentDidMount: function () {
+      indexResultsStore.on('change', this.onChange, this);
+    },
+
+    componentWillUnmount: function () {
+      indexResultsStore.off('change', this.onChange);
+    },
+
+    onChange: function () {
+      this.setState(this.getStoreState());
+    },
+
+    getIcon: function () {
+      if (this.state.selectedView === 'table') {
+        return 'fonticon-table';
+      }
+
+      if (this.state.selectedView === 'collapsed') {
+        return 'fonticon-list-alt';
+      }
+
+      return 'fonticon-json';
+    },
+
     getCollapseDocsButton: function () {
+      var icon = this.getIcon();
+
       return (
         <div className="add-dropdown">
           <div className="dropdown">
             <button data-toggle="dropdown" className="button header-control-box control-view">
-              <i className="dropdown-toggle icon fonticon-eye"></i> View
+              <i className={"dropdown-toggle icon " + icon}></i> View
             </button>
             <ul className="dropdown-menu arrow" role="menu" aria-labelledby="dLabel">
               <li>

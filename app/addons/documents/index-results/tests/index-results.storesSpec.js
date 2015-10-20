@@ -236,6 +236,17 @@ define([
     assert.ok(schema.indexOf('_id') !== -1);
   });
 
+  it('puts the id into the array as first element', function () {
+    var doclist = [
+      {foo: 'one', _id: 'testId1'},
+      {foo: 'one', _id: 'testId2'}
+    ];
+
+    var schema = store.getPseudoSchema(doclist);
+
+    assert.equal(schema.shift, '_id');
+  });
+
   it('normalizes different content from include_docs enabled', function () {
     var doclist = [
       {_id: 'testId2', foo: 'one', doc: {"_rev": "1", "ente": "gans", "fuchs": "hase"}},

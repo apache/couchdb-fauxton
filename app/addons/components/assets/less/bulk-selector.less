@@ -1,3 +1,14 @@
+// Licensed under the Apache License, Version 2.0 (the "License"); you may not
+// use this file except in compliance with the License. You may obtain a copy of
+// the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+// WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+// License for the specific language governing permissions and limitations under
+// the License.
 
 #bulk-action-component-popover {
   font-size: 13px;
@@ -41,7 +52,7 @@
   }
 
   .arrow:after {
-    border-bottom-color: #f7f7f7;
+    border-bottom-color: @btnBorder;
   }
 
   .popover {
@@ -64,13 +75,13 @@
   }
 
   .separator {
-    border-left: 1px solid #ccc;
+    border-left: 1px solid @btnBorder;
     margin: 0 8px;
     height: 15px;
   }
 
   .group-clean {
-    border: 1px solid #ccc;
+    border: 1px solid @btnBorder;
     padding: 6px;
   }
 
@@ -82,7 +93,7 @@
 
     .fonticon {
       font-size: 8px;
-      color: #999999;
+      color: @btnBorder;
       padding: 3px 0;
     }
   }
@@ -93,8 +104,17 @@
     &>* {
       float: left;
     }
-    .fonticon-play {
+    div.arrow-button {
       transform: rotate(90deg);
+      height: 27px;
+      position: absolute;
+      width: 27px;
+      right: 0px;
+      top: 0px;
+      cursor: pointer;
+      i {
+        margin-left: 11px;
+      }
     }
   }
 
@@ -112,7 +132,7 @@
       padding: 2px;
       width: 13px;
       margin-top: -5px;
-      color: #777777;
+      color: @btnBorder;
     }
 
     button.disabled {

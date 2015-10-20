@@ -142,7 +142,9 @@ function (app, FauxtonAPI, React, Stores, FauxtonComponents, ace, beautifyHelper
                 {this.getPopupContent()}
               </ReactBootstrap.Popover>
             }>
-            <div className="fonticon fonticon-play"></div>
+            <div className="arrow-button">
+              <i className="fonticon fonticon-play"></i>
+            </div>
           </ReactBootstrap.OverlayTrigger>
         </div>
       );

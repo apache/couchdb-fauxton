@@ -234,7 +234,16 @@ function (app, FauxtonAPI, ActionTypes, HeaderActionTypes, Documents, MangoHelpe
         });
       });
 
-      return _.uniq(cache);
+      cache = _.uniq(cache);
+
+      // always begin with _id
+      var i = cache.indexOf('_id');
+      if (i !== -1) {
+        cache.splice(i, 1);
+        cache.unshift('_id');
+      }
+
+      return cache;
     },
 
     // filter out cruft and JSONify strings
@@ -430,6 +439,19 @@ function (app, FauxtonAPI, ActionTypes, HeaderActionTypes, Documents, MangoHelpe
 
     getIsTableView: function () {
       return this._tableView;
+    },
+
+    getCurrentViewType: function () {
+
+      if (this._tableView) {
+        return 'table';
+      }
+
+      if (this._allCollapsed) {
+        return 'collapsed';
+      }
+
+      return 'expanded';
     },
 
     clearResultsBeforeFetch: function () {

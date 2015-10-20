@@ -11,8 +11,9 @@
 // the License.
 
 
-button.control-toggle-alternative-header {
-  border-right: none;
+button.control-view {
+  border-right: 1px solid @btnBorder;
+  border-left: none;
 }
 
 #react-headerbar .dropdown {
@@ -29,12 +30,11 @@ button.control-toggle-alternative-header {
       position: absolute;
     }
   }
-  .fonticon-eye {
+  .icon {
     position: relative;
-    font-size: 22px;
   }
-  .fonticon-eye::before {
-    margin-top: 8px;
+  .dropdown-toggle.fonticon-json:before {
+    margin-top: 9px;
   }
   .dropdown-menu {
     left: -101px;
