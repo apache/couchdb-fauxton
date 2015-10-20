@@ -79,7 +79,8 @@ function (app, FauxtonAPI, React, Stores, FauxtonComponents, ace, beautifyHelper
         title: 'Select rows that can be...',
         bulkIcon: 'fonticon-trash',
         buttonTitle: 'Delete all selected',
-        dropdownContentText: 'Deleted'
+        dropdownContentText: 'Deleted',
+        enableOverlay: false
       };
     },
 
@@ -100,12 +101,10 @@ function (app, FauxtonAPI, React, Stores, FauxtonComponents, ace, beautifyHelper
       }
 
       return (
-        <div className="group-clean bulk-actions panel">
-          <button
-            onClick={this.props.removeItem}
-            className={'fonticon ' + this.props.bulkIcon}
-            title={this.props.buttonTitle} />
-        </div>
+        <button
+          onClick={this.props.removeItem}
+          className={'fonticon ' + this.props.bulkIcon}
+          title={this.props.buttonTitle} />
       );
     },
 
@@ -124,6 +123,25 @@ function (app, FauxtonAPI, React, Stores, FauxtonComponents, ace, beautifyHelper
       this.props.selectAll();
     },
 
+    getOverlay: function () {
+      return (
+        <ReactBootstrap.OverlayTrigger
+          ref="bulkActionPopover"
+          trigger="click"
+          placement="bottom"
+          rootClose={true}
+          overlay={
+            <ReactBootstrap.Popover id="bulk-action-component-popover" title={this.props.title}>
+              {this.getPopupContent()}
+            </ReactBootstrap.Popover>
+          }>
+          <div className="arrow-button">
+            <i className="fonticon fonticon-play"></i>
+          </div>
+        </ReactBootstrap.OverlayTrigger>
+      );
+    },
+
     getMasterSelector: function () {
       return (
         <div className="group-clean bulk-actions-panel panel">
@@ -131,21 +149,8 @@ function (app, FauxtonAPI, React, Stores, FauxtonComponents, ace, beautifyHelper
             checked={this.props.isChecked}
             onChange={this.props.toggleSelect}
             disabled={this.props.disabled} />
-          <div className="separator"></div>
-          <ReactBootstrap.OverlayTrigger
-            ref="bulkActionPopover"
-            trigger="click"
-            placement="bottom"
-            rootClose={true}
-            overlay={
-              <ReactBootstrap.Popover id="bulk-action-component-popover" title={this.props.title}>
-                {this.getPopupContent()}
-              </ReactBootstrap.Popover>
-            }>
-            <div className="arrow-button">
-              <i className="fonticon fonticon-play"></i>
-            </div>
-          </ReactBootstrap.OverlayTrigger>
+          {this.props.enableOverlay ? <div className="separator"></div> : null}
+          {this.props.enableOverlay ? this.getOverlay() : null}
         </div>
       );
     },

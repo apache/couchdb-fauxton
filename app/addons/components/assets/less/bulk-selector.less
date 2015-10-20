@@ -51,10 +51,6 @@
     margin: -1px;
   }
 
-  .arrow:after {
-    border-bottom-color: @btnBorder;
-  }
-
   .popover {
     left: 10px !important;
 
@@ -70,25 +66,38 @@
 
 .bulk-action-component {
   min-height: 43px;
-  .fonticon-trash {
+
+  button {
+    height: 26px;
+    width: 26px;
+    background-color: @background;
+    border: 1px solid @btnBorder;
+    margin-left: 7px;
+  }
+
+  .fonticon-trash:before {
     font-size: 12px;
+    margin-left: 2px;
+    margin-top: 1px;
   }
 
   .separator {
     border-left: 1px solid @btnBorder;
-    margin: 0 8px;
+    margin: 5px 0;
     height: 15px;
   }
 
   .group-clean {
     border: 1px solid @btnBorder;
-    padding: 6px;
+  }
+
+  .bulk-actions {
+    height: 27px;
   }
 
   .bulk-action-component-selector-group {
     .panel {
       float: left;
-      height: 28px;
     }
 
     .fonticon {
@@ -96,24 +105,24 @@
       color: @btnBorder;
       padding: 3px 0;
     }
+
   }
 
   .bulk-actions-panel {
-    width: 54px;
+    input[type="checkbox"] {
+      margin: 6px;
+    }
     position: relative;
     &>* {
       float: left;
     }
     div.arrow-button {
+      height: 24px;
+      width: 24px;
       transform: rotate(90deg);
-      height: 27px;
-      position: absolute;
-      width: 27px;
-      right: 0px;
-      top: 0px;
       cursor: pointer;
       i {
-        margin-left: 11px;
+        margin-left: 10px;
       }
     }
   }
