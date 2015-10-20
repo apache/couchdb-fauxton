@@ -244,7 +244,7 @@ define([
 
     var schema = store.getPseudoSchema(doclist);
 
-    assert.equal(schema.shift, '_id');
+    assert.equal(schema.shift(), '_id');
   });
 
   it('normalizes different content from include_docs enabled', function () {
