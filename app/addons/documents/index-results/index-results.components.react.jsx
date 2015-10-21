@@ -347,7 +347,7 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, Documents) {
           canSelectAll={this.state.canSelectAll}
           isSelected={this.isSelected}
           isEditable={this.state.isEditable}
-          isListDeletable={this.state.results.hasEditableAndDeleteableDoc}
+          isListDeletable={this.state.results.hasEditableAndDeletableDoc}
           docChecked={this.docChecked}
           isLoading={this.state.isLoading}
           results={this.state.results}
