@@ -144,7 +144,7 @@ function (app, FauxtonAPI, React, Stores, FauxtonComponents, ace, beautifyHelper
 
     getMasterSelector: function () {
       return (
-        <div className="group-clean bulk-actions-panel panel">
+        <div className="bulk-action-component-panel">
           <input type="checkbox"
             checked={this.props.isChecked}
             onChange={this.props.toggleSelect}

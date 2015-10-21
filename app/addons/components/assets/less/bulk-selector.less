@@ -87,18 +87,11 @@
     height: 15px;
   }
 
-  .group-clean {
-    border: 1px solid @darkBorder;
-  }
-
   .bulk-actions {
     height: 27px;
   }
 
   .bulk-action-component-selector-group {
-    .panel {
-      float: left;
-    }
 
     .fonticon {
       font-size: 8px;
@@ -108,14 +101,15 @@
 
   }
 
-  .bulk-actions-panel {
+  .bulk-action-component-panel {
     input[type="checkbox"] {
       margin: 6px;
     }
+
+    border: 1px solid @darkBorder;
+
     position: relative;
-    &>* {
-      float: left;
-    }
+    float: left;
     div.arrow-button {
       height: 24px;
       width: 24px;
@@ -131,9 +125,8 @@
     margin-left: 10px;
     width: 29px;
 
-    &>* {
-      float: left;
-    }
+    float: left;
+
     .fonticon {
       font-size: 11px;
       border: 0;
