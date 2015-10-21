@@ -136,6 +136,12 @@ define([
       assert.notOk(store.getHasEditableAndDeletableDoc(doclist));
     });
 
+    it('if the collection is empty, no docs should be selected', function () {
+      store._collection = new Documents.AllDocs([], opts);
+
+      assert.notOk(store.areAllDocumentsSelected());
+    });
+
   });
 
   describe('canSelectAll', function () {
