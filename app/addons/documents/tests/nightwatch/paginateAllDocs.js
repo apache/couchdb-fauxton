@@ -23,9 +23,6 @@ module.exports = {
       .loginToGUI()
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
 
-      // ensures the header has been rendered
-      .waitForElementPresent('.control-toggle-alternative-header', waitTime, false)
-
       // ensures the main body (results list) has been rendered
       .waitForElementPresent('.prettyprint', waitTime, false)
 
@@ -57,9 +54,6 @@ module.exports = {
       .loginToGUI()
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
 
-      // ensures the header is rendered
-      .waitForElementPresent('.control-toggle-alternative-header', waitTime, false)
-
       // ensures the main body (results list) has been rendered
       .waitForElementPresent('.prettyprint', waitTime, false)
 
@@ -84,7 +78,6 @@ module.exports = {
       .populateDatabase(newDatabaseName)
       .loginToGUI()
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
-      .waitForElementPresent('.control-toggle-alternative-header', waitTime, false)
 
       // ensures the main body (results list) has been rendered
       .waitForElementPresent('.prettyprint', waitTime, false)
