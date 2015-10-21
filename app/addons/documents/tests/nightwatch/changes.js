@@ -12,7 +12,7 @@
 
 module.exports = {
 
-  'Does not display the Select-all-button': function (client) {
+  'Does not display the View-Selector-Button': function (client) {
     var waitTime = client.globals.maxWaitTime,
         newDatabaseName = client.globals.testDatabaseName,
         baseUrl = client.globals.test_settings.launch_url;
@@ -20,10 +20,10 @@ module.exports = {
     client
       .loginToGUI()
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
-      .waitForElementPresent('.control-toggle-alternative-header', waitTime, false)
+      .waitForElementPresent('.control-view', waitTime, false)
       .clickWhenVisible('#changes')
       .waitForElementPresent('.js-changes-view', waitTime, false)
-      .assert.elementNotPresent('.control-toggle-alternative-header')
+      .assert.elementNotPresent('.control-view')
       .end();
   },
 
