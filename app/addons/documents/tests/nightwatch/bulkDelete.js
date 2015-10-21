@@ -30,7 +30,7 @@ module.exports = {
       .waitForElementVisible('.prettyprint', waitTime, false)
 
       .clickWhenVisible('.bulk-action-component-selector-group input[type="checkbox"]')
-      .clickWhenVisible('.bulk-actions button.fonticon-trash', waitTime, false)
+      .clickWhenVisible('.bulk-action-component-selector-group button.fonticon-trash', waitTime, false)
       .acceptAlert()
       .waitForElementVisible('#global-notifications .alert.alert-info', waitTime, false)
       .waitForElementNotPresent('[data-id="' + newDocumentName1 + '"]', waitTime, false)
