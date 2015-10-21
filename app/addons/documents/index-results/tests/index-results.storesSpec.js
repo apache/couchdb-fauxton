@@ -26,8 +26,9 @@ define([
     beforeEach(function () {
       store = new Stores.IndexResultsStore();
       dispatchToken = FauxtonAPI.dispatcher.register(store.dispatch);
+      store.reset();
       opts = {
-        params: {},
+        params: {limit: 10, skip: 0},
         database: {
           safeID: function () { return '1';}
         }
@@ -38,33 +39,103 @@ define([
       FauxtonAPI.dispatcher.unregister(dispatchToken);
     });
 
-    describe('#hasResults', function () {
 
-      it('returns true for collection', function () {
-        store._collection = [1, 2, 3];
+    it('hasResults returns true for collection', function () {
+      store._collection = [1, 2, 3];
 
-        assert.ok(store.hasResults());
-      });
-
-      it('returns false for empty collection', function () {
-        store._collection = [];
-
-        assert.notOk(store.hasResults());
-      });
-
+      assert.ok(store.hasResults());
     });
 
-    describe('#getResults', function () {
+    it('hasResults returns false for empty collection', function () {
+      store._collection = [];
 
-      it('has correct doc format', function () {
-        store._collection = new Documents.AllDocs([{_id: 'testId'}], opts);
-
-        var doc = store.getResults().results[0];
-        assert.equal(doc.id, 'testId');
-        assert.equal(doc.keylabel, 'id');
-      });
-
+      assert.notOk(store.hasResults());
     });
+
+    it('getResults has correct doc format', function () {
+      store._collection = new Documents.AllDocs([{_id: 'testId'}], opts);
+
+      var doc = store.getResults().results[0];
+      assert.equal(doc.id, 'testId');
+      assert.equal(doc.keylabel, 'id');
+    });
+
+    it('tries to guess a pseudo schema for table views', function () {
+      var doclist = [
+        {_id: 'testId1', value: 'one'},
+        {_id: 'testId2', foo: 'one'},
+        {_id: 'testId3', bar: 'one'},
+      ];
+
+      var schema = store.getPseudoSchema(doclist);
+
+      assert.ok(schema.indexOf('_id') !== -1);
+      assert.ok(schema.indexOf('value') !== -1);
+      assert.ok(schema.indexOf('foo') !== -1);
+      assert.ok(schema.indexOf('bar') !== -1);
+    });
+
+    it('uses unique values for the pseudo schema', function () {
+      var doclist = [
+        {_id: 'testId1', foo: 'one'},
+        {_id: 'testId2', foo: 'one'}
+      ];
+
+      var schema = store.getPseudoSchema(doclist);
+
+      assert.equal(schema.length, 2);
+      assert.equal(schema.length, 2);
+      assert.ok(schema.indexOf('foo') !== -1);
+      assert.ok(schema.indexOf('_id') !== -1);
+    });
+
+    it('puts the id into the array as first element', function () {
+      var doclist = [
+        {foo: 'one', _id: 'testId1'},
+        {foo: 'one', _id: 'testId2'}
+      ];
+
+      var schema = store.getPseudoSchema(doclist);
+
+      assert.equal(schema.shift(), '_id');
+    });
+
+    it('normalizes different content from include_docs enabled', function () {
+      var doclist = [
+        {_id: 'testId2', foo: 'one', doc: {"_rev": "1", "ente": "gans", "fuchs": "hase"}},
+        {_id: 'testId3', foo: 'two', doc: {"_rev": "2", "haus": "blau", "tanne": "acht"}}
+      ];
+
+      var res = store.normalizeTableData(doclist);
+      assert.deepEqual(res[0], {"_rev": "1", "ente": "gans", "fuchs": "hase"});
+    });
+
+    it('normalizes different content from include_docs disabled', function () {
+      var doclist = [
+        {id: 'testId2', foo: 'one'},
+        {id: 'testId3', foo: 'two'}
+      ];
+
+      var res = store.normalizeTableData(doclist);
+      assert.deepEqual(doclist, res);
+    });
+
+    it('finds out if we have at least one editable/deleteable doc which needs an id', function () {
+      var doclist = [
+        {id: 'testId2', foo: 'one'},
+        {id: 'testId3', foo: 'two'}
+      ];
+
+      assert.ok(store.getHasEditableAndDeletableDoc(doclist));
+
+      doclist = [
+        {foo: 'one'},
+        {foo: 'two'}
+      ];
+
+      assert.notOk(store.getHasEditableAndDeletableDoc(doclist));
+    });
+
   });
 
   describe('canSelectAll', function () {
@@ -206,83 +277,6 @@ define([
       assert.ok(bulkDelete.at(0).get('_deleted'));
     });
   });
-
-  it('tries to guess a pseudo schema for table views', function () {
-    var doclist = [
-      {_id: 'testId1', value: 'one'},
-      {_id: 'testId2', foo: 'one'},
-      {_id: 'testId3', bar: 'one'},
-    ];
-
-    var schema = store.getPseudoSchema(doclist);
-
-    assert.ok(schema.indexOf('_id') !== -1);
-    assert.ok(schema.indexOf('value') !== -1);
-    assert.ok(schema.indexOf('foo') !== -1);
-    assert.ok(schema.indexOf('bar') !== -1);
-  });
-
-  it('uses unique values for the pseudo schema', function () {
-    var doclist = [
-      {_id: 'testId1', foo: 'one'},
-      {_id: 'testId2', foo: 'one'}
-    ];
-
-    var schema = store.getPseudoSchema(doclist);
-
-    assert.equal(schema.length, 2);
-    assert.equal(schema.length, 2);
-    assert.ok(schema.indexOf('foo') !== -1);
-    assert.ok(schema.indexOf('_id') !== -1);
-  });
-
-  it('puts the id into the array as first element', function () {
-    var doclist = [
-      {foo: 'one', _id: 'testId1'},
-      {foo: 'one', _id: 'testId2'}
-    ];
-
-    var schema = store.getPseudoSchema(doclist);
-
-    assert.equal(schema.shift(), '_id');
-  });
-
-  it('normalizes different content from include_docs enabled', function () {
-    var doclist = [
-      {_id: 'testId2', foo: 'one', doc: {"_rev": "1", "ente": "gans", "fuchs": "hase"}},
-      {_id: 'testId3', foo: 'two', doc: {"_rev": "2", "haus": "blau", "tanne": "acht"}}
-    ];
-
-    var res = store.normalizeTableData(doclist);
-    assert.deepEqual(res[0], {"_rev": "1", "ente": "gans", "fuchs": "hase"});
-  });
-
-  it('normalizes different content from include_docs disabled', function () {
-    var doclist = [
-      {id: 'testId2', foo: 'one'},
-      {id: 'testId3', foo: 'two'}
-    ];
-
-    var res = store.normalizeTableData(doclist);
-    assert.deepEqual(doclist, res);
-  });
-
-  it('finds out if we have at least one editable/deleteable doc which needs an id', function () {
-    var doclist = [
-      {id: 'testId2', foo: 'one'},
-      {id: 'testId3', foo: 'two'}
-    ];
-
-    assert.ok(store.getHasEditableAndDeletableDoc(doclist));
-
-    doclist = [
-      {foo: 'one'},
-      {foo: 'two'}
-    ];
-
-    assert.notOk(store.getHasEditableAndDeletableDoc(doclist));
-  });
-
 
   describe('#getMangoDoc', function () {
     beforeEach(function () {
