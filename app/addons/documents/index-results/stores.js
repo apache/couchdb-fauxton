@@ -356,6 +356,10 @@ function (app, FauxtonAPI, ActionTypes, HeaderActionTypes, Documents, MangoHelpe
     },
 
     areAllDocumentsSelected: function () {
+      if (this._collection.length === 0) {
+        return false;
+      }
+
       return Object.keys(this._selectedItems).length === this._collection.length;
     },
 
