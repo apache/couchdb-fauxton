@@ -33,7 +33,7 @@ before_script:
   - ./node_modules/grunt-cli/bin/grunt dev &
   - sleep 25
 script:
-  - ./node_modules/grunt-cli/bin/grunt nightwatch --file=selectDocViaTypeahead
+  - ./node_modules/grunt-cli/bin/grunt nightwatch
 
 cache: apt
 
