@@ -197,18 +197,18 @@ function (app, FauxtonAPI, React, Actions, Stores, Components) {
         show = this.props.item.type === this.props.filter;
       }
       if (show) {
-        $(this.getDOMNode()).velocity({ opacity: 1, height: this.state.elementHeight }, this.props.transitionSpeed);
+        $(React.findDOMNode(this)).velocity({ opacity: 1, height: this.state.elementHeight }, this.props.transitionSpeed);
         return;
       }
       this.hide();
     },
 
     getHeight: function () {
-      return $(this.getDOMNode()).outerHeight(true);
+      return $(React.findDOMNode(this)).outerHeight(true);
     },
 
     hide: function (onHidden) {
-      $(this.getDOMNode()).velocity({ opacity: 0, height: 0 }, this.props.transitionSpeed, function () {
+      $(React.findDOMNode(this)).velocity({ opacity: 0, height: 0 }, this.props.transitionSpeed, function () {
         if (onHidden) {
           onHidden();
         }

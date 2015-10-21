@@ -171,7 +171,7 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, DocumentViews) {
       e.preventDefault();
       var newToggleState = !this.props.contentVisible;
       var state = newToggleState ? 'show' : 'hide';
-      $(this.getDOMNode()).find('.accordion-body').collapse(state);
+      $(React.findDOMNode(this)).find('.accordion-body').collapse(state);
       this.props.toggle(this.props.designDocName, this.props.title);
     },
 
@@ -233,7 +233,7 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, DocumentViews) {
       e.preventDefault();
       var newToggleState = !this.props.contentVisible;
       var state = newToggleState ? 'show' : 'hide';
-      $(this.getDOMNode()).find('#' + this.props.designDocName).collapse(state);
+      $(React.findDOMNode(this)).find('#' + this.props.designDocName).collapse(state);
       this.props.toggle(this.props.designDocName);
     },
 
@@ -335,7 +335,7 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, DocumentViews) {
       this.dbModal = new DeleteDBModal({
         database: this.props.database,
         isSystemDatabase: (/^_/).test(this.props.database.id),
-        el: this.getDOMNode()
+        el: React.findDOMNode(this)
       });
 
       this.dbModal.render();
