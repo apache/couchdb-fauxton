@@ -180,7 +180,7 @@ function (app, FauxtonAPI, ActionTypes, HeaderActionTypes, Documents, MangoHelpe
     },
 
     getResults: function () {
-      var hasEditableAndDeleteableDoc;
+      var hasEditableAndDeletableDoc;
       var res;
       var collection;
 
@@ -217,10 +217,10 @@ function (app, FauxtonAPI, ActionTypes, HeaderActionTypes, Documents, MangoHelpe
           };
         }, this);
 
-      hasEditableAndDeleteableDoc = this.getHasEditableAndDeleteableDoc(res);
+      hasEditableAndDeletableDoc = this.getHasEditableAndDeletableDoc(res);
 
       return {
-        hasEditableAndDeleteableDoc: hasEditableAndDeleteableDoc,
+        hasEditableAndDeletableDoc: hasEditableAndDeletableDoc,
         results: res
       };
     },
@@ -259,7 +259,7 @@ function (app, FauxtonAPI, ActionTypes, HeaderActionTypes, Documents, MangoHelpe
       return data;
     },
 
-    getTableViewData: function (data, hasEditableAndDeleteableDoc) {
+    getTableViewData: function (data, hasEditableAndDeletableDoc) {
       var res;
       var schema;
       var database;
@@ -287,16 +287,16 @@ function (app, FauxtonAPI, ActionTypes, HeaderActionTypes, Documents, MangoHelpe
         };
       });
 
-      hasEditableAndDeleteableDoc = this.getHasEditableAndDeleteableDoc(res);
+      hasEditableAndDeletableDoc = this.getHasEditableAndDeletableDoc(res);
 
       return {
-        hasEditableAndDeleteableDoc: hasEditableAndDeleteableDoc,
+        hasEditableAndDeletableDoc: hasEditableAndDeletableDoc,
         schema: schema,
         results: res
       };
     },
 
-    getHasEditableAndDeleteableDoc: function (data) {
+    getHasEditableAndDeletableDoc: function (data) {
       var found = false;
       var length = data.length;
       var i;

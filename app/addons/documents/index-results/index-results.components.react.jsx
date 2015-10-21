@@ -234,7 +234,7 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, Documents) {
       );
     },
 
-    getTablestyleView: function (loadLines) {
+    getTableStyleView: function (loadLines) {
       return (
         <div>
           <TableView
@@ -255,7 +255,7 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, Documents) {
         loadLines = <Components.LoadLines />;
       }
 
-      var mainview = isTableView ? this.getTablestyleView(loadLines) : this.getDocumentStyleView(loadLines);
+      var mainView = isTableView ? this.getTableStyleView(loadLines) : this.getDocumentStyleView(loadLines);
       return (
         <div className="document-result-screen">
           <BulkActionComponent
@@ -265,7 +265,7 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, Documents) {
             selectAll={this.selectAllDocs}
             toggleSelect={this.toggleSelectAll}
             title="Select all docs that can be..." />
-          {mainview}
+          {mainView}
         </div>
       );
     },

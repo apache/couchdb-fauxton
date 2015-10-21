@@ -273,14 +273,14 @@ define([
       {id: 'testId3', foo: 'two'}
     ];
 
-    assert.ok(store.getHasEditableAndDeleteableDoc(doclist));
+    assert.ok(store.getHasEditableAndDeletableDoc(doclist));
 
     doclist = [
       {foo: 'one'},
       {foo: 'two'}
     ];
 
-    assert.notOk(store.getHasEditableAndDeleteableDoc(doclist));
+    assert.notOk(store.getHasEditableAndDeletableDoc(doclist));
   });
 
 
