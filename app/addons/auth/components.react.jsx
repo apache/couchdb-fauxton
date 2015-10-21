@@ -64,8 +64,8 @@ define([
       if (this.state.username !== '' || this.state.password !== '') {
         return false;
       }
-      var username = (this.props.testBlankUsername) ? this.props.testBlankUsername : this.refs.username.getDOMNode().value;
-      var password = (this.props.testBlankPassword) ? this.props.testBlankPassword : this.refs.password.getDOMNode().value;
+      var username = (this.props.testBlankUsername) ? this.props.testBlankUsername : React.findDOMNode(this.refs.username).value;
+      var password = (this.props.testBlankPassword) ? this.props.testBlankPassword : React.findDOMNode(this.refs.password).value;
       this.setState({ username: username, password: password }); // doesn't set immediately, hence separate login() call
       this.login(username, password);
 
@@ -77,7 +77,7 @@ define([
     },
 
     componentDidMount: function () {
-      this.refs.username.getDOMNode().focus();
+      React.findDOMNode(this.refs.username).focus();
     },
 
     render: function () {
@@ -128,7 +128,7 @@ define([
     },
 
     componentDidMount: function () {
-      this.refs.password.getDOMNode().focus();
+      React.findDOMNode(this.refs.password).focus();
       changePasswordStore.on('change', this.onChange, this);
     },
 
@@ -203,7 +203,7 @@ define([
     },
 
     componentDidMount: function () {
-      this.refs.username.getDOMNode().focus();
+      React.findDOMNode(this.refs.username).focus();
       createAdminStore.on('change', this.onChange, this);
     },
 

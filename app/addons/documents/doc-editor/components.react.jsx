@@ -314,18 +314,18 @@ define([
 
     componentDidUpdate: function () {
       var params = (this.props.visible) ? { show: true, backdrop: 'static', keyboard: true } : 'hide';
-      $(this.getDOMNode()).modal(params);
+      $(React.findDOMNode(this)).modal(params);
     },
 
     // ensure that if the user clicks ESC to close the window, the store gets wind of it
     componentDidMount: function () {
-      $(this.getDOMNode()).on('hidden.bs.modal', function () {
+      $(React.findDOMNode(this)).on('hidden.bs.modal', function () {
         Actions.hideUploadModal();
       });
     },
 
     componentWillUnmount: function () {
-      $(this.getDOMNode()).off('hidden.bs.modal');
+      $(React.findDOMNode(this)).off('hidden.bs.modal');
     },
 
     closeModal: function () {
@@ -338,7 +338,7 @@ define([
       // as it closes, which looks bad
       setTimeout(function () {
         Actions.resetUploadModal();
-        this.refs.uploadForm.getDOMNode().reset();
+        React.findDOMNode(this.refs.uploadForm).reset();
       }.bind(this), 1000);
     },
 
@@ -346,7 +346,7 @@ define([
       Actions.uploadAttachment({
         doc: this.props.doc,
         rev: this.props.doc.get('_rev'),
-        files: $(this.refs.attachments.getDOMNode())[0].files
+        files: $(React.findDOMNode(this.refs.attachments))[0].files
       });
     },
 
@@ -427,21 +427,21 @@ define([
       }
 
       var params = (this.props.visible) ? { show: true, backdrop: 'static', keyboard: true } : 'hide';
-      $(this.getDOMNode()).modal(params);
+      $(React.findDOMNode(this)).modal(params);
       this.clearEvents();
 
       // ensure that if the user clicks ESC to close the window, the store gets wind of it
-      $(this.getDOMNode()).on('hidden.bs.modal', function () {
+      $(React.findDOMNode(this)).on('hidden.bs.modal', function () {
         Actions.hideCloneDocModal();
       });
 
-      $(this.getDOMNode()).on('shown.bs.modal', function () {
+      $(React.findDOMNode(this)).on('shown.bs.modal', function () {
         this.focus();
       }.bind(this));
     },
 
     focus: function () {
-      $(this.refs.newDocId.getDOMNode()).focus();
+      $(React.findDOMNode(this.refs.newDocId)).focus();
     },
 
     componentWillUnmount: function () {
@@ -450,7 +450,7 @@ define([
 
     clearEvents: function () {
       if (this.refs.newDocId) {
-        $(this.refs.newDocId.getDOMNode()).off('shown.bs.modal hidden.bs.modal');
+        $(React.findDOMNode(this.refs.newDocId)).off('shown.bs.modal hidden.bs.modal');
       }
     },
 

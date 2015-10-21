@@ -94,7 +94,7 @@ define([
           var trayEl = this.refs.tray;
           var externalEl = this.refs.externalElement;
           trayEl.show(function () {
-            TestUtils.Simulate.click(externalEl.getDOMNode());
+            TestUtils.Simulate.click(React.findDOMNode(externalEl));
             assert.ok(spy.calledOnce);
           });
         },

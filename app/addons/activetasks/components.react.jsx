@@ -396,7 +396,7 @@ define([
       e.preventDefault();
       this.refs.view_source_sequence_btn.toggle(function (shown) {
         if (shown) {
-          this.refs.view_source_sequence_btn.getDOMNode().focus();
+          React.findDOMNode(this.refs.view_source_sequence_btn).focus();
         }
       }.bind(this));
     },
