@@ -389,7 +389,7 @@ div.spinner {
     .bottom-shadow-border();
     position: absolute;
     width: 100%;
-    z-index: 1;
+    z-index: 2; /* needed because ace's selected row has a z-index of 1 & can't be overridden */
   }
 }
 
