@@ -58,41 +58,8 @@ define([
           autoFocus={true}
           editorCommands={editorCommands}
           notifyUnsavedChanges={true}
-          stringEditModalEnabled={true}
-          change={this.onChangeDoc} />
+          stringEditModalEnabled={true} />
       );
-    },
-
-    onChangeDoc: function (doc) {
-      // super ugly, but necessary. This tells the user they can't delete the _id or _rev fields as they type and actually
-      // prevents it from being removed in the editable doc
-      var json;
-      try {
-        json = JSON.parse(doc);
-      } catch (exception) {
-        return;
-      }
-
-      var keyChecked = ['_id'];
-      if (this.state.doc.get('_rev')) {
-        keyChecked.push('_rev');
-      }
-      if (_.isEmpty(_.difference(keyChecked, _.keys(json)))) {
-        return;
-      }
-
-      this.getEditor().setReadOnly(true);
-      setTimeout(function () { this.getEditor().setReadOnly(false); }.bind(this), 400);
-
-      // extend ensures _id stays at the top of the editor doc
-      json = _.extend({ _id: this.state.doc.id, _rev: this.state.doc.get('_rev') }, json);
-      this.getEditor().setValue(JSON.stringify(json, null, '  '));
-
-      FauxtonAPI.addNotification({
-        type: 'error',
-        msg: "Cannot remove a document's id or revision.",
-        clear: true
-      });
     },
 
     componentDidMount: function () {
