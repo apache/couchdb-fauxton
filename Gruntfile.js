@@ -395,7 +395,7 @@ module.exports = function (grunt) {
       },
 
       phantomjs: {
-        command: './node_modules/phantomjs/bin/phantomjs --debug=false ' +
+        command: 'node ./node_modules/phantomjs/bin/phantomjs --debug=false ' +
           '--ssl-protocol=sslv2 --web-security=false --ignore-ssl-errors=true ' +
           './node_modules/mocha-phantomjs/lib/mocha-phantomjs.coffee test/runner.html'
       }
