@@ -47,7 +47,7 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, ReactComponents) 
       return (
         <div className="new-ddoc-section">
           <div className="new-ddoc-input">
-            <input value={this.state.designDoc} type="text" id="new-ddoc" onChange={this.onDesignDocChange} placeholder="Enter a Design Doc name" />
+            <input value={this.state.designDoc} type="text" id="new-ddoc" onChange={this.onDesignDocChange} placeholder="Name" />
           </div>
         </div>
       );
@@ -420,7 +420,7 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, ReactComponents) 
             </PaddedBorderedBox>
             <div className="padded-box">
               <div className="control-group">
-                <ConfirmButton id="save-view" text="Save &amp; Build Index" />
+                <ConfirmButton id="save-view" text="Save Document and Build Index" />
                 <DeleteView />
                 {this.getCompactButton()}
               </div>

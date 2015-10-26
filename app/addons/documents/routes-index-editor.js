@@ -136,7 +136,7 @@ function (app, FauxtonAPI, Helpers, BaseRoute, Documents, IndexEditorComponents,
         toggleDisabled: true,
         crumbs: [
           { type: 'back', link: Helpers.getPreviousPage(this.database) },
-          { name: 'Create new index', link: url }
+          { name: 'Create Index', link: url }
         ]
       }));
 
