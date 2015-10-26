@@ -53,7 +53,7 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, DocumentViews) {
       }, this.getMangoLink()]);
 
       return [{
-        title: 'Add new',
+        title: 'Add New',
         links: addNewLinks
       }];
     },
@@ -257,7 +257,7 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, DocumentViews) {
       }]);
 
       return [{
-        title: 'Add new',
+        title: 'Add New',
         links: addNewLinks
       }];
     },

@@ -594,7 +594,7 @@ function (app, FauxtonAPI, Documents, PagingCollection) {
     }];
 
     defaultMenuLinks.push({
-      title: 'Add new',
+      title: 'Add New',
       links: Documents.getExtensionLinks(database)
     });
 

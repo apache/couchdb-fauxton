@@ -209,8 +209,8 @@ define([
         headerNames : [
           ['type', 'Type'],
           ['database', 'Database'],
-          ['started-on', 'Started On'],
-          ['updated-on', 'Updated On'],
+          ['started-on', 'Started on'],
+          ['updated-on', 'Updated on'],
           ['pid', 'PID'],
           ['progress', 'Status']
         ]

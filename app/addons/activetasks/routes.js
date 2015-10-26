@@ -29,7 +29,7 @@ function (app, FauxtonAPI, ActiveTasksResources, ActiveTasksComponents, Actions)
       'activetasks': 'showActiveTasks'
     },
     crumbs: [
-      {'name': 'Active tasks', 'link': 'activetasks'}
+      {'name': 'Active Tasks', 'link': 'activetasks'}
     ],
     apiUrl: function () {
       var apiurl = window.location.origin + '/_active_tasks';

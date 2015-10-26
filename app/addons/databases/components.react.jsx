@@ -235,11 +235,11 @@ define([
             selected={this.state.isPromptVisible}
             toggleCallback={this.onTrayToggle}
             containerClasses={headerButtonContainerClasses}
-            title="Add New Database"
+            title="Create Database"
             fonticon="fonticon-new-database"
-            text="Add New Database" />
+            text="Create Database" />
           <ComponentsReact.Tray ref="newDbTray" className="new-database-tray">
-            <span className="add-on">Add New Database</span>
+            <span className="add-on">Create Database</span>
             <input id="js-new-database-name" type="text" onKeyUp={this.onKeyUpInInput} ref="newDbName" className="input-xxlarge" placeholder="Name of database" />
             <a className="btn" id="js-create-database" onClick={this.onAddDatabase}>Create</a>
           </ComponentsReact.Tray>
