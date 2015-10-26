@@ -94,7 +94,7 @@ define([
       restore(stub);
     });
 
-    it('should show a limited preview if the file is larger than 200000 ', function () {
+    it('should show a limited preview if the file is larger than 500000 ', function () {
       var stub = sinon.stub(Actions, 'papaparse');
 
       var dragNDropBox = TestUtils.findRenderedDOMComponentWithClass(importer, 'dropzone');
@@ -103,7 +103,7 @@ define([
         nativeEvent: {
           dataTransfer: {
             files: [{
-              size: 200000 + 1
+              size: 500000 + 1
             }]
           }
         }
