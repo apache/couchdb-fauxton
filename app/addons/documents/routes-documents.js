@@ -119,6 +119,14 @@ function (app, FauxtonAPI, BaseRoute, Documents, Changes, ChangesActions, Databa
 
         this.leftheader.updateCrumbs(this.getCrumbs(this.database));
 
+        // includes_docs = true if you are visiting the _replicator/_users databases
+        if ( ['_replicator', '_users'].indexOf(databaseName) > -1) {
+          docParams.include_docs = true;
+          urlParams = params.docParams;
+          var updatedURL = FauxtonAPI.urls('allDocs', 'app', databaseName, '?' + $.param(urlParams));
+          FauxtonAPI.navigate(updatedURL, {trigger: false, replace: true});
+        }
+
         this.database.buildAllDocs(docParams);
         collection = this.database.allDocs;
 
