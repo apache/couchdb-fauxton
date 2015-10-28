@@ -59,7 +59,7 @@ function (app, FauxtonAPI, React, ZeroClipboard) {
     },
 
     componentDidMount: function () {
-      var el = this.getDOMNode();
+      var el = React.findDOMNode(this);
       this.clipboard = new ZeroClipboard(el);
       this.clipboard.on('load', function () {
         this.clipboard.on('mouseup', function () {
@@ -87,7 +87,7 @@ function (app, FauxtonAPI, React, ZeroClipboard) {
     },
 
     componentDidMount: function () {
-      var el = this.refs["copy-text-" + this.props.uniqueKey].getDOMNode();
+      var el = React.findDOMNode(this.refs["copy-text-" + this.props.uniqueKey]);
       this.clipboard = new ZeroClipboard(el);
       this.clipboard.on('load', function () {
         this.clipboard.on('mouseup', function () {
@@ -208,7 +208,7 @@ function (app, FauxtonAPI, React, ZeroClipboard) {
 
     show: function (done) {
       this.setState({show: true});
-      $(this.refs.myself.getDOMNode()).velocity('transition.slideDownIn', FauxtonAPI.constants.MISC.TRAY_TOGGLE_SPEED, function () {
+      $(React.findDOMNode(this.refs.myself)).velocity('transition.slideDownIn', FauxtonAPI.constants.MISC.TRAY_TOGGLE_SPEED, function () {
         if (done) {
           done(true);
         }
@@ -216,7 +216,7 @@ function (app, FauxtonAPI, React, ZeroClipboard) {
     },
 
     hide: function (done) {
-      $(this.refs.myself.getDOMNode()).velocity('reverse', FauxtonAPI.constants.MISC.TRAY_TOGGLE_SPEED, function () {
+      $(React.findDOMNode(this.refs.myself)).velocity('reverse', FauxtonAPI.constants.MISC.TRAY_TOGGLE_SPEED, function () {
         this.setState({show: false});
         if (done) {
           done(false);
@@ -326,9 +326,9 @@ function (app, FauxtonAPI, React, ZeroClipboard) {
 
     componentDidUpdate: function () {
       var params = (this.props.visible) ? { show: true, backdrop: 'static', keyboard: true } : 'hide';
-      $(this.getDOMNode()).modal(params);
+      $(React.findDOMNode(this)).modal(params);
 
-      $(this.getDOMNode()).on('hidden.bs.modal', function () {
+      $(React.findDOMNode(this)).on('hidden.bs.modal', function () {
         this.props.onClose();
       }.bind(this));
     },

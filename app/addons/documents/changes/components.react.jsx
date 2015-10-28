@@ -213,7 +213,7 @@ define([
     },
 
     focusFilterField: function () {
-      this.refs.addItem.getDOMNode().focus();
+      React.findDOMNode(this.refs.addItem).focus();
     },
 
     onChangeFilter: function (e) {
@@ -250,7 +250,7 @@ define([
   var FilterTooltip = React.createClass({
     componentDidMount: function () {
       if (this.props.tooltip) {
-        $(this.refs.tooltip.getDOMNode()).tooltip();
+        $(React.findDOMNode(this.refs.tooltip)).tooltip();
       }
     },
 

@@ -170,7 +170,7 @@ define([
   var GraveyardInfo = React.createClass({
 
     componentDidMount: function () {
-      $(this.refs.myself.getDOMNode()).tooltip();
+      $(React.findDOMNode(this.refs.myself)).tooltip();
     },
 
     render: function () {
@@ -204,7 +204,7 @@ define([
 
       this.refs.newDbTray.toggle(function (shown) {
         if (shown) {
-          this.refs.newDbName.getDOMNode().focus();
+          React.findDOMNode(this.refs.newDbName).focus();
         }
       }.bind(this));
     },
@@ -222,7 +222,7 @@ define([
     },
 
     onAddDatabase: function () {
-      var databaseName = this.refs.newDbName.getDOMNode().value;
+      var databaseName = React.findDOMNode(this.refs.newDbName).value;
       Actions.createNewDatabase(databaseName);
     },
 
@@ -265,7 +265,7 @@ define([
     },
 
     componentDidUpdate: function () {
-      $(this.refs.searchDbName.getDOMNode()).typeahead({
+      $(React.findDOMNode(this.refs.searchDbName)).typeahead({
         source: this.state.databaseNames,
         updater: function (item) {
           this.jumpToDb(item);
@@ -282,7 +282,7 @@ define([
     },
 
     jumpToDb: function (databaseName) {
-      databaseName = databaseName || this.refs.searchDbName.getDOMNode().value;
+      databaseName = databaseName || React.findDOMNode(this.refs.searchDbName).value;
       Actions.jumpToDatabase(databaseName);
     },
 

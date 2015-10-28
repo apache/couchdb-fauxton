@@ -370,7 +370,7 @@ function (app, FauxtonAPI, React, Stores, FauxtonComponents, ace, beautifyHelper
     },
 
     setupAce: function (props, shouldUpdateCode) {
-      this.editor = ace.edit(this.refs.ace.getDOMNode());
+      this.editor = ace.edit(React.findDOMNode(this.refs.ace));
 
       // suppresses an Ace editor error
       this.editor.$blockScrolling = Infinity;
@@ -675,9 +675,9 @@ function (app, FauxtonAPI, React, Stores, FauxtonComponents, ace, beautifyHelper
 
     componentDidUpdate: function () {
       var params = (this.props.visible) ? { show: true, backdrop: 'static', keyboard: true } : 'hide';
-      $(this.getDOMNode()).modal(params);
+      $(React.findDOMNode(this)).modal(params);
 
-      $(this.getDOMNode()).on('shown.bs.modal', function () {
+      $(React.findDOMNode(this)).on('shown.bs.modal', function () {
         this.editor.focus();
 
         // re-opening the modal to edit a second string doesn't update the content. This forces the editor to redraw
@@ -689,11 +689,11 @@ function (app, FauxtonAPI, React, Stores, FauxtonComponents, ace, beautifyHelper
 
     // ensure that if the user clicks ESC to close the window, the store gets wind of it
     componentDidMount: function () {
-      $(this.getDOMNode()).on('hidden.bs.modal', function () {
+      $(React.findDOMNode(this)).on('hidden.bs.modal', function () {
         this.props.onClose();
       }.bind(this));
 
-      this.editor = ace.edit(this.refs.stringEditor.getDOMNode());
+      this.editor = ace.edit(React.findDOMNode(this.refs.stringEditor));
 
       // suppresses an Ace editor error
       this.editor.$blockScrolling = Infinity;
@@ -710,7 +710,7 @@ function (app, FauxtonAPI, React, Stores, FauxtonComponents, ace, beautifyHelper
     },
 
     componentWillUnmount: function () {
-      $(this.getDOMNode()).off('hidden.bs.modal shown.bs.modal');
+      $(React.findDOMNode(this)).off('hidden.bs.modal shown.bs.modal');
     },
 
     closeModal: function () {
@@ -786,8 +786,8 @@ function (app, FauxtonAPI, React, Stores, FauxtonComponents, ace, beautifyHelper
     },
 
     componentDidMount: function () {
-      $(this.refs.exit.getDOMNode()).tooltip({ placement: 'left' });
-      $(this.refs.theme.getDOMNode()).tooltip({ placement: 'left' });
+      $(React.findDOMNode(this.refs.exit)).tooltip({ placement: 'left' });
+      $(React.findDOMNode(this.refs.theme)).tooltip({ placement: 'left' });
     },
 
     exitZenMode: function () {
@@ -1164,7 +1164,7 @@ function (app, FauxtonAPI, React, Stores, FauxtonComponents, ace, beautifyHelper
 
     closeIfOpen: function (e) {
       if (!this.state.trayVisible) { return; }
-      var trayEl = $(this.getDOMNode());
+      var trayEl = $(React.findDOMNode(this));
 
       if (!trayEl.is(e.target) && trayEl.has(e.target).length === 0) {
         this.toggleTray();

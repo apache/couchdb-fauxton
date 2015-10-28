@@ -113,8 +113,8 @@ function (app, FauxtonAPI, React, Stores, Actions, Components) {
 
     updateBetweenKeys: function () {
       this.props.updateBetweenKeys({
-        startkey: this.refs.startkey.getDOMNode().value,
-        endkey: this.refs.endkey.getDOMNode().value,
+        startkey: React.findDOMNode(this.refs.startkey).value,
+        endkey: React.findDOMNode(this.refs.endkey).value,
         include: this.props.betweenKeys.include
       });
     },
