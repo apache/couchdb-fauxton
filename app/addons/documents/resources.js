@@ -94,6 +94,10 @@ function (app, FauxtonAPI, Documents, PagingCollection) {
       return this.get('type') !== 'special';
     },
 
+    isBulkDeletable: function () {
+      return this.isDeletable();
+    },
+
     isFromView: function () {
       return false;
     },

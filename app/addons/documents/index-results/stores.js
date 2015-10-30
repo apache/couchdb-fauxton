@@ -104,7 +104,7 @@ function (app, FauxtonAPI, ActionTypes, HeaderActionTypes, Documents, MangoHelpe
         return false;
       }
 
-      return doc.isDeletable();
+      return doc.isBulkDeletable();
     },
 
     getCollection: function () {
@@ -179,29 +179,30 @@ function (app, FauxtonAPI, ActionTypes, HeaderActionTypes, Documents, MangoHelpe
 
     },
 
+    filterOutGeneratedMangoDocs: function (doc) {
+      if (doc.get && typeof doc.get === 'function') {
+        return doc.get('language') !== 'query';
+      }
+
+      return doc.language !== 'query';
+    },
+
     getResults: function () {
-      var hasEditableAndDeletableDoc;
+      var hasDeletableDoc;
       var res;
       var collection;
 
-
-      function filterOutGeneratedMangoDocs (doc) {
-        if (doc.get && typeof doc.get === 'function') {
-          return doc.get('language') !== 'query';
-        }
-
-        return doc.language !== 'query';
-      }
+      var filteredCollection = this._collection.filter(this.filterOutGeneratedMangoDocs);
 
       // Table sytle view
       if (this.getIsTableView()) {
-        collection = this._collection.toJSON().filter(filterOutGeneratedMangoDocs);
+        collection = this._collection.toJSON().filter(this.filterOutGeneratedMangoDocs);
         return this.getTableViewData(collection);
       }
 
       // JSON style views
       res = this._collection
-        .filter(filterOutGeneratedMangoDocs)
+        .filter(this.filterOutGeneratedMangoDocs)
         .map(function (doc, i) {
           if (doc.get('def') || this.isGhostDoc(doc)) {
             return this.getMangoDoc(doc, i);
@@ -217,10 +218,10 @@ function (app, FauxtonAPI, ActionTypes, HeaderActionTypes, Documents, MangoHelpe
           };
         }, this);
 
-      hasEditableAndDeletableDoc = this.getHasEditableAndDeletableDoc(res);
+      hasDeletableDoc = this.getHasDeletableDoc(res);
 
       return {
-        hasEditableAndDeletableDoc: hasEditableAndDeletableDoc,
+        hasDeletableDoc: hasDeletableDoc,
         results: res
       };
     },
@@ -259,7 +260,7 @@ function (app, FauxtonAPI, ActionTypes, HeaderActionTypes, Documents, MangoHelpe
       return data;
     },
 
-    getTableViewData: function (data, hasEditableAndDeletableDoc) {
+    getTableViewData: function (data) {
       var res;
       var schema;
       var database;
@@ -268,42 +269,36 @@ function (app, FauxtonAPI, ActionTypes, HeaderActionTypes, Documents, MangoHelpe
       schema = this.getPseudoSchema(data);
       database = this.getDatabase().safeID();
 
-      res = data.map(function (doc) {
-        var safeId = app.utils.getSafeIdForDoc(doc._id);
-        var url;
+      res = this._collection
+        .filter(this.filterOutGeneratedMangoDocs)
+        .map(function (doc) {
 
-        if (safeId) {
-          url = FauxtonAPI.urls('document', 'app', database, safeId);
-        }
-
-        return {
-          content: doc,
-          id: safeId,
-          header: '',
-          keylabel: '',
-          url: url,
-          isDeletable: !!safeId,
-          isEditable: !!safeId
-        };
-      });
-
-      hasEditableAndDeletableDoc = this.getHasEditableAndDeletableDoc(res);
+          return {
+            content: doc.toJSON(),
+            id: this.getDocId(doc),
+            header: '',
+            keylabel: '',
+            url: this.getDocId(doc) ? doc.url('app') : null,
+            isDeletable: this.isDeletable(doc),
+            isEditable: this.isEditable(doc)
+          };
+        }, this);
 
       return {
-        hasEditableAndDeletableDoc: hasEditableAndDeletableDoc,
+        hasDeletableDoc: this.getHasDeletableDoc(res),
         schema: schema,
         results: res
       };
     },
 
-    getHasEditableAndDeletableDoc: function (data) {
+    getHasDeletableDoc: function (data) {
       var found = false;
       var length = data.length;
       var i;
-
       // use a for loop here as we can end it once we found the first id
       for (i = 0; i < length; i++) {
-        if (data[i].id) {
+
+        if (data[i].isDeletable) {
           found = true;
           break;
         }
@@ -343,6 +338,9 @@ function (app, FauxtonAPI, ActionTypes, HeaderActionTypes, Documents, MangoHelpe
     selectAllDocuments: function () {
       this.clearSelectedItems();
       this._collection.each(function (doc) {
+        if (!doc.isBulkDeletable()) {
+          return;
+        }
         this.selectDoc(doc.id);
       }, this);
     },
@@ -356,11 +354,17 @@ function (app, FauxtonAPI, ActionTypes, HeaderActionTypes, Documents, MangoHelpe
     },
 
     areAllDocumentsSelected: function () {
+      var filtered;
+
       if (this._collection.length === 0) {
         return false;
       }
 
-      return Object.keys(this._selectedItems).length === this._collection.length;
+      filtered = this._collection.filter(function (doc) {
+        return doc.isBulkDeletable();
+      });
+
+      return Object.keys(this._selectedItems).length === filtered.length;
     },
 
     getSelectedItemsLength: function () {
