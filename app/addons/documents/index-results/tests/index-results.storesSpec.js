@@ -15,12 +15,17 @@ define([
   'addons/documents/index-results/stores',
   'addons/documents/index-results/actiontypes',
   'addons/documents/shared-resources',
+  'addons/documents/tests/document-test-helper',
+
   'testUtils'
-], function (FauxtonAPI, Stores, ActionTypes, Documents, testUtils) {
+], function (FauxtonAPI, Stores, ActionTypes, Documents, documentTestHelper, testUtils) {
   var assert = testUtils.assert;
   var dispatchToken;
   var store;
   var opts;
+
+  var createDocColumn = documentTestHelper.createDocColumn;
+  var createMangoIndexDocColumn = documentTestHelper.createMangoIndexDocColumn;
 
   describe('Index Results Store', function () {
     beforeEach(function () {
@@ -120,26 +125,38 @@ define([
       assert.deepEqual(doclist, res);
     });
 
-    it('finds out if we have at least one editable/deleteable doc which needs an id', function () {
+    it('finds out if we have at least one editable/deleteable doc', function () {
       var doclist = [
-        {id: 'testId2', foo: 'one'},
+        {id: 'testId2', foo: 'one', isDeletable: true},
         {id: 'testId3', foo: 'two'}
       ];
 
-      assert.ok(store.getHasEditableAndDeletableDoc(doclist));
+      assert.ok(store.getHasDeletableDoc(doclist));
 
       doclist = [
         {foo: 'one'},
         {foo: 'two'}
       ];
 
-      assert.notOk(store.getHasEditableAndDeletableDoc(doclist));
+      assert.notOk(store.getHasDeletableDoc(doclist));
+
     });
 
     it('if the collection is empty, no docs should be selected', function () {
       store._collection = new Documents.AllDocs([], opts);
 
       assert.notOk(store.areAllDocumentsSelected());
+    });
+
+    it('special mango docs are not selectable', function () {
+      store._collection = createMangoIndexDocColumn([
+        {ddoc: 'testId1', type: 'special', def: {fields: [{_id: 'desc'}]}},
+        {ddoc: 'testId2', blubb: 'ba', type: 'json', def: {fields: [{_id: 'desc'}]}}
+      ]);
+
+      store.selectAllDocuments();
+
+      assert.ok(store.areAllDocumentsSelected());
     });
 
   });
@@ -236,10 +253,17 @@ define([
   describe('#selectAllDocuments', function () {
 
     it('selects all documents', function () {
-      store._collection = new Documents.AllDocs([{_id: 'testId1', 'value': 'one'}], opts);
+      store._collection = createDocColumn([{_id: 'testId1', _rev: '1', 'value': 'one'}]);
 
       store.selectAllDocuments();
       assert.ok(store.getSelectedItems().testId1);
+    });
+
+    it('does not select all documents if rev is missing', function () {
+      store._collection = createDocColumn([{_id: 'testId1', 'value': 'one'}]);
+
+      store.selectAllDocuments();
+      assert.equal(store.getSelectedItemsLength(), 0);
     });
 
   });
@@ -247,7 +271,7 @@ define([
   describe('toggleSelectAllDocuments', function () {
 
     it('deselects all documents', function () {
-      store._collection = new Documents.AllDocs([{_id: 'testId1', 'value': 'one'}], opts);
+      store._collection = new Documents.AllDocs([{_id: 'testId1', _rev: '1', 'value': 'one'}], opts);
 
       store.selectAllDocuments();
       assert.ok(store.getSelectedItems().testId1);
@@ -257,7 +281,7 @@ define([
 
     it('deselects all documents', function () {
       store.reset();
-      store._collection = new Documents.AllDocs([{_id: 'testId1', 'value': 'one'}], opts);
+      store._collection = new Documents.AllDocs([{_id: 'testId1', _rev: '1', 'value': 'one'}], opts);
 
       assert.equal(Object.keys(store.getSelectedItems()).length, 0);
       store.toggleSelectAllDocuments();

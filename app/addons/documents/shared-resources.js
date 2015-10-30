@@ -57,6 +57,10 @@ define([
       return app.utils.getDocTypeFromId(this.id);
     },
 
+    isBulkDeletable: function () {
+      return !!this.id && !!this.get('_rev');
+    },
+
     isDeletable: function () {
       return !!this.id;
     },

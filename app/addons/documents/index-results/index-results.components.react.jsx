@@ -86,8 +86,8 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, Documents) {
     },
 
     maybeGetCheckboxCell: function (i) {
-      if (!this.props.docId) {
-        return null;
+      if (!this.props.data.isDeletable) {
+        return <td className="tableview-checkbox-cell" key={"tableview-checkbox-cell-" + i}></td>;
       }
 
       return (
@@ -123,6 +123,7 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, Documents) {
         return (
           <TableRow
             key={"tableview-row-component-" + i}
+            isListDeletable={this.props.isListDeletable}
             index={i}
             data={el}
             docId={el.id}
@@ -258,13 +259,13 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, Documents) {
       var mainView = isTableView ? this.getTableStyleView(loadLines) : this.getDocumentStyleView(loadLines);
       return (
         <div className="document-result-screen">
-          <BulkActionComponent
+          {this.props.isListDeletable ? <BulkActionComponent
             removeItem={this.props.removeItem}
             isChecked={this.props.allDocumentsSelected}
             hasSelectedItem={this.props.hasSelectedItem}
             selectAll={this.selectAllDocs}
             toggleSelect={this.toggleSelectAll}
-            title="Select all docs that can be..." />
+            title="Select all docs that can be..." /> : null}
           {mainView}
         </div>
       );
@@ -347,7 +348,7 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, Documents) {
           canSelectAll={this.state.canSelectAll}
           isSelected={this.isSelected}
           isEditable={this.state.isEditable}
-          isListDeletable={this.state.results.hasEditableAndDeletableDoc}
+          isListDeletable={this.state.results.hasDeletableDoc}
           docChecked={this.docChecked}
           isLoading={this.state.isLoading}
           results={this.state.results}

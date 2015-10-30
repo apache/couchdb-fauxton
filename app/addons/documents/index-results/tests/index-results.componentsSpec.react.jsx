@@ -16,9 +16,11 @@ define([
   'addons/documents/index-results/stores',
   'addons/documents/resources',
   'addons/databases/resources',
+
+  'addons/documents/tests/document-test-helper',
   'testUtils',
   "react"
-], function (FauxtonAPI, Views, IndexResultsActions, Stores, Documents, Databases, utils, React) {
+], function (FauxtonAPI, Views, IndexResultsActions, Stores, Documents, Databases, documentTestHelper, utils, React) {
   FauxtonAPI.router = new FauxtonAPI.Router([]);
 
   var assert = utils.assert;
@@ -82,17 +84,13 @@ define([
         store.reset();
       });
 
-      function createDocColumn (docs) {
-        docs = docs.map(function (doc) {
-          return Documents.Doc.prototype.parse(doc);
-        });
+      var createDocColumn = documentTestHelper.createDocColumn;
+      var createMangoIndexDocColumn = documentTestHelper.createMangoIndexDocColumn;
 
-        return new Documents.AllDocs(docs, opts);
-      }
 
-      it('does not render checkboxes for elements with no id in a table', function () {
+      it('does not render checkboxes for elements with just the special index (Mango Index List)', function () {
         IndexResultsActions.sendMessageNewResultList({
-          collection: createDocColumn([{foo: 'testId1'}, {bar: 'testId1'}])
+          collection: createMangoIndexDocColumn([{foo: 'testId1', type: 'special'}])
         });
 
         store.enableTableView();
@@ -109,9 +107,82 @@ define([
         assert.ok($el.find('.tableview-header-el-checkbox').length === 0);
       });
 
-      it('renders checkboxes for elements with id in a table', function () {
+      it('renders checkboxes for elements with more than just the the special index (Mango Index List)', function () {
         IndexResultsActions.sendMessageNewResultList({
-          collection: createDocColumn([{id: '1', foo: 'testId1'}, {bar: 'testId1'}])
+          collection: createMangoIndexDocColumn([{
+            ddoc: null,
+            name: 'biene',
+            type: 'json',
+            def: {fields: [{_id: 'desc'}]}
+          },
+          {
+            ddoc: null,
+            name: 'biene',
+            type: 'special',
+            def: {fields: [{_id: 'desc'}]}
+          }])
+        });
+
+        store.enableTableView();
+
+        IndexResultsActions.resultsListReset();
+
+        instance = TestUtils.renderIntoDocument(
+          <Views.List />,
+          container
+        );
+
+        var $el = $(instance.getDOMNode());
+
+        assert.ok($el.find('.tableview-header-el-checkbox').length > 0);
+      });
+
+      it('does not render checkboxes for elements with no id in a table (usual docs)', function () {
+        IndexResultsActions.sendMessageNewResultList({
+          collection: createDocColumn([{
+            ddoc: null,
+            name: 'biene',
+            type: 'special',
+            def: {fields: [{_id: 'desc'}]}
+          }])
+        });
+
+        store.enableTableView();
+
+        IndexResultsActions.resultsListReset();
+
+        instance = TestUtils.renderIntoDocument(
+          <Views.List />,
+          container
+        );
+
+        var $el = $(instance.getDOMNode());
+
+        assert.ok($el.find('.tableview-header-el-checkbox').length === 0);
+      });
+
+      it('does not render checkboxes for elements with no rev in a table (usual docs)', function () {
+        IndexResultsActions.sendMessageNewResultList({
+          collection: createDocColumn([{id: '1', foo: 'testId1'}, {id: '1', bar: 'testId1'}])
+        });
+
+        store.enableTableView();
+
+        IndexResultsActions.resultsListReset();
+
+        instance = TestUtils.renderIntoDocument(
+          <Views.List />,
+          container
+        );
+
+        var $el = $(instance.getDOMNode());
+
+        assert.ok($el.find('.tableview-header-el-checkbox').length === 0);
+      });
+
+      it('renders checkboxes for elements with an id and rev in a table (usual docs)', function () {
+        IndexResultsActions.sendMessageNewResultList({
+          collection: createDocColumn([{id: '1', foo: 'testId1', rev: 'foo'}, {bar: 'testId1', rev: 'foo'}])
         });
 
         store.enableTableView();
@@ -128,9 +199,9 @@ define([
         assert.ok($el.find('.tableview-checkbox-cell').length > 0);
       });
 
-      it('renders checkboxes for elements with an id in a json view', function () {
+      it('renders checkboxes for elements with an id and rev in a json view (usual docs)', function () {
         IndexResultsActions.sendMessageNewResultList({
-          collection: createDocColumn([{id: '1', foo: 'testId1'}, {bar: 'testId1'}])
+          collection: createDocColumn([{id: '1', emma: 'testId1', rev: 'foo'}, {bar: 'testId1'}])
         });
 
         IndexResultsActions.resultsListReset();
@@ -143,13 +214,12 @@ define([
         );
 
         var $el = $(instance.getDOMNode());
-
         assert.ok($el.find('.js-row-select').length > 0);
       });
 
-      it('does not render checkboxes for elements with no id in a json view', function () {
+      it('does not render checkboxes for elements with that are not deletable in a json view (usual docs)', function () {
         IndexResultsActions.sendMessageNewResultList({
-          collection: createDocColumn([{foo: 'testId1'}, {bar: 'testId1'}])
+          collection: createDocColumn([{foo: 'testId1', rev: 'foo'}, {bar: 'testId1'}])
         });
 
         IndexResultsActions.resultsListReset();
