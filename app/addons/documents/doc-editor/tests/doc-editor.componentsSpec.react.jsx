@@ -19,8 +19,9 @@ define([
   'addons/documents/doc-editor/stores',
   'addons/documents/doc-editor/actions',
   'addons/documents/doc-editor/actiontypes',
+  'addons/databases/base',
   'testUtils'
-], function (app, FauxtonAPI, React, Documents, Components, Stores, Actions, ActionTypes, utils) {
+], function (app, FauxtonAPI, React, Documents, Components, Stores, Actions, ActionTypes, Databases, utils) {
   FauxtonAPI.router = new FauxtonAPI.Router([]);
 
   var assert = utils.assert;
@@ -54,10 +55,7 @@ define([
     }
   };
 
-  var database = {
-    id: 'id',
-    safeID: function () { return 'id'; }
-  };
+  var database = new Databases.Model({ id: 'id' });
 
 
   describe('DocEditorController', function () {
@@ -131,6 +129,24 @@ define([
       });
       assert.equal($(el.getDOMNode()).find('.view-attachments-section .dropdown-menu li').length, 2);
     });
+
+    it('view attachments dropdown contains correct urls', function () {
+      var el = TestUtils.renderIntoDocument(<Components.DocEditorController database={database} />, container);
+
+      var doc = new Documents.Doc(docWithAttachmentsJSON, { database: database });
+      FauxtonAPI.dispatch({
+        type: ActionTypes.DOC_LOADED,
+        options: {
+          doc: doc
+        }
+      });
+
+      var attachmentNode = $(el.getDOMNode()).find('.view-attachments-section .dropdown-menu li')[0];
+      var attachmentURLactual = $(attachmentNode).find('a').attr('href');
+
+      assert.equal(attachmentURLactual, "../../id/_design/test-doc/one.png");
+    });
+
 
     it('setting deleteDocModal=true in store shows modal', function () {
       var el = TestUtils.renderIntoDocument(<Components.DocEditorController database={database} />, container);

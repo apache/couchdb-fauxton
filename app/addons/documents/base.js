@@ -75,6 +75,9 @@ function (app, FauxtonAPI, Documents) {
     },
 
     attachment: function (database, doc, filename, query) {
+      if (_.isUndefined(query)) {
+        query = '';
+      }
       return app.host + '/' + database + '/' + doc + '/' + filename + query;
     },
 

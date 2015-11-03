@@ -198,9 +198,11 @@ define([
     },
 
     getAttachmentList: function () {
-      var docBaseURL = this.props.doc.url();
+      var db = this.props.doc.database.get('id');
+      var doc = this.props.doc.get('_id');
+
       return _.map(this.props.doc.get('_attachments'), function (item, filename) {
-        var url = docBaseURL + '/' + app.utils.safeURLName(filename);
+        var url = FauxtonAPI.urls('document', 'attachment', db, doc, app.utils.safeURLName(filename));
         return (
           <li key={filename}>
             <a href={url} target="_blank" data-bypass="true"> <strong>{filename}</strong> -
