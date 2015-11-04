@@ -245,7 +245,7 @@ module.exports = function (grunt) {
         tasks: []
       },
       jsx: {
-        files: initHelper.watchFiles(['.jsx'], ["./app/**/*.jsx", '!./app/load_addons.jsx', "./assets/**/*.jsx", "./test/**/*.jsx"]),
+        files: initHelper.watchFiles(['.jsx'], ["./app/**/*.jsx", './app/**/**/*.jsx', '!./app/load_addons.jsx', "./assets/**/*.jsx", "./test/**/*.jsx"]),
         tasks: []
       },
       style: {
