@@ -55,7 +55,7 @@ function (app, FauxtonAPI, React, Components, Stores, Actions) {
 
     getHelp: function () {
       if (this.props.section === 'admins') {
-        return 'Database members can access the database. If no members are defined, the database is public. ';
+        return 'Database admins and members can access this database. If specific accounts are not defined, the database is public. ';
       }
 
       return 'Database members can access the database. If no members are defined, the database is public. ';
@@ -123,39 +123,68 @@ function (app, FauxtonAPI, React, Components, Stores, Actions) {
       this.setState({newRole: e.target.value});
     },
 
+    getAccountBlurb: function () {
+      var blurb = 'Grant database member privileges to user accounts with the following roles:';
+      if (this.props.section === 'admins') {
+        blurb = 'Grant database ADMIN privileges to the following user accounts:';
+      }
+      return (
+        <header>
+          <h4 className="capitalize">{this.props.section} Accounts</h4>
+          <p>{blurb}</p>
+        </header>
+      );
+    },
+
+    getRoleBlurb: function () {
+      var blurb = 'Grant database member privileges to user accounts with the following roles:';
+      if (this.props.section === 'admins') {
+        blurb = 'Grant database ADMIN privileges to user accounts with the following roles:';
+      }
+      return (
+        <header>
+          <h4 className="capitalize">{this.props.section} Roles</h4>
+          <p>{blurb}</p>
+        </header>
+      );
+    },
+
+    getPageHeader: function () {
+      if (this.props.section === 'admins') {
+        return (
+          <header className="page-header">
+            <h3>{this.props.title}</h3>
+            <p className="help">
+              {this.getHelp()}
+              <a className="help-link" data-bypass="true" href={getDocUrl('DB_PERMISSION')} target="_blank">
+                <i className="icon-question-sign"></i>
+              </a>
+            </p>
+          </header>
+       );
+      }
+      return null;
+    },
+
     render: function () {
       return (
       <div>
-        <header className="page-header">
-          <h3>{this.props.section}</h3>
-          <p className="help">
-            {this.getHelp()}
-            <a className="help-link" data-bypass="true" href={getDocUrl('DB_PERMISSION')} target="_blank">
-              <i className="icon-question-sign"></i>
-            </a>
-          </p>
-        </header>
+        {this.getPageHeader()}
         <div className="row-fluid">
           <div className="span6">
-            <header>
-              <h4>Users</h4>
-              <p>Specify users who will have {this.props.section} access to this database.</p>
-            </header>
+            {this.getAccountBlurb()}
             <form onSubmit={this.addNames} className="permission-item-form form-inline">
-              <input onChange={this.nameChange} value={this.state.newName} type="text" className="item input-small" placeholder="Add Name" />
-              <button type="submit" className="btn btn-success"><i className="icon fonticon-plus-circled" /> Add Name</button>
+              <input onChange={this.nameChange} value={this.state.newName} type="text" className="item input-small" placeholder="Username" />
+              <button type="submit" className="btn btn-success"><i className="icon fonticon-plus-circled" /> Add User</button>
             </form>
             <ul className="clearfix unstyled permission-items span10">
               {this.getNames()}
             </ul>
           </div>
           <div className="span6">
-            <header>
-              <h4>Roles</h4>
-              <p>Users with any of the following role(s) will have {this.props.section} access.</p>
-            </header>
+            {this.getRoleBlurb()}
             <form onSubmit={this.addRoles} className="permission-item-form form-inline">
-              <input onChange={this.roleChange} value={this.state.newRole} type="text" className="item input-small" placeholder="Add Role" />
+              <input onChange={this.roleChange} value={this.state.newRole} type="text" className="item input-small" placeholder="Role" />
               <button type="submit" className="btn btn-success"><i className="icon fonticon-plus-circled" /> Add Role</button>
             </form>
             <ul className="unstyled permission-items span10">
@@ -217,13 +246,15 @@ function (app, FauxtonAPI, React, Components, Stores, Actions) {
               names={this.state.adminNames}
               addItem={this.addItem}
               removeItem={this.removeItem}
-              section={'admins'} />
+              section={'admins'}
+              title={'Database Admin and Member Accounts'} />
             <PermissionsSection
               roles={this.state.memberRoles}
               names={this.state.memberNames}
               addItem={this.addItem}
               removeItem={this.removeItem}
-              section={'members'} />
+              section={'members'}
+              title={'members'}/>
           </div>
         </div>
       );

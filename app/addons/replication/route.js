@@ -28,7 +28,7 @@ function (app, FauxtonAPI, Replication, Views) {
       return [this.replication.url(), this.replication.documentation];
     },
     crumbs: [
-      { "name": 'Replicate changes from: ', 'link': 'replication' }
+      { "name": 'Replication', 'link': 'replication' }
     ],
     defaultView: function (dbname) {
       var isAdmin = FauxtonAPI.session.isAdmin();

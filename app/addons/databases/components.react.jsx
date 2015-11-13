@@ -91,8 +91,8 @@ define([
             <thead>
               <th>Name</th>
               <th>Size</th>
-              <th># of Docs</th>
-              <th>Update Seq</th>
+              <th>Documents</th>
+              <th>Updates</th>
               {this.getExtensionColumns()}
               <th>Actions</th>
             </thead>

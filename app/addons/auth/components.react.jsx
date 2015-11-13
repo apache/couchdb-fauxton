@@ -144,7 +144,6 @@ define([
     render: function () {
       return (
         <div className="auth-page">
-          <h3>Change Password</h3>
 
           <form id="change-password" onSubmit={this.changePassword}>
             <p>
@@ -154,12 +153,12 @@ define([
             <input id="password" type="password" ref="password" name="password" placeholder="Password"
               size="24" onChange={this.onChangePassword} value={this.state.password} />
             <br />
-            <input id="password-confirm" type="password" name="password_confirm" placeholder= "Verify Password"
+            <input id="password-confirm" type="password" name="password_confirm" placeholder="Password confirmation"
               size="24" onChange={this.onChangePasswordConfirm} value={this.state.passwordConfirm} />
 
             <br />
             <p>
-              <button type="submit" className="btn btn-primary">Change</button>
+              <button type="submit" className="btn btn-primary">Change Password</button>
             </p>
           </form>
         </div>
@@ -219,17 +218,18 @@ define([
     render: function () {
       return (
         <div className="auth-page">
-          <h3>Create Admins</h3>
+          <h3>Create User Accounts with ADMIN Privileges</h3>
 
           <p>
-            Before a server admin is configured, all clients have admin privileges. This is fine when
-            HTTP access is restricted to trusted users. <strong>If end-users will be accessing this
-            CouchDB, you must create an admin account to prevent accidental (or malicious) data
-            loss.</strong>
+            Before an admin user account is created for this CouchDB server instance,
+            all clients have ADMIN privileges.  <strong>If clients are not trusted users,
+            you must create an admin account to prevent accidental or malicious data loss.</strong>
           </p>
           <p>
-            Server admins can create and destroy databases, install and update _design documents, run
-            the test suite, and edit all aspects of CouchDB configuration.
+            Users with ADMIN privileges can create, modify, and delete databases and design documents;
+            run the test suite; and modify the CouchDB configuration. Users without ADMIN privileges
+            have read/write access to all databases. CouchDB can be <a href="http://docs.couchdb.org/en/1.6.1/config/auth.html"
+            target="_new" title="CouchDB link">configured</a> to block the access of anonymous users.
           </p>
 
           <form id="create-admin-form" onSubmit={this.createAdmin}>
@@ -239,9 +239,6 @@ define([
             <input id="password" type="password" name="password" placeholder= "Password" size="24"
               onChange={this.onChangePassword} />
             <p>
-              Non-admin users have read and write access to all databases, which
-              are controlled by validation functions. CouchDB can be configured to block all
-              access to anonymous users.
             </p>
             <button type="submit" id="create-admin" className="btn btn-primary">Create Admin</button>
           </form>
@@ -293,7 +290,7 @@ define([
               <a href="#changePassword">Change Password</a>
             </li>
             <li className={this.state.selectedPage === 'addAdmin' ? 'active' : ''} data-page="addAdmin">
-              <a href="#addAdmin">Create Admins</a>
+              <a href="#addAdmin">Create Other Admins</a>
             </li>
           </ul>
         </div>

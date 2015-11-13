@@ -29,7 +29,7 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, ReactComponents) 
     },
 
     render: function () {
-      var btnText = 'Run';
+      var btnText = 'Compact Database';
 
       if (this.props.isCompacting) {
         btnText = 'Compacting...';
@@ -55,7 +55,7 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, ReactComponents) 
     },
 
     render: function () {
-      var btnText = 'Run';
+      var btnText = 'Cleanup Views';
 
       if (this.props.isCleaningView) {
         btnText = 'Cleaning Views...';

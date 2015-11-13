@@ -47,7 +47,7 @@ function (app, FauxtonAPI, Config, Views, CORSComponents, CORSActions, ClusterAc
     selectedHeader: 'Config',
 
     crumbs: [
-      { name: 'Config', link: '_config' }
+      { name: 'Configuration', link: '_config' }
     ],
 
     apiUrl: function () {
@@ -67,7 +67,7 @@ function (app, FauxtonAPI, Config, Views, CORSComponents, CORSActions, ClusterAc
       this.sidebar = this.setView('#sidebar-content', new Views.Tabs({
         sidebarItems: [
           {
-            title: 'Main config',
+            title: 'General',
             typeSelect: 'main',
             link: '_config/' + node
           },
