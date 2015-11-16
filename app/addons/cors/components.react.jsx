@@ -22,7 +22,7 @@ define([
   var validateOrigin = function (origin) {
     if (!Resources.validateCORSDomain(origin)) {
       FauxtonAPI.addNotification({
-        msg: 'Please enter a valid domain, starting with http/https and only containing the domain (not a subfolder).',
+        msg: 'Please enter a valid domain, starting with http/https.',
         type: 'error',
         clear: true
       });
@@ -157,7 +157,9 @@ define([
         return;
       }
 
-      this.props.addOrigin(this.state.origin);
+      var url = Resources.normalizeUrls(this.state.origin);
+
+      this.props.addOrigin(url);
       this.setState({origin: ''});
     },
 

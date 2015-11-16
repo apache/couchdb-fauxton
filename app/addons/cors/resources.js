@@ -95,10 +95,20 @@ function (app, FauxtonAPI) {
 
   });
 
-  // simple helper function to validate the user entered a valid domain starting with http(s), optional port and
-  // doesn't include a subfolder
+  // simple helper function to validate the user entered a valid domain starting with http(s)
   CORS.validateCORSDomain = function (str) {
-    return (/^https?:\/\/[a-zA-Z0-9\-]+\.[a-zA-Z0-9\-\.]+(:\d{2,5})?$/).test(str);
+    return (/^https?:\/\/(.*)(:\d{2,5})?$/).test(str);
+  };
+
+  CORS.normalizeUrls = function (url) {
+    var el = document.createElement('a');
+    el.href = url;
+
+    if (/:/.test(url)) {
+      return el.protocol + '//' + el.host;
+    }
+
+    return el.protocol + '//' + el.hostname;
   };
 
   return CORS;
