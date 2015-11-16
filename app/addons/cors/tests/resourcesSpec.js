@@ -46,23 +46,32 @@ define([
         'http://something.com',
         'https://a.ca',
         'https://something.com:8000',
-        'https://www.some-valid-domain.com:80'
+        'https://www.some-valid-domain.com:80',
+        'http://localhost',
+        'https://localhost',
+        'http://192.168.1.113',
+        'http://192.168.1.113:1337'
       ];
       _.each(urls, function (url) {
         assert.isTrue(CORS.validateCORSDomain(url));
       });
     });
 
-    it('fails on invalid domains', function () {
+    it('fails on non http/https domains', function () {
       var urls = [
         'whoahnellythisaintright',
-        'http://something',
-        'ftp://site.com',
-        'https://this.has/subfolder'
+        'ftp://site.com'
       ];
       _.each(urls, function (url) {
         assert.isFalse(CORS.validateCORSDomain(url));
       });
+    });
+
+    it('normalizes common cases, like accidentally added subfolders', function () {
+      assert.equal('https://foo.com', CORS.normalizeUrls('https://foo.com/blerg'));
+      assert.equal('https://192.168.1.113', CORS.normalizeUrls('https://192.168.1.113/blerg'));
+      assert.equal('https://foo.com:1337', CORS.normalizeUrls('https://foo.com:1337/blerg'));
+      assert.equal('https://foo.com', CORS.normalizeUrls('https://foo.com'));
     });
 
   });
