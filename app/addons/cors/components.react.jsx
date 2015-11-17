@@ -11,12 +11,13 @@
 // the License.
 
 define([
+  "app",
   "api",
   "react",
   "addons/cors/stores",
   "addons/cors/resources",
   "addons/cors/actions"
-], function (FauxtonAPI, React, Stores, Resources, Actions) {
+], function (app, FauxtonAPI, React, Stores, Resources, Actions) {
   var corsStore = Stores.corsStore;
 
   var validateOrigin = function (origin) {
@@ -259,14 +260,7 @@ define([
 
     enableCorsChange: function (event) {
       if (this.state.corsEnabled && !_.isEmpty(this.state.origins) ) {
-        var msg = FauxtonAPI.getExtensions('cors:disableCorsPrompt');
-        if (_.isUndefined(msg[0])) {
-          msg =  'Are you sure? Disabling CORS will overwrite your specific origin domains.';
-        } else {
-          msg = msg[0];
-        }
-
-        var result = window.confirm(msg);
+        var result = window.confirm(app.i18n.en_US['cors-disable-cors-prompt']);
         if (!result) { return; }
       }
 
@@ -306,15 +300,6 @@ define([
       Actions.methodChange(httpMethod);
     },
 
-    getCorsNotice: function () {
-      var msg = FauxtonAPI.getExtensions('cors:notice');
-      if (_.isUndefined(msg[0])) {
-        return 'Cross-Origin Resource Sharing (CORS) lets you connect to remote servers directly from the browser, so you can host browser-based apps on static pages and talk directly with CouchDB to load your data.';
-      }
-
-      return msg[0];
-    },
-
     render: function () {
       var isVisible = _.all([this.state.corsEnabled, !this.state.isAllOrigins]);
       var className = this.state.corsEnabled ? 'collapsing-container' : '';
@@ -322,7 +307,7 @@ define([
       return (
         <div className="cors-page">
           <header id="cors-header">
-            <p>{this.getCorsNotice()}</p>
+            <p>{app.i18n.en_US['cors-notice']}</p>
           </header>
 
           <form id="corsForm" onSubmit={this.save}>
