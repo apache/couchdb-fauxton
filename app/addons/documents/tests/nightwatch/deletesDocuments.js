@@ -98,6 +98,33 @@ module.exports = {
       // now confirm it's gone
       .waitForElementNotPresent('#sidebar-content span[title="_design/sidebar-update"]', waitTime, false)
       .end();
-  }
+  },
+
+  'Deletes a document via Editor': function (client) {
+    var waitTime = client.globals.maxWaitTime,
+        newDatabaseName = client.globals.testDatabaseName,
+        newDocumentName = 'delete_doc_doc',
+        baseUrl = client.globals.test_settings.launch_url;
+
+    client
+      .createDocument(newDocumentName, newDatabaseName)
+      .loginToGUI()
+      .url(baseUrl + '#/database/' + newDatabaseName + '/' + newDocumentName)
+      .waitForElementPresent('#editor-container', waitTime, false)
+      .clickWhenVisible('#doc-editor-actions-panel button[title="Delete"]')
+      .clickWhenVisible('button.btn.btn-success.js-btn-success')
+      .waitForElementPresent('#jump-to-doc-id', waitTime, false)
+      //check raw JSON
+      .url(baseUrl + '/' + newDatabaseName + '/_all_docs')
+      .waitForElementPresent('pre', waitTime, false)
+      .getText('pre', function (result) {
+        var data = result.value,
+            createdDocumentANotPresent = data.indexOf(newDocumentName) === -1;
+
+        this.verify.ok(createdDocumentANotPresent,
+          'Checking if new document no longer shows up in _all_docs.');
+      })
+    .end();
+  },
 
 };

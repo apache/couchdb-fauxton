@@ -82,19 +82,30 @@ function (app, FauxtonAPI, ActionTypes) {
   }
 
   function deleteDoc (doc) {
-    var databaseName = doc.database.id;
-    doc.destroy().then(function () {
-      FauxtonAPI.addNotification({
-        msg: 'Your document has been successfully deleted.',
-        clear: true
-      });
-      FauxtonAPI.navigate(FauxtonAPI.urls('allDocs', 'app', databaseName, ''));
-    }, function () {
-      FauxtonAPI.addNotification({
-        msg: 'Failed to delete your document!',
-        type: 'error',
-        clear: true
-      });
+    var databaseName = doc.database.safeID();
+    var query = '?rev=' + doc.get('_rev');
+
+    $.ajax({
+      url: FauxtonAPI.urls('document', 'server', databaseName, doc.safeID(), query),
+      type: 'DELETE',
+      contentType: 'application/json; charset=UTF-8',
+      xhrFields: {
+        withCredentials: true
+      },
+      success: function () {
+        FauxtonAPI.addNotification({
+          msg: 'Your document has been successfully deleted.',
+          clear: true
+        });
+        FauxtonAPI.navigate(FauxtonAPI.urls('allDocs', 'app', databaseName, ''));
+      },
+      error: function (resp) {
+        FauxtonAPI.addNotification({
+          msg: 'Failed to delete your document!',
+          type: 'error',
+          clear: true
+        });
+      }
     });
   }
 

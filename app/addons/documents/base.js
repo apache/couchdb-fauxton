@@ -70,8 +70,11 @@ function (app, FauxtonAPI, Documents) {
   });
 
   FauxtonAPI.registerUrls('document', {
-    server: function (database, doc) {
-      return app.host + '/' + database + '/' + doc;
+    server: function (database, doc, query) {
+      if (_.isUndefined(query)) {
+        query = '';
+      }
+      return app.host + '/' + database + '/' + doc + query;
     },
 
     attachment: function (database, doc, filename, query) {
