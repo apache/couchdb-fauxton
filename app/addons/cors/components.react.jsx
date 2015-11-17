@@ -322,13 +322,17 @@ define([
       return (
         <div className="cors-page">
           <header id="cors-header">
-            <p> {this.getCorsNotice()}</p>
+            <p>{this.getCorsNotice()}</p>
           </header>
 
           <form id="corsForm" onSubmit={this.save}>
             <div className="cors-enable">
               <label className="checkbox">
-                <input type="checkbox" checked={this.state.corsEnabled} onChange={this.enableCorsChange} /> Enable CORS
+                <input
+                  type="checkbox"
+                  checked={this.state.corsEnabled}
+                  onChange={this.enableCorsChange} />
+                  Enable CORS
               </label>
             </div>
             <div id={className}>
