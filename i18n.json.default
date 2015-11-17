@@ -8,6 +8,8 @@
     "mango-descripton-index-editor": "Mango is an easy way to find documents on predefined indexes. <br/><br/>Create an Index to query it afterwards. The example in the editor shows how to create an index for the field '_id'. <br/><br/>The Indexes that you already created are listed on the right.",
     "mango-additional-indexes-heading": "Your additional Indexes:",
     "mango-indexeditor-title": "Mango",
-    "couchdb-productname": "Apache CouchDB"
+    "couchdb-productname": "Apache CouchDB",
+    "cors-disable-cors-prompt": "Are you sure? Disabling CORS will overwrite your specific origin domains.",
+    "cors-notice": "Cross-Origin Resource Sharing (CORS) lets you connect to remote servers directly from the browser, so you can host browser-based apps on static pages and talk directly with CouchDB to load your data."
   }
 }
