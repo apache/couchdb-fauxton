@@ -16,8 +16,10 @@ define([
   "react",
   "addons/cors/stores",
   "addons/cors/resources",
-  "addons/cors/actions"
-], function (app, FauxtonAPI, React, Stores, Resources, Actions) {
+  "addons/cors/actions",
+  'addons/components/react-components.react'
+
+], function (app, FauxtonAPI, React, Stores, Resources, Actions, ReactComponents) {
   var corsStore = Stores.corsStore;
 
   var validateOrigin = function (origin) {
@@ -232,7 +234,8 @@ define([
         isAllOrigins: corsStore.isAllOrigins(),
         configChanged: corsStore.hasConfigChanged(),
         shouldSaveChange: corsStore.shouldSaveChange(),
-        node: corsStore.getNode()
+        node: corsStore.getNode(),
+        isLoading: corsStore.getIsLoading()
       };
     },
 
@@ -303,6 +306,10 @@ define([
     render: function () {
       var isVisible = _.all([this.state.corsEnabled, !this.state.isAllOrigins]);
       var className = this.state.corsEnabled ? 'collapsing-container' : '';
+
+      if (this.state.isLoading) {
+        return (<ReactComponents.LoadLines />);
+      }
 
       return (
         <div className="cors-page">

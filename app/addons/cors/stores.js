@@ -23,6 +23,7 @@ define([
       this._configChanged = false;
       this._shouldSaveChange = false;
       this._node = options.node;
+      this._isLoading = false;
     },
 
     shouldSaveChange: function () {
@@ -39,6 +40,15 @@ define([
 
     setConfigSaved: function () {
       this._configChanged = false;
+    },
+
+    setIsLoading: function (state) {
+      this._isLoading = state;
+      this._shouldSaveChange = false;
+    },
+
+    getIsLoading: function () {
+      return this._isLoading;
     },
 
     isEnabled: function () {
@@ -125,6 +135,10 @@ define([
         case ActionTypes.CORS_UPDATE_ORIGIN:
           this.updateOrigin(action.updatedOrigin, action.originalOrigin);
           this.setConfigChanged();
+        break;
+
+        case ActionTypes.CORS_SET_IS_LOADING:
+          this.setIsLoading(action.isLoading);
         break;
 
         default:

@@ -140,7 +140,16 @@ define([
         return origins.join(',');
       },
 
+      toggleLoadingBarsToEnabled: function (state) {
+        FauxtonAPI.dispatch({
+          type: ActionTypes.CORS_SET_IS_LOADING,
+          isLoading: state
+        });
+      },
+
       saveCors: function (options) {
+        this.toggleLoadingBarsToEnabled(true);
+
         var promises = [];
         promises.push(this.saveEnableCorsToHttpd(options.enableCors, options.node));
 
@@ -158,13 +167,16 @@ define([
             clear: true
           });
 
-        }, function () {
+          this.toggleLoadingBarsToEnabled(false);
+
+        }.bind(this), function () {
           FauxtonAPI.addNotification({
             msg: 'Error! Could not save your CORS settings. Please try again.',
             type: 'error',
             clear: true
           });
-        });
+          this.toggleLoadingBarsToEnabled(false);
+        }.bind(this));
       }
     };
   });
