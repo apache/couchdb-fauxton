@@ -108,30 +108,6 @@ define([
         FauxtonAPI.addNotification.restore();
       });
 
-      it('dispatches CORS_SAVED', function () {
-        var stub = sinon.stub(FauxtonAPI, 'when');
-        var called = false;
-        var promise = FauxtonAPI.Deferred();
-        promise.resolve();
-        stub.returns(promise);
-
-        FauxtonAPI.dispatcher.register(function (actions) {
-
-          if (actions.type === 'CORS_SAVED') {
-            called = true;
-          }
-
-        });
-
-        Actions.saveCors({
-          enableCors: true,
-          origins: ['https://testdomain.com']
-        });
-
-        assert.ok(called);
-        FauxtonAPI.when.restore();
-      });
-
     });
 
     describe('Sanitize origins', function () {
