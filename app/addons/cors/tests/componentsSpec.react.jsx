@@ -42,7 +42,9 @@ define([
       });
 
       afterEach(function () {
-        corsEl.save.restore();
+        utils.restore(Actions.toggleLoadingBarsToEnabled);
+        utils.restore(corsEl.save);
+
         React.unmountComponentAtNode(container);
         window.confirm.restore && window.confirm.restore();
       });
@@ -58,6 +60,7 @@ define([
 
       it('does not confirm for selected origins are emtpy for disabled cors change', function () {
         var spy = sinon.stub(window, 'confirm');
+        sinon.stub(Actions, 'toggleLoadingBarsToEnabled');
         spy.returns(false);
         corsEl.state.corsEnabled = true;
         corsEl.state.isAllOrigins = false;
@@ -77,12 +80,25 @@ define([
 
       it('does not confirm all origins change if selected origins are emtpy', function () {
         var spy = sinon.stub(window, 'confirm');
+        sinon.stub(Actions, 'toggleLoadingBarsToEnabled');
         spy.returns(false);
         corsEl.state.corsEnabled = true;
         corsEl.state.isAllOrigins = false;
         corsEl.state.origins = [];
         corsEl.originChange(true);
+
         assert.notOk(spy.calledOnce);
+      });
+
+      it('shows loading bars', function () {
+        Actions.toggleLoadingBarsToEnabled(true);
+        assert.ok($(corsEl.getDOMNode()).hasClass('loading-lines'));
+      });
+
+      it('hides loading bars', function () {
+        Actions.toggleLoadingBarsToEnabled(false);
+
+        assert.notOk($(corsEl.getDOMNode()).hasClass('loading-lines'));
       });
     });
 
