@@ -38,6 +38,7 @@
     "amd": true,
     "mocha": true,
     "phantomjs": true,
+    "es6": true
   },
 
   "globals": {

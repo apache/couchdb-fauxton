@@ -61,31 +61,12 @@ module.exports = function (grunt) {
   var assets = function () {
     // Base assets
     var theAssets = {
-      less:{
-        paths: ["assets/less"],
-        files: {
-          "dist/debug/css/fauxton.css": "assets/less/fauxton.less"
-        }
-      },
       fonts: ["assets/fonts/*.eot", "assets/fonts/*.svg", "assets/fonts/*.ttf", "assets/fonts/*.woff"],
-      img: ["assets/img/**"],
-      // used in concat:index_css to keep file ordering intact
-      // fauxton.css should load first
-      css: ["assets/css/*.css", "dist/debug/css/fauxton.css"]
+      img: ["assets/img/**"]
     };
     initHelper.processAddons(function (addon) {
-      // Less files from addons
-      var root = addon.path || "app/addons/" + addon.name;
-      var lessPath = root + "/assets/less";
-      if (fs.existsSync(lessPath)) {
-        // .less files exist for this addon
-        theAssets.less.paths.push(lessPath);
-        theAssets.less.files["dist/debug/css/" + addon.name + ".css"] =
-          lessPath + "/" + addon.name + ".less";
-        theAssets.css.push("dist/debug/css/" + addon.name + ".css");
-      }
       // Images
-      root = addon.path || "app/addons/" + addon.name;
+      var root = addon.path || "app/addons/" + addon.name;
       var imgPath = root + "/assets/img";
       if (fs.existsSync(imgPath)) {
         theAssets.img.push(imgPath + "/**");
@@ -156,15 +137,6 @@ module.exports = function (grunt) {
       watch: cleanableAddons
     },
 
-    less: {
-      compile: {
-        options: {
-          paths: assets.less.paths
-        },
-        files: assets.less.files
-      }
-    },
-
     // The jst task compiles all application templates into JavaScript
     // functions with the underscore.js template function from 1.2.4.  You can
     // change the namespace and the template options, by reading this:
@@ -198,11 +170,6 @@ module.exports = function (grunt) {
       requirejs: {
         src: ["assets/js/libs/require.js", "dist/debug/templates.js", "dist/debug/require.js"],
         dest: "dist/debug/js/require.js"
-      },
-
-      index_css: {
-        src: assets.css,
-        dest: 'dist/debug/css/index.css'
       },
 
       test_config_js: {
@@ -250,7 +217,7 @@ module.exports = function (grunt) {
       },
       style: {
         files: initHelper.watchFiles(['.less', '.css'], ["./app/**/*.css", "./app/**/*.less", "./assets/**/*.css", "./assets/**/*.less"]),
-        tasks: ['clean:watch', 'dependencies', 'less', 'concat:index_css']
+        tasks: ['clean:watch', 'dependencies', 'shell:build-less']
       },
       html: {
         // the index.html is added in as a dummy file incase there is no
@@ -390,6 +357,10 @@ module.exports = function (grunt) {
         command: 'npm run stylecheck'
       },
 
+      'build-less': {
+        command: 'npm run build:less'
+      },
+
       stylecheckSingleFile: {
         command: '' // populated dynamically
       },
@@ -515,7 +486,6 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-jst');
-  grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
@@ -543,7 +513,7 @@ module.exports = function (grunt) {
   // minify code and css, ready for release.
   grunt.registerTask('minify', ['uglify', 'cssmin:compress']);
   grunt.registerTask('jsx', ['shell:build-jsx']);
-  grunt.registerTask('build', ['less', 'concat:index_css', 'jst', 'requirejs', 'concat:requirejs', 'uglify',
+  grunt.registerTask('build', ['shell:build-less', 'jst', 'requirejs', 'concat:requirejs', 'uglify',
     'cssmin:compress', 'md5:requireJS', 'md5:css', 'template:release']);
 
   /*
@@ -553,11 +523,11 @@ module.exports = function (grunt) {
   grunt.registerTask('dev', ['debugDev', 'couchserver']);
 
   // build a debug release
-  grunt.registerTask('debug', ['lint', 'dependencies', "gen_initialize:development", 'jsx', 'concat:requirejs', 'less',
-    'concat:index_css', 'template:development', 'copy:debug']);
+  grunt.registerTask('debug', ['lint', 'dependencies', "gen_initialize:development", 'jsx', 'concat:requirejs', 'shell:build-less',
+    'template:development', 'copy:debug']);
 
   grunt.registerTask('debugDev', ['clean', 'dependencies', "gen_initialize:development", 'jsx', 'shell:stylecheck',
-    'less', 'concat:index_css', 'template:development', 'copy:debug']);
+    'shell:build-less', 'template:development', 'copy:debug']);
 
   grunt.registerTask('watchRun', ['clean:watch', 'dependencies', 'shell:stylecheck']);
 
