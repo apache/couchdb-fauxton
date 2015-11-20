@@ -10,13 +10,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-@import "../../../../../assets/less/variables.less";
-
-@import "header-togglebutton.less";
-@import "styled-select.less";
-@import "docs.less";
-@import "loading-lines.less";
-@import "code-editor.less";
-@import "bulk-selector.less";
-@import "toggle-states.less";
-@import "small-dropdown.less";
+define([],
+function () {
+  // this is empty because the compiler looks for a resource.js file here
+  return null;
+});

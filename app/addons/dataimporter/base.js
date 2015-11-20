@@ -10,13 +10,17 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-@import "../../../../../assets/less/variables.less";
+define([
+  'app',
+  'api',
+  'addons/dataimporter/routes'
+],
 
-@import "header-togglebutton.less";
-@import "styled-select.less";
-@import "docs.less";
-@import "loading-lines.less";
-@import "code-editor.less";
-@import "bulk-selector.less";
-@import "toggle-states.less";
-@import "small-dropdown.less";
+function (app, FauxtonAPI, DataImporter) {
+
+  DataImporter.initialize = function () {
+    FauxtonAPI.addHeaderLink({title: 'Import Data', icon: 'icon-download-alt', href: '#/dataimporter'});
+  };
+
+  return DataImporter;
+});
