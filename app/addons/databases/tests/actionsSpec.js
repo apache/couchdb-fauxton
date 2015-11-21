@@ -251,6 +251,7 @@ define([
         [
           "one",
           "one$",
+          "_one",
           "one/",
           "o-n-e",
           "o_n_e",
@@ -264,7 +265,6 @@ define([
       it("rejects invalid database names", function () {
         [
           "ONE",
-          "_one",
           "-blah",
           "one%",
           "one*",
