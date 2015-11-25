@@ -28,7 +28,7 @@ module.exports = function (grunt) {
     var done = this.async(),
         data = this.data,
         target = data.target || 'app/addons/',
-        settingsFile = fs.existsSync(data.src) ? data.src : 'settings.json.default',
+        settingsFile = fs.existsSync(data.src) ? data.src : 'settings.json.default.json',
         settings = grunt.file.readJSON(settingsFile),
         _ = grunt.util._;
 
@@ -78,7 +78,7 @@ module.exports = function (grunt) {
   grunt.registerMultiTask('gen_load_addons', 'Generate the load_addons.js file', function () {
     var data = this.data,
         _ = grunt.util._,
-        settingsFile = fs.existsSync(data.src) ? data.src : 'settings.json.default',
+        settingsFile = fs.existsSync(data.src) ? data.src : 'settings.json.default.json',
         settings = grunt.file.readJSON(settingsFile),
         template = 'app/load_addons.js.underscore',
         dest = 'app/load_addons.js',
