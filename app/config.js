@@ -33,6 +33,7 @@ require.config({
     "cloudant.pagingcollection": "../assets/js/plugins/cloudant.pagingcollection",
     "velocity": "../assets/js/plugins/velocity",
     "velocity.ui": "../assets/js/plugins/velocity.ui",
+    "react-autocomplete": "../assets/js/plugins/react-autocomplete",
     react: "../assets/js/libs/react",
     flux: "../assets/js/libs/flux",
     "es5-shim": "../assets/js/libs/es5-shim",
@@ -61,6 +62,8 @@ require.config({
       deps: ["jquery"],
       exports: "Bootstrap"
     },
+
+    "react-autocomplete": ["react"],
 
     "plugins/prettify": [],
     "plugins/beautify": [],

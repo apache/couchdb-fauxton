@@ -12,7 +12,8 @@
 
 var util = require('util'),
     events = require('events'),
-    helpers = require('../helpers/helpers.js');
+    helpers = require('../helpers/helpers.js'),
+    request = require('request');
 
 function CreateDocument () {
   events.EventEmitter.call(this);
@@ -22,22 +23,25 @@ function CreateDocument () {
 util.inherits(CreateDocument, events.EventEmitter);
 
 CreateDocument.prototype.command = function (documentName, databaseName, docContents) {
-  var that = this,
-      nano = helpers.getNanoInstance(),
-      database = nano.use(databaseName);
+  var couchUrl = helpers.test_settings.db_url;
 
-  if (docContents === undefined) {
-    docContents = { dummyKey: "testingValue" };
+  if (!docContents) {
+    docContents = { dummyKey: 'testingValue' };
   }
+  docContents._id = documentName;
 
-  database.insert(docContents, documentName, function (err, body, header) {
-
+  request({
+    method: 'POST',
+    uri: couchUrl + '/' + databaseName + '?w=3',
+    body: docContents,
+    json: true
+  }, function (err, res, body) {
     if (err) {
       console.log('Error in nano CreateDocument Function: ' + documentName + ', in database: ' + databaseName, err.message);
     }
     console.log('nano  - created a doc: ' + documentName + ', in database: ' + databaseName);
-    that.emit('complete');
-  });
+    this.emit('complete');
+  }.bind(this));
 
   return this;
 };

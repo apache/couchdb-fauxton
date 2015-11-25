@@ -17,10 +17,10 @@ define([
   'addons/databases/base',
   'addons/fauxton/components',
   'addons/documents/pagination/actions',
-  'addons/documents/pagination/stores',
+  'addons/documents/index-results/stores',
   'addons/documents/sidebar/sidebar.react',
   'addons/documents/sidebar/actions'
-], function (app, FauxtonAPI, Documents, Databases, Components, PaginationActions, PaginationStores,
+], function (app, FauxtonAPI, Documents, Databases, Components, PaginationActions, IndexResultStores,
   SidebarComponents, SidebarActions) {
 
 
@@ -139,7 +139,7 @@ define([
 
       PaginationActions.setDocumentLimit(parseInt(urlParams.limit, 10));
 
-      var limit = PaginationStores.indexPaginationStore.getPerPage();
+      var limit = IndexResultStores.indexResultsStore.getPerPage();
       return {
         urlParams: urlParams,
         docParams: _.extend(params, {limit: limit})

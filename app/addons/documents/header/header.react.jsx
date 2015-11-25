@@ -16,22 +16,34 @@ define([
   'react',
   'addons/documents/header/header.actions',
   'addons/components/react-components.react',
+
   'addons/documents/index-results/stores',
   'addons/documents/index-results/actions',
+  'libs/react-bootstrap',
+  'addons/documents/queryoptions/stores',
 ],
 
-function (app, FauxtonAPI, React, Actions, ReactComponents, IndexResultsStore, IndexResultsActions) {
+function (app, FauxtonAPI, React, Actions, ReactComponents,
+  IndexResultsStore, IndexResultsActions, ReactBootstrap, QueryOptionsStore) {
   var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 
   var indexResultsStore = IndexResultsStore.indexResultsStore;
+  var queryOptionsStore = QueryOptionsStore.queryOptionsStore;
+
+
   var ToggleHeaderButton = ReactComponents.ToggleHeaderButton;
-  var MenuDropDown = ReactComponents.MenuDropDown;
+
+  var ButtonGroup = ReactBootstrap.ButtonGroup;
+  var Button = ReactBootstrap.Button;
 
 
   var BulkDocumentHeaderController = React.createClass({
     getStoreState: function () {
       return {
-        selectedView: indexResultsStore.getCurrentViewType()
+        selectedView: indexResultsStore.getCurrentViewType(),
+        isTableView: indexResultsStore.getIsTableView(),
+        includeDocs: queryOptionsStore.getIncludeDocsEnabled(),
+        bulkDocCollection: indexResultsStore.getBulkDocCollection(),
       };
     },
 
@@ -41,101 +53,60 @@ function (app, FauxtonAPI, React, Actions, ReactComponents, IndexResultsStore, I
 
     componentDidMount: function () {
       indexResultsStore.on('change', this.onChange, this);
+      queryOptionsStore.on('change', this.onChange, this);
+
     },
 
     componentWillUnmount: function () {
       indexResultsStore.off('change', this.onChange);
+      queryOptionsStore.off('change', this.onChange);
     },
 
     onChange: function () {
       this.setState(this.getStoreState());
     },
 
-    getIcon: function () {
-      if (this.state.selectedView === 'table') {
-        return 'fonticon-table';
-      }
-
-      if (this.state.selectedView === 'collapsed') {
-        return 'fonticon-list-alt';
-      }
-
-      return 'fonticon-json';
-    },
-
-    getCollapseDocsButton: function () {
-      var icon = this.getIcon();
-
-      return (
-        <div className="add-dropdown">
-          <div className="dropdown">
-            <button data-toggle="dropdown" className="button header-control-box control-view">
-              <i className={"dropdown-toggle icon " + icon}></i> View
-            </button>
-            <ul className="dropdown-menu arrow" role="menu" aria-labelledby="dLabel">
-              <li>
-                <a onClick={this.collapseAllDocuments}>
-                  <i className="fonticon-list-alt" />
-                  <div>
-                    Collapsed View
-                  </div>
-                </a>
-              </li>
-              <li>
-                <a onClick={this.toggleToNormalJson}>
-                  <i className="fonticon-json" />
-                  <div>
-                    Expanded View
-                  </div>
-                </a>
-              </li>
-              <li>
-                <a onClick={this.tablelizeView}>
-                  <i className="fonticon-table" />
-                  <div>
-                    Table View
-                  </div>
-                </a>
-              </li>
-            </ul>
-
-          </div>
-        </div>
-      );
-    },
-
     render: function () {
+      var isTableViewSelected = this.state.isTableView;
+
       return (
-        <div className='alternative-header'>
-          {this.getCollapseDocsButton()}
+        <div className="alternative-header">
+          <ButtonGroup className="header-toggle-button">
+            <Button
+              className={isTableViewSelected ? '' : 'active'}
+              onClick={this.toggleTableView.bind(this, false)}
+            >
+              <i className="fonticon-json" /> JSON
+            </Button>
+            <Button
+              className={isTableViewSelected ? 'active' : ''}
+              onClick={this.toggleTableView.bind(this, true)}
+            >
+              <i className="fonticon-table" /> Table
+            </Button>
+          </ButtonGroup>
+          {this.props.showIncludeAllDocs ? <ToggleHeaderButton
+            toggleCallback={this.toggleIncludeDocs}
+            containerClasses="header-control-box control-toggle-include-docs"
+            title="Enable/Disable include_docs"
+            fonticon={this.state.includeDocs ? 'icon-check' : 'icon-check-empty'}
+            iconDefaultClass="icon fontawesome"
+            text="Include Docs" /> : null}
         </div>
       );
     },
 
-    collapseDocuments: function () {
-      Actions.collapseDocuments();
+    toggleIncludeDocs: function () {
+      Actions.toggleIncludeDocs(this.state.includeDocs, this.state.bulkDocCollection);
     },
 
-    unCollapseDocuments: function () {
-      Actions.unCollapseDocuments();
-    },
-
-    toggleToNormalJson: function () {
-      Actions.unCollapseAllDocuments();
-    },
-
-    collapseAllDocuments: function () {
-      Actions.collapseAllDocuments();
-    },
-
-    tablelizeView: function () {
-      Actions.enableTableView();
+    toggleTableView: function (enable) {
+      Actions.toggleTableView(enable);
     }
   });
 
   var Views = {
-    BulkDocumentHeaderController: BulkDocumentHeaderController,
-    ToggleHeaderButton: ToggleHeaderButton
+    BulkDocumentHeaderController: BulkDocumentHeaderController
   };
 
   return Views;

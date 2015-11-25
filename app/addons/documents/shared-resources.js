@@ -57,6 +57,7 @@ define([
       return app.utils.getDocTypeFromId(this.id);
     },
 
+    // @deprecated, see isJSONDocBulkDeletable
     isBulkDeletable: function () {
       return !!this.id && !!this.get('_rev');
     },

@@ -53,7 +53,7 @@ module.exports = {
       .execute('$("#save-view")[0].scrollIntoView();')
       .waitForElementPresent('#save-view', waitTime, false)
       .clickWhenVisible('#save-view', waitTime, false)
-      .checkForDocumentCreated('_design/test_design_doc-selenium-1')
+      .checkForDocumentCreated('_design/test_design_doc-selenium-3')
       .waitForElementPresent('.prettyprint', waitTime, false)
       .waitForElementNotPresent('.loading-lines', waitTime, false)
       .assert.containsText('.prettyprint', 'hasehase')

@@ -324,7 +324,7 @@ A key value is the first parameter emitted in a map function. For example emit("
             containerClasses="header-control-box control-toggle-queryoptions"
             title="Query Options"
             fonticon="fonticon-gears"
-            text="Query Options" />
+            text="Options" />
 
           <TrayContents
             className="query-options"

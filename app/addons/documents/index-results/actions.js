@@ -37,6 +37,12 @@ function (app, FauxtonAPI, ActionTypes, Stores, Documents, SidebarActions) {
 
   return {
 
+    togglePrioritizedTableView: function () {
+      FauxtonAPI.dispatch({
+        type: ActionTypes.INDEX_RESULTS_TOGGLE_PRIORITIZED_TABLE_VIEW
+      });
+    },
+
     sendMessageNewResultList: function (options) {
       FauxtonAPI.dispatch({
         type: ActionTypes.INDEX_RESULTS_NEW_RESULTS,
@@ -45,13 +51,14 @@ function (app, FauxtonAPI, ActionTypes, Stores, Documents, SidebarActions) {
     },
 
     newResultsList: function (options) {
-      this.sendMessageNewResultList(options);
+      this.clearResults();
 
       if (!options.collection.fetch) { return; }
-      this.clearResults();
 
       return options.collection.fetch({reset: true}).then(function () {
         this.resultsListReset();
+        this.sendMessageNewResultList(options);
+
       }.bind(this), function (collection, _xhr) {
         //Make this more robust as sometimes the colection is passed through here.
         var xhr = collection.responseText ? collection : _xhr;
@@ -83,7 +90,8 @@ function (app, FauxtonAPI, ActionTypes, Stores, Documents, SidebarActions) {
 
     runMangoFindQuery: function (options) {
       var query = JSON.parse(options.queryCode),
-          collection = indexResultsStore.getCollection();
+          collection = indexResultsStore.getCollection(),
+          bulkCollection = indexResultsStore.getBulkDocCollection();
 
       this.clearResults();
 
@@ -96,7 +104,7 @@ function (app, FauxtonAPI, ActionTypes, Stores, Documents, SidebarActions) {
             collection: collection,
             query: options.queryCode,
             textEmptyIndex: 'No Results Found!',
-            bulkCollection: Documents.BulkDeleteDocCollection
+            bulkCollection: bulkCollection
           });
         }.bind(this), function (res) {
           FauxtonAPI.addNotification({
@@ -113,14 +121,14 @@ function (app, FauxtonAPI, ActionTypes, Stores, Documents, SidebarActions) {
       if (indexResultsStore.getTypeOfIndex() === 'mango') {
         return this.newResultsList({
           collection: indexResultsStore.getCollection(),
-          bulkCollection: Documents.MangoBulkDeleteDocCollection,
+          bulkCollection: indexResultsStore.getBulkDocCollection(),
           typeOfIndex: 'mango'
         });
       }
 
       return this.newResultsList({
         collection: indexResultsStore.getCollection(),
-        bulkCollection: Documents.BulkDeleteDocCollection
+        bulkCollection: indexResultsStore.getBulkDocCollection()
       });
     },
 
@@ -130,16 +138,21 @@ function (app, FauxtonAPI, ActionTypes, Stores, Documents, SidebarActions) {
       });
     },
 
-    selectDoc: function (id) {
+    selectDoc: function (options) {
       FauxtonAPI.dispatch({
         type: ActionTypes.INDEX_RESULTS_SELECT_DOC,
-        id: id
+        options: {
+          _id: options._id,
+          _rev: options._rev,
+          _deleted: true
+        }
       });
     },
 
-    selectAllDocuments: function () {
+    changeField: function (options) {
       FauxtonAPI.dispatch({
-        type: ActionTypes.INDEX_RESULTS_SELECT_ALL_DOCUMENTS
+        type: ActionTypes.INDEX_RESULTS_SELECT_NEW_FIELD_IN_TABLE,
+        options: options
       });
     },
 
@@ -149,21 +162,13 @@ function (app, FauxtonAPI, ActionTypes, Stores, Documents, SidebarActions) {
       });
     },
 
-    selectListOfDocs: function (ids) {
-      FauxtonAPI.dispatch({
-        type: ActionTypes.INDEX_RESULTS_SELECT_LIST_OF_DOCS,
-        ids: ids
-      });
-    },
-
     clearResults: function () {
       FauxtonAPI.dispatch({
         type: ActionTypes.INDEX_RESULTS_CLEAR_RESULTS
       });
     },
 
-    deleteSelected: function () {
-      var itemsLength = indexResultsStore.getSelectedItemsLength();
+    deleteSelected: function (bulkDeleteCollection, itemsLength) {
       var msg = (itemsLength === 1) ? 'Are you sure you want to delete this doc?' :
         'Are you sure you want to delete these ' + itemsLength + ' docs?';
 
@@ -177,30 +182,30 @@ function (app, FauxtonAPI, ActionTypes, Stores, Documents, SidebarActions) {
       }
 
       var reloadResultsList = _.bind(this.reloadResultsList, this);
-      var selectListOfDocs = _.bind(this.selectListOfDocs, this);
       var selectedIds = [];
 
-      indexResultsStore.createBulkDeleteFromSelected().bulkDelete()
-      .then(function (ids) {
-        FauxtonAPI.addNotification({
-          msg: 'Successfully deleted your docs',
-          clear:  true
-        });
+      bulkDeleteCollection
+        .bulkDelete()
+        .then(function (ids) {
+          FauxtonAPI.addNotification({
+            msg: 'Successfully deleted your docs',
+            clear:  true
+          });
 
-        if (!_.isEmpty(ids.errorIds)) {
-          errorMessage(ids.errorIds);
-          selectedIds = ids.errorIds;
-        }
-      }, function (ids) {
-        errorMessage(ids);
-        selectedIds = ids;
-      })
-      .always(function () {
-        reloadResultsList().then(function () {
-          selectListOfDocs(selectedIds);
-          SidebarActions.refresh();
+          if (!_.isEmpty(ids.errorIds)) {
+            errorMessage(ids.errorIds);
+            selectedIds = ids.errorIds;
+          }
+        }, function (ids) {
+          errorMessage(ids);
+          selectedIds = ids;
+        })
+        .always(function (id) {
+          reloadResultsList().then(function () {
+            bulkDeleteCollection.reset(selectedIds);
+            SidebarActions.refresh();
+          });
         });
-      });
     }
   };
 });

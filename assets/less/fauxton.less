@@ -53,6 +53,11 @@ a {
   .transition(all .25s linear);
 }
 
+// remove blue borders from clicked elements
+button:focus, a:focus {
+  outline: 0;
+}
+
 a,
 a:visited,
 a:active {
@@ -547,11 +552,14 @@ body #dashboard .flex-body#breadcrumbs {
 }
 
 //----footer--///
+
 footer.pagination-footer {
   background-color: #fff;
   border-top: 1px solid #ccc;
   height: 50px;
   overflow: hidden;
+
+  font-size: 14px;
 
   .pagination {
     .box-shadow(none);
@@ -566,14 +574,22 @@ footer.pagination-footer {
       }
     }
   }
-  .index-indicator {
-    float: left;
-    p {
-      margin: 20px;
-      font-size: 14px;
-    }
+
+  .footer-doc-control-prioritized-wrapper {
+    margin-right: 18px;
   }
-  #documents-pagination {
+
+  .page-controls {
+    float: left;
+    margin: 17px 20px 17px 20px;
+  }
+
+  .current-docs {
+    float: right;
+    margin: 17px 20px 17px 20px;
+  }
+
+  .documents-pagination {
     float: right;
   }
   #per-page {
@@ -644,6 +660,62 @@ footer.pagination-footer {
     .with-sidebar {
       .searchbox-wrapper {
         display: none;
+      }
+    }
+  }
+}
+
+@media (max-width: 1227px) {
+  body.closeMenu {
+    .with-sidebar {
+      .two-panel-header {
+        button span {
+          display: none;
+        }
+        button i:before {
+          float: none;
+        }
+        i.icon.fonticon-link:before,
+        i.icon.fonticon-gears:before {
+          margin: 10px 0px 0 0;
+        }
+        .icon.fontawesome {
+          margin: 0 -6px 0 0px;
+        }
+        .right-header button i:before{
+          margin: 2px 0 0 0;
+        }
+        #query-options-tray:before {
+          right: 136px
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 1389px) {
+  body:not(.closeMenu) {
+    .with-sidebar {
+      .two-panel-header {
+        button span {
+          display: none;
+        }
+        button i:before {
+          float: none;
+        }
+        i.icon.fonticon-link:before,
+        i.icon.fonticon-gears:before {
+          margin: 10px 0px 0 0;
+        }
+        .icon.fontawesome {
+          margin: 0 -6px 0 0px;
+        }
+        .right-header button i:before{
+          margin: 2px 0 0 0;
+        }
+        #query-options-tray:before {
+          right: 136px
+        }
       }
     }
   }

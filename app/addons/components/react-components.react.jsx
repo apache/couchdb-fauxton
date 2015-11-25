@@ -38,12 +38,13 @@ function (app, FauxtonAPI, React, Stores, FauxtonComponents, ace, beautifyHelper
         title: '',
         disabled: false,
         toggleCallback: null,
-        text: ''
+        text: '',
+        iconDefaultClass: 'icon'
       };
     },
 
     render: function () {
-      var iconClasses = 'icon ' + this.props.fonticon + ' ' + this.props.innerClasses,
+      var iconClasses = this.props.iconDefaultClass + ' ' + this.props.fonticon + ' ' + this.props.innerClasses,
           containerClasses = 'button ' + this.props.containerClasses;
 
       if (this.props.selected) {
@@ -69,9 +70,10 @@ function (app, FauxtonAPI, React, Stores, FauxtonComponents, ace, beautifyHelper
     propTypes: {
       hasSelectedItem: React.PropTypes.bool.isRequired,
       removeItem: React.PropTypes.func.isRequired,
-      selectAll: React.PropTypes.func.isRequired,
+      selectAll: React.PropTypes.func,
       toggleSelect: React.PropTypes.func.isRequired,
-      isChecked: React.PropTypes.bool.isRequired
+      isChecked: React.PropTypes.bool.isRequired,
+      disabled: React.PropTypes.bool
     },
 
     getDefaultProps: function () {
@@ -916,7 +918,7 @@ function (app, FauxtonAPI, React, Stores, FauxtonComponents, ace, beautifyHelper
 
     onChange: function (e) {
       e.preventDefault();
-      this.props.docChecked(this.props.docIdentifier, this.props.doc, e);
+      this.props.docChecked(this.props.doc.id, this.props.doc._rev);
     },
 
     getUrlFragment: function () {
@@ -1225,7 +1227,7 @@ function (app, FauxtonAPI, React, Stores, FauxtonComponents, ace, beautifyHelper
             containerClasses="header-control-box control-toggle-api-url"
             title="API URL"
             fonticon="fonticon-link"
-            text="API URL" />
+            text="API" />
 
           <TrayContents
             className="api-bar-tray">

@@ -221,6 +221,10 @@ function (app, FauxtonAPI, ActionTypes) {
       return params;
     },
 
+    getIncludeDocsEnabled: function () {
+      return this._includeDocs;
+    },
+
     dispatch: function (action) {
       switch (action.type) {
         case ActionTypes.QUERY_RESET:
