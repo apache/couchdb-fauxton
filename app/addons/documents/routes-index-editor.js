@@ -22,7 +22,7 @@ define([
   'addons/documents/index-editor/actions',
   'addons/databases/base',
   'addons/fauxton/components',
-  'addons/documents/pagination/stores',
+  'addons/documents/index-results/stores',
   'addons/documents/index-results/actions',
   'addons/documents/index-results/index-results.components.react',
   'addons/documents/pagination/pagination.react',
@@ -31,7 +31,7 @@ define([
 ],
 
 function (app, FauxtonAPI, Helpers, BaseRoute, Documents, IndexEditorComponents, ActionsIndexEditor,
-          Databases, Components, PaginationStores, IndexResultsActions,
+          Databases, Components, IndexResultsStores, IndexResultsActions,
           IndexResultsComponents, ReactPagination, ReactHeader, ReactHeaderActions) {
 
 
@@ -90,7 +90,7 @@ function (app, FauxtonAPI, Helpers, BaseRoute, Documents, IndexEditorComponents,
         view: viewName,
         params: docParams,
         paging: {
-          pageSize: PaginationStores.indexPaginationStore.getPerPage()
+          pageSize: IndexResultsStores.indexResultsStore.getPerPage()
         }
       });
 
@@ -98,7 +98,7 @@ function (app, FauxtonAPI, Helpers, BaseRoute, Documents, IndexEditorComponents,
 
       IndexResultsActions.newResultsList({
         collection: this.indexedDocs,
-        bulkCollection: Documents.BulkDeleteDocCollection
+        bulkCollection: new Documents.BulkDeleteDocCollection([], { databaseId: this.database.safeID() }),
       });
 
       ActionsIndexEditor.fetchDesignDocsBeforeEdit({
@@ -109,7 +109,7 @@ function (app, FauxtonAPI, Helpers, BaseRoute, Documents, IndexEditorComponents,
         designDocId: '_design/' + decodeDdoc
       });
 
-      this.setComponent('#react-headerbar', ReactHeader.BulkDocumentHeaderController);
+      this.setComponent('#react-headerbar', ReactHeader.BulkDocumentHeaderController, {showIncludeAllDocs: true});
 
       this.setComponent('#left-content', IndexEditorComponents.EditorController);
       this.setComponent('#dashboard-lower-content', IndexResultsComponents.List);
@@ -152,10 +152,8 @@ function (app, FauxtonAPI, Helpers, BaseRoute, Documents, IndexEditorComponents,
       this.setComponent('#left-content', IndexEditorComponents.EditorController);
       this.setComponent('#dashboard-lower-content', IndexResultsComponents.List);
 
-      IndexResultsActions.newResultsList({
-        collection: [],
-        bulkCollection: Documents.BulkDeleteDocCollection
-      });
+      IndexResultsActions.clearResults();
+      IndexResultsActions.resultsListReset();
     }
 
   });

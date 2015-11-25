@@ -22,7 +22,7 @@ define([
   'addons/databases/base',
   'addons/documents/resources',
   'addons/fauxton/components',
-  'addons/documents/pagination/stores',
+  'addons/documents/index-results/stores',
   'addons/documents/index-results/actions',
   'addons/documents/index-results/index-results.components.react',
   'addons/documents/pagination/pagination.react',
@@ -34,7 +34,7 @@ define([
 ],
 
 function (app, FauxtonAPI, BaseRoute, Documents, Changes, ChangesActions, Databases, Resources, Components,
-  PaginationStores, IndexResultsActions, IndexResultsComponents, ReactPagination, ReactHeader, ReactActions,
+  IndexResultStores, IndexResultsActions, IndexResultsComponents, ReactPagination, ReactHeader, ReactActions,
   SidebarActions, DesignDocInfoActions, DesignDocInfoComponents) {
 
     var DocumentsRouteObject = BaseRoute.extend({
@@ -114,13 +114,14 @@ function (app, FauxtonAPI, BaseRoute, Documents, Changes, ChangesActions, Databa
             docParams = params.docParams,
             collection;
 
-        this.setComponent('#react-headerbar', ReactHeader.BulkDocumentHeaderController);
+        this.setComponent('#react-headerbar', ReactHeader.BulkDocumentHeaderController, {showIncludeAllDocs: true});
         this.setComponent('#footer', ReactPagination.Footer);
 
         this.leftheader.updateCrumbs(this.getCrumbs(this.database));
 
+
         // includes_docs = true if you are visiting the _replicator/_users databases
-        if ( ['_replicator', '_users'].indexOf(databaseName) > -1) {
+        if (['_replicator', '_users'].indexOf(databaseName) > -1) {
           docParams.include_docs = true;
           urlParams = params.docParams;
           var updatedURL = FauxtonAPI.urls('allDocs', 'app', databaseName, '?' + $.param(urlParams));
@@ -143,13 +144,16 @@ function (app, FauxtonAPI, BaseRoute, Documents, Changes, ChangesActions, Databa
           docParams = {};
         }
 
+        var frozenCollection = app.utils.localStorageGet('include_docs_bulkdocs');
+        window.localStorage.removeItem('include_docs_bulkdocs');
+
         IndexResultsActions.newResultsList({
           collection: collection,
           textEmptyIndex: 'No Documents Found',
-          bulkCollection: Documents.BulkDeleteDocCollection
+          bulkCollection: new Documents.BulkDeleteDocCollection(frozenCollection, { databaseId: this.database.safeID() }),
         });
 
-        this.database.allDocs.paging.pageSize = PaginationStores.indexPaginationStore.getPerPage();
+        this.database.allDocs.paging.pageSize = IndexResultStores.indexResultsStore.getPerPage();
 
         this.setComponent('#dashboard-lower-content', IndexResultsComponents.List);
 

@@ -18,14 +18,24 @@ define([
   'addons/documents/index-results/actions',
   'addons/components/react-components.react',
   'addons/documents/resources',
+  'addons/fauxton/components.react',
 
-  'plugins/prettify'
+  'libs/react-bootstrap',
+  'react-autocomplete',
+
+  'plugins/prettify',
+
 ],
 
-function (app, FauxtonAPI, React, Stores, Actions, Components, Documents) {
+
+function (app, FauxtonAPI, React, Stores, Actions, Components, Documents, FauxtonComponents, ReactBootstrap, Autocomplete) {
   var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
   var store = Stores.indexResultsStore;
   var BulkActionComponent = Components.BulkActionComponent;
+  var Clipboard = FauxtonComponents.Clipboard;
+
+  var SplitButton = ReactBootstrap.SplitButton;
+  var MenuItem = ReactBootstrap.MenuItem;
 
   var NoResultScreen = React.createClass({
     render: function () {
@@ -47,7 +57,7 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, Documents) {
     },
 
     onChange: function (e) {
-      this.props.docChecked(this.props.docIdentifier, this.props.data, e);
+      this.props.docChecked(this.props.el.id, this.props.el._rev);
     },
 
     getInitialState: function () {
@@ -56,21 +66,37 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, Documents) {
       };
     },
 
-    getRowContents: function (element, rownumber) {
-      var row = this.props.schema.map(function (k, i) {
-        var el = element.content.doc || element.content;
-        var key = 'tableview-data-cell-' + rownumber + k + i + el[k];
+    getRowContents: function (element, rowNumber) {
+      var el = element.content;
+
+      var row = this.props.data.selectedFields.map(function (k, i) {
+
+        var key = 'tableview-data-cell-' + rowNumber + k + i + el[k];
         var stringified = typeof el[k] === 'object' ? JSON.stringify(el[k]) : el[k];
-        var className = k === '_id' ? 'tableview-data-cell-id' : null;
 
         return (
-          <td className={className} key={key} title={stringified}>
-            {k === '_id' ? this.maybeGetUrl(element.url, stringified) : stringified}
+          <td key={key} title={stringified}>
+            {stringified}
           </td>
         );
       }.bind(this));
 
       return row;
+    },
+
+    maybeGetSpecialField: function (element, i) {
+      if (!this.props.data.hasMetadata) {
+        return null;
+      }
+
+      var el = element.content;
+
+      return (
+        <td className="tableview-data-cell-id" key={'tableview-data-cell-id' + i}>
+          <div>{this.maybeGetUrl(element.url, el._id || el.id)}</div>
+          <div>{el._rev}</div>
+        </td>
+      );
     },
 
     maybeGetUrl: function (url, stringified) {
@@ -79,79 +105,234 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, Documents) {
       }
 
       return (
-        <a href={url}>
+        <a href={'#' + url}>
           {stringified}
         </a>
       );
     },
 
-    maybeGetCheckboxCell: function (i) {
-      if (!this.props.data.isDeletable) {
-        return <td className="tableview-checkbox-cell" key={"tableview-checkbox-cell-" + i}></td>;
-      }
-
+    maybeGetCheckboxCell: function (el, i) {
       return (
         <td className="tableview-checkbox-cell" key={"tableview-checkbox-cell-" + i}>
-          <input
+          {el.isDeletable ? <input
             id={"checkbox-" + this.props.docIdentifier}
             checked={this.props.isSelected}
             type="checkbox"
-            onChange={this.onChange} />
+            onChange={this.onChange} /> : null}
         </td>
       );
     },
 
+    getAttachmentRow: function (el) {
+      var attachmentCount = Object.keys(el._attachments || {}).length;
+      var paperClip = null;
+      var text = null;
+
+      if (attachmentCount) {
+        text = attachmentCount === 1 ? attachmentCount + ' Attachment' : attachmentCount + ' Attachments';
+        paperClip = (
+          <div><i className="icon fonticon-paperclip"></i> {attachmentCount}</div>
+        );
+      }
+
+      return (
+        <td title={text} className="tableview-el-last">
+          {paperClip}
+        </td>
+      );
+    },
+
+    getCopyButton: function (el) {
+      var text = JSON.stringify(el, null, '  ');
+      return (
+        <td title={text} className="tableview-el-copy">
+          <Clipboard onClipboardClick={this.showCopiedMessage} title={text} text={text}/>
+        </td>
+      );
+    },
+
+    showCopiedMessage: function () {
+      FauxtonAPI.addNotification({
+        msg: 'The document content has been copied to the clipboard.',
+        type: 'success',
+        clear: true
+      });
+    },
+
     render: function () {
       var i = this.props.index;
+      var docContent = this.props.el.content;
+      var el = this.props.el;
 
       return (
         <tr key={"tableview-content-row-" + i}>
-          {this.maybeGetCheckboxCell(i)}
-          {this.getRowContents(this.props.data, i)}
+          {this.maybeGetCheckboxCell(el, i)}
+          {this.getCopyButton(docContent)}
+          {this.maybeGetSpecialField(el, i)}
+          {this.getRowContents(el, i)}
+          {this.getAttachmentRow(docContent)}
         </tr>
       );
     }
   });
 
+  var WrappedAutocomplete = React.createClass({
+
+    getInitialState: function () {
+      return {
+        showFilters: false
+      };
+    },
+
+    showFilters: function (state) {
+      this.setState({
+        showFilters: state
+      });
+    },
+
+    render: function () {
+
+      function matchItem (item, value) {
+        return (
+          item.indexOf(value) !== -1
+        );
+      }
+
+      function renderItems (items) {
+        return items.map(function (item) {
+          return item;
+        });
+      }
+
+      var menuStyle = {
+        borderRadius: '3px',
+        boxShadow: '0 2px 12px rgba(0, 0, 0, 0.1)',
+        background: 'rgba(255, 255, 255, 0.9)',
+        padding: '0',
+        fontSize: '90%',
+        position: 'fixed',
+        overflow: 'auto',
+        maxHeight: '50%'
+      };
+
+      return (
+        <div className="table-container-autocomplete">
+          <Autocomplete
+            shouldItemRender={matchItem}
+            initialValue={this.props.selectedField}
+            items={this.props.notSelectedFields}
+            menuStyle={menuStyle}
+            onSelect={function (item) {
+              Actions.changeField({
+                newSelectedRow: item,
+                index: this.props.index
+              });
+
+              this.showFilters(false);
+            }.bind(this)}
+            onChange={function (e, text) {
+              if (!text) {
+                this.showFilters(true);
+                return;
+              }
+              this.showFilters(false);
+            }.bind(this)}
+            getItemValue={function (item) { return item; }}
+            renderItem={function (item, isHighlighted) {
+              var highlight = isHighlighted ? 'table-dropdown-item-highlight ' : '';
+              return (
+                <div
+                  className={highlight + 'table-dropdown-item'}
+                  key={item}>
+                  {item}
+                </div>
+              );
+            }} />
+            {this.state.showFilters ? <i className="icon icon-filter"></i> : null}
+        </div>
+      );
+    }
+  });
+
+
   var TableView = React.createClass({
+
     getContentRows: function () {
       var data = this.props.data.results;
-      var schema = this.props.data.schema;
 
-      var res = data.map(function (el, i) {
+      return data.map(function (el, i) {
 
         return (
           <TableRow
             key={"tableview-row-component-" + i}
-            isListDeletable={this.props.isListDeletable}
             index={i}
-            data={el}
-            docId={el.id}
+            el={el}
             docIdentifier={el.id || "tableview-row-component-" + i}
             docChecked={this.props.docChecked}
             isSelected={this.props.isSelected(el.id)}
-            schema={schema} />
+            data={this.props.data} />
         );
       }.bind(this));
+    },
 
-      return res;
+    getOptionFieldRows: function (filtered) {
+      var notSelectedFields = this.props.data.notSelectedFields;
+
+      if (!notSelectedFields) {
+        return filtered.map(function (el, i) {
+          return <th key={'header-el-' + i}>{el}</th>;
+        });
+      }
+
+      return filtered.map(function (el, i) {
+        return (
+          <th key={'header-el-' + i}>
+            {this.getDropdown(el, this.props.data.schema, i)}
+          </th>
+        );
+      }.bind(this));
+    },
+
+    getDropdown: function (selectedField, notSelectedFields, i) {
+
+      return (
+        <WrappedAutocomplete
+          selectedField={selectedField}
+          notSelectedFields={notSelectedFields}
+          index={i} />
+      );
     },
 
     getHeader: function () {
-      var row = this.props.data.schema.map(function (el, i) {
-        return <th key={"header-el-" + i} title={el}>{el}</th>;
-      });
+      var selectedFields = this.props.data.selectedFields;
 
-      var box = null;
-
-      if (this.props.isListDeletable) {
-        box = (<th className="tableview-header-el-checkbox" key="tableview-header-el-checkbox"></th>);
+      var specialField = null;
+      if (this.props.data.hasMetadata) {
+        specialField = (<th key="header-el-metadata" title="Metadata">Metadata</th>);
       }
+
+      var row = this.getOptionFieldRows(selectedFields);
+
+      var box = (
+        <th className="tableview-header-el-checkbox" key="tableview-header-el-checkbox">
+          {this.props.isListDeletable ? <BulkActionComponent
+            disabled={this.props.isLoading}
+            removeItem={this.props.removeItem}
+            isChecked={this.props.isChecked}
+            hasSelectedItem={this.props.hasSelectedItem}
+            toggleSelect={this.props.toggleSelect}
+            title="Select all docs that can be..." /> : null}
+        </th>
+      );
+
 
       return (
         <tr key="tableview-content-row-header">
           {box}
+          <th className="tableview-el-copy"></th>
+          {specialField}
           {row}
+          <th className="tableview-el-last"></th>
         </tr>
       );
     },
@@ -161,14 +342,16 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, Documents) {
       var contentRows = this.getContentRows();
 
       return (
-        <table className="table table-striped table-view-docs">
-          <thead>
-            {header}
-          </thead>
-          <tbody>
-            {contentRows}
-          </tbody>
-        </table>
+        <div className="table-view-docs">
+          <table className="table table-striped">
+            <thead>
+              {header}
+            </thead>
+            <tbody>
+              {contentRows}
+            </tbody>
+          </table>
+        </div>
       );
     }
   });
@@ -216,6 +399,7 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, Documents) {
 
     getDocumentStyleView: function (loadLines) {
       var classNames = 'view';
+      var isDeletable = this.props.isListDeletable;
 
       if (this.props.isListDeletable) {
         classNames += ' show-select';
@@ -223,10 +407,19 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, Documents) {
 
       return (
         <div className={classNames}>
-          {loadLines}
-
+          <div className="loading-lines-wrapper">
+            {loadLines}
+          </div>
 
           <div id="doc-list">
+            {isDeletable ? <BulkActionComponent
+              removeItem={this.props.removeItem}
+              isChecked={this.props.allDocumentsSelected}
+              hasSelectedItem={this.props.hasSelectedItem}
+              toggleSelect={this.toggleSelectAll}
+              disabled={this.props.isLoading}
+              title="Select all docs that can be..." /> : null}
+
             <ReactCSSTransitionGroup transitionName="slow-fade">
               {this.getDocumentList()}
             </ReactCSSTransitionGroup>
@@ -238,11 +431,22 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, Documents) {
     getTableStyleView: function (loadLines) {
       return (
         <div>
+          <div className="loading-lines-wrapper">
+            {loadLines}
+          </div>
+
           <TableView
             docChecked={this.props.docChecked}
             isSelected={this.props.isSelected}
             isListDeletable={this.props.isListDeletable}
-            data={this.props.results} />
+            data={this.props.results}
+            isLoading={this.props.isLoading}
+
+            removeItem={this.props.removeItem}
+            isChecked={this.props.allDocumentsSelected}
+            hasSelectedItem={this.props.hasSelectedItem}
+            toggleSelect={this.toggleSelectAll}
+            title="Select all docs that can be..." />
         </div>
       );
     },
@@ -259,20 +463,9 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, Documents) {
       var mainView = isTableView ? this.getTableStyleView(loadLines) : this.getDocumentStyleView(loadLines);
       return (
         <div className="document-result-screen">
-          {this.props.isListDeletable ? <BulkActionComponent
-            removeItem={this.props.removeItem}
-            isChecked={this.props.allDocumentsSelected}
-            hasSelectedItem={this.props.hasSelectedItem}
-            selectAll={this.selectAllDocs}
-            toggleSelect={this.toggleSelectAll}
-            title="Select all docs that can be..." /> : null}
           {mainView}
         </div>
       );
-    },
-
-    selectAllDocs: function () {
-      Actions.selectAllDocuments();
     },
 
     toggleSelectAll: function () {
@@ -293,28 +486,27 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, Documents) {
 
   var ViewResultListController = React.createClass({
     getStoreState: function () {
+      var selectedItemsLength = store.getSelectedItemsLength();
       return {
         hasResults: store.hasResults(),
         results: store.getResults(),
-        selectedItems: store.getSelectedItems(),
         isLoading: store.isLoading(),
         isEditable: store.isEditable(),
         textEmptyIndex: store.getTextEmptyIndex(),
         isTableView: store.getIsTableView(),
-
-        canDeselectAll: store.canDeselectAll(),
-        canSelectAll: store.canSelectAll(),
         allDocumentsSelected: store.areAllDocumentsSelected(),
-        hasSelectedItem: !!store.getSelectedItemsLength()
+        hasSelectedItem: !!selectedItemsLength,
+        selectedItemsLength: selectedItemsLength,
+        bulkDeleteCollection: store.getBulkDocCollection()
       };
     },
 
     isSelected: function (id) {
-      return !!this.state.selectedItems[id];
+      return !!this.state.bulkDeleteCollection.get(id);
     },
 
     removeItem: function () {
-      Actions.deleteSelected();
+      Actions.deleteSelected(this.state.bulkDeleteCollection, this.state.selectedItemsLength);
     },
 
     getInitialState: function () {
@@ -333,8 +525,11 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, Documents) {
       this.setState(this.getStoreState());
     },
 
-    docChecked: function (id) {
-      Actions.selectDoc(id);
+    docChecked: function (_id, _rev) {
+      Actions.selectDoc({
+        _id: _id,
+        _rev: _rev
+      });
     },
 
     render: function () {
@@ -345,10 +540,9 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, Documents) {
           removeItem={this.removeItem}
           hasSelectedItem={this.state.hasSelectedItem}
           allDocumentsSelected={this.state.allDocumentsSelected}
-          canSelectAll={this.state.canSelectAll}
           isSelected={this.isSelected}
           isEditable={this.state.isEditable}
-          isListDeletable={this.state.results.hasDeletableDoc}
+          isListDeletable={this.state.results.hasBulkDeletableDoc}
           docChecked={this.docChecked}
           isLoading={this.state.isLoading}
           results={this.state.results}
@@ -363,7 +557,8 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, Documents) {
 
   var Views = {
     List: ViewResultListController,
-    ResultsScreen: ResultsScreen
+    ResultsScreen: ResultsScreen,
+    WrappedAutocomplete: WrappedAutocomplete
   };
 
   return Views;

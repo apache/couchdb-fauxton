@@ -26,6 +26,8 @@ define([
   var assert = utils.assert;
   var TestUtils = React.addons.TestUtils;
   var store = Stores.indexResultsStore;
+  var createDocColumn = documentTestHelper.createDocColumn;
+  var createMangoIndexDocColumn = documentTestHelper.createMangoIndexDocColumn;
 
   describe('Index Results', function () {
     var container, instance;
@@ -44,7 +46,7 @@ define([
       it('renders a default text', function () {
         IndexResultsActions.newResultsList({
           collection: [],
-          deleteable: true
+          bulkCollection: new Documents.BulkDeleteDocCollection([], {databaseId: '1'}),
         });
         IndexResultsActions.resultsListReset();
 
@@ -55,10 +57,21 @@ define([
 
       it('you can change the default text', function () {
         IndexResultsActions.newResultsList({
-          collection: [],
-          deleteable: true,
+          collection: {
+            forEach: function () {},
+            filter: function () { return []; },
+            fetch: function () {
+              return {
+                then: function (cb) {
+                  cb();
+                }
+              };
+            }
+          },
+          bulkCollection: new Documents.BulkDeleteDocCollection([], {databaseId: '1'}),
           textEmptyIndex: 'I <3 Hamburg'
         });
+
 
         instance = TestUtils.renderIntoDocument(<Views.List />, container);
         var $el = $(instance.getDOMNode());
@@ -84,16 +97,13 @@ define([
         store.reset();
       });
 
-      var createDocColumn = documentTestHelper.createDocColumn;
-      var createMangoIndexDocColumn = documentTestHelper.createMangoIndexDocColumn;
-
-
       it('does not render checkboxes for elements with just the special index (Mango Index List)', function () {
         IndexResultsActions.sendMessageNewResultList({
-          collection: createMangoIndexDocColumn([{foo: 'testId1', type: 'special'}])
+          collection: createMangoIndexDocColumn([{foo: 'testId1', type: 'special'}]),
+          bulkCollection: new Documents.BulkDeleteDocCollection([], {databaseId: '1'}),
         });
 
-        store.enableTableView();
+        store.toggleTableView({enable: true});
 
         IndexResultsActions.resultsListReset();
 
@@ -104,7 +114,7 @@ define([
 
         var $el = $(instance.getDOMNode());
 
-        assert.ok($el.find('.tableview-header-el-checkbox').length === 0);
+        assert.ok($el.find('.tableview-checkbox-cell input').length === 0);
       });
 
       it('renders checkboxes for elements with more than just the the special index (Mango Index List)', function () {
@@ -120,10 +130,11 @@ define([
             name: 'biene',
             type: 'special',
             def: {fields: [{_id: 'desc'}]}
-          }])
+          }]),
+          bulkCollection: new Documents.BulkDeleteDocCollection([], {databaseId: '1'}),
         });
 
-        store.enableTableView();
+        store.toggleTableView({enable: true});
 
         IndexResultsActions.resultsListReset();
 
@@ -134,7 +145,7 @@ define([
 
         var $el = $(instance.getDOMNode());
 
-        assert.ok($el.find('.tableview-header-el-checkbox').length > 0);
+        assert.ok($el.find('.tableview-checkbox-cell input').length > 0);
       });
 
       it('does not render checkboxes for elements with no id in a table (usual docs)', function () {
@@ -144,10 +155,11 @@ define([
             name: 'biene',
             type: 'special',
             def: {fields: [{_id: 'desc'}]}
-          }])
+          }]),
+          bulkCollection: new Documents.BulkDeleteDocCollection([], {databaseId: '1'}),
         });
 
-        store.enableTableView();
+        store.toggleTableView({enable: true});
 
         IndexResultsActions.resultsListReset();
 
@@ -158,15 +170,16 @@ define([
 
         var $el = $(instance.getDOMNode());
 
-        assert.ok($el.find('.tableview-header-el-checkbox').length === 0);
+        assert.ok($el.find('.tableview-checkbox-cell input').length === 0);
       });
 
       it('does not render checkboxes for elements with no rev in a table (usual docs)', function () {
         IndexResultsActions.sendMessageNewResultList({
-          collection: createDocColumn([{id: '1', foo: 'testId1'}, {id: '1', bar: 'testId1'}])
+          collection: createDocColumn([{id: '1', foo: 'testId1'}, {id: '1', bar: 'testId1'}]),
+          bulkCollection: new Documents.BulkDeleteDocCollection([], {databaseId: '1'}),
         });
 
-        store.enableTableView();
+        store.toggleTableView({enable: true});
 
         IndexResultsActions.resultsListReset();
 
@@ -177,15 +190,16 @@ define([
 
         var $el = $(instance.getDOMNode());
 
-        assert.ok($el.find('.tableview-header-el-checkbox').length === 0);
+        assert.ok($el.find('.tableview-checkbox-cell input').length === 0);
       });
 
       it('renders checkboxes for elements with an id and rev in a table (usual docs)', function () {
         IndexResultsActions.sendMessageNewResultList({
-          collection: createDocColumn([{id: '1', foo: 'testId1', rev: 'foo'}, {bar: 'testId1', rev: 'foo'}])
+          collection: createDocColumn([{id: '1', foo: 'testId1', rev: 'foo'}, {bar: 'testId1', rev: 'foo'}]),
+          bulkCollection: new Documents.BulkDeleteDocCollection([], {databaseId: '1'}),
         });
 
-        store.enableTableView();
+        store.toggleTableView({enable: true});
 
         IndexResultsActions.resultsListReset();
 
@@ -196,17 +210,18 @@ define([
 
         var $el = $(instance.getDOMNode());
 
-        assert.ok($el.find('.tableview-checkbox-cell').length > 0);
+        assert.ok($el.find('.tableview-checkbox-cell input').length > 0);
       });
 
       it('renders checkboxes for elements with an id and rev in a json view (usual docs)', function () {
         IndexResultsActions.sendMessageNewResultList({
-          collection: createDocColumn([{id: '1', emma: 'testId1', rev: 'foo'}, {bar: 'testId1'}])
+          collection: createDocColumn([{id: '1', emma: 'testId1', rev: 'foo'}, {bar: 'testId1'}]),
+          bulkCollection: new Documents.BulkDeleteDocCollection([], {databaseId: '1'}),
         });
 
         IndexResultsActions.resultsListReset();
 
-        store.disableTableView();
+        store.toggleTableView({enable: false});
 
         instance = TestUtils.renderIntoDocument(
           <Views.List />,
@@ -219,12 +234,13 @@ define([
 
       it('does not render checkboxes for elements with that are not deletable in a json view (usual docs)', function () {
         IndexResultsActions.sendMessageNewResultList({
-          collection: createDocColumn([{foo: 'testId1', rev: 'foo'}, {bar: 'testId1'}])
+          collection: createDocColumn([{foo: 'testId1', rev: 'foo'}, {bar: 'testId1'}]),
+          bulkCollection: new Documents.BulkDeleteDocCollection([], {databaseId: '1'}),
         });
 
         IndexResultsActions.resultsListReset();
 
-        store.disableTableView();
+        store.toggleTableView({enable: false});
 
         instance = TestUtils.renderIntoDocument(
           <Views.List />,
@@ -236,6 +252,27 @@ define([
         assert.notOk($el.hasClass('show-select'));
       });
 
+    });
+
+    describe('wrapped autocomplete', function () {
+      it('renders a filter icon if no text given', function () {
+
+        var elements = ['min_weight', 'max_weight'];
+
+        instance = TestUtils.renderIntoDocument(
+          <Views.WrappedAutocomplete selectedField="ente" />,
+          container
+        );
+
+        var $el = $(instance.getDOMNode());
+
+        assert.equal($el.find('.icon-filter').length, 0);
+
+        var node = $el.find('input')[0];
+        node.value = '';
+        TestUtils.Simulate.change(node);
+        assert.equal($el.find('.icon-filter').length, 1);
+      });
     });
 
     describe('loading', function () {

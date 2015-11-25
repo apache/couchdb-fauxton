@@ -45,8 +45,6 @@ function (app, FauxtonAPI, ActionTypes) {
   }
 
   function saveDoc (doc, isValidDoc, onSave) {
-    var databaseLink = doc.database.safeID();
-
     if (isValidDoc) {
       FauxtonAPI.addNotification({
         msg: 'Saving document.',
@@ -55,7 +53,7 @@ function (app, FauxtonAPI, ActionTypes) {
 
       doc.save().then(function () {
         onSave(doc.prettyJSON());
-        FauxtonAPI.navigate(FauxtonAPI.urls('document', 'app', databaseLink, doc.id));
+        FauxtonAPI.navigate('#' + FauxtonAPI.urls('allDocs', 'app', doc.database.id), {trigger: true});
       }).fail(function (xhr) {
         FauxtonAPI.addNotification({
           msg: 'Save failed: ' + JSON.parse(xhr.responseText).reason,

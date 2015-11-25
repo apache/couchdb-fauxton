@@ -89,11 +89,7 @@ define([
     },
 
     onSaveComplete: function (json) {
-      this.getEditor().setValue(json);
       this.getEditor().clearChanges();
-
-      // the save action updates the doc. This ensures the button row then shows the appropriate buttons
-      this.forceUpdate();
     },
 
     hideDeleteDocModal: function () {

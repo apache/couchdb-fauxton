@@ -69,7 +69,7 @@ define([
       var spy = sinon.spy();
 
       el = TestUtils.renderIntoDocument(
-        <ReactComponents.Document isDeletable={true} docChecked={spy} docIdentifier="foo" />,
+        <ReactComponents.Document doc={{id: "foo"}} isDeletable={true} docChecked={spy} docIdentifier="foo" />,
         container
       );
       var testEl = $(el.getDOMNode()).find('input[type="checkbox"]')[0];

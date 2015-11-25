@@ -90,10 +90,12 @@ function (app, FauxtonAPI, Documents, PagingCollection) {
       return true;
     },
 
+    // @deprecated, see isJSONDocBulkDeletable
     isDeletable: function () {
       return this.get('type') !== 'special';
     },
 
+    // @deprecated, see isJSONDocBulkDeletable
     isBulkDeletable: function () {
       return this.isDeletable();
     },
@@ -118,6 +120,8 @@ function (app, FauxtonAPI, Documents, PagingCollection) {
       this.params = _.extend({limit: defaultLimit}, options.params);
     },
 
+    collectionType: 'MangoIndex',
+
     url: function () {
       return this.urlRef.apply(this, arguments);
     },
@@ -126,6 +130,7 @@ function (app, FauxtonAPI, Documents, PagingCollection) {
       return false;
     },
 
+    //@deprecated, see isJSONDocEditable
     isEditable: function () {
       return false;
     },
@@ -155,6 +160,9 @@ function (app, FauxtonAPI, Documents, PagingCollection) {
 
   Documents.MangoDocumentCollection = PagingCollection.extend({
     model: Documents.MangoDoc,
+
+    collectionType: 'MangoDocumentCollection',
+
     initialize: function (_attr, options) {
       var defaultLimit = FauxtonAPI.constants.MISC.DEFAULT_PAGE_SIZE;
 

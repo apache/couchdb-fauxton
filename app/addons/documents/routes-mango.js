@@ -22,7 +22,7 @@ define([
   'addons/documents/resources',
   'addons/documents/views',
   'addons/documents/index-results/actions',
-  'addons/documents/pagination/stores',
+  'addons/documents/index-results/stores',
 
   'addons/documents/header/header.react',
   'addons/documents/header/header.actions',
@@ -37,7 +37,7 @@ define([
 
 
 function (app, FauxtonAPI, Helpers, BaseRoute, Databases,
-  Components, Resources, Documents, IndexResultsActions, PaginationStores,
+  Components, Resources, Documents, IndexResultsActions, IndexResultStores,
   ReactHeader, ReactActions, ReactPagination,
   MangoComponents, MangoActions, MangoStores, IndexResultsComponents, SidebarActions) {
 
@@ -70,30 +70,32 @@ function (app, FauxtonAPI, Helpers, BaseRoute, Databases,
     },
 
     findUsingIndex: function () {
+      console.log(this.database);
+
       var params = this.createParams(),
           urlParams = params.urlParams,
           mangoResultCollection = new Resources.MangoDocumentCollection(null, {
             database: this.database,
             paging: {
-              pageSize: PaginationStores.indexPaginationStore.getPerPage()
+              pageSize: IndexResultStores.indexResultsStore.getPerPage()
             }
           }),
           mangoIndexList = new Resources.MangoIndexCollection(null, {
             database: this.database,
             params: null,
             paging: {
-              pageSize: PaginationStores.indexPaginationStore.getPerPage()
+              pageSize: IndexResultStores.indexResultsStore.getPerPage()
             }
           });
 
       SidebarActions.setSelectedTab('mango-query');
-      this.setComponent('#react-headerbar', ReactHeader.BulkDocumentHeaderController);
+      this.setComponent('#react-headerbar', ReactHeader.BulkDocumentHeaderController, {showIncludeAllDocs: false});
       this.setComponent('#footer', ReactPagination.Footer);
 
       IndexResultsActions.newMangoResultsList({
         collection: mangoResultCollection,
         textEmptyIndex: 'No Results',
-        bulkCollection: Documents.BulkDeleteDocCollection
+        bulkCollection: new Documents.BulkDeleteDocCollection([], { databaseId: this.database.safeID() }),
       });
 
       MangoActions.getIndexList({
@@ -128,13 +130,13 @@ function (app, FauxtonAPI, Helpers, BaseRoute, Databases,
             database: this.database,
             params: null,
             paging: {
-              pageSize: PaginationStores.indexPaginationStore.getPerPage()
+              pageSize: IndexResultStores.indexResultsStore.getPerPage()
             }
           });
 
       IndexResultsActions.newResultsList({
         collection: mangoIndexCollection,
-        bulkCollection: Documents.MangoBulkDeleteDocCollection,
+        bulkCollection: new Documents.MangoBulkDeleteDocCollection([], { databaseId: this.database.safeID() }),
         typeOfIndex: 'mango'
       });
 
@@ -147,7 +149,7 @@ function (app, FauxtonAPI, Helpers, BaseRoute, Databases,
         ]
       }));
 
-      this.setComponent('#react-headerbar', ReactHeader.BulkDocumentHeaderController);
+      this.setComponent('#react-headerbar', ReactHeader.BulkDocumentHeaderController, {showIncludeAllDocs: false});
       this.setComponent('#footer', ReactPagination.Footer);
 
       this.setComponent('#dashboard-lower-content', IndexResultsComponents.List);

@@ -14,24 +14,28 @@ define([
   'app',
   'api',
   'addons/documents/pagination/actiontypes',
-  'addons/documents/pagination/stores',
-  'addons/documents/index-results/actions'
-],
-function (app, FauxtonAPI, ActionTypes, Stores, IndexResultsActions) {
+  'addons/documents/index-results/actions',
 
-  var store = Stores.indexPaginationStore;
+
+],
+function (app, FauxtonAPI, ActionTypes, IndexResultsActions) {
 
   return {
-    updatePerPage: function (perPage) {
+
+    updatePerPage: function (perPage, collection, bulkCollection) {
+
       FauxtonAPI.dispatch({
         type: ActionTypes.PER_PAGE_CHANGE,
         perPage: perPage
       });
 
       IndexResultsActions.clearResults();
-
-      store.getCollection().fetch().then(function () {
+      collection.fetch().then(function () {
         IndexResultsActions.resultsListReset();
+        IndexResultsActions.sendMessageNewResultList({
+          collection: collection,
+          bulkCollection: bulkCollection
+        });
       });
     },
 
@@ -42,29 +46,41 @@ function (app, FauxtonAPI, ActionTypes, Stores, IndexResultsActions) {
       });
     },
 
-    paginateNext: function () {
+    paginateNext: function (collection, bulkCollection) {
       FauxtonAPI.dispatch({
         type: ActionTypes.PAGINATE_NEXT,
       });
 
       IndexResultsActions.clearResults();
-
-      store.getCollection().next().then(function () {
+      collection.next().then(function () {
         IndexResultsActions.resultsListReset();
+
+        IndexResultsActions.sendMessageNewResultList({
+          collection: collection,
+          bulkCollection: bulkCollection
+        });
       });
     },
 
-    paginatePrevious: function () {
+    paginatePrevious: function (collection, bulkCollection) {
       FauxtonAPI.dispatch({
         type: ActionTypes.PAGINATE_PREVIOUS,
       });
 
       IndexResultsActions.clearResults();
-
-      store.getCollection().previous().then(function () {
+      collection.previous().then(function () {
         IndexResultsActions.resultsListReset();
+
+        IndexResultsActions.sendMessageNewResultList({
+          collection: collection,
+          bulkCollection: bulkCollection
+        });
       });
     },
+
+    toggleTableViewType: function () {
+      IndexResultsActions.togglePrioritizedTableView();
+    }
 
   };
 });

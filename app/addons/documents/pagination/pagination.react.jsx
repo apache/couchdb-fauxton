@@ -13,17 +13,19 @@
 define([
   "api",
   "react",
-  'addons/documents/pagination/stores',
   'addons/documents/pagination/actions',
-  ], function (FauxtonAPI, React, Stores, Actions) {
-    var indexPaginationStore = Stores.indexPaginationStore;
+  'addons/documents/index-results/stores',
+  ], function (FauxtonAPI, React, Actions, IndexResultsStore) {
+    var indexResultsStore = IndexResultsStore.indexResultsStore;
 
     var IndexPaginationController = React.createClass({
 
       getStoreState: function () {
         return {
-          canShowPrevious: indexPaginationStore.canShowPrevious(),
-          canShowNext: indexPaginationStore.canShowNext(),
+          canShowPrevious: indexResultsStore.canShowPrevious(),
+          canShowNext: indexResultsStore.canShowNext(),
+          collection: indexResultsStore.getCollection(),
+          bulkCollection: indexResultsStore.getBulkDocCollection(),
         };
       },
 
@@ -32,11 +34,11 @@ define([
       },
 
       componentDidMount: function () {
-        indexPaginationStore.on('change', this.onChange, this);
+        indexResultsStore.on('change', this.onChange, this);
       },
 
       componentWillUnmount: function () {
-        indexPaginationStore.off('change', this.onChange);
+        indexResultsStore.off('change', this.onChange);
       },
 
       onChange: function () {
@@ -45,16 +47,20 @@ define([
 
       nextClicked: function (event) {
         event.preventDefault();
-        event.stopPropagation();
         if (!this.state.canShowNext) { return; }
-        Actions.paginateNext();
+
+        var collection = this.state.collection;
+        var bulkCollection = this.state.bulkCollection;
+        Actions.paginateNext(collection, bulkCollection);
       },
 
       previousClicked: function (event) {
         event.preventDefault();
-        event.stopPropagation();
         if (!this.state.canShowPrevious) { return; }
-        Actions.paginatePrevious();
+
+        var collection = this.state.collection;
+        var bulkCollection = this.state.bulkCollection;
+        Actions.paginatePrevious(collection, bulkCollection);
       },
 
       render: function () {
@@ -68,15 +74,18 @@ define([
         if (!this.state.canShowNext) {
           canShowNextClassName = 'disabled';
         }
+
         return (
-          <ul className="pagination">
-            <li className={canShowPreviousClassName} >
-              <a id="previous" onClick={this.previousClicked} className="icon fonticon-left-open" href="#" data-bypass="true"></a>
-            </li>
-            <li className={canShowNextClassName} >
-              <a id="next" onClick={this.nextClicked} className="icon fonticon-right-open" href="#" data-bypass="true"></a>
-            </li>
-        </ul>
+          <div className="documents-pagination">
+            <ul className="pagination">
+              <li className={canShowPreviousClassName} >
+                <a id="previous" onClick={this.previousClicked} className="icon fonticon-left-open" href="#" data-bypass="true"></a>
+              </li>
+              <li className={canShowNextClassName} >
+                <a id="next" onClick={this.nextClicked} className="icon fonticon-right-open" href="#" data-bypass="true"></a>
+              </li>
+            </ul>
+          </div>
         );
       }
 
@@ -93,7 +102,7 @@ define([
         return (
           <div id="per-page">
             <label htmlFor="select-per-page" className="drop-down inline">
-              Documents per page:
+              Documents per page: &nbsp;
               <select id="select-per-page" onChange={this.perPageChange} value={this.props.perPage.toString()} className="input-small">
                 <option value="5">5</option>
                 <option value="10">10</option>
@@ -113,10 +122,15 @@ define([
 
       getStoreState: function () {
         return {
-          totalRows: indexPaginationStore.getTotalRows(),
-          pageStart: indexPaginationStore.getPageStart(),
-          pageEnd: indexPaginationStore.getPageEnd(),
-          perPage: indexPaginationStore.getPerPage()
+          totalRows: indexResultsStore.getTotalRows(),
+          pageStart: indexResultsStore.getPageStart(),
+          pageEnd: indexResultsStore.getPageEnd(),
+          perPage: indexResultsStore.getPerPage(),
+          prioritizedEnabled: indexResultsStore.getIsPrioritizedEnabled(),
+          showPrioritizedFieldToggler: indexResultsStore.getShowPrioritizedFieldToggler(),
+          displayedFields: indexResultsStore.getResults().displayedFields,
+          collection: indexResultsStore.getCollection(),
+          bulkCollection: indexResultsStore.getBulkDocCollection(),
         };
       },
 
@@ -125,36 +139,83 @@ define([
       },
 
       componentDidMount: function () {
-        indexPaginationStore.on('change', this.onChange, this);
+        indexResultsStore.on('change', this.onChange, this);
       },
 
       componentWillUnmount: function () {
-        indexPaginationStore.off('change', this.onChange);
+        indexResultsStore.off('change', this.onChange);
       },
 
       onChange: function () {
         this.setState(this.getStoreState());
       },
 
-      pageNumber: function () {
+      getPageNumberText: function () {
         if (this.state.totalRows === 0) {
-          return <p>Showing 0 documents</p>;
+          return <span>Showing 0 documents</span>;
         }
 
-        return <p>Showing document {this.state.pageStart} - {this.state.pageEnd}</p>;
+        return <span>Showing document {this.state.pageStart} - {this.state.pageEnd}</span>;
+      },
+
+      toggleTableViewType: function () {
+        Actions.toggleTableViewType();
+      },
+
+      getTableControl: function () {
+        if (!this.state.showPrioritizedFieldToggler) {
+          return null;
+        }
+
+        return (
+          <div className="footer-table-control">
+            <div className="footer-doc-control-prioritized-wrapper pull-left">
+              <label htmlFor="footer-doc-control-prioritized">
+                <input
+                  id="footer-doc-control-prioritized"
+                  checked={this.state.prioritizedEnabled}
+                  onChange={this.toggleTableViewType}
+                  type="checkbox">
+                </input>
+                Show all columns
+              </label>
+            </div>
+            {this.getAmountShownFields()}
+          </div>
+        );
       },
 
       perPageChange: function (perPage) {
-        Actions.updatePerPage(perPage);
+        var collection = this.state.collection;
+        var bulkCollection = this.state.bulkCollection;
+        Actions.updatePerPage(perPage, collection, bulkCollection);
       },
+
+      getAmountShownFields: function () {
+        var fields = this.state.displayedFields;
+        if (!fields || this.state.prioritizedEnabled) {
+          return null;
+        }
+
+        return (
+          <div className="pull-right">
+            Showing {fields.shown} of {fields.allFieldCount} columns.
+          </div>
+        );
+      },
+
 
       render: function () {
         return (
-          <div>
-            <div className="index-indicator">
-              {this.pageNumber()}
+          <div className="footer-controls">
+            <div className="page-controls">
+              {this.getTableControl()}
             </div>
+
             <PerPageSelector perPageChange={this.perPageChange} perPage={this.state.perPage} />
+            <div className="current-docs">
+              {this.getPageNumberText()}
+            </div>
           </div>
         );
       }
@@ -165,12 +226,8 @@ define([
       render: function () {
         return (
           <footer className="index-pagination pagination-footer">
-            <div id="documents-pagination">
-              <IndexPaginationController />
-            </div>
-            <div id="item-numbers">
-              <AllDocsNumberController />
-            </div>
+            <IndexPaginationController />
+            <AllDocsNumberController />
           </footer>
         );
       }
