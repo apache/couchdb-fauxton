@@ -24,19 +24,19 @@ exports.init = function (grunt) {
     readSettingsFile: function () {
       if (fs.existsSync("settings.json")) {
         return grunt.file.readJSON("settings.json");
-      } else if (fs.existsSync("settings.json.default")) {
-        return grunt.file.readJSON("settings.json.default");
-      } else {
-        return {deps: []};
+      } else if (fs.existsSync('settings.json.default.json')) {
+        return grunt.file.readJSON('settings.json.default.json');
       }
+
+      throw new Error('settings.json file missing');
     },
 
     readI18nFile: function () {
       if (fs.existsSync('i18n.json')) {
         return grunt.file.readJSON('i18n.json');
       }
-      if (fs.existsSync('i18n.json.default')) {
-        return grunt.file.readJSON('i18n.json.default');
+      if (fs.existsSync('i18n.json.default.json')) {
+        return grunt.file.readJSON('i18n.json.default.json');
       }
 
       throw new Error('i18n file missing');
