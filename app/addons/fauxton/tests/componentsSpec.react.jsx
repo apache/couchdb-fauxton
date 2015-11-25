@@ -202,6 +202,50 @@ define([
       assert.equal("30", lis[10].innerText);
     });
 
+    it('limits the number of total pages when customized', function () {
+      var maxNavPages = 15;
+      var pageEl = TestUtils.renderIntoDocument(
+        <Views.Pagination page={1} total={1000} maxNavPages={maxNavPages} />,
+        container
+      );
+      var lis = pageEl.getDOMNode().getElementsByTagName("li");
+      assert.equal(1 + maxNavPages + 1, lis.length);
+    });
+
+    it('calls callback method when supplied', function () {
+      var spy = sinon.spy();
+      var pageEl = TestUtils.renderIntoDocument(
+        <Views.Pagination page={1} total={100} onClick={spy} />,
+        container
+      );
+      var links = React.findDOMNode(pageEl).getElementsByTagName("a");
+
+      TestUtils.Simulate.click(links[3]);
+
+      // confirm it gets called
+      assert.ok(spy.calledOnce);
+
+      // confirm it's called with the pagination number (3)
+      assert.ok(spy.calledWith(3));
+    });
+
+    it('calls callback method with correct values for prev and next', function () {
+      var spy = sinon.spy();
+
+      var currentPage = 5;
+      var pageEl = TestUtils.renderIntoDocument(
+        <Views.Pagination page={currentPage} total={200} onClick={spy} />,
+        container
+      );
+      var links = React.findDOMNode(pageEl).getElementsByTagName("a");
+
+      TestUtils.Simulate.click(links[0]);
+      assert.ok(spy.calledWith(currentPage - 1));
+
+      TestUtils.Simulate.click(links[11]); // last index
+      assert.ok(spy.calledWith(currentPage + 1));
+    });
+
   });
 
 

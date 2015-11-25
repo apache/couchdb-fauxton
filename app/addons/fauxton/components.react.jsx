@@ -234,34 +234,36 @@ function (app, FauxtonAPI, React, ZeroClipboard) {
     }
   });
 
-  var Pagination = React.createClass({
 
-    getInitialState: function () {
-      return {};
-    },
+  var Pagination = React.createClass({
 
     getDefaultProps: function () {
       return {
         perPage: FauxtonAPI.constants.MISC.DEFAULT_PAGE_SIZE,
+        onClick: null,
         page: 1,
-        total: 0
+        total: 0,
+        urlPrefix: '',
+        urlSuffix: '',
+        maxNavPages: 10
       };
     },
 
     getVisiblePages: function (page, totalPages) {
       var from, to;
-      if (totalPages < 10) {
+      if (totalPages < this.props.maxNavPages) {
         from = 1;
         to = totalPages + 1;
       } else {
-        from = page - 5;
-        to = page + 5;
+        var halfMaxNavPages = Math.floor(this.props.maxNavPages / 2);
+        from = page - halfMaxNavPages;
+        to = page + halfMaxNavPages;
         if (from <= 1) {
           from = 1;
-          to = 11;
+          to = this.props.maxNavPages + 1;
         }
         if (to > totalPages + 1) {
-          from =  totalPages - 9;
+          from = totalPages - (this.props.maxNavPages - 1);
           to = totalPages + 1;
         }
       }
@@ -271,33 +273,46 @@ function (app, FauxtonAPI, React, ZeroClipboard) {
       };
     },
 
-    createItemsForPage: function (visiblePages, page, prefix, suffix) {
+    createItemsForPage: function (visiblePages) {
       return _.range(visiblePages.from, visiblePages.to).map(function (i) {
         return (
-          <li key={i} className={(page === i ? "active" : null)}>
-            <a href={prefix + i + suffix}>{i}</a>
+          <li key={i} className={(this.props.page === i ? 'active' : null)}>
+            {this.getLink(i, i)}
           </li>
         );
-      });
+      }.bind(this));
+    },
+
+    getLink: function (i, label) {
+      if (this.props.onClick) {
+        return (
+          <a onClick={this.props.onClick.bind(null, i)} dangerouslySetInnerHTML={{__html: label}}></a>
+        );
+      }
+      return (
+        <a href={this.props.urlPrefix + i + this.props.urlSuffix} dangerouslySetInnerHTML={{__html: label}}></a>
+      );
+    },
+
+    getTotalPages: function () {
+      return this.props.total === 0 ? 1 : Math.ceil(this.props.total / this.props.perPage);
     },
 
     render: function () {
-      var page = this.state.page || this.props.page;
-      var total = this.state.total || this.props.total;
-      var perPage = this.props.perPage;
-      var prefix = this.props.urlPrefix || "";
-      var suffix = this.props.urlSuffix || "";
-      var totalPages = total === 0 ? 1 : Math.ceil(total / perPage);
-      var visiblePages = this.getVisiblePages(page, totalPages);
-      var rangeItems = this.createItemsForPage(visiblePages, page, prefix, suffix);
+      var totalPages = this.getTotalPages();
+      var visiblePages = this.getVisiblePages(this.props.page, totalPages);
+      var rangeItems = this.createItemsForPage(visiblePages);
+      var prevPage = Math.max(this.props.page - 1, 1);
+      var nextPage = Math.min(this.props.page + 1, totalPages);
+
       return (
         <ul className="pagination">
-          <li className={(page === 1 ? "disabled" : null)}>
-            <a href={prefix + Math.max(page - 1, 1) + suffix}>&laquo;</a>
+          <li className={(this.props.page === 1 ? "disabled" : null)}>
+            {this.getLink(prevPage, '&laquo;')}
           </li>
           {rangeItems}
-          <li className={(page < totalPages ? null : "disabled")}>
-            <a href={prefix + Math.min(page + 1, totalPages) + suffix}>&raquo;</a>
+          <li className={(this.props.page < totalPages ? null : "disabled")}>
+            {this.getLink(nextPage, '&raquo;')}
           </li>
         </ul>
       );
