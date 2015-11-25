@@ -49,18 +49,11 @@ module.exports = function (grunt) {
       }, function (error) {
         if (error) {
           grunt.log.writeln('ERROR: ' + error.message);
-          return false;
-        } else {
-          return true;
         }
+
+        done();
       });
     };
-
-    var remoteDeps = _.filter(settings.deps, function (dep) { return !! dep.url; });
-    grunt.log.writeln(remoteDeps.length + ' remote dependencies');
-    var remote = fetch(remoteDeps, function (dep, destination) {
-      return 'git clone ' + dep.url + ' ' + destination;
-    });
 
     var localDeps = _.filter(settings.deps, function (dep) { return !! dep.path; });
     grunt.log.writeln(localDeps.length + ' local dependencies');
@@ -70,9 +63,6 @@ module.exports = function (grunt) {
       grunt.log.writeln(command);
       return command;
     });
-
-    done(remote && local);
-
   });
 
   grunt.registerMultiTask('gen_load_addons', 'Generate the load_addons.js file', function () {
