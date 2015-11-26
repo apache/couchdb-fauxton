@@ -237,10 +237,6 @@ A key value is the first parameter emitted in a map function. For example emit("
           <div className="add-on additionalParams">Additional Parameters</div>
           <div className="row-fluid fieldsets">
             {this.showStale()}
-            <div className="checkbox inline">
-              <input id="qoUpdateSeq" type="checkbox" onChange={this.props.toggleUpdateSeq} checked={this.props.updateSeq} />
-              <label htmlFor="qoUpdateSeq">Update Sequence</label>
-            </div>
             <div className="dropdown inline">
               <label className="drop-down">
                 Limit
@@ -302,7 +298,6 @@ A key value is the first parameter emitted in a map function. For example emit("
         showByKeys: store.showByKeys(),
         betweenKeys: store.betweenKeys(),
         byKeys: store.byKeys(),
-        updateSeq: store.updateSeq(),
         descending: store.descending(),
         skip: store.skip(),
         limit: store.limit(),
@@ -372,8 +367,6 @@ A key value is the first parameter emitted in a map function. For example emit("
                 updateByKeys={Actions.updateByKeys}
                />
               <AdditionalParams
-                updateSeq={this.state.updateSeq}
-                toggleUpdateSeq={Actions.toggleUpdateSeq}
                 descending={this.state.descending}
                 toggleDescending={Actions.toggleDescending}
                 skip={this.state.skip}

@@ -35,7 +35,6 @@ function (app, FauxtonAPI, ActionTypes) {
       };
 
       this._byKeys = '';
-      this._updateSeq = false;
       this._descending = false;
       this._skip = '';
       this._limit = "none";
@@ -96,10 +95,6 @@ function (app, FauxtonAPI, ActionTypes) {
 
     includeDocs: function () {
       return this._includeDocs;
-    },
-
-    updateSeq: function () {
-      return this._updateSeq;
     },
 
     descending: function () {
@@ -164,10 +159,6 @@ function (app, FauxtonAPI, ActionTypes) {
         this._showByKeys = true;
       }
 
-      if (params.update_seq) {
-        this._updateSeq = params.update_seq;
-      }
-
       if (params.limit && params.limit !== 'none') {
         this._limit = params.limit;
       }
@@ -210,10 +201,6 @@ function (app, FauxtonAPI, ActionTypes) {
         params.keys = this._byKeys.replace(/\r?\n/g, '');
       }
 
-      if (this._updateSeq) {
-        params.update_seq = this._updateSeq;
-      }
-
       if (this._limit !== 'none') {
         params.limit = parseInt(this._limit, 10);
       }
@@ -246,9 +233,6 @@ function (app, FauxtonAPI, ActionTypes) {
         break;
         case ActionTypes.QUERY_TOGGLE_INCLUDE_DOCS:
           this._includeDocs = !this._includeDocs;
-        break;
-        case ActionTypes.QUERY_TOGGLE_UPDATE_SEQ:
-          this._updateSeq = !this._updateSeq;
         break;
         case ActionTypes.QUERY_TOGGLE_DESCENDING:
           this._descending = !this._descending;

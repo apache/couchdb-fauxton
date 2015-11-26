@@ -98,7 +98,6 @@ define([
           include_docs: true,
           limit: 10,
           skip: 5,
-          update_seq: true,
           descending: true
         });
 
@@ -106,7 +105,6 @@ define([
         assert.ok(store.descending());
         assert.equal(store.limit(), 10);
         assert.equal(store.skip(), 5);
-        assert.equal(store.updateSeq(), 1);
       });
 
       it('sets between keys', function () {
