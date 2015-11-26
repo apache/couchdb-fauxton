@@ -197,19 +197,6 @@ A key value is the first parameter emitted in a map function. For example emit("
   });
 
   var AdditionalParams = React.createClass({
-    showStale: function () {
-      if (!this.props.showStale) {
-        return null;
-      }
-
-      return (
-        <div className="checkbox inline">
-          <input id="qoStale" name="stale" type="checkbox" defaultValue="ok" />
-          <label htmlFor="qoStale">Stale</label>
-        </div>
-      );
-    },
-
     updateSkip: function (e) {
       e.preventDefault();
       var val = e.target.value;
@@ -236,7 +223,6 @@ A key value is the first parameter emitted in a map function. For example emit("
         <div className="query-group" id="query-options-additional-params">
           <div className="add-on additionalParams">Additional Parameters</div>
           <div className="row-fluid fieldsets">
-            {this.showStale()}
             <div className="dropdown inline">
               <label className="drop-down">
                 Limit
@@ -302,7 +288,6 @@ A key value is the first parameter emitted in a map function. For example emit("
         skip: store.skip(),
         limit: store.limit(),
         showReduce: store.showReduce(),
-        showStale: store.showStale(),
         reduce: store.reduce(),
         groupLevel: store.groupLevel()
       };
