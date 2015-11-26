@@ -93,7 +93,7 @@ define([
         return (
           <div id="per-page">
             <label htmlFor="select-per-page" className="drop-down inline">
-              Per page:
+              Documents per page:
               <select id="select-per-page" onChange={this.perPageChange} value={this.props.perPage.toString()} className="input-small">
                 <option value="5">5</option>
                 <option value="10">10</option>
@@ -139,10 +139,10 @@ define([
 
       pageNumber: function () {
         if (this.state.totalRows === 0) {
-          return <p> Showing 0 documents. </p>;
+          return <p>Showing 0 documents</p>;
         }
 
-        return <p>Showing {this.state.pageStart} - {this.state.pageEnd}</p>;
+        return <p>Showing document {this.state.pageStart} - {this.state.pageEnd}</p>;
       },
 
       updateSequence: function () {
