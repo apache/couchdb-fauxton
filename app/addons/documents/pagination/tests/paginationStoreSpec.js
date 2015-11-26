@@ -41,7 +41,6 @@ define([
             safeID: function () { return '1';}
           }
         });
-        collection.updateSeq = function () { return 'updateSeq';};
         store.reset();
       });
 
@@ -49,12 +48,6 @@ define([
         store.newPagination(collection);
         assert.equal(store.getTotalRows(), 2);
       });
-
-      it('sets updateSeq', function () {
-        store.newPagination(collection);
-        assert.equal(store.getUpdateSeq(), 'updateSeq');
-      });
-
     });
 
     describe('canShowPrevious', function () {

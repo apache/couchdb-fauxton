@@ -38,12 +38,6 @@ function (app, FauxtonAPI, ActionTypes, Stores) {
       });
     },
 
-    toggleUpdateSeq: function () {
-      FauxtonAPI.dispatch({
-        type: ActionTypes.QUERY_TOGGLE_UPDATE_SEQ
-      });
-    },
-
     toggleDescending: function () {
       FauxtonAPI.dispatch({
         type: ActionTypes.QUERY_TOGGLE_DESCENDING

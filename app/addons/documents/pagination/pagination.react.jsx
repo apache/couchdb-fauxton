@@ -116,7 +116,6 @@ define([
           totalRows: indexPaginationStore.getTotalRows(),
           pageStart: indexPaginationStore.getPageStart(),
           pageEnd: indexPaginationStore.getPageEnd(),
-          updateSeq: indexPaginationStore.getUpdateSeq(),
           perPage: indexPaginationStore.getPerPage()
         };
       },
@@ -145,12 +144,6 @@ define([
         return <p>Showing document {this.state.pageStart} - {this.state.pageEnd}</p>;
       },
 
-      updateSequence: function () {
-        if (this.state.updateSeq) {
-          return <span> Update Sequence: {this.state.updateSeq} </span>;
-        }
-      },
-
       perPageChange: function (perPage) {
         Actions.updatePerPage(perPage);
       },
@@ -160,7 +153,6 @@ define([
           <div>
             <div className="index-indicator">
               {this.pageNumber()}
-              {this.updateSequence()}
             </div>
             <PerPageSelector perPageChange={this.perPageChange} perPage={this.state.perPage} />
           </div>
