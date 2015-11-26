@@ -160,20 +160,6 @@ define([
         paramsEl.updateSkip({target: {value: '3'}, preventDefault: function () {}});
         assert.equal(val, '3');
       });
-
-      it('does not show stale if showStale false', function () {
-        var paramsEl = TestUtils.renderIntoDocument(<Views.AdditionalParams
-          showStale={false} />, container);
-
-        assert.equal(paramsEl.showStale(), null);
-      });
-
-      it('show stale if showStale true', function () {
-        var paramsEl = TestUtils.renderIntoDocument(<Views.AdditionalParams
-          showStale={true} />, container);
-
-        assert.notEqual(paramsEl.showStale(), null);
-      });
     });
   });
 

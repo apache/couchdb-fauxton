@@ -42,7 +42,6 @@ function (app, FauxtonAPI, ActionTypes) {
       this._groupLevel = 'exact';
 
       this._showReduce = false;
-      this._showStale = false;
     },
 
     isLoading: function () {
@@ -55,10 +54,6 @@ function (app, FauxtonAPI, ActionTypes) {
 
     reduce: function () {
       return this._reduce;
-    },
-
-    showStale: function () {
-      return this._showStale;
     },
 
     betweenKeys: function () {
@@ -260,9 +255,6 @@ function (app, FauxtonAPI, ActionTypes) {
         break;
         case ActionTypes.QUERY_TOGGLE_REDUCE:
           this._reduce = !this._reduce;
-        break;
-        case ActionTypes.QUERY_SHOW_STALE:
-          this._showStale = true;
         break;
         case ActionTypes.QUERY_UPDATE_GROUP_LEVEL:
           this.updateGroupLevel(action.groupLevel);

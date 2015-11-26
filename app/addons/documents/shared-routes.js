@@ -80,7 +80,6 @@ define([
         that.rightHeader.showQueryOptions();
         that.rightHeader.resetQueryOptions({
           queryParams: urlParams,
-          showStale: true,
           hasReduce: hasReduceFunction,
           showReduce: !_.isUndefined(hasReduceFunction),
           viewName: viewName,

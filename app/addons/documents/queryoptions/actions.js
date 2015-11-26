@@ -101,12 +101,6 @@ function (app, FauxtonAPI, ActionTypes, Stores) {
           type: ActionTypes.QUERY_SHOW_REDUCE
         });
       }
-
-      if (options.showStale) {
-        FauxtonAPI.dispatch({
-          type: ActionTypes.QUERY_SHOW_STALE
-        });
-      }
     }
 
   };
