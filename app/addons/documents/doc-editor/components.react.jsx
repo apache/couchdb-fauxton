@@ -344,7 +344,7 @@ define([
                   Please select the file you want to upload as an attachment to this document. This creates a new
                   revision of the document, so it's not necessary to save after uploading.
                 </p>
-                <input ref="attachments" type="file" name="_attachments" />
+                <input ref="attachments" type="file" name="_attachments" multiple />
                 <br />
               </form>
 
