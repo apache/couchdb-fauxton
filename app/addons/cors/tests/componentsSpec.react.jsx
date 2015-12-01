@@ -92,13 +92,13 @@ define([
 
       it('shows loading bars', function () {
         Actions.toggleLoadingBarsToEnabled(true);
-        assert.ok($(corsEl.getDOMNode()).hasClass('loading-lines'));
+        assert.equal($(corsEl.getDOMNode()).find('.loading-lines').length, 1);
       });
 
       it('hides loading bars', function () {
         Actions.toggleLoadingBarsToEnabled(false);
 
-        assert.notOk($(corsEl.getDOMNode()).hasClass('loading-lines'));
+        assert.equal($(corsEl.getDOMNode()).find('.loading-lines').length, 0);
       });
     });
 

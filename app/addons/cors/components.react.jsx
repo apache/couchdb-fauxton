@@ -178,8 +178,8 @@ define([
       }
 
       return (
-        <div id= "origin-domains-container">
-          <div className= "origin-domains">
+        <div id="origin-domains-container">
+          <div className="origin-domains">
             <div className="input-append">
               <input type="text" name="new_origin_domain" onChange={this.onInputChange} onKeyUp={this.onKeyUp} value={this.state.origin} placeholder="e.g., https://site.com"/>
               <button onClick={this.addOrigin} className="btn btn-primary add-domain"> Add </button>
@@ -261,7 +261,7 @@ define([
       this.setState(this.getStoreState());
     },
 
-    enableCorsChange: function (event) {
+    enableCorsChange: function () {
       if (this.state.corsEnabled && !_.isEmpty(this.state.origins) ) {
         var result = window.confirm(app.i18n.en_US['cors-disable-cors-prompt']);
         if (!result) { return; }
@@ -305,10 +305,17 @@ define([
 
     render: function () {
       var isVisible = _.all([this.state.corsEnabled, !this.state.isAllOrigins]);
-      var className = this.state.corsEnabled ? 'collapsing-container' : '';
+
+      var originSettings = (
+        <div id={this.state.corsEnabled ? 'collapsing-container' : ''}>
+          <Origins corsEnabled={this.state.corsEnabled} originChange={this.originChange} isAllOrigins={this.state.isAllOrigins}/>
+          <OriginTable updateOrigin={this.updateOrigin} deleteOrigin={this.deleteOrigin} isVisible={isVisible} origins={this.state.origins} />
+          <OriginInput addOrigin={this.addOrigin} isVisible={isVisible} />
+        </div>
+      );
 
       if (this.state.isLoading) {
-        return (<ReactComponents.LoadLines />);
+        originSettings = (<ReactComponents.LoadLines />);
       }
 
       return (
@@ -319,20 +326,18 @@ define([
 
           <form id="corsForm" onSubmit={this.save}>
             <div className="cors-enable">
-              <label className="checkbox">
-                <input
-                  type="checkbox"
-                  checked={this.state.corsEnabled}
-                  onChange={this.enableCorsChange} />
-                  Enable CORS
-              </label>
+              {this.state.corsEnabled ? 'Cors is currently enabled.' : 'Cors is currently disabled.'}
+              <br />
+              <button
+                type="button"
+                className="enable-disable btn btn-small btn-success"
+                onClick={this.enableCorsChange}
+                disabled={this.state.isLoading ? 'disabled' : null}
+              >
+                {this.state.corsEnabled ? 'Disable CORS' : 'Enable CORS'}
+              </button>
             </div>
-            <div id={className}>
-              <Origins corsEnabled={this.state.corsEnabled} originChange={this.originChange} isAllOrigins={this.state.isAllOrigins}/>
-              <OriginTable updateOrigin={this.updateOrigin} deleteOrigin={this.deleteOrigin} isVisible={isVisible} origins={this.state.origins} />
-              <OriginInput addOrigin={this.addOrigin} isVisible={isVisible} />
-            </div>
-
+            {originSettings}
           </form>
         </div>
       );
