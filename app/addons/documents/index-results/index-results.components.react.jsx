@@ -58,7 +58,7 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, Documents) {
 
     getRowContents: function (element, rownumber) {
       var row = this.props.schema.map(function (k, i) {
-        var el = element.content;
+        var el = element.content.doc || element.content;
         var key = 'tableview-data-cell-' + rownumber + k + i + el[k];
         var stringified = typeof el[k] === 'object' ? JSON.stringify(el[k]) : el[k];
         var className = k === '_id' ? 'tableview-data-cell-id' : null;
