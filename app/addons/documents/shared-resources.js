@@ -177,11 +177,6 @@ define([
         resp._rev = resp.rev;
         delete resp.rev;
       }
-      if (resp.id) {
-        if (_.isUndefined(this.id)) {
-          resp._id = resp.id;
-        }
-      }
 
       if (resp.ok) {
         delete resp.id;
