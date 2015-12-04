@@ -207,8 +207,8 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, Documents) {
            header={doc.header}
            docChecked={this.props.docChecked}
            isDeletable={doc.isDeletable}
-           docIdentifier={doc.id} >
-           {doc.url ? this.getUrlFragment('#' + doc.url) : doc.url}
+           docIdentifier={doc.id}>
+           {doc.url ? this.getUrlFragment('#' + doc.url) : null}
          </Components.Document>
        );
       }, this);

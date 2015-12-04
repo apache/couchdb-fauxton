@@ -33,6 +33,12 @@ module.exports = {
       .waitForElementPresent('.prettyprint', waitTime, false)
       .waitForElementNotPresent('.loading-lines', waitTime, false)
       .assert.containsText('.prettyprint', 'hasehase')
+      .getText('#dashboard-lower-content', function (result) {
+        var data = result.value;
+        this.verify.ok(data.indexOf('"_id":') === -1,
+          'Check if non existing _id attribute is there');
+      })
+      .assert.containsText('.prettyprint', 'hasehase')
     .end();
   },
 
