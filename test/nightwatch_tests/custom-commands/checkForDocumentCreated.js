@@ -22,9 +22,12 @@ function CheckForDocumentCreated () {
 // inherit from node's event emitter
 util.inherits(CheckForDocumentCreated, events.EventEmitter);
 
-CheckForDocumentCreated.prototype.command = function (doc, timeout) {
-  var couchUrl = helpers.test_settings.db_url,
-      db = helpers.testDatabaseName;
+CheckForDocumentCreated.prototype.command = function (doc, timeout, db) {
+  var couchUrl = helpers.test_settings.db_url;
+
+  if (!db) {
+    db = helpers.testDatabaseName;
+  }
 
   if (!timeout) {
     timeout = helpers.maxWaitTime;
