@@ -21,6 +21,8 @@ module.exports = {
       .createDocument(newDocumentName, newDatabaseName)
       .createDocument(newDocumentName + '2', newDatabaseName)
       .loginToGUI()
+      .checkForDocumentCreated(newDocumentName)
+      .checkForDocumentCreated(newDocumentName + '2')
       .url(baseUrl)
       .waitForElementPresent('#dashboard-content a[href="#/database/' + newDatabaseName + '/_all_docs"]', waitTime, false)
       .clickWhenVisible('#dashboard-content a[href="#/database/' + newDatabaseName + '/_all_docs"]', waitTime, false)
@@ -108,6 +110,7 @@ module.exports = {
 
     client
       .createDocument(newDocumentName, newDatabaseName)
+      .checkForDocumentCreated(newDocumentName)
       .loginToGUI()
       .url(baseUrl + '#/database/' + newDatabaseName + '/' + newDocumentName)
       .waitForElementPresent('#editor-container', waitTime, false)
