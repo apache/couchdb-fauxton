@@ -26,7 +26,7 @@ module.exports = {
       .clickWhenVisible('#new-all-docs-button a[href="#/database/' + newDatabaseName + '/new"]')
       .waitForElementPresent('#editor-container', waitTime, false)
       .verify.urlEquals(baseUrl + '/#/database/' + newDatabaseName + '/new')
-      .waitForElementPresent('.ace_layer.ace_cursor-layer.ace_hidden-cursors', waitTime, false)
+      .waitForElementPresent('.ace_gutter-active-line', waitTime, false)
 
       // confirm the header elements are showing up
       .waitForElementVisible('.js-lastelement', waitTime, true)
