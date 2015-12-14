@@ -12,15 +12,18 @@
 define([
   'api',
   'addons/components/react-components.react',
+  'libs/react-bootstrap',
   'testUtils',
   'react'
-], function (FauxtonAPI, ReactComponents, utils, React) {
+], function (FauxtonAPI, ReactComponents, ReactBootstrap, utils, React) {
 
   var assert = utils.assert;
   var TestUtils = React.addons.TestUtils;
+  var Modal = ReactBootstrap.Modal;
+
 
   describe('String Edit Modal', function () {
-    var container, modalEl;
+    var container, el;
     var stub = function () { };
 
     beforeEach(function () {
@@ -34,52 +37,58 @@ define([
     describe('event methods called', function () {
       it('onClose called by top (x)', function () {
         var spy = sinon.spy();
-        modalEl = TestUtils.renderIntoDocument(
+        el = TestUtils.renderIntoDocument(
           <ReactComponents.StringEditModal visible={true} onClose={spy} onSave={stub} />,
           container
         );
-        TestUtils.Simulate.click($(modalEl.getDOMNode()).find('.close')[0]);
+        var modal = TestUtils.findRenderedComponentWithType(el, Modal);
+        var modalEl = React.findDOMNode(modal.refs.modal);
+
+        TestUtils.Simulate.click($(modalEl).find('.close')[0]);
         assert.ok(spy.calledOnce);
       });
 
       it('onClose called by cancel button', function () {
         var spy = sinon.spy();
-        modalEl = TestUtils.renderIntoDocument(
+        el = TestUtils.renderIntoDocument(
           <ReactComponents.StringEditModal visible={true} onClose={spy} onSave={stub} />,
           container
         );
-        TestUtils.Simulate.click($(modalEl.getDOMNode()).find('.cancel-button')[0]);
+        var modal = TestUtils.findRenderedComponentWithType(el, Modal);
+        var modalEl = React.findDOMNode(modal.refs.modal);
+        TestUtils.Simulate.click($(modalEl).find('.cancel-button')[0]);
         assert.ok(spy.calledOnce);
       });
     });
 
-    describe('setValue / onSave', function () {
-      it('setValue ensures same content returns on saving', function () {
+    describe('onSave', function () {
+      it('ensures same content returns on saving', function () {
+        var string = "a string!";
         var spy = sinon.spy();
-        modalEl = TestUtils.renderIntoDocument(
-          <ReactComponents.StringEditModal visible={true} onClose={stub} onSave={spy} />,
+        el = TestUtils.renderIntoDocument(
+          <ReactComponents.StringEditModal visible={true} onClose={stub} onSave={spy} value={string} />,
           container
         );
+        var modal = TestUtils.findRenderedComponentWithType(el, Modal);
+        var modalEl = React.findDOMNode(modal.refs.modal);
 
-        var string = "a string!";
-
-        modalEl.setValue(string);
-        TestUtils.Simulate.click($(modalEl.getDOMNode()).find('#string-edit-save-btn')[0]);
+        TestUtils.Simulate.click($(modalEl).find('#string-edit-save-btn')[0]);
         assert.ok(spy.calledOnce);
         assert.ok(spy.calledWith(string));
       });
 
       it('replaces "\\n" with actual newlines', function () {
         var spy = sinon.spy();
-        modalEl = TestUtils.renderIntoDocument(
-          <ReactComponents.StringEditModal visible={true} onSave={spy} />,
+        var string = 'I am a string\\nwith\\nlinebreaks\\nin\\nit';
+        el = TestUtils.renderIntoDocument(
+          <ReactComponents.StringEditModal visible={true} onSave={spy} value={string} />,
           container
         );
 
-        var string = 'I am a string\\nwith\\nlinebreaks\\nin\\nit';
+        var modal = TestUtils.findRenderedComponentWithType(el, Modal);
+        var modalEl = React.findDOMNode(modal.refs.modal);
 
-        modalEl.setValue(string);
-        TestUtils.Simulate.click($(modalEl.getDOMNode()).find('#string-edit-save-btn')[0]);
+        TestUtils.Simulate.click($(modalEl).find('#string-edit-save-btn')[0]);
         assert.ok(spy.calledOnce);
       });
     });

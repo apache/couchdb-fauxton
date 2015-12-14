@@ -15,12 +15,15 @@ define([
   'api',
   'react',
   'addons/fauxton/dependencies/ZeroClipboard',
+  'libs/react-bootstrap',
 
   // needed to run the test individually. Don't remove
   'velocity.ui'
 ],
 
-function (app, FauxtonAPI, React, ZeroClipboard) {
+function (app, FauxtonAPI, React, ZeroClipboard, ReactBootstrap) {
+
+  var Modal = ReactBootstrap.Modal;
 
 
   // the path to the swf depends on whether we're in a bundled environment (e.g. prod) or local
@@ -339,32 +342,22 @@ function (app, FauxtonAPI, React, ZeroClipboard) {
       };
     },
 
-    componentDidUpdate: function () {
-      var params = (this.props.visible) ? { show: true, backdrop: 'static', keyboard: true } : 'hide';
-      $(React.findDOMNode(this)).modal(params);
-
-      $(React.findDOMNode(this)).on('hidden.bs.modal', function () {
-        this.props.onClose();
-      }.bind(this));
-    },
-
     render: function () {
       return (
-        <div className="modal hide confirmation-modal fade" tabIndex="-1" data-js-visible={this.props.visible}>
-          <div className="modal-header">
-            <button type="button" className="close" onClick={this.props.onClose} aria-hidden="true">&times;</button>
-            <h3>{this.props.title}</h3>
-          </div>
-          <div className="modal-body">
+        <Modal dialogClassName="confirmation-modal" show={this.props.visible} onHide={this.props.onClose}>
+          <Modal.Header closeButton={true}>
+            <Modal.Title>{this.props.title}</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
             <p>
               {this.props.text}
             </p>
-          </div>
-          <div className="modal-footer">
+          </Modal.Body>
+          <Modal.Footer>
             <button className="btn" onClick={this.props.onClose}><i className="icon fonticon-cancel-circled"></i> Cancel</button>
             <button className="btn btn-success js-btn-success" onClick={this.props.onSubmit}><i className="fonticon-ok-circled"></i> Okay</button>
-          </div>
-        </div>
+          </Modal.Footer>
+        </Modal>
       );
     }
   });

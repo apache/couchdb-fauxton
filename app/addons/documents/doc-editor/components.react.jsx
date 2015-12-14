@@ -6,11 +6,12 @@ define([
   'addons/documents/doc-editor/stores',
   'addons/fauxton/components.react',
   'addons/components/react-components.react',
+  'libs/react-bootstrap',
   'helpers'
-], function (FauxtonAPI, app, React, Actions, Stores, FauxtonComponents, GeneralComponents, Helpers) {
+], function (FauxtonAPI, app, React, Actions, Stores, FauxtonComponents, GeneralComponents, ReactBootstrap, Helpers) {
 
   var store = Stores.docEditorStore;
-
+  var Modal = ReactBootstrap.Modal;
 
   var DocEditorController = React.createClass({
 
@@ -281,34 +282,12 @@ define([
       };
     },
 
-    componentDidUpdate: function () {
-      var params = (this.props.visible) ? { show: true, backdrop: 'static', keyboard: true } : 'hide';
-      $(React.findDOMNode(this)).modal(params);
-    },
-
-    // ensure that if the user clicks ESC to close the window, the store gets wind of it
-    componentDidMount: function () {
-      $(React.findDOMNode(this)).on('hidden.bs.modal', function () {
-        Actions.hideUploadModal();
-      });
-    },
-
-    componentWillUnmount: function () {
-      $(React.findDOMNode(this)).off('hidden.bs.modal');
-    },
-
     closeModal: function () {
       if (this.state.inProgress) {
         Actions.cancelUpload();
       }
       Actions.hideUploadModal();
-
-      // timeout needed to only clear it once the animate close effect is done, otherwise the user sees it reset
-      // as it closes, which looks bad
-      setTimeout(function () {
-        Actions.resetUploadModal();
-        React.findDOMNode(this.refs.uploadForm).reset();
-      }.bind(this), 1000);
+      Actions.resetUploadModal();
     },
 
     upload: function () {
@@ -330,14 +309,12 @@ define([
       }
 
       return (
-        <div className="modal hide fade upload-file-modal" tabIndex="-1" data-js-visible={this.props.visible}>
-          <div className="modal-header">
-            <button type="button" className="close" onClick={this.closeModal} aria-hidden="true">&times;</button>
-            <h3>Upload Attachment</h3>
-          </div>
-          <div className="modal-body">
+        <Modal dialogClassName="upload-file-modal" show={this.props.visible} onHide={this.closeModal}>
+          <Modal.Header closeButton={true}>
+            <Modal.Title>Upload Attachment</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
             <div className={errorClasses}>{this.state.errorMessage}</div>
-
             <div>
               <form ref="uploadForm" className="form" method="post">
                 <p>
@@ -348,21 +325,20 @@ define([
                 <br />
               </form>
 
-              <div ref="loadIndicator" className={loadIndicatorClasses}>
+              <div className={loadIndicatorClasses}>
                 <div className="bar" style={{ width: this.state.loadPercentage + '%'}}></div>
               </div>
             </div>
-
-          </div>
-          <div className="modal-footer">
-             <button href="#" data-bypass="true" className="btn" onClick={this.closeModal}>
+          </Modal.Body>
+          <Modal.Footer>
+            <button href="#" data-bypass="true" className="btn" onClick={this.closeModal}>
               <i className="icon fonticon-cancel-circled"></i> Cancel
             </button>
             <button href="#" id="upload-btn" data-bypass="true" className="btn btn-success save" onClick={this.upload}>
               <i className="icon fonticon-ok-circled"></i> Upload
             </button>
-          </div>
-        </div>
+          </Modal.Footer>
+        </Modal>
       );
     }
   });
@@ -392,34 +368,6 @@ define([
         uuid.fetch().then(function () {
           this.setState({ uuid: uuid.next() });
         }.bind(this));
-        return;
-      }
-
-      var params = (this.props.visible) ? { show: true, backdrop: 'static', keyboard: true } : 'hide';
-      $(React.findDOMNode(this)).modal(params);
-      this.clearEvents();
-
-      // ensure that if the user clicks ESC to close the window, the store gets wind of it
-      $(React.findDOMNode(this)).on('hidden.bs.modal', function () {
-        Actions.hideCloneDocModal();
-      });
-
-      $(React.findDOMNode(this)).on('shown.bs.modal', function () {
-        this.focus();
-      }.bind(this));
-    },
-
-    focus: function () {
-      $(React.findDOMNode(this.refs.newDocId)).focus();
-    },
-
-    componentWillUnmount: function () {
-      this.clearEvents();
-    },
-
-    clearEvents: function () {
-      if (this.refs.newDocId) {
-        $(React.findDOMNode(this.refs.newDocId)).off('shown.bs.modal hidden.bs.modal');
       }
     },
 
@@ -437,28 +385,28 @@ define([
       }
 
       return (
-        <div className="modal hide fade clone-doc-modal" data-js-visible={this.props.visible} tabIndex="-1">
-          <div className="modal-header">
-            <button type="button" className="close" onClick={this.closeModal} aria-hidden="true">&times;</button>
-            <h3>Clone Document</h3>
-          </div>
-          <div className="modal-body">
+        <Modal dialogClassName="clone-doc-modal" show={this.props.visible} onHide={this.closeModal}>
+          <Modal.Header closeButton={true}>
+            <Modal.Title>Clone Document</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
             <form className="form" method="post">
               <p>
                 Set new document's ID:
               </p>
-              <input ref="newDocId" type="text" className="input-block-level" onChange={this.docIDChange} value={this.state.uuid} />
+              <input ref="newDocId" type="text" autoFocus={true} className="input-block-level"
+                onChange={this.docIDChange} value={this.state.uuid} />
             </form>
-          </div>
-          <div className="modal-footer">
+          </Modal.Body>
+          <Modal.Footer>
             <button className="btn" onClick={this.closeModal}>
               <i className="icon fonticon-cancel-circled"></i> Cancel
             </button>
             <button className="btn btn-success save" onClick={this.cloneDoc}>
               <i className="fonticon-ok-circled"></i> Clone
             </button>
-          </div>
-        </div>
+          </Modal.Footer>
+        </Modal>
       );
     }
   });

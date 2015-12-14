@@ -20,9 +20,14 @@ define([
   'addons/documents/doc-editor/actions',
   'addons/documents/doc-editor/actiontypes',
   'addons/databases/base',
-  'testUtils'
-], function (app, FauxtonAPI, React, Documents, Components, Stores, Actions, ActionTypes, Databases, utils) {
+  'testUtils',
+  'libs/react-bootstrap'
+], function (app, FauxtonAPI, React, Documents, Components, Stores, Actions, ActionTypes, Databases, utils,
+  ReactBoostrap) {
+
   FauxtonAPI.router = new FauxtonAPI.Router([]);
+  var Modal = ReactBoostrap.Modal;
+
 
   var assert = utils.assert;
   var TestUtils = React.addons.TestUtils;
@@ -157,9 +162,15 @@ define([
           doc: doc
         }
       });
-      assert.ok($(el.getDOMNode()).find('.confirmation-modal')[0].getAttribute('data-js-visible') == 'false');
+
+      // this is unfortunate, but I can't find a better way to do it. Refs won't work for bootstrap modals because
+      // they add the modal to the page at the top level outside the component. There are 3 modals in the
+      // component: the upload modal, clone modal, delete doc modal. We locate it by index
+      var modals = TestUtils.scryRenderedComponentsWithType(el, Modal);
+
+      assert.equal(React.findDOMNode(modals[2].refs.modal), null);
       Actions.showDeleteDocModal();
-      assert.ok($(el.getDOMNode()).find('.confirmation-modal')[0].getAttribute('data-js-visible') == 'true');
+      assert.notEqual(React.findDOMNode(modals[2].refs.modal), null);
     });
 
     it('setting uploadDocModal=true in store shows modal', function () {
@@ -171,12 +182,14 @@ define([
           doc: doc
         }
       });
-      assert.ok($(el.getDOMNode()).find('.upload-file-modal')[0].getAttribute('data-js-visible') == 'false');
-      Actions.showUploadModal();
-      assert.ok($(el.getDOMNode()).find('.upload-file-modal')[0].getAttribute('data-js-visible') == 'true');
-    });
+      var modals = TestUtils.scryRenderedComponentsWithType(el, Modal);
 
+      assert.equal(React.findDOMNode(modals[1].refs.modal), null);
+      Actions.showUploadModal();
+      assert.notEqual(React.findDOMNode(modals[1].refs.modal), null);
+    });
   });
+
 
   describe("AttachmentsPanelButton", function () {
     var container, doc;

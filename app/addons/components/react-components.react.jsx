@@ -25,6 +25,7 @@ function (app, FauxtonAPI, React, Stores, FauxtonComponents, ace, beautifyHelper
 
   var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
   var componentStore = Stores.componentStore;
+  var Modal = ReactBootstrap.Modal;
 
 
   var ToggleHeaderButton = React.createClass({
@@ -355,7 +356,7 @@ function (app, FauxtonAPI, React, Stores, FauxtonComponents, ace, beautifyHelper
         stringEditModalVisible: false,
         stringEditIconVisible: false,
         stringEditIconStyle: {},
-        stringEditModalDefaultString: ''
+        stringEditModalValue: ''
       };
     },
 
@@ -560,8 +561,10 @@ function (app, FauxtonAPI, React, Stores, FauxtonComponents, ace, beautifyHelper
       }
       string = string.substring(1, lastChar);
 
-      this.setState({ stringEditModalVisible: true });
-      this.refs.stringEditModal.setValue(string);
+      this.setState({
+        stringEditModalVisible: true,
+        stringEditModalValue: string
+      });
     },
 
     saveStringEditModal: function (newString) {
@@ -648,6 +651,7 @@ function (app, FauxtonAPI, React, Stores, FauxtonComponents, ace, beautifyHelper
           <StringEditModal
             ref="stringEditModal"
             visible={this.state.stringEditModalVisible}
+            value={this.state.stringEditModalValue}
             onSave={this.saveStringEditModal}
             onClose={this.closeStringEditModal} />
         </div>
@@ -660,6 +664,7 @@ function (app, FauxtonAPI, React, Stores, FauxtonComponents, ace, beautifyHelper
   var StringEditModal = React.createClass({
 
     propTypes: {
+      value: React.PropTypes.string.isRequired,
       visible: React.PropTypes.bool.isRequired,
       onClose: React.PropTypes.func.isRequired,
       onSave: React.PropTypes.func.isRequired
@@ -673,44 +678,32 @@ function (app, FauxtonAPI, React, Stores, FauxtonComponents, ace, beautifyHelper
       };
     },
 
-    componentDidUpdate: function () {
-      var params = (this.props.visible) ? { show: true, backdrop: 'static', keyboard: true } : 'hide';
-      $(React.findDOMNode(this)).modal(params);
-
-      $(React.findDOMNode(this)).on('shown.bs.modal', function () {
-        this.editor.focus();
-
-        // re-opening the modal to edit a second string doesn't update the content. This forces the editor to redraw
-        // to show the latest content each time it opens
-        this.editor.resize();
-        this.editor.renderer.updateFull();
-      }.bind(this));
+    componentDidMount: function () {
+      if (!this.props.visible) {
+        return;
+      }
+      this.initEditor(this.props.value);
     },
 
-    // ensure that if the user clicks ESC to close the window, the store gets wind of it
-    componentDidMount: function () {
-      $(React.findDOMNode(this)).on('hidden.bs.modal', function () {
-        this.props.onClose();
-      }.bind(this));
+    componentDidUpdate: function (prevProps) {
+      if (!this.props.visible) {
+        return;
+      }
+      var val = '';
+      if (!prevProps.visible && this.props.visible) {
+        val = JSON.parse('"' + this.props.value + '"'); // this ensures newlines are converted
+      }
 
+      this.initEditor(val);
+    },
+
+    initEditor: function (val) {
       this.editor = ace.edit(React.findDOMNode(this.refs.stringEditor));
-
-      // suppresses an Ace editor error
-      this.editor.$blockScrolling = Infinity;
-
+      this.editor.$blockScrolling = Infinity; // suppresses an Ace editor error
       this.editor.setShowPrintMargin(false);
       this.editor.setOption('highlightActiveLine', true);
       this.editor.setTheme('ace/theme/idle_fingers');
-    },
-
-    setValue: function (val) {
-      // we do the JSON.parse so the string editor modal shows newlines
-      val = JSON.parse('"' + val + '"');      //returns an object, expects a JSON string
       this.editor.setValue(val, -1);
-    },
-
-    componentWillUnmount: function () {
-      $(React.findDOMNode(this)).off('hidden.bs.modal shown.bs.modal');
     },
 
     closeModal: function () {
@@ -723,22 +716,21 @@ function (app, FauxtonAPI, React, Stores, FauxtonComponents, ace, beautifyHelper
 
     render: function () {
       return (
-        <div className="modal hide fade string-editor-modal" tabIndex="-1">
-          <div className="modal-header">
-            <button type="button" className="close" onClick={this.closeModal} aria-hidden="true">&times;</button>
-            <h3>Edit text <span id="string-edit-header"></span></h3>
-          </div>
-          <div className="modal-body">
+        <Modal dialogClassName="string-editor-modal" show={this.props.visible} onHide={this.closeModal}>
+          <Modal.Header closeButton={true}>
+            <Modal.Title>Edit text <span id="string-edit-header"></span></Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
             <div id="modal-error" className="hide alert alert-error"/>
             <div id="string-editor-wrapper"><div ref="stringEditor" className="doc-code"></div></div>
-          </div>
-          <div className="modal-footer">
+          </Modal.Body>
+          <Modal.Footer>
             <button className="cancel-button btn" onClick={this.closeModal}><i className="icon fonticon-circle-x"></i> Cancel</button>
             <button id="string-edit-save-btn" onClick={this.save} className="btn btn-success save">
               <i className="fonticon-circle-check"></i> Save
             </button>
-          </div>
-        </div>
+          </Modal.Footer>
+        </Modal>
       );
     }
   });
