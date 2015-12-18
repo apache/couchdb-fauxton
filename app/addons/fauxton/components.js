@@ -271,107 +271,6 @@ function (app, FauxtonAPI, ace, spin, ZeroClipboard) {
   });
 
 
-  Components.Pagination = FauxtonAPI.View.extend({
-    tagName: "ul",
-    className: 'pagination',
-    template: "addons/fauxton/templates/pagination",
-
-    initialize: function (options) {
-      this.page = parseInt(options.page, 10);
-      this.perPage = options.perPage;
-      this.urlFun = options.urlFun;
-    },
-
-    serialize: function () {
-      var total = this.collection.length;
-      var totalPages = Math.ceil(total / this.perPage);
-
-      var visiblePagesObject = this.getVisiblePages(this.page, totalPages);
-
-      var from = visiblePagesObject.from,
-          to = visiblePagesObject.to;
-
-      return {
-        page: this.page,
-        perPage: this.perPage,
-        total: total,
-        totalPages: totalPages,
-        urlFun: this.urlFun,
-        from: from,
-        to: to
-      };
-    },
-
-    getVisiblePages: function (page, totalPages) {
-      var from, to;
-
-      if (totalPages < 10) {
-        from = 1;
-        to = totalPages + 1;
-      } else { // if totalPages is more than 10
-        from = page - 5;
-        to = page + 5;
-
-        if (from <= 1) {
-          from = 1;
-          to = 11;
-        }
-        if (to > totalPages + 1) {
-          from =  totalPages - 9;
-          to = totalPages + 1;
-        }
-
-      }
-
-      return {
-        from: from,
-        to: to
-      };
-
-    }
-  });
-
-
-  // A super-simple replacement for window.confirm()
-  Components.ConfirmationModal = FauxtonAPI.View.extend({
-    template: 'addons/fauxton/templates/confirmation_modal',
-
-    events: {
-      'click .js-btn-success': 'onSelectOkay'
-    },
-
-    initialize: function (options) {
-      this.options = _.extend({
-        title: 'Please confirm',
-        text: '',
-        action: null
-      }, options);
-    },
-
-    onSelectOkay: function () {
-      this.hideModal();
-      if (_.isFunction(this.options.action)) {
-        this.options.action();
-      }
-    },
-
-    showModal: function () {
-      this.$('.modal').modal();
-      $('.modal-backdrop').css('z-index', FauxtonAPI.constants.MISC.MODAL_BACKDROP_Z_INDEX);
-    },
-
-    hideModal: function () {
-      this.$('.modal').modal('hide');
-    },
-
-    serialize: function () {
-      return {
-        title: this.options.title,
-        text: this.options.text
-      };
-    }
-  });
-
   Components.ModalView = FauxtonAPI.View.extend({
     disableLoader: true,
 
@@ -512,22 +411,6 @@ function (app, FauxtonAPI, ace, spin, ZeroClipboard) {
           process(ids);
         }
       });
-    }
-  });
-
-  Components.FilteredView = FauxtonAPI.View.extend({
-    createFilteredData: function (json) {
-      return _.reduce(this.filters, function (elements, filter) {
-        return _.filter(elements, function (element) {
-          var match = false;
-          _.each(element, function (value) {
-            if (new RegExp(filter, 'i').test(value.toString())) {
-              match = true;
-            }
-          });
-          return match;
-        });
-      }, json, this);
     }
   });
 
