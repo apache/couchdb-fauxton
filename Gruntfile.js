@@ -107,6 +107,9 @@ module.exports = function (grunt) {
 
     Object.keys(settings.template).forEach(function (key) {
       settings.template[key].variables.generationDate = new Date().toISOString();
+      if (!settings.template[key].variables.generationLabel) {
+        settings.template[key].variables.generationLabel = 'Generated: ';
+      }
       settings.template[key].app.i18n = i18n;
     });
 

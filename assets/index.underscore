@@ -45,7 +45,7 @@
   <!-- Application source. -->
   <script data-main="/config" src="<%= requirejs %>"></script>
 
-  <!-- Generated: <%= generationDate %> -->
+  <!-- <%= generationLabel %><%= generationDate %> -->
 
 </body>
 </html>
