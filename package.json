@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "async": "~0.2.6",
+    "clean-css": "^3.4.9",
     "couchapp": "~0.11.0",
     "eslint": "^1.6.0",
     "grunt": "~0.4.1",
@@ -25,7 +26,6 @@
     "grunt-contrib-clean": "~0.4.1",
     "grunt-contrib-concat": "~0.3.0",
     "grunt-contrib-copy": "~0.4.1",
-    "grunt-contrib-cssmin": "~0.5.0",
     "grunt-contrib-jst": "~0.5.0",
     "grunt-contrib-requirejs": "~0.4.1",
     "grunt-contrib-uglify": "~0.2.0",
@@ -50,6 +50,7 @@
   "scripts": {
     "stylecheck": "eslint --ext=js,jsx .",
     "build:less": "mkdirp ./dist/debug/css && node ./build-helper/less.js",
+    "build:css-compress": "mkdirp ./dist/release/css/ && cleancss -o dist/release/css/index.css dist/debug/css/index.css",
     "test": "grunt test",
     "couchdebug": "grunt couchdebug",
     "couchdb": "grunt couchdb",

@@ -181,21 +181,6 @@ module.exports = function (grunt) {
       }
     },
 
-    cssmin: {
-      compress: {
-        files: {
-          "dist/release/css/index.css": [
-            'dist/debug/css/index.css',
-            'assets/css/*.css',
-            "app/addons/**/assets/css/*.css"
-          ]
-        },
-        options: {
-          report: 'min'
-        }
-      }
-    },
-
     uglify: {
       release: {
         files: {
@@ -364,6 +349,10 @@ module.exports = function (grunt) {
         command: 'npm run build:less'
       },
 
+      'css-compress': {
+        command: 'npm run build:css-compress'
+      },
+
       stylecheckSingleFile: {
         command: '' // populated dynamically
       },
@@ -491,7 +480,6 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-jst');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-uglify');
-  grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-shell');
   grunt.loadNpmTasks('grunt-md5');
 
@@ -514,10 +502,9 @@ module.exports = function (grunt) {
   grunt.registerTask('dependencies', ['get_deps', 'gen_load_addons:default']);
 
   // minify code and css, ready for release.
-  grunt.registerTask('minify', ['uglify', 'cssmin:compress']);
   grunt.registerTask('jsx', ['shell:build-jsx']);
   grunt.registerTask('build', ['shell:build-less', 'jst', 'requirejs', 'concat:requirejs', 'uglify',
-    'cssmin:compress', 'md5:requireJS', 'md5:css', 'template:release']);
+    'shell:css-compress', 'md5:requireJS', 'md5:css', 'template:release']);
 
   /*
    * Build the app in either dev, debug, or release mode
