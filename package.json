@@ -28,7 +28,6 @@
     "grunt-contrib-copy": "~0.4.1",
     "grunt-contrib-jst": "~0.5.0",
     "grunt-contrib-requirejs": "~0.4.1",
-    "grunt-contrib-uglify": "~0.2.0",
     "grunt-couchapp": "~0.2.1",
     "grunt-exec": "~0.4.0",
     "grunt-init": "~0.2.0",
@@ -43,6 +42,7 @@
     "react-tools": "^0.12.0",
     "request": "^2.54.0",
     "send": "~0.1.1",
+    "uglify-js": "^2.6.1",
     "underscore": "~1.4.2",
     "url": "~0.7.9",
     "urls": "~0.0.3"
@@ -51,6 +51,7 @@
     "stylecheck": "eslint --ext=js,jsx .",
     "build:less": "mkdirp ./dist/debug/css && node ./build-helper/less.js",
     "build:css-compress": "mkdirp ./dist/release/css/ && cleancss -o dist/release/css/index.css dist/debug/css/index.css",
+    "build:uglify": "mkdirp ./dist/release/js/ && uglifyjs --mangle --compress --screw-ie8 -o dist/release/js/require.js dist/debug/js/require.js",
     "test": "grunt test",
     "couchdebug": "grunt couchdebug",
     "couchdb": "grunt couchdb",

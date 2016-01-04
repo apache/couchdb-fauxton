@@ -178,16 +178,6 @@ module.exports = function (grunt) {
       }
     },
 
-    uglify: {
-      release: {
-        files: {
-          "dist/release/js/require.js": [
-            "dist/debug/js/require.js"
-          ]
-        }
-      }
-    },
-
     // Runs a proxy server for easier development, no need to keep deploying to couchdb
     couchserver: couchserver_config,
 
@@ -350,6 +340,10 @@ module.exports = function (grunt) {
         command: 'npm run build:css-compress'
       },
 
+      uglify: {
+        command: 'npm run build:uglify'
+      },
+
       stylecheckSingleFile: {
         command: '' // populated dynamically
       },
@@ -476,7 +470,6 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-jst');
   grunt.loadNpmTasks('grunt-contrib-concat');
-  grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-shell');
   grunt.loadNpmTasks('grunt-md5');
 
@@ -500,7 +493,7 @@ module.exports = function (grunt) {
 
   // minify code and css, ready for release.
   grunt.registerTask('jsx', ['shell:build-jsx']);
-  grunt.registerTask('build', ['shell:build-less', 'jst', 'requirejs', 'concat:requirejs', 'uglify',
+  grunt.registerTask('build', ['shell:build-less', 'jst', 'requirejs', 'concat:requirejs', 'shell:uglify',
     'shell:css-compress', 'md5:requireJS', 'md5:css', 'template:release']);
 
   /*
