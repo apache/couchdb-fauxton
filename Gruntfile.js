@@ -155,7 +155,7 @@ module.exports = function (grunt) {
           }
         },
         files: {
-          "dist/debug/templates.js": [
+          'dist/tmp-out/templates.js': [
             "app/templates/**/*.html",
             "app/addons/**/templates/**/*.html"
           ]
@@ -171,12 +171,12 @@ module.exports = function (grunt) {
     // index.html.
     concat: {
       requirejs: {
-        src: ["assets/js/libs/require.js", "dist/debug/templates.js", "dist/debug/require.js"],
-        dest: "dist/debug/js/require.js"
+        src: ["assets/js/libs/require.js", 'dist/tmp-out/templates.js', 'dist/tmp-out/require.js'],
+        dest: 'dist/tmp-out/require.js'
       },
 
       test_config_js: {
-        src: ["dist/debug/templates.js", "test/test.config.js"],
+        src: ['dist/tmp-out/templates.js', "test/test.config.js"],
         dest: 'test/test.config.js'
       }
     },
@@ -195,7 +195,7 @@ module.exports = function (grunt) {
       },
       style: {
         files: initHelper.watchFiles(['.less', '.css'], ["./app/**/*.css", "./app/**/*.less", "./assets/**/*.css", "./assets/**/*.less"]),
-        tasks: ['clean:watch', 'dependencies', 'shell:build-less']
+        tasks: ['clean:watch', 'dependencies', 'shell:build-less-debug']
       },
       html: {
         // the index.html is added in as a dummy file incase there is no
@@ -217,7 +217,7 @@ module.exports = function (grunt) {
           mainConfigFile: "app/config.js",
 
           // Output file.
-          out: "dist/debug/require.js",
+          out: 'dist/tmp-out/require.js',
 
           // Root application module.
           name: "config",
@@ -335,8 +335,12 @@ module.exports = function (grunt) {
         command: 'npm run stylecheck'
       },
 
-      'build-less': {
-        command: 'npm run build:less'
+      'build-less-debug': {
+        command: 'npm run build:less:debug'
+      },
+
+      'build-less-release': {
+        command: 'npm run build:less:release'
       },
 
       'css-compress': {
@@ -496,7 +500,7 @@ module.exports = function (grunt) {
 
   // minify code and css, ready for release.
   grunt.registerTask('jsx', ['shell:build-jsx']);
-  grunt.registerTask('build', ['shell:build-less', 'jst', 'requirejs', 'concat:requirejs', 'shell:uglify',
+  grunt.registerTask('build', ['shell:build-less-release', 'jst', 'requirejs', 'concat:requirejs', 'shell:uglify',
     'shell:css-compress', 'md5:requireJS', 'md5:css', 'template:release']);
 
   /*
@@ -506,11 +510,11 @@ module.exports = function (grunt) {
   grunt.registerTask('dev', ['debugDev', 'couchserver']);
 
   // build a debug release
-  grunt.registerTask('debug', ['lint', 'dependencies', "gen_initialize:development", 'jsx', 'concat:requirejs', 'shell:build-less',
+  grunt.registerTask('debug', ['lint', 'dependencies', "gen_initialize:development", 'jsx', 'concat:requirejs', 'shell:build-less-debug',
     'template:development', 'copy:debug']);
 
   grunt.registerTask('debugDev', ['clean', 'dependencies', "gen_initialize:development", 'jsx', 'shell:stylecheck',
-    'shell:build-less', 'template:development', 'copy:debug']);
+    'shell:build-less-debug', 'template:development', 'copy:debug']);
 
   grunt.registerTask('watchRun', ['clean:watch', 'dependencies', 'shell:stylecheck']);
 
