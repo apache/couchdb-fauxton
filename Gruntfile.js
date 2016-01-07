@@ -79,28 +79,7 @@ module.exports = function (grunt) {
     return theAssets;
   }();
 
-  var templateSettings = function () {
-    var defaultSettings = {
-      "development": {
-        "src": "assets/index.underscore",
-        "dest": "dist/debug/index.html",
-        "variables": {
-          "requirejs": "/assets/js/libs/require.js",
-          "css": "./css/index.css",
-          "base": null
-        }
-      },
-      "release": {
-        "src": "assets/index.underscore",
-        "dest": "dist/debug/index.html",
-        "variables": {
-          "requirejs": "./js/{REQUIREJS_FILE}",
-          "css": "./css/{CSS_FILE}",
-          "base": null
-        }
-      }
-    };
-
+  var templateSettings = (function getTemplateSettings () {
     var settings = initHelper.readSettingsFile();
 
     var i18n = JSON.stringify(initHelper.readI18nFile(), null, ' ');
@@ -113,15 +92,14 @@ module.exports = function (grunt) {
       settings.template[key].app.i18n = i18n;
     });
 
-    return settings.template || defaultSettings;
-  }();
+    return settings.template;
+  })();
 
   var couchserver_config  = function () {
     // add a "couchserver" key to settings.json with JSON that matches the
     // keys and values below (plus your customizations) to have Fauxton work
     // against a remote CouchDB-compatible server.
     var defaults = {
-      dist: './dist/debug/',
       port: helper.devServerPort,
       proxy: {
         target: helper.couch

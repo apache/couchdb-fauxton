@@ -29,7 +29,7 @@ module.exports = function (grunt) {
     }
 
     // Options
-    var dist_dir = options.dist || './dist/debug/',
+    var dist_dir = './dist/debug/',
         app_dir = './app',
         port = options.port,
         setContentSecurityPolicy = _.isUndefined(options.contentSecurityPolicy) ? true : options.contentSecurityPolicy;
