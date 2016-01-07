@@ -209,27 +209,6 @@ module.exports = function (grunt) {
       }
     },
 
-    requirejs: {
-      compile: {
-        options: {
-          baseUrl: 'app',
-          // Include the main configuration file.
-          mainConfigFile: "app/config.js",
-
-          // Output file.
-          out: 'dist/tmp-out/require.js',
-
-          // Root application module.
-          name: "config",
-
-          // Do not wrap everything in an IIFE.
-          wrap: false,
-          optimize: "none",
-          findNestedDependencies: true
-        }
-      }
-    },
-
     // Copy build artifacts and library code into the distribution
     // see - http://gruntjs.com/configuring-tasks#building-the-files-object-dynamically
     copy: {
@@ -355,6 +334,10 @@ module.exports = function (grunt) {
         command: '' // populated dynamically
       },
 
+      requirejs: {
+        command: 'npm run build:requirejs:production'
+      },
+
       phantomjs: {
         command: 'node ./node_modules/phantomjs/bin/phantomjs --debug=false ' +
           '--ssl-protocol=sslv2 --web-security=false --ignore-ssl-errors=true ' +
@@ -380,6 +363,7 @@ module.exports = function (grunt) {
     },
 
     // these rename the already-bundled, minified requireJS and CSS files to include their hash
+    // XXX use tmp-out
     md5: {
       requireJS: {
         files: { "dist/release/js/" : "dist/release/js/require.js" },
@@ -472,7 +456,6 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-couchapp');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-exec');
-  grunt.loadNpmTasks('grunt-contrib-requirejs');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-jst');
@@ -500,7 +483,7 @@ module.exports = function (grunt) {
 
   // minify code and css, ready for release.
   grunt.registerTask('jsx', ['shell:build-jsx']);
-  grunt.registerTask('build', ['shell:build-less-release', 'jst', 'requirejs', 'concat:requirejs', 'shell:uglify',
+  grunt.registerTask('build', ['shell:build-less-release', 'jst', 'shell:requirejs', 'concat:requirejs', 'shell:uglify',
     'shell:css-compress', 'md5:requireJS', 'md5:css', 'template:release']);
 
   /*

@@ -66,6 +66,13 @@ To deploy to your local [CouchDB instance](http://localhost:5984/fauxton/_design
 
     grunt couchapp_deploy
 
+### Build pipeline overview
+
+During a release build we are creating a folder called `dist/tmp-out`.
+It contains all files that are just intermediate results for the final
+release artifact. Once everything is finished the files are copied from
+`tmp-out` to their final destination, `dist/release` where they are
+part of the deployable release artifact.
 
 ### (Optional) To avoid a npm global install
     # Development mode, non minified files
