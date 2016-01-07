@@ -62,35 +62,6 @@ function (app, $, _, Backbone, Bootstrap, Helpers, Utils, FauxtonAPI, Couchdb) {
   // Localize or create a new JavaScript Template object
   var JST = window.JST = window.JST || {};
 
-  $(document).on('ajaxSend.csrf', function (elm, xhr, s) {
-
-    function parseCookies (cookies) {
-      if (!cookies) {
-        return {};
-      }
-
-      return _.reduce(cookies.split(';'), function (list, cookie) {
-        var parts = cookie.split('=');
-        list[parts.shift().trim()] = decodeURI(parts.join('='));
-        return list;
-      }, {});
-    }
-
-    var cookies = parseCookies(document.cookie);
-    var csrf = cookies['CouchDB-CSRF'] ? cookies['CouchDB-CSRF'] : 'true';
-
-    xhr.setRequestHeader('X-CouchDB-CSRF', csrf);
-  });
-
-  $(document).on('ajaxComplete', function (event, xhr, settings) {
-    if (xhr.getResponseHeader('x-couchdb-csrf-valid') === 'true') {
-      FauxtonAPI.showCsrfInfo();
-      return;
-    }
-
-    FauxtonAPI.removeHeaderLink && FauxtonAPI.removeHeaderLink({id: 'csrf', statusArea: true});
-  });
-
   // Configure LayoutManager with Backbone Boilerplate defaults
   FauxtonAPI.Layout.configure({
     // Allow LayoutManager to augment Backbone.View.prototype.
@@ -145,12 +116,6 @@ function (app, $, _, Backbone, Bootstrap, Helpers, Utils, FauxtonAPI, Couchdb) {
       FauxtonAPI.dispatch({
         type: 'UPDATE_NAVBAR_LINK',
         link: link
-      });
-    },
-
-    showCsrfInfo: function () {
-      FauxtonAPI.dispatch({
-        type: 'SHOW_CSRF_INFO'
       });
     },
 

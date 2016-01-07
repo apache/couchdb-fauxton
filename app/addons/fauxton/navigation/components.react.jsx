@@ -72,8 +72,7 @@ function (app, FauxtonAPI, React, Stores, Actions) {
         footerNavLinks: navBarStore.getFooterNavLinks(),
         activeLink: navBarStore.getActiveLink(),
         version: navBarStore.getVersion(),
-        isMinimized: navBarStore.isMinimized(),
-        statusAreaItems: navBarStore.getStatusAreaItems()
+        isMinimized: navBarStore.isMinimized()
       };
     },
 
@@ -113,20 +112,6 @@ function (app, FauxtonAPI, React, Stores, Actions) {
       Actions.toggleNavbarMenu();
     },
 
-    getStatusArea: function () {
-      var csrf = this.state.statusAreaItems[0];
-
-      if (!csrf) {
-        return null;
-      }
-
-      return (
-        <div className="nav-status-area">
-          <i className={csrf.icon + " fonticon"}></i> CSRF
-        </div>
-      );
-    },
-
     render: function () {
       var navLinks = this.createLinks(this.state.navLinks);
       var bottomNavLinks = this.createLinks(this.state.bottomNavLinks);
@@ -154,7 +139,6 @@ function (app, FauxtonAPI, React, Stores, Actions) {
             </div>
 
             <Footer version={this.state.version}/>
-            {this.getStatusArea()}
             <div id="footer-links">
               <ul id="footer-nav-links" className="nav">
                 {footerNavLinks}
