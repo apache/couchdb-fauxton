@@ -108,7 +108,7 @@ define([
       container = document.createElement('div');
 
       var designDoc = {
-        "id": "_design/test-doc",
+        "_id": "_design/test-doc",
         "key": "_design/test-doc",
         "value": {
           "rev": "20-9e4bc8b76fd7d752d620bbe6e0ea9a80"

@@ -163,7 +163,7 @@ define([
 
       it('does not render checkboxes for elements with no rev in a table (usual docs)', function () {
         IndexResultsActions.sendMessageNewResultList({
-          collection: createDocColumn([{id: '1', foo: 'testId1'}, {id: '1', bar: 'testId1'}])
+          collection: createDocColumn([{_id: '1', foo: 'testId1'}, {_id: '1', bar: 'testId1'}])
         });
 
         store.enableTableView();
@@ -182,7 +182,7 @@ define([
 
       it('renders checkboxes for elements with an id and rev in a table (usual docs)', function () {
         IndexResultsActions.sendMessageNewResultList({
-          collection: createDocColumn([{id: '1', foo: 'testId1', rev: 'foo'}, {bar: 'testId1', rev: 'foo'}])
+          collection: createDocColumn([{_id: '1', foo: 'testId1', rev: 'foo'}, {bar: 'testId1', rev: 'foo'}])
         });
 
         store.enableTableView();
@@ -201,7 +201,7 @@ define([
 
       it('renders checkboxes for elements with an id and rev in a json view (usual docs)', function () {
         IndexResultsActions.sendMessageNewResultList({
-          collection: createDocColumn([{id: '1', emma: 'testId1', rev: 'foo'}, {bar: 'testId1'}])
+          collection: createDocColumn([{_id: '1', emma: 'testId1', rev: 'foo'}, {bar: 'testId1'}])
         });
 
         IndexResultsActions.resultsListReset();

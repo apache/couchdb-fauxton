@@ -160,7 +160,7 @@ define([
     },
 
     safeID: function () {
-      return app.utils.getSafeIdForDoc(this.id);
+      return app.utils.getSafeIdForDoc(this.id || this.get('id'));
     },
 
     destroy: function () {
@@ -176,11 +176,6 @@ define([
       if (resp.rev) {
         resp._rev = resp.rev;
         delete resp.rev;
-      }
-      if (resp.id) {
-        if (_.isUndefined(this.id)) {
-          resp._id = resp.id;
-        }
       }
 
       if (resp.ok) {
