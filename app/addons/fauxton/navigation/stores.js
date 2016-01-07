@@ -19,12 +19,6 @@ define([
 function (app, FauxtonAPI, ActionTypes) {
   var Stores = {};
 
-  var csrfItem = {
-    id: 'csrf',
-    title: 'CSRF',
-    icon: 'icon-shield',
-    statusArea: true
-  };
 
   Stores.NavBarStore = FauxtonAPI.Store.extend({
     initialize: function () {
@@ -36,7 +30,6 @@ function (app, FauxtonAPI, ActionTypes) {
       this.version = null;
       this.navLinks = [];
       this.footerNavLinks = [];
-      this.statusArea = [csrfItem];
       this.bottomNavLinks = [{
         id: 'Documentation',
         title: "Documentation",
@@ -46,10 +39,6 @@ function (app, FauxtonAPI, ActionTypes) {
         top: true,
         target: '_blank'
       }];
-    },
-
-    addCsrfInfo: function () {
-      this.addLink(csrfItem);
     },
 
     addLink: function (link) {
@@ -67,10 +56,6 @@ function (app, FauxtonAPI, ActionTypes) {
       }
       if (link.footerNav) {
         this.footerNavLinks.push(link);
-        return;
-      }
-      if (link.statusArea) {
-        this.statusArea.push(link);
         return;
       }
 
@@ -107,10 +92,6 @@ function (app, FauxtonAPI, ActionTypes) {
       return this.footerNavLinks;
     },
 
-    getStatusAreaItems: function () {
-      return this.statusArea;
-    },
-
     toggleMenu: function () {
       app.utils.localStorageSet(FauxtonAPI.constants.LOCAL_STORAGE.SIDEBAR_MINIMIZED,
                                 !this.isMinimized());
@@ -125,10 +106,6 @@ function (app, FauxtonAPI, ActionTypes) {
 
       if (link.footerNav) {
         links = this.footerNavLinks;
-      }
-
-      if (link.statusArea) {
-        links = this.statusArea;
       }
 
       return links;
@@ -193,10 +170,6 @@ function (app, FauxtonAPI, ActionTypes) {
 
         case ActionTypes.NAVBAR_SET_VERSION_INFO:
           this.setVersion(action.version);
-        break;
-
-        case ActionTypes.SHOW_CSRF_INFO:
-          this.addCsrfInfo();
         break;
 
         case ActionTypes.NAVBAR_ACTIVE_LINK:
