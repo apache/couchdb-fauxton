@@ -142,18 +142,18 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, DocumentViews) {
 
   var IndexSection = React.createClass({
 
-    getDefaultProps: function () {
-      return {
-        indexTypeMap: {
-          views:   { icon: 'fonticon-sidenav-map-reduce', urlFolder: '_view', type: 'view' },
-          indexes: { icon: 'fonticon-sidenav-search', urlFolder: '_indexes', type: 'search' }
-        }
-      };
+    propTypes: {
+      urlNamespace: React.PropTypes.string.isRequired,
+      icon: React.PropTypes.string.isRequired,
+      databaseName: React.PropTypes.string.isRequired,
+      designDocName: React.PropTypes.string.isRequired,
+      items: React.PropTypes.array.isRequired
     },
 
     createItems: function () {
       return _.map(this.props.items, function (index, key) {
-        var href = FauxtonAPI.urls(this.props.indexTypeMap[this.props.selector].type, 'app', this.props.databaseName, this.props.designDocName);
+        var href = FauxtonAPI.urls(this.props.urlNamespace, 'app', this.props.databaseName, this.props.designDocName);
+
         return (
           <li key={key}>
           <a
@@ -176,6 +176,13 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, DocumentViews) {
     },
 
     render: function () {
+
+      // if this section has no content, omit it to prevent clutter. Otherwise it would show a toggle option that
+      // would hide/show nothing
+      if (this.props.items.length === 0) {
+        return null;
+      }
+
       var toggleClassNames = 'accordion-header';
       var toggleBodyClassNames = 'accordion-body collapse';
       if (this.props.contentVisible) {
@@ -184,7 +191,7 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, DocumentViews) {
       }
 
       var title = this.props.title;
-      var icon = this.props.indexTypeMap[this.props.selector].icon;
+      var icon = this.props.icon;
       var designDocName = this.props.designDocName;
       var linkId = "nav-design-function-" + designDocName + this.props.selector;
       return (
@@ -205,19 +212,36 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, DocumentViews) {
 
   var DesignDoc = React.createClass({
 
-    createIndexList: function () {
-      var sidebarListTypes = FauxtonAPI.getExtensions('sidebar:list');
+    propTypes: {
+      sidebarListTypes: React.PropTypes.array.isRequired
+    },
 
-      if (_.isEmpty(sidebarListTypes) ||
-        (_.has(sidebarListTypes[0], 'selector') && sidebarListTypes[0].selector !== 'views')) {
-        sidebarListTypes.unshift({
+    getInitialState: function () {
+      return {
+        updatedSidebarListTypes: this.props.sidebarListTypes
+      };
+    },
+
+    componentWillMount: function () {
+      if (_.isEmpty(this.state.updatedSidebarListTypes) ||
+        (_.has(this.state.updatedSidebarListTypes[0], 'selector') && this.state.updatedSidebarListTypes[0].selector !== 'views')) {
+
+        var newList = this.state.updatedSidebarListTypes;
+        newList.unshift({
           selector: 'views',
-          name: 'Views'
+          name: 'Views',
+          icon: 'fonticon-sidenav-map-reduce',
+          urlNamespace: 'view'
         });
+        this.setState({ updatedSidebarListTypes: newList });
       }
+    },
 
-      return _.map(sidebarListTypes, function (index, key) {
+    createIndexList: function () {
+      return _.map(this.state.updatedSidebarListTypes, function (index, key) {
         return <IndexSection
+          icon={index.icon}
+          urlNamespace={index.urlNamespace}
           contentVisible={this.props.isVisible(this.props.designDocName, index.name)}
           toggle={this.props.toggle}
           databaseName={this.props.databaseName}
@@ -303,10 +327,16 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, DocumentViews) {
   });
 
   var DesignDocList = React.createClass({
+    componentWillMount: function () {
+      var list = FauxtonAPI.getExtensions('sidebar:list');
+      this.sidebarListTypes = _.isUndefined(list) ? [] : list;
+    },
+
     createDesignDocs: function () {
       return _.map(this.props.designDocs, function (designDoc, key) {
         return <DesignDoc
           toggle={this.props.toggle}
+          sidebarListTypes={this.sidebarListTypes}
           contentVisible={this.props.isVisible(designDoc.safeId)}
           isVisible={this.props.isVisible}
           key={key}
@@ -317,9 +347,6 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, DocumentViews) {
     },
 
     render: function () {
-      var designDocName = this.props.designDocName;
-      var designDocMetaUrl = FauxtonAPI.urls('designDocs', 'app', this.props.databaseName, designDocName);
-
       return (
         <ul className="nav nav-list">
           {this.createDesignDocs()}
@@ -412,9 +439,9 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, DocumentViews) {
     }
   });
 
-  var Views = {
-    SidebarController: SidebarController
+  return {
+    SidebarController: SidebarController,
+    DesignDoc: DesignDoc
   };
 
-  return Views;
 });
