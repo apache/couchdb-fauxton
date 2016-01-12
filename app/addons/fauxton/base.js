@@ -18,13 +18,12 @@ define([
   'addons/fauxton/notifications/actions',
   "addons/fauxton/navigation/components.react",
   "addons/fauxton/navigation/actions",
-  'addons/fauxton/dependencies/ZeroClipboard',
   'addons/components/react-components.react',
   'addons/components/actions'
 ],
 
 function (app, FauxtonAPI, Components, NotificationComponents, Actions, NavbarReactComponents, NavigationActions,
-          ZeroClipboard, ReactComponents, ComponentActions) {
+          ReactComponents, ComponentActions) {
 
   var Fauxton = FauxtonAPI.addon();
   FauxtonAPI.addNotification = function (options) {

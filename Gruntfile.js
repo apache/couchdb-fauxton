@@ -61,7 +61,6 @@ module.exports = function (grunt) {
   var assets = function () {
     // Base assets
     var theAssets = {
-      fonts: ["assets/fonts/*.eot", "assets/fonts/*.svg", "assets/fonts/*.ttf", "assets/fonts/*.woff"],
       img: ["assets/img/**"]
     };
     initHelper.processAddons(function (addon) {
@@ -70,10 +69,6 @@ module.exports = function (grunt) {
       var imgPath = root + "/assets/img";
       if (fs.existsSync(imgPath)) {
         theAssets.img.push(imgPath + "/**");
-      }
-      var fontsPath = root + "/assets/fonts";
-      if (fs.existsSync(fontsPath)) {
-        theAssets.fonts.push(fontsPath + "/**");
       }
     });
     return theAssets;
@@ -194,49 +189,48 @@ module.exports = function (grunt) {
         files: [
           // this gets built in the template task
           {src: "dist/release/index.html", dest: "../../share/www/index.html"},
-          {src: ["**"], dest: "../../share/www/js/", cwd:'dist/release/js/',  expand: true},
-          {src: ["**"], dest: "../../share/www/img/", cwd:'dist/release/img/', expand: true},
-          {src: ["**"], dest: "../../share/www/fonts/", cwd:'dist/release/fonts/', expand: true},
-          {src: ["**"], dest: "../../share/www/css/", cwd:"dist/release/css/", expand: true}
+          {src: ["**"], dest: "../../share/www/js/", cwd: 'dist/release/dashboard.assets/js/',  expand: true},
+          {src: ["**"], dest: "../../share/www/img/", cwd: 'dist/release/dashboard.assets/img/', expand: true},
+          {src: ["**"], dest: "../../share/www/fonts/", cwd: 'dist/release/dashboard.assets/fonts/', expand: true},
+          {src: ["**"], dest: "../../share/www/css/", cwd: "dist/release/dashboard.assets/css/", expand: true}
         ]
       },
       couchdebug: {
         files: [
           // this gets built in the template task
           {src: "dist/debug/index.html", dest: "../../share/www/index.html"},
-          {src: ["**"], dest: "../../share/www/js/", cwd:"dist/debug/js/",  expand: true},
-          {src: ["**"], dest: "../../share/www/img/", cwd:"dist/debug/img/", expand: true},
-          {src: ["**"], dest: "../../share/www/fonts/", cwd:"dist/debug/fonts/", expand: true},
-          {src: ["**"], dest: "../../share/www/css/", cwd:"dist/debug/css/", expand: true}
+          {src: ["**"], dest: "../../share/www/js/", cwd: "dist/debug/dashboard.assets/js/",  expand: true},
+          {src: ["**"], dest: "../../share/www/img/", cwd: "dist/debug/dashboard.assets/img/", expand: true},
+          {src: ["**"], dest: "../../share/www/fonts/", cwd: "dist/debug/dashboard.assets/fonts/", expand: true},
+          {src: ["**"], dest: "../../share/www/css/", cwd: "dist/debug/dashboard.assets/css/", expand: true}
         ]
       },
       ace: {
         files: [
-          {src: "assets/js/libs/ace/worker-json.js", dest: "dist/release/js/ace/worker-json.js"},
-          {src: "assets/js/libs/ace/mode-json.js", dest: "dist/release/js/ace/mode-json.js"},
-          {src: "assets/js/libs/ace/theme-idle_fingers.js", dest: "dist/release/js/ace/theme-idle_fingers.js"},
-          {src: "assets/js/libs/ace/theme-dawn.js", dest: "dist/release/js/ace/theme-dawn.js"},
-          {src: "assets/js/libs/ace/mode-javascript.js", dest: "dist/release/js/ace/mode-javascript.js"},
-          {src: "assets/js/libs/ace/worker-javascript.js", dest: "dist/release/js/ace/worker-javascript.js"},
+          {src: "assets/js/libs/ace/worker-json.js", dest: "dist/release/dashboard.assets/js/ace/worker-json.js"},
+          {src: "assets/js/libs/ace/mode-json.js", dest: "dist/release/dashboard.assets/js/ace/mode-json.js"},
+          {src: "assets/js/libs/ace/theme-idle_fingers.js", dest: "dist/release/dashboard.assets/js/ace/theme-idle_fingers.js"},
+          {src: "assets/js/libs/ace/theme-dawn.js", dest: "dist/release/dashboard.assets/js/ace/theme-dawn.js"},
+          {src: "assets/js/libs/ace/mode-javascript.js", dest: "dist/release/dashboard.assets/js/ace/mode-javascript.js"},
+          {src: "assets/js/libs/ace/worker-javascript.js", dest: "dist/release/dashboard.assets/js/ace/worker-javascript.js"},
         ]
-      },
-
-      addonDependencies: {
-        files: initHelper.getAddonDependencies()
       },
 
       dist:{
         files:[
           {src: 'dist/debug/index.html', dest: 'dist/release/index.html'},
-          {src: assets.img, dest: 'dist/release/img/', flatten: true, expand: true},
-          {src: assets.fonts, dest: 'dist/release/fonts/', flatten: true, expand: true},
+          {src: assets.img, dest: 'dist/release/dashboard.assets/img/', flatten: true, expand: true},
+          {src: ['assets/js/**/*.swf'], dest: 'dist/release/dashboard.assets/', flatten: true, expand: true, filter: 'isFile'},
+          {src: ['*.eot', '*.woff', '*.svg', '*.ttf'], cwd: './assets/fonts', dest: 'dist/release/dashboard.assets/fonts/', filter: 'isFile', flatten: true, expand: true},
           {src: './favicon.ico', dest: "dist/release/favicon.ico"}
         ]
       },
-      debug:{
+
+      debug: {
         files:[
-          {src: assets.fonts, dest: "dist/debug/fonts/", flatten: true, expand: true},
-          {src: assets.img, dest: "dist/debug/img/", flatten: true, expand: true},
+          {src: ['assets/js/**/*.swf'], dest: 'dist/debug/dashboard.assets/', flatten: true, expand: true, filter: 'isFile'},
+          {src: ['*.eot', '*.woff', '*.svg', '*.ttf'], cwd: './assets/fonts', dest: 'dist/debug/dashboard.assets/fonts/', filter: 'isFile', flatten: true, expand: true},
+          {src: assets.img, dest: 'dist/debug/dashboard.assets/img/', flatten: true, expand: true},
           {src: './favicon.ico', dest: "dist/debug/favicon.ico"}
         ]
       },
@@ -341,32 +335,25 @@ module.exports = function (grunt) {
     },
 
     // these rename the already-bundled, minified requireJS and CSS files to include their hash
-    // XXX use tmp-out
     md5: {
       requireJS: {
-        files: { "dist/release/js/" : "dist/release/js/require.js" },
+        files: { 'dist/release/dashboard.assets/js/': 'dist/tmp-out/require.js' },
         options: {
           afterEach: function (fileChanges) {
             // replace the REQUIREJS_FILE placeholder with the actual filename
             var newFilename = fileChanges.newPath.match(/[^\/]+$/)[0];
             config.template.release.variables.requirejs = config.template.release.variables.requirejs.replace(/REQUIREJS_FILE/, newFilename);
-
-            // remove the original requireJS file, we don't need it anymore
-            fs.unlinkSync(fileChanges.oldPath);
           }
         }
       },
 
       css: {
-        files: { "dist/release/css/": 'dist/release/css/index.css' },
+        files: { 'dist/release/dashboard.assets/css/': 'dist/tmp-out/index.css' },
         options: {
           afterEach: function (fileChanges) {
             // replace the CSS_FILE placeholder with the actual filename
             var newFilename = fileChanges.newPath.match(/[^\/]+$/)[0];
             config.template.release.variables.css = config.template.release.variables.css.replace(/CSS_FILE/, newFilename);
-
-            // remove the original CSS file
-            fs.unlinkSync(fileChanges.oldPath);
           }
         }
       }
@@ -481,7 +468,7 @@ module.exports = function (grunt) {
 
   // build a release
   grunt.registerTask('release_commons_prefix', ['clean', 'dependencies']);
-  grunt.registerTask('release_commons_suffix', ['shell:stylecheck', 'shell:build-jsx', 'build', 'copy:dist', 'copy:ace', 'copy:addonDependencies']);
+  grunt.registerTask('release_commons_suffix', ['shell:stylecheck', 'shell:build-jsx', 'build', 'copy:dist', 'copy:ace']);
 
   grunt.registerTask('release', ['release_commons_prefix', 'gen_initialize:release', 'release_commons_suffix']);
   grunt.registerTask('couchapp_release', ['release_commons_prefix', 'gen_initialize:couchapp', 'release_commons_suffix']);

@@ -50,11 +50,11 @@
 
   "scripts": {
     "stylecheck": "eslint --ext=js,jsx .",
-    "build:less:debug": "mkdirp ./dist/debug/css && node ./build-helper/less.js dist/debug/css/index.css",
-    "build:less:release": "mkdirp ./dist/tmp-out && node ./build-helper/less.js dist/tmp-out/index.css",
-    "build:css-compress": "mkdirp ./dist/release/css/ && cleancss --skip-rebase -o dist/release/css/index.css dist/tmp-out/index.css",
-    "build:uglify": "mkdirp ./dist/release/js/ && uglifyjs --mangle --compress=warnings=false --screw-ie8 -o dist/release/js/require.js dist/tmp-out/require.js",
-    "build:requirejs:production": "mkdirp ./dist/tmp-out && r.js -o out=dist/tmp-out/require.js baseUrl=app mainConfigFile=app/config.js name=config optimize=none wrap=false findNestedDependencies=true",
+    "build:less:debug": "mkdirp ./dist/debug/dashboard.assets/css && node ./build-helper/less.js dist/debug/dashboard.assets/css/index.css",
+    "build:less:release": "mkdirp ./dist/tmp-out && node ./build-helper/less.js dist/tmp-out/index-max.css",
+    "build:css-compress": "mkdirp ./dist/release/dashboard.assets/css/ && cleancss --skip-rebase -o dist/tmp-out/index.css dist/tmp-out/index-max.css",
+    "build:uglify": "mkdirp ./dist/release/dashboard.assets/js/ && uglifyjs --mangle --compress=warnings=false --screw-ie8 -o dist/tmp-out/require.js dist/tmp-out/require.js",
+    "build:requirejs:production": "mkdirp ./dist/tmp-out && r.js -o out=dist/tmp-out/require-max.js baseUrl=app mainConfigFile=app/config.js name=config optimize=none wrap=false findNestedDependencies=true",
     "test": "grunt test",
     "couchdebug": "grunt couchdebug",
     "couchdb": "grunt couchdb",

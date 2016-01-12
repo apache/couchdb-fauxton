@@ -14,7 +14,7 @@ define([
   'app',
   'api',
   'react',
-  'addons/fauxton/dependencies/ZeroClipboard',
+  'ZeroClipboard',
   'libs/react-bootstrap',
 
   // needed to run the test individually. Don't remove
@@ -25,11 +25,8 @@ function (app, FauxtonAPI, React, ZeroClipboard, ReactBootstrap) {
 
   var Modal = ReactBootstrap.Modal;
 
-
-  // the path to the swf depends on whether we're in a bundled environment (e.g. prod) or local
   function getZeroClipboardSwfPath () {
-    var path = (app.bundled) ? 'js/fauxton' : 'app/addons/fauxton/dependencies';
-    return app.root + path + '/ZeroClipboard.swf';
+    return '/dashboard.assets/ZeroClipboard.swf';
   }
 
   // super basic right now, but can be expanded later to handle all the varieties of copy-to-clipboards

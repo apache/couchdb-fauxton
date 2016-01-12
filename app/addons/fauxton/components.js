@@ -11,7 +11,8 @@
 // the License.
 
 define('ace_configuration', ["app", "ace/ace"], function (app, ace) {
-  var path = app.host + app.root + 'js/ace';
+  var path = './dashboard.assets/js/ace';
+
   var config = require("ace/config");
   config.set("packaged", true);
   config.set("workerPath", path);
@@ -27,13 +28,10 @@ define([
   "ace_configuration",
   "spin",
 
-  // this should never be global available:
-  // https://github.com/zeroclipboard/zeroclipboard/blob/master/docs/security.md
-  'addons/fauxton/dependencies/ZeroClipboard',
   "velocity.ui"
 ],
 
-function (app, FauxtonAPI, ace, spin, ZeroClipboard) {
+function (app, FauxtonAPI, ace, spin) {
   var Components = FauxtonAPI.addon();
 
   // setting up the left header with the backbutton used in Views and All docs
