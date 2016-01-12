@@ -61,7 +61,6 @@ module.exports = function (grunt) {
   var assets = function () {
     // Base assets
     var theAssets = {
-      fonts: ["assets/fonts/*.eot", "assets/fonts/*.svg", "assets/fonts/*.ttf", "assets/fonts/*.woff"],
       img: ["assets/img/**"]
     };
     initHelper.processAddons(function (addon) {
@@ -70,10 +69,6 @@ module.exports = function (grunt) {
       var imgPath = root + "/assets/img";
       if (fs.existsSync(imgPath)) {
         theAssets.img.push(imgPath + "/**");
-      }
-      var fontsPath = root + "/assets/fonts";
-      if (fs.existsSync(fontsPath)) {
-        theAssets.fonts.push(fontsPath + "/**");
       }
     });
     return theAssets;
@@ -233,10 +228,12 @@ module.exports = function (grunt) {
           {src: './favicon.ico', dest: "dist/release/favicon.ico"}
         ]
       },
-      debug:{
+
+      debug: {
         files:[
-          {src: assets.fonts, dest: "dist/debug/fonts/", flatten: true, expand: true},
-          {src: assets.img, dest: "dist/debug/img/", flatten: true, expand: true},
+          {src: ['assets/js/**/*.swf'], dest: 'dist/debug/dashboard.assets/', flatten: true, expand: true, filter: 'isFile'},
+          {src: ['*.eot', '*.woff', '*.svg', '*.ttf'], cwd: './assets/fonts', dest: 'dist/debug/dashboard.assets/fonts/', filter: 'isFile', flatten: true, expand: true},
+          {src: assets.img, dest: 'dist/debug/dashboard.assets/img/', flatten: true, expand: true},
           {src: './favicon.ico', dest: "dist/debug/favicon.ico"}
         ]
       },
