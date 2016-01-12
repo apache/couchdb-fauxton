@@ -57,31 +57,6 @@ exports.init = function (grunt) {
       }, defaults);
     },
 
-    // examines all loaded addons and returns any files in their /dependencies subfolder. These are copied over to
-    // /js/[addonName]/ for bundled (prod) releases so their paths are known for referencing at runtime
-    getAddonDependencies: function () {
-      var files = [];
-
-      _.each(this.readSettingsFile().deps, function (addon) {
-        var addonFolder = (addon.path) ? addon.path : './app/addons/' + addon.name;
-        var addonDepsFolder = addonFolder + '/dependencies';
-
-        // ignore addons that don't contain a /dependencies subfolder
-        if (!fs.existsSync(addonDepsFolder)) {
-          return false;
-        }
-
-        _.each(fs.readdirSync(addonDepsFolder), function (file) {
-          files.push({
-            src: addonDepsFolder + '/' + file,
-            dest: 'dist/release/js/' + addon.name + '/' + file
-          });
-        });
-      });
-
-      return files;
-    },
-
     check_selenium: {
       command: 'test -s ./test/nightwatch_tests/selenium/selenium-server-standalone-2.45.0.jar || ' +
         'curl -o ./test/nightwatch_tests/selenium/selenium-server-standalone-2.45.0.jar ' +
