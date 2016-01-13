@@ -37,7 +37,6 @@ module.exports = {
       .clickWhenVisible('.bulk-action-component-selector-group button.fonticon-trash', waitTime, false)
       .acceptAlert()
 
-      .waitForElementVisible('.alert.alert-info', waitTime, false)
       .checkForStringNotPresent(newDatabaseName + '/_all_docs', newDocumentName)
       .checkForStringNotPresent(newDatabaseName + '/_all_docs', newDocumentName + '2')
       .url(baseUrl + '/' + newDatabaseName + '/_all_docs')
