@@ -144,8 +144,8 @@ module.exports = function (grunt) {
     // index.html.
     concat: {
       requirejs: {
-        src: ["assets/js/libs/require.js", 'dist/tmp-out/templates.js', 'dist/tmp-out/require.js'],
-        dest: 'dist/tmp-out/require.js'
+        src: ['assets/js/libs/require.js', 'dist/tmp-out/templates.js', 'dist/tmp-out/require-max.js'],
+        dest: 'dist/tmp-out/require-max-concat.js'
       },
 
       test_config_js: {
