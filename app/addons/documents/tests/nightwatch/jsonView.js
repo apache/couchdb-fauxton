@@ -25,7 +25,10 @@ module.exports = {
       })
 
       // now enable ?include_docs and try again
+      .url(baseUrl + '#/database/' + newDatabaseName + '/_find')
+      .waitForElementPresent('.watermark-logo', client.globals.maxWaitTime, false)
       .url(baseUrl + '#/database/' + newDatabaseName + '/_all_docs?include_docs=true')
+
       .waitForElementPresent('.prettyprint', client.globals.maxWaitTime, false)
       .assert.containsText('.prettyprint', 'American Bittern')
       .end();
