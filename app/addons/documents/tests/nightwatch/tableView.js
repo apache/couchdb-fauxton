@@ -14,23 +14,26 @@ module.exports = {
 
   'Shows data in the table for all docs (include docs enabled)': function (client) {
     var waitTime = client.globals.maxWaitTime,
-      newDatabaseName = client.globals.testDatabaseName,
-      newDocumentName1 = 'bulktest1',
-      newDocumentName2 = 'bulktest2',
-      baseUrl = client.globals.test_settings.launch_url;
+        newDatabaseName = client.globals.testDatabaseName,
+        newDocumentName1 = 'bulktest1',
+        newDocumentName2 = 'bulktest2',
+        baseUrl = client.globals.test_settings.launch_url;
 
     client
-      .loginToGUI()
       .createDocument(newDocumentName1, newDatabaseName)
       .createDocument(newDocumentName2, newDatabaseName)
+      .loginToGUI()
+      .checkForDocumentCreated(newDocumentName1)
+      .checkForDocumentCreated(newDocumentName2)
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs?include_docs=true')
 
-      // ensures page content has loaded before proceeding
-      .waitForElementVisible('.prettyprint', waitTime, false)
-      .clickWhenVisible('.control-view')
-      .clickWhenVisible('.alternative-header .dropdown-menu li:last-child a')
+      .clickWhenVisible('.alternative-header .header-toggle-button button:last-child')
       .getText('.table', function (result) {
         var data = result.value;
+
+        if (!data.indexOf) {
+          console.error('check your selenium test, race condition');
+        }
 
         this.verify.ok(data.indexOf('testingValue') !== -1,
           'Check if doc content is shown in table');
@@ -41,23 +44,26 @@ module.exports = {
 
   'Shows data in the table for all docs (include docs disabled)': function (client) {
     var waitTime = client.globals.maxWaitTime,
-      newDatabaseName = client.globals.testDatabaseName,
-      newDocumentName1 = 'bulktest1',
-      newDocumentName2 = 'bulktest2',
-      baseUrl = client.globals.test_settings.launch_url;
+        newDatabaseName = client.globals.testDatabaseName,
+        newDocumentName1 = 'bulktest1',
+        newDocumentName2 = 'bulktest2',
+        baseUrl = client.globals.test_settings.launch_url;
 
     client
-      .loginToGUI()
       .createDocument(newDocumentName1, newDatabaseName)
       .createDocument(newDocumentName2, newDatabaseName)
+      .loginToGUI()
+      .checkForDocumentCreated(newDocumentName1)
+      .checkForDocumentCreated(newDocumentName2)
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
 
-      // ensures page content has loaded before proceeding
-      .waitForElementVisible('.prettyprint', waitTime, false)
-      .clickWhenVisible('.control-view')
-      .clickWhenVisible('.alternative-header .dropdown-menu li:last-child a')
+      .clickWhenVisible('.alternative-header .header-toggle-button button:last-child')
       .getText('.table', function (result) {
         var data = result.value;
+
+        if (!data.indexOf) {
+          console.error('check your selenium test, race condition');
+        }
 
         this.verify.ok(data.indexOf('bulktest1') !== -1,
           'Check if doc content is shown in table');

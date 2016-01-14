@@ -21,15 +21,22 @@ define([
 
 function (app, FauxtonAPI, Documents) {
 
+  function getQueryParam (query) {
+    if (!query) {
+      query = '';
+    }
+    return query;
+  }
+
   FauxtonAPI.registerUrls( 'allDocs', {
     server: function (id, query) {
-      return app.host + '/' + id + '/_all_docs' + query;
+      return app.host + '/' + id + '/_all_docs' + getQueryParam(query);
     },
     app: function (id, query) {
-      return 'database/' + id + '/_all_docs' + query;
+      return 'database/' + id + '/_all_docs' + getQueryParam(query);
     },
     apiurl: function (id, query) {
-      return window.location.origin + '/' + id + '/_all_docs' + query;
+      return window.location.origin + '/' + id + '/_all_docs' + getQueryParam(query);
     }
   });
 

@@ -13,46 +13,36 @@
 define([
   'app',
   'api',
-  'addons/documents/header/header.actiontypes'
+  'addons/documents/header/header.actiontypes',
+  'addons/documents/queryoptions/actions',
+
 ],
-function (app, FauxtonAPI, ActionTypes) {
+function (app, FauxtonAPI, ActionTypes, ActionsQueryOptions) {
 
   return {
-    collapseDocuments: function () {
-      FauxtonAPI.dispatch({
-        type: ActionTypes.COLLAPSE_DOCUMENTS
-      });
+
+    toggleIncludeDocs: function (state, bulkDocsCollection) {
+      var params = app.getParams();
+
+      if (state) {
+        delete params.include_docs;
+      } else {
+        params.include_docs = true;
+      }
+
+      app.utils.localStorageSet('include_docs_bulkdocs', bulkDocsCollection.toJSON());
+
+      ActionsQueryOptions.runQuery(params);
     },
 
-    unCollapseDocuments: function () {
+    toggleTableView: function (state) {
       FauxtonAPI.dispatch({
-        type: ActionTypes.EXPAND_DOCUMENTS
+        type: ActionTypes.TOGGLE_TABLEVIEW,
+        options: {
+          enable: state
+        }
       });
-    },
-
-    collapseAllDocuments: function () {
-      FauxtonAPI.dispatch({
-        type: ActionTypes.COLLAPSE_ALL_DOCUMENTS
-      });
-    },
-
-    unCollapseAllDocuments: function () {
-      FauxtonAPI.dispatch({
-        type: ActionTypes.EXPAND_ALL_DOCUMENTS
-      });
-    },
-
-    enableTableView: function () {
-      FauxtonAPI.dispatch({
-        type: ActionTypes.ENABLE_TABLE_VIEW
-      });
-    },
-
-    disableTableView: function () {
-      FauxtonAPI.dispatch({
-        type: ActionTypes.DISABLE_TABLE_VIEW
-      });
-    },
+    }
 
   };
 });

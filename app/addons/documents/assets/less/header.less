@@ -11,44 +11,37 @@
 // the License.
 
 
-button.control-view {
-  border-right: 1px solid @btnBorder;
-  border-left: none;
-}
-
-#react-headerbar .dropdown {
-  a {
-    text-decoration: none;
-    div {
-      margin-left: 30px;
-    }
-  }
-  li {
-    cursor: pointer;
-    i {
-      font-size: 17px;
-      position: absolute;
-    }
-  }
-  .icon {
-    position: relative;
-  }
-  .dropdown-toggle.fonticon-json:before {
-    margin-top: 9px;
-  }
-  .dropdown-menu {
-    left: -101px;
-    top: 55px;
-  }
-}
-
 #react-headerbar {
-  // dropdown needs position absolute
-  .add-dropdown {
-    right: initial;
-    top: initial;
+  .control-toggle-include-docs {
+    border-right: 1px solid @btnBorder;
+    .icon-check {
+      &:before {
+        margin: 6px 6px 0 0;
+      }
+    }
+    .icon-check-empty {
+      &:before {
+        margin: 6px 9px 0 0;
+      }
+    }
   }
-  .control-select-all {
-    margin-left: 95px;
+
+  .header-toggle-button {
+    font-size: 15px;
+    padding: 11px;
+
+    button.btn {
+      padding: 10px 15px;
+      &:hover {
+        background-color: @brandPrimary;
+        color: white;
+      }
+      &.active {
+        color: @brandPrimary;
+        &:hover {
+          background-color: white;
+        }
+      }
+    }
   }
 }

@@ -43,7 +43,8 @@ function (app, FauxtonAPI, React, ZeroClipboard, ReactBootstrap) {
       return {
         displayType: 'icon',
         textDisplay: 'Copy',
-        onClipboardClick: function () { }
+        onClipboardClick: function () { },
+        title: 'Copy to clipboard'
       };
     },
 
@@ -70,7 +71,13 @@ function (app, FauxtonAPI, React, ZeroClipboard, ReactBootstrap) {
 
     render: function () {
       return (
-        <a href="#" ref="copy" className="copy" data-clipboard-text={this.props.text} data-bypass="true" title="Copy to clipboard">
+        <a href="#"
+          ref="copy"
+          className="copy"
+          data-clipboard-text={this.props.text}
+          data-bypass="true"
+          title={this.props.title}
+        >
           {this.getClipboardElement()}
         </a>
       );

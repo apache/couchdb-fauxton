@@ -16,49 +16,29 @@ define([
   'addons/documents/index-results/stores',
   'addons/documents/resources',
   'addons/documents/sidebar/actions',
-  'testUtils'
-], function (FauxtonAPI, Actions, Stores, Documents, SidebarActions, testUtils) {
+  'testUtils',
+  'addons/documents/tests/document-test-helper',
+
+], function (FauxtonAPI, Actions, Stores, Documents, SidebarActions, testUtils, documentTestHelper) {
   var assert = testUtils.assert;
   var restore = testUtils.restore;
-  var store = Stores.indexResultsStore;
+  var store;
 
-  FauxtonAPI.router = new FauxtonAPI.Router([]);
-
-  describe('Index Results Actions', function () {
-
-    describe('#newResultsList', function () {
-
-      it('sends results list reset', function () {
-        var collection = {
-          fetch: function () {
-            var promise = $.Deferred();
-            promise.resolve();
-            return promise;
-          }
-        };
-
-        var spy = sinon.spy(Actions, 'resultsListReset');
-
-        Actions.newResultsList({collection: collection});
-        assert.ok(spy.calledOnce);
-      });
-
-    });
-
-  });
-
+  var createDocColumn = documentTestHelper.createDocColumn;
 
   describe('#deleteSelected', function () {
     var confirmStub;
+    var bulkDeleteCollection;
 
     beforeEach(function () {
-      store._collection = new Documents.AllDocs([{_id: 'testId1'}, {_id: 'testId2'}], {
-        params: {},
-        database: {
-          safeID: function () { return '1';}
-        }
-      });
-      store._bulkDeleteDocCollection = Documents.BulkDeleteDocCollection;
+      Stores.indexResultsStore = new Stores.IndexResultsStore();
+      Stores.indexResultsStore.dispatchToken = FauxtonAPI.dispatcher.register(Stores.indexResultsStore.dispatch);
+      store = Stores.indexResultsStore;
+      store.reset();
+
+      bulkDeleteCollection = new Documents.BulkDeleteDocCollection([], {databaseId: '1'});
+      store._bulkDeleteDocCollection = bulkDeleteCollection;
+      store._collection = createDocColumn([{_id: 'testId1'}, {_id: 'testId2'}]);
 
       store._selectedItems = {
         'testId1': true,
@@ -72,11 +52,10 @@ define([
 
     afterEach(function () {
       restore(window.confirm);
-      restore(store.createBulkDeleteFromSelected);
       restore(FauxtonAPI.addNotification);
       restore(Actions.reloadResultsList);
-      restore(Actions.selectListOfDocs);
       restore(SidebarActions.refresh);
+      restore(Actions.newResultsList);
     });
 
     it('doesn\'t delete if user denies confirmation', function () {
@@ -85,121 +64,39 @@ define([
       var stub = sinon.stub(window, 'confirm');
       stub.returns(false);
 
-      var spy = sinon.spy(store, 'createBulkDeleteFromSelected');
+      var spy = sinon.spy(bulkDeleteCollection, 'bulkDelete');
 
-      Actions.deleteSelected();
+      Actions.deleteSelected(bulkDeleteCollection, 1);
 
       assert.notOk(spy.calledOnce);
     });
 
-    it('creates bulk delete', function () {
-      var spy = sinon.spy(store, 'createBulkDeleteFromSelected');
-
-      Actions.deleteSelected();
-
-      assert.ok(spy.calledOnce);
-    });
-
-    it('on success notifies all deleted', function () {
+    it('on success notifies all deleted', function (done) {
       var spy = sinon.spy(FauxtonAPI, 'addNotification');
       var sidebarSpy = sinon.spy(SidebarActions, 'refresh');
       var promise = FauxtonAPI.Deferred();
       var ids = {
-          errorIds: []
+        errorIds: []
       };
       var bulkDelete = {
         bulkDelete: function () {
           promise.resolve(ids);
           return promise;
+        },
+        reset: function () {
+          done();
         }
       };
-      var stub = sinon.stub(store, 'createBulkDeleteFromSelected');
-      stub.returns(bulkDelete);
+
       var reloadResultsListStub = sinon.stub(Actions, 'reloadResultsList');
       var stubPromise = FauxtonAPI.Deferred();
       stubPromise.resolve();
       reloadResultsListStub.returns(stubPromise);
 
-      Actions.deleteSelected();
+      Actions.deleteSelected(bulkDelete, 1);
 
       assert.ok(spy.calledOnce);
       assert.ok(sidebarSpy.calledOnce);
     });
-
-    it('on success with some failed ids, re-selects failed', function () {
-      var spy = sinon.spy(Actions, 'selectListOfDocs');
-      var sidebarSpy = sinon.spy(SidebarActions, 'refresh');
-
-      var reloadResultsListStub = sinon.stub(Actions, 'reloadResultsList');
-      var stubPromise = FauxtonAPI.Deferred();
-      stubPromise.resolve();
-      reloadResultsListStub.returns(stubPromise);
-
-      var promise = FauxtonAPI.Deferred();
-      var ids = {
-          errorIds: ['1']
-      };
-      var bulkDelete = {
-        bulkDelete: function () {
-          promise.resolve(ids);
-          return promise;
-        }
-      };
-
-      var stub = sinon.stub(store, 'createBulkDeleteFromSelected');
-      stub.returns(bulkDelete);
-
-      Actions.deleteSelected();
-      assert.ok(spy.calledWith(ids.errorIds));
-      assert.ok(sidebarSpy.calledOnce);
-    });
-
-    it('on failure notifies failed', function () {
-      var spy = sinon.spy(FauxtonAPI, 'addNotification');
-      var promise = FauxtonAPI.Deferred();
-      var bulkDelete = {
-        bulkDelete: function () {
-          promise.reject();
-          return promise;
-        }
-      };
-      var stub = sinon.stub(store, 'createBulkDeleteFromSelected');
-      stub.returns(bulkDelete);
-      var reloadResultsListStub = sinon.stub(Actions, 'reloadResultsList');
-      var stubPromise = FauxtonAPI.Deferred();
-      stubPromise.resolve();
-      reloadResultsListStub.returns(stubPromise);
-
-      Actions.deleteSelected();
-
-      assert.ok(spy.calledOnce);
-    });
-
-    it('on failure re-selects docs', function () {
-      var spy = sinon.spy(Actions, 'selectListOfDocs');
-
-      var reloadResultsListStub = sinon.stub(Actions, 'reloadResultsList');
-      var stubPromise = FauxtonAPI.Deferred();
-      stubPromise.resolve();
-      reloadResultsListStub.returns(stubPromise);
-
-      var promise = FauxtonAPI.Deferred();
-      var errorIds = ['1'];
-
-      var bulkDelete = {
-        bulkDelete: function () {
-          promise.reject(errorIds);
-          return promise;
-        }
-      };
-
-      var stub = sinon.stub(store, 'createBulkDeleteFromSelected');
-      stub.returns(bulkDelete);
-
-      Actions.deleteSelected();
-      assert.ok(spy.calledWith(errorIds));
-    });
-
   });
-
 });

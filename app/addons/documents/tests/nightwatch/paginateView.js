@@ -42,7 +42,6 @@ module.exports = {
       .execute(function () {
         return $('.doc-row').length;
       }, function (result) {
-        console.log(result.value);
         client.assert.equal(result.value, 10);
       })
       .end();

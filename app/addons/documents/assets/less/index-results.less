@@ -12,10 +12,19 @@
 
 @import "../../../../../assets/less/variables.less";
 
-
 .document-result-screen {
   .bulk-action-component {
     padding-bottom: 15px;
+  }
+
+  .loading-lines-wrapper {
+    margin-left: auto;
+    margin-right: auto;
+    width:  80px;
+  }
+
+  .loading-lines {
+    position: absolute;
   }
 }
 
@@ -36,35 +45,97 @@
 }
 
 .table-view-docs {
+  position: absolute;
+  margin-top: 30px;
+
+
+  .bulk-action-component {
+    padding-bottom: 0;
+    min-height: 0px;
+  }
+  .bulk-action-component-panel input {
+    width: auto;
+  }
+
+
   .tableview-data-cell-id {
-    font-weight: 700;
     a {
       color: @linkColor;
     }
-  }
-  .tableview-header-el-checkbox {
-    border: none;
+    div:first-of-type {
+      font-weight: 700;
+    }
+    div {
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
   }
 
   td, th, td a {
     vertical-align: middle;
     line-height: 20px;
     font-size: 14px;
-    color: @defaultHTag;
   }
   td {
     height: 49px;
   }
   td, th {
+    color: @defaultHTag;
     max-width: 160px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
   td.tableview-checkbox-cell, th.tableview-header-el-checkbox {
-    width: 28px;
+    width: 68px;
   }
   .tableview-checkbox-cell input {
-    margin: 0px;
+    margin: 0 0 0 8px;
+  }
+  .tableview-el-last {
+    width: 50px;
+  }
+  .tableview-el-copy {
+    width: 35px;
+  }
+
+  thead input {
+    max-width: 138px;
+    width: 100%;
+  }
+
+  .table-dropdown-item {
+    padding: 2px 6px;
+    cursor: pointer;
+    background: #2b2f33;
+    color: white;
+    margin: 0 2px;
+  }
+  .table-dropdown-item-highlight {
+    background: #e23632;
+  }
+
+  .icon.icon-filter {
+    position: absolute;
+    right: 6px;
+    top: 6px;
+    pointer-events: none;
+    color: #999;
+  }
+
+  .table-container-autocomplete {
+    position: relative;
+    width: 128px;
+  }
+
+}
+
+.document-result-screen {
+
+  .table-bulkselector-section {
+    .bulk-action-component {
+      float: left;
+    }
+    width: 300px;
   }
 }

@@ -111,7 +111,8 @@ function (app, FauxtonAPI, React, Stores, Actions,
 
       IndexResultActions.runMangoFindQuery({
         database: this.state.database,
-        queryCode: this.getMangoEditor().getEditorValue()
+        queryCode: this.getMangoEditor().getEditorValue(),
+
       });
     }
   });

@@ -16,10 +16,10 @@ define([
   'addons/documents/resources',
   'addons/documents/mango/mango.actiontypes',
   'addons/documents/mango/mango.stores',
-  'addons/documents/pagination/stores',
+  'addons/documents/index-results/stores',
   'addons/documents/index-results/actions',
 ],
-function (app, FauxtonAPI, Documents, ActionTypes, Stores, PaginationStores, IndexResultActions) {
+function (app, FauxtonAPI, Documents, ActionTypes, Stores, IndexResultsStores, IndexResultActions) {
   var store = Stores.mangoStore;
 
   return {
@@ -71,7 +71,7 @@ function (app, FauxtonAPI, Documents, ActionTypes, Stores, PaginationStores, Ind
             database: options.database,
             params: null,
             paging: {
-              pageSize: PaginationStores.indexPaginationStore.getPerPage()
+              pageSize: IndexResultsStores.indexResultsStore.getPerPage()
             }
           });
 
