@@ -254,6 +254,42 @@ define([
 
     });
 
+    describe('cellcontent', function () {
+      beforeEach(function () {
+        container = document.createElement('div');
+        store.reset();
+      });
+
+      afterEach(function () {
+        React.unmountComponentAtNode(React.findDOMNode(instance).parentNode);
+        store.reset();
+      });
+
+      it('formats title elements for better readability', function () {
+        var doc = {object: {a: 1, foo: [1, 2, 3]}};
+
+        IndexResultsActions.sendMessageNewResultList({
+          collection: createDocColumn([doc]),
+          bulkCollection: new Documents.BulkDeleteDocCollection([], {databaseId: '1'}),
+        });
+
+        store.toggleTableView({enable: true});
+
+        IndexResultsActions.resultsListReset();
+
+        instance = TestUtils.renderIntoDocument(
+          <Views.List />,
+          container
+        );
+
+        var $el = $(instance.getDOMNode());
+        var $targetNode = $el.find('td.tableview-el-last').prev();
+
+        var formattedDoc = JSON.stringify(doc.object, null, '  ');
+        assert.equal($targetNode.attr('title'), formattedDoc);
+      });
+
+    });
     describe('wrapped autocomplete', function () {
       it('renders a filter icon if no text given', function () {
 

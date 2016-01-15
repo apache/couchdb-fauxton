@@ -72,7 +72,7 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, Documents, Fauxto
       var row = this.props.data.selectedFields.map(function (k, i) {
 
         var key = 'tableview-data-cell-' + rowNumber + k + i + el[k];
-        var stringified = typeof el[k] === 'object' ? JSON.stringify(el[k]) : el[k];
+        var stringified = typeof el[k] === 'object' ? JSON.stringify(el[k], null, '  ') : el[k];
 
         return (
           <td key={key} title={stringified}>
