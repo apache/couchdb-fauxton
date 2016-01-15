@@ -152,37 +152,10 @@ define([
 
       getPageNumberText: function () {
         if (this.state.totalRows === 0) {
-          return <span>Showing 0 documents</span>;
+          return <span>Showing 0 documents.</span>;
         }
 
-        return <span>Showing document {this.state.pageStart} - {this.state.pageEnd}</span>;
-      },
-
-      toggleTableViewType: function () {
-        Actions.toggleTableViewType();
-      },
-
-      getTableControl: function () {
-        if (!this.state.showPrioritizedFieldToggler) {
-          return null;
-        }
-
-        return (
-          <div className="footer-table-control">
-            <div className="footer-doc-control-prioritized-wrapper pull-left">
-              <label htmlFor="footer-doc-control-prioritized">
-                <input
-                  id="footer-doc-control-prioritized"
-                  checked={this.state.prioritizedEnabled}
-                  onChange={this.toggleTableViewType}
-                  type="checkbox">
-                </input>
-                Show all columns
-              </label>
-            </div>
-            {this.getAmountShownFields()}
-          </div>
-        );
+        return <span>Showing document {this.state.pageStart} - {this.state.pageEnd}.</span>;
       },
 
       perPageChange: function (perPage) {
@@ -191,25 +164,17 @@ define([
         Actions.updatePerPage(perPage, collection, bulkCollection);
       },
 
-      getAmountShownFields: function () {
-        var fields = this.state.displayedFields;
-        if (!fields || this.state.prioritizedEnabled) {
-          return null;
-        }
-
-        return (
-          <div className="pull-right">
-            Showing {fields.shown} of {fields.allFieldCount} columns.
-          </div>
-        );
-      },
-
-
       render: function () {
+        var showTableControls = this.state.showPrioritizedFieldToggler;
+
         return (
           <div className="footer-controls">
+
             <div className="page-controls">
-              {this.getTableControl()}
+              {showTableControls ?
+                <TableControls
+                  prioritizedEnabled={this.state.prioritizedEnabled}
+                  displayedFields={this.state.displayedFields} /> : null}
             </div>
 
             <PerPageSelector perPageChange={this.perPageChange} perPage={this.state.perPage} />
@@ -220,6 +185,55 @@ define([
         );
       }
 
+    });
+
+    var TableControls = React.createClass({
+
+      propTypes: {
+        prioritizedEnabled: React.PropTypes.bool.isRequired,
+        displayedFields: React.PropTypes.object.isRequired,
+      },
+
+      getAmountShownFields: function () {
+        var fields = this.props.displayedFields;
+
+        if (fields.shown === fields.allFieldCount) {
+          return (
+            <div className="pull-left shown-fields">
+              Showing {fields.shown} columns.
+            </div>
+          );
+        }
+
+        return (
+          <div className="pull-left shown-fields">
+            Showing {fields.shown} of {fields.allFieldCount} columns.
+          </div>
+        );
+      },
+
+      toggleTableViewType: function () {
+        Actions.toggleTableViewType();
+      },
+
+      render: function () {
+        return (
+          <div className="footer-table-control">
+            {this.getAmountShownFields()}
+            <div className="footer-doc-control-prioritized-wrapper pull-left">
+              <label htmlFor="footer-doc-control-prioritized">
+                <input
+                  id="footer-doc-control-prioritized"
+                  checked={this.props.prioritizedEnabled}
+                  onChange={this.toggleTableViewType}
+                  type="checkbox">
+                </input>
+                Show all columns.
+              </label>
+            </div>
+          </div>
+        );
+      }
     });
 
     var Footer = React.createClass({
@@ -236,7 +250,8 @@ define([
     return {
       AllDocsNumber: AllDocsNumberController,
       PerPageSelector: PerPageSelector,
-      Footer: Footer
+      Footer: Footer,
+      TableControls: TableControls,
     };
 
   });

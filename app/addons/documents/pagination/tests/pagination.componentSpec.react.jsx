@@ -13,8 +13,10 @@ define([
   'api',
   'addons/documents/pagination/pagination.react',
   'testUtils',
-  "react"
+  'react',
+
 ], function (FauxtonAPI, Views, utils, React) {
+
   FauxtonAPI.router = new FauxtonAPI.Router([]);
 
   var assert = utils.assert;
@@ -31,14 +33,13 @@ define([
         selectorEl = TestUtils.renderIntoDocument(
           <Views.PerPageSelector
             perPageChange={perPageChange}
-            perPage={10}
-          />,
+            perPage={10} />,
           container
         );
       });
 
       afterEach(function () {
-        React.unmountComponentAtNode(container);
+        React.unmountComponentAtNode(React.findDOMNode(selectorEl).parentNode);
       });
 
       it('on new select calls callback with new page size', function () {
@@ -52,7 +53,42 @@ define([
 
         assert.ok(perPageChange.calledWith(perPage));
       });
+    });
 
+    describe('TableControls', function () {
+      var container, selectorEl;
+
+      beforeEach(function () {
+        container = document.createElement('div');
+      });
+
+      afterEach(function () {
+        React.unmountComponentAtNode(React.findDOMNode(selectorEl).parentNode);
+      });
+
+      it('shows the amount of fields, none hidden', function () {
+
+        selectorEl = TestUtils.renderIntoDocument(
+          <Views.TableControls prioritizedEnabled={true} displayedFields={{shown: 7, allFieldCount: 7}} />,
+          container
+        );
+
+        var text = $(selectorEl.getDOMNode()).find('.shown-fields').text();
+
+        assert.equal('Showing 7 columns.', text);
+      });
+
+      it('shows the amount of fields, some hidden', function () {
+
+        selectorEl = TestUtils.renderIntoDocument(
+          <Views.TableControls prioritizedEnabled={true} displayedFields={{shown: 5, allFieldCount: 7}} />,
+          container
+        );
+
+        var text = $(selectorEl.getDOMNode()).find('.shown-fields').text();
+
+        assert.equal('Showing 5 of 7 columns.', text);
+      });
     });
   });
 });
