@@ -145,21 +145,21 @@ module.exports = function (grunt) {
 
     watch: {
       js: {
-        files: initHelper.watchFiles(['.js'], ["./app/**/*.js", '!./app/load_addons.js', "./assets/**/*.js", "./test/**/*.js"]),
+        files: initHelper.getFileList(['.js'], ["./app/**/*.js", '!./app/load_addons.js', "./assets/**/*.js", "./test/**/*.js"]),
         tasks: []
       },
       jsx: {
-        files: initHelper.watchFiles(['.jsx'], ["./app/**/*.jsx", '!./app/load_addons.jsx', "./assets/**/*.jsx", "./test/**/*.jsx"]),
+        files: initHelper.getFileList(['.jsx'], ["./app/**/*.jsx", '!./app/load_addons.jsx', "./assets/**/*.jsx", "./test/**/*.jsx"]),
         tasks: []
       },
       style: {
-        files: initHelper.watchFiles(['.less', '.css'], ["./app/**/*.css", "./app/**/*.less", "./assets/**/*.css", "./assets/**/*.less"]),
+        files: initHelper.getFileList(['.less', '.css'], ["./app/**/*.css", "./app/**/*.less", "./assets/**/*.css", "./assets/**/*.less"]),
         tasks: ['clean:watch', 'dependencies', 'shell:build-less-debug']
       },
       html: {
         // the index.html is added in as a dummy file incase there is no
         // html dependancies this will break. So we need one include pattern
-        files: initHelper.watchFiles(['.html'], ['./index.html']),
+        files: initHelper.getFileList(['.html'], ['./index.html']),
         tasks: ['clean:watch', 'dependencies']
       },
       options: {
@@ -212,6 +212,12 @@ module.exports = function (grunt) {
         ]
       },
 
+      distDepsRequire: {
+        files:[
+          {src: 'assets/**', dest: 'dist/tmp-out/', flatten: false, expand: false},
+        ]
+      },
+
       debug: {
         files:[
           {src: ['assets/js/**/*.swf'], dest: 'dist/debug/dashboard.assets/', flatten: true, expand: true, filter: 'isFile'},
@@ -221,9 +227,11 @@ module.exports = function (grunt) {
         ]
       },
 
-      // populated dynamically by watch tasks
-      changedFiles: {
-        files: []
+      testfiles: {
+        files:[
+          {src: ['test/**'], dest: 'dist/debug/', flatten: false, expand: true},
+          {src: 'assets/**', dest: 'dist/debug/', flatten: false, expand: false},
+        ]
       }
     },
 
@@ -248,7 +256,11 @@ module.exports = function (grunt) {
     mochaSetup: {
       default: {
         files: {
-          src: initHelper.watchFiles(['[Ss]pec.js'], ['./app/addons/**/*[Ss]pec.js', './app/addons/**/*[Ss]pec.react.js', './app/core/**/*[Ss]pec.js'])
+          src: initHelper.getFileList(['[Ss]pec.js'], [
+            './app/addons/**/*[Ss]pec.js',
+            './app/addons/**/*[Ss]pec.react.jsx',
+            './app/core/**/*[Ss]pec.js'
+          ])
         },
         template: 'test/test.config.underscore',
         config: './app/config.js'
@@ -256,12 +268,6 @@ module.exports = function (grunt) {
     },
 
     shell: {
-      'build-jsx': {
-        command: 'node ./node_modules/react-tools/bin/jsx -x jsx app/addons/ app/addons/ --no-cache-dir',
-        stdout: true,
-        failOnError: true
-      },
-
       'build-single-jsx': {
         command: '', // populated dynamically
         stdout: true,
@@ -284,6 +290,14 @@ module.exports = function (grunt) {
         command: 'npm run build:css-compress'
       },
 
+      'build-transpile-js-debug': {
+        command: 'npm run build:transpile:debug'
+      },
+
+      'build-transpile-js-release': {
+        command: 'npm run build:transpile:release'
+      },
+
       uglify: {
         command: 'npm run build:uglify'
       },
@@ -299,7 +313,7 @@ module.exports = function (grunt) {
       phantomjs: {
         command: 'node ./node_modules/phantomjs/bin/phantomjs --debug=false ' +
           '--ssl-protocol=sslv2 --web-security=false --ignore-ssl-errors=true ' +
-          './node_modules/mocha-phantomjs/lib/mocha-phantomjs.coffee test/runner.html'
+          './node_modules/mocha-phantomjs/lib/mocha-phantomjs.coffee ./dist/debug/test/runner.html'
       }
     },
 
@@ -362,39 +376,26 @@ module.exports = function (grunt) {
 
     // compile the single JSX file into the appropriate Fauxton folder
     var targetFilepath = filepath;
-    if (isJSX) {
-      var folder = filepath.replace(/\/[^\/]*$/, '');
-      var targetFolder = folder;
 
-      // if the JSX file ISN'T in Fauxton, generate the .js file there
-      if (!(/^app\/addons/.test(folder))) {
-        targetFolder = folder.replace(/.*\/addons/, 'app/addons');
-      }
-      targetFilepath = filepath.replace(/.*\/addons/, 'app/addons');
-      targetFilepath = targetFilepath.replace(/\.jsx$/, '.js');
+    var folder = filepath.replace(/\/[^\/]*$/, '');
+    var targetFolder = folder;
 
-      config.shell['build-single-jsx'].command = 'node ./node_modules/react-tools/bin/jsx -x jsx ' + folder + ' ' + targetFolder + ' --no-cache-dir';
-      grunt.task.run(['shell:build-single-jsx']);
-    }
-
-    // if the JS file that just changed was outside of Fauxton, copy it over
-    if (isJS && !(/^app\/addons/.test(filepath))) {
-      config.copy.changedFiles.files = [{
-        src: filepath,
-        dest: filepath.replace(/.*\/addons/, 'app/addons')
-      }];
-      grunt.task.run(['copy:changedFiles']);
-    }
-
-    // lastly, run jshint + stylecheck the file. Note: this run multiple times when you save a single file because the
-    // jsx command above doesn't allow targeting a specific file, just a folder. So any JSX file in the changed file
-    // folder or subfolder are copied over, causing every one of the files to be jshinted. Still far faster than before
+    // stylecheck the file.
     if (targetFilepath.indexOf('test.config.js') === -1) {
-
-      config.shell.stylecheckSingleFile.command = 'node ./node_modules/eslint/bin/eslint.js ' + targetFilepath;
+      config.shell.stylecheckSingleFile.command = 'node ./node_modules/eslint/bin/eslint.js ' + filepath;
 
       grunt.task.run(['shell:stylecheckSingleFile']);
     }
+
+    // transpile
+    if (!(/^app\/addons/.test(folder))) {
+      targetFolder = folder.replace(/.*\/addons/, 'app/addons');
+    }
+    targetFilepath = filepath.replace(/.*\/addons/, 'app/addons');
+    targetFilepath = targetFilepath.replace(/\.jsx$/, '.js');
+
+    config.shell['build-single-jsx'].command = 'node ./node_modules/babel-cli/bin/babel --presets es2015,react ' + filepath + ' > dist/debug/' + targetFilepath;
+    grunt.task.run(['shell:build-single-jsx']);
   });
 
 
@@ -425,16 +426,15 @@ module.exports = function (grunt) {
    */
   // clean out previous build artifacts and lint
   grunt.registerTask('lint', ['clean', 'shell:stylecheck']);
-  grunt.registerTask('test', ['checkTestExists', 'clean:release', 'dependencies', 'jsx', 'shell:stylecheck', 'gen_initialize:development', 'test_inline']);
+  grunt.registerTask('test', ['checkTestExists', 'clean:release', 'dependencies', 'copy:debug', 'shell:stylecheck', 'shell:build-transpile-js-debug', 'gen_initialize:development', 'test_inline']);
 
   // lighter weight test task for use inside dev/watch
-  grunt.registerTask('test_inline', ['mochaSetup', 'jst', 'concat:test_config_js', 'shell:phantomjs']);
+  grunt.registerTask('test_inline', ['mochaSetup', 'jst', 'concat:test_config_js', 'copy:testfiles', 'shell:phantomjs']);
   // Fetch dependencies (from git or local dir), lint them and make load_addons
   grunt.registerTask('dependencies', ['get_deps', 'gen_load_addons:default']);
 
   // minify code and css, ready for release.
-  grunt.registerTask('jsx', ['shell:build-jsx']);
-  grunt.registerTask('build', ['shell:build-less-release', 'jst', 'shell:requirejs', 'concat:requirejs', 'shell:uglify',
+  grunt.registerTask('build', ['copy:distDepsRequire', 'shell:build-less-release', 'jst', 'shell:build-transpile-js-release', 'shell:requirejs', 'concat:requirejs', 'shell:uglify',
     'shell:css-compress', 'md5:requireJS', 'md5:css', 'template:release']);
 
   /*
@@ -444,17 +444,17 @@ module.exports = function (grunt) {
   grunt.registerTask('dev', ['debugDev', 'couchserver']);
 
   // build a debug release
-  grunt.registerTask('debug', ['lint', 'dependencies', "gen_initialize:development", 'jsx', 'concat:requirejs', 'shell:build-less-debug',
+  grunt.registerTask('debug', ['lint', 'dependencies', "gen_initialize:development", 'shell:build-transpile-js-debug', 'concat:requirejs', 'shell:build-less-debug',
     'template:development', 'copy:debug']);
 
-  grunt.registerTask('debugDev', ['clean', 'dependencies', "gen_initialize:development", 'jsx', 'shell:stylecheck',
-    'shell:build-less-debug', 'template:development', 'copy:debug']);
+  grunt.registerTask('debugDev', ['clean', 'dependencies', "gen_initialize:development", 'shell:stylecheck',
+    'shell:build-less-debug', 'template:development', 'copy:debug', 'shell:build-transpile-js-debug']);
 
   grunt.registerTask('watchRun', ['clean:watch', 'dependencies', 'shell:stylecheck']);
 
   // build a release
   grunt.registerTask('release_commons_prefix', ['clean', 'dependencies']);
-  grunt.registerTask('release_commons_suffix', ['shell:stylecheck', 'shell:build-jsx', 'build', 'copy:dist', 'copy:ace']);
+  grunt.registerTask('release_commons_suffix', ['shell:stylecheck', 'build', 'copy:dist', 'copy:ace']);
 
   grunt.registerTask('release', ['release_commons_prefix', 'gen_initialize:release', 'release_commons_suffix']);
   grunt.registerTask('couchapp_release', ['release_commons_prefix', 'gen_initialize:couchapp', 'release_commons_suffix']);

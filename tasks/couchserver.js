@@ -30,7 +30,7 @@ module.exports = function (grunt) {
 
     // Options
     var dist_dir = './dist/debug/',
-        app_dir = './app',
+        app_dir = './dist/debug/app',
         port = options.port,
         setContentSecurityPolicy = _.isUndefined(options.contentSecurityPolicy) ? true : options.contentSecurityPolicy;
 
@@ -78,10 +78,14 @@ module.exports = function (grunt) {
       } else if (!!url.match(/\.css|img/)) {
         url = url.replace(/\?.*/, '');
         filePath = path.join(dist_dir, url);
-      } else if (!!url.match(/\.js(\?_.*)?$|\.html(\?_.*)?$/)) {
+      } else if (!!url.match(/\.js(\?_.*)?$/)) {
         // server js from app directory
         url = url.replace(/\?_.*/, '');
-        filePath = path.join(app_dir, url.replace('/_utils/fauxton/', ''));
+        filePath = path.join('./dist/debug/app', url.replace('/_utils/fauxton/', ''));
+      } else if (!!url.match(/\.html(\?_.*)?$/)) {
+        // deprecated route for old backbone template
+        url = url.replace(/\?_.*/, '');
+        filePath = path.join('./app', url.replace('/_utils/fauxton/', ''));
       // handles local references to any addon dependencies (e.g. ZeroClipboard.swf)
       } else if (!!url.match(/addons\/[^\/]+\/dependencies\/.+/)) {
         var urlNoQueryStr = url.replace(/\?.*$/, '');

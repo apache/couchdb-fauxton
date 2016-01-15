@@ -124,6 +124,10 @@ module.exports = function (grunt) {
       return /\/app\//.test(filePath);
     });
 
+    testFiles = testFiles.map(function (file) {
+      return file.replace(/\.jsx$/, '.js');
+    });
+
     var configTemplate = _.template(grunt.file.read(configTemplateSrc));
     // a bit of a nasty hack to read our current config.js and get the info so we can change it
     // for our testing setup

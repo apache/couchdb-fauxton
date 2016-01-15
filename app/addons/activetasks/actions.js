@@ -15,6 +15,7 @@ define([
 ],
 function (FauxtonAPI, ActionTypes) {
   return {
+
     init: function (activeTasks) {
       this.fetchAndSetActiveTasks(activeTasks.table, activeTasks);
       FauxtonAPI.when(activeTasks.fetch()).then(function () {
