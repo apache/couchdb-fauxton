@@ -146,7 +146,10 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, Documents, Fauxto
       var text = JSON.stringify(el, null, '  ');
       return (
         <td title={text} className="tableview-el-copy">
-          <Clipboard onClipboardClick={this.showCopiedMessage} title={text} text={text}/>
+          <Clipboard
+            onClipboardClick={this.showCopiedMessage}
+            title={text}
+            text={text} />
         </td>
       );
     },

@@ -261,12 +261,12 @@ define([
 
     it('shows a clipboard icon by default', function () {
       var clipboard = TestUtils.renderIntoDocument(<Views.Clipboard text="copy me" />, container);
-      assert.equal($(clipboard.getDOMNode()).find('.fonticon-clipboard').length, 1);
+      assert.equal($(clipboard.getDOMNode()).find('.icon-paste').length, 1);
     });
 
     it('shows text if specified', function () {
       var clipboard = TestUtils.renderIntoDocument(<Views.Clipboard displayType="text" text="copy me" />, container);
-      assert.equal($(clipboard.getDOMNode()).find('.fonticon-clipboard').length, 0);
+      assert.equal($(clipboard.getDOMNode()).find('.icon-paste').length, 0);
     });
 
     it('shows custom text if specified ', function () {

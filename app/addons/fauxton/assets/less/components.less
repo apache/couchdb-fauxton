@@ -1,0 +1,53 @@
+@import "../../../../../assets/less/variables.less";
+@import "../../../../../assets/less/bootstrap/variables.less";
+@import "../../../../../assets/less/bootstrap/mixins.less";
+
+.api-bar-tray {
+  padding: 16px 20px;
+  .input-append.input-prepend {
+    margin-bottom: 0px;
+
+    .input-xxlarge {
+      .border-radius(5px 0 0 5px);
+    }
+    .btn {
+      background-color: @navBG;
+      color: #fff;
+      margin-left: -1px;
+      padding: 10px 10px 9px;
+      border: none;
+      line-height: 1.5em;
+      .border-radius(5px);
+      &:hover{
+        background-color: #cbcbcb;
+      }
+    }
+
+    .copy-button {
+      .border-radius(0 5px 5px 0);
+    }
+
+    .zeroclipboard-is-hover {
+      background-color: #cbcbcb;
+    }
+
+    .icon-question-sign {
+      margin-left: 3px;
+    }
+  }
+}
+
+.api-bar-tray:before {
+  right: 95px;
+}
+
+.clipboard-copy-element {
+  i:before {
+    margin-right: 0px;
+  }
+
+}
+
+a.clipboard-copy-element:hover {
+  text-decoration: none;
+}
