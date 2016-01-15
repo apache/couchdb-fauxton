@@ -14,12 +14,12 @@
 //
 // Set the require.js configuration for your test setup.
 require.config(
-<%= JSON.stringify(configInfo, null, '\t') %>
+<%= JSON.stringify(configInfo, null, '  ') %>
 );
 
 require([
+        'es5-shim',
         'app',
-        "es5-shim",
         <% _.each(testFiles, function (test) {%>
            <% if (test[0] === '.') { %>
            '../<%= test %>',
