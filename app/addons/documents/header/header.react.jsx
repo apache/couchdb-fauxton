@@ -91,7 +91,7 @@ function (app, FauxtonAPI, React, Actions, ReactComponents,
             title="Enable/Disable include_docs"
             fonticon={this.state.includeDocs ? 'icon-check' : 'icon-check-empty'}
             iconDefaultClass="icon fontawesome"
-            text="Include Docs" /> : null}
+            text="" /> : null}  { /* text is set via responsive css */}
         </div>
       );
     },

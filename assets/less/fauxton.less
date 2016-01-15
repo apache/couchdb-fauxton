@@ -325,44 +325,7 @@ div.spinner {
   }
 }
 
-.api-bar-tray {
-  padding: 16px 20px;
-  .input-append.input-prepend {
-    margin-bottom: 0px;
 
-    .input-xxlarge {
-      .border-radius(5px 0 0 5px);
-    }
-    .btn {
-      background-color: @navBG;
-      color: #fff;
-      margin-left: -1px;
-      padding: 10px 10px 9px;
-      border: none;
-      line-height: 1.5em;
-      .border-radius(5px);
-      &:hover{
-        background-color: #cbcbcb;
-      }
-    }
-
-    .copy-button {
-      .border-radius(0 5px 5px 0);
-    }
-
-    .zeroclipboard-is-hover {
-      background-color: #cbcbcb;
-    }
-
-    .icon-question-sign {
-      margin-left: 3px;
-    }
-  }
-}
-
-.api-bar-tray:before {
-  right: 95px;
-}
 
 .js-filter-form {
   .help-block {
@@ -529,7 +492,7 @@ body #dashboard .flex-body#breadcrumbs {
       .border-radius(5px);
       font-size: 13px;
       padding: 8px 35px 8px 10px;
-      width: 200px;
+      width: 150px;
     }
     .btn-primary {
       background: none repeat scroll 0% 0% transparent;
@@ -624,7 +587,7 @@ footer.pagination-footer {
 }
 
 // left navigationbar is opened
-@media (max-width: 780px) {
+@media (max-width: 730px) {
   .closeMenu {
     .one-pane {
       .searchbox-wrapper {
@@ -634,7 +597,7 @@ footer.pagination-footer {
   }
 }
 
-@media (max-width: 1050px) {
+@media (max-width: 1000px) {
   .closeMenu {
     .with-sidebar {
       .searchbox-wrapper {
@@ -645,7 +608,7 @@ footer.pagination-footer {
 }
 
 // left navigationbar is closed
-@media (max-width: 925px) {
+@media (max-width: 875px) {
   body:not(.closeMenu) {
     .one-pane {
       .searchbox-wrapper {
@@ -655,7 +618,7 @@ footer.pagination-footer {
   }
 }
 
-@media (max-width: 1225px) {
+@media (max-width: 1285px) {
   body:not(.closeMenu) {
     .with-sidebar {
       .searchbox-wrapper {
@@ -665,11 +628,44 @@ footer.pagination-footer {
   }
 }
 
-@media (max-width: 1227px) {
+.control-toggle-include-docs span::before {
+  content: "Include Docs";
+}
+
+@media (max-width: 1177px) {
   body.closeMenu {
     .with-sidebar {
       .two-panel-header {
-        button span {
+        .control-toggle-include-docs span::before {
+          content: " Docs";
+        }
+        i.icon.fonticon-link:before,
+        i.icon.fonticon-gears:before {
+          margin: 10px 0px 0 0;
+        }
+        .icon.fontawesome {
+          margin: 0 -6px 0 0px;
+        }
+        .right-header button i:before{
+          margin: 2px 0 0 0;
+        }
+        #query-options-tray:before {
+          right: 136px
+        }
+      }
+    }
+  }
+}
+
+
+@media (max-width: 1104px) {
+  body.closeMenu {
+    .with-sidebar {
+      .two-panel-header {
+        .control-toggle-include-docs span::before {
+          content: " Docs";
+        }
+        button:not(.control-toggle-include-docs) span {
           display: none;
         }
         button i:before {
@@ -693,11 +689,39 @@ footer.pagination-footer {
   }
 }
 
-@media (max-width: 1389px) {
+@media (max-width: 1339px) {
   body:not(.closeMenu) {
     .with-sidebar {
       .two-panel-header {
-        button span {
+        .control-toggle-include-docs span::before {
+          content: " Docs";
+        }
+        i.icon.fonticon-link:before,
+        i.icon.fonticon-gears:before {
+          margin: 10px 0px 0 0;
+        }
+        .icon.fontawesome {
+          margin: 0 -6px 0 0px;
+        }
+        .right-header button i:before{
+          margin: 2px 0 0 0;
+        }
+        #query-options-tray:before {
+          right: 136px
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 1082px) {
+  body:not(.closeMenu) {
+    .with-sidebar {
+      .two-panel-header {
+        .control-toggle-include-docs span::before {
+          content: " Docs";
+        }
+        button:not(.control-toggle-include-docs) span {
           display: none;
         }
         button i:before {

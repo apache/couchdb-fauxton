@@ -54,7 +54,7 @@ function (app, FauxtonAPI, React, ZeroClipboard, ReactBootstrap) {
 
     getClipboardElement: function () {
       if (this.props.displayType === 'icon') {
-        return (<i className="fonticon-clipboard"></i>);
+        return (<i className="fontawesome icon-paste"></i>);
       }
       return this.props.textDisplay;
     },
@@ -73,7 +73,7 @@ function (app, FauxtonAPI, React, ZeroClipboard, ReactBootstrap) {
       return (
         <a href="#"
           ref="copy"
-          className="copy"
+          className="copy clipboard-copy-element"
           data-clipboard-text={this.props.text}
           data-bypass="true"
           title={this.props.title}
@@ -113,13 +113,13 @@ function (app, FauxtonAPI, React, ZeroClipboard, ReactBootstrap) {
             value={this.props.textToCopy} />
           <a
             id={"copy-text-" + this.props.uniqueKey}
-            className="fonticon-clipboard icon btn copy-button"
+            className="btn copy-button clipboard-copy-element"
             data-clipboard-text={this.props.textToCopy}
             data-bypass="true"
             ref={"copy-text-" + this.props.uniqueKey}
             title="Copy to clipboard"
           >
-            Copy
+            <i className="fontawesome icon-paste"></i> Copy
           </a>
         </p>
       );
