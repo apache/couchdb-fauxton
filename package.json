@@ -47,7 +47,6 @@
     "url": "~0.7.9",
     "urls": "~0.0.3"
   },
-
   "scripts": {
     "stylecheck": "eslint --ext=js,jsx .",
     "build:less:debug": "mkdirp ./dist/debug/dashboard.assets/css && node ./build-helper/less.js dist/debug/dashboard.assets/css/index.css",

@@ -34,7 +34,7 @@
         "src": "assets/index.underscore",
         "dest": "dist/debug/index.html",
         "variables": {
-          "requirejs": "./js/REQUIREJS_FILE",
+          "requirejs": "./dashboard.assets/js/REQUIREJS_FILE",
           "css": "./dashboard.assets/css/CSS_FILE",
           "base": null
         },

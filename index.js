@@ -28,16 +28,10 @@ module.exports = function (options) {
     .pipe(res);
   }
 
-  var fileTypes = ['js', 'css', 'png', 'swf', 'eot', 'woff', 'svg', 'ttf', 'swf'];
+  var fileTypes = ['.js', '.css', '.png', '.swf', '.eot', '.woff', '.svg', '.ttf', '.swf'];
 
   function isFile (url) {
-    var arr = url.split('.');
-
-    if (arr.length < 2) {
-      return false;
-    }
-
-    return _.contains(fileTypes, arr[1]);
+    return _.contains(fileTypes, path.extname(url));
   }
 
   // create proxy to couch for all couch requests
@@ -46,7 +40,7 @@ module.exports = function (options) {
   });
 
   http.createServer(function (req, res) {
-    var isDocLink = /_utils\/docs/.test(req.url) ? true : false;
+    var isDocLink = /_utils\/docs/.test(req.url);
     var url = req.url.split(/\?v=|\?noCache/)[0].replace('_utils', '');
     var accept = req.headers.accept.split(',');
 
@@ -59,7 +53,7 @@ module.exports = function (options) {
     if (url === '/' && accept[0] !== 'application/json') {
       // serve main index file from here
       return sendFile(req, res, path.join(dist_dir, 'index.html'));
-    } else if (isFile(url) && !isDocLink ) {
+    } else if (isFile(url) && !isDocLink) {
       return sendFile(req, res, path.join(dist_dir, url));
     }
 
