@@ -18,6 +18,8 @@
 /*jslint node: true */
 "use strict";
 
+const path = require('path');
+
 module.exports = function (grunt) {
   var helper = require('./tasks/helper.js'),
       initHelper = helper.init(grunt),
@@ -325,7 +327,7 @@ module.exports = function (grunt) {
         options: {
           afterEach: function (fileChanges) {
             // replace the REQUIREJS_FILE placeholder with the actual filename
-            var newFilename = fileChanges.newPath.match(/[^\/]+$/)[0];
+            const newFilename = path.basename(fileChanges.newPath);
             config.template.release.variables.requirejs = config.template.release.variables.requirejs.replace(/REQUIREJS_FILE/, newFilename);
           }
         }
@@ -336,7 +338,7 @@ module.exports = function (grunt) {
         options: {
           afterEach: function (fileChanges) {
             // replace the CSS_FILE placeholder with the actual filename
-            var newFilename = fileChanges.newPath.match(/[^\/]+$/)[0];
+            const newFilename = path.basename(fileChanges.newPath);
             config.template.release.variables.css = config.template.release.variables.css.replace(/CSS_FILE/, newFilename);
           }
         }

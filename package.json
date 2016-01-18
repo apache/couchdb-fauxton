@@ -41,13 +41,13 @@
     "react-tools": "^0.12.0",
     "request": "^2.54.0",
     "requirejs": "^2.1.22",
+    "semver": "^5.1.0",
     "send": "~0.1.1",
     "uglify-js": "^2.6.1",
     "underscore": "~1.4.2",
     "url": "~0.7.9",
     "urls": "~0.0.3"
   },
-
   "scripts": {
     "stylecheck": "eslint --ext=js,jsx .",
     "build:less:debug": "mkdirp ./dist/debug/dashboard.assets/css && node ./build-helper/less.js dist/debug/dashboard.assets/css/index.css",
@@ -62,7 +62,7 @@
     "dev": "grunt dev",
     "nightwatch": "grunt nightwatch",
     "start": "node ./bin/fauxton",
-    "postinstall": "grunt release"
+    "postinstall": "node version-check.js && grunt release"
   },
   "repository": {
     "type": "git",
