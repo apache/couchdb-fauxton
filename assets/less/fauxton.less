@@ -624,8 +624,11 @@ footer.pagination-footer {
   }
 }
 
-.control-toggle-include-docs span::before {
-  content: "Include Docs";
+body .control-toggle-include-docs span {
+  margin-left: 0;
+  &::before {
+    content: "Include Docs";
+  }
 }
 
 @media (max-width: 1177px) {
@@ -634,20 +637,9 @@ footer.pagination-footer {
       .two-panel-header {
         .control-toggle-include-docs span::before {
           content: " Docs";
-          margin-left: 5px;
         }
-        i.icon.fonticon-link:before,
-        i.icon.fonticon-gears:before {
-          margin: 10px 0px 0 0;
-        }
-        .icon.fontawesome {
-          margin: 0 -6px 0 0px;
-        }
-        .right-header button i:before{
+        .right-header button i:before {
           margin: 2px 0 0 0;
-        }
-        #query-options-tray:before {
-          right: 136px
         }
       }
     }
@@ -655,13 +647,12 @@ footer.pagination-footer {
 }
 
 
-@media (max-width: 1104px) {
+@media (max-width: 1120px) {
   body.closeMenu {
     .with-sidebar {
       .two-panel-header {
         .control-toggle-include-docs span::before {
-          content: " Docs";
-          margin-left: 5px;
+          content: "Docs";
         }
         button:not(.control-toggle-include-docs) span {
           display: none;
@@ -669,18 +660,14 @@ footer.pagination-footer {
         button i:before {
           float: none;
         }
-        i.icon.fonticon-link:before,
-        i.icon.fonticon-gears:before {
-          margin: 10px 0px 0 0;
-        }
-        .icon.fontawesome {
-          margin: 0 -6px 0 0px;
-        }
-        .right-header button i:before{
+        .right-header button i:before {
           margin: 2px 0 0 0;
         }
         #query-options-tray:before {
-          right: 136px
+          right: 130px;
+        }
+        .api-bar-tray:before {
+          right: 68px;
         }
       }
     }
@@ -692,34 +679,22 @@ footer.pagination-footer {
     .with-sidebar {
       .two-panel-header {
         .control-toggle-include-docs span::before {
-          content: " Docs";
-          margin-left: 5px;
+          content: "Docs";
         }
-        i.icon.fonticon-link:before,
-        i.icon.fonticon-gears:before {
-          margin: 10px 0px 0 0;
-        }
-        .icon.fontawesome {
-          margin: 0 -6px 0 0px;
-        }
-        .right-header button i:before{
+        .right-header button i:before {
           margin: 2px 0 0 0;
-        }
-        #query-options-tray:before {
-          right: 136px
         }
       }
     }
   }
 }
 
-@media (max-width: 1082px) {
+@media (max-width: 1090px) {
   body:not(.closeMenu) {
     .with-sidebar {
       .two-panel-header {
         .control-toggle-include-docs span::before {
-          content: " Docs";
-          margin-left: 5px;
+          content: "Docs";
         }
         button:not(.control-toggle-include-docs) span {
           display: none;
@@ -727,18 +702,8 @@ footer.pagination-footer {
         button i:before {
           float: none;
         }
-        i.icon.fonticon-link:before,
-        i.icon.fonticon-gears:before {
-          margin: 10px 0px 0 0;
-        }
-        .icon.fontawesome {
-          margin: 0 -6px 0 0px;
-        }
-        .right-header button i:before{
+        .right-header button i:before {
           margin: 2px 0 0 0;
-        }
-        #query-options-tray:before {
-          right: 136px
         }
       }
     }

@@ -70,8 +70,6 @@ function (app, FauxtonAPI, Helpers, BaseRoute, Databases,
     },
 
     findUsingIndex: function () {
-      console.log(this.database);
-
       var params = this.createParams(),
           urlParams = params.urlParams,
           mangoResultCollection = new Resources.MangoDocumentCollection(null, {
