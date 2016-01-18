@@ -73,6 +73,6 @@
     "futon",
     "fauxton"
   ],
-  "author": "The CouchDB contributors",
-  "license": "Apache 2.0"
+  "author": "The Apache CouchDB contributors",
+  "license": "Apache-2.0"
 }
