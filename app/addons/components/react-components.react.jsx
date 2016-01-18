@@ -1113,6 +1113,12 @@ function (app, FauxtonAPI, React, Stores, FauxtonComponents, ace, beautifyHelper
       id: React.PropTypes.string.isRequired
     },
 
+    getDefaultProps: function () {
+      return {
+        className: ''
+      };
+    },
+
     componentDidMount: function () {
       $('body').on('click.' + this.props.id, _.bind(this.closeIfOpen, this));
       FauxtonAPI.Events.on(FauxtonAPI.constants.EVENTS.TRAY_HIDE, this.closeIfOpen, this);
@@ -1150,7 +1156,7 @@ function (app, FauxtonAPI, React, Stores, FauxtonComponents, ace, beautifyHelper
 
     render: function () {
       return (
-        <div>
+        <div className={this.props.className}>
           {this.renderChildren()}
         </div>
       );

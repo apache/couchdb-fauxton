@@ -21,12 +21,25 @@ define([
 
 function (app, FauxtonAPI, React, Stores, Actions, Components) {
   var store = Stores.queryOptionsStore;
-  var LoadLines = Components.LoadLines;
   var Tray = Components.Tray;
   var TrayContents = Components.TrayContents;
   var ToggleHeaderButton = Components.ToggleHeaderButton;
 
   var MainFieldsView = React.createClass({
+    propTypes: {
+      toggleIncludeDocs: React.PropTypes.func.isRequired,
+      includeDocs: React.PropTypes.bool.isRequired,
+      reduce: React.PropTypes.bool.isRequired,
+      toggleReduce: React.PropTypes.func,
+      updateGroupLevel: React.PropTypes.func,
+      docURL: React.PropTypes.string
+    },
+
+    getDefaultProps: function () {
+      return {
+        docURL: FauxtonAPI.constants.DOC_URLS.GENERAL
+      };
+    },
 
     toggleIncludeDocs: function (e) {
       this.props.toggleIncludeDocs();
@@ -83,14 +96,15 @@ function (app, FauxtonAPI, React, Stores, Actions, Components) {
         <div className="query-group" id="query-options-main-fields">
           <span className="add-on">
             Query Options
-            <a className="help-link" href={FauxtonAPI.constants.DOC_URLS.GENERAL} target="_blank" data-bypass="true">
+            <a className="help-link" href={this.props.docURL} target="_blank" data-bypass="true">
               <i className="icon-question-sign" />
             </a>
           </span>
           <div className="controls-group qo-main-fields-row">
             <div className="row-fluid fieldsets">
               <div className="checkbox inline">
-                <input disabled={this.props.reduce} onChange={this.toggleIncludeDocs} className="boom" id="qoIncludeDocs" name="include_docs" type="checkbox" checked={includeDocs} />
+                <input disabled={this.props.reduce} onChange={this.toggleIncludeDocs} id="qoIncludeDocs"
+                   name="include_docs" type="checkbox" checked={includeDocs} />
                 <label className={this.props.reduce ? 'disabled' : ''} htmlFor="qoIncludeDocs" id="qoIncludeDocsLabel">Include Docs</label>
               </div>
               {this.reduce()}
@@ -371,6 +385,7 @@ A key value is the first parameter emitted in a map function. For example emit("
 
   return {
     QueryOptionsController: QueryOptionsController,
+    QueryButtons: QueryButtons,
     MainFieldsView: MainFieldsView,
     KeySearchFields: KeySearchFields,
     AdditionalParams: AdditionalParams,

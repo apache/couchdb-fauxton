@@ -39,7 +39,6 @@ define([
       var mainFieldsEl;
 
       it('returns null no reduce', function () {
-
         mainFieldsEl = TestUtils.renderIntoDocument(<Views.MainFieldsView reduce={false} includeDocs={false} showReduce={false}/>, container);
         assert.ok(_.isNull(mainFieldsEl.reduce()));
       });
@@ -67,6 +66,15 @@ define([
 
         assert.ok(spy.calledOnce);
       });
+
+      it('uses overridden URL prop if defined', function () {
+        var customDocURL = 'http://whatever.com';
+        mainFieldsEl = TestUtils.renderIntoDocument(
+          <Views.MainFieldsView reduce={false} includeDocs={false} showReduce={false} docURL={customDocURL} />,
+          container);
+        assert.equal($(React.findDOMNode(mainFieldsEl)).find('.help-link').attr('href'), customDocURL);
+      });
+
     });
 
     describe('KeySearchFields', function () {

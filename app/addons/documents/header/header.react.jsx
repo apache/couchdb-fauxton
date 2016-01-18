@@ -43,7 +43,7 @@ function (app, FauxtonAPI, React, Actions, ReactComponents,
         selectedView: indexResultsStore.getCurrentViewType(),
         isTableView: indexResultsStore.getIsTableView(),
         includeDocs: queryOptionsStore.getIncludeDocsEnabled(),
-        bulkDocCollection: indexResultsStore.getBulkDocCollection(),
+        bulkDocCollection: indexResultsStore.getBulkDocCollection()
       };
     },
 
