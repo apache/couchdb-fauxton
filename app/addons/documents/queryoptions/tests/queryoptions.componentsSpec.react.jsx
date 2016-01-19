@@ -68,11 +68,17 @@ define([
       });
 
       it('uses overridden URL prop if defined', function () {
-        var customDocURL = 'http://whatever.com';
+
         mainFieldsEl = TestUtils.renderIntoDocument(
-          <Views.MainFieldsView reduce={false} includeDocs={false} showReduce={false} docURL={customDocURL} />,
-          container);
-        assert.equal($(React.findDOMNode(mainFieldsEl)).find('.help-link').attr('href'), customDocURL);
+          <Views.MainFieldsView
+            reduce={false}
+            includeDocs={false}
+            showReduce={false}
+            docURL={'http://whatever.com'} />,
+          container
+        );
+
+        assert.equal($(React.findDOMNode(mainFieldsEl)).find('.help-link').attr('href'), 'http://whatever.com');
       });
 
     });
