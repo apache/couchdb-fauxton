@@ -58,7 +58,8 @@ function (app, FauxtonAPI, Components, NotificationComponents, Actions, NavbarRe
 
 
   Fauxton.initialize = function () {
-    FauxtonAPI.RouteObject.on('beforeFullRender', function (routeObject) {
+
+    FauxtonAPI.RouteObject.on('beforeEstablish', function (routeObject) {
       NavigationActions.setNavbarActiveLink(_.result(routeObject, 'selectedHeader'));
 
       // always attempt to render the API Bar. Even if it's hidden on initial load, it may be enabled later
@@ -78,9 +79,7 @@ function (app, FauxtonAPI, Components, NotificationComponents, Actions, NavbarRe
       if (!routeObject.get('hideNotificationCenter')) {
         routeObject.setComponent('#notification-center-btn', NotificationComponents.NotificationCenterButton);
       }
-    });
 
-    FauxtonAPI.RouteObject.on('beforeEstablish', function (routeObject) {
       if (routeObject.overrideBreadcrumbs) { return; }
 
       FauxtonAPI.masterLayout.removeView('#breadcrumbs');
