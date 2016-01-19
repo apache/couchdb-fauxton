@@ -58,22 +58,6 @@ module.exports = function (grunt) {
     return _.union(["dist/", "app/load_addons.js"], cleanableAddons);
   }();
 
-  var assets = function () {
-    // Base assets
-    var theAssets = {
-      img: ["assets/img/**"]
-    };
-    initHelper.processAddons(function (addon) {
-      // Images
-      var root = addon.path || "app/addons/" + addon.name;
-      var imgPath = root + "/assets/img";
-      if (fs.existsSync(imgPath)) {
-        theAssets.img.push(imgPath + "/**");
-      }
-    });
-    return theAssets;
-  }();
-
   var templateSettings = (function getTemplateSettings () {
     var settings = initHelper.readSettingsFile();
 
@@ -219,7 +203,7 @@ module.exports = function (grunt) {
       dist:{
         files:[
           {src: 'dist/debug/index.html', dest: 'dist/release/index.html'},
-          {src: assets.img, dest: 'dist/release/dashboard.assets/img/', flatten: true, expand: true},
+          {src: ['assets/img/**', 'app/addons/**/assets/img/**'], dest: 'dist/release/dashboard.assets/img/', flatten: true, expand: true},
           {src: ['assets/js/**/*.swf'], dest: 'dist/release/dashboard.assets/', flatten: true, expand: true, filter: 'isFile'},
           {src: ['*.eot', '*.woff', '*.svg', '*.ttf'], cwd: './assets/fonts', dest: 'dist/release/dashboard.assets/fonts/', filter: 'isFile', flatten: true, expand: true},
           {src: './favicon.ico', dest: "dist/release/favicon.ico"}
@@ -230,7 +214,7 @@ module.exports = function (grunt) {
         files:[
           {src: ['assets/js/**/*.swf'], dest: 'dist/debug/dashboard.assets/', flatten: true, expand: true, filter: 'isFile'},
           {src: ['*.eot', '*.woff', '*.svg', '*.ttf'], cwd: './assets/fonts', dest: 'dist/debug/dashboard.assets/fonts/', filter: 'isFile', flatten: true, expand: true},
-          {src: assets.img, dest: 'dist/debug/dashboard.assets/img/', flatten: true, expand: true},
+          {src: ['assets/img/**', 'app/addons/**/assets/img/**'], dest: 'dist/debug/dashboard.assets/img/', flatten: true, expand: true},
           {src: './favicon.ico', dest: "dist/debug/favicon.ico"}
         ]
       },
