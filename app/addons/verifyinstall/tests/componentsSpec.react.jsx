@@ -14,11 +14,12 @@ define([
   'app',
   'api',
   'react',
+  'react-dom',
   'testUtils',
   'addons/verifyinstall/constants',
   'addons/verifyinstall/components.react'
 
-], function (app, FauxtonAPI, React, testUtils, Constants, Components) {
+], function (app, FauxtonAPI, React, ReactDOM, testUtils, Constants, Components) {
   FauxtonAPI.router = new FauxtonAPI.Router([]);
 
   var assert = testUtils.assert;
@@ -43,7 +44,7 @@ define([
     });
 
     afterEach(function () {
-      React.unmountComponentAtNode(container);
+      ReactDOM.unmountComponentAtNode(container);
     });
 
     it('confirm all result fields blank before tests ran', function () {
@@ -51,7 +52,7 @@ define([
       el = ReactTestUtils.renderIntoDocument(<Components.VerifyInstallResults testResults={testResults} />, container);
 
       tests.forEach(function (test) {
-        assert.equal($(el.getDOMNode()).find('#' + test.id).html(), '');
+        assert.equal($(ReactDOM.findDOMNode(el)).find('#' + test.id).html(), '');
       });
     });
 
@@ -68,7 +69,7 @@ define([
         el = ReactTestUtils.renderIntoDocument(<Components.VerifyInstallResults testResults={copy} />, container);
 
         // now look at the DOM for that element. It should contain a tick char
-        assert.equal($(el.getDOMNode()).find('#' + test.id + ' span').html(), '✓');
+        assert.equal($(ReactDOM.findDOMNode(el)).find('#' + test.id + ' span').html(), '✓');
       });
     });
 
@@ -85,7 +86,7 @@ define([
         el = ReactTestUtils.renderIntoDocument(<Components.VerifyInstallResults testResults={copy} />, container);
 
         // now look at the DOM for that element. It should contain an error char
-        assert.equal($(el.getDOMNode()).find('#' + test.id + ' span').html(), '✗');
+        assert.equal($(ReactDOM.findDOMNode(el)).find('#' + test.id + ' span').html(), '✗');
       });
     });
   });
@@ -99,14 +100,14 @@ define([
     });
 
     afterEach(function () {
-      React.unmountComponentAtNode(container);
+      ReactDOM.unmountComponentAtNode(container);
     });
 
     it('calls verify function on click', function () {
       var stub = { func: function () { } };
       var spy = sinon.spy(stub, 'func');
       el = ReactTestUtils.renderIntoDocument(<Components.VerifyInstallButton verify={stub.func} isVerifying={false} />, container);
-      ReactTestUtils.Simulate.click($(el.getDOMNode())[0]);
+      ReactTestUtils.Simulate.click($(ReactDOM.findDOMNode(el))[0]);
       assert.ok(spy.calledOnce);
     });
 
@@ -114,20 +115,20 @@ define([
       var stub = { func: function () { } };
       var spy = sinon.spy(stub, 'func');
       el = ReactTestUtils.renderIntoDocument(<Components.VerifyInstallButton verify={stub.func} isVerifying={true} />, container);
-      ReactTestUtils.Simulate.click($(el.getDOMNode())[0]);
+      ReactTestUtils.Simulate.click($(ReactDOM.findDOMNode(el))[0]);
       assert.notOk(spy.calledOnce);
     });
 
     it('shows appropriate default label', function () {
       var stub = { func: function () { } };
       el = ReactTestUtils.renderIntoDocument(<Components.VerifyInstallButton verify={stub.func} isVerifying={false} />, container);
-      assert.equal($(el.getDOMNode()).html(), 'Verify Installation');
+      assert.equal($(ReactDOM.findDOMNode(el)).html(), 'Verify Installation');
     });
 
     it('shows appropriate label during verification', function () {
       var stub = { func: function () { } };
       el = ReactTestUtils.renderIntoDocument(<Components.VerifyInstallButton verify={stub.func} isVerifying={true} />, container);
-      assert.equal($(el.getDOMNode()).html(), 'Verifying');
+      assert.equal($(ReactDOM.findDOMNode(el)).html(), 'Verifying');
     });
 
   });

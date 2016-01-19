@@ -16,8 +16,9 @@ define([
   'addons/databases/actiontypes',
   'addons/databases/stores',
   'testUtils',
-  "react"
-], function (FauxtonAPI, Views, Actions, ActionTypes, Stores, utils, React) {
+  "react",
+  'react-dom'
+], function (FauxtonAPI, Views, Actions, ActionTypes, Stores, utils, React, ReactDOM) {
 
   var assert = utils.assert;
   var TestUtils = React.addons.TestUtils;
@@ -85,12 +86,12 @@ define([
         ];
       };
       container = document.createElement('div');
-      dbEl = React.render(React.createElement(Views.DatabasesController, {}), container);
+      dbEl = ReactDOM.render(React.createElement(Views.DatabasesController, {}), container);
     });
 
     afterEach(function () {
       Stores.databasesStore.getCollection = oldGetCollection;
-      React.unmountComponentAtNode(container);
+      ReactDOM.unmountComponentAtNode(container);
     });
 
     it('renders base data of DBs', function () {
@@ -118,12 +119,12 @@ define([
         passedDbName = dbName;
       };
       container = document.createElement('div');
-      addEl = React.render(React.createElement(Views.AddDatabaseWidget, {}), container);
+      addEl = ReactDOM.render(React.createElement(Views.AddDatabaseWidget, {}), container);
     });
 
     afterEach(function () {
       Actions.createNewDatabase = oldCreateNewDatabase;
-      React.unmountComponentAtNode(container);
+      ReactDOM.unmountComponentAtNode(container);
     });
 
     it("Creates a database with given name", function () {
@@ -160,14 +161,14 @@ define([
         return ["db1", "db2"];
       };
       container = document.createElement('div');
-      jumpEl = React.render(React.createElement(Views.JumpToDatabaseWidget, {}), container);
+      jumpEl = ReactDOM.render(React.createElement(Views.JumpToDatabaseWidget, {}), container);
     });
 
     afterEach(function () {
       $ = old$;
       Actions.jumpToDatabase = oldJumpToDatabase;
       Stores.databasesStore.getDatabaseNames = oldGetDatabaseNames;
-      React.unmountComponentAtNode(container);
+      ReactDOM.unmountComponentAtNode(container);
     });
 
     it("Jumps to a database with given name", function () {
@@ -217,14 +218,14 @@ define([
     it('uses custom URL prefix on the navigation if passed through props', function () {
       var container = document.createElement('div');
       var pagination = TestUtils.renderIntoDocument(<Views.DatabasePagination linkPath="_custom_path" />, container);
-      var links = $(pagination.getDOMNode()).find('a');
+      var links = $(ReactDOM.findDOMNode(pagination)).find('a');
 
       assert.equal(links.length, 3, 'pagination contains links');
       links.each(function () {
         assert.include(this.href, '_custom_path', 'link contains custom path');
       });
 
-      React.unmountComponentAtNode(container);
+      ReactDOM.unmountComponentAtNode(container);
     });
   });
 
@@ -236,7 +237,7 @@ define([
     });
 
     afterEach(function () {
-      React.unmountComponentAtNode(container);
+      ReactDOM.unmountComponentAtNode(container);
     });
 
     it('adds multiple extra columns if extended', function () {
@@ -255,7 +256,7 @@ define([
       FauxtonAPI.registerExtension('DatabaseTable:head', ColHeader3);
 
       var table = TestUtils.renderIntoDocument(<Views.DatabaseTable loading={false} body={[]} />, container);
-      var cols = $(table.getDOMNode()).find('th');
+      var cols = $(ReactDOM.findDOMNode(table)).find('th');
 
       // (default # of rows is 5)
       assert.equal(cols.length, 8, 'extra columns show up');
@@ -280,7 +281,7 @@ define([
       };
 
       var databaseRow = TestUtils.renderIntoDocument(<Views.DatabaseTable body={[row]} />, container);
-      var links = $(databaseRow.getDOMNode()).find('td');
+      var links = $(ReactDOM.findDOMNode(databaseRow)).find('td');
 
       // (default # of rows is 5)
       assert.equal(links.length, 6, 'extra column shows up');
@@ -301,7 +302,7 @@ define([
       };
 
       var databaseRow = TestUtils.renderIntoDocument(<Views.DatabaseTable body={[row]} />, container);
-      assert.equal($(databaseRow.getDOMNode()).find('.database-load-fail').length, 1);
+      assert.equal($(ReactDOM.findDOMNode(databaseRow)).find('.database-load-fail').length, 1);
     });
 
     it('shows no error if row marked as loaded', function () {
@@ -316,7 +317,7 @@ define([
 
       var databaseRow = TestUtils.renderIntoDocument(<Views.DatabaseTable body={[row]} />, container);
 
-      assert.equal($(databaseRow.getDOMNode()).find('.database-load-fail').length, 0);
+      assert.equal($(ReactDOM.findDOMNode(databaseRow)).find('.database-load-fail').length, 0);
     });
 
   });

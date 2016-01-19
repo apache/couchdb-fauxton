@@ -14,8 +14,8 @@ define([
   'addons/documents/pagination/pagination.react',
   'testUtils',
   'react',
-
-], function (FauxtonAPI, Views, utils, React) {
+  'react-dom'
+], function (FauxtonAPI, Views, utils, React, ReactDOM) {
 
   FauxtonAPI.router = new FauxtonAPI.Router([]);
 
@@ -39,11 +39,11 @@ define([
       });
 
       afterEach(function () {
-        React.unmountComponentAtNode(React.findDOMNode(selectorEl).parentNode);
+        ReactDOM.unmountComponentAtNode(ReactDOM.findDOMNode(selectorEl).parentNode);
       });
 
       it('on new select calls callback with new page size', function () {
-        var selectEl = $(selectorEl.getDOMNode()).find('#select-per-page')[0];
+        var selectEl = $(ReactDOM.findDOMNode(selectorEl)).find('#select-per-page')[0];
         var perPage = 5;
         TestUtils.Simulate.change(selectEl, {
           target: {
@@ -63,7 +63,7 @@ define([
       });
 
       afterEach(function () {
-        React.unmountComponentAtNode(React.findDOMNode(selectorEl).parentNode);
+        ReactDOM.unmountComponentAtNode(ReactDOM.findDOMNode(selectorEl).parentNode);
       });
 
       it('shows the amount of fields, none hidden', function () {
@@ -73,7 +73,7 @@ define([
           container
         );
 
-        var text = $(selectorEl.getDOMNode()).find('.shown-fields').text();
+        var text = $(ReactDOM.findDOMNode(selectorEl)).find('.shown-fields').text();
 
         assert.equal('Showing 7 columns.', text);
       });
@@ -85,7 +85,7 @@ define([
           container
         );
 
-        var text = $(selectorEl.getDOMNode()).find('.shown-fields').text();
+        var text = $(ReactDOM.findDOMNode(selectorEl)).find('.shown-fields').text();
 
         assert.equal('Showing 5 of 7 columns.', text);
       });

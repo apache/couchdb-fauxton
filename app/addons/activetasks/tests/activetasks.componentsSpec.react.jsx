@@ -16,9 +16,10 @@ define([
   'addons/activetasks/stores',
   'addons/activetasks/tests/fakeActiveTaskResponse',
   'react',
+  'react-dom',
   'addons/activetasks/actions',
   'testUtils'
-], function (FauxtonAPI, ActiveTasks, Components, Stores, fakedResponse, React, Actions, utils) {
+], function (FauxtonAPI, ActiveTasks, Components, Stores, fakedResponse, React, ReactDOM, Actions, utils) {
   var assert = utils.assert;
   var restore = utils.restore;
   var TestUtils = React.addons.TestUtils;
@@ -39,7 +40,7 @@ define([
       });
 
       afterEach(function () {
-        React.unmountComponentAtNode(pollingWidgetDiv);
+        ReactDOM.unmountComponentAtNode(pollingWidgetDiv);
         restore(Actions.changePollingInterval);
       });
 
@@ -67,7 +68,7 @@ define([
       });
 
       afterEach(function () {
-        React.unmountComponentAtNode(tableDiv);
+        ReactDOM.unmountComponentAtNode(tableDiv);
         restore(window.confirm);
       });
 
@@ -88,7 +89,7 @@ define([
         it('should trigger change to radio buttons', function () {
           _.each(radioIDs, function (radioID) {
             spy = sinon.spy(Actions, 'switchTab');
-            TestUtils.Simulate.change($(table.getDOMNode()).find('#' + radioID)[0]);
+            TestUtils.Simulate.change($(ReactDOM.findDOMNode(table)).find('#' + radioID)[0]);
             assert.ok(spy.calledOnce);
             spy.restore();
           });
@@ -96,7 +97,7 @@ define([
 
         it('should trigger change to search term', function () {
           spy = sinon.spy(Actions, 'setSearchTerm');
-          TestUtils.Simulate.change($(table.getDOMNode()).find('.searchbox')[0], {target: {value: 'searching'}});
+          TestUtils.Simulate.change($(ReactDOM.findDOMNode(table)).find('.searchbox')[0], {target: {value: 'searching'}});
           assert.ok(spy.calledOnce);
         });
       });
@@ -118,7 +119,7 @@ define([
         it('should trigger change to which header to sort by', function () {
           _.each(headerNames, function (header) {
             spy = sinon.spy(Actions, 'sortByColumnHeader');
-            TestUtils.Simulate.change($(table.getDOMNode()).find('#' + header)[0]);
+            TestUtils.Simulate.change($(ReactDOM.findDOMNode(table)).find('#' + header)[0]);
             assert.ok(spy.calledOnce);
             spy.restore();
           });

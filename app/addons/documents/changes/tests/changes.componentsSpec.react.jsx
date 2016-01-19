@@ -14,11 +14,12 @@ define([
   'app',
   'api',
   'react',
+  'react-dom',
   'addons/documents/changes/components.react',
   'addons/documents/changes/stores',
   'addons/documents/changes/actions',
   'testUtils'
-], function (app, FauxtonAPI, React, Changes, Stores, Actions, utils) {
+], function (app, FauxtonAPI, React, ReactDOM, Changes, Stores, Actions, utils) {
   FauxtonAPI.router = new FauxtonAPI.Router([]);
 
   var assert = utils.assert;
@@ -47,12 +48,12 @@ define([
       afterEach(function () {
         spy.restore();
         Stores.changesStore.reset();
-        React.unmountComponentAtNode(container);
+        ReactDOM.unmountComponentAtNode(container);
       });
 
       // similar as previous, except it confirms that the action gets fired, not the custom toggle func
       it('calls toggleTabVisibility action on selecting a tab', function () {
-        TestUtils.Simulate.click($(tab.getDOMNode()).find('a')[0]);
+        TestUtils.Simulate.click($(ReactDOM.findDOMNode(tab)).find('a')[0]);
         assert.ok(spy.calledOnce);
       });
     });
@@ -69,11 +70,11 @@ define([
 
     afterEach(function () {
       Stores.changesStore.reset();
-      React.unmountComponentAtNode(container);
+      ReactDOM.unmountComponentAtNode(container);
     });
 
     it('should call toggle function on clicking tab', function () {
-      TestUtils.Simulate.click($(tab.getDOMNode()).find('a')[0]);
+      TestUtils.Simulate.click($(ReactDOM.findDOMNode(tab)).find('a')[0]);
       assert.ok(toggleTabVisibility.calledOnce);
     });
   });
@@ -89,11 +90,11 @@ define([
 
     afterEach(function () {
       Stores.changesStore.reset();
-      React.unmountComponentAtNode(container);
+      ReactDOM.unmountComponentAtNode(container);
     });
 
     it('should add filter markup', function () {
-      var $el = $(changesFilterEl.getDOMNode()),
+      var $el = $(ReactDOM.findDOMNode(changesFilterEl)),
           submitBtn = $el.find('[type="submit"]')[0],
           addItemField = $el.find('.js-changes-filter-field')[0];
 
@@ -109,7 +110,7 @@ define([
     });
 
     it('should call addFilter action on click', function () {
-      var $el = $(changesFilterEl.getDOMNode()),
+      var $el = $(ReactDOM.findDOMNode(changesFilterEl)),
         submitBtn = $el.find('[type="submit"]')[0],
         addItemField = $el.find('.js-changes-filter-field')[0];
 
@@ -123,7 +124,7 @@ define([
     });
 
     it('should remove filter markup', function () {
-      var $el = $(changesFilterEl.getDOMNode()),
+      var $el = $(ReactDOM.findDOMNode(changesFilterEl)),
         submitBtn = $el.find('[type="submit"]')[0],
         addItemField = $el.find('.js-changes-filter-field')[0];
 
@@ -143,7 +144,7 @@ define([
     });
 
     it('should call removeFilter action on click', function () {
-      var $el = $(changesFilterEl.getDOMNode()),
+      var $el = $(ReactDOM.findDOMNode(changesFilterEl)),
         submitBtn = $el.find('[type="submit"]')[0],
         addItemField = $el.find('.js-changes-filter-field')[0];
 
@@ -158,7 +159,7 @@ define([
     });
 
     it('should not add empty filters', function () {
-      var $el = $(changesFilterEl.getDOMNode()),
+      var $el = $(ReactDOM.findDOMNode(changesFilterEl)),
         submitBtn = $el.find('[type="submit"]')[0],
         addItemField = $el.find('.js-changes-filter-field')[0];
 
@@ -170,11 +171,11 @@ define([
     });
 
     it('should not add tooltips by default', function () {
-      assert.equal(0, $(changesFilterEl.getDOMNode()).find('.js-remove-filter').length);
+      assert.equal(0, $(ReactDOM.findDOMNode(changesFilterEl)).find('.js-remove-filter').length);
     });
 
     it('should not add the same filter twice', function () {
-      var $el = $(changesFilterEl.getDOMNode()),
+      var $el = $(ReactDOM.findDOMNode(changesFilterEl)),
           submitBtn = $el.find('[type="submit"]')[0],
           addItemField = $el.find('.js-changes-filter-field')[0];
 
@@ -213,16 +214,16 @@ define([
       container2 = document.createElement('div');
       Actions.initChanges({ databaseName: 'testDatabase' });
       headerEl  = TestUtils.renderIntoDocument(<Changes.ChangesHeaderController />, container);
-      $headerEl = $(headerEl.getDOMNode());
+      $headerEl = $(ReactDOM.findDOMNode(headerEl));
       changesEl = TestUtils.renderIntoDocument(<Changes.ChangesController />, container2);
-      $changesEl = $(changesEl.getDOMNode());
+      $changesEl = $(ReactDOM.findDOMNode(changesEl));
       Actions.updateChanges(changesResponse);
     });
 
     afterEach(function () {
       Stores.changesStore.reset();
-      React.unmountComponentAtNode(container);
-      React.unmountComponentAtNode(container2);
+      ReactDOM.unmountComponentAtNode(container);
+      ReactDOM.unmountComponentAtNode(container2);
     });
 
 
@@ -320,16 +321,16 @@ define([
 
     afterEach(function () {
       Stores.changesStore.reset();
-      React.unmountComponentAtNode(container);
+      ReactDOM.unmountComponentAtNode(container);
     });
 
     it('should truncate the number of results with very large # of changes', function () {
       // check there's no more than maxChanges results
-      assert.equal(maxChanges, $(changesEl.getDOMNode()).find('.change-box').length);
+      assert.equal(maxChanges, $(ReactDOM.findDOMNode(changesEl)).find('.change-box').length);
     });
 
     it('should show a message if the results are truncated', function () {
-      assert.equal(1, $(changesEl.getDOMNode()).find('.changes-result-limit').length);
+      assert.equal(1, $(ReactDOM.findDOMNode(changesEl)).find('.changes-result-limit').length);
     });
 
   });
@@ -349,7 +350,7 @@ define([
     });
 
     afterEach(function () {
-      React.unmountComponentAtNode(container);
+      ReactDOM.unmountComponentAtNode(container);
     });
 
 
@@ -357,23 +358,23 @@ define([
       var changeRow = TestUtils.renderIntoDocument(<Changes.ChangeRow change={change} databaseName="testDatabase" />, container);
 
       // confirm it's hidden by default
-      assert.equal(0, $(changeRow.getDOMNode()).find('.prettyprint').length);
+      assert.equal(0, $(ReactDOM.findDOMNode(changeRow)).find('.prettyprint').length);
 
       // confirm clicking it shows the element
-      TestUtils.Simulate.click($(changeRow.getDOMNode()).find('button.btn')[0]);
-      assert.equal(1, $(changeRow.getDOMNode()).find('.prettyprint').length);
+      TestUtils.Simulate.click($(ReactDOM.findDOMNode(changeRow)).find('button.btn')[0]);
+      assert.equal(1, $(ReactDOM.findDOMNode(changeRow)).find('.prettyprint').length);
     });
 
     it('deleted docs should not be clickable', function () {
       change.deleted = true;
       var changeRow = TestUtils.renderIntoDocument(<Changes.ChangeRow change={change} databaseName="testDatabase" />, container);
-      assert.equal(0, $(changeRow.getDOMNode()).find('a.js-doc-link').length);
+      assert.equal(0, $(ReactDOM.findDOMNode(changeRow)).find('a.js-doc-link').length);
     });
 
     it('non-deleted docs should be clickable', function () {
       change.deleted = false;
       var changeRow = TestUtils.renderIntoDocument(<Changes.ChangeRow change={change} databaseName="testDatabase" />, container);
-      assert.equal(1, $(changeRow.getDOMNode()).find('a.js-doc-link').length);
+      assert.equal(1, $(ReactDOM.findDOMNode(changeRow)).find('a.js-doc-link').length);
     });
   });
 

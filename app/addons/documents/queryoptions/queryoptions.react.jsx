@@ -14,12 +14,13 @@ define([
   'app',
   'api',
   'react',
+  'react-dom',
   'addons/documents/queryoptions/stores',
   'addons/documents/queryoptions/actions',
-  'addons/components/react-components.react',
+  'addons/components/react-components.react'
 ],
 
-function (app, FauxtonAPI, React, Stores, Actions, Components) {
+function (app, FauxtonAPI, React, ReactDOM, Stores, Actions, Components) {
   var store = Stores.queryOptionsStore;
   var Tray = Components.Tray;
   var TrayContents = Components.TrayContents;
@@ -127,8 +128,8 @@ function (app, FauxtonAPI, React, Stores, Actions, Components) {
 
     updateBetweenKeys: function () {
       this.props.updateBetweenKeys({
-        startkey: React.findDOMNode(this.refs.startkey).value,
-        endkey: React.findDOMNode(this.refs.endkey).value,
+        startkey: ReactDOM.findDOMNode(this.refs.startkey).value,
+        endkey: ReactDOM.findDOMNode(this.refs.endkey).value,
         include: this.props.betweenKeys.include
       });
     },
@@ -390,7 +391,7 @@ A key value is the first parameter emitted in a map function. For example emit("
     KeySearchFields: KeySearchFields,
     AdditionalParams: AdditionalParams,
     render: function (el) {
-      React.render(<QueryOptionsController />, $(el)[0]);
+      ReactDOM.render(<QueryOptionsController />, $(el)[0]);
     }
   };
 });

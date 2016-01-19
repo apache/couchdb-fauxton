@@ -35,6 +35,7 @@ require.config({
     "velocity.ui": "../assets/js/plugins/velocity.ui",
     "react-autocomplete": "../assets/js/plugins/react-autocomplete",
     react: "../assets/js/libs/react",
+    'react-dom': "../assets/js/libs/react-dom",
     flux: "../assets/js/libs/flux",
     "es5-shim": "../assets/js/libs/es5-shim",
     "css.escape": "../assets/js/libs/css.escape",

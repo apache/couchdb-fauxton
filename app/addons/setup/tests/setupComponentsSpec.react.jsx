@@ -14,8 +14,9 @@ define([
   'addons/setup/setup.react',
   'addons/setup/setup.stores',
   'testUtils',
-  'react'
-], function (FauxtonAPI, Views, Stores, utils, React) {
+  'react',
+  'react-dom'
+], function (FauxtonAPI, Views, Stores, utils, React, ReactDOM) {
 
   var assert = utils.assert;
   var TestUtils = React.addons.TestUtils;
@@ -31,7 +32,7 @@ define([
       });
 
       afterEach(function () {
-        React.unmountComponentAtNode(container);
+        ReactDOM.unmountComponentAtNode(container);
       });
 
       it('fires callbacks on change, ip', function () {
@@ -40,7 +41,7 @@ define([
           container
         );
 
-        var node = $(optSettings.getDOMNode()).find('.setup-input-ip')[0];
+        var node = $(ReactDOM.findDOMNode(optSettings)).find('.setup-input-ip')[0];
         TestUtils.Simulate.change(node, {target: {value: 'Hello, world'}});
 
         assert.ok(changeHandler.calledOnce);
@@ -52,7 +53,7 @@ define([
           container
         );
 
-        var node = $(optSettings.getDOMNode()).find('.setup-input-port')[0];
+        var node = $(ReactDOM.findDOMNode(optSettings)).find('.setup-input-port')[0];
         TestUtils.Simulate.change(node, {target: {value: 'Hello, world'}});
 
         assert.ok(changeHandler.calledOnce);
@@ -74,12 +75,12 @@ define([
 
       afterEach(function () {
         utils.restore(Stores.setupStore.getIsAdminParty);
-        React.unmountComponentAtNode(container);
+        ReactDOM.unmountComponentAtNode(container);
         Stores.setupStore.reset();
       });
 
       it('changes the values in the store for additional nodes', function () {
-        var $addNodesSection = $(controller.getDOMNode()).find('.setup-add-nodes-section');
+        var $addNodesSection = $(ReactDOM.findDOMNode(controller)).find('.setup-add-nodes-section');
         TestUtils.Simulate.change($addNodesSection.find('.setup-input-ip')[0], {target: {value: '192.168.13.37'}});
         TestUtils.Simulate.change($addNodesSection.find('.setup-input-port')[0], {target: {value: '1337'}});
         TestUtils.Simulate.change($addNodesSection.find('.input-remote-node')[0], {target: {value: 'node2.local'}});
@@ -91,7 +92,7 @@ define([
       });
 
       it('changes the values in the store for the setup node', function () {
-        var $setupNodesSection = $(controller.getDOMNode()).find('.setup-setupnode-section');
+        var $setupNodesSection = $(ReactDOM.findDOMNode(controller)).find('.setup-setupnode-section');
         TestUtils.Simulate.change($setupNodesSection.find('.setup-input-ip')[0], {target: {value: '192.168.42.42'}});
         TestUtils.Simulate.change($setupNodesSection.find('.setup-input-port')[0], {target: {value: '4242'}});
         TestUtils.Simulate.change($setupNodesSection.find('.setup-username')[0], {target: {value: 'tester'}});
@@ -120,12 +121,12 @@ define([
 
       afterEach(function () {
         utils.restore(Stores.setupStore.getIsAdminParty);
-        React.unmountComponentAtNode(container);
+        ReactDOM.unmountComponentAtNode(container);
         Stores.setupStore.reset();
       });
 
       it('changes the values in the store for the setup node', function () {
-        var $setupNodesSection = $(controller.getDOMNode()).find('.setup-setupnode-section');
+        var $setupNodesSection = $(ReactDOM.findDOMNode(controller)).find('.setup-setupnode-section');
         TestUtils.Simulate.change($setupNodesSection.find('.setup-input-ip')[0], {target: {value: '192.168.13.42'}});
         TestUtils.Simulate.change($setupNodesSection.find('.setup-input-port')[0], {target: {value: '1342'}});
         TestUtils.Simulate.change($setupNodesSection.find('.setup-username')[0], {target: {value: 'tester'}});

@@ -16,11 +16,11 @@ define([
   'addons/documents/index-results/stores',
   'addons/documents/resources',
   'addons/databases/resources',
-
   'addons/documents/tests/document-test-helper',
   'testUtils',
-  "react"
-], function (FauxtonAPI, Views, IndexResultsActions, Stores, Documents, Databases, documentTestHelper, utils, React) {
+  "react",
+  'react-dom'
+], function (FauxtonAPI, Views, IndexResultsActions, Stores, Documents, Databases, documentTestHelper, utils, React, ReactDOM) {
   FauxtonAPI.router = new FauxtonAPI.Router([]);
 
   var assert = utils.assert;
@@ -39,7 +39,7 @@ define([
       });
 
       afterEach(function () {
-        React.unmountComponentAtNode(React.findDOMNode(instance).parentNode);
+        ReactDOM.unmountComponentAtNode(ReactDOM.findDOMNode(instance).parentNode);
         store.reset();
       });
 
@@ -51,7 +51,7 @@ define([
         IndexResultsActions.resultsListReset();
 
         instance = TestUtils.renderIntoDocument(<Views.List />, container);
-        var $el = $(instance.getDOMNode());
+        var $el = $(ReactDOM.findDOMNode(instance));
         assert.equal($el.text(), 'No Index Created Yet!');
       });
 
@@ -74,7 +74,7 @@ define([
 
 
         instance = TestUtils.renderIntoDocument(<Views.List />, container);
-        var $el = $(instance.getDOMNode());
+        var $el = $(ReactDOM.findDOMNode(instance));
         assert.equal($el.text(), 'I <3 Hamburg');
       });
     });
@@ -93,7 +93,7 @@ define([
       });
 
       afterEach(function () {
-        React.unmountComponentAtNode(React.findDOMNode(instance).parentNode);
+        ReactDOM.unmountComponentAtNode(ReactDOM.findDOMNode(instance).parentNode);
         store.reset();
       });
 
@@ -112,7 +112,7 @@ define([
           container
         );
 
-        var $el = $(instance.getDOMNode());
+        var $el = $(ReactDOM.findDOMNode(instance));
 
         assert.ok($el.find('.tableview-checkbox-cell input').length === 0);
       });
@@ -143,7 +143,7 @@ define([
           container
         );
 
-        var $el = $(instance.getDOMNode());
+        var $el = $(ReactDOM.findDOMNode(instance));
 
         assert.ok($el.find('.tableview-checkbox-cell input').length > 0);
       });
@@ -168,7 +168,7 @@ define([
           container
         );
 
-        var $el = $(instance.getDOMNode());
+        var $el = $(ReactDOM.findDOMNode(instance));
 
         assert.ok($el.find('.tableview-checkbox-cell input').length === 0);
       });
@@ -188,7 +188,7 @@ define([
           container
         );
 
-        var $el = $(instance.getDOMNode());
+        var $el = $(ReactDOM.findDOMNode(instance));
 
         assert.ok($el.find('.tableview-checkbox-cell input').length === 0);
       });
@@ -208,7 +208,7 @@ define([
           container
         );
 
-        var $el = $(instance.getDOMNode());
+        var $el = $(ReactDOM.findDOMNode(instance));
 
         assert.ok($el.find('.tableview-checkbox-cell input').length > 0);
       });
@@ -228,7 +228,7 @@ define([
           container
         );
 
-        var $el = $(instance.getDOMNode());
+        var $el = $(ReactDOM.findDOMNode(instance));
         assert.ok($el.find('.js-row-select').length > 0);
       });
 
@@ -247,7 +247,7 @@ define([
           container
         );
 
-        var $el = $(instance.getDOMNode());
+        var $el = $(ReactDOM.findDOMNode(instance));
 
         assert.notOk($el.hasClass('show-select'));
       });
@@ -261,7 +261,7 @@ define([
       });
 
       afterEach(function () {
-        React.unmountComponentAtNode(React.findDOMNode(instance).parentNode);
+        ReactDOM.unmountComponentAtNode(ReactDOM.findDOMNode(instance).parentNode);
         store.reset();
       });
 
@@ -282,7 +282,7 @@ define([
           container
         );
 
-        var $el = $(instance.getDOMNode());
+        var $el = $(ReactDOM.findDOMNode(instance));
         var $targetNode = $el.find('td.tableview-el-last').prev();
 
         var formattedDoc = JSON.stringify(doc.object, null, '  ');
@@ -300,7 +300,7 @@ define([
           container
         );
 
-        var $el = $(instance.getDOMNode());
+        var $el = $(ReactDOM.findDOMNode(instance));
 
         assert.equal($el.find('.icon-filter').length, 0);
 
@@ -318,7 +318,7 @@ define([
       });
 
       afterEach(function () {
-        React.unmountComponentAtNode(React.findDOMNode(instance).parentNode);
+        ReactDOM.unmountComponentAtNode(ReactDOM.findDOMNode(instance).parentNode);
         store.reset();
       });
 
@@ -329,7 +329,7 @@ define([
           container
         );
 
-        var $el = $(instance.getDOMNode());
+        var $el = $(ReactDOM.findDOMNode(instance));
 
         assert.ok($el.find('.loading-lines').length === 1);
       });
@@ -341,7 +341,7 @@ define([
           container
         );
 
-        var $el = $(instance.getDOMNode());
+        var $el = $(ReactDOM.findDOMNode(instance));
 
         assert.ok($el.find('.loading-lines').length === 0);
       });

@@ -14,6 +14,7 @@ define([
   'app',
   'api',
   'react',
+  'react-dom',
   'addons/fauxton/notifications/actions',
   'addons/fauxton/notifications/stores',
   'addons/fauxton/components.react',
@@ -22,7 +23,7 @@ define([
   'velocity.ui'
 ],
 
-function (app, FauxtonAPI, React, Actions, Stores, Components) {
+function (app, FauxtonAPI, React, ReactDOM, Actions, Stores, Components) {
 
   var notificationStore = Stores.notificationStore;
   var Clipboard = Components.Clipboard;
@@ -197,18 +198,18 @@ function (app, FauxtonAPI, React, Actions, Stores, Components) {
         show = this.props.item.type === this.props.filter;
       }
       if (show) {
-        $(React.findDOMNode(this)).velocity({ opacity: 1, height: this.state.elementHeight }, this.props.transitionSpeed);
+        $(ReactDOM.findDOMNode(this)).velocity({ opacity: 1, height: this.state.elementHeight }, this.props.transitionSpeed);
         return;
       }
       this.hide();
     },
 
     getHeight: function () {
-      return $(React.findDOMNode(this)).outerHeight(true);
+      return $(ReactDOM.findDOMNode(this)).outerHeight(true);
     },
 
     hide: function (onHidden) {
-      $(React.findDOMNode(this)).velocity({ opacity: 0, height: 0 }, this.props.transitionSpeed, function () {
+      $(ReactDOM.findDOMNode(this)).velocity({ opacity: 0, height: 0 }, this.props.transitionSpeed, function () {
         if (onHidden) {
           onHidden();
         }
@@ -255,7 +256,7 @@ function (app, FauxtonAPI, React, Actions, Stores, Components) {
     NotificationRow: NotificationRow,
 
     renderNotificationCenter: function (el) {
-      return React.render(<NotificationCenterPanel />, el);
+      return ReactDOM.render(<NotificationCenterPanel />, el);
     }
   };
 

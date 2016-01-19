@@ -14,16 +14,16 @@ define([
   'app',
   'api',
   'react',
+  'react-dom',
   'addons/documents/sidebar/stores',
   'addons/documents/sidebar/actions',
   'addons/components/react-components.react',
   'addons/documents/views',
   'addons/documents/helpers',
-
   'plugins/prettify'
 ],
 
-function (app, FauxtonAPI, React, Stores, Actions, Components, DocumentViews, DocumentHelper) {
+function (app, FauxtonAPI, React, ReactDOM, Stores, Actions, Components, DocumentViews, DocumentHelper) {
   var DeleteDBModal = DocumentViews.Views.DeleteDBModal;
   var store = Stores.sidebarStore;
   var LoadLines = Components.LoadLines;
@@ -135,7 +135,7 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, DocumentViews, Do
       e.preventDefault();
       var newToggleState = !this.props.contentVisible;
       var state = newToggleState ? 'show' : 'hide';
-      $(React.findDOMNode(this)).find('.accordion-body').collapse(state);
+      $(ReactDOM.findDOMNode(this)).find('.accordion-body').collapse(state);
       this.props.toggle(this.props.designDocName, this.props.title);
     },
 
@@ -221,7 +221,7 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, DocumentViews, Do
       e.preventDefault();
       var newToggleState = !this.props.contentVisible;
       var state = newToggleState ? 'show' : 'hide';
-      $(React.findDOMNode(this)).find('#' + this.props.designDocName).collapse(state);
+      $(ReactDOM.findDOMNode(this)).find('#' + this.props.designDocName).collapse(state);
       this.props.toggle(this.props.designDocName);
     },
 
@@ -326,7 +326,7 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, DocumentViews, Do
       this.dbModal = new DeleteDBModal({
         database: this.props.database,
         isSystemDatabase: (/^_/).test(this.props.database.id),
-        el: React.findDOMNode(this)
+        el: ReactDOM.findDOMNode(this)
       });
 
       this.dbModal.render();

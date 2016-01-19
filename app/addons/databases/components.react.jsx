@@ -14,13 +14,14 @@ define([
   'app',
   'api',
   'react',
+  'react-dom',
   'addons/components/react-components.react',
   'addons/fauxton/components.react',
   'addons/databases/stores',
   'addons/databases/resources',
   'addons/databases/actions',
   'helpers'
-], function (app, FauxtonAPI, React, Components, ComponentsReact, Stores, Resources, Actions, Helpers) {
+], function (app, FauxtonAPI, React, ReactDOM, Components, ComponentsReact, Stores, Resources, Actions, Helpers) {
 
   var ToggleHeaderButton = Components.ToggleHeaderButton;
   var databasesStore = Stores.databasesStore;
@@ -89,12 +90,14 @@ define([
         <div className="view">
           <table className="databases table table-striped">
             <thead>
-              <th>Name</th>
-              <th>Size</th>
-              <th># of Docs</th>
-              <th>Update Seq</th>
-              {this.getExtensionColumns()}
-              <th>Actions</th>
+              <tr>
+                <th>Name</th>
+                <th>Size</th>
+                <th># of Docs</th>
+                <th>Update Seq</th>
+                {this.getExtensionColumns()}
+                <th>Actions</th>
+              </tr>
             </thead>
             <tbody>
             {rows}
@@ -170,7 +173,7 @@ define([
   var GraveyardInfo = React.createClass({
 
     componentDidMount: function () {
-      $(React.findDOMNode(this.refs.myself)).tooltip();
+      $(ReactDOM.findDOMNode(this.refs.myself)).tooltip();
     },
 
     render: function () {
@@ -204,7 +207,7 @@ define([
 
       this.refs.newDbTray.toggle(function (shown) {
         if (shown) {
-          React.findDOMNode(this.refs.newDbName).focus();
+          ReactDOM.findDOMNode(this.refs.newDbName).focus();
         }
       }.bind(this));
     },
@@ -222,7 +225,7 @@ define([
     },
 
     onAddDatabase: function () {
-      var databaseName = React.findDOMNode(this.refs.newDbName).value;
+      var databaseName = ReactDOM.findDOMNode(this.refs.newDbName).value;
       Actions.createNewDatabase(databaseName);
     },
 
@@ -265,7 +268,7 @@ define([
     },
 
     componentDidUpdate: function () {
-      $(React.findDOMNode(this.refs.searchDbName)).typeahead({
+      $(ReactDOM.findDOMNode(this.refs.searchDbName)).typeahead({
         source: this.state.databaseNames,
         updater: function (item) {
           this.jumpToDb(item);
@@ -282,7 +285,7 @@ define([
     },
 
     jumpToDb: function (databaseName) {
-      databaseName = databaseName || React.findDOMNode(this.refs.searchDbName).value;
+      databaseName = databaseName || ReactDOM.findDOMNode(this.refs.searchDbName).value;
       Actions.jumpToDatabase(databaseName);
     },
 

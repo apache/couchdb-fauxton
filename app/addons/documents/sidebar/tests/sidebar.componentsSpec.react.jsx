@@ -12,9 +12,10 @@
 define([
   'api',
   'react',
+  'react-dom',
   'testUtils',
   'addons/documents/sidebar/sidebar.react'
-], function (FauxtonAPI, React, utils, Components) {
+], function (FauxtonAPI, React, ReactDOM, utils, Components) {
   var assert = utils.assert;
   var TestUtils = React.addons.TestUtils;
   var DesignDoc = Components.DesignDoc;
@@ -28,7 +29,7 @@ define([
     });
 
     afterEach(function () {
-      React.unmountComponentAtNode(container);
+      ReactDOM.unmountComponentAtNode(container);
     });
 
     it('confirm only single sub-option is shown by default (metadata link)', function () {
@@ -41,7 +42,7 @@ define([
         designDoc={{}}
         designDocName="id"
         databaseName="db-name" />, container);
-      var subOptions = $(React.findDOMNode(el)).find('.accordion-body li');
+      var subOptions = $(ReactDOM.findDOMNode(el)).find('.accordion-body li');
       assert.equal(subOptions.length, 1);
    });
 
@@ -64,7 +65,7 @@ define([
         }}
         designDocName="id"
         databaseName="db-name" />, container);
-      var subOptions = $(React.findDOMNode(el)).find('.accordion-body li');
+      var subOptions = $(ReactDOM.findDOMNode(el)).find('.accordion-body li');
       assert.equal(subOptions.length, 3); // 1 for "Metadata" row, 1 for Type List row ("search indexes") and one for the index itself
     });
 
@@ -83,7 +84,7 @@ define([
         designDoc={{}} // note that this is empty
         designDocName="id"
         databaseName="db-name" />, container);
-      var subOptions = $(React.findDOMNode(el)).find('.accordion-body li');
+      var subOptions = $(ReactDOM.findDOMNode(el)).find('.accordion-body li');
       assert.equal(subOptions.length, 1);
     });
 

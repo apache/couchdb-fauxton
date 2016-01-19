@@ -12,10 +12,10 @@
 define([
   'api',
   'addons/components/react-components.react',
-
   'testUtils',
-  'react'
-], function (FauxtonAPI, ReactComponents, utils, React) {
+  'react',
+  'react-dom'
+], function (FauxtonAPI, ReactComponents, utils, React, ReactDOM) {
 
   var assert = utils.assert;
   var TestUtils = React.addons.TestUtils;
@@ -44,11 +44,11 @@ define([
     });
 
     afterEach(function () {
-      React.unmountComponentAtNode(container);
+      ReactDOM.unmountComponentAtNode(container);
     });
 
     it('calls the callback on select', function () {
-      TestUtils.Simulate.change($(selectorEl.getDOMNode()).find('#new-ddoc')[0], {
+      TestUtils.Simulate.change($(ReactDOM.findDOMNode(selectorEl)).find('#new-ddoc')[0], {
         target: {
           value: 'new'
         }

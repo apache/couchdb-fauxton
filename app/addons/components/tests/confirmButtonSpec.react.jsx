@@ -12,10 +12,10 @@
 define([
   'api',
   'addons/components/react-components.react',
-
   'testUtils',
-  'react'
-], function (FauxtonAPI, ReactComponents, utils, React) {
+  'react',
+  'react-dom'
+], function (FauxtonAPI, ReactComponents, utils, React, ReactDOM) {
 
   var assert = utils.assert;
   var TestUtils = React.addons.TestUtils;
@@ -27,7 +27,7 @@ define([
     });
 
     afterEach(function () {
-      React.unmountComponentAtNode(container);
+      ReactDOM.unmountComponentAtNode(container);
     });
 
     it('should render text properties', function () {
@@ -35,7 +35,7 @@ define([
         <ReactComponents.ConfirmButton text="Click here to render Rocko Artischocko" />,
         container
       );
-      assert.equal($(button.getDOMNode()).text(), 'Click here to render Rocko Artischocko');
+      assert.equal($(ReactDOM.findDOMNode(button)).text(), 'Click here to render Rocko Artischocko');
     });
 
     it('should use onClick handler if provided', function () {
@@ -46,7 +46,7 @@ define([
         container
       );
 
-      React.addons.TestUtils.Simulate.click(button.getDOMNode());
+      React.addons.TestUtils.Simulate.click(ReactDOM.findDOMNode(button));
       assert.ok(spy.calledOnce);
     });
   });

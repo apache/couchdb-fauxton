@@ -13,8 +13,9 @@ define([
   'api',
   'addons/components/react-components.react',
   'testUtils',
-  'react'
-], function (FauxtonAPI, ReactComponents, utils, React) {
+  'react',
+  'react-dom'
+], function (FauxtonAPI, ReactComponents, utils, React, ReactDOM) {
 
   var assert = utils.assert;
   var TestUtils = React.addons.TestUtils;
@@ -30,7 +31,7 @@ define([
           <ReactComponents.CodeEditorPanel defaultCode={code} />,
           container
         );
-        assert.equal($(codeEditorEl.getDOMNode()).find('.icon-question-sign').length, 0);
+        assert.equal($(ReactDOM.findDOMNode(codeEditorEl)).find('.icon-question-sign').length, 0);
       });
       it('hidden by default', function () {
         var container = document.createElement('div');
@@ -38,7 +39,7 @@ define([
           <ReactComponents.CodeEditorPanel defaultCode={code} docLink="http://link.com" />,
           container
         );
-        assert.equal($(codeEditorEl.getDOMNode()).find('.icon-question-sign').length, 1);
+        assert.equal($(ReactDOM.findDOMNode(codeEditorEl)).find('.icon-question-sign').length, 1);
       });
     });
 
@@ -49,7 +50,7 @@ define([
           <ReactComponents.CodeEditorPanel defaultCode={code} />,
           container
         );
-        assert.equal($(codeEditorEl.getDOMNode()).find('.zen-editor-icon').length, 1);
+        assert.equal($(ReactDOM.findDOMNode(codeEditorEl)).find('.zen-editor-icon').length, 1);
       });
 
       it('omits zen mode if explicitly turned off', function () {
@@ -58,7 +59,7 @@ define([
           <ReactComponents.CodeEditor defaultCode={code} allowZenMode={false} />,
           container
         );
-        assert.equal($(codeEditorEl.getDOMNode()).find('.zen-editor-icon').length, 0);
+        assert.equal($(ReactDOM.findDOMNode(codeEditorEl)).find('.zen-editor-icon').length, 0);
       });
     });
 

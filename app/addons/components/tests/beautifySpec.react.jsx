@@ -12,10 +12,10 @@
 define([
   'api',
   'addons/components/react-components.react',
-
   'testUtils',
-  'react'
-], function (FauxtonAPI, ReactComponents, utils, React) {
+  'react',
+  'react-dom'
+], function (FauxtonAPI, ReactComponents, utils, React, ReactDOM) {
 
   var assert = utils.assert;
   var TestUtils = React.addons.TestUtils;
@@ -28,7 +28,7 @@ define([
     });
 
     afterEach(function () {
-      React.unmountComponentAtNode(container);
+      ReactDOM.unmountComponentAtNode(container);
     });
 
     it('should be empty for multi-lined code', function () {
@@ -37,13 +37,13 @@ define([
         <ReactComponents.Beautify code={correctCode}/>,
         container
       );
-      assert.ok(_.isNull(beautifyEl.getDOMNode()));
+      assert.ok(_.isNull(ReactDOM.findDOMNode(beautifyEl)));
     });
 
     it('should have button to beautify for single line code', function () {
       var badCode = 'function () { console.log("hello"); }';
       beautifyEl = TestUtils.renderIntoDocument(<ReactComponents.Beautify code={badCode}/>, container);
-      assert.ok($(beautifyEl.getDOMNode()).hasClass('beautify'));
+      assert.ok($(ReactDOM.findDOMNode(beautifyEl)).hasClass('beautify'));
     });
 
     it('on click beautifies code', function () {
@@ -61,7 +61,7 @@ define([
           noOfLines={1}/>,
         container
       );
-      TestUtils.Simulate.click(beautifyEl.getDOMNode());
+      TestUtils.Simulate.click(ReactDOM.findDOMNode(beautifyEl));
       assert.equal(fixedCode, correctCode);
 
     });

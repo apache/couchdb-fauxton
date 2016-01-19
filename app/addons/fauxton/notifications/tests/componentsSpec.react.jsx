@@ -15,8 +15,9 @@ define([
   'addons/fauxton/notifications/stores',
   'testUtils',
   'react',
+  'react-dom',
   'moment'
-], function (FauxtonAPI, Views, Stores, utils, React, moment) {
+], function (FauxtonAPI, Views, Stores, utils, React, ReactDOM, moment) {
 
   var assert = utils.assert;
   var TestUtils = React.addons.TestUtils;
@@ -52,7 +53,7 @@ define([
     });
 
     afterEach(function () {
-      React.unmountComponentAtNode(container);
+      ReactDOM.unmountComponentAtNode(container);
     });
 
     it('shows all notification types when "all" filter applied', function () {
@@ -60,22 +61,22 @@ define([
         <Views.NotificationRow filter="all" item={notifications.success} />,
         container
       );
-      assert.equal($(row1.getDOMNode()).attr('aria-hidden'), 'false');
-      React.unmountComponentAtNode(container);
+      assert.equal($(ReactDOM.findDOMNode(row1)).attr('aria-hidden'), 'false');
+      ReactDOM.unmountComponentAtNode(container);
 
       var row2 = TestUtils.renderIntoDocument(
         <Views.NotificationRow filter="all" item={notifications.error} />,
         container
       );
-      assert.equal($(row2.getDOMNode()).attr('aria-hidden'), 'false');
-      React.unmountComponentAtNode(container);
+      assert.equal($(ReactDOM.findDOMNode(row2)).attr('aria-hidden'), 'false');
+      ReactDOM.unmountComponentAtNode(container);
 
       var row3 = TestUtils.renderIntoDocument(
         <Views.NotificationRow filter="all" item={notifications.info} />,
         container
       );
-      assert.equal($(row3.getDOMNode()).attr('aria-hidden'), 'false');
-      React.unmountComponentAtNode(container);
+      assert.equal($(ReactDOM.findDOMNode(row3)).attr('aria-hidden'), 'false');
+      ReactDOM.unmountComponentAtNode(container);
     });
 
     it('hides notification when filter doesn\'t match', function () {
@@ -83,7 +84,7 @@ define([
         <Views.NotificationRow filter="success" item={notifications.info} />,
         container
       );
-      assert.equal($(rowEl.getDOMNode()).attr('aria-hidden'), 'true');
+      assert.equal($(ReactDOM.findDOMNode(rowEl)).attr('aria-hidden'), 'true');
     });
 
     it('shows notification when filter exact match', function () {
@@ -91,7 +92,7 @@ define([
         <Views.NotificationRow filter="info" item={notifications.info} />,
         container
       );
-      assert.equal($(rowEl.getDOMNode()).attr('aria-hidden'), 'false');
+      assert.equal($(ReactDOM.findDOMNode(rowEl)).attr('aria-hidden'), 'false');
     });
 
   });
@@ -106,7 +107,7 @@ define([
     });
 
     afterEach(function () {
-      React.unmountComponentAtNode(container);
+      ReactDOM.unmountComponentAtNode(container);
     });
 
     it('shows all notifications by default', function () {
@@ -118,7 +119,7 @@ define([
       store.addNotification({ type: 'error', msg: 'Error #3' });
 
       var panelEl = TestUtils.renderIntoDocument(<Views.NotificationCenterPanel />, container);
-      assert.equal($(panelEl.getDOMNode()).find('.notification-list li[aria-hidden=false]').length, 6);
+      assert.equal($(ReactDOM.findDOMNode(panelEl)).find('.notification-list li[aria-hidden=false]').length, 6);
     });
 
     it('clicking on a filter icon filters applies appropriate filter', function () {
@@ -132,16 +133,16 @@ define([
       var panelEl = TestUtils.renderIntoDocument(<Views.NotificationCenterPanel />, container);
 
       // there are 2 success messages
-      TestUtils.Simulate.click($(panelEl.getDOMNode()).find('.notification-filter li[data-filter="success"]')[0]);
-      assert.equal($(panelEl.getDOMNode()).find('.notification-list li[aria-hidden=false]').length, 2);
+      TestUtils.Simulate.click($(ReactDOM.findDOMNode(panelEl)).find('.notification-filter li[data-filter="success"]')[0]);
+      assert.equal($(ReactDOM.findDOMNode(panelEl)).find('.notification-list li[aria-hidden=false]').length, 2);
 
       // 3 errors
-      TestUtils.Simulate.click($(panelEl.getDOMNode()).find('.notification-filter li[data-filter="error"]')[0]);
-      assert.equal($(panelEl.getDOMNode()).find('.notification-list li[aria-hidden=false]').length, 3);
+      TestUtils.Simulate.click($(ReactDOM.findDOMNode(panelEl)).find('.notification-filter li[data-filter="error"]')[0]);
+      assert.equal($(ReactDOM.findDOMNode(panelEl)).find('.notification-list li[aria-hidden=false]').length, 3);
 
       // 1 info
-      TestUtils.Simulate.click($(panelEl.getDOMNode()).find('.notification-filter li[data-filter="info"]')[0]);
-      assert.equal($(panelEl.getDOMNode()).find('.notification-list li[aria-hidden=false]').length, 1);
+      TestUtils.Simulate.click($(ReactDOM.findDOMNode(panelEl)).find('.notification-filter li[data-filter="info"]')[0]);
+      assert.equal($(ReactDOM.findDOMNode(panelEl)).find('.notification-list li[aria-hidden=false]').length, 1);
     });
 
     it('clear all clears all notifications', function () {
@@ -151,10 +152,10 @@ define([
       store.addNotification({ type: 'error', msg: 'Error #3' });
 
       var panelEl = TestUtils.renderIntoDocument(<Views.NotificationCenterPanel />, container);
-      assert.equal($(panelEl.getDOMNode()).find('.notification-list li[aria-hidden=false]').length, 4);
-      TestUtils.Simulate.click($(panelEl.getDOMNode()).find('footer input')[0]);
+      assert.equal($(ReactDOM.findDOMNode(panelEl)).find('.notification-list li[aria-hidden=false]').length, 4);
+      TestUtils.Simulate.click($(ReactDOM.findDOMNode(panelEl)).find('footer input')[0]);
 
-      assert.equal($(panelEl.getDOMNode()).find('.notification-list li[aria-hidden=false]').length, 0);
+      assert.equal($(ReactDOM.findDOMNode(panelEl)).find('.notification-list li[aria-hidden=false]').length, 0);
     });
 
   });

@@ -14,9 +14,10 @@ define([
   'app',
   'api',
   'react',
+  'react-dom',
   'addons/auth/stores',
   'addons/auth/actions'
-], function (app, FauxtonAPI, React, AuthStores, AuthActions) {
+], function (app, FauxtonAPI, React, ReactDOM, AuthStores, AuthActions) {
 
   var changePasswordStore = AuthStores.changePasswordStore;
   var createAdminStore = AuthStores.createAdminStore;
@@ -64,8 +65,8 @@ define([
       if (this.state.username !== '' || this.state.password !== '') {
         return false;
       }
-      var username = (this.props.testBlankUsername) ? this.props.testBlankUsername : React.findDOMNode(this.refs.username).value;
-      var password = (this.props.testBlankPassword) ? this.props.testBlankPassword : React.findDOMNode(this.refs.password).value;
+      var username = (this.props.testBlankUsername) ? this.props.testBlankUsername : ReactDOM.findDOMNode(this.refs.username).value;
+      var password = (this.props.testBlankPassword) ? this.props.testBlankPassword : ReactDOM.findDOMNode(this.refs.password).value;
       this.setState({ username: username, password: password }); // doesn't set immediately, hence separate login() call
       this.login(username, password);
 
@@ -77,7 +78,7 @@ define([
     },
 
     componentDidMount: function () {
-      React.findDOMNode(this.refs.username).focus();
+      ReactDOM.findDOMNode(this.refs.username).focus();
     },
 
     render: function () {
@@ -128,7 +129,7 @@ define([
     },
 
     componentDidMount: function () {
-      React.findDOMNode(this.refs.password).focus();
+      ReactDOM.findDOMNode(this.refs.password).focus();
       changePasswordStore.on('change', this.onChange, this);
     },
 
@@ -203,7 +204,7 @@ define([
     },
 
     componentDidMount: function () {
-      React.findDOMNode(this.refs.username).focus();
+      ReactDOM.findDOMNode(this.refs.username).focus();
       createAdminStore.on('change', this.onChange, this);
     },
 

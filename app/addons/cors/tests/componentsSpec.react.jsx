@@ -16,8 +16,9 @@ define([
   'addons/cors/resources',
   'addons/cors/stores',
   'testUtils',
-  "react"
-], function (FauxtonAPI, Views, Actions, Resources, Stores, utils, React) {
+  "react",
+  'react-dom'
+], function (FauxtonAPI, Views, Actions, Resources, Stores, utils, React, ReactDOM) {
 
   FauxtonAPI.router = new FauxtonAPI.Router([]);
   var assert = utils.assert;
@@ -45,7 +46,7 @@ define([
         utils.restore(Actions.toggleLoadingBarsToEnabled);
         utils.restore(corsEl.save);
 
-        React.unmountComponentAtNode(container);
+        ReactDOM.unmountComponentAtNode(container);
         window.confirm.restore && window.confirm.restore();
       });
 
@@ -92,13 +93,13 @@ define([
 
       it('shows loading bars', function () {
         Actions.toggleLoadingBarsToEnabled(true);
-        assert.equal($(corsEl.getDOMNode()).find('.loading-lines').length, 1);
+        assert.equal($(ReactDOM.findDOMNode(corsEl)).find('.loading-lines').length, 1);
       });
 
       it('hides loading bars', function () {
         Actions.toggleLoadingBarsToEnabled(false);
 
-        assert.equal($(corsEl.getDOMNode()).find('.loading-lines').length, 0);
+        assert.equal($(ReactDOM.findDOMNode(corsEl)).find('.loading-lines').length, 0);
       });
     });
 
@@ -115,26 +116,26 @@ define([
       afterEach(function () {
         utils.restore(Resources.validateCORSDomain);
         utils.restore(FauxtonAPI.addNotification);
-        React.unmountComponentAtNode(container);
+        ReactDOM.unmountComponentAtNode(container);
       });
 
       it('calls validates each domain', function () {
         var spy = sinon.spy(Resources, 'validateCORSDomain');
-        TestUtils.Simulate.change($(inputEl.getDOMNode()).find('input')[0], {target: {value: newOrigin}});
-        TestUtils.Simulate.click($(inputEl.getDOMNode()).find('.btn')[0]);
+        TestUtils.Simulate.change($(ReactDOM.findDOMNode(inputEl)).find('input')[0], {target: {value: newOrigin}});
+        TestUtils.Simulate.click($(ReactDOM.findDOMNode(inputEl)).find('.btn')[0]);
         assert.ok(spy.calledWith(newOrigin));
       });
 
       it('calls addOrigin on add click with valid domain', function () {
-        TestUtils.Simulate.change($(inputEl.getDOMNode()).find('input')[0], {target: {value: newOrigin}});
-        TestUtils.Simulate.click($(inputEl.getDOMNode()).find('.btn')[0]);
+        TestUtils.Simulate.change($(ReactDOM.findDOMNode(inputEl)).find('input')[0], {target: {value: newOrigin}});
+        TestUtils.Simulate.click($(ReactDOM.findDOMNode(inputEl)).find('.btn')[0]);
         assert.ok(addOrigin.calledWith(newOrigin));
       });
 
       it('shows notification if origin is not valid', function () {
         var spy = sinon.spy(FauxtonAPI, 'addNotification');
-        TestUtils.Simulate.change($(inputEl.getDOMNode()).find('input')[0], {target: {value: 'badOrigin'}});
-        TestUtils.Simulate.click($(inputEl.getDOMNode()).find('.btn')[0]);
+        TestUtils.Simulate.change($(ReactDOM.findDOMNode(inputEl)).find('input')[0], {target: {value: 'badOrigin'}});
+        TestUtils.Simulate.click($(ReactDOM.findDOMNode(inputEl)).find('.btn')[0]);
         assert.ok(spy.calledOnce);
       });
     });
@@ -149,11 +150,11 @@ define([
       });
 
       afterEach(function () {
-        React.unmountComponentAtNode(container);
+        ReactDOM.unmountComponentAtNode(container);
       });
 
       it('calls change Origin on all origins selected', function () {
-        TestUtils.Simulate.change($(originEl.getDOMNode()).find('input[value="all"]')[0]);
+        TestUtils.Simulate.change($(ReactDOM.findDOMNode(originEl)).find('input[value="all"]')[0]);
         assert.ok(changeOrigin.calledWith(true));
       });
 
@@ -165,7 +166,7 @@ define([
         //1. render radio buttons with 'all origins'
         originEl = TestUtils.renderIntoDocument(<Views.Origins corsEnabled={true} isAllOrigins={true} originChange={changeOrigin}/>, container);
         //2. switch back to 'select origins'
-        TestUtils.Simulate.change($(originEl.getDOMNode()).find('input[value="selected"]')[0]);
+        TestUtils.Simulate.change($(ReactDOM.findDOMNode(originEl)).find('input[value="selected"]')[0]);
         assert.ok(changeOrigin.calledWith(false));
       });
     });
@@ -185,14 +186,14 @@ define([
       afterEach(function () {
         window.confirm.restore && window.confirm.restore();
         Actions.deleteOrigin.restore && Actions.deleteOrigin.restore();
-        React.unmountComponentAtNode(container);
+        ReactDOM.unmountComponentAtNode(container);
       });
 
       it('should confirm on delete', function () {
         var stub = sinon.stub(window, 'confirm');
         stub.returns(true);
 
-        TestUtils.Simulate.click($(originTableEl.getDOMNode()).find('.fonticon-trash')[0]);
+        TestUtils.Simulate.click($(ReactDOM.findDOMNode(originTableEl)).find('.fonticon-trash')[0]);
         assert.ok(stub.calledOnce);
       });
 
@@ -210,43 +211,43 @@ define([
       it('should deleteOrigin on confirm true', function () {
         var stub = sinon.stub(window, 'confirm');
         stub.returns(true);
-        TestUtils.Simulate.click($(originTableEl.getDOMNode()).find('.fonticon-trash')[0]);
+        TestUtils.Simulate.click($(ReactDOM.findDOMNode(originTableEl)).find('.fonticon-trash')[0]);
         assert.ok(deleteOrigin.calledWith(origin));
       });
 
       it('should not deleteOrigin on confirm false', function () {
         var stub = sinon.stub(window, 'confirm');
         stub.returns(false);
-        TestUtils.Simulate.click($(originTableEl.getDOMNode()).find('.fonticon-trash')[0]);
+        TestUtils.Simulate.click($(ReactDOM.findDOMNode(originTableEl)).find('.fonticon-trash')[0]);
         assert.notOk(deleteOrigin.calledOnce);
       });
 
       it('should change origin to input on edit click', function () {
-        TestUtils.Simulate.click($(originTableEl.getDOMNode()).find('.fonticon-pencil')[0]);
-        assert.ok($(originTableEl.getDOMNode()).find('input').length === 1);
+        TestUtils.Simulate.click($(ReactDOM.findDOMNode(originTableEl)).find('.fonticon-pencil')[0]);
+        assert.ok($(ReactDOM.findDOMNode(originTableEl)).find('input').length === 1);
       });
 
       it('should update origin on update clicked', function () {
         var updatedOrigin = 'https://updated-origin.com';
-        TestUtils.Simulate.click($(originTableEl.getDOMNode()).find('.fonticon-pencil')[0]);
-        TestUtils.Simulate.change($(originTableEl.getDOMNode()).find('input')[0], {
+        TestUtils.Simulate.click($(ReactDOM.findDOMNode(originTableEl)).find('.fonticon-pencil')[0]);
+        TestUtils.Simulate.change($(ReactDOM.findDOMNode(originTableEl)).find('input')[0], {
           target: {
             value: updatedOrigin
           }
         });
-        TestUtils.Simulate.click($(originTableEl.getDOMNode()).find('.btn')[0]);
+        TestUtils.Simulate.click($(ReactDOM.findDOMNode(originTableEl)).find('.btn')[0]);
         assert.ok(updateOrigin.calledWith(updatedOrigin));
       });
 
       it('should not update origin on update clicked with bad origin', function () {
         var updatedOrigin = 'updated-origin';
-        TestUtils.Simulate.click($(originTableEl.getDOMNode()).find('.fonticon-pencil')[0]);
-        TestUtils.Simulate.change($(originTableEl.getDOMNode()).find('input')[0], {
+        TestUtils.Simulate.click($(ReactDOM.findDOMNode(originTableEl)).find('.fonticon-pencil')[0]);
+        TestUtils.Simulate.change($(ReactDOM.findDOMNode(originTableEl)).find('input')[0], {
           target: {
             value: updatedOrigin
           }
         });
-        TestUtils.Simulate.click($(originTableEl.getDOMNode()).find('.btn')[0]);
+        TestUtils.Simulate.click($(ReactDOM.findDOMNode(originTableEl)).find('.btn')[0]);
         assert.notOk(updateOrigin.calledOnce);
       });
 

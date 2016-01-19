@@ -16,8 +16,9 @@ define([
   'addons/permissions/components.react',
   'addons/permissions/actions',
   'testUtils',
-  "react"
-  ], function (FauxtonAPI, Databases, Permissions, Views, Actions, utils, React) {
+  "react",
+  'react-dom'
+  ], function (FauxtonAPI, Databases, Permissions, Views, Actions, utils, React, ReactDOM) {
     var assert = utils.assert;
     var restore = utils.restore;
     var TestUtils = React.addons.TestUtils;
@@ -50,7 +51,7 @@ define([
         });
 
         afterEach(function () {
-          React.unmountComponentAtNode(container);
+          ReactDOM.unmountComponentAtNode(container);
         });
 
         it('on Add triggers add action', function () {
@@ -81,17 +82,17 @@ define([
         });
 
         afterEach(function () {
-          React.unmountComponentAtNode(container);
+          ReactDOM.unmountComponentAtNode(container);
         });
 
         it('adds user on submit', function () {
-          var input = $(el.getDOMNode()).find('input')[0];
+          var input = $(ReactDOM.findDOMNode(el)).find('input')[0];
           TestUtils.Simulate.change(input, {
             target: {
               value: 'newusername'
             }
           });
-          var form = $(el.getDOMNode()).find('.permission-item-form')[0];
+          var form = $(ReactDOM.findDOMNode(el)).find('.permission-item-form')[0];
           TestUtils.Simulate.submit(form);
 
           var options = addSpy.args[0][0];
@@ -101,13 +102,13 @@ define([
         });
 
         it('adds role on submit', function () {
-          var input = $(el.getDOMNode()).find('input')[1];
+          var input = $(ReactDOM.findDOMNode(el)).find('input')[1];
           TestUtils.Simulate.change(input, {
             target: {
               value: 'newrole'
             }
           });
-          var form = $(el.getDOMNode()).find('.permission-item-form')[1];
+          var form = $(ReactDOM.findDOMNode(el)).find('.permission-item-form')[1];
           TestUtils.Simulate.submit(form);
 
           var options = addSpy.args[0][0];
@@ -118,7 +119,7 @@ define([
 
         it('stores new name on change', function () {
           var newName = 'newName';
-          var dom = $(el.getDOMNode()).find('.item')[0];
+          var dom = $(ReactDOM.findDOMNode(el)).find('.item')[0];
 
           TestUtils.Simulate.change(dom, {
             target: {
@@ -131,7 +132,7 @@ define([
 
         it('stores new role on change', function () {
           var newRole = 'newRole';
-          var dom = $(el.getDOMNode()).find('.item')[1];
+          var dom = $(ReactDOM.findDOMNode(el)).find('.item')[1];
 
           TestUtils.Simulate.change(dom, {
             target: {
@@ -153,11 +154,11 @@ define([
         });
 
         afterEach(function () {
-          React.unmountComponentAtNode(container);
+          ReactDOM.unmountComponentAtNode(container);
         });
 
         it('triggers remove on click', function () {
-          var dom = $(el.getDOMNode()).find('.close')[0];
+          var dom = $(ReactDOM.findDOMNode(el)).find('.close')[0];
           TestUtils.Simulate.click(dom);
 
           assert.ok(removeSpy.calledOnce);

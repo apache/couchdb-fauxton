@@ -13,8 +13,9 @@ define([
   'api',
   'addons/components/react-components.react',
   'testUtils',
-  'react'
-], function (FauxtonAPI, ReactComponents, utils, React) {
+  'react',
+  'react-dom'
+], function (FauxtonAPI, ReactComponents, utils, React, ReactDOM) {
 
   var assert = utils.assert;
   var TestUtils = React.addons.TestUtils;
@@ -39,7 +40,7 @@ define([
     });
 
     afterEach(function () {
-      React.unmountComponentAtNode(container);
+      ReactDOM.unmountComponentAtNode(container);
     });
 
     describe('Tracking edits', function () {

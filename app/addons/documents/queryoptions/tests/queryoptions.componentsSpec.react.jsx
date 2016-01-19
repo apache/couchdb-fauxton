@@ -16,8 +16,9 @@ define([
   'addons/documents/queryoptions/actions',
   'addons/documents/resources',
   'testUtils',
-  "react"
-], function (FauxtonAPI, Views, Stores, Actions, Documents, utils, React) {
+  "react",
+  'react-dom'
+], function (FauxtonAPI, Views, Stores, Actions, Documents, utils, React, ReactDOM) {
   FauxtonAPI.router = new FauxtonAPI.Router([]);
 
   var assert = utils.assert;
@@ -32,7 +33,7 @@ define([
     });
 
     afterEach(function () {
-      React.unmountComponentAtNode(container);
+      ReactDOM.unmountComponentAtNode(container);
     });
 
     describe('MainFieldsView', function () {
@@ -52,7 +53,7 @@ define([
       it('updates group level', function () {
         var spy = sinon.spy();
         mainFieldsEl = TestUtils.renderIntoDocument(<Views.MainFieldsView updateGroupLevel={spy} reduce={true} includeDocs={false} showReduce={true}/>, container);
-        var el = $(mainFieldsEl.getDOMNode()).find('#qoGroupLevel')[0];
+        var el = $(ReactDOM.findDOMNode(mainFieldsEl)).find('#qoGroupLevel')[0];
         TestUtils.Simulate.change(el, {target: {value: 'exact'}});
 
         assert.ok(spy.calledOnce);
@@ -61,7 +62,7 @@ define([
       it('toggles include docs on change', function () {
         var spy = sinon.spy();
         mainFieldsEl = TestUtils.renderIntoDocument(<Views.MainFieldsView toggleIncludeDocs={spy} reduce={false} includeDocs={false} showReduce={false}/>, container);
-        var el = $(mainFieldsEl.getDOMNode()).find('#qoIncludeDocs')[0];
+        var el = $(ReactDOM.findDOMNode(mainFieldsEl)).find('#qoIncludeDocs')[0];
         TestUtils.Simulate.change(el);
 
         assert.ok(spy.calledOnce);
@@ -72,7 +73,7 @@ define([
         mainFieldsEl = TestUtils.renderIntoDocument(
           <Views.MainFieldsView reduce={false} includeDocs={false} showReduce={false} docURL={customDocURL} />,
           container);
-        assert.equal($(React.findDOMNode(mainFieldsEl)).find('.help-link').attr('href'), customDocURL);
+        assert.equal($(ReactDOM.findDOMNode(mainFieldsEl)).find('.help-link').attr('href'), customDocURL);
       });
 
     });
@@ -88,7 +89,7 @@ define([
           toggleByKeys={spy}
           />, container);
 
-        var el = $(keysEl.getDOMNode()).find('#byKeys')[0];
+        var el = $(ReactDOM.findDOMNode(keysEl)).find('#byKeys')[0];
         TestUtils.Simulate.click(el);
         assert.ok(spy.calledOnce);
       });
@@ -102,7 +103,7 @@ define([
           betweenKeys={{}}
           />, container);
 
-        var el = $(keysEl.getDOMNode()).find('#betweenKeys')[0];
+        var el = $(ReactDOM.findDOMNode(keysEl)).find('#betweenKeys')[0];
         TestUtils.Simulate.click(el);
         assert.ok(spy.calledOnce);
       });
@@ -116,7 +117,7 @@ define([
           betweenKeys={{}}
           />, container);
 
-        var el = $(keysEl.getDOMNode()).find('#keys-input')[0];
+        var el = $(ReactDOM.findDOMNode(keysEl)).find('#keys-input')[0];
         TestUtils.Simulate.change(el, {target: {value: 'boom'}});
         assert.ok(spy.calledWith('boom'));
       });
@@ -135,7 +136,7 @@ define([
           betweenKeys={betweenKeys}
           />, container);
 
-        var el = $(keysEl.getDOMNode()).find('#endkey')[0];
+        var el = $(ReactDOM.findDOMNode(keysEl)).find('#endkey')[0];
         TestUtils.Simulate.change(el, {target: {value: 'boom'}});
         assert.ok(spy.calledOnce);
       });

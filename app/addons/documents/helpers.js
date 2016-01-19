@@ -16,7 +16,6 @@ define([
 ], function (app, FauxtonAPI) {
 
 
-
   function getPreviousPageForDoc (database, wasCloned) {
     var previousPage = database.url('index'), // default to the current database's all_docs page
         lastPages = FauxtonAPI.router.lastPages;
@@ -81,12 +80,15 @@ define([
     };
   }
 
+  function parseJSON (str) {
+    return JSON.parse('"' + str + '"');   // this ensures newlines are converted
+  }
 
   return {
     getPreviousPageForDoc: getPreviousPageForDoc,
     getPreviousPage: getPreviousPage,
     getSeqNum: getSeqNum,
     getNewButtonLinks: getNewButtonLinks,
-
+    parseJSON: parseJSON
   };
 });

@@ -14,12 +14,13 @@ define([
   'app',
   'api',
   'react',
+  'react-dom',
   'addons/activetasks/stores',
   'addons/activetasks/resources',
   'addons/activetasks/actions',
   'addons/components/react-components.react',
   'addons/fauxton/components.react'
-], function (app, FauxtonAPI, React, Stores, Resources, Actions, Components, ComponentsReact) {
+], function (app, FauxtonAPI, React, ReactDOM, Stores, Resources, Actions, Components, ComponentsReact) {
 
   var activeTasksStore = Stores.activeTasksStore;
   var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
@@ -263,21 +264,20 @@ define([
       var th_class = 'header-field ' + this.props.headerName;
 
       return (
-        <input
-          type="radio"
-          name="header-field"
-          id={this.props.headerName}
-          value={this.props.headerName}
-          className="header-field radio"
-          onChange={this.onTableHeaderClick}>
-          <td className={th_class + " tableheader"} value={this.props.headerName}>
-            <label
-              className="header-field label-text active-tasks-header noselect"
-              htmlFor={this.props.headerName}>
-              {this.props.displayName} {arrow}
-            </label>
-          </td>
-        </input>
+        <td className={th_class + " tableheader"} value={this.props.headerName}>
+          <input
+            type="radio"
+            name="header-field"
+            id={this.props.headerName}
+            value={this.props.headerName}
+            className="header-field radio"
+            onChange={this.onTableHeaderClick} />
+          <label
+            className="header-field label-text active-tasks-header noselect"
+            htmlFor={this.props.headerName}>
+            {this.props.displayName} {arrow}
+          </label>
+        </td>
       );
     }
   });
@@ -396,7 +396,7 @@ define([
       e.preventDefault();
       this.refs.view_source_sequence_btn.toggle(function (shown) {
         if (shown) {
-          React.findDOMNode(this.refs.view_source_sequence_btn).focus();
+          ReactDOM.findDOMNode(this.refs.view_source_sequence_btn).focus();
         }
       }.bind(this));
     },

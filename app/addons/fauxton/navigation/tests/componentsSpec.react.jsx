@@ -16,8 +16,9 @@ define([
   'core/auth',
   'addons/auth/base',
   'testUtils',
-  "react"
-], function (FauxtonAPI, Views, Actions, Auth, BaseAuth, utils, React) {
+  "react",
+  'react-dom'
+], function (FauxtonAPI, Views, Actions, Auth, BaseAuth, utils, React, ReactDOM) {
 
   var assert = utils.assert;
   var TestUtils = React.addons.TestUtils;
@@ -34,11 +35,11 @@ define([
       });
 
       afterEach(function () {
-        React.unmountComponentAtNode(container);
+        ReactDOM.unmountComponentAtNode(container);
       });
 
       it('dispatch TOGGLE_NAVBAR_MENU on click', function () {
-        TestUtils.Simulate.click(burgerEl.getDOMNode());
+        TestUtils.Simulate.click(ReactDOM.findDOMNode(burgerEl));
         assert.ok(toggleMenu.calledOnce);
       });
 
@@ -57,13 +58,13 @@ define([
       FauxtonAPI.session.trigger('change');
 
       // confirm the logout link is present
-      var matches = React.findDOMNode(el).outerHTML.match(/Logout/);
+      var matches = ReactDOM.findDOMNode(el).outerHTML.match(/Logout/);
       assert.equal(matches.length, 1);
 
       // now confirm there's still only a single logout link after publishing multiple
       FauxtonAPI.session.trigger('change');
       FauxtonAPI.session.trigger('change');
-      matches = React.findDOMNode(el).outerHTML.match(/Logout/);
+      matches = ReactDOM.findDOMNode(el).outerHTML.match(/Logout/);
       assert.equal(matches.length, 1);
 
       FauxtonAPI.session.isLoggedIn.restore();

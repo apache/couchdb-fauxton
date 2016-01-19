@@ -14,10 +14,10 @@ define([
   'addons/cluster/cluster.react',
   'addons/cluster/cluster.actions',
   'addons/cluster/cluster.stores',
-
   'testUtils',
-  'react'
-], function (FauxtonAPI, ClusterComponent, ClusterActions, ClusterStores, utils, React) {
+  'react',
+  'react-dom'
+], function (FauxtonAPI, ClusterComponent, ClusterActions, ClusterStores, utils, React, ReactDOM) {
 
   var assert = utils.assert;
   var TestUtils = React.addons.TestUtils;
@@ -47,11 +47,11 @@ define([
 
     afterEach(function () {
       ClusterStores.nodesStore.reset();
-      React.unmountComponentAtNode(container);
+      ReactDOM.unmountComponentAtNode(container);
     });
 
     it('renders the amount of nodes', function () {
-      assert.ok(/6 nodes/.test($(controller.getDOMNode()).text()), 'finds 6 nodes');
+      assert.ok(/6 nodes/.test($(ReactDOM.findDOMNode(controller)).text()), 'finds 6 nodes');
     });
   });
 });

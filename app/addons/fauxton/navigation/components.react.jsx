@@ -13,11 +13,12 @@ define([
   'app',
   'api',
   'react',
+  'react-dom',
   'addons/fauxton/navigation/stores',
   'addons/fauxton/navigation/actions'
 ],
 
-function (app, FauxtonAPI, React, Stores, Actions) {
+function (app, FauxtonAPI, React, ReactDOM, Stores, Actions) {
   var navBarStore = Stores.navBarStore;
 
   var Footer = React.createClass({
@@ -152,7 +153,7 @@ function (app, FauxtonAPI, React, Stores, Actions) {
 
   return {
     renderNavBar: function (el) {
-      React.render(<NavBar/>, el);
+      ReactDOM.render(<NavBar/>, el);
     },
     NavBar: NavBar,
     Burger: Burger

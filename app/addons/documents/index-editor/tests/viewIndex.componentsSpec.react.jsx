@@ -16,8 +16,9 @@ define([
   'addons/documents/index-editor/actions',
   'addons/documents/resources',
   'testUtils',
-  "react"
-], function (FauxtonAPI, Views, Stores, Actions, Documents, utils, React) {
+  "react",
+  'react-dom'
+], function (FauxtonAPI, Views, Stores, Actions, Documents, utils, React, ReactDOM) {
   FauxtonAPI.router = new FauxtonAPI.Router([]);
 
   var assert = utils.assert;
@@ -53,7 +54,7 @@ define([
     });
 
     afterEach(function () {
-      React.unmountComponentAtNode(container);
+      ReactDOM.unmountComponentAtNode(container);
     });
 
     describe('getReduceValue', function () {
@@ -169,12 +170,12 @@ define([
     afterEach(function () {
       restore(Actions.newDesignDoc);
       restore(Actions.designDocChange);
-      React.unmountComponentAtNode(container);
+      ReactDOM.unmountComponentAtNode(container);
     });
 
     it('calls new design doc on new selected', function () {
       var spy = sinon.spy(Actions, 'newDesignDoc');
-      TestUtils.Simulate.change($(selectorEl.getDOMNode()).find('#ddoc')[0], {
+      TestUtils.Simulate.change($(ReactDOM.findDOMNode(selectorEl)).find('#ddoc')[0], {
         target: {
           value: 'new'
         }
@@ -185,7 +186,7 @@ define([
 
     it('calls design doc changed on a different design doc selected', function () {
       var spy = sinon.spy(Actions, 'designDocChange');
-      TestUtils.Simulate.change($(selectorEl.getDOMNode()).find('#ddoc')[0], {
+      TestUtils.Simulate.change($(ReactDOM.findDOMNode(selectorEl)).find('#ddoc')[0], {
         target: {
           value: 'another-doc'
         }
@@ -197,7 +198,7 @@ define([
     it('calls design doc changed on new design doc entered', function () {
       var spy = sinon.spy(Actions, 'designDocChange');
       Actions.newDesignDoc();
-      TestUtils.Simulate.change($(selectorEl.getDOMNode()).find('#new-ddoc')[0], {
+      TestUtils.Simulate.change($(ReactDOM.findDOMNode(selectorEl)).find('#new-ddoc')[0], {
         target: {
           value: 'new-doc-entered'
         }
@@ -207,12 +208,12 @@ define([
     });
 
     it('does not filter usual design docs', function () {
-      assert.ok(/_design\/test-doc/.test($(selectorEl.getDOMNode()).text()));
+      assert.ok(/_design\/test-doc/.test($(ReactDOM.findDOMNode(selectorEl)).text()));
     });
 
     it('filters mango docs', function () {
       selectorEl = TestUtils.renderIntoDocument(<Views.DesignDocSelector/>, container);
-      assert.notOk(/_design\/123mango/.test($(selectorEl.getDOMNode()).text()));
+      assert.notOk(/_design\/123mango/.test($(ReactDOM.findDOMNode(selectorEl)).text()));
     });
   });
 
@@ -228,7 +229,7 @@ define([
     });
 
     afterEach(function () {
-      React.unmountComponentAtNode(container);
+      ReactDOM.unmountComponentAtNode(container);
       sandbox.restore();
     });
 
@@ -253,7 +254,7 @@ define([
     it('calls changeViewName on view name change', function () {
       var viewName = 'new-name';
       var spy = sandbox.spy(Actions, 'changeViewName');
-      var el = $(editorEl.getDOMNode()).find('#index-name')[0];
+      var el = $(ReactDOM.findDOMNode(editorEl)).find('#index-name')[0];
       TestUtils.Simulate.change(el, {
         target: {
           value: viewName

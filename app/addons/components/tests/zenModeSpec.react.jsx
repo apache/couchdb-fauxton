@@ -13,8 +13,9 @@ define([
   'api',
   'addons/components/react-components.react',
   'testUtils',
-  'react'
-], function (FauxtonAPI, ReactComponents, utils, React) {
+  'react',
+  'react-dom'
+], function (FauxtonAPI, ReactComponents, utils, React, ReactDOM) {
 
   var assert = utils.assert;
   var TestUtils = React.addons.TestUtils;
@@ -33,26 +34,26 @@ define([
     });
 
     afterEach(function () {
-      React.unmountComponentAtNode(container);
+      ReactDOM.unmountComponentAtNode(container);
       window.localStorage.removeItem('zenTheme');
     });
 
     describe('Toggle theme', function () {
       it('defaults to dark theme', function () {
-        assert.ok($(el.getDOMNode()).hasClass('zen-theme-dark'));
+        assert.ok($(ReactDOM.findDOMNode(el)).hasClass('zen-theme-dark'));
       });
 
       it('switch to light theme on click', function () {
-        TestUtils.Simulate.click($(el.getDOMNode()).find('.js-toggle-theme')[0]);
-        assert.ok($(el.getDOMNode()).hasClass('zen-theme-light'));
+        TestUtils.Simulate.click($(ReactDOM.findDOMNode(el)).find('.js-toggle-theme')[0]);
+        assert.ok($(ReactDOM.findDOMNode(el)).hasClass('zen-theme-light'));
         // reset
-        TestUtils.Simulate.click($(el.getDOMNode()).find('.js-toggle-theme')[0]);
+        TestUtils.Simulate.click($(ReactDOM.findDOMNode(el)).find('.js-toggle-theme')[0]);
       });
     });
 
     describe('Closing zen mode', function () {
       it('method called', function () {
-        TestUtils.Simulate.click($(el.getDOMNode()).find('.js-exit-zen-mode')[0]);
+        TestUtils.Simulate.click($(ReactDOM.findDOMNode(el)).find('.js-exit-zen-mode')[0]);
         assert.ok(spy.calledOnce);
       });
     });

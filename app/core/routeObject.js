@@ -13,9 +13,10 @@
 define([
   'core/base',
   'react',
+  'react-dom',
   'backbone'
 ],
-function (FauxtonAPI, React, Backbone) {
+function (FauxtonAPI, React, ReactDOM, Backbone) {
 
   var RouteObject = function (options) {
     this._options = options;
@@ -135,7 +136,7 @@ function (FauxtonAPI, React, Backbone) {
     renderReactComponents: function () {
       _.each(this.reactComponents, function (componentInfo, selector) {
         if ($(selector)[0]) {
-          React.render(React.createElement(componentInfo.component, componentInfo.props), $(selector)[0]);
+          ReactDOM.render(React.createElement(componentInfo.component, componentInfo.props), $(selector)[0]);
         }
       });
     },
@@ -260,7 +261,7 @@ function (FauxtonAPI, React, Backbone) {
     removeComponent: function (selector) {
       if (_.has(this.reactComponents, selector)) {
         if ($(selector)[0]) {
-          React.unmountComponentAtNode($(selector)[0]);
+          ReactDOM.unmountComponentAtNode($(selector)[0]);
         }
         this.reactComponents[selector] = null;
         delete this.reactComponents[selector];

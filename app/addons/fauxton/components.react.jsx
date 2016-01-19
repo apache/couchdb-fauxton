@@ -14,6 +14,7 @@ define([
   'app',
   'api',
   'react',
+  'react-dom',
   'ZeroClipboard',
   'libs/react-bootstrap',
 
@@ -21,7 +22,7 @@ define([
   'velocity.ui'
 ],
 
-function (app, FauxtonAPI, React, ZeroClipboard, ReactBootstrap) {
+function (app, FauxtonAPI, React, ReactDOM, ZeroClipboard, ReactBootstrap) {
 
   var Modal = ReactBootstrap.Modal;
 
@@ -60,7 +61,7 @@ function (app, FauxtonAPI, React, ZeroClipboard, ReactBootstrap) {
     },
 
     componentDidMount: function () {
-      var el = React.findDOMNode(this);
+      var el = ReactDOM.findDOMNode(this);
       this.clipboard = new ZeroClipboard(el);
       this.clipboard.on('load', function () {
         this.clipboard.on('mouseup', function () {
@@ -94,7 +95,7 @@ function (app, FauxtonAPI, React, ZeroClipboard, ReactBootstrap) {
     },
 
     componentDidMount: function () {
-      var el = React.findDOMNode(this.refs["copy-text-" + this.props.uniqueKey]);
+      var el = ReactDOM.findDOMNode(this.refs["copy-text-" + this.props.uniqueKey]);
       this.clipboard = new ZeroClipboard(el);
       this.clipboard.on('load', function () {
         this.clipboard.on('mouseup', function () {
@@ -215,7 +216,7 @@ function (app, FauxtonAPI, React, ZeroClipboard, ReactBootstrap) {
 
     show: function (done) {
       this.setState({show: true});
-      $(React.findDOMNode(this.refs.myself)).velocity('transition.slideDownIn', FauxtonAPI.constants.MISC.TRAY_TOGGLE_SPEED, function () {
+      $(ReactDOM.findDOMNode(this.refs.myself)).velocity('transition.slideDownIn', FauxtonAPI.constants.MISC.TRAY_TOGGLE_SPEED, function () {
         if (done) {
           done(true);
         }
@@ -223,7 +224,7 @@ function (app, FauxtonAPI, React, ZeroClipboard, ReactBootstrap) {
     },
 
     hide: function (done) {
-      $(React.findDOMNode(this.refs.myself)).velocity('reverse', FauxtonAPI.constants.MISC.TRAY_TOGGLE_SPEED, function () {
+      $(ReactDOM.findDOMNode(this.refs.myself)).velocity('reverse', FauxtonAPI.constants.MISC.TRAY_TOGGLE_SPEED, function () {
         this.setState({show: false});
         if (done) {
           done(false);

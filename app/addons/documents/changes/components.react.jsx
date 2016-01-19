@@ -14,13 +14,14 @@ define([
   'app',
   'api',
   'react',
+  'react-dom',
   'addons/documents/changes/actions',
   'addons/documents/changes/stores',
   'addons/fauxton/components.react',
   'addons/components/react-components.react',
 
   'plugins/prettify'
-], function (app, FauxtonAPI, React, Actions, Stores, Components, ReactComponents) {
+], function (app, FauxtonAPI, React, ReactDOM, Actions, Stores, Components, ReactComponents) {
 
   var changesStore = Stores.changesStore;
   var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
@@ -64,7 +65,8 @@ define([
       return (
         <div className="changes-header-section">
           <ChangesHeaderTab onToggle={this.toggleFilterSection} />
-          <ReactCSSTransitionGroup transitionName="toggle-changes-filter" component="div" className="changes-tab-content">
+          <ReactCSSTransitionGroup transitionName="toggle-changes-filter" component="div" className="changes-tab-content"
+             transitionEnterTimeout={500} transitionLeaveTimeout={300}>
             {tabContent}
           </ReactCSSTransitionGroup>
         </div>
@@ -211,7 +213,7 @@ define([
     },
 
     focusFilterField: function () {
-      React.findDOMNode(this.refs.addItem).focus();
+      ReactDOM.findDOMNode(this.refs.addItem).focus();
     },
 
     onChangeFilter: function (e) {
@@ -248,7 +250,7 @@ define([
   var FilterTooltip = React.createClass({
     componentDidMount: function () {
       if (this.props.tooltip) {
-        $(React.findDOMNode(this.refs.tooltip)).tooltip();
+        $(ReactDOM.findDOMNode(this.refs.tooltip)).tooltip();
       }
     },
 
@@ -383,7 +385,8 @@ define([
               </div>
             </div>
 
-            <ReactCSSTransitionGroup transitionName="toggle-changes-code" component="div" className="changesCodeSectionWrapper">
+            <ReactCSSTransitionGroup transitionName="toggle-changes-code" component="div" className="changesCodeSectionWrapper"
+              transitionEnterTimeout={500} transitionLeaveTimeout={300}>
               {this.getChangesCode()}
             </ReactCSSTransitionGroup>
 
@@ -416,13 +419,13 @@ define([
 
   return {
     renderHeader: function (el) {
-      React.render(<ChangesHeaderController />, el);
+      ReactDOM.render(<ChangesHeaderController />, el);
     },
     renderChanges: function (el) {
-      React.render(<ChangesController />, el);
+      ReactDOM.render(<ChangesController />, el);
     },
     remove: function (el) {
-      React.unmountComponentAtNode(el);
+      ReactDOM.unmountComponentAtNode(el);
     },
 
     ChangesHeaderController: ChangesHeaderController,

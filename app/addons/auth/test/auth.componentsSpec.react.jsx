@@ -12,11 +12,12 @@
 define([
   'api',
   'react',
+  'react-dom',
   'testUtils',
   'addons/auth/components.react',
   'addons/auth/stores',
   'addons/auth/actions'
-], function (FauxtonAPI, React, utils, Components, Stores, Actions) {
+], function (FauxtonAPI, React, ReactDOM, utils, Components, Stores, Actions) {
   var assert = utils.assert;
 
   var TestUtils = React.addons.TestUtils;
@@ -34,14 +35,14 @@ define([
       });
 
       afterEach(function () {
-        React.unmountComponentAtNode(container);
+        ReactDOM.unmountComponentAtNode(container);
         createAdminSidebarStore.reset();
         Actions.login.restore();
       });
 
       it('should trigger login event when form submitted', function () {
         loginForm = TestUtils.renderIntoDocument(<Components.LoginForm />, container);
-        TestUtils.Simulate.submit($(loginForm.getDOMNode()).find('#login')[0]);
+        TestUtils.Simulate.submit($(ReactDOM.findDOMNode(loginForm)).find('#login')[0]);
         assert.ok(stub.calledOnce);
       });
 
@@ -55,7 +56,7 @@ define([
             testBlankPassword={password}
           />, container);
 
-        TestUtils.Simulate.submit($(loginForm.getDOMNode()).find('#login')[0]);
+        TestUtils.Simulate.submit($(ReactDOM.findDOMNode(loginForm)).find('#login')[0]);
         assert.ok(stub.calledOnce);
 
         // confirm Actions.login() received the values that weren't in the DOM
@@ -75,24 +76,24 @@ define([
       });
 
       afterEach(function () {
-        React.unmountComponentAtNode(container);
+        ReactDOM.unmountComponentAtNode(container);
       });
 
       it('should call action to update password on field change', function () {
         var spy = sinon.spy(Actions, 'updateChangePasswordField');
-        TestUtils.Simulate.change($(changePasswordForm.getDOMNode()).find('#password')[0], { target: { value: 'bobsyouruncle' }});
+        TestUtils.Simulate.change($(ReactDOM.findDOMNode(changePasswordForm)).find('#password')[0], { target: { value: 'bobsyouruncle' }});
         assert.ok(spy.calledOnce);
       });
 
       it('should call action to update password confirm on field change', function () {
         var spy = sinon.spy(Actions, 'updateChangePasswordConfirmField');
-        TestUtils.Simulate.change($(changePasswordForm.getDOMNode()).find('#password-confirm')[0], { target: { value: 'hotdiggity' }});
+        TestUtils.Simulate.change($(ReactDOM.findDOMNode(changePasswordForm)).find('#password-confirm')[0], { target: { value: 'hotdiggity' }});
         assert.ok(spy.calledOnce);
       });
 
       it('should call action to submit form', function () {
         var stub = sinon.stub(Actions, 'changePassword', function () {});
-        TestUtils.Simulate.submit($(changePasswordForm.getDOMNode()).find('#change-password')[0]);
+        TestUtils.Simulate.submit($(ReactDOM.findDOMNode(changePasswordForm)).find('#change-password')[0]);
         assert.ok(stub.calledOnce);
       });
     });
@@ -106,18 +107,18 @@ define([
       });
 
       afterEach(function () {
-        React.unmountComponentAtNode(container);
+        ReactDOM.unmountComponentAtNode(container);
       });
 
       it('should call action to update username on field change', function () {
         var spy = sinon.spy(Actions, 'updateCreateAdminUsername');
-        TestUtils.Simulate.change($(createAdminForm.getDOMNode()).find('#username')[0], { target: { value: 'catsmeow' }});
+        TestUtils.Simulate.change($(ReactDOM.findDOMNode(createAdminForm)).find('#username')[0], { target: { value: 'catsmeow' }});
         assert.ok(spy.calledOnce);
       });
 
       it('should call action to update password confirm on field change', function () {
         var spy = sinon.spy(Actions, 'updateCreateAdminPassword');
-        TestUtils.Simulate.change($(createAdminForm.getDOMNode()).find('#password')[0], { target: { value: 'topnotch' }});
+        TestUtils.Simulate.change($(ReactDOM.findDOMNode(createAdminForm)).find('#password')[0], { target: { value: 'topnotch' }});
         assert.ok(spy.calledOnce);
       });
     });
@@ -132,16 +133,16 @@ define([
       });
 
       afterEach(function () {
-        React.unmountComponentAtNode(container);
+        ReactDOM.unmountComponentAtNode(container);
       });
 
       it('confirm the default selected nav item is the change pwd page', function () {
-        assert.equal($(createAdminSidebar.getDOMNode()).find('.active').find('a').attr('href'), '#changePassword');
+        assert.equal($(ReactDOM.findDOMNode(createAdminSidebar)).find('.active').find('a').attr('href'), '#changePassword');
       });
 
       it('confirm clicking a sidebar nav item selects it in the DOM', function () {
-        TestUtils.Simulate.click($(createAdminSidebar.getDOMNode()).find('li[data-page="addAdmin"]').find('a')[0]);
-        assert.equal($(createAdminSidebar.getDOMNode()).find('.active').find('a').attr('href'), '#addAdmin');
+        TestUtils.Simulate.click($(ReactDOM.findDOMNode(createAdminSidebar)).find('li[data-page="addAdmin"]').find('a')[0]);
+        assert.equal($(ReactDOM.findDOMNode(createAdminSidebar)).find('.active').find('a').attr('href'), '#addAdmin');
       });
     });
 

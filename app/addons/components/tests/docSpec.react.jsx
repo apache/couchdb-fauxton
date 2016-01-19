@@ -12,10 +12,10 @@
 define([
   'api',
   'addons/components/react-components.react',
-
   'testUtils',
-  'react'
-], function (FauxtonAPI, ReactComponents, utils, React) {
+  'react',
+  'react-dom'
+], function (FauxtonAPI, ReactComponents, utils, React, ReactDOM) {
 
   var assert = utils.assert;
   var TestUtils = React.addons.TestUtils;
@@ -28,7 +28,7 @@ define([
     });
 
     afterEach(function () {
-      React.unmountComponentAtNode(container);
+      ReactDOM.unmountComponentAtNode(container);
     });
 
     it('hosts child elements', function () {
@@ -38,7 +38,7 @@ define([
         </ReactComponents.Document>,
         container
       );
-      assert.ok($(el.getDOMNode()).find('.foo-children').length);
+      assert.ok($(ReactDOM.findDOMNode(el)).find('.foo-children').length);
     });
 
     it('does not require child elements', function () {
@@ -46,7 +46,7 @@ define([
         <ReactComponents.Document />,
         container
       );
-      assert.notOk($(el.getDOMNode()).find('.doc-edit-symbol').length);
+      assert.notOk($(ReactDOM.findDOMNode(el)).find('.doc-edit-symbol').length);
     });
 
     it('you can check it', function () {
@@ -54,7 +54,7 @@ define([
         <ReactComponents.Document isDeletable={true} checked={true} docIdentifier="foo" />,
         container
       );
-      assert.equal($(el.getDOMNode()).find('input[type="checkbox"]').attr('checked'), 'checked');
+      assert.equal($(ReactDOM.findDOMNode(el)).find('input[type="checkbox"]').attr('checked'), 'checked');
     });
 
     it('you can uncheck it', function () {
@@ -62,7 +62,7 @@ define([
         <ReactComponents.Document isDeletable={true} docIdentifier="foo" />,
         container
       );
-      assert.equal($(el.getDOMNode()).find('input[type="checkbox"]').attr('checked'), undefined);
+      assert.equal($(ReactDOM.findDOMNode(el)).find('input[type="checkbox"]').attr('checked'), undefined);
     });
 
     it('it calls an onchange callback', function () {
@@ -72,7 +72,7 @@ define([
         <ReactComponents.Document doc={{id: "foo"}} isDeletable={true} docChecked={spy} docIdentifier="foo" />,
         container
       );
-      var testEl = $(el.getDOMNode()).find('input[type="checkbox"]')[0];
+      var testEl = $(ReactDOM.findDOMNode(el)).find('input[type="checkbox"]')[0];
       React.addons.TestUtils.Simulate.change(testEl, {target: {value: 'Hello, world'}});
       assert.ok(spy.calledOnce);
     });
@@ -84,7 +84,7 @@ define([
         <ReactComponents.Document isDeletable={true} onDoubleClick={spy} docIdentifier="foo" />,
         container
       );
-      React.addons.TestUtils.Simulate.doubleClick(el.getDOMNode());
+      React.addons.TestUtils.Simulate.doubleClick(ReactDOM.findDOMNode(el));
       assert.ok(spy.calledOnce);
     });
 
@@ -95,8 +95,8 @@ define([
         <ReactComponents.Document isDeletable={false} onDoubleClick={spy} docIdentifier="foo" />,
         container
       );
-      assert.notOk($(el.getDOMNode()).find('input[type="checkbox"]').length);
-      assert.ok($(el.getDOMNode()).find('.checkbox-dummy').length);
+      assert.notOk($(ReactDOM.findDOMNode(el)).find('input[type="checkbox"]').length);
+      assert.ok($(ReactDOM.findDOMNode(el)).find('.checkbox-dummy').length);
     });
 
     it('contains a doc-data element when there\'s doc content', function () {
@@ -104,7 +104,7 @@ define([
         <ReactComponents.Document isDeletable={true} checked={true} docIdentifier="foo" docContent='{ "content": true }' />,
         container
       );
-      assert.equal(1, $(el.getDOMNode()).find('.doc-data').length);
+      assert.equal(1, $(ReactDOM.findDOMNode(el)).find('.doc-data').length);
     });
 
     it('doesn\'t contain a doc-data element when there\'s no doc content', function () {
@@ -112,7 +112,7 @@ define([
         <ReactComponents.Document isDeletable={true} checked={true} docIdentifier="foo" docContent='' />,
         container
       );
-      assert.equal(0, $(el.getDOMNode()).find('.doc-data').length);
+      assert.equal(0, $(ReactDOM.findDOMNode(el)).find('.doc-data').length);
     });
 
     it('allows empty headers', function () {
@@ -120,7 +120,7 @@ define([
         <ReactComponents.Document header={null} isDeletable={true} checked={true} docIdentifier="foo" docContent='' />,
         container
       );
-      assert.equal('', $(el.getDOMNode()).find('.header-doc-id').text());
+      assert.equal('', $(ReactDOM.findDOMNode(el)).find('.header-doc-id').text());
     });
 
     it('allows supports headers with "', function () {
@@ -128,7 +128,7 @@ define([
         <ReactComponents.Document header="foo" isDeletable={true} checked={true} docIdentifier="foo" docContent='' />,
         container
       );
-      assert.equal('"foo"', $(el.getDOMNode()).find('.header-doc-id').text());
+      assert.equal('"foo"', $(ReactDOM.findDOMNode(el)).find('.header-doc-id').text());
     });
   });
 

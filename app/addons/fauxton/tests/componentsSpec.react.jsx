@@ -13,8 +13,9 @@ define([
   'api',
   'addons/fauxton/components.react',
   'testUtils',
-  'react'
-], function (FauxtonAPI, Views, utils, React) {
+  'react',
+  'react-dom'
+], function (FauxtonAPI, Views, utils, React, ReactDOM) {
 
   var assert = utils.assert;
   var TestUtils = React.addons.TestUtils;
@@ -37,7 +38,7 @@ define([
     });
 
     afterEach(function () {
-      React.unmountComponentAtNode(container);
+      ReactDOM.unmountComponentAtNode(container);
       FauxtonAPI.constants.MISC.TRAY_TOGGLE_SPEED = oldToggleSpeed;
     });
 
@@ -94,7 +95,7 @@ define([
           var trayEl = this.refs.tray;
           var externalEl = this.refs.externalElement;
           trayEl.show(function () {
-            TestUtils.Simulate.click(React.findDOMNode(externalEl));
+            TestUtils.Simulate.click(ReactDOM.findDOMNode(externalEl));
             assert.ok(spy.calledOnce);
           });
         },
@@ -112,7 +113,7 @@ define([
       var reactEl = TestUtils.renderIntoDocument(React.createElement(wrapper), container);
       reactEl.runTest();
 
-      React.unmountComponentAtNode(container);
+      ReactDOM.unmountComponentAtNode(container);
     });
 
   });
@@ -131,7 +132,7 @@ define([
     });
 
     afterEach(function () {
-      React.unmountComponentAtNode(container);
+      ReactDOM.unmountComponentAtNode(container);
     });
 
     it('renders 20-wise pages per default', function () {
@@ -218,7 +219,7 @@ define([
         <Views.Pagination page={1} total={100} onClick={spy} />,
         container
       );
-      var links = React.findDOMNode(pageEl).getElementsByTagName("a");
+      var links = ReactDOM.findDOMNode(pageEl).getElementsByTagName("a");
 
       TestUtils.Simulate.click(links[3]);
 
@@ -237,7 +238,7 @@ define([
         <Views.Pagination page={currentPage} total={200} onClick={spy} />,
         container
       );
-      var links = React.findDOMNode(pageEl).getElementsByTagName("a");
+      var links = ReactDOM.findDOMNode(pageEl).getElementsByTagName("a");
 
       TestUtils.Simulate.click(links[0]);
       assert.ok(spy.calledWith(currentPage - 1));
@@ -256,22 +257,22 @@ define([
     });
 
     afterEach(function () {
-      React.unmountComponentAtNode(container);
+      ReactDOM.unmountComponentAtNode(container);
     });
 
     it('shows a clipboard icon by default', function () {
       var clipboard = TestUtils.renderIntoDocument(<Views.Clipboard text="copy me" />, container);
-      assert.equal($(clipboard.getDOMNode()).find('.icon-paste').length, 1);
+      assert.equal($(ReactDOM.findDOMNode(clipboard)).find('.icon-paste').length, 1);
     });
 
     it('shows text if specified', function () {
       var clipboard = TestUtils.renderIntoDocument(<Views.Clipboard displayType="text" text="copy me" />, container);
-      assert.equal($(clipboard.getDOMNode()).find('.icon-paste').length, 0);
+      assert.equal($(ReactDOM.findDOMNode(clipboard)).find('.icon-paste').length, 0);
     });
 
     it('shows custom text if specified ', function () {
       var clipboard = TestUtils.renderIntoDocument(<Views.Clipboard displayType="text" textDisplay='booyah!' text="copy me" />, container);
-      assert.ok(/booyah!/.test($(clipboard.getDOMNode())[0].outerHTML));
+      assert.ok(/booyah!/.test($(ReactDOM.findDOMNode(clipboard))[0].outerHTML));
     });
 
   });

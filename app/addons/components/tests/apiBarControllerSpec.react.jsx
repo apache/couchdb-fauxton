@@ -15,8 +15,9 @@ define([
   'addons/components/stores',
   'addons/components/react-components.react',
   'testUtils',
-  'react'
-], function (FauxtonAPI, Actions, Stores, ReactComponents, utils, React) {
+  'react',
+  'react-dom'
+], function (FauxtonAPI, Actions, Stores, ReactComponents, utils, React, ReactDOM) {
 
   var assert = utils.assert;
   var TestUtils = React.addons.TestUtils;
@@ -32,7 +33,7 @@ define([
     });
 
     afterEach(function () {
-      React.unmountComponentAtNode(container);
+      ReactDOM.unmountComponentAtNode(container);
       componentStore.reset();
     });
 
@@ -83,16 +84,16 @@ define([
       var el = TestUtils.renderIntoDocument(<ApiBarController />, container);
       Actions.updateAPIBar({ visible: true, endpoint: 'http://link.com', docURL: 'http://doc.com' });
 
-      TestUtils.Simulate.click($(el.getDOMNode()).find('.control-toggle-api-url')[0]);
-      assert.equal($(el.getDOMNode()).find('.help-link').length, 1);
+      TestUtils.Simulate.click($(ReactDOM.findDOMNode(el)).find('.control-toggle-api-url')[0]);
+      assert.equal($(ReactDOM.findDOMNode(el)).find('.help-link').length, 1);
     });
 
     it('Confirm doc link icon doesn\'t appear with no docURL', function () {
       var el = TestUtils.renderIntoDocument(<ApiBarController />, container);
       Actions.updateAPIBar({ visible: true, endpoint: 'http://link.com', docURL: null });
 
-      TestUtils.Simulate.click($(el.getDOMNode()).find('.control-toggle-api-url')[0]);
-      assert.equal($(el.getDOMNode()).find('.help-link').length, 0);
+      TestUtils.Simulate.click($(ReactDOM.findDOMNode(el)).find('.control-toggle-api-url')[0]);
+      assert.equal($(ReactDOM.findDOMNode(el)).find('.help-link').length, 0);
     });
 
     it('Confirm endpoint appears in markup', function () {
@@ -100,8 +101,8 @@ define([
       var link = 'http://booyah.ca';
       Actions.updateAPIBar({ visible: true, endpoint: link, docURL: null });
 
-      TestUtils.Simulate.click($(el.getDOMNode()).find('.control-toggle-api-url')[0]);
-      assert.equal($(el.getDOMNode()).find('.text-field-to-copy').val(), link);
+      TestUtils.Simulate.click($(ReactDOM.findDOMNode(el)).find('.control-toggle-api-url')[0]);
+      assert.equal($(ReactDOM.findDOMNode(el)).find('.text-field-to-copy').val(), link);
     });
 
     it('Confirm endpoint is updated in markup', function () {
@@ -109,12 +110,12 @@ define([
       var link = 'http://booyah.ca';
       Actions.updateAPIBar({ visible: true, endpoint: link, docURL: null });
 
-      TestUtils.Simulate.click($(el.getDOMNode()).find('.control-toggle-api-url')[0]);
-      assert.equal($(el.getDOMNode()).find('.text-field-to-copy').val(), link);
+      TestUtils.Simulate.click($(ReactDOM.findDOMNode(el)).find('.control-toggle-api-url')[0]);
+      assert.equal($(ReactDOM.findDOMNode(el)).find('.text-field-to-copy').val(), link);
 
       var newLink = 'http://chickensarenoisy.com';
       Actions.updateAPIBar({ endpoint: newLink });
-      assert.equal($(el.getDOMNode()).find('.text-field-to-copy').val(), newLink);
+      assert.equal($(ReactDOM.findDOMNode(el)).find('.text-field-to-copy').val(), newLink);
     });
 
     it('Confirm doc URL is updated in markup after a change', function () {
@@ -122,12 +123,12 @@ define([
       var docLink = 'http://mydoc.org';
       Actions.updateAPIBar({ visible: true, endpoint: 'http://whatever.com', docURL: docLink });
 
-      TestUtils.Simulate.click($(el.getDOMNode()).find('.control-toggle-api-url')[0]);
-      assert.equal($(el.getDOMNode()).find('.help-link').attr('href'), docLink);
+      TestUtils.Simulate.click($(ReactDOM.findDOMNode(el)).find('.control-toggle-api-url')[0]);
+      assert.equal($(ReactDOM.findDOMNode(el)).find('.help-link').attr('href'), docLink);
 
       var newDocLink = 'http://newawesomedoclink.xxx';
       Actions.updateAPIBar({ docURL: newDocLink });
-      assert.equal($(el.getDOMNode()).find('.help-link').attr('href'), newDocLink);
+      assert.equal($(ReactDOM.findDOMNode(el)).find('.help-link').attr('href'), newDocLink);
     });
 
   });

@@ -2,13 +2,14 @@ define([
   'api',
   'app',
   'react',
+  'react-dom',
   'addons/documents/doc-editor/actions',
   'addons/documents/doc-editor/stores',
   'addons/fauxton/components.react',
   'addons/components/react-components.react',
   'libs/react-bootstrap',
   'helpers'
-], function (FauxtonAPI, app, React, Actions, Stores, FauxtonComponents, GeneralComponents, ReactBootstrap, Helpers) {
+], function (FauxtonAPI, app, React, ReactDOM, Actions, Stores, FauxtonComponents, GeneralComponents, ReactBootstrap, Helpers) {
 
   var store = Stores.docEditorStore;
   var Modal = ReactBootstrap.Modal;
@@ -290,7 +291,7 @@ define([
       Actions.uploadAttachment({
         doc: this.props.doc,
         rev: this.props.doc.get('_rev'),
-        files: $(React.findDOMNode(this.refs.attachments))[0].files
+        files: $(ReactDOM.findDOMNode(this.refs.attachments))[0].files
       });
     },
 

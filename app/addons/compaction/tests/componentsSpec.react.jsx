@@ -14,8 +14,9 @@ define([
   'addons/compaction/components.react',
   'addons/compaction/actions',
   'testUtils',
-  "react"
-], function (FauxtonAPI, Views, Actions, utils, React) {
+  'react',
+  'react-dom'
+], function (FauxtonAPI, Views, Actions, utils, React, ReactDOM) {
   FauxtonAPI.router = new FauxtonAPI.Router([]);
 
   var assert = utils.assert;
@@ -37,7 +38,7 @@ define([
     });
 
     afterEach(function () {
-      React.unmountComponentAtNode(container);
+      ReactDOM.unmountComponentAtNode(container);
     });
 
     it('triggers compact database action', function () {
@@ -69,11 +70,11 @@ define([
     });
 
     afterEach(function () {
-      React.unmountComponentAtNode(container);
+      ReactDOM.unmountComponentAtNode(container);
     });
 
     it('calls cleanupView on button click', function () {
-      var el = $(cleanupViewEl.getDOMNode()).find('button')[0];
+      var el = $(ReactDOM.findDOMNode(cleanupViewEl)).find('button')[0];
       TestUtils.Simulate.click(el, {});
 
       assert.ok(spy.calledOnce);
@@ -95,11 +96,11 @@ define([
     });
 
     afterEach(function () {
-      React.unmountComponentAtNode(container);
+      ReactDOM.unmountComponentAtNode(container);
     });
 
     it('calls compact database on button click', function () {
-      var el = $(compactViewEl.getDOMNode()).find('button')[0];
+      var el = $(ReactDOM.findDOMNode(compactViewEl)).find('button')[0];
       TestUtils.Simulate.click(el, {});
 
       assert.ok(spy.calledOnce);

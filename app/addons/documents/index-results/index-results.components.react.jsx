@@ -423,7 +423,7 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, Documents, Fauxto
               disabled={this.props.isLoading}
               title="Select all docs that can be..." /> : null}
 
-            <ReactCSSTransitionGroup transitionName="slow-fade">
+            <ReactCSSTransitionGroup transitionName="slow-fade" transitionEnterTimeout={500} transitionLeaveTimeout={300}>
               {this.getDocumentList()}
             </ReactCSSTransitionGroup>
           </div>

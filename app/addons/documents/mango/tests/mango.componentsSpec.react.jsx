@@ -16,13 +16,12 @@ define([
   'addons/documents/mango/mango.stores',
   'addons/documents/mango/mango.actions',
   'addons/documents/mango/mango.actiontypes',
-
   'addons/documents/resources',
   'addons/databases/resources',
-
   'testUtils',
-  'react'
-], function (FauxtonAPI, Views, Stores, MangoActions, ActionTypes, Resources, Databases, utils, React) {
+  'react',
+  'react-dom'
+], function (FauxtonAPI, Views, Stores, MangoActions, ActionTypes, Resources, Databases, utils, React, ReactDOM) {
 
   var assert = utils.assert;
   var TestUtils = React.addons.TestUtils;
@@ -40,7 +39,7 @@ define([
     });
 
     afterEach(function () {
-      React.unmountComponentAtNode(container);
+      ReactDOM.unmountComponentAtNode(container);
     });
 
     it('renders a default index definition', function () {
@@ -58,7 +57,7 @@ define([
         <Views.MangoIndexEditorController description="foo" />,
         container
       );
-      var $el = $(editor.getDOMNode());
+      var $el = $(ReactDOM.findDOMNode(editor));
 
       assert.equal($el.find('.db-title').text(), 'testdb');
     });
@@ -68,7 +67,7 @@ define([
         <Views.MangoIndexEditorController description="CouchDB Query is great!" />,
         container
       );
-      var $el = $(editor.getDOMNode());
+      var $el = $(ReactDOM.findDOMNode(editor));
 
       assert.equal($el.find('.editor-description').text(), 'CouchDB Query is great!');
     });
@@ -123,7 +122,7 @@ define([
     });
 
     afterEach(function () {
-      React.unmountComponentAtNode(container);
+      ReactDOM.unmountComponentAtNode(container);
     });
 
     it('lists our available indexes', function () {
@@ -131,7 +130,7 @@ define([
         <Views.MangoQueryEditorController description="foo" />,
         container
       );
-      var $el = $(editor.getDOMNode());
+      var $el = $(ReactDOM.findDOMNode(editor));
       assert.equal($el.find('.mango-available-indexes').length, 1);
 
       assert.include(
@@ -145,7 +144,7 @@ define([
     });
 
     it('has a default query', function () {
-      editor = React.render(
+      editor = ReactDOM.render(
         <Views.MangoQueryEditorController description="foo" />,
         container
       );
@@ -183,7 +182,7 @@ define([
         <Views.MangoQueryEditorController description="foo" />,
         container
       );
-      var $el = $(editor.getDOMNode());
+      var $el = $(ReactDOM.findDOMNode(editor));
       assert.equal($el.find('.info-changed-query').length, 1);
     });
 
@@ -192,7 +191,7 @@ define([
         <Views.MangoQueryEditorController description="foo" />,
         container
       );
-      var $el = $(editor.getDOMNode());
+      var $el = $(ReactDOM.findDOMNode(editor));
 
       assert.equal($el.find('.db-title').text(), 'testdb');
     });
@@ -202,7 +201,7 @@ define([
         <Views.MangoQueryEditorController description="CouchDB Query is great!" />,
         container
       );
-      var $el = $(editor.getDOMNode());
+      var $el = $(ReactDOM.findDOMNode(editor));
 
       assert.equal($el.find('.editor-description').text(), 'CouchDB Query is great!');
     });
