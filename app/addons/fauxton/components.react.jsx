@@ -26,7 +26,7 @@ function (app, FauxtonAPI, React, ZeroClipboard, ReactBootstrap) {
   var Modal = ReactBootstrap.Modal;
 
   function getZeroClipboardSwfPath () {
-    return '../../dashboard.assets/ZeroClipboard.swf';
+    return './dashboard.assets/ZeroClipboard.swf';
   }
 
   // super basic right now, but can be expanded later to handle all the varieties of copy-to-clipboards
