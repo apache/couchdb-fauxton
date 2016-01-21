@@ -230,6 +230,13 @@ function (app, FauxtonAPI, React, Stores, FauxtonComponents, ace, beautifyHelper
   });
 
   var StyledSelect = React.createClass({
+    propTypes: {
+      selectValue: React.PropTypes.string.isRequired,
+      selectId: React.PropTypes.string.isRequired,
+      selectChange: React.PropTypes.func.isRequired,
+      selectContent: React.PropTypes.object.isRequired
+    },
+
     render: function () {
       return (
         <div className="styled-select">
