@@ -27,7 +27,7 @@ module.exports = {
       .checkForDocumentCreated(newDocumentName2)
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs?include_docs=true')
 
-      .clickWhenVisible('.alternative-header .header-toggle-button button:last-child')
+      .clickWhenVisible('.alternative-header .two-sides-toggle-button button:last-child')
       .getText('.table', function (result) {
         var data = result.value;
 
@@ -57,7 +57,7 @@ module.exports = {
       .checkForDocumentCreated(newDocumentName2)
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
 
-      .clickWhenVisible('.alternative-header .header-toggle-button button:last-child')
+      .clickWhenVisible('.alternative-header .two-sides-toggle-button button:last-child')
       .getText('.table', function (result) {
         var data = result.value;
 

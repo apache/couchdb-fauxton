@@ -71,7 +71,7 @@ function (app, FauxtonAPI, React, Actions, ReactComponents,
 
       return (
         <div className="alternative-header">
-          <ButtonGroup className="header-toggle-button">
+          <ButtonGroup className="two-sides-toggle-button">
             <Button
               className={isTableViewSelected ? '' : 'active'}
               onClick={this.toggleTableView.bind(this, false)}

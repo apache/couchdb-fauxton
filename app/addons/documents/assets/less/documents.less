@@ -21,6 +21,25 @@
 @import "doc-editor.less";
 @import "header.less";
 
+.two-sides-toggle-button {
+  font-size: 15px;
+  padding: 11px;
+
+  button.btn {
+    padding: 10px 15px;
+    &:hover {
+      background-color: @brandPrimary;
+      color: white;
+    }
+    &.active {
+      color: @brandPrimary;
+      &:hover {
+        background-color: white;
+      }
+    }
+  }
+}
+
 button.beautify {
   margin-top: 20px;
 }
