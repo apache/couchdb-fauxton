@@ -27,11 +27,12 @@ define([
   "api",
   "ace_configuration",
   "spin",
+  'addons/components/react-components.react',
 
   "velocity.ui"
 ],
 
-function (app, FauxtonAPI, ace, spin) {
+function (app, FauxtonAPI, ace, spin, ReactComponents) {
   var Components = FauxtonAPI.addon();
 
   // setting up the left header with the backbutton used in Views and All docs
@@ -40,7 +41,6 @@ function (app, FauxtonAPI, ace, spin) {
     template: "addons/fauxton/templates/header_left",
 
     initialize: function (options) {
-      this.dropdownEvents = options.dropdownEvents;
       this.dropdownMenuLinks = options.dropdownMenu;
       this.lookaheadTrayOptions = options.lookaheadTrayOptions || null;
       this.crumbs = options.crumbs || [];
@@ -88,10 +88,8 @@ function (app, FauxtonAPI, ace, spin) {
 
     setUpDropDownMenu: function () {
       if (this.dropdownMenuLinks) {
-        this.dropdown = this.insertView("#header-dropdown-menu", new Components.MenuDropDown({
-          icon: 'fonticon-cog',
+        this.dropdown = this.insertView("#header-dropdown-menu", new Components.MenuDropDownReact({
           links: this.dropdownMenuLinks,
-          events: this.dropdownEvents
         }));
       }
     },
@@ -113,6 +111,19 @@ function (app, FauxtonAPI, ace, spin) {
     }
   });
 
+  Components.MenuDropDownReact = FauxtonAPI.View.extend({
+    initialize: function (options) {
+      this.options = options;
+    },
+
+    afterRender: function () {
+      ReactComponents.renderMenuDropDown(this.el, this.options);
+    },
+
+    cleanup: function () {
+      ReactComponents.removeMenuDropDown(this.el);
+    }
+  });
   Components.Breadcrumbs = FauxtonAPI.View.extend({
     className: "breadcrumb pull-left",
     tagName: "ul",
@@ -409,50 +420,6 @@ function (app, FauxtonAPI, ace, spin) {
           process(ids);
         }
       });
-    }
-  });
-
-
-  //Menu Drop down component. It takes links in this format and renders the Dropdown:
-  // [{
-  //  title: 'Section Title (optional)',
-  //  links: [{
-  //    icon: 'icon-class (optional)',
-  //    url: 'clickalble-url',
-  //    title: 'name of link'
-  //  }]
-  // }]
-  Components.MenuDropDown = FauxtonAPI.View.extend({
-    template: "addons/fauxton/templates/menu_dropdown",
-    className: "dropdown",
-    initialize: function (options) {
-      this.links = options.links;
-      this.icon = options.icon || "fonticon-plus-circled";
-      this.setUpEvents();
-    },
-    setUpEvents: function () {
-      this.events = {};
-      _.each(this.links, function (parentLink) {
-        _.each(parentLink.links, function (link) {
-          if (!link.trigger) { return; }
-          this.events['click .' + link.icon] = "triggerEvent";
-        }, this);
-      }, this);
-    },
-    triggerEvent: function (e) {
-      e.preventDefault();
-      var eventTrigger = $(e.currentTarget).attr('triggerEvent');
-      FauxtonAPI.Events.trigger(eventTrigger);
-    },
-    update: function (links) {
-      this.links = links;
-      this.render();
-    },
-    serialize: function () {
-      return {
-        links: this.links,
-        icon: this.icon
-      };
     }
   });
 

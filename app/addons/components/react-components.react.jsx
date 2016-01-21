@@ -1350,7 +1350,15 @@ function (app, FauxtonAPI, React, Stores, FauxtonComponents, ace, beautifyHelper
     MenuDropDown: MenuDropDown,
     Tray: Tray,
     TrayContents: TrayContents,
-    ApiBarController: ApiBarController
+    ApiBarController: ApiBarController,
+
+    renderMenuDropDown: function (el, opts) {
+      React.render(<MenuDropDown icon="fonticon-cog" links={opts.links} />, el);
+    },
+
+    removeMenuDropDown: function (el) {
+      React.unmountComponentAtNode(el);
+    },
   };
 
 });
