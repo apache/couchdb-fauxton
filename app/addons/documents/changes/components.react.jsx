@@ -17,11 +17,15 @@ define([
   'addons/documents/changes/actions',
   'addons/documents/changes/stores',
   'addons/fauxton/components.react',
+  'addons/components/react-components.react',
+
   'plugins/prettify'
-], function (app, FauxtonAPI, React, Actions, Stores, Components) {
+], function (app, FauxtonAPI, React, Actions, Stores, Components, ReactComponents) {
 
   var changesStore = Stores.changesStore;
   var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
+
+  var BadgeList = ReactComponents.BadgeList;
 
   // the top-level component for the Changes Filter section. Handles hiding/showing of the filters form
   var ChangesHeaderController = React.createClass({
@@ -118,12 +122,6 @@ define([
       Actions.removeFilter(label);
     },
 
-    getFilters: function () {
-      return _.map(this.state.filters, function (filter) {
-        return <Filter key={filter} label={filter} removeFilter={this.removeFilter} />;
-      }, this);
-    },
-
     addFilter: function (newFilter) {
       if (_.isEmpty(newFilter)) {
         return;
@@ -155,7 +153,7 @@ define([
               </div>
               <AddFilterForm tooltip={this.props.tooltip} filter={this.state.filter} addFilter={this.addFilter}
                 hasFilter={this.hasFilter} />
-              <ul className="filter-list">{this.getFilters()}</ul>
+              <BadgeList elements={this.state.filters} removeBadge={this.removeFilter} />
             </div>
             <div className="changes-auto-update">
             </div>
@@ -264,29 +262,6 @@ define([
       );
     }
   });
-
-
-  var Filter = React.createClass({
-    propTypes: {
-      label: React.PropTypes.string.isRequired,
-      removeFilter: React.PropTypes.func.isRequired
-    },
-
-    removeFilter: function (e) {
-      e.preventDefault();
-      this.props.removeFilter(this.props.label);
-    },
-
-    render: function () {
-      return (
-        <li>
-          <span className="label label-info">{this.props.label}</span>
-          <a href="#" className="label label-info js-remove-filter" onClick={this.removeFilter} data-bypass="true">&times;</a>
-        </li>
-      );
-    }
-  });
-
 
   var ChangesController = React.createClass({
     getInitialState: function () {
