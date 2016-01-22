@@ -145,21 +145,21 @@ module.exports = function (grunt) {
 
     watch: {
       js: {
-        files: initHelper.watchFiles(['.js'], ["./app/**/*.js", '!./app/load_addons.js', "./assets/**/*.js", "./test/**/*.js"]),
+        files: initHelper.getFileList(['.js'], ["./app/**/*.js", '!./app/load_addons.js', "./assets/**/*.js", "./test/**/*.js"]),
         tasks: []
       },
       jsx: {
-        files: initHelper.watchFiles(['.jsx'], ["./app/**/*.jsx", '!./app/load_addons.jsx', "./assets/**/*.jsx", "./test/**/*.jsx"]),
+        files: initHelper.getFileList(['.jsx'], ["./app/**/*.jsx", '!./app/load_addons.jsx', "./assets/**/*.jsx", "./test/**/*.jsx"]),
         tasks: []
       },
       style: {
-        files: initHelper.watchFiles(['.less', '.css'], ["./app/**/*.css", "./app/**/*.less", "./assets/**/*.css", "./assets/**/*.less"]),
+        files: initHelper.getFileList(['.less', '.css'], ["./app/**/*.css", "./app/**/*.less", "./assets/**/*.css", "./assets/**/*.less"]),
         tasks: ['clean:watch', 'dependencies', 'shell:build-less-debug']
       },
       html: {
         // the index.html is added in as a dummy file incase there is no
         // html dependancies this will break. So we need one include pattern
-        files: initHelper.watchFiles(['.html'], ['./index.html']),
+        files: initHelper.getFileList(['.html'], ['./index.html']),
         tasks: ['clean:watch', 'dependencies']
       },
       options: {
@@ -256,9 +256,9 @@ module.exports = function (grunt) {
     mochaSetup: {
       default: {
         files: {
-          src: initHelper.watchFiles(['[Ss]pec.js'], [
+          src: initHelper.getFileList(['[Ss]pec.js'], [
             './app/addons/**/*[Ss]pec.js',
-            './app/addons/**/*[Ss]pec.react.js',
+            './app/addons/**/*[Ss]pec.react.jsx',
             './app/core/**/*[Ss]pec.js'
           ])
         },

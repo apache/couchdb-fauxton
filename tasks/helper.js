@@ -46,11 +46,11 @@ exports.init = function (grunt) {
       this.readSettingsFile().deps.forEach(callback);
     },
 
-    watchFiles: function (fileExtensions, defaults) {
+    getFileList: function (fileExtensions, defaults) {
       return _.reduce(this.readSettingsFile().deps, function (files, dep) {
         if (dep.path) {
           _.each(fileExtensions, function (fileExtension) {
-            files.push(path.join(dep.path, '**/*' + fileExtension ));
+            files.push(path.join(dep.path, '**/*' + fileExtension));
           });
         }
         return files;
