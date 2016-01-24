@@ -16,6 +16,7 @@ app/addons/*
 !app/addons/fauxton
 !app/addons/databases
 !app/addons/documents
+!app/addons/documentation
 !app/addons/styletests
 !app/addons/cors
 !app/addons/setup

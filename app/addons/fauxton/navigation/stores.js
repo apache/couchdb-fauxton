@@ -30,15 +30,7 @@ function (app, FauxtonAPI, ActionTypes) {
       this.version = null;
       this.navLinks = [];
       this.footerNavLinks = [];
-      this.bottomNavLinks = [{
-        id: 'Documentation',
-        title: "Documentation",
-        icon: "fonticon-bookmark",
-        href: app.helpers.getDocUrl('GENERAL'),
-        bottomNav: true,
-        top: true,
-        target: '_blank'
-      }];
+      this.bottomNavLinks = [];
     },
 
     addLink: function (link) {

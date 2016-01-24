@@ -13,7 +13,8 @@
   { "name": "permissions" },
   { "name": "compaction" },
   { "name": "auth" },
-  { "name": "verifyinstall" }
+  { "name": "verifyinstall" },
+  { "name": "documentation" }
   ],
     "template": {
       "development": {

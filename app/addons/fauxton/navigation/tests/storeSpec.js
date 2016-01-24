@@ -73,7 +73,7 @@ define([
           link: link
         });
 
-        assert.equal(navBarStore.getBottomNavLinks()[1].id, link.id);
+        assert.equal(navBarStore.getBottomNavLinks()[0].id, link.id);
       });
 
       it('to top of bottom nav', function () {
@@ -167,7 +167,7 @@ define([
           link: link
         });
 
-        assert.equal(navBarStore.getBottomNavLinks().length, 1);
+        assert.equal(navBarStore.getBottomNavLinks().length, 0);
       });
 
       it('from footer nav links', function () {
