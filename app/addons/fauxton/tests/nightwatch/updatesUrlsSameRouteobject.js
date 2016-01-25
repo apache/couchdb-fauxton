@@ -22,12 +22,12 @@ module.exports = {
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_find')
       .clickWhenVisible('.control-toggle-api-url')
       .waitForElementVisible('.text-field-to-copy', waitTime, false)
-      .assert.value('.text-field-to-copy', 'http://localhost:8000/' + newDatabaseName + '/_find')
+      .assert.valueContains('.text-field-to-copy', newDatabaseName + '/_find')
       .clickWhenVisible('.edit-link')
       .waitForElementVisible('.prettyprint', waitTime, false)
       .clickWhenVisible('.control-toggle-api-url')
       .waitForElementVisible('.text-field-to-copy', waitTime, false)
-      .assert.value('.text-field-to-copy', 'http://localhost:8000/' + newDatabaseName + '/_index')
+      .assert.valueContains('.text-field-to-copy', newDatabaseName + '/_index')
       .end();
   }
 };
