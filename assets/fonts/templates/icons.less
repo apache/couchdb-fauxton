@@ -18,6 +18,8 @@
 /* had to add a custom template to the generator to get this to compile to append the proper path and specify  "url" instead of "font-url":
 https://github.com/seanbarclay/fontcustom/blob/1c3ad3d2633d3a8add39e8827115394e9ec02d88/lib/fontcustom/generator/template.rb
 */
+@fauxtonFont: "<%=font_name%>";
+
 <%= font_face(:LESS) %>
 
 [data-icon]:before { content: attr(data-icon); }
@@ -27,4 +29,4 @@ https://github.com/seanbarclay/fontcustom/blob/1c3ad3d2633d3a8add39e8827115394e9
 <%= glyph_properties %>
 }
 
-<%= glyphs %>
+<%= glyphs_less %>

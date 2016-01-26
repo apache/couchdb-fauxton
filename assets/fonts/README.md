@@ -4,7 +4,7 @@ This is a temp solution till Fontcustom fixes this [BUG](https://github.com/Font
 
 ### Installation
 
-Requires **Bundler.io**, **Ruby 1.9.2+**, **FontForge** with Python scripting.
+1. Requires **Bundler.io**, **Ruby 1.9.2+**, **FontForge** with Python scripting.
 
 ```sh
 # On Mac
@@ -17,18 +17,21 @@ $ bundle
 That should install the gem in a path like below:
 /Users/[USERNAME]/.rvm/gems/[RUBYVERSION]/bundler/gems/fontcustom
 
-Don't forget to update `fontcustom.yml` with the correct paths where it says `PUT_YOUR_PATH_HERE`.
+2. Update `fontcustom.yml` with the correct paths where it says `PUT_YOUR_PATH_HERE`.
 
-From there, you can run the command `$ bundle exec fontcustom compile` to compile the svgs located in the ./icons directory into updated fauxtonicon font files. 
+3. Update the `font_name` value to generate a new filename for the font files. This is necessary for browser cache-busting.
 
-It's setup to generate the following 
+4. Add your new font(s) in SVG format to the `assets/icons` folder.
+
+5. Run the command `bundle exec fontcustom compile`. That generates the following:
+
 - an `icons.less` file [LOCAL_COUCHDB_REPO]/src/couchdb-fauxton/assets/less
 - a `fauxtonicon-preview.html` preview [LOCAL_COUCHDB_REPO]/src/couchdb-fauxton/assets/fonts/styleguide
 - font files in [LOCAL_COUCHDB_REPO]/src/couchdb-fauxton/assets/fonts/
-  * `fauxtonicon.eot` 
-  * `fauxtonicon.svg`
-  * `fauxtonicon.ttf`
-  * `fauxtonicon.woff` 
+  * `[font name].eot` 
+  * `[font name].svg`
+  * `[font name].ttf`
+  * `[font name].woff` 
 
 
 For more info on Fontcustom, check out their documenation: [Fontcustom documentation](https://github.com/FontCustom/fontcustom)
