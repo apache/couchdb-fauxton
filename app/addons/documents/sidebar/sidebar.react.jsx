@@ -325,8 +325,8 @@ function (app, FauxtonAPI, React, ReactDOM, Stores, Actions, Components, Documen
     componentDidMount: function () {
       this.dbModal = new DeleteDBModal({
         database: this.props.database,
-        isSystemDatabase: (/^_/).test(this.props.database.id),
-        el: ReactDOM.findDOMNode(this)
+        el: ReactDOM.findDOMNode(this),
+        isSystemDatabase: app.utils.isSystemDatabase(this.props.database.id)
       });
 
       this.dbModal.render();

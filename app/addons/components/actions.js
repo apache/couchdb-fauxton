@@ -36,7 +36,43 @@ function (FauxtonAPI, ActionTypes) {
     });
   }
 
+  function showDeleteDatabaseModal (options) {
+    FauxtonAPI.dispatch({
+      type: ActionTypes.COMPONENTS_DATABASES_SHOWDELETE_MODAL,
+      options: options
+    });
+  }
+
+  function deleteDatabase (dbId) {
+    var url = FauxtonAPI.urls('databaseBaseURL', 'server', dbId, '');
+
+    $.ajax({
+      url: url,
+      dataType: 'json',
+      type: 'DELETE'
+    }).then(function () {
+      this.showDeleteDatabaseModal({ showModal: true });
+
+      FauxtonAPI.addNotification({
+        msg: 'The database <code>' + _.escape(dbId) + '</code> has been deleted.',
+        clear: true,
+        escape: false // beware of possible XSS when the message changes
+      });
+
+      Backbone.history.loadUrl(FauxtonAPI.urls('allDBs', 'app'));
+
+    }.bind(this)).fail(function (rsp, error, msg) {
+      FauxtonAPI.addNotification({
+        msg: 'Could not delete the database, reason ' + msg + '.',
+        type: 'error',
+        clear: true
+      });
+    });
+  }
+
   return {
+    deleteDatabase: deleteDatabase,
+    showDeleteDatabaseModal: showDeleteDatabaseModal,
     showAPIBar: showAPIBar,
     hideAPIBar: hideAPIBar,
     updateAPIBar: updateAPIBar

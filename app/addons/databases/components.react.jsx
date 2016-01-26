@@ -16,22 +16,30 @@ define([
   'react',
   'react-dom',
   'addons/components/react-components.react',
+  'addons/components/stores',
+  'addons/components/actions',
   'addons/fauxton/components.react',
+
   'addons/databases/stores',
   'addons/databases/resources',
   'addons/databases/actions',
   'helpers'
-], function (app, FauxtonAPI, React, ReactDOM, Components, ComponentsReact, Stores, Resources, Actions, Helpers) {
+], function (app, FauxtonAPI, React, ReactDOM, Components, ComponentsStore, ComponentsActions, FauxtonComponentsReact,
+  Stores, Resources, Actions, Helpers) {
 
   var ToggleHeaderButton = Components.ToggleHeaderButton;
   var databasesStore = Stores.databasesStore;
+  var deleteDbModalStore = ComponentsStore.deleteDbModalStore;
+  var DeleteDatabaseModal = Components.DeleteDatabaseModal;
+
 
   var DatabasesController = React.createClass({
 
     getStoreState: function () {
       return {
         collection: databasesStore.getCollection(),
-        loading: databasesStore.isLoading()
+        loading: databasesStore.isLoading(),
+        showDeleteDatabaseModal: deleteDbModalStore.getShowDeleteDatabaseModal()
       };
     },
 
@@ -41,10 +49,12 @@ define([
 
     componentDidMount: function () {
       databasesStore.on('change', this.onChange, this);
+      deleteDbModalStore.on('change', this.onChange, this);
     },
 
     componentWillUnmount: function () {
       databasesStore.off('change', this.onChange, this);
+      deleteDbModalStore.off('change', this.onChange, this);
     },
 
     onChange: function () {
@@ -55,7 +65,10 @@ define([
       var collection = this.state.collection;
       var loading = this.state.loading;
       return (
-        <DatabaseTable body={collection} loading={loading} />
+        <DatabaseTable
+          showDeleteDatabaseModal={this.state.showDeleteDatabaseModal}
+          body={collection}
+          loading={loading} />
       );
     }
   });
@@ -65,7 +78,9 @@ define([
     createRows: function () {
       return _.map(this.props.body, function (item, iteration) {
         return (
-          <DatabaseRow row={item} key={iteration} />
+          <DatabaseRow
+            row={item}
+            key={iteration} />
         );
       });
     },
@@ -77,6 +92,12 @@ define([
       });
     },
 
+    showDeleteDatabaseModal: function (name) {
+      ComponentsActions.showDeleteDatabaseModal({
+        showDeleteModal: !this.props.showDeleteDatabaseModal.showDeleteModal
+      });
+    },
+
     render: function () {
       if (this.props.loading) {
         return (
@@ -85,9 +106,13 @@ define([
           </div>
         );
       }
+
       var rows = this.createRows();
       return (
         <div className="view">
+          <DeleteDatabaseModal
+            showHide={this.showDeleteDatabaseModal}
+            showModal={this.props.showDeleteDatabaseModal} />
           <table className="databases table table-striped">
             <thead>
               <tr>
@@ -131,6 +156,10 @@ define([
       });
     },
 
+    showDeleteDatabaseModal: function (name) {
+      ComponentsActions.showDeleteDatabaseModal({showDeleteModal: true, dbId: name});
+    },
+
     render: function () {
       var row = this.props.row;
       var name = row.get("name");
@@ -160,10 +189,14 @@ define([
             <a
               className="db-actions btn fonticon-replicate set-replication-start"
               title={"Replicate " + name}
-              href={"#/replication/" + encoded}></a>&#160;
+              href={"#/replication/" + encoded}></a>
             <a
               className="db-actions btn icon-lock set-permissions"
               title={"Set permissions for " + name} href={"#/database/" + encoded + "/permissions"}></a>
+            <a
+              className="db-actions btn icon-trash"
+              onClick={this.showDeleteDatabaseModal.bind(this, name)}
+              title={'Delete ' + name} data-bypass="true"></a>
           </td>
         </tr>
       );
@@ -241,11 +274,11 @@ define([
             title="Create Database"
             fonticon="fonticon-new-database"
             text="Create Database" />
-          <ComponentsReact.Tray ref="newDbTray" className="new-database-tray">
+          <FauxtonComponentsReact.Tray ref="newDbTray" className="new-database-tray">
             <span className="add-on">Create Database</span>
             <input id="js-new-database-name" type="text" onKeyUp={this.onKeyUpInInput} ref="newDbName" className="input-xxlarge" placeholder="Name of database" />
             <a className="btn" id="js-create-database" onClick={this.onAddDatabase}>Create</a>
-          </ComponentsReact.Tray>
+          </FauxtonComponentsReact.Tray>
         </div>
       );
     }
@@ -349,7 +382,7 @@ define([
       return (
         <footer className="all-db-footer pagination-footer">
           <div id="database-pagination">
-            <ComponentsReact.Pagination page={page} total={total} urlPrefix={urlPrefix} />
+            <FauxtonComponentsReact.Pagination page={page} total={total} urlPrefix={urlPrefix} />
           </div>
         </footer>
       );
