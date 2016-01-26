@@ -84,6 +84,10 @@ function ($, _) {
       return 'doc';
     },
 
+    isSystemDatabase: function (id) {
+      return (/^_/).test(id);
+    },
+
     // Need this to work around backbone router thinking _design/foo
     // is a separate route. Alternatively, maybe these should be
     // treated separately. For instance, we could default into the

@@ -16,6 +16,8 @@ define([
   'react',
   'react-dom',
   'addons/components/stores',
+  'addons/components/actions',
+
   'addons/fauxton/components.react',
   'addons/documents/helpers',
   'ace/ace',
@@ -23,7 +25,8 @@ define([
   'libs/react-bootstrap'
 ],
 
-function (app, FauxtonAPI, React, ReactDOM, Stores, FauxtonComponents, Helpers, ace, beautifyHelper, ReactBootstrap) {
+function (app, FauxtonAPI, React, ReactDOM, Stores, Actions,
+  FauxtonComponents, Helpers, ace, beautifyHelper, ReactBootstrap) {
 
   var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
   var componentStore = Stores.componentStore;
@@ -1366,6 +1369,101 @@ function (app, FauxtonAPI, React, ReactDOM, Stores, FauxtonComponents, Helpers, 
     }
   });
 
+  var DeleteDatabaseModal = React.createClass({
+
+    getInitialState: function () {
+      return {
+        inputValue: '',
+        disableSubmit: true
+      };
+    },
+
+    propTypes: {
+      dbId: React.PropTypes.string,
+      showHide: React.PropTypes.func.isRequired
+    },
+
+    close: function () {
+      this.setState({
+        inputValue: '',
+        disableSubmit: true
+      });
+
+      this.props.showHide({showModal: false});
+    },
+
+    open: function () {
+      this.props.showHide({showModal: true});
+    },
+
+    onInputChange: function (e) {
+      this.setState({
+        inputValue: e.target.value
+      });
+
+      this.setState({
+        disableSubmit: e.target.value.trim() !== this.props.showModal.dbId.trim()
+      });
+    },
+
+    onDeleteClick: function (e) {
+      e.preventDefault();
+
+      Actions.deleteDatabase(this.props.showModal.dbId.trim());
+    },
+
+    onInputKeypress: function (e) {
+      if (e.keyCode === 13 && this.state.disableSubmit !== true) {
+        Actions.deleteDatabase(this.props.showModal.dbId.trim());
+      }
+    },
+
+    render: function () {
+      var isSystemDatabase = this.props.showModal.isSystemDatabase;
+      var showDeleteModal = this.props.showModal.showDeleteModal;
+      var dbId = this.props.showModal.dbId;
+      var errorMessage = this.state.errorMessage;
+
+      var warning = isSystemDatabase ? (
+        <p className="warning"><b>You are about to delete a system database, be careful!</b></p>
+      ) : null;
+
+      return (
+        <Modal dialogClassName="delete-db-modal" show={showDeleteModal} onHide={this.close}>
+          <Modal.Header closeButton={true}>
+            <Modal.Title>Delete Database</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            {warning}
+            <p>
+            You‘ve asked to <b>permanently delete</b> <code>{dbId}</code>.
+            Please enter the database name below to confirm the deletion of the
+            database and all documents and attachments within.
+            </p>
+            <input
+              type="text"
+              className="input-block-level"
+              onKeyUp={this.onInputKeypress}
+              onChange={this.onInputChange} />
+
+          </Modal.Body>
+          <Modal.Footer>
+            <button onClick={this.close} className="btn cancel-button">
+              <i className="icon fonticon-cancel-circled"></i> Cancel
+            </button>
+            <button
+              disabled={this.state.disableSubmit}
+              onClick={this.onDeleteClick}
+              className="btn btn-danger delete"
+            >
+              <i className="icon fonticon-ok-circled"></i> Delete
+            </button>
+          </Modal.Footer>
+        </Modal>
+      );
+    }
+  });
+
   return {
     BadgeList: BadgeList,
     Badge: Badge,
@@ -1385,14 +1483,13 @@ function (app, FauxtonAPI, React, ReactDOM, Stores, FauxtonComponents, Helpers, 
     Tray: Tray,
     TrayContents: TrayContents,
     ApiBarController: ApiBarController,
-
     renderMenuDropDown: function (el, opts) {
       ReactDOM.render(<MenuDropDown icon="fonticon-cog" links={opts.links} />, el);
     },
-
     removeMenuDropDown: function (el) {
       ReactDOM.unmountComponentAtNode(el);
     },
+    DeleteDatabaseModal: DeleteDatabaseModal
   };
 
 });
