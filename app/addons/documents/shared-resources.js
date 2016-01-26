@@ -26,6 +26,7 @@ define([
     documentation: function () {
       return FauxtonAPI.constants.DOC_URLS.GENERAL;
     },
+
     url: function (context) {
       if (context === undefined) {
         context = 'server';

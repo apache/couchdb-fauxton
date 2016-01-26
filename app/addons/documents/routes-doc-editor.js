@@ -123,6 +123,10 @@ function (app, FauxtonAPI, Helpers, Documents, Databases, Actions, ReactComponen
       this.isNewDoc = true;
     },
 
+    apiUrl: function () {
+      return [this.doc.url('apiurl'), this.doc.documentation()];
+    },
+
     crumbs: function () {
       var previousPage = Helpers.getPreviousPageForDoc(this.database);
       return [
