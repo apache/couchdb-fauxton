@@ -20,10 +20,10 @@ module.exports = {
     client
       .loginToGUI()
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
-      .waitForElementPresent('.header-toggle-button', waitTime, false)
+      .waitForElementPresent('.two-sides-toggle-button', waitTime, false)
       .clickWhenVisible('#changes')
       .waitForElementPresent('.js-changes-view', waitTime, false)
-      .assert.elementNotPresent('.header-toggle-button')
+      .assert.elementNotPresent('.two-sides-toggle-button')
       .end();
   },
 
