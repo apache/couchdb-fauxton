@@ -96,6 +96,11 @@ function (app, FauxtonAPI, Documents) {
     },
 
     apiurl: function (database, doc) {
+      if (!doc) {
+        // api url for creating a doc with POST
+        return window.location.origin + '/' + database;
+      }
+
       return window.location.origin + '/' + database + '/' + doc;
     },
 
