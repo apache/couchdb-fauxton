@@ -68,6 +68,22 @@ define([
       });
       assert.notOk(res.id);
     });
+
+    it('can return the doc url, if id given', function () {
+      doc = new Models.Doc({_id: 'scholle'}, {
+        database: {id: 'blerg', safeID: function () { return this.id; }}
+      });
+
+      assert.ok(/\/blerg/.test(doc.url('apiurl')));
+    });
+
+    it('will return the API url to create a new doc, if no doc exists yet', function () {
+      doc = new Models.Doc({}, {
+        database: {id: 'blerg', safeID: function () { return this.id; }}
+      });
+
+      assert.ok(/\/blerg/.test(doc.url('apiurl')));
+    });
   });
 
   describe('MangoIndex', function () {
