@@ -59,7 +59,7 @@ function (app, FauxtonAPI, Components, NotificationComponents, Actions, NavbarRe
 
   Fauxton.initialize = function () {
 
-    FauxtonAPI.RouteObject.on('beforeEstablish', function (routeObject) {
+    FauxtonAPI.RouteObject.on('afterEstablish', function (routeObject) {
       NavigationActions.setNavbarActiveLink(_.result(routeObject, 'selectedHeader'));
 
       // always attempt to render the API Bar. Even if it's hidden on initial load, it may be enabled later
