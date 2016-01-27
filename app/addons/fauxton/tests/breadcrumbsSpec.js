@@ -32,7 +32,7 @@ define([
       it('should not remove old breadcrumbs', function () {
         var removeViewSpy = sinon.spy(FauxtonAPI.masterLayout, 'removeView');
 
-        routeObj.triggerBroadcast('beforeEstablish');
+        routeObj.triggerBroadcast('afterEstablish');
         assert.notOk(removeViewSpy.called);
         FauxtonAPI.masterLayout.removeView.restore();
       });
@@ -64,21 +64,21 @@ define([
       it('should remove old breadcrumbs', function () {
         var removeViewSpy = sinon.spy(FauxtonAPI.masterLayout, 'removeView');
 
-        routeObj.triggerBroadcast('beforeEstablish');
+        routeObj.triggerBroadcast('afterEstablish');
         assert.ok(removeViewSpy.called);
       });
 
       it('should create new breadcrumbs', function () {
         var setViewSpy = sinon.spy(FauxtonAPI.masterLayout, 'setView');
 
-        routeObj.triggerBroadcast('beforeEstablish');
+        routeObj.triggerBroadcast('afterEstablish');
         assert.equal(setViewSpy.getCall(0).args[0], '#breadcrumbs');
       });
 
       it('should not create new breadcrumbs when no crumbs are on routeObject', function () {
         var removeViewSpy = sinon.spy(FauxtonAPI.masterLayout, 'setView');
         routeObj.crumbs = [];
-        routeObj.triggerBroadcast('beforeEstablish');
+        routeObj.triggerBroadcast('afterEstablish');
 
         assert.notOk(removeViewSpy.called);
       });
