@@ -1436,9 +1436,9 @@ function (app, FauxtonAPI, React, ReactDOM, Stores, Actions,
           <Modal.Body>
             {warning}
             <p>
-            You‘ve asked to <b>permanently delete</b> <code>{dbId}</code>.
-            Please enter the database name below to confirm the deletion of the
-            database and all documents and attachments within.
+            Warning: This action will permanently delete <code>{dbId}</code>.
+            To confirm the deletion of the database and all of the
+            database's documents, you must enter the database's name.
             </p>
             <input
               type="text"
