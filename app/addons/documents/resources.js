@@ -588,52 +588,5 @@ function (app, FauxtonAPI, Documents, PagingCollection) {
 
   });
 
-  Documents.setUpDropdown = function (database) {
-    var defaultMenuLinks = [{
-      links: [{
-        title: 'Replicate Database',
-        icon: 'fonticon-replicate',
-        url: FauxtonAPI.urls('replication', 'app', database.get('id'))
-      }, {
-        title: 'Delete',
-        icon: 'fonticon-trash',
-        trigger: 'database:delete'
-      }]
-    }];
-
-    defaultMenuLinks.push({
-      title: 'Add New',
-      links: Documents.getExtensionLinks(database)
-    });
-
-    return defaultMenuLinks;
-  };
-
-  Documents.getExtensionLinks = function (database) {
-    var newUrlPrefix = '#' + FauxtonAPI.urls('databaseBaseURL', 'app', database.get('id'));
-    var menuLinks = [{
-      title: 'New Doc',
-      url: newUrlPrefix + '/new',
-      icon: 'fonticon-plus-circled'
-    }, {
-      title: 'New View',
-      url: newUrlPrefix + '/new_view',
-      icon: 'fonticon-plus-circled'
-    }, {
-      title: app.i18n.en_US['new-mango-index'],
-      url: newUrlPrefix + '/_index',
-      icon: 'fonticon-plus-circled'
-    }];
-
-    return _.reduce(FauxtonAPI.getExtensions('sidebar:links'), function (menuLinks, link) {
-      menuLinks.push({
-        title: link.title,
-        url: newUrlPrefix + "/" + link.url,
-        icon: 'fonticon-plus-circled'
-      });
-      return menuLinks;
-    }, menuLinks);
-  };
-
   return Documents;
 });

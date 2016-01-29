@@ -11,12 +11,13 @@
 // the License.
 
 define([
+  'app',
   'api'
-], function (FauxtonAPI) {
+], function (app, FauxtonAPI) {
 
-  var Helpers = {};
 
-  Helpers.getPreviousPageForDoc = function (database, wasCloned) {
+
+  function getPreviousPageForDoc (database, wasCloned) {
     var previousPage = database.url('index'), // default to the current database's all_docs page
         lastPages = FauxtonAPI.router.lastPages;
 
@@ -31,16 +32,61 @@ define([
     }
 
     return previousPage;
-  };
+  }
 
-  Helpers.getPreviousPage = function (database) {
+  function getPreviousPage (database) {
     return database.url('index');
-  };
+  }
 
   // sequence info is an array in couchdb2 with two indexes. On couch 1.x, it's just a string / number
-  Helpers.getSeqNum = function (val) {
+  function getSeqNum (val) {
     return _.isArray(val) ? val[1] : val;
-  };
+  }
 
-  return Helpers;
+  function getNewButtonLinks (databaseName) {
+    var addLinks = FauxtonAPI.getExtensions('sidebar:links');
+    var newUrlPrefix = '#' + FauxtonAPI.urls('databaseBaseURL', 'app', databaseName);
+
+    var addNewLinks = _.reduce(addLinks, function (menuLinks, link) {
+      menuLinks.push({
+        title: link.title,
+        url: newUrlPrefix + '/' + link.url,
+        icon: 'fonticon-plus-circled'
+      });
+
+      return menuLinks;
+    }, [{
+      title: 'New Doc',
+      url: newUrlPrefix + '/new',
+      icon: 'fonticon-plus-circled'
+    }, {
+      title: 'New View',
+      url: newUrlPrefix + '/new_view',
+      icon: 'fonticon-plus-circled'
+    }, getMangoLink(databaseName)]);
+
+    return [{
+      title: 'Add New',
+      links: addNewLinks
+    }];
+  }
+
+  function getMangoLink (databaseName) {
+    var newUrlPrefix = '#' + FauxtonAPI.urls('databaseBaseURL', 'app', databaseName);
+
+    return {
+      title: app.i18n.en_US['new-mango-index'],
+      url: newUrlPrefix + '/_index',
+      icon: 'fonticon-plus-circled'
+    };
+  }
+
+
+  return {
+    getPreviousPageForDoc: getPreviousPageForDoc,
+    getPreviousPage: getPreviousPage,
+    getSeqNum: getSeqNum,
+    getNewButtonLinks: getNewButtonLinks,
+
+  };
 });

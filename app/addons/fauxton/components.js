@@ -27,23 +27,25 @@ define([
   "api",
   "ace_configuration",
   "spin",
+  'addons/components/react-components.react',
+  'addons/documents/helpers',
 
   "velocity.ui"
 ],
 
-function (app, FauxtonAPI, ace, spin) {
+function (app, FauxtonAPI, ace, spin, ReactComponents, Helpers) {
   var Components = FauxtonAPI.addon();
 
-  // setting up the left header with the backbutton used in Views and All docs
+  // XXX: move to /addons/documents - component is tightly coupled to documents/alldocs
   Components.LeftHeader = FauxtonAPI.View.extend({
     className: "header-left",
     template: "addons/fauxton/templates/header_left",
 
     initialize: function (options) {
-      this.dropdownEvents = options.dropdownEvents;
-      this.dropdownMenuLinks = options.dropdownMenu;
       this.lookaheadTrayOptions = options.lookaheadTrayOptions || null;
       this.crumbs = options.crumbs || [];
+
+      this.dbName = options.databaseName;
 
       // listen for breadcrumb clicks
       this.listenTo(FauxtonAPI.Events, 'breadcrumb:click', this.toggleTray);
@@ -86,14 +88,26 @@ function (app, FauxtonAPI, ace, spin) {
       }));
     },
 
+    getModififyDbLinks: function () {
+      return [{
+        title: 'Replicate Database',
+        icon: 'fonticon-replicate',
+        url: FauxtonAPI.urls('replication', 'app', this.dbName)
+      }, {
+        title: 'Delete',
+        icon: 'fonticon-trash',
+        trigger: 'database:delete'
+      }];
+    },
+
     setUpDropDownMenu: function () {
-      if (this.dropdownMenuLinks) {
-        this.dropdown = this.insertView("#header-dropdown-menu", new Components.MenuDropDown({
-          icon: 'fonticon-cog',
-          links: this.dropdownMenuLinks,
-          events: this.dropdownEvents
-        }));
-      }
+      var dropdownMenuLinks = Helpers.getNewButtonLinks(this.dbName);
+
+      dropdownMenuLinks = this.getModififyDbLinks().concat(dropdownMenuLinks);
+
+      this.dropdown = this.insertView("#header-dropdown-menu", new Components.MenuDropDownReact({
+        links: dropdownMenuLinks,
+      }));
     },
 
     setUpLookaheadTray: function () {
@@ -113,6 +127,19 @@ function (app, FauxtonAPI, ace, spin) {
     }
   });
 
+  Components.MenuDropDownReact = FauxtonAPI.View.extend({
+    initialize: function (options) {
+      this.options = options;
+    },
+
+    afterRender: function () {
+      ReactComponents.renderMenuDropDown(this.el, this.options);
+    },
+
+    cleanup: function () {
+      ReactComponents.removeMenuDropDown(this.el);
+    }
+  });
   Components.Breadcrumbs = FauxtonAPI.View.extend({
     className: "breadcrumb pull-left",
     tagName: "ul",
@@ -409,50 +436,6 @@ function (app, FauxtonAPI, ace, spin) {
           process(ids);
         }
       });
-    }
-  });
-
-
-  //Menu Drop down component. It takes links in this format and renders the Dropdown:
-  // [{
-  //  title: 'Section Title (optional)',
-  //  links: [{
-  //    icon: 'icon-class (optional)',
-  //    url: 'clickalble-url',
-  //    title: 'name of link'
-  //  }]
-  // }]
-  Components.MenuDropDown = FauxtonAPI.View.extend({
-    template: "addons/fauxton/templates/menu_dropdown",
-    className: "dropdown",
-    initialize: function (options) {
-      this.links = options.links;
-      this.icon = options.icon || "fonticon-plus-circled";
-      this.setUpEvents();
-    },
-    setUpEvents: function () {
-      this.events = {};
-      _.each(this.links, function (parentLink) {
-        _.each(parentLink.links, function (link) {
-          if (!link.trigger) { return; }
-          this.events['click .' + link.icon] = "triggerEvent";
-        }, this);
-      }, this);
-    },
-    triggerEvent: function (e) {
-      e.preventDefault();
-      var eventTrigger = $(e.currentTarget).attr('triggerEvent');
-      FauxtonAPI.Events.trigger(eventTrigger);
-    },
-    update: function (links) {
-      this.links = links;
-      this.render();
-    },
-    serialize: function () {
-      return {
-        links: this.links,
-        icon: this.icon
-      };
     }
   });
 

@@ -90,8 +90,8 @@ define([
 
     addLeftHeader: function () {
       this.leftheader = this.setView('#breadcrumbs', new Components.LeftHeader({
+        databaseName: this.database.safeID(),
         crumbs: this.getCrumbs(this.database),
-        dropdownMenu: Documents.setUpDropdown(this.database),
         lookaheadTrayOptions: {
           databaseCollection: this.allDatabases,
           toggleEventName: 'lookaheadTray:toggle',

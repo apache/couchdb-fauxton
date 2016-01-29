@@ -1109,18 +1109,34 @@ function (app, FauxtonAPI, React, Stores, FauxtonComponents, ace, beautifyHelper
 
     createSectionLinks: function (links) {
       if (!links) { return null; }
+
       return links.map(function (link, key) {
-        return (
-          <li key={key}>
-            <a className={link.icon ? 'icon ' + link.icon : ''}
-              data-bypass={link.external ? 'true' : ''}
-              href={link.url}
-              target={link.external ? '_blank' : ''}>
-              {link.title}
-            </a>
-          </li>
-        );
-      });
+        return this.createEntry(link, key);
+      }.bind(this));
+    },
+
+    onClick: function (eventToTrigger, e) {
+      // XXX softmigration react
+
+      if (!eventToTrigger) {
+        return;
+      }
+
+      FauxtonAPI.Events.trigger(eventToTrigger);
+    },
+
+    createEntry: function (link, key) {
+      return (
+        <li key={key}>
+          <a className={link.icon ? 'icon ' + link.icon : ''}
+            data-bypass={link.external ? 'true' : ''}
+            href={link.url}
+            onClick={this.onClick.bind(this, link.trigger)}
+            target={link.external ? '_blank' : ''}>
+            {link.title}
+          </a>
+        </li>
+      );
     },
 
     createSectionTitle: function (title) {
@@ -1135,20 +1151,28 @@ function (app, FauxtonAPI, React, Stores, FauxtonComponents, ace, beautifyHelper
 
     createSection: function () {
       return this.props.links.map(function (linkSection, key) {
-        return (
-          <ul className="dropdown-menu arrow" key={key} role="menu" aria-labelledby="dLabel">
-            {this.createSectionTitle(linkSection.title)}
-            {this.createSectionLinks(linkSection.links)}
-          </ul>
-        );
+        if (linkSection.title && linkSection.links) {
+          return ([
+            this.createSectionTitle(linkSection.title),
+            this.createSectionLinks(linkSection.links)
+          ]);
+        }
+
+        return this.createEntry(linkSection, 'el' + key);
+
       }.bind(this));
     },
 
     render: function () {
       return (
         <div className="dropdown">
-          <a className={"dropdown-toggle icon " + this.props.icon} data-toggle="dropdown" href="#" data-bypass="true"></a>
+          <a className={"dropdown-toggle icon " + this.props.icon}
+          data-toggle="dropdown"
+          href="#"
+          data-bypass="true"></a>
+          <ul className="dropdown-menu arrow" role="menu" aria-labelledby="dLabel">
             {this.createSection()}
+          </ul>
         </div>
       );
     }
@@ -1357,7 +1381,15 @@ function (app, FauxtonAPI, React, Stores, FauxtonComponents, ace, beautifyHelper
     MenuDropDown: MenuDropDown,
     Tray: Tray,
     TrayContents: TrayContents,
-    ApiBarController: ApiBarController
+    ApiBarController: ApiBarController,
+
+    renderMenuDropDown: function (el, opts) {
+      React.render(<MenuDropDown icon="fonticon-cog" links={opts.links} />, el);
+    },
+
+    removeMenuDropDown: function (el) {
+      React.unmountComponentAtNode(el);
+    },
   };
 
 });
