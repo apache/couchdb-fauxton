@@ -18,55 +18,20 @@ define([
   'addons/documents/sidebar/actions',
   'addons/components/react-components.react',
   'addons/documents/views',
+  'addons/documents/helpers',
 
   'plugins/prettify'
 ],
 
-function (app, FauxtonAPI, React, Stores, Actions, Components, DocumentViews) {
+function (app, FauxtonAPI, React, Stores, Actions, Components, DocumentViews, DocumentHelper) {
   var DeleteDBModal = DocumentViews.Views.DeleteDBModal;
   var store = Stores.sidebarStore;
   var LoadLines = Components.LoadLines;
 
   var MainSidebar = React.createClass({
 
-    getNewButtonLinks: function () {  //these are links for the sidebar '+' on All Docs and All Design Docs
-      var addLinks = FauxtonAPI.getExtensions('sidebar:links');
-      var databaseName = this.props.databaseName;
-      var newUrlPrefix = '#' + FauxtonAPI.urls('databaseBaseURL', 'app', databaseName);
-
-      var addNewLinks = _.reduce(addLinks, function (menuLinks, link) {
-        menuLinks.push({
-          title: link.title,
-          url: newUrlPrefix + '/' + link.url,
-          icon: 'fonticon-plus-circled'
-        });
-
-        return menuLinks;
-      }, [{
-        title: 'New Doc',
-        url: newUrlPrefix + '/new',
-        icon: 'fonticon-plus-circled'
-      }, {
-        title: 'New View',
-        url: newUrlPrefix + '/new_view',
-        icon: 'fonticon-plus-circled'
-      }, this.getMangoLink()]);
-
-      return [{
-        title: 'Add New',
-        links: addNewLinks
-      }];
-    },
-
-    getMangoLink: function () {
-      var databaseName = this.props.databaseName;
-      var newUrlPrefix = '#' + FauxtonAPI.urls('databaseBaseURL', 'app', databaseName);
-
-      return {
-        title: app.i18n.en_US['new-mango-index'],
-        url: newUrlPrefix + '/_index',
-        icon: 'fonticon-plus-circled'
-      };
+    getNewButtonLinks: function () {  // these are links for the sidebar '+' on All Docs and All Design Docs
+      return DocumentHelper.getNewButtonLinks(this.props.databaseName);
     },
 
     buildDocLinks: function () {
@@ -79,7 +44,6 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, DocumentViews) {
             <a id={link.url} href={base + link.url}>{link.title}</a>
           </li>
         );
-
       });
     },
 
