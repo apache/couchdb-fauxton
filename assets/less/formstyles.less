@@ -11,6 +11,7 @@
 //  the License.
 
 @import "variables.less";
+@import "icons.less";
 
 input[type=text],
 input[type=password] {
@@ -186,9 +187,11 @@ form.view-query-update, form.view-query-save {
     border: none;
   }
 
+  input[type=checkbox]:checked + label {
+    .fonticon-ok;
+  }
   input[type=checkbox]:checked + label:before {
-    font-family: "fauxtonicon";
-    content: "\f13e";
+    font-family: @fauxtonFont;
     font-size: 12px;
     background-color: inherit;
     border: 2px solid #7C8085;

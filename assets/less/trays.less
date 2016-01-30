@@ -11,6 +11,8 @@
 //  the License.
 
 @import "bootstrap/mixins.less";
+@import "icons.less";
+
 
 .hide-tray {
   display: none;
@@ -96,8 +98,8 @@
 }
 
 .lookahead-tray-link:after {
-  content: "\f144";
-  font-family: "fauxtonicon";
+  content: @icon-play;
+  font-family: @fauxtonFont;
   font-style: normal;
   font-weight: normal;
   font-variant: normal;
@@ -112,7 +114,7 @@
   color: #777;
   margin: 8px;
   display: inline-block;
-  position:absolute;
+  position: absolute;
   .rotate(90deg);
 }
 
