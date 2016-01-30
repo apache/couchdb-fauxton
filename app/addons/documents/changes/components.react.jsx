@@ -292,7 +292,7 @@ define([
       var msg = '';
       if (this.state.isShowingSubset) {
         var numChanges = this.state.changes.length;
-        msg = <p className="changes-result-limit">Limiting results to latest <b>{numChanges}</b> changes.</p>;
+        msg = <p className="changes-result-limit">Results are limited to the <b>{numChanges}</b> most recent updates.</p>;
       }
       return msg;
     },

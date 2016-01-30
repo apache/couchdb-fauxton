@@ -53,7 +53,7 @@ function (app, FauxtonAPI, Auth, AuthActions, Components, ClusterActions) {
 
     createAdminForNode: function () {
       ClusterActions.fetchNodes();
-      this.crumbs = [{name: 'Create Admin', link: '#'}];
+      this.crumbs = [{name: 'User Account Management', link: '#'}];
       this.setComponent('#dashboard-content', Components.CreateAdminForm, { loginAfter: true });
     }
   });
@@ -109,7 +109,7 @@ function (app, FauxtonAPI, Auth, AuthActions, Components, ClusterActions) {
       this.setComponent('#dashboard-content', Components.CreateAdminForm, { loginAfter: false });
     },
 
-    crumbs: [{name: 'User Management', link: '#'}]
+    crumbs: [{name: 'User Account Management', link: '#'}]
   });
 
   Auth.RouteObjects = [AuthRouteObject, UserRouteObject];
