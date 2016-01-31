@@ -351,6 +351,7 @@ function (app, FauxtonAPI, React, Stores, FauxtonComponents, ace, beautifyHelper
 
     beautify: function (code) {
       this.setState({ code: code });
+      this.getEditor().setValue(code);
     },
 
     update: function () {
@@ -963,7 +964,7 @@ function (app, FauxtonAPI, React, Stores, FauxtonComponents, ace, beautifyHelper
       return (
         <button
           onClick={this.beautify}
-          className="beautify beautify_map btn btn-primary beautify-tooltip"
+          className="beautify beautify_map btn btn-primary btn-small beautify-tooltip"
           type="button"
           data-toggle="tooltip"
           title="Reformat your minified code to make edits to it."
