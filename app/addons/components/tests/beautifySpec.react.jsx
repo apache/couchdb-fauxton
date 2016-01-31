@@ -21,7 +21,7 @@ define([
   var TestUtils = React.addons.TestUtils;
 
   describe('Beautify', function () {
-    var container, beautifyEl, reduceStub;
+    var container, beautifyEl;
 
     beforeEach(function () {
       container = document.createElement('div');

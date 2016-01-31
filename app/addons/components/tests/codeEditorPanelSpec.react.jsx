@@ -18,6 +18,7 @@ define([
 
   var assert = utils.assert;
   var TestUtils = React.addons.TestUtils;
+  var codeNoNewlines = 'function (doc) {emit(doc._id, 1);}';
   var code = 'function (doc) {\n  emit(doc._id, 1);\n}';
 
   describe('CodeEditorPanel', function () {
@@ -58,6 +59,26 @@ define([
           container
         );
         assert.equal($(codeEditorEl.getDOMNode()).find('.zen-editor-icon').length, 0);
+      });
+    });
+
+    describe('Beautify', function () {
+      it('confirm clicking beautify actually works within context of component', function () {
+        var container = document.createElement('div');
+        var codeEditorEl = TestUtils.renderIntoDocument(
+          <ReactComponents.CodeEditorPanel
+            defaultCode={codeNoNewlines}
+          />,
+          container
+        );
+
+        // confirm there are no newlines in the code at this point
+        assert.equal(codeEditorEl.getValue().match(/\n/g), null);
+
+        TestUtils.Simulate.click($(React.findDOMNode(codeEditorEl)).find('.beautify')[0]);
+
+        // now confirm newlines are found
+        assert.equal(codeEditorEl.getValue().match(/\n/g).length, 2);
       });
     });
 
