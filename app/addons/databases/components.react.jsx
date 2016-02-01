@@ -54,7 +54,7 @@ define([
 
     componentWillUnmount: function () {
       databasesStore.off('change', this.onChange, this);
-      deleteDbModalStore.on('change', this.onChange, this);
+      deleteDbModalStore.off('change', this.onChange, this);
     },
 
     onChange: function () {
