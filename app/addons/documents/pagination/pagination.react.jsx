@@ -93,23 +93,38 @@ define([
 
     var PerPageSelector = React.createClass({
 
+      propTypes: {
+        perPage: React.PropTypes.number.isRequired,
+        perPageChange: React.PropTypes.func.isRequired,
+        label: React.PropTypes.string,
+        options: React.PropTypes.array
+      },
+
+      getDefaultProps: function () {
+        return {
+          label: 'Documents per page: ',
+          options: [5, 10, 20, 30, 50, 100]
+        };
+      },
+
       perPageChange: function (e) {
         var perPage = parseInt(e.target.value, 10);
         this.props.perPageChange(perPage);
+      },
+
+      getOptions: function () {
+        return _.map(this.props.options, function (i) {
+          return (<option value={i} key={i}>{i}</option>);
+        });
       },
 
       render: function () {
         return (
           <div id="per-page">
             <label htmlFor="select-per-page" className="drop-down inline">
-              Documents per page: &nbsp;
+              {this.props.label} &nbsp;
               <select id="select-per-page" onChange={this.perPageChange} value={this.props.perPage.toString()} className="input-small">
-                <option value="5">5</option>
-                <option value="10">10</option>
-                <option value="20">20</option>
-                <option value="30">30</option>
-                <option value="50">50</option>
-                <option value="100">100</option>
+                {this.getOptions()}
               </select>
             </label>
           </div>

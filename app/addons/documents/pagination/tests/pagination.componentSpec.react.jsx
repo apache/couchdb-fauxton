@@ -30,12 +30,6 @@ define([
       beforeEach(function () {
         perPageChange = sinon.spy();
         container = document.createElement('div');
-        selectorEl = TestUtils.renderIntoDocument(
-          <Views.PerPageSelector
-            perPageChange={perPageChange}
-            perPage={10} />,
-          container
-        );
       });
 
       afterEach(function () {
@@ -43,6 +37,12 @@ define([
       });
 
       it('on new select calls callback with new page size', function () {
+        selectorEl = TestUtils.renderIntoDocument(
+          <Views.PerPageSelector
+            perPageChange={perPageChange}
+            perPage={10} />,
+          container
+        );
         var selectEl = $(ReactDOM.findDOMNode(selectorEl)).find('#select-per-page')[0];
         var perPage = 5;
         TestUtils.Simulate.change(selectEl, {
@@ -53,6 +53,35 @@ define([
 
         assert.ok(perPageChange.calledWith(perPage));
       });
+
+      it('applies custom label', function () {
+        var customLabel = 'alphabet soup';
+        selectorEl = TestUtils.renderIntoDocument(
+          <Views.PerPageSelector
+            label={customLabel}
+            perPageChange={perPageChange}
+            perPage={10} />,
+          container
+        );
+        var regexp = new RegExp(customLabel);
+        assert.ok(regexp.test(React.findDOMNode(selectorEl).outerHTML));
+      });
+
+      it('applies custom options', function () {
+        selectorEl = TestUtils.renderIntoDocument(
+          <Views.PerPageSelector
+            options={[1, 2, 3]}
+            perPageChange={perPageChange}
+            perPage={10} />,
+          container
+        );
+        var options = $(React.findDOMNode(selectorEl)).find('option');
+        assert.equal(options.length, 3);
+        assert.equal(options[0].innerHTML, "1");
+        assert.equal(options[1].innerHTML, "2");
+        assert.equal(options[2].innerHTML, "3");
+      });
+
     });
 
     describe('TableControls', function () {
