@@ -382,7 +382,7 @@ define([
       return (
         <footer className="all-db-footer pagination-footer">
           <div id="database-pagination">
-            <ComponentsReact.Pagination page={page} total={total} urlPrefix={urlPrefix} />
+            <FauxtonComponentsReact.Pagination page={page} total={total} urlPrefix={urlPrefix} />
           </div>
         </footer>
       );
