@@ -13,28 +13,30 @@
 define([
   "app",
   "api",
-  "addons/styletests/views"
+  'addons/styletests/styletests.react'
 ],
 
-function (app, FauxtonAPI, Views) {
+function (app, FauxtonAPI, StyleTests) {
 
   var TestRouteObject = FauxtonAPI.RouteObject.extend({
     layout: "one_pane",
     routes: {
       "tests": "initialize"
     },
+
     selectedHeader: 'theme tests',
+
     crumbs:[],
+
     apiUrl: function () {
       return false;
     },
+
     initialize: function () {
-      this.setView("#dashboard-content", new Views.tests({}));
+      this.setComponent('#dashboard-content', StyleTests.StyleTests);
     }
   });
 
-  Views.RouteObjects = [TestRouteObject];
-
-  return Views;
+  return {RouteObjects: [TestRouteObject]};
 
 });
