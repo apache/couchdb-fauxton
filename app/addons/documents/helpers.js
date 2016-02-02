@@ -84,11 +84,24 @@ define([
     return JSON.parse('"' + str + '"');   // this ensures newlines are converted
   }
 
+  function getModifyDatabaseLinks (databaseName) {
+    return [{
+      title: 'Replicate Database',
+      icon: 'fonticon-replicate',
+      url: FauxtonAPI.urls('replication', 'app', databaseName)
+    }, {
+      title: 'Delete',
+      icon: 'fonticon-trash',
+      trigger: 'database:delete'
+    }];
+  }
+
   return {
     getPreviousPageForDoc: getPreviousPageForDoc,
     getPreviousPage: getPreviousPage,
     getSeqNum: getSeqNum,
     getNewButtonLinks: getNewButtonLinks,
+    getModifyDatabaseLinks: getModifyDatabaseLinks,
     parseJSON: parseJSON
   };
 });
