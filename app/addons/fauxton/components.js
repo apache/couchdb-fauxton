@@ -89,15 +89,7 @@ function (app, FauxtonAPI, ace, spin, ReactComponents, Helpers) {
     },
 
     getModififyDbLinks: function () {
-      return [{
-        title: 'Replicate Database',
-        icon: 'fonticon-replicate',
-        url: FauxtonAPI.urls('replication', 'app', this.dbName)
-      }, {
-        title: 'Delete',
-        icon: 'fonticon-trash',
-        trigger: 'database:delete'
-      }];
+      return Helpers.getModifyDatabaseLinks(this.dbName);
     },
 
     setUpDropDownMenu: function () {
