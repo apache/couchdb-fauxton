@@ -28,6 +28,7 @@ module.exports = {
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs?include_docs=true')
 
       .clickWhenVisible('.alternative-header .two-sides-toggle-button button:last-child')
+      .waitForElementVisible('.tableview-checkbox-cell', client.globals.maxWaitTime, false)
       .getText('.table', function (result) {
         var data = result.value;
 
@@ -58,6 +59,7 @@ module.exports = {
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
 
       .clickWhenVisible('.alternative-header .two-sides-toggle-button button:last-child')
+      .waitForElementVisible('.tableview-checkbox-cell', client.globals.maxWaitTime, false)
       .getText('.table', function (result) {
         var data = result.value;
 

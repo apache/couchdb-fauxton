@@ -20,10 +20,12 @@ define([
   'addons/documents/resources',
   'addons/documents/mango/mango.helper',
   'addons/documents/resources',
+  'addons/databases/resources',
+
 ],
 
 function (app, FauxtonAPI, ActionTypes, HeaderActionTypes, PaginationActionTypes,
-  Documents, MangoHelper, Resources) {
+  Documents, MangoHelper, Resources, DatabaseResources) {
 
   var Stores = {};
 
@@ -36,9 +38,14 @@ function (app, FauxtonAPI, ActionTypes, HeaderActionTypes, PaginationActionTypes
     },
 
     reset: function () {
-      this._collection = [];
+      this._collection = new Resources.AllDocs([], {
+        database: {
+          safeID: function () { return ''; }
+        }, params: {limit: 5}
+      });
+
       this._filteredCollection = [];
-      this._bulkDeleteDocCollection = new Resources.BulkDeleteDocCollection([], {}),
+      this._bulkDeleteDocCollection = new Resources.BulkDeleteDocCollection([], {});
 
       this.clearSelectedItems();
       this._isLoading = false;
@@ -489,11 +496,11 @@ function (app, FauxtonAPI, ActionTypes, HeaderActionTypes, PaginationActionTypes
     getTableViewData: function () {
       var res;
       var schema;
-      var database;
       var hasIdOrRev;
       var hasIdOrRev;
       var prioritizedFields;
       var hasBulkDeletableDoc;
+      var database = this.getDatabase();
       var isView = !!this._collection.view;
 
       // softmigration remove backbone
@@ -578,14 +585,14 @@ function (app, FauxtonAPI, ActionTypes, HeaderActionTypes, PaginationActionTypes
       this._notSelectedFields = notSelectedFields;
       this._tableSchema = schema;
 
-      database = this.getDatabase().safeID();
+      var dbId = database.safeID();
 
       res = data.map(function (doc) {
         var safeId = app.utils.getSafeIdForDoc(doc._id || doc.id); // inconsistent apis for GET between mango and views
         var url;
 
         if (safeId) {
-          url = FauxtonAPI.urls('document', 'app', database, safeId);
+          url = FauxtonAPI.urls('document', 'app', database, dbId);
         }
 
         return {
