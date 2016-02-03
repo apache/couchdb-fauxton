@@ -38,10 +38,8 @@ function (app, FauxtonAPI, ActionTypes, HeaderActionTypes, PaginationActionTypes
     },
 
     reset: function () {
-      this._collection = new Resources.AllDocs([], {
-        database: {
-          safeID: function () { return ''; }
-        }, params: {limit: 5}
+      this._collection = new Backbone.Collection.extend({
+        url: ''
       });
 
       this._filteredCollection = [];
