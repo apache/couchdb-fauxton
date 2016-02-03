@@ -235,8 +235,7 @@ function (app, FauxtonAPI, React, ReactDOM, Stores, FauxtonComponents, Helpers, 
     propTypes: {
       selectValue: React.PropTypes.string.isRequired,
       selectId: React.PropTypes.string.isRequired,
-      selectChange: React.PropTypes.func.isRequired,
-      selectContent: React.PropTypes.object.isRequired
+      selectChange: React.PropTypes.func.isRequired
     },
 
     render: function () {
