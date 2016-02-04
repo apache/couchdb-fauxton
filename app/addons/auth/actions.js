@@ -10,9 +10,9 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 define([
-  'api',
-  'addons/auth/actiontypes',
-  'addons/cluster/cluster.stores'
+  '../../core/api',
+  './actiontypes',
+  '../cluster/cluster.stores'
 ],
 function (FauxtonAPI, ActionTypes, ClusterStore) {
 

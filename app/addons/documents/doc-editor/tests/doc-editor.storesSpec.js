@@ -11,10 +11,10 @@
 // the License.
 
 define([
-  'app',
-  'api',
-  'addons/documents/doc-editor/stores',
-  'testUtils'
+  '../../../../app',
+  '../../../../core/api',
+  '../stores',
+  '../../../../../test/mocha/testUtils',
 ], function (app, FauxtonAPI, Stores, utils) {
   FauxtonAPI.router = new FauxtonAPI.Router([]);
 

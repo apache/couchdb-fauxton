@@ -10,16 +10,16 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 define([
-  'api',
+  '../api',
   'react',
   'react-dom',
-  'testUtils'
-], function (FauxtonAPI, React, ReactDOM, testUtils) {
-  var assert = testUtils.assert,
-      restore = testUtils.restore,
-      RouteObject = FauxtonAPI.RouteObject,
-      TestUtils = React.addons.TestUtils;
-
+  '../../../test/mocha/testUtils',
+  'react-addons-test-utils',
+  'sinon'
+], function (FauxtonAPI, React, ReactDOM, utils, TestUtils, sinon) {
+  var assert = utils.assert,
+      restore = utils.restore,
+      RouteObject = FauxtonAPI.RouteObject;
 
   describe('RouteObjects', function () {
 
@@ -60,7 +60,7 @@ define([
         setTemplateSpy.returns(promise);
         testRouteObject.renderWith('the-route', mockLayout, 'args');
 
-        assert.ok(setTemplateSpy.calledOnce, 'setTempalte was called');
+        assert.ok(setTemplateSpy.calledOnce);
       });
 
       it('Should not set template after first render', function () {
@@ -159,6 +159,7 @@ define([
         it('removes existing view for selector', function () {
           var fakeReactComponent = React.createElement('div');
           var fakeSelector = '.fake-selector';
+          console.log('WOOOOOOO');
           var spy = sinon.spy(testRouteObject, 'removeView');
 
           testRouteObject.setComponent(fakeSelector, fakeReactComponent);

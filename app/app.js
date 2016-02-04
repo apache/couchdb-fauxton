@@ -12,22 +12,22 @@
 
 define([
   // application.
-  'initialize',
+  './initialize',
 
   // libraries
   'jquery',
   'lodash',
   'backbone',
   'bootstrap',
-  'helpers',
-  'core/utils',
+  './helpers',
+  './core/utils',
 
   // modules
-  'core/api',
-  'core/couchdbSession',
+  './core/api',
+  './core/couchdbSession',
 
   // plugins
-  'plugins/backbone.layoutmanager'
+  'backbone.layoutmanager'
 ],
 
 function (app, $, _, Backbone, Bootstrap, Helpers, Utils, FauxtonAPI, Couchdb) {

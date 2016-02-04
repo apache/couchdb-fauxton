@@ -10,31 +10,19 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-define('ace_configuration', ["app", "ace/ace"], function (app, ace) {
-  var path = './dashboard.assets/js/ace';
-
-  var config = require("ace/config");
-  config.set("packaged", true);
-  config.set("workerPath", path);
-  config.set("modePath", path);
-  config.set("themePath", path);
-  return ace;
-});
-
 define([
-  "app",
+  "../../app",
   // Libs
-  "api",
-  "ace_configuration",
-  "spin",
-  'addons/components/react-components.react',
-  'addons/components/actions',
-  'addons/documents/helpers',
+  "../../core/api",
+  "../../../assets/js/libs/spin.min",
+  '../components/react-components.react',
+  '../components/actions',
+  '../documents/helpers',
 
-  "velocity.ui"
+  "velocity-animate/velocity.ui"
 ],
 
-function (app, FauxtonAPI, ace, spin, ReactComponents, ComponentsActions, Helpers) {
+function (app, FauxtonAPI, spin, ReactComponents, ComponentsActions, Helpers) {
   var Components = FauxtonAPI.addon();
 
   // XXX: move to /addons/documents - component is tightly coupled to documents/alldocs

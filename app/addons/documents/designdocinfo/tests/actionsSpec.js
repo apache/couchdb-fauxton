@@ -11,10 +11,11 @@
 // the License.
 
 define([
-  'api',
-  'addons/documents/designdocinfo/actions',
-  'testUtils'
-], function (FauxtonAPI, Actions, testUtils) {
+  '../../../../core/api',
+  '../actions',
+  '../../../../../test/mocha/testUtils',
+  'sinon'
+], function (FauxtonAPI, Actions, testUtils, sinon) {
   var assert = testUtils.assert;
   var restore = testUtils.restore;
 

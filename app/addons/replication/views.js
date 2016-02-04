@@ -11,10 +11,10 @@
 // the License.
 
 define([
-  'app',
-  'api',
-  'addons/fauxton/components',
-  'addons/replication/resources'
+  '../../app',
+  '../../core/api',
+  '../fauxton/components',
+  './resources'
 ],
 function (app, FauxtonAPI, Components, Replication) {
   var View = {},

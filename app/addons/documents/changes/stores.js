@@ -11,9 +11,9 @@
 // the License.
 
 define([
-  'api',
-  'addons/documents/changes/actiontypes',
-  'addons/documents/helpers'
+  '../../../core/api',
+  './actiontypes',
+  '../helpers'
 ], function (FauxtonAPI, ActionTypes, Helpers) {
 
 

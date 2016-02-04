@@ -10,11 +10,12 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 define([
-  'app',
+  '../../../app',
   'testUtils',
-  'api',
-  'addons/cors/actions',
-], function (app, testUtils, FauxtonAPI, Actions) {
+  '../../../core/api',
+  '../actions',
+  'sinon'
+], function (app, testUtils, FauxtonAPI, Actions, sinon) {
   var assert = testUtils.assert;
 
   describe('CORS actions', function () {

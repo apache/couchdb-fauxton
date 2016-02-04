@@ -1,14 +1,14 @@
 define([
-  'api',
-  'app',
+  '../../../core/api',
+  '../../../app',
   'react',
   'react-dom',
-  'addons/documents/doc-editor/actions',
-  'addons/documents/doc-editor/stores',
-  'addons/fauxton/components.react',
-  'addons/components/react-components.react',
-  'libs/react-bootstrap',
-  'helpers'
+  './actions',
+  './stores',
+  '../../fauxton/components.react',
+  '../../components/react-components.react',
+  'react-bootstrap',
+  '../../../helpers',
 ], function (FauxtonAPI, app, React, ReactDOM, Actions, Stores, FauxtonComponents, GeneralComponents, ReactBootstrap, Helpers) {
 
   var store = Stores.docEditorStore;

@@ -11,15 +11,16 @@
 // the License.
 
 define([
-  'api',
-  'addons/documents/index-editor/actions',
-  'addons/documents/resources',
-  'addons/documents/index-editor/actiontypes',
-  'addons/documents/index-editor/stores',
-  'testUtils',
-  'addons/documents/index-results/actions',
-  'addons/documents/base'
-], function (FauxtonAPI, Actions, Documents, ActionTypes, Stores, testUtils, IndexResultsActions) {
+  '../../../../core/api',
+  '../actions',
+  '../../resources',
+  '../actiontypes',
+  '../stores',
+  '../../../../../test/mocha/testUtils',
+  '../../index-results/actions',
+  'sinon',
+  '../../../documents/base'
+], function (FauxtonAPI, Actions, Documents, ActionTypes, Stores, testUtils, IndexResultsActions, sinon) {
   var assert = testUtils.assert;
   var restore = testUtils.restore;
 

@@ -12,7 +12,7 @@
 
 define([
   'backbone',
-  'plugins/backbone.layoutmanager'
+  'backbone.layoutmanager'
 ], function (Backbone) {
 
   // A wrapper of the main Backbone.layoutmanager

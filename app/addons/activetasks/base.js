@@ -11,9 +11,9 @@
 // the License.
 
 define([
-  'app',
-  'api',
-  'addons/activetasks/routes'
+  '../../app',
+  '../../core/api',
+  './routes'
 ],
 
 function (app, FauxtonAPI, Activetasks) {

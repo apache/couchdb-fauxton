@@ -11,8 +11,8 @@
 // the License.
 
 define([
-  'api',
-  'addons/cluster/cluster.actiontypes'
+  '../../core/api',
+  './cluster.actiontypes'
 ], function (FauxtonAPI, ActionTypes) {
 
   var NodesStore = FauxtonAPI.Store.extend({

@@ -11,18 +11,18 @@
 // the License.
 
 define([
-  "app",
-  "api",
-  "addons/fauxton/components",
-  "addons/documents/resources",
-  "addons/databases/resources",
+  "../../app",
+  "../../core/api",
+  "../fauxton/components",
+  "./resources",
+  "../databases/resources",
 
   // Views
-  "addons/documents/queryoptions/queryoptions.react",
-  "addons/documents/queryoptions/actions",
+  "./queryoptions/queryoptions.react",
+  "./queryoptions/actions",
 
   //plugins
-  "plugins/prettify"
+  "../../../assets/js/plugins/prettify"
 ],
 
 function (app, FauxtonAPI, Components, Documents, Databases, QueryOptions, QueryActions) {

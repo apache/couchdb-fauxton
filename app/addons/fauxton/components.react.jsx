@@ -11,15 +11,16 @@
 // the License.
 
 define([
-  'app',
-  'api',
+  '../../app',
+  '../../core/api',
   'react',
   'react-dom',
-  'ZeroClipboard',
-  'libs/react-bootstrap',
+  'zeroclipboard',
+  'react-bootstrap',
 
   // needed to run the test individually. Don't remove
-  'velocity.ui'
+  "velocity-animate/velocity",
+  "velocity-animate/velocity.ui"
 ],
 
 function (app, FauxtonAPI, React, ReactDOM, ZeroClipboard, ReactBootstrap) {
@@ -50,7 +51,7 @@ function (app, FauxtonAPI, React, ReactDOM, ZeroClipboard, ReactBootstrap) {
     },
 
     componentWillMount: function () {
-      ZeroClipboard.config({ moviePath: getZeroClipboardSwfPath() });
+      ZeroClipboard.config({ swfPath: getZeroClipboardSwfPath() });
     },
 
     getClipboardElement: function () {
@@ -62,17 +63,26 @@ function (app, FauxtonAPI, React, ReactDOM, ZeroClipboard, ReactBootstrap) {
 
     componentDidMount: function () {
       var el = ReactDOM.findDOMNode(this);
-      this.clipboard = new ZeroClipboard(el);
-      this.clipboard.on('load', function () {
-        this.clipboard.on('mouseup', function () {
-          this.props.onClipboardClick();
+        this.clipboard = new ZeroClipboard(el);
+        this.clipboard.on('ready', function () {
+          this.clipboard.on('copy', function () {
+            this.props.onClipboardClick();
+          }.bind(this));
         }.bind(this));
-      }.bind(this));
+
+        this.clipboard.on('error', function (event) {
+          console.log( 'ZeroClipboard error of type "' + event.name + '": ' + event.message );
+        });
+    },
+
+    onClick: function (event) {
+      event.preventDefault();
     },
 
     render: function () {
       return (
         <a href="#"
+          onClick={this.onClick}
           ref="copy"
           className="copy clipboard-copy-element"
           data-clipboard-text={this.props.text}
@@ -105,14 +115,14 @@ function (app, FauxtonAPI, React, ReactDOM, ZeroClipboard, ReactBootstrap) {
     },
 
     componentWillMount: function () {
-      ZeroClipboard.config({ moviePath: getZeroClipboardSwfPath() });
+      ZeroClipboard.config({ swfPath: getZeroClipboardSwfPath() });
     },
 
     componentDidMount: function () {
       var el = ReactDOM.findDOMNode(this.refs["copy-text-" + this.props.uniqueKey]);
       this.clipboard = new ZeroClipboard(el);
-      this.clipboard.on('load', function () {
-        this.clipboard.on('mouseup', function () {
+      this.clipboard.on('ready', function () {
+        this.clipboard.on('copy', function () {
           this.props.onClipBoardClick();
         }.bind(this));
       }.bind(this));

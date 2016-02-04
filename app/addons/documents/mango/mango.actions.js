@@ -11,13 +11,13 @@
 // the License.
 
 define([
-  'app',
-  'api',
-  'addons/documents/resources',
-  'addons/documents/mango/mango.actiontypes',
-  'addons/documents/mango/mango.stores',
-  'addons/documents/index-results/stores',
-  'addons/documents/index-results/actions',
+  '../../../app',
+  '../../../core/api',
+  '../resources',
+  './mango.actiontypes',
+  './mango.stores',
+  '../index-results/stores',
+  '../index-results/actions',
 ],
 function (app, FauxtonAPI, Documents, ActionTypes, Stores, IndexResultsStores, IndexResultActions) {
   var store = Stores.mangoStore;

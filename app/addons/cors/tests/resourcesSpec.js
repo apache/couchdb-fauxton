@@ -10,9 +10,9 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 define([
-  'app',
-  'testUtils',
-  'addons/cors/resources',
+  '../../../app',
+  '../../../../test/mocha/testUtils',
+  '../resources',
 ], function (app, testUtils, CORS) {
   var assert = testUtils.assert;
 

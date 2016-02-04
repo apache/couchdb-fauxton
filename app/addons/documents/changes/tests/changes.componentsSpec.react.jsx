@@ -11,20 +11,20 @@
 // the License.
 
 define([
-  'app',
-  'api',
+  '../../../../app',
+  '../../../../core/api',
   'react',
   'react-dom',
-  'addons/documents/changes/components.react',
-  'addons/documents/changes/stores',
-  'addons/documents/changes/actions',
-  'testUtils'
-], function (app, FauxtonAPI, React, ReactDOM, Changes, Stores, Actions, utils) {
+  '../components.react',
+  '../stores',
+  '../actions',
+  '../../../../../test/mocha/testUtils',
+  'react-addons-test-utils',
+  'sinon'
+], function (app, FauxtonAPI, React, ReactDOM, Changes, Stores, Actions, utils, TestUtils, sinon) {
   FauxtonAPI.router = new FauxtonAPI.Router([]);
 
   var assert = utils.assert;
-  var TestUtils = React.addons.TestUtils;
-
 
   // suppresses unwanted console.log()'s on missing URLs
   FauxtonAPI.registerUrls('document', {

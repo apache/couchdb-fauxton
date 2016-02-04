@@ -11,9 +11,9 @@
 // the License.
 
 define([
-       "app",
-       "api",
-       "core/couchdbSession"
+  '../../app',
+  '../../core/api',
+  "../../core/couchdbSession"
 ],
 
 function (app, FauxtonAPI, CouchdbSession) {

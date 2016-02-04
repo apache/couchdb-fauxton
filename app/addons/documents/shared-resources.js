@@ -11,9 +11,9 @@
 // the License.
 
 define([
-  'app',
-  'api',
-  'cloudant.pagingcollection'
+  '../../app',
+  '../../core/api',
+  '../../../assets/js/plugins/cloudant.pagingcollection'
 ], function (app, FauxtonAPI, PagingCollection) {
 
   // defined here because this is contains the base resources used throughout the addon and outside,

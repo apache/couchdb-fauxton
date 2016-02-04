@@ -11,10 +11,10 @@
 // the License.
 
 define([
-  'app',
-  'api',
-  'addons/replication/resources',
-  'addons/replication/views'
+  '../../app',
+  '../../core/api',
+  './resources',
+  './views'
 ],
 function (app, FauxtonAPI, Replication, Views) {
   var RepRouteObject = FauxtonAPI.RouteObject.extend({

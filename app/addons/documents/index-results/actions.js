@@ -11,12 +11,12 @@
 // the License.
 
 define([
-  'app',
-  'api',
-  'addons/documents/index-results/actiontypes',
-  'addons/documents/index-results/stores',
-  'addons/documents/resources',
-  'addons/documents/sidebar/actions'
+  '../../../app',
+  '../../../core/api',
+  './actiontypes',
+  './stores',
+  '../resources',
+  '../sidebar/actions'
 ],
 function (app, FauxtonAPI, ActionTypes, Stores, Documents, SidebarActions) {
   var indexResultsStore = Stores.indexResultsStore;

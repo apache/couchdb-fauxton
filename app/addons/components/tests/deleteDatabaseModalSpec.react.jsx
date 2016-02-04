@@ -10,16 +10,15 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 define([
-  'api',
-  'addons/components/react-components.react',
-
-  'testUtils',
-  'libs/react-bootstrap',
-  'react'
-], function (FauxtonAPI, ReactComponents, utils, ReactBootstrap, React) {
+  '../../../core/api',
+  '../react-components.react',
+  '../../../../test/mocha/testUtils',
+  'react-bootstrap',
+  'react',
+  'react-addons-test-utils',
+], function (FauxtonAPI, ReactComponents, utils, ReactBootstrap, React, TestUtils) {
 
   var assert = utils.assert;
-  var TestUtils = React.addons.TestUtils;
   var Modal = ReactBootstrap.Modal;
 
   function noop () {}

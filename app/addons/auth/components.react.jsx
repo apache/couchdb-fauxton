@@ -11,12 +11,12 @@
 // the License.
 
 define([
-  'app',
-  'api',
+  '../../app',
+  '../../core/api',
   'react',
   'react-dom',
-  'addons/auth/stores',
-  'addons/auth/actions'
+  './stores',
+  './actions'
 ], function (app, FauxtonAPI, React, ReactDOM, AuthStores, AuthActions) {
 
   var changePasswordStore = AuthStores.changePasswordStore;

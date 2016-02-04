@@ -11,13 +11,13 @@
 // the License.
 
 define([
-  'app',
-  'api',
-  'addons/databases/base',
-  'addons/permissions/resources',
-  'addons/permissions/actions',
-  'addons/permissions/components.react',
-  'addons/documents/shared-routes'
+  '../../app',
+  '../../core/api',
+  '../databases/base',
+  './resources',
+  './actions',
+  './components.react',
+  '../documents/shared-routes'
 ],
 function (app, FauxtonAPI, Databases, Resources, Actions, Permissions, BaseRoute) {
 

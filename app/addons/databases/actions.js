@@ -10,11 +10,11 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 define([
-  'app',
-  'api',
-  'addons/databases/stores',
-  'addons/databases/actiontypes',
-  'addons/databases/resources'
+  '../../app',
+  '../../core/api',
+  './stores',
+  './actiontypes',
+  './resources'
 ],
 function (app, FauxtonAPI, Stores, ActionTypes, Resources) {
   return {

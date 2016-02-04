@@ -11,24 +11,24 @@
 // the License.
 
 define([
-  'app',
-  'api',
+  '../../app',
+  '../../core/api',
 
   // Modules
-  "addons/documents/helpers",
-  'addons/documents/shared-routes',
-  'addons/documents/views',
-  'addons/documents/index-editor/components.react',
-  'addons/documents/index-editor/actions',
-  'addons/databases/base',
-  'addons/fauxton/components',
-  'addons/documents/index-results/stores',
-  'addons/documents/index-results/actions',
-  'addons/documents/index-results/index-results.components.react',
-  'addons/documents/pagination/pagination.react',
-  'addons/documents/header/header.react',
-  'addons/documents/header/header.actions',
-  'addons/documents/sidebar/actions'
+  "./helpers",
+  './shared-routes',
+  './views',
+  './index-editor/components.react',
+  './index-editor/actions',
+  '../databases/base',
+  '../fauxton/components',
+  './index-results/stores',
+  './index-results/actions',
+  './index-results/index-results.components.react',
+  './pagination/pagination.react',
+  './header/header.react',
+  './header/header.actions',
+  './sidebar/actions'
 ],
 
 function (app, FauxtonAPI, Helpers, BaseRoute, Documents, IndexEditorComponents, ActionsIndexEditor,

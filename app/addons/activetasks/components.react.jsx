@@ -11,20 +11,19 @@
 // the License.
 
 define([
-  'app',
-  'api',
+  '../../app',
+  '../../core/api',
   'react',
   'react-dom',
-  'addons/activetasks/stores',
-  'addons/activetasks/resources',
-  'addons/activetasks/actions',
-  'addons/components/react-components.react',
-  'addons/fauxton/components.react'
-], function (app, FauxtonAPI, React, ReactDOM, Stores, Resources, Actions, Components, ComponentsReact) {
+  './stores',
+  './resources',
+  './actions',
+  '../components/react-components.react',
+  '../fauxton/components.react',
+  'react-addons-css-transition-group'
+], function (app, FauxtonAPI, React, ReactDOM, Stores, Resources, Actions, Components, ComponentsReact, ReactCSSTransitionGroup) {
 
   var activeTasksStore = Stores.activeTasksStore;
-  var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
-
   var ActiveTasksController = React.createClass({
 
     getStoreState: function () {

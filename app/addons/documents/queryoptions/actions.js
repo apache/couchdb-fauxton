@@ -11,10 +11,10 @@
 // the License.
 
 define([
-  'app',
-  'api',
-  'addons/documents/queryoptions/actiontypes',
-  'addons/documents/queryoptions/stores'
+  '../../../app',
+  '../../../core/api',
+  './actiontypes',
+  './stores'
 ],
 function (app, FauxtonAPI, ActionTypes, Stores) {
   var store = Stores.queryOptionsStore;

@@ -11,9 +11,9 @@
 // the License.
 
 define([
-  'app',
-  'api',
-  'addons/verifyinstall/routes'
+  '../../app',
+  '../../core/api',
+  './routes'
 ],
 
 function (app, FauxtonAPI, VerifyInstall) {

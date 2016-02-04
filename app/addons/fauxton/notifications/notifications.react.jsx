@@ -11,16 +11,17 @@
 // the License.
 
 define([
-  'app',
-  'api',
+  '../../../app',
+  '../../../core/api',
   'react',
   'react-dom',
-  'addons/fauxton/notifications/actions',
-  'addons/fauxton/notifications/stores',
-  'addons/fauxton/components.react',
+  './actions',
+  './stores',
+  '../components.react',
 
   // needed to run the test individually. Don't remove
-  'velocity.ui'
+  "velocity-animate/velocity",
+  "velocity-animate/velocity.ui"
 ],
 
 function (app, FauxtonAPI, React, ReactDOM, Actions, Stores, Components) {

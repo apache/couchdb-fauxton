@@ -11,15 +11,15 @@
 // the License.
 
 define([
-  'app',
-  'api',
-  'addons/documents/shared-resources',
-  'addons/databases/base',
-  'addons/fauxton/components',
-  'addons/documents/pagination/actions',
-  'addons/documents/index-results/stores',
-  'addons/documents/sidebar/sidebar.react',
-  'addons/documents/sidebar/actions'
+  '../../app',
+  '../../core/api',
+  './shared-resources',
+  '../databases/base',
+  '../fauxton/components',
+  './pagination/actions',
+  './index-results/stores',
+   './sidebar/sidebar.react',
+   './sidebar/actions'
 ], function (app, FauxtonAPI, Documents, Databases, Components, PaginationActions, IndexResultStores,
   SidebarComponents, SidebarActions) {
 

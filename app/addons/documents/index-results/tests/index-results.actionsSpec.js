@@ -11,13 +11,13 @@
 // the License.
 
 define([
-  'api',
-  'addons/documents/index-results/actions',
-  'addons/documents/index-results/stores',
-  'addons/documents/resources',
-  'addons/documents/sidebar/actions',
-  'testUtils',
-  'addons/documents/tests/document-test-helper',
+  '../../../../core/api',
+  '../actions',
+  '../stores',
+  '../../resources',
+  '../../sidebar/actions',
+  '../../../../../test/mocha/testUtils',
+  '../../tests/document-test-helper',
 
 ], function (FauxtonAPI, Actions, Stores, Documents, SidebarActions, testUtils, documentTestHelper) {
   var assert = testUtils.assert;

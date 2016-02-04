@@ -10,10 +10,10 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 define([
-        'addons/replication/base',
-        'addons/replication/views',
-        'addons/replication/resources',
-        'testUtils'
+  '../base',
+  '../views',
+  '../resources',
+  '../../../../test/mocha/testUtils',
 ], function (Replication, Views, Resources, testUtils) {
   var assert = testUtils.assert,
       ViewSandbox = testUtils.ViewSandbox,

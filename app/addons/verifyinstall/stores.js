@@ -11,9 +11,9 @@
 // the License.
 
 define([
-  'api',
-  'addons/verifyinstall/constants',
-  'addons/verifyinstall/actiontypes'
+  '../../core/api',
+  './constants',
+  './actiontypes'
 ],
 
 function (FauxtonAPI, Constants, ActionTypes) {

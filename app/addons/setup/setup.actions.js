@@ -10,12 +10,12 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 define([
-  'api',
-  'addons/config/resources',
-  'addons/setup/resources',
-  'addons/setup/setup.actiontypes',
-  'addons/cluster/cluster.stores',
-  'addons/setup/setup.stores',
+  '../../core/api',
+  '../config/resources',
+  './resources',
+  './setup.actiontypes',
+  '../cluster/cluster.stores',
+  './setup.stores',
 
 ], function (FauxtonAPI, ConfigResources, SetupResources, ActionTypes, ClusterStores, SetupStores) {
     var nodesStore = ClusterStores.nodesStore;

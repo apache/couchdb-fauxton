@@ -11,10 +11,10 @@
 // the License.
 
 define([
-  "api",
+  "../../../core/api",
   "react",
-  'addons/documents/pagination/actions',
-  'addons/documents/index-results/stores',
+  './actions',
+  '../index-results/stores',
   ], function (FauxtonAPI, React, Actions, IndexResultsStore) {
     var indexResultsStore = IndexResultsStore.indexResultsStore;
 

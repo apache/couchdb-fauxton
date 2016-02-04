@@ -11,20 +11,20 @@
 // the License.
 
 define([
-  'app',
-  'api',
+  '../../../app',
+  '../../../core/api',
   'react',
   'react-dom',
-  'testUtils',
-  'addons/verifyinstall/constants',
-  'addons/verifyinstall/components.react'
+  '../../../../test/mocha/testUtils',
+  '../constants',
+  '../components.react',
+  'react-addons-test-utils',
+  'sinon'
 
-], function (app, FauxtonAPI, React, ReactDOM, testUtils, Constants, Components) {
+], function (app, FauxtonAPI, React, ReactDOM, testUtils, Constants, Components, TestUtils, sinon) {
   FauxtonAPI.router = new FauxtonAPI.Router([]);
 
   var assert = testUtils.assert;
-  var ReactTestUtils = React.addons.TestUtils;
-
 
   describe('VerifyInstallResults', function () {
     var container, el;
@@ -49,7 +49,7 @@ define([
 
     it('confirm all result fields blank before tests ran', function () {
       container = document.createElement('div');
-      el = ReactTestUtils.renderIntoDocument(<Components.VerifyInstallResults testResults={testResults} />, container);
+      el = TestUtils.renderIntoDocument(<Components.VerifyInstallResults testResults={testResults} />, container);
 
       tests.forEach(function (test) {
         assert.equal($(ReactDOM.findDOMNode(el)).find('#' + test.id).html(), '');
@@ -66,7 +66,7 @@ define([
           success: true
         };
 
-        el = ReactTestUtils.renderIntoDocument(<Components.VerifyInstallResults testResults={copy} />, container);
+        el = TestUtils.renderIntoDocument(<Components.VerifyInstallResults testResults={copy} />, container);
 
         // now look at the DOM for that element. It should contain a tick char
         assert.equal($(ReactDOM.findDOMNode(el)).find('#' + test.id + ' span').html(), '✓');
@@ -83,7 +83,7 @@ define([
           success: false
         };
 
-        el = ReactTestUtils.renderIntoDocument(<Components.VerifyInstallResults testResults={copy} />, container);
+        el = TestUtils.renderIntoDocument(<Components.VerifyInstallResults testResults={copy} />, container);
 
         // now look at the DOM for that element. It should contain an error char
         assert.equal($(ReactDOM.findDOMNode(el)).find('#' + test.id + ' span').html(), '✗');
@@ -106,28 +106,28 @@ define([
     it('calls verify function on click', function () {
       var stub = { func: function () { } };
       var spy = sinon.spy(stub, 'func');
-      el = ReactTestUtils.renderIntoDocument(<Components.VerifyInstallButton verify={stub.func} isVerifying={false} />, container);
-      ReactTestUtils.Simulate.click($(ReactDOM.findDOMNode(el))[0]);
+      el = TestUtils.renderIntoDocument(<Components.VerifyInstallButton verify={stub.func} isVerifying={false} />, container);
+      TestUtils.Simulate.click($(ReactDOM.findDOMNode(el))[0]);
       assert.ok(spy.calledOnce);
     });
 
     it('does not call verify function when verification already ongoing', function () {
       var stub = { func: function () { } };
       var spy = sinon.spy(stub, 'func');
-      el = ReactTestUtils.renderIntoDocument(<Components.VerifyInstallButton verify={stub.func} isVerifying={true} />, container);
-      ReactTestUtils.Simulate.click($(ReactDOM.findDOMNode(el))[0]);
+      el = TestUtils.renderIntoDocument(<Components.VerifyInstallButton verify={stub.func} isVerifying={true} />, container);
+      TestUtils.Simulate.click($(ReactDOM.findDOMNode(el))[0]);
       assert.notOk(spy.calledOnce);
     });
 
     it('shows appropriate default label', function () {
       var stub = { func: function () { } };
-      el = ReactTestUtils.renderIntoDocument(<Components.VerifyInstallButton verify={stub.func} isVerifying={false} />, container);
+      el = TestUtils.renderIntoDocument(<Components.VerifyInstallButton verify={stub.func} isVerifying={false} />, container);
       assert.equal($(ReactDOM.findDOMNode(el)).html(), 'Verify Installation');
     });
 
     it('shows appropriate label during verification', function () {
       var stub = { func: function () { } };
-      el = ReactTestUtils.renderIntoDocument(<Components.VerifyInstallButton verify={stub.func} isVerifying={true} />, container);
+      el = TestUtils.renderIntoDocument(<Components.VerifyInstallButton verify={stub.func} isVerifying={true} />, container);
       assert.equal($(ReactDOM.findDOMNode(el)).html(), 'Verifying');
     });
 

@@ -10,17 +10,18 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 define([
-  'api',
-  'addons/documents/pagination/pagination.react',
-  'testUtils',
+  '../../../../core/api',
+  '../pagination.react',
+  '../../../../../test/mocha/testUtils',
   'react',
-  'react-dom'
-], function (FauxtonAPI, Views, utils, React, ReactDOM) {
+  'react-dom',
+  'react-addons-test-utils',
+  'sinon'
+], function (FauxtonAPI, Views, utils, React, ReactDOM, TestUtils, sinon) {
 
   FauxtonAPI.router = new FauxtonAPI.Router([]);
 
   var assert = utils.assert;
-  var TestUtils = React.addons.TestUtils;
 
   describe('All Docs Number', function () {
 

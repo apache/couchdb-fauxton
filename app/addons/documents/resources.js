@@ -11,14 +11,13 @@
 // the License.
 
 define([
-  'app',
-  'api',
-  'addons/documents/shared-resources',
-  'cloudant.pagingcollection'
+  '../../app',
+  '../../core/api',
+  './shared-resources',
+  '../../../assets/js/plugins/cloudant.pagingcollection'
 ],
 
 function (app, FauxtonAPI, Documents, PagingCollection) {
-
   Documents.QueryParams = (function () {
     var _eachParams = function (params, action) {
       // clone to avoid in-place modification

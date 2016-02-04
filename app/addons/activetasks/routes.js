@@ -11,11 +11,11 @@
 // the License.
 
 define([
-  'app',
-  'api',
-  'addons/activetasks/resources',
-  'addons/activetasks/components.react',
-  'addons/activetasks/actions'
+  '../../app',
+  '../../core/api',
+  './resources',
+  './components.react',
+  './actions'
 ],
 
 function (app, FauxtonAPI, ActiveTasksResources, ActiveTasksComponents, Actions) {

@@ -11,8 +11,8 @@
 // the License.
 
 define([
-  "api",
-  "addons/cors/actiontypes"
+  "../../core/api",
+  "./actiontypes"
 ], function (FauxtonAPI, ActionTypes) {
 
   var CorsStore = FauxtonAPI.Store.extend({

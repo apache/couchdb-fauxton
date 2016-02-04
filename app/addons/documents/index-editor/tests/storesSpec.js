@@ -11,16 +11,15 @@
 // the License.
 
 define([
-  'api',
-  'addons/documents/index-editor/stores',
-  'addons/documents/index-editor/actiontypes',
-  'addons/documents/resources',
-  'testUtils'
+  '../../../../core/api',
+  '../stores',
+  '../actiontypes',
+  '../../../documents/resources',
+  '../../../../../test/mocha/testUtils',
 ], function (FauxtonAPI, Stores, ActionTypes, Documents, testUtils) {
   var assert = testUtils.assert;
   var store;
   var dispatchToken;
-
 
   describe('IndexEditorStore', function () {
 
@@ -341,4 +340,3 @@ define([
 
   });
 });
-

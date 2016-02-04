@@ -11,9 +11,9 @@
 // the License.
 
 define([
-       "core/base",
-       "core/auth",
-       "backbone"
+  "./base",
+  "./auth",
+  "backbone"
 ],
 
 function (FauxtonAPI, Auth, Backbone) {

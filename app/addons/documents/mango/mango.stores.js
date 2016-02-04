@@ -11,8 +11,8 @@
 // the License.
 
 define([
-  'api',
-  'addons/documents/mango/mango.actiontypes'
+  '../../../core/api',
+  './mango.actiontypes'
 ],
 
 function (FauxtonAPI, ActionTypes) {

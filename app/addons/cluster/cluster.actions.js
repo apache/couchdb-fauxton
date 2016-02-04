@@ -11,9 +11,9 @@
 // the License.
 
 define([
-  'api',
-  'addons/cluster/resources',
-  'addons/cluster/cluster.actiontypes'
+  '../../core/api',
+  './resources',
+  './cluster.actiontypes'
 ],
 function (FauxtonAPI, ClusterResources, ActionTypes) {
   return {

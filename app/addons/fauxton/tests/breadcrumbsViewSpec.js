@@ -11,9 +11,9 @@
 // the License.
 
 define([
-  'app',
-  'addons/fauxton/components',
-  'testUtils'
+  '../../../app',
+  '../components',
+  '../../../../test/mocha/testUtils',
 ], function (app, Components, testUtils) {
   var assert = testUtils.assert,
     ViewSandbox = testUtils.ViewSandbox;
@@ -48,7 +48,7 @@ define([
 
       // sync test
       it('should have 2 dividers between 3 breadcrumbs', function () {
-        assert.equal(2, breadcrumbs.$('.divider').length, $(breadcrumbs).html());
+        assert.equal(2, breadcrumbs.$('.divider').length);
       });
     });
 

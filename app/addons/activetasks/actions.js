@@ -10,8 +10,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 define([
-  'api',
-  'addons/activetasks/actiontypes'
+  '../../core/api',
+  './actiontypes'
 ],
 function (FauxtonAPI, ActionTypes) {
   return {

@@ -10,16 +10,17 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 define([
-  'api',
-  'addons/setup/setup.react',
-  'addons/setup/setup.stores',
-  'testUtils',
+  '../../../core/api',
+  '../setup.react',
+  '../setup.stores',
+  '../../../../test/mocha/testUtils',
   'react',
-  'react-dom'
-], function (FauxtonAPI, Views, Stores, utils, React, ReactDOM) {
+  'react-dom',
+  'react-addons-test-utils',
+  'sinon'
+], function (FauxtonAPI, Views, Stores, utils, React, ReactDOM, TestUtils, sinon) {
 
   var assert = utils.assert;
-  var TestUtils = React.addons.TestUtils;
 
   describe('Setup Components', function () {
 
@@ -143,4 +144,3 @@ define([
   });
 
 });
-

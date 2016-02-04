@@ -11,13 +11,13 @@
 // the License.
 
 define([
-  'app',
-  'api',
-  'addons/documents/helpers',
-  'addons/documents/resources',
-  'addons/databases/base',
-  'addons/documents/doc-editor/actions',
-  'addons/documents/doc-editor/components.react'
+  '../../app',
+  '../../core/api',
+  './helpers',
+  './resources',
+  '../databases/base',
+  './doc-editor/actions',
+  './doc-editor/components.react'
 ],
 
 function (app, FauxtonAPI, Helpers, Documents, Databases, Actions, ReactComponents) {
@@ -68,8 +68,7 @@ function (app, FauxtonAPI, Helpers, Documents, Databases, Actions, ReactComponen
       if (this.docID !== doc) {
         this.docID = doc;
         this.doc = new Documents.Doc({ _id: this.docID }, { database: this.database });
-      }
-
+       }
       Actions.initDocEditor({ doc: this.doc, database: this.database });
       this.setComponent('#dashboard-content', ReactComponents.DocEditorController, {
         database: this.database,
@@ -121,6 +120,7 @@ function (app, FauxtonAPI, Helpers, Documents, Databases, Actions, ReactComponen
         database: this.database
       });
       this.isNewDoc = true;
+      this.docID = null;
     },
 
     apiUrl: function () {

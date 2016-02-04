@@ -22,12 +22,12 @@ specific language governing permissions and limitations under the License.
   <body>
     <div id="mocha"></div>
     <script type="text/javascript" src="mocha/mocha.js"></script>
-    <script type="text/javascript" src="mocha/sinon.js"></script>
     <script type="text/javascript">
       // MOCHA SETUP
       mocha.setup('bdd');
       mocha.reporter('html');
     </script>
-    <script data-main="./test.config.js" src="../assets/js/libs/require.js"></script>
+    <script src="./templates.js"></script>
+    <script src="./bundle.js"></script>
   </body>
 </html>

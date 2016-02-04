@@ -11,20 +11,20 @@
 // the License.
 
 define([
-  'app',
-  'api',
+  '../../../app',
+  '../../../core/api',
   'react',
   'react-dom',
-  'addons/documents/changes/actions',
-  'addons/documents/changes/stores',
-  'addons/fauxton/components.react',
-  'addons/components/react-components.react',
+  './actions',
+  './stores',
+  '../../fauxton/components.react',
+  '../../components/react-components.react',
 
-  'plugins/prettify'
-], function (app, FauxtonAPI, React, ReactDOM, Actions, Stores, Components, ReactComponents) {
+  'react-addons-css-transition-group',
+  '../../../../assets/js/plugins/prettify',
+], function (app, FauxtonAPI, React, ReactDOM, Actions, Stores, Components, ReactComponents, ReactCSSTransitionGroup) {
 
   var changesStore = Stores.changesStore;
-  var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 
   var BadgeList = ReactComponents.BadgeList;
 

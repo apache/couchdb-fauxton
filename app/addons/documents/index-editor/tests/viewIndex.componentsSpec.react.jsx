@@ -10,19 +10,21 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 define([
-  'api',
-  'addons/documents/resources',
-  'addons/documents/index-editor/components.react',
-  'addons/documents/index-editor/stores',
-  'addons/documents/index-editor/actions',
-  'testUtils',
+  '../../../../core/api',
+  '../resources',
+  '../components.react',
+  '../stores',
+  '../actions',
+  '../../../documents/resources',
+  '../../../../../test/mocha/testUtils',
   "react",
-  'react-dom'
-], function (FauxtonAPI, Resources, Views, Stores, Actions, utils, React, ReactDOM) {
+  'react-dom',
+  'react-addons-test-utils',
+  'sinon'
+], function (FauxtonAPI, 'Resources, Views, Stores, Actions, Documents, utils, React, ReactDOM, TestUtils, sinon) {
   FauxtonAPI.router = new FauxtonAPI.Router([]);
 
   var assert = utils.assert;
-  var TestUtils = React.addons.TestUtils;
 
 
   var resetStore = function (designDocs) {

@@ -10,17 +10,18 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 define([
-  'api',
-  'addons/components/actions',
-  'addons/components/stores',
-  'addons/components/react-components.react',
-  'testUtils',
+  '../../../core/api',
+  '../actions',
+  '../stores',
+  '../react-components.react',
+  '../../../../test/mocha/testUtils',
+  'react-addons-test-utils',
+  'sinon',
   'react',
   'react-dom'
-], function (FauxtonAPI, Actions, Stores, ReactComponents, utils, React, ReactDOM) {
+], function (FauxtonAPI, Actions, Stores, ReactComponents, utils, TestUtils, sinon, React, ReactDOM) {
 
   var assert = utils.assert;
-  var TestUtils = React.addons.TestUtils;
   var componentStore = Stores.componentStore;
   var ApiBarController = ReactComponents.ApiBarController;
 

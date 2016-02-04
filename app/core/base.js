@@ -12,7 +12,7 @@
 
 define([
   "backbone",
-  "plugins/backbone.layoutmanager"
+  "backbone.layoutmanager"
 ],
 
 function (Backbone, LayoutManager) {
@@ -112,7 +112,6 @@ function (Backbone, LayoutManager) {
     if (!views) {
       views = [];
     }
-
     return views;
   };
 
@@ -142,4 +141,3 @@ function (Backbone, LayoutManager) {
 
   return FauxtonAPI;
 });
-

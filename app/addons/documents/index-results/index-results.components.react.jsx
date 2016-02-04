@@ -11,22 +11,24 @@
 // the License.
 
 define([
-  'app',
-  'api',
+  '../../../app',
+  '../../../core/api',
   'react',
-  'addons/documents/index-results/stores',
-  'addons/documents/index-results/actions',
-  'addons/components/react-components.react',
-  'addons/documents/resources',
-  'addons/fauxton/components.react',
-  'libs/react-bootstrap',
+  './stores',
+  './actions',
+  '../../components/react-components.react',
+  '../resources',
+  '../..//fauxton/components.react',
+
+  'react-bootstrap',
   'react-autocomplete',
-  'plugins/prettify'
+  'react-addons-css-transition-group',
+
+  '../../../../assets/js/plugins/prettify'
 ],
 
 
-function (app, FauxtonAPI, React, Stores, Actions, Components, Documents, FauxtonComponents, ReactBootstrap, Autocomplete) {
-  var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
+function (app, FauxtonAPI, React, Stores, Actions, Components, Documents, FauxtonComponents, ReactBootstrap, Autocomplete, ReactCSSTransitionGroup) {
   var store = Stores.indexResultsStore;
   var BulkActionComponent = Components.BulkActionComponent;
   var Clipboard = FauxtonComponents.Clipboard;

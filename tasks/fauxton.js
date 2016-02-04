@@ -73,7 +73,7 @@ module.exports = function (grunt) {
         template = 'app/load_addons.js.underscore',
         dest = 'app/load_addons.js',
         deps = _.map(settings.deps, function (dep) {
-          return 'addons/' + dep.name + '/base';
+          return './addons/' + dep.name + '/base';
         });
 
     var tmpl = _.template(grunt.file.read(template));
@@ -124,18 +124,12 @@ module.exports = function (grunt) {
       return /\/app\//.test(filePath);
     });
 
-    testFiles = testFiles.map(function (file) {
-      return file.replace(/\.jsx$/, '.js');
-    });
-
     var configTemplate = _.template(grunt.file.read(configTemplateSrc));
     // a bit of a nasty hack to read our current config.js and get the info so we can change it
     // for our testing setup
     var require = {
       config: function (args) {
         configInfo = args;
-        configInfo.paths['chai'] = '../test/mocha/chai';
-        configInfo.paths['sinon-chai'] = '../test/mocha/sinon-chai';
         configInfo.paths['testUtils'] = '../test/mocha/testUtils';
         configInfo.baseUrl = '../app';
         delete configInfo.deps;

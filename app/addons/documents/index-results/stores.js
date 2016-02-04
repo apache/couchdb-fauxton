@@ -11,17 +11,16 @@
 // the License.
 
 define([
-  'app',
-  'api',
-  'addons/documents/index-results/actiontypes',
-  'addons/documents/header/header.actiontypes',
-  'addons/documents/pagination/actiontypes',
+  '../../../app',
+  '../../../core/api',
+  './actiontypes',
+  '../header/header.actiontypes',
+  '../pagination/actiontypes',
 
-  'addons/documents/resources',
-  'addons/documents/mango/mango.helper',
-  'addons/documents/resources',
-  'addons/databases/resources',
-
+  '../resources',
+  '../mango/mango.helper',
+  '../resources',
+  '../../databases/resources'
 ],
 
 function (app, FauxtonAPI, ActionTypes, HeaderActionTypes, PaginationActionTypes,

@@ -11,13 +11,13 @@
 // the License.
 
 define([
-  "app",
-  "api",
+  "../../app",
+  "../../core/api",
   "react",
-  "addons/cors/stores",
-  "addons/cors/resources",
-  "addons/cors/actions",
-  'addons/components/react-components.react'
+  "./stores",
+  "./resources",
+  "./actions",
+  '../components/react-components.react'
 
 ], function (app, FauxtonAPI, React, Stores, Resources, Actions, ReactComponents) {
   var corsStore = Stores.corsStore;

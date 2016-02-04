@@ -11,10 +11,10 @@
 // the License.
 
 define([
-  'app',
-  'api',
+  '../../app',
+  '../../core/api',
   'react',
-  'addons/documentation/stores'
+  './stores'
 ], function (app, FauxtonAPI, React, Stores) {
 
   var documentationStore = Stores.documentationStore;

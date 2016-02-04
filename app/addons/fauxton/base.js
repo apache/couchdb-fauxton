@@ -11,15 +11,15 @@
 // the License.
 
 define([
-  "app",
-  "api",
-  "addons/fauxton/components",
-  'addons/fauxton/notifications/notifications.react',
-  'addons/fauxton/notifications/actions',
-  "addons/fauxton/navigation/components.react",
-  "addons/fauxton/navigation/actions",
-  'addons/components/react-components.react',
-  'addons/components/actions'
+  "../../app",
+  "../../core/api",
+  "./components",
+  './notifications/notifications.react',
+  './notifications/actions',
+  "./navigation/components.react",
+  "./navigation/actions",
+  '../components/react-components.react',
+  '../components/actions'
 ],
 
 function (app, FauxtonAPI, Components, NotificationComponents, Actions, NavbarReactComponents, NavigationActions,

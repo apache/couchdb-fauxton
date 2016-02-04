@@ -10,12 +10,11 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 define([
-  'testUtils',
-  'api',
-  'addons/fauxton/components'
+  '../../../../test/mocha/testUtils',
+  '../../../core/api',
+  '../components'
 ], function (testUtils, FauxtonAPI, Components) {
   var assert = testUtils.assert;
-
 
   describe('DbSearchTypeahead', function () {
 

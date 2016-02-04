@@ -10,16 +10,17 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 define([
-  'api',
-  'addons/activetasks/resources',
-  'addons/activetasks/stores',
-  'addons/activetasks/tests/fakeActiveTaskResponse',
+  '../../../core/api',
+  '../resources',
+  '../stores',
+  './fakeActiveTaskResponse',
   'react',
-  'testUtils'
-], function (FauxtonAPI, ActiveTasks, Stores, fakedResponse, React, utils) {
+  '../../../../test/mocha/testUtils',
+  'react-addons-test-utils',
+  'sinon'
+], function (FauxtonAPI, ActiveTasks, Stores, fakedResponse, React, utils, TestUtils, sinon) {
   var assert = utils.assert;
   var restore = utils.restore;
-  var TestUtils = React.addons.TestUtils;
 
   var activeTasksStore = Stores.activeTasksStore;
   var activeTasksCollection = new ActiveTasks.AllTasks();
@@ -35,7 +36,7 @@ define([
 
     afterEach(function () {
       restore(spy);
-      restore(clock);
+      clock.restore();
     });
 
     describe('Active Task Stores - Polling', function () {
@@ -43,13 +44,11 @@ define([
 
       beforeEach(function () {
         activeTasksStore.initAfterFetching(activeTasksCollection.table, activeTasksCollection);
-        clock = sinon.useFakeTimers();
       });
 
       afterEach(function () {
         restore(activeTasksStore.getPollingInterval);
         restore(window.clearInterval);
-        restore(clock);
       });
 
       it('should poll at the min time', function () {

@@ -11,23 +11,27 @@
 // the License.
 
 define([
-  'app',
-  'api',
+  '../../app',
+  '../../core/api',
   'react',
   'react-dom',
-  'addons/components/actions',
-  'addons/components/stores',
-  'addons/fauxton/components.react',
-  'addons/documents/helpers',
-  'ace/ace',
-  'plugins/beautify',
-  'libs/react-bootstrap'
+  './stores',
+  './actions',
+  '../fauxton/components.react',
+  '../documents/helpers',
+  '../../../assets/js/plugins/beautify',
+  'react-bootstrap',
+  'react-addons-css-transition-group',
+  'brace'
 ],
+  function (app, FauxtonAPI, React, ReactDOM, Stores, Actions, FauxtonComponents, Helpers,
+	   beautifyHelper, ReactBootstrap, ReactCSSTransitionGroup, ace) {
 
-function (app, FauxtonAPI, React, ReactDOM, Actions, Stores, FauxtonComponents, Helpers, ace, beautifyHelper,
+function (app, FauxtonAPI, React, ReactDOM, Stores, Actions,
+  FauxtonComponents, Helpers, ace, beautifyHelper, ReactBootstrap) {
+function (app, FauxtonAPI, React, ReactDOM, Stores, Actions, FauxtonComponents, Helpers, ace, beautifyHelper,
   ReactBootstrap) {
 
-  var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
   var componentStore = Stores.componentStore;
   var Modal = ReactBootstrap.Modal;
 
@@ -390,6 +394,10 @@ function (app, FauxtonAPI, React, ReactDOM, Actions, Stores, FauxtonComponents, 
     }
   });
 
+
+  require('brace/mode/javascript');
+  require('brace/mode/json');
+  require('brace/theme/idle_fingers');
 
   var CodeEditor = React.createClass({
     getDefaultProps: function () {

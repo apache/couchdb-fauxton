@@ -18,8 +18,8 @@
 // "purely functional" helper system.
 
 define([
-  'constants',
-  "core/utils",
+  './constants',
+  "./core/utils",
   "d3",
   'moment'
 ],
@@ -63,4 +63,3 @@ function (constants, utils, d3, moment) {
 
   return Helpers;
 });
-

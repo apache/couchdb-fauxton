@@ -36,3 +36,5 @@ test/nightwatch_tests/selenium/*
 *.react.js
 selenium-debug.log
 npm-debug.log
+test/bundle.js
+test/templates.js

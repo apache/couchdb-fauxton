@@ -11,9 +11,9 @@
 // the License.
 
 define([
-  'app',
-  'api',
-  'addons/cluster/routes'
+  '../../app',
+  '../../core/api',
+  './routes'
 ],
 
 function (app, FauxtonAPI, Cluster) {
@@ -22,4 +22,3 @@ function (app, FauxtonAPI, Cluster) {
 
   return Cluster;
 });
-

@@ -11,10 +11,10 @@
 // the License.
 
 define([
-  'app',
-  'api',
-  'addons/documents/pagination/actiontypes',
-  'addons/documents/index-results/actions',
+  '../../../app',
+  "../../../core/api",
+  './actiontypes',
+  '../index-results/actions',
 
 
 ],

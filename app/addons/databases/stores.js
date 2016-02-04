@@ -11,10 +11,10 @@
 // the License.
 
 define([
-  'app',
-  'api',
-  'addons/databases/actiontypes',
-  'addons/databases/resources'
+  '../../app',
+  '../../core/api',
+  './actiontypes',
+  './resources'
 ], function (app, FauxtonAPI, ActionTypes, Resources) {
 
   var DatabasesStore = FauxtonAPI.Store.extend({

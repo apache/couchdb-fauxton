@@ -11,16 +11,16 @@
 // the License.
 
 define([
-  'app',
-  'api',
+  '../../../app',
+  '../../../core/api',
   'react',
-  'addons/documents/mango/mango.stores',
-  'addons/documents/mango/mango.actions',
-  'addons/components/react-components.react',
-  'addons/documents/index-results/actions',
-  'addons/documents/mango/mango.helper',
+  './mango.stores',
+  './mango.actions',
+  '../../components/react-components.react',
+  '../index-results/actions',
+  './mango.helper',
 
-  'plugins/prettify'
+  '../../../../assets/js/plugins/prettify'
 ],
 
 function (app, FauxtonAPI, React, Stores, Actions,

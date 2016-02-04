@@ -11,13 +11,14 @@
 // the License.
 
 define([
-  'api',
-  'addons/databases/base',
-  'addons/permissions/stores',
-  'addons/permissions/resources',
-  'addons/permissions/actions',
-  'testUtils'
-], function (FauxtonAPI, Databases, Stores, Permissions, Actions, testUtils) {
+  '../../../core/api',
+  '../../databases/base',
+  '../stores',
+  '../resources',
+  '../actions',
+  '../../../../test/mocha/testUtils',
+  'sinon'
+], function (FauxtonAPI, Databases, Stores, Permissions, Actions, testUtils, sinon) {
   var assert = testUtils.assert;
   var restore = testUtils.restore;
   var store = Stores.permissionsStore;

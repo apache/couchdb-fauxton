@@ -11,14 +11,14 @@
 // the License.
 
 define([
-  'app',
-  'api',
+  '../../../app',
+  '../../../core/api',
   'react',
   'react-dom',
-  'addons/documents/index-editor/stores',
-  'addons/documents/index-editor/actions',
-  'addons/fauxton/components',
-  'addons/components/react-components.react'
+  './stores',
+  './actions',
+  '../../fauxton/components',
+  '../../components/react-components.react'
 ],
 
 function (app, FauxtonAPI, React, ReactDOM, Stores, Actions, Components, ReactComponents) {

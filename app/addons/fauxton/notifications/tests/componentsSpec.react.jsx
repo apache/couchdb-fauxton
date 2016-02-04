@@ -10,19 +10,18 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 define([
-  'api',
-  'addons/fauxton/notifications/notifications.react',
-  'addons/fauxton/notifications/stores',
-  'testUtils',
+  '../../../../core/api',
+  '../notifications.react',
+  '../stores',
+  '../../../../../test/mocha/testUtils',
   'react',
   'react-dom',
-  'moment'
-], function (FauxtonAPI, Views, Stores, utils, React, ReactDOM, moment) {
-
+  'moment',
+  'react-addons-test-utils',
+  'sinon'
+], function (FauxtonAPI, Views, Stores, utils, React, ReactDOM, moment, TestUtils) {
   var assert = utils.assert;
-  var TestUtils = React.addons.TestUtils;
   var store = Stores.notificationStore;
-
 
   describe('NotificationRow', function () {
     var container;

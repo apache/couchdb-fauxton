@@ -11,9 +11,9 @@
 // the License.
 
 define([
-  "app",
-  "api",
-  "addons/styletests/routes"
+  '../../app',
+  '../../core/api',
+  "./routes"
 ],
 
 function (app, FauxtonAPI, tests) {

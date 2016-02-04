@@ -10,14 +10,15 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 define([
-  'api',
+  '../../../../core/api',
   'react',
   'react-dom',
-  'testUtils',
-  'addons/documents/sidebar/sidebar.react'
-], function (FauxtonAPI, React, ReactDOM, utils, Components) {
+  '../../../../../test/mocha/testUtils',
+  '../sidebar.react',
+  'react-addons-test-utils',
+  'sinon'
+], function (FauxtonAPI, React, ReactDOM, utils, Components, TestUtils, sinon) {
   var assert = utils.assert;
-  var TestUtils = React.addons.TestUtils;
   var DesignDoc = Components.DesignDoc;
 
 
@@ -114,4 +115,3 @@ define([
   });
 
 });
-

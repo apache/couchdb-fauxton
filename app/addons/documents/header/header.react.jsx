@@ -11,21 +11,21 @@
 // the License.
 
 define([
-  'app',
-  'api',
+  '../../../app',
+  '../../../core/api',
   'react',
-  'addons/documents/header/header.actions',
-  'addons/components/react-components.react',
+  './header.actions',
+  '../../components/react-components.react',
 
-  'addons/documents/index-results/stores',
-  'addons/documents/index-results/actions',
-  'libs/react-bootstrap',
-  'addons/documents/queryoptions/stores',
+  '../index-results/stores',
+  '../index-results/actions',
+  'react-bootstrap',
+  '../queryoptions/stores',
+  'react-addons-css-transition-group'
 ],
 
 function (app, FauxtonAPI, React, Actions, ReactComponents,
-  IndexResultsStore, IndexResultsActions, ReactBootstrap, QueryOptionsStore) {
-  var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
+  IndexResultsStore, IndexResultsActions, ReactBootstrap, QueryOptionsStore, ReactCSSTransitionGroup) {
 
   var indexResultsStore = IndexResultsStore.indexResultsStore;
   var queryOptionsStore = QueryOptionsStore.queryOptionsStore;

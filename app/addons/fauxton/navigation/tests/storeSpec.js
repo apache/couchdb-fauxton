@@ -10,10 +10,10 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 define([
-  'app',
-  'testUtils',
-  'api',
-  'addons/fauxton/navigation/stores',
+  '../../../../app',
+  '../../../../../test/mocha/testUtils',
+  '../../../../core/api',
+  '../stores',
 ], function (app, testUtils, FauxtonAPI, Stores) {
   var assert = testUtils.assert;
   var navBarStore = Stores.navBarStore;

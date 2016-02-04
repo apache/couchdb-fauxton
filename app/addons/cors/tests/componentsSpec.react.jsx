@@ -10,19 +10,20 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 define([
-  'api',
-  'addons/cors/components.react',
-  'addons/cors/actions',
-  'addons/cors/resources',
-  'addons/cors/stores',
-  'testUtils',
+  '../../../core/api',
+  '../components.react',
+  '../actions',
+  '../resources',
+  '../stores',
+  '../../../../test/mocha/testUtils',
   "react",
-  'react-dom'
-], function (FauxtonAPI, Views, Actions, Resources, Stores, utils, React, ReactDOM) {
+  'react-dom',
+  'react-addons-test-utils',
+  'sinon'
+], function (FauxtonAPI, Views, Actions, Resources, Stores, utils, React, ReactDOM, TestUtils, sinon) {
 
   FauxtonAPI.router = new FauxtonAPI.Router([]);
   var assert = utils.assert;
-  var TestUtils = React.addons.TestUtils;
   var corsStore = Stores.corsStore;
 
   describe('CORS Components', function () {

@@ -11,12 +11,11 @@
 // the License.
 
 define([
-  "app",
-
-  "api",
+  "../../app",
+  "../../core/api",
 
   // Modules
-  "addons/documents/routes"
+  "./routes"
 ],
 
 function (app, FauxtonAPI, Documents) {

@@ -10,11 +10,12 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 define([
-      'api',
-      'addons/auth/base',
-      'core/auth',
-      'testUtils'
-], function (FauxtonAPI, Base, Auth, testUtils) {
+      '../../../core/api',
+      '../base',
+      '../../../core/auth',
+      '../../../../test/mocha/testUtils',
+      'sinon'
+], function (FauxtonAPI, Base, Auth, testUtils, sinon) {
   var assert = testUtils.assert;
 
   describe("Auth: Login", function () {

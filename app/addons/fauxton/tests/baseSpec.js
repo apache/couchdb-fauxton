@@ -10,11 +10,12 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 define([
-  'testUtils',
-  'api',
-  'addons/fauxton/base',
-  "backbone"
-], function (testUtils, FauxtonAPI, Base) {
+  '../../../../test/mocha/testUtils',
+  '../../../core/api',
+  '../base',
+  'backbone',
+  'sinon'
+], function (testUtils, FauxtonAPI, Base, Backbone, sinon) {
   var assert = testUtils.assert;
 
 

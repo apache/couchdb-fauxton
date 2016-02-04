@@ -10,15 +10,15 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 define([
-      'api',
-      'addons/config/resources',
-      'addons/config/views',
-      'testUtils'
-], function (FauxtonAPI, Resources, Views, testUtils) {
+  '../../../core/api',
+  '../resources',
+  '../views',
+  '../../../../test/mocha/testUtils',
+  'sinon'
+], function (FauxtonAPI, Resources, Views, testUtils, sinon) {
   var assert = testUtils.assert,
       ViewSandbox = testUtils.ViewSandbox,
       collection;
-
 
   beforeEach(function () {
     var optionModels = [];

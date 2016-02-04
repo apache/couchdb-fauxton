@@ -11,9 +11,9 @@
 // the License.
 
 define([
-  'testUtils',
-  'api',
-  'addons/cluster/resources',
+  '../../../../test/mocha/testUtils',
+  '../../../core/api',
+  '../resources',
 ], function (testUtils, FauxtonAPI, Resources) {
   var assert = testUtils.assert;
 

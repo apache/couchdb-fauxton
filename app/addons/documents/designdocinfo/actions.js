@@ -11,10 +11,10 @@
 // the License.
 
 define([
-  'app',
-  'api',
-  'addons/documents/designdocinfo/actiontypes',
-  'addons/documents/designdocinfo/stores'
+  '../../../app',
+  '../../../core/api',
+  './actiontypes',
+  './stores'
 ],
 function (app, FauxtonAPI, ActionTypes, Stores) {
   var store = Stores.designDocInfoStore;

@@ -11,9 +11,9 @@
 // the License.
 
 define([
-  'app',
-  'api',
-  'addons/fauxton/navigation/actiontypes'
+  '../../../app',
+  '../../../core/api',
+  './actiontypes'
 ],
 
 function (app, FauxtonAPI, ActionTypes) {
@@ -182,4 +182,3 @@ function (app, FauxtonAPI, ActionTypes) {
 
   return Stores;
 });
-

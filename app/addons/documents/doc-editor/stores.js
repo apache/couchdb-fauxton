@@ -11,8 +11,8 @@
 // the License.
 
 define([
-  'api',
-  'addons/documents/doc-editor/actiontypes'
+  '../../../core/api',
+  './actiontypes'
 ],
 
 function (FauxtonAPI, ActionTypes) {

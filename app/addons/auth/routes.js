@@ -11,12 +11,12 @@
 // the License.
 
 define([
-       "app",
-       "api",
-  'addons/auth/resources',
-  'addons/auth/actions',
-  'addons/auth/components.react',
-  'addons/cluster/cluster.actions'
+  '../../app',
+  '../../core/api',
+  './resources',
+  './actions',
+  './components.react',
+  '../cluster/cluster.actions'
 ],
 
 function (app, FauxtonAPI, Auth, AuthActions, Components, ClusterActions) {

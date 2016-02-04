@@ -11,9 +11,9 @@
 // the License.
 
 define([
-  'api',
-  'app',
-  'addons/fauxton/notifications/actiontypes',
+  '../../../core/api',
+  '../../../app',
+  './actiontypes',
   'moment'
 ],
 

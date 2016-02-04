@@ -11,11 +11,10 @@
 // the License.
 
 define([
-  'app',
-  'api',
+  '../../app',
+  '../../core/api',
   'react',
-  'addons/cluster/cluster.stores'
-
+  './cluster.stores'
 ],
 
 function (app, FauxtonAPI, React, ClusterStore) {

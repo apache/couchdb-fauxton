@@ -11,10 +11,10 @@
 // the License.
 
 define([
-  'app',
-  'api',
-  'addons/documents/sidebar/actiontypes',
-  'addons/documents/sidebar/stores.react'
+  '../../../app',
+  '../../../core/api',
+  './actiontypes',
+  './stores.react'
 ],
 function (app, FauxtonAPI, ActionTypes, Stores) {
   var store = Stores.sidebarStore;

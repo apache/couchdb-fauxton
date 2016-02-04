@@ -11,14 +11,16 @@
 // the License.
 
 define([
-  'app',
-  'api',
-  'testUtils',
-  'addons/databases/stores',
-  'addons/databases/actions',
-  'addons/databases/actiontypes',
-  'addons/databases/resources'
-], function (app, FauxtonAPI, utils, Stores, Actions, ActionTypes, Resources) {
+  '../../../app',
+  '../../../core/api',
+  '../../../../test/mocha/testUtils',
+  '../base',
+  '../stores',
+  '../actions',
+  '../actiontypes',
+  '../resources',
+  '../../documents/base'
+], function (app, FauxtonAPI, utils, Base, Stores, Actions, ActionTypes, Resources) {
 
   var assert = utils.assert;
 
@@ -125,7 +127,7 @@ define([
         oldRouter = app.router;
         navigationTarget = null;
         app.router = {
-          "navigate": function (target) {
+          navigate: function (target) {
             navigationTarget = target;
           }
         };
@@ -161,7 +163,7 @@ define([
         assert.equal(2, notificationText.length);
         assert(notificationText[0].indexOf("Creating") >= 0);
         assert(notificationText[1].indexOf("success") >= 0);
-        assert(navigationTarget.indexOf("testdb") >= 0);
+        assert.ok(navigationTarget.indexOf("testdb") >= 0);
       });
 
       it("Creates no database without name", function () {

@@ -10,9 +10,9 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 define([
-      'api',
-      'addons/setup/resources',
-      'testUtils'
+  '../../../core/api',
+  '../resources',
+  '../../../../test/mocha/testUtils'
 ], function (FauxtonAPI, Resources, testUtils) {
   var assert = testUtils.assert,
       ViewSandbox = testUtils.ViewSandbox,

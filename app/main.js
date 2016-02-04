@@ -12,12 +12,13 @@
 
 require([
   // Application
-  "app",
-  "api",
-  "load_addons"
+  "./app",
+  "./core/api",
+  "./load_addons",
+  "backbone"
 ],
 
-function (app, FauxtonAPI, LoadAddons) {
+function (app, FauxtonAPI, LoadAddons, Backbone) {
 
   app.addons = LoadAddons.addons;
   FauxtonAPI.router = app.router = new FauxtonAPI.Router(app.addons);

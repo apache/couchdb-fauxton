@@ -11,11 +11,11 @@
 // the License.
 
 define([
-  "app",
-  "api",
-  "addons/databases/resources",
-  "addons/databases/actions",
-  'addons/databases/components.react'
+  "../../app",
+  "../../core/api",
+  "./resources",
+  "./actions",
+  './components.react'
 ],
 
 function (app, FauxtonAPI, Databases, Actions, Components) {
@@ -53,7 +53,6 @@ function (app, FauxtonAPI, Databases, Actions, Components) {
       return [this.databases.url("apiurl"), this.databases.documentation()];
     }
   });
-
   Databases.RouteObjects = [AllDbsRouteObject];
 
   return Databases;

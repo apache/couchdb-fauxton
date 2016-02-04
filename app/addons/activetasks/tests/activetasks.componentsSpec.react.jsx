@@ -10,19 +10,20 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 define([
-  'api',
-  'addons/activetasks/resources',
-  'addons/activetasks/components.react',
-  'addons/activetasks/stores',
-  'addons/activetasks/tests/fakeActiveTaskResponse',
+  '../../../core/api',
+  '../resources',
+  '../components.react',
+  '../stores',
+  './fakeActiveTaskResponse',
   'react',
   'react-dom',
-  'addons/activetasks/actions',
-  'testUtils'
-], function (FauxtonAPI, ActiveTasks, Components, Stores, fakedResponse, React, ReactDOM, Actions, utils) {
+  '../actions',
+  '../../../../test/mocha/testUtils',
+  'react-addons-test-utils',
+  'sinon'
+], function (FauxtonAPI, ActiveTasks, Components, Stores, fakedResponse, React, ReactDOM, Actions, utils, TestUtils, sinon) {
   var assert = utils.assert;
   var restore = utils.restore;
-  var TestUtils = React.addons.TestUtils;
   var activeTasksStore = Stores.activeTasksStore;
   var activeTasksCollection = new ActiveTasks.AllTasks({});
   activeTasksCollection.parse(fakedResponse);

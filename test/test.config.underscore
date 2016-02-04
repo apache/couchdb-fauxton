@@ -12,23 +12,18 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 //
-// Set the require.js configuration for your test setup.
-require.config(
-<%= JSON.stringify(configInfo, null, '  ') %>
-);
 
 require([
-        'es5-shim',
-        'app',
-        <% _.each(testFiles, function (test) {%>
-           <% if (test[0] === '.') { %>
-           '../<%= test %>',
-           <% } else { %>
-           '<%= test %>',
-           <% }  %>
-        <% }) %>
+  '../app/app',
+  "es5-shim",
+  <% _.each(testFiles, function (test) {%>
+     <% if (test[0] === '.') { %>
+     '../<%= test %>',
+     <% } else { %>
+     '.././<%= test %>',
+     <% }  %>
+  <% }) %>
 ], function() {
   if (window.mochaPhantomJS) { mochaPhantomJS.run(); }
   else { mocha.run(); }
 });
-

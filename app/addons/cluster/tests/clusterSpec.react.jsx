@@ -10,17 +10,17 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 define([
-  'api',
-  'addons/cluster/cluster.react',
-  'addons/cluster/cluster.actions',
-  'addons/cluster/cluster.stores',
-  'testUtils',
+  '../../../core/api',
+  '../cluster.react',
+  '../cluster.actions',
+  '../cluster.stores',
+  '../../../../test/mocha/testUtils',
   'react',
-  'react-dom'
-], function (FauxtonAPI, ClusterComponent, ClusterActions, ClusterStores, utils, React, ReactDOM) {
+  'react-dom',
+  'react-addons-test-utils',
+], function (FauxtonAPI, ClusterComponent, ClusterActions, ClusterStores, utils, React, ReactDOM, TestUtils) {
 
   var assert = utils.assert;
-  var TestUtils = React.addons.TestUtils;
 
   describe('Cluster Controller', function () {
     var container, controller;

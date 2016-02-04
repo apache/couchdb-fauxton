@@ -11,9 +11,9 @@
 // the License.
 
 define([
-  'app',
-  'api',
-  'addons/documentation/components.react'
+  '../../app',
+  '../../core/api',
+  './components.react'
 ],
 
 function (app, FauxtonAPI, DocumentationComponents) {

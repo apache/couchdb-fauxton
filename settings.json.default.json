@@ -20,9 +20,10 @@
         "src": "assets/index.underscore",
         "dest": "dist/debug/index.html",
         "variables": {
-          "requirejs": "/assets/js/libs/require.js",
+          "bundlejs": "/bundle.js",
           "css": "./dashboard.assets/css/index.css",
-          "base": null
+          "base": null,
+          "development": true
         },
         "app": {
           "root": "/",
@@ -34,9 +35,10 @@
         "src": "assets/index.underscore",
         "dest": "dist/debug/index.html",
         "variables": {
-          "requirejs": "./dashboard.assets/js/REQUIREJS_FILE",
+          "bundlejs": "./dashboard.assets/js/BUNDLEJS_FILE",
           "css": "./dashboard.assets/css/CSS_FILE",
-          "base": null
+          "base": null,
+          "development": false
         },
         "app": {
           "root": "/_utils/",
@@ -48,9 +50,10 @@
         "src": "assets/index.underscore",
         "dest": "dist/debug/index.html",
         "variables": {
-          "requirejs": "./js/REQUIREJS_FILE",
+          "bundlejs": "./js/BUNDLEJS_FILE",
           "css": "./css/CSS_FILE",
-          "base": null
+          "base": null,
+          "development": false
         },
         "app": {
           "root": "/",

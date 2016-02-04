@@ -11,8 +11,8 @@
 // the License.
 
 define([
-  'app',
-  'api'
+  '../../app',
+  '../../core/api'
 ],
 function (app, FauxtonAPI) {
   var Permissions = FauxtonAPI.addon();

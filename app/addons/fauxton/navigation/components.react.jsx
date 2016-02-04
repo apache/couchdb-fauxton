@@ -10,12 +10,12 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 define([
-  'app',
-  'api',
+  '../../../app',
+  '../../../core/api',
   'react',
   'react-dom',
-  'addons/fauxton/navigation/stores',
-  'addons/fauxton/navigation/actions'
+  './stores',
+  './actions'
 ],
 
 function (app, FauxtonAPI, React, ReactDOM, Stores, Actions) {

@@ -10,15 +10,16 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 define([
-  'api',
-  'addons/components/react-components.react',
-  'testUtils',
+  '../../../core/api',
+  '../react-components.react',
+  '../../../../test/mocha/testUtils',
   'react',
-  'react-dom'
-], function (FauxtonAPI, ReactComponents, utils, React, ReactDOM) {
+  'react-dom',
+  'react-addons-test-utils',
+  'sinon'
+], function (FauxtonAPI, ReactComponents, utils, React, ReactDOM, TestUtils, sinon) {
 
   var assert = utils.assert;
-  var TestUtils = React.addons.TestUtils;
 
   describe('Document', function () {
     var container, el;
@@ -79,7 +80,7 @@ define([
         container
       );
       var testEl = $(ReactDOM.findDOMNode(el)).find('input[type="checkbox"]')[0];
-      React.addons.TestUtils.Simulate.change(testEl, {target: {value: 'Hello, world'}});
+      TestUtils.Simulate.change(testEl, {target: {value: 'Hello, world'}});
       assert.ok(spy.calledOnce);
     });
 
@@ -90,7 +91,7 @@ define([
         <ReactComponents.Document isDeletable={true} onDoubleClick={spy} docIdentifier="foo" />,
         container
       );
-      React.addons.TestUtils.Simulate.doubleClick(ReactDOM.findDOMNode(el));
+      TestUtils.Simulate.doubleClick(ReactDOM.findDOMNode(el));
       assert.ok(spy.calledOnce);
     });
 

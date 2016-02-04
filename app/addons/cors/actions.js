@@ -10,9 +10,9 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 define([
-  'api',
-  'addons/cors/actiontypes',
-  'addons/cors/resources'
+  '../../core/api',
+  './actiontypes',
+  './resources'
   ], function (FauxtonAPI, ActionTypes, Resources) {
     return {
       fetchAndEditCors: function (node) {

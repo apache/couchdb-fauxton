@@ -11,7 +11,7 @@
 // the License.
 
 define([
-  'api'
+  '../../../core/api'
 ], function (FauxtonAPI) {
 
   function getIndexName (doc) {
@@ -41,4 +41,3 @@ define([
   };
 
 });
-

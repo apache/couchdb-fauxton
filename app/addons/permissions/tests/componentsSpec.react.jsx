@@ -10,18 +10,19 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 define([
-  'api',
-  'addons/databases/base',
-  'addons/permissions/resources',
-  'addons/permissions/components.react',
-  'addons/permissions/actions',
-  'testUtils',
+  '../../../core/api',
+  '../../databases/base',
+  '../resources',
+  '../components.react',
+  '../actions',
+  '../../../../test/mocha/testUtils',
   "react",
-  'react-dom'
-  ], function (FauxtonAPI, Databases, Permissions, Views, Actions, utils, React, ReactDOM) {
+  'react-dom',
+  'react-addons-test-utils',
+  'sinon'
+], function (FauxtonAPI, Databases, Permissions, Views, Actions, utils, React, ReactDOM, TestUtils, sinon) {
     var assert = utils.assert;
     var restore = utils.restore;
-    var TestUtils = React.addons.TestUtils;
 
     describe('Permissions Components', function () {
 

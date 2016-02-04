@@ -11,7 +11,7 @@
 // the License.
 
 define([
-  'core/base',
+  './base',
   'react',
   'react-dom',
   'backbone'

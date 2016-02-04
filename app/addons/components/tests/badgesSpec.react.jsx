@@ -10,15 +10,14 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 define([
-  'api',
-  'addons/components/react-components.react',
-
-  'testUtils',
-  'react'
-], function (FauxtonAPI, ReactComponents, utils, React) {
+  '../../../core/api',
+  '../react-components.react',
+  '../../../../test/mocha/testUtils',
+  'react',
+  'react-addons-test-utils',
+], function (FauxtonAPI, ReactComponents, utils, React, TestUtils) {
 
   var assert = utils.assert;
-  var TestUtils = React.addons.TestUtils;
 
   describe('Badges', function () {
     var container, instance;

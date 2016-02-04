@@ -10,9 +10,9 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 define([
-  'api',
-  'testUtils',
-  'core/utils'
+  '../api',
+  '../../../test/mocha/testUtils',
+  '../utils'
 ], function (FauxtonAPI, testUtils, utils) {
   var assert = testUtils.assert;
 

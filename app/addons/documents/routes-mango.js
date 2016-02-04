@@ -11,28 +11,28 @@
 // the License.
 
 define([
-  'app',
-  'api',
+  '../../app',
+  '../../core/api',
   // Modules
-  'addons/documents/helpers',
-  'addons/documents/shared-routes',
-  'addons/databases/resources',
+  './helpers',
+  './shared-routes',
+  '../databases/resources',
 
-  'addons/fauxton/components',
-  'addons/documents/resources',
-  'addons/documents/views',
-  'addons/documents/index-results/actions',
-  'addons/documents/index-results/stores',
+  '../fauxton/components',
+  './resources',
+  './views',
+  './index-results/actions',
+  './index-results/stores',
 
-  'addons/documents/header/header.react',
-  'addons/documents/header/header.actions',
-  'addons/documents/pagination/pagination.react',
+  './header/header.react',
+  './header/header.actions',
+  './pagination/pagination.react',
 
-  'addons/documents/mango/mango.components.react',
-  'addons/documents/mango/mango.actions',
-  'addons/documents/mango/mango.stores',
-  'addons/documents/index-results/index-results.components.react',
-  'addons/documents/sidebar/actions',
+  './mango/mango.components.react',
+  './mango/mango.actions',
+  './mango/mango.stores',
+  './index-results/index-results.components.react',
+  './sidebar/actions',
 ],
 
 

@@ -10,8 +10,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 define([
-  'api',
-  'addons/documents/resources'
+  '../../../core/api',
+  '../resources'
 ], function (FauxtonAPI, Documents) {
 
   var opts = {

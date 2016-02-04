@@ -10,10 +10,10 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 define([
-  'app',
-  'testUtils',
-  'api',
-  'addons/cors/stores',
+  '../../../app',
+  '../../../../test/mocha/testUtils',
+  '../../../core/api',
+  '../stores',
 ], function (app, testUtils, FauxtonAPI, Stores) {
   var assert = testUtils.assert;
   var store = Stores.corsStore;

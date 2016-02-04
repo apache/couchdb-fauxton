@@ -11,9 +11,9 @@
 // the License.
 
 define([
-  'app',
-  'api',
-  'addons/replication/route'
+  '../../app',
+  '../../core/api',
+  './route'
 ],
 
 function (app, FauxtonAPI, replication) {

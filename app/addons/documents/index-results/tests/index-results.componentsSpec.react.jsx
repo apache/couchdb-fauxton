@@ -10,21 +10,23 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 define([
-  'api',
-  'addons/documents/index-results/index-results.components.react',
-  'addons/documents/index-results/actions',
-  'addons/documents/index-results/stores',
-  'addons/documents/resources',
-  'addons/databases/resources',
-  'addons/documents/tests/document-test-helper',
-  'testUtils',
+  '../../../../core/api',
+  '../index-results.components.react',
+  '../actions',
+  '../stores',
+  '../../resources',
+  '../../../databases/resources',
+  '../../tests/document-test-helper',
+  '../../../../../test/mocha/testUtils',
   "react",
-  'react-dom'
-], function (FauxtonAPI, Views, IndexResultsActions, Stores, Documents, Databases, documentTestHelper, utils, React, ReactDOM) {
+  'react-dom',
+  'react-addons-test-utils',
+  'sinon'
+], function (FauxtonAPI, Views, IndexResultsActions, Stores, Documents, Databases, documentTestHelper, utils, React, ReactDOM, TestUtils,
+  sinon) {
   FauxtonAPI.router = new FauxtonAPI.Router([]);
 
   var assert = utils.assert;
-  var TestUtils = React.addons.TestUtils;
   var store = Stores.indexResultsStore;
   var createDocColumn = documentTestHelper.createDocColumn;
   var createMangoIndexDocColumn = documentTestHelper.createMangoIndexDocColumn;

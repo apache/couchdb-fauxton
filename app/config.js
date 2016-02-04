@@ -74,4 +74,3 @@ require.config({
     "velocity.ui": ["velocity"]
   }
 });
-

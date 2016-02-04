@@ -10,19 +10,20 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 define([
-  'api',
-  'addons/documents/queryoptions/queryoptions.react',
-  'addons/documents/queryoptions/stores',
-  'addons/documents/queryoptions/actions',
-  'addons/documents/resources',
-  'testUtils',
+  '../../../../core/api',
+  '../queryoptions.react',
+  '../stores',
+  '../actions',
+  '../../resources',
+  '../../../../../test/mocha/testUtils',
   "react",
-  'react-dom'
-], function (FauxtonAPI, Views, Stores, Actions, Documents, utils, React, ReactDOM) {
+  'react-dom',
+  'react-addons-test-utils',
+  'sinon'
+], function (FauxtonAPI, Views, Stores, Actions, Documents, utils, React, ReactDOM, TestUtils, sinon) {
   FauxtonAPI.router = new FauxtonAPI.Router([]);
 
   var assert = utils.assert;
-  var TestUtils = React.addons.TestUtils;
   var restore = utils.restore;
 
   describe('Query Options', function () {

@@ -11,11 +11,11 @@
 // the License.
 
 define([
-  "addons/documents/views",
-  "addons/documents/routes-documents",
-  'addons/documents/routes-doc-editor',
-  'addons/documents/routes-index-editor',
-  'addons/documents/routes-mango'
+  './views',
+  './routes-documents',
+  './routes-doc-editor',
+  './routes-index-editor',
+  './routes-mango'
 ],
 
 

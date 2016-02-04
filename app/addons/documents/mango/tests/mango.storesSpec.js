@@ -11,12 +11,12 @@
 // the License.
 
 define([
-  'api',
-  'addons/documents/mango/mango.stores',
-  'addons/documents/mango/mango.actiontypes',
-  'addons/documents/resources',
+  '../../../../core/api',
+  '../mango.stores',
+  '../mango.actiontypes',
+  '../../resources',
+  '../../../../../test/mocha/testUtils',
 
-  'testUtils'
 ], function (FauxtonAPI, Stores, ActionTypes, Resources, testUtils) {
   var assert = testUtils.assert;
   var dispatchToken;

@@ -11,11 +11,11 @@
 // the License.
 
 define([
-  'app',
-  'api',
-  'addons/verifyinstall/resources',
-  'addons/verifyinstall/actions',
-  'addons/verifyinstall/components.react'
+  '../../app',
+  '../../core/api',
+  './resources',
+  './actions',
+  './components.react'
 ],
 function (app, FauxtonAPI, VerifyInstall, Actions, Components) {
 

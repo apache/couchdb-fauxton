@@ -10,10 +10,11 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 define([
-  'api',
-  'addons/fauxton/base',
-  'testUtils'
-], function (FauxtonAPI, Fauxton, testUtils) {
+  '../../../core/api',
+  '../base',
+  '../../../../test/mocha/testUtils',
+  'sinon'
+], function (FauxtonAPI, Fauxton, testUtils, sinon) {
   var assert = testUtils.assert;
 
   describe('Breadcrumbs', function () {
@@ -88,4 +89,3 @@ define([
 
 
 });
-

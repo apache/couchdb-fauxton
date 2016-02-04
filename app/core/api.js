@@ -11,18 +11,25 @@
 // the License.
 
 define([
-  'core/base',
-  'core/layout',
-  'core/router',
-  'core/routeObject',
-  'core/utils',
-  'core/store',
-  'constants',
+  './base',
+  './layout',
+  './router',
+  './routeObject',
+  './utils',
+  './store',
+  '../constants',
 
-  'flux'
+  'flux',
+  'jquery',
+  'backbone'
 ],
 
-function (FauxtonAPI, Layout, Router, RouteObject, utils, Store, constants, Flux) {
+function (FauxtonAPI, Layout, Router, RouteObject, utils, Store, constants, Flux, $, Backbone) {
+  Backbone.$ = $;
+  Backbone.ajax = function () {
+	  return Backbone.$.ajax.apply(Backbone.$, arguments);
+	};
+
   FauxtonAPI = _.extend(FauxtonAPI, {
     Layout: Layout,
     Router: Router,
@@ -71,7 +78,7 @@ function (FauxtonAPI, Layout, Router, RouteObject, utils, Store, constants, Flux
     var url;
 
     var args = arguments;
-    _.first(interceptors, function (interceptor) {
+    _.find(interceptors, function (interceptor) {
       var out = interceptor.apply(null, args);
 
       if (out) {
@@ -108,4 +115,3 @@ function (FauxtonAPI, Layout, Router, RouteObject, utils, Store, constants, Flux
 
   return FauxtonAPI;
 });
-

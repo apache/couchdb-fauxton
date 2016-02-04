@@ -43,7 +43,10 @@
   </div>
 
   <!-- Application source. -->
-  <script data-main="/config" src="<%= requirejs %>"></script>
+  <script src="<%= bundlejs %>" type="text/javascript"></script>
+  <% if (development) {%>
+    <script src="/templates.js" type="text/javascript"></script>
+  <%}%>
 
   <!-- <%= generationLabel %><%= generationDate %> -->
 

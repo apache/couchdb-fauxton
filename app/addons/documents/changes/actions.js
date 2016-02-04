@@ -11,11 +11,11 @@
 // the License.
 
 define([
-  'app',
-  'api',
-  'addons/documents/changes/actiontypes',
-  'addons/documents/changes/stores',
-  'addons/documents/helpers'
+  '../../../app',
+  '../../../core/api',
+  './actiontypes',
+  './stores',
+  '../helpers'
 ],
 function (app, FauxtonAPI, ActionTypes, Stores, Helpers) {
 

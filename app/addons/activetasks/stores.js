@@ -11,9 +11,9 @@
 // the License.
 
 define([
-  'app',
-  'api',
-  'addons/activetasks/actiontypes'
+  '../../app',
+  '../../core/api',
+  './actiontypes'
 ], function (app, FauxtonAPI, ActionTypes) {
 
   var ActiveTasksStore = FauxtonAPI.Store.extend({

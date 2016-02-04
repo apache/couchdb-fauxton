@@ -11,10 +11,10 @@
 // the License.
 
 define([
-  'app',
-  'api',
-  'testUtils',
-  'addons/fauxton/notifications/stores'
+  '../../../../app',
+  '../../../../core/api',
+  '../../../../../test/mocha/testUtils',
+  '../stores'
 ], function (app, FauxtonAPI, utils, Stores) {
 
   var assert = utils.assert;

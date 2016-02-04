@@ -10,18 +10,18 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 define([
-  'api',
-  'addons/components/react-components.react',
-  'libs/react-bootstrap',
-  'testUtils',
+  '../../../core/api',
+  '../react-components.react',
+  'react-bootstrap',
+  '../../../../test/mocha/testUtils',
   'react',
-  'react-dom'
-], function (FauxtonAPI, ReactComponents, ReactBootstrap, utils, React, ReactDOM) {
+  'react-dom',
+  'react-addons-test-utils',
+  'sinon'
+], function (FauxtonAPI, ReactComponents, ReactBootstrap, utils, React, ReactDOM, TestUtils, sinon) {
 
   var assert = utils.assert;
-  var TestUtils = React.addons.TestUtils;
   var Modal = ReactBootstrap.Modal;
-
 
   describe('String Edit Modal', function () {
     var container, el;

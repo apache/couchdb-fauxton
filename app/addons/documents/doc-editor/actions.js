@@ -13,9 +13,9 @@
 /* global FormData */
 
 define([
-  'app',
-  'api',
-  'addons/documents/doc-editor/actiontypes'
+  '../../../app',
+  '../../../core/api',
+  './actiontypes'
 ],
 function (app, FauxtonAPI, ActionTypes) {
 

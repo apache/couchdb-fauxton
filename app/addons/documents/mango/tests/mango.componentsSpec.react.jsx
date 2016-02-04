@@ -11,20 +11,21 @@
 // the License.
 
 define([
-  'api',
-  'addons/documents/mango/mango.components.react',
-  'addons/documents/mango/mango.stores',
-  'addons/documents/mango/mango.actions',
-  'addons/documents/mango/mango.actiontypes',
-  'addons/documents/resources',
-  'addons/databases/resources',
-  'testUtils',
+  '../../../../core/api',
+  '../mango.components.react',
+  '../mango.stores',
+  '../mango.actions',
+  '../mango.actiontypes',
+  '../../resources',
+  '../../../databases/resources',
+  '../../../../../test/mocha/testUtils',
   'react',
-  'react-dom'
-], function (FauxtonAPI, Views, Stores, MangoActions, ActionTypes, Resources, Databases, utils, React, ReactDOM) {
+  'react-dom',
+  'react-addons-test-utils',
+  'sinon'
+], function (FauxtonAPI, Views, Stores, MangoActions, ActionTypes, Resources, Databases, utils, React, ReactDOM, TestUtils, sinon) {
 
   var assert = utils.assert;
-  var TestUtils = React.addons.TestUtils;
 
   describe('Mango IndexEditor', function () {
     var database = new Databases.Model({id: 'testdb'}),

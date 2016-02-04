@@ -10,19 +10,19 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 define([
-  'api',
+  '../../../core/api',
   'react',
   'react-dom',
-  'testUtils',
-  'addons/auth/components.react',
-  'addons/auth/stores',
-  'addons/auth/actions'
-], function (FauxtonAPI, React, ReactDOM, utils, Components, Stores, Actions) {
+  '../../../../test/mocha/testUtils',
+  '../components.react',
+  '../stores',
+  '../actions',
+  'react-addons-test-utils',
+  'sinon'
+], function (FauxtonAPI, React, ReactDOM, utils, Components, Stores, Actions, TestUtils, sinon) {
   var assert = utils.assert;
 
-  var TestUtils = React.addons.TestUtils;
   var createAdminSidebarStore = Stores.createAdminSidebarStore;
-
 
   describe('Auth -- Components', function () {
 
