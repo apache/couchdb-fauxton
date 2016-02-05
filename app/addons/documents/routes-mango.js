@@ -86,7 +86,7 @@ function (app, FauxtonAPI, Helpers, BaseRoute, Databases,
             }
           });
 
-      SidebarActions.setSelectedTab('mango-query');
+      SidebarActions.selectNavItem('mango-query');
       this.setComponent('#react-headerbar', ReactHeader.BulkDocumentHeaderController, {showIncludeAllDocs: false});
       this.setComponent('#footer', ReactPagination.Footer);
 

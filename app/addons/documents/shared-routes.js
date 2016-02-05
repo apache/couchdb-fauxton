@@ -101,14 +101,13 @@ define([
       }));
     },
 
-    addSidebar: function (selectedTab) {
+    addSidebar: function (selectedNavItem) {
       var options = {
         designDocs: this.designDocs,
         database: this.database
       };
-
-      if (selectedTab) {
-        options.selectedTab = selectedTab;
+      if (selectedNavItem) {
+        options.selectedNavItem = selectedNavItem;
       }
 
       SidebarActions.newOptions(options);

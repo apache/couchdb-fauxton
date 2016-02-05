@@ -24,6 +24,13 @@ define([
   describe('DesignDoc', function () {
     var container;
 
+    var selectedNavInfo = {
+      navItem: 'all-docs',
+      designDocName: '',
+      designDocSection: '',
+      indexName: ''
+    };
+
     beforeEach(function () {
       container = document.createElement('div');
     });
@@ -40,6 +47,7 @@ define([
         contentVisible={true}
         isVisible={stub}
         designDoc={{}}
+        selectedNavInfo={selectedNavInfo}
         designDocName="id"
         databaseName="db-name" />, container);
       var subOptions = $(ReactDOM.findDOMNode(el)).find('.accordion-body li');
@@ -63,6 +71,7 @@ define([
             one: 'something'
           }
         }}
+        selectedNavInfo={selectedNavInfo}
         designDocName="id"
         databaseName="db-name" />, container);
       var subOptions = $(ReactDOM.findDOMNode(el)).find('.accordion-body li');
@@ -81,11 +90,32 @@ define([
         }]}
         contentVisible={true}
         isVisible={stub}
+        selectedNavInfo={selectedNavInfo}
         designDoc={{}} // note that this is empty
         designDocName="id"
         databaseName="db-name" />, container);
       var subOptions = $(ReactDOM.findDOMNode(el)).find('.accordion-body li');
       assert.equal(subOptions.length, 1);
+    });
+
+    it('confirm doc metadata page is highlighted if selected', function () {
+      var stub = function () { return true; };
+      var el = TestUtils.renderIntoDocument(<DesignDoc
+        toggle={stub}
+        sidebarListTypes={[]}
+        contentVisible={true}
+        isVisible={stub}
+        selectedNavInfo={{
+          navItem: 'designDoc',
+          designDocName: 'id',
+          designDocSection: 'metadata',
+          indexName: ''
+        }}
+        designDoc={{}}
+        designDocName="id"
+        databaseName="db-name" />, container);
+
+      assert.equal($(ReactDOM.findDOMNode(el)).find('.accordion-body li.active a').html(), 'Metadata');
     });
 
   });

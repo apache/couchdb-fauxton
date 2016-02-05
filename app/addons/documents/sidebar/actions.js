@@ -18,6 +18,7 @@ define([
 ],
 function (app, FauxtonAPI, ActionTypes, Stores) {
   var store = Stores.sidebarStore;
+
   return {
     newOptions: function (options) {
       if (options.database.safeID() !== store.getDatabaseName()) {
@@ -34,18 +35,33 @@ function (app, FauxtonAPI, ActionTypes, Stores) {
       });
     },
 
-    toggleContent: function (designDoc, index) {
+    toggleContent: function (designDoc, indexGroup) {
       FauxtonAPI.dispatch({
         type: ActionTypes.SIDEBAR_TOGGLE_CONTENT,
         designDoc: designDoc,
-        index: index
+        indexGroup: indexGroup
       });
     },
 
-    setSelectedTab: function (tab) {
+    // This selects any item in the sidebar, including nested nav items to ensure the appropriate item is visible
+    // and highlighted. Params:
+    // - `navItem`: 'permissions', 'changes', 'all-docs', 'compact', 'mango-query', 'designDoc' (or anything thats been
+    //    extended)
+    // - `params`: optional object if you passed designDoc as the first param. This lets you specify which sub-page
+    //    should be selected, e.g.
+    //       Actions.selectNavItem('designDoc', { designDocName: 'my-design-doc', section: 'metadata' });
+    //       Actions.selectNavItem('designDoc', { designDocName: 'my-design-doc', section: 'Views', indexName: 'my-view' });
+    selectNavItem: function (navItem, params) {
+      var settings = $.extend(true, {}, {
+        designDocName: '',
+        designDocSection: '',
+        indexName: ''
+      }, params);
+      settings.navItem = navItem;
+
       FauxtonAPI.dispatch({
-        type: ActionTypes.SIDEBAR_SET_SELECTED_TAB,
-        tab: tab
+        type: ActionTypes.SIDEBAR_SET_SELECTED_NAV_ITEM,
+        options: settings
       });
     },
 

@@ -50,7 +50,6 @@ function (app, FauxtonAPI, BaseRoute, Documents, Changes, ChangesActions, Databa
           roles: ['fx_loggedIn']
         },
         'database/:database/_changes': 'changes'
-
       },
 
       events: {
@@ -96,7 +95,10 @@ function (app, FauxtonAPI, BaseRoute, Documents, Changes, ChangesActions, Databa
         });
         this.setComponent("#dashboard-lower-content", DesignDocInfoComponents.DesignDocInfo);
 
-        SidebarActions.setSelectedTab(app.utils.removeSpecialCharacters(ddoc) + "_metadata");
+        SidebarActions.selectNavItem('designDoc', {
+          designDocName: ddoc,
+          designDocSection: 'metadata'
+        });
 
         this.leftheader.updateCrumbs(this.getCrumbs(this.database));
         this.rightHeader.hideQueryOptions();
@@ -137,7 +139,7 @@ function (app, FauxtonAPI, BaseRoute, Documents, Changes, ChangesActions, Databa
           tab = 'design-docs';
         }
 
-        SidebarActions.setSelectedTab(tab);
+        SidebarActions.selectNavItem(tab);
         ComponentsActions.showDeleteDatabaseModal({showDeleteModal: false, dbId: ''});
 
         this.removeComponent('#dashboard-upper-content');
@@ -171,7 +173,7 @@ function (app, FauxtonAPI, BaseRoute, Documents, Changes, ChangesActions, Databa
       //TODO: REMOVE
       reloadDesignDocs: function (event) {
         if (event && event.selectedTab) {
-          SidebarActions.setSelectedTab(event.selectedTab);
+          SidebarActions.selectNavItem(event.selectedTab);
         }
       },
 
@@ -187,7 +189,7 @@ function (app, FauxtonAPI, BaseRoute, Documents, Changes, ChangesActions, Databa
 
         this.viewEditor && this.viewEditor.remove();
 
-        SidebarActions.setSelectedTab('changes');
+        SidebarActions.selectNavItem('changes');
         this.leftheader.updateCrumbs(this.getCrumbs(this.database));
         this.rightHeader.hideQueryOptions();
 

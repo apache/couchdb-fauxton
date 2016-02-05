@@ -19,7 +19,7 @@ define([
   var assert = testUtils.assert;
   var dispatchToken;
   var store;
-  var opts;
+
 
   describe('Sidebar Store', function () {
     beforeEach(function () {
