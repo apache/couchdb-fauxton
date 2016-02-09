@@ -26,25 +26,25 @@ function (FauxtonAPI, app, ActionTypes) {
     },
 
     reset: function () {
-      this._apiBarVisible = true;
+      this._apiBarVisible = false;
+      this._apiBarButtonVisible = true;
       this._endpoint = '';
       this._docURL = FauxtonAPI.constants.DOC_URLS.GENERAL;
     },
 
-    isAPIBarVisible: function () {
-      return this._apiBarVisible;
+    updateAPIBar: function (settings) {
+      this._apiBarVisible = settings.contentVisible;
+      this._apiBarButtonVisible = settings.buttonVisible;
+      this._endpoint = settings.endpoint;
+      this._docURL = settings.docURL;
     },
 
-    updateAPIBar: function (settings) {
-      if (!_.isUndefined(settings.visible)) {
-        this._apiBarVisible = settings.visible;
-      }
-      if (!_.isUndefined(settings.endpoint)) {
-        this._endpoint = settings.endpoint;
-      }
-      if (!_.isUndefined(settings.docURL)) {
-        this._docURL = settings.docURL;
-      }
+    setVisibleButton: function (state) {
+      this._apiBarButtonVisible = state;
+    },
+
+    setApiBarVisible: function (state) {
+      this._apiBarVisible = state;
     },
 
     getEndpoint: function () {
@@ -55,27 +55,38 @@ function (FauxtonAPI, app, ActionTypes) {
       return this._docURL;
     },
 
+    getIsAPIBarButtonVisible: function () {
+      return this._apiBarButtonVisible;
+    },
+
+    getIsAPIBarVisible: function () {
+      return this._apiBarVisible;
+    },
+
     dispatch: function (action) {
       switch (action.type) {
-        case ActionTypes.SHOW_API_BAR:
-          this._apiBarVisible = true;
-          this.triggerChange();
+        case ActionTypes.CMPNTS_SHOW_API_BAR_BUTTON:
+          this.setVisibleButton(true);
         break;
 
-        case ActionTypes.HIDE_API_BAR:
-          this._apiBarVisible = false;
-          this.triggerChange();
+        case ActionTypes.CMPNTS_HIDE_API_BAR_BUTTON:
+          this.setVisibleButton(false);
         break;
 
-        case ActionTypes.UPDATE_API_BAR:
+        case ActionTypes.CMPNTS_SET_API_BAR_CONTENT_VISIBLE_STATE:
+          this.setApiBarVisible(action.options);
+        break;
+
+        case ActionTypes.CMPNTS_UPDATE_API_BAR:
           this.updateAPIBar(action.options);
-          this.triggerChange();
         break;
 
         default:
         return;
           // do nothing
       }
+
+      this.triggerChange();
     }
   });
 
@@ -99,7 +110,7 @@ function (FauxtonAPI, app, ActionTypes) {
 
     dispatch: function (action) {
       switch (action.type) {
-        case ActionTypes.COMPONENTS_DATABASES_SHOWDELETE_MODAL:
+        case ActionTypes.CMPNTS_DATABASES_SHOWDELETE_MODAL:
           this.setDeleteModal(action.options);
         break;
 
