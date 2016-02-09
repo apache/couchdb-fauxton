@@ -173,8 +173,8 @@ function (app, FauxtonAPI, React, ReactDOM, Stores, Actions, Components) {
         <div className="query-group" id="query-options-key-search">
           <div className="add-on">Keys</div>
           <div className="btn-group toggle-btns row-fluid">
-            <label id="byKeys" onClick={this.toggleByKeys} className={byKeysButtonClass}>By Key(s)</label>
-            <label id="betweenKeys" onClick={this.toggleBetweenKeys} className={betweenKeysButtonClass}>Between Keys</label>
+            <label style={{width: '101px'}} id="byKeys" onClick={this.toggleByKeys} className={byKeysButtonClass}>By Key(s)</label>
+            <label style={{width: '101px'}} id="betweenKeys" onClick={this.toggleBetweenKeys} className={betweenKeysButtonClass}>Between Keys</label>
           </div>
 
           <div className={keysGroupClass}>
