@@ -56,10 +56,9 @@ Read more about [JSX here](https://facebook.github.io/react/docs/jsx-in-depth.ht
 Each bit of functionality is its own separate module or addon. Addons are located in their own `app/addons/myaddon-name` 
 folder. As noted above, new code is being written in React so please favour React components over backbone views.
 
-A good place to get started is to read through a couple of the existing addons. Two good starting points are 
-[app/addons/verifyinstall](app/addons/verifyinstall) and [app/addons/compaction](app/addons/compaction). Both of these
-are relatively self-contained and map to specific pages in the Fauxton interface so you can see exactly where they appear
-and what they do.
+A good place to get started is to read through a couple of the existing addons. A good starting point is 
+[app/addons/verifyinstall](app/addons/verifyinstall). This is relatively self-contained and maps to a specific page in 
+the Fauxton interface so you can see exactly where it appears and what it does.
 
 Each module must have a `base.js` file, this is read and compiled when Fauxton is deployed. A `resources.js` file
 is usually used for your Backbone.Models and Backbone.Collections, `components.react.jsx` for your React components.
