@@ -99,10 +99,20 @@ define([
             { display }
           </td>
           <td width="30">
-            <span className="fonticon-pencil" onClick={this.editOrigin} title="Click to edit"></span>
+            <span>
+              <a
+                className="fonticon-pencil"
+                onClick={this.editOrigin}
+                title="Click to edit"></a>
+            </span>
           </td>
           <td width="30">
-            <span className="fonticon-trash" onClick={this.deleteOrigin} title="Click to delete"></span>
+            <span>
+              <a
+                className="fonticon-trash"
+                onClick={this.deleteOrigin}
+                title="Click to delete"></a>
+            </span>
           </td>
         </tr>
       );
