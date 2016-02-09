@@ -21,72 +21,65 @@ function (FauxtonAPI, ActionTypes) {
   Stores.CompactionStore = FauxtonAPI.Store.extend({
 
     initialize: function () {
-      this._isCompacting = false;
-      this._isCleaningView = false;
-      this._isCompactingView = false;
+      this.reset();
     },
 
-    isCompacting: function () {
-      return this._isCompacting;
+    reset: function () {
+      this._isCleanupViewsModalVisible = false;
+      this._currentDatabase = '';
+      this._isCleaningViews = false;
     },
 
     isCleaningViews: function () {
       return this._isCleaningViews;
     },
 
-    isCompactingView: function () {
-      return this._isCompactingView;
+    isCleanupViewsModalVisible: function () {
+      return this._isCleanupViewsModalVisible;
     },
 
-    setDatabase: function (database) {
-      this._database = database;
+    openCleanupViewsModal: function (dbName) {
+      this._isCleanupViewsModalVisible = true;
+      this._currentDatabase = dbName;
     },
 
-    getDatabase: function () {
-      return this._database;
+    closeCleanupViewsModal: function () {
+      this._isCleanupViewsModalVisible = false;
+      this._currentDatabase = '';
+    },
+
+    getCurrentDatabase: function () {
+      return this._currentDatabase;
     },
 
     dispatch: function (action) {
       switch (action.type) {
-        case ActionTypes.COMPACTION_SET_UP:
-          this.setDatabase(action.database);
-          this.triggerChange();
-        break;
-        case ActionTypes.COMPACTION_COMPACTION_STARTING:
-          this._isCompacting = true;
-          this.triggerChange();
-        break;
-        case ActionTypes.COMPACTION_COMPACTION_FINISHED:
-          this._isCompacting = false;
-          this.triggerChange();
-        break;
         case ActionTypes.COMPACTION_CLEANUP_STARTED:
           this._isCleaningViews = true;
-          this.triggerChange();
         break;
+
         case ActionTypes.COMPACTION_CLEANUP_FINISHED:
           this._isCleaningViews = false;
-          this.triggerChange();
         break;
-        case ActionTypes.COMPACTION_VIEW_STARTED:
-          this._isCompactingView = true;
-          this.triggerChange();
+
+        case ActionTypes.COMPACTION_OPEN_CLEANUP_VIEWS_MODAL:
+          this.openCleanupViewsModal(action.options.databaseName);
         break;
-        case ActionTypes.COMPACTION_VIEW_FINISHED:
-          this._isCompactingView = false;
-          this.triggerChange();
+
+        case ActionTypes.COMPACTION_CLOSE_CLEANUP_VIEWS_MODAL:
+          this.closeCleanupViewsModal();
         break;
 
         default:
         return;
         // do nothing
       }
-    }
 
+      this.triggerChange();
+    }
   });
 
   Stores.compactionStore = new Stores.CompactionStore();
-
   Stores.compactionStore.dispatchToken = FauxtonAPI.dispatcher.register(Stores.compactionStore.dispatch);
 
   return Stores;

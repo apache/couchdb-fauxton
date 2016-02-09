@@ -131,6 +131,13 @@ define([
       });
     },
 
+    getActionExtensions: function (db) {
+      var cols = FauxtonAPI.getExtensions('DatabaseTable:databaseActions');
+      return _.map(cols, function (Item, index) {
+        return <Item database={db} key={index} />;
+      });
+    },
+
     render: function () {
       var row = this.props.row;
       var name = row.get("name");
@@ -156,14 +163,13 @@ define([
           <td>{row.status.numDocs()} {this.renderGraveyard(row)}</td>
           <td>{row.status.updateSeq()}</td>
           {this.getExtensionColumns(row)}
-          <td>
-            <a
-              className="db-actions btn fonticon-replicate set-replication-start"
+          <td className="database-actions">
+            <a className="db-actions btn fonticon-replicate set-replication-start"
               title={"Replicate " + name}
-              href={"#/replication/" + encoded}></a>&#160;
-            <a
-              className="db-actions btn icon-lock set-permissions"
-              title={"Set permissions for " + name} href={"#/database/" + encoded + "/permissions"}></a>
+              href={"#/replication/" + encoded} />
+            <a className="db-actions btn icon-lock set-permissions"
+              title={"Set permissions for " + name} href={"#/database/" + encoded + "/permissions"} />
+            {this.getActionExtensions(row)}
           </td>
         </tr>
       );
