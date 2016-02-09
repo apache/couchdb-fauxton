@@ -13,5 +13,3 @@ all objects registered for an extension by:
     // extensions will always be an array
 
 The module can then use those extensions to extend its functionality.
-An example of extensions in the compaction module (app/addons/compaction/base.js) 
-and in documents module (app/modules/documents/views line 1003)
