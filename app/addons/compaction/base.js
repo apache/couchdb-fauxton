@@ -11,21 +11,17 @@
 // the License.
 
 define([
-  "app",
-  "api",
-  "addons/compaction/routes"
+  'app',
+  'api',
+  'addons/compaction/components.react'
 ],
 
-function (app, FauxtonAPI, Compaction) {
+function (app, FauxtonAPI, Components) {
+
+  var Compaction = {};
 
   Compaction.initialize = function () {
-    FauxtonAPI.registerExtension('docLinks', {
-      title: "Compact & Clean",
-      url: "compact",
-      icon: "icon-cogs"
-    });
-
-    FauxtonAPI.registerExtension('view-editor:compaction-button', Compaction.ViewCompactionButton);
+    FauxtonAPI.registerExtension('DatabaseTable:databaseActions', Components.CleanupViewsButton);
   };
 
   return Compaction;

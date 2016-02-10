@@ -16,68 +16,23 @@ define([
   'react',
   'addons/compaction/stores',
   'addons/compaction/actions',
-  'addons/components/react-components.react'
+  'libs/react-bootstrap'
 ],
 
-function (app, FauxtonAPI, React, Stores, Actions, Components, ReactComponents) {
+function (app, FauxtonAPI, React, Stores, Actions, ReactBootstrap) {
   var compactionStore = Stores.compactionStore;
+  var Modal = ReactBootstrap.Modal;
 
-  var CompactDatabase = React.createClass({
 
-    run: function (e) {
-      this.props.compactDatabase();
+  var CleanupViewsButton = React.createClass({
+    propTypes: {
+      database: React.PropTypes.object.isRequired
     },
 
-    render: function () {
-      var btnText = 'Run';
-
-      if (this.props.isCompacting) {
-        btnText = 'Compacting...';
-      }
-
-      return (
-        <div className="row-fluid">
-          <div className="span12 compaction-option">
-            <h3>Compact Database</h3>
-            <p>Compacting a database removes deleted documents and previous revisions. It is an irreversible operation and may take a while to complete for large databases.</p>
-            <button id="compact-db" disabled={this.props.isCompacting} onClick={this.run} className="btn btn-large btn-primary">{btnText}</button>
-          </div>
-        </div>
-      );
-    }
-
-  });
-
-  var CleanView = React.createClass({
-
-    run: function (e) {
-      this.props.cleanupView();
-    },
-
-    render: function () {
-      var btnText = 'Run';
-
-      if (this.props.isCleaningView) {
-        btnText = 'Cleaning Views...';
-      }
-      return (
-        <div className="row-fluid">
-          <div className="span12 compaction-option">
-            <h3>Cleanup Views</h3>
-            <p>Cleaning up views in a database removes old view files still stored on the filesystem. It is an irreversible operation.</p>
-            <button id="cleanup-views" onClick={this.run} className="btn btn-large btn-primary">{btnText}</button>
-          </div>
-        </div>
-      );
-    }
-
-  });
-
-  var CompactionController = React.createClass({
     getStoreState: function () {
       return {
-        database: compactionStore.getDatabase(),
-        isCompacting: compactionStore.isCompacting(),
+        cleanupViewsModalVisible: compactionStore.isCleanupViewsModalVisible(),
+        currentDatabase: compactionStore.getCurrentDatabase(),
         isCleaningViews: compactionStore.isCleaningViews()
       };
     },
@@ -95,75 +50,84 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, ReactComponents) 
     },
 
     onChange: function () {
-      this.setState(this.getStoreState());
+      if (this.isMounted()) {
+        this.setState(this.getStoreState());
+      }
     },
 
-    compactDatabase: function () {
-      Actions.compactDatabase(this.state.database);
+    cleanupViews: function () {
+      Actions.cleanupViews(this.props.database);
     },
 
-    cleanupView: function () {
-      Actions.cleanupViews(this.state.database);
+    openModal: function (e) {
+      e.preventDefault();
+      Actions.openCleanupViewsModal(this.props.database.id);
     },
 
     render: function () {
       return (
-        <div className="compaction-page flex-body">
-          <CompactDatabase isCompacting={this.state.isCompacting} compactDatabase={this.compactDatabase} />
-          <CleanView isCleaningView={this.state.isCleaningViews} cleanupView={this.cleanupView}/>
-        </div>
+        <span>
+          <a className="db-actions btn fonticon fonticon-recycle" title="Cleanup Views" onClick={this.openModal} />
+          <CleanupViewsModal
+            databaseName={this.props.database.id}
+            visible={this.state.cleanupViewsModalVisible && this.state.currentDatabase === this.props.database.id}
+            isCleaningViews={this.state.isCleaningViews}
+            onSubmit={this.cleanupViews}
+            onClose={Actions.closeCleanupViewsModal} />
+        </span>
       );
     }
   });
 
-  var ViewCompactionButton = React.createClass({
-    onClick: function (e) {
-      e.preventDefault();
-      Actions.compactView(this.props.database, this.props.designDoc);
-    },
 
-    getStoreState: function () {
+  var CleanupViewsModal = React.createClass({
+    propTypes: function () {
       return {
-        isCompactingView: compactionStore.isCompactingView()
+        databaseName: React.PropTypes.string.isRequired,
+        visible: React.PropTypes.bool.isRequired,
+        isCleaningViews: React.PropTypes.bool.isRequired,
+        onSubmit: React.PropTypes.func.isRequired,
+        onClose: React.PropTypes.func.isRequired
       };
     },
 
-    getInitialState: function () {
-      return this.getStoreState();
-    },
-
-    componentDidMount: function () {
-      compactionStore.on('change', this.onChange, this);
-    },
-
-    componentWillUnmount: function () {
-      compactionStore.off('change', this.onChange);
-    },
-
-    onChange: function () {
-      this.setState(this.getStoreState());
-    },
-
     render: function () {
-      var btnMsg = 'Compact View';
-
-      if (this.state.isCompactingView) {
-        btnMsg = 'Compacting View';
+      var btnText = 'Continue';
+      if (this.props.isCleaningViews) {
+        btnText = 'Cleaning Views...';
       }
 
       return (
-        <button disabled={this.state.isCompactingView}
-          className="btn btn-info pull-right"
-          onClick={this.onClick}>{btnMsg}</button>
+        <Modal dialogClassName="cleanup-views-database-modal" show={this.props.visible} onHide={this.props.onClose}>
+          <Modal.Header closeButton={true}>
+            <Modal.Title>Cleanup Views</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <p>
+              Cleaning up views in a database removes old view files still stored on the filesystem. It is an irreversible
+              operation.
+            </p>
+
+            <p>
+              Do you want to cleanup the views in the <code>{this.props.databaseName}</code> database?
+            </p>
+          </Modal.Body>
+          <Modal.Footer>
+            <button className="cancel-button btn" onClick={this.props.onClose}>
+              <i className="icon fonticon-circle-x" />
+              Cancel
+            </button>
+            <button onClick={this.props.onSubmit} className="btn btn-success save" disabled={this.props.isCleaningViews}>
+              <i className="fonticon-circle-check" /> {btnText}
+            </button>
+          </Modal.Footer>
+        </Modal>
       );
     }
-
   });
 
+
   return {
-    CompactDatabase: CompactDatabase,
-    CleanView: CleanView,
-    CompactionController: CompactionController,
-    ViewCompactionButton: ViewCompactionButton
+    CleanupViewsButton: CleanupViewsButton
   };
 });

@@ -11,101 +11,26 @@
 // the License.
 define([
   'api',
+  'react',
+  'react-dom',
   'addons/compaction/components.react',
   'addons/compaction/actions',
-  'testUtils',
-  'react',
-  'react-dom'
-], function (FauxtonAPI, Views, Actions, utils, React, ReactDOM) {
-  FauxtonAPI.router = new FauxtonAPI.Router([]);
-
+  'addons/compaction/stores',
+  'testUtils'
+], function (FauxtonAPI, React, ReactDOM, Components, Actions, Stores, utils) {
   var assert = utils.assert;
   var TestUtils = React.addons.TestUtils;
 
-  describe('Compaction Controller', function () {
-    var container, controllerEl;
 
-    beforeEach(function () {
-      Actions.setCompactionFor({
-        id: 'my-database'
-      });
+  describe('Compaction Actions', function () {
 
-      container = document.createElement('div');
-      controllerEl = TestUtils.renderIntoDocument(
-        <Views.CompactionController />,
-        container
-      );
-    });
+    it('cleans views', function () {
 
-    afterEach(function () {
-      ReactDOM.unmountComponentAtNode(container);
-    });
-
-    it('triggers compact database action', function () {
-      var spy = sinon.spy(Actions, 'compactDatabase');
-
-      controllerEl.compactDatabase();
-      assert.ok(spy.calledOnce);
-    });
-
-    it('triggers clean up view action', function () {
-      var spy = sinon.spy(Actions, 'cleanupViews');
-
-      controllerEl.cleanupView();
-      assert.ok(spy.calledOnce);
-    });
-
-  });
-
-  describe('CleanView', function () {
-    var spy, container, cleanupViewEl;
-
-    beforeEach(function () {
-      spy = sinon.spy();
-      container = document.createElement('div');
-      cleanupViewEl = TestUtils.renderIntoDocument(
-        <Views.CleanView cleanupView={spy} />,
-        container
-      );
-    });
-
-    afterEach(function () {
-      ReactDOM.unmountComponentAtNode(container);
-    });
-
-    it('calls cleanupView on button click', function () {
-      var el = $(ReactDOM.findDOMNode(cleanupViewEl)).find('button')[0];
-      TestUtils.Simulate.click(el, {});
-
-      assert.ok(spy.calledOnce);
+      // Problem here. No matter what I do, Components and Actions are always empty objects when running these tests
+      console.log(Components);
 
     });
 
   });
 
-  describe('CompactDatabase', function () {
-    var spy, container, compactViewEl;
-
-    beforeEach(function () {
-      spy = sinon.spy();
-      container = document.createElement('div');
-      compactViewEl = TestUtils.renderIntoDocument(
-        <Views.CompactDatabase compactDatabase={spy} />,
-        container
-      );
-    });
-
-    afterEach(function () {
-      ReactDOM.unmountComponentAtNode(container);
-    });
-
-    it('calls compact database on button click', function () {
-      var el = $(ReactDOM.findDOMNode(compactViewEl)).find('button')[0];
-      TestUtils.Simulate.click(el, {});
-
-      assert.ok(spy.calledOnce);
-
-    });
-
-  });
 });

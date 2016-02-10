@@ -19,25 +19,6 @@ define([
 function (app, FauxtonAPI, ActionTypes, Compaction) {
 
   return {
-    setCompactionFor: function (database) {
-      FauxtonAPI.dispatch({
-        type: ActionTypes.COMPACTION_SET_UP,
-        database: database
-      });
-
-    },
-
-    compactionStarted: function () {
-      FauxtonAPI.dispatch({
-        type: ActionTypes.COMPACTION_COMPACTION_STARTING
-      });
-    },
-
-    compactionFinished: function () {
-      FauxtonAPI.dispatch({
-        type: ActionTypes.COMPACTION_COMPACTION_FINISHED
-      });
-    },
 
     cleaningViewsStarted: function () {
       FauxtonAPI.dispatch({
@@ -49,36 +30,6 @@ function (app, FauxtonAPI, ActionTypes, Compaction) {
       FauxtonAPI.dispatch({
         type: ActionTypes.COMPACTION_CLEANUP_FINISHED
       });
-    },
-
-    compactViewStarted: function () {
-      FauxtonAPI.dispatch({
-        type: ActionTypes.COMPACTION_VIEW_STARTED
-      });
-    },
-
-    compactViewFinished: function () {
-      FauxtonAPI.dispatch({
-        type: ActionTypes.COMPACTION_VIEW_FINISHED
-      });
-    },
-
-    compactDatabase: function (database) {
-      this.compactionStarted();
-      Compaction.compactDB(database).then(function () {
-        FauxtonAPI.addNotification({
-          type: 'success',
-          msg: 'Database compaction has started. Visit <a href="#activetasks">Active Tasks</a> to view the compaction progress.',
-          escape: false // beware of possible XSS when the message changes
-        });
-      }, function (xhr, error, reason) {
-        FauxtonAPI.addNotification({
-          type: 'error',
-          msg: 'Error: ' + JSON.parse(xhr.responseText).reason
-        });
-      }).always(function () {
-        this.compactionFinished();
-      }.bind(this));
     },
 
     cleanupViews: function (database) {
@@ -96,26 +47,21 @@ function (app, FauxtonAPI, ActionTypes, Compaction) {
         });
       }).always(function () {
         this.cleaningViewsFinished();
+        this.closeCleanupViewsModal();
       }.bind(this));
     },
 
-    compactView: function (database, designDoc) {
-      this.compactViewStarted();
+    openCleanupViewsModal: function (dbName) {
+      FauxtonAPI.dispatch({
+        type: ActionTypes.COMPACTION_OPEN_CLEANUP_VIEWS_MODAL,
+        options: {
+          databaseName: dbName
+        }
+      });
+    },
 
-      Compaction.compactView(database, designDoc).then(function () {
-        FauxtonAPI.addNotification({
-          type: 'success',
-          msg: 'View compaction has started. Visit <a href="#activetasks">Active Tasks</a> to view progress.',
-          escape: false // beware of possible XSS when the message changes
-        });
-      }, function (xhr, error, reason) {
-        FauxtonAPI.addNotification({
-          type: 'error',
-          msg: 'Error: ' + JSON.parse(xhr.responseText).reason
-        });
-      }).always(function () {
-        this.compactViewFinished();
-      }.bind(this));
+    closeCleanupViewsModal: function () {
+      FauxtonAPI.dispatch({ type: ActionTypes.COMPACTION_CLOSE_CLEANUP_VIEWS_MODAL });
     }
 
   };
