@@ -89,7 +89,6 @@ define([
 
     dispatch: function (action) {
       switch (action.type) {
-
         case ActionTypes.DATABASES_INIT:
           this.init(action.options.collection, action.options.backboneCollection);
           this.setPage(action.options.page);
@@ -110,10 +109,6 @@ define([
 
         case ActionTypes.DATABASES_LOADCOMPLETE:
           this.setLoading(false);
-        break;
-
-        case ActionTypes.DATABASES_SHOWDELETE_MODAL:
-          this.setDeleteModal(action.options);
         break;
 
         default:
