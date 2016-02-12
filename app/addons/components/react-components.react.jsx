@@ -1345,6 +1345,16 @@ function (app, FauxtonAPI, React, ReactDOM, Actions, Stores,
       Actions.toggleApiBarVisibility(!this.props.contentVisible);
     },
 
+    componentDidMount: function () {
+      $('body').on('click.APIBar', function () {
+        Actions.toggleApiBarVisibility(false);
+      }.bind(this));
+    },
+
+    componentWillUnmount: function () {
+      $('body').off('click.APIBar');
+    },
+
     render: function () {
       if (!this.props.buttonVisible || !this.props.endpoint) {
         return null;
