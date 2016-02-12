@@ -100,7 +100,7 @@ define([
       assert.equal("2.0 MB", dbEl.getDOMNode().getElementsByTagName('tr')[1].getElementsByTagName('td')[1].innerText.trim());
       assert.equal("88", dbEl.getDOMNode().getElementsByTagName('tr')[1].getElementsByTagName('td')[2].innerText.trim());
       assert.equal(0, dbEl.getDOMNode().getElementsByTagName('tr')[1].getElementsByTagName('td')[2].getElementsByTagName("i").length);
-      assert.equal(2, dbEl.getDOMNode().getElementsByTagName('tr')[1].getElementsByTagName('td')[4].getElementsByTagName("a").length);
+      assert.equal(3, dbEl.getDOMNode().getElementsByTagName('tr')[1].getElementsByTagName('td')[4].getElementsByTagName("a").length);
       assert.equal("db2", dbEl.getDOMNode().getElementsByTagName('tr')[2].getElementsByTagName('td')[0].innerText.trim());
       assert.equal(1, dbEl.getDOMNode().getElementsByTagName('tr')[2].getElementsByTagName('td')[2].getElementsByTagName("i").length);
     });
@@ -255,7 +255,10 @@ define([
       FauxtonAPI.registerExtension('DatabaseTable:head', ColHeader2);
       FauxtonAPI.registerExtension('DatabaseTable:head', ColHeader3);
 
-      var table = TestUtils.renderIntoDocument(<Views.DatabaseTable loading={false} body={[]} />, container);
+      var table = TestUtils.renderIntoDocument(
+        <Views.DatabaseTable showDeleteDatabaseModal={{showModal: false}} loading={false} body={[]} />,
+        container
+      );
       var cols = $(ReactDOM.findDOMNode(table)).find('th');
 
       // (default # of rows is 5)
@@ -280,7 +283,10 @@ define([
         isGraveYard: function () { return false; }
       };
 
-      var databaseRow = TestUtils.renderIntoDocument(<Views.DatabaseTable body={[row]} />, container);
+      var databaseRow = TestUtils.renderIntoDocument(
+        <Views.DatabaseTable showDeleteDatabaseModal={{showModal: false}} body={[row]} />,
+        container
+      );
       var links = $(ReactDOM.findDOMNode(databaseRow)).find('td');
 
       // (default # of rows is 5)
@@ -301,7 +307,10 @@ define([
         isGraveYard: function () { return false; }
       };
 
-      var databaseRow = TestUtils.renderIntoDocument(<Views.DatabaseTable body={[row]} />, container);
+      var databaseRow = TestUtils.renderIntoDocument(
+        <Views.DatabaseTable showDeleteDatabaseModal={{showModal: false}} body={[row]} />,
+        container
+      );
       assert.equal($(ReactDOM.findDOMNode(databaseRow)).find('.database-load-fail').length, 1);
     });
 
@@ -315,7 +324,10 @@ define([
         isGraveYard: function () { return false; }
       };
 
-      var databaseRow = TestUtils.renderIntoDocument(<Views.DatabaseTable body={[row]} />, container);
+      var databaseRow = TestUtils.renderIntoDocument(
+        <Views.DatabaseTable showDeleteDatabaseModal={{showModal: false}} body={[row]} />,
+        container
+      );
 
       assert.equal($(ReactDOM.findDOMNode(databaseRow)).find('.database-load-fail').length, 0);
     });

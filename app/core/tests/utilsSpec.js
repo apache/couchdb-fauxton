@@ -49,6 +49,17 @@ define([
       });
     });
 
+    describe('isSystemDatabase', function () {
+
+      it('detects system databases', function () {
+        assert.ok(utils.isSystemDatabase('_replicator'));
+      });
+
+      it('ignores other dbs', function () {
+        assert.notOk(utils.isSystemDatabase('foo'));
+      });
+    });
+
     describe('localStorage', function () {
 
       it('Should get undefined when getting a non-existent key', function () {

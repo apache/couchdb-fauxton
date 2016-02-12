@@ -30,12 +30,13 @@ define([
   'addons/documents/header/header.actions',
   'addons/documents/sidebar/actions',
   'addons/documents/designdocinfo/actions',
-  'addons/documents/designdocinfo/components.react'
+  'addons/documents/designdocinfo/components.react',
+  'addons/components/actions',
 ],
 
 function (app, FauxtonAPI, BaseRoute, Documents, Changes, ChangesActions, Databases, Resources, Components,
   IndexResultStores, IndexResultsActions, IndexResultsComponents, ReactPagination, ReactHeader, ReactActions,
-  SidebarActions, DesignDocInfoActions, DesignDocInfoComponents) {
+  SidebarActions, DesignDocInfoActions, DesignDocInfoComponents, ComponentsActions) {
 
     var DocumentsRouteObject = BaseRoute.extend({
       layout: "with_tabs_sidebar",
@@ -137,6 +138,7 @@ function (app, FauxtonAPI, BaseRoute, Documents, Changes, ChangesActions, Databa
         }
 
         SidebarActions.setSelectedTab(tab);
+        ComponentsActions.showDeleteDatabaseModal({showDeleteModal: false, dbId: ''});
 
         this.removeComponent('#dashboard-upper-content');
 

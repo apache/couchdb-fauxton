@@ -79,6 +79,44 @@ function (FauxtonAPI, app, ActionTypes) {
     }
   });
 
+  Stores.DeleteDbModalStore = FauxtonAPI.Store.extend({
+    initialize: function () {
+      this.reset();
+    },
+
+    reset: function () {
+      this._deleteModal = {showDeleteModal: false, dbId: '', isSystemDatabase: false};
+    },
+
+    setDeleteModal: function (options) {
+      options.isSystemDatabase = app.utils.isSystemDatabase(options.dbId);
+      this._deleteModal = options;
+    },
+
+    getShowDeleteDatabaseModal: function () {
+      return this._deleteModal;
+    },
+
+    dispatch: function (action) {
+      switch (action.type) {
+        case ActionTypes.COMPONENTS_DATABASES_SHOWDELETE_MODAL:
+          this.setDeleteModal(action.options);
+        break;
+
+        default:
+        return;
+      }
+
+      this.triggerChange();
+    }
+  });
+
+
+
+
+  Stores.deleteDbModalStore = new Stores.DeleteDbModalStore();
+  Stores.deleteDbModalStore.dispatchToken = FauxtonAPI.dispatcher.register(Stores.deleteDbModalStore.dispatch);
+
   Stores.componentStore = new Stores.ComponentStore();
   Stores.componentStore.dispatchToken = FauxtonAPI.dispatcher.register(Stores.componentStore.dispatch);
 

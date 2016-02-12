@@ -94,32 +94,33 @@ define([
           this.init(action.options.collection, action.options.backboneCollection);
           this.setPage(action.options.page);
           this.setLoading(false);
-          this.triggerChange();
         break;
 
         case ActionTypes.DATABASES_SETPAGE:
           this.setPage(action.options.page);
-          this.triggerChange();
         break;
 
         case ActionTypes.DATABASES_SET_PROMPT_VISIBLE:
           this.setPromptVisible(action.options.visible);
-          this.triggerChange();
         break;
 
         case ActionTypes.DATABASES_STARTLOADING:
           this.setLoading(true);
-          this.triggerChange();
         break;
 
         case ActionTypes.DATABASES_LOADCOMPLETE:
           this.setLoading(false);
-          this.triggerChange();
+        break;
+
+        case ActionTypes.DATABASES_SHOWDELETE_MODAL:
+          this.setDeleteModal(action.options);
         break;
 
         default:
         return;
       }
+
+      this.triggerChange();
     }
   });
 
