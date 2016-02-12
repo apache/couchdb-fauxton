@@ -1229,6 +1229,10 @@ function (app, FauxtonAPI, React, ReactDOM, Actions, Stores,
       },
 
       onChange: function () {
+        if (!this.isMounted()) {
+          return;
+        }
+
         this.setState(getStateFromStores(this.props));
       },
 
