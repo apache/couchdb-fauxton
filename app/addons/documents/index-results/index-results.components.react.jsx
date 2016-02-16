@@ -19,12 +19,9 @@ define([
   'addons/components/react-components.react',
   'addons/documents/resources',
   'addons/fauxton/components.react',
-
   'libs/react-bootstrap',
   'react-autocomplete',
-
-  'plugins/prettify',
-
+  'plugins/prettify'
 ],
 
 
@@ -37,10 +34,16 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, Documents, Fauxto
   var SplitButton = ReactBootstrap.SplitButton;
   var MenuItem = ReactBootstrap.MenuItem;
 
-  var NoResultScreen = React.createClass({
+
+  var NoResultsScreen = React.createClass({
+    propTypes: {
+      text: React.PropTypes.string.isRequired
+    },
+
     render: function () {
       return (
-        <div className="watermark-logo">
+        <div className="no-results-screen">
+          <div className="watermark-logo"></div>
           <h3>{this.props.text}</h3>
         </div>
       );
@@ -536,7 +539,7 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, Documents, Fauxto
     },
 
     render: function () {
-      var view = <NoResultScreen text={this.state.textEmptyIndex}/>;
+      var view = <NoResultsScreen text={this.state.textEmptyIndex}/>;
 
       if (this.state.hasResults) {
         view = <ResultsScreen
@@ -558,8 +561,10 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, Documents, Fauxto
     }
   });
 
+
   var Views = {
     List: ViewResultListController,
+    NoResultsScreen: NoResultsScreen,
     ResultsScreen: ResultsScreen,
     WrappedAutocomplete: WrappedAutocomplete
   };
