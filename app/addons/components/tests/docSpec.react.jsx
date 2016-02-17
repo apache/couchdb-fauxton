@@ -23,6 +23,12 @@ define([
   describe('Document', function () {
     var container, el;
 
+    var doc = {};
+    _.times(1000, function (n) {
+      doc['prop' + n] = n;
+    });
+    var docContent = JSON.stringify(doc, null, '  ');
+
     beforeEach(function () {
       container = document.createElement('div');
     });
@@ -130,6 +136,39 @@ define([
       );
       assert.equal('"foo"', $(ReactDOM.findDOMNode(el)).find('.header-doc-id').text());
     });
+
+    it('small docs should not be truncated', function () {
+      el = TestUtils.renderIntoDocument(
+        <ReactComponents.Document header="foo" isDeletable={true} checked={true} docIdentifier="foo" docContent='{ "content": true }' />,
+        container
+      );
+      assert.equal($(ReactDOM.findDOMNode(el)).find('.doc-content-truncated').length, 0);
+    });
+
+    it('large docs should get truncated', function () {
+      el = TestUtils.renderIntoDocument(
+        <ReactComponents.Document header="foo" isDeletable={true} checked={true} docIdentifier="foo" docContent={docContent} />,
+        container
+      );
+      assert.equal($(ReactDOM.findDOMNode(el)).find('.doc-content-truncated').length, 1);
+    });
+
+    it('custom truncate value', function () {
+      el = TestUtils.renderIntoDocument(
+        <ReactComponents.Document header="foo" isDeletable={true} checked={true} docIdentifier="foo" docContent={docContent} maxRows={2000} />,
+        container
+      );
+      assert.equal($(ReactDOM.findDOMNode(el)).find('.doc-content-truncated').length, 0);
+    });
+
+    it('disabling truncation', function () {
+      el = TestUtils.renderIntoDocument(
+        <ReactComponents.Document header="foo" isDeletable={true} checked={true} docIdentifier="foo" docContent={docContent} truncate={false} />,
+        container
+      );
+      assert.equal($(ReactDOM.findDOMNode(el)).find('.doc-content-truncated').length, 0);
+    });
+
   });
 
 });

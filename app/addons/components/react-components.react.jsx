@@ -17,7 +17,6 @@ define([
   'react-dom',
   'addons/components/actions',
   'addons/components/stores',
-
   'addons/fauxton/components.react',
   'addons/documents/helpers',
   'ace/ace',
@@ -25,8 +24,8 @@ define([
   'libs/react-bootstrap'
 ],
 
-function (app, FauxtonAPI, React, ReactDOM, Actions, Stores,
-  FauxtonComponents, Helpers, ace, beautifyHelper, ReactBootstrap) {
+function (app, FauxtonAPI, React, ReactDOM, Actions, Stores, FauxtonComponents, Helpers, ace, beautifyHelper,
+  ReactBootstrap) {
 
   var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
   var componentStore = Stores.componentStore;
@@ -36,7 +35,7 @@ function (app, FauxtonAPI, React, ReactDOM, Actions, Stores,
 
     propTypes: {
       elements: React.PropTypes.array.isRequired,
-      removeBadge: React.PropTypes.func.isRequired,
+      removeBadge: React.PropTypes.func.isRequired
     },
 
     getDefaultProps: function () {
@@ -994,7 +993,16 @@ function (app, FauxtonAPI, React, ReactDOM, Actions, Stores,
   var Document = React.createClass({
     propTypes: {
       docIdentifier: React.PropTypes.string.isRequired,
-      docChecked: React.PropTypes.func.isRequired
+      docChecked: React.PropTypes.func.isRequired,
+      truncate: React.PropTypes.bool,
+      maxRows: React.PropTypes.number
+    },
+
+    getDefaultProps: function () {
+      return {
+        truncate: true,
+        maxRows: 500
+      };
     },
 
     onChange: function (e) {
@@ -1046,13 +1054,25 @@ function (app, FauxtonAPI, React, ReactDOM, Actions, Stores,
     },
 
     getDocContent: function () {
-      if (!_.isEmpty(this.props.docContent)) {
-        return (
-          <div className="doc-data">
-            <pre className="prettyprint">{this.props.docContent}</pre>
-          </div>
-        );
+      if (_.isEmpty(this.props.docContent)) {
+        return null;
       }
+
+      // if need be, truncate the document
+      var content = this.props.docContent;
+      var isTruncated = false;
+      if (this.props.truncate) {
+        var result = Helpers.truncateDoc(this.props.docContent, this.props.maxRows);
+        isTruncated = result.isTruncated;
+        content = result.content;
+      }
+
+      return (
+        <div className="doc-data">
+          <pre className="prettyprint">{content}</pre>
+          {isTruncated ? <div className="doc-content-truncated">(truncated)</div> : null}
+        </div>
+      );
     },
 
     render: function () {

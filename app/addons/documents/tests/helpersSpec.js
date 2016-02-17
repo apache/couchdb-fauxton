@@ -26,6 +26,27 @@ define([
       });
     });
 
+    describe('truncateDoc', function () {
+      var sevenLineDoc = '{\n"line2": 2,\n"line3": 3,\n"line4": 4,\n"line5": 5,\n"line6": 6\n}';
+
+      it('does no truncation if maxRows set higher than doc', function () {
+        var result = Helpers.truncateDoc(sevenLineDoc, 10);
+        assert.equal(result.isTruncated, false);
+        assert.equal(result.content, result.content);
+      });
+
+      it('truncates by specified line count', function () {
+        var result = Helpers.truncateDoc(sevenLineDoc, 5);
+        assert.equal(result.isTruncated, true);
+        assert.equal(result.content, '{\n"line2": 2,\n"line3": 3,\n"line4": 4,\n"line5": 5,');
+
+        var result2 = Helpers.truncateDoc(sevenLineDoc, 2);
+        assert.equal(result2.isTruncated, true);
+        assert.equal(result2.content, '{\n"line2": 2,');
+      });
+
+    });
+
   });
 
 });

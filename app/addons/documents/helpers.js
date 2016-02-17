@@ -96,12 +96,28 @@ define([
     }];
   }
 
+  function truncateDoc (docString, maxRows) {
+    var lines = docString.split('\n');
+    var isTruncated = false;
+    if (lines.length > maxRows) {
+      isTruncated = true;
+      lines = lines.slice(0, maxRows);
+      docString = lines.join('\n');
+    }
+    return {
+      isTruncated: isTruncated,
+      content: docString
+    };
+  }
+
+
   return {
     getPreviousPageForDoc: getPreviousPageForDoc,
     getPreviousPage: getPreviousPage,
     getSeqNum: getSeqNum,
     getNewButtonLinks: getNewButtonLinks,
     getModifyDatabaseLinks: getModifyDatabaseLinks,
-    parseJSON: parseJSON
+    parseJSON: parseJSON,
+    truncateDoc: truncateDoc
   };
 });
