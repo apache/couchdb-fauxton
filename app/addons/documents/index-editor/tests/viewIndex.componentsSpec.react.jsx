@@ -106,7 +106,6 @@ define([
 
   describe('DesignDocSelector component', function () {
     var container, selectorEl;
-    var database = { id: 'db' };
     var designDoc = {
       "id": "_design/test-doc",
       "key": "_design/test-doc",
@@ -251,7 +250,7 @@ define([
       container = document.createElement('div');
       $('body').append('<div id="map-function"></div>');
       $('body').append('<div id="editor"></div>');
-      editorEl = TestUtils.renderIntoDocument(<Views.Editor/>, container);
+      editorEl = TestUtils.renderIntoDocument(<Views.EditorController />, container);
       sandbox = sinon.sandbox.create();
     });
 

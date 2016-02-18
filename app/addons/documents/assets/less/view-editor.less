@@ -12,18 +12,24 @@
 
 @import "../../../../../assets/less/variables.less";
 
-.editor-wrapper {
-  .define-view {
-    padding-bottom: 70px;
+.define-view {
+  padding: 15px;
+  .help-link {
+    margin-left: 4px;
   }
-  .define-view {
-    .help-link {
-      margin-left: 3px;
+  .design-doc-group #new-ddoc-section {
+    margin-top: 24px;
+    label {
+      padding-top: 12px;
     }
   }
+}
+
+/* to remove once Mango has moved to the standard 2-panel layout */
+.mango-editor-wrapper {
   label {
     font-size: 16px;
-    margin-right: 0px;
+    margin-right: 0;
   }
   .bordered-box {
     border-bottom: 1px solid #ccc;
@@ -52,12 +58,10 @@
   a.edit-link {
     float: right;
   }
+  .help-link {
+    margin-left: 4px;
+  }
 }
-
-body .view-query-save .control-group {
-  margin-bottom: 0;
-}
-
 
 // 940px grid without margin
 // -------------------------
@@ -218,25 +222,7 @@ body .view-query-save .control-group {
   }
 }
 
-
-/* temporary CSS overrides. This will be removed once the Views is moved to the standard 2-panel layout */
-.define-view .new-ddoc-section {
-  .span5 {
-    .label {
-      display: none;
-    }
-    .control-label {
-      display: none;
-    }
-  }
-  .span3 span {
-    font-weight: bold;
-  }
-  #new-ddoc-section {
-    margin: 16px 0 0;
-    .controls {
-      margin-left: 0;
-    }
-  }
+.index-cancel-link {
+  margin-left: 10px;
+  font-size: 14px;
 }
-/* end temporary override */

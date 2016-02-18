@@ -12,7 +12,7 @@
 
 define([
   'api',
-  'addons/documents/sidebar/stores',
+  'addons/documents/sidebar/stores.react',
   'addons/documents/sidebar/actiontypes',
   'testUtils'
 ], function (FauxtonAPI, Stores, ActionTypes, testUtils) {

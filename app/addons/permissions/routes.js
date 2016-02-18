@@ -85,15 +85,10 @@ function (app, FauxtonAPI, Databases, Resources, Actions, Permissions, BaseRoute
     },
 
     cleanup: function () {
-      if (this.pageContent) {
-        this.removeView('#dashboard-content');
-      }
       if (this.leftheader) {
         this.removeView('#breadcrumbs');
       }
-      if (this.sidebar) {
-        this.removeView('#sidebar');
-      }
+      this.removeComponent('#sidebar-content');
       this.stopListening(FauxtonAPI.Events, 'lookaheadTray:update', this.onSelectDatabase);
     }
   });

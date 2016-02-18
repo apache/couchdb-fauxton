@@ -27,13 +27,9 @@ define([
 
 
   describe('Index Editor Actions', function () {
-    var database = {
-      safeID: function () { return 'id'; }
-    };
-
 
     describe('delete view', function () {
-      var designDocs, database, designDoc, designDocId, viewName;
+      var designDocs, database, designDoc, designDocCollection, designDocId, viewName;
       beforeEach(function () {
         database = {
           safeID: function () { return 'safeid';}
@@ -41,7 +37,7 @@ define([
 
         viewName = 'test-view';
         designDocId = '_design/test-doc';
-        designDocs = new Documents.AllDocs([{
+        designDocCollection = new Documents.AllDocs([{
           _id: designDocId,
           _rev: '1-231',
           views: {
@@ -56,7 +52,7 @@ define([
           params: { limit: 10 },
           database: database
         });
-        designDocs = designDocs.models;
+        designDocs = designDocCollection.models;
         designDoc = _.first(designDocs);
       });
 
@@ -65,46 +61,56 @@ define([
         restore(FauxtonAPI.triggerRouteEvent);
       });
 
-      it('removes view from design doc', function () {
-
-        Actions.deleteView({
-          viewName: viewName,
-          designDocId: designDocId,
-          database: database,
-          designDocs: designDocs
-        });
-
-        assert.ok(_.isUndefined(designDoc.getDdocView(viewName)));
-      });
-
       it('saves design doc if has other views', function () {
-        var spy = sinon.spy(designDoc, 'save');
+        designDoc.save = function () {
+          var promise = $.Deferred();
+          promise.resolve();
+          return promise;
+        };
+        var saveSpy = sinon.spy(designDoc, 'save');
+        designDocs.fetch = function () {
+          var promise = $.Deferred();
+          promise.resolve();
+          return promise;
+        };
 
         Actions.deleteView({
-          viewName: viewName,
-          designDocId: designDocId,
+          indexName: viewName,
           database: database,
-          designDocs: designDocs
+          designDocs: designDocs,
+          designDoc: designDoc
         });
 
-        assert.ok(spy.calledOnce);
+        assert.ok(saveSpy.calledOnce);
       });
 
       it('deletes design doc if has no other views', function () {
-        var spy = sinon.spy(designDoc, 'destroy');
         designDoc.removeDdocView('test-view2');
 
+        designDoc.destroy = function () {
+          var promise = $.Deferred();
+          promise.resolve();
+          return promise;
+        };
+        var destroySpy = sinon.spy(designDoc, 'destroy');
+        designDocs.remove = function () {};
+        designDocs.fetch = function () {
+          var promise = $.Deferred();
+          promise.resolve();
+          return promise;
+        };
+
         Actions.deleteView({
-          viewName: viewName,
-          designDocId: designDocId,
+          indexName: viewName,
           database: database,
-          designDocs: designDocs
+          designDocs: designDocs,
+          designDoc: designDoc
         });
 
-        assert.ok(spy.calledOnce);
+        assert.ok(destroySpy.calledOnce);
       });
 
-      it('navigates to all docs', function () {
+      it('navigates to all docs if was on view', function () {
         var spy = sinon.spy(FauxtonAPI, 'navigate');
 
         designDoc.save = function () {
@@ -112,36 +118,21 @@ define([
           promise.resolve();
           return promise;
         };
-
-        Actions.deleteView({
-          viewName: viewName,
-          designDocId: designDocId,
-          database: database,
-          designDocs: designDocs
-        });
-
-        assert.ok(spy.getCall(0).args[0].match(/_all_docs/));
-        assert.ok(spy.calledOnce);
-      });
-
-      it('triggers design doc reload', function () {
-        var spy = sinon.spy(FauxtonAPI, 'triggerRouteEvent');
-
-        designDoc.save = function () {
+        designDocs.fetch = function () {
           var promise = $.Deferred();
           promise.resolve();
           return promise;
         };
-
         Actions.deleteView({
-          viewName: viewName,
-          designDocId: designDocId,
+          indexName: viewName,
           database: database,
-          designDocs: designDocs
+          designDocs: designDocs,
+          designDoc: designDoc,
+          isOnIndex: true
         });
 
+        assert.ok(spy.getCall(0).args[0].match(/_all_docs/));
         assert.ok(spy.calledOnce);
-        assert.equal(spy.getCall(0).args[0], 'reloadDesignDocs');
       });
 
     });

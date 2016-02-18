@@ -23,6 +23,7 @@ define([
 
   describe('DesignDoc', function () {
     var container;
+    var database = { id: 'db' };
 
     var selectedNavInfo = {
       navItem: 'all-docs',
@@ -40,80 +41,72 @@ define([
     });
 
     it('confirm only single sub-option is shown by default (metadata link)', function () {
-      var stub = function () { return true; };
       var el = TestUtils.renderIntoDocument(<DesignDoc
-        toggle={stub}
+        database={database}
+        toggle={function () {}}
         sidebarListTypes={[]}
-        contentVisible={true}
-        isVisible={stub}
-        designDoc={{}}
+        isExpanded={true}
         selectedNavInfo={selectedNavInfo}
-        designDocName="id"
-        databaseName="db-name" />, container);
+        toggledSections={{}}
+        designDoc={{ customProp: { one: 'something' } }}
+      />, container);
+
       var subOptions = $(ReactDOM.findDOMNode(el)).find('.accordion-body li');
       assert.equal(subOptions.length, 1);
    });
 
     it('confirm design doc sidebar extensions appear', function () {
-      var stub = function () { return true; };
       var el = TestUtils.renderIntoDocument(<DesignDoc
-        toggle={stub}
-        contentVisible={true}
-        isVisible={stub}
+        database={database}
+        toggle={function () {}}
         sidebarListTypes={[{
           selector: 'customProp',
           name: 'Search Indexes',
           icon: 'icon-here',
           urlNamespace: 'whatever'
         }]}
-        designDoc={{
-          customProp: {
-            one: 'something'
-          }
-        }}
+        isExpanded={true}
         selectedNavInfo={selectedNavInfo}
-        designDocName="id"
-        databaseName="db-name" />, container);
+        toggledSections={{}}
+        designDoc={{ customProp: { one: 'something' } }}
+      />, container);
+
       var subOptions = $(ReactDOM.findDOMNode(el)).find('.accordion-body li');
       assert.equal(subOptions.length, 3); // 1 for "Metadata" row, 1 for Type List row ("search indexes") and one for the index itself
     });
 
     it('confirm design doc sidebar extensions do not appear when they have no content', function () {
-      var stub = function () { return true; };
       var el = TestUtils.renderIntoDocument(<DesignDoc
-        toggle={stub}
+        database={database}
+        toggle={function () {}}
         sidebarListTypes={[{
           selector: 'customProp',
           name: 'Search Indexes',
           icon: 'icon-here',
           urlNamespace: 'whatever'
         }]}
-        contentVisible={true}
-        isVisible={stub}
+        isExpanded={true}
         selectedNavInfo={selectedNavInfo}
         designDoc={{}} // note that this is empty
-        designDocName="id"
-        databaseName="db-name" />, container);
+      />, container);
+
       var subOptions = $(ReactDOM.findDOMNode(el)).find('.accordion-body li');
       assert.equal(subOptions.length, 1);
     });
 
     it('confirm doc metadata page is highlighted if selected', function () {
-      var stub = function () { return true; };
       var el = TestUtils.renderIntoDocument(<DesignDoc
-        toggle={stub}
+        database={database}
+        toggle={function () {}}
         sidebarListTypes={[]}
-        contentVisible={true}
-        isVisible={stub}
+        isExpanded={true}
         selectedNavInfo={{
           navItem: 'designDoc',
           designDocName: 'id',
           designDocSection: 'metadata',
           indexName: ''
         }}
-        designDoc={{}}
-        designDocName="id"
-        databaseName="db-name" />, container);
+        designDoc={{}} />, container);
 
       assert.equal($(ReactDOM.findDOMNode(el)).find('.accordion-body li.active a').html(), 'Metadata');
     });

@@ -74,7 +74,7 @@ function (app, FauxtonAPI, React, Stores, Actions,
       var loadLines;
       if (this.state.isLoading) {
         return (
-          <div className="editor-wrapper">
+          <div className="mango-editor-wrapper">
             <ReactComponents.LoadLines />
           </div>
         );
@@ -130,7 +130,7 @@ function (app, FauxtonAPI, React, Stores, Actions,
       var url = '#/' + FauxtonAPI.urls('allDocs', 'app', this.props.dbName, '');
 
       return (
-        <div className="editor-wrapper">
+        <div className="mango-editor-wrapper">
           <PaddedBorderedBox>
             <div
               dangerouslySetInnerHTML={{__html: this.props.description}}

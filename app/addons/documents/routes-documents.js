@@ -63,7 +63,7 @@ function (app, FauxtonAPI, BaseRoute, Documents, Changes, ChangesActions, Databa
 
       establish: function () {
         return [
-          this.designDocs.fetch({reset: true}),
+          this.designDocs.fetch({ reset: true }),
           this.allDatabases.fetchOnce()
         ];
       },
@@ -170,8 +170,8 @@ function (app, FauxtonAPI, BaseRoute, Documents, Changes, ChangesActions, Databa
         this.rightHeader.showQueryOptions();
       },
 
-      //TODO: REMOVE
       reloadDesignDocs: function (event) {
+        this.addSidebar(); // this ensures the design docs get reloaded
         if (event && event.selectedTab) {
           SidebarActions.selectNavItem(event.selectedTab);
         }

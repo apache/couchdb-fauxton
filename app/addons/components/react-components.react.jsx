@@ -369,7 +369,7 @@ function (app, FauxtonAPI, React, ReactDOM, Actions, Stores, FauxtonComponents, 
       return (
         <div className={classes}>
           <label>
-            <strong>{this.props.title + ' '}</strong>
+            <span>{this.props.title}</span>
             {this.getDocIcon()}
             {this.getZenModeIcon()}
           </label>

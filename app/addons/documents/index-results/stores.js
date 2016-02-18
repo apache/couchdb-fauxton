@@ -47,7 +47,7 @@ function (app, FauxtonAPI, ActionTypes, HeaderActionTypes, PaginationActionTypes
 
       this.clearSelectedItems();
       this._isLoading = false;
-      this._textEmptyIndex = 'No Index Created Yet!';
+      this._textEmptyIndex = 'No Documents Found';
       this._typeOfIndex = 'view';
 
       this._tableViewSelectedFields = [];

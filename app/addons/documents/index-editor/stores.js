@@ -43,9 +43,10 @@ function (FauxtonAPI, ActionTypes, Resources) {
       this._newDesignDocName = '';
       this._designDocs = options.designDocs;
       this._designDocId = options.designDocId;
-      this._designDocChanged = false;
-      this._viewNameChanged = false;
+      this._originalViewName = this._viewName;
+      this._originalDesignDocName = options.designDocId;
       this.setView();
+
       this._isLoading = false;
     },
 
@@ -88,14 +89,15 @@ function (FauxtonAPI, ActionTypes, Resources) {
     },
 
     getDesignDocs: function () {
-      return this._designDocs.filter(function (ddoc) {
-        return !ddoc.isMangoDoc();
-      });
+      return this._designDocs;
     },
 
-    // returns a simple array of design doc IDs
+    // returns a simple array of design doc IDs. Omits mango docs
     getAvailableDesignDocs: function () {
-      return _.map(this.getDesignDocs(), function (doc) {
+      var availableDocs = this.getDesignDocs().filter(function (doc) {
+        return !doc.isMangoDoc();
+      });
+      return _.map(availableDocs, function (doc) {
         return doc.id;
       });
     },
@@ -106,10 +108,6 @@ function (FauxtonAPI, ActionTypes, Resources) {
 
     setDesignDocId: function (designDocId) {
       this._designDocId = designDocId;
-    },
-
-    hasDesignDocChanged: function () {
-      return this._designDocChanged;
     },
 
     isNewDesignDoc: function () {
@@ -126,23 +124,28 @@ function (FauxtonAPI, ActionTypes, Resources) {
 
     setViewName: function (name) {
       this._viewName = name;
-      this._viewNameChanged = true;
     },
 
     hasCustomReduce: function () {
-      if (!this.hasReduce()) { return false; }
-
+      if (!this.hasReduce()) {
+        return false;
+      }
       return !_.contains(this.builtInReduces(), this.getReduce());
     },
 
     hasReduce: function () {
-      if (!this.getReduce()) { return false; }
-
+      if (!this.getReduce()) {
+        return false;
+      }
       return true;
     },
 
-    hasViewNameChanged: function () {
-      return this._viewNameChanged;
+    getOriginalViewName: function () {
+      return this._originalViewName;
+    },
+
+    getOriginalDesignDocName: function () {
+      return this._originalDesignDocName;
     },
 
     builtInReduces: function () {
@@ -153,11 +156,9 @@ function (FauxtonAPI, ActionTypes, Resources) {
       if (!this.hasReduce()) {
         return 'NONE';
       }
-
       if (this.hasCustomReduce()) {
         return 'CUSTOM';
       }
-
       return this.getReduce();
     },
 
@@ -170,17 +171,16 @@ function (FauxtonAPI, ActionTypes, Resources) {
         this.setReduce(null);
         return;
       }
-
       if (selectedReduce === 'CUSTOM') {
         this.setReduce(this.defaultReduce);
         return;
       }
-
       this.setReduce(selectedReduce);
     },
 
-    updateDesignDoc: function (designDoc) {
-      this._designDocs.add(designDoc, {merge: true});
+    addDesignDoc: function (designDoc) {
+      this._designDocs.add(designDoc, { merge: true });
+      this._designDocId = designDoc._id;
     },
 
     getNewDesignDocName: function () {
@@ -236,8 +236,8 @@ function (FauxtonAPI, ActionTypes, Resources) {
         case ActionTypes.VIEW_CREATED:
         break;
 
-        case ActionTypes.VIEW_UPDATE_DESIGN_DOC:
-          this.updateDesignDoc(action.designDoc);
+        case ActionTypes.VIEW_ADD_DESIGN_DOC:
+          this.addDesignDoc(action.designDoc);
           this.setView();
         break;
 

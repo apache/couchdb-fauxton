@@ -68,7 +68,7 @@ module.exports = {
       .clickWhenVisible('#header-dropdown-menu a', waitTime, false)
       .waitForElementPresent('#header-dropdown-menu  a[href*="new_view"]', waitTime, false)
       .clickWhenVisible('#header-dropdown-menu a[href*="new_view"]', waitTime, false)
-      .waitForElementPresent('.editor-wrapper', waitTime, false)
+      .waitForElementPresent('.index-cancel-link', waitTime, false)
       .waitForElementPresent('#new-ddoc', waitTime, false)
       .setValue('#new-ddoc', 'sidebar-update')
       .clearValue('#index-name')
