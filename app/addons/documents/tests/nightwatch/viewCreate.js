@@ -56,9 +56,9 @@ module.exports = {
       .checkForDocumentCreated('_design/test_design_doc-selenium-3')
       .waitForElementPresent('.prettyprint', waitTime, false)
       .waitForElementNotPresent('.loading-lines', waitTime, false)
+
+      // page now automatically redirects user to results of View. Confirm the new doc is present.
       .assert.containsText('.prettyprint', 'hasehase')
-      .back()
-      .waitForElementPresent('.watermark-logo', waitTime, false)
     .end();
   },
 
@@ -110,16 +110,6 @@ module.exports = {
       .execute('$("#save-view")[0].scrollIntoView();')
       .clickWhenVisible('#save-view')
       .checkForDocumentCreated('_design/testdesigndoc/_view/test-new-view')
-
-      .waitForElementPresent('.prettyprint', waitTime, false)
-      .waitForElementNotPresent('.loading-lines', waitTime, false)
-      //go back to all docs
-      .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
-      .clickWhenVisible('#nav-header-testdesigndoc', waitTime, false)
-      .clickWhenVisible('#nav-design-function-testdesigndocviews a', waitTime, false)
-      .execute('$("#testdesigndoc_test-new-view")[0].scrollIntoView();')
-      .clickWhenVisible('#testdesigndoc_test-new-view', waitTime, false)
-      .execute('$(".save")[0].scrollIntoView();')
       .waitForElementPresent('.prettyprint', waitTime, false)
       .waitForElementNotPresent('.loading-lines', waitTime, false)
       .assert.containsText('.prettyprint', 'enteente')
@@ -131,7 +121,6 @@ function openDifferentDropdownsAndClick (client, dropDownElement) {
   var modifier = dropDownElement.slice(1);
   var waitTime = client.globals.maxWaitTime;
   var newDatabaseName = client.globals.testDatabaseName;
-  var newDocumentName = 'create_view_doc' + modifier;
   var baseUrl = client.globals.test_settings.launch_url;
 
   return client
@@ -143,5 +132,5 @@ function openDifferentDropdownsAndClick (client, dropDownElement) {
     .clickWhenVisible(dropDownElement + ' a', waitTime, false)
     .waitForElementPresent(dropDownElement + ' a[href*="new_view"]', waitTime, false)
     .clickWhenVisible(dropDownElement + ' a[href*="new_view"]', waitTime, false)
-    .waitForElementPresent('.editor-wrapper', waitTime, false);
+    .waitForElementPresent('.index-cancel-link', waitTime, false);
 }

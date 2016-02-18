@@ -22,7 +22,7 @@ module.exports = {
     .loginToGUI()
     .populateDatabase(newDatabaseName)
     .url(baseUrl + '/#/database/' + newDatabaseName + '/_design/testdesigndoc/_view/stubview')
-    .waitForElementPresent('.editor-wrapper', waitTime, false)
+    .waitForElementPresent('.clearfix', waitTime, false)
     .waitForElementPresent('.doc-row', waitTime, false)
     .execute(function () {
       return $('.doc-row').length;

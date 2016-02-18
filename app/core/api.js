@@ -98,6 +98,14 @@ function (FauxtonAPI, Layout, Router, RouteObject, utils, Store, constants, Flux
     return url;
   };
 
+  // out-the-box Fauxton has only Views, but scripts extending Fauxton may introduce others (search indexes, geospatial
+  // indexes, etc). This returns an array of the special design doc property names for the index types
+  FauxtonAPI.getIndexTypePropNames = function () {
+    var indexTypes = FauxtonAPI.getExtensions('IndexTypes:propNames');
+    indexTypes.push('views');
+    return indexTypes;
+  };
+
   return FauxtonAPI;
 });
 

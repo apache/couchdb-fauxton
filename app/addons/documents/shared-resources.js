@@ -84,40 +84,8 @@ define([
       return false;
     },
 
-    isReducedShown : function () {
-      if (this.collection) {
-        return this.collection.params.reduce;
-      } else {
-        return false;
-      }
-    },
-
     isDdoc: function () {
       return this.docType() === "design doc";
-    },
-
-    hasViews: function () {
-      if (!this.isDdoc()) return false;
-      var doc = this.get('doc');
-      if (doc) {
-        return doc && doc.views && _.keys(doc.views).length > 0;
-      }
-
-      var views = this.get('views');
-      return views && _.keys(views).length > 0;
-    },
-
-    getDdocView: function (view) {
-      if (!this.isDdoc() || !this.hasViews()) {
-        return false;
-      }
-
-      var doc = this.get('doc');
-      if (doc) {
-        return doc.views[view];
-      }
-
-      return this.get('views')[view];
     },
 
     setDdocView: function (view, map, reduce) {

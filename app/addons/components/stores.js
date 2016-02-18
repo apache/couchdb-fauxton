@@ -19,7 +19,6 @@ define([
 function (FauxtonAPI, app, ActionTypes) {
   var Stores = {};
 
-
   Stores.ComponentStore = FauxtonAPI.Store.extend({
     initialize: function () {
       this.reset();

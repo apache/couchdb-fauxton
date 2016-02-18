@@ -12,32 +12,38 @@
 
 module.exports = {
 
-  'Edits a design doc - set new index name': function (client) {
-    /*jshint multistr: true */
+  'Edits a design doc - renames index': function (client) {
     var waitTime = client.globals.maxWaitTime,
         newDatabaseName = client.globals.testDatabaseName,
         baseUrl = client.globals.test_settings.launch_url;
 
-    var viewUrl = newDatabaseName + '/_design/testdesigndoc/_view/hasenindex5000?limit=6&reduce=false';
     client
+      .deleteDatabase(newDatabaseName)
       .createDatabase(newDatabaseName)
       .populateDatabase(newDatabaseName)
       .loginToGUI()
-      .url(baseUrl + '/#/database/' + newDatabaseName + '/_design/testdesigndoc/_view/stubview')
-      .waitForElementPresent('.prettyprint', waitTime, false)
-      .assert.containsText('.prettyprint', 'stub')
+      .url(baseUrl + '/#/database/' + newDatabaseName + '/_design/testdesigndoc/_view/stubview/edit')
+      .waitForElementPresent('.index-cancel-link', waitTime, true)
+      .waitForElementNotPresent('.spinner', waitTime, true)
+      .waitForElementNotPresent('.loading-lines', waitTime, true)
+      .waitForElementVisible('#index-name', waitTime, true)
+      .waitForElementPresent('.breadcrumb .js-lastelement', waitTime, false)
+      .waitForAttribute('.breadcrumb .js-lastelement', 'textContent', function (docContents) {
+        var regExp = new RegExp(newDatabaseName);
+        return regExp.test(docContents);
+      })
+
+      .waitForAttribute('#index-name', 'value', function (val) {
+        return val === 'stubview';
+      })
       .clearValue('#index-name')
       .setValue('#index-name', 'hasenindex5000')
-      .execute('\
-        var editor = ace.edit("map-function");\
-        editor.getSession().setValue("function (doc) { emit(\'hasehase5000\', 1); }");\
-      ')
+
       .execute('$("#save-view")[0].scrollIntoView();')
       .clickWhenVisible('#save-view')
-      .checkForStringPresent(viewUrl, 'hasehase5000')
-      .waitForElementNotPresent('.loading-lines', waitTime, false)
-      .waitForElementVisible('.prettyprint', waitTime, false)
-      .assert.containsText('.prettyprint', 'hasehase5000')
+
+      // confirm the new index name is present
+      .waitForElementVisible('#testdesigndoc_hasenindex5000', waitTime, false)
     .end();
   },
 
@@ -50,12 +56,25 @@ module.exports = {
     var viewUrl = newDatabaseName + '/_design/testdesigndoc/_view/stubview?limit=6&reduce=false';
 
     client
+      .deleteDatabase(newDatabaseName)
       .createDatabase(newDatabaseName)
       .populateDatabase(newDatabaseName)
       .loginToGUI()
-      .url(baseUrl + '/#/database/' + newDatabaseName + '/_design/testdesigndoc/_view/stubview')
-      .waitForElementPresent('.prettyprint', waitTime, false)
-      .assert.containsText('.prettyprint', 'stub')
+
+      .url(baseUrl + '/#/database/' + newDatabaseName + '/_design/testdesigndoc/_view/stubview/edit')
+      .waitForElementPresent('.index-cancel-link', waitTime, true)
+      .waitForElementNotPresent('.spinner', waitTime, true)
+      .waitForElementNotPresent('.loading-lines', waitTime, true)
+      .waitForElementVisible('#index-name', waitTime, true)
+      .waitForElementPresent('.breadcrumb .js-lastelement', waitTime, false)
+      .waitForAttribute('.breadcrumb .js-lastelement', 'textContent', function (docContents) {
+        var regExp = new RegExp(newDatabaseName);
+        return regExp.test(docContents);
+      })
+
+      .waitForAttribute('#index-name', 'value', function (val) {
+        return val === 'stubview';
+      })
 
       .execute('\
         var editor = ace.edit("map-function");\
@@ -63,12 +82,18 @@ module.exports = {
         editor._emit(\'blur\');\
       ')
       .execute('$("#save-view")[0].scrollIntoView();')
-
       .clickWhenVisible('#save-view')
 
       .checkForStringPresent(viewUrl, 'hasehase6000')
+      .url(baseUrl + '/#/database/' + newDatabaseName + '/_design/testdesigndoc/_view/stubview')
       .waitForElementNotPresent('.loading-lines', waitTime, false)
+      .waitForElementNotPresent('.spinner', waitTime, false)
       .waitForElementVisible('.prettyprint', waitTime, false)
+      .waitForElementPresent('.breadcrumb .js-lastelement', waitTime, false)
+      .waitForAttribute('.breadcrumb .js-lastelement', 'textContent', function (docContents) {
+        var regExp = new RegExp(newDatabaseName);
+        return regExp.test(docContents);
+      })
       .waitForAttribute('#doc-list', 'textContent', function (docContents) {
         return (/hasehase6000/).test(docContents);
       })
@@ -83,6 +108,7 @@ module.exports = {
       dropDownElement = '#header-dropdown-menu';
 
     client
+      .deleteDatabase(newDatabaseName)
       .createDatabase(newDatabaseName)
       .populateDatabase(newDatabaseName)
       .loginToGUI()
@@ -92,6 +118,14 @@ module.exports = {
       .waitForElementPresent(dropDownElement, waitTime, false)
       .clickWhenVisible(dropDownElement + ' a')
       .clickWhenVisible(dropDownElement + ' a[href*="new_view"]')
+      .waitForElementNotPresent('.spinner', waitTime, true)
+      .waitForElementNotPresent('.loading-lines', waitTime, true)
+      .waitForElementPresent('.breadcrumb .js-lastelement', waitTime, false)
+      .waitForAttribute('.breadcrumb .js-lastelement', 'textContent', function (docContents) {
+        var regExp = new RegExp(newDatabaseName);
+        return regExp.test(docContents);
+      })
+
       .waitForElementVisible('#new-ddoc', waitTime, false)
       .setValue('#new-ddoc', 'view1-name')
       .clearValue('#index-name')
@@ -105,7 +139,6 @@ module.exports = {
       .execute('$("#save-view")[0].scrollIntoView();')
       .clickWhenVisible('#save-view')
       .checkForDocumentCreated('_design/view1-name')
-      .waitForElementPresent('.btn.btn-danger.delete', waitTime, false)
 
       // create the second view
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
@@ -113,6 +146,14 @@ module.exports = {
       .clickWhenVisible(dropDownElement + ' a')
       .clickWhenVisible(dropDownElement + ' a[href*="new_view"]')
       .waitForElementVisible('#new-ddoc', waitTime, false)
+      .waitForElementNotPresent('.spinner', waitTime, true)
+      .waitForElementNotPresent('.loading-lines', waitTime, true)
+      .waitForElementPresent('.breadcrumb .js-lastelement', waitTime, false)
+      .waitForAttribute('.breadcrumb .js-lastelement', 'textContent', function (docContents) {
+        var regExp = new RegExp(newDatabaseName);
+        return regExp.test(docContents);
+      })
+
       .setValue('#new-ddoc', 'view2-name')
       .clearValue('#index-name')
       .setValue('#index-name', 'view2')
@@ -125,15 +166,19 @@ module.exports = {
       .execute('$("#save-view")[0].scrollIntoView();')
       .clickWhenVisible('#save-view')
       .checkForDocumentCreated('_design/view2-name')
-      .waitForElementPresent('.btn.btn-danger.delete', waitTime, false)
-
-      // go back to the all docs page to ensure a page reload when we return to the Edit View page
-      .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
-      .waitForElementPresent(dropDownElement, waitTime, false)
 
       // now redirect back to first view and confirm the fields are all populated properly
-      .url(baseUrl + '/#/database/' + newDatabaseName + '/_design/view1-name/_view/view1')
+      .url(baseUrl + '/#/database/' + newDatabaseName + '/_design/view1-name/_view/view1/edit')
+
+      .waitForElementNotPresent('.spinner', waitTime, true)
+      .waitForElementNotPresent('.loading-lines', waitTime, true)
       .waitForElementVisible('#save-view', waitTime, false)
+      .waitForElementPresent('.breadcrumb .js-lastelement', waitTime, false)
+      .waitForAttribute('.breadcrumb .js-lastelement', 'textContent', function (docContents) {
+        var regExp = new RegExp(newDatabaseName);
+        return regExp.test(docContents);
+      })
+
       .execute(function () {
         var editor = window.ace.edit("map-function");
         return editor.getSession().getValue();
@@ -143,34 +188,56 @@ module.exports = {
       .end();
   },
 
-  'Query Options are kept after a new reduce method is chosen': function (client) {
-    /*jshint multistr: true */
+  'Editing a view and putting it into a new design doc removes it from the old design doc': function (client) {
     var waitTime = client.globals.maxWaitTime,
-        newDatabaseName = client.globals.testDatabaseName,
-        baseUrl = client.globals.test_settings.launch_url;
-
-    var viewUrl = newDatabaseName + '/_design/testdesigndoc/_view/stubview?reduce=true&group_level=0';
+      newDatabaseName = client.globals.testDatabaseName,
+      baseUrl = client.globals.test_settings.launch_url;
 
     client
+      .deleteDatabase(newDatabaseName)
       .createDatabase(newDatabaseName)
       .populateDatabase(newDatabaseName)
       .loginToGUI()
-      .url(baseUrl + '/#/database/' + viewUrl)
+      .url(baseUrl + '/#/database/' + newDatabaseName + '/_design/testdesigndoc/_view/stubview')
       .waitForElementPresent('.prettyprint', waitTime, false)
-      .assert.containsText('.prettyprint', '20')
-      .clickWhenVisible('#reduce-function-selector option[value="_sum"]')
-      .execute('\
-        var editor = ace.edit("map-function");\
-        editor.getSession().setValue("function (doc) { emit(\'newstub\', 2); }");\
-      ')
-      .execute('$("#save-view")[0].scrollIntoView();')
-      .clickWhenVisible('#save-view', waitTime, false)
-      .checkForStringPresent(viewUrl, '40')
-      .waitForElementNotPresent('.loading-lines', waitTime, false)
-      .waitForElementVisible('.prettyprint', waitTime, false)
-      .waitForAttribute('.prettyprint', 'textContent', function (docContents) {
-        return (/40/).test(docContents);
+
+      // confirm the sidebar shows the testdesigndoc design doc
+      .waitForElementVisible('#testdesigndoc', waitTime, true)
+
+      .waitForElementPresent('.breadcrumb .js-lastelement', waitTime, false)
+      .waitForAttribute('.breadcrumb .js-lastelement', 'textContent', function (docContents) {
+        var regExp = new RegExp(newDatabaseName);
+        return regExp.test(docContents);
       })
-    .end();
+
+      // now edit the view and move it into a brand new design doc
+      .url(baseUrl + '/#/database/' + newDatabaseName + '/_design/testdesigndoc/_view/stubview/edit')
+      .waitForElementPresent('.breadcrumb .js-lastelement', waitTime, false)
+      .waitForAttribute('.breadcrumb .js-lastelement', 'textContent', function (docContents) {
+        var regExp = new RegExp(newDatabaseName);
+        return regExp.test(docContents);
+      })
+
+      .waitForElementPresent('.index-cancel-link', waitTime, true)
+      .waitForElementVisible('select#ddoc', waitTime, true)
+      .waitForElementNotPresent('.spinner', waitTime, true)
+      .waitForElementNotPresent('.loading-lines', waitTime, true)
+
+      .setValue('select#ddoc', 'new-doc')
+
+      // needed to get React to update + show the new design doc field
+      .click('body')
+
+      .waitForElementPresent('#new-ddoc', waitTime, true)
+      .execute('$("#new-ddoc")[0].scrollIntoView();')
+      .setValue('#new-ddoc', 'brand-new-ddoc')
+      .execute('$("#save-view")[0].scrollIntoView();')
+      .clickWhenVisible('#save-view')
+
+      // now wait for the old design doc to be gone, and the new one to have shown up
+      .waitForElementNotPresent('#testdesigndoc', waitTime, true)
+      .waitForElementPresent('#brand-new-ddoc', waitTime, true)
+      .end();
   }
+
 };

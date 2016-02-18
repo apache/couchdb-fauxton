@@ -25,10 +25,10 @@ module.exports = {
       .clickWhenVisible('#byKeys', waitTime, false)
       .setValue('#keys-input', '["document_1"]')
       .clickWhenVisible('#query-options .btn-success')
-      .waitForElementNotPresent('#right-content [data-id="document_2"]', waitTime, false)
-      .assert.elementNotPresent('#right-content [data-id="document_2"]')
-      .assert.elementNotPresent('#right-content [data-id="document_0"]')
-      .assert.elementPresent('#right-content [data-id="document_1"]')
+      .waitForElementNotPresent('#doc-list [data-id="document_2"]', waitTime, false)
+      .assert.elementNotPresent('#doc-list [data-id="document_2"]')
+      .assert.elementNotPresent('#doc-list [data-id="document_0"]')
+      .assert.elementPresent('#doc-list [data-id="document_1"]')
     .end();
   },
 
@@ -46,9 +46,9 @@ module.exports = {
       .clickWhenVisible('#byKeys', waitTime, false)
       .setValue('#keys-input', '["document_1",\n"document_2"]')
       .clickWhenVisible('#query-options .btn-success')
-      .waitForElementNotPresent('#right-content [data-id="document_0"]', waitTime, false)
-      .assert.elementNotPresent('#right-content [data-id="document_0"]')
-      .assert.elementPresent('#right-content [data-id="document_1"]')
+      .waitForElementNotPresent('#doc-list [data-id="document_0"]', waitTime, false)
+      .assert.elementNotPresent('#doc-list [data-id="document_0"]')
+      .assert.elementPresent('#doc-list [data-id="document_1"]')
       .end();
   }
 

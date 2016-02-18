@@ -22,11 +22,11 @@ define([
 ],
 
 function (app, FauxtonAPI, React, ReactDOM, Stores, Actions, Components, ReactComponents) {
-  var indexEditorStore = Stores.indexEditorStore;
+
+  var store = Stores.indexEditorStore;
   var getDocUrl = app.helpers.getDocUrl;
   var StyledSelect = ReactComponents.StyledSelect;
   var CodeEditorPanel = ReactComponents.CodeEditorPanel;
-  var PaddedBorderedBox = ReactComponents.PaddedBorderedBox;
   var ConfirmButton = ReactComponents.ConfirmButton;
   var LoadLines = ReactComponents.LoadLines;
 
@@ -130,11 +130,11 @@ function (app, FauxtonAPI, React, ReactDOM, Stores, Actions, Components, ReactCo
 
     getStoreState: function () {
       return {
-        reduce: indexEditorStore.getReduce(),
-        reduceOptions: indexEditorStore.reduceOptions(),
-        reduceSelectedOption: indexEditorStore.reduceSelectedOption(),
-        hasCustomReduce: indexEditorStore.hasCustomReduce(),
-        hasReduce: indexEditorStore.hasReduce()
+        reduce: store.getReduce(),
+        reduceOptions: store.reduceOptions(),
+        reduceSelectedOption: store.reduceSelectedOption(),
+        hasCustomReduce: store.hasCustomReduce(),
+        hasReduce: store.hasReduce()
       };
     },
 
@@ -174,6 +174,7 @@ function (app, FauxtonAPI, React, ReactDOM, Stores, Actions, Components, ReactCo
           id='reduce-function'
           title={'Custom Reduce function'}
           defaultCode={this.state.reduce}
+          allowZenMode={false}
           blur={this.updateReduceCode}
         />;
       }
@@ -182,7 +183,7 @@ function (app, FauxtonAPI, React, ReactDOM, Stores, Actions, Components, ReactCo
         <div>
           <div className="control-group">
             <label htmlFor="reduce-function-selector">
-              <strong>Reduce (optional)</strong>
+              <span>Reduce (optional)</span>
               <a
                 className="help-link"
                 data-bypass="true"
@@ -213,78 +214,38 @@ function (app, FauxtonAPI, React, ReactDOM, Stores, Actions, Components, ReactCo
     },
 
     onChange: function () {
-      this.setState(this.getStoreState());
+      if (this.isMounted()) {
+        this.setState(this.getStoreState());
+      }
     },
 
     componentDidMount: function () {
-      indexEditorStore.on('change', this.onChange, this);
+      store.on('change', this.onChange, this);
     },
 
     componentWillUnmount: function () {
-      indexEditorStore.off('change', this.onChange);
+      store.off('change', this.onChange);
     }
   });
 
-  var DeleteView = React.createClass({
-    getStoreState: function () {
-      return {
-        isNewView: indexEditorStore.isNewView(),
-        designDocs: indexEditorStore.getDesignDocs(),
-        viewName: indexEditorStore.getViewName(),
-        designDocId: indexEditorStore.getDesignDocId(),
-        database: indexEditorStore.getDatabase()
-      };
-    },
 
-    getInitialState: function () {
-      return this.getStoreState();
-    },
-
-    render: function () {
-      if (this.state.isNewView) {
-        return null;
-      }
-
-      return (
-        <button onClick={this.deleteView} className="btn btn-danger delete">
-          <i className="icon fonticon-cancel-circled"></i>
-          Delete
-        </button>
-      );
-    },
-
-    deleteView: function (event) {
-      event.preventDefault();
-
-      if (!confirm('Are you sure you want to delete this view?')) {return;}
-
-      Actions.deleteView({
-        designDocs: this.state.designDocs,
-        viewName: this.state.viewName,
-        designDocId: this.state.designDocId,
-        database: this.state.database
-      });
-    }
-
-  });
-
-  var Editor = React.createClass({
+  var EditorController = React.createClass({
 
     getStoreState: function () {
       return {
-        hasViewNameChanged: indexEditorStore.hasViewNameChanged(),
-        database: indexEditorStore.getDatabase(),
-        isNewView: indexEditorStore.isNewView(),
-        viewName: indexEditorStore.getViewName(),
-        designDocs: indexEditorStore.getDesignDocs(),
-        designDocList: indexEditorStore.getAvailableDesignDocs(),
-        hasDesignDocChanged: indexEditorStore.hasDesignDocChanged(),
-        newDesignDoc: indexEditorStore.isNewDesignDoc(),
-        designDocId: indexEditorStore.getDesignDocId(),
-        newDesignDocName: indexEditorStore.getNewDesignDocName(),
-        saveDesignDoc: indexEditorStore.getSaveDesignDoc(),
-        map: indexEditorStore.getMap(),
-        isLoading: indexEditorStore.isLoading()
+        database: store.getDatabase(),
+        isNewView: store.isNewView(),
+        viewName: store.getViewName(),
+        designDocs: store.getDesignDocs(),
+        designDocList: store.getAvailableDesignDocs(),
+        originalViewName: store.getOriginalViewName(),
+        originalDesignDocName: store.getOriginalDesignDocName(),
+        newDesignDoc: store.isNewDesignDoc(),
+        designDocId: store.getDesignDocId(),
+        newDesignDocName: store.getNewDesignDocName(),
+        saveDesignDoc: store.getSaveDesignDoc(),
+        map: store.getMap(),
+        isLoading: store.isLoading()
       };
     },
 
@@ -299,16 +260,24 @@ function (app, FauxtonAPI, React, ReactDOM, Stores, Actions, Components, ReactCo
     },
 
     componentDidMount: function () {
-      indexEditorStore.on('change', this.onChange, this);
+      store.on('change', this.onChange, this);
     },
 
     componentWillUnmount: function () {
-      indexEditorStore.off('change', this.onChange);
+      store.off('change', this.onChange);
+    },
+
+    // the code editor is a standalone component, so if the user goes from one edit view page to another, we need to
+    // force an update of the editor panel
+    componentDidUpdate: function (prevProps, prevState) {
+      if (this.state.map !== prevState.map && this.refs.mapEditor) {
+        this.refs.mapEditor.update();
+      }
     },
 
     hasErrors: function () {
       var mapEditorErrors = this.refs.mapEditor.getEditor().hasErrors();
-      var customReduceErrors = (indexEditorStore.hasCustomReduce()) ? this.refs.reduceEditor.getEditor().hasErrors() : false;
+      var customReduceErrors = (store.hasCustomReduce()) ? this.refs.reduceEditor.getEditor().hasErrors() : false;
       return mapEditorErrors || customReduceErrors;
     },
 
@@ -321,7 +290,7 @@ function (app, FauxtonAPI, React, ReactDOM, Stores, Actions, Components, ReactCo
 
       if (this.hasErrors()) {
         FauxtonAPI.addNotification({
-          msg:  'Please fix the Javascript errors and try again.',
+          msg: 'Please fix the Javascript errors and try again.',
           type: 'error',
           clear: true
         });
@@ -335,8 +304,8 @@ function (app, FauxtonAPI, React, ReactDOM, Stores, Actions, Components, ReactCo
         designDoc: this.state.saveDesignDoc,
         designDocId: this.state.designDocId,
         newDesignDoc: this.state.newDesignDoc,
-        designDocChanged: this.state.hasDesignDocChanged,
-        hasViewNameChanged: this.state.hasViewNameChanged,
+        originalViewName: this.state.originalViewName,
+        originalDesignDocName: this.state.originalDesignDocName,
         map: this.refs.mapEditor.getValue(),
         reduce: this.refs.reduceEditor.getReduceValue(),
         designDocs: this.state.designDocs
@@ -360,71 +329,57 @@ function (app, FauxtonAPI, React, ReactDOM, Stores, Actions, Components, ReactCo
         );
       }
 
-      var url = '#/' + FauxtonAPI.urls('allDocs', 'app', this.state.database.id, '');
+      var pageHeader = (this.state.isNewView) ? 'New View' : 'Edit View';
+      var btnLabel = (this.state.isNewView) ? 'Create Document and Build Index' : 'Save Document and Build Index';
+
+      var cancelLink = '#' + FauxtonAPI.urls('view', 'showView', this.state.database.id, this.state.designDocId, this.state.viewName);
       return (
         <div className="define-view">
-          <PaddedBorderedBox>
-            Views are the primary tools for querying and reporting.
-          </PaddedBorderedBox>
-          <PaddedBorderedBox>
-            <strong>Database</strong>
-            <div className="db-title">
-              <a href={url}>{this.state.database.id}</a>
-            </div>
-          </PaddedBorderedBox>
           <form className="form-horizontal view-query-save" onSubmit={this.saveView}>
+            <h3 className="simple-header">{pageHeader}</h3>
 
             <div className="new-ddoc-section">
-              <PaddedBorderedBox>
-                <DesignDocSelector
-                  ref="designDocSelector"
-                  designDocList={this.state.designDocList}
-                  selectedDesignDocName={this.state.designDocId}
-                  newDesignDocName={this.state.newDesignDocName}
-                  onSelectDesignDoc={Actions.selectDesignDoc}
-                  onChangeNewDesignDocName={Actions.updateNewDesignDocName}
-                  docLink={getDocUrl('DESIGN_DOCS')} />
-              </PaddedBorderedBox>
+              <DesignDocSelector
+                ref="designDocSelector"
+                designDocList={this.state.designDocList}
+                selectedDesignDocName={this.state.designDocId}
+                newDesignDocName={this.state.newDesignDocName}
+                onSelectDesignDoc={Actions.selectDesignDoc}
+                onChangeNewDesignDocName={Actions.updateNewDesignDocName}
+                docLink={getDocUrl('DESIGN_DOCS')} />
             </div>
 
             <div className="control-group">
-              <PaddedBorderedBox>
-                <label htmlFor="index-name">
-                  <strong>Index name</strong>
-                  <a
-                    className="help-link"
-                    data-bypass="true"
-                    href={getDocUrl('VIEW_FUNCS')}
-                    target="_blank">
-                    <i className="icon-question-sign"></i>
-                  </a>
-                </label>
-                <input
-                  type="text"
-                  id="index-name"
-                  value={this.state.viewName}
-                  onChange={this.viewChange}
-                  placeholder="Index name" />
-              </PaddedBorderedBox>
+              <label htmlFor="index-name">
+                <span>Index name</span>
+                <a
+                  className="help-link"
+                  data-bypass="true"
+                  href={getDocUrl('VIEW_FUNCS')}
+                  target="_blank">
+                  <i className="icon-question-sign"></i>
+                </a>
+              </label>
+              <input
+                type="text"
+                id="index-name"
+                value={this.state.viewName}
+                onChange={this.viewChange}
+                placeholder="Index name" />
             </div>
-            <div className="control-group">
-              <PaddedBorderedBox>
-                <CodeEditorPanel
-                  id={'map-function'}
-                  ref="mapEditor"
-                  title={"Map function"}
-                  docLink={getDocUrl('MAP_FUNCS')}
-                  blur={this.updateMapCode}
-                  defaultCode={this.state.map} />
-              </PaddedBorderedBox>
-            </div>
-            <PaddedBorderedBox>
-              <ReduceEditor ref="reduceEditor" />
-            </PaddedBorderedBox>
+            <CodeEditorPanel
+              id={'map-function'}
+              ref="mapEditor"
+              title={"Map function"}
+              docLink={getDocUrl('MAP_FUNCS')}
+              blur={this.updateMapCode}
+              allowZenMode={false}
+              defaultCode={this.state.map} />
+            <ReduceEditor ref="reduceEditor" />
             <div className="padded-box">
               <div className="control-group">
-                <ConfirmButton id="save-view" text="Save Document and Build Index" />
-                <DeleteView />
+                <ConfirmButton id="save-view" text={btnLabel} />
+                <a href={cancelLink} className="index-cancel-link">Cancel</a>
               </div>
             </div>
           </form>
@@ -433,23 +388,12 @@ function (app, FauxtonAPI, React, ReactDOM, Stores, Actions, Components, ReactCo
     }
   });
 
-  var EditorController = React.createClass({
-    render: function () {
-      return (
-        <div className="editor-wrapper">
-          <Editor />
-        </div>
-      );
-    }
-  });
 
-  var Views = {
+  return {
     EditorController: EditorController,
     ReduceEditor: ReduceEditor,
-    Editor: Editor,
     DesignDocSelector: DesignDocSelector,
     StyledSelect: StyledSelect
   };
 
-  return Views;
 });

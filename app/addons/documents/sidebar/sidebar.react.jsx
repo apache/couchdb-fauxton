@@ -15,22 +15,32 @@ define([
   'api',
   'react',
   'react-dom',
-  'addons/documents/sidebar/stores',
+  'addons/documents/sidebar/stores.react',
   'addons/documents/sidebar/actions',
-
-
   'addons/components/react-components.react',
   'addons/components/stores',
   'addons/components/actions',
+  'addons/documents/index-editor/actions',
+  'addons/documents/index-editor/components.react',
+  'addons/fauxton/components.react',
+  'addons/documents/views',
   'addons/documents/helpers',
+  'libs/react-bootstrap',
   'plugins/prettify'
 ],
 
-function (app, FauxtonAPI, React, ReactDOM, Stores, Actions,
-  Components, ComponentsStore, ComponentsActions, DocumentHelper) {
+function (app, FauxtonAPI, React, ReactDOM, Stores, Actions, Components, ComponentsStore, ComponentsActions,
+  IndexEditorActions, IndexEditorComponents, GeneralComponents, DocumentViews, DocumentHelper, ReactBootstrap) {
+
+  var DeleteDBModal = DocumentViews.Views.DeleteDBModal;
 
   var store = Stores.sidebarStore;
   var LoadLines = Components.LoadLines;
+  var DesignDocSelector = IndexEditorComponents.DesignDocSelector;
+  var OverlayTrigger = ReactBootstrap.OverlayTrigger;
+  var Popover = ReactBootstrap.Popover;
+  var Modal = ReactBootstrap.Modal;
+  var ConfirmationModal = GeneralComponents.ConfirmationModal;
 
   var DeleteDatabaseModal = Components.DeleteDatabaseModal;
   var deleteDbModalStore = ComponentsStore.deleteDbModalStore;
@@ -110,36 +120,103 @@ function (app, FauxtonAPI, React, ReactDOM, Stores, Actions,
         </ul>
       );
     }
-
   });
+
 
   var IndexSection = React.createClass({
 
     propTypes: {
       urlNamespace: React.PropTypes.string.isRequired,
-      databaseName: React.PropTypes.string.isRequired,
+      indexLabel: React.PropTypes.string.isRequired,
+      database: React.PropTypes.object.isRequired,
       designDocName: React.PropTypes.string.isRequired,
       items: React.PropTypes.array.isRequired,
       isExpanded: React.PropTypes.bool.isRequired,
-      selectedIndex: React.PropTypes.string.isRequired
+      selectedIndex: React.PropTypes.string.isRequired,
+      onDelete: React.PropTypes.func.isRequired,
+      onClone: React.PropTypes.func.isRequired
+    },
+
+    getInitialState: function () {
+      return {
+        placement: 'bottom'
+      };
+    },
+
+    // this dynamically changes the placement of the menu (top/bottom) to prevent it going offscreen and causing some
+    // unsightly shifting
+    setPlacement: function (rowId) {
+      var rowTop = document.getElementById(rowId).getBoundingClientRect().top;
+      var toggleHeight = 150; // the height of the menu overlay, arrow, view row
+      var placement = (rowTop + toggleHeight > window.innerHeight) ? 'top' : 'bottom';
+      this.setState({ placement: placement });
     },
 
     createItems: function () {
-      return _.map(this.props.items, function (index, key) {
-        var href = FauxtonAPI.urls(this.props.urlNamespace, 'app', this.props.databaseName, this.props.designDocName);
-        var className = (this.props.selectedIndex === index) ? 'active' : '';
+
+      // sort the indexes alphabetically
+      var sortedItems = this.props.items.sort();
+
+      return _.map(sortedItems, function (indexName, index) {
+        var href = FauxtonAPI.urls(this.props.urlNamespace, 'app', this.props.database.id, this.props.designDocName);
+        var className = (this.props.selectedIndex === indexName) ? 'active' : '';
 
         return (
-          <li className={className} key={key}>
+          <li className={className} key={index}>
             <a
-              id={this.props.designDocName + '_' + index}
-              href={"#/" + href + index}
+              id={this.props.designDocName + '_' + indexName}
+              href={"#/" + href + indexName}
               className="toggle-view">
-              {index}
+              {indexName}
             </a>
+            <OverlayTrigger
+              ref={"indexMenu-" + index}
+              trigger="click"
+              onEnter={this.setPlacement.bind(this, this.props.designDocName + '_' + indexName)}
+              placement={this.state.placement}
+              rootClose={true}
+              overlay={
+                <Popover id="index-menu-component-popover">
+                  <ul>
+                    <li onClick={this.indexAction.bind(this, 'edit', { indexName: indexName, onEdit: this.props.onEdit })}>
+                      <span className="fonticon fonticon-file-code-o"></span>
+                      Edit
+                    </li>
+                    <li onClick={this.indexAction.bind(this, 'clone', { indexName: indexName, onClone: this.props.onClone })}>
+                      <span className="fonticon fonticon-files-o"></span>
+                      Clone
+                    </li>
+                    <li onClick={this.indexAction.bind(this, 'delete', { indexName: indexName, onDelete: this.props.onDelete })}>
+                      <span className="fonticon fonticon-trash"></span>
+                      Delete
+                    </li>
+                  </ul>
+                </Popover>
+              }>
+              <span className="index-menu-toggle fonticon fonticon-wrench2"></span>
+            </OverlayTrigger>
           </li>
         );
       }, this);
+    },
+
+    indexAction: function (action, params, e) {
+      e.preventDefault();
+
+      // ensures the menu gets closed. The hide() on the ref doesn't consistently close it
+      $('body').trigger('click');
+
+      switch (action) {
+        case 'delete':
+          Actions.showDeleteIndexModal(params.indexName, this.props.designDocName, this.props.indexLabel, params.onDelete);
+        break;
+        case 'clone':
+          Actions.showCloneIndexModal(params.indexName, this.props.designDocName, this.props.indexLabel, params.onClone);
+        break;
+        case 'edit':
+          params.onEdit(this.props.database.id, this.props.designDocName, params.indexName);
+        break;
+      }
     },
 
     toggle: function (e) {
@@ -186,6 +263,7 @@ function (app, FauxtonAPI, React, ReactDOM, Stores, Actions,
 
   var DesignDoc = React.createClass({
     propTypes: {
+      database: React.PropTypes.object.isRequired,
       sidebarListTypes: React.PropTypes.array.isRequired,
       isExpanded: React.PropTypes.bool.isRequired,
       selectedNavInfo: React.PropTypes.object.isRequired,
@@ -206,7 +284,11 @@ function (app, FauxtonAPI, React, ReactDOM, Stores, Actions,
         newList.unshift({
           selector: 'views',
           name: 'Views',
-          urlNamespace: 'view'
+          urlNamespace: 'view',
+          indexLabel: 'view',
+          onDelete: IndexEditorActions.deleteView,
+          onClone: IndexEditorActions.cloneView,
+          onEdit: IndexEditorActions.gotoEditViewPage
         });
         this.setState({ updatedSidebarListTypes: newList });
       }
@@ -227,9 +309,13 @@ function (app, FauxtonAPI, React, ReactDOM, Stores, Actions,
             icon={index.icon}
             isExpanded={expanded}
             urlNamespace={index.urlNamespace}
+            indexLabel={index.indexLabel}
+            onEdit={index.onEdit}
+            onDelete={index.onDelete}
+            onClone={index.onClone}
             selectedIndex={selectedIndex}
             toggle={this.props.toggle}
-            databaseName={this.props.databaseName}
+            database={this.props.database}
             designDocName={this.props.designDocName}
             key={key}
             title={index.name}
@@ -248,8 +334,7 @@ function (app, FauxtonAPI, React, ReactDOM, Stores, Actions,
     },
 
     getNewButtonLinks: function () {
-      var databaseName = this.props.databaseName;
-      var newUrlPrefix = FauxtonAPI.urls('databaseBaseURL', 'app', databaseName);
+      var newUrlPrefix = FauxtonAPI.urls('databaseBaseURL', 'app', this.props.database.id);
       var designDocName = this.props.designDocName;
 
       var addNewLinks = _.reduce(FauxtonAPI.getExtensions('sidebar:links'), function (menuLinks, link) {
@@ -261,7 +346,7 @@ function (app, FauxtonAPI, React, ReactDOM, Stores, Actions,
         return menuLinks;
       }, [{
         title: 'New View',
-        url: '#' + FauxtonAPI.urls('new', 'addView', databaseName, designDocName),
+        url: '#' + FauxtonAPI.urls('new', 'addView', this.props.database.id, designDocName),
         icon: 'fonticon-plus-circled'
       }]);
 
@@ -281,7 +366,7 @@ function (app, FauxtonAPI, React, ReactDOM, Stores, Actions,
         toggleBodyClassNames += ' in';
       }
       var designDocName = this.props.designDocName;
-      var designDocMetaUrl = FauxtonAPI.urls('designDocs', 'app', this.props.databaseName, designDocName);
+      var designDocMetaUrl = FauxtonAPI.urls('designDocs', 'app', this.props.database.id, designDocName);
       var metadataRowClass = (this.props.selectedNavInfo.designDocSection === 'metadata') ? 'active' : '';
 
       return (
@@ -344,7 +429,7 @@ function (app, FauxtonAPI, React, ReactDOM, Stores, Actions,
             key={key}
             designDoc={designDoc}
             designDocName={ddName}
-            databaseName={this.props.databaseName} />
+            database={this.props.database} />
         );
       }.bind(this));
     },
@@ -361,13 +446,32 @@ function (app, FauxtonAPI, React, ReactDOM, Stores, Actions,
   var SidebarController = React.createClass({
     getStoreState: function () {
       return {
-        databaseName: store.getDatabaseName(),
+        database: store.getDatabase(),
         selectedNav: store.getSelected(),
         designDocs: store.getDesignDocs(),
+        designDocList: store.getDesignDocList(),
+        availableDesignDocIds: store.getAvailableDesignDocs(),
         toggledSections: store.getToggledSections(),
         isLoading: store.isLoading(),
         database: store.getDatabase(),
-        deleteDbModalProperties: deleteDbModalStore.getShowDeleteDatabaseModal()
+        deleteDbModalProperties: deleteDbModalStore.getShowDeleteDatabaseModal(),
+
+        deleteIndexModalVisible: store.isDeleteIndexModalVisible(),
+        deleteIndexModalText: store.getDeleteIndexModalText(),
+        deleteIndexModalOnSubmit: store.getDeleteIndexModalOnSubmit(),
+        deleteIndexModalIndexName: store.getDeleteIndexModalIndexName(),
+        deleteIndexModalDesignDoc: store.getDeleteIndexDesignDoc(),
+
+        cloneIndexModalVisible: store.isCloneIndexModalVisible(),
+        cloneIndexModalTitle: store.getCloneIndexModalTitle(),
+        cloneIndexModalSelectedDesignDoc: store.getCloneIndexModalSelectedDesignDoc(),
+        cloneIndexModalNewDesignDocName: store.getCloneIndexModalNewDesignDocName(),
+        cloneIndexModalOnSubmit: store.getCloneIndexModalOnSubmit(),
+        cloneIndexDesignDocProp: store.getCloneIndexDesignDocProp(),
+        cloneIndexModalNewIndexName: store.getCloneIndexModalNewIndexName(),
+        cloneIndexSourceIndexName: store.getCloneIndexModalSourceIndexName(),
+        cloneIndexSourceDesignDocName: store.getCloneIndexModalSourceDesignDocName(),
+        cloneIndexModalIndexLabel: store.getCloneIndexModalIndexLabel()
       };
     },
 
@@ -395,33 +499,173 @@ function (app, FauxtonAPI, React, ReactDOM, Stores, Actions,
       ComponentsActions.showDeleteDatabaseModal(payload);
     },
 
+    // handles deleting of any index regardless of type. The delete handler and all relevant info is set when the user
+    // clicks the delete action for a particular index
+    deleteIndex: function () {
+
+      // if the user is currently on the index that's being deleted, pass that info along to the delete handler. That can
+      // be used to redirect the user to somewhere appropriate
+      var isOnIndex = this.state.selectedNav.navItem === 'designDoc' &&
+                      ('_design/' + this.state.selectedNav.designDocName) === this.state.deleteIndexModalDesignDoc.id &&
+                      this.state.selectedNav.indexName === this.state.deleteIndexModalIndexName;
+
+      this.state.deleteIndexModalOnSubmit({
+        isOnIndex: isOnIndex,
+        indexName: this.state.deleteIndexModalIndexName,
+        designDoc: this.state.deleteIndexModalDesignDoc,
+        designDocs: this.state.designDocs,
+        database: this.state.database
+      });
+    },
+
+    cloneIndex: function () {
+      this.state.cloneIndexModalOnSubmit({
+        sourceIndexName: this.state.cloneIndexSourceIndexName,
+        sourceDesignDocName: this.state.cloneIndexSourceDesignDocName,
+        targetDesignDocName: this.state.cloneIndexModalSelectedDesignDoc,
+        newDesignDocName: this.state.cloneIndexModalNewDesignDocName,
+        newIndexName: this.state.cloneIndexModalNewIndexName,
+        designDocs: this.state.designDocs,
+        database: this.state.database,
+        onComplete: Actions.hideCloneIndexModal
+      });
+    },
+
     render: function () {
       if (this.state.isLoading) {
         return <LoadLines />;
       }
+
       return (
         <nav className="sidenav">
           <MainSidebar
             selectedNavItem={this.state.selectedNav.navItem}
-            databaseName={this.state.databaseName} />
+            databaseName={this.state.database.id} />
           <DesignDocList
             selectedNav={this.state.selectedNav}
             toggle={Actions.toggleContent}
             toggledSections={this.state.toggledSections}
-            designDocs={this.state.designDocs}
-            databaseName={this.state.databaseName} />
-
+            designDocs={this.state.designDocList}
+            database={this.state.database} />
           <DeleteDatabaseModal
             showHide={this.showDeleteDatabaseModal}
             modalProps={this.state.deleteDbModalProperties} />
+
+          {/* the delete and clone index modals handle all index types, hence the props all being pulled from the store */}
+          <ConfirmationModal
+            title="Confirm Deletion"
+            visible={this.state.deleteIndexModalVisible}
+            text={this.state.deleteIndexModalText}
+            onClose={Actions.hideDeleteIndexModal}
+            onSubmit={this.deleteIndex} />
+          <CloneIndexModal
+            visible={this.state.cloneIndexModalVisible}
+            title={this.state.cloneIndexModalTitle}
+            close={Actions.hideCloneIndexModal}
+            submit={this.cloneIndex}
+            designDocArray={this.state.availableDesignDocIds}
+            selectedDesignDoc={this.state.cloneIndexModalSelectedDesignDoc}
+            newDesignDocName={this.state.cloneIndexModalNewDesignDocName}
+            newIndexName={this.state.cloneIndexModalNewIndexName}
+            indexLabel={this.state.cloneIndexModalIndexLabel} />
         </nav>
+      );
+    }
+  });
+
+
+  var CloneIndexModal = React.createClass({
+    propTypes: {
+      visible: React.PropTypes.bool.isRequired,
+      title: React.PropTypes.string,
+      close: React.PropTypes.func.isRequired,
+      submit: React.PropTypes.func.isRequired,
+      designDocArray: React.PropTypes.array.isRequired,
+      selectedDesignDoc: React.PropTypes.string.isRequired,
+      newDesignDocName: React.PropTypes.string.isRequired,
+      newIndexName: React.PropTypes.string.isRequired,
+      indexLabel: React.PropTypes.string.isRequired
+    },
+
+    getDefaultProps: function () {
+      return {
+        title: 'Clone Index',
+        visible: false
+      };
+    },
+
+    submit: function () {
+      if (!this.refs.designDocSelector.validate()) {
+        return;
+      }
+      if (this.props.newIndexName === '') {
+        FauxtonAPI.addNotification({
+          msg: 'Please enter the new index name.',
+          type: 'error',
+          clear: true
+        });
+        return;
+      }
+      this.props.submit();
+    },
+
+    close: function (e) {
+      if (e) {
+        e.preventDefault();
+      }
+      this.props.close();
+    },
+
+    setNewIndexName: function (e) {
+      Actions.setNewCloneIndexName(e.target.value);
+    },
+
+    render: function () {
+      return (
+        <Modal dialogClassName="clone-index-modal" show={this.props.visible} onHide={this.close}>
+          <Modal.Header closeButton={true}>
+            <Modal.Title>{this.props.title}</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+
+            <form className="form" method="post" onSubmit={this.submit}>
+              <p>
+                Select the design document where the cloned {this.props.indexLabel} will be created, and then enter
+                a name for the cloned {this.props.indexLabel}.
+              </p>
+
+              <div className="row">
+                <DesignDocSelector
+                  ref="designDocSelector"
+                  designDocList={this.props.designDocArray}
+                  selectedDesignDocName={this.props.selectedDesignDoc}
+                  newDesignDocName={this.props.newDesignDocName}
+                  onSelectDesignDoc={Actions.selectDesignDoc}
+                  onChangeNewDesignDocName={Actions.updateNewDesignDocName} />
+              </div>
+
+              <div className="clone-index-name-row">
+                <label className="new-index-title-label" htmlFor="new-index-name">{this.props.indexLabel} Name</label>
+                <input type="text" id="new-index-name" value={this.props.newIndexName} onChange={this.setNewIndexName}
+                   placeholder="Enter new view name" />
+              </div>
+            </form>
+
+          </Modal.Body>
+          <Modal.Footer>
+            <button onClick={this.submit} data-bypass="true" className="btn btn-success save">
+              <i className="icon fonticon-ok-circled" /> Clone {this.props.indexLabel}</button>
+            <a href="#" className="cancel-link" onClick={this.close} data-bypass="true">Cancel</a>
+          </Modal.Footer>
+        </Modal>
       );
     }
   });
 
   return {
     SidebarController: SidebarController,
-    DesignDoc: DesignDoc
+    DesignDoc: DesignDoc,
+    CloneIndexModal: CloneIndexModal
   };
 
 });

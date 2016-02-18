@@ -52,7 +52,7 @@ define([
 
         instance = TestUtils.renderIntoDocument(<Views.List />, container);
         var $el = $(ReactDOM.findDOMNode(instance));
-        assert.equal($el.text(), 'No Index Created Yet!');
+        assert.equal($el.text(), 'No Documents Found');
       });
 
       it('you can change the default text', function () {

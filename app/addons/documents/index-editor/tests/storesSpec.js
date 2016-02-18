@@ -289,9 +289,9 @@ define([
       });
 
       it('only filters mango docs', function () {
-        var designDocs = store.getDesignDocs();
+        var designDocs = store.getAvailableDesignDocs();
         assert.equal(designDocs.length, 1);
-        assert.equal(designDocs[0].id, '_design/test-doc');
+        assert.equal(designDocs[0], '_design/test-doc');
       });
     });
 
