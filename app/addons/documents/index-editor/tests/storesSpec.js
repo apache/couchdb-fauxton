@@ -222,10 +222,43 @@ define([
           }
         };
 
-        var designDocs = new Documents.AllDocs([designDoc], {
+        var mangoDoc = {
+          "_id": "_design/123mango",
+          "id": "_design/123mango",
+          "key": "_design/123mango",
+          "value": {
+            "rev": "20-9e4bc8b76fd7d752d620bbe6e0ea9a80"
+          },
+          "doc": {
+            "_id": "_design/123mango",
+            "_rev": "20-9e4bc8b76fd7d752d620bbe6e0ea9a80",
+            "views": {
+              "test-view": {
+                "map": "function(doc) {\n  emit(doc._id, 2);\n}"
+              },
+              "new-view": {
+                "map": "function(doc) {\n  if (doc.class === \"mammal\" && doc.diet === \"herbivore\")\n    emit(doc._id, 1);\n}",
+                "reduce": "_sum"
+              }
+            },
+            "language": "query",
+            "indexes": {
+              "newSearch": {
+                "analyzer": "standard",
+                "index": "function(doc){\n index(\"default\", doc._id);\n}"
+              }
+            }
+          }
+        };
+
+        var designDocArray = _.map([designDoc, mangoDoc], function (doc) {
+          return Documents.Doc.prototype.parse(doc);
+        });
+
+        var designDocs = new Documents.AllDocs(designDocArray, {
           params: { limit: 10 },
           database: {
-            safeID: function () { return 'id';}
+            safeID: function () { return 'id'; }
           }
         });
 
@@ -240,25 +273,25 @@ define([
         });
       });
 
-      it('DESIGN_DOC_CHANGE changes design doc id', function () {
-        var designDocId =  'another-one';
-        FauxtonAPI.dispatch({
-          type: ActionTypes.DESIGN_DOC_CHANGE,
-          designDocId: designDocId,
-          newDesignDoc: false
-        });
-
-        assert.equal(store.getDesignDocId(), designDocId);
-        assert.notOk(store.isNewDesignDoc());
+      afterEach(function () {
+        store.reset();
       });
 
-      it('sets new design doc on NEW_DESIGN_DOC', function () {
+      it('DESIGN_DOC_CHANGE changes design doc id', function () {
+        var designDocId = 'another-one';
         FauxtonAPI.dispatch({
-          type: ActionTypes.NEW_DESIGN_DOC
+          type: ActionTypes.DESIGN_DOC_CHANGE,
+          options: {
+            value: designDocId
+          }
         });
+        assert.equal(store.getDesignDocId(), designDocId);
+      });
 
-        assert.ok(store.isNewDesignDoc());
-        assert.equal(store.getDesignDocId(), '');
+      it('only filters mango docs', function () {
+        var designDocs = store.getDesignDocs();
+        assert.equal(designDocs.length, 1);
+        assert.equal(designDocs[0].id, '_design/test-doc');
       });
     });
 

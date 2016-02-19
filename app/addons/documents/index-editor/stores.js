@@ -12,10 +12,11 @@
 
 define([
   'api',
-  'addons/documents/index-editor/actiontypes'
+  'addons/documents/index-editor/actiontypes',
+  'addons/documents/resources'
 ],
 
-function (FauxtonAPI, ActionTypes) {
+function (FauxtonAPI, ActionTypes, Resources) {
   var Stores = {};
 
   Stores.IndexEditorStore = FauxtonAPI.Store.extend({
@@ -37,8 +38,9 @@ function (FauxtonAPI, ActionTypes) {
     editIndex: function (options) {
       this._database = options.database;
       this._newView = options.newView;
-      this._newDesignDoc = options.newDesignDoc || false;
       this._viewName = options.viewName || 'viewName';
+      this._newDesignDoc = options.newDesignDoc || false;
+      this._newDesignDocName = '';
       this._designDocs = options.designDocs;
       this._designDocId = options.designDocId;
       this._designDocChanged = false;
@@ -83,7 +85,6 @@ function (FauxtonAPI, ActionTypes) {
       return this._designDocs.find(function (ddoc) {
         return this._designDocId == ddoc.id;
       }, this).dDocModel();
-
     },
 
     getDesignDocs: function () {
@@ -92,14 +93,19 @@ function (FauxtonAPI, ActionTypes) {
       });
     },
 
+    // returns a simple array of design doc IDs
+    getAvailableDesignDocs: function () {
+      return _.map(this.getDesignDocs(), function (doc) {
+        return doc.id;
+      });
+    },
+
     getDesignDocId: function () {
       return this._designDocId;
     },
 
-    setDesignDocId: function (designDocId, newDesignDoc) {
+    setDesignDocId: function (designDocId) {
       this._designDocId = designDocId;
-      this._newDesignDoc = newDesignDoc;
-      this._designDocChanged = true;
     },
 
     hasDesignDocChanged: function () {
@@ -177,6 +183,27 @@ function (FauxtonAPI, ActionTypes) {
       this._designDocs.add(designDoc, {merge: true});
     },
 
+    getNewDesignDocName: function () {
+      return this._newDesignDocName;
+    },
+
+    getSaveDesignDoc: function () {
+      if (this._designDocId === 'new-doc') {
+        var doc = {
+          _id: '_design/' + this._newDesignDocName,
+          views: {},
+          language: 'javascript'
+        };
+        return new Resources.Doc(doc, { database: this._database });
+      }
+
+      var foundDoc = this._designDocs.find(function (ddoc) {
+        return ddoc.id === this._designDocId;
+      }.bind(this));
+
+      return (!foundDoc) ? null : foundDoc.dDocModel();
+    },
+
     dispatch: function (action) {
       switch (action.type) {
         case ActionTypes.CLEAR_INDEX:
@@ -185,68 +212,57 @@ function (FauxtonAPI, ActionTypes) {
 
         case ActionTypes.EDIT_INDEX:
           this.editIndex(action.options);
-          this.triggerChange();
         break;
 
         case ActionTypes.VIEW_NAME_CHANGE:
           this.setViewName(action.name);
-          this.triggerChange();
         break;
 
         case ActionTypes.EDIT_NEW_INDEX:
           this.editIndex(action.options);
-          this.triggerChange();
         break;
 
         case ActionTypes.SELECT_REDUCE_CHANGE:
           this.updateReduceFromSelect(action.reduceSelectedOption);
-          this.triggerChange();
         break;
 
         case ActionTypes.DESIGN_DOC_CHANGE:
-          this.setDesignDocId(action.designDocId, action.newDesignDoc);
-          this.triggerChange();
-        break;
-
-        case ActionTypes.NEW_DESIGN_DOC:
-          this.setDesignDocId('', true);
-          this.triggerChange();
+          this.setDesignDocId(action.options.value);
         break;
 
         case ActionTypes.VIEW_SAVED:
-          this.triggerChange();
         break;
 
         case ActionTypes.VIEW_CREATED:
-          this.triggerChange();
         break;
 
         case ActionTypes.VIEW_UPDATE_DESIGN_DOC:
           this.updateDesignDoc(action.designDoc);
           this.setView();
-          this.triggerChange();
         break;
 
         case ActionTypes.VIEW_UPDATE_MAP_CODE:
           this.setMap(action.code);
-          this.triggerChange();
         break;
 
         case ActionTypes.VIEW_UPDATE_REDUCE_CODE:
           this.setReduce(action.code);
-          this.triggerChange();
+        break;
+
+        case ActionTypes.DESIGN_DOC_NEW_NAME_UPDATED:
+          this._newDesignDocName = action.options.value;
         break;
 
         default:
         return;
-        // do nothing
       }
+
+      this.triggerChange();
     }
 
   });
 
   Stores.indexEditorStore = new Stores.IndexEditorStore();
-
   Stores.indexEditorStore.dispatchToken = FauxtonAPI.dispatcher.register(Stores.indexEditorStore.dispatch);
 
   return Stores;

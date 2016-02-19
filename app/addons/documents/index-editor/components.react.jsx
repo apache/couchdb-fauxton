@@ -14,13 +14,14 @@ define([
   'app',
   'api',
   'react',
+  'react-dom',
   'addons/documents/index-editor/stores',
   'addons/documents/index-editor/actions',
   'addons/fauxton/components',
   'addons/components/react-components.react'
 ],
 
-function (app, FauxtonAPI, React, Stores, Actions, Components, ReactComponents) {
+function (app, FauxtonAPI, React, ReactDOM, Stores, Actions, Components, ReactComponents) {
   var indexEditorStore = Stores.indexEditorStore;
   var getDocUrl = app.helpers.getDocUrl;
   var StyledSelect = ReactComponents.StyledSelect;
@@ -29,110 +30,101 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, ReactComponents) 
   var ConfirmButton = ReactComponents.ConfirmButton;
   var LoadLines = ReactComponents.LoadLines;
 
-  var DesignDocSelector = React.createClass({
 
-    getStoreState: function () {
+  var DesignDocSelector = React.createClass({
+    propTypes: {
+      designDocList: React.PropTypes.array.isRequired,
+      onSelectDesignDoc: React.PropTypes.func.isRequired,
+      onChangeNewDesignDocName: React.PropTypes.func.isRequired,
+      selectedDesignDocName: React.PropTypes.string.isRequired,
+      newDesignDocName: React.PropTypes.string.isRequired,
+      designDocLabel: React.PropTypes.string,
+      docURL: React.PropTypes.string
+    },
+
+    getDefaultProps: function () {
       return {
-        designDocId: indexEditorStore.getDesignDocId(),
-        designDocs: indexEditorStore.getDesignDocs(),
-        newDesignDoc: indexEditorStore.isNewDesignDoc()
+        designDocLabel: 'Design Document'
       };
     },
 
-    getInitialState: function () {
-      return this.getStoreState();
+    validate: function () {
+      if (this.props.selectedDesignDocName === 'new-doc' && this.props.newDesignDocName === '') {
+        FauxtonAPI.addNotification({
+          msg: 'Please name your design doc.',
+          type: 'error'
+        });
+        ReactDOM.findDOMNode(this.refs.newDesignDoc).focus();
+        return false;
+      }
+      return true;
     },
 
-    getNewDesignDocInput: function () {
+    getDocList: function () {
+      return _.map(this.props.designDocList, function (designDoc) {
+        return (<option key={designDoc} value={designDoc}>{designDoc}</option>);
+      });
+    },
+
+    selectDesignDoc: function (e) {
+      this.props.onSelectDesignDoc(e.target.value);
+    },
+
+    updateDesignDocName: function (e) {
+      this.props.onChangeNewDesignDocName(e.target.value);
+    },
+
+    getNewDDocField: function () {
+      if (this.props.selectedDesignDocName !== 'new-doc') {
+        return;
+      }
       return (
-        <div className="new-ddoc-section">
-          <div className="new-ddoc-input">
-            <input value={this.state.designDoc} type="text" id="new-ddoc" onChange={this.onDesignDocChange} placeholder="Name" />
+        <div id="new-ddoc-section" className="span5">
+          <label className="control-label" htmlFor="new-ddoc">_design/</label>
+          <div className="controls">
+            <input type="text" ref="newDesignDoc" id="new-ddoc" placeholder="newDesignDoc"
+               onChange={this.updateDesignDocName}/>
           </div>
         </div>
       );
     },
 
-    onDesignDocChange: function (event) {
-      Actions.designDocChange('_design/' + event.target.value, true);
-    },
-
-    getDesignDocOptions: function () {
-      return this.state.designDocs.map(function (doc, i) {
-        return <option key={i} value={doc.id}>{doc.id}</option>;
-      });
-    },
-
-    getSelectContent: function () {
-      var designDocOptions = this.getDesignDocOptions();
-
+    getDocLink: function () {
+      if (!this.props.docLink) {
+        return null;
+      }
       return (
-        <optgroup label="Select a document">
-          <option value="new">New Design Document</option>
-          {designDocOptions}
-        </optgroup>
+        <a className="help-link" data-bypass="true" href={this.props.docLink} target="_blank">
+          <i className="icon-question-sign" />
+        </a>
       );
     },
 
     render: function () {
-      var designDocInput;
-      var designDocId = this.state.designDocId;
-
-      if (this.state.newDesignDoc) {
-        designDocInput = this.getNewDesignDocInput();
-        designDocId = 'new';
-      }
-
       return (
-        <div className="new-ddoc-section">
-          <PaddedBorderedBox>
-            <div className="control-group design-doc-group">
-              <div className="pull-left">
-                <label htmlFor="ddoc"><strong>Design Document</strong>
-                  <a className="help-link" data-bypass="true" href={getDocUrl('DESIGN_DOCS')} target="_blank">
-                    <i className="icon-question-sign">
-                    </i>
-                  </a>
-                </label>
-                <StyledSelect
-                  selectContent={this.getSelectContent()}
-                  selectChange={this.selectChange}
-                  selectId="ddoc"
-                  selectValue={designDocId}
-                />
-              </div>
-              <div className="pull-left">
-                {designDocInput}
-              </div>
+        <div className="design-doc-group control-group">
+          <div className="span3">
+            <label htmlFor="ddoc">{this.props.designDocLabel}
+              {this.getDocLink()}
+            </label>
+            <div className="styled-select">
+              <label htmlFor="js-backup-list-select">
+                <i className="fonticon-down-dir" />
+                <select id="ddoc" onChange={this.selectDesignDoc} value={this.props.selectedDesignDocName}>
+                  <optgroup label="Select a document">
+                    <option value="new-doc">New document</option>
+                    {this.getDocList()}
+                  </optgroup>
+                </select>
+              </label>
             </div>
-          </PaddedBorderedBox>
+          </div>
+          {this.getNewDDocField()}
         </div>
       );
-    },
-
-    selectChange: function (event) {
-      var designDocId = event.target.value;
-
-      if (designDocId === 'new') {
-        Actions.newDesignDoc();
-      } else {
-        Actions.designDocChange(designDocId, false);
-      }
-    },
-
-    onChange: function () {
-      this.setState(this.getStoreState());
-    },
-
-    componentDidMount: function () {
-      indexEditorStore.on('change', this.onChange, this);
-    },
-
-    componentWillUnmount: function () {
-      indexEditorStore.off('change', this.onChange);
     }
-
   });
+
 
   var ReduceEditor = React.createClass({
 
@@ -277,6 +269,7 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, ReactComponents) 
   });
 
   var Editor = React.createClass({
+
     getStoreState: function () {
       return {
         hasViewNameChanged: indexEditorStore.hasViewNameChanged(),
@@ -284,9 +277,12 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, ReactComponents) 
         isNewView: indexEditorStore.isNewView(),
         viewName: indexEditorStore.getViewName(),
         designDocs: indexEditorStore.getDesignDocs(),
+        designDocList: indexEditorStore.getAvailableDesignDocs(),
         hasDesignDocChanged: indexEditorStore.hasDesignDocChanged(),
         newDesignDoc: indexEditorStore.isNewDesignDoc(),
         designDocId: indexEditorStore.getDesignDocId(),
+        newDesignDocName: indexEditorStore.getNewDesignDocName(),
+        saveDesignDoc: indexEditorStore.getSaveDesignDoc(),
         map: indexEditorStore.getMap(),
         isLoading: indexEditorStore.isLoading()
       };
@@ -297,7 +293,9 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, ReactComponents) 
     },
 
     onChange: function () {
-      this.setState(this.getStoreState());
+      if (this.isMounted()) {
+        this.setState(this.getStoreState());
+      }
     },
 
     componentDidMount: function () {
@@ -314,8 +312,12 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, ReactComponents) 
       return mapEditorErrors || customReduceErrors;
     },
 
-    saveView: function (event) {
-      event.preventDefault();
+    saveView: function (e) {
+      e.preventDefault();
+
+      if (!this.refs.designDocSelector.validate()) {
+        return;
+      }
 
       if (this.hasErrors()) {
         FauxtonAPI.addNotification({
@@ -330,6 +332,7 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, ReactComponents) 
         database: this.state.database,
         newView: this.state.isNewView,
         viewName: this.state.viewName,
+        designDoc: this.state.saveDesignDoc,
         designDocId: this.state.designDocId,
         newDesignDoc: this.state.newDesignDoc,
         designDocChanged: this.state.hasDesignDocChanged,
@@ -340,8 +343,8 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, ReactComponents) 
       });
     },
 
-    viewChange: function (event) {
-      Actions.changeViewName(event.target.value);
+    viewChange: function (e) {
+      Actions.changeViewName(e.target.value);
     },
 
     updateMapCode: function (code) {
@@ -358,7 +361,6 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, ReactComponents) 
       }
 
       var url = '#/' + FauxtonAPI.urls('allDocs', 'app', this.state.database.id, '');
-
       return (
         <div className="define-view">
           <PaddedBorderedBox>
@@ -371,7 +373,20 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, ReactComponents) 
             </div>
           </PaddedBorderedBox>
           <form className="form-horizontal view-query-save" onSubmit={this.saveView}>
-            <DesignDocSelector />
+
+            <div className="new-ddoc-section">
+              <PaddedBorderedBox>
+                <DesignDocSelector
+                  ref="designDocSelector"
+                  designDocList={this.state.designDocList}
+                  selectedDesignDocName={this.state.designDocId}
+                  newDesignDocName={this.state.newDesignDocName}
+                  onSelectDesignDoc={Actions.selectDesignDoc}
+                  onChangeNewDesignDocName={Actions.updateNewDesignDocName}
+                  docLink={getDocUrl('DESIGN_DOCS')} />
+              </PaddedBorderedBox>
+            </div>
+
             <div className="control-group">
               <PaddedBorderedBox>
                 <label htmlFor="index-name">

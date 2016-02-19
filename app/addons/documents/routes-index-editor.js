@@ -122,9 +122,8 @@ function (app, FauxtonAPI, Helpers, BaseRoute, Documents, IndexEditorComponents,
     },
 
     newViewEditor: function (database, _designDoc) {
-      var params = app.getParams();
       var newDesignDoc = true;
-      var designDoc;
+      var designDoc = 'new-doc';
 
       if (_designDoc) {
         designDoc = '_design/' + _designDoc;

@@ -217,3 +217,26 @@ body .view-query-save .control-group {
     .spanX (@gridColumns);
   }
 }
+
+
+/* temporary CSS overrides. This will be removed once the Views is moved to the standard 2-panel layout */
+.define-view .new-ddoc-section {
+  .span5 {
+    .label {
+      display: none;
+    }
+    .control-label {
+      display: none;
+    }
+  }
+  .span3 span {
+    font-weight: bold;
+  }
+  #new-ddoc-section {
+    margin: 16px 0 0;
+    .controls {
+      margin-left: 0;
+    }
+  }
+}
+/* end temporary override */

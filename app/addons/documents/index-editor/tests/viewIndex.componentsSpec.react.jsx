@@ -11,40 +11,43 @@
 // the License.
 define([
   'api',
+  'addons/documents/resources',
   'addons/documents/index-editor/components.react',
   'addons/documents/index-editor/stores',
   'addons/documents/index-editor/actions',
-  'addons/documents/resources',
   'testUtils',
   "react",
   'react-dom'
-], function (FauxtonAPI, Views, Stores, Actions, Documents, utils, React, ReactDOM) {
+], function (FauxtonAPI, Resources, Views, Stores, Actions, utils, React, ReactDOM) {
   FauxtonAPI.router = new FauxtonAPI.Router([]);
 
   var assert = utils.assert;
   var TestUtils = React.addons.TestUtils;
-  var restore = utils.restore;
+
 
   var resetStore = function (designDocs) {
-    designDocs = designDocs.map(function (doc) {
-      return Documents.Doc.prototype.parse(doc);
-    });
-
-    var ddocs = new Documents.AllDocs(designDocs, {
-      params: { limit: 10 },
-      database: {
-        safeID: function () { return 'id';}
-      }
-    });
-
     Actions.editIndex({
-      database: {id: 'rockos-db'},
+      database: { id: 'rockos-db' },
       newView: false,
       viewName: 'test-view',
-      designDocs: ddocs,
+      designDocs: getDesignDocsCollection(designDocs),
       designDocId: designDocs[0]._id
     });
   };
+
+  var getDesignDocsCollection = function (designDocs) {
+    designDocs = designDocs.map(function (doc) {
+      return Resources.Doc.prototype.parse(doc);
+    });
+
+    return new Resources.AllDocs(designDocs, {
+      params: { limit: 10 },
+      database: {
+        safeID: function () { return 'id'; }
+      }
+    });
+  };
+
 
   describe('reduce editor', function () {
     var container, reduceEl;
@@ -70,8 +73,7 @@ define([
           _id: '_design/test-doc',
           views: {
             'test-view': {
-              map: 'function () {};',
-              //reduce: 'function (reduce) { reduce(); }'
+              map: 'function () {};'
             }
           }
         };
@@ -102,120 +104,145 @@ define([
     });
   });
 
-  describe('design Doc Selector', function () {
+  describe('DesignDocSelector component', function () {
     var container, selectorEl;
+    var database = { id: 'db' };
+    var designDoc = {
+      "id": "_design/test-doc",
+      "key": "_design/test-doc",
+      "value": {
+        "rev": "20-9e4bc8b76fd7d752d620bbe6e0ea9a80"
+      },
+      "doc": {
+        "_id": "_design/test-doc",
+        "_rev": "20-9e4bc8b76fd7d752d620bbe6e0ea9a80",
+        "views": {
+          "test-view": {
+            "map": "function(doc) {\n  emit(doc._id, 2);\n}"
+          },
+          "new-view": {
+            "map": "function(doc) {\n  if (doc.class === \"mammal\" && doc.diet === \"herbivore\")\n    emit(doc._id, 1);\n}",
+            "reduce": "_sum"
+          }
+        },
+        "language": "javascript",
+        "indexes": {
+          "newSearch": {
+            "analyzer": "standard",
+            "index": "function(doc){\n index(\"default\", doc._id);\n}"
+          }
+        }
+      }
+    };
 
     beforeEach(function () {
       container = document.createElement('div');
-
-      var designDoc = {
-        "id": "_design/test-doc",
-        "key": "_design/test-doc",
-        "value": {
-          "rev": "20-9e4bc8b76fd7d752d620bbe6e0ea9a80"
-        },
-        "doc": {
-          "_id": "_design/test-doc",
-          "_rev": "20-9e4bc8b76fd7d752d620bbe6e0ea9a80",
-          "views": {
-            "test-view": {
-              "map": "function(doc) {\n  emit(doc._id, 2);\n}"
-            },
-            "new-view": {
-              "map": "function(doc) {\n  if (doc.class === \"mammal\" && doc.diet === \"herbivore\")\n    emit(doc._id, 1);\n}",
-              "reduce": "_sum"
-            }
-          },
-          "language": "javascript",
-          "indexes": {
-            "newSearch": {
-              "analyzer": "standard",
-              "index": "function(doc){\n index(\"default\", doc._id);\n}"
-            }
-          }
-        }
-      };
-      var mangodoc = {
-        "id": "_design/123mango",
-        "key": "_design/123mango",
-        "value": {
-          "rev": "20-9e4bc8b76fd7d752d620bbe6e0ea9a80"
-        },
-        "doc": {
-          "_id": "_design/123mango",
-          "_rev": "20-9e4bc8b76fd7d752d620bbe6e0ea9a80",
-          "views": {
-            "test-view": {
-              "map": "function(doc) {\n  emit(doc._id, 2);\n}"
-            },
-            "new-view": {
-              "map": "function(doc) {\n  if (doc.class === \"mammal\" && doc.diet === \"herbivore\")\n    emit(doc._id, 1);\n}",
-              "reduce": "_sum"
-            }
-          },
-          "language": "query",
-          "indexes": {
-            "newSearch": {
-              "analyzer": "standard",
-              "index": "function(doc){\n index(\"default\", doc._id);\n}"
-            }
-          }
-        }
-      };
-      resetStore([designDoc, mangodoc]);
-      selectorEl = TestUtils.renderIntoDocument(<Views.DesignDocSelector/>, container);
     });
 
-
     afterEach(function () {
-      restore(Actions.newDesignDoc);
-      restore(Actions.designDocChange);
       ReactDOM.unmountComponentAtNode(container);
     });
 
-    it('calls new design doc on new selected', function () {
-      var spy = sinon.spy(Actions, 'newDesignDoc');
+
+    it('calls onSelectDesignDoc on change', function () {
+      var spy = sinon.spy();
+      selectorEl = TestUtils.renderIntoDocument(
+        <Views.DesignDocSelector
+          designDocList={getDesignDocsCollection([designDoc])}
+          selectedDDocName={'new-doc'}
+          onSelectDesignDoc={spy}
+        />, container);
+
       TestUtils.Simulate.change($(ReactDOM.findDOMNode(selectorEl)).find('#ddoc')[0], {
         target: {
-          value: 'new'
+          value: '_design/test-doc'
         }
       });
-
       assert.ok(spy.calledOnce);
     });
 
-    it('calls design doc changed on a different design doc selected', function () {
-      var spy = sinon.spy(Actions, 'designDocChange');
-      TestUtils.Simulate.change($(ReactDOM.findDOMNode(selectorEl)).find('#ddoc')[0], {
-        target: {
-          value: 'another-doc'
-        }
-      });
+    it('shows new design doc field when set to new-doc', function () {
+      selectorEl = TestUtils.renderIntoDocument(
+        <Views.DesignDocSelector
+          designDocList={['_design/test-doc']}
+          selectedDesignDocName={'new-doc'}
+          onSelectDesignDoc={function () { }}
+        />, container);
 
-      assert.ok(spy.calledWith('another-doc', false));
+      assert.equal($(ReactDOM.findDOMNode(selectorEl)).find('#new-ddoc-section').length, 1);
     });
 
-    it('calls design doc changed on new design doc entered', function () {
-      var spy = sinon.spy(Actions, 'designDocChange');
-      Actions.newDesignDoc();
-      TestUtils.Simulate.change($(ReactDOM.findDOMNode(selectorEl)).find('#new-ddoc')[0], {
-        target: {
-          value: 'new-doc-entered'
-        }
-      });
+    it('hides new design doc field when design doc selected', function () {
+      selectorEl = TestUtils.renderIntoDocument(
+        <Views.DesignDocSelector
+          designDocList={['_design/test-doc']}
+          selectedDesignDocName={'_design/test-doc'}
+          onSelectDesignDoc={function () { }}
+        />, container);
 
-      assert.ok(spy.calledWith('_design/new-doc-entered', true));
+      assert.equal($(ReactDOM.findDOMNode(selectorEl)).find('#new-ddoc-section').length, 0);
     });
 
-    it('does not filter usual design docs', function () {
-      assert.ok(/_design\/test-doc/.test($(ReactDOM.findDOMNode(selectorEl)).text()));
+    it('always passes validation when design doc selected', function () {
+      selectorEl = TestUtils.renderIntoDocument(
+        <Views.DesignDocSelector
+          designDocList={['_design/test-doc']}
+          selectedDesignDocName={'_design/test-doc'}
+          onSelectDesignDoc={function () { }}
+        />, container);
+
+      assert.equal(selectorEl.validate(), true);
     });
 
-    it('filters mango docs', function () {
-      selectorEl = TestUtils.renderIntoDocument(<Views.DesignDocSelector/>, container);
-      assert.notOk(/_design\/123mango/.test($(ReactDOM.findDOMNode(selectorEl)).text()));
+    it('fails validation if new doc name entered/not entered', function () {
+      selectorEl = TestUtils.renderIntoDocument(
+        <Views.DesignDocSelector
+          designDocList={['_design/test-doc']}
+          selectedDesignDocName={'new-doc'}
+          newDesignDocName=''
+          onSelectDesignDoc={function () { }}
+        />, container);
+
+      // it shouldn't validate at this point: no new design doc name has been entered
+      assert.equal(selectorEl.validate(), false);
+    });
+
+    it('passes validation if new doc name entered/not entered', function () {
+      selectorEl = TestUtils.renderIntoDocument(
+        <Views.DesignDocSelector
+          designDocList={['_design/test-doc']}
+          selectedDesignDocName={'new-doc'}
+          newDesignDocName='new-doc-name'
+          onSelectDesignDoc={function () { }}
+        />, container);
+      assert.equal(selectorEl.validate(), true);
+    });
+
+
+    it('omits doc URL when not supplied', function () {
+      selectorEl = TestUtils.renderIntoDocument(
+        <Views.DesignDocSelector
+          designDocList={['_design/test-doc']}
+          selectedDesignDocName={'new-doc'}
+          onSelectDesignDoc={function () { }}
+        />, container);
+      assert.equal($(ReactDOM.findDOMNode(selectorEl)).find('.help-link').length, 0);
+    });
+
+    it('includes help doc link when supplied', function () {
+      var docLink = 'http://docs.com';
+      selectorEl = TestUtils.renderIntoDocument(
+        <Views.DesignDocSelector
+          designDocList={['_design/test-doc']}
+          selectedDesignDocName={'new-doc'}
+          onSelectDesignDoc={function () { }}
+          docLink={docLink}
+        />, container);
+      assert.equal($(ReactDOM.findDOMNode(selectorEl)).find('.help-link').length, 1);
+      assert.equal($(ReactDOM.findDOMNode(selectorEl)).find('.help-link').attr('href'), docLink);
     });
   });
+
 
   describe('Editor', function () {
     var container, editorEl, sandbox;
