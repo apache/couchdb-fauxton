@@ -14,16 +14,12 @@
 //
 
 require([
-  '../app/app',
-  "es5-shim",
   <% _.each(testFiles, function (test) {%>
-     <% if (test[0] === '.') { %>
-     '../<%= test %>',
-     <% } else { %>
-     '.././<%= test %>',
-     <% }  %>
-  <% }) %>
+  '.././<%= test %>',
+ <% }) %>
 ], function() {
-  if (window.mochaPhantomJS) { mochaPhantomJS.run(); }
+  if (window.mochaPhantomJS) {
+    mochaPhantomJS.run();
+  }
   else { mocha.run(); }
 });

@@ -11,7 +11,7 @@
 // the License.
 define([
   '../../../../core/api',
-  '../resources',
+  '../../resources',
   '../components.react',
   '../stores',
   '../actions',
@@ -21,7 +21,7 @@ define([
   'react-dom',
   'react-addons-test-utils',
   'sinon'
-], function (FauxtonAPI, 'Resources, Views, Stores, Actions, Documents, utils, React, ReactDOM, TestUtils, sinon) {
+], function (FauxtonAPI, Resources, Views, Stores, Actions, Documents, utils, React, ReactDOM, TestUtils, sinon) {
   FauxtonAPI.router = new FauxtonAPI.Router([]);
 
   var assert = utils.assert;

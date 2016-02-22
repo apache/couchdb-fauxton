@@ -29,9 +29,10 @@ before_install:
   - "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1400x900x16"
 
 before_script:
-  - ./node_modules/grunt-cli/bin/grunt test
-  - ./node_modules/grunt-cli/bin/grunt dev &
-  - sleep 25
+  - npm test
+  - grunt debugDev
+  - DIST=./dist/debug/ ./bin/fauxton &
+  - sleep 30
 script:
   - ./node_modules/grunt-cli/bin/grunt nightwatch
 

@@ -27,11 +27,6 @@ define([
   function (app, FauxtonAPI, React, ReactDOM, Stores, Actions, FauxtonComponents, Helpers,
 	   beautifyHelper, ReactBootstrap, ReactCSSTransitionGroup, ace) {
 
-function (app, FauxtonAPI, React, ReactDOM, Stores, Actions,
-  FauxtonComponents, Helpers, ace, beautifyHelper, ReactBootstrap) {
-function (app, FauxtonAPI, React, ReactDOM, Stores, Actions, FauxtonComponents, Helpers, ace, beautifyHelper,
-  ReactBootstrap) {
-
   var componentStore = Stores.componentStore;
   var Modal = ReactBootstrap.Modal;
 

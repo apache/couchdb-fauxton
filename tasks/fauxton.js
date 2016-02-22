@@ -125,20 +125,7 @@ module.exports = function (grunt) {
     });
 
     var configTemplate = _.template(grunt.file.read(configTemplateSrc));
-    // a bit of a nasty hack to read our current config.js and get the info so we can change it
-    // for our testing setup
-    var require = {
-      config: function (args) {
-        configInfo = args;
-        configInfo.paths['testUtils'] = '../test/mocha/testUtils';
-        configInfo.baseUrl = '../app';
-        delete configInfo.deps;
-      }
-    };
-
-    eval(grunt.file.read(data.config) + '');
-
-    grunt.file.write('./test/test.config.js', configTemplate({configInfo: configInfo, testFiles: testFiles}));
+    grunt.file.write('./test/test.config.js', configTemplate({testFiles: testFiles}));
   });
 
 

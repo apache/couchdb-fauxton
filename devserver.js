@@ -1,10 +1,30 @@
 var spawn = require('child_process').spawn;
 var path = require("path");
+var fs = require("fs");
 var _ = require('lodash');
 var webpack = require('webpack');
 var WebpackDev = require('webpack-dev-server');
-
 var config = require('./webpack.config.dev.js');
+var httpProxy = require('http-proxy');
+
+
+var loadSettings = function () {
+  var fileName = './settings.json.default.json';
+  if (fs.existsSync('./settings.json')) {
+    fileName = './settings.json';
+  }
+
+  return require(fileName).couchserver || {
+    port: process.env.FAUXTON_PORT || 8000,
+    contentSecurityPolicy: true,
+    proxy: {
+      target: 'http://127.0.0.1:5984',
+      changeOrigin: false
+    }
+  };
+};
+
+var settings = loadSettings();
 
 var less = function () {
   var _less = spawn('npm', ['run', 'build:less:debug']);
@@ -24,7 +44,12 @@ var less = function () {
 
 var devSetup = function (cb) {
   console.log('setup dev environment');
-  var grunt = spawn('grunt', ['devSetup']);
+  var cmd = 'devSetupWithClean';
+  if (settings.noClean) {
+    cmd = 'devSetup';
+  }
+
+  var grunt = spawn('grunt', [cmd]);
 
   grunt.stdout.on('data', (data) => {
     console.log(data.toString());
@@ -45,7 +70,11 @@ var devSetup = function (cb) {
 var headerValue = "default-src 'self'; child-src 'self' data: blob:; img-src 'self' data:; font-src 'self'; " +
                   "script-src 'self' 'unsafe-eval'; style-src 'self' 'unsafe-inline';";
 var setCSP = function (res) {
-  res.setHeader('Content-Security-Policy', headerValue);
+  if (!settings.contentSecurityPolicy) {
+    return;
+  }
+
+  //res.setHeader('Content-Security-Policy', settings.contentSecurityPolicyHeader);
 };
 
 var runWebpackServer = function () {
@@ -53,6 +82,7 @@ var runWebpackServer = function () {
   function isFile (url) {
     return _.contains(fileTypes, path.extname(url));
   }
+
 
   var options = {
     contentBase: __dirname + '/dist/debug',
@@ -63,28 +93,6 @@ var runWebpackServer = function () {
     port: process.env.FAUXTON_PORT || 8000,
     hot: false,
     historyApiFallback: true,
-    proxy: {
-      '*': {
-        target: 'http://127.0.0.1:5984',
-        secure: false,
-        bypass: function (req, res) {
-          setCSP(res);
-          //requests for certain assets requires us to skip the proxy.
-          var url = req.url.split('?')[0];
-          if (isFile(url)) {
-            return url;
-          }
-
-          if (req.headers.accept.indexOf('html') !== -1) {
-            return '/index.html';
-          }
-
-          if (req.url.indexOf('templates.js') !== -1) {
-            return '/templates.js';
-          }
-        }
-      }
-    },
     stats: {
       colors: true,
     }
@@ -98,7 +106,24 @@ var runWebpackServer = function () {
     less();
   });
 
-  new WebpackDev(compiler, options).listen(options.port, options.host, function (err) {
+  var server = new WebpackDev(compiler, options);
+  var proxy = httpProxy.createServer({
+    secure: false,
+    changeOrigin: true,
+    target: settings.proxy.target
+  });
+
+  proxy.on('proxyRes', function (proxyRes, req, res) {
+    if (proxyRes.headers['set-cookie']) {
+      proxyRes.headers['set-cookie'][0] = proxyRes.headers["set-cookie"][0].replace('Secure', '');
+    }
+  });
+
+  server.app.all('*', function (req, res, next) {
+    proxy.web(req, res);
+  });
+
+  server.listen(options.port, options.host, function (err) {
     if (err) {
       console.log(err);
       return;
@@ -107,5 +132,6 @@ var runWebpackServer = function () {
     console.log('Starting first compile. This will take about 10 seconds...');
   });
 };
+
 
 devSetup(runWebpackServer);

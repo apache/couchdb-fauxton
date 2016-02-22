@@ -96,8 +96,10 @@ module.exports = function (grunt) {
     // The clean task ensures all files are removed from the dist/ directory so
     // that no files linger from previous builds.
     clean: {
-      release:  cleanable,
-      watch: cleanableAddons
+      options: {
+        'force': true
+      },
+      release:  cleanable
     },
 
     // The jst task compiles all application templates into JavaScript
@@ -136,9 +138,6 @@ module.exports = function (grunt) {
         dest: "dist/tmp-out/bundle.js"
       }
     },
-
-    // Runs a proxy server for easier development, no need to keep deploying to couchdb
-    couchserver: couchserver_config,
 
     // Copy build artifacts and library code into the distribution
     // see - http://gruntjs.com/configuring-tasks#building-the-files-object-dynamically
@@ -232,10 +231,11 @@ module.exports = function (grunt) {
             './app/core/**/*[Ss]pec.js',
             './app/addons/**/*[Ss]pec.js',
             './app/addons/**/*[Ss]pec.react.jsx'
+            // './app/addons/warehouse/**/*[Ss]pec.js',
+            // './app/addons/warehouse/**/*[Ss]pec.react.jsx'
           ])
         },
-        template: 'test/test.config.underscore',
-        config: './app/config.js'
+        template: 'test/test.config.underscore'
       }
     },
 
@@ -325,7 +325,6 @@ module.exports = function (grunt) {
   grunt.loadTasks('tasks');
 
   grunt.loadNpmTasks('grunt-couchapp');
-  grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-exec');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-clean');
@@ -342,13 +341,11 @@ module.exports = function (grunt) {
   /*
    * Transformation tasks
    */
-  // clean out previous build artifacts and lint
-  grunt.registerTask('lint', ['clean']);
   grunt.registerTask('test', ['checkTestExists', 'clean:release', 'dependencies', 'copy:debug', 'gen_initialize:development', 'test_inline']);
 
   // lighter weight test task for use inside dev/watch
   grunt.registerTask('test_inline', ['mochaSetup', 'shell:webpacktest', 'jst', 'copy:testTemplates', 'shell:phantomjs']);
-  // Fetch dependencies (from git or local dir), lint them and make load_addons
+  // Fetch dependencies (from git or local dir)
   grunt.registerTask('dependencies', ['get_deps', 'gen_load_addons:default']);
 
   // minify code and css, ready for release.
@@ -364,14 +361,15 @@ module.exports = function (grunt) {
   });
 
   // build a debug release
-  grunt.registerTask('debug', ['lint', 'dependencies', "gen_initialize:development", 'shell:build-less-debug',
+  grunt.registerTask('debug', ['clean', 'dependencies', "gen_initialize:development", 'shell:build-less-debug',
     'template:development', 'copy:debug']);
 
-  grunt.registerTask('debugDev', ['clean', 'dependencies', "gen_initialize:development", 'shell:stylecheck',
+  grunt.registerTask('debugDev', ['clean', 'dependencies', "gen_initialize:development",
     'shell:build-less-debug', 'template:development', 'copy:debug', 'jst', 'shell:webpack', 'concat:bundle_js']);
 
-  grunt.registerTask('devSetup', ['clean', 'dependencies', "gen_initialize:development",
+  grunt.registerTask('devSetup', ['dependencies', "gen_initialize:development",
     'shell:build-less-debug', 'template:development', 'copy:debug', 'jst', 'copy:devTemplates']);
+  grunt.registerTask('devSetupWithClean', ['clean', 'devSetup']);
 
   grunt.registerTask('watchRun', ['clean:watch', 'dependencies', 'shell:stylecheck']);
 

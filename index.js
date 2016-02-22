@@ -4,7 +4,7 @@ var httpProxy = require('http-proxy');
 var send = require('send');
 var urlLib = require('url');
 var _ = require('lodash');
-var dist_dir = __dirname + '/dist/release/';
+var dist_dir = process.env.DIST || __dirname + '/dist/release/';
 
 module.exports = function (options) {
   // Options
@@ -42,11 +42,13 @@ module.exports = function (options) {
   http.createServer(function (req, res) {
     var isDocLink = /_utils\/docs/.test(req.url);
     var url = req.url.split(/\?v=|\?noCache/)[0].replace('_utils', '');
-    var accept = req.headers.accept.split(',');
-
+    var accept = [];
+    if (req.headers.accept) {
+      var accept = req.headers.accept.split(',');
+    }
     if (setContentSecurityPolicy) {
-      var headerValue = "default-src 'self'; img-src 'self' data:; font-src 'self'; " +
-      "script-src 'self' 'unsafe-eval'; style-src 'self' 'unsafe-inline';";
+      var headerValue = "default-src 'self'; child-src 'self' data: blob:; img-src 'self' data:; font-src 'self'; " +
+                        "script-src 'self' 'unsafe-eval'; style-src 'self' 'unsafe-inline';";
       res.setHeader('Content-Security-Policy', headerValue);
     }
 
