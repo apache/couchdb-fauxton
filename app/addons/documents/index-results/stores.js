@@ -590,7 +590,7 @@ function (app, FauxtonAPI, ActionTypes, HeaderActionTypes, PaginationActionTypes
         var url;
 
         if (safeId) {
-          url = FauxtonAPI.urls('document', 'app', database, dbId);
+          url = FauxtonAPI.urls('document', 'app', dbId, safeId);
         }
 
         return {
