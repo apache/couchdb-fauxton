@@ -22,9 +22,11 @@ define([
 
 function (app, FauxtonAPI, React, ReactDOM, Stores, Actions, Components) {
   var store = Stores.queryOptionsStore;
-  var Tray = Components.Tray;
   var TrayContents = Components.TrayContents;
   var ToggleHeaderButton = Components.ToggleHeaderButton;
+
+  var TrayWrapper = Components.TrayWrapper;
+  var connectToStores = Components.connectToStores;
 
   var MainFieldsView = React.createClass({
     propTypes: {
@@ -43,7 +45,7 @@ function (app, FauxtonAPI, React, ReactDOM, Stores, Actions, Components) {
     },
 
     toggleIncludeDocs: function (e) {
-      this.props.toggleIncludeDocs();
+      this.props.toggleIncludeDocs(e);
     },
 
     groupLevelChange: function (e) {
@@ -273,7 +275,7 @@ A key value is the first parameter emitted in a map function. For example emit("
 
   var QueryButtons = React.createClass({
     hideTray: function (e) {
-      FauxtonAPI.Events.trigger(FauxtonAPI.constants.EVENTS.TRAY_HIDE, {});
+      Actions.toggleQueryBarVisibility(false);
     },
 
     render: function () {
@@ -292,93 +294,126 @@ A key value is the first parameter emitted in a map function. For example emit("
   });
 
   var QueryOptionsController = React.createClass({
-    getStoreState: function () {
-      return {
-        includeDocs: store.includeDocs(),
-        showBetweenKeys: store.showBetweenKeys(),
-        showByKeys: store.showByKeys(),
-        betweenKeys: store.betweenKeys(),
-        byKeys: store.byKeys(),
-        descending: store.descending(),
-        skip: store.skip(),
-        limit: store.limit(),
-        showReduce: store.showReduce(),
-        reduce: store.reduce(),
-        groupLevel: store.groupLevel()
-      };
+
+    getWrap: function () {
+      return connectToStores(TrayWrapper, [store], function () {
+
+        return {
+          includeDocs: store.includeDocs(),
+          showBetweenKeys: store.showBetweenKeys(),
+          showByKeys: store.showByKeys(),
+          betweenKeys: store.betweenKeys(),
+          byKeys: store.byKeys(),
+          descending: store.descending(),
+          skip: store.skip(),
+          limit: store.limit(),
+          showReduce: store.showReduce(),
+          reduce: store.reduce(),
+          groupLevel: store.groupLevel(),
+          contentVisible: store.getTrayVisible(),
+          queryParams: store.getQueryParams()
+        };
+      });
     },
 
-    getInitialState: function () {
-      return this.getStoreState();
-    },
+    render: function () {
+      var TrayWrapper = this.getWrap();
+      return (
+        <TrayWrapper>
+          <QueryTray contentVisible={false} />
+        </TrayWrapper>
+      );
+    }
+  });
 
-    componentDidMount: function () {
-      store.on('change', this.onChange, this);
-    },
+  var QueryTray = React.createClass({
 
-    componentWillUnmount: function () {
-      store.off('change', this.onChange);
-    },
-
-    onChange: function () {
-      this.setState(this.getStoreState());
+    propTypes: {
+      contentVisible: React.PropTypes.bool.isRequired
     },
 
     runQuery: function (e) {
       e.preventDefault();
 
-      this.refs.tray.hideTray();
-      Actions.runQuery(store.getQueryParams());
+      Actions.runQuery(this.props.queryParams);
+      this.toggleTrayVisibility();
+    },
+
+    toggleTrayVisibility: function () {
+      Actions.toggleQueryBarVisibility(!this.props.contentVisible);
+    },
+
+    componentDidMount: function () {
+      $('body').on('click.QueryTray', function (e) {
+        if ($(e.target).closest('#query-options').length) {
+          return;
+        }
+        Actions.toggleQueryBarVisibility(false);
+      }.bind(this));
+    },
+
+    componentWillUnmount: function () {
+      $('body').off('click.QueryTray');
+    },
+
+    toggleIncludeDocs: function (e) {
+      Actions.toggleIncludeDocs();
+    },
+
+    getTray: function () {
+      if (!this.props.contentVisible) {
+        return null;
+      }
+
+      return (
+        <TrayContents
+          className="query-options"
+          id="query-options-tray">
+
+          <form onSubmit={this.runQuery} className="js-view-query-update custom-inputs">
+            <MainFieldsView
+              includeDocs={this.props.includeDocs}
+              toggleIncludeDocs={this.toggleIncludeDocs}
+              showReduce={this.props.showReduce}
+              reduce={this.props.reduce}
+              toggleReduce={Actions.toggleReduce}
+              groupLevel={this.props.groupLevel}
+              updateGroupLevel={Actions.updateGroupLevel} />
+            <KeySearchFields
+              key={1}
+              showByKeys={this.props.showByKeys}
+              showBetweenKeys={this.props.showBetweenKeys}
+              toggleByKeys={Actions.toggleByKeys}
+              toggleBetweenKeys={Actions.toggleBetweenKeys}
+              betweenKeys={this.props.betweenKeys}
+              updateBetweenKeys={Actions.updateBetweenKeys}
+              byKeys={this.props.byKeys}
+              updateByKeys={Actions.updateByKeys} />
+            <AdditionalParams
+              descending={this.props.descending}
+              toggleDescending={Actions.toggleDescending}
+              skip={this.props.skip}
+              updateSkip={Actions.updateSkip}
+              updateLimit={Actions.updateLimit}
+              limit={this.props.limit} />
+            <QueryButtons />
+          </form>
+        </TrayContents>
+      );
+
     },
 
     render: function () {
       return (
-        <Tray id="query-options-tray" ref="tray">
-
+        <div>
           <ToggleHeaderButton
+            toggleCallback={this.toggleTrayVisibility}
             containerClasses="header-control-box control-toggle-queryoptions"
             title="Query Options"
             fonticon="fonticon-gears"
             text="Options" />
-
-          <TrayContents
-            className="query-options"
-            id="query-options-tray">
-
-            <form onSubmit={this.runQuery} className="js-view-query-update custom-inputs">
-              <MainFieldsView
-                includeDocs={this.state.includeDocs}
-                toggleIncludeDocs={Actions.toggleIncludeDocs}
-                showReduce={this.state.showReduce}
-                reduce={this.state.reduce}
-                toggleReduce={Actions.toggleReduce}
-                groupLevel={this.state.groupLevel}
-                updateGroupLevel={Actions.updateGroupLevel}
-              />
-              <KeySearchFields
-                key={1}
-                showByKeys={this.state.showByKeys}
-                showBetweenKeys={this.state.showBetweenKeys}
-                toggleByKeys={Actions.toggleByKeys}
-                toggleBetweenKeys={Actions.toggleBetweenKeys}
-                betweenKeys={this.state.betweenKeys}
-                updateBetweenKeys={Actions.updateBetweenKeys}
-                byKeys={this.state.byKeys}
-                updateByKeys={Actions.updateByKeys}
-               />
-              <AdditionalParams
-                descending={this.state.descending}
-                toggleDescending={Actions.toggleDescending}
-                skip={this.state.skip}
-                updateSkip={Actions.updateSkip}
-                updateLimit={Actions.updateLimit}
-                limit={this.state.limit}
-              />
-              <QueryButtons />
-            </form>
-
-          </TrayContents>
-        </Tray>
+          {this.getTray()}
+        </div>
       );
     }
 

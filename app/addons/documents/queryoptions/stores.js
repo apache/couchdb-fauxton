@@ -34,6 +34,8 @@ function (app, FauxtonAPI, ActionTypes) {
         include: true,
       };
 
+      this._trayVisible = false;
+
       this._byKeys = '';
       this._descending = false;
       this._skip = '';
@@ -46,6 +48,14 @@ function (app, FauxtonAPI, ActionTypes) {
 
     isLoading: function () {
       return this._loading;
+    },
+
+    setTrayVisible: function (trayVisible) {
+      this._trayVisible = trayVisible;
+    },
+
+    getTrayVisible: function () {
+      return this._trayVisible;
     },
 
     showReduce: function () {
@@ -262,6 +272,9 @@ function (app, FauxtonAPI, ActionTypes) {
         break;
         case ActionTypes.QUERY_UPDATE_GROUP_LEVEL:
           this.updateGroupLevel(action.groupLevel);
+        break;
+        case ActionTypes.QUERY_UPDATE_VISIBILITY:
+          this.setTrayVisible(action.options);
         break;
         default:
         return;
