@@ -23,7 +23,9 @@ That should install the gem in a path like below:
 
 4. Add your new font(s) in SVG format to the `assets/icons` folder.
 
-5. Run the command `bundle exec fontcustom compile`. That generates the following:
+5. If Gemfile.lock exists, delete it. The run `bundle install`
+
+6. Run the command `bundle exec fontcustom compile`. That generates the following:
 
 - an `icons.less` file [LOCAL_COUCHDB_REPO]/src/couchdb-fauxton/assets/less
 - a `fauxtonicon-preview.html` preview [LOCAL_COUCHDB_REPO]/src/couchdb-fauxton/assets/fonts/styleguide
@@ -33,6 +35,7 @@ That should install the gem in a path like below:
   * `[font name].ttf`
   * `[font name].woff` 
 
+7. Delete the old fauxtoniconX.*** files, and ./styleguide/fauxtoniconX-preview.html file.
 
 For more info on Fontcustom, check out their documenation: [Fontcustom documentation](https://github.com/FontCustom/fontcustom)
 
