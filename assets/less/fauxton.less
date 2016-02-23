@@ -452,15 +452,19 @@ body #dashboard .flex-body#breadcrumbs {
     top: 0;
     .dropdown-toggle {
       color: #666666;
+      &:before {
+        margin-top: 6px;
+        margin: 6px -5px 0 6px;
+      }
     }
     a {
       padding: 10px;
       text-decoration: none;
       &:before {
         font-size: 20px;
-        margin-top: 6px;
       }
     }
+
     .dropdown {
       height: @collapsedNavWidth;
       border-left: 1px solid #ccc;

@@ -1528,7 +1528,7 @@ function (app, FauxtonAPI, React, ReactDOM, Actions, Stores, FauxtonComponents, 
     connectToStores: connectToStores,
     ApiBarController: ApiBarController,
     renderMenuDropDown: function (el, opts) {
-      ReactDOM.render(<MenuDropDown icon="fonticon-cog" links={opts.links} />, el);
+      ReactDOM.render(<MenuDropDown icon="fonticon-vertical-ellipsis" links={opts.links} />, el);
     },
     removeMenuDropDown: function (el) {
       ReactDOM.unmountComponentAtNode(el);
