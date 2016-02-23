@@ -83,6 +83,13 @@ function (app, FauxtonAPI, ActionTypes, Stores) {
       FauxtonAPI.navigate(url);
     },
 
+    toggleQueryBarVisibility: function (options) {
+      FauxtonAPI.dispatch({
+        type: ActionTypes.QUERY_UPDATE_VISIBILITY,
+        options: options
+      });
+    },
+
     updateGroupLevel: function (groupLevel) {
       FauxtonAPI.dispatch({
         type: ActionTypes.QUERY_UPDATE_GROUP_LEVEL,

@@ -265,8 +265,6 @@ function (app, FauxtonAPI, ace, spin, ReactComponents, Helpers) {
       if (!_.isNull(this.toggleTrayBtnSelector)) {
         this.$(this.toggleTrayBtnSelector).removeClass('enabled');
       }
-      // announce that the tray is being closed
-      FauxtonAPI.Events.trigger(FauxtonAPI.constants.EVENTS.TRAY_CLOSED, { trayId: this.trayId });
     },
 
     showTray: function () {

@@ -1185,11 +1185,6 @@ function (app, FauxtonAPI, React, ReactDOM, Actions, Stores,
 
   var TrayContents = React.createClass({
     getChildren: function () {
-      // XXX sofmigration new tray wrapper
-      if (!this.props.trayVisible) {
-        return null;
-      }
-
       var className = "tray show-tray " + this.props.className;
       return (
         <div key={1} id={this.props.id} className={className}>
@@ -1311,8 +1306,7 @@ function (app, FauxtonAPI, React, ReactDOM, Actions, Stores,
       }
 
       return (
-        // XXX softmigration new tray wrapper: trayVisible={true}
-        <TrayContents trayVisible={true} className="tray show-tray api-bar-tray">
+        <TrayContents className="tray show-tray api-bar-tray">
           <div className="input-prepend input-append">
             <span className="add-on">
               API URL
@@ -1396,79 +1390,6 @@ function (app, FauxtonAPI, React, ReactDOM, Actions, Stores,
         </TrayWrapper>
       );
     }
-  });
-
-  // The tray components work as follows:
-  // <Tray> Outer wrapper for all components in the tray
-  // <ToggleHeaderButton /> The tray button to activate the tray, e.g the ToggleHeaderButton
-  // <TrayContents> </TrayContents> What is displayed when the tray is active
-  // </Tray>
-  // See documents/queryoptions/queryoptions.react.jsx for a complete example
-
-  var Tray = React.createClass({
-
-    propTypes: {
-      id: React.PropTypes.string.isRequired
-    },
-
-    getDefaultProps: function () {
-      return {
-        className: ''
-      };
-    },
-
-    componentDidMount: function () {
-      $('body').on('click.' + this.props.id, _.bind(this.closeIfOpen, this));
-      FauxtonAPI.Events.on(FauxtonAPI.constants.EVENTS.TRAY_HIDE, this.closeIfOpen, this);
-    },
-
-    componentWillUnmount: function () {
-      FauxtonAPI.Events.off(FauxtonAPI.constants.EVENTS.TRAY_HIDE);
-      $('body').off('click.' + this.props.id);
-    },
-
-    getInitialState: function () {
-      return {
-        trayVisible: false
-      };
-    },
-
-    toggleTray: function () {
-      this.setState({trayVisible: !this.state.trayVisible});
-    },
-
-    hideTray: function () {
-      this.setState({ trayVisible: false });
-    },
-
-    renderChildren: function () {
-      return React.Children.map(this.props.children, function (child, key) {
-        return React.cloneElement(child, {
-          trayVisible: this.state.trayVisible,
-          selected: this.state.trayVisible,
-          toggleCallback: this.toggleTray,
-          key: key
-        });
-      }.bind(this));
-    },
-
-    render: function () {
-      return (
-        <div className={this.props.className}>
-          {this.renderChildren()}
-        </div>
-      );
-    },
-
-    closeIfOpen: function (e) {
-      if (!this.state.trayVisible) { return; }
-      var trayEl = $(ReactDOM.findDOMNode(this));
-
-      if (!trayEl.is(e.target) && trayEl.has(e.target).length === 0) {
-        this.toggleTray();
-      }
-    }
-
   });
 
   var DeleteDatabaseModal = React.createClass({
@@ -1582,7 +1503,6 @@ function (app, FauxtonAPI, React, ReactDOM, Actions, Stores,
     Document: Document,
     LoadLines: LoadLines,
     MenuDropDown: MenuDropDown,
-    Tray: Tray,
     TrayContents: TrayContents,
     TrayWrapper: TrayWrapper,
     connectToStores: connectToStores,
