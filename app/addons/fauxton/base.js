@@ -63,17 +63,22 @@ function (app, FauxtonAPI, Components, NotificationComponents, Actions, NavbarRe
       NavigationActions.setNavbarActiveLink(_.result(routeObject, 'selectedHeader'));
 
       // always attempt to render the API Bar. Even if it's hidden on initial load, it may be enabled later
-      routeObject.setComponent('#api-navbar', ReactComponents.ApiBarController);
+      routeObject.setComponent('#api-navbar', ReactComponents.ApiBarController, {
+        buttonVisible: true,
+        contentVisible: false
+      });
 
       if (routeObject.get('apiUrl')) {
         var apiAndDocs = routeObject.get('apiUrl');
+
         ComponentActions.updateAPIBar({
-          visible: true,
+          buttonVisible: true,
+          contentVisible: false,
           endpoint: apiAndDocs[0],
           docURL: apiAndDocs[1]
         });
       } else {
-        ComponentActions.hideAPIBar();
+        ComponentActions.hideAPIBarButton();
       }
 
       if (!routeObject.get('hideNotificationCenter')) {

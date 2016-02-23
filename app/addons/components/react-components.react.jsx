@@ -15,8 +15,8 @@ define([
   'api',
   'react',
   'react-dom',
-  'addons/components/stores',
   'addons/components/actions',
+  'addons/components/stores',
 
   'addons/fauxton/components.react',
   'addons/documents/helpers',
@@ -25,7 +25,7 @@ define([
   'libs/react-bootstrap'
 ],
 
-function (app, FauxtonAPI, React, ReactDOM, Stores, Actions,
+function (app, FauxtonAPI, React, ReactDOM, Actions, Stores,
   FauxtonComponents, Helpers, ace, beautifyHelper, ReactBootstrap) {
 
   var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
@@ -1185,6 +1185,7 @@ function (app, FauxtonAPI, React, ReactDOM, Stores, Actions,
 
   var TrayContents = React.createClass({
     getChildren: function () {
+      // XXX sofmigration new tray wrapper
       if (!this.props.trayVisible) {
         return null;
       }
@@ -1202,6 +1203,197 @@ function (app, FauxtonAPI, React, ReactDOM, Stores, Actions,
           transitionEnterTimeout={500} transitionLeaveTimeout={300}>
           {this.getChildren()}
         </ReactCSSTransitionGroup>
+      );
+    }
+  });
+
+
+  function connectToStores (Component, stores, getStateFromStores) {
+
+    var WrappingElement = React.createClass({
+
+      componentDidMount: function () {
+        stores.forEach(function (store) {
+          store.on('change', this.onChange, this);
+        }.bind(this));
+      },
+
+      componentWillUnmount: function () {
+        stores.forEach(function (store) {
+          store.off('change', this.onChange);
+        }.bind(this));
+      },
+
+      getInitialState: function () {
+        return getStateFromStores(this.props);
+      },
+
+      onChange: function () {
+        if (!this.isMounted()) {
+          return;
+        }
+
+        this.setState(getStateFromStores(this.props));
+      },
+
+      handleStoresChanged: function () {
+        if (this.isMounted()) {
+          this.setState(getStateFromStores(this.props));
+        }
+      },
+
+      render: function () {
+        return <Component {...this.state} {...this.props} />;
+      }
+
+    });
+
+    return WrappingElement;
+  }
+
+  var TrayWrapper = React.createClass({
+    getDefaultProps: function () {
+      return {
+        className: ''
+      };
+    },
+
+    renderChildren: function () {
+      return React.Children.map(this.props.children, function (child, key) {
+        return React.cloneElement(child, this.props);
+      }.bind(this));
+    },
+
+    render: function () {
+      return (
+        <div>
+          {this.renderChildren()}
+        </div>
+      );
+    }
+  });
+
+  var APIBar = React.createClass({
+    propTypes: {
+      buttonVisible: React.PropTypes.bool.isRequired,
+      contentVisible: React.PropTypes.bool.isRequired,
+      docURL: React.PropTypes.string,
+      endpoint: React.PropTypes.string
+    },
+
+    showCopiedMessage: function () {
+      FauxtonAPI.addNotification({
+        msg: 'The API URL has been copied to the clipboard.',
+        type: 'success',
+        clear: true
+      });
+    },
+
+    getDocIcon: function () {
+      if (!this.props.docURL) {
+        return null;
+      }
+      return (
+        <a
+          className="help-link"
+          data-bypass="true"
+          href={this.props.docURL}
+          target="_blank"
+        >
+          <i className="icon icon-question-sign"></i>
+        </a>
+      );
+    },
+
+    getTray: function () {
+      if (!this.props.contentVisible) {
+        return null;
+      }
+
+      return (
+        // XXX softmigration new tray wrapper: trayVisible={true}
+        <TrayContents trayVisible={true} className="tray show-tray api-bar-tray">
+          <div className="input-prepend input-append">
+            <span className="add-on">
+              API URL
+              {this.getDocIcon()}
+            </span>
+
+            <FauxtonComponents.ClipboardWithTextField
+              onClipBoardClick={this.showCopiedMessage}
+              text="Copy"
+              textToCopy={this.props.endpoint}
+              uniqueKey="clipboard-apiurl" />
+
+            <div className="add-on">
+              <a
+                data-bypass="true"
+                href={this.props.endpoint}
+                target="_blank"
+                className="btn"
+              >
+                <i className="fonticon-eye icon"></i>
+                View JSON
+              </a>
+            </div>
+          </div>
+        </TrayContents>
+      );
+    },
+
+    toggleTrayVisibility: function () {
+      Actions.toggleApiBarVisibility(!this.props.contentVisible);
+    },
+
+    componentDidMount: function () {
+      $('body').on('click.APIBar', function () {
+        Actions.toggleApiBarVisibility(false);
+      }.bind(this));
+    },
+
+    componentWillUnmount: function () {
+      $('body').off('click.APIBar');
+    },
+
+    render: function () {
+      if (!this.props.buttonVisible || !this.props.endpoint) {
+        return null;
+      }
+
+      return (
+        <div>
+          <ToggleHeaderButton
+            containerClasses="header-control-box control-toggle-api-url"
+            title="API URL"
+            fonticon="fonticon-link"
+            text="API"
+            toggleCallback={this.toggleTrayVisibility} />
+
+          {this.getTray()}
+        </div>
+      );
+    }
+  });
+
+  var ApiBarController = React.createClass({
+
+    getWrap: function () {
+      return connectToStores(TrayWrapper, [componentStore], function () {
+        return {
+          buttonVisible: componentStore.getIsAPIBarButtonVisible(),
+          contentVisible: componentStore.getIsAPIBarVisible(),
+          endpoint: componentStore.getEndpoint(),
+          docURL: componentStore.getDocURL()
+        };
+      });
+    },
+
+    render: function () {
+      var TrayWrapper = this.getWrap();
+      return (
+        <TrayWrapper>
+          <APIBar buttonVisible={true} contentVisible={false} />
+        </TrayWrapper>
       );
     }
   });
@@ -1277,96 +1469,6 @@ function (app, FauxtonAPI, React, ReactDOM, Stores, Actions,
       }
     }
 
-  });
-
-
-  var ApiBarController = React.createClass({
-
-    getInitialState: function () {
-      return this.getStoreState();
-    },
-
-    getStoreState: function () {
-      return {
-        visible: componentStore.isAPIBarVisible(),
-        endpoint: componentStore.getEndpoint(),
-        docURL: componentStore.getDocURL()
-      };
-    },
-
-    onChange: function () {
-      if (this.isMounted()) {
-        this.setState(this.getStoreState());
-      }
-    },
-
-    componentDidMount: function () {
-      componentStore.on('change', this.onChange, this);
-    },
-
-    componentWillUnmount: function () {
-      componentStore.off('change', this.onChange);
-    },
-
-    showCopiedMessage: function () {
-      FauxtonAPI.addNotification({
-        msg: 'The API URL has been copied to the clipboard.',
-        type: 'success',
-        clear: true
-      });
-    },
-
-    getDocIcon: function () {
-      if (!this.state.docURL) {
-        return false;
-      }
-      return (
-        <a className="help-link" data-bypass="true" href={this.state.docURL} target="_blank">
-          <i className="icon icon-question-sign"></i>
-        </a>
-      );
-    },
-
-    render: function () {
-      if (!this.state.visible || !this.state.endpoint) {
-        return null;
-      }
-
-      return (
-        <Tray id="api-bar-controller" ref="tray">
-
-          <ToggleHeaderButton
-            containerClasses="header-control-box control-toggle-api-url"
-            title="API URL"
-            fonticon="fonticon-link"
-            text="API" />
-
-          <TrayContents
-            className="api-bar-tray">
-            <div className="input-prepend input-append">
-              <span className="add-on">
-                API URL
-                {this.getDocIcon()}
-              </span>
-
-              <FauxtonComponents.ClipboardWithTextField
-                onClipBoardClick={this.showCopiedMessage}
-                text="Copy"
-                textToCopy={this.state.endpoint}
-                uniqueKey="clipboard-apiurl" />
-
-              <div className="add-on">
-                <a data-bypass="true" href={this.state.endpoint} target="_blank" className="btn">
-                  <i className="fonticon-eye icon"></i>
-                  View JSON
-                </a>
-              </div>
-            </div>
-
-          </TrayContents>
-        </Tray>
-      );
-    }
   });
 
   var DeleteDatabaseModal = React.createClass({
@@ -1482,6 +1584,8 @@ function (app, FauxtonAPI, React, ReactDOM, Stores, Actions,
     MenuDropDown: MenuDropDown,
     Tray: Tray,
     TrayContents: TrayContents,
+    TrayWrapper: TrayWrapper,
+    connectToStores: connectToStores,
     ApiBarController: ApiBarController,
     renderMenuDropDown: function (el, opts) {
       ReactDOM.render(<MenuDropDown icon="fonticon-cog" links={opts.links} />, el);

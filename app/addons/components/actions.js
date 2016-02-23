@@ -16,29 +16,31 @@ define([
 ],
 function (FauxtonAPI, ActionTypes) {
 
-  function showAPIBar () {
-    FauxtonAPI.dispatch({ type: ActionTypes.SHOW_API_BAR });
+  function showAPIBarButton () {
+    FauxtonAPI.dispatch({ type: ActionTypes.CMPNTS_SHOW_API_BAR_BUTTON });
   }
 
-  function hideAPIBar () {
-    FauxtonAPI.dispatch({ type: ActionTypes.HIDE_API_BAR });
+  function hideAPIBarButton () {
+    FauxtonAPI.dispatch({ type: ActionTypes.CMPNTS_HIDE_API_BAR_BUTTON });
   }
 
-  // general usage for setting multiple params at once. If a param isn't passed, it's not overridden
+  function toggleApiBarVisibility (visible) {
+    FauxtonAPI.dispatch({
+      type: ActionTypes.CMPNTS_SET_API_BAR_CONTENT_VISIBLE_STATE,
+      options: visible
+    });
+  }
+
   function updateAPIBar (params) {
     FauxtonAPI.dispatch({
-      type: ActionTypes.UPDATE_API_BAR,
-      options: {
-        visible: params.visible,
-        endpoint: params.endpoint,
-        docURL: params.docURL
-      }
+      type: ActionTypes.CMPNTS_UPDATE_API_BAR,
+      options: params
     });
   }
 
   function showDeleteDatabaseModal (options) {
     FauxtonAPI.dispatch({
-      type: ActionTypes.COMPONENTS_DATABASES_SHOWDELETE_MODAL,
+      type: ActionTypes.CMPNTS_DATABASES_SHOWDELETE_MODAL,
       options: options
     });
   }
@@ -73,9 +75,10 @@ function (FauxtonAPI, ActionTypes) {
   return {
     deleteDatabase: deleteDatabase,
     showDeleteDatabaseModal: showDeleteDatabaseModal,
-    showAPIBar: showAPIBar,
-    hideAPIBar: hideAPIBar,
-    updateAPIBar: updateAPIBar
+    showAPIBarButton: showAPIBarButton,
+    hideAPIBarButton: hideAPIBarButton,
+    toggleApiBarVisibility: toggleApiBarVisibility,
+    updateAPIBar: updateAPIBar,
   };
 
 });

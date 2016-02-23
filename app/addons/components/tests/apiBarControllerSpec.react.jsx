@@ -40,49 +40,61 @@ define([
     it('Doesn\'t show up when explicitly set to visible false', function () {
       var el = TestUtils.renderIntoDocument(<ApiBarController />, container);
       Actions.updateAPIBar({
-        visible: false,
-        endpoint: 'http://link.com',
-        docURL: 'http://link.com'
+        buttonVisible: false,
+        endpoint: 'http://link.example.com',
+        docURL: 'http://link.example.com',
+        contentVisible: false
       });
-      assert.equal(el.getDOMNode(), null);
+      assert.equal($(ReactDOM.findDOMNode(el)).find('.control-toggle-api-url').length, 0);
     });
 
     it('Shows up when set to visible', function () {
       var el = TestUtils.renderIntoDocument(<ApiBarController />, container);
       Actions.updateAPIBar({
-        visible: true,
-        endpoint: 'http://link.com',
-        docURL: 'http://link.com'
+        buttonVisible: true,
+        endpoint: 'http://link.example.com',
+        docURL: 'http://link.example.com',
+        contentVisible: false
       });
-      assert.notEqual(el.getDOMNode(), null);
+      assert.equal($(ReactDOM.findDOMNode(el)).find('.control-toggle-api-url').length, 1);
     });
 
     it('Doesn\'t show up when set to visible BUT there\'s no endpoint defined', function () {
       var el = TestUtils.renderIntoDocument(<ApiBarController />, container);
       Actions.updateAPIBar({
-        visible: true,
+        buttonVisible: true,
         endpoint: '',
-        docURL: 'http://link.com'
+        docURL: 'http://link.example.com',
+        contentVisible: false
       });
-      assert.equal(el.getDOMNode(), null);
+      assert.equal($(ReactDOM.findDOMNode(el)).find('.control-toggle-api-url').length, 0);
     });
 
     it('Confirm hide/show actions update component', function () {
       var el = TestUtils.renderIntoDocument(<ApiBarController />, container);
 
-      // set an initial value
-      Actions.updateAPIBar({ endpoint: 'http://link.com' });
+      Actions.updateAPIBar({
+        buttonVisible: true,
+        endpoint: 'http://rocko.example.com',
+        docURL: 'http://link.example.com',
+        contentVisible: false
+      });
 
-      Actions.showAPIBar();
-      assert.notEqual(el.getDOMNode(), null);
+      Actions.showAPIBarButton();
+      assert.equal($(ReactDOM.findDOMNode(el)).find('.control-toggle-api-url').length, 1, 'showAPIBarButton');
 
-      Actions.hideAPIBar();
-      assert.equal(el.getDOMNode(), null);
+      Actions.hideAPIBarButton();
+      assert.equal($(ReactDOM.findDOMNode(el)).find('.control-toggle-api-url').length, 0, 'hideAPIBarButton');
     });
 
     it('Confirm doc link icon appears when docURL set', function () {
       var el = TestUtils.renderIntoDocument(<ApiBarController />, container);
-      Actions.updateAPIBar({ visible: true, endpoint: 'http://link.com', docURL: 'http://doc.com' });
+      Actions.updateAPIBar({
+        buttonVisible: true,
+        endpoint: 'http://rocko.example.com',
+        docURL: 'http://doc.example.com',
+        contentVisible: false
+      });
 
       TestUtils.Simulate.click($(ReactDOM.findDOMNode(el)).find('.control-toggle-api-url')[0]);
       assert.equal($(ReactDOM.findDOMNode(el)).find('.help-link').length, 1);
@@ -90,7 +102,12 @@ define([
 
     it('Confirm doc link icon doesn\'t appear with no docURL', function () {
       var el = TestUtils.renderIntoDocument(<ApiBarController />, container);
-      Actions.updateAPIBar({ visible: true, endpoint: 'http://link.com', docURL: null });
+      Actions.updateAPIBar({
+        buttonVisible: true,
+        endpoint: 'http://rocko.example.com',
+        docURL: null,
+        contentVisible: false
+      });
 
       TestUtils.Simulate.click($(ReactDOM.findDOMNode(el)).find('.control-toggle-api-url')[0]);
       assert.equal($(ReactDOM.findDOMNode(el)).find('.help-link').length, 0);
@@ -98,8 +115,13 @@ define([
 
     it('Confirm endpoint appears in markup', function () {
       var el = TestUtils.renderIntoDocument(<ApiBarController />, container);
-      var link = 'http://booyah.ca';
-      Actions.updateAPIBar({ visible: true, endpoint: link, docURL: null });
+      var link = 'http://booyah.example.com';
+      Actions.updateAPIBar({
+        buttonVisible: true,
+        endpoint: link,
+        docURL: null,
+        contentVisible: false
+      });
 
       TestUtils.Simulate.click($(ReactDOM.findDOMNode(el)).find('.control-toggle-api-url')[0]);
       assert.equal($(ReactDOM.findDOMNode(el)).find('.text-field-to-copy').val(), link);
@@ -107,27 +129,48 @@ define([
 
     it('Confirm endpoint is updated in markup', function () {
       var el = TestUtils.renderIntoDocument(<ApiBarController />, container);
-      var link = 'http://booyah.ca';
-      Actions.updateAPIBar({ visible: true, endpoint: link, docURL: null });
+      var link = 'http://booyah.example.com';
+      Actions.updateAPIBar({
+        buttonVisible: true,
+        endpoint: link,
+        docURL: null,
+        contentVisible: false
+      });
 
       TestUtils.Simulate.click($(ReactDOM.findDOMNode(el)).find('.control-toggle-api-url')[0]);
       assert.equal($(ReactDOM.findDOMNode(el)).find('.text-field-to-copy').val(), link);
 
-      var newLink = 'http://chickensarenoisy.com';
-      Actions.updateAPIBar({ endpoint: newLink });
+      var newLink = 'http://chickensarenoisy.example.com';
+      Actions.updateAPIBar({
+        buttonVisible: true,
+        endpoint: newLink,
+        docURL: null,
+        contentVisible: true
+      });
+
       assert.equal($(ReactDOM.findDOMNode(el)).find('.text-field-to-copy').val(), newLink);
     });
 
     it('Confirm doc URL is updated in markup after a change', function () {
       var el = TestUtils.renderIntoDocument(<ApiBarController />, container);
-      var docLink = 'http://mydoc.org';
-      Actions.updateAPIBar({ visible: true, endpoint: 'http://whatever.com', docURL: docLink });
+      var docLink = 'http://mydoc.example.com';
+      Actions.updateAPIBar({
+        buttonVisible: true,
+        endpoint: 'http://whatever.example.com',
+        docURL: docLink,
+        contentVisible: false
+      });
 
       TestUtils.Simulate.click($(ReactDOM.findDOMNode(el)).find('.control-toggle-api-url')[0]);
       assert.equal($(ReactDOM.findDOMNode(el)).find('.help-link').attr('href'), docLink);
 
-      var newDocLink = 'http://newawesomedoclink.xxx';
-      Actions.updateAPIBar({ docURL: newDocLink });
+      var newDocLink = 'http://newawesomedoclink.example.com';
+      Actions.updateAPIBar({
+        buttonVisible: true,
+        endpoint: 'http://whatever.example.com',
+        docURL: newDocLink,
+        contentVisible: true
+      });
       assert.equal($(ReactDOM.findDOMNode(el)).find('.help-link').attr('href'), newDocLink);
     });
 
