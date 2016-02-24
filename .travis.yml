@@ -9,10 +9,11 @@ services:
 
 addons:
   firefox: "38.0.1"
+  apt:
+    sources:
+      - flashplugin-installer
+      
 before_install:
-  - sudo apt-get update -qq
-  - sudo apt-get install -qq flashplugin-installer
-
   - nvm install 4 && nvm use 4
 
   - docker run -d -p 5984:5984 klaemo/couchdb:2.0-dev --with-haproxy --admin=tester:testerpass
