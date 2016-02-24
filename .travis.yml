@@ -4,9 +4,6 @@ otp_release:
 git:
   depth: 10
 
-sudo:
-  false
-
 services:
   - docker
 
