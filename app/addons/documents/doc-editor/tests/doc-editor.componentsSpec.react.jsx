@@ -24,13 +24,9 @@ define([
   '../../../../../test/mocha/testUtils',
   'react-bootstrap',
   'react-addons-test-utils',
-  'sinon',
-  '../../base',
-  '../../../fauxton/base'
+  'sinon'
 ], function (app, FauxtonAPI, React, ReactDOM, Documents, Components, Stores, Actions, ActionTypes, Databases, utils,
   ReactBoostrap, TestUtils, sinon) {
-
-  FauxtonAPI.router = new FauxtonAPI.Router([]);
 
   var assert = utils.assert;
   var docJSON = {
@@ -138,8 +134,10 @@ define([
     });
 
     //issues with this test running with all other tests. It passes on its own
-    /*it('view attachments dropdown contains correct urls', function () {
-      var el = TestUtils.renderIntoDocument(<Components.DocEditorController database={database} />, container);
+    it('view attachments dropdown contains correct urls', function () {
+      var el = TestUtils.renderIntoDocument(
+        <Components.DocEditorController database={database} />, container
+      );
 
       var doc = new Documents.Doc(docWithAttachmentsJSON, { database: database });
       FauxtonAPI.dispatch({
@@ -149,12 +147,11 @@ define([
         }
       });
 
-      var attachmentNode = $(ReactDOM.findDOMNode(el)).find('.view-attachments-section .dropdown-menu li')[0];
-      var attachmentURLactual = $(attachmentNode).find('a').attr('href');
+      var $attachmentNode = $(ReactDOM.findDOMNode(el)).find('.view-attachments-section .dropdown-menu li');
+      var attachmentURLactual = $attachmentNode.find('a').attr('href');
 
-      console.log("IHIHIHIHIHOIHOIHOIHOIHOHOIHOIHOIHOIHOIHOIHOIH");
-      assert.equal(attachmentURLactual, "../../id/_design/test-doc/one.png");
-    });*/
+      assert.equal(attachmentURLactual, '../../id/_design/test-doc/one.png');
+    });
 
     it('setting deleteDocModal=true in store shows modal', function () {
       var el = TestUtils.renderIntoDocument(<Components.DocEditorController database={database} />, container);

@@ -22,18 +22,8 @@ define([
   'react-addons-test-utils',
   'sinon'
 ], function (app, FauxtonAPI, React, ReactDOM, Changes, Stores, Actions, utils, TestUtils, sinon) {
-  FauxtonAPI.router = new FauxtonAPI.Router([]);
 
   var assert = utils.assert;
-
-  // suppresses unwanted console.log()'s on missing URLs
-  FauxtonAPI.registerUrls('document', {
-    server: function (database, doc) { return app.host + '/' + database + '/' + doc; },
-    app: function (database, doc) { return '/database/' + database + '/' + doc; },
-    apiurl: function (database, doc) { return window.location.origin + '/' + database + '/' + doc; },
-    'web-index': function (database, doc) { return '/database/' + database + '/' + doc; }
-  });
-
 
   describe('ChangesHeader', function () {
     var container, tab, spy;
