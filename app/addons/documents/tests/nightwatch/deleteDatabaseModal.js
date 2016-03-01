@@ -37,8 +37,8 @@ module.exports = {
       .clickWhenVisible("#header-dropdown-menu a.dropdown-toggle.icon.fonticon-vertical-ellipsis", waitTime, false)
       .waitForElementPresent("#header-dropdown-menu .fonticon-trash", waitTime, false)
       .clickWhenVisible('#header-dropdown-menu .fonticon-trash', waitTime, false)
-      .waitForElementPresent('#delete-db-modal', waitTime, false)
-      .waitForElementVisible('input#db-name', waitTime, false)
+      .waitForElementVisible('.delete-db-modal', waitTime, false)
+      .waitForElementVisible('.delete-db-modal input[type="text"]', waitTime, false)
       .assert.elementPresent('.warning')
     .end();
   },
@@ -54,8 +54,8 @@ module.exports = {
       .clickWhenVisible('#header-dropdown-menu a.dropdown-toggle.icon.fonticon-vertical-ellipsis', waitTime, false)
       .waitForElementPresent("#header-dropdown-menu .fonticon-trash", waitTime, false)
       .clickWhenVisible('#header-dropdown-menu .fonticon-trash', waitTime, false)
-      .waitForElementPresent('#delete-db-modal', waitTime, false)
-      .waitForElementVisible('input#db-name', waitTime, false)
+      .waitForElementVisible('.delete-db-modal', waitTime, false)
+      .waitForElementVisible('.delete-db-modal input[type="text"]', waitTime, false)
       .assert.elementNotPresent('.warning')
     .end();
   }
