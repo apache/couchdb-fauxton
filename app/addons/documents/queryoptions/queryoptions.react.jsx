@@ -336,7 +336,7 @@ A key value is the first parameter emitted in a map function. For example emit("
       e.preventDefault();
 
       Actions.runQuery(this.props.queryParams);
-      Actions.toggleQueryBarVisibility(!this.props.contentVisible);
+      this.toggleTrayVisibility();
     },
 
     toggleTrayVisibility: function () {
@@ -345,7 +345,7 @@ A key value is the first parameter emitted in a map function. For example emit("
 
     componentDidMount: function () {
       $('body').on('click.QueryTray', function (e) {
-        if ($(e.target).parents('#query-options').length) {
+        if ($(e.target).closest('#query-options').length) {
           return;
         }
         Actions.toggleQueryBarVisibility(false);
