@@ -38,7 +38,7 @@ define([
       instance = TestUtils.renderIntoDocument(
         <ReactComponents.DeleteDatabaseModal
           showHide={noop}
-          showModal={{isSystemDatabase: false, showDeleteModal: true, dbId: 'fooo'}} />,
+          modalProps={{isSystemDatabase: false, showDeleteModal: true, dbId: 'fooo'}} />,
         container
       );
 
@@ -49,7 +49,7 @@ define([
       instance = TestUtils.renderIntoDocument(
         <ReactComponents.DeleteDatabaseModal
           showHide={noop}
-          showModal={{isSystemDatabase: false, showDeleteModal: true, dbId: 'fooo'}} />,
+          modalProps={{isSystemDatabase: false, showDeleteModal: true, dbId: 'fooo'}} />,
         container
       );
 
@@ -63,7 +63,7 @@ define([
       instance = TestUtils.renderIntoDocument(
         <ReactComponents.DeleteDatabaseModal
           showHide={noop}
-          showModal={{isSystemDatabase: false, showDeleteModal: true, dbId: 'fooo'}} />,
+          modalProps={{isSystemDatabase: false, showDeleteModal: true, dbId: 'fooo'}} />,
         container
       );
 

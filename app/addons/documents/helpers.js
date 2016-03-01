@@ -84,7 +84,7 @@ define([
     return JSON.parse('"' + str + '"');   // this ensures newlines are converted
   }
 
-  function getModifyDatabaseLinks (databaseName) {
+  function getModifyDatabaseLinks (databaseName, deleteCallback) {
     return [{
       title: 'Replicate Database',
       icon: 'fonticon-replicate',
@@ -92,7 +92,9 @@ define([
     }, {
       title: 'Delete',
       icon: 'fonticon-trash',
-      trigger: 'database:delete'
+      onClick: function () {
+        deleteCallback({showDeleteModal: true, dbId: databaseName});
+      }
     }];
   }
 

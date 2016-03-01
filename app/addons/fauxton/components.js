@@ -28,12 +28,13 @@ define([
   "ace_configuration",
   "spin",
   'addons/components/react-components.react',
+  'addons/components/actions',
   'addons/documents/helpers',
 
   "velocity.ui"
 ],
 
-function (app, FauxtonAPI, ace, spin, ReactComponents, Helpers) {
+function (app, FauxtonAPI, ace, spin, ReactComponents, ComponentsActions, Helpers) {
   var Components = FauxtonAPI.addon();
 
   // XXX: move to /addons/documents - component is tightly coupled to documents/alldocs
@@ -89,7 +90,8 @@ function (app, FauxtonAPI, ace, spin, ReactComponents, Helpers) {
     },
 
     getModififyDbLinks: function () {
-      return Helpers.getModifyDatabaseLinks(this.dbName);
+      var onClickDelete = ComponentsActions.showDeleteDatabaseModal;
+      return Helpers.getModifyDatabaseLinks(this.dbName, onClickDelete);
     },
 
     setUpDropDownMenu: function () {

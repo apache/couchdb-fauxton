@@ -24,9 +24,10 @@ module.exports = {
       .clickWhenVisible("#header-dropdown-menu a.dropdown-toggle.icon.fonticon-vertical-ellipsis", waitTime, false)
       .waitForElementPresent('#header-dropdown-menu .fonticon-trash', waitTime, false)
       .clickWhenVisible('#header-dropdown-menu .fonticon-trash', waitTime, false)
-      .waitForElementPresent('#db-name', waitTime, false)
-      .clickWhenVisible('#db-name', waitTime, false)
-      .setValue('#db-name', [newDatabaseName, client.Keys.ENTER])
+      .waitForElementVisible('.delete-db-modal', waitTime, false)
+      .clickWhenVisible('.delete-db-modal input[type="text"]', waitTime, false)
+      .setValue('.delete-db-modal input[type="text"]', [newDatabaseName, client.Keys.ENTER])
+
       .checkForDatabaseDeleted(newDatabaseName, waitTime)
 
     .end();

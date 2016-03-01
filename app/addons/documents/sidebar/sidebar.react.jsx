@@ -17,16 +17,23 @@ define([
   'react-dom',
   'addons/documents/sidebar/stores',
   'addons/documents/sidebar/actions',
+
+
   'addons/components/react-components.react',
-  'addons/documents/views',
+  'addons/components/stores',
+  'addons/components/actions',
   'addons/documents/helpers',
   'plugins/prettify'
 ],
 
-function (app, FauxtonAPI, React, ReactDOM, Stores, Actions, Components, DocumentViews, DocumentHelper) {
-  var DeleteDBModal = DocumentViews.Views.DeleteDBModal;
+function (app, FauxtonAPI, React, ReactDOM, Stores, Actions,
+  Components, ComponentsStore, ComponentsActions, DocumentHelper) {
+
   var store = Stores.sidebarStore;
   var LoadLines = Components.LoadLines;
+
+  var DeleteDatabaseModal = Components.DeleteDatabaseModal;
+  var deleteDbModalStore = ComponentsStore.deleteDbModalStore;
 
 
   var MainSidebar = React.createClass({
@@ -351,33 +358,6 @@ function (app, FauxtonAPI, React, ReactDOM, Stores, Actions, Components, Documen
     }
   });
 
-
-  var DeleteDBModalWrapper = React.createClass({
-    componentDidMount: function () {
-      this.dbModal = new DeleteDBModal({
-        database: this.props.database,
-        el: ReactDOM.findDOMNode(this),
-        isSystemDatabase: app.utils.isSystemDatabase(this.props.database.id)
-      });
-
-      this.dbModal.render();
-    },
-
-    componentWillUnmount: function () {
-      this.dbModal.remove();
-    },
-
-    componentWillReceiveProps: function (newProps) {
-      this.dbModal.database = newProps.database;
-      this.dbModal.isSystemDatabase = newProps.database.isSystemDatabase();
-    },
-
-    render: function () {
-      return <div id="delete-db-modal"> </div>;
-    }
-  });
-
-
   var SidebarController = React.createClass({
     getStoreState: function () {
       return {
@@ -386,7 +366,8 @@ function (app, FauxtonAPI, React, ReactDOM, Stores, Actions, Components, Documen
         designDocs: store.getDesignDocs(),
         toggledSections: store.getToggledSections(),
         isLoading: store.isLoading(),
-        database: store.getDatabase()
+        database: store.getDatabase(),
+        deleteDbModalProperties: deleteDbModalStore.getShowDeleteDatabaseModal()
       };
     },
 
@@ -396,16 +377,22 @@ function (app, FauxtonAPI, React, ReactDOM, Stores, Actions, Components, Documen
 
     componentDidMount: function () {
       store.on('change', this.onChange, this);
+      deleteDbModalStore.on('change', this.onChange, this);
     },
 
     componentWillUnmount: function () {
       store.off('change', this.onChange);
+      deleteDbModalStore.off('change', this.onChange, this);
     },
 
     onChange: function () {
       if (this.isMounted()) {
         this.setState(this.getStoreState());
       }
+    },
+
+    showDeleteDatabaseModal: function (payload) {
+      ComponentsActions.showDeleteDatabaseModal(payload);
     },
 
     render: function () {
@@ -423,8 +410,10 @@ function (app, FauxtonAPI, React, ReactDOM, Stores, Actions, Components, Documen
             toggledSections={this.state.toggledSections}
             designDocs={this.state.designDocs}
             databaseName={this.state.databaseName} />
-          <DeleteDBModalWrapper
-            database={this.state.database} />
+
+          <DeleteDatabaseModal
+            showHide={this.showDeleteDatabaseModal}
+            modalProps={this.state.deleteDbModalProperties} />
         </nav>
       );
     }

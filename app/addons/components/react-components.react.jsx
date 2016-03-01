@@ -1159,23 +1159,13 @@ function (app, FauxtonAPI, React, ReactDOM, Actions, Stores, FauxtonComponents, 
       }.bind(this));
     },
 
-    onClick: function (eventToTrigger, e) {
-      // XXX softmigration react
-
-      if (!eventToTrigger) {
-        return;
-      }
-
-      FauxtonAPI.Events.trigger(eventToTrigger);
-    },
-
     createEntry: function (link, key) {
       return (
         <li key={key}>
           <a className={link.icon ? 'icon ' + link.icon : ''}
             data-bypass={link.external ? 'true' : ''}
             href={link.url}
-            onClick={this.onClick.bind(this, link.trigger)}
+            onClick={link.onClick}
             target={link.external ? '_blank' : ''}>
             {link.title}
           </a>
@@ -1441,8 +1431,8 @@ function (app, FauxtonAPI, React, ReactDOM, Actions, Stores, FauxtonComponents, 
     },
 
     propTypes: {
-      dbId: React.PropTypes.string,
-      showHide: React.PropTypes.func.isRequired
+      showHide: React.PropTypes.func.isRequired,
+      modalProps: React.PropTypes.object
     },
 
     close: function () {
@@ -1459,35 +1449,39 @@ function (app, FauxtonAPI, React, ReactDOM, Actions, Stores, FauxtonComponents, 
     },
 
     onInputChange: function (e) {
+      var val = encodeURIComponent(e.target.value.trim());
+
       this.setState({
-        inputValue: e.target.value
+        inputValue: val
       });
 
       this.setState({
-        disableSubmit: e.target.value.trim() !== this.props.showModal.dbId.trim()
+        disableSubmit: val !== this.props.modalProps.dbId.trim()
       });
     },
 
     onDeleteClick: function (e) {
       e.preventDefault();
 
-      Actions.deleteDatabase(this.props.showModal.dbId.trim());
+      Actions.deleteDatabase(this.props.modalProps.dbId.trim());
     },
 
     onInputKeypress: function (e) {
       if (e.keyCode === 13 && this.state.disableSubmit !== true) {
-        Actions.deleteDatabase(this.props.showModal.dbId.trim());
+        Actions.deleteDatabase(this.props.modalProps.dbId.trim());
       }
     },
 
     render: function () {
-      var isSystemDatabase = this.props.showModal.isSystemDatabase;
-      var showDeleteModal = this.props.showModal.showDeleteModal;
-      var dbId = this.props.showModal.dbId;
+      var isSystemDatabase = this.props.modalProps.isSystemDatabase;
+      var showDeleteModal = this.props.modalProps.showDeleteModal;
+      var dbId = this.props.modalProps.dbId;
       var errorMessage = this.state.errorMessage;
 
       var warning = isSystemDatabase ? (
-        <p className="warning"><b>You are about to delete a system database, be careful!</b></p>
+        <p style={{color: '#d14'}} className="warning">
+          <b>You are about to delete a system database, be careful!</b>
+        </p>
       ) : null;
 
       return (
