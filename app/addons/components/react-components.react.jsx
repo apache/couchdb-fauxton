@@ -1504,15 +1504,19 @@ function (app, FauxtonAPI, React, ReactDOM, Actions, Stores, FauxtonComponents, 
 
           </Modal.Body>
           <Modal.Footer>
-            <button onClick={this.close} className="btn cancel-button">
-              <i className="icon fonticon-cancel-circled"></i> Cancel
-            </button>
+            <a
+              style={{marginRight: '10px', cursor: 'pointer'}}
+              onClick={this.close}
+              data-bypass="true"
+            >
+              Cancel
+            </a>
             <button
               disabled={this.state.disableSubmit}
               onClick={this.onDeleteClick}
               className="btn btn-danger delete"
             >
-              <i className="icon fonticon-ok-circled"></i> Delete
+              <i className="icon fonticon-cancel-circled"></i> Delete
             </button>
           </Modal.Footer>
         </Modal>
