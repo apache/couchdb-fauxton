@@ -57,9 +57,11 @@ function (FauxtonAPI) {
           // this will return the user as a value to all function that calls done on this
           // eg. session.fetchUser().done(user) { .. do something with user ..}
           return user;
-        }.bind(this), function (session, xhr, type, message) {
-          this.trigger('session:error', xhr, type, message);
-        }.bind(this));
+        }.bind(this), this.triggerError.bind(this));
+      },
+
+      triggerError: function (xhr, type, message) {
+        this.trigger('session:error', xhr, type, message);
       }
     })
   };

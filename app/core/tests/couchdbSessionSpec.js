@@ -13,41 +13,37 @@ define([
   '../../app',
   '../api',
   '../../../test/mocha/testUtils',
-], function (app, FauxtonAPI, testUtils) {
+  'sinon'
+], function (app, FauxtonAPI, testUtils, sinon) {
   var assert = testUtils.assert;
 
   describe('CouchDBSession', function () {
-    var sessionFetch;
 
     before(function (done) {
-      sessionFetch = FauxtonAPI.session.fetch;
-      done();
-    });
-    after(function (done) {
-      FauxtonAPI.session.fetch = sessionFetch;
-      done();
-    });
-
-    //Cannot get this test to pass in isolation at the moment and I have no idea why
-    /*it('triggers error on failed fetch', function () {
-      var called = false;
-
-      var session = FauxtonAPI.session;
-      session.on('session:error', function () {
-        called = true;
-      });
-
-      session.fetch = function () {
+      sinon.stub(FauxtonAPI.session, 'fetch', function () {
         var promise = FauxtonAPI.Deferred();
         promise.reject();
         return promise;
-      };
+      });
 
-      session.fetchUser();
+      done();
+    });
 
-      assert.ok(called);
-    });*/
+    after(function (done) {
+      testUtils.restore(FauxtonAPI.session.fetch);
+      testUtils.restore(FauxtonAPI.session.triggerError);
 
+      done();
+    });
+
+    it('triggers error on failed fetch', function (done) {
+
+      sinon.stub(FauxtonAPI.session, 'triggerError', function () {
+        done();
+      });
+
+      FauxtonAPI.session.fetchUser();
+    });
 
   });
 
