@@ -15,6 +15,7 @@ define([
   'api',
   'react',
   'react-dom',
+
   'addons/components/react-components.react',
   'addons/components/stores',
   'addons/components/actions',
@@ -24,7 +25,8 @@ define([
   'addons/databases/resources',
   'addons/databases/actions',
   'helpers'
-], function (app, FauxtonAPI, React, ReactDOM, Components, ComponentsStore, ComponentsActions, FauxtonComponentsReact,
+], function (app, FauxtonAPI, React, ReactDOM,
+  Components, ComponentsStore, ComponentsActions, FauxtonComponentsReact,
   Stores, Resources, Actions, Helpers) {
 
   var ToggleHeaderButton = Components.ToggleHeaderButton;
@@ -58,7 +60,9 @@ define([
     },
 
     onChange: function () {
-      this.setState(this.getStoreState());
+      if (this.isMounted()) {
+        this.setState(this.getStoreState());
+      }
     },
 
     render: function () {
@@ -112,7 +116,7 @@ define([
         <div className="view">
           <DeleteDatabaseModal
             showHide={this.showDeleteDatabaseModal}
-            showModal={this.props.showDeleteDatabaseModal} />
+            modalProps={this.props.showDeleteDatabaseModal} />
           <table className="databases table table-striped">
             <thead>
               <tr>
