@@ -29,14 +29,15 @@ module.exports = {
       .url(baseUrl)
 
       .clickWhenVisible('.control-toggle-api-url')
+      .pause(1000) // needed for reliability. The tray slides in from the top so the pos of the copy button changes
       .waitForElementVisible('.copy-button', waitTime, false)
-      .moveTo('.copy-button')
-      .click('.copy-button')
+      .moveToElement('.copy-button', 10, 10)
       .mouseButtonDown('left')
       .mouseButtonUp('left')
       .closeNotification()
       .clickWhenVisible('.search-autocomplete', waitTime, false)
       .setValue('.search-autocomplete', '')
+      .pause(1)
       .keys([controlOrCommandKey, 'v'])
       .assert.value('.search-autocomplete', 'http://localhost:8000/_all_dbs')
 
