@@ -150,7 +150,7 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, Documents, Fauxto
       return (
         <td title={text} className="tableview-el-copy">
           <Clipboard
-            onClipboardClick={this.showCopiedMessage}
+            onCopy={this.showCopiedMessage}
             title={text}
             text={text} />
         </td>

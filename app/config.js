@@ -41,7 +41,7 @@ require.config({
     "es5-shim": "../assets/js/libs/es5-shim",
     "css.escape": "../assets/js/libs/css.escape",
     moment: '../assets/js/libs/moment',
-    ZeroClipboard: '../assets/js/libs/ZeroClipboard/ZeroClipboard'
+    clipboard: '../assets/js/libs/clipboard'
   },
 
   baseUrl: '/',

@@ -13,7 +13,7 @@
 var os = require('os');
 
 module.exports = {
-  'ZeroClipboard copies' : function (client) {
+  'Clipboard copies' : function (client) {
     var waitTime = client.globals.maxWaitTime,
         newDatabaseName = client.globals.testDatabaseName,
         baseUrl = client.globals.test_settings.launch_url;
@@ -29,11 +29,12 @@ module.exports = {
       .url(baseUrl)
 
       .clickWhenVisible('.control-toggle-api-url')
+      .pause(1000) // needed to reliably ensures the tray is open
       .waitForElementVisible('.copy-button', waitTime, false)
-      .moveTo('.copy-button')
-      .click('.copy-button')
+      .moveToElement('.copy-button span', 10, 10)
       .mouseButtonDown('left')
       .mouseButtonUp('left')
+
       .closeNotification()
       .clickWhenVisible('.search-autocomplete', waitTime, false)
       .setValue('.search-autocomplete', '')

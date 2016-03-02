@@ -86,7 +86,7 @@ module.exports = function (grunt) {
         // deprecated route for old backbone template
         url = url.replace(/\?_.*/, '');
         filePath = path.join('./app', url.replace('/_utils/fauxton/', ''));
-      // handles local references to any addon dependencies (e.g. ZeroClipboard.swf)
+      // handles local references to any addon dependencies
       } else if (!!url.match(/addons\/[^\/]+\/dependencies\/.+/)) {
         var urlNoQueryStr = url.replace(/\?.*$/, '');
         filePath = './app' + urlNoQueryStr;

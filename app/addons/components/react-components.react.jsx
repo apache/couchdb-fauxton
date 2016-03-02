@@ -1302,6 +1302,7 @@ function (app, FauxtonAPI, React, ReactDOM, Actions, Stores, FauxtonComponents, 
         type: 'success',
         clear: true
       });
+      this.toggleTrayVisibility();
     },
 
     getDocIcon: function () {
@@ -1334,7 +1335,7 @@ function (app, FauxtonAPI, React, ReactDOM, Actions, Stores, FauxtonComponents, 
             </span>
 
             <FauxtonComponents.ClipboardWithTextField
-              onClipBoardClick={this.showCopiedMessage}
+              onCopy={this.showCopiedMessage}
               text="Copy"
               textToCopy={this.props.endpoint}
               uniqueKey="clipboard-apiurl" />
@@ -1360,8 +1361,11 @@ function (app, FauxtonAPI, React, ReactDOM, Actions, Stores, FauxtonComponents, 
     },
 
     componentDidMount: function () {
-      $('body').on('click.APIBar', function () {
-        Actions.toggleApiBarVisibility(false);
+      $('body').on('click.APIBar', function (e) {
+        // only close the tray if they just clicked outside of it
+        if ($(e.target).closest('.api-bar').length === 0) {
+          Actions.toggleApiBarVisibility(false);
+        }
       }.bind(this));
     },
 
@@ -1375,7 +1379,7 @@ function (app, FauxtonAPI, React, ReactDOM, Actions, Stores, FauxtonComponents, 
       }
 
       return (
-        <div>
+        <div className="api-bar">
           <ToggleHeaderButton
             containerClasses="header-control-box control-toggle-api-url"
             title="API URL"
