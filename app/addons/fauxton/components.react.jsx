@@ -15,20 +15,16 @@ define([
   'api',
   'react',
   'react-dom',
-  'ZeroClipboard',
+  'clipboard',
   'libs/react-bootstrap',
 
   // needed to run the test individually. Don't remove
   'velocity.ui'
 ],
 
-function (app, FauxtonAPI, React, ReactDOM, ZeroClipboard, ReactBootstrap) {
+function (app, FauxtonAPI, React, ReactDOM, ClipboardJS, ReactBootstrap) {
 
   var Modal = ReactBootstrap.Modal;
-
-  function getZeroClipboardSwfPath () {
-    return './dashboard.assets/ZeroClipboard.swf';
-  }
 
   // super basic right now, but can be expanded later to handle all the varieties of copy-to-clipboards
   // (target content element, custom label, classes, notifications, etc.)
@@ -44,13 +40,10 @@ function (app, FauxtonAPI, React, ReactDOM, ZeroClipboard, ReactBootstrap) {
       return {
         displayType: 'icon',
         textDisplay: 'Copy',
-        onClipboardClick: function () { },
+        onCopy: function () { },
+        onCopyError: function () { },
         title: 'Copy to clipboard'
       };
-    },
-
-    componentWillMount: function () {
-      ZeroClipboard.config({ moviePath: getZeroClipboardSwfPath() });
     },
 
     getClipboardElement: function () {
@@ -61,12 +54,13 @@ function (app, FauxtonAPI, React, ReactDOM, ZeroClipboard, ReactBootstrap) {
     },
 
     componentDidMount: function () {
-      var el = ReactDOM.findDOMNode(this);
-      this.clipboard = new ZeroClipboard(el);
-      this.clipboard.on('load', function () {
-        this.clipboard.on('mouseup', function () {
-          this.props.onClipboardClick();
-        }.bind(this));
+      var clipboard = new ClipboardJS(ReactDOM.findDOMNode(this));
+      clipboard.on('success', function (e) {
+        this.props.onCopy();
+        e.clearSelection();
+      }.bind(this));
+      clipboard.on('success', function (e) {
+        this.props.onCopyError();
       }.bind(this));
     },
 
@@ -77,8 +71,7 @@ function (app, FauxtonAPI, React, ReactDOM, ZeroClipboard, ReactBootstrap) {
           className="copy clipboard-copy-element"
           data-clipboard-text={this.props.text}
           data-bypass="true"
-          title={this.props.title}
-        >
+          title={this.props.title}>
           {this.getClipboardElement()}
         </a>
       );
@@ -90,24 +83,34 @@ function (app, FauxtonAPI, React, ReactDOM, ZeroClipboard, ReactBootstrap) {
   //  </ComponentsReact.ClipboardWithTextField>
   // pass in the text and a unique key, the key has to be unique or you'll get a warning
   var ClipboardWithTextField = React.createClass({
-    componentWillMount: function () {
-      ZeroClipboard.config({ moviePath: getZeroClipboardSwfPath() });
+
+    propTypes: {
+      uniqueKey: React.PropTypes.string.isRequired,
+      onCopy: React.PropTypes.func.isRequired
     },
 
     componentDidMount: function () {
       var el = ReactDOM.findDOMNode(this.refs["copy-text-" + this.props.uniqueKey]);
-      this.clipboard = new ZeroClipboard(el);
-      this.clipboard.on('load', function () {
-        this.clipboard.on('mouseup', function () {
-          this.props.onClipBoardClick();
-        }.bind(this));
+      var clipboard = new ClipboardJS(el);
+      clipboard.on('success', function (e) {
+        this.props.onCopy();
+        e.clearSelection();
       }.bind(this));
+
+      // generic handler for any time a copy to clipboard fails (e.g. Safari, or a misconfiguration). It selects the
+      // content in the text field and displays an appropriate notification
+      var textField = this.refs.textField;
+      clipboard.on('error', function (e) {
+        $(ReactDOM.findDOMNode(textField)).select();
+        FauxtonAPI.addNotification({ msg: 'Press ⌘-C to copy to your clipboard.', type: 'info', clear: true });
+      });
     },
 
     render: function () {
       return (
         <p key={this.props.uniqueKey}>
           <input
+            ref="textField"
             type="text"
             className="input-xxlarge text-field-to-copy"
             readOnly
