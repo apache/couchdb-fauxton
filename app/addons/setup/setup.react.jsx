@@ -226,8 +226,9 @@ define([
             <div className="setup-add-button">
               <ConfirmButton
                 onClick={this.addNode}
+                showIcon={false}
                 id="setup-btn-no-thanks"
-                text="ADD" />
+                text="Add Node" />
             </div>
           </div>
           <div className="setup-nodelist">
@@ -235,7 +236,7 @@ define([
           </div>
 
           <div className="centered setup-finish">
-            <ConfirmButton onClick={this.finishClusterSetup} text="SETUP" />
+            <ConfirmButton onClick={this.finishClusterSetup} showIcon={false} text="Configure Cluster" />
           </div>
         </div>
       );
@@ -295,7 +296,9 @@ define([
             <SetupOptionalSettings
               onAlterPort={this.alterPort}
               onAlterBindAddress={this.alterBindAddress} />
-            <ConfirmButton onClick={this.finishSingleNode} text="Finish" />
+            <ConfirmButton
+              onClick={this.finishSingleNode}
+              text="Configure Node" />
           </div>
         </div>
       );
@@ -352,11 +355,13 @@ define([
           <div>
             <ConfirmButton
               onClick={this.redirectToMultiNodeSetup}
-              text="Setup cluster" />
+              showIcon={false}
+              text="Configure	Cluster" />
             <ConfirmButton
               onClick={this.redirectToSingleNodeSetup}
+              showIcon={false}
               id="setup-btn-no-thanks"
-              text="Single-Node-Setup" />
+              text="Configure	Single	Node" />
           </div>
         </div>
       );

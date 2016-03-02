@@ -1114,10 +1114,29 @@ function (app, FauxtonAPI, React, ReactDOM, Actions, Stores, FauxtonComponents, 
   });
 
   var ConfirmButton = React.createClass({
+    propTypes: {
+      showIcon: React.PropTypes.bool
+    },
+
+    getDefaultProps: function () {
+      return {
+        showIcon: true
+      };
+    },
+
+    getIcon: function () {
+      if (!this.props.showIcon) {
+        return null;
+      }
+      return (
+        <i className="icon fonticon-ok-circled" />
+      );
+    },
+
     render: function () {
       return (
         <button onClick={this.props.onClick} type="submit" className="btn btn-success save" id={this.props.id}>
-          <i className="icon fonticon-ok-circled"></i>
+          {this.getIcon()}
           {this.props.text}
         </button>
       );
@@ -1335,8 +1354,9 @@ function (app, FauxtonAPI, React, ReactDOM, Actions, Stores, FauxtonComponents, 
 
             <FauxtonComponents.ClipboardWithTextField
               onClipBoardClick={this.showCopiedMessage}
-              text="Copy"
+              text="Copy URL"
               textToCopy={this.props.endpoint}
+              showCopyIcon={false}
               uniqueKey="clipboard-apiurl" />
 
             <div className="add-on">
@@ -1346,7 +1366,6 @@ function (app, FauxtonAPI, React, ReactDOM, Actions, Stores, FauxtonComponents, 
                 target="_blank"
                 className="btn"
               >
-                <i className="fonticon-eye icon"></i>
                 View JSON
               </a>
             </div>

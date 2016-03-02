@@ -71,7 +71,7 @@ function (app, FauxtonAPI, React, Constants, VerifyInstall, Actions, Stores) {
 
     render: function () {
       return (
-        <button id="start" className="btn btn-large btn-success" onClick={this.props.verify} disabled={this.props.isVerifying}>
+        <button id="start" className="btn btn-success" onClick={this.props.verify} disabled={this.props.isVerifying}>
           {this.props.isVerifying ? 'Verifying' : 'Verify Installation'}
         </button>
       );

@@ -4,12 +4,13 @@
 
 .api-bar-tray {
   padding: 16px 20px;
-  .input-append.input-prepend {
-    margin-bottom: 0px;
 
-    .input-xxlarge {
-      .border-radius(5px 0 0 5px);
-    }
+  input[type="text"].text-field-to-copy {
+    .border-radius(5px 0 0 5px);
+  }
+  .input-append.input-prepend {
+    margin-bottom: 0;
+
     .btn {
       background-color: @navBG;
       color: #fff;
@@ -17,14 +18,9 @@
       padding: 10px 10px 9px;
       border: none;
       line-height: 1.5em;
-      .border-radius(5px);
       &:hover{
         background-color: #cbcbcb;
       }
-    }
-
-    .copy-button {
-      .border-radius(0 5px 5px 0);
     }
 
     .zeroclipboard-is-hover {

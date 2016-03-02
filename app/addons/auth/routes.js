@@ -39,8 +39,7 @@ function (app, FauxtonAPI, Auth, AuthActions, Components, ClusterActions) {
     },
 
     login: function () {
-      this.crumbs = [{ name: 'Login', link: "#" }];
-
+      this.crumbs = [{ name: 'Log In to Couch DB', link: "#" }];
       this.setComponent('#dashboard-content', Components.LoginForm, { urlBack: app.getParams().urlback });
     },
 

@@ -49,5 +49,22 @@ define([
       React.addons.TestUtils.Simulate.click(ReactDOM.findDOMNode(button));
       assert.ok(spy.calledOnce);
     });
+
+    it('shows icon by default', function () {
+      button = TestUtils.renderIntoDocument(
+        <ReactComponents.ConfirmButton text="Click here" onClick={function () { }} />,
+        container
+      );
+      assert.equal($(ReactDOM.findDOMNode(button)).find('.icon').length, 1);
+    });
+
+    it('optionally omits the icon', function () {
+      button = TestUtils.renderIntoDocument(
+        <ReactComponents.ConfirmButton text="Click here" onClick={function () { }} showIcon={false} />,
+        container
+      );
+      assert.equal($(ReactDOM.findDOMNode(button)).find('.icon').length, 0);
+    });
+
   });
 });

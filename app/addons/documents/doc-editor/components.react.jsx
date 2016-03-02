@@ -148,7 +148,7 @@ define([
           <div id="doc-editor-actions-panel">
             <div className="doc-actions-left">
               <button className="save-doc btn btn-success save" type="button" onClick={this.saveDoc}>
-                <i className="icon fonticon-ok-circled"></i> Save
+                <i className="icon fonticon-ok-circled"></i> Save Changes
               </button>
               <div>
                 <a href={this.props.previousPage} className="js-back cancel-button">Cancel</a>
@@ -172,10 +172,12 @@ define([
             visible={this.state.cloneDocModalVisible}
             onSubmit={this.clearChanges} />
           <FauxtonComponents.ConfirmationModal
+            title="Confirm Deletion"
             visible={this.state.deleteDocModalVisible}
             text="Are you sure you want to delete this document?"
             onClose={this.hideDeleteDocModal}
-            onSubmit={this.deleteDoc} />
+            onSubmit={this.deleteDoc}
+            successButtonLabel="Delete Document" />
         </div>
       );
     }
@@ -279,7 +281,11 @@ define([
       };
     },
 
-    closeModal: function () {
+    closeModal: function (e) {
+      if (e) {
+        e.preventDefault();
+      }
+
       if (this.state.inProgress) {
         Actions.cancelUpload();
       }
@@ -328,12 +334,10 @@ define([
             </div>
           </Modal.Body>
           <Modal.Footer>
-            <button href="#" data-bypass="true" className="btn" onClick={this.closeModal}>
-              <i className="icon fonticon-cancel-circled"></i> Cancel
-            </button>
             <button href="#" id="upload-btn" data-bypass="true" className="btn btn-success save" onClick={this.upload}>
-              <i className="icon fonticon-ok-circled"></i> Upload
+              Upload Attachment
             </button>
+            <a href="#" data-bypass="true" className="cancel-link" onClick={this.closeModal}>Cancel</a>
           </Modal.Footer>
         </Modal>
       );
@@ -368,7 +372,10 @@ define([
       }
     },
 
-    closeModal: function () {
+    closeModal: function (e) {
+      if (e) {
+        e.preventDefault();
+      }
       Actions.hideCloneDocModal();
     },
 
@@ -396,12 +403,10 @@ define([
             </form>
           </Modal.Body>
           <Modal.Footer>
-            <button className="btn" onClick={this.closeModal}>
-              <i className="icon fonticon-cancel-circled"></i> Cancel
-            </button>
             <button className="btn btn-success save" onClick={this.cloneDoc}>
-              <i className="fonticon-ok-circled"></i> Clone
+              <i className="fonticon-ok-circled"></i> Clone Document
             </button>
+            <a href="#" data-bypass="true" className="cancel-link" onClick={this.closeModal}>Cancel</a>
           </Modal.Footer>
         </Modal>
       );

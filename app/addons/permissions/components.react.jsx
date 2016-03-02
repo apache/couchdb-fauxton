@@ -142,8 +142,8 @@ function (app, FauxtonAPI, React, Components, Stores, Actions) {
               <p>Specify users who will have {this.props.section} access to this database.</p>
             </header>
             <form onSubmit={this.addNames} className="permission-item-form form-inline">
-              <input onChange={this.nameChange} value={this.state.newName} type="text" className="item input-small" placeholder="Add Name" />
-              <button type="submit" className="btn btn-success"><i className="icon fonticon-plus-circled" /> Add Name</button>
+              <input onChange={this.nameChange} value={this.state.newName} type="text" className="item input-small" placeholder="Add User" />
+              <button type="submit" className="btn btn-success"><i className="icon fonticon-plus-circled" /> Add User</button>
             </form>
             <ul className="clearfix unstyled permission-items span10">
               {this.getNames()}

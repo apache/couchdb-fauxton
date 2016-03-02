@@ -90,6 +90,20 @@ function (app, FauxtonAPI, React, ReactDOM, ZeroClipboard, ReactBootstrap) {
   //  </ComponentsReact.ClipboardWithTextField>
   // pass in the text and a unique key, the key has to be unique or you'll get a warning
   var ClipboardWithTextField = React.createClass({
+    propTypes: {
+      onClipBoardClick: React.PropTypes.func.isRequired,
+      textToCopy: React.PropTypes.string.isRequired,
+      uniqueKey: React.PropTypes.string.isRequired,
+      showCopyIcon: React.PropTypes.bool
+    },
+
+    getDefaultProps: function () {
+      return {
+        showCopyIcon: true,
+        text: 'Copy'
+      };
+    },
+
     componentWillMount: function () {
       ZeroClipboard.config({ moviePath: getZeroClipboardSwfPath() });
     },
@@ -102,6 +116,13 @@ function (app, FauxtonAPI, React, ReactDOM, ZeroClipboard, ReactBootstrap) {
           this.props.onClipBoardClick();
         }.bind(this));
       }.bind(this));
+    },
+
+    getCopyIcon: function () {
+      if (!this.props.showCopyIcon) {
+        return null;
+      }
+      return (<i className="fontawesome icon-paste"></i>);
     },
 
     render: function () {
@@ -120,7 +141,7 @@ function (app, FauxtonAPI, React, ReactDOM, ZeroClipboard, ReactBootstrap) {
             ref={"copy-text-" + this.props.uniqueKey}
             title="Copy to clipboard"
           >
-            <i className="fontawesome icon-paste"></i> Copy
+            {this.getCopyIcon()} {this.props.text}
           </a>
         </p>
       );
@@ -342,14 +363,22 @@ function (app, FauxtonAPI, React, ReactDOM, ZeroClipboard, ReactBootstrap) {
         visible: false,
         title: 'Please confirm',
         text: '',
+        successButtonLabel: 'Okay',
         onClose: function () { },
         onSubmit: function () { }
       };
     },
 
+    close: function (e) {
+      if (e) {
+        e.preventDefault();
+      }
+      this.props.onClose();
+    },
+
     render: function () {
       return (
-        <Modal dialogClassName="confirmation-modal" show={this.props.visible} onHide={this.props.onClose}>
+        <Modal dialogClassName="confirmation-modal" show={this.props.visible} onHide={this.close}>
           <Modal.Header closeButton={true}>
             <Modal.Title>{this.props.title}</Modal.Title>
           </Modal.Header>
@@ -359,8 +388,10 @@ function (app, FauxtonAPI, React, ReactDOM, ZeroClipboard, ReactBootstrap) {
             </p>
           </Modal.Body>
           <Modal.Footer>
-            <button className="btn" onClick={this.props.onClose}><i className="icon fonticon-cancel-circled"></i> Cancel</button>
-            <button className="btn btn-success js-btn-success" onClick={this.props.onSubmit}><i className="fonticon-ok-circled"></i> Okay</button>
+            <button className="btn btn-success js-btn-success" onClick={this.props.onSubmit}>
+              <i className="fonticon-ok-circled"></i> {this.props.successButtonLabel}
+            </button>
+            <a href="#" data-bypass="true" className="cancel-link" onClick={this.close}>Cancel</a>
           </Modal.Footer>
         </Modal>
       );

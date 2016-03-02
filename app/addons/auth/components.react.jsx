@@ -87,7 +87,7 @@ define([
           <div className="span12">
             <form id="login" onSubmit={this.submit}>
               <p className="help-block">
-                Login with your username and password
+                Enter your username and password.
               </p>
               <input id="username" type="text" name="name" ref="username" placeholder="Username" size="24"
                 onChange={this.onInputChange} value={this.state.username} />
@@ -95,7 +95,7 @@ define([
               <input id="password" type="password" name="password" ref="password" placeholder="Password" size="24"
                 onChange={this.onInputChange} value={this.state.password} />
               <br/>
-              <button id="submit" className="btn" type="submit">Login</button>
+              <button id="submit" className="btn btn-success" type="submit">Log In</button>
             </form>
           </div>
         </div>
