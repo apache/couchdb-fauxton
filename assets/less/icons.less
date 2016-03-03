@@ -1,5 +1,5 @@
 /*
-*	Icon Font: fauxtonicon3
+*	Icon Font: fauxtonicon4
 */
 
 /*  Licensed under the Apache License, Version 2.0 (the "License"); you may not
@@ -18,7 +18,7 @@
 /* had to add a custom template to the generator to get this to compile to append the proper path and specify  "url" instead of "font-url":
 https://github.com/seanbarclay/fontcustom/blob/1c3ad3d2633d3a8add39e8827115394e9ec02d88/lib/fontcustom/generator/template.rb
 */
-@fauxtonFont: "fauxtonicon3";
+@fauxtonFont: "fauxtonicon4";
 @icon-activetasks: "\f100";
 @icon-arrow-box-down: "\f101";
 @icon-arrow-box-up: "\f102";
@@ -137,22 +137,23 @@ https://github.com/seanbarclay/fontcustom/blob/1c3ad3d2633d3a8add39e8827115394e9
 @icon-users: "\f173";
 @icon-vertical-ellipsis: "\f174";
 @icon-wrench: "\f175";
+@icon-wrench2: "\f176";
 
 @font-face {
-  font-family: "fauxtonicon3";
-  src: url("../fonts/fauxtonicon3.eot");
-  src: url("../fonts/fauxtonicon3.eot?#iefix") format("embedded-opentype"),
-       url("../fonts/fauxtonicon3.woff") format("woff"),
-       url("../fonts/fauxtonicon3.ttf") format("truetype"),
-       url("../fonts/fauxtonicon3.svg#fauxtonicon3") format("svg");
+  font-family: "fauxtonicon4";
+  src: url("../fonts/fauxtonicon4.eot");
+  src: url("../fonts/fauxtonicon4.eot?#iefix") format("embedded-opentype"),
+       url("../fonts/fauxtonicon4.woff") format("woff"),
+       url("../fonts/fauxtonicon4.ttf") format("truetype"),
+       url("../fonts/fauxtonicon4.svg#fauxtonicon4") format("svg");
   font-weight: normal;
   font-style: normal;
 }
 
 @media screen and (-webkit-min-device-pixel-ratio:0) {
   @font-face {
-    font-family: "fauxtonicon3";
-    src: url("../fonts/fauxtonicon3.svg#fauxtonicon3") format("svg");
+    font-family: "fauxtonicon4";
+    src: url("../fonts/fauxtonicon4.svg#fauxtonicon4") format("svg");
   }
 }
 
@@ -276,9 +277,10 @@ https://github.com/seanbarclay/fontcustom/blob/1c3ad3d2633d3a8add39e8827115394e9
 .fonticon-user:before,
 .fonticon-users:before,
 .fonticon-vertical-ellipsis:before,
-.fonticon-wrench:before {
+.fonticon-wrench:before,
+.fonticon-wrench2:before {
   display: inline-block;
-  font-family: "fauxtonicon3";
+  font-family: "fauxtonicon4";
   font-style: normal;
   font-weight: normal;
   font-variant: normal;
@@ -409,3 +411,4 @@ https://github.com/seanbarclay/fontcustom/blob/1c3ad3d2633d3a8add39e8827115394e9
 .fonticon-users { &:before { content: "\f173"; }}
 .fonticon-vertical-ellipsis { &:before { content: "\f174"; }}
 .fonticon-wrench { &:before { content: "\f175"; }}
+.fonticon-wrench2 { &:before { content: "\f176"; }}
