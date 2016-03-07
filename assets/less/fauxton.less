@@ -453,16 +453,17 @@ body #dashboard .flex-body#breadcrumbs {
     .dropdown-toggle {
       color: #666666;
       &:before {
-        margin-top: 6px;
         margin: 6px -5px 0 6px;
+      }
+    }
+    .fonticon-vertical-ellipsis {
+      &:before {
+        font-size: 20px;
       }
     }
     a {
       padding: 10px;
       text-decoration: none;
-      &:before {
-        font-size: 20px;
-      }
     }
 
     .dropdown {
@@ -473,6 +474,11 @@ body #dashboard .flex-body#breadcrumbs {
     .dropdown-menu {
       left: -115px;
       top: 48px;
+
+      a.icon:before {
+        font-size: 14px;
+        padding-right: 7px;
+      }
     }
   }
 }
