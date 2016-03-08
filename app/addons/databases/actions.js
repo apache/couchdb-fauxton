@@ -81,9 +81,9 @@ function (app, FauxtonAPI, Stores, ActionTypes, Resources) {
     },
 
     createNewDatabase: function (databaseName) {
-      if (_.isNull(databaseName) || databaseName.trim().length === 0 || !this.isValidDatabaseName(databaseName)) {
+      if (_.isNull(databaseName) || databaseName.trim().length === 0) {
         FauxtonAPI.addNotification({
-          msg: 'Please enter a valid database name. The database must start with a letter and can only contain lowercase letters (a-z), digits (0-9) and the following characters _, $, (, ), +, -, and /.',
+          msg: 'Please enter a valid database name',
           type: 'error',
           clear: true
         });
@@ -134,10 +134,6 @@ function (app, FauxtonAPI, Stores, ActionTypes, Resources) {
           type: 'error'
         });
       }
-    },
-
-    isValidDatabaseName: function (databaseName) {
-      return (/^[a-z][a-z0-9_\$\(\)\+\/-]*$/).test(databaseName);
     }
   };
 });
