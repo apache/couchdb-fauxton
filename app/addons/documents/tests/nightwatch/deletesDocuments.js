@@ -114,8 +114,9 @@ module.exports = {
       .url(baseUrl + '#/database/' + newDatabaseName + '/' + newDocumentName)
       .waitForElementPresent('#editor-container', waitTime, false)
       .clickWhenVisible('#doc-editor-actions-panel button[title="Delete"]')
-      .clickWhenVisible('button.btn.btn-success.js-btn-success')
+      .clickWhenVisible('.confirmation-modal button.btn.btn-success')
       .waitForElementPresent('#jump-to-doc-id', waitTime, false)
+
       //check raw JSON
       .url(baseUrl + '/' + newDatabaseName + '/_all_docs')
       .waitForElementPresent('pre', waitTime, false)

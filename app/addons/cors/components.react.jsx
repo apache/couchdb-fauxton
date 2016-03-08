@@ -340,7 +340,7 @@ define([
               <br />
               <button
                 type="button"
-                className="enable-disable btn btn-small btn-success"
+                className="enable-disable btn btn-success"
                 onClick={this.enableCorsChange}
                 disabled={this.state.isLoading ? 'disabled' : null}
               >

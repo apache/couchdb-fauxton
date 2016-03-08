@@ -288,7 +288,7 @@ A key value is the first parameter emitted in a map function. For example emit("
           <div id="button-options" className="controls controls-row">
             <button type="submit" className="btn btn-success">
               <i className="fonticon-play icon" />
-              Query
+              Run Query
             </button>
             <a onClick={this.hideTray} className="btn btn-cancel">Cancel</a>
           </div>

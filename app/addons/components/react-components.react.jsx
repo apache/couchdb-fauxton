@@ -1449,7 +1449,11 @@ define([
       modalProps: React.PropTypes.object
     },
 
-    close: function () {
+    close: function (e) {
+      if (e) {
+        e.preventDefault();
+      }
+
       this.setState({
         inputValue: '',
         disableSubmit: true
@@ -1494,7 +1498,6 @@ define([
       var isSystemDatabase = this.props.modalProps.isSystemDatabase;
       var showDeleteModal = this.props.modalProps.showDeleteModal;
       var dbId = this.props.modalProps.dbId;
-      var errorMessage = this.state.errorMessage;
 
       var warning = isSystemDatabase ? (
         <p style={{color: '#d14'}} className="warning">
@@ -1510,9 +1513,9 @@ define([
           <Modal.Body>
             {warning}
             <p>
-            Warning: This action will permanently delete <code>{dbId}</code>.
-            To confirm the deletion of the database and all of the
-            database's documents, you must enter the database's name.
+              Warning: This action will permanently delete <code>{dbId}</code>.
+              To confirm the deletion of the database and all of the
+              database's documents, you must enter the database's name.
             </p>
             <input
               type="text"
@@ -1522,20 +1525,13 @@ define([
               autoFocus={true} />
           </Modal.Body>
           <Modal.Footer>
-            <a
-              style={{marginRight: '10px', cursor: 'pointer'}}
-              onClick={this.close}
-              data-bypass="true"
-            >
-              Cancel
-            </a>
             <button
               disabled={this.state.disableSubmit}
               onClick={this.onDeleteClick}
-              className="btn btn-danger delete"
-            >
-              <i className="icon fonticon-cancel-circled"></i> Delete
+              className="btn btn-danger delete">
+              <i className="icon fonticon-cancel-circled" /> Delete
             </button>
+            <a href="#" onClick={this.close} data-bypass="true" className="cancel-link">Cancel</a>
           </Modal.Footer>
         </Modal>
       );

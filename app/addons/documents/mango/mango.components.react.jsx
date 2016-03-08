@@ -156,7 +156,7 @@ function (app, FauxtonAPI, React, Stores, Actions,
             {this.getIndexBox()}
             <div className="padded-box">
               <div className="control-group">
-                <ConfirmButton text={this.props.confirmbuttonText} id="create-index-btn" />
+                <ConfirmButton text={this.props.confirmbuttonText} id="create-index-btn" showIcon={false} />
               </div>
             </div>
           </form>
