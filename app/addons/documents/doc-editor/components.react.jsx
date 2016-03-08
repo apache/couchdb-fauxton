@@ -143,12 +143,14 @@ define([
     },
 
     render: function () {
+      var saveButtonLabel = (this.props.isNewDoc) ? 'Create Document' : 'Save Changes';
+
       return (
         <div>
           <div id="doc-editor-actions-panel">
             <div className="doc-actions-left">
               <button className="save-doc btn btn-success save" type="button" onClick={this.saveDoc}>
-                <i className="icon fonticon-ok-circled"></i> Save Changes
+                <i className="icon fonticon-ok-circled"></i> {saveButtonLabel}
               </button>
               <div>
                 <a href={this.props.previousPage} className="js-back cancel-button">Cancel</a>

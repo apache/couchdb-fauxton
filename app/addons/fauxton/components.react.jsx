@@ -360,7 +360,7 @@ function (app, FauxtonAPI, React, ReactDOM, ZeroClipboard, ReactBootstrap) {
   });
 
 
-  // A super-simple replacement for window.confirm()
+  // a super-simple replacement for window.confirm()
   var ConfirmationModal = React.createClass({
     propTypes: {
       visible: React.PropTypes.bool.isRequired,
@@ -378,6 +378,7 @@ function (app, FauxtonAPI, React, ReactDOM, ZeroClipboard, ReactBootstrap) {
         title: 'Please confirm',
         text: '',
         successButtonLabel: 'Okay',
+        buttonClass: 'btn-success',
         onClose: function () { },
         onSubmit: function () { }
       };
@@ -395,6 +396,8 @@ function (app, FauxtonAPI, React, ReactDOM, ZeroClipboard, ReactBootstrap) {
       if (!_.isString(this.props.text)) {
         content = this.props.text;
       }
+      var btnClasses = 'btn ' + this.props.buttonClass;
+
       return (
         <Modal dialogClassName="confirmation-modal" show={this.props.visible} onHide={this.close}>
           <Modal.Header closeButton={true}>
@@ -404,7 +407,7 @@ function (app, FauxtonAPI, React, ReactDOM, ZeroClipboard, ReactBootstrap) {
             {content}
           </Modal.Body>
           <Modal.Footer>
-            <button className="btn btn-success js-btn-success" onClick={this.props.onSubmit}>
+            <button className={btnClasses} onClick={this.props.onSubmit}>
               <i className="fonticon-ok-circled"></i> {this.props.successButtonLabel}
             </button>
             <a href="#" data-bypass="true" className="cancel-link" onClick={this.close}>Cancel</a>
