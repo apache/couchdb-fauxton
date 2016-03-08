@@ -16,12 +16,14 @@ define([
   'react',
   './stores',
   './actions',
-  '../../components/react-components.react'
+  '../../components/react-components.react',
+  '../../fauxton/components.react'
 ],
 
-function (app, FauxtonAPI, React, Stores, Actions, ReactComponents) {
+function (app, FauxtonAPI, React, Stores, Actions, ReactComponents, GeneralComponents) {
   var designDocInfoStore = Stores.designDocInfoStore;
   var LoadLines = ReactComponents.LoadLines;
+  var Clipboard = GeneralComponents.Clipboard;
 
 
   var DesignDocInfo = React.createClass({
@@ -50,8 +52,15 @@ function (app, FauxtonAPI, React, Stores, Actions, ReactComponents) {
       this.setState(this.getStoreState());
     },
 
+    showCopiedMessage: function () {
+      FauxtonAPI.addNotification({
+        type: 'success',
+        msg: 'The MD5 sha has been copied to your clipboard.',
+        clear: true
+      });
+    },
+
     render: function () {
-      var formatSize = app.helpers.formatSize;
       var getDocUrl = app.helpers.getDocUrl;
       var viewIndex = this.state.viewIndex;
 
@@ -59,66 +68,88 @@ function (app, FauxtonAPI, React, Stores, Actions, ReactComponents) {
         return <LoadLines />;
       }
 
+      var actualSize = (viewIndex.data_size) ? viewIndex.data_size.toLocaleString('en') : 0;
+      var dataSize = (viewIndex.disk_size) ? viewIndex.disk_size.toLocaleString('en') : 0;
+
       return (
-      <div className="metadata-page">
-        <header className="page-header">
-          <h2>Design Document Metadata: _design/{this.state.ddocName} </h2>
-          <p className="help">Information about the specified design document, including the index,
-            index size and current status of the design document and associated index information.
-            <a href={getDocUrl('DESIGN_DOC_METADATA')} className="help-link" target="_blank" data-bypass="true">
-              <i className="icon-question-sign" />
+        <div className="metadata-page">
+          <header>
+            <div className="preheading">Design Document Metadata</div>
+            <h2>_design/{this.state.ddocName}</h2>
+
+            <p className="help">
+              Information about the specified design document, including the index, index size and current status of the
+              design document and associated index information.
+              <a href={getDocUrl('DESIGN_DOC_METADATA')} className="help-link" target="_blank" data-bypass="true">
+                <i className="icon-question-sign" />
               </a>
-          </p>
-        </header>
-        <div className="row-fluid">
-          <div className="span6">
-            <header>
-              <h3>Status</h3>
-            </header>
-            <dl>
-              <dt>Updater</dt>
-              <dd>{viewIndex.updater_running}</dd>
-              <dt>Compact</dt>
-              <dd>{viewIndex.compact_running }</dd>
-              <dt>Waiting Commit</dt>
-              <dd>{viewIndex.waiting_commit }</dd>
-              <dt>Waiting Clients</dt>
-              <dd>{viewIndex.waiting_clients }</dd>
-              <dt>Update Sequence</dt>
-              <dd>{viewIndex.update_seq }</dd>
-              <dt>Purge Sequence</dt>
-              <dd>{viewIndex.purge_seq }</dd>
-            </dl>
-          </div>
-          <div className="span6">
-            <header>
-              <h3>Information</h3>
-            </header>
-            <dl>
-              <dt>Language</dt>
-              <dd>{viewIndex.language }</dd>
-              <dt>Signature</dt>
-              <dd>{viewIndex.signature }</dd>
-            </dl>
-            <header>
-              <h3>Storage</h3>
-            </header>
-            <dl>
-              <dt>Data Size</dt>
-              <dd>{formatSize(viewIndex.data_size) }</dd>
-              <dt>Disk Size</dt>
-              <dd>{formatSize(viewIndex.disk_size) }</dd>
-            </dl>
-          </div>
+            </p>
+          </header>
+
+          <section className="container">
+            <h3>Index Information</h3>
+
+            <ul>
+              <li>
+                <span className="item-title">Language:</span>
+                <span className="capitalize">{viewIndex.language}</span>
+              </li>
+              <li>
+                <span className="item-title">Currently being updated?</span>
+                {viewIndex.updater_running ? 'Yes' : 'No'}
+              </li>
+              <li>
+                <span className="item-title">Currently running compaction?</span>
+                {viewIndex.compact_running ? 'Yes' : 'No'}
+              </li>
+              <li>
+                <span className="item-title">Waiting for a commit?</span>
+                {viewIndex.waiting_commit ? 'Yes' : 'No'}
+              </li>
+            </ul>
+
+            <ul>
+              <li>
+                <span className="item-title">Clients waiting for the index:</span>
+                {viewIndex.waiting_clients}
+              </li>
+              <li>
+                <span className="item-title">Update sequence on DB:</span>
+                {viewIndex.update_seq}
+              </li>
+              <li>
+                <span className="item-title">Processed purge sequence:</span>
+                {viewIndex.purge_seq}
+              </li>
+              <li>
+                <span className="item-title">Actual data size (bytes):</span>
+                {actualSize}
+              </li>
+              <li>
+                <span className="item-title">Data size on disk (bytes):</span>
+                {dataSize}
+              </li>
+            </ul>
+
+            <ul>
+              <li>
+                <span className="item-title">MD5 Signature:</span>
+                <Clipboard
+                  onClipboardClick={this.showCopiedMessage}
+                  text={viewIndex.signature} />
+              </li>
+            </ul>
+
+          </section>
+
         </div>
-      </div>
       );
     }
   });
 
 
-
   return {
     DesignDocInfo: DesignDocInfo
   };
+
 });
