@@ -246,40 +246,6 @@ define([
 
     });
 
-    describe('isValidDatabaseName', function () {
-      it("accepts valid database names", function () {
-        [
-          "one",
-          "one$",
-          "one/",
-          "o-n-e",
-          "o_n_e",
-          "o+n+e",
-          "one(or-two)"
-        ].forEach(function (item) {
-          assert.equal(Actions.isValidDatabaseName(item), true);
-        });
-      });
-
-      it("rejects invalid database names", function () {
-        [
-          "ONE",
-          "_one",
-          "-blah",
-          "one%",
-          "one*",
-          "one@",
-          "one#",
-          "one^",
-          "one~",
-          "one two",
-          " one"
-        ].forEach(function (item) {
-          assert.equal(Actions.isValidDatabaseName(item), false, "item: " + item);
-        });
-      });
-    });
-
   });
 
 });
