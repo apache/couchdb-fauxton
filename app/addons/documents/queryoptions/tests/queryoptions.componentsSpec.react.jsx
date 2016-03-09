@@ -170,6 +170,26 @@ define([
         assert.equal(val, '3');
       });
     });
+
   });
 
+  describe('QueryButtons', function () {
+    var container;
+
+    beforeEach(function () {
+      container = document.createElement('div');
+    });
+
+    afterEach(function () {
+      ReactDOM.unmountComponentAtNode(container);
+    });
+
+    describe('cancel event fires', function () {
+      var spy = sinon.spy();
+      var component = TestUtils.renderIntoDocument(<Views.QueryButtons onCancel={spy} />, container);
+      TestUtils.Simulate.click($(ReactDOM.findDOMNode(component)).find('a')[0]);
+      assert.ok(spy.calledOnce);
+    });
+
+  });
 });

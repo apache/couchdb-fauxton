@@ -274,8 +274,12 @@ A key value is the first parameter emitted in a map function. For example emit("
   });
 
   var QueryButtons = React.createClass({
+    propTypes: {
+      onCancel: React.PropTypes.func.isRequired
+    },
+
     hideTray: function (e) {
-      Actions.toggleQueryBarVisibility(false);
+      this.props.onCancel();
     },
 
     render: function () {
@@ -343,6 +347,10 @@ A key value is the first parameter emitted in a map function. For example emit("
       Actions.toggleQueryBarVisibility(!this.props.contentVisible);
     },
 
+    closeTray: function () {
+      Actions.toggleQueryBarVisibility(false);
+    },
+
     componentDidMount: function () {
       $('body').on('click.QueryTray', function (e) {
         if ($(e.target).closest('#query-options').length) {
@@ -396,7 +404,7 @@ A key value is the first parameter emitted in a map function. For example emit("
               updateSkip={Actions.updateSkip}
               updateLimit={Actions.updateLimit}
               limit={this.props.limit} />
-            <QueryButtons />
+            <QueryButtons onCancel={this.closeTray} />
           </form>
         </TrayContents>
       );
