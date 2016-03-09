@@ -1448,6 +1448,10 @@ function (app, FauxtonAPI, React, ReactDOM, Actions, Stores, FauxtonComponents, 
       this.props.showHide({showModal: true});
     },
 
+    getDatabaseName: function () {
+      return this.props.modalProps.dbId.trim();
+    },
+
     onInputChange: function (e) {
       var val = encodeURIComponent(e.target.value.trim());
 
@@ -1456,19 +1460,19 @@ function (app, FauxtonAPI, React, ReactDOM, Actions, Stores, FauxtonComponents, 
       });
 
       this.setState({
-        disableSubmit: val !== this.props.modalProps.dbId.trim()
+        disableSubmit: val !== this.getDatabaseName()
       });
     },
 
     onDeleteClick: function (e) {
       e.preventDefault();
 
-      Actions.deleteDatabase(this.props.modalProps.dbId.trim());
+      Actions.deleteDatabase(this.getDatabaseName());
     },
 
     onInputKeypress: function (e) {
       if (e.keyCode === 13 && this.state.disableSubmit !== true) {
-        Actions.deleteDatabase(this.props.modalProps.dbId.trim());
+        Actions.deleteDatabase(this.getDatabaseName());
       }
     },
 
