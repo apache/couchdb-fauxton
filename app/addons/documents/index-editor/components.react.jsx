@@ -213,7 +213,9 @@ function (app, FauxtonAPI, React, ReactDOM, Stores, Actions, Components, ReactCo
     },
 
     onChange: function () {
-      this.setState(this.getStoreState());
+      if (this.isMounted()) {
+        this.setState(this.getStoreState());
+      }
     },
 
     componentDidMount: function () {
