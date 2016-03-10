@@ -64,9 +64,6 @@ define([
           this.setChangePasswordConfirm(action.value);
           this.triggerChange();
         break;
-
-        default:
-        return;
       }
     }
   });
@@ -117,9 +114,6 @@ define([
           this.setPassword(action.value);
           this.triggerChange();
         break;
-
-        default:
-        return;
       }
     }
   });
@@ -151,9 +145,6 @@ define([
           this.setSelectedPage(action.page);
           this.triggerChange();
         break;
-
-        default:
-        return;
       }
     }
   });

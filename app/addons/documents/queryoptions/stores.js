@@ -239,48 +239,57 @@ function (app, FauxtonAPI, ActionTypes) {
       switch (action.type) {
         case ActionTypes.QUERY_RESET:
           this.setQueryParams(action.params);
+          this.triggerChange();
         break;
         case ActionTypes.QUERY_TOGGLE_INCLUDE_DOCS:
           this._includeDocs = !this._includeDocs;
+          this.triggerChange();
         break;
         case ActionTypes.QUERY_TOGGLE_DESCENDING:
           this._descending = !this._descending;
+          this.triggerChange();
         break;
         case ActionTypes.QUERY_TOGGLE_BY_KEYS:
           this.toggleByKeys();
+          this.triggerChange();
         break;
         case ActionTypes.QUERY_TOGGLE_BETWEEN_KEYS:
           this.toggleBetweenKeys();
+          this.triggerChange();
         break;
         case ActionTypes.QUERY_UPDATE_BETWEEN_KEYS:
           this.updateBetweenKeys(action.betweenKeys);
+          this.triggerChange();
         break;
         case ActionTypes.QUERY_UPDATE_BY_KEYS:
           this.updateByKeys(action.byKeys);
+          this.triggerChange();
         break;
         case ActionTypes.QUERY_UPDATE_SKIP:
           this.updateSkip(action.skip);
+          this.triggerChange();
         break;
         case ActionTypes.QUERY_UPDATE_LIMIT:
           this.updateLimit(action.limit);
+          this.triggerChange();
         break;
         case ActionTypes.QUERY_SHOW_REDUCE:
           this._showReduce = true;
+          this.triggerChange();
         break;
         case ActionTypes.QUERY_TOGGLE_REDUCE:
           this._reduce = !this._reduce;
+          this.triggerChange();
         break;
         case ActionTypes.QUERY_UPDATE_GROUP_LEVEL:
           this.updateGroupLevel(action.groupLevel);
+          this.triggerChange();
         break;
         case ActionTypes.QUERY_UPDATE_VISIBILITY:
           this.setTrayVisible(action.options);
+          this.triggerChange();
         break;
-        default:
-        return;
-        // do nothing
       }
-      this.triggerChange();
 
     }
   });

@@ -794,50 +794,58 @@ function (app, FauxtonAPI, ActionTypes, HeaderActionTypes, PaginationActionTypes
       switch (action.type) {
         case ActionTypes.INDEX_RESULTS_NEW_RESULTS:
           this.newResults(action.options);
+          this.triggerChange();
         break;
         case ActionTypes.INDEX_RESULTS_RESET:
           this.resultsResetFromFetch();
+          this.triggerChange();
         break;
         case ActionTypes.INDEX_RESULTS_SELECT_DOC:
           this.selectDoc(action.options);
+          this.triggerChange();
         break;
         case ActionTypes.INDEX_RESULTS_CLEAR_RESULTS:
           this.clearResultsBeforeFetch();
+          this.triggerChange();
         break;
         case ActionTypes.INDEX_RESULTS_TOOGLE_SELECT_ALL_DOCUMENTS:
           this.toggleSelectAllDocuments();
+          this.triggerChange();
         break;
         case ActionTypes.INDEX_RESULTS_SELECT_NEW_FIELD_IN_TABLE:
           this.changeTableViewFields(action.options);
+          this.triggerChange();
         break;
         case ActionTypes.INDEX_RESULTS_TOGGLE_PRIORITIZED_TABLE_VIEW:
           this.togglePrioritizedTableView();
+          this.triggerChange();
         break;
 
         case HeaderActionTypes.TOGGLE_TABLEVIEW:
           this.toggleTableView(action.options);
+          this.triggerChange();
         break;
 
         case PaginationActionTypes.SET_PAGINATION_DOCUMENT_LIMIT:
           this.setDocumentLimit(action.docLimit);
+          this.triggerChange();
         break;
         case PaginationActionTypes.PAGINATE_NEXT:
           this.paginateNext();
+          this.triggerChange();
         break;
         case PaginationActionTypes.PAGINATE_PREVIOUS:
           this.paginatePrevious();
+          this.triggerChange();
         break;
         case PaginationActionTypes.PER_PAGE_CHANGE:
           this.resetPagination();
           this.setPerPage(action.perPage);
+          this.triggerChange();
         break;
 
-        default:
-        return;
-        // do nothing
       }
 
-      this.triggerChange();
     }
 
   });

@@ -118,10 +118,6 @@ function (FauxtonAPI, app, ActionTypes, moment) {
           this.setNotificationFilter(action.options.filter);
           this.triggerChange();
         break;
-
-        default:
-        return;
-          // do nothing
       }
     }
   });

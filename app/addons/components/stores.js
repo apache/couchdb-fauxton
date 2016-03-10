@@ -67,26 +67,25 @@ function (FauxtonAPI, app, ActionTypes) {
       switch (action.type) {
         case ActionTypes.CMPNTS_SHOW_API_BAR_BUTTON:
           this.setVisibleButton(true);
+          this.triggerChange();
         break;
 
         case ActionTypes.CMPNTS_HIDE_API_BAR_BUTTON:
           this.setVisibleButton(false);
+          this.triggerChange();
         break;
 
         case ActionTypes.CMPNTS_SET_API_BAR_CONTENT_VISIBLE_STATE:
           this.setApiBarVisible(action.options);
+          this.triggerChange();
         break;
 
         case ActionTypes.CMPNTS_UPDATE_API_BAR:
           this.updateAPIBar(action.options);
+          this.triggerChange();
         break;
-
-        default:
-        return;
-          // do nothing
       }
 
-      this.triggerChange();
     }
   });
 
@@ -112,13 +111,10 @@ function (FauxtonAPI, app, ActionTypes) {
       switch (action.type) {
         case ActionTypes.CMPNTS_DATABASES_SHOWDELETE_MODAL:
           this.setDeleteModal(action.options);
+          this.triggerChange();
         break;
-
-        default:
-        return;
       }
 
-      this.triggerChange();
     }
   });
 

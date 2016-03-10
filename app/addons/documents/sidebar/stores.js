@@ -156,29 +156,30 @@ function (app, FauxtonAPI, ActionTypes) {
       switch (action.type) {
         case ActionTypes.SIDEBAR_SET_SELECTED_NAV_ITEM:
           this.setSelected(action.options);
+          this.triggerChange();
         break;
 
         case ActionTypes.SIDEBAR_NEW_OPTIONS:
           this.newOptions(action.options);
+          this.triggerChange();
         break;
 
         case ActionTypes.SIDEBAR_TOGGLE_CONTENT:
           this.toggleContent(action.designDoc, action.indexGroup);
+          this.triggerChange();
         break;
 
         case ActionTypes.SIDEBAR_FETCHING:
           this._loading = true;
+          this.triggerChange();
         break;
 
         case ActionTypes.SIDEBAR_REFRESH:
+          this.triggerChange();
         break;
 
-        default:
-        return;
-        // do nothing
       }
 
-      this.triggerChange();
     }
 
   });

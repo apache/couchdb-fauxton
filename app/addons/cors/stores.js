@@ -110,42 +110,45 @@ define([
       switch (action.type) {
         case ActionTypes.EDIT_CORS:
           this.editCors(action.options);
+          this.triggerChange();
         break;
 
         case ActionTypes.TOGGLE_ENABLE_CORS:
           this.toggleEnableCors();
           this.setConfigChanged();
+          this.triggerChange();
         break;
 
         case ActionTypes.CORS_ADD_ORIGIN:
           this.addOrigin(action.origin);
           this.setConfigChanged();
+          this.triggerChange();
         break;
 
         case ActionTypes.CORS_IS_ALL_ORIGINS:
           this.originChange(action.isAllOrigins);
           this.setConfigChanged();
+          this.triggerChange();
         break;
 
         case ActionTypes.CORS_DELETE_ORIGIN:
           this.deleteOrigin(action.origin);
           this.setConfigChanged();
+          this.triggerChange();
         break;
 
         case ActionTypes.CORS_UPDATE_ORIGIN:
           this.updateOrigin(action.updatedOrigin, action.originalOrigin);
           this.setConfigChanged();
+          this.triggerChange();
         break;
 
         case ActionTypes.CORS_SET_IS_LOADING:
           this.setIsLoading(action.isLoading);
+          this.triggerChange();
         break;
-
-        default:
-        return;
       }
 
-      this.triggerChange();
     }
 
   });

@@ -142,38 +142,40 @@ function (app, FauxtonAPI, ActionTypes) {
       switch (action.type) {
         case ActionTypes.ADD_NAVBAR_LINK:
           this.addLink(action.link);
+          this.triggerChange();
         break;
 
         case ActionTypes.TOGGLE_NAVBAR_MENU:
           this.toggleMenu();
+          this.triggerChange();
         break;
 
         case ActionTypes.UPDATE_NAVBAR_LINK:
           this.updateLink(action.link);
+          this.triggerChange();
         break;
 
         case ActionTypes.CLEAR_NAVBAR_LINK:
           this.reset();
+          this.triggerChange();
         break;
 
         case ActionTypes.REMOVE_NAVBAR_LINK:
           this.removeLink(action.link);
+          this.triggerChange();
         break;
 
         case ActionTypes.NAVBAR_SET_VERSION_INFO:
           this.setVersion(action.version);
+          this.triggerChange();
         break;
 
         case ActionTypes.NAVBAR_ACTIVE_LINK:
           this.setActiveLink(action.name);
+          this.triggerChange();
         break;
-
-        default:
-        return;
-        // do nothing
       }
 
-      this.triggerChange();
     }
   });
 

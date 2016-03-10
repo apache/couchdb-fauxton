@@ -229,9 +229,6 @@ define([
           this.setIsLoading(action.options, new Date());
           this.triggerChange();
         break;
-
-        default:
-        return;
       }
     }
   });
