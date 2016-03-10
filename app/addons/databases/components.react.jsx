@@ -165,6 +165,9 @@ define([
 
     render: function () {
       var row = this.props.row;
+      //Adding this row check in as it seems our unit tests need them to pass
+      if (!row || !row.get) {return (<span></span>);};
+
       var name = row.get("name");
 
       // if the row status failed to load, inform the user

@@ -231,8 +231,6 @@ module.exports = function (grunt) {
             './app/core/**/*[Ss]pec.js',
             './app/addons/**/*[Ss]pec.js',
             './app/addons/**/*[Ss]pec.react.jsx'
-            // './app/addons/warehouse/**/*[Ss]pec.js',
-            // './app/addons/warehouse/**/*[Ss]pec.react.jsx'
           ])
         },
         template: 'test/test.config.underscore'
@@ -240,7 +238,6 @@ module.exports = function (grunt) {
     },
 
     shell: {
-
       'build-less-debug': {
         command: 'npm run build:less:debug'
       },
@@ -266,9 +263,7 @@ module.exports = function (grunt) {
       },
 
       phantomjs: {
-        command: 'node ./node_modules/phantomjs/bin/phantomjs --debug=false ' +
-          '--ssl-protocol=sslv2 --web-security=false --ignore-ssl-errors=true ' +
-          './node_modules/mocha-phantomjs/lib/mocha-phantomjs.coffee ./test/runner.html'
+        command: 'npm run phantomjs'
       }
     },
 

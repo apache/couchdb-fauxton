@@ -170,6 +170,8 @@ define([
       Actions.jumpToDatabase = oldJumpToDatabase;
       Stores.databasesStore.getDatabaseNames = oldGetDatabaseNames;
       ReactDOM.unmountComponentAtNode(container);
+      // reset the store for future use
+      Stores.databasesStore.reset();
     });
 
     it("Jumps to a database with given name", function () {
@@ -209,8 +211,6 @@ define([
       // it gets called
       assert.ok(spy.calledOnce);
 
-      // reset the store for future use
-      Stores.databasesStore.reset();
     });
   });
 

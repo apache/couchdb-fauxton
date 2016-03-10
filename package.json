@@ -18,7 +18,8 @@
   "devDependencies": {
     "es5-shim": "4.5.4",
     "imports-loader": "^0.6.5",
-    "mocha-phantomjs": "~3.2.x",
+    "mocha": "^2.4.5",
+    "mocha-phantomjs": "~4.0.2",
     "nightwatch": "^0.6.0",
     "phantomjs": "~1.9.1",
     "react-addons-test-utils": "^0.14.7",
@@ -92,6 +93,7 @@
     "webpack:test": "webpack --debug --progress --colors --config ./webpack.config.test.js",
     "webpack:release": "webpack --debug --progress --colors --config ./webpack.config.release.js",
     "test": "grunt test",
+    "phantomjs": "./node_modules/.bin/mocha-phantomjs --debug=false --ssl-protocol=sslv2 --web-security=false --ignore-ssl-errors=true ./test/runner.html",
     "couchdebug": "grunt couchdebug",
     "couchdb": "grunt couchdb",
     "couchapp": "grunt couchapp_deploy",
