@@ -224,40 +224,45 @@ function (FauxtonAPI, ActionTypes, Resources) {
 
         case ActionTypes.SELECT_REDUCE_CHANGE:
           this.updateReduceFromSelect(action.reduceSelectedOption);
+          this.triggerChange();
         break;
 
         case ActionTypes.DESIGN_DOC_CHANGE:
           this.setDesignDocId(action.options.value);
+          this.triggerChange();
         break;
 
         case ActionTypes.VIEW_SAVED:
+          this.triggerChange();
         break;
 
         case ActionTypes.VIEW_CREATED:
+          this.triggerChange();
         break;
 
         case ActionTypes.VIEW_UPDATE_DESIGN_DOC:
           this.updateDesignDoc(action.designDoc);
           this.setView();
+          this.triggerChange();
         break;
 
         case ActionTypes.VIEW_UPDATE_MAP_CODE:
           this.setMap(action.code);
+          this.triggerChange();
         break;
 
         case ActionTypes.VIEW_UPDATE_REDUCE_CODE:
           this.setReduce(action.code);
+          this.triggerChange();
         break;
 
         case ActionTypes.DESIGN_DOC_NEW_NAME_UPDATED:
           this._newDesignDocName = action.options.value;
+          this.triggerChange();
         break;
 
-        default:
-        return;
       }
 
-      this.triggerChange();
     }
 
   });

@@ -124,42 +124,52 @@ define([
       switch (action.type) {
         case ActionTypes.SETUP_SET_CLUSTERSTATUS:
           this.setClusterState(action.options);
+          this.triggerChange();
         break;
 
         case ActionTypes.SETUP_SET_USERNAME:
           this.setUsername(action.options);
+          this.triggerChange();
         break;
 
         case ActionTypes.SETUP_SET_PASSWORD:
           this.setPassword(action.options);
+          this.triggerChange();
         break;
 
         case ActionTypes.SETUP_BIND_ADDRESS_FOR_SINGLE_NODE:
           this.setBindAdressForSetupNode(action.options);
+          this.triggerChange();
         break;
 
         case ActionTypes.SETUP_PORT_FOR_SINGLE_NODE:
           this.setPortForSetupNode(action.options);
+          this.triggerChange();
         break;
 
         case ActionTypes.SETUP_PORT_ADDITIONAL_NODE:
           this.setPortForAdditionalNode(action.options);
+          this.triggerChange();
         break;
 
         case ActionTypes.SETUP_BIND_ADDRESS_ADDITIONAL_NODE:
           this.setBindAdressForAdditionalNode(action.options);
+          this.triggerChange();
         break;
 
         case ActionTypes.SETUP_REMOTE_ADDRESS_ADDITIONAL_NODE:
           this.setRemoteAddressForAdditionalNode(action.options);
+          this.triggerChange();
         break;
 
         case ActionTypes.SETUP_ADD_NODE_TO_LIST:
           this.addNodeToList(action.options);
+          this.triggerChange();
         break;
 
         case ActionTypes.SETUP_RESET_ADDITIONAL_NODE:
           this.resetAddtionalNode();
+          this.triggerChange();
         break;
 
 
@@ -167,7 +177,6 @@ define([
         return;
       }
 
-      this.triggerChange();
     }
 
   });

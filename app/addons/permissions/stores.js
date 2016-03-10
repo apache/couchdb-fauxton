@@ -92,10 +92,6 @@ function (FauxtonAPI, ActionTypes) {
           this.removeItem(action.options);
           this.triggerChange();
         break;
-
-        default:
-        return;
-        // do nothing
       }
     }
 

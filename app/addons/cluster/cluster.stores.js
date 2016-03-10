@@ -38,13 +38,10 @@ define([
       switch (action.type) {
         case ActionTypes.CLUSTER_FETCH_NODES:
           this.setNodes(action.options);
+          this.triggerChange();
+
         break;
-
-        default:
-        return;
       }
-
-      this.triggerChange();
     }
 
   });

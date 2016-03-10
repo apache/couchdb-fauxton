@@ -129,30 +129,35 @@ function (FauxtonAPI, ActionTypes) {
 
         case ActionTypes.MANGO_SET_DB:
           this.setDatabase(action.options);
+          this.triggerChange();
         break;
 
         case ActionTypes.MANGO_NEW_QUERY_CREATE_INDEX_CODE:
           this.setQueryIndexCode(action.options);
+          this.triggerChange();
         break;
 
         case ActionTypes.MANGO_NEW_QUERY_FIND_CODE_FROM_FIELDS:
           this.newQueryFindCodeFromFields(action.options);
+          this.triggerChange();
         break;
 
         case ActionTypes.MANGO_NEW_QUERY_FIND_CODE:
           this.setQueryFindCode(action.options);
+          this.triggerChange();
         break;
 
         case ActionTypes.MANGO_NEW_AVAILABLE_INDEXES:
           this.setAvailableIndexes(action.options);
+          this.triggerChange();
         break;
 
         case ActionTypes.MANGO_RESET:
           this.setLoadingIndexes(action.options);
+          this.triggerChange();
         break;
       }
 
-      this.triggerChange();
     }
 
   });

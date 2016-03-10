@@ -71,9 +71,6 @@ function (FauxtonAPI, ActionTypes) {
           this.triggerChange();
         break;
 
-        default:
-        return;
-        // do nothing
       }
     }
 
