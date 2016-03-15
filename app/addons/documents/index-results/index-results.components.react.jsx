@@ -128,21 +128,40 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, Documents, Fauxto
       );
     },
 
-    getAttachmentRow: function (el) {
+    getAdditionalInfoRow: function (el) {
       var attachmentCount = Object.keys(el._attachments || {}).length;
-      var paperClip = null;
-      var text = null;
+      var attachmentIndicator = null;
+      var textAttachments = null;
+
+      var conflictCount = Object.keys(el._conflicts || {}).length;
+      var conflictIndicator = null;
+      var textConflicts = null;
+
 
       if (attachmentCount) {
-        text = attachmentCount === 1 ? attachmentCount + ' Attachment' : attachmentCount + ' Attachments';
-        paperClip = (
-          <div><i className="icon fonticon-paperclip"></i> {attachmentCount}</div>
+        textAttachments = attachmentCount === 1 ? attachmentCount + ' Attachment' : attachmentCount + ' Attachments';
+        attachmentIndicator = (
+          <div style={{display: 'inline', marginLeft: '5px'}} title={textAttachments}>
+            <i className="icon fonticon-paperclip"></i>{attachmentCount}
+          </div>
+        );
+      }
+
+      if (conflictCount) {
+        textConflicts = conflictCount === 1 ? conflictCount + ' Conflict' : conflictCount + ' Conflicts';
+        conflictIndicator = (
+          <div className="tableview-conflict" data-conflicts-indicator style={{display: 'inline'}} title={textConflicts}>
+            <i
+              style={{fontSize: '17px'}}
+              className="icon icon-code-fork"></i>{conflictCount}
+          </div>
         );
       }
 
       return (
-        <td title={text} className="tableview-el-last">
-          {paperClip}
+        <td className="tableview-el-last">
+          {conflictIndicator}
+          {attachmentIndicator}
         </td>
       );
     },
@@ -178,7 +197,7 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, Documents, Fauxto
           {this.getCopyButton(docContent)}
           {this.maybeGetSpecialField(el, i)}
           {this.getRowContents(el, i)}
-          {this.getAttachmentRow(docContent)}
+          {this.getAdditionalInfoRow(docContent)}
         </tr>
       );
     }
