@@ -26,8 +26,10 @@ function (app, FauxtonAPI, ActionTypes, ActionsQueryOptions) {
 
       if (state) {
         delete params.include_docs;
+        delete params.conflicts;
       } else {
         params.include_docs = true;
+        params.conflicts = true;
       }
 
       app.utils.localStorageSet('include_docs_bulkdocs', bulkDocsCollection.toJSON());
