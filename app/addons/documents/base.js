@@ -40,6 +40,24 @@ function (app, FauxtonAPI, Documents) {
     }
   });
 
+  FauxtonAPI.registerUrls('bulk_docs', {
+    server: function (id, query) {
+      return app.host + '/' + id + '/_bulk_docs' + getQueryParam(query);
+    },
+    app: function (id, query) {
+      return 'database/' + id + '/_bulk_docs' + getQueryParam(query);
+    },
+    apiurl: function (id, query) {
+      return window.location.origin + '/' + id + '/_bulk_docs' + getQueryParam(query);
+    }
+  });
+
+  FauxtonAPI.registerUrls('revision-browser', {
+    app: function (id, doc) {
+      return 'database/' + id + '/' + doc + '/conflicts';
+    }
+  });
+
   FauxtonAPI.registerUrls( 'designDocs', {
     server: function (id, designDoc) {
       return app.host + '/' + id + '/' + designDoc + '/_info';

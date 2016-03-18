@@ -63,6 +63,7 @@
     "http-proxy": "^1.13.2",
     "imports-loader": "^0.6.5",
     "jquery": "^2.2.0",
+    "jsondiffpatch": "^0.1.41",
     "less": "^2.3.1",
     "less-loader": "^2.2.3",
     "lodash": "^3.10.1",
@@ -74,7 +75,7 @@
     "react": "^15.0.1",
     "react-addons-css-transition-group": "^15.0.1",
     "react-addons-test-utils": "^15.0.1",
-    "react-autocomplete": "^0.1.4",
+    "pouchdb": "^5.3.1",
     "react-bootstrap": "^0.28.5",
     "react-dom": "^15.0.1",
     "react-select": "^1.0.0-beta12",
@@ -87,6 +88,7 @@
     "url-loader": "^0.5.7",
     "urls": "~0.0.3",
     "velocity-animate": "^1.2.3",
+    "visualizeRevTree": "git+https://github.com/neojski/visualizeRevTree.git#gh-pages",
     "webpack": "^1.12.12",
     "webpack-dev-server": "^1.14.1",
     "zeroclipboard": "^2.2.0"
@@ -104,7 +106,8 @@
     "dev": "node ./devserver.js",
     "nightwatch": "grunt nightwatch",
     "start": "node ./bin/fauxton",
-    "prepublish": "node version-check.js && grunt release"
+    "prepublish": "node version-check.js && grunt release",
+    "create:animaldb": "./bin/create-animal-db"
   },
   "repository": {
     "type": "git",

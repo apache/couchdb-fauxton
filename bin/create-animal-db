@@ -1,0 +1,13 @@
+#!/usr/bin/env node
+
+// deletes the old animaldb, creates a new, fresh one,
+// with conflicts for the zebra doc
+
+
+const url = 'http://localhost:5984/';
+
+createAnimalDb = require('../test/create-animal-db.js');
+
+createAnimalDb(url, () => {
+  console.log('created :)');
+});

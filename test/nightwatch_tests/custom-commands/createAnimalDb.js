@@ -10,23 +10,25 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-define([
-  './views',
-  './routes-documents',
-  './routes-doc-editor',
-  './routes-index-editor',
-  './routes-mango'
-],
+const util = require('util');
+const events = require('events');
+const helpers = require('../helpers/helpers.js');
 
+const createAnimalDbHelper = require('../../create-animal-db.js');
+function CreateAnimalDb () {
+  events.EventEmitter.call(this);
+}
 
-function (Documents, DocumentsRouteObject, docEditor, IndexEditorRouteObject, Mango) {
-  Documents.RouteObjects = [
-    docEditor.DocEditorRouteObject,
-    docEditor.RevBrowserRouteObject,
-    DocumentsRouteObject,
-    IndexEditorRouteObject,
-    Mango.MangoIndexEditorAndQueryEditor
-  ];
+// inherit from node's event emitter
+util.inherits(CreateAnimalDb, events.EventEmitter);
 
-  return Documents;
-});
+CreateAnimalDb.prototype.command = function (databaseName) {
+
+  createAnimalDbHelper(this.client.options.db_url, () => {
+    this.emit('complete');
+  });
+
+  return this;
+};
+
+module.exports = CreateAnimalDb;

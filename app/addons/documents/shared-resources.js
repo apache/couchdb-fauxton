@@ -38,7 +38,8 @@ define([
         id = '';
       }
 
-      return FauxtonAPI.urls('document', context, this.getDatabase().safeID(), id);
+      const query = this.fetchConflicts ? '?conflicts=true' : '';
+      return FauxtonAPI.urls('document', context, this.getDatabase().safeID(), id, query);
     },
 
     initialize: function (_attrs, options) {
@@ -46,6 +47,10 @@ define([
         this.database = this.collection.database;
       } else if (options.database) {
         this.database = options.database;
+      }
+
+      if (options.fetchConflicts) {
+        this.fetchConflicts = true;
       }
     },
 

@@ -10,23 +10,11 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-define([
-  './views',
-  './routes-documents',
-  './routes-doc-editor',
-  './routes-index-editor',
-  './routes-mango'
-],
-
-
-function (Documents, DocumentsRouteObject, docEditor, IndexEditorRouteObject, Mango) {
-  Documents.RouteObjects = [
-    docEditor.DocEditorRouteObject,
-    docEditor.RevBrowserRouteObject,
-    DocumentsRouteObject,
-    IndexEditorRouteObject,
-    Mango.MangoIndexEditorAndQueryEditor
-  ];
-
-  return Documents;
+define([], () => {
+  return {
+    REV_BROWSER_REV_TREE_LOADED: 'REV_TREE_LOADED',
+    REV_BROWSER_DIFF_DOCS_READY: 'REV_BROWSER_DIFF_DOCS_READY',
+    REV_BROWSER_DIFF_ENABLE_DIFF_VIEW: 'REV_BROWSER_DIFF_ENABLE_DIFF_VIEW',
+    REV_BROWSER_SHOW_CONFIRM_MODAL: 'REV_BROWSER_SHOW_CONFIRM_MODAL'
+  };
 });
