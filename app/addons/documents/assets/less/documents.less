@@ -20,6 +20,7 @@
 @import "index-results.less";
 @import "doc-editor.less";
 @import "header.less";
+@import "revision-browser";
 
 .two-sides-toggle-button {
   font-size: 15px;
@@ -27,14 +28,18 @@
 
   button.btn {
     padding: 10px 15px;
+    background-color: #fff;
+    color: #888;
     &:hover {
-      background-color: @brandPrimary;
-      color: white;
+      background-color: #e73d34;
+      color: #fff;
     }
     &.active {
-      color: @brandPrimary;
+      background-color: #f1f1f1;
+      color: #af2d24;
       &:hover {
-        background-color: white;
+        background-color: #f1f1f1;
+        color: #af2d24;
       }
     }
   }

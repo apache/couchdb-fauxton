@@ -10,10 +10,10 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-var util = require('util'),
-    events = require('events'),
-    helpers = require('../helpers/helpers.js'),
-    request = require('request');
+const util = require('util');
+const events = require('events');
+const helpers = require('../helpers/helpers.js');
+const request = require('request');
 
 function PopulateDatabaseWithConflicts () {
   events.EventEmitter.call(this);
@@ -22,8 +22,10 @@ function PopulateDatabaseWithConflicts () {
 util.inherits(PopulateDatabaseWithConflicts, events.EventEmitter);
 
 PopulateDatabaseWithConflicts.prototype.command = function (databaseName) {
-  var nano = helpers.getNanoInstance(),
-      database = nano.use(databaseName);
+  const nano = helpers.getNanoInstance(this.client.options.db_url);
+  const database = nano.use(databaseName);
+  const dbUrl = this.client.options.db_url;
+
 
   database.insert({
     hat: 'flamingo'
@@ -35,7 +37,7 @@ PopulateDatabaseWithConflicts.prototype.command = function (databaseName) {
 
   function createConflictingDoc (err, cb) {
     request({
-      uri: helpers.test_settings.db_url + '/' + databaseName + '/conflictingdoc',
+      uri: dbUrl + '/' + databaseName + '/conflictingdoc',
       method: 'PUT',
       json: true,
       body: {
@@ -49,7 +51,7 @@ PopulateDatabaseWithConflicts.prototype.command = function (databaseName) {
         );
       }
       request({
-        uri: helpers.test_settings.db_url + '/' + databaseName + '/conflictingdoc?new_edits=false',
+        uri: dbUrl + '/' + databaseName + '/conflictingdoc?new_edits=false',
         method: 'PUT',
         json: true,
         body: {

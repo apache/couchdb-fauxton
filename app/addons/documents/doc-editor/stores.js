@@ -35,14 +35,22 @@ function (FauxtonAPI, ActionTypes) {
       this._fileUploadErrorMsg = '';
       this._uploadInProgress = false;
       this._fileUploadLoadPercentage = 0;
+
+      this._docConflictCount = null;
     },
 
     isLoading: function () {
       return this._isLoading;
     },
 
+    getDocConflictCount: function () {
+      return this._docConflictCount;
+    },
+
     docLoaded: function (options) {
       this._isLoading = false;
+      this._docConflictCount = options.doc.get('_conflicts') ? options.doc.get('_conflicts').length : 0;
+      options.doc.unset('_conflicts');
       this._doc = options.doc;
     },
 
@@ -185,6 +193,7 @@ function (FauxtonAPI, ActionTypes) {
           this._fileUploadLoadPercentage = action.options.percent;
           this.triggerChange();
         break;
+
 
         default:
         return;

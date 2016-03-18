@@ -1,0 +1,98 @@
+// Licensed under the Apache License, Version 2.0 (the "License"); you may not
+// use this file except in compliance with the License. You may obtain a copy of
+// the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+// WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+// License for the specific language governing permissions and limitations under
+// the License.
+
+div#dashboard-content div.revision-wrapper {
+  padding: 0 0 15px 0;
+  margin-top: 60px;
+
+  .rev-subtree-selector {
+    font-family: monospace;
+    margin-bottom: 20px;
+  }
+  .left-area {
+    text-align: center;
+  }
+  .ours-rev {
+    font-size: 16px;
+    color: #fff;
+    text-align: center;
+    margin-top: 15px;
+  }
+
+  .revision-browser-controls {
+    color: #fff;
+    margin: 30px 0;
+  }
+
+  .revision-browser-controls .Select .Select-control {
+    border-radius: inherit;
+    border-color: #ccc;
+  }
+
+  .revision-browser-controls .Select .is-focused:not(.is-open) > .Select-control {
+    box-shadow: transparent;
+    border-color: #ccc;
+  }
+
+  .revision-browser-controls .Select .Select-menu-outer {
+    border-radius: inherit;
+  }
+
+  .revision-browser-controls .Select div.Select-placeholder {
+    color: #9d261d;
+  }
+
+  .revision-view-controls {
+    border-top: 1px solid grey;
+    text-align: center;
+  }
+
+  .revision-split-area {
+    padding: 20px 15px;
+    .display-flex();
+    color: #fff;
+  }
+
+  .conflicting-revs-dropdown {
+    max-width: 370px;
+    .display-flex();
+    margin-left: -17px;
+  }
+
+  .revision-split-area pre {
+    border: none;
+    background-color: transparent;
+  }
+  .revision-diff-area {
+    color: #fff;
+    margin-left: 60px;
+  }
+  .revision-diff-area .jsondiffpatch-unchanged, .revision-diff-area .jsondiffpatch-unchanged pre {
+    color: #fff;
+    background-color: transparent;
+    border: none;
+  }
+  .revision-diff-area .jsondiffpatch-added, .revision-diff-area .jsondiffpatch-deleted {
+    color: #000;
+  }
+  .revision-diff-area .jsondiffpatch-modified .jsondiffpatch-left-value pre,
+  .jsondiffpatch-textdiff-deleted,
+  .jsondiffpatch-deleted .jsondiffpatch-property-name,
+  .jsondiffpatch-deleted pre {
+    text-decoration: none;
+  }
+
+  .two-sides-toggle-button {
+    z-index: 0;
+  }
+
+}

@@ -103,7 +103,11 @@
     margin: 0 0 0 8px;
   }
   .tableview-conflict {
-    color: #FF0000;
+    color: #F00;
+  }
+  .icon-code-fork {
+    padding-right: 2px;
+    color: #F00;
   }
   .tableview-el-last {
     width: 75px;
@@ -115,6 +119,7 @@
   thead input {
     max-width: 138px;
     width: 100%;
+    overflow: visible;
   }
 
   .table-dropdown-item {
@@ -142,9 +147,14 @@
     height: 29px;
   }
 
+  th {
+    overflow: visible;
+  }
+
   .table-container-autocomplete .table-select-wrapper {
     width: inherit;
-    position: fixed;
+    overflow: visible;
+    min-height: 300px;
   }
 
   .Select div.Select-control {
@@ -177,6 +187,11 @@
 
   .Select .is-focused:not(.is-open) > .Select-control {
     box-shadow: transparent;
+  }
+
+  .Select .Select-menu {
+    min-height: 291px;
+    background-color: #333333;
   }
 
 }

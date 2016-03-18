@@ -1,3 +1,16 @@
+// Licensed under the Apache License, Version 2.0 (the "License"); you may not
+// use this file except in compliance with the License. You may obtain a copy of
+// the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+// WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+// License for the specific language governing permissions and limitations under
+// the License.
+
+
 define([
   '../../../core/api',
   '../../../app',
@@ -14,6 +27,7 @@ define([
   var store = Stores.docEditorStore;
   var Modal = ReactBootstrap.Modal;
 
+
   var DocEditorController = React.createClass({
 
     getInitialState: function () {
@@ -27,7 +41,8 @@ define([
         cloneDocModalVisible: store.isCloneDocModalVisible(),
         uploadModalVisible: store.isUploadModalVisible(),
         deleteDocModalVisible: store.isDeleteDocModalVisible(),
-        numFilesUploaded: store.getNumFilesUploaded()
+        numFilesUploaded: store.getNumFilesUploaded(),
+        conflictCount: store.getDocConflictCount()
       };
     },
 
@@ -135,7 +150,14 @@ define([
         <div>
           <AttachmentsPanelButton doc={this.state.doc} isLoading={this.state.isLoading} />
           <div className="doc-editor-extension-icons">{this.getExtensionIcons()}</div>
-          <PanelButton title="Upload Attachment" iconClass="icon-circle-arrow-up" onClick={Actions.showUploadModal} />
+
+          {this.state.conflictCount ? <PanelButton
+            title={`Conflicts (${this.state.conflictCount})`}
+            iconClass="icon-columns"
+            className="conflicts"
+            onClick={() => { FauxtonAPI.navigate(FauxtonAPI.urls('revision-browser', 'app', this.props.database.safeID(), this.state.doc.id));}}/> : null}
+
+          <PanelButton className="upload" title="Upload Attachment" iconClass="icon-circle-arrow-up" onClick={Actions.showUploadModal} />
           <PanelButton title="Clone Document" iconClass="icon-repeat" onClick={Actions.showCloneDocModal} />
           <PanelButton title="Delete" iconClass="icon-trash" onClick={Actions.showDeleteDocModal} />
         </div>
@@ -164,6 +186,7 @@ define([
           <div className="code-region">
             <div className="bgEditorGutter"></div>
             <div id="editor-container" className="doc-code">{this.getCodeEditor()}</div>
+
           </div>
 
           <UploadModal
@@ -225,8 +248,8 @@ define([
         <div className="panel-section view-attachments-section btn-group">
           <button className="panel-button dropdown-toggle btn" data-bypass="true" data-toggle="dropdown" title="View Attachments"
             id="view-attachments-menu">
-            <i className="icon fonticon-picture"></i>
-            <span>View Attachments</span>{' '}
+            <i className="icon icon-paper-clip"></i>
+            <span className="button-text">View Attachments</span>
             <span className="caret"></span>
           </button>
           <ul className="dropdown-menu" role="menu" aria-labelledby="view-attachments-menu">
@@ -241,14 +264,16 @@ define([
   var PanelButton = React.createClass({
     propTypes: {
       title: React.PropTypes.string.isRequired,
-      onClick: React.PropTypes.func.isRequired
+      onClick: React.PropTypes.func.isRequired,
+      className: React.PropTypes.string
     },
 
     getDefaultProps: function () {
       return {
         title: '',
         iconClass: '',
-        onClick: function () { }
+        onClick: function () { },
+        className: ''
       };
     },
 
@@ -256,7 +281,7 @@ define([
       var iconClasses = 'icon ' + this.props.iconClass;
       return (
         <div className="panel-section">
-          <button className="panel-button upload" title={this.props.title} onClick={this.props.onClick}>
+          <button className={`panel-button ${this.props.className}`} title={this.props.title} onClick={this.props.onClick}>
             <i className={iconClasses}></i>
             <span>{this.props.title}</span>
           </button>

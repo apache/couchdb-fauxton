@@ -17,13 +17,57 @@ define([
   './resources',
   '../databases/base',
   './doc-editor/actions',
-  './doc-editor/components.react'
+  './doc-editor/components.react',
+
+  './rev-browser/rev-browser.actions',
+  './rev-browser/rev-browser.components.react'
 ],
 
-function (app, FauxtonAPI, Helpers, Documents, Databases, Actions, ReactComponents) {
+(app, FauxtonAPI, Helpers, Documents, Databases, Actions, ReactComponents,
+RevBrowserActions, RevBrowserComponents) => {
 
 
-  var DocEditorRouteObject = FauxtonAPI.RouteObject.extend({
+  const RevBrowserRouteObject = FauxtonAPI.RouteObject.extend({
+    layout: 'doc_editor',
+    disableLoader: true,
+    selectedHeader: 'Databases',
+    roles: ['fx_loggedIn'],
+
+    routes: {
+      'database/:database/:doc/conflicts': 'revisionBrowser'
+    },
+
+    initialize: function (route, masterLayout, options) {
+      const databaseName = options[0];
+
+      this.docId = options[1];
+      this.database = this.database || new Databases.Model({ id: databaseName });
+      this.doc = new Documents.Doc({ _id: this.docId }, { database: this.database });
+    },
+
+    crumbs: function () {
+      const previousPage = Helpers.getPreviousPageForDoc(this.database, this.wasCloned);
+      const docUrl = FauxtonAPI.urls('document', 'app', this.database.safeID(), this.docId);
+
+      return [
+        { type: 'back', link: previousPage },
+        { name: this.docId + ' > Conflicts', link: '#' }
+      ];
+    },
+
+    apiUrl: function () {
+      return [this.doc.url('apiurl'), this.doc.documentation()];
+    },
+
+    revisionBrowser: function (databaseName, docId) {
+      RevBrowserActions.showConfirmModal(false, null);
+      RevBrowserActions.initDiffEditor(databaseName, docId);
+      this.setComponent('#dashboard-content', RevBrowserComponents.DiffyController);
+    }
+
+  });
+
+  const DocEditorRouteObject = FauxtonAPI.RouteObject.extend({
     layout: 'doc_editor',
     disableLoader: true,
     selectedHeader: 'Databases',
@@ -32,17 +76,17 @@ function (app, FauxtonAPI, Helpers, Documents, Databases, Actions, ReactComponen
 
     initialize: function (route, masterLayout, options) {
       this.databaseName = options[0];
-      this.docID = options[1] || 'new';
+      this.docId = options[1];
       this.database = this.database || new Databases.Model({ id: this.databaseName });
-      this.doc = new Documents.Doc({ _id: this.docID }, { database: this.database });
-      this.isNewDoc = false;
+      this.doc = new Documents.NewDoc(null, { database: this.database });
       this.wasCloned = false;
     },
 
     routes: {
       'database/:database/:doc/code_editor': 'codeEditor',
+      'database/:database/_design/:ddoc': 'showDesignDoc',
       'database/:database/:doc': 'codeEditor',
-      'database/:database/_design/:ddoc': 'showDesignDoc'
+      'database/:database/new': 'codeEditor'
     },
 
     events: {
@@ -50,29 +94,34 @@ function (app, FauxtonAPI, Helpers, Documents, Databases, Actions, ReactComponen
     },
 
     crumbs: function () {
-      var previousPage = Helpers.getPreviousPageForDoc(this.database, this.wasCloned);
 
+      if (this.docId) {
+        let previousPage = Helpers.getPreviousPageForDoc(this.database, this.wasCloned);
+
+        return [
+          { type: 'back', link: previousPage },
+          { name: this.docId, link: '#' }
+        ];
+      }
+
+      let previousPage = Helpers.getPreviousPageForDoc(this.database);
       return [
         { type: 'back', link: previousPage },
-        { name: this.docID, link: '#' }
+        { name: 'New Document', link: '#' }
       ];
     },
 
-    codeEditor: function (database, doc) {
+    codeEditor: function (databaseName, docId) {
+      this.database = new Databases.Model({ id: databaseName });
 
-      // if either the database or document just changed, we need to get the latest doc/db info
-      if (this.databaseName !== database) {
-        this.databaseName = database;
-        this.database = new Databases.Model({ id: this.databaseName });
+      if (docId) {
+        this.doc = new Documents.Doc({ _id: docId }, { database: this.database, fetchConflicts: true });
       }
-      if (this.docID !== doc) {
-        this.docID = doc;
-        this.doc = new Documents.Doc({ _id: this.docID }, { database: this.database });
-       }
+
       Actions.initDocEditor({ doc: this.doc, database: this.database });
       this.setComponent('#dashboard-content', ReactComponents.DocEditorController, {
         database: this.database,
-        isNewDoc: this.isNewDoc,
+        isNewDoc: docId ? false : true,
         previousPage: '#/' + Helpers.getPreviousPageForDoc(this.database)
       });
     },
@@ -112,40 +161,9 @@ function (app, FauxtonAPI, Helpers, Documents, Databases, Actions, ReactComponen
   });
 
 
-  var NewDocEditorRouteObject = DocEditorRouteObject.extend({
-    initialize: function (route, masterLayout, options) {
-      var databaseName = options[0];
-      this.database = this.database || new Databases.Model({ id: databaseName });
-      this.doc = new Documents.NewDoc(null, {
-        database: this.database
-      });
-      this.isNewDoc = true;
-      this.docID = null;
-    },
-
-    apiUrl: function () {
-      return [this.doc.url('apiurl'), this.doc.documentation()];
-    },
-
-    crumbs: function () {
-      var previousPage = Helpers.getPreviousPageForDoc(this.database);
-      return [
-        { type: 'back', link: previousPage },
-        { name: 'New Document', link: '#' }
-      ];
-    },
-
-    routes: {
-      'database/:database/new': 'codeEditor'
-    },
-
-    selectedHeader: 'Databases'
-  });
-
-
   return {
-    NewDocEditorRouteObject: NewDocEditorRouteObject,
-    DocEditorRouteObject: DocEditorRouteObject
+    DocEditorRouteObject: DocEditorRouteObject,
+    RevBrowserRouteObject: RevBrowserRouteObject
   };
 
 });

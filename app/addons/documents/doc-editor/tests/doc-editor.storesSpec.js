@@ -14,13 +14,16 @@ define([
   '../../../../app',
   '../../../../core/api',
   '../stores',
+
+  '../../resources',
   '../../../../../test/mocha/testUtils',
-], function (app, FauxtonAPI, Stores, utils) {
+], function (app, FauxtonAPI, Stores, Documents, utils) {
   FauxtonAPI.router = new FauxtonAPI.Router([]);
 
-  var assert = utils.assert;
+  const assert = utils.assert;
+  const store = Stores.docEditorStore;
 
-  var store = Stores.docEditorStore;
+  const doc = new Documents.Doc({id: 'foo'}, {database: 'bar'});
 
   describe('DocEditorStore', function () {
     afterEach(function () {
@@ -38,7 +41,7 @@ define([
     });
 
     it('docLoaded() marks loading as complete', function () {
-      store.docLoaded({ doc: {} });
+      store.docLoaded({ doc: doc });
       assert.equal(store.isLoading(), false);
     });
 
@@ -64,7 +67,7 @@ define([
     });
 
     it('reset() resets all values', function () {
-      store.docLoaded({ doc: {} });
+      store.docLoaded({ doc: doc });
       store.showCloneDocModal();
       store.showDeleteDocModal();
       store.showUploadModal();

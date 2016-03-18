@@ -133,13 +133,13 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, Documents, Fauxto
     },
 
     getAdditionalInfoRow: function (el) {
-      var attachmentCount = Object.keys(el._attachments || {}).length;
-      var attachmentIndicator = null;
-      var textAttachments = null;
+      const attachmentCount = Object.keys(el._attachments || {}).length;
+      let attachmentIndicator = null;
+      let textAttachments = null;
 
-      var conflictCount = Object.keys(el._conflicts || {}).length;
-      var conflictIndicator = null;
-      var textConflicts = null;
+      const conflictCount = Object.keys(el._conflicts || {}).length;
+      let conflictIndicator = null;
+      let textConflicts = null;
 
 
       if (attachmentCount) {

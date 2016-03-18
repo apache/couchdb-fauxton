@@ -1119,12 +1119,21 @@ define([
 
   var ConfirmButton = React.createClass({
     propTypes: {
-      showIcon: React.PropTypes.bool
+      showIcon: React.PropTypes.bool,
+      id: React.PropTypes.string,
+      customIcon: React.PropTypes.string,
+      style: React.PropTypes.object,
+      buttonType: React.PropTypes.string,
+      'data-id': React.PropTypes.string,
     },
 
     getDefaultProps: function () {
       return {
-        showIcon: true
+        showIcon: true,
+        customIcon: 'fonticon-ok-circled',
+        buttonType: 'btn-success',
+        style: {},
+        'data-id': null
       };
     },
 
@@ -1133,13 +1142,20 @@ define([
         return null;
       }
       return (
-        <i className="icon fonticon-ok-circled" />
+        <i className={"icon " + this.props.customIcon} />
       );
     },
 
     render: function () {
       return (
-        <button onClick={this.props.onClick} type="submit" className="btn btn-success save" id={this.props.id}>
+        <button
+          onClick={this.props.onClick}
+          type="submit"
+          data-id={this.props['data-id']}
+          className={'btn save ' + this.props.buttonType}
+          id={this.props.id}
+          style={this.props.style}
+        >
           {this.getIcon()}
           {this.props.text}
         </button>
