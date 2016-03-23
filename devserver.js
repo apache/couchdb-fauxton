@@ -67,14 +67,17 @@ var devSetup = function (cb) {
   });
 };
 
-var headerValue = "default-src 'self'; child-src 'self' data: blob:; img-src 'self' data:; font-src 'self'; " +
+var defaultHeaderValue = "default-src 'self'; child-src 'self' data: blob:; img-src 'self' data:; font-src 'self'; " +
                   "script-src 'self' 'unsafe-eval'; style-src 'self' 'unsafe-inline';";
 var setCSP = function (res) {
   if (!settings.contentSecurityPolicy) {
     return;
   }
 
-  //res.setHeader('Content-Security-Policy', settings.contentSecurityPolicyHeader);
+  var headerValue = settings.contentSecurityPolicyHeader || defaultHeaderValue;
+
+  console.log('seeting', headerValue);
+  res.set('Content-Security-Policy', headerValue);
 };
 
 var runWebpackServer = function () {
@@ -120,6 +123,7 @@ var runWebpackServer = function () {
   });
 
   server.app.all('*', function (req, res, next) {
+    setCSP(res);
     proxy.web(req, res);
   });
 
