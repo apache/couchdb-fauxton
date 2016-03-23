@@ -22,7 +22,7 @@ util.inherits(DeleteDatabase, events.EventEmitter);
 
 DeleteDatabase.prototype.command = function (databaseName) {
   var that = this,
-      nano = helpers.getNanoInstance();
+      nano = helpers.getNanoInstance(this.client.options.db_url);
 
   nano.db.destroy(databaseName, function (err, body, header) {
     if (err) {

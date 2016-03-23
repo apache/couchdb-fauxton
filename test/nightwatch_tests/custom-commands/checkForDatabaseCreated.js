@@ -23,7 +23,7 @@ function CheckForDatabaseCreated () {
 util.inherits(CheckForDatabaseCreated, events.EventEmitter);
 
 CheckForDatabaseCreated.prototype.command = function (databaseName, timeout) {
-  var couchUrl = helpers.test_settings.db_url;
+  var couchUrl = this.client.options.db_url;
 
   if (!timeout) {
     timeout = helpers.maxWaitTime;

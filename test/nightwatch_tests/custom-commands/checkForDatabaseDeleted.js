@@ -23,7 +23,7 @@ function CheckForDatabaseDeleted () {
 util.inherits(CheckForDatabaseDeleted, events.EventEmitter);
 
 CheckForDatabaseDeleted.prototype.command = function (databaseName, timeout) {
-  var couchUrl = helpers.test_settings.db_url;
+  var couchUrl = this.client.options.db_url;
 
   if (!timeout) {
     timeout = helpers.maxWaitTime;

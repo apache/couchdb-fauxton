@@ -23,7 +23,7 @@ function CreateDocument () {
 util.inherits(CreateDocument, events.EventEmitter);
 
 CreateDocument.prototype.command = function (documentName, databaseName, docContents) {
-  var couchUrl = helpers.test_settings.db_url;
+  var couchUrl = this.client.options.db_url;
 
   if (!docContents) {
     docContents = { dummyKey: 'testingValue' };

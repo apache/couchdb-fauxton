@@ -24,9 +24,10 @@ util.inherits(PopulateDatabase, events.EventEmitter);
 
 PopulateDatabase.prototype.command = function (databaseName, count) {
   var that = this,
-      nano = helpers.getNanoInstance(),
+      nano = helpers.getNanoInstance(this.client.options.db_url),
       database = nano.use(databaseName),
-      i = 0;
+      i = 0,
+      db_url = that.client.options.db_url;
 
   async.whilst(
     function () { return i < (count ? count : 20); },
@@ -61,7 +62,7 @@ PopulateDatabase.prototype.command = function (databaseName, count) {
 
         createKeyView(null, function () {
           createBrokenView(null, function () {
-            createMangoIndex(null, function () {
+            createMangoIndex(null, db_url, function () {
               that.emit('complete');
             });
           });
@@ -105,9 +106,9 @@ PopulateDatabase.prototype.command = function (databaseName, count) {
     });
   }
 
-  function createMangoIndex (err, cb) {
+  function createMangoIndex (err, db_url, cb) {
     request({
-      uri: helpers.test_settings.db_url + '/' + databaseName + '/_index',
+      uri: db_url + '/' + databaseName + '/_index',
       method: 'POST',
       json: true,
       body: {
