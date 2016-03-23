@@ -121,6 +121,10 @@ var runWebpackServer = function () {
     }
   });
 
+  proxy.on('error', function (e) {
+    // don't explode on cancelled requests
+  });
+
   server.app.all('*', function (req, res, next) {
     setCSP(res);
     proxy.web(req, res);

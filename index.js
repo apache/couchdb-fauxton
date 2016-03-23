@@ -36,6 +36,8 @@ module.exports = function (options) {
 
   // create proxy to couch for all couch requests
   var proxy = httpProxy.createServer({
+    secure: false,
+    changeOrigin: true,
     target: proxyUrl
   });
 
