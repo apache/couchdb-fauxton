@@ -23,7 +23,7 @@ function CheckForDocumentCreated () {
 util.inherits(CheckForDocumentCreated, events.EventEmitter);
 
 CheckForDocumentCreated.prototype.command = function (doc, timeout, db) {
-  var couchUrl = helpers.test_settings.db_url;
+  var couchUrl = this.client.options.db_url;
 
   if (!db) {
     db = helpers.testDatabaseName;

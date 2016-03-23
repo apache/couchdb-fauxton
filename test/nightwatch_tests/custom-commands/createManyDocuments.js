@@ -23,7 +23,7 @@ util.inherits(CreateManyDocuments, events.EventEmitter);
 
 CreateManyDocuments.prototype.command = function (amount, databaseName) {
   var that = this,
-      nano = helpers.getNanoInstance(),
+      nano = helpers.getNanoInstance(this.client.options.db_url),
       database = nano.use(databaseName),
       docs = [];
 
