@@ -75,8 +75,6 @@ var setCSP = function (res) {
   }
 
   var headerValue = settings.contentSecurityPolicyHeader || defaultHeaderValue;
-
-  console.log('seeting', headerValue);
   res.set('Content-Security-Policy', headerValue);
 };
 
