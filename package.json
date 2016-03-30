@@ -100,7 +100,8 @@
     "dev": "node ./devserver.js",
     "nightwatch": "grunt nightwatch",
     "start": "node ./bin/fauxton",
-    "postinstall": "node version-check.js && grunt release"
+    "postinstall": "node version-check.js && grunt release",
+    "nightwatchtravis": "./node_modules/grunt-cli/bin/grunt dev & && sleep 25 && ./node_modules/grunt-cli/bin/grunt nightwatch"
   },
   "repository": {
     "type": "git",
