@@ -14,7 +14,7 @@ var helpers = require('../helpers/helpers.js');
 
 exports.command = function () {
   var client = this,
-      dismissSelector = '#global-notifications .js-dismiss';
+      dismissSelector = '#global-notifications .fonticon-cancel';
 
   client
     .waitForElementPresent(dismissSelector, helpers.maxWaitTime, false)

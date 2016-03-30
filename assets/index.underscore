@@ -29,8 +29,7 @@
 
 <body id="home">
 
-  <div id="global-notifications" class="container errors-container"></div>
-  <div id="notification-center"></div>
+  <div id="notifications"></div>
 
   <!-- Main container. -->
   <div role="main" id="main">

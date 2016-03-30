@@ -55,13 +55,38 @@ function (FauxtonAPI, ActionTypes) {
     });
   }
 
+  function startHidingNotification (notificationId) {
+    FauxtonAPI.dispatch({
+      type: ActionTypes.START_HIDING_NOTIFICATION,
+      options: {
+        notificationId: notificationId
+      }
+    });
+  }
+
+  function hideNotification (notificationId) {
+    FauxtonAPI.dispatch({
+      type: ActionTypes.HIDE_NOTIFICATION,
+      options: {
+        notificationId: notificationId
+      }
+    });
+  }
+
+  function hideAllVisibleNotifications () {
+    FauxtonAPI.dispatch({ type: ActionTypes.HIDE_ALL_NOTIFICATIONS });
+  }
+
   return {
     addNotification: addNotification,
     showNotificationCenter: showNotificationCenter,
     hideNotificationCenter: hideNotificationCenter,
     clearAllNotifications: clearAllNotifications,
     clearSingleNotification: clearSingleNotification,
-    selectNotificationFilter: selectNotificationFilter
+    selectNotificationFilter: selectNotificationFilter,
+    startHidingNotification: startHidingNotification,
+    hideNotification: hideNotification,
+    hideAllVisibleNotifications: hideAllVisibleNotifications
   };
 
 });

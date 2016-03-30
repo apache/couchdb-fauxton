@@ -61,6 +61,18 @@ function (FauxtonAPI, app, ActionTypes, moment) {
       info.cleanMsg = app.utils.stripHTML(info.msg);
       info.time = moment();
 
+      // all new notifications are visible by default. They get hidden after their time expires, by the component
+      info.visible = true;
+      info.isHiding = false;
+
+      // clear: true causes all visible messages to be hidden
+      if (info.clear) {
+        this._notifications.forEach(function (notification) {
+          if (notification.visible) {
+            notification.isHiding = true;
+          }
+        });
+      }
       this._notifications.unshift(info);
     },
 
@@ -74,6 +86,25 @@ function (FauxtonAPI, app, ActionTypes, moment) {
 
     clearNotifications: function () {
       this._notifications = [];
+    },
+
+    hideNotification: function (notificationId) {
+      var notification = _.findWhere(this._notifications, { notificationId: notificationId });
+      notification.visible = false;
+      notification.isHiding = false;
+    },
+
+    hideAllNotifications: function () {
+      this._notifications.forEach(function (notification) {
+        if (notification.visible) {
+          notification.isHiding = true;
+        }
+      });
+    },
+
+      startHidingNotification: function (notificationId) {
+      var notification = _.findWhere(this._notifications, { notificationId: notificationId });
+      notification.isHiding = true;
     },
 
     getNotificationFilter: function () {
@@ -102,6 +133,21 @@ function (FauxtonAPI, app, ActionTypes, moment) {
 
         case ActionTypes.CLEAR_SINGLE_NOTIFICATION:
           this.clearNotification(action.options.notificationId);
+        break;
+
+        case ActionTypes.START_HIDING_NOTIFICATION:
+          this.startHidingNotification(action.options.notificationId);
+          this.triggerChange();
+        break;
+
+        case ActionTypes.HIDE_NOTIFICATION:
+          this.hideNotification(action.options.notificationId);
+          this.triggerChange();
+        break;
+
+        case ActionTypes.HIDE_ALL_NOTIFICATIONS:
+          this.hideAllNotifications();
+          this.triggerChange();
         break;
 
         case ActionTypes.SHOW_NOTIFICATION_CENTER:

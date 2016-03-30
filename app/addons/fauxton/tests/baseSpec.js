@@ -66,8 +66,6 @@ define([
           setView: function () {}
         }
       };
-
-
     });
 
     after(function () {
@@ -85,66 +83,6 @@ define([
       testRouteObject.renderWith('the-route', mockLayout, 'args');
       assert.ok(setViewCalled, 'Set Breadcrumbs was called');
     });
-
   });
 
-  describe('Fauxton Notifications', function () {
-
-    it('should escape by default', function () {
-      window.fauxton_xss_test_escaped = true;
-      var view = FauxtonAPI.addNotification({
-        msg: '<script>window.fauxton_xss_test_escaped = false;</script>',
-        selector: 'body'
-      });
-      view.$el.remove();
-      assert.ok(window.fauxton_xss_test_escaped);
-      delete window.fauxton_xss_test_escaped;
-    });
-
-    it('should be able to render unescaped', function (done) {
-      var view = FauxtonAPI.addNotification({
-        msg: '<script>window.fauxton_xss_test_unescaped = true;</script>',
-        selector: 'body',
-        escape: false
-      });
-
-      view.promise().then(function () {
-        view.$el.remove();
-        assert.ok(window.fauxton_xss_test_unescaped);
-        delete window.fauxton_xss_test_unescaped;
-        done();
-      });
-    });
-
-    it('should render escaped if the escape value is not explicitly false, ' +
-    'e.g. was forgotten in a direct call', function () {
-
-      window.fauxton_xss_test2_escaped = true;
-      var view = new Base.Notification({
-        msg: '<script>window.fauxton_xss_test2_escaped = false;</script>',
-        selector: 'body'
-      }).render();
-
-      view.$el.remove();
-      assert.ok(window.fauxton_xss_test2_escaped);
-      delete window.fauxton_xss_test2_escaped;
-    });
-
-    it('should close notification when ESCAPE key used', function () {
-      var notification = FauxtonAPI.addNotification({
-        msg: 'Close me!',
-        selector: 'body'
-      });
-      var removeWithAnimationSpy = sinon.spy(notification, 'removeWithAnimation');
-
-      notification.render();
-
-      // manually trigger an ESCAPE key click
-      $(document).trigger($.Event("keydown", { keyCode: 27 }));
-
-      // confirm the remove method has now been called
-      assert.ok(removeWithAnimationSpy.calledOnce);
-    });
-
-  });
 });

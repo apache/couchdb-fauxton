@@ -24,10 +24,9 @@ module.exports = {
     }
 
     client
+      .deleteDatabase(newDatabaseName)
       .loginToGUI()
-      .deleteDatabase(newDatabaseName) //need to delete the automatic database 'fauxton-selenium-tests' that has been set up before each test
       .url(baseUrl)
-
       .clickWhenVisible('.control-toggle-api-url')
       .pause(1000) // needed for reliability. The tray slides in from the top so the pos of the copy button changes
       .waitForElementVisible('.copy-button', waitTime, false)

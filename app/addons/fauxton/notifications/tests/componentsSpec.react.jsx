@@ -13,17 +13,44 @@ define([
   '../../../../core/api',
   '../notifications.react',
   '../stores',
+  '../actions',
   '../../../../../test/mocha/testUtils',
   'react',
   'react-dom',
   'moment',
   'react-addons-test-utils',
   'sinon'
-], function (FauxtonAPI, Views, Stores, utils, React, ReactDOM, moment, TestUtils) {
+], function (FauxtonAPI, Views, Stores, Actions, utils, React, ReactDOM, moment, TestUtils) {
   var assert = utils.assert;
   var store = Stores.notificationStore;
 
-  describe('NotificationRow', function () {
+
+  describe('NotificationController', function () {
+    var container;
+
+    beforeEach(function () {
+      container = document.createElement('div');
+      store.reset();
+    });
+
+    afterEach(function () {
+      ReactDOM.unmountComponentAtNode(container);
+    });
+
+    it('notifications should be escaped by default', function () {
+      var component = TestUtils.renderIntoDocument(<Views.NotificationController />, container);
+      FauxtonAPI.addNotification({ msg: '<script>window.whatever=1;</script>' });
+      assert.ok(/&lt;script&gt;window.whatever=1;&lt;\/script&gt;/.test(ReactDOM.findDOMNode(component).innerHTML));
+    });
+
+    it('notifications should be able to render unescaped', function () {
+      var component = TestUtils.renderIntoDocument(<Views.NotificationController />, container);
+      FauxtonAPI.addNotification({ msg: '<script>window.whatever=1;</script>', escape: false });
+      assert.ok(/<script>window.whatever=1;<\/script>/.test(ReactDOM.findDOMNode(component).innerHTML));
+    });
+  });
+
+  describe('NotificationPanelRow', function () {
     var container;
 
     var notifications = {
@@ -57,21 +84,21 @@ define([
 
     it('shows all notification types when "all" filter applied', function () {
       var row1 = TestUtils.renderIntoDocument(
-        <Views.NotificationRow filter="all" item={notifications.success} />,
+        <Views.NotificationPanelRow filter="all" item={notifications.success}/>,
         container
       );
       assert.equal($(ReactDOM.findDOMNode(row1)).attr('aria-hidden'), 'false');
       ReactDOM.unmountComponentAtNode(container);
 
       var row2 = TestUtils.renderIntoDocument(
-        <Views.NotificationRow filter="all" item={notifications.error} />,
+        <Views.NotificationPanelRow filter="all" item={notifications.error}/>,
         container
       );
       assert.equal($(ReactDOM.findDOMNode(row2)).attr('aria-hidden'), 'false');
       ReactDOM.unmountComponentAtNode(container);
 
       var row3 = TestUtils.renderIntoDocument(
-        <Views.NotificationRow filter="all" item={notifications.info} />,
+        <Views.NotificationPanelRow filter="all" item={notifications.info}/>,
         container
       );
       assert.equal($(ReactDOM.findDOMNode(row3)).attr('aria-hidden'), 'false');
@@ -80,7 +107,7 @@ define([
 
     it('hides notification when filter doesn\'t match', function () {
       var rowEl = TestUtils.renderIntoDocument(
-        <Views.NotificationRow filter="success" item={notifications.info} />,
+        <Views.NotificationPanelRow filter="success" item={notifications.info}/>,
         container
       );
       assert.equal($(ReactDOM.findDOMNode(rowEl)).attr('aria-hidden'), 'true');
@@ -88,12 +115,11 @@ define([
 
     it('shows notification when filter exact match', function () {
       var rowEl = TestUtils.renderIntoDocument(
-        <Views.NotificationRow filter="info" item={notifications.info} />,
+        <Views.NotificationPanelRow filter="info" item={notifications.info}/>,
         container
       );
       assert.equal($(ReactDOM.findDOMNode(rowEl)).attr('aria-hidden'), 'false');
     });
-
   });
 
 
@@ -110,51 +136,56 @@ define([
     });
 
     it('shows all notifications by default', function () {
-      store.addNotification({ type: 'success', msg: 'Success are okay' });
-      store.addNotification({ type: 'success', msg: 'another success.' });
-      store.addNotification({ type: 'info', msg: 'A single info message' });
-      store.addNotification({ type: 'error', msg: 'Error #1' });
-      store.addNotification({ type: 'error', msg: 'Error #2' });
-      store.addNotification({ type: 'error', msg: 'Error #3' });
+      store.addNotification({type: 'success', msg: 'Success are okay'});
+      store.addNotification({type: 'success', msg: 'another success.'});
+      store.addNotification({type: 'info', msg: 'A single info message'});
+      store.addNotification({type: 'error', msg: 'Error #1'});
+      store.addNotification({type: 'error', msg: 'Error #2'});
+      store.addNotification({type: 'error', msg: 'Error #3'});
 
-      var panelEl = TestUtils.renderIntoDocument(<Views.NotificationCenterPanel />, container);
+      var panelEl = TestUtils.renderIntoDocument(
+        <Views.NotificationCenterPanel
+          filter="all"
+          notifications={store.getNotifications()}
+        />, container);
+
       assert.equal($(ReactDOM.findDOMNode(panelEl)).find('.notification-list li[aria-hidden=false]').length, 6);
     });
 
-    it('clicking on a filter icon filters applies appropriate filter', function () {
-      store.addNotification({ type: 'success', msg: 'Success are okay' });
-      store.addNotification({ type: 'success', msg: 'another success.' });
-      store.addNotification({ type: 'info', msg: 'A single info message' });
-      store.addNotification({ type: 'error', msg: 'Error #1' });
-      store.addNotification({ type: 'error', msg: 'Error #2' });
-      store.addNotification({ type: 'error', msg: 'Error #3' });
+    it('appropriate filters are applied - 1', function () {
+      store.addNotification({type: 'success', msg: 'Success are okay'});
+      store.addNotification({type: 'success', msg: 'another success.'});
+      store.addNotification({type: 'info', msg: 'A single info message'});
+      store.addNotification({type: 'error', msg: 'Error #1'});
+      store.addNotification({type: 'error', msg: 'Error #2'});
+      store.addNotification({type: 'error', msg: 'Error #3'});
 
-      var panelEl = TestUtils.renderIntoDocument(<Views.NotificationCenterPanel />, container);
+      var panelEl = TestUtils.renderIntoDocument(
+        <Views.NotificationCenterPanel
+          filter="success"
+          notifications={store.getNotifications()}
+        />, container);
 
       // there are 2 success messages
-      TestUtils.Simulate.click($(ReactDOM.findDOMNode(panelEl)).find('.notification-filter li[data-filter="success"]')[0]);
       assert.equal($(ReactDOM.findDOMNode(panelEl)).find('.notification-list li[aria-hidden=false]').length, 2);
-
-      // 3 errors
-      TestUtils.Simulate.click($(ReactDOM.findDOMNode(panelEl)).find('.notification-filter li[data-filter="error"]')[0]);
-      assert.equal($(ReactDOM.findDOMNode(panelEl)).find('.notification-list li[aria-hidden=false]').length, 3);
-
-      // 1 info
-      TestUtils.Simulate.click($(ReactDOM.findDOMNode(panelEl)).find('.notification-filter li[data-filter="info"]')[0]);
-      assert.equal($(ReactDOM.findDOMNode(panelEl)).find('.notification-list li[aria-hidden=false]').length, 1);
     });
 
-    it('clear all clears all notifications', function () {
-      store.addNotification({ type: 'success', msg: 'Success are okay' });
-      store.addNotification({ type: 'info', msg: 'A single info message' });
-      store.addNotification({ type: 'error', msg: 'Error #2' });
-      store.addNotification({ type: 'error', msg: 'Error #3' });
+    it('appropriate filters are applied - 2', function () {
+      store.addNotification({type: 'success', msg: 'Success are okay'});
+      store.addNotification({type: 'success', msg: 'another success.'});
+      store.addNotification({type: 'info', msg: 'A single info message'});
+      store.addNotification({type: 'error', msg: 'Error #1'});
+      store.addNotification({type: 'error', msg: 'Error #2'});
+      store.addNotification({type: 'error', msg: 'Error #3'});
 
-      var panelEl = TestUtils.renderIntoDocument(<Views.NotificationCenterPanel />, container);
-      assert.equal($(ReactDOM.findDOMNode(panelEl)).find('.notification-list li[aria-hidden=false]').length, 4);
-      TestUtils.Simulate.click($(ReactDOM.findDOMNode(panelEl)).find('footer input')[0]);
+      var panelEl = TestUtils.renderIntoDocument(
+        <Views.NotificationCenterPanel
+          filter="error"
+          notifications={store.getNotifications()}
+        />, container);
 
-      assert.equal($(ReactDOM.findDOMNode(panelEl)).find('.notification-list li[aria-hidden=false]').length, 0);
+      // 3 errors
+      assert.equal($(ReactDOM.findDOMNode(panelEl)).find('.notification-list li[aria-hidden=false]').length, 3);
     });
 
   });

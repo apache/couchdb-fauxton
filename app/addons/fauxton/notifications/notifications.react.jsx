@@ -19,15 +19,222 @@ define([
   './stores',
   '../components.react',
 
-  // needed to run the test individually. Don't remove
+  'velocity-react',
   "velocity-animate/velocity",
   "velocity-animate/velocity.ui"
 ],
 
-function (app, FauxtonAPI, React, ReactDOM, Actions, Stores, Components) {
+function (app, FauxtonAPI, React, ReactDOM, Actions, Stores, Components, VelocityReact) {
 
-  var notificationStore = Stores.notificationStore;
+  var store = Stores.notificationStore;
   var Clipboard = Components.Clipboard;
+  var VelocityComponent = VelocityReact.VelocityComponent;
+
+
+  // The one-stop-shop for Fauxton notifications. This controller handler the header notifications and the rightmost
+  // notification center panel
+  var NotificationController = React.createClass({
+
+    getInitialState: function () {
+      return this.getStoreState();
+    },
+
+    getStoreState: function () {
+      return {
+        notificationCenterVisible: store.isNotificationCenterVisible(),
+        notificationCenterFilter: store.getNotificationFilter(),
+        notifications: store.getNotifications()
+      };
+    },
+
+    componentDidMount: function () {
+      store.on('change', this.onChange, this);
+    },
+
+    componentWillUnmount: function () {
+      store.off('change', this.onChange);
+    },
+
+    onChange: function () {
+      if (this.isMounted()) {
+        this.setState(this.getStoreState());
+      }
+    },
+
+    render: function () {
+      return (
+        <div>
+          <GlobalNotifications
+            notifications={this.state.notifications} />
+          <NotificationCenterPanel
+            visible={this.state.notificationCenterVisible}
+            filter={this.state.notificationCenterFilter}
+            notifications={this.state.notifications} />
+        </div>
+      );
+    }
+  });
+
+
+  var GlobalNotifications = React.createClass({
+    propTypes: {
+      notifications: React.PropTypes.array.isRequired
+    },
+
+    componentDidMount: function () {
+      $(document).on('keydown.notificationClose', this.onKeyDown);
+    },
+
+    componentWillUnmount: function () {
+      $(document).off('keydown.notificationClose', this.onKeyDown);
+    },
+
+    onKeyDown: function (e) {
+      var code = e.keyCode || e.which;
+      if (code === 27) {
+        Actions.hideAllVisibleNotifications();
+      }
+    },
+
+    getNotifications: function () {
+      if (!this.props.notifications.length) {
+        return null;
+      }
+
+      return _.map(this.props.notifications, function (notification, index) {
+
+        // notifications are completely removed from the DOM once they're
+        if (!notification.visible) {
+          return;
+        }
+
+        return (
+          <Notification
+            notificationId={notification.notificationId}
+            isHiding={notification.isHiding}
+            key={index}
+            msg={notification.msg}
+            type={notification.type}
+            escape={notification.escape}
+            onStartHide={Actions.startHidingNotification}
+            onHideComplete={Actions.hideNotification} />
+        );
+      }, this);
+    },
+
+    render: function () {
+      return (
+        <div id="global-notifications">
+          {this.getNotifications()}
+        </div>
+      );
+    }
+  });
+
+
+  var Notification = React.createClass({
+    propTypes: {
+      msg: React.PropTypes.string.isRequired,
+      onStartHide: React.PropTypes.func.isRequired,
+      onHideComplete: React.PropTypes.func.isRequired,
+      type: React.PropTypes.oneOf(['error', 'info', 'success']),
+      escape: React.PropTypes.bool,
+      isHiding: React.PropTypes.bool.isRequired,
+      visibleTime: React.PropTypes.number
+    },
+
+    getDefaultProps: function () {
+      return {
+        type: 'info',
+        visibleTime: 8000,
+        escape: true,
+        slideInTime: 200,
+        slideOutTime: 200
+      };
+    },
+
+    componentWillUnmount: function () {
+      if (this.timeout) {
+        window.clearTimeout(this.timeout);
+      }
+    },
+
+    getInitialState: function () {
+      return {
+        animation: { opacity: 0, minHeight: 0 }
+      };
+    },
+
+    componentDidMount: function () {
+      this.setState({
+        animation: {
+          opacity: (this.props.isHiding) ? 0 : 1,
+          minHeight: (this.props.isHiding) ? 0 : ReactDOM.findDOMNode(this.refs.notification).offsetHeight
+        }
+      });
+
+      this.timeout = setTimeout(function () {
+        this.hide();
+      }.bind(this), this.props.visibleTime);
+    },
+
+    componentDidUpdate: function (prevProps) {
+      if (!prevProps.isHiding && this.props.isHiding) {
+        this.setState({
+          animation: {
+            opacity: 0,
+            minHeight: 0
+          }
+        });
+      }
+    },
+
+    getHeight: function () {
+      return $(ReactDOM.findDOMNode(this)).outerHeight(true);
+    },
+
+    hide: function (e) {
+      if (e) {
+        e.preventDefault();
+      }
+      this.props.onStartHide(this.props.notificationId);
+    },
+
+    // many messages contain HTML, hence the need for dangerouslySetInnerHTML
+    getMsg: function () {
+      var msg = (this.props.escape) ? _.escape(this.props.msg) : this.props.msg;
+      return {
+        __html: msg
+      };
+    },
+
+    onAnimationComplete: function () {
+      if (this.props.isHiding) {
+        this.props.onHideComplete(this.props.notificationId);
+      }
+    },
+
+    render: function () {
+      var iconMap = {
+        error: 'fonticon-attention-circled',
+        info: 'fonticon-info-circled',
+        success: 'fonticon-ok-circled'
+      };
+
+      return (
+        <VelocityComponent animation={this.state.animation}
+          runOnMount={true} duration={this.props.slideInTime} complete={this.onAnimationComplete}>
+            <div className="notification-wrapper">
+              <div className={'global-notification alert alert-' + this.props.type} ref="notification">
+                <a data-bypass href="#" onClick={this.hide}><i className="pull-right fonticon-cancel" /></a>
+                <i className={'notification-icon ' + iconMap[this.props.type]} />
+                <span dangerouslySetInnerHTML={this.getMsg()}></span>
+              </div>
+            </div>
+        </VelocityComponent>
+      );
+    }
+  });
 
 
   var NotificationCenterButton = React.createClass({
@@ -53,47 +260,27 @@ function (app, FauxtonAPI, React, ReactDOM, Actions, Stores, Components) {
     }
   });
 
+
   var NotificationCenterPanel = React.createClass({
-
-    getInitialState: function () {
-      return this.getStoreState();
-    },
-
-    getStoreState: function () {
-      return {
-        isVisible: notificationStore.isNotificationCenterVisible(),
-        filter: notificationStore.getNotificationFilter(),
-        notifications: notificationStore.getNotifications()
-      };
-    },
-
-    componentDidMount: function () {
-      notificationStore.on('change', this.onChange, this);
-    },
-
-    componentWillUnmount: function () {
-      notificationStore.off('change', this.onChange);
-    },
-
-    onChange: function () {
-      if (this.isMounted()) {
-        this.setState(this.getStoreState());
-      }
+    propTypes: {
+      visible: React.PropTypes.bool.isRequired,
+      filter: React.PropTypes.string.isRequired,
+      notifications: React.PropTypes.array.isRequired
     },
 
     getNotifications: function () {
-      if (!this.state.notifications.length) {
+      if (!this.props.notifications.length) {
         return (
           <li className="no-notifications">No notifications.</li>
         );
       }
 
-      return _.map(this.state.notifications, function (notification, i) {
+      return _.map(this.props.notifications, function (notification) {
         return (
-          <NotificationRow
-            isVisible={this.state.isVisible}
+          <NotificationPanelRow
+            isVisible={this.props.visible}
             item={notification}
-            filter={this.state.filter}
+            filter={this.props.filter}
             key={notification.notificationId}
           />
         );
@@ -102,7 +289,7 @@ function (app, FauxtonAPI, React, ReactDOM, Actions, Stores, Components) {
 
     render: function () {
       var panelClasses = 'notification-center-panel flex-layout flex-col';
-      if (this.state.isVisible) {
+      if (this.props.visible) {
         panelClasses += ' visible';
       }
 
@@ -112,39 +299,39 @@ function (app, FauxtonAPI, React, ReactDOM, Actions, Stores, Components) {
         error: 'flex-body',
         info: 'flex-body'
       };
-      filterClasses[this.state.filter] += ' selected';
+      filterClasses[this.props.filter] += ' selected';
 
-      var maskClasses = 'notification-page-mask' + ((this.state.isVisible) ? ' visible' : '');
+      var maskClasses = 'notification-page-mask' + ((this.props.visible) ? ' visible' : '');
       return (
-        <div>
+        <div id="notification-center">
           <div className={panelClasses}>
 
             <header className="flex-layout flex-row">
-              <span className="fonticon fonticon-bell"></span>
+              <span className="fonticon fonticon-bell" />
               <h1 className="flex-body">Notifications</h1>
               <button type="button" onClick={Actions.hideNotificationCenter}>×</button>
             </header>
 
             <ul className="notification-filter flex-layout flex-row">
               <li className={filterClasses.all} title="All notifications" data-filter="all"
-                onClick={Actions.selectNotificationFilter.bind(this, 'all')}>All</li>
+                  onClick={Actions.selectNotificationFilter.bind(this, 'all')}>All</li>
               <li className={filterClasses.success} title="Success notifications" data-filter="success"
-                onClick={Actions.selectNotificationFilter.bind(this, 'success')}>
-                <span className="fonticon fonticon-ok-circled"></span>
+                  onClick={Actions.selectNotificationFilter.bind(this, 'success')}>
+                <span className="fonticon fonticon-ok-circled" />
               </li>
               <li className={filterClasses.error} title="Error notifications" data-filter="error"
-                onClick={Actions.selectNotificationFilter.bind(this, 'error')}>
-                <span className="fonticon fonticon-attention-circled"></span>
+                  onClick={Actions.selectNotificationFilter.bind(this, 'error')}>
+                <span className="fonticon fonticon-attention-circled" />
               </li>
               <li className={filterClasses.info} title="Info notifications" data-filter="info"
-                onClick={Actions.selectNotificationFilter.bind(this, 'info')}>
-                <span className="fonticon fonticon-info-circled"></span>
+                  onClick={Actions.selectNotificationFilter.bind(this, 'info')}>
+                <span className="fonticon fonticon-info-circled" />
               </li>
             </ul>
 
             <div className="flex-body">
               <ul className="notification-list">
-              {this.getNotifications()}
+                {this.getNotifications()}
               </ul>
             </div>
 
@@ -159,7 +346,8 @@ function (app, FauxtonAPI, React, ReactDOM, Actions, Stores, Components) {
     }
   });
 
-  var NotificationRow = React.createClass({
+
+  var NotificationPanelRow = React.createClass({
     propTypes: {
       item: React.PropTypes.object.isRequired,
       filter: React.PropTypes.string.isRequired,
@@ -252,12 +440,14 @@ function (app, FauxtonAPI, React, ReactDOM, Actions, Stores, Components) {
 
 
   return {
+    NotificationController: NotificationController,
     NotificationCenterButton: NotificationCenterButton,
     NotificationCenterPanel: NotificationCenterPanel,
-    NotificationRow: NotificationRow,
+    NotificationPanelRow: NotificationPanelRow,
+    Notification: Notification,
 
-    renderNotificationCenter: function (el) {
-      return ReactDOM.render(<NotificationCenterPanel />, el);
+    renderNotificationController: function (el) {
+      return ReactDOM.render(<NotificationController />, el);
     }
   };
 

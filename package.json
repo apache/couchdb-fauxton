@@ -89,6 +89,7 @@
     "urls": "~0.0.3",
     "velocity-animate": "^1.2.3",
     "visualizeRevTree": "git+https://github.com/neojski/visualizeRevTree.git#gh-pages",
+    "velocity-react": "^1.1.4",
     "webpack": "^1.12.12",
     "webpack-dev-server": "^1.14.1",
     "zeroclipboard": "^2.2.0"
