@@ -1,6 +1,6 @@
-language: erlang
-otp_release:
-   - 17.4
+language: node_js
+node_js:
+  "4.0"
 git:
   depth: 10
 
@@ -12,8 +12,6 @@ sudo: true
 addons:
   firefox: "38.0.1"
 before_install:
-  - nvm install 4 && nvm use 4
-
   - docker run -d -p 5984:5984 klaemo/couchdb:2.0-dev --with-haproxy --admin=tester:testerpass
   - npm install
 
