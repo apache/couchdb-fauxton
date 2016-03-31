@@ -19,8 +19,12 @@ function (app, FauxtonAPI) {
   var Cluster = FauxtonAPI.addon();
 
   Cluster.ClusterNodes = Backbone.Model.extend({
-    url: function () {
-      return app.host + '/_membership';
+    url: function (context) {
+      if (context === 'apiurl') {
+        return window.location.origin + '/_membership';
+      } else {
+        return app.host + '/_membership';
+      }
     },
 
     parse: function (res) {

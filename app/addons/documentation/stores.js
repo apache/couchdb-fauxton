@@ -19,12 +19,12 @@ define([
     getLinks: function () {
       return [
         {
-          title: 'CouchDB Offical Documentation -- Online',
+          title: 'CouchDB Official Documentation -- Online',
           link: 'http://docs.couchdb.org/en/latest/',
           iconClassName: 'couchdb-icon'
         },
         {
-          title: 'CouchDB Offical Documentation -- Offline',
+          title: 'CouchDB Official Documentation -- Offline',
           link: '/_utils/docs/contents.html',
           iconClassName: 'couchdb-icon'
         },

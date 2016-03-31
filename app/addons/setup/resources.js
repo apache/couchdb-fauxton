@@ -24,8 +24,12 @@ function (app, FauxtonAPI) {
 
     documentation: app.host + '/_utils/docs',
 
-    url: function () {
-      return '/_cluster_setup';
+    url: function (context) {
+      if (context === "apiurl") {
+        return window.location.origin + "/_cluster_setup";
+      } else {
+        return '/_cluster_setup';
+      }
     },
 
     validate: function (attrs) {
