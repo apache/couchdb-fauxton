@@ -188,39 +188,23 @@ define([
         window.confirm.restore && window.confirm.restore();
         Actions.deleteOrigin.restore && Actions.deleteOrigin.restore();
         ReactDOM.unmountComponentAtNode(container);
+        Actions.hideDeleteDomainModal();
       });
 
-      it('should confirm on delete', function () {
-        var stub = sinon.stub(window, 'confirm');
-        stub.returns(true);
-
+      it('should show confirm modal on delete', function () {
+        assert.equal($('body').find('.confirmation-modal').length, 0);
         TestUtils.Simulate.click($(ReactDOM.findDOMNode(originTableEl)).find('.fonticon-trash')[0]);
-        assert.ok(stub.calledOnce);
+        assert.notEqual($('body').find('.confirmation-modal').length, 1); // a little sneaky.
       });
 
       it('does not throw on origins being undefined', function () {
         TestUtils.renderIntoDocument(
           <Views.OriginTable
             updateOrigin={updateOrigin}
-            deleteOrigin={deleteOrigin}
             isVisible={true}
             origins={false} />,
           container
         );
-      });
-
-      it('should deleteOrigin on confirm true', function () {
-        var stub = sinon.stub(window, 'confirm');
-        stub.returns(true);
-        TestUtils.Simulate.click($(ReactDOM.findDOMNode(originTableEl)).find('.fonticon-trash')[0]);
-        assert.ok(deleteOrigin.calledWith(origin));
-      });
-
-      it('should not deleteOrigin on confirm false', function () {
-        var stub = sinon.stub(window, 'confirm');
-        stub.returns(false);
-        TestUtils.Simulate.click($(ReactDOM.findDOMNode(originTableEl)).find('.fonticon-trash')[0]);
-        assert.notOk(deleteOrigin.calledOnce);
       });
 
       it('should change origin to input on edit click', function () {

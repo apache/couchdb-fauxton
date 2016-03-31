@@ -17,6 +17,15 @@ define([
 
   var CorsStore = FauxtonAPI.Store.extend({
 
+    initialize: function () {
+      this.reset();
+    },
+
+    reset: function () {
+      this._deleteDomainModalVisible = false;
+      this._domainToDelete = '';
+    },
+
     editCors: function (options) {
       this._isEnabled = options.isEnabled;
       this._origins = options.origins;
@@ -86,11 +95,7 @@ define([
 
     isAllOrigins: function () {
       var origins = this.getOrigins();
-      if (_.include(origins, '*')) {
-        return true;
-      }
-
-      return false;
+      return _.include(origins, '*');
     },
 
     toggleEnableCors: function () {
@@ -100,6 +105,25 @@ define([
     updateOrigin: function (updatedOrigin, originalOrigin) {
       this.deleteOrigin(originalOrigin);
       this.addOrigin(updatedOrigin);
+    },
+
+    showDeleteDomainModal: function (domain) {
+      this._domainToDelete = domain;
+      this._deleteDomainModalVisible = true;
+      this._shouldSaveChange = false;
+    },
+
+    hideDeleteDomainModal: function () {
+      this._deleteDomainModalVisible = false;
+      this._shouldSaveChange = false;
+    },
+
+    isDeleteDomainModalVisible: function () {
+      return this._deleteDomainModalVisible;
+    },
+
+    getDomainToDelete: function () {
+      return this._domainToDelete;
     },
 
     dispatch: function (action) {
@@ -139,6 +163,14 @@ define([
 
         case ActionTypes.CORS_SET_IS_LOADING:
           this.setIsLoading(action.isLoading);
+        break;
+
+        case ActionTypes.CORS_SHOW_DELETE_DOMAIN_MODAL:
+          this.showDeleteDomainModal(action.options.domain);
+        break;
+
+        case ActionTypes.CORS_HIDE_DELETE_DOMAIN_MODAL:
+          this.hideDeleteDomainModal();
         break;
 
         default:

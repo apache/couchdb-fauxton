@@ -1125,6 +1125,7 @@ define([
       style: React.PropTypes.object,
       buttonType: React.PropTypes.string,
       'data-id': React.PropTypes.string,
+      onClick: React.PropTypes.func
     },
 
     getDefaultProps: function () {
@@ -1133,7 +1134,8 @@ define([
         customIcon: 'fonticon-ok-circled',
         buttonType: 'btn-success',
         style: {},
-        'data-id': null
+        'data-id': null,
+        onClick: function () { }
       };
     },
 
@@ -1147,17 +1149,18 @@ define([
     },
 
     render: function () {
+      const { onClick, buttonType, id, style, text } = this.props;
       return (
         <button
-          onClick={this.props.onClick}
+          onClick={onClick}
           type="submit"
           data-id={this.props['data-id']}
-          className={'btn save ' + this.props.buttonType}
-          id={this.props.id}
-          style={this.props.style}
+          className={'btn save ' + buttonType}
+          id={id}
+          style={style}
         >
           {this.getIcon()}
-          {this.props.text}
+          {text}
         </button>
       );
     }

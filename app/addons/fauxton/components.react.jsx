@@ -28,6 +28,7 @@ function (app, FauxtonAPI, React, ReactDOM, ZeroClipboard, ReactBootstrap) {
 
   var Modal = ReactBootstrap.Modal;
 
+
   function getZeroClipboardSwfPath () {
     return './dashboard.assets/ZeroClipboard.swf';
   }

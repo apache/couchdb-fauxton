@@ -17,10 +17,14 @@ define([
   "./stores",
   "./resources",
   "./actions",
-  '../components/react-components.react'
+  '../components/react-components.react',
+  '../fauxton/components.react'
+], function (app, FauxtonAPI, React, Stores, Resources, Actions, ReactComponents, FauxtonComponents) {
+  var LoadLines = ReactComponents.LoadLines;
+  var ConfirmationModal = FauxtonComponents.ConfirmationModal;
 
-], function (app, FauxtonAPI, React, Stores, Resources, Actions, ReactComponents) {
   var corsStore = Stores.corsStore;
+
 
   var validateOrigin = function (origin) {
     if (!Resources.validateCORSDomain(origin)) {
@@ -36,6 +40,7 @@ define([
     return true;
   };
 
+
   var OriginRow = React.createClass({
 
     getInitialState: function () {
@@ -45,31 +50,27 @@ define([
       };
     },
 
-    editOrigin: function (event) {
-      event.preventDefault();
-      this.setState({edit: !this.state.edit});
+    editOrigin: function (e) {
+      e.preventDefault();
+      this.setState({ edit: !this.state.edit });
     },
 
-    updateOrigin: function (event) {
-      event.preventDefault();
+    updateOrigin: function (e) {
+      e.preventDefault();
       if (!validateOrigin(this.state.updatedOrigin)) {
         return;
       }
       this.props.updateOrigin(this.state.updatedOrigin, this.props.origin);
-      this.setState({edit: false});
+      this.setState({ edit: false });
     },
 
-    deleteOrigin: function (event) {
-      event.preventDefault();
-      if (!window.confirm('Are you sure you want to delete ' + this.props.origin)) {
-        return;
-      }
-
-      this.props.deleteOrigin(this.props.origin);
+    deleteOrigin: function (e) {
+      e.preventDefault();
+      Actions.showDeleteDomainModal(this.props.origin);
     },
 
     onInputChange: function (event) {
-      this.setState({updatedOrigin: event.target.value});
+      this.setState({ updatedOrigin: event.target.value });
     },
 
     onKeyUp: function (e) {
@@ -82,12 +83,11 @@ define([
       if (this.state.edit) {
         return (
           <div className="input-append edit-domain-section">
-            <input type="text" name="update_origin_domain" onChange={this.onInputChange}  onKeyUp={this.onKeyUp} value={this.state.updatedOrigin} />
+            <input type="text" name="update_origin_domain" onChange={this.onInputChange} onKeyUp={this.onKeyUp} value={this.state.updatedOrigin} />
             <button onClick={this.updateOrigin} className="btn btn-primary update-origin"> Update </button>
           </div>
         );
       }
-
       return <div className="js-url url-display">{this.props.origin}</div>;
     },
 
@@ -96,22 +96,16 @@ define([
       return (
         <tr>
           <td>
-            { display }
+            {display}
           </td>
           <td width="30">
             <span>
-              <a
-                className="fonticon-pencil"
-                onClick={this.editOrigin}
-                title="Click to edit"></a>
+              <a className="fonticon-pencil" onClick={this.editOrigin} title="Click to edit" />
             </span>
           </td>
           <td width="30">
             <span>
-              <a
-                className="fonticon-trash"
-                onClick={this.deleteOrigin}
-                title="Click to delete"></a>
+              <a href="#" data-bypass="true" className="fonticon-trash" onClick={this.deleteOrigin} title="Click to delete" />
             </span>
           </td>
         </tr>
@@ -126,7 +120,6 @@ define([
       return _.map(this.props.origins, function (origin, i) {
         return <OriginRow
           updateOrigin={this.props.updateOrigin}
-          deleteOrigin={this.props.deleteOrigin}
           key={i} origin={origin} />;
       }, this);
     },
@@ -245,7 +238,9 @@ define([
         configChanged: corsStore.hasConfigChanged(),
         shouldSaveChange: corsStore.shouldSaveChange(),
         node: corsStore.getNode(),
-        isLoading: corsStore.getIsLoading()
+        isLoading: corsStore.getIsLoading(),
+        deleteDomainModalVisible: corsStore.isDeleteDomainModalVisible(),
+        domainToDelete: corsStore.getDomainToDelete()
       };
     },
 
@@ -288,10 +283,6 @@ define([
       });
     },
 
-    deleteOrigin: function (origin) {
-      Actions.deleteOrigin(origin);
-    },
-
     originChange: function (isAllOrigins) {
       if (isAllOrigins && !_.isEmpty(this.state.origins)) {
         var result = window.confirm('Are you sure? Switching to all origin domains will overwrite your specific origin domains.');
@@ -313,23 +304,28 @@ define([
       Actions.methodChange(httpMethod);
     },
 
+    deleteOrigin: function () {
+      Actions.deleteOrigin(this.state.domainToDelete);
+    },
+
     render: function () {
       var isVisible = _.all([this.state.corsEnabled, !this.state.isAllOrigins]);
 
       var originSettings = (
         <div id={this.state.corsEnabled ? 'collapsing-container' : ''}>
           <Origins corsEnabled={this.state.corsEnabled} originChange={this.originChange} isAllOrigins={this.state.isAllOrigins}/>
-          <OriginTable updateOrigin={this.updateOrigin} deleteOrigin={this.deleteOrigin} isVisible={isVisible} origins={this.state.origins} />
+          <OriginTable updateOrigin={this.updateOrigin} isVisible={isVisible} origins={this.state.origins} />
           <OriginInput addOrigin={this.addOrigin} isVisible={isVisible} />
         </div>
       );
 
       if (this.state.isLoading) {
-        originSettings = (<ReactComponents.LoadLines />);
+        originSettings = (<LoadLines />);
       }
+      var deleteMsg = <span>Are you sure you want to delete <code>{_.escape(this.state.domainToDelete)}</code>?</span>;
 
       return (
-        <div className="cors-page">
+        <div className="cors-page flex-body">
           <header id="cors-header">
             <p>{app.i18n.en_US['cors-notice']}</p>
           </header>
@@ -349,10 +345,20 @@ define([
             </div>
             {originSettings}
           </form>
+
+          <ConfirmationModal
+            title="Confirm Deletion"
+            visible={this.state.deleteDomainModalVisible}
+            text={deleteMsg}
+            buttonClass="btn-danger"
+            onClose={Actions.hideDeleteDomainModal}
+            onSubmit={this.deleteOrigin}
+            successButtonLabel="Delete Domain" />
         </div>
       );
     }
   });
+
 
   return {
     CORSController: CORSController,
