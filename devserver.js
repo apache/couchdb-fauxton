@@ -67,7 +67,7 @@ var devSetup = function (cb) {
   });
 };
 
-var defaultHeaderValue = "default-src 'self'; child-src 'self' data: blob:; img-src 'self' data:; font-src 'self'; " +
+var defaultHeaderValue = "default-src 'self'; img-src 'self' data:; font-src 'self'; " +
                   "script-src 'self' 'unsafe-eval'; style-src 'self' 'unsafe-inline';";
 var setCSP = function (res) {
   if (!settings.contentSecurityPolicy) {
