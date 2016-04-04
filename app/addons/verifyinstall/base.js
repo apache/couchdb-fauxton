@@ -13,7 +13,8 @@
 define([
   '../../app',
   '../../core/api',
-  './routes'
+  './routes',
+  "./assets/less/verifyinstall.less"
 ],
 
 function (app, FauxtonAPI, VerifyInstall) {

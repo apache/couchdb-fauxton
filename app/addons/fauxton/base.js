@@ -19,7 +19,8 @@ define([
   "./navigation/components.react",
   "./navigation/actions",
   '../components/react-components.react',
-  '../components/actions'
+  '../components/actions',
+  './assets/less/fauxton.less'
 ],
 
 function (app, FauxtonAPI, Components, NotificationComponents, Actions, NavbarReactComponents, NavigationActions,

@@ -41,7 +41,7 @@
           "development": false
         },
         "app": {
-          "root": "/_utils/",
+          "root": "/",
           "host": "../..",
           "version": "1.0"
         }

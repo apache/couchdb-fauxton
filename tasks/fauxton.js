@@ -59,7 +59,7 @@ module.exports = function (grunt) {
     grunt.log.writeln(localDeps.length + ' local dependencies');
     var local = fetch(localDeps, function (dep, destination) {
       // TODO: Windows
-      var command = 'cp -r ' + dep.path + ' ' + destination;
+      var command = 'cp -r ' + dep.path + '/ ' + destination + '/';
       grunt.log.writeln(command);
       return command;
     });

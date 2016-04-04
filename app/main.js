@@ -15,7 +15,7 @@ require([
   "./app",
   "./core/api",
   "./load_addons",
-  "backbone"
+  "backbone",
 ],
 
 function (app, FauxtonAPI, LoadAddons, Backbone) {

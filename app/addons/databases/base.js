@@ -13,7 +13,8 @@
 define([
   "../../app",
   "../../core/api",
-  "./routes"
+  "./routes",
+  "./assets/less/databases.less"
 ],
 
 function (app, FauxtonAPI, Databases) {

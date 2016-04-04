@@ -8,7 +8,7 @@ module.exports = {
   ],
 
   output: {
-    path: path.join(__dirname, '/dist/tmp-out'),
+    path: path.join(__dirname, '/dist/release'),
     filename: 'bundle.js'
   },
 
@@ -53,7 +53,26 @@ module.exports = {
      },
     { test: require.resolve("backbone"),
       loader: "expose?Backbone"
-    }
+    },
+    {
+      test: /\.less$/,
+      loader: 'style!css!less'
+    },
+    {
+      test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
+      loader: 'url?limit=10000&mimetype=application/font-woff&name=dashboard.assets/fonts/[name].[ext]'
+    },
+    {
+      test: /\.woff2(\?\S*)?$/,   loader: 'url?limit=10000&mimetype=application/font-woff2&name=dashboard.assets/fonts/[name].[ext]'
+    },
+    {
+      test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,    loader: 'url?limit=10000&mimetype=application/font-tff&name=dashboard.assets/fonts/[name].[ext]'
+    },
+    { test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,    loader: 'file?name=dashboard.assets/fonts/[name].[ext]' },
+    { test: /\.swf(\?v=\d+\.\d+\.\d+)?$/,    loader: 'file?name=dashboard.assets/[name].[ext]' },
+    { test: /\.png(\?v=\d+\.\d+\.\d+)?$/,    loader: 'file?name=dashboard.assets/img/[name].[ext]' },
+    { test: /\.gif(\?v=\d+\.\d+\.\d+)?$/,    loader: 'file?name=dashboard.assets/img/[name].[ext]' },
+    { test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,    loader: 'url?limit=10000&mimetype=image/svg+xml&name=dashboard.assets/img/[name].[ext]' }
     ]
   },
   resolve: {

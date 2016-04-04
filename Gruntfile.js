@@ -134,7 +134,7 @@ module.exports = function (grunt) {
       },
 
       bundlerelease_js: {
-        src: ['dist/tmp-out/templates.js', "dist/tmp-out/bundle.js", "dist/tmp-out/1.bundle.js"],
+        src: ['dist/tmp-out/templates.js', "dist/release/bundle.js"],
         dest: "dist/tmp-out/bundle.js"
       }
     },
@@ -146,28 +146,17 @@ module.exports = function (grunt) {
         files: [
           // this gets built in the template task
           {src: "dist/release/index.html", dest: "../../share/www/index.html"},
-          {src: ["**"], dest: "../../share/www/js/", cwd: 'dist/release/dashboard.assets/js/',  expand: true},
-          {src: ["**"], dest: "../../share/www/img/", cwd: 'dist/release/dashboard.assets/img/', expand: true},
-          {src: ["**"], dest: "../../share/www/fonts/", cwd: 'dist/release/dashboard.assets/fonts/', expand: true},
-          {src: ["**"], dest: "../../share/www/css/", cwd: "dist/release/dashboard.assets/css/", expand: true}
         ]
       },
       couchdebug: {
         files: [
           // this gets built in the template task
           {src: "dist/debug/index.html", dest: "../../share/www/index.html"},
-          {src: ["**"], dest: "../../share/www/js/", cwd: "dist/debug/dashboard.assets/js/",  expand: true},
-          {src: ["**"], dest: "../../share/www/img/", cwd: "dist/debug/dashboard.assets/img/", expand: true},
-          {src: ["**"], dest: "../../share/www/fonts/", cwd: "dist/debug/dashboard.assets/fonts/", expand: true},
-          {src: ["**"], dest: "../../share/www/css/", cwd: "dist/debug/dashboard.assets/css/", expand: true}
         ]
       },
       dist:{
         files:[
           {src: 'dist/debug/index.html', dest: 'dist/release/index.html'},
-          {src: ['assets/img/**', 'app/addons/**/assets/img/**'], dest: 'dist/release/dashboard.assets/img/', flatten: true, expand: true},
-          {src: ['node_modules/zeroclipboard/dist/*.swf'], dest: 'dist/release/dashboard.assets/', flatten: true, expand: true, filter: 'isFile'},
-          {src: ['*.eot', '*.woff', '*.svg', '*.ttf'], cwd: './assets/fonts', dest: 'dist/release/dashboard.assets/fonts/', filter: 'isFile', flatten: true, expand: true},
           {src: './favicon.ico', dest: "dist/release/favicon.ico"}
         ]
       },
@@ -180,9 +169,6 @@ module.exports = function (grunt) {
 
       debug: {
         files:[
-          {src: ['node_modules/zeroclipboard/dist/*.swf'], dest: 'dist/debug/dashboard.assets/', flatten: true, expand: true, filter: 'isFile'},
-          {src: ['*.eot', '*.woff', '*.svg', '*.ttf'], cwd: './assets/fonts', dest: 'dist/debug/dashboard.assets/fonts/', filter: 'isFile', flatten: true, expand: true},
-          {src: ['assets/img/**', 'app/addons/**/assets/img/**'], dest: 'dist/debug/dashboard.assets/img/', flatten: true, expand: true},
           {src: './favicon.ico', dest: "dist/debug/favicon.ico"}
         ]
       },
@@ -238,18 +224,6 @@ module.exports = function (grunt) {
     },
 
     shell: {
-      'build-less-debug': {
-        command: 'npm run build:less:debug'
-      },
-
-      'build-less-release': {
-        command: 'npm run build:less:release'
-      },
-
-      'css-compress': {
-        command: 'npm run build:css-compress'
-      },
-
       webpack: {
         command: 'npm run webpack:dev'
       },
@@ -295,17 +269,6 @@ module.exports = function (grunt) {
             config.template.release.variables.bundlejs = config.template.release.variables.bundlejs.replace(/BUNDLEJS_FILE/, newFilename);
           }
         }
-      },
-
-      css: {
-        files: { 'dist/release/dashboard.assets/css/': 'dist/tmp-out/index.css' },
-        options: {
-          afterEach: function (fileChanges) {
-            // replace the CSS_FILE placeholder with the actual filename
-            const newFilename = path.basename(fileChanges.newPath);
-            config.template.release.variables.css = config.template.release.variables.css.replace(/CSS_FILE/, newFilename);
-          }
-        }
       }
     },
 
@@ -344,9 +307,8 @@ module.exports = function (grunt) {
   grunt.registerTask('dependencies', ['get_deps', 'gen_load_addons:default']);
 
   // minify code and css, ready for release.
-  grunt.registerTask('build', ['copy:distDepsRequire', 'shell:build-less-release', 'jst', 'shell:webpackrelease', 'concat:bundlerelease_js',
-    'shell:css-compress', 'md5:bundlejs', 'md5:css', 'template:release']);
-
+  grunt.registerTask('build', ['copy:distDepsRequire', 'jst', 'shell:webpackrelease', 'concat:bundlerelease_js',
+    'md5:bundlejs', 'template:release']);
   /*
    * Build the app in either dev, debug, or release mode
    */
@@ -356,14 +318,14 @@ module.exports = function (grunt) {
   });
 
   // build a debug release
-  grunt.registerTask('debug', ['clean', 'dependencies', "gen_initialize:development", 'shell:build-less-debug',
+  grunt.registerTask('debug', ['clean', 'dependencies', "gen_initialize:development",
     'template:development', 'copy:debug']);
 
   grunt.registerTask('debugDev', ['clean', 'dependencies', "gen_initialize:development",
-    'shell:build-less-debug', 'template:development', 'copy:debug', 'jst', 'shell:webpack', 'concat:bundle_js']);
+    'template:development', 'copy:debug', 'jst', 'shell:webpack', 'concat:bundle_js']);
 
   grunt.registerTask('devSetup', ['dependencies', "gen_initialize:development",
-    'shell:build-less-debug', 'template:development', 'copy:debug', 'jst', 'copy:devTemplates']);
+    'template:development', 'copy:debug', 'jst', 'copy:devTemplates']);
   grunt.registerTask('devSetupWithClean', ['clean', 'devSetup']);
 
   grunt.registerTask('watchRun', ['clean:watch', 'dependencies', 'shell:stylecheck']);

@@ -13,7 +13,8 @@
 define([
   '../../app',
   '../../core/api',
-  './routes'
+  './routes',
+  './assets/less/activetasks.less'
 ],
 
 function (app, FauxtonAPI, Activetasks) {

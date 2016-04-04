@@ -20,7 +20,8 @@ define([
 
   // needed to run the test individually. Don't remove
   "velocity-animate/velocity",
-  "velocity-animate/velocity.ui"
+  "velocity-animate/velocity.ui",
+  "zeroclipboard/dist/ZeroClipboard.swf"
 ],
 
 function (app, FauxtonAPI, React, ReactDOM, ZeroClipboard, ReactBootstrap) {

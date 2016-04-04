@@ -11,7 +11,7 @@
 // the License.
 
 define([
-
+  './assets/less/components.less'
 ],
 
 function () {

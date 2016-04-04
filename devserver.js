@@ -26,22 +26,6 @@ var loadSettings = function () {
 
 var settings = loadSettings();
 
-var less = function () {
-  var _less = spawn('npm', ['run', 'build:less:debug']);
-
-  _less.stdout.on('data', (data) => {
-    console.log(data.toString());
-  });
-
-  _less.stderr.on('error', (data) => {
-    console.log('less error:', data.toString());
-  });
-
-  _less.on('close', (code) => {
-    console.log(`less compile finished with code ${code}`);
-  });
-};
-
 var devSetup = function (cb) {
   console.log('setup dev environment');
   var cmd = 'devSetupWithClean';
@@ -101,12 +85,6 @@ var runWebpackServer = function () {
   };
 
   var compiler = webpack(config);
-
-  compiler.plugin('done', function () {
-    console.log('Bundled done!');
-    console.log('Compiling less');
-    less();
-  });
 
   var server = new WebpackDev(compiler, options);
   var proxy = httpProxy.createServer({

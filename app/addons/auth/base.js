@@ -13,7 +13,8 @@
 define([
   '../../app',
   '../../core/api',
-  './routes'
+  './routes',
+  './assets/less/auth.less'
 ],
 
 function (app, FauxtonAPI, Auth) {

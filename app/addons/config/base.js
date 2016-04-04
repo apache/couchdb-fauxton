@@ -16,7 +16,8 @@ define([
   '../../core/api',
 
   // Modules
-  './routes'
+  './routes',
+  './assets/less/config.less'
 ],
 
 function (app, FauxtonAPI, Config) {

@@ -27,7 +27,8 @@ define([
   './core/couchdbSession',
 
   // plugins
-  'backbone.layoutmanager'
+  'backbone.layoutmanager',
+  "../assets/less/fauxton.less"
 ],
 
 function (app, $, _, Backbone, Bootstrap, Helpers, Utils, FauxtonAPI, Couchdb) {

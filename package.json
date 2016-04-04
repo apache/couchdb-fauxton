@@ -17,13 +17,15 @@
   },
   "devDependencies": {
     "es5-shim": "4.5.4",
+    "file-loader": "^0.8.5",
     "imports-loader": "^0.6.5",
     "mocha": "^2.4.5",
     "mocha-phantomjs": "~4.0.2",
     "nightwatch": "~0.8.18",
     "phantomjs": "^1.9.1",
     "react-addons-test-utils": "^0.14.7",
-    "sinon": "git+https://github.com/sinonjs/sinon.git"
+    "sinon": "git+https://github.com/sinonjs/sinon.git",
+    "url-loader": "^0.5.7"
   },
   "dependencies": {
     "async": "~0.2.6",
@@ -40,6 +42,7 @@
     "chai": "^3.5.0",
     "clean-css": "^3.4.9",
     "couchapp": "~0.11.0",
+    "css-loader": "^0.23.1",
     "d3": "^3.4.11",
     "eslint": "^1.6.0",
     "eslint-loader": "^1.3.0",
@@ -61,7 +64,8 @@
     "grunt-shell": "^1.1.1",
     "http-proxy": "^1.13.2",
     "jquery": "^2.2.0",
-    "less": "^1.7.5",
+    "less": "^2.3.1",
+    "less-loader": "^2.2.3",
     "lodash": "^3.10.1",
     "mkdirp": "^0.5.1",
     "moment": "^2.8.4",
@@ -76,6 +80,7 @@
     "request": "^2.54.0",
     "semver": "^5.1.0",
     "send": "^0.13.1",
+    "style-loader": "^0.13.1",
     "underscore": "~1.4.2",
     "url": "~0.7.9",
     "urls": "~0.0.3",
@@ -86,9 +91,6 @@
   },
   "scripts": {
     "stylecheck": "eslint --ext=js,jsx .",
-    "build:less:debug": "mkdirp ./dist/debug/dashboard.assets/css && node ./build-helper/less.js dist/debug/dashboard.assets/css/index.css",
-    "build:less:release": "mkdirp ./dist/tmp-out && node ./build-helper/less.js dist/tmp-out/index-max.css",
-    "build:css-compress": "mkdirp ./dist/release/dashboard.assets/css/ && cleancss --skip-rebase -o dist/tmp-out/index.css dist/tmp-out/index-max.css",
     "webpack:dev": "webpack --debug --progress --colors --config ./webpack.config.dev.js",
     "webpack:test": "webpack --debug --progress --colors --config ./webpack.config.test.js",
     "webpack:release": "webpack --debug --progress --colors --config ./webpack.config.release.js",

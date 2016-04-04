@@ -22,7 +22,6 @@
   <title>Project Fauxton</title>
 
   <!-- Application styles. -->
-  <link rel="stylesheet" href="<%= css %>">
   <% if (base) { %>
   <base href="<%= base %>"></base>
   <% } %>

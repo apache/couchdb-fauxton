@@ -12,7 +12,8 @@
 
 define([
   "../../app",
-  "../../core/api"
+  "../../core/api",
+  './assets/less/cors.less'
 ],
 
 function (app, FauxtonAPI) {
