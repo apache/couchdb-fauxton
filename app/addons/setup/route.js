@@ -16,8 +16,7 @@ define([
   './resources',
   './setup.react',
   './setup.actions',
-  '../cluster/cluster.actions',
-
+  '../cluster/cluster.actions'
 ],
 function (app, FauxtonAPI, Setup, SetupComponents, SetupActions, ClusterActions) {
   var RouteObject = FauxtonAPI.RouteObject.extend({
@@ -37,7 +36,7 @@ function (app, FauxtonAPI, Setup, SetupComponents, SetupActions, ClusterActions)
     ],
 
     apiUrl: function () {
-      return [this.setupModel.url(), this.setupModel.documentation];
+      return [this.setupModel.url('apiurl'), this.setupModel.documentation];
     },
 
     initialize: function () {

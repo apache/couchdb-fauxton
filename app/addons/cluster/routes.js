@@ -15,7 +15,7 @@ define([
   '../../core/api',
   './resources',
   './cluster.react',
-  './cluster.actions',
+  './cluster.actions'
 ],
 
 function (app, FauxtonAPI, Cluster, ClusterComponents, ClusterActions) {
@@ -25,7 +25,7 @@ function (app, FauxtonAPI, Cluster, ClusterComponents, ClusterActions) {
     layout: 'one_pane',
 
     routes: {
-      'cluster/disabled': 'showDisabledFeatureScreen',
+      'cluster/disabled': 'showDisabledFeatureScreen'
     },
 
     crumbs: [
@@ -33,7 +33,7 @@ function (app, FauxtonAPI, Cluster, ClusterComponents, ClusterActions) {
     ],
 
     apiUrl: function () {
-      return [this.memberships.url(), this.memberships.documentation];
+      return [this.memberships.url('apiurl'), this.memberships.documentation];
     },
 
     initialize: function () {
