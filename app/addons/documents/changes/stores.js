@@ -23,6 +23,7 @@ define([
     },
 
     reset: function () {
+      this._isLoaded = false;
       this._tabVisible = false;
       this._filters = [];
       this._changes = [];
@@ -36,6 +37,10 @@ define([
     initChanges: function (options) {
       this.reset();
       this._databaseName = options.databaseName;
+    },
+
+    isLoaded: function () {
+      return this._isLoaded;
     },
 
     updateChanges: function (seqNum, changes) {
@@ -64,6 +69,7 @@ define([
 
       // add the new changes to the start of the list
       this._changes = newChanges.concat(this._changes);
+      this._isLoaded = true;
     },
 
     getChanges: function () {
@@ -143,29 +149,33 @@ define([
       switch (action.type) {
         case ActionTypes.INIT_CHANGES:
           this.initChanges(action.options);
-          this.triggerChange();
         break;
+
         case ActionTypes.UPDATE_CHANGES:
           this.updateChanges(action.seqNum, action.changes);
-          this.triggerChange();
         break;
+
         case ActionTypes.TOGGLE_CHANGES_TAB_VISIBILITY:
           this.toggleTabVisibility();
-          this.triggerChange();
         break;
+
         case ActionTypes.ADD_CHANGES_FILTER_ITEM:
           this.addFilter(action.filter);
-          this.triggerChange();
         break;
+
         case ActionTypes.REMOVE_CHANGES_FILTER_ITEM:
           this.removeFilter(action.filter);
-          this.triggerChange();
         break;
+
         case ActionTypes.TOGGLE_CHANGES_POLLING:
           this.togglePolling();
-          this.triggerChange();
         break;
+
+        default:
+          return;
       }
+
+      this.triggerChange();
     }
   });
 

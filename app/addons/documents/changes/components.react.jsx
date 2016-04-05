@@ -273,6 +273,7 @@ define([
     getStoreState: function () {
       return {
         changes: changesStore.getChanges(),
+        loaded: changesStore.isLoaded(),
         databaseName: changesStore.getDatabaseName(),
         isShowingSubset: changesStore.isShowingSubset()
       };
@@ -300,6 +301,14 @@ define([
     },
 
     getRows: function () {
+      if (!this.state.changes.length && this.state.loaded) {
+        return (
+          <p>
+            No document changes have occurred in this database.
+          </p>
+        );
+      }
+
       return _.map(this.state.changes, function (change) {
         var key = change.id + '-' + change.seq;
         return <ChangeRow change={change} key={key} databaseName={this.state.databaseName} />;
@@ -351,6 +360,18 @@ define([
       };
     },
 
+    onClipboardClick: function (target) {
+      var msg = 'The document ID has been copied to your clipboard.';
+      if (target === 'seq') {
+        msg = 'The document seq number has been copied to your clipboard.';
+      }
+      FauxtonAPI.addNotification({
+        msg: msg,
+        type: 'info',
+        clear: true
+      });
+    },
+
     render: function () {
       var jsonBtnClasses = 'btn btn-small' + (this.state.codeVisible ? ' btn-secondary' : ' btn-primary');
       var wrapperClass = 'change-wrapper' + (this.props.change.isNew ? ' new-change-row' : '');
@@ -362,7 +383,7 @@ define([
               <div className="span2">seq</div>
               <div className="span8 change-sequence">{this.props.change.seq}</div>
               <div className="span2 text-right">
-                <Components.Clipboard text={this.props.change.seq} />
+                <Components.Clipboard text={this.props.change.seq} onClipboardClick={() => this.onClipboardClick('seq')} />
               </div>
             </div>
 
@@ -372,7 +393,7 @@ define([
                 <ChangeID id={this.props.change.id} deleted={this.props.change.deleted} databaseName={this.props.databaseName} />
               </div>
               <div className="span2 text-right">
-                <Components.Clipboard text={this.props.change.id} />
+                <Components.Clipboard text={this.props.change.id} onClipboardClick={() => this.onClipboardClick('id')} />
               </div>
             </div>
 

@@ -280,6 +280,13 @@ define([
       assert.equal(1, $changesEl.find('.change-box').length);
       assert.equal('doc_5', $($changesEl.find('.js-doc-id').get(0)).html());
     });
+
+    it('shows a No Docs Found message if no docs', function () {
+      Stores.changesStore.reset();
+      Actions.updateChanges({ last_seq: 124, results: [] });
+      assert.ok(/No\sdocument\schanges\shave\soccurred/.test($changesEl[0].outerHTML));
+    });
+
   });
 
 
@@ -287,6 +294,7 @@ define([
     var changesEl;
     var container;
     var maxChanges = 10;
+
 
     beforeEach(function () {
       container = document.createElement('div');

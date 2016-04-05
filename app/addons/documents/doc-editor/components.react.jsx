@@ -205,7 +205,8 @@ define([
         var url = FauxtonAPI.urls('document', 'attachment', db, doc, app.utils.safeURLName(filename));
         return (
           <li key={filename}>
-            <a href={url} target="_blank" data-bypass="true"> <strong>{filename}</strong> -
+            <a href={url} target="_blank" data-bypass="true"> <strong>{filename}</strong>
+              <span className="attachment-delimiter">-</span>
               <span>{item.content_type}, {Helpers.formatSize(item.length)}</span>
             </a>
           </li>

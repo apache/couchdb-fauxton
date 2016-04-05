@@ -1381,8 +1381,10 @@ define([
     },
 
     componentDidMount: function () {
-      $('body').on('click.APIBar', function () {
-        Actions.toggleApiBarVisibility(false);
+      $('body').on('click.APIBar', function (e) {
+        if ($(e.target).closest('.api-bar-tray,.control-toggle-api-url').length === 0) {
+          Actions.toggleApiBarVisibility(false);
+        }
       }.bind(this));
     },
 
@@ -1516,8 +1518,8 @@ define([
               type="text"
               className="input-block-level"
               onKeyUp={this.onInputKeypress}
-              onChange={this.onInputChange} />
-
+              onChange={this.onInputChange}
+              autoFocus={true} />
           </Modal.Body>
           <Modal.Footer>
             <a
