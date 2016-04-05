@@ -31,7 +31,14 @@ define([
       if (context === undefined) {
         context = 'server';
       }
-      return FauxtonAPI.urls('document', context, this.getDatabase().safeID(), this.safeID());
+
+      // new without id make a POST to the DB and not a PUT on a DB
+      let id = this.safeID();
+      if (!id) {
+        id = '';
+      }
+
+      return FauxtonAPI.urls('document', context, this.getDatabase().safeID(), id);
     },
 
     initialize: function (_attrs, options) {

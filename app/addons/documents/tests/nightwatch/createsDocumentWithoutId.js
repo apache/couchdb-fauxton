@@ -11,7 +11,7 @@
 // the License.
 
 module.exports = {
-  'Creates a document' : function (client) {
+  'Creates a document without id' : function (client) {
     /*jshint multistr: true */
     var waitTime = client.globals.maxWaitTime,
         newDatabaseName = client.globals.testDatabaseName,
@@ -22,6 +22,7 @@ module.exports = {
       .createDatabase(newDatabaseName)
       .loginToGUI()
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
+
       .clickWhenVisible('#new-all-docs-button a')
       .clickWhenVisible('#new-all-docs-button a[href="#/database/' + newDatabaseName + '/new"]')
       .waitForElementPresent('#editor-container', waitTime, false)
@@ -34,22 +35,15 @@ module.exports = {
 
       .execute('\
         var editor = ace.edit("doc-editor");\
-        editor.gotoLine(2,10);\
-        editor.removeWordRight();\
-        editor.insert("' + newDocumentName + '");\
+        editor.gotoLine(2,1);\
+        editor.removeLines();\
+        editor.insert(\'"foo": "bar"\');\
       ')
 
+      .checkForStringPresent(newDatabaseName + '/_all_docs', '"total_rows":0')
       .clickWhenVisible('#doc-editor-actions-panel .save-doc')
-      .checkForDocumentCreated(newDocumentName)
-      .url(baseUrl + '/' + newDatabaseName + '/_all_docs')
-      .waitForElementPresent('body', waitTime, false)
-      .getText('body', function (result) {
-        var data = result.value,
-            createdDocIsPresent = data.indexOf(newDocumentName);
+      .checkForStringPresent(newDatabaseName + '/_all_docs', '"total_rows":1')
 
-        this.verify.ok(createdDocIsPresent > 0,
-          'Checking if new document shows up in _all_docs.');
-      })
     .end();
   }
 };
