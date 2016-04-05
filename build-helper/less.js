@@ -40,14 +40,15 @@ const parser = new less.Parser(options);
 
 
 function writeCSS (files) {
-  function concatCSS (src, cb) {
-    fs.readFile(root + src, 'utf8', (err, data) => {
+  function concatCSS (filePath, cb) {
+    fs.readFile(root + filePath, 'utf8', (err, data) => {
       if (err) {
         return cb(null, []);
       }
 
       parser.parse(data, (err, tree) => {
         if (err) {
+          console.log('--> error with: ', filePath, err);
           throw err;
         }
         return cb(null, [tree.toCSS()]);
