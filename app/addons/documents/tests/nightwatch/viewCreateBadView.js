@@ -50,8 +50,6 @@ module.exports = {
         baseUrl = client.globals.test_settings.launch_url;
 
     client
-      .deleteDatabase(newDatabaseName)
-      .createDatabase(newDatabaseName)
       .loginToGUI()
       .populateDatabase(newDatabaseName)
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_design/brokenview/_view/brokenview')

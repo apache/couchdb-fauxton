@@ -20,8 +20,6 @@ module.exports = {
       baseUrl = client.globals.test_settings.launch_url;
 
     client
-      .deleteDatabase(newDatabaseName)
-      .createDatabase(newDatabaseName)
       .loginToGUI()
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
       .clickWhenVisible('#new-all-docs-button a')

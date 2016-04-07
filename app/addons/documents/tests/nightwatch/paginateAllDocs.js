@@ -50,8 +50,6 @@ module.exports = {
         baseUrl = client.globals.test_settings.launch_url;
 
     client
-      .deleteDatabase(newDatabaseName)
-      .createDatabase(newDatabaseName)
       .populateDatabase(newDatabaseName)
       .loginToGUI()
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
@@ -77,8 +75,6 @@ module.exports = {
         baseUrl = client.globals.test_settings.launch_url;
 
     client
-      .deleteDatabase(newDatabaseName)
-      .createDatabase(newDatabaseName)
       .populateDatabase(newDatabaseName)
       .loginToGUI()
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
