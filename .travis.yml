@@ -13,7 +13,7 @@ before_install:
   - sudo apt-get -y install libtool automake autoconf autoconf-archive
   - sudo apt-get -y install haproxy
 
-  - nvm install 4 && nvm use 4
+  - nvm install 5 && nvm use 5
 
   - cd ..
   - git clone --depth=1 https://github.com/apache/couchdb
