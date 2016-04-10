@@ -314,7 +314,7 @@ module.exports = function (grunt) {
    */
   // dev server
   grunt.registerTask('dev', function () {
-    console.log('This is deprecated. Please run npm run dev instead');
+    console.log('This is deprecated. Please run "npm run dev" instead');
   });
 
   // build a debug release
