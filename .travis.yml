@@ -42,4 +42,3 @@ cache: apt
 
 git:
   depth: 1
- depth: 1
