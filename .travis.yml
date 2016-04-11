@@ -17,9 +17,9 @@ before_install:
   - nvm install 5 && nvm use 5
 
   - cd ..
-  - git clone --depth=1 https://github.com/apache/couchdb
+  - git clone https://github.com/apache/couchdb
   - cd couchdb
-  - git reset --hard 596d3a4e7aa13e31e415b4dcd7cfc4cd1f1d8f9d
+  - git reset --hard 3619c80c3e45994304fc88f1c281bd9f50e7366d
   - ./configure --disable-docs
   - make
   - ./dev/run --admin=tester:testerpass &
@@ -42,3 +42,4 @@ cache: apt
 
 git:
   depth: 1
+ depth: 1
