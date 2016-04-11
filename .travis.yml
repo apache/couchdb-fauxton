@@ -19,6 +19,7 @@ before_install:
   - cd ..
   - git clone --depth=1 https://github.com/apache/couchdb
   - cd couchdb
+  - git reset --hard 596d3a4e7aa13e31e415b4dcd7cfc4cd1f1d8f9d
   - ./configure --disable-docs
   - make
   - ./dev/run --admin=tester:testerpass &
