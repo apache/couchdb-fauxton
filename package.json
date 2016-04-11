@@ -22,7 +22,7 @@
     "mocha": "^2.4.5",
     "mocha-phantomjs": "~4.0.2",
     "nightwatch": "~0.8.18",
-    "phantomjs": "^1.9.1",
+    "phantomjs": "^2.0.1",
     "react-addons-test-utils": "^0.14.7",
     "sinon": "git+https://github.com/sinonjs/sinon.git",
     "url-loader": "^0.5.7"
