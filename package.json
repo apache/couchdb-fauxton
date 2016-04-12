@@ -102,7 +102,7 @@
     "dev": "node ./devserver.js",
     "nightwatch": "grunt nightwatch",
     "start": "node ./bin/fauxton",
-    "postinstall": "node version-check.js && grunt release"
+    "prepublish": "node version-check.js && grunt release"
   },
   "repository": {
     "type": "git",
