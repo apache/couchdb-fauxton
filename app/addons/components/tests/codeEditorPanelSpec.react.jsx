@@ -77,7 +77,7 @@ define([
         // confirm there are no newlines in the code at this point
         assert.equal(codeEditorEl.getValue().match(/\n/g), null);
 
-        TestUtils.Simulate.click($(React.findDOMNode(codeEditorEl)).find('.beautify')[0]);
+        TestUtils.Simulate.click($(ReactDOM.findDOMNode(codeEditorEl)).find('.beautify')[0]);
 
         // now confirm newlines are found
         assert.equal(codeEditorEl.getValue().match(/\n/g).length, 2);

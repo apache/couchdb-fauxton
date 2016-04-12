@@ -96,14 +96,17 @@ define([
     });
 
     it('renders base data of DBs', function () {
-      assert.equal(1 + 2, dbEl.getDOMNode().getElementsByTagName('tr').length);
-      assert.equal("db1", dbEl.getDOMNode().getElementsByTagName('tr')[1].getElementsByTagName('td')[0].innerText.trim());
-      assert.equal("2.0 MB", dbEl.getDOMNode().getElementsByTagName('tr')[1].getElementsByTagName('td')[1].innerText.trim());
-      assert.equal("88", dbEl.getDOMNode().getElementsByTagName('tr')[1].getElementsByTagName('td')[2].innerText.trim());
-      assert.equal(0, dbEl.getDOMNode().getElementsByTagName('tr')[1].getElementsByTagName('td')[2].getElementsByTagName("i").length);
-      assert.equal(3, dbEl.getDOMNode().getElementsByTagName('tr')[1].getElementsByTagName('td')[4].getElementsByTagName("a").length);
-      assert.equal("db2", dbEl.getDOMNode().getElementsByTagName('tr')[2].getElementsByTagName('td')[0].innerText.trim());
-      assert.equal(1, dbEl.getDOMNode().getElementsByTagName('tr')[2].getElementsByTagName('td')[2].getElementsByTagName("i").length);
+
+      const el = ReactDOM.findDOMNode(dbEl);
+
+      assert.equal(1 + 2, el.getElementsByTagName('tr').length);
+      assert.equal("db1", el.getElementsByTagName('tr')[1].getElementsByTagName('td')[0].innerText.trim());
+      assert.equal("2.0 MB", el.getElementsByTagName('tr')[1].getElementsByTagName('td')[1].innerText.trim());
+      assert.equal("88", el.getElementsByTagName('tr')[1].getElementsByTagName('td')[2].innerText.trim());
+      assert.equal(0, el.getElementsByTagName('tr')[1].getElementsByTagName('td')[2].getElementsByTagName("i").length);
+      assert.equal(3, el.getElementsByTagName('tr')[1].getElementsByTagName('td')[4].getElementsByTagName("a").length);
+      assert.equal("db2", el.getElementsByTagName('tr')[2].getElementsByTagName('td')[0].innerText.trim());
+      assert.equal(1, el.getElementsByTagName('tr')[2].getElementsByTagName('td')[2].getElementsByTagName("i").length);
     });
 
   });
@@ -131,7 +134,8 @@ define([
     it("Creates a database with given name", function () {
       createCalled = false;
       passedDbName = null;
-      TestUtils.findRenderedDOMComponentWithTag(addEl, 'input').getDOMNode().value = "testdb";
+      const el = TestUtils.findRenderedDOMComponentWithTag(addEl, 'input');
+      ReactDOM.findDOMNode(el).value = "testdb";
       addEl.onAddDatabase();
       assert.equal(true, createCalled);
       assert.equal("testdb", passedDbName);
@@ -185,7 +189,8 @@ define([
     it("jumps to an existing DB from input", function () {
       jumpCalled = false;
       passedDbName = null;
-      TestUtils.findRenderedDOMComponentWithTag(jumpEl, 'input').getDOMNode().value = "db2";
+      const input = TestUtils.findRenderedDOMComponentWithTag(jumpEl, 'input');
+      input.value = "db2";
       jumpEl.jumpToDb();
       assert.equal(true, jumpCalled);
       assert.equal("db2", passedDbName);

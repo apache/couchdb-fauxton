@@ -15,8 +15,9 @@ define([
   '../../../../test/mocha/testUtils',
   'react-bootstrap',
   'react',
+  'react-dom',
   'react-addons-test-utils',
-], function (FauxtonAPI, ReactComponents, utils, ReactBootstrap, React, TestUtils) {
+], function (FauxtonAPI, ReactComponents, utils, ReactBootstrap, React, ReactDOM, TestUtils) {
 
   var assert = utils.assert;
   var Modal = ReactBootstrap.Modal;
@@ -30,7 +31,7 @@ define([
     });
 
     afterEach(function () {
-      React.unmountComponentAtNode(container);
+      ReactDOM.unmountComponentAtNode(container);
     });
 
     it('submitting is disabled when initially rendered', function () {

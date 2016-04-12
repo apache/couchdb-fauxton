@@ -1041,7 +1041,8 @@ define([
         <div className="checkbox inline">
           <input
             id={'checkbox-' + this.props.docIdentifier}
-            checked={this.props.checked ? 'checked="checked"' : null}
+            checked={this.props.checked}
+            data-checked={this.props.checked}
             type="checkbox"
             onChange={this.onChange}
             className="js-row-select" />
@@ -1287,7 +1288,15 @@ define([
 
     renderChildren: function () {
       return React.Children.map(this.props.children, function (child, key) {
-        return React.cloneElement(child, this.props);
+
+        const props = {};
+        Object.keys(this.props).filter((k) => {
+          return this.props.hasOwnProperty(k);
+        }).map((k) => {
+          return props[k] = this.props[k];
+        });
+
+        return React.cloneElement(child, props);
       }.bind(this));
     },
 
