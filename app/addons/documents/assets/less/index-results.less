@@ -68,7 +68,6 @@
     width: auto;
   }
 
-
   .tableview-data-cell-id {
     a {
       color: @linkColor;
@@ -137,6 +136,44 @@
   .table-container-autocomplete {
     position: relative;
     width: 128px;
+    height: 29px;
+  }
+
+  .table-container-autocomplete .table-select-wrapper {
+    width: inherit;
+    position: fixed;
+  }
+
+  .Select div.Select-control {
+    border-radius: initial;
+    border: none;
+  }
+
+  .Select .Select-menu-outer {
+    border-radius: inherit;
+    border: none;
+  }
+
+  .Select-option {
+    color: #fff;
+    background-color: #333333;
+  }
+
+  .Select-option {
+    color: #fff;
+    background-color: #333333;
+  }
+
+  .Select-option:hover {
+    background-color: #E33F3B;
+  }
+
+  .Select-option:last-child {
+    border-radius: initial;
+  }
+
+  .Select .is-focused:not(.is-open) > .Select-control {
+    box-shadow: transparent;
   }
 
 }

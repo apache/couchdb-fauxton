@@ -292,26 +292,6 @@ define([
       });
 
     });
-    describe('wrapped autocomplete', function () {
-      it('renders a filter icon if no text given', function () {
-
-        var elements = ['min_weight', 'max_weight'];
-
-        instance = TestUtils.renderIntoDocument(
-          <Views.WrappedAutocomplete selectedField="ente" />,
-          container
-        );
-
-        var $el = $(ReactDOM.findDOMNode(instance));
-
-        assert.equal($el.find('.icon-filter').length, 0);
-
-        var node = $el.find('input')[0];
-        node.value = '';
-        TestUtils.Simulate.change(node);
-        assert.equal($el.find('.icon-filter').length, 1);
-      });
-    });
 
     describe('loading', function () {
       beforeEach(function () {

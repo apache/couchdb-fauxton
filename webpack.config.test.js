@@ -48,6 +48,7 @@ module.exports = {
       test: /\.less$/,
       loader: 'style!css!less'
     },
+    { test: /\.css$/, loader: 'style!css' },
     {
       test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
       loader: 'url?limit=10000&mimetype=application/font-woff&name=dashboard.assets/fonts/[name].[ext]'
