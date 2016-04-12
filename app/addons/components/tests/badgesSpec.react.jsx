@@ -14,8 +14,9 @@ define([
   '../react-components.react',
   '../../../../test/mocha/testUtils',
   'react',
+  'react-dom',
   'react-addons-test-utils',
-], function (FauxtonAPI, ReactComponents, utils, React, TestUtils) {
+], function (FauxtonAPI, ReactComponents, utils, React, ReactDOM, TestUtils) {
 
   var assert = utils.assert;
 
@@ -26,7 +27,7 @@ define([
     });
 
     afterEach(function () {
-      React.unmountComponentAtNode(React.findDOMNode(instance).parentNode);
+      ReactDOM.unmountComponentAtNode(ReactDOM.findDOMNode(instance).parentNode);
     });
 
     it('renders a list of badges', function () {
@@ -35,7 +36,7 @@ define([
         container
       );
 
-      var $el = $(instance.getDOMNode());
+      var $el = $(ReactDOM.findDOMNode(instance));
 
       assert.equal($el.find('.component-badge').length, 2);
     });
@@ -46,7 +47,7 @@ define([
         container
       );
 
-      var $el = $(instance.getDOMNode());
+      var $el = $(ReactDOM.findDOMNode(instance));
 
       assert.equal($el.find('.component-badge').text(), 'foofoo×barfoo×');
     });

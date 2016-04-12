@@ -35,7 +35,7 @@ define([
     });
 
     afterEach(function () {
-      ReactDOM.unmountComponentAtNode(container);
+      ReactDOM.unmountComponentAtNode(ReactDOM.findDOMNode(el).parentNode);
     });
 
     it('hosts child elements', function () {
@@ -61,7 +61,7 @@ define([
         <ReactComponents.Document isDeletable={true} checked={true} docIdentifier="foo" />,
         container
       );
-      assert.equal($(ReactDOM.findDOMNode(el)).find('input[type="checkbox"]').attr('checked'), 'checked');
+      assert.equal($(ReactDOM.findDOMNode(el)).find('[data-checked="true"]').length, 1);
     });
 
     it('you can uncheck it', function () {
@@ -69,7 +69,7 @@ define([
         <ReactComponents.Document isDeletable={true} docIdentifier="foo" />,
         container
       );
-      assert.equal($(ReactDOM.findDOMNode(el)).find('input[type="checkbox"]').attr('checked'), undefined);
+      assert.equal($(ReactDOM.findDOMNode(el)).find('[data-checked="true"]').length, 0);
     });
 
     it('it calls an onchange callback', function () {

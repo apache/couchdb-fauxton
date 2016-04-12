@@ -65,7 +65,7 @@ define([
           container
         );
         var regexp = new RegExp(customLabel);
-        assert.ok(regexp.test(React.findDOMNode(selectorEl).outerHTML));
+        assert.ok(regexp.test(ReactDOM.findDOMNode(selectorEl).outerHTML));
       });
 
       it('applies custom options', function () {
@@ -76,7 +76,7 @@ define([
             perPage={10} />,
           container
         );
-        var options = $(React.findDOMNode(selectorEl)).find('option');
+        var options = $(ReactDOM.findDOMNode(selectorEl)).find('option');
         assert.equal(options.length, 3);
         assert.equal(options[0].innerHTML, "1");
         assert.equal(options[1].innerHTML, "2");

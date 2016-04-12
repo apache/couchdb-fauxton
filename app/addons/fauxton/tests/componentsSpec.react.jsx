@@ -42,23 +42,23 @@ define([
     });
 
     it('renders trayid and custom classes', function () {
-      assert(trayEl.getDOMNode().getAttribute('class').indexOf('traytest') >= 0);
+      assert(ReactDOM.findDOMNode(trayEl).getAttribute('class').indexOf('traytest') >= 0);
     });
 
     it('is initially closed', function () {
-      assert.equal('none', trayEl.getDOMNode().style.display);
+      assert.equal('none', ReactDOM.findDOMNode(trayEl).style.display);
     });
 
     it('shows when requested', function () {
       trayEl.setVisible(true, function () {
-        assert.equal('block', trayEl.getDOMNode().style.display);
+        assert.equal('block', ReactDOM.findDOMNode(trayEl).style.display);
       });
     });
 
     it('hides when requested', function () {
       trayEl.show(function () {
         trayEl.setVisible(false, function () {
-          assert.equal('none', trayEl.getDOMNode().style.display);
+          assert.equal('none', ReactDOM.findDOMNode(trayEl).style.display);
         });
       });
     });
@@ -71,14 +71,14 @@ define([
 
     it('toggles open with callback', function () {
       trayEl.toggle(function () {
-        assert.equal('block', trayEl.getDOMNode().style.display);
+        assert.equal('block', ReactDOM.findDOMNode(trayEl).style.display);
       });
     });
 
     it('toggles close again with callback', function () {
       trayEl.show(function () {
         trayEl.toggle(function () {
-          assert.equal('none', trayEl.getDOMNode().style.display);
+          assert.equal('none', ReactDOM.findDOMNode(trayEl).style.display);
         });
       });
     });
@@ -140,7 +140,7 @@ define([
         container
       );
 
-      var lis = pageEl.getDOMNode().getElementsByTagName("li");
+      var lis = ReactDOM.findDOMNode(pageEl).getElementsByTagName("li");
       assert.equal(1 + 3 + 1, lis.length);
       assert(nvl(lis[0].getAttribute("class")).indexOf("disabled") < 0);
       assert(nvl(lis[1].getAttribute("class")).indexOf("active") < 0);
@@ -157,7 +157,7 @@ define([
         container
       );
 
-      var lis = pageEl.getDOMNode().getElementsByTagName("li");
+      var lis = ReactDOM.findDOMNode(pageEl).getElementsByTagName("li");
       assert.equal(1 + 6 + 1, lis.length);
     });
 
@@ -166,7 +166,7 @@ define([
         <Views.Pagination page={3} total={600} />,
         container
       );
-      var lis = pageEl.getDOMNode().getElementsByTagName("li");
+      var lis = ReactDOM.findDOMNode(pageEl).getElementsByTagName("li");
       assert.equal(1 + 10 + 1, lis.length);
       assert(nvl(lis[3].getAttribute("class")).indexOf("active") >= 0);
       assert.equal("3", lis[3].innerText);
@@ -180,7 +180,7 @@ define([
         container
       );
 
-      var lis = pageEl.getDOMNode().getElementsByTagName("li");
+      var lis = ReactDOM.findDOMNode(pageEl).getElementsByTagName("li");
       assert.equal(1 + 10 + 1, lis.length);
       assert(nvl(lis[6].getAttribute("class")).indexOf("active") >= 0);
       assert.equal("7", lis[3].innerText);
@@ -194,7 +194,7 @@ define([
         container
       );
 
-      var lis = pageEl.getDOMNode().getElementsByTagName("li");
+      var lis = ReactDOM.findDOMNode(pageEl).getElementsByTagName("li");
       assert.equal(1 + 10 + 1, lis.length);
       assert(nvl(lis[9].getAttribute("class")).indexOf("active") >= 0);
       assert.equal("23", lis[3].innerText);
@@ -208,7 +208,7 @@ define([
         <Views.Pagination page={1} total={1000} maxNavPages={maxNavPages} />,
         container
       );
-      var lis = pageEl.getDOMNode().getElementsByTagName("li");
+      var lis = ReactDOM.findDOMNode(pageEl).getElementsByTagName("li");
       assert.equal(1 + maxNavPages + 1, lis.length);
     });
 
