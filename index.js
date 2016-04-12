@@ -4,7 +4,7 @@ var httpProxy = require('http-proxy');
 var send = require('send');
 var urlLib = require('url');
 var _ = require('lodash');
-var dist_dir = process.env.DIST || __dirname + '/dist/debug/';
+var dist_dir = process.env.DIST || __dirname + '/dist/release/';
 
 module.exports = function (options) {
   // Options

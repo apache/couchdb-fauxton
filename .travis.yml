@@ -32,7 +32,7 @@ before_install:
 before_script:
   - npm test
   - grunt debugDev
-  - ./bin/fauxton &
+  - DIST=./dist/debug ./bin/fauxton &
   - sleep 30
 script:
   - ./node_modules/grunt-cli/bin/grunt nightwatch

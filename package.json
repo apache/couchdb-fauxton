@@ -17,15 +17,12 @@
   },
   "devDependencies": {
     "es5-shim": "4.5.4",
-    "file-loader": "^0.8.5",
-    "imports-loader": "^0.6.5",
     "mocha": "^2.4.5",
     "mocha-phantomjs": "~4.0.2",
     "nightwatch": "~0.8.18",
     "phantomjs": "^2.0.1",
     "react-addons-test-utils": "^0.14.7",
-    "sinon": "git+https://github.com/sinonjs/sinon.git",
-    "url-loader": "^0.5.7"
+    "sinon": "git+https://github.com/sinonjs/sinon.git"
   },
   "dependencies": {
     "async": "~0.2.6",
@@ -49,6 +46,7 @@
     "exports-loader": "^0.6.2",
     "expose-loader": "^0.7.1",
     "express": "^4.13.4",
+    "file-loader": "^0.8.5",
     "flux": "^2.1.1",
     "grunt": "~0.4.1",
     "grunt-chmod": "^1.0.3",
@@ -63,6 +61,7 @@
     "grunt-md5": "^0.1.11",
     "grunt-shell": "^1.1.1",
     "http-proxy": "^1.13.2",
+    "imports-loader": "^0.6.5",
     "jquery": "^2.2.0",
     "less": "^2.3.1",
     "less-loader": "^2.2.3",
@@ -83,6 +82,7 @@
     "style-loader": "^0.13.1",
     "underscore": "~1.4.2",
     "url": "~0.7.9",
+    "url-loader": "^0.5.7",
     "urls": "~0.0.3",
     "velocity-animate": "^1.2.3",
     "webpack": "^1.12.12",
