@@ -21,14 +21,18 @@ define([
   '../..//fauxton/components.react',
 
   'react-bootstrap',
-  'react-autocomplete',
+  'react-select',
   'react-addons-css-transition-group',
 
-  '../../../../assets/js/plugins/prettify'
+  '../../../../assets/js/plugins/prettify',
+  'react-select/dist/react-select.css'
 ],
 
 
-function (app, FauxtonAPI, React, Stores, Actions, Components, Documents, FauxtonComponents, ReactBootstrap, Autocomplete, ReactCSSTransitionGroup) {
+function (app, FauxtonAPI, React, Stores, Actions, Components, Documents, FauxtonComponents,
+  ReactBootstrap, ReactSelect, ReactCSSTransitionGroup) {
+
+
   var store = Stores.indexResultsStore;
   var BulkActionComponent = Components.BulkActionComponent;
   var Clipboard = FauxtonComponents.Clipboard;
@@ -184,83 +188,28 @@ function (app, FauxtonAPI, React, Stores, Actions, Components, Documents, Fauxto
     }
   });
 
-  var WrappedAutocomplete = React.createClass({
+  const WrappedAutocomplete = ({selectedField, notSelectedFields, index}) => {
+    const options = notSelectedFields.map((el) => {
+      return {value: el, label: el};
+    });
 
-    getInitialState: function () {
-      return {
-        showFilters: false
-      };
-    },
-
-    showFilters: function (state) {
-      this.setState({
-        showFilters: state
-      });
-    },
-
-    render: function () {
-
-      function matchItem (item, value) {
-        return (
-          item.indexOf(value) !== -1
-        );
-      }
-
-      function renderItems (items) {
-        return items.map(function (item) {
-          return item;
-        });
-      }
-
-      var menuStyle = {
-        borderRadius: '3px',
-        boxShadow: '0 2px 12px rgba(0, 0, 0, 0.1)',
-        background: 'rgba(255, 255, 255, 0.9)',
-        padding: '0',
-        fontSize: '90%',
-        position: 'fixed',
-        overflow: 'auto',
-        maxHeight: '50%'
-      };
-
-      return (
-        <div className="table-container-autocomplete">
-          <Autocomplete
-            shouldItemRender={matchItem}
-            initialValue={this.props.selectedField}
-            items={this.props.notSelectedFields}
-            menuStyle={menuStyle}
-            onSelect={function (item) {
+    return (
+      <div className="table-container-autocomplete">
+        <div className="table-select-wrapper">
+          <ReactSelect
+            value={selectedField}
+            options={options}
+            clearable={false}
+            onChange={(el) => {
               Actions.changeField({
-                newSelectedRow: item,
-                index: this.props.index
+                newSelectedRow: el.value,
+                index: index
               });
-
-              this.showFilters(false);
-            }.bind(this)}
-            onChange={function (e, text) {
-              if (!text) {
-                this.showFilters(true);
-                return;
-              }
-              this.showFilters(false);
-            }.bind(this)}
-            getItemValue={function (item) { return item; }}
-            renderItem={function (item, isHighlighted) {
-              var highlight = isHighlighted ? 'table-dropdown-item-highlight ' : '';
-              return (
-                <div
-                  className={highlight + 'table-dropdown-item'}
-                  key={item}>
-                  {item}
-                </div>
-              );
             }} />
-            {this.state.showFilters ? <i className="icon icon-filter"></i> : null}
         </div>
-      );
-    }
-  });
+      </div>
+    );
+  };
 
 
   var TableView = React.createClass({
