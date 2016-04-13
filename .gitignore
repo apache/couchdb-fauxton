@@ -38,3 +38,4 @@ selenium-debug.log
 npm-debug.log
 test/bundle.js
 test/templates.js
+test/dashboard.assets
