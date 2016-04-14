@@ -83,20 +83,22 @@ define([
 
     render: function () {
       return (
-        <div className="row-fluid">
-          <div className="span12">
-            <form id="login" onSubmit={this.submit}>
-              <p className="help-block">
-                Enter your username and password.
-              </p>
-              <input id="username" type="text" name="name" ref="username" placeholder="Username" size="24"
-                onChange={this.onInputChange} value={this.state.username} />
-              <br/>
-              <input id="password" type="password" name="password" ref="password" placeholder="Password" size="24"
-                onChange={this.onInputChange} value={this.state.password} />
-              <br/>
-              <button id="submit" className="btn btn-success" type="submit">Log In</button>
-            </form>
+        <div className="couch-login-wrapper">
+          <div className="row-fluid">
+            <div className="span12">
+              <form id="login" onSubmit={this.submit}>
+                <p className="help-block">
+                  Enter your username and password.
+                </p>
+                <input id="username" type="text" name="name" ref="username" placeholder="Username" size="24"
+                  onChange={this.onInputChange} value={this.state.username} />
+                <br/>
+                <input id="password" type="password" name="password" ref="password" placeholder="Password" size="24"
+                  onChange={this.onInputChange} value={this.state.password} />
+                <br/>
+                <button id="submit" className="btn btn-success" type="submit">Log In</button>
+              </form>
+            </div>
           </div>
         </div>
       );
