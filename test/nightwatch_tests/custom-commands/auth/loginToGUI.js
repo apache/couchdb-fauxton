@@ -22,9 +22,15 @@ exports.command = function () {
     .url(baseUrl + '/#login')
     .waitForElementPresent('a[href="#login"]', waitTime, false)
     .click('a[href="#login"]')
-    .waitForElementPresent('#username', waitTime, false)
-    .setValue('#username', [username])
-    .setValue('#password', [password, client.Keys.ENTER])
+    .waitForElementVisible('.couch-login-wrapper', waitTime, false)
+    .waitForElementVisible('#username', waitTime, false)
+    .setValue('.couch-login-wrapper #username', [username])
+
+    .waitForElementVisible('#password', waitTime, false)
+    .setValue('.couch-login-wrapper #password', [password])
+
+    .clickWhenVisible('#submit')
+
     .closeNotification()
     .waitForElementPresent('#jump-to-db', waitTime, false)
 
