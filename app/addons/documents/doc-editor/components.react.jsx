@@ -157,7 +157,7 @@ define([
             className="conflicts"
             onClick={() => { FauxtonAPI.navigate(FauxtonAPI.urls('revision-browser', 'app', this.props.database.safeID(), this.state.doc.id));}}/> : null}
 
-          <PanelButton title="Upload Attachment" iconClass="icon-circle-arrow-up" onClick={Actions.showUploadModal} />
+          <PanelButton className="upload" title="Upload Attachment" iconClass="icon-circle-arrow-up" onClick={Actions.showUploadModal} />
           <PanelButton title="Clone Document" iconClass="icon-repeat" onClick={Actions.showCloneDocModal} />
           <PanelButton title="Delete" iconClass="icon-trash" onClick={Actions.showDeleteDocModal} />
         </div>
