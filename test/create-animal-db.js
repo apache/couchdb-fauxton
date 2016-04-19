@@ -3,6 +3,8 @@ const async = require('async');
 
 const animals = require('../test/animal-db.json');
 
+const conflictingDoc = 'zebra';
+
 module.exports = createAnimalDb;
 
 function createAnimalDb (url, cb) {
@@ -105,7 +107,7 @@ function createAnimalDb (url, cb) {
 
   function getRev (db, cb) {
     request({
-      uri: `${url}/${db}/zebra`,
+      uri: `${url}/${db}/${conflictingDoc}`,
       json: true
     }, (err, res, body) => {
       cb(null, body._rev);
@@ -123,7 +125,7 @@ function createAnimalDb (url, cb) {
     data._rev = rev;
 
     request({
-      uri: `${url}/${db}/zebra`,
+      uri: `${url}/${db}/${conflictingDoc}`,
       json: true,
       method: 'PUT',
       body: data
