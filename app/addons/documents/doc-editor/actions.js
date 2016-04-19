@@ -15,13 +15,9 @@
 define([
   '../../../app',
   '../../../core/api',
-  './actiontypes',
-  'visualizeRevTree/lib/getTree',
-  'pouchdb'
+  './actiontypes'
 ],
-function (app, FauxtonAPI, ActionTypes, getTree, PouchDB) {
-
-
+function (app, FauxtonAPI, ActionTypes) {
 
   var xhr;
 
