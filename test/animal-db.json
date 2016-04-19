@@ -2,6 +2,7 @@
 {"_id":"aardvark","min_weight":40,"max_weight":65,"min_length":1,"max_length":2.2,"latin_name":"Orycteropus afer","wiki_page":"http://en.wikipedia.org/wiki/Aardvark","class":"mammal","diet":"omnivore"},
 {"_id":"badger","wiki_page":"http://en.wikipedia.org/wiki/Badger","min_weight":7,"max_weight":30,"min_length":0.6,"max_length":0.9,"latin_name":"Meles meles","class":"mammal","diet":"omnivore"},
 {"_id":"elephant","wiki_page":"http://en.wikipedia.org/wiki/African_elephant","min_weight":4700,"max_weight":6050,"min_length":3.2,"max_length":4,"class":"mammal","diet":"herbivore"},
+{"_id":"flamingo","min_weight":1,"min_length":1.2,"max_weight":2.8,"max_length":1.45,"wiki_page":"https://en.wikipedia.org/wiki/American_flamingo","class":"aves","diet":"omnivore"},
 {"_id":"giraffe","min_weight":830,"min_length":5,"max_weight":1600,"max_length":6,"wiki_page":"http://en.wikipedia.org/wiki/Giraffe","class":"mammal","diet":"herbivore"},
 {"_id":"kookaburra","min_length":0.28,"max_length":0.42,"wiki_page":"http://en.wikipedia.org/wiki/Kookaburra","class":"bird","diet":"carnivore","latin_name":"Dacelo novaeguineae"},
 {"_id":"lemur","wiki_page":"http://en.wikipedia.org/wiki/Ring-tailed_lemur","min_weight":2.2,"max_weight":2.2,"min_length":0.95,"max_length":1.1,"class":"mammal","diet":"omnivore"},
