@@ -10,10 +10,10 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-var util = require('util'),
-    events = require('events'),
-    helpers = require('../helpers/helpers.js'),
-    request = require('request');
+const util = require('util');
+const events = require('events');
+const helpers = require('../helpers/helpers.js');
+const request = require('request');
 
 function PopulateDatabaseWithConflicts () {
   events.EventEmitter.call(this);
