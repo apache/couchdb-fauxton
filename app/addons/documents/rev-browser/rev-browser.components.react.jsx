@@ -269,12 +269,16 @@ define([
       RevActions.chooseLeaves(this.props.ours, next);
     }
 
-    selectAsWinner (docToWin) {
+    selectAsWinner (docToWin, doNotShowModalAgain) {
+      if (doNotShowModalAgain) {
+        app.utils.localStorageSet(storageKeyDeleteConflictsModal, true);
+      }
+
       RevActions.selectRevAsWinner(this.props.databaseName, docToWin._id, this.props.tree.paths, docToWin._rev);
     }
 
     onSelectAsWinnerClick (docToWin) {
-      if (app.utils.localStorageGet(storageKeyDeleteConflictsModal) !== 'true') {
+      if (app.utils.localStorageGet(storageKeyDeleteConflictsModal) !== true) {
         RevActions.showConfirmModal(true, docToWin);
         return;
       }
@@ -364,15 +368,6 @@ define([
       store.off('change', this.onChange);
     }
 
-    componentWillUpdate (nextProps, nextState) {
-      if (nextState.checked) {
-        app.utils.localStorageSet(storageKeyDeleteConflictsModal, 'true');
-        return;
-      }
-
-      app.utils.localStorageSet(storageKeyDeleteConflictsModal, 'false');
-    }
-
     onChange () {
       this.setState(this.getStoreState());
     }
@@ -382,7 +377,8 @@ define([
     }
 
     onDeleteConflicts () {
-      this.props.onConfirm(this.state.docToWin);
+      const hideModal = this.state.checked;
+      this.props.onConfirm(this.state.docToWin, hideModal);
     }
 
     render () {
