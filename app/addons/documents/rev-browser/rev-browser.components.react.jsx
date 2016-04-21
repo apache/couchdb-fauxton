@@ -166,7 +166,7 @@ define([
       }
 
       return (
-        <div className="revision-split-area" style={{padding: '20px 15px', display: 'flex', color: '#fff'}}>
+        <div className="revision-split-area">
           <div data-id="ours" style={{width: '50%'}}>
             <div style={{marginBottom: '20px'}}>{ours._rev} (Server-Selected Rev)</div>
             <pre ref="revLeftOurs"></pre>
@@ -208,7 +208,7 @@ define([
 
   const ConflictingRevisionsDropDown = ({options, selected, onRevisionClick, onBackwardClick, onForwardClick}) => {
     return (
-      <div style={{maxWidth: '370px', display: 'flex', marginLeft: '-17px'}}>
+      <div className="conflicting-revs-dropdown">
         <BackForwardControls backward onClick={onBackwardClick} />
         <div style={{width: '345px', margin: '0 5px'}}>
           <ReactSelect
@@ -240,7 +240,7 @@ define([
 
     onRevisionClick (revTheirs) {
 
-      RevActions.chooseLeafs(this.props.ours, revTheirs.value);
+      RevActions.chooseLeaves(this.props.ours, revTheirs.value);
     }
 
     onForwardClick () {
@@ -253,7 +253,7 @@ define([
         return;
       }
 
-      RevActions.chooseLeafs(this.props.ours, next);
+      RevActions.chooseLeaves(this.props.ours, next);
     }
 
     onBackwardClick () {
@@ -266,7 +266,7 @@ define([
         return;
       }
 
-      RevActions.chooseLeafs(this.props.ours, next);
+      RevActions.chooseLeaves(this.props.ours, next);
     }
 
     selectAsWinner (docToWin) {

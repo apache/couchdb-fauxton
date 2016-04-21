@@ -112,7 +112,6 @@ RevBrowserActions, RevBrowserComponents) => {
     },
 
     codeEditor: function (databaseName, docId) {
-      console.log(databaseName, docId);
       this.database = new Databases.Model({ id: databaseName });
 
       if (docId) {

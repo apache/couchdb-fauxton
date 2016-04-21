@@ -87,7 +87,7 @@ define([
     });
   }
 
-  function chooseLeafs (doc, revTheirs) {
+  function chooseLeaves (doc, revTheirs) {
     db.get(doc._id, {rev: revTheirs})
       .then((res) => {
         dispatchDocsToDiff(doc, res);
@@ -157,7 +157,7 @@ define([
     getConflictingRevs: getConflictingRevs,
     selectRevAsWinner: selectRevAsWinner,
     buildBulkDeletePayload: buildBulkDeletePayload,
-    chooseLeafs: chooseLeafs,
+    chooseLeaves: chooseLeaves,
     dispatchDocsToDiff: dispatchDocsToDiff,
     initDiffEditor: initDiffEditor,
     dispatchData: dispatchData,

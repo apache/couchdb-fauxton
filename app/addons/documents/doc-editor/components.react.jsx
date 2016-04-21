@@ -246,7 +246,7 @@ define([
           <button className="panel-button dropdown-toggle btn" data-bypass="true" data-toggle="dropdown" title="View Attachments"
             id="view-attachments-menu">
             <i className="icon icon-paper-clip"></i>
-            <span>View Attachments</span>{' '}
+            <span className="button-text">View Attachments</span>
             <span className="caret"></span>
           </button>
           <ul className="dropdown-menu" role="menu" aria-labelledby="view-attachments-menu">
@@ -269,7 +269,8 @@ define([
       return {
         title: '',
         iconClass: '',
-        onClick: function () { }
+        onClick: function () { },
+        className: ''
       };
     },
 

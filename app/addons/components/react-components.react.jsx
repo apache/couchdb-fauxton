@@ -1132,7 +1132,8 @@ define([
         showIcon: true,
         customIcon: 'fonticon-ok-circled',
         buttonType: 'btn-success',
-        style: {}
+        style: {},
+        'data-id': null
       };
     },
 
