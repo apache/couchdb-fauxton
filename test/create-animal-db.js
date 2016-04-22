@@ -13,7 +13,6 @@ function createAnimalDb (url, cb) {
     createAnimalDb();
   });
 
-
   function deleteDatabase (db, cb) {
     request({
       uri: `${url}/${db}`,
@@ -24,7 +23,6 @@ function createAnimalDb (url, cb) {
       if (err) {
         throw err;
       }
-
       cb();
     });
   }
@@ -40,6 +38,7 @@ function createAnimalDb (url, cb) {
         throw err;
       }
 
+      console.log("**** DEBUG **** 1");
       bulkLoadDocs();
     });
   }
@@ -59,27 +58,35 @@ function createAnimalDb (url, cb) {
 
       async.waterfall([
         (cb) => {
+          console.log("**** DEBUG **** 2");
           replicate(`${url}/animaldb`, `${url}/animaldb-copy`, true, cb);
         },
         (cb) => {
+          console.log("**** DEBUG **** 3");
           replicate(`${url}/animaldb`, `${url}/animaldb-copy-2`, true, cb);
         },
         (cb) => {
+          console.log("**** DEBUG **** 4");
           alterDocs(cb);
         },
         (cb) => {
+          console.log("**** DEBUG **** 5");
           replicate(`${url}/animaldb-copy`, `${url}/animaldb`, false, cb);
         },
         (cb) => {
+          console.log("**** DEBUG **** 6");
           replicate(`${url}/animaldb-copy-2`, `${url}/animaldb`, false, cb);
         },
         (cb) => {
+          console.log("**** DEBUG **** 7");
           deleteDatabase('animaldb-copy', cb);
         },
         (cb) => {
+          console.log("**** DEBUG **** 8");
           deleteDatabase('animaldb-copy-2', cb);
         },
       ], (err, result) => {
+        console.log("**** DEBUG **** 9");
         cb();
       });
     });
