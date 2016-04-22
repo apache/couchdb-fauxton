@@ -15,7 +15,7 @@ var async = require('async');
 
 module.exports = {
   asyncHookTimeout: 20000,
-  maxWaitTime: 30000,
+  maxWaitTime: 120000,
   testDatabaseName : 'fauxton-selenium-tests',
 
   getNanoInstance: function (dbURL) {

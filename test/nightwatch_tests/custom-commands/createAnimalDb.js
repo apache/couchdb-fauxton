@@ -22,8 +22,7 @@ function CreateAnimalDb () {
 // inherit from node's event emitter
 util.inherits(CreateAnimalDb, events.EventEmitter);
 
-CreateAnimalDb.prototype.command = function (databaseName) {
-
+CreateAnimalDb.prototype.command = function () {
   createAnimalDbHelper(this.client.options.db_url, () => {
     this.emit('complete');
   });
