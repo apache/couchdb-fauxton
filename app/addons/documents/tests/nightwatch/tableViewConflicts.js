@@ -24,11 +24,12 @@ module.exports = {
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
 
       .clickWhenVisible('.alternative-header .two-sides-toggle-button button:last-child')
-      .waitForElementVisible('.table', client.globals.maxWaitTime, false)
+      .waitForElementVisible('.table', waitTime, false)
 
       .clickWhenVisible('.control-toggle-include-docs')
 
-      .waitForElementVisible('.table-container-autocomplete', client.globals.maxWaitTime, false)
+      .waitForElementVisible('.table-container-autocomplete', waitTime, false)
+      .waitForElementVisible('.tableview-conflict', waitTime, false)
 
       .assert.visible('.table [data-conflicts-indicator="true"]')
 
