@@ -383,12 +383,15 @@ define([
       var page = this.state.page;
       var total = this.props.total || this.state.databaseNames.length;
       var urlPrefix = '#/' + this.props.linkPath + '?page=';
+      var start = 1 + (page - 1) * FauxtonAPI.constants.MISC.DEFAULT_PAGE_SIZE;
+      var end = Math.min(total, page * FauxtonAPI.constants.MISC.DEFAULT_PAGE_SIZE);
 
       return (
         <footer className="all-db-footer pagination-footer">
           <div id="database-pagination">
             <FauxtonComponentsReact.Pagination page={page} total={total} urlPrefix={urlPrefix} />
           </div>
+          <div className="current-databases">Showing {start}&ndash;{end} of {total} databases.</div>
         </footer>
       );
     }
