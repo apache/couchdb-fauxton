@@ -17,48 +17,61 @@ define([
 ],
 
 function (app, FauxtonAPI, ActionTypes) {
-  var Stores = {};
+  const Stores = {};
 
 
   Stores.NavBarStore = FauxtonAPI.Store.extend({
-    initialize: function () {
+    initialize () {
       this.reset();
     },
 
-    reset: function () {
-      this.activeLink = null;
-      this.version = null;
-      this.navLinks = [];
-      this.footerNavLinks = [];
-      this.bottomNavLinks = [];
+    reset () {
+      this._activeLink = null;
+      this._version = null;
+      this._navLinks = [];
+      this._footerNavLinks = [];
+      this._bottomNavLinks = [];
+      this._navBarVisible = true;
     },
 
-    addLink: function (link) {
+    isNavBarVisible () {
+      return this._navBarVisible;
+    },
+
+    showNavBar () {
+      this._navBarVisible = true;
+    },
+
+    hideNavBar () {
+      this._navBarVisible = false;
+    },
+
+    addLink (link) {
       if (link.top && !link.bottomNav) {
-        this.navLinks.unshift(link);
+        this._navLinks.unshift(link);
         return;
       }
       if (link.top && link.bottomNav) {
-        this.bottomNavLinks.unshift(link);
+        this._bottomNavLinks.unshift(link);
         return;
       }
       if (link.bottomNav) {
-        this.bottomNavLinks.push(link);
+        this._bottomNavLinks.push(link);
         return;
       }
       if (link.footerNav) {
-        this.footerNavLinks.push(link);
+        this._footerNavLinks.push(link);
         return;
       }
 
-      this.navLinks.push(link);
+      this._navLinks.push(link);
     },
 
-    removeLink: function (removeLink) {
-      var links = this.getLinkSection(removeLink);
-      var indexOf = 0;
+    removeLink (removeLink) {
+      const links = this.getLinkSection(removeLink);
+      let indexOf = 0;
 
-      var res = _.filter(links, function (link) {
+      const res = _.filter(links, function (link) {
         if (link.id === removeLink.id) {
           return true;
         }
@@ -72,40 +85,40 @@ function (app, FauxtonAPI, ActionTypes) {
       links.splice(indexOf, 1);
     },
 
-    getNavLinks: function () {
-      return this.navLinks;
+    getNavLinks () {
+      return this._navLinks;
     },
 
-    getBottomNavLinks: function () {
-      return this.bottomNavLinks;
+    getBottomNavLinks () {
+      return this._bottomNavLinks;
     },
 
-    getFooterNavLinks: function () {
-      return this.footerNavLinks;
+    getFooterNavLinks () {
+      return this._footerNavLinks;
     },
 
-    toggleMenu: function () {
+    toggleMenu () {
       app.utils.localStorageSet(FauxtonAPI.constants.LOCAL_STORAGE.SIDEBAR_MINIMIZED,
                                 !this.isMinimized());
     },
 
-    getLinkSection: function (link) {
-      var links = this.navLinks;
+    getLinkSection (link) {
+      let links = this._navLinks;
 
       if (link.bottomNav) {
-        links = this.bottomNavLinks;
+        links = this._bottomNavLinks;
       }
 
       if (link.footerNav) {
-        links = this.footerNavLinks;
+        links = this._footerNavLinks;
       }
 
       return links;
     },
 
-    updateLink: function (link) {
-      var oldLink;
-      var links = this.getLinkSection(link);
+    updateLink (link) {
+      let oldLink;
+      const links = this.getLinkSection(link);
 
       oldLink = _.find(links, function (oldLink) {
         return oldLink.id === link.id;
@@ -117,28 +130,28 @@ function (app, FauxtonAPI, ActionTypes) {
       oldLink.href = link.href;
     },
 
-    getVersion: function () {
-      return this.version;
+    getVersion () {
+      return this._version;
     },
 
-    setVersion: function (version) {
-      this.version = version;
+    setVersion (version) {
+      this._version = version;
     },
 
-    getActiveLink: function () {
-      return this.activeLink;
+    getActiveLink () {
+      return this._activeLink;
     },
 
-    setActiveLink: function (activeLink) {
-      this.activeLink = activeLink;
+    setActiveLink (activeLink) {
+      this._activeLink = activeLink;
     },
 
-    isMinimized: function () {
-      var isMinimized = app.utils.localStorageGet(FauxtonAPI.constants.LOCAL_STORAGE.SIDEBAR_MINIMIZED);
+    isMinimized () {
+      const isMinimized = app.utils.localStorageGet(FauxtonAPI.constants.LOCAL_STORAGE.SIDEBAR_MINIMIZED);
       return (_.isUndefined(isMinimized)) ? false : isMinimized;
     },
 
-    dispatch: function (action) {
+    dispatch (action) {
       switch (action.type) {
         case ActionTypes.ADD_NAVBAR_LINK:
           this.addLink(action.link);
@@ -166,6 +179,14 @@ function (app, FauxtonAPI, ActionTypes) {
 
         case ActionTypes.NAVBAR_ACTIVE_LINK:
           this.setActiveLink(action.name);
+        break;
+
+        case ActionTypes.NAVBAR_HIDE:
+          this.hideNavBar();
+        break;
+
+        case ActionTypes.NAVBAR_SHOW:
+          this.showNavBar();
         break;
 
         default:

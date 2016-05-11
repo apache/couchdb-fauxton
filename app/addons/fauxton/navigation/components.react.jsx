@@ -19,11 +19,11 @@ define([
 ],
 
 function (app, FauxtonAPI, React, ReactDOM, Stores, Actions) {
-  var navBarStore = Stores.navBarStore;
+  const navBarStore = Stores.navBarStore;
 
-  var Footer = React.createClass({
-    render: function () {
-      var version = this.props.version;
+  const Footer = React.createClass({
+    render () {
+      const version = this.props.version;
 
       if (!version) { return null; }
       return (
@@ -37,8 +37,8 @@ function (app, FauxtonAPI, React, ReactDOM, Stores, Actions) {
     }
   });
 
-  var Burger = React.createClass({
-    render: function () {
+  const Burger = React.createClass({
+    render () {
       return (
         <div className="burger" onClick={this.props.toggleMenu}>
           <div></div>
@@ -49,10 +49,10 @@ function (app, FauxtonAPI, React, ReactDOM, Stores, Actions) {
     }
   });
 
-  var NavLink = React.createClass({
-    render: function () {
-      var link = this.props.link;
-      var liClassName = this.props.active === link.title ? 'active' : '';
+  const NavLink = React.createClass({
+    render () {
+      const link = this.props.link;
+      const liClassName = this.props.active === link.title ? 'active' : '';
 
       return (
         <li data-nav-name={link.title} className={liClassName} >
@@ -65,58 +65,67 @@ function (app, FauxtonAPI, React, ReactDOM, Stores, Actions) {
     }
   });
 
-  var NavBar = React.createClass({
-    getStoreState: function () {
+  const NavBar = React.createClass({
+    getStoreState () {
       return {
         navLinks: navBarStore.getNavLinks(),
         bottomNavLinks: navBarStore.getBottomNavLinks(),
         footerNavLinks: navBarStore.getFooterNavLinks(),
         activeLink: navBarStore.getActiveLink(),
         version: navBarStore.getVersion(),
-        isMinimized: navBarStore.isMinimized()
+        isMinimized: navBarStore.isMinimized(),
+        isNavBarVisible: navBarStore.isNavBarVisible()
       };
     },
 
-    getInitialState: function () {
+    getInitialState () {
       return this.getStoreState();
     },
 
-    createLinks: function (links) {
+    createLinks (links) {
       return _.map(links, function (link, i) {
         return <NavLink key={i} link={link} active={this.state.activeLink} />;
       }, this);
     },
 
-    onChange: function () {
+    onChange () {
       this.setState(this.getStoreState());
     },
 
-    setMenuState: function () {
+    setMenuState () {
       $('body').toggleClass('closeMenu', this.state.isMinimized);
       FauxtonAPI.Events.trigger(FauxtonAPI.constants.EVENTS.NAVBAR_SIZE_CHANGED, this.state.isMinimized);
     },
 
-    componentDidMount: function () {
+    componentDidMount () {
       navBarStore.on('change', this.onChange, this);
       this.setMenuState();
     },
 
-    componentDidUpdate: function () {
+    componentDidUpdate () {
       this.setMenuState();
     },
 
-    componentWillUnmount: function () {
+    componentWillUnmount () {
       navBarStore.off('change', this.onChange);
     },
 
-    toggleMenu: function () {
+    toggleMenu () {
       Actions.toggleNavbarMenu();
     },
 
-    render: function () {
-      var navLinks = this.createLinks(this.state.navLinks);
-      var bottomNavLinks = this.createLinks(this.state.bottomNavLinks);
-      var footerNavLinks = this.createLinks(this.state.footerNavLinks);
+    render () {
+      //YUCK!! but we can only really fix this once we have removed all backbone
+      if (!this.state.isNavBarVisible) {
+        $('#primary-navbar').hide();
+        return null;
+      }
+
+      $('#primary-navbar').show();
+
+      const navLinks = this.createLinks(this.state.navLinks);
+      const bottomNavLinks = this.createLinks(this.state.bottomNavLinks);
+      const footerNavLinks = this.createLinks(this.state.footerNavLinks);
 
       return (
         <div className="navbar">
@@ -152,7 +161,7 @@ function (app, FauxtonAPI, React, ReactDOM, Stores, Actions) {
   });
 
   return {
-    renderNavBar: function (el) {
+    renderNavBar (el) {
       ReactDOM.render(<NavBar/>, el);
     },
     NavBar: NavBar,

@@ -18,37 +18,49 @@ define([
 function (app, FauxtonAPI, ActionTypes) {
 
   return {
-    toggleNavbarMenu: function () {
+    toggleNavbarMenu () {
       FauxtonAPI.dispatch({
         type: ActionTypes.TOGGLE_NAVBAR_MENU
       });
     },
 
-    addHeaderLink: function (link) {
+    addHeaderLink (link) {
       FauxtonAPI.dispatch({
         type: ActionTypes.ADD_NAVBAR_LINK,
         link: link
       });
     },
 
-    removeHeaderLink: function (link) {
+    removeHeaderLink (link) {
       FauxtonAPI.dispatch({
         type: ActionTypes.REMOVE_NAVBAR_LINK,
         link: link
       });
     },
 
-    setNavbarVersionInfo: function (versionInfo) {
+    setNavbarVersionInfo (versionInfo) {
       FauxtonAPI.dispatch({
         type: ActionTypes.NAVBAR_SET_VERSION_INFO,
         version: versionInfo
       });
     },
 
-    setNavbarActiveLink: function (header) {
+    setNavbarActiveLink (header) {
       FauxtonAPI.dispatch({
         type: ActionTypes.NAVBAR_ACTIVE_LINK,
         name: header
+      });
+    },
+
+    showNavBar () {
+      FauxtonAPI.dispatch({
+        type: ActionTypes.NAVBAR_SHOW
+      });
+    },
+
+    hideNavBar () {
+      FauxtonAPI.dispatch({
+        type: ActionTypes.NAVBAR_HIDE
       });
     }
   };
