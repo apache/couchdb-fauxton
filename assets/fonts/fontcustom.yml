@@ -4,7 +4,7 @@
 #   `fontcustom help` or visiting <http://fontcustom.com>.
 # --------------------------------------------------------------------------- #
 
-font_name: fauxtonicon3
+font_name: fauxtonicon5
 css_selector: .fonticon-{{glyph}}
 preprocessor_path: "../fonts/"
 autowidth: false
