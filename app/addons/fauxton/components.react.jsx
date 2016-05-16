@@ -407,10 +407,10 @@ function (app, FauxtonAPI, React, ReactDOM, ZeroClipboard, ReactBootstrap) {
             {content}
           </Modal.Body>
           <Modal.Footer>
+            <a href="#" data-bypass="true" className="cancel-link" onClick={this.close}>Cancel</a>
             <button className={btnClasses} onClick={this.props.onSubmit}>
               <i className="fonticon-ok-circled"></i> {this.props.successButtonLabel}
             </button>
-            <a href="#" data-bypass="true" className="cancel-link" onClick={this.close}>Cancel</a>
           </Modal.Footer>
         </Modal>
       );

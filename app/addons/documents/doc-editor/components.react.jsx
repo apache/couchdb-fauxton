@@ -362,10 +362,10 @@ define([
             </div>
           </Modal.Body>
           <Modal.Footer>
+            <a href="#" data-bypass="true" className="cancel-link" onClick={this.closeModal}>Cancel</a>
             <button href="#" id="upload-btn" data-bypass="true" className="btn btn-success save" onClick={this.upload}>
               Upload Attachment
             </button>
-            <a href="#" data-bypass="true" className="cancel-link" onClick={this.closeModal}>Cancel</a>
           </Modal.Footer>
         </Modal>
       );
@@ -431,10 +431,10 @@ define([
             </form>
           </Modal.Body>
           <Modal.Footer>
+            <a href="#" data-bypass="true" className="cancel-link" onClick={this.closeModal}>Cancel</a>
             <button className="btn btn-success save" onClick={this.cloneDoc}>
               <i className="fonticon-ok-circled"></i> Clone Document
             </button>
-            <a href="#" data-bypass="true" className="cancel-link" onClick={this.closeModal}>Cancel</a>
           </Modal.Footer>
         </Modal>
       );

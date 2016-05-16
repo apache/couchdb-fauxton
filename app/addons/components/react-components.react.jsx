@@ -1541,13 +1541,13 @@ define([
               autoFocus={true} />
           </Modal.Body>
           <Modal.Footer>
+            <a href="#" onClick={this.close} data-bypass="true" className="cancel-link">Cancel</a>
             <button
               disabled={this.state.disableSubmit}
               onClick={this.onDeleteClick}
               className="btn btn-danger delete">
               <i className="icon fonticon-cancel-circled" /> Delete
             </button>
-            <a href="#" onClick={this.close} data-bypass="true" className="cancel-link">Cancel</a>
           </Modal.Footer>
         </Modal>
       );

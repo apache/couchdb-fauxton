@@ -653,9 +653,9 @@ function (app, FauxtonAPI, React, ReactDOM, Stores, Actions, Components, Compone
 
           </Modal.Body>
           <Modal.Footer>
+            <a href="#" className="cancel-link" onClick={this.close} data-bypass="true">Cancel</a>
             <button onClick={this.submit} data-bypass="true" className="btn btn-success save">
               <i className="icon fonticon-ok-circled" /> Clone {this.props.indexLabel}</button>
-            <a href="#" className="cancel-link" onClick={this.close} data-bypass="true">Cancel</a>
           </Modal.Footer>
         </Modal>
       );
