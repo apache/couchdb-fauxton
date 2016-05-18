@@ -24,8 +24,7 @@ define([
   'react-select',
   'react-addons-css-transition-group',
 
-  '../../../../assets/js/plugins/prettify',
-  'react-select/dist/react-select.css'
+  '../../../../assets/js/plugins/prettify'
 ],
 
 

@@ -27,7 +27,6 @@ define([
 
   'brace',
 
-  'react-select/less/default.less',
   'jsondiffpatch/public/formatters-styles/html.css'
 ], (FauxtonAPI, app, React, ReactDOM, RevActions, RevStores, ReactComponents,
     ReactBootstrap, ReactSelect, jdp, jdpformatters, ace) => {
