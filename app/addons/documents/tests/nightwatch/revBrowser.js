@@ -51,7 +51,7 @@ module.exports = {
       .url(baseUrl + '/#/database/' + newDatabaseName + '?include_docs=true&conflicts=true')
 
       .getText('body', function (result) {
-        this.verify.ok(result.value.indexOf('"color": "white"') !== -1, 'check if doc version was promoted')
+        this.verify.ok(result.value.indexOf('"color": "white"') !== -1, 'check if doc version was promoted');
       })
 
     .end();
