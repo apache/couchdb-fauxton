@@ -17,21 +17,42 @@ define([
 
 function (FauxtonAPI, ActionTypes) {
 
+  const operators = [
+    {operator: '$eq', text: 'Equals / is'},
+    /*
+    {operator: '$gt', text: 'Greater than'},
+    {operator: '$lt', text: 'Less than'},
+    {operator: '$gte', text: 'Greater than or equal'},
+    {operator: '$lte', text: 'Less than or equal'},
+    {operator: '$ne', text: 'Not equal'},
 
-  var defaultQueryIndexCode = {
+    {operator: '$exists', text: 'Exists'},
+    {operator: '$type', text: 'Type of'},
+
+    {operator: '$in', text: 'In Array'},
+    {operator: '$nin', text: 'Not in Array'},
+
+    {operator: '$mod', text: 'Devisor / Remainder'},
+    {operator: '$regex', text: 'Regular expression'},
+    */
+  ];
+
+  const emptyQuery = {selector: {}};
+
+  const defaultQueryIndexCode = {
     "index": {
       "fields": ["_id"]
     },
     "type" : "json"
   };
 
-  var defaultQueryFindCode = {
+  const defaultQueryFindCode = {
     "selector": {
       "_id": {"$gt": null}
     }
   };
 
-  var Stores = {};
+  const Stores = {};
 
   Stores.MangoStore = FauxtonAPI.Store.extend({
 
@@ -41,6 +62,90 @@ function (FauxtonAPI, ActionTypes) {
       this._queryFindCodeChanged = false;
       this._availableIndexes = [];
       this._getLoadingIndexes = true;
+
+      this._queryParts = [];
+    },
+
+    getPossibleOperators: function () {
+      return operators;
+    },
+
+    getSelectors: function () {
+      return this._queryParts;
+    },
+
+    isSelectorValid: function (selector) {
+      if (!selector.fieldValue) {
+        return false;
+      }
+
+      if (!selector.field) {
+        return false;
+      }
+
+      return true;
+    },
+
+    addSelector: function (selector) {
+      if (!this.isSelectorValid(selector)) {
+        return;
+      }
+
+      this.removeSelector(selector);
+
+      this._queryParts = this._queryParts.concat([selector]);
+
+      return this._queryParts;
+    },
+
+    removeSelector: function (selector) {
+
+      this._queryParts = this._queryParts.reduce(function (acc, el) {
+        if (el.field === selector.field
+          && el.operator === selector.operator
+          && el.fieldValue === selector.fieldValue) {
+
+          return acc;
+        }
+
+        acc.push(el);
+
+        return acc;
+      }, []);
+
+      return this._queryParts;
+    },
+
+    getEmptyQuery: function () {
+      return JSON.parse(JSON.stringify(emptyQuery));
+    },
+
+    getStringifiedQuery: function () {
+      return this.formatCode(this.getQuery());
+    },
+
+    getQuery: function () {
+      if (!this._queryParts.length) {
+        return this.getEmptyQuery();
+      }
+
+      return this.buildQuery(this._queryParts);
+    },
+
+    buildQuery: function (parts) {
+      const wrapper = this.getEmptyQuery();
+
+      const res = parts.reduce(function (acc, el) {
+        if (el.operator === '$eq') {
+          acc[el.field] = el.fieldValue;
+        }
+
+        return acc;
+      }, {});
+
+      wrapper.selector = res;
+
+      return wrapper;
     },
 
     getQueryIndexCode: function () {
@@ -49,6 +154,14 @@ function (FauxtonAPI, ActionTypes) {
 
     setQueryIndexCode: function (options) {
       this._queryIndexCode = options.code;
+    },
+
+    getBuiltQuery: function () {
+      return {
+        "selector": {
+          "_id": {"$gt": null}
+        }
+      };
     },
 
     getQueryFindCode: function () {
@@ -72,15 +185,14 @@ function (FauxtonAPI, ActionTypes) {
     },
 
     newQueryFindCodeFromFields: function (options) {
-      var fields = options.fields,
-          queryCode = JSON.parse(JSON.stringify(this._queryFindCode)),
-          selectorContent;
+      const fields = options.fields;
+      const queryCode = JSON.parse(JSON.stringify(this._queryFindCode));
 
       if (!fields) {
         return;
       }
 
-      selectorContent = fields.reduce(function (acc, field) {
+      const selectorContent = fields.reduce(function (acc, field) {
         acc[field] = {"$gt": null};
         return acc;
       }, {});
@@ -149,6 +261,14 @@ function (FauxtonAPI, ActionTypes) {
 
         case ActionTypes.MANGO_RESET:
           this.setLoadingIndexes(action.options);
+        break;
+
+        case ActionTypes.MANGO_BUILDER_ADD_SELECTOR:
+          this.addSelector(action.options);
+        break;
+
+        case ActionTypes.MANGO_BUILDER_REMOVE_SELECTOR:
+          this.removeSelector(action.options);
         break;
       }
 
