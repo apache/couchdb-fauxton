@@ -42,7 +42,7 @@ define([
 
   const OperatorSelector = ({possibleOperators}) => {
     const options = possibleOperators.map((el, i) => {
-      return <option key={i} value={el.selector}>{el.text}</option>;
+      return <option key={i} value={el.operator}>{el.text}</option>;
     });
 
     return (
@@ -53,7 +53,8 @@ define([
   };
 
   OperatorSelector.propTypes = {
-    possibleOperators: React.PropTypes.array.isRequired
+    possibleOperators: React.PropTypes.array.isRequired,
+    selected: React.PropTypes.string
   };
 
   class MangoQueryBuilderController extends React.Component {
@@ -74,6 +75,7 @@ define([
         query: mangoStore.getStringifiedQuery(),
         queryParts: mangoStore.getSelectors(),
         builtQuery: mangoStore.getBuiltQuery(),
+        logicOperator: mangoStore.getLogicOperator(),
       };
     }
 
@@ -136,7 +138,8 @@ define([
         field: '',
         fieldValue: '',
         queryParts: [],
-        operator: '$eq'
+        operator: '$eq',
+        logicOperator: '$and'
       };
     }
 
@@ -152,6 +155,11 @@ define([
       this.setState({fieldValue: e.target.value});
     }
 
+    toggleLogicalOperator (op) {
+      this.setState({logicOperator: op});
+      Actions.setLogicalOperator({logicOperator: op});
+    }
+
     maybeAddSelectorKeyUp (e) {
       if (e.keyCode !== 13) {
         return;
@@ -164,7 +172,7 @@ define([
       if (!this.state.fieldValue) {
         return;
       }
-      console.log("ente");
+
       this.addSelector();
     }
 
@@ -227,7 +235,7 @@ define([
                 </td>
                 <td>
                 <StyledSelect
-                  selectValue={this.state.fieldValue}
+                  selectValue={this.state.operator}
                   selectId="mango-select-function"
                   className={""}
                   selectChange={this.selectChange.bind(this)}
@@ -259,13 +267,15 @@ define([
               <ButtonGroup className="two-sides-toggle-button">
                 <Button
                   style={{width: '58px'}}
-                  className={'active'}
+                  className={this.state.logicOperator === '$and' ? 'active' : ''}
+                  onClick={this.toggleLogicalOperator.bind(this, '$and')}
                 >
                   And
                 </Button>
                 <Button
                   style={{width: '58px'}}
-                  className={'s'}
+                  className={this.state.logicOperator === '$and' ? '' : 'active'}
+                  onClick={this.toggleLogicalOperator.bind(this, '$or')}
                 >
                   Or
                 </Button>
@@ -283,7 +293,6 @@ define([
         </PaddedBorderedBox>
       );
     }
-
 
     getLabel (selector) {
       return `${selector.field} : ${selector.fieldValue}`;
@@ -305,7 +314,7 @@ define([
 
     render () {
       return (
-        <div className="editor-wrapper">
+        <div className="mango-editor-wrapper">
           <PaddedBorderedBox>
             <div
               dangerouslySetInnerHTML={{__html: this.props.description}}

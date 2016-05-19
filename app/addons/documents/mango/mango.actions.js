@@ -45,6 +45,13 @@ function (app, FauxtonAPI, Documents, ActionTypes, Stores, IndexResultsStores, I
       });
     },
 
+    setLogicalOperator: (options) => {
+      FauxtonAPI.dispatch({
+        type: ActionTypes.MANGO_BUILDER_SET_LOGICAL_OPERATOR,
+        options: options
+      });
+    },
+
     newQueryFindCode: function (options) {
       FauxtonAPI.dispatch({
         type: ActionTypes.MANGO_NEW_QUERY_FIND_CODE,

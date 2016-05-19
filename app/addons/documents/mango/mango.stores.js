@@ -19,8 +19,8 @@ function (FauxtonAPI, ActionTypes) {
 
   const operators = [
     {operator: '$eq', text: 'Equals / is'},
-    /*
     {operator: '$gt', text: 'Greater than'},
+
     {operator: '$lt', text: 'Less than'},
     {operator: '$gte', text: 'Greater than or equal'},
     {operator: '$lte', text: 'Less than or equal'},
@@ -34,7 +34,7 @@ function (FauxtonAPI, ActionTypes) {
 
     {operator: '$mod', text: 'Devisor / Remainder'},
     {operator: '$regex', text: 'Regular expression'},
-    */
+
   ];
 
   const emptyQuery = {selector: {}};
@@ -64,6 +64,7 @@ function (FauxtonAPI, ActionTypes) {
       this._getLoadingIndexes = true;
 
       this._queryParts = [];
+      this._logicOperator = '$and';
     },
 
     getPossibleOperators: function () {
@@ -100,7 +101,7 @@ function (FauxtonAPI, ActionTypes) {
 
     removeSelector: function (selector) {
 
-      this._queryParts = this._queryParts.reduce(function (acc, el) {
+      this._queryParts = this._queryParts.reduce((acc, el) => {
         if (el.field === selector.field
           && el.operator === selector.operator
           && el.fieldValue === selector.fieldValue) {
@@ -132,20 +133,81 @@ function (FauxtonAPI, ActionTypes) {
       return this.buildQuery(this._queryParts);
     },
 
+    setLogicOperator: function (options) {
+      this._logicOperator = options.logicOperator;
+    },
+
+    getLogicOperator: function () {
+      return this._logicOperator;
+    },
+
+
+
+
     buildQuery: function (parts) {
       const wrapper = this.getEmptyQuery();
 
-      const res = parts.reduce(function (acc, el) {
-        if (el.operator === '$eq') {
-          acc[el.field] = el.fieldValue;
-        }
-
-        return acc;
-      }, {});
+/*
+    {
+  "selector": {
+    "year": {
+      "$eq": 2001
+    }
+  },
+  "sort": [
+    "year"
+  ],
+  "fields": [
+    "year"
+  ]
+}
+*/
+      let res;
+      if (parts.length <= 1) {
+        res = this.getQueryForSingleSelector(parts);
+      } else {
+        res = this.getQueryWithLogicalOperator(parts);
+      }
 
       wrapper.selector = res;
 
       return wrapper;
+    },
+
+    getQueryWithLogicalOperator: function (parts) {
+      // XXX $text handling
+      // test on JSON parsing
+      // 1. tests, $text handling
+      const res = parts.reduce((acc, el) => {
+
+        let tmp;
+        try {
+          tmp = {[el.field]: {[el.operator]: JSON.parse(el.fieldValue)}};
+        } catch (e) {
+          tmp = {[el.field]: {[el.operator]: el.fieldValue}};
+        }
+
+        acc.push(tmp);
+
+        return acc;
+      }, []);
+
+      return {[this._logicOperator]: res};
+    },
+
+    getQueryForSingleSelector: function (parts) {
+      // XXX $text handling
+      // 1. tests, $text handling
+      return parts.reduce((acc, el) => {
+
+        try {
+          acc[el.field] = {[el.operator]: JSON.parse(el.fieldValue)};
+        } catch (e) {
+          acc[el.field] = {[el.operator]: el.fieldValue};
+        }
+
+        return acc;
+      }, {});
     },
 
     getQueryIndexCode: function () {
@@ -269,6 +331,10 @@ function (FauxtonAPI, ActionTypes) {
 
         case ActionTypes.MANGO_BUILDER_REMOVE_SELECTOR:
           this.removeSelector(action.options);
+        break;
+
+        case ActionTypes.MANGO_BUILDER_SET_LOGICAL_OPERATOR:
+          this.setLogicOperator(action.options);
         break;
       }
 
