@@ -1,3 +1,4 @@
+
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License. You may obtain a copy of
 // the License at
@@ -22,50 +23,6 @@ import TestUtils from "react-addons-test-utils";
 import sinon from "sinon";
 
 var assert = utils.assert;
-
-describe('ChangesHeader', function () {
-  var container, tab, spy;
-
-  describe('Testing DOM', function () {
-    beforeEach(function () {
-      spy = sinon.spy(Actions, 'toggleTabVisibility');
-      container = document.createElement('div');
-      tab = TestUtils.renderIntoDocument(<Changes.ChangesHeaderController />, container);
-    });
-
-    afterEach(function () {
-      spy.restore();
-      Stores.changesStore.reset();
-      ReactDOM.unmountComponentAtNode(container);
-    });
-
-    // similar as previous, except it confirms that the action gets fired, not the custom toggle func
-    it('calls toggleTabVisibility action on selecting a tab', function () {
-      TestUtils.Simulate.click($(ReactDOM.findDOMNode(tab)).find('a')[0]);
-      assert.ok(spy.calledOnce);
-    });
-  });
-});
-
-describe('ChangesHeaderTab', function () {
-  var container, tab, toggleTabVisibility;
-
-  beforeEach(function () {
-    toggleTabVisibility = sinon.spy();
-    container = document.createElement('div');
-    tab = TestUtils.renderIntoDocument(<Changes.ChangesHeaderTab onToggle={toggleTabVisibility} />, container);
-  });
-
-  afterEach(function () {
-    Stores.changesStore.reset();
-    ReactDOM.unmountComponentAtNode(container);
-  });
-
-  it('should call toggle function on clicking tab', function () {
-    TestUtils.Simulate.click($(ReactDOM.findDOMNode(tab)).find('a')[0]);
-    assert.ok(toggleTabVisibility.calledOnce);
-  });
-});
 
 
 describe('ChangesTabContent', function () {
@@ -94,7 +51,7 @@ describe('ChangesTabContent', function () {
     TestUtils.Simulate.change(addItemField);
     TestUtils.Simulate.submit(submitBtn);
 
-    assert.equal(2, $el.find('.js-remove-filter').length);
+    assert.equal(2, $el.find('.remove-filter').length);
   });
 
   it('should call addFilter action on click', function () {
@@ -125,10 +82,10 @@ describe('ChangesTabContent', function () {
     TestUtils.Simulate.submit(submitBtn);
 
     // clicks ALL 'remove' elements
-    TestUtils.Simulate.click($el.find('.js-remove-filter')[0]);
-    TestUtils.Simulate.click($el.find('.js-remove-filter')[0]);
+    TestUtils.Simulate.click($el.find('.remove-filter')[0]);
+    TestUtils.Simulate.click($el.find('.remove-filter')[0]);
 
-    assert.equal(0, $el.find('.js-remove-filter').length);
+    assert.equal(0, $el.find('.remove-filter').length);
   });
 
   it('should call removeFilter action on click', function () {
@@ -141,7 +98,7 @@ describe('ChangesTabContent', function () {
     addItemField.value = 'I wandered lonely as a filter';
     TestUtils.Simulate.change(addItemField);
     TestUtils.Simulate.submit(submitBtn);
-    TestUtils.Simulate.click($el.find('.js-remove-filter')[0]);
+    TestUtils.Simulate.click($el.find('.remove-filter')[0]);
 
     assert.ok(spy.calledOnce);
   });
@@ -155,11 +112,11 @@ describe('ChangesTabContent', function () {
     TestUtils.Simulate.change(addItemField);
     TestUtils.Simulate.submit(submitBtn);
 
-    assert.equal(0, $el.find('.js-remove-filter').length);
+    assert.equal(0, $el.find('.remove-filter').length);
   });
 
   it('should not add tooltips by default', function () {
-    assert.equal(0, $(ReactDOM.findDOMNode(changesFilterEl)).find('.js-remove-filter').length);
+    assert.equal(0, $(ReactDOM.findDOMNode(changesFilterEl)).find('.remove-filter').length);
   });
 
   it('should not add the same filter twice', function () {
@@ -176,12 +133,11 @@ describe('ChangesTabContent', function () {
     TestUtils.Simulate.change(addItemField);
     TestUtils.Simulate.submit(submitBtn);
 
-    assert.equal(1, $el.find('.js-remove-filter').length);
+    assert.equal(1, $el.find('.remove-filter').length);
   });
 });
 
 
-// tests Changes Controller; includes tests in conjunction with ChangesHeaderController
 describe('ChangesController', function () {
   var container, container2, headerEl, $headerEl, changesEl, $changesEl;
 
@@ -201,7 +157,7 @@ describe('ChangesController', function () {
     container = document.createElement('div');
     container2 = document.createElement('div');
     Actions.initChanges({ databaseName: 'testDatabase' });
-    headerEl  = TestUtils.renderIntoDocument(<Changes.ChangesHeaderController />, container);
+    headerEl  = TestUtils.renderIntoDocument(<Changes.ChangesTabContent />, container);
     $headerEl = $(ReactDOM.findDOMNode(headerEl));
     changesEl = TestUtils.renderIntoDocument(<Changes.ChangesController />, container2);
     $changesEl = $(ReactDOM.findDOMNode(changesEl));
@@ -221,9 +177,6 @@ describe('ChangesController', function () {
 
 
   it('"false"/"true" filter strings should apply to change deleted status', function () {
-    // expand the header
-    TestUtils.Simulate.click($headerEl.find('a')[0]);
-
     // add a filter
     var addItemField = $headerEl.find('.js-changes-filter-field')[0];
     var submitBtn = $headerEl.find('[type="submit"]')[0];
@@ -239,9 +192,6 @@ describe('ChangesController', function () {
 
 
   it('confirms that a filter affects the actual search results', function () {
-    // expand the header
-    TestUtils.Simulate.click($headerEl.find('a')[0]);
-
     // add a filter
     var addItemField = $headerEl.find('.js-changes-filter-field')[0];
     var submitBtn = $headerEl.find('[type="submit"]')[0];
@@ -258,8 +208,6 @@ describe('ChangesController', function () {
   // confirms that if there are multiple filters, ALL are applied to return the subset of results that match
   // all filters
   it('multiple filters should all be applied to results', function () {
-    TestUtils.Simulate.click($headerEl.find('a')[0]);
-
     // add the filters
     var addItemField = $headerEl.find('.js-changes-filter-field')[0];
     var submitBtn = $headerEl.find('[type="submit"]')[0];
@@ -282,7 +230,7 @@ describe('ChangesController', function () {
   it('shows a No Docs Found message if no docs', function () {
     Stores.changesStore.reset();
     Actions.updateChanges({ last_seq: 124, results: [] });
-    assert.ok(/No\sdocument\schanges\shave\soccurred/.test($changesEl[0].outerHTML));
+    assert.ok(/There\sare\sno\sdocument\schanges/.test($changesEl[0].outerHTML));
   });
 
 });

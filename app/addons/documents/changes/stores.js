@@ -1,3 +1,4 @@
+
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License. You may obtain a copy of
 // the License at
@@ -22,7 +23,6 @@ var ChangesStore = FauxtonAPI.Store.extend({
 
   reset: function () {
     this._isLoaded = false;
-    this._tabVisible = false;
     this._filters = [];
     this._changes = [];
     this._databaseName = '';
@@ -91,14 +91,6 @@ var ChangesStore = FauxtonAPI.Store.extend({
     }, this);
   },
 
-  toggleTabVisibility: function () {
-    this._tabVisible = !this._tabVisible;
-  },
-
-  isTabVisible: function () {
-    return this._tabVisible;
-  },
-
   addFilter: function (filter) {
     this._filters.push(filter);
   },
@@ -147,27 +139,23 @@ var ChangesStore = FauxtonAPI.Store.extend({
     switch (action.type) {
       case ActionTypes.INIT_CHANGES:
         this.initChanges(action.options);
-      break;
+        break;
 
       case ActionTypes.UPDATE_CHANGES:
         this.updateChanges(action.seqNum, action.changes);
-      break;
-
-      case ActionTypes.TOGGLE_CHANGES_TAB_VISIBILITY:
-        this.toggleTabVisibility();
-      break;
+        break;
 
       case ActionTypes.ADD_CHANGES_FILTER_ITEM:
         this.addFilter(action.filter);
-      break;
+        break;
 
       case ActionTypes.REMOVE_CHANGES_FILTER_ITEM:
         this.removeFilter(action.filter);
-      break;
+        break;
 
       case ActionTypes.TOGGLE_CHANGES_POLLING:
         this.togglePolling();
-      break;
+        break;
 
       default:
         return;

@@ -38,19 +38,55 @@
   .span2 {
     font-weight: bold;
   }
+  .clipboard-copy-element {
+    color: #666666;
+  }
 }
 
 .changes-header {
-  padding: 30px;
-  height: 160px;
+  text-align: center;
+  padding: 26px 20px 0;
   border-bottom: 1px solid #999999;
   .label {
     float: left;
     margin-right: 5px;
   }
-  .js-filter-form {
-    padding-right: 15px;
+  fieldset {
+    text-align: left;
+    display: inline-block;
+    position: relative;
+
+    .btn-info {
+      padding: 12px;
+    }
+  }
+  .fonticon-filter {
+    position: absolute;
+    left: -25px;
+    top: 10px;
+    color: #777777;
+    font-size: 20px;
+  }
+  form {
     margin: 0;
+  }
+  .help-block {
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+  .component-badgelist li {
+    margin: 20px 0;
+  }
+  .remove-filter {
+    text-shadow: none;
+    background-color: transparent;
+    font-size: 20px;
+    margin-top: -3px;
+    padding-left: 0;
+    margin-right: 8px;
+    &:hover {
+      color: #111111;
+    }
   }
 }
 
@@ -59,7 +95,7 @@
 }
 
 #dashboard-upper-content .changes-header-section .tab-content {
-  padding: 0px;
+  padding: 0;
   overflow: hidden;
 }
 
@@ -102,6 +138,7 @@
 }
 
 .changes-polling {
+  padding: 20px 0;
   float: right;
   input {
     margin: 0 8px 1px;
@@ -113,4 +150,8 @@
 
 .new-change-row {
   -webkit-animation: slideDown 1.5s both, highlight-element 2.0s 1;
+}
+
+.no-doc-changes {
+  padding: 30px 0;
 }

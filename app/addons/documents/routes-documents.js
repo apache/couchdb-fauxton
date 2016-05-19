@@ -173,11 +173,11 @@ var DocumentsRouteObject = BaseRoute.extend({
     ChangesActions.initChanges({
       databaseName: this.database.id
     });
-    this.setComponent('#dashboard-upper-content', Changes.ChangesHeaderController);
+    this.setComponent('#dashboard-upper-content', Changes.ChangesTabContent);
     this.setComponent("#dashboard-lower-content", Changes.ChangesController);
 
     this.removeComponent('#footer');
-    this.removeComponent('#react-headerbar');
+    this.setComponent('#react-headerbar', Changes.PollingOption);
 
     this.viewEditor && this.viewEditor.remove();
 

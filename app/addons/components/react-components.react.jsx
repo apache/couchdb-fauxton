@@ -85,7 +85,7 @@ var Badge = React.createClass({
         <span className="label label-info">{this.props.label}</span>
         <a
           href="#"
-          className="label label-info js-remove-filter"
+          className="label label-info remove-filter"
           onClick={this.remove} data-bypass="true"
         >
           &times;
@@ -111,21 +111,17 @@ var ToggleHeaderButton = React.createClass({
   },
 
   render: function () {
-    var iconClasses = this.props.iconDefaultClass + ' ' + this.props.fonticon + ' ' + this.props.innerClasses,
-        containerClasses = 'button ' + this.props.containerClasses;
-
-    if (this.props.selected) {
-      containerClasses = containerClasses + ' js-headerbar-togglebutton-selected';
-    }
+    const { iconDefaultClass, fonticon, innerClasses, selected, containerClasses, title, disabled, text, toggleCallback } = this.props;
+    const selectedBtnClass = (selected) ? 'js-headerbar-togglebutton-selected' : '';
 
     return (
       <button
-        title={this.props.title}
-        disabled={this.props.disabled}
-        onClick={this.props.toggleCallback}
-        className={containerClasses}
+        title={title}
+        disabled={disabled}
+        onClick={toggleCallback}
+        className={`button ${containerClasses} ${selectedBtnClass}`}
         >
-        <i className={iconClasses}></i><span>{this.props.text}</span>
+        <i className={`${iconDefaultClass} ${fonticon} ${innerClasses}`}></i><span>{text}</span>
       </button>
     );
   }
@@ -1219,9 +1215,9 @@ var MenuDropDown = React.createClass({
     return (
       <div className="dropdown">
         <a className={"dropdown-toggle icon " + this.props.icon}
-        data-toggle="dropdown"
-        href="#"
-        data-bypass="true"></a>
+          data-toggle="dropdown"
+          href="#"
+          data-bypass="true"></a>
         <ul className="dropdown-menu arrow" role="menu" aria-labelledby="dLabel">
           {this.createSection()}
         </ul>
@@ -1571,7 +1567,7 @@ const TabElement = ({selected, text, onChange, iconClass}) => {
             checked={selected}
             onChange={onChange} />
 
-            {text}
+          {text}
         </div>
       </label>
     </li>

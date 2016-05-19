@@ -1,3 +1,4 @@
+
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License. You may obtain a copy of
 // the License at
@@ -16,18 +17,12 @@ import ActionTypes from "./actiontypes";
 import Stores from "./stores";
 import Helpers from "../helpers";
 
-var changesStore = Stores.changesStore;
-var pollingTimeout = 60000;
+const changesStore = Stores.changesStore;
+const pollingTimeout = 60000;
 var currentRequest;
 
 
 export default {
-  toggleTabVisibility: function () {
-    FauxtonAPI.dispatch({
-      type: ActionTypes.TOGGLE_CHANGES_TAB_VISIBILITY
-    });
-  },
-
   addFilter: function (filter) {
     FauxtonAPI.dispatch({
       type: ActionTypes.ADD_CHANGES_FILTER_ITEM,
@@ -52,7 +47,7 @@ export default {
   },
 
   getLatestChanges: function () {
-    var params = {
+    const params = {
       limit: 100
     };
 
@@ -63,17 +58,16 @@ export default {
       params.feed = 'longpoll';
     }
 
-    var query = $.param(params);
-    var db = app.utils.safeURLName(changesStore.getDatabaseName());
-
-    var endpoint = FauxtonAPI.urls('changes', 'server', db, '');
+    const query = $.param(params);
+    const db = app.utils.safeURLName(changesStore.getDatabaseName());
+    const endpoint = FauxtonAPI.urls('changes', 'server', db, '?' + query);
     currentRequest = $.getJSON(endpoint);
-    currentRequest.then(_.bind(this.updateChanges, this));
+    currentRequest.then(this.updateChanges.bind(this));
   },
 
   updateChanges: function (json) {
     // only bother updating the list of changes if the seq num has changed
-    var latestSeqNum = Helpers.getSeqNum(json.last_seq);
+    const latestSeqNum = Helpers.getSeqNum(json.last_seq);
     if (latestSeqNum !== changesStore.getLastSeqNum()) {
       FauxtonAPI.dispatch({
         type: ActionTypes.UPDATE_CHANGES,

@@ -1,3 +1,4 @@
+
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License. You may obtain a copy of
 // the License at
@@ -23,18 +24,6 @@ describe('ChangesStore', function () {
 
   afterEach(function () {
     Stores.changesStore.reset();
-  });
-
-  it('toggleTabVisibility() changes state in store', function () {
-    assert.ok(Stores.changesStore.isTabVisible() === false);
-    Stores.changesStore.toggleTabVisibility();
-    assert.ok(Stores.changesStore.isTabVisible() === true);
-  });
-
-  it('reset() changes tab visibility to hidden', function () {
-    Stores.changesStore.toggleTabVisibility();
-    Stores.changesStore.reset();
-    assert.ok(Stores.changesStore.isTabVisible() === false);
   });
 
   it('addFilter() adds item in store', function () {

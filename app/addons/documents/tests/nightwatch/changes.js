@@ -71,7 +71,6 @@ module.exports = {
       // go to the changes page and enable the auto-update feature
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_changes')
 
-      .clickWhenVisible('#db-views-tabs-nav a', waitTime, false)
       .waitForElementPresent('#changes-toggle-polling', waitTime, false)
       .clickWhenVisible('#changes-toggle-polling', waitTime, false)
 

@@ -50,7 +50,6 @@ module.exports = {
       .waitForElementPresent('.change-box[data-id="doc_3"]', waitTime, false)
 
       // add a filter
-      .clickWhenVisible("#db-views-tabs-nav a")
       .waitForElementVisible('.js-changes-filter-field', waitTime, false)
       .setValue('.js-changes-filter-field', "doc_1")
       .clickWhenVisible('.js-filter-form button[type="submit"]')
