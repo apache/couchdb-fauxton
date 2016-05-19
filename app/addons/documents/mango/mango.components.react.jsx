@@ -40,16 +40,32 @@ define([
   const Button = ReactBootstrap.Button;
 
 
-  var MangoQueryBuilder = React.createClass({
+  const OperatorSelector = ({possibleOperators}) => {
+    const options = possibleOperators.map((el, i) => {
+      return <option key={i} value={el.selector}>{el.text}</option>;
+    });
 
-    getInitialState: function () {
-      var state = this.getStoreState();
-      state.operator = '$eq';
+    return (
+      <optgroup label="Select a selector">
+        {options}
+      </optgroup>
+    );
+  };
 
-      return state;
-    },
+  OperatorSelector.propTypes = {
+    possibleOperators: React.PropTypes.array.isRequired
+  };
 
-    getStoreState: function () {
+  class MangoQueryBuilderController extends React.Component {
+
+    constructor (props) {
+      super(props);
+
+      this.state = this.getStoreState();
+      this.state.operator = '$eq';
+    }
+
+    getStoreState () {
       return {
         database: mangoStore.getDatabase(),
         isLoading: mangoStore.getLoadingIndexes(),
@@ -57,49 +73,86 @@ define([
         possibleOperators: mangoStore.getPossibleOperators(),
         query: mangoStore.getStringifiedQuery(),
         queryParts: mangoStore.getSelectors(),
+        builtQuery: mangoStore.getBuiltQuery(),
       };
-    },
+    }
 
-    onChange: function () {
-      this.setState(this.getStoreState());
-    },
-
-    componentDidMount: function () {
-      prettyPrint();
+    componentDidMount () {
       mangoStore.on('change', this.onChange, this);
-    },
+    }
 
-    componentWillUnmount: function () {
+    componentWillUnmount () {
       mangoStore.off('change', this.onChange);
-    },
+    }
 
-    getOperatorOptions: function () {
-      return this.state.possibleOperators.map(function (el, i) {
-        return <option key={i} value={el.selector}>{el.text}</option>;
+    onChange () {
+      this.setState(this.getStoreState());
+    }
+
+    getMangoQueryBuilder () {
+      return this.refs.mangoQueryBuilder;
+    }
+
+    runQuery (e) {
+      e.preventDefault();
+
+      IndexResultActions.runMangoFindQuery({
+        database: this.state.database,
+        queryCode: this.getMangoQueryBuilder().getEditorValue()
       });
-    },
+    }
 
-    getSelectOptions: function () {
+    render () {
+      //if (this.state.isLoading) {
+      //  return (
+      //    <LoadingEditor />
+      //  );
+      //}
+
+      // XXX splat other state
+      const {database} = this.state;
+
       return (
-        <optgroup label="Select a selector">
-          {this.getOperatorOptions()}
-        </optgroup>
+        <MangoQueryBuilder
+          {...this.state}
+          ref="mangoQueryBuilder"
+          description="Start building an ad hoc query below."
+          dbName={database.id}
+          onSubmit={this.runQuery.bind(this)}
+          title={this.props.editorTitle}
+          docs={getDocUrl('MANGO_SEARCH')}
+          exampleCode=""
+          confirmbuttonText="Run Query" />
       );
-    },
+    }
+  };
 
-    selectChange: function (e) {
-      this.setState({operator: event.target.value});
-    },
+  class MangoQueryBuilder extends React.Component {
 
-    fieldChange: function (e) {
-      this.setState({field: event.target.value});
-    },
+    constructor (props) {
+      super(props);
 
-    fieldValueChange: function (e) {
-      this.setState({fieldValue: event.target.value});
-    },
+      this.state = {
+        field: '',
+        fieldValue: '',
+        queryParts: [],
+        operator: '$eq'
+      };
+    }
 
-    maybeAddSelectorKeyUp: function (e) {
+    selectChange (e) {
+      this.setState({operator: e.target.value});
+    }
+
+    fieldChange (e) {
+      this.setState({field: e.target.value});
+    }
+
+    fieldValueChange (e) {
+      this.setState({fieldValue: e.target.value});
+    }
+
+    maybeAddSelectorKeyUp (e) {
       if (e.keyCode !== 13) {
         return;
       }
@@ -111,12 +164,12 @@ define([
       if (!this.state.fieldValue) {
         return;
       }
-
+      console.log("ente");
       this.addSelector();
-    },
+    }
 
-    addSelector: function () {
-      var selector = {
+    addSelector () {
+      const selector = {
         field: this.state.field,
         operator: this.state.operator,
         fieldValue: this.state.fieldValue
@@ -129,102 +182,111 @@ define([
         operator: '$eq',
         fieldValue: ''
       });
-    },
 
-    removeSelector: function (label, selector) {
-      Actions.removeSelector(selector);
-    },
+    }
 
-    // XXX
-    componentWillUpdate: function (nextProps, nextState) {
-      this.refs.field.getEditor().setValue(nextState.query);
-    },
-
-    getDataFields: function () {
+    getSelectOptions () {
       return (
-          <PaddedBorderedBox>
-            <table className="mango-qb-selector-combobox">
-              <tbody>
-                <tr>
-                  <td>
-                    Field
-                  </td>
-                  <td>
-                    <input
-                      onChange={this.fieldChange}
-                      onKeyUp={this.maybeAddSelectorKeyUp}
-                      value={this.state.field}
-                      type="text"
-                      className="mango-select-value"
-                      ref="mango-select-field" />
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    Function
-                  </td>
-                  <td>
-                  <StyledSelect
-                    selectValue={this.state.fieldValue}
-                    selectId="mango-select-function"
-                    className={""}
-                    selectChange={this.selectChange}
-                    selectContent={this.getSelectOptions()} />
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    Value
-                  </td>
-                  <td>
-                    <input
-                      onChange={this.fieldValueChange}
-                      onKeyUp={this.maybeAddSelectorKeyUp}
-                      value={this.state.fieldValue}
-                      type="text"
-                      className="mango-select-value"
-                      ref="mango-select-value" />
-                  </td>
-                  <td>
-                    <ConfirmButton onClick={this.addSelector} text="Add" />
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+        <OperatorSelector possibleOperators={this.props.possibleOperators} />
+      );
+    }
 
-            <div className="mango-selector-display">
-              <div className="button-wrapper">
-                <ButtonGroup className="two-sides-toggle-button">
-                  <Button
-                    className={'active'}
-                  >
-                    And
-                  </Button>
-                  <Button
-                    className={'s'}
-                  >
-                    Or
-                  </Button>
-                </ButtonGroup>
-              </div>
+    removeSelector (label, selector) {
+      Actions.removeSelector(selector);
+    }
 
-              <BadgeList
-                style={{height: '100px'}}
-                removeBadge={this.removeSelector}
-                elements={this.state.queryParts}
-                getLabel={this.getLabel} />
+    componentWillUpdate (nextProps, nextState) {
+      if (!nextProps.query) {
+        return;
+      }
+      this.refs.field.getEditor().setValue(nextProps.query);
+    }
+
+    getDataFields () {
+      return (
+        <PaddedBorderedBox>
+          <table className="mango-qb-selector-combobox">
+            <tbody>
+              <tr>
+                <td>
+                  Field
+                </td>
+                <td>
+                  <input
+                    onChange={this.fieldChange.bind(this)}
+                    onKeyUp={this.maybeAddSelectorKeyUp.bind(this)}
+                    value={this.state.field}
+                    type="text"
+                    className="mango-select-value"
+                    ref="mango-select-field" />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  Function
+                </td>
+                <td>
+                <StyledSelect
+                  selectValue={this.state.fieldValue}
+                  selectId="mango-select-function"
+                  className={""}
+                  selectChange={this.selectChange.bind(this)}
+                  selectContent={this.getSelectOptions()} />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  Value
+                </td>
+                <td>
+                  <input
+                    onChange={this.fieldValueChange.bind(this)}
+                    onKeyUp={this.maybeAddSelectorKeyUp.bind(this)}
+                    value={this.state.fieldValue}
+                    type="text"
+                    className="mango-select-value"
+                    ref="mango-select-value" />
+                </td>
+                <td>
+                  <ConfirmButton onClick={this.addSelector.bind(this)} text="Add" />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div className="mango-selector-display">
+            <div className="button-wrapper">
+              <ButtonGroup className="two-sides-toggle-button">
+                <Button
+                  className={'active'}
+                >
+                  And
+                </Button>
+                <Button
+                  className={'s'}
+                >
+                  Or
+                </Button>
+              </ButtonGroup>
             </div>
 
-          </PaddedBorderedBox>
+            <BadgeList
+              style={{height: '100px'}}
+              removeBadge={this.removeSelector.bind(this)}
+              elements={this.state.queryParts}
+              getLabel={this.getLabel.bind(this)} />
+          </div>
+
+        </PaddedBorderedBox>
       );
-    },
+    }
 
 
-    getLabel: function (selector) {
+    getLabel (selector) {
       return `${selector.field} : ${selector.fieldValue}`;
-    },
+    }
 
-    getPreviewField: function () {
+    getPreviewField () {
       return (
         <PaddedBorderedBox>
           <CodeEditorPanel
@@ -233,12 +295,12 @@ define([
             ref="field"
             title={""}
             docLink={"this.props.docs"}
-            defaultCode={this.state.query} />
+            defaultCode={this.props.query} />
         </PaddedBorderedBox>
       );
-    },
+    }
 
-    render: function () {
+    render () {
       return (
         <div className="editor-wrapper">
           <PaddedBorderedBox>
@@ -252,81 +314,15 @@ define([
         </div>
       );
     }
-  });
+  };
 
-  var QueryBuilderController = React.createClass({
-    getInitialState: function () {
-      return this.getStoreState();
-    },
-
-    getStoreState: function () {
-      return {
-        database: mangoStore.getDatabase(),
-        builtQuery: mangoStore.getBuiltQuery(),
-        isLoading: mangoStore.getLoadingIndexes()
-      };
-    },
-
-    onChange: function () {
-      this.setState(this.getStoreState());
-    },
-
-    componentDidUpdate: function () {
-      prettyPrint();
-    },
-
-    componentDidMount: function () {
-      prettyPrint();
-      mangoStore.on('change', this.onChange, this);
-    },
-
-    componentWillUnmount: function () {
-      mangoStore.off('change', this.onChange);
-    },
-
-    getMangoQueryBuilder: function () {
-      return this.refs.mangoQueryBuilder;
-    },
-
-    render: function () {
-      //if (this.state.isLoading) {
-      //  return (
-      //    <LoadingEditor />
-      //  );
-      //}
-
-      return (
-        <MangoQueryBuilder
-          ref="mangoQueryBuilder"
-          description="Start building an ad hoc query below."
-          dbName={this.state.database.id}
-          onSubmit={this.runQuery}
-          title={this.props.editorTitle}
-          docs={getDocUrl('MANGO_SEARCH')}
-          exampleCode=""
-          changedQuery={this.state.builtQuery}
-          confirmbuttonText="Run Query" />
-      );
-    },
-
-    runQuery: function (event) {
-      event.preventDefault();
-      IndexResultActions.runMangoFindQuery({
-        database: this.state.database,
-        queryCode: this.getMangoQueryBuilder().getEditorValue()
-      });
-    }
-  });
-
-  var LoadingEditor = React.createClass({
-    render: function () {
-      return (
-        <div className="editor-wrapper">
-          <ReactComponents.LoadLines />
-        </div>
-      );
-    }
-  });
+  const LoadingEditor = () => {
+    return (
+      <div className="editor-wrapper">
+        <ReactComponents.LoadLines />
+      </div>
+    );
+  };
 
 
   const MangoQueryEditorController = React.createClass({
@@ -576,10 +572,10 @@ define([
     }
   });
 
-  var Views = {
+  const Views = {
     MangoIndexEditorController: MangoIndexEditorController,
     MangoQueryEditorController: MangoQueryEditorController,
-    QueryBuilderController: QueryBuilderController
+    MangoQueryBuilderController: MangoQueryBuilderController
   };
 
   return Views;

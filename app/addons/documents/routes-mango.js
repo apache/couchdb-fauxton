@@ -105,7 +105,7 @@ function (app, FauxtonAPI, Helpers, BaseRoute, Databases,
 
       this.setComponent('#dashboard-lower-content', IndexResultsComponents.List);
 
-      this.setComponent('#left-content', MangoComponents.QueryBuilderController);
+      this.setComponent('#left-content', MangoComponents.MangoQueryBuilderController);
 
       this.apiUrl = () => {
         return [
