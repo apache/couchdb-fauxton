@@ -254,29 +254,32 @@ define([
             </tbody>
           </table>
 
-          <div className="mango-selector-display">
+          <div style={{textAlign: 'center'}} className="mango-selector-display">
             <div className="button-wrapper">
               <ButtonGroup className="two-sides-toggle-button">
                 <Button
+                  style={{width: '58px'}}
                   className={'active'}
                 >
                   And
                 </Button>
                 <Button
+                  style={{width: '58px'}}
                   className={'s'}
                 >
                   Or
                 </Button>
               </ButtonGroup>
             </div>
+          </div>
 
+          <div style={{minHeight: '40px'}}>
             <BadgeList
               style={{height: '100px'}}
               removeBadge={this.removeSelector.bind(this)}
-              elements={this.state.queryParts}
+              elements={this.props.queryParts}
               getLabel={this.getLabel.bind(this)} />
           </div>
-
         </PaddedBorderedBox>
       );
     }
@@ -401,7 +404,6 @@ define([
       IndexResultActions.runMangoFindQuery({
         database: this.state.database,
         queryCode: this.getMangoEditor().getEditorValue(),
-
       });
     }
   });
