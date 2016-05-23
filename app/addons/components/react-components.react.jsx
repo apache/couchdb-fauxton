@@ -1557,6 +1557,39 @@ define([
     }
   });
 
+  const TabElement = ({selected, text, onChange, iconClass}) => {
+
+    const additionalClass = selected ? 'tab-element-checked' : '';
+
+    return (
+      <li className={`component-tab-element ${additionalClass}`}>
+
+        <label>
+          <div className="tab-element-indicator-wrapper">
+            <div className="tab-element-indicator"></div>
+          </div>
+          <div className="tab-element-content">
+            <i className={iconClass}></i>
+            <input
+              type="radio"
+              value={text}
+              checked={selected}
+              onChange={onChange} />
+
+              {text}
+          </div>
+        </label>
+      </li>
+
+    );
+  };
+  TabElement.propTypes = {
+    selected: React.PropTypes.bool.isRequired,
+    text: React.PropTypes.string.isRequired,
+    onChange: React.PropTypes.func.isRequired,
+    iconClass: React.PropTypes.string,
+  };
+
   return {
     BadgeList: BadgeList,
     Badge: Badge,
@@ -1583,7 +1616,8 @@ define([
     removeMenuDropDown: function (el) {
       ReactDOM.unmountComponentAtNode(el);
     },
-    DeleteDatabaseModal: DeleteDatabaseModal
+    DeleteDatabaseModal: DeleteDatabaseModal,
+    TabElement: TabElement
   };
 
 });

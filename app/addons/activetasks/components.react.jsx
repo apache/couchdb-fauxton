@@ -18,12 +18,17 @@ define([
   './stores',
   './resources',
   './actions',
+
   '../components/react-components.react',
   '../fauxton/components.react',
   'react-addons-css-transition-group'
-], function (app, FauxtonAPI, React, ReactDOM, Stores, Resources, Actions, Components, ComponentsReact, ReactCSSTransitionGroup) {
+], (app, FauxtonAPI, React, ReactDOM, Stores, Resources, Actions,
+  Components, ComponentsReact, ReactCSSTransitionGroup) => {
+
+  const TabElement = Components.TabElement;
 
   var activeTasksStore = Stores.activeTasksStore;
+
   var ActiveTasksController = React.createClass({
 
     getStoreState: function () {
@@ -125,31 +130,17 @@ define([
 
     createFilterTabs: function () {
       return (
-        this.props.radioNames.map(function (radioName) {
-          var checked = this.checked(radioName);
-          var id = radioName.replace(' ', '-');
-          var radioClassName = "radio-" + id;
-          var radioClick = this.onRadioClick;
-          var checkedClassName = checked ? 'active-tasks-checked' : '';
+        this.props.radioNames.map((radioName, i) => {
+          const checked = this.checked(radioName);
 
           return (
-            <li className={"active-tasks-one-checkbox " + checkedClassName} key={radioName + "li"}>
-              <input
-                  className="toggle-filter-tab"
-                  data-bypass="true"
-                  id={id}
-                  type="radio"
-                  key ={radioName}
-                  name="radio-button-active-task-filter-tray"
-                  value={radioName}
-                  checked={checked}
-                  onChange={radioClick} />
-              <label htmlFor={id} className="active-tasks-checkbox-label">
-              {radioName}
-              </label>
-            </li>
+            <TabElement
+              key={i}
+              selected={checked}
+              text={radioName}
+              onChange={this.onRadioClick} />
           );
-        }.bind(this))
+        })
       );
     },
 

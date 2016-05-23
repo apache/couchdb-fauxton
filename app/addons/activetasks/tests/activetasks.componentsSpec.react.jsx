@@ -62,10 +62,6 @@ define([
         tableDiv = document.createElement('div');
         activeTasksStore.initAfterFetching(activeTasksCollection.table, activeTasksCollection);
         table = TestUtils.renderIntoDocument(<Components.ActiveTasksController />, tableDiv);
-
-        // open filter tray
-        //filterTab = TestUtils.findRenderedDOMComponentWithClass(table, 'toggle-filter-tab');
-        //TestUtils.Simulate.click(filterTab);
       });
 
       afterEach(function () {
@@ -80,18 +76,24 @@ define([
           restore(Actions.setSearchTerm);
         });
 
-        var radioIDs = [
+        const radioTexts = [
           'Replication',
-          'Database-Compaction',
+          'Database Compaction',
           'Indexer',
-          'View-Compaction'
+          'View Compaction'
         ];
 
-        it('should trigger change to radio buttons', function () {
-          _.each(radioIDs, function (radioID) {
+        it('should trigger change to radio buttons', () => {
+
+          radioTexts.forEach((text) => {
             spy = sinon.spy(Actions, 'switchTab');
-            TestUtils.Simulate.change($(ReactDOM.findDOMNode(table)).find('#' + radioID)[0]);
+
+            const $table = $(ReactDOM.findDOMNode(table));
+            const element = $table.find(`input[value="${text}"]`)[0];
+
+            TestUtils.Simulate.change(element);
             assert.ok(spy.calledOnce);
+
             spy.restore();
           });
         });
