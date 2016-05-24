@@ -25,6 +25,7 @@ define([
 ], (app, FauxtonAPI, React, ReactDOM, Stores, Resources, Actions,
   Components, ComponentsReact, ReactCSSTransitionGroup) => {
 
+  const TabElementWrapper = Components.TabElementWrapper;
   const TabElement = Components.TabElement;
 
   var activeTasksStore = Stores.activeTasksStore;
@@ -150,9 +151,9 @@ define([
     },
 
     render: function () {
-      var filterTabs = this.createFilterTabs();
+      const filterTabs = this.createFilterTabs();
       return (
-        <ul className="nav nav-tabs" id="active-tasks-filter-tabs">
+        <TabElementWrapper>
           {filterTabs}
           <li>
             <input
@@ -164,7 +165,8 @@ define([
               value={this.props.searchTerm}
               onChange={this.searchTermChange} />
           </li>
-        </ul>);
+        </TabElementWrapper>
+      );
     }
   });
 

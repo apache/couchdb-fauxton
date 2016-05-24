@@ -12,11 +12,23 @@
 
 @import "../../../../../assets/less/mixins.less";
 
+.component-tab-element-wrapper {
+  height: 60px;
+  background-color: #CBCBCB;
+  padding-left: 20px;
+  overflow: hidden;
+  width: 100%;
+  min-width: 770px;
+}
 
 .component-tab-element {
   background-color: #eee;
   margin-top: 10px;
   line-height: 40px;
+
+  input {
+    display: none;
+  }
 
   label {
     margin-right: 0;

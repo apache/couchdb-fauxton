@@ -1590,6 +1590,15 @@ define([
     iconClass: React.PropTypes.string,
   };
 
+  const TabElementWrapper = ({children}) => {
+    return (
+      <ul className="nav nav-tabs component-tab-element-wrapper">
+        {children}
+      </ul>
+    );
+  };
+
+
   return {
     BadgeList: BadgeList,
     Badge: Badge,
@@ -1617,7 +1626,8 @@ define([
       ReactDOM.unmountComponentAtNode(el);
     },
     DeleteDatabaseModal: DeleteDatabaseModal,
-    TabElement: TabElement
+    TabElement: TabElement,
+    TabElementWrapper: TabElementWrapper
   };
 
 });
