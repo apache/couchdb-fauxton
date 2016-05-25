@@ -21,21 +21,17 @@ module.exports = {
       .populateDatabase(newDatabaseName, 3)
       .loginToGUI()
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
-      .waitForElementPresent('#jump-to-doc-id', waitTime, false)
+      .waitForElementPresent('#jump-to-doc', waitTime, false)
+      .keys(['\uE00C'])
       .waitForElementPresent('.prettyprint', waitTime, false)
       .waitForElementPresent('.documents-pagination', waitTime, false)
       .waitForElementPresent('.breadcrumb .js-lastelement', waitTime, false)
       .click('.burger')
 
       // we need to explicitly show the doc field because it's hidden on Travis due to screen width
-      .execute("$('.closeMenu .with-sidebar .searchbox-wrapper').show();")
-      .setValue('#jump-to-doc-id', ['_des'])
-
-      .waitForElementPresent('li[data-value="_design/testdesigndoc"]', waitTime, false)
-      .waitForElementVisible('li[data-value="_design/testdesigndoc"]', waitTime, false)
-      .click('#jump-to-doc .typeahead.dropdown-menu li[data-value="_design/testdesigndoc"]')
-
-      .setValue('#jump-to-doc-id', [client.Keys.ENTER])
+      .execute("$('.searchbox-wrapper').show();")
+      .setValue('#jump-to-doc .Select-input input', ['_des'])
+      .keys(['\uE015', '\uE015', '\uE006'])
       .waitForElementPresent('.panel-button.upload', waitTime, false)
     .end();
   }

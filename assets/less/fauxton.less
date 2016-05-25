@@ -13,6 +13,7 @@
 @import "variables.less";
 @import "bootstrap/bootstrap.less";
 @import "bootstrap/mixins.less";
+@import "../../node_modules/react-select/less/default.less";
 
 #grid {
   .core  {
@@ -458,40 +459,6 @@ body #dashboard .flex-body#breadcrumbs {
 
 .header-left{
   position: relative;
-  #header-dropdown-menu {
-    position: absolute;
-    top: 0;
-    .dropdown-toggle {
-      color: #666666;
-      &:before {
-        margin: 6px -5px 0 6px;
-      }
-    }
-    .fonticon-vertical-ellipsis {
-      &:before {
-        font-size: 20px;
-      }
-    }
-    a {
-      padding: 10px;
-      text-decoration: none;
-    }
-
-    .dropdown {
-      height: @collapsedNavWidth;
-      border-left: 1px solid #ccc;
-      padding: 18px 0px;
-    }
-    .dropdown-menu {
-      left: -115px;
-      top: 48px;
-
-      a.icon:before {
-        font-size: 14px;
-        padding-right: 7px;
-      }
-    }
-  }
 }
 
 .header-right {
@@ -525,6 +492,44 @@ body #dashboard .flex-body#breadcrumbs {
       margin: 0;
     }
   }
+}
+
+// react-select color design
+.Select div.Select-control {
+  border-radius: initial;
+  border: none;
+}
+
+.Select .Select-menu-outer {
+  border-radius: inherit;
+  border: none;
+}
+
+.Select-option {
+  color: #fff;
+  background-color: #333333;
+}
+
+.Select .is-focused {
+  color: #fff;
+  background-color: #333333;
+}
+
+.Select-option:hover {
+  background-color: #E33F3B;
+}
+
+.Select-option:last-child {
+  border-radius: initial;
+}
+
+.Select .is-focused:not(.is-open) > .Select-control {
+  box-shadow: transparent;
+}
+
+.Select .Select-menu {
+  min-height: 291px;
+  background-color: #333333;
 }
 
 //----footer--///

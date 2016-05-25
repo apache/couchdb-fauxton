@@ -20,12 +20,13 @@ define([
   // Views
   "./queryoptions/queryoptions.react",
   "./queryoptions/actions",
+  './jumptodoc.react',
 
   //plugins
   "../../../assets/js/plugins/prettify"
 ],
 
-function (app, FauxtonAPI, Components, Documents, Databases, QueryOptions, QueryActions) {
+function (app, FauxtonAPI, Components, Documents, Databases, QueryOptions, QueryActions, JumpToDoc) {
 
   var Views = {};
 
@@ -51,16 +52,11 @@ function (app, FauxtonAPI, Components, Documents, Databases, QueryOptions, Query
       _.bindAll(this);
       this.selectVisible = false;
       FauxtonAPI.Events.on('success:bulkDelete', this.selectAllMenu);
-
-      // insert the Search Docs field
-      this.headerSearch = this.insertView("#header-search", new Views.JumpToDoc({
-        database: this.database,
-        collection: this.database.allDocs
-      }));
     },
 
     afterRender: function () {
       QueryOptions.render('#query-options');
+      JumpToDoc.render('#header-search', this.database, this.database.allDocs);
       this.toggleQueryOptionsHeader(this.isHidden);
     },
 
@@ -99,30 +95,6 @@ function (app, FauxtonAPI, Components, Documents, Databases, QueryOptions, Query
       return {
         database: this.database.get('id')
       };
-    }
-  });
-
-  Views.JumpToDoc = FauxtonAPI.View.extend({
-    template: "addons/documents/templates/jumpdoc",
-
-    initialize: function (options) {
-      this.database = options.database;
-    },
-
-    events: {
-      "submit #jump-to-doc": "jumpToDoc"
-    },
-
-    jumpToDoc: function (event) {
-      event.preventDefault();
-      var docId = this.$('#jump-to-doc-id').val().trim();
-      var url = FauxtonAPI.urls('document', 'app', app.utils.safeURLName(this.database.id), app.utils.safeURLName(docId) );
-      FauxtonAPI.navigate(url, {trigger: true});
-    },
-
-    afterRender: function () {
-      this.typeAhead = new Components.DocSearchTypeahead({el: '#jump-to-doc-id', database: this.database});
-      this.typeAhead.render();
     }
   });
 
