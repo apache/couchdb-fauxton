@@ -22,12 +22,9 @@ import ComponentsActions from "../../components/actions";
 import IndexEditorActions from "../index-editor/actions";
 import IndexEditorComponents from "../index-editor/components.react";
 import GeneralComponents from "../../fauxton/components.react";
-import DocumentViews from "../../documents/views";
 import DocumentHelper from "../../documents/helpers";
 import { OverlayTrigger, Popover, Modal } from "react-bootstrap";
 import "../../../../assets/js/plugins/prettify";
-
-var DeleteDBModal = DocumentViews.Views.DeleteDBModal;
 
 var store = Stores.sidebarStore;
 var LoadLines = Components.LoadLines;

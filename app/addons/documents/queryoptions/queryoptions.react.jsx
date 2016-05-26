@@ -10,19 +10,18 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import app from "../../../app";
-import FauxtonAPI from "../../../core/api";
-import React from "react";
-import ReactDOM from "react-dom";
-import Stores from "./stores";
-import Actions from "./actions";
-import Components from "../../components/react-components.react";
-var store = Stores.queryOptionsStore;
-var TrayContents = Components.TrayContents;
-var ToggleHeaderButton = Components.ToggleHeaderButton;
+import app from '../../../app';
 
-var TrayWrapper = Components.TrayWrapper;
-var connectToStores = Components.connectToStores;
+import FauxtonAPI from '../../../core/api';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import QueryOptionsStores from './stores';
+import Actions from './actions';
+import Components from '../../components/react-components.react';
+
+const { connectToStores, TrayWrapper, ToggleHeaderButton, TrayContents } = Components;
+
+const {queryOptionsStore: store} = QueryOptionsStores;
 
 var MainFieldsView = React.createClass({
   propTypes: {
@@ -294,34 +293,64 @@ var QueryButtons = React.createClass({
 });
 
 var QueryOptionsController = React.createClass({
+  getStoreState () {
+    return {
+      isVisible: store.isVisible()
+    };
+  },
+
+  getInitialState () {
+    return this.getStoreState();
+  },
+
+  onChange () {
+    this.setState(this.getStoreState());
+  },
+
+  componentDidMount: function () {
+    store.on('change', this.onChange, this);
+  },
+
+  componentWillUnmount: function () {
+    store.off('change', this.onChange);
+  },
 
   getWrap: function () {
-    return connectToStores(TrayWrapper, [store], function () {
+    if (!this.TrayWrapper) {
+      this.TrayWrapper = connectToStores(TrayWrapper, [store], function () {
 
-      return {
-        includeDocs: store.includeDocs(),
-        showBetweenKeys: store.showBetweenKeys(),
-        showByKeys: store.showByKeys(),
-        betweenKeys: store.betweenKeys(),
-        byKeys: store.byKeys(),
-        descending: store.descending(),
-        skip: store.skip(),
-        limit: store.limit(),
-        showReduce: store.showReduce(),
-        reduce: store.reduce(),
-        groupLevel: store.groupLevel(),
-        contentVisible: store.getTrayVisible(),
-        queryParams: store.getQueryParams()
-      };
-    });
+        return {
+          includeDocs: store.includeDocs(),
+          showBetweenKeys: store.showBetweenKeys(),
+          showByKeys: store.showByKeys(),
+          betweenKeys: store.betweenKeys(),
+          byKeys: store.byKeys(),
+          descending: store.descending(),
+          skip: store.skip(),
+          limit: store.limit(),
+          showReduce: store.showReduce(),
+          reduce: store.reduce(),
+          groupLevel: store.groupLevel(),
+          contentVisible: store.getTrayVisible(),
+          queryParams: store.getQueryParams()
+        };
+      });
+    }
+
+    return this.TrayWrapper;
   },
 
   render: function () {
-    var TrayWrapper = this.getWrap();
+    if (!this.state.isVisible) { return null;}
+    const TrayWrapper = this.getWrap();
     return (
-      <TrayWrapper>
-        <QueryTray contentVisible={false} />
-      </TrayWrapper>
+      <div id="header-query-options">
+        <div id="query-options">
+          <TrayWrapper>
+            <QueryTray contentVisible={false} />
+          </TrayWrapper>
+        </div>
+      </div>
     );
   }
 });
@@ -370,7 +399,7 @@ var QueryTray = React.createClass({
     }
 
     return (
-      <TrayContents
+      <TrayContents contentVisible={this.props.contentVisible}
         className="query-options"
         id="query-options-tray">
 
@@ -424,11 +453,11 @@ var QueryTray = React.createClass({
 });
 
 export default {
-  QueryOptionsController: QueryOptionsController,
-  QueryButtons: QueryButtons,
-  MainFieldsView: MainFieldsView,
-  KeySearchFields: KeySearchFields,
-  AdditionalParams: AdditionalParams,
+  QueryOptionsController,
+  QueryButtons,
+  MainFieldsView,
+  KeySearchFields,
+  AdditionalParams,
   render: function (el) {
     ReactDOM.render(<QueryOptionsController />, $(el)[0]);
   }

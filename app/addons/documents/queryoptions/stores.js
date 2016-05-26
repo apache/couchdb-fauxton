@@ -10,18 +10,20 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import app from "../../../app";
-import FauxtonAPI from "../../../core/api";
-import ActionTypes from "./actiontypes";
-var Stores = {};
+import app from '../../../app';
+
+import FauxtonAPI from '../../../core/api';
+import ActionTypes from './actiontypes';
+const Stores = {};
 
 Stores.QueryOptionsStore = FauxtonAPI.Store.extend({
 
-  initialize: function () {
+  initialize () {
     this.reset();
   },
 
-  reset: function () {
+  reset () {
+    this._isVisible = true;
     this._loading = true;
     this._showByKeys = false;
     this._showBetweenKeys = false;
@@ -42,27 +44,39 @@ Stores.QueryOptionsStore = FauxtonAPI.Store.extend({
     this._showReduce = false;
   },
 
-  isLoading: function () {
+  isLoading () {
     return this._loading;
+  },
+
+  isVisible () {
+    return this._isVisible;
+  },
+
+  hideQueryOptions () {
+    this._isVisible = false;
+  },
+
+  showQueryOptions () {
+    this._isVisible = true;
   },
 
   setTrayVisible: function (trayVisible) {
     this._trayVisible = trayVisible;
   },
 
-  getTrayVisible: function () {
+  getTrayVisible () {
     return this._trayVisible;
   },
 
-  showReduce: function () {
+  showReduce () {
     return this._showReduce;
   },
 
-  reduce: function () {
+  reduce () {
     return this._reduce;
   },
 
-  betweenKeys: function () {
+  betweenKeys () {
     return this._betweenKeys;
   },
 
@@ -74,11 +88,11 @@ Stores.QueryOptionsStore = FauxtonAPI.Store.extend({
     this._skip = skip;
   },
 
-  skip: function () {
+  skip () {
     return this._skip;
   },
 
-  limit: function () {
+  limit () {
     return this._limit;
   },
 
@@ -86,7 +100,7 @@ Stores.QueryOptionsStore = FauxtonAPI.Store.extend({
     this._limit = limit;
   },
 
-  byKeys: function () {
+  byKeys () {
     return this._byKeys;
   },
 
@@ -94,19 +108,19 @@ Stores.QueryOptionsStore = FauxtonAPI.Store.extend({
     this._byKeys = keys;
   },
 
-  includeDocs: function () {
+  includeDocs () {
     return this._includeDocs;
   },
 
-  descending: function () {
+  descending () {
     return this._descending;
   },
 
-  groupLevel: function () {
+  groupLevel () {
     return this._groupLevel;
   },
 
-  toggleByKeys: function () {
+  toggleByKeys () {
     this._showByKeys = !this._showByKeys;
 
     if (this._showByKeys) {
@@ -114,7 +128,7 @@ Stores.QueryOptionsStore = FauxtonAPI.Store.extend({
     }
   },
 
-  toggleBetweenKeys: function () {
+  toggleBetweenKeys () {
     this._showBetweenKeys = !this._showBetweenKeys;
 
     if (this._showBetweenKeys) {
@@ -122,11 +136,11 @@ Stores.QueryOptionsStore = FauxtonAPI.Store.extend({
     }
   },
 
-  showByKeys: function () {
+  showByKeys () {
     return this._showByKeys;
   },
 
-  showBetweenKeys: function () {
+  showBetweenKeys () {
     return this._showBetweenKeys;
   },
 
@@ -141,7 +155,7 @@ Stores.QueryOptionsStore = FauxtonAPI.Store.extend({
     }
 
     if (params.start_key || params.end_key) {
-      var include = true;
+      let include = true;
 
       if (params.inclusive_end) {
         include = params.inclusive_end === 'true';
@@ -182,15 +196,15 @@ Stores.QueryOptionsStore = FauxtonAPI.Store.extend({
     }
   },
 
-  getQueryParams: function () {
-    var params = {};
+  getQueryParams () {
+    const params = {};
 
     if (this._includeDocs) {
       params.include_docs = this._includeDocs;
     }
 
     if (this._showBetweenKeys) {
-      var betweenKeys = this._betweenKeys;
+      const betweenKeys = this._betweenKeys;
       params.inclusive_end = betweenKeys.include;
       if (betweenKeys.startkey && betweenKeys.startkey !== '') {
         params.start_key = betweenKeys.startkey;
@@ -227,7 +241,7 @@ Stores.QueryOptionsStore = FauxtonAPI.Store.extend({
     return params;
   },
 
-  getIncludeDocsEnabled: function () {
+  getIncludeDocsEnabled () {
     return this._includeDocs;
   },
 
@@ -271,6 +285,12 @@ Stores.QueryOptionsStore = FauxtonAPI.Store.extend({
       break;
       case ActionTypes.QUERY_UPDATE_VISIBILITY:
         this.setTrayVisible(action.options);
+      break;
+      case ActionTypes.QUERY_HIDE:
+        this.hideQueryOptions();
+      break;
+      case ActionTypes.QUERY_SHOW:
+        this.showQueryOptions();
       break;
       default:
       return;

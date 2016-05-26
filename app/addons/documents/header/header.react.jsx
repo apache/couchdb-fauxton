@@ -10,24 +10,24 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import app from "../../../app";
-import FauxtonAPI from "../../../core/api";
-import React from "react";
-import Actions from "./header.actions";
-import ReactComponents from "../../components/react-components.react";
-import IndexResultsStore from "../index-results/stores";
-import IndexResultsActions from "../index-results/actions";
-import { ButtonGroup, Button } from "react-bootstrap";
-import QueryOptionsStore from "../queryoptions/stores";
-import ReactCSSTransitionGroup from "react-addons-css-transition-group";
+import app from '../../../app';
 
-var indexResultsStore = IndexResultsStore.indexResultsStore;
-var queryOptionsStore = QueryOptionsStore.queryOptionsStore;
+import FauxtonAPI from '../../../core/api';
+import React from 'react';
+import Actions from './header.actions';
+import Components from '../../components/react-components.react';
+import IndexResultStores from '../index-results/stores';
+import IndexResultsActions from '../index-results/actions';
+import QueryOptionsStore from '../queryoptions/stores';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+import { Button, ButtonGroup } from 'react-bootstrap';
 
-var ToggleHeaderButton = ReactComponents.ToggleHeaderButton;
+const { indexResultsStore } = IndexResultStores;
+const { queryOptionsStore } = QueryOptionsStore;
+const { ToggleHeaderButton } = Components;
 
 var BulkDocumentHeaderController = React.createClass({
-  getStoreState: function () {
+  getStoreState () {
     return {
       selectedView: indexResultsStore.getCurrentViewType(),
       isTableView: indexResultsStore.getIsTableView(),
@@ -36,26 +36,26 @@ var BulkDocumentHeaderController = React.createClass({
     };
   },
 
-  getInitialState: function () {
+  getInitialState () {
     return this.getStoreState();
   },
 
-  componentDidMount: function () {
+  componentDidMount () {
     indexResultsStore.on('change', this.onChange, this);
     queryOptionsStore.on('change', this.onChange, this);
 
   },
 
-  componentWillUnmount: function () {
+  componentWillUnmount () {
     indexResultsStore.off('change', this.onChange);
     queryOptionsStore.off('change', this.onChange);
   },
 
-  onChange: function () {
+  onChange () {
     this.setState(this.getStoreState());
   },
 
-  render: function () {
+  render () {
     var isTableViewSelected = this.state.isTableView;
 
     return (
@@ -85,7 +85,7 @@ var BulkDocumentHeaderController = React.createClass({
     );
   },
 
-  toggleIncludeDocs: function () {
+  toggleIncludeDocs () {
     Actions.toggleIncludeDocs(this.state.includeDocs, this.state.bulkDocCollection);
   },
 
@@ -94,8 +94,6 @@ var BulkDocumentHeaderController = React.createClass({
   }
 });
 
-var Views = {
+export default {
   BulkDocumentHeaderController: BulkDocumentHeaderController
 };
-
-export default Views;

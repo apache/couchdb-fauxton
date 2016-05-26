@@ -14,7 +14,7 @@ import app from "../../../app";
 import FauxtonAPI from "../../../core/api";
 import ActionTypes from "./actiontypes";
 import Stores from "./stores";
-var store = Stores.queryOptionsStore;
+const store = Stores.queryOptionsStore;
 
 export default {
 
@@ -106,6 +106,17 @@ export default {
         type: ActionTypes.QUERY_SHOW_REDUCE
       });
     }
-  }
+  },
 
+  showQueryOptions: function () {
+    FauxtonAPI.dispatch({
+      type: ActionTypes.QUERY_SHOW
+    });
+  },
+
+  hideQueryOptions: function () {
+    FauxtonAPI.dispatch({
+      type: ActionTypes.QUERY_HIDE
+    });
+  }
 };

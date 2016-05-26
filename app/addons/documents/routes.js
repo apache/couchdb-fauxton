@@ -10,11 +10,12 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import Documents from "./views";
+import Documents from './shared-resources';
 import DocumentsRouteObject from "./routes-documents";
 import docEditor from "./routes-doc-editor";
 import IndexEditorRouteObject from "./routes-index-editor";
 import Mango from "./routes-mango";
+
 Documents.RouteObjects = [
   docEditor.DocEditorRouteObject,
   docEditor.RevBrowserRouteObject,

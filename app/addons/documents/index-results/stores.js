@@ -31,9 +31,9 @@ Stores.IndexResultsStore = FauxtonAPI.Store.extend({
   },
 
   reset: function () {
-    this._collection = new Backbone.Collection.extend({
+    this._collection = new (FauxtonAPI.Collection.extend({
       url: ''
-    });
+    }))();
 
     this._filteredCollection = [];
     this._bulkDeleteDocCollection = new Resources.BulkDeleteDocCollection([], {});
@@ -70,10 +70,6 @@ Stores.IndexResultsStore = FauxtonAPI.Store.extend({
     }
 
     this.initPerPage();
-  },
-
-  getCollection: function () {
-    return this._collection;
   },
 
   canShowPrevious: function () {

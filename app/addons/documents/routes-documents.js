@@ -10,25 +10,28 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import app from "../../app";
-import FauxtonAPI from "../../core/api";
-import BaseRoute from "./shared-routes";
-import Documents from "./views";
-import Changes from "./changes/components.react";
-import ChangesActions from "./changes/actions";
-import Databases from "../databases/base";
-import Resources from "./resources";
-import Components from "../fauxton/components";
-import IndexResultStores from "./index-results/stores";
-import IndexResultsActions from "./index-results/actions";
-import IndexResultsComponents from "./index-results/index-results.components.react";
-import ReactPagination from "./pagination/pagination.react";
-import ReactHeader from "./header/header.react";
-import ReactActions from "./header/header.actions";
-import SidebarActions from "./sidebar/actions";
-import DesignDocInfoActions from "./designdocinfo/actions";
-import DesignDocInfoComponents from "./designdocinfo/components.react";
-import ComponentsActions from "../components/actions";
+import app from '../../app';
+
+import FauxtonAPI from '../../core/api';
+import BaseRoute from './shared-routes';
+import Documents from './resources';
+import RightAllDocsHeader from './rightalldocsheader.react';
+import Changes from './changes/components.react';
+import ChangesActions from './changes/actions';
+import Databases from '../databases/base';
+import Resources from './resources';
+import Components from '../fauxton/components';
+import IndexResultStores from './index-results/stores';
+import IndexResultsActions from './index-results/actions';
+import IndexResultsComponents from './index-results/index-results.components.react';
+import ReactPagination from './pagination/pagination.react';
+import ReactHeader from './header/header.react';
+import ReactActions from './header/header.actions';
+import SidebarActions from './sidebar/actions';
+import DesignDocInfoActions from './designdocinfo/actions';
+import DesignDocInfoComponents from './designdocinfo/components.react';
+import ComponentsActions from '../components/actions';
+import QueryOptionsActions from './queryoptions/actions';
 
 var DocumentsRouteObject = BaseRoute.extend({
   layout: "with_tabs_sidebar",
@@ -67,9 +70,9 @@ var DocumentsRouteObject = BaseRoute.extend({
 
     this.createDesignDocsCollection();
 
-    this.rightHeader = this.setView("#right-header", new Documents.Views.RightAllDocsHeader({
+    this.setComponent("#right-header", RightAllDocsHeader, {
       database: this.database
-    }));
+    });
 
     this.addLeftHeader();
     this.addSidebar();
@@ -93,7 +96,7 @@ var DocumentsRouteObject = BaseRoute.extend({
     });
 
     this.leftheader.updateCrumbs(this.getCrumbs(this.database));
-    this.rightHeader.hideQueryOptions();
+    QueryOptionsActions.hideQueryOptions();
 
     this.apiUrl = [designDocInfo.url('apiurl'), designDocInfo.documentation()];
   },
@@ -157,9 +160,9 @@ var DocumentsRouteObject = BaseRoute.extend({
     // the initial this.database object which can change
     this.apiUrl = [this.database.allDocs.urlRef("apiurl", urlParams), this.database.allDocs.documentation()];
 
-    // update the rightHeader with the latest & greatest info
-    this.rightHeader.resetQueryOptions({ queryParams: urlParams });
-    this.rightHeader.showQueryOptions();
+    // update the query options with the latest & greatest info
+    QueryOptionsActions.reset({queryParams: urlParams});
+    QueryOptionsActions.showQueryOptions();
   },
 
   reloadDesignDocs: function (event) {
@@ -183,7 +186,7 @@ var DocumentsRouteObject = BaseRoute.extend({
 
     SidebarActions.selectNavItem('changes');
     this.leftheader.updateCrumbs(this.getCrumbs(this.database));
-    this.rightHeader.hideQueryOptions();
+    QueryOptionsActions.hideQueryOptions();
 
     this.apiUrl = function () {
       return [FauxtonAPI.urls('changes', 'apiurl', this.database.id, ''), this.database.documentation()];

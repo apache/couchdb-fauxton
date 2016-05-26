@@ -14,7 +14,7 @@ import app from "../../app";
 import FauxtonAPI from "../../core/api";
 import Helpers from "./helpers";
 import BaseRoute from "./shared-routes";
-import Documents from "./views";
+import Documents from "./resources";
 import IndexEditorComponents from "./index-editor/components.react";
 import ActionsIndexEditor from "./index-editor/actions";
 import Databases from "../databases/base";
@@ -26,6 +26,7 @@ import ReactPagination from "./pagination/pagination.react";
 import ReactHeader from "./header/header.react";
 import ReactHeaderActions from "./header/header.actions";
 import SidebarActions from "./sidebar/actions";
+import RightAllDocsHeader from './rightalldocsheader.react';
 
 
 var IndexEditorAndResults = BaseRoute.extend({
@@ -57,6 +58,10 @@ var IndexEditorAndResults = BaseRoute.extend({
     this.createDesignDocsCollection();
     this.addLeftHeader();
     this.addSidebar();
+
+    this.setComponent("#right-header", RightAllDocsHeader, {
+      database: this.database
+    });
   },
 
   establish: function () {
@@ -71,10 +76,6 @@ var IndexEditorAndResults = BaseRoute.extend({
         urlParams = params.urlParams,
         docParams = params.docParams,
         decodeDdoc = decodeURIComponent(ddoc);
-
-    this.rightHeader = this.setView('#right-header', new Documents.Views.RightAllDocsHeader({
-      database: this.database
-    }));
 
     viewName = viewName.replace(/\?.*$/, '');
     this.setComponent('#footer', ReactPagination.Footer);

@@ -19,6 +19,7 @@ import PaginationActions from "./pagination/actions";
 import IndexResultStores from "./index-results/stores";
 import SidebarComponents from "./sidebar/sidebar.react";
 import SidebarActions from "./sidebar/actions";
+import QueryActions from './queryoptions/actions';
 
 
 // The Documents section is built up a lot of different route object which share code. This contains
@@ -74,8 +75,8 @@ var BaseRoute = FauxtonAPI.RouteObject.extend({
       var design = _.findWhere(that.designDocs.models, {id: '_design/' + ddoc});
       !_.isUndefined(hasReduceFunction = design.attributes.doc.views[viewName].reduce);
 
-      that.rightHeader.showQueryOptions();
-      that.rightHeader.resetQueryOptions({
+      QueryActions.showQueryOptions();
+      QueryActions.reset({
         queryParams: urlParams,
         hasReduce: hasReduceFunction,
         showReduce: !_.isUndefined(hasReduceFunction),
