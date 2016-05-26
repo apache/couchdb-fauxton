@@ -5,7 +5,7 @@ git:
   depth: 10
 
 addons:
-  firefox: "38.0.1"
+  firefox: "46.0.1"
 before_install:
   - npm config set strict-ssl false
 
