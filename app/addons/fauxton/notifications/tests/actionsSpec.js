@@ -13,16 +13,14 @@ define([
   '../../../../core/api',
   '../notifications.react',
   '../stores',
+  '../actions',
   '../../../../../test/mocha/testUtils',
   'react',
   'react-dom',
   'moment',
   'react-addons-test-utils',
   'sinon'
-], function (FauxtonAPI, Views, Stores, utils, React, ReactDOM, moment, TestUtils) {
-  var assert = utils.assert;
-  var store = Stores.notificationStore;
-
+], function (FauxtonAPI, Views, {notificationStore: store}, Actions, {assert, restore}, React, ReactDOM, moment, TestUtils) {
 
   describe('NotificationPanel', function () {
     var container;
@@ -33,26 +31,19 @@ define([
     });
 
     afterEach(function () {
+      restore(Actions.clearAllNotifications);
       ReactDOM.unmountComponentAtNode(container);
     });
 
     it('clear all action fires', function () {
-      var panelEl = TestUtils.renderIntoDocument(<Views.NotificationPanel />, container);
-
       var stub = sinon.stub(Actions, 'clearAllNotifications');
+
+      var panelEl = TestUtils.renderIntoDocument(<Views.NotificationCenterPanel
+        notifications={[]} filter={'all'}
+        visible={true} />, container);
+
       TestUtils.Simulate.click($(ReactDOM.findDOMNode(panelEl)).find('footer input')[0]);
       assert.ok(stub.calledOnce);
-      Actions.clearAllNotifications.restore();
     });
-
-    it('switch filter action fires', function () {
-      var panelEl = TestUtils.renderIntoDocument(<Views.NotificationPanel />, container);
-
-      var stub = sinon.stub(Actions, 'clearAllNotifications');
-      TestUtils.Simulate.click($(ReactDOM.findDOMNode(panelEl)).find('footer input')[0]);
-      assert.ok(stub.calledOnce);
-      Actions.clearAllNotifications.restore();
-    });
-
   });
 });

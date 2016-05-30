@@ -336,7 +336,11 @@ function (app, FauxtonAPI, React, ReactDOM, Actions, Stores, Components, Velocit
             </div>
 
             <footer>
-              <input type="button" value="Clear All" className="btn btn-small btn-info" onClick={Actions.clearAllNotifications} />
+              <input
+                type="button"
+                value="Clear All"
+                className="btn btn-small btn-info"
+                onClick={Actions.clearAllNotifications} />
             </footer>
           </div>
 
