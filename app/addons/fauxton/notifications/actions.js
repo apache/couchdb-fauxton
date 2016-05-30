@@ -10,83 +10,78 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-define([
-  '../../../core/api',
-  './actiontypes'
-],
-function (FauxtonAPI, ActionTypes) {
+import FauxtonAPI from "../../../core/api";
+import ActionTypes from "./actiontypes";
 
-  function addNotification (notificationInfo) {
-    FauxtonAPI.dispatch({
-      type: ActionTypes.ADD_NOTIFICATION,
-      options: {
-        info: notificationInfo
-      }
-    });
-  }
+function addNotification (notificationInfo) {
+  FauxtonAPI.dispatch({
+    type: ActionTypes.ADD_NOTIFICATION,
+    options: {
+      info: notificationInfo
+    }
+  });
+}
 
-  function showNotificationCenter () {
-    FauxtonAPI.dispatch({ type: ActionTypes.SHOW_NOTIFICATION_CENTER });
-  }
+function showNotificationCenter () {
+  FauxtonAPI.dispatch({ type: ActionTypes.SHOW_NOTIFICATION_CENTER });
+}
 
-  function hideNotificationCenter () {
-    FauxtonAPI.dispatch({ type: ActionTypes.HIDE_NOTIFICATION_CENTER });
-  }
+function hideNotificationCenter () {
+  FauxtonAPI.dispatch({ type: ActionTypes.HIDE_NOTIFICATION_CENTER });
+}
 
-  function clearAllNotifications () {
-    FauxtonAPI.dispatch({ type: ActionTypes.CLEAR_ALL_NOTIFICATIONS });
-  }
+function clearAllNotifications () {
+  FauxtonAPI.dispatch({ type: ActionTypes.CLEAR_ALL_NOTIFICATIONS });
+}
 
-  function clearSingleNotification (notificationId) {
-    FauxtonAPI.dispatch({
-      type: ActionTypes.CLEAR_SINGLE_NOTIFICATION,
-      options: {
-        notificationId: notificationId
-      }
-    });
-  }
+function clearSingleNotification (notificationId) {
+  FauxtonAPI.dispatch({
+    type: ActionTypes.CLEAR_SINGLE_NOTIFICATION,
+    options: {
+      notificationId: notificationId
+    }
+  });
+}
 
-  function selectNotificationFilter (filter) {
-    FauxtonAPI.dispatch({
-      type: ActionTypes.SELECT_NOTIFICATION_FILTER,
-      options: {
-        filter: filter
-      }
-    });
-  }
+function selectNotificationFilter (filter) {
+  FauxtonAPI.dispatch({
+    type: ActionTypes.SELECT_NOTIFICATION_FILTER,
+    options: {
+      filter: filter
+    }
+  });
+}
 
-  function startHidingNotification (notificationId) {
-    FauxtonAPI.dispatch({
-      type: ActionTypes.START_HIDING_NOTIFICATION,
-      options: {
-        notificationId: notificationId
-      }
-    });
-  }
+function startHidingNotification (notificationId) {
+  FauxtonAPI.dispatch({
+    type: ActionTypes.START_HIDING_NOTIFICATION,
+    options: {
+      notificationId: notificationId
+    }
+  });
+}
 
-  function hideNotification (notificationId) {
-    FauxtonAPI.dispatch({
-      type: ActionTypes.HIDE_NOTIFICATION,
-      options: {
-        notificationId: notificationId
-      }
-    });
-  }
+function hideNotification (notificationId) {
+  FauxtonAPI.dispatch({
+    type: ActionTypes.HIDE_NOTIFICATION,
+    options: {
+      notificationId: notificationId
+    }
+  });
+}
 
-  function hideAllVisibleNotifications () {
-    FauxtonAPI.dispatch({ type: ActionTypes.HIDE_ALL_NOTIFICATIONS });
-  }
+function hideAllVisibleNotifications () {
+  FauxtonAPI.dispatch({ type: ActionTypes.HIDE_ALL_NOTIFICATIONS });
+}
 
-  return {
-    addNotification: addNotification,
-    showNotificationCenter: showNotificationCenter,
-    hideNotificationCenter: hideNotificationCenter,
-    clearAllNotifications: clearAllNotifications,
-    clearSingleNotification: clearSingleNotification,
-    selectNotificationFilter: selectNotificationFilter,
-    startHidingNotification: startHidingNotification,
-    hideNotification: hideNotification,
-    hideAllVisibleNotifications: hideAllVisibleNotifications
-  };
-
-});
+export default {
+  addNotification: addNotification,
+  showNotificationCenter: showNotificationCenter,
+  hideNotificationCenter: hideNotificationCenter,
+  clearAllNotifications: clearAllNotifications,
+  clearSingleNotification: clearSingleNotification,
+  selectNotificationFilter: selectNotificationFilter,
+  startHidingNotification: startHidingNotification,
+  hideNotification: hideNotification,
+  hideAllVisibleNotifications: hideAllVisibleNotifications
+};

@@ -9,33 +9,30 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
-define([
-  '../base',
-  '../views',
-  '../resources',
-  '../../../../test/mocha/testUtils',
-], function (Replication, Views, Resources, testUtils) {
-  var assert = testUtils.assert,
-      ViewSandbox = testUtils.ViewSandbox,
-      viewSandbox;
+import Replication from "../base";
+import Views from "../views";
+import Resources from "../resources";
+import testUtils from "../../../../test/mocha/testUtils";
+var assert = testUtils.assert,
+    ViewSandbox = testUtils.ViewSandbox,
+    viewSandbox;
 
-  describe('Replication Addon', function () {
-    describe('Replication View', function () {
-      var view = new Views.ReplicationForm({
-        collection: new Replication.DBList()
-      });
-      beforeEach(function (done) {
-        viewSandbox = new ViewSandbox();
-        viewSandbox.renderView(view, done);
-      });
+describe('Replication Addon', function () {
+  describe('Replication View', function () {
+    var view = new Views.ReplicationForm({
+      collection: new Replication.DBList()
+    });
+    beforeEach(function (done) {
+      viewSandbox = new ViewSandbox();
+      viewSandbox.renderView(view, done);
+    });
 
-      afterEach(function () {
-        viewSandbox.remove();
-      });
+    afterEach(function () {
+      viewSandbox.remove();
+    });
 
-      it("should render", function () {
-        assert.ok(view.$el.length > 0);
-      });
+    it("should render", function () {
+      assert.ok(view.$el.length > 0);
     });
   });
 });

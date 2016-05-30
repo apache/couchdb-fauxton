@@ -10,70 +10,67 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-define([
-  '../../../../core/api',
-  '../stores.react',
-  '../actiontypes',
-  '../../../../../test/mocha/testUtils',
-], function (FauxtonAPI, Stores, ActionTypes, testUtils) {
-  var assert = testUtils.assert;
-  var dispatchToken;
-  var store;
+import FauxtonAPI from "../../../../core/api";
+import Stores from "../stores.react";
+import ActionTypes from "../actiontypes";
+import testUtils from "../../../../../test/mocha/testUtils";
+var assert = testUtils.assert;
+var dispatchToken;
+var store;
 
 
-  describe('Sidebar Store', function () {
+describe('Sidebar Store', function () {
+  beforeEach(function () {
+    store = new Stores.SidebarStore();
+    dispatchToken = FauxtonAPI.dispatcher.register(store.dispatch);
+  });
+
+  afterEach(function () {
+    FauxtonAPI.dispatcher.unregister(dispatchToken);
+  });
+
+  describe('toggle state', function () {
+
+    it('should not be visible if never toggled', function () {
+      assert.notOk(store.isVisible('designDoc'));
+    });
+
+    it('should be visible after being toggled', function () {
+      var designDoc = 'designDoc';
+      store.toggleContent(designDoc);
+      assert.ok(store.isVisible(designDoc));
+    });
+
+    it('should not be visible after being toggled twice', function () {
+      var designDoc = 'designDoc';
+      store.toggleContent(designDoc);
+      store.toggleContent(designDoc);
+      assert.notOk(store.isVisible(designDoc));
+    });
+
+  });
+
+  describe('toggle state for index', function () {
+    var designDoc = 'design-doc';
+
     beforeEach(function () {
-      store = new Stores.SidebarStore();
-      dispatchToken = FauxtonAPI.dispatcher.register(store.dispatch);
+      store.toggleContent(designDoc);
     });
 
-    afterEach(function () {
-      FauxtonAPI.dispatcher.unregister(dispatchToken);
+    it('should be hidden if never toggled', function () {
+      assert.notOk(store.isVisible(designDoc, 'index'));
     });
 
-    describe('toggle state', function () {
-
-      it('should not be visible if never toggled', function () {
-        assert.notOk(store.isVisible('designDoc'));
-      });
-
-      it('should be visible after being toggled', function () {
-        var designDoc = 'designDoc';
-        store.toggleContent(designDoc);
-        assert.ok(store.isVisible(designDoc));
-      });
-
-      it('should not be visible after being toggled twice', function () {
-        var designDoc = 'designDoc';
-        store.toggleContent(designDoc);
-        store.toggleContent(designDoc);
-        assert.notOk(store.isVisible(designDoc));
-      });
-
+    it('should be if toggled', function () {
+      store.toggleContent(designDoc, 'index');
+      assert.ok(store.isVisible(designDoc, 'index'));
     });
 
-    describe('toggle state for index', function () {
-      var designDoc = 'design-doc';
-
-      beforeEach(function () {
-        store.toggleContent(designDoc);
-      });
-
-      it('should be hidden if never toggled', function () {
-        assert.notOk(store.isVisible(designDoc, 'index'));
-      });
-
-      it('should be if toggled', function () {
-        store.toggleContent(designDoc, 'index');
-        assert.ok(store.isVisible(designDoc, 'index'));
-      });
-
-      it('should be hidden after being toggled twice', function () {
-        store.toggleContent(designDoc, 'index');
-        store.toggleContent(designDoc, 'index');
-        assert.notOk(store.isVisible(designDoc, 'index'));
-      });
-
+    it('should be hidden after being toggled twice', function () {
+      store.toggleContent(designDoc, 'index');
+      store.toggleContent(designDoc, 'index');
+      assert.notOk(store.isVisible(designDoc, 'index'));
     });
+
   });
 });

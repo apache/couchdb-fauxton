@@ -10,116 +10,113 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-define([
-  '../../app',
-  '../../core/api'
-], function (app, FauxtonAPI) {
+import app from "../../app";
+import FauxtonAPI from "../../core/api";
 
 
-  function getPreviousPageForDoc (database, wasCloned) {
-    var previousPage = database.url('index'), // default to the current database's all_docs page
-        lastPages = FauxtonAPI.router.lastPages;
+function getPreviousPageForDoc (database, wasCloned) {
+  var previousPage = database.url('index'), // default to the current database's all_docs page
+      lastPages = FauxtonAPI.router.lastPages;
 
-    if (!wasCloned && lastPages.length >= 2) {
+  if (!wasCloned && lastPages.length >= 2) {
 
-      // if we came from "/new", we don't want to link the user there
-      if (/(new|new_view)$/.test(lastPages[1])) {
-        previousPage = lastPages[0];
-      } else {
-        previousPage = lastPages[1];
-      }
+    // if we came from "/new", we don't want to link the user there
+    if (/(new|new_view)$/.test(lastPages[1])) {
+      previousPage = lastPages[0];
+    } else {
+      previousPage = lastPages[1];
     }
-
-    return previousPage;
   }
 
-  function getPreviousPage (database) {
-    return database.url('index');
-  }
+  return previousPage;
+}
 
-  // sequence info is an array in couchdb2 with two indexes. On couch 1.x, it's just a string / number
-  function getSeqNum (val) {
-    return _.isArray(val) ? val[1] : val;
-  }
+function getPreviousPage (database) {
+  return database.url('index');
+}
 
-  function getNewButtonLinks (databaseName) {
-    var addLinks = FauxtonAPI.getExtensions('sidebar:links');
-    var newUrlPrefix = '#' + FauxtonAPI.urls('databaseBaseURL', 'app', databaseName);
+// sequence info is an array in couchdb2 with two indexes. On couch 1.x, it's just a string / number
+function getSeqNum (val) {
+  return _.isArray(val) ? val[1] : val;
+}
 
-    var addNewLinks = _.reduce(addLinks, function (menuLinks, link) {
-      menuLinks.push({
-        title: link.title,
-        url: newUrlPrefix + '/' + link.url,
-        icon: 'fonticon-plus-circled'
-      });
+function getNewButtonLinks (databaseName) {
+  var addLinks = FauxtonAPI.getExtensions('sidebar:links');
+  var newUrlPrefix = '#' + FauxtonAPI.urls('databaseBaseURL', 'app', databaseName);
 
-      return menuLinks;
-    }, [{
-      title: 'New Doc',
-      url: newUrlPrefix + '/new',
+  var addNewLinks = _.reduce(addLinks, function (menuLinks, link) {
+    menuLinks.push({
+      title: link.title,
+      url: newUrlPrefix + '/' + link.url,
       icon: 'fonticon-plus-circled'
-    }, {
-      title: 'New View',
-      url: newUrlPrefix + '/new_view',
-      icon: 'fonticon-plus-circled'
-    }, getMangoLink(databaseName)]);
+    });
 
-    return [{
-      title: 'Add New',
-      links: addNewLinks
-    }];
-  }
+    return menuLinks;
+  }, [{
+    title: 'New Doc',
+    url: newUrlPrefix + '/new',
+    icon: 'fonticon-plus-circled'
+  }, {
+    title: 'New View',
+    url: newUrlPrefix + '/new_view',
+    icon: 'fonticon-plus-circled'
+  }, getMangoLink(databaseName)]);
 
-  function getMangoLink (databaseName) {
-    var newUrlPrefix = '#' + FauxtonAPI.urls('databaseBaseURL', 'app', databaseName);
+  return [{
+    title: 'Add New',
+    links: addNewLinks
+  }];
+}
 
-    return {
-      title: app.i18n.en_US['new-mango-index'],
-      url: newUrlPrefix + '/_index',
-      icon: 'fonticon-plus-circled'
-    };
-  }
-
-  function parseJSON (str) {
-    return JSON.parse('"' + str + '"');   // this ensures newlines are converted
-  }
-
-  function getModifyDatabaseLinks (databaseName, deleteCallback) {
-    return [{
-      title: 'Replicate Database',
-      icon: 'fonticon-replicate',
-      url: FauxtonAPI.urls('replication', 'app', databaseName)
-    }, {
-      title: 'Delete',
-      icon: 'fonticon-trash',
-      onClick: function () {
-        deleteCallback({showDeleteModal: true, dbId: databaseName});
-      }
-    }];
-  }
-
-  function truncateDoc (docString, maxRows) {
-    var lines = docString.split('\n');
-    var isTruncated = false;
-    if (lines.length > maxRows) {
-      isTruncated = true;
-      lines = lines.slice(0, maxRows);
-      docString = lines.join('\n');
-    }
-    return {
-      isTruncated: isTruncated,
-      content: docString
-    };
-  }
-
+function getMangoLink (databaseName) {
+  var newUrlPrefix = '#' + FauxtonAPI.urls('databaseBaseURL', 'app', databaseName);
 
   return {
-    getPreviousPageForDoc: getPreviousPageForDoc,
-    getPreviousPage: getPreviousPage,
-    getSeqNum: getSeqNum,
-    getNewButtonLinks: getNewButtonLinks,
-    getModifyDatabaseLinks: getModifyDatabaseLinks,
-    parseJSON: parseJSON,
-    truncateDoc: truncateDoc
+    title: app.i18n.en_US['new-mango-index'],
+    url: newUrlPrefix + '/_index',
+    icon: 'fonticon-plus-circled'
   };
-});
+}
+
+function parseJSON (str) {
+  return JSON.parse('"' + str + '"');   // this ensures newlines are converted
+}
+
+function getModifyDatabaseLinks (databaseName, deleteCallback) {
+  return [{
+    title: 'Replicate Database',
+    icon: 'fonticon-replicate',
+    url: FauxtonAPI.urls('replication', 'app', databaseName)
+  }, {
+    title: 'Delete',
+    icon: 'fonticon-trash',
+    onClick: function () {
+      deleteCallback({showDeleteModal: true, dbId: databaseName});
+    }
+  }];
+}
+
+function truncateDoc (docString, maxRows) {
+  var lines = docString.split('\n');
+  var isTruncated = false;
+  if (lines.length > maxRows) {
+    isTruncated = true;
+    lines = lines.slice(0, maxRows);
+    docString = lines.join('\n');
+  }
+  return {
+    isTruncated: isTruncated,
+    content: docString
+  };
+}
+
+
+export default {
+  getPreviousPageForDoc: getPreviousPageForDoc,
+  getPreviousPage: getPreviousPage,
+  getSeqNum: getSeqNum,
+  getNewButtonLinks: getNewButtonLinks,
+  getModifyDatabaseLinks: getModifyDatabaseLinks,
+  parseJSON: parseJSON,
+  truncateDoc: truncateDoc
+};

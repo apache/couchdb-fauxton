@@ -10,23 +10,18 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-define([
-  '../../app',
-  '../../core/api',
-  './route',
-  './assets/less/replication.less'
-],
+import app from "../../app";
+import FauxtonAPI from "../../core/api";
+import replication from "./route";
+import "./assets/less/replication.less";
+replication.initialize = function () {
+  FauxtonAPI.addHeaderLink({ title: 'Replication', href: '#/replication', icon: 'fonticon-replicate' });
+};
 
-function (app, FauxtonAPI, replication) {
-  replication.initialize = function () {
-    FauxtonAPI.addHeaderLink({ title: 'Replication', href: '#/replication', icon: 'fonticon-replicate' });
-  };
-
-  FauxtonAPI.registerUrls( 'replication', {
-    app: function (db) {
-      return '#/replication/' + db;
-    }
-  });
-
-  return replication;
+FauxtonAPI.registerUrls( 'replication', {
+  app: function (db) {
+    return '#/replication/' + db;
+  }
 });
+
+export default replication;

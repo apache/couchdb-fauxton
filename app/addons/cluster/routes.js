@@ -10,43 +10,38 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-define([
-  '../../app',
-  '../../core/api',
-  './resources',
-  './cluster.react',
-  './cluster.actions'
-],
-
-function (app, FauxtonAPI, Cluster, ClusterComponents, ClusterActions) {
+import app from "../../app";
+import FauxtonAPI from "../../core/api";
+import Cluster from "./resources";
+import ClusterComponents from "./cluster.react";
+import ClusterActions from "./cluster.actions";
 
 
-  var ConfigDisabledRouteObject = FauxtonAPI.RouteObject.extend({
-    layout: 'one_pane',
+var ConfigDisabledRouteObject = FauxtonAPI.RouteObject.extend({
+  layout: 'one_pane',
 
-    routes: {
-      'cluster/disabled': 'showDisabledFeatureScreen'
-    },
+  routes: {
+    'cluster/disabled': 'showDisabledFeatureScreen'
+  },
 
-    crumbs: [
-      { name: 'Config disabled', link: '_config' }
-    ],
+  crumbs: [
+    { name: 'Config disabled', link: '_config' }
+  ],
 
-    apiUrl: function () {
-      return [this.memberships.url('apiurl'), this.memberships.documentation];
-    },
+  apiUrl: function () {
+    return [this.memberships.url('apiurl'), this.memberships.documentation];
+  },
 
-    initialize: function () {
-      this.memberships = new Cluster.ClusterNodes();
-    },
+  initialize: function () {
+    this.memberships = new Cluster.ClusterNodes();
+  },
 
-    showDisabledFeatureScreen: function () {
-      ClusterActions.fetchNodes();
-      this.warning = this.setComponent('#dashboard-content', ClusterComponents.DisabledConfigController);
-    }
-  });
-
-  Cluster.RouteObjects = [ConfigDisabledRouteObject];
-
-  return Cluster;
+  showDisabledFeatureScreen: function () {
+    ClusterActions.fetchNodes();
+    this.warning = this.setComponent('#dashboard-content', ClusterComponents.DisabledConfigController);
+  }
 });
+
+Cluster.RouteObjects = [ConfigDisabledRouteObject];
+
+export default Cluster;

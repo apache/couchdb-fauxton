@@ -10,78 +10,74 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-define([
-  '../../app',
-  '../../core/api'
-],
-function (app, FauxtonAPI) {
-  var Permissions = FauxtonAPI.addon();
+import app from "../../app";
+import FauxtonAPI from "../../core/api";
+var Permissions = FauxtonAPI.addon();
 
-  Permissions.Security = Backbone.Model.extend({
-    defaults: {
-      admins:  { names: [], roles: [] },
-      members: { names: [], roles: [] }
-    },
+Permissions.Security = Backbone.Model.extend({
+  defaults: {
+    admins:  { names: [], roles: [] },
+    members: { names: [], roles: [] }
+  },
 
-    isNew: function () {
-      return false;
-    },
+  isNew: function () {
+    return false;
+  },
 
-    initialize: function (attrs, options) {
-      this.database = options.database;
-    },
+  initialize: function (attrs, options) {
+    this.database = options.database;
+  },
 
-    url: function () {
-      return window.location.origin + '/' + this.database.safeID() + '/_security';
-    },
+  url: function () {
+    return window.location.origin + '/' + this.database.safeID() + '/_security';
+  },
 
-    documentation: FauxtonAPI.constants.DOC_URLS.DB_PERMISSION,
+  documentation: FauxtonAPI.constants.DOC_URLS.DB_PERMISSION,
 
-    addItem: function (value, type, section) {
-      var sectionValues = this.get(section);
+  addItem: function (value, type, section) {
+    var sectionValues = this.get(section);
 
-      var check = this.canAddItem(value, type, section);
-      if (check.error) { return check;}
+    var check = this.canAddItem(value, type, section);
+    if (check.error) { return check;}
 
-      sectionValues[type].push(value);
-      return this.set(section, sectionValues);
-    },
+    sectionValues[type].push(value);
+    return this.set(section, sectionValues);
+  },
 
-    canAddItem: function (value, type, section) {
-      var sectionValues = this.get(section);
+  canAddItem: function (value, type, section) {
+    var sectionValues = this.get(section);
 
-      if (!sectionValues || !sectionValues[type]) {
-        return {
-          error: true,
-          msg: 'Section ' + section + ' does not exist'
-        };
-      }
-
-      if (sectionValues[type].indexOf(value) > -1) {
-        return {
-          error: true,
-          msg: 'Role/Name has already been added'
-        };
-      }
-
+    if (!sectionValues || !sectionValues[type]) {
       return {
-        error: false
+        error: true,
+        msg: 'Section ' + section + ' does not exist'
       };
-    },
-
-    removeItem: function (value, type, section) {
-      var sectionValues = this.get(section);
-      var types = sectionValues[type];
-      var indexOf = _.indexOf(types, value);
-
-      if (indexOf  === -1) { return;}
-
-      types.splice(indexOf, 1);
-      sectionValues[type] = types;
-      return this.set(section, sectionValues);
     }
 
-  });
+    if (sectionValues[type].indexOf(value) > -1) {
+      return {
+        error: true,
+        msg: 'Role/Name has already been added'
+      };
+    }
 
-  return Permissions;
+    return {
+      error: false
+    };
+  },
+
+  removeItem: function (value, type, section) {
+    var sectionValues = this.get(section);
+    var types = sectionValues[type];
+    var indexOf = _.indexOf(types, value);
+
+    if (indexOf  === -1) { return;}
+
+    types.splice(indexOf, 1);
+    sectionValues[type] = types;
+    return this.set(section, sectionValues);
+  }
+
 });
+
+export default Permissions;

@@ -10,43 +10,40 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-define([
-  '../../../../core/api',
-  '../actions',
-  '../../../../../test/mocha/testUtils',
-  'sinon'
-], function (FauxtonAPI, Actions, testUtils, sinon) {
-  var assert = testUtils.assert;
-  var restore = testUtils.restore;
+import FauxtonAPI from "../../../../core/api";
+import Actions from "../actions";
+import testUtils from "../../../../../test/mocha/testUtils";
+import sinon from "sinon";
+var assert = testUtils.assert;
+var restore = testUtils.restore;
 
-  describe('DesignDocInfo Actions', function () {
+describe('DesignDocInfo Actions', function () {
 
-    describe('fetchDesignDocInfo', function () {
+  describe('fetchDesignDocInfo', function () {
 
-      afterEach(function () {
-        restore(Actions.monitorDesignDoc);
-      });
-
-      it('calls monitorDesignDoc on successful fetch', function () {
-        var promise = FauxtonAPI.Deferred();
-        promise.resolve();
-        var fakeDesignDocInfo = {
-          fetch: function () {
-            return promise;
-          }
-        };
-
-        var spy = sinon.spy(Actions, 'monitorDesignDoc');
-
-
-        Actions.fetchDesignDocInfo({
-          ddocName: 'test-designdoc-info',
-          designDocInfo: fakeDesignDocInfo
-        });
-
-        assert.ok(spy.calledOnce);
-      });
+    afterEach(function () {
+      restore(Actions.monitorDesignDoc);
     });
 
+    it('calls monitorDesignDoc on successful fetch', function () {
+      var promise = FauxtonAPI.Deferred();
+      promise.resolve();
+      var fakeDesignDocInfo = {
+        fetch: function () {
+          return promise;
+        }
+      };
+
+      var spy = sinon.spy(Actions, 'monitorDesignDoc');
+
+
+      Actions.fetchDesignDocInfo({
+        ddocName: 'test-designdoc-info',
+        designDocInfo: fakeDesignDocInfo
+      });
+
+      assert.ok(spy.calledOnce);
+    });
   });
+
 });

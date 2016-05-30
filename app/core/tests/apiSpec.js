@@ -9,41 +9,37 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
-define([
-  '../api',
-  '../../../test/mocha/testUtils',
-], function (FauxtonAPI, testUtils) {
-  var assert = testUtils.assert;
+import FauxtonAPI from "../api";
+import testUtils from "../../../test/mocha/testUtils";
+var assert = testUtils.assert;
 
-  describe('URLs', function () {
+describe('URLs', function () {
 
-    it('can register and get url', function () {
-      var testUrl = 'this_is_a_test_url';
+  it('can register and get url', function () {
+    var testUrl = 'this_is_a_test_url';
 
-      FauxtonAPI.registerUrls('testURL', {
-        server: function () {
-          return testUrl;
-        }
-      });
-
-      assert.equal(FauxtonAPI.urls('testURL', 'server'), testUrl);
-
+    FauxtonAPI.registerUrls('testURL', {
+      server: function () {
+        return testUrl;
+      }
     });
 
-    it('can register interceptor to change url', function () {
-      var testUrl = 'interceptor_url';
+    assert.equal(FauxtonAPI.urls('testURL', 'server'), testUrl);
 
-      FauxtonAPI.registerExtension('urls:interceptors', function (name, context) {
-        if (name === 'testURL' && context === 'intercept') {
-          return testUrl;
-        }
+  });
 
-        return false;
-      });
+  it('can register interceptor to change url', function () {
+    var testUrl = 'interceptor_url';
 
-      assert.equal(FauxtonAPI.urls('testURL', 'intercept'), testUrl);
+    FauxtonAPI.registerExtension('urls:interceptors', function (name, context) {
+      if (name === 'testURL' && context === 'intercept') {
+        return testUrl;
+      }
+
+      return false;
     });
 
+    assert.equal(FauxtonAPI.urls('testURL', 'intercept'), testUrl);
   });
 
 });

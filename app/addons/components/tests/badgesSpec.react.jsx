@@ -9,48 +9,45 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
-define([
-  '../../../core/api',
-  '../react-components.react',
-  '../../../../test/mocha/testUtils',
-  'react',
-  'react-dom',
-  'react-addons-test-utils',
-], function (FauxtonAPI, ReactComponents, utils, React, ReactDOM, TestUtils) {
+import FauxtonAPI from "../../../core/api";
+import ReactComponents from "../react-components.react";
+import utils from "../../../../test/mocha/testUtils";
+import React from "react";
+import ReactDOM from "react-dom";
+import TestUtils from "react-addons-test-utils";
 
-  var assert = utils.assert;
+var assert = utils.assert;
 
-  describe('Badges', function () {
-    var container, instance;
-    beforeEach(function () {
-      container = document.createElement('div');
-    });
-
-    afterEach(function () {
-      ReactDOM.unmountComponentAtNode(ReactDOM.findDOMNode(instance).parentNode);
-    });
-
-    it('renders a list of badges', function () {
-      instance = TestUtils.renderIntoDocument(
-        <ReactComponents.BadgeList elements={['foo', 'bar']} removeBadge={function () {}} />,
-        container
-      );
-
-      var $el = $(ReactDOM.findDOMNode(instance));
-
-      assert.equal($el.find('.component-badge').length, 2);
-    });
-
-    it('supports custom label formatters', function () {
-      instance = TestUtils.renderIntoDocument(
-        <ReactComponents.BadgeList elements={['foo', 'bar']} removeBadge={function () {}} getLabel={function (el) { return el + 'foo'; }} />,
-        container
-      );
-
-      var $el = $(ReactDOM.findDOMNode(instance));
-
-      assert.equal($el.find('.component-badge').text(), 'foofoo×barfoo×');
-    });
-
+describe('Badges', function () {
+  var container, instance;
+  beforeEach(function () {
+    container = document.createElement('div');
   });
+
+  afterEach(function () {
+    ReactDOM.unmountComponentAtNode(ReactDOM.findDOMNode(instance).parentNode);
+  });
+
+  it('renders a list of badges', function () {
+    instance = TestUtils.renderIntoDocument(
+      <ReactComponents.BadgeList elements={['foo', 'bar']} removeBadge={function () {}} />,
+      container
+    );
+
+    var $el = $(ReactDOM.findDOMNode(instance));
+
+    assert.equal($el.find('.component-badge').length, 2);
+  });
+
+  it('supports custom label formatters', function () {
+    instance = TestUtils.renderIntoDocument(
+      <ReactComponents.BadgeList elements={['foo', 'bar']} removeBadge={function () {}} getLabel={function (el) { return el + 'foo'; }} />,
+      container
+    );
+
+    var $el = $(ReactDOM.findDOMNode(instance));
+
+    assert.equal($el.find('.component-badge').text(), 'foofoo×barfoo×');
+  });
+
 });

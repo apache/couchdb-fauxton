@@ -10,15 +10,10 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-define([
-  '../../app',
-  '../../core/api',
-  './routes'
-],
+import app from "../../app";
+import FauxtonAPI from "../../core/api";
+import Cluster from "./routes";
 
-function (app, FauxtonAPI, Cluster) {
+Cluster.initialize = function () {};
 
-  Cluster.initialize = function () {};
-
-  return Cluster;
-});
+export default Cluster;

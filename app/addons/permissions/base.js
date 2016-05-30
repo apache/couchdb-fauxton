@@ -10,16 +10,11 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-define([
-  '../../app',
-  '../../core/api',
-  './routes',
-  './assets/less/permissions.less'
-],
+import app from "../../app";
+import FauxtonAPI from "../../core/api";
+import Permissions from "./routes";
+import "./assets/less/permissions.less";
 
-function (app, FauxtonAPI, Permissions) {
+Permissions.initialize = function () {};
 
-  Permissions.initialize = function () {};
-
-  return Permissions;
-});
+export default Permissions;

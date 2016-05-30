@@ -10,47 +10,42 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-define([
-  '../../app',
-  '../../core/api'
-],
+import app from "../../app";
+import FauxtonAPI from "../../core/api";
 
-function (app, FauxtonAPI) {
-
-  var Setup = FauxtonAPI.addon();
+var Setup = FauxtonAPI.addon();
 
 
-  Setup.Model = Backbone.Model.extend({
+Setup.Model = Backbone.Model.extend({
 
-    documentation: app.host + '/_utils/docs',
+  documentation: app.host + '/_utils/docs',
 
-    url: function (context) {
-      if (context === "apiurl") {
-        return window.location.origin + "/_cluster_setup";
-      } else {
-        return '/_cluster_setup';
-      }
-    },
+  url: function (context) {
+    if (context === "apiurl") {
+      return window.location.origin + "/_cluster_setup";
+    } else {
+      return '/_cluster_setup';
+    }
+  },
 
-    validate: function (attrs) {
-      if (!attrs.username) {
-        return 'Admin name is required';
-      }
-
-      if (!attrs.password) {
-        return 'Admin password is required';
-      }
-
-      if (attrs.bind_address && attrs.bind_address === '127.0.0.1') {
-        return 'Bind address can not be 127.0.0.1';
-      }
-
-      if (attrs.port && _.isNaN(+attrs.port)) {
-        return 'Bind port must be a number';
-      }
+  validate: function (attrs) {
+    if (!attrs.username) {
+      return 'Admin name is required';
     }
 
-  });
+    if (!attrs.password) {
+      return 'Admin password is required';
+    }
 
-  return Setup;
+    if (attrs.bind_address && attrs.bind_address === '127.0.0.1') {
+      return 'Bind address can not be 127.0.0.1';
+    }
+
+    if (attrs.port && _.isNaN(+attrs.port)) {
+      return 'Bind port must be a number';
+    }
+  }
+
 });
+
+export default Setup;

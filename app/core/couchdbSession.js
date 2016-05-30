@@ -10,61 +10,57 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-define([
-  "./base"
-],
-function (FauxtonAPI) {
-  var CouchdbSession = {
-    Session: FauxtonAPI.Model.extend({
-      url: '/_session',
+import FauxtonAPI from "./base";
+var CouchdbSession = {
+  Session: FauxtonAPI.Model.extend({
+    url: '/_session',
 
-      user: function () {
-        var userCtx = this.get('userCtx');
+    user: function () {
+      var userCtx = this.get('userCtx');
 
-        if (!userCtx || !userCtx.name) { return null; }
+      if (!userCtx || !userCtx.name) { return null; }
 
-        return {
-          name: userCtx.name,
-          roles: userCtx.roles
-        };
-      },
+      return {
+        name: userCtx.name,
+        roles: userCtx.roles
+      };
+    },
 
-      isAdmin: function () {
-        var userCtx = this.get('userCtx');
-        return userCtx.roles.indexOf('_admin') !== -1;
-      },
+    isAdmin: function () {
+      var userCtx = this.get('userCtx');
+      return userCtx.roles.indexOf('_admin') !== -1;
+    },
 
-      fetchUser: function (opt) {
-        var options = opt || {},
-            currentUser = this.user(),
-            fetch = _.bind(this.fetchOnce, this);
+    fetchUser: function (opt) {
+      var options = opt || {},
+          currentUser = this.user(),
+          fetch = _.bind(this.fetchOnce, this);
 
-        if (options.forceFetch) {
-          fetch = _.bind(this.fetch, this);
+      if (options.forceFetch) {
+        fetch = _.bind(this.fetch, this);
+      }
+
+      return fetch(opt).then(function () {
+        var user = this.user();
+
+        // Notify anyone listening on these events that either a user has changed
+        // or current user is the same
+        if (currentUser !== user) {
+          this.trigger('session:userChanged');
+        } else {
+          this.trigger('session:userFetched');
         }
 
-        return fetch(opt).then(function () {
-          var user = this.user();
+        // this will return the user as a value to all function that calls done on this
+        // eg. session.fetchUser().done(user) { .. do something with user ..}
+        return user;
+      }.bind(this), this.triggerError.bind(this));
+    },
 
-          // Notify anyone listening on these events that either a user has changed
-          // or current user is the same
-          if (currentUser !== user) {
-            this.trigger('session:userChanged');
-          } else {
-            this.trigger('session:userFetched');
-          }
+    triggerError: function (xhr, type, message) {
+      this.trigger('session:error', xhr, type, message);
+    }
+  })
+};
 
-          // this will return the user as a value to all function that calls done on this
-          // eg. session.fetchUser().done(user) { .. do something with user ..}
-          return user;
-        }.bind(this), this.triggerError.bind(this));
-      },
-
-      triggerError: function (xhr, type, message) {
-        this.trigger('session:error', xhr, type, message);
-      }
-    })
-  };
-
-  return CouchdbSession;
-});
+export default CouchdbSession;

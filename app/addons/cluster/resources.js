@@ -10,37 +10,33 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-define([
-  '../../app',
-  '../../core/api'
-],
-function (app, FauxtonAPI) {
+import app from "../../app";
+import FauxtonAPI from "../../core/api";
 
-  var Cluster = FauxtonAPI.addon();
+var Cluster = FauxtonAPI.addon();
 
-  Cluster.ClusterNodes = Backbone.Model.extend({
-    url: function (context) {
-      if (context === 'apiurl') {
-        return window.location.origin + '/_membership';
-      } else {
-        return app.host + '/_membership';
-      }
-    },
-
-    parse: function (res) {
-      var list;
-
-      list = res.all_nodes.reduce(function (acc, node) {
-        var isInCluster = res.cluster_nodes.indexOf(node) !== -1;
-
-        acc.push({node: node, isInCluster: isInCluster});
-        return acc;
-      }, []);
-
-      res.nodes_mapped = list;
-      return res;
+Cluster.ClusterNodes = Backbone.Model.extend({
+  url: function (context) {
+    if (context === 'apiurl') {
+      return window.location.origin + '/_membership';
+    } else {
+      return app.host + '/_membership';
     }
-  });
+  },
 
-  return Cluster;
+  parse: function (res) {
+    var list;
+
+    list = res.all_nodes.reduce(function (acc, node) {
+      var isInCluster = res.cluster_nodes.indexOf(node) !== -1;
+
+      acc.push({node: node, isInCluster: isInCluster});
+      return acc;
+    }, []);
+
+    res.nodes_mapped = list;
+    return res;
+  }
 });
+
+export default Cluster;

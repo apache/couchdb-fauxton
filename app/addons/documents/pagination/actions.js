@@ -10,77 +10,71 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-define([
-  '../../../app',
-  "../../../core/api",
-  './actiontypes',
-  '../index-results/actions',
+import app from "../../../app";
+import FauxtonAPI from "../../../core/api";
+import ActionTypes from "./actiontypes";
+import IndexResultsActions from "../index-results/actions";
 
+export default {
 
-],
-function (app, FauxtonAPI, ActionTypes, IndexResultsActions) {
+  updatePerPage: function (perPage, collection, bulkCollection) {
 
-  return {
+    FauxtonAPI.dispatch({
+      type: ActionTypes.PER_PAGE_CHANGE,
+      perPage: perPage
+    });
 
-    updatePerPage: function (perPage, collection, bulkCollection) {
-
-      FauxtonAPI.dispatch({
-        type: ActionTypes.PER_PAGE_CHANGE,
-        perPage: perPage
+    IndexResultsActions.clearResults();
+    collection.fetch().then(function () {
+      IndexResultsActions.resultsListReset();
+      IndexResultsActions.sendMessageNewResultList({
+        collection: collection,
+        bulkCollection: bulkCollection
       });
+    });
+  },
 
-      IndexResultsActions.clearResults();
-      collection.fetch().then(function () {
-        IndexResultsActions.resultsListReset();
-        IndexResultsActions.sendMessageNewResultList({
-          collection: collection,
-          bulkCollection: bulkCollection
-        });
+  setDocumentLimit: function (docLimit) {
+    FauxtonAPI.dispatch({
+      type: ActionTypes.SET_PAGINATION_DOCUMENT_LIMIT,
+      docLimit: docLimit
+    });
+  },
+
+  paginateNext: function (collection, bulkCollection) {
+    FauxtonAPI.dispatch({
+      type: ActionTypes.PAGINATE_NEXT,
+    });
+
+    IndexResultsActions.clearResults();
+    collection.next().then(function () {
+      IndexResultsActions.resultsListReset();
+
+      IndexResultsActions.sendMessageNewResultList({
+        collection: collection,
+        bulkCollection: bulkCollection
       });
-    },
+    });
+  },
 
-    setDocumentLimit: function (docLimit) {
-      FauxtonAPI.dispatch({
-        type: ActionTypes.SET_PAGINATION_DOCUMENT_LIMIT,
-        docLimit: docLimit
+  paginatePrevious: function (collection, bulkCollection) {
+    FauxtonAPI.dispatch({
+      type: ActionTypes.PAGINATE_PREVIOUS,
+    });
+
+    IndexResultsActions.clearResults();
+    collection.previous().then(function () {
+      IndexResultsActions.resultsListReset();
+
+      IndexResultsActions.sendMessageNewResultList({
+        collection: collection,
+        bulkCollection: bulkCollection
       });
-    },
+    });
+  },
 
-    paginateNext: function (collection, bulkCollection) {
-      FauxtonAPI.dispatch({
-        type: ActionTypes.PAGINATE_NEXT,
-      });
+  toggleTableViewType: function () {
+    IndexResultsActions.togglePrioritizedTableView();
+  }
 
-      IndexResultsActions.clearResults();
-      collection.next().then(function () {
-        IndexResultsActions.resultsListReset();
-
-        IndexResultsActions.sendMessageNewResultList({
-          collection: collection,
-          bulkCollection: bulkCollection
-        });
-      });
-    },
-
-    paginatePrevious: function (collection, bulkCollection) {
-      FauxtonAPI.dispatch({
-        type: ActionTypes.PAGINATE_PREVIOUS,
-      });
-
-      IndexResultsActions.clearResults();
-      collection.previous().then(function () {
-        IndexResultsActions.resultsListReset();
-
-        IndexResultsActions.sendMessageNewResultList({
-          collection: collection,
-          bulkCollection: bulkCollection
-        });
-      });
-    },
-
-    toggleTableViewType: function () {
-      IndexResultsActions.togglePrioritizedTableView();
-    }
-
-  };
-});
+};

@@ -10,146 +10,140 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-define([
-  '../../../app',
-  '../../../core/api',
-  'react',
-  './stores',
-  './actions',
-  '../../components/react-components.react',
-  '../../fauxton/components.react'
-],
-
-function (app, FauxtonAPI, React, Stores, Actions, ReactComponents, GeneralComponents) {
-  var designDocInfoStore = Stores.designDocInfoStore;
-  var LoadLines = ReactComponents.LoadLines;
-  var Clipboard = GeneralComponents.Clipboard;
+import app from "../../../app";
+import FauxtonAPI from "../../../core/api";
+import React from "react";
+import Stores from "./stores";
+import Actions from "./actions";
+import ReactComponents from "../../components/react-components.react";
+import GeneralComponents from "../../fauxton/components.react";
+var designDocInfoStore = Stores.designDocInfoStore;
+var LoadLines = ReactComponents.LoadLines;
+var Clipboard = GeneralComponents.Clipboard;
 
 
-  var DesignDocInfo = React.createClass({
-    getStoreState: function () {
-      return {
-        viewIndex: designDocInfoStore.getViewIndex(),
-        isLoading: designDocInfoStore.isLoading(),
-        ddocName: designDocInfoStore.getDdocName()
-      };
-    },
+var DesignDocInfo = React.createClass({
+  getStoreState: function () {
+    return {
+      viewIndex: designDocInfoStore.getViewIndex(),
+      isLoading: designDocInfoStore.isLoading(),
+      ddocName: designDocInfoStore.getDdocName()
+    };
+  },
 
-    getInitialState: function () {
-      return this.getStoreState();
-    },
+  getInitialState: function () {
+    return this.getStoreState();
+  },
 
-    componentDidMount: function () {
-      designDocInfoStore.on('change', this.onChange, this);
-    },
+  componentDidMount: function () {
+    designDocInfoStore.on('change', this.onChange, this);
+  },
 
-    componentWillUnmount: function () {
-      designDocInfoStore.off('change', this.onChange);
-      Actions.stopRefresh();
-    },
+  componentWillUnmount: function () {
+    designDocInfoStore.off('change', this.onChange);
+    Actions.stopRefresh();
+  },
 
-    onChange: function () {
-      this.setState(this.getStoreState());
-    },
+  onChange: function () {
+    this.setState(this.getStoreState());
+  },
 
-    showCopiedMessage: function () {
-      FauxtonAPI.addNotification({
-        type: 'success',
-        msg: 'The MD5 sha has been copied to your clipboard.',
-        clear: true
-      });
-    },
+  showCopiedMessage: function () {
+    FauxtonAPI.addNotification({
+      type: 'success',
+      msg: 'The MD5 sha has been copied to your clipboard.',
+      clear: true
+    });
+  },
 
-    render: function () {
-      var getDocUrl = app.helpers.getDocUrl;
-      var viewIndex = this.state.viewIndex;
+  render: function () {
+    var getDocUrl = app.helpers.getDocUrl;
+    var viewIndex = this.state.viewIndex;
 
-      if (this.state.isLoading) {
-        return <LoadLines />;
-      }
-
-      var actualSize = (viewIndex.data_size) ? viewIndex.data_size.toLocaleString('en') : 0;
-      var dataSize = (viewIndex.disk_size) ? viewIndex.disk_size.toLocaleString('en') : 0;
-
-      return (
-        <div className="metadata-page">
-          <header>
-            <div className="preheading">Design Document Metadata</div>
-            <h2>_design/{this.state.ddocName}</h2>
-
-            <p className="help">
-              Information about the specified design document, including the index, index size and current status of the
-              design document and associated index information.
-              <a href={getDocUrl('DESIGN_DOC_METADATA')} className="help-link" target="_blank" data-bypass="true">
-                <i className="icon-question-sign" />
-              </a>
-            </p>
-          </header>
-
-          <section className="container">
-            <h3>Index Information</h3>
-
-            <ul>
-              <li>
-                <span className="item-title">Language:</span>
-                <span className="capitalize">{viewIndex.language}</span>
-              </li>
-              <li>
-                <span className="item-title">Currently being updated?</span>
-                {viewIndex.updater_running ? 'Yes' : 'No'}
-              </li>
-              <li>
-                <span className="item-title">Currently running compaction?</span>
-                {viewIndex.compact_running ? 'Yes' : 'No'}
-              </li>
-              <li>
-                <span className="item-title">Waiting for a commit?</span>
-                {viewIndex.waiting_commit ? 'Yes' : 'No'}
-              </li>
-            </ul>
-
-            <ul>
-              <li>
-                <span className="item-title">Clients waiting for the index:</span>
-                {viewIndex.waiting_clients}
-              </li>
-              <li>
-                <span className="item-title">Update sequence on DB:</span>
-                {viewIndex.update_seq}
-              </li>
-              <li>
-                <span className="item-title">Processed purge sequence:</span>
-                {viewIndex.purge_seq}
-              </li>
-              <li>
-                <span className="item-title">Actual data size (bytes):</span>
-                {actualSize}
-              </li>
-              <li>
-                <span className="item-title">Data size on disk (bytes):</span>
-                {dataSize}
-              </li>
-            </ul>
-
-            <ul>
-              <li>
-                <span className="item-title">MD5 Signature:</span>
-                <Clipboard
-                  onClipboardClick={this.showCopiedMessage}
-                  text={viewIndex.signature} />
-              </li>
-            </ul>
-
-          </section>
-
-        </div>
-      );
+    if (this.state.isLoading) {
+      return <LoadLines />;
     }
-  });
 
+    var actualSize = (viewIndex.data_size) ? viewIndex.data_size.toLocaleString('en') : 0;
+    var dataSize = (viewIndex.disk_size) ? viewIndex.disk_size.toLocaleString('en') : 0;
 
-  return {
-    DesignDocInfo: DesignDocInfo
-  };
+    return (
+      <div className="metadata-page">
+        <header>
+          <div className="preheading">Design Document Metadata</div>
+          <h2>_design/{this.state.ddocName}</h2>
 
+          <p className="help">
+            Information about the specified design document, including the index, index size and current status of the
+            design document and associated index information.
+            <a href={getDocUrl('DESIGN_DOC_METADATA')} className="help-link" target="_blank" data-bypass="true">
+              <i className="icon-question-sign" />
+            </a>
+          </p>
+        </header>
+
+        <section className="container">
+          <h3>Index Information</h3>
+
+          <ul>
+            <li>
+              <span className="item-title">Language:</span>
+              <span className="capitalize">{viewIndex.language}</span>
+            </li>
+            <li>
+              <span className="item-title">Currently being updated?</span>
+              {viewIndex.updater_running ? 'Yes' : 'No'}
+            </li>
+            <li>
+              <span className="item-title">Currently running compaction?</span>
+              {viewIndex.compact_running ? 'Yes' : 'No'}
+            </li>
+            <li>
+              <span className="item-title">Waiting for a commit?</span>
+              {viewIndex.waiting_commit ? 'Yes' : 'No'}
+            </li>
+          </ul>
+
+          <ul>
+            <li>
+              <span className="item-title">Clients waiting for the index:</span>
+              {viewIndex.waiting_clients}
+            </li>
+            <li>
+              <span className="item-title">Update sequence on DB:</span>
+              {viewIndex.update_seq}
+            </li>
+            <li>
+              <span className="item-title">Processed purge sequence:</span>
+              {viewIndex.purge_seq}
+            </li>
+            <li>
+              <span className="item-title">Actual data size (bytes):</span>
+              {actualSize}
+            </li>
+            <li>
+              <span className="item-title">Data size on disk (bytes):</span>
+              {dataSize}
+            </li>
+          </ul>
+
+          <ul>
+            <li>
+              <span className="item-title">MD5 Signature:</span>
+              <Clipboard
+                onClipboardClick={this.showCopiedMessage}
+                text={viewIndex.signature} />
+            </li>
+          </ul>
+
+        </section>
+
+      </div>
+    );
+  }
 });
+
+
+export default {
+  DesignDocInfo: DesignDocInfo
+};

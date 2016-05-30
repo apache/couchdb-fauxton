@@ -10,100 +10,94 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-define([
-  '../../app',
-  '../../core/api',
-  './constants',
-  './resources',
-  './actiontypes'
-],
-function (app, FauxtonAPI, Constants, VerifyInstall, ActionTypes) {
+import app from "../../app";
+import FauxtonAPI from "../../core/api";
+import Constants from "./constants";
+import VerifyInstall from "./resources";
+import ActionTypes from "./actiontypes";
 
 
-  // helper function to publish success/fail result of a single test having been ran
-  var testPassed = function (test) {
+// helper function to publish success/fail result of a single test having been ran
+var testPassed = function (test) {
+  FauxtonAPI.dispatch({
+    type: ActionTypes.VERIFY_INSTALL_SINGLE_TEST_COMPLETE,
+    test: test,
+    success: true
+  });
+};
+
+var testFailed = function (test) {
+  return function (xhr, error) {
+    if (!xhr) { return; }
+
     FauxtonAPI.dispatch({
       type: ActionTypes.VERIFY_INSTALL_SINGLE_TEST_COMPLETE,
       test: test,
-      success: true
+      success: false
+    });
+
+    FauxtonAPI.addNotification({
+      msg: 'Error: ' + JSON.parse(xhr.responseText).reason,
+      type: 'error'
     });
   };
-
-  var testFailed = function (test) {
-    return function (xhr, error) {
-      if (!xhr) { return; }
-
-      FauxtonAPI.dispatch({
-        type: ActionTypes.VERIFY_INSTALL_SINGLE_TEST_COMPLETE,
-        test: test,
-        success: false
-      });
-
-      FauxtonAPI.addNotification({
-        msg: 'Error: ' + JSON.parse(xhr.responseText).reason,
-        type: 'error'
-      });
-    };
-  };
+};
 
 
-  return {
-    resetStore: function () {
-      FauxtonAPI.dispatch({ type: ActionTypes.VERIFY_INSTALL_RESET });
-    },
+export default {
+  resetStore: function () {
+    FauxtonAPI.dispatch({ type: ActionTypes.VERIFY_INSTALL_RESET });
+  },
 
-    startVerification: function () {
+  startVerification: function () {
 
-      // announce that we're starting the verification tests
-      FauxtonAPI.dispatch({ type: ActionTypes.VERIFY_INSTALL_START });
+    // announce that we're starting the verification tests
+    FauxtonAPI.dispatch({ type: ActionTypes.VERIFY_INSTALL_START });
 
-      var testProcess = VerifyInstall.testProcess;
+    var testProcess = VerifyInstall.testProcess;
 
-      testProcess.setup()
-        .then(function () {
-          return testProcess.saveDB();
-        }, testFailed(Constants.TESTS.CREATE_DATABASE))
-        .then(function () {
-          testPassed(Constants.TESTS.CREATE_DATABASE);
-          return testProcess.saveDoc();
-        }, testFailed(Constants.TESTS.CREATE_DOCUMENT))
-        .then(function () {
-          testPassed(Constants.TESTS.CREATE_DOCUMENT);
-          return testProcess.updateDoc();
-        }, testFailed(Constants.TESTS.UPDATE_DOCUMENT))
-        .then(function () {
-          testPassed(Constants.TESTS.UPDATE_DOCUMENT);
-          return testProcess.destroyDoc();
-        }, testFailed(Constants.TESTS.DELETE_DOCUMENT))
-        .then(function () {
-          testPassed(Constants.TESTS.DELETE_DOCUMENT);
-          return testProcess.setupView();
-        }, testFailed(Constants.TESTS.CREATE_VIEW))
-        .then(function () {
-          return testProcess.testView();
-        }, testFailed(Constants.TESTS.CREATE_VIEW))
-        .then(function () {
-          testPassed(Constants.TESTS.CREATE_VIEW);
-          return testProcess.setupReplicate();
-        }, testFailed(Constants.TESTS.CREATE_VIEW))
-        .then(function () {
-          return testProcess.testReplicate();
-        }, testFailed(Constants.TESTS.REPLICATION))
-        .then(function () {
-          testPassed(Constants.TESTS.REPLICATION);
+    testProcess.setup()
+      .then(function () {
+        return testProcess.saveDB();
+      }, testFailed(Constants.TESTS.CREATE_DATABASE))
+      .then(function () {
+        testPassed(Constants.TESTS.CREATE_DATABASE);
+        return testProcess.saveDoc();
+      }, testFailed(Constants.TESTS.CREATE_DOCUMENT))
+      .then(function () {
+        testPassed(Constants.TESTS.CREATE_DOCUMENT);
+        return testProcess.updateDoc();
+      }, testFailed(Constants.TESTS.UPDATE_DOCUMENT))
+      .then(function () {
+        testPassed(Constants.TESTS.UPDATE_DOCUMENT);
+        return testProcess.destroyDoc();
+      }, testFailed(Constants.TESTS.DELETE_DOCUMENT))
+      .then(function () {
+        testPassed(Constants.TESTS.DELETE_DOCUMENT);
+        return testProcess.setupView();
+      }, testFailed(Constants.TESTS.CREATE_VIEW))
+      .then(function () {
+        return testProcess.testView();
+      }, testFailed(Constants.TESTS.CREATE_VIEW))
+      .then(function () {
+        testPassed(Constants.TESTS.CREATE_VIEW);
+        return testProcess.setupReplicate();
+      }, testFailed(Constants.TESTS.CREATE_VIEW))
+      .then(function () {
+        return testProcess.testReplicate();
+      }, testFailed(Constants.TESTS.REPLICATION))
+      .then(function () {
+        testPassed(Constants.TESTS.REPLICATION);
 
-          // now announce the tests have been ran
-          FauxtonAPI.dispatch({ type: ActionTypes.VERIFY_INSTALL_ALL_TESTS_COMPLETE });
+        // now announce the tests have been ran
+        FauxtonAPI.dispatch({ type: ActionTypes.VERIFY_INSTALL_ALL_TESTS_COMPLETE });
 
-          FauxtonAPI.addNotification({
-            msg: 'Success! Your CouchDB installation is working. Time to Relax.',
-            type: 'success'
-          });
+        FauxtonAPI.addNotification({
+          msg: 'Success! Your CouchDB installation is working. Time to Relax.',
+          type: 'success'
+        });
 
-          testProcess.removeDBs();
-        }, testFailed(Constants.TESTS.REPLICATION));
-    }
-  };
-
-
-});
+        testProcess.removeDBs();
+      }, testFailed(Constants.TESTS.REPLICATION));
+  }
+};

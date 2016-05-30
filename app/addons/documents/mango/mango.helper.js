@@ -10,34 +10,30 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-define([
-  '../../../core/api'
-], function (FauxtonAPI) {
+import FauxtonAPI from "../../../core/api";
 
-  function getIndexName (doc) {
-    var nameArray = [],
-        indexes;
+function getIndexName (doc) {
+  var nameArray = [],
+      indexes;
 
-    nameArray = doc.get('def').fields.reduce(function (acc, el, i) {
-      if (i === 0) {
-        acc.push(doc.get('type') + ': ' + Object.keys(el)[0]);
-      } else {
-        acc.push(Object.keys(el)[0]);
-      }
-
-      return acc;
-    }, []);
-
-    if (!nameArray.length) {
-      indexes = FauxtonAPI.getExtensions('mango:additionalIndexes')[0];
-      nameArray = indexes.createHeader(doc);
+  nameArray = doc.get('def').fields.reduce(function (acc, el, i) {
+    if (i === 0) {
+      acc.push(doc.get('type') + ': ' + Object.keys(el)[0]);
+    } else {
+      acc.push(Object.keys(el)[0]);
     }
 
-    return nameArray.join(', ');
+    return acc;
+  }, []);
+
+  if (!nameArray.length) {
+    indexes = FauxtonAPI.getExtensions('mango:additionalIndexes')[0];
+    nameArray = indexes.createHeader(doc);
   }
 
-  return {
-    getIndexName: getIndexName
-  };
+  return nameArray.join(', ');
+}
 
-});
+export default {
+  getIndexName: getIndexName
+};

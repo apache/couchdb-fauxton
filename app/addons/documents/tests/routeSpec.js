@@ -10,39 +10,36 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-define([
-  '../../../core/api',
-  '../base',
-  '../routes',
-  '../header/header.actions',
-  '../index-results/actions',
-  '../../../../test/mocha/testUtils',
-], function (FauxtonAPI, Base, Documents, HeaderActions, IndexResultsActions, testUtils) {
-  var assert = testUtils.assert;
-  var DocumentRoute = Documents.RouteObjects[2];
+import FauxtonAPI from "../../../core/api";
+import Base from "../base";
+import Documents from "../routes";
+import HeaderActions from "../header/header.actions";
+import IndexResultsActions from "../index-results/actions";
+import testUtils from "../../../../test/mocha/testUtils";
+var assert = testUtils.assert;
+var DocumentRoute = Documents.RouteObjects[2];
 
-  //commenting out for now. This test adds little value and is breaking the routeObjectSpecs
-  describe('Documents Route', function () {
+//commenting out for now. This test adds little value and is breaking the routeObjectSpecs
+describe('Documents Route', function () {
 
-    /*it('the all-documents-list has a right header', function () {
-       var routeObj = new DocumentRoute(null, null, ['test']);
+  /*it('the all-documents-list has a right header', function () {
+     var routeObj = new DocumentRoute(null, null, ['test']);
 
-       routeObj.allDocs('newdatabase', null);
-      assert.equal(typeof routeObj.rightHeader, 'object');
+     routeObj.allDocs('newdatabase', null);
+    assert.equal(typeof routeObj.rightHeader, 'object');
 
-    });*/
+  });*/
 
-  });
-
-  //    until there is consensus on how to encode json responses
-  //    https://issues.apache.org/jira/browse/COUCHDB-2748
-  //    taking out this test for https://github.com/apache/couchdb-fauxton/pull/489
-
-  //describe('Fauxton Urls', function () {
-    // it('document app encodes document id', function () {
-    //   var id = "\foo";
-    //   var url = FauxtonAPI.urls('document', 'app', 'fake-db', id);
-    //   assert.deepEqual("/database/fake-db/%0Coo", url);
-    // });
-  //});
 });
+
+//    until there is consensus on how to encode json responses
+//    https://issues.apache.org/jira/browse/COUCHDB-2748
+//    taking out this test for https://github.com/apache/couchdb-fauxton/pull/489
+
+//describe('Fauxton Urls', function () {
+// it('document app encodes document id', function () {
+//   var id = "\foo";
+//   var url = FauxtonAPI.urls('document', 'app', 'fake-db', id);
+//   assert.deepEqual("/database/fake-db/%0Coo", url);
+// });
+//});

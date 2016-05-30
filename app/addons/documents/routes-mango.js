@@ -10,158 +10,145 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-define([
-  '../../app',
-  '../../core/api',
-  // Modules
-  './helpers',
-  './shared-routes',
-  '../databases/resources',
+import app from "../../app";
+import FauxtonAPI from "../../core/api";
+import Helpers from "./helpers";
+import BaseRoute from "./shared-routes";
+import Databases from "../databases/resources";
+import Components from "../fauxton/components";
+import Resources from "./resources";
+import Documents from "./views";
+import IndexResultsActions from "./index-results/actions";
+import IndexResultStores from "./index-results/stores";
+import ReactHeader from "./header/header.react";
+import ReactActions from "./header/header.actions";
+import ReactPagination from "./pagination/pagination.react";
+import MangoComponents from "./mango/mango.components.react";
+import MangoActions from "./mango/mango.actions";
+import MangoStores from "./mango/mango.stores";
+import IndexResultsComponents from "./index-results/index-results.components.react";
+import SidebarActions from "./sidebar/actions";
 
-  '../fauxton/components',
-  './resources',
-  './views',
-  './index-results/actions',
-  './index-results/stores',
-
-  './header/header.react',
-  './header/header.actions',
-  './pagination/pagination.react',
-
-  './mango/mango.components.react',
-  './mango/mango.actions',
-  './mango/mango.stores',
-  './index-results/index-results.components.react',
-  './sidebar/actions',
-],
-
-
-function (app, FauxtonAPI, Helpers, BaseRoute, Databases,
-  Components, Resources, Documents, IndexResultsActions, IndexResultStores,
-  ReactHeader, ReactActions, ReactPagination,
-  MangoComponents, MangoActions, MangoStores, IndexResultsComponents, SidebarActions) {
-
-  var MangoIndexEditorAndQueryEditor = BaseRoute.extend({
-    layout: 'two_pane',
-    routes: {
-      'database/:database/_index': {
-        route: 'createIndex',
-        roles: ['fx_loggedIn']
-      },
-      'database/:database/_find': {
-        route: 'findUsingIndex',
-        roles: ['fx_loggedIn']
-      },
+var MangoIndexEditorAndQueryEditor = BaseRoute.extend({
+  layout: 'two_pane',
+  routes: {
+    'database/:database/_index': {
+      route: 'createIndex',
+      roles: ['fx_loggedIn']
     },
-
-    initialize: function (route, masterLayout, options) {
-      var databaseName = options[0];
-      this.databaseName = databaseName;
-      this.database = new Databases.Model({id: databaseName});
-
-      // magic methods
-      this.allDatabases = this.getAllDatabases();
-      this.createDesignDocsCollection();
-      this.addLeftHeader();
-
-      MangoActions.setDatabase({
-        database: this.database
-      });
+    'database/:database/_find': {
+      route: 'findUsingIndex',
+      roles: ['fx_loggedIn']
     },
+  },
 
-    findUsingIndex: function () {
-      var params = this.createParams(),
-          urlParams = params.urlParams,
-          mangoResultCollection = new Resources.MangoDocumentCollection(null, {
-            database: this.database,
-            paging: {
-              pageSize: IndexResultStores.indexResultsStore.getPerPage()
-            }
-          }),
-          mangoIndexList = new Resources.MangoIndexCollection(null, {
-            database: this.database,
-            params: null,
-            paging: {
-              pageSize: IndexResultStores.indexResultsStore.getPerPage()
-            }
-          });
+  initialize: function (route, masterLayout, options) {
+    var databaseName = options[0];
+    this.databaseName = databaseName;
+    this.database = new Databases.Model({id: databaseName});
 
-      SidebarActions.selectNavItem('mango-query');
-      this.setComponent('#react-headerbar', ReactHeader.BulkDocumentHeaderController, {showIncludeAllDocs: false});
-      this.setComponent('#footer', ReactPagination.Footer);
+    // magic methods
+    this.allDatabases = this.getAllDatabases();
+    this.createDesignDocsCollection();
+    this.addLeftHeader();
 
-      IndexResultsActions.newMangoResultsList({
-        collection: mangoResultCollection,
-        textEmptyIndex: 'No Results',
-        bulkCollection: new Documents.BulkDeleteDocCollection([], { databaseId: this.database.safeID() }),
-      });
+    MangoActions.setDatabase({
+      database: this.database
+    });
+  },
 
-      MangoActions.getIndexList({
-        indexList: mangoIndexList
-      });
+  findUsingIndex: function () {
+    var params = this.createParams(),
+        urlParams = params.urlParams,
+        mangoResultCollection = new Resources.MangoDocumentCollection(null, {
+          database: this.database,
+          paging: {
+            pageSize: IndexResultStores.indexResultsStore.getPerPage()
+          }
+        }),
+        mangoIndexList = new Resources.MangoIndexCollection(null, {
+          database: this.database,
+          params: null,
+          paging: {
+            pageSize: IndexResultStores.indexResultsStore.getPerPage()
+          }
+        });
 
-      var url = FauxtonAPI.urls('allDocs', 'app', this.database.safeID(), '?limit=' + FauxtonAPI.constants.DATABASES.DOCUMENT_LIMIT);
-      this.breadcrumbs = this.setView('#breadcrumbs', new Components.Breadcrumbs({
-        toggleDisabled: true,
-        crumbs: [
-          {'type': 'back', 'link': url},
-          {'name': app.i18n.en_US['mango-title-editor'], 'link': url}
-        ]
-      }));
+    SidebarActions.selectNavItem('mango-query');
+    this.setComponent('#react-headerbar', ReactHeader.BulkDocumentHeaderController, {showIncludeAllDocs: false});
+    this.setComponent('#footer', ReactPagination.Footer);
 
-      this.setComponent('#left-content', MangoComponents.MangoQueryEditorController, {
-        description: app.i18n.en_US['mango-descripton'],
-        editorTitle: app.i18n.en_US['mango-title-editor'],
-        additionalIndexesText: app.i18n.en_US['mango-additional-indexes-heading']
-      });
-      this.setComponent('#dashboard-lower-content', IndexResultsComponents.List);
+    IndexResultsActions.newMangoResultsList({
+      collection: mangoResultCollection,
+      textEmptyIndex: 'No Results',
+      bulkCollection: new Documents.BulkDeleteDocCollection([], { databaseId: this.database.safeID() }),
+    });
 
-      this.apiUrl = function () {
-        return [mangoResultCollection.urlRef('query-apiurl', urlParams), FauxtonAPI.constants.DOC_URLS.MANGO_SEARCH];
-      };
-    },
+    MangoActions.getIndexList({
+      indexList: mangoIndexList
+    });
 
-    createIndex: function (database) {
-      var params = this.createParams(),
-          urlParams = params.urlParams,
-          mangoIndexCollection = new Resources.MangoIndexCollection(null, {
-            database: this.database,
-            params: null,
-            paging: {
-              pageSize: IndexResultStores.indexResultsStore.getPerPage()
-            }
-          });
+    var url = FauxtonAPI.urls('allDocs', 'app', this.database.safeID(), '?limit=' + FauxtonAPI.constants.DATABASES.DOCUMENT_LIMIT);
+    this.breadcrumbs = this.setView('#breadcrumbs', new Components.Breadcrumbs({
+      toggleDisabled: true,
+      crumbs: [
+        {'type': 'back', 'link': url},
+        {'name': app.i18n.en_US['mango-title-editor'], 'link': url}
+      ]
+    }));
 
-      IndexResultsActions.newResultsList({
-        collection: mangoIndexCollection,
-        bulkCollection: new Documents.MangoBulkDeleteDocCollection([], { databaseId: this.database.safeID() }),
-        typeOfIndex: 'mango'
-      });
+    this.setComponent('#left-content', MangoComponents.MangoQueryEditorController, {
+      description: app.i18n.en_US['mango-descripton'],
+      editorTitle: app.i18n.en_US['mango-title-editor'],
+      additionalIndexesText: app.i18n.en_US['mango-additional-indexes-heading']
+    });
+    this.setComponent('#dashboard-lower-content', IndexResultsComponents.List);
 
-      var url = FauxtonAPI.urls('allDocs', 'app', this.database.safeID(), '?limit=' + FauxtonAPI.constants.DATABASES.DOCUMENT_LIMIT);
-      this.breadcrumbs = this.setView('#breadcrumbs', new Components.Breadcrumbs({
-        toggleDisabled: true,
-        crumbs: [
-          {'type': 'back', 'link': url},
-          {'name': app.i18n.en_US['mango-indexeditor-title'], 'link': url }
-        ]
-      }));
+    this.apiUrl = function () {
+      return [mangoResultCollection.urlRef('query-apiurl', urlParams), FauxtonAPI.constants.DOC_URLS.MANGO_SEARCH];
+    };
+  },
 
-      this.setComponent('#react-headerbar', ReactHeader.BulkDocumentHeaderController, {showIncludeAllDocs: false});
-      this.setComponent('#footer', ReactPagination.Footer);
+  createIndex: function (database) {
+    var params = this.createParams(),
+        urlParams = params.urlParams,
+        mangoIndexCollection = new Resources.MangoIndexCollection(null, {
+          database: this.database,
+          params: null,
+          paging: {
+            pageSize: IndexResultStores.indexResultsStore.getPerPage()
+          }
+        });
 
-      this.setComponent('#dashboard-lower-content', IndexResultsComponents.List);
-      this.setComponent('#left-content', MangoComponents.MangoIndexEditorController, {
-        description: app.i18n.en_US['mango-descripton-index-editor']
-      });
+    IndexResultsActions.newResultsList({
+      collection: mangoIndexCollection,
+      bulkCollection: new Documents.MangoBulkDeleteDocCollection([], { databaseId: this.database.safeID() }),
+      typeOfIndex: 'mango'
+    });
 
-      this.apiUrl = function () {
-        return [mangoIndexCollection.urlRef('index-apiurl', urlParams), FauxtonAPI.constants.DOC_URLS.MANGO_INDEX];
-      };
-    }
-  });
+    var url = FauxtonAPI.urls('allDocs', 'app', this.database.safeID(), '?limit=' + FauxtonAPI.constants.DATABASES.DOCUMENT_LIMIT);
+    this.breadcrumbs = this.setView('#breadcrumbs', new Components.Breadcrumbs({
+      toggleDisabled: true,
+      crumbs: [
+        {'type': 'back', 'link': url},
+        {'name': app.i18n.en_US['mango-indexeditor-title'], 'link': url }
+      ]
+    }));
 
-  return {
-    MangoIndexEditorAndQueryEditor: MangoIndexEditorAndQueryEditor
-  };
+    this.setComponent('#react-headerbar', ReactHeader.BulkDocumentHeaderController, {showIncludeAllDocs: false});
+    this.setComponent('#footer', ReactPagination.Footer);
+
+    this.setComponent('#dashboard-lower-content', IndexResultsComponents.List);
+    this.setComponent('#left-content', MangoComponents.MangoIndexEditorController, {
+      description: app.i18n.en_US['mango-descripton-index-editor']
+    });
+
+    this.apiUrl = function () {
+      return [mangoIndexCollection.urlRef('index-apiurl', urlParams), FauxtonAPI.constants.DOC_URLS.MANGO_INDEX];
+    };
+  }
 });
+
+export default {
+  MangoIndexEditorAndQueryEditor: MangoIndexEditorAndQueryEditor
+};

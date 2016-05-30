@@ -10,50 +10,45 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-define([
-  "../../app",
-  "../../core/api",
-  "./resources",
-  "./actions",
-  './components.react'
-],
+import app from "../../app";
+import FauxtonAPI from "../../core/api";
+import Databases from "./resources";
+import Actions from "./actions";
+import Components from "./components.react";
 
-function (app, FauxtonAPI, Databases, Actions, Components) {
+var AllDbsRouteObject = FauxtonAPI.RouteObject.extend({
+  layout: 'one_pane',
 
-  var AllDbsRouteObject = FauxtonAPI.RouteObject.extend({
-    layout: 'one_pane',
+  crumbs: [
+    {"name": "Databases", "link": "/_all_dbs"}
+  ],
 
-    crumbs: [
-      {"name": "Databases", "link": "/_all_dbs"}
-    ],
+  routes: {
+    "": "allDatabases",
+    "index.html": "allDatabases",
+    "_all_dbs(:params)": "allDatabases"
+  },
 
-    routes: {
-      "": "allDatabases",
-      "index.html": "allDatabases",
-      "_all_dbs(:params)": "allDatabases"
-    },
+  roles: ['fx_loggedIn'],
 
-    roles: ['fx_loggedIn'],
+  selectedHeader: "Databases",
+  disableLoader: true,
 
-    selectedHeader: "Databases",
-    disableLoader: true,
+  initialize: function () {
+    this.databases = new Databases.List();
+  },
 
-    initialize: function () {
-      this.databases = new Databases.List();
-    },
+  allDatabases: function () {
+    Actions.init(this.databases);
+    this.setComponent("#right-header", Components.RightDatabasesHeader);
+    this.setComponent("#dashboard-content", Components.DatabasesController);
+    this.setComponent("#footer", Components.DatabasePagination);
+  },
 
-    allDatabases: function () {
-      Actions.init(this.databases);
-      this.setComponent("#right-header", Components.RightDatabasesHeader);
-      this.setComponent("#dashboard-content", Components.DatabasesController);
-      this.setComponent("#footer", Components.DatabasePagination);
-    },
-
-    apiUrl: function () {
-      return [this.databases.url("apiurl"), this.databases.documentation()];
-    }
-  });
-  Databases.RouteObjects = [AllDbsRouteObject];
-
-  return Databases;
+  apiUrl: function () {
+    return [this.databases.url("apiurl"), this.databases.documentation()];
+  }
 });
+Databases.RouteObjects = [AllDbsRouteObject];
+
+export default Databases;

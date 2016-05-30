@@ -10,841 +10,833 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-define([
-  '../../../app',
-  '../../../core/api',
-  './actiontypes',
-  '../header/header.actiontypes',
-  '../pagination/actiontypes',
+import app from "../../../app";
+import FauxtonAPI from "../../../core/api";
+import ActionTypes from "./actiontypes";
+import HeaderActionTypes from "../header/header.actiontypes";
+import PaginationActionTypes from "../pagination/actiontypes";
+import Documents from "../resources";
+import MangoHelper from "../mango/mango.helper";
+import Resources from "../resources";
+import DatabaseResources from "../../databases/resources";
 
-  '../resources',
-  '../mango/mango.helper',
-  '../resources',
-  '../../databases/resources'
-],
+var Stores = {};
 
-function (app, FauxtonAPI, ActionTypes, HeaderActionTypes, PaginationActionTypes,
-  Documents, MangoHelper, Resources, DatabaseResources) {
+var maxDocLimit = 10000;
 
-  var Stores = {};
+Stores.IndexResultsStore = FauxtonAPI.Store.extend({
 
-  var maxDocLimit = 10000;
+  initialize: function () {
+    this.reset();
+  },
 
-  Stores.IndexResultsStore = FauxtonAPI.Store.extend({
+  reset: function () {
+    this._collection = new Backbone.Collection.extend({
+      url: ''
+    });
 
-    initialize: function () {
-      this.reset();
-    },
+    this._filteredCollection = [];
+    this._bulkDeleteDocCollection = new Resources.BulkDeleteDocCollection([], {});
 
-    reset: function () {
-      this._collection = new Backbone.Collection.extend({
-        url: ''
-      });
+    this.clearSelectedItems();
+    this._isLoading = false;
+    this._textEmptyIndex = 'No Documents Found';
+    this._typeOfIndex = 'view';
 
-      this._filteredCollection = [];
-      this._bulkDeleteDocCollection = new Resources.BulkDeleteDocCollection([], {});
+    this._tableViewSelectedFields = [];
+    this._isPrioritizedEnabled = false;
 
-      this.clearSelectedItems();
-      this._isLoading = false;
-      this._textEmptyIndex = 'No Documents Found';
-      this._typeOfIndex = 'view';
+    this._tableSchema = [];
+    this._tableView = false;
 
-      this._tableViewSelectedFields = [];
-      this._isPrioritizedEnabled = false;
+    this.resetPagination();
+  },
 
-      this._tableSchema = [];
-      this._tableView = false;
+  resetPagination: function () {
+    this._pageStart = 1;
+    this._currentPage = 1;
+    this._enabled = true;
+    this._newView = false;
+    this._docLimit = _.isUndefined(this._docLimit) ? maxDocLimit : this._docLimit;
 
-      this.resetPagination();
-    },
+    this.initPerPage();
+  },
 
-    resetPagination: function () {
+  setDocumentLimit: function (docLimit) {
+    if (docLimit) {
+      this._docLimit = docLimit;
+    } else {
+      this._docLimit = maxDocLimit;
+    }
+
+    this.initPerPage();
+  },
+
+  getCollection: function () {
+    return this._collection;
+  },
+
+  canShowPrevious: function () {
+    if (!this._enabled) { return false; }
+    if (!this._collection || !this._collection.hasPrevious) { return false; }
+
+    return this._collection.hasPrevious();
+  },
+
+  canShowNext: function () {
+    if (!this._enabled) { return this._enabled; }
+
+    if ((this._pageStart + this._perPage) >= this._docLimit) {
+      return false;
+    }
+
+    if (!this._collection || !this._collection.hasNext) { return false; }
+
+    return this._collection.hasNext();
+  },
+
+  paginateNext: function () {
+    this._currentPage += 1;
+    this._pageStart += this.getPerPage();
+    this._collection.paging.pageSize = this.documentsLeftToFetch();
+  },
+
+  paginatePrevious: function () {
+    this._currentPage -= 1;
+
+    this._pageStart = this._pageStart - this.getPerPage();
+    if (this._pageStart < 1) {
       this._pageStart = 1;
-      this._currentPage = 1;
-      this._enabled = true;
-      this._newView = false;
-      this._docLimit = _.isUndefined(this._docLimit) ? maxDocLimit : this._docLimit;
+    }
 
-      this.initPerPage();
-    },
+    this._collection.paging.pageSize = this.getPerPage();
+  },
 
-    setDocumentLimit: function (docLimit) {
-      if (docLimit) {
-        this._docLimit = docLimit;
-      } else {
-        this._docLimit = maxDocLimit;
+  getCurrentPage: function () {
+    return this._currentPage;
+  },
+
+  totalDocsViewed: function () {
+    return this._perPage * this._currentPage;
+  },
+
+  documentsLeftToFetch: function () {
+    var documentsLeftToFetch = this._docLimit - this.totalDocsViewed();
+
+    if (documentsLeftToFetch < this.getPerPage() ) {
+      return documentsLeftToFetch;
+    }
+
+    return this._perPage;
+  },
+
+  getPerPage: function () {
+    return this._perPage;
+  },
+
+  initPerPage: function () {
+    var perPage = FauxtonAPI.constants.MISC.DEFAULT_PAGE_SIZE;
+
+    if (window.localStorage) {
+      var storedPerPage = app.utils.localStorageGet('fauxton:perpage');
+
+      if (storedPerPage) {
+        perPage = parseInt(storedPerPage, 10);
+      }
+    }
+
+    if (this._docLimit < perPage) {
+      perPage = this._docLimit;
+    }
+
+    this.setPerPage(perPage);
+  },
+
+  setPerPage: function (perPage) {
+    this._perPage = perPage;
+    app.utils.localStorageSet('fauxton:perpage', perPage);
+
+    if (this._collection && this._collection.pageSizeReset) {
+      this._collection.pageSizeReset(perPage, {fetch: false});
+    }
+  },
+
+  getTotalRows: function () {
+    if (!this._collection) { return false; }
+
+    return this._collection.length;
+  },
+
+  getPageStart: function () {
+    return this._pageStart;
+  },
+
+  getPageEnd: function () {
+    if (!this._collection) { return false; }
+    return this._pageStart + this._collection.length - 1;
+  },
+
+  getUpdateSeq: function () {
+    if (!this._collection) { return false; }
+    if (!this._collection.updateSeq) { return false; }
+    return this._collection.updateSeq();
+  },
+
+  clearSelectedItems: function () {
+    this._bulkDeleteDocCollection.reset([]);
+  },
+
+  newResults: function (options) {
+    this._collection = options.collection;
+
+    this._bulkDeleteDocCollection = options.bulkCollection;
+
+    if (options.textEmptyIndex) {
+      this._textEmptyIndex = options.textEmptyIndex;
+    }
+
+    if (options.typeOfIndex) {
+      this._typeOfIndex = options.typeOfIndex;
+    }
+
+    this._cachedSelected = [];
+
+    this._filteredCollection = this._collection.filter(filterOutGeneratedMangoDocs);
+
+    function filterOutGeneratedMangoDocs (doc) {
+      if (doc.get && typeof doc.get === 'function') {
+        return doc.get('language') !== 'query';
       }
 
-      this.initPerPage();
-    },
+      return doc.language !== 'query';
+    }
+  },
 
-    getCollection: function () {
-      return this._collection;
-    },
+  getTypeOfIndex: function () {
+    return this._typeOfIndex;
+  },
 
-    canShowPrevious: function () {
-      if (!this._enabled) { return false; }
-      if (!this._collection || !this._collection.hasPrevious) { return false; }
+  isEditable: function (doc) {
+    if (!this._collection) {
+      return false;
+    }
 
-      return this._collection.hasPrevious();
-    },
+    if (doc && this.isGhostDoc(doc)) {
+      return false;
+    }
 
-    canShowNext: function () {
-      if (!this._enabled) { return this._enabled; }
+    if (doc && !doc.get('_id')) {
+      return false;
+    }
 
-      if ((this._pageStart + this._perPage) >= this._docLimit) {
-        return false;
-      }
+    if (!this._collection.isEditable) {
+      return false;
+    }
 
-      if (!this._collection || !this._collection.hasNext) { return false; }
+    return this._collection.isEditable();
+  },
 
-      return this._collection.hasNext();
-    },
+  isGhostDoc: function (doc) {
+    // ghost docs are empty results where all properties were
+    // filtered away by mango
+    return !doc || !doc.attributes || !Object.keys(doc.attributes).length;
+  },
 
-    paginateNext: function () {
-      this._currentPage += 1;
-      this._pageStart += this.getPerPage();
-      this._collection.paging.pageSize = this.documentsLeftToFetch();
-    },
+  isDeletable: function (doc) {
+    if (this.isGhostDoc(doc)) {
+      return false;
+    }
 
-    paginatePrevious: function () {
-      this._currentPage -= 1;
+    return doc.isDeletable();
+  },
 
-      this._pageStart = this._pageStart - this.getPerPage();
-      if (this._pageStart < 1) {
-        this._pageStart = 1;
-      }
+  getCollection: function () {
+    return this._collection;
+  },
 
-      this._collection.paging.pageSize = this.getPerPage();
-    },
+  getBulkDocCollection: function () {
+    return this._bulkDeleteDocCollection;
+  },
 
-    getCurrentPage: function () {
-      return this._currentPage;
-    },
+  getDocContent: function (originalDoc) {
+    var doc = originalDoc.toJSON();
 
-    totalDocsViewed: function () {
-      return this._perPage * this._currentPage;
-    },
+    return JSON.stringify(doc, null, ' ');
+  },
 
-    documentsLeftToFetch: function () {
-      var documentsLeftToFetch = this._docLimit - this.totalDocsViewed();
+  getDocId: function (doc) {
 
-      if (documentsLeftToFetch < this.getPerPage() ) {
-        return documentsLeftToFetch;
-      }
+    if (!_.isUndefined(doc.id)) {
+      return doc.id;
+    }
 
-      return this._perPage;
-    },
+    if (doc.get('key')) {
+      return doc.get('key').toString();
+    }
 
-    getPerPage: function () {
-      return this._perPage;
-    },
+    return '';
+  },
 
-    initPerPage: function () {
-      var perPage = FauxtonAPI.constants.MISC.DEFAULT_PAGE_SIZE;
+  getMangoDocContent: function (originalDoc) {
+    var doc = originalDoc.toJSON();
 
-      if (window.localStorage) {
-        var storedPerPage = app.utils.localStorageGet('fauxton:perpage');
+    delete doc.ddoc;
+    delete doc.name;
 
-        if (storedPerPage) {
-          perPage = parseInt(storedPerPage, 10);
-        }
-      }
+    return JSON.stringify(doc, null, ' ');
+  },
 
-      if (this._docLimit < perPage) {
-        perPage = this._docLimit;
-      }
+  getMangoDoc: function (doc, index) {
+    var selector,
+        header;
 
-      this.setPerPage(perPage);
-    },
+    if (doc.get('def') && doc.get('def').fields) {
 
-    setPerPage: function (perPage) {
-      this._perPage = perPage;
-      app.utils.localStorageSet('fauxton:perpage', perPage);
+      header = MangoHelper.getIndexName(doc);
 
-      if (this._collection && this._collection.pageSizeReset) {
-        this._collection.pageSizeReset(perPage, {fetch: false});
-      }
-    },
-
-    getTotalRows: function () {
-      if (!this._collection) { return false; }
-
-      return this._collection.length;
-    },
-
-    getPageStart: function () {
-      return this._pageStart;
-    },
-
-    getPageEnd: function () {
-      if (!this._collection) { return false; }
-      return this._pageStart + this._collection.length - 1;
-    },
-
-    getUpdateSeq: function () {
-      if (!this._collection) { return false; }
-      if (!this._collection.updateSeq) { return false; }
-      return this._collection.updateSeq();
-    },
-
-    clearSelectedItems: function () {
-      this._bulkDeleteDocCollection.reset([]);
-    },
-
-    newResults: function (options) {
-      this._collection = options.collection;
-
-      this._bulkDeleteDocCollection = options.bulkCollection;
-
-      if (options.textEmptyIndex) {
-        this._textEmptyIndex = options.textEmptyIndex;
-      }
-
-      if (options.typeOfIndex) {
-        this._typeOfIndex = options.typeOfIndex;
-      }
-
-      this._cachedSelected = [];
-
-      this._filteredCollection = this._collection.filter(filterOutGeneratedMangoDocs);
-
-      function filterOutGeneratedMangoDocs (doc) {
-        if (doc.get && typeof doc.get === 'function') {
-          return doc.get('language') !== 'query';
-        }
-
-        return doc.language !== 'query';
-      }
-    },
-
-    getTypeOfIndex: function () {
-      return this._typeOfIndex;
-    },
-
-    isEditable: function (doc) {
-      if (!this._collection) {
-        return false;
-      }
-
-      if (doc && this.isGhostDoc(doc)) {
-        return false;
-      }
-
-      if (doc && !doc.get('_id')) {
-        return false;
-      }
-
-      if (!this._collection.isEditable) {
-        return false;
-      }
-
-      return this._collection.isEditable();
-    },
-
-    isGhostDoc: function (doc) {
-      // ghost docs are empty results where all properties were
-      // filtered away by mango
-      return !doc || !doc.attributes || !Object.keys(doc.attributes).length;
-    },
-
-    isDeletable: function (doc) {
-      if (this.isGhostDoc(doc)) {
-        return false;
-      }
-
-      return doc.isDeletable();
-    },
-
-    getCollection: function () {
-      return this._collection;
-    },
-
-    getBulkDocCollection: function () {
-      return this._bulkDeleteDocCollection;
-    },
-
-    getDocContent: function (originalDoc) {
-      var doc = originalDoc.toJSON();
-
-      return JSON.stringify(doc, null, ' ');
-    },
-
-    getDocId: function (doc) {
-
-      if (!_.isUndefined(doc.id)) {
-        return doc.id;
-      }
-
-      if (doc.get('key')) {
-        return doc.get('key').toString();
-      }
-
-      return '';
-    },
-
-    getMangoDocContent: function (originalDoc) {
-      var doc = originalDoc.toJSON();
-
-      delete doc.ddoc;
-      delete doc.name;
-
-      return JSON.stringify(doc, null, ' ');
-    },
-
-    getMangoDoc: function (doc, index) {
-      var selector,
-          header;
-
-      if (doc.get('def') && doc.get('def').fields) {
-
-        header = MangoHelper.getIndexName(doc);
-
-        return {
-          content: this.getMangoDocContent(doc),
-          header: header,
-          id: doc.getId(),
-          keylabel: '',
-          url: doc.isFromView() ? doc.url('app') : doc.url('web-index'),
-          isDeletable: this.isDeletable(doc),
-          isEditable: this.isEditable(doc)
-        };
-      }
-
-      // we filtered away our content with the fields param
       return {
-        content: ' ',
+        content: this.getMangoDocContent(doc),
         header: header,
-        id: this.getDocId(doc) + index,
+        id: doc.getId(),
         keylabel: '',
-        url: this.isEditable(doc) ? doc.url('app') : null,
+        url: doc.isFromView() ? doc.url('app') : doc.url('web-index'),
         isDeletable: this.isDeletable(doc),
         isEditable: this.isEditable(doc)
       };
-    },
+    }
 
-    getResults: function () {
-      var hasBulkDeletableDoc;
-      var res;
+    // we filtered away our content with the fields param
+    return {
+      content: ' ',
+      header: header,
+      id: this.getDocId(doc) + index,
+      keylabel: '',
+      url: this.isEditable(doc) ? doc.url('app') : null,
+      isDeletable: this.isDeletable(doc),
+      isEditable: this.isEditable(doc)
+    };
+  },
 
-      // Table sytle view
-      if (this.getIsTableView()) {
-        return this.getTableViewData();
-      }
+  getResults: function () {
+    var hasBulkDeletableDoc;
+    var res;
 
-      // JSON style views
-      res = this._filteredCollection
-        .map(function (doc, i) {
-          if (doc.get('def') || this.isGhostDoc(doc)) {
-            return this.getMangoDoc(doc, i);
-          }
-          return {
-            content: this.getDocContent(doc),
-            id: this.getDocId(doc),
-            _rev: doc.get('_rev'),
-            header: this.getDocId(doc),
-            keylabel: doc.isFromView() ? 'key' : 'id',
-            url: this.getDocId(doc) ? doc.url('app') : null,
-            isDeletable: this.isDeletable(doc),
-            isEditable: this.isEditable(doc)
-          };
-        }, this);
+    // Table sytle view
+    if (this.getIsTableView()) {
+      return this.getTableViewData();
+    }
 
-      hasBulkDeletableDoc = this.hasBulkDeletableDoc(this._filteredCollection);
-
-      return {
-        displayedFields: this.getDisplayCountForTableView(),
-        hasBulkDeletableDoc: hasBulkDeletableDoc,
-        results: res
-      };
-    },
-
-    getPseudoSchema: function (data) {
-      var cache = [];
-
-      data.forEach(function (el) {
-        Object.keys(el).forEach(function (k) {
-          cache.push(k);
-        });
-      });
-
-      cache = _.uniq(cache);
-
-      // always begin with _id
-      var i = cache.indexOf('_id');
-      if (i !== -1) {
-        cache.splice(i, 1);
-        cache.unshift('_id');
-      }
-
-      return cache;
-    },
-
-    normalizeTableData: function (data, isView) {
-      // filter out cruft
-      if (isView) {
-        return data;
-      }
-
-      return data.map(function (el) {
-        return el.doc || el;
-      });
-    },
-
-    isIncludeDocsEnabled: function () {
-      var params = app.getParams();
-
-      return !!params.include_docs;
-    },
-
-    getPrioritizedFields: function (data, max) {
-      var res = data.reduce(function (acc, el) {
-        acc = acc.concat(Object.keys(el));
-        return acc;
-      }, []);
-
-      res = _.countBy(res, function (el) {
-        return el;
-      });
-
-      delete res._id;
-      delete res.id;
-      delete res._rev;
-
-      res = Object.keys(res).reduce(function (acc, el) {
-        acc.push([res[el], el]);
-        return acc;
-      }, []);
-
-      res = this.sortByTwoFields(res);
-      res = res.slice(0, max);
-
-      return res.reduce(function (acc, el) {
-        acc.push(el[1]);
-        return acc;
-      }, []);
-    },
-
-     sortByTwoFields: function (elements) {
-      // given:
-      // var a = [[2, "b"], [3, "z"], [1, "a"], [3, "a"]]
-      // it sorts to:
-      // [[3, "a"], [3, "z"], [2, "b"], [1, "a"]]
-      // note that the arrays with 3 got the first two arrays
-      // _and_ that the second values in the array with 3 are also sorted
-
-      function _recursiveSort (a, b, index) {
-        if (a[index] === b[index]) {
-          return index < 2 ? _recursiveSort(a, b, index + 1) : 0;
+    // JSON style views
+    res = this._filteredCollection
+      .map(function (doc, i) {
+        if (doc.get('def') || this.isGhostDoc(doc)) {
+          return this.getMangoDoc(doc, i);
         }
+        return {
+          content: this.getDocContent(doc),
+          id: this.getDocId(doc),
+          _rev: doc.get('_rev'),
+          header: this.getDocId(doc),
+          keylabel: doc.isFromView() ? 'key' : 'id',
+          url: this.getDocId(doc) ? doc.url('app') : null,
+          isDeletable: this.isDeletable(doc),
+          isEditable: this.isEditable(doc)
+        };
+      }, this);
 
-        // second elements asc
-        if (index === 1) {
-          return (a[index] < b[index]) ? -1 : 1;
-        }
+    hasBulkDeletableDoc = this.hasBulkDeletableDoc(this._filteredCollection);
 
-        // first elements desc
-        return (a[index] < b[index]) ? 1 : -1;
-      }
+    return {
+      displayedFields: this.getDisplayCountForTableView(),
+      hasBulkDeletableDoc: hasBulkDeletableDoc,
+      results: res
+    };
+  },
 
-      return elements.sort(function (a, b) {
-        return _recursiveSort(a, b, 0);
+  getPseudoSchema: function (data) {
+    var cache = [];
+
+    data.forEach(function (el) {
+      Object.keys(el).forEach(function (k) {
+        cache.push(k);
       });
-    },
+    });
 
-    hasIdOrRev: function (schema) {
+    cache = _.uniq(cache);
 
-      return schema.indexOf('_id') !== -1 ||
-        schema.indexOf('id') !== -1 ||
-        schema.indexOf('_rev') !== -1;
-    },
+    // always begin with _id
+    var i = cache.indexOf('_id');
+    if (i !== -1) {
+      cache.splice(i, 1);
+      cache.unshift('_id');
+    }
 
-    getNotSelectedFields: function (selectedFields, allFields) {
-      var without = _.without.bind(this, allFields);
-      return without.apply(this, selectedFields);
-    },
+    return cache;
+  },
 
-    getDisplayCountForTableView: function () {
-      var allFieldCount;
-      var shownCount;
+  normalizeTableData: function (data, isView) {
+    // filter out cruft
+    if (isView) {
+      return data;
+    }
 
-      if (!this.getIsTableView()) {
-        return null;
+    return data.map(function (el) {
+      return el.doc || el;
+    });
+  },
+
+  isIncludeDocsEnabled: function () {
+    var params = app.getParams();
+
+    return !!params.include_docs;
+  },
+
+  getPrioritizedFields: function (data, max) {
+    var res = data.reduce(function (acc, el) {
+      acc = acc.concat(Object.keys(el));
+      return acc;
+    }, []);
+
+    res = _.countBy(res, function (el) {
+      return el;
+    });
+
+    delete res._id;
+    delete res.id;
+    delete res._rev;
+
+    res = Object.keys(res).reduce(function (acc, el) {
+      acc.push([res[el], el]);
+      return acc;
+    }, []);
+
+    res = this.sortByTwoFields(res);
+    res = res.slice(0, max);
+
+    return res.reduce(function (acc, el) {
+      acc.push(el[1]);
+      return acc;
+    }, []);
+  },
+
+   sortByTwoFields: function (elements) {
+    // given:
+    // var a = [[2, "b"], [3, "z"], [1, "a"], [3, "a"]]
+    // it sorts to:
+    // [[3, "a"], [3, "z"], [2, "b"], [1, "a"]]
+    // note that the arrays with 3 got the first two arrays
+    // _and_ that the second values in the array with 3 are also sorted
+
+    function _recursiveSort (a, b, index) {
+      if (a[index] === b[index]) {
+        return index < 2 ? _recursiveSort(a, b, index + 1) : 0;
       }
 
-      if (!this.isIncludeDocsEnabled()) {
-        return null;
+      // second elements asc
+      if (index === 1) {
+        return (a[index] < b[index]) ? -1 : 1;
       }
 
-      shownCount = _.uniq(this._tableViewSelectedFields).length;
+      // first elements desc
+      return (a[index] < b[index]) ? 1 : -1;
+    }
 
-      allFieldCount = this._tableSchema.length;
-      if (_.contains(this._tableSchema, '_id', '_rev')) {
-        allFieldCount = allFieldCount - 1;
-      }
+    return elements.sort(function (a, b) {
+      return _recursiveSort(a, b, 0);
+    });
+  },
 
-      if (_.contains(this._tableSchema, '_id', '_rev')) {
-        shownCount = shownCount + 1;
-      }
+  hasIdOrRev: function (schema) {
 
-      return {shown: shownCount, allFieldCount: allFieldCount};
-    },
+    return schema.indexOf('_id') !== -1 ||
+      schema.indexOf('id') !== -1 ||
+      schema.indexOf('_rev') !== -1;
+  },
 
-    getTableViewData: function () {
-      var res;
-      var schema;
-      var hasIdOrRev;
-      var hasIdOrRev;
-      var prioritizedFields;
-      var hasBulkDeletableDoc;
-      var database = this.getDatabase();
-      var isView = !!this._collection.view;
+  getNotSelectedFields: function (selectedFields, allFields) {
+    var without = _.without.bind(this, allFields);
+    return without.apply(this, selectedFields);
+  },
 
-      // softmigration remove backbone
-      var data;
-      var collectionType = this._collection.collectionType;
-      data = this._filteredCollection.map(function (el) {
-        return fixDocIdForMango(el.toJSON(), collectionType);
-      });
+  getDisplayCountForTableView: function () {
+    var allFieldCount;
+    var shownCount;
 
-      function fixDocIdForMango (doc, docType) {
-        if (docType !== 'MangoIndex') {
-          return doc;
-        }
+    if (!this.getIsTableView()) {
+      return null;
+    }
 
-        doc.id = doc.ddoc;
+    if (!this.isIncludeDocsEnabled()) {
+      return null;
+    }
+
+    shownCount = _.uniq(this._tableViewSelectedFields).length;
+
+    allFieldCount = this._tableSchema.length;
+    if (_.contains(this._tableSchema, '_id', '_rev')) {
+      allFieldCount = allFieldCount - 1;
+    }
+
+    if (_.contains(this._tableSchema, '_id', '_rev')) {
+      shownCount = shownCount + 1;
+    }
+
+    return {shown: shownCount, allFieldCount: allFieldCount};
+  },
+
+  getTableViewData: function () {
+    var res;
+    var schema;
+    var hasIdOrRev;
+    var hasIdOrRev;
+    var prioritizedFields;
+    var hasBulkDeletableDoc;
+    var database = this.getDatabase();
+    var isView = !!this._collection.view;
+
+    // softmigration remove backbone
+    var data;
+    var collectionType = this._collection.collectionType;
+    data = this._filteredCollection.map(function (el) {
+      return fixDocIdForMango(el.toJSON(), collectionType);
+    });
+
+    function fixDocIdForMango (doc, docType) {
+      if (docType !== 'MangoIndex') {
         return doc;
       }
 
-      function isJSONDocEditable (doc, docType) {
+      doc.id = doc.ddoc;
+      return doc;
+    }
 
-        if (!doc) {
-          return;
-        }
+    function isJSONDocEditable (doc, docType) {
 
-        if (docType === 'MangoIndex') {
-          return false;
-        }
-
-        if (!Object.keys(doc).length) {
-          return false;
-        }
-
-        if (!doc._id) {
-          return false;
-        }
-
-        return true;
-      }
-
-      function isJSONDocBulkDeletable (doc, docType) {
-        if (docType === 'MangoIndex') {
-          return doc.type !== 'special';
-        }
-
-        return !!doc._id && !!doc._rev;
-      }
-
-      // softmigration end
-
-      var isIncludeDocsEnabled = this.isIncludeDocsEnabled();
-      var notSelectedFields = null;
-      if (isIncludeDocsEnabled) {
-
-        data = this.normalizeTableData(data, isView);
-        schema = this.getPseudoSchema(data);
-        hasIdOrRev = this.hasIdOrRev(schema);
-
-        if (!this._isPrioritizedEnabled) {
-          this._tableViewSelectedFields = this._cachedSelected || [];
-        }
-
-        if (this._tableViewSelectedFields.length === 0) {
-          prioritizedFields = this.getPrioritizedFields(data, hasIdOrRev ? 4 : 5);
-          this._tableViewSelectedFields = prioritizedFields;
-          this._cachedSelected = this._tableViewSelectedFields;
-        }
-
-        var schemaWithoutMetaDataFields = _.without(schema, '_id', '_rev', '_attachment');
-        notSelectedFields = this.getNotSelectedFields(this._tableViewSelectedFields, schemaWithoutMetaDataFields);
-
-        if (this._isPrioritizedEnabled) {
-          notSelectedFields = null;
-          this._tableViewSelectedFields = schemaWithoutMetaDataFields;
-        }
-
-
-      } else {
-        schema = this.getPseudoSchema(data);
-        this._tableViewSelectedFields = _.without(schema, '_id', '_rev', '_attachment');
-      }
-
-      this._notSelectedFields = notSelectedFields;
-      this._tableSchema = schema;
-
-      var dbId = database.safeID();
-
-      res = data.map(function (doc) {
-        var safeId = app.utils.getSafeIdForDoc(doc._id || doc.id); // inconsistent apis for GET between mango and views
-        var url;
-
-        if (safeId) {
-          url = FauxtonAPI.urls('document', 'app', dbId, safeId);
-        }
-
-        return {
-          content: doc,
-          id: doc._id || doc.id, // inconsistent apis for GET between mango and views
-          _rev: doc._rev,
-          header: '',
-          keylabel: '',
-          url: url,
-          isDeletable: isJSONDocBulkDeletable(doc, collectionType),
-          isEditable: isJSONDocEditable(doc, collectionType)
-        };
-      }.bind(this));
-
-      hasBulkDeletableDoc = this.hasBulkDeletableDoc(this._filteredCollection);
-
-      return {
-        notSelectedFields: notSelectedFields,
-        hasMetadata: this.getHasMetadata(schema),
-        selectedFields: this._tableViewSelectedFields,
-        hasBulkDeletableDoc: hasBulkDeletableDoc,
-        schema: schema,
-        results: res,
-        displayedFields: this.getDisplayCountForTableView(),
-      };
-    },
-
-    changeTableViewFields: function (options) {
-      var newSelectedRow = options.newSelectedRow;
-      var i = options.index;
-
-      this._tableViewSelectedFields[i] = newSelectedRow;
-    },
-
-    getHasMetadata: function (schema) {
-      return _.contains(schema, '_id', '_rev');
-    },
-
-    hasBulkDeletableDoc: function (docs) {
-      var found = false;
-      var length = docs.length;
-      var i;
-
-      // use a for loop here as we can end it once we found the first id
-      for (i = 0; i < length; i++) {
-        if (docs[i].isBulkDeletable()) {
-          found = true;
-          break;
-        }
-      }
-
-      return found;
-    },
-
-    hasResults: function () {
-      if (this.isLoading()) { return this.isLoading(); }
-      return this._collection.length > 0;
-    },
-
-    isLoading: function () {
-      return this._isLoading;
-    },
-
-    selectDoc: function (doc, noReset) {
-
-      if (!doc._id || doc._id === '_all_docs') {
+      if (!doc) {
         return;
       }
 
-      if (!this._bulkDeleteDocCollection.get(doc._id)) {
-        this._bulkDeleteDocCollection.add(doc);
-        return;
-      }
-
-      this._bulkDeleteDocCollection.remove(doc._id);
-    },
-
-    selectAllDocuments: function () {
-      this.deSelectCurrentCollection();
-
-      this._collection.each(function (doc) {
-
-        if (!doc.isBulkDeletable()) {
-          return;
-        }
-
-        this.selectDoc({
-          _id: doc.id,
-          _rev: doc.get('_rev'),
-          _deleted: true
-        });
-      }, this);
-
-    },
-
-    deSelectCurrentCollection: function () {
-      this._collection.each(function (doc) {
-
-        if (!doc.isBulkDeletable()) {
-          return;
-        }
-
-        this._bulkDeleteDocCollection.remove(doc.id);
-      }, this);
-    },
-
-    toggleSelectAllDocuments: function () {
-      if (this.areAllDocumentsSelected()) {
-        return this.deSelectCurrentCollection();
-      }
-
-      return this.selectAllDocuments();
-    },
-
-    togglePrioritizedTableView: function () {
-      this._isPrioritizedEnabled = !this._isPrioritizedEnabled;
-    },
-
-    areAllDocumentsSelected: function () {
-      if (this._collection.length === 0) {
+      if (docType === 'MangoIndex') {
         return false;
       }
 
-      var foundAllOnThisPage = true;
-
-      var selected = this._bulkDeleteDocCollection.pluck('_id');
-
-      this._collection.forEach(function (doc) {
-        if (!doc.isBulkDeletable()) {
-          return;
-        }
-
-        if (!_.contains(selected, doc.id)) {
-          foundAllOnThisPage = false;
-        }
-      }.bind(this));
-
-      return foundAllOnThisPage;
-    },
-
-    getSelectedItemsLength: function () {
-      return this._bulkDeleteDocCollection.length;
-    },
-
-    getDatabase: function () {
-      return this._collection.database;
-    },
-
-    getTextEmptyIndex: function () {
-      return this._textEmptyIndex;
-    },
-
-    hasSelectedItem: function () {
-      return this.getSelectedItemsLength() > 0;
-    },
-
-    toggleTableView: function (options) {
-      var enableTableView = options.enable;
-
-      if (enableTableView) {
-        this._tableView = true;
-        return;
+      if (!Object.keys(doc).length) {
+        return false;
       }
 
-      this._tableView = false;
-    },
-
-    getIsTableView: function () {
-      return this._tableView;
-    },
-
-    getIsPrioritizedEnabled: function () {
-      return this._isPrioritizedEnabled;
-    },
-
-    getCurrentViewType: function () {
-
-      if (this._tableView) {
-        return 'table';
+      if (!doc._id) {
+        return false;
       }
 
-      return 'expanded';
-    },
-
-    getShowPrioritizedFieldToggler: function () {
-      return this.isIncludeDocsEnabled() && this.getIsTableView();
-    },
-
-    clearResultsBeforeFetch: function () {
-      if (this._collection && this._collection.reset) {
-        this._collection.reset();
-      }
-      this._isLoading = true;
-    },
-
-    resultsResetFromFetch: function () {
-      this._isLoading = false;
-    },
-
-    dispatch: function (action) {
-      switch (action.type) {
-        case ActionTypes.INDEX_RESULTS_NEW_RESULTS:
-          this.newResults(action.options);
-        break;
-        case ActionTypes.INDEX_RESULTS_RESET:
-          this.resultsResetFromFetch();
-        break;
-        case ActionTypes.INDEX_RESULTS_SELECT_DOC:
-          this.selectDoc(action.options);
-        break;
-        case ActionTypes.INDEX_RESULTS_CLEAR_RESULTS:
-          this.clearResultsBeforeFetch();
-        break;
-        case ActionTypes.INDEX_RESULTS_TOOGLE_SELECT_ALL_DOCUMENTS:
-          this.toggleSelectAllDocuments();
-        break;
-        case ActionTypes.INDEX_RESULTS_SELECT_NEW_FIELD_IN_TABLE:
-          this.changeTableViewFields(action.options);
-        break;
-        case ActionTypes.INDEX_RESULTS_TOGGLE_PRIORITIZED_TABLE_VIEW:
-          this.togglePrioritizedTableView();
-        break;
-
-        case HeaderActionTypes.TOGGLE_TABLEVIEW:
-          this.toggleTableView(action.options);
-        break;
-
-        case PaginationActionTypes.SET_PAGINATION_DOCUMENT_LIMIT:
-          this.setDocumentLimit(action.docLimit);
-        break;
-        case PaginationActionTypes.PAGINATE_NEXT:
-          this.paginateNext();
-        break;
-        case PaginationActionTypes.PAGINATE_PREVIOUS:
-          this.paginatePrevious();
-        break;
-        case PaginationActionTypes.PER_PAGE_CHANGE:
-          this.resetPagination();
-          this.setPerPage(action.perPage);
-        break;
-
-        default:
-        return;
-        // do nothing
-      }
-
-      this.triggerChange();
+      return true;
     }
 
-  });
+    function isJSONDocBulkDeletable (doc, docType) {
+      if (docType === 'MangoIndex') {
+        return doc.type !== 'special';
+      }
 
-  Stores.indexResultsStore = new Stores.IndexResultsStore();
+      return !!doc._id && !!doc._rev;
+    }
 
-  Stores.indexResultsStore.dispatchToken = FauxtonAPI.dispatcher.register(Stores.indexResultsStore.dispatch);
+    // softmigration end
 
-  return Stores;
+    var isIncludeDocsEnabled = this.isIncludeDocsEnabled();
+    var notSelectedFields = null;
+    if (isIncludeDocsEnabled) {
+
+      data = this.normalizeTableData(data, isView);
+      schema = this.getPseudoSchema(data);
+      hasIdOrRev = this.hasIdOrRev(schema);
+
+      if (!this._isPrioritizedEnabled) {
+        this._tableViewSelectedFields = this._cachedSelected || [];
+      }
+
+      if (this._tableViewSelectedFields.length === 0) {
+        prioritizedFields = this.getPrioritizedFields(data, hasIdOrRev ? 4 : 5);
+        this._tableViewSelectedFields = prioritizedFields;
+        this._cachedSelected = this._tableViewSelectedFields;
+      }
+
+      var schemaWithoutMetaDataFields = _.without(schema, '_id', '_rev', '_attachment');
+      notSelectedFields = this.getNotSelectedFields(this._tableViewSelectedFields, schemaWithoutMetaDataFields);
+
+      if (this._isPrioritizedEnabled) {
+        notSelectedFields = null;
+        this._tableViewSelectedFields = schemaWithoutMetaDataFields;
+      }
+
+
+    } else {
+      schema = this.getPseudoSchema(data);
+      this._tableViewSelectedFields = _.without(schema, '_id', '_rev', '_attachment');
+    }
+
+    this._notSelectedFields = notSelectedFields;
+    this._tableSchema = schema;
+
+    var dbId = database.safeID();
+
+    res = data.map(function (doc) {
+      var safeId = app.utils.getSafeIdForDoc(doc._id || doc.id); // inconsistent apis for GET between mango and views
+      var url;
+
+      if (safeId) {
+        url = FauxtonAPI.urls('document', 'app', dbId, safeId);
+      }
+
+      return {
+        content: doc,
+        id: doc._id || doc.id, // inconsistent apis for GET between mango and views
+        _rev: doc._rev,
+        header: '',
+        keylabel: '',
+        url: url,
+        isDeletable: isJSONDocBulkDeletable(doc, collectionType),
+        isEditable: isJSONDocEditable(doc, collectionType)
+      };
+    }.bind(this));
+
+    hasBulkDeletableDoc = this.hasBulkDeletableDoc(this._filteredCollection);
+
+    return {
+      notSelectedFields: notSelectedFields,
+      hasMetadata: this.getHasMetadata(schema),
+      selectedFields: this._tableViewSelectedFields,
+      hasBulkDeletableDoc: hasBulkDeletableDoc,
+      schema: schema,
+      results: res,
+      displayedFields: this.getDisplayCountForTableView(),
+    };
+  },
+
+  changeTableViewFields: function (options) {
+    var newSelectedRow = options.newSelectedRow;
+    var i = options.index;
+
+    this._tableViewSelectedFields[i] = newSelectedRow;
+  },
+
+  getHasMetadata: function (schema) {
+    return _.contains(schema, '_id', '_rev');
+  },
+
+  hasBulkDeletableDoc: function (docs) {
+    var found = false;
+    var length = docs.length;
+    var i;
+
+    // use a for loop here as we can end it once we found the first id
+    for (i = 0; i < length; i++) {
+      if (docs[i].isBulkDeletable()) {
+        found = true;
+        break;
+      }
+    }
+
+    return found;
+  },
+
+  hasResults: function () {
+    if (this.isLoading()) { return this.isLoading(); }
+    return this._collection.length > 0;
+  },
+
+  isLoading: function () {
+    return this._isLoading;
+  },
+
+  selectDoc: function (doc, noReset) {
+
+    if (!doc._id || doc._id === '_all_docs') {
+      return;
+    }
+
+    if (!this._bulkDeleteDocCollection.get(doc._id)) {
+      this._bulkDeleteDocCollection.add(doc);
+      return;
+    }
+
+    this._bulkDeleteDocCollection.remove(doc._id);
+  },
+
+  selectAllDocuments: function () {
+    this.deSelectCurrentCollection();
+
+    this._collection.each(function (doc) {
+
+      if (!doc.isBulkDeletable()) {
+        return;
+      }
+
+      this.selectDoc({
+        _id: doc.id,
+        _rev: doc.get('_rev'),
+        _deleted: true
+      });
+    }, this);
+
+  },
+
+  deSelectCurrentCollection: function () {
+    this._collection.each(function (doc) {
+
+      if (!doc.isBulkDeletable()) {
+        return;
+      }
+
+      this._bulkDeleteDocCollection.remove(doc.id);
+    }, this);
+  },
+
+  toggleSelectAllDocuments: function () {
+    if (this.areAllDocumentsSelected()) {
+      return this.deSelectCurrentCollection();
+    }
+
+    return this.selectAllDocuments();
+  },
+
+  togglePrioritizedTableView: function () {
+    this._isPrioritizedEnabled = !this._isPrioritizedEnabled;
+  },
+
+  areAllDocumentsSelected: function () {
+    if (this._collection.length === 0) {
+      return false;
+    }
+
+    var foundAllOnThisPage = true;
+
+    var selected = this._bulkDeleteDocCollection.pluck('_id');
+
+    this._collection.forEach(function (doc) {
+      if (!doc.isBulkDeletable()) {
+        return;
+      }
+
+      if (!_.contains(selected, doc.id)) {
+        foundAllOnThisPage = false;
+      }
+    }.bind(this));
+
+    return foundAllOnThisPage;
+  },
+
+  getSelectedItemsLength: function () {
+    return this._bulkDeleteDocCollection.length;
+  },
+
+  getDatabase: function () {
+    return this._collection.database;
+  },
+
+  getTextEmptyIndex: function () {
+    return this._textEmptyIndex;
+  },
+
+  hasSelectedItem: function () {
+    return this.getSelectedItemsLength() > 0;
+  },
+
+  toggleTableView: function (options) {
+    var enableTableView = options.enable;
+
+    if (enableTableView) {
+      this._tableView = true;
+      return;
+    }
+
+    this._tableView = false;
+  },
+
+  getIsTableView: function () {
+    return this._tableView;
+  },
+
+  getIsPrioritizedEnabled: function () {
+    return this._isPrioritizedEnabled;
+  },
+
+  getCurrentViewType: function () {
+
+    if (this._tableView) {
+      return 'table';
+    }
+
+    return 'expanded';
+  },
+
+  getShowPrioritizedFieldToggler: function () {
+    return this.isIncludeDocsEnabled() && this.getIsTableView();
+  },
+
+  clearResultsBeforeFetch: function () {
+    if (this._collection && this._collection.reset) {
+      this._collection.reset();
+    }
+    this._isLoading = true;
+  },
+
+  resultsResetFromFetch: function () {
+    this._isLoading = false;
+  },
+
+  dispatch: function (action) {
+    switch (action.type) {
+      case ActionTypes.INDEX_RESULTS_NEW_RESULTS:
+        this.newResults(action.options);
+      break;
+      case ActionTypes.INDEX_RESULTS_RESET:
+        this.resultsResetFromFetch();
+      break;
+      case ActionTypes.INDEX_RESULTS_SELECT_DOC:
+        this.selectDoc(action.options);
+      break;
+      case ActionTypes.INDEX_RESULTS_CLEAR_RESULTS:
+        this.clearResultsBeforeFetch();
+      break;
+      case ActionTypes.INDEX_RESULTS_TOOGLE_SELECT_ALL_DOCUMENTS:
+        this.toggleSelectAllDocuments();
+      break;
+      case ActionTypes.INDEX_RESULTS_SELECT_NEW_FIELD_IN_TABLE:
+        this.changeTableViewFields(action.options);
+      break;
+      case ActionTypes.INDEX_RESULTS_TOGGLE_PRIORITIZED_TABLE_VIEW:
+        this.togglePrioritizedTableView();
+      break;
+
+      case HeaderActionTypes.TOGGLE_TABLEVIEW:
+        this.toggleTableView(action.options);
+      break;
+
+      case PaginationActionTypes.SET_PAGINATION_DOCUMENT_LIMIT:
+        this.setDocumentLimit(action.docLimit);
+      break;
+      case PaginationActionTypes.PAGINATE_NEXT:
+        this.paginateNext();
+      break;
+      case PaginationActionTypes.PAGINATE_PREVIOUS:
+        this.paginatePrevious();
+      break;
+      case PaginationActionTypes.PER_PAGE_CHANGE:
+        this.resetPagination();
+        this.setPerPage(action.perPage);
+      break;
+
+      default:
+      return;
+      // do nothing
+    }
+
+    this.triggerChange();
+  }
 
 });
+
+Stores.indexResultsStore = new Stores.IndexResultsStore();
+
+Stores.indexResultsStore.dispatchToken = FauxtonAPI.dispatcher.register(Stores.indexResultsStore.dispatch);
+
+export default Stores;

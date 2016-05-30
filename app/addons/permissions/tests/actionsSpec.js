@@ -10,116 +10,113 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-define([
-  '../../../core/api',
-  '../../databases/base',
-  '../stores',
-  '../resources',
-  '../actions',
-  '../../../../test/mocha/testUtils',
-  'sinon'
-], function (FauxtonAPI, Databases, Stores, Permissions, Actions, testUtils, sinon) {
-  var assert = testUtils.assert;
-  var restore = testUtils.restore;
-  var store = Stores.permissionsStore;
+import FauxtonAPI from "../../../core/api";
+import Databases from "../../databases/base";
+import Stores from "../stores";
+import Permissions from "../resources";
+import Actions from "../actions";
+import testUtils from "../../../../test/mocha/testUtils";
+import sinon from "sinon";
+var assert = testUtils.assert;
+var restore = testUtils.restore;
+var store = Stores.permissionsStore;
 
-  describe('Permissions Actions', function () {
-    var getSecuritystub;
+describe('Permissions Actions', function () {
+  var getSecuritystub;
 
-    beforeEach(function () {
-      var databaseName = 'permissions-test';
-      var database = new Databases.Model({ id: databaseName });
-      Actions.editPermissions(
-        database,
-        new Permissions.Security(null, {
-          database: database
-        })
-      );
+  beforeEach(function () {
+    var databaseName = 'permissions-test';
+    var database = new Databases.Model({ id: databaseName });
+    Actions.editPermissions(
+      database,
+      new Permissions.Security(null, {
+        database: database
+      })
+    );
 
+
+    var promise = FauxtonAPI.Deferred();
+    getSecuritystub = sinon.stub(store, 'getSecurity');
+    getSecuritystub.returns({
+      canAddItem: function () { return {error: true};},
+      save: function () {
+        return promise;
+      }
+    });
+  });
+
+  afterEach(function () {
+    restore(store.getSecurity);
+  });
+
+  describe('add Item', function () {
+
+    afterEach(function () {
+      restore(FauxtonAPI.addNotification);
+      restore(Actions.savePermissions);
+      restore(store.getSecurity);
+    });
+
+    it('does not save item if cannot add it', function () {
+      var spy = sinon.spy(FauxtonAPI, 'addNotification');
+      var spy2 = sinon.spy(Actions, 'savePermissions');
+
+      Actions.addItem({
+        value: 'boom',
+        type: 'names',
+        section: 'members'
+      });
+
+      assert.ok(spy.calledOnce);
+      assert.notOk(spy2.calledOnce);
+    });
+
+    it('save items', function () {
+      var spy = sinon.spy(FauxtonAPI, 'addNotification');
+      var spy2 = sinon.spy(Actions, 'savePermissions');
 
       var promise = FauxtonAPI.Deferred();
-      getSecuritystub = sinon.stub(store, 'getSecurity');
       getSecuritystub.returns({
-        canAddItem: function () { return {error: true};},
+        canAddItem: function () { return {error: false};},
         save: function () {
           return promise;
         }
       });
+
+      Actions.addItem({
+        value: 'boom',
+        type: 'names',
+        section: 'members'
+      });
+
+      assert.ok(spy2.calledOnce);
+      assert.notOk(spy.calledOnce);
     });
+  });
+
+  describe('remove item', function () {
 
     afterEach(function () {
-      restore(store.getSecurity);
+      restore(Actions.savePermissions);
     });
 
-    describe('add Item', function () {
-
-      afterEach(function () {
-        restore(FauxtonAPI.addNotification);
-        restore(Actions.savePermissions);
-        restore(store.getSecurity);
+    it('saves item', function () {
+      Actions.addItem({
+        value: 'boom',
+        type: 'names',
+        section: 'members'
       });
 
-      it('does not save item if cannot add it', function () {
-        var spy = sinon.spy(FauxtonAPI, 'addNotification');
-        var spy2 = sinon.spy(Actions, 'savePermissions');
+      var spy = sinon.spy(Actions, 'savePermissions');
 
-        Actions.addItem({
-          value: 'boom',
-          type: 'names',
-          section: 'members'
-        });
-
-        assert.ok(spy.calledOnce);
-        assert.notOk(spy2.calledOnce);
+      Actions.removeItem({
+        value: 'boom',
+        type: 'names',
+        section: 'members'
       });
 
-      it('save items', function () {
-        var spy = sinon.spy(FauxtonAPI, 'addNotification');
-        var spy2 = sinon.spy(Actions, 'savePermissions');
-
-        var promise = FauxtonAPI.Deferred();
-        getSecuritystub.returns({
-          canAddItem: function () { return {error: false};},
-          save: function () {
-            return promise;
-          }
-        });
-
-        Actions.addItem({
-          value: 'boom',
-          type: 'names',
-          section: 'members'
-        });
-
-        assert.ok(spy2.calledOnce);
-        assert.notOk(spy.calledOnce);
-      });
+      assert.ok(spy.calledOnce);
     });
 
-    describe('remove item', function () {
-
-      afterEach(function () {
-        restore(Actions.savePermissions);
-      });
-
-      it('saves item', function () {
-        Actions.addItem({
-          value: 'boom',
-          type: 'names',
-          section: 'members'
-        });
-
-        var spy = sinon.spy(Actions, 'savePermissions');
-
-        Actions.removeItem({
-          value: 'boom',
-          type: 'names',
-          section: 'members'
-        });
-
-        assert.ok(spy.calledOnce);
-      });
-
-    });
   });
 });

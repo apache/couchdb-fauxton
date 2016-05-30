@@ -9,41 +9,41 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
-define([
-  '../../../../core/api',
-  '../notifications.react',
-  '../stores',
-  '../actions',
-  '../../../../../test/mocha/testUtils',
-  'react',
-  'react-dom',
-  'moment',
-  'react-addons-test-utils',
-  'sinon'
-], function (FauxtonAPI, Views, {notificationStore: store}, Actions, {assert, restore}, React, ReactDOM, moment, TestUtils) {
+import FauxtonAPI from "../../../../core/api";
+import Views from "../notifications.react";
+import Stores from "../stores";
+import Actions from "../actions";
+import utils from "../../../../../test/mocha/testUtils";
+import React from "react";
+import ReactDOM from "react-dom";
+import moment from "moment";
+import TestUtils from "react-addons-test-utils";
+import "sinon";
 
-  describe('NotificationPanel', function () {
-    var container;
+const store = Stores.notificationStore;
+const {restore, assert} = utils;
 
-    beforeEach(function () {
-      container = document.createElement('div');
-      store.reset();
-    });
+describe('NotificationPanel', function () {
+  var container;
 
-    afterEach(function () {
-      restore(Actions.clearAllNotifications);
-      ReactDOM.unmountComponentAtNode(container);
-    });
+  beforeEach(function () {
+    container = document.createElement('div');
+    store.reset();
+  });
 
-    it('clear all action fires', function () {
-      var stub = sinon.stub(Actions, 'clearAllNotifications');
+  afterEach(function () {
+    restore(Actions.clearAllNotifications);
+    ReactDOM.unmountComponentAtNode(container);
+  });
 
-      var panelEl = TestUtils.renderIntoDocument(<Views.NotificationCenterPanel
-        notifications={[]} filter={'all'}
-        visible={true} />, container);
+  it('clear all action fires', function () {
+    var stub = sinon.stub(Actions, 'clearAllNotifications');
 
-      TestUtils.Simulate.click($(ReactDOM.findDOMNode(panelEl)).find('footer input')[0]);
-      assert.ok(stub.calledOnce);
-    });
+    var panelEl = TestUtils.renderIntoDocument(<Views.NotificationCenterPanel
+      notifications={[]} filter={'all'}
+      visible={true} />, container);
+
+    TestUtils.Simulate.click($(ReactDOM.findDOMNode(panelEl)).find('footer input')[0]);
+    assert.ok(stub.calledOnce);
   });
 });

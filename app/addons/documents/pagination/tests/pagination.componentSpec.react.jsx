@@ -9,116 +9,113 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
-define([
-  '../../../../core/api',
-  '../pagination.react',
-  '../../../../../test/mocha/testUtils',
-  'react',
-  'react-dom',
-  'react-addons-test-utils',
-  'sinon'
-], function (FauxtonAPI, Views, utils, React, ReactDOM, TestUtils, sinon) {
+import FauxtonAPI from "../../../../core/api";
+import Views from "../pagination.react";
+import utils from "../../../../../test/mocha/testUtils";
+import React from "react";
+import ReactDOM from "react-dom";
+import TestUtils from "react-addons-test-utils";
+import sinon from "sinon";
 
-  FauxtonAPI.router = new FauxtonAPI.Router([]);
+FauxtonAPI.router = new FauxtonAPI.Router([]);
 
-  var assert = utils.assert;
+var assert = utils.assert;
 
-  describe('All Docs Number', function () {
+describe('All Docs Number', function () {
 
-    describe('PerPageSelector', function () {
-      var container, selectorEl, perPageChange;
+  describe('PerPageSelector', function () {
+    var container, selectorEl, perPageChange;
 
-      beforeEach(function () {
-        perPageChange = sinon.spy();
-        container = document.createElement('div');
-      });
-
-      afterEach(function () {
-        ReactDOM.unmountComponentAtNode(ReactDOM.findDOMNode(selectorEl).parentNode);
-      });
-
-      it('on new select calls callback with new page size', function () {
-        selectorEl = TestUtils.renderIntoDocument(
-          <Views.PerPageSelector
-            perPageChange={perPageChange}
-            perPage={10} />,
-          container
-        );
-        var selectEl = $(ReactDOM.findDOMNode(selectorEl)).find('#select-per-page')[0];
-        var perPage = 5;
-        TestUtils.Simulate.change(selectEl, {
-          target: {
-            value: perPage
-          }
-        });
-
-        assert.ok(perPageChange.calledWith(perPage));
-      });
-
-      it('applies custom label', function () {
-        var customLabel = 'alphabet soup';
-        selectorEl = TestUtils.renderIntoDocument(
-          <Views.PerPageSelector
-            label={customLabel}
-            perPageChange={perPageChange}
-            perPage={10} />,
-          container
-        );
-        var regexp = new RegExp(customLabel);
-        assert.ok(regexp.test(ReactDOM.findDOMNode(selectorEl).outerHTML));
-      });
-
-      it('applies custom options', function () {
-        selectorEl = TestUtils.renderIntoDocument(
-          <Views.PerPageSelector
-            options={[1, 2, 3]}
-            perPageChange={perPageChange}
-            perPage={10} />,
-          container
-        );
-        var options = $(ReactDOM.findDOMNode(selectorEl)).find('option');
-        assert.equal(options.length, 3);
-        assert.equal(options[0].innerHTML, "1");
-        assert.equal(options[1].innerHTML, "2");
-        assert.equal(options[2].innerHTML, "3");
-      });
-
+    beforeEach(function () {
+      perPageChange = sinon.spy();
+      container = document.createElement('div');
     });
 
-    describe('TableControls', function () {
-      var container, selectorEl;
+    afterEach(function () {
+      ReactDOM.unmountComponentAtNode(ReactDOM.findDOMNode(selectorEl).parentNode);
+    });
 
-      beforeEach(function () {
-        container = document.createElement('div');
+    it('on new select calls callback with new page size', function () {
+      selectorEl = TestUtils.renderIntoDocument(
+        <Views.PerPageSelector
+          perPageChange={perPageChange}
+          perPage={10} />,
+        container
+      );
+      var selectEl = $(ReactDOM.findDOMNode(selectorEl)).find('#select-per-page')[0];
+      var perPage = 5;
+      TestUtils.Simulate.change(selectEl, {
+        target: {
+          value: perPage
+        }
       });
 
-      afterEach(function () {
-        ReactDOM.unmountComponentAtNode(ReactDOM.findDOMNode(selectorEl).parentNode);
-      });
+      assert.ok(perPageChange.calledWith(perPage));
+    });
 
-      it('shows the amount of fields, none hidden', function () {
+    it('applies custom label', function () {
+      var customLabel = 'alphabet soup';
+      selectorEl = TestUtils.renderIntoDocument(
+        <Views.PerPageSelector
+          label={customLabel}
+          perPageChange={perPageChange}
+          perPage={10} />,
+        container
+      );
+      var regexp = new RegExp(customLabel);
+      assert.ok(regexp.test(ReactDOM.findDOMNode(selectorEl).outerHTML));
+    });
 
-        selectorEl = TestUtils.renderIntoDocument(
-          <Views.TableControls prioritizedEnabled={true} displayedFields={{shown: 7, allFieldCount: 7}} />,
-          container
-        );
+    it('applies custom options', function () {
+      selectorEl = TestUtils.renderIntoDocument(
+        <Views.PerPageSelector
+          options={[1, 2, 3]}
+          perPageChange={perPageChange}
+          perPage={10} />,
+        container
+      );
+      var options = $(ReactDOM.findDOMNode(selectorEl)).find('option');
+      assert.equal(options.length, 3);
+      assert.equal(options[0].innerHTML, "1");
+      assert.equal(options[1].innerHTML, "2");
+      assert.equal(options[2].innerHTML, "3");
+    });
 
-        var text = $(ReactDOM.findDOMNode(selectorEl)).find('.shown-fields').text();
+  });
 
-        assert.equal('Showing 7 columns.', text);
-      });
+  describe('TableControls', function () {
+    var container, selectorEl;
 
-      it('shows the amount of fields, some hidden', function () {
+    beforeEach(function () {
+      container = document.createElement('div');
+    });
 
-        selectorEl = TestUtils.renderIntoDocument(
-          <Views.TableControls prioritizedEnabled={true} displayedFields={{shown: 5, allFieldCount: 7}} />,
-          container
-        );
+    afterEach(function () {
+      ReactDOM.unmountComponentAtNode(ReactDOM.findDOMNode(selectorEl).parentNode);
+    });
 
-        var text = $(ReactDOM.findDOMNode(selectorEl)).find('.shown-fields').text();
+    it('shows the amount of fields, none hidden', function () {
 
-        assert.equal('Showing 5 of 7 columns.', text);
-      });
+      selectorEl = TestUtils.renderIntoDocument(
+        <Views.TableControls prioritizedEnabled={true} displayedFields={{shown: 7, allFieldCount: 7}} />,
+        container
+      );
+
+      var text = $(ReactDOM.findDOMNode(selectorEl)).find('.shown-fields').text();
+
+      assert.equal('Showing 7 columns.', text);
+    });
+
+    it('shows the amount of fields, some hidden', function () {
+
+      selectorEl = TestUtils.renderIntoDocument(
+        <Views.TableControls prioritizedEnabled={true} displayedFields={{shown: 5, allFieldCount: 7}} />,
+        container
+      );
+
+      var text = $(ReactDOM.findDOMNode(selectorEl)).find('.shown-fields').text();
+
+      assert.equal('Showing 5 of 7 columns.', text);
     });
   });
 });

@@ -10,41 +10,36 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-define([
-  '../../../app',
-  '../../../core/api',
-  './header.actiontypes',
-  '../queryoptions/actions',
+import app from "../../../app";
+import FauxtonAPI from "../../../core/api";
+import ActionTypes from "./header.actiontypes";
+import ActionsQueryOptions from "../queryoptions/actions";
 
-],
-function (app, FauxtonAPI, ActionTypes, ActionsQueryOptions) {
+export default {
 
-  return {
+  toggleIncludeDocs: function (state, bulkDocsCollection) {
+    var params = app.getParams();
 
-    toggleIncludeDocs: function (state, bulkDocsCollection) {
-      var params = app.getParams();
-
-      if (state) {
-        delete params.include_docs;
-        delete params.conflicts;
-      } else {
-        params.include_docs = true;
-        params.conflicts = true;
-      }
-
-      app.utils.localStorageSet('include_docs_bulkdocs', bulkDocsCollection.toJSON());
-
-      ActionsQueryOptions.runQuery(params);
-    },
-
-    toggleTableView: function (state) {
-      FauxtonAPI.dispatch({
-        type: ActionTypes.TOGGLE_TABLEVIEW,
-        options: {
-          enable: state
-        }
-      });
+    if (state) {
+      delete params.include_docs;
+      delete params.conflicts;
+    } else {
+      params.include_docs = true;
+      params.conflicts = true;
     }
 
-  };
-});
+    app.utils.localStorageSet('include_docs_bulkdocs', bulkDocsCollection.toJSON());
+
+    ActionsQueryOptions.runQuery(params);
+  },
+
+  toggleTableView: function (state) {
+    FauxtonAPI.dispatch({
+      type: ActionTypes.TOGGLE_TABLEVIEW,
+      options: {
+        enable: state
+      }
+    });
+  }
+
+};

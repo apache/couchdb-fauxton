@@ -10,175 +10,171 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-define([
-  '../../core/api',
-  './setup.actiontypes'
+import FauxtonAPI from "../../core/api";
+import ActionTypes from "./setup.actiontypes";
 
-], function (FauxtonAPI, ActionTypes) {
+var SetupStore = FauxtonAPI.Store.extend({
 
-  var SetupStore = FauxtonAPI.Store.extend({
+  initialize: function () {
+    this.reset();
+  },
 
-    initialize: function () {
-      this.reset();
-    },
+  reset: function () {
+    this._clusterState = [];
 
-    reset: function () {
-      this._clusterState = [];
+    this._username = '';
+    this._password = '';
 
-      this._username = '';
-      this._password = '';
+    this._setupNode = {
+      bindAddress: '0.0.0.0',
+      port: 5984
+    };
 
-      this._setupNode = {
-        bindAddress: '0.0.0.0',
-        port: 5984
-      };
+    this.resetAddtionalNode();
 
-      this.resetAddtionalNode();
+    this._nodeList = [];
+  },
 
-      this._nodeList = [];
-    },
+  resetAddtionalNode: function () {
+    this._additionalNode = {
+      bindAddress: '0.0.0.0',
+      port: 5984,
+      remoteAddress: '127.0.0.1'
+    };
+  },
 
-    resetAddtionalNode: function () {
-      this._additionalNode = {
-        bindAddress: '0.0.0.0',
-        port: 5984,
-        remoteAddress: '127.0.0.1'
-      };
-    },
+  setClusterState: function (options) {
+    this._clusterState = options.state;
+  },
 
-    setClusterState: function (options) {
-      this._clusterState = options.state;
-    },
+  getClusterState: function () {
+    return this._clusterState;
+  },
 
-    getClusterState: function () {
-      return this._clusterState;
-    },
+  getNodeList: function () {
+    return this._nodeList;
+  },
 
-    getNodeList: function () {
-      return this._nodeList;
-    },
+  getIsAdminParty: function () {
+    return FauxtonAPI.session.isAdminParty();
+  },
 
-    getIsAdminParty: function () {
-      return FauxtonAPI.session.isAdminParty();
-    },
+  setUsername: function (options) {
+    this._username = options.value;
+  },
 
-    setUsername: function (options) {
-      this._username = options.value;
-    },
+  setPassword: function (options) {
+    this._password = options.value;
+  },
 
-    setPassword: function (options) {
-      this._password = options.value;
-    },
+  getUsername: function () {
+    return this._username;
+  },
 
-    getUsername: function () {
-      return this._username;
-    },
+  getPassword: function () {
+    return this._password;
+  },
 
-    getPassword: function () {
-      return this._password;
-    },
+  setBindAdressForSetupNode: function (options) {
+    this._setupNode.bindAddress = options.value;
+  },
 
-    setBindAdressForSetupNode: function (options) {
-      this._setupNode.bindAddress = options.value;
-    },
+  setPortForSetupNode: function (options) {
+    this._setupNode.port = options.value;
+  },
 
-    setPortForSetupNode: function (options) {
-      this._setupNode.port = options.value;
-    },
+  getPortForSetupNode: function () {
+    return this._setupNode.port;
+  },
 
-    getPortForSetupNode: function () {
-      return this._setupNode.port;
-    },
+  getBindAdressForSetupNode: function () {
+    return this._setupNode.bindAddress;
+  },
 
-    getBindAdressForSetupNode: function () {
-      return this._setupNode.bindAddress;
-    },
+  setBindAdressForAdditionalNode: function (options) {
+    this._additionalNode.bindAddress = options.value;
+  },
 
-    setBindAdressForAdditionalNode: function (options) {
-      this._additionalNode.bindAddress = options.value;
-    },
+  setPortForAdditionalNode: function (options) {
+    this._additionalNode.port = options.value;
+  },
 
-    setPortForAdditionalNode: function (options) {
-      this._additionalNode.port = options.value;
-    },
+  setRemoteAddressForAdditionalNode: function (options) {
+    this._additionalNode.remoteAddress = options.value;
+  },
 
-    setRemoteAddressForAdditionalNode: function (options) {
-      this._additionalNode.remoteAddress = options.value;
-    },
+  getAdditionalNode: function () {
+    return this._additionalNode;
+  },
 
-    getAdditionalNode: function () {
-      return this._additionalNode;
-    },
+  addNodeToList: function (options) {
+    this._nodeList.push(options.value);
+    this.resetAddtionalNode();
+  },
 
-    addNodeToList: function (options) {
-      this._nodeList.push(options.value);
-      this.resetAddtionalNode();
-    },
+  getHostForSetupNode: function () {
+    return '127.0.0.1';
+  },
 
-    getHostForSetupNode: function () {
-      return '127.0.0.1';
-    },
+  dispatch: function (action) {
 
-    dispatch: function (action) {
+    switch (action.type) {
+      case ActionTypes.SETUP_SET_CLUSTERSTATUS:
+        this.setClusterState(action.options);
+      break;
 
-      switch (action.type) {
-        case ActionTypes.SETUP_SET_CLUSTERSTATUS:
-          this.setClusterState(action.options);
-        break;
+      case ActionTypes.SETUP_SET_USERNAME:
+        this.setUsername(action.options);
+      break;
 
-        case ActionTypes.SETUP_SET_USERNAME:
-          this.setUsername(action.options);
-        break;
+      case ActionTypes.SETUP_SET_PASSWORD:
+        this.setPassword(action.options);
+      break;
 
-        case ActionTypes.SETUP_SET_PASSWORD:
-          this.setPassword(action.options);
-        break;
+      case ActionTypes.SETUP_BIND_ADDRESS_FOR_SINGLE_NODE:
+        this.setBindAdressForSetupNode(action.options);
+      break;
 
-        case ActionTypes.SETUP_BIND_ADDRESS_FOR_SINGLE_NODE:
-          this.setBindAdressForSetupNode(action.options);
-        break;
+      case ActionTypes.SETUP_PORT_FOR_SINGLE_NODE:
+        this.setPortForSetupNode(action.options);
+      break;
 
-        case ActionTypes.SETUP_PORT_FOR_SINGLE_NODE:
-          this.setPortForSetupNode(action.options);
-        break;
+      case ActionTypes.SETUP_PORT_ADDITIONAL_NODE:
+        this.setPortForAdditionalNode(action.options);
+      break;
 
-        case ActionTypes.SETUP_PORT_ADDITIONAL_NODE:
-          this.setPortForAdditionalNode(action.options);
-        break;
+      case ActionTypes.SETUP_BIND_ADDRESS_ADDITIONAL_NODE:
+        this.setBindAdressForAdditionalNode(action.options);
+      break;
 
-        case ActionTypes.SETUP_BIND_ADDRESS_ADDITIONAL_NODE:
-          this.setBindAdressForAdditionalNode(action.options);
-        break;
+      case ActionTypes.SETUP_REMOTE_ADDRESS_ADDITIONAL_NODE:
+        this.setRemoteAddressForAdditionalNode(action.options);
+      break;
 
-        case ActionTypes.SETUP_REMOTE_ADDRESS_ADDITIONAL_NODE:
-          this.setRemoteAddressForAdditionalNode(action.options);
-        break;
+      case ActionTypes.SETUP_ADD_NODE_TO_LIST:
+        this.addNodeToList(action.options);
+      break;
 
-        case ActionTypes.SETUP_ADD_NODE_TO_LIST:
-          this.addNodeToList(action.options);
-        break;
-
-        case ActionTypes.SETUP_RESET_ADDITIONAL_NODE:
-          this.resetAddtionalNode();
-        break;
+      case ActionTypes.SETUP_RESET_ADDITIONAL_NODE:
+        this.resetAddtionalNode();
+      break;
 
 
-        default:
-        return;
-      }
-
-      this.triggerChange();
+      default:
+      return;
     }
 
-  });
+    this.triggerChange();
+  }
 
-
-  var setupStore = new SetupStore();
-
-  setupStore.dispatchToken = FauxtonAPI.dispatcher.register(setupStore.dispatch.bind(setupStore));
-
-  return {
-    setupStore: setupStore,
-    SetupStore: SetupStore
-  };
 });
+
+
+var setupStore = new SetupStore();
+
+setupStore.dispatchToken = FauxtonAPI.dispatcher.register(setupStore.dispatch.bind(setupStore));
+
+export default {
+  setupStore: setupStore,
+  SetupStore: SetupStore
+};

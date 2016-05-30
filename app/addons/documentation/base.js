@@ -10,25 +10,20 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-define([
-  '../../app',
-  '../../core/api',
-  './routes',
-  './assets/less/documentation.less'
-],
+import app from "../../app";
+import FauxtonAPI from "../../core/api";
+import Documentation from "./routes";
+import "./assets/less/documentation.less";
 
-function (app, FauxtonAPI, Documentation) {
+Documentation.initialize = function () {
+  FauxtonAPI.addHeaderLink({
+    id: 'Documentation',
+    title: 'Documentation',
+    icon: 'fonticon-bookmark',
+    href: '/documentation',
+    bottomNav: true,
+    top: true
+  });
+};
 
-  Documentation.initialize = function () {
-    FauxtonAPI.addHeaderLink({
-      id: 'Documentation',
-      title: 'Documentation',
-      icon: 'fonticon-bookmark',
-      href: '/documentation',
-      bottomNav: true,
-      top: true
-    });
-  };
-
-  return Documentation;
-});
+export default Documentation;

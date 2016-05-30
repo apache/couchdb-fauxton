@@ -9,163 +9,157 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
-define([
-  '../../../app',
-  '../../../core/api',
-  'react',
-  'react-dom',
-  './stores',
-  './actions'
-],
+import app from "../../../app";
+import FauxtonAPI from "../../../core/api";
+import React from "react";
+import ReactDOM from "react-dom";
+import Stores from "./stores";
+import Actions from "./actions";
+const navBarStore = Stores.navBarStore;
 
-function (app, FauxtonAPI, React, ReactDOM, Stores, Actions) {
-  const navBarStore = Stores.navBarStore;
+const Footer = React.createClass({
+  render () {
+    const version = this.props.version;
 
-  const Footer = React.createClass({
-    render () {
-      const version = this.props.version;
+    if (!version) { return null; }
+    return (
+      <div className="version-footer">
+        Fauxton on
+        <a href="http://couchdb.apache.org/"> Apache CouchDB</a>
+        <br/>
+        v. {version}
+      </div>
+    );
+  }
+});
 
-      if (!version) { return null; }
-      return (
-        <div className="version-footer">
-          Fauxton on
-          <a href="http://couchdb.apache.org/"> Apache CouchDB</a>
-          <br/>
-          v. {version}
-        </div>
-      );
+const Burger = React.createClass({
+  render () {
+    return (
+      <div className="burger" onClick={this.props.toggleMenu}>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    );
+  }
+});
+
+const NavLink = React.createClass({
+  render () {
+    const link = this.props.link;
+    const liClassName = this.props.active === link.title ? 'active' : '';
+
+    return (
+      <li data-nav-name={link.title} className={liClassName} >
+        <a href={link.href} target={link.target ? '_blank' : null} data-bypass={link.target ? 'true' : null}>
+          <i className={link.icon + " fonticon "}></i>
+          <span dangerouslySetInnerHTML={{__html: link.title }} />
+        </a>
+      </li>
+    );
+  }
+});
+
+const NavBar = React.createClass({
+  getStoreState () {
+    return {
+      navLinks: navBarStore.getNavLinks(),
+      bottomNavLinks: navBarStore.getBottomNavLinks(),
+      footerNavLinks: navBarStore.getFooterNavLinks(),
+      activeLink: navBarStore.getActiveLink(),
+      version: navBarStore.getVersion(),
+      isMinimized: navBarStore.isMinimized(),
+      isNavBarVisible: navBarStore.isNavBarVisible()
+    };
+  },
+
+  getInitialState () {
+    return this.getStoreState();
+  },
+
+  createLinks (links) {
+    return _.map(links, function (link, i) {
+      return <NavLink key={i} link={link} active={this.state.activeLink} />;
+    }, this);
+  },
+
+  onChange () {
+    this.setState(this.getStoreState());
+  },
+
+  setMenuState () {
+    $('body').toggleClass('closeMenu', this.state.isMinimized);
+    FauxtonAPI.Events.trigger(FauxtonAPI.constants.EVENTS.NAVBAR_SIZE_CHANGED, this.state.isMinimized);
+  },
+
+  componentDidMount () {
+    navBarStore.on('change', this.onChange, this);
+    this.setMenuState();
+  },
+
+  componentDidUpdate () {
+    this.setMenuState();
+  },
+
+  componentWillUnmount () {
+    navBarStore.off('change', this.onChange);
+  },
+
+  toggleMenu () {
+    Actions.toggleNavbarMenu();
+  },
+
+  render () {
+    //YUCK!! but we can only really fix this once we have removed all backbone
+    if (!this.state.isNavBarVisible) {
+      $('#primary-navbar').hide();
+      return null;
     }
-  });
 
-  const Burger = React.createClass({
-    render () {
-      return (
-        <div className="burger" onClick={this.props.toggleMenu}>
-          <div></div>
-          <div></div>
-          <div></div>
-        </div>
-      );
-    }
-  });
+    $('#primary-navbar').show();
 
-  const NavLink = React.createClass({
-    render () {
-      const link = this.props.link;
-      const liClassName = this.props.active === link.title ? 'active' : '';
+    const navLinks = this.createLinks(this.state.navLinks);
+    const bottomNavLinks = this.createLinks(this.state.bottomNavLinks);
+    const footerNavLinks = this.createLinks(this.state.footerNavLinks);
 
-      return (
-        <li data-nav-name={link.title} className={liClassName} >
-          <a href={link.href} target={link.target ? '_blank' : null} data-bypass={link.target ? 'true' : null}>
-            <i className={link.icon + " fonticon "}></i>
-            <span dangerouslySetInnerHTML={{__html: link.title }} />
-          </a>
-        </li>
-      );
-    }
-  });
+    return (
+      <div className="navbar">
+        <Burger toggleMenu={this.toggleMenu}/>
+        <nav id="main_navigation">
+          <ul id="nav-links" className="nav">
+            {navLinks}
+          </ul>
 
-  const NavBar = React.createClass({
-    getStoreState () {
-      return {
-        navLinks: navBarStore.getNavLinks(),
-        bottomNavLinks: navBarStore.getBottomNavLinks(),
-        footerNavLinks: navBarStore.getFooterNavLinks(),
-        activeLink: navBarStore.getActiveLink(),
-        version: navBarStore.getVersion(),
-        isMinimized: navBarStore.isMinimized(),
-        isNavBarVisible: navBarStore.isNavBarVisible()
-      };
-    },
-
-    getInitialState () {
-      return this.getStoreState();
-    },
-
-    createLinks (links) {
-      return _.map(links, function (link, i) {
-        return <NavLink key={i} link={link} active={this.state.activeLink} />;
-      }, this);
-    },
-
-    onChange () {
-      this.setState(this.getStoreState());
-    },
-
-    setMenuState () {
-      $('body').toggleClass('closeMenu', this.state.isMinimized);
-      FauxtonAPI.Events.trigger(FauxtonAPI.constants.EVENTS.NAVBAR_SIZE_CHANGED, this.state.isMinimized);
-    },
-
-    componentDidMount () {
-      navBarStore.on('change', this.onChange, this);
-      this.setMenuState();
-    },
-
-    componentDidUpdate () {
-      this.setMenuState();
-    },
-
-    componentWillUnmount () {
-      navBarStore.off('change', this.onChange);
-    },
-
-    toggleMenu () {
-      Actions.toggleNavbarMenu();
-    },
-
-    render () {
-      //YUCK!! but we can only really fix this once we have removed all backbone
-      if (!this.state.isNavBarVisible) {
-        $('#primary-navbar').hide();
-        return null;
-      }
-
-      $('#primary-navbar').show();
-
-      const navLinks = this.createLinks(this.state.navLinks);
-      const bottomNavLinks = this.createLinks(this.state.bottomNavLinks);
-      const footerNavLinks = this.createLinks(this.state.footerNavLinks);
-
-      return (
-        <div className="navbar">
-          <Burger toggleMenu={this.toggleMenu}/>
-          <nav id="main_navigation">
-            <ul id="nav-links" className="nav">
-              {navLinks}
+          <div id="bottom-nav">
+            <ul id="bottom-nav-links" className="nav">
+              {bottomNavLinks}
             </ul>
+          </div>
+        </nav>
+        <div id="primary-nav-right-shadow"/>
 
-            <div id="bottom-nav">
-              <ul id="bottom-nav-links" className="nav">
-                {bottomNavLinks}
-              </ul>
-            </div>
-          </nav>
-          <div id="primary-nav-right-shadow"/>
+        <div className="bottom-container">
+          <div className="brand">
+            <div className="icon">Apache Fauxton</div>
+          </div>
 
-          <div className="bottom-container">
-            <div className="brand">
-              <div className="icon">Apache Fauxton</div>
-            </div>
-
-            <Footer version={this.state.version}/>
-            <div id="footer-links">
-              <ul id="footer-nav-links" className="nav">
-                {footerNavLinks}
-              </ul>
-            </div>
+          <Footer version={this.state.version}/>
+          <div id="footer-links">
+            <ul id="footer-nav-links" className="nav">
+              {footerNavLinks}
+            </ul>
           </div>
         </div>
-      );
-    }
-  });
-
-  return {
-    renderNavBar (el) {
-      ReactDOM.render(<NavBar/>, el);
-    },
-    NavBar: NavBar,
-    Burger: Burger
-  };
-
+      </div>
+    );
+  }
 });
+
+export default {
+  renderNavBar (el) {
+    ReactDOM.render(<NavBar/>, el);
+  },
+  NavBar: NavBar,
+  Burger: Burger
+};

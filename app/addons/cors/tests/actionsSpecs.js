@@ -9,122 +9,118 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
-define([
-  '../../../app',
-  'testUtils',
-  '../../../core/api',
-  '../actions',
-  'sinon'
-], function (app, testUtils, FauxtonAPI, Actions, sinon) {
-  var assert = testUtils.assert;
+import app from "../../../app";
+import testUtils from "testUtils";
+import FauxtonAPI from "../../../core/api";
+import Actions from "../actions";
+import sinon from "sinon";
+var assert = testUtils.assert;
 
-  describe('CORS actions', function () {
+describe('CORS actions', function () {
 
-    describe('save', function () {
+  describe('save', function () {
 
-      afterEach(function () {
-        Actions.saveCorsOrigins.restore && Actions.saveCorsOrigins.restore();
+    afterEach(function () {
+      Actions.saveCorsOrigins.restore && Actions.saveCorsOrigins.restore();
+    });
+
+    it('should save cors enabled to httpd', function () {
+      var spy = sinon.spy(Actions, 'saveEnableCorsToHttpd');
+
+      Actions.saveCors({
+        enableCors: false
       });
 
-      it('should save cors enabled to httpd', function () {
-        var spy = sinon.spy(Actions, 'saveEnableCorsToHttpd');
+      assert.ok(spy.calledWith(false));
+    });
 
-        Actions.saveCors({
-          enableCors: false
-        });
+    it('does not save cors origins if cors not enabled', function () {
+      var spy = sinon.spy(Actions, 'saveCorsOrigins');
 
-        assert.ok(spy.calledWith(false));
+      Actions.saveCors({
+        enableCors: false,
+        origins: ['*']
       });
 
-      it('does not save cors origins if cors not enabled', function () {
-        var spy = sinon.spy(Actions, 'saveCorsOrigins');
+      assert.notOk(spy.calledOnce);
+    });
 
-        Actions.saveCors({
-          enableCors: false,
-          origins: ['*']
-        });
+    it('saves cors origins', function () {
+      var spy = sinon.spy(Actions, 'saveCorsOrigins');
 
-        assert.notOk(spy.calledOnce);
+      Actions.saveCors({
+        enableCors: true,
+        origins: ['*']
       });
 
-      it('saves cors origins', function () {
-        var spy = sinon.spy(Actions, 'saveCorsOrigins');
+      assert.ok(spy.calledWith('*'));
+    });
 
-        Actions.saveCors({
-          enableCors: true,
-          origins: ['*']
-        });
+    it('saves cors allow credentials', function () {
+      var spy = sinon.spy(Actions, 'saveCorsCredentials');
 
-        assert.ok(spy.calledWith('*'));
+      Actions.saveCors({
+        enableCors: true,
+        origins: ['https://testdomain.com']
       });
 
-      it('saves cors allow credentials', function () {
-        var spy = sinon.spy(Actions, 'saveCorsCredentials');
+      assert.ok(spy.calledOnce);
+    });
 
-        Actions.saveCors({
-          enableCors: true,
-          origins: ['https://testdomain.com']
-        });
+    it('saves cors headers', function () {
+      var spy = sinon.spy(Actions, 'saveCorsHeaders');
 
-        assert.ok(spy.calledOnce);
+      Actions.saveCors({
+        enableCors: true,
+        origins: ['https://testdomain.com']
       });
 
-      it('saves cors headers', function () {
-        var spy = sinon.spy(Actions, 'saveCorsHeaders');
+      assert.ok(spy.calledOnce);
+    });
 
-        Actions.saveCors({
-          enableCors: true,
-          origins: ['https://testdomain.com']
-        });
+    it('saves cors methods', function () {
+      var spy = sinon.spy(Actions, 'saveCorsMethods');
 
-        assert.ok(spy.calledOnce);
+      Actions.saveCors({
+        enableCors: true,
+        origins: ['https://testdomain.com']
       });
 
-      it('saves cors methods', function () {
-        var spy = sinon.spy(Actions, 'saveCorsMethods');
-
-        Actions.saveCors({
-          enableCors: true,
-          origins: ['https://testdomain.com']
-        });
-
-        assert.ok(spy.calledOnce);
-
-      });
-
-      it('shows notification on successful save', function () {
-        var stub = sinon.stub(FauxtonAPI, 'when');
-        var spy = sinon.spy(FauxtonAPI, 'addNotification');
-        var promise = FauxtonAPI.Deferred();
-        promise.resolve();
-        stub.returns(promise);
-
-        Actions.saveCors({
-          enableCors: true,
-          origins: ['https://testdomain.com']
-        });
-
-        assert.ok(spy.calledOnce);
-        FauxtonAPI.when.restore();
-        FauxtonAPI.addNotification.restore();
-      });
+      assert.ok(spy.calledOnce);
 
     });
 
-    describe('Sanitize origins', function () {
+    it('shows notification on successful save', function () {
+      var stub = sinon.stub(FauxtonAPI, 'when');
+      var spy = sinon.spy(FauxtonAPI, 'addNotification');
+      var promise = FauxtonAPI.Deferred();
+      promise.resolve();
+      stub.returns(promise);
 
-      it('joins array into string', function () {
-        var origins = ['https://hello.com', 'https://hello2.com'];
-
-        assert.deepEqual(Actions.sanitizeOrigins(origins), origins.join(','));
+      Actions.saveCors({
+        enableCors: true,
+        origins: ['https://testdomain.com']
       });
 
-      it('returns empty string for no origins', function () {
-        var origins = [];
-
-        assert.deepEqual(Actions.sanitizeOrigins(origins), '');
-      });
+      assert.ok(spy.calledOnce);
+      FauxtonAPI.when.restore();
+      FauxtonAPI.addNotification.restore();
     });
+
   });
 
+  describe('Sanitize origins', function () {
+
+    it('joins array into string', function () {
+      var origins = ['https://hello.com', 'https://hello2.com'];
+
+      assert.deepEqual(Actions.sanitizeOrigins(origins), origins.join(','));
+    });
+
+    it('returns empty string for no origins', function () {
+      var origins = [];
+
+      assert.deepEqual(Actions.sanitizeOrigins(origins), '');
+    });
+  });
 });

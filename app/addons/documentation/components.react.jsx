@@ -10,58 +10,54 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-define([
-  '../../app',
-  '../../core/api',
-  'react',
-  './stores'
-], function (app, FauxtonAPI, React, Stores) {
+import app from "../../app";
+import FauxtonAPI from "../../core/api";
+import React from "react";
+import Stores from "./stores";
 
-  var documentationStore = Stores.documentationStore;
+var documentationStore = Stores.documentationStore;
 
-  var DocumentationController = React.createClass({
-    getStoreState: function () {
-      return {
-        links: documentationStore.getLinks()
-      };
-    },
+var DocumentationController = React.createClass({
+  getStoreState: function () {
+    return {
+      links: documentationStore.getLinks()
+    };
+  },
 
-    getInitialState: function () {
-      return this.getStoreState();
-    },
+  getInitialState: function () {
+    return this.getStoreState();
+  },
 
-    createLinkRows: function () {
-      return this.state.links.map(function (linkObject) {
-        return (
-          <tr key={linkObject.title}>
-            <td className="icons-container">
-              <div className={"icon " + linkObject.iconClassName}> </div>
-            </td>
-            <td>
-              <a href={linkObject.link} target="_blank" data-bypass="true">{linkObject.title}</a>
-            </td>
-          </tr>
-        );
-      });
-    },
-
-    render: function () {
+  createLinkRows: function () {
+    return this.state.links.map(function (linkObject) {
       return (
-        <div id="documentation-page" className="scrollable">
-          <div className="links">
-            <table>
-              <tbody>
-              {this.createLinkRows()}
-              </tbody>
-            </table>
-          </div>
-        </div>
+        <tr key={linkObject.title}>
+          <td className="icons-container">
+            <div className={"icon " + linkObject.iconClassName}> </div>
+          </td>
+          <td>
+            <a href={linkObject.link} target="_blank" data-bypass="true">{linkObject.title}</a>
+          </td>
+        </tr>
       );
-    }
-  });
+    });
+  },
 
-  return {
-    DocumentationController: DocumentationController
-  };
-
+  render: function () {
+    return (
+      <div id="documentation-page" className="scrollable">
+        <div className="links">
+          <table>
+            <tbody>
+            {this.createLinkRows()}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    );
+  }
 });
+
+export default {
+  DocumentationController: DocumentationController
+};

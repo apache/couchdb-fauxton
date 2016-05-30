@@ -10,42 +10,39 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-define([
-  '../../core/api',
-  './resources',
-  './cluster.actiontypes'
-],
-function (FauxtonAPI, ClusterResources, ActionTypes) {
-  return {
-    fetchNodes: function () {
-      var memberships = new ClusterResources.ClusterNodes();
+import FauxtonAPI from "../../core/api";
+import ClusterResources from "./resources";
+import ActionTypes from "./cluster.actiontypes";
 
-      memberships.fetch().then(function () {
-        this.updateNodes({
-          nodes: memberships.get('nodes_mapped')
-        });
-      }.bind(this));
-    },
+export default {
+  fetchNodes: function () {
+    var memberships = new ClusterResources.ClusterNodes();
 
-    updateNodes: function (options) {
-      FauxtonAPI.dispatch({
-        type: ActionTypes.CLUSTER_FETCH_NODES,
-        options: options
+    memberships.fetch().then(function () {
+      this.updateNodes({
+        nodes: memberships.get('nodes_mapped')
       });
-    },
+    }.bind(this));
+  },
 
-    navigateToNodeBasedOnNodeCount: function (successtarget) {
-      var memberships = new ClusterResources.ClusterNodes();
+  updateNodes: function (options) {
+    FauxtonAPI.dispatch({
+      type: ActionTypes.CLUSTER_FETCH_NODES,
+      options: options
+    });
+  },
 
-      memberships.fetch().then(function () {
-        var nodes = memberships.get('all_nodes');
+  navigateToNodeBasedOnNodeCount: function (successtarget) {
+    var memberships = new ClusterResources.ClusterNodes();
 
-        if (nodes.length === 1) {
-          return FauxtonAPI.navigate(successtarget + nodes[0]);
-        }
-        return FauxtonAPI.navigate('/cluster/disabled', {trigger: true});
-      });
-    }
+    memberships.fetch().then(function () {
+      var nodes = memberships.get('all_nodes');
 
-  };
-});
+      if (nodes.length === 1) {
+        return FauxtonAPI.navigate(successtarget + nodes[0]);
+      }
+      return FauxtonAPI.navigate('/cluster/disabled', {trigger: true});
+    });
+  }
+
+};

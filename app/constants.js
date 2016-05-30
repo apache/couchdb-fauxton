@@ -10,51 +10,47 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-define([], function () {
+export default {
 
-  var constants = {
+  MISC: {
+    TRAY_TOGGLE_SPEED: 250,
+    DEFAULT_PAGE_SIZE: 20,
+    MODAL_BACKDROP_Z_INDEX: 1025
+  },
 
-    MISC: {
-      TRAY_TOGGLE_SPEED: 250,
-      DEFAULT_PAGE_SIZE: 20,
-      MODAL_BACKDROP_Z_INDEX: 1025
-    },
+  DATABASES: {
+    DOCUMENT_LIMIT: 100
+  },
 
-    DATABASES: {
-      DOCUMENT_LIMIT: 100
-    },
+  // global events for common used components
+  EVENTS: {
+    TRAY_OPENED: 'tray:opened',
+    NAVBAR_SIZE_CHANGED: 'navbar:size_changed'
+  },
 
-    // global events for common used components
-    EVENTS: {
-      TRAY_OPENED: 'tray:opened',
-      NAVBAR_SIZE_CHANGED: 'navbar:size_changed'
-    },
+  // documentation URLs
+  DOC_URLS: {
+    GENERAL: '/_utils/docs/intro/api.html#documents',
+    ALL_DBS: '/_utils/docs/api/server/common.html?highlight=all_dbs#get--_all_dbs',
+    REPLICATION: '/_utils/docs/replication/replicator.html#basics',
+    DESIGN_DOCS: '/_utils/docs/couchapp/ddocs.html#design-docs',
+    DESIGN_DOC_METADATA: '/_utils/docs/api/ddoc/common.html#api-ddoc-view-index-info',
+    VIEW_FUNCS: '/_utils/docs/couchapp/ddocs.html#view-functions',
+    MAP_FUNCS: '/_utils/docs/couchapp/ddocs.html#map-functions',
+    REDUCE_FUNCS: '/_utils/docs/couchapp/ddocs.html#reduce-and-rereduce-functions',
+    API_REF: '/_utils/docs/http-api.html',
+    DB_PERMISSION: '/_utils/docs/api/database/security.html#db-security',
+    STATS: '/_utils/docs/api/server/common.html?highlight=stats#get--_stats',
+    ACTIVE_TASKS: '/_utils/docs/api/server/common.html?highlight=stats#active-tasks',
+    LOG: '/_utils/docs/api/server/common.html?highlight=stats#log',
+    CONFIG: '/_utils/docs/config/index.html',
+    VIEWS: '/_utils/docs/intro/overview.html#views',
+    MANGO_INDEX: '/_utils/docs/intro/api.html#documents',
+    MANGO_SEARCH: '/_utils/docs/intro/api.html#documents',
+    CHANGES: '/_utils/docs/api/database/changes.html?highlight=changes#post--db-_changes'
+  },
 
-    // documentation URLs
-    DOC_URLS: {
-      GENERAL: '/_utils/docs/intro/api.html#documents',
-      ALL_DBS: '/_utils/docs/api/server/common.html?highlight=all_dbs#get--_all_dbs',
-      REPLICATION: '/_utils/docs/replication/replicator.html#basics',
-      DESIGN_DOCS: '/_utils/docs/couchapp/ddocs.html#design-docs',
-      DESIGN_DOC_METADATA: '/_utils/docs/api/ddoc/common.html#api-ddoc-view-index-info',
-      VIEW_FUNCS: '/_utils/docs/couchapp/ddocs.html#view-functions',
-      MAP_FUNCS: '/_utils/docs/couchapp/ddocs.html#map-functions',
-      REDUCE_FUNCS: '/_utils/docs/couchapp/ddocs.html#reduce-and-rereduce-functions',
-      API_REF: '/_utils/docs/http-api.html',
-      DB_PERMISSION: '/_utils/docs/api/database/security.html#db-security',
-      STATS: '/_utils/docs/api/server/common.html?highlight=stats#get--_stats',
-      ACTIVE_TASKS: '/_utils/docs/api/server/common.html?highlight=stats#active-tasks',
-      LOG: '/_utils/docs/api/server/common.html?highlight=stats#log',
-      CONFIG: '/_utils/docs/config/index.html',
-      VIEWS: '/_utils/docs/intro/overview.html#views',
-      MANGO_INDEX: '/_utils/docs/intro/api.html#documents',
-      MANGO_SEARCH: '/_utils/docs/intro/api.html#documents',
-      CHANGES: '/_utils/docs/api/database/changes.html?highlight=changes#post--db-_changes'
-    },
-
-    LOCAL_STORAGE: {
-      SIDEBAR_MINIMIZED: 'sidebar-minimized'
-    }
-  };
-  return constants;
-});
+  LOCAL_STORAGE: {
+    SIDEBAR_MINIMIZED: 'sidebar-minimized'
+  }
+};

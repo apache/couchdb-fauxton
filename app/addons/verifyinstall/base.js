@@ -10,22 +10,17 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-define([
-  '../../app',
-  '../../core/api',
-  './routes',
-  "./assets/less/verifyinstall.less"
-],
+import app from "../../app";
+import FauxtonAPI from "../../core/api";
+import VerifyInstall from "./routes";
+import "./assets/less/verifyinstall.less";
+VerifyInstall.initialize = function () {
+  FauxtonAPI.addHeaderLink({
+    title: 'Verify',
+    href: '#verifyinstall',
+    icon: 'fonticon-ok-circled',
+    bottomNav: true
+  });
+};
 
-function (app, FauxtonAPI, VerifyInstall) {
-  VerifyInstall.initialize = function () {
-    FauxtonAPI.addHeaderLink({
-      title: 'Verify',
-      href: '#verifyinstall',
-      icon: 'fonticon-ok-circled',
-      bottomNav: true
-    });
-  };
-
-  return VerifyInstall;
-});
+export default VerifyInstall;

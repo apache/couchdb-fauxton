@@ -15,13 +15,13 @@
  * ::WARNING::
  * THIS IS A GENERATED FILE. DO NOT EDIT.
  */
-define([
-  <%= '"' + deps.join('",\n"') + '"' %>
-],
-function () {
-  var LoadAddons = {
-    addons: arguments
-  };
 
-  return LoadAddons;
-});
+<% deps.forEach(function (dep, i) { %>
+<%= 'import { default as addon_' + i + ' } from "' + dep + '";' %>
+<% }); %>
+
+export default [
+  <% deps.forEach(function (dep, i) { %>
+    <%= 'addon_' + i + ',' %>
+  <% }); %>
+];

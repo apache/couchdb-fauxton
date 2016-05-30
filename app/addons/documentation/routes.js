@@ -10,30 +10,25 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-define([
-  '../../app',
-  '../../core/api',
-  './components.react'
-],
+import app from "../../app";
+import FauxtonAPI from "../../core/api";
+import DocumentationComponents from "./components.react";
 
-function (app, FauxtonAPI, DocumentationComponents) {
-
-  var DocumentationRouteObject = FauxtonAPI.RouteObject.extend({
-    selectedHeader: 'Documentation',
-    layout: 'one_pane',
-    disableLoader: false,
-    routes: {
-      'documentation': 'documentation'
-    },
-    crumbs: [
-      {'name': 'Documentation', 'link': '/documentation'}
-    ],
-    roles: ['fx_loggedIn'],
-    documentation: function () {
-      this.setComponent('#dashboard-content', DocumentationComponents.DocumentationController);
-    }
-  });
-  DocumentationRouteObject.RouteObjects = [DocumentationRouteObject];
-
-  return DocumentationRouteObject;
+var DocumentationRouteObject = FauxtonAPI.RouteObject.extend({
+  selectedHeader: 'Documentation',
+  layout: 'one_pane',
+  disableLoader: false,
+  routes: {
+    'documentation': 'documentation'
+  },
+  crumbs: [
+    {'name': 'Documentation', 'link': '/documentation'}
+  ],
+  roles: ['fx_loggedIn'],
+  documentation: function () {
+    this.setComponent('#dashboard-content', DocumentationComponents.DocumentationController);
+  }
 });
+DocumentationRouteObject.RouteObjects = [DocumentationRouteObject];
+
+export default DocumentationRouteObject;

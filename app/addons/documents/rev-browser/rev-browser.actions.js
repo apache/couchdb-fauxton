@@ -12,157 +12,152 @@
 
 /* global FormData */
 
-define([
-  '../../../app',
-  '../../../core/api',
-  './rev-browser.actiontypes',
-  'visualizeRevTree/lib/getTree',
-  'pouchdb'
-],
-(app, FauxtonAPI, ActionTypes, getTree, PouchDB) => {
+import app from "../../../app";
+import FauxtonAPI from "../../../core/api";
+import ActionTypes from "./rev-browser.actiontypes";
+import getTree from "visualizeRevTree/lib/getTree";
+import PouchDB from "pouchdb";
 
-  let db;
+let db;
 
-  function initDiffEditor (dbName, docId) {
-    const url = FauxtonAPI.urls('databaseBaseURL', 'server', dbName);
-    db = PouchDB(url);
+function initDiffEditor (dbName, docId) {
+  const url = FauxtonAPI.urls('databaseBaseURL', 'server', dbName);
+  db = PouchDB(url);
 
-    // XXX: we need spec compliant promise support and get rid of jQ "deferreds"
-    const d1 = $.Deferred();
-    const d2 = $.Deferred();
-    $.when(d1, d2).done((tree, doc) => {
-      const conflictingRevs = getConflictingRevs(tree.paths, tree.winner, Object.keys(tree.deleted));
-      const initialRev = conflictingRevs[0];
+  // XXX: we need spec compliant promise support and get rid of jQ "deferreds"
+  const d1 = $.Deferred();
+  const d2 = $.Deferred();
+  $.when(d1, d2).done((tree, doc) => {
+    const conflictingRevs = getConflictingRevs(tree.paths, tree.winner, Object.keys(tree.deleted));
+    const initialRev = conflictingRevs[0];
 
-      if (!initialRev) {
-        return dispatchData(tree, doc, conflictingRevs, null, dbName);
-      }
+    if (!initialRev) {
+      return dispatchData(tree, doc, conflictingRevs, null, dbName);
+    }
 
-      db.get(doc._id, {rev: initialRev})
-        .then((conflictDoc) => {
-          dispatchData(tree, doc, conflictingRevs, conflictDoc, dbName);
-        });
-    });
-
-    db.get(docId)
-      .then(d2.resolve);
-
-    getTree(db, docId)
-      .then(d1.resolve);
-  }
-
-  function getConflictingRevs (paths, winner, deleted) {
-
-    return paths.reduce((acc, el) => {
-      if (el[0] !== winner) {
-        acc.push(el[0]);
-      }
-
-      return acc;
-    }, [])
-    .filter((el) => {
-      return deleted.indexOf(el) === -1;
-    });
-  }
-
-  function dispatchData (tree, doc, conflictingRevs, conflictDoc, databaseName) {
-    FauxtonAPI.dispatch({
-      type: ActionTypes.REV_BROWSER_REV_TREE_LOADED,
-      options: {
-        tree: tree,
-        doc: doc,
-        conflictDoc: conflictDoc,
-        conflictingRevs: conflictingRevs,
-        databaseName: databaseName
-      }
-    });
-  }
-
-  function toggleDiffView (enableDiff) {
-    FauxtonAPI.dispatch({
-      type: ActionTypes.REV_BROWSER_DIFF_ENABLE_DIFF_VIEW,
-      options: {
-        enableDiff: enableDiff
-      }
-    });
-  }
-
-  function chooseLeaves (doc, revTheirs) {
-    db.get(doc._id, {rev: revTheirs})
-      .then((res) => {
-        dispatchDocsToDiff(doc, res);
+    db.get(doc._id, {rev: initialRev})
+      .then((conflictDoc) => {
+        dispatchData(tree, doc, conflictingRevs, conflictDoc, dbName);
       });
-  }
+  });
 
-  function dispatchDocsToDiff (doc, theirs) {
-    FauxtonAPI.dispatch({
-      type: ActionTypes.REV_BROWSER_DIFF_DOCS_READY,
-      options: {
-        theirs: theirs,
-        ours: doc
-      }
+  db.get(docId)
+    .then(d2.resolve);
+
+  getTree(db, docId)
+    .then(d1.resolve);
+}
+
+function getConflictingRevs (paths, winner, deleted) {
+
+  return paths.reduce((acc, el) => {
+    if (el[0] !== winner) {
+      acc.push(el[0]);
+    }
+
+    return acc;
+  }, [])
+  .filter((el) => {
+    return deleted.indexOf(el) === -1;
+  });
+}
+
+function dispatchData (tree, doc, conflictingRevs, conflictDoc, databaseName) {
+  FauxtonAPI.dispatch({
+    type: ActionTypes.REV_BROWSER_REV_TREE_LOADED,
+    options: {
+      tree: tree,
+      doc: doc,
+      conflictDoc: conflictDoc,
+      conflictingRevs: conflictingRevs,
+      databaseName: databaseName
+    }
+  });
+}
+
+function toggleDiffView (enableDiff) {
+  FauxtonAPI.dispatch({
+    type: ActionTypes.REV_BROWSER_DIFF_ENABLE_DIFF_VIEW,
+    options: {
+      enableDiff: enableDiff
+    }
+  });
+}
+
+function chooseLeaves (doc, revTheirs) {
+  db.get(doc._id, {rev: revTheirs})
+    .then((res) => {
+      dispatchDocsToDiff(doc, res);
     });
-  }
+}
 
-  function showConfirmModal (show, docToWin) {
-    FauxtonAPI.dispatch({
-      type: ActionTypes.REV_BROWSER_SHOW_CONFIRM_MODAL,
-      options: {
-        show: show,
-        docToWin: docToWin
-      }
-    });
-  }
+function dispatchDocsToDiff (doc, theirs) {
+  FauxtonAPI.dispatch({
+    type: ActionTypes.REV_BROWSER_DIFF_DOCS_READY,
+    options: {
+      theirs: theirs,
+      ours: doc
+    }
+  });
+}
 
-  function selectRevAsWinner (databaseName, docId, paths, revToWin) {
-    const revsToDelete = getConflictingRevs(paths, revToWin, []);
-    const payload = buildBulkDeletePayload(docId, revsToDelete);
+function showConfirmModal (show, docToWin) {
+  FauxtonAPI.dispatch({
+    type: ActionTypes.REV_BROWSER_SHOW_CONFIRM_MODAL,
+    options: {
+      show: show,
+      docToWin: docToWin
+    }
+  });
+}
 
-    $.ajax({
-      url: FauxtonAPI.urls('bulk_docs', 'server', databaseName, ''),
-      type: 'POST',
-      contentType: 'application/json; charset=UTF-8',
-      data: JSON.stringify(payload),
-      success: () => {
-        FauxtonAPI.addNotification({
-          msg: 'Conflicts successfully solved.',
-          clear: true
-        });
-        showConfirmModal(false, null);
-        FauxtonAPI.navigate(FauxtonAPI.urls('allDocs', 'app', databaseName, ''));
-      },
-      error: (resp) => {
-        FauxtonAPI.addNotification({
-          msg: 'Failed to delete clean up conflicts!',
-          type: 'error',
-          clear: true
-        });
-      }
-    });
-  }
+function selectRevAsWinner (databaseName, docId, paths, revToWin) {
+  const revsToDelete = getConflictingRevs(paths, revToWin, []);
+  const payload = buildBulkDeletePayload(docId, revsToDelete);
 
-  function buildBulkDeletePayload (docId, revs) {
-    const list = revs.map((rev) => {
-      return {
-        "_id": docId,
-        "_rev": rev,
-        "_deleted": true
-      };
-    });
+  $.ajax({
+    url: FauxtonAPI.urls('bulk_docs', 'server', databaseName, ''),
+    type: 'POST',
+    contentType: 'application/json; charset=UTF-8',
+    data: JSON.stringify(payload),
+    success: () => {
+      FauxtonAPI.addNotification({
+        msg: 'Conflicts successfully solved.',
+        clear: true
+      });
+      showConfirmModal(false, null);
+      FauxtonAPI.navigate(FauxtonAPI.urls('allDocs', 'app', databaseName, ''));
+    },
+    error: (resp) => {
+      FauxtonAPI.addNotification({
+        msg: 'Failed to delete clean up conflicts!',
+        type: 'error',
+        clear: true
+      });
+    }
+  });
+}
 
-    return { "docs": list };
-  }
+function buildBulkDeletePayload (docId, revs) {
+  const list = revs.map((rev) => {
+    return {
+      "_id": docId,
+      "_rev": rev,
+      "_deleted": true
+    };
+  });
 
-  return {
-    getConflictingRevs: getConflictingRevs,
-    selectRevAsWinner: selectRevAsWinner,
-    buildBulkDeletePayload: buildBulkDeletePayload,
-    chooseLeaves: chooseLeaves,
-    dispatchDocsToDiff: dispatchDocsToDiff,
-    initDiffEditor: initDiffEditor,
-    dispatchData: dispatchData,
-    toggleDiffView: toggleDiffView,
-    showConfirmModal: showConfirmModal
-  };
+  return { "docs": list };
+}
 
-});
+export default {
+  getConflictingRevs: getConflictingRevs,
+  selectRevAsWinner: selectRevAsWinner,
+  buildBulkDeletePayload: buildBulkDeletePayload,
+  chooseLeaves: chooseLeaves,
+  dispatchDocsToDiff: dispatchDocsToDiff,
+  initDiffEditor: initDiffEditor,
+  dispatchData: dispatchData,
+  toggleDiffView: toggleDiffView,
+  showConfirmModal: showConfirmModal
+};

@@ -17,49 +17,44 @@
 // want to change this later, but for now this should be thought of as a
 // "purely functional" helper system.
 
-define([
-  './constants',
-  "./core/utils",
-  "d3",
-  'moment'
-],
+import constants from "./constants";
+import utils from "./core/utils";
+import d3 from "d3";
+import moment from "moment";
 
-function (constants, utils, d3, moment) {
+var Helpers = {};
 
-  var Helpers = {};
+Helpers.removeSpecialCharacters = utils.removeSpecialCharacters;
 
-  Helpers.removeSpecialCharacters = utils.removeSpecialCharacters;
+Helpers.safeURL = utils.safeURLName;
 
-  Helpers.safeURL = utils.safeURLName;
+Helpers.imageUrl = function (path) {
+  // TODO: add dynamic path for different deploy targets
+  return path;
+};
 
-  Helpers.imageUrl = function (path) {
-    // TODO: add dynamic path for different deploy targets
-    return path;
+Helpers.getDocUrl = function (key) {
+  return (_.has(constants.DOC_URLS, key)) ? constants.DOC_URLS[key] : '#';
+};
+
+// File size pretty printing, taken from futon.format.js
+Helpers.formatSize = function (size) {
+    var jump = 512;
+    if (size < jump) return size + " bytes";
+    var units = ["KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
+    var i = 0;
+    while (size >= jump && i < units.length) {
+      i += 1;
+      size /= 1024;
+    }
+    return size.toFixed(1) + ' ' + units[i - 1];
   };
 
-  Helpers.getDocUrl = function (key) {
-    return (_.has(constants.DOC_URLS, key)) ? constants.DOC_URLS[key] : '#';
-  };
+Helpers.formatDate = function (timestamp) {
+  return moment(timestamp, 'X').format('MMM Do, h:mm:ss a');
+};
+Helpers.getDateFromNow = function (timestamp) {
+  return moment(timestamp, 'X').fromNow();
+};
 
-  // File size pretty printing, taken from futon.format.js
-  Helpers.formatSize = function (size) {
-      var jump = 512;
-      if (size < jump) return size + " bytes";
-      var units = ["KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
-      var i = 0;
-      while (size >= jump && i < units.length) {
-        i += 1;
-        size /= 1024;
-      }
-      return size.toFixed(1) + ' ' + units[i - 1];
-    };
-
-  Helpers.formatDate = function (timestamp) {
-    return moment(timestamp, 'X').format('MMM Do, h:mm:ss a');
-  };
-  Helpers.getDateFromNow = function (timestamp) {
-    return moment(timestamp, 'X').fromNow();
-  };
-
-  return Helpers;
-});
+export default Helpers;

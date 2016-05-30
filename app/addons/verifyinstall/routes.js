@@ -10,32 +10,28 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-define([
-  '../../app',
-  '../../core/api',
-  './resources',
-  './actions',
-  './components.react'
-],
-function (app, FauxtonAPI, VerifyInstall, Actions, Components) {
+import app from "../../app";
+import FauxtonAPI from "../../core/api";
+import VerifyInstall from "./resources";
+import Actions from "./actions";
+import Components from "./components.react";
 
-  var VerifyRouteObject = FauxtonAPI.RouteObject.extend({
-    layout: 'one_pane',
+var VerifyRouteObject = FauxtonAPI.RouteObject.extend({
+  layout: 'one_pane',
 
-    routes: {
-      'verifyinstall': 'verifyInstall'
-    },
-    selectedHeader: 'Verify',
+  routes: {
+    'verifyinstall': 'verifyInstall'
+  },
+  selectedHeader: 'Verify',
 
-    verifyInstall: function () {
-      Actions.resetStore();
-      this.setComponent('#dashboard-content', Components.VerifyInstallController);
-    },
+  verifyInstall: function () {
+    Actions.resetStore();
+    this.setComponent('#dashboard-content', Components.VerifyInstallController);
+  },
 
-    crumbs: [{name: 'Verify CouchDB Installation', link: '#'}]
-  });
-
-  VerifyInstall.RouteObjects = [VerifyRouteObject];
-
-  return VerifyInstall;
+  crumbs: [{name: 'Verify CouchDB Installation', link: '#'}]
 });
+
+VerifyInstall.RouteObjects = [VerifyRouteObject];
+
+export default VerifyInstall;

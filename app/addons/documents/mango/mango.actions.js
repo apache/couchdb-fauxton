@@ -10,115 +10,111 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-define([
-  '../../../app',
-  '../../../core/api',
-  '../resources',
-  './mango.actiontypes',
-  './mango.stores',
-  '../index-results/stores',
-  '../index-results/actions',
-],
-function (app, FauxtonAPI, Documents, ActionTypes, Stores, IndexResultsStores, IndexResultActions) {
-  var store = Stores.mangoStore;
+import app from "../../../app";
+import FauxtonAPI from "../../../core/api";
+import Documents from "../resources";
+import ActionTypes from "./mango.actiontypes";
+import Stores from "./mango.stores";
+import IndexResultsStores from "../index-results/stores";
+import IndexResultActions from "../index-results/actions";
+var store = Stores.mangoStore;
 
-  return {
+export default {
 
-    setDatabase: function (options) {
-      FauxtonAPI.dispatch({
-        type: ActionTypes.MANGO_SET_DB,
-        options: options
-      });
-    },
+  setDatabase: function (options) {
+    FauxtonAPI.dispatch({
+      type: ActionTypes.MANGO_SET_DB,
+      options: options
+    });
+  },
 
-    newQueryFindCode: function (options) {
-      FauxtonAPI.dispatch({
-        type: ActionTypes.MANGO_NEW_QUERY_FIND_CODE,
-        options: options
-      });
-    },
+  newQueryFindCode: function (options) {
+    FauxtonAPI.dispatch({
+      type: ActionTypes.MANGO_NEW_QUERY_FIND_CODE,
+      options: options
+    });
+  },
 
-    newQueryCreateIndexCode: function (options) {
-      FauxtonAPI.dispatch({
-        type: ActionTypes.MANGO_NEW_QUERY_CREATE_INDEX_CODE,
-        options: options
-      });
-    },
+  newQueryCreateIndexCode: function (options) {
+    FauxtonAPI.dispatch({
+      type: ActionTypes.MANGO_NEW_QUERY_CREATE_INDEX_CODE,
+      options: options
+    });
+  },
 
-    saveQuery: function (options) {
-      var queryCode = JSON.parse(options.queryCode),
-          mangoIndex = new Documents.MangoIndex(queryCode, {database: options.database});
+  saveQuery: function (options) {
+    var queryCode = JSON.parse(options.queryCode),
+        mangoIndex = new Documents.MangoIndex(queryCode, {database: options.database});
 
-      FauxtonAPI.addNotification({
-        msg:  'Saving Index for Query...',
-        type: 'info',
-        clear: true
-      });
+    FauxtonAPI.addNotification({
+      msg:  'Saving Index for Query...',
+      type: 'info',
+      clear: true
+    });
 
-      mangoIndex
-        .save()
-        .then(function (res) {
-          var url = '#' + FauxtonAPI.urls('mango', 'query-app', options.database.safeID());
+    mangoIndex
+      .save()
+      .then(function (res) {
+        var url = '#' + FauxtonAPI.urls('mango', 'query-app', options.database.safeID());
 
-          FauxtonAPI.dispatch({
-            type: ActionTypes.MANGO_NEW_QUERY_FIND_CODE_FROM_FIELDS,
-            options: {
-              fields: queryCode.index.fields
-            }
-          });
-
-          var mangoIndexCollection = new Documents.MangoIndexCollection(null, {
-            database: options.database,
-            params: null,
-            paging: {
-              pageSize: IndexResultsStores.indexResultsStore.getPerPage()
-            }
-          });
-
-          this.getIndexList({indexList: mangoIndexCollection}).then(function () {
-
-            IndexResultActions.reloadResultsList();
-
-            FauxtonAPI.addNotification({
-              msg: 'Index is ready for querying. <a href="' + url + '">Run a Query.</a>',
-              type: 'success',
-              clear: true,
-              escape: false
-            });
-          }.bind(this));
-
-        }.bind(this))
-        .fail(function (res) {
-          FauxtonAPI.addNotification({
-            msg: res.responseJSON.reason,
-            type: 'error',
-            clear: true
-          });
+        FauxtonAPI.dispatch({
+          type: ActionTypes.MANGO_NEW_QUERY_FIND_CODE_FROM_FIELDS,
+          options: {
+            fields: queryCode.index.fields
+          }
         });
-    },
 
-    mangoResetIndexList: function (options) {
-      FauxtonAPI.dispatch({
-        type: ActionTypes.MANGO_RESET,
-        options: options
-      });
-    },
+        var mangoIndexCollection = new Documents.MangoIndexCollection(null, {
+          database: options.database,
+          params: null,
+          paging: {
+            pageSize: IndexResultsStores.indexResultsStore.getPerPage()
+          }
+        });
 
-    getIndexList: function (options) {
-      FauxtonAPI.dispatch({
-        type: ActionTypes.MANGO_NEW_AVAILABLE_INDEXES,
-        options: options
-      });
+        this.getIndexList({indexList: mangoIndexCollection}).then(function () {
 
-      return options.indexList.fetch({reset: true}).then(function () {
-        this.mangoResetIndexList({isLoading: false});
-      }.bind(this), function () {
+          IndexResultActions.reloadResultsList();
+
+          FauxtonAPI.addNotification({
+            msg: 'Index is ready for querying. <a href="' + url + '">Run a Query.</a>',
+            type: 'success',
+            clear: true,
+            escape: false
+          });
+        }.bind(this));
+
+      }.bind(this))
+      .fail(function (res) {
         FauxtonAPI.addNotification({
-          msg: 'Bad request!',
-          type: "error",
-          clear:  true
-       });
+          msg: res.responseJSON.reason,
+          type: 'error',
+          clear: true
+        });
       });
-    }
-  };
-});
+  },
+
+  mangoResetIndexList: function (options) {
+    FauxtonAPI.dispatch({
+      type: ActionTypes.MANGO_RESET,
+      options: options
+    });
+  },
+
+  getIndexList: function (options) {
+    FauxtonAPI.dispatch({
+      type: ActionTypes.MANGO_NEW_AVAILABLE_INDEXES,
+      options: options
+    });
+
+    return options.indexList.fetch({reset: true}).then(function () {
+      this.mangoResetIndexList({isLoading: false});
+    }.bind(this), function () {
+      FauxtonAPI.addNotification({
+        msg: 'Bad request!',
+        type: "error",
+        clear:  true
+     });
+    });
+  }
+};

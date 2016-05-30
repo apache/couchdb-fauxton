@@ -10,58 +10,54 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-define([
-  '../../../app',
-  '../../../core/api',
-  './actiontypes'
-],
-function (app, FauxtonAPI, ActionTypes) {
+import app from "../../../app";
+import FauxtonAPI from "../../../core/api";
+import ActionTypes from "./actiontypes";
 
-  return {
-    toggleNavbarMenu () {
-      FauxtonAPI.dispatch({
-        type: ActionTypes.TOGGLE_NAVBAR_MENU
-      });
-    },
+export default {
+  toggleNavbarMenu () {
+    FauxtonAPI.dispatch({
+      type: ActionTypes.TOGGLE_NAVBAR_MENU
+    });
+  },
 
-    addHeaderLink (link) {
-      FauxtonAPI.dispatch({
-        type: ActionTypes.ADD_NAVBAR_LINK,
-        link: link
-      });
-    },
+  addHeaderLink (link) {
+    FauxtonAPI.dispatch({
+      type: ActionTypes.ADD_NAVBAR_LINK,
+      link: link
+    });
+  },
 
-    removeHeaderLink (link) {
-      FauxtonAPI.dispatch({
-        type: ActionTypes.REMOVE_NAVBAR_LINK,
-        link: link
-      });
-    },
+  removeHeaderLink (link) {
+    FauxtonAPI.dispatch({
+      type: ActionTypes.REMOVE_NAVBAR_LINK,
+      link: link
+    });
+  },
 
-    setNavbarVersionInfo (versionInfo) {
-      FauxtonAPI.dispatch({
-        type: ActionTypes.NAVBAR_SET_VERSION_INFO,
-        version: versionInfo
-      });
-    },
+  setNavbarVersionInfo (versionInfo) {
+    FauxtonAPI.dispatch({
+      type: ActionTypes.NAVBAR_SET_VERSION_INFO,
+      version: versionInfo
+    });
+  },
 
-    setNavbarActiveLink (header) {
-      FauxtonAPI.dispatch({
-        type: ActionTypes.NAVBAR_ACTIVE_LINK,
-        name: header
-      });
-    },
+  setNavbarActiveLink (header) {
+    FauxtonAPI.dispatch({
+      type: ActionTypes.NAVBAR_ACTIVE_LINK,
+      name: header
+    });
+  },
 
-    showNavBar () {
-      FauxtonAPI.dispatch({
-        type: ActionTypes.NAVBAR_SHOW
-      });
-    },
+  showNavBar () {
+    FauxtonAPI.dispatch({
+      type: ActionTypes.NAVBAR_SHOW
+    });
+  },
 
-    hideNavBar () {
-      FauxtonAPI.dispatch({
-        type: ActionTypes.NAVBAR_HIDE
-      });
-    }
-  };
-});
+  hideNavBar () {
+    FauxtonAPI.dispatch({
+      type: ActionTypes.NAVBAR_HIDE
+    });
+  }
+};

@@ -9,53 +9,50 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
-define([
-  '../../../core/api',
-  '../react-components.react',
-  '../../../../test/mocha/testUtils',
-  'react',
-  'react-dom',
-  'react-addons-test-utils',
-  'sinon'
-], function (FauxtonAPI, ReactComponents, utils, React, ReactDOM, TestUtils, sinon) {
+import FauxtonAPI from "../../../core/api";
+import ReactComponents from "../react-components.react";
+import utils from "../../../../test/mocha/testUtils";
+import React from "react";
+import ReactDOM from "react-dom";
+import TestUtils from "react-addons-test-utils";
+import sinon from "sinon";
 
-  var assert = utils.assert;
+var assert = utils.assert;
 
-  describe('styled select', function () {
-    var container, selectorEl, spy = sinon.spy();
+describe('styled select', function () {
+  var container, selectorEl, spy = sinon.spy();
 
-    beforeEach(function () {
-      container = document.createElement('div');
+  beforeEach(function () {
+    container = document.createElement('div');
 
-      var selectContent = (
-        <optgroup label="Select a document">
-          <option value="new">New Design Document</option>
-          <option value="foo">New Design Document</option>
-        </optgroup>
-      );
+    var selectContent = (
+      <optgroup label="Select a document">
+        <option value="new">New Design Document</option>
+        <option value="foo">New Design Document</option>
+      </optgroup>
+    );
 
-      selectorEl = TestUtils.renderIntoDocument(
-        <ReactComponents.StyledSelect
-          selectId="new-ddoc"
-          selectClass=""
-          selectContent={selectContent}
-          selectChange={spy} />,
-        container
-      );
-    });
-
-    afterEach(function () {
-      ReactDOM.unmountComponentAtNode(container);
-    });
-
-    it('calls the callback on select', function () {
-      TestUtils.Simulate.change($(ReactDOM.findDOMNode(selectorEl)).find('#new-ddoc')[0], {
-        target: {
-          value: 'new'
-        }
-      });
-      assert.ok(spy.calledOnce);
-    });
-
+    selectorEl = TestUtils.renderIntoDocument(
+      <ReactComponents.StyledSelect
+        selectId="new-ddoc"
+        selectClass=""
+        selectContent={selectContent}
+        selectChange={spy} />,
+      container
+    );
   });
+
+  afterEach(function () {
+    ReactDOM.unmountComponentAtNode(container);
+  });
+
+  it('calls the callback on select', function () {
+    TestUtils.Simulate.change($(ReactDOM.findDOMNode(selectorEl)).find('#new-ddoc')[0], {
+      target: {
+        value: 'new'
+      }
+    });
+    assert.ok(spy.calledOnce);
+  });
+
 });

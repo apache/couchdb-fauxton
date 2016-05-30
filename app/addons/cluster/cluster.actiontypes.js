@@ -10,8 +10,6 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-define([], function () {
-  return {
-    CLUSTER_FETCH_NODES: 'CLUSTER_FETCH_NODES'
-  };
-});
+export default {
+  CLUSTER_FETCH_NODES: 'CLUSTER_FETCH_NODES'
+};

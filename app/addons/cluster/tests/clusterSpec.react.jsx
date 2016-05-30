@@ -9,49 +9,46 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
-define([
-  '../../../core/api',
-  '../cluster.react',
-  '../cluster.actions',
-  '../cluster.stores',
-  '../../../../test/mocha/testUtils',
-  'react',
-  'react-dom',
-  'react-addons-test-utils',
-], function (FauxtonAPI, ClusterComponent, ClusterActions, ClusterStores, utils, React, ReactDOM, TestUtils) {
+import FauxtonAPI from "../../../core/api";
+import ClusterComponent from "../cluster.react";
+import ClusterActions from "../cluster.actions";
+import ClusterStores from "../cluster.stores";
+import utils from "../../../../test/mocha/testUtils";
+import React from "react";
+import ReactDOM from "react-dom";
+import TestUtils from "react-addons-test-utils";
 
-  var assert = utils.assert;
+var assert = utils.assert;
 
-  describe('Cluster Controller', function () {
-    var container, controller;
+describe('Cluster Controller', function () {
+  var container, controller;
 
-    beforeEach(function () {
+  beforeEach(function () {
 
-      var nodeList = [
-        {'node': 'node1@127.0.0.1', 'isInCluster': true},
-        {'node': 'node2@127.0.0.1', 'isInCluster': true},
-        {'node': 'node3@127.0.0.1', 'isInCluster': false},
-        {'node': 'node3@127.0.0.1', 'isInCluster': false},
-        {'node': 'node3@127.0.0.1', 'isInCluster': false},
-        {'node': 'node3@127.0.0.1', 'isInCluster': false}
-      ];
+    var nodeList = [
+      {'node': 'node1@127.0.0.1', 'isInCluster': true},
+      {'node': 'node2@127.0.0.1', 'isInCluster': true},
+      {'node': 'node3@127.0.0.1', 'isInCluster': false},
+      {'node': 'node3@127.0.0.1', 'isInCluster': false},
+      {'node': 'node3@127.0.0.1', 'isInCluster': false},
+      {'node': 'node3@127.0.0.1', 'isInCluster': false}
+    ];
 
-      ClusterActions.updateNodes({nodes: nodeList});
+    ClusterActions.updateNodes({nodes: nodeList});
 
-      container = document.createElement('div');
-      controller = TestUtils.renderIntoDocument(
-        <ClusterComponent.DisabledConfigController />,
-        container
-      );
-    });
+    container = document.createElement('div');
+    controller = TestUtils.renderIntoDocument(
+      <ClusterComponent.DisabledConfigController />,
+      container
+    );
+  });
 
-    afterEach(function () {
-      ClusterStores.nodesStore.reset();
-      ReactDOM.unmountComponentAtNode(container);
-    });
+  afterEach(function () {
+    ClusterStores.nodesStore.reset();
+    ReactDOM.unmountComponentAtNode(container);
+  });
 
-    it('renders the amount of nodes', function () {
-      assert.ok(/6 nodes/.test($(ReactDOM.findDOMNode(controller)).text()), 'finds 6 nodes');
-    });
+  it('renders the amount of nodes', function () {
+    assert.ok(/6 nodes/.test($(ReactDOM.findDOMNode(controller)).text()), 'finds 6 nodes');
   });
 });

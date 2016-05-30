@@ -10,51 +10,47 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-define([
-  '../../../app',
-  '../../../core/api',
-  './actiontypes',
-  './stores'
-],
-function (app, FauxtonAPI, ActionTypes, Stores) {
-  var store = Stores.designDocInfoStore;
+import app from "../../../app";
+import FauxtonAPI from "../../../core/api";
+import ActionTypes from "./actiontypes";
+import Stores from "./stores";
+var store = Stores.designDocInfoStore;
 
-  return {
-    fetchDesignDocInfo: function (options) {
-      var designDocInfo = options.designDocInfo;
+export default {
+  fetchDesignDocInfo: function (options) {
+    var designDocInfo = options.designDocInfo;
 
+    FauxtonAPI.dispatch({
+      type: ActionTypes.DESIGN_FETCHING
+    });
+
+    designDocInfo.fetch().then(function () {
+      this.monitorDesignDoc({
+        ddocName: options.ddocName,
+        designDocInfo: designDocInfo
+      });
+
+    }.bind(this));
+
+  },
+
+  monitorDesignDoc: function (options) {
+    options.intervalId = window.setInterval(_.bind(this.refresh, this), 5000);
+    FauxtonAPI.dispatch({
+      type: ActionTypes.DESIGN_DOC_MONITOR,
+      options: options
+    });
+  },
+
+  refresh: function () {
+    store.getDesignDocInfo().fetch().then(function () {
       FauxtonAPI.dispatch({
-        type: ActionTypes.DESIGN_FETCHING
+        type: ActionTypes.DESIGN_REFRESH
       });
+    });
+  },
 
-      designDocInfo.fetch().then(function () {
-        this.monitorDesignDoc({
-          ddocName: options.ddocName,
-          designDocInfo: designDocInfo
-        });
-
-      }.bind(this));
-
-    },
-
-    monitorDesignDoc: function (options) {
-      options.intervalId = window.setInterval(_.bind(this.refresh, this), 5000);
-      FauxtonAPI.dispatch({
-        type: ActionTypes.DESIGN_DOC_MONITOR,
-        options: options
-      });
-    },
-
-    refresh: function () {
-      store.getDesignDocInfo().fetch().then(function () {
-        FauxtonAPI.dispatch({
-          type: ActionTypes.DESIGN_REFRESH
-        });
-      });
-    },
-
-    stopRefresh: function () {
-      window.clearInterval(store.getIntervalId());
-    }
-  };
-});
+  stopRefresh: function () {
+    window.clearInterval(store.getIntervalId());
+  }
+};

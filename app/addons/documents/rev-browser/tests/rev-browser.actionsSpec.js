@@ -10,85 +10,81 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-define([
-  '../../../../core/api',
-  '../rev-browser.actions',
-  './fixtures',
+import FauxtonAPI from "../../../../core/api";
+import RevActions from "../rev-browser.actions";
+import fixtures from "./fixtures";
+import utils from "../../../../../test/mocha/testUtils";
 
-  '../../../../../test/mocha/testUtils'
-], (FauxtonAPI, RevActions, fixtures, utils) => {
+const assert = utils.assert;
 
-  const assert = utils.assert;
-
-  describe('RevActions', () => {
+describe('RevActions', () => {
 
 
-    it('getConflictingRevs gets the revisions which are obsolete, winner', () => {
+  it('getConflictingRevs gets the revisions which are obsolete, winner', () => {
 
-      const res = RevActions.getConflictingRevs(
-        fixtures.threePaths.paths,
-        "7-1f1bb5806f33c8922277ea053d6fc4ed",
-        Object.keys({})
-      );
+    const res = RevActions.getConflictingRevs(
+      fixtures.threePaths.paths,
+      "7-1f1bb5806f33c8922277ea053d6fc4ed",
+      Object.keys({})
+    );
 
-      const expected = [
-        "5-5555f2429e2211f74e656663f39b0cb8",
-        "7-1309b41d34787f7ba95280802f327dc2"
-      ];
+    const expected = [
+      "5-5555f2429e2211f74e656663f39b0cb8",
+      "7-1309b41d34787f7ba95280802f327dc2"
+    ];
 
-      assert.deepEqual(expected, res);
-    });
+    assert.deepEqual(expected, res);
+  });
 
-    it('getConflictingRevs gets the revisions which are obsolete, sidetrack with a lot lower rev', () => {
+  it('getConflictingRevs gets the revisions which are obsolete, sidetrack with a lot lower rev', () => {
 
-      const res = RevActions.getConflictingRevs(
-        fixtures.threePaths.paths,
-        "5-5555f2429e2211f74e656663f39b0cb8",
-        Object.keys({})
-      );
+    const res = RevActions.getConflictingRevs(
+      fixtures.threePaths.paths,
+      "5-5555f2429e2211f74e656663f39b0cb8",
+      Object.keys({})
+    );
 
-      const expected = [
-        "7-1309b41d34787f7ba95280802f327dc2",
-        "7-1f1bb5806f33c8922277ea053d6fc4ed"
-      ];
+    const expected = [
+      "7-1309b41d34787f7ba95280802f327dc2",
+      "7-1f1bb5806f33c8922277ea053d6fc4ed"
+    ];
 
-      assert.deepEqual(expected, res);
-    });
+    assert.deepEqual(expected, res);
+  });
 
-    it('getConflictingRevs filters out deleted revisions', () => {
+  it('getConflictingRevs filters out deleted revisions', () => {
 
-      const res = RevActions.getConflictingRevs(
-        fixtures.threePaths.paths,
-        "5-5555f2429e2211f74e656663f39b0cb8",
-        Object.keys({ '7-1f1bb5806f33c8922277ea053d6fc4ed': true })
-      );
+    const res = RevActions.getConflictingRevs(
+      fixtures.threePaths.paths,
+      "5-5555f2429e2211f74e656663f39b0cb8",
+      Object.keys({ '7-1f1bb5806f33c8922277ea053d6fc4ed': true })
+    );
 
-      const expected = [
-        "7-1309b41d34787f7ba95280802f327dc2"
-      ];
+    const expected = [
+      "7-1309b41d34787f7ba95280802f327dc2"
+    ];
 
-      assert.deepEqual(expected, res);
-    });
+    assert.deepEqual(expected, res);
+  });
 
-    it('buildBulkDeletePayload prepares the payload for bulkdocs', () => {
+  it('buildBulkDeletePayload prepares the payload for bulkdocs', () => {
 
-      const data = [
-        "7-1309b41d34787f7ba95280802f327dc2",
-        "6-9831e318304c35efafa6faa57a54809f",
-        "5-8eadb1a781b835cce132a339250bba53",
-        "4-3c1720cc9f559444f7e717a070f8eaec",
-        "7-1f1bb5806f33c8922277ea053d6fc4ed"
-      ];
+    const data = [
+      "7-1309b41d34787f7ba95280802f327dc2",
+      "6-9831e318304c35efafa6faa57a54809f",
+      "5-8eadb1a781b835cce132a339250bba53",
+      "4-3c1720cc9f559444f7e717a070f8eaec",
+      "7-1f1bb5806f33c8922277ea053d6fc4ed"
+    ];
 
-      const res = RevActions.buildBulkDeletePayload('fooId', data);
+    const res = RevActions.buildBulkDeletePayload('fooId', data);
 
-      assert.deepEqual([
-        { "_id": "fooId", "_rev": "7-1309b41d34787f7ba95280802f327dc2", "_deleted": true },
-        { "_id": "fooId", "_rev": "6-9831e318304c35efafa6faa57a54809f", "_deleted": true },
-        { "_id": "fooId", "_rev": "5-8eadb1a781b835cce132a339250bba53", "_deleted": true },
-        { "_id": "fooId", "_rev": "4-3c1720cc9f559444f7e717a070f8eaec", "_deleted": true },
-        { "_id": "fooId", "_rev": "7-1f1bb5806f33c8922277ea053d6fc4ed", "_deleted": true },
-      ], res.docs);
-    });
+    assert.deepEqual([
+      { "_id": "fooId", "_rev": "7-1309b41d34787f7ba95280802f327dc2", "_deleted": true },
+      { "_id": "fooId", "_rev": "6-9831e318304c35efafa6faa57a54809f", "_deleted": true },
+      { "_id": "fooId", "_rev": "5-8eadb1a781b835cce132a339250bba53", "_deleted": true },
+      { "_id": "fooId", "_rev": "4-3c1720cc9f559444f7e717a070f8eaec", "_deleted": true },
+      { "_id": "fooId", "_rev": "7-1f1bb5806f33c8922277ea053d6fc4ed", "_deleted": true },
+    ], res.docs);
   });
 });

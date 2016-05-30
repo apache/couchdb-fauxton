@@ -10,123 +10,110 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-define([
-  // application.
-  './initialize',
+import app from "./initialize";
+import $ from "jquery";
+import _ from "lodash";
+import Backbone from "backbone";
+import Bootstrap from "bootstrap";
+import Helpers from "./helpers";
+import Utils from "./core/utils";
+import FauxtonAPI from "./core/api";
+import Couchdb from "./core/couchdbSession";
+import "backbone.layoutmanager";
+import "../assets/less/fauxton.less";
 
-  // libraries
-  'jquery',
-  'lodash',
-  'backbone',
-  'bootstrap',
-  './helpers',
-  './core/utils',
+// Make sure we have a console.log
+if (_.isUndefined(console)) {
+  console = {
+    log: function () {},
+    trace: function () {},
+    debug: function () {}
+  };
+}
 
-  // modules
-  './core/api',
-  './core/couchdbSession',
-
-  // plugins
-  'backbone.layoutmanager',
-  "../assets/less/fauxton.less"
-],
-
-function (app, $, _, Backbone, Bootstrap, Helpers, Utils, FauxtonAPI, Couchdb) {
-
-  // Make sure we have a console.log
-  if (_.isUndefined(console)) {
-    console = {
-      log: function () {},
-      trace: function () {},
-      debug: function () {}
-    };
+// make sure we have location.origin
+if (_.isUndefined(window.location.origin)) {
+  var port = '';
+  if (window.location.port) {
+    port = ':' + window.location.port;
   }
+  window.location.origin = window.location.protocol + '//' +
+    window.location.hostname + port;
+}
 
-  // make sure we have location.origin
-  if (_.isUndefined(window.location.origin)) {
-    var port = '';
-    if (window.location.port) {
-      port = ':' + window.location.port;
-    }
-    window.location.origin = window.location.protocol + '//' +
-      window.location.hostname + port;
-  }
-
-  // Provide a global location to place configuration settings and module
-  // creation also mix in Backbone.Events
-  _.extend(app, {
-    utils: Utils,
-    getParams: FauxtonAPI.utils.getParams,
-    helpers: Helpers
-  });
-
-  // Localize or create a new JavaScript Template object
-  var JST = window.JST = window.JST || {};
-
-  // Configure LayoutManager with Backbone Boilerplate defaults
-  FauxtonAPI.Layout.configure({
-    // Allow LayoutManager to augment Backbone.View.prototype.
-    manage: true,
-    prefix: 'app/',
-
-    // Inject app/helper.js for shared functionality across all html templates
-    renderTemplate: function (template, context) {
-      return template(_.extend(Helpers, context));
-    },
-
-    fetchTemplate: function (path) {
-      // Initialize done for use in async-mode
-      var done;
-
-      // Concatenate the file extension.
-      path = path + '.html';
-
-      // If cached, use the compiled template.
-      if (JST[path]) {
-        return JST[path];
-      } else {
-        // Put fetch into `async-mode`.
-        done = this.async();
-        // Seek out the template asynchronously.
-        return $.ajax({ url: app.root + path }).then(function (contents) {
-          done(JST[path] = _.template(contents));
-        });
-      }
-    }
-  });
-
-  FauxtonAPI.setSession(new Couchdb.Session());
-
-
-  // Define your master router on the application namespace and trigger all
-  // navigation from this instance.
-  FauxtonAPI.config({
-    el: '.wrapper',
-    masterLayout: new FauxtonAPI.Layout(),
-
-    // I haven't wrapped these dispatch methods in a action
-    // because I don't want to require fauxton/actions in this method.
-    addHeaderLink: function (link) {
-      FauxtonAPI.dispatch({
-        type: 'ADD_NAVBAR_LINK',
-        link: link
-      });
-    },
-
-    updateHeaderLink: function (link) {
-      FauxtonAPI.dispatch({
-        type: 'UPDATE_NAVBAR_LINK',
-        link: link
-      });
-    },
-
-    removeHeaderLink: function (link) {
-      FauxtonAPI.dispatch({
-        type: 'REMOVE_NAVBAR_LINK',
-        link: link
-      });
-    }
-  });
-
-  return app;
+// Provide a global location to place configuration settings and module
+// creation also mix in Backbone.Events
+Object.assign(app, {
+  utils: Utils,
+  getParams: FauxtonAPI.utils.getParams,
+  helpers: Helpers
 });
+
+// Localize or create a new JavaScript Template object
+const JST = window.JST = window.JST || {};
+
+// Configure LayoutManager with Backbone Boilerplate defaults
+FauxtonAPI.Layout.configure({
+  // Allow LayoutManager to augment Backbone.View.prototype.
+  manage: true,
+  prefix: 'app/',
+
+  // Inject app/helper.js for shared functionality across all html templates
+  renderTemplate: function (template, context) {
+    return template(_.extend(Helpers, context));
+  },
+
+  fetchTemplate: function (path) {
+    // Initialize done for use in async-mode
+    let done;
+
+    // Concatenate the file extension.
+    path = path + '.html';
+
+    // If cached, use the compiled template.
+    if (JST[path]) {
+      return JST[path];
+    } else {
+      // Put fetch into `async-mode`.
+      done = this.async();
+      // Seek out the template asynchronously.
+      return $.ajax({ url: app.root + path }).then(function (contents) {
+        done(JST[path] = _.template(contents));
+      });
+    }
+  }
+});
+
+FauxtonAPI.setSession(new Couchdb.Session());
+
+// Define your master router on the application namespace and trigger all
+// navigation from this instance.
+FauxtonAPI.config({
+  el: '.wrapper',
+  masterLayout: new FauxtonAPI.Layout(),
+
+  // I haven't wrapped these dispatch methods in a action
+  // because I don't want to require fauxton/actions in this method.
+  addHeaderLink: function (link) {
+    FauxtonAPI.dispatch({
+      type: 'ADD_NAVBAR_LINK',
+      link: link
+    });
+  },
+
+  updateHeaderLink: function (link) {
+    FauxtonAPI.dispatch({
+      type: 'UPDATE_NAVBAR_LINK',
+      link: link
+    });
+  },
+
+  removeHeaderLink: function (link) {
+    FauxtonAPI.dispatch({
+      type: 'REMOVE_NAVBAR_LINK',
+      link: link
+    });
+  }
+});
+
+export default app;

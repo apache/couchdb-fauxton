@@ -10,33 +10,27 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-define([
-  "app",
-  "api",
-  'addons/styletests/styletests.react'
-],
+import app from "app";
+import FauxtonAPI from "api";
+import StyleTests from "addons/styletests/styletests.react";
 
-function (app, FauxtonAPI, StyleTests) {
+var TestRouteObject = FauxtonAPI.RouteObject.extend({
+  layout: "one_pane",
+  routes: {
+    "tests": "initialize"
+  },
 
-  var TestRouteObject = FauxtonAPI.RouteObject.extend({
-    layout: "one_pane",
-    routes: {
-      "tests": "initialize"
-    },
+  selectedHeader: 'theme tests',
 
-    selectedHeader: 'theme tests',
+  crumbs:[],
 
-    crumbs:[],
+  apiUrl: function () {
+    return false;
+  },
 
-    apiUrl: function () {
-      return false;
-    },
-
-    initialize: function () {
-      this.setComponent('#dashboard-content', StyleTests.StyleTests);
-    }
-  });
-
-  return {RouteObjects: [TestRouteObject]};
-
+  initialize: function () {
+    this.setComponent('#dashboard-content', StyleTests.StyleTests);
+  }
 });
+
+export default {RouteObjects: [TestRouteObject]};

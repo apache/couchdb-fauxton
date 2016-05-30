@@ -10,88 +10,84 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-define([
-  'backbone',
-  'backbone.layoutmanager'
-], function (Backbone) {
+import Backbone from "backbone";
+import "backbone.layoutmanager";
 
-  // A wrapper of the main Backbone.layoutmanager
-  // Allows the main layout of the page to be changed by any plugin.
-  var Layout = function () {
-    this.layout = new Backbone.Layout({
-      template: "templates/layouts/with_sidebar",
-      className: 'pusher'
-    });
-
-    this.layoutViews = {};
-    this.reactComponents = {};
-    //this views don't ever get removed. An example of this is the main navigation sidebar
-    this.permanentViews = {};
-    this.el = this.layout.el;
-  };
-
-  Layout.configure = function (options) {
-    Backbone.Layout.configure(options);
-  };
-
-  // creatings the dashboard object same way backbone does
-  _.extend(Layout.prototype, {
-    render: function () {
-      return this.layout.render();
-    },
-
-    setTemplate: function (template) {
-      if (template.prefix) {
-        this.layout.template = template.prefix + template.name;
-      } else {
-        this.layout.template = "templates/layouts/" + template;
-      }
-      // If we're changing layouts all bets are off, so kill off all the
-      // existing views in the layout.
-      _.each(this.layoutViews, function (view) {view.removeView();});
-      this.layoutViews = {};
-      return this.render().promise();
-    },
-
-    setView: function (selector, view, keep) {
-      this.layout.setView(selector, view, false);
-
-      if (!keep) {
-        this.layoutViews[selector] = view;
-      } else {
-        this.permanentViews[selector] = view;
-      }
-
-      return view;
-    },
-
-    renderView: function (selector) {
-      var view = this.layoutViews[selector];
-      if (!view) {
-        return false;
-      } else {
-        return view.render();
-      }
-    },
-
-    removeView: function (selector) {
-      var view = this.layout.getView(selector);
-
-      if (!view) {
-        return false;
-      }
-
-      this.layout.removeView(selector);
-
-      if (this.layoutViews[selector]) {
-        delete this.layoutViews[selector];
-      }
-
-      return true;
-    }
-
+// A wrapper of the main Backbone.layoutmanager
+// Allows the main layout of the page to be changed by any plugin.
+var Layout = function () {
+  this.layout = new Backbone.Layout({
+    template: "templates/layouts/with_sidebar",
+    className: 'pusher'
   });
 
-  return Layout;
+  this.layoutViews = {};
+  this.reactComponents = {};
+  //this views don't ever get removed. An example of this is the main navigation sidebar
+  this.permanentViews = {};
+  this.el = this.layout.el;
+};
+
+Layout.configure = function (options) {
+  Backbone.Layout.configure(options);
+};
+
+// creatings the dashboard object same way backbone does
+_.extend(Layout.prototype, {
+  render: function () {
+    return this.layout.render();
+  },
+
+  setTemplate: function (template) {
+    if (template.prefix) {
+      this.layout.template = template.prefix + template.name;
+    } else {
+      this.layout.template = "templates/layouts/" + template;
+    }
+    // If we're changing layouts all bets are off, so kill off all the
+    // existing views in the layout.
+    _.each(this.layoutViews, function (view) {view.removeView();});
+    this.layoutViews = {};
+    return this.render().promise();
+  },
+
+  setView: function (selector, view, keep) {
+    this.layout.setView(selector, view, false);
+
+    if (!keep) {
+      this.layoutViews[selector] = view;
+    } else {
+      this.permanentViews[selector] = view;
+    }
+
+    return view;
+  },
+
+  renderView: function (selector) {
+    var view = this.layoutViews[selector];
+    if (!view) {
+      return false;
+    } else {
+      return view.render();
+    }
+  },
+
+  removeView: function (selector) {
+    var view = this.layout.getView(selector);
+
+    if (!view) {
+      return false;
+    }
+
+    this.layout.removeView(selector);
+
+    if (this.layoutViews[selector]) {
+      delete this.layoutViews[selector];
+    }
+
+    return true;
+  }
 
 });
+
+export default Layout;

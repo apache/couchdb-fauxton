@@ -10,25 +10,20 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-define([
-  '../../app',
-  '../../core/api',
-  "./routes",
-  "./assets/less/styletests.less"
-],
+import app from "../../app";
+import FauxtonAPI from "../../core/api";
+import tests from "./routes";
+import "./assets/less/styletests.less";
 
-function (app, FauxtonAPI, tests) {
+tests.initialize = function () {
 
-  tests.initialize = function () {
+  FauxtonAPI.addHeaderLink({
+    title: "Tests",
+    href: '#/tests',
+    bottomNav: true,
+    icon: "fonticon-wrench"
+  });
 
-    FauxtonAPI.addHeaderLink({
-      title: "Tests",
-      href: '#/tests',
-      bottomNav: true,
-      icon: "fonticon-wrench"
-    });
+};
 
-  };
-
-  return tests;
-});
+export default tests;

@@ -10,48 +10,45 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-define([
-  '../../app',
-  '../../core/api',
-  'react',
-  'react-dom',
-  'react-select',
-  'lodash'
-], (app, FauxtonAPI, React, ReactDOM, ReactSelect, {debounce}) => {
+import app from "../../app";
+import FauxtonAPI from "../../core/api";
+import React from "react";
+import ReactDOM from "react-dom";
+import ReactSelect from "react-select";
+import "lodash";
 
-  const JumpToDoc = ({database, allDocs}) => {
-    const options = allDocs.map(doc => {
-      return {
-        value: doc.get('_id'),
-        label: doc.get('_id')
-      };
-    });
-    return (
-      <div id="jump-to-doc" class="input-append">
-        <ReactSelect
-          name="jump-to-doc"
-          placeholder="Document ID"
-          className="input-large jump-to-doc"
-          options={options}
-          clearable={false}
-          onChange={({value: docId}) => {
-            const url = FauxtonAPI.urls('document', 'app', app.utils.safeURLName(database.id), app.utils.safeURLName(docId) );
-            FauxtonAPI.navigate(url, {trigger: true});
-          }}
-        />
-      </div>
-    );
-  };
+const JumpToDoc = ({database, allDocs}) => {
+  const options = allDocs.map(doc => {
+    return {
+      value: doc.get('_id'),
+      label: doc.get('_id')
+    };
+  });
+  return (
+    <div id="jump-to-doc" class="input-append">
+      <ReactSelect
+        name="jump-to-doc"
+        placeholder="Document ID"
+        className="input-large jump-to-doc"
+        options={options}
+        clearable={false}
+        onChange={({value: docId}) => {
+          const url = FauxtonAPI.urls('document', 'app', app.utils.safeURLName(database.id), app.utils.safeURLName(docId) );
+          FauxtonAPI.navigate(url, {trigger: true});
+        }}
+      />
+    </div>
+  );
+};
 
-  JumpToDoc.propTypes = {
-    database: React.PropTypes.object.isRequired,
-    allDocs: React.PropTypes.object.isRequired,
-  };
+JumpToDoc.propTypes = {
+  database: React.PropTypes.object.isRequired,
+  allDocs: React.PropTypes.object.isRequired,
+};
 
-  return {
-    JumpToDoc,
-    render: (el, database, allDocs) => {
-      ReactDOM.render(<JumpToDoc database={database} allDocs={allDocs} />, $(el)[0]);
-    }
-  };
-});
+export default {
+  JumpToDoc,
+  render: (el, database, allDocs) => {
+    ReactDOM.render(<JumpToDoc database={database} allDocs={allDocs} />, $(el)[0]);
+  }
+};

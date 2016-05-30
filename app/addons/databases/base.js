@@ -10,74 +10,69 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-define([
-  "../../app",
-  "../../core/api",
-  "./routes",
-  "./assets/less/databases.less"
-],
+import app from "../../app";
+import FauxtonAPI from "../../core/api";
+import Databases from "./routes";
+import "./assets/less/databases.less";
 
-function (app, FauxtonAPI, Databases) {
-
-  Databases.initialize = function () {
-    FauxtonAPI.addHeaderLink({
-      href:"#/_all_dbs",
-      title:"Databases",
-      icon: "fonticon-database",
-      className: 'databases'
-    });
-  };
-
-  // Utility functions
-  Databases.databaseUrl = function (database) {
-    var name = _.isObject(database) ? database.id : database,
-        dbname = app.utils.safeURLName(name);
-
-    return ['/database/', dbname, '/_all_docs?limit=' + Databases.DocLimit].join('');
-  };
-
-  FauxtonAPI.registerUrls('changes', {
-    server: function (id, query) {
-      return app.host + '/' + id + '/_changes' + query;
-
-    },
-    app: function (id, query) {
-      return '/database/' + id + '/_changes' + query;
-    },
-
-    apiurl: function (id, query) {
-      return window.location.origin + '/' + id + '/_changes' + query;
-    }
+Databases.initialize = function () {
+  FauxtonAPI.addHeaderLink({
+    href:"#/_all_dbs",
+    title:"Databases",
+    icon: "fonticon-database",
+    className: 'databases'
   });
+};
 
-  FauxtonAPI.registerUrls('allDBs', {
-    app: function () {
-      return '_all_dbs';
-    }
-  });
+// Utility functions
+Databases.databaseUrl = function (database) {
+  var name = _.isObject(database) ? database.id : database,
+      dbname = app.utils.safeURLName(name);
 
-  FauxtonAPI.registerUrls('databaseBaseURL', {
-    server: function (database) {
-      return window.location.origin + '/' + database;
-    },
-    app: function (database) {
-      return '/database/' + database;
-    }
-  });
+  return ['/database/', dbname, '/_all_docs?limit=' + Databases.DocLimit].join('');
+};
 
-  FauxtonAPI.registerUrls('permissions', {
-    server: function (db) {
-      return app.host + '/' + db + '/_security';
-    },
+FauxtonAPI.registerUrls('changes', {
+  server: function (id, query) {
+    return app.host + '/' + id + '/_changes' + query;
 
-    app: function (db) {
-      return '/database/' + db + '/permissions';
-    },
+  },
+  app: function (id, query) {
+    return '/database/' + id + '/_changes' + query;
+  },
 
-    apiurl: function (db) {
-      return window.location.origin + '/' + db + '/_security';
-    }
-  });
-
-  return Databases;
+  apiurl: function (id, query) {
+    return window.location.origin + '/' + id + '/_changes' + query;
+  }
 });
+
+FauxtonAPI.registerUrls('allDBs', {
+  app: function () {
+    return '_all_dbs';
+  }
+});
+
+FauxtonAPI.registerUrls('databaseBaseURL', {
+  server: function (database) {
+    return window.location.origin + '/' + database;
+  },
+  app: function (database) {
+    return '/database/' + database;
+  }
+});
+
+FauxtonAPI.registerUrls('permissions', {
+  server: function (db) {
+    return app.host + '/' + db + '/_security';
+  },
+
+  app: function (db) {
+    return '/database/' + db + '/permissions';
+  },
+
+  apiurl: function (db) {
+    return window.location.origin + '/' + db + '/_security';
+  }
+});
+
+export default Databases;

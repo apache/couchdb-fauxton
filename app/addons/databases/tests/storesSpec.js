@@ -10,63 +10,59 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-define([
-  '../../../app',
-  '../../../core/api',
-  '../../../../test/mocha/testUtils',
-  '../stores',
-  '../actiontypes',
-  '../resources'
-], function (app, FauxtonAPI, utils, Stores, ActionTypes, Resources) {
+import app from "../../../app";
+import FauxtonAPI from "../../../core/api";
+import utils from "../../../../test/mocha/testUtils";
+import Stores from "../stores";
+import ActionTypes from "../actiontypes";
+import Resources from "../resources";
 
-  var assert = utils.assert;
+var assert = utils.assert;
 
-  describe('Databases Store', function () {
+describe('Databases Store', function () {
 
-    var oldColl, oldBackbone;
-    var passedId, doneCallback, errorCallback, navigationTarget;
+  var oldColl, oldBackbone;
+  var passedId, doneCallback, errorCallback, navigationTarget;
+
+  beforeEach(function () {
+    oldColl = Stores.databasesStore._collection;
+    oldBackbone = Stores.databasesStore._backboneCollection;
+    Stores.databasesStore._backboneCollection = {};
+  });
+
+  afterEach(function () {
+    Stores.databasesStore._collection = oldColl;
+    Stores.databasesStore._backboneCollection = oldBackbone;
+  });
+
+  it("inits based on what we pass", function () {
+    Stores.databasesStore.init({"name": "col1"}, {"name": "col2"});
+    assert.equal("col1", Stores.databasesStore.getCollection().name);
+    assert.equal("col2", Stores.databasesStore._backboneCollection.name);
+  });
+
+  describe("database collection info", function () {
 
     beforeEach(function () {
-      oldColl = Stores.databasesStore._collection;
-      oldBackbone = Stores.databasesStore._backboneCollection;
-      Stores.databasesStore._backboneCollection = {};
-    });
-
-    afterEach(function () {
-      Stores.databasesStore._collection = oldColl;
-      Stores.databasesStore._backboneCollection = oldBackbone;
-    });
-
-    it("inits based on what we pass", function () {
-      Stores.databasesStore.init({"name": "col1"}, {"name": "col2"});
-      assert.equal("col1", Stores.databasesStore.getCollection().name);
-      assert.equal("col2", Stores.databasesStore._backboneCollection.name);
-    });
-
-    describe("database collection info", function () {
-
-      beforeEach(function () {
-        Stores.databasesStore._backboneCollection.toJSON = function () {
-          return {
-            "db1": {
-              "name": "db1"
-            },
-            "db2": {
-              "name": "db2"
-            }
-          };
+      Stores.databasesStore._backboneCollection.toJSON = function () {
+        return {
+          "db1": {
+            "name": "db1"
+          },
+          "db2": {
+            "name": "db2"
+          }
         };
-      });
+      };
+    });
 
-      it("determines database names", function () {
-        assert.ok(JSON.stringify(["db1", "db2"]) == JSON.stringify(Stores.databasesStore.getDatabaseNames().sort()));
-      });
+    it("determines database names", function () {
+      assert.ok(JSON.stringify(["db1", "db2"]) == JSON.stringify(Stores.databasesStore.getDatabaseNames().sort()));
+    });
 
-      it("determines database availability", function () {
-        assert(Stores.databasesStore.doesDatabaseExist("db1"));
-        assert(!Stores.databasesStore.doesDatabaseExist("db3"));
-      });
-
+    it("determines database availability", function () {
+      assert(Stores.databasesStore.doesDatabaseExist("db1"));
+      assert(!Stores.databasesStore.doesDatabaseExist("db3"));
     });
 
   });

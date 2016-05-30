@@ -10,92 +10,88 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-define([
-  '../../../../app',
-  '../../../../core/api',
-  '../../../../../test/mocha/testUtils',
-  '../stores'
-], function (app, FauxtonAPI, utils, Stores) {
+import app from "../../../../app";
+import FauxtonAPI from "../../../../core/api";
+import utils from "../../../../../test/mocha/testUtils";
+import Stores from "../stores";
 
-  var assert = utils.assert;
-  var store = Stores.notificationStore;
+var assert = utils.assert;
+var store = Stores.notificationStore;
 
-  describe('Notification Store', function () {
+describe('Notification Store', function () {
 
-    beforeEach(function () {
-      store.reset();
-    });
+  beforeEach(function () {
+    store.reset();
+  });
 
-    it("sets reasonable defaults", function () {
-      assert.equal(store.getNotifications().length, 0);
-      assert.equal(store.isNotificationCenterVisible(), false);
-      assert.equal(store.getNotificationFilter(), 'all');
-    });
+  it("sets reasonable defaults", function () {
+    assert.equal(store.getNotifications().length, 0);
+    assert.equal(store.isNotificationCenterVisible(), false);
+    assert.equal(store.getNotificationFilter(), 'all');
+  });
 
-    it("confirm only known notification types get added", function () {
-      assert.equal(store.getNotifications().length, 0);
-      store.addNotification({ type: 'success', msg: 'Success are okay' });
+  it("confirm only known notification types get added", function () {
+    assert.equal(store.getNotifications().length, 0);
+    store.addNotification({ type: 'success', msg: 'Success are okay' });
 
-      assert.equal(store.getNotifications().length, 1);
-      store.addNotification({ type: 'info', msg: 'Infos are also okay' });
+    assert.equal(store.getNotifications().length, 1);
+    store.addNotification({ type: 'info', msg: 'Infos are also okay' });
 
-      assert.equal(store.getNotifications().length, 2);
-      store.addNotification({ type: 'error', msg: 'Errors? Bring em on' });
+    assert.equal(store.getNotifications().length, 2);
+    store.addNotification({ type: 'error', msg: 'Errors? Bring em on' });
 
-      assert.equal(store.getNotifications().length, 3);
-      store.addNotification({ type: 'rhubarb', msg: 'But rhubarb is NOT a valid notification type' });
+    assert.equal(store.getNotifications().length, 3);
+    store.addNotification({ type: 'rhubarb', msg: 'But rhubarb is NOT a valid notification type' });
 
-      // confirm it wasn't added
-      assert.equal(store.getNotifications().length, 3);
-    });
+    // confirm it wasn't added
+    assert.equal(store.getNotifications().length, 3);
+  });
 
-    it("clearNotification clears a specific notification", function () {
-      store.addNotification({ type: 'success', msg: 'one' });
-      store.addNotification({ type: 'success', msg: 'two' });
-      store.addNotification({ type: 'success', msg: 'three' });
-      store.addNotification({ type: 'success', msg: 'four' });
+  it("clearNotification clears a specific notification", function () {
+    store.addNotification({ type: 'success', msg: 'one' });
+    store.addNotification({ type: 'success', msg: 'two' });
+    store.addNotification({ type: 'success', msg: 'three' });
+    store.addNotification({ type: 'success', msg: 'four' });
 
-      var notifications = store.getNotifications();
-      assert.equal(notifications.length, 4);
+    var notifications = store.getNotifications();
+    assert.equal(notifications.length, 4);
 
-      // find the notification ID of the "three" message
-      var notification = _.findWhere(notifications, { msg: 'three' });
-      store.clearNotification(notification.notificationId);
+    // find the notification ID of the "three" message
+    var notification = _.findWhere(notifications, { msg: 'three' });
+    store.clearNotification(notification.notificationId);
 
-      // confirm it was removed
-      var updatedNotifications = store.getNotifications();
-      assert.equal(updatedNotifications.length, 3);
-      assert.equal(_.findWhere(updatedNotifications, { msg: 'three' }), undefined);
-    });
+    // confirm it was removed
+    var updatedNotifications = store.getNotifications();
+    assert.equal(updatedNotifications.length, 3);
+    assert.equal(_.findWhere(updatedNotifications, { msg: 'three' }), undefined);
+  });
 
-    it("setNotificationFilter only sets for known notification types", function () {
-      store.setNotificationFilter('all');
-      assert.equal(store.getNotificationFilter(), 'all');
+  it("setNotificationFilter only sets for known notification types", function () {
+    store.setNotificationFilter('all');
+    assert.equal(store.getNotificationFilter(), 'all');
 
-      store.setNotificationFilter('success');
-      assert.equal(store.getNotificationFilter(), 'success');
+    store.setNotificationFilter('success');
+    assert.equal(store.getNotificationFilter(), 'success');
 
-      store.setNotificationFilter('error');
-      assert.equal(store.getNotificationFilter(), 'error');
+    store.setNotificationFilter('error');
+    assert.equal(store.getNotificationFilter(), 'error');
 
-      store.setNotificationFilter('info');
-      assert.equal(store.getNotificationFilter(), 'info');
+    store.setNotificationFilter('info');
+    assert.equal(store.getNotificationFilter(), 'info');
 
-      store.setNotificationFilter('broccoli');
-      assert.equal(store.getNotificationFilter(), 'info'); // this check it's still set to the previously set value
-    });
+    store.setNotificationFilter('broccoli');
+    assert.equal(store.getNotificationFilter(), 'info'); // this check it's still set to the previously set value
+  });
 
-    it("clear all notifications", function () {
-      store.addNotification({ type: 'success', msg: 'one' });
-      store.addNotification({ type: 'success', msg: 'two' });
-      store.addNotification({ type: 'success', msg: 'three' });
-      store.addNotification({ type: 'success', msg: 'four' });
-      assert.equal(store.getNotifications().length, 4);
+  it("clear all notifications", function () {
+    store.addNotification({ type: 'success', msg: 'one' });
+    store.addNotification({ type: 'success', msg: 'two' });
+    store.addNotification({ type: 'success', msg: 'three' });
+    store.addNotification({ type: 'success', msg: 'four' });
+    assert.equal(store.getNotifications().length, 4);
 
-      store.clearNotifications();
-      assert.equal(store.getNotifications().length, 0);
-    });
-
+    store.clearNotifications();
+    assert.equal(store.getNotifications().length, 0);
   });
 
 });

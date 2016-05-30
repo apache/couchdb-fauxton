@@ -10,13 +10,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-define([
-  './assets/less/components.less'
-],
+import "./assets/less/components.less";
+var Components = {};
+Components.initialize = function () {};
 
-function () {
-  var Components = {};
-  Components.initialize = function () {};
-
-  return Components;
-});
+export default Components;

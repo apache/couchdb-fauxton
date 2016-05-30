@@ -10,25 +10,20 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-define([
-  "backbone"
-],
-function (Backbone) {
+import Backbone from "backbone";
 
-  var Store = function () {
-    this.initialize.apply(this, arguments);
-    _.bindAll(this);
-  };
+var Store = function () {
+  this.initialize.apply(this, arguments);
+  _.bindAll(this);
+};
 
-  Store.extend = Backbone.Model.extend;
-  _.extend(Store.prototype, Backbone.Events, {
-    triggerChange: function () {
-      this.trigger('change');
-    },
+Store.extend = Backbone.Model.extend;
+_.extend(Store.prototype, Backbone.Events, {
+  triggerChange: function () {
+    this.trigger('change');
+  },
 
-    initialize: function () {}
-  });
-
-  return Store;
+  initialize: function () {}
 });
 
+export default Store;

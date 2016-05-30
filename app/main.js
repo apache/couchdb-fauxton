@@ -10,47 +10,42 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-require([
-  // Application
-  "./app",
-  "./core/api",
-  "./load_addons",
-  "backbone",
-],
+import app from './app';
+import FauxtonAPI from './core/api';
+import LoadAddons from './load_addons';
+import Backbone from 'backbone';
+import $ from 'jquery';
 
-function (app, FauxtonAPI, LoadAddons, Backbone) {
+app.addons = LoadAddons;
+FauxtonAPI.router = app.router = new FauxtonAPI.Router(app.addons);
+// Trigger the initial route and enable HTML5 History API support, set the
+// root folder to '/' by default.  Change in app.js.
+Backbone.history.start({ pushState: false, root: app.root });
 
-  app.addons = LoadAddons.addons;
-  FauxtonAPI.router = app.router = new FauxtonAPI.Router(app.addons);
-  // Trigger the initial route and enable HTML5 History API support, set the
-  // root folder to '/' by default.  Change in app.js.
-  Backbone.history.start({ pushState: false, root: app.root });
+// feature detect IE
+if ('ActiveXObject' in window) {
+  $.ajaxSetup({ cache: false });
+}
 
-  // feature detect IE
-  if ('ActiveXObject' in window) {
-    $.ajaxSetup({ cache: false });
+
+// All navigation that is relative should be passed through the navigate
+// method, to be processed by the router. If the link has a `data-bypass`
+// attribute, bypass the delegation completely.
+$(document).on("click", "a:not([data-bypass])", function (evt) {
+
+  // Get the absolute anchor href.
+  var href = { prop: $(this).prop("href"), attr: $(this).attr("href") };
+
+  // Get the absolute root
+  var root = location.protocol + "//" + location.host;
+
+  // Ensure the root is part of the anchor href, meaning it's relative
+  if (href.prop && href.prop.slice(0, root.length) === root) {
+    // Stop the default event to ensure the link will not cause a page
+    // refresh.
+    evt.preventDefault();
+
+    //User app navigate so that navigate goes through a central place
+    app.router.navigate(href.attr, true);
   }
-
-
-  // All navigation that is relative should be passed through the navigate
-  // method, to be processed by the router. If the link has a `data-bypass`
-  // attribute, bypass the delegation completely.
-  $(document).on("click", "a:not([data-bypass])", function (evt) {
-
-    // Get the absolute anchor href.
-    var href = { prop: $(this).prop("href"), attr: $(this).attr("href") };
-
-    // Get the absolute root
-    var root = location.protocol + "//" + location.host;
-
-    // Ensure the root is part of the anchor href, meaning it's relative
-    if (href.prop && href.prop.slice(0, root.length) === root) {
-      // Stop the default event to ensure the link will not cause a page
-      // refresh.
-      evt.preventDefault();
-
-      //User app navigate so that navigate goes through a central place
-      app.router.navigate(href.attr, true);
-    }
-  });
 });

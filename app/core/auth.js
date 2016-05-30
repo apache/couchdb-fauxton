@@ -10,55 +10,51 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-define([
-  "./base",
-  "backbone"
-],
-function (FauxtonAPI, Backbone) {
+import FauxtonAPI from "./base";
+import Backbone from "backbone";
 
-  // This is not exposed externally as it should not need to be accessed or overridden
-  var Auth = function (options) {
-    this._options = options;
-    this.initialize.apply(this, arguments);
-  };
+// This is not exposed externally as it should not need to be accessed or overridden
+var Auth = function (options) {
+  this._options = options;
+  this.initialize.apply(this, arguments);
+};
 
-  // Piggy-back on Backbone's self-propagating extend function,
-  Auth.extend = Backbone.Model.extend;
+// Piggy-back on Backbone's self-propagating extend function,
+Auth.extend = Backbone.Model.extend;
 
-  _.extend(Auth.prototype, Backbone.Events, {
-    authDeniedCb: function () {},
+_.extend(Auth.prototype, Backbone.Events, {
+  authDeniedCb: function () {},
 
-    initialize: function () {
-      var that = this;
-    },
+  initialize: function () {
+    var that = this;
+  },
 
-    authHandlerCb : function (roles) {
-      var deferred = $.Deferred();
-      deferred.resolve();
-      return deferred;
-    },
+  authHandlerCb : function (roles) {
+    var deferred = $.Deferred();
+    deferred.resolve();
+    return deferred;
+  },
 
-    registerAuth: function (authHandlerCb) {
-      this.authHandlerCb = authHandlerCb;
-    },
+  registerAuth: function (authHandlerCb) {
+    this.authHandlerCb = authHandlerCb;
+  },
 
-    registerAuthDenied: function (authDeniedCb) {
-      this.authDeniedCb = authDeniedCb;
-    },
+  registerAuthDenied: function (authDeniedCb) {
+    this.authDeniedCb = authDeniedCb;
+  },
 
-    checkAccess: function (roles) {
-      var requiredRoles = roles || [],
-      that = this;
+  checkAccess: function (roles) {
+    var requiredRoles = roles || [],
+    that = this;
 
-      if (!FauxtonAPI.session) {
-        throw new Error("Fauxton.session is not configured.");
-      }
-
-      return FauxtonAPI.session.fetchUser().then(function (user) {
-        return FauxtonAPI.when(that.authHandlerCb(FauxtonAPI.session, requiredRoles));
-      });
+    if (!FauxtonAPI.session) {
+      throw new Error("Fauxton.session is not configured.");
     }
-  });
 
-  return Auth;
+    return FauxtonAPI.session.fetchUser().then(function (user) {
+      return FauxtonAPI.when(that.authHandlerCb(FauxtonAPI.session, requiredRoles));
+    });
+  }
 });
+
+export default Auth;

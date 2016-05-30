@@ -10,78 +10,73 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-define([
-  '../../../core/api',
-  './actiontypes'
-],
+import FauxtonAPI from "../../../core/api";
+import ActionTypes from "./actiontypes";
+var Stores = {};
 
-function (FauxtonAPI, ActionTypes) {
-  var Stores = {};
+Stores.DesignDocInfoStore = FauxtonAPI.Store.extend({
 
-  Stores.DesignDocInfoStore = FauxtonAPI.Store.extend({
+  initialize: function () {
+    this._isLoading = true;
+  },
 
-    initialize: function () {
-      this._isLoading = true;
-    },
+  isLoading: function () {
+    return this._isLoading;
+  },
 
-    isLoading: function () {
-      return this._isLoading;
-    },
+  getDdocName: function () {
+    return this._ddocName;
+  },
 
-    getDdocName: function () {
-      return this._ddocName;
-    },
+  getDesignDocInfo: function () {
+    return this._designDocInfo;
+  },
 
-    getDesignDocInfo: function () {
-      return this._designDocInfo;
-    },
+  monitorDesignDoc: function (options) {
+    this._isLoading = false;
+    this._designDocInfo = options.designDocInfo;
+    this._ddocName = options.ddocName;
+    this._intervalId = options.intervalId;
+  },
 
-    monitorDesignDoc: function (options) {
-      this._isLoading = false;
-      this._designDocInfo = options.designDocInfo;
-      this._ddocName = options.ddocName;
-      this._intervalId = options.intervalId;
-    },
+  getIntervalId: function () {
+    return this._intervalId;
+  },
 
-    getIntervalId: function () {
-      return this._intervalId;
-    },
-
-    getViewIndex: function () {
-      if (this._isLoading) {
-        return {};
-      }
-
-      return this._designDocInfo.get('view_index');
-    },
-
-    dispatch: function (action) {
-      switch (action.type) {
-        case ActionTypes.DESIGN_FETCHING:
-          this._isLoading = true;
-          this.triggerChange();
-        break;
-
-        case ActionTypes.DESIGN_DOC_MONITOR:
-          this.monitorDesignDoc(action.options);
-          this.triggerChange();
-        break;
-
-        case ActionTypes.DESIGN_DOC_REFRESH:
-          this.triggerChange();
-        break;
-
-        default:
-        return;
-        // do nothing
-      }
+  getViewIndex: function () {
+    if (this._isLoading) {
+      return {};
     }
 
-  });
+    return this._designDocInfo.get('view_index');
+  },
 
-  Stores.designDocInfoStore = new Stores.DesignDocInfoStore();
+  dispatch: function (action) {
+    switch (action.type) {
+      case ActionTypes.DESIGN_FETCHING:
+        this._isLoading = true;
+        this.triggerChange();
+      break;
 
-  Stores.designDocInfoStore.dispatchToken = FauxtonAPI.dispatcher.register(Stores.designDocInfoStore.dispatch);
+      case ActionTypes.DESIGN_DOC_MONITOR:
+        this.monitorDesignDoc(action.options);
+        this.triggerChange();
+      break;
 
-  return Stores;
+      case ActionTypes.DESIGN_DOC_REFRESH:
+        this.triggerChange();
+      break;
+
+      default:
+      return;
+      // do nothing
+    }
+  }
+
 });
+
+Stores.designDocInfoStore = new Stores.DesignDocInfoStore();
+
+Stores.designDocInfoStore.dispatchToken = FauxtonAPI.dispatcher.register(Stores.designDocInfoStore.dispatch);
+
+export default Stores;

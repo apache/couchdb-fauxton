@@ -2,7 +2,8 @@
   "root": true,
 
   "ecmaFeatures": {
-    "jsx": true
+    "jsx": true,
+    "modules": true
   },
 
   "rules-todo": {

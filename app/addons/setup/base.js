@@ -10,21 +10,16 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-define([
-  '../../app',
-  '../../core/api',
-  './route',
-  './assets/less/setup.less'
-],
+import app from "../../app";
+import FauxtonAPI from "../../core/api";
+import Setup from "./route";
+import "./assets/less/setup.less";
+Setup.initialize = function () {
+  FauxtonAPI.addHeaderLink({
+    title: 'Setup',
+    href: "#setup",
+    icon: 'fonticon-wrench'
+  });
+};
 
-function (app, FauxtonAPI, Setup) {
-  Setup.initialize = function () {
-    FauxtonAPI.addHeaderLink({
-      title: 'Setup',
-      href: "#setup",
-      icon: 'fonticon-wrench'
-    });
-  };
-
-  return Setup;
-});
+export default Setup;

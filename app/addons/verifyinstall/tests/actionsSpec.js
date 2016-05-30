@@ -10,25 +10,21 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-define([
-  '../../../app',
-  '../../../core/api',
-  '../../../../test/mocha/testUtils',
-  '../stores',
-  '../actiontypes',
-  'sinon'
-], function (app, FauxtonAPI, testUtils, Stores, ActionTypes, sinon) {
+import app from "../../../app";
+import FauxtonAPI from "../../../core/api";
+import testUtils from "../../../../test/mocha/testUtils";
+import Stores from "../stores";
+import ActionTypes from "../actiontypes";
+import sinon from "sinon";
 
-  var assert = testUtils.assert;
+var assert = testUtils.assert;
 
-  describe('Verify Install Actions', function () {
+describe('Verify Install Actions', function () {
 
-    it('resets the store when action called', function () {
-      var spy = sinon.spy(Stores.verifyInstallStore, 'reset');
-      FauxtonAPI.dispatch({ type: ActionTypes.VERIFY_INSTALL_RESET });
-      assert.ok(spy.calledOnce);
-    });
-
+  it('resets the store when action called', function () {
+    var spy = sinon.spy(Stores.verifyInstallStore, 'reset');
+    FauxtonAPI.dispatch({ type: ActionTypes.VERIFY_INSTALL_RESET });
+    assert.ok(spy.calledOnce);
   });
 
 });

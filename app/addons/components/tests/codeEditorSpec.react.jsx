@@ -9,106 +9,103 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
-define([
-  '../../../core/api',
-  '../react-components.react',
-  '../../../../test/mocha/testUtils',
-  'react',
-  'react-dom',
-  'react-addons-test-utils',
-  'sinon'
-], function (FauxtonAPI, ReactComponents, utils, React, ReactDOM, TestUtils, sinon) {
+import FauxtonAPI from "../../../core/api";
+import ReactComponents from "../react-components.react";
+import utils from "../../../../test/mocha/testUtils";
+import React from "react";
+import ReactDOM from "react-dom";
+import TestUtils from "react-addons-test-utils";
+import sinon from "sinon";
 
-  var assert = utils.assert;
-  var code = 'function (doc) {\n  emit(doc._id, 1);\n}';
-  var code2 = 'function (doc) {\n if(doc._id) { \n emit(doc._id, 2); \n } \n}';
+var assert = utils.assert;
+var code = 'function (doc) {\n  emit(doc._id, 1);\n}';
+var code2 = 'function (doc) {\n if(doc._id) { \n emit(doc._id, 2); \n } \n}';
 
-  var ignorableErrors = [
-    'Missing name in function declaration.',
-    "['{a}'] is better written in dot notation."
-  ];
+var ignorableErrors = [
+  'Missing name in function declaration.',
+  "['{a}'] is better written in dot notation."
+];
 
-  describe('Code Editor', function () {
-    var container, codeEditorEl, spy;
+describe('Code Editor', function () {
+  var container, codeEditorEl, spy;
 
-    beforeEach(function () {
-      spy = sinon.spy();
-      container = document.createElement('div');
+  beforeEach(function () {
+    spy = sinon.spy();
+    container = document.createElement('div');
+    codeEditorEl = TestUtils.renderIntoDocument(
+      <ReactComponents.CodeEditor defaultCode={code} blur={spy} />,
+      container
+    );
+  });
+
+  afterEach(function () {
+    ReactDOM.unmountComponentAtNode(container);
+  });
+
+  describe('Tracking edits', function () {
+    it('no change on mount', function () {
+      assert.notOk(codeEditorEl.hasChanged());
+    });
+
+    it('detects change on user input', function () {
+      codeEditorEl.editor.setValue(code2, -1);
+      assert.ok(codeEditorEl.hasChanged());
+    });
+  });
+
+  describe('onBlur', function () {
+    it('calls blur function', function () {
+      codeEditorEl.editor._emit('blur');
+      assert.ok(spy.calledOnce);
+    });
+  });
+
+  describe('setHeightToLineCount', function () {
+    it('check default num lines #1', function () {
       codeEditorEl = TestUtils.renderIntoDocument(
-        <ReactComponents.CodeEditor defaultCode={code} blur={spy} />,
+        <ReactComponents.CodeEditor code={code} setHeightToLineCount={true} />,
+        container
+      );
+      assert.ok(codeEditorEl.editor.getSession().getDocument().getLength(), 3);
+    });
+    it('check default num lines #2', function () {
+      codeEditorEl = TestUtils.renderIntoDocument(
+        <ReactComponents.CodeEditor code={code2} setHeightToLineCount={true} />,
+        container
+      );
+      assert.ok(codeEditorEl.editor.getSession().getDocument().getLength(), 5);
+    });
+    it('check maxLines', function () {
+      codeEditorEl = TestUtils.renderIntoDocument(
+        <ReactComponents.CodeEditor code={code2} setHeightToLineCount={true} maxLines={2} />,
+        container
+      );
+      assert.ok(codeEditorEl.editor.getSession().getDocument().getLength(), 2);
+    });
+  });
+
+  describe('removeIncorrectAnnotations', function () {
+    beforeEach(function () {
+      codeEditorEl = TestUtils.renderIntoDocument(
+        <ReactComponents.CodeEditor defaultCode={code} ignorableErrors={ignorableErrors} />,
         container
       );
     });
-
-    afterEach(function () {
-      ReactDOM.unmountComponentAtNode(container);
+    it('removes default errors that do not apply to CouchDB Views', function () {
+      assert.equal(codeEditorEl.getAnnotations(), 0);
     });
-
-    describe('Tracking edits', function () {
-      it('no change on mount', function () {
-        assert.notOk(codeEditorEl.hasChanged());
-      });
-
-      it('detects change on user input', function () {
-        codeEditorEl.editor.setValue(code2, -1);
-        assert.ok(codeEditorEl.hasChanged());
-      });
-    });
-
-    describe('onBlur', function () {
-      it('calls blur function', function () {
-        codeEditorEl.editor._emit('blur');
-        assert.ok(spy.calledOnce);
-      });
-    });
-
-    describe('setHeightToLineCount', function () {
-      it('check default num lines #1', function () {
-        codeEditorEl = TestUtils.renderIntoDocument(
-          <ReactComponents.CodeEditor code={code} setHeightToLineCount={true} />,
-          container
-        );
-        assert.ok(codeEditorEl.editor.getSession().getDocument().getLength(), 3);
-      });
-      it('check default num lines #2', function () {
-        codeEditorEl = TestUtils.renderIntoDocument(
-          <ReactComponents.CodeEditor code={code2} setHeightToLineCount={true} />,
-          container
-        );
-        assert.ok(codeEditorEl.editor.getSession().getDocument().getLength(), 5);
-      });
-      it('check maxLines', function () {
-        codeEditorEl = TestUtils.renderIntoDocument(
-          <ReactComponents.CodeEditor code={code2} setHeightToLineCount={true} maxLines={2} />,
-          container
-        );
-        assert.ok(codeEditorEl.editor.getSession().getDocument().getLength(), 2);
-      });
-    });
-
-    describe('removeIncorrectAnnotations', function () {
-      beforeEach(function () {
-        codeEditorEl = TestUtils.renderIntoDocument(
-          <ReactComponents.CodeEditor defaultCode={code} ignorableErrors={ignorableErrors} />,
-          container
-        );
-      });
-      it('removes default errors that do not apply to CouchDB Views', function () {
-        assert.equal(codeEditorEl.getAnnotations(), 0);
-      });
-    });
-
-    describe('getEditor', function () {
-      beforeEach(function () {
-        codeEditorEl = TestUtils.renderIntoDocument(
-          <ReactComponents.CodeEditor defaultCode={code} />,
-          container
-        );
-      });
-      it('returns a reference to get access to the editor', function () {
-        assert.ok(codeEditorEl.getEditor());
-      });
-    });
-
   });
+
+  describe('getEditor', function () {
+    beforeEach(function () {
+      codeEditorEl = TestUtils.renderIntoDocument(
+        <ReactComponents.CodeEditor defaultCode={code} />,
+        container
+      );
+    });
+    it('returns a reference to get access to the editor', function () {
+      assert.ok(codeEditorEl.getEditor());
+    });
+  });
+
 });

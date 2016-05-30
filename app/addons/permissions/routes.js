@@ -10,90 +10,86 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-define([
-  '../../app',
-  '../../core/api',
-  '../databases/base',
-  './resources',
-  './actions',
-  './components.react',
-  '../documents/shared-routes'
-],
-function (app, FauxtonAPI, Databases, Resources, Actions, Permissions, BaseRoute) {
+import app from "../../app";
+import FauxtonAPI from "../../core/api";
+import Databases from "../databases/base";
+import Resources from "./resources";
+import Actions from "./actions";
+import Permissions from "./components.react";
+import BaseRoute from "../documents/shared-routes";
 
-  var PermissionsRouteObject = BaseRoute.extend({
-    roles: ['fx_loggedIn'],
-    routes: {
-      'database/:database/permissions': 'permissions'
-    },
+var PermissionsRouteObject = BaseRoute.extend({
+  roles: ['fx_loggedIn'],
+  routes: {
+    'database/:database/permissions': 'permissions'
+  },
 
-    initialize: function (route, masterLayout, options) {
-      var docOptions = app.getParams();
-      docOptions.include_docs = true;
+  initialize: function (route, masterLayout, options) {
+    var docOptions = app.getParams();
+    docOptions.include_docs = true;
 
-      this.initViews(options[0]);
-      this.listenToLookaheadTray();
-    },
+    this.initViews(options[0]);
+    this.listenToLookaheadTray();
+  },
 
-    initViews: function (databaseName) {
-      this.database = new Databases.Model({ id: databaseName });
-      this.security = new Resources.Security(null, {
-        database: this.database
-      });
-      this.allDatabases = new Databases.List();
+  initViews: function (databaseName) {
+    this.database = new Databases.Model({ id: databaseName });
+    this.security = new Resources.Security(null, {
+      database: this.database
+    });
+    this.allDatabases = new Databases.List();
 
-      this.createDesignDocsCollection();
-      this.addLeftHeader();
-      this.addSidebar('permissions');
-    },
+    this.createDesignDocsCollection();
+    this.addLeftHeader();
+    this.addSidebar('permissions');
+  },
 
-    apiUrl: function () {
-      return [this.security.url('apiurl'), this.security.documentation];
-    },
+  apiUrl: function () {
+    return [this.security.url('apiurl'), this.security.documentation];
+  },
 
-    establish: function () {
-      return [
-        this.designDocs.fetch({reset: true}),
-        this.allDatabases.fetchOnce()
-      ];
-    },
+  establish: function () {
+    return [
+      this.designDocs.fetch({reset: true}),
+      this.allDatabases.fetchOnce()
+    ];
+  },
 
-    listenToLookaheadTray: function () {
-      this.listenTo(FauxtonAPI.Events, 'lookaheadTray:update', this.onSelectDatabase);
-    },
+  listenToLookaheadTray: function () {
+    this.listenTo(FauxtonAPI.Events, 'lookaheadTray:update', this.onSelectDatabase);
+  },
 
-    onSelectDatabase: function (dbName) {
-      this.cleanup();
-      this.initViews(dbName);
+  onSelectDatabase: function (dbName) {
+    this.cleanup();
+    this.initViews(dbName);
 
-      FauxtonAPI.navigate('/database/' + app.utils.safeURLName(dbName) + '/permissions', {
-        trigger: true
-      });
-      this.listenToLookaheadTray();
-    },
+    FauxtonAPI.navigate('/database/' + app.utils.safeURLName(dbName) + '/permissions', {
+      trigger: true
+    });
+    this.listenToLookaheadTray();
+  },
 
-    permissions: function () {
-      Actions.fetchPermissions(this.database, this.security);
-      this.setComponent('#dashboard-content', Permissions.PermissionsController);
-    },
+  permissions: function () {
+    Actions.fetchPermissions(this.database, this.security);
+    this.setComponent('#dashboard-content', Permissions.PermissionsController);
+  },
 
-    crumbs: function () {
-      return [
-        { name: this.database.id, link: Databases.databaseUrl(this.database)},
-        { name: 'Permissions', link: '/permissions' }
-      ];
-    },
+  crumbs: function () {
+    return [
+      { name: this.database.id, link: Databases.databaseUrl(this.database)},
+      { name: 'Permissions', link: '/permissions' }
+    ];
+  },
 
-    cleanup: function () {
-      if (this.leftheader) {
-        this.removeView('#breadcrumbs');
-      }
-      this.removeComponent('#sidebar-content');
-      this.stopListening(FauxtonAPI.Events, 'lookaheadTray:update', this.onSelectDatabase);
+  cleanup: function () {
+    if (this.leftheader) {
+      this.removeView('#breadcrumbs');
     }
-  });
-
-  Permissions.RouteObjects = [PermissionsRouteObject];
-
-  return Permissions;
+    this.removeComponent('#sidebar-content');
+    this.stopListening(FauxtonAPI.Events, 'lookaheadTray:update', this.onSelectDatabase);
+  }
 });
+
+Permissions.RouteObjects = [PermissionsRouteObject];
+
+export default Permissions;

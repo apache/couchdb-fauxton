@@ -10,51 +10,48 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-define([
-  '../../../../test/mocha/testUtils',
-  '../../../core/api',
-  '../resources',
-], function (testUtils, FauxtonAPI, Resources) {
-  var assert = testUtils.assert;
+import testUtils from "../../../../test/mocha/testUtils";
+import FauxtonAPI from "../../../core/api";
+import Resources from "../resources";
+var assert = testUtils.assert;
 
 
-  describe('Membership Model', function () {
-    var data = {
-      'all_nodes': ['node1@127.0.0.1', 'node2@127.0.0.1', 'node3@127.0.0.1', 'notpartofclusternode'],
-      'cluster_nodes': ['node1@127.0.0.1', 'node2@127.0.0.1', 'node3@127.0.0.1']
-    };
+describe('Membership Model', function () {
+  var data = {
+    'all_nodes': ['node1@127.0.0.1', 'node2@127.0.0.1', 'node3@127.0.0.1', 'notpartofclusternode'],
+    'cluster_nodes': ['node1@127.0.0.1', 'node2@127.0.0.1', 'node3@127.0.0.1']
+  };
 
-    it('reorders the data', function () {
-      var memberships = new Resources.ClusterNodes();
-      var res = memberships.parse(data);
+  it('reorders the data', function () {
+    var memberships = new Resources.ClusterNodes();
+    var res = memberships.parse(data);
 
-      assert.deepEqual([
-        {node: 'node1@127.0.0.1', isInCluster: true},
-        {node: 'node2@127.0.0.1', isInCluster: true},
-        {node: 'node3@127.0.0.1', isInCluster: true},
-        {node: 'notpartofclusternode', isInCluster: false}
-      ],
-      res.nodes_mapped);
-    });
+    assert.deepEqual([
+      {node: 'node1@127.0.0.1', isInCluster: true},
+      {node: 'node2@127.0.0.1', isInCluster: true},
+      {node: 'node3@127.0.0.1', isInCluster: true},
+      {node: 'notpartofclusternode', isInCluster: false}
+    ],
+    res.nodes_mapped);
+  });
 
-    it('keeps the exiting data', function () {
-      var memberships = new Resources.ClusterNodes();
-      var res = memberships.parse(data);
+  it('keeps the exiting data', function () {
+    var memberships = new Resources.ClusterNodes();
+    var res = memberships.parse(data);
 
-      assert.deepEqual([
-        'node1@127.0.0.1',
-        'node2@127.0.0.1',
-        'node3@127.0.0.1',
-        'notpartofclusternode'
-      ],
-      res.all_nodes);
+    assert.deepEqual([
+      'node1@127.0.0.1',
+      'node2@127.0.0.1',
+      'node3@127.0.0.1',
+      'notpartofclusternode'
+    ],
+    res.all_nodes);
 
-      assert.deepEqual([
-        'node1@127.0.0.1',
-        'node2@127.0.0.1',
-        'node3@127.0.0.1'
-      ],
-      res.cluster_nodes);
-    });
+    assert.deepEqual([
+      'node1@127.0.0.1',
+      'node2@127.0.0.1',
+      'node3@127.0.0.1'
+    ],
+    res.cluster_nodes);
   });
 });

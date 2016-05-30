@@ -9,63 +9,59 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
-define([
-  '../../../core/api',
-  '../resources',
-  '../../../../test/mocha/testUtils'
-], function (FauxtonAPI, Models, testUtils) {
-  var assert = testUtils.assert;
+import FauxtonAPI from "../../../core/api";
+import Models from "../resources";
+import testUtils from "../../../../test/mocha/testUtils";
+var assert = testUtils.assert;
 
-  describe('Permissions', function () {
+describe('Permissions', function () {
 
-    describe('#addItem', function () {
-      var security;
+  describe('#addItem', function () {
+    var security;
 
-      beforeEach(function () {
-        security = new Models.Security(null, {database: 'fakedb'});
-      });
-
-      it('Should add value to section', function () {
-
-        security.addItem('_user', 'names', 'admins');
-        assert.equal(security.get('admins').names[0], '_user');
-      });
-
-      it('Should handle incorrect type', function () {
-        security.addItem('_user', 'asdasd', 'admins');
-      });
-
-      it('Should handle incorrect section', function () {
-        security.addItem('_user', 'names', 'Asdasd');
-      });
-
-      it('Should reject duplicates', function () {
-        security.addItem('_user', 'names', 'admins');
-        security.addItem('_user', 'names', 'admins');
-        assert.equal(security.get('admins').names.length, 1);
-      });
+    beforeEach(function () {
+      security = new Models.Security(null, {database: 'fakedb'});
     });
 
-    describe('#removeItem', function () {
-      var security;
+    it('Should add value to section', function () {
 
-      beforeEach(function () {
-        security = new Models.Security(null, {database: 'fakedb'});
-      });
+      security.addItem('_user', 'names', 'admins');
+      assert.equal(security.get('admins').names[0], '_user');
+    });
 
-      it('removes value from section', function () {
-        security.addItem('_user', 'names', 'admins');
-        security.removeItem('_user', 'names', 'admins');
+    it('Should handle incorrect type', function () {
+      security.addItem('_user', 'asdasd', 'admins');
+    });
 
-        assert.equal(security.get('admins').names.length, 0);
-      });
+    it('Should handle incorrect section', function () {
+      security.addItem('_user', 'names', 'Asdasd');
+    });
 
-      it('ignores non-existing value', function () {
-        security.addItem('_user', 'names', 'admins');
-        security.removeItem('wrong_user', 'names', 'admins');
-        assert.equal(security.get('admins').names.length, 1);
-      });
+    it('Should reject duplicates', function () {
+      security.addItem('_user', 'names', 'admins');
+      security.addItem('_user', 'names', 'admins');
+      assert.equal(security.get('admins').names.length, 1);
+    });
+  });
 
+  describe('#removeItem', function () {
+    var security;
+
+    beforeEach(function () {
+      security = new Models.Security(null, {database: 'fakedb'});
+    });
+
+    it('removes value from section', function () {
+      security.addItem('_user', 'names', 'admins');
+      security.removeItem('_user', 'names', 'admins');
+
+      assert.equal(security.get('admins').names.length, 0);
+    });
+
+    it('ignores non-existing value', function () {
+      security.addItem('_user', 'names', 'admins');
+      security.removeItem('wrong_user', 'names', 'admins');
+      assert.equal(security.get('admins').names.length, 1);
     });
 
   });

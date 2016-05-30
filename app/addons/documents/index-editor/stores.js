@@ -10,261 +10,255 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-define([
-  '../../../core/api',
-  './actiontypes',
-  '../resources'
-],
+import FauxtonAPI from "../../../core/api";
+import ActionTypes from "./actiontypes";
+import Resources from "../resources";
+var Stores = {};
 
-function (FauxtonAPI, ActionTypes, Resources) {
-  var Stores = {};
+Stores.IndexEditorStore = FauxtonAPI.Store.extend({
 
-  Stores.IndexEditorStore = FauxtonAPI.Store.extend({
+  defaultMap: 'function (doc) {\n  emit(doc._id, 1);\n}',
+  defaultReduce: 'function (keys, values, rereduce) {\n  if (rereduce) {\n    return sum(values);\n  } else {\n    return values.length;\n  }\n}',
 
-    defaultMap: 'function (doc) {\n  emit(doc._id, 1);\n}',
-    defaultReduce: 'function (keys, values, rereduce) {\n  if (rereduce) {\n    return sum(values);\n  } else {\n    return values.length;\n  }\n}',
+  initialize: function () {
+    this.reset();
+  },
 
-    initialize: function () {
-      this.reset();
-    },
+  reset: function () {
+    this._designDocs = [];
+    this._isLoading = true;
+    this._view = { reduce: '', map: this.defaultMap };
+    this._database = { id: '0' };
+  },
 
-    reset: function () {
-      this._designDocs = [];
-      this._isLoading = true;
+  editIndex: function (options) {
+    this._database = options.database;
+    this._newView = options.newView;
+    this._viewName = options.viewName || 'viewName';
+    this._newDesignDoc = options.newDesignDoc || false;
+    this._newDesignDocName = '';
+    this._designDocs = options.designDocs;
+    this._designDocId = options.designDocId;
+    this._originalViewName = this._viewName;
+    this._originalDesignDocName = options.designDocId;
+    this.setView();
+
+    this._isLoading = false;
+  },
+
+  isLoading: function () {
+    return this._isLoading;
+  },
+
+  setView: function () {
+    if (this._newView || this._newDesignDoc) {
       this._view = { reduce: '', map: this.defaultMap };
-      this._database = { id: '0' };
-    },
+    } else {
+      this._view = this.getDesignDoc().get('views')[this._viewName];
+    }
+  },
 
-    editIndex: function (options) {
-      this._database = options.database;
-      this._newView = options.newView;
-      this._viewName = options.viewName || 'viewName';
-      this._newDesignDoc = options.newDesignDoc || false;
-      this._newDesignDocName = '';
-      this._designDocs = options.designDocs;
-      this._designDocId = options.designDocId;
-      this._originalViewName = this._viewName;
-      this._originalDesignDocName = options.designDocId;
-      this.setView();
+  getDatabase: function () {
+    return this._database;
+  },
 
-      this._isLoading = false;
-    },
+  getMap: function () {
+    return this._view.map;
+  },
 
-    isLoading: function () {
-      return this._isLoading;
-    },
+  setMap: function (map) {
+    this._view.map = map;
+  },
 
-    setView: function () {
-      if (this._newView || this._newDesignDoc) {
-        this._view = { reduce: '', map: this.defaultMap };
-      } else {
-        this._view = this.getDesignDoc().get('views')[this._viewName];
-      }
-    },
+  getReduce: function () {
+    return this._view.reduce;
+  },
 
-    getDatabase: function () {
-      return this._database;
-    },
+  setReduce: function (reduce) {
+    this._view.reduce = reduce;
+  },
 
-    getMap: function () {
-      return this._view.map;
-    },
+  getDesignDoc: function () {
+    return this._designDocs.find(function (ddoc) {
+      return this._designDocId == ddoc.id;
+    }, this).dDocModel();
+  },
 
-    setMap: function (map) {
-      this._view.map = map;
-    },
+  getDesignDocs: function () {
+    return this._designDocs;
+  },
 
-    getReduce: function () {
-      return this._view.reduce;
-    },
+  // returns a simple array of design doc IDs. Omits mango docs
+  getAvailableDesignDocs: function () {
+    var availableDocs = this.getDesignDocs().filter(function (doc) {
+      return !doc.isMangoDoc();
+    });
+    return _.map(availableDocs, function (doc) {
+      return doc.id;
+    });
+  },
 
-    setReduce: function (reduce) {
-      this._view.reduce = reduce;
-    },
+  getDesignDocId: function () {
+    return this._designDocId;
+  },
 
-    getDesignDoc: function () {
-      return this._designDocs.find(function (ddoc) {
-        return this._designDocId == ddoc.id;
-      }, this).dDocModel();
-    },
+  setDesignDocId: function (designDocId) {
+    this._designDocId = designDocId;
+  },
 
-    getDesignDocs: function () {
-      return this._designDocs;
-    },
+  isNewDesignDoc: function () {
+    return this._newDesignDoc;
+  },
 
-    // returns a simple array of design doc IDs. Omits mango docs
-    getAvailableDesignDocs: function () {
-      var availableDocs = this.getDesignDocs().filter(function (doc) {
-        return !doc.isMangoDoc();
-      });
-      return _.map(availableDocs, function (doc) {
-        return doc.id;
-      });
-    },
+  isNewView: function () {
+    return this._newView;
+  },
 
-    getDesignDocId: function () {
-      return this._designDocId;
-    },
+  getViewName: function () {
+    return this._viewName;
+  },
 
-    setDesignDocId: function (designDocId) {
-      this._designDocId = designDocId;
-    },
+  setViewName: function (name) {
+    this._viewName = name;
+  },
 
-    isNewDesignDoc: function () {
-      return this._newDesignDoc;
-    },
+  hasCustomReduce: function () {
+    if (!this.hasReduce()) {
+      return false;
+    }
+    return !_.contains(this.builtInReduces(), this.getReduce());
+  },
 
-    isNewView: function () {
-      return this._newView;
-    },
+  hasReduce: function () {
+    if (!this.getReduce()) {
+      return false;
+    }
+    return true;
+  },
 
-    getViewName: function () {
-      return this._viewName;
-    },
+  getOriginalViewName: function () {
+    return this._originalViewName;
+  },
 
-    setViewName: function (name) {
-      this._viewName = name;
-    },
+  getOriginalDesignDocName: function () {
+    return this._originalDesignDocName;
+  },
 
-    hasCustomReduce: function () {
-      if (!this.hasReduce()) {
-        return false;
-      }
-      return !_.contains(this.builtInReduces(), this.getReduce());
-    },
+  builtInReduces: function () {
+    return ['_sum', '_count', '_stats'];
+  },
 
-    hasReduce: function () {
-      if (!this.getReduce()) {
-        return false;
-      }
-      return true;
-    },
+  reduceSelectedOption: function () {
+    if (!this.hasReduce()) {
+      return 'NONE';
+    }
+    if (this.hasCustomReduce()) {
+      return 'CUSTOM';
+    }
+    return this.getReduce();
+  },
 
-    getOriginalViewName: function () {
-      return this._originalViewName;
-    },
+  reduceOptions: function () {
+    return this.builtInReduces().concat(['CUSTOM', 'NONE']);
+  },
 
-    getOriginalDesignDocName: function () {
-      return this._originalDesignDocName;
-    },
+  updateReduceFromSelect: function (selectedReduce) {
+    if (selectedReduce === 'NONE') {
+      this.setReduce(null);
+      return;
+    }
+    if (selectedReduce === 'CUSTOM') {
+      this.setReduce(this.defaultReduce);
+      return;
+    }
+    this.setReduce(selectedReduce);
+  },
 
-    builtInReduces: function () {
-      return ['_sum', '_count', '_stats'];
-    },
+  addDesignDoc: function (designDoc) {
+    this._designDocs.add(designDoc, { merge: true });
+    this._designDocId = designDoc._id;
+  },
 
-    reduceSelectedOption: function () {
-      if (!this.hasReduce()) {
-        return 'NONE';
-      }
-      if (this.hasCustomReduce()) {
-        return 'CUSTOM';
-      }
-      return this.getReduce();
-    },
+  getNewDesignDocName: function () {
+    return this._newDesignDocName;
+  },
 
-    reduceOptions: function () {
-      return this.builtInReduces().concat(['CUSTOM', 'NONE']);
-    },
-
-    updateReduceFromSelect: function (selectedReduce) {
-      if (selectedReduce === 'NONE') {
-        this.setReduce(null);
-        return;
-      }
-      if (selectedReduce === 'CUSTOM') {
-        this.setReduce(this.defaultReduce);
-        return;
-      }
-      this.setReduce(selectedReduce);
-    },
-
-    addDesignDoc: function (designDoc) {
-      this._designDocs.add(designDoc, { merge: true });
-      this._designDocId = designDoc._id;
-    },
-
-    getNewDesignDocName: function () {
-      return this._newDesignDocName;
-    },
-
-    getSaveDesignDoc: function () {
-      if (this._designDocId === 'new-doc') {
-        var doc = {
-          _id: '_design/' + this._newDesignDocName,
-          views: {},
-          language: 'javascript'
-        };
-        return new Resources.Doc(doc, { database: this._database });
-      }
-
-      var foundDoc = this._designDocs.find(function (ddoc) {
-        return ddoc.id === this._designDocId;
-      }.bind(this));
-
-      return (!foundDoc) ? null : foundDoc.dDocModel();
-    },
-
-    dispatch: function (action) {
-      switch (action.type) {
-        case ActionTypes.CLEAR_INDEX:
-          this.reset();
-        break;
-
-        case ActionTypes.EDIT_INDEX:
-          this.editIndex(action.options);
-        break;
-
-        case ActionTypes.VIEW_NAME_CHANGE:
-          this.setViewName(action.name);
-        break;
-
-        case ActionTypes.EDIT_NEW_INDEX:
-          this.editIndex(action.options);
-        break;
-
-        case ActionTypes.SELECT_REDUCE_CHANGE:
-          this.updateReduceFromSelect(action.reduceSelectedOption);
-        break;
-
-        case ActionTypes.DESIGN_DOC_CHANGE:
-          this.setDesignDocId(action.options.value);
-        break;
-
-        case ActionTypes.VIEW_SAVED:
-        break;
-
-        case ActionTypes.VIEW_CREATED:
-        break;
-
-        case ActionTypes.VIEW_ADD_DESIGN_DOC:
-          this.addDesignDoc(action.designDoc);
-          this.setView();
-        break;
-
-        case ActionTypes.VIEW_UPDATE_MAP_CODE:
-          this.setMap(action.code);
-        break;
-
-        case ActionTypes.VIEW_UPDATE_REDUCE_CODE:
-          this.setReduce(action.code);
-        break;
-
-        case ActionTypes.DESIGN_DOC_NEW_NAME_UPDATED:
-          this._newDesignDocName = action.options.value;
-        break;
-
-        default:
-        return;
-      }
-
-      this.triggerChange();
+  getSaveDesignDoc: function () {
+    if (this._designDocId === 'new-doc') {
+      var doc = {
+        _id: '_design/' + this._newDesignDocName,
+        views: {},
+        language: 'javascript'
+      };
+      return new Resources.Doc(doc, { database: this._database });
     }
 
-  });
+    var foundDoc = this._designDocs.find(function (ddoc) {
+      return ddoc.id === this._designDocId;
+    }.bind(this));
 
-  Stores.indexEditorStore = new Stores.IndexEditorStore();
-  Stores.indexEditorStore.dispatchToken = FauxtonAPI.dispatcher.register(Stores.indexEditorStore.dispatch);
+    return (!foundDoc) ? null : foundDoc.dDocModel();
+  },
 
-  return Stores;
+  dispatch: function (action) {
+    switch (action.type) {
+      case ActionTypes.CLEAR_INDEX:
+        this.reset();
+      break;
+
+      case ActionTypes.EDIT_INDEX:
+        this.editIndex(action.options);
+      break;
+
+      case ActionTypes.VIEW_NAME_CHANGE:
+        this.setViewName(action.name);
+      break;
+
+      case ActionTypes.EDIT_NEW_INDEX:
+        this.editIndex(action.options);
+      break;
+
+      case ActionTypes.SELECT_REDUCE_CHANGE:
+        this.updateReduceFromSelect(action.reduceSelectedOption);
+      break;
+
+      case ActionTypes.DESIGN_DOC_CHANGE:
+        this.setDesignDocId(action.options.value);
+      break;
+
+      case ActionTypes.VIEW_SAVED:
+      break;
+
+      case ActionTypes.VIEW_CREATED:
+      break;
+
+      case ActionTypes.VIEW_ADD_DESIGN_DOC:
+        this.addDesignDoc(action.designDoc);
+        this.setView();
+      break;
+
+      case ActionTypes.VIEW_UPDATE_MAP_CODE:
+        this.setMap(action.code);
+      break;
+
+      case ActionTypes.VIEW_UPDATE_REDUCE_CODE:
+        this.setReduce(action.code);
+      break;
+
+      case ActionTypes.DESIGN_DOC_NEW_NAME_UPDATED:
+        this._newDesignDocName = action.options.value;
+      break;
+
+      default:
+      return;
+    }
+
+    this.triggerChange();
+  }
 
 });
+
+Stores.indexEditorStore = new Stores.IndexEditorStore();
+Stores.indexEditorStore.dispatchToken = FauxtonAPI.dispatcher.register(Stores.indexEditorStore.dispatch);
+
+export default Stores;

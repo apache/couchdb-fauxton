@@ -10,90 +10,84 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-define([
-  '../../core/api',
-  './constants',
-  './actiontypes'
-],
+import FauxtonAPI from "../../core/api";
+import Constants from "./constants";
+import ActionTypes from "./actiontypes";
 
-function (FauxtonAPI, Constants, ActionTypes) {
+var VerifyInstallStore = FauxtonAPI.Store.extend({
+  initialize: function () {
+    this.reset();
+  },
 
-  var VerifyInstallStore = FauxtonAPI.Store.extend({
-    initialize: function () {
-      this.reset();
-    },
+  reset: function () {
+    this._isVerifying = false;
 
-    reset: function () {
-      this._isVerifying = false;
+    // reset all the tests
+    this._tests = {};
+    _.each(Object.keys(Constants.TESTS), function (key) {
+      this._tests[Constants.TESTS[key]] = { complete: false };
+    }, this);
+  },
 
-      // reset all the tests
-      this._tests = {};
-      _.each(Object.keys(Constants.TESTS), function (key) {
-        this._tests[Constants.TESTS[key]] = { complete: false };
-      }, this);
-    },
+  startVerification: function () {
+    this._isVerifying = true;
+  },
 
-    startVerification: function () {
-      this._isVerifying = true;
-    },
+  stopVerification: function () {
+    this._isVerifying = false;
+  },
 
-    stopVerification: function () {
-      this._isVerifying = false;
-    },
+  checkIsVerifying: function () {
+    return this._isVerifying;
+  },
 
-    checkIsVerifying: function () {
-      return this._isVerifying;
-    },
+  updateTestStatus: function (test, success) {
 
-    updateTestStatus: function (test, success) {
-
-      // shouldn't ever occur since we're using constants for the test names
-      if (!_.has(this._tests, test)) {
-        throw new Error('Invalid test name passed to updateTestStatus()');
-      }
-
-      // mark this test as complete, and track whether it was a success or failure
-      this._tests[test] = { complete: true, success: success };
-    },
-
-    getTestResults: function () {
-      return this._tests;
-    },
-
-    dispatch: function (action) {
-      switch (action.type) {
-        case ActionTypes.VERIFY_INSTALL_START:
-          this.startVerification();
-          this.triggerChange();
-        break;
-
-        case ActionTypes.VERIFY_INSTALL_RESET:
-          this.reset();
-          this.triggerChange();
-        break;
-
-        case ActionTypes.VERIFY_INSTALL_SINGLE_TEST_COMPLETE:
-          this.updateTestStatus(action.test, action.success);
-          this.triggerChange();
-        break;
-
-        case ActionTypes.VERIFY_INSTALL_ALL_TESTS_COMPLETE:
-          this.stopVerification();
-          this.triggerChange();
-        break;
-
-        default:
-        return;
-      }
+    // shouldn't ever occur since we're using constants for the test names
+    if (!_.has(this._tests, test)) {
+      throw new Error('Invalid test name passed to updateTestStatus()');
     }
-  });
 
+    // mark this test as complete, and track whether it was a success or failure
+    this._tests[test] = { complete: true, success: success };
+  },
 
-  var Stores = {};
-  Stores.verifyInstallStore = new VerifyInstallStore();
-  Stores.verifyInstallStore.dispatchToken = FauxtonAPI.dispatcher.register(Stores.verifyInstallStore.dispatch);
+  getTestResults: function () {
+    return this._tests;
+  },
 
+  dispatch: function (action) {
+    switch (action.type) {
+      case ActionTypes.VERIFY_INSTALL_START:
+        this.startVerification();
+        this.triggerChange();
+      break;
 
-  return Stores;
+      case ActionTypes.VERIFY_INSTALL_RESET:
+        this.reset();
+        this.triggerChange();
+      break;
 
+      case ActionTypes.VERIFY_INSTALL_SINGLE_TEST_COMPLETE:
+        this.updateTestStatus(action.test, action.success);
+        this.triggerChange();
+      break;
+
+      case ActionTypes.VERIFY_INSTALL_ALL_TESTS_COMPLETE:
+        this.stopVerification();
+        this.triggerChange();
+      break;
+
+      default:
+      return;
+    }
+  }
 });
+
+
+var Stores = {};
+Stores.verifyInstallStore = new VerifyInstallStore();
+Stores.verifyInstallStore.dispatchToken = FauxtonAPI.dispatcher.register(Stores.verifyInstallStore.dispatch);
+
+
+export default Stores;

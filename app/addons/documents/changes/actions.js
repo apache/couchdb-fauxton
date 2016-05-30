@@ -10,96 +10,91 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-define([
-  '../../../app',
-  '../../../core/api',
-  './actiontypes',
-  './stores',
-  '../helpers'
-],
-function (app, FauxtonAPI, ActionTypes, Stores, Helpers) {
+import app from "../../../app";
+import FauxtonAPI from "../../../core/api";
+import ActionTypes from "./actiontypes";
+import Stores from "./stores";
+import Helpers from "../helpers";
 
-  var changesStore = Stores.changesStore;
-  var pollingTimeout = 60000;
-  var currentRequest;
+var changesStore = Stores.changesStore;
+var pollingTimeout = 60000;
+var currentRequest;
 
 
-  return {
-    toggleTabVisibility: function () {
-      FauxtonAPI.dispatch({
-        type: ActionTypes.TOGGLE_CHANGES_TAB_VISIBILITY
-      });
-    },
+export default {
+  toggleTabVisibility: function () {
+    FauxtonAPI.dispatch({
+      type: ActionTypes.TOGGLE_CHANGES_TAB_VISIBILITY
+    });
+  },
 
-    addFilter: function (filter) {
-      FauxtonAPI.dispatch({
-        type: ActionTypes.ADD_CHANGES_FILTER_ITEM,
-        filter: filter
-      });
-    },
+  addFilter: function (filter) {
+    FauxtonAPI.dispatch({
+      type: ActionTypes.ADD_CHANGES_FILTER_ITEM,
+      filter: filter
+    });
+  },
 
-    removeFilter: function (filter) {
-      FauxtonAPI.dispatch({
-        type: ActionTypes.REMOVE_CHANGES_FILTER_ITEM,
-        filter: filter
-      });
-    },
+  removeFilter: function (filter) {
+    FauxtonAPI.dispatch({
+      type: ActionTypes.REMOVE_CHANGES_FILTER_ITEM,
+      filter: filter
+    });
+  },
 
-    initChanges: function (options) {
-      FauxtonAPI.dispatch({
-        type: ActionTypes.INIT_CHANGES,
-        options: options
-      });
-      currentRequest = null;
-      this.getLatestChanges();
-    },
+  initChanges: function (options) {
+    FauxtonAPI.dispatch({
+      type: ActionTypes.INIT_CHANGES,
+      options: options
+    });
+    currentRequest = null;
+    this.getLatestChanges();
+  },
 
-    getLatestChanges: function () {
-      var params = {
-        limit: 100
-      };
+  getLatestChanges: function () {
+    var params = {
+      limit: 100
+    };
 
-      // after the first request for the changes list has been made, switch to longpoll
-      if (currentRequest) {
-        params.since = changesStore.getLastSeqNum();
-        params.timeout = pollingTimeout;
-        params.feed = 'longpoll';
-      }
-
-      var query = $.param(params);
-      var db = app.utils.safeURLName(changesStore.getDatabaseName());
-
-      var endpoint = FauxtonAPI.urls('changes', 'server', db, '');
-      currentRequest = $.getJSON(endpoint);
-      currentRequest.then(_.bind(this.updateChanges, this));
-    },
-
-    updateChanges: function (json) {
-      // only bother updating the list of changes if the seq num has changed
-      var latestSeqNum = Helpers.getSeqNum(json.last_seq);
-      if (latestSeqNum !== changesStore.getLastSeqNum()) {
-        FauxtonAPI.dispatch({
-          type: ActionTypes.UPDATE_CHANGES,
-          changes: json.results,
-          seqNum: latestSeqNum
-        });
-      }
-
-      if (changesStore.pollingEnabled()) {
-        this.getLatestChanges();
-      }
-    },
-
-    togglePolling: function () {
-      FauxtonAPI.dispatch({ type: ActionTypes.TOGGLE_CHANGES_POLLING });
-
-      // the user just enabled polling. Start 'er up
-      if (changesStore.pollingEnabled()) {
-        this.getLatestChanges();
-      } else {
-        currentRequest.abort();
-      }
+    // after the first request for the changes list has been made, switch to longpoll
+    if (currentRequest) {
+      params.since = changesStore.getLastSeqNum();
+      params.timeout = pollingTimeout;
+      params.feed = 'longpoll';
     }
-  };
 
-});
+    var query = $.param(params);
+    var db = app.utils.safeURLName(changesStore.getDatabaseName());
+
+    var endpoint = FauxtonAPI.urls('changes', 'server', db, '');
+    currentRequest = $.getJSON(endpoint);
+    currentRequest.then(_.bind(this.updateChanges, this));
+  },
+
+  updateChanges: function (json) {
+    // only bother updating the list of changes if the seq num has changed
+    var latestSeqNum = Helpers.getSeqNum(json.last_seq);
+    if (latestSeqNum !== changesStore.getLastSeqNum()) {
+      FauxtonAPI.dispatch({
+        type: ActionTypes.UPDATE_CHANGES,
+        changes: json.results,
+        seqNum: latestSeqNum
+      });
+    }
+
+    if (changesStore.pollingEnabled()) {
+      this.getLatestChanges();
+    }
+  },
+
+  togglePolling: function () {
+    FauxtonAPI.dispatch({ type: ActionTypes.TOGGLE_CHANGES_POLLING });
+
+    // the user just enabled polling. Start 'er up
+    if (changesStore.pollingEnabled()) {
+      this.getLatestChanges();
+    } else {
+      currentRequest.abort();
+    }
+  }
+};

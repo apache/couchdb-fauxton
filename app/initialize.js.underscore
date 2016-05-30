@@ -15,20 +15,13 @@
  * THIS IS A GENERATED FILE. DO NOT EDIT.
  */
 
-
-define([],
-function () {
-  // Provide a global location to place configuration settings and module
-  // creation.
-  var app = {
-    // The root path to run the application.
-    root: "<%= root %>",
-    version: "<%= version %>",
-    // Host is used as prefix for urls
-    host: "<%= host %>",
-    i18n: <%= i18n %>
-  };
-
-  return app;
-});
-
+// Provide a global location to place configuration settings and module
+// creation.
+export default {
+  // The root path to run the application.
+  root: "<%= root %>",
+  version: "<%= version %>",
+  // Host is used as prefix for urls
+  host: "<%= host %>",
+  i18n: <%= i18n %>
+};

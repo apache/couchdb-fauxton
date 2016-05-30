@@ -10,44 +10,39 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-define([
-  '../../app',
-  '../../core/api',
-  './actions'
-],
+import app from "../../app";
+import FauxtonAPI from "../../core/api";
+import Actions from "./actions";
+var Active = {};
 
-function (app, FauxtonAPI, Actions) {
-  var Active = {};
+Active.AllTasks = Backbone.Collection.extend({
 
-  Active.AllTasks = Backbone.Collection.extend({
+  url: function () {
+    return app.host + '/_active_tasks';
+  },
 
-    url: function () {
-      return app.host + '/_active_tasks';
-    },
+  pollingFetch: function () { //still need this for the polling
+    this.fetch({reset: true, parse: true});
+    Actions.setActiveTaskIsLoading(true);
+    return this;
+  },
 
-    pollingFetch: function () { //still need this for the polling
-      this.fetch({reset: true, parse: true});
-      Actions.setActiveTaskIsLoading(true);
-      return this;
-    },
+  parse: function (resp) {
+    //no more backbone models, collection is converted into an array of objects
+    Actions.setActiveTaskIsLoading(false);
+    var collectionTable = [];
 
-    parse: function (resp) {
-      //no more backbone models, collection is converted into an array of objects
-      Actions.setActiveTaskIsLoading(false);
-      var collectionTable = [];
+    _.each(resp, function (item) {
+      collectionTable.push(item);
+    });
 
-      _.each(resp, function (item) {
-        collectionTable.push(item);
-      });
+    //collection is an array of objects
+    this.table = collectionTable;
+    return resp;
+  },
 
-      //collection is an array of objects
-      this.table = collectionTable;
-      return resp;
-    },
+  table: []
 
-    table: []
-
-  });
-
-  return Active;
 });
+
+export default Active;

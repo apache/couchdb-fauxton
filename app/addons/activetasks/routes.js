@@ -10,43 +10,38 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-define([
-  '../../app',
-  '../../core/api',
-  './resources',
-  './components.react',
-  './actions'
-],
+import app from "../../app";
+import FauxtonAPI from "../../core/api";
+import ActiveTasksResources from "./resources";
+import ActiveTasksComponents from "./components.react";
+import Actions from "./actions";
 
-function (app, FauxtonAPI, ActiveTasksResources, ActiveTasksComponents, Actions) {
-
-  var ActiveTasksRouteObject = FauxtonAPI.RouteObject.extend({
-    selectedHeader: 'Active Tasks',
-    layout: 'one_pane',
-    disableLoader: true,
-    routes: {
-      'activetasks/:id': 'showActiveTasks',
-      'activetasks': 'showActiveTasks'
-    },
-    crumbs: [
-      {'name': 'Active Tasks', 'link': 'activetasks'}
-    ],
-    apiUrl: function () {
-      var apiurl = window.location.origin + '/_active_tasks';
-      return [apiurl, FauxtonAPI.constants.DOC_URLS.ACTIVE_TASKS];
-    },
-    roles: ['_admin'],
-    initialize: function () {
-      this.allTasks = new ActiveTasksResources.AllTasks();
-    },
-    showActiveTasks: function () {
-      Actions.init(this.allTasks);
-      this.setComponent('#dashboard-content', ActiveTasksComponents.ActiveTasksController);
-      this.setComponent('#right-header', ActiveTasksComponents.ActiveTasksPollingWidgetController);
-    }
-  });
-
-  ActiveTasksResources.RouteObjects = [ActiveTasksRouteObject];
-
-  return ActiveTasksResources;
+var ActiveTasksRouteObject = FauxtonAPI.RouteObject.extend({
+  selectedHeader: 'Active Tasks',
+  layout: 'one_pane',
+  disableLoader: true,
+  routes: {
+    'activetasks/:id': 'showActiveTasks',
+    'activetasks': 'showActiveTasks'
+  },
+  crumbs: [
+    {'name': 'Active Tasks', 'link': 'activetasks'}
+  ],
+  apiUrl: function () {
+    var apiurl = window.location.origin + '/_active_tasks';
+    return [apiurl, FauxtonAPI.constants.DOC_URLS.ACTIVE_TASKS];
+  },
+  roles: ['_admin'],
+  initialize: function () {
+    this.allTasks = new ActiveTasksResources.AllTasks();
+  },
+  showActiveTasks: function () {
+    Actions.init(this.allTasks);
+    this.setComponent('#dashboard-content', ActiveTasksComponents.ActiveTasksController);
+    this.setComponent('#right-header', ActiveTasksComponents.ActiveTasksPollingWidgetController);
+  }
 });
+
+ActiveTasksResources.RouteObjects = [ActiveTasksRouteObject];
+
+export default ActiveTasksResources;

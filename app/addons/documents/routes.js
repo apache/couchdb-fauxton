@@ -10,23 +10,17 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-define([
-  './views',
-  './routes-documents',
-  './routes-doc-editor',
-  './routes-index-editor',
-  './routes-mango'
-],
+import Documents from "./views";
+import DocumentsRouteObject from "./routes-documents";
+import docEditor from "./routes-doc-editor";
+import IndexEditorRouteObject from "./routes-index-editor";
+import Mango from "./routes-mango";
+Documents.RouteObjects = [
+  docEditor.DocEditorRouteObject,
+  docEditor.RevBrowserRouteObject,
+  DocumentsRouteObject,
+  IndexEditorRouteObject,
+  Mango.MangoIndexEditorAndQueryEditor
+];
 
-
-function (Documents, DocumentsRouteObject, docEditor, IndexEditorRouteObject, Mango) {
-  Documents.RouteObjects = [
-    docEditor.DocEditorRouteObject,
-    docEditor.RevBrowserRouteObject,
-    DocumentsRouteObject,
-    IndexEditorRouteObject,
-    Mango.MangoIndexEditorAndQueryEditor
-  ];
-
-  return Documents;
-});
+export default Documents;

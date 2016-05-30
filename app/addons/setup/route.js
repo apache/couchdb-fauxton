@@ -10,62 +10,58 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-define([
-  '../../app',
-  '../../core/api',
-  './resources',
-  './setup.react',
-  './setup.actions',
-  '../cluster/cluster.actions'
-],
-function (app, FauxtonAPI, Setup, SetupComponents, SetupActions, ClusterActions) {
-  var RouteObject = FauxtonAPI.RouteObject.extend({
-    layout: 'one_pane',
+import app from "../../app";
+import FauxtonAPI from "../../core/api";
+import Setup from "./resources";
+import SetupComponents from "./setup.react";
+import SetupActions from "./setup.actions";
+import ClusterActions from "../cluster/cluster.actions";
+var RouteObject = FauxtonAPI.RouteObject.extend({
+  layout: 'one_pane',
 
-    roles: ['_admin'],
+  roles: ['_admin'],
 
-    routes: {
-      'setup': 'setupInitView',
-      'setup/finish': 'finishView',
-      'setup/singlenode': 'setupSingleNode',
-      'setup/multinode': 'setupMultiNode'
-    },
+  routes: {
+    'setup': 'setupInitView',
+    'setup/finish': 'finishView',
+    'setup/singlenode': 'setupSingleNode',
+    'setup/multinode': 'setupMultiNode'
+  },
 
-    crumbs: [
-      {'name': 'Setup ' + app.i18n.en_US['couchdb-productname'], 'link': 'setup'}
-    ],
+  crumbs: [
+    {'name': 'Setup ' + app.i18n.en_US['couchdb-productname'], 'link': 'setup'}
+  ],
 
-    apiUrl: function () {
-      return [this.setupModel.url('apiurl'), this.setupModel.documentation];
-    },
+  apiUrl: function () {
+    return [this.setupModel.url('apiurl'), this.setupModel.documentation];
+  },
 
-    initialize: function () {
-      this.setupModel = new Setup.Model();
-    },
+  initialize: function () {
+    this.setupModel = new Setup.Model();
+  },
 
-    setupInitView: function () {
-      ClusterActions.fetchNodes();
-      SetupActions.getClusterStateFromCouch();
-      this.setComponent('#dashboard-content', SetupComponents.SetupFirstStepController);
-    },
+  setupInitView: function () {
+    ClusterActions.fetchNodes();
+    SetupActions.getClusterStateFromCouch();
+    this.setComponent('#dashboard-content', SetupComponents.SetupFirstStepController);
+  },
 
-    setupSingleNode: function () {
-      ClusterActions.fetchNodes();
-      this.setComponent('#dashboard-content', SetupComponents.SetupSingleNodeController);
-    },
+  setupSingleNode: function () {
+    ClusterActions.fetchNodes();
+    this.setComponent('#dashboard-content', SetupComponents.SetupSingleNodeController);
+  },
 
-    setupMultiNode: function () {
-      ClusterActions.fetchNodes();
-      this.setComponent('#dashboard-content', SetupComponents.SetupMultipleNodesController);
-    },
+  setupMultiNode: function () {
+    ClusterActions.fetchNodes();
+    this.setComponent('#dashboard-content', SetupComponents.SetupMultipleNodesController);
+  },
 
-    finishView: function () {
-      this.setComponent('#dashboard-content', SetupComponents.ClusterConfiguredScreen);
-    }
-  });
-
-
-  Setup.RouteObjects = [RouteObject];
-
-  return Setup;
+  finishView: function () {
+    this.setComponent('#dashboard-content', SetupComponents.ClusterConfiguredScreen);
+  }
 });
+
+
+Setup.RouteObjects = [RouteObject];
+
+export default Setup;

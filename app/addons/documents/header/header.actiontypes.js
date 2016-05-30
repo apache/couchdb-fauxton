@@ -10,8 +10,6 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-define([], function () {
-  return {
-    TOGGLE_TABLEVIEW: 'TOGGLE_TABLEVIEW',
-  };
-});
+export default {
+  TOGGLE_TABLEVIEW: 'TOGGLE_TABLEVIEW',
+};

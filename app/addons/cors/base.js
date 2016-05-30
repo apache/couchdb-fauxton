@@ -10,16 +10,11 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-define([
-  "../../app",
-  "../../core/api",
-  './assets/less/cors.less'
-],
+import app from "../../app";
+import FauxtonAPI from "../../core/api";
+import "./assets/less/cors.less";
+var CORS = FauxtonAPI.addon();
 
-function (app, FauxtonAPI) {
-  var CORS = FauxtonAPI.addon();
+CORS.initialize = function () {};
 
-  CORS.initialize = function () {};
-
-  return CORS;
-});
+export default CORS;

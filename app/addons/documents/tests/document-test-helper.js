@@ -9,37 +9,33 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
-define([
-  '../../../core/api',
-  '../resources'
-], function (FauxtonAPI, Documents) {
+import FauxtonAPI from "../../../core/api";
+import Documents from "../resources";
 
-  var opts = {
-    params: {},
-    database: {
-      safeID: function () { return '1';}
-    }
-  };
-
-  function createDocColumn (docs) {
-    docs = docs.map(function (doc) {
-      return Documents.Doc.prototype.parse(doc);
-    });
-
-    return new Documents.AllDocs(docs, opts);
+var opts = {
+  params: {},
+  database: {
+    safeID: function () { return '1';}
   }
+};
 
-  function createMangoIndexDocColumn (docs) {
-    docs = docs.map(function (doc) {
-      return Documents.MangoIndex.prototype.parse(doc);
-    });
+function createDocColumn (docs) {
+  docs = docs.map(function (doc) {
+    return Documents.Doc.prototype.parse(doc);
+  });
 
-    return new Documents.MangoIndexCollection(docs, opts);
-  }
+  return new Documents.AllDocs(docs, opts);
+}
 
-  return {
-    createDocColumn: createDocColumn,
-    createMangoIndexDocColumn: createMangoIndexDocColumn
-  };
+function createMangoIndexDocColumn (docs) {
+  docs = docs.map(function (doc) {
+    return Documents.MangoIndex.prototype.parse(doc);
+  });
 
-});
+  return new Documents.MangoIndexCollection(docs, opts);
+}
+
+export default {
+  createDocColumn: createDocColumn,
+  createMangoIndexDocColumn: createMangoIndexDocColumn
+};

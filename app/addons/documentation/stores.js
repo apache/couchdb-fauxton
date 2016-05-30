@@ -10,78 +10,74 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-define([
-  '../../app',
-  '../../core/api',
-], function (app, FauxtonAPI) {
+import app from "../../app";
+import FauxtonAPI from "../../core/api";
 
-  var DocumentationStore = FauxtonAPI.Store.extend({
-    getLinks: function () {
-      return [
-        {
-          title: 'CouchDB Official Documentation -- Online',
-          link: 'http://docs.couchdb.org/en/latest/',
-          iconClassName: 'couchdb-icon'
-        },
-        {
-          title: 'CouchDB Official Documentation -- Offline',
-          link: '/_utils/docs/contents.html',
-          iconClassName: 'couchdb-icon'
-        },
-        {
-          title: 'CouchDB Weekly News',
-          link: 'http://blog.couchdb.org/',
-          iconClassName: 'couchdb-icon'
-        },
-        {
-          title: 'CouchDB Homepage',
-          link: 'https://couchdb.apache.org/',
-          iconClassName: 'couchdb-icon'
-        },
-        {
-          title: 'CouchDB on Github',
-          link: 'https://github.com/apache/couchdb',
-          iconClassName: 'github-icon'
-        },
-        {
-          title: 'Fauxton on Github',
-          link: 'https://github.com/apache/couchdb-fauxton',
-          iconClassName: 'github-icon'
-        },
-        {
-          title: 'Fauxton Visual Guide',
-          link: 'https://couchdb.apache.org/fauxton-visual-guide/index.html',
-          iconClassName: 'couchdb-icon'
-        },
-        {
-          title: 'The Apache Software Foundation',
-          link: 'http://www.apache.org/',
-          iconClassName: 'asf-feather-icon'
-        },
-        {
-          title: 'Follow CouchDB on Twitter',
-          link: 'https://twitter.com/couchdb',
-          iconClassName: 'twitter-icon'
-        },
-        {
-          title: 'Follow CouchDB on Google Plus',
-          link: 'https://plus.google.com/+CouchDB',
-          iconClassName: 'google-plus-icon'
-        },
-        {
-          title: 'Follow CouchDB on LinkedIn',
-          link: 'https://www.linkedin.com/company/apache-couchdb',
-          iconClassName: 'linkedin-icon'
-        }
-      ];
+var DocumentationStore = FauxtonAPI.Store.extend({
+  getLinks: function () {
+    return [
+      {
+        title: 'CouchDB Official Documentation -- Online',
+        link: 'http://docs.couchdb.org/en/latest/',
+        iconClassName: 'couchdb-icon'
+      },
+      {
+        title: 'CouchDB Official Documentation -- Offline',
+        link: '/_utils/docs/contents.html',
+        iconClassName: 'couchdb-icon'
+      },
+      {
+        title: 'CouchDB Weekly News',
+        link: 'http://blog.couchdb.org/',
+        iconClassName: 'couchdb-icon'
+      },
+      {
+        title: 'CouchDB Homepage',
+        link: 'https://couchdb.apache.org/',
+        iconClassName: 'couchdb-icon'
+      },
+      {
+        title: 'CouchDB on Github',
+        link: 'https://github.com/apache/couchdb',
+        iconClassName: 'github-icon'
+      },
+      {
+        title: 'Fauxton on Github',
+        link: 'https://github.com/apache/couchdb-fauxton',
+        iconClassName: 'github-icon'
+      },
+      {
+        title: 'Fauxton Visual Guide',
+        link: 'https://couchdb.apache.org/fauxton-visual-guide/index.html',
+        iconClassName: 'couchdb-icon'
+      },
+      {
+        title: 'The Apache Software Foundation',
+        link: 'http://www.apache.org/',
+        iconClassName: 'asf-feather-icon'
+      },
+      {
+        title: 'Follow CouchDB on Twitter',
+        link: 'https://twitter.com/couchdb',
+        iconClassName: 'twitter-icon'
+      },
+      {
+        title: 'Follow CouchDB on Google Plus',
+        link: 'https://plus.google.com/+CouchDB',
+        iconClassName: 'google-plus-icon'
+      },
+      {
+        title: 'Follow CouchDB on LinkedIn',
+        link: 'https://www.linkedin.com/company/apache-couchdb',
+        iconClassName: 'linkedin-icon'
+      }
+    ];
 
-    }
-  });
-
-  var documentationStore = new DocumentationStore();
-
-  return {
-    documentationStore: documentationStore
-  };
-
+  }
 });
+
+var documentationStore = new DocumentationStore();
+
+export default {
+  documentationStore: documentationStore
+};

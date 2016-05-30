@@ -10,142 +10,138 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-define([
-  '../../app',
-  '../../core/api',
-  './shared-resources',
-  '../databases/base',
-  '../fauxton/components',
-  './pagination/actions',
-  './index-results/stores',
-   './sidebar/sidebar.react',
-   './sidebar/actions'
-], function (app, FauxtonAPI, Documents, Databases, Components, PaginationActions, IndexResultStores,
-  SidebarComponents, SidebarActions) {
+import app from "../../app";
+import FauxtonAPI from "../../core/api";
+import Documents from "./shared-resources";
+import Databases from "../databases/base";
+import Components from "../fauxton/components";
+import PaginationActions from "./pagination/actions";
+import IndexResultStores from "./index-results/stores";
+import SidebarComponents from "./sidebar/sidebar.react";
+import SidebarActions from "./sidebar/actions";
 
 
-  // The Documents section is built up a lot of different route object which share code. This contains
-  // base functionality that can be used across routes / addons
-  var BaseRoute = FauxtonAPI.RouteObject.extend({
-    layout: 'with_tabs_sidebar',
-    selectedHeader: 'Databases',
-    overrideBreadcrumbs: true,
+// The Documents section is built up a lot of different route object which share code. This contains
+// base functionality that can be used across routes / addons
+var BaseRoute = FauxtonAPI.RouteObject.extend({
+  layout: 'with_tabs_sidebar',
+  selectedHeader: 'Databases',
+  overrideBreadcrumbs: true,
 
-    createDesignDocsCollection: function () {
-      this.designDocs = new Documents.AllDocs(null, {
-        database: this.database,
-        paging: {
-          pageSize: 500
-        },
-        params: {
-          startkey: '_design/',
-          endkey: '_design0',
-          include_docs: true,
-          limit: 500
-        }
-      });
-    },
-
-    onSelectDatabase: function (dbName) {
-      this.cleanup();
-      this.initViews(dbName);
-
-      var url = FauxtonAPI.urls('allDocs', 'app',  app.utils.safeURLName(dbName), '');
-      FauxtonAPI.navigate(url, {
-        trigger: true
-      });
-
-      // we need to start listening again because cleanup() removed the listener, but in this case
-      // initialize() doesn't fire to re-set up the listener
-      this.listenToLookaheadTray();
-    },
-
-    listenToLookaheadTray: function () {
-      this.listenTo(FauxtonAPI.Events, 'lookaheadTray:update', this.onSelectDatabase);
-    },
-
-    getAllDatabases: function () {
-      return new Databases.List();  //getAllDatabases() can be overwritten instead of hard coded into initViews
-    },
-
-    showQueryOptions: function (urlParams, ddoc, viewName) {
-      var promise = this.designDocs.fetch({reset: true}),
-      that = this,
-      hasReduceFunction;
-
-      promise.then(function (resp) {
-        var design = _.findWhere(that.designDocs.models, {id: '_design/' + ddoc});
-        !_.isUndefined(hasReduceFunction = design.attributes.doc.views[viewName].reduce);
-
-        that.rightHeader.showQueryOptions();
-        that.rightHeader.resetQueryOptions({
-          queryParams: urlParams,
-          hasReduce: hasReduceFunction,
-          showReduce: !_.isUndefined(hasReduceFunction),
-          viewName: viewName,
-          ddocName: ddoc
-        });
-      });
-    },
-
-    addLeftHeader: function () {
-      this.leftheader = this.setView('#breadcrumbs', new Components.LeftHeader({
-        databaseName: this.database.safeID(),
-        crumbs: this.getCrumbs(this.database),
-        lookaheadTrayOptions: {
-          databaseCollection: this.allDatabases,
-          toggleEventName: 'lookaheadTray:toggle',
-          onUpdateEventName: 'lookaheadTray:update',
-          placeholder: 'Enter database name'
-        }
-      }));
-    },
-
-    addSidebar: function (selectedNavItem) {
-      var options = {
-        designDocs: this.designDocs,
-        database: this.database
-      };
-      if (selectedNavItem) {
-        options.selectedNavItem = selectedNavItem;
+  createDesignDocsCollection: function () {
+    this.designDocs = new Documents.AllDocs(null, {
+      database: this.database,
+      paging: {
+        pageSize: 500
+      },
+      params: {
+        startkey: '_design/',
+        endkey: '_design0',
+        include_docs: true,
+        limit: 500
       }
+    });
+  },
 
-      SidebarActions.newOptions(options);
-      this.setComponent("#sidebar-content", SidebarComponents.SidebarController);
-    },
+  onSelectDatabase: function (dbName) {
+    this.cleanup();
+    this.initViews(dbName);
 
-    getCrumbs: function (database) {
-      var name = _.isObject(database) ? database.id : database,
-        dbname = app.utils.safeURLName(name);
+    var url = FauxtonAPI.urls('allDocs', 'app',  app.utils.safeURLName(dbName), '');
+    FauxtonAPI.navigate(url, {
+      trigger: true
+    });
 
-      return [
-        { "type": "back", "link": FauxtonAPI.urls('allDBs', 'app')},
-        { "name": database.id, "link": FauxtonAPI.urls('allDocs', 'app', dbname, '?limit=' + Databases.DocLimit), className: "lookahead-tray-link" }
-      ];
-    },
+    // we need to start listening again because cleanup() removed the listener, but in this case
+    // initialize() doesn't fire to re-set up the listener
+    this.listenToLookaheadTray();
+  },
 
-    ddocInfo: function (designDoc, designDocs, view) {
-      return {
-        id: "_design/" + designDoc,
-        currView: view,
-        designDocs: designDocs
-      };
-    },
+  listenToLookaheadTray: function () {
+    this.listenTo(FauxtonAPI.Events, 'lookaheadTray:update', this.onSelectDatabase);
+  },
 
-    createParams: function (options) {
-      var urlParams = app.getParams(options),
-          params = Documents.QueryParams.parse(urlParams);
+  getAllDatabases: function () {
+    return new Databases.List();  //getAllDatabases() can be overwritten instead of hard coded into initViews
+  },
 
-      PaginationActions.setDocumentLimit(parseInt(urlParams.limit, 10));
+  showQueryOptions: function (urlParams, ddoc, viewName) {
+    var promise = this.designDocs.fetch({reset: true}),
+    that = this,
+    hasReduceFunction;
 
-      var limit = IndexResultStores.indexResultsStore.getPerPage();
-      return {
-        urlParams: urlParams,
-        docParams: _.extend(params, {limit: limit})
-      };
+    promise.then(function (resp) {
+      var design = _.findWhere(that.designDocs.models, {id: '_design/' + ddoc});
+      !_.isUndefined(hasReduceFunction = design.attributes.doc.views[viewName].reduce);
+
+      that.rightHeader.showQueryOptions();
+      that.rightHeader.resetQueryOptions({
+        queryParams: urlParams,
+        hasReduce: hasReduceFunction,
+        showReduce: !_.isUndefined(hasReduceFunction),
+        viewName: viewName,
+        ddocName: ddoc
+      });
+    });
+  },
+
+  addLeftHeader: function () {
+    this.leftheader = this.setView('#breadcrumbs', new Components.LeftHeader({
+      databaseName: this.database.safeID(),
+      crumbs: this.getCrumbs(this.database),
+      lookaheadTrayOptions: {
+        databaseCollection: this.allDatabases,
+        toggleEventName: 'lookaheadTray:toggle',
+        onUpdateEventName: 'lookaheadTray:update',
+        placeholder: 'Enter database name'
+      }
+    }));
+  },
+
+  addSidebar: function (selectedNavItem) {
+    var options = {
+      designDocs: this.designDocs,
+      database: this.database
+    };
+    if (selectedNavItem) {
+      options.selectedNavItem = selectedNavItem;
     }
-  });
 
+    SidebarActions.newOptions(options);
+    this.setComponent("#sidebar-content", SidebarComponents.SidebarController);
+  },
 
-  return BaseRoute;
+  getCrumbs: function (database) {
+    var name = _.isObject(database) ? database.id : database,
+      dbname = app.utils.safeURLName(name);
+
+    return [
+      { "type": "back", "link": FauxtonAPI.urls('allDBs', 'app')},
+      { "name": database.id, "link": FauxtonAPI.urls('allDocs', 'app', dbname, '?limit=' + Databases.DocLimit), className: "lookahead-tray-link" }
+    ];
+  },
+
+  ddocInfo: function (designDoc, designDocs, view) {
+    return {
+      id: "_design/" + designDoc,
+      currView: view,
+      designDocs: designDocs
+    };
+  },
+
+  createParams: function (options) {
+    var urlParams = app.getParams(options),
+        params = Documents.QueryParams.parse(urlParams);
+
+    PaginationActions.setDocumentLimit(parseInt(urlParams.limit, 10));
+
+    var limit = IndexResultStores.indexResultsStore.getPerPage();
+    return {
+      urlParams: urlParams,
+      docParams: _.extend(params, {limit: limit})
+    };
+  }
 });
+
+
+export default BaseRoute;

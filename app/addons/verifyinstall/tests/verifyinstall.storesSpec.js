@@ -10,42 +10,38 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-define([
-  '../../../app',
-  '../../../core/api',
-  '../../../../test/mocha/testUtils',
-  '../stores',
-  '../actiontypes'
-], function (app, FauxtonAPI, testUtils, Stores, ActionTypes) {
+import app from "../../../app";
+import FauxtonAPI from "../../../core/api";
+import testUtils from "../../../../test/mocha/testUtils";
+import Stores from "../stores";
+import ActionTypes from "../actiontypes";
 
-  var assert = testUtils.assert;
+var assert = testUtils.assert;
 
-  describe('VerifyInstallStore', function () {
+describe('VerifyInstallStore', function () {
 
-    afterEach(function () {
-      Stores.verifyInstallStore.reset();
+  afterEach(function () {
+    Stores.verifyInstallStore.reset();
+  });
+
+  it('check store defaults', function () {
+    assert.ok(Stores.verifyInstallStore.checkIsVerifying() === false);
+
+    // confirm all the tests are initially marked as incomplete
+    var tests = Stores.verifyInstallStore.getTestResults();
+    _.each(tests, function (test) {
+      assert.ok(test.complete === false);
     });
+  });
 
-    it('check store defaults', function () {
-      assert.ok(Stores.verifyInstallStore.checkIsVerifying() === false);
+  it('publishing start event changes state in store', function () {
+    FauxtonAPI.dispatch({ type: ActionTypes.VERIFY_INSTALL_START });
+    assert.ok(Stores.verifyInstallStore.checkIsVerifying() === true);
+  });
 
-      // confirm all the tests are initially marked as incomplete
-      var tests = Stores.verifyInstallStore.getTestResults();
-      _.each(tests, function (test) {
-        assert.ok(test.complete === false);
-      });
-    });
-
-    it('publishing start event changes state in store', function () {
-      FauxtonAPI.dispatch({ type: ActionTypes.VERIFY_INSTALL_START });
-      assert.ok(Stores.verifyInstallStore.checkIsVerifying() === true);
-    });
-
-    it('publishing completion event changes state in store', function () {
-      FauxtonAPI.dispatch({ type: ActionTypes.VERIFY_INSTALL_ALL_TESTS_COMPLETE });
-      assert.ok(Stores.verifyInstallStore.checkIsVerifying() === false);
-    });
-
+  it('publishing completion event changes state in store', function () {
+    FauxtonAPI.dispatch({ type: ActionTypes.VERIFY_INSTALL_ALL_TESTS_COMPLETE });
+    assert.ok(Stores.verifyInstallStore.checkIsVerifying() === false);
   });
 
 });

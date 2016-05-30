@@ -10,51 +10,48 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-define([
-  '../../core/api',
-  './cluster.actiontypes'
-], function (FauxtonAPI, ActionTypes) {
+import FauxtonAPI from "../../core/api";
+import ActionTypes from "./cluster.actiontypes";
 
-  var NodesStore = FauxtonAPI.Store.extend({
+var NodesStore = FauxtonAPI.Store.extend({
 
-    initialize: function () {
-      this.reset();
-    },
+  initialize: function () {
+    this.reset();
+  },
 
-    reset: function () {
-      this._nodes = [];
-    },
+  reset: function () {
+    this._nodes = [];
+  },
 
-    setNodes: function (options) {
-      this._nodes = options.nodes;
-    },
+  setNodes: function (options) {
+    this._nodes = options.nodes;
+  },
 
-    getNodes: function () {
-      return this._nodes;
-    },
+  getNodes: function () {
+    return this._nodes;
+  },
 
-    dispatch: function (action) {
+  dispatch: function (action) {
 
-      switch (action.type) {
-        case ActionTypes.CLUSTER_FETCH_NODES:
-          this.setNodes(action.options);
-        break;
+    switch (action.type) {
+      case ActionTypes.CLUSTER_FETCH_NODES:
+        this.setNodes(action.options);
+      break;
 
-        default:
-        return;
-      }
-
-      this.triggerChange();
+      default:
+      return;
     }
 
-  });
+    this.triggerChange();
+  }
 
-
-  var nodesStore = new NodesStore();
-
-  nodesStore.dispatchToken = FauxtonAPI.dispatcher.register(nodesStore.dispatch.bind(nodesStore));
-
-  return {
-    nodesStore: nodesStore
-  };
 });
+
+
+var nodesStore = new NodesStore();
+
+nodesStore.dispatchToken = FauxtonAPI.dispatcher.register(nodesStore.dispatch.bind(nodesStore));
+
+export default {
+  nodesStore: nodesStore
+};

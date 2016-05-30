@@ -10,10 +10,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-define([], function () {
-  return {
-    DESIGN_DOC_MONITOR: 'DESIGN_DOC_MONITOR',
-    DESIGN_FETCHING: 'DESIGN_FETCHING',
-    DESIGN_REFRESH: 'DESIGN_REFRESH'
-  };
-});
+export default {
+  DESIGN_DOC_MONITOR: 'DESIGN_DOC_MONITOR',
+  DESIGN_FETCHING: 'DESIGN_FETCHING',
+  DESIGN_REFRESH: 'DESIGN_REFRESH'
+};
