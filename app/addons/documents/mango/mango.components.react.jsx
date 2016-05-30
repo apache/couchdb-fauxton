@@ -19,21 +19,325 @@ define([
   '../../components/react-components.react',
   '../index-results/actions',
   './mango.helper',
+  'react-bootstrap',
 
   '../../../../assets/js/plugins/prettify'
 ],
 
-function (app, FauxtonAPI, React, Stores, Actions,
-          ReactComponents, IndexResultActions, MangoHelper) {
+ (app, FauxtonAPI, React, Stores, Actions,
+  ReactComponents, IndexResultActions, MangoHelper, ReactBootstrap) => {
 
-  var mangoStore = Stores.mangoStore;
-  var getDocUrl = app.helpers.getDocUrl;
+  const mangoStore = Stores.mangoStore;
+  const getDocUrl = app.helpers.getDocUrl;
 
-  var PaddedBorderedBox = ReactComponents.PaddedBorderedBox;
-  var CodeEditorPanel = ReactComponents.CodeEditorPanel;
-  var ConfirmButton = ReactComponents.ConfirmButton;
+  const PaddedBorderedBox = ReactComponents.PaddedBorderedBox;
+  const CodeEditorPanel = ReactComponents.CodeEditorPanel;
+  const ConfirmButton = ReactComponents.ConfirmButton;
+  const StyledSelect = ReactComponents.StyledSelect;
+  const BadgeList = ReactComponents.BadgeList;
 
-  var MangoQueryEditorController = React.createClass({
+  const ButtonGroup = ReactBootstrap.ButtonGroup;
+  const Button = ReactBootstrap.Button;
+
+
+  const OperatorSelector = ({possibleOperators}) => {
+    const options = possibleOperators.map((el, i) => {
+      return <option key={i} value={el.operator}>{el.text}</option>;
+    });
+
+    return (
+      <optgroup label="Select a selector">
+        {options}
+      </optgroup>
+    );
+  };
+
+  OperatorSelector.propTypes = {
+    possibleOperators: React.PropTypes.array.isRequired,
+    selected: React.PropTypes.string
+  };
+
+  class MangoQueryBuilderController extends React.Component {
+
+    constructor (props) {
+      super(props);
+
+      this.state = this.getStoreState();
+      this.state.operator = '$eq';
+    }
+
+    getStoreState () {
+      return {
+        database: mangoStore.getDatabase(),
+        isLoading: mangoStore.getLoadingIndexes(),
+
+        possibleOperators: mangoStore.getPossibleOperators(),
+        query: mangoStore.getStringifiedQuery(),
+        queryParts: mangoStore.getSelectors(),
+        builtQuery: mangoStore.getBuiltQuery(),
+        logicOperator: mangoStore.getLogicOperator(),
+      };
+    }
+
+    componentDidMount () {
+      mangoStore.on('change', this.onChange, this);
+    }
+
+    componentWillUnmount () {
+      mangoStore.off('change', this.onChange);
+    }
+
+    onChange () {
+      this.setState(this.getStoreState());
+    }
+
+    getMangoQueryBuilder () {
+      return this.refs.mangoQueryBuilder;
+    }
+
+    runQuery (e) {
+      e.preventDefault();
+
+      IndexResultActions.runMangoFindQuery({
+        database: this.state.database,
+        queryCode: this.getMangoQueryBuilder().getEditorValue()
+      });
+    }
+
+    render () {
+      //if (this.state.isLoading) {
+      //  return (
+      //    <LoadingEditor />
+      //  );
+      //}
+
+      // XXX splat other state
+      const {database} = this.state;
+
+      return (
+        <MangoQueryBuilder
+          {...this.state}
+          ref="mangoQueryBuilder"
+          description="Start building an ad hoc query below."
+          dbName={database.id}
+          onSubmit={this.runQuery.bind(this)}
+          title={this.props.editorTitle}
+          docs={getDocUrl('MANGO_SEARCH')}
+          exampleCode=""
+          confirmbuttonText="Run Query" />
+      );
+    }
+  };
+
+  class MangoQueryBuilder extends React.Component {
+
+    constructor (props) {
+      super(props);
+
+      this.state = {
+        field: '',
+        fieldValue: '',
+        queryParts: [],
+        operator: '$eq',
+        logicOperator: '$and'
+      };
+    }
+
+    selectChange (e) {
+      this.setState({operator: e.target.value});
+    }
+
+    fieldChange (e) {
+      this.setState({field: e.target.value});
+    }
+
+    fieldValueChange (e) {
+      this.setState({fieldValue: e.target.value});
+    }
+
+    toggleLogicalOperator (op) {
+      this.setState({logicOperator: op});
+      Actions.setLogicalOperator({logicOperator: op});
+    }
+
+    maybeAddSelectorKeyUp (e) {
+      if (e.keyCode !== 13) {
+        return;
+      }
+
+      if (!this.state.field) {
+        return;
+      }
+
+      if (!this.state.fieldValue) {
+        return;
+      }
+
+      this.addSelector();
+    }
+
+    addSelector () {
+      const selector = {
+        field: this.state.field,
+        operator: this.state.operator,
+        fieldValue: this.state.fieldValue
+      };
+
+      Actions.addSelector(selector);
+
+      this.setState({
+        field: '',
+        operator: '$eq',
+        fieldValue: ''
+      });
+
+    }
+
+    getSelectOptions () {
+      return (
+        <OperatorSelector possibleOperators={this.props.possibleOperators} />
+      );
+    }
+
+    removeSelector (label, selector) {
+      Actions.removeSelector(selector);
+    }
+
+    componentWillUpdate (nextProps, nextState) {
+      if (!nextProps.query) {
+        return;
+      }
+      this.refs.field.getEditor().setValue(nextProps.query);
+    }
+
+    getDataFields () {
+      return (
+        <PaddedBorderedBox>
+          <table className="mango-qb-selector-combobox">
+            <tbody>
+              <tr>
+                <td>
+                  Field
+                </td>
+                <td>
+                  <input
+                    onChange={this.fieldChange.bind(this)}
+                    onKeyUp={this.maybeAddSelectorKeyUp.bind(this)}
+                    value={this.state.field}
+                    type="text"
+                    className="mango-select-value"
+                    ref="mango-select-field" />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  Function
+                </td>
+                <td>
+                <StyledSelect
+                  selectValue={this.state.operator}
+                  selectId="mango-select-function"
+                  className={""}
+                  selectChange={this.selectChange.bind(this)}
+                  selectContent={this.getSelectOptions()} />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  Value
+                </td>
+                <td>
+                  <input
+                    onChange={this.fieldValueChange.bind(this)}
+                    onKeyUp={this.maybeAddSelectorKeyUp.bind(this)}
+                    value={this.state.fieldValue}
+                    type="text"
+                    className="mango-select-value"
+                    ref="mango-select-value" />
+                </td>
+                <td>
+                  <ConfirmButton onClick={this.addSelector.bind(this)} text="Add" />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div style={{textAlign: 'center'}} className="mango-selector-display">
+            <div className="button-wrapper">
+              <ButtonGroup className="two-sides-toggle-button">
+                <Button
+                  style={{width: '58px'}}
+                  className={this.state.logicOperator === '$and' ? 'active' : ''}
+                  onClick={this.toggleLogicalOperator.bind(this, '$and')}
+                >
+                  And
+                </Button>
+                <Button
+                  style={{width: '58px'}}
+                  className={this.state.logicOperator === '$and' ? '' : 'active'}
+                  onClick={this.toggleLogicalOperator.bind(this, '$or')}
+                >
+                  Or
+                </Button>
+              </ButtonGroup>
+            </div>
+          </div>
+
+          <div style={{minHeight: '40px'}}>
+            <BadgeList
+              style={{height: '100px'}}
+              removeBadge={this.removeSelector.bind(this)}
+              elements={this.props.queryParts}
+              getLabel={this.getLabel.bind(this)} />
+          </div>
+        </PaddedBorderedBox>
+      );
+    }
+
+    getLabel (selector) {
+      return `${selector.field} : ${selector.fieldValue}`;
+    }
+
+    getPreviewField () {
+      return (
+        <PaddedBorderedBox>
+          <CodeEditorPanel
+            id="query-field"
+            allowZenMode={false}
+            ref="field"
+            title={""}
+            docLink={"this.props.docs"}
+            defaultCode={this.props.query} />
+        </PaddedBorderedBox>
+      );
+    }
+
+    render () {
+      return (
+        <div className="mango-editor-wrapper">
+          <PaddedBorderedBox>
+            <div
+              dangerouslySetInnerHTML={{__html: this.props.description}}
+              className="editor-description">
+            </div>
+          </PaddedBorderedBox>
+          {this.getDataFields()}
+          {this.getPreviewField()}
+        </div>
+      );
+    }
+  };
+
+  const LoadingEditor = () => {
+    return (
+      <div className="editor-wrapper">
+        <ReactComponents.LoadLines />
+      </div>
+    );
+  };
+
+
+  const MangoQueryEditorController = React.createClass({
     getInitialState: function () {
       return this.getStoreState();
     },
@@ -71,12 +375,9 @@ function (app, FauxtonAPI, React, Stores, Actions,
     },
 
     render: function () {
-      var loadLines;
       if (this.state.isLoading) {
         return (
-          <div className="mango-editor-wrapper">
-            <ReactComponents.LoadLines />
-          </div>
+          <LoadingEditor />
         );
       }
 
@@ -102,7 +403,7 @@ function (app, FauxtonAPI, React, Stores, Actions,
 
       if (this.getMangoEditor().hasErrors()) {
         FauxtonAPI.addNotification({
-          msg:  'Please fix the Javascript errors and try again.',
+          msg: 'Please fix the Javascript errors and try again.',
           type: 'error',
           clear: true
         });
@@ -112,7 +413,6 @@ function (app, FauxtonAPI, React, Stores, Actions,
       IndexResultActions.runMangoFindQuery({
         database: this.state.database,
         queryCode: this.getMangoEditor().getEditorValue(),
-
       });
     }
   });
@@ -269,7 +569,7 @@ function (app, FauxtonAPI, React, Stores, Actions,
 
       if (this.getMangoEditor().hasErrors()) {
         FauxtonAPI.addNotification({
-          msg:  'Please fix the Javascript errors and try again.',
+          msg: 'Please fix the Javascript errors and try again.',
           type: 'error',
           clear: true
         });
@@ -283,9 +583,10 @@ function (app, FauxtonAPI, React, Stores, Actions,
     }
   });
 
-  var Views = {
+  const Views = {
     MangoIndexEditorController: MangoIndexEditorController,
-    MangoQueryEditorController: MangoQueryEditorController
+    MangoQueryEditorController: MangoQueryEditorController,
+    MangoQueryBuilderController: MangoQueryBuilderController
   };
 
   return Views;

@@ -17,12 +17,79 @@ define([
   '../../resources',
   '../../../../../test/mocha/testUtils',
 
-], function (FauxtonAPI, Stores, ActionTypes, Resources, testUtils) {
-  var assert = testUtils.assert;
-  var dispatchToken;
-  var store;
+], (FauxtonAPI, Stores, ActionTypes, Resources, testUtils) => {
+  const assert = testUtils.assert;
 
-  describe('Mango Store', function () {
+  let dispatchToken;
+  let store;
+
+  describe('Mango Store', () => {
+
+    describe('queryBuilder', () => {
+      beforeEach(() => {
+        store = new Stores.MangoStore();
+        dispatchToken = FauxtonAPI.dispatcher.register(store.dispatch);
+      });
+
+      afterEach(() => {
+        FauxtonAPI.dispatcher.unregister(dispatchToken);
+      });
+
+      it('adds selectors', () => {
+        store.addSelector({field: 'name', operator: '$eq', fieldValue: 'John Rambo'});
+
+        assert.deepEqual([{field: 'name', operator: '$eq', fieldValue: 'John Rambo'}], store.getSelectors());
+      });
+
+      it('is not possible to add the same selector twice', () => {
+        store.addSelector({field: 'name', operator: '$eq', fieldValue: 'John Rambo'});
+        store.addSelector({field: 'name', operator: '$eq', fieldValue: 'John Rambo'});
+
+        assert.equal(1, store.getSelectors().length);
+      });
+
+      it('is not possible to add incomplete selectors: missing field', () => {
+        store.addSelector({operator: '$eq', fieldValue: 'John Rambo'});
+
+        assert.equal(0, store.getSelectors().length);
+      });
+
+      it('is not possible to add incomplete selectors: missing fieldValue', () => {
+        store.addSelector({field: 'name', operator: '$eq'});
+
+        assert.equal(0, store.getSelectors().length);
+      });
+
+      it('removes selectors', () => {
+        store.addSelector({field: 'name', operator: '$eq', fieldValue: 'John Rambo'});
+        store.removeSelector({field: 'name', operator: '$eq', fieldValue: 'John Rambo'});
+
+        assert.equal(0, store.getSelectors().length);
+      });
+
+      it('does not remove selectors that dont match', () => {
+        store.addSelector({field: 'name', operator: '$eq', fieldValue: 'John Rambo'});
+        store.removeSelector({field: 'name', operator: '$ne', fieldValue: 'John Rambo'});
+
+        assert.equal(1, store.getSelectors().length);
+      });
+
+      it('returns an empty selectorset if no selectors were added', () => {
+        assert.deepEqual(store.getEmptyQuery(), store.getQuery());
+      });
+
+      describe('buildQuery', () => {
+        it('builds queries for $eq operators', () => {
+          const selectorList = [{field: 'name', operator: '$eq', fieldValue: 'John Rambo'}];
+
+          const res = store.buildQuery(selectorList);
+
+          assert.deepEqual({selector: {name: 'John Rambo'}}, res);
+        });
+
+      });
+
+    });
 
     describe('getQueryCode', function () {
 

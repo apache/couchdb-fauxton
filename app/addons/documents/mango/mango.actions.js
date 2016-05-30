@@ -20,13 +20,34 @@ define([
   '../index-results/actions',
 ],
 function (app, FauxtonAPI, Documents, ActionTypes, Stores, IndexResultsStores, IndexResultActions) {
-  var store = Stores.mangoStore;
+  const store = Stores.mangoStore;
 
   return {
 
     setDatabase: function (options) {
       FauxtonAPI.dispatch({
         type: ActionTypes.MANGO_SET_DB,
+        options: options
+      });
+    },
+
+    addSelector: (options) => {
+      FauxtonAPI.dispatch({
+        type: ActionTypes.MANGO_BUILDER_ADD_SELECTOR,
+        options: options
+      });
+    },
+
+    removeSelector: (options) => {
+      FauxtonAPI.dispatch({
+        type: ActionTypes.MANGO_BUILDER_REMOVE_SELECTOR,
+        options: options
+      });
+    },
+
+    setLogicalOperator: (options) => {
+      FauxtonAPI.dispatch({
+        type: ActionTypes.MANGO_BUILDER_SET_LOGICAL_OPERATOR,
         options: options
       });
     },
