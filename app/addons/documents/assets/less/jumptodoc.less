@@ -20,3 +20,20 @@
   overflow: visible;
   position: absolute;
 }
+
+#jump-to-doc {
+  .Select-control, .Select-menu-outer {
+    width: 210px;
+  }
+}
+
+/* this allows the jump-to-doc results expand as much as need be when the component is used in the header */
+#right-header #jump-to-doc .Select-menu-outer {
+  &>div>div {
+    padding-right: 25px; /* prevents overlapping of auto-generated scrollbar */
+  }
+  min-width: 210px;
+  max-width: 450px;
+  width: auto;
+  overflow: hidden; /* for 450px max widths, enough is visible not to require scrolling */
+}

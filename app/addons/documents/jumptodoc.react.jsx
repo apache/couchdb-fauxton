@@ -29,7 +29,7 @@ const JumpToDoc = ({database, allDocs}) => {
       <ReactSelect
         name="jump-to-doc"
         placeholder="Document ID"
-        className="input-large jump-to-doc"
+        className="jump-to-doc"
         options={options}
         clearable={false}
         onChange={({value: docId}) => {
