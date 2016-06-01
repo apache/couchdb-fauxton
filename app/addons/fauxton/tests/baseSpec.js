@@ -51,6 +51,7 @@ describe('Fauxton RouteObject:beforeEstablish', function () {
           }
         };
       },
+
       renderView: function () {
         var d = $.Deferred();
         d.resolve();
@@ -76,9 +77,21 @@ describe('Fauxton RouteObject:beforeEstablish', function () {
     assert.ok(mockLayout.removeView.calledWith('#breadcrumbs'), 'Clear Breadcrumbs called');
   });
 
-  it('Should set breadcrumbs when breadcrumbs exist', function () {
+  it('Should set breadcrumbs when breadcrumbs exist', () => {
+    let found = false;
     FauxtonAPI.masterLayout = mockLayout;
-    testRouteObject.renderWith('the-route', mockLayout, 'args');
-    assert.ok(setViewCalled, 'Set Breadcrumbs was called');
+    const NewRouteObject = FauxtonAPI.RouteObject.extend({
+      crumbs: ['mycrumbs'],
+      hideNotificationCenter: true,
+      setComponent: function (selector) {
+        if (selector === '#breadcrumbs') {
+          found = true;
+        }
+      }
+    });
+
+    const newRouteObject = new NewRouteObject();
+    newRouteObject.renderWith('the-route', mockLayout, 'args');
+    assert.ok(found, 'Set Breadcrumbs was called');
   });
 });

@@ -43,7 +43,7 @@ function showDeleteDatabaseModal (options) {
 }
 
 function deleteDatabase (dbId) {
-  var url = FauxtonAPI.urls('databaseBaseURL', 'server', dbId, '');
+  const url = FauxtonAPI.urls('databaseBaseURL', 'server', dbId, '');
 
   $.ajax({
     url: url,
@@ -69,7 +69,17 @@ function deleteDatabase (dbId) {
   });
 }
 
+function setBreadCrumbs (crumbs) {
+  FauxtonAPI.dispatch({
+    type: ActionTypes.CMPNTS_BREADCRUMBS_SET_CRUMBS,
+    options: {
+      crumbs: crumbs
+    }
+  });
+}
+
 export default {
+  setBreadCrumbs: setBreadCrumbs,
   deleteDatabase: deleteDatabase,
   showDeleteDatabaseModal: showDeleteDatabaseModal,
   showAPIBarButton: showAPIBarButton,

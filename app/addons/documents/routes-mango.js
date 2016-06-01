@@ -88,14 +88,12 @@ var MangoIndexEditorAndQueryEditor = BaseRoute.extend({
       indexList: mangoIndexList
     });
 
-    var url = FauxtonAPI.urls('allDocs', 'app', this.database.safeID(), '?limit=' + FauxtonAPI.constants.DATABASES.DOCUMENT_LIMIT);
-    this.breadcrumbs = this.setView('#breadcrumbs', new Components.Breadcrumbs({
-      toggleDisabled: true,
-      crumbs: [
-        {'type': 'back', 'link': url},
-        {'name': app.i18n.en_US['mango-title-editor'], 'link': url}
-      ]
-    }));
+    const url = FauxtonAPI.urls('allDocs', 'app', this.database.safeID(), '?limit=' + FauxtonAPI.constants.DATABASES.DOCUMENT_LIMIT);
+    this.crumbs = [
+      {'type': 'back', 'link': url},
+      {'name': app.i18n.en_US['mango-title-editor'] }
+    ];
+
 
     this.setComponent('#left-content', MangoComponents.MangoQueryEditorController, {
       description: app.i18n.en_US['mango-descripton'],
@@ -126,14 +124,11 @@ var MangoIndexEditorAndQueryEditor = BaseRoute.extend({
       typeOfIndex: 'mango'
     });
 
-    var url = FauxtonAPI.urls('allDocs', 'app', this.database.safeID(), '?limit=' + FauxtonAPI.constants.DATABASES.DOCUMENT_LIMIT);
-    this.breadcrumbs = this.setView('#breadcrumbs', new Components.Breadcrumbs({
-      toggleDisabled: true,
-      crumbs: [
-        {'type': 'back', 'link': url},
-        {'name': app.i18n.en_US['mango-indexeditor-title'], 'link': url }
-      ]
-    }));
+    const url = FauxtonAPI.urls('allDocs', 'app', this.database.safeID(), '?limit=' + FauxtonAPI.constants.DATABASES.DOCUMENT_LIMIT);
+    this.crumbs = [
+      {'type': 'back', 'link': url},
+      {'name': app.i18n.en_US['mango-indexeditor-title'] }
+    ];
 
     this.setComponent('#react-headerbar', ReactHeader.BulkDocumentHeaderController, {showIncludeAllDocs: false});
     this.setComponent('#footer', ReactPagination.Footer);

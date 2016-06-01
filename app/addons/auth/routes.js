@@ -35,7 +35,7 @@ var AuthRouteObject = FauxtonAPI.RouteObject.extend({
   },
 
   login: function () {
-    this.crumbs = [{ name: 'Log In to CouchDB', link: "#" }];
+    this.crumbs = [{ name: 'Log In to CouchDB' }];
     this.setComponent('#dashboard-content', Components.LoginForm, { urlBack: app.getParams().urlback });
   },
 
@@ -104,7 +104,7 @@ var UserRouteObject = FauxtonAPI.RouteObject.extend({
     this.setComponent('#dashboard-content', Components.CreateAdminForm, { loginAfter: false });
   },
 
-  crumbs: [{name: 'User Management', link: '#'}]
+  crumbs: [{name: 'User Management'}]
 });
 
 Auth.RouteObjects = [AuthRouteObject, UserRouteObject];

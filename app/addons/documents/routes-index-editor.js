@@ -62,6 +62,15 @@ var IndexEditorAndResults = BaseRoute.extend({
     this.setComponent("#right-header", RightAllDocsHeader, {
       database: this.database
     });
+
+    this.crumbs = function () {
+      const backLink = FauxtonAPI.urls('allDBs', 'app');
+
+      return [
+        { type: 'back', link: backLink },
+        { name: this.database.safeID() }
+      ];
+    };
   },
 
   establish: function () {

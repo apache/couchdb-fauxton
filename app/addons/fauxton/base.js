@@ -19,6 +19,10 @@ import NavbarReactComponents from "./navigation/components.react";
 import NavigationActions from "./navigation/actions";
 import ReactComponents from "../components/react-components.react";
 import ComponentActions from "../components/actions";
+import Breadcrumbs from "../components/breadcrumbs";
+
+const {BreadcrumbsController} = Breadcrumbs;
+
 import "./assets/less/fauxton.less";
 
 var Fauxton = FauxtonAPI.addon();
@@ -78,16 +82,10 @@ Fauxton.initialize = function () {
       routeObject.setComponent('#notification-center-btn', NotificationComponents.NotificationCenterButton);
     }
 
-    if (routeObject.overrideBreadcrumbs) { return; }
+    ComponentActions.setBreadCrumbs(routeObject.get('crumbs'));
 
     FauxtonAPI.masterLayout.removeView('#breadcrumbs');
-    var crumbs = routeObject.get('crumbs');
-
-    if (crumbs.length) {
-      FauxtonAPI.masterLayout.setView('#breadcrumbs', new Components.Breadcrumbs({
-        crumbs: crumbs
-      }), true).render();
-    }
+    routeObject.setComponent('#breadcrumbs', BreadcrumbsController);
   });
 
   var primaryNavBarEl = $('#primary-navbar')[0];

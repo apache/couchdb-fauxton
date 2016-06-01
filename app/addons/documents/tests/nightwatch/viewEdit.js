@@ -10,8 +10,6 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-
-
 module.exports = {
 
   'Edits a design doc - renames index': function (client) {

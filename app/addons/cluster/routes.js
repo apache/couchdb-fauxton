@@ -25,7 +25,7 @@ var ConfigDisabledRouteObject = FauxtonAPI.RouteObject.extend({
   },
 
   crumbs: [
-    { name: 'Config disabled', link: '_config' }
+    { name: 'Config disabled' }
   ],
 
   apiUrl: function () {

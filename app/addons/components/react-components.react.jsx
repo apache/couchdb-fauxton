@@ -1216,7 +1216,7 @@ var MenuDropDown = React.createClass({
 
   render: function () {
     return (
-      <div className="dropdown">
+      <div className="component-dropdown dropdown">
         <a className={"dropdown-toggle icon " + this.props.icon}
           data-toggle="dropdown"
           href="#"

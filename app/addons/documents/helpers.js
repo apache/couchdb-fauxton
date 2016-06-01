@@ -14,11 +14,11 @@ import app from "../../app";
 import FauxtonAPI from "../../core/api";
 
 
-function getPreviousPageForDoc (database, wasCloned) {
+function getPreviousPageForDoc (database) {
   var previousPage = database.url('index'), // default to the current database's all_docs page
       lastPages = FauxtonAPI.router.lastPages;
 
-  if (!wasCloned && lastPages.length >= 2) {
+  if (lastPages.length >= 2) {
 
     // if we came from "/new", we don't want to link the user there
     if (/(new|new_view)$/.test(lastPages[1])) {

@@ -10,9 +10,20 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import "./assets/less/components.less";
+.component-breadcrumb {
+  .display-flex();
 
-const Components = {};
-Components.initialize = function () {};
+  .component-breadcrumb-element {
+    margin: 0 4px 0 4px;
+    color: #333;
+    padding: 18px 10px;
+    font-size: 24px;
+    text-shadow: none;
+  }
 
-export default Components;
+  .control-toggle-backlink {
+    border-right: 1px solid #ccc;
+    padding-left: 10px;
+    padding-right: 2px;
+  }
+}
