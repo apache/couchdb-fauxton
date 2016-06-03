@@ -10,21 +10,12 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-
-
-module.exports = {
-  'Highlight Sidebar' : function (client) {
-    var waitTime = client.globals.maxWaitTime,
-        baseUrl = client.globals.test_settings.launch_url;
-
-    client
-      .loginToGUI()
-      .url(baseUrl)
-      .waitForElementPresent('.add-new-database-btn', waitTime, false)
-      .click('a[href="#/replication"]')
-      .pause(1000)
-      .waitForElementVisible('#replicate', waitTime, false)
-      .assert.cssClassPresent('li[data-nav-name="Replication"]', 'active')
-    .end();
-  }
-};
+define([], function () {
+  return {
+    INIT_REPLICATION: 'INIT_REPLICATION',
+    CHANGE_REPLICATION_SOURCE: 'CHANGE_REPLICATION_SOURCE',
+    REPLICATION_DATABASES_LOADED: 'REPLICATION_DATABASES_LOADED',
+    REPLICATION_UPDATE_FORM_FIELD: 'REPLICATION_UPDATE_FORM_FIELD',
+    REPLICATION_CLEAR_FORM: 'REPLICATION_CLEAR_FORM'
+  };
+});
