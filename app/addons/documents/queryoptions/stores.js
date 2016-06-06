@@ -19,6 +19,7 @@ const Stores = {};
 Stores.QueryOptionsStore = FauxtonAPI.Store.extend({
 
   initialize () {
+    this._trayVisible = false;
     this.reset();
   },
 
@@ -29,11 +30,8 @@ Stores.QueryOptionsStore = FauxtonAPI.Store.extend({
     this._showBetweenKeys = false;
     this._includeDocs = false;
     this._betweenKeys = {
-      include: true,
+      include: true
     };
-
-    this._trayVisible = false;
-
     this._byKeys = '';
     this._descending = false;
     this._skip = '';
