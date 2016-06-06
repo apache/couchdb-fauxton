@@ -7,8 +7,6 @@ git:
 addons:
   firefox: "38.0.1"
 before_install:
-  - npm config set strict-ssl false
-
   - sudo apt-get update -qq
   - sudo apt-get install -qq flashplugin-installer
   - sudo apt-get -y install libicu-dev libmozjs-dev pkg-config help2man libcurl4-openssl-dev
