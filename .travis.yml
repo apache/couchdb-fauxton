@@ -7,14 +7,12 @@ git:
 addons:
   firefox: "38.0.1"
 before_install:
-  - npm config set strict-ssl false
-
   - sudo apt-get update -qq
   - sudo apt-get install -qq flashplugin-installer
   - sudo apt-get -y install libicu-dev libmozjs-dev pkg-config help2man libcurl4-openssl-dev
   - sudo apt-get -y install libtool automake autoconf autoconf-archive
   - sudo apt-get -y install haproxy
-  - nvm install 4 && nvm use 4
+  - nvm install 6 && nvm use 6
 
   - cd ..
   - git clone --depth=1 https://github.com/apache/couchdb
