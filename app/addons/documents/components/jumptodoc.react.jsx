@@ -10,27 +10,20 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import app from "../../app";
-import FauxtonAPI from "../../core/api";
+import app from "../../../app";
+import FauxtonAPI from "../../../core/api";
 import React from "react";
 import ReactDOM from "react-dom";
 import ReactSelect from "react-select";
 
-const JumpToDoc = ({database, allDocs}) => {
-  const options = allDocs.map(doc => {
-    return {
-      value: doc._id,
-      label: doc._id
-    };
-  });
-
+const JumpToDoc = ({database, loadOptions}) => {
   return (
     <div id="jump-to-doc" class="input-append">
-      <ReactSelect
+      <ReactSelect.Async
         name="jump-to-doc"
         placeholder="Document ID"
         className="jump-to-doc"
-        options={options}
+        loadOptions={loadOptions}
         clearable={false}
         onChange={({value: docId}) => {
           const url = FauxtonAPI.urls('document', 'app', app.utils.safeURLName(database.id), app.utils.safeURLName(docId) );
@@ -45,7 +38,6 @@ const JumpToDoc = ({database, allDocs}) => {
 
 JumpToDoc.propTypes = {
   database: React.PropTypes.object.isRequired,
-  allDocs: React.PropTypes.array.isRequired,
 };
 
 export default JumpToDoc;

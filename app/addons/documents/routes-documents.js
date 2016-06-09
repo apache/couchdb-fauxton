@@ -15,7 +15,7 @@ import app from '../../app';
 import FauxtonAPI from '../../core/api';
 import BaseRoute from './shared-routes';
 import Documents from './resources';
-import RightAllDocsHeader from './rightalldocsheader.react';
+import RightAllDocsHeader from './components/rightalldocsheader.react';
 import Changes from './changes/components.react';
 import ChangesActions from './changes/actions';
 import Databases from '../databases/base';

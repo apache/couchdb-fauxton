@@ -26,7 +26,7 @@ import ReactPagination from "./pagination/pagination.react";
 import ReactHeader from "./header/header.react";
 import ReactHeaderActions from "./header/header.actions";
 import SidebarActions from "./sidebar/actions";
-import RightAllDocsHeader from './rightalldocsheader.react';
+import RightAllDocsHeader from './components/rightalldocsheader.react';
 
 
 var IndexEditorAndResults = BaseRoute.extend({

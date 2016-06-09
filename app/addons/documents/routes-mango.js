@@ -27,7 +27,7 @@ import MangoActions from "./mango/mango.actions";
 import MangoStores from "./mango/mango.stores";
 import IndexResultsComponents from "./index-results/index-results.components.react";
 import SidebarActions from "./sidebar/actions";
-import RightAllDocsHeader from './rightalldocsheader.react';
+import RightAllDocsHeader from './components/rightalldocsheader.react';
 
 var MangoIndexEditorAndQueryEditor = BaseRoute.extend({
   layout: 'two_pane',
