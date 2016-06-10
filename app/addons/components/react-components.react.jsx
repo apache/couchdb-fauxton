@@ -1108,7 +1108,7 @@ var LoadLines = React.createClass({
   }
 });
 
-var ConfirmButton = React.createClass({
+const ConfirmButton = React.createClass({
   propTypes: {
     showIcon: React.PropTypes.bool,
     id: React.PropTypes.string,
@@ -1116,11 +1116,13 @@ var ConfirmButton = React.createClass({
     style: React.PropTypes.object,
     buttonType: React.PropTypes.string,
     'data-id': React.PropTypes.string,
-    onClick: React.PropTypes.func
+    onClick: React.PropTypes.func,
+    disabled: React.PropTypes.bool,
   },
 
   getDefaultProps: function () {
     return {
+      disabled: false,
       showIcon: true,
       customIcon: 'fonticon-ok-circled',
       buttonType: 'btn-success',
@@ -1140,11 +1142,12 @@ var ConfirmButton = React.createClass({
   },
 
   render: function () {
-    const { onClick, buttonType, id, style, text } = this.props;
+    const { onClick, buttonType, id, style, text, disabled } = this.props;
     return (
       <button
         onClick={onClick}
         type="submit"
+        disabled={disabled}
         data-id={this.props['data-id']}
         className={'btn save ' + buttonType}
         id={id}
