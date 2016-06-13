@@ -69,6 +69,10 @@ button:focus, a:focus {
   outline: 0;
 }
 
+.table input[type="checkbox"] {
+  margin: 0 0 0 8px;
+}
+
 a,
 a:visited,
 a:active {
@@ -752,4 +756,19 @@ body .control-toggle-include-docs span {
 
 .capitalize {
   text-transform: capitalize;
+}
+
+.fauxton-table-list {
+  a.db-actions,
+  a.db-actions:visited {
+    color: @linkColor;
+    border: 1px solid #e3e3e3;
+    padding: 5px 7px;
+    .border-radius(6px);
+    text-decoration: none;
+    font-size: 19px;
+  }
+  td {
+    vertical-align: middle;
+  }
 }

@@ -105,13 +105,13 @@ var DatabaseTable = React.createClass({
       );
     }
 
-    var rows = this.createRows();
+    const rows = this.createRows();
     return (
       <div className="view">
         <DeleteDatabaseModal
           showHide={this.showDeleteDatabaseModal}
           modalProps={this.props.showDeleteDatabaseModal} />
-        <table className="databases table table-striped">
+        <table className="table table-striped fauxton-table-list databases">
           <thead>
             <tr>
               <th>Name</th>
