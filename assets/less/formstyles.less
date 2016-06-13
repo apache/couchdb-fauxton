@@ -48,6 +48,10 @@ select {
   }
 }
 
+button:focus {
+  outline: 0 !important;
+}
+
 .btn {
   .box-shadow(none);
   .border-radius(@baseBorderRadius);
@@ -288,4 +292,34 @@ div.add-dropdown {
 input.errorHighlight {
   -webkit-animation: errorBlinkBG 1s;
   animation: errorBlinkBG 1s;
+}
+
+.two-sides-toggle-button {
+  font-size: 15px;
+  padding: 11px;
+
+  button.btn {
+    padding: 10px 15px;
+    background-color: #fff;
+    color: #888;
+    &.active:first-child {
+      border-right-radius: 10px;
+    }
+    &:hover {
+      background-color: #e73d34;
+      color: #fff;
+      .box-shadow(none);
+
+    }
+    &.active {
+      background-color: #f1f1f1;
+      color: #af2d24;
+      &:hover {
+        background-color: #f1f1f1;
+        color: #af2d24;
+      }
+      .box-shadow(none);
+    }
+  }
+
 }
