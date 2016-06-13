@@ -27,18 +27,23 @@ export default Backbone.Router.extend({
     delete beforeUnloads[name];
   },
 
-  navigate: function (fragment, trigger) {
-    var continueNav  = true,
-        msg = _.find(_.map(beforeUnloads, function (fn) { return fn(); }), function (beforeReturn) {
-          if (beforeReturn) { return true; }
-        });
+
+  navigate: function (fragment, options) {
+    let continueNav = true;
+    const msg = _.find(_.map(beforeUnloads, function (fn) { return fn(); }), function (beforeReturn) {
+      if (beforeReturn) { return true; }
+    });
 
     if (msg) {
       continueNav = window.confirm(msg);
     }
 
+    if (options && options.redirect) {
+      return window.location = fragment;
+    }
+
     if (continueNav) {
-      Backbone.Router.prototype.navigate(fragment, trigger);
+      Backbone.Router.prototype.navigate(fragment, options);
     }
   },
 
