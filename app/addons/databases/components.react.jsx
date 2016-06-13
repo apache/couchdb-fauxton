@@ -111,7 +111,7 @@ var DatabaseTable = React.createClass({
         <DeleteDatabaseModal
           showHide={this.showDeleteDatabaseModal}
           modalProps={this.props.showDeleteDatabaseModal} />
-        <table className="table table-striped fauxton-table-list">
+        <table className="table table-striped fauxton-table-list databases">
           <thead>
             <tr>
               <th>Name</th>
