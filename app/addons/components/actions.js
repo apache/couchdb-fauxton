@@ -10,7 +10,9 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+import app from "../../app";
 import FauxtonAPI from "../../core/api";
+
 import ActionTypes from "./actiontypes";
 
 function showAPIBarButton () {
@@ -43,6 +45,8 @@ function showDeleteDatabaseModal (options) {
 }
 
 function deleteDatabase (dbId) {
+  dbId = app.utils.safeURLName(dbId);
+
   const url = FauxtonAPI.urls('databaseBaseURL', 'server', dbId, '');
 
   $.ajax({

@@ -1484,13 +1484,10 @@ var DeleteDatabaseModal = React.createClass({
   },
 
   onInputChange: function (e) {
-    var val = encodeURIComponent(e.target.value.trim());
+    const val = e.target.value.trim();
 
     this.setState({
-      inputValue: val
-    });
-
-    this.setState({
+      inputValue: val,
       disableSubmit: val !== this.getDatabaseName()
     });
   },
