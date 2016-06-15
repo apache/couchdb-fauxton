@@ -22,14 +22,6 @@ body #notification-center .flex-layout {
   }
   /* end overrides */
 
-  /*
-  always default all child elements as flex items that neither shrink nor expand. Assumes all flex-layout containers
-  contain at least one .flex-body to indicate that's the one that expands
-  */
-  &>* {
-    .flex(0);
-  }
-
   /* notice we don't set heights. Flex will expand to fill the content but no more */
   #dashboard-upper-content {
     .flex(0 0 auto);
