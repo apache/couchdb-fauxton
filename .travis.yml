@@ -1,3 +1,5 @@
+sudo: required
+dist: trusty
 language: erlang
 otp_release:
    - 17.4
@@ -5,7 +7,11 @@ git:
   depth: 10
 
 addons:
-  firefox: "38.0.1"
+  apt:
+    sources:
+      - google-chrome
+    packages:
+      - google-chrome-stable
 before_install:
   - sudo apt-get update -qq
   - sudo apt-get install -qq flashplugin-installer
