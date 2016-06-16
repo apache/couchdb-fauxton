@@ -16,6 +16,7 @@
     ]
   },
   "devDependencies": {
+    "chromedriver": "^2.21.2",
     "es5-shim": "4.5.4",
     "mocha": "^2.4.5",
     "mocha-phantomjs": "git+https://github.com/garrensmith/mocha-phantomjs.git",
