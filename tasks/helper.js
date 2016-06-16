@@ -58,9 +58,9 @@ exports.init = function (grunt) {
     },
 
     check_selenium: {
-      command: 'test -s ./test/nightwatch_tests/selenium/selenium-server-standalone-2.45.0.jar || ' +
-        'curl -o ./test/nightwatch_tests/selenium/selenium-server-standalone-2.45.0.jar ' +
-        'http://selenium-release.storage.googleapis.com/2.45/selenium-server-standalone-2.45.0.jar'
+      command: 'test -s ./test/nightwatch_tests/selenium/selenium-server-standalone-2.53.0.jar || ' +
+        'curl -o ./test/nightwatch_tests/selenium/selenium-server-standalone-2.53.0.jar ' +
+        'http://selenium-release.storage.googleapis.com/2.53/selenium-server-standalone-2.53.0.jar'
     }
   };
 };
