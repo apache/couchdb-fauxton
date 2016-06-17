@@ -54,7 +54,7 @@ RouteObject.on = function (eventName, fn) {
  Current Events to subscribe to:
   * beforeFullRender -- before a full render is being done
   * beforeEstablish -- before the routeobject calls establish
-  * AfterEstablish -- after the routeobject has run establish
+  * afterEstablish -- after the routeobject has run establish
   * beforeRender -- before a view is rendered
   * afterRender -- a view is finished being rendered
   * renderComplete -- all rendering is complete
