@@ -102,17 +102,27 @@ _.extend(RouteObject.prototype, Backbone.Events, {
         establishError = _.bind(this.establishError, this),
         renderComplete = _.bind(this.renderComplete, this),
         callEstablish = _.bind(this.callEstablish, this),
-        renderReactComponents = _.bind(this.renderReactComponents, this),
-        promise = this.establish();
+        renderReactComponents = _.bind(this.renderReactComponents, this);
+
+    const promise = this.establish();
 
     // Only start the view rendering process once the template has been rendered
     // otherwise we get double renders
     promiseLayout.then(function () {
       renderReactComponents();
+
       callEstablish(promise)
         .then(renderAllViews, establishError)
-        .then(renderComplete);
-    });
+        .then(renderComplete, (err) => {
+          console.error('renderpipeline broke');
+          console.error('check your establish method');
+
+          console.log(this.establish.toString());
+          console.error(err);
+        });
+
+
+    }.bind(this));
   },
 
   setTemplateOnFullRender: function (masterLayout) {
