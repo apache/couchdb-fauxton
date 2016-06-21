@@ -29,7 +29,7 @@ var VerifyRouteObject = FauxtonAPI.RouteObject.extend({
     this.setComponent('#dashboard-content', Components.VerifyInstallController);
   },
 
-  crumbs: [{name: 'Verify CouchDB Installation', link: '#'}]
+  crumbs: [{name: 'Verify CouchDB Installation'}]
 });
 
 VerifyInstall.RouteObjects = [VerifyRouteObject];

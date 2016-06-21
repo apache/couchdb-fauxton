@@ -29,7 +29,7 @@ var RouteObject = FauxtonAPI.RouteObject.extend({
   },
 
   crumbs: [
-    {'name': 'Setup ' + app.i18n.en_US['couchdb-productname'], 'link': 'setup'}
+    { 'name': 'Setup ' + app.i18n.en_US['couchdb-productname'] }
   ],
 
   apiUrl: function () {
