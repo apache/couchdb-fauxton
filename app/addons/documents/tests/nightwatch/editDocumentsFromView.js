@@ -38,17 +38,18 @@ module.exports = {
       .clickWhenVisible('#nav-design-function-abcviews a')
       .clickWhenVisible('#abc_evens')
       .clickWhenVisible('a[href="#/database/fauxton-selenium-tests/document_10"]')
-
       //navigated to editor
       .waitForElementVisible('#editor-container', waitTime, false)
       .verify.urlContains('#/database/' + newDatabaseName + '/document_10');
   },
 
   'Edit is not allowed for Map Views where reduce is checked' : function (client) {
-    var waitTime = client.globals.maxWaitTime;
+    const waitTime = client.globals.maxWaitTime;
+    const baseUrl = client.globals.test_settings.launch_url;
+    const newDatabaseName = client.globals.testDatabaseName;
 
     client
-      .clickWhenVisible('#dashboard a[href="#database/fauxton-selenium-tests/_design/abc/_view/evens"]')
+      .url(baseUrl + '/#/database/' + newDatabaseName + '/_design/abc/_view/evens')
       .clickWhenVisible('.control-toggle-queryoptions')
       .clickWhenVisible('#query-options-tray label[for="qoReduce"]')
       .clickWhenVisible('#button-options button[type="submit"]')

@@ -220,7 +220,8 @@ module.exports = function (grunt) {
           src: initHelper.getFileList(['[Ss]pec.js'], [
             './app/core/**/*[Ss]pec.js',
             './app/addons/**/*[Ss]pec.js',
-            './app/addons/**/*[Ss]pec.react.jsx'
+            './app/addons/**/*[Ss]pec.react.jsx',
+            './app/addons/**/*[Ss]pec.jsx'
           ])
         },
         template: 'test/test.config.underscore'

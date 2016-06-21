@@ -31,7 +31,7 @@ module.exports = {
       .waitForElementPresent('.ace_gutter-active-line', waitTime, false)
 
       // confirm the header elements are showing up
-      .waitForElementVisible('.js-lastelement', waitTime, true)
+      .waitForElementVisible('.faux-header__breadcrumbs', waitTime, true)
       .waitForElementVisible('#api-navbar', waitTime, true)
 
       .execute('\

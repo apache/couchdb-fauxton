@@ -30,7 +30,7 @@ module.exports = {
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
 
       .clickWhenVisible('.fonticon-pencil', client.globals.maxWaitTime, false)
-      .clickWhenVisible('.fonticon-left-open', client.globals.maxWaitTime, false)
+      .clickWhenVisible('.faux-header__breadcrumbs-link')
       .clickWhenVisible('.fonticon-table', client.globals.maxWaitTime, false)
       .waitForElementVisible('.tableview-checkbox-cell', client.globals.maxWaitTime, false)
       .waitForElementVisible('.tableview-data-cell-id', client.globals.maxWaitTime, false)

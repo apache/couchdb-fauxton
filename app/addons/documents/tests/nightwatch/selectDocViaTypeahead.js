@@ -27,7 +27,6 @@ module.exports = {
       .keys(['\uE00C'])
       .waitForElementPresent('.prettyprint', waitTime, false)
       .waitForElementPresent('.documents-pagination', waitTime, false)
-      .waitForElementPresent('.breadcrumb .js-lastelement', waitTime, false)
       .click('.burger')
 
       // we need to explicitly show the doc field because it's hidden on Travis due to screen width
