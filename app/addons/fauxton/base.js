@@ -12,6 +12,8 @@
 
 import app from "../../app";
 import FauxtonAPI from "../../core/api";
+import React from "react";
+
 import Components from "./components";
 import NotificationComponents from "./notifications/notifications.react";
 import Actions from "./notifications/actions";
@@ -19,6 +21,8 @@ import NavbarReactComponents from "./navigation/components.react";
 import NavigationActions from "./navigation/actions";
 import ReactComponents from "../components/react-components.react";
 import ComponentActions from "../components/actions";
+import {Breadcrumbs} from '../components/header-breadcrumbs';
+
 import "./assets/less/fauxton.less";
 
 var Fauxton = FauxtonAPI.addon();
@@ -61,9 +65,8 @@ Fauxton.initialize = function () {
       contentVisible: false
     });
 
-    if (routeObject.get('apiUrl')) {
-      var apiAndDocs = routeObject.get('apiUrl');
-
+    const apiAndDocs = routeObject.get('apiUrl');
+    if (apiAndDocs) {
       ComponentActions.updateAPIBar({
         buttonVisible: true,
         contentVisible: false,
@@ -78,16 +81,18 @@ Fauxton.initialize = function () {
       routeObject.setComponent('#notification-center-btn', NotificationComponents.NotificationCenterButton);
     }
 
+    // XXX React softmigration, remove after full breadcrumb rewrite
     if (routeObject.overrideBreadcrumbs) { return; }
 
     FauxtonAPI.masterLayout.removeView('#breadcrumbs');
-    var crumbs = routeObject.get('crumbs');
+    const crumbs = routeObject.get('crumbs');
 
-    if (crumbs.length) {
-      FauxtonAPI.masterLayout.setView('#breadcrumbs', new Components.Breadcrumbs({
-        crumbs: crumbs
-      }), true).render();
+    if (!crumbs.length) {
+      return;
     }
+
+    ComponentActions.setBreadCrumbs(crumbs);
+    routeObject.setComponent('#breadcrumbs', Breadcrumbs, {crumbs: crumbs});
   });
 
   var primaryNavBarEl = $('#primary-navbar')[0];

@@ -69,7 +69,17 @@ function deleteDatabase (dbId) {
   });
 }
 
+function setBreadCrumbs (crumbs) {
+  FauxtonAPI.dispatch({
+    type: ActionTypes.CMPNTS_BREADCRUMBS_SET_CRUMBS,
+    options: {
+      crumbs: crumbs
+    }
+  });
+}
+
 export default {
+  setBreadCrumbs: setBreadCrumbs,
   deleteDatabase: deleteDatabase,
   showDeleteDatabaseModal: showDeleteDatabaseModal,
   showAPIBarButton: showAPIBarButton,

@@ -32,7 +32,7 @@ module.exports = {
       .verify.urlEquals(baseUrl + '/' + newLink)
 
       // now redirect back to the all docs page and check it's loaded properly
-      .clickWhenVisible('.fonticon-left-open')
+      .clickWhenVisible('.faux-header__breadcrumbs-link')
       .verify.urlEquals(baseUrl + '/#database/' + newDatabaseName + '/_all_docs');
   }
 };
