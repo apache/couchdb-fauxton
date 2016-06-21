@@ -31,10 +31,6 @@ function getPreviousPageForDoc (database, wasCloned) {
   return previousPage;
 }
 
-function getPreviousPage (database) {
-  return database.url('index');
-}
-
 // sequence info is an array in couchdb2 with two indexes. On couch 1.x, it's just a string / number
 function getSeqNum (val) {
   return _.isArray(val) ? val[1] : val;
@@ -113,7 +109,6 @@ function truncateDoc (docString, maxRows) {
 
 export default {
   getPreviousPageForDoc: getPreviousPageForDoc,
-  getPreviousPage: getPreviousPage,
   getSeqNum: getSeqNum,
   getNewButtonLinks: getNewButtonLinks,
   getModifyDatabaseLinks: getModifyDatabaseLinks,
