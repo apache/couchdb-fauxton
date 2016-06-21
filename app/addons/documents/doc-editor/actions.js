@@ -112,13 +112,28 @@ function hideCloneDocModal () {
   FauxtonAPI.dispatch({ type: ActionTypes.HIDE_CLONE_DOC_MODAL });
 }
 
-function cloneDoc (newId) {
-  var isDDoc = newId.match(/^_design\//),
-    removeDDocID = newId.replace(/^_design\//, ''),
-    encodedID = isDDoc ? '_design/' + app.utils.safeURLName(removeDDocID) : app.utils.safeURLName(newId);
+function cloneDoc (database, doc, newId) {
+  const docId = app.utils.getSafeIdForDoc(newId);
 
-  this.hideCloneDocModal();
-  FauxtonAPI.triggerRouteEvent('duplicateDoc', encodedID);
+  hideCloneDocModal();
+
+  doc.copy(docId).then(() => {
+    doc.set({ _id: docId });
+
+    FauxtonAPI.navigate('/database/' + database.safeID() + '/' + docId, { trigger: true });
+
+    FauxtonAPI.addNotification({
+      msg: 'Document has been duplicated.'
+    });
+
+  }, (error) => {
+    const errorMsg = `Could not duplicate document, reason: ${error.responseText}.`;
+    FauxtonAPI.addNotification({
+      msg: errorMsg,
+      type: 'error'
+    });
+  });
+
 }
 
 function showUploadModal () {
