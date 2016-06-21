@@ -45,7 +45,7 @@ const RevBrowserRouteObject = FauxtonAPI.RouteObject.extend({
 
     return [
       { type: 'back', link: previousPage },
-      { name: this.docId + ' > Conflicts', link: '#' }
+      { name: this.docId + ' > Conflicts' }
     ];
   },
 
@@ -94,14 +94,14 @@ const DocEditorRouteObject = FauxtonAPI.RouteObject.extend({
 
       return [
         { type: 'back', link: previousPage },
-        { name: this.docId, link: '#' }
+        { name: this.docId }
       ];
     }
 
     let previousPage = Helpers.getPreviousPageForDoc(this.database);
     return [
       { type: 'back', link: previousPage },
-      { name: 'New Document', link: '#' }
+      { name: 'New Document' }
     ];
   },
 

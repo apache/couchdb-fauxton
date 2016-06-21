@@ -11,7 +11,8 @@
 // the License.
 
 import "./assets/less/components.less";
-var Components = {};
+
+const Components = {};
 Components.initialize = function () {};
 
 export default Components;

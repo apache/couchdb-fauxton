@@ -25,7 +25,7 @@ var ActiveTasksRouteObject = FauxtonAPI.RouteObject.extend({
     'activetasks': 'showActiveTasks'
   },
   crumbs: [
-    {'name': 'Active Tasks', 'link': 'activetasks'}
+    {'name': 'Active Tasks'}
   ],
   apiUrl: function () {
     var apiurl = window.location.origin + '/_active_tasks';
