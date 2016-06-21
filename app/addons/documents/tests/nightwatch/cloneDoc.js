@@ -38,7 +38,6 @@ module.exports = {
       .closeNotification()
 
       .waitForAttribute('.faux-header__breadcrumbs .faux-header__breadcrumbs-element:last-child', 'textContent', function (docContents) {
-        console.log(docContents);
         return 'ente' === docContents.trim();
       })
 
