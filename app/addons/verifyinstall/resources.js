@@ -137,7 +137,7 @@ Verifyinstall.testProcess = {
 
     promise.then(function () {
       var docCount = dbReplicate.get('doc_count');
-      if ( docCount === 4) {
+      if (docCount === 4) {
         deferred.resolve();
         return;
       }

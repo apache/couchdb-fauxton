@@ -22,7 +22,7 @@ function getQueryParam (query) {
   return query;
 }
 
-FauxtonAPI.registerUrls( 'allDocs', {
+FauxtonAPI.registerUrls('allDocs', {
   server: function (id, query) {
     return app.host + '/' + id + '/_all_docs' + getQueryParam(query);
   },
@@ -52,7 +52,7 @@ FauxtonAPI.registerUrls('revision-browser', {
   }
 });
 
-FauxtonAPI.registerUrls( 'designDocs', {
+FauxtonAPI.registerUrls('designDocs', {
   server: function (id, designDoc) {
     return app.host + '/' + id + '/' + designDoc + '/_info';
   },
@@ -66,7 +66,7 @@ FauxtonAPI.registerUrls( 'designDocs', {
   }
 });
 
-FauxtonAPI.registerUrls( 'view', {
+FauxtonAPI.registerUrls('view', {
   server: function (database, designDoc, viewName) {
     return app.host + '/' + database + '/_design/' + designDoc + '/_view/' + viewName;
   },
@@ -125,7 +125,7 @@ FauxtonAPI.registerUrls('document', {
   }
 });
 
-FauxtonAPI.registerUrls( 'new', {
+FauxtonAPI.registerUrls('new', {
   newDocument: function (database) {
     return '/database/' + database + '/new';
   },
@@ -139,7 +139,7 @@ FauxtonAPI.registerUrls( 'new', {
   }
 });
 
-FauxtonAPI.registerUrls( 'base', {
+FauxtonAPI.registerUrls('base', {
   server: function (database) {
     return app.host + '/' + database + '/';
   },

@@ -26,7 +26,7 @@ const JumpToDoc = ({database, loadOptions}) => {
         loadOptions={loadOptions}
         clearable={false}
         onChange={({value: docId}) => {
-          const url = FauxtonAPI.urls('document', 'app', app.utils.safeURLName(database.id), app.utils.safeURLName(docId) );
+          const url = FauxtonAPI.urls('document', 'app', app.utils.safeURLName(database.id), app.utils.safeURLName(docId));
           // We navigating away from the page. So we need to take that navigation out of the loop otherwise
           // it causes an issue where the react-select state is changed after its unmounted
           setTimeout(() => FauxtonAPI.navigate(url, {trigger: true}));

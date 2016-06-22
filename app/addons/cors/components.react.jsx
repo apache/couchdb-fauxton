@@ -265,7 +265,7 @@ var CORSController = React.createClass({
   },
 
   enableCorsChange: function () {
-    if (this.state.corsEnabled && !_.isEmpty(this.state.origins) ) {
+    if (this.state.corsEnabled && !_.isEmpty(this.state.origins)) {
       var result = window.confirm(app.i18n.en_US['cors-disable-cors-prompt']);
       if (!result) { return; }
     }

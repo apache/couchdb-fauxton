@@ -119,7 +119,7 @@ Stores.IndexResultsStore = FauxtonAPI.Store.extend({
   documentsLeftToFetch: function () {
     var documentsLeftToFetch = this._docLimit - this.totalDocsViewed();
 
-    if (documentsLeftToFetch < this.getPerPage() ) {
+    if (documentsLeftToFetch < this.getPerPage()) {
       return documentsLeftToFetch;
     }
 

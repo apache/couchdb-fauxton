@@ -59,7 +59,7 @@ Documents.Doc = FauxtonAPI.Model.extend({
   },
 
   validate: function (attrs, options) {
-    if (this.id && this.id !== attrs._id && this.get('_rev') ) {
+    if (this.id && this.id !== attrs._id && this.get('_rev')) {
       return "Cannot change a documents id.";
     }
   },

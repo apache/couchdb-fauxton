@@ -67,7 +67,7 @@ var caching = {
   fetchOnce: function (opt) {
     var options = _.extend({}, opt);
 
-    if (!this._deferred || this._deferred.state() === "rejected" || options.forceFetch ) {
+    if (!this._deferred || this._deferred.state() === "rejected" || options.forceFetch) {
       this._deferred = this.fetch();
     }
 
