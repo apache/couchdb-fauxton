@@ -726,7 +726,7 @@ describe('Index Pagination', function () {
       var testPerPage = 111;
       store.setPerPage(testPerPage);
       var perPage = window.localStorage.getItem('fauxton:perpage');
-      assert.equal(perPage, testPerPage );
+      assert.equal(perPage, testPerPage);
     });
 
     it('sets collections perPage', function () {
