@@ -22,6 +22,8 @@ import GeneralComponents from "../../components/react-components.react";
 import { Modal } from "react-bootstrap";
 import Helpers from "../../../helpers";
 
+import DocumentResources from '../resources';
+
 var store = Stores.docEditorStore;
 
 var DocEditorController = React.createClass({
@@ -394,8 +396,9 @@ const CloneDocModal = React.createClass({
   },
 
   componentDidUpdate: function () {
+    //XXX model-code in component
     if (this.state.uuid === null) {
-      var uuid = new FauxtonAPI.UUID();
+      var uuid = new DocumentResources.UUID();
       uuid.fetch().then(function () {
         this.setState({ uuid: uuid.next() });
       }.bind(this));

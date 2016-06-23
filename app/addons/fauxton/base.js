@@ -26,32 +26,6 @@ import {Breadcrumbs} from '../components/header-breadcrumbs';
 import "./assets/less/fauxton.less";
 
 var Fauxton = FauxtonAPI.addon();
-FauxtonAPI.addNotification = function (options) {
-  options = _.extend({
-    msg: 'Notification Event Triggered!',
-    type: 'info',
-    escape: true,
-    clear: false
-  }, options);
-
-  // log all notifications in a store
-  Actions.addNotification(options);
-};
-
-FauxtonAPI.UUID = FauxtonAPI.Model.extend({
-  initialize: function (options) {
-    options = _.extend({count: 1}, options);
-    this.count = options.count;
-  },
-
-  url: function () {
-    return app.host + "/_uuids?count=" + this.count;
-  },
-
-  next: function () {
-    return this.get("uuids").pop();
-  }
-});
 
 
 Fauxton.initialize = function () {

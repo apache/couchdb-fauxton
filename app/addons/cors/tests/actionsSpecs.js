@@ -14,14 +14,19 @@ import testUtils from "testUtils";
 import FauxtonAPI from "../../../core/api";
 import Actions from "../actions";
 import sinon from "sinon";
-var assert = testUtils.assert;
+
+const assert = testUtils.assert;
+const restore = testUtils.restore;
 
 describe('CORS actions', function () {
 
   describe('save', function () {
 
     afterEach(function () {
-      Actions.saveCorsOrigins.restore && Actions.saveCorsOrigins.restore();
+      restore(Actions.saveCorsOrigins);
+
+      restore(FauxtonAPI.when);
+      restore(FauxtonAPI.addNotification);
     });
 
     it('should save cors enabled to httpd', function () {
@@ -103,8 +108,6 @@ describe('CORS actions', function () {
       });
 
       assert.ok(spy.calledOnce);
-      FauxtonAPI.when.restore();
-      FauxtonAPI.addNotification.restore();
     });
 
   });
