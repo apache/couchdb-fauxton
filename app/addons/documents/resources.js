@@ -14,6 +14,24 @@ import app from "../../app";
 import FauxtonAPI from "../../core/api";
 import Documents from "./shared-resources";
 import PagingCollection from "../../../assets/js/plugins/cloudant.pagingcollection";
+
+
+Documents.UUID = FauxtonAPI.Model.extend({
+  initialize: function (options) {
+    options = _.extend({count: 1}, options);
+    this.count = options.count;
+  },
+
+  url: function () {
+    return app.host + "/_uuids?count=" + this.count;
+  },
+
+  next: function () {
+    return this.get("uuids").pop();
+  }
+});
+
+
 Documents.QueryParams = (function () {
   var _eachParams = function (params, action) {
     // clone to avoid in-place modification
@@ -304,7 +322,7 @@ Documents.MangoDocumentCollection = PagingCollection.extend({
 
 Documents.NewDoc = Documents.Doc.extend({
   fetch: function () {
-    var uuid = new FauxtonAPI.UUID();
+    var uuid = new Documents.UUID();
     var deferred = this.deferred = $.Deferred();
     var that = this;
 

@@ -20,7 +20,30 @@ var FauxtonAPI = {
 
   masterLayout: {},
 
-  addNotification: function () {},
+  // I haven't wrapped these dispatch methods in a action
+  // because I don't want to require fauxton/actions in this method.
+  addHeaderLink: function (link) {
+    FauxtonAPI.dispatch({
+      type: 'ADD_NAVBAR_LINK',
+      link: link
+    });
+  },
+  addNotification: function (options) {
+
+    options = _.extend({
+      msg: 'Notification Event Triggered!',
+      type: 'info',
+      escape: true,
+      clear: false
+    }, options);
+
+    FauxtonAPI.dispatch({
+      type: 'ADD_NOTIFICATION',
+      options: {
+        info: options
+      }
+    });
+  },
 
   config: function (options) {
     return _.extend(this, options);
