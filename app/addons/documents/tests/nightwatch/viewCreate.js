@@ -10,8 +10,6 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-
-
 module.exports = {
 
   'Creates a Design Doc using the dropdown at "all documents"': function (client) {

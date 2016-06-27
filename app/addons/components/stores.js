@@ -13,7 +13,8 @@
 import FauxtonAPI from "../../core/api";
 import app from "../../app";
 import ActionTypes from "./actiontypes";
-var Stores = {};
+
+const Stores = {};
 
 Stores.ComponentStore = FauxtonAPI.Store.extend({
   initialize: function () {
@@ -117,8 +118,35 @@ Stores.DeleteDbModalStore = FauxtonAPI.Store.extend({
   }
 });
 
+Stores.BreadCrumbStore = FauxtonAPI.Store.extend({
+  initialize: function () {
+    this.reset();
+  },
 
+  reset: function () {
+    this._crumbs = [];
+  },
 
+  getBreadCrumbs: function () {
+    return this._crumbs;
+  },
+
+  dispatch: function (action) {
+    switch (action.type) {
+      case ActionTypes.CMPNTS_BREADCRUMBS_SET_CRUMBS:
+        this._crumbs = action.options.crumbs;
+      break;
+
+      default:
+      return;
+    }
+
+    this.triggerChange();
+  }
+});
+
+Stores.breadCrumbStore = new Stores.BreadCrumbStore();
+Stores.breadCrumbStore.dispatchToken = FauxtonAPI.dispatcher.register(Stores.breadCrumbStore.dispatch);
 
 Stores.deleteDbModalStore = new Stores.DeleteDbModalStore();
 Stores.deleteDbModalStore.dispatchToken = FauxtonAPI.dispatcher.register(Stores.deleteDbModalStore.dispatch);

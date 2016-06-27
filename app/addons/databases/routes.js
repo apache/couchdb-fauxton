@@ -20,7 +20,7 @@ var AllDbsRouteObject = FauxtonAPI.RouteObject.extend({
   layout: 'one_pane',
 
   crumbs: [
-    {"name": "Databases", "link": "/_all_dbs"}
+    {"name": "Databases"}
   ],
 
   routes: {

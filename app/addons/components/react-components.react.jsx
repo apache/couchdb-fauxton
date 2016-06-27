@@ -1216,7 +1216,7 @@ var MenuDropDown = React.createClass({
 
   render: function () {
     return (
-      <div className="dropdown">
+      <div className="component-dropdown dropdown">
         <a className={"dropdown-toggle icon " + this.props.icon}
           data-toggle="dropdown"
           href="#"
@@ -1484,13 +1484,10 @@ var DeleteDatabaseModal = React.createClass({
   },
 
   onInputChange: function (e) {
-    var val = encodeURIComponent(e.target.value.trim());
+    const val = e.target.value.trim();
 
     this.setState({
-      inputValue: val
-    });
-
-    this.setState({
+      inputValue: val,
       disableSubmit: val !== this.getDatabaseName()
     });
   },

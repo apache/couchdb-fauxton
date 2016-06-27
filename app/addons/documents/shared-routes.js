@@ -21,13 +21,17 @@ import SidebarComponents from "./sidebar/sidebar.react";
 import SidebarActions from "./sidebar/actions";
 import QueryActions from './queryoptions/actions';
 
+import Helpers from "./helpers";
+
+
+import ReactComponents from '../components/react-components.react';
+import ComponentsActions from '../components/actions';
 
 // The Documents section is built up a lot of different route object which share code. This contains
 // base functionality that can be used across routes / addons
 var BaseRoute = FauxtonAPI.RouteObject.extend({
   layout: 'with_tabs_sidebar',
   selectedHeader: 'Databases',
-  overrideBreadcrumbs: true,
 
   createDesignDocsCollection: function () {
     this.designDocs = new Documents.AllDocs(null, {
@@ -42,24 +46,6 @@ var BaseRoute = FauxtonAPI.RouteObject.extend({
         limit: 500
       }
     });
-  },
-
-  onSelectDatabase: function (dbName) {
-    this.cleanup();
-    this.initViews(dbName);
-
-    var url = FauxtonAPI.urls('allDocs', 'app',  app.utils.safeURLName(dbName), '');
-    FauxtonAPI.navigate(url, {
-      trigger: true
-    });
-
-    // we need to start listening again because cleanup() removed the listener, but in this case
-    // initialize() doesn't fire to re-set up the listener
-    this.listenToLookaheadTray();
-  },
-
-  listenToLookaheadTray: function () {
-    this.listenTo(FauxtonAPI.Events, 'lookaheadTray:update', this.onSelectDatabase);
   },
 
   getAllDatabases: function () {
@@ -87,16 +73,15 @@ var BaseRoute = FauxtonAPI.RouteObject.extend({
   },
 
   addLeftHeader: function () {
-    this.leftheader = this.setView('#breadcrumbs', new Components.LeftHeader({
-      databaseName: this.database.safeID(),
-      crumbs: this.getCrumbs(this.database),
-      lookaheadTrayOptions: {
-        databaseCollection: this.allDatabases,
-        toggleEventName: 'lookaheadTray:toggle',
-        onUpdateEventName: 'lookaheadTray:update',
-        placeholder: 'Enter database name'
-      }
-    }));
+    const onClickDelete = ComponentsActions.showDeleteDatabaseModal;
+
+    let dropdownMenuLinks = Helpers.getNewButtonLinks(this.database.id);
+    dropdownMenuLinks = Helpers.getModifyDatabaseLinks(this.database.id, onClickDelete).concat(dropdownMenuLinks);
+
+    this.setComponent('#header-dropdown-menu', ReactComponents.MenuDropDown, {
+      icon: 'fonticon-vertical-ellipsis',
+      links: dropdownMenuLinks
+    });
   },
 
   addSidebar: function (selectedNavItem) {
@@ -110,16 +95,6 @@ var BaseRoute = FauxtonAPI.RouteObject.extend({
 
     SidebarActions.newOptions(options);
     this.setComponent("#sidebar-content", SidebarComponents.SidebarController);
-  },
-
-  getCrumbs: function (database) {
-    var name = _.isObject(database) ? database.id : database,
-      dbname = app.utils.safeURLName(name);
-
-    return [
-      { "type": "back", "link": FauxtonAPI.urls('allDBs', 'app')},
-      { "name": database.id, "link": FauxtonAPI.urls('allDocs', 'app', dbname, '?limit=' + Databases.DocLimit), className: "lookahead-tray-link" }
-    ];
   },
 
   ddocInfo: function (designDoc, designDocs, view) {

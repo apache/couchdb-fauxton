@@ -10,7 +10,9 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+import app from "../../app";
 import FauxtonAPI from "../../core/api";
+
 import ActionTypes from "./actiontypes";
 
 function showAPIBarButton () {
@@ -43,7 +45,9 @@ function showDeleteDatabaseModal (options) {
 }
 
 function deleteDatabase (dbId) {
-  var url = FauxtonAPI.urls('databaseBaseURL', 'server', dbId, '');
+  dbId = app.utils.safeURLName(dbId);
+
+  const url = FauxtonAPI.urls('databaseBaseURL', 'server', dbId, '');
 
   $.ajax({
     url: url,
@@ -69,7 +73,17 @@ function deleteDatabase (dbId) {
   });
 }
 
+function setBreadCrumbs (crumbs) {
+  FauxtonAPI.dispatch({
+    type: ActionTypes.CMPNTS_BREADCRUMBS_SET_CRUMBS,
+    options: {
+      crumbs: crumbs
+    }
+  });
+}
+
 export default {
+  setBreadCrumbs: setBreadCrumbs,
   deleteDatabase: deleteDatabase,
   showDeleteDatabaseModal: showDeleteDatabaseModal,
   showAPIBarButton: showAPIBarButton,

@@ -11,7 +11,6 @@
 // the License.
 
 
-
 module.exports = {
   'Edit view: Queryoptions work': function (client) {
     /*jshint multistr: true */

@@ -11,7 +11,6 @@
 // the License.
 
 
-
 module.exports = {
 
   'Displays an error if reduce is not possible': function (client) {

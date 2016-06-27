@@ -22,7 +22,7 @@ var DocumentationRouteObject = FauxtonAPI.RouteObject.extend({
     'documentation': 'documentation'
   },
   crumbs: [
-    {'name': 'Documentation', 'link': '/documentation'}
+    {'name': 'Documentation'}
   ],
   roles: ['fx_loggedIn'],
   documentation: function () {

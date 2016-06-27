@@ -190,6 +190,8 @@ var DocEditorController = React.createClass({
           visible={this.state.uploadModalVisible}
           doc={this.state.doc} />
         <CloneDocModal
+          database={this.props.database}
+          doc={this.state.doc}
           visible={this.state.cloneDocModalVisible}
           onSubmit={this.clearChanges} />
         <FauxtonComponents.ConfirmationModal
@@ -369,7 +371,7 @@ var UploadModal = React.createClass({
 });
 
 
-var CloneDocModal = React.createClass({
+const CloneDocModal = React.createClass({
   propTypes: {
     visible: React.PropTypes.bool.isRequired
   },
@@ -384,7 +386,7 @@ var CloneDocModal = React.createClass({
     if (this.props.onSubmit) {
       this.props.onSubmit();
     }
-    Actions.cloneDoc(this.state.uuid);
+    Actions.cloneDoc(this.props.doc, this.props.database, this.state.uuid);
   },
 
   componentDidUpdate: function () {

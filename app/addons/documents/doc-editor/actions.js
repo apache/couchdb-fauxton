@@ -15,6 +15,7 @@
 import app from "../../../app";
 import FauxtonAPI from "../../../core/api";
 import ActionTypes from "./actiontypes";
+import ComponentActions from '../../components/actions';
 
 var xhr;
 
@@ -112,13 +113,36 @@ function hideCloneDocModal () {
   FauxtonAPI.dispatch({ type: ActionTypes.HIDE_CLONE_DOC_MODAL });
 }
 
-function cloneDoc (newId) {
-  var isDDoc = newId.match(/^_design\//),
-    removeDDocID = newId.replace(/^_design\//, ''),
-    encodedID = isDDoc ? '_design/' + app.utils.safeURLName(removeDDocID) : app.utils.safeURLName(newId);
+function cloneDoc (doc, database, newId) {
+  const isDDoc = newId.match(/^_design\//);
+  const removeDDocID = newId.replace(/^_design\//, '');
+  const encodedID = isDDoc ? '_design/' + app.utils.safeURLName(removeDDocID) : app.utils.safeURLName(newId);
 
   this.hideCloneDocModal();
-  FauxtonAPI.triggerRouteEvent('duplicateDoc', encodedID);
+
+  doc.copy(newId).then(function () {
+    doc.set({ _id: newId });
+
+    const url = FauxtonAPI.urls('document', 'app', database.safeID(), app.utils.safeURLName(newId));
+    FauxtonAPI.navigate(url);
+
+    FauxtonAPI.addNotification({
+      msg: 'Document has been duplicated.'
+    });
+
+    const backLink = FauxtonAPI.urls('allDocs', 'app', database.safeID());
+    ComponentActions.setBreadCrumbs([
+      {type: 'back', link: backLink},
+      {name: newId}
+    ]);
+
+  }, (error) => {
+    const errorMsg = `Could not duplicate document, reason: ${error.responseText}.`;
+    FauxtonAPI.addNotification({
+      msg: errorMsg,
+      type: 'error'
+    });
+  });
 }
 
 function showUploadModal () {

@@ -53,7 +53,15 @@ var DocumentsRouteObject = BaseRoute.extend({
 
   initialize: function (route, masterLayout, options) {
     this.initViews(options[0]);
-    this.listenToLookaheadTray();
+
+    this.crumbs = function () {
+      const backLink = FauxtonAPI.urls('allDBs', 'app');
+
+      return [
+        { type: 'back', link: backLink },
+        { name: this.database.safeID() }
+      ];
+    };
   },
 
   establish: function () {
@@ -95,10 +103,10 @@ var DocumentsRouteObject = BaseRoute.extend({
       designDocSection: 'metadata'
     });
 
-    this.leftheader.updateCrumbs(this.getCrumbs(this.database));
     QueryOptionsActions.hideQueryOptions();
 
     this.apiUrl = [designDocInfo.url('apiurl'), designDocInfo.documentation()];
+
   },
 
   /*
@@ -114,8 +122,6 @@ var DocumentsRouteObject = BaseRoute.extend({
 
     this.setComponent('#react-headerbar', ReactHeader.BulkDocumentHeaderController, {showIncludeAllDocs: true});
     this.setComponent('#footer', ReactPagination.Footer);
-
-    this.leftheader.updateCrumbs(this.getCrumbs(this.database));
 
 
     // includes_docs = true if you are visiting the _replicator/_users databases
@@ -185,18 +191,12 @@ var DocumentsRouteObject = BaseRoute.extend({
     this.viewEditor && this.viewEditor.remove();
 
     SidebarActions.selectNavItem('changes');
-    this.leftheader.updateCrumbs(this.getCrumbs(this.database));
+
     QueryOptionsActions.hideQueryOptions();
 
     this.apiUrl = function () {
       return [FauxtonAPI.urls('changes', 'apiurl', this.database.id, ''), this.database.documentation()];
     };
-  },
-
-  cleanup: function () {
-    // we're no longer interested in listening to the lookahead tray event on this route object
-    this.stopListening(FauxtonAPI.Events, 'lookaheadTray:update', this.onSelectDatabase);
-    FauxtonAPI.RouteObject.prototype.cleanup.apply(this);
   }
 
 });

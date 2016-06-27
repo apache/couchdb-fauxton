@@ -15,8 +15,9 @@ import FauxtonAPI from "../../core/api";
 import VerifyInstall from "./resources";
 import Actions from "./actions";
 import Components from "./components.react";
+import ComponentActions from "../components/actions";
 
-var VerifyRouteObject = FauxtonAPI.RouteObject.extend({
+const VerifyRouteObject = FauxtonAPI.RouteObject.extend({
   layout: 'one_pane',
 
   routes: {
@@ -29,7 +30,7 @@ var VerifyRouteObject = FauxtonAPI.RouteObject.extend({
     this.setComponent('#dashboard-content', Components.VerifyInstallController);
   },
 
-  crumbs: [{name: 'Verify CouchDB Installation', link: '#'}]
+  crumbs: [{name: 'Verify CouchDB Installation'}]
 });
 
 VerifyInstall.RouteObjects = [VerifyRouteObject];

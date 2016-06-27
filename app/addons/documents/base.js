@@ -22,7 +22,7 @@ function getQueryParam (query) {
   return query;
 }
 
-FauxtonAPI.registerUrls( 'allDocs', {
+FauxtonAPI.registerUrls('allDocs', {
   server: function (id, query) {
     return app.host + '/' + id + '/_all_docs' + getQueryParam(query);
   },

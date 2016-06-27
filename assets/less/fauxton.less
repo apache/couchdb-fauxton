@@ -168,6 +168,12 @@ tbody {
   background-color: #F7F7F7;
 }
 
+div.add-dropdown {
+  position: absolute;
+  top: 2px;
+  right: 0px;
+}
+
 /**
  * Fauxton-specific Bootstrap additions
  **/
@@ -371,95 +377,23 @@ div.spinner {
 
 body #dashboard .two-panel-header {
   #breadcrumbs {
-    .flex(0 0 331px);
+    .flex(0 0 288px);
+  }
+  #header-dropdown-menu {
+    .flex(0 0 43px);
   }
 }
 
 .with-sidebar {
   #breadcrumbs {
-    border-right: 1px solid @grayLight;
     width: @sidebarWidth + 1px;
-    .active {
-      width: 244px;
-    }
+  }
+
+  #header-dropdown-menu {
+    border-right: 1px solid @grayLight;
   }
 }
 
-
-body #dashboard .flex-body#breadcrumbs {
-  overflow: hidden;
-}
-
-#breadcrumbs {
-  height: 64px;
-
-  /* these styles are for the new header*/
-  .header-left{
-    > div{
-      display:inline-block;
-    }
-  }
-
-  .breadcrumb-back-link {
-    border-right: 1px solid #ccc;
-    a {
-      font-size: 20px;
-      margin-top: 1px;
-    }
-  }
-
-  .breadcrumb {
-    margin-bottom: 0;
-    background-color: transparent;
-    padding: 0;
-
-    li {
-      padding: 22px 10px;
-      &:first-child {
-        font-size: 24px;
-        .with-sidebar &,
-        .two-pane & {
-          float: left;
-        }
-        a {
-          float: left;
-        }
-      }
-      color: @breadcrumbText;
-      font-size: 24px;
-      text-shadow: none;
-      &.active{
-        color: #333;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
-      &.divider {
-        font-size: 14px;
-        color: #ccc;
-        padding: 20px 0px;
-        width: 10px;
-      }
-      a{
-        text-decoration: none;
-        color: @breadcrumbText;
-      }
-    }
-    .fonticon-right-open {
-      position: absolute;
-
-      &.divider {
-        padding: 23px 0;
-      }
-      +li {
-        text-overflow: inherit;
-        overflow: auto;
-        width: auto;
-        margin-left: 14px;
-      }
-    }
-  }
-}
 
 .header-left{
   position: relative;
