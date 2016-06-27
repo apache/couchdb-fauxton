@@ -15,11 +15,9 @@ import ReactDOM from 'react-dom';
 
 export const Breadcrumbs = ({crumbs}) => {
 
-  const childs = getChildren(crumbs);
-
   return (
     <div className="faux-header__breadcrumbs">
-      {childs}
+      {getChildren(crumbs)}
     </div>
   );
 
@@ -35,11 +33,8 @@ const CrumbElement = ({children}) => {
 };
 
 const Divider = () => {
-  const style = {width: '13px', paddingTop: '22px', fontSize: '20px'};
   return (
-    <div
-      className="fonticon-right-open faux-header__breadcrumbs-divider"
-      style={style}></div>
+    <div className="fonticon-right-open faux-header__breadcrumbs-divider"></div>
   );
 };
 

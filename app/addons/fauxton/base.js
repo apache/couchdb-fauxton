@@ -59,13 +59,13 @@ Fauxton.initialize = function () {
     if (routeObject.overrideBreadcrumbs) { return; }
 
     FauxtonAPI.masterLayout.removeView('#breadcrumbs');
+
     const crumbs = routeObject.get('crumbs');
 
     if (!crumbs.length) {
       return;
     }
 
-    ComponentActions.setBreadCrumbs(crumbs);
     routeObject.setComponent('#breadcrumbs', Breadcrumbs, {crumbs: crumbs});
   });
 
