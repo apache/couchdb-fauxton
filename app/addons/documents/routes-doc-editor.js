@@ -40,11 +40,11 @@ const RevBrowserRouteObject = FauxtonAPI.RouteObject.extend({
   },
 
   crumbs: function () {
-    const previousPage = Helpers.getPreviousPageForDoc(this.database);
+    const backLink = FauxtonAPI.urls('allDocs', 'app', this.database.safeID());
     const docUrl = FauxtonAPI.urls('document', 'app', this.database.safeID(), this.docId);
 
     return [
-      { type: 'back', link: previousPage },
+      { name: this.database.safeID(), link: backLink },
       { name: this.docId + ' > Conflicts' }
     ];
   },
@@ -73,7 +73,6 @@ const DocEditorRouteObject = FauxtonAPI.RouteObject.extend({
     this.docId = options[1];
     this.database = this.database || new Databases.Model({ id: this.databaseName });
     this.doc = new Documents.NewDoc(null, { database: this.database });
-    this.wasCloned = false;
   },
 
   routes: {
@@ -83,25 +82,16 @@ const DocEditorRouteObject = FauxtonAPI.RouteObject.extend({
     'database/:database/new': 'codeEditor'
   },
 
-  crumbs: function () {
-
-    if (this.docId) {
-      let previousPage = Helpers.getPreviousPageForDoc(this.database, this.wasCloned);
-
-      return [
-        { type: 'back', link: previousPage },
-        { name: this.docId }
-      ];
-    }
-
-    let previousPage = Helpers.getPreviousPageForDoc(this.database);
-    return [
-      { type: 'back', link: previousPage },
-      { name: 'New Document' }
-    ];
-  },
+  crumbs: function () {},
 
   codeEditor: function (databaseName, docId) {
+    const backLink = FauxtonAPI.urls('allDocs', 'app', databaseName);
+
+    this.crumbs =  [
+      { name: databaseName, link: backLink },
+      { name: docId ? docId : 'New Document' }
+    ];
+
     this.database = new Databases.Model({ id: databaseName });
 
     if (docId) {
@@ -111,8 +101,7 @@ const DocEditorRouteObject = FauxtonAPI.RouteObject.extend({
     Actions.initDocEditor({ doc: this.doc, database: this.database });
     this.setComponent('#dashboard-content', ReactComponents.DocEditorController, {
       database: this.database,
-      isNewDoc: docId ? false : true,
-      previousPage: '#/' + Helpers.getPreviousPageForDoc(this.database)
+      isNewDoc: docId ? false : true
     });
   },
 

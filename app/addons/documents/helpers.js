@@ -14,23 +14,6 @@ import app from "../../app";
 import FauxtonAPI from "../../core/api";
 
 
-function getPreviousPageForDoc (database, wasCloned) {
-  var previousPage = database.url('index'), // default to the current database's all_docs page
-      lastPages = FauxtonAPI.router.lastPages;
-
-  if (!wasCloned && lastPages.length >= 2) {
-
-    // if we came from "/new", we don't want to link the user there
-    if (/(new|new_view)$/.test(lastPages[1])) {
-      previousPage = lastPages[0];
-    } else {
-      previousPage = lastPages[1];
-    }
-  }
-
-  return previousPage;
-}
-
 // sequence info is an array in couchdb2 with two indexes. On couch 1.x, it's just a string / number
 function getSeqNum (val) {
   return _.isArray(val) ? val[1] : val;
@@ -108,7 +91,6 @@ function truncateDoc (docString, maxRows) {
 
 
 export default {
-  getPreviousPageForDoc: getPreviousPageForDoc,
   getSeqNum: getSeqNum,
   getNewButtonLinks: getNewButtonLinks,
   getModifyDatabaseLinks: getModifyDatabaseLinks,

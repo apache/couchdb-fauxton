@@ -47,7 +47,6 @@ var DocEditorController = React.createClass({
   getDefaultProps: function () {
     return {
       database: {},
-      previousPage: '',
       isNewDoc: false
     };
   },
@@ -173,7 +172,7 @@ var DocEditorController = React.createClass({
               <i className="icon fonticon-ok-circled"></i> {saveButtonLabel}
             </button>
             <div>
-              <a href={this.props.previousPage} className="js-back cancel-button">Cancel</a>
+              <a href={FauxtonAPI.urls('allDocs', 'app', this.props.database.id)} className="js-back cancel-button">Cancel</a>
             </div>
           </div>
           <div className="alignRight">
@@ -347,7 +346,7 @@ var UploadModal = React.createClass({
         <Modal.Body>
           <div className={errorClasses}>{this.state.errorMessage}</div>
           <div>
-            <form ref="uploadForm" className="form" method="post">
+            <form ref="uploadForm" className="form">
               <p>
                 Please select the file you want to upload as an attachment to this document. This creates a new
                 revision of the document, so it's not necessary to save after uploading.
@@ -427,7 +426,7 @@ const CloneDocModal = React.createClass({
           <Modal.Title>Clone Document</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <form className="form" method="post">
+          <form className="form" onSubmit={(e) => { e.preventDefault(); this.cloneDoc(); }}>
             <p>
               Set new document's ID:
             </p>

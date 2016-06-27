@@ -44,7 +44,6 @@ describe('RouteObjects', function () {
         setView: sinon.spy(),
         renderView: sinon.spy(),
         hooks: [],
-        setBreadcrumbs: sinon.spy(),
         apiBar: apiBar
       };
 
@@ -141,7 +140,6 @@ describe('RouteObjects', function () {
         setView: sinon.spy(),
         renderView: sinon.spy(),
         hooks: [],
-        setBreadcrumbs: sinon.spy(),
         apiBar: apiBar
       };
 
