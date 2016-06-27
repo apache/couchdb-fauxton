@@ -64,7 +64,7 @@ var Clipboard = React.createClass({
       }.bind(this));
 
       this.clipboard.on('error', function (event) {
-        console.log( 'ZeroClipboard error of type "' + event.name + '": ' + event.message );
+        console.log('ZeroClipboard error of type "' + event.name + '": ' + event.message);
       });
   },
 
