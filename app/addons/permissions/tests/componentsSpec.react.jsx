@@ -24,7 +24,7 @@ var restore = utils.restore;
 
 describe('Permissions Components', function () {
 
-  beforeEach(function () {
+  beforeEach((done) => {
     var databaseName = 'permissions-test';
     var database = new Databases.Model({ id: databaseName });
     Actions.editPermissions(
@@ -35,6 +35,7 @@ describe('Permissions Components', function () {
     );
 
     var savePermissionsStub = sinon.stub(Actions, 'savePermissions');
+    done();
   });
 
   afterEach(function () {
