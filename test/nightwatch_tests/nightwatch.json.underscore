@@ -16,7 +16,8 @@
     "cli_args" : {
       "webdriver.chrome.driver" : "test/nightwatch_tests/selenium/chromedriver",
       "webdriver.ie.driver" : "",
-      "webdriver.firefox.profile" : ""
+      "webdriver.firefox.profile" : "",
+      "webdriver.firefox.bin": "/Users/garren/Desktop/Firefox.app/Contents/MacOS/firefox-bin"
     }
   },
 
