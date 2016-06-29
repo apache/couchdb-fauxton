@@ -29,7 +29,6 @@ var PermissionsRouteObject = BaseRoute.extend({
     docOptions.include_docs = true;
 
     this.initViews(options[0]);
-    this.listenToLookaheadTray();
   },
 
   initViews: function (databaseName) {
@@ -55,20 +54,6 @@ var PermissionsRouteObject = BaseRoute.extend({
     ];
   },
 
-  listenToLookaheadTray: function () {
-    this.listenTo(FauxtonAPI.Events, 'lookaheadTray:update', this.onSelectDatabase);
-  },
-
-  onSelectDatabase: function (dbName) {
-    this.cleanup();
-    this.initViews(dbName);
-
-    FauxtonAPI.navigate('/database/' + app.utils.safeURLName(dbName) + '/permissions', {
-      trigger: true
-    });
-    this.listenToLookaheadTray();
-  },
-
   permissions: function () {
     Actions.fetchPermissions(this.database, this.security);
     this.setComponent('#dashboard-content', Permissions.PermissionsController);
@@ -86,7 +71,6 @@ var PermissionsRouteObject = BaseRoute.extend({
       this.removeView('#breadcrumbs');
     }
     this.removeComponent('#sidebar-content');
-    this.stopListening(FauxtonAPI.Events, 'lookaheadTray:update', this.onSelectDatabase);
   }
 });
 

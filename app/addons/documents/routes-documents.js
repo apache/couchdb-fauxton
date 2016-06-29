@@ -53,7 +53,6 @@ var DocumentsRouteObject = BaseRoute.extend({
 
   initialize: function (route, masterLayout, options) {
     this.initViews(options[0]);
-    this.listenToLookaheadTray();
   },
 
   establish: function () {
@@ -191,12 +190,6 @@ var DocumentsRouteObject = BaseRoute.extend({
     this.apiUrl = function () {
       return [FauxtonAPI.urls('changes', 'apiurl', this.database.id, ''), this.database.documentation()];
     };
-  },
-
-  cleanup: function () {
-    // we're no longer interested in listening to the lookahead tray event on this route object
-    this.stopListening(FauxtonAPI.Events, 'lookaheadTray:update', this.onSelectDatabase);
-    FauxtonAPI.RouteObject.prototype.cleanup.apply(this);
   }
 
 });
