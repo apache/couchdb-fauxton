@@ -108,7 +108,7 @@ var runWebpackServer = function () {
     proxy.web(req, res);
   });
 
-  server.listen(options.port, options.host, function (err) {
+  server.listen(options.port, '0.0.0.0', function (err) {
     if (err) {
       console.log(err);
       return;
