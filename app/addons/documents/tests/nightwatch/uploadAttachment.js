@@ -10,8 +10,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-
-
+// add to ignore list for now since selenium is running in its own container
+// we cannot link to the file
 module.exports = {
   'Uploading an attachment works': function (client) {
     /*jshint multistr: true */

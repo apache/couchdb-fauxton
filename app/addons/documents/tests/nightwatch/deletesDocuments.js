@@ -90,11 +90,11 @@ module.exports = {
       // confirm the design doc appears in the sidebar
       .waitForElementPresent('#sidebar-content span[title="_design/sidebar-update"]', waitTime, false)
       .waitForElementPresent('label[for="checkbox-_design/sidebar-update"]', waitTime, false)
-      .execute('$("label[for=\'checkbox-_design/sidebar-update\']")[0].scrollIntoView();')
+      .execute('$("label[for=\'checkbox-_design/sidebar-update\']")[0].scrollIntoView(false);')
       .clickWhenVisible('label[for="checkbox-_design/sidebar-update"]', waitTime, false)
 
       .waitForElementPresent('.bulk-action-component-selector-group .fonticon-trash', waitTime, false)
-      .execute('$(".bulk-action-component-selector-group .fonticon-trash")[0].scrollIntoView();')
+      .execute('$(".bulk-action-component-selector-group .fonticon-trash")[0].scrollIntoView(false);')
       .clickWhenVisible('.bulk-action-component-selector-group .fonticon-trash')
       .acceptAlert()
 

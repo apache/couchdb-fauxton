@@ -1,0 +1,13 @@
+version: '2'
+services:
+  selenium:
+    container_name: selenium
+    image: selenium/standalone-firefox:2.48.2
+    ports:
+      - "4444:4444"
+  couchdb:
+    container_name: couchdb
+    image: klaemo/couchdb:2.0-dev
+    command: '--with-haproxy -a tester:testerpass'
+    ports:
+      - "5984:5984"

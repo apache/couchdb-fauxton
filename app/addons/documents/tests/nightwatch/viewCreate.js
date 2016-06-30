@@ -71,16 +71,15 @@ module.exports = {
     /*jshint multistr: true */
     openDifferentDropdownsAndClick(client, '#header-dropdown-menu')
       .waitForElementPresent('#new-ddoc', waitTime, false)
-      .waitForElementVisible('#new-ddoc', waitTime, false)
       .setValue('#new-ddoc', 'test_design_doc-selenium-2')
       .clearValue('#index-name')
       .setValue('#index-name', 'gaenseindex')
-      .sendKeys("textarea.ace_text-input", client.Keys.Enter)
       .execute('\
         var editor = ace.edit("map-function");\
         editor.getSession().setValue("function (doc) { emit(\'gansgans\'); }");\
       ')
       .execute('$("#save-view")[0].scrollIntoView();')
+      .waitForElementPresent('#save-view', waitTime, false)
       .clickWhenVisible('#save-view')
       .checkForDocumentCreated('_design/test_design_doc-selenium-2')
       .waitForElementPresent('.prettyprint', waitTime, false)
@@ -104,7 +103,6 @@ module.exports = {
       .waitForElementVisible('#index-name', waitTime, false)
       .clearValue('#index-name')
       .setValue('#index-name', 'test-new-view')
-      .sendKeys("textarea.ace_text-input", client.Keys.Enter)
       .execute('\
         var editor = ace.edit("map-function");\
         editor.getSession().setValue("function (doc) { emit(\'enteente\', 1); }");\
