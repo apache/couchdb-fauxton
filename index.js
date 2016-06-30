@@ -67,7 +67,7 @@ module.exports = function (options) {
     req.headers.host = urlObj.host;
 
     proxy.web(req, res);
-  }).listen(port);
+  }).listen(port, '0.0.0.0');
 
   proxy.on('error', function (e) {
     // don't explode on cancelled requests

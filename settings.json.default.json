@@ -76,12 +76,21 @@
     "nightwatch": {
       "fauxton_username": "tester",
       "password": "testerpass",
-      "fauxton_host": "localhost",
+      "fauxton_host": "127.0.0.1",
       "fauxton_port": "8000",
       "db_host": "localhost",
       "db_port": "5984",
       "custom_commands_path": ["test/nightwatch_tests/custom-commands", "test/nightwatch_tests/custom-commands/auth"],
       "globals_path": "test/nightwatch_tests/helpers/helpers.js",
-      "selenium_port": "4444"
+      "selenium_port": "4444",
+      "testBlacklist": {
+        "databases": [
+          "zeroclipboard.js"
+        ],
+        "documents": [
+          "uploadAttachment.js",
+          "navigateToNewView.js"
+        ]
+      }
     }
 }

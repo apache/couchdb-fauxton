@@ -144,9 +144,13 @@ module.exports = {
 
       // create the second view
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
+      .waitForElementNotPresent('.global-notification .fonticon-cancel', waitTime, false)
       .waitForElementPresent(dropDownElement, waitTime, false)
+      .waitForElementPresent(dropDownElement + ' a', waitTime, false)
       .clickWhenVisible(dropDownElement + ' a')
+      .waitForElementPresent(dropDownElement + ' a[href*="new_view"]', waitTime, false)
       .clickWhenVisible(dropDownElement + ' a[href*="new_view"]')
+      .waitForElementPresent('.index-cancel-link', waitTime, false)
       .waitForElementVisible('#new-ddoc', waitTime, false)
       .waitForElementNotPresent('.spinner', waitTime, true)
       .waitForElementNotPresent('.loading-lines', waitTime, true)
