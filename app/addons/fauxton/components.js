@@ -25,14 +25,10 @@ Components.LeftHeader = FauxtonAPI.View.extend({
   template: "addons/fauxton/templates/header_left",
 
   initialize: function (options) {
-    this.lookaheadTrayOptions = options.lookaheadTrayOptions || null;
     this.crumbs = options.crumbs || [];
 
     this.dbName = options.databaseName;
 
-    // listen for breadcrumb clicks
-    this.listenTo(FauxtonAPI.Events, 'breadcrumb:click', this.toggleTray);
-    this.listenTo(FauxtonAPI.Events, 'lookaheadTray:close', this.unselectLastBreadcrumb);
   },
 
   updateCrumbs: function (crumbs) {
@@ -50,19 +46,9 @@ Components.LeftHeader = FauxtonAPI.View.extend({
     this.breadcrumbs.unselectLastBreadcrumb();
   },
 
-  toggleTray: function () {
-    if (this.lookaheadTray !== null) {
-      this.lookaheadTray.toggleTray();
-    }
-  },
-
   beforeRender: function () {
     this.setUpCrumbs();
     this.setUpDropDownMenu();
-
-    if (this.lookaheadTray !== null) {
-      this.setUpLookaheadTray();
-    }
   },
 
   setUpCrumbs: function () {
@@ -83,22 +69,6 @@ Components.LeftHeader = FauxtonAPI.View.extend({
 
     this.dropdown = this.insertView("#header-dropdown-menu", new Components.MenuDropDownReact({
       links: dropdownMenuLinks,
-    }));
-  },
-
-  setUpLookaheadTray: function () {
-    var options = this.lookaheadTrayOptions,
-        dbNames = options.databaseCollection.getDatabaseNames(),
-        currentDBName = this.crumbs[1].name;
-
-    // remove the current database name from the list
-    dbNames = _.without(dbNames, currentDBName);
-
-    this.lookaheadTray = this.insertView("#header-lookahead", new Components.LookaheadTray({
-      data: dbNames,
-      toggleEventName: options.toggleEventName,
-      onUpdateEventName: options.onUpdateEventName,
-      placeholder: options.placeholder
     }));
   }
 });
@@ -121,10 +91,6 @@ Components.Breadcrumbs = FauxtonAPI.View.extend({
   tagName: "ul",
   template: "addons/fauxton/templates/breadcrumbs",
 
-  events:  {
-    "click .js-lastelement": "toggleLastElement"
-  },
-
   serialize: function () {
     var crumbs = _.clone(this.crumbs);
 
@@ -139,14 +105,6 @@ Components.Breadcrumbs = FauxtonAPI.View.extend({
       crumbs: crumbs,
       nextCrumbHasLabel: nextCrumbHasLabel
     };
-  },
-
-  toggleLastElement: function (event) {
-    if (this.toggleDisabled) {
-      return;
-    }
-    this.$(event.currentTarget).toggleClass('js-enabled');
-    FauxtonAPI.Events.trigger('breadcrumb:click');
   },
 
   unselectLastBreadcrumb: function () {
@@ -410,90 +368,6 @@ Components.DocSearchTypeahead = Components.Typeahead.extend({
         process(ids);
       }
     });
-  }
-});
-
-Components.LookaheadTray = FauxtonAPI.View.extend({
-  className: "lookahead-tray tray",
-  template: "addons/fauxton/templates/lookahead_tray",
-  placeholder: "Enter to search",
-
-  events: {
-    'click #js-close-tray': 'closeTray',
-    'keyup': 'onKeyup'
-  },
-
-  serialize: function () {
-    return {
-      placeholder: this.placeholder
-    };
-  },
-
-  initialize: function (opts) {
-    this.data = opts.data;
-    this.toggleEventName = opts.toggleEventName;
-    this.onUpdateEventName = opts.onUpdateEventName;
-
-    var trayIsVisible = _.bind(this.trayIsVisible, this);
-    var closeTray = _.bind(this.closeTray, this);
-    $("body").on("click.lookaheadTray", function (e) {
-      if (!trayIsVisible()) { return; }
-      if ($(e.target).closest(".lookahead-tray").length === 0 &&
-          $(e.target).closest('.lookahead-tray-link').length === 0) {
-        closeTray();
-      }
-    });
-  },
-
-  afterRender: function () {
-    var that = this;
-    this.dbSearchTypeahead = new Components.Typeahead({
-      el: 'input.search-autocomplete',
-      source: that.data,
-      onUpdateEventName: that.onUpdateEventName
-    });
-    this.dbSearchTypeahead.render();
-  },
-
-  clearValue: function () {
-    this.$('.search-autocomplete').val('');
-  },
-
-  cleanup: function () {
-    $("body").off("click.lookaheadTray");
-  },
-
-  trayIsVisible: function () {
-    return this.$el.is(":visible");
-  },
-
-  toggleTray: function () {
-    if (this.trayIsVisible()) {
-      this.closeTray();
-    } else {
-      this.openTray();
-    }
-  },
-
-  openTray: function () {
-    var speed = FauxtonAPI.constants.MISC.TRAY_TOGGLE_SPEED;
-    this.$el.velocity('transition.slideDownIn', speed, function () {
-      this.$el.find('input').focus();
-    }.bind(this));
-  },
-
-  closeTray: function () {
-    var $tray = this.$el;
-    $tray.velocity("reverse", FauxtonAPI.constants.MISC.TRAY_TOGGLE_SPEED, function () {
-      $tray.hide();
-    });
-    FauxtonAPI.Events.trigger('lookaheadTray:close');
-  },
-
-  onKeyup: function (e) {
-    if (e.which === 27) {
-      this.closeTray();
-    }
   }
 });
 
