@@ -36,7 +36,7 @@ describe('Breadcrumbs', () => {
     const crumbs = [{name: 'pineapple'}];
 
     let el = TestUtils.renderIntoDocument(
-      <Breadcrumbs crumbs={crumbs} />,
+      <div><Breadcrumbs crumbs={crumbs} /></div>,
       container
     );
 
@@ -54,7 +54,7 @@ describe('Breadcrumbs', () => {
     ];
 
     let el = TestUtils.renderIntoDocument(
-      <Breadcrumbs crumbs={crumbs} />,
+      <div><Breadcrumbs crumbs={crumbs} /></div>,
       container
     );
 
@@ -72,7 +72,7 @@ describe('Breadcrumbs', () => {
     ];
 
     let el = TestUtils.renderIntoDocument(
-      <Breadcrumbs crumbs={crumbs} />,
+      <div><Breadcrumbs crumbs={crumbs} /></div>,
       container
     );
 
@@ -90,12 +90,12 @@ describe('Breadcrumbs', () => {
     ];
 
     let el = TestUtils.renderIntoDocument(
-      <Breadcrumbs crumbs={crumbs} />,
+      <div><Breadcrumbs crumbs={crumbs} /></div>,
       container
     );
 
     const $node = $(ReactDOM.findDOMNode(el));
 
-    assert.equal($node.find('.faux-header__breadcrumbs-link').length, 3);
+    assert.equal($node.find('.faux-header__breadcrumbs-link').length, 0);
   });
 });
