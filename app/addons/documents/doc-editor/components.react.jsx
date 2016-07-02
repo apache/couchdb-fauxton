@@ -218,6 +218,27 @@ var AttachmentsPanelButton = React.createClass({
     };
   },
 
+  componentDidMount: function () {
+    window.addEventListener("resize", this.updateMaxHeight);
+    this.updateMaxHeight();
+  },
+
+  componentWillMount: function () {
+    this.updateMaxHeight();
+  },
+
+  getMaxHeight: function () {
+    if (!this._dropdown) {
+      return "none";
+    } else {
+      return $(document).height() - $(this._dropdown).offset().top;
+    }
+  },
+
+  updateMaxHeight: function () {
+    this.setState({maxHeight: this.getMaxHeight()});
+  },
+
   getAttachmentList: function () {
     var db = this.props.doc.database.get('id');
     var doc = this.props.doc.get('_id');
@@ -240,6 +261,10 @@ var AttachmentsPanelButton = React.createClass({
       return false;
     }
 
+    var ulStyle = {
+      maxHeight: this.state.maxHeight
+    };
+
     return (
       <div className="panel-section view-attachments-section btn-group">
         <button className="panel-button dropdown-toggle btn" data-bypass="true" data-toggle="dropdown" title="View Attachments"
@@ -248,7 +273,7 @@ var AttachmentsPanelButton = React.createClass({
           <span className="button-text">View Attachments</span>
           <span className="caret"></span>
         </button>
-        <ul className="dropdown-menu" role="menu" aria-labelledby="view-attachments-menu">
+        <ul className="dropdown-menu" role="menu" aria-labelledby="view-attachments-menu" style={ulStyle} ref={(e) => this._dropdown = e}>
           {this.getAttachmentList()}
         </ul>
       </div>
