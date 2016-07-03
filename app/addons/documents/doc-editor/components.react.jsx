@@ -218,37 +218,80 @@ var AttachmentsPanelButton = React.createClass({
     };
   },
 
+  getInitialState: function () {
+    return {
+      filter: '',
+      maxHeight: 'none'
+    };
+  },
+
   componentDidMount: function () {
-    window.addEventListener("resize", this.updateMaxHeight);
+    $(window).on('resize.attachment-filter', this.updateMaxHeight);
+    Stores.attachmentFilterStore.on('change', this.onChange);
+  },
+
+  componentWillUnmount: function () {
+    $(window).off('resize.attachment-filter', this.updateMaxHeight);
+    Stores.attachmentFilterStore.off('change', this.onChange);
+  },
+
+  onChange: function () {
+    this.setState({
+      maxHeight: this.state.maxHeight,
+      filter: Stores.attachmentFilterStore.filter()
+    });
   },
 
   getMaxHeight: function () {
-      return $(document).height() - $(this._list).offset().top;
+    var $btn = $(this._button);
+    return $(document).height() - $btn.offset().top - $btn.outerHeight();
   },
 
-  updateMaxHeight: function (list) {
-    if (!this._list && list) {
-      this._list = list;
+  updateMaxHeight: function (button) {
+    if (!this._button && button) {
+      this._button = button;
     }
 
-    this.setState({maxHeight: this.getMaxHeight()});
+    this.setState({
+      maxHeight: this.getMaxHeight(),
+      filter: this.state.filter
+    });
   },
 
   getAttachmentList: function () {
     var db = this.props.doc.database.get('id');
     var doc = this.props.doc.get('_id');
+    var attachments = this.props.doc.get('_attachments');
 
-    return _.map(this.props.doc.get('_attachments'), function (item, filename) {
+    function create(item, filename) {
       var url = FauxtonAPI.urls('document', 'attachment', db, doc, app.utils.safeURLName(filename));
       return (
-        <li key={filename}>
-          <a href={url} target="_blank" data-bypass="true"> <strong>{filename}</strong>
-            <span className="attachment-delimiter">-</span>
-            <span>{item.content_type}, {Helpers.formatSize(item.length)}</span>
-          </a>
-        </li>
+          <li key={filename}>
+            <a href={url} target="_blank" data-bypass="true"> <strong>{filename}</strong>
+              <span className="attachment-delimiter">-</span>
+              <span>{item.content_type}, {Helpers.formatSize(item.length)}</span>
+            </a>
+          </li>
       );
-    });
+    }
+
+    function filter(predicate) {
+      return _.reduce(attachments, function(list, item, filename) {
+        if (predicate(filename)) {
+          list.push(create(item, filename));
+        }
+
+        return list;
+      }, []);
+    }
+
+    if (this.state.filter === '') {
+      return _.map(attachments, create);
+    } else {
+      var strong = new RegExp('^' + this.state.filter);
+      var weak = new RegExp(this.state.filter);
+      return filter(f => strong.test(f)).concat(filter(f => !strong.test(f) && weak.test(f)));
+    }
   },
 
   render: function () {
@@ -261,19 +304,49 @@ var AttachmentsPanelButton = React.createClass({
     };
 
     return (
-      <div className="panel-section view-attachments-section btn-group">
+      <div className="panel-section view-attachments-section btn-group" ref={this.updateMaxHeight}>
         <button className="panel-button dropdown-toggle btn" data-bypass="true" data-toggle="dropdown" title="View Attachments"
           id="view-attachments-menu">
           <i className="icon icon-paper-clip"></i>
           <span className="button-text">View Attachments</span>
           <span className="caret"></span>
         </button>
-        <ul className="dropdown-menu" role="menu" aria-labelledby="view-attachments-menu" style={ulStyle} ref={this.updateMaxHeight}>
+        <ul style={ulStyle} className="dropdown-menu" role="menu" aria-labelledby="view-attachments-menu">
+          <li><AttachmentsPanelFilter /></li>
           {this.getAttachmentList()}
         </ul>
       </div>
     );
   }
+});
+
+var AttachmentsPanelFilter = React.createClass({
+  propTypes: {
+    filter: React.PropTypes.string
+  },
+
+  getDefaultProps: function () {
+    return {
+      filter: this._filter
+    };
+  },
+
+  onChange: function (event) {
+    Stores.attachmentFilterStore.updateFilter(event.target.value);
+  },
+
+  stopClick: function (el) {
+    $(el).on('click.dropdown.data-api', function (e) { e.stopPropagation(); });
+  },
+
+  render: function () {
+    return (
+      <div className="view-attachments-filter" ref={this.stopClick}>
+        <i className="icon icon-filter" />
+        <input type="text" onChange={this.onChange} />
+      </div>
+    );
+  },
 });
 
 

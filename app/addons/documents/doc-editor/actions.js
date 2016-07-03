@@ -203,6 +203,10 @@ function uploadAttachment (params) {
   });
 }
 
+function updateAttachmentFilter (filter) {
+  FauxtonAPI.dispatch({ type: ActionTypes.UPDATE_ATTACHMENT_FILTER, filter: filter });
+}
+
 function cancelUpload () {
   xhr.abort();
 }
@@ -241,5 +245,8 @@ export default {
   hideUploadModal: hideUploadModal,
   uploadAttachment: uploadAttachment,
   cancelUpload: cancelUpload,
-  resetUploadModal: resetUploadModal
+  resetUploadModal: resetUploadModal,
+
+  // attachment filter
+  updateAttachmentFilter: updateAttachmentFilter
 };

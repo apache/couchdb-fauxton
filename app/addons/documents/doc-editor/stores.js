@@ -199,6 +199,39 @@ Stores.DocEditorStore = FauxtonAPI.Store.extend({
 
 });
 
+Stores.AttachmentFilterStore = FauxtonAPI.Store.extend({
+  initialize: function () {
+    this.reset();
+  },
+
+  reset: function () {
+    this._filter = "";
+  },
+
+  filter: function () {
+    return this._filter;
+  },
+
+  updateFilter: function (filter) {
+    this._filter = filter;
+    this.triggerChange();
+  },
+
+  dispatch: function (action) {
+    switch (action.type) {
+      case ActionTypes.UPDATE_ATTACHMENT_FILTER:
+        this.updateFilter(action.filter);
+      break;
+
+      default:
+      return;
+    }
+  }
+});
+
+Stores.attachmentFilterStore = new Stores.AttachmentFilterStore();
+Stores.attachmentFilterStore.dispatchToken = FauxtonAPI.dispatcher.register(Stores.attachmentFilterStore.dispatch);
+
 Stores.docEditorStore = new Stores.DocEditorStore();
 Stores.docEditorStore.dispatchToken = FauxtonAPI.dispatcher.register(Stores.docEditorStore.dispatch);
 
