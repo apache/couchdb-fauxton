@@ -220,22 +220,17 @@ var AttachmentsPanelButton = React.createClass({
 
   componentDidMount: function () {
     window.addEventListener("resize", this.updateMaxHeight);
-    this.updateMaxHeight();
-  },
-
-  componentWillMount: function () {
-    this.updateMaxHeight();
   },
 
   getMaxHeight: function () {
-    if (!this._dropdown) {
-      return "none";
-    } else {
-      return $(document).height() - $(this._dropdown).offset().top;
-    }
+      return $(document).height() - $(this._list).offset().top;
   },
 
-  updateMaxHeight: function () {
+  updateMaxHeight: function (list) {
+    if (!this._list && list) {
+      this._list = list;
+    }
+
     this.setState({maxHeight: this.getMaxHeight()});
   },
 
@@ -262,7 +257,7 @@ var AttachmentsPanelButton = React.createClass({
     }
 
     var ulStyle = {
-      maxHeight: this.state.maxHeight
+      maxHeight: this.state ? this.state.maxHeight : "none"
     };
 
     return (
@@ -273,7 +268,7 @@ var AttachmentsPanelButton = React.createClass({
           <span className="button-text">View Attachments</span>
           <span className="caret"></span>
         </button>
-        <ul className="dropdown-menu" role="menu" aria-labelledby="view-attachments-menu" style={ulStyle} ref={(e) => this._dropdown = e}>
+        <ul className="dropdown-menu" role="menu" aria-labelledby="view-attachments-menu" style={ulStyle} ref={this.updateMaxHeight}>
           {this.getAttachmentList()}
         </ul>
       </div>

@@ -149,6 +149,24 @@ describe('DocEditorController', function () {
     assert.equal(attachmentURLactual, '../../id/_design/test-doc/one.png');
   });
 
+  it('view attachements dropdown max-height is not set to none', function () {
+    debugger;
+    var el = TestUtils.renderIntoDocument(
+        <Components.DocEditorController database={database} />, container
+    );
+
+    var doc = new Documents.Doc(docWithAttachmentsJSON, { database: database });
+    FauxtonAPI.dispatch({
+      type: ActionTypes.DOC_LOADED,
+      options: {
+        doc: doc
+      }
+    });
+
+    var $listNode = $(ReactDOM.findDOMNode(el)).find('ul');
+    assert.notEqual("none", $listNode.css('max-height'));
+  });
+
   it('setting deleteDocModal=true in store shows modal', function () {
     var el = TestUtils.renderIntoDocument(<Components.DocEditorController database={database} />, container);
     var doc = new Documents.Doc(docWithAttachmentsJSON, { database: database });
