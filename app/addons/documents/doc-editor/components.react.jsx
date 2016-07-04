@@ -266,7 +266,7 @@ var AttachmentsPanelButton = React.createClass({
     function create(item, filename) {
       var url = FauxtonAPI.urls('document', 'attachment', db, doc, app.utils.safeURLName(filename));
       return (
-          <li key={filename}>
+          <li key={filename} className="attachment-row">
             <a href={url} target="_blank" data-bypass="true"> <strong>{filename}</strong>
               <span className="attachment-delimiter">-</span>
               <span>{item.content_type}, {Helpers.formatSize(item.length)}</span>
@@ -311,10 +311,10 @@ var AttachmentsPanelButton = React.createClass({
           <span className="button-text">View Attachments</span>
           <span className="caret"></span>
         </button>
-        <ul style={ulStyle} className="dropdown-menu" role="menu" aria-labelledby="view-attachments-menu">
-          <li><AttachmentsPanelFilter /></li>
-          {this.getAttachmentList()}
-        </ul>
+          <ul style={ulStyle} className="dropdown-menu" role="menu" aria-labelledby="view-attachments-menu">
+            <li><AttachmentsPanelFilter /></li>
+            {this.getAttachmentList()}
+          </ul>
       </div>
     );
   }

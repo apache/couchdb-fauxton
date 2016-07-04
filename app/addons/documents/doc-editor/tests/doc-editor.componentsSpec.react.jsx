@@ -126,7 +126,7 @@ describe('DocEditorController', function () {
         doc: doc
       }
     });
-    assert.equal($(ReactDOM.findDOMNode(el)).find('.view-attachments-section .dropdown-menu li').length, 2);
+    assert.equal($(ReactDOM.findDOMNode(el)).find('.view-attachments-section .dropdown-menu li.attachment-row').length, 2);
   });
 
   //issues with this test running with all other tests. It passes on its own
