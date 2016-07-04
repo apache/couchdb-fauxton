@@ -68,7 +68,7 @@ var utils = {
 
   safeURLName: function (name) {
     var testName = name || "";
-    var checkforBad = testName.match(/[\$/,+]/g);
+    var checkforBad = testName.match(/[\$\-/,+-]/g);
     return (checkforBad !== null) ? encodeURIComponent(name) : name;
   },
 

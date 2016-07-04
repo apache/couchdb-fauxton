@@ -111,7 +111,8 @@ Databases.Changes = FauxtonAPI.Collection.extend({
 
 Databases.Status = FauxtonAPI.Model.extend({
   url: function () {
-    return app.host + "/" + this.database.safeID();
+    // already safe (in Databases.List parse)
+    return app.host + "/" + this.database.id;
   },
 
   initialize: function (options) {
