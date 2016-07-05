@@ -247,8 +247,6 @@ module.exports = function (grunt) {
     },
 
     exec: {
-      check_selenium: initHelper.check_selenium,
-      check_chrome: initHelper.check_chrome,
       start_nightWatch: {
         command: __dirname + '/node_modules/nightwatch/bin/nightwatch' +
         ' -c ' + __dirname + '/test/nightwatch_tests/nightwatch.json'

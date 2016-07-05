@@ -9,12 +9,12 @@
 
   "selenium" : {
     "start_process" : false,
-    "server_path" : "test/nightwatch_tests/selenium/selenium-server-standalone-2.53.0.jar",
+    "server_path" : "",
     "log_path" : "",
     "host" : "127.0.0.1",
     "port" : "<%- selenium_port %>",
     "cli_args" : {
-      "webdriver.chrome.driver" : "test/nightwatch_tests/selenium/chromedriver",
+      "webdriver.chrome.driver" : "",
       "webdriver.ie.driver" : "",
       "webdriver.firefox.profile" : ""
     }

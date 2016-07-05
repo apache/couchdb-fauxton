@@ -13,10 +13,16 @@
 var nano = require('nano');
 var async = require('async');
 
+function getRandomInt(min, max) {
+  return Math.floor(Math.random() * (max - min)) + min;
+}
+
+const dbName = 'fauxton-selenium-tests-' + getRandomInt(1, 20000);
+
 module.exports = {
   asyncHookTimeout: 20000,
   maxWaitTime: 30000,
-  testDatabaseName : 'fauxton-selenium-tests',
+  testDatabaseName : dbName,
 
   getNanoInstance: function (dbURL) {
     return nano(dbURL);
@@ -26,7 +32,7 @@ module.exports = {
     var nano = module.exports.getNanoInstance(browser.globals.test_settings.db_url),
         database = module.exports.testDatabaseName;
 
-    console.log('nano setting up database');
+    console.log('nano setting up database', database);
 
     // clean up the database we created previously
     nano.db.destroy(database, function (err, body, header) {
@@ -48,7 +54,7 @@ module.exports = {
     var nano = module.exports.getNanoInstance(browser.globals.test_settings.db_url),
         database = module.exports.testDatabaseName;
 
-    console.log('nano cleaning up');
+    console.log('nano cleaning up', database);
     nano.db.destroy(database, function (err, header, body) {
       if (err) {
         console.log('Error in cleaning up ' + database, err.message);

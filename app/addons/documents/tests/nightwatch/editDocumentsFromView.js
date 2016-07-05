@@ -37,7 +37,7 @@ module.exports = {
       .clickWhenVisible('#nav-header-abc')
       .clickWhenVisible('#nav-design-function-abcviews a')
       .clickWhenVisible('#abc_evens')
-      .clickWhenVisible('a[href="#/database/fauxton-selenium-tests/document_10"]')
+      .clickWhenVisible('a[href="#/database/' + newDatabaseName + '/document_10"]')
       //navigated to editor
       .waitForElementVisible('#editor-container', waitTime, false)
       .verify.urlContains('#/database/' + newDatabaseName + '/document_10');

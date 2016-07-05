@@ -27,9 +27,7 @@ To run selenium locally you need docker installed. Selenium runs in a docker con
 
 You can run `npm run docker:logs` to see when the CouchDB instance is ready to go. You also need a Fauxton server instance runnning:
 
-    npm run dev
-    or
-    grunt debugDev && DIST=./dist/debug ./bin/fauxton`
+    grunt debugDev && DIST=./dist/debug ./bin/fauxton
 
 Finally to run the tests:
 
