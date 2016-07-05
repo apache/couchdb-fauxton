@@ -59,30 +59,21 @@ module.exports = {
     var waitTime = client.globals.maxWaitTime;
     var newDatabaseName = client.globals.testDatabaseName;
     var baseUrl = client.globals.test_settings.launch_url;
+    var designDoc = {
+      "_id": "_design/sidebar-update",
+      "views": {
+       "new-index": {
+         "map": "function (doc) {\n  emit(doc._id, 1);\n}"
+       }
+      },
+      "language": "javascript"
+    };
 
     /*jshint multistr: true */
     client
       .loginToGUI()
       .populateDatabase(newDatabaseName)
-      .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
-      .waitForElementPresent('#header-dropdown-menu', waitTime, false)
-      .waitForElementPresent('#header-dropdown-menu a', waitTime, false)
-      .clickWhenVisible('#header-dropdown-menu a', waitTime, false)
-      .waitForElementPresent('#header-dropdown-menu  a[href*="new_view"]', waitTime, false)
-      .clickWhenVisible('#header-dropdown-menu a[href*="new_view"]', waitTime, false)
-      .waitForElementPresent('.index-cancel-link', waitTime, false)
-      .waitForElementPresent('#new-ddoc', waitTime, false)
-      .setValue('#new-ddoc', 'sidebar-update')
-      .clearValue('#index-name')
-      .setValue('#index-name', 'sidebar-update-index')
-      .execute('\
-        var editor = ace.edit("map-function");\
-        editor.getSession().setValue("function (doc) { emit(\'1\'); }");\
-      ')
-      .execute('$("#save-view")[0].scrollIntoView();')
-      .waitForElementPresent('#save-view', waitTime, false)
-      .clickWhenVisible('#save-view', waitTime, false)
-      .waitForElementVisible('#global-notifications .alert.alert-success', waitTime, false)
+      .createDocument(designDoc._id, newDatabaseName, designDoc)
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
       .waitForElementPresent('.prettyprint', waitTime, false)
       .waitForElementNotPresent('.loading-lines', waitTime, false)
@@ -90,11 +81,11 @@ module.exports = {
       // confirm the design doc appears in the sidebar
       .waitForElementPresent('#sidebar-content span[title="_design/sidebar-update"]', waitTime, false)
       .waitForElementPresent('label[for="checkbox-_design/sidebar-update"]', waitTime, false)
-      .execute('$("label[for=\'checkbox-_design/sidebar-update\']")[0].scrollIntoView(false);')
+      .execute('$("label[for=\'checkbox-_design/sidebar-update\']")[0].scrollIntoView();')
       .clickWhenVisible('label[for="checkbox-_design/sidebar-update"]', waitTime, false)
 
       .waitForElementPresent('.bulk-action-component-selector-group .fonticon-trash', waitTime, false)
-      .execute('$(".bulk-action-component-selector-group .fonticon-trash")[0].scrollIntoView(false);')
+      .execute('$(".bulk-action-component-selector-group .fonticon-trash")[0].scrollIntoView();')
       .clickWhenVisible('.bulk-action-component-selector-group .fonticon-trash')
       .acceptAlert()
 

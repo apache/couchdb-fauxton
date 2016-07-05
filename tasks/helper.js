@@ -55,18 +55,6 @@ exports.init = function (grunt) {
         }
         return files;
       }, defaults);
-    },
-
-    check_selenium: {
-      command: 'test -s ./test/nightwatch_tests/selenium/selenium-server-standalone-2.53.0.jar || ' +
-        'curl -o ./test/nightwatch_tests/selenium/selenium-server-standalone-2.53.0.jar ' +
-        'http://selenium-release.storage.googleapis.com/2.53/selenium-server-standalone-2.53.0.jar'
-    },
-    check_chrome: {
-      command: 'test -s ./test/nightwatch_tests/selenium/selenium-server-standalone-2.53.0.jar || ' +
-        'curl -o ./test/nightwatch_tests/selenium/chromedriver_mac32.zip' +
-        'http://chromedriver.storage.googleapis.com/2.22/chromedriver_mac32.zip' +
-        '&& tar -xvf ./test/nightwatch_tests/selenium/chromedriver_mac32.zip -C ./test/nightwatch_tests/selenium/'
     }
   };
 };

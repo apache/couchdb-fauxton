@@ -108,6 +108,7 @@
     "dev": "node ./devserver.js",
     "nightwatch": "grunt nightwatch",
     "start": "node ./bin/fauxton",
+    "start-debug": "DIST=./dist/debug node ./bin/fauxton",
     "preversion": "node version-check.js && grunt release",
     "create:animaldb": "./bin/create-animal-db",
     "docker:couchdb-up": "docker-compose -f ./docker/dc.selenium.yml up -d couchdb",
