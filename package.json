@@ -111,6 +111,8 @@
     "preversion": "node version-check.js && grunt release",
     "create:animaldb": "./bin/create-animal-db",
     "docker:couchdb-up": "docker-compose -f ./docker/dc.selenium.yml up -d couchdb",
+    "docker:selenium-up": "docker-compose -f ./docker/dc.selenium.yml up -d selenium",
+    "docker:selenium-debug-up": "docker-compose -f ./docker/dc.selenium.yml -f ./docker/dc.selenium-debug.yml up -d selenium",
     "docker:reset": "npm run docker:down && npm run docker:up",
     "docker:logs": "docker logs couchdb",
     "docker:up": "docker-compose -f ./docker/dc.selenium.yml up -d",
