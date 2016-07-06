@@ -75,3 +75,7 @@ your settings.json file. That defines an object of the following form:
 The properties (`documents`, `databases`) map to a particular addon folder name (see `app/addons`). The values
 should be an array of tests that you don't want to run. `*` will flag all tests from being ran, otherwise you
 just enter the names of the files to omit.
+
+### Cleaning up old tests
+
+Each test run generates a new database. Sometimes these databases will not be removed. You can run `npm run remove-test-dbs` to clean up any left over databases.

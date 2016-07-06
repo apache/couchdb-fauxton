@@ -12,7 +12,7 @@
 
 
 module.exports = {
-  'Deletes a document via Editor': function (client) {
+  'Clones a document via Editor': function (client) {
     const waitTime = client.globals.maxWaitTime;
     const newDatabaseName = client.globals.testDatabaseName;
     const newDocumentName = 'clone_doc_doc';
@@ -43,6 +43,7 @@ module.exports = {
 
       .url(`${baseUrl}'/'${newDatabaseName}/${newDocumentName}`)
       .waitForElementPresent('#editor-container', waitTime, false)
+      .waitForElementNotPresent('.loading-lines', waitTime, false)
       .getText('#editor-container', function (result) {
         const data = result.value;
         const isCreatedDocumentPresent = data.indexOf('ente') !== -1;

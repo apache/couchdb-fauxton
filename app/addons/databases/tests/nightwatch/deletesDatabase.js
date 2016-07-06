@@ -48,6 +48,8 @@ module.exports = {
       .assert.elementPresent('a[href="#/database/' + newDatabaseName + '/_all_docs"]')
       .clickWhenVisible('[title="Delete ' + newDatabaseName + '"]', waitTime, false)
       .setValue('.delete-db-modal input[type="text"]', [newDatabaseName, client.Keys.ENTER])
+      .waitForElementNotPresent('.global-notification .fonticon-cancel', waitTime, false)
+      .waitForElementPresent('.fauxton-table-list', waitTime, false)
       .checkForDatabaseDeleted(newDatabaseName, waitTime)
       .assert.elementNotPresent('a[href="#/database/' + newDatabaseName + '/_all_docs"]')
 
