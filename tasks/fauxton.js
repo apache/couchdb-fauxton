@@ -158,7 +158,7 @@ module.exports = function (grunt) {
       fauxton_username: this.data.settings.nightwatch.fauxton_username,
       password: this.data.settings.nightwatch.password,
       launch_url: this.data.settings.nightwatch.launch_url,
-      fauxton_host: _getHostIpAddresss(),
+      fauxton_host: _getHost(),
       fauxton_port: this.data.settings.nightwatch.fauxton_port,
       db_host: this.data.settings.nightwatch.db_host,
       db_port: this.data.settings.nightwatch.db_port,
@@ -169,7 +169,11 @@ module.exports = function (grunt) {
 
   // HELPERS
 
-  function _getHostIpAddresss () {
+  //if FAUXTON_HOST not set use ip address
+  function _getHost () {
+    if (process.env.FAUXTON_HOST) {
+      return process.env.FAUXTON_HOST;
+    }
     //making some assumptions here
     const interfaces = os.networkInterfaces();
     const eth0 = interfaces[Object.keys(interfaces)[1]];

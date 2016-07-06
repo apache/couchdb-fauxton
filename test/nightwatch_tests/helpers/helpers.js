@@ -18,6 +18,7 @@ function getRandomInt(min, max) {
 }
 
 const dbName = 'fauxton-selenium-tests-' + getRandomInt(1, 20000);
+console.log('ssss', process.env.CLOUDANT_PWD, process.env.CLOUDANT_USER);
 
 module.exports = {
   asyncHookTimeout: 20000,
