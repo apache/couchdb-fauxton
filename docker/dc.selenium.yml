@@ -5,6 +5,7 @@ services:
     image: selenium/standalone-firefox:2.48.2
     ports:
       - "4444:4444"
+
   couchdb:
     container_name: couchdb
     image: klaemo/couchdb:2.0-dev

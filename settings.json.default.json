@@ -76,7 +76,6 @@
     "nightwatch": {
       "fauxton_username": "tester",
       "password": "testerpass",
-      "fauxton_host": "127.0.0.1",
       "fauxton_port": "8000",
       "db_host": "localhost",
       "db_port": "5984",
