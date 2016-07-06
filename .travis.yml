@@ -7,9 +7,6 @@ services:
 git:
   depth: 1
 
-env:
-  DOCKER_COMPOSE_VERSION: 1.8.0-rc1
-
 before_script:
   - ./bin/install-docker-travis.sh
   - npm run docker:up

@@ -71,6 +71,7 @@ module.exports = {
 
       // http://www.w3.org/TR/2012/WD-webdriver-20120710/
       .keys(['\uE013', '\uE006'])
+      .waitForElementNotPresent('.loading-lines', waitTime, false)
       .waitForElementPresent('#next', waitTime, false)
       .clickWhenVisible('#next', waitTime, false)
       .waitForElementNotPresent('div[data-id="document_1"]', waitTime)

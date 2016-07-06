@@ -118,7 +118,8 @@
     "docker:logs": "docker logs couchdb",
     "docker:up": "docker-compose -f ./docker/dc.selenium.yml up -d",
     "docker:debug-up": "docker-compose -f ./docker/dc.selenium-debug.yml up -d",
-    "docker:down": "docker-compose -f ./docker/dc.selenium.yml down"
+    "docker:down": "docker-compose -f ./docker/dc.selenium.yml down",
+    "remove-test-dbs": "node ./bin/remove-test-dbs.js"
   },
   "repository": {
     "type": "git",
