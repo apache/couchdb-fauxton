@@ -36,7 +36,10 @@ function initDocEditor (params) {
       params.onLoaded();
     }
   }, function (xhr, reason, msg) {
-    errorNotification('The document does not exist.');
+    if (xhr.status === 404) {
+      errorNotification('The document does not exist.');
+    }
+
     FauxtonAPI.navigate(FauxtonAPI.urls('allDocs', 'app', params.database.id, ''));
   });
 }
