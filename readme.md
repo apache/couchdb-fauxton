@@ -44,9 +44,9 @@ If you run into a permissions problem, run that last command as an administrator
 Using the dev server is the easiest way to use Fauxton, especially when developing for it. In the cloned repo folder,
 type:
 
-    grunt dev
+    npm run dev
 
-Wait until you see the "Fauxton" ascii art on your command line, then you should be able to access Fauxton at
+Wait until you `webpack: bundle is now VALID.` on your command line, then you should be able to access Fauxton at
 `http://localhost:8000`
 
 
