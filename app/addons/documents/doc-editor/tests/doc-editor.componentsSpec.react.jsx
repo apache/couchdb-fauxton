@@ -150,7 +150,6 @@ describe('DocEditorController', function () {
   });
 
   it('view attachements dropdown max-height is not set to none', function () {
-    debugger;
     var el = TestUtils.renderIntoDocument(
         <Components.DocEditorController database={database} />, container
     );

@@ -33,6 +33,8 @@ Stores.DocEditorStore = FauxtonAPI.Store.extend({
     this._fileUploadLoadPercentage = 0;
 
     this._docConflictCount = null;
+
+    this._attachments = null;
   },
 
   isLoading: function () {
@@ -48,10 +50,15 @@ Stores.DocEditorStore = FauxtonAPI.Store.extend({
     this._docConflictCount = options.doc.get('_conflicts') ? options.doc.get('_conflicts').length : 0;
     options.doc.unset('_conflicts');
     this._doc = options.doc;
+    this._attachments = options.doc.get('_attachments');
   },
 
   getDoc: function () {
     return this._doc;
+  },
+
+  getAttachments: function () {
+    return this._attachments;
   },
 
   isCloneDocModalVisible: function () {
@@ -124,6 +131,19 @@ Stores.DocEditorStore = FauxtonAPI.Store.extend({
     this._fileUploadErrorMsg = '';
   },
 
+  filterAttachments: function (filter) {
+    var allAttachments = this._doc.get('_attachments');
+    var allFilenames = _.keys(allAttachments);
+
+    var strong = (new RegExp('^' + filter)).test;
+    var weak = (new RegExp(filter)).test;
+
+    var filteredFilenames = _.filter(allFilenames, f => strong(f))
+      .concat(_.filter(allFilenames, f => !strong(f) && weak(f)));
+
+    this._attachments = _.pick(allAttachments, filteredFilenames);
+  },
+
   dispatch: function (action) {
     switch (action.type) {
       case ActionTypes.RESET_DOC:
@@ -190,6 +210,10 @@ Stores.DocEditorStore = FauxtonAPI.Store.extend({
         this.triggerChange();
       break;
 
+      case ActionTypes.UPDATE_ATTACHMENT_FILTER:
+        this.filterAttachments(action.filter);
+        this.triggerChange();
+      break;
 
       default:
       return;
@@ -198,39 +222,6 @@ Stores.DocEditorStore = FauxtonAPI.Store.extend({
   }
 
 });
-
-Stores.AttachmentFilterStore = FauxtonAPI.Store.extend({
-  initialize: function () {
-    this.reset();
-  },
-
-  reset: function () {
-    this._filter = "";
-  },
-
-  filter: function () {
-    return this._filter;
-  },
-
-  updateFilter: function (filter) {
-    this._filter = filter;
-    this.triggerChange();
-  },
-
-  dispatch: function (action) {
-    switch (action.type) {
-      case ActionTypes.UPDATE_ATTACHMENT_FILTER:
-        this.updateFilter(action.filter);
-      break;
-
-      default:
-      return;
-    }
-  }
-});
-
-Stores.attachmentFilterStore = new Stores.AttachmentFilterStore();
-Stores.attachmentFilterStore.dispatchToken = FauxtonAPI.dispatcher.register(Stores.attachmentFilterStore.dispatch);
 
 Stores.docEditorStore = new Stores.DocEditorStore();
 Stores.docEditorStore.dispatchToken = FauxtonAPI.dispatcher.register(Stores.docEditorStore.dispatch);

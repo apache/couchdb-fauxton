@@ -19,7 +19,7 @@ import Actions from "./actions";
 import Stores from "./stores";
 import FauxtonComponents from "../../fauxton/components.react";
 import GeneralComponents from "../../components/react-components.react";
-import { Modal } from "react-bootstrap";
+import { Modal, Dropdown, MenuItem } from "react-bootstrap";
 import Helpers from "../../../helpers";
 
 var store = Stores.docEditorStore;
@@ -218,80 +218,43 @@ var AttachmentsPanelButton = React.createClass({
     };
   },
 
-  getInitialState: function () {
+  getStoreState: function () {
     return {
-      filter: '',
-      maxHeight: 'none'
+      attachments: store.getAttachments()
     };
   },
 
+  getInitialState: function () {
+    return this.getStoreState();
+  },
+
   componentDidMount: function () {
-    $(window).on('resize.attachment-filter', this.updateMaxHeight);
-    Stores.attachmentFilterStore.on('change', this.onChange);
+    store.on('change', this.onChange);
   },
 
   componentWillUnmount: function () {
-    $(window).off('resize.attachment-filter', this.updateMaxHeight);
-    Stores.attachmentFilterStore.off('change', this.onChange);
+    store.off('change', this.onChange);
   },
 
   onChange: function () {
-    this.setState({
-      maxHeight: this.state.maxHeight,
-      filter: Stores.attachmentFilterStore.filter()
-    });
-  },
-
-  getMaxHeight: function () {
-    var $btn = $(this._button);
-    return $(document).height() - $btn.offset().top - $btn.outerHeight();
-  },
-
-  updateMaxHeight: function (button) {
-    if (!this._button && button) {
-      this._button = button;
-    }
-
-    this.setState({
-      maxHeight: this.getMaxHeight(),
-      filter: this.state.filter
-    });
+    this.setState(this.getStoreState());
   },
 
   getAttachmentList: function () {
     var db = this.props.doc.database.get('id');
     var doc = this.props.doc.get('_id');
-    var attachments = this.props.doc.get('_attachments');
+    var attachments = this.state.attachments;
 
-    function create(item, filename) {
+    return _.map(attachments, function (item, filename) {
       var url = FauxtonAPI.urls('document', 'attachment', db, doc, app.utils.safeURLName(filename));
       return (
-          <li key={filename} className="attachment-row">
-            <a href={url} target="_blank" data-bypass="true"> <strong>{filename}</strong>
-              <span className="attachment-delimiter">-</span>
-              <span>{item.content_type}, {Helpers.formatSize(item.length)}</span>
-            </a>
-          </li>
+        <MenuItem href={url} target="_blank" title={filename} className="attachment-row" key={filename}>
+          <strong>{filename}</strong>
+          <span className="attachment-delimiter">-</span>
+          <span>{item.content_type}, {Helpers.formatSize(item.length)}</span>
+        </MenuItem>
       );
-    }
-
-    function filter(predicate) {
-      return _.reduce(attachments, function(list, item, filename) {
-        if (predicate(filename)) {
-          list.push(create(item, filename));
-        }
-
-        return list;
-      }, []);
-    }
-
-    if (this.state.filter === '') {
-      return _.map(attachments, create);
-    } else {
-      var strong = new RegExp('^' + this.state.filter);
-      var weak = new RegExp(this.state.filter);
-      return filter(f => strong.test(f)).concat(filter(f => !strong.test(f) && weak.test(f)));
-    }
+    });
   },
 
   render: function () {
@@ -299,54 +262,34 @@ var AttachmentsPanelButton = React.createClass({
       return false;
     }
 
-    var ulStyle = {
-      maxHeight: this.state ? this.state.maxHeight : "none"
-    };
-
     return (
-      <div className="panel-section view-attachments-section btn-group" ref={this.updateMaxHeight}>
-        <button className="panel-button dropdown-toggle btn" data-bypass="true" data-toggle="dropdown" title="View Attachments"
-          id="view-attachments-menu">
+      <Dropdown className="panel-section view-attachments-section btn-group" id="attachments-dropdown">
+        <Dropdown.Toggle className="panel-button dropdown-toggle btn" title="View Attachments">
           <i className="icon icon-paper-clip"></i>
           <span className="button-text">View Attachments</span>
-          <span className="caret"></span>
-        </button>
-          <ul style={ulStyle} className="dropdown-menu" role="menu" aria-labelledby="view-attachments-menu">
-            <li><AttachmentsPanelFilter /></li>
-            {this.getAttachmentList()}
-          </ul>
-      </div>
+        </Dropdown.Toggle>
+        <Dropdown.Menu>
+          <li><AttachmentsPanelFilter /></li>
+          {this.getAttachmentList()}
+        </Dropdown.Menu>
+      </Dropdown>
     );
   }
 });
 
 var AttachmentsPanelFilter = React.createClass({
-  propTypes: {
-    filter: React.PropTypes.string
-  },
-
-  getDefaultProps: function () {
-    return {
-      filter: this._filter
-    };
-  },
-
   onChange: function (event) {
-    Stores.attachmentFilterStore.updateFilter(event.target.value);
-  },
-
-  stopClick: function (el) {
-    $(el).on('click.dropdown.data-api', function (e) { e.stopPropagation(); });
+    Actions.updateAttachmentFilter(event.target.value);
   },
 
   render: function () {
     return (
-      <div className="view-attachments-filter" ref={this.stopClick}>
+      <div className="view-attachments-filter">
         <i className="icon icon-filter" />
-        <input type="text" onChange={this.onChange} />
+        <input type="text" autoFocus onChange={this.onChange} />
       </div>
     );
-  },
+  }
 });
 
 
