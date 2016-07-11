@@ -9,7 +9,7 @@
 
   "selenium" : {
     "start_process" : true,
-    "server_path" : "test/nightwatch_tests/selenium/selenium-server-standalone-2.45.0.jar",
+    "server_path" : "test/nightwatch_tests/selenium/selenium-server-standalone-2.53.0.jar",
     "log_path" : "",
     "host" : "127.0.0.1",
     "port" : "<%- selenium_port %>",
