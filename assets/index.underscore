@@ -22,12 +22,30 @@
   <title>Project Fauxton</title>
 
   <!-- Application styles. -->
+  <style>
+    .noscript-warning {
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      padding: 1px 30px 10px 30px;
+      color: #fff;
+      background: #AF2D24;
+      margin: 100px;
+      box-shadow: 2px 2px 5px #989898;
+    }
+  </style>
+
   <% if (base) { %>
   <base href="<%= base %>"></base>
   <% } %>
 </head>
 
 <body id="home">
+
+  <noscript>
+    <div class="noscript-warning">
+      <h1>Please turn on JavaScript</h1>
+      <p>Fauxton <strong>requires</strong> JavaScript to be enabled.</p>
+    </div>
+  </noscript>
 
   <div id="notifications"></div>
 
