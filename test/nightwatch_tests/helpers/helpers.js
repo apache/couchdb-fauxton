@@ -25,7 +25,7 @@ module.exports = {
   testDatabaseName : dbName,
 
   getNanoInstance: function (dbURL) {
-    console.log('bbb', dbURL);
+    console.log('DBURL:', dbURL);
     return nano(dbURL);
   },
 
