@@ -39,3 +39,6 @@ npm-debug.log
 test/bundle.js
 test/templates.js
 test/dashboard.assets
+*.swp
+*swo
+*.swn
