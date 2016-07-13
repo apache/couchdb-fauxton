@@ -284,17 +284,31 @@ var AttachmentsPanelButton = React.createClass({
 });
 
 var AttachmentsPanelFilter = React.createClass({
+  getInitialState: function () {
+    return {
+      filter: ''
+    };
+  },
+
   onChange: function (event) {
-    Actions.updateAttachmentFilter(event.target.value);
+    var filter = event.target.value;
+    Actions.updateAttachmentFilter(filter);
+    this.setState({filter: filter});
+  },
+
+  clearFilter: function () {
+    Actions.updateAttachmentFilter('');
+    this.setState({filter: ''});
   },
 
   render: function () {
     return (
       <div className="view-attachments-filter">
-        <i className="icon icon-filter" />
+        <i className="icon fonticon-filter" />
         <NativeListener stopClick stopKeyDown stopKeyUp stopMouseDown stopMouseUp>
-          <input type="text" autoFocus onChange={this.onChange} />
+          <input type="text" autoFocus onChange={this.onChange} value={this.state.filter} />
         </NativeListener>
+        <i className="icon fonticon-cancel" onClick={this.clearFilter} />
       </div>
     );
   }
