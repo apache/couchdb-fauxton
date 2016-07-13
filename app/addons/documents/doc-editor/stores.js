@@ -135,11 +135,11 @@ Stores.DocEditorStore = FauxtonAPI.Store.extend({
     var allAttachments = this._doc.get('_attachments');
     var allFilenames = _.keys(allAttachments);
 
-    var strong = (new RegExp('^' + filter)).test;
-    var weak = (new RegExp(filter)).test;
+    var strong = new RegExp('^' + filter);
+    var weak = new RegExp(filter);
 
-    var filteredFilenames = _.filter(allFilenames, f => strong(f))
-      .concat(_.filter(allFilenames, f => !strong(f) && weak(f)));
+    var filteredFilenames = _.filter(allFilenames, f => strong.test(f))
+      .concat(_.filter(allFilenames, f => !strong.test(f) && weak.test(f)));
 
     this._attachments = _.pick(allAttachments, filteredFilenames);
   },

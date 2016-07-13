@@ -79,6 +79,7 @@
     "react-addons-css-transition-group": "~15.0.1",
     "react-bootstrap": "^0.28.5",
     "react-dom": "~15.0.1",
+    "react-native-listener": "^1.0.1",
     "react-select": "^1.0.0-beta12",
     "request": "^2.54.0",
     "semver": "^5.1.0",

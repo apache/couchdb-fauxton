@@ -20,6 +20,7 @@ import Stores from "./stores";
 import FauxtonComponents from "../../fauxton/components.react";
 import GeneralComponents from "../../components/react-components.react";
 import { Modal, Dropdown, MenuItem } from "react-bootstrap";
+import NativeListener from "react-native-listener";
 import Helpers from "../../../helpers";
 
 var store = Stores.docEditorStore;
@@ -286,7 +287,9 @@ var AttachmentsPanelFilter = React.createClass({
     return (
       <div className="view-attachments-filter">
         <i className="icon icon-filter" />
-        <input type="text" autoFocus onChange={this.onChange} />
+        <NativeListener stopClick stopKeyDown stopKeyUp stopMouseDown stopMouseUp>
+          <input type="text" autoFocus onChange={this.onChange} />
+        </NativeListener>
       </div>
     );
   }
