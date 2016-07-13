@@ -12,6 +12,7 @@
 
 import app from "../../app";
 import FauxtonAPI from "../../core/api";
+import { get, put, post, del } from "../../core/ajax";
 import Documents from "./shared-resources";
 import PagingCollection from "../../../assets/js/plugins/cloudant.pagingcollection";
 
@@ -256,19 +257,16 @@ Documents.MangoDocumentCollection = PagingCollection.extend({
               promise = FauxtonAPI.Deferred(),
               query = this.getPaginatedQuery();
 
-    $.ajax({
-      type: 'POST',
+    post({
       url: url,
-      contentType: 'application/json',
-      dataType: 'json',
-      data: JSON.stringify(query),
+      data: query,
     })
-    .then(function (res) {
+    .then((res) => {
       this.handleResponse(res, promise);
-    }.bind(this))
-    .fail(function (res) {
+    })
+    .fail((res) => {
       promise.reject(res.responseJSON);
-    }.bind(this));
+    });
 
     return promise;
   },
@@ -361,17 +359,13 @@ Documents.BulkDeleteDocCollection = FauxtonAPI.Collection.extend({
         promise = FauxtonAPI.Deferred(),
         that = this;
 
-    $.ajax({
-      type: 'POST',
+    post({
       url: this.url(),
-      contentType: 'application/json',
-      dataType: 'json',
-      data: JSON.stringify(payload),
+      data: payload,
     })
     .then(function (res) {
       that.handleResponse(res, promise);
-    })
-    .fail(function () {
+    }, function () {
       var ids = _.reduce(that.toArray(), function (acc, doc) {
         acc.push(doc.id);
         return acc;

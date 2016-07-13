@@ -18,6 +18,7 @@ import Bootstrap from "bootstrap";
 import Helpers from "./helpers";
 import Utils from "./core/utils";
 import FauxtonAPI from "./core/api";
+import { get } from "./core/ajax";
 import Couchdb from "./core/couchdbSession";
 import "backbone.layoutmanager";
 import "../assets/less/fauxton.less";
@@ -77,7 +78,7 @@ FauxtonAPI.Layout.configure({
       // Put fetch into `async-mode`.
       done = this.async();
       // Seek out the template asynchronously.
-      return $.ajax({ url: app.root + path }).then(function (contents) {
+      return get({ url: app.root + path }).then(function (contents) {
         done(JST[path] = _.template(contents));
       });
     }

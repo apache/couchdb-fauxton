@@ -12,6 +12,7 @@
 
 import app from "../../app";
 import FauxtonAPI from "../../core/api";
+import { get } from "../../core/ajax";
 import Databases from "../databases/resources";
 import Documents from "../documents/resources";
 var Verifyinstall = FauxtonAPI.addon();
@@ -117,17 +118,14 @@ Verifyinstall.testProcess = {
   },
 
   setupReplicate: function () {
-    return $.ajax({
+    return post({
       url: app.host + '/_replicate',
-      contentType: 'application/json',
-      type: 'POST',
-      dataType: 'json',
       processData: false,
-      data: JSON.stringify({
+      data: {
         create_target: true,
         source: 'verifytestdb',
         target: 'verifytestdb_replicate'
-      })
+      }
     });
   },
 
