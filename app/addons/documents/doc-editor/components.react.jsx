@@ -39,7 +39,8 @@ var DocEditorController = React.createClass({
       uploadModalVisible: store.isUploadModalVisible(),
       deleteDocModalVisible: store.isDeleteDocModalVisible(),
       numFilesUploaded: store.getNumFilesUploaded(),
-      conflictCount: store.getDocConflictCount()
+      conflictCount: store.getDocConflictCount(),
+      attachmentFilterFocused: store.isAttachmentFilterFocused()
     };
   },
 
@@ -69,7 +70,7 @@ var DocEditorController = React.createClass({
         ref="docEditor"
         defaultCode={code}
         mode="json"
-        autoFocus={true}
+        autoFocus={!this.state.attachmentFilterFocused}
         editorCommands={editorCommands}
         notifyUnsavedChanges={true}
         stringEditModalEnabled={true} />
@@ -241,6 +242,10 @@ var AttachmentsPanelButton = React.createClass({
     this.setState(this.getStoreState());
   },
 
+  onToggle: function (isOpen) {
+    isOpen ? Actions.focusAttachmentFilter() : Actions.blurAttachmentFilter();
+  },
+
   getAttachmentList: function () {
     var db = this.props.doc.database.get('id');
     var doc = this.props.doc.get('_id');
@@ -264,7 +269,7 @@ var AttachmentsPanelButton = React.createClass({
     }
 
     return (
-      <Dropdown className="panel-section view-attachments-section btn-group" id="attachments-dropdown">
+      <Dropdown className="panel-section view-attachments-section btn-group" id="attachments-dropdown" onToggle={this.onToggle}>
         <Dropdown.Toggle className="panel-button dropdown-toggle btn" title="View Attachments">
           <i className="icon icon-paper-clip"></i>
           <span className="button-text">View Attachments</span>
@@ -457,7 +462,7 @@ var CloneDocModal = React.createClass({
           <Modal.Title>Clone Document</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <form className="form" method="post">
+          <form className="form" onSubmit={(e) => { e.preventDefault(); this.cloneDoc(); }}>
             <p>
               Set new document's ID:
             </p>

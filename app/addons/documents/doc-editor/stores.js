@@ -35,6 +35,7 @@ Stores.DocEditorStore = FauxtonAPI.Store.extend({
     this._docConflictCount = null;
 
     this._attachments = null;
+    this._attachmentFilterFocused = false;
   },
 
   isLoading: function () {
@@ -144,6 +145,18 @@ Stores.DocEditorStore = FauxtonAPI.Store.extend({
     this._attachments = _.pick(allAttachments, filteredFilenames);
   },
 
+  focusAttachmentFilter: function () {
+    this._attachmentFilterFocused = true;
+  },
+
+  blurAttachmentFilter: function () {
+    this._attachmentFilterFocused = false;
+  },
+
+  isAttachmentFilterFocused: function () {
+    return this._attachmentFilterFocused;
+  },
+
   dispatch: function (action) {
     switch (action.type) {
       case ActionTypes.RESET_DOC:
@@ -214,6 +227,18 @@ Stores.DocEditorStore = FauxtonAPI.Store.extend({
         this.filterAttachments(action.filter);
         this.triggerChange();
       break;
+
+      case ActionTypes.FOCUS_ATTACHMENT_FILTER:
+        this.focusAttachmentFilter();
+        this.triggerChange();
+      break;
+
+      case ActionTypes.BLUR_ATTACHMENT_FILTER:
+        this.blurAttachmentFilter();
+        this.triggerChange();
+      break;
+
+      case ActionTypes.
 
       default:
       return;

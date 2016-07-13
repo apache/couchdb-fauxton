@@ -203,10 +203,6 @@ function uploadAttachment (params) {
   });
 }
 
-function updateAttachmentFilter (filter) {
-  FauxtonAPI.dispatch({ type: ActionTypes.UPDATE_ATTACHMENT_FILTER, filter: filter });
-}
-
 function cancelUpload () {
   xhr.abort();
 }
@@ -215,6 +211,17 @@ function resetUploadModal () {
   FauxtonAPI.dispatch({ type: ActionTypes.RESET_UPLOAD_MODAL });
 }
 
+function updateAttachmentFilter (filter) {
+  FauxtonAPI.dispatch({ type: ActionTypes.UPDATE_ATTACHMENT_FILTER, filter: filter });
+}
+
+function focusAttachmentFilter () {
+  FauxtonAPI.dispatch({ type:ActionTypes.FOCUS_ATTACHMENT_FILTER });
+}
+
+function blurAttachmentFilter() {
+  FauxtonAPI.dispatch({ type: ActionTypes.BLUR_ATTACHMENT_FILTER });
+}
 
 // helpers
 
@@ -248,5 +255,7 @@ export default {
   resetUploadModal: resetUploadModal,
 
   // attachment filter
-  updateAttachmentFilter: updateAttachmentFilter
+  updateAttachmentFilter: updateAttachmentFilter,
+  focusAttachmentFilter: focusAttachmentFilter,
+  blurAttachmentFilter: blurAttachmentFilter
 };
