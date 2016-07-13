@@ -134,15 +134,25 @@ Stores.DocEditorStore = FauxtonAPI.Store.extend({
 
   filterAttachments: function (filter) {
     var allAttachments = this._doc.get('_attachments');
-    var allFilenames = _.keys(allAttachments);
 
-    var strong = new RegExp('^' + filter);
-    var weak = new RegExp(filter);
+    if (filter !== '') {
+      var patterns = [
+        new RegExp('^' + filter),
+        new RegExp('^' + filter, 'i'),
+        new RegExp(filter),
+        new RegExp(filter, 'i')
+      ];
 
-    var filteredFilenames = _.filter(allFilenames, f => strong.test(f))
-      .concat(_.filter(allFilenames, f => !strong.test(f) && weak.test(f)));
+      var filteredFilenames = [];
+      var remainingFilenames = _.keys(allAttachments);
+      _.forEach(patterns, function(pattern) {
+        filteredFilenames = filteredFilenames.concat(_.remove(remainingFilenames, s => pattern.test(s)));
+      });
 
-    this._attachments = _.pick(allAttachments, filteredFilenames);
+      this._attachments = _.pick(allAttachments, filteredFilenames);
+    } else {
+      this._attachments = allAttachments;
+    }
   },
 
   focusAttachmentFilter: function () {
