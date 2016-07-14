@@ -254,7 +254,8 @@ var AttachmentsPanelButton = React.createClass({
     return _.map(attachments, function (item, filename) {
       var url = FauxtonAPI.urls('document', 'attachment', db, doc, app.utils.safeURLName(filename));
       return (
-        <MenuItem href={url} target="_blank" title={filename} className="attachment-row" key={filename}>
+        <MenuItem href={url} target="_blank" title={filename}
+                  className="attachment-row" key={filename} data-bypass="true">
           <strong>{filename}</strong>
           <span className="attachment-delimiter">-</span>
           <span>{item.content_type}, {Helpers.formatSize(item.length)}</span>
@@ -269,7 +270,10 @@ var AttachmentsPanelButton = React.createClass({
     }
 
     return (
-      <Dropdown className="panel-section view-attachments-section btn-group" id="attachments-dropdown" onToggle={this.onToggle}>
+      <Dropdown className="panel-section view-attachments-section btn-group"
+                id="attachments-dropdown"
+                onToggle={this.onToggle}
+                onClick={this.onClick}>
         <Dropdown.Toggle className="panel-button dropdown-toggle btn" title="View Attachments">
           <i className="icon icon-paper-clip"></i>
           <span className="button-text">View Attachments</span>
@@ -299,6 +303,11 @@ var AttachmentsPanelFilter = React.createClass({
   clearFilter: function () {
     Actions.updateAttachmentFilter('');
     this.setState({filter: ''});
+    this.focusInput();
+  },
+
+  focusInput: function () {
+    this.refs.input && this.refs.input.focus();
   },
 
   render: function () {
@@ -306,7 +315,7 @@ var AttachmentsPanelFilter = React.createClass({
       <div className="view-attachments-filter">
         <i className="icon fonticon-filter" />
         <NativeListener stopClick stopKeyDown stopKeyUp stopMouseDown stopMouseUp>
-          <input type="text" autoFocus onChange={this.onChange} value={this.state.filter} />
+          <input type="text" autoFocus onChange={this.onChange} value={this.state.filter} ref="input"/>
         </NativeListener>
         <i className="icon fonticon-cancel" onClick={this.clearFilter} />
       </div>
