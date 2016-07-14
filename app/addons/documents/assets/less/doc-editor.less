@@ -180,6 +180,14 @@
   text-align: left;
   overflow: hidden;
   overflow-y: auto;
+
+  @media screen and (min-height: 800px) {
+    max-height: 500px;
+  }
+
+  @media screen and (max-height: 800px) {
+    max-height: 200px;
+  }
 }
 
 .view-attachments-filter {
