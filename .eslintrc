@@ -26,7 +26,7 @@
     "no-trailing-spaces": 2,
     "semi-spacing": [2, {"before": false, "after": true}],
     "no-empty": 2,
-    "space-in-parens": ["error", "never"]
+    "space-in-parens": [2, "never"]
   },
 
   "parserOptions": {
