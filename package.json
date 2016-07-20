@@ -110,6 +110,7 @@
     "start": "node ./bin/fauxton",
     "start-debug": "DIST=./dist/debug node ./bin/fauxton",
     "preversion": "node version-check.js && grunt release",
+    "test-before-publish":"npm run preversion && npm install . -g",
     "create:animaldb": "./bin/create-animal-db",
     "docker:couchdb-up": "docker-compose -f ./docker/dc.selenium.yml up -d couchdb",
     "docker:selenium-up": "docker-compose -f ./docker/dc.selenium.yml up -d selenium",
