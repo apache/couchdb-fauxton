@@ -105,27 +105,31 @@
     .bottom-container {
       position: fixed;
       bottom: 0;
-      background: #3a2c2b;
       .brand {
         .box-sizing(content-box);
         .hide-text;
-        margin: 10px 0 0 0;
-        width: 200px;
-        height: 40px;
-        padding: 10px;
+        margin: 20px 0 0px 0;
+        width: 199px;
+        height: 50px;
+        padding: 10px 10px 10px 10px;
         float: none;
         background: #3a2c2b;
         .icon {
           .box-sizing(content-box);
-          background: url(../img/couchdb-site.png) no-repeat 0 0;
+          background: url(../img/CouchDB-negative-logo.png) no-repeat 28px 0px;
+          background-size: 150px;
           display: block;
           height: 100%;
           width: 100%;
+          margin-top: 10px;
         }
         .closeMenu & {
-          width: 44px;
+          width: 43px;
+
           .icon {
-            background: url(../img/minilogo.png) no-repeat 0 0;
+            background: url(../img/couchdb-logo.png) no-repeat 3px 0;
+            background-size: 40px;
+
           }
         }
       }
@@ -133,12 +137,17 @@
       #footer-nav-links {
         width: 100%;
         margin: 0;
+        background: #3a2c2b;
         li {
           a {
             font-size: 12px;
             color: @linkColor;
-            padding: 0 0 10px 10px;
+            padding: 0px 0px 15px 85px;
             text-shadow: none;
+
+            .closeMenu & {
+              padding: 0px 0px 15px 15px;
+            }
           }
           &.active, &:hover {
             a {
