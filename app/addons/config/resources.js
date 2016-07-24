@@ -15,21 +15,16 @@ import FauxtonAPI from "../../core/api";
 
 var Config = FauxtonAPI.addon();
 
-
 Config.OptionModel = Backbone.Model.extend({
   documentation: FauxtonAPI.constants.DOC_URLS.CONFIG,
 
-  initialize: function (_, options) {
-    this.node = options.node;
-  },
-
   url: function () {
-    if (!this.node) {
+    if (!this.get('node')) {
       throw new Error('no node set');
     }
 
-    return app.host + '/_node/' + this.node + '/_config/' +
-      this.get('section') + '/' + encodeURIComponent(this.get('name'));
+    return app.host + '/_node/' + this.get('node') + '/_config/' +
+      this.get('sectionName') + '/' + encodeURIComponent(this.get('optionName'));
   },
 
   isNew: function () { return false; },
@@ -52,58 +47,20 @@ Config.OptionModel = Backbone.Model.extend({
   }
 });
 
-Config.Model = Backbone.Model.extend({});
-Config.Collection = Backbone.Collection.extend({
-  model: Config.Model,
-
+Config.ConfigModel = Backbone.Model.extend({
   documentation: FauxtonAPI.constants.DOC_URLS.CONFIG,
 
-  initialize: function (_, options) {
-    this.node = options.node;
-  },
-
-  comparator: function (OptionModel) {
-    if (OptionModel.get('section')) {
-      return OptionModel.get('section');
-    }
-  },
-
   url: function () {
-    if (!this.node) {
+    if (!this.get('node')) {
       throw new Error('no node set');
     }
 
-    return app.host + '/_node/' + this.node + '/_config';
-  },
-
-  findEntryInSection: function (sectionName, entry) {
-    var section = _.findWhere(this.toJSON(), {'section': sectionName}),
-        options;
-
-    if (!section) {
-      return false;
-    }
-
-    options = _.findWhere(section.options, {name: entry});
-
-    return options;
+    return app.host + '/_node/' + this.get('node') + '/_config';
   },
 
   parse: function (resp) {
-    return _.map(resp, function (section, section_name) {
-      return {
-        section: section_name,
-        options: _.map(section, function (option, option_name) {
-          return {
-            name: option_name,
-            value: option
-          };
-        })
-      };
-    });
+    return { sections: resp };
   }
 });
-
-
 
 export default Config;
