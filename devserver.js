@@ -1,4 +1,4 @@
-var spawn = require('child_process').spawn;
+var spawn = require('cross-spawn').spawn;
 var path = require("path");
 var fs = require("fs");
 var _ = require('lodash');
@@ -18,7 +18,7 @@ var loadSettings = function () {
     port: process.env.FAUXTON_PORT || 8000,
     contentSecurityPolicy: true,
     proxy: {
-      target: 'http://127.0.0.1:5984',
+      target: 'http://couch:5984',
       changeOrigin: false
     }
   };

@@ -9,31 +9,55 @@
 //  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 //  License for the specific language governing permissions and limitations under
 //  the License.
-//
+
 @import "../../../../../assets/less/variables.less";
 @import "../../../../../assets/less/bootstrap/mixins.less";
-
-
 
 .config-item {
   height: 65px;
 
-  .js-value-input {
+  .config-value-form {
+    button {
+      margin-left: 8px;
+    }
+  }
+
+  .config-value-input {
     width: 80%;
     margin: 0;
   }
-  .js-show-value,
-  .js-delete-value {
+
+  .config-show-value,
+  .config-delete-value {
     cursor: pointer;
   }
-  .js-hidden {
-    display: none;
-  }
+
   .text-center {
     text-align: center;
   }
 
   button { width: 7%;}
+
+  transition: background-color 100ms;
+}
+
+.config-item:hover {
+  background-color: #e0e0e0;
+}
+
+.table-striped tbody > tr.config-item:nth-child(odd) > td,
+.table-striped tbody > tr.config-item:nth-child(odd) > th {
+  transition: background-color 100ms;
+}
+
+.table-striped tbody > tr.config-item:nth-child(odd):hover > td,
+.table-striped tbody > tr.config-item:nth-child(odd):hover > th {
+  background-color: #e7e7e7;
+}
+
+.config-item-deleting {
+  text-decoration: line-through;
+  text-decoration-color: red;
 }
 
 #config-trash {
@@ -55,9 +79,14 @@ table.config {
   }
 }
 
-#add-new-section {
+#add-option-button {
   line-height: 40px;
   cursor: pointer;
+  border-left: 1px solid #ccc;
+  border-right: none;
+  border-top: none;
+  border-bottom: none;
+  padding: 12px 14px;
 
   &:hover {
     transition: none;
@@ -67,8 +96,7 @@ table.config {
 }
 
 #add-section-button {
-  border-left: 1px solid #ccc;
-  padding: 12px 14px;
+
 }
 
 .add-section-tray {
@@ -110,6 +138,61 @@ table.config {
       color: #ffffff;
     }
   }
+}
+
+#add-option-popover {
+  background-color: #333;
+  color: white;
+  padding: 20px;
+  border-radius: 0;
+  width: 300px;
+  max-width: none;
+  display: block;
+
+  .popover-content {
+    padding: 0;
+  }
+
+  .popover-title {
+    font-size: 16px;
+    padding: 0;
+    margin: 10px 0;
+    border: none;
+    display: block;
+    text-align: left;
+    color: #fff;
+    text-shadow: none;
+    height: auto;
+    line-height: 1em;
+    background-color: #333;
+  }
+
+  input {
+    width: 100%;
+  }
+
+  a.btn {
+    color: white;
+    background-color: @linkColor;
+    line-height: 1.5em;
+    border: 0;
+    padding: 10px 10px 9px;
+    font-size: 14px;
+    .border-radius(5px);
+
+    &:hover {
+      background-color: #cbcbcb;
+      color: white;
+    }
+  }
+}
+
+.popover.bottom .arrow, .popover.bottom .arrow::after {
+  border-bottom-color: #333 !important;
+}
+
+#add-option-popover::before {
+  display: none;
 }
 
 .config-warning-cluster-wrapper {
