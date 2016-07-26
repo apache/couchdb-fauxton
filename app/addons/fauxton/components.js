@@ -382,36 +382,6 @@ Components.DbSearchTypeahead = Components.Typeahead.extend({
   }
 });
 
-Components.DocSearchTypeahead = Components.Typeahead.extend({
-  initialize: function (options) {
-    this.docLimit = options.docLimit || 30;
-    this.database = options.database;
-    _.bindAll(this);
-  },
-  source: function (id, process) {
-    var query = '?' + $.param({
-      startkey: JSON.stringify(id),
-      endkey: JSON.stringify(id + "\u9999"),
-      limit: this.docLimit
-    });
-
-    var url = FauxtonAPI.urls('allDocs', 'server', this.database.safeID(), query);
-
-    if (this.ajaxReq) { this.ajaxReq.abort(); }
-
-    this.ajaxReq = $.ajax({
-      cache: false,
-      url: url,
-      dataType: 'json',
-      success: function (data) {
-        var ids = _.map(data.rows, function (row) {
-          return row.id;
-        });
-        process(ids);
-      }
-    });
-  }
-});
 
 Components.LookaheadTray = FauxtonAPI.View.extend({
   className: "lookahead-tray tray",
