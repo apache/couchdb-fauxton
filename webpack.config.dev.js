@@ -73,5 +73,7 @@ module.exports = {
     path: __dirname + '/dist/debug',
     publicPath: '/',
     filename: 'bundle.js' //All our code is compiled into a single file called bundle.js
-  }
+  },
+
+  devtool: 'source-map'
 };

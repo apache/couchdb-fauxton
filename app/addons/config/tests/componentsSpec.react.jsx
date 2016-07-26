@@ -75,128 +75,7 @@ describe('Config Components', function () {
     });
   });
 
-  describe('ConfigTable', function () {
-    var container, elm;
-    var onSaveOptionSpy = sinon.spy();
-    var onDeleteOptionSpy = sinon.spy();
-    var onCancelEditSpy = sinon.spy();
-    var onEditOptionSpy = sinon.spy();
-
-    beforeEach(function () {
-      container = document.createElement('div');
-      elm = TestUtils.renderIntoDocument(
-        (<Views.ConfigTable
-          onDeleteOption={onDeleteOptionSpy}
-          onSaveOption={onSaveOptionSpy}
-          onEditOption={onEditOptionSpy}
-          onCancelEdit={onCancelEditSpy}
-          options={[]}
-        />),
-        container
-      );
-    });
-
-    afterEach(function () {
-      ReactDOM.unmountComponentAtNode(container);
-    });
-
-    it('calls onEditOption prop with option on edit', function () {
-      var option = {};
-
-      elm.onEditOption(option);
-      assert.ok(onEditOptionSpy.calledWith(option));
-    });
-
-    it('calls onSaveOption prop with option on save', function () {
-      var option = {};
-
-      elm.onSaveOption(option);
-      assert.ok(onSaveOptionSpy.calledWith(option));
-    });
-
-    it('calls onDeleteOption prop with option on delete', function () {
-      var option = {};
-
-      elm.onDeleteOption(option);
-      assert.ok(onDeleteOptionSpy.calledWith(option));
-    });
-
-    it('calls onCancelEdit prop on cancel', function () {
-      elm.onCancelEdit();
-      assert.ok(onCancelEditSpy.called);
-    });
-  });
-
   describe('ConfigOption', function () {
-    var container, elm, option;
-    var onSaveSpy = sinon.spy();
-    var onEditSpy = sinon.spy();
-    var onCancelEditSpy = sinon.spy();
-    var onDeleteSpy = sinon.spy();
-
-    beforeEach(function () {
-      container = document.createElement('div');
-      option = {
-        sectionName: 'test_section',
-        optionName: 'test_option',
-        value: 'test_value'
-      };
-      elm = TestUtils.renderIntoDocument(
-        (<Views.ConfigOption
-          onDelete={onDeleteSpy}
-          onSave={onSaveSpy}
-          onEdit={onEditSpy}
-          onCancelEdit={onCancelEditSpy}
-          option={option}
-        />),
-        container
-      );
-    });
-
-    afterEach(function () {
-      ReactDOM.unmountComponentAtNode(container);
-    });
-
-    it('calls onEdit prop with option prop on edit', function () {
-      var option = {
-        sectionName: 'test_section',
-        optionName: 'test_option',
-        value: 'test_value'
-      };
-
-      elm.onEdit();
-      assert.ok(onEditSpy.calledWith(sinon.match(option)));
-    });
-
-    it('calls onSaveOption prop with new option value on save', function () {
-      var option = {
-        sectionName: 'test_section',
-        optionName: 'test_option',
-        value: 'test_new_value'
-      };
-
-      elm.onSave('test_new_value');
-      assert.ok(onSaveSpy.calledWith(sinon.match(option)));
-    });
-
-    it('calls onDeleteOption prop with option on delete', function () {
-      var option = {
-        sectionName: 'test_section',
-        optionName: 'test_option',
-        value: 'test_value'
-      };
-
-      elm.onDelete();
-      assert.ok(onDeleteSpy.calledWith(sinon.match(option)));
-    });
-
-    it('calls onCancelEdit prop on cancel', function () {
-      elm.onCancelEdit();
-      assert.ok(onCancelEditSpy.called);
-    });
-  });
-
-  describe('ConfigOption render', function () {
     var container;
 
     beforeEach(function () {
@@ -221,51 +100,6 @@ describe('Config Components', function () {
   });
 
   describe('ConfigOptionValue', function () {
-    var container, elm;
-    var onSaveSpy = sinon.spy();
-    var onEditSpy = sinon.spy();
-    var onCancelEditSpy = sinon.spy();
-
-    beforeEach(function () {
-      container = document.createElement('div');
-      elm = TestUtils.renderIntoDocument(
-        (<Views.ConfigOptionValue
-          onSave={onSaveSpy}
-          onEdit={onEditSpy}
-          onCancelEdit={onCancelEditSpy}
-          value={'test_value'}
-        />),
-        container
-      );
-    });
-
-    afterEach(function () {
-      ReactDOM.unmountComponentAtNode(container);
-      onCancelEditSpy.reset();
-    });
-
-    it('calls onSave prop if saved with a new value', function () {
-      elm.onSave('new');
-      assert.ok(onSaveSpy.calledWith('new'));
-    });
-
-    it('calls onCancelEdit prop if saved with unchanged value', function () {
-      elm.onSave('test_value');
-      assert.ok(onCancelEditSpy.calledOnce);
-    });
-
-    it('calls onEdit prop on edit', function () {
-      elm.onEdit();
-      assert.ok(onEditSpy.calledOnce);
-    });
-
-    it('calls onCancelEdit prop on edit cancel', function () {
-      elm.onCancelEdit();
-      assert.ok(onCancelEditSpy.calledOnce);
-    });
-  });
-
-  describe('ConfigOptionValue render', function () {
     var container;
 
     beforeEach(function () {
@@ -337,30 +171,6 @@ describe('Config Components', function () {
   });
 
   describe('ConfigOptionTrash', function () {
-    var container, elm;
-    var onDeleteSpy = sinon.spy();
-
-    beforeEach(function () {
-      container = document.createElement('div');
-      elm = TestUtils.renderIntoDocument(
-        (<Views.ConfigOptionTrash
-          onDelete={onDeleteSpy}
-        />),
-        container
-      );
-    });
-
-    afterEach(function () {
-      ReactDOM.unmountComponentAtNode(container);
-    });
-
-    it('calls onDelete prop on delete', function () {
-      elm.onDelete();
-      assert.ok(onDeleteSpy.calledOnce);
-    });
-  });
-
-  describe('ConfigOptionTrash render', function () {
     var container;
 
     beforeEach(function () {
@@ -419,58 +229,6 @@ describe('Config Components', function () {
   });
 
   describe('AddOptionButton', function () {
-    var container, elm;
-    var onAddSpy = sinon.spy();
-
-    beforeEach(function () {
-      container = document.createElement('div');
-      elm = TestUtils.renderIntoDocument(
-        <Views.AddOptionButton onAdd={onAddSpy}/>,
-        container
-      );
-    });
-
-    afterEach(function () {
-      ReactDOM.unmountComponentAtNode(container);
-      elm.reset();
-    });
-
-    it('isInputValid returns false if section name empty', function () {
-      elm.updateOptionName('test_option');
-      elm.updateValue('test_value');
-
-      assert.isFalse(elm.isInputValid());
-    });
-
-    it('isInputValid returns false if option name empty', function () {
-      elm.updateOptionName('test_section');
-      elm.updateValue('test_value');
-
-      assert.isFalse(elm.isInputValid());
-    });
-
-    it('isInputValid returns false if value empty', function () {
-      elm.updateOptionName('test_section');
-      elm.updateValue('test_option');
-
-      assert.isFalse(elm.isInputValid());
-    });
-
-    it('calls onAdd prop on add with valid input', function () {
-      elm.updateSectionName('test_section');
-      elm.updateOptionName('test_option');
-      elm.updateValue('test_value');
-
-      elm.onAdd();
-      assert.ok(onAddSpy.calledWith(sinon.match({
-        sectionName: 'test_section',
-        optionName: 'test_option',
-        value: 'test_value'
-      })));
-    });
-  });
-
-  describe('AddOptionButton render', function () {
     var container;
 
     beforeEach(function () {

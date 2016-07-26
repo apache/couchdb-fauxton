@@ -15,48 +15,39 @@ import FauxtonAPI from '../../core/api';
 import Resources from './resources';
 
 export default {
-  fetchAndEditConfig: function (node) {
+  fetchAndEditConfig (node) {
     FauxtonAPI.dispatch({ type: ActionTypes.LOADING_CONFIG });
 
     var configModel = new Resources.ConfigModel({ node });
 
-    FauxtonAPI.when(configModel.fetch())
-      .then(function () {
-        this.editSections({ sections: configModel.get('sections'), node });
-      }.bind(this));
+    configModel.fetch().then(() => this.editSections({ sections: configModel.get('sections'), node }));
   },
 
-  editSections: function (options) {
+  editSections (options) {
     FauxtonAPI.dispatch({ type: ActionTypes.EDIT_CONFIG, options });
   },
 
-  editOption: function (options) {
+  editOption (options) {
     FauxtonAPI.dispatch({ type: ActionTypes.EDIT_OPTION, options });
   },
 
-  cancelEdit: function (options) {
+  cancelEdit (options) {
     FauxtonAPI.dispatch({ type: ActionTypes.CANCEL_EDIT, options });
   },
 
-  saveOption: function (node, options) {
+  saveOption (node, options) {
     FauxtonAPI.dispatch({ type: ActionTypes.SAVING_OPTION, options });
 
     var modelAttrs = options;
     modelAttrs.node = node;
     var optionModel = new Resources.OptionModel(modelAttrs);
 
-    FauxtonAPI.when(optionModel.save())
-      .done(function () {
-        this.optionSaveSuccess(options);
-      }.bind(this))
-      .fail(function (xhr) {
-          var error = JSON.parse(xhr.responseText).reason;
-          this.optionSaveFailure(options, error);
-        }.bind(this)
-      );
+    optionModel.save()
+      .then(() => this.optionSaveSuccess(options))
+      .fail(xhr => this.optionSaveFailure(options, JSON.parse(xhr.responseText).reason));
   },
 
-  optionSaveSuccess: function (options) {
+  optionSaveSuccess (options) {
     FauxtonAPI.dispatch({ type: ActionTypes.OPTION_SAVE_SUCCESS, options });
     FauxtonAPI.addNotification({
       msg: `Option ${options.optionName} saved`,
@@ -64,7 +55,7 @@ export default {
     });
   },
 
-  optionSaveFailure: function (options, error) {
+  optionSaveFailure (options, error) {
     FauxtonAPI.dispatch({ type: ActionTypes.OPTION_SAVE_FAILURE, options });
     FauxtonAPI.addNotification({
       msg: `Option save failed: ${error}`,
@@ -72,24 +63,19 @@ export default {
     });
   },
 
-  addOption: function (node, options) {
+  addOption (node, options) {
     FauxtonAPI.dispatch({ type: ActionTypes.ADDING_OPTION });
 
     var modelAttrs = options;
     modelAttrs.node = node;
     var optionModel = new Resources.OptionModel(modelAttrs);
 
-    FauxtonAPI.when(optionModel.save())
-      .done(function () {
-        this.optionAddSuccess(options);
-      }.bind(this))
-      .fail(function (xhr) {
-        var error = JSON.parse(xhr.responseText).reason;
-        this.optionAddFailure(options, error);
-      }.bind(this));
+    optionModel.save()
+      .then(() => this.optionAddSuccess(options))
+      .fail(xhr => this.optionAddFailure(options, JSON.parse(xhr.responseText).reason));
   },
 
-  optionAddSuccess: function (options) {
+  optionAddSuccess (options) {
     FauxtonAPI.dispatch({ type: ActionTypes.OPTION_ADD_SUCCESS, options });
     FauxtonAPI.addNotification({
       msg: `Option ${options.optionName} added`,
@@ -97,7 +83,7 @@ export default {
     });
   },
 
-  optionAddFailure: function (options, error) {
+  optionAddFailure (options, error) {
     FauxtonAPI.dispatch({ type: ActionTypes.OPTION_ADD_FAILURE, options });
     FauxtonAPI.addNotification({
       msg: `Option add failed: ${error}`,
@@ -105,24 +91,19 @@ export default {
     });
   },
 
-  deleteOption: function (node, options) {
+  deleteOption (node, options) {
     FauxtonAPI.dispatch({ type: ActionTypes.DELETING_OPTION, options });
 
     var modelAttrs = options;
     modelAttrs.node = node;
     var optionModel = new Resources.OptionModel(modelAttrs);
 
-    FauxtonAPI.when(optionModel.destroy())
-      .done(function success () {
-        this.optionDeleteSuccess(options);
-      }.bind(this))
-      .fail(function failure (xhr) {
-        var error = JSON.parse(xhr.responseText).reason;
-        this.optionDeleteFailure(options, error);
-      }.bind(this));
+    optionModel.destroy()
+      .then(() => this.optionDeleteSuccess(options))
+      .fail((xhr) => this.optionDeleteFailure(options, JSON.parse(xhr.responseText).reason));
   },
 
-  optionDeleteSuccess: function (options) {
+  optionDeleteSuccess (options) {
     FauxtonAPI.dispatch({ type: ActionTypes.OPTION_DELETE_SUCCESS, options });
     FauxtonAPI.addNotification({
       msg: `Option ${options.optionName} deleted`,
@@ -130,7 +111,7 @@ export default {
     });
   },
 
-  optionDeleteFailure: function (options, error) {
+  optionDeleteFailure (options, error) {
     FauxtonAPI.dispatch({ type: ActionTypes.OPTION_DELETE_FAILURE, options });
     FauxtonAPI.addNotification({
       msg: `Option delete failed: ${error}`,

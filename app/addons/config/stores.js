@@ -13,32 +13,26 @@
 import FauxtonAPI from '../../core/api';
 import ActionTypes from './actiontypes';
 
-function unset(object, sectionName, optionName) {
-  if (object[sectionName]) {
-    delete object[sectionName][optionName];
-  }
-}
-
 var ConfigStore = FauxtonAPI.Store.extend({
-  initialize: function () {
+  initialize () {
     this.reset();
   },
 
-  reset: function () {
+  reset () {
     this._sections = {};
     this._loading = true;
     this._editSectionName = null;
     this._editOptionName = null;
   },
 
-  editConfig: function (sections) {
+  editConfig (sections) {
     this._sections = sections;
     this._loading = false;
     this._editSectionName = null;
     this._editOptionName = null;
   },
 
-  getOptions: function () {
+  getOptions () {
     var sections = _.sortBy(
       _.map(this._sections, function (section, sectionName) {
         return {
@@ -52,13 +46,12 @@ var ConfigStore = FauxtonAPI.Store.extend({
     return _.flatten(_.map(sections, s => s.options));
   },
 
-  mapSection: function (section, sectionName) {
+  mapSection (section, sectionName) {
     var options = _.sortBy(
-      _.map(section, function (value, optionName) {
-        var editing = this.isEditing(sectionName, optionName);
-
-        return { editing, sectionName, optionName, value };
-      }.bind(this)), o => o.optionName
+      _.map(section, (value, optionName) => ({
+        editing: this.isEditing(sectionName, optionName),
+        sectionName, optionName, value
+      })), o => o.optionName
     );
 
     options[0].header = true;
@@ -66,29 +59,29 @@ var ConfigStore = FauxtonAPI.Store.extend({
     return options;
   },
 
-  editOption: function (sn, on) {
+  editOption (sn, on) {
     this._editSectionName = sn;
     this._editOptionName = on;
   },
 
-  isEditing: function (sn, on) {
+  isEditing (sn, on) {
     return sn == this._editSectionName && on == this._editOptionName;
   },
 
-  stopEditing: function () {
+  stopEditing () {
     this._editOptionName = null;
     this._editSectionName = null;
   },
 
-  setLoading: function () {
+  setLoading () {
     this._loading = true;
   },
 
-  isLoading: function () {
+  isLoading () {
     return this._loading;
   },
 
-  saveOption: function (sectionName, optionName, value) {
+  saveOption (sectionName, optionName, value) {
     if (!this._sections[sectionName]) {
       this._sections[sectionName] = {};
     }
@@ -96,7 +89,7 @@ var ConfigStore = FauxtonAPI.Store.extend({
     this._sections[sectionName][optionName] = value || true;
   },
 
-  deleteOption: function (sectionName, optionName) {
+  deleteOption (sectionName, optionName) {
     if (this._sections[sectionName]) {
       delete this._sections[sectionName][optionName];
 
@@ -106,7 +99,7 @@ var ConfigStore = FauxtonAPI.Store.extend({
     }
   },
 
-  dispatch: function (action) {
+  dispatch (action) {
     if (action.options) {
       var sectionName = action.options.sectionName;
       var optionName = action.options.optionName;

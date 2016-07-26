@@ -13,6 +13,7 @@ import testUtils from "../../../../test/mocha/testUtils";
 import FauxtonAPI from "../../../core/api";
 import Actions from "../actions";
 import Resources from "../resources";
+import Backbone from "backbone";
 import sinon from "sinon";
 
 const assert = testUtils.assert;
@@ -27,28 +28,17 @@ describe('Config Actions', function () {
   };
   var failXhr = { responseText: '{}' };
 
-  beforeEach(function () {
-    var optionStub = sinon.stub(Resources, 'OptionModel');
-    optionStub.returns({
-      save: () => null,
-      destroy: () => null
-    });
-  });
-
-  afterEach(function () {
-    restore(Resources.OptionModel);
-  });
-
   describe('add', function () {
     afterEach(function () {
       restore(Actions.optionAddSuccess);
       restore(Actions.optionAddFailure);
       restore(FauxtonAPI.when);
       restore(FauxtonAPI.addNotification);
+      restore(Backbone.Model.prototype.save);
     });
 
     it('calls optionAddSuccess when option add succeeds', function () {
-      var stub = sinon.stub(FauxtonAPI, 'when');
+      var stub = sinon.stub(Backbone.Model.prototype, 'save');
       var spy = sinon.spy(Actions, 'optionAddSuccess');
       var promise = FauxtonAPI.Deferred();
       promise.resolve();
@@ -59,7 +49,7 @@ describe('Config Actions', function () {
     });
 
     it('shows notification when option add succeeds', function () {
-      var stub = sinon.stub(FauxtonAPI, 'when');
+      var stub = sinon.stub(Backbone.Model.prototype, 'save');
       var spy = sinon.spy(FauxtonAPI, 'addNotification');
       var promise = FauxtonAPI.Deferred();
       promise.resolve();
@@ -70,7 +60,7 @@ describe('Config Actions', function () {
     });
 
     it('calls optionAddFailure when option add fails', function () {
-      var stub = sinon.stub(FauxtonAPI, 'when');
+      var stub = sinon.stub(Backbone.Model.prototype, 'save');
       var spy = sinon.spy(Actions, 'optionAddFailure');
       var promise = FauxtonAPI.Deferred();
       promise.reject(failXhr);
@@ -81,7 +71,7 @@ describe('Config Actions', function () {
     });
 
     it('shows notification when option add fails', function () {
-      var stub = sinon.stub(FauxtonAPI, 'when');
+      var stub = sinon.stub(Backbone.Model.prototype, 'save');
       var spy = sinon.spy(FauxtonAPI, 'addNotification');
       var promise = FauxtonAPI.Deferred();
       promise.reject(failXhr);
@@ -98,10 +88,11 @@ describe('Config Actions', function () {
       restore(Actions.optionSaveFailure);
       restore(FauxtonAPI.when);
       restore(FauxtonAPI.addNotification);
+      restore(Backbone.Model.prototype.save);
     });
 
     it('calls optionSaveSuccess when option save succeeds', function () {
-      var stub = sinon.stub(FauxtonAPI, 'when');
+      var stub = sinon.stub(Backbone.Model.prototype, 'save');
       var spy = sinon.spy(Actions, 'optionSaveSuccess');
       var promise = FauxtonAPI.Deferred();
       promise.resolve();
@@ -112,7 +103,7 @@ describe('Config Actions', function () {
     });
 
     it('shows notification when option save succeeds', function () {
-      var stub = sinon.stub(FauxtonAPI, 'when');
+      var stub = sinon.stub(Backbone.Model.prototype, 'save');
       var spy = sinon.spy(FauxtonAPI, 'addNotification');
       var promise = FauxtonAPI.Deferred();
       promise.resolve();
@@ -123,7 +114,7 @@ describe('Config Actions', function () {
     });
 
     it('calls optionSaveFailure when option save fails', function () {
-      var stub = sinon.stub(FauxtonAPI, 'when');
+      var stub = sinon.stub(Backbone.Model.prototype, 'save');
       var spy = sinon.spy(Actions, 'optionSaveFailure');
       var promise = FauxtonAPI.Deferred();
       promise.reject(failXhr);
@@ -134,7 +125,7 @@ describe('Config Actions', function () {
     });
 
     it('shows notification when option save fails', function () {
-      var stub = sinon.stub(FauxtonAPI, 'when');
+      var stub = sinon.stub(Backbone.Model.prototype, 'save');
       var spy = sinon.spy(FauxtonAPI, 'addNotification');
       var promise = FauxtonAPI.Deferred();
       promise.reject(failXhr);
@@ -151,10 +142,11 @@ describe('Config Actions', function () {
       restore(Actions.optionDeleteFailure);
       restore(FauxtonAPI.when);
       restore(FauxtonAPI.addNotification);
+      restore(Backbone.Model.prototype.destroy);
     });
 
     it('calls optionDeleteSuccess when option delete succeeds', function () {
-      var stub = sinon.stub(FauxtonAPI, 'when');
+      var stub = sinon.stub(Backbone.Model.prototype, 'destroy');
       var spy = sinon.spy(Actions, 'optionDeleteSuccess');
       var promise = FauxtonAPI.Deferred();
       promise.resolve();
@@ -165,7 +157,7 @@ describe('Config Actions', function () {
     });
 
     it('shows notification when option delete succeeds', function () {
-      var stub = sinon.stub(FauxtonAPI, 'when');
+      var stub = sinon.stub(Backbone.Model.prototype, 'destroy');
       var spy = sinon.spy(FauxtonAPI, 'addNotification');
       var promise = FauxtonAPI.Deferred();
       promise.resolve();
@@ -176,7 +168,7 @@ describe('Config Actions', function () {
     });
 
     it('calls optionDeleteFailure when option delete fails', function () {
-      var stub = sinon.stub(FauxtonAPI, 'when');
+      var stub = sinon.stub(Backbone.Model.prototype, 'destroy');
       var spy = sinon.spy(Actions, 'optionDeleteFailure');
       var promise = FauxtonAPI.Deferred();
       promise.reject(failXhr);
@@ -187,7 +179,7 @@ describe('Config Actions', function () {
     });
 
     it('shows notification when option delete fails', function () {
-      var stub = sinon.stub(FauxtonAPI, 'when');
+      var stub = sinon.stub(Backbone.Model.prototype, 'destroy');
       var spy = sinon.spy(FauxtonAPI, 'addNotification');
       var promise = FauxtonAPI.Deferred();
       promise.reject(failXhr);

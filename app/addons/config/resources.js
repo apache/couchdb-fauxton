@@ -18,7 +18,7 @@ var Config = FauxtonAPI.addon();
 Config.OptionModel = Backbone.Model.extend({
   documentation: FauxtonAPI.constants.DOC_URLS.CONFIG,
 
-  url: function () {
+  url () {
     if (!this.get('node')) {
       throw new Error('no node set');
     }
@@ -27,9 +27,9 @@ Config.OptionModel = Backbone.Model.extend({
       this.get('sectionName') + '/' + encodeURIComponent(this.get('optionName'));
   },
 
-  isNew: function () { return false; },
+  isNew () { return false; },
 
-  sync: function (method, model, options) {
+  sync (method, model, options) {
 
     var params = {
       url: model.url(),
@@ -50,7 +50,7 @@ Config.OptionModel = Backbone.Model.extend({
 Config.ConfigModel = Backbone.Model.extend({
   documentation: FauxtonAPI.constants.DOC_URLS.CONFIG,
 
-  url: function () {
+  url () {
     if (!this.get('node')) {
       throw new Error('no node set');
     }
@@ -58,7 +58,7 @@ Config.ConfigModel = Backbone.Model.extend({
     return app.host + '/_node/' + this.get('node') + '/_config';
   },
 
-  parse: function (resp) {
+  parse (resp) {
     return { sections: resp };
   }
 });
