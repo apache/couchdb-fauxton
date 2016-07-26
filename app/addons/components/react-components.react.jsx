@@ -786,21 +786,10 @@ var Beautify = React.createClass({
     return this.noOfLines() === 1;
   },
 
-  addTooltip: function () {
-    if (this.canBeautify) {
-      $('.beautify-tooltip').tooltip({ placement: 'right' });
-    }
-  },
-
-  componentDidMount: function () {
-    this.addTooltip();
-  },
-
   beautify: function (event) {
     event.preventDefault();
     var beautifiedCode = beautifyHelper(this.props.code);
     this.props.beautifiedCode(beautifiedCode);
-    $('.beautify-tooltip').tooltip('hide');
   },
 
   render: function () {
@@ -811,9 +800,8 @@ var Beautify = React.createClass({
     return (
       <button
         onClick={this.beautify}
-        className="beautify beautify_map btn btn-primary btn-small beautify-tooltip"
+        className="beautify beautify_map btn btn-primary btn-small"
         type="button"
-        data-toggle="tooltip"
         title="Reformat your minified code to make edits to it."
       >
         beautify this code
