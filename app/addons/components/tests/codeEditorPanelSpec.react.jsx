@@ -42,26 +42,6 @@ describe('CodeEditorPanel', function () {
     });
   });
 
-  describe('Zen Mode', function () {
-    it('shows zen mode by default', function () {
-      var container = document.createElement('div');
-      var codeEditorEl = TestUtils.renderIntoDocument(
-        <ReactComponents.CodeEditorPanel defaultCode={code} />,
-        container
-      );
-      assert.equal($(ReactDOM.findDOMNode(codeEditorEl)).find('.zen-editor-icon').length, 1);
-    });
-
-    it('omits zen mode if explicitly turned off', function () {
-      var container = document.createElement('div');
-      var codeEditorEl = TestUtils.renderIntoDocument(
-        <ReactComponents.CodeEditor defaultCode={code} allowZenMode={false} />,
-        container
-      );
-      assert.equal($(ReactDOM.findDOMNode(codeEditorEl)).find('.zen-editor-icon').length, 0);
-    });
-  });
-
   describe('Beautify', function () {
     it('confirm clicking beautify actually works within context of component', function () {
       var container = document.createElement('div');

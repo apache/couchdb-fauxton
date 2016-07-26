@@ -10,11 +10,7 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-.zen-editor-icon {
-  float: right;
-  font-size: 13px;
-  margin-top: 3px;
-}
+
 
 .full-page-editor-modal-wrapper {
   position: fixed;
@@ -27,18 +23,8 @@
   width: 100%;
   z-index: 1025;
 
-  &.zen-theme-dark {
-    background-color: #323232;
-  }
-  &.zen-theme-light {
-    background-color: #ffffff;
-  }
-
   &>div {
     height: 100%;
-    &.zen-mode-controls {
-      height: 96px;
-    }
   }
 
   .ace_editor {
@@ -50,48 +36,6 @@
     .ace_gutter, .ace_gutter-active-line {
       background-color: inherit;
     }
-  }
-}
-
-.zen-theme-light {
-  .zen-mode-controls {
-    color: #999999;
-  }
-}
-
-.zen-mode-controls {
-  position: absolute;
-  right: 30px;
-  top: 30px;
-  font-size: 20px;
-  color: white;
-
-  .zen-mode-controls-wrapper {
-    position: relative;
-    float: left;
-  }
-
-  .tooltips {
-    position: relative;
-    float: left;
-  }
-
-  ul {
-    float: right;
-    list-style-type: none;
-  }
-
-  .tooltip {
-    margin-right: 20px;
-    min-width: 140px;
-  }
-
-  span {
-    cursor: pointer;
-    width: 23px;
-    height: 23px;
-    margin: 10px;
-    display: inline-block;
   }
 }
 
