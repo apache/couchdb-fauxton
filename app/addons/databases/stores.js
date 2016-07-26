@@ -72,13 +72,19 @@ var DatabasesStore = FauxtonAPI.Store.extend({
   },
 
   getDatabaseNames: function () {
-    if (this._backboneCollection) {
-      return _.map(this._backboneCollection.toJSON(), function (item, key) {
-        return item.name;
-      });
-    } else {
+    if (!this._backboneCollection || !this._backboneCollection.length) {
       return [];
     }
+
+    return this._backboneCollection.toJSON().map((item, key) => {
+      return item.name;
+    });
+  },
+
+  getDatabaseNamesForDropDown: function () {
+    return this.getDatabaseNames().map((db) => {
+      return { value: db, label: db};
+    });
   },
 
   doesDatabaseExist: function (databaseName) {

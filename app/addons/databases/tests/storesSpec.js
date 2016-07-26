@@ -43,21 +43,17 @@ describe('Databases Store', function () {
 
   describe("database collection info", function () {
 
-    beforeEach(function () {
-      Stores.databasesStore._backboneCollection.toJSON = function () {
-        return {
-          "db1": {
-            "name": "db1"
-          },
-          "db2": {
-            "name": "db2"
-          }
-        };
-      };
+    beforeEach(() => {
+      const data = [{"name": "db1"}, {"name": "db2"}];
+
+      const collection = new Backbone.Collection();
+      collection.add(data);
+
+      Stores.databasesStore._backboneCollection = collection;
     });
 
     it("determines database names", function () {
-      assert.ok(JSON.stringify(["db1", "db2"]) == JSON.stringify(Stores.databasesStore.getDatabaseNames().sort()));
+      assert.ok(JSON.stringify(["db1", "db2"]) === JSON.stringify(Stores.databasesStore.getDatabaseNames().sort()));
     });
 
     it("determines database availability", function () {

@@ -32,7 +32,7 @@ exports.command = function () {
     .clickWhenVisible('#submit')
 
     .closeNotification()
-    .waitForElementPresent('#jump-to-db', waitTime, false)
+    .waitForElementPresent('[data-name="jump-to-db"]', waitTime, false)
 
     // important! wait for the db page to fully load. This was the cause of many bugs
     .waitForElementVisible('#dashboard-content table.databases', waitTime, false);

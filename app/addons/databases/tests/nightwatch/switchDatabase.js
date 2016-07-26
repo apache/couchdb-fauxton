@@ -14,8 +14,8 @@
 
 module.exports = {
   'Confirm selecting database via typeahead redirects properly': function (client) {
-    var waitTime = client.globals.maxWaitTime,
-        newDatabaseName = client.globals.testDatabaseName;
+    const waitTime = client.globals.maxWaitTime;
+    const newDatabaseName = client.globals.testDatabaseName;
 
     client
       .createDatabase(newDatabaseName)
@@ -28,14 +28,15 @@ module.exports = {
       })
 
       // wait for the DB name typeahead field to appear in the header
-      .waitForElementPresent('#jump-to-db .search-autocomplete', waitTime, false)
+      .waitForElementPresent('[data-name="jump-to-db"]', waitTime, false)
       .waitForElementPresent('#dashboard-content table.databases', waitTime, false)
-      .setValue('#jump-to-db .search-autocomplete', [newDatabaseName, client.Keys.ENTER])
+      .clickWhenVisible('[data-name="jump-to-db"] .Select-placeholder')
+      .setValue('[data-name="jump-to-db"] input', [newDatabaseName, client.Keys.ENTER])
       .waitForElementPresent('.index-pagination', waitTime, false)
       // now check we've redirected and the URL ends with /_all_docs
-      .url(function (result) {
-        var endsWithAllDocs = /all_docs$/.test(result.value);
-        this.assert.ok(endsWithAllDocs, 'Redirected properly');
+      .url((result) => {
+        const urlEndsWithAllDocs = /all_docs$/.test(result.value);
+        client.assert.ok(urlEndsWithAllDocs, 'Redirected properly');
       })
       .end();
   }

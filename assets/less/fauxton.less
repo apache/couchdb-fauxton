@@ -334,14 +334,6 @@ div.spinner {
   }
 }
 
-#header-search {
-  height: @collapsedNavWidth;
-  span {
-    position: relative;
-  }
-}
-
-
 
 .js-filter-form {
   .help-block {
@@ -470,32 +462,36 @@ body #dashboard .flex-body#breadcrumbs {
     padding: 0;
     margin: 0;
   }
-  .searchbox-container {
-    padding: 12px;
-    input[type="text"] {
-      .border-radius(5px);
-      font-size: 13px;
-      padding: 8px 35px 8px 10px;
-      width: 150px;
-    }
-    .btn-primary {
-      background: none repeat scroll 0% 0% transparent;
-      border: none;
-      position: absolute;
-      right: 12px;
-      top: 0;
-      height: 50px;
-      z-index: 2;
-      color: #999;
-      .icon-search {
-        position: absolute;
-        top: 11px;
-      }
-    }
-    form {
-      margin: 0;
-    }
+}
+
+
+.faux-header__searchboxwrapper {
+  overflow: visible;
+  height: 64px;
+  width: 235px;
+}
+
+.faux-header__searchboxcontainer {
+  height: @collapsedNavWidth;
+  overflow: visible;
+  position: absolute;
+  padding: 12px;
+}
+
+.faux-header__searchboxcontainer {
+  .Select-control, .Select-menu-outer {
+    width: 210px;
   }
+}
+
+/* this allows the jump-to-doc results expand as much as need be when the component is used in the header */
+#right-header .faux-header__searchboxcontainer .Select-menu-outer {
+  &>div>div {
+    padding-right: 25px; /* prevents overlapping of auto-generated scrollbar */
+  }
+  min-width: 210px;
+  max-width: 450px;
+  width: auto;
 }
 
 // react-select color design
@@ -630,7 +626,7 @@ footer.pagination-footer {
 @media (max-width: 730px) {
   .closeMenu {
     .one-pane {
-      .searchbox-wrapper {
+      .faux-header__searchboxwrapper {
         display: none;
       }
     }
@@ -640,7 +636,7 @@ footer.pagination-footer {
 @media (max-width: 1000px) {
   .closeMenu {
     .with-sidebar {
-      .searchbox-wrapper {
+      .faux-header__searchboxwrapper {
         display: none;
       }
     }
@@ -651,7 +647,7 @@ footer.pagination-footer {
 @media (max-width: 875px) {
   body:not(.closeMenu) {
     .one-pane {
-      .searchbox-wrapper {
+      .faux-header__searchboxwrapper {
         display: none;
       }
     }
@@ -661,7 +657,7 @@ footer.pagination-footer {
 @media (max-width: 1285px) {
   body:not(.closeMenu) {
     .with-sidebar {
-      .searchbox-wrapper {
+      .faux-header__searchboxwrapper {
         display: none;
       }
     }

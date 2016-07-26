@@ -23,6 +23,8 @@ import Resources from "./resources";
 import Actions from "./actions";
 import Helpers from "../../helpers";
 
+import ReactSelect from "react-select";
+
 var ToggleHeaderButton = Components.ToggleHeaderButton;
 var databasesStore = Stores.databasesStore;
 var deleteDbModalStore = ComponentsStore.deleteDbModalStore;
@@ -219,17 +221,44 @@ var GraveyardInfo = React.createClass({
   }
 });
 
-var RightDatabasesHeader = React.createClass({
+class RightDatabasesHeader extends React.Component {
 
-  render: function () {
+  constructor (props) {
+    super(props);
+
+    this.state = this.getStoreState();
+  }
+
+  getStoreState () {
+
+    return {
+      databaseList: databasesStore.getDatabaseNamesForDropDown()
+    };
+  }
+
+  componentDidMount () {
+    databasesStore.on('change', this.onChange, this);
+  }
+
+  componentWillUnmount () {
+    databasesStore.off('change', this.onChange);
+  }
+
+  onChange () {
+    this.setState(this.getStoreState());
+  }
+
+  render () {
+    const {databaseList} = this.state;
+
     return (
       <div className="header-right right-db-header flex-layout flex-row">
-        <JumpToDatabaseWidget />
+        <JumpToDatabaseWidget databaseList={databaseList} />
         <AddDatabaseWidget />
       </div>
     );
   }
-});
+};
 
 var AddDatabaseWidget = React.createClass({
 
@@ -284,64 +313,28 @@ var AddDatabaseWidget = React.createClass({
   }
 });
 
-var JumpToDatabaseWidget = React.createClass({
 
-  getStoreState: function () {
-    return {
-      databaseNames: databasesStore.getDatabaseNames()
-    };
-  },
+const JumpToDatabaseWidget = ({databaseList}) => {
 
-  getInitialState: function () {
-    return this.getStoreState();
-  },
+  return (
+    <div data-name="jump-to-db" className="faux-header__searchboxwrapper">
+      <div className="faux-header__searchboxcontainer">
 
-  componentDidMount: function () {
-    databasesStore.on('change', this.onChange, this);
-  },
+        <ReactSelect
+          placeholder="Database name"
+          options={databaseList}
+          clearable={false}
+          onChange={({value: databaseName}) => {
+            Actions.jumpToDatabase(databaseName);
+          }} />
 
-  componentDidUpdate: function () {
-    $(ReactDOM.findDOMNode(this.refs.searchDbName)).typeahead({
-      source: this.state.databaseNames,
-      updater: function (item) {
-        this.jumpToDb(item);
-      }.bind(this)
-    });
-  },
-
-  componentWillUnmount: function () {
-    databasesStore.off('change', this.onChange, this);
-  },
-
-  onChange: function () {
-    this.setState(this.getStoreState());
-  },
-
-  jumpToDb: function (databaseName) {
-    databaseName = databaseName || ReactDOM.findDOMNode(this.refs.searchDbName).value;
-    Actions.jumpToDatabase(databaseName);
-  },
-
-  jumpToDbHandler: function (e) {
-    e.preventDefault();
-    this.jumpToDb();
-  },
-
-  render: function () {
-    return (
-      <div className="searchbox-wrapper">
-        <div id="header-search" className="js-search searchbox-container">
-          <form onSubmit={this.jumpToDbHandler} id="jump-to-db" className="navbar-form pull-right database-search">
-            <div className="input-append">
-              <input type="text" className="search-autocomplete" ref="searchDbName" name="search-query" placeholder="Database name" autoComplete="off" />
-              <span><button className="btn btn-primary" type="submit"><i className="icon icon-search"></i></button></span>
-            </div>
-          </form>
-        </div>
       </div>
-    );
-  }
-});
+    </div>
+  );
+};
+JumpToDatabaseWidget.propTypes = {
+  databaseList: React.PropTypes.array.isRequired
+};
 
 var DatabasePagination = React.createClass({
 
