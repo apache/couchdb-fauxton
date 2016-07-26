@@ -122,15 +122,18 @@ export default {
     if (_.isNull(databaseName) || databaseName.trim().length === 0) {
       return;
     }
+
     databaseName = databaseName.trim();
+
     if (Stores.databasesStore.doesDatabaseExist(databaseName)) {
-      var url = FauxtonAPI.urls('allDocs', 'app', app.utils.safeURLName(databaseName), "");
-      FauxtonAPI.navigate(url);
-    } else {
-      FauxtonAPI.addNotification({
-        msg: 'Database does not exist.',
-        type: 'error'
-      });
+      var url = FauxtonAPI.urls('allDocs', 'app', app.utils.safeURLName(databaseName), '');
+      // use the next cpu tick to allow react-select to unmount prorperly
+      return setTimeout(() => { FauxtonAPI.navigate(url); });
     }
+
+    FauxtonAPI.addNotification({
+      msg: 'Database does not exist.',
+      type: 'error'
+    });
   }
 };

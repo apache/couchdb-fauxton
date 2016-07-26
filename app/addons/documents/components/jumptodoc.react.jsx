@@ -18,11 +18,11 @@ import ReactSelect from "react-select";
 
 const JumpToDoc = ({database, loadOptions}) => {
   return (
-    <div id="jump-to-doc" class="input-append">
+    <div>
       <ReactSelect.Async
+        className="jump-to-doc"
         name="jump-to-doc"
         placeholder="Document ID"
-        className="jump-to-doc"
         loadOptions={loadOptions}
         clearable={false}
         onChange={({value: docId}) => {
@@ -30,8 +30,7 @@ const JumpToDoc = ({database, loadOptions}) => {
           // We navigating away from the page. So we need to take that navigation out of the loop otherwise
           // it causes an issue where the react-select state is changed after its unmounted
           setTimeout(() => FauxtonAPI.navigate(url, {trigger: true}));
-        }}
-      />
+        }} />
     </div>
   );
 };

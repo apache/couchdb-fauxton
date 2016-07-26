@@ -28,11 +28,13 @@ const { QueryOptionsController } = QueryOptions;
 
 const RightAllDocsHeader = ({database}) =>
   <div className="header-right right-db-header flex-layout flex-row">
-    <div className="searchbox-wrapper">
-        <div id="header-search" className="searchbox-container">
-          <JumpToDoc loadOptions={Actions.fetchAllDocsWithKey(database)} database={database} />
-        </div>
+
+    <div className="faux-header__searchboxwrapper">
+      <div className="faux-header__searchboxcontainer">
+        <JumpToDoc loadOptions={Actions.fetchAllDocsWithKey(database)} database={database} />
+      </div>
     </div>
+
     <QueryOptionsController />
   </div>;
 
