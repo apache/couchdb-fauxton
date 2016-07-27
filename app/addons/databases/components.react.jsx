@@ -317,7 +317,7 @@ var AddDatabaseWidget = React.createClass({
 const JumpToDatabaseWidget = ({databaseList}) => {
 
   return (
-    <div className="faux-header__searchboxwrapper">
+    <div data-name="jump-to-db" className="faux-header__searchboxwrapper">
       <div className="faux-header__searchboxcontainer">
 
         <ReactSelect
