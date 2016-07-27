@@ -14,6 +14,9 @@ var util = require('util'),
     events = require('events'),
     helpers = require('../helpers/helpers.js');
 
+const commandHelper = require('./helper.js');
+const checkForDatabaseCreated = commandHelper.checkForDatabaseCreated;
+
 function CreateDatabase () {
   events.EventEmitter.call(this);
 }
@@ -22,18 +25,24 @@ function CreateDatabase () {
 util.inherits(CreateDatabase, events.EventEmitter);
 
 CreateDatabase.prototype.command = function (databaseName) {
-  var that = this,
-      nano = helpers.getNanoInstance(this.client.options.db_url);
+  const nano = helpers.getNanoInstance(this.client.options.db_url);
 
-  nano.db.create(databaseName, function (err, body, header) {
+
+  nano.db.create(databaseName, (err, body, header) => {
     if (err) {
       console.log('Error in nano CreateDatabase Function: ' + databaseName, err.message);
-
     }
+
     console.log('nano - created a database: ' + databaseName);
-    // emit the complete event
-    that.emit('complete');
+
+    const timeout = helpers.maxWaitTime;
+    const couchUrl = this.client.options.db_url;
+
+    checkForDatabaseCreated(couchUrl, databaseName, timeout, () => {
+      this.emit('complete');
+    });
   });
+
   return this;
 };
 

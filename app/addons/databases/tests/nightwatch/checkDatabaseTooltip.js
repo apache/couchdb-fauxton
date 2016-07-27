@@ -20,12 +20,12 @@ module.exports = {
         baseUrl = client.globals.test_settings.launch_url;
 
     client
-      .loginToGUI()
-
       // use nano to quickly set up a DB with a single doc
       .deleteDatabase(newDatabaseName)
       .createDatabase(newDatabaseName)
       .createDocument(newDocumentName, newDatabaseName)
+
+      .loginToGUI()
 
       // delete the document manually. This'll ensure the database page has at least one "!" icon
       .waitForElementPresent('#dashboard-content a[href="#/database/' + newDatabaseName + '/_all_docs"]', waitTime, false)

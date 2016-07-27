@@ -15,6 +15,9 @@ var util = require('util'),
     helpers = require('../helpers/helpers.js'),
     request = require('request');
 
+const commandHelper = require('./helper.js');
+const checkForDatabaseCreated = commandHelper.checkForDatabaseCreated;
+
 function CheckForDatabaseCreated () {
   events.EventEmitter.call(this);
 }
@@ -23,29 +26,15 @@ function CheckForDatabaseCreated () {
 util.inherits(CheckForDatabaseCreated, events.EventEmitter);
 
 CheckForDatabaseCreated.prototype.command = function (databaseName, timeout) {
-  var couchUrl = this.client.options.db_url;
+  const couchUrl = this.client.options.db_url;
 
   if (!timeout) {
     timeout = helpers.maxWaitTime;
   }
 
-  var timeOutId = setTimeout(function () {
-    throw new Error('timeout waiting for db to appear');
-  }, timeout);
-
-  var intervalId = setInterval(function () {
-    request(couchUrl + '/_all_dbs', function (er, res, body) {
-      if (body) {
-        var reg = new RegExp('"' + databaseName + '"', 'g');
-        if (reg.test(body)) {
-          clearTimeout(timeOutId);
-          console.log('database created: ' + databaseName);
-          clearInterval(intervalId);
-          this.emit('complete');
-        }
-      }
-    }.bind(this));
-  }.bind(this), 1000);
+  checkForDatabaseCreated(couchUrl, databaseName, timeout, () => {
+    this.emit('complete');
+  });
 
   return this;
 };

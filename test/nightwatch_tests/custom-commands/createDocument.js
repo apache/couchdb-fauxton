@@ -15,6 +15,9 @@ var util = require('util'),
     helpers = require('../helpers/helpers.js'),
     request = require('request');
 
+const commandHelper = require('./helper.js');
+const checkForDocumentCreated = commandHelper.checkForDocumentCreated;
+
 function CreateDocument () {
   events.EventEmitter.call(this);
 }
@@ -23,7 +26,7 @@ function CreateDocument () {
 util.inherits(CreateDocument, events.EventEmitter);
 
 CreateDocument.prototype.command = function (documentName, databaseName, docContents) {
-  var couchUrl = this.client.options.db_url;
+  const couchUrl = this.client.options.db_url;
 
   if (!docContents) {
     docContents = { dummyKey: 'testingValue' };
@@ -35,13 +38,22 @@ CreateDocument.prototype.command = function (documentName, databaseName, docCont
     uri: couchUrl + '/' + databaseName + '?w=3',
     body: docContents,
     json: true
-  }, function (err, res, body) {
+  }, (err, res, body) => {
     if (err) {
       console.log('Error in nano CreateDocument Function: ' + documentName + ', in database: ' + databaseName, err.message);
     }
     console.log('nano  - created a doc: ' + documentName + ', in database: ' + databaseName);
-    this.emit('complete');
-  }.bind(this));
+
+    if (!databaseName) {
+      databaseName = helpers.testDatabaseName;
+    }
+
+    const url = [couchUrl, databaseName, documentName].join('/');
+    checkForDocumentCreated(url, helpers.maxWaitTime, () => {
+      this.emit('complete');
+    });
+
+  });
 
   return this;
 };
