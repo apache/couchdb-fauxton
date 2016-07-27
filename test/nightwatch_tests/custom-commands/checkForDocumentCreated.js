@@ -15,6 +15,9 @@ var util = require('util'),
     helpers = require('../helpers/helpers.js'),
     request = require('request');
 
+const commandHelper = require('./helper.js');
+const checkForDocumentCreated = commandHelper.checkForDocumentCreated;
+
 function CheckForDocumentCreated () {
   events.EventEmitter.call(this);
 }
@@ -23,7 +26,7 @@ function CheckForDocumentCreated () {
 util.inherits(CheckForDocumentCreated, events.EventEmitter);
 
 CheckForDocumentCreated.prototype.command = function (doc, timeout, db) {
-  var couchUrl = this.client.options.db_url;
+  const couchUrl = this.client.options.db_url;
 
   if (!db) {
     db = helpers.testDatabaseName;
@@ -33,22 +36,11 @@ CheckForDocumentCreated.prototype.command = function (doc, timeout, db) {
     timeout = helpers.maxWaitTime;
   }
 
-  var timeOutId = setTimeout(function () {
-    throw new Error('timeout waiting for doc to appear');
-  }, timeout);
+  const url = [couchUrl, db, doc].join('/');
 
-  var intervalId = setInterval(function () {
-    var url = [couchUrl, db, doc].join('/');
-
-    request(url, function (er, res, body) {
-      if (res && /^2..$/.test(res.statusCode)) {
-        clearTimeout(timeOutId);
-        console.log('doc created: ' + doc);
-        clearInterval(intervalId);
-        this.emit('complete');
-      }
-    }.bind(this));
-  }.bind(this), 1000);
+  checkForDocumentCreated(url, timeout, () => {
+    this.emit('complete');
+  });
 
   return this;
 };
