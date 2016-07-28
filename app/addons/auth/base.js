@@ -14,35 +14,39 @@ import app from "../../app";
 import FauxtonAPI from "../../core/api";
 import Auth from "./routes";
 import "./assets/less/auth.less";
+import Actions from './actions';
 
 Auth.session = new Auth.Session();
 FauxtonAPI.setSession(Auth.session);
 app.session = Auth.session;
 
-Auth.initialize = function () {
 
-  FauxtonAPI.addHeaderLink({
-    id: 'auth',
-    title: 'Login',
-    href: '#/login',
-    icon: 'fonticon-user',
-    bottomNav: true
-  });
+function cleanupAuthSection () {
+  FauxtonAPI.removeHeaderLink({ id: 'auth', footerNav: true });
+}
+
+Auth.initialize = function () {
 
   Auth.session.on('change', function () {
     var session = Auth.session;
     var link = {};
 
     if (session.isAdminParty()) {
-      link = {
+      const link = {
         id: 'auth',
         title: 'Admin Party!',
         href: '#/createAdmin',
         icon: 'fonticon-user',
         bottomNav: true
       };
+
+      cleanupAuthSection();
+      FauxtonAPI.addHeaderLink(link);
+      FauxtonAPI.hideLogin();
+
     } else if (session.isLoggedIn()) {
-      link = {
+
+      const link = {
         id: 'auth',
         title: session.user().name,
         href: '#/changePassword',
@@ -50,27 +54,14 @@ Auth.initialize = function () {
         bottomNav: true
       };
 
-      // ensure the footer link is removed before adding it
-      FauxtonAPI.removeHeaderLink({ id: 'logout', footerNav: true });
-      FauxtonAPI.addHeaderLink({
-        id: 'logout',
-        footerNav: true,
-        href: '#logout',
-        title: 'Logout',
-        icon: '',
-        className: 'logout'
-      });
+      cleanupAuthSection();
+      FauxtonAPI.addHeaderLink(link);
+      FauxtonAPI.showLogout();
     } else {
-      link = {
-        id: 'auth',
-        title: 'Login',
-        href: '#/login',
-        icon: 'fonticon-user',
-        bottomNav: true
-      };
-      FauxtonAPI.removeHeaderLink({ id: 'logout', footerNav: true });
+      cleanupAuthSection();
+      FauxtonAPI.showLogin();
     }
-    FauxtonAPI.updateHeaderLink(link);
+
   });
 
   Auth.session.fetchUser().then(function () {

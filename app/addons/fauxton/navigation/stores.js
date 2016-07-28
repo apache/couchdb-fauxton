@@ -13,8 +13,10 @@
 import app from "../../../app";
 import FauxtonAPI from "../../../core/api";
 import ActionTypes from "./actiontypes";
-const Stores = {};
 
+import _ from 'lodash';
+
+const Stores = {};
 
 Stores.NavBarStore = FauxtonAPI.Store.extend({
   initialize () {
@@ -28,6 +30,17 @@ Stores.NavBarStore = FauxtonAPI.Store.extend({
     this._footerNavLinks = [];
     this._bottomNavLinks = [];
     this._navBarVisible = true;
+
+    this._loginSectionVisible = false;
+    this._loginVisibleInsteadOfLogout = true;
+  },
+
+  getIsLoginSectionVisible () {
+    return this._loginSectionVisible;
+  },
+
+  getIsLoginVisibleInsteadOfLogout () {
+    return this._loginVisibleInsteadOfLogout;
   },
 
   isNavBarVisible () {
@@ -183,6 +196,20 @@ Stores.NavBarStore = FauxtonAPI.Store.extend({
 
       case ActionTypes.NAVBAR_SHOW:
         this.showNavBar();
+      break;
+
+      case ActionTypes.NAVBAR_SHOW_HIDE_LOGIN_LOGOUT_SECTION:
+        this._loginSectionVisible = action.visible;
+      break;
+
+      case ActionTypes.NAVBAR_SHOW_LOGIN_BUTTON:
+        this._loginSectionVisible = true;
+        this._loginVisibleInsteadOfLogout = true;
+      break;
+
+      case ActionTypes.NAVBAR_SHOW_LOGOUT_BUTTON:
+        this._loginSectionVisible = true;
+        this._loginVisibleInsteadOfLogout = false;
       break;
 
       default:
