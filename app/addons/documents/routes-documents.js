@@ -180,7 +180,7 @@ var DocumentsRouteObject = BaseRoute.extend({
     this.setComponent("#dashboard-lower-content", Changes.ChangesController);
 
     this.removeComponent('#footer');
-    this.setComponent('#react-headerbar', Changes.PollingOption);
+    this.removeComponent('#react-headerbar');
 
     this.viewEditor && this.viewEditor.remove();
 

@@ -75,20 +75,5 @@ export default {
         seqNum: latestSeqNum
       });
     }
-
-    if (changesStore.pollingEnabled()) {
-      this.getLatestChanges();
-    }
-  },
-
-  togglePolling: function () {
-    FauxtonAPI.dispatch({ type: ActionTypes.TOGGLE_CHANGES_POLLING });
-
-    // the user just enabled polling. Start 'er up
-    if (changesStore.pollingEnabled()) {
-      this.getLatestChanges();
-    } else {
-      currentRequest.abort();
-    }
   }
 };

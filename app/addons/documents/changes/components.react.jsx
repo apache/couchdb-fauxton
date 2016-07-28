@@ -137,46 +137,6 @@ class ChangesTabContent extends React.Component {
 }
 
 
-class PollingOption extends React.Component {
-  constructor (props) {
-    super(props);
-    this.state = this.getStoreState();
-  }
-
-  getStoreState () {
-    return {
-      pollingEnabled: store.pollingEnabled()
-    };
-  }
-
-  onChange () {
-    this.setState(this.getStoreState());
-  }
-
-  componentDidMount () {
-    store.on('change', this.onChange, this);
-  }
-
-  componentWillUnmount () {
-    store.off('change', this.onChange);
-  }
-
-  render () {
-    return (
-      <div className="changes-polling">
-        <input
-          type="checkbox"
-          id="changes-toggle-polling"
-          checked={this.state.pollingEnabled}
-          onChange={() => Actions.togglePolling()}
-        />
-        <label htmlFor="changes-toggle-polling">Auto-update changes list</label>
-      </div>
-    );
-  }
-}
-
-
 class AddFilterForm extends React.Component {
   constructor (props) {
     super(props);
@@ -380,7 +340,6 @@ class ChangeID extends React.Component {
 
 
 export default {
-  PollingOption,
   ChangesController,
   ChangesTabContent,
   ChangeRow,
