@@ -48,10 +48,10 @@ const Burger = React.createClass({
 const NavLink = React.createClass({
   render () {
     const link = this.props.link;
-    const liClassName = this.props.active === link.title ? 'active' : '';
+    //const liClassName = this.props.active === link.title ? 'active' : '';
 
     return (
-      <li data-nav-name={link.title} className={liClassName} >
+      <li data-nav-name={link.title} className="faux-navbar__itemarea">
         <a href={link.href} target={link.target ? '_blank' : null} data-bypass={link.target ? 'true' : null}>
           <i className={link.icon + " fonticon "}></i>
           <span dangerouslySetInnerHTML={{__html: link.title }} />
@@ -124,19 +124,15 @@ const NavBar = React.createClass({
     const footerNavLinks = this.createLinks(this.state.footerNavLinks);
 
     return (
-      <div className="navbar">
+      <div className="faux-navbar">
         <Burger toggleMenu={this.toggleMenu}/>
-        <nav id="main_navigation">
-          <ul id="nav-links" className="nav">
+        <nav>
+          <ul>
             {navLinks}
+            {bottomNavLinks}
           </ul>
-
-          <div id="bottom-nav">
-            <ul id="bottom-nav-links" className="nav">
-              {bottomNavLinks}
-            </ul>
-          </div>
         </nav>
+
         <div id="primary-nav-right-shadow"/>
 
         <div className="bottom-container">
