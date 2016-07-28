@@ -4,12 +4,48 @@
 }
 
 .faux-navbar__itemarea {
-  font-size: 16px;
-  font-weight: normal;
-  font-family: helvetica;
+
   .box-sizing(border-box);
-  background-color: #564E4C;
   border-bottom: 1px solid #3A2C2B;
   height: 48px;
-  list-style-type: none;
+  padding: 12px 25px;
+  line-height: 24px;
+
+}
+
+.faux-navbar__link {
+  display: block;
+  text-decoration: none;
+
+}
+
+.faux-navbar__link--active {
+  background-color: #AF2D24;
+}
+
+.faux-navbar__link--inactive {
+  background-color: #564E4C;
+}
+
+.faux-navbar__link:hover {
+  background-color: #E73D34;
+  text-decoration: none;
+}
+
+
+.faux-navbar__icon {
+  color: #B3B4B4;
+  font-size: 24px;
+  vertical-align: middle;
+}
+
+.faux-navbar__text {
+  margin: 0 0 0 14px;
+  color: #fff;
+  vertical-align: middle;
+  font-size: 16px;
+  font-weight: normal;
+  font-family: Helvetica,sans-serif;
+  font-weight: 400;
+
 }

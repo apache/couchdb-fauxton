@@ -45,21 +45,22 @@ const Burger = React.createClass({
   }
 });
 
-const NavLink = React.createClass({
-  render () {
-    const link = this.props.link;
-    //const liClassName = this.props.active === link.title ? 'active' : '';
+const NavLink = ({link, active}) => {
 
-    return (
-      <li data-nav-name={link.title} className="faux-navbar__itemarea">
-        <a href={link.href} target={link.target ? '_blank' : null} data-bypass={link.target ? 'true' : null}>
-          <i className={link.icon + " fonticon "}></i>
-          <span dangerouslySetInnerHTML={{__html: link.title }} />
-        </a>
-      </li>
-    );
-  }
-});
+  const divClassName = active === link.title ? 'faux-navbar__link--active' : 'faux-navbar__link--inactive';
+
+  return (
+
+    <a className={"faux-navbar__link " + divClassName} href={link.href} target={link.target ? '_blank' : null} data-bypass={link.target ? 'true' : null}>
+      <div data-nav-name={link.title} className="faux-navbar__itemarea">
+        <i className={link.icon + " fonticon faux-navbar__icon"}></i>
+        <span className="faux-navbar__text" dangerouslySetInnerHTML={{__html: link.title}} />
+      </div>
+    </a>
+
+  );
+
+};
 
 const NavBar = React.createClass({
   getStoreState () {
@@ -127,10 +128,10 @@ const NavBar = React.createClass({
       <div className="faux-navbar">
         <Burger toggleMenu={this.toggleMenu}/>
         <nav>
-          <ul>
-            {navLinks}
-            {bottomNavLinks}
-          </ul>
+
+          {navLinks}
+          {bottomNavLinks}
+
         </nav>
 
         <div id="primary-nav-right-shadow"/>
