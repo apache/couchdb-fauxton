@@ -28,7 +28,6 @@ var ChangesStore = FauxtonAPI.Store.extend({
     this._databaseName = '';
     this._maxChangesListed = 100;
     this._showingSubset = false;
-    this._pollingEnabled = false;
     this._lastSequenceNum = null;
   },
 
@@ -120,17 +119,6 @@ var ChangesStore = FauxtonAPI.Store.extend({
     this._maxChangesListed = num;
   },
 
-  togglePolling: function () {
-    this._pollingEnabled = !this._pollingEnabled;
-
-    // if polling was just enabled, reset the last sequence num to 'now' so only future changes will appear
-    this._lastSequenceNum = 'now';
-  },
-
-  pollingEnabled: function () {
-    return this._pollingEnabled;
-  },
-
   getLastSeqNum: function () {
     return this._lastSequenceNum;
   },
@@ -151,10 +139,6 @@ var ChangesStore = FauxtonAPI.Store.extend({
 
       case ActionTypes.REMOVE_CHANGES_FILTER_ITEM:
         this.removeFilter(action.filter);
-        break;
-
-      case ActionTypes.TOGGLE_CHANGES_POLLING:
-        this.togglePolling();
         break;
 
       default:
