@@ -1586,7 +1586,7 @@ TabElement.propTypes = {
 
 const TabElementWrapper = ({children}) => {
   return (
-    <ul className="nav nav-tabs component-tab-element-wrapper">
+    <ul className="component-tab-element-wrapper">
       {children}
     </ul>
   );
