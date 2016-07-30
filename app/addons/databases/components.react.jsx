@@ -23,6 +23,8 @@ import Resources from "./resources";
 import Actions from "./actions";
 import Helpers from "../../helpers";
 
+import {Tooltip, OverlayTrigger} from "react-bootstrap";
+
 var ToggleHeaderButton = Components.ToggleHeaderButton;
 var databasesStore = Stores.databasesStore;
 var deleteDbModalStore = ComponentsStore.deleteDbModalStore;
@@ -138,13 +140,18 @@ var DatabaseRow = React.createClass({
   },
 
   renderGraveyard: function (row) {
-    if (row.status.isGraveYard()) {
+
+    const numDocs = row.status.numDocs();
+    const numDeletedDocs = row.status.numDeletedDocs();
+    const showGraveyardIcon = row.status.isGraveYard();
+
+    if (showGraveyardIcon) {
       return (
-        <GraveyardInfo row={row} />
+        <GraveyardInfo numDocs={numDocs} numDeletedDocs={numDeletedDocs} />
       );
-    } else {
-      return null;
     }
+
+    return null;
   },
 
   getExtensionColumns: function (row) {
@@ -203,21 +210,17 @@ var DatabaseRow = React.createClass({
   }
 });
 
-var GraveyardInfo = React.createClass({
+const GraveyardInfo = ({numDocs, numDeletedDocs}) => {
 
-  componentDidMount: function () {
-    $(ReactDOM.findDOMNode(this.refs.myself)).tooltip();
-  },
+  const graveyardTitle = `This database has just ${numDocs} docs and ${numDeletedDocs} deleted docs`;
+  const tooltip = <Tooltip id="graveyard-tooltip">{graveyardTitle}</Tooltip>;
 
-  render: function () {
-    var row = this.props.row;
-    var graveyardTitle = "This database has just " + row.status.numDocs() +
-      " docs and " + row.status.numDeletedDocs() + " deleted docs";
-    return (
-      <i className="js-db-graveyard icon icon-exclamation-sign" ref="myself" title={graveyardTitle}></i>
-    );
-  }
-});
+  return (
+    <OverlayTrigger placement="top" overlay={tooltip}>
+      <i className="js-db-graveyard icon icon-exclamation-sign" title={graveyardTitle}></i>
+    </OverlayTrigger>
+  );
+};
 
 var RightDatabasesHeader = React.createClass({
 

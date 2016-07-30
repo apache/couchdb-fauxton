@@ -128,7 +128,7 @@ class ChangesTabContent extends React.Component {
   render () {
     return (
       <div className="changes-header">
-        <AddFilterForm tooltip={this.props.tooltip} filter={(label) => Actions.removeFilter(label)} addFilter={this.addFilter}
+        <AddFilterForm filter={(label) => Actions.removeFilter(label)} addFilter={this.addFilter}
           hasFilter={this.hasFilter} />
         <BadgeList elements={this.state.filters} removeBadge={(label) => Actions.removeFilter(label)} />
       </div>
@@ -194,9 +194,6 @@ class AddFilterForm extends React.Component {
           <input type="text" ref="addItem" className={this.inputClassNames()} placeholder="Sequence or ID"
                  onChange={(e) => this.setState({ filter: e.target.value })} value={this.state.filter} />
           <button type="submit" className="btn btn-info">Filter</button>
-          <div className="help-block">
-            <FilterTooltip tooltip={this.props.tooltip} />
-          </div>
         </fieldset>
       </form>
     );
@@ -207,28 +204,6 @@ AddFilterForm.PropTypes = {
   hasFilter: React.PropTypes.func.isRequired,
   tooltips: React.PropTypes.string
 };
-AddFilterForm.defaultProps = {
-  tooltip: ''
-};
-
-
-class FilterTooltip extends React.Component {
-  componentDidMount () {
-    if (this.props.tooltip) {
-      $(ReactDOM.findDOMNode(this.refs.tooltip)).tooltip();
-    }
-  }
-
-  render () {
-    if (!this.props.tooltip) {
-      return null;
-    }
-    return (
-      <i ref="tooltip" className="icon icon-question-sign js-filter-tooltip" data-toggle="tooltip"
-         data-original-title={this.props.tooltip} />
-    );
-  }
-}
 
 
 class ChangeRow extends React.Component {

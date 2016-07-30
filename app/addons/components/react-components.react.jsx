@@ -251,7 +251,7 @@ var StyledSelect = React.createClass({
 
 
 /**
- * A pre-packaged JS editor panel for use on the Edit Index / Mango pages. Includes options for a title, zen mode
+ * A pre-packaged JS editor panel for use on the Edit Index / Mango pages. Includes options for a title,
  * icon and beautify button.
  */
 var CodeEditorPanel = React.createClass({
@@ -262,7 +262,6 @@ var CodeEditorPanel = React.createClass({
       defaultCode: '',
       title: '',
       docLink: '',
-      allowZenMode: true,
       blur: function () {}
     };
   },
@@ -273,7 +272,6 @@ var CodeEditorPanel = React.createClass({
 
   getStoreState: function () {
     return {
-      zenModeEnabled: false,
       code: this.props.defaultCode
     };
   },
@@ -290,12 +288,6 @@ var CodeEditorPanel = React.createClass({
     "['{a}'] is better written in dot notation."
   ],
 
-  getZenModeIcon: function () {
-    if (this.props.allowZenMode) {
-      return <span className="fonticon fonticon-resize-full zen-editor-icon" title="Enter Zen mode" onClick={this.enterZenMode}></span>;
-    }
-  },
-
   getDocIcon: function () {
     if (this.props.docLink) {
       return (
@@ -308,30 +300,6 @@ var CodeEditorPanel = React.createClass({
         </a>
       );
     }
-  },
-
-  getZenModeOverlay: function () {
-    if (this.state.zenModeEnabled) {
-      return (
-        <ZenModeOverlay
-          defaultCode={this.state.code}
-          mode={this.props.mode}
-          ignorableErrors={this.ignorableErrors}
-          onExit={this.exitZenMode} />
-      );
-    }
-  },
-
-  enterZenMode: function () {
-    this.setState({
-      zenModeEnabled: true,
-      code: this.refs.codeEditor.getValue()
-    });
-  },
-
-  exitZenMode: function (content) {
-    this.setState({ zenModeEnabled: false });
-    this.getEditor().setValue(content);
   },
 
   getEditor: function () {
@@ -361,7 +329,6 @@ var CodeEditorPanel = React.createClass({
         <label>
           <span>{this.props.title}</span>
           {this.getDocIcon()}
-          {this.getZenModeIcon()}
         </label>
         <CodeEditor
           id={this.props.id}
@@ -371,10 +338,8 @@ var CodeEditorPanel = React.createClass({
           showGutter={true}
           ignorableErrors={this.ignorableErrors}
           setHeightToLineCount={true}
-          blur={this.props.blur}
-        />
+          blur={this.props.blur} />
         <Beautify code={this.state.code} beautifiedCode={this.beautify} />
-        {this.getZenModeOverlay()}
       </div>
     );
   }
@@ -812,121 +777,6 @@ var StringEditModal = React.createClass({
 });
 
 
-// Zen mode editing has very few options:
-// - It covers the full screen, hiding everything else
-// - Two themes: light & dark (choice stored in local storage)
-// - No save option, but has a 1-1 map with a <CodeEditor /> element which gets updated when the user leaves
-// - [Escape] closes the mode, as does clicking the shrink icon at the top right
-var ZenModeOverlay = React.createClass({
-  getDefaultProps: function () {
-    return {
-      mode: 'javascript',
-      defaultCode: '',
-      ignorableErrors: [],
-      onExit: null,
-      highlightActiveLine: false
-    };
-  },
-
-  themes: {
-    dark: 'idle_fingers',
-    light: 'dawn'
-  },
-
-  getInitialState: function () {
-    return this.getStoreState();
-  },
-
-  getStoreState: function () {
-    return {
-      theme: this.getZenTheme(),
-      code: this.props.defaultCode
-    };
-  },
-
-  getZenTheme: function () {
-    var selectedTheme = app.utils.localStorageGet('zenTheme');
-    return _.isUndefined(selectedTheme) ? 'dark' : selectedTheme;
-  },
-
-  onChange: function () {
-    this.setState(this.getStoreState());
-  },
-
-  componentDidMount: function () {
-    $(ReactDOM.findDOMNode(this.refs.exit)).tooltip({ placement: 'left' });
-    $(ReactDOM.findDOMNode(this.refs.theme)).tooltip({ placement: 'left' });
-  },
-
-  exitZenMode: function () {
-    this.props.onExit(this.getValue());
-  },
-
-  getValue: function () {
-    return this.refs.ace.getValue();
-  },
-
-  toggleTheme: function () {
-    var newTheme = (this.state.theme === 'dark') ? 'light' : 'dark';
-    this.setState({
-      theme: newTheme,
-      code: this.getValue()
-    });
-    app.utils.localStorageSet('zenTheme', newTheme);
-  },
-
-  setValue: function (code, lineNumber) {
-    lineNumber = lineNumber ? lineNumber : -1;
-    this.editor.setValue(code, lineNumber);
-  },
-
-  render: function () {
-    var classes = 'full-page-editor-modal-wrapper zen-theme-' + this.state.theme;
-
-    var editorCommands = [{
-      name: 'close',
-      bindKey: { win: 'ESC', mac: 'ESC' },
-      exec: this.exitZenMode
-    }];
-
-    return (
-      <div className={classes}>
-        <div className="zen-mode-controls">
-          <ul>
-            <li>
-              <span ref="exit"
-                className="fonticon fonticon-resize-small js-exit-zen-mode"
-                data-toggle="tooltip"
-                data-container=".zen-mode-controls .tooltips"
-                title="Exit zen mode (`esc`)"
-                onClick={this.exitZenMode}></span>
-            </li>
-            <li>
-              <span ref="theme"
-                className="fonticon fonticon-picture js-toggle-theme"
-                data-toggle="tooltip"
-                data-container=".zen-mode-controls .tooltips"
-                title="Switch zen theme"
-                onClick={this.toggleTheme}></span>
-            </li>
-          </ul>
-          <div className="tooltips"></div>
-        </div>
-        <CodeEditor
-          ref="ace"
-          autoFocus={true}
-          theme={this.themes[this.state.theme]}
-          defaultCode={this.props.defaultCode}
-          editorCommands={editorCommands}
-          ignorableErrors={this.props.ignorableErrors}
-          highlightActiveLine={this.props.highlightActiveLine}
-        />
-      </div>
-    );
-  }
-});
-
-
 var Beautify = React.createClass({
   noOfLines: function () {
     return this.props.code.split(/\r\n|\r|\n/).length;
@@ -936,21 +786,10 @@ var Beautify = React.createClass({
     return this.noOfLines() === 1;
   },
 
-  addTooltip: function () {
-    if (this.canBeautify) {
-      $('.beautify-tooltip').tooltip({ placement: 'right' });
-    }
-  },
-
-  componentDidMount: function () {
-    this.addTooltip();
-  },
-
   beautify: function (event) {
     event.preventDefault();
     var beautifiedCode = beautifyHelper(this.props.code);
     this.props.beautifiedCode(beautifiedCode);
-    $('.beautify-tooltip').tooltip('hide');
   },
 
   render: function () {
@@ -961,9 +800,8 @@ var Beautify = React.createClass({
     return (
       <button
         onClick={this.beautify}
-        className="beautify beautify_map btn btn-primary btn-small beautify-tooltip"
+        className="beautify beautify_map btn btn-primary btn-small"
         type="button"
-        data-toggle="tooltip"
         title="Reformat your minified code to make edits to it."
       >
         beautify this code
@@ -1603,7 +1441,6 @@ export default {
   CodeEditorPanel: CodeEditorPanel,
   CodeEditor: CodeEditor,
   StringEditModal: StringEditModal,
-  ZenModeOverlay: ZenModeOverlay,
   Beautify: Beautify,
   PaddedBorderedBox: PaddedBorderedBox,
   Document: Document,

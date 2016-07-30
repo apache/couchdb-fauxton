@@ -170,7 +170,6 @@ var ReduceEditor = React.createClass({
         id='reduce-function'
         title={'Custom Reduce function'}
         defaultCode={this.state.reduce}
-        allowZenMode={false}
         blur={this.updateReduceCode}
       />;
     }
@@ -369,7 +368,6 @@ var EditorController = React.createClass({
             title={"Map function"}
             docLink={getDocUrl('MAP_FUNCS')}
             blur={this.updateMapCode}
-            allowZenMode={false}
             defaultCode={this.state.map} />
           <ReduceEditor ref="reduceEditor" />
           <div className="padded-box">
