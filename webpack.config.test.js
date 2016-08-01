@@ -77,6 +77,13 @@ module.exports = {
     path: __dirname + '/test',
     filename: 'bundle.js' //All our code is compiled into a single file called bundle.js
   },
+  externals: { //for webpack to play nice with enzyme
+    "jsdom": "window",
+    "cheerio": "window",
+    'react/lib/ExecutionEnvironment': true,
+    'react/lib/ReactContext': 'window',
+    'react/addons': true
+  },
   plugins: [
     new webpack.optimize.LimitChunkCountPlugin({maxChunks: 1})
   ]
