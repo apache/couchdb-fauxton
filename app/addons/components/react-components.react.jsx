@@ -1395,6 +1395,11 @@ var APIBar = React.createClass({
 
   componentDidMount: function () {
     $('body').on('click.APIBar', function (e) {
+
+      if (!$('.show-tray.api-bar-tray').length) {
+        return;
+      }
+
       if ($(e.target).closest('.api-bar-tray,.control-toggle-api-url').length === 0) {
         Actions.toggleApiBarVisibility(false);
       }
