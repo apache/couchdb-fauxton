@@ -24,10 +24,9 @@ const Footer = React.createClass({
     if (!version) { return null; }
     return (
       <div className="version-footer">
-        Fauxton on
-        <a href="http://couchdb.apache.org/"> Apache CouchDB</a>
-        <br/>
-        v. {version}
+        Fauxton on {" "}
+        <a href="http://couchdb.apache.org/">Apache CouchDB</a>
+        {" "} v. {version}
       </div>
     );
   }

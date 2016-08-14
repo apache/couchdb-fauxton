@@ -67,7 +67,8 @@
   .version-footer {
     color: #fff;
     font-size: 10px;
-    padding-left: 10px;
+    text-align: center;
+    background-color: @brown;
   }
   .closeMenu & {
     .version-footer {
@@ -104,7 +105,7 @@
     }
     .bottom-container {
       position: fixed;
-      bottom: 0;
+      bottom: 10px;
       .brand {
         .box-sizing(content-box);
         .hide-text;
@@ -116,7 +117,7 @@
         background: #3a2c2b;
         .icon {
           .box-sizing(content-box);
-          background: url(../img/CouchDB-negative-logo.png) no-repeat 28px 0px;
+          background: url(../img/CouchDB-negative-logo.png) no-repeat 23px 0px;
           background-size: 150px;
           display: block;
           height: 100%;
@@ -137,18 +138,20 @@
       #footer-nav-links {
         width: 100%;
         margin: 0;
-        background: #3a2c2b;
-        li {
-          a {
-            font-size: 12px;
-            color: @linkColor;
-            padding: 0px 0px 15px 85px;
-            text-shadow: none;
+        background: @brown;
 
-            .closeMenu & {
-              padding: 0px 0px 15px 15px;
-            }
+        li {
+          width: 100%;
+          text-align: center;
+
+          a {
+            font-size: 10px;
+            color: @linkColor;
+            padding: 0px;
+            text-shadow: none;
+            width: 100%;
           }
+
           &.active, &:hover {
             a {
               text-decoration: underline;
