@@ -30,6 +30,10 @@ exports.checkForDatabaseCreated = function checkForDatabaseCreated (couchUrl, da
   const intervalId = setInterval(() => {
     request(couchUrl + '/_all_dbs', function (er, res, body) {
       if (body) {
+        console.log('list of databases:');
+        console.log(body);
+        console.log("_______________________");
+
         const reg = new RegExp('"' + databaseName + '"', 'g');
         if (reg.test(body)) {
           clearTimeout(timeOutId);

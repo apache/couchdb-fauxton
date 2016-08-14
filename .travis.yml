@@ -19,7 +19,7 @@ before_script:
   - DIST=./dist/debug ./bin/fauxton &
   - sleep 30
 script:
-  - ./node_modules/grunt-cli/bin/grunt nightwatch
+  - ./node_modules/grunt-cli/bin/grunt nightwatch --file=replication
 after_script:
   - npm run docker:down
 

@@ -73,14 +73,7 @@ module.exports = {
       .checkForDatabaseCreated(replicatedDBName, longWaitTime)
 
       // lastly, check the doc was replicated as well
-      .url(baseUrl + '/' + newDatabaseName1 + '/' + docName1)
-      .waitForElementVisible('html', waitTime, false)
-      .getText('html', function (result) {
-        const data = result.value,
-              createdDocIsPresent = data.indexOf(docName1);
-
-        this.verify.ok(createdDocIsPresent > 0,  'Checking doc exists.');
-      })
+      .checkForDocumentCreated(docName1, longWaitTime, replicatedDBName)
       .end();
   },
 
