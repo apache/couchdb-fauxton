@@ -38,6 +38,8 @@ CheckForDocumentCreated.prototype.command = function (doc, timeout, db) {
 
   const url = [couchUrl, db, doc].join('/');
 
+  console.log('checking this doc exists: ', url);
+
   checkForDocumentCreated(url, timeout, () => {
     this.emit('complete');
   });
