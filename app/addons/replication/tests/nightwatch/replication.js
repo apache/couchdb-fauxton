@@ -41,6 +41,7 @@ module.exports = {
 
     client
       .createDatabase(newDatabaseName1)
+      .checkForDatabaseCreated(newDatabaseName1, waitTime)
       .createDocument(docName1, newDatabaseName1)
       .loginToGUI()
       .url(baseUrl + '/#replication')
@@ -68,7 +69,7 @@ module.exports = {
       .click('.enter-password-modal button.save')
 
       // now check the database was created
-      .checkForDatabaseCreated(newDatabaseName1, waitTime, true)
+      .checkForDatabaseCreated(replicatedDBName, waitTime, true)
 
       // lastly, check the doc was replicated as well
       .url(baseUrl + '/' + newDatabaseName1 + '/' + docName1)
@@ -91,8 +92,10 @@ module.exports = {
 
       // create two databases, each with a single (different) doc
       .createDatabase(newDatabaseName1)
+      .checkForDatabaseCreated(newDatabaseName1, waitTime)
       .createDocument(docName1, newDatabaseName1)
       .createDatabase(newDatabaseName2)
+      .checkForDatabaseCreated(newDatabaseName2, waitTime)
       .createDocument(docName2, newDatabaseName2)
 
       // now login and fill in the replication form
