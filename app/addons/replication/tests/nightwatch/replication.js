@@ -50,7 +50,7 @@ module.exports = {
 
       // select LOCAL as the source
       .click('#replication-source')
-      .click('option[value="REPLICATION_SOURCE_LOCAL"]')
+      .click('#replication-source option[value="REPLICATION_SOURCE_LOCAL"]')
       .waitForElementPresent('.replication-source-name-row', waitTime, true)
 
       // enter our source DB
@@ -106,14 +106,14 @@ module.exports = {
 
       // select the LOCAL db as the source
       .click('#replication-source')
-      .click('option[value="REPLICATION_SOURCE_LOCAL"]')
+      .click('#replication-source option[value="REPLICATION_SOURCE_LOCAL"]')
       .waitForElementPresent('.replication-source-name-row', waitTime, true)
       .setValue('.replication-source-name-row .Select-input input', [newDatabaseName1])
       .keys(['\uE015', '\uE015', '\uE006'])
 
       // select existing local as the target
       .click('#replication-target')
-      .click('option[value="REPLICATION_TARGET_EXISTING_LOCAL_DATABASE"]')
+      .click('#replication-target option[value="REPLICATION_TARGET_EXISTING_LOCAL_DATABASE"]')
       .setValue('.replication-target-name-row .Select-input input', [newDatabaseName2])
       .keys(['\uE015', '\uE015', '\uE006'])
 
