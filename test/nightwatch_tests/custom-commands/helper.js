@@ -9,6 +9,8 @@ exports.checkForDocumentCreated = function checkForDocumentCreated (url, timeout
   const intervalId = setInterval(() => {
 
     request(url, (er, res, body) => {
+      console.log(res);
+
       if (res && /^2..$/.test(res.statusCode)) {
         clearTimeout(timeOutId);
         console.log('check for doc created successful');
