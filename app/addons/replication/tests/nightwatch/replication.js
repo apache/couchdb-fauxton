@@ -19,6 +19,7 @@ const replicatedDBName = 'replicated-db';
 const docName1 = 'doc-name1';
 const docName2 = 'doc-name2';
 const pwd = 'testerpass';
+const longWaitTime = 120000;
 
 const destroyDBs = (client, done) => {
   var nano = helpers.getNanoInstance(client.globals.test_settings.db_url);
@@ -41,7 +42,7 @@ module.exports = {
 
     client
       .createDatabase(newDatabaseName1)
-      .checkForDatabaseCreated(newDatabaseName1, waitTime)
+      .checkForDatabaseCreated(newDatabaseName1, longWaitTime)
       .createDocument(docName1, newDatabaseName1)
       .loginToGUI()
       .url(baseUrl + '/#replication')
@@ -69,7 +70,7 @@ module.exports = {
       .click('.enter-password-modal button.save')
 
       // now check the database was created
-      .checkForDatabaseCreated(replicatedDBName, waitTime, true)
+      .checkForDatabaseCreated(replicatedDBName, longWaitTime)
 
       // lastly, check the doc was replicated as well
       .url(baseUrl + '/' + newDatabaseName1 + '/' + docName1)
@@ -92,10 +93,10 @@ module.exports = {
 
       // create two databases, each with a single (different) doc
       .createDatabase(newDatabaseName1)
-      .checkForDatabaseCreated(newDatabaseName1, waitTime)
+      .checkForDatabaseCreated(newDatabaseName1, longWaitTime)
       .createDocument(docName1, newDatabaseName1)
       .createDatabase(newDatabaseName2)
-      .checkForDatabaseCreated(newDatabaseName2, waitTime)
+      .checkForDatabaseCreated(newDatabaseName2, longWaitTime)
       .createDocument(docName2, newDatabaseName2)
 
       // now login and fill in the replication form
@@ -128,7 +129,7 @@ module.exports = {
       .click('.enter-password-modal button.save')
 
       // now check the target database contains the doc from the original db
-      .checkForDocumentCreated(docName1, waitTime, newDatabaseName2)
+      .checkForDocumentCreated(docName1, longWaitTime, newDatabaseName2)
       .end();
   }
 };
