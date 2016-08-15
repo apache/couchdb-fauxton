@@ -28,7 +28,7 @@ import {TrayContents, TrayWrapper, connectToStores} from './components/tray';
 import {ApiBarController} from './components/apibar';
 import {DeleteDatabaseModal} from './components/deletedatabasemodal';
 import {TabElement, TabElementWrapper} from './components/tabelement';
-import {Polling} from './components/polling';
+import {Polling, RefreshBtn} from './components/polling';
 
 export default {
   BadgeList,
@@ -53,5 +53,6 @@ export default {
   ApiBarController,
   DeleteDatabaseModal,
   TabElement,
-  TabElementWrapper
+  TabElementWrapper,
+  RefreshBtn
 };

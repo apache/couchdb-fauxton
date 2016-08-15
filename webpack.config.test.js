@@ -31,14 +31,21 @@ module.exports = {
       //loader: 'react-hot!babel'
       loader: 'babel'
     },
-    { test: require.resolve("jquery"),
+    {
+      test: require.resolve("jquery"),
       loader: "expose?$!expose?jQuery"
-     },
-    { test: require.resolve("sinon"),
+    },
+    {
+      test: require.resolve("sinon"),
       loader: "expose?sinon"
-     },
-    { test: require.resolve("backbone"),
+    },
+    {
+      test: require.resolve("backbone"),
       loader: "expose?Backbone"
+    },
+    {
+      test: require.resolve("url-polyfill"),
+      loader: "imports?this=>window"
     },
     {
       test: require.resolve("react"),

@@ -23,7 +23,8 @@ export const StyledSelect = React.createClass({
     return (
       <div className="styled-select">
         <label htmlFor={this.props.selectId}>
-          <i className="fonticon-down-dir"></i>
+          <i className="fonticon-down-dir styled-select-icon"></i>
+          <i className="fonticon-down-dir styled-select-hover-icon"></i>
           <select
             value={this.props.selectValue}
             id={this.props.selectId}

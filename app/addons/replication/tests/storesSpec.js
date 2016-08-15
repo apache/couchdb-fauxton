@@ -16,7 +16,7 @@ import Constants from '../constants';
 const assert = utils.assert;
 const store = Stores.replicationStore;
 
-describe('Databases Store', function () {
+describe('Replication Store', function () {
 
   afterEach(function () {
     store.reset();
@@ -31,9 +31,9 @@ describe('Databases Store', function () {
     store.updateFormField('remoteTarget', 'TARGET');
     assert.equal(store.getRemoteTarget(), 'TARGET');
 
-    assert.equal(store.getTargetDatabase(), '');
-    store.updateFormField('targetDatabase', 'db');
-    assert.equal(store.getTargetDatabase(), 'db');
+    assert.equal(store.getlocalTarget(), '');
+    store.updateFormField('localTarget', 'db');
+    assert.equal(store.getlocalTarget(), 'db');
 
     assert.equal(store.getReplicationType(), Constants.REPLICATION_TYPE.ONE_TIME);
     store.updateFormField('replicationType', Constants.REPLICATION_TYPE.CONTINUOUS);
@@ -51,9 +51,9 @@ describe('Databases Store', function () {
     store.updateFormField('replicationTarget', 'rtarget');
     assert.equal(store.getReplicationTarget(), 'rtarget');
 
-    assert.equal(store.getSourceDatabase(), '');
-    store.updateFormField('sourceDatabase', 'source-db');
-    assert.equal(store.getSourceDatabase(), 'source-db');
+    assert.equal(store.getlocalSource(), '');
+    store.updateFormField('localSource', 'source-db');
+    assert.equal(store.getlocalSource(), 'source-db');
   });
 
 });

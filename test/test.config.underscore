@@ -14,6 +14,7 @@
 //
 
 require([
+  "url-polyfill",
   <% _.each(testFiles, function (test) {%>
   '.././<%= test %>',
  <% }) %>

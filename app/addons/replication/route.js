@@ -10,34 +10,67 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import app from '../../app';
 import FauxtonAPI from '../../core/api';
-import Actions from './actions';
-import Components from './components.react';
+import ReplicationController from './controller';
+import ComponentActions from '../components/actions';
 
+const ReplicationRouteObject = FauxtonAPI.RouteObject.extend({
+  layout: 'empty',
+  hideNotificationCenter: true,
+  hideApiBar: true,
 
-var ReplicationRouteObject = FauxtonAPI.RouteObject.extend({
-  layout: 'one_pane',
   routes: {
-    'replication': 'defaultView',
-    'replication/:dbname': 'defaultView'
+    'replication/_create': 'defaultView',
+    'replication/:dbname': 'defaultView',
+    'replication/id/:id': 'fromId',
+    'replication': 'activityView'
   },
   selectedHeader: 'Replication',
-  apiUrl: function () {
-    return [FauxtonAPI.urls('replication', 'api'), FauxtonAPI.constants.DOC_URLS.REPLICATION];
-  },
-  crumbs: [
-    { name: 'Replication', link: 'replication' }
-  ],
+
   roles: ['fx_loggedIn'],
+
+  setActivityCrumbs () {
+    this.crumbs = [
+      {name: 'Replication'}
+    ];
+  },
+
+  setCreateReplicationCrumbs () {
+    this.crumbs = [
+      {name: 'Replication', link: 'replication'},
+      {name: 'New Replication'}
+    ];
+  },
+
   defaultView: function (databaseName) {
-    const sourceDatabase = databaseName || '';
-    Actions.initReplicator(sourceDatabase);
-    this.setComponent('#dashboard-content', Components.ReplicationController);
+    // ComponentActions.hideAPIBarButton();
+    // this.setCreateReplicationCrumbs();
+    const localSource = databaseName || '';
+    this.setComponent('.template', ReplicationController, {
+      localSource: localSource,
+      section: 'new replication'
+    });
+
+  },
+
+  fromId: function (replicationId) {
+    // ComponentActions.hideAPIBarButton();
+    // this.setCreateReplicationCrumbs();
+    this.setComponent('.template', ReplicationController, {
+      replicationId: replicationId,
+      section: 'new replication'
+    });
+  },
+
+  activityView: function () {
+    // ComponentActions.hideAPIBarButton();
+    // this.setActivityCrumbs();
+    this.setComponent('.template', ReplicationController, {
+      section: 'activity'
+    });
   }
 });
 
-var Replication = {};
-Replication.RouteObjects = [ReplicationRouteObject];
-
-export default Replication;
+export default {
+  RouteObjects: [ReplicationRouteObject]
+};

@@ -128,3 +128,23 @@ Polling.propTypes = {
   stepSize: React.PropTypes.number.isRequired,
   onPoll: React.PropTypes.func.isRequired,
 };
+
+export const RefreshBtn = ({refresh}) =>
+  <div className="faux__refresh-btn">
+    <a
+      className="faux__refresh-link"
+      href="#"
+      data-bypass="true"
+      onClick={e => {
+        e.preventDefault();
+        refresh();
+      }}
+    >
+      <i className="faux__refresh-icon fonticon-arrows-cw"></i>
+      Refresh
+    </a>
+  </div>;
+
+RefreshBtn.propTypes = {
+  refresh: React.PropTypes.func.isRequired
+};

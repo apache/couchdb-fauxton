@@ -24,7 +24,8 @@
     "nightwatch": "~0.9.0",
     "phantomjs-prebuilt": "^2.1.7",
     "react-addons-test-utils": "~15.0.1",
-    "sinon": "git+https://github.com/sinonjs/sinon.git"
+    "sinon": "git+https://github.com/sinonjs/sinon.git",
+    "url-polyfill": "github/url-polyfill"
   },
   "dependencies": {
     "async": "~0.2.6",

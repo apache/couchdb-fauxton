@@ -28,6 +28,7 @@
   text-indent: 4px;
   height: 46px;
   padding-right: 35px;
+  color: #333;
 }
 
 .styled-select select:-moz-focusring {
@@ -39,9 +40,32 @@
   display: none;
 }
 
-.styled-select i {
+.styled-select-icon {
+  pointer-events: none;
   position: absolute;
   right: 10px;
   top: 12px;
+  color: #333;
+}
+
+.styled-select-hover-icon {
   pointer-events: none;
+  position: absolute;
+  right: 10px;
+  top: 12px;
+  color: #E73D34;
+  display: none;
+  z-index: 30;
+}
+
+//this is a litte css trick to create a hover effect for the triangle. We can't use the normal hover event because we
+//need to set pointer-events to none so that a click on the triangle is actually a click on the select dropdown
+.styled-select:hover {
+  .styled-select-hover-icon {
+    display: inline;
+  }
+
+  .styled-select-icon {
+    display: none;
+  }
 }
