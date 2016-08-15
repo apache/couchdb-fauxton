@@ -28,8 +28,10 @@ exports.checkForDatabaseCreated = function checkForDatabaseCreated (couchUrl, da
   }, timeout);
 
   const intervalId = setInterval(() => {
-    request(couchUrl + '/_all_dbs', function (er, res, body) {
+    const rand = Math.round(Math.random() * 10000000);
+    request(couchUrl + '/_all_dbs?cachebust=' + rand, function (er, res, body) {
       if (body) {
+        console.log(couchUrl + '/_all_dbs?cachebust=' + rand);
         console.log('list of databases:');
         console.log(body);
         console.log("_______________________");
