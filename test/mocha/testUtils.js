@@ -11,6 +11,7 @@
 // the License.
 
 import chai from "chai";
+import _ from 'lodash';
 
 var restore = function (fn) {
   if (fn.restore) {

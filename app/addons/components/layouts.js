@@ -53,7 +53,9 @@ export const OnePaneHeader = ({showApiUrl, docURL, endpoint, crumbs, children}) 
           <Breadcrumbs crumbs={crumbs}/>
         </div>
         <div id='right-header'>
-          {children}
+          <div className="right-header-flex">
+            {children}
+          </div>
         </div>
         {showApiUrl ? <ApiBarWrapper docURL={docURL} endpoint={endpoint} /> : null}
         <div id='notification-center-btn'>
@@ -70,8 +72,8 @@ OnePaneHeader.defaultProps = {
 };
 
 OnePaneHeader.propTypes = {
-  docURL: React.PropTypes.string.isRequired,
-  endpoint: React.PropTypes.string.isRequired,
+  docURL: React.PropTypes.string,
+  endpoint: React.PropTypes.string,
 };
 
 export const OnePaneContent = ({children}) => {

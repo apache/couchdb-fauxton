@@ -14,14 +14,14 @@ import FauxtonAPI from '../../core/api';
 import ActionTypes from './actiontypes';
 import Constants from './constants';
 import AccountActionTypes from '../auth/actiontypes';
-
+import _ from 'lodash';
 
 const ReplicationStore = FauxtonAPI.Store.extend({
-  initialize: function () {
+  initialize () {
     this.reset();
   },
 
-  reset: function () {
+  reset () {
     this._loading = false;
     this._databases = [];
     this._authenticated = false;
@@ -29,130 +29,288 @@ const ReplicationStore = FauxtonAPI.Store.extend({
 
     // source fields
     this._replicationSource = '';
-    this._sourceDatabase = '';
+    this._localSource = '';
     this._remoteSource = '';
 
     // target fields
     this._replicationTarget = '';
-    this._targetDatabase = '';
+    this._localTarget = '';
     this._remoteTarget = '';
 
     // other
     this._isPasswordModalVisible = false;
+    this._isConflictModalVisible = false;
     this._replicationType = Constants.REPLICATION_TYPE.ONE_TIME;
     this._replicationDocName = '';
+    this._submittedNoChange = false;
+    this._statusDocs = [];
+    this._statusFilteredStatusDocs = [];
+    this._statusFilter = '';
+    this._allDocsSelected = false;
+    this._username = '';
+    this._password = '';
+    this._activityLoading = false;
+
+    this.loadActivitySort();
   },
 
-  isLoading: function () {
+  getActivitySort () {
+    return this._activitySort;
+  },
+
+  loadActivitySort () {
+    let sort = app.utils.localStorageGet('replication-activity-sort');
+    if (!sort) {
+      sort = {
+        descending: false,
+        column: 'statusTime'
+      };
+
+      this.setActivitySort(sort);
+    }
+
+    this._activitySort = sort;
+  },
+
+  setActivitySort (sort) {
+    app.utils.localStorageSet('replication-activity-sort', sort);
+    this._activitySort = sort;
+  },
+
+  setCredentials (username, password) {
+    this._username = username;
+    this._password = password;
+  },
+
+  getUsername () {
+    return this._username;
+  },
+
+  getPassword () {
+    return this._password;
+  },
+
+  getSubmittedNoChange () {
+    return this._submittedNoChange;
+  },
+
+  changeAfterSubmit () {
+    this._submittedNoChange = false;
+  },
+
+  isLoading () {
     return this._loading;
   },
 
-  isAuthenticated: function () {
+  isActivityLoading () {
+    return this._activityLoading;
+  },
+
+  isAuthenticated () {
     return this._authenticated;
   },
 
-  getReplicationSource: function () {
+  getReplicationSource () {
     return this._replicationSource;
   },
 
-  getSourceDatabase: function () {
-    return this._sourceDatabase;
+  getlocalSource () {
+    return this._localSource;
   },
 
-  isLocalSourceDatabaseKnown: function () {
-    return _.contains(this._databases, this._sourceDatabase);
+  isLocalSourceKnown () {
+    return _.contains(this._databases, this._localSource);
   },
 
-  isLocalTargetDatabaseKnown: function () {
-    return _.contains(this._databases, this._targetDatabase);
+  isLocalTargetKnown () {
+    return _.contains(this._databases, this._localTarget);
   },
 
-  getReplicationTarget: function () {
+  getReplicationTarget () {
     return this._replicationTarget;
   },
 
-  getDatabases: function () {
+  getDatabases () {
     return this._databases;
   },
 
-  setDatabases: function (databases) {
+  setDatabases (databases) {
     this._databases = databases;
   },
 
-  getReplicationType: function () {
+  getReplicationType () {
     return this._replicationType;
   },
 
-  getTargetDatabase: function () {
-    return this._targetDatabase;
+  getlocalTarget () {
+    return this._localTarget;
   },
 
-  getReplicationDocName: function () {
+  getReplicationDocName () {
     return this._replicationDocName;
   },
 
+  setReplicationStatus (docs) {
+    this._statusDocs = docs;
+  },
+
+  getReplicationStatus () {
+    return this._statusDocs;
+  },
+
+  getFilteredReplicationStatus () {
+    return this._statusDocs.filter(doc => {
+      return _.values(doc).filter(item => {
+        if (!item) {return null;}
+        return item.toString().toLowerCase().match(this._statusFilter);
+      }).length > 0;
+    });
+  },
+
+  selectDoc (id) {
+    const doc = this._statusDocs.find(doc => doc._id === id);
+    if (!doc) {
+      return;
+    }
+
+    doc.selected = !doc.selected;
+    this._allDocsSelected = false;
+  },
+
+  selectAllDocs () {
+    this._allDocsSelected = !this._allDocsSelected;
+    this.getFilteredReplicationStatus().forEach(doc => doc.selected = this._allDocsSelected);
+  },
+
+  someDocsSelected () {
+    return this.getFilteredReplicationStatus().some(doc => doc.selected);
+  },
+
+  getAllDocsSelected () {
+    return this._allDocsSelected;
+  },
+
+  setStatusFilter (filter) {
+    this._statusFilter = filter;
+  },
+
+  getStatusFilter () {
+    return this._statusFilter;
+  },
   // to cut down on boilerplate
-  updateFormField: function (fieldName, value) {
+  updateFormField (fieldName, value) {
 
     // I know this could be done by just adding the _ prefix to the passed field name, I just don't much like relying
     // on the var names like that...
     var validFieldMap = {
       remoteSource: '_remoteSource',
       remoteTarget: '_remoteTarget',
-      targetDatabase: '_targetDatabase',
+      localTarget: '_localTarget',
       replicationType: '_replicationType',
       replicationDocName: '_replicationDocName',
       replicationSource: '_replicationSource',
       replicationTarget: '_replicationTarget',
-      sourceDatabase: '_sourceDatabase'
+      localSource: '_localSource'
     };
 
     this[validFieldMap[fieldName]] = value;
   },
 
-  getRemoteSource: function () {
+  getRemoteSource () {
     return this._remoteSource;
   },
 
-  getRemoteTarget: function () {
+  getRemoteTarget () {
     return this._remoteTarget;
   },
 
-  isPasswordModalVisible: function () {
+  isPasswordModalVisible () {
     return this._isPasswordModalVisible;
   },
 
-  getPassword: function () {
+  isConflictModalVisible () {
+    return this._isConflictModalVisible;
+  },
+
+  getPassword () {
     return this._password;
   },
 
-  dispatch: function (action) {
-    switch (action.type) {
+  setStateFromDoc (doc) {
+    Object.keys(doc).forEach(key => {
+      this.updateFormField(key, doc[key]);
+    });
+  },
+
+  dispatch ({type, options}) {
+    switch (type) {
 
       case ActionTypes.INIT_REPLICATION:
         this._loading = true;
-        this._sourceDatabase = action.options.sourceDatabase;
+        this._localSource = options.localSource;
 
-        if (this._sourceDatabase) {
+        if (this._localSource) {
           this._replicationSource = Constants.REPLICATION_SOURCE.LOCAL;
           this._remoteSource = '';
           this._replicationTarget = '';
-          this._targetDatabase = '';
+          this._localTarget = '';
           this._remoteTarget = '';
         }
       break;
 
       case ActionTypes.REPLICATION_DATABASES_LOADED:
-        this.setDatabases(action.options.databases);
+        this.setDatabases(options.databases);
         this._loading = false;
       break;
 
       case ActionTypes.REPLICATION_UPDATE_FORM_FIELD:
-        this.updateFormField(action.options.fieldName, action.options.value);
+        this.changeAfterSubmit();
+        this.updateFormField(options.fieldName, options.value);
       break;
 
       case ActionTypes.REPLICATION_CLEAR_FORM:
         this.reset();
+      break;
+
+      case ActionTypes.REPLICATION_STARTING:
+        this._submittedNoChange = true;
+      break;
+
+      case ActionTypes.REPLICATION_FETCHING_STATUS:
+        this._activityLoading = true;
+      break;
+
+      case ActionTypes.REPLICATION_STATUS:
+        this._activityLoading = false;
+        this.setReplicationStatus(options);
+      break;
+
+      case ActionTypes.REPLICATION_FILTER_DOCS:
+        this.setStatusFilter(options);
+      break;
+
+      case ActionTypes.REPLICATION_TOGGLE_DOC:
+        this.selectDoc(options);
+      break;
+
+      case ActionTypes.REPLICATION_TOGGLE_ALL_DOCS:
+        this.selectAllDocs();
+      break;
+
+      case ActionTypes.REPLICATION_SET_STATE_FROM_DOC:
+        this.setStateFromDoc(options);
+      break;
+
+      case ActionTypes.REPLICATION_SHOW_CONFLICT_MODAL:
+        this._isConflictModalVisible = true;
+      break;
+
+      case ActionTypes.REPLICATION_HIDE_CONFLICT_MODAL:
+        this._isConflictModalVisible = false;
+      break;
+
+      case ActionTypes.REPLICATION_CHANGE_ACTIVITY_SORT:
+        this.setActivitySort(options);
       break;
 
       case AccountActionTypes.AUTH_SHOW_PASSWORD_MODAL:
@@ -165,7 +323,7 @@ const ReplicationStore = FauxtonAPI.Store.extend({
 
       case AccountActionTypes.AUTH_CREDS_VALID:
         this._authenticated = true;
-        this._password = action.options.password;
+        this.setCredentials(options.username, options.password);
       break;
 
       case AccountActionTypes.AUTH_CREDS_INVALID:

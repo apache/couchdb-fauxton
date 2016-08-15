@@ -17,10 +17,12 @@ import ReactDOM from "react-dom";
 import AuthStores from "./stores";
 import AuthActions from "./actions";
 import { Modal } from 'react-bootstrap';
+import Components from '../components/react-components.react';
 
 var changePasswordStore = AuthStores.changePasswordStore;
 var createAdminStore = AuthStores.createAdminStore;
 var createAdminSidebarStore = AuthStores.createAdminSidebarStore;
+const {ConfirmButton} = Components;
 
 
 var LoginForm = React.createClass({
@@ -328,21 +330,35 @@ class PasswordModal extends React.Component {
   }
 
   render () {
+    const {visible, onClose, submitBtnLabel, headerTitle, modalMessage} = this.props;
+    if (!this.props.visible) {
+      return null;
+    }
+
     return (
-      <Modal dialogClassName="enter-password-modal" show={this.props.visible} onHide={() => this.props.onClose()}>
+      <Modal dialogClassName="enter-password-modal" show={visible} onHide={() => onClose()}>
         <Modal.Header closeButton={true}>
-          <Modal.Title>Enter Password</Modal.Title>
+          <Modal.Title>{headerTitle}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {this.props.modalMessage}
-          <input type="password" placeholder="Enter your password" autoFocus={true} value={this.state.password}
-            onChange={(e) => this.setState({ password: e.target.value })} onKeyPress={this.onKeyPress} />
+          {modalMessage}
+          <input
+            style={{width: "385px"}}
+            type="password"
+            className="password-modal-input"
+            placeholder="Enter your password"
+            autoFocus={true}
+            value={this.state.password}
+            onChange={(e) => this.setState({ password: e.target.value })}
+            onKeyPress={this.onKeyPress}
+            />
         </Modal.Body>
         <Modal.Footer>
-          <a className="cancel-link" onClick={() => this.props.onClose()}>Cancel</a>
-          <button onClick={this.authenticate} className="btn btn-success save">
-            Continue Replication
-          </button>
+          <a className="cancel-link" onClick={() => onClose()}>Cancel</a>
+          <ConfirmButton
+            text={submitBtnLabel}
+            onClick={this.authenticate}
+          />
         </Modal.Footer>
       </Modal>
     );
@@ -356,6 +372,7 @@ PasswordModal.propTypes = {
   submitBtnLabel: React.PropTypes.string
 };
 PasswordModal.defaultProps = {
+  headerTitle: "Enter Password",
   visible: false,
   modalMessage: '',
   onClose: AuthActions.hidePasswordModal,
