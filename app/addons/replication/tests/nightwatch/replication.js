@@ -68,6 +68,7 @@ module.exports = {
       .waitForElementPresent('.enter-password-modal', waitTime, true)
       .setValue('.enter-password-modal input[type="password"]', pwd)
       .click('.enter-password-modal button.save')
+      .waitForElementNotPresent('.enter-password-modal', waitTime, true)
 
       // now check the database was created
       .checkForDatabaseCreated(replicatedDBName, longWaitTime)
