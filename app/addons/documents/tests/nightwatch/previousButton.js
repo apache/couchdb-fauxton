@@ -10,18 +10,16 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-
-
 module.exports = {
   'Mango: Navigate back to _all_docs': function (client) {
-    var newDatabaseName = client.globals.testDatabaseName,
-        baseUrl = client.globals.test_settings.launch_url;
+    const newDatabaseName = client.globals.testDatabaseName;
+    const baseUrl = client.globals.test_settings.launch_url;
 
     client
       .populateDatabase(newDatabaseName, 3)
       .loginToGUI()
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_index')
-      .clickWhenVisible('.breadcrumb-back-link .fonticon-left-open')
+      .clickWhenVisible('.faux-header__breadcrumbs-link')
       .assert.urlContains('_all_docs')
     .end();
   }
