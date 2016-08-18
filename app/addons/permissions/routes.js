@@ -67,9 +67,6 @@ var PermissionsRouteObject = BaseRoute.extend({
   },
 
   cleanup: function () {
-    if (this.leftheader) {
-      this.removeView('#breadcrumbs');
-    }
     this.removeComponent('#sidebar-content');
   }
 });

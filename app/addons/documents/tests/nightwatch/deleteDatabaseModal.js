@@ -36,9 +36,10 @@ module.exports = {
     client
       .loginToGUI()
       .url(baseUrl + '/#/database/_replicator/_all_docs')
-      .clickWhenVisible("#header-dropdown-menu a.dropdown-toggle.icon.fonticon-vertical-ellipsis", waitTime, false)
-      .waitForElementPresent("#header-dropdown-menu .fonticon-trash", waitTime, false)
-      .clickWhenVisible('#header-dropdown-menu .fonticon-trash', waitTime, false)
+
+      .clickWhenVisible('.faux-header__doc-header-dropdown-toggle')
+      .clickWhenVisible('.faux-header__doc-header-dropdown-itemwrapper .fonticon-trash')
+
       .waitForElementVisible('.delete-db-modal', waitTime, false)
       .waitForElementVisible('.delete-db-modal input[type="text"]', waitTime, false)
       .assert.elementPresent('.warning')
@@ -53,9 +54,10 @@ module.exports = {
     client
       .loginToGUI()
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
-      .clickWhenVisible('#header-dropdown-menu a.dropdown-toggle.icon.fonticon-vertical-ellipsis', waitTime, false)
-      .waitForElementPresent("#header-dropdown-menu .fonticon-trash", waitTime, false)
-      .clickWhenVisible('#header-dropdown-menu .fonticon-trash', waitTime, false)
+
+      .clickWhenVisible('.faux-header__doc-header-dropdown-toggle')
+      .clickWhenVisible('.faux-header__doc-header-dropdown-itemwrapper .fonticon-trash')
+
       .waitForElementVisible('.delete-db-modal', waitTime, false)
       .waitForElementVisible('.delete-db-modal input[type="text"]', waitTime, false)
       .assert.elementNotPresent('.warning')

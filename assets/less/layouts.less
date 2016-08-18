@@ -67,13 +67,6 @@ body #dashboard .flex-fill {
 .one-pane > header {
   width: 100%;
 
-  #breadcrumbs {
-    overflow: hidden;
-
-    /* overrides - can be removed later */
-    float: none;
-  }
-
   #right-header {
     -ms-flex-preferred-size: auto;
     -webkit-flex: 0 0 auto;
@@ -98,10 +91,6 @@ body #dashboard .flex-layout #api-navbar {
 /* temporary wedge. Can be replaced at end */
 .with-sidebar {
 
-  /* temporary wedge. Can be replaced at end */
-  #breadcrumbs {
-    float: left;
-  }
   #api-navbar {
     float: right;
   }
@@ -150,12 +139,6 @@ body #dashboard.two-pane {
   .header-wrapper {
     .flex(0 0 65px);
     position: inherit;
-
-    #breadcrumbs {
-      height: 64px;
-      .flex(0 0 440px);
-      overflow: hidden;
-    }
   }
 }
 

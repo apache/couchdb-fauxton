@@ -28,8 +28,8 @@ module.exports = {
       .waitForElementPresent('.index-cancel-link', waitTime, true)
       .waitForElementNotPresent('.loading-lines', waitTime, true)
       .waitForElementVisible('#index-name', waitTime, true)
-      .waitForElementPresent('.breadcrumb .js-lastelement', waitTime, false)
-      .waitForAttribute('.breadcrumb .js-lastelement', 'textContent', function (docContents) {
+      .waitForElementPresent('.faux-header__doc-header-title', waitTime, false)
+      .waitForAttribute('.faux-header__doc-header-title', 'textContent', function (docContents) {
         var regExp = new RegExp(newDatabaseName);
         return regExp.test(docContents);
       })
@@ -66,8 +66,8 @@ module.exports = {
       .waitForElementPresent('.index-cancel-link', waitTime, true)
       .waitForElementNotPresent('.loading-lines', waitTime, true)
       .waitForElementVisible('#index-name', waitTime, true)
-      .waitForElementPresent('.breadcrumb .js-lastelement', waitTime, false)
-      .waitForAttribute('.breadcrumb .js-lastelement', 'textContent', function (docContents) {
+      .waitForElementPresent('.faux-header__doc-header-title', waitTime, false)
+      .waitForAttribute('.faux-header__doc-header-title', 'textContent', function (docContents) {
         var regExp = new RegExp(newDatabaseName);
         return regExp.test(docContents);
       })
@@ -88,8 +88,8 @@ module.exports = {
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_design/testdesigndoc/_view/stubview')
       .waitForElementNotPresent('.loading-lines', waitTime, false)
       .waitForElementVisible('.prettyprint', waitTime, false)
-      .waitForElementPresent('.breadcrumb .js-lastelement', waitTime, false)
-      .waitForAttribute('.breadcrumb .js-lastelement', 'textContent', function (docContents) {
+      .waitForElementPresent('.faux-header__doc-header-title', waitTime, false)
+      .waitForAttribute('.faux-header__doc-header-title', 'textContent', function (docContents) {
         var regExp = new RegExp(newDatabaseName);
         return regExp.test(docContents);
       })
@@ -103,8 +103,7 @@ module.exports = {
     /*jshint multistr: true */
     var waitTime = client.globals.maxWaitTime,
       newDatabaseName = client.globals.testDatabaseName,
-      baseUrl = client.globals.test_settings.launch_url,
-      dropDownElement = '#header-dropdown-menu';
+      baseUrl = client.globals.test_settings.launch_url;
 
     client
       .deleteDatabase(newDatabaseName)
@@ -114,12 +113,11 @@ module.exports = {
 
       // create the first view
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
-      .waitForElementPresent(dropDownElement, waitTime, false)
-      .clickWhenVisible(dropDownElement + ' a')
-      .clickWhenVisible(dropDownElement + ' a[href*="new_view"]')
+      .clickWhenVisible('.faux-header__doc-header-dropdown-toggle')
+      .clickWhenVisible('.faux-header__doc-header-dropdown-itemwrapper a[href*="new_view"]')
       .waitForElementNotPresent('.loading-lines', waitTime, true)
-      .waitForElementPresent('.breadcrumb .js-lastelement', waitTime, false)
-      .waitForAttribute('.breadcrumb .js-lastelement', 'textContent', function (docContents) {
+      .waitForElementPresent('.faux-header__doc-header-title', waitTime, false)
+      .waitForAttribute('.faux-header__doc-header-title', 'textContent', function (docContents) {
         var regExp = new RegExp(newDatabaseName);
         return regExp.test(docContents);
       })
@@ -141,16 +139,15 @@ module.exports = {
       // create the second view
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
       .waitForElementNotPresent('.global-notification .fonticon-cancel', waitTime, false)
-      .waitForElementPresent(dropDownElement, waitTime, false)
-      .waitForElementPresent(dropDownElement + ' a', waitTime, false)
-      .clickWhenVisible(dropDownElement + ' a')
-      .waitForElementPresent(dropDownElement + ' a[href*="new_view"]', waitTime, false)
-      .clickWhenVisible(dropDownElement + ' a[href*="new_view"]')
+
+      .clickWhenVisible('.faux-header__doc-header-dropdown-toggle')
+      .clickWhenVisible('.faux-header__doc-header-dropdown-itemwrapper a[href*="new_view"]')
+
       .waitForElementPresent('.index-cancel-link', waitTime, false)
       .waitForElementVisible('#new-ddoc', waitTime, false)
       .waitForElementNotPresent('.loading-lines', waitTime, true)
-      .waitForElementPresent('.breadcrumb .js-lastelement', waitTime, false)
-      .waitForAttribute('.breadcrumb .js-lastelement', 'textContent', function (docContents) {
+      .waitForElementPresent('.faux-header__doc-header-title', waitTime, false)
+      .waitForAttribute('.faux-header__doc-header-title', 'textContent', function (docContents) {
         var regExp = new RegExp(newDatabaseName);
         return regExp.test(docContents);
       })
@@ -173,8 +170,8 @@ module.exports = {
 
       .waitForElementNotPresent('.loading-lines', waitTime, true)
       .waitForElementVisible('#save-view', waitTime, false)
-      .waitForElementPresent('.breadcrumb .js-lastelement', waitTime, false)
-      .waitForAttribute('.breadcrumb .js-lastelement', 'textContent', function (docContents) {
+      .waitForElementPresent('.faux-header__doc-header-title', waitTime, false)
+      .waitForAttribute('.faux-header__doc-header-title', 'textContent', function (docContents) {
         var regExp = new RegExp(newDatabaseName);
         return regExp.test(docContents);
       })
@@ -204,16 +201,16 @@ module.exports = {
       // confirm the sidebar shows the testdesigndoc design doc
       .waitForElementVisible('#testdesigndoc', waitTime, true)
 
-      .waitForElementPresent('.breadcrumb .js-lastelement', waitTime, false)
-      .waitForAttribute('.breadcrumb .js-lastelement', 'textContent', function (docContents) {
+      .waitForElementPresent('.faux-header__doc-header-title', waitTime, false)
+      .waitForAttribute('.faux-header__doc-header-title', 'textContent', function (docContents) {
         var regExp = new RegExp(newDatabaseName);
         return regExp.test(docContents);
       })
 
       // now edit the view and move it into a brand new design doc
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_design/testdesigndoc/_view/stubview/edit')
-      .waitForElementPresent('.breadcrumb .js-lastelement', waitTime, false)
-      .waitForAttribute('.breadcrumb .js-lastelement', 'textContent', function (docContents) {
+      .waitForElementPresent('.faux-header__doc-header-title', waitTime, false)
+      .waitForAttribute('.faux-header__doc-header-title', 'textContent', function (docContents) {
         var regExp = new RegExp(newDatabaseName);
         return regExp.test(docContents);
       })

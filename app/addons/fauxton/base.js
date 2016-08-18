@@ -55,9 +55,6 @@ Fauxton.initialize = function () {
       routeObject.setComponent('#notification-center-btn', NotificationComponents.NotificationCenterButton);
     }
 
-    // XXX React softmigration, remove after full breadcrumb rewrite
-    if (routeObject.overrideBreadcrumbs) { return; }
-
     FauxtonAPI.masterLayout.removeView('#breadcrumbs');
 
     const crumbs = routeObject.get('crumbs');
