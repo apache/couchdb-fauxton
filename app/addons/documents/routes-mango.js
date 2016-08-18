@@ -42,6 +42,8 @@ const MangoIndexEditorAndQueryEditor = FauxtonAPI.RouteObject.extend({
     },
   },
 
+  disableLoader: true,
+
   initialize: function (route, masterLayout, options) {
     var databaseName = options[0];
     this.databaseName = databaseName;
