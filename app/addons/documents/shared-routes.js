@@ -20,6 +20,7 @@ import IndexResultStores from "./index-results/stores";
 import SidebarComponents from "./sidebar/sidebar.react";
 import SidebarActions from "./sidebar/actions";
 import QueryActions from './queryoptions/actions';
+import HeaderDocsLeft from './components/header-docs-left';
 
 
 // The Documents section is built up a lot of different route object which share code. This contains
@@ -27,7 +28,6 @@ import QueryActions from './queryoptions/actions';
 var BaseRoute = FauxtonAPI.RouteObject.extend({
   layout: 'with_tabs_sidebar',
   selectedHeader: 'Databases',
-  overrideBreadcrumbs: true,
 
   createDesignDocsCollection: function () {
     this.designDocs = new Documents.AllDocs(null, {
@@ -50,11 +50,10 @@ var BaseRoute = FauxtonAPI.RouteObject.extend({
 
   showQueryOptions: function (urlParams, ddoc, viewName) {
     var promise = this.designDocs.fetch({reset: true}),
-    that = this,
-    hasReduceFunction;
+        hasReduceFunction;
 
-    promise.then(function (resp) {
-      var design = _.findWhere(that.designDocs.models, {id: '_design/' + ddoc});
+    promise.then((resp) => {
+      var design = _.findWhere(this.designDocs.models, {id: '_design/' + ddoc});
       !_.isUndefined(hasReduceFunction = design.attributes.doc.views[viewName].reduce);
 
       QueryActions.showQueryOptions();
@@ -69,10 +68,8 @@ var BaseRoute = FauxtonAPI.RouteObject.extend({
   },
 
   addLeftHeader: function () {
-    this.leftheader = this.setView('#breadcrumbs', new Components.LeftHeader({
-      databaseName: this.database.safeID(),
-      crumbs: this.getCrumbs(this.database)
-    }));
+    const dropDownLinks = this.getCrumbs(this.database);
+    this.setComponent('#header-docs-left', HeaderDocsLeft, {dbName: this.database.id, dropDownLinks: dropDownLinks});
   },
 
   addSidebar: function (selectedNavItem) {
@@ -91,7 +88,7 @@ var BaseRoute = FauxtonAPI.RouteObject.extend({
   getCrumbs: function (database) {
     return [
       { "type": "back", "link": FauxtonAPI.urls('allDBs', 'app')},
-      { "name": database.id, className: "lookahead-tray-link" }
+      { "name": database.id }
     ];
   },
 

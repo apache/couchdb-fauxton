@@ -13,6 +13,8 @@
 import app from "../../app";
 import FauxtonAPI from "../../core/api";
 
+import ReactComponentsActions from "../components/actions";
+
 
 // sequence info is an array in couchdb2 with two indexes. On couch 1.x, it's just a string / number
 function getSeqNum (val) {
@@ -61,7 +63,7 @@ function parseJSON (str) {
   return JSON.parse('"' + str + '"');   // this ensures newlines are converted
 }
 
-function getModifyDatabaseLinks (databaseName, deleteCallback) {
+function getModifyDatabaseLinks (databaseName) {
   return [{
     title: 'Replicate Database',
     icon: 'fonticon-replicate',
@@ -69,9 +71,7 @@ function getModifyDatabaseLinks (databaseName, deleteCallback) {
   }, {
     title: 'Delete',
     icon: 'fonticon-trash',
-    onClick: function () {
-      deleteCallback({showDeleteModal: true, dbId: databaseName});
-    }
+    onClick: ReactComponentsActions.showDeleteDatabaseModal.bind(this, {showDeleteModal: true, dbId: databaseName})
   }];
 }
 

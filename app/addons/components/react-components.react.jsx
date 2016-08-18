@@ -1160,7 +1160,7 @@ const ConfirmButton = React.createClass({
   }
 });
 
-var MenuDropDown = React.createClass({
+const MenuDropDown = React.createClass({
 
   getDefaultProps: function () {
     return {
@@ -1171,9 +1171,9 @@ var MenuDropDown = React.createClass({
   createSectionLinks: function (links) {
     if (!links) { return null; }
 
-    return links.map(function (link, key) {
+    return links.map((link, key) => {
       return this.createEntry(link, key);
-    }.bind(this));
+    });
   },
 
   createEntry: function (link, key) {
@@ -1201,7 +1201,7 @@ var MenuDropDown = React.createClass({
   },
 
   createSection: function () {
-    return this.props.links.map(function (linkSection, key) {
+    return this.props.links.map((linkSection, key) => {
       if (linkSection.title && linkSection.links) {
         return ([
           this.createSectionTitle(linkSection.title),
@@ -1211,7 +1211,7 @@ var MenuDropDown = React.createClass({
 
       return this.createEntry(linkSection, 'el' + key);
 
-    }.bind(this));
+    });
   },
 
   render: function () {

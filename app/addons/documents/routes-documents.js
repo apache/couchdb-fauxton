@@ -15,7 +15,7 @@ import app from '../../app';
 import FauxtonAPI from '../../core/api';
 import BaseRoute from './shared-routes';
 import Documents from './resources';
-import RightAllDocsHeader from './components/rightalldocsheader.react';
+import RightAllDocsHeader from './components/header-docs-right';
 import Changes from './changes/components.react';
 import ChangesActions from './changes/actions';
 import Databases from '../databases/base';
@@ -94,7 +94,6 @@ var DocumentsRouteObject = BaseRoute.extend({
       designDocSection: 'metadata'
     });
 
-    this.leftheader.updateCrumbs(this.getCrumbs(this.database));
     QueryOptionsActions.hideQueryOptions();
 
     this.apiUrl = [designDocInfo.url('apiurl'), designDocInfo.documentation()];
@@ -113,8 +112,6 @@ var DocumentsRouteObject = BaseRoute.extend({
 
     this.setComponent('#react-headerbar', ReactHeader.BulkDocumentHeaderController, {showIncludeAllDocs: true});
     this.setComponent('#footer', ReactPagination.Footer);
-
-    this.leftheader.updateCrumbs(this.getCrumbs(this.database));
 
 
     // includes_docs = true if you are visiting the _replicator/_users databases
@@ -184,7 +181,7 @@ var DocumentsRouteObject = BaseRoute.extend({
     this.viewEditor && this.viewEditor.remove();
 
     SidebarActions.selectNavItem('changes');
-    this.leftheader.updateCrumbs(this.getCrumbs(this.database));
+
     QueryOptionsActions.hideQueryOptions();
 
     this.apiUrl = function () {
