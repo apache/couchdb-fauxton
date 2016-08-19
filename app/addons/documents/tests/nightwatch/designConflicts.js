@@ -10,17 +10,21 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import Documents from './shared-resources';
-import DocumentsRouteObject from "./routes-documents";
-import docEditor from "./routes-doc-editor";
-import IndexEditorRouteObject from "./routes-index-editor";
-import Mango from "./routes-mango";
 
-Documents.RouteObjects = [
-  docEditor.DocEditorRouteObject,
-  DocumentsRouteObject,
-  IndexEditorRouteObject,
-  Mango.MangoIndexEditorAndQueryEditor
-];
+module.exports = {
 
-export default Documents;
+  'Shows the editor for conflicting docs': function (client) {
+
+    const waitTime = client.globals.maxWaitTime;
+    const newDatabaseName = client.globals.testDatabaseName;
+    const dropDownElement = '#header-dropdown-menu';
+    const baseUrl = client.globals.test_settings.launch_url;
+
+    client
+      .createAnimalDb()
+      .loginToGUI()
+      .url(baseUrl + '/#/database/' + newDatabaseName + '/_design/conflicts')
+      .waitForElementPresent('#editor-container', waitTime, false)
+      .end();
+  },
+};
