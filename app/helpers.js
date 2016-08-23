@@ -38,7 +38,7 @@ Helpers.getDocUrl = function (key) {
 };
 
 // File size pretty printing, taken from futon.format.js
-Helpers.formatSize = function (size) {
+Helpers.formatSize = function (size, decimals = 1) {
     var jump = 512;
     if (size < jump) return size + " bytes";
     var units = ["KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
@@ -47,7 +47,7 @@ Helpers.formatSize = function (size) {
       i += 1;
       size /= 1024;
     }
-    return size.toFixed(1) + ' ' + units[i - 1];
+    return size.toFixed(decimals) + ' ' + units[i - 1];
   };
 
 Helpers.formatDate = function (timestamp) {
