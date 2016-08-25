@@ -151,7 +151,7 @@ var ActiveTasksFilterTabs = React.createClass({
     return (
       <TabElementWrapper>
         {filterTabs}
-        <li>
+        <li className="component-tab-list-element">
           <input
             id="active-tasks-search-box"
             className="searchbox"
