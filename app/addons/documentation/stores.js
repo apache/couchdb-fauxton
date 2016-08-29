@@ -17,12 +17,12 @@ var DocumentationStore = FauxtonAPI.Store.extend({
   getLinks: function () {
     return [
       {
-        title: 'CouchDB Official Documentation -- Online',
+        title: 'CouchDB Official Documentation — Online',
         link: 'http://docs.couchdb.org/en/latest/',
         iconClassName: 'couchdb-icon'
       },
       {
-        title: 'CouchDB Official Documentation -- Offline',
+        title: 'CouchDB Official Documentation — Offline',
         link: '/_utils/docs/contents.html',
         iconClassName: 'couchdb-icon'
       },
@@ -37,12 +37,12 @@ var DocumentationStore = FauxtonAPI.Store.extend({
         iconClassName: 'couchdb-icon'
       },
       {
-        title: 'CouchDB on Github',
+        title: 'CouchDB on GitHub',
         link: 'https://github.com/apache/couchdb',
         iconClassName: 'github-icon'
       },
       {
-        title: 'Fauxton on Github',
+        title: 'Fauxton on GitHub',
         link: 'https://github.com/apache/couchdb-fauxton',
         iconClassName: 'github-icon'
       },
