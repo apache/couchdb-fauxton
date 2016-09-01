@@ -13,6 +13,9 @@
 @import "../../../../../assets/less/mixins.less";
 
 .component-tab-element-wrapper {
+  margin-left: 0;
+  padding-left: 0;
+  margin-bottom: 0;
   height: 60px;
   background-color: #CBCBCB;
   padding-left: 20px;
@@ -21,9 +24,17 @@
   min-width: 770px;
 }
 
+.component-tab-list-element {
+  list-style-type: none;
+}
+
 .component-tab-element {
   background-color: #eee;
   margin-top: 10px;
+  margin-right: 5px;
+  margin-bottom: -1px;
+  float: left;
+  list-style-type: none;
   line-height: 40px;
 
   input {
@@ -32,13 +43,13 @@
 
   label {
     margin-right: 0;
+    margin-bottom: 0;
     line-height: 25px;
     .noselect()
   }
 
   .tab-element-content {
     padding: 8px 12px 12px 12px;
-
   }
 
   .tab-element-indicator-wrapper {
@@ -59,11 +70,23 @@
     background-color: #fff;
   }
 
+  &.tab-element-checked .tab-element-content {
+    font-weight: bold;
+  }
+
   transition: all .25s linear;
 
   &:hover {
     background-color: #fff;
     color: @linkColorHover;
+  };
+
+  &.tab-element-checked .tab-element-content:hover {
+    color: initial;
+  };
+
+  &.tab-element-checked:hover {
+    color: initial;
   };
 
   &:hover .tab-element-indicator {
