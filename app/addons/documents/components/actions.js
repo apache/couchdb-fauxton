@@ -11,21 +11,20 @@
 // the License.
 import $ from 'jquery';
 import FauxtonAPI from "../../../core/api";
+import { get } from "../../../core/ajax";
 
 export default {
-  fetchAllDocsWithKey: (database) => {
-      return (id, callback) => {
+  fetchAllDocsWithKey(database) {
+    return (id, callback) => {
       const query = '?' + $.param({
         startkey: JSON.stringify(id),
         endkey: JSON.stringify(id + "\u9999"),
         limit: 30
       });
 
-      const url = FauxtonAPI.urls('allDocs', 'server', database.safeID(), query);
-      $.ajax({
+      get({
         cache: false,
-        url: url,
-        dataType: 'json'
+        url: FauxtonAPI.urls('allDocs', 'server', database.safeID(), query),
       }).then(({rows}) => {
         const options = rows.map(row => {
           return { value: row.id, label: row.id};
@@ -35,5 +34,5 @@ export default {
         });
       });
     };
-  }
+  },
 };

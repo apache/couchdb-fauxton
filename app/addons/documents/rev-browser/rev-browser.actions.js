@@ -14,6 +14,7 @@
 
 import app from "../../../app";
 import FauxtonAPI from "../../../core/api";
+import { post } from "../../../core/ajax";
 import ActionTypes from "./rev-browser.actiontypes";
 import getTree from "visualizeRevTree/lib/getTree";
 import PouchDB from "pouchdb";
@@ -115,26 +116,22 @@ function selectRevAsWinner (databaseName, docId, paths, revToWin) {
   const revsToDelete = getConflictingRevs(paths, revToWin, []);
   const payload = buildBulkDeletePayload(docId, revsToDelete);
 
-  $.ajax({
+  post({
     url: FauxtonAPI.urls('bulk_docs', 'server', databaseName, ''),
-    type: 'POST',
-    contentType: 'application/json; charset=UTF-8',
-    data: JSON.stringify(payload),
-    success: () => {
-      FauxtonAPI.addNotification({
-        msg: 'Conflicts successfully solved.',
-        clear: true
-      });
-      showConfirmModal(false, null);
-      FauxtonAPI.navigate(FauxtonAPI.urls('allDocs', 'app', databaseName, ''));
-    },
-    error: (resp) => {
-      FauxtonAPI.addNotification({
-        msg: 'Failed to delete clean up conflicts!',
-        type: 'error',
-        clear: true
-      });
-    }
+    data: payload,
+  }).then(() => {
+    FauxtonAPI.addNotification({
+      msg: 'Conflicts successfully solved.',
+      clear: true
+    });
+    showConfirmModal(false, null);
+    FauxtonAPI.navigate(FauxtonAPI.urls('allDocs', 'app', databaseName, ''));
+  }, (resp) => {
+    FauxtonAPI.addNotification({
+      msg: 'Failed to delete clean up conflicts!',
+      type: 'error',
+      clear: true
+    });
   });
 }
 

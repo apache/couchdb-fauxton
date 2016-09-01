@@ -12,6 +12,7 @@
 
 import app from "../../app";
 import FauxtonAPI from "../../core/api";
+import { get, post, put, del } from "../../core/ajax";
 import CouchdbSession from "../../core/couchdbSession";
 
 var Auth = new FauxtonAPI.addon();
@@ -19,11 +20,11 @@ var Auth = new FauxtonAPI.addon();
 
 var Admin = Backbone.Model.extend({
 
-  initialize: function (props, options) {
+  initialize(props, options) {
     this.node = options.node;
   },
 
-  url: function () {
+  url() {
     if (!this.node) {
       throw new Error('no node set');
     }
@@ -31,30 +32,26 @@ var Admin = Backbone.Model.extend({
     return app.host + '/_node/' + this.node + '/_config/admins/' + this.get('name');
   },
 
-  isNew: function () { return false; },
+  isNew() { return false; },
 
-  sync: function (method, model, options) {
-    var params = {
+  sync(method, model, options) {
+    const opts = {
       url: model.url(),
-      contentType: 'application/json',
-      dataType: 'json',
-      data: JSON.stringify(model.get('value'))
+      data: model.get('value'),
     };
 
-    if (method === 'delete') {
-      params.type = 'DELETE';
-    } else {
-      params.type = 'PUT';
+    if (method  === 'delete') {
+      return del(opts);
     }
 
-    return $.ajax(params);
+    return put(opts);
   }
 });
 
 Auth.Session = CouchdbSession.Session.extend({
   url: app.host + '/_session',
 
-  initialize: function (options) {
+  initialize(options) {
     if (!options) { options = {}; }
 
     _.bindAll(this);
@@ -68,7 +65,7 @@ Auth.Session = CouchdbSession.Session.extend({
       }, options.messages);
   },
 
-  isAdminParty: function () {
+  isAdminParty() {
     var userCtx = this.get('userCtx');
 
 
@@ -79,7 +76,7 @@ Auth.Session = CouchdbSession.Session.extend({
     return false;
   },
 
-  isLoggedIn: function () {
+  isLoggedIn() {
     var userCtx = this.get('userCtx');
 
     if (!userCtx) { return false;}
@@ -90,7 +87,7 @@ Auth.Session = CouchdbSession.Session.extend({
     return false;
   },
 
-  userRoles: function () {
+  userRoles() {
     var user = this.user();
 
     if (user && user.roles) {
@@ -104,7 +101,7 @@ Auth.Session = CouchdbSession.Session.extend({
     return [];
   },
 
-  matchesRoles: function (roles) {
+  matchesRoles(roles) {
     if (roles.length === 0) {
       return true;
     }
@@ -118,7 +115,7 @@ Auth.Session = CouchdbSession.Session.extend({
     return false;
   },
 
-  validateUser: function (username, password, msg) {
+  validateUser(username, password, msg) {
     if (_.isEmpty(username) || _.isEmpty(password)) {
       var deferred = FauxtonAPI.Deferred();
 
@@ -127,7 +124,7 @@ Auth.Session = CouchdbSession.Session.extend({
     }
   },
 
-  validatePasswords: function (password, password_confirm, msg) {
+  validatePasswords(password, password_confirm, msg) {
     if (_.isEmpty(password) || _.isEmpty(password_confirm) || (password !== password_confirm)) {
       var deferred = FauxtonAPI.Deferred();
 
@@ -136,7 +133,7 @@ Auth.Session = CouchdbSession.Session.extend({
     }
   },
 
-  createAdmin: function (username, password, login, node) {
+  createAdmin(username, password, login, node) {
     var errorPromise = this.validateUser(username, password, this.messages.missingCredentials);
 
     if (errorPromise) { return errorPromise; }
@@ -156,37 +153,30 @@ Auth.Session = CouchdbSession.Session.extend({
     }.bind(this));
   },
 
-  login: function (username, password) {
+  login(username, password) {
     var errorPromise = this.validateUser(username, password, this.messages.missingCredentials);
 
     if (errorPromise) { return errorPromise; }
 
-    return $.ajax({
+    return post({
       cache: false,
-      type: "POST",
       url: app.host + "/_session",
-      dataType: "json",
       data: {name: username, password: password}
-    }).then(function () {
+    }).then(() => {
       return this.fetchUser({forceFetch: true});
-    }.bind(this));
-  },
-
-  logout: function () {
-    var that = this;
-
-    return $.ajax({
-      type: "DELETE",
-      url: app.host + "/_session",
-      dataType: "json",
-      username : "_",
-      password : "_"
-    }).then(function () {
-      return that.fetchUser({forceFetch: true });
     });
   },
 
-  changePassword: function (password, confirmedPassword, node) {
+  logout() {
+    return del({
+      url: app.host + "/_session",
+      dataType: "json",
+    }).then(() => {
+      return this.fetchUser({forceFetch: true });
+    });
+  },
+
+  changePassword(password, confirmedPassword, node) {
     var errorMessage = 'Passwords do not match.';
     var errorPromise = this.validatePasswords(password, confirmedPassword, errorMessage);
 

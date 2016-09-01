@@ -14,6 +14,7 @@
 
 import app from "../../../app";
 import FauxtonAPI from "../../../core/api";
+import { del } from "../../../core/ajax";
 import ActionTypes from "./actiontypes";
 
 var xhr;
@@ -83,27 +84,23 @@ function deleteDoc (doc) {
   var databaseName = doc.database.safeID();
   var query = '?rev=' + doc.get('_rev');
 
-  $.ajax({
+  del({
     url: FauxtonAPI.urls('document', 'server', databaseName, doc.safeID(), query),
-    type: 'DELETE',
-    contentType: 'application/json; charset=UTF-8',
     xhrFields: {
       withCredentials: true
     },
-    success: function () {
-      FauxtonAPI.addNotification({
-        msg: 'Your document has been successfully deleted.',
-        clear: true
-      });
-      FauxtonAPI.navigate(FauxtonAPI.urls('allDocs', 'app', databaseName, ''));
-    },
-    error: function (resp) {
-      FauxtonAPI.addNotification({
-        msg: 'Failed to delete your document!',
-        type: 'error',
-        clear: true
-      });
-    }
+  }).then(() => {
+    FauxtonAPI.addNotification({
+      msg: 'Your document has been successfully deleted.',
+      clear: true
+    });
+    FauxtonAPI.navigate(FauxtonAPI.urls('allDocs', 'app', databaseName, ''));
+  }, (resp) => {
+    FauxtonAPI.addNotification({
+      msg: 'Failed to delete your document!',
+      type: 'error',
+      clear: true
+    });
   });
 }
 

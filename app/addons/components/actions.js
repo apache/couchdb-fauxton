@@ -11,8 +11,9 @@
 // the License.
 
 import FauxtonAPI from "../../core/api";
-import ActionTypes from "./actiontypes";
+import { del } from "../../core/ajax";
 
+import ActionTypes from "./actiontypes";
 function showAPIBarButton () {
   FauxtonAPI.dispatch({ type: ActionTypes.CMPNTS_SHOW_API_BAR_BUTTON });
 }
@@ -45,10 +46,8 @@ function showDeleteDatabaseModal (options) {
 function deleteDatabase (dbId) {
   var url = FauxtonAPI.urls('databaseBaseURL', 'server', dbId, '');
 
-  $.ajax({
-    url: url,
-    dataType: 'json',
-    type: 'DELETE'
+  del({
+    url,
   }).then(function () {
     this.showDeleteDatabaseModal({ showModal: true });
 
