@@ -11,6 +11,8 @@
 // the License.
 var webpack = require('webpack');
 var path = require('path');
+var depsWebpackPlugin = require('deps-webpack-plugin');
+var path = require('path');
 
 module.exports = {
   // Entry point for static analyzer:
@@ -36,7 +38,6 @@ module.exports = {
         warnings: false
       }
     })
-
   ],
 
   resolve: {
