@@ -146,10 +146,7 @@ module.exports = function (grunt) {
         files: [
           // this gets built in the template task
           {src: "dist/release/index.html", dest: "../../share/www/index.html"},
-          {src: ["**"], dest: "../../share/www/dashboard.assets/js/", cwd: 'dist/release/dashboard.assets/js/',  expand: true},
-          {src: ["**"], dest: "../../share/www/dashboard.assets/img/", cwd: 'dist/release/dashboard.assets/img/', expand: true},
-          {src: ["**"], dest: "../../share/www/dashboard.assets/fonts/", cwd: 'dist/release/dashboard.assets/fonts/', expand: true},
-          {src: ["**"], dest: "../../share/www/dashboard.assets/css/", cwd: "dist/release/dashboard.assets/css/", expand: true}
+          {src: ["**"], dest: '../../share/www/dashboard.assets/', cwd: 'dist/release/dashboard.assets/',  expand: true},
         ]
       },
       couchdebug: {
