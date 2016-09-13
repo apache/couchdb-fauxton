@@ -15,25 +15,28 @@ import FauxtonAPI from "../../core/api";
 import ActionTypes from "./actiontypes";
 
 var ActiveTasksStore = FauxtonAPI.Store.extend({
-
-  initAfterFetching: function (collectionTable, backboneCollection) {
+  initialize () {
     this._prevSortbyHeader = 'started-on';
     this._headerIsAscending = true;
     this._selectedRadio = 'All Tasks';
     this._sortByHeader = 'started-on';
     this._searchTerm = '';
-    this._collection = collectionTable;
     this._pollingIntervalSeconds = 5;
+
+  },
+
+  initAfterFetching (collectionTable, backboneCollection) {
+    this._collection = collectionTable;
     this.sortCollectionByColumnHeader(this._sortByHeader);
     this._backboneCollection = backboneCollection;
     this.setIsLoading(true, new Date());
   },
 
-  isLoading: function () {
+  isLoading () {
     return this._isLoading;
   },
 
-  setIsLoading: function (bool, time) {
+  setIsLoading (bool, time) {
     if (bool) {
       this._startTimeForLoading = time;
       this._isLoading = true;
@@ -51,81 +54,84 @@ var ActiveTasksStore = FauxtonAPI.Store.extend({
     }
   },
 
-  getSelectedRadio: function () {
+  getSelectedRadio () {
     return this._selectedRadio;
   },
 
-  setSelectedRadio: function (selectedRadio) {
+  setSelectedRadio (selectedRadio) {
     this._selectedRadio = selectedRadio;
   },
 
-  getPollingInterval: function () {
+  getPollingInterval () {
     return this._pollingIntervalSeconds;
   },
 
-  setPollingInterval: function (pollingInterval) {
+  setPollingInterval (pollingInterval) {
     this._pollingIntervalSeconds = pollingInterval;
   },
 
-  setPolling: function () {
+  setPolling () {
     this.clearPolling();
-    var id = setInterval(function () {
+    var id = setInterval(() => {
       this._backboneCollection.pollingFetch();
       this.setCollection(this._backboneCollection.table);
       this.sortCollectionByColumnHeader(this._prevSortbyHeader, false);
       this.triggerChange();
-    }.bind(this), this.getPollingInterval() * 1000);
+    }, this.getPollingInterval() * 1000);
 
     this.setIntervalID(id);
   },
 
-  clearPolling: function () {
+  clearPolling () {
     clearInterval(this.getIntervalID());
   },
 
-  getIntervalID: function () {
+  getIntervalID () {
     return this._intervalID;
   },
 
-  setIntervalID: function (id) {
+  setIntervalID (id) {
     this._intervalID = id;
   },
 
-  setCollection: function (collection) {
+  setCollection (collection) {
     this._collection = collection;
   },
 
-  getCollection: function () {
+  getCollection () {
     return this._collection;
   },
 
-  setSearchTerm: function (searchTerm) {
+  setSearchTerm (searchTerm) {
     this._searchTerm = searchTerm;
   },
 
-  getSearchTerm: function () {
+  getSearchTerm () {
     return this._searchTerm;
   },
 
-  getSortByHeader: function () {
+  getSortByHeader () {
     return this._sortByHeader;
   },
 
-  setSortByHeader: function (header) {
+  setSortByHeader (header) {
     this._sortByHeader = header;
   },
 
-  getHeaderIsAscending: function () {
+  getHeaderIsAscending () {
     return this._headerIsAscending;
   },
 
-  toggleHeaderIsAscending: function () {
+  toggleHeaderIsAscending () {
     if (this._prevSortbyHeader === this._sortByHeader) {
       this._headerIsAscending = !this._headerIsAscending;
+      return;
     }
+
+    this._headerIsAscending = true;
   },
 
-  sortCollectionByColumnHeader: function (colName) {
+  sortCollectionByColumnHeader (colName) {
     var collectionTable = this._collection;
 
     var sorted = _.sortBy(collectionTable, function (item) {
@@ -141,7 +147,7 @@ var ActiveTasksStore = FauxtonAPI.Store.extend({
     this._collection = sorted;
   },
 
-  getFilteredTable: function (collection) {
+  getFilteredTable (collection) {
     var table = [];
 
     //sort the table here
@@ -165,7 +171,7 @@ var ActiveTasksStore = FauxtonAPI.Store.extend({
     return table;
   },
 
-  passesSearchFilter: function (item) {
+  passesSearchFilter (item) {
     var searchTerm = this._searchTerm;
     var regex = new RegExp(searchTerm, 'g');
 
@@ -183,12 +189,12 @@ var ActiveTasksStore = FauxtonAPI.Store.extend({
     return regex.test(itemDatabasesTerm);
   },
 
-  passesRadioFilter: function (item) {
+  passesRadioFilter (item) {
     var selectedRadio = this._selectedRadio.toLowerCase().replace(' ', '_');
     return item.type ===  selectedRadio ||  selectedRadio === 'all_tasks';
   },
 
-  dispatch: function (action) {
+  dispatch (action) {
     switch (action.type) {
 
       case ActionTypes.ACTIVE_TASKS_FETCH_AND_SET:

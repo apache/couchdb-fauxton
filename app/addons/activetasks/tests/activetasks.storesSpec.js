@@ -38,7 +38,6 @@ describe('Active Tasks -- Stores', function () {
   });
 
   describe('Active Task Stores - Polling', function () {
-    var pollingWidgetDiv, pollingWidget;
 
     beforeEach(function () {
       activeTasksStore.initAfterFetching(activeTasksCollection.table, activeTasksCollection);
@@ -54,14 +53,14 @@ describe('Active Tasks -- Stores', function () {
       var minTime = 1;
       activeTasksStore.setPollingInterval(minTime);
       activeTasksStore.setPolling();
-      assert.ok(spy.calledOnce);
+      assert.ok(spy.calledOnce, 'not called');
 
       setInterval(spy, minTime * 1000);
-      clock.tick(minTime * 1000);
-      assert.ok(spy.calledTwice);
+      clock.tick(minTime * 1001);
+      assert.ok(spy.calledTwice, 'not called twice');
 
-      clock.tick(minTime * 1000);
-      assert.ok(spy.calledThrice);
+      clock.tick(minTime * 1001);
+      assert.ok(spy.calledThrice, 'not called 3 times');
     });
 
     it('should poll at the max time', function () {
@@ -181,6 +180,7 @@ describe('Active Tasks -- Stores', function () {
 
     it('should set header as ascending, if different header is selected', function () {
       activeTasksStore._sortByHeader = 'differentHeader';
+      activeTasksStore._prevSortbyHeader = 'sameHeader';
       activeTasksStore.toggleHeaderIsAscending();
       assert.ok(activeTasksStore.getHeaderIsAscending());
     });

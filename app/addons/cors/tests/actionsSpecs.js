@@ -10,13 +10,13 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 import app from "../../../app";
-import testUtils from "testUtils";
+import utils from "../../../../test/mocha/testUtils";
 import FauxtonAPI from "../../../core/api";
 import Actions from "../actions";
 import sinon from "sinon";
 
-const assert = testUtils.assert;
-const restore = testUtils.restore;
+const assert = utils.assert;
+const restore = utils.restore;
 
 describe('CORS actions', function () {
 

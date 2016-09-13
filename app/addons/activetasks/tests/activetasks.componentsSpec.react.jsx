@@ -20,6 +20,7 @@ import Actions from "../actions";
 import utils from "../../../../test/mocha/testUtils";
 import TestUtils from "react-addons-test-utils";
 import sinon from "sinon";
+import { mount } from 'enzyme';
 var assert = utils.assert;
 var restore = utils.restore;
 var activeTasksStore = Stores.activeTasksStore;
@@ -28,27 +29,21 @@ activeTasksCollection.parse(fakedResponse);
 
 describe('Active Tasks -- Components', function () {
 
+  afterEach(() => {
+    activeTasksStore.clearPolling();
+  });
+
   describe('Active Tasks Polling (Components)', function () {
     var pollingWidgetDiv, pollingWidget;
 
-    beforeEach(function () {
-      pollingWidgetDiv = document.createElement('div');
-      pollingWidget = TestUtils.renderIntoDocument(
-        <Components.ActiveTasksPollingWidgetController />, pollingWidgetDiv
-      );
-    });
-
     afterEach(function () {
-      ReactDOM.unmountComponentAtNode(pollingWidgetDiv);
       restore(Actions.changePollingInterval);
     });
 
     it('should trigger update polling interval', function () {
+      const controller = mount(<Components.ActiveTasksPollingWidgetController />);
       var spy = sinon.spy(Actions, 'changePollingInterval');
-      var rangeNode = TestUtils.findRenderedDOMComponentWithTag(pollingWidget, 'input');
-      var time = '9';
-
-      TestUtils.Simulate.change(rangeNode, {target: {value: time}});
+      controller.find('#polling-range').simulate('change', {target: {value: 9}});
       assert.ok(spy.calledOnce);
     });
   });

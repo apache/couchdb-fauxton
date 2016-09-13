@@ -459,9 +459,8 @@ var ActiveTasksPollingWidgetController = React.createClass({
   },
 
   createPollingWidget: function () {
-    var pollingInterval = this.state.pollingInterval;
-    var s = this.getPluralForLabel();
-    var onChangeHandle = this.pollingIntervalChange;
+    const {pollingInterval} = this.state;
+    const s = this.getPluralForLabel();
 
     return (
       <ul className="polling-interval-widget">
@@ -478,7 +477,7 @@ var ActiveTasksPollingWidgetController = React.createClass({
             max="30"
             step="1"
             value={pollingInterval}
-            onChange={onChangeHandle}/>
+            onChange={this.pollingIntervalChange}/>
         </li>
       </ul>
     );
