@@ -45,13 +45,13 @@
   background-color: #e0e0e0;
 }
 
-.table-striped tbody > tr.config-item:nth-child(odd) > td,
-.table-striped tbody > tr.config-item:nth-child(odd) > th {
+.config.table-striped tbody > tr.config-item:nth-child(odd) > td,
+.config.table-striped tbody > tr.config-item:nth-child(odd) > th {
   transition: background-color 100ms;
 }
 
-.table-striped tbody > tr.config-item:nth-child(odd):hover > td,
-.table-striped tbody > tr.config-item:nth-child(odd):hover > th {
+.config.table-striped tbody > tr.config-item:nth-child(odd):hover > td,
+.config.table-striped tbody > tr.config-item:nth-child(odd):hover > th {
   background-color: #e7e7e7;
 }
 
@@ -185,10 +185,11 @@ table.config {
       color: white;
     }
   }
-}
 
-.popover.bottom .arrow, .popover.bottom .arrow::after {
-  border-bottom-color: #333 !important;
+  .arrow, .arrow::after {
+    border-bottom-color: #333 !important;
+  }
+
 }
 
 #add-option-popover::before {

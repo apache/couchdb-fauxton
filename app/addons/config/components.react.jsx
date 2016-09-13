@@ -37,7 +37,7 @@ var ConfigTableController = React.createClass({
   },
 
   componentWillUnmount () {
-    configStore.off('change', this.onChange, this);
+    configStore.off('change', this.onChange);
   },
 
   onChange () {
