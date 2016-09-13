@@ -3,7 +3,7 @@
 
 Fauxton is the new Web UI for CouchDB. To get it running in development on your machine. Follow the steps below.
 
-## Install via NPM
+## Install as standalone server via npm
 
 You can use the latest release of Fauxton via npm:
 
@@ -19,20 +19,9 @@ Please note that a recent installation of [node.js](http://nodejs.org/) and npm 
 
 1. make sure you have CouchDB installed. Instructions on how to install it can be  
 [found here](http://couchdb.readthedocs.org/en/latest/install/index.html)
-2. fork this repo: `https://github.com/apache/couchdb-fauxton.git` and make sure you have a cloned local copy
-3. add upstream to the main git repo: `git remote add git-repo https://github.com/apache/couchdb-fauxton.git`
-4. add upstream to the private apache repo: `git remote add upstream http://git-wip-us.apache.org/repos/asf/couchdb-fauxton.git`
-5. go to your cloned copy of the repo (usually `couchdb-fauxton`) and type `npm install` to download all dependencies
-7. install the `grunt-cli` (grunt command line interface) 
-
-In case you don't have the Grunt command line interface installed, run the following command:
-
-    npm install -g grunt-cli
-
-If you run into a permissions problem, run that last command as an administrator:
-
-    sudo npm install -g grunt-cli
-
+1. fork this repo: `git clone https://github.com/apache/couchdb-fauxton.git`
+1. add upstream to the private apache repo: `git remote add upstream http://git-wip-us.apache.org/repos/asf/couchdb-fauxton.git`
+1. go to your cloned copy of the repo (usually `couchdb-fauxton`) and type `npm install` to download all dependencies
 
 ## Running Fauxton
 
@@ -44,7 +33,9 @@ If you run into a permissions problem, run that last command as an administrator
 Using the dev server is the easiest way to use Fauxton, especially when developing for it. In the cloned repo folder,
 type:
 
-    grunt dev
+```
+npm run dev
+```
 
 Wait until you see the "Fauxton" ascii art on your command line, then you should be able to access Fauxton at
 `http://localhost:8000`
@@ -55,8 +46,9 @@ Wait until you see the "Fauxton" ascii art on your command line, then you should
 Follow the "Setting up Fauxton" section above, then edit the `settings.json` variable root where the document will live, 
 e.g. `/_utils/`. Then type:
 
-    grunt couchdb
-
+```
+npm run couchdb
+```
 This will install the latest version of Fauxton into `/share/www/`
 
 
