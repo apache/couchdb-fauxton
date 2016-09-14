@@ -14,8 +14,7 @@ export default {
 
   MISC: {
     TRAY_TOGGLE_SPEED: 250,
-    DEFAULT_PAGE_SIZE: 20,
-    MODAL_BACKDROP_Z_INDEX: 1025
+    DEFAULT_PAGE_SIZE: 20
   },
 
   DATABASES: {
