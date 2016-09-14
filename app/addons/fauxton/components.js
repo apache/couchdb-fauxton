@@ -228,55 +228,6 @@ Components.Tray = FauxtonAPI.View.extend({
 });
 
 
-Components.ModalView = FauxtonAPI.View.extend({
-  disableLoader: true,
-
-  initialize: function (options) {
-    _.bindAll(this);
-  },
-
-  afterRender: function () {
-    var that = this;
-    this.$('.modal').on('shown', function () {
-      that.$('input:text:visible:first').focus();
-    });
-  },
-
-  showModal: function () {
-    if (this._showModal) { this._showModal();}
-    this.clear_error_msg();
-    this.$('.modal').modal();
-
-    // hack to get modal visible
-    $('.modal-backdrop').css('z-index', FauxtonAPI.constants.MISC.MODAL_BACKDROP_Z_INDEX);
-  },
-
-  hideModal: function () {
-    this.$('.modal').modal('hide');
-  },
-
-  set_error_msg: function (msg) {
-    var text;
-    if (typeof(msg) == 'string') {
-      text = msg;
-    } else {
-      text = JSON.parse(msg.responseText).reason;
-    }
-    this.$('#modal-error').text(text).removeClass('hide');
-  },
-
-  clear_error_msg: function () {
-    this.$('#modal-error').text(' ').addClass('hide');
-  },
-
-  serialize: function () {
-    if (this.model) {
-      return this.model.toJSON();
-    }
-    return {};
-  }
-});
-
 Components.Typeahead = FauxtonAPI.View.extend({
 
   initialize: function (options) {
