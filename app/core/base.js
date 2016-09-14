@@ -79,7 +79,6 @@ FauxtonAPI.View = Backbone.View.extend({
   },
   loaderClassname: 'loader',
   manage: true,
-  disableLoader: false,
 
   forceRender: function () {
     this.hasRendered = false;
