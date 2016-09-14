@@ -26,7 +26,6 @@ module.exports = {
       .loginToGUI()
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_design/testdesigndoc/_view/stubview/edit')
       .waitForElementPresent('.index-cancel-link', waitTime, true)
-      .waitForElementNotPresent('.spinner', waitTime, true)
       .waitForElementNotPresent('.loading-lines', waitTime, true)
       .waitForElementVisible('#index-name', waitTime, true)
       .waitForElementPresent('.breadcrumb .js-lastelement', waitTime, false)
@@ -65,7 +64,6 @@ module.exports = {
 
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_design/testdesigndoc/_view/stubview/edit')
       .waitForElementPresent('.index-cancel-link', waitTime, true)
-      .waitForElementNotPresent('.spinner', waitTime, true)
       .waitForElementNotPresent('.loading-lines', waitTime, true)
       .waitForElementVisible('#index-name', waitTime, true)
       .waitForElementPresent('.breadcrumb .js-lastelement', waitTime, false)
@@ -89,7 +87,6 @@ module.exports = {
       .checkForStringPresent(viewUrl, 'hasehase6000')
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_design/testdesigndoc/_view/stubview')
       .waitForElementNotPresent('.loading-lines', waitTime, false)
-      .waitForElementNotPresent('.spinner', waitTime, false)
       .waitForElementVisible('.prettyprint', waitTime, false)
       .waitForElementPresent('.breadcrumb .js-lastelement', waitTime, false)
       .waitForAttribute('.breadcrumb .js-lastelement', 'textContent', function (docContents) {
@@ -120,7 +117,6 @@ module.exports = {
       .waitForElementPresent(dropDownElement, waitTime, false)
       .clickWhenVisible(dropDownElement + ' a')
       .clickWhenVisible(dropDownElement + ' a[href*="new_view"]')
-      .waitForElementNotPresent('.spinner', waitTime, true)
       .waitForElementNotPresent('.loading-lines', waitTime, true)
       .waitForElementPresent('.breadcrumb .js-lastelement', waitTime, false)
       .waitForAttribute('.breadcrumb .js-lastelement', 'textContent', function (docContents) {
@@ -152,7 +148,6 @@ module.exports = {
       .clickWhenVisible(dropDownElement + ' a[href*="new_view"]')
       .waitForElementPresent('.index-cancel-link', waitTime, false)
       .waitForElementVisible('#new-ddoc', waitTime, false)
-      .waitForElementNotPresent('.spinner', waitTime, true)
       .waitForElementNotPresent('.loading-lines', waitTime, true)
       .waitForElementPresent('.breadcrumb .js-lastelement', waitTime, false)
       .waitForAttribute('.breadcrumb .js-lastelement', 'textContent', function (docContents) {
@@ -176,7 +171,6 @@ module.exports = {
       // now redirect back to first view and confirm the fields are all populated properly
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_design/view1-name/_view/view1/edit')
 
-      .waitForElementNotPresent('.spinner', waitTime, true)
       .waitForElementNotPresent('.loading-lines', waitTime, true)
       .waitForElementVisible('#save-view', waitTime, false)
       .waitForElementPresent('.breadcrumb .js-lastelement', waitTime, false)
@@ -226,7 +220,6 @@ module.exports = {
 
       .waitForElementPresent('.index-cancel-link', waitTime, true)
       .waitForElementVisible('select#ddoc', waitTime, true)
-      .waitForElementNotPresent('.spinner', waitTime, true)
       .waitForElementNotPresent('.loading-lines', waitTime, true)
 
       .setValue('select#ddoc', 'new-doc')

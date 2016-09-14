@@ -75,7 +75,6 @@ _.extend(RouteObject.prototype, Backbone.Events, {
   layout: "with_sidebar",
   apiUrl: null,
   hideNotificationPanel: null,
-  disableLoader: false,
   loaderClassname: 'loader',
   renderedState: false,
   establish: function () {},

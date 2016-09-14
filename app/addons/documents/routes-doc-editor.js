@@ -23,7 +23,6 @@ import RevBrowserComponents from "./rev-browser/rev-browser.components.react";
 
 const RevBrowserRouteObject = FauxtonAPI.RouteObject.extend({
   layout: 'doc_editor',
-  disableLoader: true,
   selectedHeader: 'Databases',
   roles: ['fx_loggedIn'],
 
@@ -63,7 +62,6 @@ const RevBrowserRouteObject = FauxtonAPI.RouteObject.extend({
 
 const DocEditorRouteObject = FauxtonAPI.RouteObject.extend({
   layout: 'doc_editor',
-  disableLoader: true,
   selectedHeader: 'Databases',
 
   roles: ['fx_loggedIn'],
