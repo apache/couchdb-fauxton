@@ -93,6 +93,5 @@ module.exports = {
       "underscore": "lodash",
       "bootstrap": "../assets/js/libs/bootstrap",
     }
-  },
-  devtool: 'source-map',
+  }
 };
