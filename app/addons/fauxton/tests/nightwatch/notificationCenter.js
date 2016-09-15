@@ -27,7 +27,7 @@ module.exports = {
       .loginToGUI()
       .waitForElementPresent('#notification-center-btn', waitTime, false)
       .assert.cssClassNotPresent('.notification-center-panel', 'visible')
-      .clickWhenVisible('#notification-center-btn .fonticon-bell', waitTime, false)
+      .clickWhenVisible('#notification-center-btn', waitTime, false)
       .waitForElementPresent('.notification-center-panel.visible', waitTime, false)
 
       .getText('.notification-center-panel', function (result) {
