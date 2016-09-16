@@ -23,15 +23,14 @@ function PopulateDatabase () {
 util.inherits(PopulateDatabase, events.EventEmitter);
 
 PopulateDatabase.prototype.command = function (databaseName, count) {
-  var that = this,
-      nano = helpers.getNanoInstance(this.client.options.db_url),
-      database = nano.use(databaseName),
-      i = 0,
-      db_url = that.client.options.db_url;
+  const nano = helpers.getNanoInstance(this.client.options.db_url);
+  const database = nano.use(databaseName);
+  const db_url = that.client.options.db_url;
+  let i = 0;
 
   async.whilst(
-    function () { return i < (count ? count : 20); },
-    function (cb) {
+    () => { return i < (count ? count : 20); },
+    (cb)  => {
       i++;
       var documentId = 'document_' + i;
       database.insert({
@@ -40,7 +39,7 @@ PopulateDatabase.prototype.command = function (databaseName, count) {
         ente_ente_mango_ananas_res: 'foo'
       }, documentId, cb);
     },
-    function (err) {
+    (err) => {
       if (err) {
         console.log('Error in nano populateDatabase Function: ' +
           ' in database: ' + databaseName, err.message);
@@ -54,16 +53,16 @@ PopulateDatabase.prototype.command = function (databaseName, count) {
           }
         }
       },
-      '_design/testdesigndoc', function (er) {
+      '_design/testdesigndoc', (er) => {
         if (err) {
           console.log('Error in nano populateDatabase Function: ' +
             err.message);
         }
 
-        createKeyView(null, function () {
-          createBrokenView(null, function () {
-            createMangoIndex(null, db_url, function () {
-              that.emit('complete');
+        createKeyView(null, () => {
+          createBrokenView(null, () => {
+            createMangoIndex(null, db_url, () => {
+              this.emit('complete');
             });
           });
         });
@@ -103,6 +102,26 @@ PopulateDatabase.prototype.command = function (databaseName, count) {
           err.message);
       }
       cb();
+    });
+  }
+
+  function createConflictDesignDoc (err, db_url, cb) {
+    request({
+      uri: db_url + '/' + databaseName + '/_index',
+      method: 'PUT',
+      json: true,
+      body: {
+        _id: "_design/conflicts",
+        language: "javascript",
+        "views":{"new-view":{"map":"function (doc) {\n  emit(doc._id, 1);\n}"}}
+      }
+    }, (err, res, body) => {
+      if (err) {
+        console.log('Error in nano populateDatabase Function: ' +
+          err.message);
+      }
+
+      cb(null);
     });
   }
 

@@ -21,45 +21,6 @@ import RevBrowserActions from "./rev-browser/rev-browser.actions";
 import RevBrowserComponents from "./rev-browser/rev-browser.components.react";
 
 
-const RevBrowserRouteObject = FauxtonAPI.RouteObject.extend({
-  layout: 'doc_editor',
-  disableLoader: true,
-  selectedHeader: 'Databases',
-  roles: ['fx_loggedIn'],
-
-  routes: {
-    'database/:database/:doc/conflicts': 'revisionBrowser'
-  },
-
-  initialize: function (route, masterLayout, options) {
-    const databaseName = options[0];
-
-    this.docId = options[1];
-    this.database = this.database || new Databases.Model({ id: databaseName });
-    this.doc = new Documents.Doc({ _id: this.docId }, { database: this.database });
-  },
-
-  crumbs: function () {
-    const backLink = FauxtonAPI.urls('allDocs', 'app', this.database.safeID());
-    const docUrl = FauxtonAPI.urls('document', 'app', this.database.safeID(), this.docId);
-
-    return [
-      { name: this.database.safeID(), link: backLink },
-      { name: this.docId + ' > Conflicts' }
-    ];
-  },
-
-  apiUrl: function () {
-    return [this.doc.url('apiurl'), this.doc.documentation()];
-  },
-
-  revisionBrowser: function (databaseName, docId) {
-    RevBrowserActions.showConfirmModal(false, null);
-    RevBrowserActions.initDiffEditor(databaseName, docId);
-    this.setComponent('#dashboard-content', RevBrowserComponents.DiffyController);
-  }
-
-});
 
 const DocEditorRouteObject = FauxtonAPI.RouteObject.extend({
   layout: 'doc_editor',
@@ -76,13 +37,28 @@ const DocEditorRouteObject = FauxtonAPI.RouteObject.extend({
   },
 
   routes: {
+    'database/:database/:doc/conflicts': 'revisionBrowser',
     'database/:database/:doc/code_editor': 'codeEditor',
     'database/:database/_design/:ddoc': 'showDesignDoc',
     'database/:database/:doc': 'codeEditor',
-    'database/:database/new': 'codeEditor'
+    'database/:database/new': 'codeEditor',
   },
 
   crumbs: function () {},
+
+  revisionBrowser: function (databaseName, docId) {
+    const backLink = FauxtonAPI.urls('allDocs', 'app', this.database.safeID());
+    const docUrl = FauxtonAPI.urls('document', 'app', this.database.safeID(), this.docId);
+
+    this.crumbs = [
+      { name: this.database.safeID(), link: backLink },
+      { name: this.docId + ' > Conflicts' }
+    ];
+
+    RevBrowserActions.showConfirmModal(false, null);
+    RevBrowserActions.initDiffEditor(databaseName, docId);
+    this.setComponent('#dashboard-content', RevBrowserComponents.DiffyController);
+  },
 
   codeEditor: function (databaseName, docId) {
     const backLink = FauxtonAPI.urls('allDocs', 'app', databaseName);
@@ -116,6 +92,5 @@ const DocEditorRouteObject = FauxtonAPI.RouteObject.extend({
 
 
 export default {
-  DocEditorRouteObject: DocEditorRouteObject,
-  RevBrowserRouteObject: RevBrowserRouteObject
+  DocEditorRouteObject: DocEditorRouteObject
 };
