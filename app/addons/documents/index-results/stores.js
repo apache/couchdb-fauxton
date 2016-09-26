@@ -172,12 +172,6 @@ Stores.IndexResultsStore = FauxtonAPI.Store.extend({
     return this._pageStart + this._collection.length - 1;
   },
 
-  getUpdateSeq: function () {
-    if (!this._collection) { return false; }
-    if (!this._collection.updateSeq) { return false; }
-    return this._collection.updateSeq();
-  },
-
   clearSelectedItems: function () {
     this._bulkDeleteDocCollection.reset([]);
   },

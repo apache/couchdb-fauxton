@@ -119,7 +119,6 @@ var DatabaseTable = React.createClass({
               <th>Name</th>
               <th>Size</th>
               <th># of Docs</th>
-              <th>Update Seq</th>
               {this.getExtensionColumns()}
               <th>Actions</th>
             </tr>
@@ -186,7 +185,6 @@ var DatabaseRow = React.createClass({
         </td>
         <td>{size}</td>
         <td>{row.status.numDocs()} {this.renderGraveyard(row)}</td>
-        <td>{row.status.updateSeq()}</td>
         {this.getExtensionColumns(row)}
         <td className="database-actions">
           <a className="db-actions btn fonticon-replicate set-replication-start"
