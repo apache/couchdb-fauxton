@@ -132,26 +132,12 @@ Databases.Status = FauxtonAPI.Model.extend({
   },
 
   dataSize: function () {
-    if (this.get("other")) {
-      return this.get("other").data_size;
-    } else if (this.get('data_size')) {
-      return this.get('data_size');
-    } else if (this.get('disk_size')) {
-      return this.get('disk_size');
-    } else {
-      return 0;
-    }
+    return this.get('other').data_size;
   },
 
   parse: function (resp) {
     this.loadSuccess = true;
     return resp;
-  },
-
-  // a sure-fire way to know when the DB size info is actually available; dataSize() may return 0 before or after
-  // the data has been loaded
-  hasDataSize: function () {
-    return this.get('other') || this.get('data_size') || this.get('disk_size');
   }
 });
 
