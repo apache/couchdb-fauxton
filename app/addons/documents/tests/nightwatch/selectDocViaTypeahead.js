@@ -32,6 +32,7 @@ module.exports = {
       // we need to explicitly show the doc field because it's hidden on Travis due to screen width
       .execute("$('.searchbox-wrapper').show();")
       .setValue('.jump-to-doc .Select-input input', ['_des'])
+      .waitForElementPresent('.Select-option', waitTime, false)
       .keys(['\uE015', '\uE015', '\uE006'])
       .waitForElementPresent('.panel-button.upload', waitTime, false)
     .end();
@@ -43,7 +44,6 @@ module.exports = {
         baseUrl = client.globals.test_settings.launch_url;
 
     client
-      .populateDatabase(newDatabaseName, 3)
       .createDocument('MY_CAP_DOC_ID', newDatabaseName, {value: 1, value: 2})
       .loginToGUI()
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
@@ -56,6 +56,7 @@ module.exports = {
       // we need to explicitly show the doc field because it's hidden on Travis due to screen width
       .execute("$('.searchbox-wrapper').show();")
       .setValue('.jump-to-doc .Select-input input', ['MY_CAP'])
+      .waitForElementPresent('.Select-option', waitTime, false)
       .keys(['\uE015', '\uE015', '\uE006'])
       .waitForElementPresent('.panel-button.upload', waitTime, false)
     .end();
