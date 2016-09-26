@@ -19,6 +19,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import TestUtils from "react-addons-test-utils";
 import sinon from "sinon";
+import { mount } from 'enzyme';
 
 var assert = utils.assert;
 
@@ -49,9 +50,6 @@ describe('DatabasesController', function () {
             },
             "isGraveYard": function () {
               return false;
-            },
-            "updateSeq": function () {
-              return 99;
             }
           }
         },
@@ -76,9 +74,6 @@ describe('DatabasesController', function () {
             },
             "isGraveYard": function () {
               return true;
-            },
-            "updateSeq": function () {
-              return 399;
             }
           }
         }
@@ -102,7 +97,6 @@ describe('DatabasesController', function () {
     assert.equal("2.0 MB", el.getElementsByTagName('tr')[1].getElementsByTagName('td')[1].innerText.trim());
     assert.equal("88", el.getElementsByTagName('tr')[1].getElementsByTagName('td')[2].innerText.trim());
     assert.equal(0, el.getElementsByTagName('tr')[1].getElementsByTagName('td')[2].getElementsByTagName("i").length);
-    assert.equal(3, el.getElementsByTagName('tr')[1].getElementsByTagName('td')[4].getElementsByTagName("a").length);
     assert.equal("db2", el.getElementsByTagName('tr')[2].getElementsByTagName('td')[0].innerText.trim());
     assert.equal(1, el.getElementsByTagName('tr')[2].getElementsByTagName('td')[2].getElementsByTagName("i").length);
   });
@@ -189,8 +183,8 @@ describe('DatabaseTable', function () {
     );
     var cols = $(ReactDOM.findDOMNode(table)).find('th');
 
-    // (default # of rows is 5)
-    assert.equal(cols.length, 8, 'extra columns show up');
+    // (default # of rows is 4)
+    assert.equal(cols.length, 7, 'extra columns show up');
 
     FauxtonAPI.unRegisterExtension('DatabaseTable:head');
   });
@@ -207,7 +201,6 @@ describe('DatabaseTable', function () {
       loadSuccess: true,
       dataSize: function () { return 0; },
       numDocs: function () { return 0; },
-      updateSeq: function () { return 0; },
       isGraveYard: function () { return false; }
     };
 
@@ -217,8 +210,8 @@ describe('DatabaseTable', function () {
     );
     var links = $(ReactDOM.findDOMNode(databaseRow)).find('td');
 
-    // (default # of rows is 5)
-    assert.equal(links.length, 6, 'extra column shows up');
+    // (default # of rows is 4)
+    assert.equal(links.length, 5, 'extra column shows up');
 
     FauxtonAPI.unRegisterExtension('DatabaseTable:databaseRow');
 
@@ -231,7 +224,6 @@ describe('DatabaseTable', function () {
       loadSuccess: false,
       dataSize: function () { return 0; },
       numDocs: function () { return 0; },
-      updateSeq: function () { return 0; },
       isGraveYard: function () { return false; }
     };
 
@@ -248,7 +240,6 @@ describe('DatabaseTable', function () {
       loadSuccess: true,
       dataSize: function () { return 0; },
       numDocs: function () { return 0; },
-      updateSeq: function () { return 0; },
       isGraveYard: function () { return false; }
     };
 

@@ -131,17 +131,6 @@ Databases.Status = FauxtonAPI.Model.extend({
     return this.numDeletedDocs() > this.numDocs();
   },
 
-  updateSeq: function (full) {
-    var updateSeq = this.get("update_seq");
-    if (full || (typeof(updateSeq) === 'number')) {
-      return updateSeq;
-    } else if (updateSeq) {
-      return updateSeq[0];
-    } else {
-      return 0;
-    }
-  },
-
   dataSize: function () {
     if (this.get("other")) {
       return this.get("other").data_size;
