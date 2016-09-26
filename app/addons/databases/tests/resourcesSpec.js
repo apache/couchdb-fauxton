@@ -31,18 +31,6 @@ describe("Databases: List", function () {
       assert.ok(!modelWithoutGraveYard.isGraveYard());
     });
 
-    it("can tell whether the data size showing is accurate or not", function () {
-      var modelWithDataSize = new Resources.Status({
-        other: 6,
-        data_size: 5,
-        disk_size: 2
-      });
-      assert.ok(modelWithDataSize.hasDataSize());
-
-      var empty_probably_fetching_model = new Resources.Status({});
-      assert.notOk(empty_probably_fetching_model.hasDataSize());
-    });
-
   });
 
   describe('List of Databases', function () {
