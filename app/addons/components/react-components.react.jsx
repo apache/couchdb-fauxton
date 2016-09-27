@@ -1489,7 +1489,7 @@ var DeleteDatabaseModal = React.createClass({
   },
 
   onInputChange: function (e) {
-    var val = encodeURIComponent(e.target.value.trim());
+    const val = e.target.value.trim();
 
     this.setState({
       inputValue: val
@@ -1618,12 +1618,6 @@ export default {
   TrayWrapper: TrayWrapper,
   connectToStores: connectToStores,
   ApiBarController: ApiBarController,
-  renderMenuDropDown: function (el, opts) {
-    ReactDOM.render(<MenuDropDown icon="fonticon-vertical-ellipsis" links={opts.links} />, el);
-  },
-  removeMenuDropDown: function (el) {
-    ReactDOM.unmountComponentAtNode(el);
-  },
   DeleteDatabaseModal: DeleteDatabaseModal,
   TabElement: TabElement,
   TabElementWrapper: TabElementWrapper

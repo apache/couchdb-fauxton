@@ -43,7 +43,7 @@ function showDeleteDatabaseModal (options) {
 }
 
 function deleteDatabase (dbId) {
-  var url = FauxtonAPI.urls('databaseBaseURL', 'server', dbId, '');
+  const url = FauxtonAPI.urls('databaseBaseURL', 'server', dbId, '');
 
   $.ajax({
     url: url,

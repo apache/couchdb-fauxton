@@ -11,12 +11,11 @@
 // the License.
 
 
-
 module.exports = {
   'Deletes a database with special chars': function (client) {
-    var waitTime = client.globals.maxWaitTime,
-        newDatabaseName = 'one/two-three/_four', // add any other chars here you want to test
-        baseUrl = client.globals.test_settings.launch_url;
+    const waitTime = client.globals.maxWaitTime;
+    const newDatabaseName = 'one/two-three/_four'; // add any other chars here you want to test
+    const baseUrl = client.globals.test_settings.launch_url;
 
     client
       .createDatabase(newDatabaseName)
