@@ -19,7 +19,6 @@ import Actions from "./actions";
 var ActiveTasksRouteObject = FauxtonAPI.RouteObject.extend({
   selectedHeader: 'Active Tasks',
   layout: 'one_pane',
-  disableLoader: true,
   routes: {
     'activetasks/:id': 'showActiveTasks',
     'activetasks': 'showActiveTasks'

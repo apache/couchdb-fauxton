@@ -17,7 +17,6 @@ import DocumentationComponents from "./components.react";
 var DocumentationRouteObject = FauxtonAPI.RouteObject.extend({
   selectedHeader: 'Documentation',
   layout: 'one_pane',
-  disableLoader: false,
   routes: {
     'documentation': 'documentation'
   },

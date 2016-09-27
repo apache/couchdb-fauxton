@@ -27,7 +27,6 @@ var AuthRouteObject = FauxtonAPI.RouteObject.extend({
     'createAdmin': 'checkNodes',
     'createAdmin/:node': 'createAdminForNode'
   },
-  disableLoader: true,
   hideNotificationCenter: true,
 
   checkNodes: function () {

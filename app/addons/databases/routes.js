@@ -32,7 +32,6 @@ var AllDbsRouteObject = FauxtonAPI.RouteObject.extend({
   roles: ['fx_loggedIn'],
 
   selectedHeader: "Databases",
-  disableLoader: true,
 
   initialize: function () {
     this.databases = new Databases.List();
