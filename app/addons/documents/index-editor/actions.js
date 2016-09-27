@@ -90,6 +90,12 @@ function saveView (viewInfo) {
     FauxtonAPI.dispatch({ type: ActionTypes.VIEW_SAVED });
     var fragment = FauxtonAPI.urls('view', 'showView', viewInfo.database.safeID(), designDoc.safeID(), app.utils.safeURLName(viewInfo.viewName));
     FauxtonAPI.navigate(fragment, { trigger: true });
+  }, (xhr) => {
+    FauxtonAPI.addNotification({
+      msg: `${xhr.responseJSON.reason}`,
+      type: 'error',
+      clear: true
+    });
   });
 }
 

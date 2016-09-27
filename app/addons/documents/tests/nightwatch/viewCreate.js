@@ -14,6 +14,30 @@
 
 module.exports = {
 
+  'creates design docs with js hint errors': function (client) {
+    const waitTime = client.globals.maxWaitTime;
+    const baseUrl = client.globals.test_settings.launch_url;
+
+    /*jshint multistr: true */
+    openDifferentDropdownsAndClick(client, '#header-dropdown-menu')
+      .waitForElementPresent('#new-ddoc', waitTime, false)
+      .setValue('#new-ddoc', 'test_design_doc-selenium-0')
+      .clearValue('#index-name')
+      .setValue('#index-name', 'furbie')
+      .execute('\
+        var editor = ace.edit("map-function");\
+        editor.getSession().setValue("function (doc) { if (doc != \'\') { emit(\'blerg\'); } else { emit(\'nana\'); }  }");\
+      ')
+      .execute('$("#save-view")[0].scrollIntoView();')
+      .waitForElementPresent('#save-view', waitTime, false)
+      .clickWhenVisible('#save-view', waitTime, false)
+      .checkForDocumentCreated('_design/test_design_doc-selenium-0')
+      .waitForElementPresent('.prettyprint', waitTime, false)
+      .waitForElementNotPresent('.loading-lines', waitTime, false)
+      .assert.containsText('.prettyprint', 'blerg')
+    .end();
+  },
+
   'Creates a Design Doc using the dropdown at "all documents"': function (client) {
     var waitTime = client.globals.maxWaitTime;
     var baseUrl = client.globals.test_settings.launch_url;

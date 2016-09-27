@@ -271,25 +271,10 @@ var EditorController = React.createClass({
     }
   },
 
-  hasErrors: function () {
-    var mapEditorErrors = this.refs.mapEditor.getEditor().hasErrors();
-    var customReduceErrors = (store.hasCustomReduce()) ? this.refs.reduceEditor.getEditor().hasErrors() : false;
-    return mapEditorErrors || customReduceErrors;
-  },
-
   saveView: function (e) {
     e.preventDefault();
 
     if (!this.refs.designDocSelector.validate()) {
-      return;
-    }
-
-    if (this.hasErrors()) {
-      FauxtonAPI.addNotification({
-        msg: 'Please fix the Javascript errors and try again.',
-        type: 'error',
-        clear: true
-      });
       return;
     }
 
