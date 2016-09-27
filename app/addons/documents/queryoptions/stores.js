@@ -58,7 +58,7 @@ Stores.QueryOptionsStore = FauxtonAPI.Store.extend({
     this._isVisible = true;
   },
 
-  setTrayVisible: function (trayVisible) {
+  setTrayVisible (trayVisible) {
     this._trayVisible = trayVisible;
   },
 
@@ -78,11 +78,11 @@ Stores.QueryOptionsStore = FauxtonAPI.Store.extend({
     return this._betweenKeys;
   },
 
-  updateBetweenKeys: function (newBetweenKeys) {
+  updateBetweenKeys (newBetweenKeys) {
     this._betweenKeys = newBetweenKeys;
   },
 
-  updateSkip: function (skip) {
+  updateSkip (skip) {
     this._skip = skip;
   },
 
@@ -94,7 +94,7 @@ Stores.QueryOptionsStore = FauxtonAPI.Store.extend({
     return this._limit;
   },
 
-  updateLimit: function (limit) {
+  updateLimit (limit) {
     this._limit = limit;
   },
 
@@ -102,7 +102,7 @@ Stores.QueryOptionsStore = FauxtonAPI.Store.extend({
     return this._byKeys;
   },
 
-  updateByKeys: function (keys) {
+  updateByKeys (keys) {
     this._byKeys = keys;
   },
 
@@ -142,12 +142,26 @@ Stores.QueryOptionsStore = FauxtonAPI.Store.extend({
     return this._showBetweenKeys;
   },
 
-  updateGroupLevel: function (groupLevel) {
+  updateGroupLevel (groupLevel) {
     this._groupLevel = groupLevel;
   },
 
-  setQueryParams: function (params) {
+  sanitize (params) {
+    if (params.startkey) {
+      params.start_key = params.startkey;
+      delete params.startkey;
+    }
+
+    if (params.endkey) {
+      params.end_key = params.endkey;
+      delete params.endkey;
+    }
+
+  },
+
+  setQueryParams (params) {
     this.reset();
+    this.sanitize(params);
     if (params.include_docs) {
       this._includeDocs = true;
     }
@@ -243,7 +257,7 @@ Stores.QueryOptionsStore = FauxtonAPI.Store.extend({
     return this._includeDocs;
   },
 
-  dispatch: function (action) {
+  dispatch (action) {
     switch (action.type) {
       case ActionTypes.QUERY_RESET:
         this.setQueryParams(action.params);

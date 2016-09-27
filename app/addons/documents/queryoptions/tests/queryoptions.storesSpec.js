@@ -19,38 +19,38 @@ var dispatchToken;
 var store;
 var opts;
 
-describe('QueryOptions Store', function () {
-  beforeEach(function () {
+describe('QueryOptions Store', () => {
+  beforeEach(() => {
     store = new Stores.QueryOptionsStore();
     dispatchToken = FauxtonAPI.dispatcher.register(store.dispatch);
   });
 
-  afterEach(function () {
+  afterEach(() => {
     FauxtonAPI.dispatcher.unregister(dispatchToken);
   });
 
-  describe('Toggle By Keys and Between Keys', function () {
+  describe('Toggle By Keys and Between Keys', () => {
 
-    it('toggling by keys sets by keys to true', function () {
+    it('toggling by keys sets by keys to true', () => {
 
       store.toggleByKeys();
 
       assert.ok(store.showByKeys());
     });
 
-    it('toggling between keys sets between keys to true', function () {
+    it('toggling between keys sets between keys to true', () => {
 
       store.toggleBetweenKeys();
       assert.ok(store.showBetweenKeys());
     });
 
-    it('toggling between keys sets by keys to false', function () {
+    it('toggling between keys sets by keys to false', () => {
       store._showByKeys = true;
       store.toggleBetweenKeys();
       assert.notOk(store.showByKeys());
     });
 
-    it('toggling by keys sets between keys to false', function () {
+    it('toggling by keys sets between keys to false', () => {
       store._showBetweenKeys = true;
       store.toggleByKeys();
       assert.notOk(store.showBetweenKeys());
@@ -58,12 +58,12 @@ describe('QueryOptions Store', function () {
 
   });
 
-  describe('getQueryParams', function () {
-    it('returns params for default', function () {
+  describe('getQueryParams', () => {
+    it('returns params for default', () => {
       assert.deepEqual(store.getQueryParams(), {});
     });
 
-    it('with betweenKeys', function () {
+    it('with betweenKeys', () => {
       store.toggleBetweenKeys();
       store.updateBetweenKeys({
         startkey:"a",
@@ -78,7 +78,7 @@ describe('QueryOptions Store', function () {
       });
     });
 
-    it('with byKeys', function () {
+    it('with byKeys', () => {
       store.toggleByKeys();
       store.updateByKeys("[1,2,3]");
 
@@ -88,9 +88,9 @@ describe('QueryOptions Store', function () {
     });
   });
 
-  describe('setQueryParams', function () {
+  describe('setQueryParams', () => {
 
-    it('sets all store values from given params', function () {
+    it('sets all store values from given params', () => {
 
       store.setQueryParams({
         include_docs: true,
@@ -105,7 +105,7 @@ describe('QueryOptions Store', function () {
       assert.equal(store.skip(), 5);
     });
 
-    it('sets between keys', function () {
+    it('sets between keys', () => {
       store.setQueryParams({
         start_key: 1,
         end_key: 5
@@ -117,13 +117,24 @@ describe('QueryOptions Store', function () {
       assert.ok(store.showBetweenKeys());
     });
 
-    it('sets by keys', function () {
+    it('sets by keys', () => {
       store.setQueryParams({
         keys: [1, 2, 3]
       });
 
       assert.deepEqual(store.byKeys(), [1, 2, 3]);
       assert.ok(store.showByKeys());
+    });
+
+    it('works with startkey and endkey', () => {
+      store.setQueryParams({
+        startkey: 1,
+        endkey: 5
+      });
+
+      assert.equal(store.betweenKeys().startkey, 1);
+      assert.equal(store.betweenKeys().endkey, 5);
+      assert.ok(store.showBetweenKeys());
     });
 
   });
