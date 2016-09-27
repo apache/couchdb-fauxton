@@ -18,7 +18,6 @@ import Mango from "./routes-mango";
 
 Documents.RouteObjects = [
   docEditor.DocEditorRouteObject,
-  docEditor.RevBrowserRouteObject,
   DocumentsRouteObject,
   IndexEditorRouteObject,
   Mango.MangoIndexEditorAndQueryEditor
