@@ -79,6 +79,26 @@ function createAnimalDb (url, cb) {
         (cb) => {
           deleteDatabase('animaldb-copy-2', cb);
         },
+        (cb) => {
+
+          request({
+            uri: `${url}/animaldb/${encodeURIComponent('_design/conflicts')}`,
+            method: 'PUT',
+            json: true,
+            body: {
+              _id: "_design/conflicts",
+              language: "javascript",
+              "views":{"new-view":{"map":"function (doc) {\n  emit(doc._id, 1);\n}"}}
+            }
+          }, (err, res, body) => {
+            if (err) {
+              throw err;
+            }
+
+            cb();
+          });
+
+        }
       ], (err, result) => {
         cb();
       });
@@ -130,7 +150,6 @@ function createAnimalDb (url, cb) {
       method: 'PUT',
       body: data
     }, (err, res, body) => {
-      console.log(body);
       cb(null);
     });
   }

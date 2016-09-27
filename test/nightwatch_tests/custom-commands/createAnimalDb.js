@@ -14,6 +14,9 @@ const util = require('util');
 const events = require('events');
 const helpers = require('../helpers/helpers.js');
 
+const commandHelper = require('./helper.js');
+const checkForDatabaseCreated = commandHelper.checkForDatabaseCreated;
+
 const createAnimalDbHelper = require('../../create-animal-db.js');
 function CreateAnimalDb () {
   events.EventEmitter.call(this);
@@ -24,8 +27,14 @@ util.inherits(CreateAnimalDb, events.EventEmitter);
 
 CreateAnimalDb.prototype.command = function (databaseName) {
 
-  createAnimalDbHelper(this.client.options.db_url, () => {
-    this.emit('complete');
+  const couchUrl = this.client.options.db_url;
+
+  createAnimalDbHelper(couchUrl, () => {
+
+    checkForDatabaseCreated(couchUrl, 'animaldb', helpers.maxWaitTime, () => {
+      this.emit('complete');
+    });
+
   });
 
   return this;
