@@ -16,14 +16,12 @@ module.exports = {
   'Shows the editor for conflicting docs': function (client) {
 
     const waitTime = client.globals.maxWaitTime;
-    const newDatabaseName = client.globals.testDatabaseName;
-    const dropDownElement = '#header-dropdown-menu';
     const baseUrl = client.globals.test_settings.launch_url;
 
     client
       .createAnimalDb()
       .loginToGUI()
-      .url(baseUrl + '/#/database/' + newDatabaseName + '/_design/conflicts')
+      .url(baseUrl + '/#/database/animaldb/_design/conflicts')
       .waitForElementPresent('#editor-container', waitTime, false)
       .end();
   },
