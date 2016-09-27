@@ -259,24 +259,6 @@ describe('Editor', function () {
     sandbox.restore();
   });
 
-  it('returns false on invalid map editor code', function () {
-    var stub = sandbox.stub(editorEl.refs.mapEditor.getEditor(), 'hasErrors');
-    stub.returns(false);
-    assert.notOk(editorEl.hasErrors());
-  });
-
-  it('returns true on valid map editor code', function () {
-    var stub = sandbox.stub(editorEl.refs.mapEditor.getEditor(), 'hasErrors');
-    stub.returns(true);
-    assert.ok(editorEl.hasErrors());
-  });
-
-  it('returns false on non-custom reduce', function () {
-    var stub = sandbox.stub(Stores.indexEditorStore, 'hasCustomReduce');
-    stub.returns(false);
-    assert.notOk(editorEl.hasErrors());
-  });
-
   it('calls changeViewName on view name change', function () {
     var viewName = 'new-name';
     var spy = sandbox.spy(Actions, 'changeViewName');
