@@ -142,7 +142,6 @@ module.exports = {
 };
 
 function openDifferentDropdownsAndClick (client) {
-  var modifier = dropDownElement.slice(1);
   var waitTime = client.globals.maxWaitTime;
   var newDatabaseName = client.globals.testDatabaseName;
   var baseUrl = client.globals.test_settings.launch_url;
