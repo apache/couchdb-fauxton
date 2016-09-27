@@ -103,8 +103,7 @@ module.exports = {
     /*jshint multistr: true */
     var waitTime = client.globals.maxWaitTime,
       newDatabaseName = client.globals.testDatabaseName,
-      baseUrl = client.globals.test_settings.launch_url,
-      dropDownElement = '#header-dropdown-menu';
+      baseUrl = client.globals.test_settings.launch_url;
 
     client
       .deleteDatabase(newDatabaseName)
@@ -114,9 +113,8 @@ module.exports = {
 
       // create the first view
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
-      .waitForElementPresent(dropDownElement, waitTime, false)
-      .clickWhenVisible(dropDownElement + ' a')
-      .clickWhenVisible(dropDownElement + ' a[href*="new_view"]')
+      .clickWhenVisible('.faux-header__doc-header-dropdown-toggle')
+      .clickWhenVisible('.faux-header__doc-header-dropdown-itemwrapper a[href*="new_view"]')
       .waitForElementNotPresent('.loading-lines', waitTime, true)
       .waitForElementPresent('.faux-header__doc-header-title', waitTime, false)
       .waitForAttribute('.faux-header__doc-header-title', 'textContent', function (docContents) {

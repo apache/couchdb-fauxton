@@ -18,16 +18,14 @@ module.exports = {
     /*jshint multistr: true */
     var waitTime = client.globals.maxWaitTime,
         newDatabaseName = client.globals.testDatabaseName,
-        baseUrl = client.globals.test_settings.launch_url,
-        dropDownElement = '#header-dropdown-menu';
+        baseUrl = client.globals.test_settings.launch_url;
 
     client
       .loginToGUI()
       .populateDatabase(newDatabaseName)
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
-      .waitForElementPresent(dropDownElement, waitTime, false)
-      .clickWhenVisible(dropDownElement + ' a')
-      .clickWhenVisible(dropDownElement + ' a[href*="new_view"]')
+      .clickWhenVisible('.faux-header__doc-header-dropdown-toggle')
+      .clickWhenVisible('.faux-header__doc-header-dropdown-itemwrapper a[href*="new_view"]')
       .waitForElementVisible('#new-ddoc', waitTime, false)
       .setValue('#new-ddoc', 'test_design_doc-selenium-bad-reduce')
       .clearValue('#index-name')

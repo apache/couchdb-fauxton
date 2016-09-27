@@ -43,7 +43,7 @@ module.exports = {
     var baseUrl = client.globals.test_settings.launch_url;
 
     /*jshint multistr: true */
-    openDifferentDropdownsAndClick(client, '#header-dropdown-menu')
+    openDifferentDropdownsAndClick(client)
       .waitForElementPresent('#new-ddoc', waitTime, false)
       .setValue('#new-ddoc', 'test_design_doc-selenium-1')
       .clearValue('#index-name')
@@ -67,7 +67,7 @@ module.exports = {
     var baseUrl = client.globals.test_settings.launch_url;
 
     /*jshint multistr: true */
-    openDifferentDropdownsAndClick(client, '#header-dropdown-menu')
+    openDifferentDropdownsAndClick(client)
       .waitForElementPresent('#new-ddoc', waitTime, false)
       .setValue('#new-ddoc', 'test_design_doc-selenium-3')
       .clearValue('#index-name')
@@ -93,7 +93,7 @@ module.exports = {
     var baseUrl = client.globals.test_settings.launch_url;
 
     /*jshint multistr: true */
-    openDifferentDropdownsAndClick(client, '#header-dropdown-menu')
+    openDifferentDropdownsAndClick(client)
       .waitForElementPresent('#new-ddoc', waitTime, false)
       .setValue('#new-ddoc', 'test_design_doc-selenium-2')
       .clearValue('#index-name')
@@ -141,7 +141,7 @@ module.exports = {
   }
 };
 
-function openDifferentDropdownsAndClick (client, dropDownElement) {
+function openDifferentDropdownsAndClick (client) {
   var modifier = dropDownElement.slice(1);
   var waitTime = client.globals.maxWaitTime;
   var newDatabaseName = client.globals.testDatabaseName;
@@ -151,10 +151,7 @@ function openDifferentDropdownsAndClick (client, dropDownElement) {
     .loginToGUI()
     .populateDatabase(newDatabaseName)
     .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
-    .waitForElementPresent(dropDownElement, waitTime, false)
-    .waitForElementPresent(dropDownElement + ' a', waitTime, false)
-    .clickWhenVisible(dropDownElement + ' a', waitTime, false)
-    .waitForElementPresent(dropDownElement + ' a[href*="new_view"]', waitTime, false)
-    .clickWhenVisible(dropDownElement + ' a[href*="new_view"]', waitTime, false)
+    .clickWhenVisible('.faux-header__doc-header-dropdown-toggle')
+    .clickWhenVisible('.faux-header__doc-header-dropdown-itemwrapper a[href*="new_view"]')
     .waitForElementPresent('.index-cancel-link', waitTime, false);
 }
