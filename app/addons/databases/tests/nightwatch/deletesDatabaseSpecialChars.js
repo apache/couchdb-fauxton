@@ -10,12 +10,13 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-const newDatabaseName = 'one/two-three/_four';
+
 
 module.exports = {
   'Deletes a database with special chars': function (client) {
-    const waitTime = client.globals.maxWaitTime;
-    const baseUrl = client.globals.test_settings.launch_url;
+    var waitTime = client.globals.maxWaitTime,
+        newDatabaseName = 'one/two-three/_four', // add any other chars here you want to test
+        baseUrl = client.globals.test_settings.launch_url;
 
     client
       .createDatabase(newDatabaseName)
@@ -30,27 +31,6 @@ module.exports = {
       .setValue('.delete-db-modal input[type="text"]', [newDatabaseName, client.Keys.ENTER])
 
       .checkForDatabaseDeleted(newDatabaseName, waitTime)
-
-    .end();
-  },
-
-  'Deletes a database from the list with special chars': function (client) {
-    const waitTime = client.globals.maxWaitTime;
-    const baseUrl = client.globals.test_settings.launch_url;
-
-    client
-      .createDatabase(newDatabaseName)
-      .loginToGUI()
-      .url(baseUrl + '/#/_all_dbs/')
-
-      .waitForElementPresent('a[href="#/database/' + newDatabaseName + '/_all_docs"]', waitTime, false)
-      .assert.elementPresent('a[href="#/database/' + newDatabaseName + '/_all_docs"]')
-      .clickWhenVisible('[title="Delete ' + newDatabaseName + '"]', waitTime, false)
-      .setValue('.delete-db-modal input[type="text"]', [newDatabaseName, client.Keys.ENTER])
-      .waitForElementNotPresent('.global-notification .fonticon-cancel', waitTime, false)
-      .waitForElementPresent('.fauxton-table-list', waitTime, false)
-      .checkForDatabaseDeleted(newDatabaseName, waitTime)
-      .assert.elementNotPresent('a[href="#/database/' + newDatabaseName + '/_all_docs"]')
 
     .end();
   }
