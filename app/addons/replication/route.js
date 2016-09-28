@@ -10,48 +10,34 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import app from "../../app";
-import FauxtonAPI from "../../core/api";
-import Replication from "./resources";
-import Views from "./views";
-var RepRouteObject = FauxtonAPI.RouteObject.extend({
+import app from '../../app';
+import FauxtonAPI from '../../core/api';
+import Actions from './actions';
+import Components from './components.react';
+
+
+var ReplicationRouteObject = FauxtonAPI.RouteObject.extend({
   layout: 'one_pane',
   routes: {
-    "replication": 'defaultView',
-    "replication/:dbname": 'defaultView'
+    'replication': 'defaultView',
+    'replication/:dbname': 'defaultView'
   },
   selectedHeader: 'Replication',
   apiUrl: function () {
-    return [this.replication.url(), this.replication.documentation];
+    return [FauxtonAPI.urls('replication', 'api'), FauxtonAPI.constants.DOC_URLS.REPLICATION];
   },
   crumbs: [
-    { "name": 'Replicate changes from: ' }
+    { name: 'Replication', link: 'replication' }
   ],
-  defaultView: function (dbname) {
-    var isAdmin = FauxtonAPI.session.isAdmin();
-
-    this.tasks = [];
-    this.databases = new Replication.DBList({});
-    this.replication = new Replication.Replicate({});
-
-    if (isAdmin) {
-      this.tasks = new Replication.Tasks({ id: 'ReplicationTasks' });
-      this.setView('#dashboard-content', new Views.ReplicationFormForAdmins({
-        selectedDB: dbname || '',
-        collection: this.databases,
-        status: this.tasks
-      }));
-      return;
-    }
-    this.setView('#dashboard-content', new Views.ReplicationForm({
-      selectedDB: dbname || '',
-      collection: this.databases,
-      status: this.tasks
-    }));
+  roles: ['fx_loggedIn'],
+  defaultView: function (databaseName) {
+    const sourceDatabase = databaseName || '';
+    Actions.initReplicator(sourceDatabase);
+    this.setComponent('#dashboard-content', Components.ReplicationController);
   }
 });
 
-
-Replication.RouteObjects = [RepRouteObject];
+var Replication = {};
+Replication.RouteObjects = [ReplicationRouteObject];
 
 export default Replication;

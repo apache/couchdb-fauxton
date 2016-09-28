@@ -1,3 +1,4 @@
+
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License. You may obtain a copy of
 // the License at
@@ -227,7 +228,14 @@ var StyledSelect = React.createClass({
   propTypes: {
     selectValue: React.PropTypes.string.isRequired,
     selectId: React.PropTypes.string.isRequired,
-    selectChange: React.PropTypes.func.isRequired
+    selectChange: React.PropTypes.func.isRequired,
+    autoFocus: React.PropTypes.bool
+  },
+
+  getDefaultProps: function () {
+    return {
+      autoFocus: false
+    };
   },
 
   render: function () {
@@ -240,6 +248,7 @@ var StyledSelect = React.createClass({
             id={this.props.selectId}
             className={this.props.selectValue}
             onChange={this.props.selectChange}
+            autoFocus={this.props.autoFocus}
           >
             {this.props.selectContent}
           </select>
@@ -1117,7 +1126,7 @@ const ConfirmButton = React.createClass({
     buttonType: React.PropTypes.string,
     'data-id': React.PropTypes.string,
     onClick: React.PropTypes.func,
-    disabled: React.PropTypes.bool,
+    disabled: React.PropTypes.bool
   },
 
   getDefaultProps: function () {
@@ -1128,7 +1137,8 @@ const ConfirmButton = React.createClass({
       buttonType: 'btn-success',
       style: {},
       'data-id': null,
-      onClick: function () { }
+      onClick: function () { },
+      disabled: false
     };
   },
 
@@ -1152,6 +1162,7 @@ const ConfirmButton = React.createClass({
         className={'btn save ' + buttonType}
         id={id}
         style={style}
+        disabled={disabled}
       >
         {this.getIcon()}
         {text}
@@ -1159,6 +1170,7 @@ const ConfirmButton = React.createClass({
     );
   }
 });
+
 
 var MenuDropDown = React.createClass({
 
