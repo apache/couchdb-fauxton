@@ -219,43 +219,15 @@ var GraveyardInfo = React.createClass({
   }
 });
 
-class RightDatabasesHeader extends React.Component {
-
-  constructor (props) {
-    super(props);
-
-    this.state = this.getStoreState();
-  }
-
-  getStoreState () {
-
-    return {
-      databaseList: databasesStore.getDatabaseNamesForDropDown()
-    };
-  }
-
-  componentDidMount () {
-    databasesStore.on('change', this.onChange, this);
-  }
-
-  componentWillUnmount () {
-    databasesStore.off('change', this.onChange);
-  }
-
-  onChange () {
-    this.setState(this.getStoreState());
-  }
-
-  render () {
-    const {databaseList} = this.state;
-
-    return (
-      <div className="header-right right-db-header flex-layout flex-row">
-        <JumpToDatabaseWidget databaseList={databaseList} />
-        <AddDatabaseWidget />
-      </div>
-    );
-  }
+const RightDatabasesHeader = () => {
+  return (
+    <div className="header-right right-db-header flex-layout flex-row">
+      <JumpToDatabaseWidget
+        loadOptions={Actions.fetchAllDbsWithKey}
+      />
+      <AddDatabaseWidget />
+    </div>
+  );
 };
 
 var AddDatabaseWidget = React.createClass({
@@ -311,16 +283,14 @@ var AddDatabaseWidget = React.createClass({
   }
 });
 
-
-const JumpToDatabaseWidget = ({databaseList}) => {
-
+const JumpToDatabaseWidget = ({loadOptions}) => {
   return (
     <div data-name="jump-to-db" className="faux-header__searchboxwrapper">
       <div className="faux-header__searchboxcontainer">
 
-        <ReactSelect
+        <ReactSelect.Async
           placeholder="Database name"
-          options={databaseList}
+          loadOptions={loadOptions}
           clearable={false}
           onChange={({value: databaseName}) => {
             Actions.jumpToDatabase(databaseName);
@@ -331,7 +301,7 @@ const JumpToDatabaseWidget = ({databaseList}) => {
   );
 };
 JumpToDatabaseWidget.propTypes = {
-  databaseList: React.PropTypes.array.isRequired
+  loadOptions: React.PropTypes.func.isRequired
 };
 
 var DatabasePagination = React.createClass({
