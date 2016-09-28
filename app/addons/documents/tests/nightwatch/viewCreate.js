@@ -19,7 +19,7 @@ module.exports = {
     const baseUrl = client.globals.test_settings.launch_url;
 
     /*jshint multistr: true */
-    openDifferentDropdownsAndClick(client, '#header-dropdown-menu')
+    openDifferentDropdownsAndClick(client)
       .waitForElementPresent('#new-ddoc', waitTime, false)
       .setValue('#new-ddoc', 'test_design_doc-selenium-0')
       .clearValue('#index-name')
