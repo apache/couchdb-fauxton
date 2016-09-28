@@ -38,6 +38,7 @@ const JumpToDoc = ({database, loadOptions}) => {
 
 JumpToDoc.propTypes = {
   database: React.PropTypes.object.isRequired,
+  loadOptions: React.PropTypes.func.isRequired,
 };
 
 export default JumpToDoc;

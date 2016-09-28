@@ -81,12 +81,6 @@ var DatabasesStore = FauxtonAPI.Store.extend({
     });
   },
 
-  getDatabaseNamesForDropDown: function () {
-    return this.getDatabaseNames().map((db) => {
-      return { value: db, label: db};
-    });
-  },
-
   doesDatabaseExist: function (databaseName) {
     return this.getDatabaseNames().indexOf(databaseName) >= 0;
   },

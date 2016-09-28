@@ -135,5 +135,30 @@ export default {
       msg: 'Database does not exist.',
       type: 'error'
     });
+  },
+
+  fetchAllDbsWithKey: (id, callback) => {
+    const query = '?' + $.param({
+      startkey: JSON.stringify(id),
+      endkey: JSON.stringify(id + "\u9999"),
+      limit: 30
+    });
+
+    const url = `${app.host}/_all_dbs${query}`;
+    $.ajax({
+      cache: false,
+      url: url,
+      dataType: 'json'
+    }).then((dbs) => {
+      const options = dbs.map(db => {
+        return {
+          value: db,
+          label: db
+        };
+      });
+      callback(null, {
+        options: options
+      });
+    });
   }
 };

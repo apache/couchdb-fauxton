@@ -26,12 +26,13 @@ module.exports = {
       .getCssProperty('#footer', 'bottom', function (result) {
         this.assert.equal(result.value, '0px');
       })
-
       // wait for the DB name typeahead field to appear in the header
       .waitForElementPresent('[data-name="jump-to-db"]', waitTime, false)
       .waitForElementPresent('#dashboard-content table.databases', waitTime, false)
       .clickWhenVisible('[data-name="jump-to-db"] .Select-placeholder')
-      .setValue('[data-name="jump-to-db"] input', [newDatabaseName, client.Keys.ENTER])
+      .setValue('[data-name="jump-to-db"] input', [newDatabaseName])
+      .waitForElementPresent('.Select-option', waitTime, false)
+      .keys([client.Keys.ENTER])
       .waitForElementPresent('.index-pagination', waitTime, false)
       // now check we've redirected and the URL ends with /_all_docs
       .url((result) => {
