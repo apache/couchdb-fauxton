@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/apache/couchdb-fauxton.svg?branch=master)](https://travis-ci.org/apache/couchdb-fauxton)
+
 # Fauxton
 
 
