@@ -57,15 +57,13 @@ var DocumentsRouteObject = BaseRoute.extend({
 
   establish: function () {
     return [
-      this.designDocs.fetch({ reset: true }),
-      this.allDatabases.fetchOnce()
+      this.designDocs.fetch({ reset: true })
     ];
   },
 
   initViews: function (dbName) {
     this.databaseName = dbName;
     this.database = new Databases.Model({id: this.databaseName});
-    this.allDatabases = this.getAllDatabases();
 
     this.createDesignDocsCollection();
 

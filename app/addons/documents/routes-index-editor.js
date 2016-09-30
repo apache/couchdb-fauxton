@@ -54,7 +54,6 @@ var IndexEditorAndResults = BaseRoute.extend({
     var databaseName = options[0];
     this.databaseName = databaseName;
     this.database = new Databases.Model({id: databaseName});
-    this.allDatabases = new Databases.List();
     this.createDesignDocsCollection();
     this.addLeftHeader();
     this.addSidebar();
@@ -66,8 +65,7 @@ var IndexEditorAndResults = BaseRoute.extend({
 
   establish: function () {
     return [
-      this.designDocs.fetch({ reset: true }),
-      this.allDatabases.fetchOnce()
+      this.designDocs.fetch({ reset: true })
     ];
   },
 

@@ -44,10 +44,6 @@ var BaseRoute = FauxtonAPI.RouteObject.extend({
     });
   },
 
-  getAllDatabases: function () {
-    return new Databases.List();  //getAllDatabases() can be overwritten instead of hard coded into initViews
-  },
-
   showQueryOptions: function (urlParams, ddoc, viewName) {
     var promise = this.designDocs.fetch({reset: true}),
         hasReduceFunction;
