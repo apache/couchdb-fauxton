@@ -49,6 +49,7 @@ CreateDocument.prototype.command = function (documentName, databaseName, docCont
     }
 
     const url = [couchUrl, databaseName, documentName].join('/');
+
     checkForDocumentCreated(url, helpers.maxWaitTime, () => {
       this.emit('complete');
     });

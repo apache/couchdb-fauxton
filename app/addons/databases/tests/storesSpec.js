@@ -14,51 +14,54 @@ import app from "../../../app";
 import FauxtonAPI from "../../../core/api";
 import utils from "../../../../test/mocha/testUtils";
 import Stores from "../stores";
-import ActionTypes from "../actiontypes";
-import Resources from "../resources";
 
-var assert = utils.assert;
+import DatabaseActions from "../actions";
 
+const assert = utils.assert;
+
+const store = Stores.databasesStore;
 describe('Databases Store', function () {
 
-  var oldColl, oldBackbone;
-  var passedId, doneCallback, errorCallback, navigationTarget;
-
-  beforeEach(function () {
-    oldColl = Stores.databasesStore._collection;
-    oldBackbone = Stores.databasesStore._backboneCollection;
-    Stores.databasesStore._backboneCollection = {};
-  });
-
-  afterEach(function () {
-    Stores.databasesStore._collection = oldColl;
-    Stores.databasesStore._backboneCollection = oldBackbone;
-  });
-
-  it("inits based on what we pass", function () {
-    Stores.databasesStore.init({"name": "col1"}, {"name": "col2"});
-    assert.equal("col1", Stores.databasesStore.getCollection().name);
-    assert.equal("col2", Stores.databasesStore._backboneCollection.name);
-  });
-
-  describe("database collection info", function () {
+  describe('database list storage', function () {
 
     beforeEach(() => {
-      const data = [{"name": "db1"}, {"name": "db2"}];
-
-      const collection = new Backbone.Collection();
-      collection.add(data);
-
-      Stores.databasesStore._backboneCollection = collection;
+      store.reset();
     });
 
-    it("determines database names", function () {
-      assert.ok(JSON.stringify(["db1", "db2"]) === JSON.stringify(Stores.databasesStore.getDatabaseNames().sort()));
+    it('marks failed detail fetches as failed dbs', () => {
+      DatabaseActions.updateDatabases({
+        dbList: ['db1', 'db2'],
+        databaseDetails: [{db_name: 'db1'}, {db_name: 'db2'}],
+        failedDbs: ['db1']
+      });
+
+      const list = store.getDbList();
+
+      assert.ok(list[0].failed);
     });
 
-    it("determines database availability", function () {
-      assert(Stores.databasesStore.doesDatabaseExist("db1"));
-      assert(!Stores.databasesStore.doesDatabaseExist("db3"));
+    it('unions details', () => {
+      DatabaseActions.updateDatabases({
+        dbList: ['db1'],
+        databaseDetails: [{db_name: 'db1', doc_count: 5, doc_del_count: 3}],
+        failedDbs: []
+      });
+
+      const list = store.getDbList();
+
+      assert.equal(list[0].docCount, 5);
+      assert.equal(list[0].docDelCount, 3);
+    });
+
+    it('determines database availability', () => {
+      DatabaseActions.updateDatabases({
+        dbList: ['db1', 'db2'],
+        databaseDetails: [],
+        failedDbs: []
+      });
+
+      assert(store.doesDatabaseExist('db1'));
+      assert(!store.doesDatabaseExist('db3'));
     });
 
   });

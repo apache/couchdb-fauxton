@@ -12,11 +12,11 @@
 
 import app from "../../app";
 import FauxtonAPI from "../../core/api";
-import Databases from "./resources";
 import Actions from "./actions";
 import Components from "./components.react";
+import Databases from "./resources";
 
-var AllDbsRouteObject = FauxtonAPI.RouteObject.extend({
+const AllDbsRouteObject = FauxtonAPI.RouteObject.extend({
   layout: 'one_pane',
 
   crumbs: [
@@ -33,19 +33,20 @@ var AllDbsRouteObject = FauxtonAPI.RouteObject.extend({
 
   selectedHeader: "Databases",
 
-  initialize: function () {
-    this.databases = new Databases.List();
-  },
+  initialize: function () {},
 
   allDatabases: function () {
-    Actions.init(this.databases);
+    Actions.init();
     this.setComponent("#right-header", Components.RightDatabasesHeader);
     this.setComponent("#dashboard-content", Components.DatabasesController);
     this.setComponent("#footer", Components.DatabasePagination);
   },
 
   apiUrl: function () {
-    return [this.databases.url("apiurl"), this.databases.documentation()];
+    return [
+      FauxtonAPI.urls('allDBs', 'apiurl'),
+      FauxtonAPI.constants.DOC_URLS.ALL_DBS
+    ];
   }
 });
 Databases.RouteObjects = [AllDbsRouteObject];

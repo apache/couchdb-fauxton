@@ -24,12 +24,32 @@ function getQueryParam (query) {
 
 FauxtonAPI.registerUrls('allDocs', {
   server: function (id, query) {
+    /** XXX DEPRECATED: use allDocsSanitized **/
     return app.host + '/' + id + '/_all_docs' + getQueryParam(query);
   },
   app: function (id, query) {
+    /** XXX DEPRECATED: use allDocsSanitized **/
     return 'database/' + id + '/_all_docs' + getQueryParam(query);
   },
   apiurl: function (id, query) {
+    /** XXX DEPRECATED: use allDocsSanitized **/
+    return window.location.origin + '/' + id + '/_all_docs' + getQueryParam(query);
+  }
+});
+
+FauxtonAPI.registerUrls('allDocsSanitized', {
+  server: function (id, query) {
+    id = encodeURIComponent(id);
+    return app.host + '/' + id + '/_all_docs' + getQueryParam(query);
+  },
+
+  app: function (id, query) {
+    id = encodeURIComponent(id);
+    return 'database/' + id + '/_all_docs' + getQueryParam(query);
+  },
+
+  apiurl: function (id, query) {
+    id = encodeURIComponent(id);
     return window.location.origin + '/' + id + '/_all_docs' + getQueryParam(query);
   }
 });

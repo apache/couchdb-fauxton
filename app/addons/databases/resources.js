@@ -18,11 +18,6 @@ var Databases = FauxtonAPI.addon();
 Databases.DocLimit = 100;
 
 Databases.Model = FauxtonAPI.Model.extend({
-  initialize: function (options) {
-    this.status = new Databases.Status({
-      database: this
-    });
-  },
 
   documentation: function () {
     return FauxtonAPI.constants.DOC_URLS.ALL_DBS;
@@ -63,9 +58,7 @@ Databases.Model = FauxtonAPI.Model.extend({
       return app.host + "/" + this.safeID();
     }
   },
-  safeName: function () {
-    return app.utils.safeURLName(this.get("name"));
-  },
+
   safeID: function () {
     return app.utils.safeURLName(this.id);
   },
@@ -106,80 +99,6 @@ Databases.Changes = FauxtonAPI.Collection.extend({
   parse: function (resp) {
     this.last_seq = resp.last_seq;
     return resp.results;
-  }
-});
-
-Databases.Status = FauxtonAPI.Model.extend({
-  url: function () {
-    return app.host + "/" + this.database.safeID();
-  },
-
-  initialize: function (options) {
-    this.database = options.database;
-    this.loadSuccess = false;
-  },
-
-  numDocs: function () {
-    return this.get("doc_count");
-  },
-
-  numDeletedDocs: function () {
-    return this.get("doc_del_count");
-  },
-
-  isGraveYard: function () {
-    return this.numDeletedDocs() > this.numDocs();
-  },
-
-  dataSize: function () {
-    return this.get('other').data_size;
-  },
-
-  parse: function (resp) {
-    this.loadSuccess = true;
-    return resp;
-  }
-});
-
-// TODO: shared databases - read from the user doc
-Databases.List = FauxtonAPI.Collection.extend({
-  model: Databases.Model,
-  documentation: function () {
-    return FauxtonAPI.constants.DOC_URLS.ALL_DBS;
-  },
-
-  getDatabaseNames: function () {
-    return _.map(this.toArray(), function (model) {
-      return model.get('name');
-    });
-  },
-
-  cache: {
-    expires: 60
-  },
-
-  url: function (context) {
-    if (context === "apiurl") {
-      return window.location.origin + "/_all_dbs";
-    } else {
-      return app.host + "/_all_dbs";
-    }
-  },
-
-  parse: function (resp) {
-    // TODO: pagination!
-    return _.map(resp, function (database) {
-      return {
-        id: app.utils.safeURLName(database),
-        name: database
-      };
-    });
-  },
-
-  paginated: function (page, perPage) {
-    var start = (page - 1) * perPage;
-    var end = page * perPage;
-    return this.slice(start, end);
   }
 });
 

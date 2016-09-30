@@ -28,16 +28,18 @@ module.exports = {
       .loginToGUI()
 
       // delete the document manually. This'll ensure the database page has at least one "!" icon
-      .waitForElementPresent('#dashboard-content a[href="#/database/' + newDatabaseName + '/_all_docs"]', waitTime, false)
-      .click('#dashboard-content a[href="#/database/' + newDatabaseName + '/_all_docs"]')
+      .waitForElementPresent('#dashboard-content a[href="database/' + newDatabaseName + '/_all_docs"]', waitTime, false)
+      .click('#dashboard-content a[href="database/' + newDatabaseName + '/_all_docs"]')
 
       //this opens the alternative header
       .clickWhenVisible('.bulk-action-component-panel input[type="checkbox"]')
       .clickWhenVisible('.bulk-action-component-selector-group button.fonticon-trash', waitTime, false)
       .acceptAlert()
       .waitForElementVisible('#global-notifications .alert.alert-info', waitTime, false)
-      .clickWhenVisible('#nav-links a[href="#/_all_dbs"]')
 
+      .checkForStringPresent(newDatabaseName, '"doc_del_count":1')
+
+      .clickWhenVisible('#nav-links a[href="#/_all_dbs"]')
       // now let's look at the actual UI to confirm the tooltip appears
       .waitForElementPresent('.js-db-graveyard', waitTime, false)
       .moveToElement('.js-db-graveyard', 1, 1)

@@ -36,7 +36,6 @@ var PermissionsRouteObject = BaseRoute.extend({
     this.security = new Resources.Security(null, {
       database: this.database
     });
-    this.allDatabases = new Databases.List();
 
     this.createDesignDocsCollection();
     this.addLeftHeader();
@@ -49,8 +48,7 @@ var PermissionsRouteObject = BaseRoute.extend({
 
   establish: function () {
     return [
-      this.designDocs.fetch({reset: true}),
-      this.allDatabases.fetchOnce()
+      this.designDocs.fetch({reset: true})
     ];
   },
 

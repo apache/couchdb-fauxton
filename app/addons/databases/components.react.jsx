@@ -21,9 +21,9 @@ import FauxtonComponentsReact from "..//fauxton/components.react";
 import Stores from "./stores";
 import Resources from "./resources";
 import Actions from "./actions";
-import Helpers from "../../helpers";
 
 import ReactSelect from "react-select";
+import {Tooltip, OverlayTrigger} from 'react-bootstrap';
 
 var ToggleHeaderButton = Components.ToggleHeaderButton;
 var databasesStore = Stores.databasesStore;
@@ -35,7 +35,7 @@ var DatabasesController = React.createClass({
 
   getStoreState: function () {
     return {
-      collection: databasesStore.getCollection(),
+      dbList: databasesStore.getDbList(),
       loading: databasesStore.isLoading(),
       showDeleteDatabaseModal: deleteDbModalStore.getShowDeleteDatabaseModal()
     };
@@ -62,25 +62,29 @@ var DatabasesController = React.createClass({
   },
 
   render: function () {
-    var collection = this.state.collection;
-    var loading = this.state.loading;
+    const {loading, dbList} = this.state;
+
     return (
       <DatabaseTable
         showDeleteDatabaseModal={this.state.showDeleteDatabaseModal}
-        body={collection}
+        dbList={dbList}
         loading={loading} />
     );
   }
 });
 
-var DatabaseTable = React.createClass({
+const DatabaseTable = React.createClass({
 
-  createRows: function () {
-    return _.map(this.props.body, function (item, iteration) {
+  propTypes: {
+    dbList: React.PropTypes.array.isRequired,
+    showDeleteDatabaseModal: React.PropTypes.object.isRequired,
+    loading: React.PropTypes.bool.isRequired,
+  },
+
+  createRows: function (dbList) {
+    return dbList.map((item, k) => {
       return (
-        <DatabaseRow
-          row={item}
-          key={iteration} />
+        <DatabaseRow item={item} key={k} />
       );
     });
   },
@@ -107,7 +111,7 @@ var DatabaseTable = React.createClass({
       );
     }
 
-    const rows = this.createRows();
+    const rows = this.createRows(this.props.dbList);
     return (
       <div className="view">
         <DeleteDatabaseModal
@@ -138,16 +142,6 @@ var DatabaseRow = React.createClass({
     row: React.PropTypes.object
   },
 
-  renderGraveyard: function (row) {
-    if (row.status.isGraveYard()) {
-      return (
-        <GraveyardInfo row={row} />
-      );
-    } else {
-      return null;
-    }
-  },
-
   getExtensionColumns: function (row) {
     var cols = FauxtonAPI.getExtensions('DatabaseTable:databaseRow');
     return _.map(cols, function (Item, index) {
@@ -160,64 +154,60 @@ var DatabaseRow = React.createClass({
   },
 
   render: function () {
-    var row = this.props.row;
-    //Adding this row check in as it seems our unit tests need them to pass
-    if (!row || !row.get) {return (<span></span>);};
+    const {
+      item
+    } = this.props;
 
-    var name = row.get("name");
+    const {encodedId, id, url, diskSize, docCount, docDelCount, showTombstoneWarning, failed } = item;
+    const tombStoneWarning = showTombstoneWarning ?
+      (<GraveyardInfo docCount={docCount} docDelCount={docDelCount} />) : null;
 
     // if the row status failed to load, inform the user
-    if (!row.status.loadSuccess) {
+    if (failed) {
       return (
         <tr>
-          <td>{name}</td>
+          <td data-name="database-load-fail-name">{id}</td>
           <td colSpan="4" className="database-load-fail">This database failed to load.</td>
         </tr>
       );
     }
-    var encoded = app.utils.safeURLName(name);
-    var size = Helpers.formatSize(row.status.dataSize());
 
     return (
       <tr>
         <td>
-          <a href={"#/database/" + encoded + "/_all_docs"}>{name}</a>
+          <a href={url}>{id}</a>
         </td>
-        <td>{size}</td>
-        <td>{row.status.numDocs()} {this.renderGraveyard(row)}</td>
-        {this.getExtensionColumns(row)}
+        <td>{diskSize}</td>
+        <td>{docCount} {tombStoneWarning}</td>
+        {this.getExtensionColumns(item)}
+
         <td className="database-actions">
           <a className="db-actions btn fonticon-replicate set-replication-start"
             title={"Replicate " + name}
-            href={"#/replication/" + encoded} />
+            href={"#/replication/" + encodedId} />
           <a
             className="db-actions btn icon-lock set-permissions"
-            title={"Set permissions for " + name} href={"#/database/" + encoded + "/permissions"} />
+            title={"Set permissions for " + name} href={"#/database/" + encodedId + "/permissions"} />
           <a
             className="db-actions btn icon-trash"
-            onClick={this.showDeleteDatabaseModal.bind(this, name)}
-            title={'Delete ' + name} data-bypass="true" />
+            onClick={this.showDeleteDatabaseModal.bind(this, id, encodedId)}
+            title={'Delete ' + id} data-bypass="true" />
         </td>
       </tr>
     );
   }
 });
 
-var GraveyardInfo = React.createClass({
+const GraveyardInfo = ({docCount, docDelCount}) => {
+  const graveyardTitle = `This database has just ${docCount} docs and ${docDelCount} deleted docs`;
+  const tooltip = <Tooltip id="graveyard-tooltip">{graveyardTitle}</Tooltip>;
 
-  componentDidMount: function () {
-    $(ReactDOM.findDOMNode(this.refs.myself)).tooltip();
-  },
-
-  render: function () {
-    var row = this.props.row;
-    var graveyardTitle = "This database has just " + row.status.numDocs() +
-      " docs and " + row.status.numDeletedDocs() + " deleted docs";
-    return (
-      <i className="js-db-graveyard icon icon-exclamation-sign" ref="myself" title={graveyardTitle}></i>
-    );
-  }
-});
+  return (
+    <OverlayTrigger placement="top" overlay={tooltip}>
+      <i className="js-db-graveyard icon icon-exclamation-sign" title={graveyardTitle}></i>
+    </OverlayTrigger>
+  );
+};
 
 const RightDatabasesHeader = () => {
   return (
@@ -312,7 +302,7 @@ var DatabasePagination = React.createClass({
 
   getStoreState: function () {
     return {
-      databaseNames: databasesStore.getDatabaseNames(),
+      totalAmountOfDatabases: databasesStore.getTotalAmountOfDatabases(),
       page: databasesStore.getPage()
     };
   },
@@ -334,18 +324,22 @@ var DatabasePagination = React.createClass({
   },
 
   render: function () {
-    var page = this.state.page;
-    var total = this.props.total || this.state.databaseNames.length;
+    const {page, totalAmountOfDatabases} = this.state;
+
     var urlPrefix = '#/' + this.props.linkPath + '?page=';
     var start = 1 + (page - 1) * FauxtonAPI.constants.MISC.DEFAULT_PAGE_SIZE;
-    var end = Math.min(total, page * FauxtonAPI.constants.MISC.DEFAULT_PAGE_SIZE);
+    var end = Math.min(totalAmountOfDatabases, page * FauxtonAPI.constants.MISC.DEFAULT_PAGE_SIZE);
 
     return (
       <footer className="all-db-footer pagination-footer">
         <div id="database-pagination">
-          <FauxtonComponentsReact.Pagination page={page} total={total} urlPrefix={urlPrefix} />
+          <FauxtonComponentsReact.Pagination page={page} total={totalAmountOfDatabases} urlPrefix={urlPrefix} />
         </div>
-        <div className="current-databases">Showing {start}&ndash;{end} of {total} databases.</div>
+        <div className="current-databases">
+          Showing <span className="all-db-footer__range">{start}&ndash;{end}</span>
+          of <span className="all-db-footer__total-db-count">{totalAmountOfDatabases}</span>
+          databases.
+        </div>
       </footer>
     );
   }

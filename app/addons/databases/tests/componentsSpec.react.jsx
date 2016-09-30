@@ -23,85 +23,7 @@ import { mount } from 'enzyme';
 
 var assert = utils.assert;
 
-describe('DatabasesController', function () {
-
-  var container, dbEl, oldGetCollection;
-
-  beforeEach(function () {
-    // define our own collection
-    oldGetCollection = Stores.databasesStore.getCollection;
-    Stores.databasesStore.getCollection = function () {
-      return [
-        {
-          "get": function (what) {
-            if ("name" === what) {
-              return "db1";
-            } else {
-              throw "Unknown get('" + what + "')";
-            }
-          },
-          "status": {
-            "loadSuccess": true,
-            "dataSize": function () {
-              return 2 * 1024 * 1024;
-            },
-            "numDocs": function () {
-              return 88;
-            },
-            "isGraveYard": function () {
-              return false;
-            }
-          }
-        },
-        {
-          "get": function (what) {
-            if ("name" === what) {
-              return "db2";
-            } else {
-              throw "Unknown get('" + what + "')";
-            }
-          },
-          "status": {
-            "loadSuccess": true,
-            "dataSize": function () {
-              return 1024;
-            },
-            "numDocs": function () {
-              return 188;
-            },
-            "numDeletedDocs": function () {
-              return 222;
-            },
-            "isGraveYard": function () {
-              return true;
-            }
-          }
-        }
-      ];
-    };
-    container = document.createElement('div');
-    dbEl = ReactDOM.render(React.createElement(Views.DatabasesController, {}), container);
-  });
-
-  afterEach(function () {
-    Stores.databasesStore.getCollection = oldGetCollection;
-    ReactDOM.unmountComponentAtNode(container);
-  });
-
-  it('renders base data of DBs', function () {
-
-    const el = ReactDOM.findDOMNode(dbEl);
-
-    assert.equal(1 + 2, el.getElementsByTagName('tr').length);
-    assert.equal("db1", el.getElementsByTagName('tr')[1].getElementsByTagName('td')[0].innerText.trim());
-    assert.equal("2.0 MB", el.getElementsByTagName('tr')[1].getElementsByTagName('td')[1].innerText.trim());
-    assert.equal("88", el.getElementsByTagName('tr')[1].getElementsByTagName('td')[2].innerText.trim());
-    assert.equal(0, el.getElementsByTagName('tr')[1].getElementsByTagName('td')[2].getElementsByTagName("i").length);
-    assert.equal("db2", el.getElementsByTagName('tr')[2].getElementsByTagName('td')[0].innerText.trim());
-    assert.equal(1, el.getElementsByTagName('tr')[2].getElementsByTagName('td')[2].getElementsByTagName("i").length);
-  });
-
-});
+const store = Stores.databasesStore;
 
 describe('AddDatabaseWidget', function () {
 
@@ -137,6 +59,11 @@ describe('AddDatabaseWidget', function () {
 
 
 describe('DatabasePagination', function () {
+
+  beforeEach(() => {
+    store.reset();
+  });
+
   it('uses custom URL prefix on the navigation if passed through props', function () {
     var container = document.createElement('div');
     var pagination = TestUtils.renderIntoDocument(<Views.DatabasePagination linkPath="_custom_path" />, container);
@@ -149,6 +76,26 @@ describe('DatabasePagination', function () {
 
     ReactDOM.unmountComponentAtNode(container);
   });
+
+  it('renders the database count and range', () => {
+    const controller = mount(<Views.DatabasePagination linkPath="_custom_path" />);
+    const dbList = [];
+
+    for (let i = 0; i < 30; i++) {
+      dbList.push(`db-${i}`);
+    }
+
+    Actions.updateDatabases({
+      dbList: dbList.slice(0, 10),
+      databaseDetails: [],
+      failedDbs: [],
+      fullDbList: dbList
+    });
+
+    assert.equal(controller.find('.all-db-footer__range').text(), '1–20');
+    assert.equal(controller.find('.all-db-footer__total-db-count').text(), '30');
+  });
+
 });
 
 describe('DatabaseTable', function () {
@@ -156,6 +103,12 @@ describe('DatabaseTable', function () {
 
   beforeEach(function () {
     container = document.createElement('div');
+    Actions.updateDatabases({
+      dbList: ['db1'],
+      databaseDetails: [{db_name: 'db1', doc_count: 0, doc_del_count: 0}],
+      failedDbs: ['db1'],
+      fullDbList: ['db1']
+    });
   });
 
   afterEach(function () {
@@ -163,6 +116,7 @@ describe('DatabaseTable', function () {
   });
 
   it('adds multiple extra columns if extended', function () {
+
     var ColHeader1 = React.createClass({
       render: function () { return <th>EXTRA COL 1</th>; }
     });
@@ -178,7 +132,7 @@ describe('DatabaseTable', function () {
     FauxtonAPI.registerExtension('DatabaseTable:head', ColHeader3);
 
     var table = TestUtils.renderIntoDocument(
-      <Views.DatabaseTable showDeleteDatabaseModal={{showModal: false}} loading={false} body={[]} />,
+      <Views.DatabaseTable showDeleteDatabaseModal={{showModal: false}} loading={false} dbList={[]} />,
       container
     );
     var cols = $(ReactDOM.findDOMNode(table)).find('th');
@@ -196,16 +150,17 @@ describe('DatabaseTable', function () {
 
     FauxtonAPI.registerExtension('DatabaseTable:databaseRow', Cell);
 
-    var row = new Backbone.Model({ name: 'db name' });
-    row.status = {
-      loadSuccess: true,
-      dataSize: function () { return 0; },
-      numDocs: function () { return 0; },
-      isGraveYard: function () { return false; }
-    };
+    Actions.updateDatabases({
+      dbList: ['db1'],
+      databaseDetails: [{db_name: 'db1', doc_count: 0, doc_del_count: 0}],
+      failedDbs: [],
+      fullDbList: ['db1']
+    });
+
+    const list = store.getDbList();
 
     var databaseRow = TestUtils.renderIntoDocument(
-      <Views.DatabaseTable showDeleteDatabaseModal={{showModal: false}} body={[row]} />,
+      <Views.DatabaseTable showDeleteDatabaseModal={{showModal: false}} dbList={list} />,
       container
     );
     var links = $(ReactDOM.findDOMNode(databaseRow)).find('td');
@@ -219,32 +174,34 @@ describe('DatabaseTable', function () {
   });
 
   it('shows error message if row marked as failed to load', function () {
-    var row = new Backbone.Model({ name: 'db name' });
-    row.status = {
-      loadSuccess: false,
-      dataSize: function () { return 0; },
-      numDocs: function () { return 0; },
-      isGraveYard: function () { return false; }
-    };
+    Actions.updateDatabases({
+      dbList: ['db1'],
+      databaseDetails: [{db_name: 'db1', doc_count: 0, doc_del_count: 0}],
+      failedDbs: ['db1'],
+      fullDbList: ['db1']
+    });
+
+    const list = store.getDbList();
 
     var databaseRow = TestUtils.renderIntoDocument(
-      <Views.DatabaseTable showDeleteDatabaseModal={{showModal: false}} body={[row]} />,
+      <Views.DatabaseTable showDeleteDatabaseModal={{showModal: false}} dbList={list} />,
       container
     );
     assert.equal($(ReactDOM.findDOMNode(databaseRow)).find('.database-load-fail').length, 1);
   });
 
   it('shows no error if row marked as loaded', function () {
-    var row = new Backbone.Model({ name: 'db name' });
-    row.status = {
-      loadSuccess: true,
-      dataSize: function () { return 0; },
-      numDocs: function () { return 0; },
-      isGraveYard: function () { return false; }
-    };
+    Actions.updateDatabases({
+      dbList: ['db1'],
+      databaseDetails: [{db_name: 'db1', doc_count: 0, doc_del_count: 0}],
+      failedDbs: [],
+      fullDbList: ['db1']
+    });
+
+    const list = store.getDbList();
 
     var databaseRow = TestUtils.renderIntoDocument(
-      <Views.DatabaseTable showDeleteDatabaseModal={{showModal: false}} body={[row]} />,
+      <Views.DatabaseTable showDeleteDatabaseModal={{showModal: false}} dbList={list} />,
       container
     );
 

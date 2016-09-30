@@ -15,47 +15,98 @@ import Stores from "./stores";
 import ActionTypes from "./actiontypes";
 import Resources from "./resources";
 
-export default {
+function getDatabaseDetails (dbList, fullDbList, cb) {
+  const databaseDetails = [];
+  const failedDbs = [];
+  let seen = 0;
 
-  init: function (databases) {
-    var params = app.getParams();
-    var page = params.page ? parseInt(params.page, 10) : 1;
-    var perPage = FauxtonAPI.constants.MISC.DEFAULT_PAGE_SIZE;
+  dbList.forEach((db) => {
+    const url = FauxtonAPI.urls('databaseBaseURL', 'server', db);
 
-    this.setStartLoading();
-    FauxtonAPI.when(databases.fetch({ cache: false })).then(function () {
+    fetch(url)
+      .then((res) => {
+        databaseDetails.push(res);
+      })
+      .fail((xhr) => {
+        failedDbs.push(db);
+      })
+      .always(() => {
+        seen++;
 
-      // if there are no databases, publish the init message anyway
-      if (!databases.paginated(page, perPage).length) {
-        FauxtonAPI.dispatch({
-          type: ActionTypes.DATABASES_INIT,
-          options: {
-            collection: [],
-            backboneCollection: databases,
-            page: page
-          }
-        });
-      }
+        if (seen !== dbList.length) {
+          return;
+        }
 
-      var numComplete = 0;
-      _.each(databases.paginated(page, perPage), function (db) {
-        db.status.fetchOnce().always(function () {
-          numComplete++;
-          if (numComplete < databases.paginated(page, perPage).length) {
-            return;
-          }
-          FauxtonAPI.dispatch({
-            type: ActionTypes.DATABASES_INIT,
-            options: {
-              collection: databases.paginated(page, perPage),
-              backboneCollection: databases,
-              page: page
-            }
-          });
+        updateDatabases({
+          dbList: dbList,
+          databaseDetails: databaseDetails,
+          failedDbs: failedDbs,
+          fullDbList: fullDbList
         });
       });
-    }.bind(this));
+  });
+}
+
+function fetch (url) {
+  return $.ajax({
+    cache: false,
+    url: url,
+    dataType: 'json'
+  }).then((res) => {
+    return res;
+  });
+}
+
+function getDatabaseList (limit, page) {
+  const url = FauxtonAPI.urls('allDBs', 'server');
+
+  return fetch(url);
+}
+
+function paginate (list, page, perPage) {
+  const start = (page - 1) * perPage;
+  const end = page * perPage;
+  return list.slice(start, end);
+}
+
+function updateDatabases (options) {
+  FauxtonAPI.dispatch({
+    type: ActionTypes.DATABASES_UPDATE,
+    options: options
+  });
+}
+
+export default {
+  getDatabaseList: getDatabaseList,
+  paginate: paginate,
+  getDatabaseDetails: getDatabaseDetails,
+  fetch: fetch,
+
+  init: function () {
+    const params = app.getParams();
+    const page = params.page ? parseInt(params.page, 10) : 1;
+    const limit = FauxtonAPI.constants.MISC.DEFAULT_PAGE_SIZE;
+
+    this.setStartLoading();
+
+    this.setPage(page);
+
+    getDatabaseList(limit, page)
+      .then((fullDbList) => {
+        const paginatedDbList = paginate(fullDbList, page, limit);
+
+        this.updateDatabases({
+          dbList: paginatedDbList,
+          databaseDetails: [],
+          failedDbs: [],
+          fullDbList: fullDbList
+        });
+
+        getDatabaseDetails(paginatedDbList, fullDbList);
+      });
   },
+
+  updateDatabases,
 
   setPage: function (page) {
     FauxtonAPI.dispatch({

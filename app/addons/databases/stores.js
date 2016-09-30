@@ -14,6 +14,9 @@ import app from "../../app";
 import FauxtonAPI from "../../core/api";
 import ActionTypes from "./actiontypes";
 import Resources from "./resources";
+import Helpers from "../../helpers";
+
+const Database = Resources.Model;
 
 var DatabasesStore = FauxtonAPI.Store.extend({
 
@@ -22,26 +25,18 @@ var DatabasesStore = FauxtonAPI.Store.extend({
   },
 
   reset: function () {
-    this._collection = new Backbone.Collection();
     this._loading = false;
     this._promptVisible = false;
-  },
+    this._page = 1;
 
-  init: function (collection, backboneCollection) {
-    this._collection = collection;
-    this._backboneCollection = backboneCollection;
-  },
-
-  setPage: function (page) {
-    this._page = page;
+    this._dbList = [];
+    this._databaseDetails = [];
+    this._failedDbs = [];
+    this._fullDbList = [];
   },
 
   getPage: function () {
-    if (this._page) {
-      return this._page;
-    } else {
-      return 1;
-    }
+    return this._page;
   },
 
   isLoading: function () {
@@ -60,41 +55,54 @@ var DatabasesStore = FauxtonAPI.Store.extend({
     this._promptVisible = promptVisible;
   },
 
-  obtainNewDatabaseModel: function (databaseName, nameAccCallback) {
-    return new this._backboneCollection.model({
+  obtainNewDatabaseModel: function (databaseName) {
+    return new Database({
       id: databaseName,
       name: databaseName
     });
   },
 
-  getCollection: function () {
-    return this._collection;
+  doesDatabaseExist: function (databaseName) {
+    return this._dbList.indexOf(databaseName) !== -1;
   },
 
-  getDatabaseNames: function () {
-    if (!this._backboneCollection || !this._backboneCollection.length) {
-      return [];
-    }
+  getTotalAmountOfDatabases: function () {
+    return this._fullDbList.length;
+  },
 
-    return this._backboneCollection.toJSON().map((item, key) => {
-      return item.name;
+  getDbList: function () {
+    return this._dbList.map((db) => {
+
+      const allDetails = this._databaseDetails.filter((el) => { return el.db_name === db; });
+      const data = {
+        id: db,
+        encodedId: encodeURIComponent(db),
+        url: FauxtonAPI.urls('allDocsSanitized', 'app', db),
+        failed: this._failedDbs.indexOf(db) !== -1
+      };
+
+      const res = Object.assign({}, data, this._getDetails(allDetails[0]));
+      return res;
     });
   },
 
-  doesDatabaseExist: function (databaseName) {
-    return this.getDatabaseNames().indexOf(databaseName) >= 0;
+  _getDetails: function (details) {
+    if (!details) {
+      return {};
+    }
+
+    return {
+      diskSize: Helpers.formatSize(details.disk_size || 0),
+      docCount: details.doc_count,
+      docDelCount: details.doc_del_count,
+      showTombstoneWarning: details.doc_del_count > details.doc_count
+    };
   },
 
   dispatch: function (action) {
     switch (action.type) {
-      case ActionTypes.DATABASES_INIT:
-        this.init(action.options.collection, action.options.backboneCollection);
-        this.setPage(action.options.page);
-        this.setLoading(false);
-      break;
-
       case ActionTypes.DATABASES_SETPAGE:
-        this.setPage(action.options.page);
+        this._page = action.options.page;
       break;
 
       case ActionTypes.DATABASES_SET_PROMPT_VISIBLE:
@@ -109,6 +117,14 @@ var DatabasesStore = FauxtonAPI.Store.extend({
         this.setLoading(false);
       break;
 
+      case ActionTypes.DATABASES_UPDATE:
+        this._fullDbList = action.options.fullDbList;
+        this._dbList = action.options.dbList;
+        this._databaseDetails = action.options.databaseDetails;
+        this._failedDbs = action.options.failedDbs;
+        this.setLoading(false);
+      break;
+
       default:
       return;
     }
@@ -117,7 +133,7 @@ var DatabasesStore = FauxtonAPI.Store.extend({
   }
 });
 
-var databasesStore = new DatabasesStore();
+const databasesStore = new DatabasesStore();
 databasesStore.dispatchToken = FauxtonAPI.dispatcher.register(databasesStore.dispatch.bind(databasesStore));
 
 export default {

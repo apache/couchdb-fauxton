@@ -35,8 +35,8 @@ Databases.databaseUrl = function (database) {
 FauxtonAPI.registerUrls('changes', {
   server: function (id, query) {
     return app.host + '/' + id + '/_changes' + query;
-
   },
+
   app: function (id, query) {
     return '/database/' + id + '/_changes' + query;
   },
@@ -47,8 +47,16 @@ FauxtonAPI.registerUrls('changes', {
 });
 
 FauxtonAPI.registerUrls('allDBs', {
+  server: function (query = '') {
+    return `${app.host}/_all_dbs${query}`;
+  },
+
   app: function () {
     return '_all_dbs';
+  },
+
+  apiurl: function (id, query) {
+    return window.location.origin + '/_all_dbs';
   }
 });
 
@@ -56,6 +64,7 @@ FauxtonAPI.registerUrls('databaseBaseURL', {
   server: function (database) {
     return window.location.origin + '/' + app.utils.safeURLName(database);
   },
+
   app: function (database) {
     return '/database/' + database;
   }

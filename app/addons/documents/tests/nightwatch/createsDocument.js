@@ -43,14 +43,16 @@ module.exports = {
 
       .clickWhenVisible('#doc-editor-actions-panel .save-doc')
       .checkForDocumentCreated(newDocumentName)
-      .url(baseUrl + '/' + newDatabaseName + '/_all_docs')
-      .waitForElementPresent('body', waitTime, false)
-      .getText('body', function (result) {
-        var data = result.value,
-            createdDocIsPresent = data.indexOf(newDocumentName);
+      .url(baseUrl + '#/database/' + newDatabaseName + '/_all_docs')
+      .waitForElementVisible('.prettyprint', waitTime, false)
+      .getText('.prettyprint', function (result) {
+        const data = result.value;
+        const createdDocIsPresent = data.indexOf(newDocumentName) !== -1;
 
-        this.verify.ok(createdDocIsPresent > 0,
-          'Checking if new document shows up in _all_docs.');
+        this.verify.ok(
+          createdDocIsPresent,
+          'Checking if new document shows up in _all_docs.'
+        );
       })
     .end();
   }

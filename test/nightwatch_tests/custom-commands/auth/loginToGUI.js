@@ -10,13 +10,16 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-exports.command = function () {
+exports.command = LoginToGui;
 
-  var client = this,
-      waitTime = client.globals.maxWaitTime,
-      baseUrl = client.globals.test_settings.launch_url,
-      username = client.globals.test_settings.fauxton_username,
-      password = client.globals.test_settings.password;
+function LoginToGui (user, pw) {
+
+  const client = this;
+  const waitTime = client.globals.maxWaitTime;
+  const baseUrl = client.globals.test_settings.launch_url;
+
+  const username = user || client.globals.test_settings.fauxton_username;
+  const password = pw || client.globals.test_settings.password;
 
   client
     .url(baseUrl + '/#login')
