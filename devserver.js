@@ -51,16 +51,18 @@ var devSetup = function (cb) {
   });
 };
 
-var defaultHeaderValue = "default-src 'self'; img-src 'self' data:; font-src 'self'; " +
+const defaultHeaderValue = "default-src 'self'; img-src 'self' data:; font-src 'self'; " +
                   "script-src 'self' 'unsafe-eval'; style-src 'self' 'unsafe-inline';";
-var setCSP = function (res) {
+function getCspHeaders () {
   if (!settings.contentSecurityPolicy) {
     return;
   }
 
-  var headerValue = settings.contentSecurityPolicyHeader || defaultHeaderValue;
+  const cspHeader = settings.contentSecurityPolicyHeader || defaultHeaderValue;
 
-  res.set('Content-Security-Policy', headerValue);
+  return {
+    'Content-Security-Policy': cspHeader
+  };
 };
 
 var runWebpackServer = function () {
@@ -81,7 +83,8 @@ var runWebpackServer = function () {
     historyApiFallback: true,
     stats: {
       colors: true,
-    }
+    },
+    headers: getCspHeaders(),
   };
 
   var compiler = webpack(config);
@@ -104,7 +107,6 @@ var runWebpackServer = function () {
   });
 
   server.app.all('*', function (req, res, next) {
-    setCSP(res);
     proxy.web(req, res);
   });
 
