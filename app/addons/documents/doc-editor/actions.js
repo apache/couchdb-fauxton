@@ -229,6 +229,17 @@ function resetUploadModal () {
   FauxtonAPI.dispatch({ type: ActionTypes.RESET_UPLOAD_MODAL });
 }
 
+function updateAttachmentFilter (filter) {
+  FauxtonAPI.dispatch({ type: ActionTypes.UPDATE_ATTACHMENT_FILTER, filter: filter });
+}
+
+function focusAttachmentFilter () {
+  FauxtonAPI.dispatch({ type:ActionTypes.FOCUS_ATTACHMENT_FILTER });
+}
+
+function blurAttachmentFilter() {
+  FauxtonAPI.dispatch({ type: ActionTypes.BLUR_ATTACHMENT_FILTER });
+}
 
 // helpers
 
@@ -259,5 +270,10 @@ export default {
   hideUploadModal: hideUploadModal,
   uploadAttachment: uploadAttachment,
   cancelUpload: cancelUpload,
-  resetUploadModal: resetUploadModal
+  resetUploadModal: resetUploadModal,
+
+  // attachment filter
+  updateAttachmentFilter: updateAttachmentFilter,
+  focusAttachmentFilter: focusAttachmentFilter,
+  blurAttachmentFilter: blurAttachmentFilter
 };

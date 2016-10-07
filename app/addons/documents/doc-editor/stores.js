@@ -33,6 +33,9 @@ Stores.DocEditorStore = FauxtonAPI.Store.extend({
     this._fileUploadLoadPercentage = 0;
 
     this._docConflictCount = null;
+
+    this._attachments = null;
+    this._attachmentFilterFocused = false;
   },
 
   isLoading: function () {
@@ -48,10 +51,15 @@ Stores.DocEditorStore = FauxtonAPI.Store.extend({
     this._docConflictCount = options.doc.get('_conflicts') ? options.doc.get('_conflicts').length : 0;
     options.doc.unset('_conflicts');
     this._doc = options.doc;
+    this._attachments = options.doc.get('_attachments');
   },
 
   getDoc: function () {
     return this._doc;
+  },
+
+  getAttachments: function () {
+    return this._attachments;
   },
 
   isCloneDocModalVisible: function () {
@@ -124,6 +132,41 @@ Stores.DocEditorStore = FauxtonAPI.Store.extend({
     this._fileUploadErrorMsg = '';
   },
 
+  filterAttachments: function (filter) {
+    var allAttachments = this._doc.get('_attachments');
+
+    if (filter !== '') {
+      var patterns = [
+        new RegExp('^' + filter),
+        new RegExp('^' + filter, 'i'),
+        new RegExp(filter),
+        new RegExp(filter, 'i')
+      ];
+
+      var filteredFilenames = [];
+      var remainingFilenames = _.keys(allAttachments);
+      _.forEach(patterns, function(pattern) {
+        filteredFilenames = filteredFilenames.concat(_.remove(remainingFilenames, s => pattern.test(s)));
+      });
+
+      this._attachments = _.pick(allAttachments, filteredFilenames);
+    } else {
+      this._attachments = allAttachments;
+    }
+  },
+
+  focusAttachmentFilter: function () {
+    this._attachmentFilterFocused = true;
+  },
+
+  blurAttachmentFilter: function () {
+    this._attachmentFilterFocused = false;
+  },
+
+  isAttachmentFilterFocused: function () {
+    return this._attachmentFilterFocused;
+  },
+
   dispatch: function (action) {
     switch (action.type) {
       case ActionTypes.RESET_DOC:
@@ -190,6 +233,22 @@ Stores.DocEditorStore = FauxtonAPI.Store.extend({
         this.triggerChange();
       break;
 
+      case ActionTypes.UPDATE_ATTACHMENT_FILTER:
+        this.filterAttachments(action.filter);
+        this.triggerChange();
+      break;
+
+      case ActionTypes.FOCUS_ATTACHMENT_FILTER:
+        this.focusAttachmentFilter();
+        this.triggerChange();
+      break;
+
+      case ActionTypes.BLUR_ATTACHMENT_FILTER:
+        this.blurAttachmentFilter();
+        this.triggerChange();
+      break;
+
+      case ActionTypes.
 
       default:
       return;

@@ -126,7 +126,7 @@ describe('DocEditorController', function () {
         doc: doc
       }
     });
-    assert.equal($(ReactDOM.findDOMNode(el)).find('.view-attachments-section .dropdown-menu li').length, 2);
+    assert.equal($(ReactDOM.findDOMNode(el)).find('.view-attachments-section .dropdown-menu li.attachment-row').length, 2);
   });
 
   //issues with this test running with all other tests. It passes on its own
@@ -147,6 +147,23 @@ describe('DocEditorController', function () {
     var attachmentURLactual = $attachmentNode.find('a').attr('href');
 
     assert.equal(attachmentURLactual, '../../id/_design/test-doc/one.png');
+  });
+
+  it('view attachements dropdown max-height is not set to none', function () {
+    var el = TestUtils.renderIntoDocument(
+        <Components.DocEditorController database={database} />, container
+    );
+
+    var doc = new Documents.Doc(docWithAttachmentsJSON, { database: database });
+    FauxtonAPI.dispatch({
+      type: ActionTypes.DOC_LOADED,
+      options: {
+        doc: doc
+      }
+    });
+
+    var $listNode = $(ReactDOM.findDOMNode(el)).find('ul');
+    assert.notEqual("none", $listNode.css('max-height'));
   });
 
   it('setting deleteDocModal=true in store shows modal', function () {

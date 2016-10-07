@@ -19,7 +19,8 @@ import Actions from "./actions";
 import Stores from "./stores";
 import FauxtonComponents from "../../fauxton/components.react";
 import GeneralComponents from "../../components/react-components.react";
-import { Modal } from "react-bootstrap";
+import { Modal, Dropdown, MenuItem } from "react-bootstrap";
+import NativeListener from "react-native-listener";
 import Helpers from "../../../helpers";
 
 import DocumentResources from '../resources';
@@ -40,7 +41,8 @@ var DocEditorController = React.createClass({
       uploadModalVisible: store.isUploadModalVisible(),
       deleteDocModalVisible: store.isDeleteDocModalVisible(),
       numFilesUploaded: store.getNumFilesUploaded(),
-      conflictCount: store.getDocConflictCount()
+      conflictCount: store.getDocConflictCount(),
+      attachmentFilterFocused: store.isAttachmentFilterFocused()
     };
   },
 
@@ -69,7 +71,7 @@ var DocEditorController = React.createClass({
         ref="docEditor"
         defaultCode={code}
         mode="json"
-        autoFocus={true}
+        autoFocus={!this.state.attachmentFilterFocused}
         editorCommands={editorCommands}
         notifyUnsavedChanges={true}
         stringEditModalEnabled={true} />
@@ -221,19 +223,46 @@ var AttachmentsPanelButton = React.createClass({
     };
   },
 
+  getStoreState: function () {
+    return {
+      attachments: store.getAttachments()
+    };
+  },
+
+  getInitialState: function () {
+    return this.getStoreState();
+  },
+
+  componentDidMount: function () {
+    store.on('change', this.onChange);
+  },
+
+  componentWillUnmount: function () {
+    store.off('change', this.onChange);
+  },
+
+  onChange: function () {
+    this.setState(this.getStoreState());
+  },
+
+  onToggle: function (isOpen) {
+    isOpen ? Actions.focusAttachmentFilter() : Actions.blurAttachmentFilter();
+  },
+
   getAttachmentList: function () {
     var db = this.props.doc.database.get('id');
     var doc = this.props.doc.get('_id');
+    var attachments = this.state.attachments;
 
-    return _.map(this.props.doc.get('_attachments'), function (item, filename) {
+    return _.map(attachments, function (item, filename) {
       var url = FauxtonAPI.urls('document', 'attachment', db, doc, app.utils.safeURLName(filename));
       return (
-        <li key={filename}>
-          <a href={url} target="_blank" data-bypass="true"> <strong>{filename}</strong>
-            <span className="attachment-delimiter">-</span>
-            <span>{item.content_type}, {Helpers.formatSize(item.length)}</span>
-          </a>
-        </li>
+        <MenuItem href={url} target="_blank" title={filename}
+                  className="attachment-row" key={filename} data-bypass="true">
+          <strong>{filename}</strong>
+          <span className="attachment-delimiter">-</span>
+          <span>{item.content_type}, {Helpers.formatSize(item.length)}</span>
+        </MenuItem>
       );
     });
   },
@@ -244,16 +273,54 @@ var AttachmentsPanelButton = React.createClass({
     }
 
     return (
-      <div className="panel-section view-attachments-section btn-group">
-        <button className="panel-button dropdown-toggle btn" data-bypass="true" data-toggle="dropdown" title="View Attachments"
-          id="view-attachments-menu">
+      <Dropdown className="panel-section view-attachments-section btn-group"
+                id="attachments-dropdown"
+                onToggle={this.onToggle}
+                onClick={this.onClick}>
+        <Dropdown.Toggle className="panel-button dropdown-toggle btn" title="View Attachments">
           <i className="icon icon-paper-clip"></i>
           <span className="button-text">View Attachments</span>
-          <span className="caret"></span>
-        </button>
-        <ul className="dropdown-menu" role="menu" aria-labelledby="view-attachments-menu">
+        </Dropdown.Toggle>
+        <Dropdown.Menu>
+          <li><AttachmentsPanelFilter /></li>
           {this.getAttachmentList()}
-        </ul>
+        </Dropdown.Menu>
+      </Dropdown>
+    );
+  }
+});
+
+var AttachmentsPanelFilter = React.createClass({
+  getInitialState: function () {
+    return {
+      filter: ''
+    };
+  },
+
+  onChange: function (event) {
+    var filter = event.target.value;
+    Actions.updateAttachmentFilter(filter);
+    this.setState({filter: filter});
+  },
+
+  clearFilter: function () {
+    Actions.updateAttachmentFilter('');
+    this.setState({filter: ''});
+    this.focusInput();
+  },
+
+  focusInput: function () {
+    this.refs.input && this.refs.input.focus();
+  },
+
+  render: function () {
+    return (
+      <div className="view-attachments-filter">
+        <i className="icon fonticon-filter" />
+        <NativeListener stopClick stopKeyDown stopKeyUp stopMouseDown stopMouseUp>
+          <input type="text" autoFocus onChange={this.onChange} value={this.state.filter} ref="input"/>
+        </NativeListener>
+        <i className="icon fonticon-cancel" onClick={this.clearFilter} />
       </div>
     );
   }

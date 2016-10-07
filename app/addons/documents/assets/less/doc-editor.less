@@ -175,6 +175,44 @@
   max-width: 540px;
   text-align: left;
   overflow: hidden;
+  overflow-y: auto;
+
+  @media screen and (min-height: 800px) {
+    max-height: 500px;
+  }
+
+  @media screen and (max-height: 800px) {
+    max-height: 200px;
+  }
+}
+
+.view-attachments-filter {
+  display: flex;
+  background-color: black;
+
+  input {
+    font-size: 12px;
+    flex: 1;
+    height: 30px;
+    color: #d9d9d9;
+    margin-bottom: 0;
+    border: none;
+    padding: 0;
+    background-color: black;
+  }
+
+  input:focus {
+    box-shadow: none !important;
+  }
+
+  i {
+    color: white;
+    padding: 6px;
+  }
+
+  i.fonticon-cancel {
+    cursor: pointer;
+  }
 }
 
 #editor-container div.string-editor-modal {
