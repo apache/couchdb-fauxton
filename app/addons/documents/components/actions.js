@@ -14,7 +14,7 @@ import FauxtonAPI from "../../../core/api";
 
 export default {
   fetchAllDocsWithKey: (database) => {
-      return (id, callback) => {
+    return (id, callback) => {
       const query = '?' + $.param({
         startkey: JSON.stringify(id),
         endkey: JSON.stringify(id + "\u9999"),

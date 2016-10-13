@@ -222,9 +222,7 @@ var GraveyardInfo = React.createClass({
 const RightDatabasesHeader = () => {
   return (
     <div className="header-right right-db-header flex-layout flex-row">
-      <JumpToDatabaseWidget
-        loadOptions={Actions.fetchAllDbsWithKey}
-      />
+      <JumpToDatabaseWidget loadOptions={Actions.fetchAllDbsWithKey} />
       <AddDatabaseWidget />
     </div>
   );
