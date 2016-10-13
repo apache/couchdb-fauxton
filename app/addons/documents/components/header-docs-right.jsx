@@ -31,7 +31,7 @@ const RightAllDocsHeader = ({database}) =>
 
     <div className="faux-header__searchboxwrapper">
       <div className="faux-header__searchboxcontainer">
-        <JumpToDoc loadOptions={Actions.fetchAllDocsWithKey(database)} database={database} />
+        <JumpToDoc cache={false} loadOptions={Actions.fetchAllDocsWithKey(database)} database={database} />
       </div>
     </div>
 

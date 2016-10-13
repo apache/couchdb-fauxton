@@ -26,6 +26,7 @@ const JumpToDoc = ({database, loadOptions}) => {
         loadOptions={loadOptions}
         clearable={false}
         ignoreCase={false}
+        cache={false}
         onChange={({value: docId}) => {
           const url = FauxtonAPI.urls('document', 'app', app.utils.safeURLName(database.id), app.utils.safeURLName(docId));
           // We navigating away from the page. So we need to take that navigation out of the loop otherwise
