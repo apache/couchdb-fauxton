@@ -20,7 +20,6 @@ import Documents from "../resources";
 import FauxtonComponents from "../..//fauxton/components.react";
 import { SplitButton, MenuItem } from "react-bootstrap";
 import ReactSelect from "react-select";
-import ReactCSSTransitionGroup from "react-addons-css-transition-group";
 import "../../../../assets/js/plugins/prettify";
 
 const {LoadLines, BulkActionComponent} = Components;
@@ -382,9 +381,7 @@ var ResultsScreen = React.createClass({
             disabled={this.props.isLoading}
             title="Select all docs that can be..." /> : null}
 
-          <ReactCSSTransitionGroup transitionName="slow-fade" transitionEnterTimeout={500} transitionLeaveTimeout={300}>
             {this.getDocumentList()}
-          </ReactCSSTransitionGroup>
         </div>
       </div>
     );
