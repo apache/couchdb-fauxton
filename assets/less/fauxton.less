@@ -382,10 +382,10 @@ table.databases {
   }
 }
 
-/* this allows the jump-to-doc results expand as much as need be when the component is used in the header */
-#right-header .faux-header__searchboxcontainer .Select-menu-outer {
+// this allows the results expand as much as need be when the component is used in the header
+.Select-menu-outer {
   &>div>div {
-    padding-right: 25px; /* prevents overlapping of auto-generated scrollbar */
+    padding-right: 25px; // prevents overlapping of auto-generated scrollbar
   }
   min-width: 210px;
   max-width: 450px;
@@ -422,6 +422,10 @@ table.databases {
 
 .Select .is-focused:not(.is-open) > .Select-control {
   box-shadow: transparent;
+}
+
+.Select-option.is-selected {
+  color: #fff;
 }
 
 .Select .Select-menu {
