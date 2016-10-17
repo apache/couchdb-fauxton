@@ -70,6 +70,9 @@ body #dashboard #notification-center-btn {
         margin: -18px -16px -14px; /* enlarges the hit area */
         font-size: 21px;
         color: #dddddd;
+        &:hover {
+          color: @hoverRed;
+        }
       }
     }
 
@@ -89,6 +92,12 @@ body #dashboard #notification-center-btn {
 
         &.selected {
           background-color: #555555;
+        }
+        &:hover {
+          background-color: @hoverRed;
+          .fonticon {
+            color: white;
+          }
         }
       }
       .fonticon {
@@ -129,6 +138,9 @@ body #dashboard #notification-center-btn {
           height: 20px;
           margin-top: -4px;
           margin-left: 6px;
+          &:hover {
+            color: @hoverRed;
+          }
         }
         p {
           margin-bottom: 0;
@@ -158,10 +170,10 @@ body #dashboard #notification-center-btn {
       .copy {
         color: @blue;
         text-decoration: none;
-        &:hover {
-          color: @red;
-          text-decoration: underline;
-        }
+      }
+      .copy.zeroclipboard-is-hover {
+        color: @hoverRed;
+        text-decoration: underline;
       }
     }
 
