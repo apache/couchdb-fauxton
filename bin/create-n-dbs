@@ -1,0 +1,131 @@
+#!/usr/bin/env node
+
+// Licensed under the Apache License, Version 2.0 (the "License"); you may not
+// use this file except in compliance with the License. You may obtain a copy of
+// the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+// WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+// License for the specific language governing permissions and limitations under
+// the License.
+
+const optimist = require('optimist');
+const nano = require('nano');
+
+const {parallelLimit} = require('async');
+
+
+const NAMESPACE = 'test-db-';
+const PARALLEL_LIMIT = 50;
+const URL = 'http://localhost:5984';
+
+optimist
+  .usage('Create a certain amount of dbs \nUsage: $0')
+
+  .options('help', {
+    alias: 'h',
+    describe: 'Show this message'
+  })
+  .options('number', {
+    alias: 'n',
+    describe: 'The amount of databases to create'
+  })
+  .options('delete', {
+    alias: 'd',
+    default: false,
+    describe: 'Delete databases'
+  });
+
+const argv = optimist.argv;
+
+if (argv.help || argv.h) {
+  return optimist.showHelp(console.log);
+}
+
+const isDelete = (argv.d || argv.delete);
+const isCreate = (argv.n || argv.number);
+
+if (!isDelete && !isCreate) {
+  console.error('[ERROR] Please provide -d or -n to delete or create test-databases \n');
+  optimist.showHelp(console.log);
+  process.exit(1);
+}
+
+const nClient = nano(URL)
+
+if (isCreate) {
+  return createNdbs(argv.n || argv.number);
+}
+
+if (isDelete) {
+  return deleteDbs();
+}
+
+function getExistingDbs (cb) {
+  nClient.db.list((err, body) => {
+    if (err) {
+      throw err;
+    }
+
+    const list = body.filter(db => {
+      return new RegExp(NAMESPACE).test(db);
+    });
+
+    cb(null, list);
+  });
+}
+
+function createNdbs (number) {
+  getExistingDbs((err, dbs) => {
+    const offset = dbs.length;
+
+    const newDbs = [];
+    for (let i = offset; i < offset + number; i++) {
+      newDbs.push(NAMESPACE + i);
+    }
+
+    const tasks = newDbs.map((db) => {
+      return function task (cb) {
+        nClient.db.create(db, (err, body) => {
+          if (err) {
+            console.error(err);
+          }
+
+          cb(null);
+        });
+      }
+    });
+
+    parallelLimit(tasks, PARALLEL_LIMIT, (err) => {
+      if (err) {
+        console.error(err);
+      }
+    });
+  });
+}
+
+function deleteDbs () {
+  getExistingDbs((err, dbs) => {
+    const list = dbs.map(db => {
+      return (cb) => {
+        nClient.db.destroy(db, (err, resp) => {
+          if (err) {
+            cb(err);
+            return;
+          }
+
+          cb(null);
+        });
+      };
+    });
+
+    parallelLimit(list, PARALLEL_LIMIT, (err) => {
+      if (err) {
+        console.error(err);
+      }
+    });
+  });
+}
