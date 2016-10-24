@@ -12,33 +12,6 @@
 
 import chai from "chai";
 
-var ViewSandbox = function () {
-  this.initialize();
-};
-
-_.extend(ViewSandbox.prototype, {
-  initialize: function () {
-    this.$el = $('<div style="display:none"></div>').appendTo('body');
-    this.$ = this.$el.find;
-  },
-  views: [],
-  renderView: function (view, done) {
-    this.views.push(view);
-    this.$el.append(view.el);
-    view.render();
-    if (done) {
-      view.promise().done(function () { done(); });
-    }
-    return view;
-  },
-
-  remove: function () {
-    _.each(this.views, function (view) {
-      view.remove();
-    }, this);
-  }
-});
-
 var restore = function (fn) {
   if (fn.restore) {
     fn.restore();
@@ -48,6 +21,5 @@ var restore = function (fn) {
 export default {
   chai: chai,
   assert: chai.assert,
-  ViewSandbox: ViewSandbox,
   restore: restore
 };

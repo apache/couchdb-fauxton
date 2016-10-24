@@ -12,8 +12,7 @@
 import FauxtonAPI from "../../../core/api";
 import Resources from "../resources";
 import testUtils from "../../../../test/mocha/testUtils";
-var assert = testUtils.assert,
-    ViewSandbox = testUtils.ViewSandbox;
+var assert = testUtils.assert;
 
 describe("Databases: List", function () {
 
