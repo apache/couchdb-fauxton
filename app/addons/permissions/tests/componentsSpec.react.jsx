@@ -19,12 +19,13 @@ import React from "react";
 import ReactDOM from "react-dom";
 import TestUtils from "react-addons-test-utils";
 import sinon from "sinon";
+import { mount } from 'enzyme';
 var assert = utils.assert;
 var restore = utils.restore;
 
 describe('Permissions Components', function () {
 
-  beforeEach((done) => {
+  beforeEach(() => {
     var databaseName = 'permissions-test';
     var database = new Databases.Model({ id: databaseName });
     Actions.editPermissions(
@@ -33,9 +34,8 @@ describe('Permissions Components', function () {
         database: database
       })
     );
-
+    restore(Actions.savePermissions);
     var savePermissionsStub = sinon.stub(Actions, 'savePermissions');
-    done();
   });
 
   afterEach(function () {
@@ -43,26 +43,22 @@ describe('Permissions Components', function () {
   });
 
   describe('Permissions Controller', function () {
-    var el, container;
-
-    beforeEach(function () {
-      container = document.createElement('div');
-      el = TestUtils.renderIntoDocument(<Views.PermissionsController />, container);
-    });
-
-    afterEach(function () {
-      ReactDOM.unmountComponentAtNode(container);
+    afterEach(() => {
+      restore(Actions.addItem);
+      restore(Actions.removeItem);
     });
 
     it('on Add triggers add action', function () {
       var spy = sinon.spy(Actions, 'addItem');
-      el.addItem({});
+      const el = mount(<Views.PermissionsController />);
+      el.instance().addItem({});
       assert.ok(spy.calledOnce);
     });
 
     it('on Remove triggers remove action', function () {
       var spy = sinon.spy(Actions, 'removeItem');
-      el.removeItem({
+      const el = mount(<Views.PermissionsController />);
+      el.instance().removeItem({
         value: 'boom',
         type: 'names',
         section: 'members'
@@ -86,14 +82,15 @@ describe('Permissions Components', function () {
     });
 
     it('adds user on submit', function () {
-      var input = $(ReactDOM.findDOMNode(el)).find('input')[0];
-      TestUtils.Simulate.change(input, {
+      const addSpy = sinon.spy();
+      const el = mount(<Views.PermissionsSection section={'members'} roles={[]} names={[]} addItem={addSpy} />);
+      el.find('.permissions-add-user input').simulate('change', {
         target: {
           value: 'newusername'
         }
       });
-      var form = $(ReactDOM.findDOMNode(el)).find('.permission-item-form')[0];
-      TestUtils.Simulate.submit(form);
+
+      el.find('.permissions-add-user').simulate('submit');
 
       var options = addSpy.args[0][0];
       assert.ok(addSpy.calledOnce);
@@ -102,14 +99,16 @@ describe('Permissions Components', function () {
     });
 
     it('adds role on submit', function () {
-      var input = $(ReactDOM.findDOMNode(el)).find('input')[1];
-      TestUtils.Simulate.change(input, {
+      const addSpy = sinon.spy();
+      const el = mount(<Views.PermissionsSection section={'members'} roles={[]} names={[]} addItem={addSpy} />);
+
+      el.find('.permissions-add-role input').simulate('change', {
         target: {
           value: 'newrole'
         }
       });
-      var form = $(ReactDOM.findDOMNode(el)).find('.permission-item-form')[1];
-      TestUtils.Simulate.submit(form);
+
+      el.find('.permissions-add-role').simulate('submit');
 
       var options = addSpy.args[0][0];
       assert.ok(addSpy.calledOnce);
@@ -119,51 +118,35 @@ describe('Permissions Components', function () {
 
     it('stores new name on change', function () {
       var newName = 'newName';
-      var dom = $(ReactDOM.findDOMNode(el)).find('.item')[0];
-
-      TestUtils.Simulate.change(dom, {
+      const el = mount(<Views.PermissionsSection section={'members'} roles={[]} names={[]} addItem={addSpy} />);
+      el.find('.permissions-add-user .item').simulate('change', {
         target: {
           value: newName
         }
       });
 
-      assert.equal(el.state.newName, newName);
+      assert.equal(el.state().newName, newName);
     });
 
     it('stores new role on change', function () {
       var newRole = 'newRole';
-      var dom = $(ReactDOM.findDOMNode(el)).find('.item')[1];
-
-      TestUtils.Simulate.change(dom, {
+      const el = mount(<Views.PermissionsSection section={'members'} roles={[]} names={[]} addItem={addSpy} />);
+      el.find('.permissions-add-role .item').simulate('change', {
         target: {
           value: newRole
         }
       });
-
-      assert.equal(el.state.newRole, newRole);
+      assert.equal(el.state().newRole, newRole);
     });
   });
 
   describe('PermissionsItem', function () {
-    var el, container, removeSpy;
-
-    beforeEach(function () {
-      removeSpy = sinon.spy();
-      container = document.createElement('div');
-      el = TestUtils.renderIntoDocument(<Views.PermissionsItem section={'members'} item={'test-item'} removeItem={removeSpy} />, container);
-    });
-
-    afterEach(function () {
-      ReactDOM.unmountComponentAtNode(container);
-    });
 
     it('triggers remove on click', function () {
-      var dom = $(ReactDOM.findDOMNode(el)).find('.close')[0];
-      TestUtils.Simulate.click(dom);
-
+      const removeSpy = sinon.spy();
+      const el = mount(<Views.PermissionsItem section={'members'} item={'test-item'} removeItem={removeSpy} />);
+      el.find('.close').simulate('click');
       assert.ok(removeSpy.calledOnce);
-
     });
-
   });
 });

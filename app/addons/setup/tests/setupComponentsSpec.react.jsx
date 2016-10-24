@@ -17,44 +17,29 @@ import React from "react";
 import ReactDOM from "react-dom";
 import TestUtils from "react-addons-test-utils";
 import sinon from "sinon";
+import { mount } from 'enzyme';
 
 var assert = utils.assert;
 
 describe('Setup Components', function () {
 
   describe('IP / Port area', function () {
-    var changeHandler, container;
-
-    beforeEach(function () {
-      changeHandler = sinon.spy();
-      container = document.createElement('div');
-    });
-
-    afterEach(function () {
-      ReactDOM.unmountComponentAtNode(container);
-    });
 
     it('fires callbacks on change, ip', function () {
-      var optSettings = TestUtils.renderIntoDocument(
-        <Views.SetupOptionalSettings onAlterPort={null} onAlterBindAddress={changeHandler} />,
-        container
-      );
+      const changeHandler = sinon.spy();
+      const optSettings = mount(<Views.SetupOptionalSettings onAlterPort={null} onAlterBindAddress={changeHandler} />);
 
-      var node = $(ReactDOM.findDOMNode(optSettings)).find('.setup-input-ip')[0];
-      TestUtils.Simulate.change(node, {target: {value: 'Hello, world'}});
-
+      optSettings.find('.setup-input-ip').simulate('change', {target: {value: 'Hello, world'}});
       assert.ok(changeHandler.calledOnce);
     });
 
     it('fires callbacks on change, port', function () {
-      var optSettings = TestUtils.renderIntoDocument(
-        <Views.SetupOptionalSettings onAlterPort={changeHandler} onAlterBindAddress={null} />,
-        container
+      const changeHandler = sinon.spy();
+      var optSettings = mount(
+        <Views.SetupOptionalSettings onAlterPort={changeHandler} onAlterBindAddress={null} />
       );
 
-      var node = $(ReactDOM.findDOMNode(optSettings)).find('.setup-input-port')[0];
-      TestUtils.Simulate.change(node, {target: {value: 'Hello, world'}});
-
+      optSettings.find('.setup-input-port').simulate('change', {target: {value: 'Hello, world'}});
       assert.ok(changeHandler.calledOnce);
     });
 
@@ -108,29 +93,24 @@ describe('Setup Components', function () {
   });*/
 
   describe('SingleNodeSetup', function () {
-    var controller, changeHandler, container;
-
     beforeEach(function () {
       sinon.stub(Stores.setupStore, 'getIsAdminParty', function () { return false; });
-      container = document.createElement('div');
-      controller = TestUtils.renderIntoDocument(
-        <Views.SetupSingleNodeController />,
-        container
-      );
     });
 
     afterEach(function () {
       utils.restore(Stores.setupStore.getIsAdminParty);
-      ReactDOM.unmountComponentAtNode(container);
       Stores.setupStore.reset();
     });
 
     it('changes the values in the store for the setup node', function () {
-      var $setupNodesSection = $(ReactDOM.findDOMNode(controller)).find('.setup-setupnode-section');
-      TestUtils.Simulate.change($setupNodesSection.find('.setup-input-ip')[0], {target: {value: '192.168.13.42'}});
-      TestUtils.Simulate.change($setupNodesSection.find('.setup-input-port')[0], {target: {value: '1342'}});
-      TestUtils.Simulate.change($setupNodesSection.find('.setup-username')[0], {target: {value: 'tester'}});
-      TestUtils.Simulate.change($setupNodesSection.find('.setup-password')[0], {target: {value: 'testerpass'}});
+      const controller = mount(
+        <Views.SetupSingleNodeController />
+      );
+
+      controller.find('.setup-setupnode-section .setup-input-ip').simulate('change', {target: {value: '192.168.13.42'}});
+      controller.find('.setup-setupnode-section .setup-input-port').simulate('change', {target: {value: '1342'}});
+      controller.find('.setup-setupnode-section .setup-username').simulate('change', {target: {value: 'tester'}});
+      controller.find('.setup-setupnode-section .setup-password').simulate('change', {target: {value: 'testerpass'}});
 
       assert.equal(Stores.setupStore.getBindAdressForSetupNode(), '192.168.13.42');
       assert.equal(Stores.setupStore.getPortForSetupNode(), '1342');
