@@ -30,13 +30,7 @@ var MainFieldsView = React.createClass({
     reduce: React.PropTypes.bool.isRequired,
     toggleReduce: React.PropTypes.func,
     updateGroupLevel: React.PropTypes.func,
-    docURL: React.PropTypes.string
-  },
-
-  getDefaultProps: function () {
-    return {
-      docURL: FauxtonAPI.constants.DOC_URLS.GENERAL
-    };
+    docURL: React.PropTypes.string.isRequired
   },
 
   toggleIncludeDocs: function (e) {
@@ -411,7 +405,8 @@ var QueryTray = React.createClass({
             reduce={this.props.reduce}
             toggleReduce={Actions.toggleReduce}
             groupLevel={this.props.groupLevel}
-            updateGroupLevel={Actions.updateGroupLevel} />
+            updateGroupLevel={Actions.updateGroupLevel}
+            docURL={FauxtonAPI.constants.DOC_URLS.GENERAL} />
           <KeySearchFields
             key={1}
             showByKeys={this.props.showByKeys}
