@@ -30,6 +30,7 @@ module.exports = {
     client
       .createDocument(newDocumentName, newDatabaseName, ddocContents)
       .populateDatabase(newDatabaseName)
+      .checkForDocumentCreated(newDocumentName)
 
       .loginToGUI()
 
