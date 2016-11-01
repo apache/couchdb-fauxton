@@ -24,11 +24,11 @@ import ReactCSSTransitionGroup from "react-addons-css-transition-group";
 const TabElementWrapper = Components.TabElementWrapper;
 const TabElement = Components.TabElement;
 
-var activeTasksStore = Stores.activeTasksStore;
+const activeTasksStore = Stores.activeTasksStore;
 
-var ActiveTasksController = React.createClass({
+export const ActiveTasksController = React.createClass({
 
-  getStoreState: function () {
+  getStoreState () {
     return {
       collection: activeTasksStore.getCollection(),
       searchTerm: activeTasksStore.getSearchTerm(),
@@ -42,45 +42,42 @@ var ActiveTasksController = React.createClass({
     };
   },
 
-  getInitialState: function () {
+  getInitialState () {
     return this.getStoreState();
   },
 
-  componentDidMount: function () {
+  componentDidMount () {
+    Actions.init(new Resources.AllTasks());
     this.state.setPolling();
     activeTasksStore.on('change', this.onChange, this);
   },
 
-  componentWillUnmount: function () {
+  componentWillUnmount () {
     this.state.clearPolling();
     activeTasksStore.off('change', this.onChange, this);
   },
 
-  onChange: function () {
+  onChange () {
     this.setState(this.getStoreState());
   },
 
-  setNewSearchTerm: function (searchTerm) {
+  setNewSearchTerm (searchTerm) {
     Actions.setSearchTerm(searchTerm);
   },
 
-  switchTab: function (newRadioButton) {  //tabs buttons
+  switchTab (newRadioButton) {  //tabs buttons
     Actions.switchTab(newRadioButton);
   },
 
-  tableHeaderOnClick: function (headerClicked) {
+  tableHeaderOnClick (headerClicked) {
     Actions.sortByColumnHeader(headerClicked);
   },
 
-  render: function () {
-    var collection = this.state.collection;
-    var searchTerm = this.state.searchTerm;
-    var selectedRadio = this.state.selectedRadio;
-    var sortByHeader = this.state.sortByHeader;
-    var headerIsAscending = this.state.headerIsAscending;
+  render () {
+    const {collection, searchTerm, selectedRadio, sortByHeader, headerIsAscending} = this.state;
 
-    var setSearchTerm = this.setNewSearchTerm;
-    var onTableHeaderClick = this.tableHeaderOnClick;
+    const setSearchTerm = this.setNewSearchTerm;
+    const onTableHeaderClick = this.tableHeaderOnClick;
 
     return (
       <div id="active-tasks-page" className="scrollable">
@@ -104,7 +101,7 @@ var ActiveTasksController = React.createClass({
 });
 
 var ActiveTasksFilterTabs = React.createClass({
-  getDefaultProps: function () {
+  getDefaultProps () {
     return {
       radioNames : [
         'All Tasks',
@@ -116,16 +113,16 @@ var ActiveTasksFilterTabs = React.createClass({
     };
   },
 
-  checked: function (radioName) {
+  checked (radioName) {
     return this.props.selectedRadio === radioName;
   },
 
-  onRadioClick: function (e) {
+  onRadioClick (e) {
     var radioName = e.target.value;
     this.props.onRadioClick(radioName);
   },
 
-  createFilterTabs: function () {
+  createFilterTabs () {
     return (
       this.props.radioNames.map((radioName, i) => {
         const checked = this.checked(radioName);
@@ -141,12 +138,12 @@ var ActiveTasksFilterTabs = React.createClass({
     );
   },
 
-  searchTermChange: function (e) {
+  searchTermChange (e) {
     var searchTerm = e.target.value;
     this.props.onSearch(searchTerm);
   },
 
-  render: function () {
+  render () {
     const filterTabs = this.createFilterTabs();
     return (
       <TabElementWrapper>
@@ -167,7 +164,7 @@ var ActiveTasksFilterTabs = React.createClass({
 });
 
 var ActiveTaskTable = React.createClass({
-  render: function () {
+  render () {
     var collection = this.props.collection;
     var selectedRadio = this.props.selectedRadio;
     var searchTerm = this.props.searchTerm;
@@ -193,7 +190,7 @@ var ActiveTaskTable = React.createClass({
 });
 
 var ActiveTasksTableHeader = React.createClass({
-  getDefaultProps: function () {
+  getDefaultProps () {
     return {
       headerNames : [
         ['type', 'Type'],
@@ -206,7 +203,7 @@ var ActiveTasksTableHeader = React.createClass({
     };
   },
 
-  createTableHeadingFields: function () {
+  createTableHeadingFields () {
     var onTableHeaderClick = this.props.onTableHeaderClick;
     var sortByHeader = this.props.sortByHeader;
     var headerIsAscending = this.props.headerIsAscending;
@@ -221,7 +218,7 @@ var ActiveTasksTableHeader = React.createClass({
     });
   },
 
-  render: function () {
+  render () {
     return (
       <thead>
         <tr>{this.createTableHeadingFields()}</tr>
@@ -231,7 +228,7 @@ var ActiveTasksTableHeader = React.createClass({
 });
 
 var TableHeader = React.createClass({
-  arrow: function () {
+  arrow () {
     var sortBy = this.props.sortByHeader;
     var currentName = this.props.headerName;
     var headerIsAscending = this.props.headerIsAscending;
@@ -242,12 +239,12 @@ var TableHeader = React.createClass({
     }
   },
 
-  onTableHeaderClick: function (e) {
+  onTableHeaderClick (e) {
     var headerSelected = e.target.value;
     this.props.onTableHeaderClick(headerSelected);
   },
 
-  render: function () {
+  render () {
     var arrow = this.arrow();
     var th_class = 'header-field ' + this.props.headerName;
 
@@ -272,23 +269,23 @@ var TableHeader = React.createClass({
 
 var ActiveTasksTableBody = React.createClass({
 
-  getStoreState: function () {
+  getStoreState () {
     return {
       filteredTable: activeTasksStore.getFilteredTable(this.props.collection)
     };
   },
 
-  getInitialState: function () {
+  getInitialState () {
     return this.getStoreState();
   },
 
-  componentWillReceiveProps: function (nextProps) {
+  componentWillReceiveProps (nextProps) {
     this.setState({
       filteredTable: activeTasksStore.getFilteredTable(this.props.collection)
     });
   },
 
-  createRows: function () {
+  createRows () {
     var isThereASearchTerm = this.props.searchTerm.trim() === "";
 
     if (this.state.filteredTable.length === 0) {
@@ -300,7 +297,7 @@ var ActiveTasksTableBody = React.createClass({
     });
   },
 
-  noActiveTasks: function () {
+  noActiveTasks () {
     var type = this.props.selectedRadio;
     if (type === "All Tasks") {
       type = "";
@@ -313,7 +310,7 @@ var ActiveTasksTableBody = React.createClass({
     );
   },
 
-  noActiveTasksMatchFilter: function () {
+  noActiveTasksMatchFilter () {
     var type = this.props.selectedRadio;
     if (type === "All Tasks") {
       type = "";
@@ -326,7 +323,7 @@ var ActiveTasksTableBody = React.createClass({
     );
   },
 
-  render: function () {
+  render () {
     return (
       <tbody className="js-tasks-go-here">
       {this.createRows()}
@@ -336,7 +333,7 @@ var ActiveTasksTableBody = React.createClass({
 });
 
 var ActiveTaskTableBodyContents = React.createClass({
-  getInfo: function (item) {
+  getInfo (item) {
     return {
       type : item.type,
       objectField: activeTasksHelpers.getDatabaseFieldMessage(item),
@@ -347,7 +344,7 @@ var ActiveTaskTableBodyContents = React.createClass({
     };
   },
 
-  multilineMessage: function (messageArray, optionalClassName) {
+  multilineMessage (messageArray, optionalClassName) {
 
     if (!optionalClassName) {
       optionalClassName = '';
@@ -359,7 +356,7 @@ var ActiveTaskTableBodyContents = React.createClass({
     });
   },
 
-  render: function () {
+  render () {
     var rowData =  this.getInfo(this.props.item);
     var objectFieldMsg = this.multilineMessage(rowData.objectField, 'to-from-database');
     var startedOnMsg = this.multilineMessage(rowData.started_on, 'time');
@@ -380,7 +377,7 @@ var ActiveTaskTableBodyContents = React.createClass({
 });
 
 var ActiveTasksViewSourceSequence = React.createClass({
-  onTrayToggle: function (e) {
+  onTrayToggle (e) {
     e.preventDefault();
     this.refs.view_source_sequence_btn.toggle(function (shown) {
       if (shown) {
@@ -389,7 +386,7 @@ var ActiveTasksViewSourceSequence = React.createClass({
     }.bind(this));
   },
 
-  sequences: function (item) {
+  sequences (item) {
     if (_.isNumber(item) || _.isString(item)) {
       return <ComponentsReact.ClipboardWithTextField textToCopy={item} uniqueKey={item}/>;
     }
@@ -403,7 +400,7 @@ var ActiveTasksViewSourceSequence = React.createClass({
     return  <ComponentsReact.ClipboardWithTextField textToCopy="???" uniqueKey='unknownRevision'/>;
   },
 
-  render: function () {
+  render () {
 
     if (_.has(this.props.item, 'source_seq')) {
       var sequences = this.sequences(this.props.item.source_seq);
@@ -427,38 +424,38 @@ var ActiveTasksViewSourceSequence = React.createClass({
   }
 });
 
-var ActiveTasksPollingWidgetController = React.createClass({
+export const ActiveTasksPollingWidgetController = React.createClass({
 
-  getStoreState: function () {
+  getStoreState () {
     return {
       pollingInterval:  activeTasksStore.getPollingInterval(),
       isLoading: activeTasksStore.isLoading()
     };
   },
 
-  getInitialState: function () {
+  getInitialState () {
     return this.getStoreState();
   },
 
-  componentDidMount: function () {
+  componentDidMount () {
     activeTasksStore.on('change', this.onChange, this);
   },
 
-  onChange: function () {
+  onChange () {
     if (this.isMounted()) {
       this.setState(this.getStoreState());
     }
   },
 
-  pollingIntervalChange: function (event) {
+  pollingIntervalChange (event) {
     Actions.changePollingInterval(event.target.value);
   },
 
-  getPluralForLabel: function () {
+  getPluralForLabel () {
     return this.state.pollingInterval === "1" ? '' : 's';
   },
 
-  createPollingWidget: function () {
+  createPollingWidget () {
     const {pollingInterval} = this.state;
     const s = this.getPluralForLabel();
 
@@ -483,7 +480,7 @@ var ActiveTasksPollingWidgetController = React.createClass({
     );
   },
 
-  render: function () {
+  render () {
     var pollingWidget = this.createPollingWidget();
     var loadLines = null;
 
@@ -505,7 +502,7 @@ var ActiveTasksPollingWidgetController = React.createClass({
 });
 
 var activeTasksHelpers = {
-  getTimeInfo: function (timeStamp) {
+  getTimeInfo (timeStamp) {
     var timeMessage = [
         app.helpers.formatDate(timeStamp),
         app.helpers.getDateFromNow(timeStamp)
@@ -513,7 +510,7 @@ var activeTasksHelpers = {
     return timeMessage;
   },
 
-  getDatabaseFieldMessage: function (item) {
+  getDatabaseFieldMessage (item) {
     var type = item.type;
     var databaseFieldMessage = [];
 
@@ -530,7 +527,7 @@ var activeTasksHelpers = {
     return databaseFieldMessage;
   },
 
-  getProgressMessage: function (item) {
+  getProgressMessage (item) {
     var progressMessage = [];
     var type = item.type;
 
@@ -557,7 +554,7 @@ var activeTasksHelpers = {
     return progressMessage;
   },
 
-  getSourceSequence: function (item) {
+  getSourceSequence (item) {
     return item.source_seq;
   }
 
