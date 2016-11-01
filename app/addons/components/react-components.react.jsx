@@ -1322,7 +1322,7 @@ var TrayWrapper = React.createClass({
   }
 });
 
-var APIBar = React.createClass({
+const APIBar = React.createClass({
   propTypes: {
     buttonVisible: React.PropTypes.bool.isRequired,
     contentVisible: React.PropTypes.bool.isRequired,
@@ -1430,7 +1430,15 @@ var APIBar = React.createClass({
   }
 });
 
-var ApiBarController = React.createClass({
+export const ApiBarNoStore = ({docUrl, endpoint}) => {
+  return (
+    <TrayWrapper docUrl={docUrl} endpoint={endpoint}>
+      <APIBar buttonVisible={true} contentVisible={false} />
+    </TrayWrapper>
+  );
+};
+
+export const ApiBarController = React.createClass({
 
   getWrap: function () {
     return connectToStores(TrayWrapper, [componentStore], function () {
@@ -1444,7 +1452,7 @@ var ApiBarController = React.createClass({
   },
 
   render: function () {
-    var TrayWrapper = this.getWrap();
+    const TrayWrapper = this.getWrap();
     return (
       <TrayWrapper>
         <APIBar buttonVisible={true} contentVisible={false} />
