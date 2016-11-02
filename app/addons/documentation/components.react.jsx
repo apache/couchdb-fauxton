@@ -13,23 +13,69 @@
 import app from "../../app";
 import FauxtonAPI from "../../core/api";
 import React from "react";
-import Stores from "./stores";
 
-var documentationStore = Stores.documentationStore;
-
-var DocumentationController = React.createClass({
-  getStoreState: function () {
-    return {
-      links: documentationStore.getLinks()
-    };
+const docLinks = [
+  {
+    title: 'CouchDB Official Documentation — Online',
+    link: 'http://docs.couchdb.org/en/latest/',
+    iconClassName: 'couchdb-icon'
   },
-
-  getInitialState: function () {
-    return this.getStoreState();
+  {
+    title: 'CouchDB Official Documentation — Offline',
+    link: '/_utils/docs/contents.html',
+    iconClassName: 'couchdb-icon'
   },
+  {
+    title: 'CouchDB Weekly News',
+    link: 'http://blog.couchdb.org/',
+    iconClassName: 'couchdb-icon'
+  },
+  {
+    title: 'CouchDB Homepage',
+    link: 'https://couchdb.apache.org/',
+    iconClassName: 'couchdb-icon'
+  },
+  {
+    title: 'CouchDB on GitHub',
+    link: 'https://github.com/apache/couchdb',
+    iconClassName: 'github-icon'
+  },
+  {
+    title: 'Fauxton on GitHub',
+    link: 'https://github.com/apache/couchdb-fauxton',
+    iconClassName: 'github-icon'
+  },
+  {
+    title: 'Fauxton Visual Guide',
+    link: 'https://couchdb.apache.org/fauxton-visual-guide/index.html',
+    iconClassName: 'couchdb-icon'
+  },
+  {
+    title: 'The Apache Software Foundation',
+    link: 'http://www.apache.org/',
+    iconClassName: 'asf-feather-icon'
+  },
+  {
+    title: 'Follow CouchDB on Twitter',
+    link: 'https://twitter.com/couchdb',
+    iconClassName: 'twitter-icon'
+  },
+  {
+    title: 'Follow CouchDB on Google Plus',
+    link: 'https://plus.google.com/+CouchDB',
+    iconClassName: 'google-plus-icon'
+  },
+  {
+    title: 'Follow CouchDB on LinkedIn',
+    link: 'https://www.linkedin.com/company/apache-couchdb',
+    iconClassName: 'linkedin-icon'
+  }
+];
 
-  createLinkRows: function () {
-    return this.state.links.map(function (linkObject) {
+const DocumentationPage = ({links = docLinks}) => {
+
+  function createLinkRows (linkList) {
+    return linkList.map(function (linkObject) {
       return (
         <tr key={linkObject.title}>
           <td className="icons-container">
@@ -41,23 +87,21 @@ var DocumentationController = React.createClass({
         </tr>
       );
     });
-  },
-
-  render: function () {
-    return (
-      <div id="documentation-page" className="scrollable">
-        <div className="links">
-          <table>
-            <tbody>
-            {this.createLinkRows()}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    );
   }
-});
+
+  return (
+    <div id="documentation-page" className="scrollable">
+      <div className="links">
+        <table>
+          <tbody>
+            {createLinkRows(links)}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+};
 
 export default {
-  DocumentationController: DocumentationController
+  DocumentationPage: DocumentationPage
 };
