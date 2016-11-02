@@ -20,7 +20,6 @@ import Layout from './layout';
 var ActiveTasksRouteObject = FauxtonAPI.RouteObject.extend({
   selectedHeader: 'Active Tasks',
   layout: 'empty',
-  hideBreadCrumbs: true,
   hideNotificationCenter: true,
   hideApiBar: true,
 

@@ -57,10 +57,9 @@ Fauxton.initialize = function () {
       routeObject.setComponent('#notification-center-btn', NotificationComponents.NotificationCenterButton);
     }
 
-    //FauxtonAPI.masterLayout.removeView('#breadcrumbs');
     const crumbs = routeObject.get('crumbs');
 
-    if (!crumbs.length || routeObject.hideBreadCrumbs) {
+    if (!crumbs.length) {
       return;
     }
 

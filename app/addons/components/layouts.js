@@ -35,18 +35,6 @@ const ApiBarWrapper = ({docURL, endpoint}) => {
   );
 };
 
-const CrumbsWrapper = ({crumbs}) => {
-  if (!crumbs || crumbs.length === 0) {
-    return null;
-  }
-
-  return (
-    <div id="breadcrumbs" className="flex-body">
-      <Breadcrumbs crumbs={crumbs}/>
-    </div>
-  );
-};
-
 export const OnePane = ({children}) => {
   return (
     <div id="dashboard" className="one-pane ">
@@ -59,7 +47,9 @@ export const OnePaneHeader = ({showApiUrl, docURL, endpoint, crumbs, children}) 
   return (
     <header>
       <div className="flex-layout flex-row">
-        <CrumbsWrapper crumbs={crumbs}/>
+        <div id="breadcrumbs" className="flex-body">
+          <Breadcrumbs crumbs={crumbs}/>
+        </div>
         <div id="right-header">
           {children}
         </div>
@@ -73,7 +63,8 @@ export const OnePaneHeader = ({showApiUrl, docURL, endpoint, crumbs, children}) 
 };
 
 OnePaneHeader.defaultProps = {
-  showApiUrl: true
+  showApiUrl: true,
+  crumbs: []
 };
 
 OnePaneHeader.propTypes = {
