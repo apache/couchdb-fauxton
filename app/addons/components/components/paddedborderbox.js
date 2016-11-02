@@ -9,9 +9,17 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
+import React from "react";
+import ReactDOM from "react-dom";
 
-import "./assets/less/components.less";
-
-export default {
-  initialize () {}
-};
+export const PaddedBorderedBox = React.createClass({
+  render: function () {
+    return (
+      <div className="bordered-box">
+        <div className="padded-box">
+          {this.props.children}
+        </div>
+      </div>
+    );
+   }
+ });

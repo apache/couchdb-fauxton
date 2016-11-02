@@ -16,6 +16,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import TestUtils from "react-addons-test-utils";
 import sinon from "sinon";
+import { mount } from 'enzyme';
 var assert = utils.assert;
 
 describe('Tray', function () {
@@ -248,28 +249,19 @@ describe('Pagination', function () {
 
 
 describe('Clipboard', function () {
-  var container;
-  beforeEach(function () {
-    container = document.createElement('div');
-  });
-
-  afterEach(function () {
-    ReactDOM.unmountComponentAtNode(container);
-  });
 
   it('shows a clipboard icon by default', function () {
-    var clipboard = TestUtils.renderIntoDocument(<Views.Clipboard text="copy me" />, container);
-    assert.equal($(ReactDOM.findDOMNode(clipboard)).find('.icon-paste').length, 1);
+    const clipboard = mount(<Views.Clipboard text="copy me" />);
+    assert.equal(clipboard.find('.icon-paste').length, 1);
   });
 
   it('shows text if specified', function () {
-    var clipboard = TestUtils.renderIntoDocument(<Views.Clipboard displayType="text" text="copy me" />, container);
-    assert.equal($(ReactDOM.findDOMNode(clipboard)).find('.icon-paste').length, 0);
+    const clipboard = mount(<Views.Clipboard text="copy me" displayType="text" />);
+    assert.equal(clipboard.find('.icon-paste').length, 0);
   });
 
   it('shows custom text if specified ', function () {
-    var clipboard = TestUtils.renderIntoDocument(<Views.Clipboard displayType="text" textDisplay='booyah!' text="copy me" />, container);
-    assert.ok(/booyah!/.test($(ReactDOM.findDOMNode(clipboard))[0].outerHTML));
+    var clipboard = mount(<Views.Clipboard displayType="text" textDisplay='booyah!' text="copy me" />);
+    assert.ok(/booyah!/.test(clipboard.html()));
   });
-
 });

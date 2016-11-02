@@ -37,6 +37,7 @@ describe('PaddedBorderedBox', function () {
       </ReactComponents.PaddedBorderedBox>,
       container
     );
+    console.log(container);
     assert.ok($(ReactDOM.findDOMNode(el)).find('.foo-children').length);
   });
 });

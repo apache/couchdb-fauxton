@@ -9,9 +9,13 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
+import React from "react";
+import ReactDOM from "react-dom";
 
-import "./assets/less/components.less";
-
-export default {
-  initialize () {}
-};
+export const LoadLines = () =>
+  <div className="loading-lines">
+    <div id="line1"> </div>
+    <div id="line2"> </div>
+    <div id="line3"> </div>
+    <div id="line4"> </div>
+  </div>;

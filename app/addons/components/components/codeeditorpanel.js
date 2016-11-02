@@ -1,0 +1,147 @@
+// Licensed under the Apache License, Version 2.0 (the "License"); you may not
+// use this file except in compliance with the License. You may obtain a copy of
+// the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+// WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+// License for the specific language governing permissions and limitations under
+// the License.
+import React from "react";
+import ReactDOM from "react-dom";
+import {CodeEditor} from './codeeditor';
+import {StringEditModal} from './stringeditmodal';
+import {Beautify} from './beautify';
+import {ZenModeOverlay} from './zenmodeoverlay';
+
+/**
+ * A pre-packaged JS editor panel for use on the Edit Index / Mango pages. Includes options for a title, zen mode
+ * icon and beautify button.
+ */
+export const CodeEditorPanel = React.createClass({
+  getDefaultProps () {
+    return {
+      id: 'code-editor',
+      className: '',
+      defaultCode: '',
+      title: '',
+      docLink: '',
+      allowZenMode: true,
+      blur () {}
+    };
+  },
+
+  getInitialState () {
+    return this.getStoreState();
+  },
+
+  getStoreState () {
+    return {
+      zenModeEnabled: false,
+      code: this.props.defaultCode
+    };
+  },
+
+  componentWillReceiveProps (nextProps) {
+    if (nextProps.defaultCode !== this.props.defaultCode) {
+      this.setState({ code: nextProps.defaultCode });
+    }
+  },
+
+  // list of JSHINT errors to ignore: gets around problem of anonymous functions not being valid
+  ignorableErrors: [
+    'Missing name in function declaration.',
+    "['{a}'] is better written in dot notation."
+  ],
+
+  getZenModeIcon () {
+    if (this.props.allowZenMode) {
+      return <span className="fonticon fonticon-resize-full zen-editor-icon" title="Enter Zen mode" onClick={this.enterZenMode}></span>;
+    }
+  },
+
+  getDocIcon () {
+    if (this.props.docLink) {
+      return (
+        <a className="help-link"
+          data-bypass="true"
+          href={this.props.docLink}
+          target="_blank"
+        >
+          <i className="icon-question-sign"></i>
+        </a>
+      );
+    }
+  },
+
+  getZenModeOverlay () {
+    if (this.state.zenModeEnabled) {
+      return (
+        <ZenModeOverlay
+          defaultCode={this.state.code}
+          mode={this.props.mode}
+          ignorableErrors={this.ignorableErrors}
+          onExit={this.exitZenMode} />
+      );
+    }
+  },
+
+  enterZenMode () {
+    this.setState({
+      zenModeEnabled: true,
+      code: this.refs.codeEditor.getValue()
+    });
+  },
+
+  exitZenMode (content) {
+    this.setState({ zenModeEnabled: false });
+    this.getEditor().setValue(content);
+  },
+
+  getEditor () {
+    return this.refs.codeEditor;
+  },
+
+  getValue () {
+    return this.getEditor().getValue();
+  },
+
+  beautify (code) {
+    this.setState({ code: code });
+    this.getEditor().setValue(code);
+  },
+
+  update () {
+    this.getEditor().setValue(this.state.code);
+  },
+
+  render () {
+    var classes = 'control-group';
+    if (this.props.className) {
+      classes += ' ' + this.props.className;
+    }
+    return (
+      <div className={classes}>
+        <label>
+          <span>{this.props.title}</span>
+          {this.getDocIcon()}
+          {this.getZenModeIcon()}
+        </label>
+        <CodeEditor
+          id={this.props.id}
+          ref="codeEditor"
+          mode="javascript"
+          defaultCode={this.state.code}
+          showGutter={true}
+          ignorableErrors={this.ignorableErrors}
+          setHeightToLineCount={true}
+          blur={this.props.blur}
+        />
+        <Beautify code={this.state.code} beautifiedCode={this.beautify} />
+        {this.getZenModeOverlay()}
+      </div>
+    );
+  }
+});
