@@ -232,7 +232,7 @@ var Notification = React.createClass({
 });
 
 
-var NotificationCenterButton = React.createClass({
+export const NotificationCenterButton = React.createClass({
   getInitialState: function () {
     return {
       visible: true

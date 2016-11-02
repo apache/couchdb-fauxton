@@ -33,29 +33,29 @@ Fauxton.initialize = function () {
   FauxtonAPI.RouteObject.on('beforeEstablish', function (routeObject) {
     NavigationActions.setNavbarActiveLink(_.result(routeObject, 'selectedHeader'));
 
+    if (!routeObject.hideApiBar) {
     // always attempt to render the API Bar. Even if it's hidden on initial load, it may be enabled later
-    routeObject.setComponent('#api-navbar', ReactComponents.ApiBarController, {
-      buttonVisible: true,
-      contentVisible: false
-    });
-
-    const apiAndDocs = routeObject.get('apiUrl');
-    if (apiAndDocs) {
-      ComponentActions.updateAPIBar({
+      routeObject.setComponent('#api-navbar', ReactComponents.ApiBarController, {
         buttonVisible: true,
-        contentVisible: false,
-        endpoint: apiAndDocs[0],
-        docURL: apiAndDocs[1]
+        contentVisible: false
       });
-    } else {
-      ComponentActions.hideAPIBarButton();
+
+      const apiAndDocs = routeObject.get('apiUrl');
+      if (apiAndDocs) {
+        ComponentActions.updateAPIBar({
+          buttonVisible: true,
+          contentVisible: false,
+          endpoint: apiAndDocs[0],
+          docURL: apiAndDocs[1]
+        });
+      } else {
+        ComponentActions.hideAPIBarButton();
+      }
     }
 
     if (!routeObject.get('hideNotificationCenter')) {
       routeObject.setComponent('#notification-center-btn', NotificationComponents.NotificationCenterButton);
     }
-
-    FauxtonAPI.masterLayout.removeView('#breadcrumbs');
 
     const crumbs = routeObject.get('crumbs');
 
@@ -66,17 +66,17 @@ Fauxton.initialize = function () {
     routeObject.setComponent('#breadcrumbs', Breadcrumbs, {crumbs: crumbs});
   });
 
-  var primaryNavBarEl = $('#primary-navbar')[0];
+  const primaryNavBarEl = $('#primary-navbar')[0];
   if (primaryNavBarEl) {
     NavbarReactComponents.renderNavBar(primaryNavBarEl);
   }
 
-  var notificationEl = $('#notifications')[0];
+  const notificationEl = $('#notifications')[0];
   if (notificationEl) {
     NotificationComponents.renderNotificationController(notificationEl);
   }
-  var versionInfo = new Fauxton.VersionInfo();
 
+  const versionInfo = new Fauxton.VersionInfo();
   versionInfo.fetch().then(function () {
     NavigationActions.setNavbarVersionInfo(versionInfo.get("version"));
   });

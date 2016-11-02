@@ -15,29 +15,23 @@ import FauxtonAPI from "../../core/api";
 import ActiveTasksResources from "./resources";
 import ActiveTasksComponents from "./components.react";
 import Actions from "./actions";
+import Layout from './layout';
 
 var ActiveTasksRouteObject = FauxtonAPI.RouteObject.extend({
   selectedHeader: 'Active Tasks',
-  layout: 'one_pane',
+  layout: 'empty',
+  hideNotificationCenter: true,
+  hideApiBar: true,
+
   routes: {
     'activetasks/:id': 'showActiveTasks',
     'activetasks': 'showActiveTasks'
   },
-  crumbs: [
-    {'name': 'Active Tasks'}
-  ],
-  apiUrl: function () {
-    var apiurl = window.location.origin + '/_active_tasks';
-    return [apiurl, FauxtonAPI.constants.DOC_URLS.ACTIVE_TASKS];
-  },
+
   roles: ['_admin'],
-  initialize: function () {
-    this.allTasks = new ActiveTasksResources.AllTasks();
-  },
+
   showActiveTasks: function () {
-    Actions.init(this.allTasks);
-    this.setComponent('#dashboard-content', ActiveTasksComponents.ActiveTasksController);
-    this.setComponent('#right-header', ActiveTasksComponents.ActiveTasksPollingWidgetController);
+    this.setComponent(".template", Layout);
   }
 });
 
