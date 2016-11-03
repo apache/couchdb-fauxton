@@ -10,14 +10,30 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import app from "../../app";
-import FauxtonAPI from "../../core/api";
-import Permissions from "./routes";
-import reducer from './reducers';
-import "./assets/less/permissions.less";
+export function isValueAlreadySet (p, section, type, value) {
 
-Permissions.initialize = function () {};
+  if (!p[section]) {
+    return false;
+  }
 
-FauxtonAPI.reducers.push(reducer);
+  if (!p[section][type]) {
+    return false;
+  }
 
-export default Permissions;
+  return p[section][type].indexOf(value) !== -1;
+}
+
+export function addValueToPermissions (p, section, type, value) {
+
+  if (!p[section]) {
+    p[section] = {};
+  }
+
+  if (!p[section][type]) {
+    p[section][type] = [];
+  }
+
+  p[section][type].push(value);
+
+  return p;
+}

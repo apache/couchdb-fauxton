@@ -13,48 +13,48 @@
 import app from "../../app";
 import FauxtonAPI from "../../core/api";
 import Databases from "../databases/base";
-import Resources from "./resources";
+
 import Actions from "./actions";
 import BaseRoute from "../documents/shared-routes";
 import Layout from './layout';
 import React from 'react';
 
 const PermissionsRouteObject = BaseRoute.extend({
+
   roles: ['fx_loggedIn'],
   routes: {
     'database/:database/permissions': 'permissions'
   },
 
   initialize: function (route, options) {
-    var docOptions = app.getParams();
-    docOptions.include_docs = true;
+    const docOptions = app.getParams();
 
-    this.initViews(options[0]);
+    docOptions.include_docs = true;
   },
 
-  initViews: function (databaseName) {
-    this.database = new Databases.Model({ id: databaseName });
-    this.security = new Resources.Security(null, {
-      database: this.database
-    });
+  permissions: function (databaseId) {
 
+    // XXX magic inheritance props we need to maintain for BaseRoute
+    this.database = new Databases.Model({ id: databaseId });
+
+    // XXX magic methods we have to call - originating from BaseRoute.extend
     this.createDesignDocsCollection();
     this.addSidebar('permissions');
-  },
 
-  permissions: function () {
-    Actions.fetchPermissions(this.database, this.security);
     const crumbs = [
-      { name: this.database.id, link: Databases.databaseUrl(this.database)},
+      { name: this.database.id, link: Databases.databaseUrl(databaseId)},
       { name: 'Permissions' }
     ];
+
+    const url = FauxtonAPI.urls('permissions', 'server', databaseId);
+
     return <Layout
-      docURL={this.security.documentation}
-      endpoint={this.security.url('apiurl')}
+      docURL={FauxtonAPI.constants.DOC_URLS.DB_PERMISSION}
+      endpoint={url}
       dbName={this.database.id}
       dropDownLinks={crumbs}
-      database={this.database}
-    />;
+      database={this.database} />;
+
   }
 });
 

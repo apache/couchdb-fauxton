@@ -10,42 +10,29 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import app from "../../app";
-import FauxtonAPI from "../../core/api";
-import React from "react";
-import Components from "../components/react-components.react";
-import Stores from "./stores";
-import Actions from "./actions";
-var LoadLines = Components.LoadLines;
-var permissionsStore = Stores.permissionsStore;
-var getDocUrl = app.helpers.getDocUrl;
+import React, { Component, PropTypes } from 'react';
 
-var PermissionsItem = React.createClass({
+import FauxtonAPI from '../../../core/api';
+import app from '../../../app';
+import _ from 'lodash';
 
-  removeItem: function (e) {
-    this.props.removeItem({
-      value: this.props.item,
-      type: this.props.type,
-      section: this.props.section
-    });
-  },
+import PermissionsItem from './PermissionsItem';
 
-  render: function () {
-    return (
-      <li>
-        <span>{this.props.item}</span>
-        <button onClick={this.removeItem} type="button" className="pull-right close">×</button>
-      </li>
-    );
-  }
 
-});
+const getDocUrl = app.helpers.getDocUrl;
 
-var PermissionsSection = React.createClass({
+const PermissionsSection = React.createClass({
   getInitialState: function () {
     return {
       newRole: '',
       newName: ''
+    };
+  },
+
+  getDefaultProps: function () {
+    return {
+      names: [],
+      roles: []
     };
   },
 
@@ -63,7 +50,7 @@ var PermissionsSection = React.createClass({
     }
     FauxtonAPI.addNotification({
       msg: 'Cannot add an empty value for ' + type + '.',
-      type: 'warning'
+      type: 'error'
     });
 
     return true;
@@ -98,9 +85,14 @@ var PermissionsSection = React.createClass({
   },
 
   getItems: function (items, type) {
-    return _.map(items, function (item, i) {
-      return <PermissionsItem key={i} item={item} section={this.props.section} type={type} removeItem={this.props.removeItem} />;
-    }, this);
+    return items.map((item, i) => {
+      return <PermissionsItem
+        key={i}
+        value={item}
+        section={this.props.section}
+        type={type}
+        removeItem={this.props.removeItem} />;
+    });
   },
 
   getNames: function () {
@@ -120,10 +112,13 @@ var PermissionsSection = React.createClass({
   },
 
   render: function () {
+
+    const { section } = this.props;
+
     return (
-    <div>
+    <div className={"permissions__" + section}>
       <header className="page-header">
-        <h3>{this.props.section}</h3>
+        <h3>{section}</h3>
         <p className="help">
           {this.getHelp()}
           <a className="help-link" data-bypass="true" href={getDocUrl('DB_PERMISSION')} target="_blank">
@@ -141,7 +136,7 @@ var PermissionsSection = React.createClass({
             <input onChange={this.nameChange} value={this.state.newName} type="text" className="item input-small" placeholder="Add User" />
             <button type="submit" className="btn btn-success"><i className="icon fonticon-plus-circled" /> Add User</button>
           </form>
-          <ul className="clearfix unstyled permission-items span10">
+          <ul className="unstyled permission-items span10">
             {this.getNames()}
           </ul>
         </div>
@@ -165,70 +160,4 @@ var PermissionsSection = React.createClass({
 
 });
 
-var PermissionsController = React.createClass({
-
-  getStoreState: function () {
-    return {
-      isLoading: permissionsStore.isLoading(),
-      adminRoles: permissionsStore.getAdminRoles(),
-      adminNames: permissionsStore.getAdminNames(),
-      memberRoles: permissionsStore.getMemberRoles(),
-      memberNames: permissionsStore.getMemberNames(),
-    };
-  },
-
-  getInitialState: function () {
-    return this.getStoreState();
-  },
-
-  componentDidMount: function () {
-    permissionsStore.on('change', this.onChange, this);
-  },
-
-  componentWillUnmount: function () {
-    permissionsStore.off('change', this.onChange);
-  },
-
-  onChange: function () {
-    this.setState(this.getStoreState());
-  },
-
-  addItem: function (options) {
-    Actions.addItem(options);
-  },
-
-  removeItem: function (options) {
-    Actions.removeItem(options);
-  },
-
-  render: function () {
-    if (this.state.isLoading) {
-      return <LoadLines />;
-    }
-
-    return (
-      <div className="permissions-page flex-body">
-        <div id="sections">
-          <PermissionsSection roles={this.state.adminRoles}
-            names={this.state.adminNames}
-            addItem={this.addItem}
-            removeItem={this.removeItem}
-            section={'admins'} />
-          <PermissionsSection
-            roles={this.state.memberRoles}
-            names={this.state.memberNames}
-            addItem={this.addItem}
-            removeItem={this.removeItem}
-            section={'members'} />
-        </div>
-      </div>
-    );
-  }
-
-});
-
-export default {
-  PermissionsController: PermissionsController,
-  PermissionsSection: PermissionsSection,
-  PermissionsItem: PermissionsItem
-};
+export default PermissionsSection;
