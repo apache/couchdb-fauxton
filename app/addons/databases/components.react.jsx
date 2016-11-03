@@ -326,7 +326,7 @@ var DatabasePagination = React.createClass({
   render: function () {
     const {page, totalAmountOfDatabases} = this.state;
 
-    var urlPrefix = '#/' + this.props.linkPath + '?page=';
+    const urlPrefix = `#/${this.props.linkPath}?page=`;
     var start = 1 + (page - 1) * FauxtonAPI.constants.MISC.DEFAULT_PAGE_SIZE;
     var end = Math.min(totalAmountOfDatabases, page * FauxtonAPI.constants.MISC.DEFAULT_PAGE_SIZE);
 
@@ -337,8 +337,8 @@ var DatabasePagination = React.createClass({
         </div>
         <div className="current-databases">
           Showing <span className="all-db-footer__range">{start}&ndash;{end}</span>
-          of <span className="all-db-footer__total-db-count">{totalAmountOfDatabases}</span>
-          databases.
+          &nbsp;of&nbsp;<span className="all-db-footer__total-db-count">{totalAmountOfDatabases}</span>
+          &nbsp;databases.
         </div>
       </footer>
     );
