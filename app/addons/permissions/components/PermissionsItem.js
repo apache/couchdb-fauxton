@@ -10,14 +10,27 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import app from "../../app";
-import FauxtonAPI from "../../core/api";
-import Permissions from "./routes";
-import reducer from './reducers';
-import "./assets/less/permissions.less";
+import React, { Component, PropTypes } from 'react';
 
-Permissions.initialize = function () {};
+const PermissionsItem = ({removeItem, section, type, value}) => {
 
-FauxtonAPI.reducers.push(reducer);
+  return (
+    <li className="permissions__entry">
+      <span>{value}</span>
+      <button
+        onClick={() => removeItem(section, type, value)}
+        type="button"
+        className="pull-right close"
+      >
+        ×
+      </button>
+    </li>
+  );
+};
 
-export default Permissions;
+PermissionsItem.propTypes = {
+  value: React.PropTypes.string.isRequired,
+  removeItem: PropTypes.func.isRequired,
+};
+
+export default PermissionsItem;

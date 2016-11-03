@@ -10,14 +10,9 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import app from "../../app";
-import FauxtonAPI from "../../core/api";
-import Permissions from "./routes";
-import reducer from './reducers';
-import "./assets/less/permissions.less";
+const jest = require('jest');
 
-Permissions.initialize = function () {};
+window.$ = window.jQuery = require('jquery');
+jest.mock('zeroclipboard', () => {});
 
-FauxtonAPI.reducers.push(reducer);
-
-export default Permissions;
+global.fetch = require('jest-fetch-mock');

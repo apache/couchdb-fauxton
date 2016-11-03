@@ -12,70 +12,104 @@
 
 import FauxtonAPI from "../../core/api";
 import ActionTypes from "./actiontypes";
-import Stores from "./stores";
-var permissionsStore = Stores.permissionsStore;
+import Promise from 'bluebird';
+import 'whatwg-fetch';
+import { isValueAlreadySet, addValueToPermissions } from './helpers';
 
-export default {
 
-  fetchPermissions: function (database, security) {
-    FauxtonAPI.dispatch({
-      type: ActionTypes.PERMISSIONS_FETCHING,
-      database: database,
-      security: security
-    });
+import {
+  PERMISSIONS_UPDATE
+} from './actiontypes';
 
-    FauxtonAPI.when([database.fetch(), security.fetch()]).then(function () {
-      this.editPermissions(database, security);
-    }.bind(this));
-  },
 
-  editPermissions: function (database, security) {
-    FauxtonAPI.dispatch({
-      type: ActionTypes.PERMISSIONS_EDIT,
-      database: database,
-      security: security
-    });
-  },
-  addItem: function (options) {
-    var check = permissionsStore.getSecurity().canAddItem(options.value, options.type, options.section);
+export const receivedPermissions = json => {
+  return {
+    type: PERMISSIONS_UPDATE,
+    permissions: json
+  };
+};
 
-    if (check.error) {
-      FauxtonAPI.addNotification({
-        msg: check.msg,
-        type: 'error'
-      });
 
-      return;
-    }
+export const fetchPermissions = url => dispatch => {
+  return fetch(url, { headers: { 'Accept': 'application/json' }})
+    .then(res => res.json())
+    .then(json => dispatch(receivedPermissions(json)));
+};
 
-    FauxtonAPI.dispatch({
-      type: ActionTypes.PERMISSIONS_ADD_ITEM,
-      options: options
-    });
-
-    this.savePermissions();
-
-  },
-  removeItem: function (options) {
-    FauxtonAPI.dispatch({
-      type: ActionTypes.PERMISSIONS_REMOVE_ITEM,
-      options: options
-    });
-    this.savePermissions();
-  },
-
-  savePermissions: function () {
-    permissionsStore.getSecurity().save().then(function () {
-      FauxtonAPI.addNotification({
-        msg: 'Database permissions has been updated.'
-      });
-    }, function (xhr) {
-      if (!xhr && !xhr.responseJSON) { return;}
-
-      FauxtonAPI.addNotification({
-        msg: 'Could not update permissions - reason: ' + xhr.responseJSON.reason,
-        type: 'error'
-      });
-    });
+export const setPermissionOnObject = (p, section, type, value) => {
+  if (isValueAlreadySet(p, section, type, value)) {
+    throw new Error('Role/Name has already been added');
   }
+
+  const res = addValueToPermissions(p, section, type, value);
+
+  return res;
+};
+
+export const deletePermissionFromObject = (p, section, type, value) => {
+  if (!isValueAlreadySet(p, section, type, value)) {
+    throw new Error('Role/Name does not exist');
+  }
+
+  p[section][type] = p[section][type].filter((el) => {
+    return el !== value;
+  });
+
+  return p;
+};
+
+export const updatePermission = (url, permissions, section, type, value) => dispatch => {
+  const res = setPermissionOnObject(permissions, section, type, value);
+
+  updatePermissionUnsafe(url, permissions, dispatch)
+    .catch((err) => {
+      FauxtonAPI.addNotification({
+        msg: err.message,
+        type: 'error'
+      });
+    });
+};
+
+export const deletePermission = (url, permissions, section, type, value) => dispatch => {
+  const res = deletePermissionFromObject(permissions, section, type, value);
+
+  updatePermissionUnsafe(url, permissions, dispatch)
+    .catch((err) => {
+      FauxtonAPI.addNotification({
+        msg: err.message,
+        type: 'error'
+      });
+    });
+};
+
+export const updatePermissionUnsafe = (url, p, dispatch) => {
+  return fetch(url, {
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    credentials: 'include',
+    method: 'PUT',
+    body: JSON.stringify(p)
+  })
+  .then((res) => res.json())
+  .then((json) => {
+    if (!json.ok) {
+      throw new Error(json.reason);
+    }
+    return json;
+  })
+  .then((json) => {
+    FauxtonAPI.addNotification({
+      msg: 'Database permissions has been updated.'
+    });
+
+    return dispatch(receivedPermissions(p));
+  })
+  .catch((error) => {
+    FauxtonAPI.addNotification({
+      msg: 'Could not update permissions - reason: ' + error,
+      type: 'error'
+    });
+  });
 };

@@ -73,7 +73,8 @@
     "after": true,
     "define": true,
     "expect": true,
-    "prettyPrint": true
+    "prettyPrint": true,
+    "jest": true
   }
 
 }
