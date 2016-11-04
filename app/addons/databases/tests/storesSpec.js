@@ -64,6 +64,24 @@ describe('Databases Store', function () {
       assert(!store.doesDatabaseExist('db3'));
     });
 
+    it('uses the data_size prop', () => {
+      DatabaseActions.updateDatabases({
+        dbList: ['db1'],
+        databaseDetails: [{
+          db_name: 'db1',
+          doc_count: 5,
+          doc_del_count: 3,
+          data_size: 1337,
+          disk_size: 0
+        }],
+        failedDbs: []
+      });
+
+      const dbList = store.getDbList();
+
+      assert.equal(dbList[0].dataSize, '1.3 KB');
+    });
+
   });
 
 });

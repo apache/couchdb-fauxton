@@ -158,7 +158,7 @@ var DatabaseRow = React.createClass({
       item
     } = this.props;
 
-    const {encodedId, id, url, diskSize, docCount, docDelCount, showTombstoneWarning, failed } = item;
+    const {encodedId, id, url, dataSize, docCount, docDelCount, showTombstoneWarning, failed } = item;
     const tombStoneWarning = showTombstoneWarning ?
       (<GraveyardInfo docCount={docCount} docDelCount={docDelCount} />) : null;
 
@@ -177,7 +177,7 @@ var DatabaseRow = React.createClass({
         <td>
           <a href={url}>{id}</a>
         </td>
-        <td>{diskSize}</td>
+        <td>{dataSize}</td>
         <td>{docCount} {tombStoneWarning}</td>
         {this.getExtensionColumns(item)}
 
