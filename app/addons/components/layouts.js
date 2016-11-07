@@ -13,7 +13,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {NotificationCenterButton} from "../fauxton/notifications/notifications.react";
-import {ApiBarController} from './react-components.react';
+import {ApiBarController} from './components/apibar';
 import {Breadcrumbs} from './header-breadcrumbs';
 import ComponentActions from "./actions";
 
