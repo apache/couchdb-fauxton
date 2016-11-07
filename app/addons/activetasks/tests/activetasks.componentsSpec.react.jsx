@@ -29,25 +29,6 @@ activeTasksCollection.parse(fakedResponse);
 
 describe('Active Tasks -- Components', function () {
 
-  afterEach(() => {
-    activeTasksStore.clearPolling();
-  });
-
-  describe('Active Tasks Polling (Components)', function () {
-    var pollingWidgetDiv, pollingWidget;
-
-    afterEach(function () {
-      restore(Actions.changePollingInterval);
-    });
-
-    it('should trigger update polling interval', function () {
-      const controller = mount(<Components.ActiveTasksPollingWidgetController />);
-      var spy = sinon.spy(Actions, 'changePollingInterval');
-      controller.find('#polling-range').simulate('change', {target: {value: 9}});
-      assert.ok(spy.calledOnce);
-    });
-  });
-
   describe('Active Tasks Table (Components)', function () {
     var table, tableDiv, spy, filterTab;
 
