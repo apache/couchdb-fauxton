@@ -1,0 +1,130 @@
+// Licensed under the Apache License, Version 2.0 (the "License"); you may not
+// use this file except in compliance with the License. You may obtain a copy of
+// the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+// WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+// License for the specific language governing permissions and limitations under
+// the License.
+
+import React from "react";
+import ReactDOM from "react-dom";
+
+let pollIntervalId;
+
+export const clearPollCounter = () => {
+  if (pollIntervalId) {
+    window.clearInterval(pollIntervalId);
+  }
+};
+
+export const resetPollCounter = (time, cb) => {
+  clearPollCounter();
+  pollIntervalId = window.setInterval(cb, time);
+};
+
+const getCountdown = (secsString, units, max, min) => {
+  const secs = parseInt(secsString, 10);
+  if (secs === 0 || secs > max || secs < min) {
+    return 'off';
+  }
+
+  if (secs < 60 && units === 'minute') {
+    return `${secs} seconds`;
+  }
+
+  let displayValue = secs;
+  if (units === "minute") {
+    displayValue = Math.floor(secs / 60);
+  }
+  return `${displayValue} ${displayValue === 1 ? units : `${units}s`}`;
+};
+
+export class Polling extends React.Component {
+  constructor (props) {
+    super(props);
+    this.state = {
+      value: this.props.startValue
+    };
+  }
+
+  componentDidMount () {
+    this.setPollingCounter(this.state.value);
+  }
+
+  componentWillUnmount () {
+    clearPollCounter();
+  }
+
+  setPollingCounter (value) {
+    const {min, max, onPoll} = this.props;
+    this.setState({value: value});
+
+    if (value === 0 || value < min || value > max) {
+      clearPollCounter();
+      return;
+    }
+
+    resetPollCounter(value * 1000, () => onPoll());
+  }
+
+  updatePollingFreq (e) {
+    this.setPollingCounter(parseInt(e.target.value, 10));
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.startValue !== nextProps.startValue) {
+      this.setPollingCounter(nextProps.startValue);
+    }
+  }
+
+  render () {
+    const {
+      pollingFreqOptions,
+      stepSize,
+      min,
+      max,
+      valueUnits
+    } = this.props;
+
+    const {value} = this.state;
+
+    const pollValue = getCountdown(value, valueUnits, max, min);
+    const pollStyle = pollValue === 'off' ? 'faux__polling-info-value--off' : 'faux__polling-info-value--active';
+    return (
+      <div className="faux__polling">
+        <div className="faux__polling-info">
+          <span className="faux__polling-info-text">Polling Interval</span>
+          <span className={`faux__polling-info-value faux__polling-info-value ${pollStyle}`}>{pollValue}</span>
+        </div>
+        <input
+          onChange={this.updatePollingFreq.bind(this)}
+          className="faux__polling-info-slider"
+          type="range"
+          value={value}
+          min={min}
+          max={max + stepSize}
+          step={stepSize}
+        />
+      </div>
+    );
+  }
+};
+
+Polling.defaultProps = {
+  startValue: 0,
+  min: 0,
+  valueUnits: 'minute'
+};
+
+Polling.propTypes = {
+  startValue: React.PropTypes.number,
+  valueUnits: React.PropTypes.string,
+  min: React.PropTypes.number,
+  max: React.PropTypes.number.isRequired,
+  stepSize: React.PropTypes.number.isRequired,
+  onPoll: React.PropTypes.func.isRequired,
+};

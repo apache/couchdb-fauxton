@@ -62,36 +62,9 @@ var ActiveTasksStore = FauxtonAPI.Store.extend({
     this._selectedRadio = selectedRadio;
   },
 
-  getPollingInterval () {
-    return this._pollingIntervalSeconds;
-  },
-
-  setPollingInterval (pollingInterval) {
-    this._pollingIntervalSeconds = pollingInterval;
-  },
-
-  setPolling () {
-    this.clearPolling();
-    var id = setInterval(() => {
-      this._backboneCollection.pollingFetch();
-      this.setCollection(this._backboneCollection.table);
-      this.sortCollectionByColumnHeader(this._prevSortbyHeader, false);
-      this.triggerChange();
-    }, this.getPollingInterval() * 1000);
-
-    this.setIntervalID(id);
-  },
-
-  clearPolling () {
-    clearInterval(this.getIntervalID());
-  },
-
-  getIntervalID () {
-    return this._intervalID;
-  },
-
-  setIntervalID (id) {
-    this._intervalID = id;
+  setCollectionFromPolling (collection) {
+    this.setCollection(collection);
+    this.sortCollectionByColumnHeader(this._prevSortbyHeader, false);
   },
 
   setCollection (collection) {
@@ -100,6 +73,10 @@ var ActiveTasksStore = FauxtonAPI.Store.extend({
 
   getCollection () {
     return this._collection;
+  },
+
+  getBackboneCollection () {
+    return this._backboneCollection;
   },
 
   setSearchTerm (searchTerm) {
@@ -201,12 +178,6 @@ var ActiveTasksStore = FauxtonAPI.Store.extend({
         this.initAfterFetching(action.options.collectionTable, action.options.backboneCollection);
       break;
 
-      case ActionTypes.ACTIVE_TASKS_CHANGE_POLLING_INTERVAL:
-        this.setPollingInterval(action.options);
-        this.setPolling();
-        this.triggerChange();
-      break;
-
       case ActionTypes.ACTIVE_TASKS_SWITCH_TAB:
         this.setSelectedRadio(action.options);
         this.triggerChange();
@@ -231,6 +202,11 @@ var ActiveTasksStore = FauxtonAPI.Store.extend({
 
       case ActionTypes.ACTIVE_TASKS_SET_IS_LOADING:
         this.setIsLoading(action.options, new Date());
+        this.triggerChange();
+      break;
+
+      case ActionTypes.ACTIVE_TASKS_POLLING_COLLECTION:
+        this.setCollectionFromPolling(action.options);
         this.triggerChange();
       break;
 

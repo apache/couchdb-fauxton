@@ -21,8 +21,7 @@ import Components from "../components/react-components.react";
 import ComponentsReact from "../fauxton/components.react";
 import ReactCSSTransitionGroup from "react-addons-css-transition-group";
 
-const TabElementWrapper = Components.TabElementWrapper;
-const TabElement = Components.TabElement;
+const {TabElement, TabElementWrapper, Polling} = Components;
 
 const activeTasksStore = Stores.activeTasksStore;
 
@@ -35,10 +34,8 @@ export const ActiveTasksController = React.createClass({
       selectedRadio: activeTasksStore.getSelectedRadio(),
 
       sortByHeader: activeTasksStore.getSortByHeader(),
-      headerIsAscending: activeTasksStore.getHeaderIsAscending(),
+      headerIsAscending: activeTasksStore.getHeaderIsAscending()
 
-      setPolling: activeTasksStore.setPolling,
-      clearPolling: activeTasksStore.clearPolling
     };
   },
 
@@ -48,12 +45,10 @@ export const ActiveTasksController = React.createClass({
 
   componentDidMount () {
     Actions.init(new Resources.AllTasks());
-    this.state.setPolling();
     activeTasksStore.on('change', this.onChange, this);
   },
 
   componentWillUnmount () {
-    this.state.clearPolling();
     activeTasksStore.off('change', this.onChange, this);
   },
 
@@ -428,8 +423,7 @@ export const ActiveTasksPollingWidgetController = React.createClass({
 
   getStoreState () {
     return {
-      pollingInterval:  activeTasksStore.getPollingInterval(),
-      isLoading: activeTasksStore.isLoading()
+      collection:  activeTasksStore.getBackboneCollection()
     };
   },
 
@@ -442,60 +436,28 @@ export const ActiveTasksPollingWidgetController = React.createClass({
   },
 
   onChange () {
-    if (this.isMounted()) {
-      this.setState(this.getStoreState());
-    }
+    this.setState(this.getStoreState());
   },
 
-  pollingIntervalChange (event) {
-    Actions.changePollingInterval(event.target.value);
+  runPollingUpdate () {
+    Actions.runPollingUpdate(this.state.collection);
   },
 
   getPluralForLabel () {
     return this.state.pollingInterval === "1" ? '' : 's';
   },
 
-  createPollingWidget () {
-    const {pollingInterval} = this.state;
-    const s = this.getPluralForLabel();
-
-    return (
-      <ul className="polling-interval-widget">
-        <li className="polling-interval-name">Polling interval
-          <label className="polling-interval-time-label" htmlFor="polling-range">
-            <span>{pollingInterval}</span> second{s}
-          </label>
-        </li>
-        <li>
-          <input
-            id="polling-range"
-            type="range"
-            min="1"
-            max="30"
-            step="1"
-            value={pollingInterval}
-            onChange={this.pollingIntervalChange}/>
-        </li>
-      </ul>
-    );
-  },
-
   render () {
-    var pollingWidget = this.createPollingWidget();
-    var loadLines = null;
-
-    if (this.state.isLoading || this.state.pollingInterval === "1") {
-      // show loading lines constantly if the polling interval is
-      // 1 second, so that the lines aren't choppy
-      loadLines = <Components.LoadLines />;
-    }
-
     return (
-      <div className="active-tasks-loading-lines-container">
-        <span className="active-tasks-loading-lines">
-          {loadLines}
-        </span>
-        {pollingWidget}
+      <div className="active-tasks__polling-wrapper">
+        <Polling
+          min={1}
+          max={30}
+          stepSize={1}
+          startValue={15}
+          valueUnits={"second"}
+          onPoll={this.runPollingUpdate}
+          />
       </div>
     );
   }

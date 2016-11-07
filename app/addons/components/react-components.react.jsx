@@ -28,6 +28,7 @@ import {TrayContents, TrayWrapper, connectToStores} from './components/tray';
 import {ApiBarController} from './components/apibar';
 import {DeleteDatabaseModal} from './components/deletedatabasemodal';
 import {TabElement, TabElementWrapper} from './components/tabelement';
+import {Polling} from './components/polling';
 
 export default {
   BadgeList,
@@ -42,6 +43,7 @@ export default {
   ZenModeOverlay,
   Beautify,
   PaddedBorderedBox,
+  Polling,
   Document,
   LoadLines,
   MenuDropDown,
