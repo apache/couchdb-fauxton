@@ -22,9 +22,8 @@ Active.AllTasks = Backbone.Collection.extend({
   },
 
   pollingFetch: function () { //still need this for the polling
-    this.fetch({reset: true, parse: true});
     Actions.setActiveTaskIsLoading(true);
-    return this;
+    return this.fetch({reset: true, parse: true});
   },
 
   parse: function (resp) {
