@@ -68,5 +68,13 @@ export default {
       type: ActionTypes.ACTIVE_TASKS_SET_IS_LOADING,
       options: boolean
     });
+  },
+  runPollingUpdate (collection) {
+    collection.pollingFetch().then(() => {
+      FauxtonAPI.dispatch({
+        type: ActionTypes.ACTIVE_TASKS_POLLING_COLLECTION,
+        options: collection.table
+      });
+    });
   }
 };
