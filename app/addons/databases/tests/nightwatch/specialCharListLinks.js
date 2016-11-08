@@ -45,7 +45,5 @@ function createTest (db) {
       .assert.containsText('.no-results-screen', 'No Documents Found')
       .assert.containsText('.faux-header__doc-header-title', db)
     .end();
-
-
-  }
+  };
 }
