@@ -90,9 +90,10 @@ var DatabasesStore = FauxtonAPI.Store.extend({
     if (!details) {
       return {};
     }
+    const dataSize = details.data_size || details.disk_size || 0;
 
     return {
-      dataSize: Helpers.formatSize(details.data_size || 0),
+      dataSize: Helpers.formatSize(dataSize),
       docCount: details.doc_count,
       docDelCount: details.doc_del_count,
       showTombstoneWarning: details.doc_del_count > details.doc_count
