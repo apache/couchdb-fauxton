@@ -212,6 +212,5 @@ export const checkReplicationDocID = (docId) => {
     }
     promise.resolve(true);
   });
-
   return promise;
 };
