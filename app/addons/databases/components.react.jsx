@@ -296,14 +296,17 @@ var DatabasePagination = React.createClass({
 
   getDefaultProps: function () {
     return {
-      linkPath: '_all_dbs'
+      linkPath: '_all_dbs',
+      store: databasesStore
     };
   },
 
   getStoreState: function () {
+    const {store} = this.props;
+
     return {
-      totalAmountOfDatabases: databasesStore.getTotalAmountOfDatabases(),
-      page: databasesStore.getPage()
+      totalAmountOfDatabases: store.getTotalAmountOfDatabases(),
+      page: store.getPage()
     };
   },
 
@@ -312,11 +315,14 @@ var DatabasePagination = React.createClass({
   },
 
   componentDidMount: function () {
-    databasesStore.on('change', this.onChange, this);
+    const {store} = this.props;
+
+    store.on('change', this.onChange, this);
   },
 
   componentWillUnmount: function () {
-    databasesStore.off('change', this.onChange, this);
+    const {store} = this.props;
+    store.off('change', this.onChange, this);
   },
 
   onChange: function () {

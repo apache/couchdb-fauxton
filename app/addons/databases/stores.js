@@ -18,7 +18,7 @@ import Helpers from "../../helpers";
 
 const Database = Resources.Model;
 
-var DatabasesStore = FauxtonAPI.Store.extend({
+const DatabasesStoreConstructor = FauxtonAPI.Store.extend({
 
   initialize: function () {
     this.reset();
@@ -134,9 +134,10 @@ var DatabasesStore = FauxtonAPI.Store.extend({
   }
 });
 
-const databasesStore = new DatabasesStore();
+const databasesStore = new DatabasesStoreConstructor();
 databasesStore.dispatchToken = FauxtonAPI.dispatcher.register(databasesStore.dispatch.bind(databasesStore));
 
 export default {
-  databasesStore: databasesStore
+  databasesStore: databasesStore,
+  DatabasesStoreConstructor: DatabasesStoreConstructor
 };
