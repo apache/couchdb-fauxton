@@ -170,12 +170,13 @@ export default class ReplicationController extends React.Component {
     ];
   }
 
-  render () {
+  getHeaderComponents () {
+    if (this.props.section === 'new replication') {
+      return null;
+    }
+
     return (
-      <OnePane>
-        <OnePaneHeader
-          crumbs={this.getCrumbs()}
-        >
+      <div className="right-header-flex">
         <Polling
           min={60}
           max={600}
@@ -186,6 +187,17 @@ export default class ReplicationController extends React.Component {
         <RefreshBtn
           refresh={Actions.getReplicationActivity}
           />
+      </div>
+    );
+  }
+
+  render () {
+    return (
+      <OnePane>
+        <OnePaneHeader
+          crumbs={this.getCrumbs()}
+        >
+        {this.getHeaderComponents()}
         </OnePaneHeader>
         <OnePaneContent>
           <div className="template-content flex-body flex-layout flex-col">

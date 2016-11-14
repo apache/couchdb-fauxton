@@ -20,7 +20,7 @@ const ReplicationRouteObject = FauxtonAPI.RouteObject.extend({
   hideApiBar: true,
 
   routes: {
-    'replication/create': 'defaultView',
+    'replication/_create': 'defaultView',
     'replication/:dbname': 'defaultView',
     'replication/id/:id': 'fromId',
     'replication': 'activityView'

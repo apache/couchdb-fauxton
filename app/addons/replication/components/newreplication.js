@@ -47,8 +47,8 @@ export default class NewReplicationController extends React.Component {
       replicationTarget === Constants.REPLICATION_TARGET.NEW_LOCAL_DATABASE);
 
     // if the user is authenticated, or if NEITHER the source nor target are local, just submit. The password
-    // modal isn't necessary
-    if (!hasLocalSourceOrTarget || this.props.authenticated) {
+    // modal isn't necessary or if couchdb is in admin party mode
+    if (!hasLocalSourceOrTarget || this.props.authenticated || FauxtonAPI.session.isAdminParty()) {
       this.submit(this.props.username, this.props.password);
       return;
     }
@@ -237,7 +237,7 @@ export default class NewReplicationController extends React.Component {
           onRemoteSourceChange={updateFormField('remoteSource')}
           onLocalSourceChange={updateFormField('localSource')}
         />
-        <hr className="replication-seperator" size="1"/>
+        <hr className="replication__seperator" size="1"/>
         <ReplicationTarget
           replicationTarget={replicationTarget}
           onTargetChange={updateFormField('replicationTarget')}
@@ -247,7 +247,7 @@ export default class NewReplicationController extends React.Component {
           onRemoteTargetChange={updateFormField('remoteTarget')}
           onLocalTargetChange={updateFormField('localTarget')}
         />
-        <hr className="replication-seperator" size="1"/>
+        <hr className="replication__seperator" size="1"/>
         <ReplicationOptions
           replicationType={replicationType}
           replicationDocName={replicationDocName}

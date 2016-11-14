@@ -83,12 +83,6 @@ export const ErrorModal = ({visible, onClose, errorMsg, onClick}) => {
         </p>
       </Modal.Body>
       <Modal.Footer>
-        <button
-          className="btn"
-          onClick={onClick}
-            >
-          Close
-        </button>
       </Modal.Footer>
     </Modal>
   );
@@ -121,7 +115,7 @@ export const ConflictModal = ({visible, docId, onClose, onClick}) => {
         </p>
         <p>
           If you overwrite the existing document, any replication job currently using the replication document will stop,
-          and that job will not appear in Replicator DB Activity. Replicationed documents will not be affected.
+          and that job will not appear in Replicator DB Activity. Replicated documents will not be affected.
         </p>
       </Modal.Body>
       <Modal.Footer>

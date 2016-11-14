@@ -22,8 +22,8 @@ const formatUrl = (url) => {
   if (url.indexOf(window.location.hostname) > -1) {
     return (
       <span>
-        {urlObj.origin}
-        <a href={`#/database/${encoded}/_all_docs`}>{urlObj.pathname}</a>
+        {urlObj.origin + '/'}
+        <a href={`#/database/${encoded}/_all_docs`}>{urlObj.pathname.slice(1)}</a>
       </span>
     );
   }
@@ -337,7 +337,7 @@ const ReplicationHeader = ({filter, onFilterChange}) => {
     <div className="replication_activity_header">
       <div></div>
       <ReplicationFilter value={filter} onChange={onFilterChange} />
-      <a href="#/replication/create" className="btn save replication_activity_header-btn btn-success">
+      <a href="#/replication/_create" className="btn save replication_activity_header-btn btn-success">
         <i className="icon fonticon-plus-circled"></i>
         New Replication
       </a>

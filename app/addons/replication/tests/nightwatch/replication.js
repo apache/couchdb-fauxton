@@ -45,7 +45,7 @@ module.exports = {
       .checkForDatabaseCreated(newDatabaseName1, waitTime)
       .createDocument(docName1, newDatabaseName1)
       .loginToGUI()
-      .url(baseUrl + '/#replication/create')
+      .url(baseUrl + '/#replication/_create')
       .waitForElementPresent('button#replicate', waitTime, true)
       .waitForElementPresent('#replication-source', waitTime, true)
 
@@ -94,7 +94,7 @@ module.exports = {
 
       // now login and fill in the replication form
       .loginToGUI()
-      .url(baseUrl + '/#replication/create')
+      .url(baseUrl + '/#replication/_create')
       .waitForElementPresent('button#replicate', waitTime, true)
       .waitForElementPresent('#replication-source', waitTime, true)
 
@@ -146,7 +146,7 @@ module.exports = {
 
       // now login and fill in the replication form
       .loginToGUI()
-      .url(baseUrl + '/#replication/create')
+      .url(baseUrl + '/#replication/_create')
       .waitForElementPresent('button#replicate', waitTime, true)
       .waitForElementPresent('#replication-source', waitTime, true)
 

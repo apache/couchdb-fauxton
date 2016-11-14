@@ -24,7 +24,7 @@ module.exports = {
       target: "http://target-db.com"
     };
     client
-      .deleteDocument(replicatorDoc._id, '_replicator')
+      //.deleteDocument(replicatorDoc._id, '_replicator')
       .createDocument(replicatorDoc._id, '_replicator', replicatorDoc)
       .loginToGUI()
       .url(baseUrl + '/#replication')
@@ -33,8 +33,10 @@ module.exports = {
       .click('a[title="Delete document existing-doc-id-2"]')
       .waitForElementPresent('.replication_delete-doc-modal', waitTime, true)
       .click('.replication_delete-doc-modal button.save')
+      .waitForElementNotPresent('.replication_delete-doc-modal', waitTime, true)
       .waitForElementNotPresent('.global-notification .fonticon-cancel', waitTime, false)
       .waitForElementNotPresent('.load-lines', waitTime, true)
+      .waitForElementNotPresent('a[title="Delete document existing-doc-id-2"]', waitTime, true)
       .assert.elementNotPresent('a[title="Delete document existing-doc-id-2"]')
       .end();
   }

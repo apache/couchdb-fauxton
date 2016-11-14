@@ -13,6 +13,7 @@ import React from 'react';
 import Constants from '../constants';
 import Components from '../../components/react-components.react';
 import ReactSelect from 'react-select';
+import RemoteExample from './remoteexample';
 
 const { StyledSelect } = Components;
 
@@ -27,7 +28,7 @@ const RemoteSourceInput = ({onChange, value}) =>
         value={value}
         onChange={(e) => onChange(e.target.value)}
       />
-      <div className="replication-remote-connection-url-text">Example: https://$REMOTE_USERNAME:$REMOTE_PASSWORD@$REMOTE_SERVER/$DATABASE</div>
+    <RemoteExample />
     </div>
   </div>;
 
