@@ -22,6 +22,7 @@ function getSeqNum (val) {
 }
 
 function getNewButtonLinks (databaseName) {
+  databaseName = app.utils.safeURLName(databaseName);
   var addLinks = FauxtonAPI.getExtensions('sidebar:links');
   var newUrlPrefix = '#' + FauxtonAPI.urls('databaseBaseURL', 'app', databaseName);
 
