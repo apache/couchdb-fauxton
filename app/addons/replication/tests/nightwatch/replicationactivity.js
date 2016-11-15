@@ -29,7 +29,7 @@ module.exports = {
       .loginToGUI()
       .url(baseUrl + '/#replication')
       .waitForElementNotPresent('.load-lines', waitTime, true)
-      .waitForElementPresent('.replication_table-col', waitTime, true)
+      .waitForElementPresent('.replication__table-col', waitTime, true)
       .click('a[title="Delete document existing-doc-id-2"]')
       .waitForElementPresent('.replication_delete-doc-modal', waitTime, true)
       .click('.replication_delete-doc-modal button.save')

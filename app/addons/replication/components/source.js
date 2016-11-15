@@ -18,12 +18,12 @@ import RemoteExample from './remoteexample';
 const { StyledSelect } = Components;
 
 const RemoteSourceInput = ({onChange, value}) =>
-  <div className="replication-section">
-    <div className="replication-input-label">Database URL:</div>
+  <div className="replication__section">
+    <div className="replication__input-label">Database URL:</div>
     <div className="">
       <input
         type="text"
-        className="replication-remote-connection-url"
+        className="replication__remote-connection-url"
         placeholder="https://"
         value={value}
         onChange={(e) => onChange(e.target.value)}
@@ -40,11 +40,11 @@ RemoteSourceInput.propTypes = {
 const LocalSourceInput = ({value, onChange, databases}) => {
   const options = databases.map(db => ({value: db, label: db}));
   return (
-    <div className="replication-section">
-      <div className="replication-input-label">
+    <div className="replication__section">
+      <div className="replication__input-label">
         Source Name:
       </div>
-      <div className="replication-input-react-select">
+      <div className="replication__input-react-select">
         <ReactSelect
           name="source-name"
           value={value}
@@ -99,11 +99,11 @@ const replicationSourceSelectOptions = () => {
 export const ReplicationSourceSelect = ({onChange, value}) => {
 
   return (
-    <div className="replication-section">
-      <div className="replication-input-label">
+    <div className="replication__section">
+      <div className="replication__input-label">
         Replication Source:
       </div>
-      <div className="replication-input-select">
+      <div className="replication__input-select">
         <StyledSelect
           selectContent={replicationSourceSelectOptions()}
           selectChange={(e) => onChange(e.target.value)}

@@ -13,14 +13,14 @@
 @import "../../../../../assets/less/variables.less";
 @import "../../../../../assets/less/mixins.less";
 
-div.replication-page {
+div.replication__page {
   padding-top: 25px !important;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.replication-section {
+.replication__section {
   display: flex;
   flex-flow: row wrap;
   justify-content: flex-start;
@@ -31,7 +31,7 @@ div.replication-page {
   width: 100%;
 }
 
-.replication-input-label {
+.replication__input-label {
   padding-right: 15px;
   width: 160px;
   text-align: right;
@@ -40,7 +40,7 @@ div.replication-page {
   margin-right: 10px;
 }
 
-.replication-input-select {
+.replication__input-select {
   width: 540px;
   select {
     font-size: 14px;
@@ -54,7 +54,7 @@ div.replication-page {
   }
 }
 
-.replication-input-react-select {
+.replication__input-react-select {
   font-size: 14px;
 
   .Select div.Select-control {
@@ -78,31 +78,31 @@ div.replication-page {
   }
 }
 
-.replication-remote-connection-url[type="text"] {
+.replication__remote-connection-url[type="text"] {
   font-size: 14px;
   width: 100%;
   color: #333;
 }
 
-.replication-remote-connection-url-text {
+.replication__remote-connection-url-text {
   font-size: 9pt;
   color: #999999;
   margin-bottom: 8px;
 }
 
-.replication-new-input[type="text"] {
+.replication__new-input[type="text"] {
   width: 248px;
   font-size: 14px;
   color: #333;
 }
 
-.replication-doc-name {
+.replication__doc-name {
   position: relative;
   width: 250px;
 
 }
 
-.replication-doc-name-icon {
+.replication__doc-name-icon {
   cursor: pointer;
   position: absolute;
   right: 6px;
@@ -113,139 +113,139 @@ div.replication-page {
   .transition(all 0.25s linear);
 }
 
-.replication-doc-name-icon:hover {
+.replication__doc-name-icon:hover {
   color: #E73D34;
 }
 
 //use attribute selector to strengthen this to override bootstraps default font size for inputs
-.replication-doc-name-input[type="text"] {
+.replication__doc-name-input[type="text"] {
   padding-right: 32px;
   font-size: 14px;
   width: 248px;
   color: #333;
 }
 
-.replication-button-row {
+.replication__button-row {
   margin-top: 10px;
   width: 378px;
   display: flex;
   justify-content: flex-end;
 }
 
-.replication-clear-link {
+.replication__clear-link {
   padding: 12px;
   font-size: 14px;
   padding: 12px 0 12px 24px;
 }
 
-.replication-clear-link:focus,
-.replication-clear-link:hover {
+.replication__clear-link:focus,
+.replication__clear-link:hover {
   text-decoration: none;
 }
 
-.replication_activity {
+.replication__activity {
   padding: 0 10px 0 10px !important;
 }
 
-.replication_table-row {
+.replication__table-row {
   font-size: 14px;
   height: 50px;
 }
 
-td.replication_table-col {
+td.replication__table-col {
   vertical-align: middle;
 }
 
-.replication_table--selected {
+.replication__table--selected {
   color: @hoverRed;
 }
 
-.replication_table-header-source {
+.replication__table-header-source {
   width: 30%;
   font-weight: bold;
   cursor: pointer;
 }
 
-.replication_table-header-target {
+.replication__table-header-target {
   width: 30%;
   font-weight: bold;
   cursor: pointer;
 }
 
-.replication_table-header-type {
+.replication__table-header-type {
   font-weight: bold;
   width: 9%;
   cursor: pointer;
 }
 
-.replication_table-header-status {
+.replication__table-header-status {
   font-weight: bold;
   width: 9%;
   cursor: pointer;
 }
 
-.replication_table-header-time {
+.replication__table-header-time {
   font-weight: bold;
   width: 13%;
   cursor: pointer;
 }
 
-.replication_table-header-actions {
+.replication__table-header-actions {
   font-weight: bold;
   width: 13%;
 }
 
-td.replication-row-status {
+td.replication__row-status {
   text-transform: capitalize;
   vertical-align: middle;
 }
 
-.replication_row-status--completed {
+.replication__row-status--completed {
   color: #5cb85c;
 }
 
-.replication_row-status--error {
+.replication__row-status--error {
   color: #d9534f;
 }
 
-.replication_table-header-icon {
+.replication__table-header-icon {
   margin-left: 6px;
   width: 16px;
 }
 
-.replication_activity_header {
+.replication__activity_header {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.replication_activity_header-btn {
+.replication__activity_header-btn {
   height: 42px;
 }
 
-a.replication_activity_header-btn:active,
-a.replication_activity_header-btn:visited {
+a.replication__activity_header-btn:active,
+a.replication__activity_header-btn:visited {
   color: #fff;
 }
 
-.replication_table-bulk-select {
+.replication__table-bulk-select {
   width: 68px;
 }
 
-.replication_bulk-select-wrapper {
+.replication__bulk-select-wrapper {
   display: flex;
 }
 
-.replication_bulk-select-header {
+.replication__bulk-select-header {
   width: 30px;
   border: 1px solid #aaa;
 }
 
-input.replication_bulk-select-input[type="checkbox"] {
+input.replication__bulk-select-input[type="checkbox"] {
   margin: 8px;
 }
 
-.replication_bulk-select-trash {
+.replication__bulk-select-trash {
   color: #505050;
   border: 1px solid #aaa;
   background-color: rgba(0, 0, 0, 0);
@@ -253,16 +253,16 @@ input.replication_bulk-select-input[type="checkbox"] {
   padding-left: 8px
 }
 
-.replication_row-actions-list {
+.replication__row-actions-list {
   margin: 0px;
   text-decoration: none;
 }
 
-.replication_row-list {
+.replication__row-list {
   display: inline;
 }
 
-.replication_row-btn {
+.replication__row-btn {
   font-size: 16px;
   text-decoration: none;
   cursor: pointer;
@@ -270,32 +270,44 @@ input.replication_bulk-select-input[type="checkbox"] {
   padding-left: 8px;
 }
 
-.replication_row-btn:visited,
-.replication_row-btn:hover {
+.replication__row-btn:visited,
+.replication__row-btn:hover {
   text-decoration: none;
 }
 
-.replication_row-btn--warning {
+.replication__row-btn--warning {
   color: #E73D34;
 }
 
-.replication_filter-icon {
+.replication__filter-icon {
   padding-right: 8px;
 }
 
-input.replication_filter-input[type="text"] {
+input.replication__filter-input[type="text"] {
   font-size: 14px;
   border: 0;
   padding: 10px;
   margin-bottom: 0;
 }
 
-.replication_error-cancel,
-.replication_error-continue {
+.replication__error-cancel,
+.replication__error-continue {
   background-color: #0082BF;
 }
 
-.replication_error-cancel:hover,
-.replication_error-continue:hover {
+.replication__error-cancel:hover,
+.replication__error-continue:hover {
   background-color: #e73d34;
+}
+
+td.replication__empty-row {
+  text-align: center;
+}
+
+.replication__remote_icon_help {
+  color: #E33F3B
+}
+
+.replication__remote_icon_help:hover {
+  color: #af2d24;
 }

@@ -122,6 +122,12 @@ const selectDoc = (id) => {
   });
 };
 
+const clearSelectedDocs = () => {
+  FauxtonAPI.dispatch({
+    type: ActionTypes.REPLICATION_CLEAR_SELECTED_DOCS
+  });
+};
+
 const deleteDocs = (docs) => {
   const bulkDocs = docs.map(({raw: doc}) => {
     doc._deleted = true;
@@ -153,6 +159,7 @@ const deleteDocs = (docs) => {
       escape: false,
       clear: true
     });
+    clearSelectedDocs();
     getReplicationActivity();
   }, (xhr) => {
     const errorMessage = JSON.parse(xhr.responseText);
@@ -254,5 +261,6 @@ export default {
   getReplicationStateFrom,
   showConflictModal,
   hideConflictModal,
-  changeActivitySort
+  changeActivitySort,
+  clearSelectedDocs
 };

@@ -33,11 +33,11 @@ const replicationTargetSourceOptions = () => {
 
 const ReplicationTargetSelect = ({value, onChange}) => {
   return (
-    <div className="replication-section">
-      <div className="replication-input-label">
+    <div className="replication__section">
+      <div className="replication__input-label">
         Replication Target:
       </div>
-      <div id="replication-target" className="replication-input-select">
+      <div id="replication-target" className="replication__input-select">
         <StyledSelect
           selectContent={replicationTargetSourceOptions()}
           selectChange={(e) => onChange(e.target.value)}
@@ -53,17 +53,17 @@ ReplicationTargetSelect.propTypes = {
   onChange: React.PropTypes.func.isRequired
 };
 
-const RemoteTargetReplicationRow = ({onChange, value}) => {
+const RemoteTargetReplicationRow = ({onChange, value, newRemote}) => {
   return (
     <div>
       <input
         type="text"
-        className="replication-remote-connection-url"
+        className="replication__remote-connection-url"
         placeholder="https://"
         value={value}
         onChange={(e) => onChange(e.target.value)}
       />
-      <RemoteExample />
+    <RemoteExample newRemote={newRemote} />
     </div>
   );
 };
@@ -76,7 +76,7 @@ RemoteTargetReplicationRow.propTypes = {
 const ExistingLocalTargetReplicationRow = ({onChange, value, databases}) => {
   const options = databases.map(db => ({value: db, label: db}));
   return (
-    <div id="replication-target-local" className="replication-input-react-select">
+    <div id="replication-target-local" className="replication__input-react-select">
       <ReactSelect
         value={value}
         options={options}
@@ -97,7 +97,7 @@ ExistingLocalTargetReplicationRow.propTypes = {
 const NewLocalTargetReplicationRow = ({onChange, value}) =>
   <input
     type="text"
-    className="replication-new-input"
+    className="replication__new-input"
     placeholder="Database name"
     value={value}
     onChange={(e) => onChange(e.target.value)}
@@ -137,6 +137,7 @@ const ReplicationTargetRow = ({
     input = <RemoteTargetReplicationRow
       onChange={onRemoteTargetChange}
       value={remoteTarget}
+      newRemote={Constants.REPLICATION_TARGET.NEW_REMOTE_DATABASE === replicationTarget}
             />;
   }
 
@@ -148,8 +149,8 @@ const ReplicationTargetRow = ({
   }
 
   return (
-    <div className="replication-section">
-      <div className="replication-input-label">{targetLabel}</div>
+    <div className="replication__section">
+      <div className="replication__input-label">{targetLabel}</div>
       <div>
         {input}
       </div>

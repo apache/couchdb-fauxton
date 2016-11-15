@@ -73,7 +73,7 @@ export const ErrorModal = ({visible, onClose, errorMsg, onClick}) => {
   }
 
   return (
-    <Modal dialogClassName="replication_error-doc-modal" show={visible} onHide={() => onClose()}>
+    <Modal dialogClassName="replication__error-doc-modal" show={visible} onHide={() => onClose()}>
       <Modal.Header closeButton={true}>
         <Modal.Title>Replication Error</Modal.Title>
       </Modal.Header>
@@ -102,7 +102,7 @@ export const ConflictModal = ({visible, docId, onClose, onClick}) => {
   }
 
   return (
-    <Modal dialogClassName="replication_error-doc-modal" show={visible} onHide={() => onClose()}>
+    <Modal dialogClassName="replication__error-doc-modal" show={visible} onHide={() => onClose()}>
       <Modal.Header closeButton={true}>
         <Modal.Title>Fix Document Conflict</Modal.Title>
       </Modal.Header>
@@ -119,10 +119,10 @@ export const ConflictModal = ({visible, docId, onClose, onClick}) => {
         </p>
       </Modal.Body>
       <Modal.Footer>
-        <button onClick={onClose} className="btn replication_error-cancel">
+        <button onClick={onClose} className="btn replication__error-cancel">
           Change Document ID
         </button>
-        <button onClick={onClick} className="btn replication_error-continue">
+        <button onClick={onClick} className="btn replication__error-continue">
           <i className="icon icon-eraser"></i>
           Overwrite Existing Document
         </button>

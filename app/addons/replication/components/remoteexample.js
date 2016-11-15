@@ -12,28 +12,37 @@
 import React from 'react';
 import {OverlayTrigger, Tooltip} from 'react-bootstrap';
 
-const RemoteExample = () => {
-  const tooltip = (
-    <Tooltip id="tooltip">
-      <p>
-        If you know the credentials for the remote account, you can use that remote username and password.
-      </p>
-      <p>
-        If a remote database granted permissions to your local account, you can use the local-account username and password.
-      </p>
-      <p>
-        If the remote database granted permissions to "everybody," you do not need to enter a username and password.
-      </p>
-    </Tooltip>
-  );
+const tooltipExisting = (
+  <Tooltip id="tooltip">
+    <p>
+      If you know the credentials for the remote account, you can use that remote username and password.
+    </p>
+    <p>
+      If a remote database granted permissions to your local account, you can use the local-account username and password.
+    </p>
+    <p>
+      If the remote database granted permissions to "everybody," you do not need to enter a username and password.
+    </p>
+  </Tooltip>
+);
+
+const tooltipNew = (
+  <Tooltip id="tooltip">
+    Enter the username and password of the remote account.
+  </Tooltip>
+);
+
+const RemoteExample = ({newRemote}) => {
+  const newRemoteText = newRemote ? 'If a "new" database already exists, data will replicate into that existing database.' : null;
   return (
     <div
-      className="replication-remote-connection-url-text">
-      Example:&nbsp;
-      <OverlayTrigger placement="right" overlay={tooltip}>
-        <i className="icon icon-question-sign"/>
+      className="replication__remote-connection-url-text">
+      https://$REMOTE_USERNAME:$REMOTE_PASSWORD@$REMOTE_SERVER/$DATABASE
+      &nbsp;
+      <OverlayTrigger placement="right" overlay={newRemote ? tooltipNew : tooltipExisting}>
+        <i className="replication__remote_icon_help icon icon-question-sign"/>
       </OverlayTrigger>
-      &nbsp;https://$REMOTE_USERNAME:$REMOTE_PASSWORD@$REMOTE_SERVER/$DATABASE
+      <p>{newRemoteText}</p>
     </div>
   );
 };

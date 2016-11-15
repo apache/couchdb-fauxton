@@ -16,7 +16,7 @@ import Components from '../../components/react-components.react';
 const {ConfirmButton} = Components;
 
 export const ReplicationSubmit = ({onClear, disabled, onClick}) =>
-<div className="replication-button-row">
+<div className="replication__button-row">
   <ConfirmButton
     id="replicate"
     text="Start Replication"
@@ -24,7 +24,7 @@ export const ReplicationSubmit = ({onClear, disabled, onClick}) =>
     disabled={disabled}
   />
   <a
-    className="replication-clear-link"
+    className="replication__clear-link"
     href="#"
     data-bypass="true"
     onClick={(e) => {

@@ -52,15 +52,15 @@ module.exports = {
       // select LOCAL as the source
       .click('#replication-source')
       .keys(['\uE006'])
-      .waitForElementPresent('.replication-input-react-select', waitTime, true)
+      .waitForElementPresent('.replication__input-react-select', waitTime, true)
 
       // enter our source DB
-      .setValue('.replication-input-react-select .Select-input input', [newDatabaseName1, client.Keys.ENTER])
+      .setValue('.replication__input-react-select .Select-input input', [newDatabaseName1, client.Keys.ENTER])
 
       // enter a new target name
       .waitForElementPresent('#replication-target', waitTime, true)
       .click('option[value="REPLICATION_TARGET_NEW_LOCAL_DATABASE"]')
-      .setValue('.replication-new-input', replicatedDBName)
+      .setValue('.replication__new-input', replicatedDBName)
 
       .click('#replicate')
 
@@ -101,8 +101,8 @@ module.exports = {
       // select the LOCAL db as the source
       .click('#replication-source')
       .keys(['\uE006'])
-      .waitForElementPresent('.replication-input-react-select', waitTime, true)
-      .setValue('.replication-input-react-select .Select-input input', [newDatabaseName1, client.Keys.ENTER])
+      .waitForElementPresent('.replication__input-react-select', waitTime, true)
+      .setValue('.replication__input-react-select .Select-input input', [newDatabaseName1, client.Keys.ENTER])
 
       // select existing local as the target
       .waitForElementPresent('#replication-target', waitTime, true)
@@ -153,14 +153,14 @@ module.exports = {
       // select the LOCAL db as the source
       .click('#replication-source')
       .keys(['\uE006'])
-      .waitForElementPresent('.replication-input-react-select', waitTime, true)
-      .setValue('.replication-input-react-select .Select-input input', [newDatabaseName1, client.Keys.ENTER])
+      .waitForElementPresent('.replication__input-react-select', waitTime, true)
+      .setValue('.replication__input-react-select .Select-input input', [newDatabaseName1, client.Keys.ENTER])
 
       // select existing local as the target
       .waitForElementPresent('#replication-target', waitTime, true)
       .click('#replication-target option[value="REPLICATION_TARGET_EXISTING_LOCAL_DATABASE"]')
       .setValue('#replication-target-local .Select-input input', [newDatabaseName2, client.Keys.ENTER])
-      .setValue('.replication-doc-name-input', [replicatorDoc._id, client.Keys.ENTER])
+      .setValue('.replication__doc-name-input', [replicatorDoc._id, client.Keys.ENTER])
 
       .getAttribute('#replicate', 'disabled', function (result) {
         // confirm it's not disabled
@@ -168,8 +168,8 @@ module.exports = {
       })
       .click('#replicate')
 
-      .waitForElementPresent('.replication_error-doc-modal .replication_error-continue', waitTime, true)
-      .click('.replication_error-doc-modal .replication_error-continue')
+      .waitForElementPresent('.replication__error-doc-modal .replication__error-continue', waitTime, true)
+      .click('.replication__error-doc-modal .replication__error-continue')
       .waitForElementPresent('.enter-password-modal', waitTime, true)
       .setValue('.enter-password-modal input[type="password"]', password)
       .click('.enter-password-modal button.save')

@@ -23,7 +23,7 @@ module.exports = {
       .waitForElementPresent('.add-new-database-btn', waitTime, false)
       .click('a[href="#/replication"]')
       .pause(1000)
-      .waitForElementVisible('.replication_activity_header-btn', waitTime, false)
+      .waitForElementVisible('.replication__activity_header-btn', waitTime, false)
       .assert.cssClassPresent('li[data-nav-name="Replication"]', 'active')
     .end();
   }

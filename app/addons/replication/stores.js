@@ -313,6 +313,10 @@ const ReplicationStore = FauxtonAPI.Store.extend({
         this.setActivitySort(options);
       break;
 
+      case ActionTypes.REPLICATION_CLEAR_SELECTED_DOCS:
+        this._allDocsSelected = false;
+      break;
+
       case AccountActionTypes.AUTH_SHOW_PASSWORD_MODAL:
         this._isPasswordModalVisible = true;
       break;

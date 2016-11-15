@@ -25,11 +25,11 @@ const getReplicationTypeOptions = () => {
 
 const ReplicationType = ({value, onChange}) => {
   return (
-    <div className="replication-section">
-      <div className="replication-input-label">
+    <div className="replication__section">
+      <div className="replication__input-label">
         Replication Type:
       </div>
-      <div className="replication-input-select">
+      <div className="replication__input-select">
         <StyledSelect
           selectContent={getReplicationTypeOptions()}
           selectChange={(e) => onChange(e.target.value)}
@@ -46,16 +46,16 @@ ReplicationType.propTypes = {
 };
 
 const ReplicationDoc = ({value, onChange}) =>
-<div className="replication-section">
-  <div className="replication-input-label">
+<div className="replication__section">
+  <div className="replication__input-label">
     Replication Document:
   </div>
-  <div className="replication-doc-name">
-    <span className="fonticon fonticon-cancel replication-doc-name-icon" title="Clear field"
+  <div className="replication__doc-name">
+    <span className="fonticon fonticon-cancel replication__doc-name-icon" title="Clear field"
       onClick={(e) => onChange('')} />
     <input
       type="text"
-      className="replication-doc-name-input"
+      className="replication__doc-name-input"
       placeholder="Custom ID (optional)"
       value={value}
       onChange={(e) => onChange(e.target.value)}

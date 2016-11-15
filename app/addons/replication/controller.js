@@ -201,7 +201,7 @@ export default class ReplicationController extends React.Component {
         </OnePaneHeader>
         <OnePaneContent>
           <div className="template-content flex-body flex-layout flex-col">
-            <div className="replication-page flex-layout flex-col">
+            <div className="replication__page flex-layout flex-col">
               {this.showSection()}
             </div>
           </div>

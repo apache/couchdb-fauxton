@@ -52,10 +52,10 @@ class RowActions extends React.Component {
       return null;
     }
     return (
-      <li className="replication_row-list">
+      <li className="replication__row-list">
         <a
           data-bypass="true"
-          className="replication_row-btn replication_row-btn--warning icon-exclamation-sign"
+          className="replication__row-btn replication__row-btn--warning icon-exclamation-sign"
           onClick={this.showModal.bind(this)}
           title="View error message">
         </a>
@@ -73,28 +73,28 @@ class RowActions extends React.Component {
     const {_id, url, deleteDocs} = this.props;
     const errorIcon = this.getErrorIcon();
     return (
-      <ul className="replication_row-actions-list">
-        <li className="replication_row-list">
+      <ul className="replication__row-actions-list">
+        <li className="replication__row-list">
           <a
             href={`#replication/id/${encodeURIComponent(_id)}`}
-            className="replication_row-btn icon-wrench"
+            className="replication__row-btn icon-wrench"
             title={`Edit replication`}
             data-bypass="true"
             >
           </a>
         </li>
-        <li className="replication_row-list">
+        <li className="replication__row-list">
         <a
-          className="replication_row-btn fonticon-document"
+          className="replication__row-btn fonticon-document"
           title={`Edit replication document`}
           href={url}
           data-bypass="true"
           >
         </a>
         </li>
-        <li className="replication_row-list">
+        <li className="replication__row-list">
         <a
-          className="replication_row-btn icon-trash"
+          className="replication__row-btn icon-trash"
           title={`Delete document ${_id}`}
           onClick={() => deleteDocs(_id)}>
         </a>
@@ -131,14 +131,14 @@ const Row = ({
   const formattedTime = momentTime.isValid() ? momentTime.format("MMM Do, h:mm a") : '';
 
   return (
-    <tr className="replication_table-row">
-      <td className="replication_table-col"><input checked={selected} type="checkbox" onChange={() => selectDoc(_id)} /> </td>
-      <td className="replication_table-col">{formatUrl(source)}</td>
-      <td className="replication_table-col">{formatUrl(target)}</td>
-      <td className="replication_table-col">{type}</td>
-      <td className={`replication-row-status replication_row-status--${status}`}>{status}</td>
-      <td className="replication_table-col">{formattedTime}</td>
-      <td className="replication_table-col">
+    <tr className="replication__table-row">
+      <td className="replication__table-col"><input checked={selected} type="checkbox" onChange={() => selectDoc(_id)} /> </td>
+      <td className="replication__table-col">{formatUrl(source)}</td>
+      <td className="replication__table-col">{formatUrl(target)}</td>
+      <td className="replication__table-col">{type}</td>
+      <td className={`replication__row-status replication__row-status--${status}`}>{status}</td>
+      <td className="replication__table-col">{formattedTime}</td>
+      <td className="replication__table-col">
         <RowActions
           deleteDocs={deleteDocs}
           _id={_id}
@@ -170,14 +170,14 @@ const BulkSelectHeader = ({isSelected, deleteDocs, someDocsSelected, onCheck}) =
   const trash = someDocsSelected ?
     <button
       onClick={() => deleteDocs()}
-      className="replication_bulk-select-trash fonticon fonticon-trash"
+      className="replication__bulk-select-trash fonticon fonticon-trash"
       title="Delete all selected">
     </button> : null;
 
   return (
-    <div className="replication_bulk-select-wrapper">
-      <div className="replication_bulk-select-header">
-        <input className="replication_bulk-select-input" checked={isSelected} type="checkbox" onChange={onCheck} />
+    <div className="replication__bulk-select-wrapper">
+      <div className="replication__bulk-select-header">
+        <input className="replication__bulk-select-input" checked={isSelected} type="checkbox" onChange={onCheck} />
       </div>
     {trash}
     </div>
@@ -191,13 +191,16 @@ BulkSelectHeader.propTypes = {
   deleteDocs: React.PropTypes.func.isRequired
 };
 
+const EmptyRow = () =>
+  <tr>
+    <td colSpan="7" className="replication__empty-row">
+      There is no replicator-db activity or history to display.
+    </td>
+  </tr>;
+
 class ReplicationTable extends React.Component {
   constructor (props) {
     super(props);
-    // this.state = {
-    //   descending: false,
-    //   column: 'statusTime'
-    // };
   }
 
   sort(column, descending, docs) {
@@ -222,6 +225,10 @@ class ReplicationTable extends React.Component {
   }
 
   renderRows () {
+    if (this.props.docs.length === 0) {
+      return <EmptyRow />;
+    }
+
     return this.sort(this.props.column, this.props.descending, this.props.docs).map((doc, i) => {
       return <Row
         key={i}
@@ -260,7 +267,7 @@ class ReplicationTable extends React.Component {
 
   isSelected (header) {
     if (header === this.props.column) {
-      return 'replication_table--selected';
+      return 'replication__table--selected';
     }
 
     return '';
@@ -271,7 +278,7 @@ class ReplicationTable extends React.Component {
       <Table striped>
         <thead>
           <tr>
-            <th className="replication_table-bulk-select">
+            <th className="replication__table-bulk-select">
               <BulkSelectHeader
                 isSelected={this.props.allDocsSelected}
                 onCheck={this.props.selectAllDocs}
@@ -279,27 +286,27 @@ class ReplicationTable extends React.Component {
                 deleteDocs={this.props.deleteDocs}
                 />
             </th>
-            <th className="replication_table-header-source" onClick={this.onSort('source')}>
+            <th className="replication__table-header-source" onClick={this.onSort('source')}>
               Source
-              <span className={`replication_table-header-icon ${this.iconDirection('source')} ${this.isSelected('source')}`} />
+              <span className={`replication__table-header-icon ${this.iconDirection('source')} ${this.isSelected('source')}`} />
             </th>
-            <th className="replication_table-header-target" onClick={this.onSort('target')}>
+            <th className="replication__table-header-target" onClick={this.onSort('target')}>
               Target
-              <span className={`replication_table-header-icon ${this.iconDirection('target')} ${this.isSelected('target')}`} />
+              <span className={`replication__table-header-icon ${this.iconDirection('target')} ${this.isSelected('target')}`} />
             </th>
-            <th className="replication_table-header-type" onClick={this.onSort('continuous')}>
+            <th className="replication__table-header-type" onClick={this.onSort('continuous')}>
               Type
-              <span className={`replication_table-header-icon ${this.iconDirection('continuous')} ${this.isSelected('continuous')}`} />
+              <span className={`replication__table-header-icon ${this.iconDirection('continuous')} ${this.isSelected('continuous')}`} />
             </th>
-            <th className="replication_table-header-status" onClick={this.onSort('status')}>
+            <th className="replication__table-header-status" onClick={this.onSort('status')}>
               State
-              <span className={`replication_table-header-icon ${this.iconDirection('status')} ${this.isSelected('status')}`} />
+              <span className={`replication__table-header-icon ${this.iconDirection('status')} ${this.isSelected('status')}`} />
             </th>
-            <th className="replication_table-header-time" onClick={this.onSort('statusTime')}>
+            <th className="replication__table-header-time" onClick={this.onSort('statusTime')}>
               State Time
-              <span className={`replication_table-header-icon ${this.iconDirection('statusTime')} ${this.isSelected('statusTime')}`} />
+              <span className={`replication__table-header-icon ${this.iconDirection('statusTime')} ${this.isSelected('statusTime')}`} />
             </th>
-            <th className="replication_table-header-actions">
+            <th className="replication__table-header-actions">
               Actions
             </th>
           </tr>
@@ -314,12 +321,12 @@ class ReplicationTable extends React.Component {
 
 const ReplicationFilter = ({value, onChange}) => {
   return (
-    <div className="replication_filter">
-      <i className="replication_filter-icon fonticon-filter" />
+    <div className="replication__filter">
+      <i className="replication__filter-icon fonticon-filter" />
       <input
         type="text"
         placeholder="Filter replications"
-        className="replication_filter-input"
+        className="replication__filter-input"
         value={value}
         onChange={(e) => {onChange(e.target.value);}}
       />
@@ -334,10 +341,10 @@ ReplicationFilter.propTypes = {
 
 const ReplicationHeader = ({filter, onFilterChange}) => {
   return (
-    <div className="replication_activity_header">
+    <div className="replication__activity_header">
       <div></div>
       <ReplicationFilter value={filter} onChange={onFilterChange} />
-      <a href="#/replication/_create" className="btn save replication_activity_header-btn btn-success">
+      <a href="#/replication/_create" className="btn save replication__activity_header-btn btn-success">
         <i className="icon fonticon-plus-circled"></i>
         New Replication
       </a>
@@ -405,7 +412,7 @@ export default class Activity extends React.Component {
 
     const {modalVisible} = this.state;
     return (
-      <div className="replication_activity">
+      <div className="replication__activity">
         <ReplicationHeader
           filter={filter}
           onFilterChange={onFilterChange}
