@@ -37,7 +37,7 @@ const RemoteExample = ({newRemote}) => {
   return (
     <div
       className="replication__remote-connection-url-text">
-      https://$REMOTE_USERNAME:$REMOTE_PASSWORD@$REMOTE_SERVER/$DATABASE
+      https://$USERNAME:$PASSWORD@$REMOTE_SERVER/$DATABASE
       &nbsp;
       <OverlayTrigger placement="right" overlay={newRemote ? tooltipNew : tooltipExisting}>
         <i className="replication__remote_icon_help icon icon-question-sign"/>
