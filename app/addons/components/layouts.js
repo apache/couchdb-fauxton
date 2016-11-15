@@ -74,6 +74,7 @@ OnePaneHeader.defaultProps = {
 OnePaneHeader.propTypes = {
   docURL: React.PropTypes.string,
   endpoint: React.PropTypes.string,
+  crumbs: React.PropTypes.array
 };
 
 export const OnePaneContent = ({children}) => {
