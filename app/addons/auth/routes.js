@@ -10,15 +10,19 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+import React from 'react';
 import app from "../../app";
 import FauxtonAPI from "../../core/api";
 import Auth from "./resources";
 import AuthActions from "./actions";
 import Components from "./components.react";
 import ClusterActions from "../cluster/cluster.actions";
+import Layout from './layout';
+
+const {LoginForm, CreateAdminForm} = Components;
 
 var AuthRouteObject = FauxtonAPI.RouteObject.extend({
-  layout: 'one_pane',
+  layout: 'empty',
 
   routes: {
     'login?*extra': 'login',
@@ -28,14 +32,18 @@ var AuthRouteObject = FauxtonAPI.RouteObject.extend({
     'createAdmin/:node': 'createAdminForNode'
   },
   hideNotificationCenter: true,
+  hideApiBar: true,
 
   checkNodes: function () {
     ClusterActions.navigateToNodeBasedOnNodeCount('/createAdmin/');
   },
 
   login: function () {
-    this.crumbs = [{ name: 'Log In to CouchDB' }];
-    this.setComponent('#dashboard-content', Components.LoginForm, { urlBack: app.getParams().urlback });
+    const crumbs = [{ name: 'Log In to CouchDB' }];
+    this.setComponent(".template", Layout, {
+      crumbs: crumbs,
+      component: <LoginForm urlBack={app.getParams().urlback } />
+    });
   },
 
   logout: function () {
@@ -47,8 +55,11 @@ var AuthRouteObject = FauxtonAPI.RouteObject.extend({
 
   createAdminForNode: function () {
     ClusterActions.fetchNodes();
-    this.crumbs = [{ name: 'Create Admin' }];
-    this.setComponent('#dashboard-content', Components.CreateAdminForm, { loginAfter: true });
+    const crumbs = [{ name: 'Create Admin' }];
+    this.setComponent(".template", Layout, {
+      crumbs: crumbs,
+      component: <CreateAdminForm loginAfter={true} />
+    });
   }
 });
 
