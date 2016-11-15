@@ -45,7 +45,7 @@ export const DeleteModal = ({
           and incomplete one-time replication, but does not affect replicated documents.
         </p>
         <p>
-          Replication jobs that do not have replication documents do not appear in Replcator DB Activity.
+          Replication jobs that do not have replication documents do not appear in Replicator DB Activity.
         </p>
       </Modal.Body>
       <Modal.Footer>
