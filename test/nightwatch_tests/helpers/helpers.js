@@ -17,7 +17,7 @@ function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
 }
 
-const dbName = 'fauxton-selenium-tests-' + getRandomInt(1, 20000);
+const dbName = 'fauxton-selenium-tests-//-' + getRandomInt(1, 20000);
 
 module.exports = {
   asyncHookTimeout: 20000,
