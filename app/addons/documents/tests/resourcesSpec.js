@@ -9,6 +9,7 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
+import app from "../../../app";
 import FauxtonAPI from "../../../core/api";
 import Models from "../resources";
 import testUtils from "../../../../test/mocha/testUtils";
@@ -460,5 +461,37 @@ describe('Bulk Delete', function () {
 
   });
 
+});
+
+// this should stay at the bottom due to manipulating the 'view' urls.  otherwise, update this to restore them.
+describe('IndexCollection', function () {
+  var collection;
+
+  beforeEach(function () {
+    FauxtonAPI.registerUrls('view', {
+      testWithTrailingQuestion: function (database, designDoc, viewName) {
+        return app.host + '/' + database + '/_design/' + designDoc + '/_view/' + viewName + "?bogusParam=foo";
+      }
+    });
+    collection = new Models.IndexCollection([{
+      id:'myId1',
+      doc: 'num1'
+    },
+    {
+      id:'myId2',
+      doc: 'num2'
+    }], {
+      database: {id: 'databaseId', safeID: function () { return this.id; }},
+      design: '_design/myDoc'
+    });
+  });
+
+  it('creates the right url with correct params when trailing question mark', () => {
+    assert.ok(/\?bogusParam=foo&limit=20&reduce=false/.test(collection.urlRef('testWithTrailingQuestion')));
+  });
+
+  it('creates the right url with correct params without trailing question mark', () => {
+    assert.ok(/\?limit=20&reduce=false/.test(collection.urlRef()));
+  });
 
 });
