@@ -36,11 +36,13 @@ module.exports = {
       .click('.replication_delete-doc-modal button.save')
       .waitForElementNotPresent('.replication_delete-doc-modal', waitTime, true)
       .waitForElementPresent('.global-notification .fonticon-cancel', waitTime, false)
-      .getText('.global-notification', function (result) {
-        console.log("fonticon text", result);
-      })
       .waitForElementNotPresent('.global-notification .fonticon-cancel', waitTime, false)
       .waitForElementNotPresent('.load-lines', waitTime, true)
+      .clickWhenVisible('#notification-center-btn', waitTime, false)
+      .waitForElementPresent('.notification-list', waitTime, true)
+      .getText('.notification-list', function (result) {
+        console.log("fonticon text", result);
+      })
       .waitForElementNotPresent('a[title="Delete document existing-doc-id-2"]', waitTime, true)
       .assert.elementNotPresent('a[title="Delete document existing-doc-id-2"]')
       .end();
