@@ -488,13 +488,13 @@ Documents.IndexCollection = PagingCollection.extend({
 
     if (params) {
       if (!_.isEmpty(params)) {
-        query = "?" + $.param(params);
+        query = $.param(params);
       } else {
         query = '';
       }
     } else if (this.params) {
       var parsedParam = Documents.QueryParams.stringify(this.params);
-      query = "?" + $.param(parsedParam);
+      query = $.param(parsedParam);
     }
 
     if (!context) {
@@ -506,7 +506,7 @@ Documents.IndexCollection = PagingCollection.extend({
         view = app.utils.safeURLName(this.view),
         url = FauxtonAPI.urls('view', context, database, design, view);
 
-    return url + query;
+    return (url.indexOf("?") > -1) ? url + "&" + query : url + "?" + query;
   },
 
   url: function () {
