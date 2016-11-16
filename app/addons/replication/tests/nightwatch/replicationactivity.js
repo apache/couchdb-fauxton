@@ -24,12 +24,13 @@ module.exports = {
       target: "http://target-db.com"
     };
     client
-      //.deleteDocument(replicatorDoc._id, '_replicator')
+      .deleteDatabase('_replicator')
+      .createDatabase('_replicator')
       .createDocument(replicatorDoc._id, '_replicator', replicatorDoc)
       .loginToGUI()
       .url(baseUrl + '/#replication')
       .waitForElementNotPresent('.load-lines', waitTime, true)
-      .waitForElementPresent('.replication__table-col', waitTime, true)
+      .waitForElementPresent('.replication__filter', waitTime, true)
       .click('a[title="Delete document existing-doc-id-2"]')
       .waitForElementPresent('.replication_delete-doc-modal', waitTime, true)
       .click('.replication_delete-doc-modal button.save')
