@@ -18,10 +18,12 @@ module.exports = {
         newDatabaseName = client.globals.testDatabaseName,
         baseUrl = client.globals.test_settings.launch_url;
 
+    const encodedDbName = encodeURIComponent(newDatabaseName);
+
     client
       .createDatabase(newDatabaseName)
       .loginToGUI()
-      .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
+      .url(baseUrl + '/#/database/' + encodedDbName + '/_all_docs')
       .clickWhenVisible('.faux-header__doc-header-dropdown-toggle')
       .clickWhenVisible('.faux-header__doc-header-dropdown-itemwrapper .fonticon-trash')
       .waitForElementVisible('.delete-db-modal', waitTime, false)
@@ -37,13 +39,15 @@ module.exports = {
         newDatabaseName = client.globals.testDatabaseName,
         baseUrl = client.globals.test_settings.launch_url;
 
+    const encodedDbName = encodeURIComponent(newDatabaseName);
+
     client
       .createDatabase(newDatabaseName)
       .loginToGUI()
       .url(baseUrl + '/#/_all_dbs/')
 
-      .waitForElementPresent('a[href="database/' + newDatabaseName + '/_all_docs"]', waitTime, false)
-      .assert.elementPresent('a[href="database/' + newDatabaseName + '/_all_docs"]')
+      .waitForElementPresent('a[href="database/' + encodedDbName + '/_all_docs"]', waitTime, false)
+      .assert.elementPresent('a[href="database/' + encodedDbName + '/_all_docs"]')
       .clickWhenVisible('[title="Delete ' + newDatabaseName + '"]', waitTime, false)
       .setValue('.delete-db-modal input[type="text"]', [newDatabaseName, client.Keys.ENTER])
       .waitForElementNotPresent('.global-notification .fonticon-cancel', waitTime, false)
