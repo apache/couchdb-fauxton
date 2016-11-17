@@ -21,15 +21,15 @@ module.exports = {
     client
       .populateDatabase(newDatabaseName)
       .loginToGUI()
-      .url(baseUrl + '/#/database/' + newDatabaseName + '/_find')
+      .url(baseUrl + '/#/database/' + encodeURIComponent(newDatabaseName) + '/_find')
       .clickWhenVisible('.control-toggle-api-url')
       .waitForElementVisible('.text-field-to-copy', waitTime, false)
-      .assert.valueContains('.text-field-to-copy', newDatabaseName + '/_find')
+      .assert.valueContains('.text-field-to-copy', encodeURIComponent(newDatabaseName) + '/_find')
       .clickWhenVisible('.edit-link')
       .waitForElementVisible('.prettyprint', waitTime, false)
       .clickWhenVisible('.control-toggle-api-url')
       .waitForElementVisible('.text-field-to-copy', waitTime, false)
-      .assert.valueContains('.text-field-to-copy', newDatabaseName + '/_index')
+      .assert.valueContains('.text-field-to-copy', encodeURIComponent(newDatabaseName) + '/_index')
       .end();
   }
 };

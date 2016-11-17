@@ -35,7 +35,7 @@ CreateDocument.prototype.command = function (documentName, databaseName, docCont
 
   request({
     method: 'POST',
-    uri: couchUrl + '/' + databaseName + '?w=3',
+    uri: couchUrl + '/' + encodeURIComponent(databaseName) + '?w=3',
     body: docContents,
     json: true
   }, (err, res, body) => {
@@ -48,7 +48,7 @@ CreateDocument.prototype.command = function (documentName, databaseName, docCont
       databaseName = helpers.testDatabaseName;
     }
 
-    const url = [couchUrl, databaseName, documentName].join('/');
+    const url = [couchUrl, encodeURIComponent(databaseName), documentName].join('/');
 
     checkForDocumentCreated(url, helpers.maxWaitTime, () => {
       this.emit('complete');

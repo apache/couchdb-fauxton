@@ -188,6 +188,8 @@ FauxtonAPI.registerUrls('mango', {
   },
 
   'index-app': function (db, query) {
+    db = encodeURIComponent(db);
+
     if (!query) {
       query = '';
     }
