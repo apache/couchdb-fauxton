@@ -128,6 +128,7 @@ FauxtonAPI.registerUrls('document', {
   },
 
   app: function (database, doc) {
+    database = encodeURIComponent(database);
     return '/database/' + database + '/' + doc;
   },
 

@@ -21,7 +21,7 @@ module.exports = {
 
     client
       .loginToGUI()
-      .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
+      .url(baseUrl + '/#/database/' + encodeURIComponent(newDatabaseName) + '/_all_docs')
       .waitForElementPresent('.two-sides-toggle-button', waitTime, false)
       .clickWhenVisible('#changes')
       .waitForElementPresent('.js-changes-view', waitTime, false)
@@ -37,7 +37,7 @@ module.exports = {
     client
       .loginToGUI()
       .createDocument('doc_1', newDatabaseName)
-      .url(baseUrl + '/#/database/' + newDatabaseName + '/_changes')
+      .url(baseUrl + '/#/database/' + encodeURIComponent(newDatabaseName) + '/_changes')
       .waitForElementPresent('.change-box[data-id="doc_1"]', waitTime, false)
 
       // confirm only the single result is now listed in the page
