@@ -38,11 +38,8 @@ module.exports = {
       .waitForElementPresent('.global-notification .fonticon-cancel', waitTime, false)
       .waitForElementNotPresent('.global-notification .fonticon-cancel', waitTime, false)
       .waitForElementNotPresent('.load-lines', waitTime, true)
-      .clickWhenVisible('#notification-center-btn', waitTime, false)
-      .waitForElementPresent('.notification-list', waitTime, true)
-      .getText('.notification-list', function (result) {
-        console.log("fonticon text", result);
-      })
+      .clickWhenVisible('.faux__refresh-link')
+      .waitForElementNotPresent('.load-lines', waitTime, true)
       .waitForElementNotPresent('a[title="Delete document existing-doc-id-2"]', waitTime, true)
       .assert.elementNotPresent('a[title="Delete document existing-doc-id-2"]')
       .end();
