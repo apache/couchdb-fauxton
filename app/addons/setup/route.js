@@ -10,14 +10,19 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+import React from 'react';
 import app from "../../app";
 import FauxtonAPI from "../../core/api";
 import Setup from "./resources";
 import SetupComponents from "./setup.react";
 import SetupActions from "./setup.actions";
 import ClusterActions from "../cluster/cluster.actions";
+import {OnePaneSimpleLayout} from '../components/layouts';
+
 var RouteObject = FauxtonAPI.RouteObject.extend({
-  layout: 'one_pane',
+  layout: 'empty',
+  hideApiBar: true,
+  hideNotificationCenter: true,
 
   roles: ['_admin'],
 
@@ -28,36 +33,56 @@ var RouteObject = FauxtonAPI.RouteObject.extend({
     'setup/multinode': 'setupMultiNode'
   },
 
-  crumbs: [
-    { 'name': 'Setup ' + app.i18n.en_US['couchdb-productname'] }
-  ],
-
-  apiUrl: function () {
-    return [this.setupModel.url('apiurl'), this.setupModel.documentation];
-  },
-
-  initialize: function () {
-    this.setupModel = new Setup.Model();
-  },
-
   setupInitView: function () {
+    const setup = new Setup.Model();
     ClusterActions.fetchNodes();
     SetupActions.getClusterStateFromCouch();
-    this.setComponent('#dashboard-content', SetupComponents.SetupFirstStepController);
+    this.setComponent('.template', OnePaneSimpleLayout, {
+      component: <SetupComponents.SetupFirstStepController/>,
+      endpoint: setup.url('apiurl'),
+      docURL: setup.documentation,
+      crumbs: [
+        { 'name': 'Setup ' + app.i18n.en_US['couchdb-productname'] }
+      ]
+    });
   },
 
   setupSingleNode: function () {
+    const setup = new Setup.Model();
     ClusterActions.fetchNodes();
-    this.setComponent('#dashboard-content', SetupComponents.SetupSingleNodeController);
+    this.setComponent('.template', OnePaneSimpleLayout, {
+      component: <SetupComponents.SetupSingleNodeController/>,
+      endpoint: setup.url('apiurl'),
+      docURL: setup.documentation,
+      crumbs: [
+        { 'name': 'Setup ' + app.i18n.en_US['couchdb-productname'] }
+      ]
+    });
   },
 
   setupMultiNode: function () {
+    const setup = new Setup.Model();
     ClusterActions.fetchNodes();
-    this.setComponent('#dashboard-content', SetupComponents.SetupMultipleNodesController);
+    this.setComponent('.template', OnePaneSimpleLayout, {
+      component: <SetupComponents.SetupMultipleNodesController/>,
+      endpoint: setup.url('apiurl'),
+      docURL: setup.documentation,
+      crumbs: [
+        { 'name': 'Setup ' + app.i18n.en_US['couchdb-productname'] }
+      ]
+    });
   },
 
   finishView: function () {
-    this.setComponent('#dashboard-content', SetupComponents.ClusterConfiguredScreen);
+    const setup = new Setup.Model();
+    this.setComponent('.template', OnePaneSimpleLayout, {
+      component: <SetupComponents.ClusterConfiguredScreen/>,
+      endpoint: setup.url('apiurl'),
+      docURL: setup.documentation,
+      crumbs: [
+        { 'name': 'Setup ' + app.i18n.en_US['couchdb-productname'] }
+      ]
+    });
   }
 });
 

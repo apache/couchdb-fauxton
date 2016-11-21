@@ -84,7 +84,32 @@ export const OnePaneContent = ({children}) => {
       <div id='dashboard-content' className='scrollable'>
         {children}
       </div>
-      <div id='footer'></div>
     </div>
+  );
+};
+
+export const OnePaneFooter = ({children}) => {
+  return (
+    <div className='faux__onepane-footer'>
+      {children}
+    </div>
+  );
+};
+
+export const OnePaneSimpleLayout = ({component, docUrl, endpoint, crumbs}) => {
+  return (
+    <OnePane>
+      <OnePaneHeader
+        crumbs={crumbs}
+        endpoint={endpoint}
+        docUrl={docUrl}
+      >
+      </OnePaneHeader>
+      <OnePaneContent>
+        {component}
+      </OnePaneContent>
+      <OnePaneFooter>
+      </OnePaneFooter>
+    </OnePane>
   );
 };

@@ -12,7 +12,20 @@
 
 import React from 'react';
 import FauxtonAPI from "../../core/api";
-import {OnePane, OnePaneHeader, OnePaneContent} from '../components/layouts';
+import {OnePane, OnePaneContent} from '../components/layouts';
+import {Breadcrumbs} from '../components/header-breadcrumbs';
+
+export const OnePaneHeader = ({crumbs}) => {
+  return (
+    <header>
+      <div className='flex-layout flex-row'>
+        <div id='breadcrumbs' className='flex-body'>
+          <Breadcrumbs crumbs={crumbs}/>
+        </div>
+      </div>
+    </header>
+  );
+};
 
 export const AuthLayout = ({crumbs, component}) => {
   return (

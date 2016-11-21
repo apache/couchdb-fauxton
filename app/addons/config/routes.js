@@ -22,7 +22,7 @@ import ConfigActions from "./actions";
 
 
 var ConfigDisabledRouteObject = FauxtonAPI.RouteObject.extend({
-  layout: 'one_pane',
+  layout: 'empty',
 
   routes: {
     '_config': 'checkNodes',

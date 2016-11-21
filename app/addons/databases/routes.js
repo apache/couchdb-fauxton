@@ -10,18 +10,18 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+import React from 'react';
 import app from "../../app";
 import FauxtonAPI from "../../core/api";
 import Actions from "./actions";
 import Components from "./components.react";
 import Databases from "./resources";
+import Layout from './layout';
 
 const AllDbsRouteObject = FauxtonAPI.RouteObject.extend({
-  layout: 'one_pane',
-
-  crumbs: [
-    {"name": "Databases"}
-  ],
+  layout: 'empty',
+  hideApiBar: true,
+  hideNotificationCenter: true,
 
   routes: {
     "": "allDatabases",
@@ -33,20 +33,9 @@ const AllDbsRouteObject = FauxtonAPI.RouteObject.extend({
 
   selectedHeader: "Databases",
 
-  initialize: function () {},
-
   allDatabases: function () {
     Actions.init();
-    this.setComponent("#right-header", Components.RightDatabasesHeader);
-    this.setComponent("#dashboard-content", Components.DatabasesController);
-    this.setComponent("#footer", Components.DatabasePagination);
-  },
-
-  apiUrl: function () {
-    return [
-      FauxtonAPI.urls('allDBs', 'apiurl'),
-      FauxtonAPI.constants.DOC_URLS.ALL_DBS
-    ];
+    this.setComponent('.template', Layout);
   }
 });
 Databases.RouteObjects = [AllDbsRouteObject];

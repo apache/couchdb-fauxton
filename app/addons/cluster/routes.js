@@ -11,34 +11,38 @@
 // the License.
 
 import app from "../../app";
+import React from 'react';
 import FauxtonAPI from "../../core/api";
 import Cluster from "./resources";
 import ClusterComponents from "./cluster.react";
 import ClusterActions from "./cluster.actions";
+import {OnePaneSimpleLayout} from '../components/layouts';
 
 
 var ConfigDisabledRouteObject = FauxtonAPI.RouteObject.extend({
-  layout: 'one_pane',
+  layout: 'empty',
+  hideApiBar: true,
+  hideNotificationCenter: true,
 
   routes: {
     'cluster/disabled': 'showDisabledFeatureScreen'
   },
 
-  crumbs: [
-    { name: 'Config disabled' }
-  ],
-
   apiUrl: function () {
     return [this.memberships.url('apiurl'), this.memberships.documentation];
   },
 
-  initialize: function () {
-    this.memberships = new Cluster.ClusterNodes();
-  },
-
   showDisabledFeatureScreen: function () {
+    const memberships = new Cluster.ClusterNodes();
     ClusterActions.fetchNodes();
-    this.warning = this.setComponent('#dashboard-content', ClusterComponents.DisabledConfigController);
+    this.setComponent('.template', OnePaneSimpleLayout, {
+      component: <ClusterComponents.DisabledConfigController/>,
+      endpoint: memberships.url('apiurl'),
+      docURL: memberships.documentation,
+      crumbs: [
+        { name: 'Config disabled' }
+      ]
+    });
   }
 });
 

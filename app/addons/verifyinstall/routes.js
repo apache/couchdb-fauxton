@@ -10,14 +10,18 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+import React from 'react';
 import app from "../../app";
 import FauxtonAPI from "../../core/api";
 import VerifyInstall from "./resources";
 import Actions from "./actions";
 import Components from "./components.react";
+import {OnePaneSimpleLayout} from '../components/layouts';
 
-var VerifyRouteObject = FauxtonAPI.RouteObject.extend({
-  layout: 'one_pane',
+const VerifyRouteObject = FauxtonAPI.RouteObject.extend({
+  layout: 'empty',
+  hideApiBar: true,
+  hideNotificationCenter: true,
 
   routes: {
     'verifyinstall': 'verifyInstall'
@@ -27,9 +31,13 @@ var VerifyRouteObject = FauxtonAPI.RouteObject.extend({
   verifyInstall: function () {
     Actions.resetStore();
     this.setComponent('#dashboard-content', Components.VerifyInstallController);
-  },
-
-  crumbs: [{name: 'Verify CouchDB Installation'}]
+    this.setComponent('.template', OnePaneSimpleLayout, {
+      component: <Components.VerifyInstallController/>,
+      crumbs: [
+        {name: 'Verify CouchDB Installation'}
+      ]
+    });
+  }
 });
 
 VerifyInstall.RouteObjects = [VerifyRouteObject];

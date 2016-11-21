@@ -22,8 +22,8 @@ module.exports = {
       .loginToGUI()
 
       // wait for the footer bar to appear (not strictly necessary, but ensures it shows up)
-      .waitForElementPresent('#footer .pagination-footer', waitTime, false)
-      .getCssProperty('#footer', 'bottom', function (result) {
+      .waitForElementPresent('.faux__onepane-footer .pagination-footer', waitTime, false)
+      .getCssProperty('.faux__onepane-footer', 'bottom', function (result) {
         this.assert.equal(result.value, '0px');
       })
       // wait for the DB name typeahead field to appear in the header
