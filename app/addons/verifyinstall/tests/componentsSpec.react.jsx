@@ -108,14 +108,6 @@ describe('VerifyInstallButton', function () {
     assert.ok(spy.calledOnce);
   });
 
-  it('does not call verify function when verification already ongoing', function () {
-    var stub = { func: function () { } };
-    var spy = sinon.spy(stub, 'func');
-    el = TestUtils.renderIntoDocument(<Components.VerifyInstallButton verify={stub.func} isVerifying={true} />, container);
-    TestUtils.Simulate.click($(ReactDOM.findDOMNode(el))[0]);
-    assert.notOk(spy.calledOnce);
-  });
-
   it('shows appropriate default label', function () {
     var stub = { func: function () { } };
     el = TestUtils.renderIntoDocument(<Components.VerifyInstallButton verify={stub.func} isVerifying={false} />, container);
