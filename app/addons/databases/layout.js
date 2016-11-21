@@ -35,5 +35,4 @@ export const Layout = () => {
     </OnePane>
   );
 };
-
 export default Layout;
