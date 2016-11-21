@@ -506,7 +506,7 @@ Documents.IndexCollection = PagingCollection.extend({
         view = app.utils.safeURLName(this.view),
         url = FauxtonAPI.urls('view', context, database, design, view);
 
-    return (url.indexOf("?") > -1) ? url + "&" + query : url + "?" + query;
+    return (url.indexOf("?") > -1) ? `${url}&${query}` : `${url}?${query}`;
   },
 
   url: function () {

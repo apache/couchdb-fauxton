@@ -486,8 +486,12 @@ describe('IndexCollection', function () {
     });
   });
 
-  it('creates the right url with correct params when trailing question mark', function () {
+  it('creates the right url with correct params when trailing question mark', () => {
     assert.ok(/\?bogusParam=foo&limit=20&reduce=false/.test(collection.urlRef('testWithTrailingQuestion')));
+  });
+
+  it('creates the right url with correct params without trailing question mark', () => {
+    assert.ok(/\?limit=20&reduce=false/.test(collection.urlRef()));
   });
 
 });
