@@ -20,7 +20,7 @@ define([
 function (app, FauxtonAPI, {%= name %}, Components) {
 
   var {%= name.substr(0, 1).toUpperCase() + name.substr(1)%}RouteObject = FauxtonAPI.RouteObject.extend({
-    layout: 'one_pane',
+    layout: 'empty',
     roles: [],
     routes: {
       'example/{%= name %}': 'helloWorld'

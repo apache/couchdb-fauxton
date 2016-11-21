@@ -16,7 +16,7 @@
 // with conflicts for the zebra doc
 
 
-const url = 'http://localhost:5984/';
+const url = 'http://tester:testerpass@localhost:5984/';
 
 createAnimalDb = require('../test/create-animal-db.js');
 
