@@ -28,6 +28,7 @@ module.exports = {
       .createDatabase('_replicator')
       .createDocument(replicatorDoc._id, '_replicator', replicatorDoc)
       .loginToGUI()
+      .waitForElementNotPresent('.global-notification .fonticon-cancel', waitTime, false)
       .url(baseUrl + '/#replication')
       .waitForElementNotPresent('.load-lines', waitTime, true)
       .waitForElementPresent('.replication__filter', waitTime, true)
