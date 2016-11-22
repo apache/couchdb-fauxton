@@ -17,7 +17,7 @@ import Auth from "./resources";
 import AuthActions from "./actions";
 import Components from "./components.react";
 import ClusterActions from "../cluster/cluster.actions";
-import {OnePaneSimpleLayout} from '../components/layouts';
+import Layout from './layout';
 
 const {LoginForm, CreateAdminForm} = Components;
 
@@ -40,7 +40,7 @@ var AuthRouteObject = FauxtonAPI.RouteObject.extend({
 
   login: function () {
     const crumbs = [{ name: 'Log In to CouchDB' }];
-    this.setComponent(".template", OnePaneSimpleLayout, {
+    this.setComponent(".template", Layout, {
       crumbs: crumbs,
       component: <LoginForm urlBack={app.getParams().urlback } />
     });
@@ -56,7 +56,7 @@ var AuthRouteObject = FauxtonAPI.RouteObject.extend({
   createAdminForNode: function () {
     ClusterActions.fetchNodes();
     const crumbs = [{ name: 'Create Admin' }];
-    this.setComponent(".template", OnePaneSimpleLayout, {
+    this.setComponent(".template", Layout, {
       crumbs: crumbs,
       component: <CreateAdminForm loginAfter={true} />
     });
