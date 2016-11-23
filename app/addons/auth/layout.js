@@ -14,6 +14,9 @@ import React from 'react';
 import FauxtonAPI from "../../core/api";
 import {OnePane, OnePaneContent} from '../components/layouts';
 import {Breadcrumbs} from '../components/header-breadcrumbs';
+import Components from "./components.react";
+
+const { CreateAdminForm, ChangePasswordForm } = Components;
 
 export const OnePaneHeader = ({crumbs}) => {
   return (
@@ -39,6 +42,28 @@ export const AuthLayout = ({crumbs, component}) => {
       </OnePaneContent>
     </OnePane>
   );
+};
+
+export const AdminLayout = ({crumbs, changePassword, component}) => {
+  let content = changePassword ? <ChangePasswordForm /> : <CreateAdminForm loginAfter={false} />;
+  return (
+    <div id="dashboard" className="template-with-sidebar flex-layout flex-col">
+      <OnePaneHeader
+        crumbs={crumbs}
+      >
+      </OnePaneHeader>
+      <div className="template-content flex-body flex-layout flex-row">
+        <div id="sidebar-content">
+          <Components.CreateAdminSidebar />
+        </div>
+        <div id="dashboard-content" className="flex-body">
+          {content}
+        </div>
+      </div>
+    </div>
+
+  );
+
 };
 
 export default AuthLayout;

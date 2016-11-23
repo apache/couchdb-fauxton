@@ -18,11 +18,11 @@ export default {
   fetchNodes: function () {
     var memberships = new ClusterResources.ClusterNodes();
 
-    memberships.fetch().then(function () {
+    memberships.fetch().then(() => {
       this.updateNodes({
         nodes: memberships.get('nodes_mapped')
       });
-    }.bind(this));
+    });
   },
 
   updateNodes: function (options) {

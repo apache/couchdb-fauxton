@@ -17,7 +17,7 @@ import Auth from "./resources";
 import AuthActions from "./actions";
 import Components from "./components.react";
 import ClusterActions from "../cluster/cluster.actions";
-import Layout from './layout';
+import {AuthLayout, AdminLayout} from './layout';
 
 const {LoginForm, CreateAdminForm} = Components;
 
@@ -40,7 +40,7 @@ var AuthRouteObject = FauxtonAPI.RouteObject.extend({
 
   login: function () {
     const crumbs = [{ name: 'Log In to CouchDB' }];
-    this.setComponent(".template", Layout, {
+    this.setComponent(".template", AuthLayout, {
       crumbs: crumbs,
       component: <LoginForm urlBack={app.getParams().urlback } />
     });
@@ -56,7 +56,7 @@ var AuthRouteObject = FauxtonAPI.RouteObject.extend({
   createAdminForNode: function () {
     ClusterActions.fetchNodes();
     const crumbs = [{ name: 'Create Admin' }];
-    this.setComponent(".template", Layout, {
+    this.setComponent(".template", AuthLayout, {
       crumbs: crumbs,
       component: <CreateAdminForm loginAfter={true} />
     });
@@ -65,7 +65,9 @@ var AuthRouteObject = FauxtonAPI.RouteObject.extend({
 
 
 var UserRouteObject = FauxtonAPI.RouteObject.extend({
-  layout: 'with_sidebar',
+  layout: 'empty',
+  hideNotificationCenter: true,
+  hideApiBar: true,
 
   routes: {
     'changePassword': {
@@ -98,23 +100,24 @@ var UserRouteObject = FauxtonAPI.RouteObject.extend({
     return FauxtonAPI.session.user().name;
   },
 
-  initialize: function () {
-    this.setComponent('#sidebar-content', Components.CreateAdminSidebar);
-  },
-
   changePassword: function () {
     ClusterActions.fetchNodes();
     AuthActions.selectPage('changePassword');
-    this.setComponent('#dashboard-content', Components.ChangePasswordForm);
+    this.setComponent(".template", AdminLayout, {
+      crumbs: [{name: 'User Management'}],
+      changePassword: true
+    });
   },
 
   addAdmin: function () {
     ClusterActions.fetchNodes();
     AuthActions.selectPage('addAdmin');
-    this.setComponent('#dashboard-content', Components.CreateAdminForm, { loginAfter: false });
+    this.setComponent(".template", AdminLayout, {
+      crumbs: [{name: 'User Management'}],
+      changePassword: false
+    });
   },
 
-  crumbs: [{name: 'User Management'}]
 });
 
 Auth.RouteObjects = [AuthRouteObject, UserRouteObject];
