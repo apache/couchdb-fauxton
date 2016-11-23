@@ -28,9 +28,12 @@ import MangoStores from "./mango/mango.stores";
 import IndexResultsComponents from "./index-results/index-results.components.react";
 import SidebarActions from "./sidebar/actions";
 import RightAllDocsHeader from './components/header-docs-right';
+import {MangoLayout} from './mangolayout';
 
 const MangoIndexEditorAndQueryEditor = FauxtonAPI.RouteObject.extend({
-  layout: 'two_pane',
+  layout: 'empty',
+  hideApiBar: true,
+  hideNotificationCenter: true,
   routes: {
     'database/:database/_index': {
       route: 'createIndex',
@@ -69,8 +72,6 @@ const MangoIndexEditorAndQueryEditor = FauxtonAPI.RouteObject.extend({
     });
 
     SidebarActions.selectNavItem('mango-query');
-    this.setComponent('#react-headerbar', ReactHeader.BulkDocumentHeaderController, {showIncludeAllDocs: false});
-    this.setComponent('#footer', ReactPagination.Footer);
 
     IndexResultsActions.newMangoResultsList({
       collection: mangoResultCollection,
@@ -82,25 +83,22 @@ const MangoIndexEditorAndQueryEditor = FauxtonAPI.RouteObject.extend({
       indexList: mangoIndexList
     });
 
-    this.setComponent('#left-content', MangoComponents.MangoQueryEditorController, {
-      description: app.i18n.en_US['mango-descripton'],
-      editorTitle: app.i18n.en_US['mango-title-editor'],
-      additionalIndexesText: app.i18n.en_US['mango-additional-indexes-heading']
-    });
-    this.setComponent('#dashboard-lower-content', IndexResultsComponents.List);
-
-    this.apiUrl = function () {
-      return [mangoResultCollection.urlRef('query-apiurl', ''), FauxtonAPI.constants.DOC_URLS.MANGO_SEARCH];
-    };
-
     const url = FauxtonAPI.urls(
       'allDocs', 'app', this.database.safeID(), '?limit=' + FauxtonAPI.constants.DATABASES.DOCUMENT_LIMIT
     );
 
-    this.crumbs = [
+    const crumbs = [
       {name: database, link: url},
       {name: app.i18n.en_US['mango-title-editor']}
     ];
+
+    this.setComponent('.template', MangoLayout, {
+      showIncludeAllDocs: false,
+      crumbs: crumbs,
+      docURL: FauxtonAPI.constants.DOC_URLS.MANGO_SEARCH,
+      endpoint: mangoResultCollection.urlRef('query-apiurl', ''),
+      edit: false
+    });
   },
 
   createIndex: function (database) {
@@ -118,26 +116,22 @@ const MangoIndexEditorAndQueryEditor = FauxtonAPI.RouteObject.extend({
       typeOfIndex: 'mango'
     });
 
-    this.setComponent('#react-headerbar', ReactHeader.BulkDocumentHeaderController, {showIncludeAllDocs: false});
-    this.setComponent('#footer', ReactPagination.Footer);
-
-    this.setComponent('#dashboard-lower-content', IndexResultsComponents.List);
-    this.setComponent('#left-content', MangoComponents.MangoIndexEditorController, {
-      description: app.i18n.en_US['mango-descripton-index-editor']
-    });
-
-    this.apiUrl = function () {
-      return [mangoIndexCollection.urlRef('index-apiurl', ''), FauxtonAPI.constants.DOC_URLS.MANGO_INDEX];
-    };
-
     const url = FauxtonAPI.urls(
       'allDocs', 'app', this.database.safeID(), '?limit=' + FauxtonAPI.constants.DATABASES.DOCUMENT_LIMIT
     );
 
-    this.crumbs = [
+    const crumbs = [
       {name: database, link: url},
       {name: app.i18n.en_US['mango-indexeditor-title']}
     ];
+
+    this.setComponent('.template', MangoLayout, {
+      showIncludeAllDocs: false,
+      crumbs: crumbs,
+      docURL: FauxtonAPI.constants.DOC_URLS.MANGO_INDEX,
+      endpoint: mangoIndexCollection.urlRef('index-apiurl', ''),
+      edit: true
+    });
   }
 });
 
