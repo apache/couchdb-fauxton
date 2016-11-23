@@ -10,6 +10,7 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+import React from 'react';
 import app from "../../app";
 import FauxtonAPI from "../../core/api";
 import Helpers from "./helpers";
@@ -19,10 +20,13 @@ import Actions from "./doc-editor/actions";
 import ReactComponents from "./doc-editor/components.react";
 import RevBrowserActions from "./rev-browser/rev-browser.actions";
 import RevBrowserComponents from "./rev-browser/rev-browser.components.react";
+import {DocEditorLayout} from '../components/layouts';
 
 
 const DocEditorRouteObject = FauxtonAPI.RouteObject.extend({
-  layout: 'doc_editor',
+  layout: 'empty',
+  hideApiBar: true,
+  hideNotificationCenter: true,
   selectedHeader: 'Databases',
 
   roles: ['fx_loggedIn'],
@@ -42,26 +46,30 @@ const DocEditorRouteObject = FauxtonAPI.RouteObject.extend({
     'database/:database/new': 'codeEditor'
   },
 
-  crumbs: function () {},
 
   revisionBrowser: function (databaseName, docId) {
     const backLink = FauxtonAPI.urls('allDocs', 'app', FauxtonAPI.url.encode(this.database.safeID()));
-    const docUrl = FauxtonAPI.urls('document', 'app', this.database.safeID(), this.docId);
+    const docURL = FauxtonAPI.urls('document', 'app', this.database.safeID(), this.docId);
 
-    this.crumbs = [
+    const crumbs = [
       { name: this.database.safeID(), link: backLink },
       { name: this.docId + ' > Conflicts' }
     ];
 
     RevBrowserActions.showConfirmModal(false, null);
     RevBrowserActions.initDiffEditor(databaseName, docId);
-    this.setComponent('#dashboard-content', RevBrowserComponents.DiffyController);
+    this.setComponent(".template", DocEditorLayout, {
+      crumbs,
+      endpoint: this.doc.url('apiurl'),
+      docURL,
+      component: <RevBrowserComponents.DiffyController />
+    });
   },
 
   codeEditor: function (databaseName, docId) {
     const backLink = FauxtonAPI.urls('allDocs', 'app', FauxtonAPI.url.encode(databaseName));
 
-    this.crumbs =  [
+    const crumbs =  [
       { name: databaseName, link: backLink },
       { name: docId ? docId : 'New Document' }
     ];
@@ -73,18 +81,19 @@ const DocEditorRouteObject = FauxtonAPI.RouteObject.extend({
     }
 
     Actions.initDocEditor({ doc: this.doc, database: this.database });
-    this.setComponent('#dashboard-content', ReactComponents.DocEditorController, {
-      database: this.database,
-      isNewDoc: docId ? false : true
+    this.setComponent(".template", DocEditorLayout, {
+      crumbs,
+      endpoint: this.doc.url('apiurl'),
+      docURL: this.doc.documentation(),
+      component: <ReactComponents.DocEditorController
+        database={this.database}
+        isNewDoc={docId ? false : true}
+      />
     });
   },
 
   showDesignDoc: function (database, ddoc) {
     this.codeEditor(database, '_design/' + ddoc);
-  },
-
-  apiUrl: function () {
-    return [this.doc.url('apiurl'), this.doc.documentation()];
   }
 });
 

@@ -113,3 +113,27 @@ export const OnePaneSimpleLayout = ({component, docUrl, endpoint, crumbs}) => {
     </OnePane>
   );
 };
+
+export const DocEditorContent = ({children}) => {
+  return (
+    <div id="dashboard-content">
+      {children}
+    </div>
+  );
+};
+
+export const DocEditorLayout = ({component, docUrl, endpoint, crumbs}) => {
+  return (
+    <div id="dashboard" className="one-pane doc-editor-page">
+        <OnePaneHeader
+          crumbs={crumbs}
+          endpoint={endpoint}
+          docUrl={docUrl}
+        >
+        </OnePaneHeader>
+      <DocEditorContent>
+        {component}
+      </DocEditorContent>
+    </div>
+  );
+};
