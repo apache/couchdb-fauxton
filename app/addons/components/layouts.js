@@ -17,7 +17,7 @@ import {ApiBarController} from './components/apibar';
 import {Breadcrumbs} from './header-breadcrumbs';
 import ComponentActions from './actions';
 
-const ApiBarWrapper = ({docURL, endpoint}) => {
+export const ApiBarWrapper = ({docURL, endpoint}) => {
   //TODO once all modules are using this remove actions and make them props
   setTimeout(() => {
     ComponentActions.updateAPIBar({
