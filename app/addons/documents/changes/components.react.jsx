@@ -323,20 +323,18 @@ ChangeRow.PropTypes = {
 };
 
 
-class ChangeID extends React.Component {
-  render () {
-    const { deleted, id, databaseName } = this.props;
-    if (deleted) {
-      return (
-        <span className="js-doc-id">{id}</span>
-      );
-    }
-    const link = '#' + FauxtonAPI.urls('document', 'app', databaseName, id);
+const ChangeID = ({ deleted, id, databaseName }) => {
+  if (deleted) {
     return (
-      <a href={link} className="js-doc-link">{id}</a>
+      <span className="js-doc-id">{id}</span>
     );
   }
-}
+
+  const link = '#' + FauxtonAPI.urls('document', 'app', databaseName, id);
+  return (
+    <a href={link} className="js-doc-link">{id}</a>
+  );
+};
 
 
 export default {

@@ -12,6 +12,7 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
+import app from '../../app';
 
 export const Breadcrumbs = ({crumbs}) => {
 
@@ -48,7 +49,7 @@ function getChildren (crumbs) {
     if (c.link) {
       res = [
         <CrumbElement key={i}>
-          <a className="faux-header__breadcrumbs-link" href={c.link}>{c.name}</a>
+          <a className="faux-header__breadcrumbs-link" href={app.utils.safeURLName(c.link)}>{c.name}</a>
         </CrumbElement>
       ];
     }

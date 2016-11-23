@@ -60,11 +60,13 @@ var MainSidebar = React.createClass({
   },
 
   render: function () {
+    const dbNameEncoded = app.utils.safeURLName(this.props.databaseName);
+
     var docLinks = this.buildDocLinks();
-    var changesUrl     = '#' + FauxtonAPI.urls('changes', 'app', this.props.databaseName, '');
-    var permissionsUrl = '#' + FauxtonAPI.urls('permissions', 'app', this.props.databaseName);
-    var databaseUrl    = FauxtonAPI.urls('allDocs', 'app', this.props.databaseName, '');
-    var mangoQueryUrl  = FauxtonAPI.urls('mango', 'query-app', this.props.databaseName);
+    var changesUrl     = '#' + FauxtonAPI.urls('changes', 'app', dbNameEncoded, '');
+    var permissionsUrl = '#' + FauxtonAPI.urls('permissions', 'app', dbNameEncoded);
+    var databaseUrl    = FauxtonAPI.urls('allDocs', 'app', dbNameEncoded, '');
+    var mangoQueryUrl  = FauxtonAPI.urls('mango', 'query-app', dbNameEncoded);
     var runQueryWithMangoText = app.i18n.en_US['run-query-with-mango'];
     var buttonLinks = this.getNewButtonLinks();
 

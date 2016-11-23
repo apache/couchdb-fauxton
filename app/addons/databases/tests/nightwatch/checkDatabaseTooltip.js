@@ -19,6 +19,8 @@ module.exports = {
         newDocumentName = 'TemporaryDoc',
         baseUrl = client.globals.test_settings.launch_url;
 
+    const encodedDbName = encodeURIComponent(newDatabaseName);
+
     client
       // use nano to quickly set up a DB with a single doc
       .deleteDatabase(newDatabaseName)
@@ -28,8 +30,8 @@ module.exports = {
       .loginToGUI()
 
       // delete the document manually. This'll ensure the database page has at least one "!" icon
-      .waitForElementPresent('#dashboard-content a[href="database/' + newDatabaseName + '/_all_docs"]', waitTime, false)
-      .click('#dashboard-content a[href="database/' + newDatabaseName + '/_all_docs"]')
+      .clickWhenVisible('#dashboard-content a[href="database/' + encodedDbName + '/_all_docs"]')
+
 
       //this opens the alternative header
       .clickWhenVisible('.bulk-action-component-panel input[type="checkbox"]')
@@ -37,7 +39,7 @@ module.exports = {
       .acceptAlert()
       .waitForElementVisible('#global-notifications .alert.alert-info', waitTime, false)
 
-      .checkForStringPresent(newDatabaseName, '"doc_del_count":1')
+      .checkForStringPresent(encodedDbName, '"doc_del_count":1')
 
       .clickWhenVisible('#nav-links a[href="#/_all_dbs"]')
       // now let's look at the actual UI to confirm the tooltip appears
