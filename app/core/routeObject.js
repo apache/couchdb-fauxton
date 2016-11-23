@@ -72,7 +72,7 @@ _.extend(RouteObject.prototype, Backbone.Events, {
   routes: {},
   events: {},
   crumbs: [],
-  layout: "with_sidebar",
+  layout: "empty",
   apiUrl: null,
   hideNotificationPanel: null,
   loaderClassname: 'loader',
