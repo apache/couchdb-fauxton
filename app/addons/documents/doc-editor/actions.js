@@ -53,7 +53,7 @@ function saveDoc (doc, isValidDoc, onSave) {
 
     doc.save().then(function () {
       onSave(doc.prettyJSON());
-      FauxtonAPI.navigate('#' + FauxtonAPI.urls('allDocs', 'app', doc.database.id), {trigger: true});
+      FauxtonAPI.navigate('#/' + FauxtonAPI.urls('allDocs', 'app', encodeURIComponent(doc.database.id)), {trigger: true});
     }).fail(function (xhr) {
       FauxtonAPI.addNotification({
         msg: 'Save failed: ' + JSON.parse(xhr.responseText).reason,

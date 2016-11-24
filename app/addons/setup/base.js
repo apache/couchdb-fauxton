@@ -17,7 +17,7 @@ import "./assets/less/setup.less";
 Setup.initialize = function () {
   FauxtonAPI.addHeaderLink({
     title: 'Setup',
-    href: "#setup",
+    href: "#/setup",
     icon: 'fonticon-wrench'
   });
 };

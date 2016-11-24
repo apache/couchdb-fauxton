@@ -68,14 +68,14 @@ export const APIBar = React.createClass({
           <FauxtonComponents.ClipboardWithTextField
             onClipBoardClick={this.showCopiedMessage}
             text="Copy URL"
-            textToCopy={this.props.endpoint}
+            textToCopy={decodeURIComponent(this.props.endpoint)}
             showCopyIcon={false}
             uniqueKey="clipboard-apiurl" />
 
           <div className="add-on">
             <a
               data-bypass="true"
-              href={this.props.endpoint}
+              href={decodeURIComponent(this.props.endpoint)}
               target="_blank"
               className="btn"
             >

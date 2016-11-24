@@ -45,7 +45,7 @@ const DocEditorRouteObject = FauxtonAPI.RouteObject.extend({
   crumbs: function () {},
 
   revisionBrowser: function (databaseName, docId) {
-    const backLink = FauxtonAPI.urls('allDocs', 'app', this.database.safeID());
+    const backLink = FauxtonAPI.urls('allDocs', 'app', encodeURIComponent(this.database.safeID()));
     const docUrl = FauxtonAPI.urls('document', 'app', this.database.safeID(), this.docId);
 
     this.crumbs = [
@@ -59,7 +59,7 @@ const DocEditorRouteObject = FauxtonAPI.RouteObject.extend({
   },
 
   codeEditor: function (databaseName, docId) {
-    const backLink = FauxtonAPI.urls('allDocs', 'app', databaseName);
+    const backLink = FauxtonAPI.urls('allDocs', 'app', encodeURIComponent(databaseName));
 
     this.crumbs =  [
       { name: databaseName, link: backLink },

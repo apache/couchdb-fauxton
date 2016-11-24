@@ -20,7 +20,7 @@ Documentation.initialize = function () {
     id: 'Documentation',
     title: 'Documentation',
     icon: 'fonticon-bookmark',
-    href: '/documentation',
+    href: '#/documentation',
     bottomNav: true,
     top: true
   });
