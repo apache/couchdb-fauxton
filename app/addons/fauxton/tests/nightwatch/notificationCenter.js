@@ -18,10 +18,10 @@ module.exports = {
         baseUrl = client.globals.test_settings.launch_url;
 
     client
-      .url(baseUrl + '/#login')
+      .url(baseUrl + '/#/login')
 
       // confirm the btn doesn't appear on the login screen
-      .waitForElementPresent('a[href="#login"]', waitTime, false)
+      .waitForElementPresent('a[href="#/login"]', waitTime, false)
       .waitForElementNotPresent('#notification-center-btn div.fonticon-bell', waitTime, false)
 
       .loginToGUI()

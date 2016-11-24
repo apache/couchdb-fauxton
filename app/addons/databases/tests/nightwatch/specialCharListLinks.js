@@ -18,16 +18,15 @@ const testDatabases = [
   't/t-//t_f'
 ];
 
-const tests = {};
-
-testDatabases.forEach((db) => {
-  return tests[`Db List works with special chars ${db}`] = createTest(db);
-});
+const tests = testDatabases.reduce((tests, db) => {
+  tests[`Db List works with special chars ${db}`] = createTest(db);
+  return tests;
+}, {});
 
 module.exports = tests;
 
 function createTest (db) {
-  return function (client) {
+  return (client) => {
 
     const waitTime = client.globals.maxWaitTime;
     const baseUrl = client.globals.test_settings.launch_url;

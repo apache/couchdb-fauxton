@@ -71,7 +71,7 @@ const HeaderDocsLeft = ({dbName}) => {
 
   return (
     <div className="faux-header__doc-header-left">
-      <button type="button" className="faux-header__doc-header-backlink" onClick={() => { FauxtonAPI.navigate('#_all_dbs'); }}>
+      <button type="button" className="faux-header__doc-header-backlink" onClick={() => { FauxtonAPI.navigate('#/_all_dbs'); }}>
         <i className="faux-header__doc-header-backlink__icon fonticon fonticon-left-open" />
       </button>
       <div className="faux-header__doc-header-title flex-fill" title={dbName}>

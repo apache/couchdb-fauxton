@@ -67,6 +67,17 @@ FauxtonAPI.registerUrls = function (namespace, urls) {
   urlPaths[namespace] = urls;
 };
 
+FauxtonAPI.url = {
+  encode(name = "") {
+    // These special caracters are allowed by couch: _, $, (, ), +, -, and /
+    // From them only $ + and / are to be escaped in a URI component.
+    return (/[$+/]/g.test(name)) ? encodeURIComponent(name) : name;
+  },
+  decode(name = "") {
+    return (/[$+/]/g.test(name)) ? decodeURIComponent(name) : name;
+  }
+};
+
 //This is a little rough and needs some improvement. But the basic concept is there
 FauxtonAPI.urls = function (name, context) {
   var interceptors = FauxtonAPI.getExtensions('urls:interceptors');

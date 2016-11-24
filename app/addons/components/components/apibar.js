@@ -56,7 +56,7 @@ export const APIBar = React.createClass({
     if (!this.props.contentVisible) {
       return null;
     }
-
+    let endpoint = FauxtonAPI.url.decode(this.props.endpoint);
     return (
       <TrayContents className="tray show-tray api-bar-tray">
         <div className="input-prepend input-append">
@@ -68,14 +68,14 @@ export const APIBar = React.createClass({
           <FauxtonComponents.ClipboardWithTextField
             onClipBoardClick={this.showCopiedMessage}
             text="Copy URL"
-            textToCopy={this.props.endpoint}
+            textToCopy={endpoint}
             showCopyIcon={false}
             uniqueKey="clipboard-apiurl" />
 
           <div className="add-on">
             <a
               data-bypass="true"
-              href={this.props.endpoint}
+              href={endpoint}
               target="_blank"
               className="btn"
             >

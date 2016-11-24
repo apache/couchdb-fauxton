@@ -22,9 +22,9 @@ function LoginToGui (user, pw) {
   const password = pw || client.globals.test_settings.password;
 
   client
-    .url(baseUrl + '/#login')
-    .waitForElementPresent('a[href="#login"]', waitTime, false)
-    .click('a[href="#login"]')
+    .url(baseUrl + '/#/login')
+    .waitForElementPresent('a[href="#/login"]', waitTime, false)
+    .click('a[href="#/login"]')
     .waitForElementVisible('.couch-login-wrapper', waitTime, false)
     .waitForElementVisible('#username', waitTime, false)
     .setValue('.couch-login-wrapper #username', [username])

@@ -17,7 +17,7 @@ import "./assets/less/config.less";
 Config.initialize = function () {
   FauxtonAPI.addHeaderLink({
     title: 'Configuration',
-    href: '#_config',
+    href: '#/_config',
     icon: 'fonticon-cog',
     className: 'config'
   });

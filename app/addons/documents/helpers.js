@@ -23,7 +23,7 @@ function getSeqNum (val) {
 
 function getNewButtonLinks (databaseName) {
   var addLinks = FauxtonAPI.getExtensions('sidebar:links');
-  var newUrlPrefix = '#' + FauxtonAPI.urls('databaseBaseURL', 'app', databaseName);
+  var newUrlPrefix = '#' + FauxtonAPI.urls('databaseBaseURL', 'app', FauxtonAPI.url.encode(databaseName));
 
   var addNewLinks = _.reduce(addLinks, function (menuLinks, link) {
     menuLinks.push({
@@ -50,7 +50,7 @@ function getNewButtonLinks (databaseName) {
 }
 
 function getMangoLink (databaseName) {
-  var newUrlPrefix = '#' + FauxtonAPI.urls('databaseBaseURL', 'app', databaseName);
+  var newUrlPrefix = '#' + FauxtonAPI.urls('databaseBaseURL', 'app', FauxtonAPI.url.encode(databaseName));
 
   return {
     title: app.i18n.en_US['new-mango-index'],
