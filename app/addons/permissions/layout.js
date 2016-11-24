@@ -1,0 +1,42 @@
+// Licensed under the Apache License, Version 2.0 (the "License"); you may not
+// use this file except in compliance with the License. You may obtain a copy of
+// the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+// WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+// License for the specific language governing permissions and limitations under
+// the License.
+
+import React from 'react';
+import FauxtonAPI from "../../core/api";
+import {TabsSidebarHeader} from '../documents/layouts';
+import Permissions from "./components.react";
+import SidebarComponents from "../documents/sidebar/sidebar.react";
+
+export const PermissionsLayout = ({docURL, database, endpoint, dbName, dropDownLinks}) => {
+  return (
+    <div id="dashboard" className="with-sidebar">
+      <TabsSidebarHeader
+        hideHeaderBar={true}
+        docURL={docURL}
+        endpoint={endpoint}
+        dbName={dbName}
+        dropDownLinks={dropDownLinks}
+        database={database}
+      />
+      <div className="with-sidebar tabs-with-sidebar content-area">
+        <aside id="sidebar-content" className="scrollable">
+          <SidebarComponents.SidebarController />
+        </aside>
+        <section id="dashboard-content" className="flex-layout flex-col">
+          <Permissions.PermissionsController />
+        </section>
+      </div>
+    </div>
+  );
+};
+
+export default PermissionsLayout;

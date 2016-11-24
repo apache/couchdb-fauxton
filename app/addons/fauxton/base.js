@@ -32,38 +32,6 @@ Fauxton.initialize = function () {
 
   FauxtonAPI.RouteObject.on('beforeEstablish', function (routeObject) {
     NavigationActions.setNavbarActiveLink(_.result(routeObject, 'selectedHeader'));
-
-    if (!routeObject.hideApiBar) {
-    // always attempt to render the API Bar. Even if it's hidden on initial load, it may be enabled later
-      routeObject.setComponent('#api-navbar', ReactComponents.ApiBarController, {
-        buttonVisible: true,
-        contentVisible: false
-      });
-
-      const apiAndDocs = routeObject.get('apiUrl');
-      if (apiAndDocs) {
-        ComponentActions.updateAPIBar({
-          buttonVisible: true,
-          contentVisible: false,
-          endpoint: apiAndDocs[0],
-          docURL: apiAndDocs[1]
-        });
-      } else {
-        ComponentActions.hideAPIBarButton();
-      }
-    }
-
-    if (!routeObject.get('hideNotificationCenter')) {
-      routeObject.setComponent('#notification-center-btn', NotificationComponents.NotificationCenterButton);
-    }
-
-    const crumbs = routeObject.get('crumbs');
-
-    if (!crumbs.length) {
-      return;
-    }
-
-    routeObject.setComponent('#breadcrumbs', Breadcrumbs, {crumbs: crumbs});
   });
 
   const primaryNavBarEl = $('#primary-navbar')[0];

@@ -15,10 +15,11 @@ import FauxtonAPI from "../../core/api";
 import Databases from "../databases/base";
 import Resources from "./resources";
 import Actions from "./actions";
-import Permissions from "./components.react";
 import BaseRoute from "../documents/shared-routes";
+import Layout from './layout';
 
 var PermissionsRouteObject = BaseRoute.extend({
+  layout: 'empty',
   roles: ['fx_loggedIn'],
   routes: {
     'database/:database/permissions': 'permissions'
@@ -42,10 +43,6 @@ var PermissionsRouteObject = BaseRoute.extend({
     this.addSidebar('permissions');
   },
 
-  apiUrl: function () {
-    return [this.security.url('apiurl'), this.security.documentation];
-  },
-
   establish: function () {
     return [
       this.designDocs.fetch({reset: true})
@@ -54,18 +51,20 @@ var PermissionsRouteObject = BaseRoute.extend({
 
   permissions: function () {
     Actions.fetchPermissions(this.database, this.security);
-    this.setComponent('#dashboard-content', Permissions.PermissionsController);
-  },
-
-  crumbs: function () {
-    return [
+    const crumbs = [
       { name: this.database.id, link: Databases.databaseUrl(this.database)},
       { name: 'Permissions' }
     ];
+    this.setComponent('.template', Layout, {
+      docURL: this.security.documentation,
+      endpoint: this.security.url('apiurl'),
+      dbName: this.database.id,
+      dropDownLinks: crumbs,
+      database: this.database
+    });
   },
 
-  cleanup: function () {
-    this.removeComponent('#sidebar-content');
+  crumbs: function () {
   }
 });
 

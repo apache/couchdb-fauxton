@@ -19,6 +19,7 @@ import CORSActions from "../cors/actions";
 import ClusterActions from "../cluster/cluster.actions";
 import ConfigComponents from "./components.react";
 import ConfigActions from "./actions";
+import Layout from './layout';
 
 
 var ConfigDisabledRouteObject = FauxtonAPI.RouteObject.extend({
@@ -39,14 +40,10 @@ var ConfigDisabledRouteObject = FauxtonAPI.RouteObject.extend({
 
 
 var ConfigPerNodeRouteObject = FauxtonAPI.RouteObject.extend({
-  layout: 'with_tabs_sidebar',
+  layout: 'empty',
 
   roles: ['_admin'],
   selectedHeader: 'Config',
-
-  crumbs: [
-    { name: 'Config' }
-  ],
 
   apiUrl: function () {
     return [this.configs.url(), this.configs.documentation];
@@ -80,17 +77,27 @@ var ConfigPerNodeRouteObject = FauxtonAPI.RouteObject.extend({
 
   configForNode: function (node) {
     this.removeComponents();
-    this.setComponent('#right-header', ConfigComponents.AddOptionController, { node });
-    this.setComponent('#dashboard-lower-content', ConfigComponents.ConfigTableController, { node });
     ConfigActions.fetchAndEditConfig(node);
     this.sidebar.setSelectedTab('main');
+    this.setComponent('.template', Layout, {
+      node: node,
+      docURL: this.configs.documentation,
+      endpoint: this.configs.url(),
+      crumbs: [{ name: 'Config' }],
+      showCors: false
+    });
   },
 
   configCorsForNode: function (node) {
-    this.removeComponents();
-    this.setComponent('#dashboard-lower-content', CORSComponents.CORSController);
     CORSActions.fetchAndEditCors(node);
     this.sidebar.setSelectedTab('cors');
+    this.setComponent('.template', Layout, {
+      node: node,
+      docURL: this.configs.documentation,
+      endpoint: this.configs.url(),
+      crumbs: [{ name: 'Config' }],
+      showCors: true
+    });
   }
 });
 

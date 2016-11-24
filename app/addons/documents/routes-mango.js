@@ -15,19 +15,14 @@ import FauxtonAPI from "../../core/api";
 import Helpers from "./helpers";
 import BaseRoute from "./shared-routes";
 import Databases from "../databases/resources";
-import Components from "../fauxton/components";
 import Resources from "./resources";
 import IndexResultsActions from "./index-results/actions";
 import IndexResultStores from "./index-results/stores";
 import ReactHeader from "./header/header.react";
 import ReactActions from "./header/header.actions";
-import ReactPagination from "./pagination/pagination.react";
-import MangoComponents from "./mango/mango.components.react";
 import MangoActions from "./mango/mango.actions";
 import MangoStores from "./mango/mango.stores";
-import IndexResultsComponents from "./index-results/index-results.components.react";
 import SidebarActions from "./sidebar/actions";
-import RightAllDocsHeader from './components/header-docs-right';
 import {MangoLayout} from './mangolayout';
 
 const MangoIndexEditorAndQueryEditor = FauxtonAPI.RouteObject.extend({

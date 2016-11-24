@@ -15,22 +15,17 @@ import FauxtonAPI from "../../core/api";
 import Helpers from "./helpers";
 import BaseRoute from "./shared-routes";
 import Documents from "./resources";
-import IndexEditorComponents from "./index-editor/components.react";
 import ActionsIndexEditor from "./index-editor/actions";
 import Databases from "../databases/base";
-import Components from "../fauxton/components";
 import IndexResultsStores from "./index-results/stores";
 import IndexResultsActions from "./index-results/actions";
-import IndexResultsComponents from "./index-results/index-results.components.react";
-import ReactPagination from "./pagination/pagination.react";
-import ReactHeader from "./header/header.react";
 import ReactHeaderActions from "./header/header.actions";
 import SidebarActions from "./sidebar/actions";
-import RightAllDocsHeader from './components/header-docs-right';
+import {DocsTabsSidebarLayout, ViewsTabsSidebarLayout} from './layouts';
 
 
 var IndexEditorAndResults = BaseRoute.extend({
-  layout: 'with_tabs_sidebar',
+  layout: 'empty',
   routes: {
     'database/:database/new_view': {
       route: 'createView',
@@ -57,10 +52,6 @@ var IndexEditorAndResults = BaseRoute.extend({
     this.createDesignDocsCollection();
     this.addLeftHeader();
     this.addSidebar();
-
-    this.setComponent("#right-header", RightAllDocsHeader, {
-      database: this.database
-    });
   },
 
   establish: function () {
@@ -76,8 +67,6 @@ var IndexEditorAndResults = BaseRoute.extend({
         decodeDdoc = decodeURIComponent(ddoc);
 
     viewName = viewName.replace(/\?.*$/, '');
-    this.setComponent('#footer', ReactPagination.Footer);
-
     this.indexedDocs = new Documents.IndexCollection(null, {
       database: this.database,
       design: decodeDdoc,
@@ -109,14 +98,20 @@ var IndexEditorAndResults = BaseRoute.extend({
       indexName: viewName
     });
 
-    this.setComponent('#react-headerbar', ReactHeader.BulkDocumentHeaderController, {showIncludeAllDocs: true});
-    this.setComponent('#dashboard-lower-content', IndexResultsComponents.List);
-
-    this.apiUrl = function () {
-      return [this.indexedDocs.urlRef('apiurl'), FauxtonAPI.constants.DOC_URLS.GENERAL];
-    };
-
     this.showQueryOptions(urlParams, ddoc, viewName);
+
+    const endpoint = this.indexedDocs.urlRef('apiurl');
+    const docURL = FauxtonAPI.constants.DOC_URLS.GENERAL;
+
+    const dropDownLinks = this.getCrumbs(this.database);
+    this.setComponent('.template', DocsTabsSidebarLayout, {
+      showIncludeAllDocs: true,
+      docURL,
+      endpoint,
+      dbName: this.database.id,
+      dropDownLinks,
+      database: this.database
+    });
   },
 
   createView: function (database, _designDoc) {
@@ -137,10 +132,16 @@ var IndexEditorAndResults = BaseRoute.extend({
       newDesignDoc: newDesignDoc
     });
 
-    this.removeComponent('#react-headerbar');
-    this.removeComponent('#footer');
-    this.setComponent('#dashboard-lower-content', IndexEditorComponents.EditorController);
     SidebarActions.selectNavItem('');
+
+    const dropDownLinks = this.getCrumbs(this.database);
+    this.setComponent('.template', ViewsTabsSidebarLayout, {
+      showIncludeAllDocs: true,
+      docURL: FauxtonAPI.constants.DOC_URLS.GENERAL,
+      dbName: this.database.id,
+      database: this.database,
+      dropDownLinks
+    });
   },
 
   editView: function (databaseName, ddocName, viewName) {
@@ -158,14 +159,19 @@ var IndexEditorAndResults = BaseRoute.extend({
       indexName: viewName
     });
 
-    this.apiUrl = function () {
-      return [FauxtonAPI.urls('view', 'apiurl', databaseName, ddocName, viewName), FauxtonAPI.constants.DOC_URLS.GENERAL];
-    };
+    const docURL = FauxtonAPI.constants.DOC_URLS.GENERAL;
+    const endpoint = FauxtonAPI.urls('view', 'apiurl', databaseName, ddocName, viewName);
 
-    this.removeView('#right-header');
-    this.removeComponent('#react-headerbar');
-    this.removeComponent('#footer');
-    this.setComponent('#dashboard-lower-content', IndexEditorComponents.EditorController);
+
+    const dropDownLinks = this.getCrumbs(this.database);
+    this.setComponent('.template', ViewsTabsSidebarLayout, {
+      showIncludeAllDocs: true,
+      docURL,
+      endpoint,
+      dbName: this.database.id,
+      dropDownLinks,
+      database: this.database
+    });
   }
 
 });
