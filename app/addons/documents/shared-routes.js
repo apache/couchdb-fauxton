@@ -14,10 +14,8 @@ import app from "../../app";
 import FauxtonAPI from "../../core/api";
 import Documents from "./shared-resources";
 import Databases from "../databases/base";
-import Components from "../fauxton/components";
 import PaginationActions from "./pagination/actions";
 import IndexResultStores from "./index-results/stores";
-import SidebarComponents from "./sidebar/sidebar.react";
 import SidebarActions from "./sidebar/actions";
 import QueryActions from './queryoptions/actions';
 import HeaderDocsLeft from './components/header-docs-left';
@@ -26,7 +24,7 @@ import HeaderDocsLeft from './components/header-docs-left';
 // The Documents section is built up a lot of different route object which share code. This contains
 // base functionality that can be used across routes / addons
 var BaseRoute = FauxtonAPI.RouteObject.extend({
-  layout: 'with_tabs_sidebar',
+  layout: 'empty',
   selectedHeader: 'Databases',
 
   createDesignDocsCollection: function () {
@@ -65,7 +63,6 @@ var BaseRoute = FauxtonAPI.RouteObject.extend({
 
   addLeftHeader: function () {
     const dropDownLinks = this.getCrumbs(this.database);
-    this.setComponent('#header-docs-left', HeaderDocsLeft, {dbName: this.database.id, dropDownLinks: dropDownLinks});
   },
 
   addSidebar: function (selectedNavItem) {
@@ -78,7 +75,6 @@ var BaseRoute = FauxtonAPI.RouteObject.extend({
     }
 
     SidebarActions.newOptions(options);
-    this.setComponent("#sidebar-content", SidebarComponents.SidebarController);
   },
 
   getCrumbs: function (database) {

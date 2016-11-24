@@ -31,8 +31,6 @@ var AuthRouteObject = FauxtonAPI.RouteObject.extend({
     'createAdmin': 'checkNodes',
     'createAdmin/:node': 'createAdminForNode'
   },
-  hideNotificationCenter: true,
-  hideApiBar: true,
 
   checkNodes: function () {
     ClusterActions.navigateToNodeBasedOnNodeCount('/createAdmin/');

@@ -17,10 +17,26 @@ import ReactPagination from "./pagination/pagination.react";
 import ReactHeader from "./header/header.react";
 import {Breadcrumbs} from '../components/header-breadcrumbs';
 import {NotificationCenterButton} from '../fauxton/notifications/notifications.react';
-import {ApiBarController} from '../components/components/apibar';
 import {ApiBarWrapper} from '../components/layouts';
 import MangoComponents from "./mango/mango.components.react";
 import IndexResultsComponents from "./index-results/index-results.components.react";
+
+
+export const RightHeader = ({showIncludeAllDocs, docURL, endpoint}) => {
+  return (
+    <div className="right-header-wrapper flex-layout flex-row flex-body">
+      <div id="react-headerbar" className="flex-body">
+        <ReactHeader.BulkDocumentHeaderController showIncludeAllDocs={showIncludeAllDocs} />
+      </div>
+      <div id="right-header" className="flex-body">
+      </div>
+      <ApiBarWrapper docURL={docURL} endpoint={endpoint} />
+      <div id='notification-center-btn'>
+        <NotificationCenterButton />
+      </div>
+    </div>
+  );
+};
 
 export const MangoFooter = () => {
   return (
@@ -36,17 +52,11 @@ export const MangoHeader = ({showIncludeAllDocs, crumbs, docURL, endpoint}) => {
       <div className='flex-body faux__breadcrumbs-mango-header'>
         <Breadcrumbs crumbs={crumbs}/>
       </div>
-      <div className="right-header-wrapper flex-layout flex-row flex-body">
-        <div id="react-headerbar" className="flex-body">
-          <ReactHeader.BulkDocumentHeaderController showIncludeAllDocs={showIncludeAllDocs} />
-        </div>
-        <div id="right-header" className="flex-body">
-        </div>
-        <ApiBarWrapper docURL={docURL} endpoint={endpoint} />
-        <div id='notification-center-btn'>
-          <NotificationCenterButton />
-        </div>
-      </div>
+      <RightHeader
+        showIncludeAllDocs={showIncludeAllDocs}
+        docURL={docURL}
+        endpoint={endpoint}
+      />
     </div>
   );
 };

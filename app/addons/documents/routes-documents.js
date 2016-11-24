@@ -15,26 +15,20 @@ import app from '../../app';
 import FauxtonAPI from '../../core/api';
 import BaseRoute from './shared-routes';
 import Documents from './resources';
-import RightAllDocsHeader from './components/header-docs-right';
-import Changes from './changes/components.react';
 import ChangesActions from './changes/actions';
 import Databases from '../databases/base';
 import Resources from './resources';
-import Components from '../fauxton/components';
 import IndexResultStores from './index-results/stores';
 import IndexResultsActions from './index-results/actions';
-import IndexResultsComponents from './index-results/index-results.components.react';
-import ReactPagination from './pagination/pagination.react';
-import ReactHeader from './header/header.react';
 import ReactActions from './header/header.actions';
 import SidebarActions from './sidebar/actions';
 import DesignDocInfoActions from './designdocinfo/actions';
-import DesignDocInfoComponents from './designdocinfo/components.react';
 import ComponentsActions from '../components/actions';
 import QueryOptionsActions from './queryoptions/actions';
+import {DocsTabsSidebarLayout, ViewsTabsSidebarLayout, ChangesSidebarLayout} from './layouts';
 
 var DocumentsRouteObject = BaseRoute.extend({
-  layout: "with_tabs_sidebar",
+  layout: "empty",
   routes: {
     "database/:database/_all_docs(:extra)": {
       route: "allDocs",
@@ -67,25 +61,16 @@ var DocumentsRouteObject = BaseRoute.extend({
 
     this.createDesignDocsCollection();
 
-    this.setComponent("#right-header", RightAllDocsHeader, {
-      database: this.database
-    });
-
     this.addLeftHeader();
     this.addSidebar();
   },
 
   designDocMetadata: function (database, ddoc) {
-    this.removeComponent('#footer');
-    this.removeComponent('#react-headerbar');
-    this.removeComponent('#dashboard-upper-content');
-
     var designDocInfo = new Resources.DdocInfo({ _id: "_design/" + ddoc }, { database: this.database });
     DesignDocInfoActions.fetchDesignDocInfo({
       ddocName: ddoc,
       designDocInfo: designDocInfo
     });
-    this.setComponent("#dashboard-lower-content", DesignDocInfoComponents.DesignDocInfo);
 
     SidebarActions.selectNavItem('designDoc', {
       designDocName: ddoc,
@@ -93,8 +78,17 @@ var DocumentsRouteObject = BaseRoute.extend({
     });
 
     QueryOptionsActions.hideQueryOptions();
+    this.apiUrl = [, designDocInfo.documentation()];
 
-    this.apiUrl = [designDocInfo.url('apiurl'), designDocInfo.documentation()];
+    const dropDownLinks = this.getCrumbs(this.database);
+    this.setComponent('.template', ViewsTabsSidebarLayout, {
+      showEditView: false, //a bit of a hack but its fine for now.
+      docURL: designDocInfo.documentation(),
+      endpoint: designDocInfo.url('apiurl'),
+      dbName: this.database.id,
+      dropDownLinks,
+      database: this.database
+    });
   },
 
   /*
@@ -107,10 +101,6 @@ var DocumentsRouteObject = BaseRoute.extend({
         urlParams = params.urlParams,
         docParams = params.docParams,
         collection;
-
-    this.setComponent('#react-headerbar', ReactHeader.BulkDocumentHeaderController, {showIncludeAllDocs: true});
-    this.setComponent('#footer', ReactPagination.Footer);
-
 
     // includes_docs = true if you are visiting the _replicator/_users databases
     if (['_replicator', '_users'].indexOf(databaseName) > -1) {
@@ -131,13 +121,11 @@ var DocumentsRouteObject = BaseRoute.extend({
     SidebarActions.selectNavItem(tab);
     ComponentsActions.showDeleteDatabaseModal({showDeleteModal: false, dbId: ''});
 
-    this.removeComponent('#dashboard-upper-content');
-
     if (!docParams) {
       docParams = {};
     }
 
-    var frozenCollection = app.utils.localStorageGet('include_docs_bulkdocs');
+    const frozenCollection = app.utils.localStorageGet('include_docs_bulkdocs');
     window.localStorage.removeItem('include_docs_bulkdocs');
 
     IndexResultsActions.newResultsList({
@@ -148,15 +136,22 @@ var DocumentsRouteObject = BaseRoute.extend({
 
     this.database.allDocs.paging.pageSize = IndexResultStores.indexResultsStore.getPerPage();
 
-    this.setComponent('#dashboard-lower-content', IndexResultsComponents.List);
-
-    // this used to be a function that returned the object, but be warned: it caused a closure with a reference to
-    // the initial this.database object which can change
-    this.apiUrl = [this.database.allDocs.urlRef("apiurl", urlParams), this.database.allDocs.documentation()];
+    const endpoint = this.database.allDocs.urlRef("apiurl", urlParams);
+    const docURL = this.database.allDocs.documentation();
 
     // update the query options with the latest & greatest info
     QueryOptionsActions.reset({queryParams: urlParams});
     QueryOptionsActions.showQueryOptions();
+
+    const dropDownLinks = this.getCrumbs(this.database);
+    this.setComponent('.template', DocsTabsSidebarLayout, {
+      showIncludeAllDocs: true,
+      docURL,
+      endpoint,
+      dbName: this.database.id,
+      dropDownLinks,
+      database: this.database
+    });
   },
 
   reloadDesignDocs: function (event) {
@@ -170,21 +165,17 @@ var DocumentsRouteObject = BaseRoute.extend({
     ChangesActions.initChanges({
       databaseName: this.database.id
     });
-    this.setComponent('#dashboard-upper-content', Changes.ChangesTabContent);
-    this.setComponent("#dashboard-lower-content", Changes.ChangesController);
-
-    this.removeComponent('#footer');
-    this.removeComponent('#react-headerbar');
-
-    this.viewEditor && this.viewEditor.remove();
-
     SidebarActions.selectNavItem('changes');
 
     QueryOptionsActions.hideQueryOptions();
 
-    this.apiUrl = function () {
-      return [FauxtonAPI.urls('changes', 'apiurl', this.database.id, ''), this.database.documentation()];
-    };
+    this.setComponent('.template', ChangesSidebarLayout, {
+      endpoint: FauxtonAPI.urls('changes', 'apiurl', this.database.id, ''),
+      docURL: this.database.documentation(),
+      dbName: this.database.id,
+      dropDownLinks: this.getCrumbs(this.database),
+      database: this.database
+    });
   }
 
 });
