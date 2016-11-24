@@ -17,7 +17,7 @@ import "./assets/less/verifyinstall.less";
 VerifyInstall.initialize = function () {
   FauxtonAPI.addHeaderLink({
     title: 'Verify',
-    href: '#verifyinstall',
+    href: '#/verifyinstall',
     icon: 'fonticon-ok-circled',
     bottomNav: true
   });

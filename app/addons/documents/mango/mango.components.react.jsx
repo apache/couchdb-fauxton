@@ -121,7 +121,7 @@ var MangoEditor = React.createClass({
   },
 
   render: function () {
-    var url = '#/' + FauxtonAPI.urls('allDocs', 'app', this.props.dbName, '');
+    var url = '#/' + FauxtonAPI.urls('allDocs', 'app', FauxtonAPI.url.encode(this.props.dbName), '');
 
     return (
       <div className="mango-editor-wrapper">

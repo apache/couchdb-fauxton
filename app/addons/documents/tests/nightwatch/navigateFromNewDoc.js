@@ -21,18 +21,18 @@ module.exports = {
       newDatabaseName = client.globals.testDatabaseName,
       baseUrl = client.globals.test_settings.launch_url;
 
-    var newLink = '#/database/' + newDatabaseName + '/new';
+    var newLink = '/#/database/' + newDatabaseName + '/new';
 
     client
       .loginToGUI()
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
       .clickWhenVisible('#new-all-docs-button a')
-      .clickWhenVisible('#new-all-docs-button a[href="' + newLink + '"]')
+      .clickWhenVisible('#new-all-docs-button a[href="' + newLink.replace("/", "") + '"]')
       .waitForElementPresent('.code-region', waitTime, false)
-      .verify.urlEquals(baseUrl + '/' + newLink)
+      .verify.urlEquals(baseUrl + newLink)
 
       // now redirect back to the all docs page and check it's loaded properly
       .clickWhenVisible('.faux-header__breadcrumbs-link')
-      .verify.urlEquals(baseUrl + '/#database/' + newDatabaseName + '/_all_docs');
+      .verify.urlEquals(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs');
   }
 };

@@ -24,7 +24,7 @@ Auth.initialize = function () {
   FauxtonAPI.addHeaderLink({
     id: 'auth',
     title: 'Login',
-    href: '#login',
+    href: '#/login',
     icon: 'fonticon-user',
     bottomNav: true
   });
@@ -37,7 +37,7 @@ Auth.initialize = function () {
       link = {
         id: 'auth',
         title: 'Admin Party!',
-        href: '#createAdmin',
+        href: '#/createAdmin',
         icon: 'fonticon-user',
         bottomNav: true
       };
@@ -45,7 +45,7 @@ Auth.initialize = function () {
       link = {
         id: 'auth',
         title: session.user().name,
-        href: '#changePassword',
+        href: '#/changePassword',
         icon: 'fonticon-user',
         bottomNav: true
       };
@@ -64,7 +64,7 @@ Auth.initialize = function () {
       link = {
         id: 'auth',
         title: 'Login',
-        href: '#login',
+        href: '#/login',
         icon: 'fonticon-user',
         bottomNav: true
       };
