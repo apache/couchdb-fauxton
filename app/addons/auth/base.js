@@ -24,7 +24,7 @@ Auth.initialize = function () {
   FauxtonAPI.addHeaderLink({
     id: 'auth',
     title: 'Login',
-    href: '#login',
+    href: '#/login',
     icon: 'fonticon-user',
     bottomNav: true
   });
