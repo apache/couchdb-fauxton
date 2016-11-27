@@ -163,7 +163,7 @@ var DocEditorController = React.createClass({
 
   render: function () {
     var saveButtonLabel = (this.props.isNewDoc) ? 'Create Document' : 'Save Changes';
-
+    let endpoint = FauxtonAPI.urls('allDocs', 'app', FauxtonAPI.url.encode(this.props.database.id));
     return (
       <div>
         <div id="doc-editor-actions-panel">
@@ -172,7 +172,7 @@ var DocEditorController = React.createClass({
               <i className="icon fonticon-ok-circled"></i> {saveButtonLabel}
             </button>
             <div>
-              <a href={`#/${FauxtonAPI.urls('allDocs', 'app', encodeURIComponent(this.props.database.id))}`} className="js-back cancel-button">Cancel</a>
+              <a href={`#/${endpoint}`} className="js-back cancel-button">Cancel</a>
             </div>
           </div>
           <div className="alignRight">

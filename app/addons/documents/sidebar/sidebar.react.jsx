@@ -61,7 +61,7 @@ var MainSidebar = React.createClass({
 
   render: function () {
     var docLinks = this.buildDocLinks();
-    var dbEncoded = encodeURIComponent(this.props.databaseName);
+    var dbEncoded = FauxtonAPI.url.encode(this.props.databaseName);
     var changesUrl     = '#' + FauxtonAPI.urls('changes', 'app', dbEncoded, '');
     var permissionsUrl = '#' + FauxtonAPI.urls('permissions', 'app', dbEncoded);
     var databaseUrl    = FauxtonAPI.urls('allDocs', 'app', dbEncoded, '');
