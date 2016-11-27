@@ -443,7 +443,6 @@ var SidebarController = React.createClass({
       availableDesignDocIds: store.getAvailableDesignDocs(),
       toggledSections: store.getToggledSections(),
       isLoading: store.isLoading(),
-      database: store.getDatabase(),
       deleteDbModalProperties: deleteDbModalStore.getShowDeleteDatabaseModal(),
 
       deleteIndexModalVisible: store.isDeleteIndexModalVisible(),

@@ -74,7 +74,7 @@ FauxtonAPI.url = {
     return (/[$+/]/g.test(name)) ? encodeURIComponent(name) : name;
   },
   decode(name = "") {
-    return (/[$+/]/g.test(name)) ? decodeURIComponent(name) : name; 
+    return (/[$+/]/g.test(name)) ? decodeURIComponent(name) : name;
   }
 };
 
