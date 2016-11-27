@@ -22,8 +22,9 @@ function LoginToGui (user, pw) {
   const password = pw || client.globals.test_settings.password;
 
   client
+    .resizeWindow(1200, 1200)
     .url(baseUrl + '/#/login')
-    .waitForElementPresent('a[href="#/login"]', waitTime, false)
+    .waitForElementPresent('a[href="#/login"]', 50000, false)
     .click('a[href="#/login"]')
     .waitForElementVisible('.couch-login-wrapper', waitTime, false)
     .waitForElementVisible('#username', waitTime, false)
