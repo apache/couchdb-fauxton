@@ -50,14 +50,7 @@ var IndexEditorAndResults = BaseRoute.extend({
     this.databaseName = databaseName;
     this.database = new Databases.Model({id: databaseName});
     this.createDesignDocsCollection();
-    this.addLeftHeader();
     this.addSidebar();
-  },
-
-  establish: function () {
-    return [
-      this.designDocs.fetch({ reset: true })
-    ];
   },
 
   showView: function (databaseName, ddoc, viewName) {

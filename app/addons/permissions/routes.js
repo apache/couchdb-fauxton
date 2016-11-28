@@ -18,7 +18,7 @@ import Actions from "./actions";
 import BaseRoute from "../documents/shared-routes";
 import Layout from './layout';
 
-var PermissionsRouteObject = BaseRoute.extend({
+const PermissionsRouteObject = BaseRoute.extend({
   layout: 'empty',
   roles: ['fx_loggedIn'],
   routes: {
@@ -39,14 +39,7 @@ var PermissionsRouteObject = BaseRoute.extend({
     });
 
     this.createDesignDocsCollection();
-    this.addLeftHeader();
     this.addSidebar('permissions');
-  },
-
-  establish: function () {
-    return [
-      this.designDocs.fetch({reset: true})
-    ];
   },
 
   permissions: function () {
@@ -62,12 +55,11 @@ var PermissionsRouteObject = BaseRoute.extend({
       dropDownLinks: crumbs,
       database: this.database
     });
-  },
-
-  crumbs: function () {
   }
 });
 
-Permissions.RouteObjects = [PermissionsRouteObject];
+const Permissions = {
+  RouteObjects: [PermissionsRouteObject]
+};
 
 export default Permissions;

@@ -58,7 +58,7 @@ TabsSidebarHeader.propTypes = {
   dbName : React.PropTypes.string.isRequired,
   dropDownLinks : React.PropTypes.array.isRequired,
   docURL : React.PropTypes.string.isRequired,
-  endpoint : React.PropTypes.string.isRequired,
+  endpoint : React.PropTypes.string,
   showIncludeAllDocs : React.PropTypes.bool,
   hideHeaderBar : React.PropTypes.bool,
   database : React.PropTypes.object.isRequired
@@ -163,7 +163,7 @@ ViewsTabsSidebarLayout.defaultProps = {
 ViewsTabsSidebarLayout.propTypes = {
   showEditView: React.PropTypes.bool,
   docURL: React.PropTypes.string.isRequired,
-  endpoint: React.PropTypes.string.isRequired,
+  endpoint: React.PropTypes.string,
   dbName: React.PropTypes.string.isRequired,
   dropDownLinks: React.PropTypes.array.isRequired
 };
