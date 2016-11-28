@@ -32,7 +32,7 @@ module.exports = {
       .url(baseUrl + '/#replication')
       .waitForElementNotPresent('.load-lines', waitTime, true)
       .waitForElementPresent('.replication__filter', waitTime, true)
-      .click('a[href="#/database/_replicator/existing-doc-id-view-doc"]')
+      .clickWhenVisible('a[href="#/database/_replicator/existing-doc-id-view-doc"]')
       .waitForElementNotPresent('.load-lines', waitTime, true)
       .waitForElementPresent('#editor-container', waitTime, true)
       .end();
@@ -57,7 +57,7 @@ module.exports = {
       .url(baseUrl + '/#replication')
       .waitForElementNotPresent('.load-lines', waitTime, true)
       .waitForElementPresent('.replication__filter', waitTime, true)
-      .click('a[title="Edit replication"]')
+      .clickWhenVisible('a[title="Edit replication"]')
       .waitForElementNotPresent('.load-lines', waitTime, true)
       .waitForElementPresent('.replication__section', waitTime, true)
       .end();

@@ -133,7 +133,6 @@ module.exports = {
     };
 
     client
-
       // create two databases, each with a single (different) doc
       .createDatabase(newDatabaseName1)
       .checkForDatabaseCreated(newDatabaseName1, waitTime)
