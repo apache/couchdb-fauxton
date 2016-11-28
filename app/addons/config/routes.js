@@ -13,7 +13,6 @@
 import app from "../../app";
 import FauxtonAPI from "../../core/api";
 import Config from "./resources";
-import Views from "./views";
 import CORSComponents from "../cors/components.react";
 import CORSActions from "../cors/actions";
 import ClusterActions from "../cluster/cluster.actions";
@@ -58,27 +57,10 @@ var ConfigPerNodeRouteObject = FauxtonAPI.RouteObject.extend({
     var node = options[0];
 
     this.configs = new Config.ConfigModel({ node: node });
-
-    this.sidebar = this.setView('#sidebar-content', new Views.Tabs({
-      sidebarItems: [
-        {
-          title: 'Main config',
-          typeSelect: 'main',
-          link: '_config/' + node
-        },
-        {
-          title: 'CORS',
-          typeSelect: 'cors',
-          link: '_config/' + node + '/cors'
-        }
-      ]
-    }));
   },
 
   configForNode: function (node) {
-    this.removeComponents();
     ConfigActions.fetchAndEditConfig(node);
-    this.sidebar.setSelectedTab('main');
     this.setComponent('.template', Layout, {
       node: node,
       docURL: this.configs.documentation,
@@ -90,7 +72,6 @@ var ConfigPerNodeRouteObject = FauxtonAPI.RouteObject.extend({
 
   configCorsForNode: function (node) {
     CORSActions.fetchAndEditCors(node);
-    this.sidebar.setSelectedTab('cors');
     this.setComponent('.template', Layout, {
       node: node,
       docURL: this.configs.documentation,
