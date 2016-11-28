@@ -13,13 +13,13 @@
 
 module.exports = {
 
-  'Can delete document': (client) => {
+  'Can view doc': client => {
     const waitTime = client.globals.maxWaitTime;
     const baseUrl = client.globals.test_settings.launch_url;
     const password = client.globals.test_settings.password;
 
     const replicatorDoc = {
-      _id: 'existing-doc-id-2',
+      _id: 'existing-doc-id-view-doc',
       source: "http://source-db.com",
       target: "http://target-db.com"
     };
@@ -29,21 +29,70 @@ module.exports = {
       .createDocument(replicatorDoc._id, '_replicator', replicatorDoc)
       .loginToGUI()
       .waitForElementNotPresent('.global-notification .fonticon-cancel', waitTime, false)
-      .url(baseUrl + '/#/replication')
+      .url(baseUrl + '/#replication')
       .waitForElementNotPresent('.load-lines', waitTime, true)
       .waitForElementPresent('.replication__filter', waitTime, true)
-      .click('a[title="Delete document existing-doc-id-2"]')
-      .waitForElementPresent('.replication_delete-doc-modal', waitTime, true)
-      .click('.replication_delete-doc-modal button.save')
-      .waitForElementNotPresent('.replication_delete-doc-modal', waitTime, true)
-      .waitForElementPresent('.global-notification .fonticon-cancel', waitTime, false)
-      .waitForElementNotPresent('.global-notification .fonticon-cancel', waitTime, false)
-      .url(baseUrl)
-      .waitForElementPresent('.databases.table', waitTime, false)
-      .url(baseUrl + '/#/replication')
+      .clickWhenVisible('a[href="#/database/_replicator/existing-doc-id-view-doc"]')
       .waitForElementNotPresent('.load-lines', waitTime, true)
-      .waitForElementNotPresent('a[title="Delete document existing-doc-id-2"]', waitTime, true)
-      .assert.elementNotPresent('a[title="Delete document existing-doc-id-2"]')
+      .waitForElementPresent('#editor-container', waitTime, true)
+      .end();
+  },
+
+  'Can edit doc': client => {
+    const waitTime = client.globals.maxWaitTime;
+    const baseUrl = client.globals.test_settings.launch_url;
+    const password = client.globals.test_settings.password;
+
+    const replicatorDoc = {
+      _id: 'existing-doc-id-edit-doc',
+      source: "http://source-db.com",
+      target: "http://target-db.com"
+    };
+    client
+      .deleteDatabase('_replicator')
+      .createDatabase('_replicator')
+      .createDocument(replicatorDoc._id, '_replicator', replicatorDoc)
+      .loginToGUI()
+      .waitForElementNotPresent('.global-notification .fonticon-cancel', waitTime, false)
+      .url(baseUrl + '/#replication')
+      .waitForElementNotPresent('.load-lines', waitTime, true)
+      .waitForElementPresent('.replication__filter', waitTime, true)
+      .clickWhenVisible('a[title="Edit replication"]')
+      .waitForElementNotPresent('.load-lines', waitTime, true)
+      .waitForElementPresent('.replication__section', waitTime, true)
+      .end();
+  },
+
+  'Can filter docs': client => {
+    const waitTime = client.globals.maxWaitTime;
+    const baseUrl = client.globals.test_settings.launch_url;
+    const password = client.globals.test_settings.password;
+
+    const replicatorDoc1 = {
+      _id: 'existing-doc-id-filter1',
+      source: "http://source-db.com",
+      target: "http://target-db.com"
+    };
+
+    const replicatorDoc2 = {
+      _id: 'existing-doc-filter2',
+      source: "http://source-db2.com",
+      target: "http://target-db.com"
+    };
+    client
+      .deleteDatabase('_replicator')
+      .createDatabase('_replicator')
+      .createDocument(replicatorDoc1._id, '_replicator', replicatorDoc1)
+      .createDocument(replicatorDoc2._id, '_replicator', replicatorDoc2)
+      .loginToGUI()
+      .waitForElementNotPresent('.global-notification .fonticon-cancel', waitTime, false)
+      .url(baseUrl + '/#replication')
+      .waitForElementNotPresent('.load-lines', waitTime, true)
+      .setValue('.replication__filter-input', 'filter1')
+      .waitForElementNotPresent('a[href="#/database/_replicator/existing-doc-filter2"]', waitTime, true)
+      .clearValue('.replication__filter-input')
+      .setValue('.replication__filter-input', 'filter')
+      .waitForElementPresent('a[href="#/database/_replicator/existing-doc-filter2"]', waitTime, true)
       .end();
   }
 };
