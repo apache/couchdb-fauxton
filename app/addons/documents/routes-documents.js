@@ -49,19 +49,12 @@ var DocumentsRouteObject = BaseRoute.extend({
     this.initViews(options[0]);
   },
 
-  establish: function () {
-    return [
-      this.designDocs.fetch({ reset: true })
-    ];
-  },
-
   initViews: function (dbName) {
     this.databaseName = dbName;
     this.database = new Databases.Model({id: this.databaseName});
 
     this.createDesignDocsCollection();
 
-    this.addLeftHeader();
     this.addSidebar();
   },
 
@@ -78,7 +71,6 @@ var DocumentsRouteObject = BaseRoute.extend({
     });
 
     QueryOptionsActions.hideQueryOptions();
-    this.apiUrl = [, designDocInfo.documentation()];
 
     const dropDownLinks = this.getCrumbs(this.database);
     this.setComponent('.template', ViewsTabsSidebarLayout, {
