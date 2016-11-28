@@ -387,12 +387,48 @@ var AddOptionButton = React.createClass({
   }
 });
 
+const TabItem = ({active, link, title}) => {
+  return (
+    <li className={active ? 'active' : ''}>
+    <a href={`#${link}`}>
+        {title}
+    </a>
+    </li>
+  );
+};
+
+TabItem.propTypes = {
+  active: React.PropTypes.bool.isRequired,
+  link: React.PropTypes.string.isRequired,
+  icon: React.PropTypes.string,
+  title: React.PropTypes.string.isRequired
+};
+
+const Tabs = ({sidebarItems, selectedTab}) => {
+  const tabItems = sidebarItems.map(item => {
+    return <TabItem
+      key={item.title}
+      active={selectedTab === item.title}
+      title={item.title}
+      link={item.link}
+      />;
+  });
+  return (
+    <nav className="sidenav">
+      <ul className="nav nav-list">
+        {tabItems}
+      </ul>
+    </nav>
+  );
+};
+
 export default {
-  ConfigTableController: ConfigTableController,
-  ConfigTable: ConfigTable,
-  ConfigOption: ConfigOption,
-  ConfigOptionValue: ConfigOptionValue,
-  ConfigOptionTrash: ConfigOptionTrash,
-  AddOptionController: AddOptionController,
-  AddOptionButton: AddOptionButton
+  Tabs,
+  ConfigTableController,
+  ConfigTable,
+  ConfigOption,
+  ConfigOptionValue,
+  ConfigOptionTrash,
+  AddOptionController,
+  AddOptionButton,
 };

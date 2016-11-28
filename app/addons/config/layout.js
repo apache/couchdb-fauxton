@@ -55,6 +55,17 @@ export const ConfigHeader = ({node, crumbs, docURL, endpoint}) => {
 };
 
 export const ConfigLayout = ({showCors, docURL, node, endpoint, crumbs}) => {
+  const sidebarItems = [
+    {
+      title: 'Main config',
+      link: '_config/' + node
+    },
+    {
+      title: 'CORS',
+      link: '_config/' + node + '/cors'
+    }
+  ];
+  const selectedTab = showCors ? 'CORS' : 'Main config';
   const content = showCors ? <CORSComponents.CORSController/> : <ConfigComponents.ConfigTableController node={node} />;
   return (
     <div id="dashboard" className="with-sidebar">
@@ -66,6 +77,10 @@ export const ConfigLayout = ({showCors, docURL, node, endpoint, crumbs}) => {
       />
       <div className="with-sidebar tabs-with-sidebar content-area">
         <aside id="sidebar-content" className="scrollable">
+          <ConfigComponents.Tabs
+            sidebarItems={sidebarItems}
+            selectedTab={selectedTab}
+            />
         </aside>
         <section id="dashboard-content" className="flex-layout flex-col">
           <div id="dashboard-upper-content"></div>
