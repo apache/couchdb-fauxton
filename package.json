@@ -18,6 +18,7 @@
   "devDependencies": {
     "enzyme": "^2.4.1",
     "es5-shim": "4.5.4",
+    "jest": "^17.0.3",
     "mocha": "~3.1.2",
     "mocha-loader": "^1.0.0",
     "mocha-phantomjs": "git+https://github.com/garrensmith/mocha-phantomjs.git",
@@ -104,7 +105,8 @@
     "webpack:dev": "webpack --debug --progress --colors --config ./webpack.config.dev.js",
     "webpack:test": "webpack --debug --progress --colors --config ./webpack.config.test.js",
     "webpack:release": "webpack --debug --progress --colors --config ./webpack.config.release.js",
-    "test": "grunt test",
+    "jest": "jest --config ./jest-config.json",
+    "test": "npm run jest && grunt test",
     "phantomjs": "./node_modules/.bin/mocha-phantomjs --debug=false --ssl-protocol=sslv2 --web-security=false --ignore-ssl-errors=true ./test/runner.html",
     "couchdebug": "grunt couchdebug",
     "couchdb": "grunt couchdb",
