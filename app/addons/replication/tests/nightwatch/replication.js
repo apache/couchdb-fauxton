@@ -39,6 +39,7 @@ module.exports = {
     const waitTime = client.globals.maxWaitTime;
     const baseUrl = client.globals.test_settings.launch_url;
     const password = client.globals.test_settings.password;
+    console.log('PASSWORD', password);
 
     client
       .createDatabase(newDatabaseName1)
@@ -65,14 +66,10 @@ module.exports = {
       .click('#replicate')
 
       .waitForElementPresent('.enter-password-modal', waitTime, true)
-      .setValue('.enter-password-modal input[type="password"]', password)
+      .setValue('.enter-password-modal .password-modal-input', password)
       .click('.enter-password-modal button.save')
       .waitForElementNotPresent('.enter-password-modal', waitTime, true)
       .waitForElementNotPresent('.global-notification .fonticon-cancel', waitTime, false)
-
-      // now check the database was created
-      //.checkForDatabaseCreated(replicatedDBName, waitTime)
-
       .end();
   },
 
