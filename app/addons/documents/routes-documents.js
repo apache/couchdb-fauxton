@@ -71,7 +71,6 @@ var DocumentsRouteObject = BaseRoute.extend({
     });
 
     QueryOptionsActions.hideQueryOptions();
-    this.apiUrl = [, designDocInfo.documentation()];
 
     const dropDownLinks = this.getCrumbs(this.database);
     this.setComponent('.template', ViewsTabsSidebarLayout, {

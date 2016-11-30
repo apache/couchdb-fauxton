@@ -16,7 +16,6 @@ import React from "react";
 import ReactDOM from "react-dom";
 import Stores from "./stores";
 import Actions from "./actions";
-import Components from "../../fauxton/components";
 import ReactComponents from "../../components/react-components.react";
 
 var store = Stores.indexEditorStore;

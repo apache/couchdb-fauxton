@@ -12,7 +12,6 @@
 
 import app from '../../../app';
 import FauxtonAPI from '../../../core/api';
-import Components from '../../fauxton/components';
 import Documents from '../resources';
 import Databases from '../../databases/resources';
 import React from 'react';

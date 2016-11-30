@@ -13,8 +13,6 @@
 import app from "../../app";
 import FauxtonAPI from "../../core/api";
 import React from "react";
-
-import Components from "./components";
 import NotificationComponents from "./notifications/notifications.react";
 import Actions from "./notifications/actions";
 import NavbarReactComponents from "./navigation/components.react";
@@ -25,10 +23,9 @@ import {Breadcrumbs} from '../components/header-breadcrumbs';
 
 import "./assets/less/fauxton.less";
 
-var Fauxton = FauxtonAPI.addon();
+const Fauxton = FauxtonAPI.addon();
 
-
-Fauxton.initialize = function () {
+Fauxton.initialize = () => {
 
   FauxtonAPI.RouteObject.on('beforeEstablish', function (routeObject) {
     NavigationActions.setNavbarActiveLink(_.result(routeObject, 'selectedHeader'));

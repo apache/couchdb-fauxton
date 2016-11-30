@@ -80,14 +80,6 @@ var BaseRoute = FauxtonAPI.RouteObject.extend({
     ];
   },
 
-  // ddocInfo: function (designDoc, designDocs, view) {
-  //   return {
-  //     id: "_design/" + designDoc,
-  //     currView: view,
-  //     designDocs: designDocs
-  //   };
-  // },
-
   createParams: function (options) {
     var urlParams = app.getParams(options),
         params = Documents.QueryParams.parse(urlParams);

@@ -19,19 +19,6 @@ import {Breadcrumbs} from '../components/header-breadcrumbs';
 import {NotificationCenterButton} from '../fauxton/notifications/notifications.react';
 import {ApiBarWrapper} from '../components/layouts';
 
-// const sidebarItems = [
-//   {
-//     title: 'Main config',
-//     typeSelect: 'main',
-//     link: '_config/' + node
-//   },
-//   {
-//     title: 'CORS',
-//     typeSelect: 'cors',
-//     link: '_config/' + node + '/cors'
-//   }
-// ];
-
 export const ConfigHeader = ({node, crumbs, docURL, endpoint}) => {
   return (
     <header className="two-panel-header">
