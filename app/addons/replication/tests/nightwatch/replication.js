@@ -35,43 +35,43 @@ const destroyDBsAndCreateReplicator = (client, done) => {
 module.exports = {
   before: destroyDBsAndCreateReplicator,
 
-  'Replicates existing local db to new local db' : function (client) {
-    const waitTime = client.globals.maxWaitTime;
-    const baseUrl = client.globals.test_settings.launch_url;
-    const password = client.globals.test_settings.password;
-    console.log('PASSWORD', password);
+  // 'Replicates existing local db to new local db' : function (client) {
+  //   const waitTime = client.globals.maxWaitTime;
+  //   const baseUrl = client.globals.test_settings.launch_url;
+  //   const password = client.globals.test_settings.password;
+  //   console.log('PASSWORD', password);
 
-    client
-      .createDatabase(newDatabaseName1)
-      .checkForDatabaseCreated(newDatabaseName1, waitTime)
-      .createDocument(docName1, newDatabaseName1)
-      .loginToGUI()
-      .url(baseUrl + '/#replication/_create')
-      .waitForElementPresent('button#replicate', waitTime, true)
-      .waitForElementPresent('#replication-source', waitTime, true)
+  //   client
+  //     .createDatabase(newDatabaseName1)
+  //     .checkForDatabaseCreated(newDatabaseName1, waitTime)
+  //     .createDocument(docName1, newDatabaseName1)
+  //     .loginToGUI()
+  //     .url(baseUrl + '/#replication/_create')
+  //     .waitForElementPresent('button#replicate', waitTime, true)
+  //     .waitForElementPresent('#replication-source', waitTime, true)
 
-      // select LOCAL as the source
-      .click('#replication-source')
-      .keys(['\uE006'])
-      .waitForElementPresent('.replication__input-react-select', waitTime, true)
+  //     // select LOCAL as the source
+  //     .click('#replication-source')
+  //     .keys(['\uE006'])
+  //     .waitForElementPresent('.replication__input-react-select', waitTime, true)
 
-      // enter our source DB
-      .setValue('.replication__input-react-select .Select-input input', [newDatabaseName1, client.Keys.ENTER])
+  //     // enter our source DB
+  //     .setValue('.replication__input-react-select .Select-input input', [newDatabaseName1, client.Keys.ENTER])
 
-      // enter a new target name
-      .waitForElementPresent('#replication-target', waitTime, true)
-      .click('option[value="REPLICATION_TARGET_NEW_LOCAL_DATABASE"]')
-      .setValue('.replication__new-input', replicatedDBName)
+  //     // enter a new target name
+  //     .waitForElementPresent('#replication-target', waitTime, true)
+  //     .click('option[value="REPLICATION_TARGET_NEW_LOCAL_DATABASE"]')
+  //     .setValue('.replication__new-input', replicatedDBName)
 
-      .click('#replicate')
+  //     .click('#replicate')
 
-      .waitForElementPresent('.enter-password-modal', waitTime, true)
-      .setValue('.enter-password-modal .password-modal-input', password)
-      .click('.enter-password-modal button.save')
-      .waitForElementNotPresent('.enter-password-modal', waitTime, true)
-      .waitForElementNotPresent('.global-notification .fonticon-cancel', waitTime, false)
-      .end();
-  },
+  //     .waitForElementPresent('.enter-password-modal', waitTime, true)
+  //     .setValue('.enter-password-modal .password-modal-input', password)
+  //     .click('.enter-password-modal button.save')
+  //     .waitForElementNotPresent('.enter-password-modal', waitTime, true)
+  //     .waitForElementNotPresent('.global-notification .fonticon-cancel', waitTime, false)
+  //     .end();
+  // },
 
 
   'Replicates existing local db to existing local db' : function (client) {
