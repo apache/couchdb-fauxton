@@ -47,25 +47,25 @@ module.exports = {
       .createDocument(docName1, newDatabaseName1)
       .loginToGUI()
       .url(baseUrl + '/#replication/_create')
-      .waitForElementPresent('button#replicate', waitTime, true)
-      .waitForElementPresent('#replication-source', waitTime, true)
+      .waitForElementVisible('button#replicate', waitTime, true)
+      .waitForElementVisible('#replication-source', waitTime, true)
 
       // select LOCAL as the source
       .clickWhenVisible('#replication-source')
       .keys(['\uE006'])
-      .waitForElementPresent('.replication__input-react-select', waitTime, true)
+      .waitForElementVisible('.replication__input-react-select', waitTime, true)
 
       // enter our source DB
       .setValue('.replication__input-react-select .Select-input input', [newDatabaseName1, client.Keys.ENTER])
 
       // enter a new target name
-      .waitForElementPresent('#replication-target', waitTime, true)
+      .waitForElementVisible('#replication-target', waitTime, true)
       .clickWhenVisible('option[value="REPLICATION_TARGET_NEW_LOCAL_DATABASE"]')
       .setValue('.replication__new-input', replicatedDBName)
 
       .clickWhenVisible('#replicate')
 
-      .waitForElementPresent('.enter-password-modal', waitTime, true)
+      .waitForElementVisible('.enter-password-modal', waitTime, true)
       .setValue('.enter-password-modal .password-modal-input', password)
       .clickWhenVisible('.enter-password-modal button.save')
       .waitForElementNotPresent('.enter-password-modal', waitTime, true)
@@ -92,17 +92,17 @@ module.exports = {
       // now login and fill in the replication form
       .loginToGUI()
       .url(baseUrl + '/#replication/_create')
-      .waitForElementPresent('button#replicate', waitTime, true)
-      .waitForElementPresent('#replication-source', waitTime, true)
+      .waitForElementVisible('button#replicate', waitTime, true)
+      .waitForElementVisible('#replication-source', waitTime, true)
 
       // select the LOCAL db as the source
       .clickWhenVisible('#replication-source')
       .keys(['\uE006'])
-      .waitForElementPresent('.replication__input-react-select', waitTime, true)
+      .waitForElementVisible('.replication__input-react-select', waitTime, true)
       .setValue('.replication__input-react-select .Select-input input', [newDatabaseName1, client.Keys.ENTER])
 
       // select existing local as the target
-      .waitForElementPresent('#replication-target', waitTime, true)
+      .waitForElementVisible('#replication-target', waitTime, true)
       .clickWhenVisible('#replication-target option[value="REPLICATION_TARGET_EXISTING_LOCAL_DATABASE"]')
       .setValue('#replication-target-local .Select-input input', [newDatabaseName2, client.Keys.ENTER])
 
@@ -112,7 +112,7 @@ module.exports = {
       })
       .clickWhenVisible('#replicate')
 
-      .waitForElementPresent('.enter-password-modal', waitTime, true)
+      .waitForElementVisible('.enter-password-modal', waitTime, true)
       .setValue('.enter-password-modal input[type="password"]', password)
       .clickWhenVisible('.enter-password-modal button.save')
       .end();
@@ -143,17 +143,17 @@ module.exports = {
       // now login and fill in the replication form
       .loginToGUI()
       .url(baseUrl + '/#replication/_create')
-      .waitForElementPresent('button#replicate', waitTime, true)
-      .waitForElementPresent('#replication-source', waitTime, true)
+      .waitForElementVisible('button#replicate', waitTime, true)
+      .waitForElementVisible('#replication-source', waitTime, true)
 
       // select the LOCAL db as the source
       .clickWhenVisible('#replication-source')
       .keys(['\uE006'])
-      .waitForElementPresent('.replication__input-react-select', waitTime, true)
+      .waitForElementVisible('.replication__input-react-select', waitTime, true)
       .setValue('.replication__input-react-select .Select-input input', [newDatabaseName1, client.Keys.ENTER])
 
       // select existing local as the target
-      .waitForElementPresent('#replication-target', waitTime, true)
+      .waitForElementVisible('#replication-target', waitTime, true)
       .clickWhenVisible('#replication-target option[value="REPLICATION_TARGET_EXISTING_LOCAL_DATABASE"]')
       .setValue('#replication-target-local .Select-input input', [newDatabaseName2, client.Keys.ENTER])
       .setValue('.replication__doc-name-input', [replicatorDoc._id, client.Keys.ENTER])
@@ -164,9 +164,9 @@ module.exports = {
       })
       .clickWhenVisible('#replicate')
 
-      .waitForElementPresent('.replication__error-doc-modal .replication__error-continue', waitTime, true)
+      .waitForElementVisible('.replication__error-doc-modal .replication__error-continue', waitTime, true)
       .clickWhenVisible('.replication__error-doc-modal .replication__error-continue')
-      .waitForElementPresent('.enter-password-modal', waitTime, true)
+      .waitForElementVisible('.enter-password-modal', waitTime, true)
       .setValue('.enter-password-modal input[type="password"]', password)
       .clickWhenVisible('.enter-password-modal button.save')
       .end();
