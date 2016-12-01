@@ -88,6 +88,7 @@ module.exports = {
       .waitForElementNotPresent('.global-notification .fonticon-cancel', waitTime, false)
       .url(baseUrl + '/#replication')
       .waitForElementNotPresent('.load-lines', waitTime, true)
+      .waitForElementVisible('.replication__filter-input', waitTime, true)
       .setValue('.replication__filter-input', 'filter1')
       .waitForElementNotPresent('a[href="#/database/_replicator/existing-doc-filter2"]', waitTime, true)
       .clearValue('.replication__filter-input')
