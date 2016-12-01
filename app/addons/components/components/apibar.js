@@ -56,7 +56,7 @@ export const APIBar = React.createClass({
     if (!this.props.contentVisible) {
       return null;
     }
-    let endpoint = FauxtonAPI.url.decode(this.props.endpoint);
+    const {endpoint} = this.props;
     return (
       <TrayContents className="tray show-tray api-bar-tray">
         <div className="input-prepend input-append">
