@@ -288,9 +288,6 @@ Stores.SidebarStore = FauxtonAPI.Store.extend({
         this._loading = true;
       break;
 
-      case ActionTypes.SIDEBAR_REFRESH:
-      break;
-
       case ActionTypes.SIDEBAR_SHOW_DELETE_INDEX_MODAL:
         this.showDeleteIndexModal(action.options);
       break;
@@ -321,6 +318,7 @@ Stores.SidebarStore = FauxtonAPI.Store.extend({
 
       case ActionTypes.SIDEBAR_UPDATED_DESIGN_DOCS:
         this.updatedDesignDocs(action.options.designDocs);
+        this._loading = false;
       break;
 
       default:

@@ -98,7 +98,7 @@ TabsSidebarContent.propTypes = {
   upperContent: React.PropTypes.object,
 };
 
-export const DocsTabsSidebarLayout = ({database, showIncludeAllDocs, docURL, endpoint, dbName, dropDownLinks}) => {
+export const DocsTabsSidebarLayout = ({database, designDocs, showIncludeAllDocs, docURL, endpoint, dbName, dropDownLinks}) => {
   return (
     <div id="dashboard" className="with-sidebar">
       <TabsSidebarHeader
@@ -110,7 +110,7 @@ export const DocsTabsSidebarLayout = ({database, showIncludeAllDocs, docURL, end
         database={database}
       />
       <TabsSidebarContent
-        lowerContent={<IndexResultsComponents.List />}
+        lowerContent={<IndexResultsComponents.List designDocs={designDocs} />}
       />
     </div>
   );

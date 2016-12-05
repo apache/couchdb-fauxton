@@ -423,10 +423,6 @@ Documents.BulkDeleteDocCollection = FauxtonAPI.Collection.extend({
       this.remove(this.get(id));
     }, this);
 
-    if (reloadDesignDocs) {
-      FauxtonAPI.triggerRouteEvent('reloadDesignDocs');
-    }
-
     this.trigger('removed', ids);
   },
 

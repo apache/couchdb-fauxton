@@ -84,10 +84,11 @@ var DocEditorController = React.createClass({
     store.off('change', this.onChange);
   },
 
-  // whenever a file is uploaded, reset the editor
+  // whenever a file is uploaded or a doc is cloned update the editor
   componentWillUpdate: function (nextProps, nextState) {
-    if (this.state.numFilesUploaded !== nextState.numFilesUploaded) {
+    if (this.state.numFilesUploaded !== nextState.numFilesUploaded || this.state.doc && this.state.doc.hasChanged()) {
       this.getEditor().setValue(JSON.stringify(nextState.doc.attributes, null, '  '));
+      this.onSaveComplete();
     }
   },
 

@@ -11,6 +11,8 @@
 // the License.
 
 import FauxtonAPI from "./base";
+import _ from "lodash";
+
 var CouchdbSession = {
   Session: FauxtonAPI.Model.extend({
     url: '/_session',

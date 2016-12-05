@@ -35,7 +35,7 @@ const AllDbsRouteObject = FauxtonAPI.RouteObject.extend({
 
   allDatabases: function () {
     Actions.init();
-    this.setComponent('.template', Layout);
+    return <Layout />;
   }
 });
 Databases.RouteObjects = [AllDbsRouteObject];

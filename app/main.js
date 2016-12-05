@@ -11,10 +11,14 @@
 // the License.
 
 import app from './app';
+import React from 'react';
+import ReactDOM from 'react-dom';
 import FauxtonAPI from './core/api';
 import LoadAddons from './load_addons';
 import Backbone from 'backbone';
 import $ from 'jquery';
+import AppWrapper from './addons/fauxton/appwrapper';
+
 
 app.addons = LoadAddons;
 FauxtonAPI.router = app.router = new FauxtonAPI.Router(app.addons);
@@ -49,3 +53,5 @@ $(document).on("click", "a:not([data-bypass])", function (evt) {
     app.router.navigate(href.attr, true);
   }
 });
+
+ReactDOM.render(<AppWrapper router={app.router}/>, document.getElementById('app'));

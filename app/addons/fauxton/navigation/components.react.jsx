@@ -60,7 +60,7 @@ const NavLink = React.createClass({
   }
 });
 
-const NavBar = React.createClass({
+export const NavBar = React.createClass({
   getStoreState () {
     return {
       navLinks: navBarStore.getNavLinks(),
@@ -156,9 +156,6 @@ const NavBar = React.createClass({
 });
 
 export default {
-  renderNavBar (el) {
-    ReactDOM.render(<NavBar/>, el);
-  },
   NavBar: NavBar,
   Burger: Burger
 };

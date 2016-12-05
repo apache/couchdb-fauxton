@@ -11,7 +11,7 @@
 // the License.
 
 import app from '../../app';
-
+import React from 'react';
 import FauxtonAPI from '../../core/api';
 import BaseRoute from './shared-routes';
 import Documents from './resources';
@@ -28,7 +28,6 @@ import QueryOptionsActions from './queryoptions/actions';
 import {DocsTabsSidebarLayout, ViewsTabsSidebarLayout, ChangesSidebarLayout} from './layouts';
 
 var DocumentsRouteObject = BaseRoute.extend({
-  layout: "empty",
   routes: {
     "database/:database/_all_docs(:extra)": {
       route: "allDocs",
@@ -41,11 +40,7 @@ var DocumentsRouteObject = BaseRoute.extend({
     'database/:database/_changes': 'changes'
   },
 
-  events: {
-    "route:reloadDesignDocs": "reloadDesignDocs"
-  },
-
-  initialize: function (route, masterLayout, options) {
+  initialize (route, options) {
     this.initViews(options[0]);
   },
 
@@ -73,14 +68,14 @@ var DocumentsRouteObject = BaseRoute.extend({
     QueryOptionsActions.hideQueryOptions();
 
     const dropDownLinks = this.getCrumbs(this.database);
-    this.setComponent('.template', ViewsTabsSidebarLayout, {
-      showEditView: false, //a bit of a hack but its fine for now.
-      docURL: designDocInfo.documentation(),
-      endpoint: designDocInfo.url('apiurl'),
-      dbName: this.database.id,
-      dropDownLinks,
-      database: this.database
-    });
+    return <ViewsTabsSidebarLayout
+      showEditView={false}
+      docURL={designDocInfo.documentation()}
+      endpoint={designDocInfo.url('apiurl')}
+      dbName={this.database.id}
+      dropDownLinks={dropDownLinks}
+      database={this.database}
+    />;
   },
 
   /*
@@ -136,21 +131,15 @@ var DocumentsRouteObject = BaseRoute.extend({
     QueryOptionsActions.showQueryOptions();
 
     const dropDownLinks = this.getCrumbs(this.database);
-    this.setComponent('.template', DocsTabsSidebarLayout, {
-      showIncludeAllDocs: true,
-      docURL,
-      endpoint,
-      dbName: this.database.id,
-      dropDownLinks,
-      database: this.database
-    });
-  },
-
-  reloadDesignDocs: function (event) {
-    this.addSidebar(); // this ensures the design docs get reloaded
-    if (event && event.selectedTab) {
-      SidebarActions.selectNavItem(event.selectedTab);
-    }
+    return <DocsTabsSidebarLayout
+      showIncludeAllDocs={true}
+      docURL={docURL}
+      endpoint={endpoint}
+      dbName={this.database.id}
+      dropDownLinks={dropDownLinks}
+      database={this.database}
+      designDocs={this.designDocs}
+    />;
   },
 
   changes: function () {
@@ -161,13 +150,13 @@ var DocumentsRouteObject = BaseRoute.extend({
 
     QueryOptionsActions.hideQueryOptions();
 
-    this.setComponent('.template', ChangesSidebarLayout, {
-      endpoint: FauxtonAPI.urls('changes', 'apiurl', this.database.id, ''),
-      docURL: this.database.documentation(),
-      dbName: this.database.id,
-      dropDownLinks: this.getCrumbs(this.database),
-      database: this.database
-    });
+    return <ChangesSidebarLayout
+      endpoint={FauxtonAPI.urls('changes', 'apiurl', this.database.id, '')}
+      docURL={this.database.documentation()}
+      dbName={this.database.id}
+      dropDownLinks={this.getCrumbs(this.database)}
+      database={this.database}
+    />;
   }
 
 });

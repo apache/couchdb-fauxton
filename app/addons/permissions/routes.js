@@ -17,15 +17,15 @@ import Resources from "./resources";
 import Actions from "./actions";
 import BaseRoute from "../documents/shared-routes";
 import Layout from './layout';
+import React from 'react';
 
 const PermissionsRouteObject = BaseRoute.extend({
-  layout: 'empty',
   roles: ['fx_loggedIn'],
   routes: {
     'database/:database/permissions': 'permissions'
   },
 
-  initialize: function (route, masterLayout, options) {
+  initialize: function (route, options) {
     var docOptions = app.getParams();
     docOptions.include_docs = true;
 
@@ -48,13 +48,13 @@ const PermissionsRouteObject = BaseRoute.extend({
       { name: this.database.id, link: Databases.databaseUrl(this.database)},
       { name: 'Permissions' }
     ];
-    this.setComponent('.template', Layout, {
-      docURL: this.security.documentation,
-      endpoint: this.security.url('apiurl'),
-      dbName: this.database.id,
-      dropDownLinks: crumbs,
-      database: this.database
-    });
+    return <Layout
+      docURL={this.security.documentation}
+      endpoint={this.security.url('apiurl')}
+      dbName={this.database.id}
+      dropDownLinks={crumbs}
+      database={this.database}
+    />;
   }
 });
 
