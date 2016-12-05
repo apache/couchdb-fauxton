@@ -17,52 +17,52 @@ import Clipboard from 'clipboard';
 let clipboard;
 
 export const initializeClipboard = (cb) => {
-	clipboard = new Clipboard('.copy');
-	if (cb != null) {
-		clipboard.on('success', function(e) {
-			cb();
-		});
-	}
+  clipboard = new Clipboard('.copy');
+  if (cb != null) {
+    clipboard.on('success', function(e) {
+      cb();
+    });
+  }
 };
 
 export const destroyClipboard = () => {
-	clipboard.destroy();
+  clipboard.destroy();
 };
 
 export class Copy extends React.Component {
-	componentDidMount () {
-		initializeClipboard(this.props.onClipboardClick);
-	}
+  componentDidMount () {
+    initializeClipboard(this.props.onClipboardClick);
+  }
 
-	componentWillUnmount () {
-		destroyClipboard();
-	}
+  componentWillUnmount () {
+    destroyClipboard();
+  }
 
-	getClipboardElement () {
+  getClipboardElement () {
     if (this.props.displayType === 'icon') {
       return (<i className="fontawesome icon-paste"></i>);
     }
     return this.props.textDisplay;
   }
 
-	render () {
-		return (
-			<button className="copy clipboard-copy-element"
-							title={this.props.title}
-							data-clipboard-text={this.props.text}
-			>
-				{this.getClipboardElement()}
-			</button>
-		);
-	}
+  render () {
+    return (
+      <button className="copy clipboard-copy-element"
+              title={this.props.title}
+              data-clipboard-text={this.props.text}
+      >
+        {this.getClipboardElement()}
+      </button>
+    );
+  }
 };
 
 Copy.defaultProps = {
-	displayType: 'icon',
-	textDisplay: 'Copy',
-	title: 'Copy to clipboard',
-	onClipboardClick: function () { },
-	clipboard: null
+  displayType: 'icon',
+  textDisplay: 'Copy',
+  title: 'Copy to clipboard',
+  onClipboardClick: function () { },
+  clipboard: null
 };
 
 Copy.propTypes = {
