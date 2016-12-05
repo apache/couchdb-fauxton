@@ -10,15 +10,12 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+import React from 'react';
 import FauxtonAPI from '../../core/api';
 import ReplicationController from './controller';
 import ComponentActions from '../components/actions';
 
 const ReplicationRouteObject = FauxtonAPI.RouteObject.extend({
-  layout: 'empty',
-  hideNotificationCenter: true,
-  hideApiBar: true,
-
   routes: {
     'replication/_create': 'defaultView',
     'replication/:dbname': 'defaultView',
@@ -43,31 +40,25 @@ const ReplicationRouteObject = FauxtonAPI.RouteObject.extend({
   },
 
   defaultView: function (databaseName) {
-    // ComponentActions.hideAPIBarButton();
-    // this.setCreateReplicationCrumbs();
     const localSource = databaseName || '';
-    this.setComponent('.template', ReplicationController, {
-      localSource: localSource,
-      section: 'new replication'
-    });
 
+    return <ReplicationController
+      localSource={localSource}
+      section={'new replication'}
+      />;
   },
 
   fromId: function (replicationId) {
-    // ComponentActions.hideAPIBarButton();
-    // this.setCreateReplicationCrumbs();
-    this.setComponent('.template', ReplicationController, {
-      replicationId: replicationId,
-      section: 'new replication'
-    });
+    return <ReplicationController
+      replicationId={replicationId}
+      section={'new replication'}
+    />;
   },
 
   activityView: function () {
-    // ComponentActions.hideAPIBarButton();
-    // this.setActivityCrumbs();
-    this.setComponent('.template', ReplicationController, {
-      section: 'activity'
-    });
+    return <ReplicationController
+      section={'activity'}
+    />;
   }
 });
 

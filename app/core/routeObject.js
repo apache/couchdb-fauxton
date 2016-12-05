@@ -68,34 +68,22 @@ var routeObjectOptions = ["views", "routes", "events", "roles", "crumbs", "layou
 
 _.extend(RouteObject.prototype, Backbone.Events, {
   // Should these be default vals or empty funcs?
-  views: {},
   routes: {},
   events: {},
   crumbs: [],
-  layout: "empty",
-  apiUrl: null,
-  hideNotificationPanel: null,
-  loaderClassname: 'loader',
   renderedState: false,
-  establish: function () {},
   route: function () {},
   roles: [],
-  _promises: [],
   initialize: function () {}
 }, {
 
-  renderWith: function (route, masterLayout, args) {
+  renderWith: function (route, args) {
 
     // set the options for this render
     var options = {
-      masterLayout: masterLayout,
       route: route,
       args: args
     };
-
-    var promiseLayout = this.setTemplateOnFullRender(masterLayout);
-
-    this.triggerBroadcast('beforeEstablish');
 
     var renderAllViews = _.bind(this.renderAllViews, this, options),
         establishError = _.bind(this.establishError, this),
@@ -105,122 +93,101 @@ _.extend(RouteObject.prototype, Backbone.Events, {
 
     const promise = this.establish();
 
-    // Only start the view rendering process once the template has been rendered
-    // otherwise we get double renders
-    promiseLayout.then(function () {
-      renderReactComponents();
+    renderReactComponents();
+    callEstablish(promise)
+      .then(establishError)
+      .then(renderComplete, err => {
+        console.error('renderpipeline broke');
+        console.error('check your establish method');
 
-      callEstablish(promise)
-        .then(renderAllViews, establishError)
-        .then(renderComplete, (err) => {
-          console.error('renderpipeline broke');
-          console.error('check your establish method');
+        console.log(this.establish.toString());
+        console.error(err);
+      });
 
-          console.log(this.establish.toString());
-          console.error(err);
-        });
-
-
-    }.bind(this));
   },
 
-  setTemplateOnFullRender: function (masterLayout) {
+  // renderReactComponents: function () {
+  //   _.each(this.reactComponents, function (componentInfo, selector) {
+  //     if ($(selector)[0]) {
+  //       ReactDOM.render(React.createElement(componentInfo.component, componentInfo.props), $(selector)[0]);
+  //     }
+  //   });
+  // },
 
-    var promise = $.Deferred();
-
-    // Only want to redo the template if its a full render
-    if (!this.renderedState) {
-      this.triggerBroadcast('beforeFullRender');
-      masterLayout.setTemplate(this.layout).then(promise.resolve, promise.reject);
-    } else {
-      promise.resolve();
-    }
-
-    return promise;
-  },
-
-  renderReactComponents: function () {
-    _.each(this.reactComponents, function (componentInfo, selector) {
-      if ($(selector)[0]) {
-        ReactDOM.render(React.createElement(componentInfo.component, componentInfo.props), $(selector)[0]);
-      }
-    });
-  },
-
-  callEstablish: function (establishPromise) {
-    this.addPromise(establishPromise);
-    return FauxtonAPI.when(establishPromise);
-  },
-
-  renderAllViews: function (options, resp) {
-    var routeObject = this,
-        renderView = _.bind(this.renderView, this, routeObject, options);
-
-    this.triggerBroadcast('afterEstablish');
-
-    var promises = _.map(routeObject.getViews(), renderView, this);
-    return FauxtonAPI.when(promises);
-  },
-
-  renderView: function (routeObject, options, view, selector) {
-    var viewInfo = {
-      view: view,
-      selector: selector,
-      masterLayout: options.masterLayout
-    };
-
-    var renderViewOnLayout = _.bind(this.renderViewOnLayout, this, viewInfo);
-
-    if (view.hasRendered) {
-      this.triggerBroadcast('viewHasRendered', view, selector);
-      return;
-    }
-
-    this.triggerBroadcast('beforeRender', view, selector);
-
-    return this.callEstablish(view.establish()).then(renderViewOnLayout, this.establishError);
-  },
-
-  renderViewOnLayout: function (viewInfo, resp, xhr) {
-    var masterLayout = viewInfo.masterLayout,
-        triggerBroadcast = _.bind(this.triggerBroadcast, this);
-
-    masterLayout.setView(viewInfo.selector, viewInfo.view);
-    var promise = masterLayout.renderView(viewInfo.selector).promise();
-
-    promise.then(function () {
-      triggerBroadcast('afterRender', viewInfo.view, viewInfo.selector);
-    });
-
-    return promise;
-  },
-
-  establishError: function (resp) {
-    if (!resp || !resp.responseText) { return; }
-    FauxtonAPI.addNotification({
-          msg: 'An Error occurred: ' + JSON.parse(resp.responseText).reason,
-          type: 'error',
-          clear: true
-    });
-  },
-
-  renderComplete: function () {
-    // Track that we've done a full initial render
-    this.setRenderedState(true);
-    this.triggerBroadcast('renderComplete');
-  },
-
-  setRenderedState: function (bool) {
-    this.renderedState = bool;
-  },
-
-  triggerBroadcast: function (eventName) {
-    var args = Array.prototype.slice.call(arguments);
-    this.trigger.apply(this, args);
-
-    args.splice(0, 1, eventName, this);
-    broadcaster.trigger.apply(broadcaster, args);
-  },
+  // callEstablish: function (establishPromise) {
+  //   this.addPromise(establishPromise);
+  //   return FauxtonAPI.when(establishPromise);
+  // },
+  //
+  // renderAllViews: function (options, resp) {
+  //   var routeObject = this,
+  //       renderView = _.bind(this.renderView, this, routeObject, options);
+  //
+  //   this.triggerBroadcast('afterEstablish');
+  //
+  //   var promises = _.map(routeObject.getViews(), renderView, this);
+  //   return FauxtonAPI.when(promises);
+  // },
+  //
+  // renderView: function (routeObject, options, view, selector) {
+  //   var viewInfo = {
+  //     view: view,
+  //     selector: selector,
+  //     masterLayout: options.masterLayout
+  //   };
+  //
+  //   var renderViewOnLayout = _.bind(this.renderViewOnLayout, this, viewInfo);
+  //
+  //   if (view.hasRendered) {
+  //     this.triggerBroadcast('viewHasRendered', view, selector);
+  //     return;
+  //   }
+  //
+  //   this.triggerBroadcast('beforeRender', view, selector);
+  //
+  //   return this.callEstablish(view.establish()).then(renderViewOnLayout, this.establishError);
+  // },
+  //
+  // renderViewOnLayout: function (viewInfo, resp, xhr) {
+  //   var masterLayout = viewInfo.masterLayout,
+  //       triggerBroadcast = _.bind(this.triggerBroadcast, this);
+  //
+  //   masterLayout.setView(viewInfo.selector, viewInfo.view);
+  //   var promise = masterLayout.renderView(viewInfo.selector).promise();
+  //
+  //   promise.then(function () {
+  //     triggerBroadcast('afterRender', viewInfo.view, viewInfo.selector);
+  //   });
+  //
+  //   return promise;
+  // },
+  //
+  // establishError: function (resp) {
+  //   if (!resp || !resp.responseText) { return; }
+  //   FauxtonAPI.addNotification({
+  //         msg: 'An Error occurred: ' + JSON.parse(resp.responseText).reason,
+  //         type: 'error',
+  //         clear: true
+  //   });
+  // },
+  //
+  // renderComplete: function () {
+  //   // Track that we've done a full initial render
+  //   this.setRenderedState(true);
+  //   this.triggerBroadcast('renderComplete');
+  // },
+  //
+  // setRenderedState: function (bool) {
+  //   this.renderedState = bool;
+  // },
+  //
+  // triggerBroadcast: function (eventName) {
+  //   var args = Array.prototype.slice.call(arguments);
+  //   this.trigger.apply(this, args);
+  //
+  //   args.splice(0, 1, eventName, this);
+  //   broadcaster.trigger.apply(broadcaster, args);
+  // },
 
   get: function (key) {
     return _.isFunction(this[key]) ? this[key]() : this[key];
@@ -244,94 +211,94 @@ _.extend(RouteObject.prototype, Backbone.Events, {
     }, this);
   },
 
-  getView: function (selector) {
-    return this.views[selector];
-  },
-
-  setView: function (selector, view) {
-    this.removeView(selector);
-    this.removeComponent(selector);
-    this.views[selector] = view;
-    return view;
-  },
-
-  setComponent: function (selector, component, props) {
-    this.removeView(selector);
-    this.removeComponent(selector);
-    this.reactComponents[selector] = {
-      component: component,
-      props: props || null
-    };
-  },
-
-  removeComponent: function (selector) {
-    if (_.has(this.reactComponents, selector)) {
-      if ($(selector)[0]) {
-        ReactDOM.unmountComponentAtNode($(selector)[0]);
-      }
-      this.reactComponents[selector] = null;
-      delete this.reactComponents[selector];
-    }
-  },
-
-  removeComponents: function () {
-    _.each(this.reactComponents, function (component, selector) {
-      this.removeComponent(selector);
-    }, this);
-
-    this.reactComponents = {};
-  },
-
-  getViews: function () {
-    return this.views;
-  },
-
-  removeView: function (selector) {
-    if (_.has(this.views, selector)) {
-      this.views[selector].remove();
-      this.views[selector] = null;
-      delete this.views[selector];
-    }
-  },
-
-  removeViews: function () {
-    _.each(this.views, function (view, selector) {
-      view.remove();
-      delete this.views[selector];
-      view = null;
-    }, this);
-  },
-
-  addPromise: function (promise) {
-    if (_.isEmpty(promise)) { return; }
-
-    if (!_.isArray(promise)) {
-      return this._promises.push(promise);
-    }
-
-    _.each(promise, function (p) {
-      this._promises.push(p);
-    }, this);
-  },
-
-  cleanup: function () {
-    this.removeComponents();
-    this.removeViews();
-    this.rejectPromises();
-  },
-
-  rejectPromises: function () {
-    _.each(this._promises, function (promise) {
-      if (promise.state() === "resolved") { return; }
-      if (promise.abort) {
-        return promise.abort("Route change");
-      }
-
-      promise.reject && promise.reject();
-    }, this);
-
-    this._promises = [];
-  },
+  // getView: function (selector) {
+  //   return this.views[selector];
+  // },
+  //
+  // setView: function (selector, view) {
+  //   this.removeView(selector);
+  //   this.removeComponent(selector);
+  //   this.views[selector] = view;
+  //   return view;
+  // },
+  //
+  // setComponent: function (selector, component, props) {
+  //   this.removeView(selector);
+  //   this.removeComponent(selector);
+  //   this.reactComponents[selector] = {
+  //     component: component,
+  //     props: props || null
+  //   };
+  // },
+  //
+  // removeComponent: function (selector) {
+  //   if (_.has(this.reactComponents, selector)) {
+  //     if ($(selector)[0]) {
+  //       ReactDOM.unmountComponentAtNode($(selector)[0]);
+  //     }
+  //     this.reactComponents[selector] = null;
+  //     delete this.reactComponents[selector];
+  //   }
+  // },
+  //
+  // removeComponents: function () {
+  //   _.each(this.reactComponents, function (component, selector) {
+  //     this.removeComponent(selector);
+  //   }, this);
+  //
+  //   this.reactComponents = {};
+  // },
+  //
+  // getViews: function () {
+  //   return this.views;
+  // },
+  //
+  // removeView: function (selector) {
+  //   if (_.has(this.views, selector)) {
+  //     this.views[selector].remove();
+  //     this.views[selector] = null;
+  //     delete this.views[selector];
+  //   }
+  // },
+  //
+  // removeViews: function () {
+  //   _.each(this.views, function (view, selector) {
+  //     view.remove();
+  //     delete this.views[selector];
+  //     view = null;
+  //   }, this);
+  // },
+  //
+  // addPromise: function (promise) {
+  //   if (_.isEmpty(promise)) { return; }
+  //
+  //   if (!_.isArray(promise)) {
+  //     return this._promises.push(promise);
+  //   }
+  //
+  //   _.each(promise, function (p) {
+  //     this._promises.push(p);
+  //   }, this);
+  // },
+  //
+  // cleanup: function () {
+  //   this.removeComponents();
+  //   this.removeViews();
+  //   this.rejectPromises();
+  // },
+  //
+  // rejectPromises: function () {
+  //   _.each(this._promises, function (promise) {
+  //     if (promise.state() === "resolved") { return; }
+  //     if (promise.abort) {
+  //       return promise.abort("Route change");
+  //     }
+  //
+  //     promise.reject && promise.reject();
+  //   }, this);
+  //
+  //   this._promises = [];
+  // },
 
   getRouteUrls: function () {
     return _.keys(this.get('routes'));
@@ -355,7 +322,7 @@ _.extend(RouteObject.prototype, Backbone.Events, {
       routeCallback = this[routeObj];
     }
 
-    routeCallback.apply(this, args);
+    return routeCallback.apply(this, args);
   },
 
   getRouteRoles: function (routeUrl) {

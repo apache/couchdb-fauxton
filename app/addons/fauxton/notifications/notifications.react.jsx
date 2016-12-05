@@ -28,7 +28,7 @@ var VelocityComponent = VelocityReact.VelocityComponent;
 
 // The one-stop-shop for Fauxton notifications. This controller handler the header notifications and the rightmost
 // notification center panel
-var NotificationController = React.createClass({
+export const NotificationController = React.createClass({
 
   getInitialState: function () {
     return this.getStoreState();

@@ -47,16 +47,8 @@
     </div>
   </noscript>
 
-  <div id="notifications"></div>
 
-  <!-- Main container. -->
-  <div role="main" id="main">
-    <div id="app-container">
-      <div class="wrapper">
-        <div id="primary-navbar"></div>
-      </div>
-    </div>
-  </div>
+  <div id="app"></div>
 
   <!-- Application source. -->
   <script src="<%= bundlejs %>" type="text/javascript"></script>

@@ -60,7 +60,7 @@ const NavLink = React.createClass({
   }
 });
 
-const NavBar = React.createClass({
+export const NavBar = React.createClass({
   getStoreState () {
     return {
       navLinks: navBarStore.getNavLinks(),
