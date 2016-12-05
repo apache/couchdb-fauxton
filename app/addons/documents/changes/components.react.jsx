@@ -23,7 +23,7 @@ import "../../../../assets/js/plugins/prettify";
 
 const store = Stores.changesStore;
 const BadgeList = ReactComponents.BadgeList;
-
+const {Copy} = ReactComponents;
 
 class ChangesController extends React.Component {
   constructor (props) {
@@ -280,7 +280,7 @@ class ChangeRow extends React.Component {
             <div className="span2">seq</div>
             <div className="span8 change-sequence">{change.seq}</div>
             <div className="span2 text-right">
-              <Components.Clipboard text={change.seq} onClipboardClick={() => this.onClipboardClick('seq')} />
+              <Copy text={change.seq.toString()} onClipboardClick={() => this.onClipboardClick('seq')} />
             </div>
           </div>
 
@@ -290,7 +290,7 @@ class ChangeRow extends React.Component {
               <ChangeID id={change.id} deleted={change.deleted} databaseName={databaseName} />
             </div>
             <div className="span2 text-right">
-              <Components.Clipboard text={change.id} onClipboardClick={() => this.onClipboardClick('id')} />
+              <Copy text={change.id} onClipboardClick={() => this.onClipboardClick('id')} />
             </div>
           </div>
 

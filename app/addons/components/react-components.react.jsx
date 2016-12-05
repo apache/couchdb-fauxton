@@ -29,6 +29,7 @@ import {ApiBarController} from './components/apibar';
 import {DeleteDatabaseModal} from './components/deletedatabasemodal';
 import {TabElement, TabElementWrapper} from './components/tabelement';
 import {Polling, RefreshBtn} from './components/polling';
+import {Copy} from './components/copy';
 
 export default {
   BadgeList,
@@ -54,5 +55,6 @@ export default {
   DeleteDatabaseModal,
   TabElement,
   TabElementWrapper,
-  RefreshBtn
+  RefreshBtn,
+  Copy
 };
