@@ -43,7 +43,7 @@
     "brace": "^0.7.0",
     "chai": "^3.5.0",
     "clean-css": "^3.4.9",
-    "clipboard": "^3.10.5",
+    "clipboard": "^1.5.15",
     "couchapp": "~0.11.0",
     "css-loader": "^0.26.0",
     "d3": "^3.4.11",
