@@ -19,26 +19,17 @@ import React from "react";
 import ReactDOM from "react-dom";
 import TestUtils from "react-addons-test-utils";
 import sinon from "sinon";
+import {mount} from 'enzyme';
 
 var assert = utils.assert;
 
 describe('NavBar', function () {
 
   describe('burger', function () {
-    var container, burgerEl, toggleMenu;
-
-    beforeEach(function () {
-      toggleMenu = sinon.spy();
-      container = document.createElement('div');
-      burgerEl = TestUtils.renderIntoDocument(<Views.Burger toggleMenu={toggleMenu} />, container);
-    });
-
-    afterEach(function () {
-      ReactDOM.unmountComponentAtNode(container);
-    });
-
     it('dispatch TOGGLE_NAVBAR_MENU on click', function () {
-      TestUtils.Simulate.click(ReactDOM.findDOMNode(burgerEl));
+      const toggleMenu = sinon.spy();
+      const burgerEl = mount(<Views.Burger toggleMenu={toggleMenu} />);
+      burgerEl.simulate('click');
       assert.ok(toggleMenu.calledOnce);
     });
 
@@ -51,19 +42,18 @@ describe('NavBar', function () {
     sinon.stub(FauxtonAPI.session, 'user').returns({ name: 'test-user' });
     BaseAuth.initialize();
 
-    var container = document.createElement('div');
-    var el = TestUtils.renderIntoDocument(<Views.NavBar />, container);
+    const el = mount(<Views.NavBar />);
 
     FauxtonAPI.session.trigger('change');
 
     // confirm the logout link is present
-    var matches = ReactDOM.findDOMNode(el).outerHTML.match(/Logout/);
+    let matches = el.text().match(/Logout/);
     assert.equal(matches.length, 1);
 
     // now confirm there's still only a single logout link after publishing multiple
     FauxtonAPI.session.trigger('change');
     FauxtonAPI.session.trigger('change');
-    matches = ReactDOM.findDOMNode(el).outerHTML.match(/Logout/);
+    matches = el.text().match(/Logout/);
     assert.equal(matches.length, 1);
 
     FauxtonAPI.session.isLoggedIn.restore();

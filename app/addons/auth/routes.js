@@ -38,10 +38,10 @@ var AuthRouteObject = FauxtonAPI.RouteObject.extend({
 
   login: function () {
     const crumbs = [{ name: 'Log In to CouchDB' }];
-    this.setComponent(".template", AuthLayout, {
-      crumbs: crumbs,
-      component: <LoginForm urlBack={app.getParams().urlback } />
-    });
+    return <AuthLayout
+      crumbs={crumbs}
+      component={<LoginForm urlBack={app.getParams().urlback } />}
+      />;
   },
 
   logout: function () {
@@ -54,10 +54,10 @@ var AuthRouteObject = FauxtonAPI.RouteObject.extend({
   createAdminForNode: function () {
     ClusterActions.fetchNodes();
     const crumbs = [{ name: 'Create Admin' }];
-    this.setComponent(".template", AuthLayout, {
-      crumbs: crumbs,
-      component: <CreateAdminForm loginAfter={true} />
-    });
+    return <AuthLayout
+      crumbs={crumbs}
+      component={<CreateAdminForm loginAfter={true} />}
+      />;
   }
 });
 
@@ -101,19 +101,19 @@ var UserRouteObject = FauxtonAPI.RouteObject.extend({
   changePassword: function () {
     ClusterActions.fetchNodes();
     AuthActions.selectPage('changePassword');
-    this.setComponent(".template", AdminLayout, {
-      crumbs: [{name: 'User Management'}],
-      changePassword: true
-    });
+    return <AdminLayout
+      crumbs={[{name: 'User Management'}]}
+      changePassword={true}
+      />;
   },
 
   addAdmin: function () {
     ClusterActions.fetchNodes();
     AuthActions.selectPage('addAdmin');
-    this.setComponent(".template", AdminLayout, {
-      crumbs: [{name: 'User Management'}],
-      changePassword: false
-    });
+    return <AdminLayout
+      crumbs={[{name: 'User Management'}]}
+      changePassword={false}
+      />;
   },
 
 });

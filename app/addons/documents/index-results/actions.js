@@ -165,7 +165,7 @@ export default {
     });
   },
 
-  deleteSelected: function (bulkDeleteCollection, itemsLength) {
+  deleteSelected: function (bulkDeleteCollection, itemsLength, designDocs) {
     var msg = (itemsLength === 1) ? 'Are you sure you want to delete this doc?' :
       'Are you sure you want to delete these ' + itemsLength + ' docs?';
 
@@ -180,6 +180,8 @@ export default {
 
     var reloadResultsList = _.bind(this.reloadResultsList, this);
     var selectedIds = [];
+    const hasDesignDocs = !!bulkDeleteCollection.map(d => d.id).find((id) => /_design/.test(id));
+
 
     bulkDeleteCollection
       .bulkDelete()
@@ -198,9 +200,11 @@ export default {
         selectedIds = ids;
       })
       .always(function (id) {
+        if (designDocs && hasDesignDocs) {
+          SidebarActions.updateDesignDocs(designDocs);
+        }
         reloadResultsList().then(function () {
           bulkDeleteCollection.reset(selectedIds);
-          SidebarActions.refresh();
         });
       });
   }

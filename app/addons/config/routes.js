@@ -22,7 +22,6 @@ import Layout from './layout';
 
 
 var ConfigDisabledRouteObject = FauxtonAPI.RouteObject.extend({
-  layout: 'empty',
 
   routes: {
     '_config': 'checkNodes',
@@ -61,24 +60,24 @@ var ConfigPerNodeRouteObject = FauxtonAPI.RouteObject.extend({
 
   configForNode: function (node) {
     ConfigActions.fetchAndEditConfig(node);
-    this.setComponent('.template', Layout, {
-      node: node,
-      docURL: this.configs.documentation,
-      endpoint: this.configs.url(),
-      crumbs: [{ name: 'Config' }],
-      showCors: false
-    });
+    return <Layout
+      node={node}
+      docURL={this.configs.documentation}
+      endpoint={this.configs.url()}
+      crumbs={[{ name: 'Config' }]}
+      showCors={false}
+    />;
   },
 
   configCorsForNode: function (node) {
     CORSActions.fetchAndEditCors(node);
-    this.setComponent('.template', Layout, {
-      node: node,
-      docURL: this.configs.documentation,
-      endpoint: this.configs.url(),
-      crumbs: [{ name: 'Config' }],
-      showCors: true
-    });
+    return <Layout
+      node={node}
+      docURL={this.configs.documentation}
+      endpoint={this.configs.url()}
+      crumbs={[{ name: 'Config' }]}
+      showCors={true}
+    />;
   }
 });
 

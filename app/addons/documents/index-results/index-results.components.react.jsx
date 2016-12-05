@@ -444,6 +444,10 @@ var ResultsScreen = React.createClass({
 
 
 var ViewResultListController = React.createClass({
+  propTypes: {
+    designDocs: React.PropTypes.object.isRequired
+  },
+
   getStoreState: function () {
     var selectedItemsLength = store.getSelectedItemsLength();
     return {
@@ -465,7 +469,7 @@ var ViewResultListController = React.createClass({
   },
 
   removeItem: function () {
-    Actions.deleteSelected(this.state.bulkDeleteCollection, this.state.selectedItemsLength);
+    Actions.deleteSelected(this.state.bulkDeleteCollection, this.state.selectedItemsLength, this.props.designDocs);
   },
 
   getInitialState: function () {

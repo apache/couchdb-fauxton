@@ -65,7 +65,7 @@ MangoHeader.defaultProps = {
   crumbs: []
 };
 
-const MangoContent = ({edit}) => {
+const MangoContent = ({edit, designDocs}) => {
   const leftContent = edit ?
     <MangoComponents.MangoIndexEditorController
       description={app.i18n.en_US['mango-descripton-index-editor']}
@@ -83,7 +83,7 @@ const MangoContent = ({edit}) => {
       </div>
       <div id="right-content" className="flex-body flex-layout flex-col">
         <div id="dashboard-lower-content" className="flex-body">
-          <IndexResultsComponents.List />
+          <IndexResultsComponents.List designDocs={designDocs} />
         </div>
         <MangoFooter  />
       </div>
@@ -92,7 +92,7 @@ const MangoContent = ({edit}) => {
 };
 
 
-export const MangoLayout = ({edit, showIncludeAllDocs, docURL, endpoint, crumbs}) => {
+export const MangoLayout = ({edit, showIncludeAllDocs, docURL, endpoint, crumbs, designDocs}) => {
   return (
     <div id="dashboard" className="two-pane flex-layout flex-col">
       <MangoHeader
@@ -101,7 +101,7 @@ export const MangoLayout = ({edit, showIncludeAllDocs, docURL, endpoint, crumbs}
         endpoint={endpoint}
         crumbs={crumbs}
       />
-    <MangoContent edit={edit} />
+    <MangoContent edit={edit} designDocs={designDocs}/>
     </div>
   );
 };

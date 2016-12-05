@@ -72,8 +72,7 @@
     "before": true,
     "after": true,
     "define": true,
-
-    "Spinner": true,
+    "expect": true,
     "prettyPrint": true
   }
 

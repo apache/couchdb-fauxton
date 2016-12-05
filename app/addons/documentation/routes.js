@@ -26,12 +26,12 @@ var DocumentationRouteObject = FauxtonAPI.RouteObject.extend({
   },
   roles: ['fx_loggedIn'],
   documentation: function () {
-    this.setComponent('.template', OnePaneSimpleLayout, {
-      component: <DocumentationComponents.DocumentationPage/>,
-      crumbs: [
+    return <OnePaneSimpleLayout
+      component={<DocumentationComponents.DocumentationPage/>}
+      crumbs={[
           {'name': 'Documentation'}
-      ]
-    });
+      ]}
+    />;
   }
 });
 DocumentationRouteObject.RouteObjects = [DocumentationRouteObject];

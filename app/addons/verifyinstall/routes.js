@@ -19,10 +19,6 @@ import Components from "./components.react";
 import {OnePaneSimpleLayout} from '../components/layouts';
 
 const VerifyRouteObject = FauxtonAPI.RouteObject.extend({
-  layout: 'empty',
-  hideApiBar: true,
-  hideNotificationCenter: true,
-
   routes: {
     'verifyinstall': 'verifyInstall'
   },
@@ -30,13 +26,12 @@ const VerifyRouteObject = FauxtonAPI.RouteObject.extend({
 
   verifyInstall: function () {
     Actions.resetStore();
-    this.setComponent('#dashboard-content', Components.VerifyInstallController);
-    this.setComponent('.template', OnePaneSimpleLayout, {
-      component: <Components.VerifyInstallController/>,
-      crumbs: [
+    return <OnePaneSimpleLayout
+      component={<Components.VerifyInstallController/>}
+      crumbs={[
         {name: 'Verify CouchDB Installation'}
-      ]
-    });
+      ]}
+    />;
   }
 });
 

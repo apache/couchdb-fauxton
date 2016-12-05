@@ -13,6 +13,7 @@
 import FauxtonAPI from "./base";
 import Auth from "./auth";
 import Backbone from "backbone";
+import _ from "lodash";
 
 var beforeUnloads = {};
 
@@ -48,32 +49,34 @@ export default Backbone.Router.extend({
   },
 
   addModuleRouteObject: function (RouteObject) {
-    var that = this;
-    var masterLayout = FauxtonAPI.masterLayout,
-    routeUrls = RouteObject.prototype.getRouteUrls();
+    const that = this;
+    const routeUrls = RouteObject.prototype.getRouteUrls();
 
-    _.each(routeUrls, function (route) {
-      this.route(route, route.toString(), function () {
-        var args = Array.prototype.slice.call(arguments),
-        roles = RouteObject.prototype.getRouteRoles(route),
-        authPromise = FauxtonAPI.auth.checkAccess(roles);
+    routeUrls.forEach(route => {
+      this.route(route, route.toString(), (...args) => {
+        const roles = RouteObject.prototype.getRouteRoles(route);
+        const authPromise = FauxtonAPI.auth.checkAccess(roles);
 
-        authPromise.then(function () {
+        authPromise.then(() => {
           if (!that.activeRouteObject || !that.activeRouteObject.hasRoute(route)) {
-            that.activeRouteObject && that.activeRouteObject.cleanup();
-            that.activeRouteObject = new RouteObject(route, masterLayout, args);
+            that.activeRouteObject = new RouteObject(route, args);
           }
 
-          var routeObject = that.activeRouteObject;
-          routeObject.rejectPromises();
-          routeObject.routeCallback(route, args);
-          routeObject.renderWith(route, masterLayout, args);
-        }, function () {
+          const routeObject = that.activeRouteObject;
+          const component = routeObject.routeCallback(route, args);
+          that.currentRouteOptions = {
+            selectedHeader: this.activeRouteObject.selectedHeader,
+            component,
+            roles,
+            route: route.toString()
+          };
+          that.trigger('new-component', this.currentRouteOptions);
+        }, () => {
           FauxtonAPI.auth.authDeniedCb();
         });
 
       });
-    }, this);
+    });
   },
 
   setModuleRoutes: function (addons) {
@@ -94,9 +97,6 @@ export default Backbone.Router.extend({
     // NOTE: This must be below creation of the layout
     // FauxtonAPI header links and others depend on existence of the layout
     this.setModuleRoutes(addons);
-
-    $(FauxtonAPI.el).append(FauxtonAPI.masterLayout.el);
-    FauxtonAPI.masterLayout.render();
 
     this.lastPages = [];
     //keep last pages visited in Fauxton

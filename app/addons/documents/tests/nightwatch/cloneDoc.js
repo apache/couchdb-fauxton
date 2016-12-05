@@ -50,7 +50,7 @@ module.exports = {
 
         this.verify.ok(
           isCreatedDocumentPresent,
-          'Checking if new document no longer shows up in _all_docs.'
+          'check that document is correctly reloaded'
         );
       })
     .end();

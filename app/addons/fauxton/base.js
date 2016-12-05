@@ -27,20 +27,6 @@ const Fauxton = FauxtonAPI.addon();
 
 Fauxton.initialize = () => {
 
-  FauxtonAPI.RouteObject.on('beforeEstablish', function (routeObject) {
-    NavigationActions.setNavbarActiveLink(_.result(routeObject, 'selectedHeader'));
-  });
-
-  const primaryNavBarEl = $('#primary-navbar')[0];
-  if (primaryNavBarEl) {
-    NavbarReactComponents.renderNavBar(primaryNavBarEl);
-  }
-
-  const notificationEl = $('#notifications')[0];
-  if (notificationEl) {
-    NotificationComponents.renderNotificationController(notificationEl);
-  }
-
   const versionInfo = new Fauxton.VersionInfo();
   versionInfo.fetch().then(function () {
     NavigationActions.setNavbarVersionInfo(versionInfo.get("version"));

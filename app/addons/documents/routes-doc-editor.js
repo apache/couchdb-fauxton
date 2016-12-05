@@ -24,14 +24,11 @@ import {DocEditorLayout} from '../components/layouts';
 
 
 const DocEditorRouteObject = FauxtonAPI.RouteObject.extend({
-  layout: 'empty',
-  hideApiBar: true,
-  hideNotificationCenter: true,
   selectedHeader: 'Databases',
 
   roles: ['fx_loggedIn'],
 
-  initialize: function (route, masterLayout, options) {
+  initialize (route, options) {
     this.databaseName = options[0];
     this.docId = options[1];
     this.database = this.database || new Databases.Model({ id: this.databaseName });
@@ -58,12 +55,12 @@ const DocEditorRouteObject = FauxtonAPI.RouteObject.extend({
 
     RevBrowserActions.showConfirmModal(false, null);
     RevBrowserActions.initDiffEditor(databaseName, docId);
-    this.setComponent(".template", DocEditorLayout, {
-      crumbs,
-      endpoint: this.doc.url('apiurl'),
-      docURL,
-      component: <RevBrowserComponents.DiffyController />
-    });
+    return <DocEditorLayout
+      crumbs={crumbs}
+      endpoint={this.doc.url('apiurl')}
+      docURL={docURL}
+      component={<RevBrowserComponents.DiffyController />}
+      />;
   },
 
   codeEditor: function (databaseName, docId) {
@@ -81,19 +78,20 @@ const DocEditorRouteObject = FauxtonAPI.RouteObject.extend({
     }
 
     Actions.initDocEditor({ doc: this.doc, database: this.database });
-    this.setComponent(".template", DocEditorLayout, {
-      crumbs,
-      endpoint: this.doc.url('apiurl'),
-      docURL: this.doc.documentation(),
-      component: <ReactComponents.DocEditorController
-        database={this.database}
-        isNewDoc={docId ? false : true}
-      />
-    });
+
+    return <DocEditorLayout
+      crumbs={crumbs}
+      endpoint={this.doc.url('apiurl')}
+      docURL={this.doc.documentation()}
+      component={<ReactComponents.DocEditorController
+          database={this.database}
+          isNewDoc={docId ? false : true}
+        />}
+      />;
   },
 
   showDesignDoc: function (database, ddoc) {
-    this.codeEditor(database, '_design/' + ddoc);
+    return this.codeEditor(database, '_design/' + ddoc);
   }
 });
 

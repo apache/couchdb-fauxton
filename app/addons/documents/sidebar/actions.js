@@ -32,6 +32,10 @@ function newOptions (options) {
 }
 
 function updateDesignDocs (designDocs) {
+  FauxtonAPI.dispatch({
+    type: ActionTypes.SIDEBAR_FETCHING
+  });
+
   designDocs.fetch().then(function () {
     FauxtonAPI.dispatch({
       type: ActionTypes.SIDEBAR_UPDATED_DESIGN_DOCS,
@@ -70,10 +74,6 @@ function selectNavItem (navItem, params) {
     type: ActionTypes.SIDEBAR_SET_SELECTED_NAV_ITEM,
     options: settings
   });
-}
-
-function refresh () {
-  FauxtonAPI.dispatch({ type: ActionTypes.SIDEBAR_REFRESH });
 }
 
 function showDeleteIndexModal (indexName, designDocName, indexLabel, onDelete) {
@@ -142,7 +142,6 @@ export default {
   updateDesignDocs: updateDesignDocs,
   toggleContent: toggleContent,
   selectNavItem: selectNavItem,
-  refresh: refresh,
   showDeleteIndexModal: showDeleteIndexModal,
   hideDeleteIndexModal: hideDeleteIndexModal,
   showCloneIndexModal: showCloneIndexModal,
