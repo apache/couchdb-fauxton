@@ -18,11 +18,9 @@ let clipboard;
 
 export const initializeClipboard = (cb) => {
   clipboard = new Clipboard('.copy');
-  if (cb != null) {
-    clipboard.on('success', function(e) {
-      cb();
-    });
-  }
+  clipboard.on('success', function(e) {
+    cb();
+  });
 };
 
 export const destroyClipboard = () => {
@@ -61,11 +59,11 @@ Copy.defaultProps = {
   displayType: 'icon',
   textDisplay: 'Copy',
   title: 'Copy to clipboard',
-  onClipboardClick: function () { },
-  clipboard: null
+  onClipboardClick: function () { }
 };
 
 Copy.propTypes = {
   text: React.PropTypes.string.isRequired,
-  displayType: React.PropTypes.oneOf(['icon', 'text'])
+  displayType: React.PropTypes.oneOf(['icon', 'text']),
+  onClipboardClick: React.PropTypes.func.isRequired
 };
