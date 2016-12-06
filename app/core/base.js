@@ -11,7 +11,6 @@
 // the License.
 
 import Backbone from "backbone";
-import LayoutManager from "backbone.layoutmanager";
 var FauxtonAPI = {
   //add default objects
   router: {

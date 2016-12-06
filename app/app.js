@@ -19,7 +19,6 @@ import Helpers from "./helpers";
 import Utils from "./core/utils";
 import FauxtonAPI from "./core/api";
 import Couchdb from "./core/couchdbSession";
-import "backbone.layoutmanager";
 import "../assets/less/fauxton.less";
 
 // Make sure we have a console.log

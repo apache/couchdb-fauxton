@@ -9,7 +9,6 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
-import FauxtonAPI from "../../../core/api";
 import {Polling, clearPollCounter, resetPollCounter} from "../components/polling";
 import utils from "../../../../test/mocha/testUtils";
 import {shallow, mount} from "enzyme";
