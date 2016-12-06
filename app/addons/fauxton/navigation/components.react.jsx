@@ -156,9 +156,6 @@ export const NavBar = React.createClass({
 });
 
 export default {
-  renderNavBar (el) {
-    ReactDOM.render(<NavBar/>, el);
-  },
   NavBar: NavBar,
   Burger: Burger
 };

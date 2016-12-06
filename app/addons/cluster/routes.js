@@ -20,10 +20,6 @@ import {OnePaneSimpleLayout} from '../components/layouts';
 
 
 var ConfigDisabledRouteObject = FauxtonAPI.RouteObject.extend({
-  layout: 'empty',
-  hideApiBar: true,
-  hideNotificationCenter: true,
-
   routes: {
     'cluster/disabled': 'showDisabledFeatureScreen'
   },
@@ -35,14 +31,14 @@ var ConfigDisabledRouteObject = FauxtonAPI.RouteObject.extend({
   showDisabledFeatureScreen: function () {
     const memberships = new Cluster.ClusterNodes();
     ClusterActions.fetchNodes();
-    this.setComponent('.template', OnePaneSimpleLayout, {
-      component: <ClusterComponents.DisabledConfigController/>,
-      endpoint: memberships.url('apiurl'),
-      docURL: memberships.documentation,
-      crumbs: [
+    return <OnePaneSimpleLayout
+      component={<ClusterComponents.DisabledConfigController/>}
+      endpoint={memberships.url('apiurl')}
+      docURL={memberships.documentation}
+      crumbs={[
         { name: 'Config disabled' }
-      ]
-    });
+      ]}
+    />;
   }
 });
 

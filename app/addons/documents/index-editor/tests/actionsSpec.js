@@ -57,7 +57,6 @@ describe('Index Editor Actions', function () {
 
     afterEach(function () {
       restore(FauxtonAPI.navigate);
-      restore(FauxtonAPI.triggerRouteEvent);
     });
 
     it('saves design doc if has other views', function () {

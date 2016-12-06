@@ -439,13 +439,9 @@ var NotificationPanelRow = React.createClass({
 
 
 export default {
-  NotificationController: NotificationController,
-  NotificationCenterButton: NotificationCenterButton,
-  NotificationCenterPanel: NotificationCenterPanel,
-  NotificationPanelRow: NotificationPanelRow,
-  Notification: Notification,
-
-  renderNotificationController: function (el) {
-    return ReactDOM.render(<NotificationController />, el);
-  }
+  NotificationController,
+  NotificationCenterButton,
+  NotificationCenterPanel,
+  NotificationPanelRow,
+  Notification
 };

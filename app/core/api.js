@@ -11,7 +11,6 @@
 // the License.
 
 import FauxtonAPI from "./base";
-import Layout from "./layout";
 import Router from "./router";
 import RouteObject from "./routeObject";
 import utils from "./utils";
@@ -26,7 +25,6 @@ Backbone.ajax = function () {
   };
 
 Object.assign(FauxtonAPI, {
-  Layout: Layout,
   Router: Router,
   RouteObject: RouteObject,
   utils: utils,
@@ -55,10 +53,6 @@ FauxtonAPI.removeBeforeUnload = function () {
 
 FauxtonAPI.addRoute = function (route) {
   FauxtonAPI.router.route(route.route, route.name, route.callback);
-};
-
-FauxtonAPI.triggerRouteEvent = function (routeEvent, args) {
-  FauxtonAPI.router.triggerRouteEvent('route:' + routeEvent, args);
 };
 
 var urlPaths = {};

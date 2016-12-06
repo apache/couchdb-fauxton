@@ -102,42 +102,7 @@ module.exports = function (grunt) {
       release:  cleanable
     },
 
-    // The jst task compiles all application templates into JavaScript
-    // functions with the underscore.js template function from 1.2.4.  You can
-    // change the namespace and the template options, by reading this:
-    // https://github.com/gruntjs/grunt-contrib/blob/master/docs/jst.md
-    //
-    // The concat task depends on this file to exist, so if you decide to
-    // remove this, ensure concat is updated accordingly.
-    jst: {
-      compile: {
-        options: {
-          processContent: function (src) {
-            return src.replace(/<!--[\s\S]*?-->/gm, '');
-          }
-        },
-        files: {
-          'dist/tmp-out/templates.js': [
-            "app/templates/**/*.html",
-            "app/addons/**/templates/**/*.html"
-          ]
-        }
-      }
-    },
-
     template: templateSettings,
-
-    concat: {
-      bundle_js: {
-        src: ['dist/tmp-out/templates.js', "dist/debug/bundle.js"],
-        dest: "dist/debug/bundle.js"
-      },
-
-      bundlerelease_js: {
-        src: ['dist/tmp-out/templates.js', "dist/release/bundle.js"],
-        dest: "dist/tmp-out/bundle.js"
-      }
-    },
 
     // Copy build artifacts and library code into the distribution
     // see - http://gruntjs.com/configuring-tasks#building-the-files-object-dynamically
@@ -172,17 +137,6 @@ module.exports = function (grunt) {
         files:[
           {src: './favicon.ico', dest: "dist/debug/favicon.ico"}
         ]
-      },
-
-      testTemplates: {
-        files: [
-          {src: 'dist/tmp-out/templates.js', dest: 'test/templates.js'}
-       ]
-      },
-      devTemplates: {
-        files: [
-          {src: 'dist/tmp-out/templates.js', dest: 'dist/debug/templates.js'}
-       ]
       },
 
       testfiles: {
@@ -262,7 +216,7 @@ module.exports = function (grunt) {
     // these rename the already-bundled, minified requireJS and CSS files to include their hash
     md5: {
       bundlejs: {
-        files: { 'dist/release/dashboard.assets/js/': 'dist/tmp-out/bundle.js' },
+        files: { 'dist/release/dashboard.assets/js/': 'dist/release/bundle.js' },
         options: {
           afterEach: function (fileChanges) {
             // replace the REQUIREJS_FILE placeholder with the actual filename
@@ -287,8 +241,6 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-exec');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-clean');
-  grunt.loadNpmTasks('grunt-contrib-jst');
-  grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-shell');
   grunt.loadNpmTasks('grunt-md5');
   /*
@@ -303,12 +255,12 @@ module.exports = function (grunt) {
   grunt.registerTask('test', ['checkTestExists', 'clean:release', 'dependencies', 'copy:debug', 'gen_initialize:development', 'test_inline']);
 
   // lighter weight test task for use inside dev/watch
-  grunt.registerTask('test_inline', ['mochaSetup', 'shell:webpacktest', 'jst', 'copy:testTemplates', 'shell:phantomjs']);
+  grunt.registerTask('test_inline', ['mochaSetup', 'shell:webpacktest', 'shell:phantomjs']);
   // Fetch dependencies (from git or local dir)
   grunt.registerTask('dependencies', ['get_deps', 'gen_load_addons:default']);
 
   // minify code and css, ready for release.
-  grunt.registerTask('build', ['copy:distDepsRequire', 'jst', 'shell:webpackrelease', 'concat:bundlerelease_js',
+  grunt.registerTask('build', ['copy:distDepsRequire', 'shell:webpackrelease',
     'md5:bundlejs', 'template:release']);
   /*
    * Build the app in either dev, debug, or release mode
@@ -323,10 +275,10 @@ module.exports = function (grunt) {
     'template:development', 'copy:debug']);
 
   grunt.registerTask('debugDev', ['clean', 'dependencies', "gen_initialize:development",
-    'template:development', 'copy:debug', 'jst', 'shell:webpack', 'concat:bundle_js']);
+    'template:development', 'copy:debug', 'shell:webpack']);
 
   grunt.registerTask('devSetup', ['dependencies', "gen_initialize:development",
-    'template:development', 'copy:debug', 'jst', 'copy:devTemplates']);
+    'template:development', 'copy:debug', 'copy:devTemplates']);
   grunt.registerTask('devSetupWithClean', ['clean', 'devSetup']);
 
   grunt.registerTask('watchRun', ['clean:watch', 'dependencies', 'shell:stylecheck']);

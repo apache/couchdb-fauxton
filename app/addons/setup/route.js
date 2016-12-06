@@ -20,10 +20,6 @@ import ClusterActions from "../cluster/cluster.actions";
 import {OnePaneSimpleLayout} from '../components/layouts';
 
 var RouteObject = FauxtonAPI.RouteObject.extend({
-  layout: 'empty',
-  hideApiBar: true,
-  hideNotificationCenter: true,
-
   roles: ['_admin'],
 
   routes: {
@@ -37,52 +33,52 @@ var RouteObject = FauxtonAPI.RouteObject.extend({
     const setup = new Setup.Model();
     ClusterActions.fetchNodes();
     SetupActions.getClusterStateFromCouch();
-    this.setComponent('.template', OnePaneSimpleLayout, {
-      component: <SetupComponents.SetupFirstStepController/>,
-      endpoint: setup.url('apiurl'),
-      docURL: setup.documentation,
-      crumbs: [
+    return <OnePaneSimpleLayout
+      component={<SetupComponents.SetupFirstStepController/>}
+      endpoint={setup.url('apiurl')}
+      docURL={setup.documentation}
+      crumbs={[
         { 'name': 'Setup ' + app.i18n.en_US['couchdb-productname'] }
-      ]
-    });
+      ]}
+    />;
   },
 
   setupSingleNode: function () {
     const setup = new Setup.Model();
     ClusterActions.fetchNodes();
-    this.setComponent('.template', OnePaneSimpleLayout, {
-      component: <SetupComponents.SetupSingleNodeController/>,
-      endpoint: setup.url('apiurl'),
-      docURL: setup.documentation,
-      crumbs: [
+    return <OnePaneSimpleLayout
+      component={<SetupComponents.SetupSingleNodeController/>}
+      endpoint={setup.url('apiurl')}
+      docURL={setup.documentation}
+      crumbs={[
         { 'name': 'Setup ' + app.i18n.en_US['couchdb-productname'] }
-      ]
-    });
+      ]}
+    />;
   },
 
   setupMultiNode: function () {
     const setup = new Setup.Model();
     ClusterActions.fetchNodes();
-    this.setComponent('.template', OnePaneSimpleLayout, {
-      component: <SetupComponents.SetupMultipleNodesController/>,
-      endpoint: setup.url('apiurl'),
-      docURL: setup.documentation,
-      crumbs: [
+    return <OnePaneSimpleLayout
+      component={<SetupComponents.SetupMultipleNodesController/>}
+      endpoint={setup.url('apiurl')}
+      docURL={setup.documentation}
+      crumbs={[
         { 'name': 'Setup ' + app.i18n.en_US['couchdb-productname'] }
-      ]
-    });
+      ]}
+    />;
   },
 
   finishView: function () {
     const setup = new Setup.Model();
-    this.setComponent('.template', OnePaneSimpleLayout, {
-      component: <SetupComponents.ClusterConfiguredScreen/>,
-      endpoint: setup.url('apiurl'),
-      docURL: setup.documentation,
-      crumbs: [
+    return <OnePaneSimpleLayout
+      component={<SetupComponents.ClusterConfiguredScreen/>}
+      endpoint={setup.url('apiurl')}
+      docURL={setup.documentation}
+      crumbs={[
         { 'name': 'Setup ' + app.i18n.en_US['couchdb-productname'] }
-      ]
-    });
+      ]}
+    />;
   }
 });
 

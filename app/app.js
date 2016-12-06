@@ -49,49 +49,11 @@ Object.assign(app, {
   helpers: Helpers
 });
 
-// Localize or create a new JavaScript Template object
-const JST = window.JST = window.JST || {};
-
-// Configure LayoutManager with Backbone Boilerplate defaults
-FauxtonAPI.Layout.configure({
-  // Allow LayoutManager to augment Backbone.View.prototype.
-  manage: true,
-  prefix: 'app/',
-
-  // Inject app/helper.js for shared functionality across all html templates
-  renderTemplate: function (template, context) {
-    return template(_.extend(Helpers, context));
-  },
-
-  fetchTemplate: function (path) {
-    // Initialize done for use in async-mode
-    let done;
-
-    // Concatenate the file extension.
-    path = path + '.html';
-
-    // If cached, use the compiled template.
-    if (JST[path]) {
-      return JST[path];
-    } else {
-      // Put fetch into `async-mode`.
-      done = this.async();
-      // Seek out the template asynchronously.
-      return $.ajax({ url: app.root + path }).then(function (contents) {
-        done(JST[path] = _.template(contents));
-      });
-    }
-  }
-});
-
 FauxtonAPI.setSession(new Couchdb.Session());
 
 // Define your master router on the application namespace and trigger all
 // navigation from this instance.
 FauxtonAPI.config({
-  el: '.wrapper',
-  masterLayout: new FauxtonAPI.Layout(),
-
   // I haven't wrapped these dispatch methods in a action
   // because I don't want to require fauxton/actions in this method.
   addHeaderLink: function (link) {

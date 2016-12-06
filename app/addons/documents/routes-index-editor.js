@@ -10,6 +10,7 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+import React from 'react';
 import app from "../../app";
 import FauxtonAPI from "../../core/api";
 import Helpers from "./helpers";
@@ -23,9 +24,7 @@ import ReactHeaderActions from "./header/header.actions";
 import SidebarActions from "./sidebar/actions";
 import {DocsTabsSidebarLayout, ViewsTabsSidebarLayout} from './layouts';
 
-
-var IndexEditorAndResults = BaseRoute.extend({
-  layout: 'empty',
+const IndexEditorAndResults = BaseRoute.extend({
   routes: {
     'database/:database/new_view': {
       route: 'createView',
@@ -45,7 +44,7 @@ var IndexEditorAndResults = BaseRoute.extend({
     }
   },
 
-  initialize: function (route, masterLayout, options) {
+  initialize (route, options) {
     var databaseName = options[0];
     this.databaseName = databaseName;
     this.database = new Databases.Model({id: databaseName});
@@ -97,14 +96,14 @@ var IndexEditorAndResults = BaseRoute.extend({
     const docURL = FauxtonAPI.constants.DOC_URLS.GENERAL;
 
     const dropDownLinks = this.getCrumbs(this.database);
-    this.setComponent('.template', DocsTabsSidebarLayout, {
-      showIncludeAllDocs: true,
-      docURL,
-      endpoint,
-      dbName: this.database.id,
-      dropDownLinks,
-      database: this.database
-    });
+    return <DocsTabsSidebarLayout
+      showIncludeAllDocs={true}
+      docURL={docURL}
+      endpoint={endpoint}
+      dbName={this.database.id}
+      dropDownLinks={dropDownLinks}
+      database={this.database}
+      />;
   },
 
   createView: function (database, _designDoc) {
@@ -128,13 +127,14 @@ var IndexEditorAndResults = BaseRoute.extend({
     SidebarActions.selectNavItem('');
 
     const dropDownLinks = this.getCrumbs(this.database);
-    this.setComponent('.template', ViewsTabsSidebarLayout, {
-      showIncludeAllDocs: true,
-      docURL: FauxtonAPI.constants.DOC_URLS.GENERAL,
-      dbName: this.database.id,
-      database: this.database,
-      dropDownLinks
-    });
+
+    return <ViewsTabsSidebarLayout
+      showIncludeAllDocs={true}
+      docURL={FauxtonAPI.constants.DOC_URLS.GENERAL}
+      dbName={this.database.id}
+      dropDownLinks={dropDownLinks}
+      database={this.database}
+      />;
   },
 
   editView: function (databaseName, ddocName, viewName) {
@@ -154,17 +154,16 @@ var IndexEditorAndResults = BaseRoute.extend({
 
     const docURL = FauxtonAPI.constants.DOC_URLS.GENERAL;
     const endpoint = FauxtonAPI.urls('view', 'apiurl', databaseName, ddocName, viewName);
-
-
     const dropDownLinks = this.getCrumbs(this.database);
-    this.setComponent('.template', ViewsTabsSidebarLayout, {
-      showIncludeAllDocs: true,
-      docURL,
-      endpoint,
-      dbName: this.database.id,
-      dropDownLinks,
-      database: this.database
-    });
+
+    return <ViewsTabsSidebarLayout
+      showIncludeAllDocs={true}
+      docURL={docURL}
+      endpoint={endpoint}
+      dbName={this.database.id}
+      dropDownLinks={dropDownLinks}
+      database={this.database}
+      />;
   }
 
 });

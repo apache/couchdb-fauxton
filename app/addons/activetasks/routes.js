@@ -19,9 +19,6 @@ import Layout from './layout';
 
 var ActiveTasksRouteObject = FauxtonAPI.RouteObject.extend({
   selectedHeader: 'Active Tasks',
-  layout: 'empty',
-  hideNotificationCenter: true,
-  hideApiBar: true,
 
   routes: {
     'activetasks/:id': 'showActiveTasks',
@@ -31,7 +28,7 @@ var ActiveTasksRouteObject = FauxtonAPI.RouteObject.extend({
   roles: ['_admin'],
 
   showActiveTasks: function () {
-    this.setComponent(".template", Layout);
+    return <Layout />;
   }
 });
 
