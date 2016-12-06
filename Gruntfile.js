@@ -278,7 +278,7 @@ module.exports = function (grunt) {
     'template:development', 'copy:debug', 'shell:webpack']);
 
   grunt.registerTask('devSetup', ['dependencies', "gen_initialize:development",
-    'template:development', 'copy:debug', 'copy:devTemplates']);
+    'template:development', 'copy:debug']);
   grunt.registerTask('devSetupWithClean', ['clean', 'devSetup']);
 
   grunt.registerTask('watchRun', ['clean:watch', 'dependencies', 'shell:stylecheck']);

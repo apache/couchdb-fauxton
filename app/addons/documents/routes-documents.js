@@ -138,6 +138,7 @@ var DocumentsRouteObject = BaseRoute.extend({
       dbName={this.database.id}
       dropDownLinks={dropDownLinks}
       database={this.database}
+      designDocs={this.designDocs}
     />;
   },
 

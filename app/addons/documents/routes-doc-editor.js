@@ -91,7 +91,7 @@ const DocEditorRouteObject = FauxtonAPI.RouteObject.extend({
   },
 
   showDesignDoc: function (database, ddoc) {
-    this.codeEditor(database, '_design/' + ddoc);
+    return this.codeEditor(database, '_design/' + ddoc);
   }
 });
 

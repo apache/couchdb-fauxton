@@ -17,9 +17,8 @@ import FauxtonAPI from './core/api';
 import LoadAddons from './load_addons';
 import Backbone from 'backbone';
 import $ from 'jquery';
+import AppWrapper from './addons/fauxton/appwrapper';
 
-import {NotificationController} from "./addons/fauxton/notifications/notifications.react";
-import {NavBar} from './addons/fauxton/navigation/components.react';
 
 app.addons = LoadAddons;
 FauxtonAPI.router = app.router = new FauxtonAPI.Router(app.addons);
@@ -55,50 +54,4 @@ $(document).on("click", "a:not([data-bypass])", function (evt) {
   }
 });
 
-class ContentWrapper extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      routerOptions: props.router.currentRouteOptions
-    };
-  }
-
-  componentDidMount () {
-    this.props.router.on('new-component', (routerOptions) => {
-      this.setState({routerOptions});
-    });
-  }
-
-  render () {
-    if (!this.state.routerOptions) {
-      return null;
-    }
-
-    const {component} = this.state.routerOptions;
-    return component;
-  }
-}
-
-const App = ({router}) => {
-  return (
-    <div>
-      <div id="notifications">
-        <NotificationController />
-      </div>
-      <div role="main" id="main">
-        <div id="app-container">
-          <div className="wrapper">
-            <div className="pusher">
-              <ContentWrapper router={router} />
-            </div>
-            <div id="primary-navbar">
-              <NavBar/>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-ReactDOM.render(<App router={app.router}/>, document.getElementById('app'));
+ReactDOM.render(<AppWrapper router={app.router}/>, document.getElementById('app'));

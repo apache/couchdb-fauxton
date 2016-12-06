@@ -65,6 +65,7 @@ export default Backbone.Router.extend({
           const routeObject = that.activeRouteObject;
           const component = routeObject.routeCallback(route, args);
           that.currentRouteOptions = {
+            selectedHeader: this.activeRouteObject.selectedHeader,
             component,
             roles,
             route: route.toString()

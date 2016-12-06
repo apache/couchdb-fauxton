@@ -465,7 +465,7 @@ var ViewResultListController = React.createClass({
   },
 
   removeItem: function () {
-    Actions.deleteSelected(this.state.bulkDeleteCollection, this.state.selectedItemsLength);
+    Actions.deleteSelected(this.state.bulkDeleteCollection, this.state.selectedItemsLength, this.props.designDocs);
   },
 
   getInitialState: function () {
