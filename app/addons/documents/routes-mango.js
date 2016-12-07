@@ -20,6 +20,7 @@ import Resources from "./resources";
 import IndexResultsActions from "./index-results/actions";
 import IndexResultStores from "./index-results/stores";
 import ReactHeader from "./header/header.react";
+import Documents from "./shared-resources";
 import ReactActions from "./header/header.actions";
 import MangoActions from "./mango/mango.actions";
 import MangoStores from "./mango/mango.stores";
@@ -98,6 +99,19 @@ const MangoIndexEditorAndQueryEditor = FauxtonAPI.RouteObject.extend({
   },
 
   createIndex: function (database) {
+    const designDocs = new Documents.AllDocs(null, {
+      database: this.database,
+      paging: {
+        pageSize: 500
+      },
+      params: {
+        startkey: '_design/',
+        endkey: '_design0',
+        include_docs: true,
+        limit: 500
+      }
+    });
+
     const mangoIndexCollection = new Resources.MangoIndexCollection(null, {
       database: this.database,
       params: null,
@@ -127,6 +141,7 @@ const MangoIndexEditorAndQueryEditor = FauxtonAPI.RouteObject.extend({
       docURL={FauxtonAPI.constants.DOC_URLS.MANGO_INDEX}
       endpoint={mangoIndexCollection.urlRef('index-apiurl', '')}
       edit={true}
+      designDocs={designDocs}
     />;
   }
 });

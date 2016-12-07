@@ -444,6 +444,10 @@ var ResultsScreen = React.createClass({
 
 
 var ViewResultListController = React.createClass({
+  propTypes: {
+    designDocs: React.PropTypes.object.isRequired
+  },
+
   getStoreState: function () {
     var selectedItemsLength = store.getSelectedItemsLength();
     return {

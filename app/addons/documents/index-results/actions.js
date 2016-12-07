@@ -200,7 +200,7 @@ export default {
         selectedIds = ids;
       })
       .always(function (id) {
-        if (hasDesignDocs) {
+        if (designDocs && hasDesignDocs) {
           SidebarActions.updateDesignDocs(designDocs);
         }
         reloadResultsList().then(function () {
