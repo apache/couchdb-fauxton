@@ -19,6 +19,8 @@ import constants from "../constants";
 import Flux from "flux";
 import $ from "jquery";
 import Backbone from "backbone";
+import _ from "lodash";
+
 Backbone.$ = $;
 Backbone.ajax = function () {
     return Backbone.$.ajax.apply(Backbone.$, arguments);

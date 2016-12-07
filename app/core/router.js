@@ -13,6 +13,7 @@
 import FauxtonAPI from "./base";
 import Auth from "./auth";
 import Backbone from "backbone";
+import _ from "lodash";
 
 var beforeUnloads = {};
 

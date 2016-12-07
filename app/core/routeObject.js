@@ -14,6 +14,7 @@ import FauxtonAPI from "./base";
 import React from "react";
 import ReactDOM from "react-dom";
 import Backbone from "backbone";
+import _ from "lodash";
 
 var RouteObject = function (options) {
   this._options = options;

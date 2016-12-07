@@ -51,8 +51,8 @@ describe('#deleteSelected', function () {
     restore(window.confirm);
     restore(FauxtonAPI.addNotification);
     restore(Actions.reloadResultsList);
-    restore(SidebarActions.refresh);
     restore(Actions.newResultsList);
+    restore(SidebarActions.updateDesignDocs);
   });
 
   it('doesn\'t delete if user denies confirmation', function () {
@@ -70,7 +70,7 @@ describe('#deleteSelected', function () {
 
   it('on success notifies all deleted', function (done) {
     var spy = sinon.spy(FauxtonAPI, 'addNotification');
-    var sidebarSpy = sinon.spy(SidebarActions, 'refresh');
+    const spy2 = sinon.spy(SidebarActions, 'updateDesignDocs');
     var promise = FauxtonAPI.Deferred();
     var ids = {
       errorIds: []
@@ -82,6 +82,21 @@ describe('#deleteSelected', function () {
       },
       reset: function () {
         done();
+      },
+      map () {
+        return {
+          find () {
+            return true;
+          }
+        };
+      }
+    };
+
+    const designDocs = {
+      fetch () {
+        const designDocPromise = FauxtonAPI.Deferred();
+        designDocPromise.reject();
+        return designDocPromise;
       }
     };
 
@@ -90,9 +105,8 @@ describe('#deleteSelected', function () {
     stubPromise.resolve();
     reloadResultsListStub.returns(stubPromise);
 
-    Actions.deleteSelected(bulkDelete, 1);
-
+    Actions.deleteSelected(bulkDelete, 1, designDocs);
     assert.ok(spy.calledOnce);
-    assert.ok(sidebarSpy.calledOnce);
+    assert.ok(spy2.calledOnce);
   });
 });

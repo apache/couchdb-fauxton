@@ -12,6 +12,7 @@
 
 import FauxtonAPI from "./base";
 import Backbone from "backbone";
+import _ from "lodash";
 
 // This is not exposed externally as it should not need to be accessed or overridden
 var Auth = function (options) {
