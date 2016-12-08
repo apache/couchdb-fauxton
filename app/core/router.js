@@ -54,7 +54,6 @@ export default Backbone.Router.extend({
 
     routeUrls.forEach(route => {
       this.route(route, route.toString(), (...args) => {
-        //const args = Array.prototype.slice.call(arguments),
         const roles = RouteObject.prototype.getRouteRoles(route);
         const authPromise = FauxtonAPI.auth.checkAccess(roles);
 

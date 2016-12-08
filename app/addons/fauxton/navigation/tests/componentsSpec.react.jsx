@@ -30,7 +30,6 @@ describe('NavBar', function () {
       const toggleMenu = sinon.spy();
       const burgerEl = mount(<Views.Burger toggleMenu={toggleMenu} />);
       burgerEl.simulate('click');
-      //TestUtils.Simulate.click(ReactDOM.findDOMNode(burgerEl));
       assert.ok(toggleMenu.calledOnce);
     });
 
