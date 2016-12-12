@@ -13,7 +13,7 @@
 import React from 'react';
 import FauxtonAPI from "../../core/api";
 import {TabsSidebarHeader} from '../documents/layouts';
-import Permissions from "./components.react";
+import PermissionsContainer from './container/PermissionsContainer';
 import SidebarComponents from "../documents/sidebar/sidebar.react";
 
 export const PermissionsLayout = ({docURL, database, endpoint, dbName, dropDownLinks}) => {
@@ -32,7 +32,7 @@ export const PermissionsLayout = ({docURL, database, endpoint, dbName, dropDownL
           <SidebarComponents.SidebarController />
         </aside>
         <section id="dashboard-content" className="flex-layout flex-col">
-          <Permissions.PermissionsController />
+          <PermissionsContainer url={endpoint} />
         </section>
       </div>
     </div>

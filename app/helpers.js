@@ -21,6 +21,7 @@ import constants from "./constants";
 import utils from "./core/utils";
 import d3 from "d3";
 import moment from "moment";
+import _ from 'lodash';
 
 var Helpers = {};
 

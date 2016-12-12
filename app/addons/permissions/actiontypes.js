@@ -10,9 +10,5 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-export default {
-  PERMISSIONS_EDIT: 'PERMISSIONS_EDIT',
-  PERMISSIONS_FETCHING: 'PERMISSIONS_FETCHING',
-  PERMISSIONS_ADD_ITEM: 'PERMISSIONS_ADD_ITEM',
-  PERMISSIONS_REMOVE_ITEM: 'PERMISSIONS_REMOVE_ITEM'
-};
+
+export const PERMISSIONS_UPDATE = 'PERMISSIONS_UPDATE';
