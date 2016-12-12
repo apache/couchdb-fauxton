@@ -43,6 +43,9 @@ FauxtonAPI.dispatch = _.bind(FauxtonAPI.dispatcher.dispatch, FauxtonAPI.dispatch
 FauxtonAPI.navigate = function (url, _opts) {
   var options = _.extend({trigger: true}, _opts);
   FauxtonAPI.router.navigate(url, options);
+  if (options.trigger) {
+    FauxtonAPI.router.trigger('trigger-update');
+  }
 };
 
 FauxtonAPI.beforeUnload = function () {

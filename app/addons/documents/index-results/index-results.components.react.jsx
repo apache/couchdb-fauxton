@@ -445,7 +445,7 @@ var ResultsScreen = React.createClass({
 
 var ViewResultListController = React.createClass({
   propTypes: {
-    designDocs: React.PropTypes.object.isRequired
+    designDocs: React.PropTypes.object
   },
 
   getStoreState: function () {
