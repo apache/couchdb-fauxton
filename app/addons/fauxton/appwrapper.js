@@ -34,6 +34,10 @@ class ContentWrapper extends React.Component {
       this.setState({routerOptions});
       NavbarActions.setNavbarActiveLink(this.state.routerOptions.selectedHeader);
     });
+
+    this.props.router.on('trigger-update', () => {
+      this.forceUpdate();
+    });
   }
 
   render () {
@@ -42,6 +46,7 @@ class ContentWrapper extends React.Component {
     }
 
     const {component} = this.state.routerOptions;
+    if (!component) {return null;}
     return component;
   }
 }
