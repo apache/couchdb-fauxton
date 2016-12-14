@@ -27,8 +27,8 @@ const store = Stores.databasesStore;
 
 describe('AddDatabaseWidget', function () {
 
-  var container, addEl, oldCreateNewDatabase;
-  var createCalled, passedDbName;
+  let oldCreateNewDatabase;
+  let createCalled, passedDbName;
 
   beforeEach(function () {
     oldCreateNewDatabase = Actions.createNewDatabase;
@@ -36,23 +36,20 @@ describe('AddDatabaseWidget', function () {
       createCalled = true;
       passedDbName = dbName;
     };
-    container = document.createElement('div');
-    addEl = ReactDOM.render(React.createElement(Views.AddDatabaseWidget, {}), container);
   });
 
   afterEach(function () {
     Actions.createNewDatabase = oldCreateNewDatabase;
-    ReactDOM.unmountComponentAtNode(container);
   });
 
   it("Creates a database with given name", function () {
     createCalled = false;
     passedDbName = null;
-    const el = TestUtils.findRenderedDOMComponentWithTag(addEl, 'input');
-    ReactDOM.findDOMNode(el).value = "testdb";
-    addEl.onAddDatabase();
+    const el = mount(<Views.AddDatabaseWidget />);
+    el.setState({databaseName: 'my-db'});
+    el.instance().onAddDatabase();
     assert.equal(true, createCalled);
-    assert.equal("testdb", passedDbName);
+    assert.equal("my-db", passedDbName);
   });
 
 });

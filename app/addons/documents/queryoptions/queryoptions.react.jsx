@@ -370,30 +370,13 @@ var QueryTray = React.createClass({
     Actions.toggleQueryBarVisibility(false);
   },
 
-  componentDidMount: function () {
-    $('body').on('click.QueryTray', function (e) {
-      if ($(e.target).closest('#query-options').length) {
-        return;
-      }
-      Actions.toggleQueryBarVisibility(false);
-    }.bind(this));
-  },
-
-  componentWillUnmount: function () {
-    $('body').off('click.QueryTray');
-  },
-
   toggleIncludeDocs: function (e) {
     Actions.toggleIncludeDocs();
   },
 
   getTray: function () {
-    if (!this.props.contentVisible) {
-      return null;
-    }
-
     return (
-      <TrayContents contentVisible={this.props.contentVisible}
+      <TrayContents closeTray={this.closeTray} contentVisible={this.props.contentVisible}
         className="query-options"
         id="query-options-tray">
 
@@ -440,7 +423,7 @@ var QueryTray = React.createClass({
           title="Query Options"
           fonticon="fonticon-gears"
           text="Options" />
-        {this.getTray()}
+          {this.getTray()}
       </div>
     );
   }

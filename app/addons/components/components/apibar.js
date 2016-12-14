@@ -53,12 +53,9 @@ export const APIBar = React.createClass({
   },
 
   getTray () {
-    if (!this.props.contentVisible) {
-      return null;
-    }
     const {endpoint} = this.props;
     return (
-      <TrayContents className="tray show-tray api-bar-tray">
+      <TrayContents closeTray={this.closeTray} contentVisible={this.props.contentVisible} className="tray show-tray api-bar-tray">
         <div className="input-prepend input-append">
           <span className="add-on">
             API URL
@@ -91,21 +88,8 @@ export const APIBar = React.createClass({
     Actions.toggleApiBarVisibility(!this.props.contentVisible);
   },
 
-  componentDidMount () {
-    $('body').on('click.APIBar', function (e) {
-
-      if (!$('.show-tray.api-bar-tray').length) {
-        return;
-      }
-
-      if ($(e.target).closest('.api-bar-tray,.control-toggle-api-url').length === 0) {
-        Actions.toggleApiBarVisibility(false);
-      }
-    }.bind(this));
-  },
-
-  componentWillUnmount () {
-    $('body').off('click.APIBar');
+  closeTray () {
+    Actions.toggleApiBarVisibility(false);
   },
 
   render () {
@@ -121,7 +105,6 @@ export const APIBar = React.createClass({
           fonticon="fonticon-link"
           text="API"
           toggleCallback={this.toggleTrayVisibility} />
-
         {this.getTray()}
       </div>
     );

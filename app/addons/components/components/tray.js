@@ -13,8 +13,28 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import ReactCSSTransitionGroup from "react-addons-css-transition-group";
+import {Overlay} from 'react-bootstrap';
+
+//With React 15.2.0 it validates props and throws a warning if props to a component are not acceptable
+//this means that with the overlay it will try and pass custom props to a div which causes the overlay to stop working
+//using a custom component gets around this.
+const OverlayWarningEater = ({children}) => {
+  return children;
+};
 
 export const TrayContents = React.createClass({
+  propTypes: {
+    contentVisible: React.PropTypes.bool.isRequired,
+    closeTray: React.PropTypes.func.isRequired,
+    onEnter: React.PropTypes.func,
+    container: React.PropTypes.object
+  },
+
+  defaultProps: {
+    onEnter: () => {},
+    container: this
+  },
+
   getChildren () {
     var className = "tray show-tray " + this.props.className;
     return (
@@ -25,10 +45,22 @@ export const TrayContents = React.createClass({
 
   render () {
     return (
-      <ReactCSSTransitionGroup transitionName="tray" transitionAppear={true} component="div" transitionAppearTimeout={500}
-        transitionEnterTimeout={500} transitionLeaveTimeout={300}>
-        {this.getChildren()}
-      </ReactCSSTransitionGroup>
+      <Overlay
+       show={this.props.contentVisible}
+       onHide={this.props.closeTray}
+       placement={"bottom"}
+       container={this.props.container}
+       rootClose={true}
+       target={() => ReactDOM.findDOMNode(this.refs.target)}
+       onEnter={this.props.onEnter}
+      >
+        <OverlayWarningEater>
+          <ReactCSSTransitionGroup transitionName="tray" transitionAppear={true} component="div" transitionAppearTimeout={500}
+            transitionEnterTimeout={500} transitionLeaveTimeout={300}>
+            {this.getChildren()}
+          </ReactCSSTransitionGroup>
+        </OverlayWarningEater>
+      </Overlay>
     );
   }
 });

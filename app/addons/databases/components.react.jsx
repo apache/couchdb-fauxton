@@ -25,15 +25,15 @@ import Actions from "./actions";
 import ReactSelect from "react-select";
 import {Tooltip, OverlayTrigger} from 'react-bootstrap';
 
-var ToggleHeaderButton = Components.ToggleHeaderButton;
-var databasesStore = Stores.databasesStore;
-var deleteDbModalStore = ComponentsStore.deleteDbModalStore;
-var DeleteDatabaseModal = Components.DeleteDatabaseModal;
+const databasesStore = Stores.databasesStore;
+const deleteDbModalStore = ComponentsStore.deleteDbModalStore;
+
+const {DeleteDatabaseModal, ToggleHeaderButton, TrayContents} = Components;
 
 
 var DatabasesController = React.createClass({
 
-  getStoreState: function () {
+  getStoreState () {
     return {
       dbList: databasesStore.getDbList(),
       loading: databasesStore.isLoading(),
@@ -41,27 +41,27 @@ var DatabasesController = React.createClass({
     };
   },
 
-  getInitialState: function () {
+  getInitialState () {
     return this.getStoreState();
   },
 
-  componentDidMount: function () {
+  componentDidMount () {
     databasesStore.on('change', this.onChange, this);
     deleteDbModalStore.on('change', this.onChange, this);
   },
 
-  componentWillUnmount: function () {
+  componentWillUnmount () {
     databasesStore.off('change', this.onChange, this);
     deleteDbModalStore.off('change', this.onChange, this);
   },
 
-  onChange: function () {
+  onChange () {
     if (this.isMounted()) {
       this.setState(this.getStoreState());
     }
   },
 
-  render: function () {
+  render () {
     const {loading, dbList} = this.state;
 
     return (
@@ -81,7 +81,7 @@ const DatabaseTable = React.createClass({
     loading: React.PropTypes.bool.isRequired,
   },
 
-  createRows: function (dbList) {
+  createRows (dbList) {
     return dbList.map((item, k) => {
       return (
         <DatabaseRow item={item} key={k} />
@@ -89,20 +89,20 @@ const DatabaseTable = React.createClass({
     });
   },
 
-  getExtensionColumns: function () {
+  getExtensionColumns () {
     var cols = FauxtonAPI.getExtensions('DatabaseTable:head');
     return _.map(cols, function (Item, index) {
       return <Item key={index} />;
     });
   },
 
-  showDeleteDatabaseModal: function (name) {
+  showDeleteDatabaseModal (name) {
     ComponentsActions.showDeleteDatabaseModal({
       showDeleteModal: !this.props.showDeleteDatabaseModal.showDeleteModal
     });
   },
 
-  render: function () {
+  render () {
     if (this.props.loading) {
       return (
         <div className="view">
@@ -142,18 +142,18 @@ var DatabaseRow = React.createClass({
     row: React.PropTypes.object
   },
 
-  getExtensionColumns: function (row) {
+  getExtensionColumns (row) {
     var cols = FauxtonAPI.getExtensions('DatabaseTable:databaseRow');
     return _.map(cols, function (Item, index) {
       return <Item row={row} key={index} />;
     });
   },
 
-  showDeleteDatabaseModal: function (name) {
+  showDeleteDatabaseModal (name) {
     ComponentsActions.showDeleteDatabaseModal({showDeleteModal: true, dbId: name});
   },
 
-  render: function () {
+  render () {
     const {
       item
     } = this.props;
@@ -220,52 +220,62 @@ const RightDatabasesHeader = () => {
 
 var AddDatabaseWidget = React.createClass({
 
-  onTrayToggle: function (e) {
-    e.preventDefault();
-
+  onTrayToggle () {
     this.setState({isPromptVisible: !this.state.isPromptVisible});
-
-    this.refs.newDbTray.toggle(function (shown) {
-      if (shown) {
-        ReactDOM.findDOMNode(this.refs.newDbName).focus();
-      }
-    }.bind(this));
   },
 
-  onKeyUpInInput: function (e) {
+  closeTray () {
+    this.setState({isPromptVisible: false});
+  },
+
+  focusInput () {
+    ReactDOM.findDOMNode(this.refs.newDbName).focus();
+  },
+
+  onKeyUpInInput (e) {
     if (e.which === 13) {
       this.onAddDatabase();
     }
   },
 
-  getInitialState: function () {
+  getInitialState () {
     return {
-      isPromptVisible: false
+      isPromptVisible: false,
+      databaseName: ''
     };
   },
 
-  onAddDatabase: function () {
-    var databaseName = ReactDOM.findDOMNode(this.refs.newDbName).value;
-    Actions.createNewDatabase(databaseName);
+  onChange (e) {
+    this.setState({databaseName: e.target.value});
   },
 
-  render: function () {
-    var headerButtonContainerClasses = 'header-control-box add-new-database-btn';
+  onAddDatabase () {
+    Actions.createNewDatabase(this.state.databaseName);
+  },
 
+  render () {
     return (
       <div>
         <ToggleHeaderButton
           selected={this.state.isPromptVisible}
           toggleCallback={this.onTrayToggle}
-          containerClasses={headerButtonContainerClasses}
+          containerClasses='header-control-box add-new-database-btn'
           title="Create Database"
           fonticon="fonticon-new-database"
           text="Create Database" />
-        <FauxtonComponentsReact.Tray ref="newDbTray" className="new-database-tray">
+        <TrayContents className="new-database-tray" contentVisible={this.state.isPromptVisible} closeTray={this.closeTray} onEnter={this.focusInput}>
           <span className="add-on">Create Database</span>
-          <input id="js-new-database-name" type="text" onKeyUp={this.onKeyUpInInput} ref="newDbName" className="input-xxlarge" placeholder="Name of database" />
+          <input
+            id="js-new-database-name"
+            ref="newDbName"
+            type="text"
+            value={this.state.databaseName}
+            onChange={this.onChange} onKeyUp={this.onKeyUpInInput}
+            className="input-xxlarge"
+            placeholder="Name of database"
+            />
           <a className="btn" id="js-create-database" onClick={this.onAddDatabase}>Create</a>
-        </FauxtonComponentsReact.Tray>
+        </TrayContents>
       </div>
     );
   }
@@ -294,14 +304,14 @@ JumpToDatabaseWidget.propTypes = {
 
 var DatabasePagination = React.createClass({
 
-  getDefaultProps: function () {
+  getDefaultProps () {
     return {
       linkPath: '_all_dbs',
       store: databasesStore
     };
   },
 
-  getStoreState: function () {
+  getStoreState () {
     const {store} = this.props;
 
     return {
@@ -310,26 +320,26 @@ var DatabasePagination = React.createClass({
     };
   },
 
-  getInitialState: function () {
+  getInitialState () {
     return this.getStoreState();
   },
 
-  componentDidMount: function () {
+  componentDidMount () {
     const {store} = this.props;
 
     store.on('change', this.onChange, this);
   },
 
-  componentWillUnmount: function () {
+  componentWillUnmount () {
     const {store} = this.props;
     store.off('change', this.onChange, this);
   },
 
-  onChange: function () {
+  onChange () {
     this.setState(this.getStoreState());
   },
 
-  render: function () {
+  render () {
     const {page, totalAmountOfDatabases} = this.state;
 
     const urlPrefix = `#/${this.props.linkPath}?page=`;
