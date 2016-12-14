@@ -57,11 +57,19 @@ $(document).on("click", "a:not([data-bypass])", function (evt) {
   }
 });
 
+function getReducers (r) {
 
-const reducer = FauxtonAPI.reducers.reduce((el, acc) => {
-  acc[el] = el;
-  return acc;
-}, {});
+  if (!r.length) {
+    return function () {};
+  }
+
+  return FauxtonAPI.reducers.reduce((el, acc) => {
+    acc[el] = el;
+    return acc;
+  }, {});
+}
+
+const reducer = getReducers(FauxtonAPI.reducers);
 
 const middlewares = [thunk];
 
