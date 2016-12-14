@@ -16,10 +16,9 @@ import React from "react";
 import Stores from "./stores";
 import Actions from "./actions";
 import ReactComponents from "../../components/react-components.react";
-import GeneralComponents from "../../fauxton/components.react";
 var designDocInfoStore = Stores.designDocInfoStore;
 var LoadLines = ReactComponents.LoadLines;
-var Clipboard = GeneralComponents.Clipboard;
+var Copy = ReactComponents.Copy;
 
 
 var DesignDocInfo = React.createClass({
@@ -130,7 +129,7 @@ var DesignDocInfo = React.createClass({
           <ul>
             <li>
               <span className="item-title">MD5 Signature:</span>
-              <Clipboard
+              <Copy
                 onClipboardClick={this.showCopiedMessage}
                 text={viewIndex.signature} />
             </li>

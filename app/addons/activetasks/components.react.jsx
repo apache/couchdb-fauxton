@@ -18,7 +18,6 @@ import Stores from "./stores";
 import Resources from "./resources";
 import Actions from "./actions";
 import Components from "../components/react-components.react";
-import ComponentsReact from "../fauxton/components.react";
 import ReactCSSTransitionGroup from "react-addons-css-transition-group";
 
 const {TabElement, TabElementWrapper, Polling} = Components;
@@ -365,57 +364,9 @@ var ActiveTaskTableBodyContents = React.createClass({
         <td>{startedOnMsg}</td>
         <td>{updatedOnMsg}</td>
         <td>{rowData.pid}</td>
-        <td>{progressMsg}<ActiveTasksViewSourceSequence item={this.props.item}/></td>
+        <td>{progressMsg}</td>
       </tr>
     );
-  }
-});
-
-var ActiveTasksViewSourceSequence = React.createClass({
-  onTrayToggle (e) {
-    e.preventDefault();
-    this.refs.view_source_sequence_btn.toggle(function (shown) {
-      if (shown) {
-        ReactDOM.findDOMNode(this.refs.view_source_sequence_btn).focus();
-      }
-    }.bind(this));
-  },
-
-  sequences (item) {
-    if (_.isNumber(item) || _.isString(item)) {
-      return <ComponentsReact.ClipboardWithTextField textToCopy={item} uniqueKey={item}/>;
-    }
-
-    if (_.isArray(item)) {
-      return _.map(item, function (seq, i) {
-          return <ComponentsReact.ClipboardWithTextField textToCopy={seq} uniqueKey={i + Math.random(100)} key={i}/>;
-        });
-    }
-
-    return  <ComponentsReact.ClipboardWithTextField textToCopy="???" uniqueKey='unknownRevision'/>;
-  },
-
-  render () {
-
-    if (_.has(this.props.item, 'source_seq')) {
-      var sequences = this.sequences(this.props.item.source_seq);
-      return (
-        <div>
-          Current source sequence:
-          <a href="#"
-            className="view-source-sequence-btn"
-            onClick={this.onTrayToggle}
-            data-bypass="true">
-            View
-          </a>
-          <ComponentsReact.Tray ref="view_source_sequence_btn" className="view-source-sequence-tray">
-            <span className="add-on">Source Sequence</span>
-            {sequences}
-          </ComponentsReact.Tray>
-        </div>
-      );
-    }
-    return null;
   }
 });
 
@@ -531,7 +482,6 @@ export default {
   TableHeader: TableHeader,
   ActiveTasksTableBody: ActiveTasksTableBody,
   ActiveTaskTableBodyContents: ActiveTaskTableBodyContents,
-  ActiveTasksViewSourceSequence: ActiveTasksViewSourceSequence,
 
   ActiveTasksPollingWidgetController: ActiveTasksPollingWidgetController
 };
