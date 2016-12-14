@@ -86,7 +86,7 @@
     "react-addons-css-transition-group": "~15.4.1",
     "react-bootstrap": "^0.30.7",
     "react-dom": "~15.4.1",
-    "react-redux": "^4.4.5",
+    "react-redux": "^5.0.0",
     "react-select": "1.0.0-rc.2",
     "redux": "^3.6.0",
     "redux-thunk": "^2.1.0",
