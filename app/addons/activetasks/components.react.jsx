@@ -21,7 +21,7 @@ import Components from "../components/react-components.react";
 import ComponentsReact from "../fauxton/components.react";
 import ReactCSSTransitionGroup from "react-addons-css-transition-group";
 
-const {TabElement, TabElementWrapper, Polling} = Components;
+const {TabElement, TabElementWrapper, Polling, TrayContents} = Components;
 
 const activeTasksStore = Stores.activeTasksStore;
 
@@ -372,50 +372,61 @@ var ActiveTaskTableBodyContents = React.createClass({
 });
 
 var ActiveTasksViewSourceSequence = React.createClass({
-  onTrayToggle (e) {
+  getInitialState () {
+    return {
+      contentVisible: false
+    };
+  },
+
+  toggleTray (e) {
     e.preventDefault();
-    this.refs.view_source_sequence_btn.toggle(function (shown) {
-      if (shown) {
-        ReactDOM.findDOMNode(this.refs.view_source_sequence_btn).focus();
-      }
-    }.bind(this));
+    this.setState({contentVisible: !this.state.contentVisible});
+  },
+
+  closeTray () {
+    this.setState({contentVisible: false});
   },
 
   sequences (item) {
     if (_.isNumber(item) || _.isString(item)) {
-      return <ComponentsReact.ClipboardWithTextField textToCopy={item} uniqueKey={item}/>;
+      return <ComponentsReact.ClipboardWithTextField onClipBoardClick={() => {}} textToCopy={item.toString()} uniqueKey={item.toString()}/>;
     }
 
     if (_.isArray(item)) {
       return _.map(item, function (seq, i) {
-          return <ComponentsReact.ClipboardWithTextField textToCopy={seq} uniqueKey={i + Math.random(100)} key={i}/>;
+          return <ComponentsReact.ClipboardWithTextField onClipBoardClick={() => {}} textToCopy={seq.toString()} uniqueKey={`${i + Math.random(100)}`} key={i}/>;
         });
     }
 
-    return  <ComponentsReact.ClipboardWithTextField textToCopy="???" uniqueKey='unknownRevision'/>;
+    return  <ComponentsReact.ClipboardWithTextField textToCopy="???" onClipBoardClick={() => {}} uniqueKey='unknownRevision'/>;
   },
 
   render () {
-
-    if (_.has(this.props.item, 'source_seq')) {
-      var sequences = this.sequences(this.props.item.source_seq);
-      return (
-        <div>
-          Current source sequence:
-          <a href="#"
-            className="view-source-sequence-btn"
-            onClick={this.onTrayToggle}
-            data-bypass="true">
-            View
-          </a>
-          <ComponentsReact.Tray ref="view_source_sequence_btn" className="view-source-sequence-tray">
-            <span className="add-on">Source Sequence</span>
-            {sequences}
-          </ComponentsReact.Tray>
-        </div>
-      );
+    if (!_.has(this.props.item, 'source_seq')) {
+      return null;
     }
-    return null;
+
+    const sequences = this.sequences(this.props.item.source_seq);
+    return (
+      <div>
+        Current source sequence:
+        <a href="#"
+          className="view-source-sequence-btn"
+          onClick={this.toggleTray}
+          data-bypass="true">
+          View
+        </a>
+        <TrayContents
+          ref="view_source_sequence_btn"
+          contentVisible={this.state.contentVisible}
+          closeTray={this.closeTray}
+          container={this}
+          className="view-source-sequence-tray">
+          <span className="add-on">Source Sequence</span>
+          {sequences}
+        </TrayContents>
+      </div>
+    );
   }
 });
 

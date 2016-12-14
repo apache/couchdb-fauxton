@@ -188,85 +188,6 @@ var CodeFormat = React.createClass({
   }
 });
 
-var _NextTrayInternalId = 0;
-var Tray = React.createClass({
-
-  propTypes: {
-    onAutoHide: React.PropTypes.func
-  },
-
-  getDefaultProps: function () {
-    return {
-      onAutoHide: function () { }
-    };
-  },
-
-  getInitialState: function () {
-    return {
-      show: false,
-      internalid: (_NextTrayInternalId++)
-    };
-  },
-
-  toggle: function (done) {
-    if (this.state.show) {
-      this.hide(done);
-    } else {
-      this.show(done);
-    }
-  },
-
-  setVisible: function (visible, done) {
-    if (this.state.show && !visible) {
-      this.hide(done);
-    } else if (!this.state.show && visible) {
-      this.show(done);
-    }
-  },
-
-  componentDidMount: function () {
-    $('body').on('click.Tray-' + this.state.internalid, function (e) {
-      var tgt = $(e.target);
-      if (this.state.show && tgt.closest('.tray').length === 0) {
-        this.hide();
-        this.props.onAutoHide();
-      }
-    }.bind(this));
-  },
-
-  componentWillUnmount: function () {
-    $('body').off('click.Tray-' + this.state.internalid);
-  },
-
-  show: function (done) {
-    this.setState({show: true});
-    $(ReactDOM.findDOMNode(this.refs.myself)).velocity('transition.slideDownIn', FauxtonAPI.constants.MISC.TRAY_TOGGLE_SPEED, function () {
-      if (done) {
-        done(true);
-      }
-    });
-  },
-
-  hide: function (done) {
-    $(ReactDOM.findDOMNode(this.refs.myself)).velocity('reverse', FauxtonAPI.constants.MISC.TRAY_TOGGLE_SPEED, function () {
-      this.setState({show: false});
-      if (done) {
-        done(false);
-      }
-    }.bind(this));
-  },
-
-  render: function () {
-    var styleSpec = this.state.show ? {"display": "block", "opacity": 1} :  {"display": "none", "opacity": 0};
-    var classSpec = this.props.className || "";
-    classSpec += " tray";
-    return (
-      <div ref="myself" style={styleSpec} className={classSpec}>{this.props.children}</div>
-    );
-  }
-});
-
-
 var Pagination = React.createClass({
 
   getDefaultProps: function () {
@@ -414,7 +335,6 @@ export default {
   Clipboard: Clipboard,
   ClipboardWithTextField: ClipboardWithTextField,
   CodeFormat: CodeFormat,
-  Tray: Tray,
   Pagination: Pagination,
   ConfirmationModal: ConfirmationModal
 };
