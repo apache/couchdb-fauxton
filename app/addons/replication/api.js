@@ -197,9 +197,13 @@ export const createReplicationDoc = ({
   });
 };
 
-const removeSensitiveUrlInfo = (url) => {
-  const urlObj = new URL(url);
-  return `${urlObj.origin}/${decodeURIComponent(urlObj.pathname.slice(1))}`;
+export const removeSensitiveUrlInfo = (url) => {
+  try {
+    const urlObj = new URL(url);
+    return `${urlObj.origin}/${decodeURIComponent(urlObj.pathname.slice(1))}`;
+  } catch (e) {
+    return url;
+  }
 };
 
 export const getDocUrl = (doc) => {

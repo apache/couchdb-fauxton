@@ -20,13 +20,34 @@ import {
   encodeFullUrl,
   decodeFullUrl,
   getCredentialsFromUrl,
-  removeCredentialsFromUrl
+  removeCredentialsFromUrl,
+  removeSensitiveUrlInfo
 } from '../api';
 import Constants from '../constants';
 
 const assert = utils.assert;
 
 describe('Replication API', () => {
+
+  describe("removeSensiteiveUrlInfo", () => {
+    it('removes password username', () => {
+        const url = 'http://tester:testerpass@127.0.0.1/fancy/db/name';
+
+        const res = removeSensitiveUrlInfo(url);
+
+        expect(res).toBe('http://127.0.0.1/fancy/db/name');
+      });
+
+      // see https://issues.apache.org/jira/browse/COUCHDB-3257
+      // CouchDB accepts and returns invalid urls
+      it('does not throw on invalid urls', () => {
+        const url = 'http://tester:tes#terpass@127.0.0.1/fancy/db/name';
+
+        const res = removeSensitiveUrlInfo(url);
+
+        expect(res).toBe('http://tester:tes#terpass@127.0.0.1/fancy/db/name');
+      });
+  });
 
   describe('getSource', () => {
 
