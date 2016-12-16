@@ -99,6 +99,7 @@
     "url": "~0.7.9",
     "url-loader": "^0.5.7",
     "urls": "~0.0.3",
+    "uuid": "^3.0.1",
     "velocity-animate": "^1.2.3",
     "velocity-react": "1.1.11",
     "visualizeRevTree": "git+https://github.com/neojski/visualizeRevTree.git#gh-pages",

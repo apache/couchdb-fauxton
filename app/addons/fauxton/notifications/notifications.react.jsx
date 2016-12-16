@@ -20,6 +20,7 @@ import Components from "../../components/react-components.react";
 import VelocityReact from "velocity-react";
 import "velocity-animate/velocity";
 import "velocity-animate/velocity.ui";
+import uuid from 'uuid';
 
 var store = Stores.notificationStore;
 var VelocityComponent = VelocityReact.VelocityComponent;
@@ -426,7 +427,7 @@ var NotificationPanelRow = React.createClass({
             <div className="notification-actions">
               <span className="time-elapsed">{timeElapsed}</span>
               <span className="divider">|</span>
-              <Copy text={this.props.item.cleanMsg} displayType="text" />
+              <Copy uniqueKey={uuid.v4()} text={this.props.item.cleanMsg} displayType="text" />
             </div>
           </div>
           <button type="button" onClick={this.clearNotification}>×</button>

@@ -19,6 +19,7 @@ import ReactComponents from "../../components/react-components.react";
 var designDocInfoStore = Stores.designDocInfoStore;
 var LoadLines = ReactComponents.LoadLines;
 var Copy = ReactComponents.Copy;
+import uuid from 'uuid';
 
 
 var DesignDocInfo = React.createClass({
@@ -130,8 +131,9 @@ var DesignDocInfo = React.createClass({
             <li>
               <span className="item-title">MD5 Signature:</span>
               <Copy
-                onClipboardClick={this.showCopiedMessage}
-                text={viewIndex.signature} />
+                uniqueKey={uuid.v4()}
+                text={viewIndex.signature}
+                onClipboardClick={this.showCopiedMessage} />
             </li>
           </ul>
 

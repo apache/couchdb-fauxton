@@ -14,11 +14,12 @@ import React from "react";
 import ReactDOM from "react-dom";
 import FauxtonAPI from "../../../core/api";
 import {TrayContents, TrayWrapper, connectToStores} from './tray';
-import FauxtonComponents from "../../fauxton/components.react";
+import { Copy } from "./copy";
 import Actions from "../actions";
 import Stores from "../stores";
 import {ToggleHeaderButton} from './toggleheaderbutton';
 const { componentStore } = Stores;
+import uuid from 'uuid';
 
 export const APIBar = React.createClass({
   propTypes: {
@@ -65,12 +66,12 @@ export const APIBar = React.createClass({
             {this.getDocIcon()}
           </span>
 
-          <FauxtonComponents.ClipboardWithTextField
-            onClipBoardClick={this.showCopiedMessage}
-            text="Copy URL"
-            textToCopy={endpoint}
-            showCopyIcon={false}
-            uniqueKey="clipboard-apiurl" />
+          <Copy
+            displayText="Copy URL"
+            text={endpoint}
+            displayType="input"
+            uniqueKey={uuid.v4()}
+            onClipboardClick={this.showCopiedMessage} />
 
           <div className="add-on">
             <a

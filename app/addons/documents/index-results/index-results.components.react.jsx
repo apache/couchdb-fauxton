@@ -20,6 +20,7 @@ import Documents from "../resources";
 import { SplitButton, MenuItem } from "react-bootstrap";
 import ReactSelect from "react-select";
 import "../../../../assets/js/plugins/prettify";
+import uuid from 'uuid';
 
 const {LoadLines, BulkActionComponent, Copy} = Components;
 const store  = Stores.indexResultsStore;
@@ -158,9 +159,10 @@ var TableRow = React.createClass({
     return (
       <td title={text} className="tableview-el-copy">
         <Copy
-          onClipboardClick={this.showCopiedMessage}
           title={text}
-          text={text} />
+          text={text}
+          uniqueKey={uuid.v4()}
+          onClipboardClick={this.showCopiedMessage} />
       </td>
     );
   },

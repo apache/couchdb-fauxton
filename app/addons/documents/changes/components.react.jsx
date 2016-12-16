@@ -20,6 +20,7 @@ import Components from "../../fauxton/components.react";
 import ReactComponents from "../../components/react-components.react";
 import ReactCSSTransitionGroup from "react-addons-css-transition-group";
 import "../../../../assets/js/plugins/prettify";
+import uuid from 'uuid';
 
 const store = Stores.changesStore;
 const BadgeList = ReactComponents.BadgeList;
@@ -255,7 +256,7 @@ class ChangeRow extends React.Component {
     };
   }
 
-  onClipboardClick (target) {
+  showCopiedMessage (target) {
     let msg = 'The document ID has been copied to your clipboard.';
     if (target === 'seq') {
       msg = 'The document seq number has been copied to your clipboard.';
@@ -280,7 +281,10 @@ class ChangeRow extends React.Component {
             <div className="span2">seq</div>
             <div className="span8 change-sequence">{change.seq}</div>
             <div className="span2 text-right">
-              <Copy text={change.seq.toString()} onClipboardClick={() => this.onClipboardClick('seq')} />
+              <Copy
+                uniqueKey={uuid.v4()}
+                text={change.seq.toString()}
+                onClipboardClick={() => this.showCopiedMessage('seq')} />
             </div>
           </div>
 
@@ -290,7 +294,10 @@ class ChangeRow extends React.Component {
               <ChangeID id={change.id} deleted={change.deleted} databaseName={databaseName} />
             </div>
             <div className="span2 text-right">
-              <Copy text={change.id} onClipboardClick={() => this.onClipboardClick('id')} />
+              <Copy
+                uniqueKey={uuid.v4()}
+                text={change.id}
+                onClipboardClick={() => this.showCopiedMessage('id')} />
             </div>
           </div>
 

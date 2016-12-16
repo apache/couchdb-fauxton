@@ -13,11 +13,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Clipboard from 'clipboard';
+import FauxtonAPI from '../../../core/api';
 
 let clipboard;
 
-export const initializeClipboard = (cb) => {
-  clipboard = new Clipboard('.copy');
+export const initializeClipboard = (uniqueKey, cb) => {
+  clipboard = new Clipboard('#copy-' + uniqueKey);
   clipboard.on('success', function(e) {
     cb();
   });
@@ -29,7 +30,7 @@ export const destroyClipboard = () => {
 
 export class Copy extends React.Component {
   componentDidMount () {
-    initializeClipboard(this.props.onClipboardClick);
+    initializeClipboard(this.props.uniqueKey, this.props.onClipboardClick);
   }
 
   componentWillUnmount () {
@@ -43,6 +44,20 @@ export class Copy extends React.Component {
     return this.props.textDisplay;
   }
 
+  getClipboardButton () {
+    const btnClasses = this.props.displayType === 'input' ? "btn copy-button" : "copy" + " clipboard-copy-element";
+    return (
+      <button
+        className={btnClasses}
+        data-clipboard-text={this.props.text}
+        title={this.props.title}
+        id={"copy-" + this.props.uniqueKey}
+      >
+        {this.getClipboardElement()}
+      </button>
+    );
+  }
+
   render () {
     if (this.props.displayType === 'input') {
       return (
@@ -52,23 +67,12 @@ export class Copy extends React.Component {
             className="input-xxlarge text-field-to-copy"
             readOnly
             value={this.props.text} />
-          <button
-            className="btn copy-button clipboard-copy-element"
-            data-clipboard-text={this.props.text}
-            title={this.props.title}
-          >
-            {this.props.textDisplay}
-          </button>
+          {this.getClipboardButton()}
         </p>
       );
     }
     return (
-      <button className="copy clipboard-copy-element"
-              title={this.props.title}
-              data-clipboard-text={this.props.text}
-      >
-        {this.getClipboardElement()}
-      </button>
+      this.getClipboardButton()
     );
   }
 };
@@ -83,69 +87,6 @@ Copy.defaultProps = {
 Copy.propTypes = {
   text: React.PropTypes.string.isRequired,
   displayType: React.PropTypes.oneOf(['icon', 'text', 'input']),
+  uniqueKey: React.PropTypes.string.isRequired,
   onClipboardClick: React.PropTypes.func.isRequired
 };
-
-
-
-/*
-
-var ClipboardWithTextField = React.createClass({
-  propTypes: {
-    onClipBoardClick: React.PropTypes.func.isRequired,
-    textToCopy: React.PropTypes.string.isRequired,
-    uniqueKey: React.PropTypes.string.isRequired,
-    showCopyIcon: React.PropTypes.bool
-  },
-
-  getDefaultProps: function () {
-    return {
-      showCopyIcon: true,
-      text: 'Copy'
-    };
-  },
-
-  componentWillMount: function () {
-    ZeroClipboard.config({ swfPath: getZeroClipboardSwfPath() });
-  },
-
-  componentDidMount: function () {
-    var el = ReactDOM.findDOMNode(this.refs["copy-text-" + this.props.uniqueKey]);
-    this.clipboard = new ZeroClipboard(el);
-    this.clipboard.on('ready', function () {
-      this.clipboard.on('copy', function () {
-        this.props.onClipBoardClick();
-      }.bind(this));
-    }.bind(this));
-  },
-
-  getCopyIcon: function () {
-    if (!this.props.showCopyIcon) {
-      return null;
-    }
-    return (<i className="fontawesome icon-paste"></i>);
-  },
-
-  render: function () {
-    return (
-      <p key={this.props.uniqueKey}>
-        <input
-          type="text"
-          className="input-xxlarge text-field-to-copy"
-          readOnly
-          value={this.props.textToCopy} />
-        <a
-          id={"copy-text-" + this.props.uniqueKey}
-          className="btn copy-button clipboard-copy-element"
-          data-clipboard-text={this.props.textToCopy}
-          data-bypass="true"
-          ref={"copy-text-" + this.props.uniqueKey}
-          title="Copy to clipboard"
-        >
-          {this.getCopyIcon()} {this.props.text}
-        </a>
-      </p>
-    );
-  }
-});
-*/
