@@ -14,142 +14,9 @@ import app from "../../app";
 import FauxtonAPI from "../../core/api";
 import React from "react";
 import ReactDOM from "react-dom";
-import ZeroClipboard from "zeroclipboard";
 import { Modal } from "react-bootstrap";
 import "velocity-animate/velocity";
 import "velocity-animate/velocity.ui";
-import "zeroclipboard/dist/ZeroClipboard.swf";
-
-function getZeroClipboardSwfPath () {
-  return './dashboard.assets/ZeroClipboard.swf';
-}
-
-// super basic right now, but can be expanded later to handle all the varieties of copy-to-clipboards
-// (target content element, custom label, classes, notifications, etc.)
-var Clipboard = React.createClass({
-  propTypes: function () {
-    return {
-      text: React.PropTypes.string.isRequired,
-      displayType: React.PropTypes.string.oneOf(['icon', 'text'])
-    };
-  },
-
-  getDefaultProps: function () {
-    return {
-      displayType: 'icon',
-      textDisplay: 'Copy',
-      onClipboardClick: function () { },
-      title: 'Copy to clipboard'
-    };
-  },
-
-  componentWillMount: function () {
-    ZeroClipboard.config({ swfPath: getZeroClipboardSwfPath() });
-  },
-
-  getClipboardElement: function () {
-    if (this.props.displayType === 'icon') {
-      return (<i className="fontawesome icon-paste"></i>);
-    }
-    return this.props.textDisplay;
-  },
-
-  componentDidMount: function () {
-    var el = ReactDOM.findDOMNode(this);
-      this.clipboard = new ZeroClipboard(el);
-      this.clipboard.on('ready', function () {
-        this.clipboard.on('copy', function () {
-          this.props.onClipboardClick();
-        }.bind(this));
-      }.bind(this));
-
-      this.clipboard.on('error', function (event) {
-        console.log('ZeroClipboard error of type "' + event.name + '": ' + event.message);
-      });
-  },
-
-  onClick: function (event) {
-    event.preventDefault();
-  },
-
-  render: function () {
-    return (
-      <a href="#"
-        onClick={this.onClick}
-        ref="copy"
-        className="copy clipboard-copy-element"
-        data-clipboard-text={this.props.text}
-        data-bypass="true"
-        title={this.props.title}
-      >
-        {this.getClipboardElement()}
-      </a>
-    );
-  }
-});
-
-// use like this:
-//  <ComponentsReact.ClipboardWithTextField textToCopy={yourText} uniqueKey={someUniqueValue}>
-//  </ComponentsReact.ClipboardWithTextField>
-// pass in the text and a unique key, the key has to be unique or you'll get a warning
-var ClipboardWithTextField = React.createClass({
-  propTypes: {
-    onClipBoardClick: React.PropTypes.func.isRequired,
-    textToCopy: React.PropTypes.string.isRequired,
-    uniqueKey: React.PropTypes.string.isRequired,
-    showCopyIcon: React.PropTypes.bool
-  },
-
-  getDefaultProps: function () {
-    return {
-      showCopyIcon: true,
-      text: 'Copy'
-    };
-  },
-
-  componentWillMount: function () {
-    ZeroClipboard.config({ swfPath: getZeroClipboardSwfPath() });
-  },
-
-  componentDidMount: function () {
-    var el = ReactDOM.findDOMNode(this.refs["copy-text-" + this.props.uniqueKey]);
-    this.clipboard = new ZeroClipboard(el);
-    this.clipboard.on('ready', function () {
-      this.clipboard.on('copy', function () {
-        this.props.onClipBoardClick();
-      }.bind(this));
-    }.bind(this));
-  },
-
-  getCopyIcon: function () {
-    if (!this.props.showCopyIcon) {
-      return null;
-    }
-    return (<i className="fontawesome icon-paste"></i>);
-  },
-
-  render: function () {
-    return (
-      <p key={this.props.uniqueKey}>
-        <input
-          type="text"
-          className="input-xxlarge text-field-to-copy"
-          readOnly
-          value={this.props.textToCopy} />
-        <a
-          id={"copy-text-" + this.props.uniqueKey}
-          className="btn copy-button clipboard-copy-element"
-          data-clipboard-text={this.props.textToCopy}
-          data-bypass="true"
-          ref={"copy-text-" + this.props.uniqueKey}
-          title="Copy to clipboard"
-        >
-          {this.getCopyIcon()} {this.props.text}
-        </a>
-      </p>
-    );
-  }
-});
 
 // formats a block of code and pretty-prints it in the page. Currently uses the prettyPrint plugin
 var CodeFormat = React.createClass({
@@ -187,6 +54,85 @@ var CodeFormat = React.createClass({
     );
   }
 });
+
+var _NextTrayInternalId = 0;
+var Tray = React.createClass({
+
+  propTypes: {
+    onAutoHide: React.PropTypes.func
+  },
+
+  getDefaultProps: function () {
+    return {
+      onAutoHide: function () { }
+    };
+  },
+
+  getInitialState: function () {
+    return {
+      show: false,
+      internalid: (_NextTrayInternalId++)
+    };
+  },
+
+  toggle: function (done) {
+    if (this.state.show) {
+      this.hide(done);
+    } else {
+      this.show(done);
+    }
+  },
+
+  setVisible: function (visible, done) {
+    if (this.state.show && !visible) {
+      this.hide(done);
+    } else if (!this.state.show && visible) {
+      this.show(done);
+    }
+  },
+
+  componentDidMount: function () {
+    $('body').on('click.Tray-' + this.state.internalid, function (e) {
+      var tgt = $(e.target);
+      if (this.state.show && tgt.closest('.tray').length === 0) {
+        this.hide();
+        this.props.onAutoHide();
+      }
+    }.bind(this));
+  },
+
+  componentWillUnmount: function () {
+    $('body').off('click.Tray-' + this.state.internalid);
+  },
+
+  show: function (done) {
+    this.setState({show: true});
+    $(ReactDOM.findDOMNode(this.refs.myself)).velocity('transition.slideDownIn', FauxtonAPI.constants.MISC.TRAY_TOGGLE_SPEED, function () {
+      if (done) {
+        done(true);
+      }
+    });
+  },
+
+  hide: function (done) {
+    $(ReactDOM.findDOMNode(this.refs.myself)).velocity('reverse', FauxtonAPI.constants.MISC.TRAY_TOGGLE_SPEED, function () {
+      this.setState({show: false});
+      if (done) {
+        done(false);
+      }
+    }.bind(this));
+  },
+
+  render: function () {
+    var styleSpec = this.state.show ? {"display": "block", "opacity": 1} :  {"display": "none", "opacity": 0};
+    var classSpec = this.props.className || "";
+    classSpec += " tray";
+    return (
+      <div ref="myself" style={styleSpec} className={classSpec}>{this.props.children}</div>
+    );
+  }
+});
+
 
 var Pagination = React.createClass({
 
@@ -332,9 +278,8 @@ var ConfirmationModal = React.createClass({
 
 
 export default {
-  Clipboard: Clipboard,
-  ClipboardWithTextField: ClipboardWithTextField,
   CodeFormat: CodeFormat,
+  Tray: Tray,
   Pagination: Pagination,
   ConfirmationModal: ConfirmationModal
 };

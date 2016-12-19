@@ -16,10 +16,10 @@ import React from "react";
 import Stores from "./stores";
 import Actions from "./actions";
 import ReactComponents from "../../components/react-components.react";
-import GeneralComponents from "../../fauxton/components.react";
 var designDocInfoStore = Stores.designDocInfoStore;
 var LoadLines = ReactComponents.LoadLines;
-var Clipboard = GeneralComponents.Clipboard;
+var Copy = ReactComponents.Copy;
+import uuid from 'uuid';
 
 
 var DesignDocInfo = React.createClass({
@@ -130,9 +130,10 @@ var DesignDocInfo = React.createClass({
           <ul>
             <li>
               <span className="item-title">MD5 Signature:</span>
-              <Clipboard
-                onClipboardClick={this.showCopiedMessage}
-                text={viewIndex.signature} />
+              <Copy
+                uniqueKey={uuid.v4()}
+                text={viewIndex.signature}
+                onClipboardClick={this.showCopiedMessage} />
             </li>
           </ul>
 

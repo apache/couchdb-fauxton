@@ -48,6 +48,7 @@
     "brace": "^0.7.0",
     "chai": "^3.5.0",
     "clean-css": "^3.4.9",
+    "clipboard": "^1.5.16",
     "couchapp": "~0.11.0",
     "css-loader": "^0.26.0",
     "d3": "^3.4.11",
@@ -98,13 +99,13 @@
     "url": "~0.7.9",
     "url-loader": "^0.5.7",
     "urls": "~0.0.3",
+    "uuid": "^3.0.1",
     "velocity-animate": "^1.2.3",
     "velocity-react": "1.1.11",
     "visualizeRevTree": "git+https://github.com/neojski/visualizeRevTree.git#gh-pages",
     "webpack": "^1.12.12",
     "webpack-dev-server": "^1.14.1",
-    "whatwg-fetch": "^2.0.1",
-    "zeroclipboard": "^2.2.0"
+    "whatwg-fetch": "^2.0.1"
   },
   "scripts": {
     "stylecheck": "eslint --ext=js,jsx .",

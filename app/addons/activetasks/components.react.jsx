@@ -365,67 +365,8 @@ var ActiveTaskTableBodyContents = React.createClass({
         <td>{startedOnMsg}</td>
         <td>{updatedOnMsg}</td>
         <td>{rowData.pid}</td>
-        <td>{progressMsg}<ActiveTasksViewSourceSequence item={this.props.item}/></td>
+        <td>{progressMsg}</td>
       </tr>
-    );
-  }
-});
-
-var ActiveTasksViewSourceSequence = React.createClass({
-  getInitialState () {
-    return {
-      contentVisible: false
-    };
-  },
-
-  toggleTray (e) {
-    e.preventDefault();
-    this.setState({contentVisible: !this.state.contentVisible});
-  },
-
-  closeTray () {
-    this.setState({contentVisible: false});
-  },
-
-  sequences (item) {
-    if (_.isNumber(item) || _.isString(item)) {
-      return <ComponentsReact.ClipboardWithTextField onClipBoardClick={() => {}} textToCopy={item.toString()} uniqueKey={item.toString()}/>;
-    }
-
-    if (_.isArray(item)) {
-      return _.map(item, function (seq, i) {
-          return <ComponentsReact.ClipboardWithTextField onClipBoardClick={() => {}} textToCopy={seq.toString()} uniqueKey={`${i + Math.random(100)}`} key={i}/>;
-        });
-    }
-
-    return  <ComponentsReact.ClipboardWithTextField textToCopy="???" onClipBoardClick={() => {}} uniqueKey='unknownRevision'/>;
-  },
-
-  render () {
-    if (!_.has(this.props.item, 'source_seq')) {
-      return null;
-    }
-
-    const sequences = this.sequences(this.props.item.source_seq);
-    return (
-      <div>
-        Current source sequence:
-        <a href="#"
-          className="view-source-sequence-btn"
-          onClick={this.toggleTray}
-          data-bypass="true">
-          View
-        </a>
-        <TrayContents
-          ref="view_source_sequence_btn"
-          contentVisible={this.state.contentVisible}
-          closeTray={this.closeTray}
-          container={this}
-          className="view-source-sequence-tray">
-          <span className="add-on">Source Sequence</span>
-          {sequences}
-        </TrayContents>
-      </div>
     );
   }
 });
@@ -542,7 +483,6 @@ export default {
   TableHeader: TableHeader,
   ActiveTasksTableBody: ActiveTasksTableBody,
   ActiveTaskTableBodyContents: ActiveTaskTableBodyContents,
-  ActiveTasksViewSourceSequence: ActiveTasksViewSourceSequence,
 
   ActiveTasksPollingWidgetController: ActiveTasksPollingWidgetController
 };
