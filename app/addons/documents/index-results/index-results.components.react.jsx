@@ -17,13 +17,12 @@ import Stores from "./stores";
 import Actions from "./actions";
 import Components from "../../components/react-components.react";
 import Documents from "../resources";
-import FauxtonComponents from "../..//fauxton/components.react";
 import { SplitButton, MenuItem } from "react-bootstrap";
 import ReactSelect from "react-select";
 import "../../../../assets/js/plugins/prettify";
+import uuid from 'uuid';
 
-const {LoadLines, BulkActionComponent} = Components;
-const { Clipboard } = FauxtonComponents;
+const {LoadLines, BulkActionComponent, Copy} = Components;
 const store  = Stores.indexResultsStore;
 
 var NoResultsScreen = React.createClass({
@@ -159,10 +158,11 @@ var TableRow = React.createClass({
     var text = JSON.stringify(el, null, '  ');
     return (
       <td title={text} className="tableview-el-copy">
-        <Clipboard
-          onClipboardClick={this.showCopiedMessage}
+        <Copy
           title={text}
-          text={text} />
+          text={text}
+          uniqueKey={uuid.v4()}
+          onClipboardClick={this.showCopiedMessage} />
       </td>
     );
   },

@@ -16,15 +16,15 @@ import React from "react";
 import ReactDOM from "react-dom";
 import Actions from "./actions";
 import Stores from "./stores";
-import Components from "../components.react";
+import Components from "../../components/react-components.react";
 import VelocityReact from "velocity-react";
 import "velocity-animate/velocity";
 import "velocity-animate/velocity.ui";
+import uuid from 'uuid';
 
 var store = Stores.notificationStore;
-var Clipboard = Components.Clipboard;
 var VelocityComponent = VelocityReact.VelocityComponent;
-
+const {Copy} = Components;
 
 // The one-stop-shop for Fauxton notifications. This controller handler the header notifications and the rightmost
 // notification center panel
@@ -427,7 +427,7 @@ var NotificationPanelRow = React.createClass({
             <div className="notification-actions">
               <span className="time-elapsed">{timeElapsed}</span>
               <span className="divider">|</span>
-              <Clipboard text={this.props.item.cleanMsg} displayType="text" />
+              <Copy uniqueKey={uuid.v4()} text={this.props.item.cleanMsg} displayType="text" />
             </div>
           </div>
           <button type="button" onClick={this.clearNotification}>×</button>
