@@ -37,6 +37,10 @@ export class Copy extends React.Component {
     destroyClipboard();
   }
 
+  componentDidUpdate () {
+    initializeClipboard(this.props.uniqueKey, this.props.onClipboardClick);
+  }
+
   getClipboardElement () {
     if (this.props.displayType === 'icon') {
       return (<i className="fontawesome icon-paste"></i>);
