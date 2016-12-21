@@ -16,6 +16,8 @@ import Clipboard from 'clipboard';
 
 let clipboard;
 
+// Locates the specific element on the DOM, configures the clipboard, and
+// sets the callback on 'success' (usually a Fauxton notification).
 export const initializeClipboard = (uniqueKey, cb) => {
   clipboard = new Clipboard('#copy-' + uniqueKey);
   clipboard.on('success', function(e) {
@@ -23,6 +25,7 @@ export const initializeClipboard = (uniqueKey, cb) => {
   });
 };
 
+// Cleans up the fake elements left around by clipboard.js
 export const destroyClipboard = () => {
   clipboard.destroy();
 };
@@ -36,6 +39,8 @@ export class Copy extends React.Component {
     destroyClipboard();
   }
 
+  // Necessary for copy elements that are not unmounted even though they are
+  // no longer visible (ex. Notification  rows in the notification center).
   componentDidUpdate () {
     initializeClipboard(this.props.uniqueKey, this.props.onClipboardClick);
   }

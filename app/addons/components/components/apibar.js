@@ -64,7 +64,7 @@ export const APIBar = React.createClass({
           </span>
 
           <Copy
-            displayText="Copy URL"
+            textDisplay="Copy URL"
             text={endpoint}
             displayType="input"
             uniqueKey={uuid.v4()}

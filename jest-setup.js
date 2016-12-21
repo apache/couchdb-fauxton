@@ -13,6 +13,5 @@
 const jest = require('jest');
 
 window.$ = window.jQuery = require('jquery');
-jest.mock('zeroclipboard', () => {});
 
 global.fetch = require('jest-fetch-mock');

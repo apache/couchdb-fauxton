@@ -149,22 +149,3 @@ describe('Pagination', function () {
   });
 
 });
-
-
-describe('Clipboard', function () {
-
-  it('shows a clipboard icon by default', function () {
-    const clipboard = mount(<Views.Clipboard text="copy me" />);
-    assert.equal(clipboard.find('.icon-paste').length, 1);
-  });
-
-  it('shows text if specified', function () {
-    const clipboard = mount(<Views.Clipboard text="copy me" displayType="text" />);
-    assert.equal(clipboard.find('.icon-paste').length, 0);
-  });
-
-  it('shows custom text if specified ', function () {
-    var clipboard = mount(<Views.Clipboard displayType="text" textDisplay='booyah!' text="copy me" />);
-    assert.ok(/booyah!/.test(clipboard.html()));
-  });
-});
