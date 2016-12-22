@@ -200,8 +200,6 @@ var ConfirmationModal = React.createClass({
 
 
 export default {
-  Clipboard: Clipboard,
-  ClipboardWithTextField: ClipboardWithTextField,
   CodeFormat: CodeFormat,
   Pagination: Pagination,
   ConfirmationModal: ConfirmationModal
