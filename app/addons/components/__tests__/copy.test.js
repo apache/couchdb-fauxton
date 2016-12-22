@@ -28,12 +28,12 @@ describe('Copy', () => {
   });
 
   it('shows custom text if specified', () => {
-    var wrapper = mount(<Copy uniqueKey={uuid.v4()} displayType="text" textDisplay="booyah!" text="copy me" />);
+    const wrapper = mount(<Copy uniqueKey={uuid.v4()} displayType="text" textDisplay="booyah!" text="copy me" />);
     expect(wrapper.html()).toMatch(/booyah!/);
   });
 
   it('shows an input field and button if specified', () => {
-    var wrapper = mount(<Copy uniqueKey={uuid.v4()} displayType='input' text="http://localhost:8000/_all_dbs" />);
+    const wrapper = mount(<Copy uniqueKey={uuid.v4()} displayType='input' text="http://localhost:8000/_all_dbs" />);
     expect(wrapper.find('input').length).toBe(1);
   });
 });
