@@ -13,7 +13,7 @@
 
 module.exports = {
 
-  // Since we can't directly access the clipboard to verify, we'll confirm that 
+  // Since we can't directly access the clipboard to verify, we'll confirm that
   // the text to copy is correct and the successful callback is displayed.
 
   'Copy API URL to Clipboard Test' : (client) => {
