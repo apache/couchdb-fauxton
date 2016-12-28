@@ -22,11 +22,13 @@ const Burger = ({toggleMenu, isMinimized}) => {
     {'faux-navbar--narrow': isMinimized}
   );
 
+  const icon = isMinimized ?
+    'icon-resize-horizontal' :
+    'icon-signin faux-navbar__burger__icon--flipped';
+
   return (
     <div className={burgerClasses} onClick={toggleMenu}>
-      <Stripe />
-      <Stripe />
-      <Stripe />
+      <i className={"faux-navbar__burger__icon " + icon}></i>
     </div>
   );
 };

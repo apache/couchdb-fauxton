@@ -24,6 +24,7 @@ Stores.NavBarStore = FauxtonAPI.Store.extend({
   },
 
   reset () {
+    this._isMinimized = true;
     this._activeLink = null;
     this._version = null;
     this._navLinks = [];
@@ -107,8 +108,7 @@ Stores.NavBarStore = FauxtonAPI.Store.extend({
   },
 
   toggleMenu () {
-    app.utils.localStorageSet(FauxtonAPI.constants.LOCAL_STORAGE.SIDEBAR_MINIMIZED,
-                              !this.isMinimized());
+    this._isMinimized = !this._isMinimized;
   },
 
   getLinkSection (link) {
@@ -156,8 +156,7 @@ Stores.NavBarStore = FauxtonAPI.Store.extend({
   },
 
   isMinimized () {
-    const isMinimized = app.utils.localStorageGet(FauxtonAPI.constants.LOCAL_STORAGE.SIDEBAR_MINIMIZED);
-    return (_.isUndefined(isMinimized)) ? false : isMinimized;
+    return this._isMinimized;
   },
 
   dispatch (action) {

@@ -27,7 +27,7 @@
 
 .faux-navbar__burger {
   background-color: @primaryNav;
-  padding: 22px 0 22px 18px;
+  padding: 19px 0 18px 18px;
   position: fixed;
   z-index: 100;
   top: 0;
@@ -41,16 +41,21 @@
   width: @navWidth;
 }
 
-.faux-navbar__burger:hover .faux-navbar__burger__stripe {
-  background-color: #fff;
+.faux-navbar__burger:hover .faux-navbar__burger__icon {
+  color: #fff;
 }
 
-.faux-navbar__burger__stripe {
-  height: 4px;
-  width: 24px;
-  .border-radius(2);
-  background-color: #B3B4B4;
-  margin: 2px 0px;
+.faux-navbar__burger__icon {
+  color: #B3B4B4;
+  font-size: 27px;
+}
+
+.faux-navbar__burger__icon--flipped:before{
+  -moz-transform: scale(-1, 1);
+  -webkit-transform: scale(-1, 1);
+  -o-transform: scale(-1, 1);
+  -ms-transform: scale(-1, 1);
+  transform: scale(-1, 1);
 }
 
 .faux-navbar__link, .faux-logout__link, .faux-login__link {
