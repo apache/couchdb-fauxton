@@ -11,6 +11,7 @@
 // the License.
 
 @import "../../../../../assets/less/mixins.less";
+@import "../../../../../assets/less/variables.less";
 
 
 #dashboard.doc-editor-page {
@@ -175,6 +176,9 @@
   max-width: 540px;
   text-align: left;
   overflow: hidden;
+  a:hover {
+    color: @hoverRed;
+  }
 }
 
 #editor-container div.string-editor-modal {
