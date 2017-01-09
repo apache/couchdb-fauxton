@@ -47,6 +47,7 @@
     "bluebird": "^3.4.6",
     "brace": "^0.7.0",
     "chai": "^3.5.0",
+    "classnames": "^2.2.5",
     "clean-css": "^3.4.9",
     "clipboard": "^1.5.16",
     "couchapp": "~0.11.0",

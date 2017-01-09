@@ -1,0 +1,177 @@
+.faux-navbar {
+  margin-top: 64px;
+  background-color: #3A2C2B;
+
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 5;
+
+}
+
+.faux-navbar__itemarea {
+  .box-sizing(border-box);
+  border-bottom: 1px solid #3A2C2B;
+  height: 48px;
+  padding: 10px 20px;
+  line-height: 24px;
+}
+
+.faux-navbar__version-footer {
+  color: #fff;
+  font-size: 10px;
+  text-align: center;
+  background-color: @brown;
+}
+
+.faux-navbar__burger {
+  background-color: @primaryNav;
+  padding: 19px 0 18px 18px;
+  position: fixed;
+  z-index: 100;
+  top: 0;
+}
+
+.faux-navbar--narrow {
+  width: @collapsedNavWidth;
+}
+
+.faux-navbar--wide {
+  width: @navWidth;
+}
+
+.faux-navbar__burger:hover .faux-navbar__burger__icon {
+  color: #fff;
+}
+
+.faux-navbar__burger__icon {
+  color: #B3B4B4;
+  font-size: 27px;
+}
+
+.faux-navbar__burger__icon--flipped:before{
+  -moz-transform: scale(-1, 1);
+  -webkit-transform: scale(-1, 1);
+  -o-transform: scale(-1, 1);
+  -ms-transform: scale(-1, 1);
+  transform: scale(-1, 1);
+}
+
+.faux-navbar__link, .faux-logout__link, .faux-login__link {
+  display: block;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.faux-navbar__link--active {
+  background-color: #AF2D24;
+  text-decoration: none;
+}
+
+.faux-navbar__link--inactive {
+  background-color: #564E4C;
+}
+
+.faux-navbar__link:hover, .faux-logout__link:hover, .faux-login__link:hover {
+  background-color: #E73D34;
+  text-decoration: none;
+}
+
+.faux-navbar__link:active {
+  text-decoration: none;
+}
+
+.faux-navbar__link:hover .faux-navbar__icon:before {
+  color: #fff;
+}
+
+.faux-navbar__link--active .faux-navbar__icon:before {
+  color: #fff;
+}
+
+.faux-navbar__icon {
+  margin-right: 14px;
+  color: #B3B4B4;
+  font-size: 24px;
+  vertical-align: middle;
+}
+
+.faux-navbar__text {
+  margin: 0;
+  color: #fff;
+  vertical-align: middle;
+  font-size: 16px;
+  font-weight: normal;
+  font-family: Helvetica,sans-serif;
+  font-weight: 400;
+}
+
+.faux-navbar__logout__text {
+  font-size: 12px;
+  color: #fff;
+}
+
+.faux-navbar__logout__textcontainer {
+  text-align: center;
+  color: #fff;
+}
+
+.faux-navbar__logout__textcontainer--narrow {
+  padding-bottom: 4px;
+  padding: 20px 0;
+}
+
+.faux-navbar__logout__textcontainer--wide {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: 20px;
+}
+
+.faux-navbar__login__textcontainer {
+  text-align: center;
+  color: #fff;
+}
+
+.faux-navbar__login__textcontainer--narrow {
+  padding-bottom: 4px;
+  padding: 20px 0;
+}
+
+.faux-navbar__login__textcontainer--wide {
+  padding: 20px;
+}
+
+.faux-navbar__brand {
+  margin: 20px 0 20px 0;
+  height: 50px;
+  padding: 10px 10px 10px 10px;
+  float: none;
+  background: #3a2c2b;
+}
+
+.faux-navbar__brand-logo {
+  display: block;
+  height: 100%;
+  margin-top: 10px;
+}
+
+.faux-navbar__brand-logo--wide {
+  background: url(../../../../../assets/img/CouchDB-negative-logo.png) no-repeat 23px 0px;
+  background-size: 150px;
+  width: 200px;
+}
+
+.faux-navbar__brand-logo--narrow {
+  width: 43px;
+  height: 40px;
+  background: url(../../../../../assets/img/couchdb-logo.png) no-repeat 3px 0;
+  background-size: 40px;
+}
+
+.faux-navbar__footer {
+  position: absolute;
+  bottom: 0;
+  width:100%;
+}

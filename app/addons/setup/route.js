@@ -22,6 +22,8 @@ import {OnePaneSimpleLayout} from '../components/layouts';
 var RouteObject = FauxtonAPI.RouteObject.extend({
   roles: ['_admin'],
 
+  selectedHeader: 'Setup',
+
   routes: {
     'setup': 'setupInitView',
     'setup/finish': 'finishView',

@@ -15,7 +15,7 @@ import FauxtonAPI from "../../core/api";
 import React from "react";
 import NotificationComponents from "./notifications/notifications.react";
 import Actions from "./notifications/actions";
-import NavbarReactComponents from "./navigation/components.react";
+
 import NavigationActions from "./navigation/actions";
 import ReactComponents from "../components/react-components.react";
 import ComponentActions from "../components/actions";
@@ -26,7 +26,6 @@ import "./assets/less/fauxton.less";
 const Fauxton = FauxtonAPI.addon();
 
 Fauxton.initialize = () => {
-
   const versionInfo = new Fauxton.VersionInfo();
   versionInfo.fetch().then(function () {
     NavigationActions.setNavbarVersionInfo(versionInfo.get("version"));
