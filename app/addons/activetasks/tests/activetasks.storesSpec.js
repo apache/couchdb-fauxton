@@ -9,16 +9,11 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
-import FauxtonAPI from "../../../core/api";
 import ActiveTasks from "../resources";
 import Stores from "../stores";
 import fakedResponse from "./fakeActiveTaskResponse";
-import React from "react";
 import utils from "../../../../test/mocha/testUtils";
-import TestUtils from "react-addons-test-utils";
-import sinon from "sinon";
 var assert = utils.assert;
-var restore = utils.restore;
 
 var activeTasksStore = Stores.activeTasksStore;
 var activeTasksCollection = new ActiveTasks.AllTasks();
@@ -30,13 +25,7 @@ describe('Active Tasks -- Stores', function () {
   });
 
   describe('Active Task Stores - Filter Tab Tray', function () {
-    var fakeFilteredTable, storeFilteredtable;
-    function sort (a, b, sortBy) {  //sorts array by objects with key 'sortBy', with default started_on
-      if (_.isUndefined(sortBy)) {
-        sortBy = 'started-on';
-      }
-      return b[sortBy] - a[sortBy];
-    }
+    var fakeFilteredTable;
 
     afterEach(function () {
       fakeFilteredTable = [];
@@ -65,7 +54,6 @@ describe('Active Tasks -- Stores', function () {
       var searchTerm = 'base';
       activeTasksStore.setSearchTerm(searchTerm);
       var storeGeneratedTable = activeTasksStore.getFilteredTable(activeTasksStore._collection);
-      var regEx = new RegExp(searchTerm);
 
       fakeFilteredTable = [
         { user: 'information'},

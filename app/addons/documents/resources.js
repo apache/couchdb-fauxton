@@ -152,7 +152,7 @@ Documents.MangoIndexCollection = PagingCollection.extend({
     return res.indexes;
   },
 
-  urlRef: function (context, params) {
+  urlRef: function (context) {
     var database = this.database.safeID(),
         query = '';
 
@@ -223,9 +223,7 @@ Documents.MangoDocumentCollection = PagingCollection.extend({
     }
   },
 
-  _iterate: function (offset, opts) {
-    var options = _.defaults((opts || {}), {fetch: true});
-
+  _iterate: function (offset) {
     this.paging.params = this.calculateParams(this.paging.params, offset, this.paging.pageSize);
 
     return this.fetch();
@@ -414,12 +412,7 @@ Documents.BulkDeleteDocCollection = FauxtonAPI.Collection.extend({
   },
 
   removeDocuments: function (ids) {
-    var reloadDesignDocs = false;
     _.each(ids, function (id) {
-      if (/_design/.test(id)) {
-        reloadDesignDocs = true;
-      }
-
       this.remove(this.get(id));
     }, this);
 
@@ -540,8 +533,7 @@ Documents.IndexCollection = PagingCollection.extend({
     });
   },
 
-  parse: function (resp) {
-    var rows = resp.rows;
+  parse: function () {
     this.endTime = new Date().getTime();
     this.requestDuration = (this.endTime - this.startTime);
 

@@ -10,7 +10,6 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import app from "../../app";
 import FauxtonAPI from "../../core/api";
 import ActionTypes from "./actiontypes";
 
@@ -124,7 +123,7 @@ var ActiveTasksStore = FauxtonAPI.Store.extend({
     this._collection = sorted;
   },
 
-  getFilteredTable (collection) {
+  getFilteredTable () {
     var table = [];
 
     //sort the table here

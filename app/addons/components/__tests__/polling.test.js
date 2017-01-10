@@ -92,13 +92,13 @@ describe("Polling", () => {
         assert.ok(pollCalled);
         done();
       };
-      const wrapper = mount(<Polling
+      mount(<Polling
         startValue={1}
         min={1}
         max={20}
         stepSize={1}
         onPoll={onPoll}
-                        />);
+      />);
 
       clock.tick(1010);
 

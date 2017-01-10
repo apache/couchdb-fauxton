@@ -20,7 +20,7 @@ let clipboard;
 // sets the callback on 'success' (usually a Fauxton notification).
 export const initializeClipboard = (uniqueKey, cb) => {
   clipboard = new Clipboard('#copy-' + uniqueKey);
-  clipboard.on('success', function(e) {
+  clipboard.on('success', function() {
     cb();
   });
 };

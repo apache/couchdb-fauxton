@@ -31,7 +31,7 @@ nano.db.list((err, body) => {
   }).map(db => {
     return (cb) => {
       console.log('removing', db);
-      nano.db.destroy(db, (err, resp) => {
+      nano.db.destroy(db, (err) => {
         if (err) {
           cb(err);
           return;

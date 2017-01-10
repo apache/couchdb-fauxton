@@ -1,7 +1,5 @@
 var spawn = require('child_process').spawn;
-var path = require("path");
 var fs = require("fs");
-var _ = require('lodash');
 var webpack = require('webpack');
 var WebpackDev = require('webpack-dev-server');
 var config = require('./webpack.config.dev.js');
@@ -66,12 +64,6 @@ function getCspHeaders () {
 };
 
 var runWebpackServer = function () {
-  var fileTypes = ['.js', '.css', '.png', '.swf', '.eot', '.woff', '.svg', '.ttf', '.swf'];
-  function isFile (url) {
-    return _.contains(fileTypes, path.extname(url));
-  }
-
-
   var options = {
     contentBase: __dirname + '/dist/debug',
     publicPath: '/',
@@ -96,17 +88,17 @@ var runWebpackServer = function () {
     target: settings.proxy.target
   });
 
-  proxy.on('proxyRes', function (proxyRes, req, res) {
+  proxy.on('proxyRes', function (proxyRes) {
     if (proxyRes.headers['set-cookie']) {
       proxyRes.headers['set-cookie'][0] = proxyRes.headers["set-cookie"][0].replace('Secure', '');
     }
   });
 
-  proxy.on('error', function (e) {
+  proxy.on('error', function () {
     // don't explode on cancelled requests
   });
 
-  server.app.all('*', function (req, res, next) {
+  server.app.all('*', function (req, res) {
     proxy.web(req, res);
   });
 

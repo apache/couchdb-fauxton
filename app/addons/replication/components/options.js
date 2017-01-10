@@ -12,7 +12,6 @@
 import React from 'react';
 import Constants from '../constants';
 import Components from '../../components/react-components.react';
-import ReactSelect from 'react-select';
 
 const { StyledSelect } = Components;
 
@@ -52,7 +51,7 @@ const ReplicationDoc = ({value, onChange}) =>
   </div>
   <div className="replication__doc-name">
     <span className="fonticon fonticon-cancel replication__doc-name-icon" title="Clear field"
-      onClick={(e) => onChange('')} />
+      onClick={() => onChange('')} />
     <input
       type="text"
       className="replication__doc-name-input"

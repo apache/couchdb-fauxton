@@ -66,7 +66,7 @@ DeleteModal.propTypes = {
   multipleDocs: React.PropTypes.number.isRequired
 };
 
-export const ErrorModal = ({visible, onClose, errorMsg, onClick}) => {
+export const ErrorModal = ({visible, onClose, errorMsg}) => {
 
   if (!visible) {
     return null;

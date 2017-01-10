@@ -10,20 +10,16 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 import React from 'react';
-import app from '../../app';
-import FauxtonAPI from '../../core/api';
 import Stores from './stores';
 import Actions from './actions';
 import AuthActions from '../auth/actions';
-import Constants from './constants';
-import base64 from 'base-64';
 import Components from '../components/react-components.react';
 import NewReplication from './components/newreplication';
 import Activity from './components/activity';
 import {checkReplicationDocID} from './api';
 import {OnePane, OnePaneHeader, OnePaneContent} from '../components/layouts';
 
-const {LoadLines, ConfirmButton, Polling, RefreshBtn} = Components;
+const {LoadLines, Polling, RefreshBtn} = Components;
 
 const store = Stores.replicationStore;
 
@@ -92,7 +88,7 @@ export default class ReplicationController extends React.Component {
     const {
       replicationSource, replicationTarget, replicationType, replicationDocName,
       passwordModalVisible, databases, localSource, remoteSource, remoteTarget,
-      localTarget, selectedTab, statusDocs, statusFilter, loading, allDocsSelected,
+      localTarget, statusDocs, statusFilter, loading, allDocsSelected,
       someDocsSelected, showConflictModal, localSourceKnown, localTargetKnown,
       username, password, authenticated, activityLoading, submittedNoChange, activitySort
     } = this.state;

@@ -11,16 +11,13 @@
 // the License.
 
 import React from 'react';
-import app from "../../app";
 import FauxtonAPI from "../../core/api";
-import Helpers from "./helpers";
 import BaseRoute from "./shared-routes";
 import Documents from "./resources";
 import ActionsIndexEditor from "./index-editor/actions";
 import Databases from "../databases/base";
 import IndexResultsStores from "./index-results/stores";
 import IndexResultsActions from "./index-results/actions";
-import ReactHeaderActions from "./header/header.actions";
 import SidebarActions from "./sidebar/actions";
 import {DocsTabsSidebarLayout, ViewsTabsSidebarLayout} from './layouts';
 

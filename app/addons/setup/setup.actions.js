@@ -10,12 +10,9 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 import FauxtonAPI from "../../core/api";
-import ConfigResources from "../config/resources";
 import SetupResources from "./resources";
 import ActionTypes from "./setup.actiontypes";
-import ClusterStores from "../cluster/cluster.stores";
 import SetupStores from "./setup.stores";
-var nodesStore = ClusterStores.nodesStore;
 var setupStore = SetupStores.setupStore;
 
 export default {
@@ -44,7 +41,7 @@ export default {
         action: 'finish_cluster'
       })
     })
-    .success(function (res) {
+    .success(function () {
       FauxtonAPI.addNotification({
         msg: message,
         type: 'success',
@@ -65,8 +62,6 @@ export default {
   },
 
   setupSingleNode: function () {
-    var nodes = nodesStore.getNodes();
-    var isAdminParty = setupStore.getIsAdminParty();
     var username = setupStore.getUsername();
     var password = setupStore.getPassword();
 
@@ -138,15 +133,6 @@ export default {
     if (isOrWasAdminParty) {
       delete additionalNodeData.remote_current_user;
       delete additionalNodeData.remote_current_password;
-    }
-
-    function dontGiveUp (f, u, p) {
-      return f(u, p).then(
-        undefined,
-        function (err) {
-          return dontGiveUp(f, u, p);
-        }
-      );
     }
 
     var additionalNode = new SetupResources.Model(additionalNodeData);

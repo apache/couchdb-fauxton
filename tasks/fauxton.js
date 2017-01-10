@@ -23,7 +23,7 @@ module.exports = function (grunt) {
     grunt.file.write(data.dest, tmpl(data.variables));
   });
 
-  grunt.registerMultiTask('get_deps', 'Fetch external dependencies', function (version) {
+  grunt.registerMultiTask('get_deps', 'Fetch external dependencies', function () {
 
     grunt.log.writeln('Fetching external dependencies');
     var done = this.async(),
@@ -58,7 +58,7 @@ module.exports = function (grunt) {
 
     var localDeps = _.filter(settings.deps, function (dep) { return !! dep.path; });
     grunt.log.writeln(localDeps.length + ' local dependencies');
-    var local = fetch(localDeps, function (dep, destination) {
+    fetch(localDeps, function (dep, destination) {
       // TODO: Windows
       var command = 'cp -r ' + dep.path + '/ ' + destination + '/';
       grunt.log.writeln(command);
@@ -112,7 +112,6 @@ module.exports = function (grunt) {
 
   grunt.registerMultiTask('mochaSetup', 'Generate a config.js and runner.html for tests', function () {
     var data = this.data,
-        configInfo,
         _ = grunt.util._,
         configTemplateSrc = data.template;
 

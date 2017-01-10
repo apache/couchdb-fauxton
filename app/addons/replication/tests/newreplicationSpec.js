@@ -10,7 +10,6 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 import React from "react";
-import TestUtils from "react-addons-test-utils";
 import utils from "../../../../test/mocha/testUtils";
 import FauxtonAPI from '../../../core/api';
 import { mount } from 'enzyme';

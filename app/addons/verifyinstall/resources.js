@@ -55,7 +55,7 @@ Verifyinstall.testProcess = {
     db.fetch()
     .then(function () {
       return db.destroy();
-    }, function (xhr) {
+    }, function () {
       deferred.resolve();
     })
     .then(function () {

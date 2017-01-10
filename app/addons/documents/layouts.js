@@ -11,13 +11,9 @@
 // the License.
 
 import React from 'react';
-import FauxtonAPI from "../../core/api";
-import {OnePane, OnePaneContent} from '../components/layouts';
 import IndexResultsComponents from './index-results/index-results.components.react';
 import ReactPagination from './pagination/pagination.react';
 import ReactHeader from './header/header.react';
-import {Breadcrumbs} from '../components/header-breadcrumbs';
-import {RightHeader} from './mangolayout';
 import {NotificationCenterButton} from '../fauxton/notifications/notifications.react';
 import {ApiBarWrapper} from '../components/layouts';
 import SidebarComponents from "./sidebar/sidebar.react";
@@ -136,7 +132,7 @@ export const ChangesSidebarLayout = ({docURL, database, endpoint, dbName, dropDo
   );
 };
 
-export const ViewsTabsSidebarLayout = ({showEditView, database, showIncludeAllDocs, docURL, endpoint, dbName, dropDownLinks}) => {
+export const ViewsTabsSidebarLayout = ({showEditView, database, docURL, endpoint, dbName, dropDownLinks}) => {
   const content = showEditView ? <IndexEditorComponents.EditorController /> : <DesignDocInfoComponents.DesignDocInfo />;
   return (
     <div id="dashboard" className="with-sidebar">

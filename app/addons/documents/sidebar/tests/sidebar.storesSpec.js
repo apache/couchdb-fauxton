@@ -12,7 +12,6 @@
 
 import FauxtonAPI from "../../../../core/api";
 import Stores from "../stores.react";
-import ActionTypes from "../actiontypes";
 import testUtils from "../../../../../test/mocha/testUtils";
 var assert = testUtils.assert;
 var dispatchToken;

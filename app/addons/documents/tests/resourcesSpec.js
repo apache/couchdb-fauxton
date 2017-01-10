@@ -280,8 +280,7 @@ describe('QueryParams', function () {
         key:'[\"a\",\"b\"]'
       };
       var clone = _.clone(params);
-      var result = Models.QueryParams.parse(params);
-
+      Models.QueryParams.parse(params);
       assert.deepEqual(params, clone);
     });
   });
@@ -318,7 +317,7 @@ describe('QueryParams', function () {
     it('does not modify input', function () {
       var params = {'key': ['a', 'b']};
       var clone = _.clone(params);
-      var result = Models.QueryParams.stringify(params);
+      Models.QueryParams.stringify(params);
 
       assert.deepEqual(params, clone);
     });

@@ -9,11 +9,9 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
-import app from "../../app";
 import FauxtonAPI from "../api";
 import testUtils from "../../../test/mocha/testUtils";
 import sinon from "sinon";
-var assert = testUtils.assert;
 
 describe('CouchDBSession', function () {
 

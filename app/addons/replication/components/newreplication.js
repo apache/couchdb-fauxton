@@ -86,7 +86,6 @@ export default class NewReplicationController extends React.Component {
       remoteTarget,
       remoteSource,
       replicationTarget,
-      replicationSource,
       localTarget,
       localSource,
       databases

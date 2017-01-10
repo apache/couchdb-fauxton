@@ -24,7 +24,7 @@ const destroyDBsAndCreateReplicator = (client, done) => {
   nano.db.destroy(newDatabaseName1, () => {
     nano.db.destroy(newDatabaseName2, () => {
       nano.db.destroy(replicatedDBName, () => {
-        nano.db.create('_replicator', function (err, body, header) {
+        nano.db.create('_replicator', function () {
           done();
         });
       });

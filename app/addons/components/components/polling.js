@@ -83,7 +83,6 @@ export class Polling extends React.Component {
 
   render () {
     const {
-      pollingFreqOptions,
       stepSize,
       min,
       max,

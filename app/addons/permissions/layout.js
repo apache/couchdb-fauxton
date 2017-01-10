@@ -11,7 +11,6 @@
 // the License.
 
 import React from 'react';
-import FauxtonAPI from "../../core/api";
 import {TabsSidebarHeader} from '../documents/layouts';
 import PermissionsContainer from './container/PermissionsContainer';
 import SidebarComponents from "../documents/sidebar/sidebar.react";
