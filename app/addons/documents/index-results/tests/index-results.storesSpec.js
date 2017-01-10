@@ -70,7 +70,6 @@ describe('Index Results Store', function () {
     ];
 
     store.sortByTwoFields(a);
-
     assert.equal(a[0][0], 20);
     assert.equal(a[1][0], 3);
     assert.equal(a[2][0], 1);
