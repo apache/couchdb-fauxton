@@ -75,20 +75,6 @@ module.exports = function (grunt) {
     return settings.template;
   })();
 
-  // var couchserver_config  = function () {
-  //   // add a "couchserver" key to settings.json with JSON that matches the
-  //   // keys and values below (plus your customizations) to have Fauxton work
-  //   // against a remote CouchDB-compatible server.
-  //   var defaults = {
-  //     port: helper.devServerPort,
-  //     proxy: {
-  //       target: helper.couch
-  //     }
-  //   };
-
-  //   return initHelper.readSettingsFile().couchserver || defaults;
-  // }();
-
   var config = {
 
     // The clean task ensures all files are removed from the dist/ directory so
