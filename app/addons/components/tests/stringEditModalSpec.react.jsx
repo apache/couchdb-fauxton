@@ -9,9 +9,7 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
-import FauxtonAPI from "../../../core/api";
 import ReactComponents from "../react-components.react";
-import { Modal } from "react-bootstrap";
 import utils from "../../../../test/mocha/testUtils";
 import React from "react";
 import ReactDOM from "react-dom";
@@ -21,7 +19,7 @@ import sinon from "sinon";
 var assert = utils.assert;
 
 describe('String Edit Modal', function () {
-  var container, el;
+  var container;
   var stub = function () { };
 
   beforeEach(function () {
@@ -36,7 +34,7 @@ describe('String Edit Modal', function () {
     it('ensures same content returns on saving', function () {
       var string = "a string!";
       var spy = sinon.spy();
-      el = TestUtils.renderIntoDocument(
+      TestUtils.renderIntoDocument(
         <ReactComponents.StringEditModal visible={true} onClose={stub} onSave={spy} value={string} />,
         container
       );

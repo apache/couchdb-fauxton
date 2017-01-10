@@ -117,7 +117,7 @@ export const TrayWrapper = React.createClass({
   },
 
   renderChildren () {
-    return React.Children.map(this.props.children, function (child, key) {
+    return React.Children.map(this.props.children, function (child) {
 
       const props = {};
       Object.keys(this.props).filter((k) => {

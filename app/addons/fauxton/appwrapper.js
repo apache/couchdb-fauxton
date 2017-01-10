@@ -11,8 +11,6 @@
 // the License.
 
 import React from 'react';
-import FauxtonAPI from '../../core/api';
-import ComponentActions from '../components/actions';
 import {NotificationController} from "./notifications/notifications.react";
 import {NavBar} from './navigation/components.react';
 import NavbarActions from './navigation/actions';

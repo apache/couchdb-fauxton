@@ -13,7 +13,7 @@
 /* global FormData */
 
 import app from "../../../app";
-import FauxtonAPI, { url } from "../../../core/api";
+import FauxtonAPI from "../../../core/api";
 import ActionTypes from "./actiontypes";
 
 var xhr;
@@ -35,7 +35,7 @@ function initDocEditor (params) {
     if (params.onLoaded) {
       params.onLoaded();
     }
-  }, function (xhr, reason, msg) {
+  }, function (xhr) {
     if (xhr.status === 404) {
       errorNotification('The document does not exist.');
     }
@@ -97,7 +97,7 @@ function deleteDoc (doc) {
       });
       FauxtonAPI.navigate(FauxtonAPI.urls('allDocs', 'app', databaseName, ''));
     },
-    error: function (resp) {
+    error: function () {
       FauxtonAPI.addNotification({
         msg: 'Failed to delete your document!',
         type: 'error',

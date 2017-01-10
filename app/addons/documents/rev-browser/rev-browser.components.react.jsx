@@ -10,8 +10,6 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-
-import FauxtonAPI from "../../../core/api";
 import app from "../../../app";
 import React from "react";
 import ReactDOM from "react-dom";
@@ -78,7 +76,7 @@ class DiffyController extends React.Component {
   }
 
   render () {
-    const {tree, ours, theirs, dropdownData, conflictingRevs, isDiffViewEnabled} = this.state;
+    const {tree, ours, theirs, conflictingRevs, isDiffViewEnabled} = this.state;
 
     if (!tree) {
       return null;
@@ -276,7 +274,7 @@ class RevisionBrowserControls extends React.Component {
   }
 
   render () {
-    const {tree, conflictingRevs} = this.props;
+    const {tree} = this.props;
     const cellStyle = {paddingRight: '30px'};
 
     return (
@@ -414,7 +412,7 @@ ConfirmModal.propTypes = {
   onConfirm: React.PropTypes.func.isRequired,
 };
 
-const BackForwardControls = ({onClick, forward, backward}) => {
+const BackForwardControls = ({onClick, forward}) => {
   const icon = forward ? 'fonticon-right-open' : 'fonticon-left-open';
   const style = {height: '20px', width: '11px', marginTop: '7px'};
 

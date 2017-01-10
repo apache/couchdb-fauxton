@@ -102,7 +102,7 @@ var DocEditorController = React.createClass({
     Actions.saveDoc(this.state.doc, this.checkDocIsValid(), this.onSaveComplete);
   },
 
-  onSaveComplete: function (json) {
+  onSaveComplete: function () {
     this.getEditor().clearChanges();
   },
 

@@ -12,14 +12,7 @@
 
 import app from "../../app";
 import FauxtonAPI from "../../core/api";
-import React from "react";
-import NotificationComponents from "./notifications/notifications.react";
-import Actions from "./notifications/actions";
-import NavbarReactComponents from "./navigation/components.react";
 import NavigationActions from "./navigation/actions";
-import ReactComponents from "../components/react-components.react";
-import ComponentActions from "../components/actions";
-import {Breadcrumbs} from '../components/header-breadcrumbs';
 
 import "./assets/less/fauxton.less";
 

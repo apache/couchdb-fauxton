@@ -71,7 +71,7 @@ CORS.ConfigModel = Backbone.Model.extend({
 
   isNew: function () { return false; },
 
-  sync: function (method, model, options) {
+  sync: function (method, model) {
 
     var params = {
       url: model.url(),

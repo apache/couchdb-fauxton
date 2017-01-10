@@ -9,12 +9,11 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
-
 import app from "./initialize";
 import $ from "jquery";
+window.$ = $;
 import _ from "lodash";
-import Backbone from "backbone";
-import Bootstrap from "bootstrap";
+import "bootstrap";
 import Helpers from "./helpers";
 import Utils from "./core/utils";
 import FauxtonAPI from "./core/api";

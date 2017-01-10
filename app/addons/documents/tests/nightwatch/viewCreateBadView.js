@@ -45,8 +45,7 @@ module.exports = {
   },
 
   'Visit url of broken view displays error': function (client) {
-    var waitTime = client.globals.maxWaitTime,
-        newDatabaseName = client.globals.testDatabaseName,
+    var newDatabaseName = client.globals.testDatabaseName,
         baseUrl = client.globals.test_settings.launch_url;
 
     client

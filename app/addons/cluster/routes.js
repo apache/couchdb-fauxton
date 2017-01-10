@@ -10,7 +10,6 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import app from "../../app";
 import React from 'react';
 import FauxtonAPI from "../../core/api";
 import Cluster from "./resources";

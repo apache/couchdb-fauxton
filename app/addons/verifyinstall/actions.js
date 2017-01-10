@@ -10,7 +10,6 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import app from "../../app";
 import FauxtonAPI from "../../core/api";
 import Constants from "./constants";
 import VerifyInstall from "./resources";
@@ -27,7 +26,7 @@ var testPassed = function (test) {
 };
 
 var testFailed = function (test) {
-  return function (xhr, error) {
+  return function (xhr) {
     if (!xhr) { return; }
 
     FauxtonAPI.dispatch({

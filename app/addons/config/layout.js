@@ -11,8 +11,6 @@
 // the License.
 
 import React from 'react';
-import FauxtonAPI from "../../core/api";
-import {TabsSidebarHeader} from '../documents/layouts';
 import ConfigComponents from "./components.react";
 import CORSComponents from "../cors/components.react";
 import {Breadcrumbs} from '../components/header-breadcrumbs';

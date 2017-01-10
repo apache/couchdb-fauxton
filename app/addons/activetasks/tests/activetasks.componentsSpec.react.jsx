@@ -9,7 +9,6 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
-import FauxtonAPI from "../../../core/api";
 import ActiveTasks from "../resources";
 import Components from "../components.react";
 import Stores from "../stores";
@@ -20,7 +19,6 @@ import Actions from "../actions";
 import utils from "../../../../test/mocha/testUtils";
 import TestUtils from "react-addons-test-utils";
 import sinon from "sinon";
-import { mount } from 'enzyme';
 var assert = utils.assert;
 var restore = utils.restore;
 var activeTasksStore = Stores.activeTasksStore;
@@ -30,7 +28,7 @@ activeTasksCollection.parse(fakedResponse);
 describe('Active Tasks -- Components', function () {
 
   describe('Active Tasks Table (Components)', function () {
-    var table, tableDiv, spy, filterTab;
+    var table, tableDiv, spy;
 
     beforeEach(function () {
       tableDiv = document.createElement('div');

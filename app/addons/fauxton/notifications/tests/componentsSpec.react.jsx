@@ -12,7 +12,6 @@
 import FauxtonAPI from "../../../../core/api";
 import Views from "../notifications.react";
 import Stores from "../stores";
-import Actions from "../actions";
 import utils from "../../../../../test/mocha/testUtils";
 import React from "react";
 import ReactDOM from "react-dom";

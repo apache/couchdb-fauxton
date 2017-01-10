@@ -13,8 +13,6 @@
 import app from "../../../app";
 import FauxtonAPI from "../../../core/api";
 import ActionTypes from "./actiontypes";
-import Stores from "./stores";
-const store = Stores.queryOptionsStore;
 
 export default {
 

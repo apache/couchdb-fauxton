@@ -10,16 +10,11 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import app from '../../../app';
-
-import FauxtonAPI from '../../../core/api';
 import React from 'react';
 import Actions from './header.actions';
 import Components from '../../components/react-components.react';
 import IndexResultStores from '../index-results/stores';
-import IndexResultsActions from '../index-results/actions';
 import QueryOptionsStore from '../queryoptions/stores';
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import { Button, ButtonGroup } from 'react-bootstrap';
 
 const { indexResultsStore } = IndexResultStores;

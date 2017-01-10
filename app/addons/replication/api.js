@@ -203,7 +203,7 @@ export const checkReplicationDocID = (docId) => {
     url: `/_replicator/${docId}`,
     contentType: 'application/json; charset=utf-8',
     dataType: 'json',
-  }).then((res) => {
+  }).then(() => {
     promise.resolve(true);
   }, function (xhr) {
     if (xhr.statusText === "Object Not Found") {

@@ -12,7 +12,6 @@
 
 import FauxtonAPI from "../../../../core/api";
 import Views from "../mango.components.react";
-import Stores from "../mango.stores";
 import MangoActions from "../mango.actions";
 import ActionTypes from "../mango.actiontypes";
 import Resources from "../../resources";
@@ -21,7 +20,6 @@ import utils from "../../../../../test/mocha/testUtils";
 import React from "react";
 import ReactDOM from "react-dom";
 import TestUtils from "react-addons-test-utils";
-import sinon from "sinon";
 
 var assert = utils.assert;
 

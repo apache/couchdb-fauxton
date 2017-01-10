@@ -12,13 +12,11 @@
 import FauxtonAPI from "../../../core/api";
 import Views from "../components.react";
 import Actions from "../actions";
-import ActionTypes from "../actiontypes";
 import Stores from "../stores";
 import utils from "../../../../test/mocha/testUtils";
 import React from "react";
 import ReactDOM from "react-dom";
 import TestUtils from "react-addons-test-utils";
-import sinon from "sinon";
 import { mount } from 'enzyme';
 
 var assert = utils.assert;

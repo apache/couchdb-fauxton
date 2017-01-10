@@ -15,8 +15,7 @@
 module.exports = {
 
   'Does not crash the table view': function (client) {
-    var waitTime = client.globals.maxWaitTime,
-        newDatabaseName = client.globals.testDatabaseName,
+    var newDatabaseName = client.globals.testDatabaseName,
         newDocumentName1 = 'bulktest1',
         newDocumentName2 = 'bulktest2',
         baseUrl = client.globals.test_settings.launch_url;

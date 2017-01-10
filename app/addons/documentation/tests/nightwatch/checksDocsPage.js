@@ -14,8 +14,7 @@
 
 module.exports = {
   'Check the documentation page exists': function (client) {
-    var waitTime = client.globals.maxWaitTime,
-        baseUrl = client.globals.test_settings.launch_url;
+    var waitTime = client.globals.maxWaitTime;
 
     client
       .loginToGUI()

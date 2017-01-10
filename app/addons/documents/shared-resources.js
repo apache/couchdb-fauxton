@@ -58,7 +58,7 @@ Documents.Doc = FauxtonAPI.Model.extend({
     return this.database ? this.database : this.collection.database;
   },
 
-  validate: function (attrs, options) {
+  validate: function (attrs) {
     if (this.id && this.id !== attrs._id && this.get('_rev')) {
       return "Cannot change a documents id.";
     }

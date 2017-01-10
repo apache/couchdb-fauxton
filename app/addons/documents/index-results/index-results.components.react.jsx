@@ -10,14 +10,11 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import app from "../../../app";
 import FauxtonAPI from "../../../core/api";
 import React from "react";
 import Stores from "./stores";
 import Actions from "./actions";
 import Components from "../../components/react-components.react";
-import Documents from "../resources";
-import { SplitButton, MenuItem } from "react-bootstrap";
 import ReactSelect from "react-select";
 import "../../../../assets/js/plugins/prettify";
 import uuid from 'uuid';
@@ -49,7 +46,7 @@ var TableRow = React.createClass({
     data: React.PropTypes.object.isRequired
   },
 
-  onChange: function (e) {
+  onChange: function () {
     this.props.docChecked(this.props.el.id, this.props.el._rev);
   },
 

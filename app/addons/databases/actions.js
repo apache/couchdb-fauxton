@@ -15,7 +15,7 @@ import Stores from "./stores";
 import ActionTypes from "./actiontypes";
 import Resources from "./resources";
 
-function getDatabaseDetails (dbList, fullDbList, cb) {
+function getDatabaseDetails (dbList, fullDbList) {
   const databaseDetails = [];
   const failedDbs = [];
   let seen = 0;
@@ -27,7 +27,7 @@ function getDatabaseDetails (dbList, fullDbList, cb) {
       .then((res) => {
         databaseDetails.push(res);
       })
-      .fail((xhr) => {
+      .fail(() => {
         failedDbs.push(db);
       })
       .always(() => {
@@ -57,7 +57,7 @@ function fetch (url) {
   });
 }
 
-function getDatabaseList (limit, page) {
+function getDatabaseList () {
   const url = FauxtonAPI.urls('allDBs', 'server');
 
   return fetch(url);

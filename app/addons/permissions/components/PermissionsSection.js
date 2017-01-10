@@ -10,7 +10,7 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import React, { Component, PropTypes } from 'react';
+import React from 'react';
 
 import FauxtonAPI from '../../../core/api';
 import app from '../../../app';

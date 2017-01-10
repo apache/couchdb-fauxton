@@ -12,7 +12,6 @@
 import React from 'react';
 import {Table} from "react-bootstrap";
 import moment from 'moment';
-import app from '../../../app';
 import {DeleteModal, ErrorModal} from './modals';
 
 const formatUrl = (url) => {
@@ -257,7 +256,7 @@ class ReplicationTable extends React.Component {
   }
 
   onSort (column) {
-    return (e) => {
+    return () => {
       this.props.changeSort({
         descending: column === this.props.column ? !this.props.descending : true,
         column

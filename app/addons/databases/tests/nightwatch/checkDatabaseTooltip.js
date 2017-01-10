@@ -16,8 +16,7 @@ module.exports = {
   'Check the tooltip icon for DB with deleted items appears': function (client) {
     var waitTime = client.globals.maxWaitTime,
         newDatabaseName = client.globals.testDatabaseName,
-        newDocumentName = 'TemporaryDoc',
-        baseUrl = client.globals.test_settings.launch_url;
+        newDocumentName = 'TemporaryDoc';
 
     client
       // use nano to quickly set up a DB with a single doc

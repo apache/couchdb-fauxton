@@ -10,7 +10,7 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-const jest = require('jest');
+require('jest');
 
 window.$ = window.jQuery = require('jquery');
 

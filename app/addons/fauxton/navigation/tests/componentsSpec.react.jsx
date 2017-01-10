@@ -11,13 +11,11 @@
 // the License.
 import FauxtonAPI from "../../../../core/api";
 import Views from "../components.react";
-import Actions from "../actions";
 import Auth from "../../../../core/auth";
 import BaseAuth from "../../../auth/base";
 import utils from "../../../../../test/mocha/testUtils";
 import React from "react";
 import ReactDOM from "react-dom";
-import TestUtils from "react-addons-test-utils";
 import sinon from "sinon";
 import {mount} from 'enzyme';
 

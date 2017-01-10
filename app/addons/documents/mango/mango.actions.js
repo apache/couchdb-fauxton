@@ -10,14 +10,11 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import app from "../../../app";
 import FauxtonAPI from "../../../core/api";
 import Documents from "../resources";
 import ActionTypes from "./mango.actiontypes";
-import Stores from "./mango.stores";
 import IndexResultsStores from "../index-results/stores";
 import IndexResultActions from "../index-results/actions";
-var store = Stores.mangoStore;
 
 export default {
 
@@ -54,7 +51,7 @@ export default {
 
     mangoIndex
       .save()
-      .then(function (res) {
+      .then(function () {
         var url = '#' + FauxtonAPI.urls('mango', 'query-app', options.database.safeID());
 
         FauxtonAPI.dispatch({

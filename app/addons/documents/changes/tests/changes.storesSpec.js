@@ -11,7 +11,6 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import app from "../../../../app";
 import FauxtonAPI from "../../../../core/api";
 import Stores from "../stores";
 import utils from "../../../../../test/mocha/testUtils";

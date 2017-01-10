@@ -11,9 +11,6 @@
 // the License.
 import FauxtonAPI from "../../../../core/api";
 import Views from "../queryoptions.react";
-import Stores from "../stores";
-import Actions from "../actions";
-import Documents from "../../resources";
 import utils from "../../../../../test/mocha/testUtils";
 import React from "react";
 import ReactDOM from "react-dom";
@@ -25,7 +22,7 @@ var assert = utils.assert;
 var restore = utils.restore;
 
 describe('Query Options', function () {
-  var container, El;
+  var container;
 
   beforeEach(function () {
     container = document.createElement('div');

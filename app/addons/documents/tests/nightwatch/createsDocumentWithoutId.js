@@ -17,7 +17,6 @@ module.exports = {
     /*jshint multistr: true */
     var waitTime = client.globals.maxWaitTime,
         newDatabaseName = client.globals.testDatabaseName,
-        newDocumentName = 'create_doc_document',
         baseUrl = client.globals.test_settings.launch_url;
 
     client

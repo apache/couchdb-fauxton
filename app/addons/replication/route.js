@@ -13,7 +13,6 @@
 import React from 'react';
 import FauxtonAPI from '../../core/api';
 import ReplicationController from './controller';
-import ComponentActions from '../components/actions';
 
 const ReplicationRouteObject = FauxtonAPI.RouteObject.extend({
   routes: {
