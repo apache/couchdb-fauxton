@@ -14,7 +14,6 @@ import app from "../../app";
 import FauxtonAPI from "../../core/api";
 import Databases from "../databases/base";
 
-import Actions from "./actions";
 import BaseRoute from "../documents/shared-routes";
 import Layout from './layout';
 import React from 'react';
@@ -26,7 +25,7 @@ const PermissionsRouteObject = BaseRoute.extend({
     'database/:database/permissions': 'permissions'
   },
 
-  initialize: function (route, options) {
+  initialize: function () {
     const docOptions = app.getParams();
 
     docOptions.include_docs = true;

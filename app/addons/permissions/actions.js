@@ -11,8 +11,6 @@
 // the License.
 
 import FauxtonAPI from "../../core/api";
-import ActionTypes from "./actiontypes";
-import Promise from 'bluebird';
 import 'whatwg-fetch';
 import { isValueAlreadySet, addValueToPermissions } from './helpers';
 
@@ -28,7 +26,6 @@ export const receivedPermissions = json => {
     permissions: json
   };
 };
-
 
 export const fetchPermissions = url => dispatch => {
   return fetch(url, { headers: { 'Accept': 'application/json' }})
@@ -59,7 +56,7 @@ export const deletePermissionFromObject = (p, section, type, value) => {
 };
 
 export const updatePermission = (url, permissions, section, type, value) => dispatch => {
-  const res = setPermissionOnObject(permissions, section, type, value);
+  setPermissionOnObject(permissions, section, type, value);
 
   updatePermissionUnsafe(url, permissions, dispatch)
     .catch((err) => {
@@ -71,7 +68,7 @@ export const updatePermission = (url, permissions, section, type, value) => disp
 };
 
 export const deletePermission = (url, permissions, section, type, value) => dispatch => {
-  const res = deletePermissionFromObject(permissions, section, type, value);
+  deletePermissionFromObject(permissions, section, type, value);
 
   updatePermissionUnsafe(url, permissions, dispatch)
     .catch((err) => {
@@ -99,7 +96,7 @@ export const updatePermissionUnsafe = (url, p, dispatch) => {
     }
     return json;
   })
-  .then((json) => {
+  .then(() => {
     FauxtonAPI.addNotification({
       msg: 'Database permissions has been updated.'
     });

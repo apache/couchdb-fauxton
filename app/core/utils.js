@@ -21,9 +21,7 @@
 import $ from "jquery";
 import _ from "lodash";
 
-var onWindowResize = {};
-
-var utils = {
+const utils = {
 
   // Thanks to: http://stackoverflow.com/a/2880929
   getParams: function (queryString) {

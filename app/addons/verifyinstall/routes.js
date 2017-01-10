@@ -11,7 +11,6 @@
 // the License.
 
 import React from 'react';
-import app from "../../app";
 import FauxtonAPI from "../../core/api";
 import VerifyInstall from "./resources";
 import Actions from "./actions";

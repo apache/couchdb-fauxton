@@ -11,7 +11,7 @@
 // the License.
 
 import FauxtonAPI from '../../../core/api';
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 
 import PermissionsSection from './PermissionsSection';
 import { updatePermission, deletePermission } from '../actions';

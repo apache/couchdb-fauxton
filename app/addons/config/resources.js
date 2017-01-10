@@ -29,7 +29,7 @@ Config.OptionModel = Backbone.Model.extend({
 
   isNew () { return false; },
 
-  sync (method, model, options) {
+  sync (method, model) {
 
     var params = {
       url: model.url(),

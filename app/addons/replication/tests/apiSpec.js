@@ -151,8 +151,6 @@ describe('Replication API', () => {
     });
 
     it('does not add doc id if it does not exists', () => {
-      const docId = 'docId';
-
       assert.deepEqual(
         addDocIdAndRev(null, null, {}), {});
     });

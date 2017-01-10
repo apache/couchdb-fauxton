@@ -231,15 +231,15 @@ const hideConflictModal = () => {
   });
 };
 
-const updateUsernameAndPassword = (username, password) => {
-  FauxtonAPI.dispatch({
-    type: ActionTypes.REPLICATION_USERNAME_PASSWORD,
-    options: {
-      username,
-      password
-    }
-  });
-};
+// const updateUsernameAndPassword = (username, password) => {
+//   FauxtonAPI.dispatch({
+//     type: ActionTypes.REPLICATION_USERNAME_PASSWORD,
+//     options: {
+//       username,
+//       password
+//     }
+//   });
+// };
 
 const changeActivitySort = (sort) => {
   FauxtonAPI.dispatch({

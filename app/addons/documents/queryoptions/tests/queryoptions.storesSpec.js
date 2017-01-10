@@ -12,12 +12,10 @@
 
 import FauxtonAPI from "../../../../core/api";
 import Stores from "../stores";
-import ActionTypes from "../actiontypes";
 import testUtils from "../../../../../test/mocha/testUtils";
 var assert = testUtils.assert;
 var dispatchToken;
 var store;
-var opts;
 
 describe('QueryOptions Store', () => {
   beforeEach(() => {

@@ -12,7 +12,6 @@
 import testUtils from "../../../../test/mocha/testUtils";
 import FauxtonAPI from "../../../core/api";
 import Actions from "../actions";
-import Resources from "../resources";
 import Backbone from "backbone";
 import sinon from "sinon";
 

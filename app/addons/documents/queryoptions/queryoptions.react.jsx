@@ -10,8 +10,6 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import app from '../../../app';
-
 import FauxtonAPI from '../../../core/api';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -173,8 +171,7 @@ var KeySearchFields = React.createClass({
             <div className="controls controls-row">
               <label htmlFor="keys-input" className="drop-down">A key, or an array of keys.</label>
               <textarea value={this.props.byKeys} onChange={this.updateByKeys} id="keys-input" className="input-xxlarge" rows="5" type="text"
-                placeholder='Enter either a single key ["123"] or an array of keys ["123", "456"].
-A key value is the first parameter emitted in a map function. For example emit("123", 1) the key is "123".'></textarea>
+                placeholder='Enter either a single key ["123"] or an array of keys ["123", "456"]. A key value is the first parameter emitted in a map function. For example emit("123", 1) the key is "123".'></textarea>
               <div id="keys-error" className="inline-block js-keys-error"></div>
             </div>
           </div>
@@ -267,7 +264,7 @@ var QueryButtons = React.createClass({
     onCancel: React.PropTypes.func.isRequired
   },
 
-  hideTray: function (e) {
+  hideTray: function () {
     this.props.onCancel();
   },
 
@@ -370,7 +367,7 @@ var QueryTray = React.createClass({
     Actions.toggleQueryBarVisibility(false);
   },
 
-  toggleIncludeDocs: function (e) {
+  toggleIncludeDocs: function () {
     Actions.toggleIncludeDocs();
   },
 

@@ -10,14 +10,10 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-
-const helpers = require('../../../../../test/nightwatch_tests/helpers/helpers.js');
-
 module.exports = {
 
   'lists databases with a 401' : function (client) {
     const waitTime = client.globals.maxWaitTime;
-    const baseUrl = client.globals.test_settings.launch_url;
 
     const userDoc = {
       "_id": "org.couchdb.user:furbie",

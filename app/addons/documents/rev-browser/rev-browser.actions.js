@@ -12,7 +12,6 @@
 
 /* global FormData */
 
-import app from "../../../app";
 import FauxtonAPI from "../../../core/api";
 import ActionTypes from "./rev-browser.actiontypes";
 import getTree from "visualizeRevTree/lib/getTree";
@@ -128,7 +127,7 @@ function selectRevAsWinner (databaseName, docId, paths, revToWin) {
       showConfirmModal(false, null);
       FauxtonAPI.navigate(FauxtonAPI.urls('allDocs', 'app', databaseName, ''));
     },
-    error: (resp) => {
+    error: () => {
       FauxtonAPI.addNotification({
         msg: 'Failed to delete clean up conflicts!',
         type: 'error',

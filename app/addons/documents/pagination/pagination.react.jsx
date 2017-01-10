@@ -10,7 +10,6 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import FauxtonAPI from "../../../core/api";
 import React from "react";
 import Actions from "./actions";
 import IndexResultsStore from "../index-results/stores";

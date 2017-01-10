@@ -11,7 +11,6 @@
 // the License.
 
 import React from 'react';
-import FauxtonAPI from "../../core/api";
 import {OnePane, OnePaneContent} from '../components/layouts';
 import {Breadcrumbs} from '../components/header-breadcrumbs';
 import Components from "./components.react";
@@ -44,7 +43,7 @@ export const AuthLayout = ({crumbs, component}) => {
   );
 };
 
-export const AdminLayout = ({crumbs, changePassword, component}) => {
+export const AdminLayout = ({crumbs, changePassword}) => {
   let content = changePassword ? <ChangePasswordForm /> : <CreateAdminForm loginAfter={false} />;
   return (
     <div id="dashboard" className="template-with-sidebar flex-layout flex-col">

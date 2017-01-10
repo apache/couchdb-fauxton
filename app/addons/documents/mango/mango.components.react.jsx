@@ -65,7 +65,6 @@ var MangoQueryEditorController = React.createClass({
   },
 
   render: function () {
-    var loadLines;
     if (this.state.isLoading) {
       return (
         <div className="mango-editor-wrapper">

@@ -27,10 +27,9 @@ _.extend(Auth.prototype, Backbone.Events, {
   authDeniedCb: function () {},
 
   initialize: function () {
-    var that = this;
   },
 
-  authHandlerCb : function (roles) {
+  authHandlerCb : function () {
     var deferred = $.Deferred();
     deferred.resolve();
     return deferred;
@@ -52,7 +51,7 @@ _.extend(Auth.prototype, Backbone.Events, {
       throw new Error("Fauxton.session is not configured.");
     }
 
-    return FauxtonAPI.session.fetchUser().then(function (user) {
+    return FauxtonAPI.session.fetchUser().then(function () {
       return FauxtonAPI.when(that.authHandlerCb(FauxtonAPI.session, requiredRoles));
     });
   }

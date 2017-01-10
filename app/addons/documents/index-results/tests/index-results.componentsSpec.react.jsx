@@ -14,13 +14,11 @@ import Views from "../index-results.components.react";
 import IndexResultsActions from "../actions";
 import Stores from "../stores";
 import Documents from "../../resources";
-import Databases from "../../../databases/resources";
 import documentTestHelper from "../../tests/document-test-helper";
 import utils from "../../../../../test/mocha/testUtils";
 import React from "react";
 import ReactDOM from "react-dom";
 import TestUtils from "react-addons-test-utils";
-import sinon from "sinon";
 
 FauxtonAPI.router = new FauxtonAPI.Router([]);
 
@@ -80,13 +78,6 @@ describe('Index Results', function () {
   });
 
   describe('checkbox rendering', function () {
-    var opts = {
-      params: {},
-      database: {
-        safeID: function () { return '1';}
-      }
-    };
-
     beforeEach(function () {
       container = document.createElement('div');
       store.reset();

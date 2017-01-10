@@ -13,13 +13,10 @@
 import app from "../../app";
 import FauxtonAPI from "../../core/api";
 import Documents from "./shared-resources";
-import Databases from "../databases/base";
 import PaginationActions from "./pagination/actions";
 import IndexResultStores from "./index-results/stores";
 import SidebarActions from "./sidebar/actions";
 import QueryActions from './queryoptions/actions';
-import HeaderDocsLeft from './components/header-docs-left';
-
 
 // The Documents section is built up a lot of different route object which share code. This contains
 // base functionality that can be used across routes / addons
@@ -46,7 +43,7 @@ var BaseRoute = FauxtonAPI.RouteObject.extend({
     var promise = this.designDocs.fetch({reset: true}),
         hasReduceFunction;
 
-    promise.then((resp) => {
+    promise.then(() => {
       var design = _.findWhere(this.designDocs.models, {id: '_design/' + ddoc});
       !_.isUndefined(hasReduceFunction = design.attributes.doc.views[viewName].reduce);
 

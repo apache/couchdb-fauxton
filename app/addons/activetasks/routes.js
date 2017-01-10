@@ -11,11 +11,8 @@
 // the License.
 
 import React from 'react';
-import app from "../../app";
 import FauxtonAPI from "../../core/api";
 import ActiveTasksResources from "./resources";
-import ActiveTasksComponents from "./components.react";
-import Actions from "./actions";
 import Layout from './layout';
 
 var ActiveTasksRouteObject = FauxtonAPI.RouteObject.extend({

@@ -9,13 +9,11 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
-import FauxtonAPI from "../../../../core/api";
 import React from "react";
 import ReactDOM from "react-dom";
 import utils from "../../../../../test/mocha/testUtils";
 import Components from "../sidebar.react";
 import TestUtils from "react-addons-test-utils";
-import sinon from "sinon";
 var assert = utils.assert;
 var DesignDoc = Components.DesignDoc;
 

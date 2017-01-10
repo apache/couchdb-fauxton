@@ -11,7 +11,6 @@
 // the License.
 
 import React from 'react';
-import app from "../../app";
 import FauxtonAPI from "../../core/api";
 import DocumentationComponents from "./components.react";
 import {OnePaneSimpleLayout} from '../components/layouts';

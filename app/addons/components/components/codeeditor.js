@@ -212,7 +212,7 @@ export const CodeEditor = React.createClass({
     }.bind(this));
   },
 
-  showHideEditStringGutterIcon (e) {
+  showHideEditStringGutterIcon () {
     if (this.hasErrors() || !this.parseLineForStringMatch()) {
       this.setState({ stringEditIconVisible: false });
       return false;

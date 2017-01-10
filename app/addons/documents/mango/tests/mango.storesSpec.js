@@ -12,7 +12,6 @@
 
 import FauxtonAPI from "../../../../core/api";
 import Stores from "../mango.stores";
-import ActionTypes from "../mango.actiontypes";
 import Resources from "../../resources";
 import testUtils from "../../../../../test/mocha/testUtils";
 var assert = testUtils.assert;

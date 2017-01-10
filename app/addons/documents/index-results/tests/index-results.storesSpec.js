@@ -12,7 +12,6 @@
 
 import FauxtonAPI from "../../../../core/api";
 import Stores from "../stores";
-import ActionTypes from "../actiontypes";
 import Documents from "../../resources";
 import documentTestHelper from "../../tests/document-test-helper";
 import testUtils from "../../../../../test/mocha/testUtils";
@@ -69,7 +68,8 @@ describe('Index Results Store', function () {
       [1, 2],
       [3, 4]
     ];
-    var res = store.sortByTwoFields(a);
+
+    store.sortByTwoFields(a);
 
     assert.equal(a[0][0], 20);
     assert.equal(a[1][0], 3);
@@ -82,8 +82,8 @@ describe('Index Results Store', function () {
       [1, "g"],
       [1, "a"]
     ];
-    var res = store.sortByTwoFields(a);
 
+    store.sortByTwoFields(a);
     assert.equal(a[0][1], 'a');
     assert.equal(a[1][1], 'g');
     assert.equal(a[2][1], 'z');
@@ -382,7 +382,7 @@ describe('#getMangoDoc', function () {
 
   it('supports custom header fields', function () {
     FauxtonAPI.registerExtension('mango:additionalIndexes', {
-      createHeader: function (doc) {
+      createHeader: function () {
         return ['foobar'];
       }
     });

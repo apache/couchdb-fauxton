@@ -17,8 +17,7 @@ exports.devServerPort = 8000;
 exports.couch = 'http://couch:5984/';
 
 exports.init = function (grunt) {
-  var _ = grunt.util._,
-      platform = process.platform;
+  var _ = grunt.util._;
 
   return {
     readSettingsFile: function () {

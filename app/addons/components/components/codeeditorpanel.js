@@ -12,7 +12,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import {CodeEditor} from './codeeditor';
-import {StringEditModal} from './stringeditmodal';
 import {Beautify} from './beautify';
 import {ZenModeOverlay} from './zenmodeoverlay';
 
