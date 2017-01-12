@@ -27,7 +27,6 @@ module.exports = {
           },
           "language": "javascript"
         };
-
     client
       .createDocument(newDocumentName, newDatabaseName, ddocContents)
       .populateDatabase(newDatabaseName)
