@@ -480,7 +480,11 @@ var activeTasksHelpers = {
 
   getETA (item) {
     const cps = this.getChangesPerSecond(item);
-    return this.getTimeInfo(item.started_on + item.total_changes / cps);
+    if (cps === 'NaN') {
+      return 'N/A';
+    } else {
+      return this.getTimeInfo(item.started_on + item.total_changes / cps);
+    }
   }
 };
 
