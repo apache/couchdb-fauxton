@@ -9,9 +9,11 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
-
+import "babel-polyfill";
+import 'whatwg-fetch';
 import Backbone from "backbone";
-import _ from "lodash";
+import _, { defaultsDeep } from "lodash";
+
 var FauxtonAPI = {
   //add default objects
   router: {
@@ -158,5 +160,16 @@ FauxtonAPI.setSession = function (newSession) {
 };
 
 FauxtonAPI.reducers = [];
+
+FauxtonAPI.json = (url, opts = {}) => fetch(
+    url, defaultsDeep({
+      credentials: 'include',
+      headers: {
+        'accept': 'application/json',
+        'Content-Type': 'application/json',
+      }
+    }, opts)
+  )
+  .then((res) => res.json());
 
 export default FauxtonAPI;

@@ -70,8 +70,6 @@ Auth.Session = CouchdbSession.Session.extend({
 
   isAdminParty: function () {
     var userCtx = this.get('userCtx');
-
-
     if (!userCtx.name && userCtx.roles.indexOf("_admin") > -1) {
       return true;
     }

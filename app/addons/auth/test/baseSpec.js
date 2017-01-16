@@ -16,21 +16,6 @@ import testUtils from "../../../../test/mocha/testUtils";
 import sinon from "sinon";
 var assert = testUtils.assert;
 
-describe("Auth: Login", function () {
-
-  describe("failed login", function () {
-
-    it("redirects with replace: true set", function () {
-      var navigateSpy = sinon.spy(FauxtonAPI, 'navigate');
-      FauxtonAPI.auth = new Auth();
-      FauxtonAPI.session.isLoggedIn = function () { return false; };
-      Base.initialize();
-      FauxtonAPI.auth.authDeniedCb();
-      assert.ok(navigateSpy.withArgs('/login?urlback=', {replace: true}).calledOnce);
-    });
-  });
-});
-
 describe('auth session change', function () {
 
   afterEach(function () {

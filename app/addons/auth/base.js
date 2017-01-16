@@ -31,7 +31,13 @@ Auth.initialize = function () {
 
   Auth.session.on('change', function () {
     var session = Auth.session;
-    var link = {};
+    var link = {
+        id: 'auth',
+        title: 'Login',
+        href: '#/login',
+        icon: 'fonticon-user',
+        bottomNav: true
+    };
 
     if (session.isAdminParty()) {
       link = {
@@ -61,13 +67,6 @@ Auth.initialize = function () {
         className: 'logout'
       });
     } else {
-      link = {
-        id: 'auth',
-        title: 'Login',
-        href: '#/login',
-        icon: 'fonticon-user',
-        bottomNav: true
-      };
       FauxtonAPI.removeHeaderLink({ id: 'logout', footerNav: true });
     }
     FauxtonAPI.updateHeaderLink(link);
@@ -76,35 +75,6 @@ Auth.initialize = function () {
   Auth.session.fetchUser().then(function () {
     Auth.session.trigger('change');
   });
-
-  var auth = function (session, roles) {
-    var deferred = $.Deferred();
-
-    if (session.isAdminParty()) {
-      session.trigger('authenticated');
-      deferred.resolve();
-    } else if (session.matchesRoles(roles)) {
-      session.trigger('authenticated');
-      deferred.resolve();
-    } else {
-      deferred.reject();
-    }
-
-    return [deferred];
-  };
-
-  var authDenied = function () {
-    var url = window.location.hash.replace('#', '');
-    var pattern = /login\?urlback=/g;
-
-    if (pattern.test(url)) {
-      url = url.replace('login?urlback=', '');
-    }
-    FauxtonAPI.navigate('/login?urlback=' + url, { replace: true });
-  };
-
-  FauxtonAPI.auth.registerAuth(auth);
-  FauxtonAPI.auth.registerAuthDenied(authDenied);
 };
 
 export default Auth;

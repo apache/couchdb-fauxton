@@ -11,58 +11,45 @@
 // the License.
 
 import FauxtonAPI from "./base";
-import _ from "lodash";
 
-var CouchdbSession = {
+// Can be used in redux middleware
+function getUserFromSession() {
+    return FauxtonAPI
+      .json('/_session')
+      .then(({userCtx}) => userCtx);
+}
+
+export default ({
   Session: FauxtonAPI.Model.extend({
-    url: '/_session',
-
-    user: function () {
+    user() {
       var userCtx = this.get('userCtx');
-
       if (!userCtx || !userCtx.name) { return null; }
 
       return {
         name: userCtx.name,
-        roles: userCtx.roles
+        roles: userCtx.roles,
+        isAdmin: userCtx.roles.includes('_admin')
       };
     },
 
-    isAdmin: function () {
-      var userCtx = this.get('userCtx');
-      return userCtx.roles.indexOf('_admin') !== -1;
+    fetchUser() {
+      let currentUser = this.user();
+      return getUserFromSession()
+         .then((userCtx) => this.set('userCtx', userCtx))
+         .then(this.user.bind(this))
+         .then((user) => {
+            if (currentUser !== user) {
+              this.trigger('session:userChanged');
+            } else {
+              this.trigger('session:userFetched');
+            }
+            return user;
+         }, this.triggerError.bind(this));
     },
-
-    fetchUser: function (opt) {
-      var options = opt || {},
-          currentUser = this.user(),
-          fetch = _.bind(this.fetchOnce, this);
-
-      if (options.forceFetch) {
-        fetch = _.bind(this.fetch, this);
-      }
-
-      return fetch(opt).then(function () {
-        var user = this.user();
-
-        // Notify anyone listening on these events that either a user has changed
-        // or current user is the same
-        if (currentUser !== user) {
-          this.trigger('session:userChanged');
-        } else {
-          this.trigger('session:userFetched');
-        }
-
-        // this will return the user as a value to all function that calls done on this
-        // eg. session.fetchUser().done(user) { .. do something with user ..}
-        return user;
-      }.bind(this), this.triggerError.bind(this));
-    },
-
-    triggerError: function (xhr, type, message) {
+    triggerError(xhr, type, message) {
       this.trigger('session:error', xhr, type, message);
     }
   })
-};
+});
 
-export default CouchdbSession;
+
