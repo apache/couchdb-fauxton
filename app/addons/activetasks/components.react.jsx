@@ -481,7 +481,7 @@ var activeTasksHelpers = {
   getETA (item) {
     const cps = this.getChangesPerSecond(item);
     if (cps === 'NaN') {
-      return 'N/A';
+      return ['N/A'];
     } else {
       return this.getTimeInfo(item.started_on + item.total_changes / cps);
     }
