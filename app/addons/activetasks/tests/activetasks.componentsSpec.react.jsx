@@ -83,6 +83,7 @@ describe('Active Tasks -- Components', function () {
         'database',
         'started-on',
         'updated-on',
+        'eta',
         'pid',
         'progress'
       ];
