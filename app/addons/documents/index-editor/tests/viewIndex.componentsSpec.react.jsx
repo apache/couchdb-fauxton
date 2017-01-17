@@ -150,7 +150,7 @@ describe('DesignDocSelector component', function () {
         onSelectDesignDoc={spy}
       />, container);
 
-    TestUtils.Simulate.change($(ReactDOM.findDOMNode(selectorEl)).find('#ddoc')[0], {
+    TestUtils.Simulate.change($(ReactDOM.findDOMNode(selectorEl)).find('.styled-select select')[0], {
       target: {
         value: '_design/test-doc'
       }

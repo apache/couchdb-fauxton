@@ -65,14 +65,22 @@ export default class ReplicationController extends React.Component {
     };
   }
 
+  loadReplicationInfo (props, oldProps) {
+    Actions.initReplicator(props.localSource);
+    Actions.getReplicationActivity();
+    if (props.replicationId && props.replicationId !== oldProps.replicationId) {
+      Actions.clearReplicationForm();
+      Actions.getReplicationStateFrom(props.replicationId);
+    }
+  }
+
   componentDidMount () {
     store.on('change', this.onChange, this);
-    Actions.initReplicator(this.props.localSource);
-    Actions.getReplicationActivity();
+    this.loadReplicationInfo(this.props, {});
+  }
 
-    if (this.props.replicationId) {
-      Actions.getReplicationStateFrom(this.props.replicationId);
-    }
+  componentWillReceiveProps (nextProps) {
+    this.loadReplicationInfo(nextProps, this.props);
   }
 
   componentWillUnmount () {
