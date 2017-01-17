@@ -58,6 +58,8 @@ module.exports = {
       .clickWhenVisible('a[title="Edit replication"]')
       .waitForElementNotPresent('.load-lines', waitTime, true)
       .waitForElementPresent('.replication__section', waitTime, true)
+      .pause(10000)
+      .assert.valueContains(".replication__doc-name-input", replicatorDoc._id)
       .end();
   },
 
