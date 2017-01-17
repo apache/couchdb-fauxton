@@ -20,6 +20,7 @@ import Flux from "flux";
 import $ from "jquery";
 import Backbone from "backbone";
 import _ from "lodash";
+import Promise from "bluebird";
 
 Backbone.$ = $;
 Backbone.ajax = function () {
@@ -32,7 +33,8 @@ Object.assign(FauxtonAPI, {
   utils: utils,
   Store: Store,
   Events: _.extend({}, Backbone.Events),
-  dispatcher: new Flux.Dispatcher()
+  dispatcher: new Flux.Dispatcher(),
+  Promise: Promise
 });
 
 // Pass along all constants

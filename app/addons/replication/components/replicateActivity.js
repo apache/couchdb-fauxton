@@ -70,6 +70,7 @@ export default class Activity extends React.Component {
     const {modalVisible} = this.state;
     return (
       <div className="replication__activity">
+        <p>Only active jobs triggered through the _replicate endpoint </p>
         <ReplicationHeader
           filter={filter}
           onFilterChange={onFilterChange}

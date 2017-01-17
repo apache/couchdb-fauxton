@@ -16,12 +16,27 @@ import Constants from './constants';
 import AccountActionTypes from '../auth/actiontypes';
 import _ from 'lodash';
 
+// I know this could be done by just adding the _ prefix to the passed field name, I just don't much like relying
+// on the var names like that...
+const validFieldMap = {
+  remoteSource: '_remoteSource',
+  remoteTarget: '_remoteTarget',
+  localTarget: '_localTarget',
+  replicationType: '_replicationType',
+  replicationDocName: '_replicationDocName',
+  replicationSource: '_replicationSource',
+  replicationTarget: '_replicationTarget',
+  localSource: '_localSource',
+  replicationDocName: '_replicationDocName'
+};
+
 const ReplicationStore = FauxtonAPI.Store.extend({
   initialize () {
     this.reset();
   },
 
   reset () {
+    console.log('re');
     this._loading = false;
     this._databases = [];
     this._authenticated = false;
@@ -50,8 +65,24 @@ const ReplicationStore = FauxtonAPI.Store.extend({
     this._username = '';
     this._password = '';
     this._activityLoading = false;
+    this._tabSection = 'new replication';
+    this._supportNewApi = true;
 
     this.loadActivitySort();
+
+    this._fetchingReplicateInfo = false;
+    this._replicateInfo = [];
+
+    this._checkingAPI = true;
+    this._supportNewApi = false;
+  },
+
+  supportNewApi () {
+    return this._supportNewApi;
+  },
+
+  checkingAPI () {
+    return this._checkingAPI;
   },
 
   getActivitySort () {
@@ -75,6 +106,18 @@ const ReplicationStore = FauxtonAPI.Store.extend({
   setActivitySort (sort) {
     app.utils.localStorageSet('replication-activity-sort', sort);
     this._activitySort = sort;
+  },
+
+  isReplicateInfoLoading () {
+    return this._fetchingReplicateInfo;
+  },
+
+  getReplicateInfo () {
+    return this._replicateInfo;
+  },
+
+  setReplicateInfo (info) {
+    this._replicateInfo = info;
   },
 
   setCredentials (username, password) {
@@ -200,20 +243,12 @@ const ReplicationStore = FauxtonAPI.Store.extend({
   // to cut down on boilerplate
   updateFormField (fieldName, value) {
 
-    // I know this could be done by just adding the _ prefix to the passed field name, I just don't much like relying
-    // on the var names like that...
-    var validFieldMap = {
-      remoteSource: '_remoteSource',
-      remoteTarget: '_remoteTarget',
-      localTarget: '_localTarget',
-      replicationType: '_replicationType',
-      replicationDocName: '_replicationDocName',
-      replicationSource: '_replicationSource',
-      replicationTarget: '_replicationTarget',
-      localSource: '_localSource'
-    };
 
     this[validFieldMap[fieldName]] = value;
+  },
+
+  clearReplicationForm () {
+    Object.values(validFieldMap).forEach(fieldName => this[fieldName] = '');
   },
 
   getRemoteSource () {
@@ -240,6 +275,10 @@ const ReplicationStore = FauxtonAPI.Store.extend({
     Object.keys(doc).forEach(key => {
       this.updateFormField(key, doc[key]);
     });
+  },
+
+  getTabSection () {
+    return this._tabSection;
   },
 
   dispatch ({type, options}) {
@@ -269,7 +308,7 @@ const ReplicationStore = FauxtonAPI.Store.extend({
       break;
 
       case ActionTypes.REPLICATION_CLEAR_FORM:
-        this.reset();
+        this.clearReplicationForm();
       break;
 
       case ActionTypes.REPLICATION_STARTING:
@@ -315,6 +354,28 @@ const ReplicationStore = FauxtonAPI.Store.extend({
 
       case ActionTypes.REPLICATION_CLEAR_SELECTED_DOCS:
         this._allDocsSelected = false;
+      break;
+
+      case ActionTypes.REPLICATION_CHANGE_TAB_SECTION:
+        this._tabSection = options;
+      break;
+
+      case ActionTypes.REPLICATION_CLEAR_SELECTED_DOCS:
+        this._allDocsSelected = false;
+      break;
+
+      case ActionTypes.REPLICATION_SUPPORT_NEW_API:
+        this._checkingAPI = false;
+        this._supportNewApi = options;
+      break;
+
+      case ActionTypes.REPLICATION_FETCHING_REPLICATE_STATUS:
+        this._fetchingReplicateInfo = true;
+      break;
+
+      case ActionTypes.REPLICATION_REPLICATE_STATUS:
+        this._fetchingReplicateInfo = false;
+        this.setReplicateInfo(options);
       break;
 
       case AccountActionTypes.AUTH_SHOW_PASSWORD_MODAL:

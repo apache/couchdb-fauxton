@@ -28,9 +28,11 @@ export const DeleteModal = ({
   }
 
   let header = "You are deleting a replication document.";
+  let btnText = "Delete Document";
 
   if (multipleDocs > 1) {
     header = `You are deleting ${multipleDocs} replication documents.`;
+    btnText = "Delete Documents";
   }
 
   return (
@@ -51,7 +53,7 @@ export const DeleteModal = ({
       <Modal.Footer>
         <a className="cancel-link" onClick={onClose}>Cancel</a>
         <ConfirmButton
-          text={"Delete Document"}
+          text={btnText}
           onClick={onClick}
         />
       </Modal.Footer>
@@ -66,21 +68,30 @@ DeleteModal.propTypes = {
   multipleDocs: React.PropTypes.number.isRequired
 };
 
-export const ErrorModal = ({visible, onClose, errorMsg}) => {
+export const ErrorModal = ({visible, onClose, errorMsg, status}) => {
 
   if (!visible) {
     return null;
   }
 
+  let title = "Replication Error";
+  let warning = <p>The replication job will be tried at increasing intervals</p>;
+
+  if (status.toLowerCase() === 'failed') {
+    title = "Replication Error - Failed";
+    warning = null;
+  }
+
   return (
     <Modal dialogClassName="replication__error-doc-modal" show={visible} onHide={() => onClose()}>
       <Modal.Header closeButton={true}>
-        <Modal.Title>Replication Error</Modal.Title>
+        <Modal.Title>{title}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <p>
           {errorMsg}
         </p>
+        {warning}
       </Modal.Body>
       <Modal.Footer>
       </Modal.Footer>
@@ -104,7 +115,7 @@ export const ConflictModal = ({visible, docId, onClose, onClick}) => {
   return (
     <Modal dialogClassName="replication__error-doc-modal" show={visible} onHide={() => onClose()}>
       <Modal.Header closeButton={true}>
-        <Modal.Title>Fix Document Conflict</Modal.Title>
+        <Modal.Title>Custom ID Conflict</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <p>
@@ -123,7 +134,6 @@ export const ConflictModal = ({visible, docId, onClose, onClick}) => {
           Change Document ID
         </button>
         <button onClick={onClick} className="btn replication__error-continue">
-          <i className="icon icon-eraser"></i>
           Overwrite Existing Document
         </button>
       </Modal.Footer>

@@ -208,6 +208,9 @@ export const removeSensitiveUrlInfo = (url) => {
 
 export const getDocUrl = (doc) => {
   let url = doc;
+  if (!doc) {
+    return '';
+  }
 
   if (typeof doc === "object") {
     url = doc.url;
@@ -234,14 +237,59 @@ export const parseReplicationDocs = (rows) => {
   });
 };
 
+export const convertState = (state) => {
+  if (state.toLowerCase() === 'error' || state.toLowerCase() === 'crashing') {
+    return 'retrying';
+  }
+
+  return state;
+};
+
+export const combineDocsAndScheduler = (docs, schedulerDocs) => {
+  return docs.map(doc => {
+    const schedule = schedulerDocs.find(s => s.doc_id === doc._id);
+    if (!schedule) {
+      return doc;
+    }
+
+    doc.status = convertState(schedule.state);
+    if (schedule.start_time) {
+      doc.startTime = new Date(schedule.start_time);
+    }
+
+    if (schedule.last_updated) {
+      doc.stateTime = new Date(schedule.last_updated);
+    }
+
+    return doc;
+  });
+};
+
 export const fetchReplicationDocs = () => {
-  return $.ajax({
+  const docsPromise = $.ajax({
     type: 'GET',
     url: '/_replicator/_all_docs?include_docs=true&limit=100',
     contentType: 'application/json; charset=utf-8',
     dataType: 'json',
   }).then((res) => {
     return parseReplicationDocs(res.rows.filter(row => row.id.indexOf("_design/_replicator") === -1));
+  });
+
+  const schedulerPromise = fetchSchedulerDocs();
+  return FauxtonAPI.Promise.join(docsPromise, schedulerPromise, (docs, schedulerDocs) => {
+    return combineDocsAndScheduler(docs, schedulerDocs);
+  });
+};
+
+export const fetchSchedulerDocs = () => {
+  return $.ajax({
+    type: 'GET',
+    url: '/_scheduler/docs?include_docs=true',
+    contentType: 'application/json; charset=utf-8',
+    dataType: 'json',
+  }).then((res) => {
+    console.log('new', res);
+    return res.docs;
   });
 };
 
@@ -262,4 +310,42 @@ export const checkReplicationDocID = (docId) => {
     promise.resolve(true);
   });
   return promise;
+};
+
+let newApi = null;
+export const supportNewApi = () => {
+  return new FauxtonAPI.Promise((resolve) => {
+    if (newApi !== null) {
+      return resolve(newApi);
+    }
+
+    $.ajax({
+      url: app.host,
+      contentType: 'application/json; charset=utf-8',
+      dataType: 'json',
+      method: 'GET'
+    }).then(resp => {
+      console.log('new support api todo', resp);
+      newApi = true;
+      resolve(true);
+    }, () => {
+      resolve(true);
+      newApi = true;
+    });
+  });
+};
+
+export const parseReplicateInfo = (resp) => {
+  return resp.jobs.filter(job => job.database === null);
+};
+
+export const fetchReplicateInfo = () => {
+  return $.ajax({
+    type: 'GET',
+    url: `/_scheduler/jobs`,
+    contentType: 'application/json; charset=utf-8',
+    dataType: 'json',
+  }).then(resp => {
+    return parseReplicateInfo(resp);
+  });
 };

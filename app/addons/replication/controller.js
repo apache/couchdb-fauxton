@@ -18,6 +18,8 @@ import NewReplication from './components/newreplication';
 import Activity from './components/activity';
 import {checkReplicationDocID} from './api';
 import {OnePane, OnePaneHeader, OnePaneContent} from '../components/layouts';
+import {TabElementWrapper, TabElement} from '../components/components/tabelement';
+import ReplicateActivity from './components/replicateactivity';
 
 const {LoadLines, Polling, RefreshBtn} = Components;
 
@@ -61,13 +63,19 @@ export default class ReplicationController extends React.Component {
       someDocsSelected:  store.someDocsSelected(),
       username: store.getUsername(),
       password: store.getPassword(),
-      activitySort: store.getActivitySort()
+      activitySort: store.getActivitySort(),
+      tabSection: store.getTabSection(),
+      checkingApi: store.checkingAPI(),
+      supportNewApi: store.supportNewApi(),
+      replicateLoading: store.isReplicateInfoLoading(),
+      replicateInfo: store.getReplicateInfo()
     };
   }
 
   loadReplicationInfo (props, oldProps) {
     Actions.initReplicator(props.localSource);
     Actions.getReplicationActivity();
+    Actions.getReplicateActivity();
     if (props.replicationId && props.replicationId !== oldProps.replicationId) {
       Actions.clearReplicationForm();
       Actions.getReplicationStateFrom(props.replicationId);
@@ -98,10 +106,11 @@ export default class ReplicationController extends React.Component {
       passwordModalVisible, databases, localSource, remoteSource, remoteTarget,
       localTarget, statusDocs, statusFilter, loading, allDocsSelected,
       someDocsSelected, showConflictModal, localSourceKnown, localTargetKnown,
-      username, password, authenticated, activityLoading, submittedNoChange, activitySort
+      username, password, authenticated, activityLoading, submittedNoChange, activitySort, tabSection,
+      replicateInfo, replicateLoading
     } = this.state;
 
-    if (this.props.section === 'new replication') {
+    if (tabSection === 'new replication') {
       if (loading) {
         return <LoadLines/>;
       }
@@ -141,10 +150,30 @@ export default class ReplicationController extends React.Component {
       />;
     }
 
+    if (tabSection === '_replicate') {
+      if (replicateLoading) {
+        return <LoadLines />;
+      }
+
+      console.log('rrrrrr', replicateInfo);
+      return <ReplicateActivity
+        docs={replicateInfo}
+        filter={statusFilter}
+        onFilterChange={Actions.filterDocs}
+        selectAllDocs={Actions.selectAllDocs}
+        selectDoc={Actions.selectDoc}
+        selectAllDocs={Actions.selectAllDocs}
+        allDocsSelected={allDocsSelected}
+        someDocsSelected={someDocsSelected}
+        deleteDocs={Actions.deleteDocs}
+        activitySort={activitySort}
+        changeActivitySort={Actions.changeActivitySort}
+        />;
+    }
+
     if (activityLoading) {
       return <LoadLines/>;
     }
-
 
     return <Activity
       docs={statusDocs}
@@ -161,21 +190,8 @@ export default class ReplicationController extends React.Component {
            />;
   }
 
-  getCrumbs () {
-    if (this.props.section === 'new replication') {
-      return [
-        {name: 'Replication', link: 'replication'},
-        {name: 'New Replication'}
-      ];
-    }
-
-    return [
-      {name: 'Replication'}
-    ];
-  }
-
   getHeaderComponents () {
-    if (this.props.section === 'new replication') {
+    if (this.state.tabSection === 'new replication') {
       return null;
     }
 
@@ -195,16 +211,61 @@ export default class ReplicationController extends React.Component {
     );
   }
 
+  getTabElements () {
+    const {tabSection} = this.state;
+    const elements = [
+      <TabElement
+        key={1}
+        selected={tabSection === 'activity'}
+        text={"Replicator DB Activity"}
+        onChange={this.onTabChange.bind(this, 'activity', '#/replication')}
+      />
+    ];
+
+    if (this.state.supportNewApi) {
+      elements.push(
+        <TabElement
+          key={2}
+          selected={tabSection === '_replicate'}
+          text={"_replicate Activity"}
+          onChange={this.onTabChange.bind(this, '_replicate', '#/replication/_replicate')}
+        />
+      );
+    }
+
+    elements.push(
+      <TabElement
+        key={3}
+        selected={tabSection === 'new replication'}
+        text={"New Replication"}
+        onChange={this.onTabChange.bind(this, 'new replication', '#/replication/_create')}
+      />
+    );
+
+    return elements;
+  }
+
+  onTabChange (section, url) {
+    Actions.changeTabSection(section, url);
+  }
+
   render () {
+    const { checkingAPI } = this.state;
+
+    if (checkingAPI) {
+      return <LoadLines />;
+    }
+
     return (
       <OnePane>
-        <OnePaneHeader
-          crumbs={this.getCrumbs()}
-        >
+        <OnePaneHeader>
         {this.getHeaderComponents()}
         </OnePaneHeader>
         <OnePaneContent>
           <div className="template-content flex-body flex-layout flex-col">
+            <TabElementWrapper>
+              {this.getTabElements()}
+            </TabElementWrapper>
             <div className="replication__page flex-layout flex-col">
               {this.showSection()}
             </div>

@@ -11,10 +11,8 @@
 // the License.
 import React from 'react';
 import {DeleteModal} from './modals';
-import {ReplicationTable} from './common-table';
-import {ReplicationHeader} from './common-activity';
 
-export default class Activity extends React.Component {
+export class BulkDeleteController extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
@@ -55,56 +53,50 @@ export default class Activity extends React.Component {
   }
 
   render () {
-    const {
-      onFilterChange,
-      activitySort,
-      changeActivitySort,
-      docs,
-      filter,
-      selectAllDocs,
-      someDocsSelected,
-      allDocsSelected,
-      selectDoc
-    } = this.props;
-
     const {modalVisible} = this.state;
-    return (
-      <div className="replication__activity">
-        <ReplicationHeader
-          filter={filter}
-          onFilterChange={onFilterChange}
-        />
-        <ReplicationTable
-          someDocsSelected={someDocsSelected}
-          allDocsSelected={allDocsSelected}
-          selectAllDocs={selectAllDocs}
-          docs={docs}
-          selectDoc={selectDoc}
-          deleteDocs={this.showModal.bind(this)}
-          descending={activitySort.descending}
-          column={activitySort.column}
-          changeSort={changeActivitySort}
-        />
-        <DeleteModal
+    return <DeleteModal
           multipleDocs={this.numDocsSelected()}
           visible={modalVisible}
           onClose={this.closeModal.bind(this)}
           onClick={this.confirmDeleteDocs.bind(this)}
-          />
-      </div>
-    );
+          />;
   }
 }
 
-Activity.propTypes = {
+BulkDeleteController.propTypes = {
   docs: React.PropTypes.array.isRequired,
+  deleteDocs: React.PropTypes.func.isRequired
+};
+
+export const ReplicationFilter = ({value, onChange}) => {
+  return (
+    <div className="replication__filter">
+      <i className="replication__filter-icon fonticon-filter" />
+      <input
+        type="text"
+        placeholder="Filter replications"
+        className="replication__filter-input"
+        value={value}
+        onChange={(e) => {onChange(e.target.value);}}
+      />
+    </div>
+  );
+};
+
+ReplicationFilter.propTypes = {
+  value: React.PropTypes.string.isRequired,
+  onChange: React.PropTypes.func.isRequired
+};
+
+export const ReplicationHeader = ({filter, onFilterChange}) => {
+  return (
+    <div className="replication__activity_header">
+      <ReplicationFilter value={filter} onChange={onFilterChange} />
+    </div>
+  );
+};
+
+ReplicationHeader.propTypes = {
   filter: React.PropTypes.string.isRequired,
-  selectAllDocs: React.PropTypes.func.isRequired,
-  allDocsSelected: React.PropTypes.bool.isRequired,
-  someDocsSelected: React.PropTypes.bool.isRequired,
-  selectDoc: React.PropTypes.func.isRequired,
-  onFilterChange: React.PropTypes.func.isRequired,
-  deleteDocs: React.PropTypes.func.isRequired,
-  activitySort: React.PropTypes.object.isRequired,
-  changeActivitySort: React.PropTypes.func.isRequired
+  onFilterChange: React.PropTypes.func.isRequired
 };

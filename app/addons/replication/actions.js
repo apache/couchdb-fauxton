@@ -14,7 +14,8 @@ import FauxtonAPI from '../../core/api';
 import ActionTypes from './actiontypes';
 import Helpers from './helpers';
 import Constants from './constants';
-import {createReplicationDoc, fetchReplicationDocs, decodeFullUrl} from './api';
+import {supportNewApi, createReplicationDoc, fetchReplicateInfo, fetchReplicationDocs, decodeFullUrl} from './api';
+import $ from 'jquery';
 
 
 function initReplicator (localSource) {
@@ -89,15 +90,29 @@ function clearReplicationForm () {
   FauxtonAPI.dispatch({ type: ActionTypes.REPLICATION_CLEAR_FORM });
 }
 
-const getReplicationActivity = () => {
+const getReplicationActivity = (supportNewApi) => {
   FauxtonAPI.dispatch({
       type: ActionTypes.REPLICATION_FETCHING_STATUS,
   });
 
-  fetchReplicationDocs().then(docs => {
+  fetchReplicationDocs(supportNewApi).then(docs => {
     FauxtonAPI.dispatch({
       type: ActionTypes.REPLICATION_STATUS,
       options: docs
+    });
+  });
+};
+
+const getReplicateActivity = () => {
+  FauxtonAPI.dispatch({
+      type: ActionTypes.REPLICATION_FETCHING_REPLICATE_STATUS,
+  });
+
+  fetchReplicateInfo().then(replicateInfo => {
+    console.log('replicate info', replicateInfo);
+    FauxtonAPI.dispatch({
+      type: ActionTypes.REPLICATION_REPLICATE_STATUS,
+      options: replicateInfo
     });
   });
 };
@@ -238,7 +253,29 @@ const changeActivitySort = (sort) => {
   });
 };
 
+const changeTabSection = (newSection, url) => {
+  FauxtonAPI.dispatch({
+    type: ActionTypes.REPLICATION_CHANGE_TAB_SECTION,
+    options: newSection
+  });
+
+  if (url) {
+    FauxtonAPI.navigate(url, {trigger: false});
+  }
+};
+
+const checkForNewApi = () => {
+  supportNewApi().then(newApi => {
+    console.log('new api', newApi);
+    FauxtonAPI.dispatch({
+      type: ActionTypes.REPLICATION_SUPPORT_NEW_API,
+      options: newApi
+    });
+  });
+};
+
 export default {
+  checkForNewApi,
   initReplicator,
   replicate,
   updateFormField,
@@ -252,5 +289,7 @@ export default {
   showConflictModal,
   hideConflictModal,
   changeActivitySort,
-  clearSelectedDocs
+  clearSelectedDocs,
+  changeTabSection,
+  getReplicateActivity
 };
