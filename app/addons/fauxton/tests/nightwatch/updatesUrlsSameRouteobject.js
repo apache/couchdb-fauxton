@@ -27,6 +27,9 @@ module.exports = {
       .assert.valueContains('.text-field-to-copy', newDatabaseName + '/_find')
       .clickWhenVisible('.edit-link')
       .waitForElementVisible('.prettyprint', waitTime, false)
+      // We need to wait for the previous API Url modal to disappear before
+      // attempting to view it with the new text-field-to-copy.
+      .waitForElementNotPresent('.api-bar-tray', waitTime, false)
       .clickWhenVisible('.control-toggle-api-url')
       .waitForElementVisible('.text-field-to-copy', waitTime, false)
       .assert.valueContains('.text-field-to-copy', newDatabaseName + '/_index')
