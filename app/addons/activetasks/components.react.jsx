@@ -464,7 +464,12 @@ var activeTasksHelpers = {
 
     if (_.has(item, 'changes_done')) {
       progressMessage.push(item.changes_done + ' Changes done.');
-      progressMessage.push('Rate: ' + this.getChangesPerSecond(item) + ' changes/second');
+      const rate = this.getChangesPerSecond(item);
+      if (rate === 'NaN') {
+        progressMessage.push('Rate: N/A');
+      } else {
+        progressMessage.push('Rate: ' + this.getChangesPerSecond(item) + ' changes/second');
+      }
     }
 
     return progressMessage;
