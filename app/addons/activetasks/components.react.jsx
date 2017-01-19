@@ -468,7 +468,7 @@ var activeTasksHelpers = {
       if (rate === 'NaN') {
         progressMessage.push('Rate: N/A');
       } else {
-        progressMessage.push('Rate: ' + this.getChangesPerSecond(item) + ' changes/second');
+        progressMessage.push('Rate: ' + rate + ' changes/second');
       }
     }
 
