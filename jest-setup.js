@@ -13,5 +13,8 @@
 require('jest');
 
 window.$ = window.jQuery = require('jquery');
+window._ = require('lodash');
+window.Backbone = require('backbone');
 
 global.fetch = require('jest-fetch-mock');
+
