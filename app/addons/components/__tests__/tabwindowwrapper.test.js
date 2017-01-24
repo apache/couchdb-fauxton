@@ -16,7 +16,7 @@ import ReactDOM from "react-dom";
 
 describe('TabWindowWrapper', () => {
   const mock = () => {
-    return(<div></div>);
+    return (<div></div>);
   };
 
   const tabs = [
@@ -35,7 +35,7 @@ describe('TabWindowWrapper', () => {
       component: mock,
       route: 'tab3'
     }
-  ]
+  ];
 
   it('shows all tabs', () => {
     const wrapper = mount(<TabWindowWrapper tabs={tabs} selectedTab={"Tab1"}/>);
