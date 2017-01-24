@@ -23,7 +23,16 @@ import IndexEditorComponents from "./index-editor/components.react";
 import DesignDocInfoComponents from './designdocinfo/components.react';
 import RightAllDocsHeader from './components/header-docs-right';
 
-export const TabsSidebarHeader = ({hideHeaderBar, database, dbName, dropDownLinks, showIncludeAllDocs, docURL, endpoint}) => {
+export const TabsSidebarHeader = ({
+  hideQueryOptions,
+  hideHeaderBar,
+  database,
+  dbName,
+  dropDownLinks,
+  showIncludeAllDocs,
+  docURL,
+  endpoint
+}) => {
   return (
     <header className="two-panel-header">
       <div className="flex-layout flex-row">
@@ -38,7 +47,7 @@ export const TabsSidebarHeader = ({hideHeaderBar, database, dbName, dropDownLink
               {hideHeaderBar ? null : <ReactHeader.BulkDocumentHeaderController showIncludeAllDocs={showIncludeAllDocs} />}
           </div>
           <div id="right-header" className="flex-fill">
-            <RightAllDocsHeader database={database} />
+            <RightAllDocsHeader hideQueryOptions={hideQueryOptions} database={database} />
           </div>
           <ApiBarWrapper docURL={docURL} endpoint={endpoint} />
           <div id="notification-center-btn" className="flex-fill">
