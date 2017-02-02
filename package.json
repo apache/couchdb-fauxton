@@ -20,8 +20,8 @@
     "bootstrap": "^3.3.7",
     "enzyme": "^2.4.1",
     "es5-shim": "4.5.4",
-    "jest": "^17.0.3",
-    "jest-fetch-mock": "^1.0.6",
+    "fetch-mock": "^5.9.3",
+    "jest": "^18.1.0",
     "mocha": "~3.1.2",
     "mocha-loader": "^1.0.0",
     "mocha-phantomjs": "git+https://github.com/garrensmith/mocha-phantomjs.git",
@@ -107,7 +107,7 @@
     "visualizeRevTree": "git+https://github.com/neojski/visualizeRevTree.git#gh-pages",
     "webpack": "^1.12.12",
     "webpack-dev-server": "^1.14.1",
-    "whatwg-fetch": "^2.0.1"
+    "whatwg-fetch": "~2.0.1"
   },
   "scripts": {
     "stylecheck": "eslint --ext=js,jsx .",

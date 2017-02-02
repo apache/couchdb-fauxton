@@ -1,7 +1,7 @@
 {
   "testPathDirs": ["app"],
 
-  "setupTestFrameworkScriptFile": "jest-setup.js",
+  "setupTestFrameworkScriptFile": "./jest-setup.js",
 
   "moduleNameMapper": {
     "underscore": "lodash",
