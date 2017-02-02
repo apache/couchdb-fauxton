@@ -49,7 +49,7 @@ var devSetup = function (cb) {
   });
 };
 
-const defaultHeaderValue = "default-src 'self'; img-src 'self' data:; font-src 'self'; " +
+const defaultHeaderValue = "default-src 'self'; child-src 'self' blob:; img-src 'self' data:; font-src 'self'; " +
                   "script-src 'self' 'unsafe-eval'; style-src 'self' 'unsafe-inline';";
 function getCspHeaders () {
   if (!settings.contentSecurityPolicy) {
