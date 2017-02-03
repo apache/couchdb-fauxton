@@ -63,7 +63,6 @@ module.exports = {
       .waitForElementPresent('.changes-header', waitTime, true)
     .end();
   },
-
   'views support encoding': function (client) {
     var waitTime = client.globals.maxWaitTime,
         newDatabaseName = 'encoded/db',
