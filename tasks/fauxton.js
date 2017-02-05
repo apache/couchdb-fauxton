@@ -26,44 +26,28 @@ module.exports = function (grunt) {
   grunt.registerMultiTask('get_deps', 'Fetch external dependencies', function () {
 
     grunt.log.writeln('Fetching external dependencies');
-    var done = this.async(),
-        data = this.data,
+    const data = this.data,
         target = data.target || 'app/addons/',
         settingsFile = fs.existsSync(data.src) ? data.src : 'settings.json.default.json',
-        settings = grunt.file.readJSON(settingsFile),
-        _ = grunt.util._;
+        settings = grunt.file.readJSON(settingsFile);
 
-    // This should probably be a helper, though they seem to have been removed
-    var fetch = function (deps, command) {
-      var child_process = require('child_process');
-      var async = require('async');
-      async.forEach(deps, function (dep, cb) {
-        var path = target + dep.name;
-        var location = dep.url || dep.path;
+    const fetch = deps => {
+      var fs = require('fs-extra');
+      deps.forEach(dep => {
+        const path = target + dep.name;
+        const location = dep.url || dep.path;
         grunt.log.writeln('Fetching: ' + dep.name + ' (' + location + ')');
-
-        child_process.exec(command(dep, path), function (error, stdout, stderr) {
-          grunt.log.writeln(stderr);
-          grunt.log.writeln(stdout);
-          cb(error);
-        });
-      }, function (error) {
-        if (error) {
-          grunt.log.writeln('ERROR: ' + error.message);
+        try {
+          fs.copySync(dep.path, path);
+        } catch (e) {
+          grunt.log.writeln('ERROR: ' + e.message);
         }
-
-        done();
       });
     };
 
-    var localDeps = _.filter(settings.deps, function (dep) { return !! dep.path; });
+    const localDeps = settings.deps.filter(dep => !!dep.path);
     grunt.log.writeln(localDeps.length + ' local dependencies');
-    fetch(localDeps, function (dep, destination) {
-      // TODO: Windows
-      var command = 'cp -r ' + dep.path + '/ ' + destination + '/';
-      grunt.log.writeln(command);
-      return command;
-    });
+    fetch(localDeps);
   });
 
   grunt.registerMultiTask('gen_load_addons', 'Generate the load_addons.js file', function () {

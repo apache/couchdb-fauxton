@@ -17,7 +17,7 @@ import Actions from './actions';
 
 const { QueryOptionsController } = QueryOptions;
 
-const RightAllDocsHeader = ({database}) =>
+const RightAllDocsHeader = ({database, hideQueryOptions}) =>
   <div className="header-right right-db-header flex-layout flex-row">
 
     <div className="faux-header__searchboxwrapper">
@@ -26,11 +26,15 @@ const RightAllDocsHeader = ({database}) =>
       </div>
     </div>
 
-    <QueryOptionsController />
+    {hideQueryOptions ? '' : <QueryOptionsController />}
   </div>;
 
 RightAllDocsHeader.propTypes = {
   database: React.PropTypes.object.isRequired
+};
+
+RightAllDocsHeader.defaultProps = {
+  hideQueryOptions: false
 };
 
 export default RightAllDocsHeader;

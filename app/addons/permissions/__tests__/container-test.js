@@ -23,13 +23,13 @@ import { Provider } from 'react-redux';
 import reducer from '../reducers';
 import PermissionsContainer from '../container/PermissionsContainer';
 
+var fetchMock = require('fetch-mock');
+
 describe('Permissions Container', () => {
 
   it('renders with new results', () => {
 
-    fetch.mockResponse(
-      JSON.stringify({})
-    );
+    fetchMock.once("*", {});
 
     const middlewares = [thunk];
     const store = createStore(

@@ -96,23 +96,24 @@ var DesignDocSelector = React.createClass({
   },
 
   render: function () {
+    const selectContent =
+      <optgroup label="Select a document">
+        <option value="new-doc">New document</option>
+        {this.getDocList()}
+      </optgroup>;
+
     return (
       <div className="design-doc-group control-group">
         <div className="span3">
           <label htmlFor="ddoc">{this.props.designDocLabel}
             {this.getDocLink()}
           </label>
-          <div className="styled-select">
-            <label htmlFor="js-backup-list-select">
-              <i className="fonticon-down-dir" />
-              <select id="ddoc" onChange={this.selectDesignDoc} value={this.props.selectedDesignDocName}>
-                <optgroup label="Select a document">
-                  <option value="new-doc">New document</option>
-                  {this.getDocList()}
-                </optgroup>
-              </select>
-            </label>
-          </div>
+          <StyledSelect
+            selectChange={this.selectDesignDoc}
+            selectValue={this.props.selectedDesignDocName}
+            selectId={"faux__edit-view__design-doc"}
+            selectContent={selectContent}
+          />
         </div>
         {this.getNewDDocField()}
       </div>
