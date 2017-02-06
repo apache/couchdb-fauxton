@@ -22,7 +22,7 @@ class PasswordModal extends React.Component {
 
   // default authentication function. This can be overridden via props if you want to do something different
   authenticate() {
-    const username = app.session.get("userCtx").name; // yuck. But simplest for now until logging in publishes the user data
+    const username = app.session.user.name; // yuck. But simplest for now until logging in publishes the user data
     this.props.onSubmit(username, this.state.password, this.props.onSuccess);
   }
 

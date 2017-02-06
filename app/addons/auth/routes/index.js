@@ -1,4 +1,4 @@
 import Auth from './auth';
-// import Auth from './auth'
+import User from './user';
 
-export default [Auth]
+export default [Auth, User];

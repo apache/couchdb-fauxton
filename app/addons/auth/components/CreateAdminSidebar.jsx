@@ -1,10 +1,12 @@
 import React from 'react';
 import { selectPage } from './../actions';
 import { createAdminSidebarStore } from './../stores';
+import FauxtonAPI from "../../../core/api";
 
 export default class CreateAdminSidebar extends React.Component {
-  getInitialState() {
-    return this.getStoreState();
+  constructor() {
+    super();
+    this.state = this.getStoreState();
   }
   getStoreState() {
     return {
@@ -25,8 +27,8 @@ export default class CreateAdminSidebar extends React.Component {
     selectPage(newPage);
   }
   render() {
-    var user = FauxtonAPI.session.user();
-    var userName = _.isNull(user) ? '' : FauxtonAPI.session.user().name;
+    var user = FauxtonAPI.session.user;
+    var userName = _.isNull(user) ? '' : FauxtonAPI.session.user.name;
 
     return (
       <div className="sidenav">

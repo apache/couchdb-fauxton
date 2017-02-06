@@ -34,7 +34,6 @@ export default ({
       bottomNav: true
     });
     Auth.session.onChange(function () {
-    debugger;
     var session = Auth.session;
     var link = {
         id: 'auth',
@@ -55,7 +54,7 @@ export default ({
     } else if (session.isLoggedIn()) {
       link = {
         id: 'auth',
-        title: session.user().name,
+        title: session.user.name,
         href: '#/changePassword',
         icon: 'fonticon-user',
         bottomNav: true

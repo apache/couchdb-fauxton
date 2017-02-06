@@ -8,8 +8,9 @@ import {
 } from "./../actions";
 
 export default class ChangePasswordForm extends React.Component {
-  getInitialState() {
-    return this.getStoreState();
+  constructor() {
+    super();
+    this.state = this.getStoreState();
   }
   getStoreState() {
     return {
@@ -42,7 +43,7 @@ export default class ChangePasswordForm extends React.Component {
       <div className="auth-page">
         <h3>Change Password</h3>
 
-        <form id="change-password" onSubmit={this.changePassword}>
+        <form id="change-password" onSubmit={this.changePassword.bind(this)}>
           <p>
             Enter your new password.
           </p>
@@ -54,7 +55,7 @@ export default class ChangePasswordForm extends React.Component {
             name="password"
             placeholder="Password"
             size="24"
-            onChange={this.onChangePassword}
+            onChange={this.onChangePassword.bind(this)}
             value={this.state.password}
           />
           <br />
@@ -64,7 +65,7 @@ export default class ChangePasswordForm extends React.Component {
             name="password_confirm"
             placeholder="Verify Password"
             size="24"
-            onChange={this.onChangePasswordConfirm}
+            onChange={this.onChangePasswordConfirm.bind(this)}
             value={this.state.passwordConfirm}
           />
 

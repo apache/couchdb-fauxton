@@ -37,25 +37,23 @@ describe('NavBar', function () {
     FauxtonAPI.auth = new Auth();
     sinon.stub(FauxtonAPI.session, 'isLoggedIn').returns(true);
     sinon.stub(FauxtonAPI.session, 'isAdminParty').returns(false);
-    sinon.stub(FauxtonAPI.session, 'user').returns({ name: 'test-user' });
+    sinon.stub(FauxtonAPI.session, 'fetchUser').returns(Promise.resolve({}));
     BaseAuth.initialize();
 
     const el = mount(<Views.NavBar />);
 
-    FauxtonAPI.session.trigger('change');
+    FauxtonAPI.session.user = {name: "test", roles: []};
 
     // confirm the logout link is present
     let matches = el.text().match(/Logout/);
     assert.equal(matches.length, 1);
 
     // now confirm there's still only a single logout link after publishing multiple
-    FauxtonAPI.session.trigger('change');
-    FauxtonAPI.session.trigger('change');
+    FauxtonAPI.session.user = {name: "test", roles: []};
     matches = el.text().match(/Logout/);
     assert.equal(matches.length, 1);
 
     FauxtonAPI.session.isLoggedIn.restore();
-    FauxtonAPI.session.user.restore();
     FauxtonAPI.session.isAdminParty.restore();
   });
 });

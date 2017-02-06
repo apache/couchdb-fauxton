@@ -11,134 +11,138 @@
 // the License.
 
 import FauxtonAPI from "../../../core/api";
-import React from "react";
 import testUtils from "../../../../test/mocha/testUtils";
-import ActionTypes from "../actiontypes";
-import Stores from "../stores";
+import {
+  AUTH_UPDATE_CHANGE_PWD_FIELD,
+  AUTH_CLEAR_CHANGE_PWD_FIELDS,
+  AUTH_UPDATE_CHANGE_PWD_CONFIRM_FIELD,
+  AUTH_UPDATE_CREATE_ADMIN_USERNAME_FIELD,
+  AUTH_CLEAR_CREATE_ADMIN_FIELDS,
+  AUTH_UPDATE_CREATE_ADMIN_PWD_FIELD,
+  AUTH_SELECT_PAGE
+} from "../actiontypes";
+import {
+  changePasswordStore,
+  createAdminStore,
+  createAdminSidebarStore
+} from "../stores";
 var assert = testUtils.assert;
 
-var changePasswordStore = Stores.changePasswordStore;
-var createAdminStore = Stores.createAdminStore;
-var createAdminSidebarStore = Stores.createAdminSidebarStore;
-
-describe('Auth Stores', function () {
-
-  describe('ChangePasswordStore', function () {
-
-    it('get / set change password updates store', function () {
+describe("Auth Stores", function() {
+  describe("ChangePasswordStore", function() {
+    it("get / set change password updates store", function() {
       // check empty by default
-      assert.equal(changePasswordStore.getChangePassword(), '');
+      assert.equal(changePasswordStore.getChangePassword(), "");
 
-      var newPassword = 'lets-rick-roll-mocha';
+      var newPassword = "lets-rick-roll-mocha";
       FauxtonAPI.dispatch({
-        type: ActionTypes.AUTH_UPDATE_CHANGE_PWD_FIELD,
+        type: AUTH_UPDATE_CHANGE_PWD_FIELD,
         value: newPassword
       });
       assert.equal(changePasswordStore.getChangePassword(), newPassword);
     });
 
-    it('clearing change password clears in store', function () {
-      var newPassword = 'never-gonna-give-you-up';
+    it("clearing change password clears in store", function() {
+      var newPassword = "never-gonna-give-you-up";
       FauxtonAPI.dispatch({
-        type: ActionTypes.AUTH_UPDATE_CHANGE_PWD_FIELD,
+        type: AUTH_UPDATE_CHANGE_PWD_FIELD,
         value: newPassword
       });
       assert.equal(changePasswordStore.getChangePassword(), newPassword);
 
-      FauxtonAPI.dispatch({ type: ActionTypes.AUTH_CLEAR_CHANGE_PWD_FIELDS });
-      assert.equal(changePasswordStore.getChangePassword(), '');
+      FauxtonAPI.dispatch({ type: AUTH_CLEAR_CHANGE_PWD_FIELDS });
+      assert.equal(changePasswordStore.getChangePassword(), "");
     });
 
-    it('get / set change confirm password updates store', function () {
+    it("get / set change confirm password updates store", function() {
       // check empty by default
-      assert.equal(changePasswordStore.getChangePasswordConfirm(), '');
+      assert.equal(changePasswordStore.getChangePasswordConfirm(), "");
 
       // check getPassword works
-      var newPassword = 'never-gonna-let-you-down';
+      var newPassword = "never-gonna-let-you-down";
       FauxtonAPI.dispatch({
-        type: ActionTypes.AUTH_UPDATE_CHANGE_PWD_CONFIRM_FIELD,
+        type: AUTH_UPDATE_CHANGE_PWD_CONFIRM_FIELD,
         value: newPassword
       });
       assert.equal(changePasswordStore.getChangePasswordConfirm(), newPassword);
     });
 
-    it('clearing change confirm password clears in store', function () {
-      var newPassword = 'never-gonna-run-around-and-desert-you';
+    it("clearing change confirm password clears in store", function() {
+      var newPassword = "never-gonna-run-around-and-desert-you";
       FauxtonAPI.dispatch({
-        type: ActionTypes.AUTH_UPDATE_CHANGE_PWD_CONFIRM_FIELD,
+        type: AUTH_UPDATE_CHANGE_PWD_CONFIRM_FIELD,
         value: newPassword
       });
       assert.equal(changePasswordStore.getChangePasswordConfirm(), newPassword);
 
-      FauxtonAPI.dispatch({ type: ActionTypes.AUTH_CLEAR_CHANGE_PWD_FIELDS });
-      assert.equal(changePasswordStore.getChangePasswordConfirm(), '');
+      FauxtonAPI.dispatch({ type: AUTH_CLEAR_CHANGE_PWD_FIELDS });
+      assert.equal(changePasswordStore.getChangePasswordConfirm(), "");
     });
   });
 
+  describe("CreateAdminStore", function() {
+    it("get / set username updates store", function() {
+      assert.equal(createAdminStore.getUsername(), "");
 
-  describe('CreateAdminStore', function () {
-
-    it('get / set username updates store', function () {
-      assert.equal(createAdminStore.getUsername(), '');
-
-      var newUsername = 'never-gonna-make-you-cry';
+      var newUsername = "never-gonna-make-you-cry";
       FauxtonAPI.dispatch({
-        type: ActionTypes.AUTH_UPDATE_CREATE_ADMIN_USERNAME_FIELD,
+        type: AUTH_UPDATE_CREATE_ADMIN_USERNAME_FIELD,
         value: newUsername
       });
       assert.equal(createAdminStore.getUsername(), newUsername);
     });
 
-    it('clearing username clears in store', function () {
-      var newUsername = 'never-gonna-say-goodbye';
+    it("clearing username clears in store", function() {
+      var newUsername = "never-gonna-say-goodbye";
       FauxtonAPI.dispatch({
-        type: ActionTypes.AUTH_UPDATE_CREATE_ADMIN_USERNAME_FIELD,
+        type: AUTH_UPDATE_CREATE_ADMIN_USERNAME_FIELD,
         value: newUsername
       });
       assert.equal(createAdminStore.getUsername(), newUsername);
 
-      FauxtonAPI.dispatch({ type: ActionTypes.AUTH_CLEAR_CREATE_ADMIN_FIELDS });
-      assert.equal(createAdminStore.getUsername(), '');
+      FauxtonAPI.dispatch({ type: AUTH_CLEAR_CREATE_ADMIN_FIELDS });
+      assert.equal(createAdminStore.getUsername(), "");
     });
 
-    it('get / set password updates store', function () {
+    it("get / set password updates store", function() {
       // check empty by default
-      assert.equal(createAdminStore.getPassword(), '');
+      assert.equal(createAdminStore.getPassword(), "");
 
       // check getPassword works
-      var newPassword = 'never-gonna-tell-a-lie-and-hurt-you';
+      var newPassword = "never-gonna-tell-a-lie-and-hurt-you";
       FauxtonAPI.dispatch({
-        type: ActionTypes.AUTH_UPDATE_CREATE_ADMIN_PWD_FIELD,
+        type: AUTH_UPDATE_CREATE_ADMIN_PWD_FIELD,
         value: newPassword
       });
       assert.equal(createAdminStore.getPassword(), newPassword);
     });
 
-    it('clearing change confirm password clears in store', function () {
-      var newPassword = 'mocha-please-consider-yourself-rickrolled';
+    it("clearing change confirm password clears in store", function() {
+      var newPassword = "mocha-please-consider-yourself-rickrolled";
       FauxtonAPI.dispatch({
-        type: ActionTypes.AUTH_UPDATE_CREATE_ADMIN_PWD_FIELD,
+        type: AUTH_UPDATE_CREATE_ADMIN_PWD_FIELD,
         value: newPassword
       });
       assert.equal(createAdminStore.getPassword(), newPassword);
 
-      FauxtonAPI.dispatch({ type: ActionTypes.AUTH_CLEAR_CREATE_ADMIN_FIELDS });
-      assert.equal(createAdminStore.getPassword(), '');
+      FauxtonAPI.dispatch({ type: AUTH_CLEAR_CREATE_ADMIN_FIELDS });
+      assert.equal(createAdminStore.getPassword(), "");
     });
   });
 
-
-  describe('CreateAdminSidebarStore', function () {
-    var defaultPage = 'changePassword';
-    it('has correct default selected page', function () {
+  describe("CreateAdminSidebarStore", function() {
+    var defaultPage = "changePassword";
+    it("has correct default selected page", function() {
       assert.equal(createAdminSidebarStore.getSelectedPage(), defaultPage);
     });
 
-    it('selecting a page updates the selected page in store', function () {
-      var newPage = 'addAdmin';
-      FauxtonAPI.dispatch({ type: ActionTypes.AUTH_SELECT_PAGE, page: newPage });
+    it("selecting a page updates the selected page in store", function() {
+      var newPage = "addAdmin";
+      FauxtonAPI.dispatch({
+        type: AUTH_SELECT_PAGE,
+        page: newPage
+      });
       assert.equal(createAdminSidebarStore.getSelectedPage(), newPage);
     });
   });
-
 });

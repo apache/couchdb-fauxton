@@ -36,7 +36,7 @@ export const decodeFullUrl = (fullUrl) => {
 };
 
 export const getUsername = () => {
-  return app.session.get('userCtx').name;
+  return app.session.name;
 };
 
 export const getAuthHeaders = (username, password) => {

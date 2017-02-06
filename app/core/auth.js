@@ -14,9 +14,9 @@ import FauxtonAPI from "./base";
 
 function authenticate(session, roles) {
   if (session.isAdminParty()) {
-    return true;//resolve(); session.trigger('authenticated');
+    return true;
   } else if (session.matchesRoles(roles)) {
-    return session.trigger('authenticated');
+    return true;
   } else {
     throw new Error('Unable to authentacte');
   }

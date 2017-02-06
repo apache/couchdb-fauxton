@@ -13,7 +13,7 @@
 
 // This will search for files ending in .test.js and require them
 // so that they are added to the webpack bundle
-var context = require.context('../app/addons/auth/test', true);
+var context = require.context('../app/addons/fauxton/navigation/tests', true);
 console.log('Testing files', context.keys());
 context.keys().forEach(context);
 module.exports = context;
