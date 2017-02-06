@@ -106,6 +106,9 @@ export default class {
     return this
       .validateUser(username, password, authMessages.missingCredentials)
       .then(() => session.create({ name: username, password: password }))
+      .then((res) => {
+        if (res.error) throw new Error(res.error);
+      })
       .then(() => this.fetchUser({ forceFetch: true }));
   }
   logout() {

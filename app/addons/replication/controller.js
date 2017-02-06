@@ -12,7 +12,7 @@
 import React from 'react';
 import Stores from './stores';
 import Actions from './actions';
-import AuthActions from '../auth/actions';
+import * as AuthActions from '../auth/actions';
 import Components from '../components/react-components.react';
 import NewReplication from './components/newreplication';
 import Activity from './components/activity';

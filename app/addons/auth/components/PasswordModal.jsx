@@ -1,6 +1,7 @@
 import React from "react";
 import { Modal } from "react-bootstrap";
 import { hidePasswordModal, authenticate } from "./../actions";
+import Components from '../../components/react-components.react';
 import app from "../../../app";
 
 class PasswordModal extends React.Component {
@@ -62,7 +63,7 @@ class PasswordModal extends React.Component {
         </Modal.Body>
         <Modal.Footer>
           <a className="cancel-link" onClick={() => onClose()}>Cancel</a>
-          <ConfirmButton text={submitBtnLabel} onClick={this.authenticate} />
+          <Components.ConfirmButton text={submitBtnLabel} onClick={this.authenticate} />
         </Modal.Footer>
       </Modal>
     );

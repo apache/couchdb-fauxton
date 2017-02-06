@@ -10,6 +10,7 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 import FauxtonAPI from "../../core/api";
+import { session } from "../../core/couchdb";
 import {
   AUTH_CLEAR_CHANGE_PWD_FIELDS,
   AUTH_UPDATE_CHANGE_PWD_FIELD,
@@ -27,32 +28,23 @@ import ClusterStore from "../cluster/cluster.stores";
 
 var nodesStore = ClusterStore.nodesStore;
 
-var errorHandler = function(xhr, type, msg) {
-  msg = xhr;
-  if (arguments.length === 3) {
-    msg = xhr.responseJSON.reason;
-  }
-
+function errorHandler({ message }) {
   FauxtonAPI.addNotification({
-    msg: msg,
+    msg: message,
     type: "error"
   });
 };
 
 export function login(username, password, urlBack) {
-  return FauxtonAPI
-    .session
-    .login(username, password)
-    .then(
-    () => {
+  return FauxtonAPI.session.login(username, password)
+    .then(() => {
       FauxtonAPI.addNotification({ msg: FauxtonAPI.session.messages.loggedIn });
-      if (urlBack) {
+      if (urlBack && !urlBack.includes("login")) {
         return FauxtonAPI.navigate(urlBack);
       }
       FauxtonAPI.navigate("/");
-    },
-    errorHandler
-  );
+    })
+    .catch(errorHandler);
 }
 
 export function changePassword(password, passwordConfirm) {
@@ -90,14 +82,13 @@ export function updateChangePasswordConfirmField(value) {
 
 export function createAdmin(username, password, loginAfter) {
   var nodes = nodesStore.getNodes();
-  var promise = FauxtonAPI.session.createAdmin(
+  FauxtonAPI.session.createAdmin(
     username,
     password,
     loginAfter,
     nodes[0].node
-  );
-
-  promise.then(
+  )
+  .then(
     () => {
       FauxtonAPI.addNotification({
         msg: FauxtonAPI.session.messages.adminCreated
@@ -122,33 +113,32 @@ export function createAdmin(username, password, loginAfter) {
 
 // simple authentication method - does nothing other than check creds
 export function authenticate(username, password, onSuccess) {
-  $.ajax({
-    cache: false,
-    type: "POST",
-    url: "/_session",
-    dataType: "json",
-    data: { name: username, password: password }
-  }).then(
-    () => {
-      FauxtonAPI.dispatch({
-        type: AUTH_CREDS_VALID,
-        options: { username: username, password: password }
-      });
-      hidePasswordModal();
-      onSuccess(username, password);
-    },
-    () => {
-      FauxtonAPI.addNotification({
-        msg: "Your password is incorrect.",
-        type: "error",
-        clear: true
-      });
-      FauxtonAPI.dispatch({
-        type: AUTH_CREDS_INVALID,
-        options: { username: username, password: password }
-      });
-    }
-  );
+  session
+    .create({
+      name: username,
+      password: password
+    })
+    .then(
+      () => {
+        FauxtonAPI.dispatch({
+          type: AUTH_CREDS_VALID,
+          options: { username: username, password: password }
+        });
+        hidePasswordModal();
+        onSuccess(username, password);
+      },
+      () => {
+        FauxtonAPI.addNotification({
+          msg: "Your password is incorrect.",
+          type: "error",
+          clear: true
+        });
+        FauxtonAPI.dispatch({
+          type: AUTH_CREDS_INVALID,
+          options: { username: username, password: password }
+        });
+      }
+    );
 }
 
 export function updateCreateAdminUsername(value) {
