@@ -10,12 +10,10 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-
-
 module.exports = {
   'mango supports encoding': function (client) {
     var waitTime = client.globals.maxWaitTime,
-        newDatabaseName = 'encoded/db',
+        newDatabaseName = 'encoded/db-' + client.globals.testDatabaseName,
         baseUrl = client.globals.test_settings.launch_url;
 
     client
@@ -32,7 +30,7 @@ module.exports = {
 
   'permissions supports encoding': function (client) {
     var waitTime = client.globals.maxWaitTime,
-        newDatabaseName = 'encoded/db',
+        newDatabaseName = 'encoded/db-' + client.globals.testDatabaseName,
         baseUrl = client.globals.test_settings.launch_url;
 
     client
@@ -49,7 +47,7 @@ module.exports = {
 
   'changes supports encoding': function (client) {
     var waitTime = client.globals.maxWaitTime,
-        newDatabaseName = 'encoded/db',
+        newDatabaseName = 'encoded/db-' + client.globals.testDatabaseName,
         baseUrl = client.globals.test_settings.launch_url;
 
     client
@@ -65,7 +63,7 @@ module.exports = {
   },
   'views support encoding': function (client) {
     var waitTime = client.globals.maxWaitTime,
-        newDatabaseName = 'encoded/db',
+        newDatabaseName = 'encoded/db-' + client.globals.testDatabaseName,
         baseUrl = client.globals.test_settings.launch_url;
 
     client
@@ -76,10 +74,11 @@ module.exports = {
       .url(baseUrl + '/#/database/' + encodeURIComponent(newDatabaseName) + '/_all_docs')
       .waitForElementPresent('.bulk-action-component-panel', waitTime, true)
       .clickWhenVisible('#nav-header-testdesigndoc', waitTime, true)
-      .clickWhenVisible('a[href="#/database/encoded%2Fdb/_design/testdesigndoc/_info"]', waitTime, true)
+      .clickWhenVisible('a[href="#/database/' + encodeURIComponent(newDatabaseName) + '/_design/testdesigndoc/_info"]', waitTime, true)
       .waitForElementPresent('.metadata-page', waitTime, true)
       .clickWhenVisible('#nav-design-function-testdesigndocviews', waitTime, true)
       .clickWhenVisible('#testdesigndoc_stubview', waitTime, true)
+      .waitForElementNotPresent('.loading-lines', waitTime, true)
       .waitForElementPresent('#doc-list', waitTime, true)
       .clickWhenVisible('.active .index-menu-toggle', waitTime, true)
       .clickWhenVisible('.fonticon-file-code-o')
