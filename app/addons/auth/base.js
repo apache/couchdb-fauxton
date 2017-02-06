@@ -12,24 +12,29 @@
 
 import app from "../../app";
 import FauxtonAPI from "../../core/api";
-import Auth from "./routes";
+import Session from  "../../core/session";
+import RouteObjects from './routes';
 import "./assets/less/auth.less";
 
-Auth.session = new Auth.Session();
+const Auth = {
+  session: new Session()
+};
+
 FauxtonAPI.setSession(Auth.session);
 app.session = Auth.session;
 
-Auth.initialize = function () {
+export default ({
+  initialize: () => {
 
-  FauxtonAPI.addHeaderLink({
-    id: 'auth',
-    title: 'Login',
-    href: '#/login',
-    icon: 'fonticon-user',
-    bottomNav: true
-  });
-
-  Auth.session.on('change', function () {
+    FauxtonAPI.addHeaderLink({
+      id: 'auth',
+      title: 'Login',
+      href: '#/login',
+      icon: 'fonticon-user',
+      bottomNav: true
+    });
+    Auth.session.onChange(function () {
+    debugger;
     var session = Auth.session;
     var link = {
         id: 'auth',
@@ -72,9 +77,11 @@ Auth.initialize = function () {
     FauxtonAPI.updateHeaderLink(link);
   });
 
-  Auth.session.fetchUser().then(function () {
-    Auth.session.trigger('change');
-  });
-};
-
-export default Auth;
+    Auth.session.fetchUser().then(function () {
+      // debugger;
+      // Auth.session.trigger('change');
+    });
+  },
+  Views: {},
+  RouteObjects: RouteObjects
+});

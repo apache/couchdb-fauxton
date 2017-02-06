@@ -10,12 +10,24 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 import FauxtonAPI from "../../core/api";
-import ActionTypes from "./actiontypes";
+import {
+  AUTH_CLEAR_CHANGE_PWD_FIELDS,
+  AUTH_UPDATE_CHANGE_PWD_FIELD,
+  AUTH_UPDATE_CHANGE_PWD_CONFIRM_FIELD,
+  AUTH_CLEAR_CREATE_ADMIN_FIELDS,
+  AUTH_CREDS_VALID,
+  AUTH_CREDS_INVALID,
+  AUTH_UPDATE_CREATE_ADMIN_USERNAME_FIELD,
+  AUTH_UPDATE_CREATE_ADMIN_PWD_FIELD,
+  AUTH_SELECT_PAGE,
+  AUTH_SHOW_PASSWORD_MODAL,
+  AUTH_HIDE_PASSWORD_MODAL
+} from "./actiontypes";
 import ClusterStore from "../cluster/cluster.stores";
 
 var nodesStore = ClusterStore.nodesStore;
 
-var errorHandler = function (xhr, type, msg) {
+var errorHandler = function(xhr, type, msg) {
   msg = xhr;
   if (arguments.length === 3) {
     msg = xhr.responseJSON.reason;
@@ -23,135 +35,147 @@ var errorHandler = function (xhr, type, msg) {
 
   FauxtonAPI.addNotification({
     msg: msg,
-    type: 'error'
+    type: "error"
   });
 };
 
-
-function login (username, password, urlBack) {
-  var promise = FauxtonAPI.session.login(username, password);
-
-  promise.then(() => {
-    FauxtonAPI.addNotification({ msg: FauxtonAPI.session.messages.loggedIn });
-    if (urlBack) {
-      return FauxtonAPI.navigate(urlBack);
-    }
-    FauxtonAPI.navigate('/');
-  }, errorHandler);
+export function login(username, password, urlBack) {
+  return FauxtonAPI
+    .session
+    .login(username, password)
+    .then(
+    () => {
+      FauxtonAPI.addNotification({ msg: FauxtonAPI.session.messages.loggedIn });
+      if (urlBack) {
+        return FauxtonAPI.navigate(urlBack);
+      }
+      FauxtonAPI.navigate("/");
+    },
+    errorHandler
+  );
 }
 
-function changePassword (password, passwordConfirm) {
+export function changePassword(password, passwordConfirm) {
   var nodes = nodesStore.getNodes();
-  var promise = FauxtonAPI.session.changePassword(password, passwordConfirm, nodes[0].node);
+  var promise = FauxtonAPI.session.changePassword(
+    password,
+    passwordConfirm,
+    nodes[0].node
+  );
 
-  promise.then(() => {
-    FauxtonAPI.addNotification({ msg: FauxtonAPI.session.messages.changePassword });
-    FauxtonAPI.dispatch({ type: ActionTypes.AUTH_CLEAR_CHANGE_PWD_FIELDS });
-  }, errorHandler);
+  promise.then(
+    () => {
+      FauxtonAPI.addNotification({
+        msg: FauxtonAPI.session.messages.changePassword
+      });
+      FauxtonAPI.dispatch({ type: AUTH_CLEAR_CHANGE_PWD_FIELDS });
+    },
+    errorHandler
+  );
 }
 
-function updateChangePasswordField (value) {
+export function updateChangePasswordField(value) {
   FauxtonAPI.dispatch({
-    type: ActionTypes.AUTH_UPDATE_CHANGE_PWD_FIELD,
+    type: AUTH_UPDATE_CHANGE_PWD_FIELD,
     value: value
   });
 }
 
-function updateChangePasswordConfirmField (value) {
+export function updateChangePasswordConfirmField(value) {
   FauxtonAPI.dispatch({
-    type: ActionTypes.AUTH_UPDATE_CHANGE_PWD_CONFIRM_FIELD,
+    type: AUTH_UPDATE_CHANGE_PWD_CONFIRM_FIELD,
     value: value
   });
 }
 
-function createAdmin (username, password, loginAfter) {
+export function createAdmin(username, password, loginAfter) {
   var nodes = nodesStore.getNodes();
-  var promise = FauxtonAPI.session.createAdmin(username, password, loginAfter, nodes[0].node);
+  var promise = FauxtonAPI.session.createAdmin(
+    username,
+    password,
+    loginAfter,
+    nodes[0].node
+  );
 
-  promise.then(() => {
-    FauxtonAPI.addNotification({ msg: FauxtonAPI.session.messages.adminCreated });
-    if (loginAfter) {
-      FauxtonAPI.navigate('/');
-    } else {
-      FauxtonAPI.dispatch({ type: ActionTypes.AUTH_CLEAR_CREATE_ADMIN_FIELDS });
+  promise.then(
+    () => {
+      FauxtonAPI.addNotification({
+        msg: FauxtonAPI.session.messages.adminCreated
+      });
+      if (loginAfter) {
+        FauxtonAPI.navigate("/");
+      } else {
+        FauxtonAPI.dispatch({ type: AUTH_CLEAR_CREATE_ADMIN_FIELDS });
+      }
+    },
+    (xhr, type, msg) => {
+      msg = xhr;
+      if (arguments.length === 3) {
+        msg = xhr.responseJSON.reason;
+      }
+      errorHandler(
+        FauxtonAPI.session.messages.adminCreationFailedPrefix + " " + msg
+      );
     }
-  }, (xhr, type, msg) => {
-    msg = xhr;
-    if (arguments.length === 3) {
-      msg = xhr.responseJSON.reason;
-    }
-    errorHandler(FauxtonAPI.session.messages.adminCreationFailedPrefix + ' ' + msg);
-  });
+  );
 }
 
 // simple authentication method - does nothing other than check creds
-function authenticate (username, password, onSuccess) {
+export function authenticate(username, password, onSuccess) {
   $.ajax({
     cache: false,
-    type: 'POST',
-    url: '/_session',
-    dataType: 'json',
+    type: "POST",
+    url: "/_session",
+    dataType: "json",
     data: { name: username, password: password }
-  }).then(() => {
-    FauxtonAPI.dispatch({
-      type: ActionTypes.AUTH_CREDS_VALID,
-      options: { username: username, password: password }
-    });
-    hidePasswordModal();
-    onSuccess(username, password);
-  }, () => {
-    FauxtonAPI.addNotification({
-      msg: 'Your password is incorrect.',
-      type: 'error',
-      clear: true
-    });
-    FauxtonAPI.dispatch({
-      type: ActionTypes.AUTH_CREDS_INVALID,
-      options: { username: username, password: password }
-    });
-  });
+  }).then(
+    () => {
+      FauxtonAPI.dispatch({
+        type: AUTH_CREDS_VALID,
+        options: { username: username, password: password }
+      });
+      hidePasswordModal();
+      onSuccess(username, password);
+    },
+    () => {
+      FauxtonAPI.addNotification({
+        msg: "Your password is incorrect.",
+        type: "error",
+        clear: true
+      });
+      FauxtonAPI.dispatch({
+        type: AUTH_CREDS_INVALID,
+        options: { username: username, password: password }
+      });
+    }
+  );
 }
 
-function updateCreateAdminUsername (value) {
+export function updateCreateAdminUsername(value) {
   FauxtonAPI.dispatch({
-    type: ActionTypes.AUTH_UPDATE_CREATE_ADMIN_USERNAME_FIELD,
+    type: AUTH_UPDATE_CREATE_ADMIN_USERNAME_FIELD,
     value: value
   });
 }
 
-function updateCreateAdminPassword (value) {
+export function updateCreateAdminPassword(value) {
   FauxtonAPI.dispatch({
-    type: ActionTypes.AUTH_UPDATE_CREATE_ADMIN_PWD_FIELD,
+    type: AUTH_UPDATE_CREATE_ADMIN_PWD_FIELD,
     value: value
   });
 }
 
-function selectPage (page) {
+export function selectPage(page) {
   FauxtonAPI.dispatch({
-    type: ActionTypes.AUTH_SELECT_PAGE,
+    type: AUTH_SELECT_PAGE,
     page: page
   });
 }
 
-function showPasswordModal () {
-  FauxtonAPI.dispatch({ type: ActionTypes.AUTH_SHOW_PASSWORD_MODAL });
+export function showPasswordModal() {
+  FauxtonAPI.dispatch({ type: AUTH_SHOW_PASSWORD_MODAL });
 }
 
-function hidePasswordModal () {
-  FauxtonAPI.dispatch({ type: ActionTypes.AUTH_HIDE_PASSWORD_MODAL });
+export function hidePasswordModal() {
+  FauxtonAPI.dispatch({ type: AUTH_HIDE_PASSWORD_MODAL });
 }
-
-
-export default {
-  login,
-  changePassword,
-  updateChangePasswordField,
-  updateChangePasswordConfirmField,
-  createAdmin,
-  authenticate,
-  updateCreateAdminUsername,
-  updateCreateAdminPassword,
-  selectPage,
-  showPasswordModal,
-  hidePasswordModal
-};

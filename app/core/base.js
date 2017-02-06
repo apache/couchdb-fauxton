@@ -12,7 +12,7 @@
 import "babel-polyfill";
 import 'whatwg-fetch';
 import Backbone from "backbone";
-import _, { defaultsDeep } from "lodash";
+import _ from "lodash";
 
 var FauxtonAPI = {
   //add default objects
@@ -161,15 +161,6 @@ FauxtonAPI.setSession = function (newSession) {
 
 FauxtonAPI.reducers = [];
 
-FauxtonAPI.json = (url, opts = {}) => fetch(
-    url, defaultsDeep({
-      credentials: 'include',
-      headers: {
-        'accept': 'application/json',
-        'Content-Type': 'application/json',
-      }
-    }, opts)
-  )
-  .then((res) => res.json());
+
 
 export default FauxtonAPI;
