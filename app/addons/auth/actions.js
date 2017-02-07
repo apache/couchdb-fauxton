@@ -26,7 +26,7 @@ import {
 } from "./actiontypes";
 import ClusterStore from "../cluster/cluster.stores";
 
-var nodesStore = ClusterStore.nodesStore;
+const nodesStore = ClusterStore.nodesStore;
 
 function errorHandler({ message }) {
   FauxtonAPI.addNotification({
