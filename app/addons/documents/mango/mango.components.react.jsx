@@ -178,7 +178,7 @@ var MangoEditor = React.createClass({
     return (
       <PaddedBorderedBox>
         <strong>Your available Indexes:</strong>
-        <a className="edit-link" href={'#' + FauxtonAPI.urls('mango', 'index-app', this.props.dbName)}>edit</a>
+        <a className="edit-link" href={'#' + FauxtonAPI.urls('mango', 'index-app', encodeURIComponent(this.props.dbName))}>edit</a>
         <pre
           className="mango-available-indexes">
           {this.getIndexes('index', this.props.availableIndexes)}

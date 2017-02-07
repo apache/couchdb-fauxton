@@ -45,7 +45,7 @@ var MainSidebar = React.createClass({
   },
 
   buildDocLinks: function () {
-    var base = FauxtonAPI.urls('base', 'app', this.props.databaseName);
+    const base = FauxtonAPI.urls('base', 'app', this.props.databaseName);
     return FauxtonAPI.getExtensions('docLinks').map(function (link) {
       return (
         <li key={link.url} className={this.getNavItemClass(link.url)}>
@@ -148,7 +148,7 @@ var IndexSection = React.createClass({
     var sortedItems = this.props.items.sort();
 
     return _.map(sortedItems, function (indexName, index) {
-      var href = FauxtonAPI.urls(this.props.urlNamespace, 'app', this.props.database.id, this.props.designDocName);
+      var href = FauxtonAPI.urls(this.props.urlNamespace, 'app', encodeURIComponent(this.props.database.id), this.props.designDocName);
       var className = (this.props.selectedIndex === indexName) ? 'active' : '';
 
       return (
@@ -324,7 +324,7 @@ var DesignDoc = React.createClass({
   },
 
   getNewButtonLinks: function () {
-    var newUrlPrefix = FauxtonAPI.urls('databaseBaseURL', 'app', this.props.database.id);
+    var newUrlPrefix = FauxtonAPI.urls('databaseBaseURL', 'app', encodeURIComponent(this.props.database.id));
     var designDocName = this.props.designDocName;
 
     var addNewLinks = _.reduce(FauxtonAPI.getExtensions('sidebar:links'), function (menuLinks, link) {
@@ -336,7 +336,7 @@ var DesignDoc = React.createClass({
       return menuLinks;
     }, [{
       title: 'New View',
-      url: '#' + FauxtonAPI.urls('new', 'addView', this.props.database.id, designDocName),
+      url: '#' + FauxtonAPI.urls('new', 'addView', encodeURIComponent(this.props.database.id), designDocName),
       icon: 'fonticon-plus-circled'
     }]);
 
@@ -356,7 +356,7 @@ var DesignDoc = React.createClass({
       toggleBodyClassNames += ' in';
     }
     var designDocName = this.props.designDocName;
-    var designDocMetaUrl = FauxtonAPI.urls('designDocs', 'app', this.props.database.id, designDocName);
+    var designDocMetaUrl = FauxtonAPI.urls('designDocs', 'app', encodeURIComponent(this.props.database.id), designDocName);
     var metadataRowClass = (this.props.selectedNavInfo.designDocSection === 'metadata') ? 'active' : '';
 
     return (

@@ -170,7 +170,7 @@ function cloneView (params) {
 }
 
 function gotoEditViewPage (databaseName, designDocName, indexName) {
-  FauxtonAPI.navigate('#' + FauxtonAPI.urls('view', 'edit', databaseName, designDocName, indexName));
+  FauxtonAPI.navigate('#' + FauxtonAPI.urls('view', 'edit', encodeURIComponent(databaseName), designDocName, indexName));
 }
 
 function updateMapCode (code) {
