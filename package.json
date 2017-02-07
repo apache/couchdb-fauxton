@@ -44,16 +44,9 @@
     "babel-core": "^6.22.1",
     "babel-loader": "^6.2.9",
     "babel-plugin-transform-object-assign": "^6.8.0",
-<<<<<<< HEAD
-    "babel-polyfill": "^6.20.0",
-    "babel-preset-es2015": "^6.3.13",
-    "babel-preset-react": "^6.3.13",
-    "babel-register": "^6.4.3",
-=======
     "babel-preset-es2015": "^6.22.0",
     "babel-preset-react": "^6.22.0",
     "babel-register": "^6.22.0",
->>>>>>> 307a993882a4f43f42711d5febe4309fc0a58dde
     "backbone": "^1.1.0",
     "base-64": "^0.1.0",
     "bluebird": "^3.4.6",
