@@ -1,7 +1,7 @@
 import React from "react";
 import { Modal } from "react-bootstrap";
 import { hidePasswordModal, authenticate } from "./../actions";
-import Components from '../../components/react-components.react';
+import Components from "../../components/react-components.react";
 import app from "../../../app";
 
 class PasswordModal extends React.Component {
@@ -20,13 +20,11 @@ class PasswordModal extends React.Component {
       this.authenticate();
     }
   }
-
   // default authentication function. This can be overridden via props if you want to do something different
   authenticate() {
     const username = app.session.user.name; // yuck. But simplest for now until logging in publishes the user data
     this.props.onSubmit(username, this.state.password, this.props.onSuccess);
   }
-
   render() {
     const {
       visible,
@@ -63,7 +61,10 @@ class PasswordModal extends React.Component {
         </Modal.Body>
         <Modal.Footer>
           <a className="cancel-link" onClick={() => onClose()}>Cancel</a>
-          <Components.ConfirmButton text={submitBtnLabel} onClick={this.authenticate} />
+          <Components.ConfirmButton
+            text={submitBtnLabel}
+            onClick={this.authenticate}
+          />
         </Modal.Footer>
       </Modal>
     );
