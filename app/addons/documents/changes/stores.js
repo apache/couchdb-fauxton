@@ -103,7 +103,7 @@ var ChangesStore = FauxtonAPI.Store.extend({
   },
 
   hasFilter: function (filter) {
-    return _.contains(this._filters, filter);
+    return _.includes(this._filters, filter);
   },
 
   getDatabaseName: function () {

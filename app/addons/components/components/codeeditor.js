@@ -192,7 +192,7 @@ export const CodeEditor = React.createClass({
   },
 
   isIgnorableError (msg) {
-    return _.contains(this.props.ignorableErrors, msg);
+    return _.includes(this.props.ignorableErrors, msg);
   },
 
   removeIgnorableAnnotations () {

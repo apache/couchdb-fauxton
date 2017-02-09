@@ -48,7 +48,7 @@ Stores.NotificationStore = FauxtonAPI.Store.extend({
   },
 
   addNotification: function (info) {
-    if (_.isEmpty(info.type) || !_.contains(validNotificationTypes, info.type)) {
+    if (_.isEmpty(info.type) || !_.includes(validNotificationTypes, info.type)) {
       console.warn('Invalid message type: ', info);
       return;
     }
@@ -108,7 +108,7 @@ Stores.NotificationStore = FauxtonAPI.Store.extend({
   },
 
   setNotificationFilter: function (filter) {
-    if ((_.isEmpty(filter) || !_.contains(validNotificationTypes, filter)) && filter !== 'all') {
+    if ((_.isEmpty(filter) || !_.includes(validNotificationTypes, filter)) && filter !== 'all') {
       console.warn('Invalid notification filter: ', filter);
       return;
     }
