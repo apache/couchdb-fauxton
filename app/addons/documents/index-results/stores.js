@@ -460,11 +460,11 @@ Stores.IndexResultsStore = FauxtonAPI.Store.extend({
     shownCount = _.uniq(this._tableViewSelectedFields).length;
 
     allFieldCount = this._tableSchema.length;
-    if (_.contains(this._tableSchema, '_id', '_rev')) {
+    if (_.includes(this._tableSchema, '_id', '_rev')) {
       allFieldCount = allFieldCount - 1;
     }
 
-    if (_.contains(this._tableSchema, '_id', '_rev')) {
+    if (_.includes(this._tableSchema, '_id', '_rev')) {
       shownCount = shownCount + 1;
     }
 
@@ -606,7 +606,7 @@ Stores.IndexResultsStore = FauxtonAPI.Store.extend({
   },
 
   getHasMetadata: function (schema) {
-    return _.contains(schema, '_id', '_rev');
+    return _.includes(schema, '_id', '_rev');
   },
 
   hasBulkDeletableDoc: function (docs) {
@@ -703,7 +703,7 @@ Stores.IndexResultsStore = FauxtonAPI.Store.extend({
         return;
       }
 
-      if (!_.contains(selected, doc.id)) {
+      if (!_.includes(selected, doc.id)) {
         foundAllOnThisPage = false;
       }
     }.bind(this));

@@ -31,7 +31,7 @@ module.exports = function (options) {
   var fileTypes = ['.js', '.css', '.png', '.swf', '.eot', '.woff', '.svg', '.ttf', '.swf'];
 
   function isFile (url) {
-    return _.contains(fileTypes, path.extname(url));
+    return _.includes(fileTypes, path.extname(url));
   }
 
   // create proxy to couch for all couch requests

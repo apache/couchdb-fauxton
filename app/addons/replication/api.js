@@ -84,7 +84,7 @@ export const getTarget = ({replicationTarget, localTarget, remoteTarget, replica
 };
 
 export const createTarget = (replicationTarget) => {
-  if (_.contains([
+  if (_.includes([
     Constants.REPLICATION_TARGET.NEW_LOCAL_DATABASE,
     Constants.REPLICATION_TARGET.NEW_REMOTE_DATABASE],
     replicationTarget)) {
