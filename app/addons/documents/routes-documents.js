@@ -36,7 +36,10 @@ var DocumentsRouteObject = BaseRoute.extend({
       route: "designDocMetadata",
       roles: ['fx_loggedIn']
     },
-    'database/:database/_changes': 'changes'
+    'database/:database/_changes': {
+       route: 'changes',
+       roles: ['fx_loggedIn']
+    }
   },
 
   initialize (route, options) {

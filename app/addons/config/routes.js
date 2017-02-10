@@ -16,10 +16,10 @@ import CORSActions from "../cors/actions";
 import ClusterActions from "../cluster/cluster.actions";
 import ConfigActions from "./actions";
 import Layout from './layout';
-
+import React from 'react';
 
 var ConfigDisabledRouteObject = FauxtonAPI.RouteObject.extend({
-
+  roles: ['_admin'],
   routes: {
     '_config': 'checkNodes',
   },
@@ -49,7 +49,7 @@ var ConfigPerNodeRouteObject = FauxtonAPI.RouteObject.extend({
     '_config/:node/cors': 'configCorsForNode'
   },
 
-  initialize: function (_a, _b, options) {
+  initialize: function (_a, options) {
     var node = options[0];
 
     this.configs = new Config.ConfigModel({ node: node });

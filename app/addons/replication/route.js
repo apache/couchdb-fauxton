@@ -23,7 +23,7 @@ const ReplicationRouteObject = FauxtonAPI.RouteObject.extend({
   },
   selectedHeader: 'Replication',
 
-  roles: ['fx_loggedIn'],
+  roles: ['_admin'],
 
   setActivityCrumbs () {
     this.crumbs = [

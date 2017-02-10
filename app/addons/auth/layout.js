@@ -13,9 +13,13 @@
 import React from 'react';
 import {OnePane, OnePaneContent} from '../components/layouts';
 import {Breadcrumbs} from '../components/header-breadcrumbs';
-import Components from "./components.react";
+import Components from "./components";
 
-const { CreateAdminForm, ChangePasswordForm } = Components;
+const {
+  CreateAdminForm,
+  ChangePasswordForm,
+  CreateAdminSidebar
+} = Components;
 
 export const OnePaneHeader = ({crumbs}) => {
   return (
@@ -53,7 +57,7 @@ export const AdminLayout = ({crumbs, changePassword}) => {
       </OnePaneHeader>
       <div className="template-content flex-body flex-layout flex-row">
         <div id="sidebar-content">
-          <Components.CreateAdminSidebar />
+          <CreateAdminSidebar />
         </div>
         <div id="dashboard-content" className="flex-body">
           {content}

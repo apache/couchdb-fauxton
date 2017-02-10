@@ -22,7 +22,7 @@ const VerifyRouteObject = FauxtonAPI.RouteObject.extend({
     'verifyinstall': 'verifyInstall'
   },
   selectedHeader: 'Verify',
-
+  roles: ['fx_loggedIn'],
   verifyInstall: function () {
     Actions.resetStore();
     return <OnePaneSimpleLayout

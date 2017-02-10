@@ -12,26 +12,36 @@
 
 import app from "../../app";
 import FauxtonAPI from "../../core/api";
-import Auth from "./routes";
+import Session from  "../../core/session";
+import RouteObjects from './routes';
 import "./assets/less/auth.less";
 
-Auth.session = new Auth.Session();
+const Auth = {
+  session: new Session()
+};
+
 FauxtonAPI.setSession(Auth.session);
 app.session = Auth.session;
 
-Auth.initialize = function () {
+export default ({
+  initialize: () => {
 
-  FauxtonAPI.addHeaderLink({
-    id: 'auth',
-    title: 'Login',
-    href: '#/login',
-    icon: 'fonticon-user',
-    bottomNav: true
-  });
-
-  Auth.session.on('change', function () {
+    FauxtonAPI.addHeaderLink({
+      id: 'auth',
+      title: 'Login',
+      href: '#/login',
+      icon: 'fonticon-user',
+      bottomNav: true
+    });
+    Auth.session.onChange(function () {
     var session = Auth.session;
-    var link = {};
+    var link = {
+        id: 'auth',
+        title: 'Login',
+        href: '#/login',
+        icon: 'fonticon-user',
+        bottomNav: true
+    };
 
     if (session.isAdminParty()) {
       link = {
@@ -44,7 +54,7 @@ Auth.initialize = function () {
     } else if (session.isLoggedIn()) {
       link = {
         id: 'auth',
-        title: session.user().name,
+        title: session.user.name,
         href: '#/changePassword',
         icon: 'fonticon-user',
         bottomNav: true
@@ -61,50 +71,13 @@ Auth.initialize = function () {
         className: 'logout'
       });
     } else {
-      link = {
-        id: 'auth',
-        title: 'Login',
-        href: '#/login',
-        icon: 'fonticon-user',
-        bottomNav: true
-      };
       FauxtonAPI.removeHeaderLink({ id: 'logout', footerNav: true });
     }
     FauxtonAPI.updateHeaderLink(link);
   });
 
-  Auth.session.fetchUser().then(function () {
-    Auth.session.trigger('change');
-  });
-
-  var auth = function (session, roles) {
-    var deferred = $.Deferred();
-
-    if (session.isAdminParty()) {
-      session.trigger('authenticated');
-      deferred.resolve();
-    } else if (session.matchesRoles(roles)) {
-      session.trigger('authenticated');
-      deferred.resolve();
-    } else {
-      deferred.reject();
-    }
-
-    return [deferred];
-  };
-
-  var authDenied = function () {
-    var url = window.location.hash.replace('#', '');
-    var pattern = /login\?urlback=/g;
-
-    if (pattern.test(url)) {
-      url = url.replace('login?urlback=', '');
-    }
-    FauxtonAPI.navigate('/login?urlback=' + url, { replace: true });
-  };
-
-  FauxtonAPI.auth.registerAuth(auth);
-  FauxtonAPI.auth.registerAuthDenied(authDenied);
-};
-
-export default Auth;
+    Auth.session.fetchUser();
+  },
+  Views: {},
+  RouteObjects: RouteObjects
+});

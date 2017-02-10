@@ -10,60 +10,62 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 import app from "../../app";
-import FauxtonAPI from '../../core/api';
-import ActionTypes from './actiontypes';
-import Constants from './constants';
-import AccountActionTypes from '../auth/actiontypes';
-import _ from 'lodash';
+import FauxtonAPI from "../../core/api";
+import ActionTypes from "./actiontypes";
+import Constants from "./constants";
+import {
+  AUTH_SHOW_PASSWORD_MODAL,
+  AUTH_HIDE_PASSWORD_MODAL,
+  AUTH_CREDS_VALID,
+  AUTH_CREDS_INVALID
+} from "../auth/actiontypes";
+import _ from "lodash";
 
 const ReplicationStore = FauxtonAPI.Store.extend({
-  initialize () {
+  initialize() {
     this.reset();
   },
-
-  reset () {
+  reset() {
     this._loading = false;
     this._databases = [];
     this._authenticated = false;
-    this._password = '';
+    this._password = "";
 
     // source fields
-    this._replicationSource = '';
-    this._localSource = '';
-    this._remoteSource = '';
+    this._replicationSource = "";
+    this._localSource = "";
+    this._remoteSource = "";
 
     // target fields
-    this._replicationTarget = '';
-    this._localTarget = '';
-    this._remoteTarget = '';
+    this._replicationTarget = "";
+    this._localTarget = "";
+    this._remoteTarget = "";
 
     // other
     this._isPasswordModalVisible = false;
     this._isConflictModalVisible = false;
     this._replicationType = Constants.REPLICATION_TYPE.ONE_TIME;
-    this._replicationDocName = '';
+    this._replicationDocName = "";
     this._submittedNoChange = false;
     this._statusDocs = [];
     this._statusFilteredStatusDocs = [];
-    this._statusFilter = '';
+    this._statusFilter = "";
     this._allDocsSelected = false;
-    this._username = '';
-    this._password = '';
+    this._username = "";
+    this._password = "";
     this._activityLoading = false;
 
     this.loadActivitySort();
   },
-
-  getActivitySort () {
+  getActivitySort() {
     return this._activitySort;
   },
-
-  loadActivitySort () {
-    let sort = app.utils.localStorageGet('replication-activity-sort');
+  loadActivitySort() {
+    let sort = app.utils.localStorageGet("replication-activity-sort");
     if (!sort) {
       sort = {
         descending: false,
-        column: 'statusTime'
+        column: "statusTime"
       };
 
       this.setActivitySort(sort);
@@ -71,50 +73,39 @@ const ReplicationStore = FauxtonAPI.Store.extend({
 
     this._activitySort = sort;
   },
-
-  setActivitySort (sort) {
-    app.utils.localStorageSet('replication-activity-sort', sort);
+  setActivitySort(sort) {
+    app.utils.localStorageSet("replication-activity-sort", sort);
     this._activitySort = sort;
   },
-
-  setCredentials (username, password) {
+  setCredentials(username, password) {
     this._username = username;
     this._password = password;
   },
-
-  getUsername () {
+  getUsername() {
     return this._username;
   },
-
-  getPassword () {
+  getPassword() {
     return this._password;
   },
-
-  getSubmittedNoChange () {
+  getSubmittedNoChange() {
     return this._submittedNoChange;
   },
-
-  changeAfterSubmit () {
+  changeAfterSubmit() {
     this._submittedNoChange = false;
   },
-
-  isLoading () {
+  isLoading() {
     return this._loading;
   },
-
-  isActivityLoading () {
+  isActivityLoading() {
     return this._activityLoading;
   },
-
-  isAuthenticated () {
+  isAuthenticated() {
     return this._authenticated;
   },
-
-  getReplicationSource () {
+  getReplicationSource() {
     return this._replicationSource;
   },
-
-  getlocalSource () {
+  getlocalSource() {
     return this._localSource;
   },
 
@@ -125,49 +116,41 @@ const ReplicationStore = FauxtonAPI.Store.extend({
   isLocalTargetKnown () {
     return _.includes(this._databases, this._localTarget);
   },
-
-  getReplicationTarget () {
+  getReplicationTarget() {
     return this._replicationTarget;
   },
-
-  getDatabases () {
+  getDatabases() {
     return this._databases;
   },
-
-  setDatabases (databases) {
+  setDatabases(databases) {
     this._databases = databases;
   },
-
-  getReplicationType () {
+  getReplicationType() {
     return this._replicationType;
   },
-
-  getlocalTarget () {
+  getlocalTarget() {
     return this._localTarget;
   },
-
-  getReplicationDocName () {
+  getReplicationDocName() {
     return this._replicationDocName;
   },
-
-  setReplicationStatus (docs) {
+  setReplicationStatus(docs) {
     this._statusDocs = docs;
   },
-
-  getReplicationStatus () {
+  getReplicationStatus() {
     return this._statusDocs;
   },
-
-  getFilteredReplicationStatus () {
+  getFilteredReplicationStatus() {
     return this._statusDocs.filter(doc => {
       return _.values(doc).filter(item => {
-        if (!item) {return null;}
+        if (!item) {
+          return null;
+        }
         return item.toString().toLowerCase().match(this._statusFilter);
       }).length > 0;
     });
   },
-
-  selectDoc (id) {
+  selectDoc(id) {
     const doc = this._statusDocs.find(doc => doc._id === id);
     if (!doc) {
       return;
@@ -176,166 +159,154 @@ const ReplicationStore = FauxtonAPI.Store.extend({
     doc.selected = !doc.selected;
     this._allDocsSelected = false;
   },
-
-  selectAllDocs () {
+  selectAllDocs() {
     this._allDocsSelected = !this._allDocsSelected;
-    this.getFilteredReplicationStatus().forEach(doc => doc.selected = this._allDocsSelected);
+    this
+      .getFilteredReplicationStatus()
+      .forEach(doc => doc.selected = this._allDocsSelected);
   },
-
-  someDocsSelected () {
+  someDocsSelected() {
     return this.getFilteredReplicationStatus().some(doc => doc.selected);
   },
-
-  getAllDocsSelected () {
+  getAllDocsSelected() {
     return this._allDocsSelected;
   },
-
-  setStatusFilter (filter) {
+  setStatusFilter(filter) {
     this._statusFilter = filter;
   },
-
-  getStatusFilter () {
+  getStatusFilter() {
     return this._statusFilter;
   },
   // to cut down on boilerplate
-  updateFormField (fieldName, value) {
-
+  updateFormField(fieldName, value) {
     // I know this could be done by just adding the _ prefix to the passed field name, I just don't much like relying
     // on the var names like that...
     var validFieldMap = {
-      remoteSource: '_remoteSource',
-      remoteTarget: '_remoteTarget',
-      localTarget: '_localTarget',
-      replicationType: '_replicationType',
-      replicationDocName: '_replicationDocName',
-      replicationSource: '_replicationSource',
-      replicationTarget: '_replicationTarget',
-      localSource: '_localSource'
+      remoteSource: "_remoteSource",
+      remoteTarget: "_remoteTarget",
+      localTarget: "_localTarget",
+      replicationType: "_replicationType",
+      replicationDocName: "_replicationDocName",
+      replicationSource: "_replicationSource",
+      replicationTarget: "_replicationTarget",
+      localSource: "_localSource"
     };
 
     this[validFieldMap[fieldName]] = value;
   },
-
-  getRemoteSource () {
+  getRemoteSource() {
     return this._remoteSource;
   },
-
-  getRemoteTarget () {
+  getRemoteTarget() {
     return this._remoteTarget;
   },
-
-  isPasswordModalVisible () {
+  isPasswordModalVisible() {
     return this._isPasswordModalVisible;
   },
-
-  isConflictModalVisible () {
+  isConflictModalVisible() {
     return this._isConflictModalVisible;
   },
-
-  getPassword () {
+  getPassword() {
     return this._password;
   },
-
-  setStateFromDoc (doc) {
+  setStateFromDoc(doc) {
     Object.keys(doc).forEach(key => {
       this.updateFormField(key, doc[key]);
     });
   },
-
-  dispatch ({type, options}) {
+  dispatch({ type, options }) {
     switch (type) {
-
       case ActionTypes.INIT_REPLICATION:
         this._loading = true;
         this._localSource = options.localSource;
 
         if (this._localSource) {
           this._replicationSource = Constants.REPLICATION_SOURCE.LOCAL;
-          this._remoteSource = '';
-          this._replicationTarget = '';
-          this._localTarget = '';
-          this._remoteTarget = '';
+          this._remoteSource = "";
+          this._replicationTarget = "";
+          this._localTarget = "";
+          this._remoteTarget = "";
         }
-      break;
+        break;
 
       case ActionTypes.REPLICATION_DATABASES_LOADED:
         this.setDatabases(options.databases);
         this._loading = false;
-      break;
+        break;
 
       case ActionTypes.REPLICATION_UPDATE_FORM_FIELD:
         this.changeAfterSubmit();
         this.updateFormField(options.fieldName, options.value);
-      break;
+        break;
 
       case ActionTypes.REPLICATION_CLEAR_FORM:
         this.reset();
-      break;
+        break;
 
       case ActionTypes.REPLICATION_STARTING:
         this._submittedNoChange = true;
-      break;
+        break;
 
       case ActionTypes.REPLICATION_FETCHING_STATUS:
         this._activityLoading = true;
-      break;
+        break;
 
       case ActionTypes.REPLICATION_STATUS:
         this._activityLoading = false;
         this.setReplicationStatus(options);
-      break;
+        break;
 
       case ActionTypes.REPLICATION_FILTER_DOCS:
         this.setStatusFilter(options);
-      break;
+        break;
 
       case ActionTypes.REPLICATION_TOGGLE_DOC:
         this.selectDoc(options);
-      break;
+        break;
 
       case ActionTypes.REPLICATION_TOGGLE_ALL_DOCS:
         this.selectAllDocs();
-      break;
+        break;
 
       case ActionTypes.REPLICATION_SET_STATE_FROM_DOC:
         this.setStateFromDoc(options);
-      break;
+        break;
 
       case ActionTypes.REPLICATION_SHOW_CONFLICT_MODAL:
         this._isConflictModalVisible = true;
-      break;
+        break;
 
       case ActionTypes.REPLICATION_HIDE_CONFLICT_MODAL:
         this._isConflictModalVisible = false;
-      break;
+        break;
 
       case ActionTypes.REPLICATION_CHANGE_ACTIVITY_SORT:
         this.setActivitySort(options);
-      break;
+        break;
 
       case ActionTypes.REPLICATION_CLEAR_SELECTED_DOCS:
         this._allDocsSelected = false;
-      break;
+        break;
 
-      case AccountActionTypes.AUTH_SHOW_PASSWORD_MODAL:
+      case AUTH_SHOW_PASSWORD_MODAL:
         this._isPasswordModalVisible = true;
-      break;
+        break;
 
-      case AccountActionTypes.AUTH_HIDE_PASSWORD_MODAL:
+      case AUTH_HIDE_PASSWORD_MODAL:
         this._isPasswordModalVisible = false;
-      break;
+        break;
 
-      case AccountActionTypes.AUTH_CREDS_VALID:
+      case AUTH_CREDS_VALID:
         this._authenticated = true;
         this.setCredentials(options.username, options.password);
-      break;
+        break;
 
-      case AccountActionTypes.AUTH_CREDS_INVALID:
+      case AUTH_CREDS_INVALID:
         this._authenticated = false;
-      break;
+        break;
 
       default:
-      return;
+        return;
     }
 
     this.triggerChange();
@@ -343,7 +314,9 @@ const ReplicationStore = FauxtonAPI.Store.extend({
 });
 
 const replicationStore = new ReplicationStore();
-replicationStore.dispatchToken = FauxtonAPI.dispatcher.register(replicationStore.dispatch);
+replicationStore.dispatchToken = FauxtonAPI.dispatcher.register(
+  replicationStore.dispatch
+);
 
 export default {
   replicationStore

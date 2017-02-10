@@ -57,13 +57,8 @@ $(document).on("click", "a:not([data-bypass])", function (evt) {
   }
 });
 
-function getReducers (r) {
-
-  if (!r.length) {
-    return function () {};
-  }
-
-  return FauxtonAPI.reducers.reduce((el, acc) => {
+function getReducers (reducers = []) {
+  return reducers.reduce((el, acc) => {
     acc[el] = el;
     return acc;
   }, {});

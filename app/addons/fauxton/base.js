@@ -13,7 +13,6 @@
 import app from "../../app";
 import FauxtonAPI from "../../core/api";
 import NavigationActions from "./navigation/actions";
-
 import "./assets/less/fauxton.less";
 
 const Fauxton = FauxtonAPI.addon();

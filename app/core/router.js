@@ -20,16 +20,15 @@ var beforeUnloads = {};
 export default Backbone.Router.extend({
   routes: {},
 
-  beforeUnload: function (name, fn) {
+  beforeUnload(name, fn) {
     beforeUnloads[name] = fn;
   },
 
-  removeBeforeUnload: function (name) {
+  removeBeforeUnload(name) {
     delete beforeUnloads[name];
   },
 
-
-  navigate: function (fragment, options) {
+  navigate(fragment, options) {
     let continueNav = true;
     const msg = _.find(_.map(beforeUnloads, function (fn) { return fn(); }), function (beforeReturn) {
       if (beforeReturn) { return true; }
@@ -55,24 +54,22 @@ export default Backbone.Router.extend({
     routeUrls.forEach(route => {
       this.route(route, route.toString(), (...args) => {
         const roles = RouteObject.prototype.getRouteRoles(route);
-        const authPromise = FauxtonAPI.auth.checkAccess(roles);
 
-        authPromise.then(() => {
-          if (!that.activeRouteObject || !that.activeRouteObject.hasRoute(route)) {
-            that.activeRouteObject = new RouteObject(route, args);
-          }
-
-          const routeObject = that.activeRouteObject;
-          const component = routeObject.routeCallback(route, args);
-          that.currentRouteOptions = {
-            selectedHeader: this.activeRouteObject.selectedHeader,
-            component,
-            roles,
-            route: route.toString()
-          };
-          that.trigger('new-component', this.currentRouteOptions);
-        }, () => {
-          FauxtonAPI.auth.authDeniedCb();
+        FauxtonAPI.auth
+          .checkAccess(roles)
+          .then(() => {
+            if (!that.activeRouteObject || !that.activeRouteObject.hasRoute(route)) {
+              that.activeRouteObject = new RouteObject(route, args);
+            }
+            const routeObject = that.activeRouteObject;
+            const component = routeObject.routeCallback(route, args);
+            that.currentRouteOptions = {
+              selectedHeader: this.activeRouteObject.selectedHeader,
+              component,
+              roles,
+              route: route.toString()
+            };
+            that.trigger('new-component', this.currentRouteOptions);
         });
 
       });
