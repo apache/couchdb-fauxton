@@ -3,5 +3,5 @@
     "react",
     "es2015"
   ],
-  "plugins": ["transform-object-assign", "transform-export-extensions"]
+  "plugins": ["transform-object-assign"]
 }

@@ -9,7 +9,7 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
-import { session, admin } from "./couchdb";
+import couchdb from "./couchdb";
 import { each, uniqueId } from "lodash";
 import * as authMessages from "./constants/auth_messages";
 
@@ -30,7 +30,7 @@ export default class {
     this.messages = authMessages;
   }
   getUserFromSession() {
-    return session.get().then(({ userCtx }) => userCtx);
+    return couchdb.session.get().then(({ userCtx }) => userCtx);
   }
   set user(user) {
     if (this._user.name !== user.name) {
@@ -94,7 +94,7 @@ export default class {
   createAdmin(username, password, login, node) {
     return this
       .validateUser(username, password, this.messages.missingCredentials)
-      .then(() => admin.create({ name: this.user.name, password, node }))
+      .then(() => couchdb.admin.create({ name: this.user.name, password, node }))
       .then(
         () =>
           login
@@ -105,14 +105,14 @@ export default class {
   login(username, password) {
     return this
       .validateUser(username, password, authMessages.missingCredentials)
-      .then(() => session.create({ name: username, password: password }))
+      .then(() => couchdb.session.create({ name: username, password: password }))
       .then((res) => {
         if (res.error) throw new Error(res.error);
       })
       .then(() => this.fetchUser({ forceFetch: true }));
   }
   logout() {
-    return session.remove().then(() => this.fetchUser({ forceFetch: true }));
+    return couchdb.session.remove().then(() => this.fetchUser({ forceFetch: true }));
   }
   changePassword(password, confirmedPassword, node) {
     return this
@@ -121,7 +121,7 @@ export default class {
         confirmedPassword,
         authMessages.passwordsNotMatching
       )
-      .then(() => admin.create({ name: this.user.name, password, node }))
+      .then(() => couchdb.admin.create({ name: this.user.name, password, node }))
       .then(() => this.login(this.user.name, password));
   }
 }

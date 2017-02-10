@@ -2,6 +2,12 @@
 // forms need to clear after a successful post. Since those events occur in actions.js, we need a way to tell the
 // component to update + clear the fields. That's why all this code exists.
 
-export changePasswordStore from './ChangePassword';
-export createAdminStore from './CreateAdminStore';
-export createAdminSidebarStore from './CreateAdminSidebarStore.js';
+import changePasswordStore from './ChangePassword';
+import createAdminStore from './CreateAdminStore';
+import createAdminSidebarStore from './CreateAdminSidebarStore.js';
+
+export default ({
+  changePasswordStore,
+  createAdminStore,
+  createAdminSidebarStore
+});

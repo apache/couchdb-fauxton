@@ -76,10 +76,7 @@ export default ({
     FauxtonAPI.updateHeaderLink(link);
   });
 
-    Auth.session.fetchUser().then(function () {
-      // debugger;
-      // Auth.session.trigger('change');
-    });
+    Auth.session.fetchUser();
   },
   Views: {},
   RouteObjects: RouteObjects

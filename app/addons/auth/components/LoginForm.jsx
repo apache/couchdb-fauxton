@@ -11,7 +11,7 @@ class LoginForm extends React.Component {
     };
   }
   onInputChange(e) {
-    var change = e.target.name === "name"
+    let change = e.target.name === "name"
       ? { username: e.target.value }
       : { password: e.target.value };
     this.setState(change);
@@ -88,10 +88,7 @@ class LoginForm extends React.Component {
 }
 
 LoginForm.defaultProps = {
-   urlBack: "",
-  // for testing purposes only
-  testBlankUsername: null,
-  testBlankPassword: null
+   urlBack: ""
 };
 
 LoginForm.propTypes = {

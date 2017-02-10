@@ -2,8 +2,13 @@ import React from "react";
 import FauxtonAPI from "../../../core/api";
 import ClusterActions from "../../cluster/cluster.actions";
 import { AuthLayout } from "./../layout";
-import { LoginForm, CreateAdminForm } from "../components";
 import app from "../../../app";
+import Components from "./../components";
+
+const {
+  LoginForm,
+  CreateAdminForm
+} = Components;
 
 const crumbs = [{ name: "Log In to CouchDB" }];
 

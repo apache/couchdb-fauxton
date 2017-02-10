@@ -13,7 +13,13 @@
 import React from 'react';
 import {OnePane, OnePaneContent} from '../components/layouts';
 import {Breadcrumbs} from '../components/header-breadcrumbs';
-import { CreateAdminForm, ChangePasswordForm, CreateAdminSidebar } from "./components";
+import Components from "./components";
+
+const {
+  CreateAdminForm,
+  ChangePasswordForm,
+  CreateAdminSidebar
+} = Components;
 
 export const OnePaneHeader = ({crumbs}) => {
   return (

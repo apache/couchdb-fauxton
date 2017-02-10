@@ -80,8 +80,8 @@ export function updateChangePasswordConfirmField(value) {
   });
 }
 
-export function createAdmin(username, password, loginAfter) {
-  var nodes = nodesStore.getNodes();
+export const createAdmin = (username, password, loginAfter) => {
+  const nodes = nodesStore.getNodes();
   FauxtonAPI.session.createAdmin(
     username,
     password,
@@ -94,7 +94,7 @@ export function createAdmin(username, password, loginAfter) {
         msg: FauxtonAPI.session.messages.adminCreated
       });
       if (loginAfter) {
-        FauxtonAPI.navigate("/");
+        return FauxtonAPI.navigate("/");
       } else {
         FauxtonAPI.dispatch({ type: AUTH_CLEAR_CREATE_ADMIN_FIELDS });
       }
@@ -105,11 +105,11 @@ export function createAdmin(username, password, loginAfter) {
         msg = xhr.responseJSON.reason;
       }
       errorHandler(
-        FauxtonAPI.session.messages.adminCreationFailedPrefix + " " + msg
+        `${FauxtonAPI.session.messages.adminCreationFailedPrefix} ${msg}`
       );
     }
   );
-}
+};
 
 // simple authentication method - does nothing other than check creds
 export function authenticate(username, password, onSuccess) {
@@ -122,7 +122,10 @@ export function authenticate(username, password, onSuccess) {
       () => {
         FauxtonAPI.dispatch({
           type: AUTH_CREDS_VALID,
-          options: { username: username, password: password }
+          options: {
+            username,
+            password
+          }
         });
         hidePasswordModal();
         onSuccess(username, password);
