@@ -126,7 +126,7 @@ Stores.IndexEditorStore = FauxtonAPI.Store.extend({
     if (!this.hasReduce()) {
       return false;
     }
-    return !_.contains(this.builtInReduces(), this.getReduce());
+    return !_.includes(this.builtInReduces(), this.getReduce());
   },
 
   hasReduce: function () {

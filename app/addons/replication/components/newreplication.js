@@ -89,7 +89,7 @@ export default class NewReplicationController extends React.Component {
       databases
     } = this.props;
 
-    if (replicationTarget === Constants.REPLICATION_TARGET.NEW_LOCAL_DATABASE && _.contains(databases, localTarget)) {
+    if (replicationTarget === Constants.REPLICATION_TARGET.NEW_LOCAL_DATABASE && _.includes(databases, localTarget)) {
       FauxtonAPI.addNotification({
         msg: 'The <code>' + localTarget + '</code> database already exists locally. Please enter another database name.',
         type: 'error',

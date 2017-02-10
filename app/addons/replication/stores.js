@@ -108,11 +108,21 @@ const ReplicationStore = FauxtonAPI.Store.extend({
   getlocalSource() {
     return this._localSource;
   },
+<<<<<<< HEAD
   isLocalSourceKnown() {
     return _.contains(this._databases, this._localSource);
   },
   isLocalTargetKnown() {
     return _.contains(this._databases, this._localTarget);
+=======
+
+  isLocalSourceKnown () {
+    return _.includes(this._databases, this._localSource);
+  },
+
+  isLocalTargetKnown () {
+    return _.includes(this._databases, this._localTarget);
+>>>>>>> 7e7e774e5f4ceafce80bf55554f376cac277ca04
   },
   getReplicationTarget() {
     return this._replicationTarget;
