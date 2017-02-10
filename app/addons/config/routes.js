@@ -10,6 +10,7 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+import React from 'react';
 import FauxtonAPI from "../../core/api";
 import Config from "./resources";
 import CORSActions from "../cors/actions";
@@ -49,7 +50,7 @@ var ConfigPerNodeRouteObject = FauxtonAPI.RouteObject.extend({
     '_config/:node/cors': 'configCorsForNode'
   },
 
-  initialize: function (_a, _b, options) {
+  initialize: function (_a, options) {
     var node = options[0];
 
     this.configs = new Config.ConfigModel({ node: node });
