@@ -21,7 +21,6 @@ import QueryActions from './queryoptions/actions';
 // The Documents section is built up a lot of different route object which share code. This contains
 // base functionality that can be used across routes / addons
 var BaseRoute = FauxtonAPI.RouteObject.extend({
-  layout: 'empty',
   selectedHeader: 'Databases',
 
   createDesignDocsCollection: function () {

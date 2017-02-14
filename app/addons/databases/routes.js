@@ -17,7 +17,6 @@ import Databases from "./resources";
 import Layout from './layout';
 
 const AllDbsRouteObject = FauxtonAPI.RouteObject.extend({
-  layout: 'empty',
   hideApiBar: true,
   hideNotificationCenter: true,
 

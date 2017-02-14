@@ -17,7 +17,6 @@ import {OnePaneSimpleLayout} from '../components/layouts';
 
 var DocumentationRouteObject = FauxtonAPI.RouteObject.extend({
   selectedHeader: 'Documentation',
-  layout: 'empty',
   hideApiBar: true,
   hideNotificationCenter: true,
   routes: {

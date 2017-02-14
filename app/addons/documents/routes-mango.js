@@ -23,7 +23,6 @@ import SidebarActions from "./sidebar/actions";
 import {MangoLayout} from './mangolayout';
 
 const MangoIndexEditorAndQueryEditor = FauxtonAPI.RouteObject.extend({
-  layout: 'empty',
   hideApiBar: true,
   hideNotificationCenter: true,
   routes: {

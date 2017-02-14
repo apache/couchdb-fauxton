@@ -22,8 +22,6 @@ import {AuthLayout, AdminLayout} from './layout';
 const {LoginForm, CreateAdminForm} = Components;
 
 var AuthRouteObject = FauxtonAPI.RouteObject.extend({
-  layout: 'empty',
-
   routes: {
     'login?*extra': 'login',
     'login': 'login',
@@ -63,7 +61,6 @@ var AuthRouteObject = FauxtonAPI.RouteObject.extend({
 
 
 var UserRouteObject = FauxtonAPI.RouteObject.extend({
-  layout: 'empty',
   hideNotificationCenter: true,
   hideApiBar: true,
 
