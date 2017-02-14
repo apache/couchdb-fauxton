@@ -19,7 +19,7 @@ import Backbone from 'backbone';
 import $ from 'jquery';
 import AppWrapper from './addons/fauxton/appwrapper';
 
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware, combineReducers } from 'redux';
 import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
 
@@ -57,24 +57,10 @@ $(document).on("click", "a:not([data-bypass])", function (evt) {
   }
 });
 
-function getReducers (r) {
-
-  if (!r.length) {
-    return function () {};
-  }
-
-  return FauxtonAPI.reducers.reduce((el, acc) => {
-    acc[el] = el;
-    return acc;
-  }, {});
-}
-
-const reducer = getReducers(FauxtonAPI.reducers);
-
 const middlewares = [thunk];
 
 const store = createStore(
-  reducer,
+  combineReducers(FauxtonAPI.reducers),
   applyMiddleware(...middlewares)
 );
 

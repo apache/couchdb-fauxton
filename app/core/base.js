@@ -157,6 +157,10 @@ FauxtonAPI.setSession = function (newSession) {
   return FauxtonAPI.session.fetchUser();
 };
 
-FauxtonAPI.reducers = [];
+FauxtonAPI.reducers = {};
+
+FauxtonAPI.addReducers = (reducers) => {
+  FauxtonAPI.reducers = Object.assign({}, FauxtonAPI.reducers, reducers);
+};
 
 export default FauxtonAPI;
