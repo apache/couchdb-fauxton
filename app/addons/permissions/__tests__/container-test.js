@@ -15,7 +15,7 @@ import { receivedPermissions } from '../actions';
 import React from 'react';
 import { mount } from 'enzyme';
 
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware, combineReducers } from 'redux';
 
 import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
@@ -33,7 +33,7 @@ describe('Permissions Container', () => {
 
     const middlewares = [thunk];
     const store = createStore(
-      reducer,
+      combineReducers({ permissions: reducer}),
       applyMiddleware(...middlewares)
     );
 
