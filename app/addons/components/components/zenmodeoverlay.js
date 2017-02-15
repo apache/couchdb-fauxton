@@ -14,8 +14,6 @@ import ReactDOM from "react-dom";
 import app from "../../../app";
 import {CodeEditor} from './codeeditor';
 
-require('brace/theme/dawn');
-
 // Zen mode editing has very few options:
 // - It covers the full screen, hiding everything else
 // - Two themes: light & dark (choice stored in local storage)
@@ -60,6 +58,10 @@ export const ZenModeOverlay = React.createClass({
   componentDidMount () {
     $(ReactDOM.findDOMNode(this.refs.exit)).tooltip({ placement: 'left' });
     $(ReactDOM.findDOMNode(this.refs.theme)).tooltip({ placement: 'left' });
+
+    require.ensure(['brace/theme/dawn'], function () {
+      require('brace/theme/dawn');
+    });
   },
 
   exitZenMode () {
