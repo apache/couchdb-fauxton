@@ -30,6 +30,9 @@ module.exports = {
         'NODE_ENV': JSON.stringify('production') // This has effect on the react lib size
       }
     }),
+    // moment doesn't offer a modular API, so manually remove locale
+    // see https://github.com/moment/moment/issues/2373
+    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
     new webpack.optimize.DedupePlugin(),
     new webpack.optimize.UglifyJsPlugin({
       compress: {
