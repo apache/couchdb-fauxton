@@ -21,6 +21,9 @@
   <link rel="shortcut icon" type="image/png" href="dashboard.assets/img/couchdb-logo.png"/>
   <title>Project Fauxton</title>
 
+  <% if (!development) { %>
+  <link rel="stylesheet" href="styles.css"/>
+  <% } %>
   <!-- Application styles. -->
   <style>
     .noscript-warning {
