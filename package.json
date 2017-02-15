@@ -17,6 +17,7 @@
   },
   "devDependencies": {
     "babel-jest": "^18.0.0",
+    "babel-plugin-transform-object-rest-spread": "^6.23.0",
     "bootstrap": "^3.3.7",
     "enzyme": "^2.7.1",
     "es5-shim": "4.5.4",
