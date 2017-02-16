@@ -12,6 +12,7 @@
 
 import Backbone from "backbone";
 import _ from "lodash";
+
 var FauxtonAPI = {
   //add default objects
   router: {
@@ -162,7 +163,7 @@ FauxtonAPI.reducers = {};
 FauxtonAPI.addReducers = (reducers) => {
   FauxtonAPI.reducers = {
     ...FauxtonAPI.reducers,
-    reducers
+    ...reducers
   };
 };
 
