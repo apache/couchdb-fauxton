@@ -160,6 +160,7 @@ FauxtonAPI.setSession = function (newSession) {
 
 FauxtonAPI.reducers = {};
 
+
 FauxtonAPI.addReducers = (reducers) => {
   FauxtonAPI.reducers = {
     ...FauxtonAPI.reducers,
