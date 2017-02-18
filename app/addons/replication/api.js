@@ -40,6 +40,9 @@ export const getUsername = () => {
 };
 
 export const getAuthHeaders = (username, password) => {
+  if (!username || !password) {
+    return {};
+  }
   return {
     'Authorization': 'Basic ' + base64.encode(username + ':' + password)
   };
@@ -61,10 +64,17 @@ export const getTarget = ({replicationTarget, localTarget, remoteTarget, replica
   const encodedLocalTarget = encodeURIComponent(localTarget);
   const headers = getAuthHeaders(username, password);
 
+  const {
+    origin,
+    port,
+    protocol,
+    hostname
+  } = window.location;
+
   if (replicationTarget === Constants.REPLICATION_TARGET.EXISTING_LOCAL_DATABASE) {
     target = {
       headers: headers,
-      url: `${window.location.origin}/${encodedLocalTarget}`
+      url: `${origin}/${encodedLocalTarget}`
     };
   } else if (replicationTarget === Constants.REPLICATION_TARGET.NEW_LOCAL_DATABASE) {
 
@@ -72,11 +82,12 @@ export const getTarget = ({replicationTarget, localTarget, remoteTarget, replica
     if (replicationSource === Constants.REPLICATION_SOURCE.LOCAL) {
       target = {
         headers: headers,
-        url: `${window.location.origin}/${encodedLocalTarget}`
+        url: `${origin}/${encodedLocalTarget}`
       };
     } else {
-      const port = window.location.port === '' ? '' : ':' + window.location.port;
-      target = `${window.location.protocol}//${username}:${password}@${window.location.hostname}${port}/${encodedLocalTarget}`;
+      target = `${protocol}//` +
+        ((username && password) ? `${username}:${password}@` : '') +
+        `${hostname}${port ? `:${port}` : ''}/${encodedLocalTarget}`;
     }
   }
 
