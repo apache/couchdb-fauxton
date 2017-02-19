@@ -60,29 +60,5 @@ module.exports = {
       .clickWhenVisible('#changes', waitTime, true)
       .waitForElementPresent('.changes-header', waitTime, true)
     .end();
-  },
-  'views support encoding': function (client) {
-    var waitTime = client.globals.maxWaitTime,
-        newDatabaseName = 'encoded/db-' + client.globals.testDatabaseName,
-        baseUrl = client.globals.test_settings.launch_url;
-
-    client
-      .deleteDatabase(newDatabaseName)
-      .createDatabase(newDatabaseName)
-      .populateDatabase(newDatabaseName)
-      .loginToGUI()
-      .url(baseUrl + '/#/database/' + encodeURIComponent(newDatabaseName) + '/_all_docs')
-      .waitForElementPresent('.bulk-action-component-panel', waitTime, true)
-      .clickWhenVisible('#nav-header-testdesigndoc', waitTime, true)
-      .clickWhenVisible('a[href="#/database/' + encodeURIComponent(newDatabaseName) + '/_design/testdesigndoc/_info"]', waitTime, true)
-      .waitForElementPresent('.metadata-page', waitTime, true)
-      .clickWhenVisible('#nav-design-function-testdesigndocviews', waitTime, true)
-      .clickWhenVisible('#testdesigndoc_stubview', waitTime, true)
-      .waitForElementNotPresent('.loading-lines', waitTime, true)
-      .waitForElementPresent('#doc-list', waitTime, true)
-      .clickWhenVisible('.active .index-menu-toggle', waitTime, true)
-      .clickWhenVisible('.fonticon-file-code-o')
-      .waitForElementPresent('.view-query-save', waitTime, true)
-    .end();
   }
 };
