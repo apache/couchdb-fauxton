@@ -351,7 +351,7 @@ Documents.BulkDeleteDocCollection = FauxtonAPI.Collection.extend({
   },
 
   url: function () {
-    return app.host + '/' + this.databaseId + '/_bulk_docs';
+    return FauxtonAPI.urls('bulk_docs', 'server', this.databaseId, '');
   },
 
   bulkDelete: function () {
