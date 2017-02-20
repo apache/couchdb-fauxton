@@ -19,19 +19,12 @@ import _ from 'lodash';
 export const encodeFullUrl = (fullUrl) => {
   if (!fullUrl) {return '';}
   const url = new URL(fullUrl);
-  if (url.username && url.password) {
-    return `${url.protocol}//${url.username}:${url.password}@${url.hostname}/${encodeURIComponent(url.pathname.slice(1))}`;
-  }
   return `${url.origin}/${encodeURIComponent(url.pathname.slice(1))}`;
 };
 
 export const decodeFullUrl = (fullUrl) => {
   if (!fullUrl) {return '';}
   const url = new URL(fullUrl);
-  if (url.username && url.password) {
-    return `${url.protocol}//${url.username}:${url.password}@${url.hostname}/${decodeURIComponent(url.pathname.slice(1))}`;
-  }
-
   return `${url.origin}/${decodeURIComponent(url.pathname.slice(1))}`;
 };
 
@@ -48,15 +41,23 @@ export const getAuthHeaders = (username, password) => {
   };
 };
 
-export const getSource = ({replicationSource, localSource, remoteSource, username, password}) => {
+export const getSource = ({
+  replicationSource,
+  localSource,
+  remoteSource,
+  username,
+  password
+},
+{origin} = window.location) => {
+  let url = remoteSource;
   if (replicationSource === Constants.REPLICATION_SOURCE.LOCAL) {
-    return {
-      headers: getAuthHeaders(username, password),
-      url: `${window.location.origin}/${encodeURIComponent(localSource)}`
-    };
-  } else {
-    return encodeFullUrl(remoteSource);
+    url = `${origin}/${localSource}`;
   }
+
+  return {
+    headers: getAuthHeaders(username, password),
+    url: encodeFullUrl(url)
+  };
 };
 
 export const getTarget = ({
@@ -67,40 +68,25 @@ export const getTarget = ({
   username,
   password
 },
-location = window.location //this allows us to mock out window.location for our tests
+{origin} = window.location //this allows us to mock out window.location for our tests
 ) => {
-  let target = encodeFullUrl(remoteTarget);
+
   const encodedLocalTarget = encodeURIComponent(localTarget);
-  const headers = getAuthHeaders(username, password);
+  let headers = getAuthHeaders(username, password);
+  let target = `${origin}/${encodedLocalTarget}`;
 
-  const {
-    origin,
-    port,
-    protocol,
-    hostname
-  } = location;
+  if (replicationTarget === Constants.REPLICATION_TARGET.NEW_REMOTE_DATABASE ||
+        replicationTarget === Constants.REPLICATION_TARGET.EXISTING_REMOTE_DATABASE) {
 
-  if (replicationTarget === Constants.REPLICATION_TARGET.EXISTING_LOCAL_DATABASE) {
-    target = {
-      headers: headers,
-      url: `${origin}/${encodedLocalTarget}`
-    };
-  } else if (replicationTarget === Constants.REPLICATION_TARGET.NEW_LOCAL_DATABASE) {
-
-    // check to see if we really need to send headers here or can just do the ELSE clause in all scenarioe
-    if (replicationSource === Constants.REPLICATION_SOURCE.LOCAL) {
-      target = {
-        headers: headers,
-        url: `${origin}/${encodedLocalTarget}`
-      };
-    } else {
-      target = `${protocol}//` +
-        ((username && password) ? `${username}:${password}@` : '') +
-        `${hostname}${port ? `:${port}` : ''}/${encodedLocalTarget}`;
-    }
+    const targetUrl = new URL(remoteTarget);
+    target = encodeFullUrl(remoteTarget);
+    headers = getAuthHeaders(targetUrl.username, targetUrl.password);
   }
 
-  return target;
+  return {
+    headers: headers,
+    url: target
+  };
 };
 
 export const createTarget = (replicationTarget) => {

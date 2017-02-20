@@ -16,7 +16,9 @@ import {
   continuous,
   createTarget,
   addDocIdAndRev,
-  getDocUrl
+  getDocUrl,
+  encodeFullUrl,
+  decodeFullUrl
 } from '../api';
 import Constants from '../constants';
 
@@ -33,7 +35,7 @@ describe('Replication API', () => {
         remoteSource
       });
 
-      assert.deepEqual(source, 'http://remote-couchdb.com/my%2Fdb%2Fhere');
+      assert.deepEqual(source.url, 'http://remote-couchdb.com/my%2Fdb%2Fhere');
     });
 
     it('returns local source with auth info and encoded', () => {
@@ -44,7 +46,7 @@ describe('Replication API', () => {
         localSource,
         username: 'the-user',
         password: 'password'
-      });
+      }, {origin: 'http://dev:6767'});
 
       assert.deepEqual(source.headers, {Authorization:"Basic dGhlLXVzZXI6cGFzc3dvcmQ="});
       assert.ok(/my%2Fdb/.test(source.url));
@@ -59,7 +61,7 @@ describe('Replication API', () => {
       assert.deepEqual("http://remote-couchdb.com/my%2Fdb", getTarget({
         replicationTarget: Constants.REPLICATION_TARGET.NEW_REMOTE_DATABASE,
         remoteTarget: remoteTarget
-      }));
+      }).url);
     });
 
     it('returns existing local database', () => {
@@ -94,10 +96,10 @@ describe('Replication API', () => {
         localTarget: 'my-new/db',
         username: 'the-user',
         password: 'password'
-      });
+      }, {origin: 'http://dev:5555'});
 
-      assert.ok(/the-user:password@/.test(target));
-      assert.ok(/my-new%2Fdb/.test(target));
+      assert.deepEqual(target.headers, {Authorization:"Basic dGhlLXVzZXI6cGFzc3dvcmQ="});
+      assert.ok(/my-new%2Fdb/.test(target.url));
     });
 
     it("doesn't encode username and password if it is not supplied", () => {
@@ -117,7 +119,8 @@ describe('Replication API', () => {
         localTarget: 'my-new/db'
       }, location);
 
-      assert.deepEqual("http://dev:8000/my-new%2Fdb", target);
+      assert.deepEqual("http://dev:8000/my-new%2Fdb", target.url);
+      assert.deepEqual({}, target.headers);
     });
   });
 
@@ -183,6 +186,27 @@ describe('Replication API', () => {
 
       assert.deepEqual(getDocUrl(url), cleanedUrl);
     });
+  });
+
+  describe("encodeFullUrl", () => {
+    it("encodes db correctly", () => {
+      const url = "http://dev:5984/boom/aaaa";
+      const encodedUrl = encodeFullUrl(url);
+
+      assert.deepEqual("http://dev:5984/boom%2Faaaa", encodedUrl);
+    });
+
+  });
+
+  describe("decodeFullUrl", () => {
+
+    it("encodes db correctly", () => {
+      const url = "http://dev:5984/boom%2Faaaa";
+      const encodedUrl = decodeFullUrl(url);
+
+      assert.deepEqual("http://dev:5984/boom/aaaa", encodedUrl);
+    });
+
   });
 
 });
