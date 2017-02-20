@@ -59,7 +59,16 @@ export const getSource = ({replicationSource, localSource, remoteSource, usernam
   }
 };
 
-export const getTarget = ({replicationTarget, localTarget, remoteTarget, replicationSource, username, password}) => {
+export const getTarget = ({
+  replicationTarget,
+  localTarget,
+  remoteTarget,
+  replicationSource,
+  username,
+  password
+},
+location = window.location //this allows us to mock out window.location for our tests
+) => {
   let target = encodeFullUrl(remoteTarget);
   const encodedLocalTarget = encodeURIComponent(localTarget);
   const headers = getAuthHeaders(username, password);
@@ -69,7 +78,7 @@ export const getTarget = ({replicationTarget, localTarget, remoteTarget, replica
     port,
     protocol,
     hostname
-  } = window.location;
+  } = location;
 
   if (replicationTarget === Constants.REPLICATION_TARGET.EXISTING_LOCAL_DATABASE) {
     target = {
