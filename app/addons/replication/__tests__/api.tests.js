@@ -99,6 +99,26 @@ describe('Replication API', () => {
       assert.ok(/the-user:password@/.test(target));
       assert.ok(/my-new%2Fdb/.test(target));
     });
+
+    it("doesn't encode username and password if it is not supplied", () => {
+      const location = {
+        host: "dev:8000",
+        hostname: "dev",
+        href: "http://dev:8000/#database/animaldb/_all_docs",
+        origin: "http://dev:8000",
+        pathname: "/",
+        port: "8000",
+        protocol: "http:",
+      };
+
+      const target = getTarget({
+        replicationTarget: Constants.REPLICATION_TARGET.NEW_LOCAL_DATABASE,
+        replicationSource: Constants.REPLICATION_SOURCE.REMOTE,
+        localTarget: 'my-new/db'
+      }, location);
+
+      assert.deepEqual("http://dev:8000/my-new%2Fdb", target);
+    });
   });
 
   describe('continuous', () => {
