@@ -10,6 +10,7 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 var webpack = require('webpack');
+var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var path = require('path');
 
 module.exports = {
@@ -30,13 +31,16 @@ module.exports = {
         'NODE_ENV': JSON.stringify('production') // This has effect on the react lib size
       }
     }),
+    // moment doesn't offer a modular API, so manually remove locale
+    // see https://github.com/moment/moment/issues/2373
+    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
     new webpack.optimize.DedupePlugin(),
     new webpack.optimize.UglifyJsPlugin({
       compress: {
         warnings: false
       }
-    })
-
+    }),
+    new ExtractTextPlugin("styles.css")
   ],
 
   resolve: {
@@ -65,9 +69,8 @@ module.exports = {
     { test: require.resolve("backbone"),
       loader: "expose?Backbone"
     },
-    {
-      test: /\.less$/,
-      loader: 'style!css!less'
+    { test: /\.less/,
+      loader: ExtractTextPlugin.extract("style-loader", "css-loader!less-loader")
     },
     { test: /\.css$/, loader: 'style!css' },
     {

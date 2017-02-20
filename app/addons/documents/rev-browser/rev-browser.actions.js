@@ -15,7 +15,9 @@
 import FauxtonAPI from "../../../core/api";
 import ActionTypes from "./rev-browser.actiontypes";
 import getTree from "visualizeRevTree/lib/getTree";
-import PouchDB from "pouchdb";
+import PouchDB from "pouchdb-core";
+import PouchHttpAdapter from 'pouchdb-adapter-http';
+PouchDB.plugin(PouchHttpAdapter);
 
 let db;
 
