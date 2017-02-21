@@ -36,7 +36,7 @@
         "dest": "dist/debug/index.html",
         "variables": {
           "bundlejs": "./dashboard.assets/js/BUNDLEJS_FILE",
-          "css": "./dashboard.assets/css/CSS_FILE",
+          "css": "./CSS_FILE",
           "base": null,
           "development": false
         },

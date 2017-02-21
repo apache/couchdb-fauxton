@@ -208,6 +208,17 @@ module.exports = function (grunt) {
             config.template.release.variables.bundlejs = config.template.release.variables.bundlejs.replace(/BUNDLEJS_FILE/, newFilename);
           }
         }
+      },
+
+      css: {
+        files: { 'dist/release/': 'dist/release/styles.css' },
+        options: {
+          afterEach: function (fileChanges) {
+            // replace the CSS_FILE placeholder with the actual filename
+            const newFilename = path.basename(fileChanges.newPath);
+            config.template.release.variables.css = config.template.release.variables.css.replace(/CSS_FILE/, newFilename);
+          }
+        }
       }
     },
 
@@ -245,7 +256,7 @@ module.exports = function (grunt) {
 
   // minify code and css, ready for release.
   grunt.registerTask('build', ['copy:distDepsRequire', 'shell:webpackrelease',
-    'md5:bundlejs', 'template:release']);
+    'md5:bundlejs', 'md5:css', 'template:release']);
   /*
    * Build the app in either dev, debug, or release mode
    */
