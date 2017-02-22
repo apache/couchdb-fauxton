@@ -69,9 +69,9 @@ export const removeCredentialsFromUrl = (url) => {
     return url;
   }
 
-  const protocal = url.startsWith("https") ? "https://" : 'http://';
+  const protocol = url.startsWith("https") ? "https://" : 'http://';
   const cleanUrl = url.slice(index + 1);
-  return protocal + cleanUrl;
+  return protocol + cleanUrl;
 };
 
 export const getSource = ({
