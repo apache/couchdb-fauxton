@@ -10,6 +10,7 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+import 'url-polyfill';
 import Constants from './constants';
 import app from '../../app';
 import FauxtonAPI from '../../core/api';
@@ -41,6 +42,38 @@ export const getAuthHeaders = (username, password) => {
   };
 };
 
+export const getCredentialsFromUrl = (url) => {
+  const index = url.lastIndexOf('@');
+  if (index === -1) {
+    return {
+      username: '',
+      password: ''
+    };
+  }
+
+  const startIndex = url.startsWith("https") ? 8 : 7;
+  const rawCreds = url.slice(startIndex, index);
+  const colonIndex = rawCreds.indexOf(':');
+  const username = rawCreds.slice(0, colonIndex);
+  const password = rawCreds.slice(colonIndex + 1, rawCreds.length);
+
+  return {
+    username,
+    password
+  };
+};
+
+export const removeCredentialsFromUrl = (url) => {
+  const index = url.lastIndexOf('@');
+  if (index === -1) {
+    return url;
+  }
+
+  const protocol = url.startsWith("https") ? "https://" : 'http://';
+  const cleanUrl = url.slice(index + 1);
+  return protocol + cleanUrl;
+};
+
 export const getSource = ({
   replicationSource,
   localSource,
@@ -49,13 +82,19 @@ export const getSource = ({
   password
 },
 {origin} = window.location) => {
-  let url = remoteSource;
+  let url;
+  let headers;
   if (replicationSource === Constants.REPLICATION_SOURCE.LOCAL) {
     url = `${origin}/${localSource}`;
+    headers = getAuthHeaders(username, password);
+  } else {
+    const credentials = getCredentialsFromUrl(remoteSource);
+    headers = getAuthHeaders(credentials.username, credentials.password);
+    url = removeCredentialsFromUrl(remoteSource);
   }
 
   return {
-    headers: getAuthHeaders(username, password),
+    headers,
     url: encodeFullUrl(url)
   };
 };
@@ -78,9 +117,9 @@ export const getTarget = ({
   if (replicationTarget === Constants.REPLICATION_TARGET.NEW_REMOTE_DATABASE ||
         replicationTarget === Constants.REPLICATION_TARGET.EXISTING_REMOTE_DATABASE) {
 
-    const targetUrl = new URL(remoteTarget);
-    target = encodeFullUrl(remoteTarget);
-    headers = getAuthHeaders(targetUrl.username, targetUrl.password);
+    const credentials = getCredentialsFromUrl(remoteTarget);
+    target = encodeFullUrl(removeCredentialsFromUrl(remoteTarget));
+    headers = getAuthHeaders(credentials.username, credentials.password);
   }
 
   return {
