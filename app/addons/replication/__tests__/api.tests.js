@@ -18,7 +18,9 @@ import {
   addDocIdAndRev,
   getDocUrl,
   encodeFullUrl,
-  decodeFullUrl
+  decodeFullUrl,
+  getCredentialsFromUrl,
+  removeCredentialsFromUrl
 } from '../api';
 import Constants from '../constants';
 
@@ -51,6 +53,19 @@ describe('Replication API', () => {
       assert.deepEqual(source.headers, {Authorization:"Basic dGhlLXVzZXI6cGFzc3dvcmQ="});
       assert.ok(/my%2Fdb/.test(source.url));
     });
+
+    it('returns remote source url and auth header', () => {
+      const source = getSource({
+        replicationSource: Constants.REPLICATION_SOURCE.REMOTE,
+        remoteSource: 'http://eddie:my-password@my-couchdb.com/my-db',
+        localSource: "local",
+        username: 'the-user',
+        password: 'password'
+      }, {origin: 'http://dev:6767'});
+
+      assert.deepEqual(source.headers, {Authorization:"Basic ZWRkaWU6bXktcGFzc3dvcmQ="});
+      assert.deepEqual('http://my-couchdb.com/my-db', source.url);
+    });
   });
 
   describe('getTarget', () => {
@@ -62,6 +77,19 @@ describe('Replication API', () => {
         replicationTarget: Constants.REPLICATION_TARGET.NEW_REMOTE_DATABASE,
         remoteTarget: remoteTarget
       }).url);
+    });
+
+    it("encodes username and password for remote", () => {
+      const remoteTarget = 'http://jimi:my-password@remote-couchdb.com/my/db';
+      const target = getTarget({
+        replicationTarget: Constants.REPLICATION_TARGET.NEW_REMOTE_DATABASE,
+        remoteTarget: remoteTarget,
+        username: 'fake',
+        password: 'fake'
+      });
+
+      assert.deepEqual(target.url, 'http://remote-couchdb.com/my%2Fdb');
+      assert.deepEqual(target.headers, {Authorization:"Basic amltaTpteS1wYXNzd29yZA=="});
     });
 
     it('returns existing local database', () => {
@@ -122,6 +150,7 @@ describe('Replication API', () => {
       assert.deepEqual("http://dev:8000/my-new%2Fdb", target.url);
       assert.deepEqual({}, target.headers);
     });
+
   });
 
   describe('continuous', () => {
@@ -209,4 +238,46 @@ describe('Replication API', () => {
 
   });
 
+  describe("getCredentialsFromUrl", () => {
+
+    it("can get username and password", () => {
+      const {username, password } = getCredentialsFromUrl("https://bob:marley@my-couchdb.com/db");
+
+      assert.deepEqual(username, 'bob');
+      assert.deepEqual(password, 'marley');
+    });
+
+    it("can get username and password with special characters", () => {
+      const {username, password } = getCredentialsFromUrl("http://bob:m@:/rley@my-couchdb.com/db");
+
+      assert.deepEqual(username, 'bob');
+      assert.deepEqual(password, 'm@:/rley');
+    });
+
+    it("returns nothing for no username and password", () => {
+      const {username, password } = getCredentialsFromUrl("http://my-couchdb.com/db");
+
+      assert.deepEqual(username, '');
+      assert.deepEqual(password, '');
+    });
+  });
+
+  describe("removeCredentialsFromUrl", () => {
+
+    it("can remove username and password", () => {
+      const url = removeCredentialsFromUrl("https://bob:marley@my-couchdb.com/db");
+      assert.deepEqual(url, 'https://my-couchdb.com/db');
+    });
+
+    it("returns url if no password", () => {
+      const url = removeCredentialsFromUrl("https://my-couchdb.com/db");
+      assert.deepEqual(url, 'https://my-couchdb.com/db');
+    });
+
+    it("can remove username and password with special characters", () => {
+      const url = removeCredentialsFromUrl("https://bob:m@:/rley@my-couchdb.com/db");
+      assert.deepEqual(url, 'https://my-couchdb.com/db');
+    });
+
+  });
 });

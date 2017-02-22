@@ -37,7 +37,7 @@
     "redux-devtools": "^3.3.1",
     "redux-mock-store": "^1.2.1",
     "sinon": "git+https://github.com/sinonjs/sinon.git",
-    "url-polyfill": "github/url-polyfill"
+    "url-polyfill": "git+https://github.com/webcomponents/URL.git"
   },
   "dependencies": {
     "async": "~0.2.6",

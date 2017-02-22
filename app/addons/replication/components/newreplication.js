@@ -163,8 +163,8 @@ export default class NewReplicationController extends React.Component {
       replicationDocName,
       username,
       password,
-      localTarget: localTarget,
-      localSource: localSource,
+      localTarget,
+      localSource,
       remoteTarget,
       remoteSource,
       _rev
