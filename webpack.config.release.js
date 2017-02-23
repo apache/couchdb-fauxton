@@ -70,7 +70,9 @@ module.exports = {
       loader: "expose?Backbone"
     },
     { test: /\.less/,
-      loader: ExtractTextPlugin.extract("style-loader", "css-loader!less-loader")
+      loader: ExtractTextPlugin.extract("style-loader", "css-loader!less-loader", {
+        publicPath: '../../'
+      }),
     },
     { test: /\.css$/, loader: 'style!css' },
     {

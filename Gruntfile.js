@@ -211,7 +211,7 @@ module.exports = function (grunt) {
       },
 
       css: {
-        files: { 'dist/release/': 'dist/release/styles.css' },
+        files: { 'dist/release/dashboard.assets/css/': 'dist/release/styles.css' },
         options: {
           afterEach: function (fileChanges) {
             // replace the CSS_FILE placeholder with the actual filename
