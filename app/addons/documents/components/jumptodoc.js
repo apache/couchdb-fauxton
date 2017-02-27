@@ -10,7 +10,6 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import app from "../../../app";
 import FauxtonAPI from "../../../core/api";
 import React from "react";
 import ReactDOM from "react-dom";
@@ -28,7 +27,7 @@ const JumpToDoc = ({database, loadOptions}) => {
         ignoreCase={false}
         cache={false}
         onChange={({value: docId}) => {
-          const url = FauxtonAPI.urls('document', 'app', app.utils.safeURLName(database.id), app.utils.safeURLName(docId));
+          const url = FauxtonAPI.urls('document', 'app', encodeURIComponent(database.id), encodeURIComponent(docId));
           // We navigating away from the page. So we need to take that navigation out of the loop otherwise
           // it causes an issue where the react-select state is changed after its unmounted
           setTimeout(() => FauxtonAPI.navigate(url, {trigger: true}));

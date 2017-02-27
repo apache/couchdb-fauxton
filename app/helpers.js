@@ -26,8 +26,6 @@ var Helpers = {};
 
 Helpers.removeSpecialCharacters = utils.removeSpecialCharacters;
 
-Helpers.safeURL = utils.safeURLName;
-
 Helpers.imageUrl = function (path) {
   // TODO: add dynamic path for different deploy targets
   return path;

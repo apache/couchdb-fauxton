@@ -11,7 +11,6 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import app from "../../../app";
 import FauxtonAPI from "../../../core/api";
 import ActionTypes from "./actiontypes";
 import Stores from "./stores";
@@ -59,7 +58,7 @@ export default {
     }
 
     const query = $.param(params);
-    const db = app.utils.safeURLName(changesStore.getDatabaseName());
+    const db = encodeURIComponent(changesStore.getDatabaseName());
     const endpoint = FauxtonAPI.urls('changes', 'server', db, '?' + query);
     currentRequest = $.getJSON(endpoint);
     currentRequest.then(this.updateChanges.bind(this));

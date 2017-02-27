@@ -155,7 +155,7 @@ export default {
           type: 'success',
           clear: true
         });
-        var route = FauxtonAPI.urls('allDocs', 'app', app.utils.safeURLName(databaseName), '?limit=' + Resources.DocLimit);
+        var route = FauxtonAPI.urls('allDocs', 'app', encodeURIComponent(databaseName), '?limit=' + Resources.DocLimit);
         app.router.navigate(route, { trigger: true });
       }
     ).error(function (xhr) {
@@ -176,7 +176,7 @@ export default {
 
     databaseName = databaseName.trim();
 
-    const url = FauxtonAPI.urls('allDocs', 'app', app.utils.safeURLName(databaseName), '');
+    const url = FauxtonAPI.urls('allDocs', 'app', encodeURIComponent(databaseName), '');
     // use the next cpu tick to allow react-select to unmount prorperly
     return setTimeout(() => { FauxtonAPI.navigate(url); });
   },

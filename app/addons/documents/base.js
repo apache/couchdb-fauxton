@@ -78,7 +78,7 @@ FauxtonAPI.registerUrls('designDocs', {
   },
 
   app: function (id, designDoc) {
-    return 'database/' + id + '/_design/' + app.utils.safeURLName(designDoc) + '/_info';
+    return 'database/' + id + '/_design/' + encodeURIComponent(designDoc) + '/_info';
   },
 
   apiurl: function (id, designDoc) {

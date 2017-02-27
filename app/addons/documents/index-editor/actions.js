@@ -10,7 +10,6 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import app from "../../../app";
 import FauxtonAPI from "../../../core/api";
 import Documents from "../resources";
 import ActionTypes from "./actiontypes";
@@ -98,7 +97,7 @@ function saveView (viewInfo) {
     }
 
     FauxtonAPI.dispatch({ type: ActionTypes.VIEW_SAVED });
-    var fragment = FauxtonAPI.urls('view', 'showView', viewInfo.database.safeID(), designDoc.safeID(), app.utils.safeURLName(viewInfo.viewName));
+    var fragment = FauxtonAPI.urls('view', 'showView', viewInfo.database.safeID(), designDoc.safeID(), encodeURIComponent(viewInfo.viewName));
     FauxtonAPI.navigate(fragment, { trigger: true });
   }, (xhr) => {
     FauxtonAPI.addNotification({
