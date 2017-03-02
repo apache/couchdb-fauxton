@@ -10,7 +10,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 import FauxtonAPI from "../../../../core/api";
-import Views from "../components.react";
+import Burger from "../components/Burger";
+import NavBar from "../components/NavBar";
 import Actions from "../actions";
 import Auth from "../../../../core/auth";
 import BaseAuth from "../../../auth/base";
@@ -28,7 +29,7 @@ describe('NavBar', function () {
   describe('burger', function () {
     it('dispatch TOGGLE_NAVBAR_MENU on click', function () {
       const toggleMenu = sinon.spy();
-      const burgerEl = mount(<Views.Burger toggleMenu={toggleMenu} />);
+      const burgerEl = mount(<Burger toggleMenu={toggleMenu} />);
       burgerEl.simulate('click');
       assert.ok(toggleMenu.calledOnce);
     });
@@ -42,7 +43,7 @@ describe('NavBar', function () {
     sinon.stub(FauxtonAPI.session, 'user').returns({ name: 'test-user' });
     BaseAuth.initialize();
 
-    const el = mount(<Views.NavBar />);
+    const el = mount(<NavBar />);
 
     FauxtonAPI.session.trigger('change');
 

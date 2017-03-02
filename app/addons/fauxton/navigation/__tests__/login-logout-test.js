@@ -73,8 +73,8 @@ describe('Navigation Bar', () => {
 
     const navBar = mount(<NavBar {...props} />);
 
-    expect(/Login/.test(navBar.text())).toBe(false);
-    expect(/Log Out/.test(navBar.text())).toBe(false);
+    expect(navBar.text()).not.toMatch(/Login/);
+    expect(navBar.text()).not.toMatch(/Log Out/);
   });
 
 });
