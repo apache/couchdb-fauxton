@@ -70,12 +70,16 @@ export default class Activity extends React.Component {
     const {modalVisible} = this.state;
     return (
       <div className="replication__activity">
-        <p>Only active jobs triggered through the _replicate endpoint </p>
+        <p>
+          Only active jobs triggered through the _replicate endpoint are displayed below.
+          &nbsp;Jobs that have completed or failed are not displayed
+        </p>
         <ReplicationHeader
           filter={filter}
           onFilterChange={onFilterChange}
         />
         <ReplicationTable
+          onlyDeleteAction={true}
           someDocsSelected={someDocsSelected}
           allDocsSelected={allDocsSelected}
           selectAllDocs={selectAllDocs}

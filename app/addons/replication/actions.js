@@ -14,7 +14,7 @@ import FauxtonAPI from '../../core/api';
 import ActionTypes from './actiontypes';
 import Helpers from './helpers';
 import Constants from './constants';
-import {supportNewApi, createReplicationDoc, fetchReplicateInfo, fetchReplicationDocs, decodeFullUrl} from './api';
+import {supportNewApi, createReplicationDoc, fetchReplicateInfo, fetchReplicationDocs, decodeFullUrl, deleteReplicatesApi} from './api';
 import $ from 'jquery';
 
 
@@ -109,7 +109,6 @@ const getReplicateActivity = () => {
   });
 
   fetchReplicateInfo().then(replicateInfo => {
-    console.log('replicate info', replicateInfo);
     FauxtonAPI.dispatch({
       type: ActionTypes.REPLICATION_REPLICATE_STATUS,
       options: replicateInfo
@@ -120,6 +119,13 @@ const getReplicateActivity = () => {
 const filterDocs = (filter) => {
   FauxtonAPI.dispatch({
     type: ActionTypes.REPLICATION_FILTER_DOCS,
+    options: filter
+  });
+};
+
+const filterReplicate = (filter) => {
+  FauxtonAPI.dispatch({
+    type: ActionTypes.REPLICATION_FILTER_REPLICATE,
     options: filter
   });
 };
@@ -137,9 +143,28 @@ const selectDoc = (id) => {
   });
 };
 
+const selectAllReplicates = () => {
+  FauxtonAPI.dispatch({
+    type: ActionTypes.REPLICATION_TOGGLE_ALL_REPLICATE
+  });
+};
+
+const selectReplicate = (id) => {
+  FauxtonAPI.dispatch({
+    type: ActionTypes.REPLICATION_TOGGLE_REPLICATE,
+    options: id
+  });
+};
+
 const clearSelectedDocs = () => {
   FauxtonAPI.dispatch({
     type: ActionTypes.REPLICATION_CLEAR_SELECTED_DOCS
+  });
+};
+
+const clearSelectedReplicates = () => {
+  FauxtonAPI.dispatch({
+    type: ActionTypes.REPLICATION_CLEAR_SELECTED_REPLICATES
   });
 };
 
@@ -176,6 +201,41 @@ const deleteDocs = (docs) => {
     });
     clearSelectedDocs();
     getReplicationActivity();
+  }, (xhr) => {
+    const errorMessage = JSON.parse(xhr.responseText);
+    FauxtonAPI.addNotification({
+      msg: errorMessage.reason,
+      type: 'error',
+      clear: true
+    });
+  });
+};
+
+const deleteReplicates = (replicates) => {
+  console.log('ss', replicates);
+  FauxtonAPI.addNotification({
+    msg: `Deleting _replicate${replicates.length > 1 ? 's' : ''}.`,
+    type: 'success',
+    escape: false,
+    clear: true
+  });
+
+  deleteReplicatesApi(replicates)
+  .then(() => {
+    let msg = 'The selected replications have been deleted.';
+    if (replicates.length === 1) {
+      msg = `Replication <code>${replicates[0]._id}</code> has been deleted`;
+    }
+
+    clearSelectedReplicates();
+    getReplicateActivity();
+
+    FauxtonAPI.addNotification({
+      msg: msg,
+      type: 'success',
+      escape: false,
+      clear: true
+    });
   }, (xhr) => {
     const errorMessage = JSON.parse(xhr.responseText);
     FauxtonAPI.addNotification({
@@ -291,5 +351,9 @@ export default {
   changeActivitySort,
   clearSelectedDocs,
   changeTabSection,
-  getReplicateActivity
+  getReplicateActivity,
+  filterReplicate,
+  selectReplicate,
+  selectAllReplicates,
+  deleteReplicates
 };

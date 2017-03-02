@@ -36,7 +36,6 @@ const ReplicationStore = FauxtonAPI.Store.extend({
   },
 
   reset () {
-    console.log('re');
     this._loading = false;
     this._databases = [];
     this._authenticated = false;
@@ -61,7 +60,9 @@ const ReplicationStore = FauxtonAPI.Store.extend({
     this._statusDocs = [];
     this._statusFilteredStatusDocs = [];
     this._statusFilter = '';
+    this._replicateFilter = '';
     this._allDocsSelected = false;
+    this._allReplicateSelected = false;
     this._username = '';
     this._password = '';
     this._activityLoading = false;
@@ -90,13 +91,14 @@ const ReplicationStore = FauxtonAPI.Store.extend({
   },
 
   loadActivitySort () {
-    let sort = app.utils.localStorageGet('replication-activity-sort');
-    if (!sort) {
-      sort = {
+    const defaultSort = {
         descending: false,
         column: 'statusTime'
       };
+    let sort = app.utils.localStorageGet('replication-activity-sort');
 
+    if (!sort) {
+      sort = defaultSort;
       this.setActivitySort(sort);
     }
 
@@ -113,7 +115,12 @@ const ReplicationStore = FauxtonAPI.Store.extend({
   },
 
   getReplicateInfo () {
-    return this._replicateInfo;
+    return this._replicateInfo.filter(doc => {
+      return _.values(doc).filter(item => {
+        if (!item) {return null;}
+        return item.toString().toLowerCase().match(this._replicateFilter);
+      }).length > 0;
+    });
   },
 
   setReplicateInfo (info) {
@@ -220,6 +227,29 @@ const ReplicationStore = FauxtonAPI.Store.extend({
     this._allDocsSelected = false;
   },
 
+  selectReplicate (id) {
+    const doc = this._replicateInfo.find(doc => doc._id === id);
+    if (!doc) {
+      return;
+    }
+
+    doc.selected = !doc.selected;
+    this._allReplicateSelected = false;
+  },
+
+  selectAllReplicate () {
+    this._allReplicateSelected = !this._allReplicateSelected;
+    this.getReplicateInfo().forEach(doc => doc.selected = this._allReplicateSelected);
+  },
+
+  someReplicateSelected () {
+    return this.getReplicateInfo().some(doc => doc.selected);
+  },
+
+  getAllReplicateSelected () {
+    return this._allReplicateSelected;
+  },
+
   selectAllDocs () {
     this._allDocsSelected = !this._allDocsSelected;
     this.getFilteredReplicationStatus().forEach(doc => doc.selected = this._allDocsSelected);
@@ -239,6 +269,14 @@ const ReplicationStore = FauxtonAPI.Store.extend({
 
   getStatusFilter () {
     return this._statusFilter;
+  },
+
+  setReplicateFilter (filter) {
+    this._replicateFilter = filter;
+  },
+
+  getReplicateFilter () {
+    return this._replicateFilter;
   },
   // to cut down on boilerplate
   updateFormField (fieldName, value) {
@@ -328,12 +366,24 @@ const ReplicationStore = FauxtonAPI.Store.extend({
         this.setStatusFilter(options);
       break;
 
+      case ActionTypes.REPLICATION_FILTER_REPLICATE:
+        this.setReplicateFilter(options);
+      break;
+
       case ActionTypes.REPLICATION_TOGGLE_DOC:
         this.selectDoc(options);
       break;
 
       case ActionTypes.REPLICATION_TOGGLE_ALL_DOCS:
         this.selectAllDocs();
+      break;
+
+      case ActionTypes.REPLICATION_TOGGLE_REPLICATE:
+        this.selectReplicate(options);
+      break;
+
+      case ActionTypes.REPLICATION_TOGGLE_ALL_REPLICATE:
+        this.selectAllReplicate();
       break;
 
       case ActionTypes.REPLICATION_SET_STATE_FROM_DOC:
@@ -376,6 +426,10 @@ const ReplicationStore = FauxtonAPI.Store.extend({
       case ActionTypes.REPLICATION_REPLICATE_STATUS:
         this._fetchingReplicateInfo = false;
         this.setReplicateInfo(options);
+      break;
+
+      case ActionTypes.REPLICATION_CLEAR_SELECTED_REPLICATES:
+        this._allReplicateSelected = false;
       break;
 
       case AccountActionTypes.AUTH_SHOW_PASSWORD_MODAL:

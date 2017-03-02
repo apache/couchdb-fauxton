@@ -59,6 +59,7 @@ export default class ReplicationController extends React.Component {
       submittedNoChange: store.getSubmittedNoChange(),
       statusDocs: store.getFilteredReplicationStatus(),
       statusFilter: store.getStatusFilter(),
+      replicateFilter: store.getReplicateFilter(),
       allDocsSelected: store.getAllDocsSelected(),
       someDocsSelected:  store.someDocsSelected(),
       username: store.getUsername(),
@@ -68,18 +69,24 @@ export default class ReplicationController extends React.Component {
       checkingApi: store.checkingAPI(),
       supportNewApi: store.supportNewApi(),
       replicateLoading: store.isReplicateInfoLoading(),
-      replicateInfo: store.getReplicateInfo()
+      replicateInfo: store.getReplicateInfo(),
+      allReplicateSelected: store.getAllReplicateSelected(),
+      someReplicateSelected: store.someReplicateSelected()
     };
   }
 
   loadReplicationInfo (props, oldProps) {
     Actions.initReplicator(props.localSource);
-    Actions.getReplicationActivity();
-    Actions.getReplicateActivity();
+    this.getAllActivity();
     if (props.replicationId && props.replicationId !== oldProps.replicationId) {
       Actions.clearReplicationForm();
       Actions.getReplicationStateFrom(props.replicationId);
     }
+  }
+
+  getAllActivity () {
+    Actions.getReplicationActivity();
+    Actions.getReplicateActivity();
   }
 
   componentDidMount () {
@@ -107,7 +114,7 @@ export default class ReplicationController extends React.Component {
       localTarget, statusDocs, statusFilter, loading, allDocsSelected,
       someDocsSelected, showConflictModal, localSourceKnown, localTargetKnown,
       username, password, authenticated, activityLoading, submittedNoChange, activitySort, tabSection,
-      replicateInfo, replicateLoading
+      replicateInfo, replicateLoading, replicateFilter, allReplicateSelected, someReplicateSelected
     } = this.state;
 
     if (tabSection === 'new replication') {
@@ -155,19 +162,18 @@ export default class ReplicationController extends React.Component {
         return <LoadLines />;
       }
 
-      console.log('rrrrrr', replicateInfo);
       return <ReplicateActivity
         docs={replicateInfo}
-        filter={statusFilter}
-        onFilterChange={Actions.filterDocs}
-        selectAllDocs={Actions.selectAllDocs}
-        selectDoc={Actions.selectDoc}
-        selectAllDocs={Actions.selectAllDocs}
-        allDocsSelected={allDocsSelected}
-        someDocsSelected={someDocsSelected}
+        filter={replicateFilter}
+        onFilterChange={Actions.filterReplicate}
+        selectDoc={Actions.selectReplicate}
+        selectAllDocs={Actions.selectAllReplicates}
+        allDocsSelected={allReplicateSelected}
+        someDocsSelected={someReplicateSelected}
         deleteDocs={Actions.deleteDocs}
         activitySort={activitySort}
         changeActivitySort={Actions.changeActivitySort}
+        deleteDocs={Actions.deleteReplicates}
         />;
     }
 
@@ -202,10 +208,10 @@ export default class ReplicationController extends React.Component {
           max={600}
           startValue={300}
           stepSize={60}
-          onPoll={Actions.getReplicationActivity}
+          onPoll={this.getAllActivity.bind(this)}
           />
         <RefreshBtn
-          refresh={Actions.getReplicationActivity}
+          refresh={this.getAllActivity.bind(this)}
           />
       </div>
     );

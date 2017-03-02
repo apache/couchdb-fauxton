@@ -74,14 +74,20 @@ class RowStatus extends React.Component {
   render () {
     const {statusTime, status} = this.props;
     let momentTime = moment(statusTime);
-    const formattedStatusTime = momentTime.isValid() ? momentTime.format("MMM Do, h:mm a") : '';
-    const stateTimeTooltip = <Tooltip id="">Last updated: {formattedStatusTime}</Tooltip>;
+    let statusValue = <span>{status}</span>;
+
+    if (momentTime.isValid()) {
+      const formattedStatusTime = momentTime.format("MMM Do, h:mm a");
+      const stateTimeTooltip = <Tooltip id="">Last updated: {formattedStatusTime}</Tooltip>;
+      statusValue =
+        <OverlayTrigger placement="top" overlay={stateTimeTooltip}>
+          <span>{status}</span>
+        </OverlayTrigger>;
+    }
 
     return (
       <td className={`replication__row-status replication__row-status--${status}`}>
-        <OverlayTrigger placement="top" overlay={stateTimeTooltip}>
-          <span>{status}</span>
-        </OverlayTrigger>
+        {statusValue}
         {this.getErrorIcon()}
       </td>
     );
@@ -89,7 +95,7 @@ class RowStatus extends React.Component {
 };
 
 RowStatus.propTypes = {
-  statusTime: React.PropTypes.any.isRequired,
+  statusTime: React.PropTypes.any,
   status: React.PropTypes.string.isRequired,
   errorMsg: React.PropTypes.string.isRequired,
 };
@@ -140,7 +146,7 @@ const RowActions = ({onlyDeleteAction, _id, url, deleteDocs}) => {
 
 RowActions.propTypes = {
   _id: React.PropTypes.string.isRequired,
-  url: React.PropTypes.string.isRequired,
+  url: React.PropTypes.string,
   error: React.PropTypes.bool.isRequired,
   errorMsg: React.PropTypes.string.isRequired,
   deleteDocs: React.PropTypes.func.isRequired
@@ -197,9 +203,9 @@ Row.propTypes = {
   target: React.PropTypes.string.isRequired,
   type: React.PropTypes.string.isRequired,
   status: React.PropTypes.string,
-  url: React.PropTypes.string.isRequired,
+  url: React.PropTypes.string,
   statusTime: React.PropTypes.object.isRequired,
-  startTime: React.PropTypes.object.isRequired,
+  startTime: React.PropTypes.object,
   selected: React.PropTypes.bool.isRequired,
   selectDoc: React.PropTypes.func.isRequired,
   errorMsg: React.PropTypes.string.isRequired,
