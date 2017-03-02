@@ -280,8 +280,6 @@ const ReplicationStore = FauxtonAPI.Store.extend({
   },
   // to cut down on boilerplate
   updateFormField (fieldName, value) {
-
-
     this[validFieldMap[fieldName]] = value;
   },
 
@@ -340,6 +338,10 @@ const ReplicationStore = FauxtonAPI.Store.extend({
         this._loading = false;
       break;
 
+      case ActionTypes.REPLICATION_FETCHING_FORM_STATE:
+        this._loading = true;
+      break;
+
       case ActionTypes.REPLICATION_UPDATE_FORM_FIELD:
         this.changeAfterSubmit();
         this.updateFormField(options.fieldName, options.value);
@@ -387,6 +389,7 @@ const ReplicationStore = FauxtonAPI.Store.extend({
       break;
 
       case ActionTypes.REPLICATION_SET_STATE_FROM_DOC:
+        this._loading = false;
         this.setStateFromDoc(options);
       break;
 

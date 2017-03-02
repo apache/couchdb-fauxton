@@ -96,8 +96,12 @@ class RowStatus extends React.Component {
 
 RowStatus.propTypes = {
   statusTime: React.PropTypes.any,
-  status: React.PropTypes.string.isRequired,
+  status: React.PropTypes.string,
   errorMsg: React.PropTypes.string.isRequired,
+};
+
+RowStatus.defaultProps = {
+  status: ''
 };
 
 const RowActions = ({onlyDeleteAction, _id, url, deleteDocs}) => {

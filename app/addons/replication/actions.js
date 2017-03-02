@@ -247,6 +247,10 @@ const deleteReplicates = (replicates) => {
 };
 
 const getReplicationStateFrom = (id) => {
+  FauxtonAPI.dispatch({
+    type: ActionTypes.REPLICATION_FETCHING_FORM_STATE
+  });
+
   $.ajax({
     url: `${app.host}/_replicator/${encodeURIComponent(id)}`,
     contentType: 'application/json',
@@ -326,7 +330,6 @@ const changeTabSection = (newSection, url) => {
 
 const checkForNewApi = () => {
   supportNewApi().then(newApi => {
-    console.log('new api', newApi);
     FauxtonAPI.dispatch({
       type: ActionTypes.REPLICATION_SUPPORT_NEW_API,
       options: newApi
