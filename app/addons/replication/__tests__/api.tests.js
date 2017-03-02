@@ -17,13 +17,37 @@ import {
   createTarget,
   addDocIdAndRev,
   getDocUrl,
-  combineDocsAndScheduler
+  encodeFullUrl,
+  decodeFullUrl,
+  getCredentialsFromUrl,
+  removeCredentialsFromUrl,
+  removeSensitiveUrlInfo
 } from '../api';
 import Constants from '../constants';
 
 const assert = utils.assert;
 
 describe('Replication API', () => {
+
+  describe("removeSensiteiveUrlInfo", () => {
+    it('removes password username', () => {
+        const url = 'http://tester:testerpass@127.0.0.1/fancy/db/name';
+
+        const res = removeSensitiveUrlInfo(url);
+
+        expect(res).toBe('http://127.0.0.1/fancy/db/name');
+      });
+
+      // see https://issues.apache.org/jira/browse/COUCHDB-3257
+      // CouchDB accepts and returns invalid urls
+      it('does not throw on invalid urls', () => {
+        const url = 'http://tester:tes#terpass@127.0.0.1/fancy/db/name';
+
+        const res = removeSensitiveUrlInfo(url);
+
+        expect(res).toBe('http://tester:tes#terpass@127.0.0.1/fancy/db/name');
+      });
+  });
 
   describe('getSource', () => {
 
@@ -34,7 +58,7 @@ describe('Replication API', () => {
         remoteSource
       });
 
-      assert.deepEqual(source, 'http://remote-couchdb.com/my%2Fdb%2Fhere');
+      assert.deepEqual(source.url, 'http://remote-couchdb.com/my%2Fdb%2Fhere');
     });
 
     it('returns local source with auth info and encoded', () => {
@@ -45,10 +69,23 @@ describe('Replication API', () => {
         localSource,
         username: 'the-user',
         password: 'password'
-      });
+      }, {origin: 'http://dev:6767'});
 
       assert.deepEqual(source.headers, {Authorization:"Basic dGhlLXVzZXI6cGFzc3dvcmQ="});
       assert.ok(/my%2Fdb/.test(source.url));
+    });
+
+    it('returns remote source url and auth header', () => {
+      const source = getSource({
+        replicationSource: Constants.REPLICATION_SOURCE.REMOTE,
+        remoteSource: 'http://eddie:my-password@my-couchdb.com/my-db',
+        localSource: "local",
+        username: 'the-user',
+        password: 'password'
+      }, {origin: 'http://dev:6767'});
+
+      assert.deepEqual(source.headers, {Authorization:"Basic ZWRkaWU6bXktcGFzc3dvcmQ="});
+      assert.deepEqual('http://my-couchdb.com/my-db', source.url);
     });
   });
 
@@ -60,7 +97,20 @@ describe('Replication API', () => {
       assert.deepEqual("http://remote-couchdb.com/my%2Fdb", getTarget({
         replicationTarget: Constants.REPLICATION_TARGET.NEW_REMOTE_DATABASE,
         remoteTarget: remoteTarget
-      }));
+      }).url);
+    });
+
+    it("encodes username and password for remote", () => {
+      const remoteTarget = 'http://jimi:my-password@remote-couchdb.com/my/db';
+      const target = getTarget({
+        replicationTarget: Constants.REPLICATION_TARGET.NEW_REMOTE_DATABASE,
+        remoteTarget: remoteTarget,
+        username: 'fake',
+        password: 'fake'
+      });
+
+      assert.deepEqual(target.url, 'http://remote-couchdb.com/my%2Fdb');
+      assert.deepEqual(target.headers, {Authorization:"Basic amltaTpteS1wYXNzd29yZA=="});
     });
 
     it('returns existing local database', () => {
@@ -95,11 +145,33 @@ describe('Replication API', () => {
         localTarget: 'my-new/db',
         username: 'the-user',
         password: 'password'
-      });
+      }, {origin: 'http://dev:5555'});
 
-      assert.ok(/the-user:password@/.test(target));
-      assert.ok(/my-new%2Fdb/.test(target));
+      assert.deepEqual(target.headers, {Authorization:"Basic dGhlLXVzZXI6cGFzc3dvcmQ="});
+      assert.ok(/my-new%2Fdb/.test(target.url));
     });
+
+    it("doesn't encode username and password if it is not supplied", () => {
+      const location = {
+        host: "dev:8000",
+        hostname: "dev",
+        href: "http://dev:8000/#database/animaldb/_all_docs",
+        origin: "http://dev:8000",
+        pathname: "/",
+        port: "8000",
+        protocol: "http:",
+      };
+
+      const target = getTarget({
+        replicationTarget: Constants.REPLICATION_TARGET.NEW_LOCAL_DATABASE,
+        replicationSource: Constants.REPLICATION_SOURCE.REMOTE,
+        localTarget: 'my-new/db'
+      }, location);
+
+      assert.deepEqual("http://dev:8000/my-new%2Fdb", target.url);
+      assert.deepEqual({}, target.headers);
+    });
+
   });
 
   describe('continuous', () => {
@@ -166,86 +238,67 @@ describe('Replication API', () => {
     });
   });
 
-  describe("combine docs and schedulerDocs", () => {
-    const docs = [
-      {
-        "_id": "4cb18c43bf16b2f953026d4fd100073e",
-        "_rev": "5-1163fecc6516aae02e031153ab4d5d19",
-        "selected": false,
-        "source": "https://examples.couchdb.com/db1",
-        "target": "https://examples.couchdb.com/db1-rep",
-        "createTarget": true,
-        "continuous": false,
-        "status": "error",
-        "errorMsg": "unauthorized: unauthorized to access or create database https://examples.couchdb.com/db1/",
-        "statusTime": null,
-        "url": "#/database/_replicator/4cb18c43bf16b2f953026d4fd100073e",
-      },
-      {
-        "_id": "c6540e08dafbcbb3800c25ab12000e75",
-        "_rev": "3-386a0e83182f1ebff5c269e141e796b2",
-        "selected": false,
-        "source": "https://examples.couchdb.com/animaldb",
-        "target": "https://examples.couchdb.com/animaldb-rep",
-        "createTarget": true,
-        "continuous": false,
-        "status": "completed",
-        "errorMsg": "",
-        "statusTime": null,
-        "url": "#/database/_replicator/c6540e08dafbcbb3800c25ab12000e75"
-      }];
+  describe("encodeFullUrl", () => {
+    it("encodes db correctly", () => {
+      const url = "http://dev:5984/boom/aaaa";
+      const encodedUrl = encodeFullUrl(url);
 
-      const schedulerDocs = [{
-          "database": "_replicator",
-          "doc_id": "4cb18c43bf16b2f953026d4fd100073e",
-          "id": "d5e24c90d8578f5c6eb043be147b3e39+create_target",
-          "node": "node@couchdb",
-          "source": "https://examples.couchdb.com/db1/",
-          "target": "https://examples.couchdb.com/db1-rep",
-          "state": "crashing",
-          "info": "unauthorized: unauthorized to access or create database https://examples.couchdb.com/db1/",
-          "error_count": 10,
-          "last_updated": "2017-01-23T06:17:06Z",
-          "start_time": "2017-01-16T11:38:24Z",
-          "proxy": null
-        },
-        {
-          "database": "_replicator",
-          "doc_id": "c6540e08dafbcbb3800c25ab12000e75",
-          "id": null,
-          "state": "completed",
-          "error_count": 0,
-          "info": {
-            "revisions_checked": 15,
-            "missing_revisions_found": 15,
-            "docs_read": 15,
-            "docs_written": 15,
-            "changes_pending": null,
-            "doc_write_failures": 0,
-            "checkpointed_source_seq": "44-g1AAAAGweJytz10KgkAQB_AhhYLqDnUBURyVnvIqM7trJn6AbM91s7rZtm0RIiI99DIDw8z_x9QA4JeehL1k0fUqlxyFQaP6s6aTCkTdXSS1OmiVru3qgoCPxpiq9Gjb2MEyOaBiUUjYfQOS6fuREs8onNvK1w-0cVAsEENMfskYSTgjtb6tcLPNYveXtnYaypQL5OFb2Z-wxxtzr60clhYUZURDLJqOqZ6FHoyT"
-          },
-          "last_updated": "2017-01-16T11:38:04Z",
-          "start_time": "2017-01-16T11:38:02Z"
-        }
-      ];
+      assert.deepEqual("http://dev:5984/boom%2Faaaa", encodedUrl);
+    });
 
-      it("should parse and join the docs correctly", () => {
-        const clonedDocs = docs.map(d => Object.assign({}, d));
-        const [doc1, doc2] = combineDocsAndScheduler(clonedDocs, schedulerDocs);
-
-        assert.deepEqual(doc2.status, "completed");
-
-        assert.deepEqual(doc1.status, "crashing");
-        assert.deepEqual(doc1.startTime, new Date("2017-01-16T11:38:24Z"));
-        assert.deepEqual(doc1.stateTime, new Date("2017-01-23T06:17:06Z"));
-      });
-
-      it("won't crash on no scheduler docs", () => {
-        const [doc1, doc2] = combineDocsAndScheduler(docs, []);
-
-        assert.deepEqual(doc2.status, "completed");
-        assert.deepEqual(doc1.status, "error");
-      });
   });
 
+  describe("decodeFullUrl", () => {
+
+    it("encodes db correctly", () => {
+      const url = "http://dev:5984/boom%2Faaaa";
+      const encodedUrl = decodeFullUrl(url);
+
+      assert.deepEqual("http://dev:5984/boom/aaaa", encodedUrl);
+    });
+
+  });
+
+  describe("getCredentialsFromUrl", () => {
+
+    it("can get username and password", () => {
+      const {username, password } = getCredentialsFromUrl("https://bob:marley@my-couchdb.com/db");
+
+      assert.deepEqual(username, 'bob');
+      assert.deepEqual(password, 'marley');
+    });
+
+    it("can get username and password with special characters", () => {
+      const {username, password } = getCredentialsFromUrl("http://bob:m@:/rley@my-couchdb.com/db");
+
+      assert.deepEqual(username, 'bob');
+      assert.deepEqual(password, 'm@:/rley');
+    });
+
+    it("returns nothing for no username and password", () => {
+      const {username, password } = getCredentialsFromUrl("http://my-couchdb.com/db");
+
+      assert.deepEqual(username, '');
+      assert.deepEqual(password, '');
+    });
+  });
+
+  describe("removeCredentialsFromUrl", () => {
+
+    it("can remove username and password", () => {
+      const url = removeCredentialsFromUrl("https://bob:marley@my-couchdb.com/db");
+      assert.deepEqual(url, 'https://my-couchdb.com/db');
+    });
+
+    it("returns url if no password", () => {
+      const url = removeCredentialsFromUrl("https://my-couchdb.com/db");
+      assert.deepEqual(url, 'https://my-couchdb.com/db');
+    });
+
+    it("can remove username and password with special characters", () => {
+      const url = removeCredentialsFromUrl("https://bob:m@:/rley@my-couchdb.com/db");
+      assert.deepEqual(url, 'https://my-couchdb.com/db');
+    });
+
+  });
 });
