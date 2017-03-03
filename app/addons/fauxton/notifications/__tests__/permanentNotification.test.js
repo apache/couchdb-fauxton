@@ -20,25 +20,25 @@ import ReactDOM from "react-dom";
 const store = Stores.notificationStore;
 
 describe('PermanentNotification', () => {
-	beforeEach(() => {
-		store.reset();
-	});
+  beforeEach(() => {
+    store.reset();
+  });
 
-	it('doesn\'t render content when the display flag is false', () => {
-		const wrapper = mount(<PermanentNotification />);
-		expect(wrapper.find('.perma-warning__content').length).toBe(0);
-	});
+  it('doesn\'t render content when the display flag is false', () => {
+    const wrapper = mount(<PermanentNotification />);
+    expect(wrapper.find('.perma-warning__content').length).toBe(0);
+  });
 
-	it('renders content when the display flag is true', () => {
-		const wrapper = mount(<PermanentNotification />);
-		
-		FauxtonAPI.dispatch({
-			type: ActionTypes.SHOW_PERMANENT_NOTIFICATION,
-			options: {
-				msg: "Hello World!"
-			}
-		});
+  it('renders content when the display flag is true', () => {
+    const wrapper = mount(<PermanentNotification />);
+    
+    FauxtonAPI.dispatch({
+      type: ActionTypes.SHOW_PERMANENT_NOTIFICATION,
+      options: {
+        msg: "Hello World!"
+      }
+    });
 
-		expect(wrapper.find('.perma-warning__content').html()).toMatch(/Hello World!/);
-	});
+    expect(wrapper.find('.perma-warning__content').html()).toMatch(/Hello World!/);
+  });
 });
