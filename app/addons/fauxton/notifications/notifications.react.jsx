@@ -466,7 +466,7 @@ export class PermanentNotification extends React.Component {
       return;
     }
     return (
-      <span className="perma-warning__content" dangerouslySetInnerHTML={this.getMsg()}></span>
+      <p className="perma-warning__content" dangerouslySetInnerHTML={this.getMsg()}></p>
     );
   }
 

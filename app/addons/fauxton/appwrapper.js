@@ -50,7 +50,6 @@ class ContentWrapper extends React.Component {
 }
 
 const App = ({router}) => {
-  console.log(PermanentNotification);
   return (
     <div>
       <PermanentNotification />
