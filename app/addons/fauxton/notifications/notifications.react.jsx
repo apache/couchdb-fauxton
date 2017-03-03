@@ -435,6 +435,49 @@ var NotificationPanelRow = React.createClass({
   }
 });
 
+export class PermanentNotification extends React.Component {
+  constructor (props) {
+    super(props);
+    this.state = this.getStoreState();
+  }
+
+  getStoreState () {
+    return {
+      display: store.isPermanentNotificationVisible(),
+      msg: store.getPermanentNotificationMessage()
+    };
+  }
+
+  onChange () {
+    this.setState(this.getStoreState);
+  }
+
+  componentDidMount () {
+    store.on('change', this.onChange, this);
+  }
+
+  // many messages contain HTML, hence the need for dangerouslySetInnerHTML
+  getMsg () {
+    return {__html: this.state.msg};
+  }
+
+  getContent () {
+    if (!this.state.msg) {
+      return;
+    }
+    return (
+      <span className="perma-warning__content" dangerouslySetInnerHTML={this.getMsg()}></span>
+    );
+  }
+
+  render () {
+    return (
+      <div id="perma-warning">
+        {this.getContent()}
+      </div>
+    );
+  }
+};
 
 export default {
   NotificationController,
