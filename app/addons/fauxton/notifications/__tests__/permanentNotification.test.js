@@ -26,7 +26,7 @@ describe('PermanentNotification', () => {
 
 	it('doesn\'t render content when the display flag is false', () => {
 		const wrapper = mount(<PermanentNotification />);
-		expect(wrapper.find('p').length).toBe(0);
+		expect(wrapper.find('.perma-warning__content').length).toBe(0);
 	});
 
 	it('renders content when the display flag is true', () => {
@@ -39,7 +39,6 @@ describe('PermanentNotification', () => {
 			}
 		});
 
-		expect(wrapper.find('p').length).toBe(1);
-		expect(wrapper.find('p').html()).toMatch(/Hello World!/);
+		expect(wrapper.find('.perma-warning__content').html()).toMatch(/Hello World!/);
 	});
 });
