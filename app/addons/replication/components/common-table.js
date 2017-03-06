@@ -135,7 +135,7 @@ const RowActions = ({onlyDeleteAction, _id, url, deleteDocs}) => {
     <li className="replication__row-list" key={3}>
       <a
         className="replication__row-btn icon-trash"
-        title={`Delete document ${_id}`}
+        title={`Delete ${onlyDeleteAction ? 'job' : 'document'} ${_id}`}
         onClick={() => deleteDocs(_id)}>
       </a>
     </li>
@@ -169,10 +169,20 @@ const Row = ({
   selectDoc,
   errorMsg,
   deleteDocs,
-  onlyDeleteAction
+  onlyDeleteAction,
+  showStateRow
 }) => {
   let momentTime = moment(startTime);
   const formattedStartTime = momentTime.isValid() ? momentTime.format("MMM Do, h:mm a") : '';
+  let stateRow = null;
+
+  if (showStateRow) {
+    stateRow = <RowStatus
+        statusTime={statusTime}
+        status={status}
+        errorMsg={errorMsg}
+      />;
+  }
 
   return (
     <tr className="replication__table-row">
@@ -181,11 +191,7 @@ const Row = ({
       <td className="replication__table-col">{formatUrl(target)}</td>
       <td className="replication__table-col">{formattedStartTime}</td>
       <td className="replication__table-col">{type}</td>
-      <RowStatus
-        statusTime={statusTime}
-        status={status}
-        errorMsg={errorMsg}
-      />
+      {stateRow}
       <td className="replication__table-col">
         <RowActions
           onlyDeleteAction={onlyDeleteAction}
@@ -214,7 +220,8 @@ Row.propTypes = {
   selectDoc: React.PropTypes.func.isRequired,
   errorMsg: React.PropTypes.string.isRequired,
   deleteDocs: React.PropTypes.func.isRequired,
-  onlyDeleteAction: React.PropTypes.bool.isRequired
+  onlyDeleteAction: React.PropTypes.bool.isRequired,
+  showStateRow: React.PropTypes.bool.isRequired
 };
 
 const BulkSelectHeader = ({isSelected, deleteDocs, someDocsSelected, onCheck}) => {
@@ -305,6 +312,7 @@ export class ReplicationTable extends React.Component {
         errorMsg={doc.errorMsg}
         doc={doc}
         onlyDeleteAction={this.props.onlyDeleteAction}
+        showStateRow={this.props.showStateRow}
       />;
     });
   }
@@ -334,7 +342,21 @@ export class ReplicationTable extends React.Component {
     return '';
   }
 
+  stateRow () {
+    if (this.props.showStateRow) {
+      return (
+        <th className="replication__table-header-status" onClick={this.onSort('status')}>
+          State
+          <span className={`replication__table-header-icon ${this.iconDirection('status')} ${this.isSelected('status')}`} />
+        </th>
+      );
+    }
+
+    return null;
+  }
+
   render () {
+
     return (
       <Table striped>
         <thead>
@@ -363,10 +385,7 @@ export class ReplicationTable extends React.Component {
               Type
               <span className={`replication__table-header-icon ${this.iconDirection('continuous')} ${this.isSelected('continuous')}`} />
             </th>
-            <th className="replication__table-header-status" onClick={this.onSort('status')}>
-              State
-              <span className={`replication__table-header-icon ${this.iconDirection('status')} ${this.isSelected('status')}`} />
-            </th>
+            {this.stateRow()}
             <th className="replication__table-header-actions">
               Actions
             </th>
@@ -381,5 +400,6 @@ export class ReplicationTable extends React.Component {
 }
 
 ReplicationTable.defaultProps = {
-  onlyDeleteAction: false
+  onlyDeleteAction: false,
+  showStateRow: true
 };

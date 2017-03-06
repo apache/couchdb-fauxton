@@ -44,13 +44,13 @@ div.replication__page {
   width: 540px;
   select {
     font-size: 14px;
-    width: 246px;
+    width: 400px;
     margin-bottom: 10px;
     background-color: white;
     border: 1px solid #cccccc;
   }
   .styled-select {
-    width: 250px;
+    width: 400px;
   }
 }
 
@@ -60,7 +60,7 @@ div.replication__page {
   .Select div.Select-control {
     padding: 6px;
     border: 1px solid #cccccc;
-    width: 246px;
+    width: 400px;
 
     .Select-value, .Select-placeholder {
       padding: 6px 15px 6px 10px;
@@ -80,7 +80,7 @@ div.replication__page {
 
 .replication__remote-connection-url[type="text"] {
   font-size: 14px;
-  width: 100%;
+  width: 400px;
   color: #333;
 }
 
@@ -91,14 +91,14 @@ div.replication__page {
 }
 
 .replication__new-input[type="text"] {
-  width: 248px;
+  width: 400px;
   font-size: 14px;
   color: #333;
 }
 
 .replication__doc-name {
   position: relative;
-  width: 250px;
+  width: 400px;
 
 }
 
@@ -121,7 +121,7 @@ div.replication__page {
 .replication__doc-name-input[type="text"] {
   padding-right: 32px;
   font-size: 14px;
-  width: 248px;
+  width: 400px;
   color: #333;
 }
 
@@ -215,7 +215,7 @@ td.replication__row-status {
 
 .replication__activity_header {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
 }
 
@@ -290,6 +290,10 @@ input.replication__filter-input[type="text"] {
   margin-bottom: 0;
 }
 
+.replication__error-continue {
+  margin-left: 20px;
+}
+
 .replication__error-cancel,
 .replication__error-continue {
   background-color: #0082BF;
@@ -310,4 +314,10 @@ td.replication__empty-row {
 
 .replication__remote_icon_help:hover {
   color: #af2d24;
+}
+
+.replication__tooltip {
+  .tooltip-inner {
+    text-align: left
+  }
 }

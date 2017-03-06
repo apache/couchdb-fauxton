@@ -13,7 +13,7 @@ import React from 'react';
 import {OverlayTrigger, Tooltip} from 'react-bootstrap';
 
 const tooltipExisting = (
-  <Tooltip id="tooltip">
+  <Tooltip id="tooltip" className="replication__tooltip">
     <p>
       If you know the credentials for the remote account, you can use that remote username and password.
     </p>
@@ -27,7 +27,7 @@ const tooltipExisting = (
 );
 
 const tooltipNew = (
-  <Tooltip id="tooltip">
+  <Tooltip id="tooltip" className="replication__tooltip">
     Enter the username and password of the remote account.
   </Tooltip>
 );

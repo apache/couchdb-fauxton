@@ -353,6 +353,7 @@ export const parseReplicateInfo = (resp) => {
       status: convertState(job.history[0].type),
       errorMsg: '',
       selected: false,
+      continuous: /continuous/.test(job.id),
       raw: job
     };
   });
@@ -376,7 +377,6 @@ export const deleteReplicatesApi = (replicates) => {
       cancel: true
     };
 
-    console.log(data);
     return $.ajax({
       type: 'POST',
       url: '/_replicate',

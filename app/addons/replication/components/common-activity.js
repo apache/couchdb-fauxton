@@ -91,7 +91,12 @@ ReplicationFilter.propTypes = {
 export const ReplicationHeader = ({filter, onFilterChange}) => {
   return (
     <div className="replication__activity_header">
+      <div></div>
       <ReplicationFilter value={filter} onChange={onFilterChange} />
+      <a href="#/replication/_create" className="btn save replication__activity_header-btn btn-success">
+        <i className="icon fonticon-plus-circled"></i>
+        New Replication
+      </a>
     </div>
   );
 };

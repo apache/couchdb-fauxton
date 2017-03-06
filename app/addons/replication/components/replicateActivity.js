@@ -71,8 +71,7 @@ export default class Activity extends React.Component {
     return (
       <div className="replication__activity">
         <p>
-          Only active jobs triggered through the _replicate endpoint are displayed below.
-          &nbsp;Jobs that have completed or failed are not displayed
+          Active _replicate jobs are displayed. Completed and failed jobs are not.
         </p>
         <ReplicationHeader
           filter={filter}
@@ -80,6 +79,7 @@ export default class Activity extends React.Component {
         />
         <ReplicationTable
           onlyDeleteAction={true}
+          showStateRow={false}
           someDocsSelected={someDocsSelected}
           allDocsSelected={allDocsSelected}
           selectAllDocs={selectAllDocs}
