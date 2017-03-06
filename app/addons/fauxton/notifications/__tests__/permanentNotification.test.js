@@ -12,7 +12,7 @@
 import { PermanentNotification } from "../notifications.react";
 import Stores from "../stores";
 import FauxtonAPI from "../../../../core/api";
-import ActionTypes from "../actiontypes"
+import ActionTypes from "../actiontypes";
 import { mount } from "enzyme";
 import React from "react";
 import ReactDOM from "react-dom";
@@ -24,14 +24,14 @@ describe('PermanentNotification', () => {
     store.reset();
   });
 
-  it('doesn\'t render content when the display flag is false', () => {
+  it('doesn\'t render content by default', () => {
     const wrapper = mount(<PermanentNotification />);
     expect(wrapper.find('.perma-warning__content').length).toBe(0);
   });
 
-  it('renders content when the display flag is true', () => {
+  it('shows/hides content when the display flag is switched', () => {
     const wrapper = mount(<PermanentNotification />);
-    
+
     FauxtonAPI.dispatch({
       type: ActionTypes.SHOW_PERMANENT_NOTIFICATION,
       options: {
@@ -40,5 +40,11 @@ describe('PermanentNotification', () => {
     });
 
     expect(wrapper.find('.perma-warning__content').html()).toMatch(/Hello World!/);
-  });
+
+    FauxtonAPI.dispatch({
+      type: ActionTypes.HIDE_PERMANENT_NOTIFICATION
+    });
+
+    expect(wrapper.find('.perma-warning__content').length).toBe(0);
+  }); 
 });

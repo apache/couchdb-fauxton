@@ -462,7 +462,7 @@ export class PermanentNotification extends React.Component {
   }
 
   getContent () {
-    if (!this.state.msg) {
+    if (!this.state.display || !this.state.msg) {
       return;
     }
     return (

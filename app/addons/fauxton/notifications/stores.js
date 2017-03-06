@@ -181,6 +181,11 @@ Stores.NotificationStore = FauxtonAPI.Store.extend({
         this.triggerChange();
       break;
 
+      case ActionTypes.HIDE_PERMANENT_NOTIFICATION:
+        this._permanentNotificationVisible = false;
+        this.triggerChange();
+      break;
+
       default:
       return;
         // do nothing
