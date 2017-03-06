@@ -46,5 +46,5 @@ describe('PermanentNotification', () => {
     });
 
     expect(wrapper.find('.perma-warning__content').length).toBe(0);
-  }); 
+  });
 });
