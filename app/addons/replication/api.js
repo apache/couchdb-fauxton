@@ -16,6 +16,7 @@ import app from '../../app';
 import FauxtonAPI from '../../core/api';
 import base64 from 'base-64';
 import _ from 'lodash';
+import 'whatwg-fetch';
 
 let newApiPromise = null;
 export const supportNewApi = () => {
@@ -289,12 +290,18 @@ export const combineDocsAndScheduler = (docs, schedulerDocs) => {
 export const fetchReplicationDocs = () => {
   return supportNewApi()
   .then(newApi => {
-    const docsPromise = $.ajax({
-      type: 'GET',
-      url: '/_replicator/_all_docs?include_docs=true&limit=100',
-      contentType: 'application/json; charset=utf-8',
-      dataType: 'json',
-    }).then((res) => {
+    const docsPromise = fetch('/_replicator/_all_docs?include_docs=true&limit=100', {
+      credentials: 'include',
+      headers: {
+        'Accept': 'application/json; charset=utf-8',
+      }
+    })
+    .then(res => res.json())
+    .then((res) => {
+      if (res.error) {
+        return [];
+      }
+
       return parseReplicationDocs(res.rows.filter(row => row.id.indexOf("_design/_replicator") === -1));
     });
 
@@ -305,8 +312,8 @@ export const fetchReplicationDocs = () => {
     return FauxtonAPI.Promise.join(docsPromise, schedulerPromise, (docs, schedulerDocs) => {
       return combineDocsAndScheduler(docs, schedulerDocs);
     })
-    .catch(err => {
-      console.log('err', err);
+    .catch(() => {
+      return [];
     });
   });
 };
@@ -387,4 +394,19 @@ export const deleteReplicatesApi = (replicates) => {
   });
 
   return FauxtonAPI.Promise.all(promises);
+};
+
+export const createReplicatorDB = () => {
+  return fetch('/_replicator', {
+    method: 'PUT',
+    credentials: 'include',
+    headers: {
+        'Accept': 'application/json; charset=utf-8',
+      }
+    })
+    .then(res => res.json())
+    .then(res => {
+      console.log('created', res);
+      return true;
+    });
 };

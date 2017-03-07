@@ -14,7 +14,15 @@ import FauxtonAPI from '../../core/api';
 import ActionTypes from './actiontypes';
 import Helpers from './helpers';
 import Constants from './constants';
-import {supportNewApi, createReplicationDoc, fetchReplicateInfo, fetchReplicationDocs, decodeFullUrl, deleteReplicatesApi} from './api';
+import {
+  supportNewApi,
+  createReplicationDoc,
+  fetchReplicateInfo,
+  fetchReplicationDocs,
+  decodeFullUrl,
+  deleteReplicatesApi,
+  createReplicatorDB
+} from './api';
 import $ from 'jquery';
 
 
@@ -68,6 +76,13 @@ function replicate (params) {
     });
   }, (xhr) => {
     const errorMessage = JSON.parse(xhr.responseText);
+
+    if (errorMessage.error && errorMessage.error === "not_found") {
+      return createReplicatorDB().then(() => {
+        return replicate(params);
+      });
+    }
+
     FauxtonAPI.addNotification({
       msg: errorMessage.reason,
       type: 'error',
