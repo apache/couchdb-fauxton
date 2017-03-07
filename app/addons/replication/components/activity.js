@@ -70,6 +70,9 @@ export default class Activity extends React.Component {
     const {modalVisible} = this.state;
     return (
       <div className="replication__activity">
+        <p>
+          Replications must have a replication document to display in the following table.
+        </p>
         <ReplicationHeader
           filter={filter}
           onFilterChange={onFilterChange}
@@ -86,6 +89,7 @@ export default class Activity extends React.Component {
           changeSort={changeActivitySort}
         />
         <DeleteModal
+          isReplicationDB={true}
           multipleDocs={this.numDocsSelected()}
           visible={modalVisible}
           onClose={this.closeModal.bind(this)}

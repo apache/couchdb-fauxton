@@ -91,6 +91,7 @@ export default class Activity extends React.Component {
           changeSort={changeActivitySort}
         />
         <DeleteModal
+          isReplicationDB={false}
           multipleDocs={this.numDocsSelected()}
           visible={modalVisible}
           onClose={this.closeModal.bind(this)}

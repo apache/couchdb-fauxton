@@ -239,20 +239,31 @@ export default class ReplicationController extends React.Component {
       );
     }
 
-    elements.push(
-      <TabElement
-        key={3}
-        selected={tabSection === 'new replication'}
-        text={"New Replication"}
-        onChange={this.onTabChange.bind(this, 'new replication', '#/replication/_create')}
-      />
-    );
-
     return elements;
   }
 
   onTabChange (section, url) {
     Actions.changeTabSection(section, url);
+  }
+
+  getCrumbs () {
+    if (this.state.tabSection === 'new replication') {
+      return [{'name': 'Job Configuration'}];
+    }
+
+    return [];
+  }
+
+  getTabs () {
+    if (this.state.tabSection === 'new replication') {
+      return null;
+    }
+
+    return (
+      <TabElementWrapper>
+        {this.getTabElements()}
+      </TabElementWrapper>
+    );
   }
 
   render () {
@@ -264,14 +275,12 @@ export default class ReplicationController extends React.Component {
 
     return (
       <OnePane>
-        <OnePaneHeader>
+        <OnePaneHeader crumbs={this.getCrumbs()}>
         {this.getHeaderComponents()}
         </OnePaneHeader>
         <OnePaneContent>
           <div className="template-content flex-body flex-layout flex-col">
-            <TabElementWrapper>
-              {this.getTabElements()}
-            </TabElementWrapper>
+            {this.getTabs()}
             <div className="replication__page flex-layout flex-col">
               {this.showSection()}
             </div>

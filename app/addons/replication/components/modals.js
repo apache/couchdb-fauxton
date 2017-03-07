@@ -20,19 +20,22 @@ export const DeleteModal = ({
   visible,
   onClose,
   onClick,
-  multipleDocs
+  multipleDocs,
+  isReplicationDB
 }) => {
 
   if (!visible) {
     return null;
   }
 
-  let header = "You are deleting a replication document.";
-  let btnText = "Delete Document";
+  let header = "";
+  let btnText = `Delete ${isReplicationDB ? 'Document' : 'Replication Job'}`;
+  let infoSection = `Deleting a replication ${isReplicationDB ? 'document' : 'job'} stops continuous replication 
+          and incomplete one-time replication, but does not affect replicated documents.`;
 
   if (multipleDocs > 1) {
-    header = `You are deleting ${multipleDocs} replication documents.`;
-    btnText = "Delete Documents";
+    header = `You are deleting <strong>${multipleDocs}</strong> replication ${isReplicationDB ? 'documents' : 'jobs'}.`;
+    btnText = `Delete ${isReplicationDB ? 'Documents' : 'Replication Jobs'}`;
   }
 
   return (
@@ -41,14 +44,8 @@ export const DeleteModal = ({
         <Modal.Title>Verify Deletion</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <p>{header}</p>
-        <p>
-          Deleting a replication document stops continuous replication
-          and incomplete one-time replication, but does not affect replicated documents.
-        </p>
-        <p>
-          Replication jobs that do not have replication documents do not appear in Replicator DB Activity.
-        </p>
+        <p dangerouslySetInnerHTML={{__html: header}}></p>
+        <p>{infoSection}</p>
       </Modal.Body>
       <Modal.Footer>
         <a className="cancel-link" onClick={onClose}>Cancel</a>
@@ -63,9 +60,14 @@ export const DeleteModal = ({
 
 DeleteModal.propTypes = {
   visible: React.PropTypes.bool.isRequired,
+  isReplicationDB: React.PropTypes.bool.isRequired,
   onClick: React.PropTypes.func.isRequired,
   onClose: React.PropTypes.func.isRequired,
   multipleDocs: React.PropTypes.number.isRequired
+};
+
+DeleteModal.defaultProps = {
+  isReplicationDB: true
 };
 
 export const ErrorModal = ({visible, onClose, errorMsg, status}) => {
