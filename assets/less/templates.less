@@ -59,6 +59,7 @@
   bottom: 0;
   position: absolute;
   width: @navWidth;
+  overflow-x: hidden;
   .closeMenu & {
     width: @collapsedNavWidth;
     overflow-x: hidden;
@@ -105,7 +106,9 @@
     }
     .bottom-container {
       position: fixed;
-      bottom: 10px;
+      bottom: 0px;
+      background-color: @brown;
+      padding-bottom: 5px;
       .brand {
         .box-sizing(content-box);
         .hide-text;
