@@ -194,7 +194,7 @@ Stores.SidebarStore = FauxtonAPI.Store.extend({
     });
 
     return docs.map(function (doc) {
-      doc.safeId = app.utils.safeURLName(doc._id.replace(/^_design\//, ""));
+      doc.safeId = app.utils.getSafeIdForDoc(doc._id);
       return _.extend(doc, doc.doc);
     });
   },
