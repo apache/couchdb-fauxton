@@ -96,11 +96,11 @@
         height: 4px;
         width: 24px;
         .border-radius(2);
-        background-color: @navBG;
+        background-color: #B3B4B4;
         margin: 2px 0px;
       }
       &:hover div {
-        background-color: @navBGHover;
+        background-color: #FFFFFF;
       }
     }
     .bottom-container {
@@ -177,20 +177,25 @@
           font-weight: normal;
           font-family: helvetica;
           .box-sizing(border-box);
-          background-color: @navBG;
+          background-color: #564E4C;
           border-bottom:  1px solid @primaryNav;
           height: 48px;
           min-height: 48px;
           position: relative;
 
-          &.active, &:hover {
+          &.active {
             a {
               .box-shadow(none);
             }
-            background-color: @navBGHover;
+
+            background-color: #AF2D24;
           }
-          &:hover .fonticon:before {
-            color: @white;
+          &:hover {
+            a {
+              .box-shadow(none);
+            }
+
+            background-color: @navBGHover;
           }
           &.active .fonticon:before,
           &:hover .fonticon:before,
@@ -213,7 +218,7 @@
                 position: absolute;
                 left: -41px;
                 font-size: 24px;
-                color: @NavIcon;
+                color: #B3B4B4;
                 text-shadow: @boxShadowOff;
               }
             }
