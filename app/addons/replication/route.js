@@ -18,7 +18,7 @@ import Actions from './actions';
 const ReplicationRouteObject = FauxtonAPI.RouteObject.extend({
   routes: {
     'replication/_create': 'defaultView',
-    'replication/:dbname': 'defaultView',
+    'replication/_create/:dbname': 'defaultView',
     'replication/id/:id': 'fromId',
     'replication': 'activityView',
     'replication/_replicate': 'replicateView'
@@ -41,7 +41,7 @@ const ReplicationRouteObject = FauxtonAPI.RouteObject.extend({
   },
 
   defaultView: function (databaseName) {
-    const localSource = databaseName || '';
+    let localSource = databaseName || '';
     Actions.changeTabSection('new replication');
     Actions.clearReplicationForm();
 

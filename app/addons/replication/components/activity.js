@@ -70,7 +70,7 @@ export default class Activity extends React.Component {
     const {modalVisible} = this.state;
     return (
       <div className="replication__activity">
-        <p>
+        <p className="replication__activity-caveat">
           Replications must have a replication document to display in the following table.
         </p>
         <ReplicationHeader

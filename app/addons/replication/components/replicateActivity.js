@@ -70,7 +70,7 @@ export default class Activity extends React.Component {
     const {modalVisible} = this.state;
     return (
       <div className="replication__activity">
-        <p>
+        <p className="replication__activity-caveat">
           Active _replicate jobs are displayed. Completed and failed jobs are not.
         </p>
         <ReplicationHeader

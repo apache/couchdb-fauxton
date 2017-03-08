@@ -21,7 +21,7 @@ const tooltipExisting = (
       If a remote database granted permissions to your local account, you can use the local-account username and password.
     </p>
     <p>
-      If the remote database granted permissions to "everybody," you do not need to enter a username and password.
+      If the remote database granted permissions to unauthenticated connections, you do not need to enter a username or password.
     </p>
   </Tooltip>
 );

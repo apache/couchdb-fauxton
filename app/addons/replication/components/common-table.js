@@ -111,7 +111,7 @@ const RowActions = ({onlyDeleteAction, _id, url, deleteDocs}) => {
       <li className="replication__row-list" key={1}>
         <a
           href={`#replication/id/${encodeURIComponent(_id)}`}
-          className="replication__row-btn icon-wrench"
+          className="replication__row-btn icon-wrench replication__row-btn--no-left-pad"
           title={`Edit replication`}
           data-bypass="true"
           >
@@ -134,7 +134,7 @@ const RowActions = ({onlyDeleteAction, _id, url, deleteDocs}) => {
   actions.push(
     <li className="replication__row-list" key={3}>
       <a
-        className="replication__row-btn icon-trash"
+        className={`replication__row-btn icon-trash ${onlyDeleteAction ? 'replication__row-btn--no-left-pad' : ''} `}
         title={`Delete ${onlyDeleteAction ? 'job' : 'document'} ${_id}`}
         onClick={() => deleteDocs(_id)}>
       </a>

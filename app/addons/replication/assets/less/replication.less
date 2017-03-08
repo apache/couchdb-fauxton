@@ -57,6 +57,10 @@ div.replication__page {
 .replication__input-react-select {
   font-size: 14px;
 
+  .Select .Select-menu-outer {
+    width: 400px;
+  }
+
   .Select div.Select-control {
     padding: 6px;
     border: 1px solid #cccccc;
@@ -270,6 +274,10 @@ input.replication__bulk-select-input[type="checkbox"] {
   padding-left: 8px;
 }
 
+.replication__row-btn--no-left-pad {
+  padding-left: 0px;
+}
+
 .replication__row-btn:visited,
 .replication__row-btn:hover {
   text-decoration: none;
@@ -290,8 +298,8 @@ input.replication__filter-input[type="text"] {
   margin-bottom: 0;
 }
 
-.replication__error-continue {
-  margin-left: 20px;
+button.replication__error-continue {
+  margin-left: 20px !important; //needed to override bootstrap
 }
 
 .replication__error-cancel,
@@ -320,4 +328,8 @@ td.replication__empty-row {
   .tooltip-inner {
     text-align: left
   }
+}
+
+.replication__activity-caveat {
+  padding-left: 80px;
 }

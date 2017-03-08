@@ -182,7 +182,7 @@ var DatabaseRow = React.createClass({
         <td className="database-actions">
           <a className="db-actions btn fonticon-replicate set-replication-start"
             title={"Replicate " + name}
-            href={"#/replication/" + encodedId} />
+            href={"#/replication/_create/" + encodedId} />
           <a
             className="db-actions btn icon-lock set-permissions"
             title={"Set permissions for " + name} href={"#/database/" + encodedId + "/permissions"} />

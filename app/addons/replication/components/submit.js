@@ -17,6 +17,7 @@ const {ConfirmButton} = Components;
 export const ReplicationSubmit = ({onClear, disabled, onClick}) =>
 <div className="replication__button-row">
   <ConfirmButton
+    customIcon="fonticon-replicate"
     id="replicate"
     text="Start Replication"
     onClick={onClick}
