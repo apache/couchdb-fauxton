@@ -17,4 +17,9 @@ window.$ = window.jQuery = require('jquery');
 window._ = require('lodash');
 window.Backbone = require('backbone');
 
+Object.defineProperty(window.location, 'origin', {
+  writable: true,
+  value: 'http://dev:8000'
+});
+
 

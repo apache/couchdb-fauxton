@@ -19,18 +19,21 @@ import _ from 'lodash';
 import 'whatwg-fetch';
 
 let newApiPromise = null;
-export const supportNewApi = () => {
-  if (!newApiPromise) {
+export const supportNewApi = (forceCheck) => {
+  if (!newApiPromise || forceCheck) {
     newApiPromise = new FauxtonAPI.Promise((resolve) => {
-      $.ajax({
-        url: '/_scheduler/jobs',
-        contentType: 'application/json; charset=utf-8',
-        dataType: 'json',
-        method: 'GET'
-      }).then(() => {
+      fetch('/_scheduler/job', {
+        credentials: 'include',
+        headers: {
+            'Accept': 'application/json; charset=utf-8',
+          }
+        })
+      .then(resp => {
+        if (resp.status === 404) {
+          return resolve(false);
+        }
+
         resolve(true);
-      }, () => {
-        resolve(false);
       });
     });
   }
@@ -319,12 +322,18 @@ export const fetchReplicationDocs = () => {
 };
 
 export const fetchSchedulerDocs = () => {
-  return $.ajax({
-    type: 'GET',
-    url: '/_scheduler/docs?include_docs=true',
-    contentType: 'application/json; charset=utf-8',
-    dataType: 'json',
-  }).then((res) => {
+  return fetch('/_scheduler/docs?include_docs=true', {
+    credentials: 'include',
+    headers: {
+      'Accept': 'application/json; charset=utf-8',
+    }
+  })
+  .then(res => res.json())
+  .then((res) => {
+    if (res.error) {
+      return [];
+    }
+
     return res.docs;
   });
 };
@@ -405,8 +414,7 @@ export const createReplicatorDB = () => {
       }
     })
     .then(res => res.json())
-    .then(res => {
-      console.log('created', res);
+    .then(() => {
       return true;
     });
 };

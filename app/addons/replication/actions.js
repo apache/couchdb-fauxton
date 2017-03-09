@@ -24,6 +24,7 @@ import {
   createReplicatorDB
 } from './api';
 import $ from 'jquery';
+import 'whatwg-fetch';
 
 
 function initReplicator (localSource) {
@@ -49,16 +50,19 @@ function initReplicator (localSource) {
   });
 }
 
-function replicate (params) {
+export const replicate = (params) => {
   const replicationDoc = createReplicationDoc(params);
 
-  const promise = $.ajax({
-    url: window.location.origin + '/_replicator',
-    contentType: 'application/json',
-    type: 'POST',
-    dataType: 'json',
-    data: JSON.stringify(replicationDoc)
-  });
+  const promise = fetch('/_replicator', {
+    method: 'POST',
+    credentials: 'include',
+    headers: {
+        'Accept': 'application/json; charset=utf-8',
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(replicationDoc)
+  })
+  .then(res => res.json());
 
   const source = Helpers.getDatabaseLabel(replicationDoc.source);
   const target = Helpers.getDatabaseLabel(replicationDoc.target);
@@ -67,29 +71,37 @@ function replicate (params) {
     type: ActionTypes.REPLICATION_STARTING,
   });
 
-  promise.then(() => {
+  const handleError = (json) => {
+    FauxtonAPI.addNotification({
+      msg: json.reason,
+      type: 'error',
+      clear: true
+    });
+  };
+
+  promise.then(json => {
+    if (!json.ok) {
+      throw json;
+    }
+
     FauxtonAPI.addNotification({
       msg: `Replication from <code>${decodeURIComponent(source)}</code> to <code>${decodeURIComponent(target)}</code> has been scheduled.`,
       type: 'success',
       escape: false,
       clear: true
     });
-  }, (xhr) => {
-    const errorMessage = JSON.parse(xhr.responseText);
-
-    if (errorMessage.error && errorMessage.error === "not_found") {
+  })
+  .catch(json => {
+    if (json.error && json.error === "not_found") {
       return createReplicatorDB().then(() => {
         return replicate(params);
-      });
+      })
+      .catch(handleError);
     }
 
-    FauxtonAPI.addNotification({
-      msg: errorMessage.reason,
-      type: 'error',
-      clear: true
-    });
+    handleError(json);
   });
-}
+};
 
 function updateFormField (fieldName, value) {
   FauxtonAPI.dispatch({
@@ -227,7 +239,6 @@ const deleteDocs = (docs) => {
 };
 
 const deleteReplicates = (replicates) => {
-  console.log('ss', replicates);
   FauxtonAPI.addNotification({
     msg: `Deleting _replicate${replicates.length > 1 ? 's' : ''}.`,
     type: 'success',
@@ -261,17 +272,20 @@ const deleteReplicates = (replicates) => {
   });
 };
 
-const getReplicationStateFrom = (id) => {
+export const getReplicationStateFrom = (id) => {
   FauxtonAPI.dispatch({
     type: ActionTypes.REPLICATION_FETCHING_FORM_STATE
   });
 
-  $.ajax({
-    url: `${app.host}/_replicator/${encodeURIComponent(id)}`,
-    contentType: 'application/json',
-    dataType: 'json',
+  fetch(`/_replicator/${encodeURIComponent(id)}`, {
+    credentials: 'include',
+    headers: {
+      'Accept': 'application/json; charset=utf-8',
+    },
     method: 'GET'
-  }).then((doc) => {
+  })
+  .then(resp => resp.json())
+  .then((doc) => {
     const stateDoc = {
       replicationDocName: doc._id,
       replicationType: doc.continuous ? Constants.REPLICATION_TYPE.CONTINUOUS : Constants.REPLICATION_TYPE.ONE_TIME,
@@ -303,10 +317,10 @@ const getReplicationStateFrom = (id) => {
       options: stateDoc
     });
 
-  }, (xhr) => {
-    const errorMessage = JSON.parse(xhr.responseText);
+  })
+  .catch(error => {
     FauxtonAPI.addNotification({
-      msg: errorMessage.reason,
+      msg: error.reason,
       type: 'error',
       clear: true
     });
