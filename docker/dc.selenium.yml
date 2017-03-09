@@ -8,7 +8,7 @@ services:
 
   couchdb:
     container_name: couchdb
-    image: klaemo/couchdb:2.0-dev@sha256:e9b71abaff6aeaa34ee28604c3aeb78f3a7c789ad74a7b88148e2ef78f1e3b21
+    image: klaemo/couchdb:2.0-dev
     command: '--with-haproxy -a tester:testerpass'
     ports:
       - "5984:5984"

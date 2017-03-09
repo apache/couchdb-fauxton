@@ -1,14 +1,13 @@
 language: node_js
 node_js:
    - 6
-sudo: required
+sudo: false
 services:
   - docker
 git:
   depth: 1
 
 before_script:
-  - ./bin/install-docker-travis.sh
   - npm run docker:up
   - npm install
   - docker logs couchdb
