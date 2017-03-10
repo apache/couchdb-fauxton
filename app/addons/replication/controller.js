@@ -19,7 +19,7 @@ import Activity from './components/activity';
 import {checkReplicationDocID} from './api';
 import {OnePane, OnePaneHeader, OnePaneContent} from '../components/layouts';
 import {TabElementWrapper, TabElement} from '../components/components/tabelement';
-import ReplicateActivity from './components/replicateactivity';
+import ReplicateActivity from './components/replicate-activity';
 
 const {LoadLines, Polling, RefreshBtn} = Components;
 

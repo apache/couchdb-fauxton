@@ -20,7 +20,6 @@ before_script:
   - sleep 30
   - docker logs couchdb
   - curl http://127.0.0.1:5984
-  - curl http://127.0.0.1:8000
 script:
   - travis_retry ./node_modules/.bin/grunt nightwatch
 after_script:
