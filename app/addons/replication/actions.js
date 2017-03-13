@@ -144,7 +144,8 @@ const getReplicateActivity = () => {
         type: ActionTypes.REPLICATION_FETCHING_REPLICATE_STATUS,
     });
 
-    fetchReplicateInfo().then(replicateInfo => {
+    fetchReplicateInfo()
+    .then(replicateInfo => {
       FauxtonAPI.dispatch({
         type: ActionTypes.REPLICATION_REPLICATE_STATUS,
         options: replicateInfo
@@ -229,7 +230,7 @@ export const deleteDocs = (docs) => {
   })
   .then(resp => {
     if (!resp.ok) {
-      throw resp.json();
+      throw resp;
     }
     return resp.json();
   })
@@ -250,12 +251,16 @@ export const deleteDocs = (docs) => {
     clearSelectedDocs();
     getReplicationActivity();
   })
-  .catch(error => {
-    FauxtonAPI.addNotification({
-      msg: error.reason,
-      type: 'error',
-      clear: true
+  .catch(resp => {
+    resp.json()
+    .then(error => {
+      FauxtonAPI.addNotification({
+        msg: error.reason,
+        type: 'error',
+        clear: true
+      });
     });
+
   });
 };
 

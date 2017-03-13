@@ -291,6 +291,7 @@ export class ReplicationTable extends React.Component {
   }
 
   renderRows () {
+    console.log(this.props.docs);
     if (this.props.docs.length === 0) {
       return <EmptyRow />;
     }

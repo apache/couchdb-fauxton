@@ -22,7 +22,7 @@ let newApiPromise = null;
 export const supportNewApi = (forceCheck) => {
   if (!newApiPromise || forceCheck) {
     newApiPromise = new FauxtonAPI.Promise((resolve) => {
-      fetch('/_scheduler/job', {
+      fetch('/_scheduler/jobs', {
         credentials: 'include',
         headers: {
             'Accept': 'application/json; charset=utf-8',
@@ -380,15 +380,15 @@ export const fetchReplicateInfo = () => {
       return [];
     }
 
-    fetch('/_scheduler/jobs', {
+    return fetch('/_scheduler/jobs', {
       credentials: 'include',
       headers: {
         'Accept': 'application/json; charset=utf-8'
       },
     })
+    .then(resp => resp.json())
     .then(resp => {
-      console.log('fetch replicate', resp);
-      return parseReplicateInfo(resp.json());
+      return parseReplicateInfo(resp);
     });
   });
 };
