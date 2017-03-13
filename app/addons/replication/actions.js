@@ -9,7 +9,6 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
-import app from '../../app';
 import FauxtonAPI from '../../core/api';
 import ActionTypes from './actiontypes';
 import Helpers from './helpers';
@@ -23,7 +22,6 @@ import {
   deleteReplicatesApi,
   createReplicatorDB
 } from './api';
-import $ from 'jquery';
 import 'whatwg-fetch';
 
 
@@ -36,11 +34,16 @@ function initReplicator (localSource) {
       }
     });
   }
-  $.ajax({
-    url: app.host + '/_all_dbs',
-    contentType: 'application/json',
-    dataType: 'json'
-  }).then((databases) => {
+
+  fetch('/_all_dbs', {
+    credentials: 'include',
+    headers: {
+      'Accept': 'application/json; charset=utf-8',
+      'Content-Type': 'application/json'
+    },
+  })
+  .then(resp => resp.json())
+  .then((databases) => {
     FauxtonAPI.dispatch({
       type: ActionTypes.REPLICATION_DATABASES_LOADED,
       options: {
@@ -131,14 +134,21 @@ const getReplicationActivity = (supportNewApi) => {
 };
 
 const getReplicateActivity = () => {
-  FauxtonAPI.dispatch({
-      type: ActionTypes.REPLICATION_FETCHING_REPLICATE_STATUS,
-  });
+  supportNewApi()
+  .then(newApi => {
+    if (!newApi) {
+      return;
+    }
 
-  fetchReplicateInfo().then(replicateInfo => {
     FauxtonAPI.dispatch({
-      type: ActionTypes.REPLICATION_REPLICATE_STATUS,
-      options: replicateInfo
+        type: ActionTypes.REPLICATION_FETCHING_REPLICATE_STATUS,
+    });
+
+    fetchReplicateInfo().then(replicateInfo => {
+      FauxtonAPI.dispatch({
+        type: ActionTypes.REPLICATION_REPLICATE_STATUS,
+        options: replicateInfo
+      });
     });
   });
 };
@@ -195,7 +205,7 @@ const clearSelectedReplicates = () => {
   });
 };
 
-const deleteDocs = (docs) => {
+export const deleteDocs = (docs) => {
   const bulkDocs = docs.map(({raw: doc}) => {
     doc._deleted = true;
     return doc;
@@ -208,13 +218,23 @@ const deleteDocs = (docs) => {
     clear: true
   });
 
-  $.ajax({
-    url: app.host + '/_replicator/_bulk_docs',
-    contentType: 'application/json',
-    dataType: 'json',
+  fetch('/_replicator/_bulk_docs', {
+    credentials: 'include',
+    headers: {
+      'Accept': 'application/json; charset=utf-8',
+      'Content-Type': 'application/json'
+    },
     method: 'POST',
-    data: JSON.stringify({docs: bulkDocs})
-  }).then(() => {
+    body: JSON.stringify({docs: bulkDocs})
+  })
+  .then(resp => {
+    if (!resp.ok) {
+      throw resp.json();
+    }
+    return resp.json();
+  })
+  .then(() => {
+
     let msg = 'The selected documents have been deleted.';
     if (docs.length === 1) {
       msg = `Document <code>${docs[0]._id}</code> has been deleted`;
@@ -226,12 +246,13 @@ const deleteDocs = (docs) => {
       escape: false,
       clear: true
     });
+
     clearSelectedDocs();
     getReplicationActivity();
-  }, (xhr) => {
-    const errorMessage = JSON.parse(xhr.responseText);
+  })
+  .catch(error => {
     FauxtonAPI.addNotification({
-      msg: errorMessage.reason,
+      msg: error.reason,
       type: 'error',
       clear: true
     });

@@ -29,7 +29,7 @@ export const supportNewApi = (forceCheck) => {
           }
         })
       .then(resp => {
-        if (resp.status === 404) {
+        if (resp.status > 202) {
           return resolve(false);
         }
 
@@ -340,15 +340,13 @@ export const fetchSchedulerDocs = () => {
 
 export const checkReplicationDocID = (docId) => {
   const promise = FauxtonAPI.Deferred();
-  $.ajax({
-    type: 'GET',
-    url: `/_replicator/${docId}`,
-    contentType: 'application/json; charset=utf-8',
-    dataType: 'json',
-  }).then(() => {
-    promise.resolve(true);
-  }, function (xhr) {
-    if (xhr.statusText === "Object Not Found") {
+  fetch(`/_replicator/${docId}`, {
+    credentials: 'include',
+    headers: {
+      'Accept': 'application/json; charset=utf-8'
+    },
+  }).then(resp => {
+    if (resp.statusText === "Object Not Found") {
       promise.resolve(false);
       return;
     }
@@ -376,13 +374,22 @@ export const parseReplicateInfo = (resp) => {
 };
 
 export const fetchReplicateInfo = () => {
-  return $.ajax({
-    type: 'GET',
-    url: `/_scheduler/jobs`,
-    contentType: 'application/json; charset=utf-8',
-    dataType: 'json',
-  }).then(resp => {
-    return parseReplicateInfo(resp);
+  return supportNewApi()
+  .then(newApi => {
+    if (!newApi) {
+      return [];
+    }
+
+    fetch('/_scheduler/jobs', {
+      credentials: 'include',
+      headers: {
+        'Accept': 'application/json; charset=utf-8'
+      },
+    })
+    .then(resp => {
+      console.log('fetch replicate', resp);
+      return parseReplicateInfo(resp.json());
+    });
   });
 };
 
@@ -393,13 +400,16 @@ export const deleteReplicatesApi = (replicates) => {
       cancel: true
     };
 
-    return $.ajax({
-      type: 'POST',
-      url: '/_replicate',
-      contentType: 'application/json; charset=utf-8',
-      dataType: 'json',
-      data: JSON.stringify(data)
-    });
+    return fetch('/_replicate', {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Accept': 'application/json; charset=utf-8',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+    .then(resp => resp.json());
   });
 
   return FauxtonAPI.Promise.all(promises);

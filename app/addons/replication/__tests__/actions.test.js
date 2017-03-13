@@ -10,7 +10,7 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 import utils from '../../../../test/mocha/testUtils';
-import {replicate, getReplicationStateFrom} from '../actions';
+import {replicate, getReplicationStateFrom, deleteDocs} from '../actions';
 import ActionTypes from '../actiontypes';
 import fetchMock from 'fetch-mock';
 import app from '../../../app';
@@ -121,12 +121,62 @@ describe("Replication Actions", () => {
       FauxtonAPI.dispatcher.register(({type, options}) => {
         if (ActionTypes.REPLICATION_SET_STATE_FROM_DOC === type) {
           assert.deepEqual(docState, options);
-          done();
+          setTimeout(done);
         }
       });
 
       fetchMock.getOnce('/_replicator/7dcea9874a8fcb13c6630a1547001559', doc);
       getReplicationStateFrom(doc._id);
+    });
+  });
+
+  describe('deleteDocs', () => {
+    it('sends bulk doc request', (done) => {
+      const resp = [
+        {
+          "ok": true,
+          "id": "should-fail",
+          "rev": "32-14e8495723c34271ef1391adf83defc2"
+        },
+        {
+          "ok": true,
+          "id": "my-cool-id",
+          "rev": "3-f16f14d11708952b3d787846ef6ef8a9"
+        }
+      ];
+
+      const docs = [
+        {
+          _id: "should-fail",
+          _rev: "31-cdc233eb8a98e3aa3a87cd72f6a86301",
+          raw: {
+            _id: "should-fail",
+            _rev: "31-cdc233eb8a98e3aa3a87cd72f6a86301"
+          },
+        },
+        {
+          _id: "my-cool-id",
+          _rev: "2-da6af558740409e61d563769a8044a68",
+          raw: {
+            _id: "my-cool-id",
+            _rev: "2-da6af558740409e61d563769a8044a68"
+          }
+        }
+      ];
+
+      fetchMock.getOnce('/_scheduler/job', 404);
+      fetchMock.getOnce('/_replicator/_all_docs?include_docs=true&limit=100', {rows: []});
+      fetchMock.postOnce('/_replicator/_bulk_docs', {
+        status: 200,
+        body: resp
+      });
+      deleteDocs(docs);
+
+      FauxtonAPI.dispatcher.register(({type}) => {
+        if (ActionTypes.REPLICATION_CLEAR_SELECTED_DOCS === type) {
+          setTimeout(done);
+        }
+      });
     });
   });
 });
