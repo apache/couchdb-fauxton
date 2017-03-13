@@ -310,7 +310,7 @@ describe('Replication API', () => {
     });
 
     it('returns true for support', () => {
-      fetchMock.getOnce('/_scheduler/job', 200);
+      fetchMock.getOnce('/_scheduler/jobs', 200);
       return supportNewApi(true)
       .then(resp => {
         assert.ok(resp);
@@ -318,7 +318,7 @@ describe('Replication API', () => {
     });
 
     it('returns false for no support', () => {
-      fetchMock.getOnce('/_scheduler/job', 404);
+      fetchMock.getOnce('/_scheduler/jobs', 404);
       return supportNewApi(true)
       .then(resp => {
         assert.notOk(resp);
@@ -414,7 +414,7 @@ describe('Replication API', () => {
       });
 
       it("returns parsedReplicationDocs", () => {
-        fetchMock.getOnce('/_scheduler/job', 404);
+        fetchMock.getOnce('/_scheduler/jobs', 404);
         fetchMock.get('/_replicator/_all_docs?include_docs=true&limit=100', _repDocs);
         return supportNewApi(true)
         .then(fetchReplicationDocs)
@@ -431,7 +431,7 @@ describe('Replication API', () => {
       });
 
       it("returns parsedReplicationDocs", () => {
-        fetchMock.getOnce('/_scheduler/job', 200);
+        fetchMock.getOnce('/_scheduler/jobs', 200);
         fetchMock.get('/_replicator/_all_docs?include_docs=true&limit=100', _repDocs);
         fetchMock.get('/_scheduler/docs?include_docs=true', _schedDocs);
         return supportNewApi(true)
