@@ -21,7 +21,7 @@
     "bootstrap": "^3.3.7",
     "enzyme": "^2.7.1",
     "es5-shim": "4.5.4",
-    "extract-text-webpack-plugin": "^1.0.1",
+    "extract-text-webpack-plugin": "~2.1.0",
     "fetch-mock": "^5.9.3",
     "jest": "^18.1.0",
     "less": "^2.7.2",

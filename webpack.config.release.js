@@ -34,11 +34,11 @@ module.exports = {
     // moment doesn't offer a modular API, so manually remove locale
     // see https://github.com/moment/moment/issues/2373
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
-    new webpack.optimize.DedupePlugin(),
     new webpack.optimize.UglifyJsPlugin({
       compress: {
         warnings: false
-      }
+      },
+      sourceMap: true
     }),
     new ExtractTextPlugin("styles.css")
   ],
@@ -49,51 +49,76 @@ module.exports = {
   },
 
   module: {
-    preLoaders: [
-      {
-        test: /\.jsx?$/,
-        loaders: ['eslint'],
-        exclude: /node_modules/
-      }
-    ],
     loaders: [
     {
       test: /\.jsx?$/,
+      enforce: "pre",
+      use: ['eslint-loader'],
+      exclude: /node_modules/
+    },
+    {
+      test: /\.jsx?$/,
       exclude: /node_modules/,
-      //loader: 'react-hot!babel'
-      loader: 'babel'
+      use: 'babel-loader'
     },
-    { test: require.resolve("jquery"),
-      loader: "expose?$!expose?jQuery"
+    {
+      test: require.resolve('jquery'),
+      use: [{
+          loader: 'expose-loader',
+          options: 'jQuery'
+      },
+      {
+          loader: 'expose-loader',
+          options: '$'
+      }]
      },
-    { test: require.resolve("backbone"),
-      loader: "expose?Backbone"
+     {
+      test: require.resolve("backbone"),
+      use: [{
+          loader: 'expose-loader',
+          options: 'Backbone'
+      }]
     },
-    { test: /\.less/,
-      loader: ExtractTextPlugin.extract("style-loader", "css-loader!less-loader", {
+    {
+      test: /\.less/,
+      use: ExtractTextPlugin.extract({
+        fallback: "style-loader",
+        use: [
+          "css-loader",
+          "less-loader"
+        ],
         publicPath: '../../'
       }),
     },
-    { test: /\.css$/, loader: 'style!css' },
+    {
+      test: /\.css/,
+      use: ExtractTextPlugin.extract({
+        fallback: "style-loader",
+        use: [
+          "css-loader",
+        ],
+        publicPath: '../../'
+      }),
+    },
     {
       test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
-      loader: 'url?limit=10000&mimetype=application/font-woff&name=dashboard.assets/fonts/[name].[ext]'
+      loader: 'url-loader?limit=10000&mimetype=application/font-woff&name=dashboard.assets/fonts/[name].[ext]'
     },
     {
-      test: /\.woff2(\?\S*)?$/,   loader: 'url?limit=10000&mimetype=application/font-woff2&name=dashboard.assets/fonts/[name].[ext]'
+      test: /\.woff2(\?\S*)?$/,   loader: 'url-loader?limit=10000&mimetype=application/font-woff2&name=dashboard.assets/fonts/[name].[ext]'
     },
     {
-      test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,    loader: 'url?limit=10000&mimetype=application/font-tff&name=dashboard.assets/fonts/[name].[ext]'
+      test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,    loader: 'url-loader?limit=10000&mimetype=application/font-tff&name=dashboard.assets/fonts/[name].[ext]'
     },
-    { test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,    loader: 'file?name=dashboard.assets/fonts/[name].[ext]' },
-    { test: /\.swf(\?v=\d+\.\d+\.\d+)?$/,    loader: 'file?name=dashboard.assets/[name].[ext]' },
-    { test: /\.png(\?v=\d+\.\d+\.\d+)?$/,    loader: 'file?name=dashboard.assets/img/[name].[ext]' },
-    { test: /\.gif(\?v=\d+\.\d+\.\d+)?$/,    loader: 'file?name=dashboard.assets/img/[name].[ext]' },
-    { test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,    loader: 'url?limit=10000&mimetype=image/svg+xml&name=dashboard.assets/img/[name].[ext]' }
+    { test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,    loader: 'file-loader?name=dashboard.assets/fonts/[name].[ext]' },
+    { test: /\.swf(\?v=\d+\.\d+\.\d+)?$/,    loader: 'file-loader?name=dashboard.assets/[name].[ext]' },
+    { test: /\.png(\?v=\d+\.\d+\.\d+)?$/,    loader: 'file-loader?name=dashboard.assets/img/[name].[ext]' },
+    { test: /\.gif(\?v=\d+\.\d+\.\d+)?$/,    loader: 'file-loader?name=dashboard.assets/img/[name].[ext]' },
+    { test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,    loader: 'url-loader?limit=10000&mimetype=image/svg+xml&name=dashboard.assets/img/[name].[ext]' }
     ]
   },
   resolve: {
-    extensions: ['', '.js', '.jsx'],
+    extensions: ['*', '.js', '.jsx'],
     alias: {
       "underscore": "lodash",
       "bootstrap": "../assets/js/libs/bootstrap",
