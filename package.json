@@ -107,8 +107,8 @@
     "velocity-animate": "^1.4.2",
     "velocity-react": "1.2.0",
     "visualizeRevTree": "git+https://github.com/neojski/visualizeRevTree.git#gh-pages",
-    "webpack": "^1.12.12",
-    "webpack-dev-server": "^1.14.1",
+    "webpack": "~2.2.1",
+    "webpack-dev-server": "~2.4.1",
     "whatwg-fetch": "~2.0.1"
   },
   "scripts": {

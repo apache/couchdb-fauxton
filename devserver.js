@@ -64,24 +64,6 @@ function getCspHeaders () {
 };
 
 var runWebpackServer = function () {
-  var options = {
-    contentBase: __dirname + '/dist/debug',
-    publicPath: '/',
-    outputPath: '/',
-    filename: 'bundle.js',
-    host: 'localhost',
-    port: process.env.FAUXTON_PORT || 8000,
-    hot: false,
-    historyApiFallback: true,
-    stats: {
-      colors: true,
-    },
-    headers: getCspHeaders(),
-  };
-
-  var compiler = webpack(config);
-
-  var server = new WebpackDev(compiler, options);
   var proxy = httpProxy.createServer({
     secure: false,
     changeOrigin: true,
@@ -98,9 +80,35 @@ var runWebpackServer = function () {
     // don't explode on cancelled requests
   });
 
-  server.app.all('*', function (req, res) {
-    proxy.web(req, res);
-  });
+  var options = {
+    contentBase: __dirname + '/dist/debug',
+    publicPath: '/',
+    //outputPath: '/',
+    filename: 'bundle.js',
+    host: 'localhost',
+    port: process.env.FAUXTON_PORT || 8000,
+    hot: false,
+    historyApiFallback: true,
+    stats: {
+      colors: true,
+    },
+    headers: getCspHeaders(),
+    setup: (app) => {
+      app.all('*', (req, res, next) => {
+        const accept = req.headers.accept ? req.headers.accept.split(',') : '';
+        console.log(accept);
+        if (accept[0] === 'application/json') {
+          proxy.web(req, res);
+          return;
+        }
+
+        next();
+      });
+    }
+  };
+
+  const compiler = webpack(config);
+  const server = new WebpackDev(compiler, options);
 
   server.listen(options.port, '0.0.0.0', function (err) {
     if (err) {
