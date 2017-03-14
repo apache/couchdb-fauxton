@@ -44,23 +44,27 @@ div.replication__page {
   width: 540px;
   select {
     font-size: 14px;
-    width: 246px;
+    width: 400px;
     margin-bottom: 10px;
     background-color: white;
     border: 1px solid #cccccc;
   }
   .styled-select {
-    width: 250px;
+    width: 400px;
   }
 }
 
 .replication__input-react-select {
   font-size: 14px;
 
+  .Select .Select-menu-outer {
+    width: 400px;
+  }
+
   .Select div.Select-control {
     padding: 6px;
     border: 1px solid #cccccc;
-    width: 246px;
+    width: 400px;
 
     .Select-value, .Select-placeholder {
       padding: 6px 15px 6px 10px;
@@ -80,7 +84,7 @@ div.replication__page {
 
 .replication__remote-connection-url[type="text"] {
   font-size: 14px;
-  width: 100%;
+  width: 400px;
   color: #333;
 }
 
@@ -91,14 +95,14 @@ div.replication__page {
 }
 
 .replication__new-input[type="text"] {
-  width: 248px;
+  width: 400px;
   font-size: 14px;
   color: #333;
 }
 
 .replication__doc-name {
   position: relative;
-  width: 250px;
+  width: 400px;
 
 }
 
@@ -121,7 +125,7 @@ div.replication__page {
 .replication__doc-name-input[type="text"] {
   padding-right: 32px;
   font-size: 14px;
-  width: 248px;
+  width: 400px;
   color: #333;
 }
 
@@ -270,6 +274,10 @@ input.replication__bulk-select-input[type="checkbox"] {
   padding-left: 8px;
 }
 
+.replication__row-btn--no-left-pad {
+  padding-left: 0px;
+}
+
 .replication__row-btn:visited,
 .replication__row-btn:hover {
   text-decoration: none;
@@ -288,6 +296,10 @@ input.replication__filter-input[type="text"] {
   border: 0;
   padding: 10px;
   margin-bottom: 0;
+}
+
+button.replication__error-continue {
+  margin-left: 20px !important; //needed to override bootstrap
 }
 
 .replication__error-cancel,
@@ -310,4 +322,14 @@ td.replication__empty-row {
 
 .replication__remote_icon_help:hover {
   color: #af2d24;
+}
+
+.replication__tooltip {
+  .tooltip-inner {
+    text-align: left
+  }
+}
+
+.replication__activity-caveat {
+  padding-left: 80px;
 }

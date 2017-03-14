@@ -16,6 +16,30 @@ import app from '../../app';
 import FauxtonAPI from '../../core/api';
 import base64 from 'base-64';
 import _ from 'lodash';
+import 'whatwg-fetch';
+
+let newApiPromise = null;
+export const supportNewApi = (forceCheck) => {
+  if (!newApiPromise || forceCheck) {
+    newApiPromise = new FauxtonAPI.Promise((resolve) => {
+      fetch('/_scheduler/jobs', {
+        credentials: 'include',
+        headers: {
+            'Accept': 'application/json; charset=utf-8',
+          }
+        })
+      .then(resp => {
+        if (resp.status > 202) {
+          return resolve(false);
+        }
+
+        resolve(true);
+      });
+    });
+  }
+
+  return newApiPromise;
+};
 
 export const encodeFullUrl = (fullUrl) => {
   if (!fullUrl) {return '';}
@@ -208,6 +232,9 @@ export const removeSensitiveUrlInfo = (url) => {
 
 export const getDocUrl = (doc) => {
   let url = doc;
+  if (!doc) {
+    return '';
+  }
 
   if (typeof doc === "object") {
     url = doc.url;
@@ -228,38 +255,182 @@ export const parseReplicationDocs = (rows) => {
       status: doc._replication_state,
       errorMsg: doc._replication_state_reason ? doc._replication_state_reason : '',
       statusTime: new Date(doc._replication_state_time),
-      url: `#/database/_replicator/${app.utils.getSafeIdForDoc(doc._id)}`,
+      startTime: new Date(doc._replication_start_time),
+      url: `#/database/_replicator/${encodeURIComponent(doc._id)}`,
       raw: doc
     };
   });
 };
 
+export const convertState = (state) => {
+  if (state.toLowerCase() === 'error' || state.toLowerCase() === 'crashing') {
+    return 'retrying';
+  }
+
+  return state;
+};
+
+export const combineDocsAndScheduler = (docs, schedulerDocs) => {
+  return docs.map(doc => {
+    const schedule = schedulerDocs.find(s => s.doc_id === doc._id);
+    if (!schedule) {
+      return doc;
+    }
+
+    doc.status = convertState(schedule.state);
+    if (schedule.start_time) {
+      doc.startTime = new Date(schedule.start_time);
+    }
+
+    if (schedule.last_updated) {
+      doc.stateTime = new Date(schedule.last_updated);
+    }
+
+    return doc;
+  });
+};
+
 export const fetchReplicationDocs = () => {
-  return $.ajax({
-    type: 'GET',
-    url: '/_replicator/_all_docs?include_docs=true&limit=100',
-    contentType: 'application/json; charset=utf-8',
-    dataType: 'json',
-  }).then((res) => {
-    return parseReplicationDocs(res.rows.filter(row => row.id.indexOf("_design/_replicator") === -1));
+  return supportNewApi()
+  .then(newApi => {
+    const docsPromise = fetch('/_replicator/_all_docs?include_docs=true&limit=100', {
+      credentials: 'include',
+      headers: {
+        'Accept': 'application/json; charset=utf-8',
+      }
+    })
+    .then(res => res.json())
+    .then((res) => {
+      if (res.error) {
+        return [];
+      }
+
+      return parseReplicationDocs(res.rows.filter(row => row.id.indexOf("_design/_replicator") === -1));
+    });
+
+    if (!newApi) {
+      return docsPromise;
+    }
+    const schedulerPromise = fetchSchedulerDocs();
+    return FauxtonAPI.Promise.join(docsPromise, schedulerPromise, (docs, schedulerDocs) => {
+      return combineDocsAndScheduler(docs, schedulerDocs);
+    })
+    .catch(() => {
+      return [];
+    });
+  });
+};
+
+export const fetchSchedulerDocs = () => {
+  return fetch('/_scheduler/docs?include_docs=true', {
+    credentials: 'include',
+    headers: {
+      'Accept': 'application/json; charset=utf-8',
+    }
+  })
+  .then(res => res.json())
+  .then((res) => {
+    if (res.error) {
+      return [];
+    }
+
+    return res.docs;
   });
 };
 
 export const checkReplicationDocID = (docId) => {
   const promise = FauxtonAPI.Deferred();
-  $.ajax({
-    type: 'GET',
-    url: `/_replicator/${docId}`,
-    contentType: 'application/json; charset=utf-8',
-    dataType: 'json',
-  }).then(() => {
-    promise.resolve(true);
-  }, function (xhr) {
-    if (xhr.statusText === "Object Not Found") {
+  fetch(`/_replicator/${docId}`, {
+    credentials: 'include',
+    headers: {
+      'Accept': 'application/json; charset=utf-8'
+    },
+  }).then(resp => {
+    if (resp.statusText === "Object Not Found") {
       promise.resolve(false);
       return;
     }
     promise.resolve(true);
   });
   return promise;
+};
+
+export const parseReplicateInfo = (resp) => {
+  return resp.jobs.filter(job => job.database === null).map(job => {
+    return {
+      _id: job.id,
+      source: getDocUrl(job.source.slice(0, job.source.length - 1)),
+      target: getDocUrl(job.target.slice(0, job.target.length - 1)),
+      startTime: new Date(job.start_time),
+      statusTime: new Date(job.last_updated),
+      //making an asumption here that the first element is the latest
+      status: convertState(job.history[0].type),
+      errorMsg: '',
+      selected: false,
+      continuous: /continuous/.test(job.id),
+      raw: job
+    };
+  });
+};
+
+export const fetchReplicateInfo = () => {
+  return supportNewApi()
+  .then(newApi => {
+    if (!newApi) {
+      return [];
+    }
+
+    return fetch('/_scheduler/jobs', {
+      credentials: 'include',
+      headers: {
+        'Accept': 'application/json; charset=utf-8'
+      },
+    })
+    .then(resp => resp.json())
+    .then(resp => {
+      return parseReplicateInfo(resp);
+    });
+  });
+};
+
+export const deleteReplicatesApi = (replicates) => {
+  const promises = replicates.map(replicate => {
+    const data = {
+      replication_id: replicate._id,
+      cancel: true
+    };
+
+    return fetch('/_replicate', {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Accept': 'application/json; charset=utf-8',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+    .then(resp => resp.json());
+  });
+
+  return FauxtonAPI.Promise.all(promises);
+};
+
+export const createReplicatorDB = () => {
+  return fetch('/_replicator', {
+    method: 'PUT',
+    credentials: 'include',
+    headers: {
+        'Accept': 'application/json; charset=utf-8',
+      }
+    })
+    .then(res => {
+      if (!res.ok) {
+        throw {reason: 'Failed to create the _replicator database.'};
+      }
+
+      return res.json();
+    })
+    .then(() => {
+      return true;
+    });
 };

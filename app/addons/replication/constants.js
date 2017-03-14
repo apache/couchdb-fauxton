@@ -10,7 +10,6 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-
 export default {
   REPLICATION_SOURCE: {
     LOCAL: 'REPLICATION_SOURCE_LOCAL',

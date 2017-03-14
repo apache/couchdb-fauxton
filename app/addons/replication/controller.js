@@ -18,6 +18,8 @@ import NewReplication from './components/newreplication';
 import Activity from './components/activity';
 import {checkReplicationDocID} from './api';
 import {OnePane, OnePaneHeader, OnePaneContent} from '../components/layouts';
+import {TabElementWrapper, TabElement} from '../components/components/tabelement';
+import ReplicateActivity from './components/replicate-activity';
 
 const {LoadLines, Polling, RefreshBtn} = Components;
 
@@ -57,21 +59,34 @@ export default class ReplicationController extends React.Component {
       submittedNoChange: store.getSubmittedNoChange(),
       statusDocs: store.getFilteredReplicationStatus(),
       statusFilter: store.getStatusFilter(),
+      replicateFilter: store.getReplicateFilter(),
       allDocsSelected: store.getAllDocsSelected(),
       someDocsSelected:  store.someDocsSelected(),
       username: store.getUsername(),
       password: store.getPassword(),
-      activitySort: store.getActivitySort()
+      activitySort: store.getActivitySort(),
+      tabSection: store.getTabSection(),
+      checkingApi: store.checkingAPI(),
+      supportNewApi: store.supportNewApi(),
+      replicateLoading: store.isReplicateInfoLoading(),
+      replicateInfo: store.getReplicateInfo(),
+      allReplicateSelected: store.getAllReplicateSelected(),
+      someReplicateSelected: store.someReplicateSelected()
     };
   }
 
   loadReplicationInfo (props, oldProps) {
     Actions.initReplicator(props.localSource);
-    Actions.getReplicationActivity();
+    this.getAllActivity();
     if (props.replicationId && props.replicationId !== oldProps.replicationId) {
       Actions.clearReplicationForm();
       Actions.getReplicationStateFrom(props.replicationId);
     }
+  }
+
+  getAllActivity () {
+    Actions.getReplicationActivity();
+    Actions.getReplicateActivity();
   }
 
   componentDidMount () {
@@ -98,10 +113,11 @@ export default class ReplicationController extends React.Component {
       passwordModalVisible, databases, localSource, remoteSource, remoteTarget,
       localTarget, statusDocs, statusFilter, loading, allDocsSelected,
       someDocsSelected, showConflictModal, localSourceKnown, localTargetKnown,
-      username, password, authenticated, activityLoading, submittedNoChange, activitySort
+      username, password, authenticated, activityLoading, submittedNoChange, activitySort, tabSection,
+      replicateInfo, replicateLoading, replicateFilter, allReplicateSelected, someReplicateSelected
     } = this.state;
 
-    if (this.props.section === 'new replication') {
+    if (tabSection === 'new replication') {
       if (loading) {
         return <LoadLines/>;
       }
@@ -141,10 +157,29 @@ export default class ReplicationController extends React.Component {
       />;
     }
 
+    if (tabSection === '_replicate') {
+      if (replicateLoading) {
+        return <LoadLines />;
+      }
+
+      return <ReplicateActivity
+        docs={replicateInfo}
+        filter={replicateFilter}
+        onFilterChange={Actions.filterReplicate}
+        selectDoc={Actions.selectReplicate}
+        selectAllDocs={Actions.selectAllReplicates}
+        allDocsSelected={allReplicateSelected}
+        someDocsSelected={someReplicateSelected}
+        deleteDocs={Actions.deleteDocs}
+        activitySort={activitySort}
+        changeActivitySort={Actions.changeActivitySort}
+        deleteDocs={Actions.deleteReplicates}
+        />;
+    }
+
     if (activityLoading) {
       return <LoadLines/>;
     }
-
 
     return <Activity
       docs={statusDocs}
@@ -161,21 +196,8 @@ export default class ReplicationController extends React.Component {
            />;
   }
 
-  getCrumbs () {
-    if (this.props.section === 'new replication') {
-      return [
-        {name: 'Replication', link: 'replication'},
-        {name: 'New Replication'}
-      ];
-    }
-
-    return [
-      {name: 'Replication'}
-    ];
-  }
-
   getHeaderComponents () {
-    if (this.props.section === 'new replication') {
+    if (this.state.tabSection === 'new replication') {
       return null;
     }
 
@@ -186,25 +208,79 @@ export default class ReplicationController extends React.Component {
           max={600}
           startValue={300}
           stepSize={60}
-          onPoll={Actions.getReplicationActivity}
+          onPoll={this.getAllActivity.bind(this)}
           />
         <RefreshBtn
-          refresh={Actions.getReplicationActivity}
+          refresh={this.getAllActivity.bind(this)}
           />
       </div>
     );
   }
 
+  getTabElements () {
+    const {tabSection} = this.state;
+    const elements = [
+      <TabElement
+        key={1}
+        selected={tabSection === 'activity'}
+        text={"Replicator DB Activity"}
+        onChange={this.onTabChange.bind(this, 'activity', '#/replication')}
+      />
+    ];
+
+    if (this.state.supportNewApi) {
+      elements.push(
+        <TabElement
+          key={2}
+          selected={tabSection === '_replicate'}
+          text={"_replicate Activity"}
+          onChange={this.onTabChange.bind(this, '_replicate', '#/replication/_replicate')}
+        />
+      );
+    }
+
+    return elements;
+  }
+
+  onTabChange (section, url) {
+    Actions.changeTabSection(section, url);
+  }
+
+  getCrumbs () {
+    if (this.state.tabSection === 'new replication') {
+      return [{'name': 'Job Configuration'}];
+    }
+
+    return [];
+  }
+
+  getTabs () {
+    if (this.state.tabSection === 'new replication') {
+      return null;
+    }
+
+    return (
+      <TabElementWrapper>
+        {this.getTabElements()}
+      </TabElementWrapper>
+    );
+  }
+
   render () {
+    const { checkingAPI } = this.state;
+
+    if (checkingAPI) {
+      return <LoadLines />;
+    }
+
     return (
       <OnePane>
-        <OnePaneHeader
-          crumbs={this.getCrumbs()}
-        >
+        <OnePaneHeader crumbs={this.getCrumbs()}>
         {this.getHeaderComponents()}
         </OnePaneHeader>
         <OnePaneContent>
           <div className="template-content flex-body flex-layout flex-col">
+            {this.getTabs()}
             <div className="replication__page flex-layout flex-col">
               {this.showSection()}
             </div>

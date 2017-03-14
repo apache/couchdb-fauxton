@@ -30,10 +30,10 @@ export default class Activity extends React.Component {
     });
   }
 
-  showModal (doc) {
+  showModal (docId) {
     this.setState({
       modalVisible: true,
-      unconfirmedDeleteDocId: doc
+      unconfirmedDeleteDocId: docId
     });
   }
 
@@ -71,13 +71,15 @@ export default class Activity extends React.Component {
     return (
       <div className="replication__activity">
         <p className="replication__activity-caveat">
-          Replications must have a replication document to display in the following table.
+          Active _replicate jobs are displayed. Completed and failed jobs are not.
         </p>
         <ReplicationHeader
           filter={filter}
           onFilterChange={onFilterChange}
         />
         <ReplicationTable
+          onlyDeleteAction={true}
+          showStateRow={false}
           someDocsSelected={someDocsSelected}
           allDocsSelected={allDocsSelected}
           selectAllDocs={selectAllDocs}
@@ -89,7 +91,7 @@ export default class Activity extends React.Component {
           changeSort={changeActivitySort}
         />
         <DeleteModal
-          isReplicationDB={true}
+          isReplicationDB={false}
           multipleDocs={this.numDocsSelected()}
           visible={modalVisible}
           onClose={this.closeModal.bind(this)}

@@ -13,9 +13,18 @@
 import FauxtonAPI from '../../core/api';
 import replication from './route';
 import './assets/less/replication.less';
+import Actions from './actions';
 
 replication.initialize = function () {
   FauxtonAPI.addHeaderLink({ title: 'Replication', href: '#/replication', icon: 'fonticon-replicate' });
+  FauxtonAPI.session.on('authenticated', () => {
+    if (!FauxtonAPI.session.isLoggedIn()) {
+      //don't check until user is logged in
+      return;
+    }
+
+    Actions.checkForNewApi();
+  });
 };
 
 FauxtonAPI.registerUrls('replication', {

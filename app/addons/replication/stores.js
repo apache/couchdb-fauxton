@@ -16,6 +16,20 @@ import Constants from './constants';
 import AccountActionTypes from '../auth/actiontypes';
 import _ from 'lodash';
 
+// I know this could be done by just adding the _ prefix to the passed field name, I just don't much like relying
+// on the var names like that...
+const validFieldMap = {
+  remoteSource: '_remoteSource',
+  remoteTarget: '_remoteTarget',
+  localTarget: '_localTarget',
+  replicationType: '_replicationType',
+  replicationDocName: '_replicationDocName',
+  replicationSource: '_replicationSource',
+  replicationTarget: '_replicationTarget',
+  localSource: '_localSource',
+  replicationDocName: '_replicationDocName'
+};
+
 const ReplicationStore = FauxtonAPI.Store.extend({
   initialize () {
     this.reset();
@@ -46,12 +60,30 @@ const ReplicationStore = FauxtonAPI.Store.extend({
     this._statusDocs = [];
     this._statusFilteredStatusDocs = [];
     this._statusFilter = '';
+    this._replicateFilter = '';
     this._allDocsSelected = false;
+    this._allReplicateSelected = false;
     this._username = '';
     this._password = '';
     this._activityLoading = false;
+    this._tabSection = 'new replication';
+    this._supportNewApi = true;
 
     this.loadActivitySort();
+
+    this._fetchingReplicateInfo = false;
+    this._replicateInfo = [];
+
+    this._checkingAPI = true;
+    this._supportNewApi = false;
+  },
+
+  supportNewApi () {
+    return this._supportNewApi;
+  },
+
+  checkingAPI () {
+    return this._checkingAPI;
   },
 
   getActivitySort () {
@@ -59,13 +91,14 @@ const ReplicationStore = FauxtonAPI.Store.extend({
   },
 
   loadActivitySort () {
-    let sort = app.utils.localStorageGet('replication-activity-sort');
-    if (!sort) {
-      sort = {
+    const defaultSort = {
         descending: false,
         column: 'statusTime'
       };
+    let sort = app.utils.localStorageGet('replication-activity-sort');
 
+    if (!sort) {
+      sort = defaultSort;
       this.setActivitySort(sort);
     }
 
@@ -75,6 +108,23 @@ const ReplicationStore = FauxtonAPI.Store.extend({
   setActivitySort (sort) {
     app.utils.localStorageSet('replication-activity-sort', sort);
     this._activitySort = sort;
+  },
+
+  isReplicateInfoLoading () {
+    return this._fetchingReplicateInfo;
+  },
+
+  getReplicateInfo () {
+    return this._replicateInfo.filter(doc => {
+      return _.values(doc).filter(item => {
+        if (!item) {return false;}
+        return item.toString().toLowerCase().match(this._replicateFilter);
+      }).length > 0;
+    });
+  },
+
+  setReplicateInfo (info) {
+    this._replicateInfo = info;
   },
 
   setCredentials (username, password) {
@@ -177,6 +227,29 @@ const ReplicationStore = FauxtonAPI.Store.extend({
     this._allDocsSelected = false;
   },
 
+  selectReplicate (id) {
+    const doc = this._replicateInfo.find(doc => doc._id === id);
+    if (!doc) {
+      return;
+    }
+
+    doc.selected = !doc.selected;
+    this._allReplicateSelected = false;
+  },
+
+  selectAllReplicate () {
+    this._allReplicateSelected = !this._allReplicateSelected;
+    this.getReplicateInfo().forEach(doc => doc.selected = this._allReplicateSelected);
+  },
+
+  someReplicateSelected () {
+    return this.getReplicateInfo().some(doc => doc.selected);
+  },
+
+  getAllReplicateSelected () {
+    return this._allReplicateSelected;
+  },
+
   selectAllDocs () {
     this._allDocsSelected = !this._allDocsSelected;
     this.getFilteredReplicationStatus().forEach(doc => doc.selected = this._allDocsSelected);
@@ -197,23 +270,21 @@ const ReplicationStore = FauxtonAPI.Store.extend({
   getStatusFilter () {
     return this._statusFilter;
   },
+
+  setReplicateFilter (filter) {
+    this._replicateFilter = filter;
+  },
+
+  getReplicateFilter () {
+    return this._replicateFilter;
+  },
   // to cut down on boilerplate
   updateFormField (fieldName, value) {
-
-    // I know this could be done by just adding the _ prefix to the passed field name, I just don't much like relying
-    // on the var names like that...
-    var validFieldMap = {
-      remoteSource: '_remoteSource',
-      remoteTarget: '_remoteTarget',
-      localTarget: '_localTarget',
-      replicationType: '_replicationType',
-      replicationDocName: '_replicationDocName',
-      replicationSource: '_replicationSource',
-      replicationTarget: '_replicationTarget',
-      localSource: '_localSource'
-    };
-
     this[validFieldMap[fieldName]] = value;
+  },
+
+  clearReplicationForm () {
+    _.values(validFieldMap).forEach(fieldName => this[fieldName] = '');
   },
 
   getRemoteSource () {
@@ -242,6 +313,10 @@ const ReplicationStore = FauxtonAPI.Store.extend({
     });
   },
 
+  getTabSection () {
+    return this._tabSection;
+  },
+
   dispatch ({type, options}) {
     switch (type) {
 
@@ -263,13 +338,17 @@ const ReplicationStore = FauxtonAPI.Store.extend({
         this._loading = false;
       break;
 
+      case ActionTypes.REPLICATION_FETCHING_FORM_STATE:
+        this._loading = true;
+      break;
+
       case ActionTypes.REPLICATION_UPDATE_FORM_FIELD:
         this.changeAfterSubmit();
         this.updateFormField(options.fieldName, options.value);
       break;
 
       case ActionTypes.REPLICATION_CLEAR_FORM:
-        this.reset();
+        this.clearReplicationForm();
       break;
 
       case ActionTypes.REPLICATION_STARTING:
@@ -289,6 +368,10 @@ const ReplicationStore = FauxtonAPI.Store.extend({
         this.setStatusFilter(options);
       break;
 
+      case ActionTypes.REPLICATION_FILTER_REPLICATE:
+        this.setReplicateFilter(options);
+      break;
+
       case ActionTypes.REPLICATION_TOGGLE_DOC:
         this.selectDoc(options);
       break;
@@ -297,7 +380,16 @@ const ReplicationStore = FauxtonAPI.Store.extend({
         this.selectAllDocs();
       break;
 
+      case ActionTypes.REPLICATION_TOGGLE_REPLICATE:
+        this.selectReplicate(options);
+      break;
+
+      case ActionTypes.REPLICATION_TOGGLE_ALL_REPLICATE:
+        this.selectAllReplicate();
+      break;
+
       case ActionTypes.REPLICATION_SET_STATE_FROM_DOC:
+        this._loading = false;
         this.setStateFromDoc(options);
       break;
 
@@ -315,6 +407,32 @@ const ReplicationStore = FauxtonAPI.Store.extend({
 
       case ActionTypes.REPLICATION_CLEAR_SELECTED_DOCS:
         this._allDocsSelected = false;
+      break;
+
+      case ActionTypes.REPLICATION_CHANGE_TAB_SECTION:
+        this._tabSection = options;
+      break;
+
+      case ActionTypes.REPLICATION_CLEAR_SELECTED_DOCS:
+        this._allDocsSelected = false;
+      break;
+
+      case ActionTypes.REPLICATION_SUPPORT_NEW_API:
+        this._checkingAPI = false;
+        this._supportNewApi = options;
+      break;
+
+      case ActionTypes.REPLICATION_FETCHING_REPLICATE_STATUS:
+        this._fetchingReplicateInfo = true;
+      break;
+
+      case ActionTypes.REPLICATION_REPLICATE_STATUS:
+        this._fetchingReplicateInfo = false;
+        this.setReplicateInfo(options);
+      break;
+
+      case ActionTypes.REPLICATION_CLEAR_SELECTED_REPLICATES:
+        this._allReplicateSelected = false;
       break;
 
       case AccountActionTypes.AUTH_SHOW_PASSWORD_MODAL:
