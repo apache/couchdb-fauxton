@@ -96,12 +96,11 @@ var runWebpackServer = function () {
     setup: (app) => {
       app.all('*', (req, res, next) => {
         const accept = req.headers.accept ? req.headers.accept.split(',') : '';
-        console.log(accept);
+
         if (accept[0] === 'application/json') {
           proxy.web(req, res);
           return;
         }
-
         next();
       });
     }

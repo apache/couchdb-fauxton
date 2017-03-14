@@ -15,13 +15,13 @@ var path = require('path');
 
 module.exports = {
   // Entry point for static analyzer:
-  entry: [
-    './app/main.js'
-  ],
+  entry: {
+    bundle: './app/main.js'
+  },
 
   output: {
     path: path.join(__dirname, '/dist/release'),
-    filename: 'bundle.js'
+    filename: '[name].js'
   },
 
   plugins: [
@@ -40,7 +40,14 @@ module.exports = {
       },
       sourceMap: true
     }),
-    new ExtractTextPlugin("styles.css")
+    new ExtractTextPlugin("styles.css"),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'vendor', // Specify the common bundle's name.
+      minChunks: function (module) {
+          // this assumes your vendor imports exist in the node_modules directory
+          return module.context && module.context.indexOf('node_modules') !== -1;
+      }
+    })
   ],
 
   resolve: {
