@@ -284,7 +284,7 @@ const ReplicationStore = FauxtonAPI.Store.extend({
   },
 
   clearReplicationForm () {
-    Object.values(validFieldMap).forEach(fieldName => this[fieldName] = '');
+    _.values(validFieldMap).forEach(fieldName => this[fieldName] = '');
   },
 
   getRemoteSource () {
