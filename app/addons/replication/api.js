@@ -423,7 +423,13 @@ export const createReplicatorDB = () => {
         'Accept': 'application/json; charset=utf-8',
       }
     })
-    .then(res => res.json())
+    .then(res => {
+      if (!res.ok) {
+        throw {reason: 'Failed to create the _replicator database.'};
+      }
+
+      return res.json();
+    })
     .then(() => {
       return true;
     });
