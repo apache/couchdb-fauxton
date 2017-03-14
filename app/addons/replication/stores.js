@@ -117,7 +117,7 @@ const ReplicationStore = FauxtonAPI.Store.extend({
   getReplicateInfo () {
     return this._replicateInfo.filter(doc => {
       return _.values(doc).filter(item => {
-        if (!item) {return null;}
+        if (!item) {return false;}
         return item.toString().toLowerCase().match(this._replicateFilter);
       }).length > 0;
     });

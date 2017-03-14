@@ -30,10 +30,10 @@ export default class Activity extends React.Component {
     });
   }
 
-  showModal (doc) {
+  showModal (docId) {
     this.setState({
       modalVisible: true,
-      unconfirmedDeleteDocId: doc
+      unconfirmedDeleteDocId: docId
     });
   }
 

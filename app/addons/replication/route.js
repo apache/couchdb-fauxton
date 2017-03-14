@@ -41,7 +41,7 @@ const ReplicationRouteObject = FauxtonAPI.RouteObject.extend({
   },
 
   defaultView: function (databaseName) {
-    let localSource = databaseName || '';
+    const localSource = databaseName || '';
     Actions.changeTabSection('new replication');
     Actions.clearReplicationForm();
 

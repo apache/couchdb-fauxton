@@ -10,63 +10,6 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 import React from 'react';
-import {DeleteModal} from './modals';
-
-export class BulkDeleteController extends React.Component {
-  constructor (props) {
-    super(props);
-    this.state = {
-      modalVisible: false,
-      unconfirmedDeleteDocId: null
-    };
-  }
-
-  closeModal () {
-    this.setState({
-      modalVisible: false,
-      unconfirmedDeleteDocId: null
-    });
-  }
-
-  showModal (doc) {
-    this.setState({
-      modalVisible: true,
-      unconfirmedDeleteDocId: doc
-    });
-  }
-
-  confirmDeleteDocs () {
-    let docs = [];
-    if (this.state.unconfirmedDeleteDocId) {
-      const doc = this.props.docs.find(doc => doc._id === this.state.unconfirmedDeleteDocId);
-      docs.push(doc);
-    } else {
-      docs = this.props.docs.filter(doc => doc.selected);
-    }
-
-    this.props.deleteDocs(docs);
-    this.closeModal();
-  }
-
-  numDocsSelected () {
-    return this.props.docs.filter(doc => doc.selected).length;
-  }
-
-  render () {
-    const {modalVisible} = this.state;
-    return <DeleteModal
-          multipleDocs={this.numDocsSelected()}
-          visible={modalVisible}
-          onClose={this.closeModal.bind(this)}
-          onClick={this.confirmDeleteDocs.bind(this)}
-          />;
-  }
-}
-
-BulkDeleteController.propTypes = {
-  docs: React.PropTypes.array.isRequired,
-  deleteDocs: React.PropTypes.func.isRequired
-};
 
 export const ReplicationFilter = ({value, onChange}) => {
   return (

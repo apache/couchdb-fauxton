@@ -112,7 +112,7 @@ const RowActions = ({onlyDeleteAction, _id, url, deleteDocs}) => {
         <a
           href={`#replication/id/${encodeURIComponent(_id)}`}
           className="replication__row-btn icon-wrench replication__row-btn--no-left-pad"
-          title={`Edit replication`}
+          title={'Edit replication'}
           data-bypass="true"
           >
         </a>
@@ -122,7 +122,7 @@ const RowActions = ({onlyDeleteAction, _id, url, deleteDocs}) => {
       <li className="replication__row-list" key={2}>
         <a
           className="replication__row-btn fonticon-document"
-          title={`Edit replication document`}
+          title={'Edit replication document'}
           href={url}
           data-bypass="true"
           >
@@ -291,7 +291,6 @@ export class ReplicationTable extends React.Component {
   }
 
   renderRows () {
-    console.log(this.props.docs);
     if (this.props.docs.length === 0) {
       return <EmptyRow />;
     }
@@ -343,7 +342,7 @@ export class ReplicationTable extends React.Component {
     return '';
   }
 
-  stateRow () {
+  stateCol () {
     if (this.props.showStateRow) {
       return (
         <th className="replication__table-header-status" onClick={this.onSort('status')}>
@@ -386,7 +385,7 @@ export class ReplicationTable extends React.Component {
               Type
               <span className={`replication__table-header-icon ${this.iconDirection('continuous')} ${this.isSelected('continuous')}`} />
             </th>
-            {this.stateRow()}
+            {this.stateCol()}
             <th className="replication__table-header-actions">
               Actions
             </th>
