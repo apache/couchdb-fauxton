@@ -4,6 +4,7 @@ var webpack = require('webpack');
 var WebpackDev = require('webpack-dev-server');
 var config = require('./webpack.config.dev.js');
 var httpProxy = require('http-proxy');
+var path = require('path');
 
 
 var loadSettings = function () {
@@ -81,14 +82,12 @@ var runWebpackServer = function () {
   });
 
   var options = {
-    contentBase: __dirname + '/dist/debug',
-    publicPath: '/',
-    //outputPath: '/',
-    filename: 'bundle.js',
+    contentBase: path.join(__dirname, '/dist/debug/'),
     host: 'localhost',
     port: process.env.FAUXTON_PORT || 8000,
+    overlay: true,
     hot: false,
-    historyApiFallback: true,
+    historyApiFallback: false,
     stats: {
       colors: true,
     },
@@ -97,10 +96,11 @@ var runWebpackServer = function () {
       app.all('*', (req, res, next) => {
         const accept = req.headers.accept ? req.headers.accept.split(',') : '';
 
-        if (accept[0] === 'application/json') {
+        if (/application\/json/.test(accept[0])) {
           proxy.web(req, res);
           return;
         }
+
         next();
       });
     }

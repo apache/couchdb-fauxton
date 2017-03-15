@@ -16,11 +16,12 @@ module.exports = function (grunt) {
       os = require('os');
 
   grunt.registerMultiTask('template', 'generates an html file from a specified template', function () {
-    var data = this.data,
-        _ = grunt.util._,
-        tmpl = _.template(grunt.file.read(data.src), null, data.variables);
+    console.log('template can be removed', this.data.src);
+    // var data = this.data,
+    //     _ = grunt.util._,
+    //     tmpl = _.template(grunt.file.read(data.src), null, data.variables);
 
-    grunt.file.write(data.dest, tmpl(data.variables));
+    // grunt.file.write(data.dest, tmpl(data.variables));
   });
 
   grunt.registerMultiTask('get_deps', 'Fetch external dependencies', function () {

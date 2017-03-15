@@ -10,13 +10,29 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const path = require('path');
 
 module.exports = {
-  entry: [
-    './app/main.js' //Our starting point for our development.
-  ],
+  entry: {
+    bundle: './app/main.js' //Our starting point for our development.
+  },
+
+  output: {
+    path: path.join(__dirname, '/dist/debug/'),
+    filename: 'dashboard.assets/js/[name].js'
+  },
+
   plugins: [
-    new webpack.optimize.LimitChunkCountPlugin({maxChunks: 1})
+    new webpack.optimize.LimitChunkCountPlugin({maxChunks: 1}),
+    new HtmlWebpackPlugin({
+      template: './assets/index.underscore', // Load a custom template (ejs by default see the FAQ for details)
+      title: 'Project Fauxton',
+      filename: 'index.html',
+      development: true,
+      generationLabel: 'Fauxton Dev',
+      generationDate: new Date().toISOString()
+    }),
   ],
   module: {
     rules: [
@@ -88,11 +104,5 @@ module.exports = {
       "underscore": "lodash",
     }
   },
-  output: {
-    path: __dirname + '/dist/debug',
-    publicPath: '/',
-    filename: 'bundle.js' //All our code is compiled into a single file called bundle.js
-  },
-
   devtool: 'source-map'
 };

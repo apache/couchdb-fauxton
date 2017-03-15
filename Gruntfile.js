@@ -18,8 +18,6 @@
 /*jslint node: true */
 "use strict";
 
-const path = require('path');
-
 module.exports = function (grunt) {
   var helper = require('./tasks/helper.js'),
       initHelper = helper.init(grunt),
@@ -195,33 +193,7 @@ module.exports = function (grunt) {
         template: 'test/nightwatch_tests/nightwatch.json.underscore',
         dest: 'test/nightwatch_tests/nightwatch.json'
       }
-    },
-
-    // these rename the already-bundled, minified requireJS and CSS files to include their hash
-    md5: {
-      bundlejs: {
-        files: { 'dist/release/dashboard.assets/js/': 'dist/release/bundle.js' },
-        options: {
-          afterEach: function (fileChanges) {
-            // replace the REQUIREJS_FILE placeholder with the actual filename
-            const newFilename = path.basename(fileChanges.newPath);
-            config.template.release.variables.bundlejs = config.template.release.variables.bundlejs.replace(/BUNDLEJS_FILE/, newFilename);
-          }
-        }
-      },
-
-      css: {
-        files: { 'dist/release/dashboard.assets/css/': 'dist/release/styles.css' },
-        options: {
-          afterEach: function (fileChanges) {
-            // replace the CSS_FILE placeholder with the actual filename
-            const newFilename = path.basename(fileChanges.newPath);
-            config.template.release.variables.css = config.template.release.variables.css.replace(/CSS_FILE/, newFilename);
-          }
-        }
-      }
-    },
-
+    }
   };
 
   grunt.initConfig(config);
@@ -237,7 +209,6 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-shell');
-  grunt.loadNpmTasks('grunt-md5');
   /*
    * Default task
    */
@@ -256,7 +227,7 @@ module.exports = function (grunt) {
 
   // minify code and css, ready for release.
   grunt.registerTask('build', ['copy:distDepsRequire', 'shell:webpackrelease',
-    'md5:bundlejs', 'md5:css', 'template:release']);
+    /*'md5:bundlejs',*/ 'md5:css', 'template:release']);
   /*
    * Build the app in either dev, debug, or release mode
    */

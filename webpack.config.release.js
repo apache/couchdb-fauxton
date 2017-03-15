@@ -11,6 +11,7 @@
 // the License.
 var webpack = require('webpack');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
+var HtmlWebpackPlugin = require('html-webpack-plugin');
 var path = require('path');
 
 module.exports = {
@@ -20,8 +21,8 @@ module.exports = {
   },
 
   output: {
-    path: path.join(__dirname, '/dist/release'),
-    filename: '[name].js'
+    path: path.join(__dirname, '/dist/release/'),
+    filename: 'dashboard.assets/js/[name].[chunkhash].js'
   },
 
   plugins: [
@@ -40,14 +41,26 @@ module.exports = {
       },
       sourceMap: true
     }),
-    new ExtractTextPlugin("styles.css"),
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor', // Specify the common bundle's name.
       minChunks: function (module) {
-          // this assumes your vendor imports exist in the node_modules directory
-          return module.context && module.context.indexOf('node_modules') !== -1;
+        // this assumes your vendor imports exist in the node_modules directory
+        return module.context && module.context.indexOf('node_modules') !== -1;
       }
-    })
+    }),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: "manifest",
+      minChunks: Infinity
+    }),
+    new HtmlWebpackPlugin({
+      template: './assets/index.underscore', // Load a custom template (ejs by default see the FAQ for details)
+      title: 'Project Fauxton',
+      filename: 'index.html',
+      development: false,
+      generationLabel: 'Fauxton',
+      generationDate: new Date().toISOString()
+    }),
+    new ExtractTextPlugin("dashboard.assets/css/styles.[chunkhash].css"),
   ],
 
   resolve: {
@@ -94,18 +107,14 @@ module.exports = {
           "css-loader",
           "less-loader"
         ],
-        publicPath: '../../'
+        publicPath: '../'
       }),
     },
     {
-      test: /\.css/,
-      use: ExtractTextPlugin.extract({
-        fallback: "style-loader",
-        use: [
-          "css-loader",
-        ],
-        publicPath: '../../'
-      }),
+      test: /\.css$/, use: [
+        'style-loader',
+        'css-loader'
+        ]
     },
     {
       test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
@@ -118,7 +127,6 @@ module.exports = {
       test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,    loader: 'url-loader?limit=10000&mimetype=application/font-tff&name=dashboard.assets/fonts/[name].[ext]'
     },
     { test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,    loader: 'file-loader?name=dashboard.assets/fonts/[name].[ext]' },
-    { test: /\.swf(\?v=\d+\.\d+\.\d+)?$/,    loader: 'file-loader?name=dashboard.assets/[name].[ext]' },
     { test: /\.png(\?v=\d+\.\d+\.\d+)?$/,    loader: 'file-loader?name=dashboard.assets/img/[name].[ext]' },
     { test: /\.gif(\?v=\d+\.\d+\.\d+)?$/,    loader: 'file-loader?name=dashboard.assets/img/[name].[ext]' },
     { test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,    loader: 'url-loader?limit=10000&mimetype=image/svg+xml&name=dashboard.assets/img/[name].[ext]' }
