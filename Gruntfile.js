@@ -226,8 +226,7 @@ module.exports = function (grunt) {
   grunt.registerTask('dependencies', ['get_deps', 'gen_load_addons:default']);
 
   // minify code and css, ready for release.
-  grunt.registerTask('build', ['copy:distDepsRequire', 'shell:webpackrelease',
-    'template:release']);
+  grunt.registerTask('build', ['copy:distDepsRequire', 'shell:webpackrelease']);
   /*
    * Build the app in either dev, debug, or release mode
    */
@@ -238,13 +237,13 @@ module.exports = function (grunt) {
 
   // build a debug release
   grunt.registerTask('debug', ['clean', 'dependencies', "gen_initialize:development",
-    'template:development', 'copy:debug']);
+    'copy:debug']);
 
   grunt.registerTask('debugDev', ['clean', 'dependencies', "gen_initialize:development",
-    'template:development', 'copy:debug', 'shell:webpack']);
+    'copy:debug', 'shell:webpack']);
 
   grunt.registerTask('devSetup', ['dependencies', "gen_initialize:development",
-    'template:development', 'copy:debug']);
+    'copy:debug']);
   grunt.registerTask('devSetupWithClean', ['clean', 'devSetup']);
 
   grunt.registerTask('watchRun', ['clean:watch', 'dependencies', 'shell:stylecheck']);
