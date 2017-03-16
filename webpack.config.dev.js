@@ -12,6 +12,11 @@
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
+const settings = require('./tasks/helper')
+                    .init()
+                    .readSettingsFile()
+                    .template
+                    .development;
 
 module.exports = {
   entry: {
@@ -25,14 +30,13 @@ module.exports = {
 
   plugins: [
     new webpack.optimize.LimitChunkCountPlugin({maxChunks: 1}),
-    new HtmlWebpackPlugin({
-      template: './assets/index.underscore', // Load a custom template (ejs by default see the FAQ for details)
+    new HtmlWebpackPlugin(Object.assign({
+      template: settings.src,
       title: 'Project Fauxton',
       filename: 'index.html',
-      development: true,
       generationLabel: 'Fauxton Dev',
       generationDate: new Date().toISOString()
-    }),
+    }, settings.variables)),
   ],
   module: {
     rules: [

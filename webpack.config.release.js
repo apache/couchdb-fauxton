@@ -13,6 +13,11 @@ var webpack = require('webpack');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var path = require('path');
+const settings = require('./tasks/helper')
+                    .init()
+                    .readSettingsFile()
+                    .template
+                    .release;
 
 module.exports = {
   // Entry point for static analyzer:
@@ -34,13 +39,13 @@ module.exports = {
     }),
     // moment doesn't offer a modular API, so manually remove locale
     // see https://github.com/moment/moment/issues/2373
-    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
-    new webpack.optimize.UglifyJsPlugin({
-      compress: {
-        warnings: false
-      },
-      sourceMap: true
-    }),
+    // new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+    // new webpack.optimize.UglifyJsPlugin({
+    //   compress: {
+    //     warnings: false
+    //   },
+    //   sourceMap: true
+    // }),
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor', // Specify the common bundle's name.
       minChunks: function (module) {
@@ -52,14 +57,13 @@ module.exports = {
       name: "manifest",
       minChunks: Infinity
     }),
-    new HtmlWebpackPlugin({
-      template: './assets/index.underscore', // Load a custom template (ejs by default see the FAQ for details)
+    new HtmlWebpackPlugin(Object.assign({
+      template: settings.src,
       title: 'Project Fauxton',
       filename: 'index.html',
-      development: false,
-      generationLabel: 'Fauxton',
+      generationLabel: 'Fauxton Release',
       generationDate: new Date().toISOString()
-    }),
+    }, settings.variables)),
     new ExtractTextPlugin("dashboard.assets/css/styles.[chunkhash].css"),
   ],
 
@@ -107,7 +111,7 @@ module.exports = {
           "css-loader",
           "less-loader"
         ],
-        publicPath: '../'
+        publicPath: '../../'
       }),
     },
     {

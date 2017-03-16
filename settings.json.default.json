@@ -20,10 +20,8 @@
         "src": "assets/index.underscore",
         "dest": "dist/debug/index.html",
         "variables": {
-          "bundlejs": "/bundle.js",
-          "css": "./dashboard.assets/css/index.css",
-          "base": null,
-          "development": true
+          "title": "Project Fauxton",
+          "generationLabel": "Fauxton Dev"
         },
         "app": {
           "root": "/",
@@ -35,10 +33,8 @@
         "src": "assets/index.underscore",
         "dest": "dist/debug/index.html",
         "variables": {
-          "bundlejs": "./dashboard.assets/js/BUNDLEJS_FILE",
-          "css": "./dashboard.assets/css/CSS_FILE",
-          "base": null,
-          "development": false
+          "title": "Project Fauxton",
+          "generationLabel": "Fauxton Release"
         },
         "app": {
           "root": "/",
@@ -50,10 +46,8 @@
         "src": "assets/index.underscore",
         "dest": "dist/debug/index.html",
         "variables": {
-          "bundlejs": "./js/BUNDLEJS_FILE",
-          "css": "./css/CSS_FILE",
-          "base": null,
-          "development": false
+          "title": "Project Fauxton",
+          "generationLabel": "Fauxton Couchapp"
         },
         "app": {
           "root": "/",

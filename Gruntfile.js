@@ -227,7 +227,7 @@ module.exports = function (grunt) {
 
   // minify code and css, ready for release.
   grunt.registerTask('build', ['copy:distDepsRequire', 'shell:webpackrelease',
-    /*'md5:bundlejs',*/ 'md5:css', 'template:release']);
+    'template:release']);
   /*
    * Build the app in either dev, debug, or release mode
    */
