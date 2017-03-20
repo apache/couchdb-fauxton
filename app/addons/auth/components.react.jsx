@@ -163,7 +163,7 @@ var ChangePasswordForm = React.createClass({
 
           <br />
           <p>
-            <button type="submit" className="btn btn-primary">Change</button>
+            <button type="submit" className="btn btn-primary"><i className="icon icon-ok-circle" /> Change Password</button>
           </p>
         </form>
       </div>
@@ -247,7 +247,7 @@ var CreateAdminForm = React.createClass({
             are controlled by validation functions. CouchDB can be configured to block all
             access to anonymous users.
           </p>
-          <button type="submit" id="create-admin" className="btn btn-primary">Create Admin</button>
+          <button type="submit" id="create-admin" className="btn btn-primary"><i className="icon icon-ok-circle" /> Create Admin</button>
         </form>
       </div>
     );

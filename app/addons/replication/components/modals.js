@@ -30,7 +30,7 @@ export const DeleteModal = ({
 
   let header = "";
   let btnText = `Delete ${isReplicationDB ? 'Document' : 'Replication Job'}`;
-  let infoSection = `Deleting a replication ${isReplicationDB ? 'document' : 'job'} stops continuous replication 
+  let infoSection = `Deleting a replication ${isReplicationDB ? 'document' : 'job'} stops continuous replication
           and incomplete one-time replication, but does not affect replicated documents.`;
 
   if (multipleDocs > 1) {
@@ -137,7 +137,7 @@ export const ConflictModal = ({visible, docId, onClose, onClick}) => {
           Change Document ID
         </button>
         <button onClick={onClick} className="btn replication__error-continue">
-          Overwrite Existing Document
+          <i className="icon icon-eraser" /> Overwrite Existing Document
         </button>
       </Modal.Footer>
     </Modal>

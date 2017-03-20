@@ -364,7 +364,7 @@ var UploadModal = React.createClass({
         <Modal.Footer>
           <a href="#" data-bypass="true" className="cancel-link" onClick={this.closeModal}>Cancel</a>
           <button href="#" id="upload-btn" data-bypass="true" className="btn btn-success save" onClick={this.upload}>
-            Upload Attachment
+            <i className="icon icon-upload" /> Upload Attachment
           </button>
         </Modal.Footer>
       </Modal>
