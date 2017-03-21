@@ -1,14 +1,14 @@
-var spawn = require('child_process').spawn;
-var fs = require("fs");
-var webpack = require('webpack');
-var WebpackDev = require('webpack-dev-server');
-var config = require('./webpack.config.dev.js');
-var httpProxy = require('http-proxy');
-var path = require('path');
+const spawn = require('child_process').spawn;
+const fs = require("fs");
+const webpack = require('webpack');
+const WebpackDev = require('webpack-dev-server');
+const config = require('./webpack.config.dev.js');
+const httpProxy = require('http-proxy');
+const path = require('path');
 
 
-var loadSettings = function () {
-  var fileName = './settings.json.default.json';
+const loadSettings = function () {
+  let fileName = './settings.json.default.json';
   if (fs.existsSync('./settings.json')) {
     fileName = './settings.json';
   }
@@ -23,16 +23,16 @@ var loadSettings = function () {
   };
 };
 
-var settings = loadSettings();
+const settings = loadSettings();
 
-var devSetup = function (cb) {
+const devSetup = function (cb) {
   console.log('setup dev environment');
-  var cmd = 'devSetupWithClean';
+  const cmd = 'devSetupWithClean';
   if (settings.noClean) {
     cmd = 'devSetup';
   }
 
-  var grunt = spawn('grunt', [cmd]);
+  const grunt = spawn('grunt', [cmd]);
 
   grunt.stdout.on('data', (data) => {
     console.log(data.toString());
@@ -64,8 +64,8 @@ function getCspHeaders () {
   };
 };
 
-var runWebpackServer = function () {
-  var proxy = httpProxy.createServer({
+const runWebpackServer = function () {
+  const proxy = httpProxy.createServer({
     secure: false,
     changeOrigin: true,
     target: settings.proxy.target
@@ -81,7 +81,7 @@ var runWebpackServer = function () {
     // don't explode on cancelled requests
   });
 
-  var options = {
+  const options = {
     contentBase: path.join(__dirname, '/dist/debug/'),
     host: 'localhost',
     port: process.env.FAUXTON_PORT || 8000,

@@ -17,7 +17,7 @@
   ],
     "template": {
       "development": {
-        "src": "assets/index.underscore",
+        "src": "./assets/index.underscore",
         "dest": "dist/debug/index.html",
         "variables": {
           "title": "Project Fauxton",
