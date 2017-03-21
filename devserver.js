@@ -27,7 +27,7 @@ const settings = loadSettings();
 
 const devSetup = function (cb) {
   console.log('setup dev environment');
-  const cmd = 'devSetupWithClean';
+  let cmd = 'devSetupWithClean';
   if (settings.noClean) {
     cmd = 'devSetup';
   }
