@@ -19,11 +19,8 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta http-equiv="Content-Language" content="en" />
   <link rel="shortcut icon" type="image/png" href="dashboard.assets/img/couchdb-logo.png"/>
-  <title>Project Fauxton</title>
+  <title><%= htmlWebpackPlugin.options.title %></title>
 
-  <% if (!development) { %>
-  <link rel="stylesheet" href="<%= css %>"/>
-  <% } %>
   <!-- Application styles. -->
   <style>
     .noscript-warning {
@@ -36,9 +33,6 @@
     }
   </style>
 
-  <% if (base) { %>
-  <base href="<%= base %>"></base>
-  <% } %>
 </head>
 
 <body id="home">
@@ -53,9 +47,6 @@
 
   <div id="app"></div>
 
-  <!-- Application source. -->
-  <script src="<%= bundlejs %>" type="text/javascript"></script>
-  <!-- <%= generationLabel %><%= generationDate %> -->
-
+ <!-- <%= htmlWebpackPlugin.options.generationLabel %> : <%= htmlWebpackPlugin.options.generationDate %> -->
 </body>
 </html>

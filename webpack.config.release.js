@@ -11,17 +11,23 @@
 // the License.
 var webpack = require('webpack');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
+var HtmlWebpackPlugin = require('html-webpack-plugin');
 var path = require('path');
+const settings = require('./tasks/helper')
+                    .init()
+                    .readSettingsFile()
+                    .template
+                    .release;
 
 module.exports = {
   // Entry point for static analyzer:
-  entry: [
-    './app/main.js'
-  ],
+  entry: {
+    bundle: './app/main.js'
+  },
 
   output: {
-    path: path.join(__dirname, '/dist/release'),
-    filename: 'bundle.js'
+    path: path.join(__dirname, '/dist/release/'),
+    filename: 'dashboard.assets/js/[name].[chunkhash].js'
   },
 
   plugins: [
@@ -34,13 +40,31 @@ module.exports = {
     // moment doesn't offer a modular API, so manually remove locale
     // see https://github.com/moment/moment/issues/2373
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
-    new webpack.optimize.DedupePlugin(),
     new webpack.optimize.UglifyJsPlugin({
       compress: {
         warnings: false
+      },
+      sourceMap: true
+    }),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'vendor', // Specify the common bundle's name.
+      minChunks: function (module) {
+        // this assumes your vendor imports exist in the node_modules directory
+        return module.context && module.context.indexOf('node_modules') !== -1;
       }
     }),
-    new ExtractTextPlugin("styles.css")
+    new webpack.optimize.CommonsChunkPlugin({
+      name: "manifest",
+      minChunks: Infinity
+    }),
+    new HtmlWebpackPlugin(Object.assign({
+      template: settings.src,
+      title: 'Project Fauxton',
+      filename: 'index.html',
+      generationLabel: 'Fauxton Release',
+      generationDate: new Date().toISOString()
+    }, settings.variables)),
+    new ExtractTextPlugin("dashboard.assets/css/styles.[chunkhash].css"),
   ],
 
   resolve: {
@@ -49,51 +73,71 @@ module.exports = {
   },
 
   module: {
-    preLoaders: [
-      {
-        test: /\.jsx?$/,
-        loaders: ['eslint'],
-        exclude: /node_modules/
-      }
-    ],
     loaders: [
     {
       test: /\.jsx?$/,
+      enforce: "pre",
+      use: ['eslint-loader'],
+      exclude: /node_modules/
+    },
+    {
+      test: /\.jsx?$/,
       exclude: /node_modules/,
-      //loader: 'react-hot!babel'
-      loader: 'babel'
+      use: 'babel-loader'
     },
-    { test: require.resolve("jquery"),
-      loader: "expose?$!expose?jQuery"
+    {
+      test: require.resolve('jquery'),
+      use: [{
+          loader: 'expose-loader',
+          options: 'jQuery'
+      },
+      {
+          loader: 'expose-loader',
+          options: '$'
+      }]
      },
-    { test: require.resolve("backbone"),
-      loader: "expose?Backbone"
+     {
+      test: require.resolve("backbone"),
+      use: [{
+          loader: 'expose-loader',
+          options: 'Backbone'
+      }]
     },
-    { test: /\.less/,
-      loader: ExtractTextPlugin.extract("style-loader", "css-loader!less-loader", {
+    {
+      test: /\.less/,
+      use: ExtractTextPlugin.extract({
+        fallback: "style-loader",
+        use: [
+          "css-loader",
+          "less-loader"
+        ],
         publicPath: '../../'
       }),
     },
-    { test: /\.css$/, loader: 'style!css' },
+    {
+      test: /\.css$/, use: [
+        'style-loader',
+        'css-loader'
+        ]
+    },
     {
       test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
-      loader: 'url?limit=10000&mimetype=application/font-woff&name=dashboard.assets/fonts/[name].[ext]'
+      loader: 'url-loader?limit=10000&mimetype=application/font-woff&name=dashboard.assets/fonts/[name].[ext]'
     },
     {
-      test: /\.woff2(\?\S*)?$/,   loader: 'url?limit=10000&mimetype=application/font-woff2&name=dashboard.assets/fonts/[name].[ext]'
+      test: /\.woff2(\?\S*)?$/,   loader: 'url-loader?limit=10000&mimetype=application/font-woff2&name=dashboard.assets/fonts/[name].[ext]'
     },
     {
-      test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,    loader: 'url?limit=10000&mimetype=application/font-tff&name=dashboard.assets/fonts/[name].[ext]'
+      test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,    loader: 'url-loader?limit=10000&mimetype=application/font-tff&name=dashboard.assets/fonts/[name].[ext]'
     },
-    { test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,    loader: 'file?name=dashboard.assets/fonts/[name].[ext]' },
-    { test: /\.swf(\?v=\d+\.\d+\.\d+)?$/,    loader: 'file?name=dashboard.assets/[name].[ext]' },
-    { test: /\.png(\?v=\d+\.\d+\.\d+)?$/,    loader: 'file?name=dashboard.assets/img/[name].[ext]' },
-    { test: /\.gif(\?v=\d+\.\d+\.\d+)?$/,    loader: 'file?name=dashboard.assets/img/[name].[ext]' },
-    { test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,    loader: 'url?limit=10000&mimetype=image/svg+xml&name=dashboard.assets/img/[name].[ext]' }
+    { test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,    loader: 'file-loader?name=dashboard.assets/fonts/[name].[ext]' },
+    { test: /\.png(\?v=\d+\.\d+\.\d+)?$/,    loader: 'file-loader?name=dashboard.assets/img/[name].[ext]' },
+    { test: /\.gif(\?v=\d+\.\d+\.\d+)?$/,    loader: 'file-loader?name=dashboard.assets/img/[name].[ext]' },
+    { test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,    loader: 'url-loader?limit=10000&mimetype=image/svg+xml&name=dashboard.assets/img/[name].[ext]' }
     ]
   },
   resolve: {
-    extensions: ['', '.js', '.jsx'],
+    extensions: ['*', '.js', '.jsx'],
     alias: {
       "underscore": "lodash",
       "bootstrap": "../assets/js/libs/bootstrap",
