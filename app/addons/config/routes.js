@@ -37,7 +37,7 @@ var ConfigDisabledRouteObject = FauxtonAPI.RouteObject.extend({
 
 var ConfigPerNodeRouteObject = FauxtonAPI.RouteObject.extend({
   roles: ['_admin'],
-  selectedHeader: 'Config',
+  selectedHeader: 'Configuration',
 
   apiUrl: function () {
     return [this.configs.url(), this.configs.documentation];

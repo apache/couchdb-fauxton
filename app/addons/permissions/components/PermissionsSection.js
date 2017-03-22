@@ -133,8 +133,8 @@ const PermissionsSection = React.createClass({
             <p>Specify users who will have {this.props.section} access to this database.</p>
           </header>
           <form onSubmit={this.addNames} className="permission-item-form permissions-add-user form-inline">
-            <input onChange={this.nameChange} value={this.state.newName} type="text" className="item input-small" placeholder="Add User" />
-            <button type="submit" className="btn btn-success"><i className="icon fonticon-plus-circled" /> Add User</button>
+            <input onChange={this.nameChange} value={this.state.newName} type="text" className="item input-small" placeholder="Username" />
+            <button type="submit" className="btn btn-primary"><i className="icon fonticon-plus-circled" /> Add User</button>
           </form>
           <ul className="unstyled permission-items span10">
             {this.getNames()}
@@ -146,8 +146,8 @@ const PermissionsSection = React.createClass({
             <p>Users with any of the following role(s) will have {this.props.section} access.</p>
           </header>
           <form onSubmit={this.addRoles} className="permission-item-form permissions-add-role form-inline">
-            <input onChange={this.roleChange} value={this.state.newRole} type="text" className="item input-small" placeholder="Add Role" />
-            <button type="submit" className="btn btn-success"><i className="icon fonticon-plus-circled" /> Add Role</button>
+            <input onChange={this.roleChange} value={this.state.newRole} type="text" className="item input-small" placeholder="Role" />
+            <button type="submit" className="btn btn-primary"><i className="icon fonticon-plus-circled" /> Add Role</button>
           </form>
           <ul className="unstyled permission-items span10">
             {this.getRoles()}

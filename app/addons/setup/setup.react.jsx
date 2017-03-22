@@ -341,23 +341,21 @@ var SetupFirstStepController = React.createClass({
       <div className="setup-screen">
         <h2>Welcome to {app.i18n.en_US['couchdb-productname']}!</h2>
         <p>
-          The recommended way to run the wizard is directly on your
-          node (e.g without a Loadbalancer) in front of it.
+          This wizard should be run directly on the node, rather than through a load-balancer.
         </p>
         <p>
-          Do you want to setup a cluster with multiple nodes
-          or just a single node CouchDB installation?
+          You can configure a single node, or a multi-node CouchDB installation.
         </p>
         <div>
           <ConfirmButton
             onClick={this.redirectToMultiNodeSetup}
             showIcon={false}
-            text="Configure	Cluster" />
+            text="Configure	a Cluster" />
           <ConfirmButton
             onClick={this.redirectToSingleNodeSetup}
             showIcon={false}
             id="setup-btn-no-thanks"
-            text="Configure	Single	Node" />
+            text="Configure	a Single Node" />
         </div>
       </div>
     );

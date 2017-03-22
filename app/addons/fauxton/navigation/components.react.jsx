@@ -127,13 +127,8 @@ export const NavBar = React.createClass({
         <nav id="main_navigation">
           <ul id="nav-links" className="nav">
             {navLinks}
+            {bottomNavLinks}
           </ul>
-
-          <div id="bottom-nav">
-            <ul id="bottom-nav-links" className="nav">
-              {bottomNavLinks}
-            </ul>
-          </div>
         </nav>
         <div id="primary-nav-right-shadow"/>
 

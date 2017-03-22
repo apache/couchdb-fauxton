@@ -36,7 +36,7 @@ export const ReplicationHeader = ({filter, onFilterChange}) => {
     <div className="replication__activity_header">
       <div></div>
       <ReplicationFilter value={filter} onChange={onFilterChange} />
-      <a href="#/replication/_create" className="btn save replication__activity_header-btn btn-success">
+      <a href="#/replication/_create" className="btn save replication__activity_header-btn btn-primary">
         <i className="icon fonticon-plus-circled"></i>
         New Replication
       </a>

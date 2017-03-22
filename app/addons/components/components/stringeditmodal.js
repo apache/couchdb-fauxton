@@ -85,7 +85,7 @@ export const StringEditModal = React.createClass({
         </Modal.Body>
         <Modal.Footer>
           <a className="cancel-link" onClick={this.closeModal}>Cancel</a>
-          <button id="string-edit-save-btn" onClick={this.save} className="btn btn-success save">
+          <button id="string-edit-save-btn" onClick={this.save} className="btn btn-primary save">
             <i className="fonticon-circle-check"></i> Modify Text
           </button>
         </Modal.Footer>

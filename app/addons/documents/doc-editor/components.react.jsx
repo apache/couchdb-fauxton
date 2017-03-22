@@ -169,7 +169,7 @@ var DocEditorController = React.createClass({
       <div>
         <div id="doc-editor-actions-panel">
           <div className="doc-actions-left">
-            <button className="save-doc btn btn-success save" type="button" onClick={this.saveDoc}>
+            <button className="save-doc btn btn-primary save" type="button" onClick={this.saveDoc}>
               <i className="icon fonticon-ok-circled"></i> {saveButtonLabel}
             </button>
             <div>
@@ -349,8 +349,8 @@ var UploadModal = React.createClass({
           <div>
             <form ref="uploadForm" className="form">
               <p>
-                Please select the file you want to upload as an attachment to this document. This creates a new
-                revision of the document, so it's not necessary to save after uploading.
+                Select a file to upload as an attachment to this document. Uploading a file saves the document as a new
+                revision.
               </p>
               <input ref="attachments" type="file" name="_attachments" />
               <br />
@@ -363,7 +363,7 @@ var UploadModal = React.createClass({
         </Modal.Body>
         <Modal.Footer>
           <a href="#" data-bypass="true" className="cancel-link" onClick={this.closeModal}>Cancel</a>
-          <button href="#" id="upload-btn" data-bypass="true" className="btn btn-success save" onClick={this.upload}>
+          <button href="#" id="upload-btn" data-bypass="true" className="btn btn-primary save" onClick={this.upload}>
             <i className="icon icon-upload" /> Upload Attachment
           </button>
         </Modal.Footer>
@@ -429,7 +429,10 @@ const CloneDocModal = React.createClass({
         <Modal.Body>
           <form className="form" onSubmit={(e) => { e.preventDefault(); this.cloneDoc(); }}>
             <p>
-              Set new document's ID:
+              Document cloning copies the saved version of the document. Unsaved document changes will be discarded.
+            </p>
+            <p>
+              You can modify the following generated ID for your new document.
             </p>
             <input ref="newDocId" type="text" autoFocus={true} className="input-block-level"
               onChange={this.docIDChange} value={this.state.uuid} />
@@ -437,8 +440,8 @@ const CloneDocModal = React.createClass({
         </Modal.Body>
         <Modal.Footer>
           <a href="#" data-bypass="true" className="cancel-link" onClick={this.closeModal}>Cancel</a>
-          <button className="btn btn-success save" onClick={this.cloneDoc}>
-            <i className="fonticon-ok-circled"></i> Clone Document
+          <button className="btn btn-primary save" onClick={this.cloneDoc}>
+            <i className="icon-repeat"></i> Clone Document
           </button>
         </Modal.Footer>
       </Modal>
