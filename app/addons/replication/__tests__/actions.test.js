@@ -164,7 +164,7 @@ describe("Replication Actions", () => {
         }
       ];
 
-      fetchMock.getOnce('/_scheduler/job', 404);
+      fetchMock.getOnce('/_scheduler/jobs', 404);
       fetchMock.getOnce('/_replicator/_all_docs?include_docs=true&limit=100', {rows: []});
       fetchMock.postOnce('/_replicator/_bulk_docs', {
         status: 200,

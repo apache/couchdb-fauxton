@@ -305,7 +305,7 @@ export const fetchReplicationDocs = () => {
         return [];
       }
 
-      return parseReplicationDocs(res.rows.filter(row => row.id.indexOf("_design/_replicator") === -1));
+      return parseReplicationDocs(res.rows.filter(row => row.id.indexOf("_design/") === -1));
     });
 
     if (!newApi) {
