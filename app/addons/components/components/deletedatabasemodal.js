@@ -88,7 +88,7 @@ export const DeleteDatabaseModal = React.createClass({
     return (
       <Modal dialogClassName="delete-db-modal" show={showDeleteModal} onHide={this.close}>
         <Modal.Header closeButton={true}>
-          <Modal.Title>Delete Database</Modal.Title>
+          <Modal.Title>Confirm Deletion</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {warning}
@@ -110,7 +110,7 @@ export const DeleteDatabaseModal = React.createClass({
             disabled={this.state.disableSubmit}
             onClick={this.onDeleteClick}
             className="btn btn-danger delete">
-            <i className="icon icon-trash" /> Delete
+            <i className="icon icon-trash" /> Delete Database
           </button>
         </Modal.Footer>
       </Modal>

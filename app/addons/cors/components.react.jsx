@@ -182,8 +182,8 @@ var OriginInput = React.createClass({
       <div id="origin-domains-container">
         <div className="origin-domains">
           <div className="input-append">
-            <input type="text" name="new_origin_domain" onChange={this.onInputChange} onKeyUp={this.onKeyUp} value={this.state.origin} placeholder="e.g., https://site.com"/>
-            <button onClick={this.addOrigin} className="btn btn-primary add-domain"> Add </button>
+            <input type="text" name="new_origin_domain" onChange={this.onInputChange} onKeyUp={this.onKeyUp} value={this.state.origin} placeholder="https://example.com"/>
+            <button onClick={this.addOrigin} className="btn btn-primary add-domain"><i className="icon fonticon-ok-circled"></i> Add Domain</button>
           </div>
         </div>
       </div>

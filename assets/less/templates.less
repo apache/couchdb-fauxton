@@ -87,7 +87,7 @@
       position: absolute;
       z-index: 100;
       top: 0;
-      background-color: @primaryNav;
+      background-color: @brown;
       width: @navWidth;
       .closeMenu & {
         width: @collapsedNavWidth;
@@ -96,7 +96,7 @@
         height: 4px;
         width: 24px;
         .border-radius(2);
-        background-color: @navBG;
+        background-color: #B3B4B4;
         margin: 2px 0px;
       }
       &:hover div {
@@ -146,7 +146,7 @@
 
           a {
             font-size: 10px;
-            color: @linkColor;
+            color: #B3B4B4;
             padding: 0px;
             text-shadow: none;
             width: 100%;
@@ -155,7 +155,7 @@
           &.active, &:hover {
             a {
               text-decoration: underline;
-              color: @darkRed;
+              color: @red;
             }
           }
         }
@@ -177,13 +177,20 @@
           font-weight: normal;
           font-family: helvetica;
           .box-sizing(border-box);
-          background-color: @navBG;
+          background-color: #564E4C;
           border-bottom:  1px solid @primaryNav;
           height: 48px;
           min-height: 48px;
           position: relative;
 
-          &.active, &:hover {
+          &.active {
+            a {
+              .box-shadow(none);
+            }
+            background-color: #AF2D24;
+            pointer-events: none;
+          }
+          &:hover {
             a {
               .box-shadow(none);
             }
@@ -452,8 +459,8 @@
     .divider {
       border: none;
     }
-    > li > a:hover{
-      background-color: @linkColorHover;
+    > li > a:hover {
+      background-color: @hoverRed;
       color: #fff;
     }
     li.active > a {

@@ -45,6 +45,7 @@
     & + span.index-menu-toggle {
       color: white;
     }
+
   }
 
   li {
@@ -61,7 +62,7 @@
         color: white;
       }
       p {
-        background-color: @darkRed;
+        background-color: @hoverRed;
       }
     }
     .accordion-list-item p {
@@ -113,7 +114,7 @@
           &:hover {
             color: #fff;
             text-decoration: none;
-            background-color: @darkRed;
+            background-color: @hoverRed;
           }
           border-top: none;
           &.accordion-header{
@@ -175,7 +176,7 @@
     padding-left: 4px;
     .transition(all 0.25s linear);
     &:hover {
-      color: @linkColor;
+      color: @hoverRed;
     }
     &:before {
       font-size: 17px;
