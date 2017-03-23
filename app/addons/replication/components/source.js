@@ -146,8 +146,7 @@ export class ReplicationSource extends React.Component {
   }
 
   render () {
-    const {replicationSource, onSourceSelect, localSource, remoteSource, databases} = this.props;
-    const Actions = {};
+    const {replicationSource, onSourceSelect} = this.props;
     return (
       <div>
         <ReplicationSourceSelect

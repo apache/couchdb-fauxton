@@ -11,9 +11,7 @@
 // the License.
 
 import React from 'react';
-import FauxtonAPI from '../../core/api';
-import ComponentActions from '../components/actions';
-import {NotificationController} from "./notifications/notifications.react";
+import {NotificationController, PermanentNotification} from "./notifications/notifications.react";
 import NavBar from './navigation/container/NavBar';
 import NavbarActions from './navigation/actions';
 
@@ -54,6 +52,7 @@ class ContentWrapper extends React.Component {
 const App = ({router}) => {
   return (
     <div>
+      <PermanentNotification />
       <div id="notifications">
         <NotificationController />
       </div>

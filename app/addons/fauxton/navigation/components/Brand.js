@@ -10,11 +10,11 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import React, { PropTypes } from 'react';
+import React from 'react';
 
 import classNames from 'classnames';
 
-const Brand = ({toggleMenu, isMinimized}) => {
+const Brand = ({isMinimized}) => {
 
   const burgerClasses = classNames(
     'faux-navbar__brand-logo',

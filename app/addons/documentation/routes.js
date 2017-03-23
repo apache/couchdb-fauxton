@@ -11,14 +11,12 @@
 // the License.
 
 import React from 'react';
-import app from "../../app";
 import FauxtonAPI from "../../core/api";
 import DocumentationComponents from "./components.react";
 import {OnePaneSimpleLayout} from '../components/layouts';
 
 var DocumentationRouteObject = FauxtonAPI.RouteObject.extend({
   selectedHeader: 'Documentation',
-  layout: 'empty',
   hideApiBar: true,
   hideNotificationCenter: true,
   routes: {

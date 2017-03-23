@@ -10,8 +10,16 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-const jest = require('jest');
+require('jest');
+require('whatwg-fetch');
 
 window.$ = window.jQuery = require('jquery');
+window._ = require('lodash');
+window.Backbone = require('backbone');
 
-global.fetch = require('jest-fetch-mock');
+Object.defineProperty(window.location, 'origin', {
+  writable: true,
+  value: 'http://dev:8000'
+});
+
+

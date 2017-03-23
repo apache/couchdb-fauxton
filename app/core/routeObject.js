@@ -10,8 +10,6 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import FauxtonAPI from "./base";
-import React from "react";
 import ReactDOM from "react-dom";
 import Backbone from "backbone";
 import _ from "lodash";

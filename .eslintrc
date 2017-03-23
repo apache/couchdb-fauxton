@@ -26,13 +26,17 @@
     "no-trailing-spaces": 2,
     "semi-spacing": [2, {"before": false, "after": true}],
     "no-empty": 2,
-    "space-in-parens": [2, "never"]
+    "space-in-parens": [2, "never"],
+    "no-unused-vars": [2, {"varsIgnorePattern": "ReactDOM"}],
+    "react/jsx-uses-vars": 2,
+    "react/jsx-uses-react": 2
   },
 
   "parserOptions": {
     "sourceType": "module",
     "ecmaFeatures": {
-      "jsx": true
+      "jsx": true,
+      "experimentalObjectRestSpread": true
     }
   },
 

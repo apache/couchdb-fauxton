@@ -10,7 +10,6 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import app from "../../../app";
 import FauxtonAPI from "../../../core/api";
 import React from "react";
 import Stores from "./stores";
@@ -57,7 +56,6 @@ var DesignDocInfo = React.createClass({
   },
 
   render: function () {
-    var getDocUrl = app.helpers.getDocUrl;
     var viewIndex = this.state.viewIndex;
 
     if (this.state.isLoading) {
@@ -70,16 +68,7 @@ var DesignDocInfo = React.createClass({
     return (
       <div className="metadata-page">
         <header>
-          <div className="preheading">Design Document Metadata</div>
-          <h2>_design/{this.state.ddocName}</h2>
-
-          <p className="help">
-            Information about the specified design document, including the index, index size and current status of the
-            design document and associated index information.
-            <a href={getDocUrl('DESIGN_DOC_METADATA')} className="help-link" target="_blank" data-bypass="true">
-              <i className="icon-question-sign" />
-            </a>
-          </p>
+          <h2>_design/{this.state.ddocName} Metadata</h2>
         </header>
 
         <section className="container">

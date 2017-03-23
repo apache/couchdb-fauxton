@@ -24,14 +24,14 @@ import {
 } from '../reducers';
 
 
-const mapStateToProps = (state) => {
+const mapStateToProps = ({permissions}) => {
   return {
-    isLoading: getIsLoading(state),
-    adminRoles: getAdminRoles(state),
-    adminNames: getAdminNames(state),
-    memberNames: getMemberNames(state),
-    memberRoles: getMemberRoles(state),
-    security: getSecurity(state)
+    isLoading: getIsLoading(permissions),
+    adminRoles: getAdminRoles(permissions),
+    adminNames: getAdminNames(permissions),
+    memberNames: getMemberNames(permissions),
+    memberRoles: getMemberRoles(permissions),
+    security: getSecurity(permissions)
   };
 };
 

@@ -30,6 +30,7 @@ import {DeleteDatabaseModal} from './components/deletedatabasemodal';
 import {TabElement, TabElementWrapper} from './components/tabelement';
 import {Polling, RefreshBtn} from './components/polling';
 import {Copy} from './components/copy';
+import {TabWindowWrapper} from './components/tabwindowwrapper';
 
 export default {
   BadgeList,
@@ -56,5 +57,6 @@ export default {
   TabElement,
   TabElementWrapper,
   RefreshBtn,
-  Copy
+  Copy,
+  TabWindowWrapper
 };

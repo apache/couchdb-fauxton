@@ -10,7 +10,6 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import FauxtonAPI from "../../../../core/api";
 import RevActions from "../rev-browser.actions";
 import fixtures from "./fixtures";
 import utils from "../../../../../test/mocha/testUtils";

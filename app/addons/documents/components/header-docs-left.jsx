@@ -12,17 +12,9 @@
 
 import React from "react";
 import ReactDOM from "react-dom";
-
-import ReactComponents from "../../components/react-components.react";
-
 import Helpers from "../helpers";
 import FauxtonAPI from '../../../core/api';
-
-
-import { Dropdown, MenuItem } from "react-bootstrap";
-
-const MenuDropDown = ReactComponents.MenuDropDown;
-
+import { Dropdown } from "react-bootstrap";
 
 function getModififyDbLinks (dbName) {
   return Helpers.getModifyDatabaseLinks(dbName);
@@ -38,7 +30,7 @@ function getDropdownItems (items) {
   return items.map((el, i) => {
 
     if (el.title && el.links) {
-      const items = el.links.map((subel, i2) => {
+      const items = el.links.map((subel) => {
         return <Item onClick={subel.onClick} icon={subel.icon} url={subel.url}>{subel.title}</Item>;
       });
 

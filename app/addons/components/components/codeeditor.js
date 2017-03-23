@@ -192,7 +192,7 @@ export const CodeEditor = React.createClass({
   },
 
   isIgnorableError (msg) {
-    return _.contains(this.props.ignorableErrors, msg);
+    return _.includes(this.props.ignorableErrors, msg);
   },
 
   removeIgnorableAnnotations () {
@@ -212,7 +212,7 @@ export const CodeEditor = React.createClass({
     }.bind(this));
   },
 
-  showHideEditStringGutterIcon (e) {
+  showHideEditStringGutterIcon () {
     if (this.hasErrors() || !this.parseLineForStringMatch()) {
       this.setState({ stringEditIconVisible: false });
       return false;
@@ -253,7 +253,7 @@ export const CodeEditor = React.createClass({
     // one JS(ON) string can't span more than one line - we edit one string, so ensure we don't select several lines
     if (selStart >= 0 && selEnd >= 0 && selStart === selEnd && this.isRowExpanded(selStart)) {
       var editLine = this.getLine(selStart),
-          editMatch = editLine.match(/^([ \t]*)("[a-zA-Z0-9_]*["|']: )?(["|'].*",?[ \t]*)$/);
+          editMatch = editLine.match(/^([ \t]*)("[a-zA-Z0-9_\-]*["|']: )?(["|'].*",?[ \t]*)$/);
 
       if (editMatch) {
         return editMatch;

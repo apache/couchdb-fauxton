@@ -11,7 +11,6 @@
 // the License.
 
 import app from "../../app";
-import FauxtonAPI from "../../core/api";
 import Actions from "./actions";
 var Active = {};
 

@@ -12,9 +12,7 @@
 import FauxtonAPI from "../../../../core/api";
 import Resources from "../../resources";
 import Views from "../components.react";
-import Stores from "../stores";
 import Actions from "../actions";
-import Documents from "../../../documents/resources";
 import utils from "../../../../../test/mocha/testUtils";
 import React from "react";
 import ReactDOM from "react-dom";
@@ -152,7 +150,7 @@ describe('DesignDocSelector component', function () {
         onSelectDesignDoc={spy}
       />, container);
 
-    TestUtils.Simulate.change($(ReactDOM.findDOMNode(selectorEl)).find('#ddoc')[0], {
+    TestUtils.Simulate.change($(ReactDOM.findDOMNode(selectorEl)).find('.styled-select select')[0], {
       target: {
         value: '_design/test-doc'
       }

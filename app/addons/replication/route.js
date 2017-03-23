@@ -13,14 +13,15 @@
 import React from 'react';
 import FauxtonAPI from '../../core/api';
 import ReplicationController from './controller';
-import ComponentActions from '../components/actions';
+import Actions from './actions';
 
 const ReplicationRouteObject = FauxtonAPI.RouteObject.extend({
   routes: {
     'replication/_create': 'defaultView',
-    'replication/:dbname': 'defaultView',
+    'replication/_create/:dbname': 'defaultView',
     'replication/id/:id': 'fromId',
-    'replication': 'activityView'
+    'replication': 'activityView',
+    'replication/_replicate': 'replicateView'
   },
   selectedHeader: 'Replication',
 
@@ -41,24 +42,30 @@ const ReplicationRouteObject = FauxtonAPI.RouteObject.extend({
 
   defaultView: function (databaseName) {
     const localSource = databaseName || '';
+    Actions.changeTabSection('new replication');
+    Actions.clearReplicationForm();
 
     return <ReplicationController
       localSource={localSource}
-      section={'new replication'}
       />;
   },
 
   fromId: function (replicationId) {
+    Actions.clearReplicationForm();
+    Actions.changeTabSection('new replication');
     return <ReplicationController
       replicationId={replicationId}
-      section={'new replication'}
     />;
   },
 
   activityView: function () {
-    return <ReplicationController
-      section={'activity'}
-    />;
+    Actions.changeTabSection('activity');
+    return <ReplicationController/>;
+  },
+
+  replicateView: function () {
+    Actions.changeTabSection('_replicate');
+    return <ReplicationController/>;
   }
 });
 

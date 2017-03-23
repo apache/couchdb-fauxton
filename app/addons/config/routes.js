@@ -10,13 +10,11 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import app from "../../app";
+import React from 'react';
 import FauxtonAPI from "../../core/api";
 import Config from "./resources";
-import CORSComponents from "../cors/components.react";
 import CORSActions from "../cors/actions";
 import ClusterActions from "../cluster/cluster.actions";
-import ConfigComponents from "./components.react";
 import ConfigActions from "./actions";
 import Layout from './layout';
 
@@ -38,10 +36,8 @@ var ConfigDisabledRouteObject = FauxtonAPI.RouteObject.extend({
 
 
 var ConfigPerNodeRouteObject = FauxtonAPI.RouteObject.extend({
-  layout: 'empty',
-
   roles: ['_admin'],
-  selectedHeader: 'Config',
+  selectedHeader: 'Configuration',
 
   apiUrl: function () {
     return [this.configs.url(), this.configs.documentation];
@@ -52,7 +48,7 @@ var ConfigPerNodeRouteObject = FauxtonAPI.RouteObject.extend({
     '_config/:node/cors': 'configCorsForNode'
   },
 
-  initialize: function (_a, _b, options) {
+  initialize: function (_a, options) {
     var node = options[0];
 
     this.configs = new Config.ConfigModel({ node: node });

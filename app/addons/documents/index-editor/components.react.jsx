@@ -96,23 +96,24 @@ var DesignDocSelector = React.createClass({
   },
 
   render: function () {
+    const selectContent =
+      <optgroup label="Select a document">
+        <option value="new-doc">New document</option>
+        {this.getDocList()}
+      </optgroup>;
+
     return (
       <div className="design-doc-group control-group">
         <div className="span3">
           <label htmlFor="ddoc">{this.props.designDocLabel}
             {this.getDocLink()}
           </label>
-          <div className="styled-select">
-            <label htmlFor="js-backup-list-select">
-              <i className="fonticon-down-dir" />
-              <select id="ddoc" onChange={this.selectDesignDoc} value={this.props.selectedDesignDocName}>
-                <optgroup label="Select a document">
-                  <option value="new-doc">New document</option>
-                  {this.getDocList()}
-                </optgroup>
-              </select>
-            </label>
-          </div>
+          <StyledSelect
+            selectChange={this.selectDesignDoc}
+            selectValue={this.props.selectedDesignDocName}
+            selectId={"faux__edit-view__design-doc"}
+            selectContent={selectContent}
+          />
         </div>
         {this.getNewDDocField()}
       </div>
@@ -310,7 +311,7 @@ var EditorController = React.createClass({
     }
 
     var pageHeader = (this.state.isNewView) ? 'New View' : 'Edit View';
-    var btnLabel = (this.state.isNewView) ? 'Create Document and Build Index' : 'Save Document and Build Index';
+    var btnLabel = (this.state.isNewView) ? 'Create Document and then Build Index' : 'Save Document and then Build Index';
 
     var cancelLink = '#' + FauxtonAPI.urls('view', 'showView', this.state.database.id, this.state.designDocId, this.state.viewName);
     return (

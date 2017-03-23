@@ -12,7 +12,7 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 //
-
+var Promise = require('bluebird');
 require([
   "url-polyfill",
   <% _.each(testFiles, function (test) {%>

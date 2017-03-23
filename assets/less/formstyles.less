@@ -79,22 +79,20 @@ button:focus {
   }
 }
 .btn-primary {
-  background: @brandPrimary;
+  background: #2bb673;
+  color: #fff;
 }
 .btn.btn-danger {
   background-color: #f00;
-  color: #fff;
-}
-.btn.btn-danger:hover {
-  background-color: #e73d34;
   color: #fff;
 }
 .btn.btn-info, .btn-secondary {
   background-color: #0082BF;
   color: #fff;
 }
-.btn.btn-info:hover, .btn-secondary:hover {
-  background-color: #E73D34;
+.btn-primary:hover, .btn-secondary:hover, .btn.btn-danger:hover, .btn.btn-info:hover {
+  background-color: @hoverRed;
+  color: #fff;
 }
 
 .btn-primary a:visited {
@@ -151,9 +149,14 @@ label {
   font-size: 12px;
 }
 
-a.help-link:hover {
+a.help-link{
+  color: @secondaryBlue;
   text-decoration: none;
+  &:hover {
+    color: @hoverRed
+  }
 }
+
 
 input[type=text].error {
   border: red 1px solid;
@@ -267,15 +270,16 @@ div.add-dropdown {
       right: 4px;
     }
     a {
-      background-color: #202326;
-      color: rgba(255, 255, 255, 0.8);
+      background-color: #564E4C;
+      color: #B3B4B4;
       &:hover {
-        background-color: @navBG;
+        background-color: @hoverRed;
         color: white;
       }
     }
     li a {
       padding: 10px 15px 10px 12px;
+
     }
   }
   .dropdown-toggle {
@@ -312,12 +316,8 @@ input.errorHighlight {
 
     }
     &.active {
-      background-color: #f1f1f1;
-      color: #af2d24;
-      &:hover {
-        background-color: #f1f1f1;
-        color: #af2d24;
-      }
+      background-color: #AF2D24;
+      color: #FFFFFF;
       .box-shadow(none);
     }
   }

@@ -13,22 +13,16 @@
 import React from 'react';
 import app from "../../app";
 import FauxtonAPI from "../../core/api";
-import Helpers from "./helpers";
-import BaseRoute from "./shared-routes";
 import Databases from "../databases/resources";
 import Resources from "./resources";
 import IndexResultsActions from "./index-results/actions";
 import IndexResultStores from "./index-results/stores";
-import ReactHeader from "./header/header.react";
 import Documents from "./shared-resources";
-import ReactActions from "./header/header.actions";
 import MangoActions from "./mango/mango.actions";
-import MangoStores from "./mango/mango.stores";
 import SidebarActions from "./sidebar/actions";
 import {MangoLayout} from './mangolayout';
 
 const MangoIndexEditorAndQueryEditor = FauxtonAPI.RouteObject.extend({
-  layout: 'empty',
   hideApiBar: true,
   hideNotificationCenter: true,
   routes: {

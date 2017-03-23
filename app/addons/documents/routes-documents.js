@@ -20,7 +20,6 @@ import Databases from '../databases/base';
 import Resources from './resources';
 import IndexResultStores from './index-results/stores';
 import IndexResultsActions from './index-results/actions';
-import ReactActions from './header/header.actions';
 import SidebarActions from './sidebar/actions';
 import DesignDocInfoActions from './designdocinfo/actions';
 import ComponentsActions from '../components/actions';

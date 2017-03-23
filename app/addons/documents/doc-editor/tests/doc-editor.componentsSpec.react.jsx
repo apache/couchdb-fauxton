@@ -10,19 +10,16 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import app from "../../../../app";
 import FauxtonAPI from "../../../../core/api";
 import React from "react";
 import ReactDOM from "react-dom";
 import Documents from "../../resources";
 import Components from "../components.react";
-import Stores from "../stores";
 import Actions from "../actions";
 import ActionTypes from "../actiontypes";
 import Databases from "../../../databases/base";
 import utils from "../../../../../test/mocha/testUtils";
 import TestUtils from "react-addons-test-utils";
-import sinon from "sinon";
 
 var assert = utils.assert;
 var docJSON = {
@@ -150,7 +147,7 @@ describe('DocEditorController', function () {
   });
 
   it('setting deleteDocModal=true in store shows modal', function () {
-    var el = TestUtils.renderIntoDocument(<Components.DocEditorController database={database} />, container);
+    TestUtils.renderIntoDocument(<Components.DocEditorController database={database} />, container);
     var doc = new Documents.Doc(docWithAttachmentsJSON, { database: database });
     FauxtonAPI.dispatch({
       type: ActionTypes.DOC_LOADED,
@@ -170,7 +167,7 @@ describe('DocEditorController', function () {
   });
 
   it('setting uploadDocModal=true in store shows modal', function () {
-    var el = TestUtils.renderIntoDocument(<Components.DocEditorController database={database} />, container);
+    TestUtils.renderIntoDocument(<Components.DocEditorController database={database} />, container);
     var doc = new Documents.Doc(docWithAttachmentsJSON, { database: database });
     FauxtonAPI.dispatch({
       type: ActionTypes.DOC_LOADED,

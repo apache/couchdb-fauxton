@@ -31,7 +31,7 @@ module.exports = function (options) {
   var fileTypes = ['.js', '.css', '.png', '.swf', '.eot', '.woff', '.svg', '.ttf', '.swf'];
 
   function isFile (url) {
-    return _.contains(fileTypes, path.extname(url));
+    return _.includes(fileTypes, path.extname(url));
   }
 
   // create proxy to couch for all couch requests
@@ -69,13 +69,13 @@ module.exports = function (options) {
     proxy.web(req, res);
   }).listen(port, '0.0.0.0');
 
-  proxy.on('error', function (e) {
+  proxy.on('error', () => {
     // don't explode on cancelled requests
   });
 
   //Remove Secure on the cookie if the proxy is communicating to a CouchDB instance
   // via https.
-  proxy.on('proxyRes', function (proxyRes, req, res) {
+  proxy.on('proxyRes', function (proxyRes) {
     if (proxyRes.headers['set-cookie']) {
       proxyRes.headers['set-cookie'][0] = proxyRes.headers["set-cookie"][0].replace('Secure', '');
     }

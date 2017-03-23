@@ -12,7 +12,6 @@
 
 import React from 'react';
 import app from "../../app";
-import FauxtonAPI from "../../core/api";
 import ReactPagination from "./pagination/pagination.react";
 import ReactHeader from "./header/header.react";
 import {Breadcrumbs} from '../components/header-breadcrumbs';

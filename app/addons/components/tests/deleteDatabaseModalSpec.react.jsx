@@ -9,10 +9,8 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
-import FauxtonAPI from "../../../core/api";
 import ReactComponents from "../react-components.react";
 import utils from "../../../../test/mocha/testUtils";
-import { Modal } from "react-bootstrap";
 import React from "react";
 import ReactDOM from "react-dom";
 import TestUtils from "react-addons-test-utils";
@@ -22,7 +20,7 @@ var assert = utils.assert;
 function noop () {}
 
 describe('DeleteDatabaseModal', function () {
-  var container, instance;
+  var container;
   beforeEach(function () {
     container = document.createElement('div');
   });
@@ -32,7 +30,7 @@ describe('DeleteDatabaseModal', function () {
   });
 
   it('submitting is disabled when initially rendered', function () {
-    instance = TestUtils.renderIntoDocument(
+    TestUtils.renderIntoDocument(
       <ReactComponents.DeleteDatabaseModal
         showHide={noop}
         modalProps={{isSystemDatabase: false, showDeleteModal: true, dbId: 'fooo'}} />,
@@ -43,7 +41,7 @@ describe('DeleteDatabaseModal', function () {
   });
 
   it('submitting is disabled when garbage entered', function () {
-    instance = TestUtils.renderIntoDocument(
+    TestUtils.renderIntoDocument(
       <ReactComponents.DeleteDatabaseModal
         showHide={noop}
         modalProps={{isSystemDatabase: false, showDeleteModal: true, dbId: 'fooo'}} />,
@@ -57,7 +55,7 @@ describe('DeleteDatabaseModal', function () {
   });
 
   it('submitting is enabled when same db name entered', function () {
-    instance = TestUtils.renderIntoDocument(
+    TestUtils.renderIntoDocument(
       <ReactComponents.DeleteDatabaseModal
         showHide={noop}
         modalProps={{isSystemDatabase: false, showDeleteModal: true, dbId: 'fooo'}} />,

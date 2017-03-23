@@ -216,10 +216,10 @@ module.exports = {
       })
 
       .waitForElementPresent('.index-cancel-link', waitTime, true)
-      .waitForElementVisible('select#ddoc', waitTime, true)
+      .waitForElementVisible('.styled-select select', waitTime, true)
       .waitForElementNotPresent('.loading-lines', waitTime, true)
 
-      .setValue('select#ddoc', 'new-doc')
+      .setValue('.styled-select select', 'new-doc')
 
       // needed to get React to update + show the new design doc field
       .click('body')

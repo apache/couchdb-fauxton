@@ -1,15 +1,14 @@
-var spawn = require('child_process').spawn;
-var path = require("path");
-var fs = require("fs");
-var _ = require('lodash');
-var webpack = require('webpack');
-var WebpackDev = require('webpack-dev-server');
-var config = require('./webpack.config.dev.js');
-var httpProxy = require('http-proxy');
+const spawn = require('child_process').spawn;
+const fs = require("fs");
+const webpack = require('webpack');
+const WebpackDev = require('webpack-dev-server');
+const config = require('./webpack.config.dev.js');
+const httpProxy = require('http-proxy');
+const path = require('path');
 
 
-var loadSettings = function () {
-  var fileName = './settings.json.default.json';
+const loadSettings = function () {
+  let fileName = './settings.json.default.json';
   if (fs.existsSync('./settings.json')) {
     fileName = './settings.json';
   }
@@ -18,22 +17,22 @@ var loadSettings = function () {
     port: process.env.FAUXTON_PORT || 8000,
     contentSecurityPolicy: true,
     proxy: {
-      target: 'http://127.0.0.1:5984',
+      target: process.env.COUCH_HOST || 'http://127.0.0.1:5984',
       changeOrigin: false
     }
   };
 };
 
-var settings = loadSettings();
+const settings = loadSettings();
 
-var devSetup = function (cb) {
+const devSetup = function (cb) {
   console.log('setup dev environment');
-  var cmd = 'devSetupWithClean';
+  let cmd = 'devSetupWithClean';
   if (settings.noClean) {
     cmd = 'devSetup';
   }
 
-  var grunt = spawn('grunt', [cmd]);
+  const grunt = spawn('grunt', [cmd]);
 
   grunt.stdout.on('data', (data) => {
     console.log(data.toString());
@@ -51,7 +50,7 @@ var devSetup = function (cb) {
   });
 };
 
-const defaultHeaderValue = "default-src 'self'; img-src 'self' data:; font-src 'self'; " +
+const defaultHeaderValue = "default-src 'self'; child-src 'self' blob:; img-src 'self' data:; font-src 'self'; " +
                   "script-src 'self' 'unsafe-eval'; style-src 'self' 'unsafe-inline';";
 function getCspHeaders () {
   if (!settings.contentSecurityPolicy) {
@@ -65,50 +64,50 @@ function getCspHeaders () {
   };
 };
 
-var runWebpackServer = function () {
-  var fileTypes = ['.js', '.css', '.png', '.swf', '.eot', '.woff', '.svg', '.ttf', '.swf'];
-  function isFile (url) {
-    return _.contains(fileTypes, path.extname(url));
-  }
-
-
-  var options = {
-    contentBase: __dirname + '/dist/debug',
-    publicPath: '/',
-    outputPath: '/',
-    filename: 'bundle.js',
-    host: 'localhost',
-    port: process.env.FAUXTON_PORT || 8000,
-    hot: false,
-    historyApiFallback: true,
-    stats: {
-      colors: true,
-    },
-    headers: getCspHeaders(),
-  };
-
-  var compiler = webpack(config);
-
-  var server = new WebpackDev(compiler, options);
-  var proxy = httpProxy.createServer({
+const runWebpackServer = function () {
+  const proxy = httpProxy.createServer({
     secure: false,
     changeOrigin: true,
     target: settings.proxy.target
   });
 
-  proxy.on('proxyRes', function (proxyRes, req, res) {
+  proxy.on('proxyRes', function (proxyRes) {
     if (proxyRes.headers['set-cookie']) {
       proxyRes.headers['set-cookie'][0] = proxyRes.headers["set-cookie"][0].replace('Secure', '');
     }
   });
 
-  proxy.on('error', function (e) {
+  proxy.on('error', function () {
     // don't explode on cancelled requests
   });
 
-  server.app.all('*', function (req, res, next) {
-    proxy.web(req, res);
-  });
+  const options = {
+    contentBase: path.join(__dirname, '/dist/debug/'),
+    host: 'localhost',
+    port: process.env.FAUXTON_PORT || 8000,
+    overlay: true,
+    hot: false,
+    historyApiFallback: false,
+    stats: {
+      colors: true,
+    },
+    headers: getCspHeaders(),
+    setup: (app) => {
+      app.all('*', (req, res, next) => {
+        const accept = req.headers.accept ? req.headers.accept.split(',') : '';
+
+        if (/application\/json/.test(accept[0])) {
+          proxy.web(req, res);
+          return;
+        }
+
+        next();
+      });
+    }
+  };
+
+  const compiler = webpack(config);
+  const server = new WebpackDev(compiler, options);
 
   server.listen(options.port, '0.0.0.0', function (err) {
     if (err) {

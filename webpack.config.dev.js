@@ -9,71 +9,103 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
-var webpack = require('webpack');
-var path = require('path');
+const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const path = require('path');
+const settings = require('./tasks/helper')
+                    .init()
+                    .readSettingsFile()
+                    .template
+                    .development;
 
 module.exports = {
-  entry: [
-    './app/main.js' //Our starting point for our development.
-  ],
+  entry: {
+    bundle: './app/main.js' //Our starting point for our development.
+  },
+
+  output: {
+    path: path.join(__dirname, '/dist/debug/'),
+    filename: 'dashboard.assets/js/[name].js'
+  },
+
   plugins: [
-    new webpack.optimize.LimitChunkCountPlugin({maxChunks: 1})
+    new webpack.optimize.LimitChunkCountPlugin({maxChunks: 1}),
+    new HtmlWebpackPlugin(Object.assign({
+      template: settings.src,
+      title: 'Project Fauxton',
+      filename: 'index.html',
+      generationLabel: 'Fauxton Dev',
+      generationDate: new Date().toISOString()
+    }, settings.variables)),
   ],
   module: {
-    preLoaders: [
-      {
-        test: /\.jsx?$/,
-        loaders: ['eslint'],
-        exclude: /node_modules/
-      }
-    ],
-    loaders: [
+    rules: [
+    {
+      test: /\.jsx?$/,
+      enforce: "pre",
+      use: ['eslint-loader'],
+      exclude: /node_modules/
+    },
     {
       test: /\.jsx?$/,
       exclude: /node_modules/,
-      //loader: 'react-hot!babel'
-      loader: 'babel'
+      use: 'babel-loader'
     },
-    { test: require.resolve("jquery"),
-      loader: "expose?$!expose?jQuery"
+    {
+     test: require.resolve('jquery'),
+      use: [{
+          loader: 'expose-loader',
+          options: 'jQuery'
+      },
+      {
+          loader: 'expose-loader',
+          options: '$'
+      }]
      },
-    { test: require.resolve("backbone"),
-      loader: "expose?Backbone"
+     {
+      test: require.resolve("backbone"),
+      use: [{
+          loader: 'expose-loader',
+          options: 'Backbone'
+      }]
     },
     {
       test: /\.less$/,
-      loader: 'style!css!less'
+      use: [
+        "style-loader",
+        "css-loader",
+        "less-loader"
+      ]
     },
-    { test: /\.css$/, loader: 'style!css' },
+    {
+      test: /\.css$/,
+      use: [
+        "style-loader",
+        "css-loader"
+      ]
+    },
     {
       test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
-      loader: 'url?limit=10000&mimetype=application/font-woff&name=dashboard.assets/fonts/[name].[ext]'
+      loader: 'url-loader?limit=10000&mimetype=application/font-woff&name=dashboard.assets/fonts/[name].[ext]'
     },
     {
-      test: /\.woff2(\?\S*)?$/,   loader: 'url?limit=10000&mimetype=application/font-woff2&name=dashboard.assets/fonts/[name].[ext]'
+      test: /\.woff2(\?\S*)?$/,   loader: 'url-loader?limit=10000&mimetype=application/font-woff2&name=dashboard.assets/fonts/[name].[ext]'
     },
     {
-      test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,    loader: 'url?limit=10000&mimetype=application/font-tff&name=dashboard.assets/fonts/[name].[ext]'
+      test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,    loader: 'url-loader?limit=10000&mimetype=application/font-tff&name=dashboard.assets/fonts/[name].[ext]'
     },
-    { test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,    loader: 'file?name=dashboard.assets/fonts/[name].[ext]' },
-    { test: /\.swf(\?v=\d+\.\d+\.\d+)?$/,    loader: 'file?name=dashboard.assets/[name].[ext]' },
-    { test: /\.png(\?v=\d+\.\d+\.\d+)?$/,    loader: 'file?name=dashboard.assets/img/[name].[ext]' },
-    { test: /\.gif(\?v=\d+\.\d+\.\d+)?$/,    loader: 'file?name=dashboard.assets/img/[name].[ext]' },
-    { test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,    loader: 'url?limit=10000&mimetype=image/svg+xml&name=dashboard.assets/img/[name].[ext]' }
+    { test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,    loader: 'file-loader?name=dashboard.assets/fonts/[name].[ext]' },
+    { test: /\.png(\?v=\d+\.\d+\.\d+)?$/,    loader: 'file-loader?name=dashboard.assets/img/[name].[ext]' },
+    { test: /\.gif(\?v=\d+\.\d+\.\d+)?$/,    loader: 'file-loader?name=dashboard.assets/img/[name].[ext]' },
+    { test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,    loader: 'url-loader?limit=10000&mimetype=image/svg+xml&name=dashboard.assets/img/[name].[ext]' }
   ]
   },
   resolve: {
-    extensions: ['', '.js', '.jsx'], //We can use .js and React's .jsx files using Babel
+    extensions: ['*', '.js', '.jsx'], //We can use .js and React's .jsx files using Babel
     alias: {
       "bootstrap": "../assets/js/libs/bootstrap",
       "underscore": "lodash",
     }
   },
-  output: {
-    path: __dirname + '/dist/debug',
-    publicPath: '/',
-    filename: 'bundle.js' //All our code is compiled into a single file called bundle.js
-  },
-
   devtool: 'source-map'
 };

@@ -10,7 +10,7 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import React, { PropTypes } from 'react';
+import React from 'react';
 
 import classNames from 'classnames';
 
@@ -36,10 +36,6 @@ const Burger = ({toggleMenu, isMinimized}) => {
 Burger.propTypes = {
   toggleMenu: React.PropTypes.func.isRequired,
   isMinimized: React.PropTypes.bool.isRequired
-};
-
-const Stripe = () => {
-  return <div className="faux-navbar__burger__stripe"></div>;
 };
 
 export default Burger;

@@ -14,8 +14,9 @@
 
 module.exports = {
   'Edit is allowed from default Map Views' : function (client) {
-    var waitTime = client.globals.maxWaitTime,
+    const waitTime = client.globals.maxWaitTime,
         newDatabaseName = client.globals.testDatabaseName,
+        baseUrl = client.globals.test_settings.launch_url,
         newDocumentName = '_design/abc',
         ddocContents = {
           "views": {
@@ -26,18 +27,14 @@ module.exports = {
           },
           "language": "javascript"
         };
-
     client
       .createDocument(newDocumentName, newDatabaseName, ddocContents)
       .populateDatabase(newDatabaseName)
 
       .loginToGUI()
+      .url(baseUrl + '/#/database/' + newDatabaseName + '/_design/abc/_view/evens')
 
       //navigate to 'evens' view (declared above), then click on first document's pencil icon
-      .clickWhenVisible('#dashboard-content a[href="database/' + newDatabaseName + '/_all_docs"]')
-      .clickWhenVisible('#nav-header-abc')
-      .clickWhenVisible('#nav-design-function-abcviews a')
-      .clickWhenVisible('#abc_evens')
       .clickWhenVisible('a[href="#/database/' + newDatabaseName + '/document_10"]')
       //navigated to editor
       .waitForElementVisible('#editor-container', waitTime, false)

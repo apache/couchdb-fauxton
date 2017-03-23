@@ -10,7 +10,6 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import app from "../../app";
 import FauxtonAPI from "../../core/api";
 import React from "react";
 import ReactDOM from "react-dom";
@@ -19,7 +18,6 @@ import ComponentsStore from "../components/stores";
 import ComponentsActions from "../components/actions";
 import FauxtonComponentsReact from "..//fauxton/components.react";
 import Stores from "./stores";
-import Resources from "./resources";
 import Actions from "./actions";
 
 import ReactSelect from "react-select";
@@ -96,7 +94,7 @@ const DatabaseTable = React.createClass({
     });
   },
 
-  showDeleteDatabaseModal (name) {
+  showDeleteDatabaseModal () {
     ComponentsActions.showDeleteDatabaseModal({
       showDeleteModal: !this.props.showDeleteDatabaseModal.showDeleteModal
     });
@@ -184,7 +182,7 @@ var DatabaseRow = React.createClass({
         <td className="database-actions">
           <a className="db-actions btn fonticon-replicate set-replication-start"
             title={"Replicate " + name}
-            href={"#/replication/" + encodedId} />
+            href={"#/replication/_create/" + encodedId} />
           <a
             className="db-actions btn icon-lock set-permissions"
             title={"Set permissions for " + name} href={"#/database/" + encodedId + "/permissions"} />

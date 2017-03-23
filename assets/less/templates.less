@@ -200,8 +200,8 @@
     padding: 15px;
     bottom: 0px;
     top: @collapsedNavWidth;
-    position: fixed;
-    left: @sidebarWidth+@navWidth;
+    position: absolute;
+    left: @sidebarWidth;
     right: 0;
     .box-sizing(border-box);
     .closeMenu & {
@@ -231,8 +231,8 @@
     .divider {
       border: none;
     }
-    > li > a:hover{
-      background-color: @linkColorHover;
+    > li > a:hover {
+      background-color: @hoverRed;
       color: #fff;
     }
     li.active > a {

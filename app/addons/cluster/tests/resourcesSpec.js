@@ -11,7 +11,6 @@
 // the License.
 
 import testUtils from "../../../../test/mocha/testUtils";
-import FauxtonAPI from "../../../core/api";
 import Resources from "../resources";
 var assert = testUtils.assert;
 

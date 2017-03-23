@@ -11,6 +11,7 @@
 // the License.
 
 @import "../../../../../assets/less/mixins.less";
+@import "../../../../../assets/less/variables.less";
 
 
 #dashboard.doc-editor-page {
@@ -78,6 +79,20 @@
 
   .cancel-button {
     font-size: 14px;
+    color: #666;
+    &:hover {
+      color: @hoverRed;
+      text-decoration: none;
+      cursor: hand;
+    }
+  }
+  .panel-button {
+    color: #666;
+    &:hover {
+      color: @hoverRed;
+      text-decoration: none;
+      cursor: hand;
+    }
   }
 
   .bgEditorGutter {
@@ -175,6 +190,9 @@
   max-width: 540px;
   text-align: left;
   overflow: hidden;
+  a:hover {
+    color: @hoverRed;
+  }
 }
 
 #editor-container div.string-editor-modal {

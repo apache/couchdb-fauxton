@@ -16,7 +16,6 @@ module.exports = {
 
   'creates design docs with js hint errors': function (client) {
     const waitTime = client.globals.maxWaitTime;
-    const baseUrl = client.globals.test_settings.launch_url;
 
     /*jshint multistr: true */
     openDifferentDropdownsAndClick(client)
@@ -40,7 +39,6 @@ module.exports = {
 
   'Creates a Design Doc using the dropdown at "all documents"': function (client) {
     var waitTime = client.globals.maxWaitTime;
-    var baseUrl = client.globals.test_settings.launch_url;
 
     /*jshint multistr: true */
     openDifferentDropdownsAndClick(client)
@@ -64,7 +62,6 @@ module.exports = {
 
   'Creates a Design Doc and does not crash after navigating': function (client) {
     var waitTime = client.globals.maxWaitTime;
-    var baseUrl = client.globals.test_settings.launch_url;
 
     /*jshint multistr: true */
     openDifferentDropdownsAndClick(client)
@@ -90,7 +87,6 @@ module.exports = {
 
   'Creates a Design Doc using the dropdown at "the upper dropdown in the header"': function (client) {
     var waitTime = client.globals.maxWaitTime;
-    var baseUrl = client.globals.test_settings.launch_url;
 
     /*jshint multistr: true */
     openDifferentDropdownsAndClick(client)

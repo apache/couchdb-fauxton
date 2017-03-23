@@ -13,7 +13,7 @@ import React from 'react';
 import {OverlayTrigger, Tooltip} from 'react-bootstrap';
 
 const tooltipExisting = (
-  <Tooltip id="tooltip">
+  <Tooltip id="tooltip" className="replication__tooltip">
     <p>
       If you know the credentials for the remote account, you can use that remote username and password.
     </p>
@@ -21,13 +21,13 @@ const tooltipExisting = (
       If a remote database granted permissions to your local account, you can use the local-account username and password.
     </p>
     <p>
-      If the remote database granted permissions to "everybody," you do not need to enter a username and password.
+      If the remote database granted permissions to unauthenticated connections, you do not need to enter a username or password.
     </p>
   </Tooltip>
 );
 
 const tooltipNew = (
-  <Tooltip id="tooltip">
+  <Tooltip id="tooltip" className="replication__tooltip">
     Enter the username and password of the remote account.
   </Tooltip>
 );

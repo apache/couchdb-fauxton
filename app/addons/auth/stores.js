@@ -10,10 +10,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import app from "../../app";
 import FauxtonAPI from "../../core/api";
 import ActionTypes from "./actiontypes";
-
 
 // Not thrilled with this. The sole purpose of these next two stores is because the Create Admin + Change Password
 // forms need to clear after a successful post. Since those events occur in actions.js, we need a way to tell the

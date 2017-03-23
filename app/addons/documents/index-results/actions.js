@@ -10,11 +10,9 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import app from "../../../app";
 import FauxtonAPI from "../../../core/api";
 import ActionTypes from "./actiontypes";
 import Stores from "./stores";
-import Documents from "../resources";
 import SidebarActions from "../sidebar/actions";
 var indexResultsStore = Stores.indexResultsStore;
 
@@ -199,7 +197,7 @@ export default {
         errorMessage(ids);
         selectedIds = ids;
       })
-      .always(function (id) {
+      .always(function () {
         if (designDocs && hasDesignDocs) {
           SidebarActions.updateDesignDocs(designDocs);
         }

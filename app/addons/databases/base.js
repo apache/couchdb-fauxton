@@ -55,7 +55,7 @@ FauxtonAPI.registerUrls('allDBs', {
     return '_all_dbs';
   },
 
-  apiurl: function (id, query) {
+  apiurl: function () {
     return window.location.origin + '/_all_dbs';
   }
 });

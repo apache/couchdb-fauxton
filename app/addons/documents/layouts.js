@@ -11,13 +11,9 @@
 // the License.
 
 import React from 'react';
-import FauxtonAPI from "../../core/api";
-import {OnePane, OnePaneContent} from '../components/layouts';
 import IndexResultsComponents from './index-results/index-results.components.react';
 import ReactPagination from './pagination/pagination.react';
 import ReactHeader from './header/header.react';
-import {Breadcrumbs} from '../components/header-breadcrumbs';
-import {RightHeader} from './mangolayout';
 import {NotificationCenterButton} from '../fauxton/notifications/notifications.react';
 import {ApiBarWrapper} from '../components/layouts';
 import SidebarComponents from "./sidebar/sidebar.react";
@@ -27,7 +23,16 @@ import IndexEditorComponents from "./index-editor/components.react";
 import DesignDocInfoComponents from './designdocinfo/components.react';
 import RightAllDocsHeader from './components/header-docs-right';
 
-export const TabsSidebarHeader = ({hideHeaderBar, database, dbName, dropDownLinks, showIncludeAllDocs, docURL, endpoint}) => {
+export const TabsSidebarHeader = ({
+  hideQueryOptions,
+  hideHeaderBar,
+  database,
+  dbName,
+  dropDownLinks,
+  showIncludeAllDocs,
+  docURL,
+  endpoint
+}) => {
   return (
     <header className="two-panel-header">
       <div className="flex-layout flex-row">
@@ -42,7 +47,7 @@ export const TabsSidebarHeader = ({hideHeaderBar, database, dbName, dropDownLink
               {hideHeaderBar ? null : <ReactHeader.BulkDocumentHeaderController showIncludeAllDocs={showIncludeAllDocs} />}
           </div>
           <div id="right-header" className="flex-fill">
-            <RightAllDocsHeader database={database} />
+            <RightAllDocsHeader hideQueryOptions={hideQueryOptions} database={database} />
           </div>
           <ApiBarWrapper docURL={docURL} endpoint={endpoint} />
           <div id="notification-center-btn" className="flex-fill">
@@ -136,7 +141,7 @@ export const ChangesSidebarLayout = ({docURL, database, endpoint, dbName, dropDo
   );
 };
 
-export const ViewsTabsSidebarLayout = ({showEditView, database, showIncludeAllDocs, docURL, endpoint, dbName, dropDownLinks}) => {
+export const ViewsTabsSidebarLayout = ({showEditView, database, docURL, endpoint, dbName, dropDownLinks}) => {
   const content = showEditView ? <IndexEditorComponents.EditorController /> : <DesignDocInfoComponents.DesignDocInfo />;
   return (
     <div id="dashboard" className="with-sidebar">

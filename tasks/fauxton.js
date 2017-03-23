@@ -15,55 +15,31 @@ module.exports = function (grunt) {
       fs = require('fs'),
       os = require('os');
 
-  grunt.registerMultiTask('template', 'generates an html file from a specified template', function () {
-    var data = this.data,
-        _ = grunt.util._,
-        tmpl = _.template(grunt.file.read(data.src), null, data.variables);
-
-    grunt.file.write(data.dest, tmpl(data.variables));
-  });
-
-  grunt.registerMultiTask('get_deps', 'Fetch external dependencies', function (version) {
+  grunt.registerMultiTask('get_deps', 'Fetch external dependencies', function () {
 
     grunt.log.writeln('Fetching external dependencies');
-    var done = this.async(),
-        data = this.data,
+    const data = this.data,
         target = data.target || 'app/addons/',
         settingsFile = fs.existsSync(data.src) ? data.src : 'settings.json.default.json',
-        settings = grunt.file.readJSON(settingsFile),
-        _ = grunt.util._;
+        settings = grunt.file.readJSON(settingsFile);
 
-    // This should probably be a helper, though they seem to have been removed
-    var fetch = function (deps, command) {
-      var child_process = require('child_process');
-      var async = require('async');
-      async.forEach(deps, function (dep, cb) {
-        var path = target + dep.name;
-        var location = dep.url || dep.path;
+    const fetch = deps => {
+      var fs = require('fs-extra');
+      deps.forEach(dep => {
+        const path = target + dep.name;
+        const location = dep.url || dep.path;
         grunt.log.writeln('Fetching: ' + dep.name + ' (' + location + ')');
-
-        child_process.exec(command(dep, path), function (error, stdout, stderr) {
-          grunt.log.writeln(stderr);
-          grunt.log.writeln(stdout);
-          cb(error);
-        });
-      }, function (error) {
-        if (error) {
-          grunt.log.writeln('ERROR: ' + error.message);
+        try {
+          fs.copySync(dep.path, path);
+        } catch (e) {
+          grunt.log.writeln('ERROR: ' + e.message);
         }
-
-        done();
       });
     };
 
-    var localDeps = _.filter(settings.deps, function (dep) { return !! dep.path; });
+    const localDeps = settings.deps.filter(dep => !!dep.path);
     grunt.log.writeln(localDeps.length + ' local dependencies');
-    var local = fetch(localDeps, function (dep, destination) {
-      // TODO: Windows
-      var command = 'cp -r ' + dep.path + '/ ' + destination + '/';
-      grunt.log.writeln(command);
-      return command;
-    });
+    fetch(localDeps);
   });
 
   grunt.registerMultiTask('gen_load_addons', 'Generate the load_addons.js file', function () {
@@ -112,7 +88,6 @@ module.exports = function (grunt) {
 
   grunt.registerMultiTask('mochaSetup', 'Generate a config.js and runner.html for tests', function () {
     var data = this.data,
-        configInfo,
         _ = grunt.util._,
         configTemplateSrc = data.template;
 
@@ -239,7 +214,7 @@ module.exports = function (grunt) {
       if (_.has(testBlacklist, addon.name) && _.isArray(testBlacklist[addon.name]) && testBlacklist[addon.name].length > 0) {
 
         // a '*' means the user wants to blacklist all tests in the addon
-        if (_.contains(testBlacklist[addon.name], '*')) {
+        if (_.includes(testBlacklist[addon.name], '*')) {
           return;
         }
 
@@ -247,7 +222,7 @@ module.exports = function (grunt) {
         addonFolders.push(addonTestsFolder);
 
         _.each(fs.readdirSync(addonTestsFolder), function (file) {
-          if (_.contains(testBlacklist[addon.name], file)) {
+          if (_.includes(testBlacklist[addon.name], file)) {
             // the relative path is added to work around an oddity with nightwatch. It evaluates all exclude paths
             // relative to the current src_folder being examined, so we need to return to the root first
             excludeTests.push('../../../../../' + addonTestsFolder + '/' + file);

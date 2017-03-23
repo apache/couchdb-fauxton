@@ -11,17 +11,14 @@
 // the License.
 
 import app from "../../app";
-import FauxtonAPI from "../../core/api";
 import React from "react";
 import ReactDOM from "react-dom";
 import Stores from "./stores";
 import Resources from "./resources";
 import Actions from "./actions";
 import Components from "../components/react-components.react";
-import ComponentsReact from "../fauxton/components.react";
-import ReactCSSTransitionGroup from "react-addons-css-transition-group";
 
-const {TabElement, TabElementWrapper, Polling, TrayContents} = Components;
+const {TabElement, TabElementWrapper, Polling} = Components;
 
 const activeTasksStore = Stores.activeTasksStore;
 
@@ -274,7 +271,7 @@ var ActiveTasksTableBody = React.createClass({
     return this.getStoreState();
   },
 
-  componentWillReceiveProps (nextProps) {
+  componentWillReceiveProps () {
     this.setState({
       filteredTable: activeTasksStore.getFilteredTable(this.props.collection)
     });

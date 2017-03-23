@@ -12,6 +12,7 @@
 
 import Backbone from "backbone";
 import _ from "lodash";
+
 var FauxtonAPI = {
   //add default objects
   router: {
@@ -157,6 +158,14 @@ FauxtonAPI.setSession = function (newSession) {
   return FauxtonAPI.session.fetchUser();
 };
 
-FauxtonAPI.reducers = [];
+FauxtonAPI.reducers = {};
+
+
+FauxtonAPI.addReducers = (reducers) => {
+  FauxtonAPI.reducers = {
+    ...FauxtonAPI.reducers,
+    ...reducers
+  };
+};
 
 export default FauxtonAPI;

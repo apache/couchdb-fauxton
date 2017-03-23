@@ -18,14 +18,10 @@
 /*jslint node: true */
 "use strict";
 
-const path = require('path');
-var webpackConfig = require("./webpack.config.dev.js");
-
 module.exports = function (grunt) {
   var helper = require('./tasks/helper.js'),
       initHelper = helper.init(grunt),
-      _ = grunt.util._,
-      fs = require('fs');
+      _ = grunt.util._;
 
   var couch_config = function () {
     var default_couch_config = {
@@ -76,20 +72,6 @@ module.exports = function (grunt) {
 
     return settings.template;
   })();
-
-  var couchserver_config  = function () {
-    // add a "couchserver" key to settings.json with JSON that matches the
-    // keys and values below (plus your customizations) to have Fauxton work
-    // against a remote CouchDB-compatible server.
-    var defaults = {
-      port: helper.devServerPort,
-      proxy: {
-        target: helper.couch
-      }
-    };
-
-    return initHelper.readSettingsFile().couchserver || defaults;
-  }();
 
   var config = {
 
@@ -211,22 +193,7 @@ module.exports = function (grunt) {
         template: 'test/nightwatch_tests/nightwatch.json.underscore',
         dest: 'test/nightwatch_tests/nightwatch.json'
       }
-    },
-
-    // these rename the already-bundled, minified requireJS and CSS files to include their hash
-    md5: {
-      bundlejs: {
-        files: { 'dist/release/dashboard.assets/js/': 'dist/release/bundle.js' },
-        options: {
-          afterEach: function (fileChanges) {
-            // replace the REQUIREJS_FILE placeholder with the actual filename
-            const newFilename = path.basename(fileChanges.newPath);
-            config.template.release.variables.bundlejs = config.template.release.variables.bundlejs.replace(/BUNDLEJS_FILE/, newFilename);
-          }
-        }
-      }
-    },
-
+    }
   };
 
   grunt.initConfig(config);
@@ -242,7 +209,6 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-shell');
-  grunt.loadNpmTasks('grunt-md5');
   /*
    * Default task
    */
@@ -260,8 +226,7 @@ module.exports = function (grunt) {
   grunt.registerTask('dependencies', ['get_deps', 'gen_load_addons:default']);
 
   // minify code and css, ready for release.
-  grunt.registerTask('build', ['copy:distDepsRequire', 'shell:webpackrelease',
-    'md5:bundlejs', 'template:release']);
+  grunt.registerTask('build', ['copy:distDepsRequire', 'shell:webpackrelease']);
   /*
    * Build the app in either dev, debug, or release mode
    */
@@ -272,13 +237,13 @@ module.exports = function (grunt) {
 
   // build a debug release
   grunt.registerTask('debug', ['clean', 'dependencies', "gen_initialize:development",
-    'template:development', 'copy:debug']);
+    'copy:debug']);
 
   grunt.registerTask('debugDev', ['clean', 'dependencies', "gen_initialize:development",
-    'template:development', 'copy:debug', 'shell:webpack']);
+    'copy:debug', 'shell:webpack']);
 
   grunt.registerTask('devSetup', ['dependencies', "gen_initialize:development",
-    'template:development', 'copy:debug']);
+    'copy:debug']);
   grunt.registerTask('devSetupWithClean', ['clean', 'devSetup']);
 
   grunt.registerTask('watchRun', ['clean:watch', 'dependencies', 'shell:stylecheck']);

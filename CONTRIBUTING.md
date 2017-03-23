@@ -8,6 +8,45 @@ with the framework you'd need to complete the task.
 
 The [Readme file](https://github.com/apache/couchdb-fauxton/blob/master/readme.md) has information about how to get the project running.
 
+## Contributor quick start
+
+Instructions to get a dev environment up and running as fast as possible:
+
+First, ensure that you have Node and npm installed. You should also have either CouchDB 2.0+ or PouchDB Server. The easiest to install is PouchDB Server:
+
+```
+npm install -g pouchdb-server
+pouchdb-server --port 5984
+```
+
+Now that we have a CouchDB (or PouchDB Server) up and running, check out the code:
+
+```
+git clone https://github.com/apache/couchdb-fauxton
+cd couchdb-fauxton
+npm install
+```
+
+Next, copy `settings.json.default.json` to `settings.json`. This will be our local settings file.
+
+In the `settings.json`, under `"development"` -> `"app"`, change the `"host"` to point to your local CouchDB or PouchDB Server, e.g.:
+
+```js
+"development": {
+  /* ... */
+  "app": {
+    /* ... */
+    "host": "http://localhost:5984"
+  }
+}
+```
+
+Now run:
+
+    npm run dev
+
+And your Fauxton dev server will be up and running at `localhost:8000`.
+
 ## Guide to Contributions
 
 We follow our coding-styleguide to make it easier for everyone to write, read and review code: 

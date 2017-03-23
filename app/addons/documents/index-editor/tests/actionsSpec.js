@@ -13,10 +13,7 @@
 import FauxtonAPI from "../../../../core/api";
 import Actions from "../actions";
 import Documents from "../../resources";
-import ActionTypes from "../actiontypes";
-import Stores from "../stores";
 import testUtils from "../../../../../test/mocha/testUtils";
-import IndexResultsActions from "../../index-results/actions";
 import sinon from "sinon";
 import "../../../documents/base";
 var assert = testUtils.assert;

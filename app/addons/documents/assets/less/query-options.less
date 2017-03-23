@@ -72,6 +72,10 @@
   .icon-question-sign {
     margin-left: 3px;
     font-size: 17.5px;
+    color: @secondaryBlue;
+    &:hover {
+      color: @hoverRed;
+    }
   }
 
   .query-group {
@@ -120,6 +124,13 @@
       border: none;
       box-shadow: none;
       color: @red;
+      line-height: 1em;
+    }
+    .btn-cancelDark, .btn-cancelDark:active {
+      background: none;
+      border: none;
+      box-shadow: none;
+      color: #CCC;
       line-height: 1em;
     }
     select {
@@ -208,10 +219,7 @@
   .hide {
     display: none;
   }
-
-  .icon-question-sign:hover {
-    color: @linkColorHover;
-  }
+  
   .additionalParams {
     margin-bottom: 2px;
   }

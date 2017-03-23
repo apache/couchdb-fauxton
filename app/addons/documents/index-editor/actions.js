@@ -14,10 +14,8 @@ import app from "../../../app";
 import FauxtonAPI from "../../../core/api";
 import Documents from "../resources";
 import ActionTypes from "./actiontypes";
-import IndexResultsActions from "../index-results/actions";
 import SidebarActions from "../sidebar/actions";
 import SidebarActionTypes from "../sidebar/actiontypes";
-
 
 function selectReduceChanged (reduceOption) {
   FauxtonAPI.dispatch({
@@ -172,7 +170,7 @@ function cloneView (params) {
 }
 
 function gotoEditViewPage (databaseName, designDocName, indexName) {
-  FauxtonAPI.navigate('#' + FauxtonAPI.urls('view', 'edit', databaseName, designDocName, indexName));
+  FauxtonAPI.navigate('#' + FauxtonAPI.urls('view', 'edit', encodeURIComponent(databaseName), designDocName, indexName));
 }
 
 function updateMapCode (code) {

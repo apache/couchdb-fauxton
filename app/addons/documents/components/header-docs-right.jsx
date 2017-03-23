@@ -10,22 +10,14 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import app from '../../../app';
-import FauxtonAPI from '../../../core/api';
-import Documents from '../resources';
-import Databases from '../../databases/resources';
 import React from 'react';
 import QueryOptions from '../queryoptions/queryoptions.react';
-import QueryActions from '../queryoptions/actions';
 import JumpToDoc from './jumptodoc.react';
-import IndexResultStores from '../index-results/stores';
 import Actions from './actions';
-
-const { indexResultsStore } = IndexResultStores;
 
 const { QueryOptionsController } = QueryOptions;
 
-const RightAllDocsHeader = ({database}) =>
+const RightAllDocsHeader = ({database, hideQueryOptions}) =>
   <div className="header-right right-db-header flex-layout flex-row">
 
     <div className="faux-header__searchboxwrapper">
@@ -34,11 +26,15 @@ const RightAllDocsHeader = ({database}) =>
       </div>
     </div>
 
-    <QueryOptionsController />
+    {hideQueryOptions ? '' : <QueryOptionsController />}
   </div>;
 
 RightAllDocsHeader.propTypes = {
   database: React.PropTypes.object.isRequired
+};
+
+RightAllDocsHeader.defaultProps = {
+  hideQueryOptions: false
 };
 
 export default RightAllDocsHeader;

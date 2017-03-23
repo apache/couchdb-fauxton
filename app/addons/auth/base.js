@@ -14,7 +14,6 @@ import app from "../../app";
 import FauxtonAPI from "../../core/api";
 import Auth from "./routes";
 import "./assets/less/auth.less";
-import Actions from './actions';
 
 Auth.session = new Auth.Session();
 FauxtonAPI.setSession(Auth.session);
@@ -29,7 +28,6 @@ Auth.initialize = function () {
 
   Auth.session.on('change', function () {
     var session = Auth.session;
-    var link = {};
 
     if (session.isAdminParty()) {
       const link = {

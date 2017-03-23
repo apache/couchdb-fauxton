@@ -81,8 +81,10 @@ module.exports = {
 
     client
       .loginToGUI()
+      .populateDatabase(newDatabaseName)
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
 
+      .waitForElementPresent('.doc-item', waitTime, false)
       .clickWhenVisible('.fonticon-table', waitTime, false)
       .clickWhenVisible('.table-view-docs tr:first-child .clipboard-copy-element', waitTime, false)
       .waitForElementVisible('.global-notification', waitTime, false)

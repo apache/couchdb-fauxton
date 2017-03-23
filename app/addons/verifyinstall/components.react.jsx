@@ -10,18 +10,14 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import app from "../../app";
-import FauxtonAPI from "../../core/api";
 import React from "react";
 import Constants from "./constants";
-import VerifyInstall from "./resources";
 import Actions from "./actions";
 import Stores from "./stores";
 
-var store = Stores.verifyInstallStore;
+const store = Stores.verifyInstallStore;
 
-
-var VerifyInstallController = React.createClass({
+const VerifyInstallController = React.createClass({
   getInitialState: function () {
     return this.getStoreState();
   },

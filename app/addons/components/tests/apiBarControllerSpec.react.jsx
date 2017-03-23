@@ -9,15 +9,12 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
-import FauxtonAPI from "../../../core/api";
 import Actions from "../actions";
 import Stores from "../stores";
 import utils from "../../../../test/mocha/testUtils";
-import TestUtils from "react-addons-test-utils";
-import sinon from "sinon";
 import React from "react";
 import ReactDOM from "react-dom";
-import {APIBar, ApiBarController} from '../components/apibar';
+import {ApiBarController} from '../components/apibar';
 import {mount} from 'enzyme';
 
 const assert = utils.assert;

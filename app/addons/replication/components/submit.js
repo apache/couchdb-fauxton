@@ -10,7 +10,6 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 import React from 'react';
-import Constants from '../constants';
 import Components from '../../components/react-components.react';
 
 const {ConfirmButton} = Components;
@@ -18,6 +17,7 @@ const {ConfirmButton} = Components;
 export const ReplicationSubmit = ({onClear, disabled, onClick}) =>
 <div className="replication__button-row">
   <ConfirmButton
+    customIcon="fonticon-replicate"
     id="replicate"
     text="Start Replication"
     onClick={onClick}

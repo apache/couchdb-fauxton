@@ -10,7 +10,6 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import FauxtonAPI from '../../../core/api';
 import utils from '../../../../test/mocha/testUtils';
 import React from 'react';
 import ReactDOM from 'react-dom';

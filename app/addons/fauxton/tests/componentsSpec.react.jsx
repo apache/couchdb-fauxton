@@ -9,14 +9,12 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
-import FauxtonAPI from "../../../core/api";
 import Views from "../components.react";
 import utils from "../../../../test/mocha/testUtils";
 import React from "react";
 import ReactDOM from "react-dom";
 import TestUtils from "react-addons-test-utils";
 import sinon from "sinon";
-import { mount } from 'enzyme';
 var assert = utils.assert;
 
 describe('Pagination', function () {

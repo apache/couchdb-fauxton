@@ -16,7 +16,6 @@ module.exports = {
   'Can view doc': client => {
     const waitTime = client.globals.maxWaitTime;
     const baseUrl = client.globals.test_settings.launch_url;
-    const password = client.globals.test_settings.password;
 
     const replicatorDoc = {
       _id: 'existing-doc-id-view-doc',
@@ -41,7 +40,6 @@ module.exports = {
   'Can edit doc': client => {
     const waitTime = client.globals.maxWaitTime;
     const baseUrl = client.globals.test_settings.launch_url;
-    const password = client.globals.test_settings.password;
 
     const replicatorDoc = {
       _id: 'existing-doc-id-edit-doc',
@@ -60,13 +58,14 @@ module.exports = {
       .clickWhenVisible('a[title="Edit replication"]')
       .waitForElementNotPresent('.load-lines', waitTime, true)
       .waitForElementPresent('.replication__section', waitTime, true)
+      .pause(10000)
+      .assert.valueContains(".replication__doc-name-input", replicatorDoc._id)
       .end();
   },
 
   'Can filter docs': client => {
     const waitTime = client.globals.maxWaitTime;
     const baseUrl = client.globals.test_settings.launch_url;
-    const password = client.globals.test_settings.password;
 
     const replicatorDoc1 = {
       _id: 'existing-doc-id-filter1',

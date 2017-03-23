@@ -10,14 +10,15 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import app from "../../app";
 import FauxtonAPI from "../../core/api";
 import Permissions from "./routes";
-import reducer from './reducers';
+import reducers from './reducers';
 import "./assets/less/permissions.less";
 
 Permissions.initialize = function () {};
 
-FauxtonAPI.reducers.push(reducer);
+FauxtonAPI.addReducers({
+  permissions: reducers
+});
 
 export default Permissions;

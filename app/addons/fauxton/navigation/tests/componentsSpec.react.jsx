@@ -18,7 +18,6 @@ import BaseAuth from "../../../auth/base";
 import utils from "../../../../../test/mocha/testUtils";
 import React from "react";
 import ReactDOM from "react-dom";
-import TestUtils from "react-addons-test-utils";
 import sinon from "sinon";
 import {mount} from 'enzyme';
 
