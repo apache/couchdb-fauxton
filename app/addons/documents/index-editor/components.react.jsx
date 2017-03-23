@@ -311,7 +311,7 @@ var EditorController = React.createClass({
     }
 
     var pageHeader = (this.state.isNewView) ? 'New View' : 'Edit View';
-    var btnLabel = (this.state.isNewView) ? 'Create Document and Build Index' : 'Save Document and Build Index';
+    var btnLabel = (this.state.isNewView) ? 'Create Document and then Build Index' : 'Save Document and then Build Index';
 
     var cancelLink = '#' + FauxtonAPI.urls('view', 'showView', this.state.database.id, this.state.designDocId, this.state.viewName);
     return (

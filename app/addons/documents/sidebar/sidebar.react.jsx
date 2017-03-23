@@ -643,7 +643,7 @@ var CloneIndexModal = React.createClass({
         </Modal.Body>
         <Modal.Footer>
           <a href="#" className="cancel-link" onClick={this.close} data-bypass="true">Cancel</a>
-          <button onClick={this.submit} data-bypass="true" className="btn btn-success save">
+          <button onClick={this.submit} data-bypass="true" className="btn btn-primary save">
             <i className="icon fonticon-ok-circled" /> Clone {this.props.indexLabel}</button>
         </Modal.Footer>
       </Modal>

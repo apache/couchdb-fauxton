@@ -183,7 +183,7 @@ var OriginInput = React.createClass({
         <div className="origin-domains">
           <div className="input-append">
             <input type="text" name="new_origin_domain" onChange={this.onInputChange} onKeyUp={this.onKeyUp} value={this.state.origin} placeholder="https://example.com"/>
-            <button onClick={this.addOrigin} className="btn btn-primary add-domain"><i className="icon fonticon-ok-circled"></i> Add Domain</button>
+            <button onClick={this.addOrigin} className="btn btn-secondary add-domain"><i className="icon fonticon-ok-circled"></i> Add Domain</button>
           </div>
         </div>
       </div>
@@ -334,7 +334,7 @@ var CORSController = React.createClass({
             <br />
             <button
               type="button"
-              className="enable-disable btn btn-success"
+              className="enable-disable btn btn-secondary"
               onClick={this.enableCorsChange}
               disabled={this.state.isLoading ? 'disabled' : null}
             >

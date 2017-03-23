@@ -97,7 +97,7 @@ var LoginForm = React.createClass({
               <input id="password" type="password" name="password" ref="password" placeholder="Password" size="24"
                 onChange={this.onInputChange} value={this.state.password} />
               <br/>
-              <button id="submit" className="btn btn-success" type="submit">Log In</button>
+              <button id="submit" className="btn btn-primary" type="submit">Log In</button>
             </form>
           </div>
         </div>
@@ -148,17 +148,15 @@ var ChangePasswordForm = React.createClass({
   render: function () {
     return (
       <div className="auth-page">
-        <h3>Change Password</h3>
-
         <form id="change-password" onSubmit={this.changePassword}>
           <p>
-            Enter your new password.
+            Enter and confirm a new password.
           </p>
 
           <input id="password" type="password" ref="password" name="password" placeholder="Password"
             size="24" onChange={this.onChangePassword} value={this.state.password} />
           <br />
-          <input id="password-confirm" type="password" name="password_confirm" placeholder= "Verify Password"
+          <input id="password-confirm" type="password" name="password_confirm" placeholder= "Password Confirmation"
             size="24" onChange={this.onChangePasswordConfirm} value={this.state.passwordConfirm} />
 
           <br />
@@ -223,19 +221,17 @@ var CreateAdminForm = React.createClass({
   render: function () {
     return (
       <div className="auth-page">
-        <h3>Create Admins</h3>
-
         <p>
-          Before a server admin is configured, all clients have admin privileges. This is fine when
-          HTTP access is restricted to trusted users. <strong>If end-users will be accessing this
-          CouchDB, you must create an admin account to prevent accidental (or malicious) data
+          Before a server admin is configured, all client connections have admin privileges. <strong>If HTTP access is open to non-trusted users, create an admin account to prevent data
           loss.</strong>
         </p>
         <p>
-          Server admins can create and destroy databases, install and update _design documents, run
-          the test suite, and edit all aspects of CouchDB configuration.
+          Connections with Admin privileges can create and destroy databases, install and update _design documents, run
+          the test suite, and modify the CouchDB configuration.
         </p>
-
+        <p>
+          Connections without Admin privileges have read and write access to all databases controlled by validation functions. CouchDB can be configured to block anonymous connections.
+        </p>
         <form id="create-admin-form" onSubmit={this.createAdmin}>
           <input id="username" type="text" ref="username" name="name" placeholder="Username" size="24"
             onChange={this.onChangeUsername} />
@@ -243,11 +239,8 @@ var CreateAdminForm = React.createClass({
           <input id="password" type="password" name="password" placeholder= "Password" size="24"
             onChange={this.onChangePassword} />
           <p>
-            Non-admin users have read and write access to all databases, which
-            are controlled by validation functions. CouchDB can be configured to block all
-            access to anonymous users.
+          <button type="submit" id="create-admin" className="btn btn-primary"><i className="icon icon-ok-circle" /> Grant Admin Privileges</button>
           </p>
-          <button type="submit" id="create-admin" className="btn btn-primary"><i className="icon icon-ok-circle" /> Create Admin</button>
         </form>
       </div>
     );

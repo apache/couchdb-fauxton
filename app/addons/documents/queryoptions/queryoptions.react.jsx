@@ -272,8 +272,8 @@ var QueryButtons = React.createClass({
     return (
       <div className="controls-group query-group">
         <div id="button-options" className="controls controls-row">
-          <button type="submit" className="btn btn-success">Run Query</button>
-          <a onClick={this.hideTray} className="btn btn-cancel">Cancel</a>
+          <button type="submit" className="btn btn-secondary">Run Query</button>
+          <a onClick={this.hideTray} className="btn btn-cancelDark">Cancel</a>
         </div>
       </div>
     );

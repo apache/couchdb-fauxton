@@ -79,22 +79,20 @@ button:focus {
   }
 }
 .btn-primary {
-  background: @brandPrimary;
+  background: #2bb673;
+  color: #fff;
 }
 .btn.btn-danger {
   background-color: #f00;
-  color: #fff;
-}
-.btn.btn-danger:hover {
-  background-color: #e73d34;
   color: #fff;
 }
 .btn.btn-info, .btn-secondary {
   background-color: #0082BF;
   color: #fff;
 }
-.btn.btn-info:hover, .btn-secondary:hover {
-  background-color: #E73D34;
+.btn-primary:hover, .btn-secondary:hover, .btn.btn-danger:hover, .btn.btn-info:hover {
+  background-color: @hoverRed;
+  color: #fff;
 }
 
 .btn-primary a:visited {
@@ -151,9 +149,14 @@ label {
   font-size: 12px;
 }
 
-a.help-link:hover {
+a.help-link{
+  color: @secondaryBlue;
   text-decoration: none;
+  &:hover {
+    color: @hoverRed
+  }
 }
+
 
 input[type=text].error {
   border: red 1px solid;

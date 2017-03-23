@@ -254,7 +254,9 @@ input.replication__bulk-select-input[type="checkbox"] {
   border: 1px solid #aaa;
   background-color: rgba(0, 0, 0, 0);
   margin-left: 3px;
-  padding-left: 8px
+  padding-left: 8px;
+  &:hover{
+    color: @hoverRed}
 }
 
 .replication__row-actions-list {
@@ -272,6 +274,9 @@ input.replication__bulk-select-input[type="checkbox"] {
   cursor: pointer;
   padding-right: 8px;
   padding-left: 8px;
+  color: #666;
+  &:hover{ color: @hoverRed
+  }
 }
 
 .replication__row-btn--no-left-pad {
@@ -304,13 +309,13 @@ button.replication__error-continue {
 
 .replication__error-cancel,
 .replication__error-continue {
-  background-color: #0082BF;
+  background-color: @secondaryBlue;
   color: #FFF;
 }
 
 .replication__error-cancel:hover,
 .replication__error-continue:hover {
-  background-color: #e73d34;
+  background-color: @hoverRed;
   color: #FFF;
 }
 
@@ -319,11 +324,11 @@ td.replication__empty-row {
 }
 
 .replication__remote_icon_help {
-  color: #E33F3B
+  color: @secondaryBlue
 }
 
 .replication__remote_icon_help:hover {
-  color: #af2d24;
+  color: @hoverRed;
 }
 
 .replication__tooltip {
