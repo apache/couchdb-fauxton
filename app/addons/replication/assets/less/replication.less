@@ -275,17 +275,18 @@ input.replication__bulk-select-input[type="checkbox"] {
   padding-right: 8px;
   padding-left: 8px;
   color: #666;
-  &:hover{ color: @hoverRed
+  &:hover {
+    color: @hoverRed;
+    text-decoration: none;
+  }
+  &:visited {
+    color: #666;
+    text-decoration: none;
   }
 }
 
 .replication__row-btn--no-left-pad {
   padding-left: 0px;
-}
-
-.replication__row-btn:visited,
-.replication__row-btn:hover {
-  text-decoration: none;
 }
 
 .replication__row-btn--warning {
