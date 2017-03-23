@@ -431,6 +431,9 @@ const CloneDocModal = React.createClass({
             <p>
               Document cloning copies the saved version of the document. Unsaved document changes will be discarded.
             </p>
+            <p>
+              You can modify the following generated ID for your new document.
+            </p>
             <input ref="newDocId" type="text" autoFocus={true} className="input-block-level"
               onChange={this.docIDChange} value={this.state.uuid} />
           </form>
