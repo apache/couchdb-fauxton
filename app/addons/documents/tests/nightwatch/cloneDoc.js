@@ -34,7 +34,7 @@ module.exports = {
       .clearValue('.clone-doc-modal input')
       .setValue('.clone-doc-modal input', ['ente'])
 
-      .clickWhenVisible('.clone-doc-modal button.btn.btn-success')
+      .clickWhenVisible('.clone-doc-modal button.btn.btn-primary')
       .closeNotification()
 
       .waitForAttribute('.faux-header__breadcrumbs .faux-header__breadcrumbs-element:last-child', 'textContent', function (docContents) {
