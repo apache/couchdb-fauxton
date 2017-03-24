@@ -25,7 +25,7 @@ module.exports = {
 
       .waitForElementVisible('.permissions__admins', waitTime, false)
 
-      .setValue('.permissions__admins [placeholder="Add User"]', 'blergie')
+      .setValue('.permissions__admins [placeholder="Username"]', 'blergie')
       .clickWhenVisible('.permissions__admins .permissions-add-user button')
 
       .waitForElementVisible('.permissions__admins .permissions__entry', waitTime, false)
