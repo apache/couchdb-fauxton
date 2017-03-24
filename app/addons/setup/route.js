@@ -23,8 +23,6 @@ var RouteObject = FauxtonAPI.RouteObject.extend({
   roles: ['_admin'],
   selectedHeader: 'Setup',
 
-  selectedHeader: 'Setup',
-
   routes: {
     'setup': 'setupInitView',
     'setup/finish': 'finishView',

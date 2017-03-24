@@ -46,7 +46,6 @@ const NavBarContainer = React.createClass({
   },
 
   setMenuState () {
-    $('body').toggleClass('closeMenu', this.state.isMinimized);
     FauxtonAPI.Events.trigger(FauxtonAPI.constants.EVENTS.NAVBAR_SIZE_CHANGED, this.state.isMinimized);
   },
 

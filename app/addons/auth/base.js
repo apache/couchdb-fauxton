@@ -21,7 +21,7 @@ app.session = Auth.session;
 
 
 function cleanupAuthSection () {
-  FauxtonAPI.removeHeaderLink({ id: 'auth', footerNav: true });
+  FauxtonAPI.removeHeaderLink({ id: 'auth', bottomNav: true });
 }
 
 Auth.initialize = function () {
@@ -43,10 +43,9 @@ Auth.initialize = function () {
       FauxtonAPI.hideLogin();
 
     } else if (session.isLoggedIn()) {
-
       const link = {
         id: 'auth',
-        title: session.user().name,
+        title: 'Your Account',
         href: '#/changePassword',
         icon: 'fonticon-user',
         bottomNav: true

@@ -19,6 +19,8 @@ import {OnePaneSimpleLayout} from '../components/layouts';
 
 
 var ConfigDisabledRouteObject = FauxtonAPI.RouteObject.extend({
+  selectedHeader: 'Configuration',
+
   routes: {
     'cluster/disabled': 'showDisabledFeatureScreen'
   },

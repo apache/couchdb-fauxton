@@ -20,6 +20,7 @@ import Layout from './layout';
 
 
 var ConfigDisabledRouteObject = FauxtonAPI.RouteObject.extend({
+  selectedHeader: 'Configuration',
 
   routes: {
     '_config': 'checkNodes',

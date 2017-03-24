@@ -65,6 +65,7 @@ var AuthRouteObject = FauxtonAPI.RouteObject.extend({
 var UserRouteObject = FauxtonAPI.RouteObject.extend({
   hideNotificationCenter: true,
   hideApiBar: true,
+  selectedHeader: 'Your Account',
 
   routes: {
     'changePassword': {
@@ -91,10 +92,6 @@ var UserRouteObject = FauxtonAPI.RouteObject.extend({
 
   checkNodesForAddAdmin: function () {
     ClusterActions.navigateToNodeBasedOnNodeCount('/addAdmin/');
-  },
-
-  selectedHeader: function () {
-    return FauxtonAPI.session.user().name;
   },
 
   changePassword: function () {
