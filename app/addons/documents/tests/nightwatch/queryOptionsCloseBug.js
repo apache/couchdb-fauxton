@@ -27,10 +27,10 @@ module.exports = {
       .clickWhenVisible('.control-toggle-queryoptions')
       .clickWhenVisible('#betweenKeys', waitTime, false)
       .setValue('#startkey', '"document_2"')
-      .clickWhenVisible('.query-options .btn-success')
+      .clickWhenVisible('.query-options .btn-secondary')
       .waitForElementNotPresent('#doc-list [data-id="document_1"]', waitTime, false)
       .clickWhenVisible('.control-toggle-queryoptions')
-      .clickWhenVisible('.query-options .btn-cancel')
+      .clickWhenVisible('.query-options .btn-cancelDark')
 
       .waitForElementNotPresent('.query-options .js-view-query-update', waitTime, false)
 

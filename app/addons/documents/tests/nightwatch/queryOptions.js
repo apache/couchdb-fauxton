@@ -27,7 +27,7 @@ module.exports = {
       .clickWhenVisible('.control-toggle-queryoptions')
       .clickWhenVisible('#betweenKeys', waitTime, false)
       .setValue('#startkey', '"document_2"')
-      .clickWhenVisible('.query-options .btn-success')
+      .clickWhenVisible('.query-options .btn-secondary')
       .waitForElementNotPresent('#doc-list [data-id="document_1"]', waitTime, false)
       .waitForElementPresent('#doc-list [data-id="document_2"]', waitTime, false)
       .assert.elementPresent('#doc-list [data-id="document_2"]')
