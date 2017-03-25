@@ -28,14 +28,14 @@
   .nav-list .active > a {
     text-shadow: none;
     background-color: #f1f0f1;
-    color: @brandPrimaryDark;
+    color: @brandPrimary;
     &:hover {
       color: white;
     }
   }
 
   .dropdown-toggle:hover {
-    color: #E73D34;
+    color: @hoverHighlight;
   }
 
   // ugly! This styles the (+) icon to make it white when a user hovers over a row. Better solution would be to move the
@@ -62,7 +62,7 @@
         color: white;
       }
       p {
-        background-color: @hoverRed;
+        background-color: @hoverHighlight;
       }
     }
     .accordion-list-item p {
@@ -114,7 +114,7 @@
           &:hover {
             color: #fff;
             text-decoration: none;
-            background-color: @hoverRed;
+            background-color: @hoverHighlight;
           }
           border-top: none;
           &.accordion-header{
@@ -176,7 +176,7 @@
     padding-left: 4px;
     .transition(all 0.25s linear);
     &:hover {
-      color: @hoverRed;
+      color: @hoverHighlight;
     }
     &:before {
       font-size: 17px;
@@ -205,7 +205,7 @@
     cursor: pointer;
     .transition(all 0.25s linear);
     &:hover {
-      background-color: @hoverRed;
+      background-color: @hoverHighlight;
     }
     &:last-child {
       margin-bottom: 0;

@@ -23,7 +23,7 @@
 @blue:                  #049cdb;
 @blueDark:              #0064cd;
 @green:                 #46a546;
-@red:                   #9d261d;
+@dangerRed:             #9d261d;
 @yellow:                #ffc40d;
 @orange:                #f89406;
 @pink:                  #c3325f;
@@ -97,11 +97,11 @@
 @btnSuccessBackground:              #62c462;
 @btnSuccessBackgroundHighlight:     #51a351;
 
-@btnWarningBackground:              lighten(@orange, 15%);
-@btnWarningBackgroundHighlight:     @orange;
+@btnWarningBackground:              lighten(@dangerRed, 15%);
+@btnWarningBackgroundHighlight:     @dangerRed;
 
-@btnDangerBackground:               #ee5f5b;
-@btnDangerBackgroundHighlight:      #bd362f;
+@btnDangerBackground:               @dangerRed;
+@btnDangerBackgroundHighlight:      @hoverHighlight;
 
 @btnInverseBackground:              #444;
 @btnInverseBackgroundHighlight:     @grayDarker;
