@@ -27,7 +27,7 @@ function cleanupAuthSection () {
 Auth.initialize = function () {
 
   Auth.session.on('change', function () {
-    var session = Auth.session;
+    const session = Auth.session;
 
     if (session.isAdminParty()) {
       const link = {

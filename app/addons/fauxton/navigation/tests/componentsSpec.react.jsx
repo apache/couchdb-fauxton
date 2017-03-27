@@ -12,7 +12,6 @@
 import FauxtonAPI from "../../../../core/api";
 import Burger from "../components/Burger";
 import NavBar from "../components/NavBar";
-import Actions from "../actions";
 import Auth from "../../../../core/auth";
 import BaseAuth from "../../../auth/base";
 import utils from "../../../../../test/mocha/testUtils";
