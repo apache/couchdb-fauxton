@@ -69,6 +69,15 @@
   }
 
   .tableview-data-cell-id {
+    display: none;
+  }
+  .tableview-header-id {
+    display: none;
+  }
+
+  
+
+  .tableview-data-cell-id {
     a {
       color: @linkColor;
     }
@@ -88,16 +97,18 @@
   }
   td {
     height: 49px;
+    white-space: normal;
+    
   }
   td, th {
     color: @defaultHTag;
     max-width: 160px;
     overflow: hidden;
     text-overflow: ellipsis;
-    white-space: nowrap;
+    //white-space: nowrap;
   }
   td.tableview-checkbox-cell, th.tableview-header-el-checkbox {
-    width: 68px;
+    width: 28px;
   }
   .tableview-conflict {
     color: #F00;

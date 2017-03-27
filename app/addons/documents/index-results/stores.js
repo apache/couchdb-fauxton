@@ -314,6 +314,7 @@ Stores.IndexResultsStore = FauxtonAPI.Store.extend({
     }
 
     // JSON style views
+	  //
     res = this._filteredCollection
       .map(function (doc, i) {
         if (doc.get('def') || this.isGhostDoc(doc)) {
