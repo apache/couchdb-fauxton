@@ -332,7 +332,7 @@ var NotificationCenterPanel = React.createClass({
             <input
               type="button"
               value="Clear All"
-              className="btn btn-small btn-info"
+              className="btn btn-small btn-secondary"
               onClick={Actions.clearAllNotifications} />
           </footer>
         </div>

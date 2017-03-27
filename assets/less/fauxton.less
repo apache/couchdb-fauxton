@@ -152,7 +152,7 @@ table tr td{
   }
 }
 thead {
-  border-bottom: 2px solid @brandPrimary;
+  border-bottom: 2px solid @brandHighlight;
 }
 tbody {
   padding-top: 10px;
@@ -406,11 +406,11 @@ table.databases {
 }
 
 .Select .is-focused {
-  background-color: #E33F3B;
+  background-color: @hoverHighlight;
 }
 
 .Select-option:hover {
-  background-color: #E33F3B;
+  background-color: @hoverHighlight;
 }
 
 .Select-option:last-child {
@@ -435,7 +435,7 @@ table.databases {
 }
 
 .Select-arrow-zone:hover > .Select-arrow {
-  border-top-color: #E73D34;
+  border-top-color: @hoverHighlight;
 }
 
 
@@ -672,7 +672,7 @@ body .control-toggle-include-docs span {
     text-decoration: none;
     font-size: 19px;
     &:hover {
-      background-color: @hoverRed;
+      background-color: @hoverHighlight;
       color: white;
     }
   }

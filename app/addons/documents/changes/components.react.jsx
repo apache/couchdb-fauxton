@@ -193,7 +193,7 @@ class AddFilterForm extends React.Component {
           <i className="fonticon-filter" />
           <input type="text" ref="addItem" className={this.inputClassNames()} placeholder="Sequence or ID"
                  onChange={(e) => this.setState({ filter: e.target.value })} value={this.state.filter} />
-          <button type="submit" className="btn btn-info">Filter</button>
+          <button type="submit" className="btn btn-secondary">Filter</button>
           <div className="help-block">
             <FilterTooltip tooltip={this.props.tooltip} />
           </div>
@@ -270,7 +270,6 @@ class ChangeRow extends React.Component {
   render () {
     const { codeVisible } = this.state;
     const { change, databaseName } = this.props;
-    const jsonBtnClasses = 'btn btn-small' + (codeVisible ? ' btn-secondary' : ' btn-info');
     const wrapperClass = 'change-wrapper' + (change.isNew ? ' new-change-row' : '');
 
     return (
@@ -303,7 +302,7 @@ class ChangeRow extends React.Component {
           <div className="row-fluid">
             <div className="span2">changes</div>
             <div className="span10">
-              <button type="button" className={jsonBtnClasses} onClick={this.toggleJSON.bind(this)}>
+              <button type="button" className='btn btn-small btn-secondary' onClick={this.toggleJSON.bind(this)}>
                 {codeVisible ? 'Close JSON' : 'View JSON'}
               </button>
             </div>
