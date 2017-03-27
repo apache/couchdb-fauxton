@@ -12,7 +12,6 @@
 import NavLink from "../components/NavLink";
 import React from "react";
 import ReactDOM from "react-dom";
-import sinon from "sinon";
 import {mount} from 'enzyme';
 
 describe('Navigation Bar', () => {
@@ -21,7 +20,7 @@ describe('Navigation Bar', () => {
     title: "Databases",
     icon: "fonticon-database",
     className: 'databases'
-  }
+  };
 
   describe('Active Link', () => {
     it('matching title sets active css class', () => {
@@ -32,7 +31,7 @@ describe('Navigation Bar', () => {
     it('different title sets inactive css class', () => {
       const linkEl = mount(<NavLink link={dbLink} active={"Replication"} isMinimized={false} />);
       expect(linkEl.find('a.faux-navbar__link--inactive').length).toBe(1);
-    });   
+    });
   });
 
   describe('Minimized Link', () => {
