@@ -199,7 +199,7 @@ var ConfigOptionValue = React.createClass({
       return (
         <span>
           <button
-            className="btn btn-success fonticon-ok-circled btn-small btn-config-save"
+            className="btn btn-primary fonticon-ok-circled btn-small btn-config-save"
             onClick={this.onSave}
           />
           <button
