@@ -1,6 +1,6 @@
 .faux-navbar {
   margin-top: 64px;
-  background-color: #3A2C2B;
+  background-color: @brandDark2;
 
   position: absolute;
   left: 0;
@@ -12,21 +12,21 @@
 
 .faux-navbar__itemarea {
   .box-sizing(border-box);
-  border-bottom: 1px solid #3A2C2B;
+  border-bottom: 1px solid @brandDark2;
   height: 48px;
   padding: 10px 20px;
   line-height: 24px;
 }
 
 .faux-navbar__version-footer {
-  color: #fff;
+  color: @buttonText;
   font-size: 10px;
   text-align: center;
-  background-color: @brown;
+  background-color: @brandDark2;
 }
 
 .faux-navbar__burger {
-  background-color: @primaryNav;
+  background-color: @brandDark2;
   padding: 19px 0 18px 18px;
   position: fixed;
   z-index: 100;
@@ -42,11 +42,11 @@
 }
 
 .faux-navbar__burger:hover .faux-navbar__burger__icon {
-  color: #fff;
+  color: @navIconActive;
 }
 
 .faux-navbar__burger__icon {
-  color: #B3B4B4;
+  color: @navIconColor;
   font-size: 27px;
 }
 
@@ -65,16 +65,16 @@
 }
 
 .faux-navbar__link--active {
-  background-color: #AF2D24;
+  background-color: @brandHighlight;
   text-decoration: none;
 }
 
 .faux-navbar__link--inactive {
-  background-color: #564E4C;
+  background-color: @brandDark1;
 }
 
 .faux-navbar__link:hover, .faux-logout__link:hover, .faux-login__link:hover {
-  background-color: #E73D34;
+  background-color: @hoverHighlight;
   text-decoration: none;
 }
 
@@ -83,23 +83,23 @@
 }
 
 .faux-navbar__link:hover .faux-navbar__icon:before {
-  color: #fff;
+  color: @navIconActive;
 }
 
 .faux-navbar__link--active .faux-navbar__icon:before {
-  color: #fff;
+  color: @navIconActive;
 }
 
 .faux-navbar__icon {
   margin-right: 14px;
-  color: #B3B4B4;
+  color: @navIconColor;
   font-size: 24px;
   vertical-align: middle;
 }
 
 .faux-navbar__text {
   margin: 0;
-  color: #fff;
+  color: @buttonText;
   vertical-align: middle;
   font-size: 16px;
   font-weight: normal;
@@ -109,12 +109,12 @@
 
 .faux-navbar__logout__text {
   font-size: 12px;
-  color: #fff;
+  color: @buttonText;
 }
 
 .faux-navbar__logout__textcontainer {
   text-align: center;
-  color: #fff;
+  color: @buttonText;
 }
 
 .faux-navbar__logout__textcontainer--narrow {
@@ -131,7 +131,7 @@
 
 .faux-navbar__login__textcontainer {
   text-align: center;
-  color: #fff;
+  color: @buttonText;
 }
 
 .faux-navbar__login__textcontainer--narrow {
@@ -148,7 +148,7 @@
   height: 50px;
   padding: 10px 10px 10px 10px;
   float: none;
-  background: #3a2c2b;
+  background: @brandDark2;
 }
 
 .faux-navbar__brand-logo {
