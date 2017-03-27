@@ -29,7 +29,7 @@ class NavBar extends Component {
   createLinks (links) {
     const { activeLink, isMinimized } = this.props;
 
-    return _.map(links, function (link, i) {
+    return _.map(links, (link, i) => {
       return <NavLink
         key={i}
         link={link}

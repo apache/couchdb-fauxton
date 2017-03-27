@@ -15,10 +15,10 @@ import ReactDOM from "react-dom";
 import sinon from "sinon";
 import {mount} from 'enzyme';
 
-describe('Navigation Bar', function () {
+describe('Navigation Bar', () => {
 
-  describe('Burger', function () {
-    it('dispatch TOGGLE_NAVBAR_MENU on click', function () {
+  describe('Burger', () => {
+    it('dispatch TOGGLE_NAVBAR_MENU on click', () => {
       const toggleMenu = sinon.spy();
       const burgerEl = mount(<Burger toggleMenu={toggleMenu} isMinimized={false} />);
       burgerEl.simulate('click');
