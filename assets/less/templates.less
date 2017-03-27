@@ -63,12 +63,12 @@
     width: @collapsedNavWidth;
     overflow-x: hidden;
   }
-  background-color: @primaryNav;
+  background-color: @brandDark2;
   .version-footer {
     color: #fff;
     font-size: 10px;
     text-align: center;
-    background-color: @brown;
+    background-color: @brandDark2;
   }
   .closeMenu & {
     .version-footer {
@@ -87,7 +87,7 @@
       position: absolute;
       z-index: 100;
       top: 0;
-      background-color: @brown;
+      background-color: @brandDark2;
       width: @navWidth;
       .closeMenu & {
         width: @collapsedNavWidth;
@@ -100,7 +100,7 @@
         margin: 2px 0px;
       }
       &:hover div {
-        background-color: @navBGHover;
+        background-color: @hoverHighlight;
       }
     }
     .bottom-container {
@@ -138,7 +138,7 @@
       #footer-nav-links {
         width: 100%;
         margin: 0;
-        background: @brown;
+        background: @brandDark2;
 
         li {
           width: 100%;
@@ -155,7 +155,7 @@
           &.active, &:hover {
             a {
               text-decoration: underline;
-              color: @hoverRed;
+              color: @hoverHighlight;
             }
           }
         }
@@ -178,22 +178,24 @@
           font-family: helvetica;
           .box-sizing(border-box);
           background-color: #564E4C;
-          border-bottom:  1px solid @primaryNav;
+          border-bottom:  1px solid @brandDark2;
           height: 48px;
           min-height: 48px;
           position: relative;
 
+          &.active:hover,
           &.active {
             a {
               .box-shadow(none);
             }
-            background-color: #AF2D24;
+            background-color: @brandHighlight;
+            //pointer-events: none;
           }
           &:hover {
             a {
               .box-shadow(none);
             }
-            background-color: @navBGHover;
+            background-color: @hoverHighlight;
           }
           &:hover .fonticon:before {
             color: @white;
@@ -202,7 +204,7 @@
           &:hover .fonticon:before,
           {
             text-shadow: @boxShadow;
-            color: @NavIconActive;
+            color: @navIconActive;
           }
           a {
             padding: 12px 25px 12px 60px;
@@ -219,7 +221,7 @@
                 position: absolute;
                 left: -41px;
                 font-size: 24px;
-                color: @NavIcon;
+                color: @navIconColor;
                 text-shadow: @boxShadowOff;
               }
             }
@@ -234,11 +236,11 @@
       }
       ul#footer-nav-links {
         li {
-          background-color: @primaryNav;
+          background-color: @brandDark2;
           border-top: 1px solid @linkColor;
           border-bottom: none;
           &.active, &:hover {
-            background-color: @navBGHover;
+            background-color: @hoverHighlight;
             border-top: 1px solid @linkColor;
             a {
               color: white;
@@ -254,12 +256,12 @@
         margin-top: 0;
         padding-bottom: 136px;
         li {
-          background-color: @bottomNav;
+          background-color: @brandDark1;
           &.active {
-            background-color:@navBGHover;
+            background-color:@brandHighlight;
           }
           &:hover {
-            background-color: @navBGHover;
+            background-color: @hoverHighlight;
           }
           a {
             &.fonticon {
@@ -459,11 +461,11 @@
       border: none;
     }
     > li > a:hover {
-      background-color: @hoverRed;
+      background-color: @hoverHighlight;
       color: #fff;
     }
     li.active > a {
-      color: @brandPrimaryDark;
+      color: @brandHighlight;
     }
     > li > a {
       color: #333333;
