@@ -50,19 +50,21 @@ export default {
 
     if (!options.collection.fetch) { return; }
 
-    return options.collection.fetch({reset: true}).then(function () {
+    return options.collection.fetch({reset: true}).then(() => {
       this.resultsListReset();
       this.sendMessageNewResultList(options);
-
-    }.bind(this), function (collection, _xhr) {
+    }, (collection, _xhr) => {
       //Make this more robust as sometimes the colection is passed through here.
       var xhr = collection.responseText ? collection : _xhr;
       var errorMsg = 'Bad Request';
 
       try {
-        var responseText = JSON.parse(xhr.responseText);
+        const responseText = JSON.parse(xhr.responseText);
         if (responseText.reason) {
           errorMsg = responseText.reason;
+        }
+        if (responseText.error && responseText.error === 'not_found') {
+          return;
         }
       } catch (e) {
         console.log(e);
@@ -72,7 +74,8 @@ export default {
         msg: errorMsg,
         type: "error",
         clear:  true
-     });
+      });
+
     });
   },
 
