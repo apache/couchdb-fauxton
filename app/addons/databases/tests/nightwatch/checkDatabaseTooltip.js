@@ -38,7 +38,7 @@ module.exports = {
 
       .checkForStringPresent(newDatabaseName, '"doc_del_count":1')
 
-      .clickWhenVisible('#nav-links a[href="#/_all_dbs"]')
+      .clickWhenVisible('#primary-navbar a[href="#/_all_dbs"]')
       // now let's look at the actual UI to confirm the tooltip appears
       .waitForElementPresent('.js-db-graveyard', waitTime, false)
       .moveToElement('.js-db-graveyard', 1, 1)
