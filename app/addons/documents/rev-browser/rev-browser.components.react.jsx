@@ -20,7 +20,6 @@ import { ButtonGroup, Button, Modal } from "react-bootstrap";
 import ReactSelect from "react-select";
 import jdp from "jsondiffpatch";
 import jdpformatters from "jsondiffpatch/src/formatters/html";
-import ace from "brace";
 import "jsondiffpatch/public/formatters-styles/html.css";
 
 const storageKeyDeleteConflictsModal = 'deleteConflictsHideModal';
@@ -28,15 +27,15 @@ const storageKeyDeleteConflictsModal = 'deleteConflictsHideModal';
 const store = RevStores.revBrowserStore;
 const ConfirmButton = ReactComponents.ConfirmButton;
 
-require('brace/ext/static_highlight');
-const highlight = ace.acequire('ace/ext/static_highlight');
-
-require('brace/mode/json');
-const JavaScriptMode = ace.acequire('ace/mode/json').Mode;
-
-require('brace/theme/idle_fingers');
-const theme = ace.acequire('ace/theme/idle_fingers');
-
+function ensureAce(callback) {
+  // dynamically load brace because it's large
+  require.ensure([
+    'brace',
+    'brace/ext/static_highlight',
+    'brace/mode/json',
+    'brace/theme/idle_fingers'
+  ], callback);
+}
 
 class DiffyController extends React.Component {
 
@@ -133,16 +132,29 @@ class SplitScreenArea extends React.Component {
   }
 
   hightlightAfterRender () {
-    const format = (input) => { return JSON.stringify(input, null, '  '); };
+    var self = this;
+    ensureAce(function () {
+      var ace = require("brace");
+      require('brace/ext/static_highlight');
+      const highlight = ace.acequire('ace/ext/static_highlight');
+      require('brace/mode/json');
+      const JavaScriptMode = ace.acequire('ace/mode/json').Mode;
+      require('brace/theme/idle_fingers');
+      const theme = ace.acequire('ace/theme/idle_fingers');
 
-    const jsmode = new JavaScriptMode();
-    const left = ReactDOM.findDOMNode(this.refs.revLeftOurs);
-    const right = ReactDOM.findDOMNode(this.refs.revRightTheirs);
+      const format = (input) => {
+        return JSON.stringify(input, null, '  ');
+      };
 
-    const leftRes = highlight.render(format(this.props.ours), jsmode, theme, 0, true);
-    left.innerHTML = leftRes.html;
-    const rightRes = highlight.render(format(this.props.theirs), jsmode, theme, 0, true);
-    right.innerHTML = rightRes.html;
+      const jsmode = new JavaScriptMode();
+      const left = ReactDOM.findDOMNode(self.refs.revLeftOurs);
+      const right = ReactDOM.findDOMNode(self.refs.revRightTheirs);
+
+      const leftRes = highlight.render(format(self.props.ours), jsmode, theme, 0, true);
+      left.innerHTML = leftRes.html;
+      const rightRes = highlight.render(format(self.props.theirs), jsmode, theme, 0, true);
+      right.innerHTML = rightRes.html;
+    });
   }
 
   render () {

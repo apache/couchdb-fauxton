@@ -12,12 +12,17 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import FauxtonAPI from "../../../core/api";
-import ace from "brace";
 import {StringEditModal} from './stringeditmodal';
 
-require('brace/mode/javascript');
-require('brace/mode/json');
-require('brace/theme/idle_fingers');
+function ensureAce(callback) {
+  // dynamically load brace because it's large
+  require.ensure([
+    'brace',
+    'brace/mode/javascript',
+    'brace/mode/json',
+    'brace/theme/idle_fingers'
+  ], callback);
+}
 
 export const CodeEditor = React.createClass({
   getDefaultProps () {
@@ -81,7 +86,7 @@ export const CodeEditor = React.createClass({
   },
 
   setupAce (props, shouldUpdateCode) {
-    this.editor = ace.edit(ReactDOM.findDOMNode(this.refs.ace));
+    this.editor = require('brace').edit(ReactDOM.findDOMNode(this.refs.ace));
 
     // suppresses an Ace editor error
     this.editor.$blockScrolling = Infinity;
@@ -170,21 +175,29 @@ export const CodeEditor = React.createClass({
   },
 
   componentDidMount () {
-    this.setupAce(this.props, true);
-    this.setupEvents();
+    var self = this;
+    ensureAce(function () {
+      self.setupAce(self.props, true);
+      self.setupEvents();
 
-    if (this.props.autoFocus) {
-      this.editor.focus();
-    }
+      if (self.props.autoFocus) {
+        self.editor.focus();
+      }
+    });
   },
 
   componentWillUnmount () {
     this.removeEvents();
-    this.editor.destroy();
+    if (this.editor) {
+      this.editor.destroy();
+    }
   },
 
   componentWillReceiveProps (nextProps) {
-    this.setupAce(nextProps, false);
+    var self = this;
+    ensureAce(function () {
+      self.setupAce(nextProps, false);
+    });
   },
 
   getAnnotations () {

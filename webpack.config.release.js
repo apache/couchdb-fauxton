@@ -31,7 +31,7 @@ module.exports = {
   },
 
   plugins: [
-    new webpack.optimize.LimitChunkCountPlugin({maxChunks: 1}),
+    new webpack.optimize.LimitChunkCountPlugin({maxChunks: 2}),
     new webpack.DefinePlugin({
       'process.env': {
         'NODE_ENV': JSON.stringify('production') // This has effect on the react lib size

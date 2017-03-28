@@ -13,11 +13,17 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import {Modal} from "react-bootstrap";
-import ace from "brace";
 import Helpers from "../../documents/helpers";
-require('brace/mode/javascript');
-require('brace/mode/json');
-require('brace/theme/idle_fingers');
+
+function ensureAce(callback) {
+  // dynamically load brace because it's large
+  require.ensure([
+    'brace',
+    'brace/mode/javascript',
+    'brace/mode/json',
+    'brace/theme/idle_fingers'
+  ], callback);
+}
 
 // this appears when the cursor is over a string. It shows an icon in the gutter that opens the modal.
 export const StringEditModal = React.createClass({
@@ -56,8 +62,14 @@ export const StringEditModal = React.createClass({
     this.initEditor(val);
   },
 
-  initEditor (val) {
-    this.editor = ace.edit(ReactDOM.findDOMNode(this.refs.stringEditor));
+  initEditor(val) {
+    var self = this;
+    ensureAce(function () {
+      self.initEditorAsync(val);
+    });
+  },
+  initEditorAsync (val) {
+    this.editor = require('brace').edit(ReactDOM.findDOMNode(this.refs.stringEditor));
     this.editor.$blockScrolling = Infinity; // suppresses an Ace editor error
     this.editor.setShowPrintMargin(false);
     this.editor.setOption('highlightActiveLine', true);
