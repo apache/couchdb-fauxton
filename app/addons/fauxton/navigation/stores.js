@@ -13,8 +13,6 @@
 import FauxtonAPI from "../../../core/api";
 import ActionTypes from "./actiontypes";
 
-import _ from 'lodash';
-
 const Stores = {};
 
 Stores.NavBarStore = FauxtonAPI.Store.extend({
@@ -80,7 +78,7 @@ Stores.NavBarStore = FauxtonAPI.Store.extend({
     const links = this.getLinkSection(removeLink);
     let indexOf = 0;
 
-    const res = _.filter(links, function (link) {
+    const res = links.filter((link) => {
       if (link.id === removeLink.id) {
         return true;
       }

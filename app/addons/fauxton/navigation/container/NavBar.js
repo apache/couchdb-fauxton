@@ -45,17 +45,8 @@ const NavBarContainer = React.createClass({
     this.setState(this.getStoreState());
   },
 
-  setMenuState () {
-    FauxtonAPI.Events.trigger(FauxtonAPI.constants.EVENTS.NAVBAR_SIZE_CHANGED, this.state.isMinimized);
-  },
-
   componentDidMount () {
     navBarStore.on('change', this.onChange, this);
-    this.setMenuState();
-  },
-
-  componentDidUpdate () {
-    this.setMenuState();
   },
 
   componentWillUnmount () {

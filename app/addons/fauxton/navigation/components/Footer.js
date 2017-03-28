@@ -20,7 +20,7 @@ const Footer = ({version}) => {
     <div className="faux-navbar__version-footer">
       Fauxton on &nbsp;
       <a href="http://couchdb.apache.org/">Apache CouchDB</a>
-      &nbsp; v. {version}
+      <div>v. {version}</div>
     </div>
   );
 

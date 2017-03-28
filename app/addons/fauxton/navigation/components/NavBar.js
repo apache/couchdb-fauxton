@@ -22,20 +22,19 @@ import LoginButton from './LoginButton';
 import Actions from "../actions";
 
 import classNames from 'classnames';
-import _ from 'lodash';
 
 class NavBar extends Component {
 
   createLinks (links) {
     const { activeLink, isMinimized } = this.props;
 
-    return _.map(links, (link, i) => {
+    return links.map((link, i) => {
       return <NavLink
         key={i}
         link={link}
         active={activeLink}
         isMinimized={isMinimized} />;
-    }, this);
+    });
   }
 
   toggleMenu () {

@@ -28,9 +28,10 @@ Auth.initialize = function () {
 
   Auth.session.on('change', function () {
     const session = Auth.session;
+    let link;
 
     if (session.isAdminParty()) {
-      const link = {
+      link = {
         id: 'auth',
         title: 'Admin Party!',
         href: '#/createAdmin',
@@ -43,7 +44,7 @@ Auth.initialize = function () {
       FauxtonAPI.hideLogin();
 
     } else if (session.isLoggedIn()) {
-      const link = {
+      link = {
         id: 'auth',
         title: 'Your Account',
         href: '#/changePassword',
