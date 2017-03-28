@@ -53,8 +53,7 @@ export default {
     return options.collection.fetch({reset: true}).then(() => {
       this.resultsListReset();
       this.sendMessageNewResultList(options);
-
-    }, function (collection, _xhr) {
+    }, (collection, _xhr) => {
       //Make this more robust as sometimes the colection is passed through here.
       var xhr = collection.responseText ? collection : _xhr;
       var errorMsg = 'Bad Request';
