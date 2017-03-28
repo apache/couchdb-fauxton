@@ -43,9 +43,21 @@ function clearIndex () {
 }
 
 function fetchDesignDocsBeforeEdit (options) {
-  options.designDocs.fetch({reset: true}).then(function () {
+  options.designDocs.fetch({reset: true}).then(() => {
     this.editIndex(options);
-  }.bind(this));
+  }, xhr => {
+    let errorMsg = 'Error';
+    if (xhr.responseJSON && xhr.responseJSON.error === 'not_found') {
+      const databaseName = options.designDocs.database.safeID();
+      errorMsg = `The ${databaseName} database does not exist`;
+      FauxtonAPI.navigate('/', {trigger: true});
+    }
+    FauxtonAPI.addNotification({
+      msg: errorMsg,
+      type: "error",
+      clear:  true
+    });
+  });
 }
 
 function saveView (viewInfo) {
