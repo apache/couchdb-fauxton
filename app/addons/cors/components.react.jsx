@@ -98,12 +98,12 @@ var OriginRow = React.createClass({
         </td>
         <td width="30">
           <span>
-            <a className="fonticon-pencil" onClick={this.editOrigin} title="Click to edit" />
+            <a className="fonticon-pencil" onClick={this.editOrigin} title="Edit domain." />
           </span>
         </td>
         <td width="30">
           <span>
-            <a href="#" data-bypass="true" className="fonticon-trash" onClick={this.deleteOrigin} title="Click to delete" />
+            <a href="#" data-bypass="true" className="fonticon-trash" onClick={this.deleteOrigin} title="Delete domain." />
           </span>
         </td>
       </tr>
