@@ -82,10 +82,11 @@ button:focus {
   color: @buttonText;
   background-color: @primaryGreen;
   border-color: @primaryGreen;
-  &:disabled, &[disabled]:hover {
+  &:disabled {
     background-color: @primaryGreenDisabled;
     border-color: @primaryGreenDisabled;
     color: @buttonTextDisabled;
+    pointer-events: none;
   }
 }
 
@@ -93,10 +94,11 @@ button:focus {
   color: @buttonText;
   background-color: @secondaryBlue;
   border-color: @secondaryBlue;
-  &:disabled, &[disabled] {
+  &:disabled {
     color: @buttonTextDisabled;
     background-color: @secondaryBlueDisabled;
     border-color: @secondaryBlueDisabled;
+    pointer-events: none;
   }
 }
 
@@ -104,15 +106,12 @@ button:focus {
   color: @secondaryBlue;
   background-color: @buttonText;
   border: 2px solid @secondaryBlue;
-  &:disabled, &[disabled] {
+  &:disabled {
     color: @secondaryBlueDisabled;
     background-color: @primaryGreenDisabled;
     border-color: @buttonTextDisabled;
+    pointer-events: none;
   }
-}
-
-.btn-success:hover, .btn-primary:hover, .btn-secondary:hover, .btn-tertiary:hover, .btn-warning:hover, .btn-danger:hover {
-  background-color: @hoverHighlight;
 }
 
 .btn-warning, .btn-danger {
@@ -123,7 +122,13 @@ button:focus {
     color: @buttonTextDisabled;
     background-color: @dangerDisabled;
     border-color: @dangerDisabled;
+    pointer-events: none;
   }
+}
+
+.btn-success:hover, .btn-primary:hover, .btn-secondary:hover, .btn-tertiary:hover, .btn-warning:hover, .btn-danger:hover {
+  background-color: @hoverHighlight;
+  border-color: @hoverHighlight;
 }
 
 .form-actions {
