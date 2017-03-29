@@ -200,7 +200,7 @@ describe('Config Components', function () {
       );
 
       TestUtils.Simulate.click($(ReactDOM.findDOMNode(el))[0]);
-      TestUtils.Simulate.click($('div.confirmation-modal button.btn-success')[0]);
+      TestUtils.Simulate.click($('div.confirmation-modal button.btn-primary')[0]);
       assert.ok(spy.calledOnce);
     });
   });
