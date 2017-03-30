@@ -49,7 +49,6 @@ export default {
     this.clearResults();
 
     if (!options.collection.fetch) { return; }
-    console.log(options);
 
     return options.collection.fetch({reset: true}).then(() => {
       this.resultsListReset();
