@@ -49,6 +49,7 @@ export default {
     this.clearResults();
 
     if (!options.collection.fetch) { return; }
+    console.log(options);
 
     return options.collection.fetch({reset: true}).then(() => {
       this.resultsListReset();
@@ -57,6 +58,7 @@ export default {
       //Make this more robust as sometimes the colection is passed through here.
       var xhr = collection.responseText ? collection : _xhr;
       var errorMsg = 'Bad Request';
+      console.log('xxx', xhr);
 
       try {
         const responseText = JSON.parse(xhr.responseText);
@@ -65,7 +67,12 @@ export default {
         }
 
         if (responseText.reason && responseText.reason === 'missing_named_view') {
-          errorMsg = 'The <index_name> <index_type> does not exist.';
+          errorMsg = `The ${options.collection.view} ${options.collection.design} does not exist.`;
+          FauxtonAPI.navigate(
+            FauxtonAPI.urls('allDocsSanitized', 'app', options.collection.database.safeID()),
+            {trigger: true}
+          );
+          return;
         }
       } catch (e) {
         console.log(e);
