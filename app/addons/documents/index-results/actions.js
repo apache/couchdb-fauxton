@@ -63,8 +63,9 @@ export default {
         if (responseText.reason) {
           errorMsg = responseText.reason;
         }
-        if (responseText.error && responseText.error === 'not_found') {
-          return;
+
+        if (responseText.reason && responseText.reason === 'missing_named_view') {
+          errorMsg = 'The <index_name> <index_type> does not exist.';
         }
       } catch (e) {
         console.log(e);
