@@ -30,9 +30,10 @@ const LogoutButton = ({username, isMinimized}) => {
           Log Out
         </span>
         &nbsp;
-        <span className="faux-navbar__logout__username">
-          {isMinimized ? null : _.escape(username)}
-        </span>
+        {isMinimized ?
+          null :
+          <span className="faux-navbar__logout__username">{_.escape(username)}</span>
+        }
       </div>
     </a>
   );
