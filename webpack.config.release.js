@@ -109,7 +109,15 @@ module.exports = {
         fallback: "style-loader",
         use: [
           "css-loader",
-          "less-loader"
+          {
+            loader: "less-loader",
+            options: {
+              modifyVars: {
+                largeLogoPath: "\'" + settings.variables.largeLogoPath + "\'",
+                smallLogoPath: "\'" + settings.variables.smallLogoPath + "\'"
+              }
+            }
+          }
         ],
         publicPath: '../../'
       }),

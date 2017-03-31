@@ -26,9 +26,11 @@ module.exports = {
 
       .loginToGUI()
       .waitForElementPresent('#notification-center-btn', waitTime, false)
+      .clickWhenVisible('.global-notification .fonticon-cancel', waitTime, false)
       .assert.cssClassNotPresent('.notification-center-panel', 'visible')
       .clickWhenVisible('#notification-center-btn', waitTime, false)
       .waitForElementPresent('.notification-center-panel.visible', waitTime, false)
+      .waitForElementPresent('.notification-list div.flex-layout', waitTime, false)
 
       .getText('.notification-center-panel', function (result) {
         var content = result.value;
