@@ -14,7 +14,6 @@ import FauxtonAPI from "../../../../core/api";
 import ActionTypes from "../actiontypes";
 import React from "react";
 import ReactDOM from "react-dom";
-import sinon from "sinon";
 import {mount} from 'enzyme';
 
 describe('Navigation Bar', () => {
