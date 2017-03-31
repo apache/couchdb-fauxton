@@ -48,8 +48,13 @@ class NavBar extends Component {
       isLoginSectionVisible,
       isLoginVisibleInsteadOfLogout,
       activeLink,
-      username
+      username,
+      isNavBarVisible
     } = this.props;
+
+    if (!isNavBarVisible) {
+      return null;
+    }
 
     const navLinks = this.createLinks(this.props.navLinks);
     const bottomNavLinks = this.createLinks(this.props.bottomNavLinks);
@@ -99,6 +104,7 @@ NavBar.propTypes = {
   navLinks: React.PropTypes.array,
   bottomNavLinks: React.PropTypes.array,
   footerNavLinks: React.PropTypes.array,
+  isNavBarVisible: React.PropTypes.bool,
   isLoginSectionVisible: React.PropTypes.bool.isRequired,
   isLoginVisibleInsteadOfLogout: React.PropTypes.bool.isRequired
 };

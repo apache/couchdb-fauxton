@@ -26,7 +26,7 @@ describe('Navigation Bar', () => {
       navLinks: [],
       bottomNavLinks: [],
       footerNavLinks: [],
-
+      isNavBarVisible: true,
       isLoginSectionVisible: true,
       isLoginVisibleInsteadOfLogout: true
     };
@@ -46,7 +46,7 @@ describe('Navigation Bar', () => {
       bottomNavLinks: [],
       footerNavLinks: [],
       username: 'Rocko',
-
+      isNavBarVisible: true,
       isLoginSectionVisible: true,
       isLoginVisibleInsteadOfLogout: false
     };
@@ -66,7 +66,7 @@ describe('Navigation Bar', () => {
       bottomNavLinks: [],
       footerNavLinks: [],
       username: 'Rocko',
-
+      isNavBarVisible: true,
       isLoginSectionVisible: false,
       isLoginVisibleInsteadOfLogout: false
     };
