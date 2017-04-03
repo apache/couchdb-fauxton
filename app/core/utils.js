@@ -124,6 +124,12 @@ const utils = {
   },
 
   stripHTML: function (str) {
+
+    if (!document) {
+      //not in browser, this should be ignored when testing in jest
+      return str;
+    }
+
     var tmpElement = document.createElement("div");
     tmpElement.innerHTML = str;
     return tmpElement.textContent || tmpElement.innerText;

@@ -37,7 +37,7 @@ function initDocEditor (params) {
     }
   }, function (xhr) {
     if (xhr.status === 404) {
-      errorNotification('The document does not exist.');
+      errorNotification(`The ${doc.id} document does not exist.`);
     }
 
     FauxtonAPI.navigate(FauxtonAPI.urls('allDocs', 'app', params.database.id, ''));
