@@ -74,20 +74,23 @@ class NavBar extends Component {
       <div className={navClasses}>
         <nav>
           <Burger isMinimized={isMinimized} toggleMenu={this.toggleMenu}/>
-
-          {navLinks}
-          {bottomNavLinks}
-
-          <div className="faux-navbar__footer">
-            <Brand isMinimized={isMinimized} />
-
-            <div>
-              {footerNavLinks}
+          <div className="faux-navbar__flex">
+            <div className="faux-navbar__links">
+              {navLinks}
+              {bottomNavLinks}
             </div>
 
-            <Footer version={version}/>
+            <div className="faux-navbar__footer">
+              <Brand isMinimized={isMinimized} />
 
-            {isLoginSectionVisible ? loginSection : null}
+              <div>
+                {footerNavLinks}
+              </div>
+
+              <Footer version={version}/>
+
+              {isLoginSectionVisible ? loginSection : null}
+            </div>
           </div>
         </nav>
         <div id="primary-nav-right-shadow"/>
