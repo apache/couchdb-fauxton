@@ -74,7 +74,7 @@ class NavBar extends Component {
       <div className={navClasses}>
         <nav>
           <Burger isMinimized={isMinimized} toggleMenu={this.toggleMenu}/>
-          <div className="faux-navbar__flex">
+          <div className="faux-navbar__linkcontainer">
             <div className="faux-navbar__links">
               {navLinks}
               {bottomNavLinks}
