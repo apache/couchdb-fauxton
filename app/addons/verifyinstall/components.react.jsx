@@ -64,7 +64,7 @@ var VerifyInstallButton = React.createClass({
 
   render: function () {
     return (
-      <button id="start" className="btn btn-success" onClick={this.props.verify} disabled={this.props.isVerifying}>
+      <button id="start" className="btn btn-primary" onClick={this.props.verify} disabled={this.props.isVerifying}>
         {this.props.isVerifying ? 'Verifying' : 'Verify Installation'}
       </button>
     );

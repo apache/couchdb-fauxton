@@ -228,7 +228,7 @@ const BulkSelectHeader = ({isSelected, deleteDocs, someDocsSelected, onCheck}) =
   const trash = someDocsSelected ?
     <button
       onClick={() => deleteDocs()}
-      className="replication__bulk-select-trash fonticon fonticon-trash"
+      className="bulk-select-trash fonticon fonticon-trash"
       title="Delete all selected">
     </button> : null;
 

@@ -96,7 +96,7 @@
         height: 4px;
         width: 24px;
         .border-radius(2);
-        background-color: #B3B4B4;
+        background-color: @navIconColor;
         margin: 2px 0px;
       }
       &:hover div {
@@ -114,7 +114,7 @@
         height: 50px;
         padding: 10px 10px 10px 10px;
         float: none;
-        background: #3a2c2b;
+        background: @brandDark2;
         .icon {
           .box-sizing(content-box);
           background: url(../img/CouchDB-negative-logo.png) no-repeat 23px 0px;
@@ -146,7 +146,7 @@
 
           a {
             font-size: 10px;
-            color: #B3B4B4;
+            color: @navIconColor;
             padding: 0px;
             text-shadow: none;
             width: 100%;
@@ -177,13 +177,12 @@
           font-weight: normal;
           font-family: helvetica;
           .box-sizing(border-box);
-          background-color: #564E4C;
+          background-color: @brandDark1;
           border-bottom:  1px solid @brandDark2;
           height: 48px;
           min-height: 48px;
           position: relative;
-
-          &.active:hover,
+ 
           &.active {
             a {
               .box-shadow(none);

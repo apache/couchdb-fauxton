@@ -636,7 +636,7 @@ var CloneIndexModal = React.createClass({
             <div className="clone-index-name-row">
               <label className="new-index-title-label" htmlFor="new-index-name">{this.props.indexLabel} Name</label>
               <input type="text" id="new-index-name" value={this.props.newIndexName} onChange={this.setNewIndexName}
-                 placeholder="Enter new view name" />
+                 placeholder="New view name" />
             </div>
           </form>
 

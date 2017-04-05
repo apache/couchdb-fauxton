@@ -38,27 +38,26 @@ var ClusterConfiguredScreen = React.createClass({
 var SetupCurrentAdminPassword = React.createClass({
 
   render: function () {
-    var text = 'Your current Admin Username & Password';
+    var text = 'Specify your Admin credentials';
 
     if (this.props.adminParty) {
-      text = 'Admin Username & Password that you want to use';
+      text = 'Create Admin credentials.';
     }
 
     return (
       <div className="setup-creds">
         <div>
-          <h2>Specify Credentials</h2>
-          {text}
+          <p>{text}</p>
         </div>
         <input
           className="setup-username"
           onChange={this.props.onAlterUsername}
-          placeholder="Admin Username"
+          placeholder="Username"
           type="text" />
         <input
           className="setup-password"
           onChange={this.props.onAlterPassword}
-          placeholder="Admin Password"
+          placeholder="Password"
           type="password" />
       </div>
     );
@@ -89,19 +88,16 @@ var SetupOptionalSettings = React.createClass({
   render: function () {
     return (
       <div className="setup-opt-settings">
-        <h2>IP</h2>
-        Bind address to listen on<br/>
-
+        <p>Bind address the node will listen on</p>
         <input
           className="setup-input-ip"
           value={this.state.ipValue}
           onChange={this.handleIpChange}
-          defaultValue="0.0.0.0"
+          placeholder="IP Address"
           type="text" />
 
         <div className="setup-port">
-          <h2>Port</h2>
-          Port that the Node uses <br/>
+          <p>Port that the node will use</p>
           <input
             className="setup-input-port"
             value={this.state.portValue}
@@ -206,14 +202,14 @@ var SetupMultipleNodesController = React.createClass({
           </div>
         <hr/>
         <div className="setup-add-nodes-section">
-          <h2>Add Nodes</h2>
-          Remote host <br/>
+          <h2>Add Nodes to the Cluster</h2>
+          <p>Remote host</p>
           <input
             value={this.state.remoteAddress}
             onChange={this.alterRemoteAddressAdditionalNode}
             className="input-remote-node"
             type="text"
-            placeholder="127.0.0.1" />
+            placeholder="IP Address" />
 
           <SetupOptionalSettings
             onAlterPort={this.alterPortAdditionalNode}

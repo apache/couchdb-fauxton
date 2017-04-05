@@ -50,9 +50,9 @@ export const Beautify = React.createClass({
         className="beautify beautify_map btn btn-primary btn-small beautify-tooltip"
         type="button"
         data-toggle="tooltip"
-        title="Reformat your minified code to make edits to it."
+        title="Switch to editable code format."
       >
-        beautify this code
+        Format Code
       </button>
     );
   }
