@@ -74,7 +74,15 @@ module.exports = {
       use: [
         "style-loader",
         "css-loader",
-        "less-loader"
+        {
+          loader: "less-loader",
+          options: {
+            modifyVars: {
+              largeLogoPath: "\'" + settings.variables.largeLogoPath + "\'",
+              smallLogoPath: "\'" + settings.variables.smallLogoPath + "\'"
+            }
+          }
+        }
       ]
     },
     {

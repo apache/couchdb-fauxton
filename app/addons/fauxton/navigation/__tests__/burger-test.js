@@ -9,26 +9,21 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
+import Burger from "../components/Burger";
+import React from "react";
+import ReactDOM from "react-dom";
+import sinon from "sinon";
+import {mount} from 'enzyme';
 
-import app from "../../app";
-import FauxtonAPI from "../../core/api";
-import NavigationActions from "./navigation/actions";
+describe('Navigation Bar', () => {
 
-import "./assets/less/fauxton.less";
+  describe('Burger', () => {
+    it('dispatch TOGGLE_NAVBAR_MENU on click', () => {
+      const toggleMenu = sinon.spy();
+      const burgerEl = mount(<Burger toggleMenu={toggleMenu} isMinimized={false} />);
+      burgerEl.simulate('click');
+      expect(toggleMenu.calledOnce).toBeTruthy();
+    });
 
-const Fauxton = FauxtonAPI.addon();
-
-Fauxton.initialize = () => {
-  const versionInfo = new Fauxton.VersionInfo();
-  versionInfo.fetch().then(function () {
-    NavigationActions.setNavbarVersionInfo(versionInfo.get("version"));
   });
-};
-
-Fauxton.VersionInfo = Backbone.Model.extend({
-  url: function () {
-    return app.host;
-  }
 });
-
-export default Fauxton;

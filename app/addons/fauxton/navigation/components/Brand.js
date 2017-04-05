@@ -10,25 +10,27 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import app from "../../app";
-import FauxtonAPI from "../../core/api";
-import NavigationActions from "./navigation/actions";
+import React from 'react';
 
-import "./assets/less/fauxton.less";
+import classNames from 'classnames';
 
-const Fauxton = FauxtonAPI.addon();
+const Brand = ({isMinimized}) => {
 
-Fauxton.initialize = () => {
-  const versionInfo = new Fauxton.VersionInfo();
-  versionInfo.fetch().then(function () {
-    NavigationActions.setNavbarVersionInfo(versionInfo.get("version"));
-  });
+  const burgerClasses = classNames(
+    'faux-navbar__brand-logo',
+    {'faux-navbar__brand-logo--wide':  !isMinimized},
+    {'faux-navbar__brand-logo--narrow': isMinimized}
+  );
+
+  return (
+    <div className="faux-navbar__brand">
+      <div className={burgerClasses}></div>
+    </div>
+  );
 };
 
-Fauxton.VersionInfo = Backbone.Model.extend({
-  url: function () {
-    return app.host;
-  }
-});
+Brand.propTypes = {
+  isMinimized: React.PropTypes.bool.isRequired
+};
 
-export default Fauxton;
+export default Brand;

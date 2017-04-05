@@ -10,25 +10,24 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import app from "../../app";
-import FauxtonAPI from "../../core/api";
-import NavigationActions from "./navigation/actions";
+import React from 'react';
 
-import "./assets/less/fauxton.less";
+const Footer = ({version}) => {
 
-const Fauxton = FauxtonAPI.addon();
+  if (!version) { return null; }
 
-Fauxton.initialize = () => {
-  const versionInfo = new Fauxton.VersionInfo();
-  versionInfo.fetch().then(function () {
-    NavigationActions.setNavbarVersionInfo(versionInfo.get("version"));
-  });
+  return (
+    <div className="faux-navbar__version-footer">
+      Fauxton on &nbsp;
+      <a href="http://couchdb.apache.org/">Apache CouchDB</a>
+      <div>v. {version}</div>
+    </div>
+  );
+
 };
 
-Fauxton.VersionInfo = Backbone.Model.extend({
-  url: function () {
-    return app.host;
-  }
-});
+Footer.propTypes = {
+  version: React.PropTypes.string
+};
 
-export default Fauxton;
+export default Footer;

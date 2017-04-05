@@ -72,6 +72,25 @@ FauxtonAPI.config({
       type: 'REMOVE_NAVBAR_LINK',
       link: link
     });
+  },
+
+  hideLogin: function () {
+    FauxtonAPI.dispatch({
+      type: 'NAVBAR_SHOW_HIDE_LOGIN_LOGOUT_SECTION',
+      visible: false
+    });
+  },
+
+  showLogout: function () {
+    FauxtonAPI.dispatch({
+      type: 'NAVBAR_SHOW_LOGOUT_BUTTON'
+    });
+  },
+
+  showLogin: function () {
+    FauxtonAPI.dispatch({
+      type: 'NAVBAR_SHOW_LOGIN_BUTTON'
+    });
   }
 });
 

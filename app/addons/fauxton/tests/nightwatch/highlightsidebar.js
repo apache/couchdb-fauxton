@@ -24,7 +24,7 @@ module.exports = {
       .click('a[href="#/replication"]')
       .pause(1000)
       .waitForElementVisible('.replication__activity_header-btn', waitTime, false)
-      .assert.cssClassPresent('li[data-nav-name="Replication"]', 'active')
+      .assert.cssClassPresent('a[href="#/replication"]', 'faux-navbar__link--active')
     .end();
   }
 };

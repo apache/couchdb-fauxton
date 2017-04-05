@@ -12,8 +12,12 @@
 
 import React from 'react';
 import {NotificationController, PermanentNotification} from "./notifications/notifications.react";
-import {NavBar} from './navigation/components.react';
+import NavBar from './navigation/container/NavBar';
 import NavbarActions from './navigation/actions';
+import Stores from './navigation/stores';
+import classNames from 'classnames';
+
+const navBarStore = Stores.navBarStore;
 
 class ContentWrapper extends React.Component {
   constructor(props) {
@@ -49,27 +53,52 @@ class ContentWrapper extends React.Component {
   }
 }
 
-const App = ({router}) => {
-  return (
-    <div>
-      <PermanentNotification />
-      <div id="notifications">
-        <NotificationController />
-      </div>
-      <div role="main" id="main">
-        <div id="app-container">
-          <div className="wrapper">
-            <div className="pusher">
-              <ContentWrapper router={router} />
-            </div>
-            <div id="primary-navbar">
-              <NavBar/>
+class App extends React.Component {
+  constructor (props) {
+    super(props);
+    this.state = this.getStoreState();
+  }
+
+  getStoreState () {
+    return {
+      isPrimaryNavMinimized: navBarStore.isMinimized()
+    };
+  }
+
+  componentDidMount () {
+    navBarStore.on('change', this.onChange, this);
+  }
+
+  onChange () {
+    this.setState(this.getStoreState());
+  }
+
+  render () {
+    const mainClass = classNames(
+      {'closeMenu': this.state.isPrimaryNavMinimized}
+    );
+
+    return (
+      <div>
+        <PermanentNotification />
+        <div id="notifications">
+          <NotificationController />
+        </div>
+        <div role="main" id="main"  className={mainClass}>
+          <div id="app-container">
+            <div className="wrapper">
+              <div className="pusher">
+                <ContentWrapper router={this.props.router} />
+              </div>
+              <div id="primary-navbar">
+                <NavBar/>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  }
 };
 
 export default App;

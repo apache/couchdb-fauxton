@@ -19,19 +19,16 @@ Auth.session = new Auth.Session();
 FauxtonAPI.setSession(Auth.session);
 app.session = Auth.session;
 
+
+function cleanupAuthSection () {
+  FauxtonAPI.removeHeaderLink({ id: 'auth', bottomNav: true });
+}
+
 Auth.initialize = function () {
 
-  FauxtonAPI.addHeaderLink({
-    id: 'auth',
-    title: 'Login',
-    href: '#/login',
-    icon: 'fonticon-user',
-    bottomNav: true
-  });
-
   Auth.session.on('change', function () {
-    var session = Auth.session;
-    var link = {};
+    const session = Auth.session;
+    let link;
 
     if (session.isAdminParty()) {
       link = {
@@ -41,36 +38,28 @@ Auth.initialize = function () {
         icon: 'fonticon-user',
         bottomNav: true
       };
+
+      cleanupAuthSection();
+      FauxtonAPI.addHeaderLink(link);
+      FauxtonAPI.hideLogin();
+
     } else if (session.isLoggedIn()) {
       link = {
         id: 'auth',
-        title: session.user().name,
+        title: 'Your Account',
         href: '#/changePassword',
         icon: 'fonticon-user',
         bottomNav: true
       };
 
-      // ensure the footer link is removed before adding it
-      FauxtonAPI.removeHeaderLink({ id: 'logout', footerNav: true });
-      FauxtonAPI.addHeaderLink({
-        id: 'logout',
-        footerNav: true,
-        href: '#logout',
-        title: 'Logout',
-        icon: '',
-        className: 'logout'
-      });
+      cleanupAuthSection();
+      FauxtonAPI.addHeaderLink(link);
+      FauxtonAPI.showLogout();
     } else {
-      link = {
-        id: 'auth',
-        title: 'Login',
-        href: '#/login',
-        icon: 'fonticon-user',
-        bottomNav: true
-      };
-      FauxtonAPI.removeHeaderLink({ id: 'logout', footerNav: true });
+      cleanupAuthSection();
+      FauxtonAPI.showLogin();
     }
-    FauxtonAPI.updateHeaderLink(link);
+
   });
 
   Auth.session.fetchUser().then(function () {

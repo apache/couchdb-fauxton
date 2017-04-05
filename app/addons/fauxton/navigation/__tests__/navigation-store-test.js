@@ -9,24 +9,21 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
-import app from "../../../../app";
-import testUtils from "../../../../../test/mocha/testUtils";
 import FauxtonAPI from "../../../../core/api";
 import Stores from "../stores";
-var assert = testUtils.assert;
-var navBarStore = Stores.navBarStore;
+const navBarStore = Stores.navBarStore;
 
-describe('NavBarStore', function () {
-  beforeEach(function () {
+describe('NavBarStore', () => {
+  beforeEach(() => {
     FauxtonAPI.dispatch({
       type: 'CLEAR_NAVBAR_LINK',
     });
 
   });
 
-  describe('add links', function () {
+  describe('add links', () => {
 
-    it('to nav links', function () {
+    it('to nav links', () => {
       var link = {
         id: 'mylink'
       };
@@ -35,10 +32,10 @@ describe('NavBarStore', function () {
         link: link
       });
 
-      assert.equal(navBarStore.getNavLinks()[0].id, link.id);
+      expect(navBarStore.getNavLinks()[0].id).toMatch(link.id);
     });
 
-    it('to top nav links', function () {
+    it('to top nav links', () => {
       var link1 = {
         id: 'mylink1'
       };
@@ -58,10 +55,10 @@ describe('NavBarStore', function () {
         link: link2
       });
 
-      assert.equal(navBarStore.getNavLinks()[0].id, link2.id);
+      expect(navBarStore.getNavLinks()[0].id).toMatch(link2.id);
     });
 
-    it('to bottom nav', function () {
+    it('to bottom nav', () => {
       var link = {
         id: 'bottomNav',
         bottomNav: true
@@ -71,10 +68,10 @@ describe('NavBarStore', function () {
         link: link
       });
 
-      assert.equal(navBarStore.getBottomNavLinks()[0].id, link.id);
+      expect(navBarStore.getBottomNavLinks()[0].id).toMatch(link.id);
     });
 
-    it('to top of bottom nav', function () {
+    it('to top of bottom nav', () => {
       var link = {
         id: 'bottomNav',
         bottomNav: true,
@@ -85,10 +82,10 @@ describe('NavBarStore', function () {
         link: link
       });
 
-      assert.equal(navBarStore.getBottomNavLinks()[0].id, link.id);
+      expect(navBarStore.getBottomNavLinks()[0].id).toMatch(link.id);
     });
 
-    it('to footer nav', function () {
+    it('to footer nav', () => {
       var link = {
         id: 'footerNav',
         footerNav: true
@@ -98,12 +95,12 @@ describe('NavBarStore', function () {
         link: link
       });
 
-      assert.equal(navBarStore.getFooterNavLinks()[0].id, link.id);
+      expect(navBarStore.getFooterNavLinks()[0].id).toMatch(link.id);
     });
   });
 
-  describe('remove link', function () {
-    it('from nav links', function () {
+  describe('remove link', () => {
+    it('from nav links', () => {
       var link = {
         id: 'remove_link',
       };
@@ -117,11 +114,11 @@ describe('NavBarStore', function () {
         link: link
       });
 
-      assert.equal(navBarStore.getNavLinks().length, 0);
+      expect(navBarStore.getNavLinks().length).toBe(0);
     });
 
-    it('remove link from list', function () {
-      function addLink (id) {
+    it('remove link from list', () => {
+      const addLink = (id) => {
         FauxtonAPI.dispatch({
           type: 'ADD_NAVBAR_LINK',
           link: {
@@ -129,8 +126,8 @@ describe('NavBarStore', function () {
             footerNav: true
           }
         });
-      }
-      function removeLink () {
+      };
+      const removeLink = () => {
         FauxtonAPI.dispatch({
           type: 'REMOVE_NAVBAR_LINK',
           link: {
@@ -138,7 +135,7 @@ describe('NavBarStore', function () {
             footerNav: true
           }
         });
-      }
+      };
       addLink('remove_link1');
       addLink('remove_link2');
       addLink('remove_link3');
@@ -147,10 +144,10 @@ describe('NavBarStore', function () {
       removeLink();
       removeLink();
 
-      assert.equal(navBarStore.getFooterNavLinks().length, 2);
+      expect(navBarStore.getFooterNavLinks().length).toBe(2);
     });
 
-    it('from bottom nav links', function () {
+    it('from bottom nav links', () => {
       var link = {
         id: 'remove_link',
         bottomNav: true
@@ -165,10 +162,10 @@ describe('NavBarStore', function () {
         link: link
       });
 
-      assert.equal(navBarStore.getBottomNavLinks().length, 0);
+      expect(navBarStore.getBottomNavLinks().length).toBe(0);
     });
 
-    it('from footer nav links', function () {
+    it('from footer nav links', () => {
       var link = {
         id: 'remove_link',
         footerNav: true
@@ -183,12 +180,12 @@ describe('NavBarStore', function () {
         link: link
       });
 
-      assert.equal(navBarStore.getFooterNavLinks().length, 0);
+      expect(navBarStore.getFooterNavLinks().length).toBe(0);
     });
   });
 
-  describe('update link', function () {
-    it('for nav links', function () {
+  describe('update link', () => {
+    it('for nav links', () => {
       var link = {
         id: 'update-link',
         title: 'first'
@@ -205,59 +202,19 @@ describe('NavBarStore', function () {
         link: link
       });
 
-      assert.equal(navBarStore.getNavLinks()[0].title, 'second');
+      expect(navBarStore.getNavLinks()[0].title).toMatch('second');
     });
 
   });
 
-  describe('set version', function () {
-    it('stores version number', function () {
+  describe('set version', () => {
+    it('stores version number', () => {
       FauxtonAPI.dispatch({
         type: 'NAVBAR_SET_VERSION_INFO',
         version: 1234
       });
 
-      assert.equal(navBarStore.getVersion(), 1234);
-    });
-
-  });
-
-  describe('is Minimized', function () {
-
-    it('returns true if localstorage is true', function () {
-      app.utils.localStorageSet(FauxtonAPI.constants.LOCAL_STORAGE.SIDEBAR_MINIMIZED, true);
-      assert.ok(navBarStore.isMinimized());
-    });
-
-    it('returns false if localstorage is false', function () {
-      app.utils.localStorageSet(FauxtonAPI.constants.LOCAL_STORAGE.SIDEBAR_MINIMIZED, false);
-      assert.notOk(navBarStore.isMinimized(), false);
-    });
-
-    it('returns false if localstorage is undefined', function () {
-      window.localStorage.removeItem(FauxtonAPI.constants.LOCAL_STORAGE.SIDEBAR_MINIMIZED);
-      assert.notOk(navBarStore.isMinimized(), false);
-    });
-  });
-
-  describe('toggleMenu', function () {
-
-    it('that is minimized changes to false', function () {
-      app.utils.localStorageSet(FauxtonAPI.constants.LOCAL_STORAGE.SIDEBAR_MINIMIZED, true);
-      navBarStore.toggleMenu();
-      assert.notOk(navBarStore.isMinimized());
-    });
-
-    it('that is not minimized changes to true', function () {
-      app.utils.localStorageSet(FauxtonAPI.constants.LOCAL_STORAGE.SIDEBAR_MINIMIZED, false);
-      navBarStore.toggleMenu();
-      assert.ok(navBarStore.isMinimized());
-    });
-
-    it('that is undefined changes to true', function () {
-      window.localStorage.removeItem(FauxtonAPI.constants.LOCAL_STORAGE.SIDEBAR_MINIMIZED);
-      navBarStore.toggleMenu();
-      assert.ok(navBarStore.isMinimized());
+      expect(navBarStore.getVersion()).toBe(1234);
     });
 
   });
