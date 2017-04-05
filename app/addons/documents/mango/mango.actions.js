@@ -104,11 +104,17 @@ export default {
       options: options
     });
 
-    return options.indexList.fetch({reset: true}).then(function () {
+    return options.indexList.fetch({reset: true}).then(() => {
       this.mangoResetIndexList({isLoading: false});
-    }.bind(this), function () {
+    }, (xhr) => {
+      let errorMsg = 'Bad request!';
+      if (xhr.responseJSON && xhr.responseJSON.error === 'not_found') {
+        const databaseName = options.indexList.database.safeID();
+        errorMsg = `The ${databaseName} database does not exist.`;
+        FauxtonAPI.navigate('/', {trigger: true});
+      }
       FauxtonAPI.addNotification({
-        msg: 'Bad request!',
+        msg: errorMsg,
         type: "error",
         clear:  true
      });

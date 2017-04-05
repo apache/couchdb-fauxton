@@ -30,7 +30,7 @@ export const ConfirmButton = React.createClass({
       disabled: false,
       showIcon: true,
       customIcon: 'fonticon-ok-circled',
-      buttonType: 'btn-success',
+      buttonType: 'btn-primary',
       style: {},
       'data-id': null,
       onClick () { }

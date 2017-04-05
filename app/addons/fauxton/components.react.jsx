@@ -158,7 +158,7 @@ var ConfirmationModal = React.createClass({
       title: 'Please confirm',
       text: '',
       successButtonLabel: 'Okay',
-      buttonClass: 'btn-success',
+      buttonClass: 'btn-primary',
       onClose: function () { },
       onSubmit: function () { }
     };
