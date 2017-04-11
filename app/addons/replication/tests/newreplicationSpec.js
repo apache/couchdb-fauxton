@@ -23,8 +23,13 @@ describe('New Replication Component', () => {
 
   describe('validation', () => {
 
+    beforeEach(() => {
+      sinon.stub(FauxtonAPI.session, 'fetchUser');
+    });
+
     afterEach(() => {
       restore(FauxtonAPI.addNotification);
+      restore(FauxtonAPI.session.fetchUser);
     });
 
     it('returns true for local source and target selected', () => {
@@ -125,6 +130,15 @@ describe('New Replication Component', () => {
   });
 
   describe('confirmButtonEnabled', () => {
+
+    beforeEach(() => {
+      sinon.stub(FauxtonAPI.session, 'fetchUser');
+    });
+
+    afterEach(() => {
+      restore(FauxtonAPI.session.fetchUser);
+    });
+
     it('returns false for default', () => {
       const newreplication = mount(<NewReplication
         updateFormField={() => {}}
@@ -180,6 +194,14 @@ describe('New Replication Component', () => {
   });
 
   describe("runReplicationChecks", () => {
+
+    beforeEach(() => {
+      sinon.stub(FauxtonAPI.session, 'fetchUser');
+    });
+
+    afterEach(() => {
+      restore(FauxtonAPI.session.fetchUser);
+    });
 
     it("shows conflict modal for existing replication doc", () => {
       let called = false;
