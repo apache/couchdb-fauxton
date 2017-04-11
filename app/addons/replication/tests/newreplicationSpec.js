@@ -130,6 +130,15 @@ describe('New Replication Component', () => {
   });
 
   describe('confirmButtonEnabled', () => {
+
+    beforeEach(() => {
+      sinon.stub(FauxtonAPI.session, 'fetchUser');
+    });
+
+    afterEach(() => {
+      restore(FauxtonAPI.session.fetchUser);
+    });
+
     it('returns false for default', () => {
       const newreplication = mount(<NewReplication
         updateFormField={() => {}}
@@ -185,6 +194,14 @@ describe('New Replication Component', () => {
   });
 
   describe("runReplicationChecks", () => {
+
+    beforeEach(() => {
+      sinon.stub(FauxtonAPI.session, 'fetchUser');
+    });
+
+    afterEach(() => {
+      restore(FauxtonAPI.session.fetchUser);
+    });
 
     it("shows conflict modal for existing replication doc", () => {
       let called = false;
