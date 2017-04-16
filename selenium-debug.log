@@ -1,0 +1,221 @@
+15:27:01.992 INFO - Launching a standalone server
+Setting system property webdriver.chrome.driver to test/nightwatch_tests/selenium/chromedriver
+15:27:02.020 INFO - Java: Apple Inc. 20.65-b04-466.1
+15:27:02.020 INFO - OS: Mac OS X 10.10.1 x86_64
+15:27:02.028 INFO - v2.43.1, with Core v2.43.1. Built from revision 5163bce
+15:27:02.086 INFO - Default driver org.openqa.selenium.ie.InternetExplorerDriver registration is skipped: registration capabilities Capabilities [{platform=WINDOWS, ensureCleanSession=true, browserName=internet explorer, version=}] does not match with current platform: MAC
+15:27:02.109 INFO - RemoteWebDriver instances should connect to: http://127.0.0.1:4444/wd/hub
+15:27:02.110 INFO - Version Jetty/5.1.x
+15:27:02.110 INFO - Started HttpContext[/selenium-server/driver,/selenium-server/driver]
+15:27:02.111 INFO - Started HttpContext[/selenium-server,/selenium-server]
+15:27:02.111 INFO - Started HttpContext[/,/]
+15:27:02.154 INFO - Started org.openqa.jetty.jetty.servlet.ServletHandler@335856a5
+15:27:02.154 INFO - Started HttpContext[/wd,/wd]
+15:27:02.158 INFO - Started SocketListener on 0.0.0.0:4444
+15:27:02.158 INFO - Started org.openqa.jetty.jetty.Server@6262937c
+15:27:02.554 INFO - Executing: [new session: Capabilities [{platform=ANY, javascriptEnabled=true, acceptSslCerts=true, browserName=firefox, name=Creates View}]])
+15:27:02.563 INFO - Creating a new session for Capabilities [{platform=ANY, javascriptEnabled=true, acceptSslCerts=true, browserName=firefox, name=Creates View}]
+15:27:04.512 INFO - Done: [new session: Capabilities [{platform=ANY, javascriptEnabled=true, acceptSslCerts=true, browserName=firefox, name=Creates View}]]
+15:27:04.518 INFO - Executing: [get: http://localhost:8000/#login])
+15:27:04.659 INFO - Done: [get: http://localhost:8000/#login]
+15:27:04.664 INFO - Executing: [find element: By.selector: a[href="#login"]])
+15:27:05.263 INFO - Done: [find element: By.selector: a[href="#login"]]
+15:27:05.266 INFO - Executing: [find element: By.selector: a[href="#login"]])
+15:27:05.272 INFO - Done: [find element: By.selector: a[href="#login"]]
+15:27:05.274 INFO - Executing: [click: 0 [[FirefoxDriver: firefox on MAC (940d347e-dd20-ce4a-a05b-f989fc3e2a8f)] -> css selector: a[href="#login"]]])
+15:27:05.340 INFO - Done: [click: 0 [[FirefoxDriver: firefox on MAC (940d347e-dd20-ce4a-a05b-f989fc3e2a8f)] -> css selector: a[href="#login"]]]
+15:27:05.343 INFO - Executing: [find element: By.selector: #username])
+15:27:05.350 INFO - Done: [find element: By.selector: #username]
+15:27:05.352 INFO - Executing: [find element: By.selector: #username])
+15:27:05.358 INFO - Done: [find element: By.selector: #username]
+15:27:05.361 INFO - Executing: [send keys: 1 [[FirefoxDriver: firefox on MAC (940d347e-dd20-ce4a-a05b-f989fc3e2a8f)] -> css selector: #username], [t, e, s, t, e, r]])
+15:27:05.392 INFO - Done: [send keys: 1 [[FirefoxDriver: firefox on MAC (940d347e-dd20-ce4a-a05b-f989fc3e2a8f)] -> css selector: #username], [t, e, s, t, e, r]]
+15:27:05.394 INFO - Executing: [find element: By.selector: #password])
+15:27:05.401 INFO - Done: [find element: By.selector: #password]
+15:27:05.403 INFO - Executing: [send keys: 2 [[FirefoxDriver: firefox on MAC (940d347e-dd20-ce4a-a05b-f989fc3e2a8f)] -> css selector: #password], [t, e, s, t, e, r, p, a, s, s, ?]])
+15:27:05.500 INFO - Done: [send keys: 2 [[FirefoxDriver: firefox on MAC (940d347e-dd20-ce4a-a05b-f989fc3e2a8f)] -> css selector: #password], [t, e, s, t, e, r, p, a, s, s, ?]]
+15:27:05.503 INFO - Executing: [find element: By.selector: #global-notifications button.close])
+15:27:05.552 INFO - Done: [find element: By.selector: #global-notifications button.close]
+15:27:05.554 INFO - Executing: [find element: By.selector: #global-notifications button.close])
+15:27:05.565 INFO - Done: [find element: By.selector: #global-notifications button.close]
+15:27:05.567 INFO - Executing: [click: 3 [[FirefoxDriver: firefox on MAC (940d347e-dd20-ce4a-a05b-f989fc3e2a8f)] -> css selector: #global-notifications button.close]])
+15:27:05.662 INFO - Done: [click: 3 [[FirefoxDriver: firefox on MAC (940d347e-dd20-ce4a-a05b-f989fc3e2a8f)] -> css selector: #global-notifications button.close]]
+15:27:05.665 INFO - Executing: [find element: By.selector: #jump-to-db])
+15:27:05.699 INFO - Done: [find element: By.selector: #jump-to-db]
+15:27:07.064 INFO - Executing: [get: http://localhost:8000/#/database/fauxton-selenium-tests/_all_docs])
+15:27:07.128 INFO - Done: [get: http://localhost:8000/#/database/fauxton-selenium-tests/_all_docs]
+15:27:07.131 INFO - Executing: [find element: By.selector: #new-design-docs-button])
+15:27:07.942 WARN - Exception thrown
+org.openqa.selenium.NoSuchElementException: Unable to locate element: {"method":"css selector","selector":"#new-design-docs-button"}
+Command duration or timeout: 158 milliseconds
+For documentation on this error, please visit: http://seleniumhq.org/exceptions/no_such_element.html
+Build info: version: '2.43.1', revision: '5163bce', time: '2014-09-10 16:27:33'
+System info: host: 'tequila-work.fritz.box', ip: '192.168.178.64', os.name: 'Mac OS X', os.arch: 'x86_64', os.version: '10.10.1', java.version: '1.6.0_65'
+Session ID: 940d347e-dd20-ce4a-a05b-f989fc3e2a8f
+Driver info: org.openqa.selenium.firefox.FirefoxDriver
+Capabilities [{platform=MAC, acceptSslCerts=true, javascriptEnabled=true, browserName=firefox, rotatable=false, locationContextEnabled=true, version=34.0.5, cssSelectorsEnabled=true, databaseEnabled=true, handlesAlerts=true, nativeEvents=false, webStorageEnabled=true, applicationCacheEnabled=true, takesScreenshot=true}]
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:39)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:27)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:513)
+	at org.openqa.selenium.remote.ErrorHandler.createThrowable(ErrorHandler.java:204)
+	at org.openqa.selenium.remote.ErrorHandler.throwIfResponseFailed(ErrorHandler.java:156)
+	at org.openqa.selenium.remote.RemoteWebDriver.execute(RemoteWebDriver.java:599)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElement(RemoteWebDriver.java:352)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElementByCssSelector(RemoteWebDriver.java:441)
+	at org.openqa.selenium.By$ByCssSelector.findElement(By.java:426)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElement(RemoteWebDriver.java:344)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+	at java.lang.reflect.Method.invoke(Method.java:597)
+	at org.openqa.selenium.support.events.EventFiringWebDriver$2.invoke(EventFiringWebDriver.java:101)
+	at com.sun.proxy.$Proxy1.findElement(Unknown Source)
+	at org.openqa.selenium.support.events.EventFiringWebDriver.findElement(EventFiringWebDriver.java:184)
+	at org.openqa.selenium.remote.server.handler.FindElement.call(FindElement.java:47)
+	at org.openqa.selenium.remote.server.handler.FindElement.call(FindElement.java:1)
+	at java.util.concurrent.FutureTask$Sync.innerRun(FutureTask.java:303)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:138)
+	at org.openqa.selenium.remote.server.DefaultSession$1.run(DefaultSession.java:169)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.runTask(ThreadPoolExecutor.java:895)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:918)
+	at java.lang.Thread.run(Thread.java:695)
+Caused by: org.openqa.selenium.NoSuchElementException: Unable to locate element: {"method":"css selector","selector":"#new-design-docs-button"}
+For documentation on this error, please visit: http://seleniumhq.org/exceptions/no_such_element.html
+Build info: version: '2.43.1', revision: '5163bce', time: '2014-09-10 16:27:33'
+System info: host: 'tequila-work.fritz.box', ip: '192.168.178.64', os.name: 'Mac OS X', os.arch: 'x86_64', os.version: '10.10.1', java.version: '1.6.0_65'
+Driver info: driver.version: unknown
+	at <anonymous class>.FirefoxDriver.prototype.findElementInternal_(file:///var/folders/76/ldsqhx3n2cz6v2gdlz_0w8b40000gn/T/anonymous5808361518757067801webdriver-profile/extensions/fxdriver@googlecode.com/components/driver-component.js:9618:26)
+	at <anonymous class>.FirefoxDriver.prototype.findElement(file:///var/folders/76/ldsqhx3n2cz6v2gdlz_0w8b40000gn/T/anonymous5808361518757067801webdriver-profile/extensions/fxdriver@googlecode.com/components/driver-component.js:9627:3)
+	at <anonymous class>.DelayedCommand.prototype.executeInternal_/h(file:///var/folders/76/ldsqhx3n2cz6v2gdlz_0w8b40000gn/T/anonymous5808361518757067801webdriver-profile/extensions/fxdriver@googlecode.com/components/command-processor.js:11612:16)
+	at <anonymous class>.DelayedCommand.prototype.executeInternal_(file:///var/folders/76/ldsqhx3n2cz6v2gdlz_0w8b40000gn/T/anonymous5808361518757067801webdriver-profile/extensions/fxdriver@googlecode.com/components/command-processor.js:11617:7)
+	at <anonymous class>.DelayedCommand.prototype.execute/<(file:///var/folders/76/ldsqhx3n2cz6v2gdlz_0w8b40000gn/T/anonymous5808361518757067801webdriver-profile/extensions/fxdriver@googlecode.com/components/command-processor.js:11559:5)
+15:27:07.946 WARN - Exception: Unable to locate element: {"method":"css selector","selector":"#new-design-docs-button"}
+For documentation on this error, please visit: http://seleniumhq.org/exceptions/no_such_element.html
+Build info: version: '2.43.1', revision: '5163bce', time: '2014-09-10 16:27:33'
+System info: host: 'tequila-work.fritz.box', ip: '192.168.178.64', os.name: 'Mac OS X', os.arch: 'x86_64', os.version: '10.10.1', java.version: '1.6.0_65'
+Driver info: driver.version: unknown
+15:27:08.735 INFO - Executing: [find element: By.selector: #new-design-docs-button])
+15:27:08.741 INFO - Done: [find element: By.selector: #new-design-docs-button]
+15:27:08.744 INFO - Executing: [find element: By.selector: #new-design-docs-button a])
+15:27:08.748 INFO - Done: [find element: By.selector: #new-design-docs-button a]
+15:27:08.751 INFO - Executing: [click: 6 [[FirefoxDriver: firefox on MAC (940d347e-dd20-ce4a-a05b-f989fc3e2a8f)] -> css selector: #new-design-docs-button a]])
+15:27:08.810 INFO - Done: [click: 6 [[FirefoxDriver: firefox on MAC (940d347e-dd20-ce4a-a05b-f989fc3e2a8f)] -> css selector: #new-design-docs-button a]]
+15:27:08.813 INFO - Executing: [find element: By.selector: #new-design-docs-button a[href="#/database/fauxton-selenium-tests/new_view"]])
+15:27:08.817 INFO - Done: [find element: By.selector: #new-design-docs-button a[href="#/database/fauxton-selenium-tests/new_view"]]
+15:27:08.819 INFO - Executing: [click: 7 [[FirefoxDriver: firefox on MAC (940d347e-dd20-ce4a-a05b-f989fc3e2a8f)] -> css selector: #new-design-docs-button a[href="#/database/fauxton-selenium-tests/new_view"]]])
+15:27:08.896 INFO - Done: [click: 7 [[FirefoxDriver: firefox on MAC (940d347e-dd20-ce4a-a05b-f989fc3e2a8f)] -> css selector: #new-design-docs-button a[href="#/database/fauxton-selenium-tests/new_view"]]]
+15:27:08.899 INFO - Executing: [find element: By.selector: #new-ddoc])
+15:27:08.977 INFO - Done: [find element: By.selector: #new-ddoc]
+15:27:08.980 INFO - Executing: [find element: By.selector: #new-ddoc])
+15:27:09.028 INFO - Done: [find element: By.selector: #new-ddoc]
+15:27:09.031 INFO - Executing: [send keys: 8 [[FirefoxDriver: firefox on MAC (940d347e-dd20-ce4a-a05b-f989fc3e2a8f)] -> css selector: #new-ddoc], [t, e, s, t, _, d, e, s, i, g, n, _, d, o, c]])
+15:27:09.068 INFO - Done: [send keys: 8 [[FirefoxDriver: firefox on MAC (940d347e-dd20-ce4a-a05b-f989fc3e2a8f)] -> css selector: #new-ddoc], [t, e, s, t, _, d, e, s, i, g, n, _, d, o, c]]
+15:27:09.071 INFO - Executing: [find element: By.selector: #index-name])
+15:27:09.077 INFO - Done: [find element: By.selector: #index-name]
+15:27:09.079 INFO - Executing: [clear: 9 [[FirefoxDriver: firefox on MAC (940d347e-dd20-ce4a-a05b-f989fc3e2a8f)] -> css selector: #index-name]])
+15:27:09.090 INFO - Done: [clear: 9 [[FirefoxDriver: firefox on MAC (940d347e-dd20-ce4a-a05b-f989fc3e2a8f)] -> css selector: #index-name]]
+15:27:09.093 INFO - Executing: [find element: By.selector: #index-name])
+15:27:09.098 INFO - Done: [find element: By.selector: #index-name]
+15:27:09.101 INFO - Executing: [send keys: 9 [[FirefoxDriver: firefox on MAC (940d347e-dd20-ce4a-a05b-f989fc3e2a8f)] -> css selector: #index-name], [e, v, e, n, _, i, d, s]])
+15:27:09.130 INFO - Done: [send keys: 9 [[FirefoxDriver: firefox on MAC (940d347e-dd20-ce4a-a05b-f989fc3e2a8f)] -> css selector: #index-name], [e, v, e, n, _, i, d, s]]
+15:27:09.133 INFO - Executing: [execute script:         var editor = ace.edit("map-function");        editor.getSession().setValue("function (doc) { if (doc.number%2 === 0){   emit(doc._id, doc.number); }}");      , []])
+15:27:09.148 INFO - Done: [execute script:         var editor = ace.edit("map-function");        editor.getSession().setValue("function (doc) { if (doc.number%2 === 0){   emit(doc._id, doc.number); }}");      , []]
+15:27:09.151 INFO - Executing: [find element: By.selector: button.btn.btn-success.save])
+15:27:09.157 INFO - Done: [find element: By.selector: button.btn.btn-success.save]
+15:27:09.159 INFO - Executing: [click: 10 [[FirefoxDriver: firefox on MAC (940d347e-dd20-ce4a-a05b-f989fc3e2a8f)] -> css selector: button.btn.btn-success.save]])
+15:27:09.353 INFO - Done: [click: 10 [[FirefoxDriver: firefox on MAC (940d347e-dd20-ce4a-a05b-f989fc3e2a8f)] -> css selector: button.btn.btn-success.save]]
+15:27:09.358 INFO - Executing: [find element: By.selector: #test_design_doc_even_ids])
+15:27:10.024 WARN - Exception thrown
+org.openqa.selenium.NoSuchElementException: Unable to locate element: {"method":"css selector","selector":"#test_design_doc_even_ids"}
+Command duration or timeout: 320 milliseconds
+For documentation on this error, please visit: http://seleniumhq.org/exceptions/no_such_element.html
+Build info: version: '2.43.1', revision: '5163bce', time: '2014-09-10 16:27:33'
+System info: host: 'tequila-work.fritz.box', ip: '192.168.178.64', os.name: 'Mac OS X', os.arch: 'x86_64', os.version: '10.10.1', java.version: '1.6.0_65'
+Session ID: 940d347e-dd20-ce4a-a05b-f989fc3e2a8f
+Driver info: org.openqa.selenium.firefox.FirefoxDriver
+Capabilities [{platform=MAC, acceptSslCerts=true, javascriptEnabled=true, browserName=firefox, rotatable=false, locationContextEnabled=true, version=34.0.5, cssSelectorsEnabled=true, databaseEnabled=true, handlesAlerts=true, nativeEvents=false, webStorageEnabled=true, applicationCacheEnabled=true, takesScreenshot=true}]
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:39)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:27)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:513)
+	at org.openqa.selenium.remote.ErrorHandler.createThrowable(ErrorHandler.java:204)
+	at org.openqa.selenium.remote.ErrorHandler.throwIfResponseFailed(ErrorHandler.java:156)
+	at org.openqa.selenium.remote.RemoteWebDriver.execute(RemoteWebDriver.java:599)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElement(RemoteWebDriver.java:352)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElementByCssSelector(RemoteWebDriver.java:441)
+	at org.openqa.selenium.By$ByCssSelector.findElement(By.java:426)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElement(RemoteWebDriver.java:344)
+	at sun.reflect.GeneratedMethodAccessor12.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+	at java.lang.reflect.Method.invoke(Method.java:597)
+	at org.openqa.selenium.support.events.EventFiringWebDriver$2.invoke(EventFiringWebDriver.java:101)
+	at com.sun.proxy.$Proxy1.findElement(Unknown Source)
+	at org.openqa.selenium.support.events.EventFiringWebDriver.findElement(EventFiringWebDriver.java:184)
+	at org.openqa.selenium.remote.server.handler.FindElement.call(FindElement.java:47)
+	at org.openqa.selenium.remote.server.handler.FindElement.call(FindElement.java:1)
+	at java.util.concurrent.FutureTask$Sync.innerRun(FutureTask.java:303)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:138)
+	at org.openqa.selenium.remote.server.DefaultSession$1.run(DefaultSession.java:169)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.runTask(ThreadPoolExecutor.java:895)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:918)
+	at java.lang.Thread.run(Thread.java:695)
+Caused by: org.openqa.selenium.NoSuchElementException: Unable to locate element: {"method":"css selector","selector":"#test_design_doc_even_ids"}
+For documentation on this error, please visit: http://seleniumhq.org/exceptions/no_such_element.html
+Build info: version: '2.43.1', revision: '5163bce', time: '2014-09-10 16:27:33'
+System info: host: 'tequila-work.fritz.box', ip: '192.168.178.64', os.name: 'Mac OS X', os.arch: 'x86_64', os.version: '10.10.1', java.version: '1.6.0_65'
+Driver info: driver.version: unknown
+	at <anonymous class>.FirefoxDriver.prototype.findElementInternal_(file:///var/folders/76/ldsqhx3n2cz6v2gdlz_0w8b40000gn/T/anonymous5808361518757067801webdriver-profile/extensions/fxdriver@googlecode.com/components/driver-component.js:9618:26)
+	at <anonymous class>.FirefoxDriver.prototype.findElement(file:///var/folders/76/ldsqhx3n2cz6v2gdlz_0w8b40000gn/T/anonymous5808361518757067801webdriver-profile/extensions/fxdriver@googlecode.com/components/driver-component.js:9627:3)
+	at <anonymous class>.DelayedCommand.prototype.executeInternal_/h(file:///var/folders/76/ldsqhx3n2cz6v2gdlz_0w8b40000gn/T/anonymous5808361518757067801webdriver-profile/extensions/fxdriver@googlecode.com/components/command-processor.js:11612:16)
+	at <anonymous class>.DelayedCommand.prototype.executeInternal_(file:///var/folders/76/ldsqhx3n2cz6v2gdlz_0w8b40000gn/T/anonymous5808361518757067801webdriver-profile/extensions/fxdriver@googlecode.com/components/command-processor.js:11617:7)
+	at <anonymous class>.DelayedCommand.prototype.execute/<(file:///var/folders/76/ldsqhx3n2cz6v2gdlz_0w8b40000gn/T/anonymous5808361518757067801webdriver-profile/extensions/fxdriver@googlecode.com/components/command-processor.js:11559:5)
+15:27:10.025 WARN - Exception: Unable to locate element: {"method":"css selector","selector":"#test_design_doc_even_ids"}
+For documentation on this error, please visit: http://seleniumhq.org/exceptions/no_such_element.html
+Build info: version: '2.43.1', revision: '5163bce', time: '2014-09-10 16:27:33'
+System info: host: 'tequila-work.fritz.box', ip: '192.168.178.64', os.name: 'Mac OS X', os.arch: 'x86_64', os.version: '10.10.1', java.version: '1.6.0_65'
+Driver info: driver.version: unknown
+15:27:10.784 INFO - Executing: [find element: By.selector: #test_design_doc_even_ids])
+15:27:10.790 INFO - Done: [find element: By.selector: #test_design_doc_even_ids]
+15:27:10.795 INFO - Executing: [find element: By.selector: #test_design_doc_even_ids])
+15:27:10.799 INFO - Done: [find element: By.selector: #test_design_doc_even_ids]
+15:27:10.801 INFO - Executing: [click: 11 [[FirefoxDriver: firefox on MAC (940d347e-dd20-ce4a-a05b-f989fc3e2a8f)] -> css selector: #test_design_doc_even_ids]])
+15:27:10.955 INFO - Done: [click: 11 [[FirefoxDriver: firefox on MAC (940d347e-dd20-ce4a-a05b-f989fc3e2a8f)] -> css selector: #test_design_doc_even_ids]]
+15:27:10.959 INFO - Executing: [find element: By.selector: #nav-header-test_design_doc])
+15:27:10.963 INFO - Done: [find element: By.selector: #nav-header-test_design_doc]
+15:27:10.965 INFO - Executing: [find element: By.selector: #nav-header-test_design_doc .dropdown-toggle.icon.fonticon-plus-circled])
+15:27:10.969 INFO - Done: [find element: By.selector: #nav-header-test_design_doc .dropdown-toggle.icon.fonticon-plus-circled]
+15:27:10.970 INFO - Executing: [click: 13 [[FirefoxDriver: firefox on MAC (940d347e-dd20-ce4a-a05b-f989fc3e2a8f)] -> css selector: #nav-header-test_design_doc .dropdown-toggle.icon.fonticon-plus-circled]])
+15:27:11.028 INFO - Done: [click: 13 [[FirefoxDriver: firefox on MAC (940d347e-dd20-ce4a-a05b-f989fc3e2a8f)] -> css selector: #nav-header-test_design_doc .dropdown-toggle.icon.fonticon-plus-circled]]
+15:27:11.031 INFO - Executing: [find element: By.selector: #nav-header-test_design_doc])
+15:27:11.035 INFO - Done: [find element: By.selector: #nav-header-test_design_doc]
+15:27:11.037 INFO - Executing: [find element: By.selector: #nav-header-test_design_doc a[href="#/database/fauxton-selenium-tests/new_view/test_design_doc"]])
+15:27:11.041 INFO - Done: [find element: By.selector: #nav-header-test_design_doc a[href="#/database/fauxton-selenium-tests/new_view/test_design_doc"]]
+15:27:11.042 INFO - Executing: [click: 14 [[FirefoxDriver: firefox on MAC (940d347e-dd20-ce4a-a05b-f989fc3e2a8f)] -> css selector: #nav-header-test_design_doc a[href="#/database/fauxton-selenium-tests/new_view/test_design_doc"]]])
+15:27:11.159 INFO - Done: [click: 14 [[FirefoxDriver: firefox on MAC (940d347e-dd20-ce4a-a05b-f989fc3e2a8f)] -> css selector: #nav-header-test_design_doc a[href="#/database/fauxton-selenium-tests/new_view/test_design_doc"]]]
+15:27:11.162 INFO - Executing: [find element: By.selector: #index-name])
+15:27:11.166 INFO - Done: [find element: By.selector: #index-name]
+15:27:11.167 INFO - Executing: [get element attribute: 15 [[FirefoxDriver: firefox on MAC (940d347e-dd20-ce4a-a05b-f989fc3e2a8f)] -> css selector: #index-name], value])
+15:27:11.172 INFO - Done: [get element attribute: 15 [[FirefoxDriver: firefox on MAC (940d347e-dd20-ce4a-a05b-f989fc3e2a8f)] -> css selector: #index-name], value]
+15:27:11.174 INFO - Executing: [find element: By.selector: #index-name])
+15:27:11.178 INFO - Done: [find element: By.selector: #index-name]
+15:27:11.179 INFO - Executing: [clear: 15 [[FirefoxDriver: firefox on MAC (940d347e-dd20-ce4a-a05b-f989fc3e2a8f)] -> css selector: #index-name]])
+15:27:11.190 INFO - Done: [clear: 15 [[FirefoxDriver: firefox on MAC (940d347e-dd20-ce4a-a05b-f989fc3e2a8f)] -> css selector: #index-name]]
+15:27:11.192 INFO - Executing: [find element: By.selector: #index-name])
+15:27:11.195 INFO - Done: [find element: By.selector: #index-name]
+15:27:11.197 INFO - Executing: [send keys: 15 [[FirefoxDriver: firefox on MAC (940d347e-dd20-ce4a-a05b-f989fc3e2a8f)] -> css selector: #index-name], [o, d, d, _, i, d, s]])
+15:27:11.228 INFO - Done: [send keys: 15 [[FirefoxDriver: firefox on MAC (940d347e-dd20-ce4a-a05b-f989fc3e2a8f)] -> css selector: #index-name], [o, d, d, _, i, d, s]]
+15:27:11.231 INFO - Executing: [execute script:         var editor = ace.edit("map-function");        editor.getSession().setValue("function (doc) { if (doc.number%2 === 1){   emit(doc._id, doc.number); }}");      , []])
+15:27:11.244 INFO - Done: [execute script:         var editor = ace.edit("map-function");        editor.getSession().setValue("function (doc) { if (doc.number%2 === 1){   emit(doc._id, doc.number); }}");      , []]
+15:27:11.247 INFO - Executing: [find element: By.selector: button.btn.btn-success.save])
+15:27:11.251 INFO - Done: [find element: By.selector: button.btn.btn-success.save]
+15:27:11.252 INFO - Executing: [click: 16 [[FirefoxDriver: firefox on MAC (940d347e-dd20-ce4a-a05b-f989fc3e2a8f)] -> css selector: button.btn.btn-success.save]])
+15:27:11.461 INFO - Done: [click: 16 [[FirefoxDriver: firefox on MAC (940d347e-dd20-ce4a-a05b-f989fc3e2a8f)] -> css selector: button.btn.btn-success.save]]
+15:27:11.465 INFO - Executing: [find element: By.selector: #test_design_doc_even_ids])
+15:27:11.673 INFO - Done: [find element: By.selector: #test_design_doc_even_ids]
+15:27:11.676 INFO - Executing: [find element: By.selector: #test_design_doc_odd_ids])
+15:27:11.714 INFO - Done: [find element: By.selector: #test_design_doc_odd_ids]
+15:27:11.716 INFO - Executing: [delete session: 54fa0a89-0deb-4e01-a13f-708822339224])
+15:27:12.303 INFO - Done: [delete session: 54fa0a89-0deb-4e01-a13f-708822339224]
+15:27:12.357 INFO - Shutting down...
+15:27:12.357 INFO - Stopping Acceptor ServerSocket[addr=0.0.0.0/0.0.0.0,port=0,localport=4444]
