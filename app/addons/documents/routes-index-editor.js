@@ -94,7 +94,6 @@ const IndexEditorAndResults = BaseRoute.extend({
 
     const dropDownLinks = this.getCrumbs(this.database);
     return <DocsTabsSidebarLayout
-      showIncludeAllDocs={true}
       docURL={docURL}
       endpoint={endpoint}
       dbName={this.database.id}

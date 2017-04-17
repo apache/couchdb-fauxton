@@ -10,23 +10,10 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-
-#react-headerbar {
-  .control-toggle-include-docs {
-    border-right: 1px solid @btnBorder;
-    .icon-check {
-      &:before {
-        margin: 6px 6px 0 0;
-      }
-    }
-    .icon-check-empty {
-      &:before {
-        margin: 6px 9px 0 0;
-      }
-    }
+export default {
+  LAYOUT_ORIENTATION: {
+    TABLE: 'LAYOUT_TABLE',
+    METADATA: 'LAYOUT_METADATA',
+    JSON: 'LAYOUT_JSON'
   }
-}
-
-.right-header-wrapper {
-  justify-content: flex-end;
-}
+};

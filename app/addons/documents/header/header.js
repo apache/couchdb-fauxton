@@ -13,19 +13,19 @@
 import React from 'react';
 import Actions from './header.actions';
 import Components from '../../components/react-components';
+import Constants from '../constants';
 import IndexResultStores from '../index-results/stores';
 import QueryOptionsStore from '../queryoptions/stores';
 import { Button, ButtonGroup } from 'react-bootstrap';
 
 const { indexResultsStore } = IndexResultStores;
 const { queryOptionsStore } = QueryOptionsStore;
-const { ToggleHeaderButton } = Components;
 
 var BulkDocumentHeaderController = React.createClass({
   getStoreState () {
     return {
       selectedView: indexResultsStore.getCurrentViewType(),
-      isTableView: indexResultsStore.getIsTableView(),
+      selectedLayout: indexResultsStore.getSelectedLayout(),
       includeDocs: queryOptionsStore.getIncludeDocsEnabled(),
       bulkDocCollection: indexResultsStore.getBulkDocCollection()
     };
@@ -51,31 +51,30 @@ var BulkDocumentHeaderController = React.createClass({
   },
 
   render () {
-    var isTableViewSelected = this.state.isTableView;
+    const layout = this.state.selectedLayout;
 
     return (
       <div className="alternative-header">
         <ButtonGroup className="two-sides-toggle-button">
           <Button
-            className={isTableViewSelected ? '' : 'active'}
-            onClick={this.toggleTableView.bind(this, false)}
-          >
-            <i className="fonticon-json" /> JSON
-          </Button>
-          <Button
-            className={isTableViewSelected ? 'active' : ''}
-            onClick={this.toggleTableView.bind(this, true)}
+            className={layout === Constants.LAYOUT_ORIENTATION.TABLE ? 'active' : ''}
+            onClick={this.toggleLayout.bind(this, Constants.LAYOUT_ORIENTATION.TABLE)}
           >
             <i className="fonticon-table" /> Table
           </Button>
+          <Button
+            className={layout === Constants.LAYOUT_ORIENTATION.METADATA ? 'active' : ''}
+            onClick={this.toggleLayout.bind(this, Constants.LAYOUT_ORIENTATION.METADATA)}
+          >
+            Metadata
+          </Button>
+          <Button
+            className={layout === Constants.LAYOUT_ORIENTATION.JSON ? 'active' : ''}
+            onClick={this.toggleLayout.bind(this, Constants.LAYOUT_ORIENTATION.JSON)}
+          >
+            <i className="fonticon-json" /> JSON
+          </Button>
         </ButtonGroup>
-        {this.props.showIncludeAllDocs ? <ToggleHeaderButton
-          toggleCallback={this.toggleIncludeDocs}
-          containerClasses="header-control-box control-toggle-include-docs"
-          title="Enable/Disable include_docs"
-          fonticon={this.state.includeDocs ? 'icon-check' : 'icon-check-empty'}
-          iconDefaultClass="icon fontawesome"
-          text="" /> : null}  { /* text is set via responsive css */}
       </div>
     );
   },
@@ -84,8 +83,8 @@ var BulkDocumentHeaderController = React.createClass({
     Actions.toggleIncludeDocs(this.state.includeDocs, this.state.bulkDocCollection);
   },
 
-  toggleTableView: function (enable) {
-    Actions.toggleTableView(enable);
+  toggleLayout: function (layout) {
+    Actions.toggleLayout(layout);
   }
 });
 

@@ -17,6 +17,7 @@ import HeaderActionTypes from "../header/header.actiontypes";
 import PaginationActionTypes from "../pagination/actiontypes";
 import MangoHelper from "../mango/mango.helper";
 import Resources from "../resources";
+import Constants from "../constants";
 
 var Stores = {};
 
@@ -45,7 +46,7 @@ Stores.IndexResultsStore = FauxtonAPI.Store.extend({
     this._isPrioritizedEnabled = false;
 
     this._tableSchema = [];
-    this._tableView = false;
+    this._selectedLayout = Constants.LAYOUT_ORIENTATION.JSON;
 
     this.resetPagination();
   },
@@ -305,13 +306,27 @@ Stores.IndexResultsStore = FauxtonAPI.Store.extend({
   },
 
   getResults: function () {
+    switch (this._selectedLayout) {
+      case Constants.LAYOUT_ORIENTATION.TABLE:
+        return this.getTableViewData();
+      break;
+
+      case Constants.LAYOUT_ORIENTATION.METADATA:
+        return this.getTableViewData();
+      break;
+
+      case Constants.LAYOUT_ORIENTATION.JSON:
+        return this.getJsonViewData();
+      break;
+
+      default:
+        return this.getJsonViewData();
+    };
+  },
+
+  getJsonViewData: function () {
     var hasBulkDeletableDoc;
     var res;
-
-    // Table sytle view
-    if (this.getIsTableView()) {
-      return this.getTableViewData();
-    }
 
     // JSON style views
     res = this._filteredCollection
@@ -727,19 +742,16 @@ Stores.IndexResultsStore = FauxtonAPI.Store.extend({
     return this.getSelectedItemsLength() > 0;
   },
 
-  toggleTableView: function (options) {
-    var enableTableView = options.enable;
+  toggleLayout: function (options) {
+    this._selectedLayout = options.layout;
+  },
 
-    if (enableTableView) {
-      this._tableView = true;
-      return;
-    }
-
-    this._tableView = false;
+  getSelectedLayout: function () {
+    return this._selectedLayout;
   },
 
   getIsTableView: function () {
-    return this._tableView;
+    return this._selectedLayout === Constants.LAYOUT_ORIENTATION.TABLE;
   },
 
   getIsPrioritizedEnabled: function () {
@@ -794,8 +806,8 @@ Stores.IndexResultsStore = FauxtonAPI.Store.extend({
         this.togglePrioritizedTableView();
       break;
 
-      case HeaderActionTypes.TOGGLE_TABLEVIEW:
-        this.toggleTableView(action.options);
+      case HeaderActionTypes.TOGGLE_LAYOUT:
+        this.toggleLayout(action.options);
       break;
 
       case PaginationActionTypes.SET_PAGINATION_DOCUMENT_LIMIT:

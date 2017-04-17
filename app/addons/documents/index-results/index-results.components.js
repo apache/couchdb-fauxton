@@ -15,11 +15,13 @@ import React from "react";
 import Stores from "./stores";
 import Actions from "./actions";
 import Components from "../../components/react-components";
+import Constants from "../constants";
 import ReactSelect from "react-select";
+import {ResultsToolBar} from "../components/results-toolbar";
 import "../../../../assets/js/plugins/prettify";
 import uuid from 'uuid';
 
-const {LoadLines, BulkActionComponent, Copy} = Components;
+const {LoadLines, Copy} = Components;
 const store  = Stores.indexResultsStore;
 
 var NoResultsScreen = React.createClass({
@@ -271,22 +273,9 @@ var TableView = React.createClass({
 
     var row = this.getOptionFieldRows(selectedFields);
 
-    var box = (
-      <th className="tableview-header-el-checkbox" key="tableview-header-el-checkbox">
-        {this.props.isListDeletable ? <BulkActionComponent
-          disabled={this.props.isLoading}
-          removeItem={this.props.removeItem}
-          isChecked={this.props.isChecked}
-          hasSelectedItem={this.props.hasSelectedItem}
-          toggleSelect={this.props.toggleSelect}
-          title="Select all docs that can be..." /> : null}
-      </th>
-    );
-
-
     return (
       <tr key="tableview-content-row-header">
-        {box}
+        <th className="tableview-header-el-checkbox"></th>
         <th className="tableview-el-copy"></th>
         {specialField}
         {row}
@@ -356,8 +345,7 @@ var ResultsScreen = React.createClass({
   },
 
   getDocumentStyleView: function (loadLines) {
-    var classNames = 'view';
-    var isDeletable = this.props.isListDeletable;
+    let classNames = 'view';
 
     if (this.props.isListDeletable) {
       classNames += ' show-select';
@@ -370,15 +358,7 @@ var ResultsScreen = React.createClass({
         </div>
 
         <div id="doc-list">
-          {isDeletable ? <BulkActionComponent
-            removeItem={this.props.removeItem}
-            isChecked={this.props.allDocumentsSelected}
-            hasSelectedItem={this.props.hasSelectedItem}
-            toggleSelect={this.toggleSelectAll}
-            disabled={this.props.isLoading}
-            title="Select all docs that can be..." /> : null}
-
-            {this.getDocumentList()}
+          {this.getDocumentList()}
         </div>
       </div>
     );
@@ -409,16 +389,33 @@ var ResultsScreen = React.createClass({
 
   render: function () {
 
-    var loadLines = null;
-    var isTableView = this.props.isTableView;
+    let loadLines = null;
+    let mainView = null;
 
     if (this.props.isLoading) {
       loadLines = <LoadLines />;
     }
 
-    var mainView = isTableView ? this.getTableStyleView(loadLines) : this.getDocumentStyleView(loadLines);
+    switch (this.props.selectedLayout) {
+      case Constants.LAYOUT_ORIENTATION.TABLE:
+        mainView = this.getTableStyleView(loadLines);
+      break;
+
+      case Constants.LAYOUT_ORIENTATION.METADATA:
+        mainView = this.getTableStyleView(loadLines);
+      break;
+
+      case Constants.LAYOUT_ORIENTATION.JSON:
+        mainView = this.getDocumentStyleView(loadLines);
+      break;
+
+      default:
+        mainView = this.getTableStyleView(loadLines);
+    };
+
     return (
       <div className="document-result-screen">
+        <ResultsToolBar toggleSelectAll={this.toggleSelectAll} {...this.props} />
         {mainView}
       </div>
     );
@@ -453,7 +450,7 @@ var ViewResultListController = React.createClass({
       isLoading: store.isLoading(),
       isEditable: store.isEditable(),
       textEmptyIndex: store.getTextEmptyIndex(),
-      isTableView: store.getIsTableView(),
+      selectedLayout: store.getSelectedLayout(),
       allDocumentsSelected: store.areAllDocumentsSelected(),
       hasSelectedItem: !!selectedItemsLength,
       selectedItemsLength: selectedItemsLength,
@@ -506,7 +503,7 @@ var ViewResultListController = React.createClass({
         docChecked={this.docChecked}
         isLoading={this.state.isLoading}
         results={this.state.results}
-        isTableView={this.state.isTableView} />;
+        selectedLayout={this.state.selectedLayout} />;
     }
 
     return (

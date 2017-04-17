@@ -25,11 +25,9 @@ import RightAllDocsHeader from './components/header-docs-right';
 
 export const TabsSidebarHeader = ({
   hideQueryOptions,
-  hideHeaderBar,
   database,
   dbName,
   dropDownLinks,
-  showIncludeAllDocs,
   docURL,
   endpoint
 }) => {
@@ -43,9 +41,6 @@ export const TabsSidebarHeader = ({
             />
         </div>
         <div className="right-header-wrapper flex-layout flex-row flex-body">
-          <div id="react-headerbar" className="flex-body">
-              {hideHeaderBar ? null : <ReactHeader.BulkDocumentHeaderController showIncludeAllDocs={showIncludeAllDocs} />}
-          </div>
           <div id="right-header" className="flex-fill">
             <RightAllDocsHeader hideQueryOptions={hideQueryOptions} database={database} />
           </div>
@@ -103,11 +98,10 @@ TabsSidebarContent.propTypes = {
   upperContent: React.PropTypes.object,
 };
 
-export const DocsTabsSidebarLayout = ({database, designDocs, showIncludeAllDocs, docURL, endpoint, dbName, dropDownLinks}) => {
+export const DocsTabsSidebarLayout = ({database, designDocs, docURL, endpoint, dbName, dropDownLinks}) => {
   return (
     <div id="dashboard" className="with-sidebar">
       <TabsSidebarHeader
-        showIncludeAllDocs={showIncludeAllDocs}
         docURL={docURL}
         endpoint={endpoint}
         dbName={dbName}
@@ -125,7 +119,6 @@ export const ChangesSidebarLayout = ({docURL, database, endpoint, dbName, dropDo
   return (
     <div id="dashboard" className="with-sidebar">
       <TabsSidebarHeader
-        hideHeaderBar={true}
         docURL={docURL}
         endpoint={endpoint}
         dbName={dbName}
@@ -146,7 +139,6 @@ export const ViewsTabsSidebarLayout = ({showEditView, database, docURL, endpoint
   return (
     <div id="dashboard" className="with-sidebar">
       <TabsSidebarHeader
-        hideHeaderBar={true}
         endpoint={endpoint}
         docURL={docURL}
         dbName={dbName}

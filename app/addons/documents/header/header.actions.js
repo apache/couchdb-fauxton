@@ -33,11 +33,11 @@ export default {
     ActionsQueryOptions.runQuery(params);
   },
 
-  toggleTableView: function (state) {
+  toggleLayout: function (layout) {
     FauxtonAPI.dispatch({
-      type: ActionTypes.TOGGLE_TABLEVIEW,
+      type: ActionTypes.TOGGLE_LAYOUT,
       options: {
-        enable: state
+        layout: layout
       }
     });
   }

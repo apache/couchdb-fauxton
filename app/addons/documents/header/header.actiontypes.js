@@ -11,5 +11,5 @@
 // the License.
 
 export default {
-  TOGGLE_TABLEVIEW: 'TOGGLE_TABLEVIEW',
+  TOGGLE_LAYOUT: 'TOGGLE_LAYOUT',
 };

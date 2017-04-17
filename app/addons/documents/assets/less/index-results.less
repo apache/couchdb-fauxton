@@ -13,9 +13,6 @@
 @import "../../../../../assets/less/variables.less";
 
 .document-result-screen {
-  .bulk-action-component {
-    padding-bottom: 15px;
-  }
 
   .loading-lines-wrapper {
     margin-left: auto;
@@ -26,6 +23,32 @@
   .loading-lines {
     position: absolute;
   }
+}
+
+.document-result-screen__toolbar {
+  display: flex;
+  padding-bottom: 20px;
+
+  .bulk-action-component {
+    min-width: 90px;
+    min-height: 26px;
+    padding: 8px 0px;
+  }
+}
+
+.document-result-screen__toolbar-flex-container {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.document-result-screen__toolbar-create-btn {
+  height: 42px;
+}
+
+a.document-result-screen__toolbar-create-btn:active,
+a.document-result-screen__toolbar-create-btn:visited {
+  color: #fff;
 }
 
 .no-results-screen {
@@ -57,7 +80,6 @@
 
 .table-view-docs {
   position: absolute;
-  margin-top: 30px;
 
 
   .bulk-action-component {
@@ -97,7 +119,7 @@
     white-space: nowrap;
   }
   td.tableview-checkbox-cell, th.tableview-header-el-checkbox {
-    width: 68px;
+    width: 45px;
   }
   .tableview-conflict {
     color: #F00;
