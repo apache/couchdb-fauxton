@@ -23,13 +23,10 @@ describe('New Replication Component', () => {
 
   describe('validation', () => {
 
-    beforeEach(() => {
-      sinon.stub(FauxtonAPI, 'setSession');
-    });
+    FauxtonAPI.session.triggerError = () => {};
 
     afterEach(() => {
       restore(FauxtonAPI.addNotification);
-      restore(FauxtonAPI.setSession);
     });
 
     it('returns true for local source and target selected', () => {
