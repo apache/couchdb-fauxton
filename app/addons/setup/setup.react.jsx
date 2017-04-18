@@ -134,9 +134,7 @@ var SetupMultipleNodesController = React.createClass({
   },
 
   onChange: function () {
-    if (this.isMounted()) {
-      this.setState(this.getStoreState());
-    }
+    this.setState(this.getStoreState());
   },
 
   getNodeList: function () {
@@ -256,9 +254,7 @@ var SetupSingleNodeController = React.createClass({
   },
 
   onChange: function () {
-    if (this.isMounted()) {
-      this.setState(this.getStoreState());
-    }
+    this.setState(this.getStoreState());
   },
 
   alterUsername: function (e) {
@@ -323,9 +319,7 @@ var SetupFirstStepController = React.createClass({
   },
 
   onChange: function () {
-    if (this.isMounted()) {
-      this.setState(this.getStoreState());
-    }
+    this.setState(this.getStoreState());
   },
 
   render: function () {

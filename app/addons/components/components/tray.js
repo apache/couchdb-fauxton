@@ -87,17 +87,11 @@ export const connectToStores = (Component, stores, getStateFromStores) => {
     },
 
     onChange () {
-      if (!this.isMounted()) {
-        return;
-      }
-
       this.setState(getStateFromStores(this.props));
     },
 
     handleStoresChanged () {
-      if (this.isMounted()) {
-        this.setState(getStateFromStores(this.props));
-      }
+      this.setState(getStateFromStores(this.props));
     },
 
     render () {

@@ -479,9 +479,7 @@ var SidebarController = React.createClass({
   },
 
   onChange: function () {
-    if (this.isMounted()) {
-      this.setState(this.getStoreState());
-    }
+    this.setState(this.getStoreState());
   },
 
   showDeleteDatabaseModal: function (payload) {

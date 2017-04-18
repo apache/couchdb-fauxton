@@ -253,7 +253,13 @@ Stores.IndexEditorStore = FauxtonAPI.Store.extend({
       return;
     }
 
-    this.triggerChange();
+    //This is a quick and somewhat messy fix
+    //Some of the way our components are linked together can cause a component to be re-rendered
+    //even after it is unmounted.
+    // This fix stops that from happening
+    setTimeout(() => {
+      this.triggerChange();
+    });
   }
 
 });

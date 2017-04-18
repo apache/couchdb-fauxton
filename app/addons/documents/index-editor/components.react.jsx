@@ -210,9 +210,7 @@ var ReduceEditor = React.createClass({
   },
 
   onChange: function () {
-    if (this.isMounted()) {
-      this.setState(this.getStoreState());
-    }
+    this.setState(this.getStoreState());
   },
 
   componentDidMount: function () {
@@ -250,9 +248,7 @@ var EditorController = React.createClass({
   },
 
   onChange: function () {
-    if (this.isMounted()) {
-      this.setState(this.getStoreState());
-    }
+    this.setState(this.getStoreState());
   },
 
   componentDidMount: function () {

@@ -133,12 +133,10 @@ Stores.NotificationStore = FauxtonAPI.Store.extend({
     switch (action.type) {
       case ActionTypes.ADD_NOTIFICATION:
         this.addNotification(action.options.info);
-        this.triggerChange();
       break;
 
       case ActionTypes.CLEAR_ALL_NOTIFICATIONS:
         this.clearNotifications();
-        this.triggerChange();
       break;
 
       case ActionTypes.CLEAR_SINGLE_NOTIFICATION:
@@ -147,49 +145,43 @@ Stores.NotificationStore = FauxtonAPI.Store.extend({
 
       case ActionTypes.START_HIDING_NOTIFICATION:
         this.startHidingNotification(action.options.notificationId);
-        this.triggerChange();
       break;
 
       case ActionTypes.HIDE_NOTIFICATION:
         this.hideNotification(action.options.notificationId);
-        this.triggerChange();
       break;
 
       case ActionTypes.HIDE_ALL_NOTIFICATIONS:
         this.hideAllNotifications();
-        this.triggerChange();
       break;
 
       case ActionTypes.SHOW_NOTIFICATION_CENTER:
         this._notificationCenterVisible = true;
-        this.triggerChange();
       break;
 
       case ActionTypes.HIDE_NOTIFICATION_CENTER:
         this._notificationCenterVisible = false;
-        this.triggerChange();
       break;
 
       case ActionTypes.SELECT_NOTIFICATION_FILTER:
         this.setNotificationFilter(action.options.filter);
-        this.triggerChange();
       break;
 
       case ActionTypes.SHOW_PERMANENT_NOTIFICATION:
         this._permanentNotificationVisible = true;
         this.setPermanentNotificationMessage(action.options.msg);
-        this.triggerChange();
       break;
 
       case ActionTypes.HIDE_PERMANENT_NOTIFICATION:
         this._permanentNotificationVisible = false;
-        this.triggerChange();
       break;
 
       default:
       return;
         // do nothing
     }
+
+    this.triggerChange();
   }
 });
 
