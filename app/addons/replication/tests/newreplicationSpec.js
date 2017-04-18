@@ -24,12 +24,12 @@ describe('New Replication Component', () => {
   describe('validation', () => {
 
     beforeEach(() => {
-      sinon.stub(FauxtonAPI.session, 'fetchUser');
+      sinon.stub(FauxtonAPI, 'setSession');
     });
 
     afterEach(() => {
       restore(FauxtonAPI.addNotification);
-      restore(FauxtonAPI.session.fetchUser);
+      restore(FauxtonAPI.setSession);
     });
 
     it('returns true for local source and target selected', () => {
