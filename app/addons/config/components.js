@@ -41,9 +41,7 @@ var ConfigTableController = React.createClass({
   },
 
   onChange () {
-    if (this.isMounted()) {
-      this.setState(this.getStoreState());
-    }
+    this.setState(this.getStoreState());
   },
 
   saveOption (option) {
