@@ -9,11 +9,10 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
-/*
 import React from "react";
 import utils from "../../../../test/mocha/testUtils";
 import FauxtonAPI from '../../../core/api';
-import { mount } from 'enzyme';
+import { shallow } from 'enzyme';
 import sinon from "sinon";
 import NewReplication from '../components/newreplication';
 import Constants from '../constants';
@@ -22,33 +21,49 @@ const {assert, restore}  = utils;
 
 describe('New Replication Component', () => {
 
-  describe('validation', () => {
+  FauxtonAPI.session.triggerError = () => {};
 
-    FauxtonAPI.session.triggerError = () => {};
+  describe('validation', () => {
 
     afterEach(() => {
       restore(FauxtonAPI.addNotification);
     });
 
     it('returns true for local source and target selected', () => {
-      const newreplication = mount(<NewReplication
+      const newreplication = shallow(<NewReplication
         databases={[]}
         replicationTarget={Constants.REPLICATION_TARGET.NEW_LOCAL_DATABASE}
         localTarget={"mydb"}
         localSource={"anotherdb"}
-        updateFormField={() => {}}
+        replicationSource={""}
+        replicationType={""}
+        replicationDocName={""}
+        remoteSource={""}
+        remoteTarget={""}
+        conflictModalVisible={false}
+        clearReplicationForm={() => {}}
+        hideConflictModal={() => {}}
+        updateFormField={() => { return () => {}; }}
         />);
 
       assert.ok(newreplication.instance().validate());
     });
 
     it('returns true for remote source and target selected', () => {
-      const newreplication = mount(<NewReplication
+      const newreplication = shallow(<NewReplication
         databases={[]}
         replicationTarget={Constants.REPLICATION_TARGET.NEW_REMOTE_DATABASE}
         remoteTarget={"mydb"}
         remoteSource={"anotherdb"}
-        updateFormField={() => {}}
+        localTarget={""}
+        localSource={""}
+        replicationSource={""}
+        replicationType={""}
+        replicationDocName={""}
+        conflictModalVisible={false}
+        clearReplicationForm={() => {}}
+        hideConflictModal={() => {}}
+        updateFormField={() => { return () => {}; }}
         />);
 
       assert.ok(newreplication.instance().validate());
@@ -57,12 +72,20 @@ describe('New Replication Component', () => {
     it("warns if new local database exists", () => {
       const spy = sinon.spy(FauxtonAPI, 'addNotification');
 
-      const newreplication = mount(<NewReplication
+      const newreplication = shallow(<NewReplication
         databases={["existingdb"]}
         replicationTarget={Constants.REPLICATION_TARGET.NEW_LOCAL_DATABASE}
         localTarget={"existingdb"}
         localSource={"anotherdb"}
-        updateFormField={() => {}}
+        remoteTarget={""}
+        remoteSource={""}
+        replicationSource={""}
+        replicationType={""}
+        replicationDocName={""}
+        conflictModalVisible={false}
+        clearReplicationForm={() => {}}
+        hideConflictModal={() => {}}
+        updateFormField={() => { return () => {}; }}
         />);
 
       newreplication.instance().validate();
@@ -75,12 +98,20 @@ describe('New Replication Component', () => {
     it("warns if database name is wrong", () => {
       const spy = sinon.spy(FauxtonAPI, 'addNotification');
 
-      const newreplication = mount(<NewReplication
+      const newreplication = shallow(<NewReplication
         databases={[]}
         replicationTarget={Constants.REPLICATION_TARGET.NEW_LOCAL_DATABASE}
         localTarget={"existing db"}
         localSource={"anotherdb"}
-        updateFormField={() => {}}
+        remoteTarget={""}
+        remoteSource={""}
+        replicationSource={""}
+        replicationType={""}
+        replicationDocName={""}
+        conflictModalVisible={false}
+        clearReplicationForm={() => {}}
+        hideConflictModal={() => {}}
+        updateFormField={() => { return () => {}; }}
         />);
 
       newreplication.instance().validate();
@@ -93,12 +124,20 @@ describe('New Replication Component', () => {
     it("warns if database is same for local", () => {
       const spy = sinon.spy(FauxtonAPI, 'addNotification');
 
-      const newreplication = mount(<NewReplication
+      const newreplication = shallow(<NewReplication
         databases={[]}
         replicationTarget={Constants.REPLICATION_TARGET.NEW_LOCAL_DATABASE}
         localTarget={"samedb"}
         localSource={"samedb"}
-        updateFormField={() => {}}
+        remoteTarget={""}
+        remoteSource={""}
+        replicationSource={""}
+        replicationType={""}
+        replicationDocName={""}
+        conflictModalVisible={false}
+        clearReplicationForm={() => {}}
+        hideConflictModal={() => {}}
+        updateFormField={() => { return () => {}; }}
         />);
 
       newreplication.instance().validate();
@@ -111,12 +150,20 @@ describe('New Replication Component', () => {
     it("warns if database is same for remote", () => {
       const spy = sinon.spy(FauxtonAPI, 'addNotification');
 
-      const newreplication = mount(<NewReplication
+      const newreplication = shallow(<NewReplication
         databases={[]}
         replicationTarget={Constants.REPLICATION_TARGET.NEW_LOCAL_DATABASE}
         remoteTarget={"samedb"}
         remoteSource={"samedb"}
-        updateFormField={() => {}}
+        localTarget={""}
+        localSource={""}
+        replicationSource={""}
+        replicationType={""}
+        replicationDocName={""}
+        conflictModalVisible={false}
+        clearReplicationForm={() => {}}
+        hideConflictModal={() => {}}
+        updateFormField={() => { return () => {}; }}
         />);
 
       newreplication.instance().validate();
@@ -129,44 +176,67 @@ describe('New Replication Component', () => {
 
   describe('confirmButtonEnabled', () => {
 
-    beforeEach(() => {
-      sinon.stub(FauxtonAPI.session, 'fetchUser');
-    });
-
-    afterEach(() => {
-      restore(FauxtonAPI.session.fetchUser);
-    });
-
     it('returns false for default', () => {
-      const newreplication = mount(<NewReplication
-        updateFormField={() => {}}
+      const newreplication = shallow(<NewReplication
+        databases={[]}
+        replicationTarget={Constants.REPLICATION_TARGET.NEW_LOCAL_DATABASE}
+        remoteTarget={""}
+        remoteSource={""}
+        localTarget={""}
+        localSource={""}
+        replicationSource={""}
+        replicationType={""}
+        replicationDocName={""}
+        conflictModalVisible={false}
+        clearReplicationForm={() => {}}
+        hideConflictModal={() => {}}
+        updateFormField={() => { return () => {}; }}
         />);
 
       assert.notOk(newreplication.instance().confirmButtonEnabled());
     });
 
     it('returns false for empty remote source', () => {
-      const newreplication = mount(<NewReplication
-        updateFormField={() => {}}
+      const newreplication = shallow(<NewReplication
         submittedNoChange={false}
         replicationSource={Constants.REPLICATION_SOURCE.REMOTE}
         replicationTarget={Constants.REPLICATION_TARGET.NEW_LOCAL_DATABASE}
         locallocalTargetKnown={false}
         locallocalSourceKnown={false}
+        databases={[]}
+        remoteTarget={""}
+        remoteSource={""}
+        localTarget={""}
+        localSource={""}
+        replicationType={""}
+        replicationDocName={""}
+        conflictModalVisible={false}
+        clearReplicationForm={() => {}}
+        hideConflictModal={() => {}}
+        updateFormField={() => { return () => {}; }}
         />);
 
       assert.notOk(newreplication.instance().confirmButtonEnabled());
     });
 
     it('returns false for empty local source', () => {
-      const newreplication = mount(<NewReplication
-        updateFormField={() => {}}
+      const newreplication = shallow(<NewReplication
         submittedNoChange={false}
         replicationSource={Constants.REPLICATION_SOURCE.REMOTE}
         replicationTarget={Constants.REPLICATION_TARGET.NEW_LOCAL_DATABASE}
         locallocalTargetKnown={false}
         locallocalSourceKnown={false}
         remoteSource={'db'}
+        databases={[]}
+        remoteTarget={""}
+        localTarget={""}
+        localSource={""}
+        replicationType={""}
+        replicationDocName={""}
+        conflictModalVisible={false}
+        clearReplicationForm={() => {}}
+        hideConflictModal={() => {}}
+        updateFormField={() => { return () => {}; }}
         />);
 
 
@@ -174,8 +244,7 @@ describe('New Replication Component', () => {
     });
 
     it("returns true for all details filled in", () => {
-      const newreplication = mount(<NewReplication
-        updateFormField={() => {}}
+      const newreplication = shallow(<NewReplication
         submittedNoChange={false}
         replicationSource={Constants.REPLICATION_SOURCE.REMOTE}
         remoteSource={'db'}
@@ -183,6 +252,15 @@ describe('New Replication Component', () => {
         localTarget={"new-db"}
         locallocalTargetKnown={false}
         locallocalSourceKnown={false}
+        databases={[]}
+        remoteTarget={""}
+        localSource={""}
+        replicationType={""}
+        replicationDocName={""}
+        conflictModalVisible={false}
+        clearReplicationForm={() => {}}
+        hideConflictModal={() => {}}
+        updateFormField={() => { return () => {}; }}
         />);
 
 
@@ -193,14 +271,6 @@ describe('New Replication Component', () => {
 
   describe("runReplicationChecks", () => {
 
-    beforeEach(() => {
-      sinon.stub(FauxtonAPI.session, 'fetchUser');
-    });
-
-    afterEach(() => {
-      restore(FauxtonAPI.session.fetchUser);
-    });
-
     it("shows conflict modal for existing replication doc", () => {
       let called = false;
       const showConflictModal = () => { called = true;};
@@ -209,11 +279,22 @@ describe('New Replication Component', () => {
         promise.resolve(true);
         return promise;
       };
-      const newreplication = mount(<NewReplication
-        updateFormField={() => {}}
+      const newreplication = shallow(<NewReplication
         replicationDocName="my-doc-id"
         checkReplicationDocID={checkReplicationDocID}
         showConflictModal={showConflictModal}
+        databases={[]}
+        replicationTarget={Constants.REPLICATION_TARGET.NEW_LOCAL_DATABASE}
+        remoteTarget={""}
+        remoteSource={""}
+        localTarget={""}
+        localSource={""}
+        replicationSource={""}
+        replicationType={""}
+        conflictModalVisible={false}
+        clearReplicationForm={() => {}}
+        hideConflictModal={() => {}}
+        updateFormField={() => { return () => {}; }}
         />);
 
       newreplication.instance().runReplicationChecks();
@@ -228,10 +309,21 @@ describe('New Replication Component', () => {
         promise.resolve(false);
         return promise;
       };
-      const newreplication = mount(<NewReplication
-        updateFormField={() => {}}
+      const newreplication = shallow(<NewReplication
         replicationDocName="my-doc-id"
         checkReplicationDocID={checkReplicationDocID}
+        databases={[]}
+        replicationTarget={Constants.REPLICATION_TARGET.NEW_LOCAL_DATABASE}
+        remoteTarget={""}
+        remoteSource={""}
+        localTarget={""}
+        localSource={""}
+        replicationSource={""}
+        replicationType={""}
+        conflictModalVisible={false}
+        clearReplicationForm={() => {}}
+        hideConflictModal={() => {}}
+        updateFormField={() => { return () => {}; }}
         />);
 
       newreplication.instance().showPasswordModal = showPasswordModal;
@@ -241,4 +333,4 @@ describe('New Replication Component', () => {
 
   });
 
-});*/
+});
