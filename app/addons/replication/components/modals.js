@@ -11,7 +11,7 @@
 // the License.
 import React from 'react';
 import {Modal} from 'react-bootstrap';
-import Components from '../../components/react-components.react';
+import Components from '../../components/react-components';
 
 const {ConfirmButton} = Components;
 

@@ -9,7 +9,7 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
-import { PermanentNotification } from "../notifications.react";
+import { PermanentNotification } from "../notifications";
 import Stores from "../stores";
 import FauxtonAPI from "../../../../core/api";
 import ActionTypes from "../actiontypes";

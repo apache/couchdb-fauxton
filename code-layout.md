@@ -61,7 +61,7 @@ A good place to get started is to read through a couple of the existing addons. 
 the Fauxton interface so you can see exactly where it appears and what it does.
 
 Each module must have a `base.js` file, this is read and compiled when Fauxton is deployed. A `resources.js` file
-is usually used for your Backbone.Models and Backbone.Collections, `components.react.jsx` for your React components.
+is usually used for your Backbone.Models and Backbone.Collections, `components.jsx` for your React components.
 The `routes.js` is used to register one or more URL paths for your addon along with what layout, data, breadcrumbs and API
 point is required for the view.
 

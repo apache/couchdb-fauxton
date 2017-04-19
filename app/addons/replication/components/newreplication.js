@@ -17,7 +17,7 @@ import {ReplicationSource} from './source';
 import {ReplicationTarget} from './target';
 import {ReplicationOptions} from './options';
 import {ReplicationSubmit} from './submit';
-import AuthComponents from '../../auth/components.react';
+import AuthComponents from '../../auth/components';
 import Constants from '../constants';
 import {ConflictModal} from './modals';
 import {isEmpty} from 'lodash';

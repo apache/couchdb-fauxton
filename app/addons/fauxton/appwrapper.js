@@ -11,7 +11,7 @@
 // the License.
 
 import React from 'react';
-import {NotificationController, PermanentNotification} from "./notifications/notifications.react";
+import {NotificationController, PermanentNotification} from "./notifications/notifications";
 import NavBar from './navigation/container/NavBar';
 import NavbarActions from './navigation/actions';
 import Stores from './navigation/stores';

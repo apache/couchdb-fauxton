@@ -9,7 +9,7 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
-import Views from "../notifications.react";
+import Views from "../notifications";
 import Stores from "../stores";
 import Actions from "../actions";
 import utils from "../../../../../test/mocha/testUtils";

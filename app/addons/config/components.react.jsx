@@ -15,8 +15,8 @@ import ReactDOM from "react-dom";
 import Stores from "./stores";
 import Actions from "./actions";
 import {Overlay, Button, Popover} from "react-bootstrap";
-import Components from "../components/react-components.react";
-import FauxtonComponents from "../fauxton/components.react";
+import Components from "../components/react-components";
+import FauxtonComponents from "../fauxton/components";
 
 const configStore = Stores.configStore;
 
@@ -41,9 +41,7 @@ var ConfigTableController = React.createClass({
   },
 
   onChange () {
-    if (this.isMounted()) {
-      this.setState(this.getStoreState());
-    }
+    this.setState(this.getStoreState());
   },
 
   saveOption (option) {

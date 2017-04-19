@@ -11,16 +11,16 @@
 // the License.
 
 import React from 'react';
-import IndexResultsComponents from './index-results/index-results.components.react';
-import ReactPagination from './pagination/pagination.react';
-import ReactHeader from './header/header.react';
-import {NotificationCenterButton} from '../fauxton/notifications/notifications.react';
+import IndexResultsComponents from './index-results/index-results.components';
+import ReactPagination from './pagination/pagination';
+import ReactHeader from './header/header';
+import {NotificationCenterButton} from '../fauxton/notifications/notifications';
 import {ApiBarWrapper} from '../components/layouts';
-import SidebarComponents from "./sidebar/sidebar.react";
+import SidebarComponents from "./sidebar/sidebar";
 import HeaderDocsLeft from './components/header-docs-left';
-import Changes from './changes/components.react';
-import IndexEditorComponents from "./index-editor/components.react";
-import DesignDocInfoComponents from './designdocinfo/components.react';
+import Changes from './changes/components';
+import IndexEditorComponents from "./index-editor/components";
+import DesignDocInfoComponents from './designdocinfo/components';
 import RightAllDocsHeader from './components/header-docs-right';
 
 export const TabsSidebarHeader = ({

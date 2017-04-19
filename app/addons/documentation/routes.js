@@ -12,7 +12,7 @@
 
 import React from 'react';
 import FauxtonAPI from "../../core/api";
-import DocumentationComponents from "./components.react";
+import DocumentationComponents from "./components";
 import {OnePaneSimpleLayout} from '../components/layouts';
 
 var DocumentationRouteObject = FauxtonAPI.RouteObject.extend({

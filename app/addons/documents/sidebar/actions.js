@@ -12,7 +12,7 @@
 
 import FauxtonAPI from "../../../core/api";
 import ActionTypes from "./actiontypes";
-import Stores from "./stores.react";
+import Stores from "./stores";
 var store = Stores.sidebarStore;
 
 function newOptions (options) {

@@ -11,7 +11,7 @@
 // the License.
 import React from 'react';
 import Constants from '../constants';
-import Components from '../../components/react-components.react';
+import Components from '../../components/react-components';
 import ReactSelect from 'react-select';
 import RemoteExample from './remoteexample';
 
