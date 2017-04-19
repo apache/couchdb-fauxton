@@ -54,9 +54,7 @@ var DatabasesController = React.createClass({
   },
 
   onChange () {
-    if (this.isMounted()) {
-      this.setState(this.getStoreState());
-    }
+    this.setState(this.getStoreState());
   },
 
   render () {

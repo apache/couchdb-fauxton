@@ -93,9 +93,7 @@ var DocEditorController = React.createClass({
   },
 
   onChange: function () {
-    if (this.isMounted()) {
-      this.setState(this.getStoreState());
-    }
+    this.setState(this.getStoreState());
   },
 
   saveDoc: function () {

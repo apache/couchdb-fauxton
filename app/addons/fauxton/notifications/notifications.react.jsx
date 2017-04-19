@@ -49,9 +49,7 @@ export const NotificationController = React.createClass({
   },
 
   onChange: function () {
-    if (this.isMounted()) {
-      this.setState(this.getStoreState());
-    }
+    this.setState(this.getStoreState());
   },
 
   render: function () {
