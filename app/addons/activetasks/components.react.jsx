@@ -189,6 +189,7 @@ var ActiveTasksTableHeader = React.createClass({
         ['database', 'Database'],
         ['started-on', 'Started on'],
         ['updated-on', 'Updated on'],
+        ['eta', 'ETA'],
         ['pid', 'PID'],
         ['progress', 'Status']
       ]
@@ -333,6 +334,7 @@ var ActiveTaskTableBodyContents = React.createClass({
       updated_on: activeTasksHelpers.getTimeInfo(item.updated_on),
       pid: item.pid.replace(/[<>]/g, ''),
       progress: activeTasksHelpers.getProgressMessage(item),
+      eta: activeTasksHelpers.getETA(item),
     };
   },
 
@@ -354,6 +356,7 @@ var ActiveTaskTableBodyContents = React.createClass({
     var startedOnMsg = this.multilineMessage(rowData.started_on, 'time');
     var updatedOnMsg = this.multilineMessage(rowData.updated_on, 'time');
     var progressMsg = this.multilineMessage(rowData.progress);
+    var etaMsg = this.multilineMessage(rowData.eta, 'time');
 
     return (
       <tr>
@@ -361,6 +364,7 @@ var ActiveTaskTableBodyContents = React.createClass({
         <td>{objectFieldMsg}</td>
         <td>{startedOnMsg}</td>
         <td>{updatedOnMsg}</td>
+        <td>{etaMsg}</td>
         <td>{rowData.pid}</td>
         <td>{progressMsg}</td>
       </tr>
@@ -460,6 +464,12 @@ var activeTasksHelpers = {
 
     if (_.has(item, 'changes_done')) {
       progressMessage.push(item.changes_done + ' Changes done.');
+      const rate = this.getChangesPerSecond(item);
+      if (rate === 'NaN') {
+        progressMessage.push('Rate: N/A');
+      } else {
+        progressMessage.push('Rate: ' + rate + ' changes/second');
+      }
     }
 
     return progressMessage;
@@ -467,8 +477,20 @@ var activeTasksHelpers = {
 
   getSourceSequence (item) {
     return item.source_seq;
-  }
+  },
 
+  getChangesPerSecond (item) {
+    return (item.changes_done / (item.updated_on - item.started_on)).toFixed(2);
+  },
+
+  getETA (item) {
+    const cps = this.getChangesPerSecond(item);
+    if (cps === 'NaN') {
+      return ['N/A'];
+    } else {
+      return this.getTimeInfo(item.started_on + item.total_changes / cps);
+    }
+  }
 };
 
 export default {
