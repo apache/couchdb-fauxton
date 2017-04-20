@@ -58,15 +58,55 @@ var TableRow = React.createClass({
 
   getRowContents: function (element, rowNumber) {
     var el = element.content;
+    //this.props.data.selectedFields -> ["id", "key", "value"]
+    var selecFields = this.props.data.selectedFields;
+    if (selecFields[1] == "key" && selecFields[0] == "value" && selecFields.length == 2) { selecFields = ["key", "value"];}
+      var row = selecFields.map(function (k, i) {
+	//
+      var sub = "";
+      var key = 'tableview-data-cell-' + rowNumber + k + i;
+      var style = {};
+      var styleID = {};
 
-    var row = this.props.data.selectedFields.map(function (k, i) {
+      var stringified = typeof el["value"] === 'object' ? JSON.stringify(el["value"], null, '  ') : el["value"];
+      var id = typeof el["id"] === 'object' ? JSON.stringify(el["id"], null, '  ') : el["id"];
+      var stringifiedKey = typeof el["key"] === 'object' ? JSON.stringify(el["key"], null, '  ') : el["key"];
+      var text = stringified;
+      if (typeof el[k] === 'object' & el[k] != null)  {console.log(el[k]); delete (el[k])._attachments;}
 
-      var key = 'tableview-data-cell-' + rowNumber + k + i + el[k];
-      var stringified = typeof el[k] === 'object' ? JSON.stringify(el[k], null, '  ') : el[k];
+
+      if (k == "id") {
+	      sub = "ID: " + id;
+	      text = this.maybeGetUrl(element.url, stringifiedKey || el.key || el.id);
+		sub = "ID:" + el._id;
+	        styleID = {
+		      font: "normal 10px Arial,Helvetica,sans-serif",
+			color: "#999"
+                };
+      } else
+      if (k == "key") {
+	      if (el._id) {
+		sub = "ID:" + el._id;
+	        styleID = {
+		      font: "normal 10px Arial,Helvetica,sans-serif",
+			color: "#999"
+                };
+	      }
+	      text = this.maybeGetUrl(element.url, stringifiedKey || el.key || el.id);
+      } else
+      if (k == "value") {
+	      text = typeof el[k] === 'object' ? JSON.stringify(el[k], null, '  ') : el[k];
+      } else  {
+	      if (k) {
+		text = typeof el[k] === 'object' ? JSON.stringify(el[k], null, '  ') : el[k];
+	      }
+      }
 
       return (
-        <td key={key} title={stringified}>
-          {stringified}
+        <td key={key} title={stringified}
+	    className={'tableview-data-cell-' + k } >
+	   <div style={style}>{text}</div>
+           <div style={styleID}>{sub}</div>
         </td>
       );
     }.bind(this));
@@ -86,7 +126,7 @@ var TableRow = React.createClass({
         <div>{this.maybeGetUrl(element.url, el._id || el.id)}</div>
         <div>{el._rev}</div>
       </td>
-    );
+   );
   },
 
   maybeGetUrl: function (url, stringified) {
@@ -238,13 +278,13 @@ var TableView = React.createClass({
 
     if (!notSelectedFields) {
       return filtered.map(function (el, i) {
-        return <th key={'header-el-' + i}>{el}</th>;
+        return <th className={"tableview-header-" + el} key={'header-el-' + i}>{el}</th>;
       });
     }
 
     return filtered.map(function (el, i) {
       return (
-        <th key={'header-el-' + i}>
+        <th className={"tableview-header-dropdown-" + el}  key={'header-el-' + i}>
           {this.getDropdown(el, this.props.data.schema, i)}
         </th>
       );
@@ -263,11 +303,11 @@ var TableView = React.createClass({
 
   getHeader: function () {
     var selectedFields = this.props.data.selectedFields;
-
-    var specialField = null;
-    if (this.props.data.hasMetadata) {
-      specialField = (<th key="header-el-metadata" title="Metadata">Metadata</th>);
-    }
+    if (selectedFields[1] == "key" && selectedFields[0] == "value" && selectedFields.length == 2) { selectedFields = ["key", "value"];}
+    //var specialField = null;
+    //if (this.props.data.hasMetadata) {
+    //  specialField = (<th key="header-el-metadata" className="Metradata" title="Metadata">Metadata</th>);
+    //}
 
     var row = this.getOptionFieldRows(selectedFields);
 
@@ -288,7 +328,7 @@ var TableView = React.createClass({
       <tr key="tableview-content-row-header">
         {box}
         <th className="tableview-el-copy"></th>
-        {specialField}
+        {/*specialField*/}
         {row}
         <th className="tableview-el-last"></th>
       </tr>

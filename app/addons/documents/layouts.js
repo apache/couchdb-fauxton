@@ -79,7 +79,7 @@ export const TabsSidebarContent = ({hideFooter, lowerContent, upperContent}) => 
       <aside id="sidebar-content" className="scrollable">
         <SidebarComponents.SidebarController />
       </aside>
-      <section id="dashboard-content" className="flex-layout flex-col">
+      <section id="dashboard-content" className="flex-layout flex-col" style={{left: "330px"}}>
         <div id="dashboard-upper-content">
           {upperContent}
         </div>
