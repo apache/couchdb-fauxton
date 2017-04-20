@@ -15,9 +15,9 @@ import FauxtonAPI from "../../core/api";
 import Documents from "./resources";
 import Databases from "../databases/base";
 import Actions from "./doc-editor/actions";
-import ReactComponents from "./doc-editor/components.react";
+import ReactComponents from "./doc-editor/components";
 import RevBrowserActions from "./rev-browser/rev-browser.actions";
-import RevBrowserComponents from "./rev-browser/rev-browser.components.react";
+import RevBrowserComponents from "./rev-browser/rev-browser.components";
 import {DocEditorLayout} from '../components/layouts';
 
 

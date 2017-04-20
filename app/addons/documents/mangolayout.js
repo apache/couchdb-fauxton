@@ -12,13 +12,13 @@
 
 import React from 'react';
 import app from "../../app";
-import ReactPagination from "./pagination/pagination.react";
-import ReactHeader from "./header/header.react";
+import ReactPagination from "./pagination/pagination";
+import ReactHeader from "./header/header";
 import {Breadcrumbs} from '../components/header-breadcrumbs';
-import {NotificationCenterButton} from '../fauxton/notifications/notifications.react';
+import {NotificationCenterButton} from '../fauxton/notifications/notifications';
 import {ApiBarWrapper} from '../components/layouts';
-import MangoComponents from "./mango/mango.components.react";
-import IndexResultsComponents from "./index-results/index-results.components.react";
+import MangoComponents from "./mango/mango.components";
+import IndexResultsComponents from "./index-results/index-results.components";
 
 
 export const RightHeader = ({showIncludeAllDocs, docURL, endpoint}) => {

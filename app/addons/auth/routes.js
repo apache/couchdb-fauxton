@@ -15,7 +15,7 @@ import app from "../../app";
 import FauxtonAPI from "../../core/api";
 import Auth from "./resources";
 import AuthActions from "./actions";
-import Components from "./components.react";
+import Components from "./components";
 import ClusterActions from "../cluster/cluster.actions";
 import {AuthLayout, AdminLayout} from './layout';
 

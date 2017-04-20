@@ -13,7 +13,7 @@
 import React from 'react';
 import FauxtonAPI from "../../core/api";
 import {OnePane, OnePaneHeader, OnePaneContent} from '../components/layouts';
-import {ActiveTasksController, ActiveTasksPollingWidgetController} from "./components.react";
+import {ActiveTasksController, ActiveTasksPollingWidgetController} from "./components";
 
 const crumbs = [
     {'name': 'Active Tasks'}

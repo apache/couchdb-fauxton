@@ -13,7 +13,7 @@ import React from 'react';
 import Stores from './stores';
 import Actions from './actions';
 import AuthActions from '../auth/actions';
-import Components from '../components/react-components.react';
+import Components from '../components/react-components';
 import NewReplication from './components/newreplication';
 import Activity from './components/activity';
 import {checkReplicationDocID} from './api';

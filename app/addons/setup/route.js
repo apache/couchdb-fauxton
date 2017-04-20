@@ -14,7 +14,7 @@ import React from 'react';
 import app from "../../app";
 import FauxtonAPI from "../../core/api";
 import Setup from "./resources";
-import SetupComponents from "./setup.react";
+import SetupComponents from "./setup";
 import SetupActions from "./setup.actions";
 import ClusterActions from "../cluster/cluster.actions";
 import {OnePaneSimpleLayout} from '../components/layouts';

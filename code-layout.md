@@ -43,14 +43,6 @@ With Flux, you can just publish the single event, then each store could listen f
 internally, then notify any components that was listening: and they would then have the choice to rerender or not, 
 based on what changed. This is basic "pub/sub": allowing you to keep code loosely coupled, but still communicate.
 
-### JSX 
-
-You'll noticed that some of our files have `.jsx` extensions. JSX is a javascript pre-parser, allowing us embed 
-markup directly into our javascript, linking template and code.
-
-Read more about [JSX here](https://facebook.github.io/react/docs/jsx-in-depth.html). 
-
-
 ## Addons
 
 Each bit of functionality is its own separate module or addon. Addons are located in their own `app/addons/myaddon-name` 
@@ -61,7 +53,7 @@ A good place to get started is to read through a couple of the existing addons. 
 the Fauxton interface so you can see exactly where it appears and what it does.
 
 Each module must have a `base.js` file, this is read and compiled when Fauxton is deployed. A `resources.js` file
-is usually used for your Backbone.Models and Backbone.Collections, `components.react.jsx` for your React components.
+is usually used for your Backbone.Models and Backbone.Collections, `components.js` for your React components.
 The `routes.js` is used to register one or more URL paths for your addon along with what layout, data, breadcrumbs and API
 point is required for the view.
 

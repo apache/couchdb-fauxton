@@ -13,7 +13,7 @@
 import React from 'react';
 import {OnePane, OnePaneContent} from '../components/layouts';
 import {Breadcrumbs} from '../components/header-breadcrumbs';
-import Components from "./components.react";
+import Components from "./components";
 
 const { CreateAdminForm, ChangePasswordForm } = Components;
 
