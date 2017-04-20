@@ -1,5 +1,6 @@
 {
   "testPathDirs": ["app"],
+  "testPathIgnorePatterns": ["/node_modules/", "stub"],
 
   "setupTestFrameworkScriptFile": "./jest-setup.js",
 
