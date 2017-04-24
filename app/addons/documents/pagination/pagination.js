@@ -133,6 +133,7 @@ var PerPageSelector = React.createClass({
 var AllDocsNumberController = React.createClass({
 
   getStoreState: function () {
+    const isLoading = indexResultsStore.isLoading();
     return {
       totalRows: indexResultsStore.getTotalRows(),
       pageStart: indexResultsStore.getPageStart(),
@@ -140,7 +141,7 @@ var AllDocsNumberController = React.createClass({
       perPage: indexResultsStore.getPerPage(),
       prioritizedEnabled: indexResultsStore.getIsPrioritizedEnabled(),
       showPrioritizedFieldToggler: indexResultsStore.getShowPrioritizedFieldToggler(),
-      displayedFields: indexResultsStore.getResults().displayedFields,
+      displayedFields: isLoading ? {} : indexResultsStore.getResults().displayedFields,
       collection: indexResultsStore.getCollection(),
       bulkCollection: indexResultsStore.getBulkDocCollection(),
     };

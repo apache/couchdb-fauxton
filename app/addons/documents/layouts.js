@@ -13,7 +13,6 @@
 import React from 'react';
 import IndexResultsComponents from './index-results/index-results.components';
 import ReactPagination from './pagination/pagination';
-import ReactHeader from './header/header';
 import {NotificationCenterButton} from '../fauxton/notifications/notifications';
 import {ApiBarWrapper} from '../components/layouts';
 import SidebarComponents from "./sidebar/sidebar";

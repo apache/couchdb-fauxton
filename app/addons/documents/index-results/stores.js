@@ -46,7 +46,7 @@ Stores.IndexResultsStore = FauxtonAPI.Store.extend({
     this._isPrioritizedEnabled = false;
 
     this._tableSchema = [];
-    this._selectedLayout = Constants.LAYOUT_ORIENTATION.JSON;
+    this._selectedLayout = Constants.LAYOUT_ORIENTATION.METADATA;
 
     this.resetPagination();
   },
@@ -641,7 +641,7 @@ Stores.IndexResultsStore = FauxtonAPI.Store.extend({
   },
 
   hasResults: function () {
-    if (this.isLoading()) { return this.isLoading(); }
+    if (this.isLoading()) { return !this.isLoading(); }
     return this._collection.length > 0;
   },
 

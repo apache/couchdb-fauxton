@@ -10,9 +10,9 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 import React from 'react';
-import Header from "../header/header.react";
-import Stores from "../sidebar/stores.react";
-import Components from "../../components/react-components.react";
+import Header from "../header/header";
+import Stores from "../sidebar/stores";
+import Components from "../../components/react-components";
 
 const {BulkDocumentHeaderController} = Header;
 const {BulkActionComponent} = Components;

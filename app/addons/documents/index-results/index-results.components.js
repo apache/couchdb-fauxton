@@ -443,11 +443,12 @@ var ViewResultListController = React.createClass({
   },
 
   getStoreState: function () {
-    var selectedItemsLength = store.getSelectedItemsLength();
+    const selectedItemsLength = store.getSelectedItemsLength();
+    const isLoading = store.isLoading();
     return {
       hasResults: store.hasResults(),
-      results: store.getResults(),
-      isLoading: store.isLoading(),
+      results: isLoading ? {} : store.getResults(),
+      isLoading: isLoading,
       isEditable: store.isEditable(),
       textEmptyIndex: store.getTextEmptyIndex(),
       selectedLayout: store.getSelectedLayout(),
@@ -490,6 +491,10 @@ var ViewResultListController = React.createClass({
   },
 
   render: function () {
+    if (this.state.isLoading) {
+      return <LoadLines />;
+    }
+
     var view = <NoResultsScreen text={this.state.textEmptyIndex}/>;
 
     if (this.state.hasResults) {

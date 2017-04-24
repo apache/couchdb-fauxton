@@ -51,8 +51,8 @@ export default {
     if (!options.collection.fetch) { return; }
 
     return options.collection.fetch({reset: true}).then(() => {
-      this.resultsListReset();
       this.sendMessageNewResultList(options);
+      this.resultsListReset();
     }, (collection, _xhr) => {
       //Make this more robust as sometimes the colection is passed through here.
       var xhr = collection.responseText ? collection : _xhr;

@@ -24,6 +24,7 @@ import SidebarActions from './sidebar/actions';
 import DesignDocInfoActions from './designdocinfo/actions';
 import ComponentsActions from '../components/actions';
 import QueryOptionsActions from './queryoptions/actions';
+import Constants from './constants';
 import {DocsTabsSidebarLayout, ViewsTabsSidebarLayout, ChangesSidebarLayout} from './layouts';
 
 var DocumentsRouteObject = BaseRoute.extend({
@@ -88,8 +89,10 @@ var DocumentsRouteObject = BaseRoute.extend({
         docParams = params.docParams,
         collection;
 
-    // includes_docs = true if you are visiting the _replicator/_users databases
-    if (['_replicator', '_users'].indexOf(databaseName) > -1) {
+    const indexResultsStore = IndexResultStores.indexResultsStore;
+
+    // includes_docs = true if using table or JSON view
+    if (indexResultsStore.getSelectedLayout() !== Constants.LAYOUT_ORIENTATION.METADATA) {
       docParams.include_docs = true;
       urlParams = params.docParams;
       var updatedURL = FauxtonAPI.urls('allDocs', 'app', databaseName, '?' + $.param(urlParams));
@@ -120,7 +123,7 @@ var DocumentsRouteObject = BaseRoute.extend({
       bulkCollection: new Documents.BulkDeleteDocCollection(frozenCollection, { databaseId: this.database.safeID() }),
     });
 
-    this.database.allDocs.paging.pageSize = IndexResultStores.indexResultsStore.getPerPage();
+    this.database.allDocs.paging.pageSize = indexResultsStore.getPerPage();
 
     const endpoint = this.database.allDocs.urlRef("apiurl", urlParams);
     const docURL = this.database.allDocs.documentation();

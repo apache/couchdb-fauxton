@@ -12,7 +12,6 @@
 
 import React from 'react';
 import Actions from './header.actions';
-import Components from '../../components/react-components';
 import Constants from '../constants';
 import IndexResultStores from '../index-results/stores';
 import QueryOptionsStore from '../queryoptions/stores';
@@ -26,7 +25,6 @@ var BulkDocumentHeaderController = React.createClass({
     return {
       selectedView: indexResultsStore.getCurrentViewType(),
       selectedLayout: indexResultsStore.getSelectedLayout(),
-      includeDocs: queryOptionsStore.getIncludeDocsEnabled(),
       bulkDocCollection: indexResultsStore.getBulkDocCollection()
     };
   },
@@ -79,12 +77,9 @@ var BulkDocumentHeaderController = React.createClass({
     );
   },
 
-  toggleIncludeDocs () {
-    Actions.toggleIncludeDocs(this.state.includeDocs, this.state.bulkDocCollection);
-  },
-
   toggleLayout: function (layout) {
     Actions.toggleLayout(layout);
+    Actions.toggleIncludeDocs(layout === Constants.LAYOUT_ORIENTATION.METADATA, this.state.bulkDocCollection);
   }
 });
 
