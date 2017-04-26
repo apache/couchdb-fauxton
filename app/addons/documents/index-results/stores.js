@@ -325,6 +325,12 @@ Stores.IndexResultsStore = FauxtonAPI.Store.extend({
   },
 
   getJsonViewData: function () {
+    // switch to metadata if the include docs flag was manually removed
+    /*if (!this.isIncludeDocsEnabled()) {
+      this.toggleLayout({layout: Constants.LAYOUT_ORIENTATION.METADATA});
+      return this.getResults();
+    }*/
+
     var hasBulkDeletableDoc;
     var res;
 
@@ -403,8 +409,6 @@ Stores.IndexResultsStore = FauxtonAPI.Store.extend({
       return el;
     });
 
-    delete res._id;
-    delete res.id;
     delete res._rev;
 
     res = Object.keys(res).reduce(function (acc, el) {
@@ -487,19 +491,9 @@ Stores.IndexResultsStore = FauxtonAPI.Store.extend({
   },
 
   getTableViewData: function () {
-    var res;
-    var schema;
-    var hasIdOrRev;
-    var hasIdOrRev;
-    var prioritizedFields;
-    var hasBulkDeletableDoc;
-    var database = this.getDatabase();
-    var isView = !!this._collection.view;
-
     // softmigration remove backbone
-    var data;
-    var collectionType = this._collection.collectionType;
-    data = this._filteredCollection.map(function (el) {
+    const collectionType = this._collection.collectionType;
+    let data = this._filteredCollection.map(function (el) {
       return fixDocIdForMango(el.toJSON(), collectionType);
     });
 
@@ -543,50 +537,59 @@ Stores.IndexResultsStore = FauxtonAPI.Store.extend({
 
     // softmigration end
 
-    var isIncludeDocsEnabled = this.isIncludeDocsEnabled();
-    var notSelectedFields = null;
-    if (isIncludeDocsEnabled) {
+    let notSelectedFields = null;
+    let schema;  // array containing the unique attr keys in the results.  always begins with _id.
 
+    if (this.isIncludeDocsEnabled()) {
+      // ensure the right layout state in case user manually added include_docs
+      this.toggleLayout({layout: Constants.LAYOUT_ORIENTATION.TABLE});
+
+      const isView = !!this._collection.view;
+      // remove "cruft" we don't want to display in the results
       data = this.normalizeTableData(data, isView);
+      // build the schema container based on the normalized data
       schema = this.getPseudoSchema(data);
-      hasIdOrRev = this.hasIdOrRev(schema);
 
+      // if we're showing a subset of the attr/columns in the table, set the selected fields
+      // to the previously cached fields if they exist.
       if (!this._isPrioritizedEnabled) {
         this._tableViewSelectedFields = this._cachedSelected || [];
       }
 
+      // if we still don't know what attr/columns to display, build the list and update the
+      // cached fields for the next time.
       if (this._tableViewSelectedFields.length === 0) {
-        prioritizedFields = this.getPrioritizedFields(data, hasIdOrRev ? 4 : 5);
-        this._tableViewSelectedFields = prioritizedFields;
+        this._tableViewSelectedFields = this.getPrioritizedFields(data, 5);
         this._cachedSelected = this._tableViewSelectedFields;
       }
 
-      var schemaWithoutMetaDataFields = _.without(schema, '_id', '_rev', '_attachment');
+      // set the notSelectedFields to the subset excluding meta and selected attributes
+      const schemaWithoutMetaDataFields = _.without(schema, '_id', '_rev', '_attachment');
       notSelectedFields = this.getNotSelectedFields(this._tableViewSelectedFields, schemaWithoutMetaDataFields);
 
+      // if we're showing all attr/columns, we revert the notSelectedFields to null and set
+      // the selected fields to everything excluding meta.
       if (this._isPrioritizedEnabled) {
         notSelectedFields = null;
         this._tableViewSelectedFields = schemaWithoutMetaDataFields;
       }
 
-
     } else {
+      // METADATA view.
+      // Build the schema based on the original data and then remove _attachment and value meta
+      // attributes.
+
+      // ensure the right layout in case user manually removed include_docs
+      this.toggleLayout({layout: Constants.LAYOUT_ORIENTATION.METADATA});
       schema = this.getPseudoSchema(data);
-      this._tableViewSelectedFields = _.without(schema, '_id', '_rev', '_attachment');
+      this._tableViewSelectedFields = _.without(schema, '_attachment');
     }
 
     this._notSelectedFields = notSelectedFields;
     this._tableSchema = schema;
 
-    var dbId = database.safeID();
-
-    res = data.map(function (doc) {
-      var safeId = app.utils.getSafeIdForDoc(doc._id || doc.id); // inconsistent apis for GET between mango and views
-      var url;
-
-      if (safeId) {
-        url = FauxtonAPI.urls('document', 'app', dbId, safeId);
-      }
+    const res = data.map(function (doc) {
+      const safeId = app.utils.getSafeIdForDoc(doc._id || doc.id); // inconsistent apis for GET between mango and views
 
       return {
         content: doc,
@@ -594,19 +597,16 @@ Stores.IndexResultsStore = FauxtonAPI.Store.extend({
         _rev: doc._rev,
         header: '',
         keylabel: '',
-        url: url,
+        url: safeId ? FauxtonAPI.urls('document', 'app', this.getDatabase().safeID(), safeId) : '',
         isDeletable: isJSONDocBulkDeletable(doc, collectionType),
         isEditable: isJSONDocEditable(doc, collectionType)
       };
     }.bind(this));
 
-    hasBulkDeletableDoc = this.hasBulkDeletableDoc(this._filteredCollection);
-
     return {
       notSelectedFields: notSelectedFields,
-      hasMetadata: this.getHasMetadata(schema),
       selectedFields: this._tableViewSelectedFields,
-      hasBulkDeletableDoc: hasBulkDeletableDoc,
+      hasBulkDeletableDoc: this.hasBulkDeletableDoc(this._filteredCollection),
       schema: schema,
       results: res,
       displayedFields: this.getDisplayCountForTableView(),

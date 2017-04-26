@@ -109,6 +109,10 @@ FauxtonAPI.registerUrls('view', {
 
   fragment: function (database, designDoc, viewName) {
     return 'database/' + database + designDoc + '/_view/' + viewName;
+  },
+
+  query: function (database, designDoc, viewName, query) {
+    return 'database/' + database + '/_design/' + designDoc + '/_view/' + viewName + getQueryParam(query);
   }
 });
 

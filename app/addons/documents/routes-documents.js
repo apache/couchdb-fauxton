@@ -24,7 +24,6 @@ import SidebarActions from './sidebar/actions';
 import DesignDocInfoActions from './designdocinfo/actions';
 import ComponentsActions from '../components/actions';
 import QueryOptionsActions from './queryoptions/actions';
-import Constants from './constants';
 import {DocsTabsSidebarLayout, ViewsTabsSidebarLayout, ChangesSidebarLayout} from './layouts';
 
 var DocumentsRouteObject = BaseRoute.extend({
@@ -90,14 +89,6 @@ var DocumentsRouteObject = BaseRoute.extend({
         collection;
 
     const indexResultsStore = IndexResultStores.indexResultsStore;
-
-    // includes_docs = true if using table or JSON view
-    if (indexResultsStore.getSelectedLayout() !== Constants.LAYOUT_ORIENTATION.METADATA) {
-      docParams.include_docs = true;
-      urlParams = params.docParams;
-      var updatedURL = FauxtonAPI.urls('allDocs', 'app', databaseName, '?' + $.param(urlParams));
-      FauxtonAPI.navigate(updatedURL, {trigger: false, replace: true});
-    }
 
     this.database.buildAllDocs(docParams);
     collection = this.database.allDocs;

@@ -45,7 +45,8 @@ var TableRow = React.createClass({
     docChecked: React.PropTypes.func.isRequired,
     isSelected: React.PropTypes.bool.isRequired,
     index: React.PropTypes.number.isRequired,
-    data: React.PropTypes.object.isRequired
+    data: React.PropTypes.object.isRequired,
+    onDoubleClick: React.PropTypes.func.isRequired
   },
 
   onChange: function () {
@@ -74,21 +75,6 @@ var TableRow = React.createClass({
     }.bind(this));
 
     return row;
-  },
-
-  maybeGetSpecialField: function (element, i) {
-    if (!this.props.data.hasMetadata) {
-      return null;
-    }
-
-    var el = element.content;
-
-    return (
-      <td className="tableview-data-cell-id" key={'tableview-data-cell-id' + i}>
-        <div>{this.maybeGetUrl(element.url, el._id || el.id)}</div>
-        <div>{el._rev}</div>
-      </td>
-    );
   },
 
   maybeGetUrl: function (url, stringified) {
@@ -174,16 +160,19 @@ var TableRow = React.createClass({
     });
   },
 
+  onDoubleClick: function (e) {
+    this.props.onDoubleClick(this.props.el._id, this.props.el, e);
+  },
+
   render: function () {
     var i = this.props.index;
     var docContent = this.props.el.content;
     var el = this.props.el;
 
     return (
-      <tr key={"tableview-content-row-" + i}>
+      <tr key={"tableview-content-row-" + i} onDoubleClick={this.onDoubleClick}>
         {this.maybeGetCheckboxCell(el, i)}
         {this.getCopyButton(docContent)}
-        {this.maybeGetSpecialField(el, i)}
         {this.getRowContents(el, i)}
         {this.getAdditionalInfoRow(docContent)}
       </tr>
@@ -224,6 +213,7 @@ var TableView = React.createClass({
 
       return (
         <TableRow
+          onDoubleClick={this.props.onDoubleClick}
           key={"tableview-row-component-" + i}
           index={i}
           el={el}
@@ -265,19 +255,12 @@ var TableView = React.createClass({
 
   getHeader: function () {
     var selectedFields = this.props.data.selectedFields;
-
-    var specialField = null;
-    if (this.props.data.hasMetadata) {
-      specialField = (<th key="header-el-metadata" title="Metadata">Metadata</th>);
-    }
-
     var row = this.getOptionFieldRows(selectedFields);
 
     return (
       <tr key="tableview-content-row-header">
         <th className="tableview-header-el-checkbox"></th>
         <th className="tableview-el-copy"></th>
-        {specialField}
         {row}
         <th className="tableview-el-last"></th>
       </tr>
@@ -372,6 +355,7 @@ var ResultsScreen = React.createClass({
         </div>
 
         <TableView
+          onDoubleClick={this.onDoubleClick}
           docChecked={this.props.docChecked}
           isSelected={this.props.isSelected}
           isListDeletable={this.props.isListDeletable}
@@ -396,22 +380,11 @@ var ResultsScreen = React.createClass({
       loadLines = <LoadLines />;
     }
 
-    switch (this.props.selectedLayout) {
-      case Constants.LAYOUT_ORIENTATION.TABLE:
-        mainView = this.getTableStyleView(loadLines);
-      break;
-
-      case Constants.LAYOUT_ORIENTATION.METADATA:
-        mainView = this.getTableStyleView(loadLines);
-      break;
-
-      case Constants.LAYOUT_ORIENTATION.JSON:
-        mainView = this.getDocumentStyleView(loadLines);
-      break;
-
-      default:
-        mainView = this.getTableStyleView(loadLines);
-    };
+    if (this.props.selectedLayout === Constants.LAYOUT_ORIENTATION.JSON) {
+      mainView = this.getDocumentStyleView(loadLines);
+    } else {
+      mainView = this.getTableStyleView(loadLines);
+    }
 
     return (
       <div className="document-result-screen">

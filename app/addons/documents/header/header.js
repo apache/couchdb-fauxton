@@ -79,7 +79,7 @@ var BulkDocumentHeaderController = React.createClass({
 
   toggleLayout: function (layout) {
     Actions.toggleLayout(layout);
-    Actions.toggleIncludeDocs(layout === Constants.LAYOUT_ORIENTATION.METADATA, this.state.bulkDocCollection);
+    Actions.toggleIncludeDocs(layout !== Constants.LAYOUT_ORIENTATION.TABLE, this.state.bulkDocCollection);
   }
 });
 
