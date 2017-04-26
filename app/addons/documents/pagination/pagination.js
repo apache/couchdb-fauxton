@@ -135,6 +135,7 @@ var AllDocsNumberController = React.createClass({
   getStoreState: function () {
     const isLoading = indexResultsStore.isLoading();
     return {
+      hasResults: indexResultsStore.hasResults(),
       totalRows: indexResultsStore.getTotalRows(),
       pageStart: indexResultsStore.getPageStart(),
       pageEnd: indexResultsStore.getPageEnd(),
@@ -178,13 +179,14 @@ var AllDocsNumberController = React.createClass({
   },
 
   render: function () {
-    var showTableControls = this.state.showPrioritizedFieldToggler;
+    const showTableControls = this.state.showPrioritizedFieldToggler;
+    const hasResults = this.state.hasResults;
 
     return (
       <div className="footer-controls">
 
         <div className="page-controls">
-          {showTableControls ?
+          {showTableControls && hasResults ?
             <TableControls
               prioritizedEnabled={this.state.prioritizedEnabled}
               displayedFields={this.state.displayedFields} /> : null}

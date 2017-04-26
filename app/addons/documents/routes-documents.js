@@ -111,6 +111,7 @@ var DocumentsRouteObject = BaseRoute.extend({
     IndexResultsActions.newResultsList({
       collection: collection,
       textEmptyIndex: 'No Documents Found',
+      typeOfIndex: 'view',
       bulkCollection: new Documents.BulkDeleteDocCollection(frozenCollection, { databaseId: this.database.safeID() }),
     });
 

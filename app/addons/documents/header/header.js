@@ -25,7 +25,8 @@ var BulkDocumentHeaderController = React.createClass({
     return {
       selectedView: indexResultsStore.getCurrentViewType(),
       selectedLayout: indexResultsStore.getSelectedLayout(),
-      bulkDocCollection: indexResultsStore.getBulkDocCollection()
+      bulkDocCollection: indexResultsStore.getBulkDocCollection(),
+      isMango: indexResultsStore.getIsMangoResults()
     };
   },
 
@@ -50,6 +51,13 @@ var BulkDocumentHeaderController = React.createClass({
 
   render () {
     const layout = this.state.selectedLayout;
+    const metadata = this.state.isMango ? null :
+          <Button
+            className={layout === Constants.LAYOUT_ORIENTATION.METADATA ? 'active' : ''}
+            onClick={this.toggleLayout.bind(this, Constants.LAYOUT_ORIENTATION.METADATA)}
+          >
+            Metadata
+          </Button>;
 
     return (
       <div className="alternative-header">
@@ -60,12 +68,7 @@ var BulkDocumentHeaderController = React.createClass({
           >
             <i className="fonticon-table" /> Table
           </Button>
-          <Button
-            className={layout === Constants.LAYOUT_ORIENTATION.METADATA ? 'active' : ''}
-            onClick={this.toggleLayout.bind(this, Constants.LAYOUT_ORIENTATION.METADATA)}
-          >
-            Metadata
-          </Button>
+          {metadata}
           <Button
             className={layout === Constants.LAYOUT_ORIENTATION.JSON ? 'active' : ''}
             onClick={this.toggleLayout.bind(this, Constants.LAYOUT_ORIENTATION.JSON)}
@@ -79,7 +82,9 @@ var BulkDocumentHeaderController = React.createClass({
 
   toggleLayout: function (layout) {
     Actions.toggleLayout(layout);
-    Actions.toggleIncludeDocs(layout !== Constants.LAYOUT_ORIENTATION.TABLE, this.state.bulkDocCollection);
+    if (!this.state.isMango) {
+      Actions.toggleIncludeDocs(layout !== Constants.LAYOUT_ORIENTATION.TABLE, this.state.bulkDocCollection);
+    }
   }
 });
 

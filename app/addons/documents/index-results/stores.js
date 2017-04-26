@@ -306,31 +306,14 @@ Stores.IndexResultsStore = FauxtonAPI.Store.extend({
   },
 
   getResults: function () {
-    switch (this._selectedLayout) {
-      case Constants.LAYOUT_ORIENTATION.TABLE:
-        return this.getTableViewData();
-      break;
-
-      case Constants.LAYOUT_ORIENTATION.METADATA:
-        return this.getTableViewData();
-      break;
-
-      case Constants.LAYOUT_ORIENTATION.JSON:
-        return this.getJsonViewData();
-      break;
-
-      default:
-        return this.getJsonViewData();
-    };
+    if (this._selectedLayout === Constants.LAYOUT_ORIENTATION.JSON) {
+      return this.getJsonViewData();
+    } else {
+      return this.getTableViewData();
+    }
   },
 
   getJsonViewData: function () {
-    // switch to metadata if the include docs flag was manually removed
-    /*if (!this.isIncludeDocsEnabled()) {
-      this.toggleLayout({layout: Constants.LAYOUT_ORIENTATION.METADATA});
-      return this.getResults();
-    }*/
-
     var hasBulkDeletableDoc;
     var res;
 
@@ -472,7 +455,7 @@ Stores.IndexResultsStore = FauxtonAPI.Store.extend({
       return null;
     }
 
-    if (!this.isIncludeDocsEnabled()) {
+    if (!this.isIncludeDocsEnabled() && !this.getIsMangoResults()) {
       return null;
     }
 
@@ -540,7 +523,7 @@ Stores.IndexResultsStore = FauxtonAPI.Store.extend({
     let notSelectedFields = null;
     let schema;  // array containing the unique attr keys in the results.  always begins with _id.
 
-    if (this.isIncludeDocsEnabled()) {
+    if (this.isIncludeDocsEnabled() || this.getIsMangoResults()) {
       // ensure the right layout state in case user manually added include_docs
       this.toggleLayout({layout: Constants.LAYOUT_ORIENTATION.TABLE});
 
@@ -754,6 +737,10 @@ Stores.IndexResultsStore = FauxtonAPI.Store.extend({
     return this._selectedLayout === Constants.LAYOUT_ORIENTATION.TABLE;
   },
 
+  getIsMangoResults: function () {
+    return this._typeOfIndex === 'mango';
+  },
+
   getIsPrioritizedEnabled: function () {
     return this._isPrioritizedEnabled;
   },
@@ -768,7 +755,7 @@ Stores.IndexResultsStore = FauxtonAPI.Store.extend({
   },
 
   getShowPrioritizedFieldToggler: function () {
-    return this.isIncludeDocsEnabled() && this.getIsTableView();
+    return (this.isIncludeDocsEnabled() || this.getIsMangoResults()) && this.getIsTableView();
   },
 
   clearResultsBeforeFetch: function () {

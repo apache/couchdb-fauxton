@@ -68,6 +68,7 @@ const MangoIndexEditorAndQueryEditor = FauxtonAPI.RouteObject.extend({
     IndexResultsActions.newMangoResultsList({
       collection: mangoResultCollection,
       textEmptyIndex: 'No Results',
+      typeOfIndex: 'mango',
       bulkCollection: new Resources.BulkDeleteDocCollection([], { databaseId: this.database.safeID() }),
     });
 
@@ -85,7 +86,6 @@ const MangoIndexEditorAndQueryEditor = FauxtonAPI.RouteObject.extend({
     ];
 
     return <MangoLayout
-      showIncludeAllDocs={false}
       crumbs={crumbs}
       docURL={FauxtonAPI.constants.DOC_URLS.MANGO_SEARCH}
       endpoint={mangoResultCollection.urlRef('query-apiurl', '')}

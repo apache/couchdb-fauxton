@@ -13,7 +13,6 @@
 import React from 'react';
 import app from "../../app";
 import ReactPagination from "./pagination/pagination";
-import ReactHeader from "./header/header";
 import {Breadcrumbs} from '../components/header-breadcrumbs';
 import {NotificationCenterButton} from '../fauxton/notifications/notifications';
 import {ApiBarWrapper} from '../components/layouts';
@@ -21,12 +20,9 @@ import MangoComponents from "./mango/mango.components";
 import IndexResultsComponents from "./index-results/index-results.components";
 
 
-export const RightHeader = ({showIncludeAllDocs, docURL, endpoint}) => {
+export const RightHeader = ({docURL, endpoint}) => {
   return (
     <div className="right-header-wrapper flex-layout flex-row flex-body">
-      <div id="react-headerbar" className="flex-body">
-        <ReactHeader.BulkDocumentHeaderController showIncludeAllDocs={showIncludeAllDocs} />
-      </div>
       <div id="right-header" className="flex-body">
       </div>
       <ApiBarWrapper docURL={docURL} endpoint={endpoint} />
@@ -45,14 +41,13 @@ export const MangoFooter = () => {
   );
 };
 
-export const MangoHeader = ({showIncludeAllDocs, crumbs, docURL, endpoint}) => {
+export const MangoHeader = ({crumbs, docURL, endpoint}) => {
   return (
     <div className="header-wrapper flex-layout flex-row">
       <div className='flex-body faux__breadcrumbs-mango-header'>
         <Breadcrumbs crumbs={crumbs}/>
       </div>
       <RightHeader
-        showIncludeAllDocs={showIncludeAllDocs}
         docURL={docURL}
         endpoint={endpoint}
       />
@@ -91,11 +86,10 @@ const MangoContent = ({edit, designDocs}) => {
 };
 
 
-export const MangoLayout = ({edit, showIncludeAllDocs, docURL, endpoint, crumbs, designDocs}) => {
+export const MangoLayout = ({edit, docURL, endpoint, crumbs, designDocs}) => {
   return (
     <div id="dashboard" className="two-pane flex-layout flex-col">
       <MangoHeader
-        showIncludeAllDocs={showIncludeAllDocs}
         docURL={docURL}
         endpoint={endpoint}
         crumbs={crumbs}
