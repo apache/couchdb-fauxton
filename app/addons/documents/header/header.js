@@ -23,7 +23,6 @@ const { queryOptionsStore } = QueryOptionsStore;
 var BulkDocumentHeaderController = React.createClass({
   getStoreState () {
     return {
-      selectedView: indexResultsStore.getCurrentViewType(),
       selectedLayout: indexResultsStore.getSelectedLayout(),
       bulkDocCollection: indexResultsStore.getBulkDocCollection(),
       isMango: indexResultsStore.getIsMangoResults()
@@ -83,7 +82,7 @@ var BulkDocumentHeaderController = React.createClass({
   toggleLayout: function (layout) {
     Actions.toggleLayout(layout);
     if (!this.state.isMango) {
-      Actions.toggleIncludeDocs(layout !== Constants.LAYOUT_ORIENTATION.TABLE, this.state.bulkDocCollection);
+      Actions.toggleIncludeDocs(layout === Constants.LAYOUT_ORIENTATION.METADATA, this.state.bulkDocCollection);
     }
   }
 });

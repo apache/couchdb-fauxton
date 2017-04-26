@@ -46,7 +46,7 @@ var TableRow = React.createClass({
     isSelected: React.PropTypes.bool.isRequired,
     index: React.PropTypes.number.isRequired,
     data: React.PropTypes.object.isRequired,
-    onDoubleClick: React.PropTypes.func.isRequired
+    onClick: React.PropTypes.func.isRequired
   },
 
   onChange: function () {
@@ -160,8 +160,8 @@ var TableRow = React.createClass({
     });
   },
 
-  onDoubleClick: function (e) {
-    this.props.onDoubleClick(this.props.el._id, this.props.el, e);
+  onClick: function (e) {
+    this.props.onClick(this.props.el._id, this.props.el, e);
   },
 
   render: function () {
@@ -170,7 +170,7 @@ var TableRow = React.createClass({
     var el = this.props.el;
 
     return (
-      <tr key={"tableview-content-row-" + i} onDoubleClick={this.onDoubleClick}>
+      <tr key={"tableview-content-row-" + i} onClick={this.onClick}>
         {this.maybeGetCheckboxCell(el, i)}
         {this.getCopyButton(docContent)}
         {this.getRowContents(el, i)}
@@ -213,7 +213,7 @@ var TableView = React.createClass({
 
       return (
         <TableRow
-          onDoubleClick={this.props.onDoubleClick}
+          onClick={this.props.onClick}
           key={"tableview-row-component-" + i}
           index={i}
           el={el}
@@ -289,7 +289,7 @@ var TableView = React.createClass({
 
 var ResultsScreen = React.createClass({
 
-  onDoubleClick: function (id, doc) {
+  onClick: function (id, doc) {
     FauxtonAPI.navigate(doc.url);
   },
 
@@ -313,7 +313,7 @@ var ResultsScreen = React.createClass({
        <Components.Document
          key={doc.id + i}
          doc={doc}
-         onDoubleClick={this.props.isEditable ? this.onDoubleClick : noop}
+         onClick={this.props.isEditable ? this.onClick : noop}
          keylabel={doc.keylabel}
          docContent={doc.content}
          checked={this.props.isSelected(doc.id)}
@@ -327,7 +327,7 @@ var ResultsScreen = React.createClass({
     }, this);
   },
 
-  getDocumentStyleView: function (loadLines) {
+  getDocumentStyleView: function () {
     let classNames = 'view';
 
     if (this.props.isListDeletable) {
@@ -336,10 +336,6 @@ var ResultsScreen = React.createClass({
 
     return (
       <div className={classNames}>
-        <div className="loading-lines-wrapper">
-          {loadLines}
-        </div>
-
         <div id="doc-list">
           {this.getDocumentList()}
         </div>
@@ -347,15 +343,11 @@ var ResultsScreen = React.createClass({
     );
   },
 
-  getTableStyleView: function (loadLines) {
+  getTableStyleView: function () {
     return (
       <div>
-        <div className="loading-lines-wrapper">
-          {loadLines}
-        </div>
-
         <TableView
-          onDoubleClick={this.onDoubleClick}
+          onClick={this.onClick}
           docChecked={this.props.docChecked}
           isSelected={this.props.isSelected}
           isListDeletable={this.props.isListDeletable}
@@ -372,23 +364,23 @@ var ResultsScreen = React.createClass({
   },
 
   render: function () {
-
-    let loadLines = null;
     let mainView = null;
+    let toolbar = <ResultsToolBar toggleSelectAll={this.toggleSelectAll} {...this.props} />;
 
     if (this.props.isLoading) {
-      loadLines = <LoadLines />;
-    }
-
-    if (this.props.selectedLayout === Constants.LAYOUT_ORIENTATION.JSON) {
-      mainView = this.getDocumentStyleView(loadLines);
+      mainView = <div className="loading-lines-wrapper"><LoadLines /></div>;
+    } else if (!this.props.hasResults) {
+      toolbar = null;
+      mainView = <NoResultsScreen text={this.props.textEmptyIndex}/>;
+    } else if (this.props.selectedLayout === Constants.LAYOUT_ORIENTATION.JSON) {
+      mainView = this.getDocumentStyleView();
     } else {
-      mainView = this.getTableStyleView(loadLines);
+      mainView = this.getTableStyleView();
     }
 
     return (
       <div className="document-result-screen">
-        <ResultsToolBar toggleSelectAll={this.toggleSelectAll} {...this.props} />
+        {toolbar}
         {mainView}
       </div>
     );
@@ -464,14 +456,8 @@ var ViewResultListController = React.createClass({
   },
 
   render: function () {
-    if (this.state.isLoading) {
-      return <LoadLines />;
-    }
-
-    var view = <NoResultsScreen text={this.state.textEmptyIndex}/>;
-
-    if (this.state.hasResults) {
-      view = <ResultsScreen
+    return (
+      <ResultsScreen
         removeItem={this.removeItem}
         hasSelectedItem={this.state.hasSelectedItem}
         allDocumentsSelected={this.state.allDocumentsSelected}
@@ -480,16 +466,13 @@ var ViewResultListController = React.createClass({
         isListDeletable={this.state.results.hasBulkDeletableDoc}
         docChecked={this.docChecked}
         isLoading={this.state.isLoading}
+        hasResults={this.state.hasResults}
+        textEmptyIndex={this.state.textEmptyIndex}
         results={this.state.results}
-        selectedLayout={this.state.selectedLayout} />;
-    }
-
-    return (
-      view
+        selectedLayout={this.state.selectedLayout} />
     );
   }
 });
-
 
 export default {
   List: ViewResultListController,

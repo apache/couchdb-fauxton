@@ -74,8 +74,8 @@ export const Document = React.createClass({
     );
   },
 
-  onDoubleClick (e) {
-    this.props.onDoubleClick(this.props.docIdentifier, this.props.doc, e);
+  onClick (e) {
+    this.props.onClick(this.props.docIdentifier, this.props.doc, e);
   },
 
   getDocContent () {
@@ -102,7 +102,7 @@ export const Document = React.createClass({
 
   render () {
     return (
-      <div data-id={this.props.docIdentifier} onDoubleClick={this.onDoubleClick} className="doc-row">
+      <div data-id={this.props.docIdentifier} onClick={this.onClick} className="doc-row">
         <div className="custom-inputs">
           {this.getCheckbox()}
         </div>

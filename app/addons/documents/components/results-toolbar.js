@@ -18,24 +18,38 @@ const {BulkDocumentHeaderController} = Header;
 const {BulkActionComponent} = Components;
 const store = Stores.sidebarStore;
 
-export const ResultsToolBar = ({removeItem, allDocumentsSelected, hasSelectedItem, toggleSelectAll, isLoading, isListDeletable}) => {
-  const dbName = store.getDatabase().id;
+export class ResultsToolBar extends React.Component {
+  shouldComponentUpdate (nextProps) {
+    return nextProps.isListDeletable != undefined;
+  }
 
-  return (
-    <div className="document-result-screen__toolbar">
-      {isListDeletable ? <BulkActionComponent
-        removeItem={removeItem}
-        isChecked={allDocumentsSelected}
-        hasSelectedItem={hasSelectedItem}
-        toggleSelect={toggleSelectAll}
-        disabled={isLoading}
-        title="Select all docs that can be..." /> : null}
-      <BulkDocumentHeaderController />
-      <div className="document-result-screen__toolbar-flex-container">
-        <a href={`#/database/${dbName}/new`} className="btn save document-result-screen__toolbar-create-btn btn-primary">
-          Create Document
-        </a>
+  render () {
+    const dbName = store.getDatabase().id;
+    return (
+      <div className="document-result-screen__toolbar">
+        {this.props.isListDeletable ? <BulkActionComponent
+          removeItem={this.props.removeItem}
+          isChecked={this.props.allDocumentsSelected}
+          hasSelectedItem={this.props.hasSelectedItem}
+          toggleSelect={this.props.toggleSelectAll}
+          disabled={this.props.isLoading}
+          title="Select all docs that can be..." /> : null}
+        <BulkDocumentHeaderController />
+        <div className="document-result-screen__toolbar-flex-container">
+          <a href={`#/database/${dbName}/new`} className="btn save document-result-screen__toolbar-create-btn btn-primary">
+            Create Document
+          </a>
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
+};
+
+ResultsToolBar.propTypes = {
+  removeItem: React.PropTypes.func.isRequired,
+  allDocumentsSelected: React.PropTypes.bool.isRequired,
+  hasSelectedItem: React.PropTypes.bool.isRequired,
+  toggleSelectAll: React.PropTypes.func.isRequired,
+  isLoading: React.PropTypes.bool.isRequired,
+  isListDeletable: React.PropTypes.bool
 };

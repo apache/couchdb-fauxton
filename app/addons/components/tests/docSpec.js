@@ -81,14 +81,14 @@ describe('Document', function () {
     assert.ok(spy.calledOnce);
   });
 
-  it('it calls an dblclick callback', function () {
+  it('it calls an onclick callback', function () {
     var spy = sinon.spy();
 
     el = TestUtils.renderIntoDocument(
-      <ReactComponents.Document isDeletable={true} onDoubleClick={spy} docIdentifier="foo" />,
+      <ReactComponents.Document isDeletable={true} onClick={spy} docIdentifier="foo" />,
       container
     );
-    TestUtils.Simulate.doubleClick(ReactDOM.findDOMNode(el));
+    TestUtils.Simulate.click(ReactDOM.findDOMNode(el));
     assert.ok(spy.calledOnce);
   });
 

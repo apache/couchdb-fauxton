@@ -188,6 +188,15 @@ Stores.IndexResultsStore = FauxtonAPI.Store.extend({
       this._typeOfIndex = options.typeOfIndex;
     }
 
+    // layout shifting magic to support refreshes, query options, and results toolbar
+    if (this.getIsMetadataView() && (this.isIncludeDocsEnabled() || this.getIsMangoResults())) {
+      this._selectedLayout = Constants.LAYOUT_ORIENTATION.TABLE;
+    }
+
+    if (!this.getIsMetadataView() && !this.isIncludeDocsEnabled() && !this.getIsMangoResults()) {
+      this._selectedLayout = Constants.LAYOUT_ORIENTATION.METADATA;
+    }
+
     this._cachedSelected = [];
 
     this._filteredCollection = this._collection.filter(filterOutGeneratedMangoDocs);
@@ -314,11 +323,8 @@ Stores.IndexResultsStore = FauxtonAPI.Store.extend({
   },
 
   getJsonViewData: function () {
-    var hasBulkDeletableDoc;
-    var res;
-
     // JSON style views
-    res = this._filteredCollection
+    const res = this._filteredCollection
       .map(function (doc, i) {
         if (doc.get('def') || this.isGhostDoc(doc)) {
           return this.getMangoDoc(doc, i);
@@ -335,11 +341,9 @@ Stores.IndexResultsStore = FauxtonAPI.Store.extend({
         };
       }, this);
 
-    hasBulkDeletableDoc = this.hasBulkDeletableDoc(this._filteredCollection);
-
     return {
       displayedFields: this.getDisplayCountForTableView(),
-      hasBulkDeletableDoc: hasBulkDeletableDoc,
+      hasBulkDeletableDoc: this.hasBulkDeletableDoc(this._filteredCollection),
       results: res
     };
   },
@@ -392,6 +396,7 @@ Stores.IndexResultsStore = FauxtonAPI.Store.extend({
       return el;
     });
 
+    delete res.id;
     delete res._rev;
 
     res = Object.keys(res).reduce(function (acc, el) {
@@ -452,10 +457,6 @@ Stores.IndexResultsStore = FauxtonAPI.Store.extend({
     var shownCount;
 
     if (!this.getIsTableView()) {
-      return null;
-    }
-
-    if (!this.isIncludeDocsEnabled() && !this.getIsMangoResults()) {
       return null;
     }
 
@@ -524,9 +525,6 @@ Stores.IndexResultsStore = FauxtonAPI.Store.extend({
     let schema;  // array containing the unique attr keys in the results.  always begins with _id.
 
     if (this.isIncludeDocsEnabled() || this.getIsMangoResults()) {
-      // ensure the right layout state in case user manually added include_docs
-      this.toggleLayout({layout: Constants.LAYOUT_ORIENTATION.TABLE});
-
       const isView = !!this._collection.view;
       // remove "cruft" we don't want to display in the results
       data = this.normalizeTableData(data, isView);
@@ -561,9 +559,6 @@ Stores.IndexResultsStore = FauxtonAPI.Store.extend({
       // METADATA view.
       // Build the schema based on the original data and then remove _attachment and value meta
       // attributes.
-
-      // ensure the right layout in case user manually removed include_docs
-      this.toggleLayout({layout: Constants.LAYOUT_ORIENTATION.METADATA});
       schema = this.getPseudoSchema(data);
       this._tableViewSelectedFields = _.without(schema, '_attachment');
     }
@@ -735,6 +730,10 @@ Stores.IndexResultsStore = FauxtonAPI.Store.extend({
 
   getIsTableView: function () {
     return this._selectedLayout === Constants.LAYOUT_ORIENTATION.TABLE;
+  },
+
+  getIsMetadataView: function () {
+    return this._selectedLayout === Constants.LAYOUT_ORIENTATION.METADATA;
   },
 
   getIsMangoResults: function () {
