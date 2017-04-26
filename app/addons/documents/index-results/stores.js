@@ -461,15 +461,7 @@ Stores.IndexResultsStore = FauxtonAPI.Store.extend({
     }
 
     shownCount = _.uniq(this._tableViewSelectedFields).length;
-
-    allFieldCount = this._tableSchema.length;
-    if (_.includes(this._tableSchema, '_id', '_rev')) {
-      allFieldCount = allFieldCount - 1;
-    }
-
-    if (_.includes(this._tableSchema, '_id', '_rev')) {
-      shownCount = shownCount + 1;
-    }
+    allFieldCount = _.without(this._tableSchema, '_attachments').length;
 
     return {shown: shownCount, allFieldCount: allFieldCount};
   },
@@ -477,7 +469,7 @@ Stores.IndexResultsStore = FauxtonAPI.Store.extend({
   getTableViewData: function () {
     // softmigration remove backbone
     const collectionType = this._collection.collectionType;
-    let data = this._filteredCollection.map(function (el) {
+    let data = this._filteredCollection.map(el => {
       return fixDocIdForMango(el.toJSON(), collectionType);
     });
 
@@ -545,7 +537,7 @@ Stores.IndexResultsStore = FauxtonAPI.Store.extend({
       }
 
       // set the notSelectedFields to the subset excluding meta and selected attributes
-      const schemaWithoutMetaDataFields = _.without(schema, '_id', '_rev', '_attachment');
+      const schemaWithoutMetaDataFields = _.without(schema, '_attachments');
       notSelectedFields = this.getNotSelectedFields(this._tableViewSelectedFields, schemaWithoutMetaDataFields);
 
       // if we're showing all attr/columns, we revert the notSelectedFields to null and set
@@ -560,7 +552,7 @@ Stores.IndexResultsStore = FauxtonAPI.Store.extend({
       // Build the schema based on the original data and then remove _attachment and value meta
       // attributes.
       schema = this.getPseudoSchema(data);
-      this._tableViewSelectedFields = _.without(schema, '_attachment');
+      this._tableViewSelectedFields = _.without(schema, '_attachments');
     }
 
     this._notSelectedFields = notSelectedFields;
