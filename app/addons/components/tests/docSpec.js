@@ -88,7 +88,7 @@ describe('Document', function () {
       <ReactComponents.Document isDeletable={true} onClick={spy} docIdentifier="foo" />,
       container
     );
-    TestUtils.Simulate.click(ReactDOM.findDOMNode(el));
+    TestUtils.Simulate.click($(ReactDOM.findDOMNode(el)).find('.doc-item')[0]);
     assert.ok(spy.calledOnce);
   });
 
