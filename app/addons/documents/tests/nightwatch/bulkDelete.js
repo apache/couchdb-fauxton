@@ -26,6 +26,7 @@ module.exports = {
       .createDocument(newDocumentName1, newDatabaseName)
       .createDocument(newDocumentName2, newDatabaseName)
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
+      .clickWhenVisible('.fonticon-json')
       .waitForElementPresent('.bulk-action-component-selector-group', waitTime, false)
 
       // ensures page content has loaded before proceeding
@@ -57,6 +58,7 @@ module.exports = {
       .loginToGUI()
       .createManyDocuments(25, newDatabaseName)
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
+      .clickWhenVisible('.fonticon-json')
 
       // ensures page content has loaded before proceeding
       .waitForElementVisible('.prettyprint', waitTime, false)

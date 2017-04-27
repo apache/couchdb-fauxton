@@ -44,6 +44,7 @@ module.exports = {
       .clickWhenVisible('[data-id="button-select-theirs"]')
       .clickWhenVisible('.modal-footer input[type="checkbox"]')
       .clickWhenVisible('.modal-footer button.btn-danger')
+      .clickWhenVisible('.fonticon-json')
 
       .clickWhenVisible('[data-id="zebra"] a')
 

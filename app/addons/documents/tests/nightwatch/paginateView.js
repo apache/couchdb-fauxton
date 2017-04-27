@@ -27,6 +27,7 @@ module.exports = {
       .waitForElementVisible('#dashboard-content table.databases', waitTime, false)
 
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_design/keyview/_view/keyview')
+      .clickWhenVisible('.fonticon-json')
 
       .waitForElementPresent('.control-toggle-queryoptions', waitTime, false)
 
@@ -62,6 +63,7 @@ module.exports = {
       .waitForElementVisible('#dashboard-content table.databases', waitTime, false)
 
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_design/keyview/_view/keyview')
+      .clickWhenVisible('.fonticon-json')
       .waitForElementPresent('.control-toggle-queryoptions', waitTime, false)
 
       // ensure the page content has loaded
@@ -97,6 +99,7 @@ module.exports = {
       .waitForElementVisible('#dashboard-content table.databases', waitTime, false)
 
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_design/keyview/_view/keyview')
+      .clickWhenVisible('.fonticon-json')
       .waitForElementPresent('.control-toggle-queryoptions', waitTime, false)
 
       // ensure the page content has loaded

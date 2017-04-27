@@ -88,8 +88,6 @@ var DocumentsRouteObject = BaseRoute.extend({
         docParams = params.docParams,
         collection;
 
-    const indexResultsStore = IndexResultStores.indexResultsStore;
-
     this.database.buildAllDocs(docParams);
     collection = this.database.allDocs;
 
@@ -115,7 +113,7 @@ var DocumentsRouteObject = BaseRoute.extend({
       bulkCollection: new Documents.BulkDeleteDocCollection(frozenCollection, { databaseId: this.database.safeID() }),
     });
 
-    this.database.allDocs.paging.pageSize = indexResultsStore.getPerPage();
+    this.database.allDocs.paging.pageSize = IndexResultStores.indexResultsStore.getPerPage();
 
     const endpoint = this.database.allDocs.urlRef("apiurl", urlParams);
     const docURL = this.database.allDocs.documentation();

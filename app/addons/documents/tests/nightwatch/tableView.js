@@ -14,7 +14,7 @@
 
 module.exports = {
 
-  'Shows data in the table for all docs (include docs enabled)': function (client) {
+  'Shows data in the full table for all docs (include docs enabled)': function (client) {
     var waitTime = client.globals.maxWaitTime,
         newDatabaseName = client.globals.testDatabaseName,
         newDocumentName1 = 'bulktest1',
@@ -28,10 +28,9 @@ module.exports = {
       .checkForDocumentCreated(newDocumentName1)
       .checkForDocumentCreated(newDocumentName2)
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs?include_docs=true')
-      .waitForElementVisible('.prettyprint', waitTime, false)
+      .assert.cssClassPresent('button.active i', 'fonticon-table')
 
-      .clickWhenVisible('.alternative-header .two-sides-toggle-button button:last-child')
-      .waitForElementVisible('.tableview-checkbox-cell', client.globals.maxWaitTime, false)
+      .waitForElementVisible('.tableview-checkbox-cell', waitTime, false)
       .getText('.table', function (result) {
         var data = result.value;
 
@@ -46,7 +45,7 @@ module.exports = {
       .end();
   },
 
-  'Shows data in the table for all docs (include docs disabled)': function (client) {
+  'Shows data in the metadata table for all docs (include docs disabled)': function (client) {
     var waitTime = client.globals.maxWaitTime,
         newDatabaseName = client.globals.testDatabaseName,
         newDocumentName1 = 'bulktest1',
@@ -60,10 +59,8 @@ module.exports = {
       .checkForDocumentCreated(newDocumentName1)
       .checkForDocumentCreated(newDocumentName2)
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
-      .waitForElementVisible('.prettyprint', waitTime, false)
-
-      .clickWhenVisible('.alternative-header .two-sides-toggle-button button:last-child')
-      .waitForElementVisible('.tableview-checkbox-cell', client.globals.maxWaitTime, false)
+      .assert.containsText('button.active', 'Metadata')
+      .waitForElementVisible('.tableview-checkbox-cell', waitTime, false)
       .getText('.table', function (result) {
         var data = result.value;
 

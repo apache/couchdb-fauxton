@@ -77,18 +77,6 @@ var TableRow = React.createClass({
     return row;
   },
 
-  maybeGetUrl: function (url, stringified) {
-    if (!url) {
-      return stringified;
-    }
-
-    return (
-      <a href={'#' + url}>
-        {stringified}
-      </a>
-    );
-  },
-
   maybeGetCheckboxCell: function (el, i) {
     return (
       <td className="tableview-checkbox-cell" key={"tableview-checkbox-cell-" + i}>

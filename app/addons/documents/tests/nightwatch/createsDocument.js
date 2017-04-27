@@ -44,6 +44,7 @@ module.exports = {
       .clickWhenVisible('#doc-editor-actions-panel .save-doc')
       .checkForDocumentCreated(newDocumentName)
       .url(baseUrl + '#/database/' + newDatabaseName + '/_all_docs')
+      .clickWhenVisible('.fonticon-json')
       .waitForElementVisible('.prettyprint', waitTime, false)
       .getText('.prettyprint', function (result) {
         const data = result.value;

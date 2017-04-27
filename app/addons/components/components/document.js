@@ -102,11 +102,11 @@ export const Document = React.createClass({
 
   render () {
     return (
-      <div data-id={this.props.docIdentifier} onClick={this.onClick} className="doc-row">
+      <div data-id={this.props.docIdentifier} className="doc-row">
         <div className="custom-inputs">
           {this.getCheckbox()}
         </div>
-        <div className="doc-item">
+        <div className="doc-item" onClick={this.onClick}>
           <header>
             <span className="header-keylabel">
               {this.props.keylabel}

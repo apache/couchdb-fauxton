@@ -24,6 +24,7 @@ module.exports = {
       .populateDatabase(newDatabaseName)
       .loginToGUI()
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_design/testdesigndoc/_view/stubview')
+      .clickWhenVisible('.fonticon-json')
       .waitForElementPresent('.prettyprint', waitTime, false)
       .assert.containsText('.prettyprint', 'stub')
       .clickWhenVisible('.index-list .active span', waitTime, true)

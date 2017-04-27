@@ -24,6 +24,7 @@ module.exports = {
       .populateDatabase(newDatabaseName)
       .loginToGUI()
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
+      .clickWhenVisible('.fonticon-json')
 
       // ensures the main body (results list) has been rendered
       .waitForElementPresent('.prettyprint', waitTime, false)
@@ -55,6 +56,7 @@ module.exports = {
       .populateDatabase(newDatabaseName)
       .loginToGUI()
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
+      .clickWhenVisible('.fonticon-json')
 
       // ensures the main body (results list) has been rendered
       .waitForElementPresent('.prettyprint', waitTime, false)
@@ -80,6 +82,7 @@ module.exports = {
       .populateDatabase(newDatabaseName)
       .loginToGUI()
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
+      .clickWhenVisible('.fonticon-json')
 
       // ensures the main body (results list) has been rendered
       .waitForElementPresent('.prettyprint', waitTime, false)

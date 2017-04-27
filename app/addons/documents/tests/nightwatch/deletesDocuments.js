@@ -28,6 +28,7 @@ module.exports = {
       .url(baseUrl)
       .waitForElementPresent('#dashboard-content a[href="database/' + newDatabaseName + '/_all_docs"]', waitTime, false)
       .clickWhenVisible('#dashboard-content a[href="database/' + newDatabaseName + '/_all_docs"]', waitTime, false)
+      .clickWhenVisible('.fonticon-json')
       .waitForElementVisible('label[for="checkbox-' + newDocumentName + '"]', waitTime, false)
       .clickWhenVisible('label[for="checkbox-' + newDocumentName + '"]', waitTime, false)
       .clickWhenVisible('.bulk-action-component-selector-group button.fonticon-trash', waitTime, false)
@@ -75,13 +76,14 @@ module.exports = {
       .populateDatabase(newDatabaseName)
       .createDocument(designDoc._id, newDatabaseName, designDoc)
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
+      .clickWhenVisible('.fonticon-json')
       .waitForElementPresent('.prettyprint', waitTime, false)
       .waitForElementNotPresent('.loading-lines', waitTime, false)
 
       // confirm the design doc appears in the sidebar
       .waitForElementPresent('#sidebar-content span[title="_design/sidebar-update"]', waitTime, false)
       .waitForElementPresent('label[for="checkbox-_design/sidebar-update"]', waitTime, false)
-      .execute('$("label[for=\'checkbox-_design/sidebar-update\']")[0].scrollIntoView();')
+      .execute('$("div[data-id=\'_design/sidebar-update\']")[0].scrollIntoView();')
       .clickWhenVisible('label[for="checkbox-_design/sidebar-update"]', waitTime, false)
 
       .waitForElementPresent('.bulk-action-component-selector-group .fonticon-trash', waitTime, false)
