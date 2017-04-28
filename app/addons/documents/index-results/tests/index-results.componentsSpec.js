@@ -50,7 +50,7 @@ describe('Index Results', function () {
       IndexResultsActions.resultsListReset();
 
       instance = TestUtils.renderIntoDocument(<Views.List />, container);
-      var $el = $(ReactDOM.findDOMNode(instance));
+      var $el = $(ReactDOM.findDOMNode(instance)).find('.no-results-screen');
       assert.equal($el.text(), 'No Documents Found');
     });
 
@@ -73,7 +73,7 @@ describe('Index Results', function () {
 
 
       instance = TestUtils.renderIntoDocument(<Views.List />, container);
-      var $el = $(ReactDOM.findDOMNode(instance));
+      var $el = $(ReactDOM.findDOMNode(instance)).find('.no-results-screen');
       assert.equal($el.text(), 'I <3 Hamburg');
     });
   });
