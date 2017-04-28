@@ -25,16 +25,19 @@ export class ResultsToolBar extends React.Component {
 
   render () {
     const dbName = store.getDatabase().id;
+    const hasResults = this.props.hasResults;
+    const isListDeletable = this.props.isListDeletable;
+
     return (
       <div className="document-result-screen__toolbar">
-        {this.props.isListDeletable ? <BulkActionComponent
+        {isListDeletable && hasResults ? <BulkActionComponent
           removeItem={this.props.removeItem}
           isChecked={this.props.allDocumentsSelected}
           hasSelectedItem={this.props.hasSelectedItem}
           toggleSelect={this.props.toggleSelectAll}
           disabled={this.props.isLoading}
           title="Select all docs that can be..." /> : null}
-        <BulkDocumentHeaderController />
+        {hasResults ? <BulkDocumentHeaderController /> : null}
         <div className="document-result-screen__toolbar-flex-container">
           <a href={`#/database/${dbName}/new`} className="btn save document-result-screen__toolbar-create-btn btn-primary">
             Create Document
@@ -51,5 +54,6 @@ ResultsToolBar.propTypes = {
   hasSelectedItem: React.PropTypes.bool.isRequired,
   toggleSelectAll: React.PropTypes.func.isRequired,
   isLoading: React.PropTypes.bool.isRequired,
+  hasResults: React.PropTypes.bool.isRequired,
   isListDeletable: React.PropTypes.bool
 };

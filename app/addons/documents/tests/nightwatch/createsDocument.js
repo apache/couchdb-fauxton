@@ -13,12 +13,12 @@
 
 
 module.exports = {
-  'Creates a document' : function (client) {
+  'Creates a document' : (client) => {
     /*jshint multistr: true */
-    var waitTime = client.globals.maxWaitTime,
-        newDatabaseName = client.globals.testDatabaseName,
-        newDocumentName = 'create_doc_document',
-        baseUrl = client.globals.test_settings.launch_url;
+    const waitTime = client.globals.maxWaitTime,
+          newDatabaseName = client.globals.testDatabaseName,
+          newDocumentName = 'create_doc_document',
+          baseUrl = client.globals.test_settings.launch_url;
 
     client
       .createDatabase(newDatabaseName)
@@ -33,6 +33,49 @@ module.exports = {
       // confirm the header elements are showing up
       .waitForElementVisible('.faux-header__breadcrumbs', waitTime, true)
       .waitForElementVisible('.faux__jsonlink-link', waitTime, true)
+
+      .execute('\
+        var editor = ace.edit("doc-editor");\
+        editor.gotoLine(2,10);\
+        editor.removeWordRight();\
+        editor.insert("' + newDocumentName + '");\
+      ')
+
+      .clickWhenVisible('#doc-editor-actions-panel .save-doc')
+      .checkForDocumentCreated(newDocumentName)
+      .url(baseUrl + '#/database/' + newDatabaseName + '/_all_docs')
+      .clickWhenVisible('.fonticon-json')
+      .waitForElementVisible('.prettyprint', waitTime, false)
+      .getText('.prettyprint', function (result) {
+        const data = result.value;
+        const createdDocIsPresent = data.indexOf(newDocumentName) !== -1;
+
+        this.verify.ok(
+          createdDocIsPresent,
+          'Checking if new document shows up in _all_docs.'
+        );
+      })
+    .end();
+  },
+
+  'Creates a Document through Create Document toolbar button': (client) => {
+    const waitTime = client.globals.maxWaitTime,
+          newDatabaseName = client.globals.testDatabaseName,
+          newDocumentName = 'create_doc_document',
+          baseUrl = client.globals.test_settings.launch_url;
+
+    client
+      .createDatabase(newDatabaseName)
+      .loginToGUI()
+      .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
+      .clickWhenVisible('.document-result-screen__toolbar-create-btn')
+      .waitForElementPresent('#editor-container', waitTime, false)
+      .verify.urlEquals(baseUrl + '/#/database/' + newDatabaseName + '/new')
+      .waitForElementPresent('.ace_gutter-active-line', waitTime, false)
+
+      // confirm the header elements are showing up
+      .waitForElementVisible('.faux-header__breadcrumbs', waitTime, true)
+      .waitForElementVisible('#api-navbar', waitTime, true)
 
       .execute('\
         var editor = ace.edit("doc-editor");\

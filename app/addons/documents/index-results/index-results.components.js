@@ -358,7 +358,6 @@ var ResultsScreen = React.createClass({
     if (this.props.isLoading) {
       mainView = <div className="loading-lines-wrapper"><LoadLines /></div>;
     } else if (!this.props.hasResults) {
-      toolbar = null;
       mainView = <NoResultsScreen text={this.props.textEmptyIndex}/>;
     } else if (this.props.selectedLayout === Constants.LAYOUT_ORIENTATION.JSON) {
       mainView = this.getDocumentStyleView();
