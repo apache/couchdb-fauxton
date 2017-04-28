@@ -68,7 +68,7 @@ var TableRow = React.createClass({
       var stringified = typeof el[k] === 'object' ? JSON.stringify(el[k], null, '  ') : el[k];
 
       return (
-        <td key={key} title={stringified}>
+        <td key={key} title={stringified} onClick={this.onClick}>
           {stringified}
         </td>
       );
@@ -120,7 +120,7 @@ var TableRow = React.createClass({
     }
 
     return (
-      <td className="tableview-el-last">
+      <td className="tableview-el-last" onClick={this.onClick}>
         {conflictIndicator}
         {attachmentIndicator}
       </td>
@@ -158,7 +158,7 @@ var TableRow = React.createClass({
     var el = this.props.el;
 
     return (
-      <tr key={"tableview-content-row-" + i} onClick={this.onClick}>
+      <tr key={"tableview-content-row-" + i}>
         {this.maybeGetCheckboxCell(el, i)}
         {this.getCopyButton(docContent)}
         {this.getRowContents(el, i)}

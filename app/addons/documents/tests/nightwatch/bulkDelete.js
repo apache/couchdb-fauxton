@@ -14,7 +14,7 @@
 
 module.exports = {
 
-  'Bulk deletes': function (client) {
+  'Bulk deletes on json view': function (client) {
     var waitTime = client.globals.maxWaitTime,
       newDatabaseName = client.globals.testDatabaseName,
       newDocumentName1 = 'bulktest1',
@@ -37,6 +37,40 @@ module.exports = {
       .acceptAlert()
       .waitForElementVisible('#global-notifications .alert.alert-info', waitTime, false)
       .waitForElementNotPresent('[data-id="' + newDocumentName1 + '"]', waitTime, false)
+      .getText('body', function (result) {
+        var data = result.value,
+          isPresentFirstDoc = data.indexOf(newDocumentName1) !== -1,
+          isPresentSecondDoc = data.indexOf(newDocumentName2) !== -1,
+          bothMissing = !isPresentFirstDoc && !isPresentSecondDoc;
+
+        this.verify.ok(bothMissing,
+          'Checking if documents were deleted');
+      })
+      .end();
+  },
+
+  'Bulk deletes on table/metadata view': function (client) {
+    var waitTime = client.globals.maxWaitTime,
+      newDatabaseName = client.globals.testDatabaseName,
+      newDocumentName1 = 'bulktest1',
+      newDocumentName2 = 'bulktest2',
+      baseUrl = client.globals.test_settings.launch_url;
+
+    client
+      .loginToGUI()
+      .createDocument(newDocumentName1, newDatabaseName)
+      .createDocument(newDocumentName2, newDatabaseName)
+      .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
+      .waitForElementPresent('.bulk-action-component-selector-group', waitTime, false)
+
+      // ensures page content has loaded before proceeding
+      .waitForElementVisible('.table-view-docs', waitTime, false)
+
+      .clickWhenVisible('.bulk-action-component-selector-group input[type="checkbox"]')
+      .clickWhenVisible('.bulk-action-component-selector-group button.fonticon-trash', waitTime, false)
+      .acceptAlert()
+      .waitForElementVisible('#global-notifications .alert.alert-info', waitTime, false)
+      .waitForElementNotPresent('.table-view-docs ', waitTime, false)
       .getText('body', function (result) {
         var data = result.value,
           isPresentFirstDoc = data.indexOf(newDocumentName1) !== -1,

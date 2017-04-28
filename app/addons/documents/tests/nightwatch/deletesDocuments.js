@@ -13,7 +13,7 @@
 
 
 module.exports = {
-  'Deletes a document': function (client) {
+  'Deletes a document on json view': function (client) {
     var waitTime = client.globals.maxWaitTime,
         newDatabaseName = client.globals.testDatabaseName,
         newDocumentName = 'delete_doc_doc',
@@ -37,6 +37,46 @@ module.exports = {
 
       .waitForElementVisible('label[for="checkbox-' + newDocumentName + '2' + '"]', waitTime, false)
       .clickWhenVisible('label[for="checkbox-' + newDocumentName + '2' + '"]', waitTime, false)
+      .clickWhenVisible('.bulk-action-component-selector-group button.fonticon-trash', waitTime, false)
+      .acceptAlert()
+
+      .checkForStringNotPresent(newDatabaseName + '/_all_docs', newDocumentName)
+      .checkForStringNotPresent(newDatabaseName + '/_all_docs', newDocumentName + '2')
+      .url(baseUrl + '/' + newDatabaseName + '/_all_docs')
+
+      .waitForElementPresent('pre', waitTime, false)
+      .getText('pre', function (result) {
+        var data = result.value,
+            createdDocumentANotPresent = data.indexOf(newDocumentName) === -1,
+            createdDocumentBNotPresent = data.indexOf(newDocumentName + '2') === -1;
+
+        this.verify.ok(createdDocumentANotPresent && createdDocumentBNotPresent,
+          'Checking if new documents no longer shows up in _all_docs.');
+      })
+    .end();
+  },
+
+  'Deletes a document on table/metadata view': function (client) {
+    var waitTime = client.globals.maxWaitTime,
+        newDatabaseName = client.globals.testDatabaseName,
+        newDocumentName = 'delete_doc_doc',
+        baseUrl = client.globals.test_settings.launch_url;
+
+    client
+      .createDocument(newDocumentName, newDatabaseName)
+      .createDocument(newDocumentName + '2', newDatabaseName)
+      .loginToGUI()
+      .checkForDocumentCreated(newDocumentName)
+      .checkForDocumentCreated(newDocumentName + '2')
+      .url(baseUrl)
+      .waitForElementPresent('#dashboard-content a[href="database/' + newDatabaseName + '/_all_docs"]', waitTime, false)
+      .clickWhenVisible('#dashboard-content a[href="database/' + newDatabaseName + '/_all_docs"]', waitTime, false)
+      .clickWhenVisible('#checkbox-' + newDocumentName, waitTime, false)
+      .clickWhenVisible('.bulk-action-component-selector-group button.fonticon-trash', waitTime, false)
+      .acceptAlert()
+      .waitForElementVisible('.alert.alert-info', waitTime, false)
+
+      .clickWhenVisible('#checkbox-' + newDocumentName + '2', waitTime, false)
       .clickWhenVisible('.bulk-action-component-selector-group button.fonticon-trash', waitTime, false)
       .acceptAlert()
 
