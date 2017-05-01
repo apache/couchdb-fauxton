@@ -71,7 +71,8 @@ function saveView (viewInfo) {
   });
 
   // if the view name just changed and it's in the SAME design doc, remove the old one before saving the doc
-  if (viewInfo.originalDesignDocName === viewInfo.designDocId && viewInfo.originalViewName !== viewInfo.viewName) {
+  if (!viewInfo.newView &&
+      viewInfo.originalDesignDocName === viewInfo.designDocId && viewInfo.originalViewName !== viewInfo.viewName) {
     designDoc.removeDdocView(viewInfo.originalViewName);
   }
 
