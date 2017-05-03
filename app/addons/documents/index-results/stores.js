@@ -74,7 +74,6 @@ Stores.IndexResultsStore = FauxtonAPI.Store.extend({
   canShowPrevious: function () {
     if (!this._enabled) { return false; }
     if (!this._collection || !this._collection.hasPrevious) { return false; }
-
     return this._collection.hasPrevious();
   },
 
@@ -160,6 +159,10 @@ Stores.IndexResultsStore = FauxtonAPI.Store.extend({
     if (!this._collection) { return false; }
 
     return this._collection.length;
+  },
+
+  setPageStart: function (options) {
+    this._pageStart = options.start + 1;
   },
 
   getPageStart: function () {
@@ -254,6 +257,22 @@ Stores.IndexResultsStore = FauxtonAPI.Store.extend({
 
   getBulkDocCollection: function () {
     return this._bulkDeleteDocCollection;
+  },
+
+  setCachedOffset: function (options) {
+    this._cachedOffset = options.offset;
+  },
+
+  getCachedOffset: function () {
+    return this._cachedOffset;
+  },
+
+  hasCachedOffset: function () {
+    return !!this._cachedOffset;
+  },
+
+  deleteCachedOffset: function () {
+    delete this._cachedOffset;
   },
 
   getDocContent: function (originalDoc) {
@@ -800,6 +819,18 @@ Stores.IndexResultsStore = FauxtonAPI.Store.extend({
       case PaginationActionTypes.PER_PAGE_CHANGE:
         this.resetPagination();
         this.setPerPage(action.perPage);
+      break;
+      case PaginationActionTypes.SET_CACHED_OFFSET:
+        this.setCachedOffset(action.options);
+      break;
+      case PaginationActionTypes.DELETE_CACHED_OFFSET:
+        this.deleteCachedOffset();
+      break;
+      case PaginationActionTypes.SET_PAGE_START:
+        this.setPageStart(action.options);
+      break;
+      case PaginationActionTypes.RESET_PAGINATION:
+        this.resetPagination();
       break;
 
       default:

@@ -77,15 +77,24 @@ var BaseRoute = FauxtonAPI.RouteObject.extend({
   },
 
   createParams: function (options) {
-    var urlParams = app.getParams(options),
-        params = Documents.QueryParams.parse(urlParams);
+    const urlParams = app.getParams(options),
+          params = Documents.QueryParams.parse(urlParams),
+          store = IndexResultStores.indexResultsStore;
 
+    let start = 0;
+    if (urlParams.skip && store.hasCachedOffset()) {
+      start = Math.max(store.getCachedOffset(), parseInt(urlParams.skip, 10));
+    } else if (urlParams.skip) {
+      start = parseInt(urlParams.skip, 10);
+    } else if (store.hasCachedOffset()) {
+      start = store.getCachedOffset();
+    }
+    PaginationActions.setPageStart(start);
     PaginationActions.setDocumentLimit(parseInt(urlParams.limit, 10));
 
-    var limit = IndexResultStores.indexResultsStore.getPerPage();
     return {
       urlParams: urlParams,
-      docParams: _.extend(params, {limit: limit})
+      docParams: _.extend(params, {limit: store.getPerPage()})
     };
   }
 });

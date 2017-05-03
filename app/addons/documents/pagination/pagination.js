@@ -36,6 +36,11 @@ var IndexPaginationController = React.createClass({
 
   componentWillUnmount: function () {
     indexResultsStore.off('change', this.onChange);
+
+    // Since we're migrating away from a paginated result list, don't forget
+    // to delete the cached offset used for an improved UX when switching
+    // between layouts.
+    Actions.deleteCachedOffset();
   },
 
   onChange: function () {

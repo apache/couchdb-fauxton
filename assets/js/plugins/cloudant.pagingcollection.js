@@ -52,7 +52,7 @@ export const PagingCollection = Backbone.Collection.extend({
     params.skip = (parseInt(currentParams.skip, 10) || 0) + skipIncrement;
 
     // guard against hard limits
-    if(this.paging.defaultParams.limit) {
+    if (this.paging.defaultParams.limit) {
       params.limit = Math.min(this.paging.defaultParams.limit, params.limit);
     }
     // request an extra row so we know that there are more results
@@ -102,14 +102,14 @@ export const PagingCollection = Backbone.Collection.extend({
 
   // `next` is called with the number of items for the next page.
   // It returns the fetch promise.
-  next: function(options){
+  next: function(options) {
     this.paging.direction = "next";
     return this._iterate(this.paging.pageSize, options);
   },
 
   // `previous` is called with the number of items for the previous page.
   // It returns the fetch promise.
-  previous: function(options){
+  previous: function(options) {
     this.paging.direction = "previous";
     return this._iterate(0 - this.paging.pageSize, options);
   },
@@ -118,7 +118,7 @@ export const PagingCollection = Backbone.Collection.extend({
     try {
       JSON.parse(val);
       return false;
-    } catch(e) {
+    } catch (e) {
       return true;
     }
   },
@@ -159,12 +159,11 @@ export const PagingCollection = Backbone.Collection.extend({
       update_seq: resp.update_seq
     };
 
-    var skipLimit = this.paging.defaultParams.skip || 0;
-    if(this.paging.params.skip > skipLimit) {
+    if (this.paging.params.skip > 0) {
       this.paging.hasPrevious = true;
     }
 
-    if(rows.length === this.paging.pageSize + 1) {
+    if (rows.length === this.paging.pageSize + 1) {
       this.paging.hasNext = true;
 
       // remove the next page marker result

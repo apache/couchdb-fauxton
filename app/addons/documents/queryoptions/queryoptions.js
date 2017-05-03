@@ -15,6 +15,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import QueryOptionsStores from './stores';
 import Actions from './actions';
+import PaginationActions from '../pagination/actions';
 import Components from '../../components/react-components';
 
 const { connectToStores, TrayWrapper, ToggleHeaderButton, TrayContents } = Components;
@@ -352,6 +353,8 @@ var QueryTray = React.createClass({
   runQuery: function (e) {
     e.preventDefault();
 
+    // we're going to have a fresh collection, purge the cached offset!
+    PaginationActions.deleteCachedOffset();
     Actions.runQuery(this.props.queryParams);
     this.toggleTrayVisibility();
   },

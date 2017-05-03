@@ -14,66 +14,110 @@ import FauxtonAPI from "../../../core/api";
 import ActionTypes from "./actiontypes";
 import IndexResultsActions from "../index-results/actions";
 
+const updatePerPage = (perPage, collection, bulkCollection) => {
+
+  FauxtonAPI.dispatch({
+    type: ActionTypes.PER_PAGE_CHANGE,
+    perPage: perPage
+  });
+
+  IndexResultsActions.clearResults();
+  collection.fetch().then(function () {
+    IndexResultsActions.resultsListReset();
+    IndexResultsActions.sendMessageNewResultList({
+      collection: collection,
+      bulkCollection: bulkCollection
+    });
+  });
+};
+
+const setDocumentLimit = (docLimit) => {
+  FauxtonAPI.dispatch({
+    type: ActionTypes.SET_PAGINATION_DOCUMENT_LIMIT,
+    docLimit: docLimit
+  });
+};
+
+const paginateNext = (collection, bulkCollection) => {
+  FauxtonAPI.dispatch({
+    type: ActionTypes.PAGINATE_NEXT,
+  });
+
+  IndexResultsActions.clearResults();
+  collection.next().then(function () {
+    // update the cached offset for improved UX between layouts
+    setCachedOffset(collection.paging.params.skip);
+
+    IndexResultsActions.resultsListReset();
+
+    IndexResultsActions.sendMessageNewResultList({
+      collection: collection,
+      bulkCollection: bulkCollection
+    });
+  });
+};
+
+const paginatePrevious = (collection, bulkCollection) => {
+  FauxtonAPI.dispatch({
+    type: ActionTypes.PAGINATE_PREVIOUS,
+  });
+
+  IndexResultsActions.clearResults();
+  collection.previous().then(function () {
+    // update the cached offset for improved UX between layouts
+    setCachedOffset(collection.paging.params.skip);
+
+    IndexResultsActions.resultsListReset();
+
+    IndexResultsActions.sendMessageNewResultList({
+      collection: collection,
+      bulkCollection: bulkCollection
+    });
+  });
+};
+
+const toggleTableViewType = () => {
+  IndexResultsActions.togglePrioritizedTableView();
+};
+
+const deleteCachedOffset = () => {
+  FauxtonAPI.dispatch({
+    type: ActionTypes.DELETE_CACHED_OFFSET
+  });
+};
+
+const setCachedOffset = (offset) => {
+  FauxtonAPI.dispatch({
+    type: ActionTypes.SET_CACHED_OFFSET,
+    options: {
+      offset: offset
+    }
+  });
+};
+
+const setPageStart = (start) => {
+  FauxtonAPI.dispatch({
+    type: ActionTypes.SET_PAGE_START,
+    options: {
+      start: start
+    }
+  });
+};
+
+const resetPagination = () => {
+  FauxtonAPI.dispatch({
+    type: ActionTypes.RESET_PAGINATION
+  });
+};
+
 export default {
-
-  updatePerPage: function (perPage, collection, bulkCollection) {
-
-    FauxtonAPI.dispatch({
-      type: ActionTypes.PER_PAGE_CHANGE,
-      perPage: perPage
-    });
-
-    IndexResultsActions.clearResults();
-    collection.fetch().then(function () {
-      IndexResultsActions.resultsListReset();
-      IndexResultsActions.sendMessageNewResultList({
-        collection: collection,
-        bulkCollection: bulkCollection
-      });
-    });
-  },
-
-  setDocumentLimit: function (docLimit) {
-    FauxtonAPI.dispatch({
-      type: ActionTypes.SET_PAGINATION_DOCUMENT_LIMIT,
-      docLimit: docLimit
-    });
-  },
-
-  paginateNext: function (collection, bulkCollection) {
-    FauxtonAPI.dispatch({
-      type: ActionTypes.PAGINATE_NEXT,
-    });
-
-    IndexResultsActions.clearResults();
-    collection.next().then(function () {
-      IndexResultsActions.resultsListReset();
-
-      IndexResultsActions.sendMessageNewResultList({
-        collection: collection,
-        bulkCollection: bulkCollection
-      });
-    });
-  },
-
-  paginatePrevious: function (collection, bulkCollection) {
-    FauxtonAPI.dispatch({
-      type: ActionTypes.PAGINATE_PREVIOUS,
-    });
-
-    IndexResultsActions.clearResults();
-    collection.previous().then(function () {
-      IndexResultsActions.resultsListReset();
-
-      IndexResultsActions.sendMessageNewResultList({
-        collection: collection,
-        bulkCollection: bulkCollection
-      });
-    });
-  },
-
-  toggleTableViewType: function () {
-    IndexResultsActions.togglePrioritizedTableView();
-  }
-
+  updatePerPage,
+  setDocumentLimit,
+  paginateNext,
+  paginatePrevious,
+  toggleTableViewType,
+  deleteCachedOffset,
+  setCachedOffset,
+  setPageStart,
+  resetPagination
 };

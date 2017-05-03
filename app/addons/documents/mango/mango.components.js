@@ -104,8 +104,7 @@ var MangoQueryEditorController = React.createClass({
 
     IndexResultActions.runMangoFindQuery({
       database: this.state.database,
-      queryCode: this.getMangoEditor().getEditorValue(),
-
+      queryCode: this.getMangoEditor().getEditorValue()
     });
   }
 });

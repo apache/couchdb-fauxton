@@ -50,10 +50,20 @@ const IndexEditorAndResults = BaseRoute.extend({
   },
 
   showView: function (databaseName, ddoc, viewName) {
-    var params = this.createParams(),
-        urlParams = params.urlParams,
-        docParams = params.docParams,
-        decodeDdoc = decodeURIComponent(ddoc);
+    const params = this.createParams(),
+          urlParams = params.urlParams,
+          docParams = params.docParams,
+          decodeDdoc = decodeURIComponent(ddoc),
+          store = IndexResultsStores.indexResultsStore;
+
+    // if the user is simply switching the layout style (i.e. metadata, json, or table),
+    // there will be a cached offset value.  Use that offset when getting the "new"
+    // collection so data stays the same.
+    if (docParams.skip && store.hasCachedOffset()) {
+      docParams.skip = Math.max(store.getCachedOffset(), docParams.skip);
+    } else if (store.hasCachedOffset()) {
+      docParams.skip = store.getCachedOffset();
+    }
 
     viewName = viewName.replace(/\?.*$/, '');
     this.indexedDocs = new Documents.IndexCollection(null, {
@@ -62,7 +72,7 @@ const IndexEditorAndResults = BaseRoute.extend({
       view: viewName,
       params: docParams,
       paging: {
-        pageSize: IndexResultsStores.indexResultsStore.getPerPage()
+        pageSize: store.getPerPage()
       }
     });
 

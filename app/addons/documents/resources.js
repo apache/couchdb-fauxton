@@ -251,8 +251,8 @@ Documents.MangoDocumentCollection = PagingCollection.extend({
 
   fetch: function () {
     var url = this.urlRef(),
-              promise = FauxtonAPI.Deferred(),
-              query = this.getPaginatedQuery();
+        promise = FauxtonAPI.Deferred(),
+        query = this.getPaginatedQuery();
 
     $.ajax({
       type: 'POST',
@@ -282,8 +282,7 @@ Documents.MangoDocumentCollection = PagingCollection.extend({
       update_seq: resp.update_seq
     };
 
-    var skipLimit = this.paging.defaultParams.skip || 0;
-    if (this.paging.params.skip > skipLimit) {
+    if (this.paging.params.skip > 0) {
       this.paging.hasPrevious = true;
     }
 
