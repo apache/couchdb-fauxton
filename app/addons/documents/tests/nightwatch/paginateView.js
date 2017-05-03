@@ -120,5 +120,44 @@ module.exports = {
 
       .waitForElementPresent('div[data-id="document_1"]', waitTime)
       .end();
-  }
+  },
+
+  'paginate to page two and switch to json view': function (client) {
+    var waitTime = client.globals.maxWaitTime,
+        newDatabaseName = client.globals.testDatabaseName,
+        baseUrl = client.globals.test_settings.launch_url;
+
+    client
+      .populateDatabase(newDatabaseName)
+      .loginToGUI()
+
+      // wait for the db page to fully load
+      .waitForElementVisible('#dashboard-content table.databases', waitTime, false)
+
+      .url(baseUrl + '/#/database/' + newDatabaseName + '/_design/keyview/_view/keyview')
+      .waitForElementPresent('.control-toggle-queryoptions', waitTime, false)
+
+      // ensure the page content has loaded
+      .waitForElementPresent('.table-view-docs', waitTime)
+
+      .clickWhenVisible('#select-per-page', waitTime, false)
+
+      // http://www.w3.org/TR/2012/WD-webdriver-20120710/
+      .keys(['\uE013', '\uE006'])
+      .waitForElementNotPresent('.loading-lines', waitTime, false)
+      .waitForElementPresent('#next', waitTime, false)
+      .clickWhenVisible('#next', waitTime, false)
+      .waitForElementNotPresent('td[title="document_1"]', waitTime)
+      .waitForElementNotPresent('.loading-lines', waitTime, false)
+      .waitForElementPresent('td[title="document_19"]', waitTime)
+
+      .clickWhenVisible('.fonticon-json')
+      .waitForElementPresent('.prettyprint', waitTime, false)
+      .waitForElementPresent('div[data-id="document_19"]', waitTime)
+      .clickWhenVisible('#previous', waitTime, false)
+      .waitForElementNotPresent('div[data-id="document_19"]', waitTime)
+      .waitForElementNotPresent('.loading-lines', waitTime, false)
+      .waitForElementPresent('div[data-id="document_1"]', waitTime)
+      .end();
+  },
 };
