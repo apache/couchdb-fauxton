@@ -143,7 +143,7 @@ function deleteView (options) {
     FauxtonAPI.dispatch({ type: SidebarActionTypes.SIDEBAR_HIDE_DELETE_INDEX_MODAL });
   }
 
-  safeDeleteIndex(options.designDoc, options.designDocs, 'views', options.indexName, { onSuccess: onSuccess });
+  return safeDeleteIndex(options.designDoc, options.designDocs, 'views', options.indexName, { onSuccess: onSuccess });
 }
 
 function cloneView (params) {
@@ -259,7 +259,7 @@ function safeDeleteIndex (designDoc, designDocs, indexPropName, indexName, optio
     promise = designDoc.destroy();
     deleteDesignDoc = true;
   }
-  promise.then(function () {
+  return promise.then(function () {
     if (deleteDesignDoc) {
       designDocs.remove(designDoc.id);
     }

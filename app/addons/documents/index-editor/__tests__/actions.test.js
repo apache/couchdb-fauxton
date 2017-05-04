@@ -58,15 +58,11 @@ describe('Index Editor Actions', function () {
 
     it('saves design doc if has other views', function () {
       designDoc.save = function () {
-        var promise = $.Deferred();
-        promise.resolve();
-        return promise;
+        return FauxtonAPI.Promise.resolve();
       };
       var saveSpy = sinon.spy(designDoc, 'save');
       designDocs.fetch = function () {
-        var promise = $.Deferred();
-        promise.resolve();
-        return promise;
+        return FauxtonAPI.Promise.resolve();
       };
 
       Actions.deleteView({
@@ -83,16 +79,12 @@ describe('Index Editor Actions', function () {
       designDoc.removeDdocView('test-view2');
 
       designDoc.destroy = function () {
-        var promise = $.Deferred();
-        promise.resolve();
-        return promise;
+        return FauxtonAPI.Promise.resolve();
       };
       var destroySpy = sinon.spy(designDoc, 'destroy');
       designDocs.remove = function () {};
       designDocs.fetch = function () {
-        var promise = $.Deferred();
-        promise.resolve();
-        return promise;
+        return FauxtonAPI.Promise.resolve();
       };
 
       Actions.deleteView({
@@ -109,25 +101,21 @@ describe('Index Editor Actions', function () {
       var spy = sinon.spy(FauxtonAPI, 'navigate');
 
       designDoc.save = function () {
-        var promise = $.Deferred();
-        promise.resolve();
-        return promise;
+        return FauxtonAPI.Promise.resolve();
       };
       designDocs.fetch = function () {
-        var promise = $.Deferred();
-        promise.resolve();
-        return promise;
+        return FauxtonAPI.Promise.resolve();
       };
-      Actions.deleteView({
+      return Actions.deleteView({
         indexName: viewName,
         database: database,
         designDocs: designDocs,
         designDoc: designDoc,
         isOnIndex: true
+      }).then(() => {
+        assert.ok(spy.getCall(0).args[0].match(/_all_docs/));
+        assert.ok(spy.calledOnce);
       });
-
-      assert.ok(spy.getCall(0).args[0].match(/_all_docs/));
-      assert.ok(spy.calledOnce);
     });
 
     it('saves design doc if it has no view section', function () {
