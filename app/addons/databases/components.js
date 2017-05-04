@@ -307,8 +307,8 @@ var DatabasePagination = React.createClass({
     };
   },
 
-  getStoreState () {
-    const {store} = this.props;
+  getStoreState (props) {
+    const {store} = props;
 
     return {
       totalAmountOfDatabases: store.getTotalAmountOfDatabases(),
@@ -317,12 +317,18 @@ var DatabasePagination = React.createClass({
   },
 
   getInitialState () {
-    return this.getStoreState();
+    return this.getStoreState(this.props);
   },
 
   componentDidMount () {
     const {store} = this.props;
 
+    store.on('change', this.onChange, this);
+  },
+
+  componentWillReceiveProps (nextProps) {
+    this.setState(this.getStoreState(nextProps));
+    const {store} = nextProps;
     store.on('change', this.onChange, this);
   },
 
@@ -332,7 +338,7 @@ var DatabasePagination = React.createClass({
   },
 
   onChange () {
-    this.setState(this.getStoreState());
+    this.setState(this.getStoreState(this.props));
   },
 
   render () {
