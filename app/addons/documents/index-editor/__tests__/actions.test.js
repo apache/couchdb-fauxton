@@ -129,6 +129,7 @@ describe('Index Editor Actions', function () {
           reduce: '() => {}'
         }
       });
+      assert.equal(ddocModel.get('language'), 'javascript');
     });
 
     it('removes old view only when editting', function () {
