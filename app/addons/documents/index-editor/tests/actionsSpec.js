@@ -130,5 +130,31 @@ describe('Index Editor Actions', function () {
       assert.ok(spy.calledOnce);
     });
 
+    it('saves design doc if it has no view section', function () {
+      const ddoc = { _id: designDocId };
+      const ddocModel = new Documents.Doc(ddoc, { database: database });
+
+      ddocModel.setDdocView('testview', '() => {}', '() => {}');
+      assert.deepEqual(ddocModel.get('views'), {
+        testview: {
+          map: '() => {}',
+          reduce: '() => {}'
+        }
+      });
+    });
+
+    it('removes old view only when editting', function () {
+      const viewInfo = {
+        newView: false,
+        originalDesignDocName: 'test',
+        designDocId: 'test',
+        originalViewName: 'foo',
+        viewName: 'bar'
+      };
+      assert.isTrue(Actions.shouldRemoveDdocView(viewInfo));
+
+      viewInfo.newView = true;
+      assert.isFalse(Actions.shouldRemoveDdocView(viewInfo));
+    });
   });
 });

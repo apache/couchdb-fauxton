@@ -60,6 +60,12 @@ function fetchDesignDocsBeforeEdit (options) {
   });
 }
 
+function shouldRemoveDdocView(viewInfo) {
+  return !viewInfo.newView &&
+          viewInfo.originalDesignDocName === viewInfo.designDocId &&
+          viewInfo.originalViewName !== viewInfo.viewName;
+}
+
 function saveView (viewInfo) {
   var designDoc = viewInfo.designDoc;
   designDoc.setDdocView(viewInfo.viewName, viewInfo.map, viewInfo.reduce);
@@ -71,8 +77,7 @@ function saveView (viewInfo) {
   });
 
   // if the view name just changed and it's in the SAME design doc, remove the old one before saving the doc
-  if (!viewInfo.newView &&
-      viewInfo.originalDesignDocName === viewInfo.designDocId && viewInfo.originalViewName !== viewInfo.viewName) {
+  if (shouldRemoveDdocView(viewInfo)) {
     designDoc.removeDdocView(viewInfo.originalViewName);
   }
 
@@ -300,6 +305,7 @@ export default {
   editIndex: editIndex,
   clearIndex: clearIndex,
   fetchDesignDocsBeforeEdit: fetchDesignDocsBeforeEdit,
+  shouldRemoveDdocView: shouldRemoveDdocView,
   saveView: saveView,
   addDesignDoc: addDesignDoc,
   deleteView: deleteView,
