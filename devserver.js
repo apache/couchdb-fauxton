@@ -96,7 +96,7 @@ const runWebpackServer = function () {
       app.all('*', (req, res, next) => {
         const accept = req.headers.accept ? req.headers.accept.split(',') : '';
 
-        if (/application\/json/.test(accept[0])) {
+        if (/application\/json/.test(accept[0]) || /multipart\/form-data/.test(accept[0])) {
           proxy.web(req, res);
           return;
         }
