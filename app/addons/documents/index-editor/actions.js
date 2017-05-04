@@ -60,6 +60,12 @@ function fetchDesignDocsBeforeEdit (options) {
   });
 }
 
+function shouldRemoveDdocView(viewInfo) {
+  return !viewInfo.newView &&
+          viewInfo.originalDesignDocName === viewInfo.designDocId &&
+          viewInfo.originalViewName !== viewInfo.viewName;
+}
+
 function saveView (viewInfo) {
   var designDoc = viewInfo.designDoc;
   designDoc.setDdocView(viewInfo.viewName, viewInfo.map, viewInfo.reduce);
@@ -71,7 +77,7 @@ function saveView (viewInfo) {
   });
 
   // if the view name just changed and it's in the SAME design doc, remove the old one before saving the doc
-  if (viewInfo.originalDesignDocName === viewInfo.designDocId && viewInfo.originalViewName !== viewInfo.viewName) {
+  if (shouldRemoveDdocView(viewInfo)) {
     designDoc.removeDdocView(viewInfo.originalViewName);
   }
 
@@ -137,7 +143,7 @@ function deleteView (options) {
     FauxtonAPI.dispatch({ type: SidebarActionTypes.SIDEBAR_HIDE_DELETE_INDEX_MODAL });
   }
 
-  safeDeleteIndex(options.designDoc, options.designDocs, 'views', options.indexName, { onSuccess: onSuccess });
+  return safeDeleteIndex(options.designDoc, options.designDocs, 'views', options.indexName, { onSuccess: onSuccess });
 }
 
 function cloneView (params) {
@@ -253,7 +259,7 @@ function safeDeleteIndex (designDoc, designDocs, indexPropName, indexName, optio
     promise = designDoc.destroy();
     deleteDesignDoc = true;
   }
-  promise.then(function () {
+  return promise.then(function () {
     if (deleteDesignDoc) {
       designDocs.remove(designDoc.id);
     }
@@ -299,6 +305,7 @@ export default {
   editIndex: editIndex,
   clearIndex: clearIndex,
   fetchDesignDocsBeforeEdit: fetchDesignDocsBeforeEdit,
+  shouldRemoveDdocView: shouldRemoveDdocView,
   saveView: saveView,
   addDesignDoc: addDesignDoc,
   deleteView: deleteView,

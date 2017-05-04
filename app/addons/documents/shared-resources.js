@@ -103,8 +103,13 @@ Documents.Doc = FauxtonAPI.Model.extend({
       return false;
     }
 
-    var views = this.get('views'),
-        tempView = views[view] || {};
+    let views = this.get('views');
+    // handles instances where the ddoc is empty (created manually)
+    if (!views) {
+      views = {};
+      this.set({language: "javascript"});
+    }
+    const tempView = views[view] || {};
 
     if (reduce) {
       tempView.reduce = reduce;
