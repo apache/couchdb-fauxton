@@ -10,15 +10,12 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import app from '../../app';
 import React from 'react';
 import FauxtonAPI from '../../core/api';
 import BaseRoute from './shared-routes';
-import Documents from './resources';
 import ChangesActions from './changes/actions';
 import Databases from '../databases/base';
 import Resources from './resources';
-import IndexResultStores from './index-results/stores';
 import IndexResultsActions from './index-results/actions';
 import SidebarActions from './sidebar/actions';
 import DesignDocInfoActions from './designdocinfo/actions';
@@ -28,7 +25,7 @@ import {DocsTabsSidebarLayout, ViewsTabsSidebarLayout, ChangesSidebarLayout} fro
 
 var DocumentsRouteObject = BaseRoute.extend({
   routes: {
-    "database/:database/_all_docs(:extra)": {
+    "database/:database/_all_docs": {
       route: "allDocs",
       roles: ["fx_loggedIn"]
     },
@@ -82,51 +79,25 @@ var DocumentsRouteObject = BaseRoute.extend({
   * urlParams are what are shown in the url and to the user
   * They are not the same when paginating
   */
-  allDocs: function (databaseName, options) {
-    var params = this.createParams(options),
-        urlParams = params.urlParams,
-        docParams = params.docParams,
-        collection;
-
-    // includes_docs = true if you are visiting the _replicator/_users databases
-    if (['_replicator', '_users'].indexOf(databaseName) > -1) {
-      docParams.include_docs = true;
-      urlParams = params.docParams;
-      var updatedURL = FauxtonAPI.urls('allDocs', 'app', databaseName, '?' + $.param(urlParams));
-      FauxtonAPI.navigate(updatedURL, {trigger: false, replace: true});
-    }
-
-    this.database.buildAllDocs(docParams);
-    collection = this.database.allDocs;
-
-    var tab = 'all-docs';
-    if (docParams.startkey && docParams.startkey.indexOf("_design") > -1) {
-      tab = 'design-docs';
-    }
-
-    SidebarActions.selectNavItem(tab);
+  allDocs: function (databaseName) {
+    SidebarActions.selectNavItem('all-docs');
     ComponentsActions.showDeleteDatabaseModal({showDeleteModal: false, dbId: ''});
+    IndexResultsActions.storeDatabaseName(databaseName);
 
-    if (!docParams) {
-      docParams = {};
-    }
+    const params = {
+      skip: 0,
+      limit: FauxtonAPI.constants.MISC.DEFAULT_PAGE_SIZE,
+      include_docs: false
+    };
 
-    const frozenCollection = app.utils.localStorageGet('include_docs_bulkdocs');
-    window.localStorage.removeItem('include_docs_bulkdocs');
-
-    IndexResultsActions.newResultsList({
-      collection: collection,
-      textEmptyIndex: 'No Documents Found',
-      bulkCollection: new Documents.BulkDeleteDocCollection(frozenCollection, { databaseId: this.database.safeID() }),
+    IndexResultsActions.getAllDocs({
+      databaseName: databaseName,
+      params: params
     });
 
-    this.database.allDocs.paging.pageSize = IndexResultStores.indexResultsStore.getPerPage();
-
-    const endpoint = this.database.allDocs.urlRef("apiurl", urlParams);
+    const endpoint = this.database.allDocs.urlRef("apiurl", params);
     const docURL = this.database.allDocs.documentation();
 
-    // update the query options with the latest & greatest info
-    QueryOptionsActions.reset({queryParams: urlParams});
     QueryOptionsActions.showQueryOptions();
 
     const dropDownLinks = this.getCrumbs(this.database);

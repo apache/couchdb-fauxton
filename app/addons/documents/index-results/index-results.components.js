@@ -446,7 +446,7 @@ var ViewResultListController = React.createClass({
   },
 
   getStoreState: function () {
-    var selectedItemsLength = store.getSelectedItemsLength();
+    const selectedItems = store.getSelectedDocs();
     return {
       hasResults: store.hasResults(),
       results: store.getResults(),
@@ -455,18 +455,24 @@ var ViewResultListController = React.createClass({
       textEmptyIndex: store.getTextEmptyIndex(),
       isTableView: store.getIsTableView(),
       allDocumentsSelected: store.areAllDocumentsSelected(),
-      hasSelectedItem: !!selectedItemsLength,
-      selectedItemsLength: selectedItemsLength,
-      bulkDeleteCollection: store.getBulkDocCollection()
+      hasSelectedItem: selectedItems.length > 0,
+      selectedItems: selectedItems,
+      databaseName: store.getDatabaseName(),
+      queryParams: store.getQueryParams()
     };
   },
 
   isSelected: function (id) {
-    return !!this.state.bulkDeleteCollection.get(id);
+    const indexInSelectedItems = this.state.selectedItems.findIndex((doc) => {
+      return doc._id === id;
+    });
+
+    return indexInSelectedItems > -1;
   },
 
   removeItem: function () {
-    Actions.deleteSelected(this.state.bulkDeleteCollection, this.state.selectedItemsLength, this.props.designDocs);
+    const {databaseName, queryParams, selectedItems} = this.state;
+    Actions.deleteSelected(databaseName, queryParams, selectedItems, this.props.designDocs);
   },
 
   getInitialState: function () {

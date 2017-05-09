@@ -14,10 +14,11 @@ import FauxtonAPI from "../../../core/api";
 import ActionTypes from "./actiontypes";
 import Stores from "./stores";
 import SidebarActions from "../sidebar/actions";
-var indexResultsStore = Stores.indexResultsStore;
+import {fetchAllDocs, bulkDeleteDocs} from "../api";
+const indexResultsStore = Stores.indexResultsStore;
 
-var errorMessage = function (ids) {
-  var msg = 'Failed to delete your document!';
+const errorMessage = (ids) => {
+  let msg = 'Failed to delete your document!';
 
   if (ids) {
     msg = 'Failed to delete: ' + ids.join(', ');
@@ -30,190 +31,161 @@ var errorMessage = function (ids) {
   });
 };
 
-export default {
+const storeDatabaseName = (databaseName) => {
+  FauxtonAPI.dispatch({
+    type: ActionTypes.INDEX_RESULTS_STORE_DATABASE_NAME,
+    options: {
+      databaseName: databaseName
+    }
+  });
+};
 
-  togglePrioritizedTableView: function () {
-    FauxtonAPI.dispatch({
-      type: ActionTypes.INDEX_RESULTS_TOGGLE_PRIORITIZED_TABLE_VIEW
+const getAllDocs = (databaseName, params) => {
+  clearResults();
+
+  return fetchAllDocs(databaseName, params).then((results) => {
+    sendMessageNewResultList({
+      results: results,
+      params: params
     });
-  },
+    resultsReady();
+  });
+};
 
-  sendMessageNewResultList: function (options) {
-    FauxtonAPI.dispatch({
-      type: ActionTypes.INDEX_RESULTS_NEW_RESULTS,
-      options: options
-    });
-  },
+const togglePrioritizedTableView = () => {
+  FauxtonAPI.dispatch({
+    type: ActionTypes.INDEX_RESULTS_TOGGLE_PRIORITIZED_TABLE_VIEW
+  });
+};
 
-  newResultsList: function (options) {
-    this.clearResults();
+const sendMessageNewResultList = (options) => {
+  FauxtonAPI.dispatch({
+    type: ActionTypes.INDEX_RESULTS_NEW_RESULTS,
+    options: options
+  });
+};
 
-    if (!options.collection.fetch) { return; }
+const newMangoResultsList = (options) => {
+  FauxtonAPI.dispatch({
+    type: ActionTypes.INDEX_RESULTS_NEW_RESULTS,
+    options: options
+  });
+};
 
-    return options.collection.fetch({reset: true}).then(() => {
-      this.resultsListReset();
-      this.sendMessageNewResultList(options);
-    }, (collection, _xhr) => {
-      //Make this more robust as sometimes the colection is passed through here.
-      var xhr = collection.responseText ? collection : _xhr;
-      var errorMsg = 'Bad Request';
-      console.log('xxx', xhr);
+const runMangoFindQuery = (options) => {
+  var query = JSON.parse(options.queryCode),
+      collection = indexResultsStore.getCollection(),
+      bulkCollection = indexResultsStore.getBulkDocCollection();
 
-      try {
-        const responseText = JSON.parse(xhr.responseText);
-        if (responseText.reason) {
-          errorMsg = responseText.reason;
-        }
+  clearResults();
 
-        if (responseText.reason && responseText.reason === 'missing_named_view') {
-          errorMsg = `The ${options.collection.view} ${options.collection.design} does not exist.`;
-          FauxtonAPI.navigate(
-            FauxtonAPI.urls('allDocsSanitized', 'app', options.collection.database.safeID()),
-            {trigger: true}
-          );
-          return;
-        }
-      } catch (e) {
-        console.log(e);
-      }
-
+  return collection
+    .setQuery(query)
+    .fetch()
+    .then(function () {
+      resultsReady();
+      newMangoResultsList({
+        collection: collection,
+        query: options.queryCode,
+        textEmptyIndex: 'No Results Found!',
+        bulkCollection: bulkCollection
+      });
+    }.bind(this), function (res) {
       FauxtonAPI.addNotification({
-        msg: errorMsg,
-        type: "error",
-        clear:  true
+        msg: res.reason,
+        clear:  true,
+        type: 'error'
       });
 
-    });
-  },
+      this.resultsListReset();
+    }.bind(this));
+};
 
-  newMangoResultsList: function (options) {
-    FauxtonAPI.dispatch({
-      type: ActionTypes.INDEX_RESULTS_NEW_RESULTS,
-      options: options
-    });
-  },
+const resultsReady = () => {
+  FauxtonAPI.dispatch({
+    type: ActionTypes.INDEX_RESULTS_READY
+  });
+};
 
-  runMangoFindQuery: function (options) {
-    var query = JSON.parse(options.queryCode),
-        collection = indexResultsStore.getCollection(),
-        bulkCollection = indexResultsStore.getBulkDocCollection();
-
-    this.clearResults();
-
-    return collection
-      .setQuery(query)
-      .fetch()
-      .then(function () {
-        this.resultsListReset();
-        this.newMangoResultsList({
-          collection: collection,
-          query: options.queryCode,
-          textEmptyIndex: 'No Results Found!',
-          bulkCollection: bulkCollection
-        });
-      }.bind(this), function (res) {
-        FauxtonAPI.addNotification({
-          msg: res.reason,
-          clear:  true,
-          type: 'error'
-        });
-
-        this.resultsListReset();
-      }.bind(this));
-  },
-
-  reloadResultsList: function () {
-    if (indexResultsStore.getTypeOfIndex() === 'mango') {
-      return this.newResultsList({
-        collection: indexResultsStore.getCollection(),
-        bulkCollection: indexResultsStore.getBulkDocCollection(),
-        typeOfIndex: 'mango'
-      });
+const selectDoc = (options) => {
+  FauxtonAPI.dispatch({
+    type: ActionTypes.INDEX_RESULTS_SELECT_DOC,
+    options: {
+      _id: options._id,
+      _rev: options._rev,
+      _deleted: true
     }
+  });
+};
 
-    return this.newResultsList({
-      collection: indexResultsStore.getCollection(),
-      bulkCollection: indexResultsStore.getBulkDocCollection()
-    });
-  },
+const changeField = (options) => {
+  FauxtonAPI.dispatch({
+    type: ActionTypes.INDEX_RESULTS_SELECT_NEW_FIELD_IN_TABLE,
+    options: options
+  });
+};
 
-  resultsListReset: function () {
-    FauxtonAPI.dispatch({
-      type: ActionTypes.INDEX_RESULTS_RESET
-    });
-  },
+const toggleAllDocuments = () => {
+  FauxtonAPI.dispatch({
+    type: ActionTypes.INDEX_RESULTS_TOOGLE_SELECT_ALL_DOCUMENTS
+  });
+};
 
-  selectDoc: function (options) {
-    FauxtonAPI.dispatch({
-      type: ActionTypes.INDEX_RESULTS_SELECT_DOC,
-      options: {
-        _id: options._id,
-        _rev: options._rev,
-        _deleted: true
-      }
-    });
-  },
+const clearResults = () => {
+  FauxtonAPI.dispatch({
+    type: ActionTypes.INDEX_RESULTS_CLEAR_RESULTS
+  });
+};
 
-  changeField: function (options) {
-    FauxtonAPI.dispatch({
-      type: ActionTypes.INDEX_RESULTS_SELECT_NEW_FIELD_IN_TABLE,
-      options: options
-    });
-  },
+const deleteSelected = (databaseName, queryParams, selectedItems, designDocs) => {
+  const itemsLength = selectedItems.length;
 
-  toggleAllDocuments: function () {
-    FauxtonAPI.dispatch({
-      type: ActionTypes.INDEX_RESULTS_TOOGLE_SELECT_ALL_DOCUMENTS
-    });
-  },
+  var msg = (itemsLength === 1) ? 'Are you sure you want to delete this doc?' :
+    'Are you sure you want to delete these ' + itemsLength + ' docs?';
 
-  clearResults: function () {
-    FauxtonAPI.dispatch({
-      type: ActionTypes.INDEX_RESULTS_CLEAR_RESULTS
-    });
-  },
-
-  deleteSelected: function (bulkDeleteCollection, itemsLength, designDocs) {
-    var msg = (itemsLength === 1) ? 'Are you sure you want to delete this doc?' :
-      'Are you sure you want to delete these ' + itemsLength + ' docs?';
-
-    if (itemsLength === 0) {
-      window.alert('Please select the document rows you want to delete.');
-      return false;
-    }
-
-    if (!window.confirm(msg)) {
-      return false;
-    }
-
-    var reloadResultsList = _.bind(this.reloadResultsList, this);
-    var selectedIds = [];
-    const hasDesignDocs = !!bulkDeleteCollection.map(d => d.id).find((id) => /_design/.test(id));
-
-
-    bulkDeleteCollection
-      .bulkDelete()
-      .then(function (ids) {
-        FauxtonAPI.addNotification({
-          msg: 'Successfully deleted your docs',
-          clear:  true
-        });
-
-        if (!_.isEmpty(ids.errorIds)) {
-          errorMessage(ids.errorIds);
-          selectedIds = ids.errorIds;
-        }
-      }, function (ids) {
-        errorMessage(ids);
-        selectedIds = ids;
-      })
-      .always(function () {
-        if (designDocs && hasDesignDocs) {
-          SidebarActions.updateDesignDocs(designDocs);
-        }
-        reloadResultsList().then(function () {
-          bulkDeleteCollection.reset(selectedIds);
-        });
-      });
+  if (itemsLength === 0) {
+    window.alert('Please select the document rows you want to delete.');
+    return false;
   }
+
+  if (!window.confirm(msg)) {
+    return false;
+  }
+
+  // if the selected items contain any ddocs, we'll need to update the sidebar later on.
+  const hasDesignDocs = !!selectedItems.map(d => d._id).find((_id) => /_design/.test(_id));
+
+  return bulkDeleteDocs(databaseName, selectedItems).then((docs) => {
+    FauxtonAPI.addNotification({
+      msg: 'Successfully deleted your docs',
+      clear:  true
+    });
+
+    const failedDocs = docs.filter(doc => !!doc.error).map(doc => doc.id);
+    if (failedDocs.length > 0) {
+      errorMessage(failedDocs);
+    }
+
+    if (designDocs && hasDesignDocs) {
+      SidebarActions.updateDesignDocs(designDocs);
+    }
+
+    // reload the results after the delete
+    return getAllDocs(databaseName, queryParams);
+  });
+};
+
+export default {
+  togglePrioritizedTableView,
+  sendMessageNewResultList,
+  newMangoResultsList,
+  runMangoFindQuery,
+  resultsReady,
+  selectDoc,
+  changeField,
+  toggleAllDocuments,
+  clearResults,
+  deleteSelected,
+  getAllDocs,
+  storeDatabaseName
 };
