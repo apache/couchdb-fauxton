@@ -11,50 +11,30 @@
 // the License.
 
 import FauxtonAPI from "./base";
-import Backbone from "backbone";
-import _ from "lodash";
 
-// This is not exposed externally as it should not need to be accessed or overridden
-var Auth = function (options) {
-  this._options = options;
-  this.initialize.apply(this, arguments);
+function authenticate(session, roles) {
+  if (session.isAdminParty()) {
+    return true;
+  } else if (session.matchesRoles(roles)) {
+    return true;
+  } else {
+    throw new Error('Unable to authenticate');
+  }
+}
+
+function authenticationDenied() {
+  let url = window.location.hash
+    .replace('#', '')
+    .replace('login?urlback=', '');
+
+  FauxtonAPI.navigate(`/login?urlback=${url}`, { replace: true });
 };
 
-// Piggy-back on Backbone's self-propagating extend function,
-Auth.extend = Backbone.Model.extend;
-
-_.extend(Auth.prototype, Backbone.Events, {
-  authDeniedCb: function () {},
-
-  initialize: function () {
-  },
-
-  authHandlerCb : function () {
-    var deferred = $.Deferred();
-    deferred.resolve();
-    return deferred;
-  },
-
-  registerAuth: function (authHandlerCb) {
-    this.authHandlerCb = authHandlerCb;
-  },
-
-  registerAuthDenied: function (authDeniedCb) {
-    this.authDeniedCb = authDeniedCb;
-  },
-
-  checkAccess: function (roles) {
-    var requiredRoles = roles || [],
-    that = this;
-
-    if (!FauxtonAPI.session) {
-      throw new Error("Fauxton.session is not configured.");
-    }
-
-    return FauxtonAPI.session.fetchUser().then(function () {
-      return FauxtonAPI.when(that.authHandlerCb(FauxtonAPI.session, requiredRoles));
-    });
+export default class {
+  checkAccess(roles = []) {
+    return FauxtonAPI.session
+      .fetchUser()
+      .then(() => authenticate(FauxtonAPI.session, roles))
+      .catch(authenticationDenied);
   }
-});
-
-export default Auth;
+}

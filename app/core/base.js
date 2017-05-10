@@ -155,7 +155,7 @@ FauxtonAPI.extensions = extensions;
 
 FauxtonAPI.setSession = function (newSession) {
   FauxtonAPI.session = newSession;
-  return FauxtonAPI.session.fetchUser();
+  //return FauxtonAPI.session.fetchUser();
 };
 
 FauxtonAPI.reducers = {};
