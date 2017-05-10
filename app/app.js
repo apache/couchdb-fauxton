@@ -16,7 +16,7 @@ import "bootstrap";
 import Helpers from "./helpers";
 import Utils from "./core/utils";
 import FauxtonAPI from "./core/api";
-import Couchdb from "./core/couchdbSession";
+import Session from "./core/session";
 import "../assets/less/fauxton.less";
 
 // Make sure we have a console.log
@@ -46,10 +46,8 @@ Object.assign(app, {
   helpers: Helpers
 });
 
-FauxtonAPI.setSession(new Couchdb.Session());
+FauxtonAPI.setSession(new Session());
 
-// Define your master router on the application namespace and trigger all
-// navigation from this instance.
 FauxtonAPI.config({
   // I haven't wrapped these dispatch methods in a action
   // because I don't want to require fauxton/actions in this method.
