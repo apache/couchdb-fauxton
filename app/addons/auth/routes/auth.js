@@ -16,6 +16,7 @@ import ClusterActions from "../../cluster/cluster.actions";
 import { AuthLayout } from "./../layout";
 import app from "../../../app";
 import Components from "./../components";
+import {logout} from '../actions';
 
 const {
   LoginForm,
@@ -27,9 +28,9 @@ const crumbs = [{ name: "Log In to CouchDB" }];
 export default FauxtonAPI.RouteObject.extend({
   routes: {
     "login?*extra": "login",
-    login: "login",
-    logout: "logout",
-    createAdmin: "checkNodes",
+    "login": "login",
+    "logout": "logout",
+    "createAdmin": "checkNodes",
     "createAdmin/:node": "createAdminForNode"
   },
   checkNodes() {
@@ -44,8 +45,7 @@ export default FauxtonAPI.RouteObject.extend({
     );
   },
   logout() {
-    FauxtonAPI.addNotification({ msg: "You have been logged out." });
-    FauxtonAPI.session.logout().then(() => FauxtonAPI.navigate("/"));
+    logout();
   },
   createAdminForNode() {
     ClusterActions.fetchNodes();

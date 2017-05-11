@@ -12,14 +12,12 @@
 
 import LoginForm from './loginform.js';
 import PasswordModal from './passwordmodal.js';
-import CreateAdminSidebar from './createadminsidebar.js';
 import CreateAdminForm from './createadminform.js';
 import ChangePasswordForm from './changepasswordform.js';
 
-export default ({
+export default {
   LoginForm,
   PasswordModal,
-  CreateAdminSidebar,
   CreateAdminForm,
   ChangePasswordForm
-});
+};

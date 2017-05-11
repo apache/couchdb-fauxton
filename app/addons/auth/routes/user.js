@@ -14,11 +14,12 @@ import React from "react";
 import FauxtonAPI from "../../../core/api";
 import ClusterActions from "../../cluster/cluster.actions";
 import { AdminLayout } from "./../layout";
-import { selectPage } from './../actions';
 
 export default FauxtonAPI.RouteObject.extend({
   hideNotificationCenter: true,
   hideApiBar: true,
+  selectedHeader: 'Your Account',
+
   routes: {
     changePassword: {
       route: "checkNodesForPasswordChange",
@@ -37,18 +38,17 @@ export default FauxtonAPI.RouteObject.extend({
       roles: ["_admin"]
     }
   },
+
   checkNodesForPasswordChange() {
     ClusterActions.navigateToNodeBasedOnNodeCount("/changePassword/");
   },
+
   checkNodesForAddAdmin() {
     ClusterActions.navigateToNodeBasedOnNodeCount("/addAdmin/");
   },
-  selectedHeader() {
-    return FauxtonAPI.session.user.name;
-  },
+
   changePassword() {
     ClusterActions.fetchNodes();
-    selectPage("changePassword");
     return (
       <AdminLayout
         crumbs={[{ name: "User Management" }]}
@@ -58,7 +58,6 @@ export default FauxtonAPI.RouteObject.extend({
   },
   addAdmin() {
     ClusterActions.fetchNodes();
-    selectPage("addAdmin");
     return (
       <AdminLayout
         crumbs={[{ name: "User Management" }]}

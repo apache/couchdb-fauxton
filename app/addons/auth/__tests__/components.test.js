@@ -9,19 +9,17 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
-import FauxtonAPI from "../../../core/api";
+
 import React from "react";
 import ReactDOM from "react-dom";
 import utils from "../../../../test/mocha/testUtils";
-import * as Components from "../components";
-import * as Stores from "../stores";
+import LoginForm from "../components/loginform";
+import {CreateAdminForm} from "../components/createadminform";
+import {ChangePasswordForm} from '../components/changepasswordform';
 import * as Actions from "../actions";
-import TestUtils from "react-addons-test-utils";
 import { mount } from 'enzyme';
 import sinon from "sinon";
 var assert = utils.assert;
-
-var createAdminSidebarStore = Stores.createAdminSidebarStore;
 
 describe('Auth -- Components', () => {
 
@@ -33,12 +31,11 @@ describe('Auth -- Components', () => {
     });
 
     afterEach(() => {
-      createAdminSidebarStore.reset();
       Actions.login.restore();
     });
 
     it('should trigger login event when form submitted', () => {
-      const loginForm = mount(<Components.LoginForm/>);
+      const loginForm = mount(<LoginForm/>);
       loginForm.find('#login').simulate('submit');
       assert.ok(stub.calledOnce);
     });
@@ -48,7 +45,7 @@ describe('Auth -- Components', () => {
       const password = 'smith';
 
       const loginForm = mount(
-        <Components.LoginForm
+        <LoginForm
           testBlankUsername={username}
           testBlankPassword={password}
         />);
@@ -64,65 +61,38 @@ describe('Auth -- Components', () => {
   });
 
   describe('ChangePasswordForm', () => {
-    var container, changePasswordForm;
 
-    beforeEach(() => {
-      utils.restore(Actions.changePassword);
-    });
-
-    it('should call action to update password on field change', () => {
-      const changePasswordForm = mount(<Components.ChangePasswordForm />);
-      const spy = sinon.spy(Actions, 'updateChangePasswordField');
+    it('should update state on password change', () => {
+      const changePasswordForm = mount(<ChangePasswordForm />);
       changePasswordForm.find('#password').simulate('change', { target: { value: 'bobsyouruncle' }});
-      assert.ok(spy.calledOnce);
+      assert.deepEqual(changePasswordForm.state('password'), 'bobsyouruncle');
     });
 
-    it('should call action to update password confirm on field change', () => {
-      const changePasswordForm = mount(<Components.ChangePasswordForm />);
-      const spy = sinon.spy(Actions, 'updateChangePasswordConfirmField');
+    it('should update state on password confirm change', () => {
+      const changePasswordForm = mount(<ChangePasswordForm />);
       changePasswordForm.find('#password-confirm').simulate('change', { target: { value: 'hotdiggity' }});
-      assert.ok(spy.calledOnce);
+      assert.deepEqual(changePasswordForm.state('passwordConfirm'), 'hotdiggity');
     });
 
     it('should call action to submit form', () => {
-      const changePasswordForm = mount(<Components.ChangePasswordForm />);
-      var stub = sinon.stub(Actions, 'changePassword', () => {});
+      const spy = sinon.spy();
+      const changePasswordForm = mount(<ChangePasswordForm username={"bobsyouruncle"} changePassword={spy} />);
       changePasswordForm.find('#change-password').simulate('submit');
-      assert.ok(stub.calledOnce);
+      assert.ok(spy.calledOnce);
     });
   });
 
   describe('CreateAdminForm', () => {
-    it('should call action to update username on field change', () => {
-      const createAdminForm = mount(<Components.CreateAdminForm loginAfter={false} />);
-      var spy = sinon.spy(Actions, 'updateCreateAdminUsername');
+    it('should update username state', () => {
+      const createAdminForm = mount(<CreateAdminForm loginAfter={false} />);
       createAdminForm.find('#username').simulate('change',  { target: { value: 'catsmeow' }});
-      assert.ok(spy.calledOnce);
+      assert.deepEqual(createAdminForm.state('username'), 'catsmeow');
     });
 
     it('should call action to update password confirm on field change', () => {
-      const createAdminForm = mount(<Components.CreateAdminForm loginAfter={false} />);
-      var spy = sinon.spy(Actions, 'updateCreateAdminPassword');
+      const createAdminForm = mount(<CreateAdminForm loginAfter={false} />);
       createAdminForm.find('#password').simulate('change',  { target: { value: 'topnotch' }});
-      assert.ok(spy.calledOnce);
+      assert.deepEqual(createAdminForm.state('password'), 'topnotch');
     });
   });
-
-  describe('CreateAdminSidebar', () => {
-    beforeEach(() => {
-      createAdminSidebarStore.reset();
-    });
-
-    it('confirm the default selected nav item is the change pwd page', () => {
-      const wrapper = mount(<Components.CreateAdminSidebar />)
-      assert.equal(wrapper.find('.active a').props().href, '#changePassword');
-    });
-
-    it('confirm clicking a sidebar nav item selects it in the DOM', () => {
-      const wrapper = mount(<Components.CreateAdminSidebar />)
-      wrapper.find('li[data-page="addAdmin"]').find('a').simulate('click');
-      assert.equal(wrapper.find('.active a').props().href, '#addAdmin');
-    });
-  });
-
 });

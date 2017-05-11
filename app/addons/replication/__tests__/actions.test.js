@@ -13,12 +13,13 @@ import utils from '../../../../test/mocha/testUtils';
 import {replicate, getReplicationStateFrom, deleteDocs} from '../actions';
 import ActionTypes from '../actiontypes';
 import fetchMock from 'fetch-mock';
-import app from '../../../app';
 import FauxtonAPI from '../../../core/api';
 
-app.session = {
-  get () {
-    return 'test-user-name';
+FauxtonAPI.session = {
+  user () {
+    return {
+      name: 'test-user-name'
+    };
   }
 };
 

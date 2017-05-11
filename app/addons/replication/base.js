@@ -18,7 +18,6 @@ import Actions from './actions';
 replication.initialize = function () {
   FauxtonAPI.addHeaderLink({ title: 'Replication', href: '#/replication', icon: 'fonticon-replicate' });
   FauxtonAPI.session.isAuthenticated().then(() => {
-    console.log('AUAUAU', FauxtonAPI.session.isLoggedIn());
     Actions.checkForNewApi();
   });
 };

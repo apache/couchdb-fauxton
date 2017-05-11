@@ -23,10 +23,8 @@ class LoginForm extends React.Component {
     };
   }
   onInputChange(e) {
-    let change = e.target.name === "name"
-      ? { username: e.target.value }
-      : { password: e.target.value };
-    this.setState(change);
+    this.state[e.target.name] = e.target.value;
+    this.setState(this.state);
   }
   submit(e) {
     e.preventDefault();
@@ -40,10 +38,10 @@ class LoginForm extends React.Component {
     if (this.state.username !== "" || this.state.password !== "") {
       return false;
     }
-    var username = this.props.testBlankUsername
+    let username = this.props.testBlankUsername
       ? this.props.testBlankUsername
       : ReactDOM.findDOMNode(this.refs.username).value;
-    var password = this.props.testBlankPassword
+    let password = this.props.testBlankPassword
       ? this.props.testBlankPassword
       : ReactDOM.findDOMNode(this.refs.password).value;
     this.setState({ username: username, password: password }); // doesn't set immediately, hence separate login() call
@@ -69,7 +67,7 @@ class LoginForm extends React.Component {
               <input
                 id="username"
                 type="text"
-                name="name"
+                name="username"
                 ref="username"
                 placeholder="Username"
                 size="24"

@@ -23,6 +23,13 @@ import { createStore, applyMiddleware, combineReducers } from 'redux';
 import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
 
+const middlewares = [thunk];
+
+const store = createStore(
+  combineReducers(FauxtonAPI.reducers),
+  applyMiddleware(...middlewares)
+);
+
 app.addons = LoadAddons;
 FauxtonAPI.router = app.router = new FauxtonAPI.Router(app.addons);
 // Trigger the initial route and enable HTML5 History API support, set the
@@ -33,7 +40,6 @@ Backbone.history.start({ pushState: false, root: app.root });
 if ('ActiveXObject' in window) {
   $.ajaxSetup({ cache: false });
 }
-
 
 // All navigation that is relative should be passed through the navigate
 // method, to be processed by the router. If the link has a `data-bypass`
@@ -56,13 +62,6 @@ $(document).on("click", "a:not([data-bypass])", function (evt) {
     app.router.navigate(href.attr, true);
   }
 });
-
-const middlewares = [thunk];
-
-const store = createStore(
-  combineReducers(FauxtonAPI.reducers),
-  applyMiddleware(...middlewares)
-);
 
 ReactDOM.render(
   <Provider store={store}>
