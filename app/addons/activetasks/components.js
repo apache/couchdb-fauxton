@@ -384,6 +384,10 @@ export const ActiveTasksPollingWidgetController = React.createClass({
     activeTasksStore.on('change', this.onChange, this);
   },
 
+  componentWillUnmount () {
+    activeTasksStore.off('change', this.onChange, this);
+  },
+
   onChange () {
     this.setState(this.getStoreState());
   },

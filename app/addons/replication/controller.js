@@ -12,7 +12,7 @@
 import React from 'react';
 import Stores from './stores';
 import Actions from './actions';
-import AuthActions from '../auth/actions';
+import {showPasswordModal} from '../auth/actions';
 import Components from '../components/react-components';
 import NewReplication from './components/newreplication';
 import Activity from './components/activity';
@@ -134,7 +134,7 @@ export default class ReplicationController extends React.Component {
         localSourceKnown={localSourceKnown}
         clearReplicationForm={Actions.clearReplicationForm}
         replicate={Actions.replicate}
-        showPasswordModal={AuthActions.showPasswordModal}
+        showPasswordModal={showPasswordModal}
         replicationSource={replicationSource}
         replicationTarget={replicationTarget}
         replicationType={replicationType}

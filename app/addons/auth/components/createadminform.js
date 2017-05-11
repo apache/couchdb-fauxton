@@ -12,55 +12,44 @@
 
 import React from "react";
 import ReactDOM from "react-dom";
-import { createAdminStore } from "./../stores";
 import {
-  updateCreateAdminUsername,
-  updateCreateAdminPassword,
   createAdmin
 } from "./../actions";
+import {connect} from 'react-redux';
 
-class CreateAdminForm extends React.Component {
-  getInitialState() {
-    return this.getStoreState();
-  }
-  getStoreState() {
-    return {
-      username: createAdminStore.getUsername(),
-      password: createAdminStore.getPassword()
+export class CreateAdminForm extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      username: '',
+      password: ''
     };
   }
-  onChange() {
-    this.setState(this.getStoreState());
-  }
-  getDefaultProps() {
-    return {
-      loginAfter: ""
-    };
-  }
+
   onChangeUsername(e) {
-    updateCreateAdminUsername(e.target.value);
+    this.setState({username: e.target.value});
   }
+
   onChangePassword(e) {
-    updateCreateAdminPassword(e.target.value);
+    this.setState({password: e.target.value});
   }
+
   componentDidMount() {
     ReactDOM.findDOMNode(this.refs.username).focus();
-    createAdminStore.on("change", this.onChange, this);
   }
-  componentWillUnmount() {
-    createAdminStore.off("change", this.onChange);
-  }
+
   createAdmin(e) {
     e.preventDefault();
-    createAdmin(
+    this.props.createAdmin(
       this.state.username,
       this.state.password,
       this.props.loginAfter
     );
   }
+
   render() {
     return (
-      <div className="auth-page">
+      <div className="faux__auth-page">
         <h3>Create Admins</h3>
 
         <p>
@@ -79,7 +68,7 @@ class CreateAdminForm extends React.Component {
           the test suite, and edit all aspects of CouchDB configuration.
         </p>
 
-        <form id="create-admin-form" onSubmit={this.createAdmin}>
+        <form id="create-admin-form" onSubmit={this.createAdmin.bind(this)}>
           <input
             id="username"
             type="text"
@@ -87,7 +76,7 @@ class CreateAdminForm extends React.Component {
             name="name"
             placeholder="Username"
             size="24"
-            onChange={this.onChangeUsername}
+            onChange={this.onChangeUsername.bind(this)}
           />
           <br />
           <input
@@ -96,11 +85,11 @@ class CreateAdminForm extends React.Component {
             name="password"
             placeholder="Password"
             size="24"
-            onChange={this.onChangePassword}
+            onChange={this.onChangePassword.bind(this)}
           />
           <p>
             Non-admin users have read and write access to all databases, which
-            are controlled by validatio. CouchDB can be configured to block all
+            are controlled by validation. CouchDB can be configured to block all
             access to anonymous users.
           </p>
           <button type="submit" id="create-admin" className="btn btn-primary">
@@ -116,4 +105,12 @@ CreateAdminForm.propTypes = {
   loginAfter: React.PropTypes.bool.isRequired
 };
 
-export default CreateAdminForm;
+CreateAdminForm.defaultProps = {
+  loginAfter: false
+};
+
+
+export default connect(
+  null,
+  {createAdmin}
+)(CreateAdminForm);

@@ -21,8 +21,6 @@ const {assert, restore}  = utils;
 
 describe('New Replication Component', () => {
 
-  FauxtonAPI.session.triggerError = () => {};
-
   describe('validation', () => {
 
     afterEach(() => {

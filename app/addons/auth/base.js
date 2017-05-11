@@ -10,22 +10,16 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import app from "../../app";
 import FauxtonAPI from "../../core/api";
-import Session from  "../../core/session";
 import RouteObjects from './routes';
 import "./assets/less/auth.less";
-
-const Auth = {
-  session: new Session()
-};
-
-FauxtonAPI.setSession(Auth.session);
-app.session = Auth.session;
+import Session from './session';
 
 const cleanupAuthSection = () => {
   FauxtonAPI.removeHeaderLink({ id: 'auth', bottomNav: true });
 };
+
+FauxtonAPI.setSession(new Session({allowAdminParty: true}));
 
 export default ({
   initialize: () => {
@@ -37,8 +31,8 @@ export default ({
       bottomNav: true
     });
 
-    Auth.session.onChange(() => {
-      const session = Auth.session;
+    FauxtonAPI.session.onChange(() => {
+      const session = FauxtonAPI.session;
       let link;
 
       if (session.isAdminParty()) {
@@ -71,8 +65,6 @@ export default ({
         FauxtonAPI.showLogin();
       }
     });
-
-    Auth.session.fetchUser();
   },
   RouteObjects
 });

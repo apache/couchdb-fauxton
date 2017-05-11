@@ -11,30 +11,44 @@
 // the License.
 
 import FauxtonAPI from "./base";
+import Promise from 'bluebird';
 
-function authenticate(session, roles) {
+export const authenticate = (session, roles) => {
   if (session.isAdminParty()) {
     return true;
   } else if (session.matchesRoles(roles)) {
     return true;
-  } else {
-    throw new Error('Unable to authenticate');
   }
-}
 
-function authenticationDenied() {
+  throw new Error('Unable to authenticate');
+};
+
+export const authenticationDenied = () => {
   let url = window.location.hash
     .replace('#', '')
     .replace('login?urlback=', '');
 
-  FauxtonAPI.navigate(`/login?urlback=${url}`, { replace: true });
+  if (url) {
+    FauxtonAPI.navigate(`/login?urlback=${url}`, { replace: true });
+  }
+
+  FauxtonAPI.navigate(`/login`, { replace: true });
 };
 
-export default class {
-  checkAccess(roles = []) {
-    return FauxtonAPI.session
-      .fetchUser()
-      .then(() => authenticate(FauxtonAPI.session, roles))
-      .catch(authenticationDenied);
-  }
-}
+export const checkAccess = (roles = []) => {
+  return new Promise((resolve, reject) => {
+    return FauxtonAPI.session.getSession()
+      .then(() => {
+        if (authenticate(FauxtonAPI.session, roles)) {
+          resolve();
+          return;
+        }
+
+        reject();
+      })
+      .catch(err => {
+        reject(err);
+        authenticationDenied();
+      });
+  });
+};

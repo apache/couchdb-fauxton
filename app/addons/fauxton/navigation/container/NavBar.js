@@ -56,7 +56,7 @@ const NavBarContainer = React.createClass({
   render () {
     const user = FauxtonAPI.session.user();
 
-    const username =  user ? user.name : '';
+    const username =  (user && user.name) ? user.name : '';
     return (
       <NavBar {...this.state} username={username} />
     );

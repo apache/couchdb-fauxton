@@ -12,7 +12,6 @@
 
 import 'url-polyfill';
 import Constants from './constants';
-import app from '../../app';
 import FauxtonAPI from '../../core/api';
 import base64 from 'base-64';
 import _ from 'lodash';
@@ -54,7 +53,7 @@ export const decodeFullUrl = (fullUrl) => {
 };
 
 export const getUsername = () => {
-  return app.session.get('userCtx').name;
+  return FauxtonAPI.session.user().name;
 };
 
 export const getAuthHeaders = (username, password) => {

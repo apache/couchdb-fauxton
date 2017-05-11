@@ -12,6 +12,12 @@
     "cors-disable-cors-prompt": "Are you sure? Disabling CORS will overwrite your specific origin domains.",
     "cors-notice": "Cross-Origin Resource Sharing (CORS) lets you connect to remote servers directly from the browser, so you can host browser-based apps on static pages and talk directly with CouchDB to load your data.",
     "replication-password-modal-header": "Enter Account Password.",
-    "replication-password-modal-text": "Replication requires authentication on your credentials."
+    "replication-password-modal-text": "Replication requires authentication on your credentials.",
+    "auth-missing-credentials": "Username or password cannot be blank.",
+    "auth-logged-in": "You have been logged in.",
+    "auth-admin-created": "CouchDB admin created",
+    "auth-change-password": "Your password has been updated.",
+    "auth-admin-creation-failed-prefix": "Could not create admin.",
+    "auth-passwords-not-matching": "Passwords do not match."
   }
 }

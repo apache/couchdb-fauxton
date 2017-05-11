@@ -16,7 +16,6 @@ import "bootstrap";
 import Helpers from "./helpers";
 import Utils from "./core/utils";
 import FauxtonAPI from "./core/api";
-import Session from "./core/session";
 import "../assets/less/fauxton.less";
 
 // Make sure we have a console.log
@@ -45,8 +44,6 @@ Object.assign(app, {
   getParams: FauxtonAPI.utils.getParams,
   helpers: Helpers
 });
-
-FauxtonAPI.setSession(new Session());
 
 FauxtonAPI.config({
   // I haven't wrapped these dispatch methods in a action
