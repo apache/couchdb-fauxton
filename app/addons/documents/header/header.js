@@ -49,6 +49,7 @@ var BulkDocumentHeaderController = React.createClass({
   },
 
   render () {
+    console.log(this.props);
     const layout = this.state.selectedLayout;
     const metadata = this.state.isMango ? null :
           <Button

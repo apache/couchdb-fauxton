@@ -13,7 +13,12 @@
 import app from "../../app";
 import FauxtonAPI from "../../core/api";
 import Documents from "./routes";
+import reducers from "./reducers";
 import "./assets/less/documents.less";
+
+FauxtonAPI.addReducers({
+  indexResults: reducers
+});
 
 function getQueryParam (query) {
   if (!query) {

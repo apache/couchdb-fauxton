@@ -1,0 +1,182 @@
+// Licensed under the Apache License, Version 2.0 (the "License"); you may not
+// use this file except in compliance with the License. You may obtain a copy of
+// the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+// WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+// License for the specific language governing permissions and limitations under
+// the License.
+
+import Constants from "../../constants";
+import {
+    isJSONDocBulkDeletable,
+    isJSONDocEditable,
+    hasBulkDeletableDoc,
+    getDocUrl
+ } from "./shared-helpers";
+
+const getPseudoSchema = (docs) => {
+  let cache = [];
+
+  docs.forEach((doc) => {
+    Object.keys(doc).forEach(function (k) {
+      cache.push(k);
+    });
+  });
+
+  cache = _.uniq(cache);
+
+  // always begin with _id
+  let i = cache.indexOf('_id');
+  if (i !== -1) {
+    cache.splice(i, 1);
+    cache.unshift('_id');
+  }
+
+  return cache;
+};
+
+const getPrioritizedFields = (docs, max) => {
+  let res = docs.reduce((acc, el) => {
+    acc = acc.concat(Object.keys(el));
+    return acc;
+  }, []);
+
+  res = _.countBy(res, (el) => {
+    return el;
+  });
+
+  delete res.id;
+  delete res._rev;
+
+  res = Object.keys(res).reduce((acc, el) => {
+    acc.push([res[el], el]);
+    return acc;
+  }, []);
+
+  res = sortByTwoFields(res);
+  res = res.slice(0, max);
+
+  return res.reduce((acc, el) => {
+    acc.push(el[1]);
+    return acc;
+  }, []);
+};
+
+const sortByTwoFields = (elements) => {
+  // given:
+  // var a = [[2, "b"], [3, "z"], [1, "a"], [3, "a"]]
+  // it sorts to:
+  // [[3, "a"], [3, "z"], [2, "b"], [1, "a"]]
+  // note that the arrays with 3 got the first two arrays
+  // _and_ that the second values in the array with 3 are also sorted
+
+  const _recursiveSort = (a, b, index) => {
+    if (a[index] === b[index]) {
+      return index < 2 ? _recursiveSort(a, b, index + 1) : 0;
+    }
+
+    // second elements asc
+    if (index === 1) {
+      return (a[index] < b[index]) ? -1 : 1;
+    }
+
+    // first elements desc
+    return (a[index] < b[index]) ? 1 : -1;
+  };
+
+  return elements.sort((a, b) => {
+    return _recursiveSort(a, b, 0);
+  });
+};
+
+const getNotSelectedFields = (selectedFields, allFields) => {
+    const without = _.without.bind(this, allFields);
+    return without.apply(this, selectedFields);
+};
+
+const getFullTableViewData = (docs, options) => {
+  let notSelectedFieldsTableView = null,
+      selectedFieldsTableView = options.selectedFieldsTableView,
+      showAllFieldsTableView = options.showAllFieldsTableView,
+      schema;  // array containing the unique attr keys in the results.  always begins with _id.
+
+  // only use the "doc" attribute as this resulted from an include_docs fetch
+  docs = docs.map((doc) => { return doc.doc || doc; });
+  // build the schema container based on the normalized data
+  schema = getPseudoSchema(docs);
+
+  // if we're showing a subset of the attr/columns in the table, set the selected fields
+  // to the previously cached fields if they exist.
+  if (!showAllFieldsTableView) {
+    selectedFieldsTableView = options.cachedFieldsTableView || [];
+  }
+
+  // if we still don't know what attr/columns to display, build the list
+  if (selectedFieldsTableView && selectedFieldsTableView.length === 0) {
+    selectedFieldsTableView = getPrioritizedFields(docs, 5);
+  }
+
+  // set the notSelectedFields to the subset excluding meta and selected attributes
+  const schemaWithoutMetaDataFields = _.without(schema, '_attachments');
+  notSelectedFieldsTableView = getNotSelectedFields(selectedFieldsTableView, schemaWithoutMetaDataFields);
+
+  // if we're showing all attr/columns, we revert the notSelectedFields to null and set
+  // the selected fields to everything excluding meta.
+  if (showAllFieldsTableView) {
+    notSelectedFieldsTableView = null;
+    selectedFieldsTableView = schemaWithoutMetaDataFields;
+  }
+
+  return {
+    schema,
+    selectedFieldsTableView,
+    notSelectedFieldsTableView
+  };
+};
+
+const getMetaDataTableView = (docs) => {
+  const schema = getPseudoSchema(docs);
+  return {
+    schema,
+    selectedFieldsTableView: schema,
+    notSelectedFieldsTableView: null
+  };
+};
+
+export const getTableViewData = (docs, options) => {
+  const isMetaData = Constants.LAYOUT_ORIENTATION.METADATA === options.selectedLayout;
+  const {
+    schema,
+    selectedFieldsTableView,
+    notSelectedFieldsTableView
+  } = isMetaData ? getMetaDataTableView(docs) : getFullTableViewData(docs, options);
+
+  const res = docs.map(function (doc) {
+    return {
+      content: doc,
+      id: doc._id || doc.id, // inconsistent apis for GET between mango and views
+      _rev: doc._rev || doc.value.rev,
+      header: '',
+      keylabel: '',
+      url: doc._id || doc.id ? getDocUrl('app', doc._id || doc.id, options.databaseName) : null,
+      isDeletable: isJSONDocBulkDeletable(doc, options.typeOfIndex),
+      isEditable: isJSONDocEditable(doc, options.typeOfIndex)
+    };
+  });
+
+  return {
+    notSelectedFields: notSelectedFieldsTableView,
+    selectedFields: selectedFieldsTableView,
+    hasBulkDeletableDoc: hasBulkDeletableDoc(docs),
+    schema: schema,
+    results: res,
+    displayedFields: isMetaData ? null : {
+      shown: _.uniq(selectedFieldsTableView).length,
+      allFieldCount: _.without(schema, '_attachments').length
+    }
+  };
+};

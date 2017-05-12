@@ -21,6 +21,7 @@ import Changes from './changes/components';
 import IndexEditorComponents from "./index-editor/components";
 import DesignDocInfoComponents from './designdocinfo/components';
 import RightAllDocsHeader from './components/header-docs-right';
+import IndexResultsContainer from './index-results/containers/IndexResultsContainer';
 
 export const TabsSidebarHeader = ({
   hideQueryOptions,
@@ -97,7 +98,23 @@ TabsSidebarContent.propTypes = {
   upperContent: React.PropTypes.object,
 };
 
-export const DocsTabsSidebarLayout = ({database, designDocs, docURL, endpoint, dbName, dropDownLinks}) => {
+export const DocsTabsSidebarLayout = ({
+  database,
+  designDocs,
+  docURL,
+  endpoint,
+  dbName,
+  dropDownLinks,
+  isRedux = false,
+  params = {}
+}) => {
+  let lowerContent;
+  if (isRedux) {
+    lowerContent = <IndexResultsContainer databaseName={dbName} params={params} designDocs={designDocs} />;
+  } else {
+    lowerContent = <IndexResultsComponents.List designDocs={designDocs} />;
+  }
+
   return (
     <div id="dashboard" className="with-sidebar">
       <TabsSidebarHeader
@@ -108,7 +125,7 @@ export const DocsTabsSidebarLayout = ({database, designDocs, docURL, endpoint, d
         database={database}
       />
       <TabsSidebarContent
-        lowerContent={<IndexResultsComponents.List designDocs={designDocs} />}
+        lowerContent={lowerContent}
       />
     </div>
   );
