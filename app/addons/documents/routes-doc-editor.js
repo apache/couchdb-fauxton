@@ -61,6 +61,20 @@ const DocEditorRouteObject = FauxtonAPI.RouteObject.extend({
       />;
   },
 
+  revisionBrowser: function (databaseName, docId) {
+    const backLink = FauxtonAPI.urls('allDocs', 'app', this.database.safeID());
+    const docUrl = FauxtonAPI.urls('document', 'app', this.database.safeID(), this.docId);
+
+    this.crumbs = [
+      { name: this.database.safeID(), link: backLink },
+      { name: this.docId + ' > Conflicts' }
+    ];
+
+    RevBrowserActions.showConfirmModal(false, null);
+    RevBrowserActions.initDiffEditor(databaseName, docId);
+    this.setComponent('#dashboard-content', RevBrowserComponents.DiffyController);
+  },
+
   codeEditor: function (databaseName, docId) {
     const backLink = FauxtonAPI.urls('allDocs', 'app', FauxtonAPI.url.encode(databaseName));
 
