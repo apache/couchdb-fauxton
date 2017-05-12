@@ -12,6 +12,7 @@ before_script:
   - npm install
   - docker logs couchdb
   - docker logs selenium
+  - sleep 59
   - curl http://127.0.0.1:5984
   - npm run stylecheck
   - npm test
