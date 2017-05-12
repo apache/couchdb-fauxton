@@ -27,7 +27,7 @@ Databases.initialize = function () {
 // Utility functions
 Databases.databaseUrl = function (database) {
   var name = _.isObject(database) ? database.id : database,
-      dbname = app.utils.safeURLName(name);
+      dbname = encodeURIComponent(name);
 
   return ['/database/', dbname, '/_all_docs?limit=' + Databases.DocLimit].join('');
 };
@@ -62,7 +62,7 @@ FauxtonAPI.registerUrls('allDBs', {
 
 FauxtonAPI.registerUrls('databaseBaseURL', {
   server: function (database) {
-    return window.location.origin + '/' + app.utils.safeURLName(database);
+    return window.location.origin + '/' + encodeURIComponent(database);
   },
 
   app: function (database) {

@@ -10,7 +10,6 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import app from "../../../app";
 import FauxtonAPI from "../../../core/api";
 import React from "react";
 import ActionTypes from "./actiontypes";
@@ -194,7 +193,7 @@ Stores.SidebarStore = FauxtonAPI.Store.extend({
     });
 
     return docs.map(function (doc) {
-      doc.safeId = app.utils.safeURLName(doc._id.replace(/^_design\//, ""));
+      doc.safeId = encodeURIComponent(doc._id.replace(/^_design\//, ""));
       return _.extend(doc, doc.doc);
     });
   },

@@ -60,7 +60,7 @@ Databases.Model = FauxtonAPI.Model.extend({
   },
 
   safeID: function () {
-    return app.utils.safeURLName(this.id);
+    return encodeURIComponent(this.id);
   },
   buildChanges: function (params) {
     if (!params.limit) {

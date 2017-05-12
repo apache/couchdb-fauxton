@@ -81,7 +81,7 @@ Documents.DdocInfo = FauxtonAPI.Model.extend({
   // json editor for docs, or into a ddoc specific page.
   safeID: function () {
     var ddoc = this.id.replace(/^_design\//, "");
-    return "_design/" + app.utils.safeURLName(ddoc);
+    return "_design/" + encodeURIComponent(ddoc);
   }
 });
 
@@ -491,8 +491,8 @@ Documents.IndexCollection = PagingCollection.extend({
     }
 
     var database = this.database.safeID(),
-        design = app.utils.safeURLName(this.design),
-        view = app.utils.safeURLName(this.view),
+        design = encodeURIComponent(this.design),
+        view = encodeURIComponent(this.view),
         url = FauxtonAPI.urls('view', context, database, design, view);
 
     return (url.indexOf("?") > -1) ? `${url}&${query}` : `${url}?${query}`;

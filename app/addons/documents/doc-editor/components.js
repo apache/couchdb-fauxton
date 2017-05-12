@@ -12,7 +12,6 @@
 
 
 import FauxtonAPI from "../../../core/api";
-import app from "../../../app";
 import React from "react";
 import ReactDOM from "react-dom";
 import Actions from "./actions";
@@ -225,7 +224,7 @@ var AttachmentsPanelButton = React.createClass({
     var doc = this.props.doc.get('_id');
 
     return _.map(this.props.doc.get('_attachments'), function (item, filename) {
-      var url = FauxtonAPI.urls('document', 'attachment', db, doc, app.utils.safeURLName(filename));
+      var url = FauxtonAPI.urls('document', 'attachment', encodeURIComponent(db), doc, encodeURIComponent(filename));
       return (
         <li key={filename}>
           <a href={url} target="_blank" data-bypass="true"> <strong>{filename}</strong>

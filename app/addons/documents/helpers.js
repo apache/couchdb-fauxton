@@ -67,7 +67,7 @@ function getModifyDatabaseLinks (databaseName) {
   return [{
     title: 'Replicate Database',
     icon: 'fonticon-replicate',
-    url: FauxtonAPI.urls('replication', 'app', databaseName)
+    url: FauxtonAPI.urls('replication', 'app', encodeURIComponent(databaseName))
   }, {
     title: 'Delete',
     icon: 'fonticon-trash',
