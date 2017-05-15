@@ -13,9 +13,10 @@ import React from 'react';
 import {Table, Tooltip, OverlayTrigger} from "react-bootstrap";
 import moment from 'moment';
 import {ErrorModal} from './modals';
+import {removeCredentialsFromUrl} from '../api';
 
-const formatUrl = (url) => {
-  const urlObj = new URL(url);
+export const formatUrl = (url) => {
+  const urlObj = new URL(removeCredentialsFromUrl(url));
   const encoded = encodeURIComponent(urlObj.pathname.slice(1));
 
   if (url.indexOf(window.location.hostname) > -1) {
