@@ -20,37 +20,43 @@ import { Button, ButtonGroup } from 'react-bootstrap';
 const { indexResultsStore } = IndexResultStores;
 const { queryOptionsStore } = QueryOptionsStore;
 
-var BulkDocumentHeaderController = React.createClass({
+export default class BulkDocumentHeaderController extends React.Component {
+  constructor (props) {
+    super(props);
+    this.state = this.getStoreState();
+  }
+
   getStoreState () {
     return {
       selectedLayout: indexResultsStore.getSelectedLayout(),
       bulkDocCollection: indexResultsStore.getBulkDocCollection(),
       isMango: indexResultsStore.getIsMangoResults()
     };
-  },
-
-  getInitialState () {
-    return this.getStoreState();
-  },
+  }
 
   componentDidMount () {
     indexResultsStore.on('change', this.onChange, this);
     queryOptionsStore.on('change', this.onChange, this);
 
-  },
+  }
 
   componentWillUnmount () {
     indexResultsStore.off('change', this.onChange);
     queryOptionsStore.off('change', this.onChange);
-  },
+  }
 
   onChange () {
     this.setState(this.getStoreState());
-  },
+  }
 
   render () {
-    console.log(this.props);
-    const layout = this.state.selectedLayout;
+    //console.log(this.props);
+
+    const { changeLayout, selectedLayout } = this.props;
+    // If the changeLayout function is not undefined, default to using prop values
+    // because we're using our new redux store.
+    // TODO: migrate completely to redux and eliminate this check.
+    const layout = changeLayout ? selectedLayout : this.state.selectedLayout;
     const metadata = this.state.isMango ? null :
           <Button
             className={layout === Constants.LAYOUT_ORIENTATION.METADATA ? 'active' : ''}
@@ -78,16 +84,28 @@ var BulkDocumentHeaderController = React.createClass({
         </ButtonGroup>
       </div>
     );
-  },
+  }
 
-  toggleLayout: function (layout) {
-    Actions.toggleLayout(layout);
+  toggleLayout (newLayout) {
+    // this will be present when using redux stores
+    const { changeLayout, selectedLayout, fetchAllDocs, queryParams } = this.props;
+    if (changeLayout && newLayout !== selectedLayout) {
+      changeLayout(newLayout);
+
+      if (newLayout === Constants.LAYOUT_ORIENTATION.METADATA) {
+        delete queryParams.docParams.include_docs;
+      } else {
+        queryParams.docParams.include_docs = true;
+      }
+
+      fetchAllDocs(queryParams.docParams);
+      return;
+    }
+
+    // fall back to old backbone style logic
+    Actions.toggleLayout(newLayout);
     if (!this.state.isMango) {
-      Actions.toggleIncludeDocs(layout === Constants.LAYOUT_ORIENTATION.METADATA, this.state.bulkDocCollection);
+      Actions.toggleIncludeDocs(newLayout === Constants.LAYOUT_ORIENTATION.METADATA, this.state.bulkDocCollection);
     }
   }
-});
-
-export default {
-  BulkDocumentHeaderController: BulkDocumentHeaderController
 };

@@ -16,9 +16,6 @@ import Components from '../index-results.components';
 export default class IndexResults extends React.Component {
   constructor (props) {
     super(props);
-  }
-
-  componentWillMount () {
     const { fetchAllDocs, queryParams, initialize } = this.props;
 
     // save the prop params to the state tree as an initialization step
@@ -28,9 +25,14 @@ export default class IndexResults extends React.Component {
     fetchAllDocs(queryParams.docParams);
   }
 
+  componentWillUnmount () {
+    const { resetState } = this.props;
+    resetState();
+  }
+
   deleteSelectedDocs () {
-    const { bulkDeleteDocs, fetchAllDocs, queryParams, selectedDocs } = this.props;
-    bulkDeleteDocs(selectedDocs).then(fetchAllDocs(queryParams));
+    const { bulkDeleteDocs, queryParams, selectedDocs } = this.props;
+    bulkDeleteDocs(selectedDocs, queryParams.docParams);
   }
 
   isSelected (id) {
@@ -38,35 +40,45 @@ export default class IndexResults extends React.Component {
 
     // check whether this id exists in our array of selected docs
     return selectedDocs.findIndex((doc) => {
-      return id === doc.id;
+      return id === doc._id;
     }) > -1;
   }
 
   docChecked (_id, _rev) {
-    const { selectDoc } = this.props;
+    const { selectDoc, selectedDocs } = this.props;
 
     // dispatch an action to push this doc on to the array of selected docs
-    selectDoc({
+    const doc = {
       _id: _id,
-      _rev: _rev
-    });
+      _rev: _rev,
+      _deleted: true
+    };
+
+    selectDoc(doc, selectedDocs);
+  }
+
+  toggleSelectAll () {
+    const {
+      docs,
+      selectedDocs,
+      allDocumentsSelected,
+      bulkCheckOrUncheck
+    } = this.props;
+
+    bulkCheckOrUncheck(docs, selectedDocs, allDocumentsSelected);
   }
 
   render () {
+    const { results } = this.props;
+
     return (
       <Components.ResultsScreen
         removeItem={this.deleteSelectedDocs.bind(this)}
-        hasSelectedItem={this.props.hasDocSelected}
-        allDocumentsSelected={this.props.allDocsSelected}
         isSelected={this.isSelected.bind(this)}
-        isEditable={this.props.isEditable}
-        isListDeletable={this.props.dataForRendering.hasBulkDeletableDoc}
-        docChecked={this.docChecked}
-        isLoading={this.props.isLoading}
-        hasResults={this.props.hasResults}
-        textEmptyIndex={this.props.textEmptyIndex}
-        results={this.props.dataForRendering}
-        selectedLayout={this.props.selectedLayout} />
+        docChecked={this.docChecked.bind(this)}
+        isListDeletable={results.hasBulkDeletableDoc}
+        toggleSelectAll={this.toggleSelectAll.bind(this)}
+        {...this.props} />
     );
   }
-}
+};

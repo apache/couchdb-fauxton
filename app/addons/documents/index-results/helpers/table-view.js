@@ -105,19 +105,13 @@ const getFullTableViewData = (docs, options) => {
       schema;  // array containing the unique attr keys in the results.  always begins with _id.
 
   // only use the "doc" attribute as this resulted from an include_docs fetch
-  docs = docs.map((doc) => { return doc.doc || doc; });
+  const normalizedDocs = docs.map((doc) => { return doc.doc || doc; });
   // build the schema container based on the normalized data
-  schema = getPseudoSchema(docs);
+  schema = getPseudoSchema(normalizedDocs);
 
-  // if we're showing a subset of the attr/columns in the table, set the selected fields
-  // to the previously cached fields if they exist.
-  if (!showAllFieldsTableView) {
-    selectedFieldsTableView = options.cachedFieldsTableView || [];
-  }
-
-  // if we still don't know what attr/columns to display, build the list
+  // if we don't know what attr/columns to display, build the list
   if (selectedFieldsTableView && selectedFieldsTableView.length === 0) {
-    selectedFieldsTableView = getPrioritizedFields(docs, 5);
+    selectedFieldsTableView = getPrioritizedFields(normalizedDocs, 5);
   }
 
   // set the notSelectedFields to the subset excluding meta and selected attributes
@@ -133,6 +127,7 @@ const getFullTableViewData = (docs, options) => {
 
   return {
     schema,
+    normalizedDocs,
     selectedFieldsTableView,
     notSelectedFieldsTableView
   };
@@ -142,6 +137,7 @@ const getMetaDataTableView = (docs) => {
   const schema = getPseudoSchema(docs);
   return {
     schema,
+    normalizedDocs: docs,  // no need to massage the docs for metadata
     selectedFieldsTableView: schema,
     notSelectedFieldsTableView: null
   };
@@ -151,11 +147,12 @@ export const getTableViewData = (docs, options) => {
   const isMetaData = Constants.LAYOUT_ORIENTATION.METADATA === options.selectedLayout;
   const {
     schema,
+    normalizedDocs,
     selectedFieldsTableView,
     notSelectedFieldsTableView
   } = isMetaData ? getMetaDataTableView(docs) : getFullTableViewData(docs, options);
 
-  const res = docs.map(function (doc) {
+  const res = normalizedDocs.map(function (doc) {
     return {
       content: doc,
       id: doc._id || doc.id, // inconsistent apis for GET between mango and views
@@ -171,7 +168,7 @@ export const getTableViewData = (docs, options) => {
   return {
     notSelectedFields: notSelectedFieldsTableView,
     selectedFields: selectedFieldsTableView,
-    hasBulkDeletableDoc: hasBulkDeletableDoc(docs),
+    hasBulkDeletableDoc: hasBulkDeletableDoc(normalizedDocs),
     schema: schema,
     results: res,
     displayedFields: isMetaData ? null : {

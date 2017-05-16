@@ -168,7 +168,7 @@ var TableRow = React.createClass({
   }
 });
 
-const WrappedAutocomplete = ({selectedField, notSelectedFields, index}) => {
+const WrappedAutocomplete = ({selectedField, notSelectedFields, index, changeField, selectedFields}) => {
   const options = notSelectedFields.map((el) => {
     return {value: el, label: el};
   });
@@ -181,11 +181,13 @@ const WrappedAutocomplete = ({selectedField, notSelectedFields, index}) => {
           options={options}
           clearable={false}
           onChange={(el) => {
-            Actions.changeField({
-              newSelectedRow: el.value,
-              index: index
-            });
-          }} />
+              const newField = {
+                newSelectedRow: el.value,
+                index: index
+              };
+              changeField(newField, selectedFields) || Actions.changeField(newField);
+            }
+          } />
       </div>
     </div>
   );
@@ -214,7 +216,7 @@ var TableView = React.createClass({
   },
 
   getOptionFieldRows: function (filtered) {
-    var notSelectedFields = this.props.data.notSelectedFields;
+    const notSelectedFields = this.props.data.notSelectedFields;
 
     if (!notSelectedFields) {
       return filtered.map(function (el, i) {
@@ -225,19 +227,27 @@ var TableView = React.createClass({
     return filtered.map(function (el, i) {
       return (
         <th key={'header-el-' + i}>
-          {this.getDropdown(el, this.props.data.schema, i)}
+          {this.getDropdown(
+            el,
+            this.props.data.schema,
+            i,
+            this.props.changeField,
+            this.props.data.selectedFields
+          )}
         </th>
       );
     }.bind(this));
   },
 
-  getDropdown: function (selectedField, notSelectedFields, i) {
+  getDropdown: function (selectedField, notSelectedFields, i, changeField, selectedFields) {
 
     return (
       <WrappedAutocomplete
         selectedField={selectedField}
         notSelectedFields={notSelectedFields}
-        index={i} />
+        index={i}
+        changeField={changeField}
+        selectedFields={selectedFields} />
     );
   },
 
@@ -346,6 +356,7 @@ var ResultsScreen = React.createClass({
           isChecked={this.props.allDocumentsSelected}
           hasSelectedItem={this.props.hasSelectedItem}
           toggleSelect={this.toggleSelectAll}
+          changeField={this.props.changeTableHeaderAttribute}
           title="Select all docs that can be..." />
       </div>
     );
@@ -353,7 +364,8 @@ var ResultsScreen = React.createClass({
 
   render: function () {
     let mainView = null;
-    let toolbar = <ResultsToolBar toggleSelectAll={this.toggleSelectAll} {...this.props} />;
+    const { toggleSelectAll } = this.props;
+    let toolbar = <ResultsToolBar toggleSelectAll={toggleSelectAll || this.toggleSelectAll} {...this.props} />;
 
     if (this.props.isLoading) {
       mainView = <div className="loading-lines-wrapper"><LoadLines /></div>;

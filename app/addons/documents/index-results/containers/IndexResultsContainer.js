@@ -16,7 +16,11 @@ import {
   fetchAllDocs,
   initialize,
   selectDoc,
-  bulkDeleteDocs
+  bulkDeleteDocs,
+  changeLayout,
+  bulkCheckOrUncheck,
+  changeTableHeaderAttribute,
+  resetState
 } from '../../api';
 import {
   getDocs,
@@ -35,17 +39,17 @@ import {
 } from '../../reducers';
 
 
-const mapStateToProps = ({indexResults}) => {
+const mapStateToProps = ({indexResults}, ownProps) => {
   return {
     docs: getDocs(indexResults),
     selectedDocs: getSelectedDocs(indexResults),
     isLoading: getIsLoading(indexResults),
     hasResults: getHasResults(indexResults),
-    dataForRendering: getDataForRendering(indexResults),
+    results: getDataForRendering(indexResults, ownProps.databaseName),
     isEditable: getIsEditable(indexResults),
     selectedLayout: getSelectedLayout(indexResults),
-    allDocsSelected: getAllDocsSelected(indexResults),
-    hasDocSelected: getHasDocsSelected(indexResults),
+    allDocumentsSelected: getAllDocsSelected(indexResults),
+    hasSelectedItem: getHasDocsSelected(indexResults),
     numDocsSelected: getNumDocsSelected(indexResults),
     textEmptyIndex: getTextEmptyIndex(indexResults),
     typeOfIndex: getTypeOfIndex(indexResults),
@@ -57,8 +61,18 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     fetchAllDocs: (params) => { dispatch(fetchAllDocs(ownProps.databaseName, params)); },
     initialize: () => { dispatch(initialize(ownProps.params)); },
-    selectDoc: (doc) => { dispatch(selectDoc(doc)); },
-    bulkDeleteDocs: (docs) => { bulkDeleteDocs(ownProps.databaseName, docs, ownProps.designDocs); }
+    selectDoc: (doc, selectedDocs) => { dispatch(selectDoc(doc, selectedDocs)); },
+    bulkDeleteDocs: (docs, params) => {
+      dispatch(bulkDeleteDocs(ownProps.databaseName, docs, ownProps.designDocs, params));
+    },
+    changeLayout: (newLayout) => { dispatch(changeLayout(newLayout)); },
+    bulkCheckOrUncheck: (docs, selectedDocs, allDocumentsSelected) => {
+      dispatch(bulkCheckOrUncheck(docs, selectedDocs, allDocumentsSelected));
+    },
+    changeTableHeaderAttribute: (newField, selectedFields) => {
+      dispatch(changeTableHeaderAttribute(newField, selectedFields));
+    },
+    resetState: () => { dispatch(resetState()); }
   };
 };
 

@@ -10,11 +10,10 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 import React from 'react';
-import Header from "../header/header";
+import BulkDocumentHeaderController from "../header/header";
 import Stores from "../sidebar/stores";
 import Components from "../../components/react-components";
 
-const {BulkDocumentHeaderController} = Header;
 const {BulkActionComponent} = Components;
 const store = Stores.sidebarStore;
 
@@ -25,19 +24,26 @@ export class ResultsToolBar extends React.Component {
 
   render () {
     const dbName = store.getDatabase().id;
-    const hasResults = this.props.hasResults;
-    const isListDeletable = this.props.isListDeletable;
+    const {
+      hasResults,
+      isListDeletable,
+      removeItem,
+      allDocumentsSelected,
+      hasSelectedItem,
+      toggleSelectAll,
+      isLoading
+    } = this.props;
 
     return (
       <div className="document-result-screen__toolbar">
         {isListDeletable && hasResults ? <BulkActionComponent
-          removeItem={this.props.removeItem}
-          isChecked={this.props.allDocumentsSelected}
-          hasSelectedItem={this.props.hasSelectedItem}
-          toggleSelect={this.props.toggleSelectAll}
-          disabled={this.props.isLoading}
+          removeItem={removeItem}
+          isChecked={allDocumentsSelected}
+          hasSelectedItem={hasSelectedItem}
+          toggleSelect={toggleSelectAll}
+          disabled={isLoading}
           title="Select all docs that can be..." /> : null}
-        {hasResults ? <BulkDocumentHeaderController /> : null}
+        {hasResults ? <BulkDocumentHeaderController {...this.props} /> : null}
         <div className="document-result-screen__toolbar-flex-container">
           <a href={`#/database/${dbName}/new`} className="btn save document-result-screen__toolbar-create-btn btn-primary">
             Create Document

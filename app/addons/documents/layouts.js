@@ -22,6 +22,7 @@ import IndexEditorComponents from "./index-editor/components";
 import DesignDocInfoComponents from './designdocinfo/components';
 import RightAllDocsHeader from './components/header-docs-right';
 import IndexResultsContainer from './index-results/containers/IndexResultsContainer';
+import PaginationContainer from './index-results/containers/PaginationContainer';
 
 export const TabsSidebarHeader = ({
   hideQueryOptions,
@@ -68,7 +69,13 @@ TabsSidebarHeader.defaultProps = {
   hideHeaderBar: false
 };
 
-export const TabsSidebarContent = ({hideFooter, lowerContent, upperContent}) => {
+export const TabsSidebarContent = ({
+  hideFooter,
+  lowerContent,
+  upperContent,
+  databaseName,
+  isRedux = false
+}) => {
   return (
     <div className="with-sidebar tabs-with-sidebar content-area">
       <aside id="sidebar-content" className="scrollable">
@@ -82,7 +89,8 @@ export const TabsSidebarContent = ({hideFooter, lowerContent, upperContent}) => 
           {lowerContent}
         </div>
         <div id="footer">
-          {hideFooter ? null : <ReactPagination.Footer />}
+          {isRedux && !hideFooter ? <PaginationContainer databaseName={databaseName} /> : null}
+          {!isRedux && !hideFooter ? <ReactPagination.Footer /> : null}
         </div>
       </section>
     </div>
@@ -126,6 +134,8 @@ export const DocsTabsSidebarLayout = ({
       />
       <TabsSidebarContent
         lowerContent={lowerContent}
+        isRedux={isRedux}
+        databaseName={dbName}
       />
     </div>
   );
