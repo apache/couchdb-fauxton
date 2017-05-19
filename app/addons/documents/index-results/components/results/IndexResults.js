@@ -11,18 +11,15 @@
 // the License.
 
 import React from 'react';
-import Components from '../index-results.components';
+import ResultsScreen from './ResultsScreen';
 
 export default class IndexResults extends React.Component {
   constructor (props) {
     super(props);
-    const { fetchAllDocs, queryParams, initialize } = this.props;
-
-    // save the prop params to the state tree as an initialization step
-    initialize();
+    const { fetchAllDocs, fetchParams, queryOptionsParams } = this.props;
 
     // now get the docs!
-    fetchAllDocs(queryParams.docParams);
+    fetchAllDocs(fetchParams, queryOptionsParams);
   }
 
   componentWillUnmount () {
@@ -31,8 +28,8 @@ export default class IndexResults extends React.Component {
   }
 
   deleteSelectedDocs () {
-    const { bulkDeleteDocs, queryParams, selectedDocs } = this.props;
-    bulkDeleteDocs(selectedDocs, queryParams.docParams);
+    const { bulkDeleteDocs, fetchParams, selectedDocs } = this.props;
+    bulkDeleteDocs(selectedDocs, fetchParams);
   }
 
   isSelected (id) {
@@ -72,7 +69,7 @@ export default class IndexResults extends React.Component {
     const { results } = this.props;
 
     return (
-      <Components.ResultsScreen
+      <ResultsScreen
         removeItem={this.deleteSelectedDocs.bind(this)}
         isSelected={this.isSelected.bind(this)}
         docChecked={this.docChecked.bind(this)}

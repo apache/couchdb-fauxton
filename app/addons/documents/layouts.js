@@ -30,7 +30,8 @@ export const TabsSidebarHeader = ({
   dbName,
   dropDownLinks,
   docURL,
-  endpoint
+  endpoint,
+  isRedux = false
 }) => {
   return (
     <header className="two-panel-header">
@@ -43,7 +44,11 @@ export const TabsSidebarHeader = ({
         </div>
         <div className="right-header-wrapper flex-layout flex-row flex-body">
           <div id="right-header" className="flex-fill">
-            <RightAllDocsHeader hideQueryOptions={hideQueryOptions} database={database} />
+            <RightAllDocsHeader
+              hideQueryOptions={hideQueryOptions}
+              database={database}
+              isRedux={isRedux}
+              dbName={dbName} />
           </div>
           <ApiBarWrapper docURL={docURL} endpoint={endpoint} />
           <div id="notification-center-btn" className="flex-fill">
@@ -131,6 +136,7 @@ export const DocsTabsSidebarLayout = ({
         dbName={dbName}
         dropDownLinks={dropDownLinks}
         database={database}
+        isRedux={isRedux}
       />
       <TabsSidebarContent
         lowerContent={lowerContent}

@@ -17,12 +17,12 @@ import {
   updatePerPageResults,
   paginateNext,
   paginatePrevious
-} from '../../api';
+} from '../apis/pagination-api';
 import {
   getDocs,
   getSelectedDocs,
   getHasResults,
-  getQueryParams,
+  getFetchParams,
   getPageStart,
   getPageEnd,
   getPerPage,
@@ -30,8 +30,9 @@ import {
   getShowPrioritizedEnabled,
   getDisplayedFields,
   getCanShowNext,
-  getCanShowPrevious
-} from '../../reducers';
+  getCanShowPrevious,
+  getQueryOptionsParams
+} from '../reducers';
 
 
 const mapStateToProps = ({indexResults}, ownProps) => {
@@ -47,16 +48,25 @@ const mapStateToProps = ({indexResults}, ownProps) => {
     displayedFields: getDisplayedFields(indexResults, ownProps.databaseName),
     canShowNext: getCanShowNext(indexResults),
     canShowPrevious: getCanShowPrevious(indexResults),
-    queryParams: getQueryParams(indexResults)
+    fetchParams: getFetchParams(indexResults),
+    queryOptionsParams: getQueryOptionsParams(indexResults)
   };
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    toggleShowAllColumns: () => { dispatch(toggleShowAllColumns()); },
-    updatePerPageResults: (amount, params) => { dispatch(updatePerPageResults(ownProps.databaseName, amount, params)); },
-    paginateNext: (params, perPage) => { dispatch(paginateNext(ownProps.databaseName, params, perPage)); },
-    paginatePrevious: (params, perPage) => { dispatch(paginatePrevious(ownProps.databaseName, params, perPage)); }
+    toggleShowAllColumns: () => {
+      dispatch(toggleShowAllColumns());
+    },
+    updatePerPageResults: (amount, fetchParams, queryOptionsParams) => {
+      dispatch(updatePerPageResults(ownProps.databaseName, fetchParams, queryOptionsParams, amount));
+    },
+    paginateNext: (fetchParams, queryOptionsParams, perPage) => {
+      dispatch(paginateNext(ownProps.databaseName, fetchParams, queryOptionsParams, perPage));
+    },
+    paginatePrevious: (fetchParams, queryOptionsParams, perPage) => {
+      dispatch(paginatePrevious(ownProps.databaseName, fetchParams, queryOptionsParams, perPage));
+    }
   };
 };
 

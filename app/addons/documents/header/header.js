@@ -88,17 +88,28 @@ export default class BulkDocumentHeaderController extends React.Component {
 
   toggleLayout (newLayout) {
     // this will be present when using redux stores
-    const { changeLayout, selectedLayout, fetchAllDocs, queryParams } = this.props;
+    const {
+      changeLayout,
+      selectedLayout,
+      fetchAllDocs,
+      fetchParams,
+      queryOptionsParams,
+      queryOptionsToggleIncludeDocs
+    } = this.props;
+
     if (changeLayout && newLayout !== selectedLayout) {
+      // change our layout to JSON, Table, or Metadata
       changeLayout(newLayout);
 
       if (newLayout === Constants.LAYOUT_ORIENTATION.METADATA) {
-        delete queryParams.docParams.include_docs;
+        queryOptionsParams.include_docs = false;
       } else {
-        queryParams.docParams.include_docs = true;
+        queryOptionsParams.include_docs = true;
       }
 
-      fetchAllDocs(queryParams.docParams);
+      // tell the query options panel we're updating include_docs
+      queryOptionsToggleIncludeDocs(!queryOptionsParams.include_docs);
+      fetchAllDocs(fetchParams, queryOptionsParams);
       return;
     }
 

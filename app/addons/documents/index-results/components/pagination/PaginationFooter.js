@@ -31,25 +31,25 @@ export default class PaginationFooter extends React.Component {
   }
 
   perPageChange (amount) {
-    const { updatePerPageResults, queryParams } = this.props;
-    updatePerPageResults(amount, queryParams.docParams);
+    const { updatePerPageResults, fetchParams, queryOptionsParams } = this.props;
+    updatePerPageResults(amount, fetchParams, queryOptionsParams);
   }
 
   nextClicked (event) {
     event.preventDefault();
 
-    const { canShowNext, queryParams, paginateNext, perPage } = this.props;
+    const { canShowNext, fetchParams, queryOptionsParams, paginateNext, perPage } = this.props;
     if (canShowNext) {
-      paginateNext(queryParams.docParams, perPage);
+      paginateNext(fetchParams, queryOptionsParams, perPage);
     }
   }
 
   previousClicked (event) {
     event.preventDefault();
 
-    const { canShowPrevious, queryParams, paginatePrevious, perPage } = this.props;
+    const { canShowPrevious, fetchParams, queryOptionsParams, paginatePrevious, perPage } = this.props;
     if (canShowPrevious) {
-      paginatePrevious(queryParams.docParams, perPage);
+      paginatePrevious(fetchParams, queryOptionsParams, perPage);
     }
   }
 

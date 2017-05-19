@@ -86,20 +86,9 @@ var DocumentsRouteObject = BaseRoute.extend({
     const params = this.createParams(options),
           urlParams = params.urlParams,
           docParams = params.docParams;
-          //store = IndexResultStores.indexResultsStore;
-
-    // if the user is simply switching the layout style (i.e. metadata, json, or table),
-    // there will be a cached offset value.  Use that offset when getting the "new"
-    // collection so data stays the same.
-    /*if (docParams.skip && store.hasCachedOffset()) {
-      docParams.skip = Math.max(store.getCachedOffset(), docParams.skip);
-    } else if (store.hasCachedOffset()) {
-      docParams.skip = store.getCachedOffset();
-    }*/
 
     // this is used for the header and sidebar
     this.database.buildAllDocs(docParams);
-    /*collection = this.database.allDocs;*/
 
     let tab = 'all-docs';
     if (docParams.startkey && docParams.startkey.indexOf("_design") > -1) {
@@ -108,18 +97,6 @@ var DocumentsRouteObject = BaseRoute.extend({
 
     SidebarActions.selectNavItem(tab);
     ComponentsActions.showDeleteDatabaseModal({showDeleteModal: false, dbId: ''});
-
-    /*const frozenCollection = app.utils.localStorageGet('include_docs_bulkdocs');
-    window.localStorage.removeItem('include_docs_bulkdocs');
-
-    IndexResultsActions.newResultsList({
-      collection: collection,
-      textEmptyIndex: 'No Documents Found',
-      typeOfIndex: 'view',
-      bulkCollection: new Documents.BulkDeleteDocCollection(frozenCollection, { databaseId: this.database.safeID() }),
-    });
-
-    this.database.allDocs.paging.pageSize = store.getPerPage();*/
 
     const endpoint = this.database.allDocs.urlRef("apiurl", urlParams);
     const docURL = this.database.allDocs.documentation();
@@ -137,7 +114,6 @@ var DocumentsRouteObject = BaseRoute.extend({
       database={this.database}
       designDocs={this.designDocs}
       isRedux={true}
-      params={params}
     />;
   },
 

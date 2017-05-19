@@ -11,17 +11,16 @@
 // the License.
 
 import { connect } from 'react-redux';
-import IndexResults from '../components/IndexResults';
+import IndexResults from '../components/results/IndexResults';
+import { fetchAllDocs, bulkDeleteDocs } from '../apis/fetch-api';
+import { queryOptionsToggleIncludeDocs } from '../apis/queryoptions-api';
 import {
-  fetchAllDocs,
-  initialize,
   selectDoc,
-  bulkDeleteDocs,
   changeLayout,
   bulkCheckOrUncheck,
   changeTableHeaderAttribute,
   resetState
-} from '../../api';
+} from '../apis/base-api';
 import {
   getDocs,
   getSelectedDocs,
@@ -35,8 +34,9 @@ import {
   getNumDocsSelected,
   getTextEmptyIndex,
   getTypeOfIndex,
-  getQueryParams
-} from '../../reducers';
+  getFetchParams,
+  getQueryOptionsParams
+} from '../reducers';
 
 
 const mapStateToProps = ({indexResults}, ownProps) => {
@@ -53,26 +53,37 @@ const mapStateToProps = ({indexResults}, ownProps) => {
     numDocsSelected: getNumDocsSelected(indexResults),
     textEmptyIndex: getTextEmptyIndex(indexResults),
     typeOfIndex: getTypeOfIndex(indexResults),
-    queryParams: getQueryParams(indexResults)
+    fetchParams: getFetchParams(indexResults),
+    queryOptionsParams: getQueryOptionsParams(indexResults)
   };
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    fetchAllDocs: (params) => { dispatch(fetchAllDocs(ownProps.databaseName, params)); },
-    initialize: () => { dispatch(initialize(ownProps.params)); },
-    selectDoc: (doc, selectedDocs) => { dispatch(selectDoc(doc, selectedDocs)); },
+    fetchAllDocs: (fetchParams, queryOptionsParams) => {
+      dispatch(fetchAllDocs(ownProps.databaseName, fetchParams, queryOptionsParams));
+    },
+    selectDoc: (doc, selectedDocs) => {
+      dispatch(selectDoc(doc, selectedDocs));
+    },
     bulkDeleteDocs: (docs, params) => {
       dispatch(bulkDeleteDocs(ownProps.databaseName, docs, ownProps.designDocs, params));
     },
-    changeLayout: (newLayout) => { dispatch(changeLayout(newLayout)); },
+    changeLayout: (newLayout) => {
+      dispatch(changeLayout(newLayout));
+    },
     bulkCheckOrUncheck: (docs, selectedDocs, allDocumentsSelected) => {
       dispatch(bulkCheckOrUncheck(docs, selectedDocs, allDocumentsSelected));
     },
     changeTableHeaderAttribute: (newField, selectedFields) => {
       dispatch(changeTableHeaderAttribute(newField, selectedFields));
     },
-    resetState: () => { dispatch(resetState()); }
+    resetState: () => {
+      dispatch(resetState());
+    },
+    queryOptionsToggleIncludeDocs: (previousIncludeDocs) => {
+      dispatch(queryOptionsToggleIncludeDocs(previousIncludeDocs));
+    }
   };
 };
 

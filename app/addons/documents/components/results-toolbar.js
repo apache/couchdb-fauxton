@@ -36,14 +36,14 @@ export class ResultsToolBar extends React.Component {
 
     return (
       <div className="document-result-screen__toolbar">
-        {isListDeletable && hasResults ? <BulkActionComponent
+        {(isListDeletable && hasResults) || isLoading ? <BulkActionComponent
           removeItem={removeItem}
           isChecked={allDocumentsSelected}
           hasSelectedItem={hasSelectedItem}
           toggleSelect={toggleSelectAll}
           disabled={isLoading}
           title="Select all docs that can be..." /> : null}
-        {hasResults ? <BulkDocumentHeaderController {...this.props} /> : null}
+        {hasResults || isLoading ? <BulkDocumentHeaderController {...this.props} /> : null}
         <div className="document-result-screen__toolbar-flex-container">
           <a href={`#/database/${dbName}/new`} className="btn save document-result-screen__toolbar-create-btn btn-primary">
             Create Document
