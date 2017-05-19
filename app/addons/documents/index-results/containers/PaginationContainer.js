@@ -59,13 +59,13 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       dispatch(toggleShowAllColumns());
     },
     updatePerPageResults: (amount, fetchParams, queryOptionsParams) => {
-      dispatch(updatePerPageResults(ownProps.databaseName, fetchParams, queryOptionsParams, amount));
+      dispatch(updatePerPageResults(ownProps.fetchUrl, fetchParams, queryOptionsParams, amount));
     },
     paginateNext: (fetchParams, queryOptionsParams, perPage) => {
-      dispatch(paginateNext(ownProps.databaseName, fetchParams, queryOptionsParams, perPage));
+      dispatch(paginateNext(ownProps.fetchUrl, fetchParams, queryOptionsParams, perPage));
     },
     paginatePrevious: (fetchParams, queryOptionsParams, perPage) => {
-      dispatch(paginatePrevious(ownProps.databaseName, fetchParams, queryOptionsParams, perPage));
+      dispatch(paginatePrevious(ownProps.fetchUrl, fetchParams, queryOptionsParams, perPage));
     }
   };
 };

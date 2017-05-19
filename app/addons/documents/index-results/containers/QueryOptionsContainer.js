@@ -97,7 +97,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       dispatch(queryOptionsToggleVisibility(newVisibility));
     },
     queryOptionsExecute: (queryOptionsParams, perPage) => {
-      dispatch(queryOptionsExecute(ownProps.databaseName, queryOptionsParams, perPage));
+      dispatch(queryOptionsExecute(ownProps.fetchUrl, queryOptionsParams, perPage));
     },
     changeLayout: (newLayout) => {
       dispatch(changeLayout(newLayout));

@@ -20,12 +20,12 @@ const updateQueryOptions = (queryOptions) => {
   };
 };
 
-export const queryOptionsExecute = (databaseName, queryOptionsParams, perPage) => {
+export const queryOptionsExecute = (fetchUrl, queryOptionsParams, perPage) => {
   const fetchParams = {
     limit: perPage + 1,
     skip: 0
   };
-  return fetchAllDocs(databaseName, fetchParams, queryOptionsParams);
+  return fetchAllDocs(fetchUrl, fetchParams, queryOptionsParams);
 };
 
 export const queryOptionsToggleVisibility = (newVisibility) => {

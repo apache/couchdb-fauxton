@@ -31,7 +31,8 @@ export const TabsSidebarHeader = ({
   dropDownLinks,
   docURL,
   endpoint,
-  isRedux = false
+  isRedux = false,
+  fetchUrl
 }) => {
   return (
     <header className="two-panel-header">
@@ -48,7 +49,7 @@ export const TabsSidebarHeader = ({
               hideQueryOptions={hideQueryOptions}
               database={database}
               isRedux={isRedux}
-              dbName={dbName} />
+              fetchUrl={fetchUrl} />
           </div>
           <ApiBarWrapper docURL={docURL} endpoint={endpoint} />
           <div id="notification-center-btn" className="flex-fill">
@@ -78,8 +79,9 @@ export const TabsSidebarContent = ({
   hideFooter,
   lowerContent,
   upperContent,
-  databaseName,
-  isRedux = false
+  isRedux = false,
+  fetchUrl,
+  databaseName
 }) => {
   return (
     <div className="with-sidebar tabs-with-sidebar content-area">
@@ -94,7 +96,9 @@ export const TabsSidebarContent = ({
           {lowerContent}
         </div>
         <div id="footer">
-          {isRedux && !hideFooter ? <PaginationContainer databaseName={databaseName} /> : null}
+          {isRedux && !hideFooter ? <PaginationContainer
+                                      databaseName={databaseName}
+                                      fetchUrl={fetchUrl} /> : null}
           {!isRedux && !hideFooter ? <ReactPagination.Footer /> : null}
         </div>
       </section>
@@ -119,11 +123,14 @@ export const DocsTabsSidebarLayout = ({
   dbName,
   dropDownLinks,
   isRedux = false,
-  params = {}
+  fetchUrl
 }) => {
   let lowerContent;
   if (isRedux) {
-    lowerContent = <IndexResultsContainer databaseName={dbName} params={params} designDocs={designDocs} />;
+    lowerContent = <IndexResultsContainer
+                      fetchUrl={fetchUrl}
+                      designDocs={designDocs}
+                      databaseName={dbName} />;
   } else {
     lowerContent = <IndexResultsComponents.List designDocs={designDocs} />;
   }
@@ -137,10 +144,12 @@ export const DocsTabsSidebarLayout = ({
         dropDownLinks={dropDownLinks}
         database={database}
         isRedux={isRedux}
+        fetchUrl={fetchUrl}
       />
       <TabsSidebarContent
         lowerContent={lowerContent}
         isRedux={isRedux}
+        fetchUrl={fetchUrl}
         databaseName={dbName}
       />
     </div>

@@ -87,6 +87,7 @@ var DocumentsRouteObject = BaseRoute.extend({
           urlParams = params.urlParams,
           docParams = params.docParams;
 
+    const url = `/${databaseName}/_all_docs`;
     // this is used for the header and sidebar
     this.database.buildAllDocs(docParams);
 
@@ -101,10 +102,6 @@ var DocumentsRouteObject = BaseRoute.extend({
     const endpoint = this.database.allDocs.urlRef("apiurl", urlParams);
     const docURL = this.database.allDocs.documentation();
 
-    // update the query options with the latest & greatest info
-    QueryOptionsActions.reset({queryParams: urlParams});
-    QueryOptionsActions.showQueryOptions();
-
     const dropDownLinks = this.getCrumbs(this.database);
     return <DocsTabsSidebarLayout
       docURL={docURL}
@@ -113,6 +110,7 @@ var DocumentsRouteObject = BaseRoute.extend({
       dropDownLinks={dropDownLinks}
       database={this.database}
       designDocs={this.designDocs}
+      fetchUrl={url}
       isRedux={true}
     />;
   },

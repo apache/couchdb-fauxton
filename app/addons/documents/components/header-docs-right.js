@@ -18,7 +18,7 @@ import Actions from './actions';
 
 const { QueryOptionsController } = QueryOptions;
 
-const RightAllDocsHeader = ({database, hideQueryOptions, isRedux, dbName}) =>
+const RightAllDocsHeader = ({database, hideQueryOptions, isRedux, fetchUrl}) =>
   <div className="header-right right-db-header flex-layout flex-row">
 
     <div className="faux-header__searchboxwrapper">
@@ -26,7 +26,7 @@ const RightAllDocsHeader = ({database, hideQueryOptions, isRedux, dbName}) =>
         <JumpToDoc cache={false} loadOptions={Actions.fetchAllDocsWithKey(database)} database={database} />
       </div>
     </div>
-    {!hideQueryOptions && isRedux ? <QueryOptionsContainer databaseName={dbName} /> : ''}
+    {!hideQueryOptions && isRedux ? <QueryOptionsContainer fetchUrl={fetchUrl} /> : ''}
     {!hideQueryOptions && !isRedux ? <QueryOptionsController /> : ''}
   </div>;
 

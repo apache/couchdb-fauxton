@@ -61,7 +61,7 @@ const mapStateToProps = ({indexResults}, ownProps) => {
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     fetchAllDocs: (fetchParams, queryOptionsParams) => {
-      dispatch(fetchAllDocs(ownProps.databaseName, fetchParams, queryOptionsParams));
+      dispatch(fetchAllDocs(ownProps.fetchUrl, fetchParams, queryOptionsParams));
     },
     selectDoc: (doc, selectedDocs) => {
       dispatch(selectDoc(doc, selectedDocs));

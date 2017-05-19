@@ -48,12 +48,37 @@ const mergeParams = (fetchParams, queryOptionsParams) => {
   };
 };
 
+const removeOverflowDocsAndCalculateHasNext = (docs, totalDocsRemaining, fetchLimit) => {
+  // Now is the time to determine if we have another page of results
+  // after this set of documents.  We also want to manipulate the array
+  // of docs because we always search with a limit larger than the desired
+  // number of results.  This is necessaary to emulate pagination.
+  let canShowNext = false;
+  if (totalDocsRemaining && docs.length > totalDocsRemaining) {
+    // We know the user manually entered a limit and we've reached the
+    // end of their desired results.  We need to remove any extra results
+    // that were returned because of our pagination emulation logic.
+    docs.splice(totalDocsRemaining);
+  } else if (docs.length === fetchLimit) {
+    // The number of docs returned is equal to our params.limit, which is
+    // one more than our perPage size.  We know that there is another
+    // page of results after this.
+    docs.splice(fetchLimit - 1);
+    canShowNext = true;
+  }
+
+  return {
+    finalDocList: docs,
+    canShowNext
+  };
+};
+
 // All the business logic for fetching docs from couch.
 // Arguments:
-// - databaseName -> the name of the database to fetch from
+// - fetchUrl -> the endpoint to fetch from
 // - fetchParams -> the internal params fauxton uses to emulate pagination
 // - queryOptionsParams -> manual query params entered by user
-export const fetchAllDocs = (databaseName, fetchParams, queryOptionsParams) => {
+export const fetchAllDocs = (fetchUrl, fetchParams, queryOptionsParams) => {
   const { params, totalDocsRemaining } = mergeParams(fetchParams, queryOptionsParams);
   params.limit = Math.min(params.limit, maxDocLimit);
 
@@ -63,7 +88,7 @@ export const fetchAllDocs = (databaseName, fetchParams, queryOptionsParams) => {
 
     // now fetch the results
     const query = queryString.stringify(params);
-    return fetch(`/${databaseName}/_all_docs?${query}`, {
+    return fetch(`${fetchUrl}?${query}`, {
       credentials: 'include',
       headers: {
         'Accept': 'application/json; charset=utf-8'
@@ -72,27 +97,13 @@ export const fetchAllDocs = (databaseName, fetchParams, queryOptionsParams) => {
     .then(res => res.json())
     .then((res) => {
       const docs = res.error ? [] : res.rows;
-
-      // Now is the time to determine if we have another page of results
-      // after this set of documents.  We also want to manipulate the array
-      // of docs because we always search with a limit larger than the desired
-      // number of results.  This is necessaary to emulate pagination.
-      let canShowNext = false;
-      if (totalDocsRemaining && docs.length > totalDocsRemaining) {
-        // We know the user manually entered a limit and we've reached the
-        // end of their desired results.  We need to remove any extra results
-        // that were returned because of our pagination emulation logic.
-        docs.splice(totalDocsRemaining);
-      } else if (docs.length === params.limit) {
-        // The number of docs returned is equal to our params.limit, which is
-        // one more than our perPage size.  We know that there is another
-        // page of results after this.
-        docs.splice(params.limit - 1);
-        canShowNext = true;
-      }
+      const {
+        finalDocList,
+        canShowNext
+      } = removeOverflowDocsAndCalculateHasNext(docs, totalDocsRemaining, params.limit);
 
       // dispatch that we're all done
-      dispatch(newResultsAvailable(docs, params, canShowNext));
+      dispatch(newResultsAvailable(finalDocList, params, canShowNext));
     });
   };
 };
