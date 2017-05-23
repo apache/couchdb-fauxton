@@ -24,10 +24,32 @@ const { ToggleHeaderButton, TrayContents } = GeneralComponents;
 export default class QueryOptions extends React.Component {
   constructor(props) {
     super(props);
+    const {
+      ddocsOnly,
+      queryOptionsFilterOnlyDdocs
+    } = props;
+
+    if (ddocsOnly) {
+      queryOptionsFilterOnlyDdocs();
+    }
+  }
+
+  componentWillReceiveProps (nextProps) {
+    const {
+      ddocsOnly,
+      queryOptionsFilterOnlyDdocs,
+      resetState
+    } = this.props;
+
+    if (!ddocsOnly && nextProps.ddocsOnly) {
+      queryOptionsFilterOnlyDdocs();
+    } else if (ddocsOnly && !nextProps.ddocsOnly) {
+      resetState();
+    }
   }
 
   executeQuery (e) {
-    e.preventDefault();
+    if (e) { e.preventDefault(); }
     this.closeTray();
 
     const {

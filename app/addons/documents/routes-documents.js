@@ -91,8 +91,9 @@ var DocumentsRouteObject = BaseRoute.extend({
     // this is used for the header and sidebar
     this.database.buildAllDocs(docParams);
 
+    const onlyShowDdocs = !!(docParams.startkey && docParams.startkey.indexOf("_design") > -1);
     let tab = 'all-docs';
-    if (docParams.startkey && docParams.startkey.indexOf("_design") > -1) {
+    if (onlyShowDdocs) {
       tab = 'design-docs';
     }
 
@@ -111,6 +112,7 @@ var DocumentsRouteObject = BaseRoute.extend({
       database={this.database}
       designDocs={this.designDocs}
       fetchUrl={url}
+      ddocsOnly={onlyShowDdocs}
       isRedux={true}
     />;
   },

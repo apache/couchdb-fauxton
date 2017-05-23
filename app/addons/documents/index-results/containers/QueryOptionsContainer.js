@@ -12,7 +12,7 @@
 
 import { connect } from 'react-redux';
 import QueryOptions from '../components/queryoptions/QueryOptions';
-import { changeLayout } from '../apis/base-api';
+import { changeLayout, resetState } from '../apis/base-api';
 import { resetPagination } from '../apis/pagination-api';
 import {
   queryOptionsExecute,
@@ -26,7 +26,8 @@ import {
   queryOptionsUpdateSkip,
   queryOptionsUpdateLimit,
   queryOptionsToggleIncludeDocs,
-  queryOptionsToggleVisibility
+  queryOptionsToggleVisibility,
+  queryOptionsFilterOnlyDdocs
 } from '../apis/queryoptions-api';
 import {
   getQueryOptionsPanel,
@@ -36,7 +37,7 @@ import {
   getSelectedLayout
 } from '../reducers';
 
-const mapStateToProps = ({indexResults}) => {
+const mapStateToProps = ({indexResults}, ownProps) => {
   const queryOptionsPanel = getQueryOptionsPanel(indexResults);
   return {
     contentVisible: queryOptionsPanel.isVisible,
@@ -54,7 +55,8 @@ const mapStateToProps = ({indexResults}) => {
     fetchParams: getFetchParams(indexResults),
     queryOptionsParams: getQueryOptionsParams(indexResults),
     perPage: getPerPage(indexResults),
-    selectedLayout: getSelectedLayout(indexResults)
+    selectedLayout: getSelectedLayout(indexResults),
+    ddocsOnly: ownProps.ddocsOnly
   };
 };
 
@@ -99,8 +101,14 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     queryOptionsExecute: (queryOptionsParams, perPage) => {
       dispatch(queryOptionsExecute(ownProps.fetchUrl, queryOptionsParams, perPage));
     },
+    queryOptionsFilterOnlyDdocs: () => {
+      dispatch(queryOptionsFilterOnlyDdocs());
+    },
     changeLayout: (newLayout) => {
       dispatch(changeLayout(newLayout));
+    },
+    resetState: () => {
+      dispatch(resetState());
     }
   };
 };

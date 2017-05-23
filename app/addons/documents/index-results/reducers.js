@@ -44,7 +44,9 @@ const initialState = {
     showBetweenKeys: false,
     includeDocs: false,
     betweenKeys: {
-      include: true
+      include: true,
+      startkey: '',
+      endkey: ''
     },
     byKeys: '',
     descending: false,
@@ -66,19 +68,16 @@ export default function resultsState (state = initialState, action) {
           skip: 0
         }
       });
-    break;
 
     case ActionTypes.INDEX_RESULTS_REDUX_IS_LOADING:
       return Object.assign({}, state, {
         isLoading: true
       });
-    break;
 
     case ActionTypes.INDEX_RESULTS_REDUX_NEW_SELECTED_DOCS:
       return Object.assign({}, state, {
         selectedDocs: action.selectedDocs
       });
-    break;
 
     case ActionTypes.INDEX_RESULTS_REDUX_NEW_RESULTS:
       return Object.assign({}, state, {
@@ -90,13 +89,11 @@ export default function resultsState (state = initialState, action) {
           canShowNext: action.canShowNext
         })
       });
-    break;
 
     case ActionTypes.INDEX_RESULTS_REDUX_CHANGE_LAYOUT:
       return Object.assign({}, state, {
         selectedLayout: action.layout
       });
-    break;
 
     case ActionTypes.INDEX_RESULTS_REDUX_TOGGLE_SHOW_ALL_COLUMNS:
       return Object.assign({}, state, {
@@ -105,7 +102,6 @@ export default function resultsState (state = initialState, action) {
           cachedFieldsTableView: state.tableView.selectedFieldsTableView
         })
       });
-    break;
 
     case ActionTypes.INDEX_RESULTS_REDUX_CHANGE_TABLE_HEADER_ATTRIBUTE:
       return Object.assign({}, state, {
@@ -113,7 +109,6 @@ export default function resultsState (state = initialState, action) {
           selectedFieldsTableView: action.selectedFieldsTableView
         })
       });
-    break;
 
     case ActionTypes.INDEX_RESULTS_REDUX_SET_PER_PAGE:
       return Object.assign({}, state, {
@@ -121,7 +116,6 @@ export default function resultsState (state = initialState, action) {
           perPage: action.perPage
         })
       });
-    break;
 
     case ActionTypes.INDEX_RESULTS_REDUX_PAGINATE_NEXT:
       return Object.assign({}, state, {
@@ -130,7 +124,6 @@ export default function resultsState (state = initialState, action) {
           currentPage: state.pagination.currentPage + 1
         })
       });
-    break;
 
     case ActionTypes.INDEX_RESULTS_REDUX_PAGINATE_PREVIOUS:
       return Object.assign({}, state, {
@@ -139,13 +132,11 @@ export default function resultsState (state = initialState, action) {
           currentPage: state.pagination.currentPage - 1
         })
       });
-    break;
 
     case ActionTypes.INDEX_RESULTS_REDUX_NEW_QUERY_OPTIONS:
       return Object.assign({}, state, {
         queryOptionsPanel: Object.assign({}, state.queryOptionsPanel, action.options)
       });
-    break;
 
     default:
       return state;
@@ -263,7 +254,7 @@ export const getQueryOptionsParams = (state) => {
     if (betweenKeys.startkey && betweenKeys.startkey != '') {
       params.start_key = betweenKeys.startkey;
     }
-    if (betweenKeys.endKey && betweenKeys.endKey != '') {
+    if (betweenKeys.endkey && betweenKeys.endkey != '') {
       params.end_key = betweenKeys.endkey;
     }
   } else if (queryOptionsPanel.showByKeys) {

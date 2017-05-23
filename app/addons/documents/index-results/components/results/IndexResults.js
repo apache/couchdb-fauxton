@@ -16,10 +16,27 @@ import ResultsScreen from './ResultsScreen';
 export default class IndexResults extends React.Component {
   constructor (props) {
     super(props);
-    const { fetchAllDocs, fetchParams, queryOptionsParams } = this.props;
+    const {
+      fetchAllDocs,
+      fetchParams,
+      queryOptionsParams,
+    } = this.props;
 
     // now get the docs!
     fetchAllDocs(fetchParams, queryOptionsParams);
+  }
+
+  componentWillUpdate(nextProps) {
+    const {
+      fetchAllDocs,
+      fetchParams,
+      queryOptionsParams,
+      ddocsOnly
+    } = nextProps;
+
+    if (this.props.ddocsOnly !== ddocsOnly) {
+      fetchAllDocs(fetchParams, queryOptionsParams);
+    }
   }
 
   componentWillUnmount () {

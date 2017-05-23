@@ -49,14 +49,14 @@ export const queryOptionsUpdateGroupLevel = (newGroupLevel) => {
 export const queryOptionsToggleByKeys = (previousShowByKeys) => {
   return updateQueryOptions({
     showByKeys: !previousShowByKeys,
-    showBetweenKeys: previousShowByKeys
+    showBetweenKeys: !!previousShowByKeys
   });
 };
 
 export const queryOptionsToggleBetweenKeys = (previousShowBetweenKeys) => {
   return updateQueryOptions({
     showBetweenKeys: !previousShowBetweenKeys,
-    showByKeys: previousShowBetweenKeys
+    showByKeys: !!previousShowBetweenKeys
   });
 };
 
@@ -93,5 +93,17 @@ export const queryOptionsUpdateLimit = (newLimit) => {
 export const queryOptionsToggleIncludeDocs = (previousIncludeDocs) => {
   return updateQueryOptions({
     includeDocs: !previousIncludeDocs
+  });
+};
+
+export const queryOptionsFilterOnlyDdocs = () => {
+  return updateQueryOptions({
+    betweenKeys: {
+      include: false,
+      startkey: '\"_design\"',
+      endkey: '\"_design0\"'
+    },
+    showBetweenKeys: true,
+    showByKeys: false
   });
 };

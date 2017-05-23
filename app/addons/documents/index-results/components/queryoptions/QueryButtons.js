@@ -26,7 +26,7 @@ export default class QueryButtons extends React.Component {
       <div className="controls-group query-group">
         <div id="button-options" className="controls controls-row">
           <button type="submit" className="btn btn-secondary">Run Query</button>
-          <a onClick={this.hideTray} className="btn btn-cancelDark">Cancel</a>
+          <a onClick={this.hideTray.bind(this)} className="btn btn-cancelDark">Cancel</a>
         </div>
       </div>
     );

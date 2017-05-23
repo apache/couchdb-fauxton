@@ -23,6 +23,7 @@ import DesignDocInfoComponents from './designdocinfo/components';
 import RightAllDocsHeader from './components/header-docs-right';
 import IndexResultsContainer from './index-results/containers/IndexResultsContainer';
 import PaginationContainer from './index-results/containers/PaginationContainer';
+import ApiBarContainer from './index-results/containers/ApiBarContainer';
 
 export const TabsSidebarHeader = ({
   hideQueryOptions,
@@ -32,7 +33,8 @@ export const TabsSidebarHeader = ({
   docURL,
   endpoint,
   isRedux = false,
-  fetchUrl
+  fetchUrl,
+  ddocsOnly
 }) => {
   return (
     <header className="two-panel-header">
@@ -49,9 +51,11 @@ export const TabsSidebarHeader = ({
               hideQueryOptions={hideQueryOptions}
               database={database}
               isRedux={isRedux}
-              fetchUrl={fetchUrl} />
+              fetchUrl={fetchUrl}
+              ddocsOnly={ddocsOnly} />
           </div>
-          <ApiBarWrapper docURL={docURL} endpoint={endpoint} />
+          { isRedux ? <ApiBarContainer databaseName={dbName} /> :
+                      <ApiBarWrapper docURL={docURL} endpoint={endpoint} /> }
           <div id="notification-center-btn" className="flex-fill">
             <NotificationCenterButton />
           </div>
@@ -123,13 +127,15 @@ export const DocsTabsSidebarLayout = ({
   dbName,
   dropDownLinks,
   isRedux = false,
-  fetchUrl
+  fetchUrl,
+  ddocsOnly
 }) => {
   let lowerContent;
   if (isRedux) {
     lowerContent = <IndexResultsContainer
                       fetchUrl={fetchUrl}
                       designDocs={designDocs}
+                      ddocsOnly={ddocsOnly}
                       databaseName={dbName} />;
   } else {
     lowerContent = <IndexResultsComponents.List designDocs={designDocs} />;
@@ -145,6 +151,7 @@ export const DocsTabsSidebarLayout = ({
         database={database}
         isRedux={isRedux}
         fetchUrl={fetchUrl}
+        ddocsOnly={ddocsOnly}
       />
       <TabsSidebarContent
         lowerContent={lowerContent}
