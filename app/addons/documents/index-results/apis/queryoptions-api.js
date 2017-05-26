@@ -20,11 +20,15 @@ const updateQueryOptions = (queryOptions) => {
   };
 };
 
-export const queryOptionsExecute = (fetchUrl, queryOptionsParams, perPage) => {
-  const fetchParams = {
+export const resetFetchParamsBeforeExecute = (perPage) => {
+  return {
     limit: perPage + 1,
     skip: 0
   };
+};
+
+export const queryOptionsExecute = (fetchUrl, queryOptionsParams, perPage) => {
+  const fetchParams = resetFetchParamsBeforeExecute(perPage);
   return fetchAllDocs(fetchUrl, fetchParams, queryOptionsParams);
 };
 

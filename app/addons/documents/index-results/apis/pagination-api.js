@@ -20,11 +20,18 @@ export const toggleShowAllColumns = () => {
   };
 };
 
-const setPerPage = (amount) => {
+export const setPerPage = (amount) => {
   return {
     type: ActionTypes.INDEX_RESULTS_REDUX_SET_PER_PAGE,
     perPage: amount
   };
+};
+
+export const resetFetchParamsBeforePerPageChange = (fetchParams, queryOptionsParams, amount) => {
+  return Object.assign({}, fetchParams, {
+    limit: amount + 1,
+    skip: queryOptionsParams.skip || 0
+  });
 };
 
 export const updatePerPageResults = (databaseName, fetchParams, queryOptionsParams, amount) => {
@@ -32,8 +39,7 @@ export const updatePerPageResults = (databaseName, fetchParams, queryOptionsPara
   // a next page.  We also need to reset to the beginning of all
   // possible pages since our logic to paginate backwards can't handle
   // changing perPage amounts.
-  fetchParams.limit = amount + 1;
-  fetchParams.skip = queryOptionsParams.skip || 0;
+  fetchParams = resetFetchParamsBeforePerPageChange(fetchParams, queryOptionsParams, amount);
 
   return (dispatch) => {
     dispatch(setPerPage(amount));
@@ -41,9 +47,15 @@ export const updatePerPageResults = (databaseName, fetchParams, queryOptionsPara
   };
 };
 
+export const incrementSkipForPageNext = (fetchParams, perPage) => {
+  return Object.assign({}, fetchParams, {
+    skip: fetchParams.skip + perPage
+  });
+};
+
 export const paginateNext = (databaseName, fetchParams, queryOptionsParams, perPage) => {
   // add the perPage to the previous skip.
-  fetchParams.skip += perPage;
+  fetchParams = incrementSkipForPageNext(fetchParams, perPage);
 
   return (dispatch) => {
     dispatch({
@@ -53,9 +65,15 @@ export const paginateNext = (databaseName, fetchParams, queryOptionsParams, perP
   };
 };
 
+export const decrementSkipForPagePrevious = (fetchParams, perPage) => {
+  return Object.assign({}, fetchParams, {
+    skip: Math.max(fetchParams.skip - perPage, 0)
+  });
+};
+
 export const paginatePrevious = (databaseName, fetchParams, queryOptionsParams, perPage) => {
   // subtract the perPage to the previous skip.
-  fetchParams.skip = Math.max(fetchParams.skip - perPage, 0);
+  fetchParams = decrementSkipForPagePrevious(fetchParams, perPage);
 
   return (dispatch) => {
     dispatch({

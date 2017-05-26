@@ -27,8 +27,8 @@ module.exports = {
       .loginToGUI()
       .checkForDocumentCreated(newDocumentName1)
       .checkForDocumentCreated(newDocumentName2)
-      .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs?include_docs=true')
-      .assert.cssClassPresent('button.active i', 'fonticon-table')
+      .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
+      .clickWhenVisible('.fonticon-table')
 
       .waitForElementVisible('.tableview-checkbox-cell', waitTime, false)
       .getText('.table', function (result) {

@@ -87,7 +87,7 @@ var DocumentsRouteObject = BaseRoute.extend({
           urlParams = params.urlParams,
           docParams = params.docParams;
 
-    const url = `/${databaseName}/_all_docs`;
+    const url = `/${encodeURIComponent(databaseName)}/_all_docs`;
     // this is used for the header and sidebar
     this.database.buildAllDocs(docParams);
 

@@ -66,8 +66,13 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     selectDoc: (doc, selectedDocs) => {
       dispatch(selectDoc(doc, selectedDocs));
     },
-    bulkDeleteDocs: (docs, params) => {
-      dispatch(bulkDeleteDocs(ownProps.databaseName, docs, ownProps.designDocs, params));
+    bulkDeleteDocs: (docs, fetchParams, queryOptionsParams) => {
+      dispatch(bulkDeleteDocs(ownProps.databaseName,
+                              ownProps.fetchUrl,
+                              docs,
+                              ownProps.designDocs,
+                              fetchParams,
+                              queryOptionsParams));
     },
     changeLayout: (newLayout) => {
       dispatch(changeLayout(newLayout));

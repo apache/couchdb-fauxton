@@ -22,7 +22,7 @@ const maxDocLimit = 10000;
 // This is a helper function to determine what params need to be sent to couch based
 // on what the user entered (i.e. queryOptionsParams) and what fauxton is using to
 // emulate pagination (i.e. fetchParams).
-const mergeParams = (fetchParams, queryOptionsParams) => {
+export const mergeParams = (fetchParams, queryOptionsParams) => {
   const params = {};
 
   // determine the final "index" or "position" in the total result list based on the
@@ -35,6 +35,9 @@ const mergeParams = (fetchParams, queryOptionsParams) => {
   // The limit will continue to be our pagination limit.
   params.skip = Math.max(fetchParams.skip, queryOptionsParams.skip || 0);
   params.limit = fetchParams.limit;
+  if (fetchParams.conflicts) {
+    params.conflicts = true;
+  }
 
   // Determine the total number of documents remaining based on the user's skip and
   // limit inputs.  Again, note that this will be NaN if queryOptionsParams.limit is
@@ -48,7 +51,7 @@ const mergeParams = (fetchParams, queryOptionsParams) => {
   };
 };
 
-const removeOverflowDocsAndCalculateHasNext = (docs, totalDocsRemaining, fetchLimit) => {
+export const removeOverflowDocsAndCalculateHasNext = (docs, totalDocsRemaining, fetchLimit) => {
   // Now is the time to determine if we have another page of results
   // after this set of documents.  We also want to manipulate the array
   // of docs because we always search with a limit larger than the desired
@@ -87,16 +90,7 @@ export const fetchAllDocs = (fetchUrl, fetchParams, queryOptionsParams) => {
     dispatch(nowLoading());
 
     // now fetch the results
-    const query = queryString.stringify(params);
-    return fetch(`${fetchUrl}?${query}`, {
-      credentials: 'include',
-      headers: {
-        'Accept': 'application/json; charset=utf-8'
-      }
-    })
-    .then(res => res.json())
-    .then((res) => {
-      const docs = res.error ? [] : res.rows;
+    return queryEndpoint(fetchUrl, params).then((docs) => {
       const {
         finalDocList,
         canShowNext
@@ -108,7 +102,19 @@ export const fetchAllDocs = (fetchUrl, fetchParams, queryOptionsParams) => {
   };
 };
 
-const errorMessage = (ids) => {
+export const queryEndpoint = (fetchUrl, params) => {
+  const query = queryString.stringify(params);
+  return fetch(`${fetchUrl}?${query}`, {
+    credentials: 'include',
+    headers: {
+      'Accept': 'application/json; charset=utf-8'
+    }
+  })
+  .then(res => res.json())
+  .then(res => res.error ? [] : res.rows);
+};
+
+export const errorMessage = (ids) => {
   let msg = 'Failed to delete your document!';
 
   if (ids) {
@@ -122,7 +128,7 @@ const errorMessage = (ids) => {
   });
 };
 
-const validateBulkDelete = (docs) => {
+export const validateBulkDelete = (docs) => {
   const itemsLength = docs.length;
 
   const msg = (itemsLength === 1) ? 'Are you sure you want to delete this doc?' :
@@ -140,7 +146,7 @@ const validateBulkDelete = (docs) => {
   return true;
 };
 
-export const bulkDeleteDocs = (databaseName, docs, designDocs, params) => {
+export const bulkDeleteDocs = (databaseName, fetchUrl, docs, designDocs, fetchParams, queryOptionsParams) => {
   if (!validateBulkDelete(docs)) {
     return false;
   }
@@ -150,29 +156,32 @@ export const bulkDeleteDocs = (databaseName, docs, designDocs, params) => {
       docs: docs
     };
 
-    return fetch(`/${databaseName}/_bulk_docs`, {
-      method: 'POST',
-      credentials: 'include',
-      body: JSON.stringify(payload),
-      headers: {
-        'Accept': 'application/json; charset=utf-8',
-        'Content-Type': 'application/json'
-      }
-    })
-    .then(res => res.json())
-    .then((res) => {
+    return postToBulkDocs(databaseName, payload).then((res) => {
       if (res.error) {
         errorMessage();
         return;
       }
       processBulkDeleteResponse(res, docs, designDocs);
       dispatch(newSelectedDocs());
-      dispatch(fetchAllDocs(databaseName, params));
+      dispatch(fetchAllDocs(fetchUrl, fetchParams, queryOptionsParams));
     });
   };
 };
 
-const processBulkDeleteResponse = (res, originalDocs, designDocs) => {
+export const postToBulkDocs = (databaseName, payload) => {
+  return fetch(`/${databaseName}/_bulk_docs`, {
+    method: 'POST',
+    credentials: 'include',
+    body: JSON.stringify(payload),
+    headers: {
+      'Accept': 'application/json; charset=utf-8',
+      'Content-Type': 'application/json'
+    }
+  })
+  .then(res => res.json());
+};
+
+export const processBulkDeleteResponse = (res, originalDocs, designDocs) => {
   FauxtonAPI.addNotification({
     msg: 'Successfully deleted your docs',
     clear:  true

@@ -17,7 +17,7 @@ export const getJsonViewData = (docs, { databaseName, typeOfIndex }) => {
     return {
       content: JSON.stringify(doc, null, ' '),
       id: doc.id, //|| doc.key.toString(),
-      _rev: doc._rev,
+      _rev: doc._rev || (doc.value && doc.value.rev),
       header: doc.id, //|| doc.key.toString(),
       keylabel: 'id', //doc.isFromView() ? 'key' : 'id',
       url: doc.id ? getDocUrl('app', doc.id, databaseName) : null,

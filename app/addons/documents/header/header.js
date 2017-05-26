@@ -101,10 +101,11 @@ export default class BulkDocumentHeaderController extends React.Component {
       // change our layout to JSON, Table, or Metadata
       changeLayout(newLayout);
 
-      if (newLayout === Constants.LAYOUT_ORIENTATION.METADATA) {
-        queryOptionsParams.include_docs = false;
+      queryOptionsParams.include_docs = newLayout !== Constants.LAYOUT_ORIENTATION.METADATA;
+      if (newLayout === Constants.LAYOUT_ORIENTATION.TABLE) {
+        fetchParams.conflicts = true;
       } else {
-        queryOptionsParams.include_docs = true;
+        delete fetchParams.conflicts;
       }
 
       // tell the query options panel we're updating include_docs

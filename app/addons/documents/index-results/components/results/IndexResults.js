@@ -45,8 +45,8 @@ export default class IndexResults extends React.Component {
   }
 
   deleteSelectedDocs () {
-    const { bulkDeleteDocs, fetchParams, selectedDocs } = this.props;
-    bulkDeleteDocs(selectedDocs, fetchParams);
+    const { bulkDeleteDocs, fetchParams, selectedDocs, queryOptionsParams } = this.props;
+    bulkDeleteDocs(selectedDocs, fetchParams, queryOptionsParams);
   }
 
   isSelected (id) {
@@ -64,8 +64,7 @@ export default class IndexResults extends React.Component {
     // dispatch an action to push this doc on to the array of selected docs
     const doc = {
       _id: _id,
-      _rev: _rev,
-      _deleted: true
+      _rev: _rev
     };
 
     selectDoc(doc, selectedDocs);

@@ -45,20 +45,17 @@ module.exports = {
       .createDocument(newDocumentName, newDatabaseName, docContent)
       .loginToGUI()
       .checkForDocumentCreated(newDocumentName)
-
-      // displays table view if url manually updates with include_docs=true
-      .url(`${baseUrl}#/database/${newDatabaseName}/_all_docs?include_docs=true`)
+      .url(`${baseUrl}#/database/${newDatabaseName}/_all_docs`)
       .waitForElementPresent('.two-sides-toggle-button', waitTime, false)
-      .assert.containsText('.two-sides-toggle-button button.active', 'Table')
+      .assert.containsText('.two-sides-toggle-button button.active', 'Metadata')
 
-      // turn include_docs off through query options
+      // turn include_docs on through query options
       .clickWhenVisible('.control-toggle-queryoptions')
       .waitForElementPresent('#qoIncludeDocsLabel', waitTime, false)
-      .assert.attributeEquals('#qoIncludeDocs', 'checked', 'true')
       .clickWhenVisible('#qoIncludeDocsLabel')
       .clickWhenVisible('.query-options .btn-secondary')
       .waitForElementPresent('.two-sides-toggle-button', waitTime, false)
-      .assert.containsText('.two-sides-toggle-button button.active', 'Metadata')
+      .assert.containsText('.two-sides-toggle-button button.active', 'Table')
 
       // switch to json view and then turn off include_docs
       .clickWhenVisible('.fonticon-json')

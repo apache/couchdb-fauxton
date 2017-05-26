@@ -48,6 +48,7 @@ export const selectDoc = (doc, selectedDocs) => {
   if (indexInSelectedDocs > -1) {
     selectedDocs.splice(indexInSelectedDocs, 1);
   } else {
+    doc._deleted = true;
     selectedDocs.push(doc);
   }
 
@@ -58,7 +59,7 @@ export const bulkCheckOrUncheck = (docs, selectedDocs, allDocumentsSelected) => 
   docs.forEach((doc) => {
     // find the index of the doc in the selectedDocs array
     const indexInSelectedDocs = selectedDocs.findIndex((selectedDoc) => {
-      return doc._id || doc.id === selectedDoc._id;
+      return (doc._id || doc.id) === selectedDoc._id;
     });
 
     // remove the doc if we know all the documents are currently selected
@@ -68,7 +69,7 @@ export const bulkCheckOrUncheck = (docs, selectedDocs, allDocumentsSelected) => 
     } else if (indexInSelectedDocs === -1) {
       selectedDocs.push({
         _id: doc._id || doc.id,
-        _rev: doc._rev || doc.rev,
+        _rev: doc._rev || doc.rev || doc.value.rev,
         _deleted: true
       });
     }

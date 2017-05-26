@@ -18,7 +18,7 @@ import {
     getDocUrl
  } from "./shared-helpers";
 
-const getPseudoSchema = (docs) => {
+export const getPseudoSchema = (docs) => {
   let cache = [];
 
   docs.forEach((doc) => {
@@ -39,7 +39,7 @@ const getPseudoSchema = (docs) => {
   return cache;
 };
 
-const getPrioritizedFields = (docs, max) => {
+export const getPrioritizedFields = (docs, max) => {
   let res = docs.reduce((acc, el) => {
     acc = acc.concat(Object.keys(el));
     return acc;
@@ -66,7 +66,7 @@ const getPrioritizedFields = (docs, max) => {
   }, []);
 };
 
-const sortByTwoFields = (elements) => {
+export const sortByTwoFields = (elements) => {
   // given:
   // var a = [[2, "b"], [3, "z"], [1, "a"], [3, "a"]]
   // it sorts to:
@@ -93,9 +93,9 @@ const sortByTwoFields = (elements) => {
   });
 };
 
-const getNotSelectedFields = (selectedFields, allFields) => {
-    const without = _.without.bind(this, allFields);
-    return without.apply(this, selectedFields);
+export const getNotSelectedFields = (selectedFields, allFields) => {
+  const without = _.without.bind(this, allFields);
+  return without.apply(this, selectedFields);
 };
 
 const getFullTableViewData = (docs, options) => {

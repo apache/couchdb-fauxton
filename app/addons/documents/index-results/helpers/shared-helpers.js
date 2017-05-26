@@ -53,7 +53,8 @@ const isJSONDocBulkDeletable = (doc, docType) => {
   if (docType === 'MangoIndex') {
     return doc.type !== 'special';
   }
-  return (!!doc._id || !!doc.id) && (!!doc._rev || !! doc.value.rev);
+  const result = (doc._id || doc.id) && (doc._rev || (doc.value && doc.value.rev));
+  return !!result;
 };
 
 const hasBulkDeletableDoc = (docs, docType) => {
