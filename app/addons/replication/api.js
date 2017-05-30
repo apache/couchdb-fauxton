@@ -44,7 +44,14 @@ export const supportNewApi = (forceCheck) => {
 export const encodeFullUrl = (fullUrl) => {
   if (!fullUrl) {return '';}
   const url = new URL(fullUrl);
-  return `${url.origin}/${encodeURIComponent(url.pathname.slice(1))}`;
+
+  let { origin, username, password, pathname } = url;
+  if (username || password) {
+    origin = origin.replace(/:\/\//,
+      `://${encodeURIComponent(username)}:${encodeURIComponent(password)}@`);
+  }
+
+  return `${origin}/${encodeURIComponent(pathname.slice(1))}`;
 };
 
 export const decodeFullUrl = (fullUrl) => {
@@ -207,7 +214,7 @@ export const createReplicationDoc = ({
       remoteSource,
       username,
       password
-    }),
+    }).url,
     target: getTarget({
       replicationTarget,
       replicationSource,
@@ -215,7 +222,7 @@ export const createReplicationDoc = ({
       localTarget,
       username,
       password
-    }),
+    }).url,
     create_target: createTarget(replicationTarget),
     continuous: continuous(replicationType),
   });
