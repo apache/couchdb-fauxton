@@ -156,7 +156,7 @@ describe('Docs Shared Helpers', () => {
         diet: "omnivore"
       }
     ];
-    let docType = 'MangoIndex'
+    let docType = 'MangoIndex';
 
     it('returns true if any docs are bulk deletable', () => {
       expect(hasBulkDeletableDoc(docs, docType)).toBe(true);
