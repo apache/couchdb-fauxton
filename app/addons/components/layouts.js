@@ -13,25 +13,25 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {NotificationCenterButton} from '../fauxton/notifications/notifications';
-import {ApiBarController} from './components/apibar';
+import {JSONBar, ApiBarController} from './components/apibar';
 import {Breadcrumbs} from './header-breadcrumbs';
 import ComponentActions from './actions';
 
-export const ApiBarWrapper = ({docURL, endpoint}) => {
+export const ApiBarWrapper = ({docUrl, endpoint}) => {
   //TODO once all modules are using this remove actions and make them props
   setTimeout(() => {
     ComponentActions.updateAPIBar({
       buttonVisible: true,
       contentVisible: false,
       endpoint,
-      docURL
+      docUrl
     });
   });
   return (
     <div id='api-navbar'>
-      <ApiBarController
-        buttonVisible={true}
-        contentVisible={false}
+      <JSONBar
+        endpoint={endpoint}
+        docUrl={docUrl}
       />
   </div>
   );
@@ -45,7 +45,7 @@ export const OnePane = ({children}) => {
   );
 };
 
-export const OnePaneHeader = ({showApiUrl, docURL, endpoint, crumbs, children}) => {
+export const OnePaneHeader = ({showApiUrl, docUrl, endpoint, crumbs, children}) => {
   return (
     <header>
       <div className='flex-layout flex-row'>
@@ -57,7 +57,7 @@ export const OnePaneHeader = ({showApiUrl, docURL, endpoint, crumbs, children}) 
             {children}
           </div>
         </div>
-        {showApiUrl ? <ApiBarWrapper docURL={docURL} endpoint={endpoint} /> : null}
+        {showApiUrl ? <ApiBarWrapper docUrl={docUrl} endpoint={endpoint} /> : null}
         <div id='notification-center-btn'>
           <NotificationCenterButton />
         </div>

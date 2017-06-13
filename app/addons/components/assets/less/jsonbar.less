@@ -10,18 +10,30 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-@import "../../../../../assets/less/variables.less";
+.faux__jsonbar {
+  border-left: 1px solid #ccc;
+  padding: 18px 12px 12px 12px;
+  height: 64px;
+  background-color: rgba(0, 0, 0, 0);
+  color: #666;
+}
 
-@import "header-togglebutton.less";
-@import "styled-select.less";
-@import "docs.less";
-@import "loading-lines.less";
-@import "code-editor.less";
-@import "bulk-selector.less";
-@import "badges.less";
-@import "modals.less";
-@import "tab-element.less";
-@import "header-breadcrumbs.less";
-@import "layouts.less";
-@import "polling.less";
-@import "jsonbar.less";
+.faux__jsonbar-link {
+  display: inline-block;
+  color: #666;
+  text-decoration: none;
+  line-height: 33px;
+  font-size: 13px;
+}
+
+.faux__jsonbar-link:visited,
+.faux__jsonbar-link:active {
+  text-decoration: none;
+  color: #666;
+}
+
+.faux__jsonbar-link-brackets {
+  font-size: 15px;
+  padding-right: 3px;
+  font-weight: 500;
+}

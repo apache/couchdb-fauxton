@@ -112,6 +112,25 @@ export const APIBar = React.createClass({
   }
 });
 
+export const JSONBar = ({endpoint, docUrl}) => {
+  console.log("DOD", docUrl);
+  let helpLink = null;
+
+  if (docUrl) {
+    helpLink = <a data-bypass="true" href={docUrl} target="_blank" className="">
+      <i className="icon icon-question-sign"></i>
+      </a>;
+  }
+  return (
+    <div className="faux__jsonbar">
+      <a data-bypass={true} className="faux__jsonbar-link" href={endpoint} target="_blank">
+        <span className="faux__jsonbar-link-brackets">{'{ '}{'}'}</span>
+        <span>JSON</span>
+      </a>
+      {helpLink}
+    </div>
+  );
+};
 export const ApiBarController = React.createClass({
 
   getWrap () {
