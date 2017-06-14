@@ -13,26 +13,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {NotificationCenterButton} from '../fauxton/notifications/notifications';
-import {JSONBar, ApiBarController} from './components/apibar';
+import {JSONLink, DocLink} from './components/apibar';
 import {Breadcrumbs} from './header-breadcrumbs';
-import ComponentActions from './actions';
 
 export const ApiBarWrapper = ({docUrl, endpoint}) => {
-  //TODO once all modules are using this remove actions and make them props
-  setTimeout(() => {
-    ComponentActions.updateAPIBar({
-      buttonVisible: true,
-      contentVisible: false,
-      endpoint,
-      docUrl
-    });
-  });
   return (
-    <div id='api-navbar'>
-      <JSONBar
+    <div className='faux__jsondoc-wrapper'>
+      <JSONLink
         endpoint={endpoint}
-        docUrl={docUrl}
       />
+    <DocLink
+      docUrl={docUrl}
+    />
   </div>
   );
 };
