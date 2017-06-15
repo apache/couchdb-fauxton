@@ -29,7 +29,7 @@ describe('DocLink', () => {
 
   it('Should render with url', () => {
     const url = "http://couchdb.com/help/_all_dbs";
-    const el = mount(<DocLink docUrl={url}/>);
+    const el = mount(<DocLink docURL={url}/>);
 
     expect(el.find('a').prop('href')).toEqual(url);
   });

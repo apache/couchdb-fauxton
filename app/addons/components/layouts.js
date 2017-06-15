@@ -16,14 +16,14 @@ import {NotificationCenterButton} from '../fauxton/notifications/notifications';
 import {JSONLink, DocLink} from './components/apibar';
 import {Breadcrumbs} from './header-breadcrumbs';
 
-export const ApiBarWrapper = ({docUrl, endpoint}) => {
+export const ApiBarWrapper = ({docURL, endpoint}) => {
   return (
     <div className='faux__jsondoc-wrapper'>
       <JSONLink
         endpoint={endpoint}
       />
     <DocLink
-      docUrl={docUrl}
+      docURL={docURL}
     />
   </div>
   );
@@ -37,7 +37,7 @@ export const OnePane = ({children}) => {
   );
 };
 
-export const OnePaneHeader = ({showApiUrl, docUrl, endpoint, crumbs, children}) => {
+export const OnePaneHeader = ({showApiUrl, docURL, endpoint, crumbs, children}) => {
   return (
     <header>
       <div className='flex-layout flex-row'>
@@ -49,7 +49,7 @@ export const OnePaneHeader = ({showApiUrl, docUrl, endpoint, crumbs, children}) 
             {children}
           </div>
         </div>
-        {showApiUrl ? <ApiBarWrapper docUrl={docUrl} endpoint={endpoint} /> : null}
+        {showApiUrl ? <ApiBarWrapper docURL={docURL} endpoint={endpoint} /> : null}
         <div id='notification-center-btn'>
           <NotificationCenterButton />
         </div>
@@ -88,13 +88,13 @@ export const OnePaneFooter = ({children}) => {
   );
 };
 
-export const OnePaneSimpleLayout = ({component, docUrl, endpoint, crumbs}) => {
+export const OnePaneSimpleLayout = ({component, docURL, endpoint, crumbs}) => {
   return (
     <OnePane>
       <OnePaneHeader
         crumbs={crumbs}
         endpoint={endpoint}
-        docUrl={docUrl}
+        docURL={docURL}
       >
       </OnePaneHeader>
       <OnePaneContent>
@@ -114,13 +114,13 @@ export const DocEditorContent = ({children}) => {
   );
 };
 
-export const DocEditorLayout = ({component, docUrl, endpoint, crumbs}) => {
+export const DocEditorLayout = ({component, docURL, endpoint, crumbs}) => {
   return (
     <div id="dashboard" className="one-pane doc-editor-page">
         <OnePaneHeader
           crumbs={crumbs}
           endpoint={endpoint}
-          docUrl={docUrl}
+          docURL={docURL}
         >
         </OnePaneHeader>
       <DocEditorContent>

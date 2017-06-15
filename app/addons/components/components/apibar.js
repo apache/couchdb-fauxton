@@ -28,14 +28,14 @@ export const JSONLink = ({endpoint}) => {
   );
 };
 
-export const DocLink = ({docUrl}) => {
-  if (!docUrl) {
+export const DocLink = ({docURL}) => {
+  if (!docURL) {
     return null;
   }
 
   return (
     <div className="faux__doclink">
-      <a data-bypass="true" href={docUrl} target="_blank" className="faux__doclink-link">
+      <a data-bypass="true" href={docURL} target="_blank" className="faux__doclink-link">
         <i className="icon fonticon-bookmark"></i>
       </a>
     </div>
