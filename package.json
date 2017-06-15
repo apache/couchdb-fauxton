@@ -56,7 +56,6 @@
     "couchapp": "~0.11.0",
     "css-loader": "^0.26.1",
     "d3": "^3.4.11",
-    "d3-tip": "^0.6.8",
     "eslint": "^3.14.1",
     "eslint-loader": "^1.3.0",
     "eslint-plugin-react": "^6.7.1",
@@ -111,8 +110,7 @@
     "visualizeRevTree": "git+https://github.com/neojski/visualizeRevTree.git#gh-pages",
     "webpack": "~2.2.1",
     "webpack-dev-server": "~2.4.1",
-    "whatwg-fetch": "~2.0.1",
-    "zxcvbn": "^4.4.2"
+    "whatwg-fetch": "~2.0.1"
   },
   "scripts": {
     "stylecheck": "eslint --ext=js,jsx .",
