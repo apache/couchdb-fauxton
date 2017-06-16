@@ -98,7 +98,7 @@ export const getNotSelectedFields = (selectedFields, allFields) => {
   return without.apply(this, selectedFields);
 };
 
-const getFullTableViewData = (docs, options) => {
+export const getFullTableViewData = (docs, options) => {
   let notSelectedFieldsTableView = null,
       selectedFieldsTableView = options.selectedFieldsTableView,
       showAllFieldsTableView = options.showAllFieldsTableView,
@@ -133,7 +133,7 @@ const getFullTableViewData = (docs, options) => {
   };
 };
 
-const getMetaDataTableView = (docs) => {
+export const getMetaDataTableView = (docs) => {
   const schema = getPseudoSchema(docs);
   return {
     schema,

@@ -159,6 +159,16 @@ describe('Docs Reducers', () => {
     });
   });
 
+  describe('removeGeneratedMangoDocs', () => {
+    it('returns false when language is query', () => {
+      expect(Reducers.removeGeneratedMangoDocs({ language: 'query' })).toBe(false);
+    });
+
+    it('returns true when language is not query', () => {
+      expect(Reducers.removeGeneratedMangoDocs({ language: 'foo' })).toBe(true);
+    });
+  });
+
   describe('getShowPrioritizedEnabled', () => {
     it('returns false when not table layout', () => {
       expect(Reducers.getShowPrioritizedEnabled(initialState)).toBe(false);

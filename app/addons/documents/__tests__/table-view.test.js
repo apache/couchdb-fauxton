@@ -14,7 +14,9 @@ import {
   getPseudoSchema,
   getPrioritizedFields,
   sortByTwoFields,
-  getNotSelectedFields
+  getNotSelectedFields,
+  getMetaDataTableView,
+  getFullTableViewData
 } from '../index-results/helpers/table-view';
 
 describe('Docs Table View', () => {
@@ -47,22 +49,24 @@ describe('Docs Table View', () => {
     }
   ];
 
+  const schema = [
+    '_id',
+    '_rev',
+    'wiki_page',
+    'min_weight',
+    'max_weight',
+    'min_length',
+    'max_length',
+    'latin_name',
+    'class',
+    'diet',
+    'test',
+    'foo'
+  ];
+
   describe('getPseudoSchema', () => {
     it('returns array of unique keys with _id as the first element', () => {
-      expect(getPseudoSchema(docs)).toEqual([
-        '_id',
-        '_rev',
-        'wiki_page',
-        'min_weight',
-        'max_weight',
-        'min_length',
-        'max_length',
-        'latin_name',
-        'class',
-        'diet',
-        'test',
-        'foo'
-      ]);
+      expect(getPseudoSchema(docs)).toEqual(schema);
     });
   });
 
@@ -104,6 +108,72 @@ describe('Docs Table View', () => {
         'test',
         'foo'
       ]);
+    });
+  });
+
+  describe('getFullTableViewData', () => {
+    let schemaWithoutMetaDataFields;
+    beforeEach(() => {
+      schemaWithoutMetaDataFields = _.without(schema, '_attachments');
+    });
+
+    it('returns json object with attributes necessary when selectedFieldsTableView is not set', () => {
+      const max = 5;
+      const selectedFieldsTableView = getPrioritizedFields(docs, max);
+      const notSelectedFieldsTableView = getNotSelectedFields(selectedFieldsTableView, schemaWithoutMetaDataFields);
+      const options = {
+        selectedFieldsTableView: [],
+        showAllFieldsTableView: false
+      };
+
+      expect(getFullTableViewData(docs, options)).toEqual({
+        schema,
+        normalizedDocs: docs,
+        selectedFieldsTableView,
+        notSelectedFieldsTableView
+      });
+    });
+
+    it('returns json object with attributes necessary when selectedFieldsTableView is set', () => {
+      const selectedFieldsTableView = ['_id', 'class', 'diet', 'latin_name', 'max_length'];
+      const notSelectedFieldsTableView = getNotSelectedFields(selectedFieldsTableView, schemaWithoutMetaDataFields);
+      const options = {
+        selectedFieldsTableView,
+        showAllFieldsTableView: false
+      };
+
+      expect(getFullTableViewData(docs, options)).toEqual({
+        schema,
+        normalizedDocs: docs,
+        selectedFieldsTableView,
+        notSelectedFieldsTableView
+      });
+    });
+
+    it('returns json object with attributes necessary when showAllFieldsTableView is set', () => {
+      const selectedFieldsTableView = ['_id', 'class', 'diet', 'latin_name', 'max_length'];
+      const options = {
+        selectedFieldsTableView,
+        showAllFieldsTableView: true
+      };
+
+      expect(getFullTableViewData(docs, options)).toEqual({
+        schema,
+        normalizedDocs: docs,
+        selectedFieldsTableView: schemaWithoutMetaDataFields,
+        notSelectedFieldsTableView: null
+      });
+    });
+  });
+
+  describe('getMetaDataTableView', () => {
+    it('returns json object with attributes necessary to build metadata table', () => {
+      expect(getMetaDataTableView(docs)).toEqual({
+        schema: schema,
+        normalizedDocs: docs,
+        selectedFieldsTableView: schema,
+        notSelectedFieldsTableView: null
+      });
     });
   });
 });
