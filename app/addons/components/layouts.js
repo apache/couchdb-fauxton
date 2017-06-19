@@ -13,26 +13,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {NotificationCenterButton} from '../fauxton/notifications/notifications';
-import {ApiBarController} from './components/apibar';
+import {JSONLink, DocLink} from './components/apibar';
 import {Breadcrumbs} from './header-breadcrumbs';
-import ComponentActions from './actions';
 
 export const ApiBarWrapper = ({docURL, endpoint}) => {
-  //TODO once all modules are using this remove actions and make them props
-  setTimeout(() => {
-    ComponentActions.updateAPIBar({
-      buttonVisible: true,
-      contentVisible: false,
-      endpoint,
-      docURL
-    });
-  });
   return (
-    <div id='api-navbar'>
-      <ApiBarController
-        buttonVisible={true}
-        contentVisible={false}
+    <div className='faux__jsondoc-wrapper'>
+      <JSONLink
+        endpoint={endpoint}
       />
+    <DocLink
+      docURL={docURL}
+    />
   </div>
   );
 };
@@ -96,13 +88,13 @@ export const OnePaneFooter = ({children}) => {
   );
 };
 
-export const OnePaneSimpleLayout = ({component, docUrl, endpoint, crumbs}) => {
+export const OnePaneSimpleLayout = ({component, docURL, endpoint, crumbs}) => {
   return (
     <OnePane>
       <OnePaneHeader
         crumbs={crumbs}
         endpoint={endpoint}
-        docUrl={docUrl}
+        docURL={docURL}
       >
       </OnePaneHeader>
       <OnePaneContent>
@@ -122,13 +114,13 @@ export const DocEditorContent = ({children}) => {
   );
 };
 
-export const DocEditorLayout = ({component, docUrl, endpoint, crumbs}) => {
+export const DocEditorLayout = ({component, docURL, endpoint, crumbs}) => {
   return (
     <div id="dashboard" className="one-pane doc-editor-page">
         <OnePaneHeader
           crumbs={crumbs}
           endpoint={endpoint}
-          docUrl={docUrl}
+          docURL={docURL}
         >
         </OnePaneHeader>
       <DocEditorContent>

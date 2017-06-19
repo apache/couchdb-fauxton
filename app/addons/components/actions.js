@@ -13,28 +13,6 @@
 import FauxtonAPI from "../../core/api";
 import ActionTypes from "./actiontypes";
 
-function showAPIBarButton () {
-  FauxtonAPI.dispatch({ type: ActionTypes.CMPNTS_SHOW_API_BAR_BUTTON });
-}
-
-function hideAPIBarButton () {
-  FauxtonAPI.dispatch({ type: ActionTypes.CMPNTS_HIDE_API_BAR_BUTTON });
-}
-
-function toggleApiBarVisibility (visible) {
-  FauxtonAPI.dispatch({
-    type: ActionTypes.CMPNTS_SET_API_BAR_CONTENT_VISIBLE_STATE,
-    options: visible
-  });
-}
-
-function updateAPIBar (params) {
-  FauxtonAPI.dispatch({
-    type: ActionTypes.CMPNTS_UPDATE_API_BAR,
-    options: params
-  });
-}
-
 function showDeleteDatabaseModal (options) {
   FauxtonAPI.dispatch({
     type: ActionTypes.CMPNTS_DATABASES_SHOWDELETE_MODAL,
@@ -72,9 +50,5 @@ function deleteDatabase (dbId) {
 
 export default {
   deleteDatabase: deleteDatabase,
-  showDeleteDatabaseModal: showDeleteDatabaseModal,
-  showAPIBarButton: showAPIBarButton,
-  hideAPIBarButton: hideAPIBarButton,
-  toggleApiBarVisibility: toggleApiBarVisibility,
-  updateAPIBar: updateAPIBar,
+  showDeleteDatabaseModal: showDeleteDatabaseModal
 };

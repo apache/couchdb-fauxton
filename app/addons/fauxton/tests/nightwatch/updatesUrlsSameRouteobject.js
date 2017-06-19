@@ -11,7 +11,6 @@
 // the License.
 
 
-
 module.exports = {
   'it updates the API url even for routes in the same routeobject' : function (client) {
     var waitTime = client.globals.maxWaitTime,
@@ -22,17 +21,12 @@ module.exports = {
       .populateDatabase(newDatabaseName)
       .loginToGUI()
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_find')
-      .clickWhenVisible('.control-toggle-api-url')
-      .waitForElementVisible('.text-field-to-copy', waitTime, false)
-      .assert.valueContains('.text-field-to-copy', newDatabaseName + '/_find')
+      .waitForElementVisible('.faux__jsonlink-link', waitTime, false)
+      .assert.attributeContains('.faux__jsonlink-link', 'href', newDatabaseName + '/_find')
       .clickWhenVisible('.edit-link')
       .waitForElementVisible('.prettyprint', waitTime, false)
-      // We need to wait for the previous API Url modal to disappear before
-      // attempting to view it with the new text-field-to-copy.
-      .waitForElementNotPresent('.api-bar-tray', waitTime, false)
-      .clickWhenVisible('.control-toggle-api-url')
-      .waitForElementVisible('.text-field-to-copy', waitTime, false)
-      .assert.valueContains('.text-field-to-copy', newDatabaseName + '/_index')
+      .waitForElementVisible('.faux__jsonlink-link', waitTime, false)
+      .assert.attributeContains('.faux__jsonlink-link', 'href', newDatabaseName + '/_index')
       .end();
   }
 };

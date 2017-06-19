@@ -22,7 +22,7 @@ export const Layout = () => {
       <OnePaneHeader
         crumbs={[{"name": "Databases"}]}
         endpoint={FauxtonAPI.urls('allDBs', 'apiurl')}
-        docUrl={FauxtonAPI.constants.DOC_URLS.ALL_DBS}
+        docURL={FauxtonAPI.constants.DOC_URLS.ALL_DBS}
       >
       <RightDatabasesHeader />
       </OnePaneHeader>
