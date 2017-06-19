@@ -17,7 +17,7 @@ import {
   updatePerPageResults,
   paginateNext,
   paginatePrevious
-} from '../apis/pagination-api';
+} from '../apis/pagination';
 import {
   getDocs,
   getSelectedDocs,

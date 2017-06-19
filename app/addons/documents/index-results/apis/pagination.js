@@ -11,7 +11,7 @@
 // the License.
 
 import FauxtonAPI from '../../../../core/api';
-import { fetchAllDocs } from './fetch-api';
+import { fetchAllDocs } from './fetch';
 import ActionTypes from '../actiontypes';
 
 export const toggleShowAllColumns = () => {

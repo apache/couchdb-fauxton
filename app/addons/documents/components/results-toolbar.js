@@ -34,16 +34,28 @@ export class ResultsToolBar extends React.Component {
       isLoading
     } = this.props;
 
+    // Determine if we need to display the bulk action selector
+    let bulkAction = null;
+    if ((isListDeletable && hasResults) || isLoading) {
+      bulkAction = <BulkActionComponent
+        removeItem={removeItem}
+        isChecked={allDocumentsSelected}
+        hasSelectedItem={hasSelectedItem}
+        toggleSelect={toggleSelectAll}
+        disabled={isLoading}
+        title="Select all docs that can be..." />;
+    }
+
+    // Determine if we need to display the bulk doc header
+    let bulkHeader = null;
+    if (hasResults || isLoading) {
+      bulkHeader = <BulkDocumentHeaderController {...this.props} />;
+    }
+
     return (
       <div className="document-result-screen__toolbar">
-        {(isListDeletable && hasResults) || isLoading ? <BulkActionComponent
-          removeItem={removeItem}
-          isChecked={allDocumentsSelected}
-          hasSelectedItem={hasSelectedItem}
-          toggleSelect={toggleSelectAll}
-          disabled={isLoading}
-          title="Select all docs that can be..." /> : null}
-        {hasResults || isLoading ? <BulkDocumentHeaderController {...this.props} /> : null}
+        {bulkAction}
+        {bulkHeader}
         <div className="document-result-screen__toolbar-flex-container">
           <a href={`#/database/${dbName}/new`} className="btn save document-result-screen__toolbar-create-btn btn-primary">
             Create Document

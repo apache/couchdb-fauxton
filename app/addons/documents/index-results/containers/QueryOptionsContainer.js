@@ -12,8 +12,8 @@
 
 import { connect } from 'react-redux';
 import QueryOptions from '../components/queryoptions/QueryOptions';
-import { changeLayout, resetState } from '../apis/base-api';
-import { resetPagination } from '../apis/pagination-api';
+import { changeLayout, resetState } from '../apis/base';
+import { resetPagination } from '../apis/pagination';
 import {
   queryOptionsExecute,
   queryOptionsToggleReduce,
@@ -28,7 +28,7 @@ import {
   queryOptionsToggleIncludeDocs,
   queryOptionsToggleVisibility,
   queryOptionsFilterOnlyDdocs
-} from '../apis/queryoptions-api';
+} from '../apis/queryoptions';
 import {
   getQueryOptionsPanel,
   getFetchParams,

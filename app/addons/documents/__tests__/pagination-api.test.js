@@ -17,7 +17,7 @@ import {
   incrementSkipForPageNext,
   decrementSkipForPagePrevious,
   resetPagination
-} from '../index-results/apis/pagination-api';
+} from '../index-results/apis/pagination';
 import ActionTypes from '../index-results/actiontypes';
 import FauxtonAPI from '../../../core/api';
 

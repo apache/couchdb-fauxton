@@ -17,7 +17,7 @@ import {
   validateBulkDelete,
   postToBulkDocs,
   processBulkDeleteResponse
-} from '../index-results/apis/fetch-api';
+} from '../index-results/apis/fetch';
 import fetchMock from 'fetch-mock';
 import queryString from 'query-string';
 import sinon from 'sinon';

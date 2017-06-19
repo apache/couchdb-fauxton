@@ -23,7 +23,7 @@ const getDocUrl = (context, id, databaseName) => {
   if (!safeId) {
     safeId = '';
   }
-  const safeDatabaseName = app.utils.safeURLName(databaseName);
+  const safeDatabaseName = encodeURIComponent(databaseName);
 
   return FauxtonAPI.urls('document', context, safeDatabaseName, safeId, '?conflicts=true');
 };
@@ -58,13 +58,11 @@ const isJSONDocBulkDeletable = (doc, docType) => {
 };
 
 const hasBulkDeletableDoc = (docs, docType) => {
-  // use a for loop here as we can end it once we found the first id
-  for (let i = 0; i < docs.length; i++) {
-    if (isJSONDocBulkDeletable(docs[i], docType)) {
-      return true;
-    }
-  }
-  return false;
+  const doc = docs.find((doc) => {
+    return isJSONDocBulkDeletable(doc, docType);
+  });
+
+  return !!doc;
 };
 
 export {

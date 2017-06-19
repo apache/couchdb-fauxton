@@ -16,6 +16,9 @@ import ResultsScreen from './ResultsScreen';
 export default class IndexResults extends React.Component {
   constructor (props) {
     super(props);
+  }
+
+  componentDidMount () {
     const {
       fetchAllDocs,
       fetchParams,
@@ -26,7 +29,7 @@ export default class IndexResults extends React.Component {
     fetchAllDocs(fetchParams, queryOptionsParams);
   }
 
-  componentWillUpdate(nextProps) {
+  componentWillUpdate (nextProps) {
     const {
       fetchAllDocs,
       fetchParams,

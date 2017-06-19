@@ -11,7 +11,7 @@
 // the License.
 
 import ActionTypes from '../actiontypes';
-import { fetchAllDocs } from './fetch-api';
+import { fetchAllDocs } from './fetch';
 
 const updateQueryOptions = (queryOptions) => {
   return {

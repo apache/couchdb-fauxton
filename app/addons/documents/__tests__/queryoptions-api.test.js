@@ -10,7 +10,7 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import * as Api from '../index-results/apis/queryoptions-api';
+import * as Api from '../index-results/apis/queryoptions';
 import ActionTypes from '../index-results/actiontypes';
 
 describe('Docs Query Options API', () => {

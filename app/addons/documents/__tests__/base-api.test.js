@@ -19,7 +19,7 @@ import {
   bulkCheckOrUncheck,
   changeLayout,
   changeTableHeaderAttribute
-} from '../index-results/apis/base-api';
+} from '../index-results/apis/base';
 import ActionTypes from '../index-results/actiontypes';
 import Constants from '../constants';
 

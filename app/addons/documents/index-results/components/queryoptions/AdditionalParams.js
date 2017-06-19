@@ -68,7 +68,7 @@ export default class AdditionalParams extends React.Component {
           <div className="dropdown inline">
             <label htmlFor="qoSkip" className="drop-down">
               Skip
-              <input value={this.props.skip} onChange={this.updateSkip.bind(this)} className="input-small" type="text" id="qoSkip" placeholder="# of rows" />
+              <input value={this.props.skip} onChange={this.updateSkip.bind(this)} className="input-small" type="number" id="qoSkip" placeholder="# of rows" />
             </label>
           </div>
         </div>

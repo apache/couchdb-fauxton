@@ -15,7 +15,7 @@ import 'whatwg-fetch';
 import FauxtonAPI from '../../../../core/api';
 import queryString from 'query-string';
 import SidebarActions from '../../sidebar/actions';
-import { nowLoading, newResultsAvailable, newSelectedDocs } from './base-api';
+import { nowLoading, newResultsAvailable, newSelectedDocs } from './base';
 
 const maxDocLimit = 10000;
 

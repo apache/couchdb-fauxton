@@ -41,12 +41,17 @@ export const newSelectedDocs = (selectedDocs = []) => {
 };
 
 export const selectDoc = (doc, selectedDocs) => {
+  // locate the doc in the selected docs array if it exists
   const indexInSelectedDocs = selectedDocs.findIndex((selectedDoc) => {
     return selectedDoc._id === doc._id;
   });
 
+  // if the doc exists in the selectedDocs array, remove it. This occurs
+  // when a user has deselected or unchecked a doc from the list of results.
   if (indexInSelectedDocs > -1) {
     selectedDocs.splice(indexInSelectedDocs, 1);
+
+  // otherwise, add the _deleted: true flag and push it on to the array.
   } else {
     doc._deleted = true;
     selectedDocs.push(doc);

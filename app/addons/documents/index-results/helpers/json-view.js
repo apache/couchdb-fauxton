@@ -13,6 +13,7 @@
 import { hasBulkDeletableDoc, getDocUrl } from "./shared-helpers";
 
 export const getJsonViewData = (docs, { databaseName, typeOfIndex }) => {
+  // expand on this when refactoring views and mango to use redux
   const stagedResults = docs.map((doc) => {
     return {
       content: JSON.stringify(doc, null, ' '),
@@ -21,8 +22,8 @@ export const getJsonViewData = (docs, { databaseName, typeOfIndex }) => {
       header: doc.id, //|| doc.key.toString(),
       keylabel: 'id', //doc.isFromView() ? 'key' : 'id',
       url: doc.id ? getDocUrl('app', doc.id, databaseName) : null,
-      isDeletable: true, //TODO: determine logic here
-      isEditable: true //TODO: determine logic here
+      isDeletable: true,
+      isEditable: true
     };
   });
 

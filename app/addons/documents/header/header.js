@@ -50,20 +50,20 @@ export default class BulkDocumentHeaderController extends React.Component {
   }
 
   render () {
-    //console.log(this.props);
-
     const { changeLayout, selectedLayout } = this.props;
     // If the changeLayout function is not undefined, default to using prop values
     // because we're using our new redux store.
     // TODO: migrate completely to redux and eliminate this check.
     const layout = changeLayout ? selectedLayout : this.state.selectedLayout;
-    const metadata = this.state.isMango ? null :
-          <Button
-            className={layout === Constants.LAYOUT_ORIENTATION.METADATA ? 'active' : ''}
-            onClick={this.toggleLayout.bind(this, Constants.LAYOUT_ORIENTATION.METADATA)}
-          >
-            Metadata
-          </Button>;
+    let metadata = null;
+    if (!this.state.isMango) {
+      metadata = <Button
+          className={layout === Constants.LAYOUT_ORIENTATION.METADATA ? 'active' : ''}
+          onClick={this.toggleLayout.bind(this, Constants.LAYOUT_ORIENTATION.METADATA)}
+        >
+          Metadata
+        </Button>;
+    }
 
     return (
       <div className="alternative-header">

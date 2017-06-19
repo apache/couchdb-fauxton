@@ -12,15 +12,15 @@
 
 import { connect } from 'react-redux';
 import IndexResults from '../components/results/IndexResults';
-import { fetchAllDocs, bulkDeleteDocs } from '../apis/fetch-api';
-import { queryOptionsToggleIncludeDocs } from '../apis/queryoptions-api';
+import { fetchAllDocs, bulkDeleteDocs } from '../apis/fetch';
+import { queryOptionsToggleIncludeDocs } from '../apis/queryoptions';
 import {
   selectDoc,
   changeLayout,
   bulkCheckOrUncheck,
   changeTableHeaderAttribute,
   resetState
-} from '../apis/base-api';
+} from '../apis/base';
 import {
   getDocs,
   getSelectedDocs,
