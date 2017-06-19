@@ -16,7 +16,6 @@ import ActionTypes from "./actiontypes";
 import HeaderActionTypes from "../header/header.actiontypes";
 import PaginationActionTypes from "../pagination/actiontypes";
 import MangoHelper from "../mango/mango.helper";
-import Resources from "../resources";
 
 var Stores = {};
 
@@ -29,14 +28,11 @@ Stores.IndexResultsStore = FauxtonAPI.Store.extend({
   },
 
   reset: function () {
-    this._collection = new (FauxtonAPI.Collection.extend({
-      url: ''
-    }))();
+    this._docs = [];
+    this._selectedDocs = [];
+    this._queryParams = {};
+    this._databaseName = '';
 
-    this._filteredCollection = [];
-    this._bulkDeleteDocCollection = new Resources.BulkDeleteDocCollection([], {});
-
-    this.clearSelectedItems();
     this._isLoading = false;
     this._textEmptyIndex = 'No Documents Found';
     this._typeOfIndex = 'view';
@@ -71,13 +67,17 @@ Stores.IndexResultsStore = FauxtonAPI.Store.extend({
   },
 
   canShowPrevious: function () {
+    /*
     if (!this._enabled) { return false; }
     if (!this._collection || !this._collection.hasPrevious) { return false; }
 
     return this._collection.hasPrevious();
+    */
+    return true;
   },
 
   canShowNext: function () {
+    /*
     if (!this._enabled) { return this._enabled; }
 
     if ((this._pageStart + this._perPage) >= this._docLimit) {
@@ -87,6 +87,8 @@ Stores.IndexResultsStore = FauxtonAPI.Store.extend({
     if (!this._collection || !this._collection.hasNext) { return false; }
 
     return this._collection.hasNext();
+    */
+    return true;
   },
 
   paginateNext: function () {
@@ -170,14 +172,17 @@ Stores.IndexResultsStore = FauxtonAPI.Store.extend({
     return this._pageStart + this._collection.length - 1;
   },
 
-  clearSelectedItems: function () {
-    this._bulkDeleteDocCollection.reset([]);
-  },
-
   newResults: function (options) {
-    this._collection = options.collection;
+    const removeGeneratedMangoDocs = (doc) => {
+      if (doc.get && typeof doc.get === 'function') {
+        return doc.get('language') !== 'query';
+      }
 
-    this._bulkDeleteDocCollection = options.bulkCollection;
+      return doc.language !== 'query';
+    };
+
+    this._docs = options.results.filter(removeGeneratedMangoDocs);
+    this._queryParams = options.params;
 
     if (options.textEmptyIndex) {
       this._textEmptyIndex = options.textEmptyIndex;
@@ -186,18 +191,6 @@ Stores.IndexResultsStore = FauxtonAPI.Store.extend({
     if (options.typeOfIndex) {
       this._typeOfIndex = options.typeOfIndex;
     }
-
-    this._cachedSelected = [];
-
-    this._filteredCollection = this._collection.filter(filterOutGeneratedMangoDocs);
-
-    function filterOutGeneratedMangoDocs (doc) {
-      if (doc.get && typeof doc.get === 'function') {
-        return doc.get('language') !== 'query';
-      }
-
-      return doc.language !== 'query';
-    }
   },
 
   getTypeOfIndex: function () {
@@ -205,7 +198,7 @@ Stores.IndexResultsStore = FauxtonAPI.Store.extend({
   },
 
   isEditable: function (doc) {
-    if (!this._collection) {
+    if (this._docs.length == 0) {
       return false;
     }
 
@@ -238,12 +231,12 @@ Stores.IndexResultsStore = FauxtonAPI.Store.extend({
     return doc.isDeletable();
   },
 
-  getCollection: function () {
-    return this._collection;
+  getResults: function () {
+    return this._docs;
   },
 
-  getBulkDocCollection: function () {
-    return this._bulkDeleteDocCollection;
+  getSelectedDocs: function () {
+    return this._selectedDocs;
   },
 
   getDocContent: function (originalDoc) {
@@ -373,9 +366,7 @@ Stores.IndexResultsStore = FauxtonAPI.Store.extend({
   },
 
   isIncludeDocsEnabled: function () {
-    var params = app.getParams();
-
-    return !!params.include_docs;
+    return !!this._queryParams.include_docs;
   },
 
   getPrioritizedFields: function (data, max) {
@@ -626,8 +617,8 @@ Stores.IndexResultsStore = FauxtonAPI.Store.extend({
   },
 
   hasResults: function () {
-    if (this.isLoading()) { return this.isLoading(); }
-    return this._collection.length > 0;
+    if (this.isLoading()) { return false; }
+    return this._docs.length > 0;
   },
 
   isLoading: function () {
@@ -640,12 +631,19 @@ Stores.IndexResultsStore = FauxtonAPI.Store.extend({
       return;
     }
 
-    if (!this._bulkDeleteDocCollection.get(doc._id)) {
-      this._bulkDeleteDocCollection.add(doc);
+    // search the selectedDocs array for the index of this doc
+    const indexInSelectedDocs = this._selectedDocs.findIndex((docInSelectedDocsArray) => {
+      return docInSelectedDocsArray._id === doc._id;
+    });
+
+    // if the doc doesn't exist in the array, add it
+    if (indexInSelectedDocs === -1) {
+      this._selectedDocs.push(doc);
       return;
     }
 
-    this._bulkDeleteDocCollection.remove(doc._id);
+    // doc exists, remove it
+    this._selectedDocs.splice(indexInSelectedDocs, 1);
   },
 
   selectAllDocuments: function () {
@@ -690,29 +688,35 @@ Stores.IndexResultsStore = FauxtonAPI.Store.extend({
   },
 
   areAllDocumentsSelected: function () {
-    if (this._collection.length === 0) {
+    if (this._docs.length === 0) {
       return false;
     }
 
-    var foundAllOnThisPage = true;
+    // Iterate over the results and determine if each one is included
+    // in the selectedDocs array.
+    //
+    // This is O(n^2) which makes me unhappy.  We slowly shrink the
+    // selectedDocsCopy array to improve this slightly and we know
+    // that the number of docs will never be that large due to the
+    // per page limitations we force on the user.
+    const selectedDocsCopy = this._selectedDocs;
+    this._docs.forEach((doc) => {
+      const indexOfDoc = (selectedDoc) => {
+        return doc._id === selectedDoc._id;
+      };
 
-    var selected = this._bulkDeleteDocCollection.pluck('_id');
-
-    this._collection.forEach(function (doc) {
-      if (!doc.isBulkDeletable()) {
-        return;
+      if (selectedDocsCopy.findIndex(indexOfDoc) === -1) {
+        return false;
       }
 
-      if (!_.includes(selected, doc.id)) {
-        foundAllOnThisPage = false;
-      }
-    }.bind(this));
+      selectedDocsCopy.splice(indexOfDoc, 1);
+    });
 
-    return foundAllOnThisPage;
+    return true;
   },
 
   getSelectedItemsLength: function () {
-    return this._bulkDeleteDocCollection.length;
+    return this._selectedDocs.length;
   },
 
   getDatabase: function () {
@@ -760,14 +764,24 @@ Stores.IndexResultsStore = FauxtonAPI.Store.extend({
   },
 
   clearResultsBeforeFetch: function () {
-    if (this._collection && this._collection.reset) {
-      this._collection.reset();
-    }
+    this._docs = [];
     this._isLoading = true;
   },
 
-  resultsResetFromFetch: function () {
+  resultsReady: function () {
     this._isLoading = false;
+  },
+
+  getDatabaseName: function () {
+    return this._databaseName;
+  },
+
+  setDatabaseName: function (options) {
+    this._databaseName = options.databaseName;
+  },
+
+  getQueryParams: function () {
+    return this._queryParams;
   },
 
   dispatch: function (action) {
@@ -775,8 +789,8 @@ Stores.IndexResultsStore = FauxtonAPI.Store.extend({
       case ActionTypes.INDEX_RESULTS_NEW_RESULTS:
         this.newResults(action.options);
       break;
-      case ActionTypes.INDEX_RESULTS_RESET:
-        this.resultsResetFromFetch();
+      case ActionTypes.INDEX_RESULTS_READY:
+        this.resultsReady();
       break;
       case ActionTypes.INDEX_RESULTS_SELECT_DOC:
         this.selectDoc(action.options);
@@ -792,6 +806,9 @@ Stores.IndexResultsStore = FauxtonAPI.Store.extend({
       break;
       case ActionTypes.INDEX_RESULTS_TOGGLE_PRIORITIZED_TABLE_VIEW:
         this.togglePrioritizedTableView();
+      break;
+      case ActionTypes.INDEX_RESULTS_STORE_DATABASE_NAME:
+        this.setDatabaseName(action.options);
       break;
 
       case HeaderActionTypes.TOGGLE_TABLEVIEW:
