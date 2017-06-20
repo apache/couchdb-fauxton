@@ -65,9 +65,21 @@ const hasBulkDeletableDoc = (docs, docType) => {
   return !!doc;
 };
 
+// if we've previously set the perPage in local storage, default to that.
+const getDefaultPerPage = () => {
+  if (window.localStorage) {
+    const storedPerPage = app.utils.localStorageGet('fauxton:perpageredux');
+    if (storedPerPage) {
+      return parseInt(storedPerPage, 10);
+    }
+  }
+  return FauxtonAPI.constants.MISC.DEFAULT_PAGE_SIZE;
+};
+
 export {
   getDocUrl,
   isJSONDocEditable,
   isJSONDocBulkDeletable,
-  hasBulkDeletableDoc
+  hasBulkDeletableDoc,
+  getDefaultPerPage
 };
