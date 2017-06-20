@@ -173,6 +173,20 @@ const WrappedAutocomplete = ({selectedField, notSelectedFields, index, changeFie
     return {value: el, label: el};
   });
 
+  const onChange = (el) => {
+    const newField = {
+      newSelectedRow: el.value,
+      index: index
+    };
+
+    // changeField will be undefined for non-redux components
+    if (changeField) {
+      changeField(newField, selectedFields);
+    } else {
+      Actions.changeField(newField);
+    }
+  };
+
   return (
     <div className="table-container-autocomplete">
       <div className="table-select-wrapper">
@@ -180,14 +194,7 @@ const WrappedAutocomplete = ({selectedField, notSelectedFields, index, changeFie
           value={selectedField}
           options={options}
           clearable={false}
-          onChange={(el) => {
-              const newField = {
-                newSelectedRow: el.value,
-                index: index
-              };
-              changeField(newField, selectedFields) || Actions.changeField(newField);
-            }
-          } />
+          onChange={onChange} />
       </div>
     </div>
   );
