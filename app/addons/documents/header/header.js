@@ -50,13 +50,18 @@ export default class BulkDocumentHeaderController extends React.Component {
   }
 
   render () {
-    const { changeLayout, selectedLayout } = this.props;
+    const {
+      changeLayout,
+      selectedLayout,
+      typeOfIndex
+    } = this.props;
+
     // If the changeLayout function is not undefined, default to using prop values
     // because we're using our new redux store.
     // TODO: migrate completely to redux and eliminate this check.
     const layout = changeLayout ? selectedLayout : this.state.selectedLayout;
-    let metadata = null;
-    if (!this.state.isMango) {
+    let metadata, json, table;
+    if ((typeOfIndex && typeOfIndex === 'view') || !this.state.isMango) {
       metadata = <Button
           className={layout === Constants.LAYOUT_ORIENTATION.METADATA ? 'active' : ''}
           onClick={this.toggleLayout.bind(this, Constants.LAYOUT_ORIENTATION.METADATA)}
@@ -65,22 +70,31 @@ export default class BulkDocumentHeaderController extends React.Component {
         </Button>;
     }
 
+    // reduce doesn't allow for include_docs=true, so we'll prevent JSON and table
+    // views since they force include_docs=true when reduce is checked in the
+    // query options panel.
+    if (!queryOptionsStore.reduce()) {
+      table = <Button
+          className={layout === Constants.LAYOUT_ORIENTATION.TABLE ? 'active' : ''}
+          onClick={this.toggleLayout.bind(this, Constants.LAYOUT_ORIENTATION.TABLE)}
+        >
+          <i className="fonticon-table" /> Table
+        </Button>;
+
+      json = <Button
+          className={layout === Constants.LAYOUT_ORIENTATION.JSON ? 'active' : ''}
+          onClick={this.toggleLayout.bind(this, Constants.LAYOUT_ORIENTATION.JSON)}
+        >
+          <i className="fonticon-json" /> JSON
+        </Button>;
+    }
+
     return (
       <div className="alternative-header">
         <ButtonGroup className="two-sides-toggle-button">
-          <Button
-            className={layout === Constants.LAYOUT_ORIENTATION.TABLE ? 'active' : ''}
-            onClick={this.toggleLayout.bind(this, Constants.LAYOUT_ORIENTATION.TABLE)}
-          >
-            <i className="fonticon-table" /> Table
-          </Button>
+          {table}
           {metadata}
-          <Button
-            className={layout === Constants.LAYOUT_ORIENTATION.JSON ? 'active' : ''}
-            onClick={this.toggleLayout.bind(this, Constants.LAYOUT_ORIENTATION.JSON)}
-          >
-            <i className="fonticon-json" /> JSON
-          </Button>
+          {json}
         </ButtonGroup>
       </div>
     );

@@ -80,6 +80,7 @@ const IndexEditorAndResults = BaseRoute.extend({
 
     IndexResultsActions.newResultsList({
       collection: this.indexedDocs,
+      typeOfIndex: 'view',
       bulkCollection: new Documents.BulkDeleteDocCollection([], { databaseId: this.database.safeID() }),
     });
 

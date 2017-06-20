@@ -75,7 +75,7 @@ module.exports = {
 
       // confirm the header elements are showing up
       .waitForElementVisible('.faux-header__breadcrumbs', waitTime, true)
-      .waitForElementVisible('#api-navbar', waitTime, true)
+      .waitForElementVisible('.faux__jsondoc-wrapper', waitTime, true)
 
       .execute('\
         var editor = ace.edit("doc-editor");\

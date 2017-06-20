@@ -371,6 +371,13 @@ var QueryTray = React.createClass({
     Actions.toggleIncludeDocs();
   },
 
+  toggleReduce: function () {
+    if (this.props.includeDocs) {
+      this.toggleIncludeDocs();
+    }
+    Actions.toggleReduce();
+  },
+
   getTray: function () {
     return (
       <TrayContents closeTray={this.closeTray} contentVisible={this.props.contentVisible}
@@ -383,7 +390,7 @@ var QueryTray = React.createClass({
             toggleIncludeDocs={this.toggleIncludeDocs}
             showReduce={this.props.showReduce}
             reduce={this.props.reduce}
-            toggleReduce={Actions.toggleReduce}
+            toggleReduce={this.toggleReduce}
             groupLevel={this.props.groupLevel}
             updateGroupLevel={Actions.updateGroupLevel}
             docURL={FauxtonAPI.constants.DOC_URLS.GENERAL} />
