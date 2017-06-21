@@ -14,21 +14,6 @@
 
 module.exports = {
 
-  'Does not display the View-Selector-Button': function (client) {
-    var waitTime = client.globals.maxWaitTime,
-        newDatabaseName = client.globals.testDatabaseName,
-        baseUrl = client.globals.test_settings.launch_url;
-
-    client
-      .loginToGUI()
-      .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
-      .waitForElementPresent('.two-sides-toggle-button', waitTime, false)
-      .clickWhenVisible('#changes')
-      .waitForElementPresent('.js-changes-view', waitTime, false)
-      .assert.elementNotPresent('.two-sides-toggle-button')
-      .end();
-  },
-
   'Check doc link in Changes feed links properly': function (client) {
     var waitTime = client.globals.maxWaitTime,
         newDatabaseName = client.globals.testDatabaseName,

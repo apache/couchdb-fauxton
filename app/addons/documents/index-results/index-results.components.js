@@ -15,11 +15,13 @@ import React from "react";
 import Stores from "./stores";
 import Actions from "./actions";
 import Components from "../../components/react-components";
+import Constants from "../constants";
 import ReactSelect from "react-select";
+import {ResultsToolBar} from "../components/results-toolbar";
 import "../../../../assets/js/plugins/prettify";
 import uuid from 'uuid';
 
-const {LoadLines, BulkActionComponent, Copy} = Components;
+const {LoadLines, Copy} = Components;
 const store  = Stores.indexResultsStore;
 
 var NoResultsScreen = React.createClass({
@@ -43,7 +45,8 @@ var TableRow = React.createClass({
     docChecked: React.PropTypes.func.isRequired,
     isSelected: React.PropTypes.bool.isRequired,
     index: React.PropTypes.number.isRequired,
-    data: React.PropTypes.object.isRequired
+    data: React.PropTypes.object.isRequired,
+    onClick: React.PropTypes.func.isRequired
   },
 
   onChange: function () {
@@ -65,40 +68,13 @@ var TableRow = React.createClass({
       var stringified = typeof el[k] === 'object' ? JSON.stringify(el[k], null, '  ') : el[k];
 
       return (
-        <td key={key} title={stringified}>
+        <td key={key} title={stringified} onClick={this.onClick}>
           {stringified}
         </td>
       );
     }.bind(this));
 
     return row;
-  },
-
-  maybeGetSpecialField: function (element, i) {
-    if (!this.props.data.hasMetadata) {
-      return null;
-    }
-
-    var el = element.content;
-
-    return (
-      <td className="tableview-data-cell-id" key={'tableview-data-cell-id' + i}>
-        <div>{this.maybeGetUrl(element.url, el._id || el.id)}</div>
-        <div>{el._rev}</div>
-      </td>
-    );
-  },
-
-  maybeGetUrl: function (url, stringified) {
-    if (!url) {
-      return stringified;
-    }
-
-    return (
-      <a href={'#' + url}>
-        {stringified}
-      </a>
-    );
   },
 
   maybeGetCheckboxCell: function (el, i) {
@@ -144,7 +120,7 @@ var TableRow = React.createClass({
     }
 
     return (
-      <td className="tableview-el-last">
+      <td className="tableview-el-last" onClick={this.onClick}>
         {conflictIndicator}
         {attachmentIndicator}
       </td>
@@ -172,6 +148,10 @@ var TableRow = React.createClass({
     });
   },
 
+  onClick: function (e) {
+    this.props.onClick(this.props.el._id, this.props.el, e);
+  },
+
   render: function () {
     var i = this.props.index;
     var docContent = this.props.el.content;
@@ -181,7 +161,6 @@ var TableRow = React.createClass({
       <tr key={"tableview-content-row-" + i}>
         {this.maybeGetCheckboxCell(el, i)}
         {this.getCopyButton(docContent)}
-        {this.maybeGetSpecialField(el, i)}
         {this.getRowContents(el, i)}
         {this.getAdditionalInfoRow(docContent)}
       </tr>
@@ -189,10 +168,24 @@ var TableRow = React.createClass({
   }
 });
 
-const WrappedAutocomplete = ({selectedField, notSelectedFields, index}) => {
+const WrappedAutocomplete = ({selectedField, notSelectedFields, index, changeField, selectedFields}) => {
   const options = notSelectedFields.map((el) => {
     return {value: el, label: el};
   });
+
+  const onChange = (el) => {
+    const newField = {
+      newSelectedRow: el.value,
+      index: index
+    };
+
+    // changeField will be undefined for non-redux components
+    if (changeField) {
+      changeField(newField, selectedFields);
+    } else {
+      Actions.changeField(newField);
+    }
+  };
 
   return (
     <div className="table-container-autocomplete">
@@ -201,12 +194,7 @@ const WrappedAutocomplete = ({selectedField, notSelectedFields, index}) => {
           value={selectedField}
           options={options}
           clearable={false}
-          onChange={(el) => {
-            Actions.changeField({
-              newSelectedRow: el.value,
-              index: index
-            });
-          }} />
+          onChange={onChange} />
       </div>
     </div>
   );
@@ -222,6 +210,7 @@ var TableView = React.createClass({
 
       return (
         <TableRow
+          onClick={this.props.onClick}
           key={"tableview-row-component-" + i}
           index={i}
           el={el}
@@ -234,7 +223,7 @@ var TableView = React.createClass({
   },
 
   getOptionFieldRows: function (filtered) {
-    var notSelectedFields = this.props.data.notSelectedFields;
+    const notSelectedFields = this.props.data.notSelectedFields;
 
     if (!notSelectedFields) {
       return filtered.map(function (el, i) {
@@ -245,50 +234,38 @@ var TableView = React.createClass({
     return filtered.map(function (el, i) {
       return (
         <th key={'header-el-' + i}>
-          {this.getDropdown(el, this.props.data.schema, i)}
+          {this.getDropdown(
+            el,
+            this.props.data.schema,
+            i,
+            this.props.changeField,
+            this.props.data.selectedFields
+          )}
         </th>
       );
     }.bind(this));
   },
 
-  getDropdown: function (selectedField, notSelectedFields, i) {
+  getDropdown: function (selectedField, notSelectedFields, i, changeField, selectedFields) {
 
     return (
       <WrappedAutocomplete
         selectedField={selectedField}
         notSelectedFields={notSelectedFields}
-        index={i} />
+        index={i}
+        changeField={changeField}
+        selectedFields={selectedFields} />
     );
   },
 
   getHeader: function () {
     var selectedFields = this.props.data.selectedFields;
-
-    var specialField = null;
-    if (this.props.data.hasMetadata) {
-      specialField = (<th key="header-el-metadata" title="Metadata">Metadata</th>);
-    }
-
     var row = this.getOptionFieldRows(selectedFields);
-
-    var box = (
-      <th className="tableview-header-el-checkbox" key="tableview-header-el-checkbox">
-        {this.props.isListDeletable ? <BulkActionComponent
-          disabled={this.props.isLoading}
-          removeItem={this.props.removeItem}
-          isChecked={this.props.isChecked}
-          hasSelectedItem={this.props.hasSelectedItem}
-          toggleSelect={this.props.toggleSelect}
-          title="Select all docs that can be..." /> : null}
-      </th>
-    );
-
 
     return (
       <tr key="tableview-content-row-header">
-        {box}
+        <th className="tableview-header-el-checkbox"></th>
         <th className="tableview-el-copy"></th>
-        {specialField}
         {row}
         <th className="tableview-el-last"></th>
       </tr>
@@ -317,7 +294,7 @@ var TableView = React.createClass({
 
 var ResultsScreen = React.createClass({
 
-  onDoubleClick: function (id, doc) {
+  onClick: function (id, doc) {
     FauxtonAPI.navigate(doc.url);
   },
 
@@ -341,7 +318,7 @@ var ResultsScreen = React.createClass({
        <Components.Document
          key={doc.id + i}
          doc={doc}
-         onDoubleClick={this.props.isEditable ? this.onDoubleClick : noop}
+         onClick={this.props.isEditable ? this.onClick : noop}
          keylabel={doc.keylabel}
          docContent={doc.content}
          checked={this.props.isSelected(doc.id)}
@@ -355,9 +332,8 @@ var ResultsScreen = React.createClass({
     }, this);
   },
 
-  getDocumentStyleView: function (loadLines) {
-    var classNames = 'view';
-    var isDeletable = this.props.isListDeletable;
+  getDocumentStyleView: function () {
+    let classNames = 'view';
 
     if (this.props.isListDeletable) {
       classNames += ' show-select';
@@ -365,33 +341,18 @@ var ResultsScreen = React.createClass({
 
     return (
       <div className={classNames}>
-        <div className="loading-lines-wrapper">
-          {loadLines}
-        </div>
-
         <div id="doc-list">
-          {isDeletable ? <BulkActionComponent
-            removeItem={this.props.removeItem}
-            isChecked={this.props.allDocumentsSelected}
-            hasSelectedItem={this.props.hasSelectedItem}
-            toggleSelect={this.toggleSelectAll}
-            disabled={this.props.isLoading}
-            title="Select all docs that can be..." /> : null}
-
-            {this.getDocumentList()}
+          {this.getDocumentList()}
         </div>
       </div>
     );
   },
 
-  getTableStyleView: function (loadLines) {
+  getTableStyleView: function () {
     return (
       <div>
-        <div className="loading-lines-wrapper">
-          {loadLines}
-        </div>
-
         <TableView
+          onClick={this.onClick}
           docChecked={this.props.docChecked}
           isSelected={this.props.isSelected}
           isListDeletable={this.props.isListDeletable}
@@ -402,23 +363,30 @@ var ResultsScreen = React.createClass({
           isChecked={this.props.allDocumentsSelected}
           hasSelectedItem={this.props.hasSelectedItem}
           toggleSelect={this.toggleSelectAll}
+          changeField={this.props.changeTableHeaderAttribute}
           title="Select all docs that can be..." />
       </div>
     );
   },
 
   render: function () {
-
-    var loadLines = null;
-    var isTableView = this.props.isTableView;
+    let mainView = null;
+    const { toggleSelectAll } = this.props;
+    let toolbar = <ResultsToolBar toggleSelectAll={toggleSelectAll || this.toggleSelectAll} {...this.props} />;
 
     if (this.props.isLoading) {
-      loadLines = <LoadLines />;
+      mainView = <div className="loading-lines-wrapper"><LoadLines /></div>;
+    } else if (!this.props.hasResults) {
+      mainView = <NoResultsScreen text={this.props.textEmptyIndex}/>;
+    } else if (this.props.selectedLayout === Constants.LAYOUT_ORIENTATION.JSON) {
+      mainView = this.getDocumentStyleView();
+    } else {
+      mainView = this.getTableStyleView();
     }
 
-    var mainView = isTableView ? this.getTableStyleView(loadLines) : this.getDocumentStyleView(loadLines);
     return (
       <div className="document-result-screen">
+        {toolbar}
         {mainView}
       </div>
     );
@@ -446,14 +414,15 @@ var ViewResultListController = React.createClass({
   },
 
   getStoreState: function () {
-    var selectedItemsLength = store.getSelectedItemsLength();
+    const selectedItemsLength = store.getSelectedItemsLength();
+    const isLoading = store.isLoading();
     return {
       hasResults: store.hasResults(),
-      results: store.getResults(),
-      isLoading: store.isLoading(),
+      results: isLoading ? {} : store.getResults(),
+      isLoading: isLoading,
       isEditable: store.isEditable(),
       textEmptyIndex: store.getTextEmptyIndex(),
-      isTableView: store.getIsTableView(),
+      selectedLayout: store.getSelectedLayout(),
       allDocumentsSelected: store.areAllDocumentsSelected(),
       hasSelectedItem: !!selectedItemsLength,
       selectedItemsLength: selectedItemsLength,
@@ -493,10 +462,8 @@ var ViewResultListController = React.createClass({
   },
 
   render: function () {
-    var view = <NoResultsScreen text={this.state.textEmptyIndex}/>;
-
-    if (this.state.hasResults) {
-      view = <ResultsScreen
+    return (
+      <ResultsScreen
         removeItem={this.removeItem}
         hasSelectedItem={this.state.hasSelectedItem}
         allDocumentsSelected={this.state.allDocumentsSelected}
@@ -505,16 +472,13 @@ var ViewResultListController = React.createClass({
         isListDeletable={this.state.results.hasBulkDeletableDoc}
         docChecked={this.docChecked}
         isLoading={this.state.isLoading}
+        hasResults={this.state.hasResults}
+        textEmptyIndex={this.state.textEmptyIndex}
         results={this.state.results}
-        isTableView={this.state.isTableView} />;
-    }
-
-    return (
-      view
+        selectedLayout={this.state.selectedLayout} />
     );
   }
 });
-
 
 export default {
   List: ViewResultListController,

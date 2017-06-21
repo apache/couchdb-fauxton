@@ -17,6 +17,7 @@ import HeaderActionTypes from "../header/header.actiontypes";
 import PaginationActionTypes from "../pagination/actiontypes";
 import MangoHelper from "../mango/mango.helper";
 import Resources from "../resources";
+import Constants from "../constants";
 
 var Stores = {};
 
@@ -45,7 +46,7 @@ Stores.IndexResultsStore = FauxtonAPI.Store.extend({
     this._isPrioritizedEnabled = false;
 
     this._tableSchema = [];
-    this._tableView = false;
+    this._selectedLayout = Constants.LAYOUT_ORIENTATION.METADATA;
 
     this.resetPagination();
   },
@@ -73,7 +74,6 @@ Stores.IndexResultsStore = FauxtonAPI.Store.extend({
   canShowPrevious: function () {
     if (!this._enabled) { return false; }
     if (!this._collection || !this._collection.hasPrevious) { return false; }
-
     return this._collection.hasPrevious();
   },
 
@@ -161,6 +161,10 @@ Stores.IndexResultsStore = FauxtonAPI.Store.extend({
     return this._collection.length;
   },
 
+  setPageStart: function (options) {
+    this._pageStart = options.start + 1;
+  },
+
   getPageStart: function () {
     return this._pageStart;
   },
@@ -185,6 +189,15 @@ Stores.IndexResultsStore = FauxtonAPI.Store.extend({
 
     if (options.typeOfIndex) {
       this._typeOfIndex = options.typeOfIndex;
+    }
+
+    // layout shifting magic to support refreshes, query options, and results toolbar
+    if (this.getIsMetadataView() && (this.isIncludeDocsEnabled() || this.getIsMangoResults())) {
+      this._selectedLayout = Constants.LAYOUT_ORIENTATION.TABLE;
+    }
+
+    if (!this.getIsMetadataView() && !this.isIncludeDocsEnabled() && !this.getIsMangoResults()) {
+      this._selectedLayout = Constants.LAYOUT_ORIENTATION.METADATA;
     }
 
     this._cachedSelected = [];
@@ -246,6 +259,22 @@ Stores.IndexResultsStore = FauxtonAPI.Store.extend({
     return this._bulkDeleteDocCollection;
   },
 
+  setCachedOffset: function (options) {
+    this._cachedOffset = options.offset;
+  },
+
+  getCachedOffset: function () {
+    return this._cachedOffset;
+  },
+
+  hasCachedOffset: function () {
+    return !!this._cachedOffset;
+  },
+
+  deleteCachedOffset: function () {
+    delete this._cachedOffset;
+  },
+
   getDocContent: function (originalDoc) {
     var doc = originalDoc.toJSON();
 
@@ -305,16 +334,16 @@ Stores.IndexResultsStore = FauxtonAPI.Store.extend({
   },
 
   getResults: function () {
-    var hasBulkDeletableDoc;
-    var res;
-
-    // Table sytle view
-    if (this.getIsTableView()) {
+    if (this._selectedLayout === Constants.LAYOUT_ORIENTATION.JSON) {
+      return this.getJsonViewData();
+    } else {
       return this.getTableViewData();
     }
+  },
 
+  getJsonViewData: function () {
     // JSON style views
-    res = this._filteredCollection
+    const res = this._filteredCollection
       .map(function (doc, i) {
         if (doc.get('def') || this.isGhostDoc(doc)) {
           return this.getMangoDoc(doc, i);
@@ -331,11 +360,9 @@ Stores.IndexResultsStore = FauxtonAPI.Store.extend({
         };
       }, this);
 
-    hasBulkDeletableDoc = this.hasBulkDeletableDoc(this._filteredCollection);
-
     return {
       displayedFields: this.getDisplayCountForTableView(),
-      hasBulkDeletableDoc: hasBulkDeletableDoc,
+      hasBulkDeletableDoc: this.hasBulkDeletableDoc(this._filteredCollection),
       results: res
     };
   },
@@ -388,7 +415,6 @@ Stores.IndexResultsStore = FauxtonAPI.Store.extend({
       return el;
     });
 
-    delete res._id;
     delete res.id;
     delete res._rev;
 
@@ -453,38 +479,16 @@ Stores.IndexResultsStore = FauxtonAPI.Store.extend({
       return null;
     }
 
-    if (!this.isIncludeDocsEnabled()) {
-      return null;
-    }
-
     shownCount = _.uniq(this._tableViewSelectedFields).length;
-
-    allFieldCount = this._tableSchema.length;
-    if (_.includes(this._tableSchema, '_id', '_rev')) {
-      allFieldCount = allFieldCount - 1;
-    }
-
-    if (_.includes(this._tableSchema, '_id', '_rev')) {
-      shownCount = shownCount + 1;
-    }
+    allFieldCount = _.without(this._tableSchema, '_attachments').length;
 
     return {shown: shownCount, allFieldCount: allFieldCount};
   },
 
   getTableViewData: function () {
-    var res;
-    var schema;
-    var hasIdOrRev;
-    var hasIdOrRev;
-    var prioritizedFields;
-    var hasBulkDeletableDoc;
-    var database = this.getDatabase();
-    var isView = !!this._collection.view;
-
     // softmigration remove backbone
-    var data;
-    var collectionType = this._collection.collectionType;
-    data = this._filteredCollection.map(function (el) {
+    const collectionType = this._collection.collectionType;
+    let data = this._filteredCollection.map(el => {
       return fixDocIdForMango(el.toJSON(), collectionType);
     });
 
@@ -528,50 +532,53 @@ Stores.IndexResultsStore = FauxtonAPI.Store.extend({
 
     // softmigration end
 
-    var isIncludeDocsEnabled = this.isIncludeDocsEnabled();
-    var notSelectedFields = null;
-    if (isIncludeDocsEnabled) {
+    let notSelectedFields = null;
+    let schema;  // array containing the unique attr keys in the results.  always begins with _id.
 
+    if (this.isIncludeDocsEnabled() || this.getIsMangoResults()) {
+      const isView = !!this._collection.view;
+      // remove "cruft" we don't want to display in the results
       data = this.normalizeTableData(data, isView);
+      // build the schema container based on the normalized data
       schema = this.getPseudoSchema(data);
-      hasIdOrRev = this.hasIdOrRev(schema);
 
+      // if we're showing a subset of the attr/columns in the table, set the selected fields
+      // to the previously cached fields if they exist.
       if (!this._isPrioritizedEnabled) {
         this._tableViewSelectedFields = this._cachedSelected || [];
       }
 
+      // if we still don't know what attr/columns to display, build the list and update the
+      // cached fields for the next time.
       if (this._tableViewSelectedFields.length === 0) {
-        prioritizedFields = this.getPrioritizedFields(data, hasIdOrRev ? 4 : 5);
-        this._tableViewSelectedFields = prioritizedFields;
+        this._tableViewSelectedFields = this.getPrioritizedFields(data, 5);
         this._cachedSelected = this._tableViewSelectedFields;
       }
 
-      var schemaWithoutMetaDataFields = _.without(schema, '_id', '_rev', '_attachment');
+      // set the notSelectedFields to the subset excluding meta and selected attributes
+      const schemaWithoutMetaDataFields = _.without(schema, '_attachments');
       notSelectedFields = this.getNotSelectedFields(this._tableViewSelectedFields, schemaWithoutMetaDataFields);
 
+      // if we're showing all attr/columns, we revert the notSelectedFields to null and set
+      // the selected fields to everything excluding meta.
       if (this._isPrioritizedEnabled) {
         notSelectedFields = null;
         this._tableViewSelectedFields = schemaWithoutMetaDataFields;
       }
 
-
     } else {
+      // METADATA view.
+      // Build the schema based on the original data and then remove _attachment and value meta
+      // attributes.
       schema = this.getPseudoSchema(data);
-      this._tableViewSelectedFields = _.without(schema, '_id', '_rev', '_attachment');
+      this._tableViewSelectedFields = _.without(schema, '_attachments');
     }
 
     this._notSelectedFields = notSelectedFields;
     this._tableSchema = schema;
 
-    var dbId = database.safeID();
-
-    res = data.map(function (doc) {
-      var safeId = app.utils.getSafeIdForDoc(doc._id || doc.id); // inconsistent apis for GET between mango and views
-      var url;
-
-      if (safeId) {
-        url = FauxtonAPI.urls('document', 'app', dbId, safeId);
-      }
+    const res = data.map(function (doc) {
+      const safeId = app.utils.getSafeIdForDoc(doc._id || doc.id); // inconsistent apis for GET between mango and views
 
       return {
         content: doc,
@@ -579,19 +586,16 @@ Stores.IndexResultsStore = FauxtonAPI.Store.extend({
         _rev: doc._rev,
         header: '',
         keylabel: '',
-        url: url,
+        url: safeId ? FauxtonAPI.urls('document', 'app', this.getDatabase().safeID(), safeId) : '',
         isDeletable: isJSONDocBulkDeletable(doc, collectionType),
         isEditable: isJSONDocEditable(doc, collectionType)
       };
     }.bind(this));
 
-    hasBulkDeletableDoc = this.hasBulkDeletableDoc(this._filteredCollection);
-
     return {
       notSelectedFields: notSelectedFields,
-      hasMetadata: this.getHasMetadata(schema),
       selectedFields: this._tableViewSelectedFields,
-      hasBulkDeletableDoc: hasBulkDeletableDoc,
+      hasBulkDeletableDoc: this.hasBulkDeletableDoc(this._filteredCollection),
       schema: schema,
       results: res,
       displayedFields: this.getDisplayCountForTableView(),
@@ -626,7 +630,7 @@ Stores.IndexResultsStore = FauxtonAPI.Store.extend({
   },
 
   hasResults: function () {
-    if (this.isLoading()) { return this.isLoading(); }
+    if (this.isLoading()) { return !this.isLoading(); }
     return this._collection.length > 0;
   },
 
@@ -727,19 +731,24 @@ Stores.IndexResultsStore = FauxtonAPI.Store.extend({
     return this.getSelectedItemsLength() > 0;
   },
 
-  toggleTableView: function (options) {
-    var enableTableView = options.enable;
+  toggleLayout: function (options) {
+    this._selectedLayout = options.layout;
+  },
 
-    if (enableTableView) {
-      this._tableView = true;
-      return;
-    }
-
-    this._tableView = false;
+  getSelectedLayout: function () {
+    return this._selectedLayout;
   },
 
   getIsTableView: function () {
-    return this._tableView;
+    return this._selectedLayout === Constants.LAYOUT_ORIENTATION.TABLE;
+  },
+
+  getIsMetadataView: function () {
+    return this._selectedLayout === Constants.LAYOUT_ORIENTATION.METADATA;
+  },
+
+  getIsMangoResults: function () {
+    return this._typeOfIndex === 'mango';
   },
 
   getIsPrioritizedEnabled: function () {
@@ -756,7 +765,7 @@ Stores.IndexResultsStore = FauxtonAPI.Store.extend({
   },
 
   getShowPrioritizedFieldToggler: function () {
-    return this.isIncludeDocsEnabled() && this.getIsTableView();
+    return (this.isIncludeDocsEnabled() || this.getIsMangoResults()) && this.getIsTableView();
   },
 
   clearResultsBeforeFetch: function () {
@@ -794,8 +803,8 @@ Stores.IndexResultsStore = FauxtonAPI.Store.extend({
         this.togglePrioritizedTableView();
       break;
 
-      case HeaderActionTypes.TOGGLE_TABLEVIEW:
-        this.toggleTableView(action.options);
+      case HeaderActionTypes.TOGGLE_LAYOUT:
+        this.toggleLayout(action.options);
       break;
 
       case PaginationActionTypes.SET_PAGINATION_DOCUMENT_LIMIT:
@@ -810,6 +819,18 @@ Stores.IndexResultsStore = FauxtonAPI.Store.extend({
       case PaginationActionTypes.PER_PAGE_CHANGE:
         this.resetPagination();
         this.setPerPage(action.perPage);
+      break;
+      case PaginationActionTypes.SET_CACHED_OFFSET:
+        this.setCachedOffset(action.options);
+      break;
+      case PaginationActionTypes.DELETE_CACHED_OFFSET:
+        this.deleteCachedOffset();
+      break;
+      case PaginationActionTypes.SET_PAGE_START:
+        this.setPageStart(action.options);
+      break;
+      case PaginationActionTypes.RESET_PAGINATION:
+        this.resetPagination();
       break;
 
       default:

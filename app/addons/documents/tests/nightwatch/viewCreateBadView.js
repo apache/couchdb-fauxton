@@ -42,7 +42,7 @@ module.exports = {
       .clickWhenVisible('.control-toggle-queryoptions', waitTime, false)
       .clickWhenVisible('label[for="qoReduce"]', waitTime, false)
       .clickWhenVisible('.query-options .btn-secondary', waitTime, false)
-      .waitForAttribute('.doc-item', 'textContent', function (docContents) {
+      .waitForAttribute('.table-view-docs td:nth-child(4)', 'title', function (docContents) {
         return (/_sum function requires/).test(docContents);
       })
       .end();
@@ -60,7 +60,7 @@ module.exports = {
       .clickWhenVisible('.control-toggle-queryoptions', waitTime, false)
       .clickWhenVisible('label[for="qoReduce"]', waitTime, false)
       .clickWhenVisible('.query-options .btn-secondary', waitTime, false)
-      .waitForAttribute('.doc-item', 'textContent', function (docContents) {
+      .waitForAttribute('.table-view-docs td:nth-child(4)', 'title', function (docContents) {
         return (/_sum function requires/).test(docContents);
       })
       .end();

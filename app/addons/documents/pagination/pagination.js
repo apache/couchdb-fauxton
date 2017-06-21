@@ -36,6 +36,11 @@ var IndexPaginationController = React.createClass({
 
   componentWillUnmount: function () {
     indexResultsStore.off('change', this.onChange);
+
+    // Since we're migrating away from a paginated result list, don't forget
+    // to delete the cached offset used for an improved UX when switching
+    // between layouts.
+    Actions.deleteCachedOffset();
   },
 
   onChange: function () {
@@ -133,14 +138,16 @@ var PerPageSelector = React.createClass({
 var AllDocsNumberController = React.createClass({
 
   getStoreState: function () {
+    const isLoading = indexResultsStore.isLoading();
     return {
+      hasResults: indexResultsStore.hasResults(),
       totalRows: indexResultsStore.getTotalRows(),
       pageStart: indexResultsStore.getPageStart(),
       pageEnd: indexResultsStore.getPageEnd(),
       perPage: indexResultsStore.getPerPage(),
       prioritizedEnabled: indexResultsStore.getIsPrioritizedEnabled(),
       showPrioritizedFieldToggler: indexResultsStore.getShowPrioritizedFieldToggler(),
-      displayedFields: indexResultsStore.getResults().displayedFields,
+      displayedFields: isLoading ? {} : indexResultsStore.getResults().displayedFields,
       collection: indexResultsStore.getCollection(),
       bulkCollection: indexResultsStore.getBulkDocCollection(),
     };
@@ -177,13 +184,14 @@ var AllDocsNumberController = React.createClass({
   },
 
   render: function () {
-    var showTableControls = this.state.showPrioritizedFieldToggler;
+    const showTableControls = this.state.showPrioritizedFieldToggler;
+    const hasResults = this.state.hasResults;
 
     return (
       <div className="footer-controls">
 
         <div className="page-controls">
-          {showTableControls ?
+          {showTableControls && hasResults ?
             <TableControls
               prioritizedEnabled={this.state.prioritizedEnabled}
               displayedFields={this.state.displayedFields} /> : null}

@@ -14,6 +14,7 @@ import Views from "../index-results.components";
 import IndexResultsActions from "../actions";
 import Stores from "../stores";
 import Documents from "../../resources";
+import Constants from "../../constants";
 import documentTestHelper from "../../tests/document-test-helper";
 import utils from "../../../../../test/mocha/testUtils";
 import React from "react";
@@ -49,7 +50,7 @@ describe('Index Results', function () {
       IndexResultsActions.resultsListReset();
 
       instance = TestUtils.renderIntoDocument(<Views.List />, container);
-      var $el = $(ReactDOM.findDOMNode(instance));
+      var $el = $(ReactDOM.findDOMNode(instance)).find('.no-results-screen');
       assert.equal($el.text(), 'No Documents Found');
     });
 
@@ -72,7 +73,7 @@ describe('Index Results', function () {
 
 
       instance = TestUtils.renderIntoDocument(<Views.List />, container);
-      var $el = $(ReactDOM.findDOMNode(instance));
+      var $el = $(ReactDOM.findDOMNode(instance)).find('.no-results-screen');
       assert.equal($el.text(), 'I <3 Hamburg');
     });
   });
@@ -91,10 +92,11 @@ describe('Index Results', function () {
     it('does not render checkboxes for elements with just the special index (Mango Index List)', function () {
       IndexResultsActions.sendMessageNewResultList({
         collection: createMangoIndexDocColumn([{foo: 'testId1', type: 'special'}]),
+        typeOfIndex: 'mango',
         bulkCollection: new Documents.BulkDeleteDocCollection([], {databaseId: '1'}),
       });
 
-      store.toggleTableView({enable: true});
+      store.toggleLayout({layout: Constants.LAYOUT_ORIENTATION.TABLE});
 
       IndexResultsActions.resultsListReset();
 
@@ -122,10 +124,11 @@ describe('Index Results', function () {
           type: 'special',
           def: {fields: [{_id: 'desc'}]}
         }]),
+        typeOfIndex: 'mango',
         bulkCollection: new Documents.BulkDeleteDocCollection([], {databaseId: '1'}),
       });
 
-      store.toggleTableView({enable: true});
+      store.toggleLayout({layout: Constants.LAYOUT_ORIENTATION.TABLE});
 
       IndexResultsActions.resultsListReset();
 
@@ -147,10 +150,11 @@ describe('Index Results', function () {
           type: 'special',
           def: {fields: [{_id: 'desc'}]}
         }]),
+        typeOfIndex: 'view',
         bulkCollection: new Documents.BulkDeleteDocCollection([], {databaseId: '1'}),
       });
 
-      store.toggleTableView({enable: true});
+      store.toggleLayout({layout: Constants.LAYOUT_ORIENTATION.TABLE});
 
       IndexResultsActions.resultsListReset();
 
@@ -167,10 +171,11 @@ describe('Index Results', function () {
     it('does not render checkboxes for elements with no rev in a table (usual docs)', function () {
       IndexResultsActions.sendMessageNewResultList({
         collection: createDocColumn([{id: '1', foo: 'testId1'}, {id: '1', bar: 'testId1'}]),
+        typeOfIndex: 'view',
         bulkCollection: new Documents.BulkDeleteDocCollection([], {databaseId: '1'}),
       });
 
-      store.toggleTableView({enable: true});
+      store.toggleLayout({layout: Constants.LAYOUT_ORIENTATION.TABLE});
 
       IndexResultsActions.resultsListReset();
 
@@ -187,10 +192,11 @@ describe('Index Results', function () {
     it('renders checkboxes for elements with an id and rev in a table (usual docs)', function () {
       IndexResultsActions.sendMessageNewResultList({
         collection: createDocColumn([{id: '1', foo: 'testId1', rev: 'foo'}, {bar: 'testId1', rev: 'foo'}]),
+        typeOfIndex: 'view',
         bulkCollection: new Documents.BulkDeleteDocCollection([], {databaseId: '1'}),
       });
 
-      store.toggleTableView({enable: true});
+      store.toggleLayout({layout: Constants.LAYOUT_ORIENTATION.TABLE});
 
       IndexResultsActions.resultsListReset();
 
@@ -207,12 +213,13 @@ describe('Index Results', function () {
     it('renders checkboxes for elements with an id and rev in a json view (usual docs)', function () {
       IndexResultsActions.sendMessageNewResultList({
         collection: createDocColumn([{id: '1', emma: 'testId1', rev: 'foo'}, {bar: 'testId1'}]),
+        typeOfIndex: 'view',
         bulkCollection: new Documents.BulkDeleteDocCollection([], {databaseId: '1'}),
       });
 
       IndexResultsActions.resultsListReset();
 
-      store.toggleTableView({enable: false});
+      store.toggleLayout({layout: Constants.LAYOUT_ORIENTATION.JSON});
 
       instance = TestUtils.renderIntoDocument(
         <Views.List />,
@@ -226,12 +233,13 @@ describe('Index Results', function () {
     it('does not render checkboxes for elements with that are not deletable in a json view (usual docs)', function () {
       IndexResultsActions.sendMessageNewResultList({
         collection: createDocColumn([{foo: 'testId1', rev: 'foo'}, {bar: 'testId1'}]),
+        typeOfIndex: 'view',
         bulkCollection: new Documents.BulkDeleteDocCollection([], {databaseId: '1'}),
       });
 
       IndexResultsActions.resultsListReset();
 
-      store.toggleTableView({enable: false});
+      store.toggleLayout({layout: Constants.LAYOUT_ORIENTATION.JSON});
 
       instance = TestUtils.renderIntoDocument(
         <Views.List />,
@@ -261,10 +269,11 @@ describe('Index Results', function () {
 
       IndexResultsActions.sendMessageNewResultList({
         collection: createDocColumn([doc]),
+        typeOfIndex: 'view',
         bulkCollection: new Documents.BulkDeleteDocCollection([], {databaseId: '1'}),
       });
 
-      store.toggleTableView({enable: true});
+      store.toggleLayout({layout: Constants.LAYOUT_ORIENTATION.TABLE});
 
       IndexResultsActions.resultsListReset();
 
@@ -294,7 +303,7 @@ describe('Index Results', function () {
     });
 
     it('should show loading component', function () {
-      var results = {results: []};
+      var results = {results: [], selectedFields: []};
       instance = TestUtils.renderIntoDocument(
         <Views.ResultsScreen results={results} isLoading={true} />,
         container
@@ -306,7 +315,7 @@ describe('Index Results', function () {
     });
 
     it('should not show loading component', function () {
-      var results = {results: []};
+      var results = {results: [], selectedFields: []};
       instance = TestUtils.renderIntoDocument(
         <Views.ResultsScreen results={results} isLoading={false} />,
         container

@@ -87,6 +87,7 @@ module.exports = {
       .checkForStringPresent(viewUrl, 'hasehase6000')
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_design/testdesigndoc/_view/stubview')
       .waitForElementNotPresent('.loading-lines', waitTime, false)
+      .clickWhenVisible('.fonticon-json')
       .waitForElementVisible('.prettyprint', waitTime, false)
       .waitForElementPresent('.faux-header__doc-header-title', waitTime, false)
       .waitForAttribute('.faux-header__doc-header-title', 'textContent', function (docContents) {
@@ -196,6 +197,7 @@ module.exports = {
       .populateDatabase(newDatabaseName)
       .loginToGUI()
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_design/testdesigndoc/_view/stubview')
+      .clickWhenVisible('.fonticon-json')
       .waitForElementPresent('.prettyprint', waitTime, false)
 
       // confirm the sidebar shows the testdesigndoc design doc

@@ -24,12 +24,9 @@ module.exports = {
       .checkForDocumentCreated('outfit1')
       .loginToGUI()
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
-      .waitForElementVisible('.prettyprint', waitTime, false)
 
-      .clickWhenVisible('.alternative-header .two-sides-toggle-button button:last-child')
+      .clickWhenVisible('.fonticon-table')
       .waitForElementVisible('.table', waitTime, false)
-
-      .clickWhenVisible('.control-toggle-include-docs')
 
       .waitForElementVisible('.table-container-autocomplete', waitTime, false)
       .waitForElementVisible('.tableview-conflict', waitTime, false)

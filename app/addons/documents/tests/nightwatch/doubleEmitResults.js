@@ -23,6 +23,7 @@ module.exports = {
     .loginToGUI()
     .populateDatabase(newDatabaseName)
     .url(baseUrl + '/#/database/' + newDatabaseName + '/_design/testdesigndoc/_view/stubview')
+    .clickWhenVisible('.fonticon-json')
     .waitForElementPresent('.clearfix', waitTime, false)
     .waitForElementPresent('.doc-row', waitTime, false)
     .execute(function () {

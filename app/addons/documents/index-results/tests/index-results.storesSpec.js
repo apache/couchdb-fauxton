@@ -13,6 +13,7 @@
 import FauxtonAPI from "../../../../core/api";
 import Stores from "../stores";
 import Documents from "../../resources";
+import Constants from "../../constants";
 import documentTestHelper from "../../tests/document-test-helper";
 import testUtils from "../../../../../test/mocha/testUtils";
 import sinon from "sinon";
@@ -101,6 +102,7 @@ describe('Index Results Store', function () {
         {_id: 'testId', _rev: '1', 'value': 'one'},
       ])
     });
+    store.toggleLayout({layout: Constants.LAYOUT_ORIENTATION.JSON});
 
     var doc = store.getResults().results[0];
     assert.equal(doc.id, 'testId');
@@ -157,14 +159,14 @@ describe('Index Results Store', function () {
     assert.deepEqual(res[0], {"_rev": "1", "ente": "gans", "fuchs": "hase"});
   });
 
-  it('returns the fields that occure the most without id and rev', function () {
+  it('returns the fields that occur the most without id and rev', function () {
     var doclist = [
       {_rev: '1', _id: '1', id: 'testId2', foo: 'one'},
       {_rev: '1', _id: '1', id: 'testId3', foo: 'two'}
     ];
 
     var res = store.getPrioritizedFields(doclist, 10);
-    assert.deepEqual(res, ['foo']);
+    assert.deepEqual(res, ['_id', 'foo']);
   });
 
   it('sorts the fields that occure the most', function () {
@@ -253,45 +255,24 @@ describe('Index Results Store', function () {
     assert.ok(store.areAllDocumentsSelected());
   });
 
-  it('does not count multiple fields in the prioritzed table', function () {
+  it('does not count multiple fields in the prioritized table', function () {
     store.newResults({
       collection: createDocColumn([
         {a: '1', 'value': 'one', b: '1'},
         {a: '1', 'value': 'one', b: '1'},
         {a: '1', 'value': 'one', b: '1'}
-      ])
+      ]),
+      typeOfIndex: 'view'
     });
 
-    store.getResults();
-
-    store.toggleTableView({enable: true});
+    store.toggleLayout({layout: Constants.LAYOUT_ORIENTATION.TABLE});
+    const stub = sinon.stub(store, 'isIncludeDocsEnabled');
+    stub.returns(true);
     store.getResults();
 
     store.changeTableViewFields({index: 0, newSelectedRow: 'value'});
 
-    var stub = sinon.stub(store, 'isIncludeDocsEnabled');
-    stub.returns(true);
-
     assert.deepEqual(store.getDisplayCountForTableView(), { shown: 2, allFieldCount: 3 });
-  });
-
-  it('id and rev count as one field, because of the combined metadata field', function () {
-    store.newResults({
-      collection: createDocColumn([
-        {_id: 'foo1', _rev: 'bar', a: '1', 'value': 'one', b: '1'},
-        {_id: 'foo2', _rev: 'bar', a: '1', 'value': 'one', b: '1'},
-        {_id: 'foo3', _rev: 'bar', a: '1', 'value': 'one', b: '1'}
-      ]),
-      bulkCollection: new Documents.BulkDeleteDocCollection([], { databaseId: '1' })
-    });
-
-    store.toggleTableView({enable: true});
-
-    var stub = sinon.stub(store, 'isIncludeDocsEnabled');
-    stub.returns(true);
-    store.getResults();
-
-    assert.deepEqual(store.getDisplayCountForTableView(), { shown: 4, allFieldCount: 4 });
   });
 
   it('selectDoc selects doc if not already selected', function () {

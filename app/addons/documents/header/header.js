@@ -12,83 +12,126 @@
 
 import React from 'react';
 import Actions from './header.actions';
-import Components from '../../components/react-components';
+import Constants from '../constants';
 import IndexResultStores from '../index-results/stores';
 import QueryOptionsStore from '../queryoptions/stores';
 import { Button, ButtonGroup } from 'react-bootstrap';
 
 const { indexResultsStore } = IndexResultStores;
 const { queryOptionsStore } = QueryOptionsStore;
-const { ToggleHeaderButton } = Components;
 
-var BulkDocumentHeaderController = React.createClass({
+export default class BulkDocumentHeaderController extends React.Component {
+  constructor (props) {
+    super(props);
+    this.state = this.getStoreState();
+  }
+
   getStoreState () {
     return {
-      selectedView: indexResultsStore.getCurrentViewType(),
-      isTableView: indexResultsStore.getIsTableView(),
-      includeDocs: queryOptionsStore.getIncludeDocsEnabled(),
-      bulkDocCollection: indexResultsStore.getBulkDocCollection()
+      selectedLayout: indexResultsStore.getSelectedLayout(),
+      bulkDocCollection: indexResultsStore.getBulkDocCollection(),
+      isMango: indexResultsStore.getIsMangoResults()
     };
-  },
-
-  getInitialState () {
-    return this.getStoreState();
-  },
+  }
 
   componentDidMount () {
     indexResultsStore.on('change', this.onChange, this);
     queryOptionsStore.on('change', this.onChange, this);
 
-  },
+  }
 
   componentWillUnmount () {
     indexResultsStore.off('change', this.onChange);
     queryOptionsStore.off('change', this.onChange);
-  },
+  }
 
   onChange () {
     this.setState(this.getStoreState());
-  },
+  }
 
   render () {
-    var isTableViewSelected = this.state.isTableView;
+    const {
+      changeLayout,
+      selectedLayout,
+      typeOfIndex
+    } = this.props;
+
+    // If the changeLayout function is not undefined, default to using prop values
+    // because we're using our new redux store.
+    // TODO: migrate completely to redux and eliminate this check.
+    const layout = changeLayout ? selectedLayout : this.state.selectedLayout;
+    let metadata, json, table;
+    if ((typeOfIndex && typeOfIndex === 'view') || !this.state.isMango) {
+      metadata = <Button
+          className={layout === Constants.LAYOUT_ORIENTATION.METADATA ? 'active' : ''}
+          onClick={this.toggleLayout.bind(this, Constants.LAYOUT_ORIENTATION.METADATA)}
+        >
+          Metadata
+        </Button>;
+    }
+
+    // reduce doesn't allow for include_docs=true, so we'll prevent JSON and table
+    // views since they force include_docs=true when reduce is checked in the
+    // query options panel.
+    if (!queryOptionsStore.reduce()) {
+      table = <Button
+          className={layout === Constants.LAYOUT_ORIENTATION.TABLE ? 'active' : ''}
+          onClick={this.toggleLayout.bind(this, Constants.LAYOUT_ORIENTATION.TABLE)}
+        >
+          <i className="fonticon-table" /> Table
+        </Button>;
+
+      json = <Button
+          className={layout === Constants.LAYOUT_ORIENTATION.JSON ? 'active' : ''}
+          onClick={this.toggleLayout.bind(this, Constants.LAYOUT_ORIENTATION.JSON)}
+        >
+          <i className="fonticon-json" /> JSON
+        </Button>;
+    }
 
     return (
       <div className="alternative-header">
         <ButtonGroup className="two-sides-toggle-button">
-          <Button
-            className={isTableViewSelected ? '' : 'active'}
-            onClick={this.toggleTableView.bind(this, false)}
-          >
-            <i className="fonticon-json" /> JSON
-          </Button>
-          <Button
-            className={isTableViewSelected ? 'active' : ''}
-            onClick={this.toggleTableView.bind(this, true)}
-          >
-            <i className="fonticon-table" /> Table
-          </Button>
+          {table}
+          {metadata}
+          {json}
         </ButtonGroup>
-        {this.props.showIncludeAllDocs ? <ToggleHeaderButton
-          toggleCallback={this.toggleIncludeDocs}
-          containerClasses="header-control-box control-toggle-include-docs"
-          title="Enable/Disable include_docs"
-          fonticon={this.state.includeDocs ? 'icon-check' : 'icon-check-empty'}
-          iconDefaultClass="icon fontawesome"
-          text="" /> : null}  { /* text is set via responsive css */}
       </div>
     );
-  },
-
-  toggleIncludeDocs () {
-    Actions.toggleIncludeDocs(this.state.includeDocs, this.state.bulkDocCollection);
-  },
-
-  toggleTableView: function (enable) {
-    Actions.toggleTableView(enable);
   }
-});
 
-export default {
-  BulkDocumentHeaderController: BulkDocumentHeaderController
+  toggleLayout (newLayout) {
+    // this will be present when using redux stores
+    const {
+      changeLayout,
+      selectedLayout,
+      fetchAllDocs,
+      fetchParams,
+      queryOptionsParams,
+      queryOptionsToggleIncludeDocs
+    } = this.props;
+
+    if (changeLayout && newLayout !== selectedLayout) {
+      // change our layout to JSON, Table, or Metadata
+      changeLayout(newLayout);
+
+      queryOptionsParams.include_docs = newLayout !== Constants.LAYOUT_ORIENTATION.METADATA;
+      if (newLayout === Constants.LAYOUT_ORIENTATION.TABLE) {
+        fetchParams.conflicts = true;
+      } else {
+        delete fetchParams.conflicts;
+      }
+
+      // tell the query options panel we're updating include_docs
+      queryOptionsToggleIncludeDocs(!queryOptionsParams.include_docs);
+      fetchAllDocs(fetchParams, queryOptionsParams);
+      return;
+    }
+
+    // fall back to old backbone style logic
+    Actions.toggleLayout(newLayout);
+    if (!this.state.isMango) {
+      Actions.toggleIncludeDocs(newLayout === Constants.LAYOUT_ORIENTATION.METADATA, this.state.bulkDocCollection);
+    }
+  }
 };

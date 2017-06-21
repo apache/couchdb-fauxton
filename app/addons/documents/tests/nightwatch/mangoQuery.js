@@ -36,6 +36,7 @@ module.exports = {
       ')
       .execute('$("#create-index-btn")[0].scrollIntoView();')
       .clickWhenVisible('#create-index-btn')
+      .clickWhenVisible('.fonticon-json')
 
       .waitForElementPresent('.prettyprint', waitTime, false)
       .assert.containsText('#dashboard-lower-content', 'number')

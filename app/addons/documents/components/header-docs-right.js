@@ -12,12 +12,26 @@
 
 import React from 'react';
 import QueryOptions from '../queryoptions/queryoptions';
+import QueryOptionsContainer from '../index-results/containers/QueryOptionsContainer';
 import JumpToDoc from './jumptodoc';
 import Actions from './actions';
 
 const { QueryOptionsController } = QueryOptions;
 
-const RightAllDocsHeader = ({database, hideQueryOptions}) =>
+const getQueryOptionsComponent = (hideQueryOptions, isRedux, fetchUrl, ddocsOnly) => {
+  if (hideQueryOptions) {
+    return null;
+  }
+
+  let queryOptionsComponent = <QueryOptionsController />;
+  if (isRedux) {
+    queryOptionsComponent = <QueryOptionsContainer fetchUrl={fetchUrl} ddocsOnly={ddocsOnly} />;
+  }
+
+  return queryOptionsComponent;
+};
+
+const RightAllDocsHeader = ({database, hideQueryOptions, isRedux, fetchUrl, ddocsOnly}) =>
   <div className="header-right right-db-header flex-layout flex-row">
 
     <div className="faux-header__searchboxwrapper">
@@ -25,8 +39,7 @@ const RightAllDocsHeader = ({database, hideQueryOptions}) =>
         <JumpToDoc cache={false} loadOptions={Actions.fetchAllDocsWithKey(database)} database={database} />
       </div>
     </div>
-
-    {hideQueryOptions ? '' : <QueryOptionsController />}
+    {getQueryOptionsComponent(hideQueryOptions, isRedux, fetchUrl, ddocsOnly)}
   </div>;
 
 RightAllDocsHeader.propTypes = {

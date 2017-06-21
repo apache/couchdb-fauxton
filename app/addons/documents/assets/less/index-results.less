@@ -13,9 +13,6 @@
 @import "../../../../../assets/less/variables.less";
 
 .document-result-screen {
-  .bulk-action-component {
-    padding-bottom: 15px;
-  }
 
   .loading-lines-wrapper {
     margin-left: auto;
@@ -26,6 +23,32 @@
   .loading-lines {
     position: absolute;
   }
+}
+
+.document-result-screen__toolbar {
+  display: flex;
+  padding-bottom: 20px;
+
+  .bulk-action-component {
+    min-width: 90px;
+    min-height: 26px;
+    padding: 8px 0;
+  }
+}
+
+.document-result-screen__toolbar-flex-container {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.document-result-screen__toolbar-create-btn {
+  height: 42px;
+}
+
+a.document-result-screen__toolbar-create-btn:active,
+a.document-result-screen__toolbar-create-btn:visited {
+  color: #fff;
 }
 
 .no-results-screen {
@@ -57,12 +80,11 @@
 
 .table-view-docs {
   position: absolute;
-  margin-top: 30px;
 
 
   .bulk-action-component {
     padding-bottom: 0;
-    min-height: 0px;
+    min-height: 0;
   }
   .bulk-action-component-panel input {
     width: auto;
@@ -80,14 +102,22 @@
       overflow: hidden;
     }
   }
-
+  tbody tr {
+    cursor: pointer;
+    &:hover {
+      border-left: 2px solid @hoverHighlight;
+      td {
+        color: @hoverHighlight;
+        input[type="checkbox"] {
+          margin-left: 7px;
+        }
+      }
+    }
+  }
   td, th, td a {
     vertical-align: middle;
     line-height: 20px;
     font-size: 14px;
-  }
-  td {
-    height: 49px;
   }
   td, th {
     color: @defaultHTag;
@@ -97,7 +127,8 @@
     white-space: nowrap;
   }
   td.tableview-checkbox-cell, th.tableview-header-el-checkbox {
-    width: 68px;
+    width: 35px;
+    padding-left: 0px;
   }
   .tableview-conflict {
     color: #F00;
@@ -151,7 +182,6 @@
   .table-container-autocomplete .table-select-wrapper {
     width: inherit;
     overflow: visible;
-    min-height: 300px;
   }
 }
 
