@@ -68,7 +68,7 @@ describe('QueryOptions', () => {
     expect(spy.calledOnce).toBe(true);
   });
 
-  it('calls queryOptionsFilterOnlyDdocs if ddocsOnly switches to true on new props', () => {
+  it('calls resetState and queryOptionsFilterOnlyDdocs if ddocsOnly switches to true on new props', () => {
     const spy = sinon.spy();
     const queryOptionsParams = {
       include_docs: false
@@ -76,6 +76,7 @@ describe('QueryOptions', () => {
 
     const wrapper = shallow(<QueryOptions
       ddocsOnly={false}
+      resetState={spy}
       queryOptionsFilterOnlyDdocs={spy}
       queryOptionsExecute={() => {}}
       resetPagination={() => {}}
@@ -89,7 +90,7 @@ describe('QueryOptions', () => {
     wrapper.instance().componentWillReceiveProps({
       ddocsOnly: true
     });
-    expect(spy.calledOnce).toBe(true);
+    expect(spy.calledTwice).toBe(true);
   });
 
   it('calls resetState if ddocsOnly switches to false on new props', () => {
