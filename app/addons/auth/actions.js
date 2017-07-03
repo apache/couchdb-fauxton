@@ -125,7 +125,7 @@ export const authenticate = (username, password, onSuccess) => {
       },
       () => {
         FauxtonAPI.addNotification({
-          msg: "Your password is incorrect.",
+          msg: "Your username or password is incorrect.",
           type: "error",
           clear: true
         });
