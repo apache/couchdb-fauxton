@@ -42,6 +42,7 @@ export default class QueryOptions extends React.Component {
     } = this.props;
 
     if (!ddocsOnly && nextProps.ddocsOnly) {
+      resetState();
       queryOptionsFilterOnlyDdocs();
     } else if (ddocsOnly && !nextProps.ddocsOnly) {
       resetState();
