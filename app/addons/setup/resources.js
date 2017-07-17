@@ -37,12 +37,21 @@ Setup.Model = Backbone.Model.extend({
       return 'Admin password is required';
     }
 
-    if (attrs.bind_address && attrs.bind_address === '127.0.0.1') {
+    if (attrs.bind_address && attrs.bind_address === '127.0.0.1' &&
+        !attrs.singlenode) {
       return 'Bind address can not be 127.0.0.1';
     }
 
     if (attrs.port && _.isNaN(+attrs.port)) {
       return 'Bind port must be a number';
+    }
+
+    if (attrs.nodeCount && _.isNaN(+attrs.nodeCount)) {
+      return 'Node count must be a number';
+    }
+
+    if (attrs.nodeCount && attrs.nodeCount < 1) {
+      return 'Node count must be >= 1';
     }
   }
 
