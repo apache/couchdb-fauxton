@@ -22,11 +22,44 @@ var ConfirmButton = ReactComponents.ConfirmButton;
 
 
 var ClusterConfiguredScreen = React.createClass({
+  getInitialState: function () {
+    return this.getStoreState();
+  },
+
+  getStoreState: function () {
+    return {
+      clusterState: setupStore.getClusterState()
+    };
+  },
+
+  componentDidMount: function () {
+    setupStore.on('change', this.onChange, this);
+  },
+
+  componentWillUnmount: function () {
+    setupStore.off('change', this.onChange);
+  },
+
+  onChange: function () {
+    this.setState(this.getStoreState());
+  },
+
+  getNodeType: function() {
+    if (this.state.clusterState === 'cluster_finished') {
+      return 'clustered';
+    } else if (this.state.clusterState === 'single_node_enabled') {
+      return 'single';
+    } else {
+      return 'unknown state';
+    }
+  },
 
   render: function () {
+    var nodetype = this.getNodeType();
+
     return (
       <div className="setup-screen">
-        {app.i18n.en_US['couchdb-productname']} is configured for production usage!
+        {app.i18n.en_US['couchdb-productname']} is configured for production usage as a {nodetype} node!
         <br />
         <br/>
         Do you want to <a href="#replication">replicate data</a>?
@@ -66,6 +99,32 @@ var SetupCurrentAdminPassword = React.createClass({
 
 });
 
+var SetupNodeCountSetting = React.createClass({
+  getInitialState: function () {
+    return {
+      nodeCountValue: this.props.nodeCountValue
+    };
+  },
+
+  handleNodeCountChange: function (event) {
+    this.props.onAlterNodeCount(event);
+    this.setState({nodeCountValue: event.target.value});
+  },
+
+  render: function () {
+    return (
+      <div className="setup-node-count">
+        <p>Number of nodes to be added to the cluster (including this one)</p>
+        <input
+          className="setup-input-nodecount"
+          value={this.state.nodeCountValue}
+          onChange={this.handleNodeCountChange}
+          placeholder="Value of cluster n"
+          type="text" />
+      </div>
+    );
+  }
+});
 
 var SetupOptionalSettings = React.createClass({
   getInitialState: function () {
@@ -179,6 +238,10 @@ var SetupMultipleNodesController = React.createClass({
     SetupActions.setPortForSetupNode(e.target.value);
   },
 
+  alterNodeCount: function (e) {
+    SetupActions.setNodeCount(e.target.value);
+  },
+
   finishClusterSetup: function () {
     SetupActions.finishClusterSetup('CouchDB Cluster set up!');
   },
@@ -197,6 +260,8 @@ var SetupMultipleNodesController = React.createClass({
           <SetupOptionalSettings
             onAlterPort={this.alterPortSetupNode}
             onAlterBindAddress={this.alterBindAddressSetupNode} />
+          <SetupNodeCountSetting
+            onAlterNodeCount={this.alterNodeCount} />
           </div>
         <hr/>
         <div className="setup-add-nodes-section">
@@ -323,7 +388,8 @@ var SetupFirstStepController = React.createClass({
   },
 
   render: function () {
-    if (this.state.clusterState === 'cluster_finished') {
+    if (this.state.clusterState === 'cluster_finished' ||
+        this.state.clusterState === 'single_node_enabled') {
       return (<ClusterConfiguredScreen />);
     }
 
@@ -340,12 +406,12 @@ var SetupFirstStepController = React.createClass({
           <ConfirmButton
             onClick={this.redirectToMultiNodeSetup}
             showIcon={false}
-            text="Configure	a Cluster" />
+            text="Configure a Cluster" />
           <ConfirmButton
             onClick={this.redirectToSingleNodeSetup}
             showIcon={false}
             id="setup-btn-no-thanks"
-            text="Configure	a Single Node" />
+            text="Configure a Single Node" />
         </div>
       </div>
     );

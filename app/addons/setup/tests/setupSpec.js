@@ -66,4 +66,26 @@ describe('Setup: verify input', function () {
     assert.ok(error);
   });
 
+  it('Node count must be a number', function () {
+    var error = model.validate({
+      admin: {
+        user: 'rocko',
+        password: 'ente'
+      },
+      nodeCount: 'abc'
+    });
+    assert.ok(error);
+  });
+
+  it('Node count must be >= 1', function () {
+    var error = model.validate({
+      admin: {
+        user: 'rocko',
+        password: 'ente'
+      },
+      nodeCount: 0
+    });
+    assert.ok(error);
+  });
+
 });
