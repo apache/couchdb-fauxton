@@ -17,7 +17,7 @@ See `fauxton --help` for extra options.
 
 ## Setting up Fauxton
 
-Please note that [node.js](http://nodejs.org/) and npm is required. Speciifcally, Fauxton requires at least Node 6 and npm 3.
+Please note that a recent installation of [node.js](http://nodejs.org/) and npm is required.
 
 1. make sure you have CouchDB installed. Instructions on how to install it can be  
 [found here](http://couchdb.readthedocs.org/en/latest/install/index.html)
@@ -93,3 +93,5 @@ Check out the following pages for a lot more information about Fauxton:
 
 
 -- The Fauxton Team
+
+test pull request to test travis tests on trunk branch
