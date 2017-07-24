@@ -61,13 +61,14 @@ module.exports = {
   'Creates a Document through Create Document toolbar button': (client) => {
     const waitTime = client.globals.maxWaitTime,
           newDatabaseName = client.globals.testDatabaseName,
-          newDocumentName = 'create_doc_document',
+          newDocumentName = 'a-create_doc_document',
           baseUrl = client.globals.test_settings.launch_url;
 
     client
       .createDatabase(newDatabaseName)
       .loginToGUI()
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
+      .waitForElementPresent('.tableview-checkbox-cell', waitTime, false)
       .clickWhenVisible('.document-result-screen__toolbar-create-btn')
       .waitForElementPresent('#editor-container', waitTime, false)
       .verify.urlEquals(baseUrl + '/#/database/' + newDatabaseName + '/new')
@@ -92,7 +93,6 @@ module.exports = {
       .getText('.prettyprint', function (result) {
         const data = result.value;
         const createdDocIsPresent = data.indexOf(newDocumentName) !== -1;
-
         this.verify.ok(
           createdDocIsPresent,
           'Checking if new document shows up in _all_docs.'

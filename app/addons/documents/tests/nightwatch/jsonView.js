@@ -3,6 +3,7 @@ module.exports = {
   'Doc results: check ?include_docs=true returns doc content': function (client) {
     var newDatabaseName = client.globals.testDatabaseName,
         newDocumentName = 'bitterns',
+        waitTime = client.globals.maxWaitTime,
         baseUrl = client.globals.test_settings.launch_url;
 
     var docContent = {
@@ -17,6 +18,7 @@ module.exports = {
       .checkForDocumentCreated(newDocumentName)
 
       .url(baseUrl + '#/database/' + newDatabaseName + '/_all_docs')
+      .waitForElementPresent('.tableview-checkbox-cell', waitTime, false)
       .clickWhenVisible('.fonticon-json')
       .waitForElementPresent('.doc-item', client.globals.maxWaitTime, false)
       // by default include_docs is on, so check "American Bittern" does exist in the DOM
