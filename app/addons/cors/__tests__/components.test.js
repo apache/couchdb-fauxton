@@ -38,7 +38,7 @@ describe('CORS Components', function () {
       corsStore._configChanged = true;
       corsEl = TestUtils.renderIntoDocument(<Views.CORSController />, container);
       //stub this out so it doesn't keep trying to save cors and crash phantomjs
-      sinon.stub(corsEl, 'save');
+      //sinon.stub(corsEl, 'save');
     });
 
     afterEach(function () {
