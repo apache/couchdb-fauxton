@@ -21,6 +21,8 @@ describe('CORS actions', function () {
 
   describe('save', function () {
 
+    let localNode = 'node2@127.0.0.1';
+
     afterEach(function () {
       restore(Actions.saveCorsOrigins);
 
@@ -32,7 +34,8 @@ describe('CORS actions', function () {
       var spy = sinon.spy(Actions, 'saveEnableCorsToHttpd');
 
       Actions.saveCors({
-        enableCors: false
+        enableCors: false,
+        node: localNode
       });
 
       assert.ok(spy.calledWith(false));
@@ -43,7 +46,8 @@ describe('CORS actions', function () {
 
       Actions.saveCors({
         enableCors: false,
-        origins: ['*']
+        origins: ['*'],
+        node: localNode
       });
 
       assert.notOk(spy.calledOnce);
@@ -54,7 +58,8 @@ describe('CORS actions', function () {
 
       Actions.saveCors({
         enableCors: true,
-        origins: ['*']
+        origins: ['*'],
+        node: localNode
       });
 
       assert.ok(spy.calledWith('*'));
@@ -65,7 +70,8 @@ describe('CORS actions', function () {
 
       Actions.saveCors({
         enableCors: true,
-        origins: ['https://testdomain.com']
+        origins: ['https://testdomain.com'],
+        node: localNode
       });
 
       assert.ok(spy.calledOnce);
@@ -76,7 +82,8 @@ describe('CORS actions', function () {
 
       Actions.saveCors({
         enableCors: true,
-        origins: ['https://testdomain.com']
+        origins: ['https://testdomain.com'],
+        node: localNode
       });
 
       assert.ok(spy.calledOnce);
@@ -87,7 +94,8 @@ describe('CORS actions', function () {
 
       Actions.saveCors({
         enableCors: true,
-        origins: ['https://testdomain.com']
+        origins: ['https://testdomain.com'],
+        node: localNode
       });
 
       assert.ok(spy.calledOnce);
@@ -103,7 +111,8 @@ describe('CORS actions', function () {
 
       Actions.saveCors({
         enableCors: true,
-        origins: ['https://testdomain.com']
+        origins: ['https://testdomain.com'],
+        node: localNode
       });
 
       assert.ok(spy.calledOnce);
