@@ -29,6 +29,7 @@ module.exports = {
       .clickWhenVisible('#betweenKeys', waitTime, false)
       .setValue('#startkey', '"document_2"')
       .clickWhenVisible('.query-options .btn-secondary')
+      .waitForElementNotPresent('.loading-lines', waitTime, false)
       .clickWhenVisible('.fonticon-json')
       .waitForElementNotPresent('.loading-lines', waitTime, false)
       .waitForElementNotPresent('#doc-list [data-id="document_1"]', waitTime, false)
