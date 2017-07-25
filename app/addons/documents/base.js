@@ -61,7 +61,7 @@ FauxtonAPI.registerUrls('allDocsSanitized', {
 
 FauxtonAPI.registerUrls('bulk_docs', {
   server: function (id, query) {
-    return app.host + '/' + id + '/_bulk_docs' + getQueryParam(query);
+    return app.host + '/' + encodeURIComponent(id) + '/_bulk_docs' + getQueryParam(query);
   },
   app: function (id, query) {
     return 'database/' + id + '/_bulk_docs' + getQueryParam(query);

@@ -64,6 +64,7 @@ export default function resultsState (state = initialState, action) {
 
     case ActionTypes.INDEX_RESULTS_REDUX_RESET_STATE:
       return Object.assign({}, initialState, {
+        selectedDocs: [],
         fetchParams: {
           limit: getDefaultPerPage() + 1,
           skip: 0

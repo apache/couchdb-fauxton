@@ -104,7 +104,8 @@ export const fetchAllDocs = (fetchUrl, fetchParams, queryOptionsParams) => {
 
 export const queryEndpoint = (fetchUrl, params) => {
   const query = queryString.stringify(params);
-  return fetch(`${fetchUrl}?${query}`, {
+  const url = `${fetchUrl}${fetchUrl.includes('?') ? '&' : '?'}${query}`;
+  return fetch(url, {
     credentials: 'include',
     headers: {
       'Accept': 'application/json; charset=utf-8'
@@ -169,7 +170,8 @@ export const bulkDeleteDocs = (databaseName, fetchUrl, docs, designDocs, fetchPa
 };
 
 export const postToBulkDocs = (databaseName, payload) => {
-  return fetch(`/${databaseName}/_bulk_docs`, {
+  const url = FauxtonAPI.urls('bulk_docs', 'server', databaseName);
+  return fetch(url, {
     method: 'POST',
     credentials: 'include',
     body: JSON.stringify(payload),
