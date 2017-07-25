@@ -65,6 +65,23 @@ describe('Docs Reducers', () => {
     }
   };
 
+  it('resets selectedDocs on state reset', () => {
+    const action = {
+      type: ActionTypes.INDEX_RESULTS_REDUX_NEW_SELECTED_DOCS,
+      selectedDocs: [{_id: '1'}]
+    };
+
+    const newState = Reducers.default(initialState, action);
+
+    const resetAction = {
+      type: ActionTypes.INDEX_RESULTS_REDUX_RESET_STATE
+    };
+
+    const newState2 = Reducers.default(newState, resetAction);
+    expect(newState2.selectedDocs).toEqual([]);
+
+  });
+
   it('getDocs returns the docs attribute from the state', () => {
     const action = {
       type: ActionTypes.INDEX_RESULTS_REDUX_NEW_RESULTS,
