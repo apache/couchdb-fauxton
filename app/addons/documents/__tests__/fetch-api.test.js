@@ -23,6 +23,7 @@ import queryString from 'query-string';
 import sinon from 'sinon';
 import SidebarActions from '../sidebar/actions';
 import FauxtonAPI from '../../../core/api';
+import '../base';
 
 describe('Docs Fetch API', () => {
   describe('mergeParams', () => {
@@ -280,7 +281,8 @@ describe('Docs Fetch API', () => {
           }
         ];
         const databaseName = 'testdb';
-        fetchMock.postOnce(`/${databaseName}/_bulk_docs`, res);
+
+        fetchMock.postOnce(FauxtonAPI.urls('bulk_docs', 'server', databaseName), res);
         return postToBulkDocs(databaseName, payload).then((json) => {
           expect(json).toEqual(res);
         });
