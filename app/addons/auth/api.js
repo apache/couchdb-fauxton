@@ -27,6 +27,20 @@ export const json = (url, opts = {}) => fetch(
   )
 ).then(resp => resp.json());
 
+export const formEncoded = (url, opts = {}) => fetch(
+  url,
+  defaultsDeep(
+    {
+      credentials: "include",
+      headers: {
+        accept: "application/json",
+        "Content-Type": 'application/x-www-form-urlencoded;charset=UTF-8'
+      }
+    },
+    opts
+  )
+).then(resp => resp.json());
+
 
 export function createAdmin({name, password, node}) {
   return json(`${app.host}/_node/${node}/_config/admins/${name}`, {
@@ -53,17 +67,17 @@ export function getSession() {
 }
 
 export function login(body) {
-  return json(app.host + "/_session", {
+  return formEncoded(app.host + "/_session", {
     method: "POST",
-    body: JSON.stringify(body)
+    body: $.param(body)
   });
 }
 
 export function logout() {
   loggedInSessionPromise = null;
-  return json(app.host + "/_session", {
+  return formEncoded(app.host + "/_session", {
     method: "DELETE",
-    body: JSON.stringify({ username: "_", password: "_" })
+    body: $.param({ username: "_", password: "_" })
   });
 }
 
