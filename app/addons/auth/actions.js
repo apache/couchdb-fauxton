@@ -53,7 +53,8 @@ export const login = (username, password, urlBack) => {
   return Api.login({name: username, password})
   .then(resp => {
     if (resp.error) {
-      return errorHandler({message: resp.reason});
+      errorHandler({message: resp.reason});
+      return resp;
     }
 
     let msg = app.i18n.en_US['auth-logged-in'];
