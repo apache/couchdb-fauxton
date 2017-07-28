@@ -173,11 +173,7 @@ describe('CORS Components', () => {
     });
 
     it('should change origin to input on edit click, then hide input on 2nd click', () => {
-      const wrapper = mount(
-        <Views.OriginTable
-          updateOrigin={spyUpdateOrigin}
-          isVisible={true} origins={[origin]}/>
-      );
+      const wrapper = mount(<Views.OriginTable updateOrigin={spyUpdateOrigin} isVisible={true} origins={[origin]}/>);
       // Text input appears after clicking Edit
       wrapper.find('.fonticon-pencil').simulate('click', { preventDefault: sinon.stub() });
       assert.ok(wrapper.find('input').exists());
