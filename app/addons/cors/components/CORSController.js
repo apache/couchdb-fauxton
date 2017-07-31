@@ -4,6 +4,9 @@ import Stores from "../stores";
 import app from "../../../app";
 import ReactComponents from "../../components/react-components";
 import FauxtonComponents from "../../fauxton/components";
+import Origins from "./Origins";
+import OriginInput from "./OriginInput";
+import OriginTable from "./OriginTable";
 
 const LoadLines = ReactComponents.LoadLines;
 const ConfirmationModal = FauxtonComponents.ConfirmationModal;
@@ -13,6 +16,7 @@ export default class CORSController extends Component {
 
   constructor (props) {
     super(props);
+    this.state = this.getStoreState();
   }
 
   getStoreState () {
@@ -27,10 +31,6 @@ export default class CORSController extends Component {
       deleteDomainModalVisible: corsStore.isDeleteDomainModalVisible(),
       domainToDelete: corsStore.getDomainToDelete()
     };
-  }
-
-  getInitialState () {
-    return this.getStoreState();
   }
 
   componentDidMount () {
@@ -98,9 +98,9 @@ export default class CORSController extends Component {
 
     var originSettings = (
       <div id={this.state.corsEnabled ? 'collapsing-container' : ''}>
-        <Origins corsEnabled={this.state.corsEnabled} originChange={this.originChange} isAllOrigins={this.state.isAllOrigins}/>
-        <OriginTable updateOrigin={this.updateOrigin} isVisible={isVisible} origins={this.state.origins} />
-        <OriginInput addOrigin={this.addOrigin} isVisible={isVisible} />
+        <Origins corsEnabled={this.state.corsEnabled} originChange={ this.originChange.bind(this) } isAllOrigins={this.state.isAllOrigins}/>
+        <OriginTable updateOrigin={ this.updateOrigin.bind(this) } isVisible={isVisible} origins={this.state.origins} />
+        <OriginInput addOrigin={ this.addOrigin.bind(this) } isVisible={isVisible} />
       </div>
     );
 
@@ -115,14 +115,14 @@ export default class CORSController extends Component {
           <p>{app.i18n.en_US['cors-notice']}</p>
         </header>
 
-        <form id="corsForm" onSubmit={this.save}>
+        <form id="corsForm" onSubmit={ this.save.bind(this) }>
           <div className="cors-enable">
             {this.state.corsEnabled ? 'Cors is currently enabled.' : 'Cors is currently disabled.'}
             <br />
             <button
               type="button"
               className="enable-disable btn btn-secondary"
-              onClick={this.enableCorsChange}
+              onClick={ this.enableCorsChange.bind(this) }
               disabled={this.state.isLoading ? 'disabled' : null}
             >
               {this.state.corsEnabled ? 'Disable CORS' : 'Enable CORS'}
@@ -137,18 +137,9 @@ export default class CORSController extends Component {
           text={deleteMsg}
           buttonClass="btn-danger"
           onClose={Actions.hideDeleteDomainModal}
-          onSubmit={this.deleteOrigin}
+          onSubmit={ this.deleteOrigin.bind(this) }
           successButtonLabel="Delete Domain" />
       </div>
     );
   }
 };
-
-
-// export default {
-//   CORSController: CORSController,
-//   OriginInput: OriginInput,
-//   Origins: Origins,
-//   OriginTable: OriginTable,
-//   OriginRow: OriginRow
-// };

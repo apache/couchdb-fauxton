@@ -1,6 +1,7 @@
 import React, { Component } from "react";
+import OriginRow from "./OriginRow";
 
-export default class OriginRow extends Component {
+export default class OriginTable extends Component {
 
   constructor (props) {
     super(props);

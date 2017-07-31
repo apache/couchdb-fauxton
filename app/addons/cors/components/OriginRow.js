@@ -7,10 +7,7 @@ export default class OriginRow extends Component {
 
   constructor (props) {
     super(props);
-  }
-
-  getInitialState() {
-    return {
+    this.state = {
       edit: false,
       updatedOrigin: this.props.origin
     };
@@ -49,8 +46,8 @@ export default class OriginRow extends Component {
     if (this.state.edit) {
       return (
         <div className="input-append edit-domain-section">
-          <input type="text" name="update_origin_domain" onChange={this.onInputChange} onKeyUp={this.onKeyUp} value={this.state.updatedOrigin} />
-          <button onClick={this.updateOrigin} className="btn btn-primary update-origin"> Update </button>
+          <input type="text" name="update_origin_domain" onChange={ this.onInputChange.bind(this) } onKeyUp={ this.onKeyUp.bind(this) } value={this.state.updatedOrigin} />
+          <button onClick={ this.updateOrigin.bind(this) } className="btn btn-primary update-origin"> Update </button>
         </div>
       );
     }
@@ -66,12 +63,12 @@ export default class OriginRow extends Component {
         </td>
         <td width="30">
           <span>
-            <a className="fonticon-pencil" onClick={this.editOrigin} title="Edit domain." />
+            <a className="fonticon-pencil" onClick={ this.editOrigin.bind(this) } title="Edit domain." />
           </span>
         </td>
         <td width="30">
           <span>
-            <a href="#" data-bypass="true" className="fonticon-trash" onClick={this.deleteOrigin} title="Delete domain." />
+            <a href="#" data-bypass="true" className="fonticon-trash" onClick={ this.deleteOrigin.bind(this) } title="Delete domain." />
           </span>
         </td>
       </tr>

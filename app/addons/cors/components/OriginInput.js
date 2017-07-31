@@ -6,10 +6,7 @@ export default class OriginInput extends Component {
 
   constructor (props) {
     super(props);
-  }
-
-  getInitialState () {
-    return {
+    this.state = {
       origin: ''
     };
   }
@@ -45,8 +42,8 @@ export default class OriginInput extends Component {
       <div id="origin-domains-container">
         <div className="origin-domains">
           <div className="input-append">
-            <input type="text" name="new_origin_domain" onChange={this.onInputChange} onKeyUp={this.onKeyUp} value={this.state.origin} placeholder="https://example.com"/>
-            <button onClick={this.addOrigin} className="btn btn-secondary add-domain"><i className="icon fonticon-ok-circled"></i> Add Domain</button>
+            <input type="text" name="new_origin_domain" onChange={this.onInputChange.bind(this)} onKeyUp={this.onKeyUp.bind(this) } value={this.state.origin} placeholder="https://example.com"/>
+            <button onClick={ this.addOrigin.bind(this) } className="btn btn-secondary add-domain"><i className="icon fonticon-ok-circled"></i> Add Domain</button>
           </div>
         </div>
       </div>

@@ -10,27 +10,19 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-// import app from "../../app";
-// // import FauxtonAPI from "../../core/api";
-// import React from "react";
-// import Stores from "./stores";
-// import Actions from "./actions";
+import CORSController from "./components/CORSController";
+import OriginInput from "./components/OriginInput";
+import Origins from "./components/Origins";
+import OriginTable from "./components/OriginTable";
+import OriginRow from "./components/OriginRow";
 
-
-
-// var validateOrigin = function (origin) {
-//   if (!Resources.validateCORSDomain(origin)) {
-//     FauxtonAPI.addNotification({
-//       msg: 'Please enter a valid domain, starting with http/https.',
-//       type: 'error',
-//       clear: true
-//     });
-
-//     return false;
-//   }
-
-//   return true;
-// };
+export default {
+  CORSController: CORSController,
+  OriginInput: OriginInput,
+  Origins: Origins,
+  OriginTable: OriginTable,
+  OriginRow: OriginRow
+};
 
 
 

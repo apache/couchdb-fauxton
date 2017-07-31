@@ -12,7 +12,7 @@
 
 import React from 'react';
 import ConfigComponents from "./components";
-import CORSController from "../cors/components/CORSController";
+import CORSComponents from "../cors/components";
 import {Breadcrumbs} from '../components/header-breadcrumbs';
 import {NotificationCenterButton} from '../fauxton/notifications/notifications';
 import {ApiBarWrapper} from '../components/layouts';
@@ -51,7 +51,7 @@ export const ConfigLayout = ({showCors, docURL, node, endpoint, crumbs}) => {
     }
   ];
   const selectedTab = showCors ? 'CORS' : 'Main config';
-  const content = showCors ? <CORSController/> : <ConfigComponents.ConfigTableController node={node} />;
+  const content = showCors ? <CORSComponents.CORSController/> : <ConfigComponents.ConfigTableController node={node} />;
   return (
     <div id="dashboard" className="with-sidebar">
       <ConfigHeader
