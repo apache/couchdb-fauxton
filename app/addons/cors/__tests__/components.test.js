@@ -21,8 +21,8 @@ import sinon from "sinon";
 import { shallow, mount } from 'enzyme';
 
 FauxtonAPI.router = new FauxtonAPI.Router([]);
-var assert = utils.assert;
-var corsStore = Stores.corsStore;
+const {assert, restore} = utils;
+const corsStore = Stores.corsStore;
 
 describe('CORS Components', () => {
 
@@ -36,11 +36,11 @@ describe('CORS Components', () => {
     });
 
     afterEach(() => {
-      utils.restore(window.confirm);
+      restore(window.confirm);
     });
 
     it('confirms user change from restricted origin to disabled cors', () => {
-      var spy = sinon.stub(window, 'confirm');
+      const spy = sinon.stub(window, 'confirm');
       spy.returns(false);
 
       const wrapper = shallow(<Views.CORSController />);
@@ -49,7 +49,7 @@ describe('CORS Components', () => {
     });
 
     it('does not confirm user change to disable cors when restricted origins are empty', () => {
-      let spy = sinon.stub(window, 'confirm');
+      const spy = sinon.stub(window, 'confirm');
       spy.returns(false);
 
       // Set selected origins to empty
@@ -70,8 +70,7 @@ describe('CORS Components', () => {
     });
 
     it('does not confirm all origins change if selected origins are emtpy', () => {
-      var spy = sinon.stub(window, 'confirm');
-      // sinon.stub(Actions, 'toggleLoadingBarsToEnabled');
+      const spy = sinon.stub(window, 'confirm');
       spy.returns(false);
 
       // Set selected origins to empty
@@ -118,7 +117,7 @@ describe('CORS Components', () => {
     });
 
     it('shows notification if origin is not valid', () => {
-      var spyAddNotification = sinon.spy(FauxtonAPI, 'addNotification');
+      const spyAddNotification = sinon.spy(FauxtonAPI, 'addNotification');
       const wrapper = shallow(<Views.OriginInput isVisible={true} addOrigin={sinon.stub()}/>);
 
       wrapper.find('input').simulate('change', {target: {value: 'badOrigin'}});
@@ -151,7 +150,7 @@ describe('CORS Components', () => {
 
   describe('OriginRow', () => {
     const spyUpdateOrigin = sinon.spy();
-    var origin;
+    let origin;
 
     beforeEach(() => {
       origin = 'https://hello.com';

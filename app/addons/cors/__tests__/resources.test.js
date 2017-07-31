@@ -11,35 +11,35 @@
 // the License.
 import testUtils from "../../../../test/mocha/testUtils";
 import CORS from "../resources";
-var assert = testUtils.assert;
+const assert = testUtils.assert;
 
 describe('Cors Config Model', () => {
-  var cors;
+  let cors;
 
   beforeEach(() => {
-    cors = new CORS.Config(null, {node: 'node2@127.0.0.1'});
+    cors = new CORS.Config(null, { node: 'node2@127.0.0.1' });
   });
 
   it('Splits up origins into array', () => {
-    var origins = ['http://hello.com', 'http://another.co.a'];
-    cors.set(cors.parse({origins: origins.join(',')}));
+    const origins = ['http://hello.com', 'http://another.co.a'];
+    cors.set(cors.parse({ origins: origins.join(',') }));
     assert.deepEqual(cors.get('origins'), origins);
   });
 
   it('returns empty array for undefined', () => {
-    var origins = { origins : undefined };
+    const origins = { origins: undefined };
     cors.set(cors.parse(origins));
     assert.deepEqual(cors.get('origins'), []);
   });
 
   it('does not return an empty string (empty origin), when "specific origins" is set, but there are no domains on that list', () => {
-      var emptyOrigins = {origins: ''};
-      cors.set(cors.parse(emptyOrigins));
-      assert.deepEqual(cors.get('origins'), []);
-    });
+    const emptyOrigins = { origins: '' };
+    cors.set(cors.parse(emptyOrigins));
+    assert.deepEqual(cors.get('origins'), []);
+  });
 
   it('allows valid domains', () => {
-    var urls = [
+    const urls = [
       'http://something.com',
       'https://a.ca',
       'https://something.com:8000',
@@ -55,7 +55,7 @@ describe('Cors Config Model', () => {
   });
 
   it('fails on non http/https domains', () => {
-    var urls = [
+    const urls = [
       'whoahnellythisaintright',
       'ftp://site.com'
     ];
