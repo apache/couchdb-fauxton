@@ -25,7 +25,7 @@ export default class OriginTable extends Component {
       return null;
     }
 
-    var origins = this.createRows();
+    const origins = this.createRows();
 
     return (
       <table id="origin-domain-table" className="table table-striped">

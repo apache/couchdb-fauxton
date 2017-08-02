@@ -13,7 +13,7 @@
 import FauxtonAPI from "../../core/api";
 import ActionTypes from "./actiontypes";
 
-var CorsStore = FauxtonAPI.Store.extend({
+const CorsStore = FauxtonAPI.Store.extend({
 
   initialize: function () {
     this.reset();
@@ -67,7 +67,7 @@ var CorsStore = FauxtonAPI.Store.extend({
   },
 
   deleteOrigin: function (origin) {
-    var index = _.indexOf(this._origins, origin);
+    const index = _.indexOf(this._origins, origin);
 
     if (index === -1) { return; }
 
@@ -92,7 +92,7 @@ var CorsStore = FauxtonAPI.Store.extend({
   },
 
   isAllOrigins: function () {
-    var origins = this.getOrigins();
+    const origins = this.getOrigins();
     return _.include(origins, '*');
   },
 
@@ -181,7 +181,7 @@ var CorsStore = FauxtonAPI.Store.extend({
 });
 
 
-var corsStore = new CorsStore();
+const corsStore = new CorsStore();
 
 corsStore.dispatchToken = FauxtonAPI.dispatcher.register(corsStore.dispatch.bind(corsStore));
 

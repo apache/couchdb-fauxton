@@ -57,7 +57,7 @@ export default class OriginRow extends Component {
   }
 
   render () {
-    var display = this.createOriginDisplay();
+    const display = this.createOriginDisplay();
     return (
       <tr>
         <td>

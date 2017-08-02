@@ -12,7 +12,7 @@
 
 import app from "../../app";
 import FauxtonAPI from "../../core/api";
-var CORS = FauxtonAPI.addon();
+const CORS = FauxtonAPI.addon();
 
 
 CORS.Config = FauxtonAPI.Model.extend({
@@ -25,7 +25,7 @@ CORS.Config = FauxtonAPI.Model.extend({
   },
 
   parse: function (resp) {
-    var origins = !resp.origins ? [] : resp.origins.split(',');
+    const origins = !resp.origins ? [] : resp.origins.split(',');
 
     return {
       origins: origins,
@@ -46,7 +46,7 @@ CORS.Httpd = FauxtonAPI.Model.extend({
   },
 
   corsEnabled: function () {
-    var enabledCors = this.get('enable_cors');
+    const enabledCors = this.get('enable_cors');
 
     if (_.isUndefined(enabledCors)) {
       return false;
@@ -73,7 +73,7 @@ CORS.ConfigModel = Backbone.Model.extend({
 
   sync: function (method, model) {
 
-    var params = {
+    const params = {
       url: model.url(),
       contentType: 'application/json',
       dataType: 'json',
@@ -97,7 +97,7 @@ CORS.validateCORSDomain = function (str) {
 };
 
 CORS.normalizeUrls = function (url) {
-  var el = document.createElement('a');
+  const el = document.createElement('a');
   el.href = url;
 
   if (/:/.test(url)) {

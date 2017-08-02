@@ -1,8 +1,8 @@
 import { connect } from 'react-redux';
 
 import CORSScreen from './CORSScreen';
-import { newSaveCors, newActionShowLoadingBars, newActionFetchAndLoadCORSOptions,
-    newActionShowDomainDeleteConfirmation, newActionHideDomainDeleteConfirmation } from '../actions';
+import { saveCors, showLoadingBars, fetchAndLoadCORSOptions,
+    showDomainDeleteConfirmation, hideDomainDeleteConfirmation } from '../actions';
 
 const mapStateToProps = (state) => {
     const cors = state.cors;
@@ -24,20 +24,20 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         saveCORS: (options) => {
             console.log('saveCORS with:', options, ' ownProps:', ownProps);
-            dispatch(newActionShowLoadingBars());
-            dispatch(newSaveCors(options));
+            dispatch(showLoadingBars());
+            dispatch(saveCors(options));
         },
 
         fetchAndLoadCORSOptions: () => {
-            dispatch(newActionFetchAndLoadCORSOptions(ownProps.node));
+            dispatch(fetchAndLoadCORSOptions(ownProps.node));
         },
 
         showDeleteDomainConfirmation: (domain) => {
-            dispatch(newActionShowDomainDeleteConfirmation(domain));
+            dispatch(showDomainDeleteConfirmation(domain));
         },
 
         hideDeleteDomainConfirmation: () => {
-            dispatch(newActionHideDomainDeleteConfirmation());
+            dispatch(hideDomainDeleteConfirmation());
         }
     };
 };

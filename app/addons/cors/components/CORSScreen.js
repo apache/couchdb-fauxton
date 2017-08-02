@@ -23,7 +23,7 @@ export default class CORSScreen extends Component {
   enableCorsChange () {
     console.log("CORSScreen.enableCorsChange:", this.props.corsEnabled, 'to', !this.props.corsEnabled);
     if (this.props.corsEnabled && !_.isEmpty(this.props.origins)) {
-      var result = window.confirm(app.i18n.en_US['cors-disable-cors-prompt']);
+      const result = window.confirm(app.i18n.en_US['cors-disable-cors-prompt']);
       if (!result) { return; }
     }
     this.props.saveCORS({
@@ -44,7 +44,7 @@ export default class CORSScreen extends Component {
 
   originChange (isAllOrigins) {
     if (isAllOrigins && !_.isEmpty(this.props.origins)) {
-      var result = window.confirm('Are you sure? Switching to all origin domains will overwrite your specific origin domains.');
+      const result = window.confirm('Are you sure? Switching to all origin domains will overwrite your specific origin domains.');
       if (!result) { return; }
     }
     this.props.saveCORS({
@@ -96,9 +96,9 @@ export default class CORSScreen extends Component {
   }
 
   render () {
-    var isVisible = _.all([this.props.corsEnabled, !this.props.isAllOrigins]);
+    const isVisible = _.all([this.props.corsEnabled, !this.props.isAllOrigins]);
 
-    var originSettings = (
+    let originSettings = (
       <div id={this.props.corsEnabled ? 'collapsing-container' : ''}>
         <Origins corsEnabled={this.props.corsEnabled} originChange={ this.originChange.bind(this) } isAllOrigins={this.props.isAllOrigins}/>
         <OriginTable updateOrigin={ this.updateOrigin.bind(this) } deleteOrigin={ this.props.showDeleteDomainConfirmation }
@@ -110,7 +110,7 @@ export default class CORSScreen extends Component {
     if (this.props.isLoading) {
       originSettings = (<LoadLines />);
     }
-    var deleteMsg = <span>Are you sure you want to delete <code>{_.escape(this.props.domainToDelete)}</code>?</span>;
+    const deleteMsg = <span>Are you sure you want to delete <code>{_.escape(this.props.domainToDelete)}</code>?</span>;
 
     return (
       <div className="cors-page flex-body">

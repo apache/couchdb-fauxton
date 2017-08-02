@@ -21,7 +21,7 @@ export default class OriginInput extends Component {
       return;
     }
 
-    var url = Resources.normalizeUrls(this.state.origin);
+    const url = Resources.normalizeUrls(this.state.origin);
 
     this.props.addOrigin(url);
     this.setState({origin: ''});
