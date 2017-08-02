@@ -334,7 +334,6 @@ var CORSController = React.createClass({
             <br />
             <button
               type="button"
-              id="bt-enable-disable-cors"
               className="enable-disable btn btn-secondary"
               onClick={this.enableCorsChange}
               disabled={this.state.isLoading ? 'disabled' : null}

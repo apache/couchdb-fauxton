@@ -44,7 +44,7 @@ describe('CORS Components', () => {
       spy.returns(false);
 
       const wrapper = shallow(<Views.CORSController />);
-      wrapper.find('#bt-enable-disable-cors').simulate('click');
+      wrapper.find('.enable-disable .btn').simulate('click');
       assert.ok(spy.calledOnce);
     });
 
@@ -56,7 +56,7 @@ describe('CORS Components', () => {
       corsStore._origins = [];
 
       const wrapper = shallow(<Views.CORSController />);
-      wrapper.find('#bt-enable-disable-cors').simulate('click');
+      wrapper.find('.enable-disable .btn').simulate('click');
       assert.ok(spy.notCalled);
     });
 
