@@ -12,8 +12,14 @@
 
 import FauxtonAPI from "../../core/api";
 import "./assets/less/cors.less";
-var CORS = FauxtonAPI.addon();
+import reducers from "./reducers";
+
+const CORS = FauxtonAPI.addon();
 
 CORS.initialize = function () {};
+
+FauxtonAPI.addReducers({
+  cors: reducers
+});
 
 export default CORS;

@@ -10,14 +10,14 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import CORSController from "./components/CORSController";
+import CORSContainer from "./components/CORSContainer";
 import OriginInput from "./components/OriginInput";
 import Origins from "./components/Origins";
 import OriginTable from "./components/OriginTable";
 import OriginRow from "./components/OriginRow";
 
 export default {
-  CORSController: CORSController,
+  CORSContainer: CORSContainer,
   OriginInput: OriginInput,
   Origins: Origins,
   OriginTable: OriginTable,

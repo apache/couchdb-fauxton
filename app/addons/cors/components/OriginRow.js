@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import Actions from "../actions";
-import { validateOrigin } from "../helpers";
+import { validateDomain } from "../helpers";
 
 
 export default class OriginRow extends Component {
@@ -20,16 +19,19 @@ export default class OriginRow extends Component {
 
   updateOrigin (e) {
     e.preventDefault();
-    if (!validateOrigin(this.state.updatedOrigin)) {
+    if (!validateDomain(this.state.updatedOrigin)) {
       return;
     }
-    this.props.updateOrigin(this.state.updatedOrigin, this.props.origin);
+
+    if (this.state.updatedOrigin && this.props.origin !== this.state.updatedOrigin) {
+      this.props.updateOrigin(this.state.updatedOrigin, this.props.origin);
+    }
     this.setState({ edit: false });
   }
 
   deleteOrigin (e) {
     e.preventDefault();
-    Actions.showDeleteDomainModal(this.props.origin);
+    this.props.deleteOrigin(this.props.origin);
   }
 
   onInputChange (event) {
@@ -75,4 +77,10 @@ export default class OriginRow extends Component {
     );
   }
 
+};
+
+OriginRow.propTypes = {
+  origin: React.PropTypes.string.isRequired,
+  updateOrigin: React.PropTypes.func.isRequired,
+  deleteOrigin: React.PropTypes.func.isRequired
 };

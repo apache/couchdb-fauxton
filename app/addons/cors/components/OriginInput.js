@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { validateOrigin } from "../helpers";
+import { validateDomain } from "../helpers";
 import Resources from "../resources";
 
 export default class OriginInput extends Component {
@@ -17,7 +17,7 @@ export default class OriginInput extends Component {
 
   addOrigin (event) {
     event.preventDefault();
-    if (!validateOrigin(this.state.origin)) {
+    if (!validateDomain(this.state.origin)) {
       return;
     }
 
@@ -50,4 +50,9 @@ export default class OriginInput extends Component {
     );
   }
 
+};
+
+OriginInput.propTypes = {
+  isVisible: React.PropTypes.bool.isRequired,
+  addOrigin: React.PropTypes.func.isRequired
 };

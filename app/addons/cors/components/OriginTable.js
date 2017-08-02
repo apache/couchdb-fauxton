@@ -11,6 +11,7 @@ export default class OriginTable extends Component {
     return _.map(this.props.origins, function (origin, i) {
       return <OriginRow
         updateOrigin={this.props.updateOrigin}
+        deleteOrigin={this.props.deleteOrigin}
         key={i} origin={origin} />;
     }, this);
   }
@@ -35,4 +36,11 @@ export default class OriginTable extends Component {
     );
   }
 
+};
+
+OriginTable.propTypes = {
+  isVisible: React.PropTypes.bool.isRequired,
+  origins: React.PropTypes.arrayOf(React.PropTypes.string),
+  updateOrigin: React.PropTypes.func.isRequired,
+  deleteOrigin: React.PropTypes.func.isRequired
 };

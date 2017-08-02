@@ -37,3 +37,9 @@ export default class Origins extends Component {
     );
   }
 };
+
+Origins.propTypes = {
+  corsEnabled: React.PropTypes.bool,
+  isAllOrigins: React.PropTypes.bool,
+  originChange: React.PropTypes.func.isRequired
+};

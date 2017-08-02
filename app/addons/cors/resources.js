@@ -93,7 +93,7 @@ CORS.ConfigModel = Backbone.Model.extend({
 
 // simple helper function to validate the user entered a valid domain starting with http(s)
 CORS.validateCORSDomain = function (str) {
-  return (/^https?:\/\/(.*)(:\d{2,5})?$/).test(str);
+  return (/^https?:\/\/(.+)(:\d{2,5})?$/).test(str);
 };
 
 CORS.normalizeUrls = function (url) {
