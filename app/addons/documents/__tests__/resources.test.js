@@ -14,11 +14,12 @@ import FauxtonAPI from "../../../core/api";
 import Models from "../resources";
 import testUtils from "../../../../test/mocha/testUtils";
 import "../base";
-var assert = testUtils.assert;
+import sinon from 'sinon';
+const { assert, restore } = testUtils;
 
-describe('IndexCollection', function () {
-  var collection;
-  beforeEach(function () {
+describe('IndexCollection', () => {
+  let collection;
+  beforeEach(() => {
     collection = new Models.IndexCollection([{
       id:'myId1',
       doc: 'num1'
@@ -32,20 +33,20 @@ describe('IndexCollection', function () {
     });
   });
 
-  it('creates the right api-url with an absolute url', function () {
-    assert.ok(/file:/.test(collection.urlRef('apiurl')));
+  it('creates the right api-url with an absolute url', () => {
+    assert.ok(/http:\/\/dev:8000/.test(collection.urlRef('apiurl')));
   });
 
 });
 
-describe('Document', function () {
-  var doc;
-  beforeEach(function () {
+describe('Document', () => {
+  let doc;
+  beforeEach(() => {
     doc = new Models.Doc({}, {});
   });
 
-  it('does not remove an id attribute', function () {
-    var res = doc.parse({
+  it('does not remove an id attribute', () => {
+    const res = doc.parse({
       _id: 'be31e531fe131bdf416b479ac1000484',
       _rev: '4-3a1b9f4b988b413e9245cd250769da72',
       id: 'foo'
@@ -53,12 +54,12 @@ describe('Document', function () {
     assert.equal(res.id, 'foo');
   });
 
-  it('removes the id, if we create a document and get back an "id" instead of "_id"', function () {
+  it('removes the id, if we create a document and get back an "id" instead of "_id"', () => {
     // if we take the document {"_id": "mycustomid", "_rev": "18-9cdeb1b121137233e3466b06a1780c29", id: "foo"}
     // and do a PUT request for an update, CouchDB will return:
     // {"ok":true,"id":"mycustomid","rev":"18-9cdeb1b121137233e3466b06a1780c29"}
     // and our Model will think it has the id "mycustomid" instead of "foo"
-    var res = doc.parse({
+    const res = doc.parse({
       id: 'be31e531fe131bdf416b479ac1000484',
       _rev: '4-3a1b9f4b988b413e9245cd250769da72',
       ok: true
@@ -66,7 +67,7 @@ describe('Document', function () {
     assert.notOk(res.id);
   });
 
-  it('can return the doc url, if id given', function () {
+  it('can return the doc url, if id given', () => {
     doc = new Models.Doc({_id: 'scholle'}, {
       database: {id: 'blerg', safeID: function () { return this.id; }}
     });
@@ -74,7 +75,7 @@ describe('Document', function () {
     assert.ok(/\/blerg/.test(doc.url('apiurl')));
   });
 
-  it('will return the API url to create a new doc, if no doc exists yet', function () {
+  it('will return the API url to create a new doc, if no doc exists yet', () => {
     doc = new Models.Doc({}, {
       database: {id: 'blerg', safeID: function () { return this.id; }}
     });
@@ -83,11 +84,11 @@ describe('Document', function () {
   });
 });
 
-describe('MangoIndex', function () {
-  var doc;
+describe('MangoIndex', () => {
+  let doc;
 
-  it('is deleteable', function () {
-    var index = {
+  it('is deleteable', () => {
+    const index = {
       ddoc: null,
       name: '_all_docs',
       type: 'json',
@@ -98,8 +99,8 @@ describe('MangoIndex', function () {
     assert.ok(doc.isDeletable());
   });
 
-  it('special docs are not deleteable', function () {
-    var index = {
+  it('special docs are not deleteable', () => {
+    const index = {
       ddoc: null,
       name: '_all_docs',
       type: 'special',
@@ -111,10 +112,14 @@ describe('MangoIndex', function () {
   });
 });
 
-describe('MangoDocumentCollection', function () {
-  var collection;
+describe('MangoDocumentCollection', () => {
+  let collection;
 
-  it('gets 1 doc more to know if there are more than 20', function () {
+  afterEach(() => {
+    restore($.ajax);
+  });
+
+  it('gets 1 doc more to know if there are more than 20', () => {
     collection = new Models.MangoDocumentCollection([{
       name: 'myId1',
       doc: 'num1'
@@ -139,7 +144,7 @@ describe('MangoDocumentCollection', function () {
     }, collection.getPaginatedQuery());
   });
 
-  it('on next page, skips first 20', function () {
+  it('on next page, skips first 20', () => {
     collection = new Models.MangoDocumentCollection([{
       name: 'myId1',
       doc: 'num1'
@@ -164,12 +169,31 @@ describe('MangoDocumentCollection', function () {
     }, collection.getPaginatedQuery());
   });
 
+  it('does not do a fetch if the query is null', () => {
+    collection = new Models.MangoDocumentCollection([{
+      name: 'myId1',
+      doc: 'num1'
+    },
+    {
+      name: 'myId2',
+      doc: 'num2'
+    }], {
+      database: {id: 'databaseId', safeID: function () { return this.id; }},
+      params: {limit: 20}
+    });
+
+    const spy = sinon.spy($, 'ajax');
+
+    collection.fetch();
+    assert.notOk(spy.wasCalled);
+  });
+
 });
 
-describe('MangoDocumentCollection', function () {
-  var collection;
+describe('MangoDocumentCollection', () => {
+  let collection;
 
-  it('is not editable', function () {
+  it('is not editable', () => {
     collection = new Models.MangoIndexCollection([{
       name: 'myId1',
       doc: 'num1'
@@ -186,10 +210,10 @@ describe('MangoDocumentCollection', function () {
   });
 });
 
-describe('IndexCollection', function () {
-  var collection;
+describe('IndexCollection', () => {
+  let collection;
 
-  it('design docs are editable', function () {
+  it('design docs are editable', () => {
     collection = new Models.IndexCollection([{
       _id: 'myId1',
       doc: 'num1'
@@ -206,7 +230,7 @@ describe('IndexCollection', function () {
     assert.ok(collection.isEditable());
   });
 
-  it('reduced design docs are NOT editable', function () {
+  it('reduced design docs are NOT editable', () => {
     collection = new Models.IndexCollection([{
       _id: 'myId1',
       doc: 'num1'
@@ -224,10 +248,10 @@ describe('IndexCollection', function () {
   });
 });
 
-describe('AllDocs', function () {
-  var collection;
+describe('AllDocs', () => {
+  let collection;
 
-  it('all-docs-list documents are always editable', function () {
+  it('all-docs-list documents are always editable', () => {
     collection = new Models.AllDocs([{
       _id: 'myId1',
       doc: 'num1'
@@ -244,21 +268,21 @@ describe('AllDocs', function () {
   });
 });
 
-describe('QueryParams', function () {
-  describe('parse', function () {
-    it('should not parse arbitrary parameters', function () {
-      var params = {'foo': '[1]]'};
-      var result = Models.QueryParams.parse(params);
+describe('QueryParams', () => {
+  describe('parse', () => {
+    it('should not parse arbitrary parameters', () => {
+      const params = {'foo': '[1]]'};
+      const result = Models.QueryParams.parse(params);
 
       assert.deepEqual(result, params);
     });
 
-    it('parses startkey, endkey', function () {
-      var params = {
+    it('parses startkey, endkey', () => {
+      const params = {
         'startkey':'[\"a\",\"b\"]',
         'endkey':'[\"c\",\"d\"]'
       };
-      var result = Models.QueryParams.parse(params);
+      const result = Models.QueryParams.parse(params);
 
       assert.deepEqual(result, {
         'startkey': ['a', 'b'],
@@ -266,40 +290,40 @@ describe('QueryParams', function () {
       });
     });
 
-    it('parses key', function () {
-      var params = {
+    it('parses key', () => {
+      const params = {
         key:'[1,2]'
       };
-      var result = Models.QueryParams.parse(params);
+      const result = Models.QueryParams.parse(params);
 
       assert.deepEqual(result, {'key': [1, 2]});
     });
 
-    it('does not modify input', function () {
-      var params = {
+    it('does not modify input', () => {
+      const params = {
         key:'[\"a\",\"b\"]'
       };
-      var clone = _.clone(params);
+      const clone = _.clone(params);
       Models.QueryParams.parse(params);
       assert.deepEqual(params, clone);
     });
   });
 
-  describe('stringify', function () {
-    it('should not stringify arbitrary parameters', function () {
-      var params = {'foo': [1, 2, 3]};
-      var result = Models.QueryParams.stringify(params);
+  describe('stringify', () => {
+    it('should not stringify arbitrary parameters', () => {
+      const params = {'foo': [1, 2, 3]};
+      const result = Models.QueryParams.stringify(params);
 
       assert.deepEqual(result, params);
     });
 
-    it('stringifies startkey, endkey', function () {
-      var params = {
+    it('stringifies startkey, endkey', () => {
+      const params = {
         'startkey': ['a', 'b'],
         'endkey': ['c', 'd']
       };
 
-      var result = Models.QueryParams.stringify(params);
+      const result = Models.QueryParams.stringify(params);
 
       assert.deepEqual(result, {
         'startkey':'[\"a\",\"b\"]',
@@ -307,40 +331,40 @@ describe('QueryParams', function () {
       });
     });
 
-    it('stringifies key', function () {
-      var params = {'key':['a', 'b']};
-      var result = Models.QueryParams.stringify(params);
+    it('stringifies key', () => {
+      const params = {'key':['a', 'b']};
+      const result = Models.QueryParams.stringify(params);
 
       assert.deepEqual(result, { 'key': '[\"a\",\"b\"]' });
     });
 
-    it('does not modify input', function () {
-      var params = {'key': ['a', 'b']};
-      var clone = _.clone(params);
+    it('does not modify input', () => {
+      const params = {'key': ['a', 'b']};
+      const clone = _.clone(params);
       Models.QueryParams.stringify(params);
 
       assert.deepEqual(params, clone);
     });
 
-    it('is symmetrical with parse', function () {
-      var params = {
+    it('is symmetrical with parse', () => {
+      const params = {
         'startkey': ['a', 'b'],
         'endkey': ['c', 'd'],
         'foo': '[1,2]',
         'bar': 'abc'
       };
 
-      var clone = _.clone(params);
-      var json = Models.QueryParams.stringify(params);
-      var result = Models.QueryParams.parse(json);
+      const clone = _.clone(params);
+      const json = Models.QueryParams.stringify(params);
+      const result = Models.QueryParams.parse(json);
 
       assert.deepEqual(result, clone);
     });
   });
 });
 
-describe('Bulk Delete', function () {
-  var databaseId = 'ente',
+describe('Bulk Delete', () => {
+  let databaseId = 'ente',
       collection,
       promise,
       values;
@@ -361,7 +385,7 @@ describe('Bulk Delete', function () {
     _deleted: true
   }];
 
-  beforeEach(function () {
+  beforeEach(() => {
     collection = new Models.BulkDeleteDocCollection(values, {
       databaseId: databaseId
     });
@@ -369,7 +393,7 @@ describe('Bulk Delete', function () {
     promise = FauxtonAPI.Deferred();
   });
 
-  it('contains the models', function () {
+  it('contains the models', () => {
     collection = new Models.BulkDeleteDocCollection(values, {
       databaseId: databaseId
     });
@@ -377,7 +401,7 @@ describe('Bulk Delete', function () {
     assert.equal(collection.length, 3);
   });
 
-  it('clears the memory if no errors happened', function () {
+  it('clears the memory if no errors happened', () => {
     collection.handleResponse([
       {'ok': true, 'id': '1', 'rev': '10-72cd2edbcc0d197ce96188a229a7af01'},
       {'ok': true, 'id': '2', 'rev': '6-da537822b9672a4b2f42adb1be04a5b1'}
@@ -386,7 +410,7 @@ describe('Bulk Delete', function () {
     assert.equal(collection.length, 1);
   });
 
-  it('triggers a removed event with all ids', function () {
+  it('triggers a removed event with all ids', () => {
     collection.listenToOnce(collection, 'removed', function (ids) {
       assert.deepEqual(ids, ['Deferred', 'DeskSet']);
     });
@@ -397,7 +421,7 @@ describe('Bulk Delete', function () {
     ], promise);
   });
 
-  it('triggers a error event with all errored ids', function () {
+  it('triggers a error event with all errored ids', () => {
     collection.listenToOnce(collection, 'error', function (ids) {
       assert.deepEqual(ids, ['Deferred']);
     });
@@ -407,7 +431,7 @@ describe('Bulk Delete', function () {
     ], promise);
   });
 
-  it('removes successfull deleted from the collection but keeps one with errors', function () {
+  it('removes successfull deleted from the collection but keeps one with errors', () => {
     collection.handleResponse([
       {'error':'conflict', 'id':'1', 'rev':'10-72cd2edbcc0d197ce96188a229a7af01'},
       {'ok':true, 'id':'2', 'rev':'6-da537822b9672a4b2f42adb1be04a5b1'},
@@ -418,8 +442,8 @@ describe('Bulk Delete', function () {
     assert.notOk(collection.get('2'));
   });
 
-  it('triggers resolve for successful delete', function () {
-    var spy = sinon.spy();
+  it('triggers resolve for successful delete', () => {
+    const spy = sinon.spy();
     promise.then(spy);
 
     collection.handleResponse([
@@ -431,10 +455,10 @@ describe('Bulk Delete', function () {
 
   });
 
-  it('triggers resolve for successful delete with errors as well', function () {
-    var spy = sinon.spy();
+  it('triggers resolve for successful delete with errors as well', () => {
+    const spy = sinon.spy();
     promise.then(spy);
-    var ids = {
+    const ids = {
       errorIds: ['1'],
       successIds: ['Deferred', 'DeskSet']
     };
@@ -448,8 +472,8 @@ describe('Bulk Delete', function () {
     assert.ok(spy.calledWith(ids));
   });
 
-  it('triggers reject for failed delete', function () {
-    var spy = sinon.spy();
+  it('triggers reject for failed delete', () => {
+    const spy = sinon.spy();
     promise.fail(spy);
 
     collection.handleResponse([
@@ -463,14 +487,18 @@ describe('Bulk Delete', function () {
 });
 
 // this should stay at the bottom due to manipulating the 'view' urls.  otherwise, update this to restore them.
-describe('IndexCollection', function () {
-  var collection;
+describe('IndexCollection', () => {
+  let collection;
 
-  beforeEach(function () {
+  beforeEach(() => {
     FauxtonAPI.registerUrls('view', {
       testWithTrailingQuestion: function (database, designDoc, viewName) {
         return app.host + '/' + database + '/_design/' + designDoc + '/_view/' + viewName + "?bogusParam=foo";
-      }
+      },
+
+      server: function (database, designDoc, viewName) {
+        return app.host + '/' + database + '/_design/' + designDoc + '/_view/' + viewName;
+      },
     });
     collection = new Models.IndexCollection([{
       id:'myId1',

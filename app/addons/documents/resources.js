@@ -230,6 +230,10 @@ Documents.MangoDocumentCollection = PagingCollection.extend({
   },
 
   getPaginatedQuery: function () {
+    if (!this.query) {
+      return this.query;
+    }
+
     var paginatedQuery = JSON.parse(JSON.stringify(this.query));
 
     if (!this.paging.direction && this.paging.params.limit > 0) {
@@ -254,6 +258,14 @@ Documents.MangoDocumentCollection = PagingCollection.extend({
         promise = FauxtonAPI.Deferred(),
         query = this.getPaginatedQuery();
 
+    //this section can get called when updating page
+    //and the query options might not have been selected yet
+    //so we just return and don't do a fetch
+    if (!query) {
+      promise.resolve();
+      return promise;
+    }
+
     $.ajax({
       type: 'POST',
       url: url,
@@ -261,12 +273,11 @@ Documents.MangoDocumentCollection = PagingCollection.extend({
       dataType: 'json',
       data: JSON.stringify(query),
     })
-    .then(function (res) {
+    .then(res => {
       this.handleResponse(res, promise);
-    }.bind(this))
-    .fail(function (res) {
+    }, res => {
       promise.reject(res.responseJSON);
-    }.bind(this));
+    });
 
     return promise;
   },
