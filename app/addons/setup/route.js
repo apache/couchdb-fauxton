@@ -72,6 +72,7 @@ var RouteObject = FauxtonAPI.RouteObject.extend({
 
   finishView: function () {
     const setup = new Setup.Model();
+    SetupActions.getClusterStateFromCouch();
     return <OnePaneSimpleLayout
       component={<SetupComponents.ClusterConfiguredScreen/>}
       endpoint={setup.url('apiurl')}

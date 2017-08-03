@@ -17,84 +17,92 @@ import sinon from "sinon";
 const assert = utils.assert;
 const restore = utils.restore;
 
-describe('CORS actions', function () {
+describe('CORS actions', () => {
 
-  describe('save', function () {
+  describe('save', () => {
 
-    afterEach(function () {
+    let localNode = 'node2@127.0.0.1';
+
+    afterEach(() => {
       restore(Actions.saveCorsOrigins);
 
       restore(FauxtonAPI.when);
       restore(FauxtonAPI.addNotification);
     });
 
-    it('should save cors enabled to httpd', function () {
+    it('should save cors enabled to httpd', () => {
       var spy = sinon.spy(Actions, 'saveEnableCorsToHttpd');
 
       Actions.saveCors({
-        enableCors: false
+        enableCors: false,
+        node: localNode
       });
 
       assert.ok(spy.calledWith(false));
     });
 
-    it('does not save cors origins if cors not enabled', function () {
+    it('does not save cors origins if cors not enabled', () => {
       var spy = sinon.spy(Actions, 'saveCorsOrigins');
 
       Actions.saveCors({
         enableCors: false,
-        origins: ['*']
+        origins: ['*'],
+        node: localNode
       });
 
       assert.notOk(spy.calledOnce);
     });
 
-    it('saves cors origins', function () {
+    it('saves cors origins', () => {
       var spy = sinon.spy(Actions, 'saveCorsOrigins');
 
       Actions.saveCors({
         enableCors: true,
-        origins: ['*']
+        origins: ['*'],
+        node: localNode
       });
 
       assert.ok(spy.calledWith('*'));
     });
 
-    it('saves cors allow credentials', function () {
+    it('saves cors allow credentials', () => {
       var spy = sinon.spy(Actions, 'saveCorsCredentials');
 
       Actions.saveCors({
         enableCors: true,
-        origins: ['https://testdomain.com']
+        origins: ['https://testdomain.com'],
+        node: localNode
       });
 
       assert.ok(spy.calledOnce);
     });
 
-    it('saves cors headers', function () {
+    it('saves cors headers', () => {
       var spy = sinon.spy(Actions, 'saveCorsHeaders');
 
       Actions.saveCors({
         enableCors: true,
-        origins: ['https://testdomain.com']
+        origins: ['https://testdomain.com'],
+        node: localNode
       });
 
       assert.ok(spy.calledOnce);
     });
 
-    it('saves cors methods', function () {
+    it('saves cors methods', () => {
       var spy = sinon.spy(Actions, 'saveCorsMethods');
 
       Actions.saveCors({
         enableCors: true,
-        origins: ['https://testdomain.com']
+        origins: ['https://testdomain.com'],
+        node: localNode
       });
 
       assert.ok(spy.calledOnce);
 
     });
 
-    it('shows notification on successful save', function () {
+    it('shows notification on successful save', () => {
       var stub = sinon.stub(FauxtonAPI, 'when');
       var spy = sinon.spy(FauxtonAPI, 'addNotification');
       var promise = FauxtonAPI.Deferred();
@@ -103,7 +111,8 @@ describe('CORS actions', function () {
 
       Actions.saveCors({
         enableCors: true,
-        origins: ['https://testdomain.com']
+        origins: ['https://testdomain.com'],
+        node: localNode
       });
 
       assert.ok(spy.calledOnce);
@@ -111,15 +120,15 @@ describe('CORS actions', function () {
 
   });
 
-  describe('Sanitize origins', function () {
+  describe('Sanitize origins', () => {
 
-    it('joins array into string', function () {
+    it('joins array into string', () => {
       var origins = ['https://hello.com', 'https://hello2.com'];
 
       assert.deepEqual(Actions.sanitizeOrigins(origins), origins.join(','));
     });
 
-    it('returns empty string for no origins', function () {
+    it('returns empty string for no origins', () => {
       var origins = [];
 
       assert.deepEqual(Actions.sanitizeOrigins(origins), '');
