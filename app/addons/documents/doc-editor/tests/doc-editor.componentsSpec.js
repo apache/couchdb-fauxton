@@ -20,6 +20,7 @@ import ActionTypes from "../actiontypes";
 import Databases from "../../../databases/base";
 import utils from "../../../../../test/mocha/testUtils";
 import TestUtils from "react-addons-test-utils";
+import '../../base';
 
 var assert = utils.assert;
 var docJSON = {
