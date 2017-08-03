@@ -12,6 +12,7 @@
 import FauxtonAPI from "../../core/api";
 import ActionTypes from "./actiontypes";
 import Resources from "./resources";
+import * as CorsAPI from "./api";
 
 export const showDomainDeleteConfirmation = (domain) => {
   return {
@@ -26,30 +27,30 @@ export const hideDomainDeleteConfirmation = () => {
   };
 };
 
-export const fetchAndLoadCORSOptions = (node) => (dispatch) => {
+export const fetchAndLoadCORSOptions = (url, node) => (dispatch) => {
   console.log('fetchAndLoadCORSOptions started for node111:', node);
-  const cors = new Resources.Config({ node: node });
-  const httpd = new Resources.Httpd({ node: node });
+  //const cors = new Resources.Config({ node: node });
+  //const httpd = new Resources.Httpd({ node: node });
 
-  FauxtonAPI.when([cors.fetch(), httpd.fetch()]).then(
-    () => {
-      console.log('fetchAndLoadCORSOptions... Promise resolved');
-      const loadOptions = loadCORSOptions({
-        origins: cors.get('origins'),
-        corsEnabled: httpd.corsEnabled(),
-        node: node
-      });
-      console.log(loadOptions);
-      dispatch(loadOptions);
-    },
-    (error) => {
-      const reason = (error && error.statusText) || 'n/a';
-      FauxtonAPI.addNotification({
-        msg: 'Could not load CORS settings. Reason: ' + reason,
-        type: 'error'
-      });
-    }
-  );
+  const fetchCors = CorsAPI.fetchCORSConfig(url);
+  const fetchHttp = CorsAPI.fetchHttpdConfig(url);
+  FauxtonAPI.Promise.join(fetchCors, fetchHttp, (corsConfig, httpdConfig) => {
+    console.log('fetchAndLoadCORSOptions... Promises joined');
+    const loadOptions = loadCORSOptions({
+      origins: corsConfig.origins,
+      corsEnabled: httpdConfig.enable_cors === 'true',
+      node: node
+    });
+    console.log(loadOptions);
+    dispatch(loadOptions);
+  }).catch((error) => {
+    console.error(error);
+    const reason = (error && error.message) || 'n/a';
+    FauxtonAPI.addNotification({
+      msg: 'Could not load CORS settings. Reason: ' + reason,
+      type: 'error'
+    });
+  });
 };
 
 export const showLoadingBars = () => {
@@ -74,16 +75,25 @@ export const loadCORSOptions = (options) => {
   };
 };
 
-export const saveCors = (options) => (dispatch) => {
+export const saveCors = (url, options) => (dispatch) => {
   // console.log('newSaveCors::', options);
   const promises = [];
-  promises.push(saveEnableCorsToHttpd(options.corsEnabled, options.node));
+
+  promises.push(CorsAPI.updateEnableCorsToHttpd(url, options.node, options.corsEnabled));
+  // promises.push(saveEnableCorsToHttpd(options.corsEnabled, options.node));
 
   if (options.corsEnabled) {
-    promises.push(saveCorsOrigins(sanitizeOrigins(options.origins), options.node));
-    promises.push(saveCorsCredentials(options.node));
-    promises.push(saveCorsHeaders(options.node));
-    promises.push(saveCorsMethods(options.node));
+    promises.push(CorsAPI.updateCorsOrigins(url, options.node, sanitizeOrigins(options.origins)));
+    // promises.push(saveCorsOrigins(sanitizeOrigins(options.origins), options.node));
+
+    promises.push(CorsAPI.updateCorsCredentials(url, options.node));
+    // promises.push(saveCorsCredentials(options.node));
+
+    promises.push(CorsAPI.updateCorsHeaders(url, options.node));
+    // promises.push(saveCorsHeaders(options.node));
+
+    promises.push(CorsAPI.updateCorsMethods(url, options.node));
+    // promises.push(saveCorsMethods(options.node));
   }
   console.log('Sending Promisses with ', options);
   FauxtonAPI.when(promises).then(() => {
@@ -109,7 +119,9 @@ export const saveCors = (options) => (dispatch) => {
     });
 };
 
-const saveEnableCorsToHttpd = (enableCors, node) => {
+
+
+export function saveEnableCorsToHttpd (enableCors, node) {
   const enableOption = new Resources.ConfigModel({
     section: 'httpd',
     attribute: 'enable_cors',
@@ -120,7 +132,7 @@ const saveEnableCorsToHttpd = (enableCors, node) => {
   return enableOption.save();
 };
 
-const saveCorsOrigins = (origins, node) => {
+export function saveCorsOrigins (origins, node)  {
   const allowOrigins = new Resources.ConfigModel({
     section: 'cors',
     attribute: 'origins',
@@ -131,7 +143,7 @@ const saveCorsOrigins = (origins, node) => {
   return allowOrigins.save();
 };
 
-const saveCorsCredentials = (node) => {
+export function saveCorsCredentials  (node)  {
   const allowCredentials = new Resources.ConfigModel({
     section: 'cors',
     attribute: 'credentials',
@@ -142,7 +154,7 @@ const saveCorsCredentials = (node) => {
   return allowCredentials.save();
 };
 
-const saveCorsHeaders = (node) => {
+export function saveCorsHeaders  (node)  {
   const corsHeaders = new Resources.ConfigModel({
     section: 'cors',
     attribute: 'headers',
@@ -153,7 +165,7 @@ const saveCorsHeaders = (node) => {
   return corsHeaders.save();
 };
 
-const saveCorsMethods = (node) => {
+export function saveCorsMethods  (node)  {
   const corsMethods = new Resources.ConfigModel({
     section: 'cors',
     attribute: 'methods',

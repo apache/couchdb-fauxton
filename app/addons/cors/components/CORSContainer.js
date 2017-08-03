@@ -25,11 +25,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         saveCORS: (options) => {
             console.log('saveCORS with:', options, ' ownProps:', ownProps);
             dispatch(showLoadingBars());
-            dispatch(saveCors(options));
+            dispatch(saveCors(ownProps.url, options));
         },
 
         fetchAndLoadCORSOptions: () => {
-            dispatch(fetchAndLoadCORSOptions(ownProps.node));
+            dispatch(fetchAndLoadCORSOptions(ownProps.url, ownProps.node));
         },
 
         showDeleteDomainConfirmation: (domain) => {

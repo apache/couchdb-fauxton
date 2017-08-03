@@ -34,7 +34,7 @@ export default class CORSScreen extends Component {
   }
 
   save () {
-      console.log("Actions.saveCors");
+      console.log(">>>>>>Actions.saveCors");
       this.props.saveCORS({
         corsEnabled: this.props.corsEnabled,
         origins: this.props.origins,
@@ -52,7 +52,7 @@ export default class CORSScreen extends Component {
         origins: isAllOrigins ? ['*'] : [],
         node: this.props.node
         });
-    console.log("Actions.originChange(isAllOrigins);");
+    console.log("exiting CORSScreen.originChange(isAllOrigins);");
   }
 
   addOrigin (origin) {
@@ -61,7 +61,7 @@ export default class CORSScreen extends Component {
         origins: this.props.origins.concat(origin),
         node: this.props.node
         });
-    console.log("Actions.addOrigin(origin);", origin);
+    console.log("exiting CORSScreen.addOrigin(origin);", origin);
   }
 
   updateOrigin (updatedOrigin, originalOrigin) {
@@ -75,7 +75,7 @@ export default class CORSScreen extends Component {
         origins: newOrigins,
         node: this.props.node
         });
-    console.log("Actions.updateOrigin(updatedOrigin, originalOrigin);", updatedOrigin, originalOrigin);
+    console.log("exiting CORSScreen.updateOrigin(updatedOrigin, originalOrigin);", updatedOrigin, originalOrigin);
   }
 
   deleteOrigin () {
@@ -92,7 +92,7 @@ export default class CORSScreen extends Component {
         node: this.props.node
         });
       //newOrigins[index] = updatedOrigin;
-    console.log("Actions.deleteOrigin(this.props.domainToDelete);");
+    console.log("exiting CORSScreen.deleteOrigin(this.props.domainToDelete);");
   }
 
   render () {

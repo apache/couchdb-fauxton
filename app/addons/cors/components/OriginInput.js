@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { validateDomain } from "../helpers";
-import Resources from "../resources";
+import { validateDomain, normalizeUrls } from "../helpers";
+// import Resources from "../resources";
 
 export default class OriginInput extends Component {
 
@@ -17,11 +17,13 @@ export default class OriginInput extends Component {
 
   addOrigin (event) {
     event.preventDefault();
+    console.log('>>> OriginInput.addOrigin ');
     if (!validateDomain(this.state.origin)) {
-      return;
+      return false;
     }
 
-    const url = Resources.normalizeUrls(this.state.origin);
+    // const url = Resources.normalizeUrls(this.state.origin);
+    const url = normalizeUrls(this.state.origin);
 
     this.props.addOrigin(url);
     this.setState({origin: ''});
@@ -29,6 +31,7 @@ export default class OriginInput extends Component {
 
   onKeyUp (e) {
     if (e.keyCode == 13) {   //enter key
+      console.log('>>> OriginInput.onKeyUp ');
       return this.addOrigin(e);
     }
   }
@@ -42,7 +45,7 @@ export default class OriginInput extends Component {
       <div id="origin-domains-container">
         <div className="origin-domains">
           <div className="input-append">
-            <input type="text" name="new_origin_domain" onChange={this.onInputChange.bind(this)} onKeyUp={this.onKeyUp.bind(this) } value={this.state.origin} placeholder="https://example.com"/>
+            <input type="text" name="new_origin_domain" onChange={this.onInputChange.bind(this)}  value={this.state.origin} placeholder="https://example.com"/>
             <button onClick={ this.addOrigin.bind(this) } className="btn btn-secondary add-domain"><i className="icon fonticon-ok-circled"></i> Add Domain</button>
           </div>
         </div>
