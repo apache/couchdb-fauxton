@@ -11,34 +11,36 @@
 // the License.
 import testUtils from "../../../../test/mocha/testUtils";
 import Stores from "../stores";
-var assert = testUtils.assert;
-var store = Stores.corsStore;
+const assert = testUtils.assert;
+const store = Stores.corsStore;
 
-describe('CORS store', function () {
+describe('CORS store', () => {
 
-  describe('isAllOrigins', function () {
+  describe('isAllOrigins', () => {
 
-    it('returns true for all origins', function () {
+    it('returns true for all origins', () => {
       store._origins = ['*'];
 
       assert.ok(store.isAllOrigins());
     });
 
-    it('returns false for specific origins', function () {
+    it('returns false for specific origins', () => {
       store._origins = ['https://hello.com', 'http://another.com'];
+
       assert.notOk(store.isAllOrigins());
     });
 
-    it('returns false for empty array', function () {
+    it('returns false for empty array', () => {
       store._origins = [];
+
       assert.notOk(store.isAllOrigins());
     });
   });
 
-  describe('addOrigin', function () {
+  describe('addOrigin', () => {
 
-    it('adds Origin to list', function () {
-      var origin = 'http://hello.com';
+    it('adds Origin to list', () => {
+      const origin = 'http://hello.com';
       store._origins = [];
       store.addOrigin(origin);
 
@@ -47,15 +49,15 @@ describe('CORS store', function () {
 
   });
 
-  describe('originChange', function () {
+  describe('originChange', () => {
 
-    it('sets origins to * for true', function () {
+    it('sets origins to * for true', () => {
       store.originChange(true);
 
       assert.deepEqual(store.getOrigins(), ['*']);
     });
 
-    it('sets origins to [] for true', function () {
+    it('sets origins to [] for true', () => {
       store.originChange(false);
 
       assert.deepEqual(store.getOrigins(), []);
@@ -63,9 +65,9 @@ describe('CORS store', function () {
 
   });
 
-  describe('deleteOrigin', function () {
+  describe('deleteOrigin', () => {
 
-    it('removes origin', function () {
+    it('removes origin', () => {
       store._origins = ['http://first.com', 'http://hello.com', 'http://second.com'];
       store.deleteOrigin('http://hello.com');
 
@@ -75,9 +77,9 @@ describe('CORS store', function () {
 
   });
 
-  describe('update origin', function () {
+  describe('update origin', () => {
 
-    it('removes old origin', function () {
+    it('removes old origin', () => {
       store._origins = ['http://first.com', 'http://hello.com', 'http://second.com'];
       store.updateOrigin('http://hello123.com', 'http://hello.com');
 
@@ -85,7 +87,7 @@ describe('CORS store', function () {
 
     });
 
-    it('adds new origin', function () {
+    it('adds new origin', () => {
       store._origins = ['http://first.com', 'http://hello.com', 'http://second.com'];
       store.updateOrigin('http://hello123.com', 'http://hello.com');
 

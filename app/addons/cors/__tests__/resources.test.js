@@ -11,35 +11,35 @@
 // the License.
 import testUtils from "../../../../test/mocha/testUtils";
 import CORS from "../resources";
-var assert = testUtils.assert;
+const assert = testUtils.assert;
 
-describe('Cors Config Model', function () {
-  var cors;
+describe('Cors Config Model', () => {
+  let cors;
 
-  beforeEach(function () {
-    cors = new CORS.Config(null, {node: 'node2@127.0.0.1'});
+  beforeEach(() => {
+    cors = new CORS.Config(null, { node: 'node2@127.0.0.1' });
   });
 
-  it('Splits up origins into array', function () {
-    var origins = ['http://hello.com', 'http://another.co.a'];
-    cors.set(cors.parse({origins: origins.join(',')}));
+  it('Splits up origins into array', () => {
+    const origins = ['http://hello.com', 'http://another.co.a'];
+    cors.set(cors.parse({ origins: origins.join(',') }));
     assert.deepEqual(cors.get('origins'), origins);
   });
 
-  it('returns empty array for undefined', function () {
-    var origins = { origins : undefined };
+  it('returns empty array for undefined', () => {
+    const origins = { origins: undefined };
     cors.set(cors.parse(origins));
     assert.deepEqual(cors.get('origins'), []);
   });
 
-  it('does not return an empty string (empty origin), when "specific origins" is set, but there are no domains on that list', function () {
-      var emptyOrigins = {origins: ''};
-      cors.set(cors.parse(emptyOrigins));
-      assert.deepEqual(cors.get('origins'), []);
-    });
+  it('does not return an empty string (empty origin), when "specific origins" is set, but there are no domains on that list', () => {
+    const emptyOrigins = { origins: '' };
+    cors.set(cors.parse(emptyOrigins));
+    assert.deepEqual(cors.get('origins'), []);
+  });
 
-  it('allows valid domains', function () {
-    var urls = [
+  it('allows valid domains', () => {
+    const urls = [
       'http://something.com',
       'https://a.ca',
       'https://something.com:8000',
@@ -54,8 +54,8 @@ describe('Cors Config Model', function () {
     });
   });
 
-  it('fails on non http/https domains', function () {
-    var urls = [
+  it('fails on non http/https domains', () => {
+    const urls = [
       'whoahnellythisaintright',
       'ftp://site.com'
     ];
@@ -64,7 +64,7 @@ describe('Cors Config Model', function () {
     });
   });
 
-  it('normalizes common cases, like accidentally added subfolders', function () {
+  it('normalizes common cases, like accidentally added subfolders', () => {
     assert.equal('https://foo.com', CORS.normalizeUrls('https://foo.com/blerg'));
     assert.equal('https://192.168.1.113', CORS.normalizeUrls('https://192.168.1.113/blerg'));
     assert.equal('https://foo.com:1337', CORS.normalizeUrls('https://foo.com:1337/blerg'));
