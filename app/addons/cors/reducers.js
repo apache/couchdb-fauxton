@@ -28,9 +28,9 @@ export default function cors (state = initialState, action) {
   switch (action.type) {
 
     case ActionTypes.EDIT_CORS:
-      console.log('reducing ' + action.type + ' using ', action);
       const corsOptions = action.options;
-      return Object.assign({}, state, {
+      return {
+        ...state,
         isLoading: false,
         node: corsOptions.node,
         corsEnabled: corsOptions.corsEnabled,
@@ -38,27 +38,27 @@ export default function cors (state = initialState, action) {
         origins: corsOptions.origins,
         deleteDomainModalVisible: false,
         domainToDelete: ''
-      });
+      };
 
     case ActionTypes.CORS_SHOW_DELETE_DOMAIN_MODAL:
-      console.log('reducing ' + action.type + ' using ', action);
-      return Object.assign({}, state, {
+      return {
+        ...state,
         deleteDomainModalVisible: true,
         domainToDelete: action.domainToDelete
-      });
+      };
 
     case ActionTypes.CORS_HIDE_DELETE_DOMAIN_MODAL:
-      console.log('reducing ' + action.type + ' using ', action);
-      return Object.assign({}, state, {
+      return {
+        ...state,
         deleteDomainModalVisible: false,
         domainToDelete: ''
-      });
+      };
 
     case ActionTypes.CORS_SET_IS_LOADING:
-      console.log('reducing ' + action.type + ' using ', action);
-      return Object.assign({}, state, {
+      return {
+        ...state,
         isLoading: action.isLoading
-      });
+      };
 
     default:
       return state;
