@@ -53,7 +53,7 @@ const IndexEditorAndResults = BaseRoute.extend({
     const params = this.createParams(),
           urlParams = params.urlParams,
           docParams = params.docParams,
-          decodeDdoc = decodeURIComponent(ddoc),
+          decodeDdoc = ddoc,
           store = IndexResultsStores.indexResultsStore;
 
     // if the user is simply switching the layout style (i.e. metadata, json, or table),
