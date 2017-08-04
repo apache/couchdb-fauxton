@@ -30,7 +30,8 @@ export default class BulkDocumentHeaderController extends React.Component {
     return {
       selectedLayout: indexResultsStore.getSelectedLayout(),
       bulkDocCollection: indexResultsStore.getBulkDocCollection(),
-      isMango: indexResultsStore.getIsMangoResults()
+      isMango: indexResultsStore.getIsMangoResults(),
+      isMangoIndexList: indexResultsStore.getIsMangoIndexResults()
     };
   }
 
@@ -68,6 +69,8 @@ export default class BulkDocumentHeaderController extends React.Component {
         >
           Metadata
         </Button>;
+    } else if (this.state.isMangoIndexList) {
+      return null;
     }
 
     // reduce doesn't allow for include_docs=true, so we'll prevent JSON and table

@@ -12,7 +12,7 @@
 
 import FauxtonAPI from "../../../core/api";
 import ActionTypes from "./mango.actiontypes";
-
+import IndexActionTypes from "../index-results/actiontypes";
 
 var defaultQueryIndexCode = {
   "index": {
@@ -35,8 +35,6 @@ Stores.MangoStore = FauxtonAPI.Store.extend({
     this._queryFindCode = defaultQueryFindCode;
     this._queryIndexCode = defaultQueryIndexCode;
     this._queryFindCodeChanged = false;
-    this._availableIndexes = [];
-    this._getLoadingIndexes = true;
   },
 
   getQueryIndexCode: function () {
@@ -55,35 +53,8 @@ Stores.MangoStore = FauxtonAPI.Store.extend({
     this._queryFindCode = options.code;
   },
 
-  getLoadingIndexes: function () {
-    return this._getLoadingIndexes;
-  },
-
-  setLoadingIndexes: function (options) {
-    this._getLoadingIndexes = options.isLoading;
-  },
-
   formatCode: function (code) {
     return JSON.stringify(code, null, '  ');
-  },
-
-  newQueryFindCodeFromFields: function (options) {
-    var fields = options.fields,
-        queryCode = JSON.parse(JSON.stringify(this._queryFindCode)),
-        selectorContent;
-
-    if (!fields) {
-      return;
-    }
-
-    selectorContent = fields.reduce(function (acc, field) {
-      acc[field] = {"$gt": null};
-      return acc;
-    }, {});
-
-    queryCode.selector = selectorContent;
-    this._queryFindCode = queryCode;
-    this._queryFindCodeChanged = true;
   },
 
   getQueryFindCodeChanged: function () {
@@ -98,26 +69,12 @@ Stores.MangoStore = FauxtonAPI.Store.extend({
     return this._database;
   },
 
-  setAvailableIndexes: function (options) {
-    this._availableIndexes = options.indexList;
+  setExplainPlan: function (options) {
+    this._explainPlan = options && options.explainPlan;
   },
 
-  getAvailableQueryIndexes: function () {
-    return this._availableIndexes.filter(function (el) {
-      return ['json', 'special'].indexOf(el.get('type')) !== -1;
-    });
-  },
-
-  getAvailableAdditionalIndexes: function () {
-    var indexes = FauxtonAPI.getExtensions('mango:additionalIndexes')[0];
-
-    if (!indexes) {
-      return;
-    }
-
-    return this._availableIndexes.filter(function (el) {
-      return el.get('type').indexOf(indexes.type) !== -1;
-    });
+  getExplainPlan: function() {
+    return this._explainPlan;
   },
 
   dispatch: function (action) {
@@ -131,21 +88,17 @@ Stores.MangoStore = FauxtonAPI.Store.extend({
         this.setQueryIndexCode(action.options);
       break;
 
-      case ActionTypes.MANGO_NEW_QUERY_FIND_CODE_FROM_FIELDS:
-        this.newQueryFindCodeFromFields(action.options);
-      break;
-
       case ActionTypes.MANGO_NEW_QUERY_FIND_CODE:
         this.setQueryFindCode(action.options);
       break;
 
-      case ActionTypes.MANGO_NEW_AVAILABLE_INDEXES:
-        this.setAvailableIndexes(action.options);
-      break;
+      case ActionTypes.MANGO_EXPLAIN_RESULTS:
+        this.setExplainPlan(action.options);
+        break;
 
-      case ActionTypes.MANGO_RESET:
-        this.setLoadingIndexes(action.options);
-      break;
+      case IndexActionTypes.INDEX_RESULTS_CLEAR_RESULTS:
+        this.setExplainPlan(false);
+        break;
     }
 
     this.triggerChange();

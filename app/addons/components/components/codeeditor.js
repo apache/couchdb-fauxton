@@ -41,6 +41,7 @@ export const CodeEditor = React.createClass({
       // these two options create auto-resizeable code editors, with a maximum number of lines
       setHeightToLineCount: false,
       maxLines: 10,
+      minLines: 10,
 
       // optional editor key commands (e.g. specific save action)
       editorCommands: [],
@@ -165,7 +166,8 @@ export const CodeEditor = React.createClass({
     var numLines = this.editor.getSession().getDocument().getLength();
     var maxLines = (numLines > this.props.maxLines) ? this.props.maxLines : numLines;
     this.editor.setOptions({
-      maxLines: maxLines
+      maxLines: maxLines,
+      minLines: this.props.minLines
     });
   },
 

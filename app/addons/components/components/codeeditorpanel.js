@@ -136,6 +136,7 @@ export const CodeEditorPanel = React.createClass({
           showGutter={true}
           ignorableErrors={this.ignorableErrors}
           setHeightToLineCount={true}
+          maxLines={10000}
           blur={this.props.blur}
         />
         <Beautify code={this.state.code} beautifiedCode={this.beautify} />

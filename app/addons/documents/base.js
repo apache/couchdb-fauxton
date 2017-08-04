@@ -222,6 +222,14 @@ FauxtonAPI.registerUrls('mango', {
     }
 
     return 'database/' + db + '/_find' + query;
+  },
+
+  'explain-server': function (db) {
+    return app.host + '/' + db + '/_explain';
+  },
+
+  'explain-apiurl': function (db) {
+    return window.location.origin + '/' + db + '/_explain';
   }
 });
 

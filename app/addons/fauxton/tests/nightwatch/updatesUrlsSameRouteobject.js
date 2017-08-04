@@ -24,7 +24,6 @@ module.exports = {
       .waitForElementVisible('.faux__jsonlink-link', waitTime, false)
       .assert.attributeContains('.faux__jsonlink-link', 'href', newDatabaseName + '/_find')
       .clickWhenVisible('.edit-link')
-      .clickWhenVisible('.fonticon-json')
       .waitForElementVisible('.prettyprint', waitTime, false)
       .waitForElementVisible('.faux__jsonlink-link', waitTime, false)
       .assert.attributeContains('.faux__jsonlink-link', 'href', newDatabaseName + '/_index')
