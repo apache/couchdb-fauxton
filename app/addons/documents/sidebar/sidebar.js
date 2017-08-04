@@ -258,7 +258,8 @@ var DesignDoc = React.createClass({
     sidebarListTypes: React.PropTypes.array.isRequired,
     isExpanded: React.PropTypes.bool.isRequired,
     selectedNavInfo: React.PropTypes.object.isRequired,
-    toggledSections: React.PropTypes.object.isRequired
+    toggledSections: React.PropTypes.object.isRequired,
+    designDocName:  React.PropTypes.string.isRequired
   },
 
   getInitialState: function () {
