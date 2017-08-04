@@ -22,9 +22,7 @@ const { assert, restore} = utils;
 
 
 describe('DesignDoc', () => {
-  let container;
   const database = { id: 'test-db' };
-
   const selectedNavInfo = {
     navItem: 'all-docs',
     designDocName: '',
@@ -48,18 +46,14 @@ describe('DesignDoc', () => {
       designDocName={'doc-$-#-.1'}
       selectedNavInfo={selectedNavInfo}
       toggledSections={{}}
-      designDoc={{}} />, container);
+      designDoc={{}} />);
 
     assert.include(wrapper.find('a.icon .fonticon-plus-circled').at(1).props()['href'], '/doc-%24-%23-.1');
     assert.include(wrapper.find('a.toggle-view .accordion-header').props()['href'], '/doc-%24-%23-.1');
   });
 
   it('check toggle() works when design doc name has special characters', function () {
-    sinon.stub(FauxtonAPI, 'urls').callsFake(
-      (a, b, c, d, e) => {
-        return '' + (a || '') + '/' + (b || '') + '/' + (c || '') + '/' + (d || '') + '/' + (e || '');
-      }
-    );
+    sinon.stub(FauxtonAPI, 'urls');
 
     const toggleStub = sinon.stub();
     const wrapper = mount(<Components.DesignDoc
@@ -70,7 +64,7 @@ describe('DesignDoc', () => {
       designDocName={'id#1'}
       selectedNavInfo={{}}
       toggledSections={{}}
-      designDoc={{}} />, container);
+      designDoc={{}} />);
 
     // NOTE: wrapper.find doesn't work special chars so we use class name instead
     wrapper.find('div.accordion-list-item').simulate('click', {preventDefault: sinon.stub()});
