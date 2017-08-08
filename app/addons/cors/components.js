@@ -17,11 +17,11 @@ import OriginTable from "./components/OriginTable";
 import OriginRow from "./components/OriginRow";
 
 export default {
-  CORSContainer: CORSContainer,
-  OriginInput: OriginInput,
-  Origins: Origins,
-  OriginTable: OriginTable,
-  OriginRow: OriginRow
+  CORSContainer,
+  OriginInput,
+  Origins,
+  OriginTable,
+  OriginRow
 };
 
 

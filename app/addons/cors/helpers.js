@@ -12,13 +12,7 @@
 
 import FauxtonAPI from "../../core/api";
 
-/**
- * Returns true if 'domain' is a valid domain name. Otherwise returns false and shows an error message to the user.
- *
- * @param {string} domain
- * @returns {boolean}
- */
-export function validateDomain(domain) {
+export const validateDomain = (domain) => {
   if (!validateCORSDomain(domain)) {
     FauxtonAPI.addNotification({
       msg: 'Please enter a valid domain, starting with http/https.',
@@ -28,24 +22,13 @@ export function validateDomain(domain) {
     return false;
   }
   return true;
-}
+};
 
-/**
- * Returns true if 'domain' is a valid domain name.
- *
- * @param {string} domain
- * @returns {boolean}
- */
-export function validateCORSDomain (domain) {
+export const validateCORSDomain = (domain) => {
   return (/^https?:\/\/(.+)(:\d{2,5})?$/).test(domain);
 };
 
-/**
- * Formats a URL value.
- * @param {string} url
- * @returns {string}
- */
-export function normalizeUrls (url) {
+export const normalizeUrls = (url) => {
   const el = document.createElement('a');
   el.href = url;
 

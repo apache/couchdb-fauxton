@@ -8,29 +8,31 @@ export default class OriginTable extends Component {
   }
 
   createRows () {
-    return _.map(this.props.origins, function (origin, i) {
+    return this.props.origins.map((origin, i) => {
       return <OriginRow
         updateOrigin={this.props.updateOrigin}
         deleteOrigin={this.props.deleteOrigin}
         key={i} origin={origin} />;
-    }, this);
+    });
   }
 
   render () {
-    if (!this.props.origins) {
+    const {origins, isVisible} = this.props;
+
+    if (!origins) {
       return null;
     }
 
-    if (!this.props.isVisible || this.props.origins.length === 0) {
+    if (!isVisible || origins.length === 0) {
       return null;
     }
 
-    const origins = this.createRows();
+    const originRows = this.createRows();
 
     return (
       <table id="origin-domain-table" className="table table-striped">
         <tbody>
-          {origins}
+          {originRows}
         </tbody>
       </table>
     );

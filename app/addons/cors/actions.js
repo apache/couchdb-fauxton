@@ -97,11 +97,6 @@ export const saveCors = (url, options) => (dispatch) => {
     });
 };
 
-/**
- * Returns a string with error details.
- * @param {Error} error
- * @return {string}
- */
 const errorReason = (error) => {
   return 'Reason: ' + ((error && error.message) || 'n/a');
 };
