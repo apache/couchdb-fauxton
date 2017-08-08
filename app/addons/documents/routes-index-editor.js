@@ -53,7 +53,6 @@ const IndexEditorAndResults = BaseRoute.extend({
     const params = this.createParams(),
           urlParams = params.urlParams,
           docParams = params.docParams,
-          decodeDdoc = ddoc,
           store = IndexResultsStores.indexResultsStore;
 
     // if the user is simply switching the layout style (i.e. metadata, json, or table),
@@ -68,7 +67,7 @@ const IndexEditorAndResults = BaseRoute.extend({
     viewName = viewName.replace(/\?.*$/, '');
     this.indexedDocs = new Documents.IndexCollection(null, {
       database: this.database,
-      design: decodeDdoc,
+      design: ddoc,
       view: viewName,
       params: docParams,
       paging: {
@@ -89,7 +88,7 @@ const IndexEditorAndResults = BaseRoute.extend({
       newView: false,
       database: this.database,
       designDocs: this.designDocs,
-      designDocId: '_design/' + decodeDdoc
+      designDocId: '_design/' + ddoc
     });
 
     SidebarActions.selectNavItem('designDoc', {
