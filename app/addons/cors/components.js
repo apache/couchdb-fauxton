@@ -11,6 +11,7 @@
 // the License.
 
 import CORSContainer from "./components/CORSContainer";
+import CORSScreen from "./components/CORSScreen";
 import OriginInput from "./components/OriginInput";
 import Origins from "./components/Origins";
 import OriginTable from "./components/OriginTable";
@@ -18,6 +19,7 @@ import OriginRow from "./components/OriginRow";
 
 export default {
   CORSContainer,
+  CORSScreen,
   OriginInput,
   Origins,
   OriginTable,

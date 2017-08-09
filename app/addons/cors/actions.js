@@ -79,7 +79,7 @@ export const saveCors = (url, options) => (dispatch) => {
     promises.push(CorsAPI.updateCorsMethods(url, options.node));
   }
 
-  FauxtonAPI.Promise.all(promises).then(() => {
+  return FauxtonAPI.Promise.all(promises).then(() => {
     FauxtonAPI.addNotification({
       msg: 'CORS settings updated.',
       type: 'success',
@@ -101,7 +101,7 @@ const errorReason = (error) => {
   return 'Reason: ' + ((error && error.message) || 'n/a');
 };
 
-const sanitizeOrigins = (origins) => {
+export const sanitizeOrigins = (origins) => {
   if (_.isEmpty(origins)) {
     return '';
   }

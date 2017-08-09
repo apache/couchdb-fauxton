@@ -12,11 +12,6 @@
 
 import 'whatwg-fetch';
 
-/**
- * Fetches the current CORS configuration.
- * @param {string} baseURL
- * @returns {Promise}
- */
 export const fetchCORSConfig = (baseURL) => {
   const configURL = baseURL + '/cors';
   return fetch(configURL, {
@@ -43,11 +38,6 @@ export const fetchCORSConfig = (baseURL) => {
     });
 };
 
-/**
- * Fetches the current Httpd configuration.
- * @param {string} baseURL
- * @returns {Promise}
- */
 export const fetchHttpdConfig = (baseURL) => {
   const configURL = baseURL + '/httpd';
   return fetch(configURL, {
@@ -67,13 +57,6 @@ export const fetchHttpdConfig = (baseURL) => {
     });
 };
 
-/**
- * Updates the 'enable_cors' property of the Httpd configuration.
- * @param {string} baseURL
- * @param {string} node
- * @param {boolean} enableCors
- * @returns {Promise}
- */
 export const updateEnableCorsToHttpd = (baseURL, node, enableCors) => {
   if (!node) {
     throw new Error('node not set');
@@ -97,43 +80,18 @@ export const updateEnableCorsToHttpd = (baseURL, node, enableCors) => {
     });
 };
 
-/**
- * Updates the 'origins' property of the CORS configuration.
- * @param {string} baseURL
- * @param {string} node
- * @param {string} origins A comma separated list of domains
- * @returns {Promise}
- */
 export const updateCorsOrigins = (baseURL, node, origins) => {
   return updateCorsProperty(baseURL, node, 'origins', origins);
 };
 
-/**
- * Updates the 'credentials' property of the CORS configuration with the proper value when enabling CORS.
- * @param {string} baseURL
- * @param {string} node
- * @returns {Promise}
- */
 export const updateCorsCredentials = (baseURL, node) => {
   return updateCorsProperty(baseURL, node, 'credentials', 'true');
 };
 
-/**
- * Updates the 'headers' property of the CORS configuration with the proper value when enabling CORS.
- * @param {string} baseURL
- * @param {string} node
- * @returns {Promise}
- */
 export const updateCorsHeaders = (baseURL, node) => {
   return updateCorsProperty(baseURL, node, 'headers', 'accept, authorization, content-type, origin, referer');
 };
 
-/**
- * Updates the 'methods' property of the CORS configuration with the proper value when enabling CORS.
- * @param {string} baseURL
- * @param {string} node
- * @returns {Promise}
- */
 export const updateCorsMethods = (baseURL, node) => {
   return updateCorsProperty(baseURL, node, 'methods', 'GET, PUT, POST, HEAD, DELETE');
 };
