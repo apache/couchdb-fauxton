@@ -179,6 +179,7 @@ Documents.MangoDocumentCollection = PagingCollection.extend({
   initialize: function (_attr, options) {
     var defaultLimit = FauxtonAPI.constants.MISC.DEFAULT_PAGE_SIZE;
 
+    this._warning = null;
     this.database = options.database;
     this.params = _.extend({limit: defaultLimit}, options.params);
 
@@ -196,6 +197,10 @@ Documents.MangoDocumentCollection = PagingCollection.extend({
 
   url: function () {
     return this.urlRef.apply(this, arguments);
+  },
+
+  warning: function () {
+    return this._warning;
   },
 
   updateSeq: function () {
@@ -286,6 +291,8 @@ Documents.MangoDocumentCollection = PagingCollection.extend({
     var rows = resp.docs;
 
     this.paging.hasNext = this.paging.hasPrevious = false;
+
+    this._warning = resp.warning;
 
     this.viewMeta = {
       total_rows: resp.total_rows,
