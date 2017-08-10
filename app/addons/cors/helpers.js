@@ -11,15 +11,34 @@
 // the License.
 
 import FauxtonAPI from "../../core/api";
-import "./assets/less/cors.less";
-import reducers from "./reducers";
 
-const CORS = FauxtonAPI.addon();
+export const validateDomain = (domain) => {
+  if (!validateCORSDomain(domain)) {
+    FauxtonAPI.addNotification({
+      msg: 'Please enter a valid domain, starting with http/https.',
+      type: 'error',
+      clear: true
+    });
+    return false;
+  }
+  return true;
+};
 
-CORS.initialize = function () {};
+export const validateCORSDomain = (domain) => {
+  return (/^https?:\/\/(.+)(:\d{2,5})?$/).test(domain);
+};
 
-FauxtonAPI.addReducers({
-  cors: reducers
-});
+export const normalizeUrls = (url) => {
+  const el = document.createElement('a');
+  el.href = url;
 
-export default CORS;
+  if (/:/.test(url)) {
+    return el.protocol + '//' + el.host;
+  }
+
+  return el.protocol + '//' + el.hostname;
+};
+
+
+
+
