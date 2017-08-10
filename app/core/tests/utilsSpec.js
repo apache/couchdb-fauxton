@@ -51,6 +51,10 @@ describe('Utils', function () {
     it('encodes special chars', function () {
       assert.equal('foo-bar%2Fbaz', utils.safeURLName('foo-bar/baz'));
     });
+
+    it('encodes an encoded doc', function () {
+      assert.equal('foo-bar%252Fbaz', utils.safeURLName('foo-bar%2Fbaz'));
+    });
   });
 
   describe('isSystemDatabase', function () {
