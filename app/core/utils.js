@@ -67,7 +67,8 @@ const utils = {
   safeURLName: function (name = "") {
     // These special caracters are allowed by couch: _, $, (, ), +, -, and /
     // From them only $ + and / are to be escaped in a URI component.
-    return (/[$+/]/g.test(name)) ? encodeURIComponent(name) : name;
+    // return (/[$+/]/g.test(name)) ? encodeURIComponent(name) : name;
+    return encodeURIComponent(name);
   },
 
   getDocTypeFromId: function (id) {
