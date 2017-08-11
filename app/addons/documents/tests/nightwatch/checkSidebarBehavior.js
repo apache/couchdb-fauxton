@@ -19,8 +19,8 @@ module.exports = {
         newDatabaseName = client.globals.testDatabaseName,
         baseUrl = client.globals.test_settings.launch_url;
     const docNormal = 'ddoc_normal';
-    const docSpecialChars = 'ddoc_with.$pecialcharacters()+-';
-    const docSpecialCharsEncoded = 'ddoc_with.%24pecialcharacters()%2B-';
+    const docSpecialChars = 'ddoc_with.$pecialcharacters';
+    const docSpecialCharsEncoded = 'ddoc_with.%24pecialcharacters';
     client
       .loginToGUI()
       .createDocument('_design/' + docNormal, newDatabaseName)
