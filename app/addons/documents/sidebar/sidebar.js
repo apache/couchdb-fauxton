@@ -358,7 +358,7 @@ var DesignDoc = React.createClass({
       toggleBodyClassNames += ' in';
     }
     var designDocName = this.props.designDocName;
-    var designDocMetaUrl = FauxtonAPI.urls('designDocs', 'app', encodeURIComponent(this.props.database.id), encodeURIComponent(designDocName));
+    var designDocMetaUrl = FauxtonAPI.urls('designDocs', 'app', this.props.database.id, designDocName);
     var metadataRowClass = (this.props.selectedNavInfo.designDocSection === 'metadata') ? 'active' : '';
 
     return (

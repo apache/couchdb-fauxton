@@ -21,7 +21,7 @@ before_script:
   - docker logs couchdb
   - curl http://127.0.0.1:5984
 script:
-  - ./node_modules/.bin/grunt nightwatch
+  - travis_retry ./node_modules/.bin/grunt nightwatch
 after_script:
   - npm run docker:down
 
