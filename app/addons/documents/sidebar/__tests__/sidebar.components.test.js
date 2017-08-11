@@ -35,8 +35,11 @@ describe('DesignDoc', () => {
   });
 
   it('confirm URLs are properly encoded when design doc name has special chars', function () {
-    sinon.stub(FauxtonAPI, 'urls').callsFake((a, b, c, d, e) => {
-      return '' + (a || '') + '/' + (b || '') + '/' + (c || '') + '/' + (d || '') + '/' + (e || '');
+    sinon.stub(FauxtonAPI, 'urls').callsFake((a, b, c, d) => {
+      if (a === 'designDocs') {
+        return '#/database/MOCK/_design/' + encodeURIComponent(c) + '/' + encodeURIComponent(d);
+      }
+      return '' + (a || '') + '/' + (b || '') + '/' + (c || '') + '/' + (d || '');
     });
     const wrapper = mount(<Components.DesignDoc
       database={database}
