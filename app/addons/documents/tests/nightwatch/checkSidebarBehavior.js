@@ -26,7 +26,23 @@ module.exports = {
       .createDocument('_design/' + docNormal, newDatabaseName)
       .createDocument('_design/' + docSpecialChars, newDatabaseName)
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
-      .waitForElementPresent('.nav-list', waitTime, false)
+      .waitForElementPresent('.nav-list', waitTime, false);
+
+      client.source((result) => {
+        let matches = result.value.match(/span title(.*?)\/span/gi);
+        console.log('First matches:', matches.length);
+        matches.map((el) => {
+          console.log('1-FOUND:', el.substr(0, 100));
+        });
+
+        matches = result.value.match(/a href(.*?)\/a/gi);
+        console.log('2nd matches:', matches.length);
+        matches.map((el) => {
+          console.log('2-FOUND:', el.substr(0, 100));
+        });
+      });
+
+      client
       // Verify 'Metadata' subitem is not visible
       .assert.hidden('a[href="#/database/' + newDatabaseName + '/_design/' + docNormal + '/_info"]')
       .assert.hidden('a[href="#/database/' + newDatabaseName + '/_design/' + docSpecialCharsEncoded + '/_info"]')
