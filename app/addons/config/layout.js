@@ -51,7 +51,7 @@ export const ConfigLayout = ({showCors, docURL, node, endpoint, crumbs}) => {
     }
   ];
   const selectedTab = showCors ? 'CORS' : 'Main config';
-  const content = showCors ? <CORSComponents.CORSController/> : <ConfigComponents.ConfigTableController node={node} />;
+  const content = showCors ? <CORSComponents.CORSContainer node={node} url={endpoint}/> : <ConfigComponents.ConfigTableController node={node} />;
   return (
     <div id="dashboard" className="with-sidebar">
       <ConfigHeader

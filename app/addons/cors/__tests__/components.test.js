@@ -10,10 +10,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 import FauxtonAPI from "../../../core/api";
+import * as Helpers from "../helpers";
 import Views from "../components";
-import Actions from "../actions";
-import Resources from "../resources";
-import Stores from "../stores";
 import utils from "../../../../test/mocha/testUtils";
 import React from "react";
 import ReactDOM from "react-dom";
@@ -21,19 +19,11 @@ import sinon from "sinon";
 import { shallow, mount } from 'enzyme';
 
 FauxtonAPI.router = new FauxtonAPI.Router([]);
-const {assert, restore} = utils;
-const corsStore = Stores.corsStore;
+const { assert, restore } = utils;
 
 describe('CORS Components', () => {
 
-  describe('CorsController', () => {
-
-    beforeEach(() => {
-      corsStore._origins = ['http://hello.com'];
-      corsStore._node = 'node2@127.0.0.1';
-      corsStore._isEnabled = true;
-      corsStore._configChanged = true;
-    });
+  describe('CORSContainer tests', () => {
 
     afterEach(() => {
       restore(window.confirm);
@@ -43,7 +33,14 @@ describe('CORS Components', () => {
       const spy = sinon.stub(window, 'confirm');
       spy.returns(false);
 
-      const wrapper = shallow(<Views.CORSController />);
+      const wrapper = shallow(<Views.CORSScreen
+        corsEnabled={true}
+        isAllOrigins={false}
+        origins={['https://localhost']}
+        saveCORS={sinon.stub()}
+        showDeleteDomainConfirmation={sinon.stub()}
+      />);
+
       wrapper.find('.enable-disable .btn').simulate('click');
       assert.ok(spy.calledOnce);
     });
@@ -52,10 +49,13 @@ describe('CORS Components', () => {
       const spy = sinon.stub(window, 'confirm');
       spy.returns(false);
 
-      // Set selected origins to empty
-      corsStore._origins = [];
-
-      const wrapper = shallow(<Views.CORSController />);
+      const wrapper = shallow(<Views.CORSScreen
+        corsEnabled={true}
+        isAllOrigins={true}
+        origins={[]}
+        saveCORS={sinon.stub()}
+        showDeleteDomainConfirmation={sinon.stub()}
+      />);
       wrapper.find('.enable-disable .btn').simulate('click');
       assert.ok(spy.notCalled);
     });
@@ -64,8 +64,15 @@ describe('CORS Components', () => {
       const spy = sinon.stub(window, 'confirm');
       spy.returns(false);
 
-      const wrapper = mount(<Views.CORSController />);
-      wrapper.find('input').at(0).simulate('change', {target: {checked: true, value: 'all'}});
+      const wrapper = mount(<Views.CORSScreen
+        corsEnabled={true}
+        isAllOrigins={false}
+        origins={['http://localhost']}
+        saveCORS={sinon.stub()}
+        showDeleteDomainConfirmation={sinon.stub()}
+        fetchAndLoadCORSOptions={sinon.stub()}
+      />);
+      wrapper.find('input').at(0).simulate('change', { target: { checked: true, value: 'all' } });
       assert.ok(spy.calledOnce);
     });
 
@@ -73,23 +80,42 @@ describe('CORS Components', () => {
       const spy = sinon.stub(window, 'confirm');
       spy.returns(false);
 
-      // Set selected origins to empty
-      corsStore._origins = [];
-
-      const wrapper = mount(<Views.CORSController />);
-      wrapper.find('input').at(0).simulate('change', {target: {checked: true, value: 'all'}});
+      const wrapper = shallow(<Views.CORSScreen
+        corsEnabled={true}
+        isAllOrigins={false}
+        origins={[]}
+        saveCORS={sinon.stub()}
+        showDeleteDomainConfirmation={sinon.stub()}
+      />);
+      wrapper.find('input').at(0).simulate('change', { target: { checked: true, value: 'all' } });
       assert.notOk(spy.calledOnce);
     });
 
     it('shows loading bars', () => {
-      const wrapper = mount(<Views.CORSController />);
-      Actions.toggleLoadingBarsToEnabled(true);
+      const wrapper = mount(<Views.CORSScreen
+        isLoading={true}
+        corsEnabled={true}
+        isAllOrigins={false}
+        origins={[]}
+        saveCORS={sinon.stub()}
+        showDeleteDomainConfirmation={sinon.stub()}
+        fetchAndLoadCORSOptions={sinon.stub()}
+      />);
+
       assert.ok(wrapper.find('.loading-lines').exists());
     });
 
     it('hides loading bars', () => {
-      const wrapper = mount(<Views.CORSController />);
-      Actions.toggleLoadingBarsToEnabled(false);
+      const wrapper = mount(<Views.CORSScreen
+        isLoading={false}
+        corsEnabled={true}
+        isAllOrigins={false}
+        origins={[]}
+        saveCORS={sinon.stub()}
+        showDeleteDomainConfirmation={sinon.stub()}
+        fetchAndLoadCORSOptions={sinon.stub()}
+      />);
+
       assert.notOk(wrapper.find('.loading-lines').exists());
     });
   });
@@ -98,30 +124,29 @@ describe('CORS Components', () => {
     const newOrigin = 'http://new-site.com';
 
     it('calls validates each domain', () => {
-      const spyValidateCORSDomain = sinon.spy(Resources, 'validateCORSDomain');
-      const addOriginStub = sinon.stub();
-      const wrapper = shallow(<Views.OriginInput isVisible={true} addOrigin={addOriginStub}/>);
+      const spyValidateDomain = sinon.spy(Helpers, 'validateDomain');
+      const wrapper = shallow(<Views.OriginInput isVisible={true} addOrigin={sinon.stub()} />);
 
-      wrapper.find('input').simulate('change', {target: {value: newOrigin}});
-      wrapper.find('.btn').simulate('click', {preventDefault: sinon.stub()});
-      assert.ok(spyValidateCORSDomain.calledWith(newOrigin));
+      wrapper.find('input').simulate('change', { target: { value: newOrigin } });
+      wrapper.find('.btn').simulate('click', { preventDefault: sinon.stub() });
+      assert.ok(spyValidateDomain.called);
     });
 
     it('calls addOrigin on add click with valid domain', () => {
       const addOriginSpy = sinon.spy();
-      const wrapper = shallow(<Views.OriginInput isVisible={true} addOrigin={addOriginSpy}/>);
+      const wrapper = mount(<Views.OriginInput isVisible={true} addOrigin={addOriginSpy} />);
 
-      wrapper.find('input').simulate('change', {target: {value: newOrigin}});
-      wrapper.find('.btn').simulate('click', {preventDefault: sinon.stub()});
+      wrapper.find('input').simulate('change', { target: { value: newOrigin } });
+      wrapper.find('.btn').simulate('click', { preventDefault: sinon.stub() });
       assert.ok(addOriginSpy.calledWith(newOrigin));
     });
 
     it('shows notification if origin is not valid', () => {
       const spyAddNotification = sinon.spy(FauxtonAPI, 'addNotification');
-      const wrapper = shallow(<Views.OriginInput isVisible={true} addOrigin={sinon.stub()}/>);
+      const wrapper = shallow(<Views.OriginInput isVisible={true} addOrigin={sinon.stub()} />);
 
-      wrapper.find('input').simulate('change', {target: {value: 'badOrigin'}});
-      wrapper.find('.btn').simulate('click', {preventDefault: sinon.stub()});
+      wrapper.find('input').simulate('change', { target: { value: 'badOrigin' } });
+      wrapper.find('.btn').simulate('click', { preventDefault: sinon.stub() });
       assert.ok(spyAddNotification.calledOnce);
     });
   });
@@ -134,22 +159,23 @@ describe('CORS Components', () => {
     });
 
     it('calls changeOrigin() when you switch from "Select List of Origins" to "Allow All Origins"', () => {
-      const wrapper = shallow(<Views.Origins corsEnabled={true} isAllOrigins={false} originChange={spyChangeOrigin}/>);
+      const wrapper = shallow(<Views.Origins corsEnabled={true} isAllOrigins={false} originChange={spyChangeOrigin} />);
 
-      wrapper.find('input[value="all"]').simulate('change', {target: {checked: true, value: 'all'}});
+      wrapper.find('input[value="all"]').simulate('change', { target: { checked: true, value: 'all' } });
       assert.ok(spyChangeOrigin.calledWith(true));
     });
 
     it('calls changeOrigin() when you switch from "Allow All Origins" to "Select List of Origins"', () => {
-      const wrapper = shallow(<Views.Origins corsEnabled={true} isAllOrigins={true} originChange={spyChangeOrigin}/>);
+      const wrapper = shallow(<Views.Origins corsEnabled={true} isAllOrigins={true} originChange={spyChangeOrigin} />);
 
-      wrapper.find('input[value="selected"]').simulate('change', {target: {checked: true, value: 'selected'}});
+      wrapper.find('input[value="selected"]').simulate('change', { target: { checked: true, value: 'selected' } });
       assert.ok(spyChangeOrigin.calledWith(false));
     });
   });
 
   describe('OriginRow', () => {
     const spyUpdateOrigin = sinon.spy();
+    const spyDeleteOrigin = sinon.spy();
     let origin;
 
     beforeEach(() => {
@@ -158,21 +184,35 @@ describe('CORS Components', () => {
 
     afterEach(() => {
       spyUpdateOrigin.reset();
+      spyDeleteOrigin.reset();
     });
 
-    it('should show confirm modal on delete', () => {
-      const wrapper = mount(<Views.OriginTable updateOrigin={spyUpdateOrigin} isVisible={true} origins={[origin]}/>);
+    it('should call deleteOrigin on delete', () => {
+      const wrapper = mount(<Views.OriginTable
+        updateOrigin={spyUpdateOrigin}
+        deleteOrigin={spyDeleteOrigin}
+        isVisible={true}
+        origins={[origin]} />);
 
       wrapper.find('.fonticon-trash').simulate('click', { preventDefault: sinon.stub() });
-      assert.ok(corsStore.isDeleteDomainModalVisible());
+      assert.ok(spyDeleteOrigin.calledOnce);
     });
 
     it('does not throw error if origins is undefined', () => {
-      mount(<Views.OriginTable updateOrigin={spyUpdateOrigin} isVisible={true} origins={false}/>);
+      mount(<Views.OriginTable
+        updateOrigin={spyUpdateOrigin}
+        deleteOrigin={spyDeleteOrigin}
+        isVisible={true}
+        origins={undefined} />);
     });
 
     it('should change origin to input on edit click, then hide input on 2nd click', () => {
-      const wrapper = mount(<Views.OriginTable updateOrigin={spyUpdateOrigin} isVisible={true} origins={[origin]}/>);
+      const wrapper = mount(<Views.OriginTable
+        updateOrigin={spyUpdateOrigin}
+        deleteOrigin={spyDeleteOrigin}
+        isVisible={true}
+        origins={[origin]} />);
+
       // Text input appears after clicking Edit
       wrapper.find('.fonticon-pencil').simulate('click', { preventDefault: sinon.stub() });
       assert.ok(wrapper.find('input').exists());
@@ -183,28 +223,32 @@ describe('CORS Components', () => {
     });
 
     it('should update origin on update clicked', () => {
-      let updatedOrigin = 'https://updated-origin.com';
+      const updatedOrigin = 'https://updated-origin.com';
       const wrapper = mount(
         <Views.OriginTable
           updateOrigin={spyUpdateOrigin}
-          isVisible={true} origins={[origin]}/>
+          deleteOrigin={spyDeleteOrigin}
+          isVisible={true}
+          origins={[origin]} />
       );
 
       wrapper.find('.fonticon-pencil').simulate('click', { preventDefault: sinon.stub() });
-      wrapper.find('input').simulate('change', {target: {value: updatedOrigin}});
+      wrapper.find('input').simulate('change', { target: { value: updatedOrigin } });
       wrapper.find('.btn').at(0).simulate('click', { preventDefault: sinon.stub() });
       assert.ok(spyUpdateOrigin.calledWith(updatedOrigin));
     });
 
     it('should not update origin on update clicked with bad origin', () => {
-      let updatedOrigin = 'updated-origin';
+      const updatedOrigin = 'updated-origin';
       const wrapper = mount(
         <Views.OriginTable
           updateOrigin={spyUpdateOrigin}
-          isVisible={true} origins={[origin]}/>
+          deleteOrigin={spyDeleteOrigin}
+          isVisible={true}
+          origins={[origin]} />
       );
       wrapper.find('.fonticon-pencil').simulate('click', { preventDefault: sinon.stub() });
-      wrapper.find('input').simulate('change', {target: {value: updatedOrigin}});
+      wrapper.find('input').simulate('change', { target: { value: updatedOrigin } });
       wrapper.find('.btn').at(0).simulate('click', { preventDefault: sinon.stub() });
       assert.notOk(spyUpdateOrigin.calledWith(updatedOrigin));
     });
