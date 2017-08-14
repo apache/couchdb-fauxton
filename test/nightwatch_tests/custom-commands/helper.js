@@ -3,7 +3,7 @@ const request = require('request');
 exports.checkForDocumentCreated = function checkForDocumentCreated (url, timeout, cb) {
 
   const timeOutId = setTimeout(() => {
-    throw new Error('timeout waiting for doc to appear');
+    throw new Error('timeout waiting for doc to appear (' + url + ')');
   }, timeout);
 
   const intervalId = setInterval(() => {

@@ -11,6 +11,7 @@
 // the License.
 
 import app from "../../../app";
+import Helpers from "../../../helpers";
 import FauxtonAPI from "../../../core/api";
 import React from "react";
 import ReactDOM from "react-dom";
@@ -148,14 +149,14 @@ var IndexSection = React.createClass({
     var sortedItems = this.props.items.sort();
 
     return _.map(sortedItems, function (indexName, index) {
-      var href = FauxtonAPI.urls(this.props.urlNamespace, 'app', encodeURIComponent(this.props.database.id), this.props.designDocName);
+      var href = FauxtonAPI.urls(this.props.urlNamespace, 'app', encodeURIComponent(this.props.database.id), encodeURIComponent(this.props.designDocName));
       var className = (this.props.selectedIndex === indexName) ? 'active' : '';
 
       return (
         <li className={className} key={index}>
           <a
             id={this.props.designDocName + '_' + indexName}
-            href={"#/" + href + indexName}
+            href={"#/" + href + encodeURIComponent(indexName)}
             className="toggle-view">
             {indexName}
           </a>
@@ -257,7 +258,8 @@ var DesignDoc = React.createClass({
     sidebarListTypes: React.PropTypes.array.isRequired,
     isExpanded: React.PropTypes.bool.isRequired,
     selectedNavInfo: React.PropTypes.object.isRequired,
-    toggledSections: React.PropTypes.object.isRequired
+    toggledSections: React.PropTypes.object.isRequired,
+    designDocName:  React.PropTypes.string.isRequired
   },
 
   getInitialState: function () {
@@ -319,7 +321,7 @@ var DesignDoc = React.createClass({
     e.preventDefault();
     var newToggleState = !this.props.isExpanded;
     var state = newToggleState ? 'show' : 'hide';
-    $(ReactDOM.findDOMNode(this)).find('#' + this.props.designDocName).collapse(state);
+    $(ReactDOM.findDOMNode(this)).find('#' + Helpers.escapeJQuerySelector(this.props.designDocName)).collapse(state);
     this.props.toggle(this.props.designDocName);
   },
 
@@ -330,13 +332,13 @@ var DesignDoc = React.createClass({
     var addNewLinks = _.reduce(FauxtonAPI.getExtensions('sidebar:links'), function (menuLinks, link) {
       menuLinks.push({
         title: link.title,
-        url: '#' + newUrlPrefix + '/' + link.url + '/' + designDocName,
+        url: '#' + newUrlPrefix + '/' + link.url + '/' + encodeURIComponent(designDocName),
         icon: 'fonticon-plus-circled'
       });
       return menuLinks;
     }, [{
       title: 'New View',
-      url: '#' + FauxtonAPI.urls('new', 'addView', encodeURIComponent(this.props.database.id), designDocName),
+      url: '#' + FauxtonAPI.urls('new', 'addView', encodeURIComponent(this.props.database.id), encodeURIComponent(designDocName)),
       icon: 'fonticon-plus-circled'
     }]);
 
@@ -356,7 +358,7 @@ var DesignDoc = React.createClass({
       toggleBodyClassNames += ' in';
     }
     var designDocName = this.props.designDocName;
-    var designDocMetaUrl = FauxtonAPI.urls('designDocs', 'app', encodeURIComponent(this.props.database.id), designDocName);
+    var designDocMetaUrl = FauxtonAPI.urls('designDocs', 'app', this.props.database.id, designDocName);
     var metadataRowClass = (this.props.selectedNavInfo.designDocSection === 'metadata') ? 'active' : '';
 
     return (
@@ -394,7 +396,7 @@ var DesignDocList = React.createClass({
 
   designDocList: function () {
     return _.map(this.props.designDocs, function (designDoc, key) {
-      var ddName = designDoc.safeId;
+      var ddName = decodeURIComponent(designDoc.safeId);
 
       // only pass down the selected nav info and toggle info if they're relevant for this particular design doc
       var expanded = false,
