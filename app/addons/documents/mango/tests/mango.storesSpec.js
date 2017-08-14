@@ -12,7 +12,6 @@
 
 import FauxtonAPI from "../../../../core/api";
 import Stores from "../mango.stores";
-import Resources from "../../resources";
 import testUtils from "../../../../../test/mocha/testUtils";
 var assert = testUtils.assert;
 var dispatchToken;
@@ -34,63 +33,5 @@ describe('Mango Store', function () {
     it('returns a default query', function () {
       assert.ok(store.getQueryFindCode());
     });
-
-    it('can set new selectors', function () {
-      store.newQueryFindCodeFromFields({fields: ['foo', 'bar']});
-      var res = store.getQueryFindCode();
-      assert.equal(res, JSON.stringify({
-        "selector": {
-          "foo": {"$gt": null},
-          "bar": {"$gt": null}
-        }
-      }, null, '  '));
-    });
-
-    it('indicates that we set another query for the user', function () {
-      assert.notOk(store.getQueryFindCodeChanged());
-      store.newQueryFindCodeFromFields({fields: ['mussman', 'zetti']});
-      assert.ok(store.getQueryFindCodeChanged());
-    });
-
-    it('alters the default query', function () {
-      assert.notOk(store.getQueryFindCodeChanged());
-      store.newQueryFindCodeFromFields({fields: ['mussman', 'zetti']});
-      assert.deepEqual(store.getQueryFindCode(), JSON.stringify({
-        "selector": {
-          "mussman": {"$gt": null},
-          "zetti": {"$gt": null}
-        }
-      }, null, '  '));
-    });
-
-    it('filters querytypes that are not needed', function () {
-
-      var collection = new Resources.MangoIndexCollection([
-        new Resources.MangoIndex({
-          ddoc: null,
-          name: 'emma',
-          type: 'special',
-          def: {fields: [{_id: 'asc'}]}
-        }, {}),
-        new Resources.MangoIndex({
-          ddoc: null,
-          name: 'biene',
-          type: 'json',
-          def: {fields: [{_id: 'desc'}]}
-        }, {}),
-        new Resources.MangoIndex({
-          ddoc: null,
-          name: 'alf',
-          type: 'nickname',
-          def: {fields: [{_id: 'asc'}]}
-        }, {})
-      ], {
-        database: {id: 'databaseId', safeID: function () { return this.id; }},
-        params: {limit: 20}
-      });
-      store._availableIndexes = collection;
-      assert.equal(store.getAvailableQueryIndexes().length, 2);
-    });
-
   });
 });

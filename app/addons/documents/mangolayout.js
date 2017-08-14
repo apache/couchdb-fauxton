@@ -10,7 +10,7 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import React from 'react';
+import React, { Component } from 'react';
 import app from "../../app";
 import ReactPagination from "./pagination/pagination";
 import {Breadcrumbs} from '../components/header-breadcrumbs';
@@ -18,7 +18,10 @@ import {NotificationCenterButton} from '../fauxton/notifications/notifications';
 import {ApiBarWrapper} from '../components/layouts';
 import MangoComponents from "./mango/mango.components";
 import IndexResultsComponents from "./index-results/index-results.components";
+import Stores from "./mango/mango.stores";
+import FauxtonAPI from "../../core/api";
 
+const mangoStore = Stores.mangoStore;
 
 export const RightHeader = ({docURL, endpoint}) => {
   return (
@@ -59,16 +62,22 @@ MangoHeader.defaultProps = {
   crumbs: []
 };
 
-const MangoContent = ({edit, designDocs}) => {
-  const leftContent = edit ?
-    <MangoComponents.MangoIndexEditorController
+export const MangoContent = ({edit, designDocs, explainPlan}) => {
+  const leftContent = edit ? <MangoComponents.MangoIndexEditorController
       description={app.i18n.en_US['mango-descripton-index-editor']}
-    /> :
-    <MangoComponents.MangoQueryEditorController
+    /> : <MangoComponents.MangoQueryEditorController
       description={app.i18n.en_US['mango-descripton']}
       editorTitle={app.i18n.en_US['mango-title-editor']}
       additionalIndexesText={app.i18n.en_US['mango-additional-indexes-heading']}
     />;
+
+  let resultsPage = <IndexResultsComponents.List designDocs={designDocs} />;
+  let mangoFooter = <MangoFooter />;
+
+  if (explainPlan) {
+    resultsPage = <MangoComponents.ExplainPage explainPlan={explainPlan} />;
+    mangoFooter = null;
+  }
 
   return (
     <div id="two-pane-content" className="flex-layout flex-row flex-body">
@@ -77,24 +86,58 @@ const MangoContent = ({edit, designDocs}) => {
       </div>
       <div id="right-content" className="flex-body flex-layout flex-col">
         <div id="dashboard-lower-content" className="flex-body">
-          <IndexResultsComponents.List designDocs={designDocs} />
+          {resultsPage}
         </div>
-        <MangoFooter  />
+        {mangoFooter}
       </div>
     </div>
   );
 };
 
+export class MangoLayout extends Component {
+  constructor (props) {
+    super(props);
+    this.state = this.getStoreState();
+  };
 
-export const MangoLayout = ({edit, docURL, endpoint, crumbs, designDocs}) => {
-  return (
-    <div id="dashboard" className="two-pane flex-layout flex-col">
-      <MangoHeader
-        docURL={docURL}
-        endpoint={endpoint}
-        crumbs={crumbs}
-      />
-    <MangoContent edit={edit} designDocs={designDocs}/>
-    </div>
-  );
+  getStoreState () {
+    return {
+      explainPlan: mangoStore.getExplainPlan()
+    };
+  };
+
+  componentDidMount () {
+    mangoStore.on('change', this.onChange, this);
+  };
+
+  componentWillUnmount () {
+    mangoStore.off('change', this.onChange, this);
+  };
+
+  onChange () {
+    this.setState(this.getStoreState());
+  };
+
+  render () {
+    const {database, edit, docURL, crumbs, designDocs} = this.props;
+    let endpoint = this.props.endpoint;
+
+    if (this.state.explainPlan) {
+      endpoint = FauxtonAPI.urls('mango', 'explain-apiurl', database);
+    }
+
+    return (
+      <div id="dashboard" className="two-pane flex-layout flex-col">
+        <MangoHeader
+          docURL={docURL}
+          endpoint={endpoint}
+          crumbs={crumbs}
+        />
+      <MangoContent
+        edit={edit}
+        designDocs={designDocs}
+        explainPlan={this.state.explainPlan} />
+      </div>
+    );
+  }
 };

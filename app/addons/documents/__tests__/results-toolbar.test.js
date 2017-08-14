@@ -36,11 +36,4 @@ describe('Results Toolbar', () => {
     expect(wrapper.find('.two-sides-toggle-button').length).toBe(1);
     expect(wrapper.find('.document-result-screen__toolbar-create-btn').length).toBe(1);
   });
-
-  it('only renders create button when there are no results', () => {
-    const wrapper = mount(<ResultsToolBar hasResults={false} {...restProps}/>);
-    expect(wrapper.find('.bulk-action-component').length).toBe(0);
-    expect(wrapper.find('.two-sides-toggle-button').length).toBe(0);
-    expect(wrapper.find('.document-result-screen__toolbar-create-btn').length).toBe(1);
-  });
 });

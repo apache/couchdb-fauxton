@@ -136,17 +136,10 @@ export default {
   },
 
   reloadResultsList: function () {
-    if (indexResultsStore.getTypeOfIndex() === 'mango') {
-      return this.newResultsList({
-        collection: indexResultsStore.getCollection(),
-        bulkCollection: indexResultsStore.getBulkDocCollection(),
-        typeOfIndex: 'mango'
-      });
-    }
-
     return this.newResultsList({
       collection: indexResultsStore.getCollection(),
-      bulkCollection: indexResultsStore.getBulkDocCollection()
+      bulkCollection: indexResultsStore.getBulkDocCollection(),
+      typeOfIndex: indexResultsStore.getTypeOfIndex()
     });
   },
 

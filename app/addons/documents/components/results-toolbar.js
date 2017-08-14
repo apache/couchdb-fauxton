@@ -13,6 +13,7 @@ import React from 'react';
 import BulkDocumentHeaderController from "../header/header";
 import Stores from "../sidebar/stores";
 import Components from "../../components/react-components";
+import app from '../../../app';
 
 const {BulkActionComponent} = Components;
 const store = Stores.sidebarStore;
@@ -23,7 +24,7 @@ export class ResultsToolBar extends React.Component {
   }
 
   render () {
-    const dbName = store.getDatabase().id;
+    const database = store.getDatabase();
     const {
       hasResults,
       isListDeletable,
@@ -52,15 +53,23 @@ export class ResultsToolBar extends React.Component {
       bulkHeader = <BulkDocumentHeaderController {...this.props} />;
     }
 
+    let createDocumentLink = null;
+    if (database) {
+      const safeDatabaseId = app.utils.safeURLName(database.id);
+      createDocumentLink = (
+        <div className="document-result-screen__toolbar-flex-container">
+          <a href={`#/database/${safeDatabaseId}/new`} className="btn save document-result-screen__toolbar-create-btn btn-primary">
+            Create Document
+          </a>
+        </div>
+      );
+    }
+
     return (
       <div className="document-result-screen__toolbar">
         {bulkAction}
         {bulkHeader}
-        <div className="document-result-screen__toolbar-flex-container">
-          <a href={`#/database/${dbName}/new`} className="btn save document-result-screen__toolbar-create-btn btn-primary">
-            Create Document
-          </a>
-        </div>
+        {createDocumentLink}
       </div>
     );
   }

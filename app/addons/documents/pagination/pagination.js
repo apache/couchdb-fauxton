@@ -40,7 +40,7 @@ var IndexPaginationController = React.createClass({
     // Since we're migrating away from a paginated result list, don't forget
     // to delete the cached offset used for an improved UX when switching
     // between layouts.
-    Actions.deleteCachedOffset();
+    setTimeout(() => Actions.deleteCachedOffset());
   },
 
   onChange: function () {

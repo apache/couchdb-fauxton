@@ -288,9 +288,9 @@ Documents.MangoDocumentCollection = PagingCollection.extend({
   },
 
   parse: function (resp) {
-    var rows = resp.docs;
+    var rows = [];
 
-    this.paging.hasNext = this.paging.hasPrevious = false;
+    rows = resp.docs;
 
     this._warning = resp.warning;
 
@@ -299,6 +299,8 @@ Documents.MangoDocumentCollection = PagingCollection.extend({
       offset: resp.offset,
       update_seq: resp.update_seq
     };
+
+    this.paging.hasNext = this.paging.hasPrevious = false;
 
     if (this.paging.params.skip > 0) {
       this.paging.hasPrevious = true;

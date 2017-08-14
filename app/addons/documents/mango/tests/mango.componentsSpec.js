@@ -48,26 +48,6 @@ describe('Mango IndexEditor', function () {
     var payload = JSON.parse(editor.getMangoEditor().getEditorValue());
     assert.equal(payload.index.fields[0], '_id');
   });
-
-  it('renders the current database', function () {
-    editor = TestUtils.renderIntoDocument(
-      <Views.MangoIndexEditorController description="foo" />,
-      container
-    );
-    var $el = $(ReactDOM.findDOMNode(editor));
-
-    assert.equal($el.find('.db-title').text(), 'testdb');
-  });
-
-  it('renders a description', function () {
-    editor = TestUtils.renderIntoDocument(
-      <Views.MangoIndexEditorController description="CouchDB Query is great!" />,
-      container
-    );
-    var $el = $(ReactDOM.findDOMNode(editor));
-
-    assert.equal($el.find('.editor-description').text(), 'CouchDB Query is great!');
-  });
 });
 
 describe('Mango QueryEditor', function () {
@@ -81,8 +61,6 @@ describe('Mango QueryEditor', function () {
     MangoActions.setDatabase({
       database: database
     });
-
-    MangoActions.mangoResetIndexList({isLoading: false});
 
     mangoCollection = new Resources.MangoIndexCollection([{
       ddoc: '_design/e4d338e5d6f047749f5399ab998b4fa04ba0c816',
@@ -122,24 +100,6 @@ describe('Mango QueryEditor', function () {
     ReactDOM.unmountComponentAtNode(container);
   });
 
-  it('lists our available indexes', function () {
-    editor = TestUtils.renderIntoDocument(
-      <Views.MangoQueryEditorController description="foo" />,
-      container
-    );
-    var $el = $(ReactDOM.findDOMNode(editor));
-    assert.equal($el.find('.mango-available-indexes').length, 1);
-
-    assert.include(
-      $el.find('.mango-available-indexes').text(),
-      'json: _id, foo, ente'
-    );
-    assert.include(
-      $el.find('.mango-available-indexes').text(),
-      'json: _id'
-    );
-  });
-
   it('has a default query', function () {
     editor = ReactDOM.render(
       <Views.MangoQueryEditorController description="foo" />,
@@ -147,59 +107,5 @@ describe('Mango QueryEditor', function () {
     );
     var json = JSON.parse(editor.getMangoEditor().getEditorValue());
     assert.equal(Object.keys(json.selector)[0], '_id');
-  });
-
-  it('can render a query based on the last defined index', function () {
-    FauxtonAPI.dispatch({
-      type: ActionTypes.MANGO_NEW_QUERY_FIND_CODE_FROM_FIELDS,
-      options: {
-        fields: ['zetti', 'mussmaennchen']
-      }
-    });
-
-    editor = TestUtils.renderIntoDocument(
-      <Views.MangoQueryEditorController description="foo" />,
-      container
-    );
-
-    var json = JSON.parse(editor.getMangoEditor().getEditorValue());
-    assert.equal(Object.keys(json.selector)[0], 'zetti');
-    assert.equal(Object.keys(json.selector)[1], 'mussmaennchen');
-  });
-
-  it('informs the user that it uses a query based on the last defined index', function () {
-    FauxtonAPI.dispatch({
-      type: ActionTypes.MANGO_NEW_QUERY_FIND_CODE_FROM_FIELDS,
-      options: {
-        fields: ['zetti', 'mussmaennchen']
-      }
-    });
-
-    editor = TestUtils.renderIntoDocument(
-      <Views.MangoQueryEditorController description="foo" />,
-      container
-    );
-    var $el = $(ReactDOM.findDOMNode(editor));
-    assert.equal($el.find('.info-changed-query').length, 1);
-  });
-
-  it('renders the current database', function () {
-    editor = TestUtils.renderIntoDocument(
-      <Views.MangoQueryEditorController description="foo" />,
-      container
-    );
-    var $el = $(ReactDOM.findDOMNode(editor));
-
-    assert.equal($el.find('.db-title').text(), 'testdb');
-  });
-
-  it('renders a description', function () {
-    editor = TestUtils.renderIntoDocument(
-      <Views.MangoQueryEditorController description="CouchDB Query is great!" />,
-      container
-    );
-    var $el = $(ReactDOM.findDOMNode(editor));
-
-    assert.equal($el.find('.editor-description').text(), 'CouchDB Query is great!');
   });
 });
