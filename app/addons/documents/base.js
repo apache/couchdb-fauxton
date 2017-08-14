@@ -14,10 +14,12 @@ import app from "../../app";
 import FauxtonAPI from "../../core/api";
 import Documents from "./routes";
 import reducers from "./index-results/reducers";
+import mangoReducers from "./mango/mango.reducers";
 import "./assets/less/documents.less";
 
 FauxtonAPI.addReducers({
-  indexResults: reducers
+  indexResults: reducers,
+  mangoQuery: mangoReducers
 });
 
 function getQueryParam (query) {

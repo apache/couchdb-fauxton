@@ -61,10 +61,10 @@ MangoHeader.defaultProps = {
 
 const MangoContent = ({edit, designDocs}) => {
   const leftContent = edit ?
-    <MangoComponents.MangoIndexEditorController
+    <MangoComponents.MangoIndexEditorContainer
       description={app.i18n.en_US['mango-descripton-index-editor']}
     /> :
-    <MangoComponents.MangoQueryEditorController
+    <MangoComponents.MangoQueryEditorContainer
       description={app.i18n.en_US['mango-descripton']}
       editorTitle={app.i18n.en_US['mango-title-editor']}
       additionalIndexesText={app.i18n.en_US['mango-additional-indexes-heading']}
