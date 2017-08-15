@@ -15,9 +15,9 @@ import FauxtonAPI from "../../../core/api";
 
 const defaultPageSize = FauxtonAPI.constants.MISC.DEFAULT_PAGE_SIZE;
 
-export const fetchIndexList = ({ database, limit = defaultPageSize }) => {
+export const fetchIndexList = (databaseName, limit = defaultPageSize) => {
 
-  const url = FauxtonAPI.urls('mango', 'index-server', database.safeID())
+  const url = FauxtonAPI.urls('mango', 'index-server', encodeURIComponent(databaseName))
     + '?limit=' + encodeURIComponent(limit);
   return fetch(url, {
     headers: {

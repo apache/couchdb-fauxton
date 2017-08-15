@@ -59,15 +59,18 @@ MangoHeader.defaultProps = {
   crumbs: []
 };
 
-const MangoContent = ({edit, designDocs}) => {
+const MangoContent = ({edit, designDocs, databaseName}) => {
+  console.log('MangoContent::databaseName:', databaseName);
   const leftContent = edit ?
     <MangoComponents.MangoIndexEditorContainer
       description={app.i18n.en_US['mango-descripton-index-editor']}
+      databaseName={databaseName}
     /> :
     <MangoComponents.MangoQueryEditorContainer
       description={app.i18n.en_US['mango-descripton']}
       editorTitle={app.i18n.en_US['mango-title-editor']}
       additionalIndexesText={app.i18n.en_US['mango-additional-indexes-heading']}
+      databaseName={databaseName}
     />;
 
   return (
@@ -86,7 +89,7 @@ const MangoContent = ({edit, designDocs}) => {
 };
 
 
-export const MangoLayout = ({edit, docURL, endpoint, crumbs, designDocs}) => {
+export const MangoLayout = ({edit, docURL, endpoint, crumbs, designDocs, databaseName}) => {
   return (
     <div id="dashboard" className="two-pane flex-layout flex-col">
       <MangoHeader
@@ -94,7 +97,7 @@ export const MangoLayout = ({edit, docURL, endpoint, crumbs, designDocs}) => {
         endpoint={endpoint}
         crumbs={crumbs}
       />
-    <MangoContent edit={edit} designDocs={designDocs}/>
+    <MangoContent edit={edit} designDocs={designDocs} databaseName={databaseName}/>
     </div>
   );
 };

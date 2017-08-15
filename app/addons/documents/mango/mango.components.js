@@ -10,19 +10,21 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import app from "../../../app";
-import FauxtonAPI from "../../../core/api";
-import React from "react";
-import Stores from "./mango.stores";
-import Actions from "./mango.actions";
+// import app from "../../../app";
+// import FauxtonAPI from "../../../core/api";
+// import React from "react";
+// import Stores from "./mango.stores";
+// import Actions from "./mango.actions";
+import MangoQueryEditorContainer from "./components/MangoQueryEditorContainer";
+import MangoIndexEditorContainer from "./components/MangoIndexEditorContainer";
 // import ReactComponents from "../../components/react-components";
 // import IndexResultActions from "../index-results/actions";
 // import MangoHelper from "./mango.helper";
 // import "../../../../assets/js/plugins/prettify";
 
 
-var mangoStore = Stores.mangoStore;
-var getDocUrl = app.helpers.getDocUrl;
+// var mangoStore = Stores.mangoStore;
+// var getDocUrl = app.helpers.getDocUrl;
 
 
 
@@ -213,66 +215,66 @@ var getDocUrl = app.helpers.getDocUrl;
 //   }
 // });
 
-var MangoIndexEditorController = React.createClass({
-  getInitialState: function () {
-    return this.getStoreState();
-  },
+// var MangoIndexEditorController = React.createClass({
+//   getInitialState: function () {
+//     return this.getStoreState();
+//   },
 
-  getStoreState: function () {
-    return {
-      queryIndexCode: mangoStore.getQueryIndexCode(),
-      database: mangoStore.getDatabase(),
-    };
-  },
+//   getStoreState: function () {
+//     return {
+//       queryIndexCode: mangoStore.getQueryIndexCode(),
+//       database: mangoStore.getDatabase(),
+//     };
+//   },
 
-  onChange: function () {
-    this.setState(this.getStoreState());
-  },
+//   onChange: function () {
+//     this.setState(this.getStoreState());
+//   },
 
-  componentDidMount: function () {
-    mangoStore.on('change', this.onChange, this);
-  },
+//   componentDidMount: function () {
+//     mangoStore.on('change', this.onChange, this);
+//   },
 
-  componentWillUnmount: function () {
-    mangoStore.off('change', this.onChange);
-  },
+//   componentWillUnmount: function () {
+//     mangoStore.off('change', this.onChange);
+//   },
 
-  getMangoEditor: function () {
-    return this.refs.mangoEditor;
-  },
+//   getMangoEditor: function () {
+//     return this.refs.mangoEditor;
+//   },
 
-  render: function () {
-    return (
-      <MangoEditor
-        ref="mangoEditor"
-        description={this.props.description}
-        dbName={this.state.database.id}
-        onSubmit={this.saveQuery}
-        title="Index"
-        docs={getDocUrl('MANGO_INDEX')}
-        exampleCode={this.state.queryIndexCode}
-        confirmbuttonText="Create Index" />
-    );
-  },
+//   render: function () {
+//     return (
+//       <MangoEditor
+//         ref="mangoEditor"
+//         description={this.props.description}
+//         dbName={this.state.database.id}
+//         onSubmit={this.saveQuery}
+//         title="Index"
+//         docs={getDocUrl('MANGO_INDEX')}
+//         exampleCode={this.state.queryIndexCode}
+//         confirmbuttonText="Create Index" />
+//     );
+//   },
 
-  saveQuery: function (event) {
-    event.preventDefault();
+//   saveQuery: function (event) {
+//     event.preventDefault();
 
-    if (this.getMangoEditor().hasErrors()) {
-      FauxtonAPI.addNotification({
-        msg:  'Please fix the Javascript errors and try again.',
-        type: 'error',
-        clear: true
-      });
-      return;
-    }
+//     if (this.getMangoEditor().hasErrors()) {
+//       FauxtonAPI.addNotification({
+//         msg:  'Please fix the Javascript errors and try again.',
+//         type: 'error',
+//         clear: true
+//       });
+//       return;
+//     }
 
-    Actions.saveQuery({
-      database: this.state.database,
-      queryCode: this.getMangoEditor().getEditorValue()
-    });
-  }
-});
+//     Actions.saveQuery({
+//       database: this.state.database,
+//       queryCode: this.getMangoEditor().getEditorValue()
+//     });
+//   }
+// });
 
 var Views = {
   MangoIndexEditorContainer: MangoIndexEditorContainer,

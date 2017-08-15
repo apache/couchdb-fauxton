@@ -11,10 +11,7 @@ export default class MangoEditor extends Component {
 
   constructor(props) {
     super(props);
-  }
-
-  getDefaultProps() {
-    return {
+    this.defaultProps = {
       changedQuery: null,
       availableIndexes: null,
       additionalIndexes: null

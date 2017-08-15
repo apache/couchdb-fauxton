@@ -110,16 +110,18 @@ export default {
       });
   },
 
-  getIndexList: function (options) {
+  getIndexList: function ({ databaseName }) {
     return (dispatch) => {
-      MangoAPI.fetchIndexList(options.database).then((res) => {
+      MangoAPI.fetchIndexList(databaseName).then((res) => {
+        console.log('fetchIndexList response is ', res);
         dispatch(this.newAvailableIndexes({ indexList: res.indexes }));
         dispatch(this.mangoResetIndexList({ isLoading: false }));
       }).catch((error) => {
-        const errorMsg = 'Bad request!';
+        console.log('fetchIndexList:', error);
+        let errorMsg = 'Faild to retrieve index list.';
         if (error.message && error.message.indexOf('(not_found)') != -1) {
           //const databaseName = options.indexList.database.safeID();
-          const databaseName = options.database;
+          const databaseName = databaseName;
           errorMsg = `The ${databaseName} database does not exist.`;
           FauxtonAPI.navigate('/', {trigger: true});
         }

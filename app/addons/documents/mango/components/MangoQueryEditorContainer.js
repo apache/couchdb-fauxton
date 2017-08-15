@@ -1,17 +1,45 @@
 import { connect } from 'react-redux';
+import FauxtonAPI from "../../../../core/api";
 import MangoQueryEditor from './MangoQueryEditor';
-import {
-  getIndexList
-} from '../mango.actions';
+import Helpers from '../mango.helper';
+import Actions from '../mango.actions';
 
-const mapStateToProps = ({ mangoQuery }, ownProps) => {
-  console.log('mapStateToProps::state:', mangoQuery);
+const getAvailableQueryIndexes = ({ availableIndexes }) => {
+  if (!availableIndexes) {
+    return [];
+  }
+  return availableIndexes.filter(function ({ type }) {
+    // if (el && el.type) {
+      return ['json', 'special'].indexOf(type) !== -1;
+    // }
+    // return false;
+  });
+};
+
+const getAvailableAdditionalIndexes = ({ additionalIndexes }) => {
+  if (!additionalIndexes) {
+    return [];
+  }
+  const indexes = FauxtonAPI.getExtensions('mango:additionalIndexes')[0];
+  if (!indexes) {
+    return;
+  }
+
+  return additionalIndexes.filter(function (el) {
+    return el.get('type').indexOf(indexes.type) !== -1;
+  });
+};
+
+const mapStateToProps = (state, ownProps) => {
+  const mangoQuery = state.mangoQuery;
+  console.log('MangoQueryEditor::mapStateToProps::state:', state);
   return {
-    database: mangoQuery.database,
-    queryFindCode: mangoQuery.queryFindCode,
+    // database: mangoQuery.database,
+    databaseName: ownProps.databaseName,
+    queryFindCode: Helpers.formatCode(mangoQuery.queryFindCode),
     queryFindCodeChanged: mangoQuery.queryFindCodeChanged,
-    availableIndexes: mangoQuery.availableIndexes,
-    additionalIndexes: mangoQuery.additionalIndexes,
+    availableIndexes: getAvailableQueryIndexes(mangoQuery),
+    additionalIndexes: getAvailableAdditionalIndexes(mangoQuery),
     isLoading: mangoQuery.isLoading,
     description: ownProps.description,
     editorTitle: ownProps.editorTitle,
@@ -27,7 +55,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     // },
 
     fetchAndLoadIndexList: () => {
-      dispatch(getIndexList(ownProps.options));
+      console.log('Loading indexes...', ownProps);
+      console.log(Actions.getIndexList);
+      dispatch(Actions.getIndexList({ databaseName: ownProps.databaseName }));
     },
 
     // showDeleteDomainConfirmation: (domain) => {

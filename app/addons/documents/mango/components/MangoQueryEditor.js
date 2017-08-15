@@ -15,6 +15,7 @@ import "../../../../../assets/js/plugins/prettify";
 import app from "../../../../app";
 import FauxtonAPI from "../../../../core/api";
 import IndexResultActions from "../../index-results/actions";
+import MangoEditor from "./MangoEditor";
 
 const getDocUrl = app.helpers.getDocUrl;
 
@@ -22,9 +23,12 @@ export default class MangoQueryEditor extends Component {
 
   constructor(props) {
     super(props);
+    console.log('MangoQueryEditor::constructors:', props);
   }
 
   componentDidMount() {
+    console.log('MangoQueryEditor:::mounted');
+    prettyPrint();
     this.props.fetchAndLoadIndexList();
   }
 
@@ -47,10 +51,10 @@ export default class MangoQueryEditor extends Component {
     prettyPrint();
   }
 
-  componentDidMount () {
-    prettyPrint();
-    // mangoStore.on('change', this.onChange, this);
-  }
+  // componentDidMount () {
+
+  //   // mangoStore.on('change', this.onChange, this);
+  // }
 
   // componentWillUnmount () {
   //   mangoStore.off('change', this.onChange);
@@ -73,8 +77,9 @@ export default class MangoQueryEditor extends Component {
       <MangoEditor
         ref="mangoEditor"
         description={this.props.description}
-        dbName={this.props.database.id}
-        onSubmit={this.runQuery}
+        // dbName={this.props.database.id}
+        dbName={this.props.databaseName}
+        onSubmit={(ev) => {this.runQuery(ev);}}
         title={this.props.editorTitle}
         additionalIndexesText={this.props.additionalIndexesText}
         docs={getDocUrl('MANGO_SEARCH')}
@@ -111,7 +116,7 @@ MangoQueryEditor.propTypes = {
   additionalIndexesText: React.PropTypes.string.isRequired,
   queryFindCode: React.PropTypes.string.isRequired,
   queryFindCodeChanged: React.PropTypes.bool,
-  database: React.PropTypes.object.isRequired,
+  databaseName: React.PropTypes.string.isRequired,
   availableIndexes: React.PropTypes.arrayOf(React.PropTypes.object),
   additionalIndexes: React.PropTypes.arrayOf(React.PropTypes.object),
   isLoading: React.PropTypes.bool,

@@ -87,6 +87,8 @@ const MangoIndexEditorAndQueryEditor = FauxtonAPI.RouteObject.extend({
       'allDocs', 'app', this.database.safeID(), '?limit=' + FauxtonAPI.constants.DATABASES.DOCUMENT_LIMIT
     );
 
+    const fetchUrl = '/' + this.database.safeID() + '/_find';
+
     const crumbs = [
       {name: database, link: url},
       {name: app.i18n.en_US['mango-title-editor']}
@@ -97,6 +99,9 @@ const MangoIndexEditorAndQueryEditor = FauxtonAPI.RouteObject.extend({
       docURL={FauxtonAPI.constants.DOC_URLS.MANGO_SEARCH}
       endpoint={mangoResultCollection.urlRef('query-apiurl', '')}
       edit={false}
+
+      databaseName={this.databaseName}
+      fetchUrl={fetchUrl}
     />;
   },
 
@@ -144,6 +149,8 @@ const MangoIndexEditorAndQueryEditor = FauxtonAPI.RouteObject.extend({
       endpoint={mangoIndexCollection.urlRef('index-apiurl', '')}
       edit={true}
       designDocs={designDocs}
+
+      databaseName={this.databaseName}
     />;
   }
 });

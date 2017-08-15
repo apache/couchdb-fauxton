@@ -308,7 +308,10 @@ Stores.IndexResultsStore = FauxtonAPI.Store.extend({
 
     if (doc.get('def') && doc.get('def').fields) {
 
-      header = MangoHelper.getIndexName(doc);
+      header = MangoHelper.getIndexName({
+        def: doc.get('def'),
+        type: doc.get('type')
+      });
 
       return {
         content: this.getMangoDocContent(doc),
