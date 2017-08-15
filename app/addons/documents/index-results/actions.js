@@ -51,7 +51,7 @@ export default {
       FauxtonAPI.addNotification({
         msg: msg,
         clear:  false,
-        type: 'error'
+        type: 'info'
       });
     }
   },

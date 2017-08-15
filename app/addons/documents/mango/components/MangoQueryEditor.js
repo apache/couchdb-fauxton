@@ -14,58 +14,35 @@ import React, { Component } from "react";
 import "../../../../../assets/js/plugins/prettify";
 import app from "../../../../app";
 import FauxtonAPI from "../../../../core/api";
-import IndexResultActions from "../../index-results/actions";
-// import MangoEditor from "./MangoEditor";
+import ReactComponents from "../../../components/react-components";
 
+const PaddedBorderedBox = ReactComponents.PaddedBorderedBox;
+const CodeEditorPanel = ReactComponents.CodeEditorPanel;
 const getDocUrl = app.helpers.getDocUrl;
 
 export default class MangoQueryEditor extends Component {
 
   constructor(props) {
     super(props);
-    console.log('MangoQueryEditor::constructors:', props);
   }
 
   componentDidMount() {
-    console.log('MangoQueryEditor:::mounted');
     prettyPrint();
-    // this.props.fetchAndLoadIndexList();
   }
-
-  // getStoreState: function () {
-  //   return {
-  //     queryCode: mangoStore.getQueryFindCode(),
-  //     database: mangoStore.getDatabase(),
-  //     changedQuery: mangoStore.getQueryFindCodeChanged(),
-  //     availableIndexes: mangoStore.getAvailableQueryIndexes(),
-  //     additionalIndexes: mangoStore.getAvailableAdditionalIndexes(),
-  //     isLoading: mangoStore.getLoadingIndexes()
-  //   };
-  // },
-
-  // onChange: function () {
-  //   this.setState(this.getStoreState());
-  // },
 
   componentDidUpdate () {
     prettyPrint();
   }
 
-  // componentDidMount () {
+  getEditorValue () {
+    return this.refs.codeEditor.getValue();
+  }
 
-  //   // mangoStore.on('change', this.onChange, this);
-  // }
-
-  // componentWillUnmount () {
-  //   mangoStore.off('change', this.onChange);
-  // },
-
-  getMangoEditor () {
-    return this.refs.codeEditor;
+  editorHasErrors () {
+    return this.refs.codeEditor.getEditor().hasErrors();
   }
 
   editor() {
-    const manageIndexURL = '#' + FauxtonAPI.urls('mango', 'index-app', encodeURIComponent(this.props.databaseName));
     return (
       <div className="mango-editor-wrapper">
         <form className="form-horizontal" onSubmit={(ev) => {this.runQuery(ev);}}>
@@ -82,7 +59,7 @@ export default class MangoQueryEditor extends Component {
               <button type="submit" id="create-index-btn" className="btn btn-primary btn-space">Run Query</button>
               <button type="button" id="explain-btn" className="btn btn-secondary btn-space"
                 onClick={(ev) => {this.runExplain(ev);} }>Explain</button>
-              <a className="edit-link" href={manageIndexURL}>manage indexes</a>
+              <a className="edit-link" style={{} } onClick={(ev) => {this.manageIndexes(ev);}}>manage indexes</a>
             </div>
           </div>
         </form>
@@ -100,28 +77,10 @@ export default class MangoQueryEditor extends Component {
     }
 
     return this.editor();
-    // (
-    //   <MangoEditor
-    //     ref="mangoEditor"
-    //     // description={this.props.description}
-    //     // dbName={this.props.database.id}
-    //     dbName={this.props.databaseName}
-    //     onSubmit={(ev) => {this.runQuery(ev);}}
-    //     title={this.props.editorTitle}
-    //     // additionalIndexesText={this.props.additionalIndexesText}
-    //     docs={getDocUrl('MANGO_SEARCH')}
-    //     exampleCode={this.props.queryFindCode} //mangoStore.getQueryFindCode(),
-    //     changedQuery={this.props.queryFindCodeChanged} //mangoStore.getQueryFindCodeChanged(),
-    //     onExplainQuery={(ev) => {this.runExplain(ev);} }
-    //     //availableIndexes={this.props.availableIndexes} //mangoStore.getAvailableQueryIndexes(),
-    //     //additionalIndexes={this.props.additionalIndexes} //mangoStore.getAvailableAdditionalIndexes(),
-    //     //confirmbuttonText="Run Query"
-    //     />
-    // );
   }
 
   notifyOnQueryError() {
-    if (this.getMangoEditor().hasErrors()) {
+    if (this.editorHasErrors()) {
       FauxtonAPI.addNotification({
         msg:  'Please fix the Javascript errors and try again.',
         type: 'error',
@@ -133,6 +92,15 @@ export default class MangoQueryEditor extends Component {
     return false;
   }
 
+  manageIndexes(event) {
+    event.preventDefault();
+
+    this.props.manageIndexes();
+
+    const manageIndexURL = '#' + FauxtonAPI.urls('mango', 'index-app', encodeURIComponent(this.props.databaseName));
+    FauxtonAPI.navigate(manageIndexURL);
+  }
+
   runExplain(event) {
     event.preventDefault();
 
@@ -141,9 +109,8 @@ export default class MangoQueryEditor extends Component {
     }
 
     this.props.runExplainQuery({
-      database: this.state.database,
-      //queryCode: this.getMangoEditor().getEditorValue()
-      queryCode: this.getMangoEditor().getValue()
+      databaseName: this.props.databaseName,
+      queryCode: this.getEditorValue()
     });
   }
 
@@ -154,9 +121,9 @@ export default class MangoQueryEditor extends Component {
       return;
     }
 
-    IndexResultActions.runMangoFindQuery({
+    this.props.runQuery({
       database: this.props.database,
-      queryCode: this.getMangoEditor().getValue()
+      queryCode: this.getEditorValue()
     });
   }
 }
@@ -169,8 +136,5 @@ MangoQueryEditor.propTypes = {
   queryFindCodeChanged: React.PropTypes.bool,
   databaseName: React.PropTypes.string.isRequired,
   runExplainQuery: React.PropTypes.func.isRequired,
-  // availableIndexes: React.PropTypes.arrayOf(React.PropTypes.object),
-  // additionalIndexes: React.PropTypes.arrayOf(React.PropTypes.object),
-  // isLoading: React.PropTypes.bool,
-  // fetchAndLoadIndexList: React.PropTypes.func.isRequired,
+  manageIndexes: React.PropTypes.func.isRequired,
 };

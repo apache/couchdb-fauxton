@@ -11,21 +11,42 @@
 // the License.
 
 import 'whatwg-fetch';
+import app from "../../../app";
 import FauxtonAPI from "../../../core/api";
 
-const defaultPageSize = FauxtonAPI.constants.MISC.DEFAULT_PAGE_SIZE;
+export const fetchQueryExplain = (databaseName, queryCode) => {
+  const url = FauxtonAPI.urls('mango', 'explain-server', databaseName);
 
-export const fetchIndexList = (databaseName, limit = defaultPageSize) => {
-
-  const url = FauxtonAPI.urls('mango', 'index-server', encodeURIComponent(databaseName))
-    + '?limit=' + encodeURIComponent(limit);
   return fetch(url, {
     headers: {
       'Accept': 'application/json',
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json; charset=utf-8'
     },
     credentials: 'include',
-    method: 'GET'
+    method: 'POST',
+    body: queryCode
+  })
+    .then((res) => res.json())
+    .then((json) => {
+      if (json.error) {
+        throw new Error('(' + json.error + ') ' + json.reason);
+      }
+      return json;
+    });
+};
+
+export const createIndex = (databaseName, indexCode) => {
+  const url = FauxtonAPI.urls('mango', 'index-server',
+    app.utils.safeURLName(databaseName));
+
+  return fetch(url, {
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json; charset=utf-8'
+    },
+    credentials: 'include',
+    method: 'POST',
+    body: indexCode
   })
     .then((res) => res.json())
     .then((json) => {

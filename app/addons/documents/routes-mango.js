@@ -21,7 +21,7 @@ import PaginationActions from "./pagination/actions";
 import Documents from "./shared-resources";
 import MangoActions from "./mango/mango.actions";
 import SidebarActions from "./sidebar/actions";
-import {MangoLayout} from './mangolayout';
+import {MangoLayoutContainer} from './mangolayout';
 
 const MangoIndexEditorAndQueryEditor = FauxtonAPI.RouteObject.extend({
   selectedHeader: 'Databases',
@@ -82,7 +82,7 @@ const MangoIndexEditorAndQueryEditor = FauxtonAPI.RouteObject.extend({
       {name: app.i18n.en_US['mango-title-editor']}
     ];
 
-    return <MangoLayout
+    return <MangoLayoutContainer
       database={database}
       crumbs={crumbs}
       docURL={FauxtonAPI.constants.DOC_URLS.MANGO_SEARCH}
@@ -131,7 +131,7 @@ const MangoIndexEditorAndQueryEditor = FauxtonAPI.RouteObject.extend({
       {name: app.i18n.en_US['mango-indexeditor-title']}
     ];
 
-    return <MangoLayout
+    return <MangoLayoutContainer
       showIncludeAllDocs={false}
       crumbs={crumbs}
       docURL={FauxtonAPI.constants.DOC_URLS.MANGO_INDEX}

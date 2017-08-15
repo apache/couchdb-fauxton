@@ -1,8 +1,24 @@
+// Licensed under the Apache License, Version 2.0 (the "License"); you may not
+// use this file except in compliance with the License. You may obtain a copy of
+// the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+// WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+// License for the specific language governing permissions and limitations under
+// the License.
+
 import React, { Component } from "react";
+import "../../../../../assets/js/plugins/prettify";
 import app from "../../../../app";
 import FauxtonAPI from "../../../../core/api";
-// import MangoEditor from "./MangoEditor";
+import ReactComponents from "../../../components/react-components";
 
+const PaddedBorderedBox = ReactComponents.PaddedBorderedBox;
+const CodeEditorPanel = ReactComponents.CodeEditorPanel;
+const ConfirmButton = ReactComponents.ConfirmButton;
 const getDocUrl = app.helpers.getDocUrl;
 
 export default class MangoIndexEditor extends Component {
@@ -12,18 +28,26 @@ export default class MangoIndexEditor extends Component {
   }
 
   componentDidMount() {
-    //this.props.fetchAndLoadIndexList();
+    prettyPrint();
   }
 
-  getMangoEditor () {
-    return this.refs.codeEditor;
+  componentDidUpdate () {
+    prettyPrint();
+  }
+
+  getEditorValue () {
+    return this.refs.codeEditor.getValue();
+  }
+
+  editorHasErrors () {
+    return this.refs.codeEditor.getEditor().hasErrors();
   }
 
   editor() {
     const editQueryURL = '#' + FauxtonAPI.urls('mango', 'query-app', encodeURIComponent(this.props.databaseName));
     return (
       <div className="mango-editor-wrapper">
-        <form className="form-horizontal" onSubmit={(ev) => {this.saveQuery(ev);}}>
+        <form className="form-horizontal" onSubmit={(ev) => {this.saveIndex(ev);}}>
           <PaddedBorderedBox>
             <CodeEditorPanel
               id="query-field"
@@ -50,7 +74,7 @@ export default class MangoIndexEditor extends Component {
   saveIndex (event) {
     event.preventDefault();
 
-    if (this.getMangoEditor().hasErrors()) {
+    if (this.editorHasErrors()) {
       FauxtonAPI.addNotification({
         msg:  'Please fix the Javascript errors and try again.',
         type: 'error',
@@ -59,20 +83,14 @@ export default class MangoIndexEditor extends Component {
       return;
     }
 
-    // Actions.saveQuery({
-    //   database: this.props.database,
-    //   queryCode: this.getMangoEditor().getEditorValue()
-    // });
-
     this.props.saveIndex({
-      database: this.props.database,
-      queryCode: this.getMangoEditor().getValue(),
+      databaseName: this.props.databaseName,
+      indexCode: this.getEditorValue(),
     });
   }
 }
 
 MangoIndexEditor.propTypes = {
-  // description: React.PropTypes.string.isRequired,
   databaseName: React.PropTypes.string.isRequired,
   saveIndex: React.PropTypes.func.isRequired,
   queryIndexCode: React.PropTypes.string.isRequired

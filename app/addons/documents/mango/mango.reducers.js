@@ -29,9 +29,7 @@ const initialState = {
   queryFindCode: defaultQueryFindCode,
   queryIndexCode: defaultQueryIndexCode,
   queryFindCodeChanged: false,
-  // availableIndexes: [],
-  // getLoadingIndexes: true,
-  // database: ''
+  explainPlan: undefined
 };
 
 export default function mangoquery(state = initialState, action) {
@@ -62,36 +60,19 @@ export default function mangoquery(state = initialState, action) {
         queryIndexCode: options.code
       };
 
-    // case ActionTypes.MANGO_NEW_QUERY_FIND_CODE_FROM_FIELDS:
-    //   return newQueryFindCodeFromFields(state, options);
+    case ActionTypes.MANGO_SHOW_EXPLAIN_RESULTS:
+      return {
+        ...state,
+        explainPlan: options.explainPlan
+      };
 
-    // case ActionTypes.MANGO_NEW_AVAILABLE_INDEXES:
-    //   return {
-    //     ...state,
-    //     availableIndexes: options.indexList
-    //   };
+    case ActionTypes.MANGO_HIDE_EXPLAIN_RESULTS:
+      return {
+        ...state,
+        explainPlan: false
+      };
 
     default:
       return state;
   }
 };
-
-// const newQueryFindCodeFromFields = (state, { fields }) => {
-//   const queryCode = JSON.parse(JSON.stringify(state.queryFindCode));
-
-//   if (!fields) {
-//     return state;
-//   }
-
-//   const selectorContent = fields.reduce(function (acc, field) {
-//     acc[field] = { "$gt": null };
-//     return acc;
-//   }, {});
-
-//   queryCode.selector = selectorContent;
-//   return {
-//     ...state,
-//     queryFindCode: queryCode,
-//     queryFindCodeChanged: true
-//   };
-// };

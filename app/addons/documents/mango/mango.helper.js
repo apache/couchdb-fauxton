@@ -12,34 +12,11 @@
 
 import FauxtonAPI from "../../../core/api";
 
-// function getIndexName (docModel) {
-//   var nameArray = [],
-//       indexes;
-//   // nameArray = def.fields.reduce(function (acc, el, i) {
-//   nameArray = docModel.get('def').fields.reduce(function (acc, el, i) {
-//     if (i === 0) {
-//       acc.push(docModel.get('type') + ': ' + Object.keys(el)[0]);
-//     } else {
-//       acc.push(Object.keys(el)[0]);
-//     }
-
-//     return acc;
-//   }, []);
-
-//   if (!nameArray.length) {
-//     indexes = FauxtonAPI.getExtensions('mango:additionalIndexes')[0];
-//     nameArray = indexes.createHeader(docModel);
-//   }
-
-//   return nameArray.join(', ');
-// }
-
 const getIndexName = ({def, type}) => {
   var nameArray = [],
       indexes;
 
   nameArray = def.fields.reduce(function (acc, el, i) {
-  // nameArray = docModel.get('def').fields.reduce(function (acc, el, i) {
     if (i === 0) {
       acc.push(type + ': ' + Object.keys(el)[0]);
     } else {
@@ -64,5 +41,4 @@ const formatCode = (code) => {
 export default {
   getIndexName: getIndexName,
   formatCode: formatCode
-  // mango.: indexName
 };

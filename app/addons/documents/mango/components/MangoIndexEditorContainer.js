@@ -1,11 +1,21 @@
+// Licensed under the Apache License, Version 2.0 (the "License"); you may not
+// use this file except in compliance with the License. You may obtain a copy of
+// the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+// WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+// License for the specific language governing permissions and limitations under
+// the License.
+
 import { connect } from 'react-redux';
 import MangoIndexEditor from './MangoIndexEditor';
 import Helpers from '../mango.helper';
-// import Actions from '../mango.actions';
+import Actions from '../mango.actions';
 
 const mapStateToProps = ({ mangoQuery }, ownProps) => {
-  console.log('MangoIndexEditor::mapStateToProps::state:', mangoQuery);
-  console.log('MangoIndexEditor::ownProps:', ownProps);
   return {
     description: ownProps.description,
     databaseName: ownProps.databaseName,
@@ -13,25 +23,11 @@ const mapStateToProps = ({ mangoQuery }, ownProps) => {
   };
 };
 
-const mapDispatchToProps = (dispatch/*, ownProps*/) => {
+const mapDispatchToProps = (dispatch) => {
   return {
-    saveQuery: (options) => {
-      // dispatch(showLoadingBars());
-      //dispatch(Actions.saveQuery(options));
-      console.log('saveQuery::NOT_IMPLEMENTED::', options, dispatch);
+    saveIndex: (options) => {
+      dispatch(Actions.saveIndex(options));
     }
-
-    // fetchAndLoadIndexList: () => {
-    //   dispatch(getIndexList(ownProps.options));
-    // },
-
-    // showDeleteDomainConfirmation: (domain) => {
-    //   dispatch(showDomainDeleteConfirmation(domain));
-    // },
-
-    // hideDeleteDomainConfirmation: () => {
-    //   dispatch(hideDomainDeleteConfirmation());
-    // }
   };
 };
 

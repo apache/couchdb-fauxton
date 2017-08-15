@@ -11,6 +11,7 @@
 // the License.
 
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import app from "../../app";
 import ReactPagination from "./pagination/pagination";
 import {Breadcrumbs} from '../components/header-breadcrumbs';
@@ -18,10 +19,7 @@ import {NotificationCenterButton} from '../fauxton/notifications/notifications';
 import {ApiBarWrapper} from '../components/layouts';
 import MangoComponents from "./mango/mango.components";
 import IndexResultsComponents from "./index-results/index-results.components";
-import Stores from "./mango/mango.stores";
 import FauxtonAPI from "../../core/api";
-
-const mangoStore = Stores.mangoStore;
 
 export const RightHeader = ({docURL, endpoint}) => {
   return (
@@ -63,7 +61,6 @@ MangoHeader.defaultProps = {
 };
 
 export const MangoContent = ({edit, designDocs, explainPlan, databaseName}) => {
-  console.log('MangoContent::databaseName:', databaseName);
   const leftContent = edit ?
     <MangoComponents.MangoIndexEditorContainer
       description={app.i18n.en_US['mango-descripton-index-editor']}
@@ -99,35 +96,16 @@ export const MangoContent = ({edit, designDocs, explainPlan, databaseName}) => {
   );
 };
 
-export class MangoLayout extends Component {
+class MangoLayout extends Component {
   constructor (props) {
     super(props);
-    this.state = this.getStoreState();
-  };
-
-  getStoreState () {
-    return {
-      explainPlan: mangoStore.getExplainPlan()
-    };
-  };
-
-  componentDidMount () {
-    mangoStore.on('change', this.onChange, this);
-  };
-
-  componentWillUnmount () {
-    mangoStore.off('change', this.onChange, this);
-  };
-
-  onChange () {
-    this.setState(this.getStoreState());
   };
 
   render () {
     const {database, edit, docURL, crumbs, designDocs, databaseName} = this.props;
     let endpoint = this.props.endpoint;
 
-    if (this.state.explainPlan) {
+    if (this.props.explainPlan) {
       endpoint = FauxtonAPI.urls('mango', 'explain-apiurl', database);
     }
 
@@ -141,9 +119,19 @@ export class MangoLayout extends Component {
       <MangoContent
         edit={edit}
         designDocs={designDocs}
-        explainPlan={this.state.explainPlan}
+        explainPlan={this.props.explainPlan}
         databaseName={databaseName} />
       </div>
     );
   }
 };
+
+const mapStateToProps = ({mangoQuery}) => {
+  return {
+    explainPlan: mangoQuery.explainPlan
+  };
+};
+
+export const MangoLayoutContainer = connect(
+  mapStateToProps
+)(MangoLayout);

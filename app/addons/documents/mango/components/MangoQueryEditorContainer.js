@@ -1,5 +1,18 @@
+// Licensed under the Apache License, Version 2.0 (the "License"); you may not
+// use this file except in compliance with the License. You may obtain a copy of
+// the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+// WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+// License for the specific language governing permissions and limitations under
+// the License.
+
 import { connect } from 'react-redux';
 import FauxtonAPI from "../../../../core/api";
+import IndexResultActions from "../../index-results/actions";
 import MangoQueryEditor from './MangoQueryEditor';
 import Helpers from '../mango.helper';
 import Actions from '../mango.actions';
@@ -9,10 +22,7 @@ const getAvailableQueryIndexes = ({ availableIndexes }) => {
     return [];
   }
   return availableIndexes.filter(function ({ type }) {
-    // if (el && el.type) {
       return ['json', 'special'].indexOf(type) !== -1;
-    // }
-    // return false;
   });
 };
 
@@ -47,26 +57,21 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-const mapDispatchToProps = (dispatch, ownProps) => {
+const mapDispatchToProps = (dispatch/*, ownProps*/) => {
   return {
-    // saveCORS: (options) => {
-    //   dispatch(showLoadingBars());
-    //   dispatch(saveCors(ownProps.url, options));
-    // },
-
-    fetchAndLoadIndexList: () => {
-      console.log('Loading indexes...', ownProps);
-      console.log(Actions.getIndexList);
-      dispatch(Actions.getIndexList({ databaseName: ownProps.databaseName }));
+    runExplainQuery: (options) => {
+      dispatch(Actions.runExplainQuery(options));
     },
 
-    // showDeleteDomainConfirmation: (domain) => {
-    //   dispatch(showDomainDeleteConfirmation(domain));
-    // },
+    runQuery: (options) => {
+      dispatch(Actions.hideQueryExplain());
+      IndexResultActions.runMangoFindQuery(options);
+    },
 
-    // hideDeleteDomainConfirmation: () => {
-    //   dispatch(hideDomainDeleteConfirmation());
-    // }
+    manageIndexes: () => {
+      dispatch(Actions.hideQueryExplain());
+    }
+
   };
 };
 
