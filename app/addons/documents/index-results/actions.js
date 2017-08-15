@@ -45,6 +45,17 @@ export default {
     });
   },
 
+  notifyOfWarnings: function (options) {
+    var msg = options.collection.warning && options.collection.warning();
+    if (msg) {
+      FauxtonAPI.addNotification({
+        msg: msg,
+        clear:  false,
+        type: 'error'
+      });
+    }
+  },
+
   newResultsList: function (options) {
     this.clearResults();
 
@@ -87,6 +98,8 @@ export default {
   },
 
   newMangoResultsList: function (options) {
+    this.notifyOfWarnings(options);
+
     FauxtonAPI.dispatch({
       type: ActionTypes.INDEX_RESULTS_NEW_RESULTS,
       options: options
@@ -123,17 +136,10 @@ export default {
   },
 
   reloadResultsList: function () {
-    if (indexResultsStore.getTypeOfIndex() === 'mango') {
-      return this.newResultsList({
-        collection: indexResultsStore.getCollection(),
-        bulkCollection: indexResultsStore.getBulkDocCollection(),
-        typeOfIndex: 'mango'
-      });
-    }
-
     return this.newResultsList({
       collection: indexResultsStore.getCollection(),
-      bulkCollection: indexResultsStore.getBulkDocCollection()
+      bulkCollection: indexResultsStore.getBulkDocCollection(),
+      typeOfIndex: indexResultsStore.getTypeOfIndex()
     });
   },
 

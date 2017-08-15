@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import app from "../../../../app";
 import FauxtonAPI from "../../../../core/api";
-import MangoEditor from "./MangoEditor";
+// import MangoEditor from "./MangoEditor";
 
 const getDocUrl = app.helpers.getDocUrl;
 
@@ -16,24 +16,38 @@ export default class MangoIndexEditor extends Component {
   }
 
   getMangoEditor () {
-    return this.refs.mangoEditor;
+    return this.refs.codeEditor;
   }
 
-  render () {
+  editor() {
+    const editQueryURL = '#' + FauxtonAPI.urls('mango', 'query-app', encodeURIComponent(this.props.databaseName));
     return (
-      <MangoEditor
-        ref="mangoEditor"
-        description={this.props.description}
-        dbName={this.props.databaseName}
-        onSubmit={(ev) => {this.saveQuery(ev);}}
-        title="Index"
-        docs={getDocUrl('MANGO_INDEX')}
-        exampleCode={this.props.queryIndexCode}
-        confirmbuttonText="Create Index" />
+      <div className="mango-editor-wrapper">
+        <form className="form-horizontal" onSubmit={(ev) => {this.saveQuery(ev);}}>
+          <PaddedBorderedBox>
+            <CodeEditorPanel
+              id="query-field"
+              ref="codeEditor"
+              title="Index"
+              docLink={getDocUrl('MANGO_INDEX')}
+              defaultCode={this.props.queryIndexCode} />
+          </PaddedBorderedBox>
+          <div className="padded-box">
+            <div className="control-group">
+              <ConfirmButton text="Create index" id="create-index-btn" showIcon={false} />
+              <a className="edit-link" href={editQueryURL}>edit query</a>
+            </div>
+          </div>
+        </form>
+      </div>
     );
   }
 
-  saveQuery (event) {
+  render () {
+    return this.editor();
+  }
+
+  saveIndex (event) {
     event.preventDefault();
 
     if (this.getMangoEditor().hasErrors()) {
@@ -50,16 +64,16 @@ export default class MangoIndexEditor extends Component {
     //   queryCode: this.getMangoEditor().getEditorValue()
     // });
 
-    this.props.saveQuery({
+    this.props.saveIndex({
       database: this.props.database,
-      queryCode: this.getMangoEditor().getEditorValue(),
+      queryCode: this.getMangoEditor().getValue(),
     });
   }
 }
 
 MangoIndexEditor.propTypes = {
-  description: React.PropTypes.string.isRequired,
+  // description: React.PropTypes.string.isRequired,
   databaseName: React.PropTypes.string.isRequired,
-  saveQuery: React.PropTypes.func.isRequired,
+  saveIndex: React.PropTypes.func.isRequired,
   queryIndexCode: React.PropTypes.string.isRequired
 };

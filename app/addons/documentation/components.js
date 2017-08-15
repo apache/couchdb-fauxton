@@ -20,7 +20,7 @@ const docLinks = [
   },
   {
     title: 'CouchDB Official Documentation — Offline',
-    link: '/_utils/docs/contents.html',
+    link: '/_utils/docs/index.html',
     iconClassName: 'couchdb-icon'
   },
   {

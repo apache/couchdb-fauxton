@@ -33,7 +33,7 @@
       header {
         font-weight: bold;
         position: relative;
-        padding: 20px;
+        padding: 5px 10px;
         background-color: @docHeaderBG;
         border-bottom: 1px solid @docHeaderBorderBottom;
         border-left: 1px solid @docHeaderOtherBorders;
@@ -41,18 +41,24 @@
         border-top: 1px solid @docHeaderOtherBorders;
         .header-doc-id {
           color: @docHeaderDocId;
-          margin-left: 10px;
+          margin-left: 0;
+        }
+        .header-keylabel {
+          margin-right: 10px;
+        }
+        .header-keylabel:empty
+        {
+          display:none;
         }
         .header-keylabel,
         .fonticon-pencil {
           color: @docHeaderLabels;
         }
         .doc-edit-symbol {
-          top: -3px;
           position: relative;
         }
         .fonticon-pencil {
-          font-size: 20px;
+          font-size: 16px;
         }
         .fonticon-pencil:hover {
           color: @hoverHighlight;
@@ -75,7 +81,7 @@
     }
   }
   .checkbox.inline {
-    padding-top: 32px;
+    padding-top: 17px;
     padding-left: 0;
     label {
       padding-left: 23px; // 7px to the right-border + 16px around

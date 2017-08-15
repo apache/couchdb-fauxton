@@ -44,6 +44,7 @@ Stores.IndexResultsStore = FauxtonAPI.Store.extend({
 
     this._tableViewSelectedFields = [];
     this._isPrioritizedEnabled = false;
+    this._explain = false;
 
     this._tableSchema = [];
     this._selectedLayout = Constants.LAYOUT_ORIENTATION.METADATA;
@@ -198,6 +199,10 @@ Stores.IndexResultsStore = FauxtonAPI.Store.extend({
 
     if (!this.getIsMetadataView() && !this.isIncludeDocsEnabled() && !this.getIsMangoResults()) {
       this._selectedLayout = Constants.LAYOUT_ORIENTATION.METADATA;
+    }
+
+    if (this.getIsMangoIndexResults()) {
+      this._selectedLayout = Constants.LAYOUT_ORIENTATION.JSON;
     }
 
     this._cachedSelected = [];
@@ -751,7 +756,11 @@ Stores.IndexResultsStore = FauxtonAPI.Store.extend({
   },
 
   getIsMangoResults: function () {
-    return this._typeOfIndex === 'mango';
+    return this._typeOfIndex === 'mango' || this._typeOfIndex === 'mango-index';
+  },
+
+  getIsMangoIndexResults: function () {
+    return this._typeOfIndex === 'mango-index';
   },
 
   getIsPrioritizedEnabled: function () {

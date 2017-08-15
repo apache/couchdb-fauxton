@@ -358,7 +358,6 @@ var ResultsScreen = React.createClass({
           isListDeletable={this.props.isListDeletable}
           data={this.props.results}
           isLoading={this.props.isLoading}
-
           removeItem={this.props.removeItem}
           isChecked={this.props.allDocumentsSelected}
           hasSelectedItem={this.props.hasSelectedItem}
@@ -402,8 +401,7 @@ var ResultsScreen = React.createClass({
 
   componentDidUpdate: function () {
     prettyPrint();
-  },
-
+  }
 });
 
 

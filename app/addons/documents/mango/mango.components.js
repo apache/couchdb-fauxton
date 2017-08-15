@@ -17,6 +17,7 @@
 // import Actions from "./mango.actions";
 import MangoQueryEditorContainer from "./components/MangoQueryEditorContainer";
 import MangoIndexEditorContainer from "./components/MangoIndexEditorContainer";
+import ExplainPage from "./components/ExplainPage";
 // import ReactComponents from "../../components/react-components";
 // import IndexResultActions from "../index-results/actions";
 // import MangoHelper from "./mango.helper";
@@ -276,9 +277,8 @@ import MangoIndexEditorContainer from "./components/MangoIndexEditorContainer";
 //   }
 // });
 
-var Views = {
-  MangoIndexEditorContainer: MangoIndexEditorContainer,
-  MangoQueryEditorContainer: MangoQueryEditorContainer
+export default {
+  MangoIndexEditorContainer,
+  MangoQueryEditorContainer,
+  ExplainPage
 };
-
-export default Views;

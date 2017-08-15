@@ -29,8 +29,8 @@ const initialState = {
   queryFindCode: defaultQueryFindCode,
   queryIndexCode: defaultQueryIndexCode,
   queryFindCodeChanged: false,
-  availableIndexes: [],
-  getLoadingIndexes: true,
+  // availableIndexes: [],
+  // getLoadingIndexes: true,
   // database: ''
 };
 
@@ -62,36 +62,36 @@ export default function mangoquery(state = initialState, action) {
         queryIndexCode: options.code
       };
 
-    case ActionTypes.MANGO_NEW_QUERY_FIND_CODE_FROM_FIELDS:
-      return newQueryFindCodeFromFields(state, options);
+    // case ActionTypes.MANGO_NEW_QUERY_FIND_CODE_FROM_FIELDS:
+    //   return newQueryFindCodeFromFields(state, options);
 
-    case ActionTypes.MANGO_NEW_AVAILABLE_INDEXES:
-      return {
-        ...state,
-        availableIndexes: options.indexList
-      };
+    // case ActionTypes.MANGO_NEW_AVAILABLE_INDEXES:
+    //   return {
+    //     ...state,
+    //     availableIndexes: options.indexList
+    //   };
 
     default:
       return state;
   }
 };
 
-const newQueryFindCodeFromFields = (state, { fields }) => {
-  const queryCode = JSON.parse(JSON.stringify(state.queryFindCode));
+// const newQueryFindCodeFromFields = (state, { fields }) => {
+//   const queryCode = JSON.parse(JSON.stringify(state.queryFindCode));
 
-  if (!fields) {
-    return state;
-  }
+//   if (!fields) {
+//     return state;
+//   }
 
-  const selectorContent = fields.reduce(function (acc, field) {
-    acc[field] = { "$gt": null };
-    return acc;
-  }, {});
+//   const selectorContent = fields.reduce(function (acc, field) {
+//     acc[field] = { "$gt": null };
+//     return acc;
+//   }, {});
 
-  queryCode.selector = selectorContent;
-  return {
-    ...state,
-    queryFindCode: queryCode,
-    queryFindCodeChanged: true
-  };
-};
+//   queryCode.selector = selectorContent;
+//   return {
+//     ...state,
+//     queryFindCode: queryCode,
+//     queryFindCodeChanged: true
+//   };
+// };

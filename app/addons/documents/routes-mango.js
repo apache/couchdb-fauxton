@@ -62,14 +62,6 @@ const MangoIndexEditorAndQueryEditor = FauxtonAPI.RouteObject.extend({
       }
     });
 
-    const mangoIndexList = new Resources.MangoIndexCollection(null, {
-      database: this.database,
-      params: null,
-      paging: {
-        pageSize: pageSize
-      }
-    });
-
     SidebarActions.selectNavItem('mango-query');
 
     IndexResultsActions.newMangoResultsList({
@@ -77,10 +69,6 @@ const MangoIndexEditorAndQueryEditor = FauxtonAPI.RouteObject.extend({
       textEmptyIndex: 'No Results',
       typeOfIndex: 'mango',
       bulkCollection: new Resources.BulkDeleteDocCollection([], { databaseId: this.database.safeID() }),
-    });
-
-    MangoActions.getIndexList({
-      indexList: mangoIndexList
     });
 
     const url = FauxtonAPI.urls(
@@ -95,6 +83,7 @@ const MangoIndexEditorAndQueryEditor = FauxtonAPI.RouteObject.extend({
     ];
 
     return <MangoLayout
+      database={database}
       crumbs={crumbs}
       docURL={FauxtonAPI.constants.DOC_URLS.MANGO_SEARCH}
       endpoint={mangoResultCollection.urlRef('query-apiurl', '')}
@@ -130,7 +119,7 @@ const MangoIndexEditorAndQueryEditor = FauxtonAPI.RouteObject.extend({
     IndexResultsActions.newResultsList({
       collection: mangoIndexCollection,
       bulkCollection: new Resources.MangoBulkDeleteDocCollection([], { databaseId: this.database.safeID() }),
-      typeOfIndex: 'mango'
+      typeOfIndex: 'mango-index'
     });
 
     const url = FauxtonAPI.urls(
