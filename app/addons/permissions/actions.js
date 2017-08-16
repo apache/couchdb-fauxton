@@ -28,9 +28,12 @@ export const receivedPermissions = json => {
 };
 
 export const fetchPermissions = url => dispatch => {
-  return fetch(url, { headers: { 'Accept': 'application/json' }})
-    .then(res => res.json())
-    .then(json => dispatch(receivedPermissions(json)));
+  return fetch(url, {
+    headers: {'Accept': 'application/json' },
+    credentials: 'include',
+  })
+  .then(res => res.json())
+  .then(json => dispatch(receivedPermissions(json)));
 };
 
 export const setPermissionOnObject = (p, section, type, value) => {
