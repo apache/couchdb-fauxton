@@ -30,7 +30,7 @@ export const receivedPermissions = json => {
 export const fetchPermissions = url => dispatch => {
   return fetch(url, {
     headers: {'Accept': 'application/json' },
-    credentials: 'include',
+    credentials: 'include'
   })
   .then(res => res.json())
   .then(json => dispatch(receivedPermissions(json)));
