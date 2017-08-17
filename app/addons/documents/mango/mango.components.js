@@ -18,6 +18,7 @@ import Actions from "./mango.actions";
 import ReactComponents from "../../components/react-components";
 import IndexResultActions from "../index-results/actions";
 import "../../../../assets/js/plugins/prettify";
+import ReactSelect from "react-select";
 
 var mangoStore = Stores.mangoStore;
 var getDocUrl = app.helpers.getDocUrl;
@@ -34,7 +35,8 @@ var MangoQueryEditorController = React.createClass({
   getStoreState: function () {
     return {
       queryCode: mangoStore.getQueryFindCode(),
-      database: mangoStore.getDatabase()
+      database: mangoStore.getDatabase(),
+      history: mangoStore.getHistory()
     };
   },
 
@@ -78,7 +80,9 @@ var MangoQueryEditorController = React.createClass({
         docs={getDocUrl('MANGO_SEARCH')}
         exampleCode={this.state.queryCode}
         onExplainQuery={this.runExplain}
-        changedQuery={this.state.changedQuery} />
+        history={this.state.history}
+        onHistorySelected={this.historySelected}
+        />
     );
   },
 
@@ -119,6 +123,10 @@ var MangoQueryEditorController = React.createClass({
       database: this.state.database,
       queryCode: this.getMangoEditor().getEditorValue()
     });
+  },
+
+  historySelected: function(selectedItem) {
+    this.getMangoEditor().setEditorValue(selectedItem.value);
   }
 });
 
@@ -127,6 +135,18 @@ var MangoEditor = React.createClass({
     return (
       <div className="mango-editor-wrapper">
         <form className="form-horizontal" onSubmit={this.props.onSubmit}>
+          <div className="padded-box">
+            <ReactSelect
+                className="mango-history"
+                options={this.props.history}
+                ref="history"
+                placeholder="Query history"
+                searchable={false}
+                clearable={false}
+                autosize={false}
+                onChange={this.props.onHistorySelected}
+                />
+          </div>
           <PaddedBorderedBox>
             <CodeEditorPanel
               id="query-field"
@@ -145,6 +165,10 @@ var MangoEditor = React.createClass({
         </form>
       </div>
     );
+  },
+
+  setEditorValue: function (value) {
+    return this.refs.field.getEditor().setValue(value);
   },
 
   getEditorValue: function () {

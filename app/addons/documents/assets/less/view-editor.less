@@ -64,6 +64,25 @@
   }
 }
 
+.mango-history {
+  width: inherit;
+  overflow: visible;
+
+  div {
+    z-index: 100;
+  }
+
+  .mango-history-entry {
+    background-color: @queryHistoryBGColor;
+    color: @queryHistoryColor;
+
+    &.is-selected, &.is-focused {
+      background-color: @brandHighlight;
+      color: @queryHistoryBGColor;
+    }
+  }
+}
+
 // 940px grid without margin
 // -------------------------
 @gridColumnWidthNoMargin:         60px;
