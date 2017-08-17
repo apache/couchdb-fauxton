@@ -137,7 +137,7 @@ var MangoEditor = React.createClass({
         <form className="form-horizontal" onSubmit={this.props.onSubmit}>
           <div className="padded-box">
             <ReactSelect
-                className="mango-history"
+                className="mango-select"
                 options={this.props.history}
                 ref="history"
                 placeholder="Query history"
@@ -168,7 +168,7 @@ var MangoEditor = React.createClass({
   },
 
   setEditorValue: function (value) {
-    return this.refs.field.getEditor().setValue(value);
+    return this.getEditor().setValue(value);
   },
 
   getEditorValue: function () {
@@ -189,6 +189,18 @@ var MangoIndexEditor = React.createClass({
     return (
       <div className="mango-editor-wrapper">
         <form className="form-horizontal" onSubmit={this.props.onSubmit}>
+          <div className="padded-box">
+            <ReactSelect
+                className="mango-select"
+                options={this.props.templates}
+                ref="templates"
+                placeholder="Examples"
+                searchable={false}
+                clearable={false}
+                autosize={false}
+                onChange={this.props.onTemplateSelected}
+                />
+          </div>
           <PaddedBorderedBox>
             <CodeEditorPanel
               id="query-field"
@@ -206,6 +218,10 @@ var MangoIndexEditor = React.createClass({
         </form>
       </div>
     );
+  },
+
+  setEditorValue: function (value) {
+    return this.getEditor().setValue(value);
   },
 
   getEditorValue: function () {
@@ -230,6 +246,7 @@ var MangoIndexEditorController = React.createClass({
     return {
       queryIndexCode: mangoStore.getQueryIndexCode(),
       database: mangoStore.getDatabase(),
+      templates: mangoStore.getQueryIndexTemplates()
     };
   },
 
@@ -249,6 +266,10 @@ var MangoIndexEditorController = React.createClass({
     return this.refs.mangoIndexEditor;
   },
 
+  templateSelected: function(selectedItem) {
+    this.getMangoEditor().setEditorValue(selectedItem.value);
+  },
+
   render: function () {
     return (
       <MangoIndexEditor
@@ -258,6 +279,8 @@ var MangoIndexEditorController = React.createClass({
         onSubmit={this.saveIndex}
         title="Index"
         docs={getDocUrl('MANGO_INDEX')}
+        templates={this.state.templates}
+        onTemplateSelected={this.templateSelected}
         exampleCode={this.state.queryIndexCode} />
     );
   },

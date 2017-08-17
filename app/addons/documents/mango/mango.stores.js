@@ -14,13 +14,7 @@ import app from "../../../app";
 import FauxtonAPI from "../../../core/api";
 import ActionTypes from "./mango.actiontypes";
 import IndexActionTypes from "../index-results/actiontypes";
-
-var defaultQueryIndexCode = {
-  "index": {
-    "fields": ["_id"]
-  },
-  "type" : "json"
-};
+import constants from "./mango.constants";
 
 var defaultQueryFindCode = {
   "selector": {
@@ -36,15 +30,11 @@ Stores.MangoStore = FauxtonAPI.Store.extend({
 
   initialize: function () {
     this.setHistoryKey('default');
-    this._queryIndexCode = defaultQueryIndexCode;
+    this.queryIndexTemplates = [];
   },
 
   getQueryIndexCode: function () {
-    return this.formatCode(this._queryIndexCode);
-  },
-
-  setQueryIndexCode: function (options) {
-    this._queryIndexCode = options.code;
+    return this.getQueryIndexTemplates()[0].value;
   },
 
   getQueryFindCode: function () {
@@ -80,7 +70,7 @@ Stores.MangoStore = FauxtonAPI.Store.extend({
     this._historyKey = key + '_queryhistory';
   },
 
-  createHistoryEntry: function(queryObject) {
+  createSelectItem: function(queryObject) {
     // ensure we're working with a deserialized query object
     const object = typeof queryObject === "string" ? JSON.parse(queryObject) : queryObject;
 
@@ -90,21 +80,21 @@ Stores.MangoStore = FauxtonAPI.Store.extend({
     return {
       label: singleLineValue,
       value: multiLineValue,
-      className: 'mango-history-entry'
+      className: 'mango-select-entry'
     };
   },
 
   addQueryHistory: function (value, label) {
     var history = this.getHistory();
 
-    const historyEntry = this.createHistoryEntry(value);
+    const historyEntry = this.createSelectItem(value);
     historyEntry.label = label || historyEntry.label;
 
     // remove existing entry if it exists
     var indexOfExisting = history.findIndex(i => i.value === historyEntry.value);
     if (indexOfExisting > -1) {
       history.splice(indexOfExisting, 1);
-    }
+  }
 
     // insert item at head of array
     history.splice(0, 0, historyEntry);
@@ -118,11 +108,29 @@ Stores.MangoStore = FauxtonAPI.Store.extend({
   },
 
   getDefaultHistory: function () {
-    return [this.createHistoryEntry(defaultQueryFindCode)];
+    return [this.createSelectItem(defaultQueryFindCode)];
   },
 
   getHistory: function () {
     return app.utils.localStorageGet(this.getHistoryKey()) || this.getDefaultHistory();
+  },
+
+  addQueryIndexTemplate: function (value, label) {
+    const templateItem = this.createSelectItem(value);
+    templateItem.label = label || templateItem.label;
+
+    var existing = this.queryIndexTemplates.find(i => i.value === templateItem.value);
+    if (!existing) {
+      this.queryIndexTemplates.push(templateItem);
+    }
+  },
+
+  getQueryIndexTemplates: function () {
+    if (!this.queryIndexTemplates.length) {
+      constants.INDEX_TEMPLATES.forEach(i => this.addQueryIndexTemplate(i.code, i.label));
+    }
+
+    return this.queryIndexTemplates;
   },
 
   dispatch: function (action) {
@@ -132,8 +140,8 @@ Stores.MangoStore = FauxtonAPI.Store.extend({
         this.setDatabase(action.options);
       break;
 
-      case ActionTypes.MANGO_NEW_QUERY_CREATE_INDEX_CODE:
-        this.setQueryIndexCode(action.options);
+      case ActionTypes.MANGO_NEW_QUERY_CREATE_INDEX_TEMPLATE:
+        this.addQueryIndexTemplate(action.options.code, action.options.label);
       break;
 
       case ActionTypes.MANGO_NEW_QUERY_FIND_CODE:
@@ -151,7 +159,6 @@ Stores.MangoStore = FauxtonAPI.Store.extend({
 
     this.triggerChange();
   }
-
 });
 
 Stores.mangoStore = new Stores.MangoStore();
