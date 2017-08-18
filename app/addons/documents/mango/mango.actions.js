@@ -13,7 +13,7 @@
 import app from "../../../app";
 import FauxtonAPI from "../../../core/api";
 import ActionTypes from "./mango.actiontypes";
-import IndexResultActions from "../index-results/actions";
+import * as IndexResultActions from "../index-results/apis/fetch";
 import * as MangoAPI from "./mango.api";
 
 export default {
@@ -52,7 +52,7 @@ export default {
     };
   },
 
-  saveIndex: function ({ databaseName, indexCode }) {
+  saveIndex: function ({ databaseName, indexCode, fetchParams }) {
     FauxtonAPI.addNotification({
       msg: 'Saving index for query...',
       type: 'info',
@@ -60,14 +60,13 @@ export default {
     });
 
     return (dispatch) => {
-      MangoAPI.createIndex(databaseName, indexCode)
+      return MangoAPI.createIndex(databaseName, indexCode)
         .then(() => {
           const runQueryURL = '#' + FauxtonAPI.urls('mango', 'query-app',
             app.utils.safeURLName(databaseName));
 
-          console.log(dispatch);
-
-          IndexResultActions.reloadResultsList();
+          const queryIndexes = (params) => { return MangoAPI.fetchIndexes(databaseName, params); };
+          dispatch(IndexResultActions.fetchDocs(queryIndexes, fetchParams, {}));
 
           FauxtonAPI.addNotification({
             msg: 'Index is ready for querying. <a href="' + runQueryURL + '">Run a Query.</a>',
@@ -92,7 +91,7 @@ export default {
 
   runExplainQuery: function ({ databaseName, queryCode }) {
     return (dispatch) => {
-      MangoAPI.fetchQueryExplain(databaseName, queryCode)
+      return MangoAPI.fetchQueryExplain(databaseName, queryCode)
         .then((explainPlan) => {
           dispatch(this.showQueryExplain({ explainPlan }));
         }).catch(() => {

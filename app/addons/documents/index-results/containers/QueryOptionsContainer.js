@@ -10,6 +10,7 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+import React from 'react';
 import { connect } from 'react-redux';
 import QueryOptions from '../components/queryoptions/QueryOptions';
 import { changeLayout, resetState } from '../apis/base';
@@ -99,7 +100,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       dispatch(queryOptionsToggleVisibility(newVisibility));
     },
     queryOptionsExecute: (queryOptionsParams, perPage) => {
-      dispatch(queryOptionsExecute(ownProps.fetchUrl, queryOptionsParams, perPage));
+      //dispatch(queryOptionsExecute(ownProps.fetchUrl, queryOptionsParams, perPage));
+      dispatch(queryOptionsExecute(ownProps.queryDocs, queryOptionsParams, perPage));
     },
     queryOptionsFilterOnlyDdocs: () => {
       dispatch(queryOptionsFilterOnlyDdocs());
@@ -113,7 +115,13 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   };
 };
 
-export default connect (
+const QueryOptionsContainer = connect (
   mapStateToProps,
   mapDispatchToProps
 )(QueryOptions);
+
+export default QueryOptionsContainer;
+
+QueryOptionsContainer.propTypes = {
+  queryDocs: React.PropTypes.func.isRequired
+};

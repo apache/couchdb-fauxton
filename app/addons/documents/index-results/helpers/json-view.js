@@ -11,16 +11,29 @@
 // the License.
 
 import { hasBulkDeletableDoc, getDocUrl } from "./shared-helpers";
+import MangoHelper from "../../mango/mango.helper";
 
-export const getJsonViewData = (docs, { databaseName, typeOfIndex }) => {
-  // expand on this when refactoring views and mango to use redux
+export const getJsonViewData = (docs, { databaseName, docType }) => {
+
+  // expand on this when refactoring views to use redux
   const stagedResults = docs.map((doc) => {
+    if (docType === "MangoIndex") {
+      return {
+        header: MangoHelper.getIndexName(doc),
+        content: MangoHelper.getIndexContent(doc),
+        id: doc.type === 'special' ? '_all_docs' : doc.ddoc,
+        keylabel: '',
+        url: doc.id ? getDocUrl('app', doc.id, databaseName) : null,
+        isDeletable: doc.type !== 'special',
+        isEditable: false
+      };
+    }
     return {
+      header: doc.id,
       content: JSON.stringify(doc, null, ' '),
-      id: doc.id, //|| doc.key.toString(),
+      id: doc.id || (doc.key && doc.key.toString()),
       _rev: doc._rev || (doc.value && doc.value.rev),
-      header: doc.id, //|| doc.key.toString(),
-      keylabel: 'id', //doc.isFromView() ? 'key' : 'id',
+      keylabel: 'id',
       url: doc.id ? getDocUrl('app', doc.id, databaseName) : null,
       isDeletable: true,
       isEditable: true
@@ -29,7 +42,7 @@ export const getJsonViewData = (docs, { databaseName, typeOfIndex }) => {
 
   return {
     displayedFields: null,
-    hasBulkDeletableDoc: hasBulkDeletableDoc(docs, typeOfIndex),
+    hasBulkDeletableDoc: hasBulkDeletableDoc(docs, docType),
     results: stagedResults
   };
 };

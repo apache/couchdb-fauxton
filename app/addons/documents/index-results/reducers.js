@@ -15,7 +15,7 @@ import ActionTypes from './actiontypes';
 import Constants from '../constants';
 import { getJsonViewData } from './helpers/json-view';
 import { getTableViewData } from './helpers/table-view';
-import { getDefaultPerPage } from './helpers/shared-helpers';
+import { getDefaultPerPage, getDocId } from './helpers/shared-helpers';
 
 const initialState = {
   docs: [],  // raw documents returned from couch
@@ -92,7 +92,8 @@ export default function resultsState (state = initialState, action) {
         fetchParams: Object.assign({}, state.fetchParams, action.params),
         pagination: Object.assign({}, state.pagination, {
           canShowNext: action.canShowNext
-        })
+        }),
+        typeOfIndex: action.docType
       });
 
     case ActionTypes.INDEX_RESULTS_REDUX_CHANGE_LAYOUT:
@@ -162,7 +163,7 @@ export const getDataForRendering = (state, databaseName) => {
     selectedLayout: state.selectedLayout,
     selectedFieldsTableView: state.tableView.selectedFieldsTableView,
     showAllFieldsTableView: state.tableView.showAllFieldsTableView,
-    typeOfIndex: state.typeOfIndex
+    docType: state.typeOfIndex
   };
 
   const docsWithoutGeneratedMangoDocs = docs.filter(removeGeneratedMangoDocs);
@@ -215,7 +216,7 @@ export const getAllDocsSelected = (state) => {
     // Helper function for finding index of a doc in the current
     // selected docs list.
     const exists = (selectedDoc) => {
-      return doc._id || doc.id === selectedDoc._id;
+      return getDocId(doc, state.typeOfIndex) === selectedDoc._id;
     };
 
     if (!state.selectedDocs.some(exists)) {

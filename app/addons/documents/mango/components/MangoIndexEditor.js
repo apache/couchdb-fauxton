@@ -29,6 +29,9 @@ export default class MangoIndexEditor extends Component {
 
   componentDidMount() {
     prettyPrint();
+    this.props.loadIndexList({
+      fetchParams: this.props.fetchParams
+    });
   }
 
   componentDidUpdate () {
@@ -86,6 +89,7 @@ export default class MangoIndexEditor extends Component {
     this.props.saveIndex({
       databaseName: this.props.databaseName,
       indexCode: this.getEditorValue(),
+      fetchParams: this.props.fetchParams
     });
   }
 }

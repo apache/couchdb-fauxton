@@ -10,6 +10,7 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+import React from 'react';
 import { connect } from 'react-redux';
 import PaginationFooter from '../components/pagination/PaginationFooter';
 import {
@@ -59,18 +60,27 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       dispatch(toggleShowAllColumns());
     },
     updatePerPageResults: (amount, fetchParams, queryOptionsParams) => {
-      dispatch(updatePerPageResults(ownProps.fetchUrl, fetchParams, queryOptionsParams, amount));
+      //dispatch(updatePerPageResults(ownProps.fetchUrl, fetchParams, queryOptionsParams, amount));
+      dispatch(updatePerPageResults(ownProps.queryDocs, fetchParams, queryOptionsParams, amount));
     },
     paginateNext: (fetchParams, queryOptionsParams, perPage) => {
-      dispatch(paginateNext(ownProps.fetchUrl, fetchParams, queryOptionsParams, perPage));
+      //dispatch(paginateNext(ownProps.fetchUrl, fetchParams, queryOptionsParams, perPage));
+      dispatch(paginateNext(ownProps.queryDocs, fetchParams, queryOptionsParams, perPage));
     },
     paginatePrevious: (fetchParams, queryOptionsParams, perPage) => {
-      dispatch(paginatePrevious(ownProps.fetchUrl, fetchParams, queryOptionsParams, perPage));
+      //dispatch(paginatePrevious(ownProps.fetchUrl, fetchParams, queryOptionsParams, perPage));
+      dispatch(paginatePrevious(ownProps.queryDocs, fetchParams, queryOptionsParams, perPage));
     }
   };
 };
 
-export default connect (
+const PaginationFooterContainer = connect (
   mapStateToProps,
   mapDispatchToProps
 )(PaginationFooter);
+
+export default PaginationFooterContainer;
+
+PaginationFooterContainer.propTypes = {
+  queryDocs: React.PropTypes.func.isRequired
+};

@@ -202,6 +202,10 @@ FauxtonAPI.registerUrls('mango', {
     return 'database/' + db + '/_index' + query;
   },
 
+  'index-server-bulk-delete': function (db) {
+    return app.host + '/' + encodeURIComponent(db) + '/_index/_bulk_delete';
+  },
+
   'query-server': function (db, query) {
     if (!query) {
       query = '';

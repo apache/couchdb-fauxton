@@ -10,9 +10,10 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+import React from 'react';
 import { connect } from 'react-redux';
 import IndexResults from '../components/results/IndexResults';
-import { fetchAllDocs, bulkDeleteDocs } from '../apis/fetch';
+import { fetchDocs, bulkDeleteDocs } from '../apis/fetch';
 import { queryOptionsToggleIncludeDocs } from '../apis/queryoptions';
 import {
   selectDoc,
@@ -54,31 +55,33 @@ const mapStateToProps = ({indexResults}, ownProps) => {
     textEmptyIndex: getTextEmptyIndex(indexResults),
     typeOfIndex: getTypeOfIndex(indexResults),
     fetchParams: getFetchParams(indexResults),
-    queryOptionsParams: getQueryOptionsParams(indexResults)
+    queryOptionsParams: getQueryOptionsParams(indexResults),
+    pendingReload: indexResults.pendingReload
   };
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    fetchAllDocs: (fetchParams, queryOptionsParams) => {
-      dispatch(fetchAllDocs(ownProps.fetchUrl, fetchParams, queryOptionsParams));
+    fetchDocs: (fetchParams, queryOptionsParams) => {
+      dispatch(fetchDocs(ownProps.queryDocs, fetchParams, queryOptionsParams));
     },
     selectDoc: (doc, selectedDocs) => {
       dispatch(selectDoc(doc, selectedDocs));
     },
     bulkDeleteDocs: (docs, fetchParams, queryOptionsParams) => {
       dispatch(bulkDeleteDocs(ownProps.databaseName,
-                              ownProps.fetchUrl,
+                              ownProps.queryDocs,
                               docs,
                               ownProps.designDocs,
                               fetchParams,
-                              queryOptionsParams));
+                              queryOptionsParams,
+                              ownProps.docType));
     },
     changeLayout: (newLayout) => {
       dispatch(changeLayout(newLayout));
     },
     bulkCheckOrUncheck: (docs, selectedDocs, allDocumentsSelected) => {
-      dispatch(bulkCheckOrUncheck(docs, selectedDocs, allDocumentsSelected));
+      dispatch(bulkCheckOrUncheck(docs, selectedDocs, allDocumentsSelected, ownProps.docType));
     },
     changeTableHeaderAttribute: (newField, selectedFields) => {
       dispatch(changeTableHeaderAttribute(newField, selectedFields));
@@ -92,7 +95,13 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   };
 };
 
-export default connect (
+const IndexResultsContainer = connect (
   mapStateToProps,
   mapDispatchToProps
 )(IndexResults);
+
+export default IndexResultsContainer;
+
+IndexResultsContainer.propTypes = {
+  queryDocs: React.PropTypes.func.isRequired
+};

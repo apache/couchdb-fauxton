@@ -20,25 +20,30 @@ export default class IndexResults extends React.Component {
 
   componentDidMount () {
     const {
-      fetchAllDocs,
+      fetchDocs,
       fetchParams,
       queryOptionsParams,
+      fetchAtStartup
     } = this.props;
 
-    // now get the docs!
-    fetchAllDocs(fetchParams, queryOptionsParams);
+    // Fetch docs if requested
+    if (fetchAtStartup) {
+      fetchDocs(fetchParams, queryOptionsParams);
+    }
   }
 
   componentWillUpdate (nextProps) {
+    // console.log('IndexResults - will update - next.ddocsOnly:', nextProps.ddocsOnly);
     const {
-      fetchAllDocs,
+      fetchDocs,
       fetchParams,
       queryOptionsParams,
       ddocsOnly
     } = nextProps;
 
-    if (this.props.ddocsOnly !== ddocsOnly) {
-      fetchAllDocs(fetchParams, queryOptionsParams);
+    if (this.props.ddocsOnly !== ddocsOnly || nextProps.pendingReload) {
+      console.log('IndexResults - will update - FETCHING DOCS');
+      fetchDocs(fetchParams, queryOptionsParams);
     }
   }
 
@@ -54,7 +59,6 @@ export default class IndexResults extends React.Component {
 
   isSelected (id) {
     const { selectedDocs } = this.props;
-
     // check whether this id exists in our array of selected docs
     return selectedDocs.findIndex((doc) => {
       return id === doc._id;
@@ -97,4 +101,8 @@ export default class IndexResults extends React.Component {
         {...this.props} />
     );
   }
+};
+
+IndexResults.propTypes = {
+  fetchAtStartup: React.PropTypes.bool.isRequired
 };

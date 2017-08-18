@@ -16,7 +16,7 @@ import '../base';
 
 describe('Docs JSON View', () => {
   const databaseName = 'testdb';
-  let typeOfIndex = 'view';
+  let docType = 'view';
   const docs = [
     {
       id: "aardvark",
@@ -61,11 +61,11 @@ describe('Docs JSON View', () => {
 
   beforeEach(() => {
     testDocs = docs;
-    typeOfIndex = 'view';
+    docType = 'view';
   });
 
   it('getJsonViewData returns proper meta object with vanilla inputs', () => {
-    expect(getJsonViewData(testDocs, {databaseName, typeOfIndex})).toEqual({
+    expect(getJsonViewData(testDocs, {databaseName, docType})).toEqual({
       displayedFields: null,
       hasBulkDeletableDoc: true,
       results: [
@@ -94,11 +94,11 @@ describe('Docs JSON View', () => {
   });
 
   it('getJsonViewData false hasBulkDeletableDoc when all special mango docs', () => {
-    typeOfIndex = 'MangoIndex';
+    docType = 'MangoIndex';
     testDocs[0].type = 'special';
     testDocs[1].type = 'special';
 
-    expect(getJsonViewData(testDocs, {databaseName, typeOfIndex})).toEqual({
+    expect(getJsonViewData(testDocs, {databaseName, docType})).toEqual({
       displayedFields: null,
       hasBulkDeletableDoc: false,
       results: [

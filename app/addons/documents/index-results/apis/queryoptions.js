@@ -11,7 +11,7 @@
 // the License.
 
 import ActionTypes from '../actiontypes';
-import { fetchAllDocs } from './fetch';
+import { fetchDocs } from './fetch';
 
 const updateQueryOptions = (queryOptions) => {
   return {
@@ -27,9 +27,9 @@ export const resetFetchParamsBeforeExecute = (perPage) => {
   };
 };
 
-export const queryOptionsExecute = (fetchUrl, queryOptionsParams, perPage) => {
+export const queryOptionsExecute = (queryDocs, queryOptionsParams, perPage) => {
   const fetchParams = resetFetchParamsBeforeExecute(perPage);
-  return fetchAllDocs(fetchUrl, fetchParams, queryOptionsParams);
+  return fetchDocs(queryDocs, fetchParams, queryOptionsParams);
 };
 
 export const queryOptionsToggleVisibility = (newVisibility) => {

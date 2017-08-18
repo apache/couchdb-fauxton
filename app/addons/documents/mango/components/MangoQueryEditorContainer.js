@@ -12,10 +12,11 @@
 
 import { connect } from 'react-redux';
 import FauxtonAPI from "../../../../core/api";
-import IndexResultActions from "../../index-results/actions";
+import * as IndexResultActions from '../../index-results/apis/fetch';
 import MangoQueryEditor from './MangoQueryEditor';
 import Helpers from '../mango.helper';
 import Actions from '../mango.actions';
+import * as MangoAPI from '../mango.api';
 
 const getAvailableQueryIndexes = ({ availableIndexes }) => {
   if (!availableIndexes) {
@@ -42,6 +43,7 @@ const getAvailableAdditionalIndexes = ({ additionalIndexes }) => {
 
 const mapStateToProps = (state, ownProps) => {
   const mangoQuery = state.mangoQuery;
+  const indexResults = state.indexResults;
   console.log('MangoQueryEditor::mapStateToProps::state:', state);
   return {
     // database: mangoQuery.database,
@@ -53,7 +55,9 @@ const mapStateToProps = (state, ownProps) => {
     isLoading: mangoQuery.isLoading,
     description: ownProps.description,
     editorTitle: ownProps.editorTitle,
-    additionalIndexesText: ownProps.additionalIndexesText
+    additionalIndexesText: ownProps.additionalIndexesText,
+
+    fetchParams: indexResults.fetchParams
   };
 };
 
@@ -64,8 +68,11 @@ const mapDispatchToProps = (dispatch/*, ownProps*/) => {
     },
 
     runQuery: (options) => {
+      const queryDocs = (params) => { return MangoAPI.mangoQueryDocs(options.databaseName, options.queryCode, params); };
+
       dispatch(Actions.hideQueryExplain());
-      IndexResultActions.runMangoFindQuery(options);
+      dispatch(Actions.newQueryFindCode(options));
+      dispatch(IndexResultActions.fetchDocs(queryDocs, options.fetchParams, {}));
     },
 
     manageIndexes: () => {

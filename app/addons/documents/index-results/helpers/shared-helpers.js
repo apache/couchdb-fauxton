@@ -76,10 +76,33 @@ const getDefaultPerPage = () => {
   return FauxtonAPI.constants.MISC.DEFAULT_PAGE_SIZE;
 };
 
+const isGhostDoc = (doc) => {
+  // ghost docs are empty results where all properties were
+  // filtered away by mango
+  return !doc || !doc.attributes || !Object.keys(doc.attributes).length;
+};
+
+const getDocId = (doc, docType = 'view') => {
+  if (docType === 'MangoIndex') {
+    return doc.type === 'special' ? '_all_docs' : doc.ddoc;
+  }
+  return doc._id || doc.id;
+};
+
+const getDocRev = (doc, docType = 'view') => {
+  if (docType === 'MangoIndex') {
+    return undefined;
+  }
+  return doc._rev || doc.rev || (doc.value && doc.value.rev);
+};
+
 export {
   getDocUrl,
+  isGhostDoc,
   isJSONDocEditable,
   isJSONDocBulkDeletable,
   hasBulkDeletableDoc,
-  getDefaultPerPage
+  getDefaultPerPage,
+  getDocId,
+  getDocRev
 };

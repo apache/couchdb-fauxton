@@ -24,6 +24,7 @@ import RightAllDocsHeader from './components/header-docs-right';
 import IndexResultsContainer from './index-results/containers/IndexResultsContainer';
 import PaginationContainer from './index-results/containers/PaginationContainer';
 import ApiBarContainer from './index-results/containers/ApiBarContainer';
+import { queryAllDocs } from './index-results/apis/fetch';
 
 export const TabsSidebarHeader = ({
   hideQueryOptions,
@@ -52,7 +53,8 @@ export const TabsSidebarHeader = ({
               database={database}
               isRedux={isRedux}
               fetchUrl={fetchUrl}
-              ddocsOnly={ddocsOnly} />
+              ddocsOnly={ddocsOnly}
+              queryDocs={ (params) => { return queryAllDocs(fetchUrl, params); } } />
           </div>
           { isRedux ? <ApiBarContainer databaseName={dbName} /> :
                       <ApiBarWrapper docURL={docURL} endpoint={endpoint} /> }
@@ -102,7 +104,8 @@ export const TabsSidebarContent = ({
         <div id="footer">
           {isRedux && !hideFooter ? <PaginationContainer
                                       databaseName={databaseName}
-                                      fetchUrl={fetchUrl} /> : null}
+                                      fetchUrl={fetchUrl}
+                                      queryDocs={(params) => { return queryAllDocs(fetchUrl, params); }}/> : null}
           {!isRedux && !hideFooter ? <ReactPagination.Footer /> : null}
         </div>
       </section>
@@ -136,7 +139,10 @@ export const DocsTabsSidebarLayout = ({
                       fetchUrl={fetchUrl}
                       designDocs={designDocs}
                       ddocsOnly={ddocsOnly}
-                      databaseName={dbName} />;
+                      databaseName={dbName}
+                      fetchAtStartup={true}
+                      queryDocs={ (params) => { return queryAllDocs(fetchUrl, params); } }
+                      docType={'view'} />;
   } else {
     lowerContent = <IndexResultsComponents.List designDocs={designDocs} />;
   }

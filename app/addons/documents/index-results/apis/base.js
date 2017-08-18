@@ -11,6 +11,7 @@
 // the License.
 
 import ActionTypes from '../actiontypes';
+import { getDocId, getDocRev } from "../helpers/shared-helpers";
 
 export const nowLoading = () => {
   return {
@@ -24,12 +25,13 @@ export const resetState = () => {
   };
 };
 
-export const newResultsAvailable = (docs, params, canShowNext) => {
+export const newResultsAvailable = (docs, docType, params, canShowNext) => {
   return {
     type: ActionTypes.INDEX_RESULTS_REDUX_NEW_RESULTS,
     docs: docs,
     params: params,
-    canShowNext: canShowNext
+    canShowNext: canShowNext,
+    docType: docType
   };
 };
 
@@ -60,11 +62,11 @@ export const selectDoc = (doc, selectedDocs) => {
   return newSelectedDocs(selectedDocs);
 };
 
-export const bulkCheckOrUncheck = (docs, selectedDocs, allDocumentsSelected) => {
+export const bulkCheckOrUncheck = (docs, selectedDocs, allDocumentsSelected, docType) => {
   docs.forEach((doc) => {
     // find the index of the doc in the selectedDocs array
     const indexInSelectedDocs = selectedDocs.findIndex((selectedDoc) => {
-      return (doc._id || doc.id) === selectedDoc._id;
+      return getDocId(doc, docType) === selectedDoc._id;
     });
 
     // remove the doc if we know all the documents are currently selected
@@ -73,8 +75,8 @@ export const bulkCheckOrUncheck = (docs, selectedDocs, allDocumentsSelected) => 
     // otherwise, add the doc if it doesn't exist in the selectedDocs array
     } else if (indexInSelectedDocs === -1) {
       selectedDocs.push({
-        _id: doc._id || doc.id,
-        _rev: doc._rev || doc.rev || doc.value.rev,
+        _id: getDocId(doc, docType),
+        _rev: getDocRev(doc, docType),
         _deleted: true
       });
     }

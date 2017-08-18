@@ -45,7 +45,7 @@ export default function mangoquery(state = initialState, action) {
     case ActionTypes.MANGO_NEW_QUERY_FIND_CODE:
       return {
         ...state,
-        queryFindCode: options.code
+        queryFindCode: options.queryCode
       };
 
     case ActionTypes.MANGO_RESET:

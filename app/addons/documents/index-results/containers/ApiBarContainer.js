@@ -10,8 +10,9 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import queryString from 'query-string';
+import React from 'react';
 import { connect } from 'react-redux';
+import queryString from 'query-string';
 import { ApiBarWrapper } from '../../../components/layouts';
 import { getQueryOptionsParams } from '../reducers';
 import FauxtonAPI from '../../../../core/api';
@@ -26,11 +27,22 @@ const urlRef = (databaseName, params) => {
   return FauxtonAPI.urls('allDocs', "apiurl", encodeURIComponent(databaseName), query);
 };
 
-const mapStateToProps = ({indexResults}, ownProps) => {
-  return {
-    docUrl: FauxtonAPI.constants.DOC_URLS.GENERAL,
-    endpoint: urlRef(ownProps.databaseName, getQueryOptionsParams(indexResults))
-  };
+const mapStateToProps = ({indexResults}, {docUrl, endpoint, databaseName}) => {
+  if (!docUrl) {
+    docUrl = FauxtonAPI.constants.DOC_URLS.GENERAL;
+  }
+  if (!endpoint) {
+    endpoint = urlRef(databaseName, getQueryOptionsParams(indexResults));
+  }
+  return { docUrl, endpoint };
 };
 
-export default connect (mapStateToProps)(ApiBarWrapper);
+const ApiBarContainer = connect (
+  mapStateToProps
+)(ApiBarWrapper);
+
+export default ApiBarContainer;
+
+ApiBarContainer.propTypes = {
+  databaseName: React.PropTypes.string
+};

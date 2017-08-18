@@ -756,11 +756,14 @@ Stores.IndexResultsStore = FauxtonAPI.Store.extend({
   },
 
   getIsMangoResults: function () {
-    return this._typeOfIndex === 'mango' || this._typeOfIndex === 'mango-index';
+    return this._typeOfIndex === 'mango'
+      || this._typeOfIndex === 'mango-index'
+      || this._typeOfIndex === 'MangoIndex'; // MangoIndex is the value used by Redux components
   },
 
   getIsMangoIndexResults: function () {
-    return this._typeOfIndex === 'mango-index';
+    return this._typeOfIndex === 'mango-index'
+    || this._typeOfIndex === 'MangoIndex'; // MangoIndex is the value used by Redux components;
   },
 
   getIsPrioritizedEnabled: function () {

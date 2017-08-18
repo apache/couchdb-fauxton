@@ -11,22 +11,30 @@
 // the License.
 
 import { connect } from 'react-redux';
+import * as IndexResultActions from '../../index-results/apis/fetch';
 import MangoIndexEditor from './MangoIndexEditor';
 import Helpers from '../mango.helper';
 import Actions from '../mango.actions';
+import * as MangoAPI from '../mango.api';
 
-const mapStateToProps = ({ mangoQuery }, ownProps) => {
+const mapStateToProps = ({ mangoQuery, indexResults }, ownProps) => {
   return {
     description: ownProps.description,
     databaseName: ownProps.databaseName,
-    queryIndexCode: Helpers.formatCode(mangoQuery.queryIndexCode)
+    queryIndexCode: Helpers.formatCode(mangoQuery.queryIndexCode),
+    fetchParams: indexResults.fetchParams
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     saveIndex: (options) => {
       dispatch(Actions.saveIndex(options));
+      // dispatch(IndexResultActions.fetchDocs(queryDocs, options.fetchParams, {}));
+    },
+    loadIndexList: (options) => {
+      const queryIndexes = (params) => { return MangoAPI.fetchIndexes(ownProps.databaseName, params); };
+      dispatch(IndexResultActions.fetchDocs(queryIndexes, options.fetchParams, {}));
     }
   };
 };

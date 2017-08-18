@@ -108,7 +108,7 @@ export default class BulkDocumentHeaderController extends React.Component {
     const {
       changeLayout,
       selectedLayout,
-      fetchAllDocs,
+      fetchDocs,
       fetchParams,
       queryOptionsParams,
       queryOptionsToggleIncludeDocs
@@ -127,7 +127,7 @@ export default class BulkDocumentHeaderController extends React.Component {
 
       // tell the query options panel we're updating include_docs
       queryOptionsToggleIncludeDocs(!queryOptionsParams.include_docs);
-      fetchAllDocs(fetchParams, queryOptionsParams);
+      fetchDocs(fetchParams, queryOptionsParams);
       return;
     }
 

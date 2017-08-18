@@ -78,10 +78,12 @@ export const removeOverflowDocsAndCalculateHasNext = (docs, totalDocsRemaining, 
 
 // All the business logic for fetching docs from couch.
 // Arguments:
-// - fetchUrl -> the endpoint to fetch from
+// - queryDocs -> a function that fetches the docs. Accepts fetch params and returns a Promise of {docs[], docType}.
 // - fetchParams -> the internal params fauxton uses to emulate pagination
 // - queryOptionsParams -> manual query params entered by user
-export const fetchAllDocs = (fetchUrl, fetchParams, queryOptionsParams) => {
+export const fetchDocs = (queryDocs, fetchParams, queryOptionsParams) => {
+  console.log('Actions.fetchDocs: queryDocs', queryDocs);
+
   const { params, totalDocsRemaining } = mergeParams(fetchParams, queryOptionsParams);
   params.limit = Math.min(params.limit, maxDocLimit);
 
@@ -90,19 +92,19 @@ export const fetchAllDocs = (fetchUrl, fetchParams, queryOptionsParams) => {
     dispatch(nowLoading());
 
     // now fetch the results
-    return queryEndpoint(fetchUrl, params).then((docs) => {
+    return queryDocs(params).then(({ docs, docType }) => {
       const {
         finalDocList,
         canShowNext
       } = removeOverflowDocsAndCalculateHasNext(docs, totalDocsRemaining, params.limit);
 
       // dispatch that we're all done
-      dispatch(newResultsAvailable(finalDocList, params, canShowNext));
+      dispatch(newResultsAvailable(finalDocList, docType, params, canShowNext));
     });
   };
 };
 
-export const queryEndpoint = (fetchUrl, params) => {
+export const queryAllDocs = (fetchUrl, params) => {
   const query = queryString.stringify(params);
   const url = `${fetchUrl}${fetchUrl.includes('?') ? '&' : '?'}${query}`;
   return fetch(url, {
@@ -112,7 +114,12 @@ export const queryEndpoint = (fetchUrl, params) => {
     }
   })
   .then(res => res.json())
-  .then(res => res.error ? [] : res.rows);
+  .then(res => {
+    return {
+      docs: res.error ? [] : res.rows,
+      docType: 'view'
+    };
+  });
 };
 
 export const errorMessage = (ids) => {
@@ -147,24 +154,30 @@ export const validateBulkDelete = (docs) => {
   return true;
 };
 
-export const bulkDeleteDocs = (databaseName, fetchUrl, docs, designDocs, fetchParams, queryOptionsParams) => {
+export const bulkDeleteDocs = (databaseName, queryDocs, docs, designDocs, fetchParams, queryOptionsParams, docType) => {
   if (!validateBulkDelete(docs)) {
     return false;
   }
 
   return (dispatch) => {
-    const payload = {
-      docs: docs
-    };
-
-    return postToBulkDocs(databaseName, payload).then((res) => {
+    let postPromise, payload;
+    if (docType === 'MangoIndex') {
+      payload = { docids: docs.map(doc => doc._id) };
+      postPromise = postToIndexBulkDelete(databaseName, payload);
+    } else if (docType === 'view') {
+      payload = { docs: docs };
+      postPromise = postToBulkDocs(databaseName, payload);
+    } else {
+      throw new Error('Invalid document type: ' + docType);
+    }
+    return postPromise.then((res) => {
       if (res.error) {
         errorMessage();
         return;
       }
-      processBulkDeleteResponse(res, docs, designDocs);
+      processBulkDeleteResponse(res, docs, designDocs, docType);
       dispatch(newSelectedDocs());
-      dispatch(fetchAllDocs(fetchUrl, fetchParams, queryOptionsParams));
+      dispatch(fetchDocs(queryDocs, fetchParams, queryOptionsParams));
     });
   };
 };
@@ -183,14 +196,30 @@ export const postToBulkDocs = (databaseName, payload) => {
   .then(res => res.json());
 };
 
-export const processBulkDeleteResponse = (res, originalDocs, designDocs) => {
+export const postToIndexBulkDelete = (databaseName, payload) => {
+  const url = FauxtonAPI.urls('mango', 'index-server-bulk-delete', databaseName);
+  return fetch(url, {
+    method: 'POST',
+    credentials: 'include',
+    body: JSON.stringify(payload),
+    headers: {
+      'Accept': 'application/json; charset=utf-8',
+      'Content-Type': 'application/json'
+    }
+  })
+  .then(res => res.json());
+};
+
+export const processBulkDeleteResponse = (res, deletedDocs, designDocs, docType) => {
   FauxtonAPI.addNotification({
     msg: 'Successfully deleted your docs',
     clear:  true
   });
 
-  const failedDocs = res.filter(doc => !!doc.error).map(doc => doc.id);
-  const hasDesignDocs = !!originalDocs.map(d => d._id).find((_id) => /_design/.test(_id));
+  const failedDocs = docType === 'MangoIndex' ?
+    (res.fail ? res.fail.map(doc => doc.id) : [])
+    : res.filter(doc => !!doc.error).map(doc => doc.id);
+  const hasDesignDocs = !!deletedDocs.map(d => d._id).find((_id) => /_design/.test(_id));
 
   if (failedDocs.length > 0) {
     errorMessage(failedDocs);

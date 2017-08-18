@@ -11,6 +11,7 @@
 // the License.
 
 import 'whatwg-fetch';
+import queryString from 'query-string';
 import app from "../../../app";
 import FauxtonAPI from "../../../core/api";
 
@@ -54,5 +55,60 @@ export const createIndex = (databaseName, indexCode) => {
         throw new Error('(' + json.error + ') ' + json.reason);
       }
       return json;
+    });
+};
+
+export const fetchIndexes = (databaseName, params) => {
+  const query = queryString.stringify(params);
+  let url = FauxtonAPI.urls('mango', 'index-server', app.utils.safeURLName(databaseName));
+  url = `${url}${url.includes('?') ? '&' : '?'}${query}`;
+
+  return fetch(url, {
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json; charset=utf-8'
+    },
+    credentials: 'include',
+    method: 'GET'
+  })
+    .then((res) => res.json())
+    .then((json) => {
+      if (json.error) {
+        throw new Error('(' + json.error + ') ' + json.reason);
+      }
+      return {
+        docs: json.indexes,
+        docType: 'MangoIndex'
+      };
+    });
+};
+
+export const mangoQueryDocs = (databaseName, queryCode, params) => {
+  // console.log('TODO: Merge params with queryCode (limit and skip from pagination) - params:', params);
+  // console.log('mangoQueryDocs: db:', databaseName, ' query:', JSON.stringify(queryCode));
+  const url = FauxtonAPI.urls('mango', 'query-server', databaseName);
+  const queryWithParams = {
+    ...queryCode,
+    limit: params.limit,
+    skip: params.skip
+  };
+  return fetch(url, {
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json; charset=utf-8'
+    },
+    credentials: 'include',
+    method: 'POST',
+    body: JSON.stringify(queryWithParams)
+  })
+    .then((res) => res.json())
+    .then((json) => {
+      if (json.error) {
+        throw new Error('(' + json.error + ') ' + json.reason);
+      }
+      return {
+        docs: json.docs,
+        docType: 'view'
+      };
     });
 };
