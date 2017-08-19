@@ -94,6 +94,10 @@ module.exports = {
     alias: {
       "bootstrap": "../assets/js/libs/bootstrap",
       "underscore": "lodash"
+      "react": "preact-compat",
+      "react-dom": "preact-compat",
+      "react-addons-css-transition-group": "react-transition-group",
+      "create-react-class": "preact-compat/lib/create-react-class"
     }
   },
   output: {
