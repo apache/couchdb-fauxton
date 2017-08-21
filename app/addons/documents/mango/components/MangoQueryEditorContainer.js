@@ -13,6 +13,7 @@
 import { connect } from 'react-redux';
 import FauxtonAPI from "../../../../core/api";
 import * as IndexResultActions from '../../index-results/apis/fetch';
+import * as IndexResultBaseActions from '../../index-results/apis/base';
 import MangoQueryEditor from './MangoQueryEditor';
 import Helpers from '../mango.helper';
 import Actions from '../mango.actions';
@@ -44,9 +45,8 @@ const getAvailableAdditionalIndexes = ({ additionalIndexes }) => {
 const mapStateToProps = (state, ownProps) => {
   const mangoQuery = state.mangoQuery;
   const indexResults = state.indexResults;
-  console.log('MangoQueryEditor::mapStateToProps::state:', state);
+
   return {
-    // database: mangoQuery.database,
     databaseName: ownProps.databaseName,
     queryFindCode: Helpers.formatCode(mangoQuery.queryFindCode),
     queryFindCodeChanged: mangoQuery.queryFindCodeChanged,
@@ -73,6 +73,10 @@ const mapDispatchToProps = (dispatch/*, ownProps*/) => {
       dispatch(Actions.hideQueryExplain());
       dispatch(Actions.newQueryFindCode(options));
       dispatch(IndexResultActions.fetchDocs(queryDocs, options.fetchParams, {}));
+    },
+
+    clearResults: () => {
+      dispatch(IndexResultBaseActions.resetState());
     },
 
     manageIndexes: () => {

@@ -57,6 +57,10 @@ describe('Docs JSON View', () => {
       }
     }
   ];
+  const mangoIndexes = [
+    {ddoc: null, name: "_all_docs", type: "special", def: {fields: [{_id: "asc"}]}},
+    {ddoc: "_design/34223ecd7b6bcdc4dcdbc1a09bd63db365dd5f69", name: "idx1", type: "json", def: {fields: [{host3: "asc"}]}}
+  ];
   let testDocs;
 
   beforeEach(() => {
@@ -95,32 +99,40 @@ describe('Docs JSON View', () => {
 
   it('getJsonViewData false hasBulkDeletableDoc when all special mango docs', () => {
     docType = 'MangoIndex';
+    testDocs = mangoIndexes;
     testDocs[0].type = 'special';
     testDocs[1].type = 'special';
+
+    const idx0 = { ...testDocs[0] };
+    delete idx0.ddoc;
+    delete idx0.name;
+    const idx1 = { ...testDocs[1] };
+    delete idx1.ddoc;
+    delete idx1.name;
 
     expect(getJsonViewData(testDocs, {databaseName, docType})).toEqual({
       displayedFields: null,
       hasBulkDeletableDoc: false,
       results: [
         {
-          content: JSON.stringify(testDocs[0], null, ' '),
-          id: testDocs[0].id,
-          _rev: testDocs[0].value.rev,
-          header: testDocs[0].id,
-          keylabel: 'id',
-          url: getDocUrl('app', testDocs[0].id, databaseName),
-          isDeletable: true,
-          isEditable: true
+          content: JSON.stringify(idx0, null, ' '),
+          id: mangoIndexes[0].name,
+          _rev: undefined,
+          header: 'special: _id',
+          keylabel: '',
+          url: null,
+          isDeletable: false,
+          isEditable: false
         },
         {
-          content: JSON.stringify(testDocs[1], null, ' '),
-          id: testDocs[1].id,
-          _rev: testDocs[1].value.rev,
-          header: testDocs[1].id,
-          keylabel: 'id',
-          url: getDocUrl('app', testDocs[1].id, databaseName),
-          isDeletable: true,
-          isEditable: true
+          content: JSON.stringify(idx1, null, ' '),
+          id: '_all_docs',
+          _rev: undefined,
+          header: 'special: host3',
+          keylabel: '',
+          url: null,
+          isDeletable: false,
+          isEditable: false
         }
       ]
     });

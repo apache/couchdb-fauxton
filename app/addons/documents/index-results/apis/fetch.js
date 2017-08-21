@@ -99,7 +99,7 @@ export const fetchDocs = (queryDocs, fetchParams, queryOptionsParams) => {
       } = removeOverflowDocsAndCalculateHasNext(docs, totalDocsRemaining, params.limit);
 
       // dispatch that we're all done
-      dispatch(newResultsAvailable(finalDocList, docType, params, canShowNext));
+      dispatch(newResultsAvailable(finalDocList, params, canShowNext, docType));
     });
   };
 };

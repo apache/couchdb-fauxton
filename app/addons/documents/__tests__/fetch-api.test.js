@@ -13,7 +13,7 @@
 import {
   mergeParams,
   removeOverflowDocsAndCalculateHasNext,
-  queryEndpoint,
+  queryAllDocs,
   validateBulkDelete,
   postToBulkDocs,
   processBulkDeleteResponse
@@ -180,7 +180,7 @@ describe('Docs Fetch API', () => {
     });
   });
 
-  describe('queryEndpoint', () => {
+  describe('queryAllDocs', () => {
     const params = {
       limit: 21,
       skip: 0
@@ -212,8 +212,10 @@ describe('Docs Fetch API', () => {
       const url = `${fetchUrl}?${query}`;
       fetchMock.getOnce(url, docs);
 
-      return queryEndpoint(fetchUrl, params).then((docs) => {
-        expect(docs).toEqual([
+      return queryAllDocs(fetchUrl, params).then((res) => {
+        expect(res).toEqual({
+          docType: 'view',
+          docs: [
           {
             id: "foo",
             key: "foo",
@@ -227,8 +229,8 @@ describe('Docs Fetch API', () => {
             value: {
               rev: "2-1390740c4877979dbe8998382876556c"
             }
-          }
-        ]);
+          }]
+        });
       });
     });
   });

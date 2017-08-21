@@ -17,18 +17,32 @@ import IndexResults from '../index-results/components/results/IndexResults';
 import sinon from 'sinon';
 
 describe('IndexResults', () => {
-  it('calls fetchAllDocs on mount', () => {
+  it('calls fetchDocs on mount only when fetchAtStartup is set to true', () => {
     const spy = sinon.spy();
-    const wrapper = shallow(<IndexResults
+    const wrapperFetch = shallow(<IndexResults
       fetchParams={{}}
       selectedDocs={[]}
       queryOptionsParams={{}}
-      fetchAllDocs={spy}
+      fetchDocs={spy}
       results={[]}
+      fetchAtStartup={true}
     />);
 
-    wrapper.instance().componentDidMount();
+    wrapperFetch.instance().componentDidMount();
     expect(spy.calledOnce).toBe(true);
+
+    spy.reset();
+    const wrapperDontFetch = shallow(<IndexResults
+      fetchParams={{}}
+      selectedDocs={[]}
+      queryOptionsParams={{}}
+      fetchDocs={spy}
+      results={[]}
+      fetchAtStartup={false}
+    />);
+
+    wrapperDontFetch.instance().componentDidMount();
+    expect(spy.notCalled).toBe(true);
   });
 
   it('calls fetchAllDocs on update if ddocsOnly switches', () => {
@@ -37,7 +51,7 @@ describe('IndexResults', () => {
       fetchParams={{}}
       selectedDocs={[]}
       queryOptionsParams={{}}
-      fetchAllDocs={() => {}}
+      fetchDocs={() => {}}
       results={[]}
       ddocsOnly={false}
     />);
@@ -46,7 +60,7 @@ describe('IndexResults', () => {
       ddocsOnly: true,
       fetchParams: {},
       queryOptionsParams: {},
-      fetchAllDocs: spy
+      fetchDocs: spy
     });
 
     expect(spy.calledOnce).toBe(true);

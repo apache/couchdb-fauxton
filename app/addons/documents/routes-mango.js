@@ -15,7 +15,6 @@ import app from "../../app";
 import FauxtonAPI from "../../core/api";
 import Databases from "../databases/resources";
 import Documents from "./shared-resources";
-import MangoActions from "./mango/mango.actions";
 import SidebarActions from "./sidebar/actions";
 import {MangoLayoutContainer} from './mangolayout';
 
@@ -38,20 +37,16 @@ const MangoIndexEditorAndQueryEditor = FauxtonAPI.RouteObject.extend({
     var databaseName = options[0];
     this.databaseName = databaseName;
     this.database = new Databases.Model({id: databaseName});
-
-    MangoActions.setDatabase({
-      database: this.database
-    });
   },
 
   findUsingIndex: function (database) {
     SidebarActions.selectNavItem('mango-query');
 
     const url = FauxtonAPI.urls(
-      'allDocs', 'app', this.database.safeID(), '?limit=' + FauxtonAPI.constants.DATABASES.DOCUMENT_LIMIT
+      'allDocs', 'app', encodeURIComponent(this.databaseName), '?limit=' + FauxtonAPI.constants.DATABASES.DOCUMENT_LIMIT
     );
 
-    const fetchUrl = '/' + this.database.safeID() + '/_find';
+    const fetchUrl = '/' + encodeURIComponent(this.databaseName) + '/_find';
 
     const crumbs = [
       {name: database, link: url},
@@ -87,7 +82,7 @@ const MangoIndexEditorAndQueryEditor = FauxtonAPI.RouteObject.extend({
     });
 
     const url = FauxtonAPI.urls(
-      'allDocs', 'app', this.database.safeID(), '?limit=' + FauxtonAPI.constants.DATABASES.DOCUMENT_LIMIT
+      'allDocs', 'app', encodeURIComponent(this.databaseName), '?limit=' + FauxtonAPI.constants.DATABASES.DOCUMENT_LIMIT
     );
     const endpoint = FauxtonAPI.urls('mango', 'index-apiurl', this.databaseName);
 

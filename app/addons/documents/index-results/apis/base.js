@@ -25,7 +25,7 @@ export const resetState = () => {
   };
 };
 
-export const newResultsAvailable = (docs, docType, params, canShowNext) => {
+export const newResultsAvailable = (docs, params, canShowNext, docType) => {
   return {
     type: ActionTypes.INDEX_RESULTS_REDUX_NEW_RESULTS,
     docs: docs,

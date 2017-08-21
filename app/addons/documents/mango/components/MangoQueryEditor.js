@@ -28,6 +28,8 @@ export default class MangoQueryEditor extends Component {
 
   componentDidMount() {
     prettyPrint();
+    // Clear results list in case it was populated by other pages
+    this.props.clearResults();
   }
 
   componentDidUpdate () {
@@ -132,7 +134,6 @@ export default class MangoQueryEditor extends Component {
 MangoQueryEditor.propTypes = {
   description: React.PropTypes.string.isRequired,
   editorTitle: React.PropTypes.string.isRequired,
-  additionalIndexesText: React.PropTypes.string.isRequired,
   queryFindCode: React.PropTypes.string.isRequired,
   queryFindCodeChanged: React.PropTypes.bool,
   databaseName: React.PropTypes.string.isRequired,

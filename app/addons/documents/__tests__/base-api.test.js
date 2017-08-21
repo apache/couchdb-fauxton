@@ -56,12 +56,14 @@ describe('Docs Base API', () => {
       limit: 21
     };
     const canShowNext = true;
+    const docType = 'view';
 
-    expect(newResultsAvailable(docs, params, canShowNext)).toEqual({
+    expect(newResultsAvailable(docs, params, canShowNext, docType)).toEqual({
       type: ActionTypes.INDEX_RESULTS_REDUX_NEW_RESULTS,
       docs: docs,
       params: params,
-      canShowNext: canShowNext
+      canShowNext: canShowNext,
+      docType: docType
     });
   });
 
