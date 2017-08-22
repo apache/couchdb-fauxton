@@ -206,6 +206,7 @@ var Notification = React.createClass({
   },
 
   render: function () {
+    //setTimeout(() => this.onAnimationComplete(), 3000); // Temp work around so that notifications appear and disappear
     var iconMap = {
       error: 'fonticon-attention-circled',
       info: 'fonticon-info-circled',
