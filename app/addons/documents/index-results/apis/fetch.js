@@ -15,7 +15,8 @@ import 'whatwg-fetch';
 import FauxtonAPI from '../../../../core/api';
 import queryString from 'query-string';
 import SidebarActions from '../../sidebar/actions';
-import { nowLoading, newResultsAvailable, newSelectedDocs } from './base';
+import Constants from '../../constants';
+import { nowLoading, newResultsAvailable, newSelectedDocs, changeLayout } from './base';
 
 const maxDocLimit = 10000;
 
@@ -98,6 +99,9 @@ export const fetchDocs = (queryDocs, fetchParams, queryOptionsParams) => {
         canShowNext
       } = removeOverflowDocsAndCalculateHasNext(docs, totalDocsRemaining, params.limit);
 
+      if (docType === 'MangoIndex') {
+        dispatch(changeLayout(Constants.LAYOUT_ORIENTATION.JSON));
+      }
       // dispatch that we're all done
       dispatch(newResultsAvailable(finalDocList, params, canShowNext, docType));
     });

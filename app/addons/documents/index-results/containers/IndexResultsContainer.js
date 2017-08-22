@@ -55,8 +55,7 @@ const mapStateToProps = ({indexResults}, ownProps) => {
     textEmptyIndex: getTextEmptyIndex(indexResults),
     typeOfIndex: getTypeOfIndex(indexResults),
     fetchParams: getFetchParams(indexResults),
-    queryOptionsParams: getQueryOptionsParams(indexResults),
-    pendingReload: indexResults.pendingReload
+    queryOptionsParams: getQueryOptionsParams(indexResults)
   };
 };
 

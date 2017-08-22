@@ -41,8 +41,7 @@ export default class IndexResults extends React.Component {
       ddocsOnly
     } = nextProps;
 
-    if (this.props.ddocsOnly !== ddocsOnly || nextProps.pendingReload) {
-      console.log('IndexResults - will update - FETCHING DOCS');
+    if (this.props.ddocsOnly !== ddocsOnly) {
       fetchDocs(fetchParams, queryOptionsParams);
     }
   }
