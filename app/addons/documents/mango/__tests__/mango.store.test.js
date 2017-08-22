@@ -119,5 +119,10 @@ describe('Mango Store', () => {
       const code = store.getQueryFindCode();
       assert.equal(history[0].value, code);
     });
+
+    it('initializes default index code with template', () => {
+      const templates = store.getQueryIndexTemplates();
+      assert.equal(2, templates.length);
+    });
   });
 });
