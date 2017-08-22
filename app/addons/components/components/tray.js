@@ -44,7 +44,6 @@ export const TrayContents = React.createClass({
   },
 
   render () {
-    console.log('tt', this.props);
     return (
       <Overlay
        show={this.props.contentVisible}
