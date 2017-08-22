@@ -12,7 +12,7 @@
 
 import React from "react";
 import ReactDOM from "react-dom";
-import ReactCSSTransitionGroup from "react-addons-css-transition-group";
+// import ReactCSSTransitionGroup from "react-addons-css-transition-group";
 import {Overlay} from 'react-bootstrap';
 
 //With React 15.2.0 it validates props and throws a warning if props to a component are not acceptable
@@ -44,10 +44,11 @@ export const TrayContents = React.createClass({
   },
 
   render () {
+    console.log('tt', this.props);
     return (
       <Overlay
        show={this.props.contentVisible}
-       onHide={this.props.closeTray}
+       onHide={() => {console.log('ENABLE CLOSE AGAIN');}}
        placement={"bottom"}
        container={this.props.container}
        rootClose={true}
@@ -55,10 +56,10 @@ export const TrayContents = React.createClass({
        onEnter={this.props.onEnter}
       >
         <OverlayWarningEater>
-          <ReactCSSTransitionGroup transitionName="tray" transitionAppear={true} component="div" transitionAppearTimeout={500}
-            transitionEnterTimeout={500} transitionLeaveTimeout={300}>
+          {/* <ReactCSSTransitionGroup transitionName="tray" transitionAppear={true} component="div" transitionAppearTimeout={500}
+            transitionEnterTimeout={500} transitionLeaveTimeout={300}> */}
             {this.getChildren()}
-          </ReactCSSTransitionGroup>
+          {/* </ReactCSSTransitionGroup> */}
         </OverlayWarningEater>
       </Overlay>
     );

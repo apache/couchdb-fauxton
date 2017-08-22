@@ -61,6 +61,7 @@ const HeaderDocsLeft = ({dbName}) => {
   const items = getAllDatabaseModalLinks(dbName);
   const dropdownItems = getDropdownItems(items);
 
+  //TODO: Seems we have to add a stopPropagation to the onClick for the toggle to work Preact
   return (
     <div className="faux-header__doc-header-left">
       <button type="button" className="faux-header__doc-header-backlink" onClick={() => { FauxtonAPI.navigate('#/_all_dbs'); }}>
@@ -70,7 +71,7 @@ const HeaderDocsLeft = ({dbName}) => {
         {dbName}
       </div>
       <Dropdown id="faux-header__doc-header-left-1">
-        <Dropdown.Toggle noCaret className="faux-header__doc-header-dropdown-toggle">
+        <Dropdown.Toggle onClick={(evt) => evt.stopPropagation()} noCaret className="faux-header__doc-header-dropdown-toggle">
           <i className="faux-header__doc-header-dropdown-toggle-icon fonticon-vertical-ellipsis"></i>
         </Dropdown.Toggle>
         <Dropdown.Menu className="faux-header__doc-header-dropdown-itemwrapper">

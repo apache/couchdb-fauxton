@@ -115,7 +115,8 @@ module.exports = {
       "underscore": "lodash",
       "react": "preact-compat",
       "react-dom": "preact-compat",
-      "react-addons-css-transition-group": "react-transition-group",
+      //"react-addons-css-transition-group": "preact-css-transition-group",
+      // "react-transition-group": "preact-transition-group",
       "create-react-class": "preact-compat/lib/create-react-class"
     }
   },
