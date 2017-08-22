@@ -25,6 +25,7 @@ after_script:
   - npm run docker:down
 
 env:
-  COMMAND=nightwatch
-  COMMAND=test
+  - COMMAND=nightwatch
+  - COMMAND=test
+
 cache: apt
