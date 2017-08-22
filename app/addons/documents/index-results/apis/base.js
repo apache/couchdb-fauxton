@@ -11,7 +11,7 @@
 // the License.
 
 import ActionTypes from '../actiontypes';
-import { getDocId, getDocRev } from "../helpers/shared-helpers";
+import { getDocId, getDocRev, isJSONDocBulkDeletable } from "../helpers/shared-helpers";
 
 export const nowLoading = () => {
   return {
@@ -64,6 +64,9 @@ export const selectDoc = (doc, selectedDocs) => {
 
 export const bulkCheckOrUncheck = (docs, selectedDocs, allDocumentsSelected, docType) => {
   docs.forEach((doc) => {
+    if (!isJSONDocBulkDeletable(doc, docType)) {
+      return;
+    }
     // find the index of the doc in the selectedDocs array
     const indexInSelectedDocs = selectedDocs.findIndex((selectedDoc) => {
       return getDocId(doc, docType) === selectedDoc._id;
