@@ -10,7 +10,7 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import { hasBulkDeletableDoc, getDocUrl } from "./shared-helpers";
+import { hasBulkDeletableDoc, getDocUrl, getDocId, getDocRev } from "./shared-helpers";
 import MangoHelper from "../../mango/mango.helper";
 
 export const getJsonViewData = (docs, { databaseName, docType }) => {
@@ -28,11 +28,12 @@ export const getJsonViewData = (docs, { databaseName, docType }) => {
         isEditable: false
       };
     }
+    const docID = getDocId(doc, docType);
     return {
-      header: doc.id,
+      header: docID,
       content: JSON.stringify(doc, null, ' '),
-      id: doc.id || (doc.key && doc.key.toString()),
-      _rev: doc._rev || (doc.value && doc.value.rev),
+      id: docID || (doc.key && doc.key.toString()),
+      _rev: getDocRev(doc, docType),
       keylabel: 'id',
       url: doc.id ? getDocUrl('app', doc.id, databaseName) : null,
       isDeletable: true,

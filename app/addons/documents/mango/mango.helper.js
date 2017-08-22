@@ -13,7 +13,7 @@
 import FauxtonAPI from "../../../core/api";
 
 const getIndexName = ({def, type}) => {
-  var nameArray = [],
+  let nameArray = [],
       indexes;
 
   nameArray = def.fields.reduce(function (acc, el, i) {
@@ -28,7 +28,11 @@ const getIndexName = ({def, type}) => {
 
   if (!nameArray.length) {
     indexes = FauxtonAPI.getExtensions('mango:additionalIndexes')[0];
-    nameArray = indexes.createHeader({def, type});
+    if (indexes) {
+      nameArray = indexes.createHeader({def, type});
+    } else {
+      nameArray = [type + ': ' + (def.selector ? JSON.stringify(def.selector) : '{}')];
+    }
   }
 
   return nameArray.join(', ');

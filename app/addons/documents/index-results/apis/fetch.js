@@ -83,8 +83,6 @@ export const removeOverflowDocsAndCalculateHasNext = (docs, totalDocsRemaining, 
 // - fetchParams -> the internal params fauxton uses to emulate pagination
 // - queryOptionsParams -> manual query params entered by user
 export const fetchDocs = (queryDocs, fetchParams, queryOptionsParams) => {
-  console.log('Actions.fetchDocs: queryDocs', queryDocs);
-
   const { params, totalDocsRemaining } = mergeParams(fetchParams, queryOptionsParams);
   params.limit = Math.min(params.limit, maxDocLimit);
 
