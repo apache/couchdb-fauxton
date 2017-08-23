@@ -41,7 +41,7 @@ export const CodeEditor = React.createClass({
       // these two options create auto-resizeable code editors, with a maximum number of lines
       setHeightToLineCount: false,
       maxLines: 10,
-      minLines: 10,
+      minLines: 11, // show double digits in sidebar
 
       // optional editor key commands (e.g. specific save action)
       editorCommands: [],

@@ -12,7 +12,9 @@
 
 require('jest');
 require('whatwg-fetch');
+require('mock-local-storage');
 
+window.localStorage = global.localStorage;
 window.$ = window.jQuery = require('jquery');
 window._ = require('lodash');
 window.Backbone = require('backbone');

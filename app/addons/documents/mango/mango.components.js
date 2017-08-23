@@ -18,6 +18,7 @@ import Actions from "./mango.actions";
 import ReactComponents from "../../components/react-components";
 import IndexResultActions from "../index-results/actions";
 import "../../../../assets/js/plugins/prettify";
+import ReactSelect from "react-select";
 
 var mangoStore = Stores.mangoStore;
 var getDocUrl = app.helpers.getDocUrl;
@@ -34,7 +35,8 @@ var MangoQueryEditorController = React.createClass({
   getStoreState: function () {
     return {
       queryCode: mangoStore.getQueryFindCode(),
-      database: mangoStore.getDatabase()
+      database: mangoStore.getDatabase(),
+      history: mangoStore.getHistory()
     };
   },
 
@@ -78,7 +80,9 @@ var MangoQueryEditorController = React.createClass({
         docs={getDocUrl('MANGO_SEARCH')}
         exampleCode={this.state.queryCode}
         onExplainQuery={this.runExplain}
-        changedQuery={this.state.changedQuery} />
+        history={this.state.history}
+        onHistorySelected={this.historySelected}
+        />
     );
   },
 
@@ -119,6 +123,10 @@ var MangoQueryEditorController = React.createClass({
       database: this.state.database,
       queryCode: this.getMangoEditor().getEditorValue()
     });
+  },
+
+  historySelected: function(selectedItem) {
+    this.getMangoEditor().setEditorValue(selectedItem.value);
   }
 });
 
@@ -127,6 +135,18 @@ var MangoEditor = React.createClass({
     return (
       <div className="mango-editor-wrapper">
         <form className="form-horizontal" onSubmit={this.props.onSubmit}>
+          <div className="padded-box">
+            <ReactSelect
+                className="mango-select"
+                options={this.props.history}
+                ref="history"
+                placeholder="Query history"
+                searchable={false}
+                clearable={false}
+                autosize={false}
+                onChange={this.props.onHistorySelected}
+                />
+          </div>
           <PaddedBorderedBox>
             <CodeEditorPanel
               id="query-field"
@@ -147,6 +167,10 @@ var MangoEditor = React.createClass({
     );
   },
 
+  setEditorValue: function (value) {
+    return this.getEditor().setValue(value);
+  },
+
   getEditorValue: function () {
     return this.refs.field.getValue();
   },
@@ -165,6 +189,18 @@ var MangoIndexEditor = React.createClass({
     return (
       <div className="mango-editor-wrapper">
         <form className="form-horizontal" onSubmit={this.props.onSubmit}>
+          <div className="padded-box">
+            <ReactSelect
+                className="mango-select"
+                options={this.props.templates}
+                ref="templates"
+                placeholder="Examples"
+                searchable={false}
+                clearable={false}
+                autosize={false}
+                onChange={this.props.onTemplateSelected}
+                />
+          </div>
           <PaddedBorderedBox>
             <CodeEditorPanel
               id="query-field"
@@ -182,6 +218,10 @@ var MangoIndexEditor = React.createClass({
         </form>
       </div>
     );
+  },
+
+  setEditorValue: function (value) {
+    return this.getEditor().setValue(value);
   },
 
   getEditorValue: function () {
@@ -206,6 +246,7 @@ var MangoIndexEditorController = React.createClass({
     return {
       queryIndexCode: mangoStore.getQueryIndexCode(),
       database: mangoStore.getDatabase(),
+      templates: mangoStore.getQueryIndexTemplates()
     };
   },
 
@@ -225,6 +266,10 @@ var MangoIndexEditorController = React.createClass({
     return this.refs.mangoIndexEditor;
   },
 
+  templateSelected: function(selectedItem) {
+    this.getMangoEditor().setEditorValue(selectedItem.value);
+  },
+
   render: function () {
     return (
       <MangoIndexEditor
@@ -234,6 +279,8 @@ var MangoIndexEditorController = React.createClass({
         onSubmit={this.saveIndex}
         title="Index"
         docs={getDocUrl('MANGO_INDEX')}
+        templates={this.state.templates}
+        onTemplateSelected={this.templateSelected}
         exampleCode={this.state.queryIndexCode} />
     );
   },

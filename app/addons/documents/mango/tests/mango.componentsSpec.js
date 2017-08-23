@@ -19,36 +19,8 @@ import Databases from "../../../databases/resources";
 import utils from "../../../../../test/mocha/testUtils";
 import React from "react";
 import ReactDOM from "react-dom";
-import TestUtils from "react-addons-test-utils";
 
 var assert = utils.assert;
-
-describe('Mango IndexEditor', function () {
-  var database = new Databases.Model({id: 'testdb'}),
-      container,
-      editor;
-
-  beforeEach(function () {
-    container = document.createElement('div');
-    MangoActions.setDatabase({
-      database: database
-    });
-  });
-
-  afterEach(function () {
-    ReactDOM.unmountComponentAtNode(container);
-  });
-
-  it('renders a default index definition', function () {
-    editor = TestUtils.renderIntoDocument(
-      <Views.MangoIndexEditorController description="foo" />,
-      container
-    );
-
-    var payload = JSON.parse(editor.getMangoEditor().getEditorValue());
-    assert.equal(payload.index.fields[0], '_id');
-  });
-});
 
 describe('Mango QueryEditor', function () {
   var database = new Databases.Model({id: 'testdb'}),

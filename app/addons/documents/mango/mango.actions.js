@@ -31,9 +31,9 @@ export default {
     });
   },
 
-  newQueryCreateIndexCode: function (options) {
+  newQueryCreateIndexTemplate: function (options) {
     FauxtonAPI.dispatch({
-      type: ActionTypes.MANGO_NEW_QUERY_CREATE_INDEX_CODE,
+      type: ActionTypes.MANGO_NEW_QUERY_CREATE_INDEX_TEMPLATE,
       options: options
     });
   },
