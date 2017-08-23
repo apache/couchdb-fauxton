@@ -32,8 +32,22 @@ export const fetchPermissions = url => dispatch => {
     headers: {'Accept': 'application/json' },
     credentials: 'include'
   })
-  .then(res => res.json())
-  .then(json => dispatch(receivedPermissions(json)));
+  .then((res) => res.json())
+  .then(json => {
+     if (json.error && json.reason) {
+       dispatch(receivedPermissions(
+         {admins:{roles:["_admin"]}, members:{roles:["_admin"]}}));
+       throw new Error(json.reason);
+     }
+     dispatch(receivedPermissions(json));
+  })
+  .catch((err) => {
+     FauxtonAPI.addNotification({
+       msg: 'Failed to retrieve permissions. Please try again. Reason:'
+         + err.message,
+       type: 'error'
+     });
+  });
 };
 
 export const setPermissionOnObject = (p, section, type, value) => {
