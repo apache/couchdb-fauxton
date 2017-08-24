@@ -16,7 +16,7 @@ import RouteObject from "./routeObject";
 import utils from "./utils";
 import Store from "./store";
 import constants from "../constants";
-import dispatcher from "./flux";
+import dispatcher from "./dispatcher";
 import $ from "jquery";
 import Backbone from "backbone";
 import _ from "lodash";
