@@ -14,8 +14,8 @@ import FauxtonAPI from "../../core/api";
 import React from "react";
 import ReactDOM from "react-dom";
 import { Modal } from "react-bootstrap";
-import "velocity-animate/velocity";
-import "velocity-animate/velocity.ui";
+// import "velocity-animate/velocity";
+// import "velocity-animate/velocity.ui";
 
 
 // formats a block of code and pretty-prints it in the page. Currently uses the prettyPrint plugin
