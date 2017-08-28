@@ -65,7 +65,6 @@
     "express": "^4.14.1",
     "extract-text-webpack-plugin": "~2.1.0",
     "file-loader": "^0.10.0",
-    "flux": "^3.1.0",
     "fs-extra": "^2.0.0",
     "grunt": "~1.0.1",
     "grunt-cli": "~1.2.0",

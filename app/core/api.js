@@ -16,7 +16,7 @@ import RouteObject from "./routeObject";
 import utils from "./utils";
 import Store from "./store";
 import constants from "../constants";
-import Flux from "flux";
+import dispatcher from "./dispatcher";
 import $ from "jquery";
 import Backbone from "backbone";
 import _ from "lodash";
@@ -28,19 +28,19 @@ Backbone.ajax = function () {
   };
 
 Object.assign(FauxtonAPI, {
-  Router: Router,
-  RouteObject: RouteObject,
-  utils: utils,
-  Store: Store,
-  Events: _.extend({}, Backbone.Events),
-  dispatcher: new Flux.Dispatcher(),
-  Promise: Promise
+  Router,
+  RouteObject,
+  utils,
+  Store,
+  dispatcher,
+  Promise,
+  Events: _.extend({}, Backbone.Events)
 });
 
 // Pass along all constants
 FauxtonAPI.constants = constants;
 
-FauxtonAPI.dispatch = _.bind(FauxtonAPI.dispatcher.dispatch, FauxtonAPI.dispatcher);
+FauxtonAPI.dispatch = dispatcher.dispatch;
 
 FauxtonAPI.navigate = function (url, _opts) {
   var options = _.extend({trigger: true}, _opts);
