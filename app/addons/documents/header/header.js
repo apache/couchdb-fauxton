@@ -30,9 +30,8 @@ export default class BulkDocumentHeaderController extends React.Component {
     return {
       selectedLayout: indexResultsStore.getSelectedLayout(),
       bulkDocCollection: indexResultsStore.getBulkDocCollection(),
-      isMango: indexResultsStore.getIsMangoResults(),
-      //isMangoIndexList: indexResultsStore.getIsMangoIndexResults()
-      // isMangoIndexList:
+      //TODO: Replace below with a test for docType
+      isMango: indexResultsStore.getIsMangoResults()
     };
   }
 
@@ -63,6 +62,7 @@ export default class BulkDocumentHeaderController extends React.Component {
     // TODO: migrate completely to redux and eliminate this check.
     const layout = changeLayout ? selectedLayout : this.state.selectedLayout;
     let metadata, json, table;
+    //TODO: Add test for typeOfIndex !== 'mango-query'
     if ((typeOfIndex && typeOfIndex === 'view')) {
       metadata = <Button
           className={layout === Constants.LAYOUT_ORIENTATION.METADATA ? 'active' : ''}

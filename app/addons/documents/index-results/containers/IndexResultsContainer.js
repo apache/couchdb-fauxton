@@ -102,5 +102,6 @@ const IndexResultsContainer = connect (
 export default IndexResultsContainer;
 
 IndexResultsContainer.propTypes = {
-  queryDocs: React.PropTypes.func.isRequired
+  queryDocs: React.PropTypes.func.isRequired,
+  docType: React.PropTypes.string.isRequired
 };

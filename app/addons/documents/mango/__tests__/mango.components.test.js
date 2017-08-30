@@ -14,16 +14,11 @@ import FauxtonAPI from "../../../../core/api";
 import Views from "../mango.components";
 import MangoQueryEditor from "../components/MangoQueryEditor";
 import MangoIndexEditor from "../components/MangoIndexEditor";
-// import MangoActions from "../mango.actions";
-// import ActionTypes from "../mango.actiontypes";
-// import Resources from "../../resources";
-// import Databases from "../../../databases/resources";
 import utils from "../../../../../test/mocha/testUtils";
 import React from "react";
 import ReactDOM from "react-dom";
-// import TestUtils from "react-addons-test-utils";
 import sinon from "sinon";
-import { shallow, mount } from 'enzyme';
+import { mount } from 'enzyme';
 
 import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';

@@ -100,7 +100,6 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       dispatch(queryOptionsToggleVisibility(newVisibility));
     },
     queryOptionsExecute: (queryOptionsParams, perPage) => {
-      //dispatch(queryOptionsExecute(ownProps.fetchUrl, queryOptionsParams, perPage));
       dispatch(queryOptionsExecute(ownProps.queryDocs, queryOptionsParams, perPage));
     },
     queryOptionsFilterOnlyDdocs: () => {

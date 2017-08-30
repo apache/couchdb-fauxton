@@ -158,7 +158,7 @@ export const getTableViewData = (docs, options) => {
     return {
       content: doc,
       id: getDocId(doc, options.docType),
-      _rev: getDocRev(doc, options.docType), //doc._rev || (doc.value && doc.value.rev),
+      _rev: getDocRev(doc, options.docType),
       header: '',
       keylabel: '',
       url: doc._id || doc.id ? getDocUrl('app', doc._id || doc.id, options.databaseName) : null,

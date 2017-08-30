@@ -33,7 +33,6 @@ export default class IndexResults extends React.Component {
   }
 
   componentWillUpdate (nextProps) {
-    // console.log('IndexResults - will update - next.ddocsOnly:', nextProps.ddocsOnly);
     const {
       fetchDocs,
       fetchParams,
