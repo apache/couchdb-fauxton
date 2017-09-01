@@ -39,7 +39,7 @@ const getIndexName = ({def, type}) => {
 };
 
 const formatCode = (code) => {
-  return JSON.stringify(code, null, '  ');
+  return JSON.stringify(code, null, 3);
 };
 
 const getIndexContent = (doc) => {

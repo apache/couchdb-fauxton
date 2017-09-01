@@ -53,6 +53,7 @@ const mapStateToProps = (state, ownProps) => {
     availableIndexes: getAvailableQueryIndexes(mangoQuery),
     additionalIndexes: getAvailableAdditionalIndexes(mangoQuery),
     isLoading: mangoQuery.isLoading,
+    history: mangoQuery.history,
     description: ownProps.description,
     editorTitle: ownProps.editorTitle,
     additionalIndexesText: ownProps.additionalIndexesText,
@@ -63,6 +64,10 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch/*, ownProps*/) => {
   return {
+    loadQueryHistory: (options) => {
+      dispatch(Actions.loadQueryHistory(options));
+    },
+
     runExplainQuery: (options) => {
       dispatch(Actions.runExplainQuery(options));
     },

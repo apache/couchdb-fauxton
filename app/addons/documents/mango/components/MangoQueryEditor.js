@@ -12,6 +12,7 @@
 
 import React, { Component } from "react";
 import "../../../../../assets/js/plugins/prettify";
+import ReactSelect from "react-select";
 import app from "../../../../app";
 import FauxtonAPI from "../../../../core/api";
 import ReactComponents from "../../../components/react-components";
@@ -28,12 +29,17 @@ export default class MangoQueryEditor extends Component {
 
   componentDidMount() {
     prettyPrint();
+    this.props.loadQueryHistory({ databaseName: this.props.databaseName });
     // Clear results list in case it was populated by other pages
     this.props.clearResults();
   }
 
   componentDidUpdate () {
     prettyPrint();
+  }
+
+  setEditorValue (newValue = '') {
+    return this.refs.codeEditor.setValue(newValue);
   }
 
   getEditorValue () {
@@ -44,10 +50,26 @@ export default class MangoQueryEditor extends Component {
     return this.refs.codeEditor.getEditor().hasErrors();
   }
 
+  onHistorySelected(selectedItem) {
+    this.setEditorValue(selectedItem.value);
+  }
+
   editor() {
     return (
       <div className="mango-editor-wrapper">
         <form className="form-horizontal" onSubmit={(ev) => {this.runQuery(ev);}}>
+          <div className="padded-box">
+            <ReactSelect
+              className="mango-select"
+              options={this.props.history}
+              ref="history"
+              placeholder="Query history"
+              searchable={false}
+              clearable={false}
+              autosize={false}
+              onChange={(elem) => {this.onHistorySelected(elem);}}
+            />
+          </div>
           <PaddedBorderedBox>
             <CodeEditorPanel
               id="query-field"

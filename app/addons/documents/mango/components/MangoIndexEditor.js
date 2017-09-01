@@ -38,6 +38,10 @@ export default class MangoIndexEditor extends Component {
     prettyPrint();
   }
 
+  setEditorValue (newValue = '') {
+    return this.refs.codeEditor.setValue(newValue);
+  }
+
   getEditorValue () {
     return this.refs.codeEditor.getValue();
   }
@@ -46,11 +50,27 @@ export default class MangoIndexEditor extends Component {
     return this.refs.codeEditor.getEditor().hasErrors();
   }
 
+  onTemplateSelected(selectedItem) {
+    this.getMangoEditor().setEditorValue(selectedItem.value);
+  }
+
   editor() {
     const editQueryURL = '#' + FauxtonAPI.urls('mango', 'query-app', encodeURIComponent(this.props.databaseName));
     return (
       <div className="mango-editor-wrapper">
         <form className="form-horizontal" onSubmit={(ev) => {this.saveIndex(ev);}}>
+          <div className="padded-box">
+            <ReactSelect
+              className="mango-select"
+              options={this.props.templates}
+              ref="templates"
+              placeholder="Examples"
+              searchable={false}
+              clearable={false}
+              autosize={false}
+              onChange={(item) => {this.onTemplateSelected(item);}}
+            />
+           </div>
           <PaddedBorderedBox>
             <CodeEditorPanel
               id="query-field"

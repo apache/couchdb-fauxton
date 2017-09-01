@@ -14,6 +14,7 @@ import FauxtonAPI from "../../../core/api";
 import ActionTypes from "./actiontypes";
 import Stores from "./stores";
 import SidebarActions from "../sidebar/actions";
+import MangoActionTypes from "../mango/mango.actiontypes";
 var indexResultsStore = Stores.indexResultsStore;
 
 var errorMessage = function (ids) {
@@ -112,6 +113,13 @@ export default {
         bulkCollection = indexResultsStore.getBulkDocCollection();
 
     this.clearResults();
+
+    FauxtonAPI.dispatch({
+      type: MangoActionTypes.MANGO_NEW_QUERY_FIND_CODE,
+      options: {
+        code: options.queryCode
+      }
+    });
 
     return collection
       .setQuery(query)

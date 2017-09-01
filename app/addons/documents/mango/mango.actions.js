@@ -25,6 +25,13 @@ export default {
     };
   },
 
+  loadQueryHistory: function (options) {
+    return {
+      type: ActionTypes.MANGO_LOAD_QUERY_HISTORY,
+      options: options
+    };
+  },
+
   newQueryFindCode: function (options) {
     return {
       type: ActionTypes.MANGO_NEW_QUERY_FIND_CODE,
@@ -45,9 +52,9 @@ export default {
     };
   },
 
-  newQueryCreateIndexCode: function (options) {
+  newQueryCreateIndexTemplate: function (options) {
     return {
-      type: ActionTypes.MANGO_NEW_QUERY_CREATE_INDEX_CODE,
+      type: ActionTypes.MANGO_NEW_QUERY_CREATE_INDEX_TEMPLATE,
       options: options
     };
   },
