@@ -13,7 +13,6 @@
 import React from 'react';
 import FauxtonAPI from '../../../../../core/api';
 import Constants from '../../../constants';
-import {getDocId} from '../../helpers/shared-helpers';
 import Components from "../../../../components/react-components";
 import {ResultsToolBar} from "../../../components/results-toolbar";
 import NoResultsScreen from './NoResultsScreen';
@@ -52,11 +51,10 @@ export default class ResultsScreen extends React.Component {
   getDocumentList () {
     let noop = () => {};
     let data = this.props.results.results;
-    const { typeOfIndex } = this.props;
     return _.map(data, function (doc, i) {
       return (
        <Document
-         key={getDocId(doc, typeOfIndex) + i}
+         key={doc.id + i}
          doc={doc}
          onClick={this.props.isEditable ? this.onClick : noop}
          keylabel={doc.keylabel}
@@ -65,7 +63,7 @@ export default class ResultsScreen extends React.Component {
          header={doc.header}
          docChecked={this.props.docChecked}
          isDeletable={doc.isDeletable}
-         docIdentifier={getDocId(doc, typeOfIndex)} >
+         docIdentifier={doc.id} >
          {doc.url ? this.getUrlFragment('#' + doc.url) : doc.url}
        </Document>
      );

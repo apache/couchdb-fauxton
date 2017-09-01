@@ -12,7 +12,7 @@
 
 import app from "../../../app";
 import ActionTypes from "./mango.actiontypes";
-import { formatCode } from "./mango.helper";
+import MangoHelper from "./mango.helper";
 import constants from "./mango.constants";
 
 const defaultQueryIndexCode = {
@@ -28,24 +28,12 @@ const defaultQueryFindCode = {
   }
 };
 
-const HISTORY_LIMIT = 5;
-
-const initialState = {
-  queryFindCode: defaultQueryFindCode,
-  queryIndexCode: defaultQueryIndexCode,
-  queryFindCodeChanged: false,
-  explainPlan: undefined,
-  history: [createSelectItem(defaultQueryFindCode)],
-  historyKey: 'default',
-  queryIndexTemplates: getDefaultQueryIndexTemplates()
-};
-
 const createSelectItem = (code) => {
   // ensure we're working with a deserialized query object
   const object = typeof code === "string" ? JSON.parse(code) : code;
 
   const singleLineValue = JSON.stringify(object);
-  const multiLineValue = formatCode(object);
+  const multiLineValue = MangoHelper.formatCode(object);
 
   return {
     label: singleLineValue,
@@ -54,9 +42,33 @@ const createSelectItem = (code) => {
   };
 };
 
+const getDefaultHistory = () => {
+  return [createSelectItem(defaultQueryFindCode)];
+};
+
+const getDefaultQueryIndexTemplates = () => {
+  return constants.INDEX_TEMPLATES.map((el) => {
+    const item = createSelectItem(el.code);
+    item.label = el.label || item.label;
+    return item;
+  });
+};
+
+const HISTORY_LIMIT = 5;
+
+const initialState = {
+  queryFindCode: defaultQueryFindCode,
+  queryIndexCode: defaultQueryIndexCode,
+  queryFindCodeChanged: false,
+  explainPlan: undefined,
+  history: getDefaultHistory(),
+  historyKey: 'default',
+  queryIndexTemplates: getDefaultQueryIndexTemplates()
+};
+
 const loadQueryHistory = (databaseName) => {
   const historyKey = databaseName + '_queryhistory';
-  return app.utils.localStorageGet(historyKey) || this.getDefaultHistory();
+  return app.utils.localStorageGet(historyKey) || getDefaultHistory();
 };
 
 const updateQueryHistory = ({ historyKey, history }, queryCode, label) => {
@@ -95,14 +107,6 @@ const updateQueryIndexTemplates = ({ queryIndexTemplates }, value, label) => {
     newTemplates.push(templateItem);
   }
 };
-
-const getDefaultQueryIndexTemplates = () => {
-  return constants.INDEX_TEMPLATES.map(i => createSelectItem(i.code, i.label));
-};
-
-// const getHistory = () => {
-//   return app.utils.localStorageGet(this.getHistoryKey()) || this.getDefaultHistory();
-// };
 
 export default function mangoquery(state = initialState, action) {
   const { options } = action;

@@ -11,8 +11,8 @@
 // the License.
 
 import React, { Component } from "react";
-import "../../../../../assets/js/plugins/prettify";
 import ReactSelect from "react-select";
+import "../../../../../assets/js/plugins/prettify";
 import app from "../../../../app";
 import FauxtonAPI from "../../../../core/api";
 import ReactComponents from "../../../components/react-components";
@@ -39,7 +39,7 @@ export default class MangoQueryEditor extends Component {
   }
 
   setEditorValue (newValue = '') {
-    return this.refs.codeEditor.setValue(newValue);
+    return this.refs.codeEditor.getEditor().setValue(newValue);
   }
 
   getEditorValue () {

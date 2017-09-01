@@ -11,6 +11,7 @@
 // the License.
 
 import React, { Component } from "react";
+import ReactSelect from "react-select";
 import "../../../../../assets/js/plugins/prettify";
 import app from "../../../../app";
 import FauxtonAPI from "../../../../core/api";
@@ -39,7 +40,7 @@ export default class MangoIndexEditor extends Component {
   }
 
   setEditorValue (newValue = '') {
-    return this.refs.codeEditor.setValue(newValue);
+    return this.refs.codeEditor.getEditor().setValue(newValue);
   }
 
   getEditorValue () {
@@ -51,7 +52,7 @@ export default class MangoIndexEditor extends Component {
   }
 
   onTemplateSelected(selectedItem) {
-    this.getMangoEditor().setEditorValue(selectedItem.value);
+    this.setEditorValue(selectedItem.value);
   }
 
   editor() {

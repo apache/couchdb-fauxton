@@ -22,7 +22,8 @@ const mapStateToProps = ({ mangoQuery, indexResults }, ownProps) => {
     description: ownProps.description,
     databaseName: ownProps.databaseName,
     queryIndexCode: Helpers.formatCode(mangoQuery.queryIndexCode),
-    fetchParams: indexResults.fetchParams
+    templates: mangoQuery.queryIndexTemplates,
+    fetchParams: indexResults.fetchParams,
   };
 };
 
