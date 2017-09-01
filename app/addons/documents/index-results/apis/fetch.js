@@ -118,6 +118,7 @@ export const queryAllDocs = (fetchUrl, params) => {
   .then(res => res.json())
   .then(res => {
     return {
+      //TODO: handle error situation
       docs: res.error ? [] : res.rows,
       docType: 'view'
     };
@@ -218,9 +219,15 @@ export const processBulkDeleteResponse = (res, deletedDocs, designDocs, docType)
     clear:  true
   });
 
-  const failedDocs = docType === 'MangoIndex' ?
-    (res.fail ? res.fail.map(doc => doc.id) : [])
-    : res.filter(doc => !!doc.error).map(doc => doc.id);
+  let failedDocs = [];
+  if (docType === 'MangoIndex') {
+    if (res.fail) {
+      failedDocs = res.fail.map(doc => doc.id);
+    }
+  } else {
+    failedDocs = res.filter(doc => !!doc.error).map(doc => doc.id);
+  }
+
   const hasDesignDocs = !!deletedDocs.map(d => d._id).find((_id) => /_design/.test(_id));
 
   if (failedDocs.length > 0) {

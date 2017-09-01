@@ -13,6 +13,8 @@
 import ActionTypes from '../actiontypes';
 import { getDocId, getDocRev, isJSONDocBulkDeletable } from "../helpers/shared-helpers";
 
+//TODO: Move action function action.js
+
 export const nowLoading = () => {
   return {
     type: ActionTypes.INDEX_RESULTS_REDUX_IS_LOADING

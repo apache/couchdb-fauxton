@@ -63,14 +63,14 @@ export default class BulkDocumentHeaderController extends React.Component {
     const layout = changeLayout ? selectedLayout : this.state.selectedLayout;
     let metadata, json, table;
     //TODO: Add test for typeOfIndex !== 'mango-query'
-    if ((typeOfIndex && typeOfIndex === 'view')) {
+    if ((typeOfIndex === 'view')) {
       metadata = <Button
           className={layout === Constants.LAYOUT_ORIENTATION.METADATA ? 'active' : ''}
           onClick={this.toggleLayout.bind(this, Constants.LAYOUT_ORIENTATION.METADATA)}
         >
           Metadata
         </Button>;
-    } else if ((typeOfIndex && typeOfIndex === 'MangoIndex')) {
+    } else if ((typeOfIndex === 'MangoIndex')) {
       return null;
     }
 
