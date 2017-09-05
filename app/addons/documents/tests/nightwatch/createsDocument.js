@@ -71,7 +71,7 @@ module.exports = {
       .waitForElementPresent('.tableview-checkbox-cell', waitTime, false)
       .clickWhenVisible('.document-result-screen__toolbar-create-btn')
       .waitForElementPresent('#editor-container', waitTime, false)
-      .verify.urlEquals(baseUrl + '/#/database/' + newDatabaseName + '/new')
+      .verify.urlEquals(baseUrl + '/#database/' + newDatabaseName + '/new')
       .waitForElementPresent('.ace_gutter-active-line', waitTime, false)
 
       // confirm the header elements are showing up
