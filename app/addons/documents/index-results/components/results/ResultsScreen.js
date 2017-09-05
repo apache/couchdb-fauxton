@@ -34,7 +34,9 @@ export default class ResultsScreen extends React.Component {
   }
 
   onClick (id, doc) {
-    FauxtonAPI.navigate(doc.url);
+    if (doc.url) {
+      FauxtonAPI.navigate(doc.url);
+    }
   }
 
   getUrlFragment (url) {

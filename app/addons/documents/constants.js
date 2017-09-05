@@ -15,5 +15,11 @@ export default {
     TABLE: 'LAYOUT_TABLE',
     METADATA: 'LAYOUT_METADATA',
     JSON: 'LAYOUT_JSON'
+  },
+  // Document types that can be displayed by Index Results components
+  INDEX_RESULTS_DOC_TYPE: {
+    MANGO_INDEX: 'MangoIndex',
+    MANGO_QUERY: 'MangoQueryResult',
+    VIEW: 'view'
   }
 };

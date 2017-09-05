@@ -25,6 +25,7 @@ import IndexResultsContainer from './index-results/containers/IndexResultsContai
 import PaginationContainer from './index-results/containers/PaginationContainer';
 import ApiBarContainer from './index-results/containers/ApiBarContainer';
 import { queryAllDocs } from './index-results/apis/fetch';
+import Constants from './constants';
 
 export const TabsSidebarHeader = ({
   hideQueryOptions,
@@ -142,7 +143,7 @@ export const DocsTabsSidebarLayout = ({
                       databaseName={dbName}
                       fetchAtStartup={true}
                       queryDocs={ (params) => { return queryAllDocs(fetchUrl, params); } }
-                      docType={'view'} />;
+                      docType={Constants.INDEX_RESULTS_DOC_TYPE.VIEW} />;
   } else {
     lowerContent = <IndexResultsComponents.List designDocs={designDocs} />;
   }

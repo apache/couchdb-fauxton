@@ -13,10 +13,11 @@
 import { getJsonViewData } from '../index-results/helpers/json-view';
 import { getDocUrl } from '../index-results/helpers/shared-helpers';
 import '../base';
+import Constants from '../constants';
 
 describe('Docs JSON View', () => {
   const databaseName = 'testdb';
-  let docType = 'view';
+  let docType = Constants.INDEX_RESULTS_DOC_TYPE.VIEW;
   const docs = [
     {
       id: "aardvark",
@@ -65,7 +66,7 @@ describe('Docs JSON View', () => {
 
   beforeEach(() => {
     testDocs = docs;
-    docType = 'view';
+    docType = Constants.INDEX_RESULTS_DOC_TYPE.VIEW;
   });
 
   it('getJsonViewData returns proper meta object with vanilla inputs', () => {
@@ -98,7 +99,7 @@ describe('Docs JSON View', () => {
   });
 
   it('getJsonViewData false hasBulkDeletableDoc when all special mango docs', () => {
-    docType = 'MangoIndex';
+    docType = Constants.INDEX_RESULTS_DOC_TYPE.MANGO_INDEX;
     testDocs = mangoIndexes;
     testDocs[0].type = 'special';
     testDocs[1].type = 'special';

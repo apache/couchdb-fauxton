@@ -14,10 +14,13 @@ import {
   getDocUrl,
   isJSONDocEditable,
   isJSONDocBulkDeletable,
-  hasBulkDeletableDoc
+  hasBulkDeletableDoc,
+  getDocId,
+  getDocRev
 } from '../index-results/helpers/shared-helpers';
 import FauxtonAPI from '../../../core/api';
 import '../base';
+import Constants from '../constants';
 import sinon from 'sinon';
 
 describe('Docs Shared Helpers', () => {
@@ -66,11 +69,11 @@ describe('Docs Shared Helpers', () => {
       class: "mammal",
       diet: "omnivore"
     };
-    let docType = 'view';
+    let docType = Constants.INDEX_RESULTS_DOC_TYPE.VIEW;
     let testDoc = Object.assign({}, doc);
 
     afterEach(() => {
-      docType = 'view';
+      docType = Constants.INDEX_RESULTS_DOC_TYPE.VIEW;
       testDoc = Object.assign({}, doc);
     });
 
@@ -80,7 +83,7 @@ describe('Docs Shared Helpers', () => {
     });
 
     it('returns false when type is MangoIndex', () => {
-      docType = 'MangoIndex';
+      docType = Constants.INDEX_RESULTS_DOC_TYPE.MANGO_INDEX;
       expect(isJSONDocEditable(testDoc, docType)).toBe(false);
     });
 
@@ -90,7 +93,7 @@ describe('Docs Shared Helpers', () => {
     });
 
     it('returns false if the doc does not have an _id', () => {
-      delete(testDoc._id);
+      delete (testDoc._id);
       expect(isJSONDocEditable(testDoc, docType)).toBe(false);
     });
 
@@ -112,12 +115,12 @@ describe('Docs Shared Helpers', () => {
       class: "mammal",
       diet: "omnivore"
     };
-    let docType = 'view';
+    let docType = Constants.INDEX_RESULTS_DOC_TYPE.VIEW;
     let testDoc = Object.assign({}, doc);
 
     afterEach(() => {
       testDoc = Object.assign({}, doc);
-      docType = 'view';
+      docType = Constants.INDEX_RESULTS_DOC_TYPE.VIEW;
     });
 
     it('returns true for normal doc and views', () => {
@@ -125,18 +128,18 @@ describe('Docs Shared Helpers', () => {
     });
 
     it('returns false if mango index and doc has type of special', () => {
-      docType = 'MangoIndex';
+      docType = Constants.INDEX_RESULTS_DOC_TYPE.MANGO_INDEX;
       testDoc.type = 'special';
       expect(isJSONDocBulkDeletable(testDoc, docType)).toBe(false);
     });
 
     it('returns false if doc does not have _id or id', () => {
-      delete(testDoc._id);
+      delete (testDoc._id);
       expect(isJSONDocBulkDeletable(testDoc, docType)).toBe(false);
     });
 
     it('returns false if doc does not have _rev or doc.value.rev', () => {
-      delete(testDoc._rev);
+      delete (testDoc._rev);
       expect(isJSONDocBulkDeletable(testDoc, docType)).toBe(false);
     });
   });
@@ -156,7 +159,7 @@ describe('Docs Shared Helpers', () => {
         diet: "omnivore"
       }
     ];
-    let docType = 'MangoIndex';
+    const docType = Constants.INDEX_RESULTS_DOC_TYPE.MANGO_INDEX;
 
     it('returns true if any docs are bulk deletable', () => {
       expect(hasBulkDeletableDoc(docs, docType)).toBe(true);
@@ -165,6 +168,100 @@ describe('Docs Shared Helpers', () => {
     it('returns true when no docs are bulk deletable', () => {
       docs[0].type = 'special';
       expect(hasBulkDeletableDoc(docs, docType)).toBe(false);
+    });
+  });
+
+  describe('getDocId', () => {
+    it('returns correct ID for docType "view"', () => {
+      const docView = {
+        id: "20c76d4ff9851694792654ab3e2ca303",
+        key: "20c76d4ff9851694792654ab3e2ca303",
+        value: {
+          rev: "1-c59f5770929653147ab939344b84e933"
+        }
+      };
+      const docType = Constants.INDEX_RESULTS_DOC_TYPE.VIEW;
+      expect(getDocId(docView, docType)).toBe(docView.id);
+    });
+
+    it('returns correct ID for docType "MangoQueryResult"', () => {
+      const docMangoResult = {
+        _id: "aardvark",
+        _rev: "5-717f5e88689af3ad191b47321de10c95"
+      };
+      const docType = Constants.INDEX_RESULTS_DOC_TYPE.MANGO_QUERY;
+      expect(getDocId(docMangoResult, docType)).toBe(docMangoResult._id);
+    });
+
+    it('returns _all_docs as ID for special Mango index', () => {
+      const docSpecialMangoIndex = {
+        "ddoc": null,
+        "name": "_all_docs",
+        "type": "special",
+        "def": {
+          "fields": [{ "_id": "asc" }]
+        }
+      };
+      const docType = Constants.INDEX_RESULTS_DOC_TYPE.MANGO_INDEX;
+      expect(getDocId(docSpecialMangoIndex, docType)).toBe('_all_docs');
+    });
+
+    it('returns design doc ID as ID for Mango indexes', () => {
+      const docMangoIndex = {
+        ddoc: "_design/a7ee061f1a2c0c6882258b2f1e148b714e79ccea",
+        name: "a7ee061f1a2c0c6882258b2f1e148b714e79ccea",
+        type: "json",
+        def: { "fields": [{ "foo": "asc" }] }
+      };
+      const docType = Constants.INDEX_RESULTS_DOC_TYPE.MANGO_INDEX;
+      expect(getDocId(docMangoIndex, docType)).toBe(docMangoIndex.ddoc);
+    });
+  });
+
+  describe('getDocRev', () => {
+    it('returns document revision for docType "view"', () => {
+      const docView = {
+        id: "20c76d4ff9851694792654ab3e2ca303",
+        key: "20c76d4ff9851694792654ab3e2ca303",
+        value: {
+          rev: "1-c59f5770929653147ab939344b84e933"
+        }
+      };
+      const docType = Constants.INDEX_RESULTS_DOC_TYPE.VIEW;
+      expect(getDocRev(docView, docType)).toBe(docView.value.rev);
+    });
+
+    it('returns document revision for docType "MangoQueryResult"', () => {
+      const docMangoResult = {
+        _id: "aardvark",
+        _rev: "5-717f5e88689af3ad191b47321de10c95"
+      };
+      const docType = Constants.INDEX_RESULTS_DOC_TYPE.MANGO_QUERY;
+      expect(getDocRev(docMangoResult, docType)).toBe(docMangoResult._rev);
+    });
+
+    it('returns undefined as revision for special Mango index', () => {
+      const docSpecialMangoIndex = {
+        "ddoc": null,
+        "name": "_all_docs",
+        "type": "special",
+        "def": {
+          "fields": [{ "_id": "asc" }]
+        }
+      };
+      const docType = Constants.INDEX_RESULTS_DOC_TYPE.MANGO_INDEX;
+      expect(getDocRev(docSpecialMangoIndex, docType)).toBe(undefined);
+    });
+
+    it('returns undefined as revision for Mango indexes', () => {
+      const docMangoIndex = {
+        ddoc: "_design/a7ee061f1a2c0c6882258b2f1e148b714e79ccea",
+        name: "a7ee061f1a2c0c6882258b2f1e148b714e79ccea",
+        type: "json",
+        def: { "fields": [{ "foo": "asc" }] }
+      };
+      const docType = Constants.INDEX_RESULTS_DOC_TYPE.MANGO_INDEX;
+      expect(getDocRev(docMangoIndex, docType)).toBe(undefined);
     });
   });
 });

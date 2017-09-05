@@ -14,6 +14,7 @@ import app from "../../app";
 import FauxtonAPI from "../../core/api";
 import Documents from "./shared-resources";
 import PagingCollection from "../../../assets/js/plugins/cloudant.pagingcollection";
+import Constants from './constants';
 
 
 Documents.UUID = FauxtonAPI.Model.extend({
@@ -133,7 +134,7 @@ Documents.MangoIndexCollection = PagingCollection.extend({
     this.params = _.extend({limit: defaultLimit}, options.params);
   },
 
-  collectionType: 'MangoIndex',
+  collectionType: Constants.INDEX_RESULTS_DOC_TYPE.MANGO_INDEX,
 
   url: function () {
     return this.urlRef.apply(this, arguments);

@@ -27,7 +27,7 @@ describe('Docs Reducers', () => {
     isEditable: true,  // can the user manipulate the results returned?
     selectedLayout: Constants.LAYOUT_ORIENTATION.METADATA,
     textEmptyIndex: 'No Documents Found',
-    typeOfIndex: 'view',
+    typeOfIndex: Constants.INDEX_RESULTS_DOC_TYPE.VIEW,
     fetchParams: {
       limit: FauxtonAPI.constants.MISC.DEFAULT_PAGE_SIZE + 1,
       skip: 0
@@ -58,7 +58,7 @@ describe('Docs Reducers', () => {
     }
   };
   const testDoc = {
-    _id: 'foo',
+    id: 'foo',
     key: 'foo',
     value: {
       rev: '1-967a00dff5e02add41819138abb3284d'
@@ -129,7 +129,7 @@ describe('Docs Reducers', () => {
   });
 
   it('getTypeOfIndex returns the typeOfIndex attribute from the state', () => {
-    expect(Reducers.getTypeOfIndex(initialState)).toMatch('view');
+    expect(Reducers.getTypeOfIndex(initialState)).toMatch(Constants.INDEX_RESULTS_DOC_TYPE.VIEW);
   });
 
   it('getFetchParams returns the fetchParams attribute from the state', () => {
@@ -288,7 +288,7 @@ describe('Docs Reducers', () => {
       expect(Reducers.getAllDocsSelected(newState)).toBe(false);
     });
 
-    it('returns true when all docs in the docs array are in the selectedDocs array', () => {
+    it('returns true when all selectable docs in the docs array are in the selectedDocs array', () => {
       const newDocAction = {
         type: ActionTypes.INDEX_RESULTS_REDUX_NEW_RESULTS,
         docs: [testDoc],
@@ -296,10 +296,11 @@ describe('Docs Reducers', () => {
           limit: 21,
           skip: 0
         },
-        canShowNext: true
+        canShowNext: true,
+        docType: Constants.INDEX_RESULTS_DOC_TYPE.VIEW
       };
-      const newState1 = Reducers.default(initialState, newDocAction);
 
+      const newState1 = Reducers.default(initialState, newDocAction);
       const selectedDoc = {
         _id: 'foo',
         _rev: '1-967a00dff5e02add41819138abb3284d',
@@ -310,7 +311,7 @@ describe('Docs Reducers', () => {
         selectedDocs: [selectedDoc]
       };
       const newState2 = Reducers.default(newState1, newSelectedDocAction);
-
+      console.log('newState2:', newState2);
       expect(Reducers.getAllDocsSelected(newState2)).toBe(true);
     });
   });

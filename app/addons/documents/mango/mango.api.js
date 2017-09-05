@@ -14,6 +14,7 @@ import 'whatwg-fetch';
 import queryString from 'query-string';
 import app from "../../../app";
 import FauxtonAPI from "../../../core/api";
+import Constants from '../constants';
 
 export const fetchQueryExplain = (databaseName, queryCode) => {
   const url = FauxtonAPI.urls('mango', 'explain-server', databaseName);
@@ -78,14 +79,12 @@ export const fetchIndexes = (databaseName, params) => {
       }
       return {
         docs: json.indexes,
-        docType: 'MangoIndex'
+        docType: Constants.INDEX_RESULTS_DOC_TYPE.MANGO_INDEX
       };
     });
 };
 
 export const mangoQueryDocs = (databaseName, queryCode, params) => {
-  // console.log('TODO: Merge params with queryCode (limit and skip from pagination) - params:', params);
-  // console.log('mangoQueryDocs: db:', databaseName, ' query:', JSON.stringify(queryCode));
   const url = FauxtonAPI.urls('mango', 'query-server', databaseName);
   const queryWithParams = {
     ...queryCode,
@@ -108,7 +107,7 @@ export const mangoQueryDocs = (databaseName, queryCode, params) => {
       }
       return {
         docs: json.docs,
-        docType: 'view'
+        docType: Constants.INDEX_RESULTS_DOC_TYPE.MANGO_QUERY
       };
     });
 };

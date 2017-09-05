@@ -24,6 +24,7 @@ import sinon from 'sinon';
 import SidebarActions from '../sidebar/actions';
 import FauxtonAPI from '../../../core/api';
 import '../base';
+import Constants from '../constants';
 
 describe('Docs Fetch API', () => {
   describe('mergeParams', () => {
@@ -214,7 +215,7 @@ describe('Docs Fetch API', () => {
 
       return queryAllDocs(fetchUrl, params).then((res) => {
         expect(res).toEqual({
-          docType: 'view',
+          docType: Constants.INDEX_RESULTS_DOC_TYPE.VIEW,
           docs: [
           {
             id: "foo",

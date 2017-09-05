@@ -15,7 +15,7 @@ import ActionTypes from './actiontypes';
 import Constants from '../constants';
 import { getJsonViewData } from './helpers/json-view';
 import { getTableViewData } from './helpers/table-view';
-import { getDefaultPerPage, getDocId } from './helpers/shared-helpers';
+import { getDefaultPerPage, getDocId, isJSONDocBulkDeletable } from './helpers/shared-helpers';
 
 const initialState = {
   docs: [],  // raw documents returned from couch
@@ -28,7 +28,7 @@ const initialState = {
   isEditable: true,  // can the user manipulate the results returned?
   selectedLayout: Constants.LAYOUT_ORIENTATION.METADATA,
   textEmptyIndex: 'No Documents Found',
-  typeOfIndex: 'view',
+  typeOfIndex: Constants.INDEX_RESULTS_DOC_TYPE.VIEW,
   fetchParams: {
     limit: getDefaultPerPage() + 1,
     skip: 0
@@ -64,6 +64,7 @@ export default function resultsState (state = initialState, action) {
 
     case ActionTypes.INDEX_RESULTS_REDUX_RESET_STATE:
       return Object.assign({}, initialState, {
+        selectedLayout: state.selectedLayout,
         selectedDocs: [],
         fetchParams: {
           limit: getDefaultPerPage() + 1,
@@ -85,6 +86,13 @@ export default function resultsState (state = initialState, action) {
       });
 
     case ActionTypes.INDEX_RESULTS_REDUX_NEW_RESULTS:
+      let selectedLayout = state.selectedLayout;
+      // Change layout if it's set to METADATA because this option is not available for Mango queries
+      if (action.docType === Constants.INDEX_RESULTS_DOC_TYPE.MANGO_QUERY) {
+        if (state.selectedLayout === Constants.LAYOUT_ORIENTATION.METADATA) {
+          selectedLayout = Constants.LAYOUT_ORIENTATION.TABLE;
+        }
+      }
       return Object.assign({}, state, {
         docs: action.docs,
         isLoading: false,
@@ -93,10 +101,12 @@ export default function resultsState (state = initialState, action) {
         pagination: Object.assign({}, state.pagination, {
           canShowNext: action.canShowNext
         }),
-        typeOfIndex: action.docType
+        typeOfIndex: action.docType,
+        selectedLayout: selectedLayout
       });
 
     case ActionTypes.INDEX_RESULTS_REDUX_CHANGE_LAYOUT:
+      console.log('Reducing to ', action.layout);
       return Object.assign({}, state, {
         selectedLayout: action.layout
       });
@@ -194,7 +204,7 @@ export const getHasResults = (state) => {
   return !state.isLoading && state.docs.length > 0;
 };
 
-// helper function to determine if all the docs on the current page are selected.
+// helper function to determine if all selectable docs on the current page are selected.
 export const getAllDocsSelected = (state) => {
   if (state.docs.length === 0 || state.selectedDocs.length === 0) {
     return false;
@@ -212,7 +222,10 @@ export const getAllDocsSelected = (state) => {
 
   for (let i = 0; i < state.docs.length; i++) {
     const doc = state.docs[i];
-
+    if (!isJSONDocBulkDeletable(doc, state.typeOfIndex)) {
+      //Only check selectable docs
+      continue;
+    }
     // Helper function for finding index of a doc in the current
     // selected docs list.
     const exists = (selectedDoc) => {

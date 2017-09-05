@@ -21,6 +21,7 @@ import IndexResultsContainer from './index-results/containers/IndexResultsContai
 import PaginationContainer from './index-results/containers/PaginationContainer';
 import ApiBarContainer from './index-results/containers/ApiBarContainer';
 import FauxtonAPI from "../../core/api";
+import Constants from './constants';
 
 export const RightHeader = ({ docURL, endpoint }) => {
   const apiBar = <ApiBarContainer docURL={docURL} endpoint={endpoint} />;
@@ -124,12 +125,11 @@ class MangoLayout extends Component {
     if (this.props.explainPlan) {
       endpoint = FauxtonAPI.urls('mango', 'explain-apiurl', database);
     }
-    //console.log('MangoLayout::render:queryFindCode=', queryFindCode);
     let queryFunction = (params) => { return MangoAPI.mangoQueryDocs(databaseName, queryFindCode, params); };
-    let docType = 'view';
+    let docType = Constants.INDEX_RESULTS_DOC_TYPE.MANGO_QUERY;
     if (edit) {
       queryFunction = (params) => { return MangoAPI.fetchIndexes(databaseName, params); };
-      docType = 'MangoIndex';
+      docType = Constants.INDEX_RESULTS_DOC_TYPE.MANGO_INDEX;
     }
     return (
       <div id="dashboard" className="two-pane flex-layout flex-col">

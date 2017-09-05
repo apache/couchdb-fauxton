@@ -97,7 +97,7 @@ export const fetchDocs = (queryDocs, fetchParams, queryOptionsParams) => {
         canShowNext
       } = removeOverflowDocsAndCalculateHasNext(docs, totalDocsRemaining, params.limit);
 
-      if (docType === 'MangoIndex') {
+      if (docType === Constants.INDEX_RESULTS_DOC_TYPE.MANGO_INDEX) {
         dispatch(changeLayout(Constants.LAYOUT_ORIENTATION.JSON));
       }
       // dispatch that we're all done
@@ -120,7 +120,7 @@ export const queryAllDocs = (fetchUrl, params) => {
     return {
       //TODO: handle error situation
       docs: res.error ? [] : res.rows,
-      docType: 'view'
+      docType: Constants.INDEX_RESULTS_DOC_TYPE.VIEW
     };
   });
 };
@@ -164,10 +164,11 @@ export const bulkDeleteDocs = (databaseName, queryDocs, docs, designDocs, fetchP
 
   return (dispatch) => {
     let postPromise, payload;
-    if (docType === 'MangoIndex') {
+    if (docType === Constants.INDEX_RESULTS_DOC_TYPE.MANGO_INDEX) {
       payload = { docids: docs.map(doc => doc._id) };
       postPromise = postToIndexBulkDelete(databaseName, payload);
-    } else if (docType === 'view') {
+    } else if (docType === Constants.INDEX_RESULTS_DOC_TYPE.VIEW
+        || docType === Constants.INDEX_RESULTS_DOC_TYPE.MANGO_QUERY) {
       payload = { docs: docs };
       postPromise = postToBulkDocs(databaseName, payload);
     } else {
@@ -220,7 +221,7 @@ export const processBulkDeleteResponse = (res, deletedDocs, designDocs, docType)
   });
 
   let failedDocs = [];
-  if (docType === 'MangoIndex') {
+  if (docType === Constants.INDEX_RESULTS_DOC_TYPE.MANGO_INDEX) {
     if (res.fail) {
       failedDocs = res.fail.map(doc => doc.id);
     }

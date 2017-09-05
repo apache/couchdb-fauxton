@@ -40,7 +40,7 @@ Stores.IndexResultsStore = FauxtonAPI.Store.extend({
     this.clearSelectedItems();
     this._isLoading = false;
     this._textEmptyIndex = 'No Documents Found';
-    this._typeOfIndex = 'view';
+    this._typeOfIndex = Constants.INDEX_RESULTS_DOC_TYPE.VIEW;
 
     this._tableViewSelectedFields = [];
     this._isPrioritizedEnabled = false;
@@ -501,7 +501,7 @@ Stores.IndexResultsStore = FauxtonAPI.Store.extend({
     });
 
     function fixDocIdForMango (doc, docType) {
-      if (docType !== 'MangoIndex') {
+      if (docType !== Constants.INDEX_RESULTS_DOC_TYPE.MANGO_INDEX) {
         return doc;
       }
 
@@ -515,7 +515,7 @@ Stores.IndexResultsStore = FauxtonAPI.Store.extend({
         return;
       }
 
-      if (docType === 'MangoIndex') {
+      if (docType === Constants.INDEX_RESULTS_DOC_TYPE.MANGO_INDEX) {
         return false;
       }
 
@@ -531,7 +531,7 @@ Stores.IndexResultsStore = FauxtonAPI.Store.extend({
     }
 
     function isJSONDocBulkDeletable (doc, docType) {
-      if (docType === 'MangoIndex') {
+      if (docType === Constants.INDEX_RESULTS_DOC_TYPE.MANGO_INDEX) {
         return doc.type !== 'special';
       }
 
@@ -758,12 +758,12 @@ Stores.IndexResultsStore = FauxtonAPI.Store.extend({
   getIsMangoResults: function () {
     return this._typeOfIndex === 'mango'
       || this._typeOfIndex === 'mango-index'
-      || this._typeOfIndex === 'MangoIndex'; // MangoIndex is the value used by Redux components
+      || this._typeOfIndex === Constants.INDEX_RESULTS_DOC_TYPE.MANGO_INDEX; // MangoIndex is the value used by Redux components
   },
 
   getIsMangoIndexResults: function () {
     return this._typeOfIndex === 'mango-index'
-    || this._typeOfIndex === 'MangoIndex'; // MangoIndex is the value used by Redux components;
+    || this._typeOfIndex === Constants.INDEX_RESULTS_DOC_TYPE.MANGO_INDEX; // MangoIndex is the value used by Redux components;
   },
 
   getIsPrioritizedEnabled: function () {

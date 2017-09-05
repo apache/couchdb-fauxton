@@ -35,7 +35,7 @@ export const getJsonViewData = (docs, { databaseName, docType }) => {
       id: docID || (doc.key && doc.key.toString()),
       _rev: getDocRev(doc, docType),
       keylabel: 'id',
-      url: doc.id ? getDocUrl('app', doc.id, databaseName) : null,
+      url: docID ? getDocUrl('app', docID, databaseName) : null,
       isDeletable: true,
       isEditable: true
     };
