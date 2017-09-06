@@ -18,13 +18,6 @@ import * as MangoAPI from "./mango.api";
 
 export default {
 
-  setDatabase: function (options) {
-    return {
-      type: ActionTypes.MANGO_SET_DB,
-      options: options
-    };
-  },
-
   loadQueryHistory: function (options) {
     return {
       type: ActionTypes.MANGO_LOAD_QUERY_HISTORY,
