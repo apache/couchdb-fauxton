@@ -13,7 +13,7 @@ import React from 'react';
 import BulkDocumentHeaderController from "../header/header";
 import Stores from "../sidebar/stores";
 import Components from "../../components/react-components";
-import app from '../../../app';
+import Helpers from '../helpers';
 
 const {BulkActionComponent} = Components;
 const store = Stores.sidebarStore;
@@ -55,10 +55,9 @@ export class ResultsToolBar extends React.Component {
 
     let createDocumentLink = null;
     if (database) {
-      const safeDatabaseId = app.utils.safeURLName(database.id);
       createDocumentLink = (
         <div className="document-result-screen__toolbar-flex-container">
-          <a href={`#/database/${safeDatabaseId}/new`} className="btn save document-result-screen__toolbar-create-btn btn-primary">
+          <a href={Helpers.getNewDocUrl(database.id)} className="btn save document-result-screen__toolbar-create-btn btn-primary">
             Create Document
           </a>
         </div>
