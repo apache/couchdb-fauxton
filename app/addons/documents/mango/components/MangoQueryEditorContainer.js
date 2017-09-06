@@ -12,8 +12,8 @@
 
 import { connect } from 'react-redux';
 import FauxtonAPI from "../../../../core/api";
-import * as IndexResultActions from '../../index-results/apis/fetch';
-import * as IndexResultBaseActions from '../../index-results/apis/base';
+import * as IndexResultActions from '../../index-results/actions/fetch';
+import * as IndexResultBaseActions from '../../index-results/actions/base';
 import MangoQueryEditor from './MangoQueryEditor';
 import Helpers from '../mango.helper';
 import Actions from '../mango.actions';

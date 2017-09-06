@@ -13,11 +13,10 @@
 import {
   mergeParams,
   removeOverflowDocsAndCalculateHasNext,
-  queryAllDocs,
   validateBulkDelete,
-  postToBulkDocs,
   processBulkDeleteResponse
-} from '../index-results/apis/fetch';
+} from '../index-results/actions/fetch';
+import {queryAllDocs, postToBulkDocs} from '../index-results/api';
 import fetchMock from 'fetch-mock';
 import queryString from 'query-string';
 import sinon from 'sinon';

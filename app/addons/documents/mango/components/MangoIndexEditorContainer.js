@@ -11,7 +11,7 @@
 // the License.
 
 import { connect } from 'react-redux';
-import * as IndexResultActions from '../../index-results/apis/fetch';
+import * as IndexResultActions from '../../index-results/actions/fetch';
 import MangoIndexEditor from './MangoIndexEditor';
 import Helpers from '../mango.helper';
 import Actions from '../mango.actions';

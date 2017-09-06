@@ -13,7 +13,7 @@
 import app from "../../../app";
 import FauxtonAPI from "../../../core/api";
 import ActionTypes from "./mango.actiontypes";
-import * as IndexResultActions from "../index-results/apis/fetch";
+import * as IndexResultActions from "../index-results/actions/fetch";
 import * as MangoAPI from "./mango.api";
 
 export default {

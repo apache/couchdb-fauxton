@@ -24,7 +24,7 @@ import RightAllDocsHeader from './components/header-docs-right';
 import IndexResultsContainer from './index-results/containers/IndexResultsContainer';
 import PaginationContainer from './index-results/containers/PaginationContainer';
 import ApiBarContainer from './index-results/containers/ApiBarContainer';
-import { queryAllDocs } from './index-results/apis/fetch';
+import { queryAllDocs } from './index-results/api';
 import Constants from './constants';
 
 export const TabsSidebarHeader = ({
