@@ -27,7 +27,7 @@ describe('Docs Reducers', () => {
     isEditable: true,  // can the user manipulate the results returned?
     selectedLayout: Constants.LAYOUT_ORIENTATION.METADATA,
     textEmptyIndex: 'No Documents Found',
-    typeOfIndex: Constants.INDEX_RESULTS_DOC_TYPE.VIEW,
+    docType: Constants.INDEX_RESULTS_DOC_TYPE.VIEW,
     fetchParams: {
       limit: FauxtonAPI.constants.MISC.DEFAULT_PAGE_SIZE + 1,
       skip: 0
@@ -128,8 +128,8 @@ describe('Docs Reducers', () => {
     expect(Reducers.getTextEmptyIndex(initialState)).toMatch('No Documents Found');
   });
 
-  it('getTypeOfIndex returns the typeOfIndex attribute from the state', () => {
-    expect(Reducers.getTypeOfIndex(initialState)).toMatch(Constants.INDEX_RESULTS_DOC_TYPE.VIEW);
+  it('getDocType returns the docType attribute from the state', () => {
+    expect(Reducers.getDocType(initialState)).toMatch(Constants.INDEX_RESULTS_DOC_TYPE.VIEW);
   });
 
   it('getFetchParams returns the fetchParams attribute from the state', () => {

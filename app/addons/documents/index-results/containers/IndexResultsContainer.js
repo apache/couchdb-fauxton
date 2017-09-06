@@ -34,7 +34,7 @@ import {
   getHasDocsSelected,
   getNumDocsSelected,
   getTextEmptyIndex,
-  getTypeOfIndex,
+  getDocType,
   getFetchParams,
   getQueryOptionsParams
 } from '../reducers';
@@ -53,7 +53,7 @@ const mapStateToProps = ({indexResults}, ownProps) => {
     hasSelectedItem: getHasDocsSelected(indexResults),
     numDocsSelected: getNumDocsSelected(indexResults),
     textEmptyIndex: getTextEmptyIndex(indexResults),
-    typeOfIndex: getTypeOfIndex(indexResults),
+    docType: getDocType(indexResults),
     fetchParams: getFetchParams(indexResults),
     queryOptionsParams: getQueryOptionsParams(indexResults)
   };

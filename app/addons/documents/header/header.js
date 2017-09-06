@@ -54,7 +54,7 @@ export default class BulkDocumentHeaderController extends React.Component {
     const {
       changeLayout,
       selectedLayout,
-      typeOfIndex
+      docType
     } = this.props;
 
     // If the changeLayout function is not undefined, default to using prop values
@@ -62,14 +62,14 @@ export default class BulkDocumentHeaderController extends React.Component {
     // TODO: migrate completely to redux and eliminate this check.
     const layout = changeLayout ? selectedLayout : this.state.selectedLayout;
     let metadata, json, table;
-    if ((typeOfIndex === Constants.INDEX_RESULTS_DOC_TYPE.VIEW)) {
+    if ((docType === Constants.INDEX_RESULTS_DOC_TYPE.VIEW)) {
       metadata = <Button
           className={layout === Constants.LAYOUT_ORIENTATION.METADATA ? 'active' : ''}
           onClick={this.toggleLayout.bind(this, Constants.LAYOUT_ORIENTATION.METADATA)}
         >
           Metadata
         </Button>;
-    } else if ((typeOfIndex === Constants.INDEX_RESULTS_DOC_TYPE.MANGO_INDEX)) {
+    } else if ((docType === Constants.INDEX_RESULTS_DOC_TYPE.MANGO_INDEX)) {
       return null;
     }
 

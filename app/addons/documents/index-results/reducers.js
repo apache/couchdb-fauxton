@@ -28,7 +28,7 @@ const initialState = {
   isEditable: true,  // can the user manipulate the results returned?
   selectedLayout: Constants.LAYOUT_ORIENTATION.METADATA,
   textEmptyIndex: 'No Documents Found',
-  typeOfIndex: Constants.INDEX_RESULTS_DOC_TYPE.VIEW,
+  docType: Constants.INDEX_RESULTS_DOC_TYPE.VIEW,
   fetchParams: {
     limit: getDefaultPerPage() + 1,
     skip: 0
@@ -101,7 +101,7 @@ export default function resultsState (state = initialState, action) {
         pagination: Object.assign({}, state.pagination, {
           canShowNext: action.canShowNext
         }),
-        typeOfIndex: action.docType,
+        docType: action.docType,
         selectedLayout: selectedLayout
       });
 
@@ -173,7 +173,7 @@ export const getDataForRendering = (state, databaseName) => {
     selectedLayout: state.selectedLayout,
     selectedFieldsTableView: state.tableView.selectedFieldsTableView,
     showAllFieldsTableView: state.tableView.showAllFieldsTableView,
-    docType: state.typeOfIndex
+    docType: state.docType
   };
 
   const docsWithoutGeneratedMangoDocs = docs.filter(removeGeneratedMangoDocs);
@@ -222,14 +222,14 @@ export const getAllDocsSelected = (state) => {
 
   for (let i = 0; i < state.docs.length; i++) {
     const doc = state.docs[i];
-    if (!isJSONDocBulkDeletable(doc, state.typeOfIndex)) {
+    if (!isJSONDocBulkDeletable(doc, state.docType)) {
       //Only check selectable docs
       continue;
     }
     // Helper function for finding index of a doc in the current
     // selected docs list.
     const exists = (selectedDoc) => {
-      return getDocId(doc, state.typeOfIndex) === selectedDoc._id;
+      return getDocId(doc, state.docType) === selectedDoc._id;
     };
 
     if (!state.selectedDocs.some(exists)) {
@@ -312,7 +312,7 @@ export const getIsLoading = state => state.isLoading;
 export const getIsEditable = state => state.isEditable;
 export const getSelectedLayout = state => state.selectedLayout;
 export const getTextEmptyIndex = state => state.textEmptyIndex;
-export const getTypeOfIndex = state => state.typeOfIndex;
+export const getDocType = state => state.docType;
 export const getPageStart = state => state.pagination.pageStart;
 export const getPrioritizedEnabled = state => state.tableView.showAllFieldsTableView;
 export const getCanShowNext = state => state.pagination.canShowNext;
