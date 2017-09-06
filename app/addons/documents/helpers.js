@@ -89,10 +89,16 @@ const truncateDoc = (docString, maxRows) => {
   };
 };
 
+const getNewDocUrl = (databaseName) => {
+  const safeDatabaseName = encodeURIComponent(databaseName);
+  return FauxtonAPI.urls('new', 'newDocument', safeDatabaseName);
+};
+
 export default {
   getSeqNum,
   getNewButtonLinks,
   getModifyDatabaseLinks,
+  getNewDocUrl,
   parseJSON,
   truncateDoc
 };
