@@ -13,7 +13,7 @@
 import FauxtonAPI from '../../../../core/api';
 import SidebarActions from '../../sidebar/actions';
 import Constants from '../../constants';
-import IndexResultsAPI from '../api';
+import * as IndexResultsAPI from '../api';
 import { nowLoading, newResultsAvailable, newSelectedDocs, changeLayout } from './base';
 
 const maxDocLimit = 10000;
