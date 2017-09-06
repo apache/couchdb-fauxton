@@ -30,7 +30,7 @@ class NavBar extends Component {
 
     return links.map((link, i) => {
       return <NavLink
-        key={i}
+        key={link.href + i}
         link={link}
         active={activeLink}
         isMinimized={isMinimized} />;

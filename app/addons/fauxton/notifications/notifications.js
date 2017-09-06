@@ -15,13 +15,13 @@ import ReactDOM from "react-dom";
 import Actions from "./actions";
 import Stores from "./stores";
 import Components from "../../components/react-components";
-import VelocityReact from "velocity-react";
+// import VelocityReact from "velocity-react";
 import "velocity-animate/velocity";
 import "velocity-animate/velocity.ui";
 import uuid from 'uuid';
 
 var store = Stores.notificationStore;
-var VelocityComponent = VelocityReact.VelocityComponent;
+// var VelocityComponent = VelocityReact.VelocityComponent;
 const {Copy} = Components;
 
 // The one-stop-shop for Fauxton notifications. This controller handler the header notifications and the rightmost
@@ -206,6 +206,7 @@ var Notification = React.createClass({
   },
 
   render: function () {
+    //setTimeout(() => this.onAnimationComplete(), 3000); // Temp work around so that notifications appear and disappear
     var iconMap = {
       error: 'fonticon-attention-circled',
       info: 'fonticon-info-circled',
@@ -213,8 +214,8 @@ var Notification = React.createClass({
     };
 
     return (
-      <VelocityComponent animation={this.state.animation}
-        runOnMount={true} duration={this.props.slideInTime} complete={this.onAnimationComplete}>
+      // <VelocityComponent animation={this.state.animation}
+      //   runOnMount={true} duration={this.props.slideInTime} complete={this.onAnimationComplete}>
           <div className="notification-wrapper">
             <div className={'global-notification alert alert-' + this.props.type} ref="notification">
               <a data-bypass href="#" onClick={this.hide}><i className="pull-right fonticon-cancel" /></a>
@@ -222,7 +223,7 @@ var Notification = React.createClass({
               <span dangerouslySetInnerHTML={this.getMsg()}></span>
             </div>
           </div>
-      </VelocityComponent>
+      // </VelocityComponent>
     );
   }
 });

@@ -17,7 +17,7 @@ import Actions from "./actions";
 import Stores from "./stores";
 import Components from "../../fauxton/components";
 import ReactComponents from "../../components/react-components";
-import ReactCSSTransitionGroup from "react-addons-css-transition-group";
+// import ReactCSSTransitionGroup from "react-addons-css-transition-group";
 import "../../../../assets/js/plugins/prettify";
 import uuid from 'uuid';
 
@@ -308,10 +308,10 @@ class ChangeRow extends React.Component {
             </div>
           </div>
 
-          <ReactCSSTransitionGroup transitionName="toggle-changes-code" component="div" className="changesCodeSectionWrapper"
-            transitionEnterTimeout={500} transitionLeaveTimeout={300}>
+          {/* <ReactCSSTransitionGroup transitionName="toggle-changes-code" component="div" className="changesCodeSectionWrapper"
+            transitionEnterTimeout={500} transitionLeaveTimeout={300}> */}
             {this.getChangesCode()}
-          </ReactCSSTransitionGroup>
+          {/* </ReactCSSTransitionGroup> */}
 
           <div className="row-fluid">
             <div className="span2">deleted</div>
