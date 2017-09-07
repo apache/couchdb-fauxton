@@ -88,6 +88,7 @@ const runWebpackServer = function () {
     overlay: true,
     hot: false,
     historyApiFallback: false,
+    disableHostCheck: true,
     stats: {
       colors: true,
     },
