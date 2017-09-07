@@ -10,31 +10,31 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import FauxtonAPI from "../../../../core/api";
-import Actions from "../actions";
-import testUtils from "../../../../../test/mocha/testUtils";
+import FauxtonAPI from "../../../core/api";
+import Actions from "../designdocinfo/actions";
+import testUtils from "../../../../test/mocha/testUtils";
 import sinon from "sinon";
-var assert = testUtils.assert;
-var restore = testUtils.restore;
+const assert = testUtils.assert;
+const restore = testUtils.restore;
 
-describe('DesignDocInfo Actions', function () {
+describe('DesignDocInfo Actions', () => {
 
-  describe('fetchDesignDocInfo', function () {
+  describe('fetchDesignDocInfo', () => {
 
-    afterEach(function () {
+    afterEach(() => {
       restore(Actions.monitorDesignDoc);
     });
 
-    it('calls monitorDesignDoc on successful fetch', function () {
-      var promise = FauxtonAPI.Deferred();
+    it('calls monitorDesignDoc on successful fetch', () => {
+      const promise = FauxtonAPI.Deferred();
       promise.resolve();
-      var fakeDesignDocInfo = {
-        fetch: function () {
+      const fakeDesignDocInfo = {
+        fetch: () => {
           return promise;
         }
       };
 
-      var spy = sinon.spy(Actions, 'monitorDesignDoc');
+      const spy = sinon.spy(Actions, 'monitorDesignDoc');
 
 
       Actions.fetchDesignDocInfo({
