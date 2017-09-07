@@ -19,6 +19,7 @@ module.exports = {
       .populateDatabase(newDatabaseName, 3)
       .loginToGUI()
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_index')
+      .pause(30000)
       .clickWhenVisible('.faux-header__breadcrumbs-link')
       .assert.urlContains('_all_docs')
     .end();
