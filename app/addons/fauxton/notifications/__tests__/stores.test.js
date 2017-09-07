@@ -13,22 +13,22 @@
 import utils from "../../../../../test/mocha/testUtils";
 import Stores from "../stores";
 
-var assert = utils.assert;
-var store = Stores.notificationStore;
+const assert = utils.assert;
+const store = Stores.notificationStore;
 
-describe('Notification Store', function () {
+describe('Notification Store', () => {
 
-  beforeEach(function () {
+  beforeEach(() => {
     store.reset();
   });
 
-  it("sets reasonable defaults", function () {
+  it("sets reasonable defaults", () => {
     assert.equal(store.getNotifications().length, 0);
     assert.equal(store.isNotificationCenterVisible(), false);
     assert.equal(store.getNotificationFilter(), 'all');
   });
 
-  it("confirm only known notification types get added", function () {
+  it("confirm only known notification types get added", () => {
     assert.equal(store.getNotifications().length, 0);
     store.addNotification({ type: 'success', msg: 'Success are okay' });
 
@@ -45,26 +45,26 @@ describe('Notification Store', function () {
     assert.equal(store.getNotifications().length, 3);
   });
 
-  it("clearNotification clears a specific notification", function () {
+  it("clearNotification clears a specific notification", () => {
     store.addNotification({ type: 'success', msg: 'one' });
     store.addNotification({ type: 'success', msg: 'two' });
     store.addNotification({ type: 'success', msg: 'three' });
     store.addNotification({ type: 'success', msg: 'four' });
 
-    var notifications = store.getNotifications();
+    const notifications = store.getNotifications();
     assert.equal(notifications.length, 4);
 
     // find the notification ID of the "three" message
-    var notification = _.findWhere(notifications, { msg: 'three' });
+    const notification = _.findWhere(notifications, { msg: 'three' });
     store.clearNotification(notification.notificationId);
 
     // confirm it was removed
-    var updatedNotifications = store.getNotifications();
+    const updatedNotifications = store.getNotifications();
     assert.equal(updatedNotifications.length, 3);
     assert.equal(_.findWhere(updatedNotifications, { msg: 'three' }), undefined);
   });
 
-  it("setNotificationFilter only sets for known notification types", function () {
+  it("setNotificationFilter only sets for known notification types", () => {
     store.setNotificationFilter('all');
     assert.equal(store.getNotificationFilter(), 'all');
 
@@ -81,7 +81,7 @@ describe('Notification Store', function () {
     assert.equal(store.getNotificationFilter(), 'info'); // this check it's still set to the previously set value
   });
 
-  it("clear all notifications", function () {
+  it("clear all notifications", () => {
     store.addNotification({ type: 'success', msg: 'one' });
     store.addNotification({ type: 'success', msg: 'two' });
     store.addNotification({ type: 'success', msg: 'three' });

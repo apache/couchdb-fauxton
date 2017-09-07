@@ -368,6 +368,9 @@ export class ChangesCodeTransition extends React.Component {
 
   getChildren (items) {
     const code =  items.map(({style}) => {
+      if (this.props.codeVisible === false && style.opacity === 0) {
+        return null;
+      }
       return (
         <div key='1' style={{opacity: style.opacity, height: style.height + 'px'}}>
           <Components.CodeFormat
