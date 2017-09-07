@@ -109,8 +109,8 @@ module.exports = {
       .clickWhenVisible('.fonticon-json')
       .waitForElementNotPresent('.loading-lines', waitTime, false)
       .checkForDocumentCreated('_design/test_design_doc-selenium-2')
-      .waitForElementPresent('.prettyprint', waitTime, false)
       .waitForElementNotPresent('.loading-lines', waitTime, false)
+      .waitForElementPresent('.prettyprint', waitTime, false)
       .assert.containsText('.prettyprint', 'gansgans')
     .end();
   },
@@ -139,8 +139,8 @@ module.exports = {
       .clickWhenVisible('.fonticon-json')
       .waitForElementNotPresent('.loading-lines', waitTime, false)
       .checkForDocumentCreated('_design/testdesigndoc/_view/test-new-view')
-      .waitForElementPresent('.prettyprint', waitTime, false)
       .waitForElementNotPresent('.loading-lines', waitTime, false)
+      .waitForElementPresent('.prettyprint', waitTime, false)
       .assert.containsText('.prettyprint', 'enteente')
     .end();
   }
