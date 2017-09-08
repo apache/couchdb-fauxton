@@ -10,8 +10,6 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-
-
 module.exports = {
 
   'creates design docs with js hint errors': function (client) {
@@ -30,11 +28,10 @@ module.exports = {
       .execute('$("#save-view")[0].scrollIntoView();')
       .waitForElementPresent('#save-view', waitTime, false)
       .clickWhenVisible('#save-view', waitTime, false)
-      .clickWhenVisible('.fonticon-json')
       .checkForDocumentCreated('_design/test_design_doc-selenium-0')
-      .waitForElementPresent('.prettyprint', waitTime, false)
       .waitForElementNotPresent('.loading-lines', waitTime, false)
-      .assert.containsText('.prettyprint', 'blerg')
+      .waitForElementPresent('.table-view-docs', waitTime, false)
+      .assert.containsText('td[title="blerg"]', 'blerg')
     .end();
   },
 
@@ -54,12 +51,10 @@ module.exports = {
       .execute('$("#save-view")[0].scrollIntoView();')
       .waitForElementPresent('#save-view', waitTime, false)
       .clickWhenVisible('#save-view', waitTime, false)
-      .clickWhenVisible('.fonticon-json')
-      .waitForElementNotPresent('.loading-lines', waitTime, false)
       .checkForDocumentCreated('_design/test_design_doc-selenium-1')
       .waitForElementNotPresent('.loading-lines', waitTime, false)
-      .waitForElementPresent('.prettyprint', waitTime, false)
-      .assert.containsText('.prettyprint', 'hasehase')
+      .waitForElementPresent('.table-view-docs', waitTime, false)
+      .assert.containsText('td[title="hasehase"]', 'hasehase')
     .end();
   },
 
@@ -79,14 +74,12 @@ module.exports = {
       .execute('$("#save-view")[0].scrollIntoView();')
       .waitForElementPresent('#save-view', waitTime, false)
       .clickWhenVisible('#save-view', waitTime, false)
-      .clickWhenVisible('.fonticon-json')
-      .waitForElementNotPresent('.loading-lines', waitTime, false)
       .checkForDocumentCreated('_design/test_design_doc-selenium-3')
       .waitForElementNotPresent('.loading-lines', waitTime, false)
-      .waitForElementPresent('.prettyprint', waitTime, false)
 
       // page now automatically redirects user to results of View. Confirm the new doc is present.
-      .assert.containsText('.prettyprint', 'hasehase')
+      .waitForElementPresent('.table-view-docs', waitTime, false)
+      .assert.containsText('td[title="hasehase"]', 'hasehase')
     .end();
   },
 
@@ -106,12 +99,10 @@ module.exports = {
       .execute('$("#save-view")[0].scrollIntoView();')
       .waitForElementPresent('#save-view', waitTime, false)
       .clickWhenVisible('#save-view')
-      .clickWhenVisible('.fonticon-json')
-      .waitForElementNotPresent('.loading-lines', waitTime, false)
       .checkForDocumentCreated('_design/test_design_doc-selenium-2')
       .waitForElementNotPresent('.loading-lines', waitTime, false)
-      .waitForElementPresent('.prettyprint', waitTime, false)
-      .assert.containsText('.prettyprint', 'gansgans')
+      .waitForElementPresent('.table-view-docs', waitTime, false)
+      .assert.containsText('td[title="gansgans"]', 'gansgans')
     .end();
   },
 
@@ -136,12 +127,10 @@ module.exports = {
       ')
       .execute('$("#save-view")[0].scrollIntoView();')
       .clickWhenVisible('#save-view')
-      .clickWhenVisible('.fonticon-json')
-      .waitForElementNotPresent('.loading-lines', waitTime, false)
       .checkForDocumentCreated('_design/testdesigndoc/_view/test-new-view')
       .waitForElementNotPresent('.loading-lines', waitTime, false)
-      .waitForElementPresent('.prettyprint', waitTime, false)
-      .assert.containsText('.prettyprint', 'enteente')
+      .waitForElementPresent('.table-view-docs', waitTime, false)
+      .assert.containsText('td[title="enteente"]', 'enteente')
     .end();
   }
 };
