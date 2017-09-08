@@ -15,24 +15,21 @@ import ReactDOM from "react-dom";
 import Actions from "./actions";
 import Stores from "./stores";
 import Components from "../../components/react-components";
-import VelocityReact from "velocity-react";
-import "velocity-animate/velocity";
-import "velocity-animate/velocity.ui";
+import {TransitionMotion, spring, presets} from 'react-motion';
 import uuid from 'uuid';
 
 var store = Stores.notificationStore;
-var VelocityComponent = VelocityReact.VelocityComponent;
 const {Copy} = Components;
 
 // The one-stop-shop for Fauxton notifications. This controller handler the header notifications and the rightmost
 // notification center panel
 export const NotificationController = React.createClass({
 
-  getInitialState: function () {
+  getInitialState () {
     return this.getStoreState();
   },
 
-  getStoreState: function () {
+  getStoreState () {
     return {
       notificationCenterVisible: store.isNotificationCenterVisible(),
       notificationCenterFilter: store.getNotificationFilter(),
@@ -40,27 +37,66 @@ export const NotificationController = React.createClass({
     };
   },
 
-  componentDidMount: function () {
+  componentDidMount () {
     store.on('change', this.onChange, this);
   },
 
-  componentWillUnmount: function () {
+  componentWillUnmount () {
     store.off('change', this.onChange);
   },
 
-  onChange: function () {
+  onChange () {
     this.setState(this.getStoreState());
   },
 
-  render: function () {
+  getStyles () {
+    const isVisible = this.state.notificationCenterVisible;
+    let item = {
+      key: '1',
+      style: {
+        x: 320
+      }
+    };
+
+    if (isVisible) {
+      item.style = {
+        x: spring(0)
+      };
+    }
+
+    if (!isVisible) {
+      item.style = {
+        x: spring(320)
+      };
+    }
+    return [item];
+  },
+
+  getNotificationCenterPanel (items) {
+    const panel = items.map(({style}) => {
+      return <NotificationCenterPanel
+        key={'1'}
+        style={style}
+        visible={this.state.notificationCenterVisible}
+        filter={this.state.notificationCenterFilter}
+        notifications={this.state.notifications} />;
+    });
+    return (
+      <span>
+        {panel}
+      </span>
+    );
+  },
+
+  render () {
     return (
       <div>
         <GlobalNotifications
           notifications={this.state.notifications} />
-        <NotificationCenterPanel
-          visible={this.state.notificationCenterVisible}
-          filter={this.state.notificationCenterFilter}
-          notifications={this.state.notifications} />
+        <TransitionMotion
+          styles={this.getStyles}>
+          {this.getNotificationCenterPanel}
+        </TransitionMotion>
       </div>
     );
   }
@@ -72,22 +108,22 @@ var GlobalNotifications = React.createClass({
     notifications: React.PropTypes.array.isRequired
   },
 
-  componentDidMount: function () {
+  componentDidMount () {
     $(document).on('keydown.notificationClose', this.onKeyDown);
   },
 
-  componentWillUnmount: function () {
+  componentWillUnmount () {
     $(document).off('keydown.notificationClose', this.onKeyDown);
   },
 
-  onKeyDown: function (e) {
+  onKeyDown (e) {
     var code = e.keyCode || e.which;
     if (code === 27) {
       Actions.hideAllVisibleNotifications();
     }
   },
 
-  getNotifications: function () {
+  getNotifications () {
     if (!this.props.notifications.length) {
       return null;
     }
@@ -113,10 +149,69 @@ var GlobalNotifications = React.createClass({
     }, this);
   },
 
-  render: function () {
+  getchildren (items) {
+    const notifications = items.map(({key, data, style}) => {
+      const notification = data;
+      return (
+        <Notification
+          key={key}
+          style={style}
+          notificationId={notification.notificationId}
+          isHiding={notification.isHiding}
+          msg={notification.msg}
+          type={notification.type}
+          escape={notification.escape}
+          onStartHide={Actions.startHidingNotification}
+          onHideComplete={Actions.hideNotification} />
+      );
+    });
+
+    return (
+      <div>
+        {notifications}
+      </div>
+    );
+  },
+
+  getStyles (prevItems) {
+    if (!prevItems) {
+      prevItems = [];
+    }
+
+    return this.props.notifications
+      .filter(notification => notification.visible)
+      .map(notification => {
+        let item = prevItems.find(style => style.key === (notification.notificationId.toString()));
+        let style = !item ? {opacity: 0.5, minHeight: 50} : false;
+
+        if (!style && !notification.isHiding) {
+          style = {
+            opacity: spring(1, presets.stiff),
+            minHeight: spring(64)
+          };
+        } else if (!style && notification.isHiding) {
+          style = {
+            opacity: spring(0, presets.stiff),
+            minHeight: spring(0, presets.stiff)
+          };
+        }
+
+        return {
+          key: notification.notificationId.toString(),
+          style,
+          data: notification
+        };
+      });
+  },
+
+  render () {
     return (
       <div id="global-notifications">
-        {this.getNotifications()}
+        <TransitionMotion
+          styles={this.getStyles}
+        >
+          {this.getchildren}
+        </TransitionMotion>
       </div>
     );
   }
@@ -134,57 +229,25 @@ var Notification = React.createClass({
     visibleTime: React.PropTypes.number
   },
 
-  getDefaultProps: function () {
+  getDefaultProps () {
     return {
       type: 'info',
       visibleTime: 8000,
-      escape: true,
-      slideInTime: 200,
-      slideOutTime: 200
+      escape: true
     };
   },
 
-  componentWillUnmount: function () {
+  componentWillUnmount () {
     if (this.timeout) {
       window.clearTimeout(this.timeout);
     }
   },
 
-  getInitialState: function () {
-    return {
-      animation: { opacity: 0, minHeight: 0 }
-    };
+  componentDidMount () {
+    this.timeout = setTimeout(this.hide, this.props.visibleTime);
   },
 
-  componentDidMount: function () {
-    this.setState({
-      animation: {
-        opacity: (this.props.isHiding) ? 0 : 1,
-        minHeight: (this.props.isHiding) ? 0 : ReactDOM.findDOMNode(this.refs.notification).offsetHeight
-      }
-    });
-
-    this.timeout = setTimeout(function () {
-      this.hide();
-    }.bind(this), this.props.visibleTime);
-  },
-
-  componentDidUpdate: function (prevProps) {
-    if (!prevProps.isHiding && this.props.isHiding) {
-      this.setState({
-        animation: {
-          opacity: 0,
-          minHeight: 0
-        }
-      });
-    }
-  },
-
-  getHeight: function () {
-    return $(ReactDOM.findDOMNode(this)).outerHeight(true);
-  },
-
-  hide: function (e) {
+  hide (e) {
     if (e) {
       e.preventDefault();
     }
@@ -192,58 +255,64 @@ var Notification = React.createClass({
   },
 
   // many messages contain HTML, hence the need for dangerouslySetInnerHTML
-  getMsg: function () {
+  getMsg () {
     var msg = (this.props.escape) ? _.escape(this.props.msg) : this.props.msg;
     return {
       __html: msg
     };
   },
 
-  onAnimationComplete: function () {
+  onAnimationComplete () {
     if (this.props.isHiding) {
-      this.props.onHideComplete(this.props.notificationId);
+      window.setTimeout(() => this.props.onHideComplete(this.props.notificationId));
     }
   },
 
-  render: function () {
-    var iconMap = {
+  render () {
+    const {style, notificationId} = this.props;
+    const iconMap = {
       error: 'fonticon-attention-circled',
       info: 'fonticon-info-circled',
       success: 'fonticon-ok-circled'
     };
 
+    if (style.opacity === 0 && this.props.isHiding) {
+      this.onAnimationComplete();
+    }
+
     return (
-      <VelocityComponent animation={this.state.animation}
-        runOnMount={true} duration={this.props.slideInTime} complete={this.onAnimationComplete}>
-          <div className="notification-wrapper">
-            <div className={'global-notification alert alert-' + this.props.type} ref="notification">
-              <a data-bypass href="#" onClick={this.hide}><i className="pull-right fonticon-cancel" /></a>
-              <i className={'notification-icon ' + iconMap[this.props.type]} />
-              <span dangerouslySetInnerHTML={this.getMsg()}></span>
-            </div>
-          </div>
-      </VelocityComponent>
+      <div
+        key={notificationId.toString()} className="notification-wrapper" style={{opacity: style.opacity, minHeight: style.minHeight + 'px'}}>
+        <div
+          style={{opacity: style.opacity, minHeight: style.minHeight + 'px'}}
+          className={'global-notification alert alert-' + this.props.type}
+          ref="notification">
+          <a data-bypass href="#" onClick={this.hide}><i className="pull-right fonticon-cancel" /></a>
+          <i className={'notification-icon ' + iconMap[this.props.type]} />
+          <span dangerouslySetInnerHTML={this.getMsg()}></span>
+        </div>
+      </div>
     );
   }
 });
 
 
 export const NotificationCenterButton = React.createClass({
-  getInitialState: function () {
+  getInitialState () {
     return {
       visible: true
     };
   },
 
-  hide: function () {
+  hide () {
     this.setState({ visible: false });
   },
 
-  show: function () {
+  show () {
     this.setState({ visible: true });
   },
 
-  render: function () {
+  render () {
     var classes = 'fonticon fonticon-bell' + ((!this.state.visible) ? ' hide' : '');
     return (
       <div className={classes} onClick={Actions.showNotificationCenter}></div>
@@ -259,32 +328,67 @@ var NotificationCenterPanel = React.createClass({
     notifications: React.PropTypes.array.isRequired
   },
 
-  getNotifications: function () {
-    if (!this.props.notifications.length) {
-      return (
-        <li className="no-notifications">No notifications.</li>
-      );
+  getNotifications (items) {
+    let notifications;
+    if (!items.length && !this.props.notifications.length) {
+        notifications = <li className="no-notifications">
+          No notifications.
+        </li>;
+    } else {
+      notifications = items
+      .map(({key, data: notification, style}) => {
+        return (
+          <NotificationPanelRow
+            isVisible={this.props.visible}
+            item={notification}
+            filter={this.props.filter}
+            key={key}
+            style={style}
+          />
+        );
+      });
     }
 
-    return _.map(this.props.notifications, function (notification) {
-      return (
-        <NotificationPanelRow
-          isVisible={this.props.visible}
-          item={notification}
-          filter={this.props.filter}
-          key={notification.notificationId}
-        />
-      );
-    }, this);
+    return (
+      <ul className="notification-list">
+        {notifications}
+      </ul>
+    );
   },
 
-  render: function () {
-    var panelClasses = 'notification-center-panel flex-layout flex-col';
-    if (this.props.visible) {
-      panelClasses += ' visible';
+  getStyles (prevItems = []) {
+    return this.props.notifications
+    .map(notification => {
+      let item = prevItems.find(style => style.key === (notification.notificationId.toString()));
+      let style = !item ? {opacity: 0, height: 0} : false;
+
+      if (!style && (notification.type === this.props.filter || this.props.filter === 'all')) {
+        style = {
+          opacity: spring(1, presets.stiff),
+          height: spring(61, presets.stiff)
+        };
+      } else if (notification.type !== this.props.filter) {
+        style = {
+          opacity: spring(0, presets.stiff),
+          height: spring(0, presets.stiff)
+        };
+      }
+
+      return {
+        key: notification.notificationId.toString(),
+        style,
+        data: notification
+      };
+    });
+  },
+
+  render () {
+    if (!this.props.visible && this.props.style.x === 0) {
+      // panelClasses += ' visible';
+      return null;
     }
 
-    var filterClasses = {
+    const filterClasses = {
       all: 'flex-body',
       success: 'flex-body',
       error: 'flex-body',
@@ -292,10 +396,11 @@ var NotificationCenterPanel = React.createClass({
     };
     filterClasses[this.props.filter] += ' selected';
 
-    var maskClasses = 'notification-page-mask' + ((this.props.visible) ? ' visible' : '');
+    const maskClasses = `notification-page-mask ${((this.props.visible) ? ' visible' : '')}`;
+    const panelClasses = 'notification-center-panel flex-layout flex-col visible';
     return (
       <div id="notification-center">
-        <div className={panelClasses}>
+        <div className={panelClasses} style={{transform: `translate(${this.props.style.x}px)`}}>
 
           <header className="flex-layout flex-row">
             <span className="fonticon fonticon-bell" />
@@ -321,9 +426,9 @@ var NotificationCenterPanel = React.createClass({
           </ul>
 
           <div className="flex-body">
-            <ul className="notification-list">
-              {this.getNotifications()}
-            </ul>
+            <TransitionMotion styles={this.getStyles}>
+              {this.getNotifications}
+            </TransitionMotion>
           </div>
 
           <footer>
@@ -344,78 +449,35 @@ var NotificationCenterPanel = React.createClass({
 
 var NotificationPanelRow = React.createClass({
   propTypes: {
-    item: React.PropTypes.object.isRequired,
-    filter: React.PropTypes.string.isRequired,
-    transitionSpeed: React.PropTypes.number
+    item: React.PropTypes.object.isRequired
   },
 
-  getDefaultProps: function () {
-    return {
-      transitionSpeed: 300
-    };
+  clearNotification () {
+    const {notificationId} = this.props.item;
+    Actions.clearSingleNotification(notificationId);
   },
 
-  clearNotification: function () {
-    var notificationId = this.props.item.notificationId;
-    this.hide(function () {
-      Actions.clearSingleNotification(notificationId);
-    });
-  },
-
-  componentDidMount: function () {
-    this.setState({
-      elementHeight: this.getHeight()
-    });
-  },
-
-  componentDidUpdate: function (prevProps) {
-    // in order for the nice slide effects to work we need a concrete element height to slide to and from.
-    // $.outerHeight() only works reliably on visible elements, hence this additional setState here
-    if (!prevProps.isVisible && this.props.isVisible) {
-      this.setState({
-        elementHeight: this.getHeight()
-      });
-    }
-
-    var show = true;
-    if (this.props.filter !== 'all') {
-      show = this.props.item.type === this.props.filter;
-    }
-    if (show) {
-      $(ReactDOM.findDOMNode(this)).velocity({ opacity: 1, height: this.state.elementHeight }, this.props.transitionSpeed);
-      return;
-    }
-    this.hide();
-  },
-
-  getHeight: function () {
-    return $(ReactDOM.findDOMNode(this)).outerHeight(true);
-  },
-
-  hide: function (onHidden) {
-    $(ReactDOM.findDOMNode(this)).velocity({ opacity: 0, height: 0 }, this.props.transitionSpeed, function () {
-      if (onHidden) {
-        onHidden();
-      }
-    });
-  },
-
-  render: function () {
-    var iconMap = {
+  render () {
+    const iconMap = {
       success: 'fonticon-ok-circled',
       error: 'fonticon-attention-circled',
       info: 'fonticon-info-circled'
     };
 
-    var timeElapsed = this.props.item.time.fromNow();
+    const timeElapsed = this.props.item.time.fromNow();
 
     // we can safely do this because the store ensures all notifications are of known types
-    var rowIconClasses = 'fonticon ' + iconMap[this.props.item.type];
-    var hidden = (this.props.filter === 'all' || this.props.filter === this.props.item.type) ? false : true;
+    const rowIconClasses = 'fonticon ' + iconMap[this.props.item.type];
+    const hidden = (this.props.filter === 'all' || this.props.filter === this.props.item.type) ? false : true;
+    const {style} = this.props;
+    const {opacity, height} = style;
+    if (opacity === 0 && height === 0) {
+      return null;
+    }
 
     // N.B. wrapper <div> needed to ensure smooth hide/show transitions
     return (
-      <li aria-hidden={hidden}>
+      <li style={{opactiy: opacity, height: height + 'px', borderBottomColor: `rgba(34, 34, 34, ${opacity})`}} aria-hidden={hidden}>
         <div className="flex-layout flex-row">
           <span className={rowIconClasses}></span>
           <div className="flex-body">

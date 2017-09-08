@@ -21,6 +21,7 @@ module.exports = {
       .createDatabase(newDatabaseName)
       .loginToGUI()
       .url(baseUrl + '/#/database/' + encodeURIComponent(newDatabaseName) + '/_all_docs')
+      .waitForElementNotPresent('.global-notification .fonticon-cancel', waitTime, false)
       .clickWhenVisible('.faux-header__doc-header-dropdown-toggle')
       .clickWhenVisible('.faux-header__doc-header-dropdown-itemwrapper .fonticon-trash')
       .waitForElementVisible('.delete-db-modal', waitTime, false)

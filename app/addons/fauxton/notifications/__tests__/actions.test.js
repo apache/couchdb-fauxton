@@ -15,33 +15,31 @@ import Actions from "../actions";
 import utils from "../../../../../test/mocha/testUtils";
 import React from "react";
 import ReactDOM from "react-dom";
-import TestUtils from "react-addons-test-utils";
-import "sinon";
+import {mount} from 'enzyme';
+import sinon from "sinon";
 
 const store = Stores.notificationStore;
 const {restore, assert} = utils;
 
-describe('NotificationPanel', function () {
-  var container;
-
-  beforeEach(function () {
-    container = document.createElement('div');
+describe('NotificationPanel', () => {
+  beforeEach(() => {
     store.reset();
   });
 
-  afterEach(function () {
+  afterEach(() => {
     restore(Actions.clearAllNotifications);
-    ReactDOM.unmountComponentAtNode(container);
   });
 
-  it('clear all action fires', function () {
+  it('clear all action fires', () => {
     var stub = sinon.stub(Actions, 'clearAllNotifications');
 
-    var panelEl = TestUtils.renderIntoDocument(<Views.NotificationCenterPanel
-      notifications={[]} filter={'all'}
-      visible={true} />, container);
+    var panelEl = mount(<Views.NotificationCenterPanel
+      notifications={[]}
+      style={{x: 1}}
+      filter={'all'}
+      visible={true} />);
 
-    TestUtils.Simulate.click($(ReactDOM.findDOMNode(panelEl)).find('footer input')[0]);
+    panelEl.find('footer input').simulate('click');
     assert.ok(stub.calledOnce);
   });
 });

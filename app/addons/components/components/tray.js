@@ -12,15 +12,8 @@
 
 import React from "react";
 import ReactDOM from "react-dom";
-import ReactCSSTransitionGroup from "react-addons-css-transition-group";
 import {Overlay} from 'react-bootstrap';
-
-//With React 15.2.0 it validates props and throws a warning if props to a component are not acceptable
-//this means that with the overlay it will try and pass custom props to a div which causes the overlay to stop working
-//using a custom component gets around this.
-const OverlayWarningEater = ({children}) => {
-  return children;
-};
+import {TransitionMotion, spring} from 'react-motion';
 
 export const TrayContents = React.createClass({
   propTypes: {
@@ -35,12 +28,46 @@ export const TrayContents = React.createClass({
     container: this
   },
 
-  getChildren () {
+  getChildren (items) {
+    const {style} = items[0];
     var className = "tray show-tray " + this.props.className;
     return (
-      <div key={1} id={this.props.id} className={className}>
+      <div key={'1'} id={this.props.id} style={{opacity: style.opacity, top: style.top + 'px'}} className={className}>
         {this.props.children}
       </div>);
+  },
+
+  willEnter () {
+    return {
+      opacity: spring(1),
+      top: spring(55)
+    };
+  },
+
+  willLeave () {
+    return {
+      opacity: spring(0),
+      top: spring(30)
+    };
+  },
+
+  getDefaultStyles () {
+    return [{key: '1', style: {opacity: 0, top: 30}}];
+  },
+
+  getStyles (prevStyle) {
+    if (!prevStyle) {
+      return [{
+        key: '1',
+        style: this.willEnter()
+      }];
+    }
+    return prevStyle.map(item => {
+      return {
+        key: '1',
+        style: item.style
+      };
+    });
   },
 
   render () {
@@ -54,12 +81,14 @@ export const TrayContents = React.createClass({
        target={() => ReactDOM.findDOMNode(this.refs.target)}
        onEnter={this.props.onEnter}
       >
-        <OverlayWarningEater>
-          <ReactCSSTransitionGroup transitionName="tray" transitionAppear={true} component="div" transitionAppearTimeout={500}
-            transitionEnterTimeout={500} transitionLeaveTimeout={300}>
-            {this.getChildren()}
-          </ReactCSSTransitionGroup>
-        </OverlayWarningEater>
+        <TransitionMotion
+          defaultStyles={this.getDefaultStyles()}
+          styles={this.getStyles()}
+          willLeave={this.willLeave}
+          willEnter={this.willEnter}
+        >
+        {this.getChildren}
+        </TransitionMotion>
       </Overlay>
     );
   }

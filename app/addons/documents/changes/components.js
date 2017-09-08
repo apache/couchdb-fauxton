@@ -17,7 +17,7 @@ import Actions from "./actions";
 import Stores from "./stores";
 import Components from "../../fauxton/components";
 import ReactComponents from "../../components/react-components";
-import ReactCSSTransitionGroup from "react-addons-css-transition-group";
+import {TransitionMotion, spring, presets} from 'react-motion';
 import "../../../../assets/js/plugins/prettify";
 import uuid from 'uuid';
 
@@ -300,6 +300,11 @@ class ChangeRow extends React.Component {
           </div>
 
           <div className="row-fluid">
+            <div className="span2">deleted</div>
+            <div className="span10">{change.deleted ? 'True' : 'False'}</div>
+          </div>
+
+          <div className="row-fluid">
             <div className="span2">changes</div>
             <div className="span10">
               <button type="button" className='btn btn-small btn-secondary' onClick={this.toggleJSON.bind(this)}>
@@ -308,24 +313,92 @@ class ChangeRow extends React.Component {
             </div>
           </div>
 
-          <ReactCSSTransitionGroup transitionName="toggle-changes-code" component="div" className="changesCodeSectionWrapper"
-            transitionEnterTimeout={500} transitionLeaveTimeout={300}>
-            {this.getChangesCode()}
-          </ReactCSSTransitionGroup>
-
-          <div className="row-fluid">
-            <div className="span2">deleted</div>
-            <div className="span10">{change.deleted ? 'True' : 'False'}</div>
-          </div>
+          <ChangesCodeTransition
+            codeVisible={this.state.codeVisible}
+            code={this.getChangeCode()}
+          />
         </div>
       </div>
     );
   }
 }
+
 ChangeRow.PropTypes = {
   change: React.PropTypes.object,
   databaseName: React.PropTypes.string.isRequired
 };
+
+
+export class ChangesCodeTransition extends React.Component {
+  willEnter () {
+    return {
+      opacity: spring(1, presets.gentle),
+      height: spring(160, presets.gentle)
+    };
+  }
+
+  willLeave () {
+    return {
+      opacity: spring(0, presets.gentle),
+      height: spring(0, presets.gentle)
+    };
+  }
+
+  getStyles (prevStyle) {
+    if (!prevStyle && this.props.codeVisible) {
+      return [{
+        key: '1',
+        style: this.willEnter()
+      }];
+    }
+
+    if (!prevStyle && !this.props.codeVisible) {
+      return [{
+        key: '1',
+        style: this.willLeave()
+      }];
+    }
+    return prevStyle.map(item => {
+      return {
+        key: '1',
+        style: item.style
+      };
+    });
+  }
+
+  getChildren (items) {
+    const code =  items.map(({style}) => {
+      if (this.props.codeVisible === false && style.opacity === 0) {
+        return null;
+      }
+      return (
+        <div key='1' style={{opacity: style.opacity, height: style.height + 'px'}}>
+          <Components.CodeFormat
+          code={this.props.code}
+          />
+        </div>
+      );
+    });
+
+    return (
+      <span>
+        {code}
+      </span>
+    );
+  }
+
+  render () {
+    return (
+      <TransitionMotion
+          styles={this.getStyles()}
+          willLeave={this.willLeave}
+          willEnter={this.willEnter}
+        >
+        {this.getChildren.bind(this)}
+      </TransitionMotion>
+    );
+  }
+}
 
 
 class ChangeID extends React.Component {
