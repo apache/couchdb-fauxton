@@ -11,15 +11,15 @@
 // the License.
 import FauxtonAPI from "../api";
 import testUtils from "../../../test/mocha/testUtils";
-var assert = testUtils.assert;
+const assert = testUtils.assert;
 
-describe('URLs', function () {
+describe('URLs', () => {
 
-  it('can register and get url', function () {
-    var testUrl = 'this_is_a_test_url';
+  it('can register and get url', () => {
+    const testUrl = 'this_is_a_test_url';
 
     FauxtonAPI.registerUrls('testURL', {
-      server: function () {
+      server: () => {
         return testUrl;
       }
     });
@@ -28,8 +28,8 @@ describe('URLs', function () {
 
   });
 
-  it('can register interceptor to change url', function () {
-    var testUrl = 'interceptor_url';
+  it('can register interceptor to change url', () => {
+    const testUrl = 'interceptor_url';
 
     FauxtonAPI.registerExtension('urls:interceptors', function (name, context) {
       if (name === 'testURL' && context === 'intercept') {

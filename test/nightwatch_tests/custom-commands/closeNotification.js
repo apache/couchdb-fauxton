@@ -18,7 +18,8 @@ exports.command = function () {
 
   client
     .waitForElementPresent(dismissSelector, helpers.maxWaitTime, false)
-    .click(dismissSelector);
+    .click(dismissSelector)
+    .waitForElementNotPresent(dismissSelector, helpers.maxWaitTime, false);
 
   return this;
 };

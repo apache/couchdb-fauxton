@@ -11,77 +11,77 @@
 // the License.
 import testUtils from "../../../test/mocha/testUtils";
 import utils from "../utils";
-var assert = testUtils.assert;
+const assert = testUtils.assert;
 
-describe('Utils', function () {
+describe('Utils', () => {
 
-  describe('getDocTypeFromId', function () {
+  describe('getDocTypeFromId', () => {
 
-    it('returns doc if id not given', function () {
-      var res = utils.getDocTypeFromId();
+    it('returns doc if id not given', () => {
+      const res = utils.getDocTypeFromId();
       assert.equal(res, 'doc');
     });
 
-    it('returns design doc for design docs', function () {
-      var res = utils.getDocTypeFromId('_design/foobar');
+    it('returns design doc for design docs', () => {
+      const res = utils.getDocTypeFromId('_design/foobar');
       assert.equal(res, 'design doc');
     });
 
-    it('returns doc for all others', function () {
-      var res = utils.getDocTypeFromId('blerg');
+    it('returns doc for all others', () => {
+      const res = utils.getDocTypeFromId('blerg');
       assert.equal(res, 'doc');
     });
   });
 
-  describe('getSafeIdForDoc', function () {
+  describe('getSafeIdForDoc', () => {
 
-    it('keeps _design/ intact', function () {
-      var res = utils.getSafeIdForDoc('_design/foo/do');
+    it('keeps _design/ intact', () => {
+      const res = utils.getSafeIdForDoc('_design/foo/do');
       assert.equal(res, '_design/foo%2Fdo');
     });
 
-    it('encodes all other', function () {
-      var res = utils.getSafeIdForDoc('_redesign/foobar');
+    it('encodes all other', () => {
+      const res = utils.getSafeIdForDoc('_redesign/foobar');
       assert.equal(res, '_redesign%2Ffoobar');
     });
   });
 
-  describe('safeURLName', function () {
+  describe('safeURLName', () => {
 
-    it('encodes special chars', function () {
+    it('encodes special chars', () => {
       assert.equal('foo-bar%2Fbaz', utils.safeURLName('foo-bar/baz'));
     });
 
-    it('encodes an encoded doc', function () {
+    it('encodes an encoded doc', () => {
       assert.equal('foo-bar%252Fbaz', utils.safeURLName('foo-bar%2Fbaz'));
     });
   });
 
-  describe('isSystemDatabase', function () {
+  describe('isSystemDatabase', () => {
 
-    it('detects system databases', function () {
+    it('detects system databases', () => {
       assert.ok(utils.isSystemDatabase('_replicator'));
     });
 
-    it('ignores other dbs', function () {
+    it('ignores other dbs', () => {
       assert.notOk(utils.isSystemDatabase('foo'));
     });
   });
 
-  describe('localStorage', function () {
+  describe('localStorage', () => {
 
-    it('Should get undefined when getting a non-existent key', function () {
+    it('Should get undefined when getting a non-existent key', () => {
       assert.isUndefined(utils.localStorageGet('qwerty'));
     });
 
-    it ('Should get value after setting it', function () {
-      var key = 'key1';
+    it ('Should get value after setting it', () => {
+      const key = 'key1';
       utils.localStorageSet(key, 1);
       assert.equal(utils.localStorageGet(key), 1);
     });
 
-    it ('Set and retrieve complex object', function () {
-      var key = 'key2',
+    it ('Set and retrieve complex object', () => {
+      const key = 'key2',
         obj = {
           one: 1,
           two: ['1', 'string', 3]
@@ -90,7 +90,7 @@ describe('Utils', function () {
       assert.deepEqual(utils.localStorageGet(key), obj);
     });
 
-    it ('stripHTML removes HTML', function () {
+    it ('stripHTML removes HTML', () => {
       [
         { html: '<span>okay</span>', text: 'okay' },
         { html: 'test <span>before</span> and after', text: 'test before and after' },

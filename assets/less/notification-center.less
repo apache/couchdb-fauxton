@@ -33,21 +33,15 @@ body #dashboard #notification-center-btn {
 
 #notification-center {
   .notification-center-panel {
-    z-index: 12;
-    .translate(306px, 0px);/* the 6px extra is for the left shadow */
+    z-index: 112;
     position: fixed;
     box-shadow: 0 6px 5px 4px rgba(0, 0, 0, 0.1);
     top: 0;
     right: 0;
     width: 300px;
     height: 100%;
-    .transition(all .3s ease-out);
     background-color: #333333;
     color: #dddddd;
-
-    &.visible {
-      .translate(0px, 0px);
-    }
 
     header {
       .flex(0 0 auto);
@@ -204,32 +198,32 @@ body #dashboard #notification-center-btn {
     bottom: 0;
     left: 0;
     opacity: 0;
-    .transition(all .3s ease-out);
 
     &.visible {
-      z-index: 10;
+      z-index: 110;
       opacity: 0.3;
       background-color: #000000;
     }
   }
 }
 
-@-webkit-keyframes in {
-  0% { max-height: 0; }
-  100% { max-height: 1000px; }
-}
-
-@-webkit-keyframes out {
-  0% { max-height: 1000px; }
-  100% { max-height:0; }
-}
-
-@keyframes in {
-  0% { max-height: 0; }
-  100% { max-height: 1000px; }
-}
-
-@keyframes out {
-  0% { max-height: 1000px; }
-  100% { max-height:0; }
-}
+//Leaving this in for now as I'm not sure where it is used
+// @-webkit-keyframes in {
+//   0% { max-height: 0; }
+//   100% { max-height: 1000px; }
+// }
+//
+// @-webkit-keyframes out {
+//   0% { max-height: 1000px; }
+//   100% { max-height:0; }
+// }
+//
+// @keyframes in {
+//   0% { max-height: 0; }
+//   100% { max-height: 1000px; }
+// }
+//
+// @keyframes out {
+//   0% { max-height: 1000px; }
+//   100% { max-height:0; }
+// }

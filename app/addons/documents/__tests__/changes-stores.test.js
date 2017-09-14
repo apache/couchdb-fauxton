@@ -11,48 +11,47 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import FauxtonAPI from "../../../../core/api";
-import Stores from "../stores";
-import utils from "../../../../../test/mocha/testUtils";
+import FauxtonAPI from "../../../core/api";
+import Stores from "../changes/stores";
+import utils from "../../../../test/mocha/testUtils";
 FauxtonAPI.router = new FauxtonAPI.Router([]);
 
-var assert = utils.assert;
+const assert = utils.assert;
 
+describe('ChangesStore', () => {
 
-describe('ChangesStore', function () {
-
-  afterEach(function () {
+  afterEach(() => {
     Stores.changesStore.reset();
   });
 
-  it('addFilter() adds item in store', function () {
-    var filter = 'My filter';
+  it('addFilter() adds item in store', () => {
+    const filter = 'My filter';
     Stores.changesStore.addFilter(filter);
-    var filters = Stores.changesStore.getFilters();
+    const filters = Stores.changesStore.getFilters();
     assert.ok(filters.length === 1);
     assert.ok(filters[0] === filter);
   });
 
-  it('removeFilter() removes item from store', function () {
-    var filter1 = 'My filter 1';
-    var filter2 = 'My filter 2';
+  it('removeFilter() removes item from store', () => {
+    const filter1 = 'My filter 1';
+    const filter2 = 'My filter 2';
     Stores.changesStore.addFilter(filter1);
     Stores.changesStore.addFilter(filter2);
     Stores.changesStore.removeFilter(filter1);
 
-    var filters = Stores.changesStore.getFilters();
+    const filters = Stores.changesStore.getFilters();
     assert.ok(filters.length === 1);
     assert.ok(filters[0] === filter2);
   });
 
-  it('hasFilter() finds item in store', function () {
-    var filter = 'My filter';
+  it('hasFilter() finds item in store', () => {
+    const filter = 'My filter';
     Stores.changesStore.addFilter(filter);
     assert.ok(Stores.changesStore.hasFilter(filter) === true);
   });
 
-  it('getDatabaseName() returns database name', function () {
-    var dbName = 'hoopoes';
+  it('getDatabaseName() returns database name', () => {
+    const dbName = 'hoopoes';
     Stores.changesStore.initChanges({ databaseName: dbName });
     assert.equal(Stores.changesStore.getDatabaseName(), dbName);
 
@@ -60,28 +59,28 @@ describe('ChangesStore', function () {
     assert.equal(Stores.changesStore.getDatabaseName(), '');
   });
 
-  it("getChanges() should return a subset if there are a lot of changes", function () {
+  it("getChanges() should return a subset if there are a lot of changes", () => {
 
     // to keep the test speedy, we override the default max value
-    var maxChanges = 10;
-    var changes = [];
+    const maxChanges = 10;
+    const changes = [];
     _.times(maxChanges + 10, function (i) {
       changes.push({ id: 'doc_' + i, seq: 1, changes: {}});
     });
     Stores.changesStore.initChanges({ databaseName: "test" });
     Stores.changesStore.setMaxChanges(maxChanges);
 
-    var seqNum = 123;
+    const seqNum = 123;
     Stores.changesStore.updateChanges(seqNum, changes);
 
-    var results = Stores.changesStore.getChanges();
+    const results = Stores.changesStore.getChanges();
     assert.equal(maxChanges, results.length);
   });
 
-  it("tracks last sequence number", function () {
+  it("tracks last sequence number", () => {
     assert.equal(null, Stores.changesStore.getLastSeqNum());
 
-    var seqNum = 123;
+    const seqNum = 123;
     Stores.changesStore.updateChanges(seqNum, []);
 
     // confirm it's been stored
