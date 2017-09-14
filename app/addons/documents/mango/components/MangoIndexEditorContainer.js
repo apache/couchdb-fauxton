@@ -12,6 +12,7 @@
 
 import { connect } from 'react-redux';
 import * as IndexResultActions from '../../index-results/actions/fetch';
+import * as IndexResultBaseActions from '../../index-results/actions/base';
 import MangoIndexEditor from './MangoIndexEditor';
 import Helpers from '../mango.helper';
 import Actions from '../mango.actions';
@@ -35,7 +36,10 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     loadIndexList: (options) => {
       const queryIndexes = (params) => { return MangoAPI.fetchIndexes(ownProps.databaseName, params); };
       dispatch(IndexResultActions.fetchDocs(queryIndexes, options.fetchParams, {}));
-    }
+    },
+    clearResults: () => {
+      dispatch(IndexResultBaseActions.resetState());
+    },
   };
 };
 

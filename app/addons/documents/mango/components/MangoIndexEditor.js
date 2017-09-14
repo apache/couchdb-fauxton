@@ -30,8 +30,9 @@ export default class MangoIndexEditor extends Component {
 
   componentDidMount() {
     prettyPrint();
+    this.props.clearResults();
     this.props.loadIndexList({
-      fetchParams: this.props.fetchParams
+      fetchParams: {...this.props.fetchParams, skip: 0}
     });
   }
 

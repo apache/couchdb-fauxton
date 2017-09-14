@@ -144,7 +144,7 @@ export default class MangoQueryEditor extends Component {
     if (this.notifyOnQueryError()) {
       return;
     }
-
+    this.props.clearResults();
     this.props.runQuery({
       databaseName: this.props.databaseName,
       queryCode: JSON.parse(this.getEditorValue()),
