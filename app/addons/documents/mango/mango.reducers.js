@@ -119,10 +119,12 @@ export default function mangoquery(state = initialState, action) {
       };
 
     case ActionTypes.MANGO_LOAD_QUERY_HISTORY:
+      const hist = loadQueryHistory(options.databaseName);
       return {
         ...state,
-        history: loadQueryHistory(options.databaseName),
-        historyKey: options.databaseName + '_queryhistory'
+        history: hist,
+        historyKey: options.databaseName + '_queryhistory',
+        queryFindCode: JSON.parse(hist[0].value),
       };
 
     case ActionTypes.MANGO_NEW_QUERY_FIND_CODE:

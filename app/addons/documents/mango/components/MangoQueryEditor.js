@@ -34,8 +34,12 @@ export default class MangoQueryEditor extends Component {
     this.props.clearResults();
   }
 
-  componentDidUpdate () {
+  componentDidUpdate (prevProps) {
     prettyPrint();
+    if (prevProps.history != this.props.history) {
+      // Explicitly set value because updating 'CodeEditorPanel.defaultCode' won't change the editor once it's already loaded.
+      this.setEditorValue(this.props.history[0].value);
+    }
   }
 
   setEditorValue (newValue = '') {
