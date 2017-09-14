@@ -23,8 +23,8 @@ const getAvailableQueryIndexes = ({ availableIndexes }) => {
   if (!availableIndexes) {
     return [];
   }
-  return availableIndexes.filter(function ({ type }) {
-      return ['json', 'special'].indexOf(type) !== -1;
+  return availableIndexes.filter(({ type }) => {
+      return ['json', 'special'].includes(type);
   });
 };
 
@@ -37,7 +37,7 @@ const getAvailableAdditionalIndexes = ({ additionalIndexes }) => {
     return;
   }
 
-  return additionalIndexes.filter(function (el) {
+  return additionalIndexes.filter((el) => {
     return el.get('type').indexOf(indexes.type) !== -1;
   });
 };

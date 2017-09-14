@@ -72,7 +72,6 @@ const loadQueryHistory = (databaseName) => {
 };
 
 const updateQueryHistory = ({ historyKey, history }, queryCode, label) => {
-  //const history = getHistory();
   const newHistory = history.slice();
 
   const historyEntry = createSelectItem(queryCode);

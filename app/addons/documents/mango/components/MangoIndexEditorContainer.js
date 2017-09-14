@@ -31,7 +31,6 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     saveIndex: (options) => {
       dispatch(Actions.saveIndex(options));
-      // dispatch(IndexResultActions.fetchDocs(queryDocs, options.fetchParams, {}));
     },
     loadIndexList: (options) => {
       const queryIndexes = (params) => { return MangoAPI.fetchIndexes(ownProps.databaseName, params); };

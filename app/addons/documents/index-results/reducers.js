@@ -106,7 +106,6 @@ export default function resultsState (state = initialState, action) {
       });
 
     case ActionTypes.INDEX_RESULTS_REDUX_CHANGE_LAYOUT:
-      console.log('Reducing to ', action.layout);
       return Object.assign({}, state, {
         selectedLayout: action.layout
       });
