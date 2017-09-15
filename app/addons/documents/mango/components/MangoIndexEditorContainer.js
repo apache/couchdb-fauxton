@@ -40,6 +40,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     clearResults: () => {
       dispatch(IndexResultBaseActions.resetState());
     },
+    loadIndexTemplates: () => {
+      dispatch(Actions.loadIndexTemplates());
+    }
   };
 };
 

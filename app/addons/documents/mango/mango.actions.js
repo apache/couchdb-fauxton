@@ -52,6 +52,13 @@ export default {
     };
   },
 
+  loadIndexTemplates: function (options) {
+    return {
+      type: ActionTypes.MANGO_LOAD_INDEX_TEMPLATES,
+      options: options
+    };
+  },
+
   saveIndex: function ({ databaseName, indexCode, fetchParams }) {
     FauxtonAPI.addNotification({
       msg: 'Saving index for query...',

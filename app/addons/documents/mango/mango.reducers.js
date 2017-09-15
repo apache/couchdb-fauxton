@@ -11,6 +11,7 @@
 // the License.
 
 import app from "../../../app";
+import FauxtonAPI from "../../../core/api";
 import ActionTypes from "./mango.actiontypes";
 import MangoHelper from "./mango.helper";
 import constants from "./mango.constants";
@@ -54,6 +55,21 @@ const getDefaultQueryIndexTemplates = () => {
   });
 };
 
+const loadIndexTemplates = () => {
+  const extTemplates = FauxtonAPI.getExtensions('mango:indexTemplates')[0];
+  if (extTemplates) {
+    return extTemplates.filter((elem) => {
+      return !!elem.code;
+    }).map((elem) => {
+      const item = createSelectItem(elem.code);
+      item.label = elem.label || item.label;
+      return item;
+    });
+  }
+
+  return getDefaultQueryIndexTemplates();
+};
+
 const HISTORY_LIMIT = 5;
 
 const initialState = {
@@ -68,7 +84,23 @@ const initialState = {
 
 const loadQueryHistory = (databaseName) => {
   const historyKey = databaseName + '_queryhistory';
-  return app.utils.localStorageGet(historyKey) || getDefaultHistory();
+  let history = app.utils.localStorageGet(historyKey);
+  if (history) {
+    return history;
+  }
+
+  history = FauxtonAPI.getExtensions('mango:queryHistory')[0];
+  if (history) {
+    return history.filter((elem) => {
+      return !!elem.code;
+    }).map((elem) => {
+      const item = createSelectItem(elem.code);
+      item.label = elem.label || item.label;
+      return item;
+    });
+  }
+
+  return getDefaultHistory();
 };
 
 const updateQueryHistory = ({ historyKey, history }, queryCode, label) => {
@@ -138,6 +170,14 @@ export default function mangoquery(state = initialState, action) {
       return {
         ...state,
         getLoadingIndexes: options.isLoading
+      };
+
+    case ActionTypes.MANGO_LOAD_INDEX_TEMPLATES:
+      const templates = loadIndexTemplates();
+      return {
+        ...state,
+        queryIndexTemplates: templates,
+        queryIndexCode: JSON.parse(templates[0].value),
       };
 
     case ActionTypes.MANGO_NEW_QUERY_CREATE_INDEX_TEMPLATE:

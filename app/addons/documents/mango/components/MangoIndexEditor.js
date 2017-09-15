@@ -30,25 +30,30 @@ export default class MangoIndexEditor extends Component {
 
   componentDidMount() {
     prettyPrint();
+    this.props.loadIndexTemplates();
     this.props.clearResults();
     this.props.loadIndexList({
-      fetchParams: {...this.props.fetchParams, skip: 0}
+      fetchParams: { ...this.props.fetchParams, skip: 0 }
     });
   }
 
-  componentDidUpdate () {
+  componentDidUpdate(prevProps) {
     prettyPrint();
+    if (prevProps.templates != this.props.templates) {
+      // Explicitly set value because updating 'CodeEditorPanel.defaultCode' won't change the editor once it's already loaded.
+      this.setEditorValue(this.props.templates[0].value);
+    }
   }
 
-  setEditorValue (newValue = '') {
+  setEditorValue(newValue = '') {
     return this.refs.codeEditor.getEditor().setValue(newValue);
   }
 
-  getEditorValue () {
+  getEditorValue() {
     return this.refs.codeEditor.getValue();
   }
 
-  editorHasErrors () {
+  editorHasErrors() {
     return this.refs.codeEditor.getEditor().hasErrors();
   }
 
@@ -60,7 +65,7 @@ export default class MangoIndexEditor extends Component {
     const editQueryURL = '#' + FauxtonAPI.urls('mango', 'query-app', encodeURIComponent(this.props.databaseName));
     return (
       <div className="mango-editor-wrapper">
-        <form className="form-horizontal" onSubmit={(ev) => {this.saveIndex(ev);}}>
+        <form className="form-horizontal" onSubmit={(ev) => { this.saveIndex(ev); }}>
           <div className="padded-box">
             <ReactSelect
               className="mango-select"
@@ -70,9 +75,9 @@ export default class MangoIndexEditor extends Component {
               searchable={false}
               clearable={false}
               autosize={false}
-              onChange={(item) => {this.onTemplateSelected(item);}}
+              onChange={(item) => { this.onTemplateSelected(item); }}
             />
-           </div>
+          </div>
           <PaddedBorderedBox>
             <CodeEditorPanel
               id="query-field"
@@ -92,16 +97,16 @@ export default class MangoIndexEditor extends Component {
     );
   }
 
-  render () {
+  render() {
     return this.editor();
   }
 
-  saveIndex (event) {
+  saveIndex(event) {
     event.preventDefault();
 
     if (this.editorHasErrors()) {
       FauxtonAPI.addNotification({
-        msg:  'Please fix the Javascript errors and try again.',
+        msg: 'Please fix the Javascript errors and try again.',
         type: 'error',
         clear: true
       });
