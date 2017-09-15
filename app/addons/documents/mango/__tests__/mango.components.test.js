@@ -59,7 +59,7 @@ describe('Mango IndexEditor', function () {
     assert.ok(indexEditor.exists());
     if (indexEditor.exists()) {
       const json = JSON.parse(indexEditor.props().queryIndexCode);
-      assert.equal(json.index.fields[0], '_id');
+      assert.equal(json.index.fields[0], 'foo');
     }
   });
 
