@@ -72,7 +72,8 @@ export default function resultsState (state = initialState, action) {
         },
         pagination: Object.assign({}, initialState.pagination, {
           perPage: state.pagination.perPage
-        })
+        }),
+        isLoading: false
       });
 
     case ActionTypes.INDEX_RESULTS_REDUX_IS_LOADING:

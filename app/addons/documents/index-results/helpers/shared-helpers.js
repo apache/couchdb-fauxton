@@ -105,6 +105,10 @@ const getDocRev = (doc, docType = Constants.INDEX_RESULTS_DOC_TYPE.VIEW) => {
   return undefined;
 };
 
+const errorReason = (error) => {
+  return 'Reason: ' + ((error && error.message) || 'n/a');
+};
+
 export {
   getDocUrl,
   isGhostDoc,
@@ -113,5 +117,6 @@ export {
   hasBulkDeletableDoc,
   getDefaultPerPage,
   getDocId,
-  getDocRev
+  getDocRev,
+  errorReason
 };

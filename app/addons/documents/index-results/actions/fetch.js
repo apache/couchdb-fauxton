@@ -13,8 +13,10 @@
 import FauxtonAPI from '../../../../core/api';
 import SidebarActions from '../../sidebar/actions';
 import Constants from '../../constants';
+import { errorReason } from '../helpers/shared-helpers';
 import * as IndexResultsAPI from '../api';
-import { nowLoading, newResultsAvailable, newSelectedDocs, changeLayout } from './base';
+import { nowLoading, newResultsAvailable, newSelectedDocs,
+  changeLayout, resetState } from './base';
 
 const maxDocLimit = 10000;
 
@@ -100,6 +102,13 @@ export const fetchDocs = (queryDocs, fetchParams, queryOptionsParams) => {
       }
       // dispatch that we're all done
       dispatch(newResultsAvailable(finalDocList, params, canShowNext, docType));
+    }).catch((error) => {
+      FauxtonAPI.addNotification({
+        msg: 'Error running query. ' + errorReason(error),
+        type: 'error',
+        clear: true
+      });
+      dispatch(resetState());
     });
   };
 };
