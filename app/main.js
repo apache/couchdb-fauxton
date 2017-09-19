@@ -23,11 +23,10 @@ import { createStore, applyMiddleware, combineReducers } from 'redux';
 import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
 
-const middlewares = [thunk];
-
+FauxtonAPI.addMiddleware(thunk);
 const store = createStore(
   combineReducers(FauxtonAPI.reducers),
-  applyMiddleware(...middlewares)
+  applyMiddleware(...FauxtonAPI.middlewares)
 );
 
 app.addons = LoadAddons;

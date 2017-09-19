@@ -59,6 +59,12 @@ export default {
     };
   },
 
+  requestSaveIndex: function () {
+    return {
+      type: ActionTypes.MANGO_SAVE_INDEX_REQUEST
+    };
+  },
+
   saveIndex: function ({ databaseName, indexCode, fetchParams }) {
     FauxtonAPI.addNotification({
       msg: 'Saving index for query...',
@@ -67,6 +73,9 @@ export default {
     });
 
     return (dispatch) => {
+      // Notifies index save operation was requested
+      dispatch(this.requestSaveIndex());
+
       return MangoAPI.createIndex(databaseName, indexCode)
         .then(() => {
           const runQueryURL = '#' + FauxtonAPI.urls('mango', 'query-app',
