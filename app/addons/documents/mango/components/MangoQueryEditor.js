@@ -152,7 +152,7 @@ export default class MangoQueryEditor extends Component {
     this.props.runQuery({
       databaseName: this.props.databaseName,
       queryCode: JSON.parse(this.getEditorValue()),
-      fetchParams: this.props.fetchParams
+      fetchParams: {...this.props.fetchParams, skip: 0}
     });
   }
 }

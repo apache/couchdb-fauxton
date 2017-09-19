@@ -84,13 +84,29 @@ export const fetchIndexes = (databaseName, params) => {
     });
 };
 
-export const mangoQueryDocs = (databaseName, queryCode, params) => {
-  const url = FauxtonAPI.urls('mango', 'query-server', databaseName);
-  const queryWithParams = {
+// Determines what params need to be sent to couch based on the Mango query entered
+// by the user and what fauxton is using to emulate pagination (fetchParams).
+const mergeFetchParams = (queryCode, fetchParams) => {
+  // Since Fauxton pagination's 'limit' is always (docs-per-page + 1), this ensures
+  // (page-number * docs-per-page) doesn't exceed the query's 'limit' value.
+  let limit = fetchParams.limit;
+  const docsPerPage = fetchParams.limit - 1;
+  const pageNumber = Math.floor(fetchParams.skip / docsPerPage) + 1;
+  const docsOverLimit = (pageNumber * docsPerPage) - queryCode.limit;
+  if (docsOverLimit >= 0) {
+    limit = docsPerPage - docsOverLimit;
+  }
+
+  return {
     ...queryCode,
-    limit: params.limit,
-    skip: params.skip
+    limit: limit,
+    skip: queryCode.skip ? (fetchParams.skip + queryCode.skip) : fetchParams.skip
   };
+};
+
+export const mangoQueryDocs = (databaseName, queryCode, fetchParams) => {
+  const url = FauxtonAPI.urls('mango', 'query-server', databaseName);
+  const modifiedQuery = mergeFetchParams(queryCode, fetchParams);
   return fetch(url, {
     headers: {
       'Accept': 'application/json',
@@ -98,7 +114,7 @@ export const mangoQueryDocs = (databaseName, queryCode, params) => {
     },
     credentials: 'include',
     method: 'POST',
-    body: JSON.stringify(queryWithParams)
+    body: JSON.stringify(modifiedQuery)
   })
     .then((res) => res.json())
     .then((json) => {
