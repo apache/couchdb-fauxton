@@ -311,7 +311,6 @@ describe('Docs Reducers', () => {
         selectedDocs: [selectedDoc]
       };
       const newState2 = Reducers.default(newState1, newSelectedDocAction);
-      console.log('newState2:', newState2);
       expect(Reducers.getAllDocsSelected(newState2)).toBe(true);
     });
   });

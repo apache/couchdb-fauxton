@@ -54,6 +54,7 @@ describe('IndexResults', () => {
       fetchDocs={() => {}}
       results={[]}
       ddocsOnly={false}
+      fetchAtStartup={true}
     />);
 
     wrapper.instance().componentWillUpdate({
@@ -75,6 +76,7 @@ describe('IndexResults', () => {
       queryOptionsParams={{}}
       fetchAllDocs={() => {}}
       results={[]}
+      fetchAtStartup={true}
     />);
 
     wrapper.instance().deleteSelectedDocs();
@@ -89,6 +91,7 @@ describe('IndexResults', () => {
       selectedDocs={selectedDocs}
       fetchAllDocs={() => {}}
       results={[]}
+      fetchAtStartup={true}
     />);
 
     expect(wrapper.instance().isSelected('foo')).toBe(true);
@@ -102,6 +105,7 @@ describe('IndexResults', () => {
       selectedDocs={selectedDocs}
       fetchAllDocs={() => {}}
       results={[]}
+      fetchAtStartup={true}
     />);
 
     expect(wrapper.instance().isSelected('foo')).toBe(false);
@@ -114,6 +118,7 @@ describe('IndexResults', () => {
       fetchAllDocs={() => {}}
       results={[]}
       selectDoc={spy}
+      fetchAtStartup={true}
     />);
 
     wrapper.instance().docChecked('foo', '1-123324345');
@@ -129,6 +134,7 @@ describe('IndexResults', () => {
       docs={[]}
       allDocumentsSelected={false}
       bulkCheckOrUncheck={spy}
+      fetchAtStartup={true}
     />);
 
     wrapper.instance().toggleSelectAll();

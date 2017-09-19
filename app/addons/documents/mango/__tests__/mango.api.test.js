@@ -25,7 +25,7 @@ describe('Mango API', () => {
   const paginationLimit = 6;
 
   beforeEach(() => {
-    FauxtonAPI.urls = sinon.stub(FauxtonAPI, 'urls').returns('mock-url');
+    sinon.stub(FauxtonAPI, 'urls').returns('mock-url');
   });
 
   afterEach(() => {

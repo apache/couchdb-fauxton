@@ -34,12 +34,12 @@ describe('Mango IndexEditor', function () {
 
   const middlewares = [thunk];
   const store = createStore(
-      combineReducers({ mangoQuery: mangoReducer, indexResults: indexResultsReducer }),
-      applyMiddleware(...middlewares)
-    );
+    combineReducers({ mangoQuery: mangoReducer, indexResults: indexResultsReducer }),
+    applyMiddleware(...middlewares)
+  );
 
   beforeEach(() => {
-    FauxtonAPI.urls = sinon.stub(FauxtonAPI, 'urls').returns('mock-url');
+    sinon.stub(FauxtonAPI, 'urls').withArgs('mango').returns('mock-url');
   });
 
   afterEach(() => {
@@ -69,12 +69,16 @@ describe('Mango QueryEditor', function () {
 
   const middlewares = [thunk];
   const store = createStore(
-      combineReducers({ mangoQuery: mangoReducer, indexResults: indexResultsReducer }),
-      applyMiddleware(...middlewares)
-    );
+    combineReducers({ mangoQuery: mangoReducer, indexResults: indexResultsReducer }),
+    applyMiddleware(...middlewares)
+  );
 
-  beforeEach(function () {
+  beforeEach(() => {
+    sinon.stub(FauxtonAPI, 'urls').returns('mock-url');
+  });
 
+  afterEach(() => {
+    restore(FauxtonAPI.urls);
   });
 
   it('has a default query', function () {
