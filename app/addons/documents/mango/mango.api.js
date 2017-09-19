@@ -86,7 +86,7 @@ export const fetchIndexes = (databaseName, params) => {
 
 // Determines what params need to be sent to couch based on the Mango query entered
 // by the user and what fauxton is using to emulate pagination (fetchParams).
-const mergeFetchParams = (queryCode, fetchParams) => {
+export const mergeFetchParams = (queryCode, fetchParams) => {
   // Since Fauxton pagination's 'limit' is always (docs-per-page + 1), this ensures
   // (page-number * docs-per-page) doesn't exceed the query's 'limit' value.
   let limit = fetchParams.limit;
