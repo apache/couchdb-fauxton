@@ -12,7 +12,6 @@
 import "jquery";
 import app from "./initialize";
 import _ from "lodash";
-import "bootstrap";
 import Helpers from "./helpers";
 import Utils from "./core/utils";
 import FauxtonAPI from "./core/api";
