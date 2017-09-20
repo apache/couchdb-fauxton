@@ -205,7 +205,7 @@ export default {
     const hasDesignDocs = !!bulkDeleteCollection.map(d => d.id).find((id) => /_design/.test(id));
 
 
-    bulkDeleteCollection
+    return bulkDeleteCollection
       .bulkDelete()
       .then(function (ids) {
         FauxtonAPI.addNotification({

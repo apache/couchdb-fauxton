@@ -269,9 +269,12 @@ describe('New Replication Component', () => {
 
   describe("runReplicationChecks", () => {
 
-    it("shows conflict modal for existing replication doc", () => {
-      let called = false;
-      const showConflictModal = () => { called = true;};
+    it("shows conflict modal for existing replication doc", (done) => {
+      const showConflictModal = () => {
+        assert.ok(true);
+        done();
+      };
+
       const checkReplicationDocID = () => {
         const promise = FauxtonAPI.Deferred();
         promise.resolve(true);
@@ -296,7 +299,6 @@ describe('New Replication Component', () => {
         />);
 
       newreplication.instance().runReplicationChecks();
-      assert.ok(called);
     });
 
     it("Shows password modal", () => {
@@ -308,7 +310,7 @@ describe('New Replication Component', () => {
         return promise;
       };
       const newreplication = shallow(<NewReplication
-        replicationDocName="my-doc-id"
+        replicationDocName={''}
         checkReplicationDocID={checkReplicationDocID}
         databases={[]}
         replicationTarget={Constants.REPLICATION_TARGET.NEW_LOCAL_DATABASE}

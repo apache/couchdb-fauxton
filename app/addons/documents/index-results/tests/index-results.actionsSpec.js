@@ -68,7 +68,7 @@ describe('#deleteSelected', function () {
     assert.notOk(spy.calledOnce);
   });
 
-  it('on success notifies all deleted', function (done) {
+  it('on success notifies all deleted', function () {
     var spy = sinon.spy(FauxtonAPI, 'addNotification');
     const spy2 = sinon.spy(SidebarActions, 'updateDesignDocs');
     var promise = FauxtonAPI.Deferred();
@@ -81,7 +81,7 @@ describe('#deleteSelected', function () {
         return promise;
       },
       reset: function () {
-        done();
+        // done();
       },
       map () {
         return {
@@ -105,8 +105,10 @@ describe('#deleteSelected', function () {
     stubPromise.resolve();
     reloadResultsListStub.returns(stubPromise);
 
-    Actions.deleteSelected(bulkDelete, 1, designDocs);
-    assert.ok(spy.calledOnce);
-    assert.ok(spy2.calledOnce);
+    return Actions.deleteSelected(bulkDelete, 1, designDocs)
+    .then(() => {
+      assert.ok(spy.calledOnce);
+      assert.ok(spy2.calledOnce);
+    });
   });
 });

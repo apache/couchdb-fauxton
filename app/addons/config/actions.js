@@ -42,9 +42,11 @@ export default {
     modelAttrs.node = node;
     var optionModel = new Resources.OptionModel(modelAttrs);
 
-    optionModel.save()
-      .then(() => this.optionSaveSuccess(options))
-      .fail(xhr => this.optionSaveFailure(options, JSON.parse(xhr.responseText).reason));
+    return optionModel.save()
+      .then(
+        () => this.optionSaveSuccess(options),
+        xhr => this.optionSaveFailure(options, JSON.parse(xhr.responseText).reason)
+      );
   },
 
   optionSaveSuccess (options) {
@@ -70,9 +72,11 @@ export default {
     modelAttrs.node = node;
     var optionModel = new Resources.OptionModel(modelAttrs);
 
-    optionModel.save()
-      .then(() => this.optionAddSuccess(options))
-      .fail(xhr => this.optionAddFailure(options, JSON.parse(xhr.responseText).reason));
+    return optionModel.save()
+      .then(
+        () => this.optionAddSuccess(options),
+        xhr => this.optionAddFailure(options, JSON.parse(xhr.responseText).reason)
+      );
   },
 
   optionAddSuccess (options) {
@@ -98,9 +102,11 @@ export default {
     modelAttrs.node = node;
     var optionModel = new Resources.OptionModel(modelAttrs);
 
-    optionModel.destroy()
-      .then(() => this.optionDeleteSuccess(options))
-      .fail((xhr) => this.optionDeleteFailure(options, JSON.parse(xhr.responseText).reason));
+    return optionModel.destroy()
+      .then(
+        () => this.optionDeleteSuccess(options),
+        xhr => this.optionDeleteFailure(options, JSON.parse(xhr.responseText).reason)
+      );
   },
 
   optionDeleteSuccess (options) {
