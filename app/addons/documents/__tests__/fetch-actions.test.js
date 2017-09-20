@@ -13,17 +13,17 @@
 import {
   mergeParams,
   removeOverflowDocsAndCalculateHasNext,
-  queryEndpoint,
   validateBulkDelete,
-  postToBulkDocs,
   processBulkDeleteResponse
-} from '../index-results/apis/fetch';
+} from '../index-results/actions/fetch';
+import {queryAllDocs, postToBulkDocs} from '../index-results/api';
 import fetchMock from 'fetch-mock';
 import queryString from 'query-string';
 import sinon from 'sinon';
 import SidebarActions from '../sidebar/actions';
 import FauxtonAPI from '../../../core/api';
 import '../base';
+import Constants from '../constants';
 
 describe('Docs Fetch API', () => {
   describe('mergeParams', () => {
@@ -180,7 +180,7 @@ describe('Docs Fetch API', () => {
     });
   });
 
-  describe('queryEndpoint', () => {
+  describe('queryAllDocs', () => {
     const params = {
       limit: 21,
       skip: 0
@@ -212,8 +212,10 @@ describe('Docs Fetch API', () => {
       const url = `${fetchUrl}?${query}`;
       fetchMock.getOnce(url, docs);
 
-      return queryEndpoint(fetchUrl, params).then((docs) => {
-        expect(docs).toEqual([
+      return queryAllDocs(fetchUrl, params).then((res) => {
+        expect(res).toEqual({
+          docType: Constants.INDEX_RESULTS_DOC_TYPE.VIEW,
+          docs: [
           {
             id: "foo",
             key: "foo",
@@ -227,8 +229,8 @@ describe('Docs Fetch API', () => {
             value: {
               rev: "2-1390740c4877979dbe8998382876556c"
             }
-          }
-        ]);
+          }]
+        });
       });
     });
   });

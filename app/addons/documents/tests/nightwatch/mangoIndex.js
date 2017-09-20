@@ -56,6 +56,7 @@ module.exports = {
       .populateDatabase(newDatabaseName)
       .loginToGUI()
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_index')
+      .waitForElementPresent('#doc-list', waitTime, false)
       .assert.containsText('#dashboard-lower-content', 'ente_ente_mango_ananas')
       .clickWhenVisible('.bulk-action-component-panel input[type="checkbox"]')
       .clickWhenVisible('.bulk-action-component-selector-group button.fonticon-trash', waitTime, false)

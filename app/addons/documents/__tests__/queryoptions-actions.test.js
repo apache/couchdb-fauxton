@@ -10,13 +10,13 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import * as Api from '../index-results/apis/queryoptions';
+import * as Actions from '../index-results/actions/queryoptions';
 import ActionTypes from '../index-results/actiontypes';
 
 describe('Docs Query Options API', () => {
   it('resetFetchParamsBeforeExecute returns proper fetch params', () => {
     const perPage = 20;
-    expect(Api.resetFetchParamsBeforeExecute(perPage)).toEqual({
+    expect(Actions.resetFetchParamsBeforeExecute(perPage)).toEqual({
       limit: 21,
       skip: 0
     });
@@ -24,7 +24,7 @@ describe('Docs Query Options API', () => {
 
   it('queryOptionsToggleVisibility returns the proper event to dispatch', () => {
     const newVisibility = true;
-    expect(Api.queryOptionsToggleVisibility(newVisibility)).toEqual({
+    expect(Actions.queryOptionsToggleVisibility(newVisibility)).toEqual({
       type: ActionTypes.INDEX_RESULTS_REDUX_NEW_QUERY_OPTIONS,
       options: {
         isVisible: true
@@ -34,7 +34,7 @@ describe('Docs Query Options API', () => {
 
   it('queryOptionsToggleReduce returns the proper event to dispatch', () => {
     const previousReduce = true;
-    expect(Api.queryOptionsToggleReduce(previousReduce)).toEqual({
+    expect(Actions.queryOptionsToggleReduce(previousReduce)).toEqual({
       type: ActionTypes.INDEX_RESULTS_REDUX_NEW_QUERY_OPTIONS,
       options: {
         reduce: false
@@ -44,7 +44,7 @@ describe('Docs Query Options API', () => {
 
   it('queryOptionsUpdateGroupLevel returns the proper event to dispatch', () => {
     const newGroupLevel = 'exact';
-    expect(Api.queryOptionsUpdateGroupLevel(newGroupLevel)).toEqual({
+    expect(Actions.queryOptionsUpdateGroupLevel(newGroupLevel)).toEqual({
       type: ActionTypes.INDEX_RESULTS_REDUX_NEW_QUERY_OPTIONS,
       options: {
         groupLevel: 'exact'
@@ -54,7 +54,7 @@ describe('Docs Query Options API', () => {
 
   it('queryOptionsToggleByKeys returns the proper event to dispatch', () => {
     const previousShowByKeys = true;
-    expect(Api.queryOptionsToggleByKeys(previousShowByKeys)).toEqual({
+    expect(Actions.queryOptionsToggleByKeys(previousShowByKeys)).toEqual({
       type: ActionTypes.INDEX_RESULTS_REDUX_NEW_QUERY_OPTIONS,
       options: {
         showByKeys: false,
@@ -65,7 +65,7 @@ describe('Docs Query Options API', () => {
 
   it('queryOptionsToggleBetweenKeys returns the proper event to dispatch', () => {
     const previousShowBetweenKeys = true;
-    expect(Api.queryOptionsToggleBetweenKeys(previousShowBetweenKeys)).toEqual({
+    expect(Actions.queryOptionsToggleBetweenKeys(previousShowBetweenKeys)).toEqual({
       type: ActionTypes.INDEX_RESULTS_REDUX_NEW_QUERY_OPTIONS,
       options: {
         showBetweenKeys: false,
@@ -80,7 +80,7 @@ describe('Docs Query Options API', () => {
       startkey: '\"_design\"',
       endkey: '\"_design\"'
     };
-    expect(Api.queryOptionsUpdateBetweenKeys(newBetweenKeys)).toEqual({
+    expect(Actions.queryOptionsUpdateBetweenKeys(newBetweenKeys)).toEqual({
       type: ActionTypes.INDEX_RESULTS_REDUX_NEW_QUERY_OPTIONS,
       options: {
         betweenKeys: {
@@ -94,7 +94,7 @@ describe('Docs Query Options API', () => {
 
   it('queryOptionsUpdateByKeys returns the proper event to dispatch', () => {
     const newByKeys = ['foo', 'bar'];
-    expect(Api.queryOptionsUpdateByKeys(newByKeys)).toEqual({
+    expect(Actions.queryOptionsUpdateByKeys(newByKeys)).toEqual({
       type: ActionTypes.INDEX_RESULTS_REDUX_NEW_QUERY_OPTIONS,
       options: {
         byKeys: ['foo', 'bar']
@@ -104,7 +104,7 @@ describe('Docs Query Options API', () => {
 
   it('queryOptionsToggleDescending returns the proper event to dispatch', () => {
     const previousDescending = true;
-    expect(Api.queryOptionsToggleDescending(previousDescending)).toEqual({
+    expect(Actions.queryOptionsToggleDescending(previousDescending)).toEqual({
       type: ActionTypes.INDEX_RESULTS_REDUX_NEW_QUERY_OPTIONS,
       options: {
         descending: false
@@ -114,7 +114,7 @@ describe('Docs Query Options API', () => {
 
   it('queryOptionsUpdateSkip returns the proper event to dispatch', () => {
     const newSkip = 5;
-    expect(Api.queryOptionsUpdateSkip(newSkip)).toEqual({
+    expect(Actions.queryOptionsUpdateSkip(newSkip)).toEqual({
       type: ActionTypes.INDEX_RESULTS_REDUX_NEW_QUERY_OPTIONS,
       options: {
         skip: 5
@@ -124,7 +124,7 @@ describe('Docs Query Options API', () => {
 
   it('queryOptionsUpdateLimit returns the proper event to dispatch', () => {
     const newLimit = 50;
-    expect(Api.queryOptionsUpdateLimit(newLimit)).toEqual({
+    expect(Actions.queryOptionsUpdateLimit(newLimit)).toEqual({
       type: ActionTypes.INDEX_RESULTS_REDUX_NEW_QUERY_OPTIONS,
       options: {
         limit: 50
@@ -134,7 +134,7 @@ describe('Docs Query Options API', () => {
 
   it('queryOptionsToggleIncludeDocs returns the proper event to dispatch', () => {
     const previousIncludeDocs = true;
-    expect(Api.queryOptionsToggleIncludeDocs(previousIncludeDocs)).toEqual({
+    expect(Actions.queryOptionsToggleIncludeDocs(previousIncludeDocs)).toEqual({
       type: ActionTypes.INDEX_RESULTS_REDUX_NEW_QUERY_OPTIONS,
       options: {
         includeDocs: false
@@ -143,7 +143,7 @@ describe('Docs Query Options API', () => {
   });
 
   it('queryOptionsFilterOnlyDdocs returns the proper event to dispatch', () => {
-    expect(Api.queryOptionsFilterOnlyDdocs()).toEqual({
+    expect(Actions.queryOptionsFilterOnlyDdocs()).toEqual({
       type: ActionTypes.INDEX_RESULTS_REDUX_NEW_QUERY_OPTIONS,
       options: {
         betweenKeys: {

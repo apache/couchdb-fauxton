@@ -23,7 +23,6 @@ export default class TableView extends React.Component {
     const data = this.props.data.results;
 
     return data.map(function (el, i) {
-
       return (
         <TableRow
           onClick={this.props.onClick}

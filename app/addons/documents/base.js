@@ -14,10 +14,12 @@ import app from "../../app";
 import FauxtonAPI from "../../core/api";
 import Documents from "./routes";
 import reducers from "./index-results/reducers";
+import mangoReducers from "./mango/mango.reducers";
 import "./assets/less/documents.less";
 
 FauxtonAPI.addReducers({
-  indexResults: reducers
+  indexResults: reducers,
+  mangoQuery: mangoReducers
 });
 
 function getQueryParam (query) {
@@ -200,6 +202,10 @@ FauxtonAPI.registerUrls('mango', {
     return 'database/' + db + '/_index' + query;
   },
 
+  'index-server-bulk-delete': function (db) {
+    return app.host + '/' + encodeURIComponent(db) + '/_index/_bulk_delete';
+  },
+
   'query-server': function (db, query) {
     if (!query) {
       query = '';
@@ -225,11 +231,11 @@ FauxtonAPI.registerUrls('mango', {
   },
 
   'explain-server': function (db) {
-    return app.host + '/' + db + '/_explain';
+    return app.host + '/' + app.utils.safeURLName(db) + '/_explain';
   },
 
   'explain-apiurl': function (db) {
-    return window.location.origin + '/' + db + '/_explain';
+    return window.location.origin + '/' + app.utils.safeURLName(db) + '/_explain';
   }
 });
 

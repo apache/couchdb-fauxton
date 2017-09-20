@@ -10,12 +10,13 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import 'url-polyfill';
-import 'whatwg-fetch';
 import FauxtonAPI from '../../../../core/api';
-import queryString from 'query-string';
 import SidebarActions from '../../sidebar/actions';
-import { nowLoading, newResultsAvailable, newSelectedDocs } from './base';
+import Constants from '../../constants';
+import { errorReason } from '../helpers/shared-helpers';
+import * as IndexResultsAPI from '../api';
+import { nowLoading, newResultsAvailable, newSelectedDocs,
+  changeLayout, resetState } from './base';
 
 const maxDocLimit = 10000;
 
@@ -78,10 +79,10 @@ export const removeOverflowDocsAndCalculateHasNext = (docs, totalDocsRemaining, 
 
 // All the business logic for fetching docs from couch.
 // Arguments:
-// - fetchUrl -> the endpoint to fetch from
+// - queryDocs -> a function that fetches the docs. Accepts fetch params and returns a Promise of {docs[], docType}.
 // - fetchParams -> the internal params fauxton uses to emulate pagination
 // - queryOptionsParams -> manual query params entered by user
-export const fetchAllDocs = (fetchUrl, fetchParams, queryOptionsParams) => {
+export const fetchDocs = (queryDocs, fetchParams, queryOptionsParams) => {
   const { params, totalDocsRemaining } = mergeParams(fetchParams, queryOptionsParams);
   params.limit = Math.min(params.limit, maxDocLimit);
 
@@ -90,32 +91,30 @@ export const fetchAllDocs = (fetchUrl, fetchParams, queryOptionsParams) => {
     dispatch(nowLoading());
 
     // now fetch the results
-    return queryEndpoint(fetchUrl, params).then((docs) => {
+    return queryDocs(params).then(({ docs, docType }) => {
       const {
         finalDocList,
         canShowNext
       } = removeOverflowDocsAndCalculateHasNext(docs, totalDocsRemaining, params.limit);
 
+      if (docType === Constants.INDEX_RESULTS_DOC_TYPE.MANGO_INDEX) {
+        dispatch(changeLayout(Constants.LAYOUT_ORIENTATION.JSON));
+      }
       // dispatch that we're all done
-      dispatch(newResultsAvailable(finalDocList, params, canShowNext));
+      dispatch(newResultsAvailable(finalDocList, params, canShowNext, docType));
+    }).catch((error) => {
+      FauxtonAPI.addNotification({
+        msg: 'Error running query. ' + errorReason(error),
+        type: 'error',
+        clear: true
+      });
+      dispatch(resetState());
     });
   };
 };
 
-export const queryEndpoint = (fetchUrl, params) => {
-  const query = queryString.stringify(params);
-  const url = `${fetchUrl}${fetchUrl.includes('?') ? '&' : '?'}${query}`;
-  return fetch(url, {
-    credentials: 'include',
-    headers: {
-      'Accept': 'application/json; charset=utf-8'
-    }
-  })
-  .then(res => res.json())
-  .then(res => res.error ? [] : res.rows);
-};
 
-export const errorMessage = (ids) => {
+export const deleteErrorMessage = (ids) => {
   let msg = 'Failed to delete your document!';
 
   if (ids) {
@@ -147,53 +146,54 @@ export const validateBulkDelete = (docs) => {
   return true;
 };
 
-export const bulkDeleteDocs = (databaseName, fetchUrl, docs, designDocs, fetchParams, queryOptionsParams) => {
+export const bulkDeleteDocs = (databaseName, queryDocs, docs, designDocs, fetchParams, queryOptionsParams, docType) => {
   if (!validateBulkDelete(docs)) {
     return false;
   }
 
   return (dispatch) => {
-    const payload = {
-      docs: docs
-    };
-
-    return postToBulkDocs(databaseName, payload).then((res) => {
+    let postPromise, payload;
+    if (docType === Constants.INDEX_RESULTS_DOC_TYPE.MANGO_INDEX) {
+      payload = { docids: docs.map(doc => doc._id) };
+      postPromise = IndexResultsAPI.postToIndexBulkDelete(databaseName, payload);
+    } else if (docType === Constants.INDEX_RESULTS_DOC_TYPE.VIEW
+        || docType === Constants.INDEX_RESULTS_DOC_TYPE.MANGO_QUERY) {
+      payload = { docs: docs };
+      postPromise = IndexResultsAPI.postToBulkDocs(databaseName, payload);
+    } else {
+      throw new Error('Invalid document type: ' + docType);
+    }
+    return postPromise.then((res) => {
       if (res.error) {
-        errorMessage();
+        deleteErrorMessage();
         return;
       }
-      processBulkDeleteResponse(res, docs, designDocs);
+      processBulkDeleteResponse(res, docs, designDocs, docType);
       dispatch(newSelectedDocs());
-      dispatch(fetchAllDocs(fetchUrl, fetchParams, queryOptionsParams));
+      dispatch(fetchDocs(queryDocs, fetchParams, queryOptionsParams));
     });
   };
 };
 
-export const postToBulkDocs = (databaseName, payload) => {
-  const url = FauxtonAPI.urls('bulk_docs', 'server', databaseName);
-  return fetch(url, {
-    method: 'POST',
-    credentials: 'include',
-    body: JSON.stringify(payload),
-    headers: {
-      'Accept': 'application/json; charset=utf-8',
-      'Content-Type': 'application/json'
-    }
-  })
-  .then(res => res.json());
-};
-
-export const processBulkDeleteResponse = (res, originalDocs, designDocs) => {
+export const processBulkDeleteResponse = (res, deletedDocs, designDocs, docType) => {
   FauxtonAPI.addNotification({
     msg: 'Successfully deleted your docs',
     clear:  true
   });
 
-  const failedDocs = res.filter(doc => !!doc.error).map(doc => doc.id);
-  const hasDesignDocs = !!originalDocs.map(d => d._id).find((_id) => /_design/.test(_id));
+  let failedDocs = [];
+  if (docType === Constants.INDEX_RESULTS_DOC_TYPE.MANGO_INDEX) {
+    if (res.fail) {
+      failedDocs = res.fail.map(doc => doc.id);
+    }
+  } else {
+    failedDocs = res.filter(doc => !!doc.error).map(doc => doc.id);
+  }
+
+  const hasDesignDocs = !!deletedDocs.map(d => d._id).find((_id) => /_design/.test(_id));
 
   if (failedDocs.length > 0) {
-    errorMessage(failedDocs);
+    deleteErrorMessage(failedDocs);
   }
 
   if (designDocs && hasDesignDocs) {

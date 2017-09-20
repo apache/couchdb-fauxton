@@ -9,6 +9,10 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
+
+import sinon from "sinon";
+import utils from "../../../../test/mocha/testUtils";
+import FauxtonAPI from "../../../core/api";
 import {ResultsToolBar} from "../components/results-toolbar";
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -22,6 +26,14 @@ describe('Results Toolbar', () => {
     toggleSelectAll: () => {},
     isLoading: false
   };
+
+  beforeEach(() => {
+    sinon.stub(FauxtonAPI, 'urls').withArgs('new').returns('mock-url');
+  });
+
+  afterEach(() => {
+    utils.restore(FauxtonAPI.urls);
+  });
 
   it('renders all content when there are results and they are deletable', () => {
     const wrapper = mount(<ResultsToolBar hasResults={true} isListDeletable={true} {...restProps}/>);

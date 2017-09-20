@@ -11,7 +11,7 @@
 // the License.
 
 import FauxtonAPI from '../../../../core/api';
-import { fetchAllDocs } from './fetch';
+import { fetchDocs } from './fetch';
 import ActionTypes from '../actiontypes';
 
 export const toggleShowAllColumns = () => {
@@ -34,7 +34,7 @@ export const resetFetchParamsBeforePerPageChange = (fetchParams, queryOptionsPar
   });
 };
 
-export const updatePerPageResults = (databaseName, fetchParams, queryOptionsParams, amount) => {
+export const updatePerPageResults = (queryDocs, fetchParams, queryOptionsParams, amount) => {
   // Set the query limit to the perPage + 1 so we know if there is
   // a next page.  We also need to reset to the beginning of all
   // possible pages since our logic to paginate backwards can't handle
@@ -43,7 +43,7 @@ export const updatePerPageResults = (databaseName, fetchParams, queryOptionsPara
 
   return (dispatch) => {
     dispatch(setPerPage(amount));
-    dispatch(fetchAllDocs(databaseName, fetchParams, queryOptionsParams));
+    dispatch(fetchDocs(queryDocs, fetchParams, queryOptionsParams));
   };
 };
 
@@ -53,7 +53,7 @@ export const incrementSkipForPageNext = (fetchParams, perPage) => {
   });
 };
 
-export const paginateNext = (databaseName, fetchParams, queryOptionsParams, perPage) => {
+export const paginateNext = (queryDocs, fetchParams, queryOptionsParams, perPage) => {
   // add the perPage to the previous skip.
   fetchParams = incrementSkipForPageNext(fetchParams, perPage);
 
@@ -61,7 +61,7 @@ export const paginateNext = (databaseName, fetchParams, queryOptionsParams, perP
     dispatch({
       type: ActionTypes.INDEX_RESULTS_REDUX_PAGINATE_NEXT
     });
-    dispatch(fetchAllDocs(databaseName, fetchParams, queryOptionsParams));
+    dispatch(fetchDocs(queryDocs, fetchParams, queryOptionsParams));
   };
 };
 
@@ -71,7 +71,7 @@ export const decrementSkipForPagePrevious = (fetchParams, perPage) => {
   });
 };
 
-export const paginatePrevious = (databaseName, fetchParams, queryOptionsParams, perPage) => {
+export const paginatePrevious = (queryDocs, fetchParams, queryOptionsParams, perPage) => {
   // subtract the perPage to the previous skip.
   fetchParams = decrementSkipForPagePrevious(fetchParams, perPage);
 
@@ -79,7 +79,7 @@ export const paginatePrevious = (databaseName, fetchParams, queryOptionsParams, 
     dispatch({
       type: ActionTypes.INDEX_RESULTS_REDUX_PAGINATE_PREVIOUS
     });
-    dispatch(fetchAllDocs(databaseName, fetchParams, queryOptionsParams));
+    dispatch(fetchDocs(queryDocs, fetchParams, queryOptionsParams));
   };
 };
 

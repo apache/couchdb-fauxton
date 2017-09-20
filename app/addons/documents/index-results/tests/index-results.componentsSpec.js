@@ -150,7 +150,7 @@ describe('Index Results', function () {
           type: 'special',
           def: {fields: [{_id: 'desc'}]}
         }]),
-        typeOfIndex: 'view',
+        typeOfIndex: Constants.INDEX_RESULTS_DOC_TYPE.VIEW,
         bulkCollection: new Documents.BulkDeleteDocCollection([], {databaseId: '1'}),
       });
 
@@ -171,7 +171,7 @@ describe('Index Results', function () {
     it('does not render checkboxes for elements with no rev in a table (usual docs)', function () {
       IndexResultsActions.sendMessageNewResultList({
         collection: createDocColumn([{id: '1', foo: 'testId1'}, {id: '1', bar: 'testId1'}]),
-        typeOfIndex: 'view',
+        typeOfIndex: Constants.INDEX_RESULTS_DOC_TYPE.VIEW,
         bulkCollection: new Documents.BulkDeleteDocCollection([], {databaseId: '1'}),
       });
 
@@ -192,7 +192,7 @@ describe('Index Results', function () {
     it('renders checkboxes for elements with an id and rev in a table (usual docs)', function () {
       IndexResultsActions.sendMessageNewResultList({
         collection: createDocColumn([{id: '1', foo: 'testId1', rev: 'foo'}, {bar: 'testId1', rev: 'foo'}]),
-        typeOfIndex: 'view',
+        typeOfIndex: Constants.INDEX_RESULTS_DOC_TYPE.VIEW,
         bulkCollection: new Documents.BulkDeleteDocCollection([], {databaseId: '1'}),
       });
 
@@ -213,7 +213,7 @@ describe('Index Results', function () {
     it('renders checkboxes for elements with an id and rev in a json view (usual docs)', function () {
       IndexResultsActions.sendMessageNewResultList({
         collection: createDocColumn([{id: '1', emma: 'testId1', rev: 'foo'}, {bar: 'testId1'}]),
-        typeOfIndex: 'view',
+        typeOfIndex: Constants.INDEX_RESULTS_DOC_TYPE.VIEW,
         bulkCollection: new Documents.BulkDeleteDocCollection([], {databaseId: '1'}),
       });
 
@@ -233,7 +233,7 @@ describe('Index Results', function () {
     it('does not render checkboxes for elements with that are not deletable in a json view (usual docs)', function () {
       IndexResultsActions.sendMessageNewResultList({
         collection: createDocColumn([{foo: 'testId1', rev: 'foo'}, {bar: 'testId1'}]),
-        typeOfIndex: 'view',
+        typeOfIndex: Constants.INDEX_RESULTS_DOC_TYPE.VIEW,
         bulkCollection: new Documents.BulkDeleteDocCollection([], {databaseId: '1'}),
       });
 
@@ -269,7 +269,7 @@ describe('Index Results', function () {
 
       IndexResultsActions.sendMessageNewResultList({
         collection: createDocColumn([doc]),
-        typeOfIndex: 'view',
+        typeOfIndex: Constants.INDEX_RESULTS_DOC_TYPE.VIEW,
         bulkCollection: new Documents.BulkDeleteDocCollection([], {databaseId: '1'}),
       });
 

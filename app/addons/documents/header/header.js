@@ -30,8 +30,8 @@ export default class BulkDocumentHeaderController extends React.Component {
     return {
       selectedLayout: indexResultsStore.getSelectedLayout(),
       bulkDocCollection: indexResultsStore.getBulkDocCollection(),
-      isMango: indexResultsStore.getIsMangoResults(),
-      isMangoIndexList: indexResultsStore.getIsMangoIndexResults()
+      //TODO: Replace below with a test for docType
+      isMango: indexResultsStore.getIsMangoResults()
     };
   }
 
@@ -54,7 +54,7 @@ export default class BulkDocumentHeaderController extends React.Component {
     const {
       changeLayout,
       selectedLayout,
-      typeOfIndex
+      docType
     } = this.props;
 
     // If the changeLayout function is not undefined, default to using prop values
@@ -62,14 +62,14 @@ export default class BulkDocumentHeaderController extends React.Component {
     // TODO: migrate completely to redux and eliminate this check.
     const layout = changeLayout ? selectedLayout : this.state.selectedLayout;
     let metadata, json, table;
-    if ((typeOfIndex && typeOfIndex === 'view') || !this.state.isMango) {
+    if ((docType === Constants.INDEX_RESULTS_DOC_TYPE.VIEW)) {
       metadata = <Button
           className={layout === Constants.LAYOUT_ORIENTATION.METADATA ? 'active' : ''}
           onClick={this.toggleLayout.bind(this, Constants.LAYOUT_ORIENTATION.METADATA)}
         >
           Metadata
         </Button>;
-    } else if (this.state.isMangoIndexList) {
+    } else if ((docType === Constants.INDEX_RESULTS_DOC_TYPE.MANGO_INDEX)) {
       return null;
     }
 
@@ -108,7 +108,7 @@ export default class BulkDocumentHeaderController extends React.Component {
     const {
       changeLayout,
       selectedLayout,
-      fetchAllDocs,
+      fetchDocs,
       fetchParams,
       queryOptionsParams,
       queryOptionsToggleIncludeDocs
@@ -127,7 +127,7 @@ export default class BulkDocumentHeaderController extends React.Component {
 
       // tell the query options panel we're updating include_docs
       queryOptionsToggleIncludeDocs(!queryOptionsParams.include_docs);
-      fetchAllDocs(fetchParams, queryOptionsParams);
+      fetchDocs(fetchParams, queryOptionsParams);
       return;
     }
 

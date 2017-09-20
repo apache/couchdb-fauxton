@@ -15,7 +15,9 @@ import {
     isJSONDocBulkDeletable,
     isJSONDocEditable,
     hasBulkDeletableDoc,
-    getDocUrl
+    getDocUrl,
+    getDocId,
+    getDocRev
  } from "./shared-helpers";
 
 export const getPseudoSchema = (docs) => {
@@ -155,20 +157,20 @@ export const getTableViewData = (docs, options) => {
   const res = normalizedDocs.map(function (doc) {
     return {
       content: doc,
-      id: doc._id || doc.id, // inconsistent apis for GET between mango and views
-      _rev: doc._rev || doc.value.rev,
+      id: getDocId(doc, options.docType),
+      _rev: getDocRev(doc, options.docType),
       header: '',
       keylabel: '',
       url: doc._id || doc.id ? getDocUrl('app', doc._id || doc.id, options.databaseName) : null,
-      isDeletable: isJSONDocBulkDeletable(doc, options.typeOfIndex),
-      isEditable: isJSONDocEditable(doc, options.typeOfIndex)
+      isDeletable: isJSONDocBulkDeletable(doc, options.docType),
+      isEditable: isJSONDocEditable(doc, options.docType)
     };
   });
 
   return {
     notSelectedFields: notSelectedFieldsTableView,
     selectedFields: selectedFieldsTableView,
-    hasBulkDeletableDoc: hasBulkDeletableDoc(normalizedDocs),
+    hasBulkDeletableDoc: hasBulkDeletableDoc(normalizedDocs, options.docType),
     schema: schema,
     results: res,
     displayedFields: isMetaData ? null : {

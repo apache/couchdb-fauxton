@@ -262,7 +262,7 @@ describe('Index Results Store', function () {
         {a: '1', 'value': 'one', b: '1'},
         {a: '1', 'value': 'one', b: '1'}
       ]),
-      typeOfIndex: 'view'
+      typeOfIndex: Constants.INDEX_RESULTS_DOC_TYPE.VIEW
     });
 
     store.toggleLayout({layout: Constants.LAYOUT_ORIENTATION.TABLE});

@@ -12,6 +12,7 @@
 
 import app from "../../../../app";
 import FauxtonAPI from "../../../../core/api";
+import Constants from '../../constants';
 
 const getDocUrl = (context, id, databaseName) => {
   if (context === undefined) {
@@ -34,7 +35,7 @@ const isJSONDocEditable = (doc, docType) => {
     return;
   }
 
-  if (docType === 'MangoIndex') {
+  if (docType === Constants.INDEX_RESULTS_DOC_TYPE.MANGO_INDEX) {
     return false;
   }
 
@@ -50,7 +51,7 @@ const isJSONDocEditable = (doc, docType) => {
 };
 
 const isJSONDocBulkDeletable = (doc, docType) => {
-  if (docType === 'MangoIndex') {
+  if (docType === Constants.INDEX_RESULTS_DOC_TYPE.MANGO_INDEX) {
     return doc.type !== 'special';
   }
   const result = (doc._id || doc.id) && (doc._rev || (doc.value && doc.value.rev));
@@ -76,10 +77,46 @@ const getDefaultPerPage = () => {
   return FauxtonAPI.constants.MISC.DEFAULT_PAGE_SIZE;
 };
 
+const isGhostDoc = (doc) => {
+  // ghost docs are empty results where all properties were
+  // filtered away by mango
+  return !doc || !doc.attributes || !Object.keys(doc.attributes).length;
+};
+
+const getDocId = (doc, docType = Constants.INDEX_RESULTS_DOC_TYPE.VIEW) => {
+  if (docType === Constants.INDEX_RESULTS_DOC_TYPE.VIEW) {
+    return doc.id;
+  } else if (docType === Constants.INDEX_RESULTS_DOC_TYPE.MANGO_INDEX) {
+    return doc.type === 'special' ? '_all_docs' : doc.ddoc;
+  } else if (docType === Constants.INDEX_RESULTS_DOC_TYPE.MANGO_QUERY) {
+    return doc._id;
+  }
+  return doc.id || doc._id;
+};
+
+const getDocRev = (doc, docType = Constants.INDEX_RESULTS_DOC_TYPE.VIEW) => {
+  if (docType === Constants.INDEX_RESULTS_DOC_TYPE.VIEW) {
+    return doc.value && doc.value.rev;
+  } else if (docType === Constants.INDEX_RESULTS_DOC_TYPE.MANGO_INDEX) {
+    return undefined;
+  } else if (docType === Constants.INDEX_RESULTS_DOC_TYPE.MANGO_QUERY) {
+    return doc._rev;
+  }
+  return undefined;
+};
+
+const errorReason = (error) => {
+  return 'Reason: ' + ((error && error.message) || 'n/a');
+};
+
 export {
   getDocUrl,
+  isGhostDoc,
   isJSONDocEditable,
   isJSONDocBulkDeletable,
   hasBulkDeletableDoc,
-  getDefaultPerPage
+  getDefaultPerPage,
+  getDocId,
+  getDocRev,
+  errorReason
 };

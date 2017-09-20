@@ -20,6 +20,7 @@ import IndexResultsStores from "./index-results/stores";
 import IndexResultsActions from "./index-results/actions";
 import SidebarActions from "./sidebar/actions";
 import {DocsTabsSidebarLayout, ViewsTabsSidebarLayout} from './layouts';
+import Constants from './constants';
 
 const IndexEditorAndResults = BaseRoute.extend({
   routes: {
@@ -79,7 +80,7 @@ const IndexEditorAndResults = BaseRoute.extend({
 
     IndexResultsActions.newResultsList({
       collection: this.indexedDocs,
-      typeOfIndex: 'view',
+      typeOfIndex: Constants.INDEX_RESULTS_DOC_TYPE.VIEW,
       bulkCollection: new Documents.BulkDeleteDocCollection([], { databaseId: this.database.safeID() }),
     });
 

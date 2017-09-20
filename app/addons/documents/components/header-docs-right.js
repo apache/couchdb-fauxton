@@ -18,20 +18,22 @@ import Actions from './actions';
 
 const { QueryOptionsController } = QueryOptions;
 
-const getQueryOptionsComponent = (hideQueryOptions, isRedux, fetchUrl, ddocsOnly) => {
+const getQueryOptionsComponent = (hideQueryOptions, isRedux, queryDocs, ddocsOnly) => {
   if (hideQueryOptions) {
     return null;
   }
 
   let queryOptionsComponent = <QueryOptionsController />;
   if (isRedux) {
-    queryOptionsComponent = <QueryOptionsContainer fetchUrl={fetchUrl} ddocsOnly={ddocsOnly} />;
+    queryOptionsComponent = <QueryOptionsContainer
+      ddocsOnly={ddocsOnly}
+      queryDocs={ queryDocs } />;
   }
 
   return queryOptionsComponent;
 };
 
-const RightAllDocsHeader = ({database, hideQueryOptions, isRedux, fetchUrl, ddocsOnly}) =>
+const RightAllDocsHeader = ({database, hideQueryOptions, isRedux, queryDocs, ddocsOnly}) =>
   <div className="header-right right-db-header flex-layout flex-row">
 
     <div className="faux-header__searchboxwrapper">
@@ -39,11 +41,14 @@ const RightAllDocsHeader = ({database, hideQueryOptions, isRedux, fetchUrl, ddoc
         <JumpToDoc cache={false} loadOptions={Actions.fetchAllDocsWithKey(database)} database={database} />
       </div>
     </div>
-    {getQueryOptionsComponent(hideQueryOptions, isRedux, fetchUrl, ddocsOnly)}
+    {getQueryOptionsComponent(hideQueryOptions, isRedux, queryDocs, ddocsOnly)}
   </div>;
 
 RightAllDocsHeader.propTypes = {
-  database: React.PropTypes.object.isRequired
+  database: React.PropTypes.object.isRequired,
+  hideQueryOptions: React.PropTypes.bool,
+  isRedux: React.PropTypes.bool,
+  queryDocs: React.PropTypes.func
 };
 
 RightAllDocsHeader.defaultProps = {

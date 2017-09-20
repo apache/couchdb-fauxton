@@ -34,7 +34,9 @@ export default class ResultsScreen extends React.Component {
   }
 
   onClick (id, doc) {
-    FauxtonAPI.navigate(doc.url);
+    if (doc.url) {
+      FauxtonAPI.navigate(doc.url);
+    }
   }
 
   getUrlFragment (url) {
@@ -51,7 +53,6 @@ export default class ResultsScreen extends React.Component {
   getDocumentList () {
     let noop = () => {};
     let data = this.props.results.results;
-
     return _.map(data, function (doc, i) {
       return (
        <Document

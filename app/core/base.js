@@ -167,4 +167,12 @@ FauxtonAPI.addReducers = (reducers) => {
   };
 };
 
+FauxtonAPI.middlewares = [];
+FauxtonAPI.addMiddleware = (middleware) => {
+  // Basic validation
+  if (middleware && typeof middleware === 'function') {
+    FauxtonAPI.middlewares.push(middleware);
+  }
+};
+
 export default FauxtonAPI;

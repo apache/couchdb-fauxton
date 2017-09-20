@@ -19,7 +19,7 @@ import {
   bulkCheckOrUncheck,
   changeLayout,
   changeTableHeaderAttribute
-} from '../index-results/apis/base';
+} from '../index-results/actions/base';
 import ActionTypes from '../index-results/actiontypes';
 import Constants from '../constants';
 
@@ -56,12 +56,14 @@ describe('Docs Base API', () => {
       limit: 21
     };
     const canShowNext = true;
+    const docType = Constants.INDEX_RESULTS_DOC_TYPE.VIEW;
 
-    expect(newResultsAvailable(docs, params, canShowNext)).toEqual({
+    expect(newResultsAvailable(docs, params, canShowNext, docType)).toEqual({
       type: ActionTypes.INDEX_RESULTS_REDUX_NEW_RESULTS,
       docs: docs,
       params: params,
-      canShowNext: canShowNext
+      canShowNext: canShowNext,
+      docType: docType
     });
   });
 
@@ -116,7 +118,7 @@ describe('Docs Base API', () => {
     it('returns the proper event to dispatch when allDocumentsSelected false', () => {
       const selectedDocs = [];
       const allDocumentsSelected = false;
-      expect(bulkCheckOrUncheck(docs, selectedDocs, allDocumentsSelected)).toEqual({
+      expect(bulkCheckOrUncheck(docs, selectedDocs, allDocumentsSelected, Constants.INDEX_RESULTS_DOC_TYPE.MANGO_QUERY)).toEqual({
         type: ActionTypes.INDEX_RESULTS_REDUX_NEW_SELECTED_DOCS,
         selectedDocs: [
           {

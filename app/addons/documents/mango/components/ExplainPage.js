@@ -10,12 +10,26 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-export default {
-  MANGO_NEW_QUERY_FIND_CODE: 'MANGO_NEW_QUERY_FIND_CODE',
-  MANGO_LOAD_QUERY_HISTORY: 'MANGO_LOAD_QUERY_HISTORY',
-  MANGO_LOAD_INDEX_TEMPLATES: 'MANGO_LOAD_INDEX_TEMPLATES',
-  MANGO_NEW_QUERY_CREATE_INDEX_TEMPLATE: 'MANGO_NEW_QUERY_CREATE_INDEX_TEMPLATE',
-  MANGO_SAVE_INDEX_REQUEST: 'MANGO_SAVE_INDEX_REQUEST',
-  MANGO_SHOW_EXPLAIN_RESULTS: 'MANGO_SHOW_EXPLAIN_RESULTS',
-  MANGO_HIDE_EXPLAIN_RESULTS: 'MANGO_HIDE_EXPLAIN_RESULTS',
+import React, { Component } from "react";
+
+export default class ExplainPage extends Component {
+  componentDidMount () {
+    prettyPrint();
+  };
+
+  componentDidUpdate () {
+    prettyPrint();
+  };
+
+  render () {
+    return (
+      <div>
+        <pre className="prettyprint">{JSON.stringify(this.props.explainPlan, null, ' ')}</pre>
+      </div>
+    );
+  };
+}
+
+ExplainPage.propTypes = {
+  explainPlan: React.PropTypes.object.isRequired
 };
