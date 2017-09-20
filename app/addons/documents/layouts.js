@@ -171,6 +171,7 @@ export const DocsTabsSidebarLayout = ({
 };
 
 export const ChangesSidebarLayout = ({docURL, database, endpoint, dbName, dropDownLinks}) => {
+  console.log('hh');
   return (
     <div id="dashboard" className="with-sidebar">
       <TabsSidebarHeader
