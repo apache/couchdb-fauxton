@@ -147,8 +147,7 @@ module.exports = {
   resolve: {
     extensions: ['*', '.js', '.jsx'],
     alias: {
-      "underscore": "lodash",
-      "bootstrap": "../assets/js/libs/bootstrap",
+      "underscore": "lodash"
     }
   }
 };
