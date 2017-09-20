@@ -111,7 +111,7 @@ module.exports = {
   resolve: {
     extensions: ['*', '.js', '.jsx'], //We can use .js and React's .jsx files using Babel
     alias: {
-      "bootstrap": "../assets/js/libs/bootstrap",
+      // "bootstrap": "../assets/js/libs/bootstrap",
       "underscore": "lodash",
     }
   },
