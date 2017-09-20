@@ -26,10 +26,12 @@ export const queryAllDocs = (fetchUrl, params) => {
     }
   })
   .then(res => res.json())
-  .then(res => {
+  .then(json => {
+    if (json.error) {
+      throw new Error('(' + json.error + ') ' + json.reason);
+    }
     return {
-      //TODO: handle error situation
-      docs: res.error ? [] : res.rows,
+      docs: json.rows,
       docType: Constants.INDEX_RESULTS_DOC_TYPE.VIEW
     };
   });
