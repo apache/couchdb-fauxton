@@ -17,7 +17,7 @@ import FauxtonAPI from "../../../core/api";
 import Constants from '../constants';
 
 export const fetchQueryExplain = (databaseName, queryCode) => {
-  const url = FauxtonAPI.urls('mango', 'explain-server', databaseName);
+  const url = FauxtonAPI.urls('mango', 'explain-server', encodeURIComponent(databaseName));
 
   return fetch(url, {
     headers: {
@@ -105,7 +105,7 @@ export const mergeFetchParams = (queryCode, fetchParams) => {
 };
 
 export const mangoQueryDocs = (databaseName, queryCode, fetchParams) => {
-  const url = FauxtonAPI.urls('mango', 'query-server', databaseName);
+  const url = FauxtonAPI.urls('mango', 'query-server', encodeURIComponent(databaseName));
   const modifiedQuery = mergeFetchParams(queryCode, fetchParams);
   return fetch(url, {
     headers: {

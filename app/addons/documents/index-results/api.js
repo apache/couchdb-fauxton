@@ -50,7 +50,7 @@ export const postToBulkDocs = (databaseName, payload) => {
 };
 
 export const postToIndexBulkDelete = (databaseName, payload) => {
-  const url = FauxtonAPI.urls('mango', 'index-server-bulk-delete', databaseName);
+  const url = FauxtonAPI.urls('mango', 'index-server-bulk-delete', encodeURIComponent(databaseName));
   return fetch(url, {
     method: 'POST',
     credentials: 'include',
