@@ -12,6 +12,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import beautifyHelper from "../../../../assets/js/plugins/beautify";
+import {Tooltip, OverlayTrigger} from 'react-bootstrap';
 
 export class Beautify extends React.Component {
   noOfLines = () => {
@@ -22,21 +23,18 @@ export class Beautify extends React.Component {
     return this.noOfLines() === 1;
   };
 
-  addTooltip = () => {
-    if (this.canBeautify) {
-      $('.beautify-tooltip').tooltip({ placement: 'right' });
-    }
-  };
-
-  componentDidMount() {
-    this.addTooltip();
-  }
-
   beautify = (event) => {
     event.preventDefault();
     var beautifiedCode = beautifyHelper(this.props.code);
     this.props.beautifiedCode(beautifiedCode);
-    $('.beautify-tooltip').tooltip('hide');
+  };
+
+  getTooltip = () => {
+    return (
+      <Tooltip id="tooltip">
+      Switch to editable code format.
+      </Tooltip>
+    );
   };
 
   render() {
@@ -44,16 +42,18 @@ export class Beautify extends React.Component {
       return null;
     }
 
+    const tooltip = this.getTooltip();
+
     return (
-      <button
-        onClick={this.beautify}
-        className="beautify beautify_map btn btn-primary btn-small beautify-tooltip"
-        type="button"
-        data-toggle="tooltip"
-        title="Switch to editable code format."
-      >
-        Format Code
-      </button>
+      <OverlayTrigger placement="right" overlay={tooltip}>
+        <button
+          onClick={this.beautify}
+          className="beautify beautify_map btn btn-primary btn-small beautify-tooltip"
+          type="button"
+        >
+          Format Code
+        </button>
+      </OverlayTrigger>
     );
   }
 }

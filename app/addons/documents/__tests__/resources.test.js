@@ -221,12 +221,15 @@ describe('Bulk Delete', () => {
       {'ok': true, 'id': '2', 'rev': '6-da537822b9672a4b2f42adb1be04a5b1'}
     ], promise);
 
-    assert.equal(collection.length, 1);
+    return promise.then(() => {
+      assert.equal(collection.length, 1);
+    });
   });
 
-  it('triggers a removed event with all ids', () => {
+  it('triggers a removed event with all ids', (done) => {
     collection.listenToOnce(collection, 'removed', function (ids) {
       assert.deepEqual(ids, ['Deferred', 'DeskSet']);
+      done();
     });
 
     collection.handleResponse([
@@ -235,10 +238,12 @@ describe('Bulk Delete', () => {
     ], promise);
   });
 
-  it('triggers a error event with all errored ids', () => {
+  it('triggers a error event with all errored ids', (done) => {
     collection.listenToOnce(collection, 'error', function (ids) {
+      done();
       assert.deepEqual(ids, ['Deferred']);
     });
+
     collection.handleResponse([
       {'error':'conflict', 'id':'Deferred', 'rev':'10-72cd2edbcc0d197ce96188a229a7af01'},
       {'ok':true, 'id':'DeskSet', 'rev':'6-da537822b9672a4b2f42adb1be04a5b1'}
@@ -251,9 +256,12 @@ describe('Bulk Delete', () => {
       {'ok':true, 'id':'2', 'rev':'6-da537822b9672a4b2f42adb1be04a5b1'},
       {'error':'conflict', 'id':'3', 'rev':'6-da537822b9672a4b2f42adb1be04a5b1'}
     ], promise);
-    assert.ok(collection.get('1'));
-    assert.ok(collection.get('3'));
-    assert.notOk(collection.get('2'));
+
+    return promise.then(() => {
+      assert.ok(collection.get('1'));
+      assert.ok(collection.get('3'));
+      assert.notOk(collection.get('2'));
+    });
   });
 
   it('triggers resolve for successful delete', () => {
@@ -265,8 +273,9 @@ describe('Bulk Delete', () => {
       {'ok':true, 'id':'DeskSet', 'rev':'6-da537822b9672a4b2f42adb1be04a5b1'}
     ], promise);
 
-    assert.ok(spy.calledOnce);
-
+    return promise.then(() => {
+      assert.ok(spy.calledOnce);
+    });
   });
 
   it('triggers resolve for successful delete with errors as well', () => {
@@ -283,19 +292,19 @@ describe('Bulk Delete', () => {
       {'error':'conflict', 'id':'1', 'rev':'10-72cd2edbcc0d197ce96188a229a7af01'},
     ], promise);
 
-    assert.ok(spy.calledWith(ids));
+    return promise.then(() => {
+      assert.ok(spy.calledWith(ids));
+    });
   });
 
   it('triggers reject for failed delete', () => {
-    const spy = sinon.spy();
-    promise.fail(spy);
-
     collection.handleResponse([
       {'error':'conflict', 'id':'1', 'rev':'10-72cd2edbcc0d197ce96188a229a7af01'}
     ], promise);
 
-    assert.ok(spy.calledWith(['1']));
-
+    return promise.catch((errors) => {
+      assert.deepEqual(errors, ['1']);
+    });
   });
 
 });
