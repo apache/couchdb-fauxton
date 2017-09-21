@@ -203,7 +203,7 @@ FauxtonAPI.registerUrls('mango', {
   },
 
   'index-server-bulk-delete': function (db) {
-    return app.host + '/' + encodeURIComponent(db) + '/_index/_bulk_delete';
+    return app.host + '/' + db + '/_index/_bulk_delete';
   },
 
   'query-server': function (db, query) {
@@ -231,11 +231,11 @@ FauxtonAPI.registerUrls('mango', {
   },
 
   'explain-server': function (db) {
-    return app.host + '/' + app.utils.safeURLName(db) + '/_explain';
+    return app.host + '/' + db + '/_explain';
   },
 
   'explain-apiurl': function (db) {
-    return window.location.origin + '/' + app.utils.safeURLName(db) + '/_explain';
+    return window.location.origin + '/' + db + '/_explain';
   }
 });
 

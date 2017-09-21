@@ -123,7 +123,7 @@ class MangoLayout extends Component {
     let endpoint = this.props.endpoint;
 
     if (this.props.explainPlan) {
-      endpoint = FauxtonAPI.urls('mango', 'explain-apiurl', database);
+      endpoint = FauxtonAPI.urls('mango', 'explain-apiurl', encodeURIComponent(database));
     }
     let queryFunction = (params) => { return MangoAPI.mangoQueryDocs(databaseName, queryFindCode, params); };
     let docType = Constants.INDEX_RESULTS_DOC_TYPE.MANGO_QUERY;

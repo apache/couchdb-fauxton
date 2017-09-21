@@ -53,7 +53,7 @@ const MangoIndexEditorAndQueryEditor = FauxtonAPI.RouteObject.extend({
       {name: app.i18n.en_US['mango-title-editor']}
     ];
 
-    const endpoint = FauxtonAPI.urls('mango', 'query-apiurl', this.databaseName);
+    const endpoint = FauxtonAPI.urls('mango', 'query-apiurl', encodeURIComponent(this.databaseName));
 
     return <MangoLayoutContainer
       database={database}
@@ -84,7 +84,7 @@ const MangoIndexEditorAndQueryEditor = FauxtonAPI.RouteObject.extend({
     const url = FauxtonAPI.urls(
       'allDocs', 'app', encodeURIComponent(this.databaseName), '?limit=' + FauxtonAPI.constants.DATABASES.DOCUMENT_LIMIT
     );
-    const endpoint = FauxtonAPI.urls('mango', 'index-apiurl', this.databaseName);
+    const endpoint = FauxtonAPI.urls('mango', 'index-apiurl', encodeURIComponent(this.databaseName));
 
     const crumbs = [
       {name: database, link: url},
