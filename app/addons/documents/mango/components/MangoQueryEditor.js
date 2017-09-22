@@ -18,6 +18,7 @@ import "../../../../../assets/js/plugins/prettify";
 import app from "../../../../app";
 import FauxtonAPI from "../../../../core/api";
 import ReactComponents from "../../../components/react-components";
+import ExecutionStats from './ExecutionStats';
 
 const PaddedBorderedBox = ReactComponents.PaddedBorderedBox;
 const CodeEditorPanel = ReactComponents.CodeEditorPanel;
@@ -90,6 +91,9 @@ export default class MangoQueryEditor extends Component {
               <button type="button" id="explain-btn" className="btn btn-secondary btn-space"
                 onClick={(ev) => {this.runExplain(ev);} }>Explain</button>
               <a className="edit-link" style={{} } onClick={(ev) => {this.manageIndexes(ev);}}>manage indexes</a>
+            </div>
+            <div>
+              <ExecutionStats {...this.props} />
             </div>
           </div>
         </form>

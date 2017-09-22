@@ -91,7 +91,7 @@ export const fetchDocs = (queryDocs, fetchParams, queryOptionsParams) => {
     dispatch(nowLoading());
 
     // now fetch the results
-    return queryDocs(params).then(({ docs, docType }) => {
+    return queryDocs(params).then(({ docs, docType, executionStats, warning }) => {
       const {
         finalDocList,
         canShowNext
@@ -101,7 +101,7 @@ export const fetchDocs = (queryDocs, fetchParams, queryOptionsParams) => {
         dispatch(changeLayout(Constants.LAYOUT_ORIENTATION.JSON));
       }
       // dispatch that we're all done
-      dispatch(newResultsAvailable(finalDocList, params, canShowNext, docType));
+      dispatch(newResultsAvailable(finalDocList, params, canShowNext, docType, executionStats, warning));
     }).catch((error) => {
       FauxtonAPI.addNotification({
         msg: 'Error running query. ' + errorReason(error),

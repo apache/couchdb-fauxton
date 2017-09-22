@@ -101,11 +101,8 @@ const supportsExecutionStats = (databaseName) => {
         resolve(supportsExecutionStatsCache);
       });
     });
-  } else {
-    return new FauxtonAPI.Promise((resolve) => {
-      resolve(supportsExecutionStatsCache);
-    });
   }
+  return Promise.resolve(supportsExecutionStatsCache);
 };
 
 // Determines what params need to be sent to couch based on the Mango query entered
@@ -129,7 +126,7 @@ export const mergeFetchParams = (queryCode, fetchParams) => {
 };
 
 export const mangoQuery = (databaseName, queryCode, fetchParams) => {
-  const url = FauxtonAPI.urls('mango', 'query-server', databaseName);
+  const url = FauxtonAPI.urls('mango', 'query-server', encodeURIComponent(databaseName));
   const modifiedQuery = mergeFetchParams(queryCode, fetchParams);
 
   return fetch(url, {
@@ -141,9 +138,11 @@ export const mangoQuery = (databaseName, queryCode, fetchParams) => {
     method: 'POST',
     body: JSON.stringify(modifiedQuery)
   });
-}
+};
 
 export const mangoQueryDocs = (databaseName, queryCode, fetchParams) => {
+  // we can only add the execution_stats field if it is supported by the server
+  // otherwise Couch throws an error
   return supportsExecutionStats(databaseName).then((shouldFetchExecutionStats) => {
     if (shouldFetchExecutionStats) {
       queryCode.execution_stats = true;
@@ -156,7 +155,9 @@ export const mangoQueryDocs = (databaseName, queryCode, fetchParams) => {
         }
         return {
           docs: json.docs,
-          docType: Constants.INDEX_RESULTS_DOC_TYPE.MANGO_QUERY
+          docType: Constants.INDEX_RESULTS_DOC_TYPE.MANGO_QUERY,
+          executionStats: json.execution_stats,
+          warning: json.warning
         };
       });
   });

@@ -34,7 +34,7 @@ describe('Mango API', () => {
 
   describe('mangoQueryDocs', () => {
     it('returns document type INDEX_RESULTS_DOC_TYPE.MANGO_QUERY', (done) => {
-      fetchMock.once("*", {});
+      fetchMock.mock("*", { times: 2 });
       MangoAPI.mangoQueryDocs('myDB', {}, {}).then((res) => {
         assert.equal(res.docType, Constants.INDEX_RESULTS_DOC_TYPE.MANGO_QUERY);
         done();
