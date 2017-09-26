@@ -166,14 +166,15 @@ export const removeGeneratedMangoDocs = (doc) => {
 };
 
 // transform the docs in to a state ready for rendering on the page
-export const getDataForRendering = (state, databaseName) => {
+export const getDataForRendering = (state, databaseName, deleteEnabled = true) => {
   const { docs } = state;
   const options = {
     databaseName: databaseName,
     selectedLayout: state.selectedLayout,
     selectedFieldsTableView: state.tableView.selectedFieldsTableView,
     showAllFieldsTableView: state.tableView.showAllFieldsTableView,
-    docType: state.docType
+    docType: state.docType,
+    deleteEnabled: deleteEnabled
   };
 
   const docsWithoutGeneratedMangoDocs = docs.filter(removeGeneratedMangoDocs);

@@ -57,7 +57,7 @@ export const TabsSidebarHeader = ({
               ddocsOnly={ddocsOnly}
               queryDocs={ (params) => { return queryAllDocs(fetchUrl, params); } } />
           </div>
-          { isRedux ? <ApiBarContainer databaseName={dbName} /> :
+          { isRedux ? <ApiBarContainer docURL={docURL} endpoint={endpoint} /> :
                       <ApiBarWrapper docURL={docURL} endpoint={endpoint} /> }
           <div id="notification-center-btn" className="flex-fill">
             <NotificationCenterButton />
@@ -132,7 +132,8 @@ export const DocsTabsSidebarLayout = ({
   dropDownLinks,
   isRedux = false,
   fetchUrl,
-  ddocsOnly
+  ddocsOnly,
+  deleteEnabled = true
 }) => {
   let lowerContent;
   if (isRedux) {
@@ -143,7 +144,8 @@ export const DocsTabsSidebarLayout = ({
                       databaseName={dbName}
                       fetchAtStartup={true}
                       queryDocs={ (params) => { return queryAllDocs(fetchUrl, params); } }
-                      docType={Constants.INDEX_RESULTS_DOC_TYPE.VIEW} />;
+                      docType={Constants.INDEX_RESULTS_DOC_TYPE.VIEW}
+                      deleteEnabled={deleteEnabled} />;
   } else {
     lowerContent = <IndexResultsComponents.List designDocs={designDocs} />;
   }

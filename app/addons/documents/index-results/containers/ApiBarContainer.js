@@ -44,5 +44,7 @@ const ApiBarContainer = connect (
 export default ApiBarContainer;
 
 ApiBarContainer.propTypes = {
-  databaseName: React.PropTypes.string
+  databaseName: React.PropTypes.string,
+  docUrl: React.PropTypes.string,
+  endpoint: React.PropTypes.string
 };

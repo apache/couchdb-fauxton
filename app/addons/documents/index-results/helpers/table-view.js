@@ -162,7 +162,7 @@ export const getTableViewData = (docs, options) => {
       header: '',
       keylabel: '',
       url: doc._id || doc.id ? getDocUrl('app', doc._id || doc.id, options.databaseName) : null,
-      isDeletable: isJSONDocBulkDeletable(doc, options.docType),
+      isDeletable: options.deleteEnabled ? isJSONDocBulkDeletable(doc, options.docType) : false,
       isEditable: isJSONDocEditable(doc, options.docType)
     };
   });
@@ -170,7 +170,7 @@ export const getTableViewData = (docs, options) => {
   return {
     notSelectedFields: notSelectedFieldsTableView,
     selectedFields: selectedFieldsTableView,
-    hasBulkDeletableDoc: hasBulkDeletableDoc(normalizedDocs, options.docType),
+    hasBulkDeletableDoc: options.deleteEnabled ? hasBulkDeletableDoc(normalizedDocs, options.docType) : false,
     schema: schema,
     results: res,
     displayedFields: isMetaData ? null : {

@@ -89,6 +89,7 @@ const IndexEditorAndResults = BaseRoute.extend({
       fetchUrl={url}
       ddocsOnly={false}
       isRedux={true}
+      deleteEnabled={false}
       />;
   },
 

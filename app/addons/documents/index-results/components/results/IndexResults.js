@@ -68,6 +68,9 @@ export default class IndexResults extends React.Component {
   }
 
   docChecked (_id, _rev) {
+    if (!_id) {
+      return;
+    }
     const { selectDoc, selectedDocs } = this.props;
 
     // dispatch an action to push this doc on to the array of selected docs
