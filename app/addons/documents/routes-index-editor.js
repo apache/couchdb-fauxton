@@ -13,14 +13,10 @@
 import React from 'react';
 import FauxtonAPI from "../../core/api";
 import BaseRoute from "./shared-routes";
-import Documents from "./resources";
 import ActionsIndexEditor from "./index-editor/actions";
 import Databases from "../databases/base";
-import IndexResultsStores from "./index-results/stores";
-import IndexResultsActions from "./index-results/actions";
 import SidebarActions from "./sidebar/actions";
 import {DocsTabsSidebarLayout, ViewsTabsSidebarLayout} from './layouts';
-import Constants from './constants';
 
 const IndexEditorAndResults = BaseRoute.extend({
   routes: {
@@ -52,38 +48,15 @@ const IndexEditorAndResults = BaseRoute.extend({
 
   showView: function (databaseName, ddoc, viewName) {
     const params = this.createParams(),
-          urlParams = params.urlParams,
-          docParams = params.docParams,
-          store = IndexResultsStores.indexResultsStore;
-
-    // if the user is simply switching the layout style (i.e. metadata, json, or table),
-    // there will be a cached offset value.  Use that offset when getting the "new"
-    // collection so data stays the same.
-    if (docParams.skip && store.hasCachedOffset()) {
-      docParams.skip = Math.max(store.getCachedOffset(), docParams.skip);
-    } else if (store.hasCachedOffset()) {
-      docParams.skip = store.getCachedOffset();
-    }
+          urlParams = params.urlParams;
 
     viewName = viewName.replace(/\?.*$/, '');
-    this.indexedDocs = new Documents.IndexCollection(null, {
-      database: this.database,
-      design: ddoc,
-      view: viewName,
-      params: docParams,
-      paging: {
-        pageSize: store.getPerPage()
-      }
-    });
 
+    // TODO(antonio) remove after refactoring IndexEditor
     ActionsIndexEditor.clearIndex();
 
-    IndexResultsActions.newResultsList({
-      collection: this.indexedDocs,
-      typeOfIndex: Constants.INDEX_RESULTS_DOC_TYPE.VIEW,
-      bulkCollection: new Documents.BulkDeleteDocCollection([], { databaseId: this.database.safeID() }),
-    });
 
+    // TODO(antonio) remove after refactoring IndexEditor
     ActionsIndexEditor.fetchDesignDocsBeforeEdit({
       viewName: viewName,
       newView: false,
@@ -100,7 +73,10 @@ const IndexEditorAndResults = BaseRoute.extend({
 
     this.showQueryOptions(urlParams, ddoc, viewName);
 
-    const endpoint = this.indexedDocs.urlRef('apiurl');
+    const url = FauxtonAPI.urls('view', 'server', encodeURIComponent(databaseName),
+      encodeURIComponent(ddoc), encodeURIComponent(viewName));
+    const endpoint = FauxtonAPI.urls('view', 'apiurl', encodeURIComponent(databaseName),
+      encodeURIComponent(ddoc), encodeURIComponent(viewName));
     const docURL = FauxtonAPI.constants.DOC_URLS.GENERAL;
 
     const dropDownLinks = this.getCrumbs(this.database);
@@ -110,6 +86,9 @@ const IndexEditorAndResults = BaseRoute.extend({
       dbName={this.database.id}
       dropDownLinks={dropDownLinks}
       database={this.database}
+      fetchUrl={url}
+      ddocsOnly={false}
+      isRedux={true}
       />;
   },
 
