@@ -13,7 +13,7 @@
 import { hasBulkDeletableDoc, getDocUrl, getDocId, getDocRev } from "./shared-helpers";
 import MangoHelper from "../../mango/mango.helper";
 
-export const getJsonViewData = (docs, { databaseName, docType, deleteEnabled }) => {
+export const getJsonViewData = (docs, { databaseName, docType, deleteEnabled = true }) => {
 
   // expand on this when refactoring views to use redux
   const stagedResults = docs.map((doc) => {
