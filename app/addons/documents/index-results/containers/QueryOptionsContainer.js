@@ -12,6 +12,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
+import DocHelpers from '../../helpers';
 import QueryOptions from '../components/queryoptions/QueryOptions';
 import { changeLayout, resetState } from '../actions/base';
 import { resetPagination } from '../actions/pagination';
@@ -38,12 +39,16 @@ import {
   getSelectedLayout
 } from '../reducers';
 
-const mapStateToProps = ({indexResults}, ownProps) => {
+const showReduce = (designDocs, selectedNavItem) => {
+  return DocHelpers.selectedViewContainsReduceFunction(designDocs, selectedNavItem);
+};
+
+const mapStateToProps = ({indexResults, sidebar}, ownProps) => {
   const queryOptionsPanel = getQueryOptionsPanel(indexResults);
   return {
     contentVisible: queryOptionsPanel.isVisible,
     includeDocs: queryOptionsPanel.includeDocs,
-    showReduce: queryOptionsPanel.showReduce,
+    showReduce: showReduce(sidebar.designDocs, ownProps.selectedNavItem),
     reduce: queryOptionsPanel.reduce,
     groupLevel: queryOptionsPanel.groupLevel,
     showByKeys: queryOptionsPanel.showByKeys,

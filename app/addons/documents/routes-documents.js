@@ -98,7 +98,10 @@ var DocumentsRouteObject = BaseRoute.extend({
       tab = 'design-docs';
     }
 
-    SidebarActions.selectNavItem(tab);
+    const selectedNavItem = {
+      navItem: tab
+    };
+    SidebarActions.selectNavItem(selectedNavItem.navItem);
     ComponentsActions.showDeleteDatabaseModal({showDeleteModal: false, dbId: ''});
 
     const endpoint = this.database.allDocs.urlRef("apiurl", urlParams);
@@ -115,6 +118,7 @@ var DocumentsRouteObject = BaseRoute.extend({
       fetchUrl={url}
       ddocsOnly={onlyShowDdocs}
       isRedux={true}
+      selectedNavItem={selectedNavItem}
     />;
   },
 

@@ -15,7 +15,7 @@ import IndexResultsComponents from './index-results/index-results.components';
 import ReactPagination from './pagination/pagination';
 import {NotificationCenterButton} from '../fauxton/notifications/notifications';
 import {ApiBarWrapper} from '../components/layouts';
-import SidebarComponents from "./sidebar/sidebar";
+import SidebarControllerContainer from "./sidebar/SidebarControllerContainer";
 import HeaderDocsLeft from './components/header-docs-left';
 import Changes from './changes/components';
 import IndexEditorComponents from "./index-editor/components";
@@ -24,8 +24,9 @@ import RightAllDocsHeader from './components/header-docs-right';
 import IndexResultsContainer from './index-results/containers/IndexResultsContainer';
 import PaginationContainer from './index-results/containers/PaginationContainer';
 import ApiBarContainer from './index-results/containers/ApiBarContainer';
-import { queryAllDocs } from './index-results/api';
+import { queryAllDocs, queryMapReduceView } from './index-results/api';
 import Constants from './constants';
+import Helpers from './helpers';
 
 export const TabsSidebarHeader = ({
   hideQueryOptions,
@@ -36,7 +37,9 @@ export const TabsSidebarHeader = ({
   endpoint,
   isRedux = false,
   fetchUrl,
-  ddocsOnly
+  ddocsOnly,
+  queryDocs,
+  selectedNavItem
 }) => {
   return (
     <header className="two-panel-header">
@@ -55,7 +58,8 @@ export const TabsSidebarHeader = ({
               isRedux={isRedux}
               fetchUrl={fetchUrl}
               ddocsOnly={ddocsOnly}
-              queryDocs={ (params) => { return queryAllDocs(fetchUrl, params); } } />
+              queryDocs={queryDocs}
+              selectedNavItem={selectedNavItem} />
           </div>
           { isRedux ? <ApiBarContainer docURL={docURL} endpoint={endpoint} /> :
                       <ApiBarWrapper docURL={docURL} endpoint={endpoint} /> }
@@ -75,7 +79,9 @@ TabsSidebarHeader.propTypes = {
   endpoint : React.PropTypes.string,
   showIncludeAllDocs : React.PropTypes.bool,
   hideHeaderBar : React.PropTypes.bool,
-  database : React.PropTypes.object.isRequired
+  database : React.PropTypes.object.isRequired,
+  queryDocs: React.PropTypes.func.isRequired,
+  selectedNavItem: React.PropTypes.object
 };
 
 TabsSidebarHeader.defaultProps = {
@@ -88,12 +94,13 @@ export const TabsSidebarContent = ({
   upperContent,
   isRedux = false,
   fetchUrl,
-  databaseName
+  databaseName,
+  queryDocs
 }) => {
   return (
     <div className="with-sidebar tabs-with-sidebar content-area">
       <aside id="sidebar-content" className="scrollable">
-        <SidebarComponents.SidebarController />
+        <SidebarControllerContainer />
       </aside>
       <section id="dashboard-content" className="flex-layout flex-col">
         <div id="dashboard-upper-content">
@@ -106,7 +113,7 @@ export const TabsSidebarContent = ({
           {isRedux && !hideFooter ? <PaginationContainer
                                       databaseName={databaseName}
                                       fetchUrl={fetchUrl}
-                                      queryDocs={(params) => { return queryAllDocs(fetchUrl, params); }}/> : null}
+                                      queryDocs={queryDocs} /> : null}
           {!isRedux && !hideFooter ? <ReactPagination.Footer /> : null}
         </div>
       </section>
@@ -133,8 +140,13 @@ export const DocsTabsSidebarLayout = ({
   isRedux = false,
   fetchUrl,
   ddocsOnly,
-  deleteEnabled = true
+  deleteEnabled = true,
+  selectedNavItem
 }) => {
+  let queryDocs = (params) => { return queryAllDocs(fetchUrl, params); };
+  if (Helpers.isViewSelected(selectedNavItem)) {
+    queryDocs = (params) => { return queryMapReduceView(fetchUrl, params); };
+  }
   let lowerContent;
   if (isRedux) {
     lowerContent = <IndexResultsContainer
@@ -143,7 +155,7 @@ export const DocsTabsSidebarLayout = ({
                       ddocsOnly={ddocsOnly}
                       databaseName={dbName}
                       fetchAtStartup={true}
-                      queryDocs={ (params) => { return queryAllDocs(fetchUrl, params); } }
+                      queryDocs={queryDocs}
                       docType={Constants.INDEX_RESULTS_DOC_TYPE.VIEW}
                       deleteEnabled={deleteEnabled} />;
   } else {
@@ -161,12 +173,15 @@ export const DocsTabsSidebarLayout = ({
         isRedux={isRedux}
         fetchUrl={fetchUrl}
         ddocsOnly={ddocsOnly}
+        queryDocs={queryDocs}
+        selectedNavItem={selectedNavItem}
       />
       <TabsSidebarContent
         lowerContent={lowerContent}
         isRedux={isRedux}
         fetchUrl={fetchUrl}
         databaseName={dbName}
+        queryDocs={queryDocs}
       />
     </div>
   );
@@ -201,6 +216,7 @@ export const ViewsTabsSidebarLayout = ({showEditView, database, docURL, endpoint
         dbName={dbName}
         dropDownLinks={dropDownLinks}
         database={database}
+        queryDocs={() => {}}
       />
       <TabsSidebarContent
         lowerContent={content}

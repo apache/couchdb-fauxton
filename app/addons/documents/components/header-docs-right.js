@@ -18,7 +18,7 @@ import Actions from './actions';
 
 const { QueryOptionsController } = QueryOptions;
 
-const getQueryOptionsComponent = (hideQueryOptions, isRedux, queryDocs, ddocsOnly) => {
+const getQueryOptionsComponent = (hideQueryOptions, isRedux, queryDocs, ddocsOnly, selectedNavItem) => {
   if (hideQueryOptions) {
     return null;
   }
@@ -27,13 +27,14 @@ const getQueryOptionsComponent = (hideQueryOptions, isRedux, queryDocs, ddocsOnl
   if (isRedux) {
     queryOptionsComponent = <QueryOptionsContainer
       ddocsOnly={ddocsOnly}
-      queryDocs={ queryDocs } />;
+      queryDocs={ queryDocs }
+      selectedNavItem={selectedNavItem} />;
   }
 
   return queryOptionsComponent;
 };
 
-const RightAllDocsHeader = ({database, hideQueryOptions, isRedux, queryDocs, ddocsOnly}) =>
+const RightAllDocsHeader = ({database, hideQueryOptions, isRedux, queryDocs, ddocsOnly, selectedNavItem}) =>
   <div className="header-right right-db-header flex-layout flex-row">
 
     <div className="faux-header__searchboxwrapper">
@@ -41,14 +42,15 @@ const RightAllDocsHeader = ({database, hideQueryOptions, isRedux, queryDocs, ddo
         <JumpToDoc cache={false} loadOptions={Actions.fetchAllDocsWithKey(database)} database={database} />
       </div>
     </div>
-    {getQueryOptionsComponent(hideQueryOptions, isRedux, queryDocs, ddocsOnly)}
+    {getQueryOptionsComponent(hideQueryOptions, isRedux, queryDocs, ddocsOnly, selectedNavItem)}
   </div>;
 
 RightAllDocsHeader.propTypes = {
   database: React.PropTypes.object.isRequired,
   hideQueryOptions: React.PropTypes.bool,
   isRedux: React.PropTypes.bool,
-  queryDocs: React.PropTypes.func
+  queryDocs: React.PropTypes.func,
+  selectedNavItem: React.PropTypes.object
 };
 
 RightAllDocsHeader.defaultProps = {

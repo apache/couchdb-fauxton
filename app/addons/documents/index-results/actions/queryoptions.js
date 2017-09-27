@@ -39,9 +39,17 @@ export const queryOptionsToggleVisibility = (newVisibility) => {
 };
 
 export const queryOptionsToggleReduce = (previousReduce) => {
-  return updateQueryOptions({
-    reduce: !previousReduce
-  });
+  if (previousReduce) {
+    return updateQueryOptions({
+      reduce: !previousReduce
+    });
+  } else {
+    // Disables includeDocs if reduce is changing to true
+    return updateQueryOptions({
+      reduce: !previousReduce,
+      includeDocs: false
+    });
+  }
 };
 
 export const queryOptionsUpdateGroupLevel = (newGroupLevel) => {

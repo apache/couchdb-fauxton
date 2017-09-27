@@ -65,11 +65,15 @@ const IndexEditorAndResults = BaseRoute.extend({
       designDocId: '_design/' + ddoc
     });
 
-    SidebarActions.selectNavItem('designDoc', {
-      designDocName: ddoc,
-      designDocSection: 'Views',
-      indexName: viewName
-    });
+    const selectedNavItem = {
+      navItem: 'designDoc',
+      params: {
+        designDocName: ddoc,
+        designDocSection: 'Views',
+        indexName: viewName
+      }
+    };
+    SidebarActions.selectNavItem(selectedNavItem.navItem, selectedNavItem.params);
 
     this.showQueryOptions(urlParams, ddoc, viewName);
 
@@ -90,6 +94,7 @@ const IndexEditorAndResults = BaseRoute.extend({
       ddocsOnly={false}
       isRedux={true}
       deleteEnabled={false}
+      selectedNavItem={selectedNavItem}
       />;
   },
 
