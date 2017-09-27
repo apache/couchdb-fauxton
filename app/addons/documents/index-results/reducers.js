@@ -59,7 +59,7 @@ const initialState = {
   }
 };
 
-export default function resultsState (state = initialState, action) {
+export default function resultsState(state = initialState, action) {
   switch (action.type) {
 
     case ActionTypes.INDEX_RESULTS_REDUX_RESET_STATE:
@@ -256,7 +256,7 @@ export const getCanShowPrevious = (state) => {
   return state.pagination.currentPage > 1;
 };
 
-export const getDisplayedFields = (state, databaseName)  => {
+export const getDisplayedFields = (state, databaseName) => {
   return getDataForRendering(state, databaseName).displayedFields || {};
 };
 
@@ -278,7 +278,9 @@ export const getQueryOptionsParams = (state) => {
       params.end_key = betweenKeys.endkey;
     }
   } else if (queryOptionsPanel.showByKeys) {
-    params.keys = queryOptionsPanel.byKeys.replace(/\r?\n/g, '');
+    if (queryOptionsPanel.byKeys.trim()) {
+      params.keys = queryOptionsPanel.byKeys.replace(/\r?\n/g, '');
+    }
   }
 
   if (queryOptionsPanel.limit !== 'none') {
