@@ -11,10 +11,7 @@
 // the License.
 
 import React from 'react';
-import IndexResultsComponents from './index-results/index-results.components';
-import ReactPagination from './pagination/pagination';
-import {NotificationCenterButton} from '../fauxton/notifications/notifications';
-import {ApiBarWrapper} from '../components/layouts';
+import { NotificationCenterButton } from '../fauxton/notifications/notifications';
 import SidebarControllerContainer from "./sidebar/SidebarControllerContainer";
 import HeaderDocsLeft from './components/header-docs-left';
 import Changes from './changes/components';
@@ -30,12 +27,12 @@ import Helpers from './helpers';
 
 export const TabsSidebarHeader = ({
   hideQueryOptions,
+  hideJumpToDoc,
   database,
   dbName,
   dropDownLinks,
   docURL,
   endpoint,
-  isRedux = false,
   fetchUrl,
   ddocsOnly,
   queryDocs,
@@ -48,21 +45,20 @@ export const TabsSidebarHeader = ({
           <HeaderDocsLeft
             dbName={dbName}
             dropDownLinks={dropDownLinks}
-            />
+          />
         </div>
         <div className="right-header-wrapper flex-layout flex-row flex-body">
           <div id="right-header" className="flex-fill">
             <RightAllDocsHeader
               hideQueryOptions={hideQueryOptions}
+              hideJumpToDoc={hideJumpToDoc}
               database={database}
-              isRedux={isRedux}
               fetchUrl={fetchUrl}
               ddocsOnly={ddocsOnly}
               queryDocs={queryDocs}
               selectedNavItem={selectedNavItem} />
           </div>
-          { isRedux ? <ApiBarContainer docURL={docURL} endpoint={endpoint} /> :
-                      <ApiBarWrapper docURL={docURL} endpoint={endpoint} /> }
+          <ApiBarContainer docURL={docURL} endpoint={endpoint} />
           <div id="notification-center-btn" className="flex-fill">
             <NotificationCenterButton />
           </div>
@@ -73,14 +69,15 @@ export const TabsSidebarHeader = ({
 };
 
 TabsSidebarHeader.propTypes = {
-  dbName : React.PropTypes.string.isRequired,
-  dropDownLinks : React.PropTypes.array.isRequired,
-  docURL : React.PropTypes.string,
-  endpoint : React.PropTypes.string,
-  showIncludeAllDocs : React.PropTypes.bool,
-  hideHeaderBar : React.PropTypes.bool,
-  database : React.PropTypes.object.isRequired,
-  queryDocs: React.PropTypes.func.isRequired,
+  dbName: React.PropTypes.string.isRequired,
+  dropDownLinks: React.PropTypes.array.isRequired,
+  docURL: React.PropTypes.string,
+  endpoint: React.PropTypes.string,
+  showIncludeAllDocs: React.PropTypes.bool,
+  hideQueryOptions: React.PropTypes.bool,
+  hideJumpToDoc: React.PropTypes.bool,
+  database: React.PropTypes.object.isRequired,
+  queryDocs: React.PropTypes.func,
   selectedNavItem: React.PropTypes.object
 };
 
@@ -92,7 +89,6 @@ export const TabsSidebarContent = ({
   hideFooter,
   lowerContent,
   upperContent,
-  isRedux = false,
   fetchUrl,
   databaseName,
   queryDocs
@@ -110,11 +106,10 @@ export const TabsSidebarContent = ({
           {lowerContent}
         </div>
         <div id="footer">
-          {isRedux && !hideFooter ? <PaginationContainer
-                                      databaseName={databaseName}
-                                      fetchUrl={fetchUrl}
-                                      queryDocs={queryDocs} /> : null}
-          {!isRedux && !hideFooter ? <ReactPagination.Footer /> : null}
+          {!hideFooter ? <PaginationContainer
+            databaseName={databaseName}
+            fetchUrl={fetchUrl}
+            queryDocs={queryDocs} /> : null}
         </div>
       </section>
     </div>
@@ -137,7 +132,6 @@ export const DocsTabsSidebarLayout = ({
   endpoint,
   dbName,
   dropDownLinks,
-  isRedux = false,
   fetchUrl,
   ddocsOnly,
   deleteEnabled = true,
@@ -147,20 +141,15 @@ export const DocsTabsSidebarLayout = ({
   if (Helpers.isViewSelected(selectedNavItem)) {
     queryDocs = (params) => { return queryMapReduceView(fetchUrl, params); };
   }
-  let lowerContent;
-  if (isRedux) {
-    lowerContent = <IndexResultsContainer
-                      fetchUrl={fetchUrl}
-                      designDocs={designDocs}
-                      ddocsOnly={ddocsOnly}
-                      databaseName={dbName}
-                      fetchAtStartup={true}
-                      queryDocs={queryDocs}
-                      docType={Constants.INDEX_RESULTS_DOC_TYPE.VIEW}
-                      deleteEnabled={deleteEnabled} />;
-  } else {
-    lowerContent = <IndexResultsComponents.List designDocs={designDocs} />;
-  }
+  const lowerContent = <IndexResultsContainer
+    fetchUrl={fetchUrl}
+    designDocs={designDocs}
+    ddocsOnly={ddocsOnly}
+    databaseName={dbName}
+    fetchAtStartup={true}
+    queryDocs={queryDocs}
+    docType={Constants.INDEX_RESULTS_DOC_TYPE.VIEW}
+    deleteEnabled={deleteEnabled} />;
 
   return (
     <div id="dashboard" className="with-sidebar">
@@ -170,7 +159,6 @@ export const DocsTabsSidebarLayout = ({
         dbName={dbName}
         dropDownLinks={dropDownLinks}
         database={database}
-        isRedux={isRedux}
         fetchUrl={fetchUrl}
         ddocsOnly={ddocsOnly}
         queryDocs={queryDocs}
@@ -178,7 +166,6 @@ export const DocsTabsSidebarLayout = ({
       />
       <TabsSidebarContent
         lowerContent={lowerContent}
-        isRedux={isRedux}
         fetchUrl={fetchUrl}
         databaseName={dbName}
         queryDocs={queryDocs}
@@ -187,7 +174,7 @@ export const DocsTabsSidebarLayout = ({
   );
 };
 
-export const ChangesSidebarLayout = ({docURL, database, endpoint, dbName, dropDownLinks}) => {
+export const ChangesSidebarLayout = ({ docURL, database, endpoint, dbName, dropDownLinks }) => {
   return (
     <div id="dashboard" className="with-sidebar">
       <TabsSidebarHeader
@@ -196,17 +183,18 @@ export const ChangesSidebarLayout = ({docURL, database, endpoint, dbName, dropDo
         dbName={dbName}
         dropDownLinks={dropDownLinks}
         database={database}
+        hideQueryOptions={true}
       />
       <TabsSidebarContent
         upperContent={<Changes.ChangesTabContent />}
         lowerContent={<Changes.ChangesController />}
         hideFooter={true}
-        />
+      />
     </div>
   );
 };
 
-export const ViewsTabsSidebarLayout = ({showEditView, database, docURL, endpoint, dbName, dropDownLinks}) => {
+export const ViewsTabsSidebarLayout = ({ showEditView, database, docURL, endpoint, dbName, dropDownLinks }) => {
   const content = showEditView ? <IndexEditorComponents.EditorController /> : <DesignDocInfoComponents.DesignDocInfo />;
   return (
     <div id="dashboard" className="with-sidebar">
@@ -216,7 +204,9 @@ export const ViewsTabsSidebarLayout = ({showEditView, database, docURL, endpoint
         dbName={dbName}
         dropDownLinks={dropDownLinks}
         database={database}
-        queryDocs={() => {}}
+        queryDocs={() => { }}
+        hideQueryOptions={true}
+        hideJumpToDoc={true}
       />
       <TabsSidebarContent
         lowerContent={content}

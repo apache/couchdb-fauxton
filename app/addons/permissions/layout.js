@@ -19,7 +19,8 @@ export const PermissionsLayout = ({docURL, database, endpoint, dbName, dropDownL
   return (
     <div id="dashboard" className="with-sidebar">
       <TabsSidebarHeader
-        hideHeaderBar={true}
+        hideQueryOptions={true}
+        hideJumpToDoc={true}
         docURL={docURL}
         endpoint={endpoint}
         dbName={dbName}

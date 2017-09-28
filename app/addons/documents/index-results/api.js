@@ -46,7 +46,7 @@ export const queryMapReduceView = (fetchUrl, params) => {
   if (params.reduce === undefined) {
     params.reduce = false;
   }
-  // Reduce cannot be true at the same time as include_docs
+  // reduce cannot be true when include_docs is true
   if (params.include_docs && params.reduce) {
     params.reduce = false;
     params.group = undefined;

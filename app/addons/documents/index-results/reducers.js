@@ -156,6 +156,17 @@ export default function resultsState(state = initialState, action) {
       });
 
     case ActionTypes.INDEX_RESULTS_REDUX_NEW_QUERY_OPTIONS:
+      // includeDocs or reduce should be mutually exclusive
+      if (action.options.includeDocs && action.options.reduce) {
+        // includeDocs has precedence if both are set at the same time
+        action.options.reduce = false;
+      } else if (action.options.includeDocs && state.queryOptionsPanel.reduce) {
+        // Switch off reduce when includeDocs is being set to true
+        action.options.reduce = false;
+      } else if (action.options.reduce && state.queryOptionsPanel.includeDocs) {
+        // Switch off includeDocs when reduce is being set to true
+        action.options.includeDocs = false;
+      }
       return Object.assign({}, state, {
         queryOptionsPanel: Object.assign({}, state.queryOptionsPanel, action.options)
       });

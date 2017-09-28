@@ -144,5 +144,14 @@ export default class QueryOptions extends React.Component {
 };
 
 QueryOptions.propTypes = {
-  contentVisible: React.PropTypes.bool.isRequired
+  contentVisible: React.PropTypes.bool.isRequired,
+  queryOptionsFilterOnlyDdocs: React.PropTypes.func.isRequired,
+  resetState: React.PropTypes.func.isRequired,
+  queryOptionsExecute: React.PropTypes.func.isRequired,
+  queryOptionsParams: React.PropTypes.object.isRequired,
+  perPage: React.PropTypes.number.isRequired,
+  resetPagination: React.PropTypes.func.isRequired,
+  selectedLayout: React.PropTypes.string.isRequired,
+  changeLayout: React.PropTypes.func.isRequired,
+  queryOptionsToggleVisibility: React.PropTypes.func.isRequired
 };

@@ -117,7 +117,6 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-// Adds dispatch method to SidebarController
 const SidebarControllerContainer = connect(
   mapStateToProps,
   mapDispatchToProps

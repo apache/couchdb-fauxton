@@ -47,14 +47,11 @@ const IndexEditorAndResults = BaseRoute.extend({
   },
 
   showView: function (databaseName, ddoc, viewName) {
-    const params = this.createParams(),
-          urlParams = params.urlParams;
 
     viewName = viewName.replace(/\?.*$/, '');
 
     // TODO(antonio) remove after refactoring IndexEditor
     ActionsIndexEditor.clearIndex();
-
 
     // TODO(antonio) remove after refactoring IndexEditor
     ActionsIndexEditor.fetchDesignDocsBeforeEdit({
@@ -75,8 +72,6 @@ const IndexEditorAndResults = BaseRoute.extend({
     };
     SidebarActions.selectNavItem(selectedNavItem.navItem, selectedNavItem.params);
 
-    this.showQueryOptions(urlParams, ddoc, viewName);
-
     const url = FauxtonAPI.urls('view', 'server', encodeURIComponent(databaseName),
       encodeURIComponent(ddoc), encodeURIComponent(viewName));
     const endpoint = FauxtonAPI.urls('view', 'apiurl', encodeURIComponent(databaseName),
@@ -92,7 +87,6 @@ const IndexEditorAndResults = BaseRoute.extend({
       database={this.database}
       fetchUrl={url}
       ddocsOnly={false}
-      isRedux={true}
       deleteEnabled={false}
       selectedNavItem={selectedNavItem}
       />;
