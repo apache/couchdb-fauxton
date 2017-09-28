@@ -138,7 +138,6 @@ export const DocsTabsSidebarLayout = ({
   deleteEnabled = true,
   selectedNavItem
 }) => {
-  console.log('DocsTabsSidebarLayout:', fetchUrl, '    ', ddocsOnly);
   let queryDocs = (params) => { return queryAllDocs(fetchUrl, params); };
   if (Helpers.isViewSelected(selectedNavItem)) {
     queryDocs = (params) => { return queryMapReduceView(fetchUrl, params); };

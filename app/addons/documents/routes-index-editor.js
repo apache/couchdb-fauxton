@@ -50,10 +50,7 @@ const IndexEditorAndResults = BaseRoute.extend({
 
     viewName = viewName.replace(/\?.*$/, '');
 
-    // TODO(antonio) remove after refactoring IndexEditor
     ActionsIndexEditor.clearIndex();
-
-    // TODO(antonio) remove after refactoring IndexEditor
     ActionsIndexEditor.fetchDesignDocsBeforeEdit({
       viewName: viewName,
       newView: false,
