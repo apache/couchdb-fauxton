@@ -33,6 +33,7 @@ export const TabsSidebarHeader = ({
   dropDownLinks,
   docURL,
   endpoint,
+  endpointAddQueryOptions,
   fetchUrl,
   ddocsOnly,
   queryDocs,
@@ -58,7 +59,7 @@ export const TabsSidebarHeader = ({
               queryDocs={queryDocs}
               selectedNavItem={selectedNavItem} />
           </div>
-          <ApiBarContainer docURL={docURL} endpoint={endpoint} />
+          <ApiBarContainer docURL={docURL} endpoint={endpoint} endpointAddQueryOptions={endpointAddQueryOptions} />
           <div id="notification-center-btn" className="flex-fill">
             <NotificationCenterButton />
           </div>
@@ -137,6 +138,7 @@ export const DocsTabsSidebarLayout = ({
   deleteEnabled = true,
   selectedNavItem
 }) => {
+  console.log('DocsTabsSidebarLayout:', fetchUrl, '    ', ddocsOnly);
   let queryDocs = (params) => { return queryAllDocs(fetchUrl, params); };
   if (Helpers.isViewSelected(selectedNavItem)) {
     queryDocs = (params) => { return queryMapReduceView(fetchUrl, params); };
@@ -156,6 +158,7 @@ export const DocsTabsSidebarLayout = ({
       <TabsSidebarHeader
         docURL={docURL}
         endpoint={endpoint}
+        endpointAddQueryOptions={true}
         dbName={dbName}
         dropDownLinks={dropDownLinks}
         database={database}

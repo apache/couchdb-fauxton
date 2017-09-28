@@ -26,26 +26,25 @@ export default class QueryOptions extends React.Component {
     super(props);
     const {
       ddocsOnly,
-      queryOptionsFilterOnlyDdocs
+      queryOptionsApplyFilterOnlyDdocs
     } = props;
 
     if (ddocsOnly) {
-      queryOptionsFilterOnlyDdocs();
+      queryOptionsApplyFilterOnlyDdocs();
     }
   }
 
   componentWillReceiveProps (nextProps) {
     const {
       ddocsOnly,
-      queryOptionsFilterOnlyDdocs,
-      resetState
+      queryOptionsApplyFilterOnlyDdocs,
+      queryOptionsRemoveFilterOnlyDdocs,
     } = this.props;
 
     if (!ddocsOnly && nextProps.ddocsOnly) {
-      resetState();
-      queryOptionsFilterOnlyDdocs();
+      queryOptionsApplyFilterOnlyDdocs();
     } else if (ddocsOnly && !nextProps.ddocsOnly) {
-      resetState();
+      queryOptionsRemoveFilterOnlyDdocs();
     }
   }
 
@@ -145,8 +144,8 @@ export default class QueryOptions extends React.Component {
 
 QueryOptions.propTypes = {
   contentVisible: React.PropTypes.bool.isRequired,
-  queryOptionsFilterOnlyDdocs: React.PropTypes.func.isRequired,
-  resetState: React.PropTypes.func.isRequired,
+  queryOptionsApplyFilterOnlyDdocs: React.PropTypes.func.isRequired,
+  queryOptionsRemoveFilterOnlyDdocs: React.PropTypes.func.isRequired,
   queryOptionsExecute: React.PropTypes.func.isRequired,
   queryOptionsParams: React.PropTypes.object.isRequired,
   perPage: React.PropTypes.number.isRequired,

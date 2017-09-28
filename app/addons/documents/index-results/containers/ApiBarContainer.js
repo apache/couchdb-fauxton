@@ -27,12 +27,19 @@ const urlRef = (databaseName, params) => {
   return FauxtonAPI.urls('allDocs', "apiurl", encodeURIComponent(databaseName), query);
 };
 
-const mapStateToProps = ({indexResults}, {docUrl, endpoint, databaseName}) => {
+const mapStateToProps = ({indexResults}, {docUrl, endpoint, databaseName, endpointAddQueryOptions}) => {
   if (!docUrl) {
     docUrl = FauxtonAPI.constants.DOC_URLS.GENERAL;
   }
   if (!endpoint) {
     endpoint = urlRef(databaseName, getQueryOptionsParams(indexResults));
+  } else {
+    if (endpointAddQueryOptions) {
+      const query = queryString.stringify(getQueryOptionsParams(indexResults));
+      if (query) {
+        endpoint = endpoint.indexOf('?') == -1 ? `${endpoint}?${query}` : `${endpoint}&${query}`;
+      }
+    }
   }
   return { docUrl, endpoint };
 };
@@ -46,5 +53,6 @@ export default ApiBarContainer;
 ApiBarContainer.propTypes = {
   databaseName: React.PropTypes.string,
   docUrl: React.PropTypes.string,
-  endpoint: React.PropTypes.string
+  endpoint: React.PropTypes.string,
+  endpointAddQueryOptions: React.PropTypes.bool
 };

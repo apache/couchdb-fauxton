@@ -73,11 +73,7 @@ export default function resultsState(state = initialState, action) {
         pagination: Object.assign({}, initialState.pagination, {
           perPage: state.pagination.perPage
         }),
-        queryOptionsPanel: Object.assign({}, initialState.queryOptionsPanel, {
-          skip: state.queryOptionsPanel.perPage,
-          limit: state.queryOptionsPanel.limit,
-          descending: state.queryOptionsPanel.descending
-        }),
+        queryOptionsPanel: Object.assign({}, initialState.queryOptionsPanel, state.queryOptionsPanel),
         isLoading: false
       });
 

@@ -29,7 +29,8 @@ import {
   queryOptionsUpdateLimit,
   queryOptionsToggleIncludeDocs,
   queryOptionsToggleVisibility,
-  queryOptionsFilterOnlyDdocs
+  queryOptionsFilterOnlyDdocs,
+  queryOptionsRemoveFilterOnlyDdocs
 } from '../actions/queryoptions';
 import {
   getQueryOptionsPanel,
@@ -107,8 +108,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     queryOptionsExecute: (queryOptionsParams, perPage) => {
       dispatch(queryOptionsExecute(ownProps.queryDocs, queryOptionsParams, perPage));
     },
-    queryOptionsFilterOnlyDdocs: () => {
+    queryOptionsApplyFilterOnlyDdocs: () => {
       dispatch(queryOptionsFilterOnlyDdocs());
+    },
+    queryOptionsRemoveFilterOnlyDdocs: () => {
+      dispatch(queryOptionsRemoveFilterOnlyDdocs());
     },
     changeLayout: (newLayout) => {
       dispatch(changeLayout(newLayout));

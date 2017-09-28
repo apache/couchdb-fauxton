@@ -119,3 +119,11 @@ export const queryOptionsFilterOnlyDdocs = () => {
     showByKeys: false
   });
 };
+
+export const queryOptionsRemoveFilterOnlyDdocs = () => {
+  return updateQueryOptions({
+    betweenKeys: {},
+    showBetweenKeys: false,
+    showByKeys: false
+  });
+};
