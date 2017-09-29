@@ -210,7 +210,7 @@ describe('QueryOptions', () => {
   it('button is highlighted when betweenKeys option is set', () => {
     const newProps = {
       ...props,
-      betweenKeys: {}
+      betweenKeys: {startkey:"a"}
     };
     const wrapper = shallow(<QueryOptions
       ddocsOnly={true}
