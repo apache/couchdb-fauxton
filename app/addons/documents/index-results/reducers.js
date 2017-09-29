@@ -73,7 +73,8 @@ export default function resultsState(state = initialState, action) {
         pagination: Object.assign({}, initialState.pagination, {
           perPage: state.pagination.perPage
         }),
-        queryOptionsPanel: Object.assign({}, initialState.queryOptionsPanel, state.queryOptionsPanel),
+        queryOptionsPanel: Object.assign({}, initialState.queryOptionsPanel,
+          state.queryOptionsPanel, {reduce: false, groupLevel: 'exact', showReduce: false}),
         isLoading: false
       });
 
@@ -152,6 +153,7 @@ export default function resultsState(state = initialState, action) {
       });
 
     case ActionTypes.INDEX_RESULTS_REDUX_NEW_QUERY_OPTIONS:
+      console.log('INDEX_RESULTS_REDUX_NEW_QUERY_OPTIONS - ', action.options);
       // includeDocs or reduce should be mutually exclusive
       if (action.options.includeDocs && action.options.reduce) {
         // includeDocs has precedence if both are set at the same time

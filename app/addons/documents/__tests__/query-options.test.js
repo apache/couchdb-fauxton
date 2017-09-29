@@ -121,4 +121,177 @@ describe('QueryOptions', () => {
     });
     expect(spy.calledOnce).toBe(true);
   });
+
+  it('button is not highlighted when query options are not set', () => {
+
+    const wrapper = shallow(<QueryOptions
+      ddocsOnly={true}
+      queryOptionsRemoveFilterOnlyDdocs={() => {}}
+      queryOptionsApplyFilterOnlyDdocs={() => {}}
+      queryOptionsExecute={() => {}}
+      resetPagination={() => {}}
+      queryOptionsToggleVisibility={() => {}}
+      queryOptionsParams={{}}
+      selectedLayout={Constants.LAYOUT_ORIENTATION.METADATA}
+      changeLayout={() => {}}
+      {...props}
+    />);
+
+    const isHighlighted = wrapper.find('ToggleHeaderButton').prop('active');
+    expect(isHighlighted).toBe(false);
+  });
+
+  it('button is highlighted when reduce option is enabled', () => {
+    const newProps = {
+      ...props,
+      reduce: true
+    };
+    const wrapper = shallow(<QueryOptions
+      ddocsOnly={true}
+      queryOptionsRemoveFilterOnlyDdocs={() => {}}
+      queryOptionsApplyFilterOnlyDdocs={() => {}}
+      queryOptionsExecute={() => {}}
+      resetPagination={() => {}}
+      queryOptionsToggleVisibility={() => {}}
+      queryOptionsParams={{}}
+      selectedLayout={Constants.LAYOUT_ORIENTATION.METADATA}
+      changeLayout={() => {}}
+      {...newProps}
+    />);
+
+    const isHighlighted = wrapper.find('ToggleHeaderButton').prop('active');
+    expect(isHighlighted).toBe(true);
+  });
+
+  it('button is highlighted when limit option is set', () => {
+    const newProps = {
+      ...props,
+      limit: 3
+    };
+    const wrapper = shallow(<QueryOptions
+      ddocsOnly={true}
+      queryOptionsRemoveFilterOnlyDdocs={() => {}}
+      queryOptionsApplyFilterOnlyDdocs={() => {}}
+      queryOptionsExecute={() => {}}
+      resetPagination={() => {}}
+      queryOptionsToggleVisibility={() => {}}
+      queryOptionsParams={{}}
+      selectedLayout={Constants.LAYOUT_ORIENTATION.METADATA}
+      changeLayout={() => {}}
+      {...newProps}
+    />);
+
+    const isHighlighted = wrapper.find('ToggleHeaderButton').prop('active');
+    expect(isHighlighted).toBe(true);
+  });
+
+  it('button is highlighted when skip option is set', () => {
+    const newProps = {
+      ...props,
+      skip: 3
+    };
+    const wrapper = shallow(<QueryOptions
+      ddocsOnly={true}
+      queryOptionsRemoveFilterOnlyDdocs={() => {}}
+      queryOptionsApplyFilterOnlyDdocs={() => {}}
+      queryOptionsExecute={() => {}}
+      resetPagination={() => {}}
+      queryOptionsToggleVisibility={() => {}}
+      queryOptionsParams={{}}
+      selectedLayout={Constants.LAYOUT_ORIENTATION.METADATA}
+      changeLayout={() => {}}
+      {...newProps}
+    />);
+
+    const isHighlighted = wrapper.find('ToggleHeaderButton').prop('active');
+    expect(isHighlighted).toBe(true);
+  });
+
+  it('button is highlighted when betweenKeys option is set', () => {
+    const newProps = {
+      ...props,
+      betweenKeys: {}
+    };
+    const wrapper = shallow(<QueryOptions
+      ddocsOnly={true}
+      queryOptionsRemoveFilterOnlyDdocs={() => {}}
+      queryOptionsApplyFilterOnlyDdocs={() => {}}
+      queryOptionsExecute={() => {}}
+      resetPagination={() => {}}
+      queryOptionsToggleVisibility={() => {}}
+      queryOptionsParams={{}}
+      selectedLayout={Constants.LAYOUT_ORIENTATION.METADATA}
+      changeLayout={() => {}}
+      {...newProps}
+    />);
+
+    const isHighlighted = wrapper.find('ToggleHeaderButton').prop('active');
+    expect(isHighlighted).toBe(true);
+  });
+
+  it('button is highlighted when byKeys option is set', () => {
+    const newProps = {
+      ...props,
+      byKeys: {}
+    };
+    const wrapper = shallow(<QueryOptions
+      ddocsOnly={true}
+      queryOptionsRemoveFilterOnlyDdocs={() => {}}
+      queryOptionsApplyFilterOnlyDdocs={() => {}}
+      queryOptionsExecute={() => {}}
+      resetPagination={() => {}}
+      queryOptionsToggleVisibility={() => {}}
+      queryOptionsParams={{}}
+      selectedLayout={Constants.LAYOUT_ORIENTATION.METADATA}
+      changeLayout={() => {}}
+      {...newProps}
+    />);
+
+    const isHighlighted = wrapper.find('ToggleHeaderButton').prop('active');
+    expect(isHighlighted).toBe(true);
+  });
+
+  it('button is highlighted when descending option is enabled', () => {
+    const newProps = {
+      ...props,
+      descending: true
+    };
+    const wrapper = shallow(<QueryOptions
+      ddocsOnly={true}
+      queryOptionsRemoveFilterOnlyDdocs={() => {}}
+      queryOptionsApplyFilterOnlyDdocs={() => {}}
+      queryOptionsExecute={() => {}}
+      resetPagination={() => {}}
+      queryOptionsToggleVisibility={() => {}}
+      queryOptionsParams={{}}
+      selectedLayout={Constants.LAYOUT_ORIENTATION.METADATA}
+      changeLayout={() => {}}
+      {...newProps}
+    />);
+
+    const isHighlighted = wrapper.find('ToggleHeaderButton').prop('active');
+    expect(isHighlighted).toBe(true);
+  });
+
+  it('button is not highlighted when includeDocs option is enabled', () => {
+    const newProps = {
+      ...props,
+      includeDocs: true
+    };
+    const wrapper = shallow(<QueryOptions
+      ddocsOnly={true}
+      queryOptionsRemoveFilterOnlyDdocs={() => {}}
+      queryOptionsApplyFilterOnlyDdocs={() => {}}
+      queryOptionsExecute={() => {}}
+      resetPagination={() => {}}
+      queryOptionsToggleVisibility={() => {}}
+      queryOptionsParams={{}}
+      selectedLayout={Constants.LAYOUT_ORIENTATION.METADATA}
+      changeLayout={() => {}}
+      {...newProps}
+    />);
+
+    const isHighlighted = wrapper.find('ToggleHeaderButton').prop('active');
+    expect(isHighlighted).toBe(false);
+  });
 });

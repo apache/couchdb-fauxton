@@ -48,6 +48,17 @@ export default class QueryOptions extends React.Component {
     }
   }
 
+  componentWillUnmount() {
+    const {
+      ddocsOnly,
+      queryOptionsRemoveFilterOnlyDdocs
+    } = this.props;
+    if (ddocsOnly) {
+      // Remove filter it was set before
+      queryOptionsRemoveFilterOnlyDdocs();
+    }
+  }
+
   executeQuery (e) {
     if (e) { e.preventDefault(); }
     this.closeTray();
@@ -123,7 +134,13 @@ export default class QueryOptions extends React.Component {
     );
   }
 
+  showAsActive() {
+    const { reduce, betweenKeys, byKeys, descending, skip, limit } = this.props;
+    return !!(betweenKeys || byKeys || limit || skip || reduce || descending);
+  }
+
   render () {
+
     return (
       <div id="header-query-options">
         <div id="query-options">
@@ -133,7 +150,8 @@ export default class QueryOptions extends React.Component {
               containerClasses="header-control-box control-toggle-queryoptions"
               title="Query Options"
               fonticon="fonticon-gears"
-              text="Options" />
+              text="Options"
+              active={this.showAsActive()} />
               {this.getTray()}
           </div>
         </div>

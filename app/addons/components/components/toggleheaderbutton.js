@@ -29,8 +29,8 @@ export const ToggleHeaderButton = React.createClass({
   },
 
   render () {
-    const { iconDefaultClass, fonticon, innerClasses, selected, containerClasses, title, disabled, text, toggleCallback } = this.props;
-    const selectedBtnClass = (selected) ? 'js-headerbar-togglebutton-selected' : '';
+    const { iconDefaultClass, fonticon, innerClasses, selected, containerClasses, title, disabled, text, toggleCallback, active } = this.props;
+    const selectedBtnClass = (selected || active) ? 'js-headerbar-togglebutton-selected' : '';
 
     return (
       <button

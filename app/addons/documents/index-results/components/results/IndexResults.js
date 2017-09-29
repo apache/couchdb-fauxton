@@ -45,7 +45,10 @@ export default class IndexResults extends React.Component {
     // Indicates the selected sidebar item has changed, so it needs to fetch the new list of docs
     if (this.props.ddocsOnly !== ddocsOnly || this.props.fetchUrl !== fetchUrl) {
       resetState();
-      fetchDocs({...fetchParams, skip: 0}, queryOptionsParams);
+      // Need to reset skip and reduce here because 'resetState()'
+      // won't change props until the next update cycle
+      fetchDocs({...fetchParams, skip: 0},
+        {...queryOptionsParams, reduce: undefined, group: undefined, group_level: undefined});
     }
   }
 
