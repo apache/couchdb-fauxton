@@ -90,7 +90,7 @@ function saveView (viewInfo) {
 
     // if the user just saved an existing view to a different design doc, remove the view
     // from the old design doc and delete if it's empty
-    if (viewInfo.designDocId !== 'new-doc' && viewInfo.originalDesignDocName !== viewInfo.designDocId) {
+    if (!viewInfo.newView && viewInfo.originalDesignDocName !== viewInfo.designDocId) {
       var oldDesignDoc = findDesignDoc(viewInfo.designDocs, viewInfo.originalDesignDocName);
       safeDeleteIndex(oldDesignDoc, viewInfo.designDocs, 'views', viewInfo.originalViewName, {
         onSuccess: function () {
