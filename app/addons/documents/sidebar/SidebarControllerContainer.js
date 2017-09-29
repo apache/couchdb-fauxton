@@ -100,7 +100,7 @@ const reduxUpdatedDesignDocList = (designDocs) => {
   return {
     type: ActionTypes.SIDEBAR_UPDATED_DESIGN_DOCS,
     options: {
-      designDocs: designDocs
+      designDocs: Array.isArray(designDocs) ? designDocs : []
     }
   };
 };
