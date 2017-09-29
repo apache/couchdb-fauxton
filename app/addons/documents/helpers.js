@@ -104,7 +104,7 @@ const selectedViewContainsReduceFunction = (designDocs, selectedNavItem) => {
   if (designDocs && isViewSelected(selectedNavItem)) {
       const ddocID = '_design/' + selectedNavItem.params.designDocName;
       const ddoc = designDocs.find(ddoc => ddoc._id === ddocID);
-      showReduce = ddoc !== undefined
+      showReduce = ddoc !== undefined && ddoc.doc && ddoc.doc.views
         && ddoc.doc.views[selectedNavItem.params.indexName] !== undefined
         && ddoc.doc.views[selectedNavItem.params.indexName].reduce !== undefined;
   }
