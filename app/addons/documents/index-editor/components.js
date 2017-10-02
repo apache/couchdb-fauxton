@@ -19,7 +19,7 @@ const StyledSelect = ReactComponents.StyledSelect;
 
 export default {
   EditorController: IndexEditor,
-  ReduceEditor: ReduceEditor,
-  DesignDocSelector: DesignDocSelector,
-  StyledSelect: StyledSelect
+  ReduceEditor,
+  DesignDocSelector,
+  StyledSelect
 };
