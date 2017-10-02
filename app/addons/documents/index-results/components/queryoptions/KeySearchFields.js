@@ -12,6 +12,7 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
+import {Tooltip, OverlayTrigger} from 'react-bootstrap';
 
 export default class KeySearchFields extends React.Component {
   constructor (props) {
@@ -44,6 +45,47 @@ export default class KeySearchFields extends React.Component {
 
   updateByKeys (e) {
     this.props.updateByKeys(e.target.value);
+  }
+
+  warningBetweenKeysValue(keyValue) {
+    if (!keyValue) {
+      return null;
+    }
+    keyValue = keyValue.trim();
+    // No warning if it's enclosed in double quotes, square brackets or curly brackets
+    if (/^".*"$/.test(keyValue) || /^\[.*\]$/.test(keyValue) || /^{.*}$/.test(keyValue)) {
+      return null;
+    }
+    // No warning if user specified a boolean or numeric value
+    if (keyValue === 'true' || keyValue === 'false' ||
+      $.isNumeric(keyValue)) {
+      return null;
+    }
+
+    const tooltip = <Tooltip id="queryoptions-key-tooltip">String values must be enclosed in double quotes. E.g.: "abc"</Tooltip>;
+    return (
+      <OverlayTrigger placement="top" overlay={tooltip}>
+        <i className="icon-exclamation-sign" style={{marginLeft: '0.5rem'}}></i>
+      </OverlayTrigger>
+    );
+  }
+
+  warningByKeysValue(keyValue) {
+    if (!keyValue) {
+      return null;
+    }
+    keyValue = keyValue.trim();
+    // No warning if it's enclosed in square brackets
+    if (/^\[.*\]$/.test(keyValue)) {
+      return null;
+    }
+
+    const tooltip = <Tooltip id="queryoptions-key-tooltip">Value must be an array. E.g.: ["abc"] or ["abc", "def"]</Tooltip>;
+    return (
+      <OverlayTrigger placement="top" overlay={tooltip}>
+        <i className="icon-exclamation-sign" style={{marginLeft: '0.5rem'}}></i>
+      </OverlayTrigger>
+    );
   }
 
   render () {
@@ -80,7 +122,10 @@ export default class KeySearchFields extends React.Component {
         <div className={keysGroupClass}>
           <div className={byKeysClass} id="js-showKeys">
             <div className="controls controls-row">
-              <label htmlFor="keys-input" className="drop-down">A key, or an array of keys.</label>
+              <label htmlFor="keys-input" className="drop-down">
+                An array of one or more keys
+                {this.warningByKeysValue(this.props.byKeys)}
+              </label>
               <textarea value={this.props.byKeys} onChange={this.updateByKeys.bind(this)} id="keys-input" className="input-xxlarge" rows="5" type="text"
                 placeholder='Enter either a single key ["123"] or an array of keys ["123", "456"]. A key value is the first parameter emitted in a map function. For example emit("123", 1) the key is "123".'></textarea>
               <div id="keys-error" className="inline-block js-keys-error"></div>
@@ -90,11 +135,17 @@ export default class KeySearchFields extends React.Component {
           <div className={betweenKeysClass} id="js-showStartEnd">
             <div className="controls controls-row">
               <div>
-                <label htmlFor="startkey" className="drop-down">Start key</label>
+                <label htmlFor="startkey" className="drop-down">
+                  Start key
+                  {this.warningBetweenKeysValue(this.props.betweenKeys.startkey)}
+                </label>
                 <input id="startkey" ref="startkey" type="text" onChange={this.updateBetweenKeys.bind(this)} value={this.props.betweenKeys.startkey} placeholder='e.g., "1234"' />
               </div>
               <div>
-                <label htmlFor="endkey" className="drop-down">End key</label>
+                <label htmlFor="endkey" className="drop-down">
+                  End key
+                  {this.warningBetweenKeysValue(this.props.betweenKeys.endkey)}
+                </label>
                 <input id="endkey" ref="endkey" onChange={this.updateBetweenKeys.bind(this)} value={this.props.betweenKeys.endkey} type="text" placeholder='e.g., "1234"'/>
                 <div className="controls include-end-key-row checkbox controls-row inline">
                   <input id="qoIncludeEndKeyInResults" ref="inclusive_end" type="checkbox" onChange={this.updateInclusiveEnd.bind(this)} checked={this.props.betweenKeys.include}/>
