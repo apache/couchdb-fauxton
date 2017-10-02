@@ -21,10 +21,8 @@ import DesignDocSelector from './DesignDocSelector';
 import ReduceEditor from './ReduceEditor';
 
 const getDocUrl = app.helpers.getDocUrl;
-const CodeEditorPanel = ReactComponents.CodeEditorPanel;
 const store = Stores.indexEditorStore;
-const ConfirmButton = ReactComponents.ConfirmButton;
-const LoadLines = ReactComponents.LoadLines;
+const {CodeEditorPanel, ConfirmButton, LoadLines} = ReactComponents;
 
 export default class IndexEditor extends Component {
 
@@ -66,15 +64,15 @@ export default class IndexEditor extends Component {
   // the code editor is a standalone component, so if the user goes from one edit view page to another, we need to
   // force an update of the editor panel
   componentDidUpdate(prevProps, prevState) {
-    if (this.state.map !== prevState.map && this.refs.mapEditor) {
-      this.refs.mapEditor.update();
+    if (this.state.map !== prevState.map && this.mapEditor) {
+      this.mapEditor.update();
     }
   }
 
   saveView(el) {
     el.preventDefault();
 
-    if (!this.refs.designDocSelector.validate()) {
+    if (!this.designDocSelector.validate()) {
       return;
     }
 
@@ -87,8 +85,8 @@ export default class IndexEditor extends Component {
       newDesignDoc: this.state.newDesignDoc,
       originalViewName: this.state.originalViewName,
       originalDesignDocName: this.state.originalDesignDocName,
-      map: this.refs.mapEditor.getValue(),
-      reduce: this.refs.reduceEditor.getReduceValue(),
+      map: this.mapEditor.getValue(),
+      reduce: this.reduceEditor.getReduceValue(),
       designDocs: this.state.designDocs
     });
   }
@@ -110,10 +108,9 @@ export default class IndexEditor extends Component {
       );
     }
 
-    var pageHeader = (this.state.isNewView) ? 'New View' : 'Edit View';
-    var btnLabel = (this.state.isNewView) ? 'Create Document and then Build Index' : 'Save Document and then Build Index';
-
-    var cancelLink = '#' + FauxtonAPI.urls('view', 'showView', this.state.database.id, this.state.designDocId, this.state.viewName);
+    const pageHeader = (this.state.isNewView) ? 'New View' : 'Edit View';
+    const btnLabel = (this.state.isNewView) ? 'Create Document and then Build Index' : 'Save Document and then Build Index';
+    const cancelLink = '#' + FauxtonAPI.urls('view', 'showView', this.state.database.id, this.state.designDocId, this.state.viewName);
     return (
       <div className="define-view" >
         <form className="form-horizontal view-query-save" onSubmit={this.saveView.bind(this)}>
@@ -121,7 +118,7 @@ export default class IndexEditor extends Component {
 
           <div className="new-ddoc-section">
             <DesignDocSelector
-              ref="designDocSelector"
+              ref={(el) => { this.designDocSelector = el; }}
               designDocList={this.state.designDocList}
               selectedDesignDocName={this.state.designDocId}
               newDesignDocName={this.state.newDesignDocName}
@@ -150,13 +147,13 @@ export default class IndexEditor extends Component {
           </div>
           <CodeEditorPanel
             id={'map-function'}
-            ref="mapEditor"
+            ref={(el) => { this.mapEditor = el; }}
             title={"Map function"}
             docLink={getDocUrl('MAP_FUNCS')}
             blur={this.updateMapCode.bind(this)}
             allowZenMode={false}
             defaultCode={this.state.map} />
-          <ReduceEditor ref="reduceEditor" />
+          <ReduceEditor ref={(el) => { this.reduceEditor = el; }} />
           <div className="padded-box">
             <div className="control-group">
               <ConfirmButton id="save-view" text={btnLabel} />

@@ -11,7 +11,7 @@
 // the License.
 import Documents from "../resources";
 
-var opts = {
+const opts = {
   params: {},
   database: {
     safeID: function () { return '1';}
@@ -27,5 +27,5 @@ function createDocColumn (docs) {
 }
 
 export default {
-  createDocColumn: createDocColumn
+  createDocColumn
 };

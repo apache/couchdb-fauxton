@@ -18,9 +18,7 @@ import FauxtonAPI from '../../../core/api';
 
 export const queryAllDocs = (fetchUrl, params) => {
   // Exclude params 'group', 'reduce' and 'group_level' if present since they not allowed for '_all_docs'
-  params.group = undefined;
-  params.reduce = undefined;
-  params.group_level = undefined;
+  Object.assign(params, {reduce: undefined, group: undefined, group_level: undefined});
   const query = queryString.stringify(params);
   const url = `${fetchUrl}${fetchUrl.includes('?') ? '&' : '?'}${query}`;
   return fetch(url, {

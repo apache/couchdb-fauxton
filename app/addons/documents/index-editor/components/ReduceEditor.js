@@ -18,9 +18,8 @@ import Stores from "../stores";
 import Actions from "../actions";
 
 const getDocUrl = app.helpers.getDocUrl;
-const StyledSelect = ReactComponents.StyledSelect;
-const CodeEditorPanel = ReactComponents.CodeEditorPanel;
 const store = Stores.indexEditorStore;
+const {CodeEditorPanel, StyledSelect} = ReactComponents;
 
 export default class ReduceEditor extends Component {
 

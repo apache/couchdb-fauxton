@@ -10,91 +10,9 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-// import React from 'react';
 import { connect } from 'react-redux';
 import SidebarComponents from './sidebar';
 import ActionTypes from './actiontypes';
-// import IndexResults from '../components/results/IndexResults';
-// import { fetchDocs, bulkDeleteDocs } from '../actions/fetch';
-// import { queryOptionsToggleIncludeDocs } from '../actions/queryoptions';
-// import {
-//   selectDoc,
-//   changeLayout,
-//   bulkCheckOrUncheck,
-//   changeTableHeaderAttribute,
-//   resetState
-// } from '../actions/base';
-// import {
-//   getDocs,
-//   getSelectedDocs,
-//   getIsLoading,
-//   getHasResults,
-//   getDataForRendering,
-//   getIsEditable,
-//   getSelectedLayout,
-//   getAllDocsSelected,
-//   getHasDocsSelected,
-//   getNumDocsSelected,
-//   getTextEmptyIndex,
-//   getDocType,
-//   getFetchParams,
-//   getQueryOptionsParams
-// } from '../reducers';
-
-
-// const mapStateToProps = ({indexResults}, ownProps) => {
-//   return {
-//     docs: getDocs(indexResults),
-//     selectedDocs: getSelectedDocs(indexResults),
-//     isLoading: getIsLoading(indexResults),
-//     hasResults: getHasResults(indexResults),
-//     results: getDataForRendering(indexResults, ownProps.databaseName, ownProps.deleteEnabled),
-//     isEditable: getIsEditable(indexResults),
-//     selectedLayout: getSelectedLayout(indexResults),
-//     allDocumentsSelected: getAllDocsSelected(indexResults),
-//     hasSelectedItem: getHasDocsSelected(indexResults),
-//     numDocsSelected: getNumDocsSelected(indexResults),
-//     textEmptyIndex: getTextEmptyIndex(indexResults),
-//     docType: getDocType(indexResults),
-//     fetchParams: getFetchParams(indexResults),
-//     queryOptionsParams: getQueryOptionsParams(indexResults)
-//   };
-// };
-
-// const mapDispatchToProps = (dispatch, ownProps) => {
-//   return {
-//     fetchDocs: (fetchParams, queryOptionsParams) => {
-//       dispatch(fetchDocs(ownProps.queryDocs, fetchParams, queryOptionsParams));
-//     },
-//     selectDoc: (doc, selectedDocs) => {
-//       dispatch(selectDoc(doc, selectedDocs));
-//     },
-//     bulkDeleteDocs: (docs, fetchParams, queryOptionsParams) => {
-//       dispatch(bulkDeleteDocs(ownProps.databaseName,
-//                               ownProps.queryDocs,
-//                               docs,
-//                               ownProps.designDocs,
-//                               fetchParams,
-//                               queryOptionsParams,
-//                               ownProps.docType));
-//     },
-//     changeLayout: (newLayout) => {
-//       dispatch(changeLayout(newLayout));
-//     },
-//     bulkCheckOrUncheck: (docs, selectedDocs, allDocumentsSelected) => {
-//       dispatch(bulkCheckOrUncheck(docs, selectedDocs, allDocumentsSelected, ownProps.docType));
-//     },
-//     changeTableHeaderAttribute: (newField, selectedFields) => {
-//       dispatch(changeTableHeaderAttribute(newField, selectedFields));
-//     },
-//     resetState: () => {
-//       dispatch(resetState());
-//     },
-//     queryOptionsToggleIncludeDocs: (previousIncludeDocs) => {
-//       dispatch(queryOptionsToggleIncludeDocs(previousIncludeDocs));
-//     }
-//   };
-// };
 
 const reduxUpdatedDesignDocList = (designDocs) => {
   return {

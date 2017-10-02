@@ -15,7 +15,7 @@ import ReactDOM from "react-dom";
 import FauxtonAPI from "../../../../core/api";
 import ReactComponents from "../../../components/react-components";
 
-const StyledSelect = ReactComponents.StyledSelect;
+const { StyledSelect } = ReactComponents;
 
 export default class DesignDocSelector extends Component {
 
@@ -29,16 +29,20 @@ export default class DesignDocSelector extends Component {
         msg: 'Please name your design doc.',
         type: 'error'
       });
-      ReactDOM.findDOMNode(this.refs.newDesignDoc).focus();
+      this.newDesignDocInput.focus();
       return false;
     }
     return true;
   }
 
   getDocList() {
-    return _.map(this.props.designDocList, function (designDoc) {
-      return (<option key={designDoc} value={designDoc}>{designDoc}</option>);
-    });
+    if (this.props.designDocList) {
+      return this.props.designDocList.map ((designDoc) => {
+        return (<option key={designDoc} value={designDoc}>{designDoc}</option>);
+      });
+    } else {
+      return [];
+    }
   }
 
   selectDesignDoc(e) {
@@ -57,7 +61,8 @@ export default class DesignDocSelector extends Component {
       <div id="new-ddoc-section" className="span5">
         <label className="control-label" htmlFor="new-ddoc">_design/</label>
         <div className="controls">
-          <input type="text" ref="newDesignDoc" id="new-ddoc" placeholder="newDesignDoc"
+          <input type="text" id="new-ddoc" placeholder="newDesignDoc"
+            ref={(el) => { this.newDesignDocInput = el; }}
             onChange={this.updateDesignDocName.bind(this)} />
         </div>
       </div>
