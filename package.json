@@ -89,6 +89,7 @@
     "optimist": "^0.6.1",
     "pouchdb-adapter-http": "^6.1.2",
     "pouchdb-core": "^6.1.2",
+    "prop-types": "^15.6.0",
     "react": "~15.6.2",
     "react-bootstrap": "^0.31.3",
     "react-dom": "~15.4.1",
