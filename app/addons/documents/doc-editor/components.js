@@ -29,13 +29,13 @@ import DocumentResources from '../resources';
 
 var store = Stores.docEditorStore;
 
-var DocEditorController = React.createClass({
+class DocEditorController extends React.Component {
+  static defaultProps = {
+    database: {},
+    isNewDoc: false
+  };
 
-  getInitialState: function () {
-    return this.getStoreState();
-  },
-
-  getStoreState: function () {
+  getStoreState = () => {
     return {
       isLoading: store.isLoading(),
       doc: store.getDoc(),
@@ -45,16 +45,9 @@ var DocEditorController = React.createClass({
       numFilesUploaded: store.getNumFilesUploaded(),
       conflictCount: store.getDocConflictCount()
     };
-  },
+  };
 
-  getDefaultProps: function () {
-    return {
-      database: {},
-      isNewDoc: false
-    };
-  },
-
-  getCodeEditor: function () {
+  getCodeEditor = () => {
     if (this.state.isLoading) {
       return (<GeneralComponents.LoadLines />);
     }
@@ -77,17 +70,17 @@ var DocEditorController = React.createClass({
         notifyUnsavedChanges={true}
         stringEditModalEnabled={true} />
     );
-  },
+  };
 
-  componentDidMount: function () {
+  componentDidMount() {
     store.on('change', this.onChange, this);
-  },
+  }
 
-  componentWillUnmount: function () {
+  componentWillUnmount() {
     store.off('change', this.onChange);
-  },
+  }
 
-  componentWillUpdate: function (nextProps, nextState) {
+  componentWillUpdate(nextProps, nextState) {
     // Update the editor whenever a file is uploaded, a doc is cloned, or a new doc is loaded
     if (this.state.numFilesUploaded !== nextState.numFilesUploaded ||
         this.state.doc && this.state.doc.hasChanged() ||
@@ -95,34 +88,34 @@ var DocEditorController = React.createClass({
       this.getEditor().setValue(JSON.stringify(nextState.doc.attributes, null, '  '));
       this.onSaveComplete();
     }
-  },
+  }
 
-  onChange: function () {
+  onChange = () => {
     this.setState(this.getStoreState());
-  },
+  };
 
-  saveDoc: function () {
+  saveDoc = () => {
     Actions.saveDoc(this.state.doc, this.checkDocIsValid(), this.onSaveComplete);
-  },
+  };
 
-  onSaveComplete: function () {
+  onSaveComplete = () => {
     this.getEditor().clearChanges();
-  },
+  };
 
-  hideDeleteDocModal: function () {
+  hideDeleteDocModal = () => {
     Actions.hideDeleteDocModal();
-  },
+  };
 
-  deleteDoc: function () {
+  deleteDoc = () => {
     Actions.hideDeleteDocModal();
     Actions.deleteDoc(this.state.doc);
-  },
+  };
 
-  getEditor: function () {
+  getEditor = () => {
     return (this.refs.docEditor) ? this.refs.docEditor.getEditor() : null;
-  },
+  };
 
-  checkDocIsValid: function () {
+  checkDocIsValid = () => {
     if (this.getEditor().hasErrors()) {
       return false;
     }
@@ -130,20 +123,20 @@ var DocEditorController = React.createClass({
     this.state.doc.clear().set(json, { validate: true });
 
     return !this.state.doc.validationError;
-  },
+  };
 
-  clearChanges: function () {
+  clearChanges = () => {
     this.refs.docEditor.clearChanges();
-  },
+  };
 
-  getExtensionIcons: function () {
+  getExtensionIcons = () => {
     var extensions = FauxtonAPI.getExtensions('DocEditor:icons');
     return _.map(extensions, function (Extension, i) {
       return (<Extension doc={this.state.doc} key={i} database={this.props.database} />);
     }, this);
-  },
+  };
 
-  getButtonRow: function () {
+  getButtonRow = () => {
     if (this.props.isNewDoc) {
       return false;
     }
@@ -163,9 +156,11 @@ var DocEditorController = React.createClass({
         <PanelButton title="Delete" iconClass="icon-trash" onClick={Actions.showDeleteDocModal} />
       </div>
     );
-  },
+  };
 
-  render: function () {
+  state = this.getStoreState();
+
+  render() {
     var saveButtonLabel = (this.props.isNewDoc) ? 'Create Document' : 'Save Changes';
     let endpoint = FauxtonAPI.urls('allDocs', 'app', FauxtonAPI.url.encode(this.props.database.id));
     return (
@@ -209,23 +204,20 @@ var DocEditorController = React.createClass({
       </div>
     );
   }
-});
+}
 
-var AttachmentsPanelButton = React.createClass({
-
-  propTypes: {
+class AttachmentsPanelButton extends React.Component {
+  static propTypes = {
     isLoading: PropTypes.bool.isRequired,
     doc: PropTypes.object
-  },
+  };
 
-  getDefaultProps: function () {
-    return {
-      isLoading: true,
-      doc: {}
-    };
-  },
+  static defaultProps = {
+    isLoading: true,
+    doc: {}
+  };
 
-  getAttachmentList: function () {
+  getAttachmentList = () => {
     var db = this.props.doc.database.get('id');
     var doc = this.props.doc.get('_id');
 
@@ -240,9 +232,9 @@ var AttachmentsPanelButton = React.createClass({
         </li>
       );
     });
-  },
+  };
 
-  render: function () {
+  render() {
     if (this.props.isLoading || !this.props.doc.get('_attachments')) {
       return false;
     }
@@ -261,26 +253,23 @@ var AttachmentsPanelButton = React.createClass({
       </div>
     );
   }
-});
+}
 
-
-var PanelButton = React.createClass({
-  propTypes: {
+class PanelButton extends React.Component {
+  static propTypes = {
     title: PropTypes.string.isRequired,
     onClick: PropTypes.func.isRequired,
     className: PropTypes.string
-  },
+  };
 
-  getDefaultProps: function () {
-    return {
-      title: '',
-      iconClass: '',
-      onClick: function () { },
-      className: ''
-    };
-  },
+  static defaultProps = {
+    title: '',
+    iconClass: '',
+    onClick: function () { },
+    className: ''
+  };
 
-  render: function () {
+  render() {
     var iconClasses = 'icon ' + this.props.iconClass;
     return (
       <div className="panel-section">
@@ -291,28 +280,23 @@ var PanelButton = React.createClass({
       </div>
     );
   }
-});
+}
 
-
-var UploadModal = React.createClass({
-  propTypes: {
+class UploadModal extends React.Component {
+  static propTypes = {
     visible: PropTypes.bool.isRequired,
     doc: PropTypes.object
-  },
+  };
 
-  getInitialState: function () {
-    return this.getStoreState();
-  },
-
-  getStoreState: function () {
+  getStoreState = () => {
     return {
       inProgress: store.isUploadInProgress(),
       loadPercentage: store.getUploadLoadPercentage(),
       errorMessage: store.getFileUploadErrorMsg()
     };
-  },
+  };
 
-  closeModal: function (e) {
+  closeModal = (e) => {
     if (e) {
       e.preventDefault();
     }
@@ -322,17 +306,19 @@ var UploadModal = React.createClass({
     }
     Actions.hideUploadModal();
     Actions.resetUploadModal();
-  },
+  };
 
-  upload: function () {
+  upload = () => {
     Actions.uploadAttachment({
       doc: this.props.doc,
       rev: this.props.doc.get('_rev'),
       files: $(ReactDOM.findDOMNode(this.refs.attachments))[0].files
     });
-  },
+  };
 
-  render: function () {
+  state = this.getStoreState();
+
+  render() {
     var errorClasses = 'alert alert-error';
     if (this.state.errorMessage === '') {
       errorClasses += ' hide';
@@ -373,32 +359,29 @@ var UploadModal = React.createClass({
       </Modal>
     );
   }
-});
+}
 
-
-const CloneDocModal = React.createClass({
-  propTypes: {
+class CloneDocModal extends React.Component {
+  static propTypes = {
     visible: PropTypes.bool.isRequired,
     doc: PropTypes.object,
     database: PropTypes.object.isRequired,
     onSubmit: PropTypes.func.isRequired
-  },
+  };
 
-  getInitialState: function () {
-    return {
-      uuid: null
-    };
-  },
+  state = {
+    uuid: null
+  };
 
-  cloneDoc: function () {
+  cloneDoc = () => {
     if (this.props.onSubmit) {
       this.props.onSubmit();
     }
 
     Actions.cloneDoc(this.props.database, this.props.doc, this.state.uuid);
-  },
+  };
 
-  componentDidUpdate: function () {
+  componentDidUpdate() {
     //XXX model-code in component
     if (this.state.uuid === null) {
       var uuid = new DocumentResources.UUID();
@@ -406,20 +389,20 @@ const CloneDocModal = React.createClass({
         this.setState({ uuid: uuid.next() });
       }.bind(this));
     }
-  },
+  }
 
-  closeModal: function (e) {
+  closeModal = (e) => {
     if (e) {
       e.preventDefault();
     }
     Actions.hideCloneDocModal();
-  },
+  };
 
-  docIDChange: function (e) {
+  docIDChange = (e) => {
     this.setState({ uuid: e.target.value });
-  },
+  };
 
-  render: function () {
+  render() {
     if (this.state.uuid === null) {
       return false;
     }
@@ -450,7 +433,7 @@ const CloneDocModal = React.createClass({
       </Modal>
     );
   }
-});
+}
 
 
 export default {

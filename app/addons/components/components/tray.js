@@ -17,47 +17,49 @@ import ReactDOM from "react-dom";
 import {Overlay} from 'react-bootstrap';
 import {TransitionMotion, spring} from 'react-motion';
 
-export const TrayContents = React.createClass({
-  propTypes: {
+export class TrayContents extends React.Component {
+  static propTypes = {
     contentVisible: PropTypes.bool.isRequired,
     closeTray: PropTypes.func.isRequired,
     onEnter: PropTypes.func,
     container: PropTypes.object
-  },
+  };
 
-  defaultProps: {
-    onEnter: () => {},
-    container: this
-  },
+  defaultProps = () => {
+    return {
+      onEnter: () => {},
+      container: this
+    };
+  };
 
-  getChildren (items) {
+  getChildren = (items) => {
     const {style} = items[0];
     var className = "tray show-tray " + this.props.className;
     return (
       <div key={'1'} id={this.props.id} style={{opacity: style.opacity, top: style.top + 'px'}} className={className}>
         {this.props.children}
       </div>);
-  },
+  };
 
-  willEnter () {
+  willEnter = () => {
     return {
       opacity: spring(1),
       top: spring(55)
     };
-  },
+  };
 
-  willLeave () {
+  willLeave = () => {
     return {
       opacity: spring(0),
       top: spring(30)
     };
-  },
+  };
 
-  getDefaultStyles () {
+  getDefaultStyles = () => {
     return [{key: '1', style: {opacity: 0, top: 30}}];
-  },
+  };
 
-  getStyles (prevStyle) {
+  getStyles = (prevStyle) => {
     if (!prevStyle) {
       return [{
         key: '1',
@@ -70,9 +72,9 @@ export const TrayContents = React.createClass({
         style: item.style
       };
     });
-  },
+  };
 
-  render () {
+  render() {
     return (
       <Overlay
        show={this.props.contentVisible}
@@ -94,55 +96,48 @@ export const TrayContents = React.createClass({
       </Overlay>
     );
   }
-});
+}
 
 
 export const connectToStores = (Component, stores, getStateFromStores) => {
+  class WrappingElement extends React.Component {
+    state = getStateFromStores(this.props);
 
-  var WrappingElement = React.createClass({
-
-    componentDidMount () {
-      stores.forEach(function (store) {
+    componentDidMount() {
+      stores.forEach(store => {
         store.on('change', this.onChange, this);
-      }.bind(this));
-    },
+      });
+    }
 
-    componentWillUnmount () {
+    componentWillUnmount() {
       stores.forEach(function (store) {
         store.off('change', this.onChange);
       }.bind(this));
-    },
-
-    getInitialState () {
-      return getStateFromStores(this.props);
-    },
-
-    onChange () {
-      this.setState(getStateFromStores(this.props));
-    },
-
-    handleStoresChanged () {
-      this.setState(getStateFromStores(this.props));
-    },
-
-    render () {
-      return <Component {...this.state} {...this.props} />;
     }
 
-  });
+    onChange = () => {
+      this.setState(getStateFromStores(this.props));
+    };
+
+    handleStoresChanged = () => {
+      this.setState(getStateFromStores(this.props));
+    };
+
+    render() {
+      return <Component {...this.state} {...this.props} />;
+    }
+  }
 
   return WrappingElement;
 };
 
-export const TrayWrapper = React.createClass({
-  getDefaultProps () {
-    return {
-      className: ''
-    };
-  },
+export class TrayWrapper extends React.Component {
+  static defaultProps = {
+    className: ''
+  };
 
-  renderChildren () {
-    return React.Children.map(this.props.children, function (child) {
+  renderChildren = () => {
+    return React.Children.map(this.props.children, (child) => {
 
       const props = {};
       Object.keys(this.props).filter((k) => {
@@ -152,14 +147,14 @@ export const TrayWrapper = React.createClass({
       });
 
       return React.cloneElement(child, props);
-    }.bind(this));
-  },
+    });
+  };
 
-  render () {
+  render() {
     return (
       <div>
         {this.renderChildren()}
       </div>
     );
   }
-});
+}

@@ -13,22 +13,20 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
-export const ToggleHeaderButton = React.createClass({
-  getDefaultProps () {
-    return {
-      innerClasses: '',
-      fonticon: '',
-      containerClasses: '',
-      selected: false,
-      title: '',
-      disabled: false,
-      toggleCallback: null,
-      text: '',
-      iconDefaultClass: 'icon'
-    };
-  },
+export class ToggleHeaderButton extends React.Component {
+  static defaultProps = {
+    innerClasses: '',
+    fonticon: '',
+    containerClasses: '',
+    selected: false,
+    title: '',
+    disabled: false,
+    toggleCallback: null,
+    text: '',
+    iconDefaultClass: 'icon'
+  };
 
-  render () {
+  render() {
     const { iconDefaultClass, fonticon, innerClasses, selected, containerClasses, title, disabled, text, toggleCallback, active } = this.props;
     const selectedBtnClass = (selected || active) ? 'js-headerbar-togglebutton-selected' : '';
 
@@ -43,4 +41,4 @@ export const ToggleHeaderButton = React.createClass({
       </button>
     );
   }
-});
+}

@@ -13,33 +13,33 @@ import React from "react";
 import ReactDOM from "react-dom";
 import beautifyHelper from "../../../../assets/js/plugins/beautify";
 
-export const Beautify = React.createClass({
-  noOfLines () {
+export class Beautify extends React.Component {
+  noOfLines = () => {
     return this.props.code.split(/\r\n|\r|\n/).length;
-  },
+  };
 
-  canBeautify () {
+  canBeautify = () => {
     return this.noOfLines() === 1;
-  },
+  };
 
-  addTooltip () {
+  addTooltip = () => {
     if (this.canBeautify) {
       $('.beautify-tooltip').tooltip({ placement: 'right' });
     }
-  },
+  };
 
-  componentDidMount () {
+  componentDidMount() {
     this.addTooltip();
-  },
+  }
 
-  beautify (event) {
+  beautify = (event) => {
     event.preventDefault();
     var beautifiedCode = beautifyHelper(this.props.code);
     this.props.beautifiedCode(beautifiedCode);
     $('.beautify-tooltip').tooltip('hide');
-  },
+  };
 
-  render () {
+  render() {
     if (!this.canBeautify()) {
       return null;
     }
@@ -56,4 +56,4 @@ export const Beautify = React.createClass({
       </button>
     );
   }
-});
+}

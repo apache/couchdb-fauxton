@@ -111,16 +111,17 @@ describe('DatabaseTable', function () {
   });
 
   it('adds multiple extra columns if extended', function () {
+    class ColHeader1 extends React.Component {
+      render() { return <th>EXTRA COL 1</th>; }
+    }
 
-    var ColHeader1 = React.createClass({
-      render: function () { return <th>EXTRA COL 1</th>; }
-    });
-    var ColHeader2 = React.createClass({
-      render: function () { return <th>EXTRA COL 2</th>; }
-    });
-    var ColHeader3 = React.createClass({
-      render: function () { return <th>EXTRA COL 3</th>; }
-    });
+    class ColHeader2 extends React.Component {
+      render() { return <th>EXTRA COL 2</th>; }
+    }
+
+    class ColHeader3 extends React.Component {
+      render() { return <th>EXTRA COL 3</th>; }
+    }
 
     FauxtonAPI.registerExtension('DatabaseTable:head', ColHeader1);
     FauxtonAPI.registerExtension('DatabaseTable:head', ColHeader2);
@@ -139,9 +140,9 @@ describe('DatabaseTable', function () {
   });
 
   it('adds multiple extra column in DatabaseRow if extended', function () {
-    var Cell = React.createClass({
-      render: function () { return <td>EXTRA CELL</td>; }
-    });
+    class Cell extends React.Component {
+      render() { return <td>EXTRA CELL</td>; }
+    }
 
     FauxtonAPI.registerExtension('DatabaseTable:databaseRow', Cell);
 

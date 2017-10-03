@@ -22,47 +22,45 @@ import FauxtonComponents from "../fauxton/components";
 
 const configStore = Stores.configStore;
 
-var ConfigTableController = React.createClass({
-  getStoreState () {
+class ConfigTableController extends React.Component {
+  getStoreState = () => {
     return {
       options: configStore.getOptions(),
       loading: configStore.isLoading()
     };
-  },
+  };
 
-  getInitialState () {
-    return this.getStoreState();
-  },
-
-  componentDidMount () {
+  componentDidMount() {
     configStore.on('change', this.onChange, this);
-  },
+  }
 
-  componentWillUnmount () {
+  componentWillUnmount() {
     configStore.off('change', this.onChange);
-  },
+  }
 
-  onChange () {
+  onChange = () => {
     this.setState(this.getStoreState());
-  },
+  };
 
-  saveOption (option) {
+  saveOption = (option) => {
     Actions.saveOption(this.props.node, option);
-  },
+  };
 
-  deleteOption (option) {
+  deleteOption = (option) => {
     Actions.deleteOption(this.props.node, option);
-  },
+  };
 
-  editOption (option) {
+  editOption = (option) => {
     Actions.editOption(option);
-  },
+  };
 
-  cancelEdit () {
+  cancelEdit = () => {
     Actions.cancelEdit();
-  },
+  };
 
-  render () {
+  state = this.getStoreState();
+
+  render() {
     if (this.state.loading) {
       return (
         <div className="view">
@@ -80,10 +78,10 @@ var ConfigTableController = React.createClass({
       );
     }
   }
-});
+}
 
-var ConfigTable = React.createClass({
-  createOptions () {
+class ConfigTable extends React.Component {
+  createOptions = () => {
     return _.map(this.props.options, (option) => (
       <ConfigOption
         option={option}
@@ -94,9 +92,9 @@ var ConfigTable = React.createClass({
         key={`${option.sectionName}/${option.optionName}`}
       />
     ));
-  },
+  };
 
-  render () {
+  render() {
     var options = this.createOptions();
 
     return (
@@ -115,24 +113,24 @@ var ConfigTable = React.createClass({
       </table>
     );
   }
-});
+}
 
-var ConfigOption = React.createClass({
-  onSave (value) {
+class ConfigOption extends React.Component {
+  onSave = (value) => {
     var option = this.props.option;
     option.value = value;
     this.props.onSave(option);
-  },
+  };
 
-  onDelete () {
+  onDelete = () => {
     this.props.onDelete(this.props.option);
-  },
+  };
 
-  onEdit () {
+  onEdit = () => {
     this.props.onEdit(this.props.option);
-  },
+  };
 
-  render () {
+  render() {
     return (
       <tr className="config-item">
         <th>{this.props.option.header && this.props.option.sectionName}</th>
@@ -151,48 +149,44 @@ var ConfigOption = React.createClass({
       </tr>
     );
   }
-});
+}
 
-var ConfigOptionValue = React.createClass({
-  getInitialState () {
-    return {
-      value: this.props.value,
-      editing: this.props.editing,
-      saving: this.props.saving
-    };
-  },
+class ConfigOptionValue extends React.Component {
+  static defaultProps = {
+    value: '',
+    editing: false,
+    saving: false,
+    onSave: () => null,
+    onEdit: () => null,
+    onCancelEdit: () => null
+  };
 
-  getDefaultProps () {
-    return {
-      value: '',
-      editing: false,
-      saving: false,
-      onSave: () => null,
-      onEdit: () => null,
-      onCancelEdit: () => null
-    };
-  },
+  state = {
+    value: this.props.value,
+    editing: this.props.editing,
+    saving: this.props.saving
+  };
 
-  componentWillReceiveProps (nextProps) {
+  componentWillReceiveProps(nextProps) {
     if (this.props.value !== nextProps.value) {
       this.setState({ saving: false });
     }
-  },
+  }
 
-  onChange (event) {
+  onChange = (event) => {
     this.setState({ value: event.target.value });
-  },
+  };
 
-  onSave () {
+  onSave = () => {
     if (this.state.value !== this.props.value) {
       this.setState({ saving: true });
       this.props.onSave(this.state.value);
     } else {
       this.props.onCancelEdit();
     }
-  },
+  };
 
-  getButtons () {
+  getButtons = () => {
     if (this.state.saving) {
       return null;
     } else {
@@ -200,7 +194,7 @@ var ConfigOptionValue = React.createClass({
         <span>
           <button
             className="btn btn-primary fonticon-ok-circled btn-small btn-config-save"
-            onClick={this.onSave}
+            onClick={this.onSave.bind(this)}
           />
           <button
             className="btn fonticon-cancel-circled btn-small btn-config-cancel"
@@ -209,15 +203,15 @@ var ConfigOptionValue = React.createClass({
         </span>
       );
     }
-  },
+  };
 
-  render () {
+  render() {
     if (this.props.editing) {
       return (
         <td>
           <div className="config-value-form">
             <input
-              onChange={this.onChange}
+              onChange={this.onChange.bind(this)}
               defaultValue={this.props.value}
               disabled={this.state.saving}
               autoFocus type="text" className="config-value-input"
@@ -234,55 +228,58 @@ var ConfigOptionValue = React.createClass({
       );
     }
   }
-});
+}
 
-var ConfigOptionTrash = React.createClass({
-  getInitialState () {
-    return {
-      show: false
-    };
-  },
+class ConfigOptionTrash extends React.Component {
+  state = {
+    show: false
+  };
 
-  onDelete () {
+  onDelete = () => {
     this.props.onDelete();
-  },
+  };
 
-  showModal () {
+  showModal = () => {
     this.setState({ show: true });
-  },
+  };
 
-  hideModal () {
-    this.setState({ hide: false });
-  },
+  hideModal = () => {
+    this.setState({ show: false });
+  };
 
-  render () {
+  render() {
     return (
       <td className="text-center config-item-trash config-delete-value"
-          onClick={this.showModal}>
+          onClick={this.showModal.bind(this)}>
         <i className="icon icon-trash"></i>
         <FauxtonComponents.ConfirmationModal
           text={`Are you sure you want to delete ${this.props.sectionName}/${this.props.optionName}?`}
-          onClose={this.hideModal}
-          onSubmit={this.onDelete}
+          onClose={this.hideModal.bind(this)}
+          onSubmit={this.onDelete.bind(this)}
           visible={this.state.show}/>
       </td>
     );
   }
-});
+}
 
-var AddOptionController = React.createClass({
-  addOption (option) {
+class AddOptionController extends React.Component {
+  addOption = (option) => {
     Actions.addOption(this.props.node, option);
-  },
+  };
 
-  render () {
+  render() {
     return (
       <AddOptionButton onAdd={this.addOption}/>
     );
   }
-});
+}
 
-var AddOptionButton = React.createClass({
+class AddOptionButton extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = this.getInitialState();
+  }
+
   getInitialState () {
     return {
       sectionName: '',
@@ -290,7 +287,7 @@ var AddOptionButton = React.createClass({
       value: '',
       show: false
     };
-  },
+  }
 
   isInputValid () {
     if (this.state.sectionName !== ''
@@ -300,23 +297,23 @@ var AddOptionButton = React.createClass({
     }
 
     return false;
-  },
+  }
 
   updateSectionName (event) {
     this.setState({ sectionName: event.target.value });
-  },
+  }
 
   updateOptionName (event) {
     this.setState({ optionName: event.target.value });
-  },
+  }
 
   updateValue (event) {
     this.setState({ value: event.target.value });
-  },
+  }
 
   reset () {
     this.setState(this.getInitialState());
-  },
+  }
 
   onAdd () {
     if (this.isInputValid()) {
@@ -329,46 +326,46 @@ var AddOptionButton = React.createClass({
       this.setState({ show: false });
       this.props.onAdd(option);
     }
-  },
+  }
 
   togglePopover () {
     this.setState({ show: !this.state.show });
-  },
+  }
 
   hidePopover () {
     this.setState({ show: false });
-  },
+  }
 
   getPopover () {
     return (
       <Popover className="tray" id="add-option-popover" title="Add Option">
         <input
           className="input-section-name"
-          onChange={this.updateSectionName}
-          type="text" name="section" placeholder="Section" autocomplete="off" autoFocus/>
+          onChange={this.updateSectionName.bind(this)}
+          type="text" name="section" placeholder="Section" autoComplete="off" autoFocus/>
         <input
           className="input-option-name"
-          onChange={this.updateOptionName}
+          onChange={this.updateOptionName.bind(this)}
           type="text" name="name" placeholder="Name"/>
         <input
           className="input-value"
-          onChange={this.updateValue}
+          onChange={this.updateValue.bind(this)}
           type="text" name="value" placeholder="Value"/>
         <a
           className="btn btn-create"
-          onClick={this.onAdd}>
+          onClick={this.onAdd.bind(this)}>
           Create
         </a>
       </Popover>
     );
-  },
+  }
 
   render () {
     return (
       <div id="add-option-panel">
         <Button
           id="add-option-button"
-          onClick={this.togglePopover}
+          onClick={this.togglePopover.bind(this)}
           ref="target">
           <i className="icon icon-plus header-icon"></i>
           Add Option
@@ -376,7 +373,7 @@ var AddOptionButton = React.createClass({
 
         <Overlay
           show={this.state.show}
-          onHide={this.hidePopover}
+          onHide={this.hidePopover.bind(this)}
           placement="bottom"
           rootClose={true}
           target={() => ReactDOM.findDOMNode(this.refs.target)}>
@@ -385,7 +382,7 @@ var AddOptionButton = React.createClass({
       </div>
     );
   }
-});
+}
 
 const TabItem = ({active, link, title}) => {
   return (

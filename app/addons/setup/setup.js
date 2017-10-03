@@ -21,30 +21,26 @@ var setupStore = SetupStores.setupStore;
 var ConfirmButton = ReactComponents.ConfirmButton;
 
 
-var ClusterConfiguredScreen = React.createClass({
-  getInitialState: function () {
-    return this.getStoreState();
-  },
-
-  getStoreState: function () {
+class ClusterConfiguredScreen extends React.Component {
+  getStoreState = () => {
     return {
       clusterState: setupStore.getClusterState()
     };
-  },
+  };
 
-  componentDidMount: function () {
+  componentDidMount() {
     setupStore.on('change', this.onChange, this);
-  },
+  }
 
-  componentWillUnmount: function () {
+  componentWillUnmount() {
     setupStore.off('change', this.onChange);
-  },
+  }
 
-  onChange: function () {
+  onChange = () => {
     this.setState(this.getStoreState());
-  },
+  };
 
-  getNodeType: function() {
+  getNodeType = () => {
     if (this.state.clusterState === 'cluster_finished') {
       return 'clustered';
     } else if (this.state.clusterState === 'single_node_enabled') {
@@ -52,9 +48,11 @@ var ClusterConfiguredScreen = React.createClass({
     } else {
       return 'unknown state';
     }
-  },
+  };
 
-  render: function () {
+  state = this.getStoreState();
+
+  render() {
     var nodetype = this.getNodeType();
 
     return (
@@ -66,11 +64,10 @@ var ClusterConfiguredScreen = React.createClass({
       </div>
     );
   }
-});
+}
 
-var SetupCurrentAdminPassword = React.createClass({
-
-  render: function () {
+class SetupCurrentAdminPassword extends React.Component {
+  render() {
     var text = 'Specify your Admin credentials';
 
     if (this.props.adminParty) {
@@ -94,24 +91,20 @@ var SetupCurrentAdminPassword = React.createClass({
           type="password" />
       </div>
     );
-  },
+  }
+}
 
+class SetupNodeCountSetting extends React.Component {
+  state = {
+    nodeCountValue: this.props.nodeCountValue
+  };
 
-});
-
-var SetupNodeCountSetting = React.createClass({
-  getInitialState: function () {
-    return {
-      nodeCountValue: this.props.nodeCountValue
-    };
-  },
-
-  handleNodeCountChange: function (event) {
+  handleNodeCountChange = (event) => {
     this.props.onAlterNodeCount(event);
     this.setState({nodeCountValue: event.target.value});
-  },
+  };
 
-  render: function () {
+  render() {
     return (
       <div className="setup-node-count">
         <p>Number of nodes to be added to the cluster (including this one)</p>
@@ -124,27 +117,25 @@ var SetupNodeCountSetting = React.createClass({
       </div>
     );
   }
-});
+}
 
-var SetupOptionalSettings = React.createClass({
-  getInitialState: function () {
-    return {
-      ipValue: this.props.ipInitialValue,
-      portValue: this.props.portValue
-    };
-  },
+class SetupOptionalSettings extends React.Component {
+  state = {
+    ipValue: this.props.ipInitialValue,
+    portValue: this.props.portValue
+  };
 
-  handleIpChange: function (event) {
+  handleIpChange = (event) => {
     this.props.onAlterBindAddress(event);
     this.setState({ipValue: event.target.value});
-  },
+  };
 
-  handlePortChange: function (event) {
+  handlePortChange = (event) => {
     this.props.onAlterPort(event);
     this.setState({portValue: event.target.value});
-  },
+  };
 
-  render: function () {
+  render() {
     return (
       <div className="setup-opt-settings">
         <p>Bind address the node will listen on</p>
@@ -167,36 +158,31 @@ var SetupOptionalSettings = React.createClass({
       </div>
     );
   }
-});
+}
 
-var SetupMultipleNodesController = React.createClass({
-
-  getInitialState: function () {
-    return this.getStoreState();
-  },
-
-  getStoreState: function () {
+class SetupMultipleNodesController extends React.Component {
+  getStoreState = () => {
     return {
       nodeList: setupStore.getNodeList(),
       isAdminParty: setupStore.getIsAdminParty(),
       remoteAddress: setupStore.getAdditionalNode().remoteAddress
     };
-  },
+  };
 
-  componentDidMount: function () {
+  componentDidMount() {
     this.isAdminParty = setupStore.getIsAdminParty();
     setupStore.on('change', this.onChange, this);
-  },
+  }
 
-  componentWillUnmount: function () {
+  componentWillUnmount() {
     setupStore.off('change', this.onChange);
-  },
+  }
 
-  onChange: function () {
+  onChange = () => {
     this.setState(this.getStoreState());
-  },
+  };
 
-  getNodeList: function () {
+  getNodeList = () => {
     return this.state.nodeList.map(function (el, i) {
       return (
         <div key={i} className="node-item">
@@ -204,49 +190,51 @@ var SetupMultipleNodesController = React.createClass({
         </div>
       );
     }, this);
-  },
+  };
 
-  addNode: function () {
+  addNode = () => {
     SetupActions.addNode(this.isAdminParty);
-  },
+  };
 
-  alterPortAdditionalNode: function (e) {
+  alterPortAdditionalNode = (e) => {
     SetupActions.alterPortAdditionalNode(e.target.value);
-  },
+  };
 
-  alterBindAddressAdditionalNode: function (e) {
+  alterBindAddressAdditionalNode = (e) => {
     SetupActions.alterBindAddressAdditionalNode(e.target.value);
-  },
+  };
 
-  alterRemoteAddressAdditionalNode: function (e) {
+  alterRemoteAddressAdditionalNode = (e) => {
     SetupActions.alterRemoteAddressAdditionalNode(e.target.value);
-  },
+  };
 
-  alterUsername: function (e) {
+  alterUsername = (e) => {
     SetupActions.setUsername(e.target.value);
-  },
+  };
 
-  alterPassword: function (e) {
+  alterPassword = (e) => {
     SetupActions.setPassword(e.target.value);
-  },
+  };
 
-  alterBindAddressSetupNode: function (e) {
+  alterBindAddressSetupNode = (e) => {
     SetupActions.setBindAddressForSetupNode(e.target.value);
-  },
+  };
 
-  alterPortSetupNode: function (e) {
+  alterPortSetupNode = (e) => {
     SetupActions.setPortForSetupNode(e.target.value);
-  },
+  };
 
-  alterNodeCount: function (e) {
+  alterNodeCount = (e) => {
     SetupActions.setNodeCount(e.target.value);
-  },
+  };
 
-  finishClusterSetup: function () {
+  finishClusterSetup = () => {
     SetupActions.finishClusterSetup('CouchDB Cluster set up!');
-  },
+  };
 
-  render: function () {
+  state = this.getStoreState();
+
+  render() {
 
     return (
       <div className="setup-nodes">
@@ -296,49 +284,44 @@ var SetupMultipleNodesController = React.createClass({
       </div>
     );
   }
-});
+}
 
-var SetupSingleNodeController = React.createClass({
-
-  getInitialState: function () {
-    return this.getStoreState();
-  },
-
-  getStoreState: function () {
+class SetupSingleNodeController extends React.Component {
+  getStoreState = () => {
     return {
       isAdminParty: setupStore.getIsAdminParty()
     };
-  },
+  };
 
-  componentDidMount: function () {
+  componentDidMount() {
     setupStore.on('change', this.onChange, this);
-  },
+  }
 
-  componentWillUnmount: function () {
+  componentWillUnmount() {
     setupStore.off('change', this.onChange);
-  },
+  }
 
-  onChange: function () {
+  onChange = () => {
     this.setState(this.getStoreState());
-  },
+  };
 
-  alterUsername: function (e) {
+  alterUsername = (e) => {
     SetupActions.setUsername(e.target.value);
-  },
+  };
 
-  alterPassword: function (e) {
+  alterPassword = (e) => {
     SetupActions.setPassword(e.target.value);
-  },
+  };
 
-  alterBindAddress: function (e) {
+  alterBindAddress = (e) => {
     SetupActions.setBindAddressForSetupNode(e.target.value);
-  },
+  };
 
-  alterPort: function (e) {
+  alterPort = (e) => {
     SetupActions.setPortForSetupNode(e.target.value);
-  },
+  };
 
-  render: function () {
+  render() {
     return (
       <div className="setup-nodes">
         <div className="setup-setupnode-section">
@@ -355,39 +338,36 @@ var SetupSingleNodeController = React.createClass({
         </div>
       </div>
     );
-  },
+  }
 
-  finishSingleNode: function (e) {
+  finishSingleNode = (e) => {
     e.preventDefault();
     SetupActions.setupSingleNode();
-  }
-});
+  };
 
-var SetupFirstStepController = React.createClass({
+  state = this.getStoreState();
+}
 
-  getInitialState: function () {
-    return this.getStoreState();
-  },
-
-  getStoreState: function () {
+class SetupFirstStepController extends React.Component {
+  getStoreState = () => {
     return {
       clusterState: setupStore.getClusterState()
     };
-  },
+  };
 
-  componentDidMount: function () {
+  componentDidMount() {
     setupStore.on('change', this.onChange, this);
-  },
+  }
 
-  componentWillUnmount: function () {
+  componentWillUnmount() {
     setupStore.off('change', this.onChange);
-  },
+  }
 
-  onChange: function () {
+  onChange = () => {
     this.setState(this.getStoreState());
-  },
+  };
 
-  render: function () {
+  render() {
     if (this.state.clusterState === 'cluster_finished' ||
         this.state.clusterState === 'single_node_enabled') {
       return (<ClusterConfiguredScreen />);
@@ -415,18 +395,20 @@ var SetupFirstStepController = React.createClass({
         </div>
       </div>
     );
-  },
+  }
 
-  redirectToSingleNodeSetup: function (e) {
+  redirectToSingleNodeSetup = (e) => {
     e.preventDefault();
     FauxtonAPI.navigate('#setup/singlenode');
-  },
+  };
 
-  redirectToMultiNodeSetup: function (e) {
+  redirectToMultiNodeSetup = (e) => {
     e.preventDefault();
     FauxtonAPI.navigate('#setup/multinode');
-  }
-});
+  };
+
+  state = this.getStoreState();
+}
 
 export default {
   SetupMultipleNodesController: SetupMultipleNodesController,

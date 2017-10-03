@@ -19,35 +19,33 @@ import Stores from "./stores";
 
 const store = Stores.verifyInstallStore;
 
-const VerifyInstallController = React.createClass({
-  getInitialState: function () {
-    return this.getStoreState();
-  },
-
-  getStoreState: function () {
+class VerifyInstallController extends React.Component {
+  getStoreState = () => {
     return {
       isVerifying: store.checkIsVerifying(),
       testResults: store.getTestResults()
     };
-  },
+  };
 
-  startVerification: function () {
+  startVerification = () => {
     Actions.startVerification();
-  },
+  };
 
-  onChange: function () {
+  onChange = () => {
     this.setState(this.getStoreState());
-  },
+  };
 
-  componentDidMount: function () {
+  state = this.getStoreState();
+
+  componentDidMount() {
     store.on('change', this.onChange, this);
-  },
+  }
 
-  componentWillUnmount: function () {
+  componentWillUnmount() {
     store.off('change', this.onChange);
-  },
+  }
 
-  render: function () {
+  render() {
     return (
       <div>
         <VerifyInstallButton verify={this.startVerification} isVerifying={this.state.isVerifying} />
@@ -55,31 +53,29 @@ const VerifyInstallController = React.createClass({
       </div>
     );
   }
-});
+}
 
-
-var VerifyInstallButton = React.createClass({
-  propTypes: {
+class VerifyInstallButton extends React.Component {
+  static propTypes = {
     verify: PropTypes.func.isRequired,
     isVerifying: PropTypes.bool.isRequired
-  },
+  };
 
-  render: function () {
+  render() {
     return (
       <button id="start" className="btn btn-primary" onClick={this.props.verify} disabled={this.props.isVerifying}>
         {this.props.isVerifying ? 'Verifying' : 'Verify Installation'}
       </button>
     );
   }
-});
+}
 
-
-var VerifyInstallResults = React.createClass({
-  propTypes: {
+class VerifyInstallResults extends React.Component {
+  static propTypes = {
     testResults: PropTypes.object.isRequired
-  },
+  };
 
-  showTestResult: function (test) {
+  showTestResult = (test) => {
     if (!this.props.testResults[test].complete) {
       return '';
     }
@@ -87,9 +83,9 @@ var VerifyInstallResults = React.createClass({
       return <span>&#10003;</span>;
     }
     return <span>&#x2717;</span>;
-  },
+  };
 
-  render: function () {
+  render() {
     return (
       <table className="table table-striped table-bordered">
         <thead>
@@ -127,7 +123,7 @@ var VerifyInstallResults = React.createClass({
       </table>
     );
   }
-});
+}
 
 export default {
   VerifyInstallController: VerifyInstallController,
