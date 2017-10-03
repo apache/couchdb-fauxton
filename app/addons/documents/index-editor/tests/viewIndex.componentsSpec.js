@@ -20,10 +20,10 @@ import TestUtils from "react-addons-test-utils";
 import sinon from "sinon";
 FauxtonAPI.router = new FauxtonAPI.Router([]);
 
-var assert = utils.assert;
+const { assert } = utils;
 
 
-var resetStore = function (designDocs) {
+const resetStore = function (designDocs) {
   Actions.editIndex({
     database: { id: 'rockos-db' },
     newView: false,
@@ -33,7 +33,7 @@ var resetStore = function (designDocs) {
   });
 };
 
-var getDesignDocsCollection = function (designDocs) {
+const getDesignDocsCollection = function (designDocs) {
   designDocs = designDocs.map(function (doc) {
     return Resources.Doc.prototype.parse(doc);
   });
@@ -48,7 +48,7 @@ var getDesignDocsCollection = function (designDocs) {
 
 
 describe('reduce editor', function () {
-  var container, reduceEl;
+  let container, reduceEl;
 
   beforeEach(function () {
     container = document.createElement('div');
@@ -59,7 +59,7 @@ describe('reduce editor', function () {
   });
 
   describe('getReduceValue', function () {
-    var container;
+    let container;
 
     beforeEach(function () {
       container = document.createElement('div');
@@ -67,7 +67,7 @@ describe('reduce editor', function () {
     });
 
     it('returns null for none', function () {
-      var designDoc = {
+      const designDoc = {
         _id: '_design/test-doc',
         views: {
           'test-view': {
@@ -83,7 +83,7 @@ describe('reduce editor', function () {
     });
 
     it('returns built in for built in reduce', function () {
-      var designDoc = {
+      const designDoc = {
         _id: '_design/test-doc',
         views: {
           'test-view': {
@@ -103,34 +103,7 @@ describe('reduce editor', function () {
 });
 
 describe('DesignDocSelector component', function () {
-  var container, selectorEl;
-  var designDoc = {
-    "id": "_design/test-doc",
-    "key": "_design/test-doc",
-    "value": {
-      "rev": "20-9e4bc8b76fd7d752d620bbe6e0ea9a80"
-    },
-    "doc": {
-      "_id": "_design/test-doc",
-      "_rev": "20-9e4bc8b76fd7d752d620bbe6e0ea9a80",
-      "views": {
-        "test-view": {
-          "map": "function(doc) {\n  emit(doc._id, 2);\n}"
-        },
-        "new-view": {
-          "map": "function(doc) {\n  if (doc.class === \"mammal\" && doc.diet === \"herbivore\")\n    emit(doc._id, 1);\n}",
-          "reduce": "_sum"
-        }
-      },
-      "language": "javascript",
-      "indexes": {
-        "newSearch": {
-          "analyzer": "standard",
-          "index": "function(doc){\n index(\"default\", doc._id);\n}"
-        }
-      }
-    }
-  };
+  let container, selectorEl;
 
   beforeEach(function () {
     container = document.createElement('div');
@@ -142,10 +115,10 @@ describe('DesignDocSelector component', function () {
 
 
   it('calls onSelectDesignDoc on change', function () {
-    var spy = sinon.spy();
+    const spy = sinon.spy();
     selectorEl = TestUtils.renderIntoDocument(
       <Views.DesignDocSelector
-        designDocList={getDesignDocsCollection([designDoc])}
+        designDocList={['_design/test-doc', '_design/test-doc2']}
         selectedDDocName={'new-doc'}
         onSelectDesignDoc={spy}
       />, container);
@@ -227,7 +200,7 @@ describe('DesignDocSelector component', function () {
   });
 
   it('includes help doc link when supplied', function () {
-    var docLink = 'http://docs.com';
+    const docLink = 'http://docs.com';
     selectorEl = TestUtils.renderIntoDocument(
       <Views.DesignDocSelector
         designDocList={['_design/test-doc']}
@@ -242,7 +215,7 @@ describe('DesignDocSelector component', function () {
 
 
 describe('Editor', function () {
-  var container, editorEl, sandbox;
+  let container, editorEl, sandbox;
 
   beforeEach(function () {
     container = document.createElement('div');
@@ -258,9 +231,9 @@ describe('Editor', function () {
   });
 
   it('calls changeViewName on view name change', function () {
-    var viewName = 'new-name';
-    var spy = sandbox.spy(Actions, 'changeViewName');
-    var el = $(ReactDOM.findDOMNode(editorEl)).find('#index-name')[0];
+    const viewName = 'new-name';
+    const spy = sandbox.spy(Actions, 'changeViewName');
+    const el = $(ReactDOM.findDOMNode(editorEl)).find('#index-name')[0];
     TestUtils.Simulate.change(el, {
       target: {
         value: viewName

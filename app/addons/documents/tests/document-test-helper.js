@@ -11,7 +11,7 @@
 // the License.
 import Documents from "../resources";
 
-var opts = {
+const opts = {
   params: {},
   database: {
     safeID: function () { return '1';}
@@ -26,15 +26,6 @@ function createDocColumn (docs) {
   return new Documents.AllDocs(docs, opts);
 }
 
-function createMangoIndexDocColumn (docs) {
-  docs = docs.map(function (doc) {
-    return Documents.MangoIndex.prototype.parse(doc);
-  });
-
-  return new Documents.MangoIndexCollection(docs, opts);
-}
-
 export default {
-  createDocColumn: createDocColumn,
-  createMangoIndexDocColumn: createMangoIndexDocColumn
+  createDocColumn
 };

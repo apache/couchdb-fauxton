@@ -45,23 +45,51 @@ describe('IndexResults', () => {
     expect(spy.notCalled).toBe(true);
   });
 
-  it('calls fetchAllDocs on update if ddocsOnly switches', () => {
+  it('calls fetchDocs on update if ddocsOnly switches', () => {
     const spy = sinon.spy();
     const wrapper = shallow(<IndexResults
       fetchParams={{}}
       selectedDocs={[]}
       queryOptionsParams={{}}
-      fetchDocs={() => {}}
+      fetchDocs={() => { }}
+      resetState={() => { }}
       results={[]}
       ddocsOnly={false}
       fetchAtStartup={true}
+      fetchUrl={''}
     />);
 
     wrapper.instance().componentWillUpdate({
       ddocsOnly: true,
       fetchParams: {},
       queryOptionsParams: {},
-      fetchDocs: spy
+      fetchDocs: spy,
+      resetState: () => { },
+    });
+
+    expect(spy.calledOnce).toBe(true);
+  });
+
+  it('calls fetchDocs on update if fetchUrl switches', () => {
+    const spy = sinon.spy();
+    const wrapper = shallow(<IndexResults
+      fetchParams={{}}
+      selectedDocs={[]}
+      queryOptionsParams={{}}
+      fetchDocs={() => { }}
+      resetState={() => { }}
+      results={[]}
+      ddocsOnly={false}
+      fetchAtStartup={true}
+      fetchUrl={'view1'}
+    />);
+
+    wrapper.instance().componentWillUpdate({
+      fetchParams: {},
+      queryOptionsParams: {},
+      fetchDocs: spy,
+      resetState: () => { },
+      fetchUrl: 'view2'
     });
 
     expect(spy.calledOnce).toBe(true);
@@ -74,7 +102,7 @@ describe('IndexResults', () => {
       fetchParams={{}}
       selectedDocs={[]}
       queryOptionsParams={{}}
-      fetchAllDocs={() => {}}
+      fetchAllDocs={() => { }}
       results={[]}
       fetchAtStartup={true}
     />);
@@ -89,7 +117,7 @@ describe('IndexResults', () => {
     }];
     const wrapper = shallow(<IndexResults
       selectedDocs={selectedDocs}
-      fetchAllDocs={() => {}}
+      fetchAllDocs={() => { }}
       results={[]}
       fetchAtStartup={true}
     />);
@@ -103,7 +131,7 @@ describe('IndexResults', () => {
     }];
     const wrapper = shallow(<IndexResults
       selectedDocs={selectedDocs}
-      fetchAllDocs={() => {}}
+      fetchAllDocs={() => { }}
       results={[]}
       fetchAtStartup={true}
     />);
@@ -115,7 +143,7 @@ describe('IndexResults', () => {
     const spy = sinon.spy();
     const wrapper = shallow(<IndexResults
       selectedDocs={[]}
-      fetchAllDocs={() => {}}
+      fetchAllDocs={() => { }}
       results={[]}
       selectDoc={spy}
       fetchAtStartup={true}
@@ -129,7 +157,7 @@ describe('IndexResults', () => {
     const spy = sinon.spy();
     const wrapper = shallow(<IndexResults
       selectedDocs={[]}
-      fetchAllDocs={() => {}}
+      fetchAllDocs={() => { }}
       results={[]}
       docs={[]}
       allDocumentsSelected={false}

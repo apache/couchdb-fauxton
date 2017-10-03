@@ -26,26 +26,36 @@ export default class QueryOptions extends React.Component {
     super(props);
     const {
       ddocsOnly,
-      queryOptionsFilterOnlyDdocs
+      queryOptionsApplyFilterOnlyDdocs
     } = props;
 
     if (ddocsOnly) {
-      queryOptionsFilterOnlyDdocs();
+      queryOptionsApplyFilterOnlyDdocs();
     }
   }
 
   componentWillReceiveProps (nextProps) {
     const {
       ddocsOnly,
-      queryOptionsFilterOnlyDdocs,
-      resetState
+      queryOptionsApplyFilterOnlyDdocs,
+      queryOptionsRemoveFilterOnlyDdocs,
     } = this.props;
 
     if (!ddocsOnly && nextProps.ddocsOnly) {
-      resetState();
-      queryOptionsFilterOnlyDdocs();
+      queryOptionsApplyFilterOnlyDdocs();
     } else if (ddocsOnly && !nextProps.ddocsOnly) {
-      resetState();
+      queryOptionsRemoveFilterOnlyDdocs();
+    }
+  }
+
+  componentWillUnmount() {
+    const {
+      ddocsOnly,
+      queryOptionsRemoveFilterOnlyDdocs
+    } = this.props;
+    if (ddocsOnly) {
+      // Remove filter it was set before
+      queryOptionsRemoveFilterOnlyDdocs();
     }
   }
 
@@ -124,7 +134,14 @@ export default class QueryOptions extends React.Component {
     );
   }
 
+  showAsActive() {
+    const { reduce, betweenKeys, byKeys, descending, skip, limit } = this.props;
+    return !!((betweenKeys && betweenKeys.startkey) ||
+      byKeys || (limit && limit != 'none') || skip || reduce || descending);
+  }
+
   render () {
+
     return (
       <div id="header-query-options">
         <div id="query-options">
@@ -134,7 +151,8 @@ export default class QueryOptions extends React.Component {
               containerClasses="header-control-box control-toggle-queryoptions"
               title="Query Options"
               fonticon="fonticon-gears"
-              text="Options" />
+              text="Options"
+              active={this.showAsActive()} />
               {this.getTray()}
           </div>
         </div>
@@ -144,5 +162,14 @@ export default class QueryOptions extends React.Component {
 };
 
 QueryOptions.propTypes = {
-  contentVisible: React.PropTypes.bool.isRequired
+  contentVisible: React.PropTypes.bool.isRequired,
+  queryOptionsApplyFilterOnlyDdocs: React.PropTypes.func.isRequired,
+  queryOptionsRemoveFilterOnlyDdocs: React.PropTypes.func.isRequired,
+  queryOptionsExecute: React.PropTypes.func.isRequired,
+  queryOptionsParams: React.PropTypes.object.isRequired,
+  perPage: React.PropTypes.number.isRequired,
+  resetPagination: React.PropTypes.func.isRequired,
+  selectedLayout: React.PropTypes.string.isRequired,
+  changeLayout: React.PropTypes.func.isRequired,
+  queryOptionsToggleVisibility: React.PropTypes.func.isRequired
 };

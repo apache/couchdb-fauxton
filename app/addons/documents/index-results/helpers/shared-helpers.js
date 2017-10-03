@@ -85,7 +85,7 @@ const isGhostDoc = (doc) => {
 
 const getDocId = (doc, docType = Constants.INDEX_RESULTS_DOC_TYPE.VIEW) => {
   if (docType === Constants.INDEX_RESULTS_DOC_TYPE.VIEW) {
-    return doc.id;
+    return doc.id || doc._id;
   } else if (docType === Constants.INDEX_RESULTS_DOC_TYPE.MANGO_INDEX) {
     return doc.type === 'special' ? '_all_docs' : doc.ddoc;
   } else if (docType === Constants.INDEX_RESULTS_DOC_TYPE.MANGO_QUERY) {

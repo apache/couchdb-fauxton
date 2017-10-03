@@ -37,11 +37,18 @@ export default class IndexResults extends React.Component {
       fetchDocs,
       fetchParams,
       queryOptionsParams,
-      ddocsOnly
+      ddocsOnly,
+      fetchUrl,
+      resetState
     } = nextProps;
 
-    if (this.props.ddocsOnly !== ddocsOnly) {
-      fetchDocs(fetchParams, queryOptionsParams);
+    // Indicates the selected sidebar item has changed, so it needs to fetch the new list of docs
+    if (this.props.ddocsOnly !== ddocsOnly || this.props.fetchUrl !== fetchUrl) {
+      resetState();
+      // Need to reset skip and reduce here because 'resetState()'
+      // won't change props until the next update cycle
+      fetchDocs({...fetchParams, skip: 0},
+        {...queryOptionsParams, reduce: undefined, group: undefined, group_level: undefined});
     }
   }
 
@@ -64,6 +71,9 @@ export default class IndexResults extends React.Component {
   }
 
   docChecked (_id, _rev) {
+    if (!_id) {
+      return;
+    }
     const { selectDoc, selectedDocs } = this.props;
 
     // dispatch an action to push this doc on to the array of selected docs

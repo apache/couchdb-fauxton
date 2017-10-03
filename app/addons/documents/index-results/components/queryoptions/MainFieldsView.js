@@ -50,6 +50,10 @@ export default class MainFieldsView extends React.Component {
     );
   }
 
+  toggleReduce () {
+    this.props.toggleReduce(this.props.reduce);
+  }
+
   reduce () {
     if (!this.props.showReduce) {
       return null;
@@ -58,7 +62,7 @@ export default class MainFieldsView extends React.Component {
     return (
       <span>
         <div className="checkbox inline">
-          <input id="qoReduce" name="reduce" onChange={this.props.toggleReduce} type="checkbox" checked={this.props.reduce} />
+          <input id="qoReduce" name="reduce" onChange={this.toggleReduce.bind(this)} type="checkbox" checked={this.props.reduce} />
           <label htmlFor="qoReduce">Reduce</label>
         </div>
         {this.groupLevel()}

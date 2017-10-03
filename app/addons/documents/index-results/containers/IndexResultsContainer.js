@@ -46,7 +46,7 @@ const mapStateToProps = ({indexResults}, ownProps) => {
     selectedDocs: getSelectedDocs(indexResults),
     isLoading: getIsLoading(indexResults),
     hasResults: getHasResults(indexResults),
-    results: getDataForRendering(indexResults, ownProps.databaseName),
+    results: getDataForRendering(indexResults, ownProps.databaseName, ownProps.deleteEnabled),
     isEditable: getIsEditable(indexResults),
     selectedLayout: getSelectedLayout(indexResults),
     allDocumentsSelected: getAllDocsSelected(indexResults),

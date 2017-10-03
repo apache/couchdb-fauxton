@@ -481,7 +481,16 @@ var SidebarController = React.createClass({
   },
 
   onChange: function () {
-    this.setState(this.getStoreState());
+
+    const newState = this.getStoreState();
+    // Workaround to signal Redux store that the design doc list was updated
+    // which is currently required by QueryOptionsContainer
+    // It should be removed once Sidebar components are refactored to use Redux
+    if (this.props.reduxUpdatedDesignDocList) {
+      this.props.reduxUpdatedDesignDocList(newState.designDocList);
+    }
+
+    this.setState(newState);
   },
 
   showDeleteDatabaseModal: function (payload) {
