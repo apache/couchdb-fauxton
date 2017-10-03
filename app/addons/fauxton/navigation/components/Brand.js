@@ -10,6 +10,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+import PropTypes from 'prop-types';
+
 import React from 'react';
 
 import classNames from 'classnames';
@@ -30,7 +32,7 @@ const Brand = ({isMinimized}) => {
 };
 
 Brand.propTypes = {
-  isMinimized: React.PropTypes.bool.isRequired
+  isMinimized: PropTypes.bool.isRequired
 };
 
 export default Brand;

@@ -10,6 +10,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+import PropTypes from 'prop-types';
+
 import React from 'react';
 import { NotificationCenterButton } from '../fauxton/notifications/notifications';
 import SidebarControllerContainer from "./sidebar/SidebarControllerContainer";
@@ -70,16 +72,16 @@ export const TabsSidebarHeader = ({
 };
 
 TabsSidebarHeader.propTypes = {
-  dbName: React.PropTypes.string.isRequired,
-  dropDownLinks: React.PropTypes.array.isRequired,
-  docURL: React.PropTypes.string,
-  endpoint: React.PropTypes.string,
-  showIncludeAllDocs: React.PropTypes.bool,
-  hideQueryOptions: React.PropTypes.bool,
-  hideJumpToDoc: React.PropTypes.bool,
-  database: React.PropTypes.object.isRequired,
-  queryDocs: React.PropTypes.func,
-  selectedNavItem: React.PropTypes.object
+  dbName: PropTypes.string.isRequired,
+  dropDownLinks: PropTypes.array.isRequired,
+  docURL: PropTypes.string,
+  endpoint: PropTypes.string,
+  showIncludeAllDocs: PropTypes.bool,
+  hideQueryOptions: PropTypes.bool,
+  hideJumpToDoc: PropTypes.bool,
+  database: PropTypes.object.isRequired,
+  queryDocs: PropTypes.func,
+  selectedNavItem: PropTypes.object
 };
 
 TabsSidebarHeader.defaultProps = {
@@ -121,9 +123,9 @@ TabsSidebarContent.defaultProps = {
 };
 
 TabsSidebarContent.propTypes = {
-  hideFooter: React.PropTypes.bool,
-  lowerContent: React.PropTypes.object,
-  upperContent: React.PropTypes.object,
+  hideFooter: PropTypes.bool,
+  lowerContent: PropTypes.object,
+  upperContent: PropTypes.object,
 };
 
 export const DocsTabsSidebarLayout = ({
@@ -223,9 +225,9 @@ ViewsTabsSidebarLayout.defaultProps = {
 };
 
 ViewsTabsSidebarLayout.propTypes = {
-  showEditView: React.PropTypes.bool,
-  docURL: React.PropTypes.string.isRequired,
-  endpoint: React.PropTypes.string,
-  dbName: React.PropTypes.string.isRequired,
-  dropDownLinks: React.PropTypes.array.isRequired
+  showEditView: PropTypes.bool,
+  docURL: PropTypes.string.isRequired,
+  endpoint: PropTypes.string,
+  dbName: PropTypes.string.isRequired,
+  dropDownLinks: PropTypes.array.isRequired
 };

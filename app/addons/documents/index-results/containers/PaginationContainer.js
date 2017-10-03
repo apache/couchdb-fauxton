@@ -10,7 +10,7 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import PaginationFooter from '../components/pagination/PaginationFooter';
 import {
@@ -79,5 +79,5 @@ const PaginationFooterContainer = connect (
 export default PaginationFooterContainer;
 
 PaginationFooterContainer.propTypes = {
-  queryDocs: React.PropTypes.func.isRequired
+  queryDocs: PropTypes.func.isRequired
 };

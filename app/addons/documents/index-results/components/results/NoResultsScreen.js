@@ -10,6 +10,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+import PropTypes from 'prop-types';
+
 import React from 'react';
 
 export default function NoResultsScreen ({ text }) {
@@ -19,8 +21,8 @@ export default function NoResultsScreen ({ text }) {
       <h3>{text}</h3>
     </div>
   );
-};
+}
 
 NoResultsScreen.propTypes = {
-  text: React.PropTypes.string.isRequired
+  text: PropTypes.string.isRequired
 };

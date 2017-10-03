@@ -10,6 +10,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+import PropTypes from 'prop-types';
+
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
 import FauxtonAPI from "../../../../core/api";
@@ -111,11 +113,11 @@ DesignDocSelector.defaultProps = {
 };
 
 DesignDocSelector.propTypes = {
-  designDocList: React.PropTypes.array.isRequired,
-  onSelectDesignDoc: React.PropTypes.func.isRequired,
-  onChangeNewDesignDocName: React.PropTypes.func.isRequired,
-  selectedDesignDocName: React.PropTypes.string.isRequired,
-  newDesignDocName: React.PropTypes.string.isRequired,
-  designDocLabel: React.PropTypes.string,
-  docURL: React.PropTypes.string
+  designDocList: PropTypes.array.isRequired,
+  onSelectDesignDoc: PropTypes.func.isRequired,
+  onChangeNewDesignDocName: PropTypes.func.isRequired,
+  selectedDesignDocName: PropTypes.string.isRequired,
+  newDesignDocName: PropTypes.string.isRequired,
+  designDocLabel: PropTypes.string,
+  docURL: PropTypes.string
 };

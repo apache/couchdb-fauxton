@@ -9,6 +9,8 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
+import PropTypes from 'prop-types';
+
 import React from 'react';
 import BulkDocumentHeaderController from "../header/header";
 import Stores from "../sidebar/stores";
@@ -72,14 +74,14 @@ export class ResultsToolBar extends React.Component {
       </div>
     );
   }
-};
+}
 
 ResultsToolBar.propTypes = {
-  removeItem: React.PropTypes.func.isRequired,
-  allDocumentsSelected: React.PropTypes.bool.isRequired,
-  hasSelectedItem: React.PropTypes.bool.isRequired,
-  toggleSelectAll: React.PropTypes.func.isRequired,
-  isLoading: React.PropTypes.bool.isRequired,
-  hasResults: React.PropTypes.bool.isRequired,
-  isListDeletable: React.PropTypes.bool
+  removeItem: PropTypes.func.isRequired,
+  allDocumentsSelected: PropTypes.bool.isRequired,
+  hasSelectedItem: PropTypes.bool.isRequired,
+  toggleSelectAll: PropTypes.func.isRequired,
+  isLoading: PropTypes.bool.isRequired,
+  hasResults: PropTypes.bool.isRequired,
+  isListDeletable: PropTypes.bool
 };

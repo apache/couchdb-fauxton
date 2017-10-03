@@ -10,6 +10,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+import PropTypes from 'prop-types';
+
 import React from 'react';
 import QueryOptionsContainer from '../index-results/containers/QueryOptionsContainer';
 import JumpToDoc from './jumptodoc';
@@ -29,11 +31,11 @@ const RightAllDocsHeader = ({database, hideQueryOptions, hideJumpToDoc, queryDoc
   </div>;
 
 RightAllDocsHeader.propTypes = {
-  database: React.PropTypes.object.isRequired,
-  hideQueryOptions: React.PropTypes.bool,
-  isRedux: React.PropTypes.bool,
-  queryDocs: React.PropTypes.func,
-  selectedNavItem: React.PropTypes.object
+  database: PropTypes.object.isRequired,
+  hideQueryOptions: PropTypes.bool,
+  isRedux: PropTypes.bool,
+  queryDocs: PropTypes.func,
+  selectedNavItem: PropTypes.object
 };
 
 RightAllDocsHeader.defaultProps = {

@@ -10,6 +10,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+import PropTypes from 'prop-types';
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {NotificationCenterButton} from '../fauxton/notifications/notifications';
@@ -64,9 +66,9 @@ OnePaneHeader.defaultProps = {
 };
 
 OnePaneHeader.propTypes = {
-  docURL: React.PropTypes.string,
-  endpoint: React.PropTypes.string,
-  crumbs: React.PropTypes.array
+  docURL: PropTypes.string,
+  endpoint: PropTypes.string,
+  crumbs: PropTypes.array
 };
 
 export const OnePaneContent = ({children}) => {

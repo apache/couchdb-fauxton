@@ -10,6 +10,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+import PropTypes from 'prop-types';
+
 import React from "react";
 import ReactDOM from "react-dom";
 import {Modal} from "react-bootstrap";
@@ -25,8 +27,8 @@ export const DeleteDatabaseModal = React.createClass({
   },
 
   propTypes: {
-    showHide: React.PropTypes.func.isRequired,
-    modalProps: React.PropTypes.object
+    showHide: PropTypes.func.isRequired,
+    modalProps: PropTypes.object
   },
 
   close (e) {

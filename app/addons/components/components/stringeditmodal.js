@@ -10,6 +10,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+import PropTypes from 'prop-types';
+
 import React from "react";
 import ReactDOM from "react-dom";
 import {Modal} from "react-bootstrap";
@@ -23,10 +25,10 @@ require('brace/theme/idle_fingers');
 export const StringEditModal = React.createClass({
 
   propTypes: {
-    value: React.PropTypes.string.isRequired,
-    visible: React.PropTypes.bool.isRequired,
-    onClose: React.PropTypes.func.isRequired,
-    onSave: React.PropTypes.func.isRequired
+    value: PropTypes.string.isRequired,
+    visible: PropTypes.bool.isRequired,
+    onClose: PropTypes.func.isRequired,
+    onSave: PropTypes.func.isRequired
   },
 
   getDefaultProps () {

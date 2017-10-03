@@ -10,6 +10,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+import PropTypes from 'prop-types';
+
 import React from 'react';
 
 export default class PerPageSelector extends React.Component {
@@ -41,7 +43,7 @@ export default class PerPageSelector extends React.Component {
     );
   }
 
-};
+}
 
 PerPageSelector.defaultProps = {
   label: 'Documents per page: ',
@@ -49,8 +51,8 @@ PerPageSelector.defaultProps = {
 };
 
 PerPageSelector.propTypes = {
-  perPage: React.PropTypes.number.isRequired,
-  perPageChange: React.PropTypes.func.isRequired,
-  label: React.PropTypes.string,
-  options: React.PropTypes.array
+  perPage: PropTypes.number.isRequired,
+  perPageChange: PropTypes.func.isRequired,
+  label: PropTypes.string,
+  options: PropTypes.array
 };

@@ -10,6 +10,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+import PropTypes from 'prop-types';
+
 import React from 'react';
 import ResultsScreen from './ResultsScreen';
 
@@ -109,8 +111,8 @@ export default class IndexResults extends React.Component {
         {...this.props} />
     );
   }
-};
+}
 
 IndexResults.propTypes = {
-  fetchAtStartup: React.PropTypes.bool.isRequired
+  fetchAtStartup: PropTypes.bool.isRequired
 };

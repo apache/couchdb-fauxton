@@ -9,6 +9,8 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
+import PropTypes from 'prop-types';
+
 import React from "react";
 import ReactDOM from "react-dom";
 import FauxtonAPI from "../../../core/api";
@@ -16,10 +18,10 @@ import Helpers from "../../documents/helpers";
 
 export const Document = React.createClass({
   propTypes: {
-    docIdentifier: React.PropTypes.string.isRequired,
-    docChecked: React.PropTypes.func.isRequired,
-    truncate: React.PropTypes.bool,
-    maxRows: React.PropTypes.number
+    docIdentifier: PropTypes.string.isRequired,
+    docChecked: PropTypes.func.isRequired,
+    truncate: PropTypes.bool,
+    maxRows: PropTypes.number
   },
 
   getDefaultProps () {

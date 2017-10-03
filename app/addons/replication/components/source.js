@@ -9,6 +9,8 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
+import PropTypes from 'prop-types';
+
 import React from 'react';
 import Constants from '../constants';
 import Components from '../../components/react-components';
@@ -33,8 +35,8 @@ const RemoteSourceInput = ({onChange, value}) =>
   </div>;
 
 RemoteSourceInput.propTypes = {
-  value: React.PropTypes.string.isRequired,
-  onChange: React.PropTypes.func.isRequired
+  value: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired
 };
 
 const LocalSourceInput = ({value, onChange, databases}) => {
@@ -58,9 +60,9 @@ const LocalSourceInput = ({value, onChange, databases}) => {
 };
 
 LocalSourceInput.propTypes = {
-  value: React.PropTypes.string.isRequired,
-  databases: React.PropTypes.array.isRequired,
-  onChange: React.PropTypes.func.isRequired
+  value: PropTypes.string.isRequired,
+  databases: PropTypes.array.isRequired,
+  onChange: PropTypes.func.isRequired
 };
 
 const ReplicationSourceRow = ({replicationSource, databases, localSource, remoteSource, onChangeRemote, onChangeLocal}) => {
@@ -76,12 +78,12 @@ const ReplicationSourceRow = ({replicationSource, databases, localSource, remote
 };
 
 ReplicationSourceRow.propTypes = {
-  replicationSource: React.PropTypes.string.isRequired,
-  databases: React.PropTypes.array.isRequired,
-  localSource: React.PropTypes.string.isRequired,
-  remoteSource: React.PropTypes.string.isRequired,
-  onChangeRemote: React.PropTypes.func.isRequired,
-  onChangeLocal: React.PropTypes.func.isRequired
+  replicationSource: PropTypes.string.isRequired,
+  databases: PropTypes.array.isRequired,
+  localSource: PropTypes.string.isRequired,
+  remoteSource: PropTypes.string.isRequired,
+  onChangeRemote: PropTypes.func.isRequired,
+  onChangeLocal: PropTypes.func.isRequired
 };
 
 const replicationSourceSelectOptions = () => {
@@ -115,8 +117,8 @@ export const ReplicationSourceSelect = ({onChange, value}) => {
 };
 
 ReplicationSourceSelect.propTypes = {
-  value: React.PropTypes.string.isRequired,
-  onChange: React.PropTypes.func.isRequired
+  value: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired
 };
 
 export class ReplicationSource extends React.Component {
@@ -160,10 +162,10 @@ export class ReplicationSource extends React.Component {
 }
 
 ReplicationSource.propTypes = {
-  replicationSource: React.PropTypes.string.isRequired,
-  localSource: React.PropTypes.string.isRequired,
-  remoteSource: React.PropTypes.string.isRequired,
-  databases: React.PropTypes.array.isRequired,
-  onLocalSourceChange: React.PropTypes.func.isRequired,
-  onRemoteSourceChange: React.PropTypes.func.isRequired
+  replicationSource: PropTypes.string.isRequired,
+  localSource: PropTypes.string.isRequired,
+  remoteSource: PropTypes.string.isRequired,
+  databases: PropTypes.array.isRequired,
+  onLocalSourceChange: PropTypes.func.isRequired,
+  onRemoteSourceChange: PropTypes.func.isRequired
 };

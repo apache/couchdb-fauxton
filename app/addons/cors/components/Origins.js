@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { Component } from "react";
 
 export default class Origins extends Component {
@@ -36,10 +37,10 @@ export default class Origins extends Component {
       </div>
     );
   }
-};
+}
 
 Origins.propTypes = {
-  corsEnabled: React.PropTypes.bool,
-  isAllOrigins: React.PropTypes.bool,
-  originChange: React.PropTypes.func.isRequired
+  corsEnabled: PropTypes.bool,
+  isAllOrigins: PropTypes.bool,
+  originChange: PropTypes.func.isRequired
 };

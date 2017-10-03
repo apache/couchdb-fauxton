@@ -10,6 +10,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+import PropTypes from 'prop-types';
+
 import React from "react";
 import ReactDOM from "react-dom";
 import {Overlay} from 'react-bootstrap';
@@ -17,10 +19,10 @@ import {TransitionMotion, spring} from 'react-motion';
 
 export const TrayContents = React.createClass({
   propTypes: {
-    contentVisible: React.PropTypes.bool.isRequired,
-    closeTray: React.PropTypes.func.isRequired,
-    onEnter: React.PropTypes.func,
-    container: React.PropTypes.object
+    contentVisible: PropTypes.bool.isRequired,
+    closeTray: PropTypes.func.isRequired,
+    onEnter: PropTypes.func,
+    container: PropTypes.object
   },
 
   defaultProps: {

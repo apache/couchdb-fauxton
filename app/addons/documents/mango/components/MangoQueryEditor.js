@@ -10,6 +10,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+import PropTypes from 'prop-types';
+
 import React, { Component } from "react";
 import ReactSelect from "react-select";
 import "../../../../../assets/js/plugins/prettify";
@@ -158,11 +160,11 @@ export default class MangoQueryEditor extends Component {
 }
 
 MangoQueryEditor.propTypes = {
-  description: React.PropTypes.string.isRequired,
-  editorTitle: React.PropTypes.string.isRequired,
-  queryFindCode: React.PropTypes.string.isRequired,
-  queryFindCodeChanged: React.PropTypes.bool,
-  databaseName: React.PropTypes.string.isRequired,
-  runExplainQuery: React.PropTypes.func.isRequired,
-  manageIndexes: React.PropTypes.func.isRequired,
+  description: PropTypes.string.isRequired,
+  editorTitle: PropTypes.string.isRequired,
+  queryFindCode: PropTypes.string.isRequired,
+  queryFindCodeChanged: PropTypes.bool,
+  databaseName: PropTypes.string.isRequired,
+  runExplainQuery: PropTypes.func.isRequired,
+  manageIndexes: PropTypes.func.isRequired,
 };

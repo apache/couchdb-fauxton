@@ -10,6 +10,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+import PropTypes from 'prop-types';
+
 import React from 'react';
 
 export default class MainFieldsView extends React.Component {
@@ -94,13 +96,13 @@ export default class MainFieldsView extends React.Component {
     );
   }
 
-};
+}
 
 MainFieldsView.propTypes = {
-  toggleIncludeDocs: React.PropTypes.func.isRequired,
-  includeDocs: React.PropTypes.bool.isRequired,
-  reduce: React.PropTypes.bool.isRequired,
-  toggleReduce: React.PropTypes.func,
-  updateGroupLevel: React.PropTypes.func,
-  docURL: React.PropTypes.string.isRequired
+  toggleIncludeDocs: PropTypes.func.isRequired,
+  includeDocs: PropTypes.bool.isRequired,
+  reduce: PropTypes.bool.isRequired,
+  toggleReduce: PropTypes.func,
+  updateGroupLevel: PropTypes.func,
+  docURL: PropTypes.string.isRequired
 };

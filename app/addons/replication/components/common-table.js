@@ -9,6 +9,8 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
+import PropTypes from 'prop-types';
+
 import React from 'react';
 import {Table, Tooltip, OverlayTrigger} from "react-bootstrap";
 import moment from 'moment';
@@ -93,12 +95,12 @@ class RowStatus extends React.Component {
       </td>
     );
   }
-};
+}
 
 RowStatus.propTypes = {
-  statusTime: React.PropTypes.any,
-  status: React.PropTypes.string,
-  errorMsg: React.PropTypes.string.isRequired,
+  statusTime: PropTypes.any,
+  status: PropTypes.string,
+  errorMsg: PropTypes.string.isRequired,
 };
 
 RowStatus.defaultProps = {
@@ -150,11 +152,11 @@ const RowActions = ({onlyDeleteAction, _id, url, deleteDocs}) => {
 };
 
 RowActions.propTypes = {
-  _id: React.PropTypes.string.isRequired,
-  url: React.PropTypes.string,
-  error: React.PropTypes.bool.isRequired,
-  errorMsg: React.PropTypes.string.isRequired,
-  deleteDocs: React.PropTypes.func.isRequired
+  _id: PropTypes.string.isRequired,
+  url: PropTypes.string,
+  error: PropTypes.bool.isRequired,
+  errorMsg: PropTypes.string.isRequired,
+  deleteDocs: PropTypes.func.isRequired
 };
 
 const Row = ({
@@ -209,20 +211,20 @@ const Row = ({
 };
 
 Row.propTypes = {
-  _id: React.PropTypes.string.isRequired,
-  source: React.PropTypes.string.isRequired,
-  target: React.PropTypes.string.isRequired,
-  type: React.PropTypes.string.isRequired,
-  status: React.PropTypes.string,
-  url: React.PropTypes.string,
-  statusTime: React.PropTypes.object.isRequired,
-  startTime: React.PropTypes.object,
-  selected: React.PropTypes.bool.isRequired,
-  selectDoc: React.PropTypes.func.isRequired,
-  errorMsg: React.PropTypes.string.isRequired,
-  deleteDocs: React.PropTypes.func.isRequired,
-  onlyDeleteAction: React.PropTypes.bool.isRequired,
-  showStateRow: React.PropTypes.bool.isRequired
+  _id: PropTypes.string.isRequired,
+  source: PropTypes.string.isRequired,
+  target: PropTypes.string.isRequired,
+  type: PropTypes.string.isRequired,
+  status: PropTypes.string,
+  url: PropTypes.string,
+  statusTime: PropTypes.object.isRequired,
+  startTime: PropTypes.object,
+  selected: PropTypes.bool.isRequired,
+  selectDoc: PropTypes.func.isRequired,
+  errorMsg: PropTypes.string.isRequired,
+  deleteDocs: PropTypes.func.isRequired,
+  onlyDeleteAction: PropTypes.bool.isRequired,
+  showStateRow: PropTypes.bool.isRequired
 };
 
 const BulkSelectHeader = ({isSelected, deleteDocs, someDocsSelected, onCheck}) => {
@@ -244,10 +246,10 @@ const BulkSelectHeader = ({isSelected, deleteDocs, someDocsSelected, onCheck}) =
 };
 
 BulkSelectHeader.propTypes = {
-  isSelected: React.PropTypes.bool.isRequired,
-  someDocsSelected: React.PropTypes.bool.isRequired,
-  onCheck: React.PropTypes.func.isRequired,
-  deleteDocs: React.PropTypes.func.isRequired
+  isSelected: PropTypes.bool.isRequired,
+  someDocsSelected: PropTypes.bool.isRequired,
+  onCheck: PropTypes.func.isRequired,
+  deleteDocs: PropTypes.func.isRequired
 };
 
 const EmptyRow = ({msg}) => {

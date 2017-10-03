@@ -9,6 +9,8 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
+import PropTypes from 'prop-types';
+
 import React from 'react';
 import Constants from '../constants';
 import Components from '../../components/react-components';
@@ -40,8 +42,8 @@ const ReplicationType = ({value, onChange}) => {
 };
 
 ReplicationType.propTypes = {
-  value: React.PropTypes.string.isRequired,
-  onChange: React.PropTypes.func.isRequired
+  value: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired
 };
 
 const ReplicationDoc = ({value, onChange}) =>
@@ -63,8 +65,8 @@ const ReplicationDoc = ({value, onChange}) =>
 </div>;
 
 ReplicationDoc.propTypes = {
-  value: React.PropTypes.string.isRequired,
-  onChange: React.PropTypes.func.isRequired
+  value: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired
 };
 
 export class ReplicationOptions extends React.Component {
@@ -89,8 +91,8 @@ export class ReplicationOptions extends React.Component {
 }
 
 ReplicationOptions.propTypes = {
-  replicationDocName: React.PropTypes.string.isRequired,
-  replicationType: React.PropTypes.string.isRequired,
-  onDocChange: React.PropTypes.func.isRequired,
-  onTypeChange: React.PropTypes.func.isRequired
+  replicationDocName: PropTypes.string.isRequired,
+  replicationType: PropTypes.string.isRequired,
+  onDocChange: PropTypes.func.isRequired,
+  onTypeChange: PropTypes.func.isRequired
 };
