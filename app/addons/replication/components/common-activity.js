@@ -9,6 +9,8 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
+import PropTypes from 'prop-types';
+
 import React from 'react';
 
 export const ReplicationFilter = ({value, onChange}) => {
@@ -27,8 +29,8 @@ export const ReplicationFilter = ({value, onChange}) => {
 };
 
 ReplicationFilter.propTypes = {
-  value: React.PropTypes.string.isRequired,
-  onChange: React.PropTypes.func.isRequired
+  value: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired
 };
 
 export const ReplicationHeader = ({filter, onFilterChange}) => {
@@ -45,6 +47,6 @@ export const ReplicationHeader = ({filter, onFilterChange}) => {
 };
 
 ReplicationHeader.propTypes = {
-  filter: React.PropTypes.string.isRequired,
-  onFilterChange: React.PropTypes.func.isRequired
+  filter: PropTypes.string.isRequired,
+  onFilterChange: PropTypes.func.isRequired
 };

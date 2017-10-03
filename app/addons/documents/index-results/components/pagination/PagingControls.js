@@ -10,6 +10,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+import PropTypes from 'prop-types';
+
 import React from 'react';
 
 export default function PagingControls ({ nextClicked, previousClicked, canShowPrevious, canShowNext }) {
@@ -36,11 +38,11 @@ export default function PagingControls ({ nextClicked, previousClicked, canShowP
       </ul>
     </div>
   );
-};
+}
 
 PagingControls.propTypes = {
-  nextClicked: React.PropTypes.func.isRequired,
-  previousClicked: React.PropTypes.func.isRequired,
-  canShowPrevious: React.PropTypes.bool.isRequired,
-  canShowNext: React.PropTypes.bool.isRequired
+  nextClicked: PropTypes.func.isRequired,
+  previousClicked: PropTypes.func.isRequired,
+  canShowPrevious: PropTypes.bool.isRequired,
+  canShowNext: PropTypes.bool.isRequired
 };

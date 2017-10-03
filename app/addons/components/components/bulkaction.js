@@ -10,6 +10,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+import PropTypes from 'prop-types';
+
 import React from "react";
 import ReactDOM from "react-dom";
 import {OverlayTrigger, Popover} from "react-bootstrap";
@@ -17,12 +19,12 @@ import {OverlayTrigger, Popover} from "react-bootstrap";
 export const BulkActionComponent = React.createClass({
 
   propTypes: {
-    hasSelectedItem: React.PropTypes.bool.isRequired,
-    removeItem: React.PropTypes.func.isRequired,
-    selectAll: React.PropTypes.func,
-    toggleSelect: React.PropTypes.func.isRequired,
-    isChecked: React.PropTypes.bool.isRequired,
-    disabled: React.PropTypes.bool
+    hasSelectedItem: PropTypes.bool.isRequired,
+    removeItem: PropTypes.func.isRequired,
+    selectAll: PropTypes.func,
+    toggleSelect: PropTypes.func.isRequired,
+    isChecked: PropTypes.bool.isRequired,
+    disabled: PropTypes.bool
   },
 
   getDefaultProps () {

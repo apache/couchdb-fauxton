@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { Component } from "react";
 import OriginRow from "./OriginRow";
 
@@ -38,11 +39,11 @@ export default class OriginTable extends Component {
     );
   }
 
-};
+}
 
 OriginTable.propTypes = {
-  isVisible: React.PropTypes.bool.isRequired,
-  origins: React.PropTypes.arrayOf(React.PropTypes.string),
-  updateOrigin: React.PropTypes.func.isRequired,
-  deleteOrigin: React.PropTypes.func.isRequired
+  isVisible: PropTypes.bool.isRequired,
+  origins: PropTypes.arrayOf(PropTypes.string),
+  updateOrigin: PropTypes.func.isRequired,
+  deleteOrigin: PropTypes.func.isRequired
 };

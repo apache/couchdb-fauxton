@@ -1,3 +1,5 @@
+import FauxtonAPI from '../../../core/api';
+
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License. You may obtain a copy of
 // the License at
@@ -10,7 +12,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import FauxtonAPI from '../../../core/api';
+import PropTypes from 'prop-types';
+
 import React, { Component } from 'react';
 
 import PermissionsSection from './PermissionsSection';
@@ -78,8 +81,8 @@ export default class PermissionsScreen extends Component {
     );
   }
 
-};
+}
 
 PermissionsScreen.propTypes = {
-  security: React.PropTypes.object.isRequired
+  security: PropTypes.object.isRequired
 };

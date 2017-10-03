@@ -10,6 +10,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+import PropTypes from 'prop-types';
+
 import React from 'react';
 import FauxtonAPI from '../../../../../core/api';
 import GeneralComponents from '../../../../components/react-components';
@@ -159,17 +161,17 @@ export default class QueryOptions extends React.Component {
       </div>
     );
   }
-};
+}
 
 QueryOptions.propTypes = {
-  contentVisible: React.PropTypes.bool.isRequired,
-  queryOptionsApplyFilterOnlyDdocs: React.PropTypes.func.isRequired,
-  queryOptionsRemoveFilterOnlyDdocs: React.PropTypes.func.isRequired,
-  queryOptionsExecute: React.PropTypes.func.isRequired,
-  queryOptionsParams: React.PropTypes.object.isRequired,
-  perPage: React.PropTypes.number.isRequired,
-  resetPagination: React.PropTypes.func.isRequired,
-  selectedLayout: React.PropTypes.string.isRequired,
-  changeLayout: React.PropTypes.func.isRequired,
-  queryOptionsToggleVisibility: React.PropTypes.func.isRequired
+  contentVisible: PropTypes.bool.isRequired,
+  queryOptionsApplyFilterOnlyDdocs: PropTypes.func.isRequired,
+  queryOptionsRemoveFilterOnlyDdocs: PropTypes.func.isRequired,
+  queryOptionsExecute: PropTypes.func.isRequired,
+  queryOptionsParams: PropTypes.object.isRequired,
+  perPage: PropTypes.number.isRequired,
+  resetPagination: PropTypes.func.isRequired,
+  selectedLayout: PropTypes.string.isRequired,
+  changeLayout: PropTypes.func.isRequired,
+  queryOptionsToggleVisibility: PropTypes.func.isRequired
 };

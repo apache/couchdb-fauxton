@@ -10,6 +10,8 @@
 //  License for the specific language governing permissions and limitations under
 //  the License.
 
+import PropTypes from 'prop-types';
+
 import React from "react";
 import ReactDOM from "react-dom";
 import Stores from "./stores";
@@ -396,10 +398,10 @@ const TabItem = ({active, link, title}) => {
 };
 
 TabItem.propTypes = {
-  active: React.PropTypes.bool.isRequired,
-  link: React.PropTypes.string.isRequired,
-  icon: React.PropTypes.string,
-  title: React.PropTypes.string.isRequired
+  active: PropTypes.bool.isRequired,
+  link: PropTypes.string.isRequired,
+  icon: PropTypes.string,
+  title: PropTypes.string.isRequired
 };
 
 const Tabs = ({sidebarItems, selectedTab}) => {

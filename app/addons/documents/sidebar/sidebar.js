@@ -1,3 +1,7 @@
+import app from "../../../app";
+import Helpers from "../../../helpers";
+import FauxtonAPI from "../../../core/api";
+
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License. You may obtain a copy of
 // the License at
@@ -10,9 +14,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import app from "../../../app";
-import Helpers from "../../../helpers";
-import FauxtonAPI from "../../../core/api";
+import PropTypes from 'prop-types';
+
 import React from "react";
 import ReactDOM from "react-dom";
 import Stores from "./stores";
@@ -38,7 +41,7 @@ var deleteDbModalStore = ComponentsStore.deleteDbModalStore;
 
 var MainSidebar = React.createClass({
   propTypes: {
-    selectedNavItem: React.PropTypes.string.isRequired
+    selectedNavItem: PropTypes.string.isRequired
   },
 
   getNewButtonLinks: function () {  // these are links for the sidebar '+' on All Docs and All Design Docs
@@ -117,15 +120,15 @@ var MainSidebar = React.createClass({
 var IndexSection = React.createClass({
 
   propTypes: {
-    urlNamespace: React.PropTypes.string.isRequired,
-    indexLabel: React.PropTypes.string.isRequired,
-    database: React.PropTypes.object.isRequired,
-    designDocName: React.PropTypes.string.isRequired,
-    items: React.PropTypes.array.isRequired,
-    isExpanded: React.PropTypes.bool.isRequired,
-    selectedIndex: React.PropTypes.string.isRequired,
-    onDelete: React.PropTypes.func.isRequired,
-    onClone: React.PropTypes.func.isRequired
+    urlNamespace: PropTypes.string.isRequired,
+    indexLabel: PropTypes.string.isRequired,
+    database: PropTypes.object.isRequired,
+    designDocName: PropTypes.string.isRequired,
+    items: PropTypes.array.isRequired,
+    isExpanded: PropTypes.bool.isRequired,
+    selectedIndex: PropTypes.string.isRequired,
+    onDelete: PropTypes.func.isRequired,
+    onClone: PropTypes.func.isRequired
   },
 
   getInitialState: function () {
@@ -254,12 +257,12 @@ var IndexSection = React.createClass({
 
 var DesignDoc = React.createClass({
   propTypes: {
-    database: React.PropTypes.object.isRequired,
-    sidebarListTypes: React.PropTypes.array.isRequired,
-    isExpanded: React.PropTypes.bool.isRequired,
-    selectedNavInfo: React.PropTypes.object.isRequired,
-    toggledSections: React.PropTypes.object.isRequired,
-    designDocName:  React.PropTypes.string.isRequired
+    database: PropTypes.object.isRequired,
+    sidebarListTypes: PropTypes.array.isRequired,
+    isExpanded: PropTypes.bool.isRequired,
+    selectedNavInfo: PropTypes.object.isRequired,
+    toggledSections: PropTypes.object.isRequired,
+    designDocName:  PropTypes.string.isRequired
   },
 
   getInitialState: function () {
@@ -574,15 +577,15 @@ var SidebarController = React.createClass({
 
 var CloneIndexModal = React.createClass({
   propTypes: {
-    visible: React.PropTypes.bool.isRequired,
-    title: React.PropTypes.string,
-    close: React.PropTypes.func.isRequired,
-    submit: React.PropTypes.func.isRequired,
-    designDocArray: React.PropTypes.array.isRequired,
-    selectedDesignDoc: React.PropTypes.string.isRequired,
-    newDesignDocName: React.PropTypes.string.isRequired,
-    newIndexName: React.PropTypes.string.isRequired,
-    indexLabel: React.PropTypes.string.isRequired
+    visible: PropTypes.bool.isRequired,
+    title: PropTypes.string,
+    close: PropTypes.func.isRequired,
+    submit: PropTypes.func.isRequired,
+    designDocArray: PropTypes.array.isRequired,
+    selectedDesignDoc: PropTypes.string.isRequired,
+    newDesignDocName: PropTypes.string.isRequired,
+    newIndexName: PropTypes.string.isRequired,
+    indexLabel: PropTypes.string.isRequired
   },
 
   getDefaultProps: function () {

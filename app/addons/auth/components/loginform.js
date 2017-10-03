@@ -10,6 +10,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+import PropTypes from 'prop-types';
+
 import React from "react";
 import ReactDOM from "react-dom";
 import { login } from "./../actions";
@@ -102,7 +104,7 @@ LoginForm.defaultProps = {
 };
 
 LoginForm.propTypes = {
-  urlBack: React.PropTypes.string.isRequired
+  urlBack: PropTypes.string.isRequired
 };
 
 export default LoginForm;

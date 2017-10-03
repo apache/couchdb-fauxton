@@ -10,6 +10,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+import PropTypes from 'prop-types';
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Clipboard from 'clipboard';
@@ -83,7 +85,7 @@ export class Copy extends React.Component {
       this.getClipboardButton()
     );
   }
-};
+}
 
 Copy.defaultProps = {
   displayType: 'icon',
@@ -93,8 +95,8 @@ Copy.defaultProps = {
 };
 
 Copy.propTypes = {
-  text: React.PropTypes.string.isRequired,
-  displayType: React.PropTypes.oneOf(['icon', 'text', 'input']),
-  uniqueKey: React.PropTypes.string.isRequired,
-  onClipboardClick: React.PropTypes.func.isRequired
+  text: PropTypes.string.isRequired,
+  displayType: PropTypes.oneOf(['icon', 'text', 'input']),
+  uniqueKey: PropTypes.string.isRequired,
+  onClipboardClick: PropTypes.func.isRequired
 };

@@ -1,3 +1,6 @@
+import FauxtonAPI from "../../../core/api";
+import app from "../../../app";
+
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License. You may obtain a copy of
 // the License at
@@ -11,8 +14,8 @@
 // the License.
 
 
-import FauxtonAPI from "../../../core/api";
-import app from "../../../app";
+import PropTypes from 'prop-types';
+
 import React from "react";
 import ReactDOM from "react-dom";
 import Actions from "./actions";
@@ -211,8 +214,8 @@ var DocEditorController = React.createClass({
 var AttachmentsPanelButton = React.createClass({
 
   propTypes: {
-    isLoading: React.PropTypes.bool.isRequired,
-    doc: React.PropTypes.object
+    isLoading: PropTypes.bool.isRequired,
+    doc: PropTypes.object
   },
 
   getDefaultProps: function () {
@@ -263,9 +266,9 @@ var AttachmentsPanelButton = React.createClass({
 
 var PanelButton = React.createClass({
   propTypes: {
-    title: React.PropTypes.string.isRequired,
-    onClick: React.PropTypes.func.isRequired,
-    className: React.PropTypes.string
+    title: PropTypes.string.isRequired,
+    onClick: PropTypes.func.isRequired,
+    className: PropTypes.string
   },
 
   getDefaultProps: function () {
@@ -293,8 +296,8 @@ var PanelButton = React.createClass({
 
 var UploadModal = React.createClass({
   propTypes: {
-    visible: React.PropTypes.bool.isRequired,
-    doc: React.PropTypes.object
+    visible: PropTypes.bool.isRequired,
+    doc: PropTypes.object
   },
 
   getInitialState: function () {
@@ -375,10 +378,10 @@ var UploadModal = React.createClass({
 
 const CloneDocModal = React.createClass({
   propTypes: {
-    visible: React.PropTypes.bool.isRequired,
-    doc: React.PropTypes.object,
-    database: React.PropTypes.object.isRequired,
-    onSubmit: React.PropTypes.func.isRequired
+    visible: PropTypes.bool.isRequired,
+    doc: PropTypes.object,
+    database: PropTypes.object.isRequired,
+    onSubmit: PropTypes.func.isRequired
   },
 
   getInitialState: function () {

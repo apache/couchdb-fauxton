@@ -10,14 +10,16 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+import PropTypes from 'prop-types';
+
 import React from "react";
 import ReactDOM from "react-dom";
 
 export const BadgeList = React.createClass({
 
   propTypes: {
-    elements: React.PropTypes.array.isRequired,
-    removeBadge: React.PropTypes.func.isRequired
+    elements: PropTypes.array.isRequired,
+    removeBadge: PropTypes.func.isRequired
   },
 
   getDefaultProps () {
@@ -57,8 +59,8 @@ export const BadgeList = React.createClass({
 
 export const Badge = React.createClass({
   propTypes: {
-    label: React.PropTypes.string.isRequired,
-    remove: React.PropTypes.func.isRequired
+    label: PropTypes.string.isRequired,
+    remove: PropTypes.func.isRequired
   },
 
   remove (e) {

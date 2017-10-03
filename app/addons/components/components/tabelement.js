@@ -10,6 +10,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+import PropTypes from 'prop-types';
+
 import React from "react";
 import ReactDOM from "react-dom";
 
@@ -40,10 +42,10 @@ export const TabElement = ({selected, text, onChange, iconClass}) => {
   );
 };
 TabElement.propTypes = {
-  selected: React.PropTypes.bool.isRequired,
-  text: React.PropTypes.string.isRequired,
-  onChange: React.PropTypes.func.isRequired,
-  iconClass: React.PropTypes.string,
+  selected: PropTypes.bool.isRequired,
+  text: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+  iconClass: PropTypes.string,
 };
 
 export const TabElementWrapper = ({children}) => {

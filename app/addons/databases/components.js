@@ -1,3 +1,5 @@
+import FauxtonAPI from "../../core/api";
+
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License. You may obtain a copy of
 // the License at
@@ -10,7 +12,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import FauxtonAPI from "../../core/api";
+import PropTypes from 'prop-types';
+
 import React from "react";
 import ReactDOM from "react-dom";
 import Components from "../components/react-components";
@@ -72,9 +75,9 @@ var DatabasesController = React.createClass({
 const DatabaseTable = React.createClass({
 
   propTypes: {
-    dbList: React.PropTypes.array.isRequired,
-    showDeleteDatabaseModal: React.PropTypes.object.isRequired,
-    loading: React.PropTypes.bool.isRequired,
+    dbList: PropTypes.array.isRequired,
+    showDeleteDatabaseModal: PropTypes.object.isRequired,
+    loading: PropTypes.bool.isRequired,
   },
 
   createRows (dbList) {
@@ -135,7 +138,7 @@ const DatabaseTable = React.createClass({
 var DatabaseRow = React.createClass({
 
   propTypes: {
-    row: React.PropTypes.object
+    row: PropTypes.object
   },
 
   getExtensionColumns (row) {
@@ -295,7 +298,7 @@ const JumpToDatabaseWidget = ({loadOptions}) => {
   );
 };
 JumpToDatabaseWidget.propTypes = {
-  loadOptions: React.PropTypes.func.isRequired
+  loadOptions: PropTypes.func.isRequired
 };
 
 var DatabasePagination = React.createClass({

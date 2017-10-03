@@ -10,6 +10,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+import PropTypes from 'prop-types';
+
 import React from "react";
 import ReactDOM from "react-dom";
 import Actions from "./actions";
@@ -105,7 +107,7 @@ export const NotificationController = React.createClass({
 
 var GlobalNotifications = React.createClass({
   propTypes: {
-    notifications: React.PropTypes.array.isRequired
+    notifications: PropTypes.array.isRequired
   },
 
   componentDidMount () {
@@ -220,13 +222,13 @@ var GlobalNotifications = React.createClass({
 
 var Notification = React.createClass({
   propTypes: {
-    msg: React.PropTypes.string.isRequired,
-    onStartHide: React.PropTypes.func.isRequired,
-    onHideComplete: React.PropTypes.func.isRequired,
-    type: React.PropTypes.oneOf(['error', 'info', 'success']),
-    escape: React.PropTypes.bool,
-    isHiding: React.PropTypes.bool.isRequired,
-    visibleTime: React.PropTypes.number
+    msg: PropTypes.string.isRequired,
+    onStartHide: PropTypes.func.isRequired,
+    onHideComplete: PropTypes.func.isRequired,
+    type: PropTypes.oneOf(['error', 'info', 'success']),
+    escape: PropTypes.bool,
+    isHiding: PropTypes.bool.isRequired,
+    visibleTime: PropTypes.number
   },
 
   getDefaultProps () {
@@ -323,9 +325,9 @@ export const NotificationCenterButton = React.createClass({
 
 var NotificationCenterPanel = React.createClass({
   propTypes: {
-    visible: React.PropTypes.bool.isRequired,
-    filter: React.PropTypes.string.isRequired,
-    notifications: React.PropTypes.array.isRequired
+    visible: PropTypes.bool.isRequired,
+    filter: PropTypes.string.isRequired,
+    notifications: PropTypes.array.isRequired
   },
 
   getNotifications (items) {
@@ -449,7 +451,7 @@ var NotificationCenterPanel = React.createClass({
 
 var NotificationPanelRow = React.createClass({
   propTypes: {
-    item: React.PropTypes.object.isRequired
+    item: PropTypes.object.isRequired
   },
 
   clearNotification () {
@@ -537,7 +539,7 @@ export class PermanentNotification extends React.Component {
       </div>
     );
   }
-};
+}
 
 export default {
   NotificationController,

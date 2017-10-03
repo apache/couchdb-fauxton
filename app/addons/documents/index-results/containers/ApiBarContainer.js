@@ -1,3 +1,5 @@
+import { connect } from 'react-redux';
+
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License. You may obtain a copy of
 // the License at
@@ -10,8 +12,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import React from 'react';
-import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+
 import queryString from 'query-string';
 import { ApiBarWrapper } from '../../../components/layouts';
 import { getQueryOptionsParams } from '../reducers';
@@ -38,8 +40,8 @@ const ApiBarContainer = connect (
 export default ApiBarContainer;
 
 ApiBarContainer.propTypes = {
-  databaseName: React.PropTypes.string,
-  docUrl: React.PropTypes.string,
-  endpoint: React.PropTypes.string,
-  endpointAddQueryOptions: React.PropTypes.bool
+  databaseName: PropTypes.string,
+  docUrl: PropTypes.string,
+  endpoint: PropTypes.string,
+  endpointAddQueryOptions: PropTypes.bool
 };

@@ -10,6 +10,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+import PropTypes from 'prop-types';
+
 import React from 'react';
 
 import classNames from 'classnames';
@@ -40,8 +42,8 @@ const LogoutButton = ({username, isMinimized}) => {
 };
 
 LogoutButton.propTypes = {
-  username: React.PropTypes.string,
-  isMinimized: React.PropTypes.bool.isRequired
+  username: PropTypes.string,
+  isMinimized: PropTypes.bool.isRequired
 };
 
 export default LogoutButton;

@@ -10,19 +10,21 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+import PropTypes from 'prop-types';
+
 import React from "react";
 import ReactDOM from "react-dom";
 
 export const ConfirmButton = React.createClass({
   propTypes: {
-    showIcon: React.PropTypes.bool,
-    id: React.PropTypes.string,
-    customIcon: React.PropTypes.string,
-    style: React.PropTypes.object,
-    buttonType: React.PropTypes.string,
-    'data-id': React.PropTypes.string,
-    onClick: React.PropTypes.func,
-    disabled: React.PropTypes.bool,
+    showIcon: PropTypes.bool,
+    id: PropTypes.string,
+    customIcon: PropTypes.string,
+    style: PropTypes.object,
+    buttonType: PropTypes.string,
+    'data-id': PropTypes.string,
+    onClick: PropTypes.func,
+    disabled: PropTypes.bool,
   },
 
   getDefaultProps () {

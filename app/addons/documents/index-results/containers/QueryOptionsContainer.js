@@ -10,7 +10,7 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import DocHelpers from '../../helpers';
 import QueryOptions from '../components/queryoptions/QueryOptions';
@@ -131,5 +131,5 @@ const QueryOptionsContainer = connect (
 export default QueryOptionsContainer;
 
 QueryOptionsContainer.propTypes = {
-  queryDocs: React.PropTypes.func.isRequired
+  queryDocs: PropTypes.func.isRequired
 };

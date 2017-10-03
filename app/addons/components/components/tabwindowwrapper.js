@@ -1,4 +1,5 @@
 import FauxtonAPI from '../../../core/api';
+import PropTypes from 'prop-types';
 import React from 'react';
 import {TabElement, TabElementWrapper} from './tabelement';
 
@@ -48,9 +49,9 @@ export class TabWindowWrapper extends React.Component {
     );
   }
 
-};
+}
 
 TabWindowWrapper.propTypes = {
-  tabs: React.PropTypes.array.isRequired,
-  selectedTab: React.PropTypes.string.isRequired
+  tabs: PropTypes.array.isRequired,
+  selectedTab: PropTypes.string.isRequired
 };

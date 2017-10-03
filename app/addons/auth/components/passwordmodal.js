@@ -10,6 +10,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+import PropTypes from 'prop-types';
+
 import React from "react";
 import { Modal } from "react-bootstrap";
 import { hidePasswordModal, authenticate } from "./../actions";
@@ -84,14 +86,14 @@ class PasswordModal extends React.Component {
 }
 
 PasswordModal.propTypes = {
-  visible: React.PropTypes.bool.isRequired,
-  modalMessage: React.PropTypes.oneOfType([
-    React.PropTypes.string,
-    React.PropTypes.element
+  visible: PropTypes.bool.isRequired,
+  modalMessage: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.element
   ]),
-  onSubmit: React.PropTypes.func.isRequired,
-  onClose: React.PropTypes.func.isRequired,
-  submitBtnLabel: React.PropTypes.string
+  onSubmit: PropTypes.func.isRequired,
+  onClose: PropTypes.func.isRequired,
+  submitBtnLabel: PropTypes.string
 };
 
 PasswordModal.defaultProps = {

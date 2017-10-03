@@ -10,6 +10,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+import PropTypes from 'prop-types';
+
 import React from 'react';
 
 import classNames from 'classnames';
@@ -34,8 +36,8 @@ const Burger = ({toggleMenu, isMinimized}) => {
 };
 
 Burger.propTypes = {
-  toggleMenu: React.PropTypes.func.isRequired,
-  isMinimized: React.PropTypes.bool.isRequired
+  toggleMenu: PropTypes.func.isRequired,
+  isMinimized: PropTypes.bool.isRequired
 };
 
 export default Burger;

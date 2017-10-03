@@ -10,6 +10,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+import PropTypes from 'prop-types';
+
 import React from "react";
 import Constants from "./constants";
 import Actions from "./actions";
@@ -58,8 +60,8 @@ const VerifyInstallController = React.createClass({
 
 var VerifyInstallButton = React.createClass({
   propTypes: {
-    verify: React.PropTypes.func.isRequired,
-    isVerifying: React.PropTypes.bool.isRequired
+    verify: PropTypes.func.isRequired,
+    isVerifying: PropTypes.bool.isRequired
   },
 
   render: function () {
@@ -74,7 +76,7 @@ var VerifyInstallButton = React.createClass({
 
 var VerifyInstallResults = React.createClass({
   propTypes: {
-    testResults: React.PropTypes.object.isRequired
+    testResults: PropTypes.object.isRequired
   },
 
   showTestResult: function (test) {

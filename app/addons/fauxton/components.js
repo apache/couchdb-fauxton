@@ -1,3 +1,5 @@
+import FauxtonAPI from "../../core/api";
+
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License. You may obtain a copy of
 // the License at
@@ -10,7 +12,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import FauxtonAPI from "../../core/api";
+import PropTypes from 'prop-types';
+
 import React from "react";
 import ReactDOM from "react-dom";
 import { Modal } from "react-bootstrap";
@@ -143,13 +146,13 @@ var Pagination = React.createClass({
 // a super-simple replacement for window.confirm()
 var ConfirmationModal = React.createClass({
   propTypes: {
-    visible: React.PropTypes.bool.isRequired,
-    text: React.PropTypes.oneOfType([
-      React.PropTypes.string,
-      React.PropTypes.element
+    visible: PropTypes.bool.isRequired,
+    text: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.element
     ]).isRequired,
-    onClose: React.PropTypes.func.isRequired,
-    onSubmit: React.PropTypes.func.isRequired
+    onClose: PropTypes.func.isRequired,
+    onSubmit: PropTypes.func.isRequired
   },
 
   getDefaultProps: function () {

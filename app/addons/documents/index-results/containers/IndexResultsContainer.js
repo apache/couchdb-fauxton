@@ -10,7 +10,7 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import IndexResults from '../components/results/IndexResults';
 import { fetchDocs, bulkDeleteDocs } from '../actions/fetch';
@@ -102,6 +102,6 @@ const IndexResultsContainer = connect (
 export default IndexResultsContainer;
 
 IndexResultsContainer.propTypes = {
-  queryDocs: React.PropTypes.func.isRequired,
-  docType: React.PropTypes.string.isRequired
+  queryDocs: PropTypes.func.isRequired,
+  docType: PropTypes.string.isRequired
 };

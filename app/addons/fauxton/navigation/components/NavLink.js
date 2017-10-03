@@ -10,6 +10,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+import PropTypes from 'prop-types';
+
 import React from 'react';
 import classNames from 'classnames';
 
@@ -42,9 +44,9 @@ const NavLink = ({link, active, isMinimized}) => {
 };
 
 NavLink.propTypes = {
-  link: React.PropTypes.object.isRequired,
-  active: React.PropTypes.string,
-  isMinimized: React.PropTypes.bool.isRequired,
+  link: PropTypes.object.isRequired,
+  active: PropTypes.string,
+  isMinimized: PropTypes.bool.isRequired,
 };
 
 
