@@ -32,35 +32,32 @@ const deleteDbModalStore = ComponentsStore.deleteDbModalStore;
 const {DeleteDatabaseModal, ToggleHeaderButton, TrayContents} = Components;
 
 
-var DatabasesController = React.createClass({
-
-  getStoreState () {
+class DatabasesController extends React.Component {
+  getStoreState = () => {
     return {
       dbList: databasesStore.getDbList(),
       loading: databasesStore.isLoading(),
       showDeleteDatabaseModal: deleteDbModalStore.getShowDeleteDatabaseModal()
     };
-  },
+  };
 
-  getInitialState () {
-    return this.getStoreState();
-  },
-
-  componentDidMount () {
+  componentDidMount() {
     databasesStore.on('change', this.onChange, this);
     deleteDbModalStore.on('change', this.onChange, this);
-  },
+  }
 
-  componentWillUnmount () {
+  componentWillUnmount() {
     databasesStore.off('change', this.onChange, this);
     deleteDbModalStore.off('change', this.onChange, this);
-  },
+  }
 
-  onChange () {
+  onChange = () => {
     this.setState(this.getStoreState());
-  },
+  };
 
-  render () {
+  state = this.getStoreState();
+
+  render() {
     const {loading, dbList} = this.state;
 
     return (
@@ -70,38 +67,37 @@ var DatabasesController = React.createClass({
         loading={loading} />
     );
   }
-});
+}
 
-const DatabaseTable = React.createClass({
-
-  propTypes: {
+class DatabaseTable extends React.Component {
+  static propTypes = {
     dbList: PropTypes.array.isRequired,
     showDeleteDatabaseModal: PropTypes.object.isRequired,
     loading: PropTypes.bool.isRequired,
-  },
+  };
 
-  createRows (dbList) {
+  createRows = (dbList) => {
     return dbList.map((item, k) => {
       return (
         <DatabaseRow item={item} key={k} />
       );
     });
-  },
+  };
 
-  getExtensionColumns () {
+  getExtensionColumns = () => {
     var cols = FauxtonAPI.getExtensions('DatabaseTable:head');
     return _.map(cols, function (Item, index) {
       return <Item key={index} />;
     });
-  },
+  };
 
-  showDeleteDatabaseModal () {
+  showDeleteDatabaseModal = () => {
     ComponentsActions.showDeleteDatabaseModal({
       showDeleteModal: !this.props.showDeleteDatabaseModal.showDeleteModal
     });
-  },
+  };
 
-  render () {
+  render() {
     if (this.props.loading) {
       return (
         <div className="view">
@@ -133,26 +129,25 @@ const DatabaseTable = React.createClass({
       </div>
     );
   }
-});
+}
 
-var DatabaseRow = React.createClass({
-
-  propTypes: {
+class DatabaseRow extends React.Component {
+  static propTypes = {
     row: PropTypes.object
-  },
+  };
 
-  getExtensionColumns (row) {
+  getExtensionColumns = (row) => {
     var cols = FauxtonAPI.getExtensions('DatabaseTable:databaseRow');
     return _.map(cols, function (Item, index) {
       return <Item row={row} key={index} />;
     });
-  },
+  };
 
-  showDeleteDatabaseModal (name) {
+  showDeleteDatabaseModal = (name) => {
     ComponentsActions.showDeleteDatabaseModal({showDeleteModal: true, dbId: name});
-  },
+  };
 
-  render () {
+  render() {
     const {
       item
     } = this.props;
@@ -195,7 +190,7 @@ var DatabaseRow = React.createClass({
       </tr>
     );
   }
-});
+}
 
 const GraveyardInfo = ({docCount, docDelCount}) => {
   const graveyardTitle = `This database has just ${docCount} docs and ${docDelCount} deleted docs`;
@@ -217,42 +212,39 @@ const RightDatabasesHeader = () => {
   );
 };
 
-var AddDatabaseWidget = React.createClass({
+class AddDatabaseWidget extends React.Component {
+  state = {
+    isPromptVisible: false,
+    databaseName: ''
+  };
 
-  onTrayToggle () {
+  onTrayToggle = () => {
     this.setState({isPromptVisible: !this.state.isPromptVisible});
-  },
+  };
 
-  closeTray () {
+  closeTray = () => {
     this.setState({isPromptVisible: false});
-  },
+  };
 
-  focusInput () {
+  focusInput = () => {
     ReactDOM.findDOMNode(this.refs.newDbName).focus();
-  },
+  };
 
-  onKeyUpInInput (e) {
+  onKeyUpInInput = (e) => {
     if (e.which === 13) {
       this.onAddDatabase();
     }
-  },
+  };
 
-  getInitialState () {
-    return {
-      isPromptVisible: false,
-      databaseName: ''
-    };
-  },
-
-  onChange (e) {
+  onChange = (e) => {
     this.setState({databaseName: e.target.value});
-  },
+  };
 
-  onAddDatabase () {
+  onAddDatabase = () => {
     Actions.createNewDatabase(this.state.databaseName);
-  },
+  };
 
-  render () {
+  render() {
     return (
       <div>
         <ToggleHeaderButton
@@ -278,7 +270,7 @@ var AddDatabaseWidget = React.createClass({
       </div>
     );
   }
-});
+}
 
 const JumpToDatabaseWidget = ({loadOptions}) => {
   return (
@@ -301,50 +293,45 @@ JumpToDatabaseWidget.propTypes = {
   loadOptions: PropTypes.func.isRequired
 };
 
-var DatabasePagination = React.createClass({
+class DatabasePagination extends React.Component {
+  static defaultProps = {
+    linkPath: '_all_dbs',
+    store: databasesStore
+  };
 
-  getDefaultProps () {
-    return {
-      linkPath: '_all_dbs',
-      store: databasesStore
-    };
-  },
-
-  getStoreState (props) {
+  getStoreState = (props) => {
     const {store} = props;
 
     return {
       totalAmountOfDatabases: store.getTotalAmountOfDatabases(),
       page: store.getPage()
     };
-  },
+  };
 
-  getInitialState () {
-    return this.getStoreState(this.props);
-  },
-
-  componentDidMount () {
+  componentDidMount() {
     const {store} = this.props;
 
     store.on('change', this.onChange, this);
-  },
+  }
 
-  componentWillReceiveProps (nextProps) {
+  componentWillReceiveProps(nextProps) {
     this.setState(this.getStoreState(nextProps));
     const {store} = nextProps;
     store.on('change', this.onChange, this);
-  },
+  }
 
-  componentWillUnmount () {
+  componentWillUnmount() {
     const {store} = this.props;
     store.off('change', this.onChange, this);
-  },
+  }
 
-  onChange () {
+  onChange = () => {
     this.setState(this.getStoreState(this.props));
-  },
+  };
 
-  render () {
+  state = this.getStoreState(this.props);
+
+  render() {
     const {page, totalAmountOfDatabases} = this.state;
 
     const urlPrefix = `#/${this.props.linkPath}?page=`;
@@ -364,7 +351,7 @@ var DatabasePagination = React.createClass({
       </footer>
     );
   }
-});
+}
 
 export default {
   DatabasesController: DatabasesController,

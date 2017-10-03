@@ -12,8 +12,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
-export const PaddedBorderedBox = React.createClass({
-  render: function () {
+export class PaddedBorderedBox extends React.Component {
+  render() {
     return (
       <div className="bordered-box">
         <div className="padded-box">
@@ -22,4 +22,4 @@ export const PaddedBorderedBox = React.createClass({
       </div>
     );
    }
- });
+}

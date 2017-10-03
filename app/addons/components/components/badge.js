@@ -15,26 +15,23 @@ import PropTypes from 'prop-types';
 import React from "react";
 import ReactDOM from "react-dom";
 
-export const BadgeList = React.createClass({
-
-  propTypes: {
+export class BadgeList extends React.Component {
+  static propTypes = {
     elements: PropTypes.array.isRequired,
     removeBadge: PropTypes.func.isRequired
-  },
+  };
 
-  getDefaultProps () {
-    return {
-      getLabel (el) {
-        return el;
-      },
+  static defaultProps = {
+    getLabel (el) {
+      return el;
+    },
 
-      getId (el) {
-        return el;
-      }
-    };
-  },
+    getId (el) {
+      return el;
+    }
+  };
 
-  getBadges () {
+  getBadges = () => {
     return this.props.elements.map(function (el, i) {
       return <Badge
         label={this.props.getLabel(el)}
@@ -42,33 +39,33 @@ export const BadgeList = React.createClass({
         id={el}
         remove={this.removeBadge} />;
     }.bind(this));
-  },
+  };
 
-  removeBadge (label, el) {
+  removeBadge = (label, el) => {
     this.props.removeBadge(label, el);
-  },
+  };
 
-  render () {
+  render() {
     return (
       <ul className="component-badgelist">
         {this.getBadges()}
       </ul>
     );
   }
-});
+}
 
-export const Badge = React.createClass({
-  propTypes: {
+export class Badge extends React.Component {
+  static propTypes = {
     label: PropTypes.string.isRequired,
     remove: PropTypes.func.isRequired
-  },
+  };
 
-  remove (e) {
+  remove = (e) => {
     e.preventDefault();
     this.props.remove(this.props.label, this.props.id);
-  },
+  };
 
-  render () {
+  render() {
     return (
       <li className="component-badge">
         <span className="label label-info">{this.props.label}</span>
@@ -82,4 +79,4 @@ export const Badge = React.createClass({
       </li>
     );
   }
-});
+}

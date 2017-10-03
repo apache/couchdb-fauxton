@@ -15,8 +15,8 @@ import PropTypes from 'prop-types';
 import React from "react";
 import ReactDOM from "react-dom";
 
-export const ConfirmButton = React.createClass({
-  propTypes: {
+export class ConfirmButton extends React.Component {
+  static propTypes = {
     showIcon: PropTypes.bool,
     id: PropTypes.string,
     customIcon: PropTypes.string,
@@ -25,30 +25,28 @@ export const ConfirmButton = React.createClass({
     'data-id': PropTypes.string,
     onClick: PropTypes.func,
     disabled: PropTypes.bool,
-  },
+  };
 
-  getDefaultProps () {
-    return {
-      disabled: false,
-      showIcon: true,
-      customIcon: 'fonticon-ok-circled',
-      buttonType: 'btn-primary',
-      style: {},
-      'data-id': null,
-      onClick () { }
-    };
-  },
+  static defaultProps = {
+    disabled: false,
+    showIcon: true,
+    customIcon: 'fonticon-ok-circled',
+    buttonType: 'btn-primary',
+    style: {},
+    'data-id': null,
+    onClick () { }
+  };
 
-  getIcon () {
+  getIcon = () => {
     if (!this.props.showIcon) {
       return null;
     }
     return (
       <i className={"icon " + this.props.customIcon} />
     );
-  },
+  };
 
-  render () {
+  render() {
     const { onClick, buttonType, id, style, text, disabled } = this.props;
     return (
       <button
@@ -65,4 +63,4 @@ export const ConfirmButton = React.createClass({
       </button>
     );
   }
-});
+}

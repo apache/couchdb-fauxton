@@ -39,16 +39,16 @@ var DeleteDatabaseModal = Components.DeleteDatabaseModal;
 var deleteDbModalStore = ComponentsStore.deleteDbModalStore;
 
 
-var MainSidebar = React.createClass({
-  propTypes: {
+class MainSidebar extends React.Component {
+  static propTypes = {
     selectedNavItem: PropTypes.string.isRequired
-  },
+  };
 
-  getNewButtonLinks: function () {  // these are links for the sidebar '+' on All Docs and All Design Docs
+  getNewButtonLinks = () => {  // these are links for the sidebar '+' on All Docs and All Design Docs
     return DocumentHelper.getNewButtonLinks(this.props.databaseName);
-  },
+  };
 
-  buildDocLinks: function () {
+  buildDocLinks = () => {
     const base = FauxtonAPI.urls('base', 'app', this.props.databaseName);
     return FauxtonAPI.getExtensions('docLinks').map(function (link) {
       return (
@@ -57,13 +57,13 @@ var MainSidebar = React.createClass({
         </li>
       );
     }, this);
-  },
+  };
 
-  getNavItemClass: function (navItem) {
+  getNavItemClass = (navItem) => {
     return (navItem === this.props.selectedNavItem) ? 'active' : '';
-  },
+  };
 
-  render: function () {
+  render() {
     var docLinks = this.buildDocLinks();
     var dbEncoded = FauxtonAPI.url.encode(this.props.databaseName);
     var changesUrl     = '#' + FauxtonAPI.urls('changes', 'app', dbEncoded, '');
@@ -114,12 +114,10 @@ var MainSidebar = React.createClass({
       </ul>
     );
   }
-});
+}
 
-
-var IndexSection = React.createClass({
-
-  propTypes: {
+class IndexSection extends React.Component {
+  static propTypes = {
     urlNamespace: PropTypes.string.isRequired,
     indexLabel: PropTypes.string.isRequired,
     database: PropTypes.object.isRequired,
@@ -129,24 +127,22 @@ var IndexSection = React.createClass({
     selectedIndex: PropTypes.string.isRequired,
     onDelete: PropTypes.func.isRequired,
     onClone: PropTypes.func.isRequired
-  },
+  };
 
-  getInitialState: function () {
-    return {
-      placement: 'bottom'
-    };
-  },
+  state = {
+    placement: 'bottom'
+  };
 
   // this dynamically changes the placement of the menu (top/bottom) to prevent it going offscreen and causing some
   // unsightly shifting
-  setPlacement: function (rowId) {
+  setPlacement = (rowId) => {
     var rowTop = document.getElementById(rowId).getBoundingClientRect().top;
     var toggleHeight = 150; // the height of the menu overlay, arrow, view row
     var placement = (rowTop + toggleHeight > window.innerHeight) ? 'top' : 'bottom';
     this.setState({ placement: placement });
-  },
+  };
 
-  createItems: function () {
+  createItems = () => {
 
     // sort the indexes alphabetically
     var sortedItems = this.props.items.sort();
@@ -192,9 +188,9 @@ var IndexSection = React.createClass({
         </li>
       );
     }, this);
-  },
+  };
 
-  indexAction: function (action, params, e) {
+  indexAction = (action, params, e) => {
     e.preventDefault();
 
     // ensures the menu gets closed. The hide() on the ref doesn't consistently close it
@@ -211,17 +207,17 @@ var IndexSection = React.createClass({
         params.onEdit(this.props.database.id, this.props.designDocName, params.indexName);
       break;
     }
-  },
+  };
 
-  toggle: function (e) {
+  toggle = (e) => {
     e.preventDefault();
     var newToggleState = !this.props.isExpanded;
     var state = newToggleState ? 'show' : 'hide';
     $(ReactDOM.findDOMNode(this)).find('.accordion-body').collapse(state);
     this.props.toggle(this.props.designDocName, this.props.title);
-  },
+  };
 
-  render: function () {
+  render() {
 
     // if this section has no content, omit it to prevent clutter. Otherwise it would show a toggle option that
     // would hide/show nothing
@@ -252,26 +248,23 @@ var IndexSection = React.createClass({
       </li>
     );
   }
-});
+}
 
-
-var DesignDoc = React.createClass({
-  propTypes: {
+class DesignDoc extends React.Component {
+  static propTypes = {
     database: PropTypes.object.isRequired,
     sidebarListTypes: PropTypes.array.isRequired,
     isExpanded: PropTypes.bool.isRequired,
     selectedNavInfo: PropTypes.object.isRequired,
     toggledSections: PropTypes.object.isRequired,
     designDocName:  PropTypes.string.isRequired
-  },
+  };
 
-  getInitialState: function () {
-    return {
-      updatedSidebarListTypes: this.props.sidebarListTypes
-    };
-  },
+  state = {
+    updatedSidebarListTypes: this.props.sidebarListTypes
+  };
 
-  componentWillMount: function () {
+  componentWillMount() {
     if (_.isEmpty(this.state.updatedSidebarListTypes) ||
       (_.has(this.state.updatedSidebarListTypes[0], 'selector') && this.state.updatedSidebarListTypes[0].selector !== 'views')) {
 
@@ -287,9 +280,9 @@ var DesignDoc = React.createClass({
       });
       this.setState({ updatedSidebarListTypes: newList });
     }
-  },
+  }
 
-  indexList: function () {
+  indexList = () => {
     return _.map(this.state.updatedSidebarListTypes, function (index, key) {
       var expanded = _.has(this.props.toggledSections, index.name) && this.props.toggledSections[index.name];
 
@@ -318,17 +311,17 @@ var DesignDoc = React.createClass({
           items={_.keys(this.props.designDoc[index.selector])} />
       );
     }.bind(this));
-  },
+  };
 
-  toggle: function (e) {
+  toggle = (e) => {
     e.preventDefault();
     var newToggleState = !this.props.isExpanded;
     var state = newToggleState ? 'show' : 'hide';
     $(ReactDOM.findDOMNode(this)).find('#' + Helpers.escapeJQuerySelector(this.props.designDocName)).collapse(state);
     this.props.toggle(this.props.designDocName);
-  },
+  };
 
-  getNewButtonLinks: function () {
+  getNewButtonLinks = () => {
     var newUrlPrefix = FauxtonAPI.urls('databaseBaseURL', 'app', encodeURIComponent(this.props.database.id));
     var designDocName = this.props.designDocName;
 
@@ -349,9 +342,9 @@ var DesignDoc = React.createClass({
       title: 'Add New',
       links: addNewLinks
     }];
-  },
+  };
 
-  render: function () {
+  render() {
     var buttonLinks = this.getNewButtonLinks();
     var toggleClassNames = 'design-doc-section accordion-header';
     var toggleBodyClassNames = 'design-doc-body accordion-body collapse';
@@ -388,16 +381,15 @@ var DesignDoc = React.createClass({
       </li>
     );
   }
-});
+}
 
-
-var DesignDocList = React.createClass({
-  componentWillMount: function () {
+class DesignDocList extends React.Component {
+  componentWillMount() {
     var list = FauxtonAPI.getExtensions('sidebar:list');
     this.sidebarListTypes = _.isUndefined(list) ? [] : list;
-  },
+  }
 
-  designDocList: function () {
+  designDocList = () => {
     return _.map(this.props.designDocs, function (designDoc, key) {
       var ddName = decodeURIComponent(designDoc.safeId);
 
@@ -427,19 +419,19 @@ var DesignDocList = React.createClass({
           database={this.props.database} />
       );
     }.bind(this));
-  },
+  };
 
-  render: function () {
+  render() {
     return (
       <ul className="nav nav-list">
         {this.designDocList()}
       </ul>
     );
   }
-});
+}
 
-var SidebarController = React.createClass({
-  getStoreState: function () {
+class SidebarController extends React.Component {
+  getStoreState = () => {
     return {
       database: store.getDatabase(),
       selectedNav: store.getSelected(),
@@ -467,23 +459,19 @@ var SidebarController = React.createClass({
       cloneIndexSourceDesignDocName: store.getCloneIndexModalSourceDesignDocName(),
       cloneIndexModalIndexLabel: store.getCloneIndexModalIndexLabel()
     };
-  },
+  };
 
-  getInitialState: function () {
-    return this.getStoreState();
-  },
-
-  componentDidMount: function () {
+  componentDidMount() {
     store.on('change', this.onChange, this);
     deleteDbModalStore.on('change', this.onChange, this);
-  },
+  }
 
-  componentWillUnmount: function () {
+  componentWillUnmount() {
     store.off('change', this.onChange);
     deleteDbModalStore.off('change', this.onChange, this);
-  },
+  }
 
-  onChange: function () {
+  onChange = () => {
 
     const newState = this.getStoreState();
     // Workaround to signal Redux store that the design doc list was updated
@@ -494,15 +482,15 @@ var SidebarController = React.createClass({
     }
 
     this.setState(newState);
-  },
+  };
 
-  showDeleteDatabaseModal: function (payload) {
+  showDeleteDatabaseModal = (payload) => {
     ComponentsActions.showDeleteDatabaseModal(payload);
-  },
+  };
 
   // handles deleting of any index regardless of type. The delete handler and all relevant info is set when the user
   // clicks the delete action for a particular index
-  deleteIndex: function () {
+  deleteIndex = () => {
 
     // if the user is currently on the index that's being deleted, pass that info along to the delete handler. That can
     // be used to redirect the user to somewhere appropriate
@@ -517,9 +505,9 @@ var SidebarController = React.createClass({
       designDocs: this.state.designDocs,
       database: this.state.database
     });
-  },
+  };
 
-  cloneIndex: function () {
+  cloneIndex = () => {
     this.state.cloneIndexModalOnSubmit({
       sourceIndexName: this.state.cloneIndexSourceIndexName,
       sourceDesignDocName: this.state.cloneIndexSourceDesignDocName,
@@ -530,9 +518,11 @@ var SidebarController = React.createClass({
       database: this.state.database,
       onComplete: Actions.hideCloneIndexModal
     });
-  },
+  };
 
-  render: function () {
+  state = this.getStoreState();
+
+  render() {
     if (this.state.isLoading) {
       return <LoadLines />;
     }
@@ -572,11 +562,10 @@ var SidebarController = React.createClass({
       </nav>
     );
   }
-});
+}
 
-
-var CloneIndexModal = React.createClass({
-  propTypes: {
+class CloneIndexModal extends React.Component {
+  static propTypes = {
     visible: PropTypes.bool.isRequired,
     title: PropTypes.string,
     close: PropTypes.func.isRequired,
@@ -586,16 +575,14 @@ var CloneIndexModal = React.createClass({
     newDesignDocName: PropTypes.string.isRequired,
     newIndexName: PropTypes.string.isRequired,
     indexLabel: PropTypes.string.isRequired
-  },
+  };
 
-  getDefaultProps: function () {
-    return {
-      title: 'Clone Index',
-      visible: false
-    };
-  },
+  static defaultProps = {
+    title: 'Clone Index',
+    visible: false
+  };
 
-  submit: function () {
+  submit = () => {
     if (!this.refs.designDocSelector.validate()) {
       return;
     }
@@ -608,20 +595,20 @@ var CloneIndexModal = React.createClass({
       return;
     }
     this.props.submit();
-  },
+  };
 
-  close: function (e) {
+  close = (e) => {
     if (e) {
       e.preventDefault();
     }
     this.props.close();
-  },
+  };
 
-  setNewIndexName: function (e) {
+  setNewIndexName = (e) => {
     Actions.setNewCloneIndexName(e.target.value);
-  },
+  };
 
-  render: function () {
+  render() {
     return (
       <Modal dialogClassName="clone-index-modal" show={this.props.visible} onHide={this.close}>
         <Modal.Header closeButton={true}>
@@ -661,7 +648,7 @@ var CloneIndexModal = React.createClass({
       </Modal>
     );
   }
-});
+}
 
 export default {
   SidebarController: SidebarController,

@@ -21,30 +21,26 @@ import PermissionsItem from './PermissionsItem';
 
 const getDocUrl = app.helpers.getDocUrl;
 
-const PermissionsSection = React.createClass({
-  getInitialState: function () {
-    return {
-      newRole: '',
-      newName: ''
-    };
-  },
+class PermissionsSection extends React.Component {
+  static defaultProps = {
+    names: [],
+    roles: []
+  };
 
-  getDefaultProps: function () {
-    return {
-      names: [],
-      roles: []
-    };
-  },
+  state = {
+    newRole: '',
+    newName: ''
+  };
 
-  getHelp: function () {
+  getHelp = () => {
     if (this.props.section === 'admins') {
       return 'Database members can access the database. If no members are defined, the database is public. ';
     }
 
     return 'Database members can access the database. If no members are defined, the database is public. ';
-  },
+  };
 
-  isEmptyValue: function (value, type) {
+  isEmptyValue = (value, type) => {
     if (!_.isEmpty(value)) {
       return false;
     }
@@ -54,9 +50,9 @@ const PermissionsSection = React.createClass({
     });
 
     return true;
-  },
+  };
 
-  addNames: function (e) {
+  addNames = (e) => {
     e.preventDefault();
     if (this.isEmptyValue(this.state.newName, 'names')) {
       return;
@@ -68,9 +64,9 @@ const PermissionsSection = React.createClass({
     });
 
     this.setState({newName: ''});
-  },
+  };
 
-  addRoles: function (e) {
+  addRoles = (e) => {
     e.preventDefault();
     if (this.isEmptyValue(this.state.newRole, 'roles')) {
       return;
@@ -82,9 +78,9 @@ const PermissionsSection = React.createClass({
     });
 
     this.setState({newRole: ''});
-  },
+  };
 
-  getItems: function (items, type) {
+  getItems = (items, type) => {
     return items.map((item, i) => {
       return <PermissionsItem
         key={i}
@@ -93,25 +89,25 @@ const PermissionsSection = React.createClass({
         type={type}
         removeItem={this.props.removeItem} />;
     });
-  },
+  };
 
-  getNames: function () {
+  getNames = () => {
     return this.getItems(this.props.names, 'names');
-  },
+  };
 
-  getRoles: function () {
+  getRoles = () => {
     return this.getItems(this.props.roles, 'roles');
-  },
+  };
 
-  nameChange: function (e) {
+  nameChange = (e) => {
     this.setState({newName: e.target.value});
-  },
+  };
 
-  roleChange: function (e) {
+  roleChange = (e) => {
     this.setState({newRole: e.target.value});
-  },
+  };
 
-  render: function () {
+  render() {
 
     const { section } = this.props;
 
@@ -157,7 +153,6 @@ const PermissionsSection = React.createClass({
     </div>
     );
   }
-
-});
+}
 
 export default PermissionsSection;

@@ -14,14 +14,14 @@ import PropTypes from 'prop-types';
 import React from "react";
 import ReactDOM from "react-dom";
 
-export const StyledSelect = React.createClass({
-  propTypes: {
+export class StyledSelect extends React.Component {
+  static propTypes = {
     selectValue: PropTypes.string.isRequired,
     selectId: PropTypes.string.isRequired,
     selectChange: PropTypes.func.isRequired
-  },
+  };
 
-  render: function () {
+  render() {
     return (
       <div className="styled-select">
         <label htmlFor={this.props.selectId}>
@@ -39,4 +39,4 @@ export const StyledSelect = React.createClass({
       </div>
     );
   }
-});
+}
