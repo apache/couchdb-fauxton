@@ -108,7 +108,7 @@ function saveView (viewInfo) {
     FauxtonAPI.navigate(fragment, { trigger: true });
   }, (xhr) => {
     FauxtonAPI.addNotification({
-      msg: `${xhr.responseJSON.reason}`,
+      msg: 'Save failed. ' + (xhr.responseJSON ? `Reason: ${xhr.responseJSON.reason}` : ''),
       type: 'error',
       clear: true
     });
