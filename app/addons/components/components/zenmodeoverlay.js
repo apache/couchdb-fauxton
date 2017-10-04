@@ -13,6 +13,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import app from "../../../app";
 import {CodeEditor} from './codeeditor';
+import {Tooltip, OverlayTrigger} from 'react-bootstrap';
 
 require('brace/theme/dawn');
 
@@ -57,11 +58,6 @@ export const ZenModeOverlay = React.createClass({
     this.setState(this.getStoreState());
   },
 
-  componentDidMount () {
-    $(ReactDOM.findDOMNode(this.refs.exit)).tooltip({ placement: 'left' });
-    $(ReactDOM.findDOMNode(this.refs.theme)).tooltip({ placement: 'left' });
-  },
-
   exitZenMode () {
     this.props.onExit(this.getValue());
   },
@@ -93,25 +89,36 @@ export const ZenModeOverlay = React.createClass({
       exec: this.exitZenMode
     }];
 
+    const tooltipExit = <Tooltip id="tooltip">
+      Exit zen mode (`esc`)
+      </Tooltip>;
+
+    const tooltipTheme = <Tooltip id="tooltip">
+      Switch zen theme
+      </Tooltip>;
+
     return (
       <div className={classes}>
         <div className="zen-mode-controls">
           <ul>
             <li>
-              <span ref="exit"
-                className="fonticon fonticon-resize-small js-exit-zen-mode"
-                data-toggle="tooltip"
-                data-container=".zen-mode-controls .tooltips"
-                title="Exit zen mode (`esc`)"
-                onClick={this.exitZenMode}></span>
+              <OverlayTrigger placement="left" overlay={tooltipExit}>
+                <span
+                  className="fonticon fonticon-resize-small js-exit-zen-mode"
+                  data-container=".zen-mode-controls .tooltips"
+                  onClick={this.exitZenMode}>
+                </span>
+              </OverlayTrigger>
             </li>
             <li>
-              <span ref="theme"
-                className="fonticon fonticon-picture js-toggle-theme"
-                data-toggle="tooltip"
-                data-container=".zen-mode-controls .tooltips"
-                title="Switch zen theme"
-                onClick={this.toggleTheme}></span>
+              <OverlayTrigger placement="left" overlay={tooltipTheme}>
+                <span ref="theme"
+                  className="fonticon fonticon-picture js-toggle-theme"
+                  data-container=".zen-mode-controls .tooltips"
+                  title="Switch zen theme"
+                  onClick={this.toggleTheme}>
+                 </span>
+                </OverlayTrigger>
             </li>
           </ul>
           <div className="tooltips"></div>
