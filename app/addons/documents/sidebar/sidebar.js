@@ -11,7 +11,6 @@
 // the License.
 
 import app from "../../../app";
-import Helpers from "../../../helpers";
 import FauxtonAPI from "../../../core/api";
 import React from "react";
 import ReactDOM from "react-dom";
@@ -24,17 +23,14 @@ import IndexEditorActions from "../index-editor/actions";
 import IndexEditorComponents from "../index-editor/components";
 import GeneralComponents from "../../fauxton/components";
 import DocumentHelper from "../../documents/helpers";
-import { OverlayTrigger, Popover, Modal } from "react-bootstrap";
+import { Collapse, OverlayTrigger, Popover, Modal } from "react-bootstrap";
 import "../../../../assets/js/plugins/prettify";
 
-var store = Stores.sidebarStore;
-var LoadLines = Components.LoadLines;
-var DesignDocSelector = IndexEditorComponents.DesignDocSelector;
-var ConfirmationModal = GeneralComponents.ConfirmationModal;
-
-var DeleteDatabaseModal = Components.DeleteDatabaseModal;
-var deleteDbModalStore = ComponentsStore.deleteDbModalStore;
-
+const store = Stores.sidebarStore;
+const { DeleteDatabaseModal, LoadLines, MenuDropDown } = Components;
+const { DesignDocSelector } = IndexEditorComponents;
+const { ConfirmationModal } = GeneralComponents;
+const { deleteDbModalStore } = ComponentsStore;
 
 var MainSidebar = React.createClass({
   propTypes: {
@@ -61,14 +57,14 @@ var MainSidebar = React.createClass({
   },
 
   render: function () {
-    var docLinks = this.buildDocLinks();
-    var dbEncoded = FauxtonAPI.url.encode(this.props.databaseName);
-    var changesUrl     = '#' + FauxtonAPI.urls('changes', 'app', dbEncoded, '');
-    var permissionsUrl = '#' + FauxtonAPI.urls('permissions', 'app', dbEncoded);
-    var databaseUrl    = FauxtonAPI.urls('allDocs', 'app', dbEncoded, '');
-    var mangoQueryUrl  = FauxtonAPI.urls('mango', 'query-app', dbEncoded);
-    var runQueryWithMangoText = app.i18n.en_US['run-query-with-mango'];
-    var buttonLinks = this.getNewButtonLinks();
+    const docLinks = this.buildDocLinks();
+    const dbEncoded = FauxtonAPI.url.encode(this.props.databaseName);
+    const changesUrl = '#' + FauxtonAPI.urls('changes', 'app', dbEncoded, '');
+    const permissionsUrl = '#' + FauxtonAPI.urls('permissions', 'app', dbEncoded);
+    const databaseUrl = FauxtonAPI.urls('allDocs', 'app', dbEncoded, '');
+    const mangoQueryUrl = FauxtonAPI.urls('mango', 'query-app', dbEncoded);
+    const runQueryWithMangoText = app.i18n.en_US['run-query-with-mango'];
+    const buttonLinks = this.getNewButtonLinks();
 
     return (
       <ul className="nav nav-list">
@@ -79,7 +75,7 @@ var MainSidebar = React.createClass({
             All Documents
           </a>
           <div id="new-all-docs-button" className="add-dropdown">
-            <Components.MenuDropDown links={buttonLinks} />
+            <MenuDropDown links={buttonLinks} />
           </div>
         </li>
         <li className={this.getNavItemClass('mango-query')}>
@@ -105,7 +101,7 @@ var MainSidebar = React.createClass({
             Design Documents
           </a>
           <div id="new-design-docs-button" className="add-dropdown">
-            <Components.MenuDropDown links={buttonLinks} />
+            <MenuDropDown links={buttonLinks} />
           </div>
         </li>
       </ul>
@@ -137,20 +133,20 @@ var IndexSection = React.createClass({
   // this dynamically changes the placement of the menu (top/bottom) to prevent it going offscreen and causing some
   // unsightly shifting
   setPlacement: function (rowId) {
-    var rowTop = document.getElementById(rowId).getBoundingClientRect().top;
-    var toggleHeight = 150; // the height of the menu overlay, arrow, view row
-    var placement = (rowTop + toggleHeight > window.innerHeight) ? 'top' : 'bottom';
+    const rowTop = document.getElementById(rowId).getBoundingClientRect().top;
+    const toggleHeight = 150; // the height of the menu overlay, arrow, view row
+    const placement = (rowTop + toggleHeight > window.innerHeight) ? 'top' : 'bottom';
     this.setState({ placement: placement });
   },
 
   createItems: function () {
 
     // sort the indexes alphabetically
-    var sortedItems = this.props.items.sort();
+    const sortedItems = this.props.items.sort();
 
     return _.map(sortedItems, function (indexName, index) {
-      var href = FauxtonAPI.urls(this.props.urlNamespace, 'app', encodeURIComponent(this.props.database.id), encodeURIComponent(this.props.designDocName));
-      var className = (this.props.selectedIndex === indexName) ? 'active' : '';
+      const href = FauxtonAPI.urls(this.props.urlNamespace, 'app', encodeURIComponent(this.props.database.id), encodeURIComponent(this.props.designDocName));
+      const className = (this.props.selectedIndex === indexName) ? 'active' : '';
 
       return (
         <li className={className} key={index}>
@@ -200,21 +196,18 @@ var IndexSection = React.createClass({
     switch (action) {
       case 'delete':
         Actions.showDeleteIndexModal(params.indexName, this.props.designDocName, this.props.indexLabel, params.onDelete);
-      break;
+        break;
       case 'clone':
         Actions.showCloneIndexModal(params.indexName, this.props.designDocName, this.props.indexLabel, params.onClone);
-      break;
+        break;
       case 'edit':
         params.onEdit(this.props.database.id, this.props.designDocName, params.indexName);
-      break;
+        break;
     }
   },
 
   toggle: function (e) {
     e.preventDefault();
-    var newToggleState = !this.props.isExpanded;
-    var state = newToggleState ? 'show' : 'hide';
-    $(ReactDOM.findDOMNode(this)).find('.accordion-body').collapse(state);
     this.props.toggle(this.props.designDocName, this.props.title);
   },
 
@@ -226,16 +219,16 @@ var IndexSection = React.createClass({
       return null;
     }
 
-    var toggleClassNames = 'accordion-header index-group-header';
-    var toggleBodyClassNames = 'index-list accordion-body collapse';
+    let toggleClassNames = 'accordion-header index-group-header';
+    let toggleBodyClassNames = 'index-list accordion-body collapse';
     if (this.props.isExpanded) {
       toggleClassNames += ' down';
       toggleBodyClassNames += ' in';
     }
 
-    var title = this.props.title;
-    var designDocName = this.props.designDocName;
-    var linkId = "nav-design-function-" + designDocName + this.props.selector;
+    const title = this.props.title;
+    const designDocName = this.props.designDocName;
+    const linkId = "nav-design-function-" + designDocName + this.props.selector;
 
     return (
       <li id={linkId}>
@@ -243,9 +236,11 @@ var IndexSection = React.createClass({
           <div className="fonticon-play"></div>
           {title}
         </a>
-        <ul className={toggleBodyClassNames}>
-          {this.createItems()}
-        </ul>
+        <Collapse in={this.props.isExpanded}>
+          <ul className={toggleBodyClassNames}>
+            {this.createItems()}
+          </ul>
+        </Collapse>
       </li>
     );
   }
@@ -259,7 +254,7 @@ var DesignDoc = React.createClass({
     isExpanded: React.PropTypes.bool.isRequired,
     selectedNavInfo: React.PropTypes.object.isRequired,
     toggledSections: React.PropTypes.object.isRequired,
-    designDocName:  React.PropTypes.string.isRequired
+    designDocName: React.PropTypes.string.isRequired
   },
 
   getInitialState: function () {
@@ -272,7 +267,7 @@ var DesignDoc = React.createClass({
     if (_.isEmpty(this.state.updatedSidebarListTypes) ||
       (_.has(this.state.updatedSidebarListTypes[0], 'selector') && this.state.updatedSidebarListTypes[0].selector !== 'views')) {
 
-      var newList = this.state.updatedSidebarListTypes;
+      const newList = this.state.updatedSidebarListTypes;
       newList.unshift({
         selector: 'views',
         name: 'Views',
@@ -288,10 +283,10 @@ var DesignDoc = React.createClass({
 
   indexList: function () {
     return _.map(this.state.updatedSidebarListTypes, function (index, key) {
-      var expanded = _.has(this.props.toggledSections, index.name) && this.props.toggledSections[index.name];
+      const expanded = _.has(this.props.toggledSections, index.name) && this.props.toggledSections[index.name];
 
       // if an index in this list is selected, pass that down
-      var selectedIndex = '';
+      let selectedIndex = '';
       if (this.props.selectedNavInfo.designDocSection === index.name) {
         selectedIndex = this.props.selectedNavInfo.indexName;
       }
@@ -319,17 +314,14 @@ var DesignDoc = React.createClass({
 
   toggle: function (e) {
     e.preventDefault();
-    var newToggleState = !this.props.isExpanded;
-    var state = newToggleState ? 'show' : 'hide';
-    $(ReactDOM.findDOMNode(this)).find('#' + Helpers.escapeJQuerySelector(this.props.designDocName)).collapse(state);
     this.props.toggle(this.props.designDocName);
   },
 
   getNewButtonLinks: function () {
-    var newUrlPrefix = FauxtonAPI.urls('databaseBaseURL', 'app', encodeURIComponent(this.props.database.id));
-    var designDocName = this.props.designDocName;
+    const newUrlPrefix = FauxtonAPI.urls('databaseBaseURL', 'app', encodeURIComponent(this.props.database.id));
+    const designDocName = this.props.designDocName;
 
-    var addNewLinks = _.reduce(FauxtonAPI.getExtensions('sidebar:links'), function (menuLinks, link) {
+    const addNewLinks = _.reduce(FauxtonAPI.getExtensions('sidebar:links'), function (menuLinks, link) {
       menuLinks.push({
         title: link.title,
         url: '#' + newUrlPrefix + '/' + link.url + '/' + encodeURIComponent(designDocName),
@@ -349,17 +341,17 @@ var DesignDoc = React.createClass({
   },
 
   render: function () {
-    var buttonLinks = this.getNewButtonLinks();
-    var toggleClassNames = 'design-doc-section accordion-header';
-    var toggleBodyClassNames = 'design-doc-body accordion-body collapse';
+    const buttonLinks = this.getNewButtonLinks();
+    let toggleClassNames = 'design-doc-section accordion-header';
+    let toggleBodyClassNames = 'design-doc-body accordion-body collapse';
 
     if (this.props.isExpanded) {
       toggleClassNames += ' down';
       toggleBodyClassNames += ' in';
     }
-    var designDocName = this.props.designDocName;
-    var designDocMetaUrl = FauxtonAPI.urls('designDocs', 'app', this.props.database.id, designDocName);
-    var metadataRowClass = (this.props.selectedNavInfo.designDocSection === 'metadata') ? 'active' : '';
+    const designDocName = this.props.designDocName;
+    const designDocMetaUrl = FauxtonAPI.urls('designDocs', 'app', this.props.database.id, designDocName);
+    const metadataRowClass = (this.props.selectedNavInfo.designDocSection === 'metadata') ? 'active' : '';
 
     return (
       <li className="nav-header">
@@ -371,17 +363,19 @@ var DesignDoc = React.createClass({
             </p>
           </div>
           <div className='new-button add-dropdown'>
-            <Components.MenuDropDown links={buttonLinks} />
+            <MenuDropDown links={buttonLinks} />
           </div>
         </div>
-        <ul className={toggleBodyClassNames} id={this.props.designDocName}>
-          <li className={metadataRowClass}>
-            <a href={"#/" + designDocMetaUrl} className="toggle-view accordion-header">
-              Metadata
-            </a>
-          </li>
-          {this.indexList()}
-        </ul>
+        <Collapse in={this.props.isExpanded}>
+          <ul className={toggleBodyClassNames} id={this.props.designDocName}>
+            <li className={metadataRowClass}>
+              <a href={"#/" + designDocMetaUrl} className="toggle-view accordion-header">
+                Metadata
+              </a>
+            </li>
+            {this.indexList()}
+          </ul>
+        </Collapse>
       </li>
     );
   }
@@ -390,23 +384,23 @@ var DesignDoc = React.createClass({
 
 var DesignDocList = React.createClass({
   componentWillMount: function () {
-    var list = FauxtonAPI.getExtensions('sidebar:list');
+    const list = FauxtonAPI.getExtensions('sidebar:list');
     this.sidebarListTypes = _.isUndefined(list) ? [] : list;
   },
 
   designDocList: function () {
     return _.map(this.props.designDocs, function (designDoc, key) {
-      var ddName = decodeURIComponent(designDoc.safeId);
+      const ddName = decodeURIComponent(designDoc.safeId);
 
       // only pass down the selected nav info and toggle info if they're relevant for this particular design doc
-      var expanded = false,
+      let expanded = false,
         toggledSections = {};
       if (_.has(this.props.toggledSections, ddName)) {
         expanded = this.props.toggledSections[ddName].visible;
         toggledSections = this.props.toggledSections[ddName].indexGroups;
       }
 
-      var selectedNavInfo = {};
+      let selectedNavInfo = {};
       if (this.props.selectedNav.navItem === 'designDoc' && this.props.selectedNav.designDocName === ddName) {
         selectedNavInfo = this.props.selectedNav;
       }
@@ -494,9 +488,9 @@ var SidebarController = React.createClass({
 
     // if the user is currently on the index that's being deleted, pass that info along to the delete handler. That can
     // be used to redirect the user to somewhere appropriate
-    var isOnIndex = this.state.selectedNav.navItem === 'designDoc' &&
-                    ('_design/' + this.state.selectedNav.designDocName) === this.state.deleteIndexModalDesignDoc.id &&
-                    this.state.selectedNav.indexName === this.state.deleteIndexModalIndexName;
+    const isOnIndex = this.state.selectedNav.navItem === 'designDoc' &&
+      ('_design/' + this.state.selectedNav.designDocName) === this.state.deleteIndexModalDesignDoc.id &&
+      this.state.selectedNav.indexName === this.state.deleteIndexModalIndexName;
 
     this.state.deleteIndexModalOnSubmit({
       isOnIndex: isOnIndex,
@@ -636,7 +630,7 @@ var CloneIndexModal = React.createClass({
             <div className="clone-index-name-row">
               <label className="new-index-title-label" htmlFor="new-index-name">{this.props.indexLabel} Name</label>
               <input type="text" id="new-index-name" value={this.props.newIndexName} onChange={this.setNewIndexName}
-                 placeholder="New view name" />
+                placeholder="New view name" />
             </div>
           </form>
 
