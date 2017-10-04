@@ -17,28 +17,15 @@ import { ApiBarWrapper } from '../../../components/layouts';
 import { getQueryOptionsParams } from '../reducers';
 import FauxtonAPI from '../../../../core/api';
 
-const urlRef = (databaseName, params) => {
-  let query = queryString.stringify(params);
-
-  if (query) {
-    query = `?${query}`;
-  }
-
-  return FauxtonAPI.urls('allDocs', "apiurl", encodeURIComponent(databaseName), query);
-};
-
-const mapStateToProps = ({indexResults}, {docUrl, endpoint, databaseName, endpointAddQueryOptions}) => {
+const mapStateToProps = ({indexResults}, {docUrl, endpoint, endpointAddQueryOptions}) => {
   if (!docUrl) {
     docUrl = FauxtonAPI.constants.DOC_URLS.GENERAL;
   }
-  if (!endpoint) {
-    endpoint = urlRef(databaseName, getQueryOptionsParams(indexResults));
-  } else {
-    if (endpointAddQueryOptions) {
-      const query = queryString.stringify(getQueryOptionsParams(indexResults));
-      if (query) {
-        endpoint = endpoint.indexOf('?') == -1 ? `${endpoint}?${query}` : `${endpoint}&${query}`;
-      }
+
+  if (endpoint && endpointAddQueryOptions) {
+    const query = queryString.stringify(getQueryOptionsParams(indexResults));
+    if (query) {
+      endpoint = endpoint.indexOf('?') == -1 ? `${endpoint}?${query}` : `${endpoint}&${query}`;
     }
   }
   return { docUrl, endpoint };
