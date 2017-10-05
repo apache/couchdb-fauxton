@@ -11,60 +11,25 @@
 // the License.
 
 import React from 'react';
-import Actions from './header.actions';
 import Constants from '../constants';
-import IndexResultStores from '../index-results/stores';
-import QueryOptionsStore from '../queryoptions/stores';
 import { Button, ButtonGroup } from 'react-bootstrap';
-
-const { indexResultsStore } = IndexResultStores;
-const { queryOptionsStore } = QueryOptionsStore;
 
 export default class BulkDocumentHeaderController extends React.Component {
   constructor (props) {
     super(props);
-    this.state = this.getStoreState();
-  }
-
-  getStoreState () {
-    return {
-      selectedLayout: indexResultsStore.getSelectedLayout(),
-      bulkDocCollection: indexResultsStore.getBulkDocCollection(),
-      //TODO: Replace below with a test for docType
-      isMango: indexResultsStore.getIsMangoResults()
-    };
-  }
-
-  componentDidMount () {
-    indexResultsStore.on('change', this.onChange, this);
-    queryOptionsStore.on('change', this.onChange, this);
-
-  }
-
-  componentWillUnmount () {
-    indexResultsStore.off('change', this.onChange);
-    queryOptionsStore.off('change', this.onChange);
-  }
-
-  onChange () {
-    this.setState(this.getStoreState());
   }
 
   render () {
     const {
-      changeLayout,
       selectedLayout,
-      docType
+      docType,
+      queryOptionsParams
     } = this.props;
 
-    // If the changeLayout function is not undefined, default to using prop values
-    // because we're using our new redux store.
-    // TODO: migrate completely to redux and eliminate this check.
-    const layout = changeLayout ? selectedLayout : this.state.selectedLayout;
     let metadata, json, table;
     if ((docType === Constants.INDEX_RESULTS_DOC_TYPE.VIEW)) {
       metadata = <Button
-          className={layout === Constants.LAYOUT_ORIENTATION.METADATA ? 'active' : ''}
+          className={selectedLayout === Constants.LAYOUT_ORIENTATION.METADATA ? 'active' : ''}
           onClick={this.toggleLayout.bind(this, Constants.LAYOUT_ORIENTATION.METADATA)}
         >
           Metadata
@@ -76,16 +41,16 @@ export default class BulkDocumentHeaderController extends React.Component {
     // reduce doesn't allow for include_docs=true, so we'll prevent JSON and table
     // views since they force include_docs=true when reduce is checked in the
     // query options panel.
-    if (!queryOptionsStore.reduce()) {
+    if (!queryOptionsParams.reduce) {
       table = <Button
-          className={layout === Constants.LAYOUT_ORIENTATION.TABLE ? 'active' : ''}
+          className={selectedLayout === Constants.LAYOUT_ORIENTATION.TABLE ? 'active' : ''}
           onClick={this.toggleLayout.bind(this, Constants.LAYOUT_ORIENTATION.TABLE)}
         >
           <i className="fonticon-table" /> Table
         </Button>;
 
       json = <Button
-          className={layout === Constants.LAYOUT_ORIENTATION.JSON ? 'active' : ''}
+          className={selectedLayout === Constants.LAYOUT_ORIENTATION.JSON ? 'active' : ''}
           onClick={this.toggleLayout.bind(this, Constants.LAYOUT_ORIENTATION.JSON)}
         >
           <i className="fonticon-json" /> JSON
@@ -104,7 +69,6 @@ export default class BulkDocumentHeaderController extends React.Component {
   }
 
   toggleLayout (newLayout) {
-    // this will be present when using redux stores
     const {
       changeLayout,
       selectedLayout,
@@ -114,7 +78,7 @@ export default class BulkDocumentHeaderController extends React.Component {
       queryOptionsToggleIncludeDocs
     } = this.props;
 
-    if (changeLayout && newLayout !== selectedLayout) {
+    if (newLayout !== selectedLayout) {
       // change our layout to JSON, Table, or Metadata
       changeLayout(newLayout);
 
@@ -129,12 +93,6 @@ export default class BulkDocumentHeaderController extends React.Component {
       queryOptionsToggleIncludeDocs(!queryOptionsParams.include_docs);
       fetchDocs(fetchParams, queryOptionsParams);
       return;
-    }
-
-    // fall back to old backbone style logic
-    Actions.toggleLayout(newLayout);
-    if (!this.state.isMango) {
-      Actions.toggleIncludeDocs(newLayout === Constants.LAYOUT_ORIENTATION.METADATA, this.state.bulkDocCollection);
     }
   }
 };

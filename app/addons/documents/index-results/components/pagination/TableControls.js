@@ -10,6 +10,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+import PropTypes from 'prop-types';
+
 import React from 'react';
 
 export default class TableControls extends React.Component {
@@ -55,10 +57,10 @@ export default class TableControls extends React.Component {
       </div>
     );
   }
-};
+}
 
 TableControls.propTypes = {
-  prioritizedEnabled: React.PropTypes.bool.isRequired,
-  displayedFields: React.PropTypes.object.isRequired,
-  toggleShowAllColumns: React.PropTypes.func.isRequired
+  prioritizedEnabled: PropTypes.bool.isRequired,
+  displayedFields: PropTypes.object.isRequired,
+  toggleShowAllColumns: PropTypes.func.isRequired
 };

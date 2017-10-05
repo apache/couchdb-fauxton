@@ -10,6 +10,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+import PropTypes from 'prop-types';
+
 import React from "react";
 import ReactDOM from "react-dom";
 import {
@@ -102,7 +104,7 @@ export class CreateAdminForm extends React.Component {
 }
 
 CreateAdminForm.propTypes = {
-  loginAfter: React.PropTypes.bool.isRequired
+  loginAfter: PropTypes.bool.isRequired
 };
 
 CreateAdminForm.defaultProps = {

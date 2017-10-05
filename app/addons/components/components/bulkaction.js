@@ -10,33 +10,32 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+import PropTypes from 'prop-types';
+
 import React from "react";
 import ReactDOM from "react-dom";
 import {OverlayTrigger, Popover} from "react-bootstrap";
 
-export const BulkActionComponent = React.createClass({
+export class BulkActionComponent extends React.Component {
+  static propTypes = {
+    hasSelectedItem: PropTypes.bool.isRequired,
+    removeItem: PropTypes.func.isRequired,
+    selectAll: PropTypes.func,
+    toggleSelect: PropTypes.func.isRequired,
+    isChecked: PropTypes.bool.isRequired,
+    disabled: PropTypes.bool
+  };
 
-  propTypes: {
-    hasSelectedItem: React.PropTypes.bool.isRequired,
-    removeItem: React.PropTypes.func.isRequired,
-    selectAll: React.PropTypes.func,
-    toggleSelect: React.PropTypes.func.isRequired,
-    isChecked: React.PropTypes.bool.isRequired,
-    disabled: React.PropTypes.bool
-  },
+  static defaultProps = {
+    disabled: false,
+    title: 'Select rows that can be...',
+    bulkIcon: 'fonticon-trash',
+    buttonTitle: 'Delete all selected',
+    dropdownContentText: 'Deleted',
+    enableOverlay: false
+  };
 
-  getDefaultProps () {
-    return {
-      disabled: false,
-      title: 'Select rows that can be...',
-      bulkIcon: 'fonticon-trash',
-      buttonTitle: 'Delete all selected',
-      dropdownContentText: 'Deleted',
-      enableOverlay: false
-    };
-  },
-
-  render () {
+  render() {
     return (
       <div className="bulk-action-component">
         <div className="bulk-action-component-selector-group">
@@ -45,9 +44,9 @@ export const BulkActionComponent = React.createClass({
         </div>
       </div>
     );
-  },
+  }
 
-  getMultiSelectOptions () {
+  getMultiSelectOptions = () => {
     if (!this.props.hasSelectedItem) {
       return null;
     }
@@ -58,9 +57,9 @@ export const BulkActionComponent = React.createClass({
         className={'fonticon ' + this.props.bulkIcon}
         title={this.props.buttonTitle} />
     );
-  },
+  };
 
-  getPopupContent () {
+  getPopupContent = () => {
     return (
       <ul className="bulk-action-component-popover-actions">
         <li onClick={this.selectAll} >
@@ -68,14 +67,14 @@ export const BulkActionComponent = React.createClass({
         </li>
       </ul>
     );
-  },
+  };
 
-  selectAll () {
+  selectAll = () => {
     this.refs.bulkActionPopover.hide();
     this.props.selectAll();
-  },
+  };
 
-  getOverlay () {
+  getOverlay = () => {
     return (
       <OverlayTrigger
         ref="bulkActionPopover"
@@ -92,9 +91,9 @@ export const BulkActionComponent = React.createClass({
         </div>
       </OverlayTrigger>
     );
-  },
+  };
 
-  getMasterSelector () {
+  getMasterSelector = () => {
     return (
       <div className="bulk-action-component-panel">
         <input type="checkbox"
@@ -105,5 +104,5 @@ export const BulkActionComponent = React.createClass({
         {this.props.enableOverlay ? this.getOverlay() : null}
       </div>
     );
-  },
-});
+  };
+}

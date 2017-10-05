@@ -10,6 +10,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+import PropTypes from 'prop-types';
+
 import React from 'react';
 
 const Footer = ({version}) => {
@@ -27,7 +29,7 @@ const Footer = ({version}) => {
 };
 
 Footer.propTypes = {
-  version: React.PropTypes.string
+  version: PropTypes.string
 };
 
 export default Footer;

@@ -21,41 +21,39 @@ var Copy = ReactComponents.Copy;
 import uuid from 'uuid';
 
 
-var DesignDocInfo = React.createClass({
-  getStoreState: function () {
+class DesignDocInfo extends React.Component {
+  getStoreState = () => {
     return {
       viewIndex: designDocInfoStore.getViewIndex(),
       isLoading: designDocInfoStore.isLoading(),
       ddocName: designDocInfoStore.getDdocName()
     };
-  },
+  };
 
-  getInitialState: function () {
-    return this.getStoreState();
-  },
-
-  componentDidMount: function () {
+  componentDidMount() {
     designDocInfoStore.on('change', this.onChange, this);
-  },
+  }
 
-  componentWillUnmount: function () {
+  componentWillUnmount() {
     designDocInfoStore.off('change', this.onChange);
     Actions.stopRefresh();
-  },
+  }
 
-  onChange: function () {
+  onChange = () => {
     this.setState(this.getStoreState());
-  },
+  };
 
-  showCopiedMessage: function () {
+  showCopiedMessage = () => {
     FauxtonAPI.addNotification({
       type: 'success',
       msg: 'The MD5 sha has been copied to your clipboard.',
       clear: true
     });
-  },
+  };
 
-  render: function () {
+  state = this.getStoreState();
+
+  render() {
     var viewIndex = this.state.viewIndex;
 
     if (this.state.isLoading) {
@@ -131,7 +129,7 @@ var DesignDocInfo = React.createClass({
       </div>
     );
   }
-});
+}
 
 
 export default {

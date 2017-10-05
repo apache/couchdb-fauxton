@@ -10,6 +10,21 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-export default {
-  TOGGLE_LAYOUT: 'TOGGLE_LAYOUT',
+import ActionTypes from './actiontypes';
+
+const initialState = {
+  designDocs: []
+};
+
+export default function resultsState(state = initialState, action) {
+  switch (action.type) {
+
+    case ActionTypes.SIDEBAR_UPDATED_DESIGN_DOCS:
+      return Object.assign({}, state, {
+        designDocs: action.options.designDocs
+      });
+
+    default:
+      return state;
+  }
 };

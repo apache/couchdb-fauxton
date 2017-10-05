@@ -14,23 +14,20 @@ import ReactDOM from "react-dom";
 import { Dropdown } from "react-bootstrap";
 import RootCloseWrapper from 'react-overlays/lib/RootCloseWrapper';
 
-export const MenuDropDown = React.createClass({
+export class MenuDropDown extends React.Component {
+  static defaultProps = {
+    icon: 'fonticon-plus-circled'
+  };
 
-  getDefaultProps() {
-    return {
-      icon: 'fonticon-plus-circled'
-    };
-  },
-
-  createSectionLinks(links) {
+  createSectionLinks = (links) => {
     if (!links) { return null; }
 
     return links.map((link, key) => {
       return this.createEntry(link, key);
     });
-  },
+  };
 
-  createEntry(link, key) {
+  createEntry = (link, key) => {
     return (
       <li key={key}>
         <a className={link.icon ? 'icon ' + link.icon : ''}
@@ -42,9 +39,9 @@ export const MenuDropDown = React.createClass({
         </a>
       </li>
     );
-  },
+  };
 
-  createSectionTitle(title) {
+  createSectionTitle = (title) => {
     if (!title) {
       return null;
     }
@@ -52,9 +49,9 @@ export const MenuDropDown = React.createClass({
     return (
       <li className="header-label">{title}</li>
     );
-  },
+  };
 
-  createSection() {
+  createSection = () => {
     return this.props.links.map((linkSection, key) => {
       if (linkSection.title && linkSection.links) {
         return ([
@@ -64,7 +61,7 @@ export const MenuDropDown = React.createClass({
       }
       return this.createEntry(linkSection, 'el' + key);
     });
-  },
+  };
 
   render() {
     const menuItems = this.createSection();
@@ -79,7 +76,7 @@ export const MenuDropDown = React.createClass({
       </Dropdown>
     );
   }
-});
+}
 
 class CustomMenuToggle extends React.Component {
   constructor(props, context) {

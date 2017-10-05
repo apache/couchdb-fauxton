@@ -10,20 +10,15 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-//import app from '../../app';
 import React from 'react';
 import FauxtonAPI from '../../core/api';
 import BaseRoute from './shared-routes';
-//import Documents from './resources';
 import ChangesActions from './changes/actions';
 import Databases from '../databases/base';
 import Resources from './resources';
-//import IndexResultStores from './index-results/stores';
-//import IndexResultsActions from './index-results/actions';
 import SidebarActions from './sidebar/actions';
 import DesignDocInfoActions from './designdocinfo/actions';
 import ComponentsActions from '../components/actions';
-import QueryOptionsActions from './queryoptions/actions';
 import {DocsTabsSidebarLayout, ViewsTabsSidebarLayout, ChangesSidebarLayout} from './layouts';
 
 var DocumentsRouteObject = BaseRoute.extend({
@@ -64,8 +59,6 @@ var DocumentsRouteObject = BaseRoute.extend({
       designDocSection: 'metadata'
     });
 
-    QueryOptionsActions.hideQueryOptions();
-
     const dropDownLinks = this.getCrumbs(this.database);
     return <ViewsTabsSidebarLayout
       showEditView={false}
@@ -84,7 +77,6 @@ var DocumentsRouteObject = BaseRoute.extend({
   */
   allDocs: function (databaseName, options) {
     const params = this.createParams(options),
-          urlParams = params.urlParams,
           docParams = params.docParams;
 
     const url = FauxtonAPI.urls('allDocsSanitized', 'server', databaseName);
@@ -98,11 +90,14 @@ var DocumentsRouteObject = BaseRoute.extend({
       tab = 'design-docs';
     }
 
-    SidebarActions.selectNavItem(tab);
+    const selectedNavItem = {
+      navItem: tab
+    };
+    SidebarActions.selectNavItem(selectedNavItem.navItem);
     ComponentsActions.showDeleteDatabaseModal({showDeleteModal: false, dbId: ''});
 
-    const endpoint = this.database.allDocs.urlRef("apiurl", urlParams);
-    const docURL = this.database.allDocs.documentation();
+    const endpoint = this.database.allDocs.urlRef("apiurl", {});
+    const docURL = FauxtonAPI.constants.DOC_URLS.GENERAL;
 
     const dropDownLinks = this.getCrumbs(this.database);
     return <DocsTabsSidebarLayout
@@ -114,7 +109,7 @@ var DocumentsRouteObject = BaseRoute.extend({
       designDocs={this.designDocs}
       fetchUrl={url}
       ddocsOnly={onlyShowDdocs}
-      isRedux={true}
+      selectedNavItem={selectedNavItem}
     />;
   },
 
@@ -123,8 +118,6 @@ var DocumentsRouteObject = BaseRoute.extend({
       databaseName: this.database.id
     });
     SidebarActions.selectNavItem('changes');
-
-    QueryOptionsActions.hideQueryOptions();
 
     return <ChangesSidebarLayout
       endpoint={FauxtonAPI.urls('changes', 'apiurl', this.database.id, '')}

@@ -10,6 +10,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+import PropTypes from 'prop-types';
+
 import React, { Component } from "react";
 
 export default class ExplainPage extends Component {
@@ -31,5 +33,5 @@ export default class ExplainPage extends Component {
 }
 
 ExplainPage.propTypes = {
-  explainPlan: React.PropTypes.object.isRequired
+  explainPlan: PropTypes.object.isRequired
 };

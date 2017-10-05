@@ -210,8 +210,8 @@ describe("AttachmentsPanelButton", function () {
 
 describe("Custom Extension Buttons", function () {
   it('supports buttons', function () {
-    var CustomButton = React.createClass({
-      render: function () {
+    class CustomButton extends React.Component {
+      render() {
         return (
           <div>
             <button>Oh no she di'n't!</button>
@@ -219,7 +219,8 @@ describe("Custom Extension Buttons", function () {
           </div>
         );
       }
-    });
+    }
+
     FauxtonAPI.registerExtension('DocEditor:icons', CustomButton);
 
     var container = document.createElement('div');

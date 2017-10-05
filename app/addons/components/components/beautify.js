@@ -14,31 +14,30 @@ import ReactDOM from "react-dom";
 import beautifyHelper from "../../../../assets/js/plugins/beautify";
 import {Tooltip, OverlayTrigger} from 'react-bootstrap';
 
-export const Beautify = React.createClass({
-  noOfLines () {
+export class Beautify extends React.Component {
+  noOfLines = () => {
     return this.props.code.split(/\r\n|\r|\n/).length;
-  },
+  };
 
-  canBeautify () {
+  canBeautify = () => {
     return this.noOfLines() === 1;
-  },
+  };
 
-  beautify (event) {
+  beautify = (event) => {
     event.preventDefault();
     var beautifiedCode = beautifyHelper(this.props.code);
     this.props.beautifiedCode(beautifiedCode);
-  },
+  };
 
-  getTooltip () {
+  getTooltip = () => {
     return (
       <Tooltip id="tooltip">
       Switch to editable code format.
       </Tooltip>
     );
+  };
 
-  },
-
-  render () {
+  render() {
     if (!this.canBeautify()) {
       return null;
     }
@@ -57,4 +56,4 @@ export const Beautify = React.createClass({
       </OverlayTrigger>
     );
   }
-});
+}

@@ -13,7 +13,7 @@
 import { hasBulkDeletableDoc, getDocUrl, getDocId, getDocRev } from "./shared-helpers";
 import MangoHelper from "../../mango/mango.helper";
 
-export const getJsonViewData = (docs, { databaseName, docType }) => {
+export const getJsonViewData = (docs, { databaseName, docType, deleteEnabled = true }) => {
 
   // expand on this when refactoring views to use redux
   const stagedResults = docs.map((doc) => {
@@ -24,7 +24,7 @@ export const getJsonViewData = (docs, { databaseName, docType }) => {
         id: doc.type === 'special' ? '_all_docs' : doc.ddoc,
         keylabel: '',
         url: doc.id ? getDocUrl('app', doc.id, databaseName) : null,
-        isDeletable: doc.type !== 'special',
+        isDeletable: deleteEnabled ? doc.type !== 'special' : false,
         isEditable: false
       };
     }
@@ -36,7 +36,7 @@ export const getJsonViewData = (docs, { databaseName, docType }) => {
       _rev: getDocRev(doc, docType),
       keylabel: 'id',
       url: docID ? getDocUrl('app', docID, databaseName) : null,
-      isDeletable: true,
+      isDeletable: deleteEnabled,
       isEditable: true
     };
   });

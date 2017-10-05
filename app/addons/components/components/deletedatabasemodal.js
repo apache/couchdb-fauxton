@@ -10,26 +10,25 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+import PropTypes from 'prop-types';
+
 import React from "react";
 import ReactDOM from "react-dom";
 import {Modal} from "react-bootstrap";
 import Actions from "../actions";
 
-export const DeleteDatabaseModal = React.createClass({
+export class DeleteDatabaseModal extends React.Component {
+  static propTypes = {
+    showHide: PropTypes.func.isRequired,
+    modalProps: PropTypes.object
+  };
 
-  getInitialState () {
-    return {
-      inputValue: '',
-      disableSubmit: true
-    };
-  },
+  state = {
+    inputValue: '',
+    disableSubmit: true
+  };
 
-  propTypes: {
-    showHide: React.PropTypes.func.isRequired,
-    modalProps: React.PropTypes.object
-  },
-
-  close (e) {
+  close = (e) => {
     if (e) {
       e.preventDefault();
     }
@@ -40,17 +39,17 @@ export const DeleteDatabaseModal = React.createClass({
     });
 
     this.props.showHide({showModal: false});
-  },
+  };
 
-  open () {
+  open = () => {
     this.props.showHide({showModal: true});
-  },
+  };
 
-  getDatabaseName () {
+  getDatabaseName = () => {
     return this.props.modalProps.dbId.trim();
-  },
+  };
 
-  onInputChange (e) {
+  onInputChange = (e) => {
     const val = e.target.value.trim();
 
     this.setState({
@@ -60,21 +59,21 @@ export const DeleteDatabaseModal = React.createClass({
     this.setState({
       disableSubmit: val !== this.getDatabaseName()
     });
-  },
+  };
 
-  onDeleteClick (e) {
+  onDeleteClick = (e) => {
     e.preventDefault();
 
     Actions.deleteDatabase(this.getDatabaseName());
-  },
+  };
 
-  onInputKeypress (e) {
+  onInputKeypress = (e) => {
     if (e.keyCode === 13 && this.state.disableSubmit !== true) {
       Actions.deleteDatabase(this.getDatabaseName());
     }
-  },
+  };
 
-  render () {
+  render() {
     var isSystemDatabase = this.props.modalProps.isSystemDatabase;
     var showDeleteModal = this.props.modalProps.showDeleteModal;
     var dbId = this.props.modalProps.dbId;
@@ -116,4 +115,4 @@ export const DeleteDatabaseModal = React.createClass({
       </Modal>
     );
   }
-});
+}

@@ -20,9 +20,8 @@ import NavBar from '../components/NavBar';
 
 const navBarStore = Stores.navBarStore;
 
-const NavBarContainer = React.createClass({
-
-  getStoreState () {
+class NavBarContainer extends React.Component {
+  getStoreState = () => {
     return {
       navLinks: navBarStore.getNavLinks(),
       bottomNavLinks: navBarStore.getBottomNavLinks(),
@@ -35,25 +34,23 @@ const NavBarContainer = React.createClass({
       isLoginSectionVisible: navBarStore.getIsLoginSectionVisible(),
       isLoginVisibleInsteadOfLogout: navBarStore.getIsLoginVisibleInsteadOfLogout()
     };
-  },
+  };
 
-  getInitialState () {
-    return this.getStoreState();
-  },
-
-  onChange () {
+  onChange = () => {
     this.setState(this.getStoreState());
-  },
+  };
 
-  componentDidMount () {
+  state = this.getStoreState();
+
+  componentDidMount() {
     navBarStore.on('change', this.onChange, this);
-  },
+  }
 
-  componentWillUnmount () {
+  componentWillUnmount() {
     navBarStore.off('change', this.onChange);
-  },
+  }
 
-  render () {
+  render() {
     const user = FauxtonAPI.session.user();
 
     const username =  (user && user.name) ? user.name : '';
@@ -61,8 +58,7 @@ const NavBarContainer = React.createClass({
       <NavBar {...this.state} username={username} />
     );
   }
-
-});
+}
 
 
 export default NavBarContainer;

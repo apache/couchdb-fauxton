@@ -17,70 +17,65 @@ import {Tooltip, OverlayTrigger} from 'react-bootstrap';
 
 require('brace/theme/dawn');
 
+ const themes = {
+    dark: 'idle_fingers',
+    light: 'dawn'
+  };
 // Zen mode editing has very few options:
 // - It covers the full screen, hiding everything else
 // - Two themes: light & dark (choice stored in local storage)
 // - No save option, but has a 1-1 map with a <CodeEditor /> element which gets updated when the user leaves
 // - [Escape] closes the mode, as does clicking the shrink icon at the top right
-export const ZenModeOverlay = React.createClass({
-  getDefaultProps () {
-    return {
-      mode: 'javascript',
-      defaultCode: '',
-      ignorableErrors: [],
-      onExit: null,
-      highlightActiveLine: false
-    };
-  },
+export class ZenModeOverlay extends React.Component {
+  static defaultProps = {
+    mode: 'javascript',
+    defaultCode: '',
+    ignorableErrors: [],
+    onExit: null,
+    highlightActiveLine: false
+  };
 
-  themes: {
-    dark: 'idle_fingers',
-    light: 'dawn'
-  },
-
-  getInitialState () {
-    return this.getStoreState();
-  },
-
-  getStoreState () {
+  getStoreState = () => {
     return {
       theme: this.getZenTheme(),
       code: this.props.defaultCode
     };
-  },
+  };
 
-  getZenTheme () {
+  getZenTheme = () => {
     var selectedTheme = app.utils.localStorageGet('zenTheme');
     return _.isUndefined(selectedTheme) ? 'dark' : selectedTheme;
-  },
+  };
 
-  onChange () {
+  onChange = () => {
     this.setState(this.getStoreState());
-  },
+  };
 
-  exitZenMode () {
+  exitZenMode = () => {
     this.props.onExit(this.getValue());
-  },
+  };
 
-  getValue () {
+  getValue = () => {
     return this.refs.ace.getValue();
-  },
+  };
 
-  toggleTheme () {
+  toggleTheme = () => {
     var newTheme = (this.state.theme === 'dark') ? 'light' : 'dark';
     this.setState({
       theme: newTheme,
       code: this.getValue()
     });
     app.utils.localStorageSet('zenTheme', newTheme);
-  },
+  };
 
-  setValue (code, lineNumber) {
+  setValue = (code, lineNumber) => {
     lineNumber = lineNumber ? lineNumber : -1;
     this.editor.setValue(code, lineNumber);
-  },
+  };
 
-  render () {
+  state = this.getStoreState();
+
+  render() {
     var classes = 'full-page-editor-modal-wrapper zen-theme-' + this.state.theme;
 
     var editorCommands = [{
@@ -126,7 +121,7 @@ export const ZenModeOverlay = React.createClass({
         <CodeEditor
           ref="ace"
           autoFocus={true}
-          theme={this.themes[this.state.theme]}
+          theme={themes[this.state.theme]}
           defaultCode={this.props.defaultCode}
           editorCommands={editorCommands}
           ignorableErrors={this.props.ignorableErrors}
@@ -135,4 +130,4 @@ export const ZenModeOverlay = React.createClass({
       </div>
     );
   }
-});
+}

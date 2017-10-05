@@ -59,7 +59,7 @@ const initialState = {
   }
 };
 
-export default function resultsState (state = initialState, action) {
+export default function resultsState(state = initialState, action) {
   switch (action.type) {
 
     case ActionTypes.INDEX_RESULTS_REDUX_RESET_STATE:
@@ -73,6 +73,8 @@ export default function resultsState (state = initialState, action) {
         pagination: Object.assign({}, initialState.pagination, {
           perPage: state.pagination.perPage
         }),
+        queryOptionsPanel: Object.assign({}, initialState.queryOptionsPanel,
+          state.queryOptionsPanel, {reduce: false, groupLevel: 'exact', showReduce: false}),
         isLoading: false
       });
 
@@ -151,6 +153,17 @@ export default function resultsState (state = initialState, action) {
       });
 
     case ActionTypes.INDEX_RESULTS_REDUX_NEW_QUERY_OPTIONS:
+      // includeDocs or reduce should be mutually exclusive
+      if (action.options.includeDocs && action.options.reduce) {
+        // includeDocs has precedence if both are set at the same time
+        action.options.reduce = false;
+      } else if (action.options.includeDocs && state.queryOptionsPanel.reduce) {
+        // Switch off reduce when includeDocs is being set to true
+        action.options.reduce = false;
+      } else if (action.options.reduce && state.queryOptionsPanel.includeDocs) {
+        // Switch off includeDocs when reduce is being set to true
+        action.options.includeDocs = false;
+      }
       return Object.assign({}, state, {
         queryOptionsPanel: Object.assign({}, state.queryOptionsPanel, action.options)
       });
@@ -166,14 +179,15 @@ export const removeGeneratedMangoDocs = (doc) => {
 };
 
 // transform the docs in to a state ready for rendering on the page
-export const getDataForRendering = (state, databaseName) => {
+export const getDataForRendering = (state, databaseName, deleteEnabled = true) => {
   const { docs } = state;
   const options = {
     databaseName: databaseName,
     selectedLayout: state.selectedLayout,
     selectedFieldsTableView: state.tableView.selectedFieldsTableView,
     showAllFieldsTableView: state.tableView.showAllFieldsTableView,
-    docType: state.docType
+    docType: state.docType,
+    deleteEnabled: deleteEnabled
   };
 
   const docsWithoutGeneratedMangoDocs = docs.filter(removeGeneratedMangoDocs);
@@ -255,7 +269,7 @@ export const getCanShowPrevious = (state) => {
   return state.pagination.currentPage > 1;
 };
 
-export const getDisplayedFields = (state, databaseName)  => {
+export const getDisplayedFields = (state, databaseName) => {
   return getDataForRendering(state, databaseName).displayedFields || {};
 };
 
@@ -277,7 +291,9 @@ export const getQueryOptionsParams = (state) => {
       params.end_key = betweenKeys.endkey;
     }
   } else if (queryOptionsPanel.showByKeys) {
-    params.keys = queryOptionsPanel.byKeys.replace(/\r?\n/g, '');
+    if (queryOptionsPanel.byKeys.trim()) {
+      params.keys = queryOptionsPanel.byKeys.replace(/\r?\n/g, '');
+    }
   }
 
   if (queryOptionsPanel.limit !== 'none') {

@@ -16,31 +16,28 @@ import ClusterStore from "./cluster.stores";
 var nodesStore = ClusterStore.nodesStore;
 
 
-var DisabledConfigController = React.createClass({
-
-  getStoreState: function () {
+class DisabledConfigController extends React.Component {
+  getStoreState = () => {
     return {
       nodes: nodesStore.getNodes()
     };
-  },
+  };
 
-  getInitialState: function () {
-    return this.getStoreState();
-  },
-
-  componentDidMount: function () {
+  componentDidMount() {
     nodesStore.on('change', this.onChange, this);
-  },
+  }
 
-  componentWillUnmount: function () {
+  componentWillUnmount() {
     nodesStore.off('change', this.onChange);
-  },
+  }
 
-  onChange: function () {
+  onChange = () => {
     this.setState(this.getStoreState());
-  },
+  };
 
-  render: function () {
+  state = this.getStoreState();
+
+  render() {
     return (
       <div className="config-warning-cluster-wrapper">
         <div className="config-warning-cluster-container">
@@ -62,7 +59,7 @@ var DisabledConfigController = React.createClass({
       </div>
     );
   }
-});
+}
 
 var Views = {
   DisabledConfigController: DisabledConfigController

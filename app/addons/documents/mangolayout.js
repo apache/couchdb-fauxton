@@ -24,7 +24,7 @@ import FauxtonAPI from "../../core/api";
 import Constants from './constants';
 
 export const RightHeader = ({ docURL, endpoint }) => {
-  const apiBar = <ApiBarContainer docURL={docURL} endpoint={endpoint} />;
+  const apiBar = <ApiBarContainer docURL={docURL} endpoint={endpoint} includeQueryOptionsParams={false}/>;
   return (
     <div className="right-header-wrapper flex-layout flex-row flex-body">
       <div id="right-header" className="flex-body">
@@ -123,7 +123,7 @@ class MangoLayout extends Component {
     let endpoint = this.props.endpoint;
 
     if (this.props.explainPlan) {
-      endpoint = FauxtonAPI.urls('mango', 'explain-apiurl', database);
+      endpoint = FauxtonAPI.urls('mango', 'explain-apiurl', encodeURIComponent(database));
     }
     let queryFunction = (params) => { return MangoAPI.mangoQueryDocs(databaseName, queryFindCode, params); };
     let docType = Constants.INDEX_RESULTS_DOC_TYPE.MANGO_QUERY;

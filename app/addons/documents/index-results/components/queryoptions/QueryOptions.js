@@ -10,6 +10,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+import PropTypes from 'prop-types';
+
 import React from 'react';
 import FauxtonAPI from '../../../../../core/api';
 import GeneralComponents from '../../../../components/react-components';
@@ -26,26 +28,36 @@ export default class QueryOptions extends React.Component {
     super(props);
     const {
       ddocsOnly,
-      queryOptionsFilterOnlyDdocs
+      queryOptionsApplyFilterOnlyDdocs
     } = props;
 
     if (ddocsOnly) {
-      queryOptionsFilterOnlyDdocs();
+      queryOptionsApplyFilterOnlyDdocs();
     }
   }
 
   componentWillReceiveProps (nextProps) {
     const {
       ddocsOnly,
-      queryOptionsFilterOnlyDdocs,
-      resetState
+      queryOptionsApplyFilterOnlyDdocs,
+      queryOptionsRemoveFilterOnlyDdocs,
     } = this.props;
 
     if (!ddocsOnly && nextProps.ddocsOnly) {
-      resetState();
-      queryOptionsFilterOnlyDdocs();
+      queryOptionsApplyFilterOnlyDdocs();
     } else if (ddocsOnly && !nextProps.ddocsOnly) {
-      resetState();
+      queryOptionsRemoveFilterOnlyDdocs();
+    }
+  }
+
+  componentWillUnmount() {
+    const {
+      ddocsOnly,
+      queryOptionsRemoveFilterOnlyDdocs
+    } = this.props;
+    if (ddocsOnly) {
+      // Remove filter it was set before
+      queryOptionsRemoveFilterOnlyDdocs();
     }
   }
 
@@ -124,7 +136,14 @@ export default class QueryOptions extends React.Component {
     );
   }
 
+  showAsActive() {
+    const { reduce, betweenKeys, byKeys, descending, skip, limit } = this.props;
+    return !!((betweenKeys && betweenKeys.startkey) ||
+      byKeys || (limit && limit != 'none') || skip || reduce || descending);
+  }
+
   render () {
+
     return (
       <div id="header-query-options">
         <div id="query-options">
@@ -134,15 +153,25 @@ export default class QueryOptions extends React.Component {
               containerClasses="header-control-box control-toggle-queryoptions"
               title="Query Options"
               fonticon="fonticon-gears"
-              text="Options" />
+              text="Options"
+              active={this.showAsActive()} />
               {this.getTray()}
           </div>
         </div>
       </div>
     );
   }
-};
+}
 
 QueryOptions.propTypes = {
-  contentVisible: React.PropTypes.bool.isRequired
+  contentVisible: PropTypes.bool.isRequired,
+  queryOptionsApplyFilterOnlyDdocs: PropTypes.func.isRequired,
+  queryOptionsRemoveFilterOnlyDdocs: PropTypes.func.isRequired,
+  queryOptionsExecute: PropTypes.func.isRequired,
+  queryOptionsParams: PropTypes.object.isRequired,
+  perPage: PropTypes.number.isRequired,
+  resetPagination: PropTypes.func.isRequired,
+  selectedLayout: PropTypes.string.isRequired,
+  changeLayout: PropTypes.func.isRequired,
+  queryOptionsToggleVisibility: PropTypes.func.isRequired
 };

@@ -17,6 +17,8 @@ import Constants from '../constants';
 import FauxtonAPI from '../../../core/api';
 
 export const queryAllDocs = (fetchUrl, params) => {
+  // Exclude params 'group', 'reduce' and 'group_level' if present since they not allowed for '_all_docs'
+  Object.assign(params, {reduce: undefined, group: undefined, group_level: undefined});
   const query = queryString.stringify(params);
   const url = `${fetchUrl}${fetchUrl.includes('?') ? '&' : '?'}${query}`;
   return fetch(url, {
@@ -26,10 +28,43 @@ export const queryAllDocs = (fetchUrl, params) => {
     }
   })
   .then(res => res.json())
-  .then(res => {
+  .then(json => {
+    if (json.error) {
+      throw new Error('(' + json.error + ') ' + json.reason);
+    }
     return {
-      //TODO: handle error situation
-      docs: res.error ? [] : res.rows,
+      docs: json.rows,
+      docType: Constants.INDEX_RESULTS_DOC_TYPE.VIEW
+    };
+  });
+};
+
+export const queryMapReduceView = (fetchUrl, params) => {
+  // Adds the 'reduce' param in case it's not defined
+  if (params.reduce === undefined) {
+    params.reduce = false;
+  }
+  // reduce cannot be true when include_docs is true
+  if (params.include_docs && params.reduce) {
+    params.reduce = false;
+    params.group = undefined;
+    params.group_level = undefined;
+  }
+  const query = queryString.stringify(params);
+  const url = `${fetchUrl}${fetchUrl.includes('?') ? '&' : '?'}${query}`;
+  return fetch(url, {
+    credentials: 'include',
+    headers: {
+      'Accept': 'application/json; charset=utf-8'
+    }
+  })
+  .then(res => res.json())
+  .then(json => {
+    if (json.error) {
+      throw new Error('(' + json.error + ') ' + json.reason);
+    }
+    return {
+      docs: json.rows,
       docType: Constants.INDEX_RESULTS_DOC_TYPE.VIEW
     };
   });
@@ -50,7 +85,7 @@ export const postToBulkDocs = (databaseName, payload) => {
 };
 
 export const postToIndexBulkDelete = (databaseName, payload) => {
-  const url = FauxtonAPI.urls('mango', 'index-server-bulk-delete', databaseName);
+  const url = FauxtonAPI.urls('mango', 'index-server-bulk-delete', encodeURIComponent(databaseName));
   return fetch(url, {
     method: 'POST',
     credentials: 'include',

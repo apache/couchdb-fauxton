@@ -10,6 +10,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+import PropTypes from 'prop-types';
+
 import React from 'react';
 
 export default class QueryButtons extends React.Component {
@@ -31,8 +33,8 @@ export default class QueryButtons extends React.Component {
       </div>
     );
   }
-};
+}
 
 QueryButtons.propTypes = {
-  onCancel: React.PropTypes.func.isRequired
+  onCancel: PropTypes.func.isRequired
 };

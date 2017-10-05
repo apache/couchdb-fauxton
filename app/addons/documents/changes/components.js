@@ -1,3 +1,5 @@
+import FauxtonAPI from "../../../core/api";
+
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License. You may obtain a copy of
 // the License at
@@ -10,7 +12,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import FauxtonAPI from "../../../core/api";
+import PropTypes from 'prop-types';
+
 import React from "react";
 import ReactDOM from "react-dom";
 import Actions from "./actions";
@@ -201,8 +204,12 @@ class AddFilterForm extends React.Component {
   }
 }
 AddFilterForm.PropTypes = {
-  addFilter: React.PropTypes.func.isRequired,
-  hasFilter: React.PropTypes.func.isRequired
+  addFilter: PropTypes.func.isRequired,
+  hasFilter: PropTypes.func.isRequired,
+  tooltips: PropTypes.string
+};
+AddFilterForm.defaultProps = {
+  tooltip: ''
 };
 
 class ChangeRow extends React.Component {
@@ -298,8 +305,8 @@ class ChangeRow extends React.Component {
 }
 
 ChangeRow.PropTypes = {
-  change: React.PropTypes.object,
-  databaseName: React.PropTypes.string.isRequired
+  change: PropTypes.object,
+  databaseName: PropTypes.string.isRequired
 };
 
 

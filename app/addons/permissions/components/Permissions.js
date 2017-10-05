@@ -10,7 +10,9 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+
+import React, { Component } from 'react';
 
 import PermissionsScreen  from './PermissionsScreen';
 
@@ -36,13 +38,13 @@ export default class Permissions extends Component {
       isLoading ? <LoadLines /> : <PermissionsScreen {...this.props} />
     );
   }
-};
+}
 
 Permissions.propTypes = {
   isLoading: PropTypes.bool.isRequired,
-  adminRoles: React.PropTypes.array.isRequired,
-  adminNames: React.PropTypes.array.isRequired,
-  memberNames: React.PropTypes.array.isRequired,
-  memberRoles: React.PropTypes.array.isRequired,
-  security: React.PropTypes.object.isRequired
+  adminRoles: PropTypes.array.isRequired,
+  adminNames: PropTypes.array.isRequired,
+  memberNames: PropTypes.array.isRequired,
+  memberRoles: PropTypes.array.isRequired,
+  security: PropTypes.object.isRequired
 };

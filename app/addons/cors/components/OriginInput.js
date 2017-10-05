@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { Component } from "react";
 import { validateDomain, normalizeUrls } from "../helpers";
 
@@ -52,9 +53,9 @@ export default class OriginInput extends Component {
     );
   }
 
-};
+}
 
 OriginInput.propTypes = {
-  isVisible: React.PropTypes.bool.isRequired,
-  addOrigin: React.PropTypes.func.isRequired
+  isVisible: PropTypes.bool.isRequired,
+  addOrigin: PropTypes.func.isRequired
 };

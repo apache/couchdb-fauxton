@@ -15,53 +15,48 @@ import {CodeEditor} from './codeeditor';
 import {Beautify} from './beautify';
 import {ZenModeOverlay} from './zenmodeoverlay';
 
+
+  // list of JSHINT errors to ignore: gets around problem of anonymous functions not being valid
+const ignorableErrors = [
+    'Missing name in function declaration.',
+    "['{a}'] is better written in dot notation."
+  ];
+
 /**
  * A pre-packaged JS editor panel for use on the Edit Index / Mango pages. Includes options for a title, zen mode
  * icon and beautify button.
  */
-export const CodeEditorPanel = React.createClass({
-  getDefaultProps () {
-    return {
-      id: 'code-editor',
-      className: '',
-      defaultCode: '',
-      title: '',
-      docLink: '',
-      allowZenMode: true,
-      blur () {}
-    };
-  },
+export class CodeEditorPanel extends React.Component {
+  static defaultProps = {
+    id: 'code-editor',
+    className: '',
+    defaultCode: '',
+    title: '',
+    docLink: '',
+    allowZenMode: true,
+    blur () {}
+  };
 
-  getInitialState () {
-    return this.getStoreState();
-  },
-
-  getStoreState () {
+  getStoreState = () => {
     return {
       zenModeEnabled: false,
       code: this.props.defaultCode
     };
-  },
+  };
 
-  componentWillReceiveProps (nextProps) {
+  componentWillReceiveProps(nextProps) {
     if (nextProps.defaultCode !== this.props.defaultCode) {
       this.setState({ code: nextProps.defaultCode });
     }
-  },
+  }
 
-  // list of JSHINT errors to ignore: gets around problem of anonymous functions not being valid
-  ignorableErrors: [
-    'Missing name in function declaration.',
-    "['{a}'] is better written in dot notation."
-  ],
-
-  getZenModeIcon () {
+  getZenModeIcon = () => {
     if (this.props.allowZenMode) {
       return <span className="fonticon fonticon-resize-full zen-editor-icon" title="Enter Zen mode" onClick={this.enterZenMode}></span>;
     }
-  },
+  };
 
-  getDocIcon () {
+  getDocIcon = () => {
     if (this.props.docLink) {
       return (
         <a className="help-link"
@@ -73,50 +68,52 @@ export const CodeEditorPanel = React.createClass({
         </a>
       );
     }
-  },
+  };
 
-  getZenModeOverlay () {
+  getZenModeOverlay = () => {
     if (this.state.zenModeEnabled) {
       return (
         <ZenModeOverlay
           defaultCode={this.state.code}
           mode={this.props.mode}
-          ignorableErrors={this.ignorableErrors}
+          ignorableErrors={ignorableErrors}
           onExit={this.exitZenMode} />
       );
     }
-  },
+  };
 
-  enterZenMode () {
+  enterZenMode = () => {
     this.setState({
       zenModeEnabled: true,
       code: this.refs.codeEditor.getValue()
     });
-  },
+  };
 
-  exitZenMode (content) {
+  exitZenMode = (content) => {
     this.setState({ zenModeEnabled: false });
     this.getEditor().setValue(content);
-  },
+  };
 
-  getEditor () {
+  getEditor = () => {
     return this.refs.codeEditor;
-  },
+  };
 
-  getValue () {
+  getValue = () => {
     return this.getEditor().getValue();
-  },
+  };
 
-  beautify (code) {
+  beautify = (code) => {
     this.setState({ code: code });
     this.getEditor().setValue(code);
-  },
+  };
 
-  update () {
+  update = () => {
     this.getEditor().setValue(this.state.code);
-  },
+  };
 
-  render () {
+  state = this.getStoreState();
+
+  render() {
     var classes = 'control-group';
     if (this.props.className) {
       classes += ' ' + this.props.className;
@@ -134,7 +131,7 @@ export const CodeEditorPanel = React.createClass({
           mode="javascript"
           defaultCode={this.state.code}
           showGutter={true}
-          ignorableErrors={this.ignorableErrors}
+          ignorableErrors={ignorableErrors}
           setHeightToLineCount={true}
           maxLines={10000}
           blur={this.props.blur}
@@ -144,4 +141,4 @@ export const CodeEditorPanel = React.createClass({
       </div>
     );
   }
-});
+}

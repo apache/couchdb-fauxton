@@ -22,7 +22,8 @@ describe('QueryOptions', () => {
     includeDocs: false,
     queryOptionsToggleIncludeDocs: () => {},
     reduce: false,
-    contentVisible: true
+    contentVisible: true,
+    perPage: 10
   };
 
   it('calls resetPagination and queryOptionsExecute on submit', () => {
@@ -39,6 +40,8 @@ describe('QueryOptions', () => {
       queryOptionsParams={queryOptionsParams}
       selectedLayout={Constants.LAYOUT_ORIENTATION.METADATA}
       changeLayout={() => {}}
+      queryOptionsApplyFilterOnlyDdocs={() => {}}
+      queryOptionsRemoveFilterOnlyDdocs={() => {}}
       {...props}
     />);
 
@@ -47,7 +50,7 @@ describe('QueryOptions', () => {
     expect(spy2.calledOnce).toBe(true);
   });
 
-  it('calls queryOptionsFilterOnlyDdocs if ddocsOnly is true', () => {
+  it('calls queryOptionsApplyFilterOnlyDdocs if ddocsOnly is true', () => {
     const spy = sinon.spy();
     const queryOptionsParams = {
       include_docs: false
@@ -55,7 +58,8 @@ describe('QueryOptions', () => {
 
     shallow(<QueryOptions
       ddocsOnly={true}
-      queryOptionsFilterOnlyDdocs={spy}
+      queryOptionsApplyFilterOnlyDdocs={spy}
+      queryOptionsRemoveFilterOnlyDdocs={() => {}}
       queryOptionsExecute={() => {}}
       resetPagination={() => {}}
       queryOptionsToggleVisibility={() => {}}
@@ -68,7 +72,7 @@ describe('QueryOptions', () => {
     expect(spy.calledOnce).toBe(true);
   });
 
-  it('calls resetState and queryOptionsFilterOnlyDdocs if ddocsOnly switches to true on new props', () => {
+  it('calls queryOptionsApplyFilterOnlyDdocs if ddocsOnly switches to true on new props', () => {
     const spy = sinon.spy();
     const queryOptionsParams = {
       include_docs: false
@@ -76,8 +80,8 @@ describe('QueryOptions', () => {
 
     const wrapper = shallow(<QueryOptions
       ddocsOnly={false}
-      resetState={spy}
-      queryOptionsFilterOnlyDdocs={spy}
+      queryOptionsRemoveFilterOnlyDdocs={() => {}}
+      queryOptionsApplyFilterOnlyDdocs={spy}
       queryOptionsExecute={() => {}}
       resetPagination={() => {}}
       queryOptionsToggleVisibility={() => {}}
@@ -90,10 +94,10 @@ describe('QueryOptions', () => {
     wrapper.instance().componentWillReceiveProps({
       ddocsOnly: true
     });
-    expect(spy.calledTwice).toBe(true);
+    expect(spy.calledOnce).toBe(true);
   });
 
-  it('calls resetState if ddocsOnly switches to false on new props', () => {
+  it('calls queryOptionsRemoveFilterOnlyDdocs if ddocsOnly switches to false on new props', () => {
     const spy = sinon.spy();
     const queryOptionsParams = {
       include_docs: false
@@ -101,8 +105,8 @@ describe('QueryOptions', () => {
 
     const wrapper = shallow(<QueryOptions
       ddocsOnly={true}
-      resetState={spy}
-      queryOptionsFilterOnlyDdocs={() => {}}
+      queryOptionsRemoveFilterOnlyDdocs={spy}
+      queryOptionsApplyFilterOnlyDdocs={() => {}}
       queryOptionsExecute={() => {}}
       resetPagination={() => {}}
       queryOptionsToggleVisibility={() => {}}
@@ -116,5 +120,178 @@ describe('QueryOptions', () => {
       ddocsOnly: false
     });
     expect(spy.calledOnce).toBe(true);
+  });
+
+  it('button is not highlighted when query options are not set', () => {
+
+    const wrapper = shallow(<QueryOptions
+      ddocsOnly={true}
+      queryOptionsRemoveFilterOnlyDdocs={() => {}}
+      queryOptionsApplyFilterOnlyDdocs={() => {}}
+      queryOptionsExecute={() => {}}
+      resetPagination={() => {}}
+      queryOptionsToggleVisibility={() => {}}
+      queryOptionsParams={{}}
+      selectedLayout={Constants.LAYOUT_ORIENTATION.METADATA}
+      changeLayout={() => {}}
+      {...props}
+    />);
+
+    const isHighlighted = wrapper.find('ToggleHeaderButton').prop('active');
+    expect(isHighlighted).toBe(false);
+  });
+
+  it('button is highlighted when reduce option is enabled', () => {
+    const newProps = {
+      ...props,
+      reduce: true
+    };
+    const wrapper = shallow(<QueryOptions
+      ddocsOnly={true}
+      queryOptionsRemoveFilterOnlyDdocs={() => {}}
+      queryOptionsApplyFilterOnlyDdocs={() => {}}
+      queryOptionsExecute={() => {}}
+      resetPagination={() => {}}
+      queryOptionsToggleVisibility={() => {}}
+      queryOptionsParams={{}}
+      selectedLayout={Constants.LAYOUT_ORIENTATION.METADATA}
+      changeLayout={() => {}}
+      {...newProps}
+    />);
+
+    const isHighlighted = wrapper.find('ToggleHeaderButton').prop('active');
+    expect(isHighlighted).toBe(true);
+  });
+
+  it('button is highlighted when limit option is set', () => {
+    const newProps = {
+      ...props,
+      limit: 3
+    };
+    const wrapper = shallow(<QueryOptions
+      ddocsOnly={true}
+      queryOptionsRemoveFilterOnlyDdocs={() => {}}
+      queryOptionsApplyFilterOnlyDdocs={() => {}}
+      queryOptionsExecute={() => {}}
+      resetPagination={() => {}}
+      queryOptionsToggleVisibility={() => {}}
+      queryOptionsParams={{}}
+      selectedLayout={Constants.LAYOUT_ORIENTATION.METADATA}
+      changeLayout={() => {}}
+      {...newProps}
+    />);
+
+    const isHighlighted = wrapper.find('ToggleHeaderButton').prop('active');
+    expect(isHighlighted).toBe(true);
+  });
+
+  it('button is highlighted when skip option is set', () => {
+    const newProps = {
+      ...props,
+      skip: 3
+    };
+    const wrapper = shallow(<QueryOptions
+      ddocsOnly={true}
+      queryOptionsRemoveFilterOnlyDdocs={() => {}}
+      queryOptionsApplyFilterOnlyDdocs={() => {}}
+      queryOptionsExecute={() => {}}
+      resetPagination={() => {}}
+      queryOptionsToggleVisibility={() => {}}
+      queryOptionsParams={{}}
+      selectedLayout={Constants.LAYOUT_ORIENTATION.METADATA}
+      changeLayout={() => {}}
+      {...newProps}
+    />);
+
+    const isHighlighted = wrapper.find('ToggleHeaderButton').prop('active');
+    expect(isHighlighted).toBe(true);
+  });
+
+  it('button is highlighted when betweenKeys option is set', () => {
+    const newProps = {
+      ...props,
+      betweenKeys: {startkey:"a"}
+    };
+    const wrapper = shallow(<QueryOptions
+      ddocsOnly={true}
+      queryOptionsRemoveFilterOnlyDdocs={() => {}}
+      queryOptionsApplyFilterOnlyDdocs={() => {}}
+      queryOptionsExecute={() => {}}
+      resetPagination={() => {}}
+      queryOptionsToggleVisibility={() => {}}
+      queryOptionsParams={{}}
+      selectedLayout={Constants.LAYOUT_ORIENTATION.METADATA}
+      changeLayout={() => {}}
+      {...newProps}
+    />);
+
+    const isHighlighted = wrapper.find('ToggleHeaderButton').prop('active');
+    expect(isHighlighted).toBe(true);
+  });
+
+  it('button is highlighted when byKeys option is set', () => {
+    const newProps = {
+      ...props,
+      byKeys: {}
+    };
+    const wrapper = shallow(<QueryOptions
+      ddocsOnly={true}
+      queryOptionsRemoveFilterOnlyDdocs={() => {}}
+      queryOptionsApplyFilterOnlyDdocs={() => {}}
+      queryOptionsExecute={() => {}}
+      resetPagination={() => {}}
+      queryOptionsToggleVisibility={() => {}}
+      queryOptionsParams={{}}
+      selectedLayout={Constants.LAYOUT_ORIENTATION.METADATA}
+      changeLayout={() => {}}
+      {...newProps}
+    />);
+
+    const isHighlighted = wrapper.find('ToggleHeaderButton').prop('active');
+    expect(isHighlighted).toBe(true);
+  });
+
+  it('button is highlighted when descending option is enabled', () => {
+    const newProps = {
+      ...props,
+      descending: true
+    };
+    const wrapper = shallow(<QueryOptions
+      ddocsOnly={true}
+      queryOptionsRemoveFilterOnlyDdocs={() => {}}
+      queryOptionsApplyFilterOnlyDdocs={() => {}}
+      queryOptionsExecute={() => {}}
+      resetPagination={() => {}}
+      queryOptionsToggleVisibility={() => {}}
+      queryOptionsParams={{}}
+      selectedLayout={Constants.LAYOUT_ORIENTATION.METADATA}
+      changeLayout={() => {}}
+      {...newProps}
+    />);
+
+    const isHighlighted = wrapper.find('ToggleHeaderButton').prop('active');
+    expect(isHighlighted).toBe(true);
+  });
+
+  it('button is not highlighted when includeDocs option is enabled', () => {
+    const newProps = {
+      ...props,
+      includeDocs: true
+    };
+    const wrapper = shallow(<QueryOptions
+      ddocsOnly={true}
+      queryOptionsRemoveFilterOnlyDdocs={() => {}}
+      queryOptionsApplyFilterOnlyDdocs={() => {}}
+      queryOptionsExecute={() => {}}
+      resetPagination={() => {}}
+      queryOptionsToggleVisibility={() => {}}
+      queryOptionsParams={{}}
+      selectedLayout={Constants.LAYOUT_ORIENTATION.METADATA}
+      changeLayout={() => {}}
+      {...newProps}
+    />);
+
+    const isHighlighted = wrapper.find('ToggleHeaderButton').prop('active');
+    expect(isHighlighted).toBe(false);
   });
 });

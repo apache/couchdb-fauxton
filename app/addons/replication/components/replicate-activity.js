@@ -9,6 +9,8 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
+import PropTypes from 'prop-types';
+
 import React from 'react';
 import {DeleteModal} from './modals';
 import {ReplicationTable} from './common-table';
@@ -103,14 +105,14 @@ export default class Activity extends React.Component {
 }
 
 Activity.propTypes = {
-  docs: React.PropTypes.array.isRequired,
-  filter: React.PropTypes.string.isRequired,
-  selectAllDocs: React.PropTypes.func.isRequired,
-  allDocsSelected: React.PropTypes.bool.isRequired,
-  someDocsSelected: React.PropTypes.bool.isRequired,
-  selectDoc: React.PropTypes.func.isRequired,
-  onFilterChange: React.PropTypes.func.isRequired,
-  deleteDocs: React.PropTypes.func.isRequired,
-  activitySort: React.PropTypes.object.isRequired,
-  changeActivitySort: React.PropTypes.func.isRequired
+  docs: PropTypes.array.isRequired,
+  filter: PropTypes.string.isRequired,
+  selectAllDocs: PropTypes.func.isRequired,
+  allDocsSelected: PropTypes.bool.isRequired,
+  someDocsSelected: PropTypes.bool.isRequired,
+  selectDoc: PropTypes.func.isRequired,
+  onFilterChange: PropTypes.func.isRequired,
+  deleteDocs: PropTypes.func.isRequired,
+  activitySort: PropTypes.object.isRequired,
+  changeActivitySort: PropTypes.func.isRequired
 };

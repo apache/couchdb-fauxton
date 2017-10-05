@@ -9,32 +9,32 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
+import PropTypes from 'prop-types';
+
 import React from "react";
 import ReactDOM from "react-dom";
 import FauxtonAPI from "../../../core/api";
 import Helpers from "../../documents/helpers";
 
-export const Document = React.createClass({
-  propTypes: {
-    docIdentifier: React.PropTypes.string.isRequired,
-    docChecked: React.PropTypes.func.isRequired,
-    truncate: React.PropTypes.bool,
-    maxRows: React.PropTypes.number
-  },
+export class Document extends React.Component {
+  static propTypes = {
+    docIdentifier: PropTypes.string.isRequired,
+    docChecked: PropTypes.func.isRequired,
+    truncate: PropTypes.bool,
+    maxRows: PropTypes.number
+  };
 
-  getDefaultProps () {
-    return {
-      truncate: true,
-      maxRows: 500
-    };
-  },
+  static defaultProps = {
+    truncate: true,
+    maxRows: 500
+  };
 
-  onChange (e) {
+  onChange = (e) => {
     e.preventDefault();
     this.props.docChecked(this.props.doc.id, this.props.doc._rev);
-  },
+  };
 
-  getUrlFragment () {
+  getUrlFragment = () => {
     if (!this.props.children) {
       return '';
     }
@@ -44,16 +44,16 @@ export const Document = React.createClass({
         {this.props.children}
       </div>
     );
-  },
+  };
 
-  getExtensionIcons () {
+  getExtensionIcons = () => {
     var extensions = FauxtonAPI.getExtensions('DocList:icons');
     return _.map(extensions, function (Extension, i) {
       return (<Extension doc={this.props.doc} key={i} />);
     }, this);
-  },
+  };
 
-  getCheckbox () {
+  getCheckbox = () => {
     if (!this.props.isDeletable) {
       return <div className="checkbox-dummy"></div>;
     }
@@ -72,13 +72,13 @@ export const Document = React.createClass({
           htmlFor={'checkbox-' + this.props.docIdentifier} />
       </div>
     );
-  },
+  };
 
-  onClick (e) {
+  onClick = (e) => {
     this.props.onClick(this.props.docIdentifier, this.props.doc, e);
-  },
+  };
 
-  getDocContent () {
+  getDocContent = () => {
     if (_.isEmpty(this.props.docContent)) {
       return null;
     }
@@ -98,9 +98,9 @@ export const Document = React.createClass({
         {isTruncated ? <div className="doc-content-truncated">(truncated)</div> : null}
       </div>
     );
-  },
+  };
 
-  render () {
+  render() {
     return (
       <div data-id={this.props.docIdentifier} className="doc-row">
         <div className="custom-inputs">
@@ -123,4 +123,4 @@ export const Document = React.createClass({
       </div>
     );
   }
-});
+}

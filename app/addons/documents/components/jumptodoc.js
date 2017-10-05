@@ -1,3 +1,6 @@
+import app from "../../../app";
+import FauxtonAPI from "../../../core/api";
+
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License. You may obtain a copy of
 // the License at
@@ -10,8 +13,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import app from "../../../app";
-import FauxtonAPI from "../../../core/api";
+import PropTypes from 'prop-types';
+
 import React from "react";
 import ReactDOM from "react-dom";
 import ReactSelect from "react-select";
@@ -38,8 +41,8 @@ const JumpToDoc = ({database, loadOptions}) => {
 };
 
 JumpToDoc.propTypes = {
-  database: React.PropTypes.object.isRequired,
-  loadOptions: React.PropTypes.func.isRequired,
+  database: PropTypes.object.isRequired,
+  loadOptions: PropTypes.func.isRequired,
 };
 
 export default JumpToDoc;

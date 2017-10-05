@@ -9,35 +9,13 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
-import app from "../../../app";
+
 import FauxtonAPI from "../../../core/api";
 import Models from "../resources";
 import testUtils from "../../../../test/mocha/testUtils";
 import "../base";
 import sinon from 'sinon';
-const { assert, restore } = testUtils;
-
-describe('IndexCollection', () => {
-  let collection;
-  beforeEach(() => {
-    collection = new Models.IndexCollection([{
-      id:'myId1',
-      doc: 'num1'
-    },
-    {
-      id:'myId2',
-      doc: 'num2'
-    }], {
-      database: {id: 'databaseId', safeID: function () { return this.id; }},
-      design: '_design/myDoc'
-    });
-  });
-
-  it('creates the right api-url with an absolute url', () => {
-    assert.ok(/http:\/\/dev:8000/.test(collection.urlRef('apiurl')));
-  });
-
-});
+const { assert } = testUtils;
 
 describe('Document', () => {
   let doc;
@@ -81,170 +59,6 @@ describe('Document', () => {
     });
 
     assert.ok(/\/blerg/.test(doc.url('apiurl')));
-  });
-});
-
-describe('MangoIndex', () => {
-  let doc;
-
-  it('is deleteable', () => {
-    const index = {
-      ddoc: null,
-      name: '_all_docs',
-      type: 'json',
-      def: {fields: [{_id: 'asc'}]}
-    };
-    doc = new Models.MangoIndex(index, {});
-
-    assert.ok(doc.isDeletable());
-  });
-
-  it('special docs are not deleteable', () => {
-    const index = {
-      ddoc: null,
-      name: '_all_docs',
-      type: 'special',
-      def: {fields: [{_id: 'asc'}]}
-    };
-    doc = new Models.MangoIndex(index, {});
-
-    assert.notOk(doc.isDeletable());
-  });
-});
-
-describe('MangoDocumentCollection', () => {
-  let collection;
-
-  afterEach(() => {
-    restore($.ajax);
-  });
-
-  it('gets 1 doc more to know if there are more than 20', () => {
-    collection = new Models.MangoDocumentCollection([{
-      name: 'myId1',
-      doc: 'num1'
-    },
-    {
-      name: 'myId2',
-      doc: 'num2'
-    }], {
-      database: {id: 'databaseId', safeID: function () { return this.id; }},
-      params: {limit: 20}
-    });
-    collection.setQuery({
-      selector: '$foo',
-      fields: 'bla'
-    });
-
-    assert.deepEqual({
-      selector: '$foo',
-      fields: 'bla',
-      limit: 21,
-      skip: undefined
-    }, collection.getPaginatedQuery());
-  });
-
-  it('on next page, skips first 20', () => {
-    collection = new Models.MangoDocumentCollection([{
-      name: 'myId1',
-      doc: 'num1'
-    },
-    {
-      name: 'myId2',
-      doc: 'num2'
-    }], {
-      database: {id: 'databaseId', safeID: function () { return this.id; }},
-      params: {limit: 20}
-    });
-    collection.setQuery({
-      selector: '$foo',
-      fields: 'bla'
-    });
-    collection.next();
-    assert.deepEqual({
-      selector: '$foo',
-      fields: 'bla',
-      limit: 21,
-      skip: 20
-    }, collection.getPaginatedQuery());
-  });
-
-  it('does not do a fetch if the query is null', () => {
-    collection = new Models.MangoDocumentCollection([{
-      name: 'myId1',
-      doc: 'num1'
-    },
-    {
-      name: 'myId2',
-      doc: 'num2'
-    }], {
-      database: {id: 'databaseId', safeID: function () { return this.id; }},
-      params: {limit: 20}
-    });
-
-    const spy = sinon.spy($, 'ajax');
-
-    collection.fetch();
-    assert.notOk(spy.wasCalled);
-  });
-
-});
-
-describe('MangoDocumentCollection', () => {
-  let collection;
-
-  it('is not editable', () => {
-    collection = new Models.MangoIndexCollection([{
-      name: 'myId1',
-      doc: 'num1'
-    },
-    {
-      name: 'myId2',
-      doc: 'num2'
-    }], {
-      database: {id: 'databaseId', safeID: function () { return this.id; }},
-      params: {limit: 20}
-    });
-
-    assert.notOk(collection.isEditable());
-  });
-});
-
-describe('IndexCollection', () => {
-  let collection;
-
-  it('design docs are editable', () => {
-    collection = new Models.IndexCollection([{
-      _id: 'myId1',
-      doc: 'num1'
-    },
-    {
-      _id: 'myId2',
-      doc: 'num2'
-    }], {
-      database: {id: 'databaseId', safeID: function () { return this.id; }},
-      params: {limit: 20},
-      design: '_design/foobar'
-    });
-
-    assert.ok(collection.isEditable());
-  });
-
-  it('reduced design docs are NOT editable', () => {
-    collection = new Models.IndexCollection([{
-      _id: 'myId1',
-      doc: 'num1'
-    },
-    {
-      _id: 'myId2',
-      doc: 'num2'
-    }], {
-      database: {id: 'databaseId', safeID: function () { return this.id; }},
-      params: {limit: 20, reduce: true},
-      design: '_design/foobar'
-    });
-
-    assert.notOk(collection.isEditable());
   });
 });
 
@@ -491,43 +305,6 @@ describe('Bulk Delete', () => {
     return promise.catch((errors) => {
       assert.deepEqual(errors, ['1']);
     });
-  });
-
-});
-
-// this should stay at the bottom due to manipulating the 'view' urls.  otherwise, update this to restore them.
-describe('IndexCollection', () => {
-  let collection;
-
-  beforeEach(() => {
-    FauxtonAPI.registerUrls('view', {
-      testWithTrailingQuestion: function (database, designDoc, viewName) {
-        return app.host + '/' + database + '/_design/' + designDoc + '/_view/' + viewName + "?bogusParam=foo";
-      },
-
-      server: function (database, designDoc, viewName) {
-        return app.host + '/' + database + '/_design/' + designDoc + '/_view/' + viewName;
-      },
-    });
-    collection = new Models.IndexCollection([{
-      id:'myId1',
-      doc: 'num1'
-    },
-    {
-      id:'myId2',
-      doc: 'num2'
-    }], {
-      database: {id: 'databaseId', safeID: function () { return this.id; }},
-      design: '_design/myDoc'
-    });
-  });
-
-  it('creates the right url with correct params when trailing question mark', () => {
-    assert.ok(/\?bogusParam=foo&limit=20&reduce=false/.test(collection.urlRef('testWithTrailingQuestion')));
-  });
-
-  it('creates the right url with correct params without trailing question mark', () => {
-    assert.ok(/\?limit=20&reduce=false/.test(collection.urlRef()));
   });
 
 });
