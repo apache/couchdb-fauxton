@@ -13,51 +13,51 @@
 import Stores from '../stores';
 import utils from '../../../../test/mocha/testUtils';
 
-var assert = utils.assert;
+const {assert} = utils;
 
-describe("ConfigStore", function () {
-  var configStore = Stores.configStore;
+describe("ConfigStore", () => {
+  const configStore = Stores.configStore;
 
-  describe("mapSection", function () {
-    beforeEach(function () {
+  describe("mapSection", () => {
+    beforeEach(() => {
       configStore._editOptionName = 'b';
       configStore._editSectionName = 'test';
     });
 
-    afterEach(function () {
+    afterEach(() => {
       configStore.reset();
     });
 
-    it("sorts options ascending", function () {
-      var options = configStore.mapSection({ b: 1, c: 2, a: 3 }, 'test');
+    it("sorts options ascending", () => {
+      const options = configStore.mapSection({ b: 1, c: 2, a: 3 }, 'test');
       assert.equal(options[0].optionName, 'a');
     });
 
-    it("sets the first option as the header", function () {
-      var options = configStore.mapSection({ b: 1, c: 2, a: 3 }, 'test');
+    it("sets the first option as the header", () => {
+      const options = configStore.mapSection({ b: 1, c: 2, a: 3 }, 'test');
       assert.isTrue(options[0].header);
     });
 
-    it("sets the option that is being edited", function () {
-      var options = configStore.mapSection({ b: 1, c: 2, a: 3 }, 'test');
+    it("sets the option that is being edited", () => {
+      const options = configStore.mapSection({ b: 1, c: 2, a: 3 }, 'test');
       assert.isTrue(options[1].editing);
     });
   });
 
-  describe("saveOption", function () {
-    var sectionName, optionName, value;
+  describe("saveOption", () => {
+    let sectionName, optionName, value;
 
-    beforeEach(function () {
+    beforeEach(() => {
       sectionName = 'a';
       optionName = 'b';
       value = 1;
     });
 
-    afterEach(function () {
+    afterEach(() => {
       configStore.reset();
     });
 
-    it("saves option to sections", function () {
+    it("saves option to sections", () => {
       configStore._sections = {};
 
       configStore.saveOption(sectionName, optionName, value);
@@ -65,26 +65,26 @@ describe("ConfigStore", function () {
     });
   });
 
-  describe("deleteOption", function () {
-    var sectionName, optionName;
+  describe("deleteOption", () => {
+    let sectionName, optionName;
 
-    beforeEach(function () {
+    beforeEach(() => {
       sectionName = 'a';
       optionName = 'b';
     });
 
-    afterEach(function () {
+    afterEach(() => {
       configStore.reset();
     });
 
-    it("deletes option from section", function () {
+    it("deletes option from section", () => {
       configStore._sections = { a: { b: 1, c: 2 } };
 
       configStore.deleteOption(sectionName, optionName);
       assert.deepEqual(configStore._sections, { a: { c: 2 } });
     });
 
-    it("deletes section when all options are deleted", function () {
+    it("deletes section when all options are deleted", () => {
       configStore._sections = { a: { b: 1 } };
 
       configStore.deleteOption(sectionName, optionName);

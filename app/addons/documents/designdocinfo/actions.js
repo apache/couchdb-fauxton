@@ -16,24 +16,20 @@ import Stores from "./stores";
 var store = Stores.designDocInfoStore;
 
 export default {
-  fetchDesignDocInfo: function (options) {
-    var designDocInfo = options.designDocInfo;
-
+  fetchDesignDocInfo ({ddocName, designDocInfo}) {
     FauxtonAPI.dispatch({
       type: ActionTypes.DESIGN_FETCHING
     });
 
-    designDocInfo.fetch().then(function () {
+    return designDocInfo.fetch().then(() => {
       this.monitorDesignDoc({
-        ddocName: options.ddocName,
-        designDocInfo: designDocInfo
+        ddocName,
+        designDocInfo
       });
-
-    }.bind(this));
-
+    });
   },
 
-  monitorDesignDoc: function (options) {
+  monitorDesignDoc (options) {
     options.intervalId = window.setInterval(_.bind(this.refresh, this), 5000);
     FauxtonAPI.dispatch({
       type: ActionTypes.DESIGN_DOC_MONITOR,
@@ -41,15 +37,15 @@ export default {
     });
   },
 
-  refresh: function () {
-    store.getDesignDocInfo().fetch().then(function () {
+  refresh () {
+    store.getDesignDocInfo().fetch().then(() => {
       FauxtonAPI.dispatch({
         type: ActionTypes.DESIGN_REFRESH
       });
     });
   },
 
-  stopRefresh: function () {
+  stopRefresh () {
     window.clearInterval(store.getIntervalId());
   }
 };

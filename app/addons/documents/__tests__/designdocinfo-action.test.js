@@ -14,8 +14,7 @@ import FauxtonAPI from "../../../core/api";
 import Actions from "../designdocinfo/actions";
 import testUtils from "../../../../test/mocha/testUtils";
 import sinon from "sinon";
-const assert = testUtils.assert;
-const restore = testUtils.restore;
+const {assert, restore} = testUtils;
 
 describe('DesignDocInfo Actions', () => {
 
@@ -36,14 +35,12 @@ describe('DesignDocInfo Actions', () => {
 
       const spy = sinon.spy(Actions, 'monitorDesignDoc');
 
-
-      Actions.fetchDesignDocInfo({
+      return Actions.fetchDesignDocInfo({
         ddocName: 'test-designdoc-info',
         designDocInfo: fakeDesignDocInfo
+      }).then(() => {
+        assert.ok(spy.calledOnce);
       });
-
-      assert.ok(spy.calledOnce);
     });
   });
-
 });

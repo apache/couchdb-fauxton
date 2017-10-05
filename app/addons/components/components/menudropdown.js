@@ -11,6 +11,8 @@
 // the License.
 import React from "react";
 import ReactDOM from "react-dom";
+import { Dropdown } from "react-bootstrap";
+import RootCloseWrapper from 'react-overlays/lib/RootCloseWrapper';
 
 export class MenuDropDown extends React.Component {
   static defaultProps = {
@@ -57,23 +59,61 @@ export class MenuDropDown extends React.Component {
           this.createSectionLinks(linkSection.links)
         ]);
       }
-
       return this.createEntry(linkSection, 'el' + key);
-
     });
   };
 
   render() {
+    const menuItems = this.createSection();
     return (
-      <div className="dropdown">
-        <a className={"dropdown-toggle icon " + this.props.icon}
-          data-toggle="dropdown"
-          href="#"
-          data-bypass="true"></a>
+      <Dropdown id="dropdown-menu">
+        <CustomMenuToggle bsRole="toggle" icon={this.props.icon}>
+        </CustomMenuToggle>
+        <CustomMenu bsRole="menu" className="arrow">
+          {menuItems}
+        </CustomMenu>
+        }
+      </Dropdown>
+    );
+  }
+}
+
+class CustomMenuToggle extends React.Component {
+  constructor(props, context) {
+    super(props, context);
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  handleClick(e) {
+    e.preventDefault();
+    this.props.onClick(e);
+  }
+
+  render() {
+    return (
+      <a className={"dropdown-toggle icon " + this.props.icon}
+        style={{ fontSize: '1rem', boxShadow: '0px 0px 0px' }}
+        onClick={this.handleClick}>
+        {this.props.children}
+      </a>
+    );
+  }
+}
+
+export class CustomMenu extends React.Component {
+  constructor(props, context) {
+    super(props, context);
+  }
+
+  render() {
+    const { children, open, onClose } = this.props;
+
+    return (
+      <RootCloseWrapper disabled={!open} onRootClose={onClose}>
         <ul className="dropdown-menu arrow" role="menu" aria-labelledby="dLabel">
-          {this.createSection()}
+          {children}
         </ul>
-      </div>
+      </RootCloseWrapper>
     );
   }
 }
