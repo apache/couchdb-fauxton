@@ -188,7 +188,8 @@ function cloneView (params) {
 }
 
 function gotoEditViewPage (databaseName, designDocName, indexName) {
-  FauxtonAPI.navigate('#' + FauxtonAPI.urls('view', 'edit', encodeURIComponent(databaseName), designDocName, indexName));
+  FauxtonAPI.navigate('#' + FauxtonAPI.urls('view', 'edit', encodeURIComponent(databaseName),
+    encodeURIComponent(designDocName), encodeURIComponent(indexName)));
 }
 
 function updateMapCode (code) {
