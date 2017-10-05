@@ -10,6 +10,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+import PropTypes from 'prop-types';
+
 import React, { Component } from "react";
 import ReactSelect from "react-select";
 import "../../../../../assets/js/plugins/prettify";
@@ -122,7 +124,7 @@ export default class MangoIndexEditor extends Component {
 }
 
 MangoIndexEditor.propTypes = {
-  databaseName: React.PropTypes.string.isRequired,
-  saveIndex: React.PropTypes.func.isRequired,
-  queryIndexCode: React.PropTypes.string.isRequired
+  databaseName: PropTypes.string.isRequired,
+  saveIndex: PropTypes.func.isRequired,
+  queryIndexCode: PropTypes.string.isRequired
 };

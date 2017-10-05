@@ -9,6 +9,8 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
+import PropTypes from 'prop-types';
+
 import React from 'react';
 import {Modal} from 'react-bootstrap';
 import Components from '../../components/react-components';
@@ -60,11 +62,11 @@ export const DeleteModal = ({
 };
 
 DeleteModal.propTypes = {
-  visible: React.PropTypes.bool.isRequired,
-  isReplicationDB: React.PropTypes.bool.isRequired,
-  onClick: React.PropTypes.func.isRequired,
-  onClose: React.PropTypes.func.isRequired,
-  multipleDocs: React.PropTypes.number.isRequired
+  visible: PropTypes.bool.isRequired,
+  isReplicationDB: PropTypes.bool.isRequired,
+  onClick: PropTypes.func.isRequired,
+  onClose: PropTypes.func.isRequired,
+  multipleDocs: PropTypes.number.isRequired
 };
 
 DeleteModal.defaultProps = {
@@ -103,10 +105,10 @@ export const ErrorModal = ({visible, onClose, errorMsg, status}) => {
 };
 
 ErrorModal.propTypes = {
-  visible: React.PropTypes.bool.isRequired,
-  onClick: React.PropTypes.func.isRequired,
-  onClose: React.PropTypes.func.isRequired,
-  errorMsg: React.PropTypes.string.isRequired
+  visible: PropTypes.bool.isRequired,
+  onClick: PropTypes.func.isRequired,
+  onClose: PropTypes.func.isRequired,
+  errorMsg: PropTypes.string.isRequired
 };
 
 export const ConflictModal = ({visible, docId, onClose, onClick}) => {
@@ -145,8 +147,8 @@ export const ConflictModal = ({visible, docId, onClose, onClick}) => {
 };
 
 ConflictModal.propTypes = {
-  visible: React.PropTypes.bool.isRequired,
-  onClick: React.PropTypes.func.isRequired,
-  onClose: React.PropTypes.func.isRequired,
-  docId: React.PropTypes.string.isRequired
+  visible: PropTypes.bool.isRequired,
+  onClick: PropTypes.func.isRequired,
+  onClose: PropTypes.func.isRequired,
+  docId: PropTypes.string.isRequired
 };

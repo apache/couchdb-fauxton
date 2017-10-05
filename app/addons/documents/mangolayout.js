@@ -24,7 +24,7 @@ import FauxtonAPI from "../../core/api";
 import Constants from './constants';
 
 export const RightHeader = ({ docURL, endpoint }) => {
-  const apiBar = <ApiBarContainer docURL={docURL} endpoint={endpoint} />;
+  const apiBar = <ApiBarContainer docURL={docURL} endpoint={endpoint} includeQueryOptionsParams={false}/>;
   return (
     <div className="right-header-wrapper flex-layout flex-row flex-body">
       <div id="right-header" className="flex-body">

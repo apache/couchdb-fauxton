@@ -9,6 +9,8 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
+import PropTypes from 'prop-types';
+
 import React from 'react';
 import Constants from '../constants';
 import Components from '../../components/react-components';
@@ -49,8 +51,8 @@ const ReplicationTargetSelect = ({value, onChange}) => {
 };
 
 ReplicationTargetSelect.propTypes = {
-  value: React.PropTypes.string.isRequired,
-  onChange: React.PropTypes.func.isRequired
+  value: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired
 };
 
 const RemoteTargetReplicationRow = ({onChange, value, newRemote}) => {
@@ -69,8 +71,8 @@ const RemoteTargetReplicationRow = ({onChange, value, newRemote}) => {
 };
 
 RemoteTargetReplicationRow.propTypes = {
-  value: React.PropTypes.string.isRequired,
-  onChange: React.PropTypes.func.isRequired
+  value: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired
 };
 
 const ExistingLocalTargetReplicationRow = ({onChange, value, databases}) => {
@@ -89,9 +91,9 @@ const ExistingLocalTargetReplicationRow = ({onChange, value, databases}) => {
 };
 
 ExistingLocalTargetReplicationRow.propTypes = {
-  value: React.PropTypes.string.isRequired,
-  databases: React.PropTypes.array.isRequired,
-  onChange: React.PropTypes.func.isRequired
+  value: PropTypes.string.isRequired,
+  databases: PropTypes.array.isRequired,
+  onChange: PropTypes.func.isRequired
 };
 
 const NewLocalTargetReplicationRow = ({onChange, value}) =>
@@ -104,8 +106,8 @@ const NewLocalTargetReplicationRow = ({onChange, value}) =>
   />;
 
 NewLocalTargetReplicationRow.propTypes = {
-  value: React.PropTypes.string.isRequired,
-  onChange: React.PropTypes.func.isRequired
+  value: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired
 };
 
 const ReplicationTargetRow = ({
@@ -159,12 +161,12 @@ const ReplicationTargetRow = ({
 };
 
 ReplicationTargetRow.propTypes = {
-  databases: React.PropTypes.array.isRequired,
-  onLocalTargetChange: React.PropTypes.func.isRequired,
-  onRemoteTargetChange: React.PropTypes.func.isRequired,
-  remoteTarget: React.PropTypes.string.isRequired,
-  localTarget: React.PropTypes.string.isRequired,
-  replicationTarget: React.PropTypes.string.isRequired
+  databases: PropTypes.array.isRequired,
+  onLocalTargetChange: PropTypes.func.isRequired,
+  onRemoteTargetChange: PropTypes.func.isRequired,
+  remoteTarget: PropTypes.string.isRequired,
+  localTarget: PropTypes.string.isRequired,
+  replicationTarget: PropTypes.string.isRequired
 };
 
 export class ReplicationTarget extends React.Component {
@@ -199,11 +201,11 @@ export class ReplicationTarget extends React.Component {
 }
 
 ReplicationTarget.propTypes = {
-  databases: React.PropTypes.array.isRequired,
-  onTargetChange: React.PropTypes.func.isRequired,
-  onLocalTargetChange: React.PropTypes.func.isRequired,
-  onRemoteTargetChange: React.PropTypes.func.isRequired,
-  remoteTarget: React.PropTypes.string.isRequired,
-  localTarget: React.PropTypes.string.isRequired,
-  replicationTarget: React.PropTypes.string.isRequired
+  databases: PropTypes.array.isRequired,
+  onTargetChange: PropTypes.func.isRequired,
+  onLocalTargetChange: PropTypes.func.isRequired,
+  onRemoteTargetChange: PropTypes.func.isRequired,
+  remoteTarget: PropTypes.string.isRequired,
+  localTarget: PropTypes.string.isRequired,
+  replicationTarget: PropTypes.string.isRequired
 };

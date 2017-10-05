@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { Component } from "react";
 import { validateDomain } from "../helpers";
 
@@ -77,10 +78,10 @@ export default class OriginRow extends Component {
     );
   }
 
-};
+}
 
 OriginRow.propTypes = {
-  origin: React.PropTypes.string.isRequired,
-  updateOrigin: React.PropTypes.func.isRequired,
-  deleteOrigin: React.PropTypes.func.isRequired
+  origin: PropTypes.string.isRequired,
+  updateOrigin: PropTypes.func.isRequired,
+  deleteOrigin: PropTypes.func.isRequired
 };

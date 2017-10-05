@@ -22,9 +22,8 @@ const {TabElement, TabElementWrapper, Polling} = Components;
 
 const activeTasksStore = Stores.activeTasksStore;
 
-export const ActiveTasksController = React.createClass({
-
-  getStoreState () {
+export class ActiveTasksController extends React.Component {
+  getStoreState = () => {
     return {
       collection: activeTasksStore.getCollection(),
       searchTerm: activeTasksStore.getSearchTerm(),
@@ -34,38 +33,36 @@ export const ActiveTasksController = React.createClass({
       headerIsAscending: activeTasksStore.getHeaderIsAscending()
 
     };
-  },
+  };
 
-  getInitialState () {
-    return this.getStoreState();
-  },
-
-  componentDidMount () {
+  componentDidMount() {
     Actions.init(new Resources.AllTasks());
     activeTasksStore.on('change', this.onChange, this);
-  },
+  }
 
-  componentWillUnmount () {
+  componentWillUnmount() {
     activeTasksStore.off('change', this.onChange, this);
-  },
+  }
 
-  onChange () {
+  onChange = () => {
     this.setState(this.getStoreState());
-  },
+  };
 
-  setNewSearchTerm (searchTerm) {
+  setNewSearchTerm = (searchTerm) => {
     Actions.setSearchTerm(searchTerm);
-  },
+  };
 
-  switchTab (newRadioButton) {  //tabs buttons
+  switchTab = (newRadioButton) => {  //tabs buttons
     Actions.switchTab(newRadioButton);
-  },
+  };
 
-  tableHeaderOnClick (headerClicked) {
+  tableHeaderOnClick = (headerClicked) => {
     Actions.sortByColumnHeader(headerClicked);
-  },
+  };
 
-  render () {
+  state = this.getStoreState();
+
+  render() {
     const {collection, searchTerm, selectedRadio, sortByHeader, headerIsAscending} = this.state;
 
     const setSearchTerm = this.setNewSearchTerm;
@@ -90,31 +87,29 @@ export const ActiveTasksController = React.createClass({
       </div>
     );
   }
-});
+}
 
-var ActiveTasksFilterTabs = React.createClass({
-  getDefaultProps () {
-    return {
-      radioNames : [
-        'All Tasks',
-        'Replication',
-        'Database Compaction',
-        'Indexer',
-        'View Compaction'
-      ]
-    };
-  },
+class ActiveTasksFilterTabs extends React.Component {
+  static defaultProps = {
+    radioNames : [
+      'All Tasks',
+      'Replication',
+      'Database Compaction',
+      'Indexer',
+      'View Compaction'
+    ]
+  };
 
-  checked (radioName) {
+  checked = (radioName) => {
     return this.props.selectedRadio === radioName;
-  },
+  };
 
-  onRadioClick (e) {
+  onRadioClick = (e) => {
     var radioName = e.target.value;
     this.props.onRadioClick(radioName);
-  },
+  };
 
-  createFilterTabs () {
+  createFilterTabs = () => {
     return (
       this.props.radioNames.map((radioName, i) => {
         const checked = this.checked(radioName);
@@ -128,14 +123,14 @@ var ActiveTasksFilterTabs = React.createClass({
         );
       })
     );
-  },
+  };
 
-  searchTermChange (e) {
+  searchTermChange = (e) => {
     var searchTerm = e.target.value;
     this.props.onSearch(searchTerm);
-  },
+  };
 
-  render () {
+  render() {
     const filterTabs = this.createFilterTabs();
     return (
       <TabElementWrapper>
@@ -153,10 +148,10 @@ var ActiveTasksFilterTabs = React.createClass({
       </TabElementWrapper>
     );
   }
-});
+}
 
-var ActiveTaskTable = React.createClass({
-  render () {
+class ActiveTaskTable extends React.Component {
+  render() {
     var collection = this.props.collection;
     var selectedRadio = this.props.selectedRadio;
     var searchTerm = this.props.searchTerm;
@@ -179,23 +174,21 @@ var ActiveTaskTable = React.createClass({
       </div>
     );
   }
-});
+}
 
-var ActiveTasksTableHeader = React.createClass({
-  getDefaultProps () {
-    return {
-      headerNames : [
-        ['type', 'Type'],
-        ['database', 'Database'],
-        ['started-on', 'Started on'],
-        ['updated-on', 'Updated on'],
-        ['pid', 'PID'],
-        ['progress', 'Status']
-      ]
-    };
-  },
+class ActiveTasksTableHeader extends React.Component {
+  static defaultProps = {
+    headerNames : [
+      ['type', 'Type'],
+      ['database', 'Database'],
+      ['started-on', 'Started on'],
+      ['updated-on', 'Updated on'],
+      ['pid', 'PID'],
+      ['progress', 'Status']
+    ]
+  };
 
-  createTableHeadingFields () {
+  createTableHeadingFields = () => {
     var onTableHeaderClick = this.props.onTableHeaderClick;
     var sortByHeader = this.props.sortByHeader;
     var headerIsAscending = this.props.headerIsAscending;
@@ -208,19 +201,19 @@ var ActiveTasksTableHeader = React.createClass({
         sortByHeader={sortByHeader}
         headerIsAscending={headerIsAscending} />;
     });
-  },
+  };
 
-  render () {
+  render() {
     return (
       <thead>
         <tr>{this.createTableHeadingFields()}</tr>
       </thead>
     );
   }
-});
+}
 
-var TableHeader = React.createClass({
-  arrow () {
+class TableHeader extends React.Component {
+  arrow = () => {
     var sortBy = this.props.sortByHeader;
     var currentName = this.props.headerName;
     var headerIsAscending = this.props.headerIsAscending;
@@ -229,14 +222,14 @@ var TableHeader = React.createClass({
     if (sortBy === currentName) {
       return <i className={arrow}></i>;
     }
-  },
+  };
 
-  onTableHeaderClick (e) {
+  onTableHeaderClick = (e) => {
     var headerSelected = e.target.value;
     this.props.onTableHeaderClick(headerSelected);
-  },
+  };
 
-  render () {
+  render() {
     var arrow = this.arrow();
     var th_class = 'header-field ' + this.props.headerName;
 
@@ -257,27 +250,22 @@ var TableHeader = React.createClass({
       </td>
     );
   }
-});
+}
 
-var ActiveTasksTableBody = React.createClass({
-
-  getStoreState () {
+class ActiveTasksTableBody extends React.Component {
+  getStoreState = () => {
     return {
       filteredTable: activeTasksStore.getFilteredTable(this.props.collection)
     };
-  },
+  };
 
-  getInitialState () {
-    return this.getStoreState();
-  },
-
-  componentWillReceiveProps () {
+  componentWillReceiveProps() {
     this.setState({
       filteredTable: activeTasksStore.getFilteredTable(this.props.collection)
     });
-  },
+  }
 
-  createRows () {
+  createRows = () => {
     var isThereASearchTerm = this.props.searchTerm.trim() === "";
 
     if (this.state.filteredTable.length === 0) {
@@ -287,9 +275,9 @@ var ActiveTasksTableBody = React.createClass({
     return _.map(this.state.filteredTable, function (item, key) {
       return <ActiveTaskTableBodyContents key={key} item={item} />;
     });
-  },
+  };
 
-  noActiveTasks () {
+  noActiveTasks = () => {
     var type = this.props.selectedRadio;
     if (type === "All Tasks") {
       type = "";
@@ -300,9 +288,9 @@ var ActiveTasksTableBody = React.createClass({
         <td  colSpan="6">No active {type} tasks.</td>
       </tr>
     );
-  },
+  };
 
-  noActiveTasksMatchFilter () {
+  noActiveTasksMatchFilter = () => {
     var type = this.props.selectedRadio;
     if (type === "All Tasks") {
       type = "";
@@ -313,19 +301,21 @@ var ActiveTasksTableBody = React.createClass({
         <td colSpan="6">No active {type} tasks match with filter: "{this.props.searchTerm}"</td>
       </tr>
     );
-  },
+  };
 
-  render () {
+  state = this.getStoreState();
+
+  render() {
     return (
       <tbody className="js-tasks-go-here">
       {this.createRows()}
       </tbody>
     );
   }
-});
+}
 
-var ActiveTaskTableBodyContents = React.createClass({
-  getInfo (item) {
+class ActiveTaskTableBodyContents extends React.Component {
+  getInfo = (item) => {
     return {
       type : item.type,
       objectField: activeTasksHelpers.getDatabaseFieldMessage(item),
@@ -334,9 +324,9 @@ var ActiveTaskTableBodyContents = React.createClass({
       pid: item.pid.replace(/[<>]/g, ''),
       progress: activeTasksHelpers.getProgressMessage(item),
     };
-  },
+  };
 
-  multilineMessage (messageArray, optionalClassName) {
+  multilineMessage = (messageArray, optionalClassName) => {
 
     if (!optionalClassName) {
       optionalClassName = '';
@@ -346,9 +336,9 @@ var ActiveTaskTableBodyContents = React.createClass({
     return messageArray.map(function (msgLine, iterator) {
       return <p key={iterator} className={cssClasses}>{msgLine}</p>;
     });
-  },
+  };
 
-  render () {
+  render() {
     var rowData =  this.getInfo(this.props.item);
     var objectFieldMsg = this.multilineMessage(rowData.objectField, 'to-from-database');
     var startedOnMsg = this.multilineMessage(rowData.started_on, 'time');
@@ -366,41 +356,38 @@ var ActiveTaskTableBodyContents = React.createClass({
       </tr>
     );
   }
-});
+}
 
-export const ActiveTasksPollingWidgetController = React.createClass({
-
-  getStoreState () {
+export class ActiveTasksPollingWidgetController extends React.Component {
+  getStoreState = () => {
     return {
       collection:  activeTasksStore.getBackboneCollection()
     };
-  },
+  };
 
-  getInitialState () {
-    return this.getStoreState();
-  },
-
-  componentDidMount () {
+  componentDidMount() {
     activeTasksStore.on('change', this.onChange, this);
-  },
+  }
 
-  componentWillUnmount () {
+  componentWillUnmount() {
     activeTasksStore.off('change', this.onChange, this);
-  },
+  }
 
-  onChange () {
+  onChange = () => {
     this.setState(this.getStoreState());
-  },
+  };
 
-  runPollingUpdate () {
+  runPollingUpdate = () => {
     Actions.runPollingUpdate(this.state.collection);
-  },
+  };
 
-  getPluralForLabel () {
+  getPluralForLabel = () => {
     return this.state.pollingInterval === "1" ? '' : 's';
-  },
+  };
 
-  render () {
+  state = this.getStoreState();
+
+  render() {
     return (
       <div className="active-tasks__polling-wrapper">
         <Polling
@@ -414,7 +401,7 @@ export const ActiveTasksPollingWidgetController = React.createClass({
       </div>
     );
   }
-});
+}
 
 var activeTasksHelpers = {
   getTimeInfo (timeStamp) {

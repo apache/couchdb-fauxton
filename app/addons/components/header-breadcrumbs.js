@@ -10,6 +10,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+import PropTypes from 'prop-types';
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 
@@ -24,7 +26,7 @@ export const Breadcrumbs = ({crumbs}) => {
 };
 
 Breadcrumbs.propTypes = {
-  crumbs: React.PropTypes.array.isRequired
+  crumbs: PropTypes.array.isRequired
 };
 
 

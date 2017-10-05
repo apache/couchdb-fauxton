@@ -10,6 +10,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+import PropTypes from 'prop-types';
+
 import React from 'react';
 import FauxtonAPI from '../../../../../core/api';
 import Components from '../../../../components/react-components';
@@ -136,13 +138,13 @@ export default class TableRow extends React.Component {
       </tr>
     );
   }
-};
+}
 
 TableRow.propTypes = {
-  docIdentifier: React.PropTypes.string.isRequired,
-  docChecked: React.PropTypes.func.isRequired,
-  isSelected: React.PropTypes.bool.isRequired,
-  index: React.PropTypes.number.isRequired,
-  data: React.PropTypes.object.isRequired,
-  onClick: React.PropTypes.func.isRequired
+  docIdentifier: PropTypes.string.isRequired,
+  docChecked: PropTypes.func.isRequired,
+  isSelected: PropTypes.bool.isRequired,
+  index: PropTypes.number.isRequired,
+  data: PropTypes.object.isRequired,
+  onClick: PropTypes.func.isRequired
 };

@@ -1,3 +1,5 @@
+import app from "../../../app";
+
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License. You may obtain a copy of
 // the License at
@@ -10,7 +12,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import app from "../../../app";
+import PropTypes from 'prop-types';
+
 import React from "react";
 import ReactDOM from "react-dom";
 import RevActions from "./rev-browser.actions";
@@ -187,9 +190,9 @@ const RevisionDiffArea = ({ours, theirs}) => {
   );
 };
 RevisionDiffArea.propTypes = {
-  ours: React.PropTypes.object,
-  theirs: React.PropTypes.object,
-  currentRev: React.PropTypes.string
+  ours: PropTypes.object,
+  theirs: PropTypes.object,
+  currentRev: PropTypes.string
 };
 
 
@@ -210,11 +213,11 @@ const ConflictingRevisionsDropDown = ({options, selected, onRevisionClick, onBac
   );
 };
 ConflictingRevisionsDropDown.propTypes = {
-  options: React.PropTypes.array.isRequired,
-  selected: React.PropTypes.string.isRequired,
-  onRevisionClick: React.PropTypes.func.isRequired,
-  onBackwardClick: React.PropTypes.func.isRequired,
-  onForwardClick: React.PropTypes.func.isRequired,
+  options: PropTypes.array.isRequired,
+  selected: PropTypes.string.isRequired,
+  onRevisionClick: PropTypes.func.isRequired,
+  onBackwardClick: PropTypes.func.isRequired,
+  onForwardClick: PropTypes.func.isRequired,
 };
 
 class RevisionBrowserControls extends React.Component {
@@ -326,9 +329,9 @@ class RevisionBrowserControls extends React.Component {
   }
 }
 RevisionBrowserControls.propTypes = {
-  tree: React.PropTypes.object.isRequired,
-  ours: React.PropTypes.object.isRequired,
-  conflictingRevs: React.PropTypes.array.isRequired,
+  tree: PropTypes.object.isRequired,
+  ours: PropTypes.object.isRequired,
+  conflictingRevs: PropTypes.array.isRequired,
 };
 
 class ConfirmModal extends React.Component {
@@ -409,7 +412,7 @@ class ConfirmModal extends React.Component {
   }
 }
 ConfirmModal.propTypes = {
-  onConfirm: React.PropTypes.func.isRequired,
+  onConfirm: PropTypes.func.isRequired,
 };
 
 const BackForwardControls = ({onClick, forward}) => {
@@ -419,7 +422,7 @@ const BackForwardControls = ({onClick, forward}) => {
   return <div style={style} className={icon} onClick={onClick}></div>;
 };
 BackForwardControls.propTypes = {
-  onClick: React.PropTypes.func.isRequired,
+  onClick: PropTypes.func.isRequired,
 };
 
 export default {

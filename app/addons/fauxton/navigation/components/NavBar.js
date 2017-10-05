@@ -10,6 +10,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+import PropTypes from 'prop-types';
+
 import React, { Component } from 'react';
 
 import Footer from './Footer';
@@ -100,16 +102,16 @@ class NavBar extends Component {
 }
 
 NavBar.propTypes = {
-  activeLink: React.PropTypes.string,
-  isMinimized: React.PropTypes.bool.isRequired,
-  version: React.PropTypes.string,
-  username: React.PropTypes.string,
-  navLinks: React.PropTypes.array,
-  bottomNavLinks: React.PropTypes.array,
-  footerNavLinks: React.PropTypes.array,
-  isNavBarVisible: React.PropTypes.bool,
-  isLoginSectionVisible: React.PropTypes.bool.isRequired,
-  isLoginVisibleInsteadOfLogout: React.PropTypes.bool.isRequired
+  activeLink: PropTypes.string,
+  isMinimized: PropTypes.bool.isRequired,
+  version: PropTypes.string,
+  username: PropTypes.string,
+  navLinks: PropTypes.array,
+  bottomNavLinks: PropTypes.array,
+  footerNavLinks: PropTypes.array,
+  isNavBarVisible: PropTypes.bool,
+  isLoginSectionVisible: PropTypes.bool.isRequired,
+  isLoginVisibleInsteadOfLogout: PropTypes.bool.isRequired
 };
 
 export default NavBar;

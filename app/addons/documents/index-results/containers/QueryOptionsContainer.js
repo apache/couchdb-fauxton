@@ -10,8 +10,9 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import DocHelpers from '../../helpers';
 import QueryOptions from '../components/queryoptions/QueryOptions';
 import { changeLayout, resetState } from '../actions/base';
 import { resetPagination } from '../actions/pagination';
@@ -28,7 +29,8 @@ import {
   queryOptionsUpdateLimit,
   queryOptionsToggleIncludeDocs,
   queryOptionsToggleVisibility,
-  queryOptionsFilterOnlyDdocs
+  queryOptionsFilterOnlyDdocs,
+  queryOptionsRemoveFilterOnlyDdocs
 } from '../actions/queryoptions';
 import {
   getQueryOptionsPanel,
@@ -38,12 +40,16 @@ import {
   getSelectedLayout
 } from '../reducers';
 
-const mapStateToProps = ({indexResults}, ownProps) => {
+const showReduce = (designDocs, selectedNavItem) => {
+  return DocHelpers.selectedViewContainsReduceFunction(designDocs, selectedNavItem);
+};
+
+const mapStateToProps = ({indexResults, sidebar}, ownProps) => {
   const queryOptionsPanel = getQueryOptionsPanel(indexResults);
   return {
     contentVisible: queryOptionsPanel.isVisible,
     includeDocs: queryOptionsPanel.includeDocs,
-    showReduce: queryOptionsPanel.showReduce,
+    showReduce: showReduce(sidebar.designDocs, ownProps.selectedNavItem),
     reduce: queryOptionsPanel.reduce,
     groupLevel: queryOptionsPanel.groupLevel,
     showByKeys: queryOptionsPanel.showByKeys,
@@ -102,8 +108,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     queryOptionsExecute: (queryOptionsParams, perPage) => {
       dispatch(queryOptionsExecute(ownProps.queryDocs, queryOptionsParams, perPage));
     },
-    queryOptionsFilterOnlyDdocs: () => {
+    queryOptionsApplyFilterOnlyDdocs: () => {
       dispatch(queryOptionsFilterOnlyDdocs());
+    },
+    queryOptionsRemoveFilterOnlyDdocs: () => {
+      dispatch(queryOptionsRemoveFilterOnlyDdocs());
     },
     changeLayout: (newLayout) => {
       dispatch(changeLayout(newLayout));
@@ -122,5 +131,5 @@ const QueryOptionsContainer = connect (
 export default QueryOptionsContainer;
 
 QueryOptionsContainer.propTypes = {
-  queryDocs: React.PropTypes.func.isRequired
+  queryDocs: PropTypes.func.isRequired
 };

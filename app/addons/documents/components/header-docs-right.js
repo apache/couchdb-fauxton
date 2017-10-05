@@ -10,45 +10,32 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+import PropTypes from 'prop-types';
+
 import React from 'react';
-import QueryOptions from '../queryoptions/queryoptions';
 import QueryOptionsContainer from '../index-results/containers/QueryOptionsContainer';
 import JumpToDoc from './jumptodoc';
 import Actions from './actions';
 
-const { QueryOptionsController } = QueryOptions;
-
-const getQueryOptionsComponent = (hideQueryOptions, isRedux, queryDocs, ddocsOnly) => {
-  if (hideQueryOptions) {
-    return null;
-  }
-
-  let queryOptionsComponent = <QueryOptionsController />;
-  if (isRedux) {
-    queryOptionsComponent = <QueryOptionsContainer
-      ddocsOnly={ddocsOnly}
-      queryDocs={ queryDocs } />;
-  }
-
-  return queryOptionsComponent;
-};
-
-const RightAllDocsHeader = ({database, hideQueryOptions, isRedux, queryDocs, ddocsOnly}) =>
+const RightAllDocsHeader = ({database, hideQueryOptions, hideJumpToDoc, queryDocs, ddocsOnly, selectedNavItem}) =>
   <div className="header-right right-db-header flex-layout flex-row">
 
     <div className="faux-header__searchboxwrapper">
       <div className="faux-header__searchboxcontainer">
-        <JumpToDoc cache={false} loadOptions={Actions.fetchAllDocsWithKey(database)} database={database} />
+        {hideJumpToDoc ? null :
+          <JumpToDoc cache={false} loadOptions={Actions.fetchAllDocsWithKey(database)} database={database} /> }
       </div>
     </div>
-    {getQueryOptionsComponent(hideQueryOptions, isRedux, queryDocs, ddocsOnly)}
+    {hideQueryOptions ? null :
+      <QueryOptionsContainer ddocsOnly={ddocsOnly} queryDocs={ queryDocs } selectedNavItem={selectedNavItem} /> }
   </div>;
 
 RightAllDocsHeader.propTypes = {
-  database: React.PropTypes.object.isRequired,
-  hideQueryOptions: React.PropTypes.bool,
-  isRedux: React.PropTypes.bool,
-  queryDocs: React.PropTypes.func
+  database: PropTypes.object.isRequired,
+  hideQueryOptions: PropTypes.bool,
+  isRedux: PropTypes.bool,
+  queryDocs: PropTypes.func,
+  selectedNavItem: PropTypes.object
 };
 
 RightAllDocsHeader.defaultProps = {

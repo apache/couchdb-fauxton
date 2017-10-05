@@ -10,6 +10,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+import PropTypes from 'prop-types';
+
 import React from "react";
 import ReactDOM from "react-dom";
 import {Modal} from "react-bootstrap";
@@ -20,31 +22,28 @@ require('brace/mode/json');
 require('brace/theme/idle_fingers');
 
 // this appears when the cursor is over a string. It shows an icon in the gutter that opens the modal.
-export const StringEditModal = React.createClass({
+export class StringEditModal extends React.Component {
+  static propTypes = {
+    value: PropTypes.string.isRequired,
+    visible: PropTypes.bool.isRequired,
+    onClose: PropTypes.func.isRequired,
+    onSave: PropTypes.func.isRequired
+  };
 
-  propTypes: {
-    value: React.PropTypes.string.isRequired,
-    visible: React.PropTypes.bool.isRequired,
-    onClose: React.PropTypes.func.isRequired,
-    onSave: React.PropTypes.func.isRequired
-  },
+  static defaultProps = {
+    visible: false,
+    onClose () { },
+    onSave () { }
+  };
 
-  getDefaultProps () {
-    return {
-      visible: false,
-      onClose () { },
-      onSave () { }
-    };
-  },
-
-  componentDidMount () {
+  componentDidMount() {
     if (!this.props.visible) {
       return;
     }
     this.initEditor(this.props.value);
-  },
+  }
 
-  componentDidUpdate (prevProps) {
+  componentDidUpdate(prevProps) {
     if (!this.props.visible) {
       return;
     }
@@ -54,26 +53,26 @@ export const StringEditModal = React.createClass({
     }
 
     this.initEditor(val);
-  },
+  }
 
-  initEditor (val) {
+  initEditor = (val) => {
     this.editor = ace.edit(ReactDOM.findDOMNode(this.refs.stringEditor));
     this.editor.$blockScrolling = Infinity; // suppresses an Ace editor error
     this.editor.setShowPrintMargin(false);
     this.editor.setOption('highlightActiveLine', true);
     this.editor.setTheme('ace/theme/idle_fingers');
     this.editor.setValue(val, -1);
-  },
+  };
 
-  closeModal () {
+  closeModal = () => {
     this.props.onClose();
-  },
+  };
 
-  save () {
+  save = () => {
     this.props.onSave(this.editor.getValue());
-  },
+  };
 
-  render () {
+  render() {
     return (
       <Modal dialogClassName="string-editor-modal" show={this.props.visible} onHide={this.closeModal}>
         <Modal.Header closeButton={true}>
@@ -92,4 +91,4 @@ export const StringEditModal = React.createClass({
       </Modal>
     );
   }
-});
+}

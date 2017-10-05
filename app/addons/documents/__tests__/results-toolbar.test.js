@@ -24,7 +24,8 @@ describe('Results Toolbar', () => {
     allDocumentsSelected: false,
     hasSelectedItem: false,
     toggleSelectAll: () => {},
-    isLoading: false
+    isLoading: false,
+    queryOptionsParams: {}
   };
 
   beforeEach(() => {

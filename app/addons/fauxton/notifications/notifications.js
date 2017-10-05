@@ -10,6 +10,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+import PropTypes from 'prop-types';
+
 import React from "react";
 import ReactDOM from "react-dom";
 import Actions from "./actions";
@@ -23,33 +25,28 @@ const {Copy} = Components;
 
 // The one-stop-shop for Fauxton notifications. This controller handler the header notifications and the rightmost
 // notification center panel
-export const NotificationController = React.createClass({
-
-  getInitialState () {
-    return this.getStoreState();
-  },
-
-  getStoreState () {
+export class NotificationController extends React.Component {
+  getStoreState = () => {
     return {
       notificationCenterVisible: store.isNotificationCenterVisible(),
       notificationCenterFilter: store.getNotificationFilter(),
       notifications: store.getNotifications()
     };
-  },
+  };
 
-  componentDidMount () {
+  componentDidMount() {
     store.on('change', this.onChange, this);
-  },
+  }
 
-  componentWillUnmount () {
+  componentWillUnmount() {
     store.off('change', this.onChange);
-  },
+  }
 
-  onChange () {
+  onChange = () => {
     this.setState(this.getStoreState());
-  },
+  };
 
-  getStyles () {
+  getStyles = () => {
     const isVisible = this.state.notificationCenterVisible;
     let item = {
       key: '1',
@@ -70,9 +67,9 @@ export const NotificationController = React.createClass({
       };
     }
     return [item];
-  },
+  };
 
-  getNotificationCenterPanel (items) {
+  getNotificationCenterPanel = (items) => {
     const panel = items.map(({style}) => {
       return <NotificationCenterPanel
         key={'1'}
@@ -86,9 +83,11 @@ export const NotificationController = React.createClass({
         {panel}
       </span>
     );
-  },
+  };
 
-  render () {
+  state = this.getStoreState();
+
+  render() {
     return (
       <div>
         <GlobalNotifications
@@ -100,30 +99,30 @@ export const NotificationController = React.createClass({
       </div>
     );
   }
-});
+}
 
 
-var GlobalNotifications = React.createClass({
-  propTypes: {
-    notifications: React.PropTypes.array.isRequired
-  },
+class GlobalNotifications extends React.Component {
+  static propTypes = {
+    notifications: PropTypes.array.isRequired
+  };
 
-  componentDidMount () {
+  componentDidMount() {
     $(document).on('keydown.notificationClose', this.onKeyDown);
-  },
+  }
 
-  componentWillUnmount () {
+  componentWillUnmount() {
     $(document).off('keydown.notificationClose', this.onKeyDown);
-  },
+  }
 
-  onKeyDown (e) {
+  onKeyDown = (e) => {
     var code = e.keyCode || e.which;
     if (code === 27) {
       Actions.hideAllVisibleNotifications();
     }
-  },
+  };
 
-  getNotifications () {
+  getNotifications = () => {
     if (!this.props.notifications.length) {
       return null;
     }
@@ -147,9 +146,9 @@ var GlobalNotifications = React.createClass({
           onHideComplete={Actions.hideNotification} />
       );
     }, this);
-  },
+  };
 
-  getchildren (items) {
+  getchildren = (items) => {
     const notifications = items.map(({key, data, style}) => {
       const notification = data;
       return (
@@ -171,9 +170,9 @@ var GlobalNotifications = React.createClass({
         {notifications}
       </div>
     );
-  },
+  };
 
-  getStyles (prevItems) {
+  getStyles = (prevItems) => {
     if (!prevItems) {
       prevItems = [];
     }
@@ -202,9 +201,9 @@ var GlobalNotifications = React.createClass({
           data: notification
         };
       });
-  },
+  };
 
-  render () {
+  render() {
     return (
       <div id="global-notifications">
         <TransitionMotion
@@ -215,60 +214,57 @@ var GlobalNotifications = React.createClass({
       </div>
     );
   }
-});
+}
 
+class Notification extends React.Component {
+  static propTypes = {
+    msg: PropTypes.string.isRequired,
+    onStartHide: PropTypes.func.isRequired,
+    onHideComplete: PropTypes.func.isRequired,
+    type: PropTypes.oneOf(['error', 'info', 'success']),
+    escape: PropTypes.bool,
+    isHiding: PropTypes.bool.isRequired,
+    visibleTime: PropTypes.number
+  };
 
-var Notification = React.createClass({
-  propTypes: {
-    msg: React.PropTypes.string.isRequired,
-    onStartHide: React.PropTypes.func.isRequired,
-    onHideComplete: React.PropTypes.func.isRequired,
-    type: React.PropTypes.oneOf(['error', 'info', 'success']),
-    escape: React.PropTypes.bool,
-    isHiding: React.PropTypes.bool.isRequired,
-    visibleTime: React.PropTypes.number
-  },
+  static defaultProps = {
+    type: 'info',
+    visibleTime: 8000,
+    escape: true
+  };
 
-  getDefaultProps () {
-    return {
-      type: 'info',
-      visibleTime: 8000,
-      escape: true
-    };
-  },
-
-  componentWillUnmount () {
+  componentWillUnmount() {
     if (this.timeout) {
       window.clearTimeout(this.timeout);
     }
-  },
+  }
 
-  componentDidMount () {
+  componentDidMount() {
     this.timeout = setTimeout(this.hide, this.props.visibleTime);
-  },
+  }
 
-  hide (e) {
+  hide = (e) => {
     if (e) {
       e.preventDefault();
     }
     this.props.onStartHide(this.props.notificationId);
-  },
+  };
 
   // many messages contain HTML, hence the need for dangerouslySetInnerHTML
-  getMsg () {
+  getMsg = () => {
     var msg = (this.props.escape) ? _.escape(this.props.msg) : this.props.msg;
     return {
       __html: msg
     };
-  },
+  };
 
-  onAnimationComplete () {
+  onAnimationComplete = () => {
     if (this.props.isHiding) {
       window.setTimeout(() => this.props.onHideComplete(this.props.notificationId));
     }
-  },
+  };
 
-  render () {
+  render() {
     const {style, notificationId} = this.props;
     const iconMap = {
       error: 'fonticon-attention-circled',
@@ -294,41 +290,39 @@ var Notification = React.createClass({
       </div>
     );
   }
-});
+}
 
 
-export const NotificationCenterButton = React.createClass({
-  getInitialState () {
-    return {
-      visible: true
-    };
-  },
+export class NotificationCenterButton extends React.Component {
+  state = {
+    visible: true
+  };
 
-  hide () {
+  hide = () => {
     this.setState({ visible: false });
-  },
+  };
 
-  show () {
+  show = () => {
     this.setState({ visible: true });
-  },
+  };
 
-  render () {
+  render() {
     var classes = 'fonticon fonticon-bell' + ((!this.state.visible) ? ' hide' : '');
     return (
       <div className={classes} onClick={Actions.showNotificationCenter}></div>
     );
   }
-});
+}
 
 
-var NotificationCenterPanel = React.createClass({
-  propTypes: {
-    visible: React.PropTypes.bool.isRequired,
-    filter: React.PropTypes.string.isRequired,
-    notifications: React.PropTypes.array.isRequired
-  },
+class NotificationCenterPanel extends React.Component {
+  static propTypes = {
+    visible: PropTypes.bool.isRequired,
+    filter: PropTypes.string.isRequired,
+    notifications: PropTypes.array.isRequired
+  };
 
-  getNotifications (items) {
+  getNotifications = (items) => {
     let notifications;
     if (!items.length && !this.props.notifications.length) {
         notifications = <li className="no-notifications">
@@ -354,9 +348,9 @@ var NotificationCenterPanel = React.createClass({
         {notifications}
       </ul>
     );
-  },
+  };
 
-  getStyles (prevItems = []) {
+  getStyles = (prevItems = []) => {
     return this.props.notifications
     .map(notification => {
       let item = prevItems.find(style => style.key === (notification.notificationId.toString()));
@@ -380,9 +374,9 @@ var NotificationCenterPanel = React.createClass({
         data: notification
       };
     });
-  },
+  };
 
-  render () {
+  render() {
     if (!this.props.visible && this.props.style.x === 0) {
       // panelClasses += ' visible';
       return null;
@@ -444,20 +438,19 @@ var NotificationCenterPanel = React.createClass({
       </div>
     );
   }
-});
+}
 
+class NotificationPanelRow extends React.Component {
+  static propTypes = {
+    item: PropTypes.object.isRequired
+  };
 
-var NotificationPanelRow = React.createClass({
-  propTypes: {
-    item: React.PropTypes.object.isRequired
-  },
-
-  clearNotification () {
+  clearNotification = () => {
     const {notificationId} = this.props.item;
     Actions.clearSingleNotification(notificationId);
-  },
+  };
 
-  render () {
+  render() {
     const iconMap = {
       success: 'fonticon-ok-circled',
       error: 'fonticon-attention-circled',
@@ -493,7 +486,7 @@ var NotificationPanelRow = React.createClass({
       </li>
     );
   }
-});
+}
 
 export class PermanentNotification extends React.Component {
   constructor (props) {
@@ -537,7 +530,7 @@ export class PermanentNotification extends React.Component {
       </div>
     );
   }
-};
+}
 
 export default {
   NotificationController,

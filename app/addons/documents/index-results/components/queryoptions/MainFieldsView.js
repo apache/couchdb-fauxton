@@ -10,6 +10,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+import PropTypes from 'prop-types';
+
 import React from 'react';
 
 export default class MainFieldsView extends React.Component {
@@ -50,6 +52,10 @@ export default class MainFieldsView extends React.Component {
     );
   }
 
+  toggleReduce () {
+    this.props.toggleReduce(this.props.reduce);
+  }
+
   reduce () {
     if (!this.props.showReduce) {
       return null;
@@ -58,7 +64,7 @@ export default class MainFieldsView extends React.Component {
     return (
       <span>
         <div className="checkbox inline">
-          <input id="qoReduce" name="reduce" onChange={this.props.toggleReduce} type="checkbox" checked={this.props.reduce} />
+          <input id="qoReduce" name="reduce" onChange={this.toggleReduce.bind(this)} type="checkbox" checked={this.props.reduce} />
           <label htmlFor="qoReduce">Reduce</label>
         </div>
         {this.groupLevel()}
@@ -90,13 +96,13 @@ export default class MainFieldsView extends React.Component {
     );
   }
 
-};
+}
 
 MainFieldsView.propTypes = {
-  toggleIncludeDocs: React.PropTypes.func.isRequired,
-  includeDocs: React.PropTypes.bool.isRequired,
-  reduce: React.PropTypes.bool.isRequired,
-  toggleReduce: React.PropTypes.func,
-  updateGroupLevel: React.PropTypes.func,
-  docURL: React.PropTypes.string.isRequired
+  toggleIncludeDocs: PropTypes.func.isRequired,
+  includeDocs: PropTypes.bool.isRequired,
+  reduce: PropTypes.bool.isRequired,
+  toggleReduce: PropTypes.func,
+  updateGroupLevel: PropTypes.func,
+  docURL: PropTypes.string.isRequired
 };
