@@ -57,8 +57,9 @@ const mapStateToProps = (state, ownProps) => {
     description: ownProps.description,
     editorTitle: ownProps.editorTitle,
     additionalIndexesText: ownProps.additionalIndexesText,
-
-    fetchParams: indexResults.fetchParams
+    fetchParams: indexResults.fetchParams,
+    executionStats: indexResults.executionStats,
+    warning: indexResults.warning
   };
 };
 

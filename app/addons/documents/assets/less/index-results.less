@@ -194,3 +194,30 @@ a.document-result-screen__toolbar-create-btn:visited {
     width: 300px;
   }
 }
+
+.execution-stats-popup {
+  font-size: 14px;
+  .execution-stats-popup-component {
+    [data-status="false"] {
+      color: @fontGrey;
+    }
+    [data-status="true"] {
+      .value {
+        font-weight: bold;
+      }
+    }
+  }
+  .warning {
+    color: @errorAlertColor;
+    margin-top: 8px;
+  }
+}
+
+.execution-stats {
+  font-size: 13px;
+  padding: 8px 8px 8px 0;
+
+  .fonticon-attention-circled {
+    margin-right: 4px;
+  }
+}

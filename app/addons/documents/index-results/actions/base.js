@@ -25,13 +25,15 @@ export const resetState = () => {
   };
 };
 
-export const newResultsAvailable = (docs, params, canShowNext, docType) => {
+export const newResultsAvailable = (docs, params, canShowNext, docType, executionStats, warning) => {
   return {
     type: ActionTypes.INDEX_RESULTS_REDUX_NEW_RESULTS,
     docs: docs,
     params: params,
     canShowNext: canShowNext,
-    docType: docType
+    docType: docType,
+    executionStats: executionStats,
+    warning: warning
   };
 };
 
