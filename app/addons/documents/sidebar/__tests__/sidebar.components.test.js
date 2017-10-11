@@ -17,6 +17,9 @@ import ReactDOM from "react-dom";
 import sinon from "sinon";
 import { mount } from 'enzyme';
 import Components from "../sidebar";
+import '../../base';
+
+const {DesignDoc} = Components;
 
 const { assert, restore} = utils;
 
@@ -41,7 +44,7 @@ describe('DesignDoc', () => {
       }
       return '' + (a || '') + '/' + (b || '') + '/' + (c || '') + '/' + (d || '');
     });
-    const wrapper = mount(<Components.DesignDoc
+    const wrapper = mount(<DesignDoc
       database={database}
       toggle={sinon.stub()}
       sidebarListTypes={[]}
@@ -59,7 +62,7 @@ describe('DesignDoc', () => {
     sinon.stub(FauxtonAPI, 'urls');
 
     const toggleStub = sinon.stub();
-    const wrapper = mount(<Components.DesignDoc
+    const wrapper = mount(<DesignDoc
       database={database}
       toggle={toggleStub}
       sidebarListTypes={[]}
@@ -72,5 +75,90 @@ describe('DesignDoc', () => {
     // NOTE: wrapper.find doesn't work special chars so we use class name instead
     wrapper.find('div.accordion-list-item').simulate('click', {preventDefault: sinon.stub()});
     assert.ok(toggleStub.calledOnce);
+  });
+
+  //here
+
+  it('confirm only single sub-option is shown by default (metadata link)', function () {
+    const el = mount(<DesignDoc
+      database={database}
+      toggle={function () {}}
+      sidebarListTypes={[]}
+      isExpanded={true}
+      selectedNavInfo={selectedNavInfo}
+      toggledSections={{}}
+      designDoc={{ customProp: { one: 'something' } }}
+      designDocName={'doc-$-#-.1'}
+    />);
+
+    const subOptions = el.find('.accordion-body li');
+    assert.equal(subOptions.length, 1);
+ });
+
+  it('confirm design doc sidebar extensions appear', function () {
+    const el = mount(<DesignDoc
+      database={database}
+      toggle={function () {}}
+      sidebarListTypes={[{
+        selector: 'customProp',
+        name: 'Search Indexes',
+        icon: 'icon-here',
+        urlNamespace: 'whatever',
+        indexLabel: 'the label',
+        onDelete: () => {},
+        onClone: () => {}
+      }]}
+      isExpanded={true}
+      selectedNavInfo={selectedNavInfo}
+      toggledSections={{}}
+      designDoc={{ customProp: { one: 'something' } }}
+      designDocName={'doc-$-#-.1'}
+    />);
+
+    const subOptions = el.find('.accordion-body li');
+    assert.equal(subOptions.length, 3); // 1 for "Metadata" row, 1 for Type List row ("search indexes") and one for the index itself
+  });
+
+  it('confirm design doc sidebar extensions do not appear when they have no content', function () {
+    const el = mount(<DesignDoc
+      database={database}
+      toggle={function () {}}
+      sidebarListTypes={[{
+        selector: 'customProp',
+        name: 'Search Indexes',
+        icon: 'icon-here',
+        urlNamespace: 'whatever',
+        indexLabel: 'the label',
+        onDelete: () => {},
+        onClone: () => {}
+      }]}
+      isExpanded={true}
+      selectedNavInfo={selectedNavInfo}
+      designDoc={{}} // note that this is empty
+      designDocName={'doc-$-#-.1'}
+      toggledSections={{}}
+    />);
+
+    const subOptions = el.find('.accordion-body li');
+    assert.equal(subOptions.length, 1);
+  });
+
+  it('confirm doc metadata page is highlighted if selected', function () {
+    const el = mount(<DesignDoc
+      database={database}
+      toggle={function () {}}
+      sidebarListTypes={[]}
+      isExpanded={true}
+      selectedNavInfo={{
+        navItem: 'designDoc',
+        designDocName: 'id',
+        designDocSection: 'metadata',
+        indexName: ''
+      }}
+      designDocName={'doc-$-#-.1'}
+      toggledSections={{}}
+      designDoc={{}} />);
+
+    assert.equal(el.find('.accordion-body li.active a').text(), 'Metadata');
   });
 });
