@@ -19,7 +19,7 @@ import {ChangePasswordForm} from '../components/changepasswordform';
 import * as Actions from "../actions";
 import { mount } from 'enzyme';
 import sinon from "sinon";
-var assert = utils.assert;
+const assert = utils.assert;
 
 describe('Auth -- Components', () => {
 

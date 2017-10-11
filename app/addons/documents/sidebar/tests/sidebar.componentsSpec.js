@@ -13,8 +13,8 @@ import React from "react";
 import ReactDOM from "react-dom";
 import utils from "../../../../../test/mocha/testUtils";
 import Components from "../sidebar";
-import TestUtils from "react-addons-test-utils";
-var assert = utils.assert;
+import {mount} from 'enzyme';
+const assert = utils.assert;
 var DesignDoc = Components.DesignDoc;
 
 
@@ -30,15 +30,15 @@ describe('DesignDoc', function () {
   };
 
   beforeEach(function () {
-    container = document.createElement('div');
+    
   });
 
   afterEach(function () {
-    ReactDOM.unmountComponentAtNode(container);
+    
   });
 
   it('confirm only single sub-option is shown by default (metadata link)', function () {
-    var el = TestUtils.renderIntoDocument(<DesignDoc
+    var el = mount(<DesignDoc
       database={database}
       toggle={function () {}}
       sidebarListTypes={[]}
@@ -53,7 +53,7 @@ describe('DesignDoc', function () {
  });
 
   it('confirm design doc sidebar extensions appear', function () {
-    var el = TestUtils.renderIntoDocument(<DesignDoc
+    var el = mount(<DesignDoc
       database={database}
       toggle={function () {}}
       sidebarListTypes={[{
@@ -73,7 +73,7 @@ describe('DesignDoc', function () {
   });
 
   it('confirm design doc sidebar extensions do not appear when they have no content', function () {
-    var el = TestUtils.renderIntoDocument(<DesignDoc
+    var el = mount(<DesignDoc
       database={database}
       toggle={function () {}}
       sidebarListTypes={[{
@@ -92,7 +92,7 @@ describe('DesignDoc', function () {
   });
 
   it('confirm doc metadata page is highlighted if selected', function () {
-    var el = TestUtils.renderIntoDocument(<DesignDoc
+    var el = mount(<DesignDoc
       database={database}
       toggle={function () {}}
       sidebarListTypes={[]}

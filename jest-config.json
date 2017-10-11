@@ -1,6 +1,6 @@
 {
   "testPathDirs": ["app"],
-  "testPathIgnorePatterns": ["/node_modules/", "stub"],
+  "testPathIgnorePatterns": ["/node_modules/", "stub", "fakeActiveTaskResponse", "fixtures"],
 
   "setupTestFrameworkScriptFile": "./jest-setup.js",
 

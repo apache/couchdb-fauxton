@@ -30,11 +30,11 @@ describe('DesignDoc', () => {
     indexName: ''
   };
 
-  afterEach(function () {
+  afterEach(() => {
     restore(FauxtonAPI.urls);
   });
 
-  it('confirm URLs are properly encoded when design doc name has special chars', function () {
+  it('confirm URLs are properly encoded when design doc name has special chars', () => {
     sinon.stub(FauxtonAPI, 'urls').callsFake((a, b, c, d) => {
       if (a === 'designDocs') {
         return '#/database/MOCK/_design/' + encodeURIComponent(c) + '/' + encodeURIComponent(d);
@@ -55,7 +55,7 @@ describe('DesignDoc', () => {
     assert.include(wrapper.find('a.toggle-view .accordion-header').props()['href'], '/doc-%24-%23-.1');
   });
 
-  it('check toggle() works when design doc name has special characters', function () {
+  it('check toggle() works when design doc name has special characters', () => {
     sinon.stub(FauxtonAPI, 'urls');
 
     const toggleStub = sinon.stub();
