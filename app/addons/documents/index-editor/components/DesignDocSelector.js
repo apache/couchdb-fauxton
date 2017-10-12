@@ -109,7 +109,9 @@ export default class DesignDocSelector extends Component {
 }
 
 DesignDocSelector.defaultProps = {
-  designDocLabel: 'Design Document'
+  designDocLabel: 'Design Document',
+  selectedDesignDocName: '',
+  newDesignDocName: ''
 };
 
 DesignDocSelector.propTypes = {

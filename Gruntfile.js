@@ -147,20 +147,6 @@ module.exports = function (grunt) {
     rmcouchdb: couch_config,
     couchapp: couch_config,
 
-    mochaSetup: {
-      default: {
-        files: {
-          src: initHelper.getFileList(['[Ss]pec.js'], [
-            './app/core/**/*[Ss]pec.js',
-            './app/addons/**/*[Ss]pec.js',
-            './app/addons/**/*[Ss]pec.react.jsx',
-            './app/addons/**/*[Ss]pec.jsx'
-          ])
-        },
-        template: 'test/test.config.underscore'
-      }
-    },
-
     shell: {
       webpack: {
         command: 'npm run webpack:dev'
@@ -168,14 +154,6 @@ module.exports = function (grunt) {
 
       webpackrelease: {
         command: 'npm run webpack:release'
-      },
-
-      webpacktest: {
-        command: 'npm run webpack:test'
-      },
-
-      phantomjs: {
-        command: 'npm run phantomjs'
       }
     },
 
@@ -221,10 +199,8 @@ module.exports = function (grunt) {
   /*
    * Transformation tasks
    */
-  grunt.registerTask('test', ['checkTestExists', 'clean:release', 'dependencies', 'copy:debug', 'gen_initialize:development', 'test_inline']);
+  grunt.registerTask('test', ['clean:release', 'dependencies', 'copy:debug', 'gen_initialize:development']);
 
-  // lighter weight test task for use inside dev/watch
-  grunt.registerTask('test_inline', ['mochaSetup', 'shell:webpacktest', 'shell:phantomjs']);
   // Fetch dependencies (from git or local dir)
   grunt.registerTask('dependencies', ['get_deps', 'gen_load_addons:default']);
 
