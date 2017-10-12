@@ -16,7 +16,7 @@ import sinon from "sinon";
 import React from "react";
 import ReactDOM from "react-dom";
 
-var assert = utils.assert;
+const assert = utils.assert;
 
 describe("Polling", () => {
   describe('Counters', () => {

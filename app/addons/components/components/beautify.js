@@ -14,6 +14,8 @@ import ReactDOM from "react-dom";
 import beautifyHelper from "../../../../assets/js/plugins/beautify";
 import {Tooltip, OverlayTrigger} from 'react-bootstrap';
 
+const helper = beautifyHelper.js_beautify ? beautifyHelper.js_beautify : beautifyHelper;
+
 export class Beautify extends React.Component {
   noOfLines = () => {
     return this.props.code.split(/\r\n|\r|\n/).length;
@@ -25,7 +27,7 @@ export class Beautify extends React.Component {
 
   beautify = (event) => {
     event.preventDefault();
-    var beautifiedCode = beautifyHelper(this.props.code);
+    var beautifiedCode = helper(this.props.code);
     this.props.beautifiedCode(beautifiedCode);
   };
 

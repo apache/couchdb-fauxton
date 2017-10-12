@@ -18,7 +18,7 @@ import ReactDOM from "react-dom";
 import moment from "moment";
 import {mount} from 'enzyme';
 import "sinon";
-var assert = utils.assert;
+const assert = utils.assert;
 var store = Stores.notificationStore;
 
 
