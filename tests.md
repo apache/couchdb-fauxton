@@ -1,42 +1,22 @@
 # Tests
 
-Fauxton has both unit and end-to-end tests. 
-
-Most unit tests are implemented with [Mocha](https://mochajs.org/) but we are slowly transitioning to [Jest](https://facebook.github.io/jest/). New tests should be implemented with Jest.
-
-End-to-end tests use [Nightwatch](http://nightwatchjs.org/) against Selenium.
+Fauxton has both **unit tests**, implemented with [Jest](https://facebook.github.io/jest/), and **end-to-end tests** using [Nightwatch](http://nightwatchjs.org/) against Selenium.
 
 ## Unit tests
 
-Use `npm run test` to execute both Mocha and Jest tests.
-
-### Mocha tests
-
-You can run the Mocha unit tests via the command line or your browser.
-
-**Command line**
-
-    grunt test
-
-**Browser** 
-
-Run `grunt test` at least once in order to generate `bundle.js` which is required by the HTML page.
-
-Make sure the dev server is running, and enter the path (not URL) to your `runner.html` file in your browser. 
-
-    file://path/to/couchdb-fauxton/test/runner.html
-
-Refreshing the URL will re-run the tests via PhantomJS and in the browser.
-
-### Jest tests
-
 To run all tests:
 
-    npm run jest
+    npm run test
     
-To run a single test:
+You can run only specific tests by providing a pattern or filename.
 
-    npm run jest -- filename.test.js
+E.g.: to run tests in the `filename.test.js` file:
+
+    npm run test -- filename.test.js
+
+E.g.: to run tests under the `addons/cors` path:
+
+    npm run test -- addons/cors
 
 ## End-to-end tests
 
@@ -77,7 +57,7 @@ your settings.json file. That defines an object of the following form:
 
 ```javascript
 // ...
-"nightwatch": {
+"nightwatch": { 
   // ...
   "testBlacklist": {
     "documents": ["*"],

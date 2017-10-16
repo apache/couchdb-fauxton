@@ -28,7 +28,8 @@ Please note that [node.js](http://nodejs.org/) and npm is required. Specifically
     * `git branch --set-upstream-to=upstream/master master`
 1. Download all dependencies: `npm install`
 1. Make sure you have CouchDB installed.
-    - Option 1 (**recommended**): Use `npm run docker:up` to start a Docker container running CouchDB. You need to have [Docker](https://docs.docker.com/engine/installation/) installed to use this option.
+    - Option 1 (**recommended**): Use `npm run docker:up` to start a Docker container running CouchDB with user `tester` and password `testerpass`.
+      - You need to have [Docker](https://docs.docker.com/engine/installation/) installed to use this option. 
     - Option 2: Follow instructions 
 [found here](http://couchdb.readthedocs.org/en/latest/install/index.html)
 
