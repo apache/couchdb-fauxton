@@ -17,6 +17,7 @@ import app from "../../../app";
 import PropTypes from 'prop-types';
 
 import React from "react";
+import { Dropdown, MenuItem } from "react-bootstrap";
 import ReactDOM from "react-dom";
 import Actions from "./actions";
 import Stores from "./stores";
@@ -224,12 +225,11 @@ class AttachmentsPanelButton extends React.Component {
     return _.map(this.props.doc.get('_attachments'), function (item, filename) {
       var url = FauxtonAPI.urls('document', 'attachment', db, doc, app.utils.safeURLName(filename));
       return (
-        <li key={filename}>
-          <a href={url} target="_blank" data-bypass="true"> <strong>{filename}</strong>
-            <span className="attachment-delimiter">-</span>
-            <span>{item.content_type}, {Helpers.formatSize(item.length)}</span>
-          </a>
-        </li>
+        <MenuItem key={filename} href={url} target="_blank" data-bypass="true">
+          <strong>{filename}</strong>
+          <span className="attachment-delimiter">-</span>
+          <span>{item.content_type}{item.content_type ? ', ' : ''}{Helpers.formatSize(item.length)}</span>
+        </MenuItem>
       );
     });
   };
@@ -241,15 +241,16 @@ class AttachmentsPanelButton extends React.Component {
 
     return (
       <div className="panel-section view-attachments-section btn-group">
-        <button className="panel-button dropdown-toggle btn" data-bypass="true" data-toggle="dropdown" title="View Attachments"
-          id="view-attachments-menu">
-          <i className="icon icon-paper-clip"></i>
-          <span className="button-text">View Attachments</span>
-          <span className="caret"></span>
-        </button>
-        <ul className="dropdown-menu" role="menu" aria-labelledby="view-attachments-menu">
-          {this.getAttachmentList()}
-        </ul>
+        <Dropdown id="view-attachments-menu">
+          <Dropdown.Toggle noCaret className="panel-button dropdown-toggle btn" data-bypass="true">
+            <i className="icon icon-paper-clip"></i>
+            <span className="button-text">View Attachments</span>
+            <span className="caret"></span>
+          </Dropdown.Toggle>
+          <Dropdown.Menu>
+            {this.getAttachmentList()}
+          </Dropdown.Menu>
+        </Dropdown>
       </div>
     );
   }
@@ -294,6 +295,18 @@ class UploadModal extends React.Component {
       loadPercentage: store.getUploadLoadPercentage(),
       errorMessage: store.getFileUploadErrorMsg()
     };
+  };
+
+  componentDidMount() {
+    store.on('change', this.onChange, this);
+  }
+
+  componentWillUnmount() {
+    store.off('change', this.onChange);
+  }
+
+  onChange = () => {
+    this.setState(this.getStoreState());
   };
 
   closeModal = (e) => {
