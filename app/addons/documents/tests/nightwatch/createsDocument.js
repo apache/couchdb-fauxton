@@ -95,6 +95,7 @@ module.exports = {
       .waitForElementVisible('.faux-header__breadcrumbs', waitTime, true)
       .waitForElementVisible('.faux__jsonlink-link', waitTime, true)
       .execute(function() {
+        /*global ace*/
         return ace.edit("doc-editor").getValue();
       }, function (data) {
         const createdDocIsPresent = data.value.indexOf(newDocumentName) !== -1;
