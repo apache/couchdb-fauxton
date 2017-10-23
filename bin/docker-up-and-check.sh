@@ -52,16 +52,11 @@ stop_containters() {
   sleep 2
 }
 
-# Tries to start the containers a few times
-# NUM_TRIES=5
-# for ((i=1; i<=$NUM_TRIES; i++));
-# do
-  # echo "Starting containers... ($i of $NUM_TRIES)"
-  if start_containters_and_check 
-  then
-    exit 0
-  fi
-  stop_containters
-# done
 
+if start_containters_and_check 
+then
+  exit 0
+fi
+
+stop_containters
 exit 2
