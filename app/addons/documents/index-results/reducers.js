@@ -105,7 +105,9 @@ export default function resultsState(state = initialState, action) {
           canShowNext: action.canShowNext
         }),
         docType: action.docType,
-        selectedLayout: selectedLayout
+        selectedLayout: selectedLayout,
+        executionStats: action.executionStats,
+        warning: action.warning
       });
 
     case ActionTypes.INDEX_RESULTS_REDUX_CHANGE_LAYOUT:

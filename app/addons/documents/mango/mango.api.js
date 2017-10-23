@@ -84,6 +84,27 @@ export const fetchIndexes = (databaseName, params) => {
     });
 };
 
+// assume all databases being accessed are on the same
+// host / CouchDB version
+let supportsExecutionStatsCache = null;
+const supportsExecutionStats = (databaseName) => {
+  if (supportsExecutionStatsCache === null) {
+    return new FauxtonAPI.Promise((resolve) => {
+      mangoQuery(databaseName, {
+        selector: {
+          "_id": {"$gt": "a" }
+       },
+        execution_stats: true
+      }, {limit: 1})
+      .then(resp => {
+        supportsExecutionStatsCache = resp.status == 200;
+        resolve(supportsExecutionStatsCache);
+      });
+    });
+  }
+  return Promise.resolve(supportsExecutionStatsCache);
+};
+
 // Determines what params need to be sent to couch based on the Mango query entered
 // by the user and what fauxton is using to emulate pagination (fetchParams).
 export const mergeFetchParams = (queryCode, fetchParams) => {
@@ -104,9 +125,10 @@ export const mergeFetchParams = (queryCode, fetchParams) => {
   };
 };
 
-export const mangoQueryDocs = (databaseName, queryCode, fetchParams) => {
+export const mangoQuery = (databaseName, queryCode, fetchParams) => {
   const url = FauxtonAPI.urls('mango', 'query-server', encodeURIComponent(databaseName));
   const modifiedQuery = mergeFetchParams(queryCode, fetchParams);
+
   return fetch(url, {
     headers: {
       'Accept': 'application/json',
@@ -115,15 +137,28 @@ export const mangoQueryDocs = (databaseName, queryCode, fetchParams) => {
     credentials: 'include',
     method: 'POST',
     body: JSON.stringify(modifiedQuery)
-  })
-    .then((res) => res.json())
-    .then((json) => {
-      if (json.error) {
-        throw new Error('(' + json.error + ') ' + json.reason);
-      }
-      return {
-        docs: json.docs,
-        docType: Constants.INDEX_RESULTS_DOC_TYPE.MANGO_QUERY
-      };
-    });
+  });
+};
+
+export const mangoQueryDocs = (databaseName, queryCode, fetchParams) => {
+  // we can only add the execution_stats field if it is supported by the server
+  // otherwise Couch throws an error
+  return supportsExecutionStats(databaseName).then((shouldFetchExecutionStats) => {
+    if (shouldFetchExecutionStats) {
+      queryCode.execution_stats = true;
+    }
+    return mangoQuery(databaseName, queryCode, fetchParams)
+      .then((res) => res.json())
+      .then((json) => {
+        if (json.error) {
+          throw new Error('(' + json.error + ') ' + json.reason);
+        }
+        return {
+          docs: json.docs,
+          docType: Constants.INDEX_RESULTS_DOC_TYPE.MANGO_QUERY,
+          executionStats: json.execution_stats,
+          warning: json.warning
+        };
+      });
+  });
 };

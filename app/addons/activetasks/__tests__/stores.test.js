@@ -11,9 +11,9 @@
 // the License.
 import ActiveTasks from "../resources";
 import Stores from "../stores";
-import fakedResponse from "../tests/fakeActiveTaskResponse";
+import fakedResponse from "./fakeActiveTaskResponse";
 import utils from "../../../../test/mocha/testUtils";
-var assert = utils.assert;
+const assert = utils.assert;
 
 var activeTasksStore = Stores.activeTasksStore;
 var activeTasksCollection = new ActiveTasks.AllTasks();
