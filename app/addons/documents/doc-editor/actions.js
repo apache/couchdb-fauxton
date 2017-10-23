@@ -173,6 +173,9 @@ function uploadAttachment (params) {
     type: 'PUT',
     data: file,
     contentType: file.type,
+    headers: {
+      Accept: "application/json; charset=utf-8"
+    },
     processData: false,
     xhrFields: {
       withCredentials: true
@@ -214,7 +217,7 @@ function uploadAttachment (params) {
       FauxtonAPI.dispatch({
         type: ActionTypes.FILE_UPLOAD_ERROR,
         options: {
-          error: JSON.parse(resp.responseText).reason
+          error: resp.responseJSON ? resp.responseJSON.reason : 'Error uploading file: (' + resp.statusText + ')'
         }
       });
     }
