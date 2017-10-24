@@ -169,7 +169,7 @@ function uploadAttachment (params) {
   var file = params.files[0];
 
   $.ajax({
-    url: FauxtonAPI.urls('document', 'attachment', db, docId, file.name, query),
+    url: FauxtonAPI.urls('document', 'attachment', db, docId, encodeURIComponent(file.name), query),
     type: 'PUT',
     data: file,
     contentType: file.type,
