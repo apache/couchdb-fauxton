@@ -16,6 +16,7 @@ import {formatUrl} from '../components/common-table';
 const {assert}  = utils;
 
 describe('Common Table Component', () => {
+
   describe("formatUrl", () => {
     it("renders a url with tricky password characters", () => {
       const url = "http://hello:h#$!^@couchdb.com/my-db";
@@ -27,6 +28,10 @@ describe('Common Table Component', () => {
       const url = "http://couchdb.com/my-db";
       const el = shallow(formatUrl(url));
       assert.equal(el.find('a').prop('href'), '#/database/my-db/_all_docs');
+    });
+
+    it('renders a with a default url if no url is supplied', () => {
+      assert.equal(formatUrl(), '');
     });
   });
 });
