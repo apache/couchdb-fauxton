@@ -37,7 +37,8 @@ export default class TableRow extends React.Component {
     const row = this.props.data.selectedFields.map(function (k, i) {
 
       const key = 'tableview-data-cell-' + rowNumber + k + i + el[k];
-      const stringified = typeof el[k] === 'object' ? JSON.stringify(el[k], null, '  ') : el[k];
+      const stringified = ['object', 'boolean'].includes(typeof el[k]) ?
+        JSON.stringify(el[k], null, '  ') : el[k];
 
       return (
         <td key={key} title={stringified} onClick={this.onClick.bind(this)}>
