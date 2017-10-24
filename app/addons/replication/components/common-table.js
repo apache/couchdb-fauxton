@@ -18,8 +18,15 @@ import {ErrorModal} from './modals';
 import {removeCredentialsFromUrl} from '../api';
 
 export const formatUrl = (url) => {
-  const urlObj = new URL(removeCredentialsFromUrl(url));
-  const encoded = encodeURIComponent(urlObj.pathname.slice(1));
+  let urlObj;
+  let encoded;
+  try {
+    urlObj = new URL(removeCredentialsFromUrl(url));
+    encoded = encodeURIComponent(urlObj.pathname.slice(1));
+  } catch (error) {
+    console.log('error with url', url);
+    return '';
+  }
 
   if (url.indexOf(window.location.hostname) > -1) {
     return (
