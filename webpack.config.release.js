@@ -22,7 +22,7 @@ const settings = require('./tasks/helper')
 module.exports = {
   // Entry point for static analyzer:
   entry: {
-    bundle: './app/main.js'
+    bundle: ['babel-polyfill', './app/main.js']
   },
 
   output: {
