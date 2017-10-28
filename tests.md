@@ -1,27 +1,26 @@
 # Tests
 
-Fauxton has both test coverage through unit and selenium tests, built on
-[Mocha](https://mochajs.org/) and [Nightwatch](http://nightwatchjs.org/) respectively.
+Fauxton has both **unit tests**, implemented with [Jest](https://facebook.github.io/jest/), and **end-to-end tests** using [Nightwatch](http://nightwatchjs.org/) against Selenium.
 
+## Unit tests
 
-## Unit Tests
+To run all tests:
 
-You can run the Mocha unit tests via the command line or your browser.
+    npm run test
+    
+You can run only specific tests by providing a pattern or filename.
 
-Command line:
+E.g.: to run tests in the `filename.test.js` file:
 
-    grunt test
+    npm run test -- filename.test.js
 
-Browser: make sure the dev server is running, and enter the path (not URL) to your `runner.html` file in your browser.
+E.g.: to run tests under the `addons/cors` path:
 
-    file://path/to/couchdb-fauxton/test/runner.html
+    npm run test -- addons/cors
 
-Refreshing the URL will re-run the tests via PhantomJS and in the browser.
+## End-to-end tests
 
-
-## Selenium tests
-
-To run selenium locally you need docker installed. Selenium runs in a docker container and connects to a CouchDB instance in another container. To start them run the command:
+To run selenium locally you need Docker installed. Selenium runs in a Docker container and connects to a CouchDB instance in another container. To start them run the command:
 
     npm run docker:up
 
@@ -58,7 +57,7 @@ your settings.json file. That defines an object of the following form:
 
 ```javascript
 // ...
-"nightwatch": {
+"nightwatch": { 
   // ...
   "testBlacklist": {
     "documents": ["*"],

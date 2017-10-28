@@ -37,6 +37,7 @@ function createTest (db) {
 
       .url(baseUrl + '#/_all_dbs')
       .clickWhenVisible(`.fauxton-table-list a[href="database/${encodeURIComponent(db)}/_all_docs"]`)
+      .waitForElementNotPresent('#global-notifications .fonticon-cancel', waitTime, false)
 
       .waitForElementVisible('.faux-header__doc-header-title', waitTime, false)
       .waitForElementVisible('.no-results-screen', waitTime, false)

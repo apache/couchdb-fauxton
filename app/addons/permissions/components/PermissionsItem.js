@@ -10,7 +10,9 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+
+import React from 'react';
 
 const PermissionsItem = ({removeItem, section, type, value}) => {
 
@@ -29,7 +31,7 @@ const PermissionsItem = ({removeItem, section, type, value}) => {
 };
 
 PermissionsItem.propTypes = {
-  value: React.PropTypes.string.isRequired,
+  value: PropTypes.string.isRequired,
   removeItem: PropTypes.func.isRequired,
 };
 

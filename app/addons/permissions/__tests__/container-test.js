@@ -15,7 +15,7 @@ import { receivedPermissions } from '../actions';
 import React from 'react';
 import { mount } from 'enzyme';
 
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware, combineReducers } from 'redux';
 
 import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
@@ -23,17 +23,17 @@ import { Provider } from 'react-redux';
 import reducer from '../reducers';
 import PermissionsContainer from '../container/PermissionsContainer';
 
+var fetchMock = require('fetch-mock');
+
 describe('Permissions Container', () => {
 
   it('renders with new results', () => {
 
-    fetch.mockResponse(
-      JSON.stringify({})
-    );
+    fetchMock.once("*", {});
 
     const middlewares = [thunk];
     const store = createStore(
-      reducer,
+      combineReducers({ permissions: reducer}),
       applyMiddleware(...middlewares)
     );
 

@@ -13,13 +13,14 @@
 import React from 'react';
 import {TabsSidebarHeader} from '../documents/layouts';
 import PermissionsContainer from './container/PermissionsContainer';
-import SidebarComponents from "../documents/sidebar/sidebar.react";
+import SidebarComponents from "../documents/sidebar/sidebar";
 
 export const PermissionsLayout = ({docURL, database, endpoint, dbName, dropDownLinks}) => {
   return (
     <div id="dashboard" className="with-sidebar">
       <TabsSidebarHeader
-        hideHeaderBar={true}
+        hideQueryOptions={true}
+        hideJumpToDoc={true}
         docURL={docURL}
         endpoint={endpoint}
         dbName={dbName}

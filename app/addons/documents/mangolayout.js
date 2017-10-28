@@ -10,26 +10,26 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import React from 'react';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import app from "../../app";
-import ReactPagination from "./pagination/pagination.react";
-import ReactHeader from "./header/header.react";
-import {Breadcrumbs} from '../components/header-breadcrumbs';
-import {NotificationCenterButton} from '../fauxton/notifications/notifications.react';
-import {ApiBarWrapper} from '../components/layouts';
-import MangoComponents from "./mango/mango.components.react";
-import IndexResultsComponents from "./index-results/index-results.components.react";
+import { Breadcrumbs } from '../components/header-breadcrumbs';
+import { NotificationCenterButton } from '../fauxton/notifications/notifications';
+import MangoComponents from "./mango/mango.components";
+import * as MangoAPI from "./mango/mango.api";
+import IndexResultsContainer from './index-results/containers/IndexResultsContainer';
+import PaginationContainer from './index-results/containers/PaginationContainer';
+import ApiBarContainer from './index-results/containers/ApiBarContainer';
+import FauxtonAPI from "../../core/api";
+import Constants from './constants';
 
-
-export const RightHeader = ({showIncludeAllDocs, docURL, endpoint}) => {
+export const RightHeader = ({ docURL, endpoint }) => {
+  const apiBar = <ApiBarContainer docURL={docURL} endpoint={endpoint} includeQueryOptionsParams={false}/>;
   return (
     <div className="right-header-wrapper flex-layout flex-row flex-body">
-      <div id="react-headerbar" className="flex-body">
-        <ReactHeader.BulkDocumentHeaderController showIncludeAllDocs={showIncludeAllDocs} />
-      </div>
       <div id="right-header" className="flex-body">
       </div>
-      <ApiBarWrapper docURL={docURL} endpoint={endpoint} />
+      {apiBar}
       <div id='notification-center-btn'>
         <NotificationCenterButton />
       </div>
@@ -37,22 +37,24 @@ export const RightHeader = ({showIncludeAllDocs, docURL, endpoint}) => {
   );
 };
 
-export const MangoFooter = () => {
+export const MangoFooter = ({databaseName, fetchUrl, queryDocs}) => {
   return (
     <div id="footer">
-        <ReactPagination.Footer />
+      <PaginationContainer
+        databaseName={databaseName}
+        fetchUrl={fetchUrl}
+        queryDocs={queryDocs} />
     </div>
   );
 };
 
-export const MangoHeader = ({showIncludeAllDocs, crumbs, docURL, endpoint}) => {
+export const MangoHeader = ({ crumbs, docURL, endpoint }) => {
   return (
     <div className="header-wrapper flex-layout flex-row">
       <div className='flex-body faux__breadcrumbs-mango-header'>
-        <Breadcrumbs crumbs={crumbs}/>
+        <Breadcrumbs crumbs={crumbs} />
       </div>
       <RightHeader
-        showIncludeAllDocs={showIncludeAllDocs}
         docURL={docURL}
         endpoint={endpoint}
       />
@@ -64,43 +66,99 @@ MangoHeader.defaultProps = {
   crumbs: []
 };
 
-const MangoContent = ({edit, designDocs}) => {
+export const MangoContent = ({ edit, designDocs, explainPlan, databaseName, fetchUrl, queryDocs, docType }) => {
   const leftContent = edit ?
-    <MangoComponents.MangoIndexEditorController
+    <MangoComponents.MangoIndexEditorContainer
       description={app.i18n.en_US['mango-descripton-index-editor']}
+      databaseName={databaseName}
     /> :
-    <MangoComponents.MangoQueryEditorController
+    <MangoComponents.MangoQueryEditorContainer
       description={app.i18n.en_US['mango-descripton']}
       editorTitle={app.i18n.en_US['mango-title-editor']}
       additionalIndexesText={app.i18n.en_US['mango-additional-indexes-heading']}
+      databaseName={databaseName}
     />;
+
+  let resultsPage = <IndexResultsContainer
+                      fetchUrl={fetchUrl}
+                      designDocs={designDocs}
+                      ddocsOnly={false}
+                      databaseName={databaseName}
+                      fetchAtStartup={false}
+                      queryDocs={queryDocs}
+                      docType={docType} />;
+
+  let mangoFooter = <MangoFooter
+                      databaseName={databaseName}
+                      fetchUrl={fetchUrl}
+                      queryDocs={queryDocs} />;
+
+  if (explainPlan) {
+    resultsPage = <MangoComponents.ExplainPage explainPlan={explainPlan} />;
+    mangoFooter = null;
+  }
 
   return (
     <div id="two-pane-content" className="flex-layout flex-row flex-body">
       <div id="left-content" className="flex-body">
-          {leftContent}
+        {leftContent}
       </div>
       <div id="right-content" className="flex-body flex-layout flex-col">
         <div id="dashboard-lower-content" className="flex-body">
-          <IndexResultsComponents.List designDocs={designDocs} />
+          {resultsPage}
         </div>
-        <MangoFooter  />
+        {mangoFooter}
       </div>
     </div>
   );
 };
 
+class MangoLayout extends Component {
+  constructor(props) {
+    super(props);
+  };
 
-export const MangoLayout = ({edit, showIncludeAllDocs, docURL, endpoint, crumbs, designDocs}) => {
-  return (
-    <div id="dashboard" className="two-pane flex-layout flex-col">
-      <MangoHeader
-        showIncludeAllDocs={showIncludeAllDocs}
-        docURL={docURL}
-        endpoint={endpoint}
-        crumbs={crumbs}
-      />
-    <MangoContent edit={edit} designDocs={designDocs}/>
-    </div>
-  );
+  render() {
+    const { database, edit, docURL, crumbs, designDocs, fetchUrl, databaseName, queryFindCode } = this.props;
+    let endpoint = this.props.endpoint;
+
+    if (this.props.explainPlan) {
+      endpoint = FauxtonAPI.urls('mango', 'explain-apiurl', encodeURIComponent(database));
+    }
+    let queryFunction = (params) => { return MangoAPI.mangoQueryDocs(databaseName, queryFindCode, params); };
+    let docType = Constants.INDEX_RESULTS_DOC_TYPE.MANGO_QUERY;
+    if (edit) {
+      queryFunction = (params) => { return MangoAPI.fetchIndexes(databaseName, params); };
+      docType = Constants.INDEX_RESULTS_DOC_TYPE.MANGO_INDEX;
+    }
+    return (
+      <div id="dashboard" className="two-pane flex-layout flex-col">
+        <MangoHeader
+          docURL={docURL}
+          endpoint={endpoint}
+          crumbs={crumbs}
+        />
+        <MangoContent
+          edit={edit}
+          designDocs={designDocs}
+          explainPlan={this.props.explainPlan}
+          databaseName={databaseName}
+          fetchUrl={fetchUrl}
+          queryDocs={queryFunction}
+          docType={docType}
+          />
+      </div>
+    );
+  }
 };
+
+const mapStateToProps = ({ mangoQuery }) => {
+  return {
+    explainPlan: mangoQuery.explainPlan,
+    queryFindCode: mangoQuery.queryFindCode
+  };
+};
+
+export const MangoLayoutContainer = connect(
+  mapStateToProps
+)(MangoLayout);

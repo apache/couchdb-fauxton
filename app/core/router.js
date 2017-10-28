@@ -10,8 +10,7 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import FauxtonAPI from "./base";
-import Auth from "./auth";
+import {checkAccess} from "./authentication";
 import Backbone from "backbone";
 import _ from "lodash";
 
@@ -55,9 +54,8 @@ export default Backbone.Router.extend({
     routeUrls.forEach(route => {
       this.route(route, route.toString(), (...args) => {
         const roles = RouteObject.prototype.getRouteRoles(route);
-        const authPromise = FauxtonAPI.auth.checkAccess(roles);
 
-        authPromise.then(() => {
+        checkAccess(roles).then(() => {
           if (!that.activeRouteObject || !that.activeRouteObject.hasRoute(route)) {
             that.activeRouteObject = new RouteObject(route, args);
           }
@@ -71,10 +69,7 @@ export default Backbone.Router.extend({
             route: route.toString()
           };
           that.trigger('new-component', this.currentRouteOptions);
-        }, () => {
-          FauxtonAPI.auth.authDeniedCb();
-        });
-
+        }, () => {/* do nothing on reject*/ });
       });
     });
   },
@@ -93,7 +88,6 @@ export default Backbone.Router.extend({
 
   initialize: function (addons) {
     this.addons = addons;
-    this.auth = FauxtonAPI.auth = new Auth();
     // NOTE: This must be below creation of the layout
     // FauxtonAPI header links and others depend on existence of the layout
     this.setModuleRoutes(addons);
@@ -106,14 +100,5 @@ export default Backbone.Router.extend({
         this.lastPages.shift();
       }
     }, this);
-  },
-
-  triggerRouteEvent: function (event, args) {
-    if (this.activeRouteObject) {
-      var eventArgs = [event].concat(args);
-
-      this.activeRouteObject.trigger.apply(this.activeRouteObject, eventArgs);
-      this.activeRouteObject.renderWith(eventArgs, FauxtonAPI.masterLayout, args);
-    }
   }
 });

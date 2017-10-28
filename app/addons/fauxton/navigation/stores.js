@@ -10,11 +10,11 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import app from "../../../app";
 import FauxtonAPI from "../../../core/api";
 import ActionTypes from "./actiontypes";
-const Stores = {};
+import {findIndex} from 'lodash';
 
+const Stores = {};
 
 Stores.NavBarStore = FauxtonAPI.Store.extend({
   initialize () {
@@ -22,12 +22,24 @@ Stores.NavBarStore = FauxtonAPI.Store.extend({
   },
 
   reset () {
+    this._isMinimized = true;
     this._activeLink = null;
     this._version = null;
     this._navLinks = [];
     this._footerNavLinks = [];
     this._bottomNavLinks = [];
     this._navBarVisible = true;
+
+    this._loginSectionVisible = false;
+    this._loginVisibleInsteadOfLogout = true;
+  },
+
+  getIsLoginSectionVisible () {
+    return this._loginSectionVisible;
+  },
+
+  getIsLoginVisibleInsteadOfLogout () {
+    return this._loginVisibleInsteadOfLogout;
   },
 
   isNavBarVisible () {
@@ -65,18 +77,16 @@ Stores.NavBarStore = FauxtonAPI.Store.extend({
 
   removeLink (removeLink) {
     const links = this.getLinkSection(removeLink);
-    let indexOf = 0;
 
-    const res = _.filter(links, function (link) {
+    const indexOf = findIndex(links, link => {
       if (link.id === removeLink.id) {
         return true;
       }
 
-      indexOf++;
       return false;
     });
 
-    if (!res.length) { return; }
+    if (indexOf === -1) { return; }
 
     links.splice(indexOf, 1);
   },
@@ -94,8 +104,7 @@ Stores.NavBarStore = FauxtonAPI.Store.extend({
   },
 
   toggleMenu () {
-    app.utils.localStorageSet(FauxtonAPI.constants.LOCAL_STORAGE.SIDEBAR_MINIMIZED,
-                              !this.isMinimized());
+    this._isMinimized = !this._isMinimized;
   },
 
   getLinkSection (link) {
@@ -143,8 +152,7 @@ Stores.NavBarStore = FauxtonAPI.Store.extend({
   },
 
   isMinimized () {
-    const isMinimized = app.utils.localStorageGet(FauxtonAPI.constants.LOCAL_STORAGE.SIDEBAR_MINIMIZED);
-    return (_.isUndefined(isMinimized)) ? false : isMinimized;
+    return this._isMinimized;
   },
 
   dispatch (action) {
@@ -183,6 +191,20 @@ Stores.NavBarStore = FauxtonAPI.Store.extend({
 
       case ActionTypes.NAVBAR_SHOW:
         this.showNavBar();
+      break;
+
+      case ActionTypes.NAVBAR_SHOW_HIDE_LOGIN_LOGOUT_SECTION:
+        this._loginSectionVisible = action.visible;
+      break;
+
+      case ActionTypes.NAVBAR_SHOW_LOGIN_BUTTON:
+        this._loginSectionVisible = true;
+        this._loginVisibleInsteadOfLogout = true;
+      break;
+
+      case ActionTypes.NAVBAR_SHOW_LOGOUT_BUTTON:
+        this._loginSectionVisible = true;
+        this._loginVisibleInsteadOfLogout = false;
       break;
 
       default:

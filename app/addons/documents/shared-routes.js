@@ -13,15 +13,11 @@
 import app from "../../app";
 import FauxtonAPI from "../../core/api";
 import Documents from "./shared-resources";
-import PaginationActions from "./pagination/actions";
-import IndexResultStores from "./index-results/stores";
 import SidebarActions from "./sidebar/actions";
-import QueryActions from './queryoptions/actions';
 
 // The Documents section is built up a lot of different route object which share code. This contains
 // base functionality that can be used across routes / addons
 var BaseRoute = FauxtonAPI.RouteObject.extend({
-  layout: 'empty',
   selectedHeader: 'Databases',
 
   createDesignDocsCollection: function () {
@@ -36,25 +32,6 @@ var BaseRoute = FauxtonAPI.RouteObject.extend({
         include_docs: true,
         limit: 500
       }
-    });
-  },
-
-  showQueryOptions: function (urlParams, ddoc, viewName) {
-    var promise = this.designDocs.fetch({reset: true}),
-        hasReduceFunction;
-
-    promise.then(() => {
-      var design = _.findWhere(this.designDocs.models, {id: '_design/' + ddoc});
-      !_.isUndefined(hasReduceFunction = design.attributes.doc.views[viewName].reduce);
-
-      QueryActions.showQueryOptions();
-      QueryActions.reset({
-        queryParams: urlParams,
-        hasReduce: hasReduceFunction,
-        showReduce: !_.isUndefined(hasReduceFunction),
-        viewName: viewName,
-        ddocName: ddoc
-      });
     });
   },
 
@@ -78,15 +55,12 @@ var BaseRoute = FauxtonAPI.RouteObject.extend({
   },
 
   createParams: function (options) {
-    var urlParams = app.getParams(options),
-        params = Documents.QueryParams.parse(urlParams);
+    const urlParams = app.getParams(options),
+          params = Documents.QueryParams.parse(urlParams);
 
-    PaginationActions.setDocumentLimit(parseInt(urlParams.limit, 10));
-
-    var limit = IndexResultStores.indexResultsStore.getPerPage();
     return {
       urlParams: urlParams,
-      docParams: _.extend(params, {limit: limit})
+      docParams: params
     };
   }
 });

@@ -11,10 +11,10 @@
 // the License.
 
 import React from 'react';
-import ConfigComponents from "./components.react";
-import CORSComponents from "../cors/components.react";
+import ConfigComponents from "./components";
+import CORSComponents from "../cors/components";
 import {Breadcrumbs} from '../components/header-breadcrumbs';
-import {NotificationCenterButton} from '../fauxton/notifications/notifications.react';
+import {NotificationCenterButton} from '../fauxton/notifications/notifications';
 import {ApiBarWrapper} from '../components/layouts';
 
 export const ConfigHeader = ({node, crumbs, docURL, endpoint}) => {
@@ -51,7 +51,7 @@ export const ConfigLayout = ({showCors, docURL, node, endpoint, crumbs}) => {
     }
   ];
   const selectedTab = showCors ? 'CORS' : 'Main config';
-  const content = showCors ? <CORSComponents.CORSController/> : <ConfigComponents.ConfigTableController node={node} />;
+  const content = showCors ? <CORSComponents.CORSContainer node={node} url={endpoint}/> : <ConfigComponents.ConfigTableController node={node} />;
   return (
     <div id="dashboard" className="with-sidebar">
       <ConfigHeader

@@ -13,9 +13,14 @@
 import React from 'react';
 import {OnePane, OnePaneContent} from '../components/layouts';
 import {Breadcrumbs} from '../components/header-breadcrumbs';
-import Components from "./components.react";
+import Components from "./components";
+import {TabElementWrapper, TabElement} from '../components/components/tabelement';
+import FauxtonAPI from "../../core/api";
 
-const { CreateAdminForm, ChangePasswordForm } = Components;
+const {
+  CreateAdminForm,
+  ChangePasswordForm
+} = Components;
 
 export const OnePaneHeader = ({crumbs}) => {
   return (
@@ -43,23 +48,43 @@ export const AuthLayout = ({crumbs, component}) => {
   );
 };
 
+const Tabs = ({changePassword}) => {
+  return (
+    <TabElementWrapper>
+      <TabElement
+        key={1}
+        selected={changePassword}
+        text={"Change Password"}
+        onChange={() => {
+          FauxtonAPI.navigate('#changePassword');
+        }}
+        />
+      <TabElement
+        key={2}
+        selected={!changePassword}
+        text={"Create Server Admin"}
+        onChange={() => {
+          FauxtonAPI.navigate('#addAdmin');
+        }}
+        />
+    </TabElementWrapper>
+  );
+};
+
 export const AdminLayout = ({crumbs, changePassword}) => {
   let content = changePassword ? <ChangePasswordForm /> : <CreateAdminForm loginAfter={false} />;
   return (
-    <div id="dashboard" className="template-with-sidebar flex-layout flex-col">
-      <OnePaneHeader
-        crumbs={crumbs}
-      >
-      </OnePaneHeader>
-      <div className="template-content flex-body flex-layout flex-row">
-        <div id="sidebar-content">
-          <Components.CreateAdminSidebar />
+    <OnePane>
+      <OnePaneHeader crumbs={crumbs}/>
+      <OnePaneContent>
+        <div className="template-content flex-body flex-layout flex-col">
+          <Tabs changePassword={changePassword} />
+          <div id="dashboard-conten1t" className="flex-layout flex-col">
+            {content}
+          </div>
         </div>
-        <div id="dashboard-content" className="flex-body">
-          {content}
-        </div>
-      </div>
-    </div>
+      </OnePaneContent>
+    </OnePane>
 
   );
 

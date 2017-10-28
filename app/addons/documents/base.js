@@ -13,7 +13,16 @@
 import app from "../../app";
 import FauxtonAPI from "../../core/api";
 import Documents from "./routes";
+import reducers from "./index-results/reducers";
+import mangoReducers from "./mango/mango.reducers";
+import sidebarReducers from "./sidebar/reducers";
 import "./assets/less/documents.less";
+
+FauxtonAPI.addReducers({
+  indexResults: reducers,
+  mangoQuery: mangoReducers,
+  sidebar: sidebarReducers
+});
 
 function getQueryParam (query) {
   if (!query) {
@@ -56,7 +65,7 @@ FauxtonAPI.registerUrls('allDocsSanitized', {
 
 FauxtonAPI.registerUrls('bulk_docs', {
   server: function (id, query) {
-    return app.host + '/' + id + '/_bulk_docs' + getQueryParam(query);
+    return app.host + '/' + encodeURIComponent(id) + '/_bulk_docs' + getQueryParam(query);
   },
   app: function (id, query) {
     return 'database/' + id + '/_bulk_docs' + getQueryParam(query);
@@ -195,6 +204,10 @@ FauxtonAPI.registerUrls('mango', {
     return 'database/' + db + '/_index' + query;
   },
 
+  'index-server-bulk-delete': function (db) {
+    return app.host + '/' + db + '/_index/_bulk_delete';
+  },
+
   'query-server': function (db, query) {
     if (!query) {
       query = '';
@@ -217,6 +230,14 @@ FauxtonAPI.registerUrls('mango', {
     }
 
     return 'database/' + db + '/_find' + query;
+  },
+
+  'explain-server': function (db) {
+    return app.host + '/' + db + '/_explain';
+  },
+
+  'explain-apiurl': function (db) {
+    return window.location.origin + '/' + db + '/_explain';
   }
 });
 

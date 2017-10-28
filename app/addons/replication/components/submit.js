@@ -9,14 +9,17 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
+import PropTypes from 'prop-types';
+
 import React from 'react';
-import Components from '../../components/react-components.react';
+import Components from '../../components/react-components';
 
 const {ConfirmButton} = Components;
 
 export const ReplicationSubmit = ({onClear, disabled, onClick}) =>
 <div className="replication__button-row">
   <ConfirmButton
+    customIcon="fonticon-replicate"
     id="replicate"
     text="Start Replication"
     onClick={onClick}
@@ -36,7 +39,7 @@ export const ReplicationSubmit = ({onClear, disabled, onClick}) =>
 
 
 ReplicationSubmit.propTypes = {
-  disabled: React.PropTypes.bool.isRequired,
-  onClick: React.PropTypes.func.isRequired,
-  onClear: React.PropTypes.func.isRequired
+  disabled: PropTypes.bool.isRequired,
+  onClick: PropTypes.func.isRequired,
+  onClear: PropTypes.func.isRequired
 };

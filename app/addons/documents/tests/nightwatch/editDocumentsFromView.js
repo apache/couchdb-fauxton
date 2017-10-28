@@ -33,6 +33,7 @@ module.exports = {
 
       .loginToGUI()
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_design/abc/_view/evens')
+      .clickWhenVisible('.fonticon-json')
 
       //navigate to 'evens' view (declared above), then click on first document's pencil icon
       .clickWhenVisible('a[href="#/database/' + newDatabaseName + '/document_10"]')

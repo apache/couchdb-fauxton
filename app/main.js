@@ -19,9 +19,15 @@ import Backbone from 'backbone';
 import $ from 'jquery';
 import AppWrapper from './addons/fauxton/appwrapper';
 
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware, combineReducers } from 'redux';
 import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
+
+FauxtonAPI.addMiddleware(thunk);
+const store = createStore(
+  combineReducers(FauxtonAPI.reducers),
+  applyMiddleware(...FauxtonAPI.middlewares)
+);
 
 app.addons = LoadAddons;
 FauxtonAPI.router = app.router = new FauxtonAPI.Router(app.addons);
@@ -33,7 +39,6 @@ Backbone.history.start({ pushState: false, root: app.root });
 if ('ActiveXObject' in window) {
   $.ajaxSetup({ cache: false });
 }
-
 
 // All navigation that is relative should be passed through the navigate
 // method, to be processed by the router. If the link has a `data-bypass`
@@ -56,27 +61,6 @@ $(document).on("click", "a:not([data-bypass])", function (evt) {
     app.router.navigate(href.attr, true);
   }
 });
-
-function getReducers (r) {
-
-  if (!r.length) {
-    return function () {};
-  }
-
-  return FauxtonAPI.reducers.reduce((el, acc) => {
-    acc[el] = el;
-    return acc;
-  }, {});
-}
-
-const reducer = getReducers(FauxtonAPI.reducers);
-
-const middlewares = [thunk];
-
-const store = createStore(
-  reducer,
-  applyMiddleware(...middlewares)
-);
 
 ReactDOM.render(
   <Provider store={store}>

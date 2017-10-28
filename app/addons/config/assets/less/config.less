@@ -37,22 +37,11 @@
   }
 
   button { width: 7%;}
-
   transition: background-color 100ms;
 }
 
-.config-item:hover {
-  background-color: #e0e0e0;
-}
-
-.config.table-striped tbody > tr.config-item:nth-child(odd) > td,
-.config.table-striped tbody > tr.config-item:nth-child(odd) > th {
-  transition: background-color 100ms;
-}
-
-.config.table-striped tbody > tr.config-item:nth-child(odd):hover > td,
-.config.table-striped tbody > tr.config-item:nth-child(odd):hover > th {
-  background-color: #e7e7e7;
+.config-item-trash:hover {
+  color: @dangerRed;
 }
 
 .config-item-deleting {

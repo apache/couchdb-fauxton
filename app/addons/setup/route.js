@@ -14,13 +14,14 @@ import React from 'react';
 import app from "../../app";
 import FauxtonAPI from "../../core/api";
 import Setup from "./resources";
-import SetupComponents from "./setup.react";
+import SetupComponents from "./setup";
 import SetupActions from "./setup.actions";
 import ClusterActions from "../cluster/cluster.actions";
 import {OnePaneSimpleLayout} from '../components/layouts';
 
 var RouteObject = FauxtonAPI.RouteObject.extend({
   roles: ['_admin'],
+  selectedHeader: 'Setup',
 
   routes: {
     'setup': 'setupInitView',
@@ -71,6 +72,7 @@ var RouteObject = FauxtonAPI.RouteObject.extend({
 
   finishView: function () {
     const setup = new Setup.Model();
+    SetupActions.getClusterStateFromCouch();
     return <OnePaneSimpleLayout
       component={<SetupComponents.ClusterConfiguredScreen/>}
       endpoint={setup.url('apiurl')}

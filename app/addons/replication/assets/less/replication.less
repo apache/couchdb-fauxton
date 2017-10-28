@@ -44,23 +44,27 @@ div.replication__page {
   width: 540px;
   select {
     font-size: 14px;
-    width: 246px;
+    width: 400px;
     margin-bottom: 10px;
     background-color: white;
     border: 1px solid #cccccc;
   }
   .styled-select {
-    width: 250px;
+    width: 400px;
   }
 }
 
 .replication__input-react-select {
   font-size: 14px;
 
+  .Select .Select-menu-outer {
+    width: 400px;
+  }
+
   .Select div.Select-control {
     padding: 6px;
     border: 1px solid #cccccc;
-    width: 246px;
+    width: 400px;
 
     .Select-value, .Select-placeholder {
       padding: 6px 15px 6px 10px;
@@ -80,7 +84,7 @@ div.replication__page {
 
 .replication__remote-connection-url[type="text"] {
   font-size: 14px;
-  width: 100%;
+  width: 400px;
   color: #333;
 }
 
@@ -91,14 +95,14 @@ div.replication__page {
 }
 
 .replication__new-input[type="text"] {
-  width: 248px;
+  width: 400px;
   font-size: 14px;
   color: #333;
 }
 
 .replication__doc-name {
   position: relative;
-  width: 250px;
+  width: 400px;
 
 }
 
@@ -114,14 +118,14 @@ div.replication__page {
 }
 
 .replication__doc-name-icon:hover {
-  color: #E73D34;
+  color: @hoverHighlight;
 }
 
 //use attribute selector to strengthen this to override bootstraps default font size for inputs
 .replication__doc-name-input[type="text"] {
   padding-right: 32px;
   font-size: 14px;
-  width: 248px;
+  width: 400px;
   color: #333;
 }
 
@@ -157,7 +161,7 @@ td.replication__table-col {
 }
 
 .replication__table--selected {
-  color: @hoverRed;
+  color: @hoverHighlight;
 }
 
 .replication__table-header-source {
@@ -245,12 +249,14 @@ input.replication__bulk-select-input[type="checkbox"] {
   margin: 8px;
 }
 
-.replication__bulk-select-trash {
+.bulk-select-trash {
   color: #505050;
   border: 1px solid #aaa;
   background-color: rgba(0, 0, 0, 0);
   margin-left: 3px;
-  padding-left: 8px
+  padding-left: 8px;
+  &:hover{
+    color: @hoverHighlight}
 }
 
 .replication__row-actions-list {
@@ -268,15 +274,24 @@ input.replication__bulk-select-input[type="checkbox"] {
   cursor: pointer;
   padding-right: 8px;
   padding-left: 8px;
+  color: #333;
+  &:visited {
+    color: #333;
+    text-decoration: none;
+  }
+  &:hover {
+    color: @hoverHighlight;
+    text-decoration: none;
+  }
+
 }
 
-.replication__row-btn:visited,
-.replication__row-btn:hover {
-  text-decoration: none;
+.replication__row-btn--no-left-pad {
+  padding-left: 0px;
 }
 
 .replication__row-btn--warning {
-  color: #E73D34;
+  color: @dangerRed;
 }
 
 .replication__filter-icon {
@@ -290,14 +305,20 @@ input.replication__filter-input[type="text"] {
   margin-bottom: 0;
 }
 
+button.replication__error-continue {
+  margin-left: 20px !important; //needed to override bootstrap
+}
+
 .replication__error-cancel,
 .replication__error-continue {
-  background-color: #0082BF;
+  background-color: @secondaryBlue;
+  color: #FFF;
 }
 
 .replication__error-cancel:hover,
 .replication__error-continue:hover {
-  background-color: #e73d34;
+  background-color: @hoverHighlight;
+  color: #FFF;
 }
 
 td.replication__empty-row {
@@ -305,9 +326,19 @@ td.replication__empty-row {
 }
 
 .replication__remote_icon_help {
-  color: #E33F3B
+  color: @secondaryBlue
 }
 
 .replication__remote_icon_help:hover {
-  color: #af2d24;
+  color: @hoverHighlight;
+}
+
+.replication__tooltip {
+  .tooltip-inner {
+    text-align: left
+  }
+}
+
+.replication__activity-caveat {
+  padding-left: 80px;
 }

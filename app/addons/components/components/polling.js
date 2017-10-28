@@ -10,6 +10,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+import PropTypes from 'prop-types';
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 
@@ -111,7 +113,7 @@ export class Polling extends React.Component {
       </div>
     );
   }
-};
+}
 
 Polling.defaultProps = {
   startValue: 0,
@@ -120,12 +122,12 @@ Polling.defaultProps = {
 };
 
 Polling.propTypes = {
-  startValue: React.PropTypes.number,
-  valueUnits: React.PropTypes.string,
-  min: React.PropTypes.number,
-  max: React.PropTypes.number.isRequired,
-  stepSize: React.PropTypes.number.isRequired,
-  onPoll: React.PropTypes.func.isRequired,
+  startValue: PropTypes.number,
+  valueUnits: PropTypes.string,
+  min: PropTypes.number,
+  max: PropTypes.number.isRequired,
+  stepSize: PropTypes.number.isRequired,
+  onPoll: PropTypes.func.isRequired,
 };
 
 export const RefreshBtn = ({refresh}) =>
@@ -145,5 +147,5 @@ export const RefreshBtn = ({refresh}) =>
   </div>;
 
 RefreshBtn.propTypes = {
-  refresh: React.PropTypes.func.isRequired
+  refresh: PropTypes.func.isRequired
 };

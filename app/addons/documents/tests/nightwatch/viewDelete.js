@@ -24,6 +24,7 @@ module.exports = {
       .populateDatabase(newDatabaseName)
       .loginToGUI()
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_design/testdesigndoc/_view/stubview')
+      .clickWhenVisible('.fonticon-json')
       .waitForElementPresent('.prettyprint', waitTime, false)
       .assert.containsText('.prettyprint', 'stub')
 
@@ -32,8 +33,8 @@ module.exports = {
 
       .clickWhenVisible('.index-list .active span', waitTime, true)
       .clickWhenVisible('.popover-content .fonticon-trash', waitTime, true)
-      .waitForElementVisible('.confirmation-modal button.btn-success', waitTime, true)
-      .clickWhenVisible('.confirmation-modal button.btn-success', waitTime, true)
+      .waitForElementVisible('.confirmation-modal button.btn-primary', waitTime, true)
+      .clickWhenVisible('.confirmation-modal button.btn-primary', waitTime, true)
 
 
       // now wait for the sidebar to have removed the design doc

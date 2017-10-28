@@ -10,8 +10,6 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-
-
 module.exports = {
 
   'Clones a view': function (client) {
@@ -24,13 +22,14 @@ module.exports = {
       .populateDatabase(newDatabaseName)
       .loginToGUI()
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_design/testdesigndoc/_view/stubview')
+      .clickWhenVisible('.fonticon-json')
       .waitForElementPresent('.prettyprint', waitTime, false)
       .assert.containsText('.prettyprint', 'stub')
       .clickWhenVisible('.index-list .active span', waitTime, true)
       .clickWhenVisible('.popover-content .fonticon-files-o', waitTime, true)
       .waitForElementVisible('#new-index-name', waitTime, true)
       .setValue('#new-index-name', 'cloned-view')
-      .clickWhenVisible('.clone-index-modal .btn-success', waitTime, true)
+      .clickWhenVisible('.clone-index-modal .btn-primary', waitTime, true)
 
       // now wait for the sidebar to be updated with the new view
       .waitForElementVisible('#testdesigndoc_cloned-view', waitTime, true)

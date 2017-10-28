@@ -14,24 +14,29 @@
 
 module.exports = {
 
-  'Checks if design docs that have a dot symbol in the id show up in the UI': function (client) {
-    var waitTime = 10000,
+  'Checks if design docs that have special chars in the ID show up in the UI and are clickable': function (client) {
+    const waitTime = 10000,
         newDatabaseName = client.globals.testDatabaseName,
         baseUrl = client.globals.test_settings.launch_url;
-
+    const docNormal = 'ddoc_normal';
+    const docSpecialChars = 'ddoc_with.$pecialcharacters()+-';
+    const docSpecialCharsEncoded = 'ddoc_with.%24pecialcharacters()%2B-';
     client
       .loginToGUI()
-      .createDocument('_design/ddoc_normal', newDatabaseName)
-      .createDocument('_design/ddoc.with.specialcharacters', newDatabaseName)
+      .createDocument('_design/' + docNormal, newDatabaseName)
+      .createDocument('_design/' + docSpecialChars, newDatabaseName)
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
       .waitForElementPresent('.nav-list', waitTime, false)
-      .assert.hidden('a[href="#/database/' + newDatabaseName + '/_design/ddoc_normal/_info"]')
-      .assert.hidden('a[href="#/database/' + newDatabaseName + '/_design/ddoc.with.specialcharacters/_info"]')
-
-      .clickWhenVisible('#nav-header-ddoc_normal')
-      .assert.visible('a[href="#/database/' + newDatabaseName + '/_design/ddoc_normal/_info"]')
-      .clickWhenVisible('[title="_design/ddoc.with.specialcharacters"]')
-      .assert.visible('a[href="#/database/' + newDatabaseName + '/_design/ddoc.with.specialcharacters/_info"]')
+      // Verify 'Metadata' subitem is not visible
+      .assert.hidden('a[href="#/database/' + newDatabaseName + '/_design/' + docNormal + '/_info"]')
+      .assert.hidden('a[href="#/database/' + newDatabaseName + '/_design/' + docSpecialCharsEncoded + '/_info"]')
+      // Click sidebar items and verify they expand
+      .clickWhenVisible('#nav-header-' + docNormal)
+      .assert.visible('a[href="#/database/' + newDatabaseName + '/_design/' + docNormal + '/_info"]')
+      .clickWhenVisible('span[title="_design/' + docSpecialChars + '"]')
+      .assert.visible('a[href="#/database/' + newDatabaseName + '/_design/' + docSpecialCharsEncoded + '/_info"]')
+      // Verify display name is not encoded
+      .assert.containsText('span[title="_design/' + docSpecialChars + '"]', docSpecialChars)
     .end();
   }
 };

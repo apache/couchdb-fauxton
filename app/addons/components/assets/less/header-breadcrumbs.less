@@ -28,10 +28,15 @@
   white-space: nowrap;
 }
 
-.faux-header__breadcrumbs-link:hover {
+a.faux-header__breadcrumbs-link {
+  color: @brandHighlight;
+  &:hover {
+  color: @hoverHighlight;
   text-decoration: none;
   cursor: hand;
+  }
 }
+
 
 .faux-header__breadcrumbs-divider {
   width: 13px;

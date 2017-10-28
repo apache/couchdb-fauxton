@@ -47,9 +47,5 @@ export default {
     MANGO_INDEX: '/_utils/docs/intro/api.html#documents',
     MANGO_SEARCH: '/_utils/docs/intro/api.html#documents',
     CHANGES: '/_utils/docs/api/database/changes.html?highlight=changes#post--db-_changes'
-  },
-
-  LOCAL_STORAGE: {
-    SIDEBAR_MINIMIZED: 'sidebar-minimized'
   }
 };

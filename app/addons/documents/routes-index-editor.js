@@ -13,11 +13,8 @@
 import React from 'react';
 import FauxtonAPI from "../../core/api";
 import BaseRoute from "./shared-routes";
-import Documents from "./resources";
 import ActionsIndexEditor from "./index-editor/actions";
 import Databases from "../databases/base";
-import IndexResultsStores from "./index-results/stores";
-import IndexResultsActions from "./index-results/actions";
 import SidebarActions from "./sidebar/actions";
 import {DocsTabsSidebarLayout, ViewsTabsSidebarLayout} from './layouts';
 
@@ -50,56 +47,45 @@ const IndexEditorAndResults = BaseRoute.extend({
   },
 
   showView: function (databaseName, ddoc, viewName) {
-    var params = this.createParams(),
-        urlParams = params.urlParams,
-        docParams = params.docParams,
-        decodeDdoc = decodeURIComponent(ddoc);
 
     viewName = viewName.replace(/\?.*$/, '');
-    this.indexedDocs = new Documents.IndexCollection(null, {
-      database: this.database,
-      design: decodeDdoc,
-      view: viewName,
-      params: docParams,
-      paging: {
-        pageSize: IndexResultsStores.indexResultsStore.getPerPage()
-      }
-    });
 
     ActionsIndexEditor.clearIndex();
-
-    IndexResultsActions.newResultsList({
-      collection: this.indexedDocs,
-      bulkCollection: new Documents.BulkDeleteDocCollection([], { databaseId: this.database.safeID() }),
-    });
-
     ActionsIndexEditor.fetchDesignDocsBeforeEdit({
       viewName: viewName,
       newView: false,
       database: this.database,
       designDocs: this.designDocs,
-      designDocId: '_design/' + decodeDdoc
+      designDocId: '_design/' + ddoc
     });
 
-    SidebarActions.selectNavItem('designDoc', {
-      designDocName: ddoc,
-      designDocSection: 'Views',
-      indexName: viewName
-    });
+    const selectedNavItem = {
+      navItem: 'designDoc',
+      params: {
+        designDocName: ddoc,
+        designDocSection: 'Views',
+        indexName: viewName
+      }
+    };
+    SidebarActions.selectNavItem(selectedNavItem.navItem, selectedNavItem.params);
 
-    this.showQueryOptions(urlParams, ddoc, viewName);
-
-    const endpoint = this.indexedDocs.urlRef('apiurl');
+    const url = FauxtonAPI.urls('view', 'server', encodeURIComponent(databaseName),
+      encodeURIComponent(ddoc), encodeURIComponent(viewName));
+    const endpoint = FauxtonAPI.urls('view', 'apiurl', encodeURIComponent(databaseName),
+      encodeURIComponent(ddoc), encodeURIComponent(viewName));
     const docURL = FauxtonAPI.constants.DOC_URLS.GENERAL;
 
     const dropDownLinks = this.getCrumbs(this.database);
     return <DocsTabsSidebarLayout
-      showIncludeAllDocs={true}
       docURL={docURL}
       endpoint={endpoint}
       dbName={this.database.id}
       dropDownLinks={dropDownLinks}
       database={this.database}
+      fetchUrl={url}
+      ddocsOnly={false}
+      deleteEnabled={false}
+      selectedNavItem={selectedNavItem}
       />;
   },
 

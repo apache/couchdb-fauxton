@@ -15,9 +15,9 @@ import FauxtonAPI from "../../core/api";
 import Documents from "./resources";
 import Databases from "../databases/base";
 import Actions from "./doc-editor/actions";
-import ReactComponents from "./doc-editor/components.react";
+import ReactComponents from "./doc-editor/components";
 import RevBrowserActions from "./rev-browser/rev-browser.actions";
-import RevBrowserComponents from "./rev-browser/rev-browser.components.react";
+import RevBrowserComponents from "./rev-browser/rev-browser.components";
 import {DocEditorLayout} from '../components/layouts';
 
 
@@ -37,10 +37,10 @@ const DocEditorRouteObject = FauxtonAPI.RouteObject.extend({
     'database/:database/:doc/conflicts': 'revisionBrowser',
     'database/:database/:doc/code_editor': 'codeEditor',
     'database/:database/_design/:ddoc': 'showDesignDoc',
+    'database/:database/_local/:doc': 'showLocalDoc',
     'database/:database/:doc': 'codeEditor',
     'database/:database/new': 'codeEditor'
   },
-
 
   revisionBrowser: function (databaseName, docId) {
     const backLink = FauxtonAPI.urls('allDocs', 'app', FauxtonAPI.url.encode(this.database.safeID()));
@@ -86,6 +86,10 @@ const DocEditorRouteObject = FauxtonAPI.RouteObject.extend({
           isNewDoc={docId ? false : true}
         />}
       />;
+  },
+
+  showLocalDoc: function(databaseName, docId) {
+    return this.codeEditor(databaseName, '_local/' + docId);
   },
 
   showDesignDoc: function (database, ddoc) {

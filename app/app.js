@@ -12,11 +12,9 @@
 import "jquery";
 import app from "./initialize";
 import _ from "lodash";
-import "bootstrap";
 import Helpers from "./helpers";
 import Utils from "./core/utils";
 import FauxtonAPI from "./core/api";
-import Couchdb from "./core/couchdbSession";
 import "../assets/less/fauxton.less";
 
 // Make sure we have a console.log
@@ -46,10 +44,6 @@ Object.assign(app, {
   helpers: Helpers
 });
 
-FauxtonAPI.setSession(new Couchdb.Session());
-
-// Define your master router on the application namespace and trigger all
-// navigation from this instance.
 FauxtonAPI.config({
   // I haven't wrapped these dispatch methods in a action
   // because I don't want to require fauxton/actions in this method.
@@ -71,6 +65,25 @@ FauxtonAPI.config({
     FauxtonAPI.dispatch({
       type: 'REMOVE_NAVBAR_LINK',
       link: link
+    });
+  },
+
+  hideLogin: function () {
+    FauxtonAPI.dispatch({
+      type: 'NAVBAR_SHOW_HIDE_LOGIN_LOGOUT_SECTION',
+      visible: false
+    });
+  },
+
+  showLogout: function () {
+    FauxtonAPI.dispatch({
+      type: 'NAVBAR_SHOW_LOGOUT_BUTTON'
+    });
+  },
+
+  showLogin: function () {
+    FauxtonAPI.dispatch({
+      type: 'NAVBAR_SHOW_LOGIN_BUTTON'
     });
   }
 });

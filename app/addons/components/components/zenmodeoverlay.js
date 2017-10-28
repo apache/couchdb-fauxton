@@ -13,78 +13,69 @@ import React from "react";
 import ReactDOM from "react-dom";
 import app from "../../../app";
 import {CodeEditor} from './codeeditor';
+import {Tooltip, OverlayTrigger} from 'react-bootstrap';
 
 require('brace/theme/dawn');
 
+ const themes = {
+    dark: 'idle_fingers',
+    light: 'dawn'
+  };
 // Zen mode editing has very few options:
 // - It covers the full screen, hiding everything else
 // - Two themes: light & dark (choice stored in local storage)
 // - No save option, but has a 1-1 map with a <CodeEditor /> element which gets updated when the user leaves
 // - [Escape] closes the mode, as does clicking the shrink icon at the top right
-export const ZenModeOverlay = React.createClass({
-  getDefaultProps () {
-    return {
-      mode: 'javascript',
-      defaultCode: '',
-      ignorableErrors: [],
-      onExit: null,
-      highlightActiveLine: false
-    };
-  },
+export class ZenModeOverlay extends React.Component {
+  static defaultProps = {
+    mode: 'javascript',
+    defaultCode: '',
+    ignorableErrors: [],
+    onExit: null,
+    highlightActiveLine: false
+  };
 
-  themes: {
-    dark: 'idle_fingers',
-    light: 'dawn'
-  },
-
-  getInitialState () {
-    return this.getStoreState();
-  },
-
-  getStoreState () {
+  getStoreState = () => {
     return {
       theme: this.getZenTheme(),
       code: this.props.defaultCode
     };
-  },
+  };
 
-  getZenTheme () {
+  getZenTheme = () => {
     var selectedTheme = app.utils.localStorageGet('zenTheme');
     return _.isUndefined(selectedTheme) ? 'dark' : selectedTheme;
-  },
+  };
 
-  onChange () {
+  onChange = () => {
     this.setState(this.getStoreState());
-  },
+  };
 
-  componentDidMount () {
-    $(ReactDOM.findDOMNode(this.refs.exit)).tooltip({ placement: 'left' });
-    $(ReactDOM.findDOMNode(this.refs.theme)).tooltip({ placement: 'left' });
-  },
-
-  exitZenMode () {
+  exitZenMode = () => {
     this.props.onExit(this.getValue());
-  },
+  };
 
-  getValue () {
+  getValue = () => {
     return this.refs.ace.getValue();
-  },
+  };
 
-  toggleTheme () {
+  toggleTheme = () => {
     var newTheme = (this.state.theme === 'dark') ? 'light' : 'dark';
     this.setState({
       theme: newTheme,
       code: this.getValue()
     });
     app.utils.localStorageSet('zenTheme', newTheme);
-  },
+  };
 
-  setValue (code, lineNumber) {
+  setValue = (code, lineNumber) => {
     lineNumber = lineNumber ? lineNumber : -1;
     this.editor.setValue(code, lineNumber);
-  },
+  };
 
-  render () {
+  state = this.getStoreState();
+
+  render() {
     var classes = 'full-page-editor-modal-wrapper zen-theme-' + this.state.theme;
 
     var editorCommands = [{
@@ -93,25 +84,36 @@ export const ZenModeOverlay = React.createClass({
       exec: this.exitZenMode
     }];
 
+    const tooltipExit = <Tooltip id="tooltip">
+      Exit zen mode (`esc`)
+      </Tooltip>;
+
+    const tooltipTheme = <Tooltip id="tooltip">
+      Switch zen theme
+      </Tooltip>;
+
     return (
       <div className={classes}>
         <div className="zen-mode-controls">
           <ul>
             <li>
-              <span ref="exit"
-                className="fonticon fonticon-resize-small js-exit-zen-mode"
-                data-toggle="tooltip"
-                data-container=".zen-mode-controls .tooltips"
-                title="Exit zen mode (`esc`)"
-                onClick={this.exitZenMode}></span>
+              <OverlayTrigger placement="left" overlay={tooltipExit}>
+                <span
+                  className="fonticon fonticon-resize-small js-exit-zen-mode"
+                  data-container=".zen-mode-controls .tooltips"
+                  onClick={this.exitZenMode}>
+                </span>
+              </OverlayTrigger>
             </li>
             <li>
-              <span ref="theme"
-                className="fonticon fonticon-picture js-toggle-theme"
-                data-toggle="tooltip"
-                data-container=".zen-mode-controls .tooltips"
-                title="Switch zen theme"
-                onClick={this.toggleTheme}></span>
+              <OverlayTrigger placement="left" overlay={tooltipTheme}>
+                <span ref="theme"
+                  className="fonticon fonticon-picture js-toggle-theme"
+                  data-container=".zen-mode-controls .tooltips"
+                  title="Switch zen theme"
+                  onClick={this.toggleTheme}>
+                 </span>
+                </OverlayTrigger>
             </li>
           </ul>
           <div className="tooltips"></div>
@@ -119,7 +121,7 @@ export const ZenModeOverlay = React.createClass({
         <CodeEditor
           ref="ace"
           autoFocus={true}
-          theme={this.themes[this.state.theme]}
+          theme={themes[this.state.theme]}
           defaultCode={this.props.defaultCode}
           editorCommands={editorCommands}
           ignorableErrors={this.props.ignorableErrors}
@@ -128,4 +130,4 @@ export const ZenModeOverlay = React.createClass({
       </div>
     );
   }
-});
+}

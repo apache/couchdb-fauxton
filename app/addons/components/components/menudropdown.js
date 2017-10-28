@@ -11,24 +11,23 @@
 // the License.
 import React from "react";
 import ReactDOM from "react-dom";
+import { Dropdown } from "react-bootstrap";
+import RootCloseWrapper from 'react-overlays/lib/RootCloseWrapper';
 
-export const MenuDropDown = React.createClass({
+export class MenuDropDown extends React.Component {
+  static defaultProps = {
+    icon: 'fonticon-plus-circled'
+  };
 
-  getDefaultProps () {
-    return {
-      icon: 'fonticon-plus-circled'
-    };
-  },
-
-  createSectionLinks (links) {
+  createSectionLinks = (links) => {
     if (!links) { return null; }
 
     return links.map((link, key) => {
       return this.createEntry(link, key);
     });
-  },
+  };
 
-  createEntry (link, key) {
+  createEntry = (link, key) => {
     return (
       <li key={key}>
         <a className={link.icon ? 'icon ' + link.icon : ''}
@@ -40,9 +39,9 @@ export const MenuDropDown = React.createClass({
         </a>
       </li>
     );
-  },
+  };
 
-  createSectionTitle (title) {
+  createSectionTitle = (title) => {
     if (!title) {
       return null;
     }
@@ -50,9 +49,9 @@ export const MenuDropDown = React.createClass({
     return (
       <li className="header-label">{title}</li>
     );
-  },
+  };
 
-  createSection () {
+  createSection = () => {
     return this.props.links.map((linkSection, key) => {
       if (linkSection.title && linkSection.links) {
         return ([
@@ -60,23 +59,61 @@ export const MenuDropDown = React.createClass({
           this.createSectionLinks(linkSection.links)
         ]);
       }
-
       return this.createEntry(linkSection, 'el' + key);
-
     });
-  },
+  };
 
-  render () {
+  render() {
+    const menuItems = this.createSection();
     return (
-      <div className="dropdown">
-        <a className={"dropdown-toggle icon " + this.props.icon}
-          data-toggle="dropdown"
-          href="#"
-          data-bypass="true"></a>
-        <ul className="dropdown-menu arrow" role="menu" aria-labelledby="dLabel">
-          {this.createSection()}
-        </ul>
-      </div>
+      <Dropdown id="dropdown-menu">
+        <CustomMenuToggle bsRole="toggle" icon={this.props.icon}>
+        </CustomMenuToggle>
+        <CustomMenu bsRole="menu" className="arrow">
+          {menuItems}
+        </CustomMenu>
+        }
+      </Dropdown>
     );
   }
-});
+}
+
+class CustomMenuToggle extends React.Component {
+  constructor(props, context) {
+    super(props, context);
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  handleClick(e) {
+    e.preventDefault();
+    this.props.onClick(e);
+  }
+
+  render() {
+    return (
+      <a className={"dropdown-toggle icon " + this.props.icon}
+        style={{ fontSize: '1rem', boxShadow: '0px 0px 0px' }}
+        onClick={this.handleClick}>
+        {this.props.children}
+      </a>
+    );
+  }
+}
+
+export class CustomMenu extends React.Component {
+  constructor(props, context) {
+    super(props, context);
+  }
+
+  render() {
+    const { children, open, onClose } = this.props;
+
+    return (
+      <RootCloseWrapper disabled={!open} onRootClose={onClose}>
+        <ul className="dropdown-menu arrow" role="menu" aria-labelledby="dLabel">
+          {children}
+        </ul>
+      </RootCloseWrapper>
+    );
+  }
+}

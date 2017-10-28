@@ -35,10 +35,10 @@
     border-bottom: 1px solid #ccc;
   }
   .padded-box {
-    margin: 25px 30px;
+    margin: 15px;
   }
   .db-title {
-    color: @brandPrimary;
+    color: @brandHighlight;
     line-height: 30px;
   }
   #index-name {
@@ -53,13 +53,34 @@
     padding: 5px;
   }
   form {
-    padding-bottom: 50px;
+    padding-bottom: 15px;
   }
   a.edit-link {
     float: right;
+    margin-right: 5px;
+    cursor: pointer;
   }
   .help-link {
     margin-left: 4px;
+  }
+}
+
+.mango-select {
+  width: inherit;
+  overflow: visible;
+
+  div {
+    z-index: 100;
+  }
+
+  .mango-select-entry {
+    background-color: @queryHistoryBGColor;
+    color: @queryHistoryColor;
+
+    &.is-selected, &.is-focused {
+      background-color: @brandHighlight;
+      color: @queryHistoryBGColor;
+    }
   }
 }
 
@@ -222,7 +243,13 @@
   }
 }
 
-.index-cancel-link {
+a.index-cancel-link {
   margin-left: 10px;
   font-size: 14px;
+  color: #666;
+  &:hover {
+    color: @hoverHighlight;
+    text-decoration: none;
+    cursor: hand;
+  }
 }

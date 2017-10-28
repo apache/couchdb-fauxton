@@ -19,68 +19,65 @@ require('brace/mode/javascript');
 require('brace/mode/json');
 require('brace/theme/idle_fingers');
 
-export const CodeEditor = React.createClass({
-  getDefaultProps () {
-    return {
-      id: 'code-editor',
-      mode: 'javascript',
-      theme: 'idle_fingers',
-      fontSize: 13,
+export class CodeEditor extends React.Component {
+  static defaultProps = {
+    id: 'code-editor',
+    mode: 'javascript',
+    theme: 'idle_fingers',
+    fontSize: 13,
 
-      // this sets the default value for the editor. On the fly changes are stored in state in this component only. To
-      // change the editor content after initial construction use CodeEditor.setValue()
-      defaultCode: '',
+    // this sets the default value for the editor. On the fly changes are stored in state in this component only. To
+    // change the editor content after initial construction use CodeEditor.setValue()
+    defaultCode: '',
 
-      showGutter: true,
-      highlightActiveLine: true,
-      showPrintMargin: false,
-      autoScrollEditorIntoView: true,
-      autoFocus: false,
-      stringEditModalEnabled: false,
+    showGutter: true,
+    highlightActiveLine: true,
+    showPrintMargin: false,
+    autoScrollEditorIntoView: true,
+    autoFocus: false,
+    stringEditModalEnabled: false,
 
-      // these two options create auto-resizeable code editors, with a maximum number of lines
-      setHeightToLineCount: false,
-      maxLines: 10,
+    // these two options create auto-resizeable code editors, with a maximum number of lines
+    setHeightToLineCount: false,
+    maxLines: 10,
+    minLines: 11, // show double digits in sidebar
 
-      // optional editor key commands (e.g. specific save action)
-      editorCommands: [],
+    // optional editor key commands (e.g. specific save action)
+    editorCommands: [],
 
-      // notifies users that there is unsaved changes in the editor when navigating away from the page
-      notifyUnsavedChanges: false,
+    // notifies users that there is unsaved changes in the editor when navigating away from the page
+    notifyUnsavedChanges: false,
 
-      // an optional array of ignorable Ace errors. Lets us filter out errors based on context
-      ignorableErrors: [],
+    // an optional array of ignorable Ace errors. Lets us filter out errors based on context
+    ignorableErrors: [],
 
-      // un-Reacty, but the code editor is a self-contained component and it's helpful to be able to tie into
-      // editor specific events like content changes and leaving the editor
-      change () {},
-      blur () {}
-    };
-  },
+    // un-Reacty, but the code editor is a self-contained component and it's helpful to be able to tie into
+    // editor specific events like content changes and leaving the editor
+    change () {},
+    blur () {}
+  };
 
-  getInitialState () {
-    return {
-      originalCode: this.props.defaultCode,
+  state = {
+    originalCode: this.props.defaultCode,
 
-      // these are all related to the (optional) string edit modal
-      stringEditModalVisible: false,
-      stringEditIconVisible: false,
-      stringEditIconStyle: {},
-      stringEditModalValue: ''
-    };
-  },
+    // these are all related to the (optional) string edit modal
+    stringEditModalVisible: false,
+    stringEditIconVisible: false,
+    stringEditIconStyle: {},
+    stringEditModalValue: ''
+  };
 
-  hasChanged () {
+  hasChanged = () => {
     return !_.isEqual(this.state.originalCode, this.getValue());
-  },
+  };
 
-  clearChanges () {
+  clearChanges = () => {
     this.setState({
       originalCode: this.getValue()
     });
-  },
+  };
 
-  setupAce (props, shouldUpdateCode) {
+  setupAce = (props, shouldUpdateCode) => {
     this.editor = ace.edit(ReactDOM.findDOMNode(this.refs.ace));
 
     // suppresses an Ace editor error
@@ -113,15 +110,15 @@ export const CodeEditor = React.createClass({
     if (this.props.autoFocus) {
       this.editor.focus();
     }
-  },
+  };
 
-  addCommands () {
+  addCommands = () => {
     _.each(this.props.editorCommands, function (command) {
       this.editor.commands.addCommand(command);
     }, this);
-  },
+  };
 
-  setupEvents () {
+  setupEvents = () => {
     this.editor.on('blur', _.bind(this.onBlur, this));
     this.editor.on('change', _.bind(this.onContentChange, this));
 
@@ -135,67 +132,68 @@ export const CodeEditor = React.createClass({
       $(window).on('beforeunload.editor_' + this.props.id, _.bind(this.quitWarningMsg));
       FauxtonAPI.beforeUnload('editor_' + this.props.id, _.bind(this.quitWarningMsg, this));
     }
-  },
+  };
 
-  onBlur () {
+  onBlur = () => {
     this.props.blur(this.getValue());
-  },
+  };
 
-  onContentChange () {
+  onContentChange = () => {
     if (this.props.setHeightToLineCount) {
       this.setHeightToLineCount();
     }
     this.props.change(this.getValue());
-  },
+  };
 
-  quitWarningMsg () {
+  quitWarningMsg = () => {
     if (this.hasChanged()) {
       return 'Your changes have not been saved. Click Cancel to return to the document, or OK to proceed.';
     }
-  },
+  };
 
-  removeEvents () {
+  removeEvents = () => {
     if (this.props.notifyUnsavedChanges) {
       $(window).off('beforeunload.editor_' + this.props.id);
       FauxtonAPI.removeBeforeUnload('editor_' + this.props.id);
     }
-  },
+  };
 
-  setHeightToLineCount () {
+  setHeightToLineCount = () => {
     var numLines = this.editor.getSession().getDocument().getLength();
     var maxLines = (numLines > this.props.maxLines) ? this.props.maxLines : numLines;
     this.editor.setOptions({
-      maxLines: maxLines
+      maxLines: maxLines,
+      minLines: this.props.minLines
     });
-  },
+  };
 
-  componentDidMount () {
+  componentDidMount() {
     this.setupAce(this.props, true);
     this.setupEvents();
 
     if (this.props.autoFocus) {
       this.editor.focus();
     }
-  },
+  }
 
-  componentWillUnmount () {
+  componentWillUnmount() {
     this.removeEvents();
     this.editor.destroy();
-  },
+  }
 
-  componentWillReceiveProps (nextProps) {
+  componentWillReceiveProps(nextProps) {
     this.setupAce(nextProps, false);
-  },
+  }
 
-  getAnnotations () {
+  getAnnotations = () => {
     return this.editor.getSession().getAnnotations();
-  },
+  };
 
-  isIgnorableError (msg) {
-    return _.contains(this.props.ignorableErrors, msg);
-  },
+  isIgnorableError = (msg) => {
+    return _.includes(this.props.ignorableErrors, msg);
+  };
 
-  removeIgnorableAnnotations () {
+  removeIgnorableAnnotations = () => {
     var isIgnorableError = this.isIgnorableError;
     this.editor.getSession().on('changeAnnotation', function () {
       var annotations = this.editor.getSession().getAnnotations();
@@ -210,9 +208,9 @@ export const CodeEditor = React.createClass({
         this.editor.getSession().setAnnotations(newAnnotations);
       }
     }.bind(this));
-  },
+  };
 
-  showHideEditStringGutterIcon () {
+  showHideEditStringGutterIcon = () => {
     if (this.hasErrors() || !this.parseLineForStringMatch()) {
       this.setState({ stringEditIconVisible: false });
       return false;
@@ -226,9 +224,9 @@ export const CodeEditor = React.createClass({
     });
 
     return true;
-  },
+  };
 
-  updateEditStringGutterIconPosition () {
+  updateEditStringGutterIconPosition = () => {
     if (!this.state.stringEditIconVisible) {
       return;
     }
@@ -237,16 +235,16 @@ export const CodeEditor = React.createClass({
         top: this.getGutterIconPosition()
       }
     });
-  },
+  };
 
-  getGutterIconPosition () {
+  getGutterIconPosition = () => {
     var rowHeight = this.getRowHeight();
     var scrollTop = this.editor.session.getScrollTop();
     var positionFromTop = (rowHeight * this.documentToScreenRow(this.getSelectionStart().row)) - scrollTop;
     return positionFromTop + 'px';
-  },
+  };
 
-  parseLineForStringMatch () {
+  parseLineForStringMatch = () => {
     var selStart = this.getSelectionStart().row;
     var selEnd   = this.getSelectionEnd().row;
 
@@ -260,9 +258,9 @@ export const CodeEditor = React.createClass({
       }
     }
     return false;
-  },
+  };
 
-  openStringEditModal () {
+  openStringEditModal = () => {
     var matches = this.parseLineForStringMatch();
     var string = matches[3];
     var lastChar = string.length - 1;
@@ -275,9 +273,9 @@ export const CodeEditor = React.createClass({
       stringEditModalVisible: true,
       stringEditModalValue: string
     });
-  },
+  };
 
-  saveStringEditModal (newString) {
+  saveStringEditModal = (newString) => {
     // replace the string on the selected line
     var line = this.parseLineForStringMatch();
     var indent = line[1] || '',
@@ -289,68 +287,68 @@ export const CodeEditor = React.createClass({
     }
     this.replaceCurrentLine(indent + key + JSON.stringify(newString) + comma + '\n');
     this.closeStringEditModal();
-  },
+  };
 
-  closeStringEditModal () {
+  closeStringEditModal = () => {
     this.setState({
       stringEditModalVisible: false
     });
-  },
+  };
 
-  hasErrors () {
+  hasErrors = () => {
     return !_.every(this.getAnnotations(), function (error) {
       return this.isIgnorableError(error.raw);
     }, this);
-  },
+  };
 
-  setReadOnly (readonly) {
+  setReadOnly = (readonly) => {
     this.editor.setReadOnly(readonly);
-  },
+  };
 
-  setValue (code, lineNumber) {
+  setValue = (code, lineNumber) => {
     lineNumber = lineNumber ? lineNumber : -1;
     this.editor.setValue(code, lineNumber);
-  },
+  };
 
-  getValue () {
+  getValue = () => {
     return this.editor.getValue();
-  },
+  };
 
-  getEditor () {
+  getEditor = () => {
     return this;
-  },
+  };
 
-  getLine (lineNum) {
+  getLine = (lineNum) => {
     return this.editor.session.getLine(lineNum);
-  },
+  };
 
-  getSelectionStart () {
+  getSelectionStart = () => {
     return this.editor.getSelectionRange().start;
-  },
+  };
 
-  getSelectionEnd () {
+  getSelectionEnd = () => {
     return this.editor.getSelectionRange().end;
-  },
+  };
 
-  getRowHeight () {
+  getRowHeight = () => {
     return this.editor.renderer.layerConfig.lineHeight;
-  },
+  };
 
-  isRowExpanded (row) {
+  isRowExpanded = (row) => {
     return !this.editor.getSession().isRowFolded(row);
-  },
+  };
 
-  documentToScreenRow (row) {
+  documentToScreenRow = (row) => {
     return this.editor.getSession().documentToScreenRow(row, 0);
-  },
+  };
 
-  replaceCurrentLine (replacement) {
+  replaceCurrentLine = (replacement) => {
     this.editor.getSelection().selectLine();
     this.editor.insert(replacement);
     this.editor.getSelection().moveCursorUp();
-  },
+  };
 
-  render () {
+  render() {
     return (
       <div>
         <div ref="ace" className="js-editor" id={this.props.id}></div>
@@ -367,4 +365,4 @@ export const CodeEditor = React.createClass({
       </div>
     );
   }
-});
+}

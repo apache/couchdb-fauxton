@@ -14,16 +14,12 @@ import React from 'react';
 import app from "../../app";
 import FauxtonAPI from "../../core/api";
 import Databases from "../databases/resources";
-import Resources from "./resources";
-import IndexResultsActions from "./index-results/actions";
-import IndexResultStores from "./index-results/stores";
 import Documents from "./shared-resources";
-import MangoActions from "./mango/mango.actions";
 import SidebarActions from "./sidebar/actions";
-import {MangoLayout} from './mangolayout';
+import {MangoLayoutContainer} from './mangolayout';
 
 const MangoIndexEditorAndQueryEditor = FauxtonAPI.RouteObject.extend({
-  layout: 'empty',
+  selectedHeader: 'Databases',
   hideApiBar: true,
   hideNotificationCenter: true,
   routes: {
@@ -41,55 +37,33 @@ const MangoIndexEditorAndQueryEditor = FauxtonAPI.RouteObject.extend({
     var databaseName = options[0];
     this.databaseName = databaseName;
     this.database = new Databases.Model({id: databaseName});
-
-    MangoActions.setDatabase({
-      database: this.database
-    });
   },
 
   findUsingIndex: function (database) {
-    const mangoResultCollection = new Resources.MangoDocumentCollection(null, {
-      database: this.database,
-      paging: {
-        pageSize: IndexResultStores.indexResultsStore.getPerPage()
-      }
-    });
-
-    const mangoIndexList = new Resources.MangoIndexCollection(null, {
-      database: this.database,
-      params: null,
-      paging: {
-        pageSize: IndexResultStores.indexResultsStore.getPerPage()
-      }
-    });
-
     SidebarActions.selectNavItem('mango-query');
 
-    IndexResultsActions.newMangoResultsList({
-      collection: mangoResultCollection,
-      textEmptyIndex: 'No Results',
-      bulkCollection: new Resources.BulkDeleteDocCollection([], { databaseId: this.database.safeID() }),
-    });
-
-    MangoActions.getIndexList({
-      indexList: mangoIndexList
-    });
-
     const url = FauxtonAPI.urls(
-      'allDocs', 'app', this.database.safeID(), '?limit=' + FauxtonAPI.constants.DATABASES.DOCUMENT_LIMIT
+      'allDocs', 'app', encodeURIComponent(this.databaseName), '?limit=' + FauxtonAPI.constants.DATABASES.DOCUMENT_LIMIT
     );
+
+    const fetchUrl = '/' + encodeURIComponent(this.databaseName) + '/_find';
 
     const crumbs = [
       {name: database, link: url},
       {name: app.i18n.en_US['mango-title-editor']}
     ];
 
-    return <MangoLayout
-      showIncludeAllDocs={false}
+    const endpoint = FauxtonAPI.urls('mango', 'query-apiurl', encodeURIComponent(this.databaseName));
+
+    return <MangoLayoutContainer
+      database={database}
       crumbs={crumbs}
       docURL={FauxtonAPI.constants.DOC_URLS.MANGO_SEARCH}
-      endpoint={mangoResultCollection.urlRef('query-apiurl', '')}
+      endpoint={endpoint}
       edit={false}
+
+      databaseName={this.databaseName}
+      fetchUrl={fetchUrl}
     />;
   },
 
@@ -107,36 +81,25 @@ const MangoIndexEditorAndQueryEditor = FauxtonAPI.RouteObject.extend({
       }
     });
 
-    const mangoIndexCollection = new Resources.MangoIndexCollection(null, {
-      database: this.database,
-      params: null,
-      paging: {
-        pageSize: IndexResultStores.indexResultsStore.getPerPage()
-      }
-    });
-
-    IndexResultsActions.newResultsList({
-      collection: mangoIndexCollection,
-      bulkCollection: new Resources.MangoBulkDeleteDocCollection([], { databaseId: this.database.safeID() }),
-      typeOfIndex: 'mango'
-    });
-
     const url = FauxtonAPI.urls(
-      'allDocs', 'app', this.database.safeID(), '?limit=' + FauxtonAPI.constants.DATABASES.DOCUMENT_LIMIT
+      'allDocs', 'app', encodeURIComponent(this.databaseName), '?limit=' + FauxtonAPI.constants.DATABASES.DOCUMENT_LIMIT
     );
+    const endpoint = FauxtonAPI.urls('mango', 'index-apiurl', encodeURIComponent(this.databaseName));
 
     const crumbs = [
       {name: database, link: url},
       {name: app.i18n.en_US['mango-indexeditor-title']}
     ];
 
-    return <MangoLayout
+    return <MangoLayoutContainer
       showIncludeAllDocs={false}
       crumbs={crumbs}
       docURL={FauxtonAPI.constants.DOC_URLS.MANGO_INDEX}
-      endpoint={mangoIndexCollection.urlRef('index-apiurl', '')}
+      endpoint={endpoint}
       edit={true}
       designDocs={designDocs}
+
+      databaseName={this.databaseName}
     />;
   }
 });

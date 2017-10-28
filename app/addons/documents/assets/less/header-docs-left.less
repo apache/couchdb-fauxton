@@ -36,14 +36,14 @@ button.faux-header__doc-header-dropdown-toggle {
 }
 
 button.faux-header__doc-header-dropdown-toggle:focus {
-  color: #e33f3b;
+  color: @hoverHighlight;
   background-color: transparent !important;
   border: none;
   box-shadow: none !important;
 }
 
 .faux-header__doc-header-dropdown-toggle:hover {
-  color: #e33f3b;
+  color: @hoverHighlight;
   background-color: transparent;
 }
 
@@ -68,7 +68,7 @@ button.faux-header__doc-header-dropdown-toggle:focus {
 
 .faux-header__doc-header-backlink:hover {
   text-decoration: none;
-  color: @hoverRed;
+  color: @hoverHighlight;
 }
 
 // override bootstrap styles
@@ -76,7 +76,7 @@ button.faux-header__doc-header-dropdown-toggle:focus {
   padding: 10px 15px 10px 12px;
 }
 .faux-header__doc-header-dropdown-itemwrapper .faux-header__doc-header-dropdown-item:hover {
-  background-color: @navBG;
+  background-color: @hoverHighlight;
   color: #fff;
   cursor: pointer;
 }

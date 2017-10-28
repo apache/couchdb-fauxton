@@ -1,18 +1,15 @@
 language: node_js
 node_js:
    - 6
-sudo: required
+sudo: false
 services:
   - docker
 git:
   depth: 1
 
 before_script:
-  - ./bin/install-docker-travis.sh
-  - npm run docker:up
+  - travis_retry ./bin/docker-up-and-check.sh
   - npm install
-  - docker logs couchdb
-  - docker logs selenium
   - curl http://127.0.0.1:5984
   - npm run stylecheck
   - npm test
@@ -20,7 +17,7 @@ before_script:
   - DIST=./dist/debug ./bin/fauxton &
   - sleep 30
 script:
-  - ./node_modules/grunt-cli/bin/grunt nightwatch
+  - travis_retry ./node_modules/.bin/grunt nightwatch
 after_script:
   - npm run docker:down
 

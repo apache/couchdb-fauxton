@@ -37,7 +37,7 @@ function initDocEditor (params) {
     }
   }, function (xhr) {
     if (xhr.status === 404) {
-      errorNotification('The document does not exist.');
+      errorNotification(`The ${doc.id} document does not exist.`);
     }
 
     FauxtonAPI.navigate(FauxtonAPI.urls('allDocs', 'app', params.database.id, ''));
@@ -169,10 +169,13 @@ function uploadAttachment (params) {
   var file = params.files[0];
 
   $.ajax({
-    url: FauxtonAPI.urls('document', 'attachment', db, docId, file.name, query),
+    url: FauxtonAPI.urls('document', 'attachment', db, docId, encodeURIComponent(file.name), query),
     type: 'PUT',
     data: file,
     contentType: file.type,
+    headers: {
+      Accept: "application/json; charset=utf-8"
+    },
     processData: false,
     xhrFields: {
       withCredentials: true
@@ -214,7 +217,7 @@ function uploadAttachment (params) {
       FauxtonAPI.dispatch({
         type: ActionTypes.FILE_UPLOAD_ERROR,
         options: {
-          error: JSON.parse(resp.responseText).reason
+          error: resp.responseJSON ? resp.responseJSON.reason : 'Error uploading file: (' + resp.statusText + ')'
         }
       });
     }

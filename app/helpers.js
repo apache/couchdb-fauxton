@@ -57,4 +57,8 @@ Helpers.getDateFromNow = function (timestamp) {
   return moment(timestamp, 'X').fromNow();
 };
 
+Helpers.escapeJQuerySelector = function (selector) {
+  return selector && selector.replace(/[!"#$%&'()*+,.\/:;<=>?@[\\\]^`{|}~]/g, "\\$&");
+};
+
 export default Helpers;

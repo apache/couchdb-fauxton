@@ -17,15 +17,15 @@ import ReactComponentsActions from "../components/actions";
 
 
 // sequence info is an array in couchdb2 with two indexes. On couch 1.x, it's just a string / number
-function getSeqNum (val) {
+const getSeqNum = (val) => {
   return _.isArray(val) ? val[1] : val;
-}
+};
 
-function getNewButtonLinks (databaseName) {
-  var addLinks = FauxtonAPI.getExtensions('sidebar:links');
-  var newUrlPrefix = '#' + FauxtonAPI.urls('databaseBaseURL', 'app', FauxtonAPI.url.encode(databaseName));
+const getNewButtonLinks = (databaseName) => {
+  const addLinks = FauxtonAPI.getExtensions('sidebar:links');
+  const newUrlPrefix = '#' + FauxtonAPI.urls('databaseBaseURL', 'app', FauxtonAPI.url.encode(databaseName));
 
-  var addNewLinks = _.reduce(addLinks, function (menuLinks, link) {
+  const addNewLinks = _.reduce(addLinks, function (menuLinks, link) {
     menuLinks.push({
       title: link.title,
       url: newUrlPrefix + '/' + link.url,
@@ -47,23 +47,23 @@ function getNewButtonLinks (databaseName) {
     title: 'Add New',
     links: addNewLinks
   }];
-}
+};
 
-function getMangoLink (databaseName) {
-  var newUrlPrefix = '#' + FauxtonAPI.urls('databaseBaseURL', 'app', FauxtonAPI.url.encode(databaseName));
+const getMangoLink = (databaseName) => {
+  const newUrlPrefix = '#' + FauxtonAPI.urls('databaseBaseURL', 'app', FauxtonAPI.url.encode(databaseName));
 
   return {
     title: app.i18n.en_US['new-mango-index'],
     url: newUrlPrefix + '/_index',
     icon: 'fonticon-plus-circled'
   };
-}
+};
 
-function parseJSON (str) {
+const parseJSON = (str) => {
   return JSON.parse('"' + str + '"');   // this ensures newlines are converted
-}
+};
 
-function getModifyDatabaseLinks (databaseName) {
+const getModifyDatabaseLinks = (databaseName) => {
   return [{
     title: 'Replicate Database',
     icon: 'fonticon-replicate',
@@ -73,11 +73,11 @@ function getModifyDatabaseLinks (databaseName) {
     icon: 'fonticon-trash',
     onClick: ReactComponentsActions.showDeleteDatabaseModal.bind(this, {showDeleteModal: true, dbId: databaseName})
   }];
-}
+};
 
-function truncateDoc (docString, maxRows) {
-  var lines = docString.split('\n');
-  var isTruncated = false;
+const truncateDoc = (docString, maxRows) => {
+  let lines = docString.split('\n');
+  let isTruncated = false;
   if (lines.length > maxRows) {
     isTruncated = true;
     lines = lines.slice(0, maxRows);
@@ -87,13 +87,44 @@ function truncateDoc (docString, maxRows) {
     isTruncated: isTruncated,
     content: docString
   };
-}
+};
 
+const getNewDocUrl = (databaseName) => {
+  const safeDatabaseName = encodeURIComponent(databaseName);
+  return FauxtonAPI.urls('new', 'newDocument', safeDatabaseName);
+};
+
+const selectedViewContainsReduceFunction = (designDocs, selectedNavItem) => {
+  if (!selectedNavItem) {
+    return false;
+  }
+
+  let showReduce = false;
+  // If a map/reduce view is selected, check if view contains reduce field
+  if (designDocs && isViewSelected(selectedNavItem)) {
+      const ddocID = '_design/' + selectedNavItem.params.designDocName;
+      const ddoc = designDocs.find(ddoc => ddoc._id === ddocID);
+      showReduce = ddoc !== undefined && ddoc.views
+        && ddoc.views[selectedNavItem.params.indexName] !== undefined
+        && ddoc.views[selectedNavItem.params.indexName].reduce !== undefined;
+  }
+  return showReduce;
+};
+
+const isViewSelected = (selectedNavItem) => {
+  return (selectedNavItem.navItem === 'designDoc'
+    && selectedNavItem.params
+    && selectedNavItem.params.designDocSection === 'Views'
+    && selectedNavItem.params.indexName);
+};
 
 export default {
-  getSeqNum: getSeqNum,
-  getNewButtonLinks: getNewButtonLinks,
-  getModifyDatabaseLinks: getModifyDatabaseLinks,
-  parseJSON: parseJSON,
-  truncateDoc: truncateDoc
+  getSeqNum,
+  getNewButtonLinks,
+  getModifyDatabaseLinks,
+  getNewDocUrl,
+  parseJSON,
+  truncateDoc,
+  selectedViewContainsReduceFunction,
+  isViewSelected
 };

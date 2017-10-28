@@ -10,7 +10,7 @@ the codebase to build it around [React](https://facebook.github.io/react/). We'r
 (unit-tested!) React components. Backbone models and collections are still being used for server-side data retrieval 
 and storage as is URL routing, but the plan is to phase out all Backbone over time. 
 
-### React and Flux 
+### React and the Flux pattern
 
 You can read more about [React](https://facebook.github.io/react/) and [Flux](https://facebook.github.io/flux/docs/overview.html) 
 on their sites, but a few quick words about both. 
@@ -21,8 +21,9 @@ a *virtual DOM* to handle the re-rendering. The key decisions to moving to React
 ease of testing. Check out [this page](https://facebook.github.io/react/docs/why-react.html) for a few more remarks.
 
 Flux is primarily a *pattern* for keeping your code organized over time. One of its key ideas is to have *one-way 
-communication* as shown in the [diagram here](https://github.com/facebook/flux). Information flows 
-like this:
+communication* as shown in the [diagram here](https://github.com/facebook/flux). 
+
+Note that Fauxton has no dependency with the Flux code as it implements its own dispatcher and reduce stores. The information flows like this:
 
 1. User clicks on something in a React component, 
 2. the component fires an action (in an `actions.js` file),
@@ -39,17 +40,15 @@ Here's a simple example: imagine if a user shrunk/expanded the main sidebar, and
 needed to know about it to make use of the new space. Maybe one was a graph and needed to redraw for the extra space, 
 and maybe another component could switch from "basic" to "advanced" view or something.
 
-With Flux, you can just publish the single event, then each store could listen for it, change whatever data was needed 
+With this pattern, you can just publish the single event, then each store could listen for it, change whatever data was needed 
 internally, then notify any components that was listening: and they would then have the choice to rerender or not, 
 based on what changed. This is basic "pub/sub": allowing you to keep code loosely coupled, but still communicate.
 
-### JSX 
+### Moving to Redux
 
-You'll noticed that some of our files have `.jsx` extensions. JSX is a javascript pre-parser, allowing us embed 
-markup directly into our javascript, linking template and code.
+There are a few drawbacks in the implementation above though. For instance the reduce stores rely on Backbone. 
 
-Read more about [JSX here](https://facebook.github.io/react/docs/jsx-in-depth.html). 
-
+For this reason and others, it's encouraged that new components use Redux (https://github.com/reactjs/redux), which follows the same principles as Flux. Additionally, use React Redux (https://github.com/reactjs/react-redux) to easily connect a Redux store to your React components.
 
 ## Addons
 
@@ -61,7 +60,7 @@ A good place to get started is to read through a couple of the existing addons. 
 the Fauxton interface so you can see exactly where it appears and what it does.
 
 Each module must have a `base.js` file, this is read and compiled when Fauxton is deployed. A `resources.js` file
-is usually used for your Backbone.Models and Backbone.Collections, `components.react.jsx` for your React components.
+is usually used for your Backbone.Models and Backbone.Collections, `components.js` for your React components.
 The `routes.js` is used to register one or more URL paths for your addon along with what layout, data, breadcrumbs and API
 point is required for the view.
 

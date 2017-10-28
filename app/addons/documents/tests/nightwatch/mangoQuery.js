@@ -14,7 +14,7 @@
 
 module.exports = {
 
-  'Finding things with with mango': function (client) {
+  'Finding things with mango': function (client) {
     /*jshint multistr: true */
     var waitTime = 10000,
         newDatabaseName = client.globals.testDatabaseName,
@@ -23,7 +23,7 @@ module.exports = {
     client
       .populateDatabase(newDatabaseName)
       .loginToGUI()
-      .url(baseUrl + '/#/database/' + newDatabaseName + '/_find')
+      .url(baseUrl + '/#database/' + newDatabaseName + '/_find')
       .waitForElementPresent('.watermark-logo', waitTime, false)
       .execute('\
         var json = \'{\
@@ -36,6 +36,7 @@ module.exports = {
       ')
       .execute('$("#create-index-btn")[0].scrollIntoView();')
       .clickWhenVisible('#create-index-btn')
+      .clickWhenVisible('.fonticon-json')
 
       .waitForElementPresent('.prettyprint', waitTime, false)
       .assert.containsText('#dashboard-lower-content', 'number')

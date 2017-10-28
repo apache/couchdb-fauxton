@@ -12,125 +12,32 @@
 
 import React from "react";
 import ReactDOM from "react-dom";
-import FauxtonAPI from "../../../core/api";
-import {TrayContents, TrayWrapper, connectToStores} from './tray';
-import { Copy } from "./copy";
-import Actions from "../actions";
-import Stores from "../stores";
-import {ToggleHeaderButton} from './toggleheaderbutton';
-const { componentStore } = Stores;
-import uuid from 'uuid';
 
-export const APIBar = React.createClass({
-  propTypes: {
-    buttonVisible: React.PropTypes.bool.isRequired,
-    contentVisible: React.PropTypes.bool.isRequired,
-    docURL: React.PropTypes.string,
-    endpoint: React.PropTypes.string
-  },
+export const JSONLink = ({endpoint}) => {
+  if (!endpoint) {
+    return null;
+  }
 
-  showCopiedMessage () {
-    FauxtonAPI.addNotification({
-      msg: 'The API URL has been copied to the clipboard.',
-      type: 'success',
-      clear: true
-    });
-  },
-
-  getDocIcon () {
-    if (!this.props.docURL) {
-      return null;
-    }
-    return (
-      <a
-        className="help-link"
-        data-bypass="true"
-        href={this.props.docURL}
-        target="_blank"
-      >
-        <i className="icon icon-question-sign"></i>
+  return (
+    <div className="faux__jsonlink">
+      <a data-bypass={true} className="faux__jsonlink-link" href={endpoint} target="_blank">
+        <span className="faux__jsonlink-link-brackets">{'{ '}{'}'}</span>
+        <span>JSON</span>
       </a>
-    );
-  },
+    </div>
+  );
+};
 
-  getTray () {
-    const {endpoint} = this.props;
-    return (
-      <TrayContents closeTray={this.closeTray} contentVisible={this.props.contentVisible} className="tray show-tray api-bar-tray">
-        <div className="input-prepend input-append">
-          <span className="add-on">
-            API URL
-            {this.getDocIcon()}
-          </span>
-
-          <Copy
-            textDisplay="Copy URL"
-            text={endpoint}
-            displayType="input"
-            uniqueKey={uuid.v4()}
-            onClipboardClick={this.showCopiedMessage} />
-
-          <div className="add-on">
-            <a
-              data-bypass="true"
-              href={endpoint}
-              target="_blank"
-              className="btn"
-            >
-              View JSON
-            </a>
-          </div>
-        </div>
-      </TrayContents>
-    );
-  },
-
-  toggleTrayVisibility () {
-    Actions.toggleApiBarVisibility(!this.props.contentVisible);
-  },
-
-  closeTray () {
-    Actions.toggleApiBarVisibility(false);
-  },
-
-  render () {
-    if (!this.props.buttonVisible || !this.props.endpoint) {
-      return null;
-    }
-
-    return (
-      <div>
-        <ToggleHeaderButton
-          containerClasses="header-control-box control-toggle-api-url"
-          title="API URL"
-          fonticon="fonticon-link"
-          text="API"
-          toggleCallback={this.toggleTrayVisibility} />
-        {this.getTray()}
-      </div>
-    );
+export const DocLink = ({docURL}) => {
+  if (!docURL) {
+    return null;
   }
-});
 
-export const ApiBarController = React.createClass({
-
-  getWrap () {
-    return connectToStores(TrayWrapper, [componentStore], function () {
-      return {
-        buttonVisible: componentStore.getIsAPIBarButtonVisible(),
-        contentVisible: componentStore.getIsAPIBarVisible(),
-        endpoint: componentStore.getEndpoint(),
-        docURL: componentStore.getDocURL()
-      };
-    });
-  },
-
-  render () {
-    var TrayWrapper = this.getWrap();
-    return (
-      <TrayWrapper>
-        <APIBar buttonVisible={true} contentVisible={false} />
-      </TrayWrapper>
-    );
-  }
-});
+  return (
+    <div className="faux__doclink">
+      <a data-bypass="true" href={docURL} target="_blank" className="faux__doclink-link">
+        <i className="icon fonticon-bookmark"></i>
+      </a>
+    </div>
+  );
+};

@@ -17,13 +17,22 @@ See `fauxton --help` for extra options.
 
 ## Setting up Fauxton
 
-Please note that a recent installation of [node.js](http://nodejs.org/) and npm is required.
+Please note that [node.js](http://nodejs.org/) and npm is required. Specifically, Fauxton requires at least Node 6 and npm 3.
 
-1. make sure you have CouchDB installed. Instructions on how to install it can be  
+1. Fork this repo (see [GitHub help](https://help.github.com/articles/fork-a-repo/) for details)
+1. Clone your fork: `git clone https://github.com/YOUR-USERNAME/couchdb-fauxton.git`
+1. Go to your cloned copy: `cd couchdb-fauxton`
+1. Set up the upstream repo: 
+    * `git remote add upstream git@github.com:apache/couchdb-fauxton.git`
+    * `git fetch upstream`
+    * `git branch --set-upstream-to=upstream/master master`
+1. Download all dependencies: `npm install`
+1. Make sure you have CouchDB installed.
+    - Option 1 (**recommended**): Use `npm run docker:up` to start a Docker container running CouchDB with user `tester` and password `testerpass`.
+      - You need to have [Docker](https://docs.docker.com/engine/installation/) installed to use this option. 
+    - Option 2: Follow instructions 
 [found here](http://couchdb.readthedocs.org/en/latest/install/index.html)
-1. fork this repo: `git clone https://github.com/apache/couchdb-fauxton.git`
-1. add upstream to the private apache repo: `git remote add upstream http://git-wip-us.apache.org/repos/asf/couchdb-fauxton.git`
-1. go to your cloned copy of the repo (usually `couchdb-fauxton`) and type `npm install` to download all dependencies
+
 
 ## Running Fauxton
 
@@ -39,8 +48,7 @@ type:
 npm run dev
 ```
 
-Wait until you see the "Fauxton" ascii art on your command line, then you should be able to access Fauxton at
-`http://localhost:8000`
+You should be able to access Fauxton at `http://localhost:8000`
 
 
 ### Preparing a Fauxton Release

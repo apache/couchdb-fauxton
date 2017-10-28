@@ -11,7 +11,17 @@
 // the License.
 
 require('jest');
+require('whatwg-fetch');
+require('mock-local-storage');
 
+window.localStorage = global.localStorage;
 window.$ = window.jQuery = require('jquery');
+window._ = require('lodash');
+window.Backbone = require('backbone');
 
-global.fetch = require('jest-fetch-mock');
+Object.defineProperty(window.location, 'origin', {
+  writable: true,
+  value: 'http://dev:8000'
+});
+
+

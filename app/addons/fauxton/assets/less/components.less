@@ -12,8 +12,8 @@
     margin-bottom: 0;
 
     .btn {
-      background-color: @navBG;
-      color: #fff;
+      background-color: @secondaryBlue;
+      color: @buttonText;
       margin-left: -1px;
       padding: 10px 10px 9px;
       border: none;
@@ -25,6 +25,10 @@
 
     .icon-question-sign {
       margin-left: 3px;
+      color: @secondaryBlue;
+      &:hover {
+        color: @hoverHighlight;
+      }
     }
   }
 }
@@ -43,4 +47,20 @@
 button.clipboard-copy-element {
   background: transparent;
   border: 0;
+  &:hover {
+    color: @hoverHighlight;
+  }
+}
+
+#perma-warning {
+  background-color: white;
+}
+
+.perma-warning__content {
+  margin: 4px;
+  padding: 10px;
+  color: #B11925;
+  outline-style: solid;
+  outline-color: #B11925;
+  outline-width: 4px;
 }

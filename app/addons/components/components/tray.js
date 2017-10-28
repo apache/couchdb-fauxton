@@ -10,40 +10,71 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+import PropTypes from 'prop-types';
+
 import React from "react";
 import ReactDOM from "react-dom";
-import ReactCSSTransitionGroup from "react-addons-css-transition-group";
 import {Overlay} from 'react-bootstrap';
+import {TransitionMotion, spring} from 'react-motion';
 
-//With React 15.2.0 it validates props and throws a warning if props to a component are not acceptable
-//this means that with the overlay it will try and pass custom props to a div which causes the overlay to stop working
-//using a custom component gets around this.
-const OverlayWarningEater = ({children}) => {
-  return children;
-};
+export class TrayContents extends React.Component {
+  static propTypes = {
+    contentVisible: PropTypes.bool.isRequired,
+    closeTray: PropTypes.func.isRequired,
+    onEnter: PropTypes.func,
+    container: PropTypes.object
+  };
 
-export const TrayContents = React.createClass({
-  propTypes: {
-    contentVisible: React.PropTypes.bool.isRequired,
-    closeTray: React.PropTypes.func.isRequired,
-    onEnter: React.PropTypes.func,
-    container: React.PropTypes.object
-  },
+  defaultProps = () => {
+    return {
+      onEnter: () => {},
+      container: this
+    };
+  };
 
-  defaultProps: {
-    onEnter: () => {},
-    container: this
-  },
-
-  getChildren () {
+  getChildren = (items) => {
+    const {style} = items[0];
     var className = "tray show-tray " + this.props.className;
     return (
-      <div key={1} id={this.props.id} className={className}>
+      <div key={'1'} id={this.props.id} style={{opacity: style.opacity, top: style.top + 'px'}} className={className}>
         {this.props.children}
       </div>);
-  },
+  };
 
-  render () {
+  willEnter = () => {
+    return {
+      opacity: spring(1),
+      top: spring(55)
+    };
+  };
+
+  willLeave = () => {
+    return {
+      opacity: spring(0),
+      top: spring(30)
+    };
+  };
+
+  getDefaultStyles = () => {
+    return [{key: '1', style: {opacity: 0, top: 30}}];
+  };
+
+  getStyles = (prevStyle) => {
+    if (!prevStyle) {
+      return [{
+        key: '1',
+        style: this.willEnter()
+      }];
+    }
+    return prevStyle.map(item => {
+      return {
+        key: '1',
+        style: item.style
+      };
+    });
+  };
+
+  render() {
     return (
       <Overlay
        show={this.props.contentVisible}
@@ -54,70 +85,59 @@ export const TrayContents = React.createClass({
        target={() => ReactDOM.findDOMNode(this.refs.target)}
        onEnter={this.props.onEnter}
       >
-        <OverlayWarningEater>
-          <ReactCSSTransitionGroup transitionName="tray" transitionAppear={true} component="div" transitionAppearTimeout={500}
-            transitionEnterTimeout={500} transitionLeaveTimeout={300}>
-            {this.getChildren()}
-          </ReactCSSTransitionGroup>
-        </OverlayWarningEater>
+        <TransitionMotion
+          defaultStyles={this.getDefaultStyles()}
+          styles={this.getStyles()}
+          willLeave={this.willLeave}
+          willEnter={this.willEnter}
+        >
+        {this.getChildren}
+        </TransitionMotion>
       </Overlay>
     );
   }
-});
+}
 
 
 export const connectToStores = (Component, stores, getStateFromStores) => {
+  class WrappingElement extends React.Component {
+    state = getStateFromStores(this.props);
 
-  var WrappingElement = React.createClass({
-
-    componentDidMount () {
-      stores.forEach(function (store) {
+    componentDidMount() {
+      stores.forEach(store => {
         store.on('change', this.onChange, this);
-      }.bind(this));
-    },
+      });
+    }
 
-    componentWillUnmount () {
+    componentWillUnmount() {
       stores.forEach(function (store) {
         store.off('change', this.onChange);
       }.bind(this));
-    },
-
-    getInitialState () {
-      return getStateFromStores(this.props);
-    },
-
-    onChange () {
-      if (!this.isMounted()) {
-        return;
-      }
-
-      this.setState(getStateFromStores(this.props));
-    },
-
-    handleStoresChanged () {
-      if (this.isMounted()) {
-        this.setState(getStateFromStores(this.props));
-      }
-    },
-
-    render () {
-      return <Component {...this.state} {...this.props} />;
     }
 
-  });
+    onChange = () => {
+      this.setState(getStateFromStores(this.props));
+    };
+
+    handleStoresChanged = () => {
+      this.setState(getStateFromStores(this.props));
+    };
+
+    render() {
+      return <Component {...this.state} {...this.props} />;
+    }
+  }
 
   return WrappingElement;
 };
 
-export const TrayWrapper = React.createClass({
-  getDefaultProps () {
-    return {
-      className: ''
-    };
-  },
+export class TrayWrapper extends React.Component {
+  static defaultProps = {
+    className: ''
+  };
 
-  renderChildren () {
-    return React.Children.map(this.props.children, function (child) {
+  renderChildren = () => {
+    return React.Children.map(this.props.children, (child) => {
 
       const props = {};
       Object.keys(this.props).filter((k) => {
@@ -127,14 +147,14 @@ export const TrayWrapper = React.createClass({
       });
 
       return React.cloneElement(child, props);
-    }.bind(this));
-  },
+    });
+  };
 
-  render () {
+  render() {
     return (
       <div>
         {this.renderChildren()}
       </div>
     );
   }
-});
+}

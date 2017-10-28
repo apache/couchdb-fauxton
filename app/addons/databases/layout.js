@@ -13,7 +13,7 @@
 import React from 'react';
 import FauxtonAPI from "../../core/api";
 import {OnePane, OnePaneHeader, OnePaneContent, OnePaneFooter} from '../components/layouts';
-import Components from "./components.react";
+import Components from "./components";
 const {RightDatabasesHeader, DatabasesController, DatabasePagination} = Components;
 
 export const Layout = () => {
@@ -22,7 +22,7 @@ export const Layout = () => {
       <OnePaneHeader
         crumbs={[{"name": "Databases"}]}
         endpoint={FauxtonAPI.urls('allDBs', 'apiurl')}
-        docUrl={FauxtonAPI.constants.DOC_URLS.ALL_DBS}
+        docURL={FauxtonAPI.constants.DOC_URLS.ALL_DBS}
       >
       <RightDatabasesHeader />
       </OnePaneHeader>

@@ -19,7 +19,6 @@ import "./assets/less/fauxton.less";
 const Fauxton = FauxtonAPI.addon();
 
 Fauxton.initialize = () => {
-
   const versionInfo = new Fauxton.VersionInfo();
   versionInfo.fetch().then(function () {
     NavigationActions.setNavbarVersionInfo(versionInfo.get("version"));

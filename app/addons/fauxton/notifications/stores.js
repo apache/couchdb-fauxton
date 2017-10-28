@@ -33,22 +33,28 @@ var validNotificationTypes = ['success', 'error', 'info'];
  */
 
 Stores.NotificationStore = FauxtonAPI.Store.extend({
-  initialize: function () {
+  initialize () {
     this.reset();
   },
 
-  reset: function () {
+  reset () {
     this._notifications = [];
     this._notificationCenterVisible = false;
     this._selectedNotificationFilter = 'all';
+    this._permanentNotificationVisible = false;
+    this._permanentNotificationMessage = '';
   },
 
-  isNotificationCenterVisible: function () {
+  isNotificationCenterVisible () {
     return this._notificationCenterVisible;
   },
 
-  addNotification: function (info) {
-    if (_.isEmpty(info.type) || !_.contains(validNotificationTypes, info.type)) {
+  isPermanentNotificationVisible () {
+    return this._permanentNotificationVisible;
+  },
+
+  addNotification (info) {
+    if (_.isEmpty(info.type) || !_.includes(validNotificationTypes, info.type)) {
       console.warn('Invalid message type: ', info);
       return;
     }
@@ -72,25 +78,33 @@ Stores.NotificationStore = FauxtonAPI.Store.extend({
     this._notifications.unshift(info);
   },
 
-  getNotifications: function () {
+  getNotifications () {
     return this._notifications;
   },
 
-  clearNotification: function (notificationId) {
+  getPermanentNotificationMessage () {
+    return this._permanentNotificationMessage;
+  },
+
+  setPermanentNotificationMessage (content) {
+    this._permanentNotificationMessage = content;
+  },
+
+  clearNotification (notificationId) {
     this._notifications = _.without(this._notifications, _.findWhere(this._notifications, { notificationId: notificationId }));
   },
 
-  clearNotifications: function () {
+  clearNotifications () {
     this._notifications = [];
   },
 
-  hideNotification: function (notificationId) {
+  hideNotification (notificationId) {
     var notification = _.findWhere(this._notifications, { notificationId: notificationId });
     notification.visible = false;
     notification.isHiding = false;
   },
 
-  hideAllNotifications: function () {
+  hideAllNotifications () {
     this._notifications.forEach(function (notification) {
       if (notification.visible) {
         notification.isHiding = true;
@@ -98,33 +112,31 @@ Stores.NotificationStore = FauxtonAPI.Store.extend({
     });
   },
 
-    startHidingNotification: function (notificationId) {
+  startHidingNotification (notificationId) {
     var notification = _.findWhere(this._notifications, { notificationId: notificationId });
     notification.isHiding = true;
   },
 
-  getNotificationFilter: function () {
+  getNotificationFilter () {
     return this._selectedNotificationFilter;
   },
 
-  setNotificationFilter: function (filter) {
-    if ((_.isEmpty(filter) || !_.contains(validNotificationTypes, filter)) && filter !== 'all') {
+  setNotificationFilter (filter) {
+    if ((_.isEmpty(filter) || !_.includes(validNotificationTypes, filter)) && filter !== 'all') {
       console.warn('Invalid notification filter: ', filter);
       return;
     }
     this._selectedNotificationFilter = filter;
   },
 
-  dispatch: function (action) {
+  dispatch (action) {
     switch (action.type) {
       case ActionTypes.ADD_NOTIFICATION:
         this.addNotification(action.options.info);
-        this.triggerChange();
       break;
 
       case ActionTypes.CLEAR_ALL_NOTIFICATIONS:
         this.clearNotifications();
-        this.triggerChange();
       break;
 
       case ActionTypes.CLEAR_SINGLE_NOTIFICATION:
@@ -133,38 +145,43 @@ Stores.NotificationStore = FauxtonAPI.Store.extend({
 
       case ActionTypes.START_HIDING_NOTIFICATION:
         this.startHidingNotification(action.options.notificationId);
-        this.triggerChange();
       break;
 
       case ActionTypes.HIDE_NOTIFICATION:
         this.hideNotification(action.options.notificationId);
-        this.triggerChange();
       break;
 
       case ActionTypes.HIDE_ALL_NOTIFICATIONS:
         this.hideAllNotifications();
-        this.triggerChange();
       break;
 
       case ActionTypes.SHOW_NOTIFICATION_CENTER:
         this._notificationCenterVisible = true;
-        this.triggerChange();
       break;
 
       case ActionTypes.HIDE_NOTIFICATION_CENTER:
         this._notificationCenterVisible = false;
-        this.triggerChange();
       break;
 
       case ActionTypes.SELECT_NOTIFICATION_FILTER:
         this.setNotificationFilter(action.options.filter);
-        this.triggerChange();
+      break;
+
+      case ActionTypes.SHOW_PERMANENT_NOTIFICATION:
+        this._permanentNotificationVisible = true;
+        this.setPermanentNotificationMessage(action.options.msg);
+      break;
+
+      case ActionTypes.HIDE_PERMANENT_NOTIFICATION:
+        this._permanentNotificationVisible = false;
       break;
 
       default:
       return;
         // do nothing
     }
+
+    this.triggerChange();
   }
 });
 

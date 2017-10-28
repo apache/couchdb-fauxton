@@ -43,9 +43,27 @@ function clearIndex () {
 }
 
 function fetchDesignDocsBeforeEdit (options) {
-  options.designDocs.fetch({reset: true}).then(function () {
+  options.designDocs.fetch({reset: true}).then(() => {
     this.editIndex(options);
-  }.bind(this));
+  }, xhr => {
+    let errorMsg = 'Error';
+    if (xhr.responseJSON && xhr.responseJSON.error === 'not_found') {
+      const databaseName = options.designDocs.database.safeID();
+      errorMsg = `The ${databaseName} database does not exist`;
+      FauxtonAPI.navigate('/', {trigger: true});
+    }
+    FauxtonAPI.addNotification({
+      msg: errorMsg,
+      type: "error",
+      clear:  true
+    });
+  });
+}
+
+function shouldRemoveDdocView(viewInfo) {
+  return !viewInfo.newView &&
+          viewInfo.originalDesignDocName === viewInfo.designDocId &&
+          viewInfo.originalViewName !== viewInfo.viewName;
 }
 
 function saveView (viewInfo) {
@@ -59,7 +77,7 @@ function saveView (viewInfo) {
   });
 
   // if the view name just changed and it's in the SAME design doc, remove the old one before saving the doc
-  if (viewInfo.originalDesignDocName === viewInfo.designDocId && viewInfo.originalViewName !== viewInfo.viewName) {
+  if (shouldRemoveDdocView(viewInfo)) {
     designDoc.removeDdocView(viewInfo.originalViewName);
   }
 
@@ -70,9 +88,9 @@ function saveView (viewInfo) {
       clear: true
     });
 
-    // if the user just saved the view to a different design doc, remove the view from the old design doc and
-    // delete if it's empty
-    if (viewInfo.originalDesignDocName !== viewInfo.designDocId) {
+    // if the user just saved an existing view to a different design doc, remove the view
+    // from the old design doc and delete if it's empty
+    if (!viewInfo.newView && viewInfo.originalDesignDocName !== viewInfo.designDocId) {
       var oldDesignDoc = findDesignDoc(viewInfo.designDocs, viewInfo.originalDesignDocName);
       safeDeleteIndex(oldDesignDoc, viewInfo.designDocs, 'views', viewInfo.originalViewName, {
         onSuccess: function () {
@@ -90,7 +108,7 @@ function saveView (viewInfo) {
     FauxtonAPI.navigate(fragment, { trigger: true });
   }, (xhr) => {
     FauxtonAPI.addNotification({
-      msg: `${xhr.responseJSON.reason}`,
+      msg: 'Save failed. ' + (xhr.responseJSON ? `Reason: ${xhr.responseJSON.reason}` : ''),
       type: 'error',
       clear: true
     });
@@ -125,7 +143,7 @@ function deleteView (options) {
     FauxtonAPI.dispatch({ type: SidebarActionTypes.SIDEBAR_HIDE_DELETE_INDEX_MODAL });
   }
 
-  safeDeleteIndex(options.designDoc, options.designDocs, 'views', options.indexName, { onSuccess: onSuccess });
+  return safeDeleteIndex(options.designDoc, options.designDocs, 'views', options.indexName, { onSuccess: onSuccess });
 }
 
 function cloneView (params) {
@@ -170,7 +188,8 @@ function cloneView (params) {
 }
 
 function gotoEditViewPage (databaseName, designDocName, indexName) {
-  FauxtonAPI.navigate('#' + FauxtonAPI.urls('view', 'edit', databaseName, designDocName, indexName));
+  FauxtonAPI.navigate('#' + FauxtonAPI.urls('view', 'edit', encodeURIComponent(databaseName),
+    encodeURIComponent(designDocName), encodeURIComponent(indexName)));
 }
 
 function updateMapCode (code) {
@@ -241,7 +260,7 @@ function safeDeleteIndex (designDoc, designDocs, indexPropName, indexName, optio
     promise = designDoc.destroy();
     deleteDesignDoc = true;
   }
-  promise.then(function () {
+  return promise.then(function () {
     if (deleteDesignDoc) {
       designDocs.remove(designDoc.id);
     }
@@ -287,6 +306,7 @@ export default {
   editIndex: editIndex,
   clearIndex: clearIndex,
   fetchDesignDocsBeforeEdit: fetchDesignDocsBeforeEdit,
+  shouldRemoveDdocView: shouldRemoveDdocView,
   saveView: saveView,
   addDesignDoc: addDesignDoc,
   deleteView: deleteView,

@@ -14,7 +14,7 @@ import React from 'react';
 import FauxtonAPI from "../../core/api";
 import VerifyInstall from "./resources";
 import Actions from "./actions";
-import Components from "./components.react";
+import Components from "./components";
 import {OnePaneSimpleLayout} from '../components/layouts';
 
 const VerifyRouteObject = FauxtonAPI.RouteObject.extend({

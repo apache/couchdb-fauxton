@@ -10,29 +10,23 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+import PropTypes from 'prop-types';
+
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {NotificationCenterButton} from '../fauxton/notifications/notifications.react';
-import {ApiBarController} from './components/apibar';
+import {NotificationCenterButton} from '../fauxton/notifications/notifications';
+import {JSONLink, DocLink} from './components/apibar';
 import {Breadcrumbs} from './header-breadcrumbs';
-import ComponentActions from './actions';
 
 export const ApiBarWrapper = ({docURL, endpoint}) => {
-  //TODO once all modules are using this remove actions and make them props
-  setTimeout(() => {
-    ComponentActions.updateAPIBar({
-      buttonVisible: true,
-      contentVisible: false,
-      endpoint,
-      docURL
-    });
-  });
   return (
-    <div id='api-navbar'>
-      <ApiBarController
-        buttonVisible={true}
-        contentVisible={false}
+    <div className='faux__jsondoc-wrapper'>
+      <JSONLink
+        endpoint={endpoint}
       />
+    <DocLink
+      docURL={docURL}
+    />
   </div>
   );
 };
@@ -72,9 +66,9 @@ OnePaneHeader.defaultProps = {
 };
 
 OnePaneHeader.propTypes = {
-  docURL: React.PropTypes.string,
-  endpoint: React.PropTypes.string,
-  crumbs: React.PropTypes.array
+  docURL: PropTypes.string,
+  endpoint: PropTypes.string,
+  crumbs: PropTypes.array
 };
 
 export const OnePaneContent = ({children}) => {
@@ -96,13 +90,13 @@ export const OnePaneFooter = ({children}) => {
   );
 };
 
-export const OnePaneSimpleLayout = ({component, docUrl, endpoint, crumbs}) => {
+export const OnePaneSimpleLayout = ({component, docURL, endpoint, crumbs}) => {
   return (
     <OnePane>
       <OnePaneHeader
         crumbs={crumbs}
         endpoint={endpoint}
-        docUrl={docUrl}
+        docURL={docURL}
       >
       </OnePaneHeader>
       <OnePaneContent>
@@ -122,13 +116,13 @@ export const DocEditorContent = ({children}) => {
   );
 };
 
-export const DocEditorLayout = ({component, docUrl, endpoint, crumbs}) => {
+export const DocEditorLayout = ({component, docURL, endpoint, crumbs}) => {
   return (
     <div id="dashboard" className="one-pane doc-editor-page">
         <OnePaneHeader
           crumbs={crumbs}
           endpoint={endpoint}
-          docUrl={docUrl}
+          docURL={docURL}
         >
         </OnePaneHeader>
       <DocEditorContent>

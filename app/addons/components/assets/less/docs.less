@@ -21,6 +21,7 @@
   div.doc-row {
     margin-bottom: 20px;
     .doc-item {
+      cursor: pointer;
       vertical-align: top;
       position: relative;
       .box-shadow(3px 4px 0 rgba(0, 0, 0, 0.3));
@@ -28,11 +29,12 @@
         border-bottom: 1px solid @docHeaderBorderBottom;
         border-left: 1px solid @docHeaderOtherBorders;
         border-right: 1px solid @docHeaderOtherBorders;
+        font-family: monospace;
       }
       header {
         font-weight: bold;
         position: relative;
-        padding: 20px;
+        padding: 5px 10px;
         background-color: @docHeaderBG;
         border-bottom: 1px solid @docHeaderBorderBottom;
         border-left: 1px solid @docHeaderOtherBorders;
@@ -40,21 +42,27 @@
         border-top: 1px solid @docHeaderOtherBorders;
         .header-doc-id {
           color: @docHeaderDocId;
-          margin-left: 10px;
+          margin-left: 0;
+        }
+        .header-keylabel {
+          margin-right: 10px;
+        }
+        .header-keylabel:empty
+        {
+          display:none;
         }
         .header-keylabel,
         .fonticon-pencil {
           color: @docHeaderLabels;
         }
         .doc-edit-symbol {
-          top: -3px;
           position: relative;
         }
         .fonticon-pencil {
-          font-size: 20px;
+          font-size: 16px;
         }
         .fonticon-pencil:hover {
-          color: @hoverRed;
+          color: @hoverHighlight;
         }
       }
     }
@@ -74,7 +82,7 @@
     }
   }
   .checkbox.inline {
-    padding-top: 32px;
+    padding-top: 17px;
     padding-left: 0;
     label {
       padding-left: 23px; // 7px to the right-border + 16px around

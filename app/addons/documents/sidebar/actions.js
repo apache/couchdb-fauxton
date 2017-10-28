@@ -12,7 +12,7 @@
 
 import FauxtonAPI from "../../../core/api";
 import ActionTypes from "./actiontypes";
-import Stores from "./stores.react";
+import Stores from "./stores";
 var store = Stores.sidebarStore;
 
 function newOptions (options) {
@@ -22,10 +22,22 @@ function newOptions (options) {
     });
   }
 
-  options.designDocs.fetch().then(function () {
+  options.designDocs.fetch().then(() => {
     FauxtonAPI.dispatch({
       type: ActionTypes.SIDEBAR_NEW_OPTIONS,
       options: options
+    });
+  }, xhr => {
+    let errorMsg = 'Unable to update the sidebar.';
+    if (xhr.responseJSON && xhr.responseJSON.error === 'not_found') {
+      const databaseName = options.designDocs.database.safeID();
+      errorMsg = `The ${databaseName} database does not exist.`;
+      FauxtonAPI.navigate('/', {trigger: true});
+    }
+    FauxtonAPI.addNotification({
+      msg: errorMsg,
+      type: "error",
+      clear:  true
     });
   });
 }

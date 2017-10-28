@@ -27,7 +27,8 @@ var SetupStore = FauxtonAPI.Store.extend({
 
     this._setupNode = {
       bindAddress: '0.0.0.0',
-      port: 5984
+      port: 5984,
+      nodeCount: 3
     };
 
     this.resetAddtionalNode();
@@ -89,6 +90,14 @@ var SetupStore = FauxtonAPI.Store.extend({
 
   getBindAdressForSetupNode: function () {
     return this._setupNode.bindAddress;
+  },
+
+  setNodeCountForSetupNode: function (options) {
+    this._setupNode.nodeCount = Math.min(options.value, 3);
+  },
+
+  getNodeCountForSetupNode: function () {
+    return this._setupNode.nodeCount;
   },
 
   setBindAdressForAdditionalNode: function (options) {
@@ -159,12 +168,21 @@ var SetupStore = FauxtonAPI.Store.extend({
         this.resetAddtionalNode();
       break;
 
+      case ActionTypes.SETUP_NODE_COUNT:
+        this.setNodeCountForSetupNode(action.options);
+      break;
 
       default:
       return;
     }
 
-    this.triggerChange();
+    //This is a quick and somewhat messy fix
+    //Some of the way our components are linked together can cause a component to be re-rendered
+    //even after it is unmounted.
+    // This fix stops that from happening
+    setTimeout(() => {
+      this.triggerChange();
+    });
   }
 
 });

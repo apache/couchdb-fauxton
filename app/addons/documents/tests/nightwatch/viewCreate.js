@@ -10,8 +10,6 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-
-
 module.exports = {
 
   'creates design docs with js hint errors': function (client) {
@@ -31,9 +29,9 @@ module.exports = {
       .waitForElementPresent('#save-view', waitTime, false)
       .clickWhenVisible('#save-view', waitTime, false)
       .checkForDocumentCreated('_design/test_design_doc-selenium-0')
-      .waitForElementPresent('.prettyprint', waitTime, false)
       .waitForElementNotPresent('.loading-lines', waitTime, false)
-      .assert.containsText('.prettyprint', 'blerg')
+      .waitForElementPresent('.table-view-docs', waitTime, false)
+      .assert.containsText('td[title="blerg"]', 'blerg')
     .end();
   },
 
@@ -54,9 +52,9 @@ module.exports = {
       .waitForElementPresent('#save-view', waitTime, false)
       .clickWhenVisible('#save-view', waitTime, false)
       .checkForDocumentCreated('_design/test_design_doc-selenium-1')
-      .waitForElementPresent('.prettyprint', waitTime, false)
       .waitForElementNotPresent('.loading-lines', waitTime, false)
-      .assert.containsText('.prettyprint', 'hasehase')
+      .waitForElementPresent('.table-view-docs', waitTime, false)
+      .assert.containsText('td[title="hasehase"]', 'hasehase')
     .end();
   },
 
@@ -77,11 +75,11 @@ module.exports = {
       .waitForElementPresent('#save-view', waitTime, false)
       .clickWhenVisible('#save-view', waitTime, false)
       .checkForDocumentCreated('_design/test_design_doc-selenium-3')
-      .waitForElementPresent('.prettyprint', waitTime, false)
       .waitForElementNotPresent('.loading-lines', waitTime, false)
 
       // page now automatically redirects user to results of View. Confirm the new doc is present.
-      .assert.containsText('.prettyprint', 'hasehase')
+      .waitForElementPresent('.table-view-docs', waitTime, false)
+      .assert.containsText('td[title="hasehase"]', 'hasehase')
     .end();
   },
 
@@ -102,9 +100,9 @@ module.exports = {
       .waitForElementPresent('#save-view', waitTime, false)
       .clickWhenVisible('#save-view')
       .checkForDocumentCreated('_design/test_design_doc-selenium-2')
-      .waitForElementPresent('.prettyprint', waitTime, false)
       .waitForElementNotPresent('.loading-lines', waitTime, false)
-      .assert.containsText('.prettyprint', 'gansgans')
+      .waitForElementPresent('.table-view-docs', waitTime, false)
+      .assert.containsText('td[title="gansgans"]', 'gansgans')
     .end();
   },
 
@@ -130,9 +128,9 @@ module.exports = {
       .execute('$("#save-view")[0].scrollIntoView();')
       .clickWhenVisible('#save-view')
       .checkForDocumentCreated('_design/testdesigndoc/_view/test-new-view')
-      .waitForElementPresent('.prettyprint', waitTime, false)
       .waitForElementNotPresent('.loading-lines', waitTime, false)
-      .assert.containsText('.prettyprint', 'enteente')
+      .waitForElementPresent('.table-view-docs', waitTime, false)
+      .assert.containsText('td[title="enteente"]', 'enteente')
     .end();
   }
 };
@@ -146,6 +144,7 @@ function openDifferentDropdownsAndClick (client) {
     .loginToGUI()
     .populateDatabase(newDatabaseName)
     .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
+    .waitForElementNotPresent('.global-notification .fonticon-cancel', waitTime, false)
     .clickWhenVisible('.faux-header__doc-header-dropdown-toggle')
     .clickWhenVisible('.faux-header__doc-header-dropdown-itemwrapper a[href*="new_view"]')
     .waitForElementPresent('.index-cancel-link', waitTime, false);

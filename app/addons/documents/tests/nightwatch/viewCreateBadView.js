@@ -16,7 +16,7 @@ module.exports = {
 
   'Displays an error if reduce is not possible': function (client) {
     /*jshint multistr: true */
-    var waitTime = client.globals.maxWaitTime,
+    const waitTime = client.globals.maxWaitTime,
         newDatabaseName = client.globals.testDatabaseName,
         baseUrl = client.globals.test_settings.launch_url;
 
@@ -38,21 +38,31 @@ module.exports = {
       ')
       .execute('$("#save-view")[0].scrollIntoView();')
       .clickWhenVisible('#save-view')
-      .waitForAttribute('#global-notifications', 'textContent', function (docContents) {
+      .waitForElementNotPresent('.global-notification .fonticon-cancel', waitTime, false)
+      .clickWhenVisible('.control-toggle-queryoptions', waitTime, false)
+      .clickWhenVisible('label[for="qoReduce"]', waitTime, false)
+      .clickWhenVisible('.query-options .btn-secondary', waitTime, false)
+      .waitForElementVisible('div.table-view-docs', waitTime, false)
+      .waitForAttribute('.table-view-docs td:nth-child(4)', 'title', function (docContents) {
         return (/_sum function requires/).test(docContents);
       })
       .end();
   },
 
   'Visit url of broken view displays error': function (client) {
-    var newDatabaseName = client.globals.testDatabaseName,
-        baseUrl = client.globals.test_settings.launch_url;
+    const newDatabaseName = client.globals.testDatabaseName,
+        baseUrl = client.globals.test_settings.launch_url,
+        waitTime = client.globals.maxWaitTime;
 
     client
       .loginToGUI()
       .populateDatabase(newDatabaseName)
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_design/brokenview/_view/brokenview')
-      .waitForAttribute('#global-notifications', 'textContent', function (docContents) {
+      .clickWhenVisible('.control-toggle-queryoptions', waitTime, false)
+      .clickWhenVisible('label[for="qoReduce"]', waitTime, false)
+      .clickWhenVisible('.query-options .btn-secondary', waitTime, false)
+      .waitForElementVisible('div.table-view-docs', waitTime, false)
+      .waitForAttribute('.table-view-docs td:nth-child(4)', 'title', function (docContents) {
         return (/_sum function requires/).test(docContents);
       })
       .end();

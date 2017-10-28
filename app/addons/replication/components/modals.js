@@ -9,9 +9,11 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
+import PropTypes from 'prop-types';
+
 import React from 'react';
 import {Modal} from 'react-bootstrap';
-import Components from '../../components/react-components.react';
+import Components from '../../components/react-components';
 
 const {ConfirmButton} = Components;
 
@@ -20,17 +22,22 @@ export const DeleteModal = ({
   visible,
   onClose,
   onClick,
-  multipleDocs
+  multipleDocs,
+  isReplicationDB
 }) => {
 
   if (!visible) {
     return null;
   }
 
-  let header = "You are deleting a replication document.";
+  let header = "";
+  let btnText = `Delete ${isReplicationDB ? 'Document' : 'Replication Job'}`;
+  let infoSection = `Deleting a replication ${isReplicationDB ? 'document' : 'job'} stops continuous replication
+          and incomplete one-time replication, but does not affect replicated documents.`;
 
   if (multipleDocs > 1) {
-    header = `You are deleting ${multipleDocs} replication documents.`;
+    header = `You are deleting <strong>${multipleDocs}</strong> replication ${isReplicationDB ? 'documents' : 'jobs'}.`;
+    btnText = `Delete ${isReplicationDB ? 'Documents' : 'Replication Jobs'}`;
   }
 
   return (
@@ -39,19 +46,14 @@ export const DeleteModal = ({
         <Modal.Title>Verify Deletion</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <p>{header}</p>
-        <p>
-          Deleting a replication document stops continuous replication
-          and incomplete one-time replication, but does not affect replicated documents.
-        </p>
-        <p>
-          Replication jobs that do not have replication documents do not appear in Replicator DB Activity.
-        </p>
+        <p dangerouslySetInnerHTML={{__html: header}}></p>
+        <p>{infoSection}</p>
       </Modal.Body>
       <Modal.Footer>
         <a className="cancel-link" onClick={onClose}>Cancel</a>
         <ConfirmButton
-          text={"Delete Document"}
+          customIcon={"icon-trash"}
+          text={btnText}
           onClick={onClick}
         />
       </Modal.Footer>
@@ -60,27 +62,41 @@ export const DeleteModal = ({
 };
 
 DeleteModal.propTypes = {
-  visible: React.PropTypes.bool.isRequired,
-  onClick: React.PropTypes.func.isRequired,
-  onClose: React.PropTypes.func.isRequired,
-  multipleDocs: React.PropTypes.number.isRequired
+  visible: PropTypes.bool.isRequired,
+  isReplicationDB: PropTypes.bool.isRequired,
+  onClick: PropTypes.func.isRequired,
+  onClose: PropTypes.func.isRequired,
+  multipleDocs: PropTypes.number.isRequired
 };
 
-export const ErrorModal = ({visible, onClose, errorMsg}) => {
+DeleteModal.defaultProps = {
+  isReplicationDB: true
+};
+
+export const ErrorModal = ({visible, onClose, errorMsg, status}) => {
 
   if (!visible) {
     return null;
   }
 
+  let title = "Replication Error";
+  let warning = <p>The replication job will be tried at increasing intervals</p>;
+
+  if (status.toLowerCase() === 'failed') {
+    title = "Replication Error - Failed";
+    warning = null;
+  }
+
   return (
     <Modal dialogClassName="replication__error-doc-modal" show={visible} onHide={() => onClose()}>
       <Modal.Header closeButton={true}>
-        <Modal.Title>Replication Error</Modal.Title>
+        <Modal.Title>{title}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <p>
           {errorMsg}
         </p>
+        {warning}
       </Modal.Body>
       <Modal.Footer>
       </Modal.Footer>
@@ -89,10 +105,10 @@ export const ErrorModal = ({visible, onClose, errorMsg}) => {
 };
 
 ErrorModal.propTypes = {
-  visible: React.PropTypes.bool.isRequired,
-  onClick: React.PropTypes.func.isRequired,
-  onClose: React.PropTypes.func.isRequired,
-  errorMsg: React.PropTypes.string.isRequired
+  visible: PropTypes.bool.isRequired,
+  onClick: PropTypes.func.isRequired,
+  onClose: PropTypes.func.isRequired,
+  errorMsg: PropTypes.string.isRequired
 };
 
 export const ConflictModal = ({visible, docId, onClose, onClick}) => {
@@ -104,7 +120,7 @@ export const ConflictModal = ({visible, docId, onClose, onClick}) => {
   return (
     <Modal dialogClassName="replication__error-doc-modal" show={visible} onHide={() => onClose()}>
       <Modal.Header closeButton={true}>
-        <Modal.Title>Fix Document Conflict</Modal.Title>
+        <Modal.Title>Custom ID Conflict</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <p>
@@ -123,8 +139,7 @@ export const ConflictModal = ({visible, docId, onClose, onClick}) => {
           Change Document ID
         </button>
         <button onClick={onClick} className="btn replication__error-continue">
-          <i className="icon icon-eraser"></i>
-          Overwrite Existing Document
+          <i className="icon icon-eraser" /> Overwrite Existing Document
         </button>
       </Modal.Footer>
     </Modal>
@@ -132,8 +147,8 @@ export const ConflictModal = ({visible, docId, onClose, onClick}) => {
 };
 
 ConflictModal.propTypes = {
-  visible: React.PropTypes.bool.isRequired,
-  onClick: React.PropTypes.func.isRequired,
-  onClose: React.PropTypes.func.isRequired,
-  docId: React.PropTypes.string.isRequired
+  visible: PropTypes.bool.isRequired,
+  onClick: PropTypes.func.isRequired,
+  onClose: PropTypes.func.isRequired,
+  docId: PropTypes.string.isRequired
 };

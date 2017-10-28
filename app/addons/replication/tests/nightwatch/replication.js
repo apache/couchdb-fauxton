@@ -46,13 +46,13 @@ module.exports = {
       .checkForDatabaseCreated(newDatabaseName1, waitTime)
       .createDocument(docName1, newDatabaseName1)
       .loginToGUI()
-      .url(baseUrl + '/#replication/_create')
+      .url(baseUrl + '/#/replication/_create')
       .waitForElementVisible('button#replicate', waitTime, true)
       .waitForElementVisible('#replication-source', waitTime, true)
 
       // select LOCAL as the source
       .clickWhenVisible('#replication-source')
-      .keys(['\uE006'])
+      .keys(['\uE015', '\uE006'])
       .waitForElementVisible('.replication__input-react-select', waitTime, true)
 
       // enter our source DB
@@ -91,13 +91,13 @@ module.exports = {
 
       // now login and fill in the replication form
       .loginToGUI()
-      .url(baseUrl + '/#replication/_create')
+      .url(baseUrl + '/#/replication/_create')
       .waitForElementVisible('button#replicate', waitTime, true)
       .waitForElementVisible('#replication-source', waitTime, true)
 
       // select the LOCAL db as the source
       .clickWhenVisible('#replication-source')
-      .keys(['\uE006'])
+      .keys(['\uE015', '\uE006'])
       .waitForElementVisible('.replication__input-react-select', waitTime, true)
       .setValue('.replication__input-react-select .Select-input input', [newDatabaseName1, client.Keys.ENTER])
 
@@ -142,13 +142,13 @@ module.exports = {
 
       // now login and fill in the replication form
       .loginToGUI()
-      .url(baseUrl + '/#replication/_create')
+      .url(baseUrl + '/#/replication/_create')
       .waitForElementVisible('button#replicate', waitTime, true)
       .waitForElementVisible('#replication-source', waitTime, true)
 
       // select the LOCAL db as the source
       .clickWhenVisible('#replication-source')
-      .keys(['\uE006'])
+      .keys(['\uE015', '\uE006'])
       .waitForElementVisible('.replication__input-react-select', waitTime, true)
       .setValue('.replication__input-react-select .Select-input input', [newDatabaseName1, client.Keys.ENTER])
 

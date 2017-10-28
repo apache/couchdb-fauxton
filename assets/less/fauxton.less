@@ -60,10 +60,6 @@ body {
 
 h2,h3,h4 {font-weight: 600;}
 
-a {
-  .transition(all .25s linear);
-}
-
 // remove blue borders from clicked elements
 button:focus, a:focus {
   outline: 0;
@@ -77,10 +73,12 @@ a,
 a:visited,
 a:active {
   color: @linkColor;
+  text-decoration: none;
 }
 
 a:hover {
   color: @linkColorHover;
+  text-decoration: none;
 }
 
 /* bootstrap overrides */
@@ -155,7 +153,7 @@ table tr td{
   }
 }
 thead {
-  border-bottom: 2px solid @brandPrimary;
+  border-bottom: 2px solid #333;
 }
 tbody {
   padding-top: 10px;
@@ -189,11 +187,11 @@ table.databases {
     text-shadow: none;
     .box-shadow(0px 4px 0px rgba(0,0,0,0.45));
     .border-radius(0);
-    border-bottom: 1px solid #3a2c2b;
+    border-bottom: 1px solid @brandDark2;
     box-shadow: 0 4px 0 0 rgba(0, 0, 0, 0.4);
     a, a:hover {
       color: #cecece;
-      text-decoration: underline;
+      text-decoration: none;
     }
     a.js-dismiss {
       color: rgba(255, 255, 255, 1);
@@ -409,11 +407,11 @@ table.databases {
 }
 
 .Select .is-focused {
-  background-color: #E33F3B;
+  background-color: @hoverHighlight;
 }
 
 .Select-option:hover {
-  background-color: #E33F3B;
+  background-color: @hoverHighlight;
 }
 
 .Select-option:last-child {
@@ -438,7 +436,7 @@ table.databases {
 }
 
 .Select-arrow-zone:hover > .Select-arrow {
-  border-top-color: #E73D34;
+  border-top-color: @hoverHighlight;
 }
 
 
@@ -556,7 +554,7 @@ footer.pagination-footer {
 
 // left navigationbar is closed
 @media (max-width: 875px) {
-  body:not(.closeMenu) {
+  #main:not(.closeMenu) {
     .one-pane {
       .faux-header__searchboxwrapper {
         display: none;
@@ -566,7 +564,7 @@ footer.pagination-footer {
 }
 
 @media (max-width: 1285px) {
-  body:not(.closeMenu) {
+  #main:not(.closeMenu) {
     .with-sidebar {
       .faux-header__searchboxwrapper {
         display: none;
@@ -583,7 +581,7 @@ body .control-toggle-include-docs span {
 }
 
 @media (max-width: 1177px) {
-  body.closeMenu {
+  #main.closeMenu {
     .with-sidebar {
       .two-panel-header {
         .control-toggle-include-docs span::before {
@@ -599,7 +597,7 @@ body .control-toggle-include-docs span {
 
 
 @media (max-width: 1120px) {
-  body.closeMenu {
+  #main.closeMenu {
     .with-sidebar {
       .two-panel-header {
         .control-toggle-include-docs span::before {
@@ -626,7 +624,7 @@ body .control-toggle-include-docs span {
 }
 
 @media (max-width: 1339px) {
-  body:not(.closeMenu) {
+  #main:not(.closeMenu) {
     .with-sidebar {
       .two-panel-header {
         .control-toggle-include-docs span::before {
@@ -641,7 +639,7 @@ body .control-toggle-include-docs span {
 }
 
 @media (max-width: 1090px) {
-  body:not(.closeMenu) {
+  #main:not(.closeMenu) {
     .with-sidebar {
       .two-panel-header {
         .control-toggle-include-docs span::before {
@@ -675,11 +673,26 @@ body .control-toggle-include-docs span {
     text-decoration: none;
     font-size: 19px;
     &:hover {
-      background-color: @hoverRed;
+      background-color: @hoverHighlight;
       color: white;
     }
   }
   td {
     vertical-align: middle;
   }
+}
+
+.btn-space {
+  margin-right: 5px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  border: 0;
 }

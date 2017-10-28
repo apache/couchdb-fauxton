@@ -16,26 +16,25 @@ var fs = require('fs'),
 exports.devServerPort = 8000;
 exports.couch = 'http://couch:5984/';
 
-exports.init = function (grunt) {
-  var _ = grunt.util._;
+exports.init = function () {
 
   return {
     readSettingsFile: function () {
-      if (fs.existsSync("settings.json")) {
-        return grunt.file.readJSON("settings.json");
-      } else if (fs.existsSync('settings.json.default.json')) {
-        return grunt.file.readJSON('settings.json.default.json');
+      if (fs.existsSync(path.join(__dirname, "../settings.json"))) {
+        return require(path.join(__dirname, "../settings.json"));
+      } else if (fs.existsSync(path.join(__dirname, '../settings.json.default.json'))) {
+        return require(path.join(__dirname, '../settings.json.default.json'));
       }
 
       throw new Error('settings.json file missing');
     },
 
     readI18nFile: function () {
-      if (fs.existsSync('i18n.json')) {
-        return grunt.file.readJSON('i18n.json');
+      if (fs.existsSync(path.join(__dirname, '../i18n.json'))) {
+        return require(path.join(__dirname, '../i18n.json'));
       }
-      if (fs.existsSync('i18n.json.default.json')) {
-        return grunt.file.readJSON('i18n.json.default.json');
+      if (fs.existsSync(path.join(__dirname, '../i18n.json.default.json'))) {
+        return require(path.join(__dirname, '../i18n.json.default.json'));
       }
 
       throw new Error('i18n file missing');
@@ -46,9 +45,9 @@ exports.init = function (grunt) {
     },
 
     getFileList: function (fileExtensions, defaults) {
-      return _.reduce(this.readSettingsFile().deps, function (files, dep) {
+      return this.readSettingsFile().deps.reduce((files, dep) => {
         if (dep.path) {
-          _.each(fileExtensions, function (fileExtension) {
+          fileExtensions.forEach(fileExtension => {
             files.push(path.join(dep.path, '**/*' + fileExtension));
           });
         }

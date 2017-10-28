@@ -18,8 +18,6 @@
 /*jslint node: true */
 "use strict";
 
-const path = require('path');
-
 module.exports = function (grunt) {
   var helper = require('./tasks/helper.js'),
       initHelper = helper.init(grunt),
@@ -149,20 +147,6 @@ module.exports = function (grunt) {
     rmcouchdb: couch_config,
     couchapp: couch_config,
 
-    mochaSetup: {
-      default: {
-        files: {
-          src: initHelper.getFileList(['[Ss]pec.js'], [
-            './app/core/**/*[Ss]pec.js',
-            './app/addons/**/*[Ss]pec.js',
-            './app/addons/**/*[Ss]pec.react.jsx',
-            './app/addons/**/*[Ss]pec.jsx'
-          ])
-        },
-        template: 'test/test.config.underscore'
-      }
-    },
-
     shell: {
       webpack: {
         command: 'npm run webpack:dev'
@@ -170,21 +154,16 @@ module.exports = function (grunt) {
 
       webpackrelease: {
         command: 'npm run webpack:release'
-      },
-
-      webpacktest: {
-        command: 'npm run webpack:test'
-      },
-
-      phantomjs: {
-        command: 'npm run phantomjs'
       }
     },
 
     exec: {
       start_nightWatch: {
         command: __dirname + '/node_modules/nightwatch/bin/nightwatch' +
-        ' -c ' + __dirname + '/test/nightwatch_tests/nightwatch.json'
+        ' -c ' + __dirname + '/test/nightwatch_tests/nightwatch.json',
+        options: {
+          maxBuffer: 1000 * 1024
+        }
       }
     },
 
@@ -195,22 +174,7 @@ module.exports = function (grunt) {
         template: 'test/nightwatch_tests/nightwatch.json.underscore',
         dest: 'test/nightwatch_tests/nightwatch.json'
       }
-    },
-
-    // these rename the already-bundled, minified requireJS and CSS files to include their hash
-    md5: {
-      bundlejs: {
-        files: { 'dist/release/dashboard.assets/js/': 'dist/release/bundle.js' },
-        options: {
-          afterEach: function (fileChanges) {
-            // replace the REQUIREJS_FILE placeholder with the actual filename
-            const newFilename = path.basename(fileChanges.newPath);
-            config.template.release.variables.bundlejs = config.template.release.variables.bundlejs.replace(/BUNDLEJS_FILE/, newFilename);
-          }
-        }
-      }
-    },
-
+    }
   };
 
   grunt.initConfig(config);
@@ -226,7 +190,6 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-shell');
-  grunt.loadNpmTasks('grunt-md5');
   /*
    * Default task
    */
@@ -236,16 +199,13 @@ module.exports = function (grunt) {
   /*
    * Transformation tasks
    */
-  grunt.registerTask('test', ['checkTestExists', 'clean:release', 'dependencies', 'copy:debug', 'gen_initialize:development', 'test_inline']);
+  grunt.registerTask('test', ['clean:release', 'dependencies', 'copy:debug', 'gen_initialize:development']);
 
-  // lighter weight test task for use inside dev/watch
-  grunt.registerTask('test_inline', ['mochaSetup', 'shell:webpacktest', 'shell:phantomjs']);
   // Fetch dependencies (from git or local dir)
   grunt.registerTask('dependencies', ['get_deps', 'gen_load_addons:default']);
 
   // minify code and css, ready for release.
-  grunt.registerTask('build', ['copy:distDepsRequire', 'shell:webpackrelease',
-    'md5:bundlejs', 'template:release']);
+  grunt.registerTask('build', ['copy:distDepsRequire', 'shell:webpackrelease']);
   /*
    * Build the app in either dev, debug, or release mode
    */
@@ -256,13 +216,13 @@ module.exports = function (grunt) {
 
   // build a debug release
   grunt.registerTask('debug', ['clean', 'dependencies', "gen_initialize:development",
-    'template:development', 'copy:debug']);
+    'copy:debug']);
 
   grunt.registerTask('debugDev', ['clean', 'dependencies', "gen_initialize:development",
-    'template:development', 'copy:debug', 'shell:webpack']);
+    'copy:debug', 'shell:webpack']);
 
   grunt.registerTask('devSetup', ['dependencies', "gen_initialize:development",
-    'template:development', 'copy:debug']);
+    'copy:debug']);
   grunt.registerTask('devSetupWithClean', ['clean', 'devSetup']);
 
   grunt.registerTask('watchRun', ['clean:watch', 'dependencies', 'shell:stylecheck']);

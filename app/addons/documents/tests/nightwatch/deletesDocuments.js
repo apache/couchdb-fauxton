@@ -13,7 +13,7 @@
 
 
 module.exports = {
-  'Deletes a document': function (client) {
+  'Deletes a document on json view': function (client) {
     var waitTime = client.globals.maxWaitTime,
         newDatabaseName = client.globals.testDatabaseName,
         newDocumentName = 'delete_doc_doc',
@@ -28,6 +28,7 @@ module.exports = {
       .url(baseUrl)
       .waitForElementPresent('#dashboard-content a[href="database/' + newDatabaseName + '/_all_docs"]', waitTime, false)
       .clickWhenVisible('#dashboard-content a[href="database/' + newDatabaseName + '/_all_docs"]', waitTime, false)
+      .clickWhenVisible('.fonticon-json')
       .waitForElementVisible('label[for="checkbox-' + newDocumentName + '"]', waitTime, false)
       .clickWhenVisible('label[for="checkbox-' + newDocumentName + '"]', waitTime, false)
       .clickWhenVisible('.bulk-action-component-selector-group button.fonticon-trash', waitTime, false)
@@ -36,6 +37,46 @@ module.exports = {
 
       .waitForElementVisible('label[for="checkbox-' + newDocumentName + '2' + '"]', waitTime, false)
       .clickWhenVisible('label[for="checkbox-' + newDocumentName + '2' + '"]', waitTime, false)
+      .clickWhenVisible('.bulk-action-component-selector-group button.fonticon-trash', waitTime, false)
+      .acceptAlert()
+
+      .checkForStringNotPresent(newDatabaseName + '/_all_docs', newDocumentName)
+      .checkForStringNotPresent(newDatabaseName + '/_all_docs', newDocumentName + '2')
+      .url(baseUrl + '/' + newDatabaseName + '/_all_docs')
+
+      .waitForElementPresent('pre', waitTime, false)
+      .getText('pre', function (result) {
+        var data = result.value,
+            createdDocumentANotPresent = data.indexOf(newDocumentName) === -1,
+            createdDocumentBNotPresent = data.indexOf(newDocumentName + '2') === -1;
+
+        this.verify.ok(createdDocumentANotPresent && createdDocumentBNotPresent,
+          'Checking if new documents no longer shows up in _all_docs.');
+      })
+    .end();
+  },
+
+  'Deletes a document on table/metadata view': function (client) {
+    var waitTime = client.globals.maxWaitTime,
+        newDatabaseName = client.globals.testDatabaseName,
+        newDocumentName = 'delete_doc_doc',
+        baseUrl = client.globals.test_settings.launch_url;
+
+    client
+      .createDocument(newDocumentName, newDatabaseName)
+      .createDocument(newDocumentName + '2', newDatabaseName)
+      .loginToGUI()
+      .checkForDocumentCreated(newDocumentName)
+      .checkForDocumentCreated(newDocumentName + '2')
+      .url(baseUrl)
+      .waitForElementPresent('#dashboard-content a[href="database/' + newDatabaseName + '/_all_docs"]', waitTime, false)
+      .clickWhenVisible('#dashboard-content a[href="database/' + newDatabaseName + '/_all_docs"]', waitTime, false)
+      .clickWhenVisible('#checkbox-' + newDocumentName, waitTime, false)
+      .clickWhenVisible('.bulk-action-component-selector-group button.fonticon-trash', waitTime, false)
+      .acceptAlert()
+      .waitForElementVisible('.alert.alert-info', waitTime, false)
+
+      .clickWhenVisible('#checkbox-' + newDocumentName + '2', waitTime, false)
       .clickWhenVisible('.bulk-action-component-selector-group button.fonticon-trash', waitTime, false)
       .acceptAlert()
 
@@ -75,13 +116,14 @@ module.exports = {
       .populateDatabase(newDatabaseName)
       .createDocument(designDoc._id, newDatabaseName, designDoc)
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
+      .clickWhenVisible('.fonticon-json')
       .waitForElementPresent('.prettyprint', waitTime, false)
       .waitForElementNotPresent('.loading-lines', waitTime, false)
 
       // confirm the design doc appears in the sidebar
       .waitForElementPresent('#sidebar-content span[title="_design/sidebar-update"]', waitTime, false)
       .waitForElementPresent('label[for="checkbox-_design/sidebar-update"]', waitTime, false)
-      .execute('$("label[for=\'checkbox-_design/sidebar-update\']")[0].scrollIntoView();')
+      .execute('$("div[data-id=\'_design/sidebar-update\']")[0].scrollIntoView();')
       .clickWhenVisible('label[for="checkbox-_design/sidebar-update"]', waitTime, false)
 
       .waitForElementPresent('.bulk-action-component-selector-group .fonticon-trash', waitTime, false)
@@ -107,7 +149,7 @@ module.exports = {
       .url(baseUrl + '#/database/' + newDatabaseName + '/' + newDocumentName)
       .waitForElementPresent('#editor-container', waitTime, false)
       .clickWhenVisible('#doc-editor-actions-panel button[title="Delete"]')
-      .clickWhenVisible('.confirmation-modal button.btn.btn-success')
+      .clickWhenVisible('.confirmation-modal button.btn.btn-primary')
       .waitForElementPresent('.jump-to-doc', waitTime, false)
 
       //check raw JSON

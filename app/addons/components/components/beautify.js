@@ -12,48 +12,50 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import beautifyHelper from "../../../../assets/js/plugins/beautify";
+import {Tooltip, OverlayTrigger} from 'react-bootstrap';
 
-export const Beautify = React.createClass({
-  noOfLines () {
+const helper = beautifyHelper.js_beautify ? beautifyHelper.js_beautify : beautifyHelper;
+
+export class Beautify extends React.Component {
+  noOfLines = () => {
     return this.props.code.split(/\r\n|\r|\n/).length;
-  },
+  };
 
-  canBeautify () {
+  canBeautify = () => {
     return this.noOfLines() === 1;
-  },
+  };
 
-  addTooltip () {
-    if (this.canBeautify) {
-      $('.beautify-tooltip').tooltip({ placement: 'right' });
-    }
-  },
-
-  componentDidMount () {
-    this.addTooltip();
-  },
-
-  beautify (event) {
+  beautify = (event) => {
     event.preventDefault();
-    var beautifiedCode = beautifyHelper(this.props.code);
+    var beautifiedCode = helper(this.props.code);
     this.props.beautifiedCode(beautifiedCode);
-    $('.beautify-tooltip').tooltip('hide');
-  },
+  };
 
-  render () {
+  getTooltip = () => {
+    return (
+      <Tooltip id="tooltip">
+      Switch to editable code format.
+      </Tooltip>
+    );
+  };
+
+  render() {
     if (!this.canBeautify()) {
       return null;
     }
 
+    const tooltip = this.getTooltip();
+
     return (
-      <button
-        onClick={this.beautify}
-        className="beautify beautify_map btn btn-primary btn-small beautify-tooltip"
-        type="button"
-        data-toggle="tooltip"
-        title="Reformat your minified code to make edits to it."
-      >
-        beautify this code
-      </button>
+      <OverlayTrigger placement="right" overlay={tooltip}>
+        <button
+          onClick={this.beautify}
+          className="beautify beautify_map btn btn-primary btn-small beautify-tooltip"
+          type="button"
+        >
+          Format Code
+        </button>
+      </OverlayTrigger>
     );
   }
-});
+}

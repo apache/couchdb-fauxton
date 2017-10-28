@@ -24,6 +24,7 @@ module.exports = {
       .populateDatabase(newDatabaseName)
       .loginToGUI()
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
+      .clickWhenVisible('.fonticon-json')
 
       // ensures the main body (results list) has been rendered
       .waitForElementPresent('.prettyprint', waitTime, false)
@@ -55,6 +56,9 @@ module.exports = {
       .populateDatabase(newDatabaseName)
       .loginToGUI()
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
+      .waitForElementNotPresent('.loading-lines', waitTime, false)
+      .clickWhenVisible('.fonticon-json')
+      .waitForElementNotPresent('.loading-lines', waitTime, false)
 
       // ensures the main body (results list) has been rendered
       .waitForElementPresent('.prettyprint', waitTime, false)
@@ -62,6 +66,7 @@ module.exports = {
       .clickWhenVisible('#select-per-page', waitTime, false)
       // http://www.w3.org/TR/2012/WD-webdriver-20120710/
       .keys(['\uE013', '\uE006'])
+      .waitForElementNotPresent('.loading-lines', waitTime, false)
       .waitForElementNotPresent('div[data-id="document_16"]', waitTime)
       .clickWhenVisible('#next', waitTime, false)
       .waitForElementPresent('div[data-id="document_17"]', waitTime)
@@ -80,6 +85,9 @@ module.exports = {
       .populateDatabase(newDatabaseName)
       .loginToGUI()
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
+      .waitForElementNotPresent('.loading-lines', waitTime, false)
+      .clickWhenVisible('.fonticon-json')
+      .waitForElementNotPresent('.loading-lines', waitTime, false)
 
       // ensures the main body (results list) has been rendered
       .waitForElementPresent('.prettyprint', waitTime, false)
@@ -87,6 +95,7 @@ module.exports = {
       .clickWhenVisible('#select-per-page', waitTime, false)
       // http://www.w3.org/TR/2012/WD-webdriver-20120710/
       .keys(['\uE013', '\uE006'])
+      .waitForElementNotPresent('.loading-lines', waitTime, false)
       .waitForElementNotPresent('div[data-id="document_16"]', waitTime)
       .clickWhenVisible('#next', waitTime, false)
       .waitForElementPresent('div[data-id="document_17"]', waitTime)
@@ -95,5 +104,37 @@ module.exports = {
       .keys(['\uE013', '\uE006'])
       .waitForElementPresent('div[data-id="document_1"]', waitTime)
       .end();
-  }
+  },
+
+  'paginate to page two and switch to json view': function (client) {
+    /*jshint multistr: true */
+    var waitTime = client.globals.maxWaitTime,
+        newDatabaseName = client.globals.testDatabaseName,
+        baseUrl = client.globals.test_settings.launch_url;
+
+    client
+      .populateDatabase(newDatabaseName)
+      .loginToGUI()
+      .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
+      .waitForElementNotPresent('.loading-lines', waitTime, false)
+
+      // ensures the main body (results list) has been rendered
+      .waitForElementPresent('.table-view-docs', waitTime)
+
+      .clickWhenVisible('#select-per-page', waitTime, false)
+      // http://www.w3.org/TR/2012/WD-webdriver-20120710/
+      .keys(['\uE013', '\uE006'])
+      .waitForElementNotPresent('.loading-lines', waitTime, false)
+      .waitForElementNotPresent('td[title="document_16"]', waitTime)
+      .clickWhenVisible('#next', waitTime, false)
+      .waitForElementPresent('td[title="document_17"]', waitTime)
+
+      .clickWhenVisible('.fonticon-json')
+      .waitForElementNotPresent('.loading-lines', waitTime, false)
+      .waitForElementPresent('.prettyprint', waitTime, false)
+      .waitForElementPresent('div[data-id="document_17"]', waitTime)
+      .clickWhenVisible('#previous', waitTime, false)
+      .waitForElementPresent('div[data-id="document_1"]', waitTime)
+      .end();
+  },
 };

@@ -47,7 +47,11 @@ CreateDocument.prototype.command = function (documentName, databaseName, docCont
     if (!databaseName) {
       databaseName = helpers.testDatabaseName;
     }
-
+    if (documentName.startsWith('_design/')) {
+      documentName = '_design/' + encodeURIComponent(documentName.substr(8));
+    } else {
+      documentName = encodeURIComponent(documentName);
+    }
     const url = [couchUrl, databaseName, documentName].join('/');
 
     checkForDocumentCreated(url, helpers.maxWaitTime, () => {

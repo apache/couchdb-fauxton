@@ -12,26 +12,31 @@
 
 @import "bootstrap/variables.less";
 
-/* colors */
-@brown: #3A2C2B;
-@red: #E33F3B;
-@orange: #F3622D;
-@darkRed: #AF2D24;
-@linkRed: #DA4F49;
-@greyBrown: #554D4C;
-@greyBrownLighter: #A59D9D;
-@blue: #049cdb;
-@blueDark: #0064cd;
-@green: #7FA30C;
-@yellow: #ffcc00;
-@pink: #c3325f;
-@purple: #7a43b6;
-@hoverOrange: #f3812d;
-@hoverRed: #e73d34;
+/*Dashboard-Specific Colors*/
+@dangerRed: #F00;
+@hoverHighlight: #e73d34;
+@brandHighlight: #AF2D24;
+@brandDark1: #564E4C;
+@brandDark2: #3A2C2B;
+@navIconColor: #B3B4B4;
+@navIconActive: #ffffff;
+@trayBackground1: #3A2C2B;
+@trayBackground2: #3A2C2B;
 
-/* brand */
-@brandPrimary: @red;
-@brandPrimaryDark: @darkRed;
+/*buttons */
+@primaryGreen: #2bb673;
+@secondaryBlue: #0082BF;
+@primaryGreenDisabled: #8EC9AD;
+@secondaryBlueDisabled: #86BAD2;
+@dangerDisabled: #FF9797;
+@buttonText: #FFF;
+@buttonTextDisabled: #F1F1F1;
+
+/* colors */
+@orange: #F3622D;
+@blue: #049cdb;
+@green: #7FA30C;
+
 
 /* base */
 @background: #F2F2F2;
@@ -47,29 +52,21 @@
 @subListGray: #767F89;
 
 /*nav*/
-@primaryNav : @brown;
-@navBG: @brandPrimaryDark;
-@navBGHighlight: @brandPrimary;
-@navBGHover: @brandPrimary;
 @navWidth: 220px;
-@navIconColor: @brandPrimaryDark;
-@navIconHighlight: #FFFFFF;
-@bottomNav: @greyBrown;
-@NavIconActive: #ffffff;
-@NavIcon: @brown;
+
 
 /*top header*/
 @breadcrumbBG: #F1F1F1;
-@breadcrumbText: @brandPrimary;
+@breadcrumbText: @brandHighlight;
 @breadcrumbArrow: #999999;
-@breadcrumbBorder: @brandPrimary;
+@breadcrumbBorder: @brandHighlight;
 
 /* document-header in doclist */
 @docHeaderBG: #3a3a3a;
 @docHeaderBorderBottom: #2a2a2a;
 @docHeaderOtherBorders: #000;
 @docHeaderLabels: #909090;
-@docHeaderDocId: @brandPrimary;
+@docHeaderDocId: @brandHighlight;
 
 /* checkboxes in doc-list */
 @docCheckBoxUncheckedBG: #EFEFEF;
@@ -86,8 +83,8 @@
 @secondarySidebar: white;
 
 /* links */
-@linkColor: @brandPrimary;
-@linkColorHover: @brandPrimaryDark;
+@linkColor: @brandHighlight;
+@linkColorHover: @brandHighlight;
 
 /* borders */
 @radius: 4px;
@@ -118,3 +115,14 @@
 @infoAlertColor: #329898;
 @successAlertColor: #448c11;
 @errorAlertColor: #c45b55;
+
+/* query history */
+@queryHistoryBGColor: white;
+@queryHistoryColor: @defaultText;
+
+/*
+  -- logo image paths --
+  These are set during webpack bundle through your settings.json file.
+*/
+@largeLogoPath: "";
+@smallLogoPath: "";

@@ -36,7 +36,7 @@ export default {
     var memberships = new ClusterResources.ClusterNodes();
 
     memberships.fetch().then(function () {
-      var nodes = memberships.get('all_nodes');
+      const nodes = memberships.get('all_nodes');
 
       if (nodes.length === 1) {
         return FauxtonAPI.navigate(successtarget + nodes[0]);

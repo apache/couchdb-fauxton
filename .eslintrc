@@ -1,12 +1,12 @@
 {
   "root": true,
+  "parser": "babel-eslint",
 
   "plugins": [
     "react"
   ],
 
   "rules-todo": {
-
     "space-unary-ops": 2,
     "camelcase": 2
   },
@@ -35,7 +35,8 @@
   "parserOptions": {
     "sourceType": "module",
     "ecmaFeatures": {
-      "jsx": true
+      "jsx": true,
+      "experimentalObjectRestSpread": true
     }
   },
 
