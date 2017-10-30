@@ -21,7 +21,7 @@ export const JSONLink = ({endpoint}) => {
   return (
     <div className="faux__jsonlink">
       <a data-bypass={true} className="faux__jsonlink-link" href={endpoint} target="_blank">
-        <span className="faux__jsonlink-link-brackets">{'{ '}{'}'}</span>
+        <span className="faux__jsonlink-link-brackets">{'{\u00a0}'}</span>
         <span>JSON</span>
       </a>
     </div>
