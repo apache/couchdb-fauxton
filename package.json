@@ -130,7 +130,7 @@
     "start-debug": "DIST=./dist/debug node ./bin/fauxton",
     "preversion": "node version-check.js && grunt release",
     "test-before-publish": "npm run preversion && npm install . -g",
-    "create:animaldb": "./bin/create-animal-db",
+    "create:animaldb": "node ./bin/create-animal-db",
     "docker:couchdb-up": "docker-compose -f ./docker/dc.selenium.yml up -d couchdb",
     "docker:selenium-up": "docker-compose -f ./docker/dc.selenium.yml up -d selenium",
     "docker:selenium-debug-up": "docker-compose -f ./docker/dc.selenium-debug.yml up -d selenium",
