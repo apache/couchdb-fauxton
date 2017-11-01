@@ -96,7 +96,10 @@ const getDocId = (doc, docType = Constants.INDEX_RESULTS_DOC_TYPE.VIEW) => {
 
 const getDocRev = (doc, docType = Constants.INDEX_RESULTS_DOC_TYPE.VIEW) => {
   if (docType === Constants.INDEX_RESULTS_DOC_TYPE.VIEW) {
-    return doc.value && doc.value.rev;
+    if (doc.value) {
+      return doc.value.rev;
+    }
+    return doc._rev;
   } else if (docType === Constants.INDEX_RESULTS_DOC_TYPE.MANGO_INDEX) {
     return undefined;
   } else if (docType === Constants.INDEX_RESULTS_DOC_TYPE.MANGO_QUERY) {
