@@ -9,7 +9,6 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
-
 @import "../../../../../assets/less/bootstrap/variables.less";
 @import "../../../../../assets/less/variables.less";
 @import "../../../../../assets/less/bootstrap/mixins.less";
@@ -68,7 +67,7 @@
         color: #888;
       }
 
-      &.to-from-database{
+      &.to-from-database {
         &:first-child {
           border-bottom: 1px solid #ddd;
         }
@@ -102,7 +101,8 @@
       &:focus {
         background-color: #fff;
         outline-color: #fff;
-      };
+      }
+    ;
     }
   }
 
@@ -114,7 +114,6 @@
   .header-field {
     background-color: #ccc;
 
-
     &.radio {
       display: none;
     }
@@ -122,7 +121,7 @@
     &.label-text {
       display: block;
       font-weight: bold;
-      padding:10px;
+      padding: 10px;
       margin: 0px;
       height: 50px;
       .noselect()
@@ -148,4 +147,8 @@
   align-items: center;
   flex-direction: row;
   height: 100%;
+
+  &--ie11 {
+    align-items: stretch;
+  }
 }
