@@ -231,6 +231,16 @@ describe('Docs Shared Helpers', () => {
       expect(getDocRev(docView, docType)).toBe(docView.value.rev);
     });
 
+    it('returns document revision for docType "view" and only doc', () => {
+      const docView = {
+        id: "20c76d4ff9851694792654ab3e2ca303",
+        _rev: "1-c59f5770929653147ab939344b84e933"
+      };
+      const docType = Constants.INDEX_RESULTS_DOC_TYPE.VIEW;
+      expect(getDocRev(docView, docType)).toBe(docView._rev);
+    });
+
+
     it('returns document revision for docType "MangoQueryResult"', () => {
       const docMangoResult = {
         _id: "aardvark",
