@@ -82,7 +82,7 @@ export class ActiveTasksController extends React.Component {
                         selectedRadio={selectedRadio}
                         onTableHeaderClick={onTableHeaderClick}
                         sortByHeader={sortByHeader}
-                        headerIsAscending={headerIsAscending}/>
+                        headerIsAscending={headerIsAscending} />
                 </div>
             </div>
         );
@@ -91,7 +91,7 @@ export class ActiveTasksController extends React.Component {
 
 class ActiveTasksFilterTabs extends React.Component {
     static defaultProps = {
-        radioNames: [
+        radioNames : [
             'All Tasks',
             'Replication',
             'Database Compaction',
@@ -119,7 +119,7 @@ class ActiveTasksFilterTabs extends React.Component {
                         key={i}
                         selected={checked}
                         text={radioName}
-                        onChange={this.onRadioClick}/>
+                        onChange={this.onRadioClick} />
                 );
             })
         );
@@ -143,7 +143,7 @@ class ActiveTasksFilterTabs extends React.Component {
                         name="search"
                         placeholder="Search for databases..."
                         value={this.props.searchTerm}
-                        onChange={this.searchTermChange}/>
+                        onChange={this.searchTermChange} />
                 </li>
             </TabElementWrapper>
         );
@@ -178,7 +178,7 @@ class ActiveTaskTable extends React.Component {
 
 class ActiveTasksTableHeader extends React.Component {
     static defaultProps = {
-        headerNames: [
+        headerNames : [
             ['type', 'Type'],
             ['database', 'Database'],
             ['started-on', 'Started on'],
@@ -199,7 +199,7 @@ class ActiveTasksTableHeader extends React.Component {
                 key={header[0]}
                 onTableHeaderClick={onTableHeaderClick}
                 sortByHeader={sortByHeader}
-                headerIsAscending={headerIsAscending}/>;
+                headerIsAscending={headerIsAscending} />;
         });
     };
 
@@ -241,7 +241,7 @@ class TableHeader extends React.Component {
                     id={this.props.headerName}
                     value={this.props.headerName}
                     className="header-field radio"
-                    onChange={this.onTableHeaderClick}/>
+                    onChange={this.onTableHeaderClick} />
                 <label
                     className="header-field label-text active-tasks-header noselect"
                     htmlFor={this.props.headerName}>
@@ -273,7 +273,7 @@ class ActiveTasksTableBody extends React.Component {
         }
 
         return _.map(this.state.filteredTable, function (item, key) {
-            return <ActiveTaskTableBodyContents key={key} item={item}/>;
+            return <ActiveTaskTableBodyContents key={key} item={item} />;
         });
     };
 
@@ -285,7 +285,7 @@ class ActiveTasksTableBody extends React.Component {
 
         return (
             <tr className="no-matching-database-on-search">
-                <td colSpan="6">No active {type} tasks.</td>
+                <td  colSpan="6">No active {type} tasks.</td>
             </tr>
         );
     };
@@ -317,7 +317,7 @@ class ActiveTasksTableBody extends React.Component {
 class ActiveTaskTableBodyContents extends React.Component {
     getInfo = (item) => {
         return {
-            type: item.type,
+            type : item.type,
             objectField: activeTasksHelpers.getDatabaseFieldMessage(item),
             started_on: activeTasksHelpers.getTimeInfo(item.started_on),
             updated_on: activeTasksHelpers.getTimeInfo(item.updated_on),
@@ -339,7 +339,7 @@ class ActiveTaskTableBodyContents extends React.Component {
     };
 
     render() {
-        var rowData = this.getInfo(this.props.item);
+        var rowData =  this.getInfo(this.props.item);
         var objectFieldMsg = this.multilineMessage(rowData.objectField, 'to-from-database');
         var startedOnMsg = this.multilineMessage(rowData.started_on, 'time');
         var updatedOnMsg = this.multilineMessage(rowData.updated_on, 'time');
@@ -361,7 +361,7 @@ class ActiveTaskTableBodyContents extends React.Component {
 export class ActiveTasksPollingWidgetController extends React.Component {
     getStoreState = () => {
         return {
-            collection: activeTasksStore.getBackboneCollection()
+            collection:  activeTasksStore.getBackboneCollection()
         };
     };
 
@@ -393,7 +393,6 @@ export class ActiveTasksPollingWidgetController extends React.Component {
         if (isIE11) {
             activeTaskPollingClass += " " + activeTaskPollingClass + "--ie11";
         }
-
         return (
             <div className={activeTaskPollingClass}>
                 <Polling
@@ -410,7 +409,7 @@ export class ActiveTasksPollingWidgetController extends React.Component {
 }
 
 var activeTasksHelpers = {
-    getTimeInfo(timeStamp) {
+    getTimeInfo (timeStamp) {
         var timeMessage = [
             app.helpers.formatDate(timeStamp),
             app.helpers.getDateFromNow(timeStamp)
@@ -418,7 +417,7 @@ var activeTasksHelpers = {
         return timeMessage;
     },
 
-    getDatabaseFieldMessage(item) {
+    getDatabaseFieldMessage (item) {
         var type = item.type;
         var databaseFieldMessage = [];
 
@@ -435,7 +434,7 @@ var activeTasksHelpers = {
         return databaseFieldMessage;
     },
 
-    getProgressMessage(item) {
+    getProgressMessage (item) {
         var progressMessage = [];
         var type = item.type;
 
@@ -462,7 +461,7 @@ var activeTasksHelpers = {
         return progressMessage;
     },
 
-    getSourceSequence(item) {
+    getSourceSequence (item) {
         return item.source_seq;
     }
 

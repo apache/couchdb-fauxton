@@ -56,9 +56,9 @@ export const OnePaneHeader = ({showApiUrl, docURL, endpoint, crumbs, children}) 
                         {children}
                     </div>
                 </div>
-                {showApiUrl ? <ApiBarWrapper docURL={docURL} endpoint={endpoint}/> : null}
+                {showApiUrl ? <ApiBarWrapper docURL={docURL} endpoint={endpoint} /> : null}
                 <div id='notification-center-btn'>
-                    <NotificationCenterButton/>
+                    <NotificationCenterButton />
                 </div>
             </div>
         </header>

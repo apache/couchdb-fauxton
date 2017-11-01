@@ -46,24 +46,22 @@ const getCountdown = (secsString, units, max, min) => {
 };
 
 export class Polling extends React.Component {
-    constructor(props) {
+    constructor (props) {
         super(props);
         this.state = {
             value: this.props.startValue
         };
-
-        this.updatePollingFreq = this.updatePollingFreq.bind(this);
     }
 
-    componentDidMount() {
+    componentDidMount () {
         this.setPollingCounter(this.state.value);
     }
 
-    componentWillUnmount() {
+    componentWillUnmount () {
         clearPollCounter();
     }
 
-    setPollingCounter(value) {
+    setPollingCounter (value) {
         const {min, max, onPoll} = this.props;
         this.setState({value: value});
 
@@ -75,7 +73,7 @@ export class Polling extends React.Component {
         resetPollCounter(value * 1000, () => onPoll());
     }
 
-    updatePollingFreq(e) {
+    updatePollingFreq (e) {
         this.setPollingCounter(parseInt(e.target.value, 10));
     }
 
@@ -85,7 +83,7 @@ export class Polling extends React.Component {
         }
     }
 
-    render() {
+    render () {
         const {
             stepSize,
             min,
@@ -101,11 +99,10 @@ export class Polling extends React.Component {
             <div className='faux__polling'>
                 <div className='faux__polling-info'>
                     <span className='faux__polling-info-text'>Polling Interval</span>
-                    <span
-                        className={`faux__polling-info-value faux__polling-info-value ${pollStyle}`}>{pollValue}</span>
+                    <span className={`faux__polling-info-value faux__polling-info-value ${pollStyle}`}>{pollValue}</span>
                 </div>
                 <input
-                    onChange={this.updatePollingFreq}
+                    onChange={this.updatePollingFreq.bind(this)}
                     className='faux__polling-info-slider'
                     type='range'
                     value={value}

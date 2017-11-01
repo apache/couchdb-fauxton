@@ -10,7 +10,6 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Popover, OverlayTrigger } from 'react-bootstrap';
 
 const TOO_MANY_DOCS_SCANNED_WARNING = "The number of documents examined is high in proportion to the number of results returned. Consider adding an index to improve this.";
@@ -123,6 +122,6 @@ export default class ExecutionStats extends React.Component {
 };
 
 ExecutionStats.propTypes = {
-  executionStats: PropTypes.object,
-  warning: PropTypes.string
+  executionStats: React.PropTypes.object,
+  warning: React.PropTypes.string
 };

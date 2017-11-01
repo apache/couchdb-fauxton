@@ -26,12 +26,12 @@ const {LoadLines, Polling, RefreshBtn} = Components;
 const store = Stores.replicationStore;
 
 export default class ReplicationController extends React.Component {
-    constructor(props) {
+    constructor (props) {
         super(props);
         this.state = this.getStoreState();
     }
 
-    getStoreState() {
+    getStoreState () {
         return {
             loading: store.isLoading(),
             activityLoading: store.isActivityLoading(),
@@ -61,7 +61,7 @@ export default class ReplicationController extends React.Component {
             statusFilter: store.getStatusFilter(),
             replicateFilter: store.getReplicateFilter(),
             allDocsSelected: store.getAllDocsSelected(),
-            someDocsSelected: store.someDocsSelected(),
+            someDocsSelected:  store.someDocsSelected(),
             username: store.getUsername(),
             password: store.getPassword(),
             activitySort: store.getActivitySort(),
@@ -75,7 +75,7 @@ export default class ReplicationController extends React.Component {
         };
     }
 
-    loadReplicationInfo(props, oldProps) {
+    loadReplicationInfo (props, oldProps) {
         Actions.initReplicator(props.localSource);
         this.getAllActivity();
         if (props.replicationId && props.replicationId !== oldProps.replicationId) {
@@ -84,30 +84,30 @@ export default class ReplicationController extends React.Component {
         }
     }
 
-    getAllActivity() {
+    getAllActivity () {
         Actions.getReplicationActivity();
         Actions.getReplicateActivity();
     }
 
-    componentDidMount() {
+    componentDidMount () {
         store.on('change', this.onChange, this);
         this.loadReplicationInfo(this.props, {});
     }
 
-    componentWillReceiveProps(nextProps) {
+    componentWillReceiveProps (nextProps) {
         this.loadReplicationInfo(nextProps, this.props);
     }
 
-    componentWillUnmount() {
+    componentWillUnmount () {
         store.off('change', this.onChange);
         Actions.clearReplicationForm();
     }
 
-    onChange() {
+    onChange () {
         this.setState(this.getStoreState());
     }
 
-    showSection() {
+    showSection () {
         const {
             replicationSource, replicationTarget, replicationType, replicationDocName,
             passwordModalVisible, databases, localSource, remoteSource, remoteTarget,
@@ -159,7 +159,7 @@ export default class ReplicationController extends React.Component {
 
         if (tabSection === '_replicate') {
             if (replicateLoading) {
-                return <LoadLines/>;
+                return <LoadLines />;
             }
 
             return <ReplicateActivity
@@ -196,7 +196,7 @@ export default class ReplicationController extends React.Component {
         />;
     }
 
-    getHeaderComponents() {
+    getHeaderComponents () {
         if (this.state.tabSection === 'new replication') {
             return null;
         }
@@ -223,7 +223,7 @@ export default class ReplicationController extends React.Component {
         );
     }
 
-    getTabElements() {
+    getTabElements () {
         const {tabSection} = this.state;
         const elements = [
             <TabElement
@@ -248,11 +248,11 @@ export default class ReplicationController extends React.Component {
         return elements;
     }
 
-    onTabChange(section, url) {
+    onTabChange (section, url) {
         Actions.changeTabSection(section, url);
     }
 
-    getCrumbs() {
+    getCrumbs () {
         if (this.state.tabSection === 'new replication') {
             return [{'name': 'Job Configuration'}];
         }
@@ -260,7 +260,7 @@ export default class ReplicationController extends React.Component {
         return [];
     }
 
-    getTabs() {
+    getTabs () {
         if (this.state.tabSection === 'new replication') {
             return null;
         }
@@ -272,11 +272,11 @@ export default class ReplicationController extends React.Component {
         );
     }
 
-    render() {
-        const {checkingAPI} = this.state;
+    render () {
+        const { checkingAPI } = this.state;
 
         if (checkingAPI) {
-            return <LoadLines/>;
+            return <LoadLines />;
         }
 
         return (
