@@ -61,4 +61,12 @@ Helpers.escapeJQuerySelector = function (selector) {
   return selector && selector.replace(/[!"#$%&'()*+,.\/:;<=>?@[\\\]^`{|}~]/g, "\\$&");
 };
 
+/**
+ * Determine if the current application is running on IE10 or IE11
+ * @returns {boolean} True if on IE10 or IE11. Otherwise false.
+ */
+Helpers.isIE1X = function() {
+    return document.documentMode == 11 || document.documentMode == 10;
+};
+
 export default Helpers;

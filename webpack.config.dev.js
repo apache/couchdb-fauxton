@@ -20,7 +20,7 @@ const settings = require('./tasks/helper')
 
 module.exports = {
   entry: {
-    bundle: './app/main.js' //Our starting point for our development.
+    bundle: ['babel-polyfill','./app/main.js'] //Our starting point for our development.
   },
 
   output: {

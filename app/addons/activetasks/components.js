@@ -388,8 +388,13 @@ export class ActiveTasksPollingWidgetController extends React.Component {
   state = this.getStoreState();
 
   render() {
+    const isIE1X = document.documentMode == 11 || document.documentMode == 10;
+    let activePollingClass = "active-tasks__polling-wrapper";
+    if (isIE1X) {
+      activePollingClass += " " + activePollingClass + "--ie1X";
+    }
     return (
-      <div className="active-tasks__polling-wrapper">
+      <div className={activePollingClass}>
         <Polling
           min={1}
           max={30}
