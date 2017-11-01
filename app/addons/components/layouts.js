@@ -19,115 +19,120 @@ import {JSONLink, DocLink} from './components/apibar';
 import {Breadcrumbs} from './header-breadcrumbs';
 
 export const ApiBarWrapper = ({docURL, endpoint}) => {
-  return (
-    <div className='faux__jsondoc-wrapper'>
-      <JSONLink
-        endpoint={endpoint}
-      />
-    <DocLink
-      docURL={docURL}
-    />
-  </div>
-  );
+    return (
+        <div className='faux__jsondoc-wrapper'>
+            <JSONLink
+                endpoint={endpoint}
+            />
+            <DocLink
+                docURL={docURL}
+            />
+        </div>
+    );
 };
 
 export const OnePane = ({children}) => {
-  return (
-    <div id='dashboard' className='one-pane '>
-      {children}
-    </div>
-  );
+    return (
+        <div id='dashboard' className='one-pane '>
+            {children}
+        </div>
+    );
 };
 
 export const OnePaneHeader = ({showApiUrl, docURL, endpoint, crumbs, children}) => {
-  return (
-    <header>
-      <div className='flex-layout flex-row'>
-        <div id='breadcrumbs' className='flex-body'>
-          <Breadcrumbs crumbs={crumbs}/>
-        </div>
-        <div id='right-header'>
-          <div className="right-header-flex">
-            {children}
-          </div>
-        </div>
-        {showApiUrl ? <ApiBarWrapper docURL={docURL} endpoint={endpoint} /> : null}
-        <div id='notification-center-btn'>
-          <NotificationCenterButton />
-        </div>
-      </div>
-    </header>
-  );
+    const isIE11 = document.documentMode == 11;
+    let rightHeaderClass = "right-header-flex";
+    if (isIE11) {
+        rightHeaderClass += " " + rightHeaderClass + "--ie11";
+    }
+    return (
+        <header>
+            <div className='flex-layout flex-row'>
+                <div id='breadcrumbs' className='flex-body'>
+                    <Breadcrumbs crumbs={crumbs}/>
+                </div>
+                <div id='right-header'>
+                    <div className={rightHeaderClass}>
+                        {children}
+                    </div>
+                </div>
+                {showApiUrl ? <ApiBarWrapper docURL={docURL} endpoint={endpoint} /> : null}
+                <div id='notification-center-btn'>
+                    <NotificationCenterButton />
+                </div>
+            </div>
+        </header>
+    );
 };
 
 OnePaneHeader.defaultProps = {
-  showApiUrl: true,
-  crumbs: []
+    showApiUrl: true,
+    crumbs: []
 };
 
 OnePaneHeader.propTypes = {
-  docURL: PropTypes.string,
-  endpoint: PropTypes.string,
-  crumbs: PropTypes.array
+    docURL: PropTypes.string,
+    endpoint: PropTypes.string,
+    crumbs: PropTypes.array
 };
 
 export const OnePaneContent = ({children}) => {
-  return (
-    <div className='content-area container-fluid'>
-      <div id='tabs'></div>
-      <div id='dashboard-content' className='scrollable'>
-        {children}
-      </div>
-    </div>
-  );
+    return (
+        <div className='content-area container-fluid'>
+            <div id='tabs'></div>
+            <div id='dashboard-content' className='scrollable'>
+                {children}
+            </div>
+        </div>
+    );
 };
 
 export const OnePaneFooter = ({children}) => {
-  return (
-    <div className='faux__onepane-footer'>
-      {children}
-    </div>
-  );
+    return (
+        <div className='faux__onepane-footer'>
+            {children}
+        </div>
+    );
 };
 
 export const OnePaneSimpleLayout = ({component, docURL, endpoint, crumbs}) => {
-  return (
-    <OnePane>
-      <OnePaneHeader
-        crumbs={crumbs}
-        endpoint={endpoint}
-        docURL={docURL}
-      >
-      </OnePaneHeader>
-      <OnePaneContent>
-        {component}
-      </OnePaneContent>
-      <OnePaneFooter>
-      </OnePaneFooter>
-    </OnePane>
-  );
+    return (
+        <OnePane>
+            <OnePaneHeader
+                crumbs={crumbs}
+                endpoint={endpoint}
+                docURL={docURL}
+            >
+            </OnePaneHeader>
+            <OnePaneContent>
+                {component}
+            </OnePaneContent>
+            <OnePaneFooter>
+            </OnePaneFooter>
+        </OnePane>
+    );
 };
 
 export const DocEditorContent = ({children}) => {
-  return (
-    <div id="dashboard-content">
-      {children}
-    </div>
-  );
+    return (
+        <div id="dashboard-content">
+            {children}
+        </div>
+    );
 };
 
 export const DocEditorLayout = ({component, docURL, endpoint, crumbs}) => {
-  return (
-    <div id="dashboard" className="one-pane doc-editor-page">
-        <OnePaneHeader
-          crumbs={crumbs}
-          endpoint={endpoint}
-          docURL={docURL}
-        >
-        </OnePaneHeader>
-      <DocEditorContent>
-        {component}
-      </DocEditorContent>
-    </div>
-  );
+    return (
+        <div id="dashboard" className="one-pane doc-editor-page">
+            <OnePaneHeader
+                crumbs={crumbs}
+                endpoint={endpoint}
+                docURL={docURL}
+            >
+            </OnePaneHeader>
+            <DocEditorContent>
+                {component}
+            </DocEditorContent>
+        </div>
+    );
 };

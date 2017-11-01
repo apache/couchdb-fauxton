@@ -18,134 +18,134 @@ import ReactDOM from 'react-dom';
 let pollIntervalId;
 
 export const clearPollCounter = () => {
-  if (pollIntervalId) {
-    window.clearInterval(pollIntervalId);
-  }
+    if (pollIntervalId) {
+        window.clearInterval(pollIntervalId);
+    }
 };
 
 export const resetPollCounter = (time, cb) => {
-  clearPollCounter();
-  pollIntervalId = window.setInterval(cb, time);
+    clearPollCounter();
+    pollIntervalId = window.setInterval(cb, time);
 };
 
 const getCountdown = (secsString, units, max, min) => {
-  const secs = parseInt(secsString, 10);
-  if (secs === 0 || secs > max || secs < min) {
-    return 'off';
-  }
+    const secs = parseInt(secsString, 10);
+    if (secs === 0 || secs > max || secs < min) {
+        return 'off';
+    }
 
-  if (secs < 60 && units === 'minute') {
-    return `${secs} seconds`;
-  }
+    if (secs < 60 && units === 'minute') {
+        return `${secs} seconds`;
+    }
 
-  let displayValue = secs;
-  if (units === 'minute') {
-    displayValue = Math.floor(secs / 60);
-  }
-  return `${displayValue} ${displayValue === 1 ? units : `${units}s`}`;
+    let displayValue = secs;
+    if (units === 'minute') {
+        displayValue = Math.floor(secs / 60);
+    }
+    return `${displayValue} ${displayValue === 1 ? units : `${units}s`}`;
 };
 
 export class Polling extends React.Component {
-  constructor (props) {
-    super(props);
-    this.state = {
-      value: this.props.startValue
-    };
-  }
-
-  componentDidMount () {
-    this.setPollingCounter(this.state.value);
-  }
-
-  componentWillUnmount () {
-    clearPollCounter();
-  }
-
-  setPollingCounter (value) {
-    const {min, max, onPoll} = this.props;
-    this.setState({value: value});
-
-    if (value === 0 || value < min || value > max) {
-      clearPollCounter();
-      return;
+    constructor (props) {
+        super(props);
+        this.state = {
+            value: this.props.startValue
+        };
     }
 
-    resetPollCounter(value * 1000, () => onPoll());
-  }
-
-  updatePollingFreq (e) {
-    this.setPollingCounter(parseInt(e.target.value, 10));
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (this.props.startValue !== nextProps.startValue) {
-      this.setPollingCounter(nextProps.startValue);
+    componentDidMount () {
+        this.setPollingCounter(this.state.value);
     }
-  }
 
-  render () {
-    const {
-      stepSize,
-      min,
-      max,
-      valueUnits
-    } = this.props;
+    componentWillUnmount () {
+        clearPollCounter();
+    }
 
-    const {value} = this.state;
+    setPollingCounter (value) {
+        const {min, max, onPoll} = this.props;
+        this.setState({value: value});
 
-    const pollValue = getCountdown(value, valueUnits, max, min);
-    const pollStyle = pollValue === 'off' ? 'faux__polling-info-value--off' : 'faux__polling-info-value--active';
-    return (
-      <div className='faux__polling'>
-        <div className='faux__polling-info'>
-          <span className='faux__polling-info-text'>Polling Interval</span>
-          <span className={`faux__polling-info-value faux__polling-info-value ${pollStyle}`}>{pollValue}</span>
-        </div>
-        <input
-          onChange={this.updatePollingFreq.bind(this)}
-          className='faux__polling-info-slider'
-          type='range'
-          value={value}
-          min={min}
-          max={max + stepSize}
-          step={stepSize}
-        />
-      </div>
-    );
-  }
+        if (value === 0 || value < min || value > max) {
+            clearPollCounter();
+            return;
+        }
+
+        resetPollCounter(value * 1000, () => onPoll());
+    }
+
+    updatePollingFreq (e) {
+        this.setPollingCounter(parseInt(e.target.value, 10));
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (this.props.startValue !== nextProps.startValue) {
+            this.setPollingCounter(nextProps.startValue);
+        }
+    }
+
+    render () {
+        const {
+            stepSize,
+            min,
+            max,
+            valueUnits
+        } = this.props;
+
+        const {value} = this.state;
+
+        const pollValue = getCountdown(value, valueUnits, max, min);
+        const pollStyle = pollValue === 'off' ? 'faux__polling-info-value--off' : 'faux__polling-info-value--active';
+        return (
+            <div className='faux__polling'>
+                <div className='faux__polling-info'>
+                    <span className='faux__polling-info-text'>Polling Interval</span>
+                    <span className={`faux__polling-info-value faux__polling-info-value ${pollStyle}`}>{pollValue}</span>
+                </div>
+                <input
+                    onChange={this.updatePollingFreq.bind(this)}
+                    className='faux__polling-info-slider'
+                    type='range'
+                    value={value}
+                    min={min}
+                    max={max + stepSize}
+                    step={stepSize}
+                />
+            </div>
+        );
+    }
 }
 
 Polling.defaultProps = {
-  startValue: 0,
-  min: 0,
-  valueUnits: 'minute'
+    startValue: 0,
+    min: 0,
+    valueUnits: 'minute'
 };
 
 Polling.propTypes = {
-  startValue: PropTypes.number,
-  valueUnits: PropTypes.string,
-  min: PropTypes.number,
-  max: PropTypes.number.isRequired,
-  stepSize: PropTypes.number.isRequired,
-  onPoll: PropTypes.func.isRequired,
+    startValue: PropTypes.number,
+    valueUnits: PropTypes.string,
+    min: PropTypes.number,
+    max: PropTypes.number.isRequired,
+    stepSize: PropTypes.number.isRequired,
+    onPoll: PropTypes.func.isRequired,
 };
 
 export const RefreshBtn = ({refresh}) =>
-  <div className="faux__refresh-btn">
-    <a
-      className="faux__refresh-link"
-      href="#"
-      data-bypass="true"
-      onClick={e => {
-        e.preventDefault();
-        refresh();
-      }}
-    >
-      <i className="faux__refresh-icon fonticon-arrows-cw"></i>
-      Refresh
-    </a>
-  </div>;
+    <div className="faux__refresh-btn">
+        <a
+            className="faux__refresh-link"
+            href="#"
+            data-bypass="true"
+            onClick={e => {
+                e.preventDefault();
+                refresh();
+            }}
+        >
+            <i className="faux__refresh-icon fonticon-arrows-cw"></i>
+            Refresh
+        </a>
+    </div>;
 
 RefreshBtn.propTypes = {
-  refresh: PropTypes.func.isRequired
+    refresh: PropTypes.func.isRequired
 };
