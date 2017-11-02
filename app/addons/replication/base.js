@@ -24,7 +24,7 @@ replication.initialize = function () {
 
 FauxtonAPI.registerUrls('replication', {
   app: (db) => {
-    return '#/replication/' + db;
+    return '#/replication/_create/' + db;
   },
   api: () => {
     return window.location.origin + '/_replicator';
