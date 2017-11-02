@@ -158,7 +158,7 @@ export default {
         var route = FauxtonAPI.urls('allDocs', 'app', app.utils.safeURLName(databaseName), '?limit=' + Resources.DocLimit);
         app.router.navigate(route, { trigger: true });
       }
-    ).error(function (xhr) {
+    ).fail(function (xhr) {
         var responseText = JSON.parse(xhr.responseText).reason;
         FauxtonAPI.addNotification({
           msg: 'Create database failed: ' + responseText,
