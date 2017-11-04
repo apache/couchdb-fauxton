@@ -159,7 +159,7 @@ module.exports = function (grunt) {
 
     exec: {
       start_nightWatch: {
-        command: __dirname + '/node_modules/nightwatch/bin/nightwatch' +
+        command: 'node ' + __dirname + '/node_modules/nightwatch/bin/nightwatch' +
         ' -c ' + __dirname + '/test/nightwatch_tests/nightwatch.json',
         options: {
           maxBuffer: 1000 * 1024
