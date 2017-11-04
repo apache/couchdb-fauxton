@@ -17,6 +17,7 @@ import Stores from "./stores";
 import Resources from "./resources";
 import Actions from "./actions";
 import Components from "../components/react-components";
+import Helpers from '../../helpers';
 
 const {TabElement, TabElementWrapper, Polling} = Components;
 
@@ -388,9 +389,8 @@ export class ActiveTasksPollingWidgetController extends React.Component {
   state = this.getStoreState();
 
   render() {
-    const isIE1X = document.documentMode == 11 || document.documentMode == 10;
     let activePollingClass = "active-tasks__polling-wrapper";
-    if (isIE1X) {
+    if (Helpers.isIE1X()) {
       activePollingClass += " " + activePollingClass + "--ie1X";
     }
     return (
