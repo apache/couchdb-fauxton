@@ -52,6 +52,7 @@ export class Polling extends React.Component {
     this.state = {
       value: this.props.startValue
     };
+    this.updatePollingFreq = this.updatePollingFreq.bind(this);
   }
 
   componentDidMount () {
@@ -103,7 +104,7 @@ export class Polling extends React.Component {
           <span className={`faux__polling-info-value faux__polling-info-value ${pollStyle}`}>{pollValue}</span>
         </div>
         <Range
-          onChange={this.updatePollingFreq.bind(this)}
+          onChange={this.updatePollingFreq}
           className='faux__polling-info-slider'
           type='range'
           value={value}
