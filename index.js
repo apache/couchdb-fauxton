@@ -8,6 +8,8 @@ var dist_dir = process.env.DIST || __dirname + '/dist/release/';
 
 module.exports = function (options) {
   // Options
+  var self = this;
+  var proxy;
   var setContentSecurityPolicy = options.contentSecurityPolicy;
   var port = options.port;
   var proxyUrl = options.couchdb;
@@ -35,13 +37,13 @@ module.exports = function (options) {
   }
 
   // create proxy to couch for all couch requests
-  var proxy = httpProxy.createServer({
+  self.proxy = proxy = httpProxy.createServer({
     secure: false,
     changeOrigin: true,
     target: proxyUrl
   });
 
-  http.createServer(function (req, res) {
+  self.server = http.createServer(function (req, res) {
     var isDocLink = /_utils\/docs/.test(req.url);
     var url = req.url.split(/\?v=|\?noCache/)[0].replace('_utils', '');
     var accept = [];
@@ -97,4 +99,11 @@ module.exports = function (options) {
   });
 
   console.log('Listening on ' + port);
+
+  self.close = function() {
+    self.server.close();
+    self.proxy.close();
+  };
+
+  return self;
 };
