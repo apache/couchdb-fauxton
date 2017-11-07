@@ -8,8 +8,6 @@ var dist_dir = process.env.DIST || __dirname + '/dist/release/';
 
 module.exports = function (options) {
   // Options
-  var self = this;
-  var proxy;
   var setContentSecurityPolicy = options.contentSecurityPolicy;
   var port = options.port;
   var proxyUrl = options.couchdb;
@@ -37,13 +35,13 @@ module.exports = function (options) {
   }
 
   // create proxy to couch for all couch requests
-  self.proxy = proxy = httpProxy.createServer({
+  this.proxy = httpProxy.createServer({
     secure: false,
     changeOrigin: true,
     target: proxyUrl
   });
 
-  self.server = http.createServer(function (req, res) {
+  this.server = http.createServer((req, res) => {
     var isDocLink = /_utils\/docs/.test(req.url);
     var url = req.url.split(/\?v=|\?noCache/)[0].replace('_utils', '');
     var accept = [];
@@ -68,16 +66,16 @@ module.exports = function (options) {
     var urlObj = urlLib.parse(req.url);
     req.headers.host = urlObj.host;
 
-    proxy.web(req, res);
+    this.proxy.web(req, res);
   }).listen(port, '0.0.0.0');
 
-  proxy.on('error', () => {
+  this.proxy.on('error', () => {
     // don't explode on cancelled requests
   });
 
   //Remove Secure on the cookie if the proxy is communicating to a CouchDB instance
   // via https.
-  proxy.on('proxyRes', function (proxyRes) {
+  this.proxy.on('proxyRes', function (proxyRes) {
     if (proxyRes.headers['set-cookie']) {
       proxyRes.headers['set-cookie'][0] = proxyRes.headers["set-cookie"][0].replace('Secure', '');
     }
@@ -100,10 +98,10 @@ module.exports = function (options) {
 
   console.log('Listening on ' + port);
 
-  self.close = function() {
-    self.server.close();
-    self.proxy.close();
+  this.close = function() {
+    this.server.close();
+    this.proxy.close();
   };
 
-  return self;
+  return this;
 };
