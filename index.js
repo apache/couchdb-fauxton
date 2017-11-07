@@ -75,7 +75,7 @@ module.exports = function (options) {
 
   //Remove Secure on the cookie if the proxy is communicating to a CouchDB instance
   // via https.
-  this.proxy.on('proxyRes', function (proxyRes) {
+  this.proxy.on('proxyRes', (proxyRes) => {
     if (proxyRes.headers['set-cookie']) {
       proxyRes.headers['set-cookie'][0] = proxyRes.headers["set-cookie"][0].replace('Secure', '');
     }
@@ -98,7 +98,7 @@ module.exports = function (options) {
 
   console.log('Listening on ' + port);
 
-  this.close = function() {
+  this.close = () => {
     this.server.close();
     this.proxy.close();
   };
