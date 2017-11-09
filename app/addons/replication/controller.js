@@ -249,6 +249,8 @@ export default class ReplicationController extends React.Component {
   getCrumbs () {
     if (this.state.tabSection === 'new replication') {
       return [{'name': 'Job Configuration'}];
+    } else {
+      return [{'name': 'Replication'}];
     }
 
     return [];
