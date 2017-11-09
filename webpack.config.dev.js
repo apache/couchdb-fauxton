@@ -20,7 +20,7 @@ const settings = require('./tasks/helper')
 
 module.exports = {
   entry: {
-    bundle: './app/main.js' //Our starting point for our development.
+    bundle: ['core-js/fn/array', 'core-js/fn/symbol', 'core-js/fn/promise', './app/main.js'] //Our starting point for our development.
   },
 
   output: {

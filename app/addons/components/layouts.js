@@ -17,6 +17,7 @@ import ReactDOM from 'react-dom';
 import {NotificationCenterButton} from '../fauxton/notifications/notifications';
 import {JSONLink, DocLink} from './components/apibar';
 import {Breadcrumbs} from './header-breadcrumbs';
+import Helpers from '../../helpers';
 
 export const ApiBarWrapper = ({docURL, endpoint}) => {
   return (
@@ -40,6 +41,10 @@ export const OnePane = ({children}) => {
 };
 
 export const OnePaneHeader = ({showApiUrl, docURL, endpoint, crumbs, children}) => {
+  let rightHeaderClass = "right-header-flex";
+  if (Helpers.isIE1X()) {
+      rightHeaderClass += " " + rightHeaderClass + "--ie1X";
+  }
   return (
     <header>
       <div className='flex-layout flex-row'>
@@ -47,7 +52,7 @@ export const OnePaneHeader = ({showApiUrl, docURL, endpoint, crumbs, children}) 
           <Breadcrumbs crumbs={crumbs}/>
         </div>
         <div id='right-header'>
-          <div className="right-header-flex">
+          <div className={rightHeaderClass}>
             {children}
           </div>
         </div>

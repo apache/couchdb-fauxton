@@ -14,6 +14,7 @@ import PropTypes from 'prop-types';
 
 import React from 'react';
 import ReactDOM from 'react-dom';
+import Range from 'react-range';
 
 let pollIntervalId;
 
@@ -51,6 +52,7 @@ export class Polling extends React.Component {
     this.state = {
       value: this.props.startValue
     };
+    this.updatePollingFreq = this.updatePollingFreq.bind(this);
   }
 
   componentDidMount () {
@@ -101,8 +103,8 @@ export class Polling extends React.Component {
           <span className='faux__polling-info-text'>Polling Interval</span>
           <span className={`faux__polling-info-value faux__polling-info-value ${pollStyle}`}>{pollValue}</span>
         </div>
-        <input
-          onChange={this.updatePollingFreq.bind(this)}
+        <Range
+          onChange={this.updatePollingFreq}
           className='faux__polling-info-slider'
           type='range'
           value={value}
