@@ -280,12 +280,15 @@ export class ReplicationTable extends React.Component {
   }
 
   sort(column, descending, docs) {
+    let orderChanged = false;
     const sorted = docs.sort((a, b) => {
       if (a[column] < b[column]) {
+        orderChanged = true;
         return -1;
       }
 
       if (a[column] > b[column]) {
+        orderChanged = true;
         return 1;
       }
 
@@ -293,7 +296,7 @@ export class ReplicationTable extends React.Component {
 
     });
 
-    if (!descending) {
+    if (!descending && orderChanged) {
       sorted.reverse();
     }
 

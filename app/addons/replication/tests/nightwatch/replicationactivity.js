@@ -94,5 +94,44 @@ module.exports = {
       .setValue('.replication__filter-input', 'filter')
       .waitForElementPresent('a[href="#/database/_replicator/existing-doc-filter2"]', waitTime, true)
       .end();
+  },
+  "Action click doesn't change doc's order": client =>{
+      const waitTime = client.globals.maxWaitTime;
+      const baseUrl = client.globals.test_settings.launch_url;
+      const firstRowSelector = '.replication__table-row:nth-of-type(1)';
+      let firstDoc;
+
+      const replicatorDoc1 = {
+          _id: 'existing-doc-id-filter1',
+          source: "http://source-db.com",
+          target: "http://target-db.com"
+      };
+
+      const replicatorDoc2 = {
+          _id: 'existing-doc-filter2',
+          source: "http://source-db2.com",
+          target: "http://target-db.com"
+      };
+      client
+          .deleteDatabase('_replicator')
+          .createDatabase('_replicator')
+          .createDocument(replicatorDoc1._id, '_replicator', replicatorDoc1)
+          .createDocument(replicatorDoc2._id, '_replicator', replicatorDoc2)
+          .loginToGUI()
+          .waitForElementNotPresent('.global-notification .fonticon-cancel', waitTime, false)
+          .url(baseUrl + '/#replication')
+          .waitForElementNotPresent('.load-lines', waitTime, true)
+          .waitForElementVisible(firstRowSelector, waitTime, true)
+          .getText(firstRowSelector + ' td:nth-of-type(2)', function(result) {
+            firstDoc = result.value;
+          })
+          .clickWhenVisible(firstRowSelector + ' .replication__row-btn.icon-trash', waitTime, true)
+          .clickWhenVisible('.replication_delete-doc-modal.modal-dialog .modal-footer .cancel-link', waitTime, true)
+          .waitForElementVisible(firstRowSelector, waitTime, true)
+          .getText(firstRowSelector + ' td:nth-of-type(2)', function(result) {
+              this.verify.ok(result.value === firstDoc,
+                  'Checking if the order was reserved if no documents were sorted');
+          })
+          .end();
   }
 };
