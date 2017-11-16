@@ -29,6 +29,18 @@ var FauxtonAPI = {
       link: link
     });
   },
+  showHeaderLinkBadge: function (link) {
+    FauxtonAPI.dispatch({
+      type: 'SHOW_NAVBAR_LINK_BADGE',
+      link: link
+    });
+  },
+  hideHeaderLinkBadge: function (link) {
+    FauxtonAPI.dispatch({
+      type: 'HIDE_NAVBAR_LINK_BADGE',
+      link: link
+    });
+  },
   addNotification: function (options) {
 
     options = _.extend({

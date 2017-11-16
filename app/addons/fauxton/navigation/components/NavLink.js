@@ -26,12 +26,17 @@ const NavLink = ({link, active, isMinimized}) => {
     {'faux-navbar--narrow': isMinimized}
   );
 
+  // const iconBadgeClass = link.badge ?  : '';
   return (
     <a className={linkClass} href={link.href} target={link.target ? '_blank' : null} data-bypass={link.target ? 'true' : null}>
       <div data-nav-name={link.title} className="faux-navbar__itemarea">
 
         {!!link.icon ?
-          <i className={classNames(link.icon, 'fonticon faux-navbar__icon')}></i> :
+          <i className={classNames(
+            link.icon,
+            'fonticon faux-navbar__icon',
+            {'faux-navbar__icon-badge': link.badge})}>
+          </i> :
           null
         }
         {isMinimized ?
