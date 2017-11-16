@@ -31,6 +31,7 @@ module.exports = {
       .clickWhenVisible('.fonticon-table')
 
       .waitForElementVisible('.tableview-checkbox-cell', waitTime, false)
+      .waitForElementVisible('.table', waitTime, false)
       .getText('.table', function (result) {
         var data = result.value;
 
@@ -61,6 +62,7 @@ module.exports = {
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
       .assert.containsText('button.active', 'Metadata')
       .waitForElementVisible('.tableview-checkbox-cell', waitTime, false)
+      .waitForElementVisible('.table', waitTime, false)
       .getText('.table', function (result) {
         var data = result.value;
 
