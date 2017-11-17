@@ -47,4 +47,15 @@ describe('TabWindowWrapper', () => {
     const wrapper = mount(<TabWindowWrapper tabs={tabs} selectedTab={"Tab2"}/>);
     expect(wrapper.find('.tab-element-checked .tab-element-content').html()).toMatch(/Tab2/);
   });
+
+  it('shows tab badge', () => {
+    const tabNoBadge = [{name: 'Tab1', component: mock, route: 'tab1'}];
+    const wrapperNoBadge = mount(<TabWindowWrapper tabs={tabNoBadge} selectedTab={"Tab1"}/>);
+    expect(wrapperNoBadge.find('.tab-element-badge').length).toBe(0);
+
+    const tabWithBadge = [{name: 'Tab1', component: mock, route: 'tab1', badgeText: 'new'}];
+    const wrapperWithBadge = mount(<TabWindowWrapper tabs={tabWithBadge} selectedTab={"Tab1"}/>);
+    expect(wrapperWithBadge.find('.tab-element-badge').length).toBe(1);
+    expect(wrapperWithBadge.find('.tab-element-badge').text()).toBe('new');
+  });
 });
