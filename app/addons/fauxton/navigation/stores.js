@@ -137,7 +137,7 @@ Stores.NavBarStore = FauxtonAPI.Store.extend({
 
   showLinkBadge (link) {
     const links = this.getLinkSection(link);
-    const selectedLink = _.find(links, function (oldLink) {
+    const selectedLink = links.find(function (oldLink) {
       return oldLink.title === link.title;
     });
     if (selectedLink) {
@@ -147,7 +147,7 @@ Stores.NavBarStore = FauxtonAPI.Store.extend({
 
   hideLinkBadge (link) {
     const links = this.getLinkSection(link);
-    const selectedLink = _.find(links, function (oldLink) {
+    const selectedLink = links.find(function (oldLink) {
       return oldLink.title === link.title;
     });
 

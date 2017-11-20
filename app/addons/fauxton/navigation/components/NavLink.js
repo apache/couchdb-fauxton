@@ -26,23 +26,26 @@ const NavLink = ({link, active, isMinimized}) => {
     {'faux-navbar--narrow': isMinimized}
   );
 
-  // const iconBadgeClass = link.badge ?  : '';
+  const linkTitle = isMinimized ?
+    null :
+    <span className="faux-navbar__text">{link.title}</span>;
+
+  let linkIcon = null;
+  if (!!link.icon) {
+    linkIcon = (
+      <i className={classNames(
+        link.icon,
+        'fonticon faux-navbar__icon',
+        {'faux-navbar__icon-badge': link.badge})}>
+      </i>
+    );
+  }
+
   return (
     <a className={linkClass} href={link.href} target={link.target ? '_blank' : null} data-bypass={link.target ? 'true' : null}>
       <div data-nav-name={link.title} className="faux-navbar__itemarea">
-
-        {!!link.icon ?
-          <i className={classNames(
-            link.icon,
-            'fonticon faux-navbar__icon',
-            {'faux-navbar__icon-badge': link.badge})}>
-          </i> :
-          null
-        }
-        {isMinimized ?
-          null :
-          <span className="faux-navbar__text">{link.title}</span>
-        }
+        {linkIcon}
+        {linkTitle}
       </div>
     </a>
   );
