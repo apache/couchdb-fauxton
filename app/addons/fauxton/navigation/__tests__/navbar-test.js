@@ -40,4 +40,27 @@ describe('Navigation Bar', () => {
     expect(NavBar.find('.faux-navbar').length).toBe(1);
   });
 
+  it('can display items with icon badge', () => {
+    FauxtonAPI.dispatch({
+      type: ActionTypes.ADD_NAVBAR_LINK,
+      link: {
+        href: "#/_with_badge",
+        title: "WithBadge",
+        icon: "fonticon-database",
+        badge: true
+      }
+    });
+    FauxtonAPI.dispatch({
+      type: ActionTypes.ADD_NAVBAR_LINK,
+      link: {
+        href: "#/_without_badge",
+        title: "WithoutBadge",
+        icon: "fonticon-database"
+      }
+    });
+    const NavBar = mount(<NavBarContainer />);
+    expect(NavBar.find('div[data-nav-name="WithoutBadge"] i.faux-navbar__icon-badge').length, 0);
+    expect(NavBar.find('div[data-nav-name="WithBadge"] i.faux-navbar__icon-badge').length, 1);
+  });
+
 });

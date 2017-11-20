@@ -135,6 +135,27 @@ Stores.NavBarStore = FauxtonAPI.Store.extend({
     oldLink.href = link.href;
   },
 
+  showLinkBadge (link) {
+    const links = this.getLinkSection(link);
+    const selectedLink = links.find(function (oldLink) {
+      return oldLink.title === link.title;
+    });
+    if (selectedLink) {
+      selectedLink.badge = true;
+    }
+  },
+
+  hideLinkBadge (link) {
+    const links = this.getLinkSection(link);
+    const selectedLink = links.find(function (oldLink) {
+      return oldLink.title === link.title;
+    });
+
+    if (selectedLink) {
+      selectedLink.badge = false;
+    }
+  },
+
   getVersion () {
     return this._version;
   },
@@ -175,6 +196,14 @@ Stores.NavBarStore = FauxtonAPI.Store.extend({
 
       case ActionTypes.REMOVE_NAVBAR_LINK:
         this.removeLink(action.link);
+      break;
+
+      case ActionTypes.SHOW_NAVBAR_LINK_BADGE:
+        this.showLinkBadge(action.link);
+      break;
+
+      case ActionTypes.HIDE_NAVBAR_LINK_BADGE:
+        this.hideLinkBadge(action.link);
       break;
 
       case ActionTypes.NAVBAR_SET_VERSION_INFO:
