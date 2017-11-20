@@ -15,10 +15,13 @@ import PropTypes from 'prop-types';
 import React from "react";
 import ReactDOM from "react-dom";
 
-export const TabElement = ({selected, text, onChange, iconClass}) => {
+export const TabElement = ({selected, text, onChange, iconClass, badgeText}) => {
 
   const additionalClass = selected ? 'tab-element-checked' : '';
-
+  let badge = null;
+  if (badgeText) {
+    badge = <span className="tab-element-badge">{badgeText}</span>;
+  }
   return (
     <li className={`component-tab-element ${additionalClass}`}>
 
@@ -35,6 +38,7 @@ export const TabElement = ({selected, text, onChange, iconClass}) => {
             onChange={onChange} />
 
           {text}
+          {badge}
         </div>
       </label>
     </li>
@@ -46,6 +50,7 @@ TabElement.propTypes = {
   text: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
   iconClass: PropTypes.string,
+  badgeText: PropTypes.string
 };
 
 export const TabElementWrapper = ({children}) => {
