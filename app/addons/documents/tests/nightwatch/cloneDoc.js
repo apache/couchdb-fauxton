@@ -15,7 +15,7 @@ module.exports = {
   'Clones a document via Editor': function (client) {
     const waitTime = client.globals.maxWaitTime;
     const newDatabaseName = client.globals.testDatabaseName;
-    const newDocumentName = 'clone_doc_doc';
+    const newDocumentName = 'clone_doc/doc';
     const baseUrl = client.globals.test_settings.launch_url;
 
     client

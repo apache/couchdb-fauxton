@@ -1,6 +1,3 @@
-import FauxtonAPI from "../../../core/api";
-import app from "../../../app";
-
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License. You may obtain a copy of
 // the License at
@@ -13,9 +10,9 @@ import app from "../../../app";
 // License for the specific language governing permissions and limitations under
 // the License.
 
-
+import FauxtonAPI from "../../../core/api";
+import app from "../../../app";
 import PropTypes from 'prop-types';
-
 import React from "react";
 import { Dropdown, MenuItem } from "react-bootstrap";
 import ReactDOM from "react-dom";
