@@ -16,6 +16,7 @@ module.exports = {
     const waitTime = client.globals.maxWaitTime;
     const newDatabaseName = client.globals.testDatabaseName;
     const newDocumentName = 'clone_doc_doc';
+    const clonedDocName = 'cloned/document';
     const baseUrl = client.globals.test_settings.launch_url;
 
     client
@@ -32,13 +33,13 @@ module.exports = {
       .clickWhenVisible('.clone-doc-modal input')
 
       .clearValue('.clone-doc-modal input')
-      .setValue('.clone-doc-modal input', ['ente'])
+      .setValue('.clone-doc-modal input', [clonedDocName])
 
       .clickWhenVisible('.clone-doc-modal button.btn.btn-primary')
       .closeNotification()
 
       .waitForAttribute('.faux-header__breadcrumbs .faux-header__breadcrumbs-element:last-child', 'textContent', function (docContents) {
-        return 'ente' === docContents.trim();
+        return clonedDocName === docContents.trim();
       })
 
       .url(`${baseUrl}'/'${newDatabaseName}/${newDocumentName}`)
@@ -46,7 +47,7 @@ module.exports = {
       .waitForElementNotPresent('.loading-lines', waitTime, false)
       .getText('#editor-container', function (result) {
         const data = result.value;
-        const isCreatedDocumentPresent = data.indexOf('ente') !== -1;
+        const isCreatedDocumentPresent = data.indexOf(clonedDocName) !== -1;
 
         this.verify.ok(
           isCreatedDocumentPresent,
