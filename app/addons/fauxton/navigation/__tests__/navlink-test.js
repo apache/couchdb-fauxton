@@ -45,4 +45,27 @@ describe('Navigation Bar', () => {
       expect(linkEl.find('span.faux-navbar__text').length).toBe(0);
     });
   });
+
+  describe('Link icon badge', () => {
+    const aLinkNoBadge = {
+      href: "#/_all_dbs",
+      title: "Databases",
+      icon: "fonticon-database"
+    };
+    it('is not displayed when not set', () => {
+      const linkEl = mount(<NavLink link={aLinkNoBadge} active={"Databases"} isMinimized={false} />);
+      expect(linkEl.find('i.faux-navbar__icon-badge').length).toBe(0);
+    });
+
+    const aLinkWithBadge = {
+      href: "#/_all_dbs",
+      title: "Databases",
+      icon: "fonticon-database",
+      badge: true
+    };
+    it('is displayed when set to true', () => {
+      const linkEl = mount(<NavLink link={aLinkWithBadge} active={"Databases"} isMinimized={false} />);
+      expect(linkEl.find('i.faux-navbar__icon-badge').length).toBe(1);
+    });
+  });
 });
