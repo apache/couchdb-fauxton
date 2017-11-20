@@ -12,7 +12,6 @@
 
 /* global FormData */
 
-import app from "../../../app";
 import FauxtonAPI from "../../../core/api";
 import ActionTypes from "./actiontypes";
 
@@ -116,14 +115,11 @@ function hideCloneDocModal () {
 }
 
 function cloneDoc (database, doc, newId) {
-  const docId = app.utils.getSafeIdForDoc(newId);
 
   hideCloneDocModal();
 
-  doc.copy(docId).then(() => {
-    doc.set({ _id: docId });
-
-    FauxtonAPI.navigate('/database/' + database.safeID() + '/' + docId, { trigger: true });
+  doc.copy(newId).then(() => {
+    FauxtonAPI.navigate('/database/' + database.safeID() + '/' + encodeURIComponent(newId), { trigger: true });
 
     FauxtonAPI.addNotification({
       msg: 'Document has been duplicated.'

@@ -183,11 +183,12 @@ Documents.Doc = FauxtonAPI.Model.extend({
   },
 
   copy: function (copyId) {
-    return $.ajax({
-      type: 'COPY',
-      url: '/' + this.database.safeID() + '/' + this.safeID(),
-      headers: {Destination: copyId}
+    const attrs = Object.assign({}, this.attributes, {_id: copyId});
+    delete attrs._rev;
+    const clonedDoc = new this.constructor(attrs, {
+      database: this.database
     });
+    return clonedDoc.save();
   },
 
   isNewDoc: function () {
