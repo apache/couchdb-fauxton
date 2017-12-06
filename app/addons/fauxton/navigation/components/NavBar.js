@@ -95,7 +95,6 @@ class NavBar extends Component {
             </div>
           </div>
         </nav>
-        <div id="primary-nav-right-shadow"/>
       </div>
     );
   }
