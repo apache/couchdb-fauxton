@@ -10,12 +10,13 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 import $ from 'jquery';
+import app from "../../../app";
 import FauxtonAPI from "../../../core/api";
 
 export default {
   fetchAllDocsWithKey: (database) => {
     return (id, callback) => {
-      const query = '?' + $.param({
+      const query = '?' + app.utils.queryParams({
         startkey: JSON.stringify(id),
         endkey: JSON.stringify(id + "\u9999"),
         limit: 30

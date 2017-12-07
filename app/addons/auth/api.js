@@ -69,7 +69,7 @@ export function getSession() {
 export function login(body) {
   return formEncoded(app.host + "/_session", {
     method: "POST",
-    body: $.param(body)
+    body: app.utils.queryParams(body)
   });
 }
 
@@ -77,7 +77,7 @@ export function logout() {
   loggedInSessionPromise = null;
   return formEncoded(app.host + "/_session", {
     method: "DELETE",
-    body: $.param({ username: "_", password: "_" })
+    body: app.utils.queryParams({ username: "_", password: "_" })
   });
 }
 

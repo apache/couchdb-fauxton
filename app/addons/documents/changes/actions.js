@@ -58,7 +58,7 @@ export default {
       params.feed = 'longpoll';
     }
 
-    const query = $.param(params);
+    const query = app.utils.queryParams(params);
     const db = app.utils.safeURLName(changesStore.getDatabaseName());
     const endpoint = FauxtonAPI.urls('changes', 'server', db, '?' + query);
     currentRequest = $.getJSON(endpoint);

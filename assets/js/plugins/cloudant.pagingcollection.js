@@ -13,8 +13,7 @@
 import _ from 'lodash';
 import $ from 'jquery';
 import Backbone from "backbone";
-
-const $param = $.param;
+import app from '../../../app/app';
 
 //PagingCollection
 //----------------
@@ -134,7 +133,7 @@ export const PagingCollection = Backbone.Collection.extend({
       }
     }, this);
 
-    this.url = url + '?' + $param(params);
+    this.url = url + '?' + app.utils.queryParams(params);
   },
 
   fetch: function () {

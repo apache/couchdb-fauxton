@@ -88,7 +88,7 @@ Databases.Changes = FauxtonAPI.Collection.extend({
   url: function (context) {
     var query = "";
     if (this.params) {
-      query = "?" + $.param(this.params);
+      query = "?" + app.utils.queryParams(this.params);
     }
 
     if (!context) { context = 'server';}
