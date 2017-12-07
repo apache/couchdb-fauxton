@@ -322,7 +322,7 @@ class UploadModal extends React.Component {
     Actions.uploadAttachment({
       doc: this.props.doc,
       rev: this.props.doc.get('_rev'),
-      files: $(ReactDOM.findDOMNode(this.refs.attachments))[0].files
+      files: this.attachments.files
     });
   };
 
@@ -351,7 +351,7 @@ class UploadModal extends React.Component {
                 Select a file to upload as an attachment to this document. Uploading a file saves the document as a new
                 revision.
               </p>
-              <input ref="attachments" type="file" name="_attachments" />
+              <input ref={el => this.attachments = el} type="file" name="_attachments" />
               <br />
             </form>
 

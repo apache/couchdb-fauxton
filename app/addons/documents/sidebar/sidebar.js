@@ -154,11 +154,11 @@ class IndexSection extends React.Component {
             {indexName}
           </a>
           <OverlayTrigger
-            ref={"indexMenu-" + index}
             trigger="click"
             onEnter={this.setPlacement.bind(this, this.props.designDocName + '_' + indexName)}
             placement={this.state.placement}
             rootClose={true}
+            ref={overlay => this.itemOverlay = overlay}
             overlay={
               <Popover id="index-menu-component-popover">
                 <ul>
@@ -187,8 +187,7 @@ class IndexSection extends React.Component {
   indexAction = (action, params, e) => {
     e.preventDefault();
 
-    // ensures the menu gets closed. The hide() on the ref doesn't consistently close it
-    $('body').trigger('click');
+    this.itemOverlay.hide();
 
     switch (action) {
       case 'delete':

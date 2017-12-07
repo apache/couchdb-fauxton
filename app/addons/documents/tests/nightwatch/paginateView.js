@@ -43,7 +43,7 @@ module.exports = {
       .waitForElementPresent('.prettyprint', waitTime, false)
       .waitForElementNotPresent('div[data-id="document_9"]', waitTime)
       .execute(function () {
-        return $('.doc-row').length;
+        return document.querySelectorAll('.doc-row').length;
       }, function (result) {
         client.assert.equal(result.value, 10);
       })

@@ -108,15 +108,15 @@ class GlobalNotifications extends React.Component {
   };
 
   componentDidMount() {
-    $(document).on('keydown.notificationClose', this.onKeyDown);
+    document.addEventListener('keydown', this.onKeyDown);
   }
 
   componentWillUnmount() {
-    $(document).off('keydown.notificationClose', this.onKeyDown);
+    document.removeEventListener('keydown', this.onKeyDown);
   }
 
   onKeyDown = (e) => {
-    var code = e.keyCode || e.which;
+    const code = e.keyCode || e.which;
     if (code === 27) {
       Actions.hideAllVisibleNotifications();
     }

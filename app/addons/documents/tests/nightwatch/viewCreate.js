@@ -25,7 +25,7 @@ module.exports = {
         var editor = ace.edit("map-function");\
         editor.getSession().setValue("function (doc) { if (doc != \'\') { emit(\'blerg\'); } else { emit(\'nana\'); }  }");\
       ')
-      .execute('$("#save-view")[0].scrollIntoView();')
+      .execute('document.querySelector("#save-view").scrollIntoView();')
       .waitForElementPresent('#save-view', waitTime, false)
       .clickWhenVisible('#save-view', waitTime, false)
       .checkForDocumentCreated('_design/test_design_doc-selenium-0')
@@ -48,7 +48,7 @@ module.exports = {
         var editor = ace.edit("map-function");\
         editor.getSession().setValue("function (doc) { emit(\'hasehase\'); }");\
       ')
-      .execute('$("#save-view")[0].scrollIntoView();')
+      .execute('document.querySelector("#save-view").scrollIntoView();')
       .waitForElementPresent('#save-view', waitTime, false)
       .clickWhenVisible('#save-view', waitTime, false)
       .checkForDocumentCreated('_design/test_design_doc-selenium-1')
@@ -71,7 +71,7 @@ module.exports = {
         var editor = ace.edit("map-function");\
         editor.getSession().setValue("function (doc) { emit(\'hasehase\'); }");\
       ')
-      .execute('$("#save-view")[0].scrollIntoView();')
+      .execute('document.querySelector("#save-view").scrollIntoView();')
       .waitForElementPresent('#save-view', waitTime, false)
       .clickWhenVisible('#save-view', waitTime, false)
       .checkForDocumentCreated('_design/test_design_doc-selenium-3')
@@ -96,7 +96,7 @@ module.exports = {
         var editor = ace.edit("map-function");\
         editor.getSession().setValue("function (doc) { emit(\'gansgans\'); }");\
       ')
-      .execute('$("#save-view")[0].scrollIntoView();')
+      .execute('document.querySelector("#save-view").scrollIntoView();')
       .waitForElementPresent('#save-view', waitTime, false)
       .clickWhenVisible('#save-view')
       .checkForDocumentCreated('_design/test_design_doc-selenium-2')
@@ -125,7 +125,7 @@ module.exports = {
         var editor = ace.edit("map-function");\
         editor.getSession().setValue("function (doc) { emit(\'enteente\', 1); }");\
       ')
-      .execute('$("#save-view")[0].scrollIntoView();')
+      .execute('document.querySelector("#save-view").scrollIntoView();')
       .clickWhenVisible('#save-view')
       .checkForDocumentCreated('_design/testdesigndoc/_view/test-new-view')
       .waitForElementNotPresent('.loading-lines', waitTime, false)

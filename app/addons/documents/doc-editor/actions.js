@@ -85,7 +85,10 @@ function deleteDoc (doc) {
   $.ajax({
     url: FauxtonAPI.urls('document', 'server', databaseName, doc.safeID(), query),
     type: 'DELETE',
-    contentType: 'application/json; charset=UTF-8',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
     xhrFields: {
       withCredentials: true
     },

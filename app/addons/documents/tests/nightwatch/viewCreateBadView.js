@@ -36,7 +36,7 @@ module.exports = {
         var editor = ace.edit("map-function");\
         editor.getSession().setValue("function (doc) { emit(\'boom\', doc._id); }");\
       ')
-      .execute('$("#save-view")[0].scrollIntoView();')
+      .execute('document.querySelector("#save-view").scrollIntoView();')
       .clickWhenVisible('#save-view')
       .waitForElementNotPresent('.global-notification .fonticon-cancel', waitTime, false)
       .clickWhenVisible('.control-toggle-queryoptions', waitTime, false)

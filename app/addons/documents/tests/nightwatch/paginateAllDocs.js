@@ -39,7 +39,7 @@ module.exports = {
       .waitForElementNotPresent('div[data-id="document_16"]', waitTime)
       .waitForElementPresent('.doc-row', waitTime, false)
       .execute(function () {
-        return $('.doc-row').length;
+        return document.querySelectorAll('.doc-row').length;
       }, function (result) {
         client.assert.equal(result.value, 10);
       })
