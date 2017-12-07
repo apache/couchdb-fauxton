@@ -40,7 +40,7 @@ module.exports = {
       .clearValue('#index-name')
       .setValue('#index-name', 'hasenindex5000')
 
-      .execute('$("#save-view")[0].scrollIntoView();')
+      .execute('document.querySelector("#save-view").scrollIntoView();')
       .clickWhenVisible('#save-view')
 
       // confirm the new index name is present
@@ -81,7 +81,7 @@ module.exports = {
         editor.getSession().setValue("function (doc) { emit(\'hasehase6000\', 1); }");\
         editor._emit(\'blur\');\
       ')
-      .execute('$("#save-view")[0].scrollIntoView();')
+      .execute('document.querySelector("#save-view").scrollIntoView();')
       .clickWhenVisible('#save-view')
 
       .checkForStringPresent(viewUrl, 'hasehase6000')
@@ -133,7 +133,7 @@ module.exports = {
         var editor = ace.edit("map-function");\
         editor.getSession().setValue("function (doc) { emit(doc._id, 100); }");\
       ')
-      .execute('$("#save-view")[0].scrollIntoView();')
+      .execute('document.querySelector("#save-view").scrollIntoView();')
       .clickWhenVisible('#save-view')
       .checkForDocumentCreated('_design/view1-name')
 
@@ -162,7 +162,7 @@ module.exports = {
         var editor = ace.edit("map-function");\
         editor.getSession().setValue("function (doc) { emit(doc._id, 200); }");\
       ')
-      .execute('$("#save-view")[0].scrollIntoView();')
+      .execute('document.querySelector("#save-view").scrollIntoView();')
       .clickWhenVisible('#save-view')
       .checkForDocumentCreated('_design/view2-name')
 
@@ -227,9 +227,9 @@ module.exports = {
       .click('body')
 
       .waitForElementPresent('#new-ddoc', waitTime, true)
-      .execute('$("#new-ddoc")[0].scrollIntoView();')
+      .execute('document.querySelector("#new-ddoc").scrollIntoView();')
       .setValue('#new-ddoc', 'brand-new-ddoc')
-      .execute('$("#save-view")[0].scrollIntoView();')
+      .execute('document.querySelector("#save-view").scrollIntoView();')
       .clickWhenVisible('#save-view')
 
       // now wait for the old design doc to be gone, and the new one to have shown up

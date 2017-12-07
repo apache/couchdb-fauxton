@@ -38,7 +38,7 @@ module.exports = {
         var editor = ace.edit("query-field");\
         editor.getSession().setValue(json);\
       ')
-      .execute('$("#create-index-btn")[0].scrollIntoView();')
+      .execute('document.querySelector("#create-index-btn").scrollIntoView();')
       .clickWhenVisible('#create-index-btn')
       .checkForStringPresent(newDatabaseName + '/_index', 'rocko-artischocko')
       .checkForStringPresent(newDatabaseName + '/_index', 'gans_gans_mango')
