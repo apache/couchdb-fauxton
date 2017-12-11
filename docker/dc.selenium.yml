@@ -2,7 +2,7 @@ version: '2'
 services:
   selenium:
     container_name: selenium
-    image: selenium/standalone-firefox:2.48.2
+    image: selenium/standalone-firefox:3.4.0
     ports:
       - "4444:4444"
 
