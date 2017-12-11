@@ -63,14 +63,12 @@ document.addEventListener("click", evt => {
   }
   //"a:not([data-bypass])"
   const dataBypass = target.getAttribute('data-bypass');
-  console.log('DB', dataBypass);
   if (dataBypass) {
     return;
   }
 
   // Get the absolute anchor href.
-  var href = { prop: target.href, attr: target.getAttribute("href") };
-  console.log('HREF', href);
+  const href = { prop: target.href, attr: target.getAttribute("href") };
   if (!href.prop) {
     return;
   }
