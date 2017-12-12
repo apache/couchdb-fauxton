@@ -14,7 +14,7 @@ import { connect } from 'react-redux';
 
 import PropTypes from 'prop-types';
 
-import queryString from 'query-string';
+import app from '../../../../app';
 import { ApiBarWrapper } from '../../../components/layouts';
 import { getQueryOptionsParams } from '../reducers';
 import FauxtonAPI from '../../../../core/api';
@@ -25,7 +25,7 @@ const mapStateToProps = ({indexResults}, {docUrl, endpoint, endpointAddQueryOpti
   }
 
   if (endpoint && endpointAddQueryOptions) {
-    const query = queryString.stringify(getQueryOptionsParams(indexResults));
+    const query = app.utils.queryString(getQueryOptionsParams(indexResults));
     if (query) {
       endpoint = endpoint.indexOf('?') == -1 ? `${endpoint}?${query}` : `${endpoint}&${query}`;
     }
