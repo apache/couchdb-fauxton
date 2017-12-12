@@ -224,12 +224,12 @@ Documents.AllDocs = PagingCollection.extend({
 
     if (params) {
       if (!_.isEmpty(params)) {
-        query = "?" + $.param(params);
+        query = "?" + app.utils.queryParams(params);
       } else {
         query = '';
       }
     } else if (this.params) {
-      query = "?" + $.param(this.params);
+      query = "?" + app.utils.queryParams(this.params);
     }
     if (_.isUndefined(context)) {
       context = 'server';

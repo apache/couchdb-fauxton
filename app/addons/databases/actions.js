@@ -182,7 +182,7 @@ export default {
   },
 
   fetchAllDbsWithKey: (id, callback) => {
-    const query = '?' + $.param({
+    const query = '?' + app.utils.queryParams({
       startkey: JSON.stringify(id),
       endkey: JSON.stringify(id + "\u9999"),
       limit: 30
