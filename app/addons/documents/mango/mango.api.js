@@ -11,7 +11,6 @@
 // the License.
 
 import 'whatwg-fetch';
-import queryString from 'query-string';
 import app from "../../../app";
 import FauxtonAPI from "../../../core/api";
 import Constants from '../constants';
@@ -60,7 +59,7 @@ export const createIndex = (databaseName, indexCode) => {
 };
 
 export const fetchIndexes = (databaseName, params) => {
-  const query = queryString.stringify(params);
+  const query = app.utils.queryString(params);
   let url = FauxtonAPI.urls('mango', 'index-server', app.utils.safeURLName(databaseName));
   url = `${url}${url.includes('?') ? '&' : '?'}${query}`;
 

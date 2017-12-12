@@ -18,7 +18,7 @@ import {
 } from '../index-results/actions/fetch';
 import {queryAllDocs, postToBulkDocs} from '../index-results/api';
 import fetchMock from 'fetch-mock';
-import queryString from 'query-string';
+import app from '../../../app';
 import sinon from 'sinon';
 import SidebarActions from '../sidebar/actions';
 import FauxtonAPI from '../../../core/api';
@@ -208,7 +208,7 @@ describe('Docs Fetch API', () => {
 
     it('queries _all_docs with default params', () => {
       const fetchUrl = '/testdb/_all_docs';
-      const query = queryString.stringify(params);
+      const query = app.utils.queryString(params);
       const url = `${fetchUrl}?${query}`;
       fetchMock.getOnce(url, docs);
 

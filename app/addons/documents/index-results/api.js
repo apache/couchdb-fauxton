@@ -12,14 +12,14 @@
 
 import 'url-polyfill';
 import 'whatwg-fetch';
-import queryString from 'query-string';
+import app from '../../../app';
 import Constants from '../constants';
 import FauxtonAPI from '../../../core/api';
 
 export const queryAllDocs = (fetchUrl, params) => {
   // Exclude params 'group', 'reduce' and 'group_level' if present since they not allowed for '_all_docs'
   Object.assign(params, {reduce: undefined, group: undefined, group_level: undefined});
-  const query = queryString.stringify(params);
+  const query = app.utils.queryString(params);
   const url = `${fetchUrl}${fetchUrl.includes('?') ? '&' : '?'}${query}`;
   return fetch(url, {
     credentials: 'include',
@@ -50,7 +50,7 @@ export const queryMapReduceView = (fetchUrl, params) => {
     params.group = undefined;
     params.group_level = undefined;
   }
-  const query = queryString.stringify(params);
+  const query = app.utils.queryString(params);
   const url = `${fetchUrl}${fetchUrl.includes('?') ? '&' : '?'}${query}`;
   return fetch(url, {
     credentials: 'include',

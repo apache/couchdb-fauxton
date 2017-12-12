@@ -63,6 +63,18 @@ const utils = {
   },
 
   queryParams: function (obj) {
+    //Simulates jQuery.param()
+    return param(obj);
+  },
+
+  queryString: function (obj) {
+    //Similar to queryParams() but skips object properties
+    //that are undefined
+    Object.keys(obj).forEach((key) => {
+      if (obj[key] === undefined) {
+        delete obj[key];
+      }
+    });
     return param(obj);
   },
 
