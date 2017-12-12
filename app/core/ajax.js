@@ -44,6 +44,9 @@ export const json = (url, method = "GET", opts = {}) => {
     )
   ).then(resp => {
     fetchObserver.next(resp);
+    if (opts.raw) {
+      return resp;
+    }
     return resp.json();
   });
 };

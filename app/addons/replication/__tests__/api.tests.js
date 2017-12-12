@@ -310,7 +310,7 @@ describe('Replication API', () => {
     });
 
     it('returns true for support', () => {
-      fetchMock.getOnce('/_scheduler/jobs', 200);
+      fetchMock.getOnce('/_scheduler/jobs', {});
       return supportNewApi(true)
       .then(resp => {
         assert.ok(resp);
@@ -318,7 +318,11 @@ describe('Replication API', () => {
     });
 
     it('returns false for no support', () => {
-      fetchMock.getOnce('/_scheduler/jobs', 404);
+      fetchMock.getOnce('/_scheduler/jobs', {
+        status: 404,
+        body: {error: "missing"}
+      });
+
       return supportNewApi(true)
       .then(resp => {
         assert.notOk(resp);
@@ -453,7 +457,7 @@ describe('Replication API', () => {
         .then(docs => {
           assert.deepEqual(docs.length, 1);
           assert.deepEqual(docs[0]._id, "c94d4839d1897105cb75e1251e0003ea");
-          assert.deepEqual(docs[0].stateTime, new Date('2017-03-07T14:46:17'));
+          assert.deepEqual(docs[0].stateTime.toDateString(), (new Date('2017-03-07T14:46:17')).toDateString());
         });
       });
     });
