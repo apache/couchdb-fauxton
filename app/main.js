@@ -40,16 +40,41 @@ if ('ActiveXObject' in window) {
   $.ajaxSetup({ cache: false });
 }
 
+// Walks up the element tree to look for a link to see if it is part
+// of the click nodes
+const findLink = (target) => {
+  if (!target) {
+    return null;
+  }
+
+  if (target.tagName === 'A') {
+    return target;
+  }
+  return findLink(target.parentNode);
+};
 // All navigation that is relative should be passed through the navigate
 // method, to be processed by the router. If the link has a `data-bypass`
 // attribute, bypass the delegation completely.
-$(document).on("click", "a:not([data-bypass])", function (evt) {
+document.addEventListener("click", evt => {
+
+  const target = findLink(evt.target);
+  if (!target) {
+    return;
+  }
+  //"a:not([data-bypass])"
+  const dataBypass = target.getAttribute('data-bypass');
+  if (dataBypass) {
+    return;
+  }
 
   // Get the absolute anchor href.
-  var href = { prop: $(this).prop("href"), attr: $(this).attr("href") };
+  const href = { prop: target.href, attr: target.getAttribute("href") };
+  if (!href.prop) {
+    return;
+  }
 
   // Get the absolute root
-  var root = location.protocol + "//" + location.host;
+  const root = location.protocol + "//" + location.host;
 
   // Ensure the root is part of the anchor href, meaning it's relative
   if (href.prop && href.prop.slice(0, root.length) === root) {

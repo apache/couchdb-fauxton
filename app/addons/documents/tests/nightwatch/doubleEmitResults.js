@@ -27,7 +27,7 @@ module.exports = {
     .waitForElementPresent('.clearfix', waitTime, false)
     .waitForElementPresent('.doc-row', waitTime, false)
     .execute(function () {
-      return $('.doc-row').length;
+      return document.querySelectorAll('.doc-row').length;
     }, function (result) {
       client.assert.equal(result.value, 20);
     })

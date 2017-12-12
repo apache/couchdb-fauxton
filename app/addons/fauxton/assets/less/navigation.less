@@ -103,6 +103,29 @@
   color: @navIconColor;
   font-size: 24px;
   vertical-align: middle;
+  position: relative;
+}
+
+.faux-navbar__icon-badge:after {
+  content:"";
+  position: absolute;
+  background: @hoverHighlight;
+  border: 1px solid @hoverHighlight;
+  height:8px;
+  width:8px;
+  top:0;
+  right:-2px;
+  text-align: center;
+  font-size: 0.5rem;
+  border-radius: 50%;
+}
+
+.faux-navbar__link:hover .faux-navbar__icon-badge:after {
+  border-color: @navIconActive;
+}
+
+.faux-navbar__link--active .faux-navbar__icon-badge:after {
+  border-color: @navIconActive;
 }
 
 .faux-navbar__text {

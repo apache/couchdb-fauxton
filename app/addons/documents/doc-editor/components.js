@@ -1,6 +1,3 @@
-import FauxtonAPI from "../../../core/api";
-import app from "../../../app";
-
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License. You may obtain a copy of
 // the License at
@@ -13,9 +10,9 @@ import app from "../../../app";
 // License for the specific language governing permissions and limitations under
 // the License.
 
-
+import FauxtonAPI from "../../../core/api";
+import app from "../../../app";
 import PropTypes from 'prop-types';
-
 import React from "react";
 import { Dropdown, MenuItem } from "react-bootstrap";
 import ReactDOM from "react-dom";
@@ -325,7 +322,7 @@ class UploadModal extends React.Component {
     Actions.uploadAttachment({
       doc: this.props.doc,
       rev: this.props.doc.get('_rev'),
-      files: $(ReactDOM.findDOMNode(this.refs.attachments))[0].files
+      files: this.attachments.files
     });
   };
 
@@ -354,7 +351,7 @@ class UploadModal extends React.Component {
                 Select a file to upload as an attachment to this document. Uploading a file saves the document as a new
                 revision.
               </p>
-              <input ref="attachments" type="file" name="_attachments" />
+              <input ref={el => this.attachments = el} type="file" name="_attachments" />
               <br />
             </form>
 

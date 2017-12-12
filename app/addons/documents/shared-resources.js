@@ -183,11 +183,12 @@ Documents.Doc = FauxtonAPI.Model.extend({
   },
 
   copy: function (copyId) {
-    return $.ajax({
-      type: 'COPY',
-      url: '/' + this.database.safeID() + '/' + this.safeID(),
-      headers: {Destination: copyId}
+    const attrs = Object.assign({}, this.attributes, {_id: copyId});
+    delete attrs._rev;
+    const clonedDoc = new this.constructor(attrs, {
+      database: this.database
     });
+    return clonedDoc.save();
   },
 
   isNewDoc: function () {
@@ -223,12 +224,12 @@ Documents.AllDocs = PagingCollection.extend({
 
     if (params) {
       if (!_.isEmpty(params)) {
-        query = "?" + $.param(params);
+        query = "?" + app.utils.queryParams(params);
       } else {
         query = '';
       }
     } else if (this.params) {
-      query = "?" + $.param(this.params);
+      query = "?" + app.utils.queryParams(this.params);
     }
     if (_.isUndefined(context)) {
       context = 'server';

@@ -74,13 +74,13 @@ describe('Utils', () => {
       assert.isUndefined(utils.localStorageGet('qwerty'));
     });
 
-    it ('Should get value after setting it', () => {
+    it('Should get value after setting it', () => {
       const key = 'key1';
       utils.localStorageSet(key, 1);
       assert.equal(utils.localStorageGet(key), 1);
     });
 
-    it ('Set and retrieve complex object', () => {
+    it('Set and retrieve complex object', () => {
       const key = 'key2',
         obj = {
           one: 1,
@@ -90,7 +90,7 @@ describe('Utils', () => {
       assert.deepEqual(utils.localStorageGet(key), obj);
     });
 
-    it ('stripHTML removes HTML', () => {
+    it('stripHTML removes HTML', () => {
       [
         { html: '<span>okay</span>', text: 'okay' },
         { html: 'test <span>before</span> and after', text: 'test before and after' },
@@ -101,5 +101,18 @@ describe('Utils', () => {
       });
     });
 
+  });
+
+  describe('queryParams', () => {
+    it('builds query string from an object', () => {
+      assert.equal(
+        utils.queryParams({
+          startkey: JSON.stringify('_design/app'),
+          endkey: JSON.stringify('_design/app\u9999'),
+          limit:30
+        }),
+        'startkey=%22_design%2Fapp%22&endkey=%22_design%2Fapp%E9%A6%99%22&limit=30'
+      );
+    });
   });
 });

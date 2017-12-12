@@ -63,7 +63,7 @@ describe("Polling", () => {
         onPoll={() => {}}
                             />);
 
-      const props = wrapper.find('input').props();
+      const props = wrapper.find('Range').props();
 
       assert.deepEqual(props.value, 10);
       assert.deepEqual(props.step, 1);
@@ -80,7 +80,7 @@ describe("Polling", () => {
         onPoll={() => {}}
                             />);
 
-      wrapper.find('input').simulate('change', {target: {value: 21}});
+      wrapper.find('input').simulate('mouseMove', {buttons:1, which:1, target: {value: 21}});
       const isOff = wrapper.find('.faux__polling-info-value--off').text();
       assert.deepEqual(isOff.toLowerCase(), "off");
     });

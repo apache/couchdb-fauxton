@@ -28,8 +28,6 @@ module.exports = {
       .keys(['\uE00C'])
       .waitForElementPresent('.prettyprint', waitTime, false)
       .waitForElementPresent('.documents-pagination', waitTime, false)
-      // we need to explicitly show the doc field because it's hidden on Travis due to screen width
-      .execute("$('.searchbox-wrapper').show();")
       .setValue('.jump-to-doc .Select-input input', ['_des'])
       .waitForElementPresent('.Select-option', waitTime, false)
       .keys(['\uE015', '\uE015', '\uE006'])
@@ -51,8 +49,6 @@ module.exports = {
       .keys(['\uE00C'])
       .waitForElementPresent('.prettyprint', waitTime, false)
       .waitForElementPresent('.documents-pagination', waitTime, false)
-      // we need to explicitly show the doc field because it's hidden on Travis due to screen width
-      .execute("$('.searchbox-wrapper').show();")
       .setValue('.jump-to-doc .Select-input input', ['MY_CAP'])
       .waitForElementPresent('.Select-option', waitTime, false)
       .keys(['\uE015', '\uE015', '\uE006'])

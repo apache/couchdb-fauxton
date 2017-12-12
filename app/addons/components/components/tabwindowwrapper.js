@@ -20,6 +20,7 @@ export class TabWindowWrapper extends React.Component {
           key={i}
           selected={tab.name === selectedTab}
           text={tab.name}
+          badgeText={tab.badgeText}
           onChange={() => { FauxtonAPI.navigate(tab.route, {redirect: true}); }}
           iconClass="" />
       );

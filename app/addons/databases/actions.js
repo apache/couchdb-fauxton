@@ -158,7 +158,7 @@ export default {
         var route = FauxtonAPI.urls('allDocs', 'app', app.utils.safeURLName(databaseName), '?limit=' + Resources.DocLimit);
         app.router.navigate(route, { trigger: true });
       }
-    ).error(function (xhr) {
+    ).fail(function (xhr) {
         var responseText = JSON.parse(xhr.responseText).reason;
         FauxtonAPI.addNotification({
           msg: 'Create database failed: ' + responseText,
@@ -182,7 +182,7 @@ export default {
   },
 
   fetchAllDbsWithKey: (id, callback) => {
-    const query = '?' + $.param({
+    const query = '?' + app.utils.queryParams({
       startkey: JSON.stringify(id),
       endkey: JSON.stringify(id + "\u9999"),
       limit: 30

@@ -129,8 +129,8 @@ export class CodeEditor extends React.Component {
     }
 
     if (this.props.notifyUnsavedChanges) {
-      $(window).on('beforeunload.editor_' + this.props.id, _.bind(this.quitWarningMsg));
-      FauxtonAPI.beforeUnload('editor_' + this.props.id, _.bind(this.quitWarningMsg, this));
+      window.addEventListener('beforeunload', this.quitWarningMsg);
+      FauxtonAPI.beforeUnload('editor_' + this.props.id, this.quitWarningMsg);
     }
   };
 
@@ -153,7 +153,7 @@ export class CodeEditor extends React.Component {
 
   removeEvents = () => {
     if (this.props.notifyUnsavedChanges) {
-      $(window).off('beforeunload.editor_' + this.props.id);
+      window.removeEventListener('beforeunload', this.quitWarningMsg);
       FauxtonAPI.removeBeforeUnload('editor_' + this.props.id);
     }
   };

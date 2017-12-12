@@ -31,8 +31,9 @@ const devSetup = function (cb) {
   if (settings.noClean) {
     cmd = 'devSetup';
   }
-
-  const grunt = spawn('grunt', [cmd]);
+  const isOnWindows = process.platform === 'win32';
+  const gruntCmd = isOnWindows ? 'grunt.cmd' : 'grunt';
+  const grunt = spawn(gruntCmd, [cmd]);
 
   grunt.stdout.on('data', (data) => {
     console.log(data.toString());

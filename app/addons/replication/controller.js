@@ -12,6 +12,7 @@
 import React from 'react';
 import Stores from './stores';
 import Actions from './actions';
+import Helpers from '../../helpers';
 import {showPasswordModal} from '../auth/actions';
 import Components from '../components/react-components';
 import NewReplication from './components/newreplication';
@@ -200,9 +201,13 @@ export default class ReplicationController extends React.Component {
     if (this.state.tabSection === 'new replication') {
       return null;
     }
+    let rightHeaderclass = "right-header-flex";
+    if (Helpers.isIE1X()) {
+      rightHeaderclass += " " + rightHeaderclass + "--ie1X";
+    }
 
     return (
-      <div className="right-header-flex">
+      <div className={rightHeaderclass}>
         <Polling
           min={60}
           max={600}
@@ -249,6 +254,8 @@ export default class ReplicationController extends React.Component {
   getCrumbs () {
     if (this.state.tabSection === 'new replication') {
       return [{'name': 'Job Configuration'}];
+    } else {
+      return [{'name': 'Replication'}];
     }
 
     return [];

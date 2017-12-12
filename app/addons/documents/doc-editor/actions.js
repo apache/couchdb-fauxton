@@ -12,7 +12,6 @@
 
 /* global FormData */
 
-import app from "../../../app";
 import FauxtonAPI from "../../../core/api";
 import ActionTypes from "./actiontypes";
 
@@ -86,7 +85,10 @@ function deleteDoc (doc) {
   $.ajax({
     url: FauxtonAPI.urls('document', 'server', databaseName, doc.safeID(), query),
     type: 'DELETE',
-    contentType: 'application/json; charset=UTF-8',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
     xhrFields: {
       withCredentials: true
     },
@@ -116,14 +118,11 @@ function hideCloneDocModal () {
 }
 
 function cloneDoc (database, doc, newId) {
-  const docId = app.utils.getSafeIdForDoc(newId);
 
   hideCloneDocModal();
 
-  doc.copy(docId).then(() => {
-    doc.set({ _id: docId });
-
-    FauxtonAPI.navigate('/database/' + database.safeID() + '/' + docId, { trigger: true });
+  doc.copy(newId).then(() => {
+    FauxtonAPI.navigate('/database/' + database.safeID() + '/' + encodeURIComponent(newId), { trigger: true });
 
     FauxtonAPI.addNotification({
       msg: 'Document has been duplicated.'
@@ -169,7 +168,7 @@ function uploadAttachment (params) {
   var file = params.files[0];
 
   $.ajax({
-    url: FauxtonAPI.urls('document', 'attachment', db, docId, file.name, query),
+    url: FauxtonAPI.urls('document', 'attachment', db, docId, encodeURIComponent(file.name), query),
     type: 'PUT',
     data: file,
     contentType: file.type,
