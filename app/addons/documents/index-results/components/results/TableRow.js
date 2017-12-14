@@ -93,7 +93,7 @@ export default class TableRow extends React.Component {
     }
 
     return (
-      <td className="tableview-el-last" onClick={this.onClick}>
+      <td className="tableview-el-last" onClick={this.onClick.bind(this)}>
         {conflictIndicator}
         {attachmentIndicator}
       </td>

@@ -16,12 +16,14 @@ import Documents from "./routes";
 import reducers from "./index-results/reducers";
 import mangoReducers from "./mango/mango.reducers";
 import sidebarReducers from "./sidebar/reducers";
+import revisionBrowserReducers from './rev-browser/reducers';
 import "./assets/less/documents.less";
 
 FauxtonAPI.addReducers({
   indexResults: reducers,
   mangoQuery: mangoReducers,
-  sidebar: sidebarReducers
+  sidebar: sidebarReducers,
+  revisionBrowser: revisionBrowserReducers
 });
 
 function getQueryParam (query) {
