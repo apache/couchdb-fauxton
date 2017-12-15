@@ -100,6 +100,7 @@
     "redux": "^3.6.0",
     "redux-thunk": "^2.1.0",
     "request": "^2.54.0",
+    "rxjs": "^5.5.5",
     "semver": "^5.1.0",
     "send": "^0.14.2",
     "style-loader": "^0.13.1",

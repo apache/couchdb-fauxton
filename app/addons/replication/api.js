@@ -13,25 +13,19 @@
 import 'url-polyfill';
 import Constants from './constants';
 import FauxtonAPI from '../../core/api';
+import {get, post, put} from '../../core/ajax';
 import base64 from 'base-64';
 import _ from 'lodash';
-import 'whatwg-fetch';
 
 let newApiPromise = null;
 export const supportNewApi = (forceCheck) => {
   if (!newApiPromise || forceCheck) {
     newApiPromise = new FauxtonAPI.Promise((resolve) => {
-      fetch('/_scheduler/jobs', {
-        credentials: 'include',
-        headers: {
-            'Accept': 'application/json; charset=utf-8',
-          }
-        })
+      get('/_scheduler/jobs', {raw: true})
       .then(resp => {
         if (resp.status > 202) {
           return resolve(false);
         }
-
         resolve(true);
       });
     });
@@ -292,13 +286,7 @@ export const combineDocsAndScheduler = (docs, schedulerDocs) => {
 export const fetchReplicationDocs = () => {
   return supportNewApi()
   .then(newApi => {
-    const docsPromise = fetch('/_replicator/_all_docs?include_docs=true&limit=100', {
-      credentials: 'include',
-      headers: {
-        'Accept': 'application/json; charset=utf-8',
-      }
-    })
-    .then(res => res.json())
+    const docsPromise = get('/_replicator/_all_docs?include_docs=true&limit=100')
     .then((res) => {
       if (res.error) {
         return [];
@@ -321,13 +309,7 @@ export const fetchReplicationDocs = () => {
 };
 
 export const fetchSchedulerDocs = () => {
-  return fetch('/_scheduler/docs?include_docs=true', {
-    credentials: 'include',
-    headers: {
-      'Accept': 'application/json; charset=utf-8',
-    }
-  })
-  .then(res => res.json())
+  return get('/_scheduler/docs?include_docs=true')
   .then((res) => {
     if (res.error) {
       return [];
@@ -338,20 +320,16 @@ export const fetchSchedulerDocs = () => {
 };
 
 export const checkReplicationDocID = (docId) => {
-  const promise = FauxtonAPI.Deferred();
-  fetch(`/_replicator/${docId}`, {
-    credentials: 'include',
-    headers: {
-      'Accept': 'application/json; charset=utf-8'
-    },
-  }).then(resp => {
-    if (resp.statusText === "Object Not Found") {
-      promise.resolve(false);
-      return;
-    }
-    promise.resolve(true);
+  return new Promise((resolve) => {
+    get(`/_replicator/${docId}`)
+    .then(resp => {
+      if (resp.error === "not_found") {
+        resolve(false);
+        return;
+      }
+      resolve(true);
+    });
   });
-  return promise;
 };
 
 export const parseReplicateInfo = (resp) => {
@@ -379,13 +357,7 @@ export const fetchReplicateInfo = () => {
       return [];
     }
 
-    return fetch('/_scheduler/jobs', {
-      credentials: 'include',
-      headers: {
-        'Accept': 'application/json; charset=utf-8'
-      },
-    })
-    .then(resp => resp.json())
+    return get('/_scheduler/jobs')
     .then(resp => {
       return parseReplicateInfo(resp);
     });
@@ -399,37 +371,18 @@ export const deleteReplicatesApi = (replicates) => {
       cancel: true
     };
 
-    return fetch('/_replicate', {
-      method: 'POST',
-      credentials: 'include',
-      headers: {
-        'Accept': 'application/json; charset=utf-8',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    })
-    .then(resp => resp.json());
+    return post('/_replicate', data);
   });
 
   return FauxtonAPI.Promise.all(promises);
 };
 
 export const createReplicatorDB = () => {
-  return fetch('/_replicator', {
-    method: 'PUT',
-    credentials: 'include',
-    headers: {
-        'Accept': 'application/json; charset=utf-8',
-      }
-    })
+  return put('/_replicator')
     .then(res => {
       if (!res.ok) {
         throw {reason: 'Failed to create the _replicator database.'};
       }
-
-      return res.json();
-    })
-    .then(() => {
       return true;
     });
 };
