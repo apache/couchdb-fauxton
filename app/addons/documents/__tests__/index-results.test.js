@@ -19,7 +19,7 @@ import sinon from 'sinon';
 describe('IndexResults', () => {
   it('calls fetchDocs on mount only when fetchAtStartup is set to true', () => {
     const spy = sinon.spy();
-    const wrapperFetch = shallow(<IndexResults
+    shallow(<IndexResults
       fetchParams={{}}
       selectedDocs={[]}
       queryOptionsParams={{}}
@@ -28,7 +28,6 @@ describe('IndexResults', () => {
       fetchAtStartup={true}
     />);
 
-    wrapperFetch.instance().componentDidMount();
     expect(spy.calledOnce).toBe(true);
 
     spy.reset();
@@ -102,7 +101,7 @@ describe('IndexResults', () => {
       fetchParams={{}}
       selectedDocs={[]}
       queryOptionsParams={{}}
-      fetchAllDocs={() => { }}
+      fetchDocs={() => { }}
       results={[]}
       fetchAtStartup={true}
     />);
@@ -117,7 +116,7 @@ describe('IndexResults', () => {
     }];
     const wrapper = shallow(<IndexResults
       selectedDocs={selectedDocs}
-      fetchAllDocs={() => { }}
+      fetchDocs={() => { }}
       results={[]}
       fetchAtStartup={true}
     />);
@@ -131,7 +130,7 @@ describe('IndexResults', () => {
     }];
     const wrapper = shallow(<IndexResults
       selectedDocs={selectedDocs}
-      fetchAllDocs={() => { }}
+      fetchDocs={() => { }}
       results={[]}
       fetchAtStartup={true}
     />);
@@ -143,7 +142,7 @@ describe('IndexResults', () => {
     const spy = sinon.spy();
     const wrapper = shallow(<IndexResults
       selectedDocs={[]}
-      fetchAllDocs={() => { }}
+      fetchDocs={() => { }}
       results={[]}
       selectDoc={spy}
       fetchAtStartup={true}
@@ -157,7 +156,7 @@ describe('IndexResults', () => {
     const spy = sinon.spy();
     const wrapper = shallow(<IndexResults
       selectedDocs={[]}
-      fetchAllDocs={() => { }}
+      fetchDocs={() => { }}
       results={[]}
       docs={[]}
       allDocumentsSelected={false}

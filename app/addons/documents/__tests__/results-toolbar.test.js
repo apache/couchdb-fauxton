@@ -39,14 +39,14 @@ describe('Results Toolbar', () => {
   it('renders all content when there are results and they are deletable', () => {
     const wrapper = mount(<ResultsToolBar hasResults={true} isListDeletable={true} {...restProps}/>);
     expect(wrapper.find('.bulk-action-component').length).toBe(1);
-    expect(wrapper.find('.two-sides-toggle-button').length).toBe(1);
+    expect(wrapper.find('div.two-sides-toggle-button').length).toBe(1);
     expect(wrapper.find('.document-result-screen__toolbar-create-btn').length).toBe(1);
   });
 
   it('does not render bulk action component when list is not deletable', () => {
     const wrapper = mount(<ResultsToolBar hasResults={true} isListDeletable={false} {...restProps}/>);
     expect(wrapper.find('.bulk-action-component').length).toBe(0);
-    expect(wrapper.find('.two-sides-toggle-button').length).toBe(1);
+    expect(wrapper.find('div.two-sides-toggle-button').length).toBe(1);
     expect(wrapper.find('.document-result-screen__toolbar-create-btn').length).toBe(1);
   });
 });
