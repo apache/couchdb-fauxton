@@ -13,13 +13,16 @@
 import React from 'react';
 import app from "../../app";
 import FauxtonAPI from "../../core/api";
-import Setup from "./resources";
-import SetupComponents from "./setup";
-import SetupActions from "./setup.actions";
+import SetupActions from "./actions";
 import ClusterActions from "../cluster/cluster.actions";
 import {OnePaneSimpleLayout} from '../components/layouts';
 
-var RouteObject = FauxtonAPI.RouteObject.extend({
+import FirstStepContainer from './container/FirstStepContainer';
+import SingleNodeContainer from './container/SingleNodeContainer';
+import MultipleNodeContainer from './container/MultipleNodeContainer';
+import ConfiguredScreen from './components/ConfiguredScreen';
+
+const SetupRouteObject = FauxtonAPI.RouteObject.extend({
   roles: ['_admin'],
   selectedHeader: 'Setup',
 
@@ -31,13 +34,13 @@ var RouteObject = FauxtonAPI.RouteObject.extend({
   },
 
   setupInitView: function () {
-    const setup = new Setup.Model();
+    const url = FauxtonAPI.urls('_setup', 'apiurl');
     ClusterActions.fetchNodes();
     SetupActions.getClusterStateFromCouch();
     return <OnePaneSimpleLayout
-      component={<SetupComponents.SetupFirstStepController/>}
-      endpoint={setup.url('apiurl')}
-      docURL={setup.documentation}
+      component={<FirstStepContainer />}
+      endpoint={url}
+      docURL={FauxtonAPI.constants.DOC_URLS.SETUP}
       crumbs={[
         { 'name': 'Setup ' + app.i18n.en_US['couchdb-productname'] }
       ]}
@@ -45,12 +48,12 @@ var RouteObject = FauxtonAPI.RouteObject.extend({
   },
 
   setupSingleNode: function () {
-    const setup = new Setup.Model();
+    const url = FauxtonAPI.urls('_setup', 'apiurl');
     ClusterActions.fetchNodes();
     return <OnePaneSimpleLayout
-      component={<SetupComponents.SetupSingleNodeController/>}
-      endpoint={setup.url('apiurl')}
-      docURL={setup.documentation}
+      component={<SingleNodeContainer />}
+      endpoint={url}
+      docURL={FauxtonAPI.constants.DOC_URLS.SETUP}
       crumbs={[
         { 'name': 'Setup ' + app.i18n.en_US['couchdb-productname'] }
       ]}
@@ -58,12 +61,12 @@ var RouteObject = FauxtonAPI.RouteObject.extend({
   },
 
   setupMultiNode: function () {
-    const setup = new Setup.Model();
+    const url = FauxtonAPI.urls('_setup', 'apiurl');
     ClusterActions.fetchNodes();
     return <OnePaneSimpleLayout
-      component={<SetupComponents.SetupMultipleNodesController/>}
-      endpoint={setup.url('apiurl')}
-      docURL={setup.documentation}
+      component={<MultipleNodeContainer />}
+      endpoint={url}
+      docURL={FauxtonAPI.constants.DOC_URLS.SETUP}
       crumbs={[
         { 'name': 'Setup ' + app.i18n.en_US['couchdb-productname'] }
       ]}
@@ -71,12 +74,12 @@ var RouteObject = FauxtonAPI.RouteObject.extend({
   },
 
   finishView: function () {
-    const setup = new Setup.Model();
+    const url = FauxtonAPI.urls('_setup', 'apiurl');
     SetupActions.getClusterStateFromCouch();
     return <OnePaneSimpleLayout
-      component={<SetupComponents.ClusterConfiguredScreen/>}
-      endpoint={setup.url('apiurl')}
-      docURL={setup.documentation}
+      component={<ConfiguredScreen/>}
+      endpoint={url}
+      docURL={FauxtonAPI.constants.DOC_URLS.SETUP}
       crumbs={[
         { 'name': 'Setup ' + app.i18n.en_US['couchdb-productname'] }
       ]}
@@ -84,7 +87,8 @@ var RouteObject = FauxtonAPI.RouteObject.extend({
   }
 });
 
-
-Setup.RouteObjects = [RouteObject];
+const Setup = {
+  RouteObjects: [SetupRouteObject]
+};
 
 export default Setup;

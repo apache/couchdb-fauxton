@@ -9,13 +9,13 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
-import Views from "../setup";
-import Stores from "../setup.stores";
 import utils from "../../../../test/mocha/testUtils";
 import React from "react";
 import ReactDOM from "react-dom";
+import OptionalSettings from '../components/OptionalSettings';
 import sinon from "sinon";
 import { mount } from 'enzyme';
+import SingleNodeController from "../components/SingleNodeController";
 
 const assert = utils.assert;
 
@@ -26,7 +26,7 @@ describe.skip('Setup Components', () => {
 
     it('fires callbacks on change, ip', () => {
       const changeHandler = sinon.spy();
-      const optSettings = mount(<Views.SetupOptionalSettings onAlterPort={null} onAlterBindAddress={changeHandler} />);
+      const optSettings = mount(<OptionalSettings onAlterPort={null} onAlterBindAddress={changeHandler}  ip='0.0.0.0' port='5984'/>);
 
       optSettings.find('.setup-input-ip').simulate('change', {target: {value: 'Hello, world'}});
       assert.ok(changeHandler.calledOnce);
@@ -35,7 +35,7 @@ describe.skip('Setup Components', () => {
     it('fires callbacks on change, port', () => {
       const changeHandler = sinon.spy();
       var optSettings = mount(
-        <Views.SetupOptionalSettings onAlterPort={changeHandler} onAlterBindAddress={null} />
+        <OptionalSettings onAlterPort={changeHandler} onAlterBindAddress={null} ip='0.0.0.0' port='5984' />
       );
 
       optSettings.find('.setup-input-port').simulate('change', {target: {value: 'Hello, world'}});
@@ -45,20 +45,12 @@ describe.skip('Setup Components', () => {
   });
 
   describe('SingleNodeSetup', () => {
-    beforeEach(() => {
-      sinon.stub(Stores.setupStore, 'getIsAdminParty', () => { return false; });
-    });
-
-    afterEach(() => {
-      utils.restore(Stores.setupStore.getIsAdminParty);
-      Stores.setupStore.reset();
-    });
 
     it('changes the values in the store for the setup node', () => {
-      const controller = mount(
-        <Views.SetupSingleNodeController />
-      );
 
+      const controller = mount(
+        <SingleNodeController  ip={} isAdminParty={false}/>
+      );
       controller.find('.setup-setupnode-section .setup-input-ip').simulate('change', {target: {value: '192.168.13.42'}});
       controller.find('.setup-setupnode-section .setup-input-port').simulate('change', {target: {value: '1342'}});
       controller.find('.setup-setupnode-section .setup-username').simulate('change', {target: {value: 'tester'}});
