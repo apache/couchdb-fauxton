@@ -89,4 +89,4 @@ export default class PaginationFooter extends React.Component {
       </footer>
     );
   }
-};
+}

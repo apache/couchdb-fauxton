@@ -112,8 +112,8 @@ export const queryOptionsFilterOnlyDdocs = () => {
   return updateQueryOptions({
     betweenKeys: {
       include: false,
-      startkey: '\"_design\"',
-      endkey: '\"_design0\"'
+      startkey: '"_design"',
+      endkey: '"_design0"'
     },
     showBetweenKeys: true,
     showByKeys: false

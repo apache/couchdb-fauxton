@@ -58,7 +58,7 @@ Helpers.getDateFromNow = function (timestamp) {
 };
 
 Helpers.escapeJQuerySelector = function (selector) {
-  return selector && selector.replace(/[!"#$%&'()*+,.\/:;<=>?@[\\\]^`{|}~]/g, "\\$&");
+  return selector && selector.replace(/[!"#$%&'()*+,./:;<=>?@[\\\]^`{|}~]/g, "\\$&");
 };
 
 /**

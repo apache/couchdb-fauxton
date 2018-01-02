@@ -95,4 +95,4 @@ export default class BulkDocumentHeaderController extends React.Component {
       return;
     }
   }
-};
+}

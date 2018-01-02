@@ -116,7 +116,7 @@ export const MangoContent = ({ edit, designDocs, explainPlan, databaseName, fetc
 class MangoLayout extends Component {
   constructor(props) {
     super(props);
-  };
+  }
 
   render() {
     const { database, edit, docURL, crumbs, designDocs, fetchUrl, databaseName, queryFindCode } = this.props;
@@ -150,7 +150,7 @@ class MangoLayout extends Component {
       </div>
     );
   }
-};
+}
 
 const mapStateToProps = ({ mangoQuery }) => {
   return {

@@ -26,8 +26,7 @@ const validFieldMap = {
   replicationDocName: '_replicationDocName',
   replicationSource: '_replicationSource',
   replicationTarget: '_replicationTarget',
-  localSource: '_localSource',
-  replicationDocName: '_replicationDocName'
+  localSource: '_localSource'
 };
 
 const ReplicationStore = FauxtonAPI.Store.extend({
@@ -303,10 +302,6 @@ const ReplicationStore = FauxtonAPI.Store.extend({
     return this._isConflictModalVisible;
   },
 
-  getPassword () {
-    return this._password;
-  },
-
   setStateFromDoc (doc) {
     Object.keys(doc).forEach(key => {
       this.updateFormField(key, doc[key]);
@@ -411,10 +406,6 @@ const ReplicationStore = FauxtonAPI.Store.extend({
 
       case ActionTypes.REPLICATION_CHANGE_TAB_SECTION:
         this._tabSection = options;
-      break;
-
-      case ActionTypes.REPLICATION_CLEAR_SELECTED_DOCS:
-        this._allDocsSelected = false;
       break;
 
       case ActionTypes.REPLICATION_SUPPORT_NEW_API:

@@ -108,4 +108,4 @@ export default class KeySearchFields extends React.Component {
       </div>
     );
   }
-};
+}

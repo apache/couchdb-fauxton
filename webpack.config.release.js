@@ -68,8 +68,10 @@ module.exports = {
   ],
 
   resolve: {
-    // Allow to omit extensions when requiring these files
-    extensions: ['', '.js', '.jsx']
+    extensions: ['*', '.js', '.jsx'],
+    alias: {
+      "underscore": "lodash"
+    }
   },
 
   module: {
@@ -113,8 +115,8 @@ module.exports = {
             loader: "less-loader",
             options: {
               modifyVars: {
-                largeLogoPath: "\'" + settings.variables.largeLogoPath + "\'",
-                smallLogoPath: "\'" + settings.variables.smallLogoPath + "\'"
+                largeLogoPath: "'" + settings.variables.largeLogoPath + "'",
+                smallLogoPath: "'" + settings.variables.smallLogoPath + "'"
               }
             }
           }
@@ -143,11 +145,5 @@ module.exports = {
     { test: /\.gif(\?v=\d+\.\d+\.\d+)?$/,    loader: 'file-loader?name=dashboard.assets/img/[name].[ext]' },
     { test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,    loader: 'url-loader?limit=10000&mimetype=image/svg+xml&name=dashboard.assets/img/[name].[ext]' }
     ]
-  },
-  resolve: {
-    extensions: ['*', '.js', '.jsx'],
-    alias: {
-      "underscore": "lodash"
-    }
   }
 };

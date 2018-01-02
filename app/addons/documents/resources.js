@@ -107,7 +107,7 @@ Documents.BulkDeleteDocCollection = FauxtonAPI.Collection.extend({
 
   model: Documents.BulkDeleteDoc,
 
-  sync: function () {
+  sync: function () {
 
   },
 

@@ -120,7 +120,6 @@ export const getTarget = ({
   replicationTarget,
   localTarget,
   remoteTarget,
-  replicationSource,
   username,
   password
 },

@@ -84,7 +84,7 @@ module.exports = function (grunt) {
     var result = _getNightwatchTests(this.data.settings);
     var addonsWithTests = result.addonFolders;
     var excludeTests = result.excludeTests;
-    console.log('addons and excluded', addonsWithTests, excludeTests);
+    console.info('addons and excluded', addonsWithTests, excludeTests);
 
     // if the user passed a --file="X" on the command line, filter out
     var singleTestToRun = grunt.option('file');

@@ -27,4 +27,4 @@ export default function resultsState(state = initialState, action) {
     default:
       return state;
   }
-};
+}

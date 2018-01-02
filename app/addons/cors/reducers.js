@@ -28,7 +28,7 @@ export default function cors (state = initialState, action) {
   switch (action.type) {
 
     case ActionTypes.EDIT_CORS:
-      const corsOptions = action.options;
+    const corsOptions = action.options;
       return {
         ...state,
         isLoading: false,
@@ -63,5 +63,4 @@ export default function cors (state = initialState, action) {
     default:
       return state;
   }
-};
-
+}

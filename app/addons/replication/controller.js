@@ -38,7 +38,6 @@ export default class ReplicationController extends React.Component {
       activityLoading: store.isActivityLoading(),
       databases: store.getDatabases(),
       authenticated: store.isAuthenticated(),
-      password: store.getPassword(),
 
       // source fields
       replicationSource: store.getReplicationSource(),
@@ -257,8 +256,6 @@ export default class ReplicationController extends React.Component {
     } else {
       return [{'name': 'Replication'}];
     }
-
-    return [];
   }
 
   getTabs () {

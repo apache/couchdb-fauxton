@@ -16,9 +16,9 @@ module.exports = function (options) {
     return send(req, filePath)
     .on('error', function (err) {
       if (err.status === 404) {
-        console.log('Could not locate', filePath);
+        console.error('Could not locate', filePath);
       } else {
-        console.log('ERROR', filePath, err);
+        console.error('ERROR', filePath, err);
       }
 
       res.setHeader("Content-Type", "text/javascript");
@@ -46,7 +46,7 @@ module.exports = function (options) {
     var url = req.url.split(/\?v=|\?noCache/)[0].replace('_utils', '');
     var accept = [];
     if (req.headers.accept) {
-      var accept = req.headers.accept.split(',');
+      accept = req.headers.accept.split(',');
     }
     if (setContentSecurityPolicy) {
       var headerValue = "default-src 'self'; child-src 'self' data: blob:; img-src 'self' data:; font-src 'self'; " +
@@ -93,9 +93,10 @@ module.exports = function (options) {
   ];
 
   _.each(logo, function (line) {
+    // eslint-disable-next-line no-console
     console.log(line.toString());
   });
-
+  // eslint-disable-next-line no-console
   console.log('Listening on ' + port);
 
   this.close = () => {

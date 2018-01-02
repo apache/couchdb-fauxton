@@ -75,4 +75,4 @@ export default class AdditionalParams extends React.Component {
       </div>
     );
   }
-};
+}

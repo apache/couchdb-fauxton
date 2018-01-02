@@ -24,7 +24,6 @@ export const formatUrl = (url) => {
     urlObj = new URL(removeCredentialsFromUrl(url));
     encoded = encodeURIComponent(urlObj.pathname.slice(1));
   } catch (error) {
-    console.log('error with url', url);
     return '';
   }
 

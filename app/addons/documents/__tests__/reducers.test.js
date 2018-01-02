@@ -381,8 +381,8 @@ describe('Docs Reducers', () => {
           showBetweenKeys: true,
           betweenKeys: {
             include: true,
-            startkey: '\"_design\"',
-            endkey: '\"_design0\"'
+            startkey: '"_design"',
+            endkey: '"_design0"'
           }
         }
       };
@@ -390,8 +390,8 @@ describe('Docs Reducers', () => {
       const newState = Reducers.default(initialState, action);
       expect(Reducers.getQueryOptionsParams(newState)).toEqual({
         inclusive_end: true,
-        start_key: '\"_design\"',
-        end_key: '\"_design0\"'
+        start_key: '"_design"',
+        end_key: '"_design0"'
       });
     });
 

@@ -49,7 +49,7 @@ export default class ExecutionStats extends React.Component {
   }
 
   warningPopupComponent(warningText) {
-    if (!!warningText) {
+    if (warningText) {
       return (<div className="warning">
         <i className="fonticon-attention-circled"></i> {warningText}
       </div>);
@@ -95,7 +95,7 @@ export default class ExecutionStats extends React.Component {
     const warningText = this.getWarning(executionStats, warning);
 
     let warningComponent = null;
-    if (!!warningText) {
+    if (warningText) {
       warningComponent = <i className="fonticon-attention-circled"></i>;
     }
 
@@ -104,7 +104,7 @@ export default class ExecutionStats extends React.Component {
       executionStatsComponent = (
         <span className="execution-stats-component">Executed in {this.humanizeDuration(executionStats.execution_time_ms)}</span>
       );
-    } else if (!!warningText) {
+    } else if (warningText) {
       executionStatsComponent = (
         <span className="execution-stats-component">Warning</span>
       );
@@ -120,7 +120,7 @@ export default class ExecutionStats extends React.Component {
         </OverlayTrigger>
     );
   }
-};
+}
 
 ExecutionStats.propTypes = {
   executionStats: PropTypes.object,

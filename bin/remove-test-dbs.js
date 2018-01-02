@@ -23,14 +23,14 @@ const nano = require('nano')(dbUrl);
 
 nano.db.list((err, body) => {
   if (err) {
-    console.log('ERR', err);
+    console.error('ERR', err);
     return;
   }
   const list = body.filter(db => {
     return /fauxton-selenium-tests/.test(db);
   }).map(db => {
     return (cb) => {
-      console.log('removing', db);
+      console.info('Removing db', db);
       nano.db.destroy(db, (err) => {
         if (err) {
           cb(err);

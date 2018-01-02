@@ -130,4 +130,4 @@ export default class ResultsScreen extends React.Component {
     );
   }
 
-};
+}

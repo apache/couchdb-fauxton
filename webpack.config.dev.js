@@ -78,8 +78,8 @@ module.exports = {
           loader: "less-loader",
           options: {
             modifyVars: {
-              largeLogoPath: "\'" + settings.variables.largeLogoPath + "\'",
-              smallLogoPath: "\'" + settings.variables.smallLogoPath + "\'"
+              largeLogoPath: "'" + settings.variables.largeLogoPath + "'",
+              smallLogoPath: "'" + settings.variables.smallLogoPath + "'"
             }
           }
         }
