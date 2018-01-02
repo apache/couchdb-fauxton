@@ -39,12 +39,14 @@ describe('PermanentNotification', () => {
       }
     });
 
+    wrapper.update();
     expect(wrapper.find('.perma-warning__content').html()).toMatch(/Hello World!/);
 
     FauxtonAPI.dispatch({
       type: ActionTypes.HIDE_PERMANENT_NOTIFICATION
     });
 
+    wrapper.update();
     expect(wrapper.find('.perma-warning__content').length).toBe(0);
   });
 });
