@@ -33,12 +33,12 @@ export const initDiffEditor = (dbName, docId) => dispatch => {
     const initialRev = conflictingRevs[0];
 
     if (!initialRev) {
-      return dispatch(dispatchData(tree, doc, conflictingRevs, null, dbName));
+      return dispatch(treeLoaded(tree, doc, conflictingRevs, null, dbName));
     }
 
     db.get(doc._id, {rev: initialRev})
       .then((conflictDoc) => {
-        dispatch(dispatchData(tree, doc, conflictingRevs, conflictDoc, dbName));
+        dispatch(treeLoaded(tree, doc, conflictingRevs, conflictDoc, dbName));
       });
   });
 };
@@ -57,7 +57,7 @@ function getConflictingRevs (paths, winner, deleted) {
   });
 }
 
-const dispatchData = (tree, doc, conflictingRevs, conflictDoc, databaseName) => {
+const treeLoaded = (tree, doc, conflictingRevs, conflictDoc, databaseName) => {
   return {
     type: ActionTypes.REV_BROWSER_REV_TREE_LOADED,
     options: {
@@ -82,11 +82,11 @@ export const toggleDiffView = (enableDiff) => {
 export const chooseLeaves = (doc, revTheirs) => dispatch => {
   db.get(doc._id, {rev: revTheirs})
     .then((res) => {
-      dispatch(dispatchDocsToDiff(doc, res));
+      dispatch(docsToDiff(doc, res));
     });
 };
 
-const dispatchDocsToDiff = (doc, theirs) => {
+const docsToDiff = (doc, theirs) => {
   return {
     type: ActionTypes.REV_BROWSER_DIFF_DOCS_READY,
     options: {
@@ -140,15 +140,3 @@ function buildBulkDeletePayload (docId, revs) {
 
   return { "docs": list };
 }
-
-// export default {
-//   getConflictingRevs,
-//   selectRevAsWinner,
-//   buildBulkDeletePayload,
-//   chooseLeaves: chooseLeaves,
-//   dispatchDocsToDiff: dispatchDocsToDiff,
-//   initDiffEditor: initDiffEditor,
-//   dispatchData: dispatchData,
-//   toggleDiffView: toggleDiffView,
-//   showConfirmModal: showConfirmModal
-// };

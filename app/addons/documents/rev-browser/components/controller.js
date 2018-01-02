@@ -23,7 +23,8 @@ export default class DiffyController extends React.Component {
 
   constructor (props) {
     super(props);
-
+    this.toggleDiffViewFalse = this.toggleDiffView.bind(this, false);
+    this.toggleDiffViewTrue = this.toggleDiffView.bind(this, true);
   }
 
   componentDidMount () {
@@ -55,14 +56,14 @@ export default class DiffyController extends React.Component {
             <Button
               style={{width: '120px'}}
               className={isDiffViewEnabled ? 'active' : ''}
-              onClick={this.toggleDiffView.bind(this, true)}
+              onClick={this.toggleDiffViewTrue}
             >
               <i className="icon-columns" /> Diff
             </Button>
             <Button
               style={{width: '120px'}}
               className={isDiffViewEnabled ? '' : 'active'}
-              onClick={this.toggleDiffView.bind(this, false)}
+              onClick={this.toggleDiffViewFalse}
             >
               <i className="icon-file-text" /> Document
             </Button>

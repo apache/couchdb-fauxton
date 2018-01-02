@@ -26,6 +26,9 @@ export default class ConfirmModal extends React.Component {
     this.state = {
       checked: false
     };
+
+    this.close = this.close.bind(this);
+    this.onDeleteConflicts = this.onDeleteConflicts.bind(this);
   }
 
   close () {
@@ -39,7 +42,7 @@ export default class ConfirmModal extends React.Component {
 
   render () {
     return (
-      <Modal dialogClassName="delete-conflicts-modal" show={this.props.show} onHide={this.close.bind(this)}>
+      <Modal dialogClassName="delete-conflicts-modal" show={this.props.show} onHide={this.close}>
         <Modal.Header closeButton={false}>
           <Modal.Title>Solve Conflicts</Modal.Title>
         </Modal.Header>
@@ -62,14 +65,14 @@ export default class ConfirmModal extends React.Component {
           </div>
           <a
             style={{marginRight: '10px', cursor: 'pointer'}}
-            onClick={this.close.bind(this)}
+            onClick={this.close}
             data-bypass="true"
           >
             Cancel
           </a>
 
           <ConfirmButton
-            onClick={this.onDeleteConflicts.bind(this)}
+            onClick={this.onDeleteConflicts}
             text="Delete Revisions"
             buttonType="btn-danger" />
         </Modal.Footer>

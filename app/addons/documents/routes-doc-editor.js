@@ -16,8 +16,6 @@ import Documents from "./resources";
 import Databases from "../databases/base";
 import Actions from "./doc-editor/actions";
 import ReactComponents from "./doc-editor/components";
-// import RevBrowserActions from "./rev-browser/rev-browser.actions";
-// import RevBrowserComponents from "./rev-browser/rev-browser.components";
 import RevBrowserContainer from './rev-browser/container';
 import {DocEditorLayout} from '../components/layouts';
 
@@ -52,8 +50,6 @@ const DocEditorRouteObject = FauxtonAPI.RouteObject.extend({
       { name: this.docId + ' > Conflicts' }
     ];
 
-    // RevBrowserActions.showConfirmModal(false, null);
-    // RevBrowserActions.initDiffEditor(databaseName, docId);
     return <DocEditorLayout
       crumbs={crumbs}
       endpoint={this.doc.url('apiurl')}

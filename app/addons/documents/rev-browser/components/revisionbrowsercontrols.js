@@ -27,6 +27,12 @@ export default class RevisionBrowserControls extends React.Component {
     super(props);
 
     this.state = {showModal: false};
+    this.selectAsWinner = this.selectAsWinner.bind(this);
+    this.onSelectAsWinnerClickOurs = this.onSelectAsWinnerClick.bind(this, this.props.ours);
+    this.onSelectAsWinnerClickTheirs = this.onSelectAsWinnerClick.bind(this, this.props.theirs);
+    this.onRevisionClick = this.onRevisionClick.bind(this);
+    this.onForwardClick = this.onForwardClick.bind(this);
+    this.onBackwardClick = this.onBackwardClick.bind(this);
   }
 
   onRevisionClick (revTheirs) {
@@ -84,7 +90,7 @@ export default class RevisionBrowserControls extends React.Component {
       <div className="revision-browser-controls">
         <ConfirmModal
           toggleConfirmModal={this.props.toggleConfirmModal}
-          onConfirm={this.selectAsWinner.bind(this)}
+          onConfirm={this.selectAsWinner}
           docToWin={this.props.docToWin}
           show={this.props.showConfirmModal}
         />
@@ -99,7 +105,7 @@ export default class RevisionBrowserControls extends React.Component {
               </td>
               <td>
                 <ConfirmButton
-                  onClick={this.onSelectAsWinnerClick.bind(this, this.props.ours)}
+                  onClick={this.onSelectAsWinnerClickOurs}
                   style={{marginRight: '10px', width: '220px'}}
                   text="Delete Other Conflicts"
                   buttonType="btn-secondary"
@@ -110,16 +116,16 @@ export default class RevisionBrowserControls extends React.Component {
               <td style={cellStyle}>Conflicting Revisions: </td>
               <td style={cellStyle}>
                 <ConflictingRevisionsDropDown
-                  onRevisionClick={this.onRevisionClick.bind(this)}
-                  onForwardClick={this.onForwardClick.bind(this)}
-                  onBackwardClick={this.onBackwardClick.bind(this)}
+                  onRevisionClick={this.onRevisionClick}
+                  onForwardClick={this.onForwardClick}
+                  onBackwardClick={this.onBackwardClick}
                   options={this.props.dropdownData}
                   selected={this.props.theirs._rev} />
               </td>
               <td>
                 <ConfirmButton
                   data-id="button-select-theirs"
-                  onClick={this.onSelectAsWinnerClick.bind(this, this.props.theirs)}
+                  onClick={this.onSelectAsWinnerClickTheirs}
                   style={{marginRight: '10px', width: '220px'}}
                   text="Select as Winner"
                   buttonType="btn-secondary"
