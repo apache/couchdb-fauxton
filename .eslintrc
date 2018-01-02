@@ -6,14 +6,10 @@
     "react"
   ],
 
-  "rules-todo": {
-    "space-unary-ops": 2,
-    "camelcase": 2
-  },
+  "extends": "eslint:recommended",
 
   "rules": {
     "semi": [2, "always"],
-    "no-undef": 2,
     "keyword-spacing": 2,
     "space-infix-ops": 2,
     "space-before-blocks": 2,
@@ -22,11 +18,13 @@
     "comma-spacing": [2, {"before": false, "after": true}],
     "computed-property-spacing": [2, "never"],
     "eol-last": 2,
+    "no-case-declarations": 0,
+    "no-console": [2, { "allow": ["warn", "error", "info"] }],
     "no-mixed-spaces-and-tabs": [2, "smart-tabs"],
     "no-trailing-spaces": 2,
     "semi-spacing": [2, {"before": false, "after": true}],
-    "no-empty": 2,
     "space-in-parens": [2, "never"],
+    "space-unary-ops": 2,
     "no-unused-vars": [2, {"varsIgnorePattern": "ReactDOM"}],
     "react/jsx-uses-vars": 2,
     "react/jsx-uses-react": 2
