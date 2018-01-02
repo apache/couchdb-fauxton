@@ -36,12 +36,12 @@ describe('Zen Mode', () => {
 
   describe('Toggle theme', () => {
     it('defaults to dark theme', () => {
-      assert.ok(el.hasClass('zen-theme-dark'));
+      assert.ok(el.find('div.zen-theme-dark').exists());
     });
 
     it('switch to light theme on click', () => {
       el.find('.js-toggle-theme').simulate('click');
-      assert.ok(el.hasClass('zen-theme-light'));
+      assert.ok(el.find('div.zen-theme-light').exists());
       // reset
       el.find('.js-toggle-theme').simulate('click');
     });

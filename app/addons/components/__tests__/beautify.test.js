@@ -31,7 +31,7 @@ describe('Beautify', () => {
   it('should have button to beautify for single line code', () => {
     const badCode = '() => { console.log("hello"); }';
     beautifyEl = mount(<ReactComponents.Beautify code={badCode}/>);
-    assert.ok(beautifyEl.hasClass('beautify'));
+    assert.ok(beautifyEl.find('button').hasClass('beautify'));
   });
 
   it('on click beautifies code', () => {

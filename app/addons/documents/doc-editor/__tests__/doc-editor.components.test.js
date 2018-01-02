@@ -73,6 +73,7 @@ describe('DocEditorController', () => {
       }
     });
 
+    el.update();
     assert.equal(el.find('.loading-lines').length, 0);
     assert.equal(el.find('.icon-circle-arrow-up').length, 0);
     assert.equal(el.find('.icon-repeat').length, 0);
@@ -102,6 +103,8 @@ describe('DocEditorController', () => {
         doc: doc
       }
     });
+
+    el.update();
     assert.equal(el.find('.view-attachments-section').length, 1);
   });
 
@@ -188,7 +191,7 @@ describe("AttachmentsPanelButton", () => {
 
   it('shows up after loading', () => {
     const el = mount(<Components.AttachmentsPanelButton isLoading={false} doc={doc} />);
-    assert.equal(el.find('.panel-button').length, 1);
+    assert.equal(el.find('button.panel-button').length, 1);
   });
 });
 

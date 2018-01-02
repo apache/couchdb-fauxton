@@ -138,9 +138,9 @@ describe('ChangesController', () => {
 
   beforeEach(() => {
     Actions.initChanges({ databaseName: 'testDatabase' });
+    Actions.updateChanges(changesResponse);
     headerEl  = mount(<Changes.ChangesTabContent />);
     changesEl = mount(<Changes.ChangesController />);
-    Actions.updateChanges(changesResponse);
   });
 
   afterEach(() => {
@@ -149,6 +149,7 @@ describe('ChangesController', () => {
 
 
   it('should list the right number of changes', () => {
+    changesEl.update();
     assert.equal(results.length, changesEl.find('.change-box').length);
   });
 
@@ -162,6 +163,7 @@ describe('ChangesController', () => {
     submitBtn.simulate('submit');
 
     // confirm only the two deleted items shows up and the IDs maps to the deleted rows
+    changesEl.update();
     assert.equal(2, changesEl.find('.change-box').length);
     assert.equal('doc_3', changesEl.find('.js-doc-id').first().text());
     assert.equal('doc_5', changesEl.find('.js-doc-id').at(1).text());
@@ -176,6 +178,7 @@ describe('ChangesController', () => {
     submitBtn.simulate('submit');
 
     // confirm only one item shows up and the ID maps to what we'd expect
+    changesEl.update();
     assert.equal(1, changesEl.find('.change-box').length);
     assert.equal('doc_3', changesEl.find('.js-doc-id').first().text());
   });
@@ -197,6 +200,7 @@ describe('ChangesController', () => {
     submitBtn.simulate('submit');
 
     // confirm only one item shows up and that it's doc_5
+    changesEl.update();
     assert.equal(1, changesEl.find('.change-box').length);
     assert.equal('doc_5', changesEl.find('.js-doc-id').first().text());
   });
@@ -204,6 +208,7 @@ describe('ChangesController', () => {
   it('shows a No Docs Found message if no docs', () => {
     Stores.changesStore.reset();
     Actions.updateChanges({ last_seq: 124, results: [] });
+    changesEl.update();
     assert.ok(/There\sare\sno\sdocument\schanges/.test(changesEl.html()));
   });
 });
