@@ -39,6 +39,7 @@ describe('CORS Components', () => {
         origins={['https://localhost']}
         saveCORS={sinon.stub()}
         showDeleteDomainConfirmation={sinon.stub()}
+        fetchAndLoadCORSOptions={sinon.stub()}
       />);
 
       wrapper.find('.enable-disable .btn').simulate('click');
@@ -55,6 +56,7 @@ describe('CORS Components', () => {
         origins={[]}
         saveCORS={sinon.stub()}
         showDeleteDomainConfirmation={sinon.stub()}
+        fetchAndLoadCORSOptions={sinon.stub()}
       />);
       wrapper.find('.enable-disable .btn').simulate('click');
       assert.ok(spy.notCalled);
@@ -80,12 +82,13 @@ describe('CORS Components', () => {
       const spy = sinon.stub(window, 'confirm');
       spy.returns(false);
 
-      const wrapper = shallow(<Views.CORSScreen
+      const wrapper = mount(<Views.CORSScreen
         corsEnabled={true}
         isAllOrigins={false}
         origins={[]}
         saveCORS={sinon.stub()}
         showDeleteDomainConfirmation={sinon.stub()}
+        fetchAndLoadCORSOptions={sinon.stub()}
       />);
       wrapper.find('input').at(0).simulate('change', { target: { checked: true, value: 'all' } });
       assert.notOk(spy.calledOnce);

@@ -19,9 +19,27 @@ window.$ = window.jQuery = require('jquery');
 window._ = require('lodash');
 window.Backbone = require('backbone');
 
+// URL.createObjectURL() and Worker are referenced by brace so we add mock objects to prevent
+// long warning messages from being printed while running the tests.
+if (!window.URL) {
+  window.URL = {};
+}
+if (!window.URL.createObjectURL) {
+  window.URL.createObjectURL = function() {
+    return 'http://localhost';
+  };
+}
+window.Worker = function FakeWorker() {
+  this.postMessage = function () { };
+  this.onmessage = undefined;
+};
+
 Object.defineProperty(window.location, 'origin', {
   writable: true,
   value: 'http://dev:8000'
 });
 
-
+// Setup enzyme's react adapter
+const Enzyme = require('enzyme');
+const EnzymeAdapter = require('enzyme-adapter-react-15');
+Enzyme.configure({ adapter: new EnzymeAdapter() });
