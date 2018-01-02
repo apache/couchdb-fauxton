@@ -56,7 +56,7 @@ export class ZenModeOverlay extends React.Component {
   };
 
   getValue = () => {
-    return this.refs.ace.getValue();
+    return this.ace.getValue();
   };
 
   toggleTheme = () => {
@@ -107,7 +107,7 @@ export class ZenModeOverlay extends React.Component {
             </li>
             <li>
               <OverlayTrigger placement="left" overlay={tooltipTheme}>
-                <span ref="theme"
+                <span
                   className="fonticon fonticon-picture js-toggle-theme"
                   data-container=".zen-mode-controls .tooltips"
                   title="Switch zen theme"
@@ -119,7 +119,7 @@ export class ZenModeOverlay extends React.Component {
           <div className="tooltips"></div>
         </div>
         <CodeEditor
-          ref="ace"
+          ref={node => this.ace = node}
           autoFocus={true}
           theme={themes[this.state.theme]}
           defaultCode={this.props.defaultCode}

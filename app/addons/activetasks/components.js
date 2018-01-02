@@ -299,7 +299,7 @@ class ActiveTasksTableBody extends React.Component {
 
     return (
       <tr className="no-matching-database-on-search">
-        <td colSpan="6">No active {type} tasks match with filter: "{this.props.searchTerm}"</td>
+        <td colSpan="6">No active {type} tasks match with filter: &quot;{this.props.searchTerm}&quot;</td>
       </tr>
     );
   };

@@ -574,7 +574,7 @@ class CloneIndexModal extends React.Component {
   };
 
   submit = () => {
-    if (!this.refs.designDocSelector.validate()) {
+    if (!this.designDocSelector.validate()) {
       return;
     }
     if (this.props.newIndexName === '') {
@@ -615,7 +615,7 @@ class CloneIndexModal extends React.Component {
 
             <div className="row">
               <DesignDocSelector
-                ref="designDocSelector"
+                ref={node => this.designDocSelector = node}
                 designDocList={this.props.designDocArray}
                 selectedDesignDocName={this.props.selectedDesignDoc}
                 newDesignDocName={this.props.newDesignDocName}

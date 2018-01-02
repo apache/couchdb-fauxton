@@ -282,7 +282,7 @@ class Notification extends React.Component {
         <div
           style={{opacity: style.opacity, minHeight: style.minHeight + 'px'}}
           className={'global-notification alert alert-' + this.props.type}
-          ref="notification">
+          ref={node => this.notification = node}>
           <a data-bypass href="#" onClick={this.hide}><i className="pull-right fonticon-cancel" /></a>
           <i className={'notification-icon ' + iconMap[this.props.type]} />
           <span dangerouslySetInnerHTML={this.getMsg()}></span>

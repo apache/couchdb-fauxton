@@ -227,7 +227,7 @@ class AddDatabaseWidget extends React.Component {
   };
 
   focusInput = () => {
-    ReactDOM.findDOMNode(this.refs.newDbName).focus();
+    this.newDbName.focus();
   };
 
   onKeyUpInInput = (e) => {
@@ -258,7 +258,7 @@ class AddDatabaseWidget extends React.Component {
           <span className="add-on">Create Database</span>
           <input
             id="js-new-database-name"
-            ref="newDbName"
+            ref={node => this.newDbName = node}
             type="text"
             value={this.state.databaseName}
             onChange={this.onChange} onKeyUp={this.onKeyUpInInput}

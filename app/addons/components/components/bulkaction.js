@@ -70,14 +70,14 @@ export class BulkActionComponent extends React.Component {
   };
 
   selectAll = () => {
-    this.refs.bulkActionPopover.hide();
+    this.bulkActionPopover.hide();
     this.props.selectAll();
   };
 
   getOverlay = () => {
     return (
       <OverlayTrigger
-        ref="bulkActionPopover"
+        ref={node => this.bulkActionPopover = node}
         trigger="click"
         placement="bottom"
         rootClose={true}

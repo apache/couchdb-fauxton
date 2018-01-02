@@ -170,7 +170,6 @@ export default class ReplicationController extends React.Component {
         selectAllDocs={Actions.selectAllReplicates}
         allDocsSelected={allReplicateSelected}
         someDocsSelected={someReplicateSelected}
-        deleteDocs={Actions.deleteDocs}
         activitySort={activitySort}
         changeActivitySort={Actions.changeActivitySort}
         deleteDocs={Actions.deleteReplicates}
@@ -187,7 +186,6 @@ export default class ReplicationController extends React.Component {
       onFilterChange={Actions.filterDocs}
       selectAllDocs={Actions.selectAllDocs}
       selectDoc={Actions.selectDoc}
-      selectAllDocs={Actions.selectAllDocs}
       allDocsSelected={allDocsSelected}
       someDocsSelected={someDocsSelected}
       deleteDocs={Actions.deleteDocs}

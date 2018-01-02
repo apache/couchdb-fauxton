@@ -366,7 +366,7 @@ class AddOptionButton extends React.Component {
         <Button
           id="add-option-button"
           onClick={this.togglePopover.bind(this)}
-          ref="target">
+          ref={node => this.target = node}>
           <i className="icon icon-plus header-icon"></i>
           Add Option
         </Button>
@@ -376,7 +376,7 @@ class AddOptionButton extends React.Component {
           onHide={this.hidePopover.bind(this)}
           placement="bottom"
           rootClose={true}
-          target={() => ReactDOM.findDOMNode(this.refs.target)}>
+          target={() => this.target}>
           {this.getPopover()}
         </Overlay>
       </div>

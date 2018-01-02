@@ -94,7 +94,7 @@ export class DeleteDatabaseModal extends React.Component {
           <p>
             Warning: This action will permanently delete <code>{dbId}</code>.
             To confirm the deletion of the database and all of the
-            database's documents, you must enter the database's name.
+            database&apos;s documents, you must enter the database&apos;s name.
           </p>
           <input
             type="text"

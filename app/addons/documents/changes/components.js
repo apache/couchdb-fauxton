@@ -178,7 +178,7 @@ class AddFilterForm extends React.Component {
   }
 
   focusFilterField () {
-    ReactDOM.findDOMNode(this.refs.addItem).focus();
+    this.addItem.focus();
   }
 
   inputClassNames () {
@@ -194,8 +194,13 @@ class AddFilterForm extends React.Component {
       <form className="form-inline js-filter-form" onSubmit={this.submitForm}>
         <fieldset>
           <i className="fonticon-filter" />
-          <input type="text" ref="addItem" className={this.inputClassNames()} placeholder="Sequence or ID"
-                 onChange={(e) => this.setState({ filter: e.target.value })} value={this.state.filter} />
+          <input
+            type="text"
+            ref={node => this.addItem = node}
+            className={this.inputClassNames()}
+            placeholder="Sequence or ID"
+            onChange={(e) => this.setState({ filter: e.target.value })}
+            value={this.state.filter} />
           <button type="submit" className="btn btn-secondary">Filter</button>
           <div className="help-block"></div>
         </fieldset>

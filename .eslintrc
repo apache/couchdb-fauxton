@@ -6,7 +6,10 @@
     "react"
   ],
 
-  "extends": "eslint:recommended",
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended"
+  ],
 
   "rules": {
     "semi": [2, "always"],
@@ -19,15 +22,16 @@
     "computed-property-spacing": [2, "never"],
     "eol-last": 2,
     "no-case-declarations": 0,
-    "no-console": [2, { "allow": ["warn", "error", "info"] }],
+    "no-console": [1, { "allow": ["warn", "error", "info"] }],
     "no-mixed-spaces-and-tabs": [2, "smart-tabs"],
     "no-trailing-spaces": 2,
     "semi-spacing": [2, {"before": false, "after": true}],
     "space-in-parens": [2, "never"],
     "space-unary-ops": 2,
     "no-unused-vars": [2, {"varsIgnorePattern": "ReactDOM"}],
-    "react/jsx-uses-vars": 2,
-    "react/jsx-uses-react": 2
+    "react/display-name": 0,
+    // disabling for now since there are too many components without PropTypes
+    "react/prop-types": 0    
   },
 
   "parserOptions": {

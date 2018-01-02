@@ -63,6 +63,7 @@ export class CodeEditorPanel extends React.Component {
           data-bypass="true"
           href={this.props.docLink}
           target="_blank"
+          rel="noopener noreferrer"
         >
           <i className="icon-question-sign"></i>
         </a>
@@ -85,7 +86,7 @@ export class CodeEditorPanel extends React.Component {
   enterZenMode = () => {
     this.setState({
       zenModeEnabled: true,
-      code: this.refs.codeEditor.getValue()
+      code: this.codeEditor.getValue()
     });
   };
 
@@ -95,7 +96,7 @@ export class CodeEditorPanel extends React.Component {
   };
 
   getEditor = () => {
-    return this.refs.codeEditor;
+    return this.codeEditor;
   };
 
   getValue = () => {
@@ -127,7 +128,7 @@ export class CodeEditorPanel extends React.Component {
         </label>
         <CodeEditor
           id={this.props.id}
-          ref="codeEditor"
+          ref={node => this.codeEditor = node}
           mode="javascript"
           defaultCode={this.state.code}
           showGutter={true}
