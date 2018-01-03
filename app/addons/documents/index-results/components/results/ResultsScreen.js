@@ -55,20 +55,20 @@ export default class ResultsScreen extends React.Component {
     let data = this.props.results.results;
     return _.map(data, function (doc, i) {
       return (
-       <Document
-         key={doc.id + i}
-         doc={doc}
-         onClick={this.props.isEditable ? this.onClick : noop}
-         keylabel={doc.keylabel}
-         docContent={doc.content}
-         checked={this.props.isSelected(doc.id)}
-         header={doc.header}
-         docChecked={this.props.docChecked}
-         isDeletable={doc.isDeletable}
-         docIdentifier={doc.id} >
-         {doc.url ? this.getUrlFragment('#' + doc.url) : doc.url}
-       </Document>
-     );
+        <Document
+          key={doc.id + i}
+          doc={doc}
+          onClick={this.props.isEditable ? this.onClick : noop}
+          keylabel={doc.keylabel}
+          docContent={doc.content}
+          checked={this.props.isSelected(doc.id)}
+          header={doc.header}
+          docChecked={this.props.docChecked}
+          isDeletable={doc.isDeletable}
+          docIdentifier={doc.id} >
+          {doc.url ? this.getUrlFragment('#' + doc.url) : doc.url}
+        </Document>
+      );
     }, this);
   }
 

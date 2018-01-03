@@ -51,23 +51,23 @@ export const login = (username, password, urlBack) => {
   }
 
   return Api.login({name: username, password})
-  .then(resp => {
-    if (resp.error) {
-      errorHandler({message: resp.reason});
-      return resp;
-    }
+    .then(resp => {
+      if (resp.error) {
+        errorHandler({message: resp.reason});
+        return resp;
+      }
 
-    let msg = app.i18n.en_US['auth-logged-in'];
-    if (msg) {
-      FauxtonAPI.addNotification({msg});
-    }
+      let msg = app.i18n.en_US['auth-logged-in'];
+      if (msg) {
+        FauxtonAPI.addNotification({msg});
+      }
 
-    if (urlBack && !urlBack.includes("login")) {
-      return FauxtonAPI.navigate(urlBack);
-    }
-    FauxtonAPI.navigate("/");
-  })
-  .catch(errorHandler);
+      if (urlBack && !urlBack.includes("login")) {
+        return FauxtonAPI.navigate(urlBack);
+      }
+      FauxtonAPI.navigate("/");
+    })
+    .catch(errorHandler);
 };
 
 export const changePassword = (username, password, passwordConfirm) => () => {
@@ -98,27 +98,27 @@ export const createAdmin = (username, password, loginAfter) => () => {
   }
 
   Api.createAdmin({name: username, password, node})
-  .then(resp => {
-    if (resp.error) {
-      return errorHandler({message: `${app.i18n.en_US['auth-admin-creation-failed-prefix']} ${resp.reason}`});
-    }
+    .then(resp => {
+      if (resp.error) {
+        return errorHandler({message: `${app.i18n.en_US['auth-admin-creation-failed-prefix']} ${resp.reason}`});
+      }
 
-    FauxtonAPI.addNotification({
-      msg: app.i18n.en_US['auth-admin-created']
+      FauxtonAPI.addNotification({
+        msg: app.i18n.en_US['auth-admin-created']
+      });
+
+      if (loginAfter) {
+        return FauxtonAPI.navigate("/login");
+      }
     });
-
-    if (loginAfter) {
-      return FauxtonAPI.navigate("/login");
-    }
-  });
 };
 
 // simple authentication method - does nothing other than check creds
 export const authenticate = (username, password, onSuccess) => {
-    Api.login({
-      name: username,
-      password: password
-    })
+  Api.login({
+    name: username,
+    password: password
+  })
     .then(
       () => {
         hidePasswordModal();
@@ -146,7 +146,7 @@ export const hidePasswordModal = () => {
 export const logout = () => {
   FauxtonAPI.addNotification({ msg: "You have been logged out." });
   Api.logout()
-  .then(Api.getSession)
-  .then(() => FauxtonAPI.navigate('/'))
-  .catch(errorHandler);
+    .then(Api.getSession)
+    .then(() => FauxtonAPI.navigate('/'))
+    .catch(errorHandler);
 };

@@ -58,7 +58,7 @@ const Tabs = ({changePassword}) => {
         onChange={() => {
           FauxtonAPI.navigate('#changePassword');
         }}
-        />
+      />
       <TabElement
         key={2}
         selected={!changePassword}
@@ -66,7 +66,7 @@ const Tabs = ({changePassword}) => {
         onChange={() => {
           FauxtonAPI.navigate('#addAdmin');
         }}
-        />
+      />
     </TabElementWrapper>
   );
 };

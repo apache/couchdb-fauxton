@@ -32,7 +32,7 @@ module.exports = {
       .waitForElementPresent('.Select-option', waitTime, false)
       .keys(['\uE015', '\uE015', '\uE006'])
       .waitForElementPresent('.panel-button.upload', waitTime, false)
-    .end();
+      .end();
   },
 
   'Select doc works for capitalised id': function (client) {
@@ -53,6 +53,6 @@ module.exports = {
       .waitForElementPresent('.Select-option', waitTime, false)
       .keys(['\uE015', '\uE015', '\uE006'])
       .waitForElementPresent('.panel-button.upload', waitTime, false)
-    .end();
+      .end();
   }
 };

@@ -19,9 +19,9 @@ module.exports = function (grunt) {
 
     grunt.log.writeln('Fetching external dependencies');
     const data = this.data,
-        target = data.target || 'app/addons/',
-        settingsFile = fs.existsSync(data.src) ? data.src : 'settings.json.default.json',
-        settings = grunt.file.readJSON(settingsFile);
+          target = data.target || 'app/addons/',
+          settingsFile = fs.existsSync(data.src) ? data.src : 'settings.json.default.json',
+          settings = grunt.file.readJSON(settingsFile);
 
     const fetch = deps => {
       var fs = require('fs-extra');

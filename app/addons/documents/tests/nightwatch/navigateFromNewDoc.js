@@ -18,8 +18,8 @@ module.exports = {
   // a bug fix for where the Ace Editor threw a JS error preventing the subsequent page from loading]
   'Navigate to and from New Doc Page' : function (client) {
     var waitTime = client.globals.maxWaitTime,
-      newDatabaseName = client.globals.testDatabaseName,
-      baseUrl = client.globals.test_settings.launch_url;
+        newDatabaseName = client.globals.testDatabaseName,
+        baseUrl = client.globals.test_settings.launch_url;
 
     var newLink = '/#/database/' + newDatabaseName + '/new';
 

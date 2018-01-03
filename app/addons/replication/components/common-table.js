@@ -123,7 +123,7 @@ const RowActions = ({onlyDeleteAction, _id, url, deleteDocs}) => {
           className="replication__row-btn icon-wrench replication__row-btn--no-left-pad"
           title={'Edit replication'}
           data-bypass="true"
-          >
+        >
         </a>
       </li>
     );
@@ -134,7 +134,7 @@ const RowActions = ({onlyDeleteAction, _id, url, deleteDocs}) => {
           title={'Edit replication document'}
           href={url}
           data-bypass="true"
-          >
+        >
         </a>
       </li>
     );
@@ -187,10 +187,10 @@ const Row = ({
 
   if (showStateRow) {
     stateRow = <RowStatus
-        statusTime={statusTime}
-        status={status}
-        errorMsg={errorMsg}
-      />;
+      statusTime={statusTime}
+      status={status}
+      errorMsg={errorMsg}
+    />;
   }
 
   return (
@@ -209,7 +209,7 @@ const Row = ({
           url={url}
           error={status === "error" || status === 'retrying'}
           errorMsg={errorMsg}
-          />
+        />
       </td>
     </tr>
 
@@ -246,7 +246,7 @@ const BulkSelectHeader = ({isSelected, deleteDocs, someDocsSelected, onCheck}) =
       <div className="replication__bulk-select-header">
         <input className="replication__bulk-select-input" checked={isSelected} type="checkbox" onChange={onCheck} />
       </div>
-    {trash}
+      {trash}
     </div>
   );
 };
@@ -379,7 +379,7 @@ export class ReplicationTable extends React.Component {
                 onCheck={this.props.selectAllDocs}
                 someDocsSelected={this.props.someDocsSelected}
                 deleteDocs={this.props.deleteDocs}
-                />
+              />
             </th>
             <th className="replication__table-header-source" onClick={this.onSort('source')}>
               Source

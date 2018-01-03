@@ -133,51 +133,51 @@ Stores.NotificationStore = FauxtonAPI.Store.extend({
     switch (action.type) {
       case ActionTypes.ADD_NOTIFICATION:
         this.addNotification(action.options.info);
-      break;
+        break;
 
       case ActionTypes.CLEAR_ALL_NOTIFICATIONS:
         this.clearNotifications();
-      break;
+        break;
 
       case ActionTypes.CLEAR_SINGLE_NOTIFICATION:
         this.clearNotification(action.options.notificationId);
-      break;
+        break;
 
       case ActionTypes.START_HIDING_NOTIFICATION:
         this.startHidingNotification(action.options.notificationId);
-      break;
+        break;
 
       case ActionTypes.HIDE_NOTIFICATION:
         this.hideNotification(action.options.notificationId);
-      break;
+        break;
 
       case ActionTypes.HIDE_ALL_NOTIFICATIONS:
         this.hideAllNotifications();
-      break;
+        break;
 
       case ActionTypes.SHOW_NOTIFICATION_CENTER:
         this._notificationCenterVisible = true;
-      break;
+        break;
 
       case ActionTypes.HIDE_NOTIFICATION_CENTER:
         this._notificationCenterVisible = false;
-      break;
+        break;
 
       case ActionTypes.SELECT_NOTIFICATION_FILTER:
         this.setNotificationFilter(action.options.filter);
-      break;
+        break;
 
       case ActionTypes.SHOW_PERMANENT_NOTIFICATION:
         this._permanentNotificationVisible = true;
         this.setPermanentNotificationMessage(action.options.msg);
-      break;
+        break;
 
       case ActionTypes.HIDE_PERMANENT_NOTIFICATION:
         this._permanentNotificationVisible = false;
-      break;
+        break;
 
       default:
-      return;
+        return;
         // do nothing
     }
 

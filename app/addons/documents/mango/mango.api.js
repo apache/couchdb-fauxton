@@ -92,13 +92,13 @@ const supportsExecutionStats = (databaseName) => {
       mangoQuery(databaseName, {
         selector: {
           "_id": {"$gt": "a" }
-       },
+        },
         execution_stats: true
       }, {limit: 1})
-      .then(resp => {
-        supportsExecutionStatsCache = resp.status == 200;
-        resolve(supportsExecutionStatsCache);
-      });
+        .then(resp => {
+          supportsExecutionStatsCache = resp.status == 200;
+          resolve(supportsExecutionStatsCache);
+        });
     });
   }
   return Promise.resolve(supportsExecutionStatsCache);

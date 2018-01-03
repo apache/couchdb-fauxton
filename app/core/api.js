@@ -24,8 +24,8 @@ import Promise from "bluebird";
 
 Backbone.$ = $;
 Backbone.ajax = function () {
-    return Backbone.$.ajax.apply(Backbone.$, arguments);
-  };
+  return Backbone.$.ajax.apply(Backbone.$, arguments);
+};
 
 Object.assign(FauxtonAPI, {
   Router,

@@ -123,7 +123,7 @@ class DatabaseTable extends React.Component {
             </tr>
           </thead>
           <tbody>
-          {rows}
+            {rows}
           </tbody>
         </table>
       </div>
@@ -264,7 +264,7 @@ class AddDatabaseWidget extends React.Component {
             onChange={this.onChange} onKeyUp={this.onKeyUpInInput}
             className="input-xxlarge"
             placeholder="Name of database"
-            />
+          />
           <a className="btn" id="js-create-database" onClick={this.onAddDatabase}>Create</a>
         </TrayContents>
       </div>

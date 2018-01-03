@@ -130,11 +130,9 @@ Documents.BulkDeleteDocCollection = FauxtonAPI.Collection.extend({
       contentType: 'application/json',
       dataType: 'json',
       data: JSON.stringify(payload),
-    })
-    .then(function (res) {
+    }).then(function (res) {
       that.handleResponse(res, promise);
-    })
-    .fail(function () {
+    }).fail(function () {
       var ids = _.reduce(that.toArray(), function (acc, doc) {
         acc.push(doc.id);
         return acc;

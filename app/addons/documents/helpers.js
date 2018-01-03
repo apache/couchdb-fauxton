@@ -102,9 +102,9 @@ const selectedViewContainsReduceFunction = (designDocs, selectedNavItem) => {
   let showReduce = false;
   // If a map/reduce view is selected, check if view contains reduce field
   if (designDocs && isViewSelected(selectedNavItem)) {
-      const ddocID = '_design/' + selectedNavItem.params.designDocName;
-      const ddoc = designDocs.find(ddoc => ddoc._id === ddocID);
-      showReduce = ddoc !== undefined && ddoc.views
+    const ddocID = '_design/' + selectedNavItem.params.designDocName;
+    const ddoc = designDocs.find(ddoc => ddoc._id === ddocID);
+    showReduce = ddoc !== undefined && ddoc.views
         && ddoc.views[selectedNavItem.params.indexName] !== undefined
         && ddoc.views[selectedNavItem.params.indexName].reduce !== undefined;
   }

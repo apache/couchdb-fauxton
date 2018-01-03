@@ -53,18 +53,18 @@ Verifyinstall.testProcess = {
   setupDB: function (db) {
     var deferred = FauxtonAPI.Deferred();
     db.fetch()
-    .then(function () {
-      return db.destroy();
-    }, function () {
-      deferred.resolve();
-    })
-    .then(function () {
-      deferred.resolve();
-    }, function (xhr, error, reason) {
-      if (reason === 'Unauthorized') {
-        deferred.reject(xhr, error, reason);
-      }
-    });
+      .then(function () {
+        return db.destroy();
+      }, function () {
+        deferred.resolve();
+      })
+      .then(function () {
+        deferred.resolve();
+      }, function (xhr, error, reason) {
+        if (reason === 'Unauthorized') {
+          deferred.reject(xhr, error, reason);
+        }
+      });
 
     return deferred;
   },

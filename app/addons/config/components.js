@@ -100,15 +100,15 @@ class ConfigTable extends React.Component {
     return (
       <table className="config table table-striped table-bordered">
         <thead>
-        <tr>
-          <th id="config-section" width="22%">Section</th>
-          <th id="config-option" width="22%">Option</th>
-          <th id="config-value">Value</th>
-          <th id="config-trash"></th>
-        </tr>
+          <tr>
+            <th id="config-section" width="22%">Section</th>
+            <th id="config-option" width="22%">Option</th>
+            <th id="config-value">Value</th>
+            <th id="config-trash"></th>
+          </tr>
         </thead>
         <tbody>
-        {options}
+          {options}
         </tbody>
       </table>
     );
@@ -250,7 +250,7 @@ class ConfigOptionTrash extends React.Component {
   render() {
     return (
       <td className="text-center config-item-trash config-delete-value"
-          onClick={this.showModal.bind(this)}>
+        onClick={this.showModal.bind(this)}>
         <i className="icon icon-trash"></i>
         <FauxtonComponents.ConfirmationModal
           text={`Are you sure you want to delete ${this.props.sectionName}/${this.props.optionName}?`}
@@ -387,9 +387,9 @@ class AddOptionButton extends React.Component {
 const TabItem = ({active, link, title}) => {
   return (
     <li className={active ? 'active' : ''}>
-    <a href={`#${link}`}>
+      <a href={`#${link}`}>
         {title}
-    </a>
+      </a>
     </li>
   );
 };
@@ -408,7 +408,7 @@ const Tabs = ({sidebarItems, selectedTab}) => {
       active={selectedTab === item.title}
       title={item.title}
       link={item.link}
-      />;
+    />;
   });
   return (
     <nav className="sidenav">

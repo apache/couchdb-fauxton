@@ -21,6 +21,6 @@ module.exports = {
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_index')
       .clickWhenVisible('.faux-header__breadcrumbs-link')
       .assert.urlContains('_all_docs')
-    .end();
+      .end();
   }
 };

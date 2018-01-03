@@ -360,7 +360,7 @@ export class ChangesCodeTransition extends React.Component {
       return (
         <div key='1' style={{opacity: style.opacity, height: style.height + 'px'}}>
           <Components.CodeFormat
-          code={this.props.code}
+            code={this.props.code}
           />
         </div>
       );
@@ -376,10 +376,10 @@ export class ChangesCodeTransition extends React.Component {
   render () {
     return (
       <TransitionMotion
-          styles={this.getStyles()}
-          willLeave={this.willLeave}
-          willEnter={this.willEnter}
-        >
+        styles={this.getStyles()}
+        willLeave={this.willLeave}
+        willEnter={this.willEnter}
+      >
         {this.getChildren.bind(this)}
       </TransitionMotion>
     );

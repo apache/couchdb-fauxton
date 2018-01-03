@@ -39,16 +39,16 @@ Helpers.getDocUrl = function (key) {
 
 // File size pretty printing, taken from futon.format.js
 Helpers.formatSize = function (size, decimals = 1) {
-    var jump = 512;
-    if (size < jump) return size + " bytes";
-    var units = ["KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
-    var i = 0;
-    while (size >= jump && i < units.length) {
-      i += 1;
-      size /= 1024;
-    }
-    return size.toFixed(decimals) + ' ' + units[i - 1];
-  };
+  var jump = 512;
+  if (size < jump) return size + " bytes";
+  var units = ["KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
+  var i = 0;
+  while (size >= jump && i < units.length) {
+    i += 1;
+    size /= 1024;
+  }
+  return size.toFixed(decimals) + ' ' + units[i - 1];
+};
 
 Helpers.formatDate = function (timestamp) {
   return moment(timestamp, 'X').format('MMM Do, h:mm:ss a');
@@ -66,7 +66,7 @@ Helpers.escapeJQuerySelector = function (selector) {
  * @returns {boolean} True if on IE10 or IE11. Otherwise false.
  */
 Helpers.isIE1X = function() {
-    return document.documentMode == 11 || document.documentMode == 10;
+  return document.documentMode == 11 || document.documentMode == 10;
 };
 
 export default Helpers;

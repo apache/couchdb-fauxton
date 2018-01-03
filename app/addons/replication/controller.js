@@ -173,7 +173,7 @@ export default class ReplicationController extends React.Component {
         activitySort={activitySort}
         changeActivitySort={Actions.changeActivitySort}
         deleteDocs={Actions.deleteReplicates}
-        />;
+      />;
     }
 
     if (activityLoading) {
@@ -191,7 +191,7 @@ export default class ReplicationController extends React.Component {
       deleteDocs={Actions.deleteDocs}
       activitySort={activitySort}
       changeActivitySort={Actions.changeActivitySort}
-           />;
+    />;
   }
 
   getHeaderComponents () {
@@ -211,10 +211,10 @@ export default class ReplicationController extends React.Component {
           startValue={300}
           stepSize={60}
           onPoll={this.getAllActivity.bind(this)}
-          />
+        />
         <RefreshBtn
           refresh={this.getAllActivity.bind(this)}
-          />
+        />
       </div>
     );
   }
@@ -277,7 +277,7 @@ export default class ReplicationController extends React.Component {
     return (
       <OnePane>
         <OnePaneHeader crumbs={this.getCrumbs()}>
-        {this.getHeaderComponents()}
+          {this.getHeaderComponents()}
         </OnePaneHeader>
         <OnePaneContent>
           <div className="template-content flex-body flex-layout flex-col">

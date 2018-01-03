@@ -36,10 +36,10 @@ const utils = {
     const hash = window.location.hash.split('?')[1];
     queryString = queryString || hash || window.location.search.substring(1);
     const urlParams = {},
-      pl = /\+/g,  // Regex for replacing addition symbol with a space
-      search = /([^&=]+)=?([^&]*)/g,
-      decode = function (s) { return decodeURIComponent(s.replace(pl, ' ')); },
-      query = queryString;
+          pl = /\+/g,  // Regex for replacing addition symbol with a space
+          search = /([^&=]+)=?([^&]*)/g,
+          decode = function (s) { return decodeURIComponent(s.replace(pl, ' ')); },
+          query = queryString;
 
     if (queryString) {
       let match;

@@ -17,10 +17,10 @@ import {Tooltip, OverlayTrigger} from 'react-bootstrap';
 
 require('brace/theme/dawn');
 
- const themes = {
-    dark: 'idle_fingers',
-    light: 'dawn'
-  };
+const themes = {
+  dark: 'idle_fingers',
+  light: 'dawn'
+};
 // Zen mode editing has very few options:
 // - It covers the full screen, hiding everything else
 // - Two themes: light & dark (choice stored in local storage)
@@ -86,11 +86,11 @@ export class ZenModeOverlay extends React.Component {
 
     const tooltipExit = <Tooltip id="tooltip">
       Exit zen mode (`esc`)
-      </Tooltip>;
+    </Tooltip>;
 
     const tooltipTheme = <Tooltip id="tooltip">
       Switch zen theme
-      </Tooltip>;
+    </Tooltip>;
 
     return (
       <div className={classes}>
@@ -112,8 +112,8 @@ export class ZenModeOverlay extends React.Component {
                   data-container=".zen-mode-controls .tooltips"
                   title="Switch zen theme"
                   onClick={this.toggleTheme}>
-                 </span>
-                </OverlayTrigger>
+                </span>
+              </OverlayTrigger>
             </li>
           </ul>
           <div className="tooltips"></div>

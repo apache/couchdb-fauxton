@@ -37,6 +37,6 @@ module.exports = {
       .assert.elementPresent('#doc-list [data-id="document_2"]')
       .waitForElementPresent('#doc-list [data-id="document_3"]', waitTime, false)
       .assert.elementPresent('#doc-list [data-id="document_3"]')
-    .end();
+      .end();
   }
 };

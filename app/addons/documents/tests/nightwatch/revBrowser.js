@@ -57,6 +57,6 @@ module.exports = {
         this.verify.ok(result.value.indexOf('"color": "white"') !== -1, 'check if doc version was promoted');
       })
 
-    .end();
+      .end();
   }
 };

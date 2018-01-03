@@ -250,7 +250,7 @@ class SetupMultipleNodesController extends React.Component {
             onAlterBindAddress={this.alterBindAddressSetupNode} />
           <SetupNodeCountSetting
             onAlterNodeCount={this.alterNodeCount} />
-          </div>
+        </div>
         <hr/>
         <div className="setup-add-nodes-section">
           <h2>Add Nodes to the Cluster</h2>

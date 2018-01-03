@@ -37,7 +37,7 @@ describe('ChangesTabContent', () => {
 
   it('should add filter markup', () => {
     const submitBtn = el.find('[type="submit"]'),
-        addItemField = el.find('.js-changes-filter-field');
+          addItemField = el.find('.js-changes-filter-field');
 
     addItemField.simulate('change', {target: {value: 'I wandered lonely as a filter'}});
     submitBtn.simulate('submit');
@@ -50,7 +50,7 @@ describe('ChangesTabContent', () => {
 
   it('should call addFilter action on click', () => {
     const submitBtn = el.find('[type="submit"]'),
-      addItemField = el.find('.js-changes-filter-field');
+          addItemField = el.find('.js-changes-filter-field');
 
     const spy = sinon.spy(Actions, 'addFilter');
 
@@ -62,7 +62,7 @@ describe('ChangesTabContent', () => {
 
   it('should remove filter markup', () => {
     const submitBtn = el.find('[type="submit"]'),
-      addItemField = el.find('.js-changes-filter-field');
+          addItemField = el.find('.js-changes-filter-field');
 
     addItemField.simulate('change', {target: {value: 'I wandered lonely as a filter'}});
     submitBtn.simulate('submit');
@@ -79,7 +79,7 @@ describe('ChangesTabContent', () => {
 
   it('should call removeFilter action on click', () => {
     const submitBtn = el.find('[type="submit"]'),
-      addItemField = el.find('.js-changes-filter-field');
+          addItemField = el.find('.js-changes-filter-field');
 
     const spy = sinon.spy(Actions, 'removeFilter');
 
@@ -92,7 +92,7 @@ describe('ChangesTabContent', () => {
 
   it('should not add empty filters', () => {
     const submitBtn = el.find('[type="submit"]'),
-      addItemField = el.find('.js-changes-filter-field');
+          addItemField = el.find('.js-changes-filter-field');
 
     addItemField.simulate('change', {target: {value: ''}});
     submitBtn.simulate('submit');
@@ -106,7 +106,7 @@ describe('ChangesTabContent', () => {
 
   it('should not add the same filter twice', () => {
     const submitBtn = el.find('[type="submit"]'),
-        addItemField = el.find('.js-changes-filter-field');
+          addItemField = el.find('.js-changes-filter-field');
 
     const filter = 'I am unique in the whole wide world';
     addItemField.simulate('change', {target: {value: filter}});

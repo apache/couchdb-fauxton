@@ -93,7 +93,7 @@ describe('DesignDoc', () => {
 
     const subOptions = el.find('.accordion-body li');
     assert.equal(subOptions.length, 1);
- });
+  });
 
   it('confirm design doc sidebar extensions appear', function () {
     const el = mount(<DesignDoc

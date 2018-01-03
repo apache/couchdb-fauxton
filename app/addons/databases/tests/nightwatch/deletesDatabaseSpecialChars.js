@@ -30,7 +30,7 @@ module.exports = {
 
       .checkForDatabaseDeleted(newDatabaseName, waitTime)
 
-    .end();
+      .end();
   },
 
   'Deletes a database from the list with special chars': function (client) {
@@ -53,6 +53,6 @@ module.exports = {
       .checkForDatabaseDeleted(newDatabaseName, waitTime)
       .assert.elementNotPresent('a[href="database/' + newDatabaseName + '/_all_docs"]')
 
-    .end();
+      .end();
   }
 };

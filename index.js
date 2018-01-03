@@ -14,18 +14,18 @@ module.exports = function (options) {
 
   function sendFile (req, res, filePath) {
     return send(req, filePath)
-    .on('error', function (err) {
-      if (err.status === 404) {
-        console.error('Could not locate', filePath);
-      } else {
-        console.error('ERROR', filePath, err);
-      }
+      .on('error', function (err) {
+        if (err.status === 404) {
+          console.error('Could not locate', filePath);
+        } else {
+          console.error('ERROR', filePath, err);
+        }
 
-      res.setHeader("Content-Type", "text/javascript");
-      res.statusCode = 404;
-      res.end(JSON.stringify({error: err.message}));
-    })
-    .pipe(res);
+        res.setHeader("Content-Type", "text/javascript");
+        res.statusCode = 404;
+        res.end(JSON.stringify({error: err.message}));
+      })
+      .pipe(res);
   }
 
   var fileTypes = ['.js', '.css', '.png', '.swf', '.eot', '.woff', '.svg', '.ttf', '.swf'];

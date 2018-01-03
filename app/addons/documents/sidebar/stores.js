@@ -274,55 +274,55 @@ Stores.SidebarStore = FauxtonAPI.Store.extend({
     switch (action.type) {
       case ActionTypes.SIDEBAR_SET_SELECTED_NAV_ITEM:
         this.setSelected(action.options);
-      break;
+        break;
 
       case ActionTypes.SIDEBAR_NEW_OPTIONS:
         this.newOptions(action.options);
-      break;
+        break;
 
       case ActionTypes.SIDEBAR_TOGGLE_CONTENT:
         this.toggleContent(action.designDoc, action.indexGroup);
-      break;
+        break;
 
       case ActionTypes.SIDEBAR_FETCHING:
         this._loading = true;
-      break;
+        break;
 
       case ActionTypes.SIDEBAR_SHOW_DELETE_INDEX_MODAL:
         this.showDeleteIndexModal(action.options);
-      break;
+        break;
 
       case ActionTypes.SIDEBAR_HIDE_DELETE_INDEX_MODAL:
         this._deleteIndexModalVisible = false;
-      break;
+        break;
 
       case ActionTypes.SIDEBAR_SHOW_CLONE_INDEX_MODAL:
         this.showCloneIndexModal(action.options);
-      break;
+        break;
 
       case ActionTypes.SIDEBAR_HIDE_CLONE_INDEX_MODAL:
         this._cloneIndexModalVisible = false;
-      break;
+        break;
 
       case ActionTypes.SIDEBAR_CLONE_MODAL_DESIGN_DOC_CHANGE:
         this._cloneIndexModalSelectedDesignDoc = action.options.value;
-      break;
+        break;
 
       case ActionTypes.SIDEBAR_CLONE_MODAL_DESIGN_DOC_NEW_NAME_UPDATED:
         this._cloneIndexModalNewDesignDocName = action.options.value;
-      break;
+        break;
 
       case ActionTypes.SIDEBAR_CLONE_MODAL_UPDATE_INDEX_NAME:
         this._cloneIndexModalNewIndexName = action.options.value;
-      break;
+        break;
 
       case ActionTypes.SIDEBAR_UPDATED_DESIGN_DOCS:
         this.updatedDesignDocs(action.options.designDocs);
         this._loading = false;
-      break;
+        break;
 
       default:
-      return;
+        return;
       // do nothing
     }
 

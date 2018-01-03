@@ -325,22 +325,22 @@ class NotificationCenterPanel extends React.Component {
   getNotifications = (items) => {
     let notifications;
     if (!items.length && !this.props.notifications.length) {
-        notifications = <li className="no-notifications">
+      notifications = <li className="no-notifications">
           No notifications.
-        </li>;
+      </li>;
     } else {
       notifications = items
-      .map(({key, data: notification, style}) => {
-        return (
-          <NotificationPanelRow
-            isVisible={this.props.visible}
-            item={notification}
-            filter={this.props.filter}
-            key={key}
-            style={style}
-          />
-        );
-      });
+        .map(({key, data: notification, style}) => {
+          return (
+            <NotificationPanelRow
+              isVisible={this.props.visible}
+              item={notification}
+              filter={this.props.filter}
+              key={key}
+              style={style}
+            />
+          );
+        });
     }
 
     return (
@@ -352,28 +352,28 @@ class NotificationCenterPanel extends React.Component {
 
   getStyles = (prevItems = []) => {
     return this.props.notifications
-    .map(notification => {
-      let item = prevItems.find(style => style.key === (notification.notificationId.toString()));
-      let style = !item ? {opacity: 0, height: 0} : false;
+      .map(notification => {
+        let item = prevItems.find(style => style.key === (notification.notificationId.toString()));
+        let style = !item ? {opacity: 0, height: 0} : false;
 
-      if (!style && (notification.type === this.props.filter || this.props.filter === 'all')) {
-        style = {
-          opacity: spring(1, presets.stiff),
-          height: spring(61, presets.stiff)
-        };
-      } else if (notification.type !== this.props.filter) {
-        style = {
-          opacity: spring(0, presets.stiff),
-          height: spring(0, presets.stiff)
-        };
-      }
+        if (!style && (notification.type === this.props.filter || this.props.filter === 'all')) {
+          style = {
+            opacity: spring(1, presets.stiff),
+            height: spring(61, presets.stiff)
+          };
+        } else if (notification.type !== this.props.filter) {
+          style = {
+            opacity: spring(0, presets.stiff),
+            height: spring(0, presets.stiff)
+          };
+        }
 
-      return {
-        key: notification.notificationId.toString(),
-        style,
-        data: notification
-      };
-    });
+        return {
+          key: notification.notificationId.toString(),
+          style,
+          data: notification
+        };
+      });
   };
 
   render() {
@@ -404,17 +404,17 @@ class NotificationCenterPanel extends React.Component {
 
           <ul className="notification-filter flex-layout flex-row">
             <li className={filterClasses.all} title="All notifications" data-filter="all"
-                onClick={Actions.selectNotificationFilter.bind(this, 'all')}>All</li>
+              onClick={Actions.selectNotificationFilter.bind(this, 'all')}>All</li>
             <li className={filterClasses.success} title="Success notifications" data-filter="success"
-                onClick={Actions.selectNotificationFilter.bind(this, 'success')}>
+              onClick={Actions.selectNotificationFilter.bind(this, 'success')}>
               <span className="fonticon fonticon-ok-circled" />
             </li>
             <li className={filterClasses.error} title="Error notifications" data-filter="error"
-                onClick={Actions.selectNotificationFilter.bind(this, 'error')}>
+              onClick={Actions.selectNotificationFilter.bind(this, 'error')}>
               <span className="fonticon fonticon-attention-circled" />
             </li>
             <li className={filterClasses.info} title="Info notifications" data-filter="info"
-                onClick={Actions.selectNotificationFilter.bind(this, 'info')}>
+              onClick={Actions.selectNotificationFilter.bind(this, 'info')}>
               <span className="fonticon fonticon-info-circled" />
             </li>
           </ul>

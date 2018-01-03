@@ -44,7 +44,7 @@ module.exports = {
       .waitForElementVisible('.delete-db-modal', waitTime, false)
       .waitForElementVisible('.delete-db-modal input[type="text"]', waitTime, false)
       .assert.elementPresent('.warning')
-    .end();
+      .end();
   },
 
   'Shows no warning for non system databases': function (client) {
@@ -63,6 +63,6 @@ module.exports = {
       .waitForElementVisible('.delete-db-modal', waitTime, false)
       .waitForElementVisible('.delete-db-modal input[type="text"]', waitTime, false)
       .assert.elementNotPresent('.warning')
-    .end();
+      .end();
   }
 };

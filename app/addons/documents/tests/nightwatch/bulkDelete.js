@@ -16,10 +16,10 @@ module.exports = {
 
   'Bulk deletes on json view': function (client) {
     var waitTime = client.globals.maxWaitTime,
-      newDatabaseName = client.globals.testDatabaseName,
-      newDocumentName1 = 'bulktest1',
-      newDocumentName2 = 'bulktest2',
-      baseUrl = client.globals.test_settings.launch_url;
+        newDatabaseName = client.globals.testDatabaseName,
+        newDocumentName1 = 'bulktest1',
+        newDocumentName2 = 'bulktest2',
+        baseUrl = client.globals.test_settings.launch_url;
 
     client
       .loginToGUI()
@@ -39,9 +39,9 @@ module.exports = {
       .waitForElementNotPresent('[data-id="' + newDocumentName1 + '"]', waitTime, false)
       .getText('body', function (result) {
         var data = result.value,
-          isPresentFirstDoc = data.indexOf(newDocumentName1) !== -1,
-          isPresentSecondDoc = data.indexOf(newDocumentName2) !== -1,
-          bothMissing = !isPresentFirstDoc && !isPresentSecondDoc;
+            isPresentFirstDoc = data.indexOf(newDocumentName1) !== -1,
+            isPresentSecondDoc = data.indexOf(newDocumentName2) !== -1,
+            bothMissing = !isPresentFirstDoc && !isPresentSecondDoc;
 
         this.verify.ok(bothMissing,
           'Checking if documents were deleted');
@@ -51,10 +51,10 @@ module.exports = {
 
   'Bulk deletes on table/metadata view': function (client) {
     var waitTime = client.globals.maxWaitTime,
-      newDatabaseName = client.globals.testDatabaseName,
-      newDocumentName1 = 'bulktest1',
-      newDocumentName2 = 'bulktest2',
-      baseUrl = client.globals.test_settings.launch_url;
+        newDatabaseName = client.globals.testDatabaseName,
+        newDocumentName1 = 'bulktest1',
+        newDocumentName2 = 'bulktest2',
+        baseUrl = client.globals.test_settings.launch_url;
 
     client
       .loginToGUI()
@@ -73,9 +73,9 @@ module.exports = {
       .waitForElementNotPresent('.table-view-docs ', waitTime, false)
       .getText('body', function (result) {
         var data = result.value,
-          isPresentFirstDoc = data.indexOf(newDocumentName1) !== -1,
-          isPresentSecondDoc = data.indexOf(newDocumentName2) !== -1,
-          bothMissing = !isPresentFirstDoc && !isPresentSecondDoc;
+            isPresentFirstDoc = data.indexOf(newDocumentName1) !== -1,
+            isPresentSecondDoc = data.indexOf(newDocumentName2) !== -1,
+            bothMissing = !isPresentFirstDoc && !isPresentSecondDoc;
 
         this.verify.ok(bothMissing,
           'Checking if documents were deleted');
@@ -85,8 +85,8 @@ module.exports = {
 
   'Select all works after changing the page': function (client) {
     var waitTime = client.globals.maxWaitTime,
-      newDatabaseName = client.globals.testDatabaseName,
-      baseUrl = client.globals.test_settings.launch_url;
+        newDatabaseName = client.globals.testDatabaseName,
+        baseUrl = client.globals.test_settings.launch_url;
 
     client
       .loginToGUI()

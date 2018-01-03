@@ -13,10 +13,10 @@ const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
 const settings = require('./tasks/helper')
-                    .init()
-                    .readSettingsFile()
-                    .template
-                    .development;
+  .init()
+  .readSettingsFile()
+  .template
+  .development;
 
 module.exports = {
   entry: {
@@ -40,73 +40,73 @@ module.exports = {
   ],
   module: {
     rules: [
-    {
-      test: /\.jsx?$/,
-      enforce: "pre",
-      use: ['eslint-loader'],
-      exclude: /node_modules/
-    },
-    {
-      test: /\.jsx?$/,
-      exclude: /node_modules/,
-      use: 'babel-loader'
-    },
-    {
-     test: require.resolve('jquery'),
-      use: [{
-          loader: 'expose-loader',
-          options: 'jQuery'
+      {
+        test: /\.jsx?$/,
+        enforce: "pre",
+        use: ['eslint-loader'],
+        exclude: /node_modules/
       },
       {
+        test: /\.jsx?$/,
+        exclude: /node_modules/,
+        use: 'babel-loader'
+      },
+      {
+        test: require.resolve('jquery'),
+        use: [{
+          loader: 'expose-loader',
+          options: 'jQuery'
+        },
+        {
           loader: 'expose-loader',
           options: '$'
-      }]
-     },
-     {
-      test: require.resolve("backbone"),
-      use: [{
+        }]
+      },
+      {
+        test: require.resolve("backbone"),
+        use: [{
           loader: 'expose-loader',
           options: 'Backbone'
-      }]
-    },
-    {
-      test: /\.less$/,
-      use: [
-        "style-loader",
-        "css-loader",
-        {
-          loader: "less-loader",
-          options: {
-            modifyVars: {
-              largeLogoPath: "'" + settings.variables.largeLogoPath + "'",
-              smallLogoPath: "'" + settings.variables.smallLogoPath + "'"
+        }]
+      },
+      {
+        test: /\.less$/,
+        use: [
+          "style-loader",
+          "css-loader",
+          {
+            loader: "less-loader",
+            options: {
+              modifyVars: {
+                largeLogoPath: "'" + settings.variables.largeLogoPath + "'",
+                smallLogoPath: "'" + settings.variables.smallLogoPath + "'"
+              }
             }
           }
-        }
-      ]
-    },
-    {
-      test: /\.css$/,
-      use: [
-        "style-loader",
-        "css-loader"
-      ]
-    },
-    {
-      test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
-      loader: 'url-loader?limit=10000&mimetype=application/font-woff&name=dashboard.assets/fonts/[name].[ext]'
-    },
-    {
-      test: /\.woff2(\?\S*)?$/,   loader: 'url-loader?limit=10000&mimetype=application/font-woff2&name=dashboard.assets/fonts/[name].[ext]'
-    },
-    {
-      test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,    loader: 'url-loader?limit=10000&mimetype=application/font-tff&name=dashboard.assets/fonts/[name].[ext]'
-    },
-    { test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,    loader: 'file-loader?name=dashboard.assets/fonts/[name].[ext]' },
-    { test: /\.png(\?v=\d+\.\d+\.\d+)?$/,    loader: 'file-loader?name=dashboard.assets/img/[name].[ext]' },
-    { test: /\.gif(\?v=\d+\.\d+\.\d+)?$/,    loader: 'file-loader?name=dashboard.assets/img/[name].[ext]' },
-    { test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,    loader: 'url-loader?limit=10000&mimetype=image/svg+xml&name=dashboard.assets/img/[name].[ext]' }
-  ]
+        ]
+      },
+      {
+        test: /\.css$/,
+        use: [
+          "style-loader",
+          "css-loader"
+        ]
+      },
+      {
+        test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
+        loader: 'url-loader?limit=10000&mimetype=application/font-woff&name=dashboard.assets/fonts/[name].[ext]'
+      },
+      {
+        test: /\.woff2(\?\S*)?$/,   loader: 'url-loader?limit=10000&mimetype=application/font-woff2&name=dashboard.assets/fonts/[name].[ext]'
+      },
+      {
+        test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,    loader: 'url-loader?limit=10000&mimetype=application/font-tff&name=dashboard.assets/fonts/[name].[ext]'
+      },
+      { test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,    loader: 'file-loader?name=dashboard.assets/fonts/[name].[ext]' },
+      { test: /\.png(\?v=\d+\.\d+\.\d+)?$/,    loader: 'file-loader?name=dashboard.assets/img/[name].[ext]' },
+      { test: /\.gif(\?v=\d+\.\d+\.\d+)?$/,    loader: 'file-loader?name=dashboard.assets/img/[name].[ext]' },
+      { test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,    loader: 'url-loader?limit=10000&mimetype=image/svg+xml&name=dashboard.assets/img/[name].[ext]' }
+    ]
   },
   resolve: {
     extensions: ['*', '.js', '.jsx'], //We can use .js and React's .jsx files using Babel

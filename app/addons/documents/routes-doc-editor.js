@@ -55,7 +55,7 @@ const DocEditorRouteObject = FauxtonAPI.RouteObject.extend({
       endpoint={this.doc.url('apiurl')}
       docURL={docURL}
       component={<RevBrowserContainer docId={docId} databaseName={databaseName} />}
-      />;
+    />;
   },
 
   codeEditor: function (databaseName, docId) {
@@ -79,10 +79,10 @@ const DocEditorRouteObject = FauxtonAPI.RouteObject.extend({
       endpoint={this.doc.url('apiurl')}
       docURL={this.doc.documentation()}
       component={<ReactComponents.DocEditorController
-          database={this.database}
-          isNewDoc={docId ? false : true}
-        />}
-      />;
+        database={this.database}
+        isNewDoc={docId ? false : true}
+      />}
+    />;
   },
 
   showLocalDoc: function(databaseName, docId) {

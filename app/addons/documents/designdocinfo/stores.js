@@ -56,19 +56,19 @@ Stores.DesignDocInfoStore = FauxtonAPI.Store.extend({
       case ActionTypes.DESIGN_FETCHING:
         this._isLoading = true;
         this.triggerChange();
-      break;
+        break;
 
       case ActionTypes.DESIGN_DOC_MONITOR:
         this.monitorDesignDoc(action.options);
         this.triggerChange();
-      break;
+        break;
 
       case ActionTypes.DESIGN_DOC_REFRESH:
         this.triggerChange();
-      break;
+        break;
 
       default:
-      return;
+        return;
       // do nothing
     }
   }

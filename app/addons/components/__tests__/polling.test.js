@@ -61,7 +61,7 @@ describe("Polling", () => {
         max={20}
         stepSize={1}
         onPoll={() => {}}
-                            />);
+      />);
 
       const props = wrapper.find('Range').props();
 
@@ -78,7 +78,7 @@ describe("Polling", () => {
         max={20}
         stepSize={1}
         onPoll={() => {}}
-                            />);
+      />);
 
       wrapper.find('input').simulate('mouseMove', {buttons:1, which:1, target: {value: 21}});
       const isOff = wrapper.find('.faux__polling-info-value--off').text();

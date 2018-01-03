@@ -155,7 +155,7 @@ export default class QueryOptions extends React.Component {
               fonticon="fonticon-gears"
               text="Options"
               active={this.showAsActive()} />
-              {this.getTray()}
+            {this.getTray()}
           </div>
         </div>
       </div>

@@ -24,7 +24,7 @@ export const Layout = () => {
         endpoint={FauxtonAPI.urls('allDBs', 'apiurl')}
         docURL={FauxtonAPI.constants.DOC_URLS.ALL_DBS}
       >
-      <RightDatabasesHeader />
+        <RightDatabasesHeader />
       </OnePaneHeader>
       <OnePaneContent>
         <DatabasesController />

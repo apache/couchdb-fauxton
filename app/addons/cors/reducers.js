@@ -13,22 +13,22 @@
 import ActionTypes from "./actiontypes";
 
 const initialState = {
-      corsEnabled: false,
-      origins: [],
-      isAllOrigins: false,
-      configChanged: false,
-      shouldSaveChange: false,
-      node: '',
-      isLoading: true,
-      deleteDomainModalVisible: false,
-      domainToDelete: ''
+  corsEnabled: false,
+  origins: [],
+  isAllOrigins: false,
+  configChanged: false,
+  shouldSaveChange: false,
+  node: '',
+  isLoading: true,
+  deleteDomainModalVisible: false,
+  domainToDelete: ''
 };
 
 export default function cors (state = initialState, action) {
   switch (action.type) {
 
     case ActionTypes.EDIT_CORS:
-    const corsOptions = action.options;
+      const corsOptions = action.options;
       return {
         ...state,
         isLoading: false,

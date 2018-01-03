@@ -22,12 +22,12 @@ export const supportNewApi = (forceCheck) => {
   if (!newApiPromise || forceCheck) {
     newApiPromise = new FauxtonAPI.Promise((resolve) => {
       get('/_scheduler/jobs', {raw: true})
-      .then(resp => {
-        if (resp.status > 202) {
-          return resolve(false);
-        }
-        resolve(true);
-      });
+        .then(resp => {
+          if (resp.status > 202) {
+            return resolve(false);
+          }
+          resolve(true);
+        });
     });
   }
 
@@ -148,7 +148,7 @@ export const createTarget = (replicationTarget) => {
   if (_.includes([
     Constants.REPLICATION_TARGET.NEW_LOCAL_DATABASE,
     Constants.REPLICATION_TARGET.NEW_REMOTE_DATABASE],
-    replicationTarget)) {
+  replicationTarget)) {
     return true;
   }
 
@@ -284,50 +284,50 @@ export const combineDocsAndScheduler = (docs, schedulerDocs) => {
 
 export const fetchReplicationDocs = () => {
   return supportNewApi()
-  .then(newApi => {
-    const docsPromise = get('/_replicator/_all_docs?include_docs=true&limit=100')
+    .then(newApi => {
+      const docsPromise = get('/_replicator/_all_docs?include_docs=true&limit=100')
+        .then((res) => {
+          if (res.error) {
+            return [];
+          }
+
+          return parseReplicationDocs(res.rows.filter(row => row.id.indexOf("_design/") === -1));
+        });
+
+      if (!newApi) {
+        return docsPromise;
+      }
+      const schedulerPromise = fetchSchedulerDocs();
+      return FauxtonAPI.Promise.join(docsPromise, schedulerPromise, (docs, schedulerDocs) => {
+        return combineDocsAndScheduler(docs, schedulerDocs);
+      })
+        .catch(() => {
+          return [];
+        });
+    });
+};
+
+export const fetchSchedulerDocs = () => {
+  return get('/_scheduler/docs?include_docs=true')
     .then((res) => {
       if (res.error) {
         return [];
       }
 
-      return parseReplicationDocs(res.rows.filter(row => row.id.indexOf("_design/") === -1));
+      return res.docs;
     });
-
-    if (!newApi) {
-      return docsPromise;
-    }
-    const schedulerPromise = fetchSchedulerDocs();
-    return FauxtonAPI.Promise.join(docsPromise, schedulerPromise, (docs, schedulerDocs) => {
-      return combineDocsAndScheduler(docs, schedulerDocs);
-    })
-    .catch(() => {
-      return [];
-    });
-  });
-};
-
-export const fetchSchedulerDocs = () => {
-  return get('/_scheduler/docs?include_docs=true')
-  .then((res) => {
-    if (res.error) {
-      return [];
-    }
-
-    return res.docs;
-  });
 };
 
 export const checkReplicationDocID = (docId) => {
   return new Promise((resolve) => {
     get(`/_replicator/${docId}`)
-    .then(resp => {
-      if (resp.error === "not_found") {
-        resolve(false);
-        return;
-      }
-      resolve(true);
-    });
+      .then(resp => {
+        if (resp.error === "not_found") {
+          resolve(false);
+          return;
+        }
+        resolve(true);
+      });
   });
 };
 
@@ -351,16 +351,16 @@ export const parseReplicateInfo = (resp) => {
 
 export const fetchReplicateInfo = () => {
   return supportNewApi()
-  .then(newApi => {
-    if (!newApi) {
-      return [];
-    }
+    .then(newApi => {
+      if (!newApi) {
+        return [];
+      }
 
-    return get('/_scheduler/jobs')
-    .then(resp => {
-      return parseReplicateInfo(resp);
+      return get('/_scheduler/jobs')
+        .then(resp => {
+          return parseReplicateInfo(resp);
+        });
     });
-  });
 };
 
 export const deleteReplicatesApi = (replicates) => {

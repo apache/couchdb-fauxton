@@ -42,7 +42,7 @@ describe('New Replication Component', () => {
         clearReplicationForm={() => {}}
         hideConflictModal={() => {}}
         updateFormField={() => { return () => {}; }}
-        />);
+      />);
 
       assert.ok(newreplication.instance().validate());
     });
@@ -62,7 +62,7 @@ describe('New Replication Component', () => {
         clearReplicationForm={() => {}}
         hideConflictModal={() => {}}
         updateFormField={() => { return () => {}; }}
-        />);
+      />);
 
       assert.ok(newreplication.instance().validate());
     });
@@ -84,7 +84,7 @@ describe('New Replication Component', () => {
         clearReplicationForm={() => {}}
         hideConflictModal={() => {}}
         updateFormField={() => { return () => {}; }}
-        />);
+      />);
 
       newreplication.instance().validate();
       assert.ok(spy.calledOnce);
@@ -110,7 +110,7 @@ describe('New Replication Component', () => {
         clearReplicationForm={() => {}}
         hideConflictModal={() => {}}
         updateFormField={() => { return () => {}; }}
-        />);
+      />);
 
       newreplication.instance().validate();
       assert.ok(spy.calledOnce);
@@ -136,7 +136,7 @@ describe('New Replication Component', () => {
         clearReplicationForm={() => {}}
         hideConflictModal={() => {}}
         updateFormField={() => { return () => {}; }}
-        />);
+      />);
 
       newreplication.instance().validate();
       assert.ok(spy.calledOnce);
@@ -162,7 +162,7 @@ describe('New Replication Component', () => {
         clearReplicationForm={() => {}}
         hideConflictModal={() => {}}
         updateFormField={() => { return () => {}; }}
-        />);
+      />);
 
       newreplication.instance().validate();
       assert.ok(spy.calledOnce);
@@ -189,7 +189,7 @@ describe('New Replication Component', () => {
         clearReplicationForm={() => {}}
         hideConflictModal={() => {}}
         updateFormField={() => { return () => {}; }}
-        />);
+      />);
 
       assert.notOk(newreplication.instance().confirmButtonEnabled());
     });
@@ -212,7 +212,7 @@ describe('New Replication Component', () => {
         clearReplicationForm={() => {}}
         hideConflictModal={() => {}}
         updateFormField={() => { return () => {}; }}
-        />);
+      />);
 
       assert.notOk(newreplication.instance().confirmButtonEnabled());
     });
@@ -235,7 +235,7 @@ describe('New Replication Component', () => {
         clearReplicationForm={() => {}}
         hideConflictModal={() => {}}
         updateFormField={() => { return () => {}; }}
-        />);
+      />);
 
 
       assert.notOk(newreplication.instance().confirmButtonEnabled());
@@ -259,7 +259,7 @@ describe('New Replication Component', () => {
         clearReplicationForm={() => {}}
         hideConflictModal={() => {}}
         updateFormField={() => { return () => {}; }}
-        />);
+      />);
 
 
       assert.ok(newreplication.instance().confirmButtonEnabled());
@@ -296,7 +296,7 @@ describe('New Replication Component', () => {
         clearReplicationForm={() => {}}
         hideConflictModal={() => {}}
         updateFormField={() => { return () => {}; }}
-        />);
+      />);
 
       newreplication.instance().runReplicationChecks();
     });
@@ -324,7 +324,7 @@ describe('New Replication Component', () => {
         clearReplicationForm={() => {}}
         hideConflictModal={() => {}}
         updateFormField={() => { return () => {}; }}
-        />);
+      />);
 
       newreplication.instance().showPasswordModal = showPasswordModal;
       newreplication.instance().runReplicationChecks();

@@ -30,7 +30,7 @@ const RemoteSourceInput = ({onChange, value}) =>
         value={value}
         onChange={(e) => onChange(e.target.value)}
       />
-    <RemoteExample />
+      <RemoteExample />
     </div>
   </div>;
 
@@ -71,7 +71,7 @@ const ReplicationSourceRow = ({replicationSource, databases, localSource, remote
       value={localSource}
       databases={databases}
       onChange={onChangeLocal}
-           />;
+    />;
   }
 
   return <RemoteSourceInput value={remoteSource} onChange={onChangeRemote} />;
@@ -144,7 +144,7 @@ export class ReplicationSource extends React.Component {
       remoteSource={remoteSource}
       onChangeLocal={onLocalSourceChange}
       onChangeRemote={onRemoteSourceChange}
-           />;
+    />;
   }
 
   render () {

@@ -103,7 +103,7 @@ class LoginForm extends React.Component {
 }
 
 LoginForm.defaultProps = {
-   urlBack: ""
+  urlBack: ""
 };
 
 LoginForm.propTypes = {

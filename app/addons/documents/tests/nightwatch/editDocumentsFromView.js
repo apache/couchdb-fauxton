@@ -15,18 +15,18 @@
 module.exports = {
   'Edit is allowed from default Map Views' : function (client) {
     const waitTime = client.globals.maxWaitTime,
-        newDatabaseName = client.globals.testDatabaseName,
-        baseUrl = client.globals.test_settings.launch_url,
-        newDocumentName = '_design/abc',
-        ddocContents = {
-          "views": {
-            "evens": {
-              "map": "function (doc) { if (doc.number%2 === 0) { emit(doc._id, doc.number); } }",
-              "reduce" : "_count"
-            }
-          },
-          "language": "javascript"
-        };
+          newDatabaseName = client.globals.testDatabaseName,
+          baseUrl = client.globals.test_settings.launch_url,
+          newDocumentName = '_design/abc',
+          ddocContents = {
+            "views": {
+              "evens": {
+                "map": "function (doc) { if (doc.number%2 === 0) { emit(doc._id, doc.number); } }",
+                "reduce" : "_count"
+              }
+            },
+            "language": "javascript"
+          };
     client
       .createDocument(newDocumentName, newDatabaseName, ddocContents)
       .populateDatabase(newDatabaseName)
@@ -53,6 +53,6 @@ module.exports = {
       .clickWhenVisible('#query-options-tray label[for="qoReduce"]')
       .clickWhenVisible('#button-options button[type="submit"]')
       .waitForElementNotPresent('i.fonticon-pencil', waitTime)
-    .end();
+      .end();
   }
 };

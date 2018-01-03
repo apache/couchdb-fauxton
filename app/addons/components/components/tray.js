@@ -77,12 +77,12 @@ export class TrayContents extends React.Component {
   render() {
     return (
       <Overlay
-       show={this.props.contentVisible}
-       onHide={this.props.closeTray}
-       placement={"bottom"}
-       container={this.props.container}
-       rootClose={true}
-       onEnter={this.props.onEnter}
+        show={this.props.contentVisible}
+        onHide={this.props.closeTray}
+        placement={"bottom"}
+        container={this.props.container}
+        rootClose={true}
+        onEnter={this.props.onEnter}
       >
         <TransitionMotion
           defaultStyles={this.getDefaultStyles()}
@@ -90,7 +90,7 @@ export class TrayContents extends React.Component {
           willLeave={this.willLeave}
           willEnter={this.willEnter}
         >
-        {this.getChildren}
+          {this.getChildren}
         </TransitionMotion>
       </Overlay>
     );

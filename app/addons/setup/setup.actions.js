@@ -41,8 +41,7 @@ export default {
       data: JSON.stringify({
         action: 'finish_cluster'
       })
-    })
-    .success(function () {
+    }).success(function () {
       FauxtonAPI.addNotification({
         msg: message,
         type: 'success',
@@ -50,8 +49,7 @@ export default {
         clear: true
       });
       FauxtonAPI.navigate('#setup/finish');
-    })
-    .fail(function () {
+    }).fail(function () {
       FauxtonAPI.addNotification({
         msg: 'There was an error. Please check your setup and try again.',
         type: 'error',

@@ -87,14 +87,14 @@ export const saveCors = (url, options) => (dispatch) => {
     });
     dispatch(loadCORSOptions(options));
   }).catch((error) => {
-      FauxtonAPI.addNotification({
-        msg: 'Error! Could not save your CORS settings. Please try again. ' + errorReason(error),
-        type: 'error',
-        clear: true
-      });
-      dispatch(hideDomainDeleteConfirmation());
-      dispatch(hideLoadingBars());
+    FauxtonAPI.addNotification({
+      msg: 'Error! Could not save your CORS settings. Please try again. ' + errorReason(error),
+      type: 'error',
+      clear: true
     });
+    dispatch(hideDomainDeleteConfirmation());
+    dispatch(hideLoadingBars());
+  });
 };
 
 const errorReason = (error) => {

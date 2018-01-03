@@ -16,11 +16,11 @@ import {Beautify} from './beautify';
 import {ZenModeOverlay} from './zenmodeoverlay';
 
 
-  // list of JSHINT errors to ignore: gets around problem of anonymous functions not being valid
+// list of JSHINT errors to ignore: gets around problem of anonymous functions not being valid
 const ignorableErrors = [
-    'Missing name in function declaration.',
-    "['{a}'] is better written in dot notation."
-  ];
+  'Missing name in function declaration.',
+  "['{a}'] is better written in dot notation."
+];
 
 /**
  * A pre-packaged JS editor panel for use on the Edit Index / Mango pages. Includes options for a title, zen mode

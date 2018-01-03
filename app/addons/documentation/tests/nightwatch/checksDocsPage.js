@@ -30,6 +30,6 @@ module.exports = {
       .waitForElementVisible('a[href="https://twitter.com/couchdb"]', waitTime, false)
       .waitForElementVisible('a[href="https://plus.google.com/+CouchDB"]', waitTime, false)
       .waitForElementVisible('a[href="https://www.linkedin.com/company/apache-couchdb"]', waitTime, false)
-    .end();
+      .end();
   }
 };

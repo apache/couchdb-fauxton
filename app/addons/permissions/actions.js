@@ -32,22 +32,22 @@ export const fetchPermissions = url => dispatch => {
     headers: {'Accept': 'application/json' },
     credentials: 'include'
   })
-  .then((res) => res.json())
-  .then(json => {
-     if (json.error && json.reason) {
-       dispatch(receivedPermissions(
-         {admins:{roles:["_admin"]}, members:{roles:["_admin"]}}));
-       throw new Error(json.reason);
-     }
-     dispatch(receivedPermissions(json));
-  })
-  .catch((err) => {
-     FauxtonAPI.addNotification({
-       msg: 'Failed to retrieve permissions. Please try again. Reason:'
+    .then((res) => res.json())
+    .then(json => {
+      if (json.error && json.reason) {
+        dispatch(receivedPermissions(
+          {admins:{roles:["_admin"]}, members:{roles:["_admin"]}}));
+        throw new Error(json.reason);
+      }
+      dispatch(receivedPermissions(json));
+    })
+    .catch((err) => {
+      FauxtonAPI.addNotification({
+        msg: 'Failed to retrieve permissions. Please try again. Reason:'
          + err.message,
-       type: 'error'
-     });
-  });
+        type: 'error'
+      });
+    });
 };
 
 export const setPermissionOnObject = (p, section, type, value) => {
@@ -106,24 +106,24 @@ export const updatePermissionUnsafe = (url, p, dispatch) => {
     method: 'PUT',
     body: JSON.stringify(p)
   })
-  .then((res) => res.json())
-  .then((json) => {
-    if (!json.ok) {
-      throw new Error(json.reason);
-    }
-    return json;
-  })
-  .then(() => {
-    FauxtonAPI.addNotification({
-      msg: 'Database permissions has been updated.'
-    });
+    .then((res) => res.json())
+    .then((json) => {
+      if (!json.ok) {
+        throw new Error(json.reason);
+      }
+      return json;
+    })
+    .then(() => {
+      FauxtonAPI.addNotification({
+        msg: 'Database permissions has been updated.'
+      });
 
-    return dispatch(receivedPermissions(p));
-  })
-  .catch((error) => {
-    FauxtonAPI.addNotification({
-      msg: 'Could not update permissions - reason: ' + error,
-      type: 'error'
+      return dispatch(receivedPermissions(p));
+    })
+    .catch((error) => {
+      FauxtonAPI.addNotification({
+        msg: 'Could not update permissions - reason: ' + error,
+        type: 'error'
+      });
     });
-  });
 };

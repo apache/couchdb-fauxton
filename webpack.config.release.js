@@ -14,15 +14,15 @@ var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var path = require('path');
 const settings = require('./tasks/helper')
-                    .init()
-                    .readSettingsFile()
-                    .template
-                    .release;
+  .init()
+  .readSettingsFile()
+  .template
+  .release;
 
 module.exports = {
   // Entry point for static analyzer:
   entry: {
-      bundle: ['core-js/fn/array', 'core-js/fn/symbol', 'core-js/fn/promise', './app/main.js']
+    bundle: ['core-js/fn/array', 'core-js/fn/symbol', 'core-js/fn/promise', './app/main.js']
   },
 
   output: {
@@ -75,8 +75,7 @@ module.exports = {
   },
 
   module: {
-    loaders: [
-    {
+    loaders: [{
       test: /\.jsx?$/,
       enforce: "pre",
       use: ['eslint-loader'],
@@ -90,19 +89,19 @@ module.exports = {
     {
       test: require.resolve('jquery'),
       use: [{
-          loader: 'expose-loader',
-          options: 'jQuery'
+        loader: 'expose-loader',
+        options: 'jQuery'
       },
       {
-          loader: 'expose-loader',
-          options: '$'
+        loader: 'expose-loader',
+        options: '$'
       }]
-     },
-     {
+    },
+    {
       test: require.resolve("backbone"),
       use: [{
-          loader: 'expose-loader',
-          options: 'Backbone'
+        loader: 'expose-loader',
+        options: 'Backbone'
       }]
     },
     {
@@ -128,7 +127,7 @@ module.exports = {
       test: /\.css$/, use: [
         'style-loader',
         'css-loader'
-        ]
+      ]
     },
     {
       test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,

@@ -52,9 +52,9 @@ function getConflictingRevs (paths, winner, deleted) {
 
     return acc;
   }, [])
-  .filter((el) => {
-    return deleted.indexOf(el) === -1;
-  });
+    .filter((el) => {
+      return deleted.indexOf(el) === -1;
+    });
 }
 
 const treeLoaded = (tree, doc, conflictingRevs, conflictDoc, databaseName) => {

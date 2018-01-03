@@ -150,22 +150,22 @@ export default {
     var db = Stores.databasesStore.obtainNewDatabaseModel(databaseName);
     FauxtonAPI.addNotification({ msg: 'Creating database.' });
     db.save().done(function () {
-        FauxtonAPI.addNotification({
-          msg: 'Database created successfully',
-          type: 'success',
-          clear: true
-        });
-        var route = FauxtonAPI.urls('allDocs', 'app', app.utils.safeURLName(databaseName), '?limit=' + Resources.DocLimit);
-        app.router.navigate(route, { trigger: true });
-      }
+      FauxtonAPI.addNotification({
+        msg: 'Database created successfully',
+        type: 'success',
+        clear: true
+      });
+      var route = FauxtonAPI.urls('allDocs', 'app', app.utils.safeURLName(databaseName), '?limit=' + Resources.DocLimit);
+      app.router.navigate(route, { trigger: true });
+    }
     ).fail(function (xhr) {
-        var responseText = JSON.parse(xhr.responseText).reason;
-        FauxtonAPI.addNotification({
-          msg: 'Create database failed: ' + responseText,
-          type: 'error',
-          clear: true
-        });
-      }
+      var responseText = JSON.parse(xhr.responseText).reason;
+      FauxtonAPI.addNotification({
+        msg: 'Create database failed: ' + responseText,
+        type: 'error',
+        clear: true
+      });
+    }
     );
   },
 

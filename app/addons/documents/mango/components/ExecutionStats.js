@@ -112,12 +112,12 @@ export default class ExecutionStats extends React.Component {
 
     const popup = this.popup(executionStats, warningText);
     return (
-        <OverlayTrigger trigger={['hover', 'focus', 'click']} placement="right" overlay={popup}>
-          <span className="execution-stats">
-            {warningComponent}
-            {executionStatsComponent}
-          </span>
-        </OverlayTrigger>
+      <OverlayTrigger trigger={['hover', 'focus', 'click']} placement="right" overlay={popup}>
+        <span className="execution-stats">
+          {warningComponent}
+          {executionStatsComponent}
+        </span>
+      </OverlayTrigger>
     );
   }
 }
