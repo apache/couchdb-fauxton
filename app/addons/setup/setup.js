@@ -45,9 +45,9 @@ class ClusterConfiguredScreen extends React.Component {
       return 'clustered';
     } else if (this.state.clusterState === 'single_node_enabled') {
       return 'single';
-    } else {
-      return 'unknown state';
     }
+    return 'unknown state';
+
   };
 
   state = this.getStoreState();

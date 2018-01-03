@@ -67,16 +67,15 @@ class ConfigTableController extends React.Component {
           <Components.LoadLines />
         </div>
       );
-    } else {
-      return (
-        <ConfigTable
-          onDeleteOption={this.deleteOption}
-          onSaveOption={this.saveOption}
-          onEditOption={this.editOption}
-          onCancelEdit={this.cancelEdit}
-          options={this.state.options}/>
-      );
     }
+    return (
+      <ConfigTable
+        onDeleteOption={this.deleteOption}
+        onSaveOption={this.saveOption}
+        onEditOption={this.editOption}
+        onCancelEdit={this.cancelEdit}
+        options={this.state.options}/>
+    );
   }
 }
 
@@ -189,20 +188,20 @@ class ConfigOptionValue extends React.Component {
   getButtons = () => {
     if (this.state.saving) {
       return null;
-    } else {
-      return (
-        <span>
-          <button
-            className="btn btn-primary fonticon-ok-circled btn-small btn-config-save"
-            onClick={this.onSave.bind(this)}
-          />
-          <button
-            className="btn fonticon-cancel-circled btn-small btn-config-cancel"
-            onClick={this.props.onCancelEdit}
-          />
-        </span>
-      );
     }
+    return (
+      <span>
+        <button
+          className="btn btn-primary fonticon-ok-circled btn-small btn-config-save"
+          onClick={this.onSave.bind(this)}
+        />
+        <button
+          className="btn fonticon-cancel-circled btn-small btn-config-cancel"
+          onClick={this.props.onCancelEdit}
+        />
+      </span>
+    );
+
   };
 
   render() {
@@ -220,13 +219,13 @@ class ConfigOptionValue extends React.Component {
           </div>
         </td>
       );
-    } else {
-      return (
-        <td className="config-show-value" onClick={this.props.onEdit}>
-          {this.props.value}
-        </td>
-      );
     }
+    return (
+      <td className="config-show-value" onClick={this.props.onEdit}>
+        {this.props.value}
+      </td>
+    );
+
   }
 }
 

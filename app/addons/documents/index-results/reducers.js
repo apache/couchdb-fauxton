@@ -196,9 +196,9 @@ export const getDataForRendering = (state, databaseName, deleteEnabled = true) =
 
   if (Constants.LAYOUT_ORIENTATION.JSON === options.selectedLayout) {
     return getJsonViewData(docsWithoutGeneratedMangoDocs, options);
-  } else {
-    return getTableViewData(docsWithoutGeneratedMangoDocs, options);
   }
+  return getTableViewData(docsWithoutGeneratedMangoDocs, options);
+
 };
 
 // Should we show the input checkbox where the user can elect to display

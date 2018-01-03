@@ -54,9 +54,9 @@ Databases.Model = FauxtonAPI.Model.extend({
       return FauxtonAPI.urls('changes', 'apiurl', this.safeID(), '?descending=true&limit=100&include_docs=true');
     } else if (context === "app") {
       return "/database/" + this.safeID();
-    } else {
-      return app.host + "/" + this.safeID();
     }
+    return app.host + "/" + this.safeID();
+
   },
 
   safeID: function () {

@@ -24,6 +24,7 @@
     "indent": ["error", 2, { "SwitchCase": 1, "VariableDeclarator": { "var": 2, "let": 2, "const": 3 } }],
     "no-case-declarations": "off",
     "no-console": [1, { "allow": ["warn", "error", "info"] }],
+    "no-else-return": "error",
     "no-mixed-spaces-and-tabs": ["error", "smart-tabs"],
     "no-trailing-spaces": "error",
     "semi-spacing": ["error", {"before": false, "after": true}],
