@@ -23,7 +23,7 @@ export const formatUrl = (url) => {
   try {
     urlObj = new URL(removeCredentialsFromUrl(url));
     encoded = encodeURIComponent(urlObj.pathname.slice(1));
-  } catch {
+  } catch (e) {
     return '';
   }
 
