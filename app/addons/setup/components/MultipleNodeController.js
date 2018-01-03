@@ -1,4 +1,15 @@
-import SetupActions from "../actions";
+import {
+    addNode,
+    alterBindAddressAdditionalNode,
+    alterPortAdditionalNode,
+    alterRemoteAddressAdditionalNode,
+    finishClusterSetup,
+    setBindAddressForSetupNode,
+    setNodeCount,
+    setPassword,
+    setPortForSetupNode,
+    setUsername
+} from "../actions";
 import React from 'react';
 import PropTypes from 'prop-types';
 import ReactComponents from "../../components/react-components";
@@ -27,71 +38,73 @@ export default class MultipleNodesController extends React.Component {
         }, this);
     };
 
-    addNode = () => {
+    _addNode = () => {
         const {username, password} = this.props;
-        SetupActions.addNode(
+        this.props.dispatch(addNode(
             this.isAdminParty,
             {username, password},
             this.props.setupNode,
             this.props.additionalNode
-        );
+        ));
     };
 
-    alterPortAdditionalNode = (e) => {
-        SetupActions.alterPortAdditionalNode(e.target.value);
+    _alterPortAdditionalNode = (e) => {
+        this.props.dispatch(alterPortAdditionalNode(e.target.value));
     };
 
-    alterBindAddressAdditionalNode = (e) => {
-        SetupActions.alterBindAddressAdditionalNode(e.target.value);
+    _alterBindAddressAdditionalNode = (e) => {
+        this.props.dispatch(alterBindAddressAdditionalNode(e.target.value));
     };
 
-    alterRemoteAddressAdditionalNode = (e) => {
-        SetupActions.alterRemoteAddressAdditionalNode(e.target.value);
+    _alterRemoteAddressAdditionalNode = (e) => {
+        this.props.dispatch(alterRemoteAddressAdditionalNode(e.target.value));
     };
 
-    alterUsername = (e) => {
-        SetupActions.setUsername(e.target.value);
+    _alterUsername = (e) => {
+        this.props.dispatch(setUsername(e.target.value));
     };
 
-    alterPassword = (e) => {
-        SetupActions.setPassword(e.target.value);
+    _alterPassword = (e) => {
+        this.props.dispatch(setPassword(e.target.value));
     };
 
-    alterBindAddressSetupNode = (e) => {
-        SetupActions.setBindAddressForSetupNode(e.target.value);
+    _alterBindAddressSetupNode = (e) => {
+        this.props.dispatch(setBindAddressForSetupNode(e.target.value));
     };
 
-    alterPortSetupNode = (e) => {
-        SetupActions.setPortForSetupNode(e.target.value);
+    _alterPortSetupNode = (e) => {
+        this.props.dispatch(setPortForSetupNode(e.target.value));
     };
 
-    alterNodeCount = (e) => {
-        SetupActions.setNodeCount(e.target.value);
+    _alterNodeCount = (e) => {
+        this.props.dispatch(setNodeCount(e.target.value));
     };
 
-    finishClusterSetup = () => {
-        SetupActions.finishClusterSetup('CouchDB Cluster set up!');
+    _finishClusterSetup = () => {
+        this.props.dispatch(finishClusterSetup('CouchDB Cluster set up!'));
     };
 
     render() {
-        const {username, password, isAdminParty, setupNode, additionalNode} = this.props;
+        const {setupNode, additionalNode} = this.props;
         return (
             <div className="setup-nodes">
                 Setup your initial base-node, afterwards add the other nodes that you want to add
                 <div className="setup-setupnode-section">
                     <CurrentAdminPassword
-                        onAlterUsername={this.alterUsername}
-                        onAlterPassword={this.alterPassword}
-                        adminParty={isAdminParty}
-                        password={password}
-                        username={username}/>
+                        {...this.props}
+                        onAlterUsername={this._alterUsername}
+                        onAlterPassword={this._alterPassword}/>
 
                     <OptionalSettings
-                        onAlterPort={this.alterPortSetupNode}
-                        onAlterBindAddress={this.alterBindAddressSetupNode} ip={setupNode.bindAddress}
+                        {...this.props}
+                        onAlterPort={this._alterPortSetupNode}
+                        onAlterBindAddress={this._alterBindAddressSetupNode}
+                        ip={setupNode.bindAddress}
                         port={setupNode.port}/>
                     <NodeCountSetting
-                        onAlterNodeCount={this.alterNodeCount} nodeCount={setupNode.nodeCount}/>
+                        {...this.props}
+                        onAlterNodeCount={this._alterNodeCount}
+                        nodeCount={setupNode.nodeCount}/>
                 </div>
                 <hr/>
                 <div className="setup-add-nodes-section">
@@ -99,19 +112,19 @@ export default class MultipleNodesController extends React.Component {
                     <p>Remote host</p>
                     <input
                         value={additionalNode.remoteAddress}
-                        onChange={this.alterRemoteAddressAdditionalNode}
+                        onChange={this._alterRemoteAddressAdditionalNode}
                         className="input-remote-node"
                         type="text"
                         placeholder="IP Address"/>
-
                     <OptionalSettings
-                        onAlterPort={this.alterPortAdditionalNode}
-                        onAlterBindAddress={this.alterBindAddressAdditionalNode}
+                        {...this.props}
+                        onAlterPort={this._alterPortAdditionalNode}
+                        onAlterBindAddress={this._alterBindAddressAdditionalNode}
                         ip={additionalNode.bindAddress} port={additionalNode.port}/>
 
                     <div className="setup-add-button">
                         <ConfirmButton
-                            onClick={this.addNode}
+                            onClick={this._addNode}
                             showIcon={false}
                             id="setup-btn-no-thanks"
                             text="Add Node"/>
@@ -122,7 +135,10 @@ export default class MultipleNodesController extends React.Component {
                 </div>
 
                 <div className="centered setup-finish">
-                    <ConfirmButton onClick={this.finishClusterSetup} showIcon={false} text="Configure Cluster"/>
+                    <ConfirmButton
+                        onClick={this._finishClusterSetup}
+                        showIcon={false}
+                        text="Configure Cluster"/>
                 </div>
             </div>
         );

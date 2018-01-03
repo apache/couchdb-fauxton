@@ -4,16 +4,20 @@ import PropTypes from 'prop-types';
 import FauxtonAPI from "../../../core/api";
 import ClusterConfiguredScreen from "./ConfiguredScreen";
 import ReactComponents from "../../components/react-components";
+import {getClusterStateFromCouch} from "../actions";
 
 const ConfirmButton = ReactComponents.ConfirmButton;
 
 export default class FirstStepController extends React.Component {
 
+    componentWillMount() {
+        this.props.dispatch(getClusterStateFromCouch());
+    }
 
     render() {
         if (this.props.clusterState === 'cluster_finished' ||
             this.props.clusterState === 'single_node_enabled') {
-            return (<ClusterConfiguredScreen/>);
+            return (<ClusterConfiguredScreen {...this.props}/>);
         }
 
         return (

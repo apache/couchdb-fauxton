@@ -1,6 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import SetupActions from '../actions';
+import {
+    setBindAddressForSetupNode,
+    setPassword,
+    setPortForSetupNode,
+    setupSingleNode,
+    setUsername
+} from '../actions';
 import ReactComponents from "../../components/react-components";
 import CurrentAdminPassword from "./CurrentAdminPassword";
 import OptionalSettings from "./OptionalSettings";
@@ -15,19 +21,19 @@ export default class SingleNodeController extends React.Component {
     }
 
     alterUsername = (e) => {
-        SetupActions.setUsername(e.target.value);
+        this.props.dispatch(setUsername(e.target.value));
     };
 
     alterPassword = (e) => {
-        SetupActions.setPassword(e.target.value);
+        this.props.dispatch(setPassword(e.target.value));
     };
 
     alterBindAddress = (e) => {
-        SetupActions.setBindAddressForSetupNode(e.target.value);
+        this.props.dispatch(setBindAddressForSetupNode(e.target.value));
     };
 
     alterPort = (e) => {
-        SetupActions.setPortForSetupNode(e.target.value);
+        this.props.dispatch(setPortForSetupNode(e.target.value));
     };
 
     render() {
@@ -35,16 +41,17 @@ export default class SingleNodeController extends React.Component {
             <div className="setup-nodes">
                 <div className="setup-setupnode-section">
                     <CurrentAdminPassword
+                        {...this.props}
                         onAlterUsername={this.alterUsername}
-                        onAlterPassword={this.alterPassword}
-                        adminParty={this.props.isAdminParty}
-                        username={this.props.username}
-                        password={this.props.password}/>
+                        onAlterPassword={this.alterPassword}/>
                     <OptionalSettings
+                        {...this.props}
                         onAlterPort={this.alterPort}
                         onAlterBindAddress={this.alterBindAddress}
-                        ip={this.props.bindAddress} port={this.props.port}/>
+                        ip={this.props.bindAddress}
+                        port={this.props.port}/>
                     <ConfirmButton
+                        {...this.props}
                         onClick={this.finishSingleNode}
                         text="Configure Node"/>
                 </div>
@@ -54,13 +61,13 @@ export default class SingleNodeController extends React.Component {
 
     finishSingleNode = (e) => {
         e.preventDefault();
-        const {username, password, port, bindAddress} = this.props;
+        const {username, password, port, bindAddress, dispatch} = this.props;
         const credentials = {username, password};
         const setupNode = {
             port,
             bindAddress,
         };
-        SetupActions.setupSingleNode(credentials, setupNode);
+        dispatch(setupSingleNode(credentials, setupNode));
     };
 }
 

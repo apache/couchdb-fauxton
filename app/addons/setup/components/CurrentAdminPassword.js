@@ -19,7 +19,7 @@ export default class SetupCurrentAdminPassword extends React.Component {
     render() {
         let text = 'Specify your Admin credentials';
 
-        if (this.props.adminParty) {
+        if (this.props.isAdminParty) {
             text = 'Create Admin credentials.';
         }
 
@@ -50,5 +50,5 @@ SetupCurrentAdminPassword.propTypes = {
     onAlterPassword: PropTypes.func.isRequired,
     username: PropTypes.string.isRequired,
     password: PropTypes.string.isRequired,
-    adminParty: PropTypes.bool
+    isAdminParty: PropTypes.bool
 };

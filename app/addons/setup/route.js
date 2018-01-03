@@ -13,14 +13,12 @@
 import React from 'react';
 import app from "../../app";
 import FauxtonAPI from "../../core/api";
-import SetupActions from "./actions";
 import ClusterActions from "../cluster/cluster.actions";
 import {OnePaneSimpleLayout} from '../components/layouts';
 
 import FirstStepContainer from './container/FirstStepContainer';
 import SingleNodeContainer from './container/SingleNodeContainer';
 import MultipleNodeContainer from './container/MultipleNodeContainer';
-import ConfiguredScreen from './components/ConfiguredScreen';
 
 const SetupRouteObject = FauxtonAPI.RouteObject.extend({
   roles: ['_admin'],
@@ -33,10 +31,9 @@ const SetupRouteObject = FauxtonAPI.RouteObject.extend({
     'setup/multinode': 'setupMultiNode'
   },
 
-  setupInitView: function () {
-    const url = FauxtonAPI.urls('_setup', 'apiurl');
+  setupInitView : () => {
+    const url = FauxtonAPI.urls('cluster_setup', 'apiurl');
     ClusterActions.fetchNodes();
-    SetupActions.getClusterStateFromCouch();
     return <OnePaneSimpleLayout
       component={<FirstStepContainer />}
       endpoint={url}
@@ -47,8 +44,8 @@ const SetupRouteObject = FauxtonAPI.RouteObject.extend({
     />;
   },
 
-  setupSingleNode: function () {
-    const url = FauxtonAPI.urls('_setup', 'apiurl');
+  setupSingleNode: () => {
+    const url = FauxtonAPI.urls('cluster_setup', 'apiurl');
     ClusterActions.fetchNodes();
     return <OnePaneSimpleLayout
       component={<SingleNodeContainer />}
@@ -60,8 +57,8 @@ const SetupRouteObject = FauxtonAPI.RouteObject.extend({
     />;
   },
 
-  setupMultiNode: function () {
-    const url = FauxtonAPI.urls('_setup', 'apiurl');
+  setupMultiNode: () => {
+    const url = FauxtonAPI.urls('cluster_setup', 'apiurl');
     ClusterActions.fetchNodes();
     return <OnePaneSimpleLayout
       component={<MultipleNodeContainer />}
@@ -73,11 +70,11 @@ const SetupRouteObject = FauxtonAPI.RouteObject.extend({
     />;
   },
 
-  finishView: function () {
-    const url = FauxtonAPI.urls('_setup', 'apiurl');
-    SetupActions.getClusterStateFromCouch();
+  finishView: () => {
+    //TODO Alexis: Should I create a ConfiguredScreen container with connect in other to fetch clusterstate?
+    const url = FauxtonAPI.urls('cluster_setup', 'apiurl');
     return <OnePaneSimpleLayout
-      component={<ConfiguredScreen/>}
+      component={<FirstStepContainer/>}
       endpoint={url}
       docURL={FauxtonAPI.constants.DOC_URLS.SETUP}
       crumbs={[

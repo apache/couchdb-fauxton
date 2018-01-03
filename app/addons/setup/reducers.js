@@ -45,8 +45,8 @@ const initialState = {
 };
 
 export default function setup(state = initialState, action) {
-    const {options} = action;
-    switch (action) {
+    const {options, type} = action;
+    switch (type) {
         case SETUP_SET_CLUSTERSTATUS:
             return updateState(state, 'clusterState', options.state);
             break;
