@@ -48,7 +48,7 @@ export default class ConfirmModal extends React.Component {
         </Modal.Header>
         <Modal.Body>
           <p>
-          <i className="icon-warning-sign"></i> Do you want to delete all conflicting revisions for this document?
+            <i className="icon-warning-sign"></i> Do you want to delete all conflicting revisions for this document?
           </p>
 
 

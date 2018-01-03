@@ -37,7 +37,6 @@ import {
 
 const mapStateToProps = ({revisionBrowser}, ownProps) => {
   return {
-    databaseName: ownProps.databaseName,
     docId: ownProps.docId,
     tree: getTree(revisionBrowser),
     doc: getDoc(revisionBrowser),
