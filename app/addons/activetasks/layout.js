@@ -16,8 +16,8 @@ import {OnePane, OnePaneHeader, OnePaneContent} from '../components/layouts';
 import {ActiveTasksController, ActiveTasksPollingWidgetController} from "./components";
 
 const crumbs = [
-    {'name': 'Active Tasks'}
-  ];
+  {'name': 'Active Tasks'}
+];
 
 export const ActiveTasksLayout = () => {
   return (

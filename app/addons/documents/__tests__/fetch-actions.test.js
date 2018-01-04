@@ -216,20 +216,20 @@ describe('Docs Fetch API', () => {
         expect(res).toEqual({
           docType: Constants.INDEX_RESULTS_DOC_TYPE.VIEW,
           docs: [
-          {
-            id: "foo",
-            key: "foo",
-            value: {
-              rev: "1-1390740c4877979dbe8998382876556c"
-            }
-          },
-          {
-            id: "foo2",
-            key: "foo2",
-            value: {
-              rev: "2-1390740c4877979dbe8998382876556c"
-            }
-          }]
+            {
+              id: "foo",
+              key: "foo",
+              value: {
+                rev: "1-1390740c4877979dbe8998382876556c"
+              }
+            },
+            {
+              id: "foo2",
+              key: "foo2",
+              value: {
+                rev: "2-1390740c4877979dbe8998382876556c"
+              }
+            }]
         });
       });
     });

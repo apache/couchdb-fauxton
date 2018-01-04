@@ -55,10 +55,10 @@ module.exports = {
           'Checking if new document shows up in _all_docs.'
         );
       })
-    .end();
+      .end();
   },
 
-    'Creates a _local document' : (client) => {
+  'Creates a _local document' : (client) => {
     /*jshint multistr: true */
     const waitTime = client.globals.maxWaitTime,
           newDatabaseName = client.globals.testDatabaseName,
@@ -105,7 +105,7 @@ module.exports = {
           'Checking if new document shows up in _all_docs.'
         );
       })
-    .end();
+      .end();
   },
 
   'Creates a Document through Create Document toolbar button': (client) => {
@@ -148,6 +148,6 @@ module.exports = {
           'Checking if new document shows up in _all_docs.'
         );
       })
-    .end();
+      .end();
   }
 };

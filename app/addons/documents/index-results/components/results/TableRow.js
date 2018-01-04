@@ -63,11 +63,11 @@ export default class TableRow extends React.Component {
   }
 
   getAdditionalInfoRow (el) {
-    const attachmentCount = Object.keys(el._attachments || {}).length;
+    const attachmentCount = Object.keys(el._attachments || {}).length;
     let attachmentIndicator = null;
     let textAttachments = null;
 
-    const conflictCount = Object.keys(el._conflicts || {}).length;
+    const conflictCount = Object.keys(el._conflicts || {}).length;
     let conflictIndicator = null;
     let textConflicts = null;
 

@@ -25,6 +25,6 @@ module.exports = {
       .pause(1000)
       .waitForElementVisible('.replication__activity_header-btn', waitTime, false)
       .assert.cssClassPresent('a[href="#/replication"]', 'faux-navbar__link--active')
-    .end();
+      .end();
   }
 };

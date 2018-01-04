@@ -78,7 +78,7 @@ export class CodeEditor extends React.Component {
   };
 
   setupAce = (props, shouldUpdateCode) => {
-    this.editor = ace.edit(ReactDOM.findDOMNode(this.refs.ace));
+    this.editor = ace.edit(this.ace);
 
     // suppresses an Ace editor error
     this.editor.$blockScrolling = Infinity;
@@ -251,7 +251,7 @@ export class CodeEditor extends React.Component {
     // one JS(ON) string can't span more than one line - we edit one string, so ensure we don't select several lines
     if (selStart >= 0 && selEnd >= 0 && selStart === selEnd && this.isRowExpanded(selStart)) {
       var editLine = this.getLine(selStart),
-          editMatch = editLine.match(/^([ \t]*)("[a-zA-Z0-9_\-]*["|']: )?(["|'].*",?[ \t]*)$/);
+          editMatch = editLine.match(/^([ \t]*)("[a-zA-Z0-9_-]*["|']: )?(["|'].*",?[ \t]*)$/);
 
       if (editMatch) {
         return editMatch;
@@ -351,13 +351,13 @@ export class CodeEditor extends React.Component {
   render() {
     return (
       <div>
-        <div ref="ace" className="js-editor" id={this.props.id}></div>
-        <button ref="stringEditIcon" className="btn string-edit" title="Edit string" disabled={!this.state.stringEditIconVisible}
+        <div ref={node => this.ace = node} className="js-editor" id={this.props.id}></div>
+        <button ref={node => this.stringEditIcon = node} className="btn string-edit" title="Edit string" disabled={!this.state.stringEditIconVisible}
           style={this.state.stringEditIconStyle} onClick={this.openStringEditModal}>
           <i className="icon icon-edit"></i>
         </button>
         <StringEditModal
-          ref="stringEditModal"
+          ref={node => this.stringEditModal = node}
           visible={this.state.stringEditModalVisible}
           value={this.state.stringEditModalValue}
           onSave={this.saveStringEditModal}

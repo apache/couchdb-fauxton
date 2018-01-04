@@ -23,9 +23,9 @@ Setup.Model = Backbone.Model.extend({
   url: function (context) {
     if (context === "apiurl") {
       return window.location.origin + "/_cluster_setup";
-    } else {
-      return '/_cluster_setup';
     }
+    return '/_cluster_setup';
+
   },
 
   validate: function (attrs) {

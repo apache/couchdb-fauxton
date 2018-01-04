@@ -24,10 +24,13 @@ class LoginForm extends React.Component {
       password: ""
     };
   }
-  onInputChange(e) {
-    this.state[e.target.name] = e.target.value;
-    this.setState(this.state);
+  onUsernameChange(e) {
+    this.setState({username: e.target.value});
   }
+  onPasswordChange(e) {
+    this.setState({password: e.target.value});
+  }
+
   submit(e) {
     e.preventDefault();
     if (!this.checkUnrecognizedAutoFill()) {
@@ -42,10 +45,10 @@ class LoginForm extends React.Component {
     }
     let username = this.props.testBlankUsername
       ? this.props.testBlankUsername
-      : ReactDOM.findDOMNode(this.refs.username).value;
+      : this.usernameField.value;
     let password = this.props.testBlankPassword
       ? this.props.testBlankPassword
-      : ReactDOM.findDOMNode(this.refs.password).value;
+      : this.passwordField.value;
     this.setState({ username: username, password: password }); // doesn't set immediately, hence separate login() call
     this.login(username, password);
 
@@ -55,7 +58,7 @@ class LoginForm extends React.Component {
     login(username, password, this.props.urlBack);
   }
   componentDidMount() {
-    ReactDOM.findDOMNode(this.refs.username).focus();
+    this.usernameField.focus();
   }
   render() {
     return (
@@ -70,10 +73,10 @@ class LoginForm extends React.Component {
                 id="username"
                 type="text"
                 name="username"
-                ref="username"
+                ref={node => this.usernameField = node}
                 placeholder="Username"
                 size="24"
-                onChange={this.onInputChange.bind(this)}
+                onChange={this.onUsernameChange.bind(this)}
                 value={this.state.username}
               />
               <br />
@@ -81,10 +84,10 @@ class LoginForm extends React.Component {
                 id="password"
                 type="password"
                 name="password"
-                ref="password"
+                ref={node => this.passwordField = node}
                 placeholder="Password"
                 size="24"
-                onChange={this.onInputChange.bind(this)}
+                onChange={this.onPasswordChange.bind(this)}
                 value={this.state.password}
               />
               <br />
@@ -100,7 +103,7 @@ class LoginForm extends React.Component {
 }
 
 LoginForm.defaultProps = {
-   urlBack: ""
+  urlBack: ""
 };
 
 LoginForm.propTypes = {

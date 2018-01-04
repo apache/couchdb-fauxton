@@ -103,19 +103,19 @@ const DatabasesStoreConstructor = FauxtonAPI.Store.extend({
     switch (action.type) {
       case ActionTypes.DATABASES_SETPAGE:
         this._page = action.options.page;
-      break;
+        break;
 
       case ActionTypes.DATABASES_SET_PROMPT_VISIBLE:
         this.setPromptVisible(action.options.visible);
-      break;
+        break;
 
       case ActionTypes.DATABASES_STARTLOADING:
         this.setLoading(true);
-      break;
+        break;
 
       case ActionTypes.DATABASES_LOADCOMPLETE:
         this.setLoading(false);
-      break;
+        break;
 
       case ActionTypes.DATABASES_UPDATE:
         this._fullDbList = action.options.fullDbList;
@@ -123,10 +123,10 @@ const DatabasesStoreConstructor = FauxtonAPI.Store.extend({
         this._databaseDetails = action.options.databaseDetails;
         this._failedDbs = action.options.failedDbs;
         this.setLoading(false);
-      break;
+        break;
 
       default:
-      return;
+        return;
     }
 
     this.triggerChange();

@@ -43,13 +43,13 @@ export const queryOptionsToggleReduce = (previousReduce) => {
     return updateQueryOptions({
       reduce: !previousReduce
     });
-  } else {
-    // Disables includeDocs if reduce is changing to true
-    return updateQueryOptions({
-      reduce: !previousReduce,
-      includeDocs: false
-    });
   }
+  // Disables includeDocs if reduce is changing to true
+  return updateQueryOptions({
+    reduce: !previousReduce,
+    includeDocs: false
+  });
+
 };
 
 export const queryOptionsUpdateGroupLevel = (newGroupLevel) => {
@@ -112,8 +112,8 @@ export const queryOptionsFilterOnlyDdocs = () => {
   return updateQueryOptions({
     betweenKeys: {
       include: false,
-      startkey: '\"_design\"',
-      endkey: '\"_design0\"'
+      startkey: '"_design"',
+      endkey: '"_design0"'
     },
     showBetweenKeys: true,
     showByKeys: false

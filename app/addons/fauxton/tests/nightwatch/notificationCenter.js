@@ -37,6 +37,6 @@ module.exports = {
         this.verify.ok(/You\shave\sbeen\slogged\sin\./.test(content),
           'Confirming login message appears');
       })
-    .end();
+      .end();
   }
 };

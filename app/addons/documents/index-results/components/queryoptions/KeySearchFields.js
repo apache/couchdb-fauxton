@@ -28,8 +28,8 @@ export default class KeySearchFields extends React.Component {
 
   updateBetweenKeys () {
     this.props.updateBetweenKeys({
-      startkey: ReactDOM.findDOMNode(this.refs.startkey).value,
-      endkey: ReactDOM.findDOMNode(this.refs.endkey).value,
+      startkey: this.startkey.value,
+      endkey: this.endkey.value,
       include: this.props.betweenKeys.include
     });
   }
@@ -91,13 +91,29 @@ export default class KeySearchFields extends React.Component {
             <div className="controls controls-row">
               <div>
                 <label htmlFor="startkey" className="drop-down">Start key</label>
-                <input id="startkey" ref="startkey" type="text" onChange={this.updateBetweenKeys.bind(this)} value={this.props.betweenKeys.startkey} placeholder='e.g., "1234"' />
+                <input
+                  id="startkey"
+                  ref={node => this.startkey = node}
+                  type="text"
+                  onChange={this.updateBetweenKeys.bind(this)}
+                  value={this.props.betweenKeys.startkey}
+                  placeholder='e.g., "1234"' />
               </div>
               <div>
                 <label htmlFor="endkey" className="drop-down">End key</label>
-                <input id="endkey" ref="endkey" onChange={this.updateBetweenKeys.bind(this)} value={this.props.betweenKeys.endkey} type="text" placeholder='e.g., "1234"'/>
+                <input
+                  id="endkey"
+                  ref={node => this.endkey = node}
+                  onChange={this.updateBetweenKeys.bind(this)}
+                  value={this.props.betweenKeys.endkey}
+                  type="text"
+                  placeholder='e.g., "1234"'/>
                 <div className="controls include-end-key-row checkbox controls-row inline">
-                  <input id="qoIncludeEndKeyInResults" ref="inclusive_end" type="checkbox" onChange={this.updateInclusiveEnd.bind(this)} checked={this.props.betweenKeys.include}/>
+                  <input
+                    id="qoIncludeEndKeyInResults"
+                    type="checkbox"
+                    onChange={this.updateInclusiveEnd.bind(this)}
+                    checked={this.props.betweenKeys.include}/>
                   <label htmlFor="qoIncludeEndKeyInResults">Include End Key in results</label>
                 </div>
               </div>
@@ -108,4 +124,4 @@ export default class KeySearchFields extends React.Component {
       </div>
     );
   }
-};
+}

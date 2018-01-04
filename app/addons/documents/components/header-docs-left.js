@@ -31,11 +31,11 @@ function getDropdownItems (items) {
 
     if (el.title && el.links) {
       const items = el.links.map((subel) => {
-        return <Item onClick={subel.onClick} icon={subel.icon} url={subel.url}>{subel.title}</Item>;
+        return <Item key={subel.title} onClick={subel.onClick} icon={subel.icon} url={subel.url}>{subel.title}</Item>;
       });
 
       return ([
-        <li className="header-label">{el.title}</li>,
+        <li key={el.title} className="header-label">{el.title}</li>,
         items
       ]);
     }

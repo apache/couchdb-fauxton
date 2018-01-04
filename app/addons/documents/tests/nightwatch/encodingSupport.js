@@ -25,7 +25,7 @@ module.exports = {
       .waitForElementPresent('.bulk-action-component-panel', waitTime, true)
       .clickWhenVisible('#mango-query', waitTime, true)
       .waitForElementPresent('.mango-editor-wrapper', waitTime, true)
-    .end();
+      .end();
   },
 
   'permissions supports encoding': function (client) {
@@ -42,7 +42,7 @@ module.exports = {
       .waitForElementPresent('.bulk-action-component-panel', waitTime, true)
       .clickWhenVisible('#permissions', waitTime, true)
       .waitForElementPresent('.permissions-page', waitTime, true)
-    .end();
+      .end();
   },
 
   'changes supports encoding': function (client) {
@@ -59,6 +59,6 @@ module.exports = {
       .waitForElementPresent('.bulk-action-component-panel', waitTime, true)
       .clickWhenVisible('#changes', waitTime, true)
       .waitForElementPresent('.changes-header', waitTime, true)
-    .end();
+      .end();
   }
 };

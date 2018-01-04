@@ -72,7 +72,6 @@ export class MenuDropDown extends React.Component {
         <CustomMenu bsRole="menu" className="arrow">
           {menuItems}
         </CustomMenu>
-        }
       </Dropdown>
     );
   }

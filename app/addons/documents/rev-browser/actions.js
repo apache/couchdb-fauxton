@@ -28,19 +28,19 @@ export const initDiffEditor = (dbName, docId) => dispatch => {
 
   // XXX: we need spec compliant promise support and get rid of jQ "deferreds"
   Promise.all([db.get(docId), getTree(db, docId)])
-  .then(([doc, tree]) => {
-    const conflictingRevs = getConflictingRevs(tree.paths, tree.winner, Object.keys(tree.deleted));
-    const initialRev = conflictingRevs[0];
+    .then(([doc, tree]) => {
+      const conflictingRevs = getConflictingRevs(tree.paths, tree.winner, Object.keys(tree.deleted));
+      const initialRev = conflictingRevs[0];
 
-    if (!initialRev) {
-      return dispatch(treeLoaded(tree, doc, conflictingRevs, null, dbName));
-    }
+      if (!initialRev) {
+        return dispatch(treeLoaded(tree, doc, conflictingRevs, null, dbName));
+      }
 
-    db.get(doc._id, {rev: initialRev})
-      .then((conflictDoc) => {
-        dispatch(treeLoaded(tree, doc, conflictingRevs, conflictDoc, dbName));
-      });
-  });
+      db.get(doc._id, {rev: initialRev})
+        .then((conflictDoc) => {
+          dispatch(treeLoaded(tree, doc, conflictingRevs, conflictDoc, dbName));
+        });
+    });
 };
 
 function getConflictingRevs (paths, winner, deleted) {
@@ -52,9 +52,9 @@ function getConflictingRevs (paths, winner, deleted) {
 
     return acc;
   }, [])
-  .filter((el) => {
-    return deleted.indexOf(el) === -1;
-  });
+    .filter((el) => {
+      return deleted.indexOf(el) === -1;
+    });
 }
 
 const treeLoaded = (tree, doc, conflictingRevs, conflictDoc, databaseName) => {
@@ -111,22 +111,22 @@ export const selectRevAsWinner = (databaseName, docId, paths, revToWin) => dispa
   const payload = buildBulkDeletePayload(docId, revsToDelete);
 
   post(FauxtonAPI.urls('bulk_docs', 'server', databaseName, ''), payload)
-  .then((resp) => {
-    if (resp.error) {
-      return FauxtonAPI.addNotification({
-        msg: 'Failed to delete clean up conflicts!',
-        type: 'error',
+    .then((resp) => {
+      if (resp.error) {
+        return FauxtonAPI.addNotification({
+          msg: 'Failed to delete clean up conflicts!',
+          type: 'error',
+          clear: true
+        });
+      }
+
+      FauxtonAPI.addNotification({
+        msg: 'Conflicts successfully solved.',
         clear: true
       });
-    }
-
-    FauxtonAPI.addNotification({
-      msg: 'Conflicts successfully solved.',
-      clear: true
+      dispatch(toggleConfirmModal(false, null));
+      FauxtonAPI.navigate(FauxtonAPI.urls('allDocs', 'app', databaseName, ''));
     });
-    dispatch(toggleConfirmModal(false, null));
-    FauxtonAPI.navigate(FauxtonAPI.urls('allDocs', 'app', databaseName, ''));
-  });
 };
 
 function buildBulkDeletePayload (docId, revs) {

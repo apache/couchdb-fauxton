@@ -36,7 +36,7 @@ export class ToggleHeaderButton extends React.Component {
         disabled={disabled}
         onClick={toggleCallback}
         className={`button ${containerClasses} ${selectedBtnClass}`}
-        >
+      >
         <i className={`${iconDefaultClass} ${fonticon} ${innerClasses}`}></i><span>{text}</span>
       </button>
     );

@@ -47,7 +47,7 @@ const ReplicationRouteObject = FauxtonAPI.RouteObject.extend({
 
     return <ReplicationController
       localSource={localSource}
-      />;
+    />;
   },
 
   fromId: function (replicationId) {

@@ -32,7 +32,7 @@ module.exports = {
       .waitForElementPresent('.Select-option', waitTime, false)
       .keys(['\uE015', '\uE015', '\uE006'])
       .waitForElementPresent('.panel-button.upload', waitTime, false)
-    .end();
+      .end();
   },
 
   'Select doc works for capitalised id': function (client) {
@@ -41,7 +41,7 @@ module.exports = {
         baseUrl = client.globals.test_settings.launch_url;
 
     client
-      .createDocument('MY_CAP_DOC_ID', newDatabaseName, {value: 1, value: 2})
+      .createDocument('MY_CAP_DOC_ID', newDatabaseName, {value: 2})
       .loginToGUI()
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
       .clickWhenVisible('.fonticon-json')
@@ -53,6 +53,6 @@ module.exports = {
       .waitForElementPresent('.Select-option', waitTime, false)
       .keys(['\uE015', '\uE015', '\uE006'])
       .waitForElementPresent('.panel-button.upload', waitTime, false)
-    .end();
+      .end();
   }
 };

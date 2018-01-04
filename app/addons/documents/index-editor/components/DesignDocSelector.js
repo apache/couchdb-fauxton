@@ -42,9 +42,9 @@ export default class DesignDocSelector extends Component {
       return this.props.designDocList.map ((designDoc) => {
         return (<option key={designDoc} value={designDoc}>{designDoc}</option>);
       });
-    } else {
-      return [];
     }
+    return [];
+
   }
 
   selectDesignDoc(e) {

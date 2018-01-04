@@ -54,6 +54,6 @@ module.exports = {
           'check that document is correctly reloaded'
         );
       })
-    .end();
+      .end();
   },
 };

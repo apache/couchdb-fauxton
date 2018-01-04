@@ -175,42 +175,42 @@ var ActiveTasksStore = FauxtonAPI.Store.extend({
 
       case ActionTypes.ACTIVE_TASKS_FETCH_AND_SET:
         this.initAfterFetching(action.options.collectionTable, action.options.backboneCollection);
-      break;
+        break;
 
       case ActionTypes.ACTIVE_TASKS_SWITCH_TAB:
         this.setSelectedRadio(action.options);
         this.triggerChange();
-      break;
+        break;
 
       case ActionTypes.ACTIVE_TASKS_SET_COLLECTION:
         this.setCollection(action.options);
         this.triggerChange();
-      break;
+        break;
 
       case ActionTypes.ACTIVE_TASKS_SET_SEARCH_TERM:
         this.setSearchTerm(action.options);
         this.triggerChange();
-      break;
+        break;
 
       case ActionTypes.ACTIVE_TASKS_SORT_BY_COLUMN_HEADER:
         this.toggleHeaderIsAscending();
         this.setSortByHeader(action.options.columnName);
         this.sortCollectionByColumnHeader(action.options.columnName);
         this.triggerChange();
-      break;
+        break;
 
       case ActionTypes.ACTIVE_TASKS_SET_IS_LOADING:
         this.setIsLoading(action.options, new Date());
         this.triggerChange();
-      break;
+        break;
 
       case ActionTypes.ACTIVE_TASKS_POLLING_COLLECTION:
         this.setCollectionFromPolling(action.options);
         this.triggerChange();
-      break;
+        break;
 
       default:
-      return;
+        return;
     }
   }
 });

@@ -60,7 +60,7 @@ class DocEditorController extends React.Component {
     return (
       <GeneralComponents.CodeEditor
         id="doc-editor"
-        ref="docEditor"
+        ref={node => this.docEditor = node}
         defaultCode={code}
         mode="json"
         autoFocus={true}
@@ -110,7 +110,7 @@ class DocEditorController extends React.Component {
   };
 
   getEditor = () => {
-    return (this.refs.docEditor) ? this.refs.docEditor.getEditor() : null;
+    return (this.docEditor) ? this.docEditor.getEditor() : null;
   };
 
   checkDocIsValid = () => {
@@ -124,7 +124,7 @@ class DocEditorController extends React.Component {
   };
 
   clearChanges = () => {
-    this.refs.docEditor.clearChanges();
+    this.docEditor.clearChanges();
   };
 
   getExtensionIcons = () => {
@@ -184,7 +184,7 @@ class DocEditorController extends React.Component {
         </div>
 
         <UploadModal
-          ref="uploadModal"
+          ref={node => this.uploadModal = node}
           visible={this.state.uploadModalVisible}
           doc={this.state.doc} />
         <CloneDocModal
@@ -346,7 +346,7 @@ class UploadModal extends React.Component {
         <Modal.Body>
           <div className={errorClasses}>{this.state.errorMessage}</div>
           <div>
-            <form ref="uploadForm" className="form">
+            <form ref={node => this.uploadForm = node} className="form">
               <p>
                 Select a file to upload as an attachment to this document. Uploading a file saves the document as a new
                 revision.
@@ -430,7 +430,7 @@ class CloneDocModal extends React.Component {
             <p>
               You can modify the following generated ID for your new document.
             </p>
-            <input ref="newDocId" type="text" autoFocus={true} className="input-block-level"
+            <input ref={node => this.newDocId = node} type="text" autoFocus={true} className="input-block-level"
               onChange={this.docIDChange} value={this.state.uuid} />
           </form>
         </Modal.Body>

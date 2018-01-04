@@ -38,7 +38,6 @@ export default class ReplicationController extends React.Component {
       activityLoading: store.isActivityLoading(),
       databases: store.getDatabases(),
       authenticated: store.isAuthenticated(),
-      password: store.getPassword(),
 
       // source fields
       replicationSource: store.getReplicationSource(),
@@ -171,11 +170,10 @@ export default class ReplicationController extends React.Component {
         selectAllDocs={Actions.selectAllReplicates}
         allDocsSelected={allReplicateSelected}
         someDocsSelected={someReplicateSelected}
-        deleteDocs={Actions.deleteDocs}
         activitySort={activitySort}
         changeActivitySort={Actions.changeActivitySort}
         deleteDocs={Actions.deleteReplicates}
-        />;
+      />;
     }
 
     if (activityLoading) {
@@ -188,13 +186,12 @@ export default class ReplicationController extends React.Component {
       onFilterChange={Actions.filterDocs}
       selectAllDocs={Actions.selectAllDocs}
       selectDoc={Actions.selectDoc}
-      selectAllDocs={Actions.selectAllDocs}
       allDocsSelected={allDocsSelected}
       someDocsSelected={someDocsSelected}
       deleteDocs={Actions.deleteDocs}
       activitySort={activitySort}
       changeActivitySort={Actions.changeActivitySort}
-           />;
+    />;
   }
 
   getHeaderComponents () {
@@ -214,10 +211,10 @@ export default class ReplicationController extends React.Component {
           startValue={300}
           stepSize={60}
           onPoll={this.getAllActivity.bind(this)}
-          />
+        />
         <RefreshBtn
           refresh={this.getAllActivity.bind(this)}
-          />
+        />
       </div>
     );
   }
@@ -254,11 +251,8 @@ export default class ReplicationController extends React.Component {
   getCrumbs () {
     if (this.state.tabSection === 'new replication') {
       return [{'name': 'Job Configuration'}];
-    } else {
-      return [{'name': 'Replication'}];
     }
-
-    return [];
+    return [{'name': 'Replication'}];
   }
 
   getTabs () {
@@ -283,7 +277,7 @@ export default class ReplicationController extends React.Component {
     return (
       <OnePane>
         <OnePaneHeader crumbs={this.getCrumbs()}>
-        {this.getHeaderComponents()}
+          {this.getHeaderComponents()}
         </OnePaneHeader>
         <OnePaneContent>
           <div className="template-content flex-body flex-layout flex-col">

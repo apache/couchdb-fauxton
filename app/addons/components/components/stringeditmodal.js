@@ -56,7 +56,7 @@ export class StringEditModal extends React.Component {
   }
 
   initEditor = (val) => {
-    this.editor = ace.edit(ReactDOM.findDOMNode(this.refs.stringEditor));
+    this.editor = ace.edit(this.stringEditor);
     this.editor.$blockScrolling = Infinity; // suppresses an Ace editor error
     this.editor.setShowPrintMargin(false);
     this.editor.setOption('highlightActiveLine', true);
@@ -80,7 +80,9 @@ export class StringEditModal extends React.Component {
         </Modal.Header>
         <Modal.Body>
           <div id="modal-error" className="hide alert alert-error"/>
-          <div id="string-editor-wrapper"><div ref="stringEditor" className="doc-code"></div></div>
+          <div id="string-editor-wrapper">
+            <div ref={node => this.stringEditor = node} className="doc-code"></div>
+          </div>
         </Modal.Body>
         <Modal.Footer>
           <a className="cancel-link" onClick={this.closeModal}>Cancel</a>

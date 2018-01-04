@@ -82,10 +82,10 @@ describe('Utils', () => {
 
     it('Set and retrieve complex object', () => {
       const key = 'key2',
-        obj = {
-          one: 1,
-          two: ['1', 'string', 3]
-        };
+            obj = {
+              one: 1,
+              two: ['1', 'string', 3]
+            };
       utils.localStorageSet(key, obj);
       assert.deepEqual(utils.localStorageGet(key), obj);
     });

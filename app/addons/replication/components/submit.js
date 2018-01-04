@@ -17,25 +17,25 @@ import Components from '../../components/react-components';
 const {ConfirmButton} = Components;
 
 export const ReplicationSubmit = ({onClear, disabled, onClick}) =>
-<div className="replication__button-row">
-  <ConfirmButton
-    customIcon="fonticon-replicate"
-    id="replicate"
-    text="Start Replication"
-    onClick={onClick}
-    disabled={disabled}
-  />
-  <a
-    className="replication__clear-link"
-    href="#"
-    data-bypass="true"
-    onClick={(e) => {
-      e.preventDefault();
-      onClear();
-    }}>
+  <div className="replication__button-row">
+    <ConfirmButton
+      customIcon="fonticon-replicate"
+      id="replicate"
+      text="Start Replication"
+      onClick={onClick}
+      disabled={disabled}
+    />
+    <a
+      className="replication__clear-link"
+      href="#"
+      data-bypass="true"
+      onClick={(e) => {
+        e.preventDefault();
+        onClear();
+      }}>
     Clear
-  </a>
-</div>;
+    </a>
+  </div>;
 
 
 ReplicationSubmit.propTypes = {

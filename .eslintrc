@@ -6,30 +6,34 @@
     "react"
   ],
 
-  "rules-todo": {
-    "space-unary-ops": 2,
-    "camelcase": 2
-  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended"
+  ],
 
   "rules": {
-    "semi": [2, "always"],
-    "no-undef": 2,
-    "keyword-spacing": 2,
-    "space-infix-ops": 2,
-    "space-before-blocks": 2,
-    "array-bracket-spacing": [2, "never"],
-    "brace-style": [2, "1tbs", { "allowSingleLine": true }],
-    "comma-spacing": [2, {"before": false, "after": true}],
-    "computed-property-spacing": [2, "never"],
-    "eol-last": 2,
-    "no-mixed-spaces-and-tabs": [2, "smart-tabs"],
-    "no-trailing-spaces": 2,
-    "semi-spacing": [2, {"before": false, "after": true}],
-    "no-empty": 2,
-    "space-in-parens": [2, "never"],
-    "no-unused-vars": [2, {"varsIgnorePattern": "ReactDOM"}],
-    "react/jsx-uses-vars": 2,
-    "react/jsx-uses-react": 2
+    "semi": ["error", "always"],
+    "keyword-spacing": "error",
+    "space-infix-ops": "error",
+    "space-before-blocks": "error",
+    "array-bracket-spacing": ["error", "never"],
+    "brace-style": ["error", "1tbs", { "allowSingleLine": true }],
+    "comma-spacing": ["error", {"before": false, "after": true}],
+    "computed-property-spacing": ["error", "never"],
+    "eol-last": "error",
+    "indent": ["error", 2, { "SwitchCase": 1, "VariableDeclarator": { "var": 2, "let": 2, "const": 3 } }],
+    "no-case-declarations": "off",
+    "no-console": [1, { "allow": ["warn", "error", "info"] }],
+    "no-else-return": "error",
+    "no-mixed-spaces-and-tabs": ["error", "smart-tabs"],
+    "no-trailing-spaces": "error",
+    "semi-spacing": ["error", {"before": false, "after": true}],
+    "space-in-parens": ["error", "never"],
+    "space-unary-ops": "error",
+    "no-unused-vars": ["error", {"varsIgnorePattern": "ReactDOM"}],
+    "react/display-name": "off",
+    // disabling for now since there are too many components without PropTypes
+    "react/prop-types": "off"    
   },
 
   "parserOptions": {

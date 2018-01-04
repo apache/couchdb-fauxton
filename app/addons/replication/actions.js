@@ -42,15 +42,15 @@ function initReplicator (localSource) {
       'Content-Type': 'application/json'
     },
   })
-  .then(resp => resp.json())
-  .then((databases) => {
-    FauxtonAPI.dispatch({
-      type: ActionTypes.REPLICATION_DATABASES_LOADED,
-      options: {
-        databases: databases
-      }
+    .then(resp => resp.json())
+    .then((databases) => {
+      FauxtonAPI.dispatch({
+        type: ActionTypes.REPLICATION_DATABASES_LOADED,
+        options: {
+          databases: databases
+        }
+      });
     });
-  });
 }
 
 export const replicate = (params) => {
@@ -60,12 +60,12 @@ export const replicate = (params) => {
     method: 'POST',
     credentials: 'include',
     headers: {
-        'Accept': 'application/json; charset=utf-8',
-        'Content-Type': 'application/json'
+      'Accept': 'application/json; charset=utf-8',
+      'Content-Type': 'application/json'
     },
     body: JSON.stringify(replicationDoc)
   })
-  .then(res => res.json());
+    .then(res => res.json());
 
   const source = Helpers.getDatabaseLabel(replicationDoc.source);
   const target = Helpers.getDatabaseLabel(replicationDoc.target);
@@ -94,16 +94,16 @@ export const replicate = (params) => {
       clear: true
     });
   })
-  .catch(json => {
-    if (json.error && json.error === "not_found") {
-      return createReplicatorDB().then(() => {
-        return replicate(params);
-      })
-      .catch(handleError);
-    }
+    .catch(json => {
+      if (json.error && json.error === "not_found") {
+        return createReplicatorDB().then(() => {
+          return replicate(params);
+        })
+          .catch(handleError);
+      }
 
-    handleError(json);
-  });
+      handleError(json);
+    });
 };
 
 function updateFormField (fieldName, value) {
@@ -122,7 +122,7 @@ function clearReplicationForm () {
 
 const getReplicationActivity = (supportNewApi) => {
   FauxtonAPI.dispatch({
-      type: ActionTypes.REPLICATION_FETCHING_STATUS,
+    type: ActionTypes.REPLICATION_FETCHING_STATUS,
   });
 
   fetchReplicationDocs(supportNewApi).then(docs => {
@@ -135,23 +135,23 @@ const getReplicationActivity = (supportNewApi) => {
 
 const getReplicateActivity = () => {
   supportNewApi()
-  .then(newApi => {
-    if (!newApi) {
-      return;
-    }
+    .then(newApi => {
+      if (!newApi) {
+        return;
+      }
 
-    FauxtonAPI.dispatch({
-        type: ActionTypes.REPLICATION_FETCHING_REPLICATE_STATUS,
-    });
-
-    fetchReplicateInfo()
-    .then(replicateInfo => {
       FauxtonAPI.dispatch({
-        type: ActionTypes.REPLICATION_REPLICATE_STATUS,
-        options: replicateInfo
+        type: ActionTypes.REPLICATION_FETCHING_REPLICATE_STATUS,
       });
+
+      fetchReplicateInfo()
+        .then(replicateInfo => {
+          FauxtonAPI.dispatch({
+            type: ActionTypes.REPLICATION_REPLICATE_STATUS,
+            options: replicateInfo
+          });
+        });
     });
-  });
 };
 
 const filterDocs = (filter) => {
@@ -228,40 +228,40 @@ export const deleteDocs = (docs) => {
     method: 'POST',
     body: JSON.stringify({docs: bulkDocs})
   })
-  .then(resp => {
-    if (!resp.ok) {
-      throw resp;
-    }
-    return resp.json();
-  })
-  .then(() => {
+    .then(resp => {
+      if (!resp.ok) {
+        throw resp;
+      }
+      return resp.json();
+    })
+    .then(() => {
 
-    let msg = 'The selected documents have been deleted.';
-    if (docs.length === 1) {
-      msg = `Document <code>${docs[0]._id}</code> has been deleted`;
-    }
+      let msg = 'The selected documents have been deleted.';
+      if (docs.length === 1) {
+        msg = `Document <code>${docs[0]._id}</code> has been deleted`;
+      }
 
-    FauxtonAPI.addNotification({
-      msg: msg,
-      type: 'success',
-      escape: false,
-      clear: true
-    });
-
-    clearSelectedDocs();
-    getReplicationActivity();
-  })
-  .catch(resp => {
-    resp.json()
-    .then(error => {
       FauxtonAPI.addNotification({
-        msg: error.reason,
-        type: 'error',
+        msg: msg,
+        type: 'success',
+        escape: false,
         clear: true
       });
-    });
 
-  });
+      clearSelectedDocs();
+      getReplicationActivity();
+    })
+    .catch(resp => {
+      resp.json()
+        .then(error => {
+          FauxtonAPI.addNotification({
+            msg: error.reason,
+            type: 'error',
+            clear: true
+          });
+        });
+
+    });
 };
 
 const deleteReplicates = (replicates) => {
@@ -273,29 +273,29 @@ const deleteReplicates = (replicates) => {
   });
 
   deleteReplicatesApi(replicates)
-  .then(() => {
-    let msg = 'The selected replications have been deleted.';
-    if (replicates.length === 1) {
-      msg = `Replication <code>${replicates[0]._id}</code> has been deleted`;
-    }
+    .then(() => {
+      let msg = 'The selected replications have been deleted.';
+      if (replicates.length === 1) {
+        msg = `Replication <code>${replicates[0]._id}</code> has been deleted`;
+      }
 
-    clearSelectedReplicates();
-    getReplicateActivity();
+      clearSelectedReplicates();
+      getReplicateActivity();
 
-    FauxtonAPI.addNotification({
-      msg: msg,
-      type: 'success',
-      escape: false,
-      clear: true
+      FauxtonAPI.addNotification({
+        msg: msg,
+        type: 'success',
+        escape: false,
+        clear: true
+      });
+    }, (xhr) => {
+      const errorMessage = JSON.parse(xhr.responseText);
+      FauxtonAPI.addNotification({
+        msg: errorMessage.reason,
+        type: 'error',
+        clear: true
+      });
     });
-  }, (xhr) => {
-    const errorMessage = JSON.parse(xhr.responseText);
-    FauxtonAPI.addNotification({
-      msg: errorMessage.reason,
-      type: 'error',
-      clear: true
-    });
-  });
 };
 
 export const getReplicationStateFrom = (id) => {
@@ -310,47 +310,47 @@ export const getReplicationStateFrom = (id) => {
     },
     method: 'GET'
   })
-  .then(resp => resp.json())
-  .then((doc) => {
-    const stateDoc = {
-      replicationDocName: doc._id,
-      replicationType: doc.continuous ? Constants.REPLICATION_TYPE.CONTINUOUS : Constants.REPLICATION_TYPE.ONE_TIME,
-    };
+    .then(resp => resp.json())
+    .then((doc) => {
+      const stateDoc = {
+        replicationDocName: doc._id,
+        replicationType: doc.continuous ? Constants.REPLICATION_TYPE.CONTINUOUS : Constants.REPLICATION_TYPE.ONE_TIME,
+      };
 
-    const sourceUrl = _.isObject(doc.source) ? doc.source.url : doc.source;
-    const targetUrl = _.isObject(doc.target) ? doc.target.url : doc.target;
+      const sourceUrl = _.isObject(doc.source) ? doc.source.url : doc.source;
+      const targetUrl = _.isObject(doc.target) ? doc.target.url : doc.target;
 
-    if (sourceUrl.indexOf(window.location.hostname) > -1) {
-      const url = new URL(sourceUrl);
-      stateDoc.replicationSource = Constants.REPLICATION_SOURCE.LOCAL;
-      stateDoc.localSource = decodeURIComponent(url.pathname.slice(1));
-    } else {
-      stateDoc.replicationSource = Constants.REPLICATION_SOURCE.REMOTE;
-      stateDoc.remoteSource = decodeFullUrl(sourceUrl);
-    }
+      if (sourceUrl.indexOf(window.location.hostname) > -1) {
+        const url = new URL(sourceUrl);
+        stateDoc.replicationSource = Constants.REPLICATION_SOURCE.LOCAL;
+        stateDoc.localSource = decodeURIComponent(url.pathname.slice(1));
+      } else {
+        stateDoc.replicationSource = Constants.REPLICATION_SOURCE.REMOTE;
+        stateDoc.remoteSource = decodeFullUrl(sourceUrl);
+      }
 
-    if (targetUrl.indexOf(window.location.hostname) > -1) {
-      const url = new URL(targetUrl);
-      stateDoc.replicationTarget = Constants.REPLICATION_TARGET.EXISTING_LOCAL_DATABASE;
-      stateDoc.localTarget = decodeURIComponent(url.pathname.slice(1));
-    } else {
-      stateDoc.replicationTarget = Constants.REPLICATION_TARGET.EXISTING_REMOTE_DATABASE;
-      stateDoc.remoteTarget = decodeFullUrl(targetUrl);
-    }
+      if (targetUrl.indexOf(window.location.hostname) > -1) {
+        const url = new URL(targetUrl);
+        stateDoc.replicationTarget = Constants.REPLICATION_TARGET.EXISTING_LOCAL_DATABASE;
+        stateDoc.localTarget = decodeURIComponent(url.pathname.slice(1));
+      } else {
+        stateDoc.replicationTarget = Constants.REPLICATION_TARGET.EXISTING_REMOTE_DATABASE;
+        stateDoc.remoteTarget = decodeFullUrl(targetUrl);
+      }
 
-    FauxtonAPI.dispatch({
-      type: ActionTypes.REPLICATION_SET_STATE_FROM_DOC,
-      options: stateDoc
+      FauxtonAPI.dispatch({
+        type: ActionTypes.REPLICATION_SET_STATE_FROM_DOC,
+        options: stateDoc
+      });
+
+    })
+    .catch(error => {
+      FauxtonAPI.addNotification({
+        msg: error.reason,
+        type: 'error',
+        clear: true
+      });
     });
-
-  })
-  .catch(error => {
-    FauxtonAPI.addNotification({
-      msg: error.reason,
-      type: 'error',
-      clear: true
-    });
-  });
 };
 
 const showConflictModal = () => {

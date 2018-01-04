@@ -12,13 +12,13 @@
 
 import Constants from "../../constants";
 import {
-    isJSONDocBulkDeletable,
-    isJSONDocEditable,
-    hasBulkDeletableDoc,
-    getDocUrl,
-    getDocId,
-    getDocRev
- } from "./shared-helpers";
+  isJSONDocBulkDeletable,
+  isJSONDocEditable,
+  hasBulkDeletableDoc,
+  getDocUrl,
+  getDocId,
+  getDocRev
+} from "./shared-helpers";
 
 export const getPseudoSchema = (docs) => {
   let cache = [];

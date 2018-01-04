@@ -86,7 +86,7 @@ const IndexEditorAndResults = BaseRoute.extend({
       ddocsOnly={false}
       deleteEnabled={false}
       selectedNavItem={selectedNavItem}
-      />;
+    />;
   },
 
   createView: function (database, _designDoc) {
@@ -117,7 +117,7 @@ const IndexEditorAndResults = BaseRoute.extend({
       dbName={this.database.id}
       dropDownLinks={dropDownLinks}
       database={this.database}
-      />;
+    />;
   },
 
   editView: function (databaseName, ddocName, viewName) {
@@ -146,7 +146,7 @@ const IndexEditorAndResults = BaseRoute.extend({
       dbName={this.database.id}
       dropDownLinks={dropDownLinks}
       database={this.database}
-      />;
+    />;
   }
 
 });

@@ -56,34 +56,34 @@ module.exports = {
         this.verify.ok(createdDatabaseIsPresent > 0,
           'Checking if new database shows up in _all_dbs.');
       })
-    .end();
+      .end();
   },
 
   'Creates a Database with invalid name' : function (client) {
-        var waitTime = client.globals.maxWaitTime,
-            baseUrl = client.globals.test_settings.launch_url;
+    var waitTime = client.globals.maxWaitTime,
+        baseUrl = client.globals.test_settings.launch_url;
 
-        client
-            .loginToGUI()
-            .checkForDatabaseDeleted(invalidDatabaseName, waitTime)
-            .url(baseUrl)
+    client
+      .loginToGUI()
+      .checkForDatabaseDeleted(invalidDatabaseName, waitTime)
+      .url(baseUrl)
 
-            // ensure the page has fully loaded
-            .waitForElementPresent('.databases.table', waitTime, false)
-            .clickWhenVisible('.add-new-database-btn')
-            .waitForElementVisible('#js-new-database-name', waitTime, false)
-            .setValue('#js-new-database-name', [invalidDatabaseName])
-            .clickWhenVisible('#js-create-database', waitTime, false)
-            .waitForElementVisible('.global-notification.alert.alert-error', waitTime, false)
-            .url(baseUrl + '/_all_dbs')
-            .waitForElementVisible('html', waitTime, false)
-            .getText('html', function (result) {
-                var data = result.value,
-                    createdDatabaseIsPresent = data.indexOf(invalidDatabaseName);
+    // ensure the page has fully loaded
+      .waitForElementPresent('.databases.table', waitTime, false)
+      .clickWhenVisible('.add-new-database-btn')
+      .waitForElementVisible('#js-new-database-name', waitTime, false)
+      .setValue('#js-new-database-name', [invalidDatabaseName])
+      .clickWhenVisible('#js-create-database', waitTime, false)
+      .waitForElementVisible('.global-notification.alert.alert-error', waitTime, false)
+      .url(baseUrl + '/_all_dbs')
+      .waitForElementVisible('html', waitTime, false)
+      .getText('html', function (result) {
+        var data = result.value,
+            createdDatabaseIsPresent = data.indexOf(invalidDatabaseName);
 
-                this.verify.ok(createdDatabaseIsPresent === -1,
-                    'Checking if new database shows up in _all_dbs.');
-            })
-            .end();
-    }
+        this.verify.ok(createdDatabaseIsPresent === -1,
+          'Checking if new database shows up in _all_dbs.');
+      })
+      .end();
+  }
 };

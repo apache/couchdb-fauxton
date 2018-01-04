@@ -77,16 +77,16 @@ describe('Docs Query Options API', () => {
   it('queryOptionsUpdateBetweenKeys returns the proper event to dispatch', () => {
     const newBetweenKeys = {
       include: true,
-      startkey: '\"_design\"',
-      endkey: '\"_design\"'
+      startkey: '"_design"',
+      endkey: '"_design"'
     };
     expect(Actions.queryOptionsUpdateBetweenKeys(newBetweenKeys)).toEqual({
       type: ActionTypes.INDEX_RESULTS_REDUX_NEW_QUERY_OPTIONS,
       options: {
         betweenKeys: {
           include: true,
-          startkey: '\"_design\"',
-          endkey: '\"_design\"'
+          startkey: '"_design"',
+          endkey: '"_design"'
         }
       }
     });
@@ -148,8 +148,8 @@ describe('Docs Query Options API', () => {
       options: {
         betweenKeys: {
           include: false,
-          startkey: '\"_design\"',
-          endkey: '\"_design0\"'
+          startkey: '"_design"',
+          endkey: '"_design0"'
         },
         showBetweenKeys: true,
         showByKeys: false

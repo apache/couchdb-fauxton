@@ -53,7 +53,7 @@ module.exports = {
         this.verify.ok(createdDocumentANotPresent && createdDocumentBNotPresent,
           'Checking if new documents no longer shows up in _all_docs.');
       })
-    .end();
+      .end();
   },
 
   'Deletes a document on table/metadata view': function (client) {
@@ -93,7 +93,7 @@ module.exports = {
         this.verify.ok(createdDocumentANotPresent && createdDocumentBNotPresent,
           'Checking if new documents no longer shows up in _all_docs.');
       })
-    .end();
+      .end();
   },
 
   'Deleting a new Design Doc automatically removes it from the sidebar': function (client) {
@@ -103,9 +103,9 @@ module.exports = {
     var designDoc = {
       "_id": "_design/sidebar-update",
       "views": {
-       "new-index": {
-         "map": "function (doc) {\n  emit(doc._id, 1);\n}"
-       }
+        "new-index": {
+          "map": "function (doc) {\n  emit(doc._id, 1);\n}"
+        }
       },
       "language": "javascript"
     };
@@ -162,7 +162,7 @@ module.exports = {
         this.verify.ok(createdDocumentANotPresent,
           'Checking if new document no longer shows up in _all_docs.');
       })
-    .end();
+      .end();
   },
 
 };

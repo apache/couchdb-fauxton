@@ -130,50 +130,50 @@ var SetupStore = FauxtonAPI.Store.extend({
     switch (action.type) {
       case ActionTypes.SETUP_SET_CLUSTERSTATUS:
         this.setClusterState(action.options);
-      break;
+        break;
 
       case ActionTypes.SETUP_SET_USERNAME:
         this.setUsername(action.options);
-      break;
+        break;
 
       case ActionTypes.SETUP_SET_PASSWORD:
         this.setPassword(action.options);
-      break;
+        break;
 
       case ActionTypes.SETUP_BIND_ADDRESS_FOR_SINGLE_NODE:
         this.setBindAdressForSetupNode(action.options);
-      break;
+        break;
 
       case ActionTypes.SETUP_PORT_FOR_SINGLE_NODE:
         this.setPortForSetupNode(action.options);
-      break;
+        break;
 
       case ActionTypes.SETUP_PORT_ADDITIONAL_NODE:
         this.setPortForAdditionalNode(action.options);
-      break;
+        break;
 
       case ActionTypes.SETUP_BIND_ADDRESS_ADDITIONAL_NODE:
         this.setBindAdressForAdditionalNode(action.options);
-      break;
+        break;
 
       case ActionTypes.SETUP_REMOTE_ADDRESS_ADDITIONAL_NODE:
         this.setRemoteAddressForAdditionalNode(action.options);
-      break;
+        break;
 
       case ActionTypes.SETUP_ADD_NODE_TO_LIST:
         this.addNodeToList(action.options);
-      break;
+        break;
 
       case ActionTypes.SETUP_RESET_ADDITIONAL_NODE:
         this.resetAddtionalNode();
-      break;
+        break;
 
       case ActionTypes.SETUP_NODE_COUNT:
         this.setNodeCountForSetupNode(action.options);
-      break;
+        break;
 
       default:
-      return;
+        return;
     }
 
     //This is a quick and somewhat messy fix

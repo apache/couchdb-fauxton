@@ -47,22 +47,22 @@ ReplicationType.propTypes = {
 };
 
 const ReplicationDoc = ({value, onChange}) =>
-<div className="replication__section">
-  <div className="replication__input-label">
+  <div className="replication__section">
+    <div className="replication__input-label">
     Replication Document:
-  </div>
-  <div className="replication__doc-name">
-    <span className="fonticon fonticon-cancel replication__doc-name-icon" title="Clear field"
-      onClick={() => onChange('')} />
-    <input
-      type="text"
-      className="replication__doc-name-input"
-      placeholder="Custom ID (optional)"
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
-    />
-  </div>
-</div>;
+    </div>
+    <div className="replication__doc-name">
+      <span className="fonticon fonticon-cancel replication__doc-name-icon" title="Clear field"
+        onClick={() => onChange('')} />
+      <input
+        type="text"
+        className="replication__doc-name-input"
+        placeholder="Custom ID (optional)"
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+      />
+    </div>
+  </div>;
 
 ReplicationDoc.propTypes = {
   value: PropTypes.string.isRequired,

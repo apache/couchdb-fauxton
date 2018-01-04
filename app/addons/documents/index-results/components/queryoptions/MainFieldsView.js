@@ -86,7 +86,7 @@ export default class MainFieldsView extends React.Component {
           <div className="row-fluid fieldsets">
             <div className="checkbox inline">
               <input disabled={this.props.reduce} onChange={this.toggleIncludeDocs.bind(this)} id="qoIncludeDocs"
-                 name="include_docs" type="checkbox" checked={includeDocs} />
+                name="include_docs" type="checkbox" checked={includeDocs} />
               <label className={this.props.reduce ? 'disabled' : ''} htmlFor="qoIncludeDocs" id="qoIncludeDocsLabel">Include Docs</label>
             </div>
             {this.reduce()}

@@ -17,11 +17,11 @@ import React, { Component } from "react";
 export default class ExplainPage extends Component {
   componentDidMount () {
     prettyPrint();
-  };
+  }
 
   componentDidUpdate () {
     prettyPrint();
-  };
+  }
 
   render () {
     return (
@@ -29,7 +29,7 @@ export default class ExplainPage extends Component {
         <pre className="prettyprint">{JSON.stringify(this.props.explainPlan, null, ' ')}</pre>
       </div>
     );
-  };
+  }
 }
 
 ExplainPage.propTypes = {

@@ -202,7 +202,7 @@ describe("Custom Extension Buttons", () => {
       render() {
         return (
           <div>
-            <button>Oh no she di'n't!</button>
+            <button>Oh no she di&apos;n&apos;t!</button>
             <span id="testDatabaseName">{this.props.database.id}</span>
           </div>
         );

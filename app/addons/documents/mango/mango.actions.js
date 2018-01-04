@@ -92,12 +92,12 @@ export default {
           });
         })
         .catch((error) => {
-            FauxtonAPI.addNotification({
-              msg: 'Failed to create index. ' + this.errorReason(error),
-              type: 'error',
-              clear: true
-            });
+          FauxtonAPI.addNotification({
+            msg: 'Failed to create index. ' + this.errorReason(error),
+            type: 'error',
+            clear: true
           });
+        });
     };
   },
 

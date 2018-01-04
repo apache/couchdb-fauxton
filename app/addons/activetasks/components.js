@@ -299,7 +299,7 @@ class ActiveTasksTableBody extends React.Component {
 
     return (
       <tr className="no-matching-database-on-search">
-        <td colSpan="6">No active {type} tasks match with filter: "{this.props.searchTerm}"</td>
+        <td colSpan="6">No active {type} tasks match with filter: &quot;{this.props.searchTerm}&quot;</td>
       </tr>
     );
   };
@@ -309,7 +309,7 @@ class ActiveTasksTableBody extends React.Component {
   render() {
     return (
       <tbody className="js-tasks-go-here">
-      {this.createRows()}
+        {this.createRows()}
       </tbody>
     );
   }
@@ -402,7 +402,7 @@ export class ActiveTasksPollingWidgetController extends React.Component {
           startValue={15}
           valueUnits={"second"}
           onPoll={this.runPollingUpdate}
-          />
+        />
       </div>
     );
   }
@@ -411,9 +411,9 @@ export class ActiveTasksPollingWidgetController extends React.Component {
 var activeTasksHelpers = {
   getTimeInfo (timeStamp) {
     var timeMessage = [
-        app.helpers.formatDate(timeStamp),
-        app.helpers.getDateFromNow(timeStamp)
-      ];
+      app.helpers.formatDate(timeStamp),
+      app.helpers.getDateFromNow(timeStamp)
+    ];
     return timeMessage;
   },
 

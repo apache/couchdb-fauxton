@@ -16,8 +16,8 @@ module.exports = {
 
   'Checks if design docs that have special chars in the ID show up in the UI and are clickable': function (client) {
     const waitTime = 10000,
-        newDatabaseName = client.globals.testDatabaseName,
-        baseUrl = client.globals.test_settings.launch_url;
+          newDatabaseName = client.globals.testDatabaseName,
+          baseUrl = client.globals.test_settings.launch_url;
     const docNormal = 'ddoc_normal';
     const docSpecialChars = 'ddoc_with.$pecialcharacters()+-';
     const docSpecialCharsEncoded = 'ddoc_with.%24pecialcharacters()%2B-';
@@ -37,6 +37,6 @@ module.exports = {
       .assert.visible('a[href="#/database/' + newDatabaseName + '/_design/' + docSpecialCharsEncoded + '/_info"]')
       // Verify display name is not encoded
       .assert.containsText('span[title="_design/' + docSpecialChars + '"]', docSpecialChars)
-    .end();
+      .end();
   }
 };

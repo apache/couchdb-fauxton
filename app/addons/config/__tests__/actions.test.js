@@ -44,9 +44,9 @@ describe('Config Actions', () => {
       stub.returns(promise);
 
       return Actions.addOption(node, option)
-      .then(() => {
-        assert.ok(spy.calledOnce);
-      });
+        .then(() => {
+          assert.ok(spy.calledOnce);
+        });
     });
 
     it('shows notification when option add succeeds', () => {
@@ -57,9 +57,9 @@ describe('Config Actions', () => {
       stub.returns(promise);
 
       return Actions.addOption(node, option)
-      .then(() => {
-        assert.ok(spy.calledOnce);
-      });
+        .then(() => {
+          assert.ok(spy.calledOnce);
+        });
     });
 
     it('calls optionAddFailure when option add fails', () => {
@@ -70,9 +70,9 @@ describe('Config Actions', () => {
       stub.returns(promise);
 
       return Actions.addOption(node, option)
-      .then(() => {
-        assert.ok(spy.calledOnce);
-      });
+        .then(() => {
+          assert.ok(spy.calledOnce);
+        });
     });
 
     it('shows notification when option add fails', () => {
@@ -83,9 +83,9 @@ describe('Config Actions', () => {
       stub.returns(promise);
 
       return Actions.addOption(node, option)
-      .then(() => {
-        assert.ok(spy.calledOnce);
-      });
+        .then(() => {
+          assert.ok(spy.calledOnce);
+        });
     });
   });
 
@@ -106,9 +106,9 @@ describe('Config Actions', () => {
       stub.returns(promise);
 
       return Actions.saveOption(node, option)
-      .then(() => {
-        assert.ok(spy.calledOnce);
-      });
+        .then(() => {
+          assert.ok(spy.calledOnce);
+        });
     });
 
     it('shows notification when option save succeeds', () => {
@@ -119,9 +119,9 @@ describe('Config Actions', () => {
       stub.returns(promise);
 
       return Actions.saveOption(node, option)
-      .then(() => {
-        assert.ok(spy.calledOnce);
-      });
+        .then(() => {
+          assert.ok(spy.calledOnce);
+        });
     });
 
     it('calls optionSaveFailure when option save fails', () => {
@@ -132,9 +132,9 @@ describe('Config Actions', () => {
       stub.returns(promise);
 
       return Actions.saveOption(node, option)
-      .then(() => {
-        assert.ok(spy.calledOnce);
-      });
+        .then(() => {
+          assert.ok(spy.calledOnce);
+        });
     });
 
     it('shows notification when option save fails', () => {
@@ -145,9 +145,9 @@ describe('Config Actions', () => {
       stub.returns(promise);
 
       return Actions.saveOption(node, option)
-      .then(() => {
-        assert.ok(spy.calledOnce);
-      });
+        .then(() => {
+          assert.ok(spy.calledOnce);
+        });
     });
   });
 
@@ -168,9 +168,9 @@ describe('Config Actions', () => {
       stub.returns(promise);
 
       return Actions.deleteOption(node, option)
-      .then(() => {
-        assert.ok(spy.calledOnce);
-      });
+        .then(() => {
+          assert.ok(spy.calledOnce);
+        });
     });
 
     it('shows notification when option delete succeeds', () => {
@@ -181,9 +181,9 @@ describe('Config Actions', () => {
       stub.returns(promise);
 
       return Actions.deleteOption(node, option)
-      .then(() => {
-        assert.ok(spy.calledOnce);
-      });
+        .then(() => {
+          assert.ok(spy.calledOnce);
+        });
     });
 
     it('calls optionDeleteFailure when option delete fails', () => {
@@ -194,9 +194,9 @@ describe('Config Actions', () => {
       stub.returns(promise);
 
       return Actions.deleteOption(node, option)
-      .then(() => {
-        assert.ok(spy.calledOnce);
-      });
+        .then(() => {
+          assert.ok(spy.calledOnce);
+        });
     });
 
     it('shows notification when option delete fails', () => {
@@ -207,9 +207,9 @@ describe('Config Actions', () => {
       stub.returns(promise);
 
       return Actions.deleteOption(node, option)
-      .then(() => {
-        assert.ok(spy.calledOnce);
-      });
+        .then(() => {
+          assert.ok(spy.calledOnce);
+        });
     });
   });
 });

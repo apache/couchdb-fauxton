@@ -386,7 +386,7 @@ class DesignDocList extends React.Component {
 
       // only pass down the selected nav info and toggle info if they're relevant for this particular design doc
       let expanded = false,
-        toggledSections = {};
+          toggledSections = {};
       if (_.has(this.props.toggledSections, ddName)) {
         expanded = this.props.toggledSections[ddName].visible;
         toggledSections = this.props.toggledSections[ddName].indexGroups;
@@ -574,7 +574,7 @@ class CloneIndexModal extends React.Component {
   };
 
   submit = () => {
-    if (!this.refs.designDocSelector.validate()) {
+    if (!this.designDocSelector.validate()) {
       return;
     }
     if (this.props.newIndexName === '') {
@@ -615,7 +615,7 @@ class CloneIndexModal extends React.Component {
 
             <div className="row">
               <DesignDocSelector
-                ref="designDocSelector"
+                ref={node => this.designDocSelector = node}
                 designDocList={this.props.designDocArray}
                 selectedDesignDocName={this.props.selectedDesignDoc}
                 newDesignDocName={this.props.newDesignDocName}

@@ -45,9 +45,9 @@ class ClusterConfiguredScreen extends React.Component {
       return 'clustered';
     } else if (this.state.clusterState === 'single_node_enabled') {
       return 'single';
-    } else {
-      return 'unknown state';
     }
+    return 'unknown state';
+
   };
 
   state = this.getStoreState();
@@ -250,7 +250,7 @@ class SetupMultipleNodesController extends React.Component {
             onAlterBindAddress={this.alterBindAddressSetupNode} />
           <SetupNodeCountSetting
             onAlterNodeCount={this.alterNodeCount} />
-          </div>
+        </div>
         <hr/>
         <div className="setup-add-nodes-section">
           <h2>Add Nodes to the Cluster</h2>

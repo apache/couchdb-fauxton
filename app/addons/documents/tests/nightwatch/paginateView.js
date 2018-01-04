@@ -14,7 +14,7 @@
 
 module.exports = {
 
-	'change number of items per page': function (client) {
+  'change number of items per page': function (client) {
     var waitTime = client.globals.maxWaitTime,
         newDatabaseName = client.globals.testDatabaseName,
         baseUrl = client.globals.test_settings.launch_url;

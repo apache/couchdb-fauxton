@@ -13,15 +13,15 @@
 import ActionTypes from "./actiontypes";
 
 const initialState = {
-      corsEnabled: false,
-      origins: [],
-      isAllOrigins: false,
-      configChanged: false,
-      shouldSaveChange: false,
-      node: '',
-      isLoading: true,
-      deleteDomainModalVisible: false,
-      domainToDelete: ''
+  corsEnabled: false,
+  origins: [],
+  isAllOrigins: false,
+  configChanged: false,
+  shouldSaveChange: false,
+  node: '',
+  isLoading: true,
+  deleteDomainModalVisible: false,
+  domainToDelete: ''
 };
 
 export default function cors (state = initialState, action) {
@@ -63,5 +63,4 @@ export default function cors (state = initialState, action) {
     default:
       return state;
   }
-};
-
+}

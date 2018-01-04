@@ -20,7 +20,7 @@ describe('TabWindowWrapper', () => {
   };
 
   const tabs = [
-   {
+    {
       name: 'Tab1',
       component: mock,
       route: 'tab1'

@@ -32,14 +32,14 @@ module.exports = {
       .assert.elementNotPresent('#doc-list [data-id="document_2"]')
       .assert.elementNotPresent('#doc-list [data-id="document_0"]')
       .assert.elementPresent('#doc-list [data-id="document_1"]')
-    .end();
+      .end();
   },
 
   'Edit view: Queryoptions works querying index with newlines in key field': function (client) {
     /*jshint multistr: true */
     var waitTime = client.globals.maxWaitTime,
-      newDatabaseName = client.globals.testDatabaseName,
-      baseUrl = client.globals.test_settings.launch_url;
+        newDatabaseName = client.globals.testDatabaseName,
+        baseUrl = client.globals.test_settings.launch_url;
 
     client
       .populateDatabase(newDatabaseName, 3)

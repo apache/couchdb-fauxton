@@ -38,7 +38,7 @@ export class ChangePasswordForm extends React.Component {
   }
 
   componentDidMount() {
-    ReactDOM.findDOMNode(this.refs.password).focus();
+    this.passwordField.focus();
   }
 
   changePassword(e) {
@@ -59,7 +59,7 @@ export class ChangePasswordForm extends React.Component {
           <input
             id="password"
             type="password"
-            ref="password"
+            ref={node => this.passwordField = node}
             name="password"
             placeholder="Password"
             size="24"

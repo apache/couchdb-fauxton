@@ -67,16 +67,15 @@ class ConfigTableController extends React.Component {
           <Components.LoadLines />
         </div>
       );
-    } else {
-      return (
-        <ConfigTable
-          onDeleteOption={this.deleteOption}
-          onSaveOption={this.saveOption}
-          onEditOption={this.editOption}
-          onCancelEdit={this.cancelEdit}
-          options={this.state.options}/>
-      );
     }
+    return (
+      <ConfigTable
+        onDeleteOption={this.deleteOption}
+        onSaveOption={this.saveOption}
+        onEditOption={this.editOption}
+        onCancelEdit={this.cancelEdit}
+        options={this.state.options}/>
+    );
   }
 }
 
@@ -100,15 +99,15 @@ class ConfigTable extends React.Component {
     return (
       <table className="config table table-striped table-bordered">
         <thead>
-        <tr>
-          <th id="config-section" width="22%">Section</th>
-          <th id="config-option" width="22%">Option</th>
-          <th id="config-value">Value</th>
-          <th id="config-trash"></th>
-        </tr>
+          <tr>
+            <th id="config-section" width="22%">Section</th>
+            <th id="config-option" width="22%">Option</th>
+            <th id="config-value">Value</th>
+            <th id="config-trash"></th>
+          </tr>
         </thead>
         <tbody>
-        {options}
+          {options}
         </tbody>
       </table>
     );
@@ -189,20 +188,20 @@ class ConfigOptionValue extends React.Component {
   getButtons = () => {
     if (this.state.saving) {
       return null;
-    } else {
-      return (
-        <span>
-          <button
-            className="btn btn-primary fonticon-ok-circled btn-small btn-config-save"
-            onClick={this.onSave.bind(this)}
-          />
-          <button
-            className="btn fonticon-cancel-circled btn-small btn-config-cancel"
-            onClick={this.props.onCancelEdit}
-          />
-        </span>
-      );
     }
+    return (
+      <span>
+        <button
+          className="btn btn-primary fonticon-ok-circled btn-small btn-config-save"
+          onClick={this.onSave.bind(this)}
+        />
+        <button
+          className="btn fonticon-cancel-circled btn-small btn-config-cancel"
+          onClick={this.props.onCancelEdit}
+        />
+      </span>
+    );
+
   };
 
   render() {
@@ -220,13 +219,13 @@ class ConfigOptionValue extends React.Component {
           </div>
         </td>
       );
-    } else {
-      return (
-        <td className="config-show-value" onClick={this.props.onEdit}>
-          {this.props.value}
-        </td>
-      );
     }
+    return (
+      <td className="config-show-value" onClick={this.props.onEdit}>
+        {this.props.value}
+      </td>
+    );
+
   }
 }
 
@@ -250,7 +249,7 @@ class ConfigOptionTrash extends React.Component {
   render() {
     return (
       <td className="text-center config-item-trash config-delete-value"
-          onClick={this.showModal.bind(this)}>
+        onClick={this.showModal.bind(this)}>
         <i className="icon icon-trash"></i>
         <FauxtonComponents.ConfirmationModal
           text={`Are you sure you want to delete ${this.props.sectionName}/${this.props.optionName}?`}
@@ -366,7 +365,7 @@ class AddOptionButton extends React.Component {
         <Button
           id="add-option-button"
           onClick={this.togglePopover.bind(this)}
-          ref="target">
+          ref={node => this.target = node}>
           <i className="icon icon-plus header-icon"></i>
           Add Option
         </Button>
@@ -376,7 +375,7 @@ class AddOptionButton extends React.Component {
           onHide={this.hidePopover.bind(this)}
           placement="bottom"
           rootClose={true}
-          target={() => ReactDOM.findDOMNode(this.refs.target)}>
+          target={() => this.target}>
           {this.getPopover()}
         </Overlay>
       </div>
@@ -387,9 +386,9 @@ class AddOptionButton extends React.Component {
 const TabItem = ({active, link, title}) => {
   return (
     <li className={active ? 'active' : ''}>
-    <a href={`#${link}`}>
+      <a href={`#${link}`}>
         {title}
-    </a>
+      </a>
     </li>
   );
 };
@@ -408,7 +407,7 @@ const Tabs = ({sidebarItems, selectedTab}) => {
       active={selectedTab === item.title}
       title={item.title}
       link={item.link}
-      />;
+    />;
   });
   return (
     <nav className="sidenav">

@@ -48,15 +48,15 @@ export default class MangoIndexEditor extends Component {
   }
 
   setEditorValue(newValue = '') {
-    return this.refs.codeEditor.getEditor().setValue(newValue);
+    return this.codeEditor.getEditor().setValue(newValue);
   }
 
   getEditorValue() {
-    return this.refs.codeEditor.getValue();
+    return this.codeEditor.getValue();
   }
 
   editorHasErrors() {
-    return this.refs.codeEditor.getEditor().hasErrors();
+    return this.codeEditor.getEditor().hasErrors();
   }
 
   onTemplateSelected(selectedItem) {
@@ -72,7 +72,7 @@ export default class MangoIndexEditor extends Component {
             <ReactSelect
               className="mango-select"
               options={this.props.templates}
-              ref="templates"
+              ref={node => this.templates = node}
               placeholder="Examples"
               searchable={false}
               clearable={false}
@@ -83,7 +83,7 @@ export default class MangoIndexEditor extends Component {
           <PaddedBorderedBox>
             <CodeEditorPanel
               id="query-field"
-              ref="codeEditor"
+              ref={node => this.codeEditor = node}
               title="Index"
               docLink={getDocUrl('MANGO_INDEX')}
               defaultCode={this.props.queryIndexCode} />

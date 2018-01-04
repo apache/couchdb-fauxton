@@ -32,7 +32,7 @@ module.exports = {
       .waitForElementNotPresent('.loading-lines', waitTime, false)
       .waitForElementPresent('.table-view-docs', waitTime, false)
       .assert.containsText('td[title="blerg"]', 'blerg')
-    .end();
+      .end();
   },
 
   'Creates a Design Doc using the dropdown at "all documents"': function (client) {
@@ -55,7 +55,7 @@ module.exports = {
       .waitForElementNotPresent('.loading-lines', waitTime, false)
       .waitForElementPresent('.table-view-docs', waitTime, false)
       .assert.containsText('td[title="hasehase"]', 'hasehase')
-    .end();
+      .end();
   },
 
   'Creates a Design Doc and does not crash after navigating': function (client) {
@@ -80,7 +80,7 @@ module.exports = {
       // page now automatically redirects user to results of View. Confirm the new doc is present.
       .waitForElementPresent('.table-view-docs', waitTime, false)
       .assert.containsText('td[title="hasehase"]', 'hasehase')
-    .end();
+      .end();
   },
 
   'Creates a Design Doc using the dropdown at "the upper dropdown in the header"': function (client) {
@@ -103,7 +103,7 @@ module.exports = {
       .waitForElementNotPresent('.loading-lines', waitTime, false)
       .waitForElementPresent('.table-view-docs', waitTime, false)
       .assert.containsText('td[title="gansgans"]', 'gansgans')
-    .end();
+      .end();
   },
 
   'Adds a View to a DDoc using an existing DDoc': function (client) {
@@ -131,7 +131,7 @@ module.exports = {
       .waitForElementNotPresent('.loading-lines', waitTime, false)
       .waitForElementPresent('.table-view-docs', waitTime, false)
       .assert.containsText('td[title="enteente"]', 'enteente')
-    .end();
+      .end();
   }
 };
 

@@ -80,18 +80,18 @@ export const MangoContent = ({ edit, designDocs, explainPlan, databaseName, fetc
     />;
 
   let resultsPage = <IndexResultsContainer
-                      fetchUrl={fetchUrl}
-                      designDocs={designDocs}
-                      ddocsOnly={false}
-                      databaseName={databaseName}
-                      fetchAtStartup={false}
-                      queryDocs={queryDocs}
-                      docType={docType} />;
+    fetchUrl={fetchUrl}
+    designDocs={designDocs}
+    ddocsOnly={false}
+    databaseName={databaseName}
+    fetchAtStartup={false}
+    queryDocs={queryDocs}
+    docType={docType} />;
 
   let mangoFooter = <MangoFooter
-                      databaseName={databaseName}
-                      fetchUrl={fetchUrl}
-                      queryDocs={queryDocs} />;
+    databaseName={databaseName}
+    fetchUrl={fetchUrl}
+    queryDocs={queryDocs} />;
 
   if (explainPlan) {
     resultsPage = <MangoComponents.ExplainPage explainPlan={explainPlan} />;
@@ -116,7 +116,7 @@ export const MangoContent = ({ edit, designDocs, explainPlan, databaseName, fetc
 class MangoLayout extends Component {
   constructor(props) {
     super(props);
-  };
+  }
 
   render() {
     const { database, edit, docURL, crumbs, designDocs, fetchUrl, databaseName, queryFindCode } = this.props;
@@ -146,11 +146,11 @@ class MangoLayout extends Component {
           fetchUrl={fetchUrl}
           queryDocs={queryFunction}
           docType={docType}
-          />
+        />
       </div>
     );
   }
-};
+}
 
 const mapStateToProps = ({ mangoQuery }) => {
   return {

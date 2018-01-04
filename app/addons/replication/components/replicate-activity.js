@@ -98,7 +98,7 @@ export default class Activity extends React.Component {
           visible={modalVisible}
           onClose={this.closeModal.bind(this)}
           onClick={this.confirmDeleteDocs.bind(this)}
-          />
+        />
       </div>
     );
   }

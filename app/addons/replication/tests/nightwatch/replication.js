@@ -39,7 +39,6 @@ module.exports = {
     const waitTime = client.globals.maxWaitTime;
     const baseUrl = client.globals.test_settings.launch_url;
     const password = client.globals.test_settings.password;
-    console.log('PASSWORD', password);
 
     client
       .createDatabase(newDatabaseName1)

@@ -36,10 +36,10 @@ var NodesStore = FauxtonAPI.Store.extend({
     switch (action.type) {
       case ActionTypes.CLUSTER_FETCH_NODES:
         this.setNodes(action.options);
-      break;
+        break;
 
       default:
-      return;
+        return;
     }
 
     this.triggerChange();

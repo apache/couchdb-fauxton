@@ -21,5 +21,5 @@ export class PaddedBorderedBox extends React.Component {
         </div>
       </div>
     );
-   }
+  }
 }
