@@ -99,3 +99,14 @@ export const put = (url, body, opts = {}) => {
   }
   return json(url, "PUT", opts);
 };
+
+/**
+ * Return a rejectPromise with the Couch error. This clean promise coding
+ * @param response A Response object from fetch.
+ */
+export const rejectFetchError = response => {
+  return response.json().then(json =>{
+      const error = json.reason ? json.reason : json.error;
+    return Promise.reject(error);
+  });
+};

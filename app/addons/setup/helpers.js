@@ -12,11 +12,11 @@
 import _ from 'lodash';
 
 export function isInvalid(attrs) {
-    if (!attrs.username) {
+    if (_.isEmpty(attrs.username)) {
         return 'Admin name is required';
     }
 
-    if (!attrs.password) {
+    if (_.isEmpty(attrs.password)) {
         return 'Admin password is required';
     }
 
@@ -33,8 +33,8 @@ export function isInvalid(attrs) {
         return 'Node count must be a number';
     }
 
-    if (attrs.nodeCount && attrs.nodeCount < 1) {
+    if (attrs.nodeCount === 0 || attrs.nodeCount && attrs.nodeCount < 1) {
         return 'Node count must be >= 1';
     }
-    return true;
+    return false;
 }

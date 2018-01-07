@@ -16,6 +16,7 @@ import FauxtonAPI from "../../core/api";
 import ClusterActions from "../cluster/cluster.actions";
 import {OnePaneSimpleLayout} from '../components/layouts';
 
+import ConfiguredScreenContainer from './container/ConfiguredSceenContainer';
 import FirstStepContainer from './container/FirstStepContainer';
 import SingleNodeContainer from './container/SingleNodeContainer';
 import MultipleNodeContainer from './container/MultipleNodeContainer';
@@ -71,10 +72,9 @@ const SetupRouteObject = FauxtonAPI.RouteObject.extend({
   },
 
   finishView: () => {
-    //TODO Alexis: Should I create a ConfiguredScreen container with connect in other to fetch clusterstate?
     const url = FauxtonAPI.urls('cluster_setup', 'apiurl');
     return <OnePaneSimpleLayout
-      component={<FirstStepContainer/>}
+      component={<ConfiguredScreenContainer/>}
       endpoint={url}
       docURL={FauxtonAPI.constants.DOC_URLS.SETUP}
       crumbs={[

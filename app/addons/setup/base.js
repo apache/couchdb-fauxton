@@ -28,7 +28,7 @@ FauxtonAPI.addReducers({
 });
 
 FauxtonAPI.registerUrls('cluster_setup', {
-  server: (query = '') => `${app.host}/_cluster_setup${query}`,
+  server: () => app.host + '/_cluster_setup',
   app:  () => '/_cluster_setup',
   apiurl: () => window.location.origin + "/_cluster_setup"
 });

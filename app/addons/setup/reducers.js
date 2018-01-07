@@ -62,7 +62,7 @@ export default function setup(state = initialState, action) {
         case SETUP_PORT_FOR_SINGLE_NODE:
             return updateState(state, 'setupNode.port', options.value);
         case SETUP_PORT_ADDITIONAL_NODE:
-            return updateState(state, 'additionalNode.port', options.value);
+            return updateState(state, 'additionalNode.port', parseInt(options.value));
         case SETUP_BIND_ADDRESS_ADDITIONAL_NODE:
             return updateState(state, 'additionalNode.bindAddress', options.value);
             break;
