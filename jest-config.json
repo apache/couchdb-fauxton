@@ -2,6 +2,7 @@
   "testPathDirs": ["app"],
   "testPathIgnorePatterns": ["/node_modules/", "stub", "fakeActiveTaskResponse", "fixtures"],
 
+  "setupFiles": ["./jest-shim.js"],
   "setupTestFrameworkScriptFile": "./jest-setup.js",
 
   "moduleNameMapper": {
