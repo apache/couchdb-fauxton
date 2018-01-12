@@ -208,7 +208,7 @@ class AddFilterForm extends React.Component {
     );
   }
 }
-AddFilterForm.PropTypes = {
+AddFilterForm.propTypes = {
   addFilter: PropTypes.func.isRequired,
   hasFilter: PropTypes.func.isRequired,
   tooltips: PropTypes.string
@@ -309,7 +309,7 @@ class ChangeRow extends React.Component {
   }
 }
 
-ChangeRow.PropTypes = {
+ChangeRow.propTypes = {
   change: PropTypes.object,
   databaseName: PropTypes.string.isRequired
 };

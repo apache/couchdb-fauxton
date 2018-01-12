@@ -25,12 +25,16 @@ export class TrayContents extends React.Component {
     container: PropTypes.object
   };
 
-  defaultProps = () => {
-    return {
-      onEnter: () => {},
-      container: this
-    };
+  static defaultProps = {
+    onEnter: () => {}
   };
+
+  constructor (props) {
+    super(props);
+    if (!props.container) {
+      this.container = this;
+    }
+  }
 
   getChildren = (items) => {
     const {style} = items[0];

@@ -41,13 +41,13 @@ export class MenuDropDown extends React.Component {
     );
   };
 
-  createSectionTitle = (title) => {
+  createSectionTitle = (title, key) => {
     if (!title) {
       return null;
     }
 
     return (
-      <li className="header-label">{title}</li>
+      <li key={key} className="header-label">{title}</li>
     );
   };
 
@@ -55,7 +55,7 @@ export class MenuDropDown extends React.Component {
     return this.props.links.map((linkSection, key) => {
       if (linkSection.title && linkSection.links) {
         return ([
-          this.createSectionTitle(linkSection.title),
+          this.createSectionTitle(linkSection.title, 'title_' + key),
           this.createSectionLinks(linkSection.links)
         ]);
       }
