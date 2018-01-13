@@ -115,8 +115,8 @@ export default class QueryOptions extends React.Component {
             docURL={FauxtonAPI.constants.DOC_URLS.GENERAL}
             stable={this.props.stable}
             toggleStable={this.props.queryOptionsToggleStable}
-            stale={this.props.stale}
-            updateStale={this.props.queryOptionsUpdateStale}
+            update={this.props.update}
+            changeUpdateField={this.props.queryOptionsChangeUpdate}
           />
           <KeySearchFields
             key={1}
@@ -180,7 +180,7 @@ QueryOptions.propTypes = {
   changeLayout: PropTypes.func.isRequired,
   queryOptionsToggleVisibility: PropTypes.func.isRequired,
   queryOptionsToggleStable: PropTypes.func.isRequired,
-  queryOptionsUpdateStale: PropTypes.func.isRequired,
+  queryOptionsChangeUpdate: PropTypes.func.isRequired,
   stable: PropTypes.bool.isRequired,
-  stale: PropTypes.string.isRequired
+  update: PropTypes.string.isRequired
 };

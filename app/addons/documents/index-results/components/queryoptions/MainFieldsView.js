@@ -17,12 +17,11 @@ export default class MainFieldsView extends React.Component {
   constructor(props) {
     super(props);
     this.toggleStable = this.toggleStable.bind(this);
-    this.onStaleChange = this.onStaleChange.bind(this);
+    this.onUpdateChange = this.onUpdateChange.bind(this);
 
-    this.staleOptions = [
-      {value: null, 'label': 'Default'},
-      {value: 'ok', label: 'ok'},
-      {value: 'update_after', label: 'update_after'},
+    this.updateOptions = [
+      {value: 'true', label:'true'},
+      {value: 'lazy', label: 'lazy'},
       {value: 'false', label: 'false'}
     ];
   }
@@ -31,8 +30,8 @@ export default class MainFieldsView extends React.Component {
     this.props.toggleIncludeDocs(this.props.includeDocs);
   }
 
-  onStaleChange(e) {
-    this.props.updateStale(e.target.value);
+  onUpdateChange(e) {
+    this.props.changeUpdateField(e.target.value);
   }
 
   groupLevelChange(e) {
@@ -90,12 +89,12 @@ export default class MainFieldsView extends React.Component {
     );
   }
 
-  getStaleOptions() {
-    return this.staleOptions.map(option => <option key={option.value} value={option.value}>{option.label}</option>);
+  getUpdateOptions() {
+    return this.updateOptions.map(option => <option key={option.value} value={option.value}>{option.label}</option>);
   }
 
   render() {
-    let {includeDocs, stable, stale} = this.props;
+    let {includeDocs, stable, update} = this.props;
     return (
         <div className="query-group" id="query-options-main-fields">
         <span className="add-on">
@@ -121,9 +120,9 @@ export default class MainFieldsView extends React.Component {
                 <label htmlFor="qoStable" id="qoStableLabel">Stable</label>
               </div>
               <div className="dropdown inline">
-                <label className="drop-down">Stale
-                  <select className="input-small" value={stale} onChange={this.onStaleChange}>
-                    {this.getStaleOptions()}
+                <label className="drop-down">Update
+                  <select className="input-small" value={update} onChange={this.onUpdateChange}>
+                    {this.getUpdateOptions()}
                   </select>
                 </label>
               </div>
@@ -144,6 +143,6 @@ MainFieldsView.propTypes = {
   docURL: PropTypes.string.isRequired,
   stable: PropTypes.bool.isRequired,
   toggleStable: PropTypes.func.isRequired,
-  stale: PropTypes.string.isRequired,
-  updateStale: PropTypes.func.isRequired
+  update: PropTypes.string.isRequired,
+  changeUpdateField: PropTypes.func.isRequired
 };

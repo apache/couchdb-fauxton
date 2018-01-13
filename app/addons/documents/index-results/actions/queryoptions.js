@@ -134,8 +134,8 @@ export const queryOptionsToggleStable = previous => {
   });
 };
 
-export const queryOptionsUpdateStale = value => {
+export const queryOptionsChangeUpdate = value => {
   return updateQueryOptions({
-    stale: value
+    update: value
   });
 };
