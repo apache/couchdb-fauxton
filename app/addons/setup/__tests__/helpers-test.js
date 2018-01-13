@@ -15,57 +15,57 @@ import _ from 'lodash';
 
 describe('Setup - Helpers', () => {
 
-    const validData = {
-        username: 'foo',
-        password: 'bar',
-        bind_address: '0.0.0.0',
-        singlenode: false,
-        port: 5984,
-        nodeCount: 3
-    };
+  const validData = {
+    username: 'foo',
+    password: 'bar',
+    bind_address: '0.0.0.0',
+    singlenode: false,
+    port: 5984,
+    nodeCount: 3
+  };
 
-    describe('isInvalid', () => {
+  describe('isInvalid', () => {
 
-        it('should return an error if no username is define', () => {
-            let data = _.assign({}, validData);
-            data.username = '';
-            expect(isInvalid(data)).toBe('Admin name is required');
-        });
-
-        it('should return an error if password not set', () => {
-            let data = _.assign({}, validData);
-            data.password = '';
-            expect(isInvalid(data)).toBe('Admin password is required');
-        });
-
-        it('should return an error if bind address is 127.0.0.1', () => {
-            let data = _.assign({}, validData);
-            data.bind_address = '127.0.0.1';
-            expect(isInvalid(data)).toBe('Bind address can not be 127.0.0.1');
-        });
-
-        it('should return error if port is not a number', () => {
-            let data = _.assign({}, validData);
-            data.port = 'foo';
-            expect(isInvalid(data)).toBe('Bind port must be a number');
-        });
-
-        it('should return error if node count is not a number', () => {
-
-            let data = _.assign({}, validData);
-            data.nodeCount = 'foo';
-            expect(isInvalid(data)).toBe('Node count must be a number');
-        });
-
-        it('should return error if node counter is lower than 1', () => {
-            let data = _.assign({}, validData);
-            data.nodeCount = 0;
-            expect(isInvalid(data)).toBe('Node count must be >= 1');
-        });
-
-        it('should return false if valid', () => {
-            expect(isInvalid(validData)).toBe(false);
-        });
-
+    it('should return an error if no username is define', () => {
+      let data = _.assign({}, validData);
+      data.username = '';
+      expect(isInvalid(data)).toBe('Admin name is required');
     });
+
+    it('should return an error if password not set', () => {
+      let data = _.assign({}, validData);
+      data.password = '';
+      expect(isInvalid(data)).toBe('Admin password is required');
+    });
+
+    it('should return an error if bind address is 127.0.0.1', () => {
+      let data = _.assign({}, validData);
+      data.bind_address = '127.0.0.1';
+      expect(isInvalid(data)).toBe('Bind address can not be 127.0.0.1');
+    });
+
+    it('should return error if port is not a number', () => {
+      let data = _.assign({}, validData);
+      data.port = 'foo';
+      expect(isInvalid(data)).toBe('Bind port must be a number');
+    });
+
+    it('should return error if node count is not a number', () => {
+
+      let data = _.assign({}, validData);
+      data.nodeCount = 'foo';
+      expect(isInvalid(data)).toBe('Node count must be a number');
+    });
+
+    it('should return error if node counter is lower than 1', () => {
+      let data = _.assign({}, validData);
+      data.nodeCount = 0;
+      expect(isInvalid(data)).toBe('Node count must be >= 1');
+    });
+
+    it('should return false if valid', () => {
+      expect(isInvalid(validData)).toBe(false);
+    });
+
+  });
 });

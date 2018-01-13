@@ -14,34 +14,35 @@ import React from "react";
 import ReactDOM from "react-dom";
 import OptionalSettings from '../components/OptionalSettings';
 import sinon from "sinon";
-import { mount } from 'enzyme';
+import {mount} from 'enzyme';
 
 const assert = utils.assert;
 
 //this was commented out. I imagine it needs to be updated
 describe.skip('Setup Components', () => {
 
-    describe('IP / Port area', () => {
+  describe('IP / Port area', () => {
 
-        it('fires callbacks on change, ip', () => {
-            const bindAddressHandler = sinon.spy();
-            const optSettings = mount(<OptionalSettings onAlterPort={null} onAlterBindAddress={bindAddressHandler}  ip='0.0.0.0' port='5984'/>);
+    it('fires callbacks on change, ip', () => {
+      const bindAddressHandler = sinon.spy();
+      const optSettings = mount(<OptionalSettings onAlterPort={null} onAlterBindAddress={bindAddressHandler}
+                                                  ip='0.0.0.0' port='5984'/>);
 
-            optSettings.find('.setup-input-ip').simulate('change', {target: {value: 'Hello, world'}});
-            assert.ok(bindAddressHandler.calledOnce);
-
-        });
-
-        it('fires callbacks on change, port', () => {
-            const changeHandler = sinon.spy();
-            const optSettings = mount(
-                <OptionalSettings onAlterPort={changeHandler} onAlterBindAddress={null} ip='0.0.0.0' port='5984' />
-            );
-
-            optSettings.find('.setup-input-port').simulate('change', {target: {value: 'Hello, world'}});
-            assert.ok(changeHandler.calledOnce);
-        });
+      optSettings.find('.setup-input-ip').simulate('change', {target: {value: 'Hello, world'}});
+      assert.ok(bindAddressHandler.calledOnce);
 
     });
+
+    it('fires callbacks on change, port', () => {
+      const changeHandler = sinon.spy();
+      const optSettings = mount(
+          <OptionalSettings onAlterPort={changeHandler} onAlterBindAddress={null} ip='0.0.0.0' port='5984'/>
+      );
+
+      optSettings.find('.setup-input-port').simulate('change', {target: {value: 'Hello, world'}});
+      assert.ok(changeHandler.calledOnce);
+    });
+
+  });
 
 });

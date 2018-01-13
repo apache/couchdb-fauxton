@@ -21,30 +21,30 @@ const assert = utils.assert;
 //this was commented out. I imagine it needs to be updated
 describe('Setup Components', () => {
 
-    describe.skip('SingleNodeSetup', () => {
+  describe.skip('SingleNodeSetup', () => {
 
-        it('changes the values in the store for the setup node', () => {
-            const props = {
-                bindAddress: '0.0.0.0',
-                port: 5984,
-                username: 'foo',
-                password: 'bar',
-                isAdminParty: false
-            };
-            const controller = mount(
-                <SingleNodeController {...props}/>
-            );
-            controller.find('.setup-setupnode-section .setup-input-ip').simulate('change', {target: {value: '192.168.13.42'}});
-            controller.find('.setup-setupnode-section .setup-input-port').simulate('change', {target: {value: '1342'}});
-            controller.find('.setup-setupnode-section .setup-username').simulate('change', {target: {value: 'tester'}});
-            controller.find('.setup-setupnode-section .setup-password').simulate('change', {target: {value: 'testerpass'}});
+    it('changes the values in the store for the setup node', () => {
+      const props = {
+        bindAddress: '0.0.0.0',
+        port: 5984,
+        username: 'foo',
+        password: 'bar',
+        isAdminParty: false
+      };
+      const controller = mount(
+          <SingleNodeController {...props}/>
+      );
+      controller.find('.setup-setupnode-section .setup-input-ip').simulate('change', {target: {value: '192.168.13.42'}});
+      controller.find('.setup-setupnode-section .setup-input-port').simulate('change', {target: {value: '1342'}});
+      controller.find('.setup-setupnode-section .setup-username').simulate('change', {target: {value: 'tester'}});
+      controller.find('.setup-setupnode-section .setup-password').simulate('change', {target: {value: 'testerpass'}});
 
-            assert.equal(Store.setupStore.getBindAdressForSetupNode(), '192.168.13.42');
-            assert.equal(Store.setupStore.getPortForSetupNode(), '1342');
-            assert.equal(Store.setupStore.getUsername(), 'tester');
-            assert.equal(Store.setupStore.getPassword(), 'testerpass');
-        });
-
+      assert.equal(Store.setupStore.getBindAdressForSetupNode(), '192.168.13.42');
+      assert.equal(Store.setupStore.getPortForSetupNode(), '1342');
+      assert.equal(Store.setupStore.getUsername(), 'tester');
+      assert.equal(Store.setupStore.getPassword(), 'testerpass');
     });
+
+  });
 
 });
