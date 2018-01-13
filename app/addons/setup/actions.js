@@ -73,7 +73,7 @@ export const getClusterStateFromCouch = () => dispatch => {
     });
 };
 
-export const finishClusterSetup = message => {
+export const finishClusterSetup = message => () => {
     const baseUrl = FauxtonAPI.urls('cluster_setup', 'server');
     const body = {action: 'finish_cluster'};
     fetch(baseUrl, getFetchOpts('POST', body)).then(response => {
@@ -105,7 +105,7 @@ export const finishClusterSetup = message => {
     });
 };
 
-export const setupSingleNode = (credentials, setupNode) => {
+export const setupSingleNode = (credentials, setupNode) => () => {
     const baseUrl = FauxtonAPI.urls('cluster_setup', 'server');
     const setupAttrs = {
         action: 'enable_single_node',
@@ -274,17 +274,13 @@ export const addNode = (isOrWasAdminParty, credentials, setupNode, additionalNod
         });
     };
 
-    return fetch(baseUrl, getFetchOpts('POST', enableSetupData)).then(response => {
-        if (!response.ok) {
-            return rejectFetchError(response);
-        } else {
-            return Api.login({name: credentials.username, password: credentials.password});
-        }
+    return fetch(baseUrl, getFetchOpts('POST', enableSetupData)).then(() => {
+        return Api.login({name: credentials.username, password: credentials.password});
     }).then(() => {
         continueSetup();
     }).catch(err => {
         FauxtonAPI.addNotification({
-            msg: 'The cluster is already finished. Error:' + err,
+            msg: 'An error occured while adding the node. Error:' + err,
             type: 'error',
             fade: false,
             clear: true

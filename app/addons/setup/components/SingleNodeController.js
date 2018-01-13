@@ -61,13 +61,13 @@ export default class SingleNodeController extends React.Component {
 
     finishSingleNode = (e) => {
         e.preventDefault();
-        const {username, password, port, bindAddress} = this.props;
+        const {username, password, port, bindAddress, dispatch} = this.props;
         const credentials = {username, password};
         const setupNode = {
             port,
             bindAddress,
         };
-        setupSingleNode(credentials, setupNode);
+        dispatch(setupSingleNode(credentials, setupNode));
     };
 }
 
