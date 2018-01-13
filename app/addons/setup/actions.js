@@ -252,7 +252,7 @@ export const addNode = (isOrWasAdminParty, credentials, setupNode, additionalNod
                     type: SETUP_ADD_NODE_TO_LIST,
                     options: {
                         value: {
-                            port: additionalNode.node,
+                            port: additionalNode.port,
                             remoteAddress: additionalNode.remoteAddress
                         }
                     }
