@@ -57,7 +57,7 @@ const initialState = {
     groupLevel: 'exact',
     showReduce: false,
     stable: false,
-    stale: ''
+    update: true
   }
 };
 
@@ -76,7 +76,7 @@ export default function resultsState(state = initialState, action) {
           perPage: state.pagination.perPage
         }),
         queryOptionsPanel: Object.assign({}, initialState.queryOptionsPanel,
-            state.queryOptionsPanel, {reduce: false, groupLevel: 'exact', showReduce: false}),
+          state.queryOptionsPanel, {reduce: false, groupLevel: 'exact', showReduce: false}),
         isLoading: false
       });
 
@@ -322,8 +322,8 @@ export const getQueryOptionsParams = (state) => {
     }
   }
 
-  if (queryOptionsPanel.stale) {
-    params.stale = queryOptionsPanel.stale;
+  if (queryOptionsPanel.update !== undefined) {
+    params.update = queryOptionsPanel.update;
   }
 
   if (typeof queryOptionsPanel.stable === 'boolean') {

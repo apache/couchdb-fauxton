@@ -156,4 +156,22 @@ describe('Docs Query Options API', () => {
       }
     });
   });
+
+  it('queryOptionsToggleStable returns the proper event to dispatch', () => {
+    expect(Actions.queryOptionsToggleStable(true)).toEqual({
+      type: ActionTypes.INDEX_RESULTS_REDUX_NEW_QUERY_OPTIONS,
+      options: {
+        stable: false
+      }
+    });
+  });
+
+  it('queryOptionsChangeUpdate returns the proper event to dispatch', () => {
+    expect(Actions.queryOptionsChangeUpdate('lazy')).toEqual({
+      type: ActionTypes.INDEX_RESULTS_REDUX_NEW_QUERY_OPTIONS,
+      options: {
+        update: 'lazy'
+      }
+    });
+  });
 });

@@ -20,7 +20,7 @@ export default class MainFieldsView extends React.Component {
     this.onUpdateChange = this.onUpdateChange.bind(this);
 
     this.updateOptions = [
-      {value: 'true', label:'true'},
+      {value: 'true', label: 'true'},
       {value: 'lazy', label: 'lazy'},
       {value: 'false', label: 'false'}
     ];
@@ -44,23 +44,23 @@ export default class MainFieldsView extends React.Component {
     }
 
     return (
-        <label className="drop-down inline" id="qoGroupLevelGroup">
+      <label className="drop-down inline" id="qoGroupLevelGroup">
           Group Level
-          <select onChange={this.groupLevelChange.bind(this)} id="qoGroupLevel" value={this.props.groupLevel}
-                  name="group_level" className="input-small">
-            <option value="0">None</option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-            <option value="8">8</option>
-            <option value="9">9</option>
-            <option value="exact">Exact</option>
-          </select>
-        </label>
+        <select onChange={this.groupLevelChange.bind(this)} id="qoGroupLevel" value={this.props.groupLevel}
+          name="group_level" className="input-small">
+          <option value="0">None</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+          <option value="8">8</option>
+          <option value="9">9</option>
+          <option value="exact">Exact</option>
+        </select>
+      </label>
     );
   }
 
@@ -78,13 +78,13 @@ export default class MainFieldsView extends React.Component {
     }
 
     return (
-        <span>
+      <span>
         <div className="checkbox inline">
           <input id="qoReduce" name="reduce" onChange={this.toggleReduce.bind(this)} type="checkbox"
-                 checked={this.props.reduce}/>
+            checked={this.props.reduce}/>
           <label htmlFor="qoReduce">Reduce</label>
         </div>
-          {this.groupLevel()}
+        {this.groupLevel()}
       </span>
     );
   }
@@ -96,39 +96,39 @@ export default class MainFieldsView extends React.Component {
   render() {
     let {includeDocs, stable, update} = this.props;
     return (
-        <div className="query-group" id="query-options-main-fields">
+      <div className="query-group" id="query-options-main-fields">
         <span className="add-on">
           Query Options
           <a className="help-link" href={this.props.docURL} target="_blank" data-bypass="true">
             <i className="icon-question-sign"/>
           </a>
         </span>
-          <div className="controls-group qo-main-fields-row">
-            <div className="row-fluid fieldsets">
-              <div className="checkbox inline">
-                <input disabled={this.props.reduce} onChange={this.toggleIncludeDocs.bind(this)} id="qoIncludeDocs"
-                       name="include_docs" type="checkbox" checked={includeDocs}/>
-                <label className={this.props.reduce ? 'disabled' : ''} htmlFor="qoIncludeDocs" id="qoIncludeDocsLabel">Include
+        <div className="controls-group qo-main-fields-row">
+          <div className="row-fluid fieldsets">
+            <div className="checkbox inline">
+              <input disabled={this.props.reduce} onChange={this.toggleIncludeDocs.bind(this)} id="qoIncludeDocs"
+                name="include_docs" type="checkbox" checked={includeDocs}/>
+              <label className={this.props.reduce ? 'disabled' : ''} htmlFor="qoIncludeDocs" id="qoIncludeDocsLabel">Include
                   Docs</label>
-              </div>
-              {this.reduce()}
             </div>
-            <div className="row-fluid fieldsets">
-              <div className="checkbox inline">
-                <input onChange={this.toggleStable} id="qoStable"
-                       name="include_docs" type="checkbox" checked={stable}/>
-                <label htmlFor="qoStable" id="qoStableLabel">Stable</label>
-              </div>
-              <div className="dropdown inline">
-                <label className="drop-down">Update
-                  <select className="input-small" value={update} onChange={this.onUpdateChange}>
-                    {this.getUpdateOptions()}
-                  </select>
-                </label>
-              </div>
+            {this.reduce()}
+          </div>
+          <div className="row-fluid fieldsets">
+            <div className="checkbox inline">
+              <input onChange={this.toggleStable} id="qoStable"
+                name="include_docs" type="checkbox" checked={stable}/>
+              <label htmlFor="qoStable" id="qoStableLabel">Stable</label>
+            </div>
+            <div className="dropdown inline">
+              <label className="drop-down">Update
+                <select className="input-small" id="qoUpdate" value={update} onChange={this.onUpdateChange}>
+                  {this.getUpdateOptions()}
+                </select>
+              </label>
             </div>
           </div>
         </div>
+      </div>
     );
   }
 
