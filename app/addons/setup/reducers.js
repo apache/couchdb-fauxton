@@ -11,80 +11,71 @@
 // the License.
 
 import {
-    SETUP_SET_CLUSTERSTATUS,
-    SETUP_SET_USERNAME,
-    SETUP_SET_PASSWORD,
-    SETUP_BIND_ADDRESS_FOR_SINGLE_NODE,
-    SETUP_PORT_FOR_SINGLE_NODE,
-    SETUP_PORT_ADDITIONAL_NODE,
-    SETUP_BIND_ADDRESS_ADDITIONAL_NODE,
-    SETUP_REMOTE_ADDRESS_ADDITIONAL_NODE,
-    SETUP_ADD_NODE_TO_LIST,
-    SETUP_RESET_ADDITIONAL_NODE,
-    SETUP_NODE_COUNT
+  SETUP_SET_CLUSTERSTATUS,
+  SETUP_SET_USERNAME,
+  SETUP_SET_PASSWORD,
+  SETUP_BIND_ADDRESS_FOR_SINGLE_NODE,
+  SETUP_PORT_FOR_SINGLE_NODE,
+  SETUP_PORT_ADDITIONAL_NODE,
+  SETUP_BIND_ADDRESS_ADDITIONAL_NODE,
+  SETUP_REMOTE_ADDRESS_ADDITIONAL_NODE,
+  SETUP_ADD_NODE_TO_LIST,
+  SETUP_RESET_ADDITIONAL_NODE,
+  SETUP_NODE_COUNT
 } from './actiontypes';
 import FauxtonAPI from "../../core/api";
 import _ from "lodash";
 
 
 const initialState = {
-    clusterState: '',
-    username: '',
-    password: '',
-    setupNode: {
-        bindAddress: '0.0.0.0',
-        port: 5984,
-        nodeCount: 3
-    },
-    nodeList: [],
-    additionalNode: {
-        bindAddress: '0.0.0.0',
-        port: 5984,
-        remoteAddress: '127.0.0.1'
-    }
+  clusterState: '',
+  username: '',
+  password: '',
+  setupNode: {
+    bindAddress: '0.0.0.0',
+    port: 5984,
+    nodeCount: 3
+  },
+  nodeList: [],
+  additionalNode: {
+    bindAddress: '0.0.0.0',
+    port: 5984,
+    remoteAddress: '127.0.0.1'
+  }
 };
 
 export default function setup(state = initialState, action) {
-    const {options, type} = action;
-    switch (type) {
-        case SETUP_SET_CLUSTERSTATUS:
-            return updateState(state, 'clusterState', options.state);
-            break;
-        case SETUP_SET_USERNAME:
-            return updateState(state, 'username', options.value);
-            break;
-        case SETUP_SET_PASSWORD:
-            return updateState(state, 'password', options.value);
-            break;
-        case SETUP_BIND_ADDRESS_FOR_SINGLE_NODE:
-            return updateState(state, 'setupNode.bindAddress', options.value);
-            break;
-        case SETUP_PORT_FOR_SINGLE_NODE:
-            return updateState(state, 'setupNode.port', options.value);
-        case SETUP_PORT_ADDITIONAL_NODE:
-            return updateState(state, 'additionalNode.port', parseInt(options.value));
-        case SETUP_BIND_ADDRESS_ADDITIONAL_NODE:
-            return updateState(state, 'additionalNode.bindAddress', options.value);
-            break;
-        case SETUP_REMOTE_ADDRESS_ADDITIONAL_NODE:
-            return updateState(state, 'additionalNode.remoteAddress', options.value);
-            break;
-        case SETUP_ADD_NODE_TO_LIST:
-            let addNodeListState = getStateCopy(state);
-            addNodeListState.nodeList.push(options.value);
-            resetAdditionalNode(addNodeListState);
-            return addNodeListState;
-            break;
-        case SETUP_RESET_ADDITIONAL_NODE:
-            return resetAdditionalNode(getStateCopy(state));
-            break;
-        case SETUP_NODE_COUNT:
-            const nodeCount = Math.min(options.value, 3);
-            return updateState(state, 'setupNode.nodeCount', nodeCount);
-            break;
-        default:
-            return state;
-    }
+  const {options, type} = action;
+  switch (type) {
+    case SETUP_SET_CLUSTERSTATUS:
+      return updateState(state, 'clusterState', options.state);
+    case SETUP_SET_USERNAME:
+      return updateState(state, 'username', options.value);
+    case SETUP_SET_PASSWORD:
+      return updateState(state, 'password', options.value);
+    case SETUP_BIND_ADDRESS_FOR_SINGLE_NODE:
+      return updateState(state, 'setupNode.bindAddress', options.value);
+    case SETUP_PORT_FOR_SINGLE_NODE:
+      return updateState(state, 'setupNode.port', options.value);
+    case SETUP_PORT_ADDITIONAL_NODE:
+      return updateState(state, 'additionalNode.port', parseInt(options.value));
+    case SETUP_BIND_ADDRESS_ADDITIONAL_NODE:
+      return updateState(state, 'additionalNode.bindAddress', options.value);
+    case SETUP_REMOTE_ADDRESS_ADDITIONAL_NODE:
+      return updateState(state, 'additionalNode.remoteAddress', options.value);
+    case SETUP_ADD_NODE_TO_LIST:
+      let addNodeListState = getStateCopy(state);
+      addNodeListState.nodeList.push(options.value);
+      resetAdditionalNode(addNodeListState);
+      return addNodeListState;
+    case SETUP_RESET_ADDITIONAL_NODE:
+      return resetAdditionalNode(getStateCopy(state));
+    case SETUP_NODE_COUNT:
+      const nodeCount = Math.min(options.value, 3);
+      return updateState(state, 'setupNode.nodeCount', nodeCount);
+    default:
+      return state;
+  }
 }
 
 /**
@@ -93,15 +84,15 @@ export default function setup(state = initialState, action) {
  * @returns {{setupNode: {}, additionalNode: {}}}
  */
 export const getStateCopy = (state) => {
-    return {
-        ...state,
-        setupNode: {
-            ...state.setupNode
-        },
-        additionalNode: {
-            ...state.additionalNode
-        }
-    };
+  return {
+    ...state,
+    setupNode: {
+      ...state.setupNode
+    },
+    additionalNode: {
+      ...state.additionalNode
+    }
+  };
 };
 
 /**
@@ -111,8 +102,8 @@ export const getStateCopy = (state) => {
  * @param value The value to update
  */
 const updateState = (state, path, value) => {
-    let statecopy = getStateCopy(state);
-    return _.set(statecopy, path, value);
+  let statecopy = getStateCopy(state);
+  return _.set(statecopy, path, value);
 };
 
 /**
@@ -121,8 +112,8 @@ const updateState = (state, path, value) => {
  * @returns {*}
  */
 const resetAdditionalNode = state => {
-    state.additionalNode = Object.assign({}, initialState.additionalNode);
-    return state;
+  state.additionalNode = Object.assign({}, initialState.additionalNode);
+  return state;
 };
 
 export const getState = state => state;

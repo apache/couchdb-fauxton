@@ -24,12 +24,12 @@ Setup.initialize = function () {
 };
 
 FauxtonAPI.addReducers({
-    setup: reducers
+  setup: reducers
 });
 
 FauxtonAPI.registerUrls('cluster_setup', {
   server: () => app.host + '/_cluster_setup',
-  app:  () => '/_cluster_setup',
+  app: () => '/_cluster_setup',
   apiurl: () => window.location.origin + "/_cluster_setup"
 });
 

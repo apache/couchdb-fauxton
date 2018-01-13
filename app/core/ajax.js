@@ -106,7 +106,7 @@ export const put = (url, body, opts = {}) => {
  */
 export const rejectFetchError = response => {
   return response.json().then(json =>{
-      const error = json.reason ? json.reason : json.error;
+    const error = json.reason ? json.reason : json.error;
     return Promise.reject(error);
   });
 };

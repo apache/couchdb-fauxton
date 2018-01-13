@@ -16,31 +16,31 @@ import app from "../../../app";
 
 
 export default class ClusterConfiguredScreen extends React.Component {
-    getNodeType = () => {
-        const {clusterState} = this.props;
-        if (clusterState === 'cluster_finished') {
-            return 'clustered';
-        } else if (clusterState === 'single_node_enabled') {
-            return 'single';
-        } else {
-            return 'unknown state';
-        }
-    };
-
-    render() {
-        const nodetype = this.getNodeType();
-
-        return (
-            <div className="setup-screen">
-                {app.i18n.en_US['couchdb-productname']} is configured for production usage as a {nodetype} node!
-                <br/>
-                <br/>
-                Do you want to <a href="#replication">replicate data</a>?
-            </div>
-        );
+  getNodeType = () => {
+    const {clusterState} = this.props;
+    if (clusterState === 'cluster_finished') {
+      return 'clustered';
+    } else if (clusterState === 'single_node_enabled') {
+      return 'single';
     }
+    return 'unknown state';
+
+  };
+
+  render() {
+    const nodetype = this.getNodeType();
+
+    return (
+        <div className="setup-screen">
+          {app.i18n.en_US['couchdb-productname']} is configured for production usage as a {nodetype} node!
+          <br/>
+          <br/>
+          Do you want to <a href="#replication">replicate data</a>?
+        </div>
+    );
+  }
 }
 
 ClusterConfiguredScreen.propTypes = {
-    clusterState: PropTypes.string
+  clusterState: PropTypes.string
 };

@@ -14,9 +14,9 @@ import ConfiguredScreen from '../components/ConfiguredScreen';
 import {getClusterState} from '../reducers';
 
 const mapStateToProps = ({setup}) => {
-    return {
-        clusterState: getClusterState(setup),
-    };
+  return {
+    clusterState: getClusterState(setup),
+  };
 };
 
 export default connect(

@@ -14,9 +14,9 @@ import FirstStepController from '../components/FirstStepController';
 import {getClusterState} from '../reducers';
 
 const mapStateToProps = ({setup}) => {
-    return {
-        clusterState: getClusterState(setup),
-    };
+  return {
+    clusterState: getClusterState(setup),
+  };
 };
 
 export default connect(

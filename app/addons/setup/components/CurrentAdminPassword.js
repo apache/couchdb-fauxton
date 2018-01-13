@@ -16,39 +16,39 @@ import PropTypes from 'prop-types';
 
 
 export default class SetupCurrentAdminPassword extends React.Component {
-    render() {
-        let text = 'Specify your Admin credentials';
+  render() {
+    let text = 'Specify your Admin credentials';
 
-        if (this.props.isAdminParty) {
-            text = 'Create Admin credentials.';
-        }
-
-        return (
-            <div className="setup-creds">
-                <div>
-                    <p>{text}</p>
-                </div>
-                <input
-                    className="setup-username"
-                    onChange={this.props.onAlterUsername}
-                    placeholder="Username"
-                    value={this.props.username}
-                    type="text"/>
-                <input
-                    className="setup-password"
-                    onChange={this.props.onAlterPassword}
-                    placeholder="Password"
-                    value={this.props.password}
-                    type="password"/>
-            </div>
-        );
+    if (this.props.isAdminParty) {
+      text = 'Create Admin credentials.';
     }
+
+    return (
+        <div className="setup-creds">
+          <div>
+            <p>{text}</p>
+          </div>
+          <input
+              className="setup-username"
+              onChange={this.props.onAlterUsername}
+              placeholder="Username"
+              value={this.props.username}
+              type="text"/>
+          <input
+              className="setup-password"
+              onChange={this.props.onAlterPassword}
+              placeholder="Password"
+              value={this.props.password}
+              type="password"/>
+        </div>
+    );
+  }
 }
 
 SetupCurrentAdminPassword.propTypes = {
-    onAlterUsername: PropTypes.func.isRequired,
-    onAlterPassword: PropTypes.func.isRequired,
-    username: PropTypes.string.isRequired,
-    password: PropTypes.string.isRequired,
-    isAdminParty: PropTypes.bool
+  onAlterUsername: PropTypes.func.isRequired,
+  onAlterPassword: PropTypes.func.isRequired,
+  username: PropTypes.string.isRequired,
+  password: PropTypes.string.isRequired,
+  isAdminParty: PropTypes.bool
 };

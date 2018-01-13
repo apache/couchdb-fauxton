@@ -14,14 +14,14 @@ import MultipleNodeController from '../components/MultipleNodeController';
 import {getNodeList, getIsAdminParty, getAdditionalNode, getUsername, getPassword, getSetupNode} from '../reducers';
 
 const mapStateToProps = ({setup}) => {
-    return {
-        nodeList: getNodeList(setup),
-        isAdminParty: getIsAdminParty(setup),
-        setupNode: getSetupNode(setup),
-        username: getUsername(setup),
-        password: getPassword(setup),
-        additionalNode: getAdditionalNode(setup)
-    };
+  return {
+    nodeList: getNodeList(setup),
+    isAdminParty: getIsAdminParty(setup),
+    setupNode: getSetupNode(setup),
+    username: getUsername(setup),
+    password: getPassword(setup),
+    additionalNode: getAdditionalNode(setup)
+  };
 };
 
 export default connect(

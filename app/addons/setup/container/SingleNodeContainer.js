@@ -12,25 +12,25 @@
 import {connect} from 'react-redux';
 import SingleNodeController from '../components/SingleNodeController';
 import {
-    getIsAdminParty,
-    getBindAddressForSetupNode,
-    getPortForSetupNode,
-    getNodeList,
-    getPassword,
-    getSetupNode,
-    getUsername
+  getIsAdminParty,
+  getBindAddressForSetupNode,
+  getPortForSetupNode,
+  getNodeList,
+  getPassword,
+  getSetupNode,
+  getUsername
 } from '../reducers';
 
 const mapStateToProps = ({setup}) => {
-    return {
-        nodeList: getNodeList(setup),
-        isAdminParty: getIsAdminParty(setup),
-        setupNode: getSetupNode(setup),
-        username: getUsername(setup),
-        password: getPassword(setup),
-        port: getPortForSetupNode(setup),
-        bindAddress: getBindAddressForSetupNode(setup)
-    };
+  return {
+    nodeList: getNodeList(setup),
+    isAdminParty: getIsAdminParty(setup),
+    setupNode: getSetupNode(setup),
+    username: getUsername(setup),
+    password: getPassword(setup),
+    port: getPortForSetupNode(setup),
+    bindAddress: getBindAddressForSetupNode(setup)
+  };
 };
 
 export default connect(

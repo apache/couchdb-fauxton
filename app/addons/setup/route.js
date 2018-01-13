@@ -32,16 +32,16 @@ const SetupRouteObject = FauxtonAPI.RouteObject.extend({
     'setup/multinode': 'setupMultiNode'
   },
 
-  setupInitView : () => {
+  setupInitView: () => {
     const url = FauxtonAPI.urls('cluster_setup', 'apiurl');
     ClusterActions.fetchNodes();
     return <OnePaneSimpleLayout
-      component={<FirstStepContainer />}
-      endpoint={url}
-      docURL={FauxtonAPI.constants.DOC_URLS.SETUP}
-      crumbs={[
-        { 'name': 'Setup ' + app.i18n.en_US['couchdb-productname'] }
-      ]}
+        component={<FirstStepContainer />}
+        endpoint={url}
+        docURL={FauxtonAPI.constants.DOC_URLS.SETUP}
+        crumbs={[
+          {'name': 'Setup ' + app.i18n.en_US['couchdb-productname']}
+        ]}
     />;
   },
 
@@ -49,12 +49,12 @@ const SetupRouteObject = FauxtonAPI.RouteObject.extend({
     const url = FauxtonAPI.urls('cluster_setup', 'apiurl');
     ClusterActions.fetchNodes();
     return <OnePaneSimpleLayout
-      component={<SingleNodeContainer />}
-      endpoint={url}
-      docURL={FauxtonAPI.constants.DOC_URLS.SETUP}
-      crumbs={[
-        { 'name': 'Setup ' + app.i18n.en_US['couchdb-productname'] }
-      ]}
+        component={<SingleNodeContainer />}
+        endpoint={url}
+        docURL={FauxtonAPI.constants.DOC_URLS.SETUP}
+        crumbs={[
+          {'name': 'Setup ' + app.i18n.en_US['couchdb-productname']}
+        ]}
     />;
   },
 
@@ -62,24 +62,24 @@ const SetupRouteObject = FauxtonAPI.RouteObject.extend({
     const url = FauxtonAPI.urls('cluster_setup', 'apiurl');
     ClusterActions.fetchNodes();
     return <OnePaneSimpleLayout
-      component={<MultipleNodeContainer />}
-      endpoint={url}
-      docURL={FauxtonAPI.constants.DOC_URLS.SETUP}
-      crumbs={[
-        { 'name': 'Setup ' + app.i18n.en_US['couchdb-productname'] }
-      ]}
+        component={<MultipleNodeContainer />}
+        endpoint={url}
+        docURL={FauxtonAPI.constants.DOC_URLS.SETUP}
+        crumbs={[
+          {'name': 'Setup ' + app.i18n.en_US['couchdb-productname']}
+        ]}
     />;
   },
 
   finishView: () => {
     const url = FauxtonAPI.urls('cluster_setup', 'apiurl');
     return <OnePaneSimpleLayout
-      component={<ConfiguredScreenContainer/>}
-      endpoint={url}
-      docURL={FauxtonAPI.constants.DOC_URLS.SETUP}
-      crumbs={[
-        { 'name': 'Setup ' + app.i18n.en_US['couchdb-productname'] }
-      ]}
+        component={<ConfiguredScreenContainer/>}
+        endpoint={url}
+        docURL={FauxtonAPI.constants.DOC_URLS.SETUP}
+        crumbs={[
+          {'name': 'Setup ' + app.i18n.en_US['couchdb-productname']}
+        ]}
     />;
   }
 });

@@ -15,16 +15,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 export default class OptionalSettings extends React.Component {
-    handleIpChange = (event) => {
-        this.props.onAlterBindAddress(event);
-    };
+  handleIpChange = (event) => {
+    this.props.onAlterBindAddress(event);
+  };
 
-    handlePortChange = (event) => {
-        this.props.onAlterPort(event);
-    };
+  handlePortChange = (event) => {
+    this.props.onAlterPort(event);
+  };
 
-    render() {
-        return (
+  render() {
+    return (
             <div className="setup-opt-settings">
                 <p>Bind address the node will listen on</p>
                 <input
@@ -43,13 +43,13 @@ export default class OptionalSettings extends React.Component {
                         type="text"/>
                 </div>
             </div>
-        );
-    }
+    );
+  }
 }
 
 OptionalSettings.propTypes = {
-    ip: PropTypes.string.isRequired,
-    port: PropTypes.number.isRequired,
-    onAlterBindAddress: PropTypes.func.isRequired,
-    onAlterPort: PropTypes.func.isRequired
+  ip: PropTypes.string.isRequired,
+  port: PropTypes.number.isRequired,
+  onAlterBindAddress: PropTypes.func.isRequired,
+  onAlterPort: PropTypes.func.isRequired
 };
