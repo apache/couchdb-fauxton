@@ -30,7 +30,9 @@ import {
   queryOptionsToggleIncludeDocs,
   queryOptionsToggleVisibility,
   queryOptionsFilterOnlyDdocs,
-  queryOptionsRemoveFilterOnlyDdocs
+  queryOptionsRemoveFilterOnlyDdocs,
+  queryOptionsToggleStable,
+  queryOptionsUpdateStale,
 } from '../actions/queryoptions';
 import {
   getQueryOptionsPanel,
@@ -59,6 +61,8 @@ const mapStateToProps = ({indexResults, sidebar}, ownProps) => {
     descending: queryOptionsPanel.descending,
     skip: queryOptionsPanel.skip,
     limit: queryOptionsPanel.limit,
+    stable: queryOptionsPanel.stable,
+    stale: queryOptionsPanel.stale,
     fetchParams: getFetchParams(indexResults),
     queryOptionsParams: getQueryOptionsParams(indexResults),
     perPage: getPerPage(indexResults),
@@ -113,6 +117,14 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     },
     queryOptionsRemoveFilterOnlyDdocs: () => {
       dispatch(queryOptionsRemoveFilterOnlyDdocs());
+    },
+
+    queryOptionsToggleStable: previous =>{
+      dispatch(queryOptionsToggleStable(previous));
+    },
+
+    queryOptionsUpdateStale: stale => {
+      dispatch(queryOptionsUpdateStale(stale));
     },
     changeLayout: (newLayout) => {
       dispatch(changeLayout(newLayout));

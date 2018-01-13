@@ -13,9 +13,9 @@
 import app from "../../../app";
 import ActionTypes from './actiontypes';
 import Constants from '../constants';
-import { getJsonViewData } from './helpers/json-view';
-import { getTableViewData } from './helpers/table-view';
-import { getDefaultPerPage, getDocId, isJSONDocBulkDeletable } from './helpers/shared-helpers';
+import {getJsonViewData} from './helpers/json-view';
+import {getTableViewData} from './helpers/table-view';
+import {getDefaultPerPage, getDocId, isJSONDocBulkDeletable} from './helpers/shared-helpers';
 
 const initialState = {
   docs: [],  // raw documents returned from couch
@@ -55,7 +55,9 @@ const initialState = {
     limit: 'none',
     reduce: false,
     groupLevel: 'exact',
-    showReduce: false
+    showReduce: false,
+    stable: false,
+    stale: ''
   }
 };
 
@@ -74,7 +76,7 @@ export default function resultsState(state = initialState, action) {
           perPage: state.pagination.perPage
         }),
         queryOptionsPanel: Object.assign({}, initialState.queryOptionsPanel,
-          state.queryOptionsPanel, {reduce: false, groupLevel: 'exact', showReduce: false}),
+            state.queryOptionsPanel, {reduce: false, groupLevel: 'exact', showReduce: false}),
         isLoading: false
       });
 
@@ -182,7 +184,7 @@ export const removeGeneratedMangoDocs = (doc) => {
 
 // transform the docs in to a state ready for rendering on the page
 export const getDataForRendering = (state, databaseName, deleteEnabled = true) => {
-  const { docs } = state;
+  const {docs} = state;
   const options = {
     databaseName: databaseName,
     selectedLayout: state.selectedLayout,
@@ -276,7 +278,7 @@ export const getDisplayedFields = (state, databaseName) => {
 };
 
 export const getQueryOptionsParams = (state) => {
-  const { queryOptionsPanel } = state;
+  const {queryOptionsPanel} = state;
   const params = {};
 
   if (queryOptionsPanel.includeDocs) {
@@ -318,6 +320,14 @@ export const getQueryOptionsParams = (state) => {
     } else {
       params.group_level = queryOptionsPanel.groupLevel;
     }
+  }
+
+  if (queryOptionsPanel.stale) {
+    params.stale = queryOptionsPanel.stale;
+  }
+
+  if (typeof queryOptionsPanel.stable === 'boolean') {
+    params.stable = queryOptionsPanel.stable;
   }
 
   return params;

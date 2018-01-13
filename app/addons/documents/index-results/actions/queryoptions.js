@@ -127,3 +127,15 @@ export const queryOptionsRemoveFilterOnlyDdocs = () => {
     showByKeys: false
   });
 };
+
+export const queryOptionsToggleStable = previous => {
+  return updateQueryOptions({
+    stable: !previous
+  });
+};
+
+export const queryOptionsUpdateStale = value => {
+  return updateQueryOptions({
+    stale: value
+  });
+};

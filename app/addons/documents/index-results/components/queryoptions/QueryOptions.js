@@ -112,7 +112,12 @@ export default class QueryOptions extends React.Component {
             toggleReduce={this.props.queryOptionsToggleReduce}
             groupLevel={this.props.groupLevel}
             updateGroupLevel={this.props.queryOptionsUpdateGroupLevel}
-            docURL={FauxtonAPI.constants.DOC_URLS.GENERAL} />
+            docURL={FauxtonAPI.constants.DOC_URLS.GENERAL}
+            stable={this.props.stable}
+            toggleStable={this.props.queryOptionsToggleStable}
+            stale={this.props.stale}
+            updateStale={this.props.queryOptionsUpdateStale}
+          />
           <KeySearchFields
             key={1}
             showByKeys={this.props.showByKeys}
@@ -173,5 +178,9 @@ QueryOptions.propTypes = {
   resetPagination: PropTypes.func.isRequired,
   selectedLayout: PropTypes.string.isRequired,
   changeLayout: PropTypes.func.isRequired,
-  queryOptionsToggleVisibility: PropTypes.func.isRequired
+  queryOptionsToggleVisibility: PropTypes.func.isRequired,
+  queryOptionsToggleStable: PropTypes.func.isRequired,
+  queryOptionsUpdateStale: PropTypes.func.isRequired,
+  stable: PropTypes.bool.isRequired,
+  stale: PropTypes.string.isRequired
 };
