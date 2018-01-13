@@ -37,7 +37,7 @@ describe('ChangesTabContent', () => {
 
   it('should add filter markup', () => {
     const submitBtn = el.find('[type="submit"]'),
-        addItemField = el.find('.js-changes-filter-field');
+          addItemField = el.find('.js-changes-filter-field');
 
     addItemField.simulate('change', {target: {value: 'I wandered lonely as a filter'}});
     submitBtn.simulate('submit');
@@ -50,7 +50,7 @@ describe('ChangesTabContent', () => {
 
   it('should call addFilter action on click', () => {
     const submitBtn = el.find('[type="submit"]'),
-      addItemField = el.find('.js-changes-filter-field');
+          addItemField = el.find('.js-changes-filter-field');
 
     const spy = sinon.spy(Actions, 'addFilter');
 
@@ -62,7 +62,7 @@ describe('ChangesTabContent', () => {
 
   it('should remove filter markup', () => {
     const submitBtn = el.find('[type="submit"]'),
-      addItemField = el.find('.js-changes-filter-field');
+          addItemField = el.find('.js-changes-filter-field');
 
     addItemField.simulate('change', {target: {value: 'I wandered lonely as a filter'}});
     submitBtn.simulate('submit');
@@ -79,7 +79,7 @@ describe('ChangesTabContent', () => {
 
   it('should call removeFilter action on click', () => {
     const submitBtn = el.find('[type="submit"]'),
-      addItemField = el.find('.js-changes-filter-field');
+          addItemField = el.find('.js-changes-filter-field');
 
     const spy = sinon.spy(Actions, 'removeFilter');
 
@@ -92,7 +92,7 @@ describe('ChangesTabContent', () => {
 
   it('should not add empty filters', () => {
     const submitBtn = el.find('[type="submit"]'),
-      addItemField = el.find('.js-changes-filter-field');
+          addItemField = el.find('.js-changes-filter-field');
 
     addItemField.simulate('change', {target: {value: ''}});
     submitBtn.simulate('submit');
@@ -106,7 +106,7 @@ describe('ChangesTabContent', () => {
 
   it('should not add the same filter twice', () => {
     const submitBtn = el.find('[type="submit"]'),
-        addItemField = el.find('.js-changes-filter-field');
+          addItemField = el.find('.js-changes-filter-field');
 
     const filter = 'I am unique in the whole wide world';
     addItemField.simulate('change', {target: {value: filter}});
@@ -138,9 +138,9 @@ describe('ChangesController', () => {
 
   beforeEach(() => {
     Actions.initChanges({ databaseName: 'testDatabase' });
+    Actions.updateChanges(changesResponse);
     headerEl  = mount(<Changes.ChangesTabContent />);
     changesEl = mount(<Changes.ChangesController />);
-    Actions.updateChanges(changesResponse);
   });
 
   afterEach(() => {
@@ -149,6 +149,7 @@ describe('ChangesController', () => {
 
 
   it('should list the right number of changes', () => {
+    changesEl.update();
     assert.equal(results.length, changesEl.find('.change-box').length);
   });
 
@@ -162,6 +163,7 @@ describe('ChangesController', () => {
     submitBtn.simulate('submit');
 
     // confirm only the two deleted items shows up and the IDs maps to the deleted rows
+    changesEl.update();
     assert.equal(2, changesEl.find('.change-box').length);
     assert.equal('doc_3', changesEl.find('.js-doc-id').first().text());
     assert.equal('doc_5', changesEl.find('.js-doc-id').at(1).text());
@@ -176,6 +178,7 @@ describe('ChangesController', () => {
     submitBtn.simulate('submit');
 
     // confirm only one item shows up and the ID maps to what we'd expect
+    changesEl.update();
     assert.equal(1, changesEl.find('.change-box').length);
     assert.equal('doc_3', changesEl.find('.js-doc-id').first().text());
   });
@@ -197,6 +200,7 @@ describe('ChangesController', () => {
     submitBtn.simulate('submit');
 
     // confirm only one item shows up and that it's doc_5
+    changesEl.update();
     assert.equal(1, changesEl.find('.change-box').length);
     assert.equal('doc_5', changesEl.find('.js-doc-id').first().text());
   });
@@ -204,6 +208,7 @@ describe('ChangesController', () => {
   it('shows a No Docs Found message if no docs', () => {
     Stores.changesStore.reset();
     Actions.updateChanges({ last_seq: 124, results: [] });
+    changesEl.update();
     assert.ok(/There\sare\sno\sdocument\schanges/.test(changesEl.html()));
   });
 });

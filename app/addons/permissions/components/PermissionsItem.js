@@ -14,7 +14,7 @@ import PropTypes from 'prop-types';
 
 import React from 'react';
 
-const PermissionsItem = ({removeItem, section, type, value}) => {
+const PermissionsItem = ({removeItem, section, type, value}) => {
 
   return (
     <li className="permissions__entry">

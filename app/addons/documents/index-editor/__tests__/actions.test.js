@@ -37,14 +37,14 @@ describe('Index Editor Actions', function () {
         _id: designDocId,
         _rev: '1-231',
         views: {
-            'test-view': {
-              map: 'function () {};'
-            },
-            'test-view2': {
-              map: 'function () {};'
-            }
+          'test-view': {
+            map: 'function () {};'
+          },
+          'test-view2': {
+            map: 'function () {};'
           }
-        }], {
+        }
+      }], {
         params: { limit: 10 },
         database: database
       });

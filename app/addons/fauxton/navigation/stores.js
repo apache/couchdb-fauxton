@@ -180,64 +180,64 @@ Stores.NavBarStore = FauxtonAPI.Store.extend({
     switch (action.type) {
       case ActionTypes.ADD_NAVBAR_LINK:
         this.addLink(action.link);
-      break;
+        break;
 
       case ActionTypes.TOGGLE_NAVBAR_MENU:
         this.toggleMenu();
-      break;
+        break;
 
       case ActionTypes.UPDATE_NAVBAR_LINK:
         this.updateLink(action.link);
-      break;
+        break;
 
       case ActionTypes.CLEAR_NAVBAR_LINK:
         this.reset();
-      break;
+        break;
 
       case ActionTypes.REMOVE_NAVBAR_LINK:
         this.removeLink(action.link);
-      break;
+        break;
 
       case ActionTypes.SHOW_NAVBAR_LINK_BADGE:
         this.showLinkBadge(action.link);
-      break;
+        break;
 
       case ActionTypes.HIDE_NAVBAR_LINK_BADGE:
         this.hideLinkBadge(action.link);
-      break;
+        break;
 
       case ActionTypes.NAVBAR_SET_VERSION_INFO:
         this.setVersion(action.version);
-      break;
+        break;
 
       case ActionTypes.NAVBAR_ACTIVE_LINK:
         this.setActiveLink(action.name);
-      break;
+        break;
 
       case ActionTypes.NAVBAR_HIDE:
         this.hideNavBar();
-      break;
+        break;
 
       case ActionTypes.NAVBAR_SHOW:
         this.showNavBar();
-      break;
+        break;
 
       case ActionTypes.NAVBAR_SHOW_HIDE_LOGIN_LOGOUT_SECTION:
         this._loginSectionVisible = action.visible;
-      break;
+        break;
 
       case ActionTypes.NAVBAR_SHOW_LOGIN_BUTTON:
         this._loginSectionVisible = true;
         this._loginVisibleInsteadOfLogout = true;
-      break;
+        break;
 
       case ActionTypes.NAVBAR_SHOW_LOGOUT_BUTTON:
         this._loginSectionVisible = true;
         this._loginVisibleInsteadOfLogout = false;
-      break;
+        break;
 
       default:
-      return;
+        return;
       // do nothing
     }
 

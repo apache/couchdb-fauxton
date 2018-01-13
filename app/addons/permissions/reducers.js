@@ -41,7 +41,7 @@ export default function permissions (state = initialState, action) {
     default:
       return state;
   }
-};
+}
 
 function getRoles (type, permissions) {
   if (!permissions[type]) {

@@ -202,4 +202,4 @@ export default function mangoquery(state = initialState, action) {
     default:
       return state;
   }
-};
+}

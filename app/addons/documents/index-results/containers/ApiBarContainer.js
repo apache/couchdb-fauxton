@@ -1,5 +1,3 @@
-import { connect } from 'react-redux';
-
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License. You may obtain a copy of
 // the License at
@@ -13,7 +11,7 @@ import { connect } from 'react-redux';
 // the License.
 
 import PropTypes from 'prop-types';
-
+import { connect } from 'react-redux';
 import app from '../../../../app';
 import { ApiBarWrapper } from '../../../components/layouts';
 import { getQueryOptionsParams } from '../reducers';

@@ -93,8 +93,8 @@ describe('QueryParams', () => {
 
     it('parses startkey, endkey', () => {
       const params = {
-        'startkey':'[\"a\",\"b\"]',
-        'endkey':'[\"c\",\"d\"]'
+        'startkey':'["a","b"]',
+        'endkey':'["c","d"]'
       };
       const result = Models.QueryParams.parse(params);
 
@@ -115,7 +115,7 @@ describe('QueryParams', () => {
 
     it('does not modify input', () => {
       const params = {
-        key:'[\"a\",\"b\"]'
+        key:'["a","b"]'
       };
       const clone = _.clone(params);
       Models.QueryParams.parse(params);
@@ -140,8 +140,8 @@ describe('QueryParams', () => {
       const result = Models.QueryParams.stringify(params);
 
       assert.deepEqual(result, {
-        'startkey':'[\"a\",\"b\"]',
-        'endkey':'[\"c\",\"d\"]'
+        'startkey':'["a","b"]',
+        'endkey':'["c","d"]'
       });
     });
 
@@ -149,7 +149,7 @@ describe('QueryParams', () => {
       const params = {'key':['a', 'b']};
       const result = Models.QueryParams.stringify(params);
 
-      assert.deepEqual(result, { 'key': '[\"a\",\"b\"]' });
+      assert.deepEqual(result, { 'key': '["a","b"]' });
     });
 
     it('does not modify input', () => {

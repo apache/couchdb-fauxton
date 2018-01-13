@@ -28,8 +28,7 @@ module.exports = {
       .clickWhenVisible('.delete-db-modal input[type="text"]', waitTime, false)
       .setValue('.delete-db-modal input[type="text"]', [newDatabaseName, client.Keys.ENTER])
       .checkForDatabaseDeleted(newDatabaseName, waitTime)
-
-    .end();
+      .end();
   },
 
   'Deletes a database from the list': function (client) {
@@ -53,6 +52,6 @@ module.exports = {
       .checkForDatabaseDeleted(newDatabaseName, waitTime)
       .assert.elementNotPresent('a[href="database/' + newDatabaseName + '/_all_docs"]')
 
-    .end();
+      .end();
   }
 };

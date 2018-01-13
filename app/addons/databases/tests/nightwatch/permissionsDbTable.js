@@ -31,6 +31,6 @@ module.exports = {
       .waitForElementVisible('[data-name="database-load-fail-name"]', waitTime, false)
       .assert.containsText('[data-name="database-load-fail-name"]', '_global_changes')
 
-    .end();
+      .end();
   }
 };

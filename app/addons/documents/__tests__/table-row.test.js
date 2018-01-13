@@ -41,7 +41,6 @@ describe('Docs Table Row', () => {
     const wrapper = shallow(<TableRow
       onClick={sinon.stub()}
       docChecked={sinon.stub()}
-      isSelected={sinon.stub()}
       el={elem}
       data={data}
       index={0}

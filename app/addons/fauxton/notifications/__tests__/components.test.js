@@ -86,7 +86,7 @@ describe('NotificationPanelRow', () => {
       isVisible={true}
       filter="all"
       item={notifications.success}
-      />);
+    />);
 
     assert.notOk(row1.find('li').prop('aria-hidden'));
 
@@ -95,7 +95,7 @@ describe('NotificationPanelRow', () => {
       isVisible={true}
       filter="all"
       item={notifications.error}
-      />
+    />
     );
     assert.notOk(row2.find('li').prop('aria-hidden'));
 
@@ -111,10 +111,10 @@ describe('NotificationPanelRow', () => {
   it('hides notification when filter doesn\'t match', () => {
     var rowEl = mount(
       <Views.NotificationPanelRow
-      style={style}
-      isVisible={true}
-      filter="success"
-      item={notifications.info}
+        style={style}
+        isVisible={true}
+        filter="success"
+        item={notifications.info}
       />);
     assert.ok(rowEl.find('li').prop('aria-hidden'));
   });
@@ -122,10 +122,10 @@ describe('NotificationPanelRow', () => {
   it('shows notification when filter exact match', () => {
     const rowEl = mount(
       <Views.NotificationPanelRow
-      style={style}
-      isVisible={true}
-      filter="info"
-      item={notifications.info}
+        style={style}
+        isVisible={true}
+        filter="info"
+        item={notifications.info}
       />);
     assert.notOk(rowEl.find('li').prop('aria-hidden'));
   });

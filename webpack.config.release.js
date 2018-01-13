@@ -14,15 +14,15 @@ var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var path = require('path');
 const settings = require('./tasks/helper')
-                    .init()
-                    .readSettingsFile()
-                    .template
-                    .release;
+  .init()
+  .readSettingsFile()
+  .template
+  .release;
 
 module.exports = {
   // Entry point for static analyzer:
   entry: {
-      bundle: ['core-js/fn/array', 'core-js/fn/symbol', 'core-js/fn/promise', './app/main.js']
+    bundle: ['core-js/fn/array', 'core-js/fn/symbol', 'core-js/fn/promise', './app/main.js']
   },
 
   output: {
@@ -68,13 +68,14 @@ module.exports = {
   ],
 
   resolve: {
-    // Allow to omit extensions when requiring these files
-    extensions: ['', '.js', '.jsx']
+    extensions: ['*', '.js', '.jsx'],
+    alias: {
+      "underscore": "lodash"
+    }
   },
 
   module: {
-    loaders: [
-    {
+    loaders: [{
       test: /\.jsx?$/,
       enforce: "pre",
       use: ['eslint-loader'],
@@ -88,19 +89,19 @@ module.exports = {
     {
       test: require.resolve('jquery'),
       use: [{
-          loader: 'expose-loader',
-          options: 'jQuery'
+        loader: 'expose-loader',
+        options: 'jQuery'
       },
       {
-          loader: 'expose-loader',
-          options: '$'
+        loader: 'expose-loader',
+        options: '$'
       }]
-     },
-     {
+    },
+    {
       test: require.resolve("backbone"),
       use: [{
-          loader: 'expose-loader',
-          options: 'Backbone'
+        loader: 'expose-loader',
+        options: 'Backbone'
       }]
     },
     {
@@ -113,8 +114,8 @@ module.exports = {
             loader: "less-loader",
             options: {
               modifyVars: {
-                largeLogoPath: "\'" + settings.variables.largeLogoPath + "\'",
-                smallLogoPath: "\'" + settings.variables.smallLogoPath + "\'"
+                largeLogoPath: "'" + settings.variables.largeLogoPath + "'",
+                smallLogoPath: "'" + settings.variables.smallLogoPath + "'"
               }
             }
           }
@@ -126,7 +127,7 @@ module.exports = {
       test: /\.css$/, use: [
         'style-loader',
         'css-loader'
-        ]
+      ]
     },
     {
       test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
@@ -143,11 +144,5 @@ module.exports = {
     { test: /\.gif(\?v=\d+\.\d+\.\d+)?$/,    loader: 'file-loader?name=dashboard.assets/img/[name].[ext]' },
     { test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,    loader: 'url-loader?limit=10000&mimetype=image/svg+xml&name=dashboard.assets/img/[name].[ext]' }
     ]
-  },
-  resolve: {
-    extensions: ['*', '.js', '.jsx'],
-    alias: {
-      "underscore": "lodash"
-    }
   }
 };

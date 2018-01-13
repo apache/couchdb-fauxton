@@ -26,17 +26,16 @@ export const queryAllDocs = (fetchUrl, params) => {
     headers: {
       'Accept': 'application/json; charset=utf-8'
     }
-  })
-  .then(res => res.json())
-  .then(json => {
-    if (json.error) {
-      throw new Error('(' + json.error + ') ' + json.reason);
-    }
-    return {
-      docs: json.rows,
-      docType: Constants.INDEX_RESULTS_DOC_TYPE.VIEW
-    };
-  });
+  }).then(res => res.json())
+    .then(json => {
+      if (json.error) {
+        throw new Error('(' + json.error + ') ' + json.reason);
+      }
+      return {
+        docs: json.rows,
+        docType: Constants.INDEX_RESULTS_DOC_TYPE.VIEW
+      };
+    });
 };
 
 export const queryMapReduceView = (fetchUrl, params) => {
@@ -58,16 +57,16 @@ export const queryMapReduceView = (fetchUrl, params) => {
       'Accept': 'application/json; charset=utf-8'
     }
   })
-  .then(res => res.json())
-  .then(json => {
-    if (json.error) {
-      throw new Error('(' + json.error + ') ' + json.reason);
-    }
-    return {
-      docs: json.rows,
-      docType: Constants.INDEX_RESULTS_DOC_TYPE.VIEW
-    };
-  });
+    .then(res => res.json())
+    .then(json => {
+      if (json.error) {
+        throw new Error('(' + json.error + ') ' + json.reason);
+      }
+      return {
+        docs: json.rows,
+        docType: Constants.INDEX_RESULTS_DOC_TYPE.VIEW
+      };
+    });
 };
 
 export const postToBulkDocs = (databaseName, payload) => {
@@ -81,7 +80,7 @@ export const postToBulkDocs = (databaseName, payload) => {
       'Content-Type': 'application/json'
     }
   })
-  .then(res => res.json());
+    .then(res => res.json());
 };
 
 export const postToIndexBulkDelete = (databaseName, payload) => {
@@ -95,5 +94,5 @@ export const postToIndexBulkDelete = (databaseName, payload) => {
       'Content-Type': 'application/json'
     }
   })
-  .then(res => res.json());
+    .then(res => res.json());
 };

@@ -65,11 +65,11 @@ export default class ReduceEditor extends Component {
       return this.state.reduce;
     }
 
-    return this.refs.reduceEditor.getValue();
+    return this.reduceEditor.getValue();
   }
 
   getEditor() {
-    return this.refs.reduceEditor.getEditor();
+    return this.reduceEditor.getEditor();
   }
 
   updateReduceCode(code) {
@@ -86,7 +86,7 @@ export default class ReduceEditor extends Component {
 
     if (this.state.hasCustomReduce) {
       customReduceSection = <CodeEditorPanel
-        ref='reduceEditor'
+        ref={node => this.reduceEditor = node}
         id='reduce-function'
         title={'Custom Reduce function'}
         defaultCode={this.state.reduce}
@@ -115,7 +115,6 @@ export default class ReduceEditor extends Component {
             selectId="reduce-function-selector"
             selectValue={this.state.reduceSelectedOption} />
         </div>
-
         {customReduceSection}
       </div>
     );

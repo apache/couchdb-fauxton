@@ -41,6 +41,6 @@ module.exports = {
       .waitForElementPresent('.prettyprint', waitTime, false)
       .assert.containsText('#dashboard-lower-content', 'number')
       .assert.containsText('#dashboard-lower-content', 'ente_ente_mango_ananas_res')
-    .end();
+      .end();
   }
 };

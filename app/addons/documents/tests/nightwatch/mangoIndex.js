@@ -44,7 +44,7 @@ module.exports = {
       .checkForStringPresent(newDatabaseName + '/_index', 'gans_gans_mango')
       .waitForElementPresent('.prettyprint', waitTime, false)
       .assert.containsText('#dashboard-lower-content', 'gans_gans_mango')
-    .end();
+      .end();
   },
 
   'Deleting new named indexes with mango': function (client) {

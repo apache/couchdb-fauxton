@@ -27,7 +27,7 @@ var DocumentationRouteObject = FauxtonAPI.RouteObject.extend({
     return <OnePaneSimpleLayout
       component={<DocumentationComponents.DocumentationPage/>}
       crumbs={[
-          {'name': 'Documentation'}
+        {'name': 'Documentation'}
       ]}
     />;
   }

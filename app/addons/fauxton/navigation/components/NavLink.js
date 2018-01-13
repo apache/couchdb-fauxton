@@ -31,7 +31,7 @@ const NavLink = ({link, active, isMinimized}) => {
     <span className="faux-navbar__text">{link.title}</span>;
 
   let linkIcon = null;
-  if (!!link.icon) {
+  if (link.icon) {
     linkIcon = (
       <i className={classNames(
         link.icon,

@@ -65,8 +65,8 @@ _.extend(RouteObject.prototype, {
 
   routeCallback: function (route, args) {
     var routes = this.get('routes'),
-    routeObj = routes[route],
-    routeCallback;
+        routeObj = routes[route],
+        routeCallback;
 
     if (typeof routeObj === 'object') {
       routeCallback = this[routeObj.route];

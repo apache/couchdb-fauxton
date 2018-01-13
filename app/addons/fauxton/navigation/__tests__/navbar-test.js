@@ -22,22 +22,24 @@ describe('Navigation Bar', () => {
   };
 
   it('is displayed by default', () => {
-    const NavBar = mount(<NavBarContainer />);
-    expect(NavBar.find('.faux-navbar').length).toBe(1);
+    const navbar = mount(<NavBarContainer />);
+    expect(navbar.find('.faux-navbar').length).toBe(1);
   });
 
   it('is dynamically displayed by isNavBarVisible', () => {
-    const NavBar = mount(<NavBarContainer />);
+    const navbar = mount(<NavBarContainer />);
 
     FauxtonAPI.dispatch({
       type: ActionTypes.NAVBAR_HIDE
     });
-    expect(NavBar.find('.faux-navbar').length).toBe(0);
+    navbar.update();
+    expect(navbar.find('.faux-navbar').length).toBe(0);
 
     FauxtonAPI.dispatch({
       type: ActionTypes.NAVBAR_SHOW
     });
-    expect(NavBar.find('.faux-navbar').length).toBe(1);
+    navbar.update();
+    expect(navbar.find('.faux-navbar').length).toBe(1);
   });
 
   it('can display items with icon badge', () => {
@@ -58,9 +60,9 @@ describe('Navigation Bar', () => {
         icon: "fonticon-database"
       }
     });
-    const NavBar = mount(<NavBarContainer />);
-    expect(NavBar.find('div[data-nav-name="WithoutBadge"] i.faux-navbar__icon-badge').length, 0);
-    expect(NavBar.find('div[data-nav-name="WithBadge"] i.faux-navbar__icon-badge').length, 1);
+    const navbar = mount(<NavBarContainer />);
+    expect(navbar.find('div[data-nav-name="WithoutBadge"] i.faux-navbar__icon-badge').length, 0);
+    expect(navbar.find('div[data-nav-name="WithBadge"] i.faux-navbar__icon-badge').length, 1);
   });
 
 });

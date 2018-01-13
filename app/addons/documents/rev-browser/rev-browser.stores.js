@@ -89,23 +89,23 @@ Stores.RevBrowserStore = FauxtonAPI.Store.extend({
         this._dropDownData = this.prepareDropdownData(this._conflictingRevs);
 
         this._databaseName = action.options.databaseName;
-      break;
+        break;
 
       case ActionTypes.REV_BROWSER_DIFF_DOCS_READY:
         this._theirs = action.options.theirs;
-      break;
+        break;
 
       case ActionTypes.REV_BROWSER_DIFF_ENABLE_DIFF_VIEW:
         this._isDiffViewEnabled = action.options.enableDiff;
-      break;
+        break;
 
       case ActionTypes.REV_BROWSER_SHOW_CONFIRM_MODAL:
         this._showConfirmModal = action.options.show;
         this._docToWin = action.options.docToWin;
-      break;
+        break;
 
       default:
-      return;
+        return;
       // do nothing
     }
 

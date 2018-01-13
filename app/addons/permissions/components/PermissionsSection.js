@@ -112,45 +112,45 @@ class PermissionsSection extends React.Component {
     const { section } = this.props;
 
     return (
-    <div className={"permissions__" + section}>
-      <header className="page-header">
-        <h3>{section}</h3>
-        <p className="help">
-          {this.getHelp()}
-          <a className="help-link" data-bypass="true" href={getDocUrl('DB_PERMISSION')} target="_blank">
-            <i className="icon-question-sign"></i>
-          </a>
-        </p>
-      </header>
-      <div className="row-fluid">
-        <div className="span6">
-          <header>
-            <h4>Users</h4>
-            <p>Specify users who will have {this.props.section} access to this database.</p>
-          </header>
-          <form onSubmit={this.addNames} className="permission-item-form permissions-add-user form-inline">
-            <input onChange={this.nameChange} value={this.state.newName} type="text" className="item input-small" placeholder="Username" />
-            <button type="submit" className="btn btn-primary"><i className="icon fonticon-plus-circled" /> Add User</button>
-          </form>
-          <ul className="unstyled permission-items span10">
-            {this.getNames()}
-          </ul>
-        </div>
-        <div className="span6">
-          <header>
-            <h4>Roles</h4>
-            <p>Users with any of the following role(s) will have {this.props.section} access.</p>
-          </header>
-          <form onSubmit={this.addRoles} className="permission-item-form permissions-add-role form-inline">
-            <input onChange={this.roleChange} value={this.state.newRole} type="text" className="item input-small" placeholder="Role" />
-            <button type="submit" className="btn btn-primary"><i className="icon fonticon-plus-circled" /> Add Role</button>
-          </form>
-          <ul className="unstyled permission-items span10">
-            {this.getRoles()}
-          </ul>
+      <div className={"permissions__" + section}>
+        <header className="page-header">
+          <h3>{section}</h3>
+          <p className="help">
+            {this.getHelp()}
+            <a className="help-link" data-bypass="true" href={getDocUrl('DB_PERMISSION')} target="_blank">
+              <i className="icon-question-sign"></i>
+            </a>
+          </p>
+        </header>
+        <div className="row-fluid">
+          <div className="span6">
+            <header>
+              <h4>Users</h4>
+              <p>Specify users who will have {this.props.section} access to this database.</p>
+            </header>
+            <form onSubmit={this.addNames} className="permission-item-form permissions-add-user form-inline">
+              <input onChange={this.nameChange} value={this.state.newName} type="text" className="item input-small" placeholder="Username" />
+              <button type="submit" className="btn btn-primary"><i className="icon fonticon-plus-circled" /> Add User</button>
+            </form>
+            <ul className="unstyled permission-items span10">
+              {this.getNames()}
+            </ul>
+          </div>
+          <div className="span6">
+            <header>
+              <h4>Roles</h4>
+              <p>Users with any of the following role(s) will have {this.props.section} access.</p>
+            </header>
+            <form onSubmit={this.addRoles} className="permission-item-form permissions-add-role form-inline">
+              <input onChange={this.roleChange} value={this.state.newRole} type="text" className="item input-small" placeholder="Role" />
+              <button type="submit" className="btn btn-primary"><i className="icon fonticon-plus-circled" /> Add Role</button>
+            </form>
+            <ul className="unstyled permission-items span10">
+              {this.getRoles()}
+            </ul>
+          </div>
         </div>
       </div>
-    </div>
     );
   }
 }

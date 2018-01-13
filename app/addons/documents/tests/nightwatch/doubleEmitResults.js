@@ -20,17 +20,17 @@ module.exports = {
     var baseUrl = client.globals.test_settings.launch_url;
 
     client
-    .loginToGUI()
-    .populateDatabase(newDatabaseName)
-    .url(baseUrl + '/#/database/' + newDatabaseName + '/_design/testdesigndoc/_view/stubview')
-    .clickWhenVisible('.fonticon-json')
-    .waitForElementPresent('.clearfix', waitTime, false)
-    .waitForElementPresent('.doc-row', waitTime, false)
-    .execute(function () {
-      return document.querySelectorAll('.doc-row').length;
-    }, function (result) {
-      client.assert.equal(result.value, 20);
-    })
-    .end();
+      .loginToGUI()
+      .populateDatabase(newDatabaseName)
+      .url(baseUrl + '/#/database/' + newDatabaseName + '/_design/testdesigndoc/_view/stubview')
+      .clickWhenVisible('.fonticon-json')
+      .waitForElementPresent('.clearfix', waitTime, false)
+      .waitForElementPresent('.doc-row', waitTime, false)
+      .execute(function () {
+        return document.querySelectorAll('.doc-row').length;
+      }, function (result) {
+        client.assert.equal(result.value, 20);
+      })
+      .end();
   },
 };

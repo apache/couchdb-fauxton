@@ -114,5 +114,6 @@ export default class IndexResults extends React.Component {
 }
 
 IndexResults.propTypes = {
-  fetchAtStartup: PropTypes.bool.isRequired
+  fetchAtStartup: PropTypes.bool.isRequired,
+  fetchDocs: PropTypes.func.isRequired
 };

@@ -25,10 +25,10 @@ export const ApiBarWrapper = ({docURL, endpoint}) => {
       <JSONLink
         endpoint={endpoint}
       />
-    <DocLink
-      docURL={docURL}
-    />
-  </div>
+      <DocLink
+        docURL={docURL}
+      />
+    </div>
   );
 };
 
@@ -43,7 +43,7 @@ export const OnePane = ({children}) => {
 export const OnePaneHeader = ({showApiUrl, docURL, endpoint, crumbs, children}) => {
   let rightHeaderClass = "right-header-flex";
   if (Helpers.isIE1X()) {
-      rightHeaderClass += " " + rightHeaderClass + "--ie1X";
+    rightHeaderClass += " " + rightHeaderClass + "--ie1X";
   }
   return (
     <header>
@@ -124,12 +124,12 @@ export const DocEditorContent = ({children}) => {
 export const DocEditorLayout = ({component, docURL, endpoint, crumbs}) => {
   return (
     <div id="dashboard" className="one-pane doc-editor-page">
-        <OnePaneHeader
-          crumbs={crumbs}
-          endpoint={endpoint}
-          docURL={docURL}
-        >
-        </OnePaneHeader>
+      <OnePaneHeader
+        crumbs={crumbs}
+        endpoint={endpoint}
+        docURL={docURL}
+      >
+      </OnePaneHeader>
       <DocEditorContent>
         {component}
       </DocEditorContent>

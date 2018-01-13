@@ -128,71 +128,71 @@ Stores.DocEditorStore = FauxtonAPI.Store.extend({
     switch (action.type) {
       case ActionTypes.RESET_DOC:
         this.reset();
-      break;
+        break;
 
       case ActionTypes.DOC_LOADED:
         this.docLoaded(action.options);
         this.triggerChange();
-      break;
+        break;
 
       case ActionTypes.SHOW_CLONE_DOC_MODAL:
         this.showCloneDocModal();
         this.triggerChange();
-      break;
+        break;
 
       case ActionTypes.HIDE_CLONE_DOC_MODAL:
         this.hideCloneDocModal();
         this.triggerChange();
-      break;
+        break;
 
       case ActionTypes.SHOW_DELETE_DOC_CONFIRMATION_MODAL:
         this.showDeleteDocModal();
         this.triggerChange();
-      break;
+        break;
 
       case ActionTypes.HIDE_DELETE_DOC_CONFIRMATION_MODAL:
         this.hideDeleteDocModal();
         this.triggerChange();
-      break;
+        break;
 
       case ActionTypes.SHOW_UPLOAD_MODAL:
         this.showUploadModal();
         this.triggerChange();
-      break;
+        break;
 
       case ActionTypes.HIDE_UPLOAD_MODAL:
         this.hideUploadModal();
         this.triggerChange();
-      break;
+        break;
 
       case ActionTypes.FILE_UPLOAD_SUCCESS:
         this._numFilesUploaded++;
         this.triggerChange();
-      break;
+        break;
 
       case ActionTypes.FILE_UPLOAD_ERROR:
         this.setFileUploadErrorMsg(action.options.error);
         this.triggerChange();
-      break;
+        break;
 
       case ActionTypes.RESET_UPLOAD_MODAL:
         this.resetUploadModal();
         this.triggerChange();
-      break;
+        break;
 
       case ActionTypes.START_FILE_UPLOAD:
         this.startFileUpload();
         this.triggerChange();
-      break;
+        break;
 
       case ActionTypes.SET_FILE_UPLOAD_PERCENTAGE:
         this._fileUploadLoadPercentage = action.options.percent;
         this.triggerChange();
-      break;
+        break;
 
 
       default:
-      return;
+        return;
       // do nothing
     }
   }

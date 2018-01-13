@@ -65,7 +65,7 @@ export const ConfigLayout = ({showCors, docURL, node, endpoint, crumbs}) => {
           <ConfigComponents.Tabs
             sidebarItems={sidebarItems}
             selectedTab={selectedTab}
-            />
+          />
         </aside>
         <section id="dashboard-content" className="flex-layout flex-col">
           <div id="dashboard-upper-content"></div>

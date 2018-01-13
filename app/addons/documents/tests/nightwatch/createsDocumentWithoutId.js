@@ -45,6 +45,6 @@ module.exports = {
       .clickWhenVisible('#doc-editor-actions-panel .save-doc')
       .checkForStringPresent(newDatabaseName + '/_all_docs', '"total_rows":1')
 
-    .end();
+      .end();
   }
 };

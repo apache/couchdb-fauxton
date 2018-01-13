@@ -29,11 +29,11 @@ export default class BulkDocumentHeaderController extends React.Component {
     let metadata, json, table;
     if ((docType === Constants.INDEX_RESULTS_DOC_TYPE.VIEW)) {
       metadata = <Button
-          className={selectedLayout === Constants.LAYOUT_ORIENTATION.METADATA ? 'active' : ''}
-          onClick={this.toggleLayout.bind(this, Constants.LAYOUT_ORIENTATION.METADATA)}
-        >
+        className={selectedLayout === Constants.LAYOUT_ORIENTATION.METADATA ? 'active' : ''}
+        onClick={this.toggleLayout.bind(this, Constants.LAYOUT_ORIENTATION.METADATA)}
+      >
           Metadata
-        </Button>;
+      </Button>;
     } else if ((docType === Constants.INDEX_RESULTS_DOC_TYPE.MANGO_INDEX)) {
       return null;
     }
@@ -43,18 +43,18 @@ export default class BulkDocumentHeaderController extends React.Component {
     // query options panel.
     if (!queryOptionsParams.reduce) {
       table = <Button
-          className={selectedLayout === Constants.LAYOUT_ORIENTATION.TABLE ? 'active' : ''}
-          onClick={this.toggleLayout.bind(this, Constants.LAYOUT_ORIENTATION.TABLE)}
-        >
-          <i className="fonticon-table" /> Table
-        </Button>;
+        className={selectedLayout === Constants.LAYOUT_ORIENTATION.TABLE ? 'active' : ''}
+        onClick={this.toggleLayout.bind(this, Constants.LAYOUT_ORIENTATION.TABLE)}
+      >
+        <i className="fonticon-table" /> Table
+      </Button>;
 
       json = <Button
-          className={selectedLayout === Constants.LAYOUT_ORIENTATION.JSON ? 'active' : ''}
-          onClick={this.toggleLayout.bind(this, Constants.LAYOUT_ORIENTATION.JSON)}
-        >
-          <i className="fonticon-json" /> JSON
-        </Button>;
+        className={selectedLayout === Constants.LAYOUT_ORIENTATION.JSON ? 'active' : ''}
+        onClick={this.toggleLayout.bind(this, Constants.LAYOUT_ORIENTATION.JSON)}
+      >
+        <i className="fonticon-json" /> JSON
+      </Button>;
     }
 
     return (
@@ -95,4 +95,4 @@ export default class BulkDocumentHeaderController extends React.Component {
       return;
     }
   }
-};
+}

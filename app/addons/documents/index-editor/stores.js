@@ -204,53 +204,53 @@ Stores.IndexEditorStore = FauxtonAPI.Store.extend({
     switch (action.type) {
       case ActionTypes.CLEAR_INDEX:
         this.reset();
-      break;
+        break;
 
       case ActionTypes.EDIT_INDEX:
         this.editIndex(action.options);
-      break;
+        break;
 
       case ActionTypes.VIEW_NAME_CHANGE:
         this.setViewName(action.name);
-      break;
+        break;
 
       case ActionTypes.EDIT_NEW_INDEX:
         this.editIndex(action.options);
-      break;
+        break;
 
       case ActionTypes.SELECT_REDUCE_CHANGE:
         this.updateReduceFromSelect(action.reduceSelectedOption);
-      break;
+        break;
 
       case ActionTypes.DESIGN_DOC_CHANGE:
         this.setDesignDocId(action.options.value);
-      break;
+        break;
 
       case ActionTypes.VIEW_SAVED:
-      break;
+        break;
 
       case ActionTypes.VIEW_CREATED:
-      break;
+        break;
 
       case ActionTypes.VIEW_ADD_DESIGN_DOC:
         this.addDesignDoc(action.designDoc);
         this.setView();
-      break;
+        break;
 
       case ActionTypes.VIEW_UPDATE_MAP_CODE:
         this.setMap(action.code);
-      break;
+        break;
 
       case ActionTypes.VIEW_UPDATE_REDUCE_CODE:
         this.setReduce(action.code);
-      break;
+        break;
 
       case ActionTypes.DESIGN_DOC_NEW_NAME_UPDATED:
         this._newDesignDocName = action.options.value;
-      break;
+        break;
 
       default:
-      return;
+        return;
     }
 
     this.triggerChange();

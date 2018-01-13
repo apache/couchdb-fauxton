@@ -24,7 +24,7 @@ const getAvailableQueryIndexes = ({ availableIndexes }) => {
     return [];
   }
   return availableIndexes.filter(({ type }) => {
-      return ['json', 'special'].includes(type);
+    return ['json', 'special'].includes(type);
   });
 };
 

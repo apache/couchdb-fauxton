@@ -94,8 +94,7 @@ describe('Fauxton Ajax', () => {
       }
     });
 
-    return get('/testing')
-    .then(resp =>{
+    return get('/testing').then(resp =>{
       assert.ok(resp.ok);
     });
   });
@@ -109,9 +108,9 @@ describe('Fauxton Ajax', () => {
     });
 
     return put('/testing')
-    .then(resp =>{
-      assert.ok(resp.ok);
-    });
+      .then(resp =>{
+        assert.ok(resp.ok);
+      });
   });
 
   it('can do a POST', () => {
@@ -123,9 +122,9 @@ describe('Fauxton Ajax', () => {
     });
 
     return post('/testing')
-    .then(resp =>{
-      assert.ok(resp.ok);
-    });
+      .then(resp =>{
+        assert.ok(resp.ok);
+      });
   });
 
   it('can do a DELETE', () => {
@@ -137,8 +136,8 @@ describe('Fauxton Ajax', () => {
     });
 
     return deleteRequest('/testing')
-    .then(resp =>{
-      assert.ok(resp.ok);
-    });
+      .then(resp =>{
+        assert.ok(resp.ok);
+      });
   });
 });

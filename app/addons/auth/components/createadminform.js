@@ -37,7 +37,7 @@ export class CreateAdminForm extends React.Component {
   }
 
   componentDidMount() {
-    ReactDOM.findDOMNode(this.refs.username).focus();
+    this.usernameField.focus();
   }
 
   createAdmin(e) {
@@ -74,7 +74,7 @@ export class CreateAdminForm extends React.Component {
           <input
             id="username"
             type="text"
-            ref="username"
+            ref={node => this.usernameField = node}
             name="name"
             placeholder="Username"
             size="24"

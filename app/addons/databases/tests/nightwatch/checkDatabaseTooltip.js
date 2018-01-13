@@ -45,6 +45,6 @@ module.exports = {
 
       // confirm the tooltip element has been inserted
       .waitForElementPresent('.tooltip.fade.top.in', waitTime, false)
-    .end();
+      .end();
   }
 };

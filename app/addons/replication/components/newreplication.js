@@ -122,15 +122,15 @@ export default class NewReplicationController extends React.Component {
 
     //check that source and target are not the same. They can trigger a false positive if they are ""
     if ((remoteTarget === remoteSource && !isEmpty(remoteTarget))
-      || (localSource === localTarget && !isEmpty(localSource))) {
-        FauxtonAPI.addNotification({
-          msg: 'Cannot replicate a database to itself',
-          type: 'error',
-          escape: false,
-          clear: true
-        });
+        || (localSource === localTarget && !isEmpty(localSource))) {
+      FauxtonAPI.addNotification({
+        msg: 'Cannot replicate a database to itself',
+        type: 'error',
+        escape: false,
+        clear: true
+      });
 
-        return false;
+      return false;
     }
 
     return true;
@@ -209,8 +209,8 @@ export default class NewReplicationController extends React.Component {
   }
 
   render () {
-   const {
-     replicationSource,
+    const {
+      replicationSource,
       replicationTarget,
       replicationType,
       replicationDocName,
@@ -269,7 +269,7 @@ export default class NewReplicationController extends React.Component {
           onClick={this.showPasswordModal}
           onClose={this.props.hideConflictModal}
           docId={replicationDocName}
-          />
+        />
       </div>
     );
   }

@@ -61,25 +61,25 @@ var VerifyInstallStore = FauxtonAPI.Store.extend({
       case ActionTypes.VERIFY_INSTALL_START:
         this.startVerification();
         this.triggerChange();
-      break;
+        break;
 
       case ActionTypes.VERIFY_INSTALL_RESET:
         this.reset();
         this.triggerChange();
-      break;
+        break;
 
       case ActionTypes.VERIFY_INSTALL_SINGLE_TEST_COMPLETE:
         this.updateTestStatus(action.test, action.success);
         this.triggerChange();
-      break;
+        break;
 
       case ActionTypes.VERIFY_INSTALL_ALL_TESTS_COMPLETE:
         this.stopVerification();
         this.triggerChange();
-      break;
+        break;
 
       default:
-      return;
+        return;
     }
   }
 });

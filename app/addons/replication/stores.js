@@ -26,8 +26,7 @@ const validFieldMap = {
   replicationDocName: '_replicationDocName',
   replicationSource: '_replicationSource',
   replicationTarget: '_replicationTarget',
-  localSource: '_localSource',
-  replicationDocName: '_replicationDocName'
+  localSource: '_localSource'
 };
 
 const ReplicationStore = FauxtonAPI.Store.extend({
@@ -92,9 +91,9 @@ const ReplicationStore = FauxtonAPI.Store.extend({
 
   loadActivitySort () {
     const defaultSort = {
-        descending: false,
-        column: 'statusTime'
-      };
+      descending: false,
+      column: 'statusTime'
+    };
     let sort = app.utils.localStorageGet('replication-activity-sort');
 
     if (!sort) {
@@ -303,10 +302,6 @@ const ReplicationStore = FauxtonAPI.Store.extend({
     return this._isConflictModalVisible;
   },
 
-  getPassword () {
-    return this._password;
-  },
-
   setStateFromDoc (doc) {
     Object.keys(doc).forEach(key => {
       this.updateFormField(key, doc[key]);
@@ -331,129 +326,125 @@ const ReplicationStore = FauxtonAPI.Store.extend({
           this._localTarget = '';
           this._remoteTarget = '';
         }
-      break;
+        break;
 
       case ActionTypes.REPLICATION_DATABASES_LOADED:
         this.setDatabases(options.databases);
         this._loading = false;
-      break;
+        break;
 
       case ActionTypes.REPLICATION_FETCHING_FORM_STATE:
         this._loading = true;
-      break;
+        break;
 
       case ActionTypes.REPLICATION_UPDATE_FORM_FIELD:
         this.changeAfterSubmit();
         this.updateFormField(options.fieldName, options.value);
-      break;
+        break;
 
       case ActionTypes.REPLICATION_CLEAR_FORM:
         this.clearReplicationForm();
-      break;
+        break;
 
       case ActionTypes.REPLICATION_STARTING:
         this._submittedNoChange = true;
-      break;
+        break;
 
       case ActionTypes.REPLICATION_FETCHING_STATUS:
         this._activityLoading = true;
-      break;
+        break;
 
       case ActionTypes.REPLICATION_STATUS:
         this._activityLoading = false;
         this.setReplicationStatus(options);
-      break;
+        break;
 
       case ActionTypes.REPLICATION_FILTER_DOCS:
         this.setStatusFilter(options);
-      break;
+        break;
 
       case ActionTypes.REPLICATION_FILTER_REPLICATE:
         this.setReplicateFilter(options);
-      break;
+        break;
 
       case ActionTypes.REPLICATION_TOGGLE_DOC:
         this.selectDoc(options);
-      break;
+        break;
 
       case ActionTypes.REPLICATION_TOGGLE_ALL_DOCS:
         this.selectAllDocs();
-      break;
+        break;
 
       case ActionTypes.REPLICATION_TOGGLE_REPLICATE:
         this.selectReplicate(options);
-      break;
+        break;
 
       case ActionTypes.REPLICATION_TOGGLE_ALL_REPLICATE:
         this.selectAllReplicate();
-      break;
+        break;
 
       case ActionTypes.REPLICATION_SET_STATE_FROM_DOC:
         this._loading = false;
         this.setStateFromDoc(options);
-      break;
+        break;
 
       case ActionTypes.REPLICATION_SHOW_CONFLICT_MODAL:
         this._isConflictModalVisible = true;
-      break;
+        break;
 
       case ActionTypes.REPLICATION_HIDE_CONFLICT_MODAL:
         this._isConflictModalVisible = false;
-      break;
+        break;
 
       case ActionTypes.REPLICATION_CHANGE_ACTIVITY_SORT:
         this.setActivitySort(options);
-      break;
+        break;
 
       case ActionTypes.REPLICATION_CLEAR_SELECTED_DOCS:
         this._allDocsSelected = false;
-      break;
+        break;
 
       case ActionTypes.REPLICATION_CHANGE_TAB_SECTION:
         this._tabSection = options;
-      break;
-
-      case ActionTypes.REPLICATION_CLEAR_SELECTED_DOCS:
-        this._allDocsSelected = false;
-      break;
+        break;
 
       case ActionTypes.REPLICATION_SUPPORT_NEW_API:
         this._checkingAPI = false;
         this._supportNewApi = options;
-      break;
+        break;
 
       case ActionTypes.REPLICATION_FETCHING_REPLICATE_STATUS:
         this._fetchingReplicateInfo = true;
-      break;
+        break;
 
       case ActionTypes.REPLICATION_REPLICATE_STATUS:
         this._fetchingReplicateInfo = false;
         this.setReplicateInfo(options);
-      break;
+        break;
 
       case ActionTypes.REPLICATION_CLEAR_SELECTED_REPLICATES:
         this._allReplicateSelected = false;
-      break;
+        break;
 
       case AccountActionTypes.AUTH_SHOW_PASSWORD_MODAL:
         this._isPasswordModalVisible = true;
-      break;
+        break;
 
       case AccountActionTypes.AUTH_HIDE_PASSWORD_MODAL:
         this._isPasswordModalVisible = false;
-      break;
+        break;
 
       case AccountActionTypes.AUTH_CREDS_VALID:
         this._authenticated = true;
         this.setCredentials(options.username, options.password);
-      break;
+        break;
 
       case AccountActionTypes.AUTH_CREDS_INVALID:
         this._authenticated = false;
-      break;
+        break;
 
       default:
-      return;
+        return;
     }
 
     this.triggerChange();

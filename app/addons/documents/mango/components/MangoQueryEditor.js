@@ -46,15 +46,15 @@ export default class MangoQueryEditor extends Component {
   }
 
   setEditorValue (newValue = '') {
-    return this.refs.codeEditor.getEditor().setValue(newValue);
+    return this.codeEditor.getEditor().setValue(newValue);
   }
 
   getEditorValue () {
-    return this.refs.codeEditor.getValue();
+    return this.codeEditor.getValue();
   }
 
   editorHasErrors () {
-    return this.refs.codeEditor.getEditor().hasErrors();
+    return this.codeEditor.getEditor().hasErrors();
   }
 
   onHistorySelected(selectedItem) {
@@ -69,7 +69,7 @@ export default class MangoQueryEditor extends Component {
             <ReactSelect
               className="mango-select"
               options={this.props.history}
-              ref="history"
+              ref={node => this.history = node}
               placeholder="Query history"
               searchable={false}
               clearable={false}
@@ -80,7 +80,7 @@ export default class MangoQueryEditor extends Component {
           <PaddedBorderedBox>
             <CodeEditorPanel
               id="query-field"
-              ref="codeEditor"
+              ref={node => this.codeEditor = node}
               title={this.props.editorTitle}
               docLink={getDocUrl('MANGO_SEARCH')}
               defaultCode={this.props.queryFindCode} />

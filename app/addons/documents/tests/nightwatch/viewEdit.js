@@ -45,7 +45,7 @@ module.exports = {
 
       // confirm the new index name is present
       .waitForElementVisible('#testdesigndoc_hasenindex5000', waitTime, false)
-    .end();
+      .end();
   },
 
   'Edits a design doc': function (client) {
@@ -97,14 +97,14 @@ module.exports = {
       .waitForAttribute('#doc-list', 'textContent', function (docContents) {
         return (/hasehase6000/).test(docContents);
       })
-    .end();
+      .end();
   },
 
   'Edits two design docs to confirm Map Editor correct on second': function (client) {
     /*jshint multistr: true */
     var waitTime = client.globals.maxWaitTime,
-      newDatabaseName = client.globals.testDatabaseName,
-      baseUrl = client.globals.test_settings.launch_url;
+        newDatabaseName = client.globals.testDatabaseName,
+        baseUrl = client.globals.test_settings.launch_url;
 
     client
       .deleteDatabase(newDatabaseName)
@@ -188,8 +188,8 @@ module.exports = {
 
   'Editing a view and putting it into a new design doc removes it from the old design doc': function (client) {
     var waitTime = client.globals.maxWaitTime,
-      newDatabaseName = client.globals.testDatabaseName,
-      baseUrl = client.globals.test_settings.launch_url;
+        newDatabaseName = client.globals.testDatabaseName,
+        baseUrl = client.globals.test_settings.launch_url;
 
     client
       .deleteDatabase(newDatabaseName)

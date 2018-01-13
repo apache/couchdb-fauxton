@@ -26,7 +26,7 @@ const loadSettings = function () {
 const settings = loadSettings();
 
 const devSetup = function (cb) {
-  console.log('setup dev environment');
+  console.info('setup dev environment');
   let cmd = 'devSetupWithClean';
   if (settings.noClean) {
     cmd = 'devSetup';
@@ -36,15 +36,15 @@ const devSetup = function (cb) {
   const grunt = spawn(gruntCmd, [cmd]);
 
   grunt.stdout.on('data', (data) => {
-    console.log(data.toString());
+    console.info(data.toString());
   });
 
   grunt.stderr.on('error', (data) => {
-    console.log('Setup error:', data.toString());
+    console.info('Setup error:', data.toString());
   });
 
   grunt.on('close', (code) => {
-    console.log('dev setup finished with code', code);
+    console.info('dev setup finished with code', code);
     if (code === 0) {
       cb();
     }
@@ -63,7 +63,7 @@ function getCspHeaders () {
   return {
     'Content-Security-Policy': cspHeader
   };
-};
+}
 
 const runWebpackServer = function () {
   const proxy = httpProxy.createServer({
@@ -113,11 +113,11 @@ const runWebpackServer = function () {
 
   server.listen(options.port, '0.0.0.0', function (err) {
     if (err) {
-      console.log(err);
+      console.error(err);
       return;
     }
-    console.log('listening on', options.host, options.port);
-    console.log('Starting first compile. This will take about 10 seconds...');
+    console.info('listening on', options.host, options.port);
+    console.info('Starting first compile. This will take about 10 seconds...');
   });
 };
 

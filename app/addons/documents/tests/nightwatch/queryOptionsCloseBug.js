@@ -37,6 +37,6 @@ module.exports = {
 
       .waitForElementNotPresent('.query-options .js-view-query-update', waitTime, false)
 
-    .end();
+      .end();
   }
 };

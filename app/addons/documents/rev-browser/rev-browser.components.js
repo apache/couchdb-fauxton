@@ -139,8 +139,8 @@ class SplitScreenArea extends React.Component {
     const format = (input) => { return JSON.stringify(input, null, '  '); };
 
     const jsmode = new JavaScriptMode();
-    const left = ReactDOM.findDOMNode(this.refs.revLeftOurs);
-    const right = ReactDOM.findDOMNode(this.refs.revRightTheirs);
+    const left = this.revLeftOurs;
+    const right = this.revRightTheirs;
 
     const leftRes = highlight.render(format(this.props.ours), jsmode, theme, 0, true);
     left.innerHTML = leftRes.html;
@@ -159,12 +159,12 @@ class SplitScreenArea extends React.Component {
       <div className="revision-split-area">
         <div data-id="ours" style={{width: '50%'}}>
           <div style={{marginBottom: '20px'}}>{ours._rev} (Server-Selected Rev)</div>
-          <pre ref="revLeftOurs"></pre>
+          <pre ref={node => this.revLeftOurs = node}></pre>
         </div>
 
         <div data-id="theirs" style={{width: '50%'}}>
           <div style={{marginBottom: '20px'}}>{theirs._rev}</div>
-          <pre ref="revRightTheirs"></pre>
+          <pre ref={node => this.revRightTheirs = node}></pre>
         </div>
       </div>
     );
@@ -184,8 +184,7 @@ const RevisionDiffArea = ({ours, theirs}) => {
       <div
         style={{marginTop: '30px'}}
         dangerouslySetInnerHTML={{__html: html}}
-      >
-      </div>
+      ></div>
     </div>
   );
 };
@@ -379,7 +378,7 @@ class ConfirmModal extends React.Component {
         </Modal.Header>
         <Modal.Body>
           <p>
-          <i className="icon-warning-sign"></i> Do you want to delete all conflicting revisions for this document?
+            <i className="icon-warning-sign"></i> Do you want to delete all conflicting revisions for this document?
           </p>
 
 

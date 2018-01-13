@@ -19,9 +19,9 @@ module.exports = function (grunt) {
 
     grunt.log.writeln('Fetching external dependencies');
     const data = this.data,
-        target = data.target || 'app/addons/',
-        settingsFile = fs.existsSync(data.src) ? data.src : 'settings.json.default.json',
-        settings = grunt.file.readJSON(settingsFile);
+          target = data.target || 'app/addons/',
+          settingsFile = fs.existsSync(data.src) ? data.src : 'settings.json.default.json',
+          settings = grunt.file.readJSON(settingsFile);
 
     const fetch = deps => {
       var fs = require('fs-extra');
@@ -84,7 +84,7 @@ module.exports = function (grunt) {
     var result = _getNightwatchTests(this.data.settings);
     var addonsWithTests = result.addonFolders;
     var excludeTests = result.excludeTests;
-    console.log('addons and excluded', addonsWithTests, excludeTests);
+    console.info('addons and excluded', addonsWithTests, excludeTests);
 
     // if the user passed a --file="X" on the command line, filter out
     var singleTestToRun = grunt.option('file');

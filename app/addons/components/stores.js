@@ -37,10 +37,10 @@ Stores.DeleteDbModalStore = FauxtonAPI.Store.extend({
     switch (action.type) {
       case ActionTypes.CMPNTS_DATABASES_SHOWDELETE_MODAL:
         this.setDeleteModal(action.options);
-      break;
+        break;
 
       default:
-      return;
+        return;
     }
 
     this.triggerChange();

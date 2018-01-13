@@ -65,7 +65,7 @@ const RemoteTargetReplicationRow = ({onChange, value, newRemote}) => {
         value={value}
         onChange={(e) => onChange(e.target.value)}
       />
-    <RemoteExample newRemote={newRemote} />
+      <RemoteExample newRemote={newRemote} />
     </div>
   );
 };
@@ -128,19 +128,19 @@ const ReplicationTargetRow = ({
     input = <NewLocalTargetReplicationRow
       value={localTarget}
       onChange={onLocalTargetChange}
-            />;
+    />;
   } else if (replicationTarget === Constants.REPLICATION_TARGET.EXISTING_LOCAL_DATABASE) {
     input = <ExistingLocalTargetReplicationRow
       onChange={onLocalTargetChange}
       databases={databases}
       value={localTarget}
-            />;
+    />;
   } else {
     input = <RemoteTargetReplicationRow
       onChange={onRemoteTargetChange}
       value={remoteTarget}
       newRemote={Constants.REPLICATION_TARGET.NEW_REMOTE_DATABASE === replicationTarget}
-            />;
+    />;
   }
 
   let targetLabel = 'Target Name:';
