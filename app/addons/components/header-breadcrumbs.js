@@ -60,7 +60,7 @@ function getChildren (crumbs) {
     }
 
     if (i < amountDividers) {
-      res.push(<Divider />);
+      res.push(<Divider key={'divider_' + i}/>);
     }
 
     return res;

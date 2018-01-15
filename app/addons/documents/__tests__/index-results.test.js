@@ -30,7 +30,7 @@ describe('IndexResults', () => {
 
     expect(spy.calledOnce).toBe(true);
 
-    spy.reset();
+    spy.resetHistory();
     const wrapperDontFetch = shallow(<IndexResults
       fetchParams={{}}
       selectedDocs={[]}
