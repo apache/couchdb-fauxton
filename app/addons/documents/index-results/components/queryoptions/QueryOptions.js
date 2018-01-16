@@ -142,9 +142,9 @@ export default class QueryOptions extends React.Component {
   }
 
   showAsActive() {
-    const { reduce, betweenKeys, byKeys, descending, skip, limit } = this.props;
+    const { reduce, betweenKeys, byKeys, descending, skip, limit, stable, update } = this.props;
     return !!((betweenKeys && betweenKeys.startkey) ||
-      byKeys || (limit && limit != 'none') || skip || reduce || descending);
+      byKeys || (limit && limit != 'none') || skip || reduce || descending || stable || update !== 'true');
   }
 
   render () {

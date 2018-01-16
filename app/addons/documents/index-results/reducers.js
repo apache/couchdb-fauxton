@@ -57,7 +57,7 @@ const initialState = {
     groupLevel: 'exact',
     showReduce: false,
     stable: false,
-    update: true
+    update: 'true'
   }
 };
 

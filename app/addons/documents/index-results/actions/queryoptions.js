@@ -136,6 +136,6 @@ export const queryOptionsToggleStable = previous => {
 
 export const queryOptionsChangeUpdate = value => {
   return updateQueryOptions({
-    update: value
+    update: value.toString()
   });
 };
