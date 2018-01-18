@@ -29,7 +29,7 @@ const store = Stores.replicationStore;
 export default class ReplicationController extends React.Component {
   constructor (props) {
     super(props);
-    this.state = this.getStoreState();
+    this.props = this.getStoreState();
   }
 
   getStoreState () {
@@ -90,7 +90,6 @@ export default class ReplicationController extends React.Component {
   }
 
   componentDidMount () {
-    store.on('change', this.onChange, this);
     this.loadReplicationInfo(this.props, {});
   }
 
@@ -99,12 +98,7 @@ export default class ReplicationController extends React.Component {
   }
 
   componentWillUnmount () {
-    store.off('change', this.onChange);
     Actions.clearReplicationForm();
-  }
-
-  onChange () {
-    this.setState(this.getStoreState());
   }
 
   showSection () {
@@ -115,7 +109,7 @@ export default class ReplicationController extends React.Component {
       someDocsSelected, showConflictModal, localSourceKnown, localTargetKnown,
       username, password, authenticated, activityLoading, submittedNoChange, activitySort, tabSection,
       replicateInfo, replicateLoading, replicateFilter, allReplicateSelected, someReplicateSelected
-    } = this.state;
+    } = this.props;
 
     if (tabSection === 'new replication') {
       if (loading) {
@@ -195,7 +189,7 @@ export default class ReplicationController extends React.Component {
   }
 
   getHeaderComponents () {
-    if (this.state.tabSection === 'new replication') {
+    if (this.props.tabSection === 'new replication') {
       return null;
     }
     let rightHeaderclass = "right-header-flex";
@@ -220,7 +214,7 @@ export default class ReplicationController extends React.Component {
   }
 
   getTabElements () {
-    const {tabSection} = this.state;
+    const {tabSection} = this.props;
     const elements = [
       <TabElement
         key={1}
@@ -230,7 +224,7 @@ export default class ReplicationController extends React.Component {
       />
     ];
 
-    if (this.state.supportNewApi) {
+    if (this.props.supportNewApi) {
       elements.push(
         <TabElement
           key={2}
@@ -249,14 +243,14 @@ export default class ReplicationController extends React.Component {
   }
 
   getCrumbs () {
-    if (this.state.tabSection === 'new replication') {
+    if (this.props.tabSection === 'new replication') {
       return [{'name': 'Job Configuration'}];
     }
     return [{'name': 'Replication'}];
   }
 
   getTabs () {
-    if (this.state.tabSection === 'new replication') {
+    if (this.props.tabSection === 'new replication') {
       return null;
     }
 
@@ -268,7 +262,7 @@ export default class ReplicationController extends React.Component {
   }
 
   render () {
-    const { checkingAPI } = this.state;
+    const { checkingAPI } = this.props;
 
     if (checkingAPI) {
       return <LoadLines />;

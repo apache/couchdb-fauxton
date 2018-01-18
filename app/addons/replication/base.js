@@ -14,6 +14,7 @@ import FauxtonAPI from '../../core/api';
 import replication from './route';
 import './assets/less/replication.less';
 import Actions from './actions';
+import replicationReducer from './reducers';
 
 replication.initialize = function () {
   FauxtonAPI.addHeaderLink({ title: 'Replication', href: '#/replication', icon: 'fonticon-replicate' });
@@ -21,6 +22,10 @@ replication.initialize = function () {
     Actions.checkForNewApi();
   });
 };
+
+FauxtonAPI.addReducers({
+  replication: replicationReducer
+});
 
 FauxtonAPI.registerUrls('replication', {
   app: (db) => {
