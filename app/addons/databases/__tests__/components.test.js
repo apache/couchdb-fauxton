@@ -17,6 +17,7 @@ import utils from "../../../../test/mocha/testUtils";
 import React from "react";
 import ReactDOM from "react-dom";
 import { mount } from 'enzyme';
+import sinon from 'sinon';
 
 const assert = utils.assert;
 
@@ -96,6 +97,12 @@ describe('DatabaseTable', () => {
       failedDbs: ['db1'],
       fullDbList: ['db1']
     });
+    // To avoid console.error() in app/core/api.js
+    sinon.stub(FauxtonAPI, 'urls').returns('/fake/url');
+  });
+
+  afterEach(() => {
+    utils.restore(FauxtonAPI.urls);
   });
 
   it('adds multiple extra columns if extended', () => {

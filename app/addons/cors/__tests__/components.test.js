@@ -158,7 +158,7 @@ describe('CORS Components', () => {
     const spyChangeOrigin = sinon.spy();
 
     afterEach(() => {
-      spyChangeOrigin.reset();
+      spyChangeOrigin.resetHistory();
     });
 
     it('calls changeOrigin() when you switch from "Select List of Origins" to "Allow All Origins"', () => {
@@ -186,8 +186,8 @@ describe('CORS Components', () => {
     });
 
     afterEach(() => {
-      spyUpdateOrigin.reset();
-      spyDeleteOrigin.reset();
+      spyUpdateOrigin.resetHistory();
+      spyDeleteOrigin.resetHistory();
     });
 
     it('should call deleteOrigin on delete', () => {

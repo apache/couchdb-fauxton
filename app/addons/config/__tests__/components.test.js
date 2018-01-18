@@ -79,7 +79,7 @@ describe('Config Components', () => {
         header: true
       };
 
-      const el = mount(<Views.ConfigOption option={option}/>);
+      const el = mount(<table><tbody><Views.ConfigOption option={option}/></tbody></table>);
       assert.equal(el.find('th').text(), 'test_section');
     });
   });
@@ -87,7 +87,9 @@ describe('Config Components', () => {
   describe('ConfigOptionValue', () => {
     it('displays the value prop', () => {
       const el = mount(
-        <Views.ConfigOptionValue value={'test_value'}/>
+        <table><tbody><tr>
+          <Views.ConfigOptionValue value={'test_value'}/>
+        </tr></tbody></table>
       );
 
       assert.equal(el.text(), 'test_value');
@@ -96,16 +98,20 @@ describe('Config Components', () => {
     it('starts editing when clicked', () => {
       const spy = sinon.spy();
       const el = mount(
-        <Views.ConfigOptionValue value={'test_value'} onEdit={spy}/>
+        <table><tbody><tr>
+          <Views.ConfigOptionValue value={'test_value'} onEdit={spy}/>
+        </tr></tbody></table>
       );
 
-      el.simulate('click');
+      el.find(Views.ConfigOptionValue).simulate('click');
       assert.ok(spy.calledOnce);
     });
 
     it('displays editing controls if editing', () => {
       const el = mount(
-        <Views.ConfigOptionValue value={'test_value'} editing/>
+        <table><tbody><tr>
+          <Views.ConfigOptionValue value={'test_value'} editing/>
+        </tr></tbody></table>
       );
 
       assert.equal(el.find('input.config-value-input').length, 1);
@@ -115,7 +121,9 @@ describe('Config Components', () => {
 
     it('disables input when save clicked', () => {
       const el = mount(
-        <Views.ConfigOptionValue value={'test_value'} editing/>
+        <table><tbody><tr>
+          <Views.ConfigOptionValue value={'test_value'} editing/>
+        </tr></tbody></table>
       );
 
       el.find('input.config-value-input').simulate('change', {target: {value: 'value'}});
@@ -127,7 +135,9 @@ describe('Config Components', () => {
       var change = { target: { value: 'new_value' } };
       const spy = sinon.spy();
       const el = mount(
-        <Views.ConfigOptionValue value={'test_value'} editing onSave={spy}/>
+        <table><tbody><tr>
+          <Views.ConfigOptionValue value={'test_value'} editing onSave={spy}/>
+        </tr></tbody></table>
       );
 
       el.find('input.config-value-input').simulate('change', change);
@@ -138,7 +148,9 @@ describe('Config Components', () => {
     it('cancels edit if save clicked with unchanged value', () => {
       const spy = sinon.spy();
       const el = mount(
-        <Views.ConfigOptionValue value={'test_value'} editing onCancelEdit={spy}/>
+        <table><tbody><tr>
+          <Views.ConfigOptionValue value={'test_value'} editing onCancelEdit={spy}/>
+        </tr></tbody></table>
       );
 
       el.find('button.btn-config-save').simulate('click');
