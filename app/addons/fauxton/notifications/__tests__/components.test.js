@@ -48,27 +48,6 @@ describe('NotificationController', () => {
       assert.ok(/<script>window.whatever=1;<\/script>/.test(component.html()));
     });
   });
-
-  // it.only('notifications should be hidden after visible time', (done) => {
-  //   store._notificationCenterVisible = true;
-  //   const component = mount(<Views.NotificationController />);
-  //   FauxtonAPI.addNotification({
-  //     msg: '<script>window.whatever=1;</script>',
-  //     visibleTime: 2000
-  //   });
-
-  //   component.update();
-  //   console.log(component.html());
-  //   assert.ok(component.find('i.notification-icon').exists());
-
-  //   // Set timeout to 4s which is lower than the 8s default
-  //   setTimeout(() => {
-  //     console.log('checking...', component.find('i.notification-icon').exists());
-  //     component.update();
-  //     assert.notOk(component.find('i.notification-icon').exists());
-  //     done();
-  //   }, 4000);
-  // });
 });
 
 describe('Notification', () => {
