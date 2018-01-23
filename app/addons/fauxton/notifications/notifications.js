@@ -142,6 +142,7 @@ class GlobalNotifications extends React.Component {
           msg={notification.msg}
           type={notification.type}
           escape={notification.escape}
+          visibleTime={notification.visibleTime}
           onStartHide={Actions.startHidingNotification}
           onHideComplete={Actions.hideNotification} />
       );
@@ -160,6 +161,7 @@ class GlobalNotifications extends React.Component {
           msg={notification.msg}
           type={notification.type}
           escape={notification.escape}
+          visibleTime={notification.visibleTime}
           onStartHide={Actions.startHidingNotification}
           onHideComplete={Actions.hideNotification} />
       );
