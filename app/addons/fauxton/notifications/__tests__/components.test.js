@@ -51,7 +51,7 @@ describe('NotificationController', () => {
 });
 
 describe('Notification', () => {
-  it.only('startHide is only called after visible time is out', (done) => {
+  it('startHide is only called after visible time is out', (done) => {
     store._notificationCenterVisible = true;
     const spy = sinon.spy();
     const component = mount(<Views.Notification
