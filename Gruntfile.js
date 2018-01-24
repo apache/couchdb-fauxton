@@ -164,6 +164,14 @@ module.exports = function (grunt) {
         options: {
           maxBuffer: 1000 * 1024
         }
+      },
+      start_nightWatch_with_retries: {
+        command: 'node ' + __dirname + '/node_modules/nightwatch/bin/nightwatch' +
+        ' -c ' + __dirname + '/test/nightwatch_tests/nightwatch.json' +
+        ' --suiteRetries 3',
+        options: {
+          maxBuffer: 1000 * 1024
+        }
       }
     },
 
@@ -253,4 +261,6 @@ module.exports = function (grunt) {
    */
   //Start Nightwatch test from terminal, using: $ grunt nightwatch
   grunt.registerTask('nightwatch', ['initNightwatch', 'exec:start_nightWatch']);
+  //Same as above but the Nightwatch runner will retry tests 3 times before failing
+  grunt.registerTask('nightwatch_retries', ['initNightwatch', 'exec:start_nightWatch_with_retries']);
 };

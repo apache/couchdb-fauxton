@@ -130,6 +130,7 @@
     "dev": "node ./devserver.js",
     "devtests": "webpack-dev-server --config webpack.config.test-dev.js --debug --progress",
     "nightwatch": "grunt nightwatch",
+    "nightwatch_retries": "grunt nightwatch_retries",
     "start": "node ./bin/fauxton",
     "start-debug": "DIST=./dist/debug node ./bin/fauxton",
     "preversion": "node version-check.js && grunt release",
