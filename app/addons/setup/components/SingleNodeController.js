@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-    setBindAddressForSetupNode,
-    setPassword,
-    setPortForSetupNode,
-    setupSingleNode,
-    setUsername
+  setBindAddressForSetupNode,
+  setPassword,
+  setPortForSetupNode,
+  setupSingleNode,
+  setUsername
 } from '../actions';
 import ReactComponents from "../../components/react-components";
 import CurrentAdminPassword from "./CurrentAdminPassword";
@@ -38,24 +38,24 @@ export default class SingleNodeController extends React.Component {
 
   render() {
     return (
-            <div className="setup-nodes">
-                <div className="setup-setupnode-section">
-                    <CurrentAdminPassword
-                        {...this.props}
-                        onAlterUsername={this.alterUsername}
-                        onAlterPassword={this.alterPassword}/>
-                    <OptionalSettings
-                        {...this.props}
-                        onAlterPort={this.alterPort}
-                        onAlterBindAddress={this.alterBindAddress}
-                        ip={this.props.bindAddress}
-                        port={this.props.port}/>
-                    <ConfirmButton
-                        {...this.props}
-                        onClick={this.finishSingleNode}
-                        text="Configure Node"/>
-                </div>
-            </div>
+      <div className="setup-nodes">
+        <div className="setup-setupnode-section">
+          <CurrentAdminPassword
+            {...this.props}
+            onAlterUsername={this.alterUsername}
+            onAlterPassword={this.alterPassword}/>
+          <OptionalSettings
+            {...this.props}
+            onAlterPort={this.alterPort}
+            onAlterBindAddress={this.alterBindAddress}
+            ip={this.props.bindAddress}
+            port={this.props.port}/>
+          <ConfirmButton
+            {...this.props}
+            onClick={this.finishSingleNode}
+            text="Configure Node"/>
+        </div>
+      </div>
     );
   }
 

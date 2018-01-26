@@ -25,24 +25,24 @@ export default class OptionalSettings extends React.Component {
 
   render() {
     return (
-            <div className="setup-opt-settings">
-                <p>Bind address the node will listen on</p>
-                <input
-                    className="setup-input-ip"
-                    value={this.props.ip}
-                    onChange={this.handleIpChange}
-                    placeholder="IP Address"
-                    type="text"/>
+      <div className="setup-opt-settings">
+        <p>Bind address the node will listen on</p>
+        <input
+          className="setup-input-ip"
+          value={this.props.ip}
+          onChange={this.handleIpChange}
+          placeholder="IP Address"
+          type="text"/>
 
-                <div className="setup-port">
-                    <p>Port that the node will use</p>
-                    <input
-                        className="setup-input-port"
-                        value={this.props.port}
-                        onChange={this.handlePortChange}
-                        type="text"/>
-                </div>
-            </div>
+        <div className="setup-port">
+          <p>Port that the node will use</p>
+          <input
+            className="setup-input-port"
+            value={this.props.port}
+            onChange={this.handlePortChange}
+            type="text"/>
+        </div>
+      </div>
     );
   }
 }

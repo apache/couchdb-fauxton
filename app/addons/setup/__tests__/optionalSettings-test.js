@@ -26,7 +26,7 @@ describe.skip('Setup Components', () => {
     it('fires callbacks on change, ip', () => {
       const bindAddressHandler = sinon.spy();
       const optSettings = mount(<OptionalSettings onAlterPort={null} onAlterBindAddress={bindAddressHandler}
-                                                  ip='0.0.0.0' port='5984'/>);
+        ip='0.0.0.0' port='5984'/>);
 
       optSettings.find('.setup-input-ip').simulate('change', {target: {value: 'Hello, world'}});
       assert.ok(bindAddressHandler.calledOnce);
@@ -36,7 +36,7 @@ describe.skip('Setup Components', () => {
     it('fires callbacks on change, port', () => {
       const changeHandler = sinon.spy();
       const optSettings = mount(
-          <OptionalSettings onAlterPort={changeHandler} onAlterBindAddress={null} ip='0.0.0.0' port='5984'/>
+        <OptionalSettings onAlterPort={changeHandler} onAlterBindAddress={null} ip='0.0.0.0' port='5984'/>
       );
 
       optSettings.find('.setup-input-port').simulate('change', {target: {value: 'Hello, world'}});

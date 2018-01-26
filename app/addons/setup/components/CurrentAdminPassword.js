@@ -24,23 +24,23 @@ export default class SetupCurrentAdminPassword extends React.Component {
     }
 
     return (
-        <div className="setup-creds">
-          <div>
-            <p>{text}</p>
-          </div>
-          <input
-              className="setup-username"
-              onChange={this.props.onAlterUsername}
-              placeholder="Username"
-              value={this.props.username}
-              type="text"/>
-          <input
-              className="setup-password"
-              onChange={this.props.onAlterPassword}
-              placeholder="Password"
-              value={this.props.password}
-              type="password"/>
+      <div className="setup-creds">
+        <div>
+          <p>{text}</p>
         </div>
+        <input
+          className="setup-username"
+          onChange={this.props.onAlterUsername}
+          placeholder="Username"
+          value={this.props.username}
+          type="text"/>
+        <input
+          className="setup-password"
+          onChange={this.props.onAlterPassword}
+          placeholder="Password"
+          value={this.props.password}
+          type="password"/>
+      </div>
     );
   }
 }

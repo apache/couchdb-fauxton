@@ -22,15 +22,15 @@ export default class NodeCountSetting extends React.Component {
 
   render() {
     return (
-            <div className="setup-node-count">
-                <p>Number of nodes to be added to the cluster (including this one)</p>
-                <input
-                    className="setup-input-nodecount"
-                    value={this.props.nodeCount}
-                    onChange={this.handleNodeCountChange}
-                    placeholder="Value of cluster n"
-                    type="text"/>
-            </div>
+      <div className="setup-node-count">
+        <p>Number of nodes to be added to the cluster (including this one)</p>
+        <input
+          className="setup-input-nodecount"
+          value={this.props.nodeCount}
+          onChange={this.handleNodeCountChange}
+          placeholder="Value of cluster n"
+          type="text"/>
+      </div>
     );
   }
 }

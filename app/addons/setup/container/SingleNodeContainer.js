@@ -34,5 +34,5 @@ const mapStateToProps = ({setup}) => {
 };
 
 export default connect(
-    mapStateToProps
+  mapStateToProps
 )(SingleNodeController);

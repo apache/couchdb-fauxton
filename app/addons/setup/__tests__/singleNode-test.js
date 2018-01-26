@@ -32,7 +32,7 @@ describe('Setup Components', () => {
         isAdminParty: false
       };
       const controller = mount(
-          <SingleNodeController {...props}/>
+        <SingleNodeController {...props}/>
       );
       controller.find('.setup-setupnode-section .setup-input-ip').simulate('change', {target: {value: '192.168.13.42'}});
       controller.find('.setup-setupnode-section .setup-input-port').simulate('change', {target: {value: '1342'}});
