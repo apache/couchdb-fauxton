@@ -16,8 +16,8 @@ import utils from "../../../../../test/mocha/testUtils";
 import React from "react";
 import ReactDOM from "react-dom";
 import moment from "moment";
-import {mount} from 'enzyme';
-import "sinon";
+import { mount } from 'enzyme';
+import sinon from 'sinon';
 const assert = utils.assert;
 var store = Stores.notificationStore;
 
@@ -47,6 +47,33 @@ describe('NotificationController', () => {
       done();
       assert.ok(/<script>window.whatever=1;<\/script>/.test(component.html()));
     });
+  });
+});
+
+describe('Notification', () => {
+  it('startHide is only called after visible time is out', (done) => {
+    store._notificationCenterVisible = true;
+    const spy = sinon.spy();
+    const component = mount(<Views.Notification
+      notificationId={'some id'}
+      isHiding={false}
+      key={11}
+      msg={'a msg'}
+      type={'error'}
+      escape={true}
+      style={{opacity:1}}
+      visibleTime={1000}
+      onStartHide={spy}
+      onHideComplete={() => {}}
+    />);
+
+    assert.notOk(spy.called);
+
+    setTimeout(() => {
+      component.update();
+      assert.ok(spy.called);
+      done();
+    }, 3000);
   });
 });
 
@@ -103,7 +130,7 @@ describe('NotificationPanelRow', () => {
       style={style}
       isVisible={true}
       filter="all"
-      item={notifications.info}/>
+      item={notifications.info} />
     );
     assert.notOk(row3.find('li').prop('aria-hidden'));
   });
@@ -138,16 +165,16 @@ describe('NotificationCenterPanel', () => {
   });
 
   it('shows all notifications by default', (done) => {
-    store.addNotification({type: 'success', msg: 'Success are okay'});
-    store.addNotification({type: 'success', msg: 'another success.'});
-    store.addNotification({type: 'info', msg: 'A single info message'});
-    store.addNotification({type: 'error', msg: 'Error #1'});
-    store.addNotification({type: 'error', msg: 'Error #2'});
-    store.addNotification({type: 'error', msg: 'Error #3'});
+    store.addNotification({ type: 'success', msg: 'Success are okay' });
+    store.addNotification({ type: 'success', msg: 'another success.' });
+    store.addNotification({ type: 'info', msg: 'A single info message' });
+    store.addNotification({ type: 'error', msg: 'Error #1' });
+    store.addNotification({ type: 'error', msg: 'Error #2' });
+    store.addNotification({ type: 'error', msg: 'Error #3' });
 
     var panelEl = mount(
       <Views.NotificationCenterPanel
-        style={{x: 1}}
+        style={{ x: 1 }}
         visible={true}
         filter="all"
         notifications={store.getNotifications()}
@@ -160,16 +187,16 @@ describe('NotificationCenterPanel', () => {
   });
 
   it('appropriate filters are applied - 1', (done) => {
-    store.addNotification({type: 'success', msg: 'Success are okay'});
-    store.addNotification({type: 'success', msg: 'another success.'});
-    store.addNotification({type: 'info', msg: 'A single info message'});
-    store.addNotification({type: 'error', msg: 'Error #1'});
-    store.addNotification({type: 'error', msg: 'Error #2'});
-    store.addNotification({type: 'error', msg: 'Error #3'});
+    store.addNotification({ type: 'success', msg: 'Success are okay' });
+    store.addNotification({ type: 'success', msg: 'another success.' });
+    store.addNotification({ type: 'info', msg: 'A single info message' });
+    store.addNotification({ type: 'error', msg: 'Error #1' });
+    store.addNotification({ type: 'error', msg: 'Error #2' });
+    store.addNotification({ type: 'error', msg: 'Error #3' });
 
     var panelEl = mount(
       <Views.NotificationCenterPanel
-        style={{x: 1}}
+        style={{ x: 1 }}
         visible={true}
         filter="success"
         notifications={store.getNotifications()}
@@ -183,16 +210,16 @@ describe('NotificationCenterPanel', () => {
   });
 
   it('appropriate filters are applied - 2', (done) => {
-    store.addNotification({type: 'success', msg: 'Success are okay'});
-    store.addNotification({type: 'success', msg: 'another success.'});
-    store.addNotification({type: 'info', msg: 'A single info message'});
-    store.addNotification({type: 'error', msg: 'Error #1'});
-    store.addNotification({type: 'error', msg: 'Error #2'});
-    store.addNotification({type: 'error', msg: 'Error #3'});
+    store.addNotification({ type: 'success', msg: 'Success are okay' });
+    store.addNotification({ type: 'success', msg: 'another success.' });
+    store.addNotification({ type: 'info', msg: 'A single info message' });
+    store.addNotification({ type: 'error', msg: 'Error #1' });
+    store.addNotification({ type: 'error', msg: 'Error #2' });
+    store.addNotification({ type: 'error', msg: 'Error #3' });
 
     var panelEl = mount(
       <Views.NotificationCenterPanel
-        style={{x: 1}}
+        style={{ x: 1 }}
         visible={true}
         filter="error"
         notifications={store.getNotifications()}

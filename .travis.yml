@@ -17,7 +17,7 @@ before_script:
   - DIST=./dist/debug ./bin/fauxton &
   - sleep 30
 script:
-  - travis_retry ./node_modules/.bin/grunt nightwatch
+  - ./node_modules/.bin/grunt nightwatch_retries
 after_script:
   - npm run docker:down
 

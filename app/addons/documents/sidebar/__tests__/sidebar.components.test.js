@@ -96,6 +96,7 @@ describe('DesignDoc', () => {
   });
 
   it('confirm design doc sidebar extensions appear', function () {
+    sinon.stub(FauxtonAPI, 'urls');
     const el = mount(<DesignDoc
       database={database}
       toggle={function () {}}
@@ -120,6 +121,7 @@ describe('DesignDoc', () => {
   });
 
   it('confirm design doc sidebar extensions do not appear when they have no content', function () {
+    sinon.stub(FauxtonAPI, 'urls');
     const el = mount(<DesignDoc
       database={database}
       toggle={function () {}}
