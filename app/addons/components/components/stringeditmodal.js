@@ -36,31 +36,13 @@ export class StringEditModal extends React.Component {
     onSave () { }
   };
 
-  componentDidMount() {
-    if (!this.props.visible) {
-      return;
-    }
-    this.initEditor(this.props.value);
-  }
-
-  componentDidUpdate(prevProps) {
-    if (!this.props.visible) {
-      return;
-    }
-    var val = '';
-    if (!prevProps.visible && this.props.visible) {
-      val = Helpers.parseJSON(this.props.value);
-    }
-
-    this.initEditor(val);
-  }
-
-  initEditor = (val) => {
-    this.editor = ace.edit(this.stringEditor);
+  initAceEditor = (dom_node) => {
+    this.editor = ace.edit(dom_node);
     this.editor.$blockScrolling = Infinity; // suppresses an Ace editor error
     this.editor.setShowPrintMargin(false);
     this.editor.setOption('highlightActiveLine', true);
     this.editor.setTheme('ace/theme/idle_fingers');
+    const val = Helpers.parseJSON(this.props.value);
     this.editor.setValue(val, -1);
   };
 
@@ -81,7 +63,7 @@ export class StringEditModal extends React.Component {
         <Modal.Body>
           <div id="modal-error" className="hide alert alert-error"/>
           <div id="string-editor-wrapper">
-            <div ref={node => this.stringEditor = node} className="doc-code"></div>
+            <div id="string-editor-container" ref={node => this.initAceEditor(node)} className="doc-code"></div>
           </div>
         </Modal.Body>
         <Modal.Footer>
