@@ -45,7 +45,8 @@ const PermissionsRouteObject = BaseRoute.extend({
       { name: 'Permissions' }
     ];
 
-    const url = FauxtonAPI.urls('permissions', 'server', databaseId);
+    const encodedDatabaseId = encodeURIComponent(databaseId);
+    const url = FauxtonAPI.urls('permissions', 'server', encodedDatabaseId);
 
     return <Layout
       docURL={FauxtonAPI.constants.DOC_URLS.DB_PERMISSION}
