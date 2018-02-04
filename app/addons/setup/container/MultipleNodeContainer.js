@@ -12,6 +12,12 @@
 import {connect} from 'react-redux';
 import MultipleNodeController from '../components/MultipleNodeController';
 import {getNodeList, getIsAdminParty, getAdditionalNode, getUsername, getPassword, getSetupNode} from '../reducers';
+import {
+  addNode,
+  alterBindAddressAdditionalNode, alterPortAdditionalNode, alterRemoteAddressAdditionalNode, finishClusterSetup,
+  setBindAddressForSetupNode, setNodeCount, setPassword,
+  setPortForSetupNode, setUsername
+} from "../actions";
 
 const mapStateToProps = ({setup}) => {
   return {
@@ -24,6 +30,42 @@ const mapStateToProps = ({setup}) => {
   };
 };
 
+const mapDispatchToProps = (dispatch, ownProps) => {
+  return {
+    addNode(isAdminParty, credentials) {
+      dispatch(addNode(isAdminParty, credentials, ownProps.setupNode, ownProps.additionalNode));
+    },
+    alterPortAdditionalNode(port) {
+      dispatch(alterPortAdditionalNode(port));
+    },
+    alterBindAddressAdditionalNode(bindAddress) {
+      dispatch(alterBindAddressAdditionalNode(bindAddress));
+    },
+    alterRemoteAddressAdditionalNode(remoteAddress) {
+      dispatch(alterRemoteAddressAdditionalNode(remoteAddress));
+    },
+    alterUsername(username) {
+      dispatch(setUsername(username));
+    },
+    alterPassword(password) {
+      dispatch(setPassword(password));
+    },
+    alterBindAddressForSetupNode(bindAddress) {
+      dispatch(setBindAddressForSetupNode(bindAddress));
+    },
+    alterPortForSetupNode(port) {
+      dispatch(setPortForSetupNode(port));
+    },
+    finishClusterSetup(msg) {
+      dispatch(finishClusterSetup(msg));
+    },
+    alterNodeCount(nodeCount) {
+      dispatch(setNodeCount(nodeCount));
+    }
+  };
+};
+
 export default connect(
-  mapStateToProps
+  mapStateToProps,
+  mapDispatchToProps
 )(MultipleNodeController);

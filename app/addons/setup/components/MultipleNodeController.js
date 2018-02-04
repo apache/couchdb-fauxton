@@ -1,15 +1,14 @@
-import {
-  addNode,
-  alterBindAddressAdditionalNode,
-  alterPortAdditionalNode,
-  alterRemoteAddressAdditionalNode,
-  finishClusterSetup,
-  setBindAddressForSetupNode,
-  setNodeCount,
-  setPassword,
-  setPortForSetupNode,
-  setUsername
-} from "../actions";
+// Licensed under the Apache License, Version 2.0 (the "License"); you may not
+// use this file except in compliance with the License. You may obtain a copy of
+// the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+// WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+// License for the specific language governing permissions and limitations under
+// the License.
 import React from 'react';
 import PropTypes from 'prop-types';
 import ReactComponents from "../../components/react-components";
@@ -40,48 +39,43 @@ export default class MultipleNodesController extends React.Component {
 
   _addNode = () => {
     const {username, password} = this.props;
-    this.props.dispatch(addNode(
-      this.isAdminParty,
-      {username, password},
-      this.props.setupNode,
-      this.props.additionalNode
-    ));
+    this.props.addNode(this.isAdminParty, {username, password});
   };
 
   _alterPortAdditionalNode = (e) => {
-    this.props.dispatch(alterPortAdditionalNode(e.target.value));
+    this.props.alterPortAdditionalNode(e.target.value);
   };
 
   _alterBindAddressAdditionalNode = (e) => {
-    this.props.dispatch(alterBindAddressAdditionalNode(e.target.value));
+    this.props.alterBindAddressAdditionalNode(e.target.value);
   };
 
   _alterRemoteAddressAdditionalNode = (e) => {
-    this.props.dispatch(alterRemoteAddressAdditionalNode(e.target.value));
+    this.props.alterRemoteAddressAdditionalNode(e.target.value);
   };
 
   _alterUsername = (e) => {
-    this.props.dispatch(setUsername(e.target.value));
+    this.props.alterUsername(e.target.value);
   };
 
   _alterPassword = (e) => {
-    this.props.dispatch(setPassword(e.target.value));
+    this.props.alterPassword(e.target.value);
   };
 
   _alterBindAddressSetupNode = (e) => {
-    this.props.dispatch(setBindAddressForSetupNode(e.target.value));
+    this.props.alterBindAddressForSetupNode(e.target.value);
   };
 
   _alterPortSetupNode = (e) => {
-    this.props.dispatch(setPortForSetupNode(e.target.value));
+    this.props.alterPortForSetupNode(e.target.value);
   };
 
   _alterNodeCount = (e) => {
-    this.props.dispatch(setNodeCount(e.target.value));
+    this.props.alterNodeCount(e.target.value);
   };
 
   _finishClusterSetup = () => {
-    this.props.dispatch(finishClusterSetup('CouchDB Cluster set up!'));
+    this.props.finishClusterSetup('CouchDB Cluster set up!');
   };
 
   render() {

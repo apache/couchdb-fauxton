@@ -20,6 +20,7 @@ import {
   getSetupNode,
   getUsername
 } from '../reducers';
+import {setBindAddressForSetupNode, setPassword, setPortForSetupNode, setupSingleNode, setUsername} from "../actions";
 
 const mapStateToProps = ({setup}) => {
   return {
@@ -33,6 +34,27 @@ const mapStateToProps = ({setup}) => {
   };
 };
 
+const mapDispatchToProps = dispatch => {
+  return {
+    alterUsername(username) {
+      dispatch(setUsername(username));
+    },
+    alterPassword(password) {
+      dispatch(setPassword(password));
+    },
+    alterBindAddress(bindAddress) {
+      dispatch(setBindAddressForSetupNode(bindAddress));
+    },
+    alterPort(port) {
+      dispatch(setPortForSetupNode(port));
+    },
+    setupSingleNode(credentials, setupNode) {
+      dispatch(setupSingleNode(credentials, setupNode));
+    }
+  };
+};
+
 export default connect(
-  mapStateToProps
+  mapStateToProps,
+  mapDispatchToProps
 )(SingleNodeController);
