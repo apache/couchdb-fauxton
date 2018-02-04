@@ -38,8 +38,8 @@ export default class MultipleNodesController extends React.Component {
   };
 
   _addNode = () => {
-    const {username, password} = this.props;
-    this.props.addNode(this.isAdminParty, {username, password});
+    const {username, password, setupNode, additionalNode} = this.props;
+    this.props.addNode(this.isAdminParty, {username, password}, setupNode, additionalNode);
   };
 
   _alterPortAdditionalNode = (e) => {

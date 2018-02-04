@@ -15,14 +15,13 @@ import PropTypes from 'prop-types';
 import FauxtonAPI from "../../../core/api";
 import ClusterConfiguredScreen from "./ConfiguredScreen";
 import ReactComponents from "../../components/react-components";
-import {getClusterStateFromCouch} from "../actions";
 
 const ConfirmButton = ReactComponents.ConfirmButton;
 
 export default class FirstStepController extends React.Component {
 
   componentWillMount() {
-    this.props.dispatch(getClusterStateFromCouch());
+    this.props.getClusterState();
   }
 
   render() {

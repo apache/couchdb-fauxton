@@ -30,10 +30,10 @@ const mapStateToProps = ({setup}) => {
   };
 };
 
-const mapDispatchToProps = (dispatch, ownProps) => {
+const mapDispatchToProps = (dispatch) => {
   return {
-    addNode(isAdminParty, credentials) {
-      dispatch(addNode(isAdminParty, credentials, ownProps.setupNode, ownProps.additionalNode));
+    addNode(isAdminParty, credentials, setupNode, additionalNode) {
+      dispatch(addNode(isAdminParty, credentials, setupNode, additionalNode));
     },
     alterPortAdditionalNode(port) {
       dispatch(alterPortAdditionalNode(port));

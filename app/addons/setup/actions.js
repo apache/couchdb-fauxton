@@ -10,7 +10,6 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 import FauxtonAPI from "../../core/api";
-import 'whatwg-fetch';
 import {isInvalid} from "./helpers";
 import {
   SETUP_ADD_NODE_TO_LIST,
@@ -25,7 +24,7 @@ import {
   SETUP_SET_PASSWORD,
   SETUP_SET_USERNAME
 } from "./actiontypes";
-import {get, rejectFetchError} from '../../core/ajax';
+import {get, post} from '../../core/ajax';
 import Api from "../auth/api";
 
 
@@ -40,43 +39,34 @@ import Api from "../auth/api";
  * Public functions
  */
 
-const getFetchOpts = (method = 'GET', body) => {
-  const hasBody = method === 'POST' || method === 'PUT';
-  let headers = {'Accept': 'application/json'};
-  if (hasBody)
-    headers['Content-Type'] = 'application/json';
-  let options = {
-    credentials: 'include',
-    method,
-    headers
-  };
-
-  if (hasBody)
-    options.body = JSON.stringify(body);
-
-  return options;
+const showError = (msg, error) => {
+  const errorMsg = error ? ' Error:' + error : '';
+  FauxtonAPI.addNotification({
+    msg: msg + errorMsg,
+    type: 'error',
+    fade: false,
+    clear: true
+  });
+  return;
 };
 
 
-export const getClusterStateFromCouch = () => dispatch => {
+export const getClusterStateFromCouch = () => async dispatch => {
   const baseUrl = FauxtonAPI.urls('cluster_setup', 'server');
-  return get(baseUrl, {
-    headers: {'Accept': 'application/json'},
-    credentials: 'include'
-  }).then(json => {
-    dispatch({
-      type: SETUP_SET_CLUSTERSTATUS,
-      options: {
-        state: json.state
-      }
-    });
+  const json = await get(baseUrl);
+  dispatch({
+    type: SETUP_SET_CLUSTERSTATUS,
+    options: {
+      state: json.state
+    }
   });
 };
 
-export const finishClusterSetup = message => () => {
+export const finishClusterSetup = message => async() => {
   const baseUrl = FauxtonAPI.urls('cluster_setup', 'server');
   const body = {action: 'finish_cluster'};
-  fetch(baseUrl, getFetchOpts('POST', body)).then(response => {
+  try {
+    const response = await post(baseUrl, body, {raw: true});
     if (response.ok) {
       FauxtonAPI.addNotification({
         msg: message,
@@ -86,26 +76,15 @@ export const finishClusterSetup = message => () => {
       });
       FauxtonAPI.navigate('#setup/finish');
     } else {
-      response.json().then(json => {
-        FauxtonAPI.addNotification({
-          msg: 'The cluster is already finished. Error:' + json.reason,
-          type: 'error',
-          fade: false,
-          clear: true
-        });
-      });
+      const json = await response.json();
+      showError('The cluster is already finished', json.reason);
     }
-  }).catch(err => {
-    FauxtonAPI.addNotification({
-      msg: 'There was an error. Please check your setup and try again. Error:' + err,
-      type: 'error',
-      fade: false,
-      clear: true
-    });
-  });
+  } catch (err) {
+    showError('There was an error. Please check your setup and try again.', err);
+  }
 };
 
-export const setupSingleNode = (credentials, setupNode) => () => {
+export const setupSingleNode = (credentials, setupNode) => async() => {
   const baseUrl = FauxtonAPI.urls('cluster_setup', 'server');
   const setupAttrs = {
     action: 'enable_single_node',
@@ -119,30 +98,18 @@ export const setupSingleNode = (credentials, setupNode) => () => {
   const attrsAreInvalid = isInvalid(setupAttrs);
 
   if (attrsAreInvalid) {
-    FauxtonAPI.addNotification({
-      msg: attrsAreInvalid,
-      type: 'error',
-      fade: false,
-      clear: true
-    });
-    return Promise.resolve();
+    return showError(attrsAreInvalid);
   }
 
-  return fetch(baseUrl, {
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    },
-    method: 'POST',
-    credentials: 'include',
-    body: JSON.stringify(setupAttrs)
-  }).then(response => {
+  try {
+    const response = await post(baseUrl, setupAttrs, {raw: true});
     if (!response.ok) {
-      return rejectFetchError(response);
+      const json = await response.json();
+      const error = json.reason ? json.reason : json.error;
+      return showError(error);
     }
-    return Api.login({name: credentials.username, password: credentials.password});
 
-  }).then(() => {
+    await Api.login({name: credentials.username, password: credentials.password});
     FauxtonAPI.addNotification({
       msg: 'Single node setup successful.',
       type: 'success',
@@ -150,14 +117,9 @@ export const setupSingleNode = (credentials, setupNode) => () => {
       clear: true
     });
     FauxtonAPI.navigate('#setup/finish');
-  }).catch((err) => {
-    FauxtonAPI.addNotification({
-      msg: "The cluster has not been setuped successfully. Error: " + err,
-      type: 'error',
-      fade: false,
-      clear: true
-    });
-  });
+  } catch (error) {
+    showError("The cluster has not been setuped successfully.", error);
+  }
 };
 
 /**
@@ -170,7 +132,7 @@ export const setupSingleNode = (credentials, setupNode) => () => {
  * @param setupNode
  * @param additionalNode
  */
-export const addNode = (isOrWasAdminParty, credentials, setupNode, additionalNode) => dispatch => {
+export const addNode = (isOrWasAdminParty, credentials, setupNode, additionalNode) => async dispatch => {
   const baseUrl = FauxtonAPI.urls('cluster_setup', 'server');
   const enableSetupData = {
     action: 'enable_cluster',
@@ -189,13 +151,7 @@ export const addNode = (isOrWasAdminParty, credentials, setupNode, additionalNod
   });
 
   if (attrsAreInvalid) {
-    FauxtonAPI.addNotification({
-      msg: attrsAreInvalid,
-      type: 'error',
-      fade: false,
-      clear: true
-    });
-    return Promise.resolve();
+    return showError(attrsAreInvalid);
   }
 
   let enableNodeData = {
@@ -218,16 +174,10 @@ export const addNode = (isOrWasAdminParty, credentials, setupNode, additionalNod
   const additionalNodeDataIsInvalid = isInvalid(enableNodeData);
 
   if (additionalNodeDataIsInvalid) {
-    FauxtonAPI.addNotification({
-      msg: additionalNodeDataIsInvalid,
-      type: 'error',
-      fade: false,
-      clear: true
-    });
-    return Promise.resolve();
+    return showError(additionalNodeDataIsInvalid);
   }
 
-  const continueSetup = () => {
+  const continueSetup = async() => {
     const addNodeData = {
       action: 'add_node',
       username: credentials.username,
@@ -238,54 +188,45 @@ export const addNode = (isOrWasAdminParty, credentials, setupNode, additionalNod
     };
 
     //Enable the remote node
-    return fetch(baseUrl, getFetchOpts('POST', enableNodeData)).then(resp => {
-      if (!resp.ok) {
-        return rejectFetchError(resp);
-      }
-      return fetch(baseUrl, getFetchOpts('POST', addNodeData));
+    const enableRemoteNodeResponse = await post(baseUrl, enableNodeData, {raw: true});
 
-    }).then(response => {
-      if (!response.ok) {
-        return rejectFetchError(response);
-      }
-      dispatch({
-        type: SETUP_ADD_NODE_TO_LIST,
-        options: {
-          value: {
-            port: additionalNode.port,
-            remoteAddress: additionalNode.remoteAddress
-          }
+    if (!enableRemoteNodeResponse.ok) {
+      const json = await enableRemoteNodeResponse.json();
+      const error = json.reason ? json.reason : json.error;
+      return showError(error);
+    }
+    const addNodeResponse = await post(baseUrl, addNodeData, {raw: true});
+
+
+    if (!addNodeResponse.ok) {
+      const json = await enableRemoteNodeResponse.json();
+      const error = json.reason ? json.reason : json.error;
+      return showError(error);
+    }
+
+    dispatch({
+      type: SETUP_ADD_NODE_TO_LIST,
+      options: {
+        value: {
+          port: additionalNode.port,
+          remoteAddress: additionalNode.remoteAddress
         }
-      });
-      FauxtonAPI.addNotification({
-        msg: 'Added node',
-        type: 'success',
-        fade: false,
-        clear: true
-      });
-
-    }).catch(err => {
-      FauxtonAPI.addNotification({
-        msg: 'Unable to add the node. Error:' + err,
-        type: 'error',
-        fade: false,
-        clear: true
-      });
+      }
     });
-  };
-
-  return fetch(baseUrl, getFetchOpts('POST', enableSetupData)).then(() => {
-    return Api.login({name: credentials.username, password: credentials.password});
-  }).then(() => {
-    continueSetup();
-  }).catch(err => {
     FauxtonAPI.addNotification({
-      msg: 'An error occured while adding the node. Error:' + err,
-      type: 'error',
+      msg: 'Added node',
+      type: 'success',
       fade: false,
       clear: true
     });
-  });
+  };
+  try {
+    await post(baseUrl, enableSetupData, {raw: true});
+    await Api.login({name: credentials.username, password: credentials.password});
+    await continueSetup();
+  } catch (err) {
+    showError('An error occured while adding the node.', err);
+  }
 };
 
 export const resetAddtionalNodeForm = () => {

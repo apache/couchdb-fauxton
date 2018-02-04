@@ -12,6 +12,7 @@
 import {connect} from 'react-redux';
 import FirstStepController from '../components/FirstStepController';
 import {getClusterState} from '../reducers';
+import {getClusterStateFromCouch} from '../actions';
 
 const mapStateToProps = ({setup}) => {
   return {
@@ -19,6 +20,16 @@ const mapStateToProps = ({setup}) => {
   };
 };
 
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getClusterState() {
+      dispatch(getClusterStateFromCouch());
+    }
+  };
+};
+
 export default connect(
-  mapStateToProps
+  mapStateToProps,
+  mapDispatchToProps
 )(FirstStepController);

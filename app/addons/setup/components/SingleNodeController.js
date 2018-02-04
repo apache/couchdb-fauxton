@@ -67,7 +67,7 @@ export default class SingleNodeController extends React.Component {
       port,
       bindAddress,
     };
-    this.setupSingleNode(credentials, setupNode);
+    this.props.setupSingleNode(credentials, setupNode);
   };
 }
 
