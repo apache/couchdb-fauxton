@@ -34,7 +34,7 @@ const docJSON = {
 };
 
 const docWithAttachmentsJSON = {
-  _id: '_design/test-doc',
+  _id: '_design/test#doc',
   _rev: '12345',
   blah: {
     whatever: {
@@ -42,7 +42,7 @@ const docWithAttachmentsJSON = {
     }
   },
   _attachments: {
-    "one.png": {
+    "one%2F.png": {
       "content-type": "images/png",
       "length": 100
     },
@@ -53,7 +53,7 @@ const docWithAttachmentsJSON = {
   }
 };
 
-const database = new Databases.Model({ id: 'id' });
+const database = new Databases.Model({ id: 'a/special?db' });
 
 
 describe('DocEditorController', () => {
@@ -137,7 +137,7 @@ describe('DocEditorController', () => {
     const $attachmentNode = el.find('.view-attachments-section .dropdown-menu li');
     const attachmentURLactual = $attachmentNode.find('a').first().prop('href');
 
-    assert.equal(attachmentURLactual, '../../id/_design/test-doc/one.png');
+    assert.equal(attachmentURLactual, '../../a%2Fspecial%3Fdb/_design%2Ftest%23doc/one%252F.png');
   });
 
   it.skip('setting deleteDocModal=true in store shows modal', () => {
