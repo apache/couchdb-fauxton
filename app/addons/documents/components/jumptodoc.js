@@ -14,15 +14,15 @@ import FauxtonAPI from "../../../core/api";
 // the License.
 
 import PropTypes from 'prop-types';
-
 import React from "react";
 import ReactDOM from "react-dom";
-import ReactSelect from "react-select";
+import Components from "../../components/react-components";
+
 
 const JumpToDoc = ({database, loadOptions}) => {
   return (
     <div>
-      <ReactSelect.Async
+      <Components.ThrottledReactSelectAsync
         className="jump-to-doc"
         name="jump-to-doc"
         placeholder="Document ID"
