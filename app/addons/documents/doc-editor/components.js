@@ -11,7 +11,6 @@
 // the License.
 
 import FauxtonAPI from "../../../core/api";
-import app from "../../../app";
 import PropTypes from 'prop-types';
 import React from "react";
 import { Dropdown, MenuItem } from "react-bootstrap";
@@ -216,11 +215,11 @@ class AttachmentsPanelButton extends React.Component {
   };
 
   getAttachmentList = () => {
-    var db = this.props.doc.database.get('id');
-    var doc = this.props.doc.get('_id');
+    const db = encodeURIComponent(this.props.doc.database.get('id'));
+    const doc = encodeURIComponent(this.props.doc.get('_id'));
 
     return _.map(this.props.doc.get('_attachments'), function (item, filename) {
-      var url = FauxtonAPI.urls('document', 'attachment', db, doc, app.utils.safeURLName(filename));
+      const url = FauxtonAPI.urls('document', 'attachment', db, doc, encodeURIComponent(filename));
       return (
         <MenuItem key={filename} href={url} target="_blank" data-bypass="true">
           <strong>{filename}</strong>
