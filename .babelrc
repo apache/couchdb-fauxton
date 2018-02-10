@@ -3,6 +3,6 @@
     "react",
     "es2015"
   ],
-  "plugins": ["transform-object-assign", "transform-object-rest-spread", 
-    "transform-class-properties", "array-includes"]
+  "plugins": ["transform-object-assign", "transform-object-rest-spread",
+    "transform-class-properties", "array-includes","transform-async-to-generator"]
 }
