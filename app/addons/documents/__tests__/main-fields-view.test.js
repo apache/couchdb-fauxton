@@ -88,4 +88,34 @@ describe('MainFieldsView', () => {
     wrapper.find('#qoReduce').simulate('change');
     expect(spy.calledOnce).toBe(true);
   });
+
+  it('calls toggleStable', () => {
+    const spy = sinon.spy();
+    const wrapper = mount(<MainFieldsView
+      includeDocs={false}
+      showReduce={false}
+      reduce={false}
+      toggleIncludeDocs={() => {}}
+      toggleStable={spy}
+      docURL={docURL}
+    />);
+
+    wrapper.find('#qoStable').simulate('change');
+    expect(spy.calledOnce).toBe(true);
+  });
+
+  it('calls changeUpdateField', () => {
+    const spy = sinon.spy();
+    const wrapper = mount(<MainFieldsView
+      includeDocs={false}
+      showReduce={false}
+      reduce={false}
+      toggleIncludeDocs={() => {}}
+      changeUpdateField={spy}
+      docURL={docURL}
+    />);
+
+    wrapper.find('#qoUpdate').simulate('change');
+    expect(spy.calledOnce).toBe(true);
+  });
 });
