@@ -23,7 +23,6 @@ import FauxtonComponentsReact from "..//fauxton/components";
 import Stores from "./stores";
 import Actions from "./actions";
 
-import ReactSelect from "react-select";
 import {Tooltip, OverlayTrigger} from 'react-bootstrap';
 
 const databasesStore = Stores.databasesStore;
@@ -272,12 +271,13 @@ class AddDatabaseWidget extends React.Component {
   }
 }
 
+
 const JumpToDatabaseWidget = ({loadOptions}) => {
   return (
     <div data-name="jump-to-db" className="faux-header__searchboxwrapper">
       <div className="faux-header__searchboxcontainer">
 
-        <ReactSelect.Async
+        <Components.ThrottledReactSelectAsync
           placeholder="Database name"
           loadOptions={loadOptions}
           clearable={false}
