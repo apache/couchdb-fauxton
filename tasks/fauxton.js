@@ -104,6 +104,7 @@ module.exports = function (grunt) {
       launch_url: this.data.settings.nightwatch.launch_url,
       fauxton_host: _getHost(this.data.settings.nightwatch.fauxton_ip),
       fauxton_port: this.data.settings.nightwatch.fauxton_port,
+      db_protocol: this.data.settings.nightwatch.db_protocol,
       db_host: this.data.settings.nightwatch.db_host,
       db_port: this.data.settings.nightwatch.db_port,
       selenium_port: this.data.settings.nightwatch.selenium_port
