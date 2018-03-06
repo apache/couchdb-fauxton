@@ -9,7 +9,7 @@ git:
 
 before_script:
   - travis_retry ./bin/docker-up-and-check.sh
-  - npm install
+  - npm ci
   - curl http://127.0.0.1:5984
   - npm run stylecheck
   - npm test
@@ -21,4 +21,7 @@ script:
 after_script:
   - npm run docker:down
 
-cache: apt
+cache:
+  - apt
+  - directories:
+    - "$HOME/.npm"
