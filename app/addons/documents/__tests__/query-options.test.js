@@ -126,6 +126,7 @@ describe('QueryOptions', () => {
 
     const wrapper = shallow(<QueryOptions
       ddocsOnly={true}
+      update='true'
       queryOptionsRemoveFilterOnlyDdocs={() => {}}
       queryOptionsApplyFilterOnlyDdocs={() => {}}
       queryOptionsExecute={() => {}}
@@ -280,6 +281,7 @@ describe('QueryOptions', () => {
     };
     const wrapper = shallow(<QueryOptions
       ddocsOnly={true}
+      update='true'
       queryOptionsRemoveFilterOnlyDdocs={() => {}}
       queryOptionsApplyFilterOnlyDdocs={() => {}}
       queryOptionsExecute={() => {}}

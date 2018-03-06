@@ -17,6 +17,7 @@
   },
   "devDependencies": {
     "babel-jest": "^18.0.0",
+    "babel-plugin-transform-async-to-generator": "^6.24.1",
     "bootstrap": "^3.3.7",
     "enzyme": "^3.2.0",
     "enzyme-adapter-react-16": "^1.1.0",
@@ -100,6 +101,7 @@
     "react-test-renderer": "~16.2.0",
     "redux": "^3.6.0",
     "redux-thunk": "^2.1.0",
+    "regenerator-runtime": "^0.11.1",
     "request": "^2.54.0",
     "rxjs": "^5.5.5",
     "semver": "^5.1.0",
