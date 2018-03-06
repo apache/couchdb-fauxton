@@ -9,6 +9,7 @@ git:
 
 before_script:
   - travis_retry ./bin/docker-up-and-check.sh
+  - npm install -g npm@latest
   - npm ci
   - curl http://127.0.0.1:5984
   - npm run stylecheck
