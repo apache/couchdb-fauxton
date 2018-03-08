@@ -10,6 +10,7 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 import FauxtonAPI from "../../core/api";
+import { post } from "../../core/ajax";
 import SetupResources from "./resources";
 import ActionTypes from "./setup.actiontypes";
 import SetupStores from "./setup.stores";
@@ -32,16 +33,13 @@ export default {
   },
 
   finishClusterSetup: function (message) {
-
-    $.ajax({
-      type: 'POST',
-      url: '/_cluster_setup',
-      contentType: 'application/json',
-      dataType: 'json',
-      data: JSON.stringify({
-        action: 'finish_cluster'
-      })
-    }).success(function () {
+    const body = {
+      action: 'finish_cluster'
+    };
+    post('/_cluster_setup', body).then((res) => {
+      if (res.error) {
+        throw new Error(res.reason || res.error);
+      }
       FauxtonAPI.addNotification({
         msg: message,
         type: 'success',
@@ -49,7 +47,7 @@ export default {
         clear: true
       });
       FauxtonAPI.navigate('#setup/finish');
-    }).fail(function () {
+    }).catch(() => {
       FauxtonAPI.addNotification({
         msg: 'There was an error. Please check your setup and try again.',
         type: 'error',
@@ -57,7 +55,6 @@ export default {
         clear: true
       });
     });
-
   },
 
   setupSingleNode: function () {
