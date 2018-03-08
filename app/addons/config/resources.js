@@ -12,6 +12,7 @@
 
 import app from "../../app";
 import FauxtonAPI from "../../core/api";
+import { deleteRequest, put } from "../../core/ajax";
 
 var Config = FauxtonAPI.addon();
 
@@ -30,20 +31,20 @@ Config.OptionModel = Backbone.Model.extend({
   isNew () { return false; },
 
   sync (method, model) {
-
-    var params = {
-      url: model.url(),
-      contentType: 'application/json',
-      dataType: 'json',
-      data: JSON.stringify(model.get('value'))
-    };
-
+    let operation = put;
     if (method === 'delete') {
-      params.type = 'DELETE';
-    } else {
-      params.type = 'PUT';
+      operation = deleteRequest;
     }
-    return $.ajax(params);
+
+    return operation(
+      model.url(),
+      model.get('value')
+    ).then((res) => {
+      if (res.error) {
+        throw new Error(res.reason || res.error);
+      }
+      return res;
+    });
   }
 });
 
