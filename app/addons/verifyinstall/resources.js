@@ -48,10 +48,7 @@ Verifyinstall.testProcess = {
   },
 
   saveDB: function () {
-    return FauxtonAPI.when([
-      db.save(),
-      dbReplicate.save()
-    ]);
+    return db.save();
   },
 
   setupDB: function (db) {
@@ -74,35 +71,35 @@ Verifyinstall.testProcess = {
   },
 
   setup: function () {
-    return FauxtonAPI.when([
+    return FauxtonAPI.Promise.all([
       this.setupDB(db),
       this.setupDB(dbReplicate)
     ]);
   },
 
   testView: function () {
-    const deferred = FauxtonAPI.Deferred();
-    const promise = get(viewDoc.url() + '/_view/testview').then(res => {
+    let resolve, reject;
+    const promise = new FauxtonAPI.Promise(function(res, rej) {
+      resolve = res;
+      reject = rej;
+    });
+    const getPromise = get(viewDoc.url() + '/_view/testview').then(res => {
       if (res.error) {
         throw new Error(res.reason || res.error);
       }
       return res;
     });
 
-    promise.then(function (resp) {
+    getPromise.then(function (resp) {
       resp = _.isString(resp) ? JSON.parse(resp) : resp;
       const row = resp.rows[0];
       if (row.value === 6) {
-        return deferred.resolve();
+        resolve();
       }
-      const reason = {
-        reason: 'Values expect 6, got ' + row.value
-      };
+      reject(new Error('Values expect 6, got ' + row.value));
+    }, reject);
 
-      deferred.reject({responseText: JSON.stringify(reason)});
-    }, deferred.reject);
-
-    return deferred;
+    return promise;
   },
 
   setupView: function () {
@@ -122,7 +119,7 @@ Verifyinstall.testProcess = {
       database: db
     });
 
-    return FauxtonAPI.when([doc1.save(), doc2.save(), doc3.save(), viewDoc.save()]);
+    return FauxtonAPI.Promise.all([doc1.save(), doc2.save(), doc3.save(), viewDoc.save()]);
   },
 
   setupReplicate: function () {

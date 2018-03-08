@@ -18,15 +18,19 @@ import ActionTypes from "./actiontypes";
 
 // helper function to publish success/fail result of a single test having been ran
 var testPassed = function (test) {
-  FauxtonAPI.dispatch({
-    type: ActionTypes.VERIFY_INSTALL_SINGLE_TEST_COMPLETE,
-    test: test,
-    success: true
-  });
+  return function () {
+    FauxtonAPI.dispatch({
+      type: ActionTypes.VERIFY_INSTALL_SINGLE_TEST_COMPLETE,
+      test: test,
+      success: true
+    });
+  };
 };
 
+var allTestsPassed = true;
 var testFailed = function (test) {
   return function (xhr) {
+    allTestsPassed = false;
     if (!xhr) { return; }
 
     FauxtonAPI.dispatch({
@@ -61,45 +65,38 @@ export default {
     var testProcess = VerifyInstall.testProcess;
 
     testProcess.setup()
-      .then(function () {
-        return testProcess.saveDB();
+      .then(() => {
+        return testProcess.saveDB().then(testPassed(Constants.TESTS.CREATE_DATABASE));
       }, testFailed(Constants.TESTS.CREATE_DATABASE))
-      .then(function () {
-        testPassed(Constants.TESTS.CREATE_DATABASE);
-        return testProcess.saveDoc();
+      .then(() => {
+        return testProcess.saveDoc().then(testPassed(Constants.TESTS.CREATE_DOCUMENT));
+      }, testFailed(Constants.TESTS.CREATE_DATABASE))
+      .then(() => {
+        return testProcess.updateDoc().then(testPassed(Constants.TESTS.UPDATE_DOCUMENT));
       }, testFailed(Constants.TESTS.CREATE_DOCUMENT))
-      .then(function () {
-        testPassed(Constants.TESTS.CREATE_DOCUMENT);
-        return testProcess.updateDoc();
+      .then(() => {
+        return testProcess.destroyDoc().then(testPassed(Constants.TESTS.DELETE_DOCUMENT));
       }, testFailed(Constants.TESTS.UPDATE_DOCUMENT))
-      .then(function () {
-        testPassed(Constants.TESTS.UPDATE_DOCUMENT);
-        return testProcess.destroyDoc();
+      .then(() => {
+        return testProcess.setupView().then(() => {
+          return testProcess.testView().then(testPassed(Constants.TESTS.CREATE_VIEW));
+        });
       }, testFailed(Constants.TESTS.DELETE_DOCUMENT))
-      .then(function () {
-        testPassed(Constants.TESTS.DELETE_DOCUMENT);
-        return testProcess.setupView();
+      .then(() => {
+        return testProcess.setupReplicate().then(() => {
+          return testProcess.testReplicate().then(testPassed(Constants.TESTS.REPLICATION));
+        });
       }, testFailed(Constants.TESTS.CREATE_VIEW))
-      .then(function () {
-        return testProcess.testView();
-      }, testFailed(Constants.TESTS.CREATE_VIEW))
-      .then(function () {
-        testPassed(Constants.TESTS.CREATE_VIEW);
-        return testProcess.setupReplicate();
-      }, testFailed(Constants.TESTS.CREATE_VIEW))
-      .then(function () {
-        return testProcess.testReplicate();
-      }, testFailed(Constants.TESTS.REPLICATION))
-      .then(function () {
-        testPassed(Constants.TESTS.REPLICATION);
-
+      .then(() => {
         // now announce the tests have been ran
         FauxtonAPI.dispatch({ type: ActionTypes.VERIFY_INSTALL_ALL_TESTS_COMPLETE });
 
-        FauxtonAPI.addNotification({
-          msg: 'Success! Your CouchDB installation is working. Time to Relax.',
-          type: 'success'
-        });
+        if (allTestsPassed) {
+          FauxtonAPI.addNotification({
+            msg: 'Success! Your CouchDB installation is working. Time to Relax.',
+            type: 'success'
+          });
+        }
 
         testProcess.removeDBs();
       }, testFailed(Constants.TESTS.REPLICATION));
