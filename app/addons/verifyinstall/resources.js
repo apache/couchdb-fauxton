@@ -12,6 +12,7 @@
 
 import app from "../../app";
 import FauxtonAPI from "../../core/api";
+import { get, post } from "../../core/ajax";
 import Databases from "../databases/resources";
 import Documents from "../documents/resources";
 var Verifyinstall = FauxtonAPI.addon();
@@ -47,7 +48,10 @@ Verifyinstall.testProcess = {
   },
 
   saveDB: function () {
-    return db.save();
+    return FauxtonAPI.when([
+      db.save(),
+      dbReplicate.save()
+    ]);
   },
 
   setupDB: function (db) {
@@ -77,16 +81,21 @@ Verifyinstall.testProcess = {
   },
 
   testView: function () {
-    var deferred = FauxtonAPI.Deferred();
-    var promise = $.get(viewDoc.url() + '/_view/testview');
+    const deferred = FauxtonAPI.Deferred();
+    const promise = get(viewDoc.url() + '/_view/testview').then(res => {
+      if (res.error) {
+        throw new Error(res.reason || res.error);
+      }
+      return res;
+    });
 
     promise.then(function (resp) {
       resp = _.isString(resp) ? JSON.parse(resp) : resp;
-      var row = resp.rows[0];
+      const row = resp.rows[0];
       if (row.value === 6) {
         return deferred.resolve();
       }
-      var reason = {
+      const reason = {
         reason: 'Values expect 6, got ' + row.value
       };
 
@@ -117,17 +126,19 @@ Verifyinstall.testProcess = {
   },
 
   setupReplicate: function () {
-    return $.ajax({
-      url: app.host + '/_replicate',
-      contentType: 'application/json',
-      type: 'POST',
-      dataType: 'json',
-      processData: false,
-      data: JSON.stringify({
-        create_target: true,
-        source: 'verifytestdb',
-        target: 'verifytestdb_replicate'
-      })
+    const body = {
+      create_target: true,
+      source: 'verifytestdb',
+      target: 'verifytestdb_replicate'
+    };
+    return post(
+      app.host + '/_replicate',
+      body
+    ).then(res => {
+      if (res.error) {
+        throw new Error(res.reason || res.error);
+      }
+      return res;
     });
   },
 

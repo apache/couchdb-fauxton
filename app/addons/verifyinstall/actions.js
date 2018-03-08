@@ -34,9 +34,14 @@ var testFailed = function (test) {
       test: test,
       success: false
     });
-
+    let reason = 'n/a';
+    if (xhr.responseText) {
+      reason = JSON.parse(xhr.responseText).reason;
+    } else if (xhr.message) {
+      reason = xhr.message;
+    }
     FauxtonAPI.addNotification({
-      msg: 'Error: ' + JSON.parse(xhr.responseText).reason,
+      msg: 'Error: ' + reason,
       type: 'error'
     });
   };
