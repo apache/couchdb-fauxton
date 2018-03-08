@@ -35,7 +35,7 @@
         "path" : "./test/nightwatch_tests/reports"
       },
       "desiredCapabilities" : {
-        "browserName" : "firefox",
+        "browserName" : "chrome",
         "javascriptEnabled" : true,
         "acceptSslCerts" : true
       },
