@@ -17,7 +17,7 @@ import ActionTypes from "./actiontypes";
 
 
 // helper function to publish success/fail result of a single test having been ran
-var testPassed = function (test) {
+const testPassed = function (test) {
   return function () {
     FauxtonAPI.dispatch({
       type: ActionTypes.VERIFY_INSTALL_SINGLE_TEST_COMPLETE,
@@ -27,8 +27,8 @@ var testPassed = function (test) {
   };
 };
 
-var allTestsPassed = true;
-var testFailed = function (test) {
+let allTestsPassed = true;
+const testFailed = function (test) {
   return function (xhr) {
     allTestsPassed = false;
     if (!xhr) { return; }
@@ -87,6 +87,7 @@ export default {
           return testProcess.testReplicate().then(testPassed(Constants.TESTS.REPLICATION));
         });
       }, testFailed(Constants.TESTS.CREATE_VIEW))
+      .then(() => {}, testFailed(Constants.TESTS.REPLICATION))
       .then(() => {
         // now announce the tests have been ran
         FauxtonAPI.dispatch({ type: ActionTypes.VERIFY_INSTALL_ALL_TESTS_COMPLETE });
@@ -99,6 +100,6 @@ export default {
         }
 
         testProcess.removeDBs();
-      }, testFailed(Constants.TESTS.REPLICATION));
+      });
   }
 };

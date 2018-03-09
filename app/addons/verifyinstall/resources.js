@@ -15,19 +15,19 @@ import FauxtonAPI from "../../core/api";
 import { get, post } from "../../core/ajax";
 import Databases from "../databases/resources";
 import Documents from "../documents/resources";
-var Verifyinstall = FauxtonAPI.addon();
+const Verifyinstall = FauxtonAPI.addon();
 
-var db = new Databases.Model({
+const db = new Databases.Model({
   id: 'verifytestdb',
   name: 'verifytestdb'
 });
 
-var dbReplicate = new Databases.Model({
+const dbReplicate = new Databases.Model({
   id: 'verifytestdb_replicate',
   name: 'verifytestdb_replicate'
 });
 
-var doc, viewDoc;
+let doc, viewDoc;
 
 Verifyinstall.testProcess = {
   saveDoc: function () {
@@ -52,22 +52,18 @@ Verifyinstall.testProcess = {
   },
 
   setupDB: function (db) {
-    var deferred = FauxtonAPI.Deferred();
-    db.fetch()
-      .then(function () {
+    const promise = new FauxtonAPI.Promise((resolve, reject) => {
+      db.fetch().then(() => {
         return db.destroy();
-      }, function () {
-        deferred.resolve();
-      })
-      .then(function () {
-        deferred.resolve();
-      }, function (xhr, error, reason) {
-        if (reason === 'Unauthorized') {
-          deferred.reject(xhr, error, reason);
-        }
+      }, () => {
+        resolve();
+      }).then(() => {
+        resolve();
+      }, (xhr, error, reason) => {
+        reject(new Error(reason));
       });
-
-    return deferred;
+    });
+    return promise;
   },
 
   setup: function () {
@@ -103,9 +99,9 @@ Verifyinstall.testProcess = {
   },
 
   setupView: function () {
-    var doc1 = new Documents.Doc({_id: 'test_doc_10', a: 1}, { database: db });
-    var doc2 = new Documents.Doc({_id: 'test_doc_20', a: 2}, { database: db });
-    var doc3 = new Documents.Doc({_id: 'test_doc_30', a: 3}, { database: db });
+    const doc1 = new Documents.Doc({_id: 'test_doc_10', a: 1}, { database: db });
+    const doc2 = new Documents.Doc({_id: 'test_doc_20', a: 2}, { database: db });
+    const doc3 = new Documents.Doc({_id: 'test_doc_30', a: 3}, { database: db });
 
     viewDoc = new Documents.Doc({
       _id: '_design/view_check',
@@ -140,24 +136,19 @@ Verifyinstall.testProcess = {
   },
 
   testReplicate: function () {
-    var deferred = FauxtonAPI.Deferred();
-    var promise = dbReplicate.fetch();
+    const promise = new FauxtonAPI.Promise((resolve, reject) => {
+      dbReplicate.fetch().then(() => {
+        const docCount = dbReplicate.get('doc_count');
+        if (docCount === 4) {
+          resolve();
+          return;
+        }
+        const reason = 'Replication Failed, expected 4 docs got ' + docCount;
+        reject(new Error(reason));
+      }, reject);
+    });
 
-    promise.then(function () {
-      var docCount = dbReplicate.get('doc_count');
-      if (docCount === 4) {
-        deferred.resolve();
-        return;
-      }
-
-      var reason = {
-        reason: 'Replication Failed, expected 4 docs got ' + docCount
-      };
-
-      deferred.reject({responseText: JSON.stringify(reason)});
-    }, deferred.reject);
-
-    return deferred;
+    return promise;
   },
 
   removeDBs: function () {
