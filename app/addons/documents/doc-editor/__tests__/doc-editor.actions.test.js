@@ -22,11 +22,23 @@ const { restore } = utils;
 describe('DocEditorActions', () => {
   const database = new Databases.Model({ id: 'db1' });
   const doc = new Documents.Doc({ _id: 'foo' }, { database: database });
+  let fakeXMLHttpRequest, fakeOpen;
+
+  beforeEach(() => {
+    fakeXMLHttpRequest = sinon.stub(global, 'XMLHttpRequest');
+    fakeOpen = sinon.stub();
+    fakeXMLHttpRequest.returns({
+      send: sinon.stub(),
+      setRequestHeader: sinon.stub(),
+      open: fakeOpen
+    });
+  });
 
   afterEach(() => {
     restore(FauxtonAPI.addNotification);
     restore(FauxtonAPI.navigate);
     restore(FauxtonAPI.urls);
+    fakeXMLHttpRequest.restore();
   });
 
   it('uploadAttachment handles filenames with special chars', () => {
@@ -34,7 +46,6 @@ describe('DocEditorActions', () => {
     sinon.stub(FauxtonAPI, 'urls').callsFake((p1, p2, p3, p4, p5, p6) => {
       return [p1, p2, p3, p4, p5, p6].join('/');
     });
-    const stub = sinon.stub($, 'ajax');
     const params = {
       rev: 'rev-num',
       doc: doc,
@@ -47,10 +58,10 @@ describe('DocEditorActions', () => {
     };
 
     Actions.uploadAttachment(params);
-    sinon.assert.calledWithMatch(stub,
-      {
-        url: 'document/attachment/db1/foo/' + encodeURIComponent(params.files[0].name) + '/?rev=rev-num'
-      }
+    sinon.assert.calledWithExactly(
+      fakeOpen,
+      'PUT',
+      'document/attachment/db1/foo/' + encodeURIComponent(params.files[0].name) + '/?rev=rev-num'
     );
   });
 

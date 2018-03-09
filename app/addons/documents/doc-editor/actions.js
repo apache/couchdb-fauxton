@@ -13,9 +13,10 @@
 /* global FormData */
 
 import FauxtonAPI from "../../../core/api";
+import { deleteRequest } from "../../../core/ajax";
 import ActionTypes from "./actiontypes";
 
-var xhr;
+var currentUploadHttpRequest;
 
 function initDocEditor (params) {
   var doc = params.doc;
@@ -79,33 +80,24 @@ function hideDeleteDocModal () {
 }
 
 function deleteDoc (doc) {
-  var databaseName = doc.database.safeID();
-  var query = '?rev=' + doc.get('_rev');
-
-  $.ajax({
-    url: FauxtonAPI.urls('document', 'server', databaseName, doc.safeID(), query),
-    type: 'DELETE',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-    },
-    xhrFields: {
-      withCredentials: true
-    },
-    success: function () {
-      FauxtonAPI.addNotification({
-        msg: 'Your document has been successfully deleted.',
-        clear: true
-      });
-      FauxtonAPI.navigate(FauxtonAPI.urls('allDocs', 'app', databaseName, ''));
-    },
-    error: function () {
-      FauxtonAPI.addNotification({
-        msg: 'Failed to delete your document!',
-        type: 'error',
-        clear: true
-      });
+  const databaseName = doc.database.safeID();
+  const query = '?rev=' + doc.get('_rev');
+  const url = FauxtonAPI.urls('document', 'server', databaseName, doc.safeID(), query);
+  deleteRequest(url).then(res => {
+    if (res.error) {
+      throw new Error(res.reason || res.error);
     }
+    FauxtonAPI.addNotification({
+      msg: 'Your document has been successfully deleted.',
+      clear: true
+    });
+    FauxtonAPI.navigate(FauxtonAPI.urls('allDocs', 'app', databaseName, ''));
+  }).catch(err => {
+    FauxtonAPI.addNotification({
+      msg: 'Failed to delete your document. Reason: ' + err.message,
+      type: 'error',
+      clear: true
+    });
   });
 }
 
@@ -156,75 +148,88 @@ function uploadAttachment (params) {
     });
     return;
   }
-
   FauxtonAPI.dispatch({ type: ActionTypes.START_FILE_UPLOAD });
 
-  // store the xhr in parent scope to allow us to cancel any uploads if the user closes the modal
-  xhr = $.ajaxSettings.xhr();
+  const query = '?rev=' + params.rev;
+  const db = params.doc.getDatabase().safeID();
+  const docId = params.doc.safeID();
+  const file = params.files[0];
+  const url = FauxtonAPI.urls('document', 'attachment', db, docId, encodeURIComponent(file.name), query);
 
-  var query = '?rev=' + params.rev;
-  var db = params.doc.getDatabase().safeID();
-  var docId = params.doc.safeID();
-  var file = params.files[0];
-
-  $.ajax({
-    url: FauxtonAPI.urls('document', 'attachment', db, docId, encodeURIComponent(file.name), query),
-    type: 'PUT',
-    data: file,
-    contentType: file.type,
-    headers: {
-      Accept: "application/json; charset=utf-8"
-    },
-    processData: false,
-    xhrFields: {
-      withCredentials: true
-    },
-    xhr: function () {
-      xhr.upload.onprogress = function (evt) {
-        var percentComplete = evt.loaded / evt.total * 100;
-        FauxtonAPI.dispatch({
-          type: ActionTypes.SET_FILE_UPLOAD_PERCENTAGE,
-          options: {
-            percent: percentComplete
-          }
-        });
-      };
-      return xhr;
-    },
-    success: function () {
-
-      // re-initialize the document editor. Only announce it's been updated when
-      initDocEditor({
-        doc: params.doc,
-        onLoaded: function () {
-          FauxtonAPI.dispatch({ type: ActionTypes.FILE_UPLOAD_SUCCESS });
-          FauxtonAPI.addNotification({
-            msg: 'Document saved successfully.',
-            type: 'success',
-            clear: true
-          });
-        }.bind(this)
-      });
-
-    },
-    error: function (resp) {
-      // cancelled uploads throw an ajax error but they don't contain a response. We don't want to publish an error
-      // event in those cases
-      if (_.isEmpty(resp.responseText)) {
-        return;
-      }
+  const onProgress = (evt) => {
+    if (evt.lengthComputable) {
+      const percentComplete = evt.loaded / evt.total * 100;
       FauxtonAPI.dispatch({
-        type: ActionTypes.FILE_UPLOAD_ERROR,
+        type: ActionTypes.SET_FILE_UPLOAD_PERCENTAGE,
         options: {
-          error: resp.responseJSON ? resp.responseJSON.reason : 'Error uploading file: (' + resp.statusText + ')'
+          percent: percentComplete
         }
       });
     }
-  });
+  };
+  const onSuccess = (doc) => {
+    // re-initialize the document editor. Only announce it's been updated when
+    initDocEditor({
+      doc: doc,
+      onLoaded: () => {
+        FauxtonAPI.dispatch({ type: ActionTypes.FILE_UPLOAD_SUCCESS });
+        FauxtonAPI.addNotification({
+          msg: 'Document saved successfully.',
+          type: 'success',
+          clear: true
+        });
+      }
+    });
+  };
+  const onError = (msg) => {
+    FauxtonAPI.dispatch({
+      type: ActionTypes.FILE_UPLOAD_ERROR,
+      options: {
+        error: msg
+      }
+    });
+  };
+  const httpRequest = new XMLHttpRequest();
+  currentUploadHttpRequest = httpRequest;
+  httpRequest.withCredentials = true;
+  if (httpRequest.upload) {
+    httpRequest.upload.onprogress = onProgress;
+  }
+  httpRequest.onloadend = () => {
+    currentUploadHttpRequest = undefined;
+  };
+  httpRequest.onerror = () => {
+    onError('Error uploading file');
+  };
+  httpRequest.onload = (e) => {
+    if (httpRequest.status >= 200 && httpRequest.status < 300) {
+      onSuccess(params.doc);
+    } else {
+      let errorMsg = 'Error uploading file. ';
+      if (e.responseText) {
+        try {
+          const json = JSON.parse(e.responseText);
+          if (json.error) {
+            errorMsg += 'Reason: ' + (json.reason || json.error);
+          }
+        } catch (err) {
+          //ignore parsing error
+        }
+      }
+      onError(errorMsg);
+    }
+  };
+  httpRequest.open('PUT', url);
+  httpRequest.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+  httpRequest.setRequestHeader('Content-Type', file.type);
+  httpRequest.setRequestHeader('Accept', 'application/json');
+  httpRequest.send(file);
 }
 
 function cancelUpload () {
-  xhr.abort();
+  if (currentUploadHttpRequest) {
+    currentUploadHttpRequest.abort();
+  }
 }
 
 function resetUploadModal () {

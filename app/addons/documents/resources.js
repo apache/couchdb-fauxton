@@ -12,6 +12,7 @@
 
 import app from "../../app";
 import FauxtonAPI from "../../core/api";
+import { post } from "../../core/ajax";
 import Documents from "./shared-resources";
 
 Documents.UUID = FauxtonAPI.Model.extend({
@@ -85,18 +86,15 @@ Documents.DdocInfo = FauxtonAPI.Model.extend({
 
 Documents.NewDoc = Documents.Doc.extend({
   fetch: function () {
-    var uuid = new Documents.UUID();
-    var deferred = this.deferred = $.Deferred();
-    var that = this;
-
-    uuid.fetch().done(function () {
-      that.set("_id", uuid.next());
-      deferred.resolve();
+    const uuid = new Documents.UUID();
+    const promise = new FauxtonAPI.Promise((resolve) => {
+      uuid.fetch().done(() => {
+        this.set("_id", uuid.next());
+        resolve();
+      });
     });
-
-    return deferred.promise();
+    return promise;
   }
-
 });
 
 Documents.BulkDeleteDoc = FauxtonAPI.Model.extend({
@@ -120,31 +118,26 @@ Documents.BulkDeleteDocCollection = FauxtonAPI.Collection.extend({
   },
 
   bulkDelete: function () {
-    var payload = this.createPayload(this.toJSON()),
-        promise = FauxtonAPI.Deferred(),
-        that = this;
-
-    $.ajax({
-      type: 'POST',
-      url: this.url(),
-      contentType: 'application/json',
-      dataType: 'json',
-      data: JSON.stringify(payload),
-    }).then(function (res) {
-      that.handleResponse(res, promise);
-    }).fail(function () {
-      var ids = _.reduce(that.toArray(), function (acc, doc) {
-        acc.push(doc.id);
-        return acc;
-      }, []);
-      that.trigger('error', ids);
-      promise.reject(ids);
+    const payload = this.createPayload(this.toJSON());
+    const promise = new FauxtonAPI.Promise((resolve, reject) => {
+      post(this.url(), payload).then(res => {
+        if (res.error) {
+          throw new Error(res.reason || res.error);
+        }
+        this.handleResponse(res, resolve, reject);
+      }).catch(() => {
+        const ids = _.reduce(this.toArray(), (acc, doc) => {
+          acc.push(doc.id);
+          return acc;
+        }, []);
+        this.trigger('error', ids);
+        reject(ids);
+      });
     });
-
     return promise;
   },
 
-  handleResponse: function (res, promise) {
+  handleResponse: function (res, resolve, reject) {
     var ids = _.reduce(res, function (ids, doc) {
       if (doc.error) {
         ids.errorIds.push(doc.id);
@@ -166,9 +159,9 @@ Documents.BulkDeleteDocCollection = FauxtonAPI.Collection.extend({
     // This is kind of tricky. If there are no documents deleted then rejects
     // otherwise resolve with list of successful and failed documents
     if (!_.isEmpty(ids.successIds)) {
-      promise.resolve(ids);
+      resolve(ids);
     } else {
-      promise.reject(ids.errorIds);
+      reject(ids.errorIds);
     }
 
     this.trigger('updated');

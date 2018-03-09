@@ -74,11 +74,12 @@ function toggleContent (designDoc, indexGroup) {
 //       Actions.selectNavItem('designDoc', { designDocName: 'my-design-doc', section: 'metadata' });
 //       Actions.selectNavItem('designDoc', { designDocName: 'my-design-doc', section: 'Views', indexName: 'my-view' });
 function selectNavItem (navItem, params) {
-  var settings = $.extend(true, {}, {
+  const settings = {
     designDocName: '',
     designDocSection: '',
-    indexName: ''
-  }, params);
+    indexName: '',
+    ...params
+  };
   settings.navItem = navItem;
 
   FauxtonAPI.dispatch({
