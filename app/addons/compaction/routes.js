@@ -15,7 +15,7 @@ import FauxtonAPI from "../../core/api";
 import Databases from "../databases/base";
 
 import BaseRoute from "../documents/shared-routes";
-import Layout from './Layout';
+import Layout from './layout';
 
 const CompactionRouteObject = BaseRoute.extend({
 

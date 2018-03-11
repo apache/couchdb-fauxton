@@ -66,4 +66,3 @@ export default function compaction(state = initialState, action) {
 export const isCompacting = state => state.isCompacting;
 export const isCleaningViews = state => state.isCleaningViews;
 export const isCompactingView = state => state.isCompactingView;
-export const getDesignDoc = state => state.designDoc;
