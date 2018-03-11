@@ -13,7 +13,7 @@
 require('jest');
 require('whatwg-fetch');
 require('mock-local-storage');
-
+require('regenerator-runtime/runtime');
 window.localStorage = global.localStorage;
 window.$ = window.jQuery = require('jquery');
 window._ = require('lodash');
