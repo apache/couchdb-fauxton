@@ -36,6 +36,7 @@ describe('Compaction Controller', function () {
   let instance, container;
 
   beforeEach(() => {
+  // eslint-disable-next-line no-undef
     spyOn(store, 'dispatch');
     instance = TestUtils.renderIntoDocument(
       <Provider store={store}>
