@@ -11,6 +11,7 @@
   { "name": "replication" },
   { "name": "cors" },
   { "name": "permissions" },
+  { "name": "compaction" },
   { "name": "auth" },
   { "name": "verifyinstall" },
   { "name": "documentation" }

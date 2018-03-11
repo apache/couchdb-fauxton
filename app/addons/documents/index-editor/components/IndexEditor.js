@@ -19,6 +19,7 @@ import Stores from "../stores";
 import Actions from "../actions";
 import DesignDocSelector from './DesignDocSelector';
 import ReduceEditor from './ReduceEditor';
+import _ from 'lodash';
 
 const getDocUrl = app.helpers.getDocUrl;
 const store = Stores.indexEditorStore;
@@ -99,6 +100,16 @@ export default class IndexEditor extends Component {
     Actions.updateMapCode(code);
   }
 
+  getCompactButton () {
+    const extension = FauxtonAPI.getExtensions('view-editor:compaction-button');
+
+    if (_.isEmpty(extension)) {
+      return null;
+    }
+    const CompactButton = extension[0];
+    return <CompactButton database={this.state.database.id} designDoc={this.state.designDocId}/>;
+  }
+
   render() {
     if (this.state.isLoading) {
       return (
@@ -157,6 +168,7 @@ export default class IndexEditor extends Component {
           <div className="padded-box">
             <div className="control-group">
               <ConfirmButton id="save-view" text={btnLabel} />
+              {!this.state.isNewView && this.getCompactButton()}
               <a href={cancelLink} className="index-cancel-link">Cancel</a>
             </div>
           </div>
