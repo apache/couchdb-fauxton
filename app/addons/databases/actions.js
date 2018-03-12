@@ -11,6 +11,7 @@
 // the License.
 import app from "../../app";
 import FauxtonAPI from "../../core/api";
+import { get } from "../../core/ajax";
 import Stores from "./stores";
 import ActionTypes from "./actiontypes";
 import Resources from "./resources";
@@ -26,17 +27,13 @@ function getDatabaseDetails (dbList, fullDbList) {
     fetch(url)
       .then((res) => {
         databaseDetails.push(res);
-      })
-      .fail(() => {
+      }).catch(() => {
         failedDbs.push(db);
-      })
-      .always(() => {
+      }).then(() => {
         seen++;
-
         if (seen !== dbList.length) {
           return;
         }
-
         updateDatabases({
           dbList: dbList,
           databaseDetails: databaseDetails,
@@ -48,11 +45,10 @@ function getDatabaseDetails (dbList, fullDbList) {
 }
 
 function fetch (url) {
-  return $.ajax({
-    cache: false,
-    url: url,
-    dataType: 'json'
-  }).then((res) => {
+  return get(url).then(res => {
+    if (res.error) {
+      throw new Error(res.reason || res.error);
+    }
     return res;
   });
 }
@@ -189,20 +185,14 @@ export default {
     });
 
     const url = `${app.host}/_all_dbs${query}`;
-    $.ajax({
-      cache: false,
-      url: url,
-      dataType: 'json'
-    }).then((dbs) => {
+    get(url).then((dbs) => {
       const options = dbs.map(db => {
         return {
           value: db,
           label: db
         };
       });
-      callback(null, {
-        options: options
-      });
+      callback(null, { options: options });
     });
   }
 };
