@@ -31,15 +31,19 @@ Config.OptionModel = Backbone.Model.extend({
   isNew () { return false; },
 
   sync (method, model) {
-    let operation = put;
+    let operation;
     if (method === 'delete') {
-      operation = deleteRequest;
+      operation = deleteRequest(
+        model.url()
+      );
+    } else {
+      operation = put(
+        model.url(),
+        model.get('value')
+      );
     }
 
-    return operation(
-      model.url(),
-      model.get('value')
-    ).then((res) => {
+    return operation.then((res) => {
       if (res.error) {
         throw new Error(res.reason || res.error);
       }
