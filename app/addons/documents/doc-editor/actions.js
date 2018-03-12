@@ -222,7 +222,7 @@ function uploadAttachment (params) {
   };
   httpRequest.open('PUT', url);
   httpRequest.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-  httpRequest.setRequestHeader('Content-Type', file.type);
+  httpRequest.setRequestHeader('Content-Type', file.type || `application/octet-stream`);
   httpRequest.setRequestHeader('Accept', 'application/json');
   httpRequest.send(file);
 }
