@@ -89,6 +89,7 @@ function deleteDoc (doc) {
     }
     FauxtonAPI.addNotification({
       msg: 'Your document has been successfully deleted.',
+      type: 'success',
       clear: true
     });
     FauxtonAPI.navigate(FauxtonAPI.urls('allDocs', 'app', databaseName, ''));
