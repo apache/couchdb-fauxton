@@ -11,25 +11,10 @@
 // the License.
 
 import app from "../../app";
+import Helpers from '../../helpers';
 import FauxtonAPI from "../../core/api";
 import { post } from "../../core/ajax";
 import Documents from "./shared-resources";
-
-Documents.UUID = FauxtonAPI.Model.extend({
-  initialize: function (options) {
-    options = _.extend({count: 1}, options);
-    this.count = options.count;
-  },
-
-  url: function () {
-    return app.host + "/_uuids?count=" + this.count;
-  },
-
-  next: function () {
-    return this.get("uuids").pop();
-  }
-});
-
 
 Documents.QueryParams = (function () {
   var _eachParams = function (params, action) {
@@ -86,14 +71,18 @@ Documents.DdocInfo = FauxtonAPI.Model.extend({
 
 Documents.NewDoc = Documents.Doc.extend({
   fetch: function () {
-    const uuid = new Documents.UUID();
-    const promise = new FauxtonAPI.Promise((resolve) => {
-      uuid.fetch().done(() => {
-        this.set("_id", uuid.next());
-        resolve();
-      });
+    return Helpers.getUUID().then((res) => {
+      if (res.uuids) {
+        this.set("_id", res.uuids[0]);
+      } else {
+        this.set("_id", 'enter_document_id');
+      }
+      return res;
+    }).catch(() => {
+      // Don't throw error so the user is still able
+      // to edit the new doc
+      this.set("_id", 'enter_document_id');
     });
-    return promise;
   }
 });
 
@@ -148,7 +137,7 @@ Documents.BulkDeleteDocCollection = FauxtonAPI.Collection.extend({
       }
 
       return ids;
-    }, {errorIds: [], successIds: []});
+    }, { errorIds: [], successIds: [] });
 
     this.removeDocuments(ids.successIds);
 

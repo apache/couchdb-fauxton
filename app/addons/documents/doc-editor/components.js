@@ -22,8 +22,6 @@ import GeneralComponents from "../../components/react-components";
 import { Modal } from "react-bootstrap";
 import Helpers from "../../../helpers";
 
-import DocumentResources from '../resources';
-
 var store = Stores.docEditorStore;
 
 class DocEditorController extends React.Component {
@@ -393,12 +391,12 @@ class CloneDocModal extends React.Component {
   };
 
   componentDidUpdate() {
-    //XXX model-code in component
     if (this.state.uuid === null) {
-      var uuid = new DocumentResources.UUID();
-      uuid.fetch().then(function () {
-        this.setState({ uuid: uuid.next() });
-      }.bind(this));
+      Helpers.getUUID().then((res) => {
+        if (res.uuids) {
+          this.setState({ uuid: res.uuids[0] });
+        }
+      });
     }
   }
 
