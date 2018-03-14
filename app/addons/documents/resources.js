@@ -108,7 +108,7 @@ Documents.BulkDeleteDocCollection = FauxtonAPI.Collection.extend({
 
   bulkDelete: function () {
     const payload = this.createPayload(this.toJSON());
-    const promise = new FauxtonAPI.Promise((resolve, reject) => {
+    return new FauxtonAPI.Promise((resolve, reject) => {
       post(this.url(), payload).then(res => {
         if (res.error) {
           throw new Error(res.reason || res.error);
@@ -123,7 +123,6 @@ Documents.BulkDeleteDocCollection = FauxtonAPI.Collection.extend({
         reject(ids);
       });
     });
-    return promise;
   },
 
   handleResponse: function (res, resolve, reject) {
