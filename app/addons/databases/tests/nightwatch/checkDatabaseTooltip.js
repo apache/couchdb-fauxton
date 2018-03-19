@@ -31,7 +31,7 @@ module.exports = {
       .click('#dashboard-content a[href="database/' + newDatabaseName + '/_all_docs"]')
 
       //this opens the alternative header
-      .clickWhenVisible('.bulk-action-component-panel input[type="checkbox"]')
+      .clickWhenVisible('.tableview-checkbox-cell input[type="checkbox"]')
       .clickWhenVisible('.bulk-action-component-selector-group button.fonticon-trash', waitTime, false)
       .acceptAlert()
       .waitForElementVisible('#global-notifications .alert.alert-info', waitTime, false)
