@@ -22,8 +22,6 @@ import GeneralComponents from "../../components/react-components";
 import { Modal } from "react-bootstrap";
 import Helpers from "../../../helpers";
 
-import DocumentResources from '../resources';
-
 var store = Stores.docEditorStore;
 
 class DocEditorController extends React.Component {
@@ -328,13 +326,15 @@ class UploadModal extends React.Component {
   state = this.getStoreState();
 
   render() {
-    var errorClasses = 'alert alert-error';
+    let errorClasses = 'alert alert-error';
     if (this.state.errorMessage === '') {
       errorClasses += ' hide';
     }
-    var loadIndicatorClasses = 'progress progress-info';
+    let loadIndicatorClasses = 'progress progress-info';
+    let disabledAttribute = {disabled: 'disabled'};
     if (!this.state.inProgress) {
       loadIndicatorClasses += ' hide';
+      disabledAttribute = {};
     }
 
     return (
@@ -350,7 +350,7 @@ class UploadModal extends React.Component {
                 Select a file to upload as an attachment to this document. Uploading a file saves the document as a new
                 revision.
               </p>
-              <input ref={el => this.attachments = el} type="file" name="_attachments" />
+              <input ref={el => this.attachments = el} type="file" name="_attachments" {...disabledAttribute}/>
               <br />
             </form>
 
@@ -361,7 +361,7 @@ class UploadModal extends React.Component {
         </Modal.Body>
         <Modal.Footer>
           <a href="#" data-bypass="true" className="cancel-link" onClick={this.closeModal}>Cancel</a>
-          <button href="#" id="upload-btn" data-bypass="true" className="btn btn-primary save" onClick={this.upload}>
+          <button href="#" id="upload-btn" data-bypass="true" className="btn btn-primary save" onClick={this.upload} {...disabledAttribute}>
             <i className="icon icon-upload" /> Upload Attachment
           </button>
         </Modal.Footer>
@@ -391,12 +391,12 @@ class CloneDocModal extends React.Component {
   };
 
   componentDidUpdate() {
-    //XXX model-code in component
     if (this.state.uuid === null) {
-      var uuid = new DocumentResources.UUID();
-      uuid.fetch().then(function () {
-        this.setState({ uuid: uuid.next() });
-      }.bind(this));
+      Helpers.getUUID().then((res) => {
+        if (res.uuids) {
+          this.setState({ uuid: res.uuids[0] });
+        }
+      });
     }
   }
 

@@ -121,9 +121,9 @@ export default class MainFieldsView extends React.Component {
             </div>
             <div className="dropdown inline">
               <label className="drop-down">Update
-              <select className="input-small" id="qoUpdate" value={update} onChange={this.onUpdateChange}>
-                {this.getUpdateOptions()}
-              </select>
+                <select className="input-small" id="qoUpdate" value={update} onChange={this.onUpdateChange}>
+                  {this.getUpdateOptions()}
+                </select>
               </label>
             </div>
           </div>
