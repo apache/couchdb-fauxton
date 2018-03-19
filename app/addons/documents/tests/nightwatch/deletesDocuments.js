@@ -149,6 +149,7 @@ module.exports = {
       .url(baseUrl + '#/database/' + newDatabaseName + '/' + newDocumentName)
       .waitForElementPresent('#editor-container', waitTime, false)
       .clickWhenVisible('#doc-editor-actions-panel button[title="Delete"]')
+      .waitForElementVisible('.confirmation-modal', waitTime, false)
       .clickWhenVisible('.confirmation-modal button.btn.btn-primary')
       .waitForElementPresent('.jump-to-doc', waitTime, false)
 

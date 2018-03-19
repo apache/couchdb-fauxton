@@ -11,24 +11,10 @@
 // the License.
 
 import app from "../../app";
+import Helpers from '../../helpers';
 import FauxtonAPI from "../../core/api";
+import { post } from "../../core/ajax";
 import Documents from "./shared-resources";
-
-Documents.UUID = FauxtonAPI.Model.extend({
-  initialize: function (options) {
-    options = _.extend({count: 1}, options);
-    this.count = options.count;
-  },
-
-  url: function () {
-    return app.host + "/_uuids?count=" + this.count;
-  },
-
-  next: function () {
-    return this.get("uuids").pop();
-  }
-});
-
 
 Documents.QueryParams = (function () {
   var _eachParams = function (params, action) {
@@ -85,18 +71,19 @@ Documents.DdocInfo = FauxtonAPI.Model.extend({
 
 Documents.NewDoc = Documents.Doc.extend({
   fetch: function () {
-    var uuid = new Documents.UUID();
-    var deferred = this.deferred = $.Deferred();
-    var that = this;
-
-    uuid.fetch().done(function () {
-      that.set("_id", uuid.next());
-      deferred.resolve();
+    return Helpers.getUUID().then((res) => {
+      if (res.uuids) {
+        this.set("_id", res.uuids[0]);
+      } else {
+        this.set("_id", 'enter_document_id');
+      }
+      return res;
+    }).catch(() => {
+      // Don't throw error so the user is still able
+      // to edit the new doc
+      this.set("_id", 'enter_document_id');
     });
-
-    return deferred.promise();
   }
-
 });
 
 Documents.BulkDeleteDoc = FauxtonAPI.Model.extend({
@@ -120,31 +107,25 @@ Documents.BulkDeleteDocCollection = FauxtonAPI.Collection.extend({
   },
 
   bulkDelete: function () {
-    var payload = this.createPayload(this.toJSON()),
-        promise = FauxtonAPI.Deferred(),
-        that = this;
-
-    $.ajax({
-      type: 'POST',
-      url: this.url(),
-      contentType: 'application/json',
-      dataType: 'json',
-      data: JSON.stringify(payload),
-    }).then(function (res) {
-      that.handleResponse(res, promise);
-    }).fail(function () {
-      var ids = _.reduce(that.toArray(), function (acc, doc) {
-        acc.push(doc.id);
-        return acc;
-      }, []);
-      that.trigger('error', ids);
-      promise.reject(ids);
+    const payload = this.createPayload(this.toJSON());
+    return new FauxtonAPI.Promise((resolve, reject) => {
+      post(this.url(), payload).then(res => {
+        if (res.error) {
+          throw new Error(res.reason || res.error);
+        }
+        this.handleResponse(res, resolve, reject);
+      }).catch(() => {
+        const ids = _.reduce(this.toArray(), (acc, doc) => {
+          acc.push(doc.id);
+          return acc;
+        }, []);
+        this.trigger('error', ids);
+        reject(ids);
+      });
     });
-
-    return promise;
   },
 
-  handleResponse: function (res, promise) {
+  handleResponse: function (res, resolve, reject) {
     var ids = _.reduce(res, function (ids, doc) {
       if (doc.error) {
         ids.errorIds.push(doc.id);
@@ -155,7 +136,7 @@ Documents.BulkDeleteDocCollection = FauxtonAPI.Collection.extend({
       }
 
       return ids;
-    }, {errorIds: [], successIds: []});
+    }, { errorIds: [], successIds: [] });
 
     this.removeDocuments(ids.successIds);
 
@@ -166,9 +147,9 @@ Documents.BulkDeleteDocCollection = FauxtonAPI.Collection.extend({
     // This is kind of tricky. If there are no documents deleted then rejects
     // otherwise resolve with list of successful and failed documents
     if (!_.isEmpty(ids.successIds)) {
-      promise.resolve(ids);
+      resolve(ids);
     } else {
-      promise.reject(ids.errorIds);
+      reject(ids.errorIds);
     }
 
     this.trigger('updated');
