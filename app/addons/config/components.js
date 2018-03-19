@@ -230,9 +230,13 @@ class ConfigOptionValue extends React.Component {
 }
 
 class ConfigOptionTrash extends React.Component {
-  state = {
-    show: false
-  };
+  constructor (props) {
+    super(props);
+    this.onDelete = this.onDelete.bind(this);
+    this.showModal = this.showModal.bind(this);
+    this.hideModal = this.hideModal.bind(this);
+    this.state = { show: false };
+  }
 
   onDelete = () => {
     this.props.onDelete();
@@ -248,13 +252,12 @@ class ConfigOptionTrash extends React.Component {
 
   render() {
     return (
-      <td className="text-center config-item-trash config-delete-value"
-        onClick={this.showModal.bind(this)}>
-        <i className="icon icon-trash"></i>
+      <td className="text-center config-item-trash config-delete-value">
+        <i className="icon icon-trash" onClick={this.showModal}></i>
         <FauxtonComponents.ConfirmationModal
           text={`Are you sure you want to delete ${this.props.sectionName}/${this.props.optionName}?`}
-          onClose={this.hideModal.bind(this)}
-          onSubmit={this.onDelete.bind(this)}
+          onClose={this.hideModal}
+          onSubmit={this.onDelete}
           visible={this.state.show}/>
       </td>
     );

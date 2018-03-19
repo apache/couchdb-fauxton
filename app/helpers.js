@@ -17,7 +17,9 @@
 // want to change this later, but for now this should be thought of as a
 // "purely functional" helper system.
 
+import app from "./app";
 import constants from "./constants";
+import { get } from "./core/ajax";
 import utils from "./core/utils";
 import moment from "moment";
 import _ from 'lodash';
@@ -67,6 +69,11 @@ Helpers.escapeJQuerySelector = function (selector) {
  */
 Helpers.isIE1X = function() {
   return document.documentMode == 11 || document.documentMode == 10;
+};
+
+Helpers.getUUID = function (count = 1) {
+  const url = `${app.host}/_uuids?count=${count}`;
+  return get(url);
 };
 
 export default Helpers;

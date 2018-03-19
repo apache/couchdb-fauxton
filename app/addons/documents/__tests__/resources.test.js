@@ -181,6 +181,8 @@ describe('Bulk Delete', () => {
   let databaseId = 'ente',
       collection,
       promise,
+      resolve,
+      reject,
       values;
 
   values = [{
@@ -204,7 +206,10 @@ describe('Bulk Delete', () => {
       databaseId: databaseId
     });
 
-    promise = FauxtonAPI.Deferred();
+    promise = new FauxtonAPI.Promise((res, rej) => {
+      resolve = res;
+      reject = rej;
+    });
   });
 
   it('contains the models', () => {
@@ -219,7 +224,7 @@ describe('Bulk Delete', () => {
     collection.handleResponse([
       {'ok': true, 'id': '1', 'rev': '10-72cd2edbcc0d197ce96188a229a7af01'},
       {'ok': true, 'id': '2', 'rev': '6-da537822b9672a4b2f42adb1be04a5b1'}
-    ], promise);
+    ], resolve, reject);
 
     return promise.then(() => {
       assert.equal(collection.length, 1);
@@ -235,7 +240,7 @@ describe('Bulk Delete', () => {
     collection.handleResponse([
       {'ok': true, 'id': 'Deferred', 'rev':'10-72cd2edbcc0d197ce96188a229a7af01'},
       {'ok': true, 'id': 'DeskSet', 'rev':'6-da537822b9672a4b2f42adb1be04a5b1'}
-    ], promise);
+    ], resolve, reject);
   });
 
   it('triggers a error event with all errored ids', (done) => {
@@ -247,7 +252,7 @@ describe('Bulk Delete', () => {
     collection.handleResponse([
       {'error':'conflict', 'id':'Deferred', 'rev':'10-72cd2edbcc0d197ce96188a229a7af01'},
       {'ok':true, 'id':'DeskSet', 'rev':'6-da537822b9672a4b2f42adb1be04a5b1'}
-    ], promise);
+    ], resolve, reject);
   });
 
   it('removes successfull deleted from the collection but keeps one with errors', () => {
@@ -255,7 +260,7 @@ describe('Bulk Delete', () => {
       {'error':'conflict', 'id':'1', 'rev':'10-72cd2edbcc0d197ce96188a229a7af01'},
       {'ok':true, 'id':'2', 'rev':'6-da537822b9672a4b2f42adb1be04a5b1'},
       {'error':'conflict', 'id':'3', 'rev':'6-da537822b9672a4b2f42adb1be04a5b1'}
-    ], promise);
+    ], resolve, reject);
 
     return promise.then(() => {
       assert.ok(collection.get('1'));
@@ -271,7 +276,7 @@ describe('Bulk Delete', () => {
     collection.handleResponse([
       {'ok':true, 'id':'Deferred', 'rev':'10-72cd2edbcc0d197ce96188a229a7af01'},
       {'ok':true, 'id':'DeskSet', 'rev':'6-da537822b9672a4b2f42adb1be04a5b1'}
-    ], promise);
+    ], resolve, reject);
 
     return promise.then(() => {
       assert.ok(spy.calledOnce);
@@ -290,7 +295,7 @@ describe('Bulk Delete', () => {
       {'ok':true, 'id':'Deferred', 'rev':'10-72cd2edbcc0d197ce96188a229a7af01'},
       {'ok':true, 'id':'DeskSet', 'rev':'6-da537822b9672a4b2f42adb1be04a5b1'},
       {'error':'conflict', 'id':'1', 'rev':'10-72cd2edbcc0d197ce96188a229a7af01'},
-    ], promise);
+    ], resolve, reject);
 
     return promise.then(() => {
       assert.ok(spy.calledWith(ids));
@@ -300,7 +305,7 @@ describe('Bulk Delete', () => {
   it('triggers reject for failed delete', () => {
     collection.handleResponse([
       {'error':'conflict', 'id':'1', 'rev':'10-72cd2edbcc0d197ce96188a229a7af01'}
-    ], promise);
+    ], resolve, reject);
 
     return promise.catch((errors) => {
       assert.deepEqual(errors, ['1']);
