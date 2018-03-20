@@ -25,8 +25,8 @@ const Burger = ({toggleMenu, isMinimized}) => {
   );
 
   const icon = isMinimized ?
-    'icon-resize-horizontal' :
-    'icon-signin faux-navbar__burger__icon--flipped';
+    'icon-chevron-right' :
+    'icon-chevron-left';
 
   return (
     <div className={burgerClasses} onClick={toggleMenu}>
