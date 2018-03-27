@@ -13,6 +13,7 @@
 
 import app from "../../../app";
 import FauxtonAPI from "../../../core/api";
+import { get } from "../../../core/ajax";
 import ActionTypes from "./actiontypes";
 import Stores from "./stores";
 import Helpers from "../helpers";
@@ -61,8 +62,18 @@ export default {
     const query = app.utils.queryParams(params);
     const db = app.utils.safeURLName(changesStore.getDatabaseName());
     const endpoint = FauxtonAPI.urls('changes', 'server', db, '?' + query);
-    currentRequest = $.getJSON(endpoint);
-    currentRequest.then(this.updateChanges.bind(this));
+    get(endpoint).then((res) => {
+      if (res.error) {
+        throw new Error(res.reason || res.error);
+      }
+      this.updateChanges(res);
+    }).catch((err) => {
+      FauxtonAPI.addNotification({
+        msg: 'Error loading list of changes. Reason: ' + err.message,
+        type: 'error',
+        clear: true
+      });
+    });
   },
 
   updateChanges: function (json) {

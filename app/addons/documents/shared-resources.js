@@ -12,6 +12,7 @@
 
 import app from "../../app";
 import FauxtonAPI from "../../core/api";
+import { deleteRequest } from "../../core/ajax";
 import PagingCollection from "../../../assets/js/plugins/cloudant.pagingcollection";
 
 // defined here because this is contains the base resources used throughout the addon and outside,
@@ -149,11 +150,12 @@ Documents.Doc = FauxtonAPI.Model.extend({
   },
 
   destroy: function () {
-    var url = this.url() + "?rev=" + this.get('_rev');
-    return $.ajax({
-      url: url,
-      dataType: 'json',
-      type: 'DELETE'
+    const url = this.url() + "?rev=" + this.get('_rev');
+    return deleteRequest(url).then(res => {
+      if (res.error) {
+        throw new Error(res.reason || res.error);
+      }
+      return res;
     });
   },
 

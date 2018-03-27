@@ -103,10 +103,8 @@ export default {
     var optionModel = new Resources.OptionModel(modelAttrs);
 
     return optionModel.destroy()
-      .then(
-        () => this.optionDeleteSuccess(options),
-        xhr => this.optionDeleteFailure(options, JSON.parse(xhr.responseText).reason)
-      );
+      .then(() => this.optionDeleteSuccess(options))
+      .catch((err) => this.optionDeleteFailure(options, err.message));
   },
 
   optionDeleteSuccess (options) {

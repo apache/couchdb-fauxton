@@ -18,7 +18,7 @@ const async = require('async');
 const settingsFilePath = './settings.json';
 const settingsFile = fs.existsSync(settingsFilePath) ? settingsFilePath : './settings.json.default.json';
 const settings = JSON.parse(fs.readFileSync(settingsFile)).nightwatch;
-const dbUrl = `http://${settings.fauxton_username}:${settings.password}@${settings.db_host}:${settings.db_port}`;
+const dbUrl = `${settings.db_protocol}://${settings.fauxton_username}:${settings.password}@${settings.db_host}:${settings.db_port}`;
 const nano = require('nano')(dbUrl);
 
 nano.db.list((err, body) => {
