@@ -120,10 +120,11 @@ export default class MainFieldsView extends React.Component {
               <label htmlFor="qoStable" id="qoStableLabel">Stable</label>
             </div>
             <div className="dropdown inline">
-              <label className="drop-down">Update
-              <select className="input-small" id="qoUpdate" value={update} onChange={this.onUpdateChange}>
-                {this.getUpdateOptions()}
-              </select>
+              <label className="drop-down">
+                Update
+                <select className="input-small" id="qoUpdate" value={update} onChange={this.onUpdateChange}>
+                  {this.getUpdateOptions()}
+                </select>
               </label>
             </div>
           </div>
