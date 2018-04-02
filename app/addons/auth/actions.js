@@ -16,7 +16,6 @@ import ActionTypes from './actiontypes';
 import Api from './api';
 
 const {
-  AUTH_SHOW_PASSWORD_MODAL,
   AUTH_HIDE_PASSWORD_MODAL,
 } = ActionTypes;
 
@@ -119,24 +118,20 @@ export const authenticate = (username, password, onSuccess) => {
     name: username,
     password: password
   })
-    .then(
-      () => {
-        hidePasswordModal();
-        onSuccess(username, password);
-      },
-      () => {
-        FauxtonAPI.addNotification({
-          msg: "Your username or password is incorrect.",
-          type: "error",
-          clear: true
-        });
+    .then((resp) => {
+      if (resp.error) {
+        throw (resp);
       }
-    );
-};
-
-//This is used in the replication store
-export const showPasswordModal = () => {
-  FauxtonAPI.dispatch({ type: AUTH_SHOW_PASSWORD_MODAL });
+      hidePasswordModal();
+      onSuccess(username, password);
+    })
+    .catch(() => {
+      FauxtonAPI.addNotification({
+        msg: "Your username or password is incorrect.",
+        type: "error",
+        clear: true
+      });
+    });
 };
 
 export const hidePasswordModal = () => {

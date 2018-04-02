@@ -10,9 +10,28 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 import ActionTypes from './actiontypes';
-import AccountActionTypes from '../auth/actiontypes';
 import Constants from './constants';
 import app from "../../app";
+
+const setActivitySort = (sort) => {
+  app.utils.localStorageSet('replication-activity-sort', sort);
+};
+
+const loadActivitySort = () => {
+  const defaultSort = {
+    descending: false,
+    column: 'statusTime'
+
+  };
+  let sort = app.utils.localStorageGet('replication-activity-sort');
+
+  if (!sort) {
+    sort = defaultSort;
+  }
+
+  setActivitySort(sort);
+  return sort;
+};
 
 const validFieldMap = {
   remoteSource: 'remoteSource',
@@ -43,7 +62,7 @@ const initialState = {
   // other
   isPasswordModalVisible: false,
   isConflictModalVisible: false,
-  replicationType: Constants.REPLICATIONTYPE.ONETIME,
+  replicationType: Constants.REPLICATION_TYPE.ONE_TIME,
   replicationDocName: '',
   submittedNoChange: false,
   statusDocs: [],
@@ -56,11 +75,12 @@ const initialState = {
   password: '',
   activityLoading: false,
   tabSection: 'new replication',
-  supportNewApi: true,
+  supportNewApi: false,
   fetchingReplicateInfo: false,
   replicateInfo: [],
 
   checkingAPI: true,
+  activitySort: loadActivitySort()
 };
 
 const clearForm = (state) => {
@@ -144,29 +164,6 @@ const setStateFromDoc = (state, doc) => {
   });
 };
 
-const setActivitySort = (state, sort) => {
-  app.utils.localStorageSet('replication-activity-sort', sort);
-
-  return {
-    ...state,
-    activitySort: sort
-  };
-};
-
-const loadActivitySort = (state) => {
-  const defaultSort = {
-    descending: false,
-    column: 'statusTime'
-
-  };
-  let sort = app.utils.localStorageGet('replication-activity-sort');
-
-  if (!sort) {
-    sort = defaultSort;
-  }
-
-  return  setActivitySort(state, sort);
-};
 
 const replication = (state = initialState, {type, options}) => {
   switch (type) {
@@ -264,7 +261,10 @@ const replication = (state = initialState, {type, options}) => {
       };
 
     case ActionTypes.REPLICATION_CHANGE_ACTIVITY_SORT:
-      return setActivitySort(options);
+      return {
+        ...state,
+        activitySort: setActivitySort(options)
+      };
 
     case ActionTypes.REPLICATION_CLEAR_SELECTED_DOCS:
       return {
@@ -292,36 +292,33 @@ const replication = (state = initialState, {type, options}) => {
       };
 
     case ActionTypes.REPLICATION_REPLICATE_STATUS:
-      this._fetchingReplicateInfo = false;
-      return setReplicateInfo(state, options);
+      return {
+        ...state,
+        fetchReplicateInfo: false,
+        replicateInfo: options
+      };
 
     case ActionTypes.REPLICATION_CLEAR_SELECTED_REPLICATES:
-      this._allReplicateSelected = false;
-      break;
+      return {
+        ...state,
+        allReplicateSelected: false
+      };
 
-    case AccountActionTypes.AUTH_SHOW_PASSWORD_MODAL:
-      this._isPasswordModalVisible = true;
-      break;
+    case ActionTypes.REPLICATION_SHOW_PASSWORD_MODAL:
+      return {
+        ...state,
+        isPasswordModalVisible: true
+      };
 
-    case AccountActionTypes.AUTH_HIDE_PASSWORD_MODAL:
-      this._isPasswordModalVisible = false;
-      break;
-
-    case AccountActionTypes.AUTH_CREDS_VALID:
-      this._authenticated = true;
-      this.setCredentials(options.username, options.password);
-      break;
-
-    case AccountActionTypes.AUTH_CREDS_INVALID:
-      this._authenticated = false;
-      break;
+    case ActionTypes.REPLICATION_HIDE_PASSWORD_MODAL:
+      return {
+        ...state,
+        isPasswordModalVisible: false
+      };
 
     default:
-      return;
+      return state;
   }
-
-
-  return state;
 };
 
 
@@ -331,13 +328,13 @@ export const getDatabases = (state) => state.databases;
 export const isAuthenticated = (state) => state.authenticated;
 
 export const getReplicationSource = (state) => state.replicationSource;
-export const getlocalSource = (state) => state.localSource;
+export const getLocalSource = (state) => state.localSource;
 export const isLocalSourceKnown = (state) => _.includes(state.databases, state.localSource);
 export const getRemoteSource = (state) => state.remoteSource;
 
 
 export const getReplicationTarget = (state) => state.replicationTarget;
-export const getLocalTarget = (state) => state.replicationTarget;
+export const getLocalTarget = (state) => state.localTarget;
 export const isLocalTargetKnown = (state) => _.includes(state.databases, state.localTarget);
 export const getRemoteTarget = (state) => state.remoteTarget;
 
@@ -359,7 +356,7 @@ export const getFilteredReplicationStatus = (state) => {
 export const getStatusFilter = (state) => state.statusFilter;
 export const getReplicateFilter = (state) => state.replicateFilter;
 export const getAllDocsSelected = (state) => state.allDocsSelected;
-export const getSomeDocsSelected = (state) => state.someDocsSelected;
+export const getSomeDocsSelected = (state) => getFilteredReplicationStatus(state).some(doc => doc.selected);
 export const getUsername = (state) => state.username;
 export const getPassword = (state) => state.password;
 export const getActivitySort = (state) => state.activitySort;

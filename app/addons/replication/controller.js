@@ -10,10 +10,7 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 import React from 'react';
-import Stores from './stores';
-import Actions from './actions';
 import Helpers from '../../helpers';
-import {showPasswordModal} from '../auth/actions';
 import Components from '../components/react-components';
 import NewReplication from './components/newreplication';
 import Activity from './components/activity';
@@ -24,81 +21,35 @@ import ReplicateActivity from './components/replicate-activity';
 
 const {LoadLines, Polling, RefreshBtn} = Components;
 
-const store = Stores.replicationStore;
-
 export default class ReplicationController extends React.Component {
-  constructor (props) {
-    super(props);
-    this.props = this.getStoreState();
-  }
-
-  getStoreState () {
-    return {
-      loading: store.isLoading(),
-      activityLoading: store.isActivityLoading(),
-      databases: store.getDatabases(),
-      authenticated: store.isAuthenticated(),
-
-      // source fields
-      replicationSource: store.getReplicationSource(),
-      localSource: store.getlocalSource(),
-      localSourceKnown: store.isLocalSourceKnown(),
-      remoteSource: store.getRemoteSource(),
-
-      // target fields
-      replicationTarget: store.getReplicationTarget(),
-      localTarget: store.getlocalTarget(),
-      localTargetKnown: store.isLocalTargetKnown(),
-      remoteTarget: store.getRemoteTarget(),
-
-      // other
-      passwordModalVisible: store.isPasswordModalVisible(),
-      showConflictModal: store.isConflictModalVisible(),
-      replicationType: store.getReplicationType(),
-      replicationDocName: store.getReplicationDocName(),
-      submittedNoChange: store.getSubmittedNoChange(),
-      statusDocs: store.getFilteredReplicationStatus(),
-      statusFilter: store.getStatusFilter(),
-      replicateFilter: store.getReplicateFilter(),
-      allDocsSelected: store.getAllDocsSelected(),
-      someDocsSelected:  store.someDocsSelected(),
-      username: store.getUsername(),
-      password: store.getPassword(),
-      activitySort: store.getActivitySort(),
-      tabSection: store.getTabSection(),
-      checkingApi: store.checkingAPI(),
-      supportNewApi: store.supportNewApi(),
-      replicateLoading: store.isReplicateInfoLoading(),
-      replicateInfo: store.getReplicateInfo(),
-      allReplicateSelected: store.getAllReplicateSelected(),
-      someReplicateSelected: store.someReplicateSelected()
-    };
-  }
 
   loadReplicationInfo (props, oldProps) {
-    Actions.initReplicator(props.localSource);
+    console.log('LO', props, oldProps);
+    this.props.initReplicator(props.routeLocalSource, props.localSource);
     this.getAllActivity();
-    if (props.replicationId && props.replicationId !== oldProps.replicationId) {
-      Actions.clearReplicationForm();
-      Actions.getReplicationStateFrom(props.replicationId);
-    }
+    // if (props.replicationId && props.replicationId !== oldProps.replicationId) {
+    //   this.props.clearReplicationForm();
+    //   this.props.getReplicationStateFrom(props.replicationId);
+    // }
   }
 
   getAllActivity () {
-    Actions.getReplicationActivity();
-    Actions.getReplicateActivity();
+    this.props.getReplicationActivity();
+    this.props.getReplicateActivity();
   }
 
   componentDidMount () {
+    this.props.checkForNewApi();
+    this.props.getDatabasesList();
     this.loadReplicationInfo(this.props, {});
   }
 
   componentWillReceiveProps (nextProps) {
-    this.loadReplicationInfo(nextProps, this.props);
+    // this.loadReplicationInfo(nextProps, this.props);
   }
 
   componentWillUnmount () {
-    Actions.clearReplicationForm();
+    this.props.clearReplicationForm();
   }
 
   showSection () {
@@ -106,9 +57,10 @@ export default class ReplicationController extends React.Component {
       replicationSource, replicationTarget, replicationType, replicationDocName,
       passwordModalVisible, databases, localSource, remoteSource, remoteTarget,
       localTarget, statusDocs, statusFilter, loading, allDocsSelected,
-      someDocsSelected, showConflictModal, localSourceKnown, localTargetKnown,
+      someDocsSelected, showConflictModal, localSourceKnown, localTargetKnown, updateFormField,
       username, password, authenticated, activityLoading, submittedNoChange, activitySort, tabSection,
-      replicateInfo, replicateLoading, replicateFilter, allReplicateSelected, someReplicateSelected
+      replicateInfo, replicateLoading, replicateFilter, allReplicateSelected, someReplicateSelected,
+      showPasswordModal, hidePasswordModal, hideConflictModal, isConflictModalVisible
     } = this.props;
 
     if (tabSection === 'new replication') {
@@ -116,18 +68,12 @@ export default class ReplicationController extends React.Component {
         return <LoadLines/>;
       }
 
-      const updateFormField = (field) => {
-        return (value) => {
-          Actions.updateFormField(field, value);
-        };
-      };
-
       return <NewReplication
         docs={statusDocs}
         localTargetKnown={localTargetKnown}
         localSourceKnown={localSourceKnown}
-        clearReplicationForm={Actions.clearReplicationForm}
-        replicate={Actions.replicate}
+        clearReplicationForm={this.props.clearReplicationForm}
+        replicate={this.props.replicate}
         showPasswordModal={showPasswordModal}
         replicationSource={replicationSource}
         replicationTarget={replicationTarget}
@@ -140,14 +86,15 @@ export default class ReplicationController extends React.Component {
         remoteTarget={remoteTarget}
         localTarget={localTarget}
         updateFormField={updateFormField}
-        conflictModalVisible={showConflictModal}
-        hideConflictModal={Actions.hideConflictModal}
-        showConflictModal={Actions.showConflictModal}
+        conflictModalVisible={isConflictModalVisible}
+        hideConflictModal={hideConflictModal}
+        showConflictModal={showConflictModal}
         checkReplicationDocID={checkReplicationDocID}
         authenticated={authenticated}
         username={username}
         password={password}
         submittedNoChange={submittedNoChange}
+        hidePasswordModal={hidePasswordModal}
       />;
     }
 
@@ -159,14 +106,14 @@ export default class ReplicationController extends React.Component {
       return <ReplicateActivity
         docs={replicateInfo}
         filter={replicateFilter}
-        onFilterChange={Actions.filterReplicate}
-        selectDoc={Actions.selectReplicate}
-        selectAllDocs={Actions.selectAllReplicates}
+        onFilterChange={this.props.filterReplicate}
+        selectDoc={this.props.selectReplicate}
+        selectAllDocs={this.props.selectAllReplicates}
         allDocsSelected={allReplicateSelected}
         someDocsSelected={someReplicateSelected}
         activitySort={activitySort}
-        changeActivitySort={Actions.changeActivitySort}
-        deleteDocs={Actions.deleteReplicates}
+        changeActivitySort={this.props.changeActivitySort}
+        deleteDocs={this.props.deleteReplicates}
       />;
     }
 
@@ -174,17 +121,19 @@ export default class ReplicationController extends React.Component {
       return <LoadLines/>;
     }
 
+    console.log('FF', this.props);
+
     return <Activity
       docs={statusDocs}
       filter={statusFilter}
-      onFilterChange={Actions.filterDocs}
-      selectAllDocs={Actions.selectAllDocs}
-      selectDoc={Actions.selectDoc}
+      onFilterChange={this.props.filterDocs}
+      selectAllDocs={this.props.selectAllDocs}
+      selectDoc={this.props.selectDoc}
       allDocsSelected={allDocsSelected}
       someDocsSelected={someDocsSelected}
-      deleteDocs={Actions.deleteDocs}
+      deleteDocs={this.props.deleteDocs}
       activitySort={activitySort}
-      changeActivitySort={Actions.changeActivitySort}
+      changeActivitySort={this.props.changeActivitySort}
     />;
   }
 
@@ -239,7 +188,7 @@ export default class ReplicationController extends React.Component {
   }
 
   onTabChange (section, url) {
-    Actions.changeTabSection(section, url);
+    this.props.changeTabSection(section, url);
   }
 
   getCrumbs () {

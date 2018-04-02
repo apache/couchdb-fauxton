@@ -25,22 +25,25 @@ import {
 } from './api';
 
 
-export const initReplicator = (localSource) => dispatch => {
-  if (localSource) {
+export const initReplicator = (routeLocalSource, localSource) => dispatch => {
+  if (routeLocalSource && routeLocalSource !== localSource) {
     dispatch({
       type: ActionTypes.INIT_REPLICATION,
       options: {
-        localSource: localSource
+        localSource: routeLocalSource
       }
     });
   }
+};
 
+export const getDatabasesList = () => dispatch => {
+  console.log('GET DB');
   get('/_all_dbs')
     .then((databases) => {
       dispatch({
         type: ActionTypes.REPLICATION_DATABASES_LOADED,
         options: {
-          databases: databases
+          databases
         }
       });
     });
@@ -66,18 +69,21 @@ export const replicate = (params) => dispatch => {
     });
   };
 
-  promise.then(json => {
-    if (!json.ok) {
-      throw json;
-    }
+  promise
+    .then(json => {
+      if (!json.ok) {
+        throw json;
+      }
 
-    FauxtonAPI.addNotification({
-      msg: `Replication from <code>${decodeURIComponent(source)}</code> to <code>${decodeURIComponent(target)}</code> has been scheduled.`,
-      type: 'success',
-      escape: false,
-      clear: true
-    });
-  })
+      FauxtonAPI.addNotification({
+        msg: `Replication from <code>${decodeURIComponent(source)}</code> to <code>${decodeURIComponent(target)}</code> has been scheduled.`,
+        type: 'success',
+        escape: false,
+        clear: true
+      });
+
+      dispatch(getReplicationActivity());
+    })
     .catch(json => {
       if (json.error && json.error === "not_found") {
         return createReplicatorDB().then(() => {
@@ -104,20 +110,24 @@ export const clearReplicationForm = () => {
   return { type: ActionTypes.REPLICATION_CLEAR_FORM };
 };
 
-const getReplicationActivity = (supportNewApi) => dispatch => {
+export const getReplicationActivity = () => dispatch => {
   dispatch({
     type: ActionTypes.REPLICATION_FETCHING_STATUS,
   });
 
-  fetchReplicationDocs(supportNewApi).then(docs => {
-    dispatch({
-      type: ActionTypes.REPLICATION_STATUS,
-      options: docs
+  supportNewApi()
+    .then(supportNewApi => {
+      return fetchReplicationDocs(supportNewApi);
+    })
+    .then(docs => {
+      dispatch({
+        type: ActionTypes.REPLICATION_STATUS,
+        options: docs
+      });
     });
-  });
 };
 
-const getReplicateActivity = () => dispatch => {
+export const getReplicateActivity = () => dispatch => {
   supportNewApi()
     .then(newApi => {
       if (!newApi) {
@@ -138,53 +148,53 @@ const getReplicateActivity = () => dispatch => {
     });
 };
 
-const filterDocs = (filter) => {
+export const filterDocs = (filter) => {
   return {
     type: ActionTypes.REPLICATION_FILTER_DOCS,
     options: filter
   };
 };
 
-const filterReplicate = (filter) => {
+export const filterReplicate = (filter) => {
   return {
     type: ActionTypes.REPLICATION_FILTER_REPLICATE,
     options: filter
   };
 };
 
-const selectAllDocs = () => {
+export const selectAllDocs = () => {
   return {
     type: ActionTypes.REPLICATION_TOGGLE_ALL_DOCS
   };
 };
 
-const selectDoc = (id) => {
+export const selectDoc = (id) => {
   return {
     type: ActionTypes.REPLICATION_TOGGLE_DOC,
     options: id
   };
 };
 
-const selectAllReplicates = () => {
+export const selectAllReplicates = () => {
   return {
     type: ActionTypes.REPLICATION_TOGGLE_ALL_REPLICATE
   };
 };
 
-const selectReplicate = (id) => {
+export const selectReplicate = (id) => {
   return {
     type: ActionTypes.REPLICATION_TOGGLE_REPLICATE,
     options: id
   };
 };
 
-const clearSelectedDocs = () => {
+export const clearSelectedDocs = () => {
   return {
     type: ActionTypes.REPLICATION_CLEAR_SELECTED_DOCS
   };
 };
 
-const clearSelectedReplicates = () => {
+export const clearSelectedReplicates = () => {
   return {
     type: ActionTypes.REPLICATION_CLEAR_SELECTED_REPLICATES
   };
@@ -246,7 +256,7 @@ export const deleteDocs = (docs) => dispatch => {
     });
 };
 
-const deleteReplicates = (replicates) => dispatch => {
+export const deleteReplicates = (replicates) => dispatch => {
   FauxtonAPI.addNotification({
     msg: `Deleting _replicate${replicates.length > 1 ? 's' : ''}.`,
     type: 'success',
@@ -328,37 +338,26 @@ export const getReplicationStateFrom = (id) => dispatch => {
     });
 };
 
-const showConflictModal = () => {
+export const showConflictModal = () => {
   return {
     type: ActionTypes.REPLICATION_SHOW_CONFLICT_MODAL
   };
 };
 
-const hideConflictModal = () => {
+export const hideConflictModal = () => {
   return {
     type: ActionTypes.REPLICATION_HIDE_CONFLICT_MODAL
   };
 };
 
-const changeActivitySort = (sort) => {
+export const changeActivitySort = (sort) => {
   return {
     type: ActionTypes.REPLICATION_CHANGE_ACTIVITY_SORT,
     options: sort
   };
 };
 
-const changeTabSection = (newSection, url) => dispatch => {
-  dispatch({
-    type: ActionTypes.REPLICATION_CHANGE_TAB_SECTION,
-    options: newSection
-  });
-
-  if (url) {
-    FauxtonAPI.navigate(url, {trigger: false});
-  }
-};
-
-const checkForNewApi = () => dispatch => {
+export const checkForNewApi = () => dispatch => {
   supportNewApi().then(newApi => {
     dispatch({
       type: ActionTypes.REPLICATION_SUPPORT_NEW_API,
@@ -367,26 +366,14 @@ const checkForNewApi = () => dispatch => {
   });
 };
 
-export default {
-  checkForNewApi,
-  initReplicator,
-  replicate,
-  updateFormField,
-  clearReplicationForm,
-  getReplicationActivity,
-  filterDocs,
-  selectAllDocs,
-  selectDoc,
-  deleteDocs,
-  getReplicationStateFrom,
-  showConflictModal,
-  hideConflictModal,
-  changeActivitySort,
-  clearSelectedDocs,
-  changeTabSection,
-  getReplicateActivity,
-  filterReplicate,
-  selectReplicate,
-  selectAllReplicates,
-  deleteReplicates
+export const showPasswordModal = () => {
+  return {
+    type: ActionTypes.REPLICATION_SHOW_PASSWORD_MODAL
+  };
+};
+
+export const hidePasswordModal = () => {
+  return {
+    type: ActionTypes.REPLICATION_HIDE_PASSWORD_MODAL
+  };
 };

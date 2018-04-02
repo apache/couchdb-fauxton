@@ -2,16 +2,32 @@ import { connect } from 'react-redux';
 import ReplicationController from './controller';
 
 import {
+  checkForNewApi,
+  updateFormField,
+  clearReplicationForm,
+  initReplicator,
+  getReplicationStateFrom,
+  getReplicateActivity,
+  getReplicationActivity,
+  getDatabasesList,
+  showPasswordModal,
+  hidePasswordModal,
+  showConflictModal,
+  hideConflictModal,
+  replicate
+} from './actions';
+
+import {
   isLoading,
   isActivityLoading,
   getDatabases,
   isAuthenticated,
   getReplicationSource,
-  getlocalSource,
+  getLocalSource,
   isLocalSourceKnown,
   getRemoteSource,
   getReplicationTarget,
-  getlocalTarget,
+  getLocalTarget,
   isLocalTargetKnown,
   getRemoteTarget,
   isPasswordModalVisible,
@@ -23,12 +39,11 @@ import {
   getStatusFilter,
   getReplicateFilter,
   getAllDocsSelected,
-  someDocsSelected,
+  getSomeDocsSelected,
   getUsername,
   getPassword,
   getActivitySort,
-  getTabSection,
-  getCheckingAPI,
+  getCheckingApi,
   supportNewApi,
   isReplicateInfoLoading,
   getAllReplicateSelected,
@@ -37,7 +52,11 @@ import {
 } from './reducers';
 
 const mapStateToProps = ({replication}, ownProps) => {
+  console.log('REP', replication);
   return {
+    routeLocalSource: ownProps.routeLocalSource,
+    replicationId: ownProps.routeReplicationId,
+    tabSection: ownProps.section,
     loading: isLoading(replication),
     activityLoading: isActivityLoading(replication),
     databases: getDatabases(replication),
@@ -45,19 +64,19 @@ const mapStateToProps = ({replication}, ownProps) => {
 
     // source fields
     replicationSource: getReplicationSource(replication),
-    localSource: getlocalSource(replication),
+    localSource: getLocalSource(replication),
     localSourceKnown: isLocalSourceKnown(replication),
     remoteSource: getRemoteSource(replication),
 
     // target fields
     replicationTarget: getReplicationTarget(replication),
-    localTarget: getlocalTarget(replication),
+    localTarget: getLocalTarget(replication),
     localTargetKnown: isLocalTargetKnown(replication),
     remoteTarget: getRemoteTarget(replication),
 
     // other
     passwordModalVisible: isPasswordModalVisible(replication),
-    showConflictModal: isConflictModalVisible(replication),
+    isConflictModalVisible: isConflictModalVisible(replication),
     replicationType: getReplicationType(replication),
     replicationDocName: getReplicationDocName(replication),
     submittedNoChange: getSubmittedNoChange(replication),
@@ -65,12 +84,11 @@ const mapStateToProps = ({replication}, ownProps) => {
     statusFilter: getStatusFilter(replication),
     replicateFilter: getReplicateFilter(replication),
     allDocsSelected: getAllDocsSelected(replication),
-    someDocsSelected:  someDocsSelected(replication),
+    someDocsSelected:  getSomeDocsSelected(replication),
     username: getUsername(replication),
     password: getPassword(replication),
     activitySort: getActivitySort(replication),
-    tabSection: getTabSection(replication),
-    checkingApi: getCheckingAPI(replication),
+    checkingApi: getCheckingApi(replication),
     supportNewApi: supportNewApi(replication),
     replicateLoading: isReplicateInfoLoading(replication),
     replicateInfo: getReplicateInfo(replication),
@@ -79,5 +97,26 @@ const mapStateToProps = ({replication}, ownProps) => {
   };
 };
 
+const mapDispatchToProps = (dispatch) => {
+  return {
+    checkForNewApi: () => dispatch(checkForNewApi()),
+    updateFormField: (fieldName) => (value) => {
+      console.log('UU', fieldName, value);
+      dispatch(updateFormField(fieldName, value));
+    },
+    clearReplicationForm: () => dispatch(clearReplicationForm()),
+    initReplicator: (localSource) => dispatch(initReplicator(localSource)),
+    getReplicationActivity: () => dispatch(getReplicationActivity()),
+    getReplicateActivity: () => dispatch(getReplicateActivity()),
+    getReplicationStateFrom: (id) => dispatch(getReplicationStateFrom(id)),
+    getDatabasesList: () => dispatch(getDatabasesList()),
+    showPasswordModal: () => dispatch(showPasswordModal()),
+    hidePasswordModal: () => dispatch(hidePasswordModal()),
+    replicate: (params) => dispatch(replicate(params)),
+    showConflictModal: () => dispatch(showConflictModal()),
+    hideConflictModal: () => dispatch(hideConflictModal())
+  };
+};
 
-export default connect(mapStateToProps, null)(ReplicationController);
+
+export default connect(mapStateToProps, mapDispatchToProps)(ReplicationController);
