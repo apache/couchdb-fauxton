@@ -14,7 +14,16 @@ import {
   hidePasswordModal,
   showConflictModal,
   hideConflictModal,
-  replicate
+  replicate,
+  filterReplicate,
+  filterDocs,
+  selectDoc,
+  deleteDocs,
+  selectAllDocs,
+  changeActivitySort,
+  deleteReplicates,
+  selectAllReplicates,
+  selectReplicate
 } from './actions';
 
 import {
@@ -52,10 +61,9 @@ import {
 } from './reducers';
 
 const mapStateToProps = ({replication}, ownProps) => {
-  console.log('REP', replication);
   return {
     routeLocalSource: ownProps.routeLocalSource,
-    replicationId: ownProps.routeReplicationId,
+    replicationId: ownProps.replicationId,
     tabSection: ownProps.section,
     loading: isLoading(replication),
     activityLoading: isActivityLoading(replication),
@@ -101,7 +109,6 @@ const mapDispatchToProps = (dispatch) => {
   return {
     checkForNewApi: () => dispatch(checkForNewApi()),
     updateFormField: (fieldName) => (value) => {
-      console.log('UU', fieldName, value);
       dispatch(updateFormField(fieldName, value));
     },
     clearReplicationForm: () => dispatch(clearReplicationForm()),
@@ -114,7 +121,16 @@ const mapDispatchToProps = (dispatch) => {
     hidePasswordModal: () => dispatch(hidePasswordModal()),
     replicate: (params) => dispatch(replicate(params)),
     showConflictModal: () => dispatch(showConflictModal()),
-    hideConflictModal: () => dispatch(hideConflictModal())
+    hideConflictModal: () => dispatch(hideConflictModal()),
+    filterReplicate: (filter) => dispatch(filterReplicate(filter)),
+    filterDocs: (filter) => dispatch(filterDocs(filter)),
+    selectDoc: (doc) => dispatch(selectDoc(doc)),
+    deleteDocs: (docs) => dispatch(deleteDocs(docs)),
+    selectAllDocs: () => dispatch(selectAllDocs()),
+    changeActivitySort: (sort) => dispatch(changeActivitySort(sort)),
+    selectAllReplicates: () => dispatch(selectAllReplicates()),
+    deleteReplicates: (replicates) => dispatch(deleteReplicates(replicates)),
+    selectReplicate: (replicate) => dispatch(selectReplicate(replicate))
   };
 };
 

@@ -108,7 +108,7 @@ export const ReplicationSourceSelect = ({onChange, value}) => {
       <div className="replication__input-select">
         <StyledSelect
           selectContent={replicationSourceSelectOptions()}
-          selectChange={(e) => {console.log('BB', onChange); onChange(e.target.value);}}
+          selectChange={(e) => onChange(e.target.value)}
           selectId="replication-source"
           selectValue={value} />
       </div>

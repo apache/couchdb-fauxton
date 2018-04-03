@@ -37,7 +37,6 @@ export const initReplicator = (routeLocalSource, localSource) => dispatch => {
 };
 
 export const getDatabasesList = () => dispatch => {
-  console.log('GET DB');
   get('/_all_dbs')
     .then((databases) => {
       dispatch({
@@ -213,13 +212,7 @@ export const deleteDocs = (docs) => dispatch => {
     clear: true
   });
 
-  post('/_replicator/_bulk_docs', {docs: bulkDocs})
-    // .then(resp => {
-    //   if (!resp.ok) {
-    //     throw resp;
-    //   }
-    //   return resp.json();
-    // })
+  post('/_replicator/_bulk_docs', {docs: bulkDocs}, {raw: true})
     .then(resp => {
       if (!resp.ok) {
         throw resp;

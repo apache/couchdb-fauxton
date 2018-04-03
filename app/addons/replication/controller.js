@@ -24,13 +24,16 @@ const {LoadLines, Polling, RefreshBtn} = Components;
 export default class ReplicationController extends React.Component {
 
   loadReplicationInfo (props, oldProps) {
-    console.log('LO', props, oldProps);
     this.props.initReplicator(props.routeLocalSource, props.localSource);
     this.getAllActivity();
-    // if (props.replicationId && props.replicationId !== oldProps.replicationId) {
-    //   this.props.clearReplicationForm();
-    //   this.props.getReplicationStateFrom(props.replicationId);
-    // }
+    this.loadReplicationStateFrom(props, oldProps);
+  }
+
+  loadReplicationStateFrom (props, oldProps) {
+    if (props.replicationId && props.replicationId !== oldProps.replicationId) {
+      this.props.clearReplicationForm();
+      this.props.getReplicationStateFrom(props.replicationId);
+    }
   }
 
   getAllActivity () {
@@ -45,7 +48,10 @@ export default class ReplicationController extends React.Component {
   }
 
   componentWillReceiveProps (nextProps) {
-    // this.loadReplicationInfo(nextProps, this.props);
+    this.loadReplicationStateFrom(nextProps, this.props);
+    if (this.props.tabSection !== 'new replication' && nextProps.tabSection === 'new replication') {
+      this.props.clearReplicationForm();
+    }
   }
 
   componentWillUnmount () {
@@ -60,7 +66,9 @@ export default class ReplicationController extends React.Component {
       someDocsSelected, showConflictModal, localSourceKnown, localTargetKnown, updateFormField,
       username, password, authenticated, activityLoading, submittedNoChange, activitySort, tabSection,
       replicateInfo, replicateLoading, replicateFilter, allReplicateSelected, someReplicateSelected,
-      showPasswordModal, hidePasswordModal, hideConflictModal, isConflictModalVisible
+      showPasswordModal, hidePasswordModal, hideConflictModal, isConflictModalVisible, filterDocs,
+      filterReplicate, replicate, clearReplicationForm, selectAllDocs, changeActivitySort, selectDoc,
+      deleteDocs, deleteReplicates, selectAllReplicates, selectReplicate
     } = this.props;
 
     if (tabSection === 'new replication') {
@@ -72,8 +80,8 @@ export default class ReplicationController extends React.Component {
         docs={statusDocs}
         localTargetKnown={localTargetKnown}
         localSourceKnown={localSourceKnown}
-        clearReplicationForm={this.props.clearReplicationForm}
-        replicate={this.props.replicate}
+        clearReplicationForm={clearReplicationForm}
+        replicate={replicate}
         showPasswordModal={showPasswordModal}
         replicationSource={replicationSource}
         replicationTarget={replicationTarget}
@@ -106,14 +114,14 @@ export default class ReplicationController extends React.Component {
       return <ReplicateActivity
         docs={replicateInfo}
         filter={replicateFilter}
-        onFilterChange={this.props.filterReplicate}
-        selectDoc={this.props.selectReplicate}
-        selectAllDocs={this.props.selectAllReplicates}
+        onFilterChange={filterReplicate}
+        selectDoc={selectReplicate}
+        selectAllDocs={selectAllReplicates}
         allDocsSelected={allReplicateSelected}
         someDocsSelected={someReplicateSelected}
         activitySort={activitySort}
-        changeActivitySort={this.props.changeActivitySort}
-        deleteDocs={this.props.deleteReplicates}
+        changeActivitySort={changeActivitySort}
+        deleteDocs={deleteReplicates}
       />;
     }
 
@@ -121,19 +129,17 @@ export default class ReplicationController extends React.Component {
       return <LoadLines/>;
     }
 
-    console.log('FF', this.props);
-
     return <Activity
       docs={statusDocs}
       filter={statusFilter}
-      onFilterChange={this.props.filterDocs}
-      selectAllDocs={this.props.selectAllDocs}
-      selectDoc={this.props.selectDoc}
+      onFilterChange={filterDocs}
+      selectAllDocs={selectAllDocs}
+      selectDoc={selectDoc}
       allDocsSelected={allDocsSelected}
       someDocsSelected={someDocsSelected}
-      deleteDocs={this.props.deleteDocs}
+      deleteDocs={deleteDocs}
       activitySort={activitySort}
-      changeActivitySort={this.props.changeActivitySort}
+      changeActivitySort={changeActivitySort}
     />;
   }
 

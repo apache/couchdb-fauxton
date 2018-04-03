@@ -119,7 +119,7 @@ const toggleDoc = (state, id) => {
 const selectAllDocs = (state) => {
   const newState = {
     ...state,
-    allDocsSelected: state.allDocsSelected
+    allDocsSelected: !state.allDocsSelected
   };
 
   getFilteredReplicationStatus(newState)
@@ -146,7 +146,7 @@ const selectReplicate = (state, id) => {
 const selectAllReplicate = (state) => {
   const newState = {
     ...state,
-    allReplicateSelected: state.allReplicateSelected
+    allReplicateSelected: !state.allReplicateSelected
   };
 
   getReplicateInfo(newState).forEach(doc => doc.selected = newState.allReplicateSelected);
@@ -154,14 +154,14 @@ const selectAllReplicate = (state) => {
 };
 
 const setStateFromDoc = (state, doc) => {
-  const newState = {
+  let newState = {
     ...state,
     loading: false
   };
 
-  Object.keys(doc).forEach(key => {
-    updateFormField(newState, key, doc[key]);
-  });
+  return Object.keys(doc).reduce((state, key) => {
+    return updateFormField(state, key, doc[key]);
+  }, newState);
 };
 
 
@@ -169,19 +169,20 @@ const replication = (state = initialState, {type, options}) => {
   switch (type) {
 
     case ActionTypes.INIT_REPLICATION:
-      return {
+      const newState = {
         ...state,
         loading: true
       };
-      // this._localSource = options.localSource;
-      //
-      // if (this._localSource) {
-      //   this._replicationSource = Constants.REPLICATION_SOURCE.LOCAL;
-      //   this._remoteSource = '';
-      //   this._replicationTarget = '';
-      //   this._localTarget = '';
-      //   this._remoteTarget = '';
-      // }
+
+      if (options.localSource) {
+        newState.localSource = options.localSource;
+        newState.replicationSource = Constants.REPLICATION_SOURCE.LOCAL;
+        newState.remoteSource = '';
+        newState.replicationTarget = '';
+        newState.localTarget = '';
+        newState.remoteTarget = '';
+      }
+      return newState;
 
     case ActionTypes.REPLICATION_DATABASES_LOADED:
       return {
@@ -261,9 +262,10 @@ const replication = (state = initialState, {type, options}) => {
       };
 
     case ActionTypes.REPLICATION_CHANGE_ACTIVITY_SORT:
+      setActivitySort(options);
       return {
         ...state,
-        activitySort: setActivitySort(options)
+        activitySort: loadActivitySort()
       };
 
     case ActionTypes.REPLICATION_CLEAR_SELECTED_DOCS:

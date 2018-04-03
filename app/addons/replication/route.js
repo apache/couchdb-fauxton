@@ -51,9 +51,8 @@ const ReplicationRouteObject = FauxtonAPI.RouteObject.extend({
   },
 
   createViewFromId: function (replicationId) {
-    // Actions.clearReplicationForm();
     return <ReplicationController
-      routeReplicationId={replicationId}
+      replicationId={replicationId}
       section={'new replication'}
     />;
   },

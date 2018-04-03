@@ -225,7 +225,6 @@ export default class NewReplicationController extends React.Component {
       updateFormField,
       clearReplicationForm
     } = this.props;
-    console.log('ccc', conflictModalVisible);
 
     return (
       <div>

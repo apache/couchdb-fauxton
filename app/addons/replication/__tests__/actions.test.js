@@ -36,6 +36,7 @@ describe("Replication Actions", () => {
     afterEach(fetchMock.restore);
 
     it('creates a new database if it does not exist', (done) => {
+      const dispatch = () => {};
       fetchMock.postOnce('/_replicator', {
         status: 404,
         body: {
@@ -69,7 +70,7 @@ describe("Replication Actions", () => {
         replicationTarget: "REPLICATION_TARGET_NEW_LOCAL_DATABASE",
         replicationType: "",
         username: "tester"
-      });
+      })(dispatch);
 
       //this is not pretty, and might cause some false errors. But its tricky to tell when this test has completed
       setTimeout(() => {
@@ -119,15 +120,15 @@ describe("Replication Actions", () => {
     };
 
     it('builds up correct state', (done) => {
-      FauxtonAPI.dispatcher.register(({type, options}) => {
+      const dispatch = ({type, options}) => {
         if (ActionTypes.REPLICATION_SET_STATE_FROM_DOC === type) {
           assert.deepEqual(docState, options);
           setTimeout(done);
         }
-      });
+      };
 
       fetchMock.getOnce('/_replicator/7dcea9874a8fcb13c6630a1547001559', doc);
-      getReplicationStateFrom(doc._id);
+      getReplicationStateFrom(doc._id)(dispatch);
     });
   });
 
@@ -171,13 +172,15 @@ describe("Replication Actions", () => {
         status: 200,
         body: resp
       });
-      deleteDocs(docs);
 
-      FauxtonAPI.dispatcher.register(({type}) => {
+
+      const dispatch = ({type}) => {
         if (ActionTypes.REPLICATION_CLEAR_SELECTED_DOCS === type) {
           setTimeout(done);
         }
-      });
+      };
+
+      deleteDocs(docs)(dispatch);
     });
   });
 });
