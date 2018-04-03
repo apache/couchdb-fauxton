@@ -482,5 +482,51 @@ describe('Docs Reducers', () => {
         group_level: 2
       });
     });
+
+    it('only adds update when set to non-default value in the queryOptionsPanel', () => {
+      const action = {
+        type: ActionTypes.INDEX_RESULTS_REDUX_NEW_QUERY_OPTIONS,
+        options: {
+          update: 'lazy'
+        }
+      };
+
+      const newStateLazy = Reducers.default(initialState, action);
+      expect(Reducers.getQueryOptionsParams(newStateLazy)).toEqual({
+        update: 'lazy'
+      });
+
+      action.options.update = 'false';
+      const newStateFalse = Reducers.default(initialState, action);
+      expect(Reducers.getQueryOptionsParams(newStateFalse)).toEqual({
+        update: 'false'
+      });
+
+      action.options.update = 'true';
+      const newStateTrue = Reducers.default(initialState, action);
+      expect(Reducers.getQueryOptionsParams(newStateTrue)).toEqual({
+        update: undefined
+      });
+    });
+
+    it('only adds stable when set to non-default value in the queryOptionsPanel', () => {
+      const action = {
+        type: ActionTypes.INDEX_RESULTS_REDUX_NEW_QUERY_OPTIONS,
+        options: {
+          stable: true
+        }
+      };
+
+      const newStateTrue = Reducers.default(initialState, action);
+      expect(Reducers.getQueryOptionsParams(newStateTrue)).toEqual({
+        stable: true
+      });
+
+      action.options.stable = false;
+      const newStateFalse = Reducers.default(initialState, action);
+      expect(Reducers.getQueryOptionsParams(newStateFalse)).toEqual({
+        stable: undefined
+      });
+    });
   });
 });
