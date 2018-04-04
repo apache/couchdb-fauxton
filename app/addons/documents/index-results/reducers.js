@@ -325,18 +325,11 @@ export const getQueryOptionsParams = (state) => {
   // Only add UPDATE and STABLE parameters when different than
   // their respective default values. This prevent errors in
   // older CouchDB versions that don't support these parameters.
-  if (queryOptionsPanel.update !== undefined) {
-    // Default value is 'true'
-    if (queryOptionsPanel.update !== 'true') {
-      params.update = queryOptionsPanel.update;
-    }
+  if (queryOptionsPanel.update !== undefined && queryOptionsPanel.update !== 'true') {
+    params.update = queryOptionsPanel.update;
   }
-
-  if (typeof queryOptionsPanel.stable === 'boolean') {
-    // Default value is false
-    if (queryOptionsPanel.stable === true) {
-      params.stable = queryOptionsPanel.stable;
-    }
+  if (queryOptionsPanel.stable === true) {
+    params.stable = queryOptionsPanel.stable;
   }
 
   return params;
