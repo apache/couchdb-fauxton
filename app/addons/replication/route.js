@@ -13,7 +13,6 @@
 import React from 'react';
 import FauxtonAPI from '../../core/api';
 import ReplicationController from './container';
-import Actions from './actions';
 
 const ReplicationRouteObject = FauxtonAPI.RouteObject.extend({
   routes: {
@@ -42,7 +41,6 @@ const ReplicationRouteObject = FauxtonAPI.RouteObject.extend({
 
   createView: function (databaseName) {
     const localSource = databaseName || '';
-    // Actions.clearReplicationForm();
 
     return <ReplicationController
       routeLocalSource={localSource}
@@ -64,7 +62,6 @@ const ReplicationRouteObject = FauxtonAPI.RouteObject.extend({
   },
 
   replicateView: function () {
-    Actions.changeTabSection('_replicate');
     return <ReplicationController
       section={"_replicate"}
     />;

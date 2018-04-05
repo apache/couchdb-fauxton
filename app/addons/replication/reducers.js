@@ -296,7 +296,7 @@ const replication = (state = initialState, {type, options}) => {
     case ActionTypes.REPLICATION_REPLICATE_STATUS:
       return {
         ...state,
-        fetchReplicateInfo: false,
+        fetchingReplicateInfo: false,
         replicateInfo: options
       };
 
@@ -367,7 +367,7 @@ export const getCheckingApi = (state) => state.checkingAPI;
 export const supportNewApi = (state) => state.supportNewApi;
 export const isReplicateInfoLoading = (state) => state.fetchingReplicateInfo;
 export const getAllReplicateSelected = (state) => state.allReplicateSelected;
-export const someReplicateSelected = (state) => state.someReplicateSelected;
+export const someReplicateSelected = (state) => getReplicateInfo(state).some(doc => doc.selected);
 
 export const getReplicateInfo = (state) => {
   return state.replicateInfo.filter(doc => {

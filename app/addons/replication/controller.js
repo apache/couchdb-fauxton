@@ -9,6 +9,7 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
+import FauxtonAPI from '../../core/api';
 import React from 'react';
 import Helpers from '../../helpers';
 import Components from '../components/react-components';
@@ -194,7 +195,8 @@ export default class ReplicationController extends React.Component {
   }
 
   onTabChange (section, url) {
-    this.props.changeTabSection(section, url);
+    // this.props.changeTabSection(section, url);
+    FauxtonAPI.navigate(url);
   }
 
   getCrumbs () {
