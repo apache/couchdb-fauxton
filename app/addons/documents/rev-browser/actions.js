@@ -26,7 +26,6 @@ export const initDiffEditor = (dbName, docId) => dispatch => {
   const url = FauxtonAPI.urls('databaseBaseURL', 'server', dbName);
   db = PouchDB(url);
 
-  // XXX: we need spec compliant promise support and get rid of jQ "deferreds"
   Promise.all([db.get(docId), getTree(db, docId)])
     .then(([doc, tree]) => {
       const conflictingRevs = getConflictingRevs(tree.paths, tree.winner, Object.keys(tree.deleted));

@@ -156,6 +156,7 @@ export default class NewReplicationController extends React.Component {
       }
     }
 
+    this.props.hidePasswordModal();
     this.props.replicate({
       replicationTarget,
       replicationSource,
@@ -263,6 +264,7 @@ export default class NewReplicationController extends React.Component {
           modalMessage={<p>{app.i18n.en_US['replication-password-modal-text']}</p>}
           submitBtnLabel="Start Replication"
           headerTitle={app.i18n.en_US['replication-password-modal-header']}
+          onClose={this.props.hidePasswordModal}
           onSuccess={this.submit} />
         <ConflictModal
           visible={conflictModalVisible}
