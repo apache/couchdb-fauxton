@@ -13,9 +13,11 @@
 import '@webcomponents/url';
 import Constants from './constants';
 import FauxtonAPI from '../../core/api';
+import app from '../../app';
 import {get, post, put} from '../../core/ajax';
 import base64 from 'base-64';
 import _ from 'lodash';
+import { removeOverflowDocsAndCalculateHasNext } from '../documents/index-results/actions/fetch';
 
 let newApiPromise = null;
 export const supportNewApi = (forceCheck) => {
@@ -295,10 +297,16 @@ export const combineDocsAndScheduler = (docs, schedulerDocs) => {
   });
 };
 
-export const fetchReplicationDocs = () => {
+export const fetchReplicationDocs = ({docsPerPage, page}) => {
+  const params = {
+    limit: docsPerPage + 1,
+    skip: (page - 1) * docsPerPage,
+    include_docs: true
+  };
+
   return supportNewApi()
     .then(newApi => {
-      const docsPromise = get('/_replicator/_all_docs?include_docs=true&limit=100')
+      const docsPromise = get(`/_replicator/_all_docs?${app.utils.queryParams(params)}`)
         .then((res) => {
           if (res.error) {
             return [];
@@ -308,20 +316,40 @@ export const fetchReplicationDocs = () => {
         });
 
       if (!newApi) {
-        return docsPromise;
+        return docsPromise
+          .then(docs => {
+            const {
+              finalDocList,
+              canShowNext
+            } = removeOverflowDocsAndCalculateHasNext(docs, false, docsPerPage);
+            return {
+              docs: finalDocList,
+              canShowNext
+            };
+          });
       }
-      const schedulerPromise = fetchSchedulerDocs();
+      const schedulerPromise = fetchSchedulerDocs(params);
       return FauxtonAPI.Promise.join(docsPromise, schedulerPromise, (docs, schedulerDocs) => {
         return combineDocsAndScheduler(docs, schedulerDocs);
       })
+        .then(docs => {
+          const {
+            finalDocList,
+            canShowNext
+          } = removeOverflowDocsAndCalculateHasNext(docs, false, docsPerPage + 1);
+          return {
+            docs: finalDocList,
+            canShowNext
+          };
+        })
         .catch(() => {
           return [];
         });
     });
 };
 
-export const fetchSchedulerDocs = () => {
-  return get('/_scheduler/docs?include_docs=true')
+export const fetchSchedulerDocs = (params) => {
+  return get(`/_scheduler/docs?${app.utils.queryParams(params)}`)
     .then((res) => {
       if (res.error) {
         return [];

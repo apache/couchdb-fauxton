@@ -40,6 +40,7 @@ export default class PaginationFooter extends React.Component {
 
     const { canShowNext, fetchParams, queryOptionsParams, paginateNext, perPage } = this.props;
     if (canShowNext) {
+      console.log('FOOTER NEXT', fetchParams, queryOptionsParams, perPage);
       paginateNext(fetchParams, queryOptionsParams, perPage);
     }
   }

@@ -21,7 +21,10 @@ import {
   changeActivitySort,
   deleteReplicates,
   selectAllReplicates,
-  selectReplicate
+  selectReplicate,
+  updatePerPageResults,
+  paginateNext,
+  paginatePrevious
 } from './actions';
 
 import {
@@ -53,7 +56,12 @@ import {
   isReplicateInfoLoading,
   getAllReplicateSelected,
   getReplicateInfo,
-  someReplicateSelected
+  someReplicateSelected,
+  getPagination,
+  getPageEnd,
+  getPageStart,
+  getDocsPerPage,
+  canShowNext
 } from './reducers';
 
 const mapStateToProps = ({replication}, ownProps) => {
@@ -99,7 +107,13 @@ const mapStateToProps = ({replication}, ownProps) => {
     replicateLoading: isReplicateInfoLoading(replication),
     replicateInfo: getReplicateInfo(replication),
     allReplicateSelected: getAllReplicateSelected(replication),
-    someReplicateSelected: someReplicateSelected(replication)
+    someReplicateSelected: someReplicateSelected(replication),
+    pagination: getPagination(replication),
+    pageStart: getPageStart(replication),
+    pageEnd: getPageEnd(replication),
+    docsPerPage: getDocsPerPage(replication),
+    canShowNext: canShowNext(replication)
+
   };
 };
 
@@ -111,7 +125,7 @@ const mapDispatchToProps = (dispatch) => {
     },
     clearReplicationForm: () => dispatch(clearReplicationForm()),
     initReplicator: (localSource) => dispatch(initReplicator(localSource)),
-    getReplicationActivity: () => dispatch(getReplicationActivity()),
+    getReplicationActivity: (params) => dispatch(getReplicationActivity(params)),
     getReplicateActivity: () => dispatch(getReplicateActivity()),
     getReplicationStateFrom: (id) => dispatch(getReplicationStateFrom(id)),
     getDatabasesList: () => dispatch(getDatabasesList()),
@@ -126,7 +140,10 @@ const mapDispatchToProps = (dispatch) => {
     changeActivitySort: (sort) => dispatch(changeActivitySort(sort)),
     selectAllReplicates: () => dispatch(selectAllReplicates()),
     deleteReplicates: (replicates) => dispatch(deleteReplicates(replicates)),
-    selectReplicate: (replicate) => dispatch(selectReplicate(replicate))
+    selectReplicate: (replicate) => dispatch(selectReplicate(replicate)),
+    updatePerPageResults: (amount) => dispatch(updatePerPageResults(amount)),
+    paginateNext: (params) => dispatch(paginateNext(params)),
+    paginatePrevious: (params) => dispatch(paginatePrevious(params))
   };
 };
 
