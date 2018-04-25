@@ -381,7 +381,7 @@ export class ReplicationTable extends React.Component {
   render () {
 
     return (
-      <Table striped>
+      <Table striped style={{marginBottom: '100px'}}>
         <thead>
           <tr>
             <th className="replication__table-bulk-select">
