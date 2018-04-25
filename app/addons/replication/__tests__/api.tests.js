@@ -578,7 +578,7 @@ describe('Replication API', () => {
 
       it("returns parsedReplicationDocs and ignores all design docs", () => {
         fetchMock.getOnce('/_scheduler/jobs', 404);
-        fetchMock.get('/_replicator/_all_docs?limit=6&skip=0&include_docs=true', _repDocs);
+        fetchMock.get('/_replicator/_all_docs?startkey=%22_designZ%22&limit=6&skip=0&include_docs=true', _repDocs);
         return supportNewApi(true)
           .then(() => fetchReplicationDocs({docsPerPage: 5, page: 1}))
           .then(({docs}) => {
@@ -595,7 +595,7 @@ describe('Replication API', () => {
 
       it("returns parsedReplicationDocs", () => {
         fetchMock.getOnce('/_scheduler/jobs', 200);
-        fetchMock.get('/_replicator/_all_docs?limit=6&skip=0&include_docs=true', _repDocs);
+        fetchMock.get('/_replicator/_all_docs?startkey=%22_designZ%22&limit=6&skip=0&include_docs=true', _repDocs);
         fetchMock.get('/_scheduler/docs?limit=6&skip=0&include_docs=true', _schedDocs);
         return supportNewApi(true)
           .then(() => fetchReplicationDocs({docsPerPage: 5, page: 1}))

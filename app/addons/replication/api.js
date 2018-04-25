@@ -319,7 +319,7 @@ export const fetchReplicationDocs = ({docsPerPage, page}) => {
 
   return supportNewApi()
     .then(newApi => {
-      const url = Helpers.getServerUrl(`/_replicator/_all_docs?${app.utils.queryParams(parent)}`);
+      const url = Helpers.getServerUrl(`/_replicator/_all_docs?startkey=%22_designZ%22&${app.utils.queryParams(params)}`);
       const docsPromise = get(url)
         .then((res) => {
           if (res.error) {
@@ -335,7 +335,7 @@ export const fetchReplicationDocs = ({docsPerPage, page}) => {
             const {
               finalDocList,
               canShowNext
-            } = removeOverflowDocsAndCalculateHasNext(docs, false, docsPerPage);
+            } = removeOverflowDocsAndCalculateHasNext(docs, false, docsPerPage + 1);
             return {
               docs: finalDocList,
               canShowNext
