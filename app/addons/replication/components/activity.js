@@ -15,7 +15,7 @@ import React from 'react';
 import {DeleteModal} from './modals';
 import {ReplicationTable} from './common-table';
 import {ReplicationHeader} from './common-activity';
-import PaginationFooter from '../../documents/index-results/components/pagination/paginationfooter';
+import PaginationFooter from '../../documents/index-results/components/pagination/PaginationFooter';
 
 export default class Activity extends React.Component {
   constructor (props) {
