@@ -277,7 +277,6 @@ const replication = (state = initialState, {type, options}) => {
       };
 
     case ActionTypes.REPLICATION_STATUS:
-      console.log('STATUS', options);
       return {
         ...state,
         activityLoading: false,

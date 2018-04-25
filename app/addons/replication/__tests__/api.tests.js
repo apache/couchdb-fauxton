@@ -577,13 +577,13 @@ describe('Replication API', () => {
       });
 
       it("returns parsedReplicationDocs and ignores all design docs", () => {
-        fetchMock.getOnce('./_scheduler/jobs', 404);
-        fetchMock.get('./_replicator/_all_docs?include_docs=true&limit=100', _repDocs);
+        fetchMock.getOnce('/_scheduler/jobs', 404);
+        fetchMock.get('/_replicator/_all_docs?limit=6&skip=0&include_docs=true', _repDocs);
         return supportNewApi(true)
-          .then(fetchReplicationDocs)
-          .then(docs => {
-            expect(docs.length).toBe(1);
-            expect(docs[0]._id).toBe("c94d4839d1897105cb75e1251e0003ea");
+          .then(() => fetchReplicationDocs({docsPerPage: 5, page: 1}))
+          .then(({docs}) => {
+            assert.deepEqual(docs.length, 1);
+            assert.deepEqual(docs[0]._id, "c94d4839d1897105cb75e1251e0003ea");
           });
       });
     });
@@ -594,15 +594,15 @@ describe('Replication API', () => {
       });
 
       it("returns parsedReplicationDocs", () => {
-        fetchMock.getOnce('./_scheduler/jobs', 200);
-        fetchMock.get('./_replicator/_all_docs?include_docs=true&limit=100', _repDocs);
-        fetchMock.get('./_scheduler/docs?include_docs=true', _schedDocs);
+        fetchMock.getOnce('/_scheduler/jobs', 200);
+        fetchMock.get('/_replicator/_all_docs?limit=6&skip=0&include_docs=true', _repDocs);
+        fetchMock.get('/_scheduler/docs?limit=6&skip=0&include_docs=true', _schedDocs);
         return supportNewApi(true)
-          .then(fetchReplicationDocs)
-          .then(docs => {
-            expect(docs.length).toBe(1);
-            expect(docs[0]._id).toBe("c94d4839d1897105cb75e1251e0003ea");
-            expect(docs[0].stateTime.toDateString()).toBe((new Date('2017-03-07T14:46:17')).toDateString());
+          .then(() => fetchReplicationDocs({docsPerPage: 5, page: 1}))
+          .then(({docs}) => {
+            assert.deepEqual(docs.length, 1);
+            assert.deepEqual(docs[0]._id, "c94d4839d1897105cb75e1251e0003ea");
+            assert.deepEqual(docs[0].stateTime.toDateString(), (new Date('2017-03-07T14:46:17')).toDateString());
           });
       });
     });
