@@ -586,6 +586,50 @@ describe('Replication API', () => {
             assert.deepEqual(docs[0]._id, "c94d4839d1897105cb75e1251e0003ea");
           });
       });
+
+      it("paginates to page 2 correctly", () => {
+        fetchMock.getOnce('/_scheduler/jobs', 200);
+        fetchMock.get('/_replicator/_all_docs?startkey=%22_designZ%22&limit=11&skip=10&include_docs=true', _repDocs);
+        fetchMock.get('/_scheduler/docs?limit=11&skip=10&include_docs=true', _schedDocs);
+        return supportNewApi(true)
+          .then(() => fetchReplicationDocs({docsPerPage: 10, page: 2}))
+          .then(({canShowNext}) => {
+            assert.notOk(canShowNext);
+          });
+      });
+
+      it("sets canShowNext true and trims docs correctly", () => {
+        const clonedDoc = _repDocs.rows[2];
+        const repDocs = {
+          ..._repDocs,
+          "total_rows":4,
+          "offset":0,
+          rows: [{
+            ...clonedDoc,
+            _id: '1',
+          }, {
+            ...clonedDoc,
+            _id: '2',
+          }, {
+
+            ...clonedDoc,
+            _id: '3',
+          }, {
+            ...clonedDoc,
+            _id: '4',
+          }]
+        };
+
+        fetchMock.getOnce('/_scheduler/jobs', 200);
+        fetchMock.get('/_replicator/_all_docs?startkey=%22_designZ%22&limit=4&skip=6&include_docs=true', repDocs);
+        fetchMock.get('/_scheduler/docs?limit=4&skip=6&include_docs=true', _schedDocs);
+        return supportNewApi(true)
+          .then(() => fetchReplicationDocs({docsPerPage: 3, page: 3}))
+          .then(({docs, canShowNext}) => {
+            assert.ok(canShowNext);
+            assert.deepEqual(docs.length, 3);
+          });
+      });
     });
 
     describe('new api', () => {
@@ -603,6 +647,50 @@ describe('Replication API', () => {
             assert.deepEqual(docs.length, 1);
             assert.deepEqual(docs[0]._id, "c94d4839d1897105cb75e1251e0003ea");
             assert.deepEqual(docs[0].stateTime.toDateString(), (new Date('2017-03-07T14:46:17')).toDateString());
+          });
+      });
+
+      it("paginates to page 2 correctly", () => {
+        fetchMock.getOnce('/_scheduler/jobs', 200);
+        fetchMock.get('/_replicator/_all_docs?startkey=%22_designZ%22&limit=11&skip=10&include_docs=true', _repDocs);
+        fetchMock.get('/_scheduler/docs?limit=11&skip=10&include_docs=true', _schedDocs);
+        return supportNewApi(true)
+          .then(() => fetchReplicationDocs({docsPerPage: 10, page: 2}))
+          .then(({canShowNext}) => {
+            assert.notOk(canShowNext);
+          });
+      });
+
+      it("sets canShowNext true and trims docs correctly", () => {
+        const clonedDoc = _repDocs.rows[2];
+        const repDocs = {
+          ..._repDocs,
+          "total_rows":4,
+          "offset":0,
+          rows: [{
+            ...clonedDoc,
+            _id: '1',
+          }, {
+            ...clonedDoc,
+            _id: '2',
+          }, {
+
+            ...clonedDoc,
+            _id: '3',
+          }, {
+            ...clonedDoc,
+            _id: '4',
+          }]
+        };
+
+        fetchMock.getOnce('/_scheduler/jobs', 200);
+        fetchMock.get('/_replicator/_all_docs?startkey=%22_designZ%22&limit=4&skip=6&include_docs=true', repDocs);
+        fetchMock.get('/_scheduler/docs?limit=4&skip=6&include_docs=true', _schedDocs);
+        return supportNewApi(true)
+          .then(() => fetchReplicationDocs({docsPerPage: 3, page: 3}))
+          .then(({docs, canShowNext}) => {
+            assert.ok(canShowNext);
+            assert.deepEqual(docs.length, 3);
           });
       });
     });
