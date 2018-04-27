@@ -10,7 +10,7 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import 'url-polyfill';
+import '@webcomponents/url';
 import 'whatwg-fetch';
 import app from '../../../app';
 import Constants from '../constants';
