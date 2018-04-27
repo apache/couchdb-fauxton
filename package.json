@@ -100,7 +100,7 @@
     "react-redux": "^5.0.0",
     "react-select": "^1.2.0",
     "react-test-renderer": "~16.2.0",
-    "redux": "^3.6.0",
+    "redux": "^4.0.0",
     "redux-thunk": "^2.1.0",
     "regenerator-runtime": "^0.11.1",
     "request": "^2.54.0",
