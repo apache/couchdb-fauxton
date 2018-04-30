@@ -10,8 +10,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import app from "../../app";
 import FauxtonAPI from "../../core/api";
+import Helpers from "../../helpers";
 import { deleteRequest, put } from "../../core/ajax";
 
 var Config = FauxtonAPI.addon();
@@ -23,9 +23,9 @@ Config.OptionModel = Backbone.Model.extend({
     if (!this.get('node')) {
       throw new Error('no node set');
     }
-
-    return app.host + '/_node/' + this.get('node') + '/_config/' +
+    const endpointUrl = '/_node/' + this.get('node') + '/_config/' +
       this.get('sectionName') + '/' + encodeURIComponent(this.get('optionName'));
+    return Helpers.getServerUrl(endpointUrl);
   },
 
   isNew () { return false; },
@@ -59,8 +59,7 @@ Config.ConfigModel = Backbone.Model.extend({
     if (!this.get('node')) {
       throw new Error('no node set');
     }
-
-    return app.host + '/_node/' + this.get('node') + '/_config';
+    return Helpers.getServerUrl('/_node/' + this.get('node') + '/_config');
   },
 
   parse (resp) {

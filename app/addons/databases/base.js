@@ -11,6 +11,7 @@
 // the License.
 
 import app from "../../app";
+import Helpers from "../../helpers";
 import FauxtonAPI from "../../core/api";
 import Databases from "./routes";
 import "./assets/less/databases.less";
@@ -34,7 +35,7 @@ Databases.databaseUrl = function (database) {
 
 FauxtonAPI.registerUrls('changes', {
   server: function (id, query) {
-    return app.host + '/' + id + '/_changes' + query;
+    return Helpers.getServerUrl('/' + id + '/_changes' + query);
   },
 
   app: function (id, query) {
@@ -42,13 +43,13 @@ FauxtonAPI.registerUrls('changes', {
   },
 
   apiurl: function (id, query) {
-    return window.location.origin + '/' + id + '/_changes' + query;
+    return Helpers.getApiUrl('/' + id + '/_changes' + query);
   }
 });
 
 FauxtonAPI.registerUrls('allDBs', {
   server: function (query = '') {
-    return `${app.host}/_all_dbs${query}`;
+    return Helpers.getServerUrl(`/_all_dbs${query}`);
   },
 
   app: function () {
@@ -56,13 +57,13 @@ FauxtonAPI.registerUrls('allDBs', {
   },
 
   apiurl: function () {
-    return window.location.origin + '/_all_dbs';
+    return Helpers.getApiUrl('/_all_dbs');
   }
 });
 
 FauxtonAPI.registerUrls('databaseBaseURL', {
   server: function (database) {
-    return window.location.origin + '/' + app.utils.safeURLName(database);
+    return Helpers.getServerUrl('/' + app.utils.safeURLName(database));
   },
 
   app: function (database) {
@@ -72,7 +73,7 @@ FauxtonAPI.registerUrls('databaseBaseURL', {
 
 FauxtonAPI.registerUrls('permissions', {
   server: function (db) {
-    return app.host + '/' + db + '/_security';
+    return Helpers.getServerUrl('/' + db + '/_security');
   },
 
   app: function (db) {
@@ -80,7 +81,7 @@ FauxtonAPI.registerUrls('permissions', {
   },
 
   apiurl: function (db) {
-    return window.location.origin + '/' + db + '/_security';
+    return Helpers.getApiUrl('/' + db + '/_security');
   }
 });
 

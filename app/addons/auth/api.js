@@ -11,6 +11,7 @@
 // the License.
 
 import app from './../../app';
+import Helpers from "../../helpers";
 import { defaultsDeep } from "lodash";
 
 export const json = (url, opts = {}) => fetch(
@@ -43,7 +44,8 @@ export const formEncoded = (url, opts = {}) => fetch(
 
 
 export function createAdmin({name, password, node}) {
-  return json(`${app.host}/_node/${node}/_config/admins/${name}`, {
+  const url = Helpers.getServerUrl(`/_node/${node}/_config/admins/${name}`);
+  return json(url, {
     method: "PUT",
     body: JSON.stringify(password)
   });
@@ -56,7 +58,8 @@ export function getSession() {
     return loggedInSessionPromise;
   }
 
-  const promise = json(app.host + "/_session").then(resp => {
+  const url = Helpers.getServerUrl('/_session');
+  const promise = json(url).then(resp => {
     if (resp.userCtx.name) {
       loggedInSessionPromise = promise;
     }
@@ -67,7 +70,8 @@ export function getSession() {
 }
 
 export function login(body) {
-  return formEncoded(app.host + "/_session", {
+  const url = Helpers.getServerUrl('/_session');
+  return formEncoded(url, {
     method: "POST",
     body: app.utils.queryParams(body)
   });
@@ -75,7 +79,8 @@ export function login(body) {
 
 export function logout() {
   loggedInSessionPromise = null;
-  return formEncoded(app.host + "/_session", {
+  const url = Helpers.getServerUrl('/_session');
+  return formEncoded(url, {
     method: "DELETE",
     body: app.utils.queryParams({ username: "_", password: "_" })
   });

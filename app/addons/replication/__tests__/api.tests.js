@@ -401,7 +401,7 @@ describe('Replication API', () => {
     });
 
     it('returns true for support', () => {
-      fetchMock.getOnce('/_scheduler/jobs', {});
+      fetchMock.getOnce('./_scheduler/jobs', {});
       return supportNewApi(true)
         .then(resp => {
           assert.ok(resp);
@@ -409,7 +409,7 @@ describe('Replication API', () => {
     });
 
     it('returns false for no support', () => {
-      fetchMock.getOnce('/_scheduler/jobs', {
+      fetchMock.getOnce('./_scheduler/jobs', {
         status: 404,
         body: {error: "missing"}
       });
@@ -547,8 +547,8 @@ describe('Replication API', () => {
       });
 
       it("returns parsedReplicationDocs and ignores all design docs", () => {
-        fetchMock.getOnce('/_scheduler/jobs', 404);
-        fetchMock.get('/_replicator/_all_docs?include_docs=true&limit=100', _repDocs);
+        fetchMock.getOnce('./_scheduler/jobs', 404);
+        fetchMock.get('./_replicator/_all_docs?include_docs=true&limit=100', _repDocs);
         return supportNewApi(true)
           .then(fetchReplicationDocs)
           .then(docs => {
@@ -564,9 +564,9 @@ describe('Replication API', () => {
       });
 
       it("returns parsedReplicationDocs", () => {
-        fetchMock.getOnce('/_scheduler/jobs', 200);
-        fetchMock.get('/_replicator/_all_docs?include_docs=true&limit=100', _repDocs);
-        fetchMock.get('/_scheduler/docs?include_docs=true', _schedDocs);
+        fetchMock.getOnce('./_scheduler/jobs', 200);
+        fetchMock.get('./_replicator/_all_docs?include_docs=true&limit=100', _repDocs);
+        fetchMock.get('./_scheduler/docs?include_docs=true', _schedDocs);
         return supportNewApi(true)
           .then(fetchReplicationDocs)
           .then(docs => {
