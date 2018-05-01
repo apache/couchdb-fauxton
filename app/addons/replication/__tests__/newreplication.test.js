@@ -44,14 +44,34 @@ describe('New Replication Component', () => {
         updateFormField={() => { return () => {}; }}
       />);
 
-      assert.ok(newreplication.instance().validate());
+      assert.ok(newreplication.instance().checkSourceTargetDatabases());
     });
 
     it('returns true for remote source and target selected', () => {
       const newreplication = shallow(<NewReplication
         databases={[]}
         replicationTarget={Constants.REPLICATION_TARGET.NEW_REMOTE_DATABASE}
-        remoteTarget={"mydb"}
+        remoteTarget={"https://mydb.com/db2"}
+        remoteSource={"https://mydb.com/db1"}
+        localTarget={""}
+        localSource={""}
+        replicationSource={""}
+        replicationType={""}
+        replicationDocName={""}
+        conflictModalVisible={false}
+        clearReplicationForm={() => {}}
+        hideConflictModal={() => {}}
+        updateFormField={() => { return () => {}; }}
+      />);
+
+      assert.ok(newreplication.instance().checkSourceTargetDatabases());
+    });
+
+    it('returns false for invalid remote source', () => {
+      const newreplication = shallow(<NewReplication
+        databases={[]}
+        replicationTarget={Constants.REPLICATION_TARGET.NEW_REMOTE_DATABASE}
+        remoteTarget={"https://mydb.com/db"}
         remoteSource={"anotherdb"}
         localTarget={""}
         localSource={""}
@@ -64,7 +84,27 @@ describe('New Replication Component', () => {
         updateFormField={() => { return () => {}; }}
       />);
 
-      assert.ok(newreplication.instance().validate());
+      assert.notOk(newreplication.instance().checkSourceTargetDatabases());
+    });
+
+    it('returns false for invalid remote target', () => {
+      const newreplication = shallow(<NewReplication
+        databases={[]}
+        replicationTarget={Constants.REPLICATION_TARGET.NEW_REMOTE_DATABASE}
+        remoteTarget={"anotherdb"}
+        remoteSource={"https://mydb.com/db"}
+        localTarget={""}
+        localSource={""}
+        replicationSource={""}
+        replicationType={""}
+        replicationDocName={""}
+        conflictModalVisible={false}
+        clearReplicationForm={() => {}}
+        hideConflictModal={() => {}}
+        updateFormField={() => { return () => {}; }}
+      />);
+
+      assert.notOk(newreplication.instance().checkSourceTargetDatabases());
     });
 
     it("warns if new local database exists", () => {
@@ -86,7 +126,7 @@ describe('New Replication Component', () => {
         updateFormField={() => { return () => {}; }}
       />);
 
-      newreplication.instance().validate();
+      newreplication.instance().checkSourceTargetDatabases();
       assert.ok(spy.calledOnce);
 
       const notification = spy.args[0][0];
@@ -112,7 +152,7 @@ describe('New Replication Component', () => {
         updateFormField={() => { return () => {}; }}
       />);
 
-      newreplication.instance().validate();
+      newreplication.instance().checkSourceTargetDatabases();
       assert.ok(spy.calledOnce);
 
       const notification = spy.args[0][0];
@@ -138,7 +178,7 @@ describe('New Replication Component', () => {
         updateFormField={() => { return () => {}; }}
       />);
 
-      newreplication.instance().validate();
+      newreplication.instance().checkSourceTargetDatabases();
       assert.ok(spy.calledOnce);
 
       const notification = spy.args[0][0];
@@ -151,8 +191,8 @@ describe('New Replication Component', () => {
       const newreplication = shallow(<NewReplication
         databases={[]}
         replicationTarget={Constants.REPLICATION_TARGET.NEW_LOCAL_DATABASE}
-        remoteTarget={"samedb"}
-        remoteSource={"samedb"}
+        remoteTarget={"http://localhost/samedb"}
+        remoteSource={"http://localhost/samedb"}
         localTarget={""}
         localSource={""}
         replicationSource={""}
@@ -164,7 +204,7 @@ describe('New Replication Component', () => {
         updateFormField={() => { return () => {}; }}
       />);
 
-      newreplication.instance().validate();
+      newreplication.instance().checkSourceTargetDatabases();
       assert.ok(spy.calledOnce);
 
       const notification = spy.args[0][0];
@@ -301,9 +341,9 @@ describe('New Replication Component', () => {
       newreplication.instance().runReplicationChecks();
     });
 
-    it("Shows password modal", () => {
+    it("calls auth checks", () => {
       let called = false;
-      const showPasswordModal = () => {called = true;};
+      const checkAuth = () => {called = true;};
       const checkReplicationDocID = () => {
         const promise = FauxtonAPI.Deferred();
         promise.resolve(false);
@@ -326,11 +366,51 @@ describe('New Replication Component', () => {
         updateFormField={() => { return () => {}; }}
       />);
 
-      newreplication.instance().showPasswordModal = showPasswordModal;
+      newreplication.instance().checkAuth = checkAuth;
       newreplication.instance().runReplicationChecks();
       assert.ok(called);
     });
 
+  });
+
+  describe("checkAuth", () => {
+
+    afterEach(() => {
+      restore(FauxtonAPI.addNotification);
+      FauxtonAPI.session = undefined;
+    });
+
+    it("prompts user for local target auth method", () => {
+      const spy = sinon.spy(FauxtonAPI, 'addNotification');
+      FauxtonAPI.session = {
+        isAdminParty: () => false
+      };
+      const newreplication = shallow(<NewReplication
+        replicationDocName="my-doc-id"
+        checkReplicationDocID={() => {}}
+        showConflictModal={() => {}}
+        databases={[]}
+        replicationSource={Constants.REPLICATION_SOURCE.REMOTE}
+        replicationTarget={Constants.REPLICATION_TARGET.NEW_LOCAL_DATABASE}
+        targetAuthType={Constants.REPLICATION_AUTH_METHOD.NO_AUTH}
+        remoteTarget={""}
+        remoteSource={""}
+        localTarget={""}
+        localSource={""}
+        replicationType={""}
+        conflictModalVisible={false}
+        clearReplicationForm={() => {}}
+        hideConflictModal={() => {}}
+        updateFormField={() => { return () => {}; }}
+      />);
+
+      newreplication.instance().checkAuth();
+      sinon.assert.calledWith(spy, {
+        msg: 'Missing credentials for local target database.',
+        clear: true,
+        type: 'error'
+      });
+    });
   });
 
 });

@@ -101,6 +101,8 @@ const clearForm = (state) => {
       newState[field] = '';
     }
   });
+  newState.sourceAuthType = Constants.REPLICATION_AUTH_METHOD.NO_AUTH;
+  newState.targetAuthType = Constants.REPLICATION_AUTH_METHOD.NO_AUTH;
   return newState;
 };
 

@@ -35,59 +35,52 @@ export default class NewReplicationController extends React.Component {
     const { replicationSource, replicationTarget,
       sourceAuthType, targetAuthType, sourceAuth, targetAuth } = this.props;
 
-    const userPasswordAuth = sourceAuthType === Constants.REPLICATION_AUTH_METHOD.BASIC ||
-      targetAuthType === Constants.REPLICATION_AUTH_METHOD.BASIC;
-    const hasLocalSourceOrTarget = (replicationSource === Constants.REPLICATION_SOURCE.LOCAL ||
-      replicationTarget === Constants.REPLICATION_TARGET.EXISTING_LOCAL_DATABASE ||
-      replicationTarget === Constants.REPLICATION_TARGET.NEW_LOCAL_DATABASE);
+    const isLocalSource = replicationSource === Constants.REPLICATION_SOURCE.LOCAL;
+    const isLocalTarget = replicationTarget === Constants.REPLICATION_TARGET.EXISTING_LOCAL_DATABASE ||
+      replicationTarget === Constants.REPLICATION_TARGET.NEW_LOCAL_DATABASE;
 
-    // Just submit if couchdb is in admin party mode, or not using user/password auth on local dbs
-    if (!(hasLocalSourceOrTarget && userPasswordAuth) || FauxtonAPI.session.isAdminParty()) {
-      this.submit();
-      return;
-    }
-
-    // Ask user to select an auth method for local source/target when one is not selected.
+    // Ask user to select an auth method for local source/target when one is not selected
+    // and not on admin party
     if (!FauxtonAPI.session.isAdminParty()) {
-      if (replicationSource === Constants.REPLICATION_SOURCE.LOCAL &&
-          sourceAuthType === Constants.REPLICATION_AUTH_METHOD.NO_AUTH) {
+      if (isLocalSource && sourceAuthType === Constants.REPLICATION_AUTH_METHOD.NO_AUTH) {
         FauxtonAPI.addNotification({
-          msg: "Missing authentication for local source database.",
-          type: "error",
+          msg: 'Missing credentials for local source database.',
+          type: 'error',
           clear: true
         });
         return;
       }
-      if ((replicationTarget === Constants.REPLICATION_TARGET.EXISTING_LOCAL_DATABASE ||
-          replicationTarget === Constants.REPLICATION_TARGET.NEW_LOCAL_DATABASE) &&
-          targetAuthType === Constants.REPLICATION_AUTH_METHOD.NO_AUTH) {
+      if (isLocalTarget && targetAuthType === Constants.REPLICATION_AUTH_METHOD.NO_AUTH) {
         FauxtonAPI.addNotification({
-          msg: "Missing authentication for local target database.",
-          type: "error",
+          msg: 'Missing credentials for local target database.',
+          type: 'error',
           clear: true
         });
         return;
       }
     }
 
-    this.checkLocalAccountCredentials(sourceAuthType, sourceAuth, 'source').then(() => {
-      this.checkLocalAccountCredentials(targetAuthType, targetAuth, 'target').then(() => {
+    this.checkLocalAccountCredentials(sourceAuthType, sourceAuth, 'source', isLocalSource).then(() => {
+      this.checkLocalAccountCredentials(targetAuthType, targetAuth, 'target', isLocalTarget).then(() => {
         this.submit();
-      });
-    });
+      }, () => {});
+    }, () => {});
   }
 
-  checkLocalAccountCredentials(authType, auth, label) {
-    // const { sourceAuthType, targetAuthType, sourceAuth, targetAuth } = this.props;
+  checkLocalAccountCredentials(authType, auth, label, isLocal) {
+    // Skip check if it's a remote tb or not using BASIC auth
+    if (authType !== Constants.REPLICATION_AUTH_METHOD.BASIC || !isLocal) {
+      return FauxtonAPI.Promise.resolve(true);
+    }
 
-    if (authType === Constants.REPLICATION_AUTH_METHOD.BASIC &&
-        (!auth.username || !auth.password)) {
+    if (!auth.username || !auth.password) {
+      const err = `Missing ${label} credentials.`;
       FauxtonAPI.addNotification({
-        msg: `Missing ${label} credentials.`,
+        msg: err,
         type: 'error',
         clear: true
       });
-      return FauxtonAPI.Promise.reject({});
+      return FauxtonAPI.Promise.reject(new Error(err));
     }
 
     return AuthAPI.login({

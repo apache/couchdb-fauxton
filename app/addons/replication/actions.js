@@ -307,7 +307,7 @@ const getAuthTypeAndCredentials = (repSourceOrTarget) => {
     authExtensions.map(ext => {
       if (!credentials && ext.getCredentials) {
         credentials = ext.getCredentials(repSourceOrTarget);
-        customAuthType = ext.authType;
+        customAuthType = ext.typeValue;
       }
     });
   }
