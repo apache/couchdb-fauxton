@@ -11,49 +11,101 @@
 // the License.
 
 import React from 'react';
-import app from '../../../app';
 import FauxtonAPI from '../../../core/api';
 import {ReplicationSource} from './source';
 import {ReplicationTarget} from './target';
 import {ReplicationOptions} from './options';
 import {ReplicationSubmit} from './submit';
-import AuthComponents from '../../auth/components';
+import {ReplicationAuth} from './auth-options';
+import AuthAPI from '../../auth/api';
 import Constants from '../constants';
 import {ConflictModal} from './modals';
 import {isEmpty} from 'lodash';
-
-const {PasswordModal} = AuthComponents;
 
 export default class NewReplicationController extends React.Component {
   constructor (props) {
     super(props);
     this.submit = this.submit.bind(this);
-    this.clear = this.clear.bind(this);
-    this.showPasswordModal = this.showPasswordModal.bind(this);
+    this.checkAuth = this.checkAuth.bind(this);
     this.runReplicationChecks = this.runReplicationChecks.bind(this);
   }
 
-  clear (e) {
-    e.preventDefault();
-    this.props.clearReplicationForm();
-  }
-
-  showPasswordModal () {
+  checkAuth () {
     this.props.hideConflictModal();
-    const { replicationSource, replicationTarget } = this.props;
+    const { replicationSource, replicationTarget,
+      sourceAuthType, targetAuthType, sourceAuth, targetAuth } = this.props;
 
+    const userPasswordAuth = sourceAuthType === Constants.REPLICATION_AUTH_METHOD.BASIC ||
+      targetAuthType === Constants.REPLICATION_AUTH_METHOD.BASIC;
     const hasLocalSourceOrTarget = (replicationSource === Constants.REPLICATION_SOURCE.LOCAL ||
       replicationTarget === Constants.REPLICATION_TARGET.EXISTING_LOCAL_DATABASE ||
       replicationTarget === Constants.REPLICATION_TARGET.NEW_LOCAL_DATABASE);
 
-    // if the user is authenticated, or if NEITHER the source nor target are local, just submit. The password
-    // modal isn't necessary or if couchdb is in admin party mode
-    if (!hasLocalSourceOrTarget || this.props.authenticated || FauxtonAPI.session.isAdminParty()) {
-      this.submit(this.props.username, this.props.password);
+    // Just submit if couchdb is in admin party mode, or not using user/password auth on local dbs
+    if (!(hasLocalSourceOrTarget && userPasswordAuth) || FauxtonAPI.session.isAdminParty()) {
+      this.submit();
       return;
     }
 
-    this.props.showPasswordModal();
+    // Ask user to select an auth method for local source/target when one is not selected.
+    if (!FauxtonAPI.session.isAdminParty()) {
+      if (replicationSource === Constants.REPLICATION_SOURCE.LOCAL &&
+          sourceAuthType === Constants.REPLICATION_AUTH_METHOD.NO_AUTH) {
+        FauxtonAPI.addNotification({
+          msg: "Missing authentication for local source database.",
+          type: "error",
+          clear: true
+        });
+        return;
+      }
+      if ((replicationTarget === Constants.REPLICATION_TARGET.EXISTING_LOCAL_DATABASE ||
+          replicationTarget === Constants.REPLICATION_TARGET.NEW_LOCAL_DATABASE) &&
+          targetAuthType === Constants.REPLICATION_AUTH_METHOD.NO_AUTH) {
+        FauxtonAPI.addNotification({
+          msg: "Missing authentication for local target database.",
+          type: "error",
+          clear: true
+        });
+        return;
+      }
+    }
+
+    this.checkLocalAccountCredentials(sourceAuthType, sourceAuth, 'source').then(() => {
+      this.checkLocalAccountCredentials(targetAuthType, targetAuth, 'target').then(() => {
+        this.submit();
+      });
+    });
+  }
+
+  checkLocalAccountCredentials(authType, auth, label) {
+    // const { sourceAuthType, targetAuthType, sourceAuth, targetAuth } = this.props;
+
+    if (authType === Constants.REPLICATION_AUTH_METHOD.BASIC &&
+        (!auth.username || !auth.password)) {
+      FauxtonAPI.addNotification({
+        msg: `Missing ${label} credentials.`,
+        type: 'error',
+        clear: true
+      });
+      return FauxtonAPI.Promise.reject({});
+    }
+
+    return AuthAPI.login({
+      name: auth.username,
+      password: auth.password
+    }).then((resp) => {
+      if (resp.error) {
+        throw (resp);
+      }
+      return true;
+    }).catch(err => {
+      FauxtonAPI.addNotification({
+        msg: `Your username or password for ${label} database is incorrect.`,
+        type: 'error',
+        clear: true
+      });
+      throw err;
+    });
   }
 
   checkReplicationDocID () {
@@ -64,13 +116,13 @@ export default class NewReplicationController extends React.Component {
         return;
       }
 
-      this.showPasswordModal();
+      this.checkAuth();
     });
   }
 
   runReplicationChecks () {
     const {replicationDocName} = this.props;
-    if (!this.validate()) {
+    if (!this.checkSourceTargetDatabases()) {
       return;
     }
     if (replicationDocName) {
@@ -78,10 +130,10 @@ export default class NewReplicationController extends React.Component {
       return;
     }
 
-    this.showPasswordModal();
+    this.checkAuth();
   }
 
-  validate () {
+  checkSourceTargetDatabases () {
     const {
       remoteTarget,
       remoteSource,
@@ -120,6 +172,48 @@ export default class NewReplicationController extends React.Component {
       }
     }
 
+    //check if remote source/target URL is valid
+    if (!isEmpty(remoteSource)) {
+      let errorMessage = '';
+      try {
+        const url = new URL(remoteSource);
+        if (url.pathname.slice(1) === '') {
+          errorMessage = 'Invalid source database URL. Database name is missing.';
+        }
+      } catch (err) {
+        errorMessage = 'Invalid source database URL.';
+      }
+      if (errorMessage) {
+        FauxtonAPI.addNotification({
+          msg: errorMessage,
+          type: 'error',
+          escape: false,
+          clear: true
+        });
+        return false;
+      }
+    }
+    if (!isEmpty(remoteTarget)) {
+      let errorMessage = '';
+      try {
+        const url = new URL(remoteTarget);
+        if (url.pathname.slice(1) === '') {
+          errorMessage = 'Invalid target database URL. Database name is missing.';
+        }
+      } catch (err) {
+        errorMessage = 'Invalid target database URL.';
+      }
+      if (errorMessage) {
+        FauxtonAPI.addNotification({
+          msg: errorMessage,
+          type: 'error',
+          escape: false,
+          clear: true
+        });
+        return false;
+      }
+    }
+
     //check that source and target are not the same. They can trigger a false positive if they are ""
     if ((remoteTarget === remoteSource && !isEmpty(remoteTarget))
         || (localSource === localTarget && !isEmpty(localSource))) {
@@ -136,7 +230,7 @@ export default class NewReplicationController extends React.Component {
     return true;
   }
 
-  submit (username, password) {
+  submit () {
     const {
       replicationTarget,
       replicationSource,
@@ -145,7 +239,11 @@ export default class NewReplicationController extends React.Component {
       remoteTarget,
       remoteSource,
       localTarget,
-      localSource
+      localSource,
+      sourceAuthType,
+      sourceAuth,
+      targetAuthType,
+      targetAuth
     } = this.props;
 
     let _rev;
@@ -156,19 +254,20 @@ export default class NewReplicationController extends React.Component {
       }
     }
 
-    this.props.hidePasswordModal();
     this.props.replicate({
       replicationTarget,
       replicationSource,
       replicationType,
       replicationDocName,
-      username,
-      password,
       localTarget,
       localSource,
       remoteTarget,
       remoteSource,
-      _rev
+      _rev,
+      sourceAuthType,
+      sourceAuth,
+      targetAuthType,
+      targetAuth
     });
   }
 
@@ -215,7 +314,6 @@ export default class NewReplicationController extends React.Component {
       replicationTarget,
       replicationType,
       replicationDocName,
-      passwordModalVisible,
       conflictModalVisible,
       databases,
       localSource,
@@ -223,11 +321,15 @@ export default class NewReplicationController extends React.Component {
       remoteTarget,
       localTarget,
       updateFormField,
-      clearReplicationForm
+      clearReplicationForm,
+      sourceAuthType,
+      sourceAuth,
+      targetAuthType,
+      targetAuth
     } = this.props;
 
     return (
-      <div>
+      <div style={ {paddingBottom: 20} }>
         <ReplicationSource
           replicationSource={replicationSource}
           localSource={localSource}
@@ -236,6 +338,13 @@ export default class NewReplicationController extends React.Component {
           onSourceSelect={updateFormField('replicationSource')}
           onRemoteSourceChange={updateFormField('remoteSource')}
           onLocalSourceChange={updateFormField('localSource')}
+        />
+        <ReplicationAuth
+          credentials={sourceAuth}
+          authType={sourceAuthType}
+          onChangeAuthType={updateFormField('sourceAuthType')}
+          onChangeAuth={updateFormField('sourceAuth')}
+          selectId={'replication-source-auth'}
         />
         <hr className="replication__seperator" size="1"/>
         <ReplicationTarget
@@ -246,6 +355,13 @@ export default class NewReplicationController extends React.Component {
           remoteTarget={remoteTarget}
           onRemoteTargetChange={updateFormField('remoteTarget')}
           onLocalTargetChange={updateFormField('localTarget')}
+        />
+        <ReplicationAuth
+          credentials={targetAuth}
+          authType={targetAuthType}
+          onChangeAuthType={updateFormField('targetAuthType')}
+          onChangeAuth={updateFormField('targetAuth')}
+          selectId={'replication-target-auth'}
         />
         <hr className="replication__seperator" size="1"/>
         <ReplicationOptions
@@ -259,16 +375,9 @@ export default class NewReplicationController extends React.Component {
           onClick={this.runReplicationChecks}
           onClear={clearReplicationForm}
         />
-        <PasswordModal
-          visible={passwordModalVisible}
-          modalMessage={<p>{app.i18n.en_US['replication-password-modal-text']}</p>}
-          submitBtnLabel="Start Replication"
-          headerTitle={app.i18n.en_US['replication-password-modal-header']}
-          onClose={this.props.hidePasswordModal}
-          onSuccess={this.submit} />
         <ConflictModal
           visible={conflictModalVisible}
-          onClick={this.showPasswordModal}
+          onClick={this.checkAuth}
           onClose={this.props.hideConflictModal}
           docId={replicationDocName}
         />

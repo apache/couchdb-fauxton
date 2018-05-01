@@ -62,14 +62,15 @@ export default class ReplicationController extends React.Component {
   showSection () {
     const {
       replicationSource, replicationTarget, replicationType, replicationDocName,
-      passwordModalVisible, databases, localSource, remoteSource, remoteTarget,
+      databases, localSource, remoteSource, remoteTarget,
       localTarget, statusDocs, statusFilter, loading, allDocsSelected,
       someDocsSelected, showConflictModal, localSourceKnown, localTargetKnown, updateFormField,
-      username, password, authenticated, activityLoading, submittedNoChange, activitySort, tabSection,
+      authenticated, activityLoading, submittedNoChange, activitySort, tabSection,
       replicateInfo, replicateLoading, replicateFilter, allReplicateSelected, someReplicateSelected,
-      showPasswordModal, hidePasswordModal, hideConflictModal, isConflictModalVisible, filterDocs,
+      hideConflictModal, isConflictModalVisible, filterDocs,
       filterReplicate, replicate, clearReplicationForm, selectAllDocs, changeActivitySort, selectDoc,
-      deleteDocs, deleteReplicates, selectAllReplicates, selectReplicate
+      deleteDocs, deleteReplicates, selectAllReplicates, selectReplicate,
+      sourceAuthType, sourceAuth, targetAuthType, targetAuth
     } = this.props;
 
     if (tabSection === 'new replication') {
@@ -83,27 +84,26 @@ export default class ReplicationController extends React.Component {
         localSourceKnown={localSourceKnown}
         clearReplicationForm={clearReplicationForm}
         replicate={replicate}
-        showPasswordModal={showPasswordModal}
         replicationSource={replicationSource}
         replicationTarget={replicationTarget}
         replicationType={replicationType}
         replicationDocName={replicationDocName}
-        passwordModalVisible={passwordModalVisible}
         databases={databases}
         localSource={localSource}
         remoteSource={remoteSource}
         remoteTarget={remoteTarget}
         localTarget={localTarget}
+        sourceAuthType={sourceAuthType}
+        sourceAuth={sourceAuth}
+        targetAuthType={targetAuthType}
+        targetAuth={targetAuth}
         updateFormField={updateFormField}
         conflictModalVisible={isConflictModalVisible}
         hideConflictModal={hideConflictModal}
         showConflictModal={showConflictModal}
         checkReplicationDocID={checkReplicationDocID}
         authenticated={authenticated}
-        username={username}
-        password={password}
         submittedNoChange={submittedNoChange}
-        hidePasswordModal={hidePasswordModal}
       />;
     }
 

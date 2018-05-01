@@ -9,6 +9,7 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
+import FauxtonAPI from '../../core/api';
 import ActionTypes from './actiontypes';
 import Constants from './constants';
 import app from "../../app";
@@ -41,26 +42,32 @@ const validFieldMap = {
   replicationDocName: 'replicationDocName',
   replicationSource: 'replicationSource',
   replicationTarget: 'replicationTarget',
-  localSource: 'localSource'
+  localSource: 'localSource',
+  sourceAuthType: 'sourceAuthType',
+  sourceAuth: 'sourceAuth',
+  targetAuthType: 'targetAuthType',
+  targetAuth: 'targetAuth'
 };
 
 const initialState = {
   loading: false,
   databases: [],
-  authenticated: false,
 
   // source fields
   replicationSource: '',
   localSource: '',
   remoteSource: '',
+  sourceAuthType: Constants.REPLICATION_AUTH_METHOD.NO_AUTH,
+  sourceAuth: {},
 
   // target fields
   replicationTarget: '',
   localTarget: '',
   remoteTarget: '',
+  targetAuthType: Constants.REPLICATION_AUTH_METHOD.NO_AUTH,
+  targetAuth: {},
 
   // other
-  isPasswordModalVisible: false,
   isConflictModalVisible: false,
   replicationType: Constants.REPLICATION_TYPE.ONE_TIME,
   replicationDocName: '',
@@ -87,7 +94,13 @@ const clearForm = (state) => {
   const newState = {
     ...state
   };
-  Object.values(validFieldMap).forEach(field => newState[field] = '');
+  Object.values(validFieldMap).forEach(field => {
+    if (field === 'sourceAuth' || field === 'targetAuth') {
+      newState[field] = {};
+    } else {
+      newState[field] = '';
+    }
+  });
   return newState;
 };
 
@@ -96,8 +109,31 @@ const updateFormField = (state, fieldName, value) => {
     ...state,
     submittedNoChange: false,
   };
-
   updateState[validFieldMap[fieldName]] = value;
+
+  // Set default username when state is set to local target/source AND auth is user/pwd
+  if (fieldName === validFieldMap.sourceAuthType || fieldName === validFieldMap.replicationSource) {
+    const isUserPwdAuth = updateState[validFieldMap.sourceAuthType] === Constants.REPLICATION_AUTH_METHOD.BASIC;
+    const isLocalDB = updateState[validFieldMap.replicationSource] === Constants.REPLICATION_SOURCE.LOCAL;
+    const usernameNotSet = !updateState[validFieldMap.sourceAuth] || !updateState[validFieldMap.sourceAuth].username;
+    if (isUserPwdAuth && isLocalDB && usernameNotSet) {
+      updateState[validFieldMap.sourceAuth] = {
+        username: FauxtonAPI.session.user().name,
+        password: ''
+      };
+    }
+  } else if (fieldName === validFieldMap.targetAuthType || fieldName === validFieldMap.replicationTarget) {
+    const isUserPwdAuth = updateState[validFieldMap.targetAuthType] === Constants.REPLICATION_AUTH_METHOD.BASIC;
+    const isLocalDB = updateState[validFieldMap.replicationTarget] === Constants.REPLICATION_TARGET.EXISTING_LOCAL_DATABASE ||
+      updateState[validFieldMap.replicationTarget] === Constants.REPLICATION_TARGET.NEW_LOCAL_DATABASE;
+    const usernameNotSet = !updateState[validFieldMap.targetAuth] || !updateState[validFieldMap.targetAuth].username;
+    if (isUserPwdAuth && isLocalDB && usernameNotSet) {
+      updateState[validFieldMap.targetAuth] = {
+        username: FauxtonAPI.session.user().name,
+        password: ''
+      };
+    }
+  }
 
   return updateState;
 };
@@ -306,18 +342,6 @@ const replication = (state = initialState, {type, options}) => {
         allReplicateSelected: false
       };
 
-    case ActionTypes.REPLICATION_SHOW_PASSWORD_MODAL:
-      return {
-        ...state,
-        isPasswordModalVisible: true
-      };
-
-    case ActionTypes.REPLICATION_HIDE_PASSWORD_MODAL:
-      return {
-        ...state,
-        isPasswordModalVisible: false
-      };
-
     default:
       return state;
   }
@@ -327,7 +351,6 @@ const replication = (state = initialState, {type, options}) => {
 export const isLoading = (state) => state.isLoading;
 export const isActivityLoading = (state) => state.activityLoading;
 export const getDatabases = (state) => state.databases;
-export const isAuthenticated = (state) => state.authenticated;
 
 export const getReplicationSource = (state) => state.replicationSource;
 export const getLocalSource = (state) => state.localSource;
@@ -340,7 +363,6 @@ export const getLocalTarget = (state) => state.localTarget;
 export const isLocalTargetKnown = (state) => _.includes(state.databases, state.localTarget);
 export const getRemoteTarget = (state) => state.remoteTarget;
 
-export const isPasswordModalVisible = (state) => state.isPasswordModalVisible;
 export const isConflictModalVisible = (state) => state.isConflictModalVisible;
 export const getReplicationType = (state) => state.replicationType;
 export const getReplicationDocName = (state) => state.replicationDocName;
