@@ -65,11 +65,14 @@ Helpers.escapeJQuerySelector = function (selector) {
 };
 
 Helpers.getApiUrl = endpointRoute => {
+  if (app.host.endsWith('/') && endpointRoute.startsWith("/")) {
+    endpointRoute = endpointRoute.substr(1);
+  }
   return url.resolve(window.location.href, app.host + endpointRoute);
 };
 
 Helpers.getServerUrl = endpointRoute => {
-  if (endpointRoute.startsWith("/")) {
+  if (app.host.endsWith('/') && endpointRoute.startsWith("/")) {
     endpointRoute = endpointRoute.substr(1);
   }
   return app.host + endpointRoute;

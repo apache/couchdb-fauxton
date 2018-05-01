@@ -65,7 +65,9 @@ FauxtonAPI.registerUrls('databaseBaseURL', {
   server: function (database) {
     return Helpers.getServerUrl('/' + app.utils.safeURLName(database));
   },
-
+  apiurl: function(database) {
+    return Helpers.getApiUrl('/' + app.utils.safeURLName(database));
+  },
   app: function (database) {
     return '/database/' + database;
   }

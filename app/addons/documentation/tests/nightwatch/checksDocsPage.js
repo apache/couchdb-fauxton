@@ -14,13 +14,13 @@
 
 module.exports = {
   'Check the documentation page exists': function (client) {
-    var waitTime = client.globals.maxWaitTime;
+    const waitTime = client.globals.maxWaitTime;
 
     client
       .loginToGUI()
       .clickWhenVisible('a[href="#/documentation"]')
       .waitForElementVisible('a[href="http://docs.couchdb.org/en/latest/"]', waitTime, false)
-      .waitForElementVisible('a[href="/_utils/docs/index.html"]', waitTime, false)
+      .waitForElementVisible('a[href="./docs/index.html"]', waitTime, false)
       .waitForElementVisible('a[href="http://blog.couchdb.org/"]', waitTime, false)
       .waitForElementVisible('a[href="https://couchdb.apache.org/"]', waitTime, false)
       .waitForElementVisible('a[href="https://github.com/apache/couchdb"]', waitTime, false)
