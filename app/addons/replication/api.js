@@ -141,6 +141,8 @@ const setCredentials = (target, authType, auth) => {
     target.headers = getAuthHeaders(auth.username, auth.password);
   } else {
     // Tries to get creds using one of the custom auth methods
+    // The extension should provide:
+    //   - 'setCredentials(target, auth)' method which sets the 'auth' credentials into 'target' which is the 'target'/'source' field of the replication doc.
     const authExtensions = FauxtonAPI.getExtensions('Replication:Auth');
     if (authExtensions) {
       authExtensions.filter(ext => ext.typeValue === authType).map(ext => {

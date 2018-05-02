@@ -26,6 +26,10 @@ export class ReplicationAuth extends React.Component {
     this.onChangeValue = this.onChangeValue.bind(this);
 
     // init auth extensions
+    // The extension should provide:
+    //   - 'inputComponent' a React component that will be displayed when the user selects the auth method.
+    //   - 'typeValue' field with an arbitrary ID representing the auth type the extension supports.
+    //   - 'typeLabel' field containing the display label for the authentication method.
     this.customAuths = FauxtonAPI.getExtensions('Replication:Auth');
     if (!this.customAuths) {
       this.customAuths = [];

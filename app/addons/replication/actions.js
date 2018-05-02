@@ -300,6 +300,9 @@ const getAuthTypeAndCredentials = (repSourceOrTarget) => {
   }
 
   // Tries to get creds using one of the custom auth methods
+  // The extension should provide:
+  //   - 'getCredentials(obj)' method that extracts the credentials from obj which is the 'target'/'source' field of the replication doc.
+  //   - 'typeValue' field with an arbitrary ID representing the auth type the extension supports.
   const authExtensions = FauxtonAPI.getExtensions('Replication:Auth');
   let credentials = undefined;
   let customAuthType = undefined;
