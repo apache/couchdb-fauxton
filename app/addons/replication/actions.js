@@ -49,7 +49,7 @@ export const getDatabasesList = () => dispatch => {
     });
 };
 
-export const  replicate = (params) => dispatch => {
+export const replicate = (params) => dispatch => {
   const replicationDoc = createReplicationDoc(params);
 
   const promise = post('/_replicator', replicationDoc);
