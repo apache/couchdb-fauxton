@@ -15,13 +15,12 @@ import React from 'react';
 import Constants from '../constants';
 import Components from '../../components/react-components';
 import ReactSelect from 'react-select';
-import RemoteExample from './remoteexample';
 
 const { StyledSelect } = Components;
 
 const replicationTargetSourceOptions = () => {
   return [
-    { value: '', label: 'Select target' },
+    { value: '', label: 'Select target type' },
     { value: Constants.REPLICATION_TARGET.EXISTING_LOCAL_DATABASE, label: 'Existing local database' },
     { value: Constants.REPLICATION_TARGET.EXISTING_REMOTE_DATABASE, label: 'Existing remote database' },
     { value: Constants.REPLICATION_TARGET.NEW_LOCAL_DATABASE, label: 'New local database' },
@@ -37,7 +36,7 @@ const ReplicationTargetSelect = ({value, onChange}) => {
   return (
     <div className="replication__section">
       <div className="replication__input-label">
-        Replication Target:
+        Type:
       </div>
       <div id="replication-target" className="replication__input-select">
         <StyledSelect
@@ -55,7 +54,7 @@ ReplicationTargetSelect.propTypes = {
   onChange: PropTypes.func.isRequired
 };
 
-const RemoteTargetReplicationRow = ({onChange, value, newRemote}) => {
+const RemoteTargetReplicationRow = ({onChange, value}) => {
   return (
     <div>
       <input
@@ -65,7 +64,6 @@ const RemoteTargetReplicationRow = ({onChange, value, newRemote}) => {
         value={value}
         onChange={(e) => onChange(e.target.value)}
       />
-      <RemoteExample newRemote={newRemote} />
     </div>
   );
 };
@@ -124,7 +122,7 @@ const ReplicationTargetRow = ({
   let input;
 
   if (replicationTarget === Constants.REPLICATION_TARGET.NEW_LOCAL_DATABASE) {
-    targetLabel = 'New Database:';
+    targetLabel = 'New database:';
     input = <NewLocalTargetReplicationRow
       value={localTarget}
       onChange={onLocalTargetChange}
@@ -143,11 +141,11 @@ const ReplicationTargetRow = ({
     />;
   }
 
-  let targetLabel = 'Target Name:';
+  let targetLabel = 'Name:';
 
   if (replicationTarget === Constants.REPLICATION_TARGET.NEW_REMOTE_DATABASE ||
       replicationTarget === Constants.REPLICATION_TARGET.NEW_LOCAL_DATABASE) {
-    targetLabel = 'New Database:';
+    targetLabel = 'New database:';
   }
 
   return (
@@ -183,6 +181,7 @@ export class ReplicationTarget extends React.Component {
     } = this.props;
     return (
       <div>
+        <h3>Target</h3>
         <ReplicationTargetSelect
           value={replicationTarget}
           onChange={onTargetChange}

@@ -11,27 +11,27 @@
 // the License.
 
 
-var helpers = require('../../../../../test/nightwatch_tests/helpers/helpers.js');
-var testDbName = 'test_database';
+const helpers = require('../../../../../test/nightwatch_tests/helpers/helpers.js');
+const testDbName = 'test_database';
 module.exports = {
   before: function (client, done) {
-    var nano = helpers.getNanoInstance(client.globals.test_settings.db_url);
+    const nano = helpers.getNanoInstance(client.globals.test_settings.db_url);
     nano.db.create(testDbName, function () {
       done();
     });
   },
 
   after: function (client, done) {
-    var nano = helpers.getNanoInstance(client.globals.test_settings.db_url);
+    const nano = helpers.getNanoInstance(client.globals.test_settings.db_url);
     nano.db.destroy(testDbName, function () {
       done();
     });
   },
 
   'Shows correct view on replicate database': function (client) {
-    var waitTime = client.globals.maxWaitTime,
-        baseUrl = client.globals.test_settings.launch_url;
-    var srcDbSelector = '.replication__page .replication__section:nth-child(2) .replication__input-react-select .Select-value-label';
+    const waitTime = client.globals.maxWaitTime,
+          baseUrl = client.globals.test_settings.launch_url;
+    const srcDbSelector = '.replication__page .replication__section:nth-child(3) .replication__input-react-select .Select-value-label';
     client
       .loginToGUI()
       .url(baseUrl + '/#/database/' + testDbName + '/_all_docs')
@@ -40,13 +40,13 @@ module.exports = {
       .clickWhenVisible('.faux-header__doc-header-dropdown-toggle')
       .clickWhenVisible('.faux-header__doc-header-dropdown-itemwrapper .fonticon-replicate')
 
-    //Wait for replication page to show up
+      //Wait for replication page to show up
       .waitForElementVisible('.replication__page', waitTime, false)
 
-    //Wait for source select to show
+      //Wait for source select to show
       .waitForElementVisible(srcDbSelector, waitTime, false)
 
-    //Get the text values
+      //Get the text values
       .getText(srcDbSelector, function (data) {
         this.verify.ok(data.value === testDbName,
           'Check if database name is filled in source name');

@@ -115,8 +115,12 @@ describe("Replication Actions", () => {
       "replicationType": "REPLICATION_TYPE_ONE_TIME",
       "replicationSource": "REPLICATION_SOURCE_LOCAL",
       "localSource": "animaldb",
+      "sourceAuthType":"BASIC_AUTH",
+      "sourceAuth":{"username":"tester", "password":"testerpass"},
       "replicationTarget": "REPLICATION_TARGET_EXISTING_LOCAL_DATABASE",
-      "localTarget": "boom123"
+      "localTarget": "boom123",
+      "targetAuthType":"BASIC_AUTH",
+      "targetAuth":{"username":"tester", "password":"testerpass"}
     };
 
     it('builds up correct state', (done) => {
@@ -129,6 +133,60 @@ describe("Replication Actions", () => {
 
       fetchMock.getOnce('/_replicator/7dcea9874a8fcb13c6630a1547001559', doc);
       getReplicationStateFrom(doc._id)(dispatch);
+    });
+
+    it('builds up correct state with custom auth', (done) => {
+      const docWithCustomAuth = Object.assign(
+        {}, doc, {
+          "_id": "rep_custom_auth",
+          "continuous": true,
+          "source": {
+            "headers": {},
+            "url": "http://dev:8000/animaldb",
+            "auth": {
+              "creds": "source_user_creds"
+            }
+          },
+          "target": {
+            "headers": {},
+            "url": "http://dev:8000/boom123",
+            "auth": {
+              "creds": "target_user_creds"
+            }
+          }
+        });
+
+      const docStateWithCustomAuth = {
+        "replicationDocName": "rep_custom_auth",
+        "replicationType": "REPLICATION_TYPE_CONTINUOUS",
+        "replicationSource": "REPLICATION_SOURCE_LOCAL",
+        "localSource": "animaldb",
+        "sourceAuthType":"TEST_CUSTOM_AUTH",
+        "sourceAuth":{"creds":"source_user_creds"},
+        "replicationTarget": "REPLICATION_TARGET_EXISTING_LOCAL_DATABASE",
+        "localTarget": "boom123",
+        "targetAuthType":"TEST_CUSTOM_AUTH",
+        "targetAuth":{"creds":"target_user_creds"},
+      };
+      FauxtonAPI.registerExtension('Replication:Auth', {
+        typeValue: 'TEST_CUSTOM_AUTH',
+        typeLabel: 'Test Custom Auth',
+        getCredentials: (repSourceOrTarget) => {
+          if (repSourceOrTarget.auth && repSourceOrTarget.auth.creds) {
+            return { creds: repSourceOrTarget.auth.creds };
+          }
+          return undefined;
+        }
+      });
+      const dispatch = ({type, options}) => {
+        if (ActionTypes.REPLICATION_SET_STATE_FROM_DOC === type) {
+          assert.deepEqual(docStateWithCustomAuth, options);
+          setTimeout(done);
+        }
+      };
+
+      fetchMock.getOnce('/_replicator/rep_custom_auth', docWithCustomAuth);
+      getReplicationStateFrom(docWithCustomAuth._id)(dispatch);
     });
   });
 

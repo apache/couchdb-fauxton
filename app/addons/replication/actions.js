@@ -9,6 +9,7 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
+import base64 from 'base-64';
 import FauxtonAPI from '../../core/api';
 import {get, post} from '../../core/ajax';
 import ActionTypes from './actiontypes';
@@ -87,10 +88,8 @@ export const replicate = (params) => dispatch => {
       if (json.error && json.error === "not_found") {
         return createReplicatorDB().then(() => {
           return replicate(params);
-        })
-          .catch(handleError);
+        }).catch(handleError);
       }
-
       handleError(json);
     });
 };
@@ -283,6 +282,45 @@ export const deleteReplicates = (replicates) => dispatch => {
     });
 };
 
+const getAuthTypeAndCredentials = (repSourceOrTarget) => {
+  const authTypeAndCreds = {
+    type: Constants.REPLICATION_AUTH_METHOD.NO_AUTH,
+    creds: {}
+  };
+  if (repSourceOrTarget.headers && repSourceOrTarget.headers.Authorization) {
+    // Removes 'Basic ' prefix
+    const encodedCreds = repSourceOrTarget.headers.Authorization.substring(6);
+    const decodedCreds = base64.decode(encodedCreds);
+    authTypeAndCreds.type = Constants.REPLICATION_AUTH_METHOD.BASIC;
+    authTypeAndCreds.creds = {
+      username: decodedCreds.split(':')[0],
+      password: decodedCreds.split(':')[1]
+    };
+    return authTypeAndCreds;
+  }
+
+  // Tries to get creds using one of the custom auth methods
+  // The extension should provide:
+  //   - 'getCredentials(obj)' method that extracts the credentials from obj which is the 'target'/'source' field of the replication doc.
+  //   - 'typeValue' field with an arbitrary ID representing the auth type the extension supports.
+  const authExtensions = FauxtonAPI.getExtensions('Replication:Auth');
+  let credentials = undefined;
+  let customAuthType = undefined;
+  if (authExtensions) {
+    authExtensions.map(ext => {
+      if (!credentials && ext.getCredentials) {
+        credentials = ext.getCredentials(repSourceOrTarget);
+        customAuthType = ext.typeValue;
+      }
+    });
+  }
+  if (credentials) {
+    authTypeAndCreds.type = customAuthType;
+    authTypeAndCreds.creds = credentials;
+  }
+  return authTypeAndCreds;
+};
+
 export const getReplicationStateFrom = (id) => dispatch => {
   dispatch({
     type: ActionTypes.REPLICATION_FETCHING_FORM_STATE
@@ -306,6 +344,9 @@ export const getReplicationStateFrom = (id) => dispatch => {
         stateDoc.replicationSource = Constants.REPLICATION_SOURCE.REMOTE;
         stateDoc.remoteSource = decodeFullUrl(sourceUrl);
       }
+      const sourceAuth = getAuthTypeAndCredentials(doc.source);
+      stateDoc.sourceAuthType = sourceAuth.type;
+      stateDoc.sourceAuth = sourceAuth.creds;
 
       if (targetUrl.indexOf(window.location.hostname) > -1) {
         const url = new URL(targetUrl);
@@ -315,6 +356,9 @@ export const getReplicationStateFrom = (id) => dispatch => {
         stateDoc.replicationTarget = Constants.REPLICATION_TARGET.EXISTING_REMOTE_DATABASE;
         stateDoc.remoteTarget = decodeFullUrl(targetUrl);
       }
+      const targetAuth = getAuthTypeAndCredentials(doc.target);
+      stateDoc.targetAuthType = targetAuth.type;
+      stateDoc.targetAuth = targetAuth.creds;
 
       dispatch({
         type: ActionTypes.REPLICATION_SET_STATE_FROM_DOC,
@@ -357,16 +401,4 @@ export const checkForNewApi = () => dispatch => {
       options: newApi
     });
   });
-};
-
-export const showPasswordModal = () => {
-  return {
-    type: ActionTypes.REPLICATION_SHOW_PASSWORD_MODAL
-  };
-};
-
-export const hidePasswordModal = () => {
-  return {
-    type: ActionTypes.REPLICATION_HIDE_PASSWORD_MODAL
-  };
 };

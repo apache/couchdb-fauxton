@@ -95,53 +95,63 @@ export const getSource = ({
   replicationSource,
   localSource,
   remoteSource,
-  username,
-  password
+  sourceAuthType,
+  sourceAuth
 },
 {origin} = window.location) => {
-  let url;
-  let headers;
+
+  const source = {};
   if (replicationSource === Constants.REPLICATION_SOURCE.LOCAL) {
-    url = `${origin}/${localSource}`;
-    headers = getAuthHeaders(username, password);
+    source.url = encodeFullUrl(`${origin}/${localSource}`);
   } else {
-    const credentials = getCredentialsFromUrl(remoteSource);
-    headers = getAuthHeaders(credentials.username, credentials.password);
-    url = removeCredentialsFromUrl(remoteSource);
+    source.url = encodeFullUrl(removeCredentialsFromUrl(remoteSource));
   }
 
-  return {
-    headers,
-    url: encodeFullUrl(url)
-  };
+  setCredentials(source, sourceAuthType, sourceAuth);
+  return source;
 };
 
 export const getTarget = ({
   replicationTarget,
   localTarget,
   remoteTarget,
-  username,
-  password
+  targetAuthType,
+  targetAuth
 },
-{origin} = window.location //this allows us to mock out window.location for our tests
-) => {
+//this allows us to mock out window.location for our tests
+{origin} = window.location) => {
 
-  const encodedLocalTarget = encodeURIComponent(localTarget);
-  let headers = getAuthHeaders(username, password);
-  let target = `${origin}/${encodedLocalTarget}`;
-
+  const target = {};
   if (replicationTarget === Constants.REPLICATION_TARGET.NEW_REMOTE_DATABASE ||
         replicationTarget === Constants.REPLICATION_TARGET.EXISTING_REMOTE_DATABASE) {
-
-    const credentials = getCredentialsFromUrl(remoteTarget);
-    target = encodeFullUrl(removeCredentialsFromUrl(remoteTarget));
-    headers = getAuthHeaders(credentials.username, credentials.password);
+    target.url = encodeFullUrl(removeCredentialsFromUrl(remoteTarget));
+  } else {
+    const encodedLocalTarget = encodeURIComponent(localTarget);
+    target.url = `${origin}/${encodedLocalTarget}`;
   }
 
-  return {
-    headers: headers,
-    url: target
-  };
+  setCredentials(target, targetAuthType, targetAuth);
+  return target;
+};
+
+const setCredentials = (target, authType, auth) => {
+  if (!authType || authType === Constants.REPLICATION_AUTH_METHOD.NO_AUTH) {
+    target.headers = {};
+  } else if (authType === Constants.REPLICATION_AUTH_METHOD.BASIC) {
+    target.headers = getAuthHeaders(auth.username, auth.password);
+  } else {
+    // Tries to set creds using one of the custom auth methods
+    // The extension should provide:
+    //   - 'setCredentials(target, auth)' method which sets the 'auth' credentials into 'target' which is the 'target'/'source' field of the replication doc.
+    const authExtensions = FauxtonAPI.getExtensions('Replication:Auth');
+    if (authExtensions) {
+      authExtensions.filter(ext => ext.typeValue === authType).map(ext => {
+        if (ext.setCredentials) {
+          ext.setCredentials(target, auth);
+        }
+      });
+    }
+  }
 };
 
 export const createTarget = (replicationTarget) => {
@@ -180,12 +190,15 @@ export const createReplicationDoc = ({
   replicationSource,
   replicationType,
   replicationDocName,
-  password,
   localTarget,
   localSource,
   remoteTarget,
   remoteSource,
-  _rev
+  _rev,
+  sourceAuthType,
+  sourceAuth,
+  targetAuthType,
+  targetAuth
 }) => {
   const username = getUsername();
   return addDocIdAndRev(replicationDocName, _rev, {
@@ -197,16 +210,16 @@ export const createReplicationDoc = ({
       replicationSource,
       localSource,
       remoteSource,
-      username,
-      password
+      sourceAuthType,
+      sourceAuth
     }),
     target: getTarget({
       replicationTarget,
       replicationSource,
       remoteTarget,
       localTarget,
-      username,
-      password
+      targetAuthType,
+      targetAuth
     }),
     create_target: createTarget(replicationTarget),
     continuous: continuous(replicationType),
