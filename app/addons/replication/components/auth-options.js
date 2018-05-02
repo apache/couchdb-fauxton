@@ -11,6 +11,7 @@
 // the License.
 import PropTypes from 'prop-types';
 import FauxtonAPI from '../../../core/api';
+import app from '../../../app';
 import React from 'react';
 import Constants from '../constants';
 import Components from '../../components/react-components';
@@ -33,9 +34,10 @@ export class ReplicationAuth extends React.Component {
   }
 
   getAuthOptions = () => {
+    const userPasswordLabel = app.i18n.en_US['replication-user-password-auth-label'];
     const authOptions = [
       { value: Constants.REPLICATION_AUTH_METHOD.NO_AUTH, label: 'None' },
-      { value: Constants.REPLICATION_AUTH_METHOD.BASIC, label: 'Username and password' }
+      { value: Constants.REPLICATION_AUTH_METHOD.BASIC, label: userPasswordLabel }
     ];
     this.customAuths.map(auth => {
       authOptions.push({ value: auth.typeValue, label: auth.typeLabel });
@@ -129,6 +131,8 @@ export class UserPasswordAuthInput extends React.Component {
   }
 
   render () {
+    const usernamePlaceholder = app.i18n.en_US['replication-username-input-placeholder'];
+    const passwordPlaceholder = app.i18n.en_US['replication-password-input-placeholder'];
     const { authId } = this.props;
     return (
       <React.Fragment>
@@ -138,7 +142,7 @@ export class UserPasswordAuthInput extends React.Component {
             <input
               id={authId + '-username'}
               type="text"
-              placeholder="Username"
+              placeholder={usernamePlaceholder}
               value={this.state.username}
               onChange={(e) => this.updateUsername(e.target.value)}
               readOnly={this.props.usernameReadOnly}
@@ -151,7 +155,7 @@ export class UserPasswordAuthInput extends React.Component {
             <input
               id={authId + '-password'}
               type="password"
-              placeholder="Password"
+              placeholder={passwordPlaceholder}
               value={this.state.password}
               onChange={(e) => this.updatePassword(e.target.value)}
             />
