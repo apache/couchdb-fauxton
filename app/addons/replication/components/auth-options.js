@@ -53,8 +53,9 @@ export class ReplicationAuth extends React.Component {
   }
 
   getAuthInputFields(authValue, authType) {
+    const {authId} = this.props;
     if (authType == Constants.REPLICATION_AUTH_METHOD.BASIC) {
-      return <UserPasswordAuthInput onChange={this.onChangeValue} auth={authValue}/>;
+      return <UserPasswordAuthInput onChange={this.onChangeValue} auth={authValue} authId={authId}/>;
     }
     const matchedAuths = this.customAuths.filter(el => el.typeValue === authType);
     if (matchedAuths && matchedAuths.length > 0) {
@@ -66,7 +67,7 @@ export class ReplicationAuth extends React.Component {
   }
 
   render () {
-    const {credentials, authType, selectId} = this.props;
+    const {credentials, authType, authId} = this.props;
     return (<React.Fragment>
       <div className="replication__section">
         <div className="replication__input-label">
@@ -76,7 +77,7 @@ export class ReplicationAuth extends React.Component {
           <StyledSelect
             selectContent={this.getAuthOptions()}
             selectChange={(e) => this.onChangeType(e.target.value)}
-            selectId={selectId}
+            selectId={'select-' + authId}
             selectValue={authType} />
         </div>
       </div>
@@ -128,12 +129,14 @@ export class UserPasswordAuthInput extends React.Component {
   }
 
   render () {
+    const { authId } = this.props;
     return (
       <React.Fragment>
         <div className="replication__section">
           <div className="replication__input-label"></div>
           <div>
             <input
+              id={authId + '-username'}
               type="text"
               placeholder="Username"
               value={this.state.username}
@@ -146,6 +149,7 @@ export class UserPasswordAuthInput extends React.Component {
           <div className="replication__input-label"></div>
           <div>
             <input
+              id={authId + '-password'}
               type="password"
               placeholder="Password"
               value={this.state.password}

@@ -57,21 +57,32 @@ module.exports = {
       // enter our source DB
       .setValue('.replication__input-react-select .Select-input input', [newDatabaseName1, client.Keys.ENTER])
 
+      // select source USER/PASSWORD authentication
+      .clickWhenVisible('#select-replication-source-auth')
+      .keys(['\uE015', '\uE006'])
+      .waitForElementVisible('#replication-source-auth-username', waitTime, true)
+
+      // enter source username/password
+      .setValue('#replication-source-auth-password', [password, client.Keys.ENTER])
+
       // enter a new target name
       .waitForElementVisible('#replication-target', waitTime, true)
       .clickWhenVisible('option[value="REPLICATION_TARGET_NEW_LOCAL_DATABASE"]')
       .setValue('.replication__new-input', replicatedDBName)
 
+      // select target USER/PASSWORD authentication
+      .clickWhenVisible('#select-replication-target-auth')
+      .keys(['\uE015', '\uE006'])
+      .waitForElementVisible('#replication-target-auth-username', waitTime, true)
+
+      // enter target username/password
+      .setValue('#replication-target-auth-password', [password, client.Keys.ENTER])
+
       .clickWhenVisible('#replicate')
 
-      .waitForElementVisible('.enter-password-modal', waitTime, true)
-      .setValue('.enter-password-modal .password-modal-input', password)
-      .clickWhenVisible('.enter-password-modal button.save')
-      .waitForElementNotPresent('.enter-password-modal', waitTime, true)
       .waitForElementNotPresent('.global-notification .fonticon-cancel', waitTime, false)
       .end();
   },
-
 
   'Replicates existing local db to existing local db' : function (client) {
     const waitTime = client.globals.maxWaitTime;
@@ -100,10 +111,26 @@ module.exports = {
       .waitForElementVisible('.replication__input-react-select', waitTime, true)
       .setValue('.replication__input-react-select .Select-input input', [newDatabaseName1, client.Keys.ENTER])
 
+      // select source USER/PASSWORD authentication
+      .clickWhenVisible('#select-replication-source-auth')
+      .keys(['\uE015', '\uE006'])
+      .waitForElementVisible('#replication-source-auth-username', waitTime, true)
+
+      // enter source username/password
+      .setValue('#replication-source-auth-password', [password, client.Keys.ENTER])
+
       // select existing local as the target
       .waitForElementVisible('#replication-target', waitTime, true)
       .clickWhenVisible('#replication-target option[value="REPLICATION_TARGET_EXISTING_LOCAL_DATABASE"]')
       .setValue('#replication-target-local .Select-input input', [newDatabaseName2, client.Keys.ENTER])
+
+      // select target USER/PASSWORD authentication
+      .clickWhenVisible('#select-replication-target-auth')
+      .keys(['\uE015', '\uE006'])
+      .waitForElementVisible('#replication-target-auth-username', waitTime, true)
+
+      // enter target username/password
+      .setValue('#replication-target-auth-password', [password, client.Keys.ENTER])
 
       .getAttribute('#replicate', 'disabled', function (result) {
         // confirm it's not disabled
@@ -111,9 +138,7 @@ module.exports = {
       })
       .clickWhenVisible('#replicate')
 
-      .waitForElementVisible('.enter-password-modal', waitTime, true)
-      .setValue('.enter-password-modal input[type="password"]', password)
-      .clickWhenVisible('.enter-password-modal button.save')
+      .waitForElementNotPresent('.global-notification .fonticon-cancel', waitTime, false)
       .end();
   },
 
@@ -151,11 +176,27 @@ module.exports = {
       .waitForElementVisible('.replication__input-react-select', waitTime, true)
       .setValue('.replication__input-react-select .Select-input input', [newDatabaseName1, client.Keys.ENTER])
 
+      // select source USER/PASSWORD authentication
+      .clickWhenVisible('#select-replication-source-auth')
+      .keys(['\uE015', '\uE006'])
+      .waitForElementVisible('#replication-source-auth-username', waitTime, true)
+
+      // enter source username/password
+      .setValue('#replication-source-auth-password', [password, client.Keys.ENTER])
+
       // select existing local as the target
       .waitForElementVisible('#replication-target', waitTime, true)
       .clickWhenVisible('#replication-target option[value="REPLICATION_TARGET_EXISTING_LOCAL_DATABASE"]')
       .setValue('#replication-target-local .Select-input input', [newDatabaseName2, client.Keys.ENTER])
       .setValue('.replication__doc-name-input', [replicatorDoc._id, client.Keys.ENTER])
+
+      // select target USER/PASSWORD authentication
+      .clickWhenVisible('#select-replication-target-auth')
+      .keys(['\uE015', '\uE006'])
+      .waitForElementVisible('#replication-target-auth-username', waitTime, true)
+
+      // enter target username/password
+      .setValue('#replication-target-auth-password', [password, client.Keys.ENTER])
 
       .getAttribute('#replicate', 'disabled', function (result) {
         // confirm it's not disabled
@@ -163,11 +204,83 @@ module.exports = {
       })
       .clickWhenVisible('#replicate')
 
+      // confirm overwrite of existing doc
       .waitForElementVisible('.replication__error-doc-modal .replication__error-continue', waitTime, true)
       .clickWhenVisible('.replication__error-doc-modal .replication__error-continue')
-      .waitForElementVisible('.enter-password-modal', waitTime, true)
-      .setValue('.enter-password-modal input[type="password"]', password)
-      .clickWhenVisible('.enter-password-modal button.save')
+
+      .waitForElementNotPresent('.global-notification .fonticon-cancel', waitTime, false)
+      .end();
+  },
+
+  'Show error for missing credentials' : function (client) {
+    const waitTime = client.globals.maxWaitTime;
+    const baseUrl = client.globals.test_settings.launch_url;
+
+    client
+      .createDatabase(newDatabaseName1)
+      .checkForDatabaseCreated(newDatabaseName1, waitTime)
+      .createDocument(docName1, newDatabaseName1)
+      .loginToGUI()
+      .url(baseUrl + '/#/replication/_create')
+      .waitForElementVisible('button#replicate', waitTime, true)
+      .waitForElementVisible('#replication-source', waitTime, true)
+
+      // select LOCAL as the source
+      .clickWhenVisible('#replication-source')
+      .keys(['\uE015', '\uE006'])
+      .waitForElementVisible('.replication__input-react-select', waitTime, true)
+
+      // enter our source DB
+      .setValue('.replication__input-react-select .Select-input input', [newDatabaseName1, client.Keys.ENTER])
+
+      // enter a new target name
+      .waitForElementVisible('#replication-target', waitTime, true)
+      .clickWhenVisible('option[value="REPLICATION_TARGET_NEW_LOCAL_DATABASE"]')
+      .setValue('.replication__new-input', replicatedDBName)
+
+      .clickWhenVisible('#replicate')
+
+      .waitForElementPresent('.global-notification.alert-error', waitTime, true)
+      .end();
+  },
+
+  'Show error for invalid credentials' : function (client) {
+    const waitTime = client.globals.maxWaitTime;
+    const baseUrl = client.globals.test_settings.launch_url;
+
+    client
+      .createDatabase(newDatabaseName1)
+      .checkForDatabaseCreated(newDatabaseName1, waitTime)
+      .createDocument(docName1, newDatabaseName1)
+      .loginToGUI()
+      .url(baseUrl + '/#/replication/_create')
+      .waitForElementVisible('button#replicate', waitTime, true)
+      .waitForElementVisible('#replication-source', waitTime, true)
+
+      // select LOCAL as the source
+      .clickWhenVisible('#replication-source')
+      .keys(['\uE015', '\uE006'])
+      .waitForElementVisible('.replication__input-react-select', waitTime, true)
+
+      // enter our source DB
+      .setValue('.replication__input-react-select .Select-input input', [newDatabaseName1, client.Keys.ENTER])
+
+      // select source USER/PASSWORD authentication
+      .clickWhenVisible('#select-replication-source-auth')
+      .keys(['\uE015', '\uE006'])
+      .waitForElementVisible('#replication-source-auth-username', waitTime, true)
+
+      // enter source username/password
+      .setValue('#replication-source-auth-password', ['wrong_pwd', client.Keys.ENTER])
+
+      // enter a new target name
+      .waitForElementVisible('#replication-target', waitTime, true)
+      .clickWhenVisible('option[value="REPLICATION_TARGET_NEW_REMOTE_DATABASE"]')
+      .setValue('.replication__remote-connection-url', 'http://fake.com/dummydb')
+
+      .clickWhenVisible('#replicate')
+
+      .waitForElementPresent('.global-notification.alert-error', waitTime, true)
       .end();
   }
 };

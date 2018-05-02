@@ -337,7 +337,7 @@ export default class NewReplicationController extends React.Component {
           authType={sourceAuthType}
           onChangeAuthType={updateFormField('sourceAuthType')}
           onChangeAuth={updateFormField('sourceAuth')}
-          selectId={'replication-source-auth'}
+          authId={'replication-source-auth'}
         />
         <hr className="replication__seperator" size="1"/>
         <ReplicationTarget
@@ -354,7 +354,7 @@ export default class NewReplicationController extends React.Component {
           authType={targetAuthType}
           onChangeAuthType={updateFormField('targetAuthType')}
           onChangeAuth={updateFormField('targetAuth')}
-          selectId={'replication-target-auth'}
+          authId={'replication-target-auth'}
         />
         <hr className="replication__seperator" size="1"/>
         <ReplicationOptions
