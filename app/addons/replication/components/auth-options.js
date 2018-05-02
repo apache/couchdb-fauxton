@@ -93,7 +93,7 @@ export class ReplicationAuth extends React.Component {
 }
 
 ReplicationAuth.propTypes = {
-  selectId: PropTypes.string.isRequired,
+  authId: PropTypes.string.isRequired,
   authType: PropTypes.string.isRequired,
   credentials: PropTypes.object,
   onChangeAuth: PropTypes.func.isRequired,
