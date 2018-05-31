@@ -23,7 +23,9 @@ const dbName = 'fauxton-selenium-tests-' + getRandomInt(1, 20000);
 function createDatabase(nano, database) {
   return new Promise(function (resolve, reject) {
     nano.db.create(database, function (err) {
-      if (err && err.message != "The database could not be created, the file already exists.")
+
+      //Tolerate database already existing
+      if (err && err.status_code != 412)
         reject(err);
       else
         resolve();
