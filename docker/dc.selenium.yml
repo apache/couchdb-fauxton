@@ -8,7 +8,9 @@ services:
 
   couchdb:
     container_name: couchdb
-    image: couchdbdev/debian-8-dev
-    command: '--with-haproxy -a tester:testerpass -n 1'
+    image: apache/couchdb:latest
+    environment:
+      COUCHDB_USER: tester
+      COUCHDB_PASSWORD: testerpass
     ports:
       - "5984:5984"
