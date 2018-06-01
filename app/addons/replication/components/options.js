@@ -28,7 +28,7 @@ const ReplicationType = ({value, onChange}) => {
   return (
     <div className="replication__section">
       <div className="replication__input-label">
-        Replication Type:
+        Replication type:
       </div>
       <div className="replication__input-select">
         <StyledSelect
@@ -49,7 +49,7 @@ ReplicationType.propTypes = {
 const ReplicationDoc = ({value, onChange}) =>
   <div className="replication__section">
     <div className="replication__input-label">
-    Replication Document:
+    Replication document:
     </div>
     <div className="replication__doc-name">
       <span className="fonticon fonticon-cancel replication__doc-name-icon" title="Clear field"
@@ -76,6 +76,7 @@ export class ReplicationOptions extends React.Component {
 
     return (
       <div>
+        <h3>Options</h3>
         <ReplicationType
           onChange={onTypeChange}
           value={replicationType}

@@ -9,7 +9,9 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
+import base64 from 'base-64';
 import FauxtonAPI from '../../core/api';
+import {get, post} from '../../core/ajax';
 import ActionTypes from './actiontypes';
 import Helpers from './helpers';
 import Constants from './constants';
@@ -22,55 +24,40 @@ import {
   deleteReplicatesApi,
   createReplicatorDB
 } from './api';
-import 'whatwg-fetch';
 
 
-function initReplicator (localSource) {
-  if (localSource) {
-    FauxtonAPI.dispatch({
+export const initReplicator = (routeLocalSource, localSource) => dispatch => {
+  if (routeLocalSource && routeLocalSource !== localSource) {
+    dispatch({
       type: ActionTypes.INIT_REPLICATION,
       options: {
-        localSource: localSource
+        localSource: routeLocalSource
       }
     });
   }
+};
 
-  fetch('/_all_dbs', {
-    credentials: 'include',
-    headers: {
-      'Accept': 'application/json; charset=utf-8',
-      'Content-Type': 'application/json'
-    },
-  })
-    .then(resp => resp.json())
+export const getDatabasesList = () => dispatch => {
+  get('/_all_dbs')
     .then((databases) => {
-      FauxtonAPI.dispatch({
+      dispatch({
         type: ActionTypes.REPLICATION_DATABASES_LOADED,
         options: {
-          databases: databases
+          databases
         }
       });
     });
-}
+};
 
-export const replicate = (params) => {
+export const replicate = (params) => dispatch => {
   const replicationDoc = createReplicationDoc(params);
 
-  const promise = fetch('/_replicator', {
-    method: 'POST',
-    credentials: 'include',
-    headers: {
-      'Accept': 'application/json; charset=utf-8',
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(replicationDoc)
-  })
-    .then(res => res.json());
+  const promise = post('/_replicator', replicationDoc);
 
   const source = Helpers.getDatabaseLabel(replicationDoc.source);
   const target = Helpers.getDatabaseLabel(replicationDoc.target);
 
-  FauxtonAPI.dispatch({
+  dispatch({
     type: ActionTypes.REPLICATION_STARTING,
   });
 
@@ -82,71 +69,76 @@ export const replicate = (params) => {
     });
   };
 
-  promise.then(json => {
-    if (!json.ok) {
-      throw json;
-    }
+  promise
+    .then(json => {
+      if (!json.ok) {
+        throw json;
+      }
 
-    FauxtonAPI.addNotification({
-      msg: `Replication from <code>${decodeURIComponent(source)}</code> to <code>${decodeURIComponent(target)}</code> has been scheduled.`,
-      type: 'success',
-      escape: false,
-      clear: true
-    });
-  })
+      FauxtonAPI.addNotification({
+        msg: `Replication from <code>${decodeURIComponent(source)}</code> to <code>${decodeURIComponent(target)}</code> has been scheduled.`,
+        type: 'success',
+        escape: false,
+        clear: true
+      });
+
+      dispatch(getReplicationActivity());
+    })
     .catch(json => {
       if (json.error && json.error === "not_found") {
         return createReplicatorDB().then(() => {
           return replicate(params);
-        })
-          .catch(handleError);
+        }).catch(handleError);
       }
-
       handleError(json);
     });
 };
 
-function updateFormField (fieldName, value) {
-  FauxtonAPI.dispatch({
+export const updateFormField = (fieldName, value) => {
+  return {
     type: ActionTypes.REPLICATION_UPDATE_FORM_FIELD,
     options: {
       fieldName: fieldName,
       value: value
     }
-  });
-}
+  };
+};
 
-function clearReplicationForm () {
-  FauxtonAPI.dispatch({ type: ActionTypes.REPLICATION_CLEAR_FORM });
-}
+export const clearReplicationForm = () => {
+  return { type: ActionTypes.REPLICATION_CLEAR_FORM };
+};
 
-const getReplicationActivity = (supportNewApi) => {
-  FauxtonAPI.dispatch({
+export const getReplicationActivity = () => dispatch => {
+  dispatch({
     type: ActionTypes.REPLICATION_FETCHING_STATUS,
   });
 
-  fetchReplicationDocs(supportNewApi).then(docs => {
-    FauxtonAPI.dispatch({
-      type: ActionTypes.REPLICATION_STATUS,
-      options: docs
+  supportNewApi()
+    .then(supportNewApi => {
+      return fetchReplicationDocs(supportNewApi);
+    })
+    .then(docs => {
+      dispatch({
+        type: ActionTypes.REPLICATION_STATUS,
+        options: docs
+      });
     });
-  });
 };
 
-const getReplicateActivity = () => {
+export const getReplicateActivity = () => dispatch => {
   supportNewApi()
     .then(newApi => {
       if (!newApi) {
         return;
       }
 
-      FauxtonAPI.dispatch({
+      dispatch({
         type: ActionTypes.REPLICATION_FETCHING_REPLICATE_STATUS,
       });
 
       fetchReplicateInfo()
         .then(replicateInfo => {
-          FauxtonAPI.dispatch({
+          dispatch({
             type: ActionTypes.REPLICATION_REPLICATE_STATUS,
             options: replicateInfo
           });
@@ -154,59 +146,59 @@ const getReplicateActivity = () => {
     });
 };
 
-const filterDocs = (filter) => {
-  FauxtonAPI.dispatch({
+export const filterDocs = (filter) => {
+  return {
     type: ActionTypes.REPLICATION_FILTER_DOCS,
     options: filter
-  });
+  };
 };
 
-const filterReplicate = (filter) => {
-  FauxtonAPI.dispatch({
+export const filterReplicate = (filter) => {
+  return {
     type: ActionTypes.REPLICATION_FILTER_REPLICATE,
     options: filter
-  });
+  };
 };
 
-const selectAllDocs = () => {
-  FauxtonAPI.dispatch({
+export const selectAllDocs = () => {
+  return {
     type: ActionTypes.REPLICATION_TOGGLE_ALL_DOCS
-  });
+  };
 };
 
-const selectDoc = (id) => {
-  FauxtonAPI.dispatch({
+export const selectDoc = (id) => {
+  return {
     type: ActionTypes.REPLICATION_TOGGLE_DOC,
     options: id
-  });
+  };
 };
 
-const selectAllReplicates = () => {
-  FauxtonAPI.dispatch({
+export const selectAllReplicates = () => {
+  return {
     type: ActionTypes.REPLICATION_TOGGLE_ALL_REPLICATE
-  });
+  };
 };
 
-const selectReplicate = (id) => {
-  FauxtonAPI.dispatch({
+export const selectReplicate = (id) => {
+  return {
     type: ActionTypes.REPLICATION_TOGGLE_REPLICATE,
     options: id
-  });
+  };
 };
 
-const clearSelectedDocs = () => {
-  FauxtonAPI.dispatch({
+export const clearSelectedDocs = () => {
+  return {
     type: ActionTypes.REPLICATION_CLEAR_SELECTED_DOCS
-  });
+  };
 };
 
-const clearSelectedReplicates = () => {
-  FauxtonAPI.dispatch({
+export const clearSelectedReplicates = () => {
+  return {
     type: ActionTypes.REPLICATION_CLEAR_SELECTED_REPLICATES
-  });
+  };
 };
 
-export const deleteDocs = (docs) => {
+export const deleteDocs = (docs) => dispatch => {
   const bulkDocs = docs.map(({raw: doc}) => {
     doc._deleted = true;
     return doc;
@@ -219,20 +211,12 @@ export const deleteDocs = (docs) => {
     clear: true
   });
 
-  fetch('/_replicator/_bulk_docs', {
-    credentials: 'include',
-    headers: {
-      'Accept': 'application/json; charset=utf-8',
-      'Content-Type': 'application/json'
-    },
-    method: 'POST',
-    body: JSON.stringify({docs: bulkDocs})
-  })
+  post('/_replicator/_bulk_docs', {docs: bulkDocs}, {raw: true})
     .then(resp => {
       if (!resp.ok) {
         throw resp;
       }
-      return resp.json();
+      return resp;
     })
     .then(() => {
 
@@ -248,8 +232,8 @@ export const deleteDocs = (docs) => {
         clear: true
       });
 
-      clearSelectedDocs();
-      getReplicationActivity();
+      dispatch(clearSelectedDocs());
+      dispatch(getReplicationActivity());
     })
     .catch(resp => {
       resp.json()
@@ -264,7 +248,7 @@ export const deleteDocs = (docs) => {
     });
 };
 
-const deleteReplicates = (replicates) => {
+export const deleteReplicates = (replicates) => dispatch => {
   FauxtonAPI.addNotification({
     msg: `Deleting _replicate${replicates.length > 1 ? 's' : ''}.`,
     type: 'success',
@@ -279,8 +263,8 @@ const deleteReplicates = (replicates) => {
         msg = `Replication <code>${replicates[0]._id}</code> has been deleted`;
       }
 
-      clearSelectedReplicates();
-      getReplicateActivity();
+      dispatch(clearSelectedReplicates());
+      dispatch(getReplicateActivity());
 
       FauxtonAPI.addNotification({
         msg: msg,
@@ -298,19 +282,51 @@ const deleteReplicates = (replicates) => {
     });
 };
 
-export const getReplicationStateFrom = (id) => {
-  FauxtonAPI.dispatch({
+const getAuthTypeAndCredentials = (repSourceOrTarget) => {
+  const authTypeAndCreds = {
+    type: Constants.REPLICATION_AUTH_METHOD.NO_AUTH,
+    creds: {}
+  };
+  if (repSourceOrTarget.headers && repSourceOrTarget.headers.Authorization) {
+    // Removes 'Basic ' prefix
+    const encodedCreds = repSourceOrTarget.headers.Authorization.substring(6);
+    const decodedCreds = base64.decode(encodedCreds);
+    authTypeAndCreds.type = Constants.REPLICATION_AUTH_METHOD.BASIC;
+    authTypeAndCreds.creds = {
+      username: decodedCreds.split(':')[0],
+      password: decodedCreds.split(':')[1]
+    };
+    return authTypeAndCreds;
+  }
+
+  // Tries to get creds using one of the custom auth methods
+  // The extension should provide:
+  //   - 'getCredentials(obj)' method that extracts the credentials from obj which is the 'target'/'source' field of the replication doc.
+  //   - 'typeValue' field with an arbitrary ID representing the auth type the extension supports.
+  const authExtensions = FauxtonAPI.getExtensions('Replication:Auth');
+  let credentials = undefined;
+  let customAuthType = undefined;
+  if (authExtensions) {
+    authExtensions.map(ext => {
+      if (!credentials && ext.getCredentials) {
+        credentials = ext.getCredentials(repSourceOrTarget);
+        customAuthType = ext.typeValue;
+      }
+    });
+  }
+  if (credentials) {
+    authTypeAndCreds.type = customAuthType;
+    authTypeAndCreds.creds = credentials;
+  }
+  return authTypeAndCreds;
+};
+
+export const getReplicationStateFrom = (id) => dispatch => {
+  dispatch({
     type: ActionTypes.REPLICATION_FETCHING_FORM_STATE
   });
 
-  fetch(`/_replicator/${encodeURIComponent(id)}`, {
-    credentials: 'include',
-    headers: {
-      'Accept': 'application/json; charset=utf-8',
-    },
-    method: 'GET'
-  })
-    .then(resp => resp.json())
+  get(`/_replicator/${encodeURIComponent(id)}`)
     .then((doc) => {
       const stateDoc = {
         replicationDocName: doc._id,
@@ -328,6 +344,9 @@ export const getReplicationStateFrom = (id) => {
         stateDoc.replicationSource = Constants.REPLICATION_SOURCE.REMOTE;
         stateDoc.remoteSource = decodeFullUrl(sourceUrl);
       }
+      const sourceAuth = getAuthTypeAndCredentials(doc.source);
+      stateDoc.sourceAuthType = sourceAuth.type;
+      stateDoc.sourceAuth = sourceAuth.creds;
 
       if (targetUrl.indexOf(window.location.hostname) > -1) {
         const url = new URL(targetUrl);
@@ -337,8 +356,11 @@ export const getReplicationStateFrom = (id) => {
         stateDoc.replicationTarget = Constants.REPLICATION_TARGET.EXISTING_REMOTE_DATABASE;
         stateDoc.remoteTarget = decodeFullUrl(targetUrl);
       }
+      const targetAuth = getAuthTypeAndCredentials(doc.target);
+      stateDoc.targetAuthType = targetAuth.type;
+      stateDoc.targetAuth = targetAuth.creds;
 
-      FauxtonAPI.dispatch({
+      dispatch({
         type: ActionTypes.REPLICATION_SET_STATE_FROM_DOC,
         options: stateDoc
       });
@@ -353,65 +375,30 @@ export const getReplicationStateFrom = (id) => {
     });
 };
 
-const showConflictModal = () => {
-  FauxtonAPI.dispatch({
+export const showConflictModal = () => {
+  return {
     type: ActionTypes.REPLICATION_SHOW_CONFLICT_MODAL
-  });
+  };
 };
 
-const hideConflictModal = () => {
-  FauxtonAPI.dispatch({
+export const hideConflictModal = () => {
+  return {
     type: ActionTypes.REPLICATION_HIDE_CONFLICT_MODAL
-  });
+  };
 };
 
-const changeActivitySort = (sort) => {
-  FauxtonAPI.dispatch({
+export const changeActivitySort = (sort) => {
+  return {
     type: ActionTypes.REPLICATION_CHANGE_ACTIVITY_SORT,
     options: sort
-  });
+  };
 };
 
-const changeTabSection = (newSection, url) => {
-  FauxtonAPI.dispatch({
-    type: ActionTypes.REPLICATION_CHANGE_TAB_SECTION,
-    options: newSection
-  });
-
-  if (url) {
-    FauxtonAPI.navigate(url, {trigger: false});
-  }
-};
-
-const checkForNewApi = () => {
+export const checkForNewApi = () => dispatch => {
   supportNewApi().then(newApi => {
-    FauxtonAPI.dispatch({
+    dispatch({
       type: ActionTypes.REPLICATION_SUPPORT_NEW_API,
       options: newApi
     });
   });
-};
-
-export default {
-  checkForNewApi,
-  initReplicator,
-  replicate,
-  updateFormField,
-  clearReplicationForm,
-  getReplicationActivity,
-  filterDocs,
-  selectAllDocs,
-  selectDoc,
-  deleteDocs,
-  getReplicationStateFrom,
-  showConflictModal,
-  hideConflictModal,
-  changeActivitySort,
-  clearSelectedDocs,
-  changeTabSection,
-  getReplicateActivity,
-  filterReplicate,
-  selectReplicate,
-  selectAllReplicates,
-  deleteReplicates
 };

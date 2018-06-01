@@ -12,14 +12,13 @@
 
 import React from 'react';
 import FauxtonAPI from '../../core/api';
-import ReplicationController from './controller';
-import Actions from './actions';
+import ReplicationController from './container';
 
 const ReplicationRouteObject = FauxtonAPI.RouteObject.extend({
   routes: {
-    'replication/_create': 'defaultView',
-    'replication/_create/:dbname': 'defaultView',
-    'replication/id/:id': 'fromId',
+    'replication/_create': 'createView',
+    'replication/_create/:dbname': 'createView',
+    'replication/id/:id': 'createViewFromId',
     'replication': 'activityView',
     'replication/_replicate': 'replicateView'
   },
@@ -40,32 +39,32 @@ const ReplicationRouteObject = FauxtonAPI.RouteObject.extend({
     ];
   },
 
-  defaultView: function (databaseName) {
+  createView: function (databaseName) {
     const localSource = databaseName || '';
-    Actions.changeTabSection('new replication');
-    Actions.clearReplicationForm();
 
     return <ReplicationController
-      localSource={localSource}
+      routeLocalSource={localSource}
+      section={'new replication'}
     />;
   },
 
-  fromId: function (replicationId) {
-    Actions.clearReplicationForm();
-    Actions.changeTabSection('new replication');
+  createViewFromId: function (replicationId) {
     return <ReplicationController
       replicationId={replicationId}
+      section={'new replication'}
     />;
   },
 
   activityView: function () {
-    Actions.changeTabSection('activity');
-    return <ReplicationController/>;
+    return <ReplicationController
+      section={"activity"}
+    />;
   },
 
   replicateView: function () {
-    Actions.changeTabSection('_replicate');
-    return <ReplicationController/>;
+    return <ReplicationController
+      section={"_replicate"}
+    />;
   }
 });
 

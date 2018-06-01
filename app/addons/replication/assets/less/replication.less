@@ -13,6 +13,8 @@
 @import "../../../../../assets/less/variables.less";
 @import "../../../../../assets/less/mixins.less";
 
+@replication_input_field_width: 400px;
+
 div.replication__page {
   padding-top: 25px !important;
   display: flex;
@@ -24,6 +26,10 @@ div.replication__page {
   display: flex;
   flex-flow: row wrap;
   justify-content: flex-start;
+  & input {
+    width: @replication_input_field_width;
+    font-size: 14px;
+  }
 }
 
 .replication__seperator {
@@ -44,27 +50,28 @@ div.replication__page {
   width: 540px;
   select {
     font-size: 14px;
-    width: 400px;
+    width: @replication_input_field_width;
     margin-bottom: 10px;
     background-color: white;
     border: 1px solid #cccccc;
   }
   .styled-select {
-    width: 400px;
+    width: @replication_input_field_width;
   }
 }
 
 .replication__input-react-select {
   font-size: 14px;
+  padding-bottom: 10px;
 
   .Select .Select-menu-outer {
-    width: 400px;
+    width: @replication_input_field_width;
   }
 
   .Select div.Select-control {
     padding: 6px;
     border: 1px solid #cccccc;
-    width: 400px;
+    width: @replication_input_field_width;
 
     .Select-value, .Select-placeholder {
       padding: 6px 15px 6px 10px;
@@ -84,7 +91,7 @@ div.replication__page {
 
 .replication__remote-connection-url[type="text"] {
   font-size: 14px;
-  width: 400px;
+  width: @replication_input_field_width;
   color: #333;
 }
 
@@ -95,14 +102,14 @@ div.replication__page {
 }
 
 .replication__new-input[type="text"] {
-  width: 400px;
+  width: @replication_input_field_width;
   font-size: 14px;
   color: #333;
 }
 
 .replication__doc-name {
   position: relative;
-  width: 400px;
+  width: @replication_input_field_width;
 
 }
 
@@ -125,7 +132,7 @@ div.replication__page {
 .replication__doc-name-input[type="text"] {
   padding-right: 32px;
   font-size: 14px;
-  width: 400px;
+  width: @replication_input_field_width;
   color: #333;
 }
 

@@ -9,11 +9,9 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
+import FauxtonAPI from '../../core/api';
 import React from 'react';
-import Stores from './stores';
-import Actions from './actions';
 import Helpers from '../../helpers';
-import {showPasswordModal} from '../auth/actions';
 import Components from '../components/react-components';
 import NewReplication from './components/newreplication';
 import Activity from './components/activity';
@@ -24,135 +22,87 @@ import ReplicateActivity from './components/replicate-activity';
 
 const {LoadLines, Polling, RefreshBtn} = Components;
 
-const store = Stores.replicationStore;
-
 export default class ReplicationController extends React.Component {
-  constructor (props) {
-    super(props);
-    this.state = this.getStoreState();
-  }
-
-  getStoreState () {
-    return {
-      loading: store.isLoading(),
-      activityLoading: store.isActivityLoading(),
-      databases: store.getDatabases(),
-      authenticated: store.isAuthenticated(),
-
-      // source fields
-      replicationSource: store.getReplicationSource(),
-      localSource: store.getlocalSource(),
-      localSourceKnown: store.isLocalSourceKnown(),
-      remoteSource: store.getRemoteSource(),
-
-      // target fields
-      replicationTarget: store.getReplicationTarget(),
-      localTarget: store.getlocalTarget(),
-      localTargetKnown: store.isLocalTargetKnown(),
-      remoteTarget: store.getRemoteTarget(),
-
-      // other
-      passwordModalVisible: store.isPasswordModalVisible(),
-      showConflictModal: store.isConflictModalVisible(),
-      replicationType: store.getReplicationType(),
-      replicationDocName: store.getReplicationDocName(),
-      submittedNoChange: store.getSubmittedNoChange(),
-      statusDocs: store.getFilteredReplicationStatus(),
-      statusFilter: store.getStatusFilter(),
-      replicateFilter: store.getReplicateFilter(),
-      allDocsSelected: store.getAllDocsSelected(),
-      someDocsSelected:  store.someDocsSelected(),
-      username: store.getUsername(),
-      password: store.getPassword(),
-      activitySort: store.getActivitySort(),
-      tabSection: store.getTabSection(),
-      checkingApi: store.checkingAPI(),
-      supportNewApi: store.supportNewApi(),
-      replicateLoading: store.isReplicateInfoLoading(),
-      replicateInfo: store.getReplicateInfo(),
-      allReplicateSelected: store.getAllReplicateSelected(),
-      someReplicateSelected: store.someReplicateSelected()
-    };
-  }
 
   loadReplicationInfo (props, oldProps) {
-    Actions.initReplicator(props.localSource);
+    this.props.initReplicator(props.routeLocalSource, props.localSource);
     this.getAllActivity();
+    this.loadReplicationStateFrom(props, oldProps);
+  }
+
+  loadReplicationStateFrom (props, oldProps) {
     if (props.replicationId && props.replicationId !== oldProps.replicationId) {
-      Actions.clearReplicationForm();
-      Actions.getReplicationStateFrom(props.replicationId);
+      this.props.clearReplicationForm();
+      this.props.getReplicationStateFrom(props.replicationId);
     }
   }
 
   getAllActivity () {
-    Actions.getReplicationActivity();
-    Actions.getReplicateActivity();
+    this.props.getReplicationActivity();
+    this.props.getReplicateActivity();
   }
 
   componentDidMount () {
-    store.on('change', this.onChange, this);
+    this.props.checkForNewApi();
+    this.props.getDatabasesList();
     this.loadReplicationInfo(this.props, {});
   }
 
   componentWillReceiveProps (nextProps) {
-    this.loadReplicationInfo(nextProps, this.props);
+    this.loadReplicationStateFrom(nextProps, this.props);
+    if (this.props.tabSection !== 'new replication' && nextProps.tabSection === 'new replication') {
+      this.props.clearReplicationForm();
+    }
   }
 
   componentWillUnmount () {
-    store.off('change', this.onChange);
-    Actions.clearReplicationForm();
-  }
-
-  onChange () {
-    this.setState(this.getStoreState());
+    this.props.clearReplicationForm();
   }
 
   showSection () {
     const {
       replicationSource, replicationTarget, replicationType, replicationDocName,
-      passwordModalVisible, databases, localSource, remoteSource, remoteTarget,
+      databases, localSource, remoteSource, remoteTarget,
       localTarget, statusDocs, statusFilter, loading, allDocsSelected,
-      someDocsSelected, showConflictModal, localSourceKnown, localTargetKnown,
-      username, password, authenticated, activityLoading, submittedNoChange, activitySort, tabSection,
-      replicateInfo, replicateLoading, replicateFilter, allReplicateSelected, someReplicateSelected
-    } = this.state;
+      someDocsSelected, showConflictModal, localSourceKnown, localTargetKnown, updateFormField,
+      authenticated, activityLoading, submittedNoChange, activitySort, tabSection,
+      replicateInfo, replicateLoading, replicateFilter, allReplicateSelected, someReplicateSelected,
+      hideConflictModal, isConflictModalVisible, filterDocs,
+      filterReplicate, replicate, clearReplicationForm, selectAllDocs, changeActivitySort, selectDoc,
+      deleteDocs, deleteReplicates, selectAllReplicates, selectReplicate,
+      sourceAuthType, sourceAuth, targetAuthType, targetAuth
+    } = this.props;
 
     if (tabSection === 'new replication') {
       if (loading) {
         return <LoadLines/>;
       }
 
-      const updateFormField = (field) => {
-        return (value) => {
-          Actions.updateFormField(field, value);
-        };
-      };
-
       return <NewReplication
         docs={statusDocs}
         localTargetKnown={localTargetKnown}
         localSourceKnown={localSourceKnown}
-        clearReplicationForm={Actions.clearReplicationForm}
-        replicate={Actions.replicate}
-        showPasswordModal={showPasswordModal}
+        clearReplicationForm={clearReplicationForm}
+        replicate={replicate}
         replicationSource={replicationSource}
         replicationTarget={replicationTarget}
         replicationType={replicationType}
         replicationDocName={replicationDocName}
-        passwordModalVisible={passwordModalVisible}
         databases={databases}
         localSource={localSource}
         remoteSource={remoteSource}
         remoteTarget={remoteTarget}
         localTarget={localTarget}
+        sourceAuthType={sourceAuthType}
+        sourceAuth={sourceAuth}
+        targetAuthType={targetAuthType}
+        targetAuth={targetAuth}
         updateFormField={updateFormField}
-        conflictModalVisible={showConflictModal}
-        hideConflictModal={Actions.hideConflictModal}
-        showConflictModal={Actions.showConflictModal}
+        conflictModalVisible={isConflictModalVisible}
+        hideConflictModal={hideConflictModal}
+        showConflictModal={showConflictModal}
         checkReplicationDocID={checkReplicationDocID}
         authenticated={authenticated}
-        username={username}
-        password={password}
         submittedNoChange={submittedNoChange}
       />;
     }
@@ -165,14 +115,14 @@ export default class ReplicationController extends React.Component {
       return <ReplicateActivity
         docs={replicateInfo}
         filter={replicateFilter}
-        onFilterChange={Actions.filterReplicate}
-        selectDoc={Actions.selectReplicate}
-        selectAllDocs={Actions.selectAllReplicates}
+        onFilterChange={filterReplicate}
+        selectDoc={selectReplicate}
+        selectAllDocs={selectAllReplicates}
         allDocsSelected={allReplicateSelected}
         someDocsSelected={someReplicateSelected}
         activitySort={activitySort}
-        changeActivitySort={Actions.changeActivitySort}
-        deleteDocs={Actions.deleteReplicates}
+        changeActivitySort={changeActivitySort}
+        deleteDocs={deleteReplicates}
       />;
     }
 
@@ -183,19 +133,19 @@ export default class ReplicationController extends React.Component {
     return <Activity
       docs={statusDocs}
       filter={statusFilter}
-      onFilterChange={Actions.filterDocs}
-      selectAllDocs={Actions.selectAllDocs}
-      selectDoc={Actions.selectDoc}
+      onFilterChange={filterDocs}
+      selectAllDocs={selectAllDocs}
+      selectDoc={selectDoc}
       allDocsSelected={allDocsSelected}
       someDocsSelected={someDocsSelected}
-      deleteDocs={Actions.deleteDocs}
+      deleteDocs={deleteDocs}
       activitySort={activitySort}
-      changeActivitySort={Actions.changeActivitySort}
+      changeActivitySort={changeActivitySort}
     />;
   }
 
   getHeaderComponents () {
-    if (this.state.tabSection === 'new replication') {
+    if (this.props.tabSection === 'new replication') {
       return null;
     }
     let rightHeaderclass = "right-header-flex";
@@ -220,7 +170,7 @@ export default class ReplicationController extends React.Component {
   }
 
   getTabElements () {
-    const {tabSection} = this.state;
+    const {tabSection} = this.props;
     const elements = [
       <TabElement
         key={1}
@@ -230,7 +180,7 @@ export default class ReplicationController extends React.Component {
       />
     ];
 
-    if (this.state.supportNewApi) {
+    if (this.props.supportNewApi) {
       elements.push(
         <TabElement
           key={2}
@@ -245,18 +195,19 @@ export default class ReplicationController extends React.Component {
   }
 
   onTabChange (section, url) {
-    Actions.changeTabSection(section, url);
+    // this.props.changeTabSection(section, url);
+    FauxtonAPI.navigate(url);
   }
 
   getCrumbs () {
-    if (this.state.tabSection === 'new replication') {
+    if (this.props.tabSection === 'new replication') {
       return [{'name': 'Job Configuration'}];
     }
     return [{'name': 'Replication'}];
   }
 
   getTabs () {
-    if (this.state.tabSection === 'new replication') {
+    if (this.props.tabSection === 'new replication') {
       return null;
     }
 
@@ -268,7 +219,7 @@ export default class ReplicationController extends React.Component {
   }
 
   render () {
-    const { checkingAPI } = this.state;
+    const { checkingAPI } = this.props;
 
     if (checkingAPI) {
       return <LoadLines />;

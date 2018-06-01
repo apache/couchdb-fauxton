@@ -36,6 +36,7 @@ describe("Replication Actions", () => {
     afterEach(fetchMock.restore);
 
     it('creates a new database if it does not exist', (done) => {
+      const dispatch = () => {};
       fetchMock.postOnce('/_replicator', {
         status: 404,
         body: {
@@ -69,7 +70,7 @@ describe("Replication Actions", () => {
         replicationTarget: "REPLICATION_TARGET_NEW_LOCAL_DATABASE",
         replicationType: "",
         username: "tester"
-      });
+      })(dispatch);
 
       //this is not pretty, and might cause some false errors. But its tricky to tell when this test has completed
       setTimeout(() => {
@@ -114,20 +115,78 @@ describe("Replication Actions", () => {
       "replicationType": "REPLICATION_TYPE_ONE_TIME",
       "replicationSource": "REPLICATION_SOURCE_LOCAL",
       "localSource": "animaldb",
+      "sourceAuthType":"BASIC_AUTH",
+      "sourceAuth":{"username":"tester", "password":"testerpass"},
       "replicationTarget": "REPLICATION_TARGET_EXISTING_LOCAL_DATABASE",
-      "localTarget": "boom123"
+      "localTarget": "boom123",
+      "targetAuthType":"BASIC_AUTH",
+      "targetAuth":{"username":"tester", "password":"testerpass"}
     };
 
     it('builds up correct state', (done) => {
-      FauxtonAPI.dispatcher.register(({type, options}) => {
+      const dispatch = ({type, options}) => {
         if (ActionTypes.REPLICATION_SET_STATE_FROM_DOC === type) {
           assert.deepEqual(docState, options);
           setTimeout(done);
         }
-      });
+      };
 
       fetchMock.getOnce('/_replicator/7dcea9874a8fcb13c6630a1547001559', doc);
-      getReplicationStateFrom(doc._id);
+      getReplicationStateFrom(doc._id)(dispatch);
+    });
+
+    it('builds up correct state with custom auth', (done) => {
+      const docWithCustomAuth = Object.assign(
+        {}, doc, {
+          "_id": "rep_custom_auth",
+          "continuous": true,
+          "source": {
+            "headers": {},
+            "url": "http://dev:8000/animaldb",
+            "auth": {
+              "creds": "source_user_creds"
+            }
+          },
+          "target": {
+            "headers": {},
+            "url": "http://dev:8000/boom123",
+            "auth": {
+              "creds": "target_user_creds"
+            }
+          }
+        });
+
+      const docStateWithCustomAuth = {
+        "replicationDocName": "rep_custom_auth",
+        "replicationType": "REPLICATION_TYPE_CONTINUOUS",
+        "replicationSource": "REPLICATION_SOURCE_LOCAL",
+        "localSource": "animaldb",
+        "sourceAuthType":"TEST_CUSTOM_AUTH",
+        "sourceAuth":{"creds":"source_user_creds"},
+        "replicationTarget": "REPLICATION_TARGET_EXISTING_LOCAL_DATABASE",
+        "localTarget": "boom123",
+        "targetAuthType":"TEST_CUSTOM_AUTH",
+        "targetAuth":{"creds":"target_user_creds"},
+      };
+      FauxtonAPI.registerExtension('Replication:Auth', {
+        typeValue: 'TEST_CUSTOM_AUTH',
+        typeLabel: 'Test Custom Auth',
+        getCredentials: (repSourceOrTarget) => {
+          if (repSourceOrTarget.auth && repSourceOrTarget.auth.creds) {
+            return { creds: repSourceOrTarget.auth.creds };
+          }
+          return undefined;
+        }
+      });
+      const dispatch = ({type, options}) => {
+        if (ActionTypes.REPLICATION_SET_STATE_FROM_DOC === type) {
+          assert.deepEqual(docStateWithCustomAuth, options);
+          setTimeout(done);
+        }
+      };
+
+      fetchMock.getOnce('/_replicator/rep_custom_auth', docWithCustomAuth);
+      getReplicationStateFrom(docWithCustomAuth._id)(dispatch);
     });
   });
 
@@ -171,13 +230,15 @@ describe("Replication Actions", () => {
         status: 200,
         body: resp
       });
-      deleteDocs(docs);
 
-      FauxtonAPI.dispatcher.register(({type}) => {
+
+      const dispatch = ({type}) => {
         if (ActionTypes.REPLICATION_CLEAR_SELECTED_DOCS === type) {
           setTimeout(done);
         }
-      });
+      };
+
+      deleteDocs(docs)(dispatch);
     });
   });
 });

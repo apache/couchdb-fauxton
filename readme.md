@@ -23,7 +23,7 @@ Please note that [node.js](http://nodejs.org/) and npm is required. Specifically
 1. Clone your fork: `git clone https://github.com/YOUR-USERNAME/couchdb-fauxton.git`
 1. Go to your cloned copy: `cd couchdb-fauxton`
 1. Set up the upstream repo: 
-    * `git remote add upstream git@github.com:apache/couchdb-fauxton.git`
+    * `git remote add upstream https://github.com/apache/couchdb-fauxton.git`
     * `git fetch upstream`
     * `git branch --set-upstream-to=upstream/master master`
 1. Download all dependencies: `npm install`
@@ -92,7 +92,6 @@ Check out the following pages for a lot more information about Fauxton:
 - [The Fauxton Code Layout](https://github.com/apache/couchdb-fauxton/blob/master/code-layout.md)
 - [Style Guide](https://github.com/apache/couchdb-fauxton/blob/master/styleguide.md)
 - [Testing Fauxton](https://github.com/apache/couchdb-fauxton/blob/master/tests.md)
-- [Writing Addons](https://github.com/apache/couchdb-fauxton/blob/master/writing_addons.md)
 - [Extensions](https://github.com/apache/couchdb-fauxton/blob/master/extensions.md)
 - [How to contribute](https://github.com/apache/couchdb-fauxton/blob/master/CONTRIBUTING.md)
 

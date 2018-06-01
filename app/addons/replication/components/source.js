@@ -15,7 +15,6 @@ import React from 'react';
 import Constants from '../constants';
 import Components from '../../components/react-components';
 import ReactSelect from 'react-select';
-import RemoteExample from './remoteexample';
 
 const { StyledSelect } = Components;
 
@@ -30,7 +29,6 @@ const RemoteSourceInput = ({onChange, value}) =>
         value={value}
         onChange={(e) => onChange(e.target.value)}
       />
-      <RemoteExample />
     </div>
   </div>;
 
@@ -44,7 +42,7 @@ const LocalSourceInput = ({value, onChange, databases}) => {
   return (
     <div className="replication__section">
       <div className="replication__input-label">
-        Source Name:
+        Name:
       </div>
       <div className="replication__input-react-select">
         <ReactSelect
@@ -88,7 +86,7 @@ ReplicationSourceRow.propTypes = {
 
 const replicationSourceSelectOptions = () => {
   return [
-    { value: '', label: 'Select source' },
+    { value: '', label: 'Select source type' },
     { value: Constants.REPLICATION_SOURCE.LOCAL, label: 'Local database' },
     { value: Constants.REPLICATION_SOURCE.REMOTE, label: 'Remote database' }
   ].map((option) => {
@@ -103,7 +101,7 @@ export const ReplicationSourceSelect = ({onChange, value}) => {
   return (
     <div className="replication__section">
       <div className="replication__input-label">
-        Replication Source:
+        Type:
       </div>
       <div className="replication__input-select">
         <StyledSelect
@@ -151,6 +149,7 @@ export class ReplicationSource extends React.Component {
     const {replicationSource, onSourceSelect} = this.props;
     return (
       <div>
+        <h3>Source</h3>
         <ReplicationSourceSelect
           onChange={onSourceSelect}
           value={replicationSource}

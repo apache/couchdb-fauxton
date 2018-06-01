@@ -13,22 +13,23 @@
 import FauxtonAPI from '../../core/api';
 import replication from './route';
 import './assets/less/replication.less';
-import Actions from './actions';
+import { checkForNewApi } from './actions';
+import replicationReducer from './reducers';
 
 replication.initialize = function () {
   FauxtonAPI.addHeaderLink({ title: 'Replication', href: '#/replication', icon: 'fonticon-replicate' });
   FauxtonAPI.session.isAuthenticated().then(() => {
-    Actions.checkForNewApi();
+    checkForNewApi();
   });
 };
 
+FauxtonAPI.addReducers({
+  replication: replicationReducer
+});
+
 FauxtonAPI.registerUrls('replication', {
-  app: (db) => {
-    return '#/replication/_create/' + db;
-  },
-  api: () => {
-    return window.location.origin + '/_replicator';
-  }
+  app: (db) => '#/replication/_create/' + db,
+  api: () => window.location.origin + '/_replicator'
 });
 
 export default replication;

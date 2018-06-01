@@ -9,6 +9,7 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
+import FauxtonAPI from '../../../core/api';
 import utils from '../../../../test/mocha/testUtils';
 import {
   getSource,
@@ -66,12 +67,14 @@ describe('Replication API', () => {
 
     it('returns local source with auth info and encoded', () => {
       const localSource = 'my/db';
-
       const source = getSource({
         replicationSource: Constants.REPLICATION_SOURCE.LOCAL,
         localSource,
-        username: 'the-user',
-        password: 'password'
+        sourceAuth: {
+          username: 'the-user',
+          password: 'password'
+        },
+        sourceAuthType: Constants.REPLICATION_AUTH_METHOD.BASIC
       }, {origin: 'http://dev:6767'});
 
       assert.deepEqual(source.headers, {Authorization:"Basic dGhlLXVzZXI6cGFzc3dvcmQ="});
@@ -81,14 +84,61 @@ describe('Replication API', () => {
     it('returns remote source url and auth header', () => {
       const source = getSource({
         replicationSource: Constants.REPLICATION_SOURCE.REMOTE,
-        remoteSource: 'http://eddie:my-password@my-couchdb.com/my-db',
+        remoteSource: 'http://my-couchdb.com/my-db',
         localSource: "local",
-        username: 'the-user',
-        password: 'password'
+        sourceAuth: {
+          username: 'the-user',
+          password: 'password'
+        },
+        sourceAuthType: Constants.REPLICATION_AUTH_METHOD.BASIC
       }, {origin: 'http://dev:6767'});
 
-      assert.deepEqual(source.headers, {Authorization:"Basic ZWRkaWU6bXktcGFzc3dvcmQ="});
+      assert.deepEqual(source.headers, {Authorization:"Basic dGhlLXVzZXI6cGFzc3dvcmQ="});
       assert.deepEqual('http://my-couchdb.com/my-db', source.url);
+    });
+
+    it('returns source with no auth', () => {
+      const source = getSource({
+        replicationSource: Constants.REPLICATION_SOURCE.REMOTE,
+        remoteSource: 'http://my-couchdb.com/my-db',
+        localSource: "local",
+        sourceAuth: {
+          username: 'the-user',
+          password: 'password'
+        },
+        sourceAuthType: Constants.REPLICATION_AUTH_METHOD.NO_AUTH
+      }, {origin: 'http://dev:6767'});
+
+      assert.deepEqual(source.headers, {});
+
+      const source2 = getSource({
+        replicationSource: Constants.REPLICATION_SOURCE.REMOTE,
+        remoteSource: 'http://my-couchdb.com/my-db',
+        localSource: "local"
+      }, {origin: 'http://dev:6767'});
+
+      assert.deepEqual(source2.headers, {});
+    });
+
+    it('returns source with custom auth', () => {
+      FauxtonAPI.registerExtension('Replication:Auth', {
+        typeValue: 'TEST_CUSTOM_AUTH',
+        typeLabel: 'Test Custom Auth',
+        setCredentials: (repSourceOrTarget, auth) => {
+          repSourceOrTarget.auth = {
+            auth_creds: auth.creds
+          };
+        }
+      });
+      const source = getSource({
+        replicationSource: Constants.REPLICATION_SOURCE.REMOTE,
+        remoteSource: 'http://my-couchdb.com/my-db',
+        localSource: "local",
+        sourceAuth: { creds: 'sample_creds' },
+        sourceAuthType: 'TEST_CUSTOM_AUTH'
+      }, {origin: 'http://dev:6767'});
+
+      assert.deepEqual(source.auth, { auth_creds: 'sample_creds' });
     });
   });
 
@@ -104,12 +154,15 @@ describe('Replication API', () => {
     });
 
     it("encodes username and password for remote", () => {
-      const remoteTarget = 'http://jimi:my-password@remote-couchdb.com/my/db';
+      const remoteTarget = 'http://remote-couchdb.com/my/db';
       const target = getTarget({
         replicationTarget: Constants.REPLICATION_TARGET.NEW_REMOTE_DATABASE,
         remoteTarget: remoteTarget,
-        username: 'fake',
-        password: 'fake'
+        targetAuth: {
+          username: 'jimi',
+          password: 'my-password'
+        },
+        targetAuthType: Constants.REPLICATION_AUTH_METHOD.BASIC
       });
 
       assert.deepEqual(target.url, 'http://remote-couchdb.com/my%2Fdb');
@@ -120,8 +173,11 @@ describe('Replication API', () => {
       const target = getTarget({
         replicationTarget: Constants.REPLICATION_TARGET.EXISTING_LOCAL_DATABASE,
         localTarget: 'my-existing/db',
-        username: 'the-user',
-        password: 'password'
+        targetAuth: {
+          username: 'the-user',
+          password: 'password'
+        },
+        targetAuthType: Constants.REPLICATION_AUTH_METHOD.BASIC
       });
 
       assert.deepEqual(target.headers, {Authorization:"Basic dGhlLXVzZXI6cGFzc3dvcmQ="});
@@ -133,8 +189,11 @@ describe('Replication API', () => {
         replicationTarget: Constants.REPLICATION_TARGET.NEW_LOCAL_DATABASE,
         replicationSource: Constants.REPLICATION_SOURCE.LOCAL,
         localTarget: 'my-new/db',
-        username: 'the-user',
-        password: 'password'
+        targetAuth: {
+          username: 'the-user',
+          password: 'password'
+        },
+        targetAuthType: Constants.REPLICATION_AUTH_METHOD.BASIC
       });
 
       assert.deepEqual(target.headers, {Authorization:"Basic dGhlLXVzZXI6cGFzc3dvcmQ="});
@@ -146,8 +205,11 @@ describe('Replication API', () => {
         replicationTarget: Constants.REPLICATION_TARGET.NEW_LOCAL_DATABASE,
         replicationSource: Constants.REPLICATION_SOURCE.REMOTE,
         localTarget: 'my-new/db',
-        username: 'the-user',
-        password: 'password'
+        targetAuth: {
+          username: 'the-user',
+          password: 'password'
+        },
+        targetAuthType: Constants.REPLICATION_AUTH_METHOD.BASIC
       }, {origin: 'http://dev:5555'});
 
       assert.deepEqual(target.headers, {Authorization:"Basic dGhlLXVzZXI6cGFzc3dvcmQ="});
@@ -173,6 +235,35 @@ describe('Replication API', () => {
 
       assert.deepEqual("http://dev:8000/my-new%2Fdb", target.url);
       assert.deepEqual({}, target.headers);
+
+      const targetNoAuth = getTarget({
+        replicationTarget: Constants.REPLICATION_TARGET.NEW_LOCAL_DATABASE,
+        replicationSource: Constants.REPLICATION_SOURCE.REMOTE,
+        localTarget: 'my-new/db',
+        targetAuthType: Constants.REPLICATION_AUTH_METHOD.NO_AUTH
+      }, location);
+      assert.deepEqual({}, targetNoAuth.headers);
+    });
+
+    it('returns target with custom auth', () => {
+      FauxtonAPI.registerExtension('Replication:Auth', {
+        typeValue: 'TEST_CUSTOM_AUTH',
+        typeLabel: 'Test Custom Auth',
+        setCredentials: (repSourceOrTarget, auth) => {
+          repSourceOrTarget.auth = {
+            auth_creds: auth.creds
+          };
+        }
+      });
+      const target = getTarget({
+        replicationTarget: Constants.REPLICATION_TARGET.NEW_LOCAL_DATABASE,
+        replicationSource: Constants.REPLICATION_SOURCE.LOCAL,
+        localTarget: 'my-new/db',
+        targetAuth: { creds: 'sample_creds' },
+        targetAuthType: 'TEST_CUSTOM_AUTH'
+      });
+
+      assert.deepEqual(target.auth, { auth_creds: 'sample_creds' });
     });
 
   });
@@ -308,6 +399,30 @@ describe('Replication API', () => {
     afterEach(() => {
       fetchMock.restore();
     });
+
+    it('returns true for support', () => {
+      fetchMock.getOnce('/_scheduler/jobs', {});
+      return supportNewApi(true)
+        .then(resp => {
+          assert.ok(resp);
+        });
+    });
+
+    it('returns false for no support', () => {
+      fetchMock.getOnce('/_scheduler/jobs', {
+        status: 404,
+        body: {error: "missing"}
+      });
+
+      return supportNewApi(true)
+        .then(resp => {
+          assert.notOk(resp);
+        });
+    });
+
+  });
+
+  describe('setCredentials', () => {
 
     it('returns true for support', () => {
       fetchMock.getOnce('/_scheduler/jobs', {});
