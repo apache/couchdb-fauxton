@@ -15,6 +15,7 @@ discussed, agreed upon and documented here.
 
 
 <a name="js" />
+
 ## JavaScript
 
 Note: We have JSHint running as a grunt task which will catch the more egregious errors (missing `vars`, missing
@@ -206,6 +207,7 @@ var anonymousFunction = function () {
 
 
 <a name="html" />
+
 ## HTML
 
 In Fauxton, all our HTML documents are all Underscore templates so this section contains a few Underscore-related 
@@ -233,6 +235,7 @@ styled; they should be used for JS hooks only.
 
 
 <a name="css" />
+
 ## CSS / Less
 
 We use Less to generate our CSS.
