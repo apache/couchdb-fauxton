@@ -105,6 +105,7 @@ export default class ReplicationController extends React.Component {
         checkReplicationDocID={checkReplicationDocID}
         authenticated={authenticated}
         submittedNoChange={submittedNoChange}
+        pagination={pagination}
       />;
     }
 

@@ -49,7 +49,7 @@ export default class Activity extends React.Component {
       docs = this.props.docs.filter(doc => doc.selected);
     }
 
-    this.props.deleteDocs(docs);
+    this.props.deleteDocs(docs, this.props.pagination);
     this.closeModal();
   }
 

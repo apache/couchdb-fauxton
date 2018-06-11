@@ -81,7 +81,7 @@ export const replicate = (params) => dispatch => {
         clear: true
       });
 
-      dispatch(getReplicationActivity());
+      dispatch(getReplicationActivity(params.pagination));
     })
     .catch(json => {
       if (json.error && json.error === "not_found") {
@@ -194,7 +194,7 @@ export const clearSelectedReplicates = () => {
   };
 };
 
-export const deleteDocs = (docs) => dispatch => {
+export const deleteDocs = (docs, pagination) => dispatch => {
   const bulkDocs = docs.map(({raw: doc}) => {
     doc._deleted = true;
     return doc;
@@ -229,7 +229,7 @@ export const deleteDocs = (docs) => dispatch => {
       });
 
       dispatch(clearSelectedDocs());
-      dispatch(getReplicationActivity());
+      dispatch(getReplicationActivity(pagination));
     })
     .catch(resp => {
       resp.json()

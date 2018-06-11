@@ -236,7 +236,8 @@ export default class NewReplicationController extends React.Component {
       sourceAuthType,
       sourceAuth,
       targetAuthType,
-      targetAuth
+      targetAuth,
+      pagination
     } = this.props;
 
     let _rev;
@@ -260,7 +261,8 @@ export default class NewReplicationController extends React.Component {
       sourceAuthType,
       sourceAuth,
       targetAuthType,
-      targetAuth
+      targetAuth,
+      pagination
     });
   }
 
