@@ -138,7 +138,7 @@ const mapDispatchToProps = (dispatch) => {
     filterReplicate: (filter) => dispatch(filterReplicate(filter)),
     filterDocs: (filter) => dispatch(filterDocs(filter)),
     selectDoc: (doc) => dispatch(selectDoc(doc)),
-    deleteDocs: (docs) => dispatch(deleteDocs(docs)),
+    deleteDocs: (docs, pagination) => dispatch(deleteDocs(docs, pagination)),
     selectAllDocs: () => dispatch(selectAllDocs()),
     changeActivitySort: (sort) => dispatch(changeActivitySort(sort)),
     selectAllReplicates: () => dispatch(selectAllReplicates()),
