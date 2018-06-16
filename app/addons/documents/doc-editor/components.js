@@ -75,7 +75,7 @@ class DocEditorController extends React.Component {
     store.off('change', this.onChange);
   }
 
-  componentWillUpdate(nextProps, nextState) {
+  UNSAFE_componentWillUpdate(nextProps, nextState) {
     // Update the editor whenever a file is uploaded, a doc is cloned, or a new doc is loaded
     if (this.state.numFilesUploaded !== nextState.numFilesUploaded ||
         this.state.doc && this.state.doc.hasChanged() ||

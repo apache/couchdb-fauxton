@@ -44,7 +44,7 @@ export class CodeEditorPanel extends React.Component {
     };
   };
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (nextProps.defaultCode !== this.props.defaultCode) {
       this.setState({ code: nextProps.defaultCode });
     }

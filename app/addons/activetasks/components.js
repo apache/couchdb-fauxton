@@ -260,7 +260,7 @@ class ActiveTasksTableBody extends React.Component {
     };
   };
 
-  componentWillReceiveProps() {
+  UNSAFE_componentWillReceiveProps() {
     this.setState({
       filteredTable: activeTasksStore.getFilteredTable(this.props.collection)
     });

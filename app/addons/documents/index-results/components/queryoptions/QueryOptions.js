@@ -36,7 +36,7 @@ export default class QueryOptions extends React.Component {
     }
   }
 
-  componentWillReceiveProps (nextProps) {
+  UNSAFE_componentWillReceiveProps (nextProps) {
     const {
       ddocsOnly,
       queryOptionsApplyFilterOnlyDdocs,

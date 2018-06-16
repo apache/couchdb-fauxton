@@ -117,7 +117,7 @@ class PermissionsSection extends React.Component {
           <h3>{section}</h3>
           <p className="help">
             {this.getHelp()}
-            <a className="help-link" data-bypass="true" href={getDocUrl('DB_PERMISSION')} target="_blank">
+            <a className="help-link" data-bypass="true" href={getDocUrl('DB_PERMISSION')} target="_blank" rel="noopener noreferrer">
               <i className="icon-question-sign"></i>
             </a>
           </p>

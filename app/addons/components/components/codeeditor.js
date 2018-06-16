@@ -181,7 +181,7 @@ export class CodeEditor extends React.Component {
     this.editor.destroy();
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     this.setupAce(nextProps, false);
   }
 
