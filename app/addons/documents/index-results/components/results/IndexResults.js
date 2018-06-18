@@ -34,7 +34,7 @@ export default class IndexResults extends React.Component {
     }
   }
 
-  componentWillUpdate (nextProps) {
+  UNSAFE_componentWillUpdate (nextProps) {
     const {
       fetchDocs,
       fetchParams,

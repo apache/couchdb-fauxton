@@ -99,7 +99,7 @@ export default class MainFieldsView extends React.Component {
       <div className="query-group" id="query-options-main-fields">
         <span className="add-on">
           Query Options
-          <a className="help-link" href={this.props.docURL} target="_blank" data-bypass="true">
+          <a className="help-link" href={this.props.docURL} target="_blank" rel="noopener noreferrer" data-bypass="true">
             <i className="icon-question-sign"/>
           </a>
         </span>
