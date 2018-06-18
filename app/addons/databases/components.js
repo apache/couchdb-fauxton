@@ -314,7 +314,7 @@ class DatabasePagination extends React.Component {
     store.on('change', this.onChange, this);
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     this.setState(this.getStoreState(nextProps));
     const {store} = nextProps;
     store.on('change', this.onChange, this);

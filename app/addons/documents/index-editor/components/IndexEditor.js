@@ -134,7 +134,8 @@ export default class IndexEditor extends Component {
                 className="help-link"
                 data-bypass="true"
                 href={getDocUrl('VIEW_FUNCS')}
-                target="_blank">
+                target="_blank"
+                rel="noopener noreferrer">
                 <i className="icon-question-sign"></i>
               </a>
             </label>

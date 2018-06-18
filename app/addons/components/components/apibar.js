@@ -20,7 +20,7 @@ export const JSONLink = ({endpoint}) => {
 
   return (
     <div className="faux__jsonlink">
-      <a data-bypass={true} className="faux__jsonlink-link" href={endpoint} target="_blank">
+      <a data-bypass={true} className="faux__jsonlink-link" href={endpoint} target="_blank" rel="noopener noreferrer">
         <span className="faux__jsonlink-link-brackets">{'{\u00a0}'}</span>
         <span>JSON</span>
       </a>
@@ -35,7 +35,7 @@ export const DocLink = ({docURL}) => {
 
   return (
     <div className="faux__doclink">
-      <a data-bypass="true" href={docURL} target="_blank" className="faux__doclink-link">
+      <a data-bypass="true" href={docURL} target="_blank" rel="noopener noreferrer" className="faux__doclink-link">
         <i className="icon fonticon-bookmark"></i>
       </a>
     </div>

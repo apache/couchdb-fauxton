@@ -79,7 +79,7 @@ export class Polling extends React.Component {
     this.setPollingCounter(parseInt(e.target.value, 10));
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (this.props.startValue !== nextProps.startValue) {
       this.setPollingCounter(nextProps.startValue);
     }
