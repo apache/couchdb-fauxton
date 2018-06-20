@@ -48,7 +48,7 @@ export default class ReplicationController extends React.Component {
     this.loadReplicationInfo(this.props, {});
   }
 
-  componentWillReceiveProps (nextProps) {
+  UNSAFE_componentWillReceiveProps (nextProps) {
     this.loadReplicationStateFrom(nextProps, this.props);
     if (this.props.tabSection !== 'new replication' && nextProps.tabSection === 'new replication') {
       this.props.clearReplicationForm();

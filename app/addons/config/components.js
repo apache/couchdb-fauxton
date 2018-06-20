@@ -166,7 +166,7 @@ class ConfigOptionValue extends React.Component {
     saving: this.props.saving
   };
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (this.props.value !== nextProps.value) {
       this.setState({ saving: false });
     }

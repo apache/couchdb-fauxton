@@ -256,7 +256,7 @@ class DesignDoc extends React.Component {
     updatedSidebarListTypes: this.props.sidebarListTypes
   };
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     if (_.isEmpty(this.state.updatedSidebarListTypes) ||
       (_.has(this.state.updatedSidebarListTypes[0], 'selector') && this.state.updatedSidebarListTypes[0].selector !== 'views')) {
 
@@ -375,7 +375,7 @@ class DesignDoc extends React.Component {
 }
 
 class DesignDocList extends React.Component {
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     const list = FauxtonAPI.getExtensions('sidebar:list');
     this.sidebarListTypes = _.isUndefined(list) ? [] : list;
   }
