@@ -35,6 +35,7 @@ const DocEditorRouteObject = FauxtonAPI.RouteObject.extend({
   routes: {
     'database/:database/:doc/conflicts': 'revisionBrowser',
     'database/:database/:doc/code_editor': 'codeEditor',
+    'database/:database/_design/:ddoc/conflicts': 'revBrowserForDesignDoc',
     'database/:database/_design/:ddoc': 'showDesignDoc',
     'database/:database/_local/:doc': 'showLocalDoc',
     'database/:database/:doc': 'codeEditor',
@@ -56,6 +57,10 @@ const DocEditorRouteObject = FauxtonAPI.RouteObject.extend({
       docURL={docURL}
       component={<RevBrowserContainer docId={docId} databaseName={databaseName} />}
     />;
+  },
+
+  revBrowserForDesignDoc: function(databaseName, ddoc) {
+    return this.revisionBrowser(databaseName, '_design/' + ddoc);
   },
 
   codeEditor: function (databaseName, docId) {

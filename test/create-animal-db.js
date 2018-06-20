@@ -3,8 +3,6 @@ const async = require('async');
 
 const animals = require('../test/animal-db.json');
 
-const conflictingDoc = 'zebra';
-
 module.exports = createAnimalDb;
 
 function createAnimalDb (url, cb) {
@@ -65,7 +63,10 @@ function createAnimalDb (url, cb) {
           replicate(`${url}/animaldb`, `${url}/animaldb-copy-2`, true, cb);
         },
         (cb) => {
-          alterDocs(cb);
+          alterZebraDocs(cb);
+        },
+        (cb) => {
+            alterAnimalDesignDoc(cb)
         },
         (cb) => {
           replicate(`${url}/animaldb-copy`, `${url}/animaldb`, false, cb);
@@ -125,27 +126,27 @@ function createAnimalDb (url, cb) {
     });
   }
 
-  function getRev (db, cb) {
+  function getRev (db, id, cb) {
     request({
-      uri: `${url}/${db}/${conflictingDoc}`,
+      uri: `${url}/${db}/${id}`,
       json: true
     }, (err, res, body) => {
       cb(null, body._rev);
     });
   }
 
-  function updateDoc (db, data, cb) {
+  function updateDoc (db, id, data, cb) {
 
-    getRev(db, (err, rev) => {
-      alterDoc(db, data, rev, cb);
+    getRev(db, id, (err, rev) => {
+      alterDoc(db,id, data, rev, cb);
     });
   }
 
-  function alterDoc (db, data, rev, cb) {
+  function alterDoc (db, id, data, rev, cb) {
     data._rev = rev;
 
     request({
-      uri: `${url}/${db}/${conflictingDoc}`,
+      uri: `${url}/${db}/${id}`,
       json: true,
       method: 'PUT',
       body: data
@@ -154,20 +155,34 @@ function createAnimalDb (url, cb) {
     });
   }
 
-  function alterDocs (cb) {
+  function alterZebraDocs (cb) {
 
-    updateDoc('animaldb', {
+    updateDoc('animaldb','zebra', {
       color: 'black & white'
     }, () => {
-
-      updateDoc('animaldb-copy', {
+      updateDoc('animaldb-copy', 'zebra', {
         color: 'white'
       }, () => {
-        updateDoc('animaldb-copy-2', {
+        updateDoc('animaldb-copy-2', 'zebra', {
           color: 'green'
         }, cb);
       });
     });
 }
+
+    function alterAnimalDesignDoc (cb) {
+
+        updateDoc('animaldb','_design/animals', {
+            color: 'black & white'
+        }, () => {
+            updateDoc('animaldb-copy', '_design/animals', {
+                color: 'white'
+            }, () => {
+                updateDoc('animaldb-copy-2', '_design/animals', {
+                    color: 'green'
+                }, cb);
+            });
+        });
+    }
 
 }
