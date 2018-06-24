@@ -20,7 +20,7 @@ const ConfirmButton = ReactComponents.ConfirmButton;
 
 export default class FirstStepController extends React.Component {
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     this.props.getClusterState();
   }
 
