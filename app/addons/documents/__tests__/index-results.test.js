@@ -58,7 +58,7 @@ describe('IndexResults', () => {
       fetchUrl={''}
     />);
 
-    wrapper.instance().componentWillUpdate({
+    wrapper.instance().UNSAFE_componentWillUpdate({
       ddocsOnly: true,
       fetchParams: {},
       queryOptionsParams: {},
@@ -83,7 +83,7 @@ describe('IndexResults', () => {
       fetchUrl={'view1'}
     />);
 
-    wrapper.instance().componentWillUpdate({
+    wrapper.instance().UNSAFE_componentWillUpdate({
       fetchParams: {},
       queryOptionsParams: {},
       fetchDocs: spy,

@@ -91,7 +91,7 @@ describe('QueryOptions', () => {
       {...props}
     />);
 
-    wrapper.instance().componentWillReceiveProps({
+    wrapper.instance().UNSAFE_componentWillReceiveProps({
       ddocsOnly: true
     });
     expect(spy.calledOnce).toBe(true);
@@ -116,7 +116,7 @@ describe('QueryOptions', () => {
       {...props}
     />);
 
-    wrapper.instance().componentWillReceiveProps({
+    wrapper.instance().UNSAFE_componentWillReceiveProps({
       ddocsOnly: false
     });
     expect(spy.calledOnce).toBe(true);

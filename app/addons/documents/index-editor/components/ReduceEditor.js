@@ -105,6 +105,7 @@ export default class ReduceEditor extends Component {
               data-bypass="true"
               href={getDocUrl('REDUCE_FUNCS')}
               target="_blank"
+              rel="noopener noreferrer"
             >
               <i className="icon-question-sign"></i>
             </a>

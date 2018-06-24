@@ -80,7 +80,7 @@ const DocumentationPage = ({links = docLinks}) => {
             <div className={"icon " + linkObject.iconClassName}> </div>
           </td>
           <td>
-            <a href={linkObject.link} target="_blank" data-bypass="true">{linkObject.title}</a>
+            <a href={linkObject.link} target="_blank" rel="noopener noreferrer" data-bypass="true">{linkObject.title}</a>
           </td>
         </tr>
       );
