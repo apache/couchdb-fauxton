@@ -10,14 +10,15 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+import base64 from 'base-64';
 import React from 'react';
+import app from '../../../app';
 import FauxtonAPI from '../../../core/api';
 import {ReplicationSource} from './source';
 import {ReplicationTarget} from './target';
 import {ReplicationOptions} from './options';
 import {ReplicationSubmit} from './submit';
 import {ReplicationAuth} from './auth-options';
-import AuthAPI from '../../auth/api';
 import Constants from '../constants';
 import {ConflictModal} from './modals';
 import {isEmpty} from 'lodash';
@@ -83,10 +84,7 @@ export default class NewReplicationController extends React.Component {
       return FauxtonAPI.Promise.reject(new Error(err));
     }
 
-    return AuthAPI.login({
-      name: auth.username,
-      password: auth.password
-    }).then((resp) => {
+    return this.checkCredentials(auth.username, auth.password).then((resp) => {
       if (resp.error) {
         throw (resp);
       }
@@ -99,6 +97,18 @@ export default class NewReplicationController extends React.Component {
       });
       throw err;
     });
+  }
+
+  checkCredentials(username, password) {
+    return fetch(app.host + '/', {
+      method: 'GET',
+      credentials: 'omit',
+      headers: {
+        accept: 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Basic ' + base64.encode(username + ':' + password)
+      }
+    }).then(resp => resp.json());
   }
 
   checkReplicationDocID () {
