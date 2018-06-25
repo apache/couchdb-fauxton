@@ -11,7 +11,9 @@
 // the License.
 
 import FauxtonAPI from "../../core/api";
+import app from '../../app';
 import Setup from "./route";
+import reducers from './reducers';
 import "./assets/less/setup.less";
 Setup.initialize = function () {
   FauxtonAPI.addHeaderLink({
@@ -20,5 +22,15 @@ Setup.initialize = function () {
     icon: 'fonticon-wrench'
   });
 };
+
+FauxtonAPI.addReducers({
+  setup: reducers
+});
+
+FauxtonAPI.registerUrls('cluster_setup', {
+  server: () => app.host + '/_cluster_setup',
+  app: () => '/_cluster_setup',
+  apiurl: () => window.location.origin + "/_cluster_setup"
+});
 
 export default Setup;
