@@ -46,6 +46,7 @@ export default {
     VIEWS: '/_utils/docs/intro/overview.html#views',
     MANGO_INDEX: '/_utils/docs/intro/api.html#documents',
     MANGO_SEARCH: '/_utils/docs/intro/api.html#documents',
+    SETUP: '/_utils/docs/cluster/setup.html#the-cluster-setup-wizard',
     CHANGES: '/_utils/docs/api/database/changes.html?highlight=changes#post--db-_changes'
   }
 };
