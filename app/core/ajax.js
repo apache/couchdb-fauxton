@@ -32,6 +32,8 @@ export const json = (url, method = "GET", opts = {}) => {
   return fetch(
     url,
     defaultsDeep(
+      {},
+      opts,
       {
         method,
         credentials: "include",
@@ -39,8 +41,7 @@ export const json = (url, method = "GET", opts = {}) => {
           accept: "application/json",
           "Content-Type": "application/json"
         }
-      },
-      opts
+      }
     )
   ).then(resp => {
     fetchObserver.next(resp);
