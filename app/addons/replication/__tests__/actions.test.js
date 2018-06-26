@@ -185,7 +185,7 @@ describe("Replication Actions", () => {
         }
       };
 
-      fetchMock.getOnce('/_replicator/rep_custom_auth', docWithCustomAuth);
+      fetchMock.getOnce('./_replicator/rep_custom_auth', docWithCustomAuth);
       getReplicationStateFrom(docWithCustomAuth._id)(dispatch);
     });
   });

@@ -425,7 +425,7 @@ describe('Replication API', () => {
   describe('setCredentials', () => {
 
     it('returns true for support', () => {
-      fetchMock.getOnce('/_scheduler/jobs', {});
+      fetchMock.getOnce('./_scheduler/jobs', {});
       return supportNewApi(true)
         .then(resp => {
           assert.ok(resp);
@@ -433,7 +433,7 @@ describe('Replication API', () => {
     });
 
     it('returns false for no support', () => {
-      fetchMock.getOnce('/_scheduler/jobs', {
+      fetchMock.getOnce('./_scheduler/jobs', {
         status: 404,
         body: {error: "missing"}
       });
