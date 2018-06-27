@@ -71,13 +71,13 @@ describe("Replication Actions", () => {
         replicationType: "",
         username: "tester"
       })(dispatch).then(() => {
-        assert.lengthOf(finalPost.calls('/_replicator'), 3);
+        assert.lengthOf(finalPost.calls('./_replicator'), 3);
       });
     });
 
     it('does not try to create new database if it already exist', () => {
       const dispatch = () => {};
-      const mockPost = fetchMock.postOnce('/_replicator', {
+      const mockPost = fetchMock.postOnce('./_replicator', {
         status: 200,
         body: {
           ok: true
