@@ -10,8 +10,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import app from "../../app";
 import FauxtonAPI from "../../core/api";
+import Helpers from "../../helpers";
 import { get, post } from "../../core/ajax";
 import Databases from "../databases/resources";
 import Documents from "../documents/resources";
@@ -125,7 +125,7 @@ Verifyinstall.testProcess = {
       target: 'verifytestdb_replicate'
     };
     return post(
-      app.host + '/_replicate',
+      Helpers.getServerUrl('/_replicate'),
       body
     ).then(res => {
       if (res.error) {

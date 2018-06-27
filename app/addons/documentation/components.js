@@ -11,6 +11,7 @@
 // the License.
 
 import React from "react";
+import Helpers from '../../helpers';
 
 const docLinks = [
   {
@@ -20,7 +21,7 @@ const docLinks = [
   },
   {
     title: 'CouchDB Official Documentation — Offline',
-    link: '/_utils/docs/index.html',
+    link: Helpers.getServerUrl('/docs/index.html'),
     iconClassName: 'couchdb-icon'
   },
   {

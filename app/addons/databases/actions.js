@@ -10,6 +10,7 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 import app from "../../app";
+import Helpers from "../../helpers";
 import FauxtonAPI from "../../core/api";
 import { get } from "../../core/ajax";
 import Stores from "./stores";
@@ -184,7 +185,7 @@ export default {
       limit: 30
     });
 
-    const url = `${app.host}/_all_dbs${query}`;
+    const url = Helpers.getServerUrl(`/_all_dbs${query}`);
     get(url).then((dbs) => {
       const options = dbs.map(db => {
         return {

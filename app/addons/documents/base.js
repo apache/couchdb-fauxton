@@ -11,6 +11,7 @@
 // the License.
 
 import app from "../../app";
+import Helpers from "../../helpers";
 import FauxtonAPI from "../../core/api";
 import Documents from "./routes";
 import reducers from "./index-results/reducers";
@@ -36,7 +37,7 @@ function getQueryParam (query) {
 FauxtonAPI.registerUrls('allDocs', {
   server: function (id, query) {
     /** XXX DEPRECATED: use allDocsSanitized **/
-    return app.host + '/' + id + '/_all_docs' + getQueryParam(query);
+    return Helpers.getServerUrl('/' + id + '/_all_docs' + getQueryParam(query));
   },
   app: function (id, query) {
     /** XXX DEPRECATED: use allDocsSanitized **/
@@ -44,14 +45,14 @@ FauxtonAPI.registerUrls('allDocs', {
   },
   apiurl: function (id, query) {
     /** XXX DEPRECATED: use allDocsSanitized **/
-    return window.location.origin + '/' + id + '/_all_docs' + getQueryParam(query);
+    return Helpers.getApiUrl('/' + id + '/_all_docs' + getQueryParam(query));
   }
 });
 
 FauxtonAPI.registerUrls('allDocsSanitized', {
   server: function (id, query) {
     id = encodeURIComponent(id);
-    return app.host + '/' + id + '/_all_docs' + getQueryParam(query);
+    return Helpers.getServerUrl('/' + id + '/_all_docs' + getQueryParam(query));
   },
 
   app: function (id, query) {
@@ -61,19 +62,19 @@ FauxtonAPI.registerUrls('allDocsSanitized', {
 
   apiurl: function (id, query) {
     id = encodeURIComponent(id);
-    return window.location.origin + '/' + id + '/_all_docs' + getQueryParam(query);
+    return Helpers.getApiUrl('/' + id + '/_all_docs' + getQueryParam(query));
   }
 });
 
 FauxtonAPI.registerUrls('bulk_docs', {
   server: function (id, query) {
-    return app.host + '/' + encodeURIComponent(id) + '/_bulk_docs' + getQueryParam(query);
+    return Helpers.getServerUrl('/' + encodeURIComponent(id) + '/_bulk_docs' + getQueryParam(query));
   },
   app: function (id, query) {
     return 'database/' + id + '/_bulk_docs' + getQueryParam(query);
   },
   apiurl: function (id, query) {
-    return window.location.origin + '/' + id + '/_bulk_docs' + getQueryParam(query);
+    return Helpers.getApiUrl('/' + id + '/_bulk_docs' + getQueryParam(query));
   }
 });
 
@@ -85,7 +86,7 @@ FauxtonAPI.registerUrls('revision-browser', {
 
 FauxtonAPI.registerUrls('designDocs', {
   server: function (id, designDoc) {
-    return app.host + '/' + id + '/' + designDoc + '/_info';
+    return Helpers.getServerUrl('/' + id + '/' + designDoc + '/_info');
   },
 
   app: function (id, designDoc) {
@@ -93,13 +94,13 @@ FauxtonAPI.registerUrls('designDocs', {
   },
 
   apiurl: function (id, designDoc) {
-    return window.location.origin + '/' + id + '/' + designDoc + '/_info';
+    return Helpers.getApiUrl('/' + id + '/' + designDoc + '/_info');
   }
 });
 
 FauxtonAPI.registerUrls('view', {
   server: function (database, designDoc, viewName) {
-    return app.host + '/' + database + '/_design/' + designDoc + '/_view/' + viewName;
+    return Helpers.getServerUrl('/' + database + '/_design/' + designDoc + '/_view/' + viewName);
   },
 
   app: function (database, designDoc) {
@@ -107,7 +108,7 @@ FauxtonAPI.registerUrls('view', {
   },
 
   apiurl: function (id, designDoc, viewName) {
-    return window.location.origin + '/' + id + '/_design/' + designDoc + '/_view/' + viewName;
+    return Helpers.getApiUrl('/' + id + '/_design/' + designDoc + '/_view/' + viewName);
   },
 
   edit: function (database, designDoc, indexName) {
@@ -128,14 +129,14 @@ FauxtonAPI.registerUrls('document', {
     if (_.isUndefined(query)) {
       query = '';
     }
-    return app.host + '/' + database + '/' + doc + query;
+    return Helpers.getServerUrl('/' + database + '/' + doc + query);
   },
 
   attachment: function (database, doc, filename, query) {
     if (_.isUndefined(query)) {
       query = '';
     }
-    return app.host + '/' + database + '/' + doc + '/' + filename + query;
+    return Helpers.getServerUrl('/' + database + '/' + doc + '/' + filename + query);
   },
 
   app: function (database, doc) {
@@ -145,10 +146,9 @@ FauxtonAPI.registerUrls('document', {
   apiurl: function (database, doc) {
     if (!doc) {
       // api url for creating a doc with POST
-      return window.location.origin + '/' + database;
+      return Helpers.getApiUrl('/' + database);
     }
-
-    return window.location.origin + '/' + database + '/' + doc;
+    return Helpers.getApiUrl('/' + database + '/' + doc);
   },
 
   'web-index': function (database, doc) {
@@ -172,7 +172,7 @@ FauxtonAPI.registerUrls('new', {
 
 FauxtonAPI.registerUrls('base', {
   server: function (database) {
-    return app.host + '/' + database + '/';
+    return Helpers.getServerUrl('/' + database + '/');
   },
 
   app: function (database) {
@@ -187,7 +187,7 @@ FauxtonAPI.registerUrls('mango', {
       query = '';
     }
 
-    return app.host + '/' + db + '/_index' + query;
+    return Helpers.getServerUrl('/' + db + '/_index' + query);
   },
 
   'index-apiurl': function (db, query) {
@@ -195,7 +195,7 @@ FauxtonAPI.registerUrls('mango', {
       query = '';
     }
 
-    return window.location.origin + '/' + db + '/_index' + query;
+    return Helpers.getApiUrl('/' + db + '/_index' + query);
   },
 
   'index-app': function (db, query) {
@@ -207,7 +207,7 @@ FauxtonAPI.registerUrls('mango', {
   },
 
   'index-server-bulk-delete': function (db) {
-    return app.host + '/' + db + '/_index/_bulk_delete';
+    return Helpers.getServerUrl('/' + db + '/_index/_bulk_delete');
   },
 
   'query-server': function (db, query) {
@@ -215,7 +215,7 @@ FauxtonAPI.registerUrls('mango', {
       query = '';
     }
 
-    return app.host + '/' + db + '/_find' + query;
+    return Helpers.getServerUrl('/' + db + '/_find' + query);
   },
 
   'query-apiurl': function (db, query) {
@@ -223,7 +223,7 @@ FauxtonAPI.registerUrls('mango', {
       query = '';
     }
 
-    return window.location.origin + '/' + db + '/_find' + query;
+    return Helpers.getApiUrl('/' + db + '/_find' + query);
   },
 
   'query-app': function (db, query) {
@@ -235,11 +235,11 @@ FauxtonAPI.registerUrls('mango', {
   },
 
   'explain-server': function (db) {
-    return app.host + '/' + db + '/_explain';
+    return Helpers.getServerUrl('/' + db + '/_explain');
   },
 
   'explain-apiurl': function (db) {
-    return window.location.origin + '/' + db + '/_explain';
+    return Helpers.getApiUrl('/' + db + '/_explain');
   }
 });
 

@@ -17,11 +17,12 @@
 // want to change this later, but for now this should be thought of as a
 // "purely functional" helper system.
 
-import app from "./app";
 import constants from "./constants";
-import { get } from "./core/ajax";
+import app from "./initialize";
 import utils from "./core/utils";
 import moment from "moment";
+import url from "url";
+import {get} from "./core/ajax";
 import _ from 'lodash';
 
 var Helpers = {};
@@ -63,17 +64,31 @@ Helpers.escapeJQuerySelector = function (selector) {
   return selector && selector.replace(/[!"#$%&'()*+,./:;<=>?@[\\\]^`{|}~]/g, "\\$&");
 };
 
+Helpers.getApiUrl = endpointRoute => {
+  if (app.host.endsWith('/') && endpointRoute.startsWith("/")) {
+    endpointRoute = endpointRoute.substr(1);
+  }
+  return url.resolve(window.location.href, app.host + endpointRoute);
+};
+
+Helpers.getServerUrl = endpointRoute => {
+  if (app.host.endsWith('/') && endpointRoute.startsWith("/")) {
+    endpointRoute = endpointRoute.substr(1);
+  }
+  return app.host + endpointRoute;
+};
+
+Helpers.getUUID = function (count = 1) {
+  const url = Helpers.getServerUrl(`/_uuids?count=${count}`);
+  return get(url);
+};
+
 /**
  * Determine if the current application is running on IE10 or IE11
  * @returns {boolean} True if on IE10 or IE11. Otherwise false.
  */
 Helpers.isIE1X = function() {
   return document.documentMode == 11 || document.documentMode == 10;
-};
-
-Helpers.getUUID = function (count = 1) {
-  const url = `${app.host}/_uuids?count=${count}`;
-  return get(url);
 };
 
 export default Helpers;

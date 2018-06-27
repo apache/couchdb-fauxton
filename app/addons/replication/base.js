@@ -11,6 +11,7 @@
 // the License.
 
 import FauxtonAPI from '../../core/api';
+import Helpers from "../../helpers";
 import replication from './route';
 import './assets/less/replication.less';
 import { checkForNewApi } from './actions';
@@ -29,7 +30,7 @@ FauxtonAPI.addReducers({
 
 FauxtonAPI.registerUrls('replication', {
   app: (db) => '#/replication/_create/' + db,
-  api: () => window.location.origin + '/_replicator'
+  api: () => Helpers.getApiUrl('/_replicator')
 });
 
 export default replication;
