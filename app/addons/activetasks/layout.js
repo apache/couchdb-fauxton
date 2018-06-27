@@ -11,6 +11,7 @@
 // the License.
 
 import React from 'react';
+import Helpers from "../../helpers";
 import FauxtonAPI from "../../core/api";
 import {OnePane, OnePaneHeader, OnePaneContent} from '../components/layouts';
 import {ActiveTasksController, ActiveTasksPollingWidgetController} from "./components";
@@ -25,7 +26,7 @@ export const ActiveTasksLayout = () => {
       <OnePaneHeader
         crumbs={crumbs}
         docURL={FauxtonAPI.constants.DOC_URLS.ACTIVE_TASKS}
-        endpoint={`${window.location.origin}/_active_tasks`}
+        endpoint={Helpers.getApiUrl('/_active_tasks')}
       >
         <ActiveTasksPollingWidgetController />
       </OnePaneHeader>

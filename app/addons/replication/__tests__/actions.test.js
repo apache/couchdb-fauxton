@@ -37,7 +37,7 @@ describe("Replication Actions", () => {
 
     it('creates a new database if it does not exist', () => {
       const dispatch = () => {};
-      fetchMock.postOnce('/_replicator', {
+      fetchMock.postOnce('./_replicator', {
         status: 404,
         body: {
           error: "not_found",
@@ -45,14 +45,14 @@ describe("Replication Actions", () => {
         }
       });
 
-      fetchMock.putOnce('/_replicator', {
+      fetchMock.putOnce('./_replicator', {
         status: 200,
         body: {
           ok: true
         }
       });
 
-      const finalPost = fetchMock.postOnce('/_replicator', {
+      const finalPost = fetchMock.postOnce('./_replicator', {
         status: 200,
         body: {
           ok: true
@@ -96,7 +96,7 @@ describe("Replication Actions", () => {
         replicationType: "",
         username: "tester"
       })(dispatch).then(() => {
-        assert.lengthOf(mockPost.calls('/_replicator'), 1);
+        assert.lengthOf(mockPost.calls('./_replicator'), 1);
       });
     });
   });
@@ -152,7 +152,7 @@ describe("Replication Actions", () => {
         }
       };
 
-      fetchMock.getOnce('/_replicator/7dcea9874a8fcb13c6630a1547001559', doc);
+      fetchMock.getOnce('./_replicator/7dcea9874a8fcb13c6630a1547001559', doc);
       getReplicationStateFrom(doc._id)(dispatch);
     });
 
@@ -206,7 +206,7 @@ describe("Replication Actions", () => {
         }
       };
 
-      fetchMock.getOnce('/_replicator/rep_custom_auth', docWithCustomAuth);
+      fetchMock.getOnce('./_replicator/rep_custom_auth', docWithCustomAuth);
       getReplicationStateFrom(docWithCustomAuth._id)(dispatch);
     });
   });
@@ -245,9 +245,9 @@ describe("Replication Actions", () => {
         }
       ];
 
-      fetchMock.getOnce('/_scheduler/jobs', 404);
-      fetchMock.getOnce('/_replicator/_all_docs?include_docs=true&limit=100', {rows: []});
-      fetchMock.postOnce('/_replicator/_bulk_docs', {
+      fetchMock.getOnce('./_scheduler/jobs', 404);
+      fetchMock.getOnce('./_replicator/_all_docs?include_docs=true&limit=100', {rows: []});
+      fetchMock.postOnce('./_replicator/_bulk_docs', {
         status: 200,
         body: resp
       });

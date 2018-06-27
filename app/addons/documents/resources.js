@@ -174,7 +174,7 @@ Documents.BulkDeleteDocCollection = FauxtonAPI.Collection.extend({
 
 Documents.MangoBulkDeleteDocCollection = Documents.BulkDeleteDocCollection.extend({
   url: function () {
-    return app.host + '/' + this.databaseId + '/_index/_bulk_delete';
+    return Helpers.getServerUrl(`/${this.databaseId}/_index/_bulk_delete`);
   },
 
   createPayload: function (documents) {

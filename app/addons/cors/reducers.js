@@ -11,6 +11,7 @@
 // the License.
 
 import ActionTypes from "./actiontypes";
+import _ from "lodash";
 
 const initialState = {
   corsEnabled: false,
@@ -34,7 +35,7 @@ export default function cors (state = initialState, action) {
         isLoading: false,
         node: corsOptions.node,
         corsEnabled: corsOptions.corsEnabled,
-        isAllOrigins: _.include(corsOptions.origins, '*'),
+        isAllOrigins: _.includes(corsOptions.origins, '*'),
         origins: corsOptions.origins,
         deleteDomainModalVisible: false,
         domainToDelete: ''

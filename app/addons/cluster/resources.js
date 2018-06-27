@@ -10,17 +10,14 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import app from "../../app";
 import FauxtonAPI from "../../core/api";
+import Helpers from "../../helpers";
 
 var Cluster = FauxtonAPI.addon();
 
 Cluster.ClusterNodes = Backbone.Model.extend({
-  url: function (context) {
-    if (context === 'apiurl') {
-      return window.location.origin + '/_membership';
-    }
-    return app.host + '/_membership';
+  url: function () {
+    return Helpers.getServerUrl('/_membership');
   },
 
   parse: function (res) {

@@ -13,6 +13,7 @@
 import '@webcomponents/url';
 import Constants from './constants';
 import FauxtonAPI from '../../core/api';
+import Helpers from '../../helpers';
 import {get, post, put} from '../../core/ajax';
 import base64 from 'base-64';
 import _ from 'lodash';
@@ -21,7 +22,8 @@ let newApiPromise = null;
 export const supportNewApi = (forceCheck) => {
   if (!newApiPromise || forceCheck) {
     newApiPromise = new FauxtonAPI.Promise((resolve) => {
-      get('/_scheduler/jobs', {raw: true})
+      const url = Helpers.getServerUrl('/_scheduler/jobs');
+      get(url, {raw: true})
         .then(resp => {
           if (resp.status > 202) {
             return resolve(false);
@@ -298,7 +300,8 @@ export const combineDocsAndScheduler = (docs, schedulerDocs) => {
 export const fetchReplicationDocs = () => {
   return supportNewApi()
     .then(newApi => {
-      const docsPromise = get('/_replicator/_all_docs?include_docs=true&limit=100')
+      const url = Helpers.getServerUrl('/_replicator/_all_docs?include_docs=true&limit=100');
+      const docsPromise = get(url)
         .then((res) => {
           if (res.error) {
             return [];
@@ -321,7 +324,8 @@ export const fetchReplicationDocs = () => {
 };
 
 export const fetchSchedulerDocs = () => {
-  return get('/_scheduler/docs?include_docs=true')
+  const url = Helpers.getServerUrl('/_scheduler/docs?include_docs=true');
+  return get(url)
     .then((res) => {
       if (res.error) {
         return [];
@@ -333,7 +337,8 @@ export const fetchSchedulerDocs = () => {
 
 export const checkReplicationDocID = (docId) => {
   return new Promise((resolve) => {
-    get(`/_replicator/${docId}`)
+    const url = Helpers.getServerUrl(`/_replicator/${docId}`);
+    get(url)
       .then(resp => {
         if (resp.error === "not_found") {
           resolve(false);
@@ -369,7 +374,8 @@ export const fetchReplicateInfo = () => {
         return [];
       }
 
-      return get('/_scheduler/jobs')
+      const url = Helpers.getServerUrl('/_scheduler/jobs');
+      return get(url)
         .then(resp => {
           return parseReplicateInfo(resp);
         });
@@ -382,15 +388,16 @@ export const deleteReplicatesApi = (replicates) => {
       replication_id: replicate._id,
       cancel: true
     };
-
-    return post('/_replicate', data);
+    const url = Helpers.getServerUrl('/_replicate');
+    return post(url, data);
   });
 
   return FauxtonAPI.Promise.all(promises);
 };
 
 export const createReplicatorDB = () => {
-  return put('/_replicator')
+  const url = Helpers.getServerUrl('/_replicator');
+  return put(url)
     .then(res => {
       if (!res.ok) {
         throw {reason: 'Failed to create the _replicator database.'};

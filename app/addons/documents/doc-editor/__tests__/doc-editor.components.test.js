@@ -137,7 +137,7 @@ describe('DocEditorController', () => {
     const $attachmentNode = el.find('.view-attachments-section .dropdown-menu li');
     const attachmentURLactual = $attachmentNode.find('a').first().prop('href');
 
-    assert.equal(attachmentURLactual, '../../a%2Fspecial%3Fdb/_design%2Ftest%23doc/one%252F.png');
+    assert.equal(attachmentURLactual, './a%2Fspecial%3Fdb/_design%2Ftest%23doc/one%252F.png');
   });
 
   it.skip('setting deleteDocModal=true in store shows modal', () => {

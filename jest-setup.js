@@ -39,6 +39,11 @@ Object.defineProperty(window.location, 'origin', {
   value: 'http://dev:8000'
 });
 
+Object.defineProperty(window.location, 'href', {
+  writable: true,
+  value: 'http://dev:8000'
+});
+
 // Setup enzyme's react adapter
 const Enzyme = require('enzyme');
 const EnzymeAdapter = require('enzyme-adapter-react-16');

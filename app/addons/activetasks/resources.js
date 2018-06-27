@@ -10,14 +10,14 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import app from "../../app";
+import Helpers from "../../helpers";
 import Actions from "./actions";
 var Active = {};
 
 Active.AllTasks = Backbone.Collection.extend({
 
   url: function () {
-    return app.host + '/_active_tasks';
+    return Helpers.getServerUrl('/_active_tasks');
   },
 
   pollingFetch: function () { //still need this for the polling

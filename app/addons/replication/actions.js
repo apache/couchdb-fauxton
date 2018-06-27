@@ -14,6 +14,7 @@ import FauxtonAPI from '../../core/api';
 import {get, post} from '../../core/ajax';
 import ActionTypes from './actiontypes';
 import Helpers from './helpers';
+import MainHelper from '../../helpers';
 import Constants from './constants';
 import {
   supportNewApi,
@@ -38,7 +39,8 @@ export const initReplicator = (routeLocalSource, localSource) => dispatch => {
 };
 
 export const getDatabasesList = () => dispatch => {
-  get('/_all_dbs')
+  const url = MainHelper.getServerUrl("/_all_dbs");
+  get(url)
     .then((databases) => {
       dispatch({
         type: ActionTypes.REPLICATION_DATABASES_LOADED,
@@ -51,8 +53,8 @@ export const getDatabasesList = () => dispatch => {
 
 export const replicate = (params) => dispatch => {
   const replicationDoc = createReplicationDoc(params);
-
-  const promise = post('/_replicator', replicationDoc);
+  const url = MainHelper.getServerUrl("/_replicator");
+  const promise = post(url, replicationDoc);
 
   const source = Helpers.getDatabaseLabel(replicationDoc.source);
   const target = Helpers.getDatabaseLabel(replicationDoc.target);
@@ -212,7 +214,8 @@ export const deleteDocs = (docs) => dispatch => {
     clear: true
   });
 
-  post('/_replicator/_bulk_docs', {docs: bulkDocs}, {raw: true})
+  const url = MainHelper.getServerUrl('/_replicator/_bulk_docs');
+  post(url, {docs: bulkDocs}, {raw: true})
     .then(resp => {
       if (!resp.ok) {
         throw resp;
@@ -327,7 +330,8 @@ export const getReplicationStateFrom = (id) => dispatch => {
     type: ActionTypes.REPLICATION_FETCHING_FORM_STATE
   });
 
-  get(`/_replicator/${encodeURIComponent(id)}`)
+  const url = MainHelper.getServerUrl(`/_replicator/${encodeURIComponent(id)}`);
+  get(url)
     .then((doc) => {
       const stateDoc = {
         replicationDocName: doc._id,

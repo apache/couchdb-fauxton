@@ -11,6 +11,7 @@
 // the License.
 
 import app from "../../app";
+import Helpers from "../../helpers";
 import FauxtonAPI from "../../core/api";
 import Documents from "../documents/resources";
 var Databases = FauxtonAPI.addon();
@@ -47,7 +48,7 @@ Databases.Model = FauxtonAPI.Model.extend({
     } else if (context === "web-index") {
       return "#/database/" + this.safeID() + "/_all_docs?limit=" + Databases.DocLimit;
     } else if (context === "apiurl") {
-      return window.location.origin + "/database/" + this.safeID() + "/_all_docs";
+      return Helpers.getApiUrl("/database/" + this.safeID() + "/_all_docs");
     } else if (context === "changes") {
       return FauxtonAPI.urls('changes', 'app', this.safeID(), '?descending=true&limit=100&include_docs=true');
     } else if (context === "changes-apiurl") {
@@ -55,7 +56,7 @@ Databases.Model = FauxtonAPI.Model.extend({
     } else if (context === "app") {
       return "/database/" + this.safeID();
     }
-    return app.host + "/" + this.safeID();
+    return Helpers.getServerUrl("/" + this.safeID());
 
   },
 

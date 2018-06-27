@@ -23,7 +23,8 @@ PouchDB.plugin(PouchHttpAdapter);
 let db;
 
 export const initDiffEditor = (dbName, docId) => dispatch => {
-  const url = FauxtonAPI.urls('databaseBaseURL', 'server', dbName);
+  // We have to use API url here because PouchDB doesn't take relative urls.
+  const url = FauxtonAPI.urls('databaseBaseURL', 'apiurl', dbName);
   db = PouchDB(url);
 
   Promise.all([db.get(docId), getTree(db, docId)])
