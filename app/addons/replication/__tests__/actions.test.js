@@ -35,7 +35,7 @@ describe("Replication Actions", () => {
   describe('replicate', () => {
     afterEach(fetchMock.restore);
 
-    it('creates a new database if it does not exist', (done) => {
+    it('creates a new database if it does not exist', () => {
       const dispatch = () => {};
       fetchMock.postOnce('./_replicator', {
         status: 404,
@@ -59,7 +59,7 @@ describe("Replication Actions", () => {
         }
       });
 
-      replicate ({
+      return replicate ({
         localSource: "animaldb",
         localTarget: "boom123",
         password: "testerpass",
@@ -70,13 +70,34 @@ describe("Replication Actions", () => {
         replicationTarget: "REPLICATION_TARGET_NEW_LOCAL_DATABASE",
         replicationType: "",
         username: "tester"
-      })(dispatch);
+      })(dispatch).then(() => {
+        assert.lengthOf(finalPost.calls('./_replicator'), 3);
+      });
+    });
 
-      //this is not pretty, and might cause some false errors. But its tricky to tell when this test has completed
-      setTimeout(() => {
-        assert.ok(finalPost.called('./_replicator'));
-        done();
-      }, 100);
+    it('does not try to create new database if it already exist', () => {
+      const dispatch = () => {};
+      const mockPost = fetchMock.postOnce('./_replicator', {
+        status: 200,
+        body: {
+          ok: true
+        }
+      });
+
+      return replicate ({
+        localSource: "animaldb",
+        localTarget: "boom123",
+        password: "testerpass",
+        remoteSource: "",
+        remoteTarget: "",
+        replicationDocName: "",
+        replicationSource: "REPLICATION_SOURCE_LOCAL",
+        replicationTarget: "REPLICATION_TARGET_NEW_LOCAL_DATABASE",
+        replicationType: "",
+        username: "tester"
+      })(dispatch).then(() => {
+        assert.lengthOf(mockPost.calls('./_replicator'), 1);
+      });
     });
   });
 

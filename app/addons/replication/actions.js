@@ -71,7 +71,8 @@ export const replicate = (params) => dispatch => {
     });
   };
 
-  promise
+  // Return promise for testing
+  return promise
     .then(json => {
       if (!json.ok) {
         throw json;
@@ -85,11 +86,11 @@ export const replicate = (params) => dispatch => {
       });
 
       dispatch(getReplicationActivity());
-    })
-    .catch(json => {
+      FauxtonAPI.navigate('#/replication');
+    }).catch(json => {
       if (json.error && json.error === "not_found") {
         return createReplicatorDB().then(() => {
-          return replicate(params);
+          return replicate(params)(dispatch);
         }).catch(handleError);
       }
       handleError(json);
