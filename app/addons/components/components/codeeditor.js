@@ -245,14 +245,13 @@ export class CodeEditor extends React.Component {
   };
 
   parseLineForStringMatch = () => {
-    var selStart = this.getSelectionStart().row;
-    var selEnd   = this.getSelectionEnd().row;
+    const selStart = this.getSelectionStart().row;
+    const selEnd   = this.getSelectionEnd().row;
 
     // one JS(ON) string can't span more than one line - we edit one string, so ensure we don't select several lines
     if (selStart >= 0 && selEnd >= 0 && selStart === selEnd && this.isRowExpanded(selStart)) {
-      var editLine = this.getLine(selStart),
-          editMatch = editLine.match(/^([ \t]*)("[a-zA-Z0-9_-]*["|']: )?(["|'].*",?[ \t]*)$/);
-
+      const editLine = this.getLine(selStart);
+      const editMatch = editLine.match(/^([ \t]*)("[^"]*["][ \t]*:[ \t]*)?(["|'].*"[ \t]*,?[ \t]*)$/);
       if (editMatch) {
         return editMatch;
       }
