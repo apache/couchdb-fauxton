@@ -260,13 +260,14 @@ export class CodeEditor extends React.Component {
   };
 
   openStringEditModal = () => {
-    var matches = this.parseLineForStringMatch();
-    var string = matches[3];
-    var lastChar = string.length - 1;
+    const matches = this.parseLineForStringMatch();
+    let string = matches[3].trim();
+    // Removes trailing comma and surrouding spaces
     if (string.substring(string.length - 1) === ',') {
-      lastChar = string.length - 2;
+      string = string.substring(0, string.length - 1).trim();
     }
-    string = string.substring(1, lastChar);
+    // Removes surrouding quotes
+    string = string.substring(1, string.length - 1);
 
     this.setState({
       stringEditModalVisible: true,
