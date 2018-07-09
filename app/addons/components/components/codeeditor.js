@@ -13,6 +13,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import FauxtonAPI from "../../../core/api";
 import ace from "brace";
+import "brace/ext/searchbox";
 import {StringEditModal} from './stringeditmodal';
 
 require('brace/mode/javascript');
