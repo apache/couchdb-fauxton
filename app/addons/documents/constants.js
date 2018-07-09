@@ -21,5 +21,9 @@ export default {
     MANGO_INDEX: 'MangoIndex',
     MANGO_QUERY: 'MangoQueryResult',
     VIEW: 'view'
+  },
+  INDEX_RESULTS_STYLE: {
+    TEXT_OVERFLOW_TRUNCATED: 'truncated',
+    TEXT_OVERFLOW_FULL: 'full'
   }
 };

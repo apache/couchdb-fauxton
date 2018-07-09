@@ -105,3 +105,12 @@ export const changeTableHeaderAttribute = (newField, selectedFields) => {
   };
 };
 
+export const setResultsTextOverflow = (overflow) => {
+  return {
+    type: ActionTypes.INDEX_RESULTS_SET_STYLE,
+    resultsStyle: {
+      textOverflow: overflow
+    }
+  };
+};
+

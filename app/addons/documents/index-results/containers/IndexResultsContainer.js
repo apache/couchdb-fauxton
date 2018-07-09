@@ -20,7 +20,8 @@ import {
   changeLayout,
   bulkCheckOrUncheck,
   changeTableHeaderAttribute,
-  resetState
+  resetState,
+  setResultsTextOverflow
 } from '../actions/base';
 import {
   getDocs,
@@ -36,7 +37,8 @@ import {
   getTextEmptyIndex,
   getDocType,
   getFetchParams,
-  getQueryOptionsParams
+  getQueryOptionsParams,
+  getResultsStyle
 } from '../reducers';
 
 
@@ -55,7 +57,8 @@ const mapStateToProps = ({indexResults}, ownProps) => {
     textEmptyIndex: getTextEmptyIndex(indexResults),
     docType: getDocType(indexResults),
     fetchParams: getFetchParams(indexResults),
-    queryOptionsParams: getQueryOptionsParams(indexResults)
+    queryOptionsParams: getQueryOptionsParams(indexResults),
+    resultsStyle: getResultsStyle(indexResults)
   };
 };
 
@@ -90,6 +93,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     },
     queryOptionsToggleIncludeDocs: (previousIncludeDocs) => {
       dispatch(queryOptionsToggleIncludeDocs(previousIncludeDocs));
+    },
+    setResultsTextOverflow: (overflow) => {
+      dispatch(setResultsTextOverflow(overflow));
     }
   };
 };

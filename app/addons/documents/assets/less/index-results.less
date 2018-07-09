@@ -34,6 +34,12 @@
     min-height: 26px;
     padding: 8px 0;
   }
+
+  .text-overflow-switch {
+    min-width: 130px;
+    min-height: 26px;
+    padding: 8px 0;
+  }
 }
 
 .document-result-screen__toolbar-flex-container {
@@ -125,6 +131,12 @@ a.document-result-screen__toolbar-create-btn:visited {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    vertical-align: top;
+    &.showall {
+      overflow: visible;
+      white-space: normal;
+      word-wrap: break-word;
+    }
   }
   td.tableview-checkbox-cell, th.tableview-header-el-checkbox {
     width: 35px;

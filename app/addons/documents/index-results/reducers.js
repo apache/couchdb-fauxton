@@ -29,6 +29,9 @@ const initialState = {
   selectedLayout: Constants.LAYOUT_ORIENTATION.METADATA,
   textEmptyIndex: 'No Documents Found',
   docType: Constants.INDEX_RESULTS_DOC_TYPE.VIEW,
+  resultsStyle: {
+    textOverflow: Constants.INDEX_RESULTS_STYLE.TEXT_OVERFLOW_TRUNCATED
+  },
   fetchParams: {
     limit: getDefaultPerPage() + 1,
     skip: 0
@@ -64,6 +67,11 @@ const initialState = {
 export default function resultsState(state = initialState, action) {
   switch (action.type) {
 
+    case ActionTypes.INDEX_RESULTS_SET_STYLE:
+      return Object.assign({}, state, {
+        resultsStyle: action.resultsStyle
+      });
+
     case ActionTypes.INDEX_RESULTS_REDUX_RESET_STATE:
       return Object.assign({}, initialState, {
         selectedLayout: state.selectedLayout,
@@ -77,7 +85,8 @@ export default function resultsState(state = initialState, action) {
         }),
         queryOptionsPanel: Object.assign({}, initialState.queryOptionsPanel,
           state.queryOptionsPanel, {reduce: false, groupLevel: 'exact', showReduce: false}),
-        isLoading: false
+        isLoading: false,
+        resultsStyle: state.resultsStyle
       });
 
     case ActionTypes.INDEX_RESULTS_REDUX_IS_LOADING:
@@ -349,3 +358,4 @@ export const getCanShowNext = state => state.pagination.canShowNext;
 export const getQueryOptionsPanel = state => state.queryOptionsPanel;
 export const getPerPage = state => state.pagination.perPage;
 export const getFetchParams = state => state.fetchParams;
+export const getResultsStyle = state => state.resultsStyle;

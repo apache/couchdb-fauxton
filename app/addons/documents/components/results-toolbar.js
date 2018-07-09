@@ -15,14 +15,28 @@ import React from 'react';
 import BulkDocumentHeaderController from "../header/header";
 import Stores from "../sidebar/stores";
 import Components from "../../components/react-components";
+import Constants from '../constants';
 import Helpers from '../helpers';
 
 const {BulkActionComponent} = Components;
 const store = Stores.sidebarStore;
 
 export class ResultsToolBar extends React.Component {
+  constructor (props) {
+    super(props);
+    this.toggleTextOverflow = this.toggleTextOverflow.bind(this);
+  }
+
   shouldComponentUpdate (nextProps) {
     return nextProps.isListDeletable != undefined;
+  }
+
+  toggleTextOverflow() {
+    if (this.props.resultsStyle.textOverflow === Constants.INDEX_RESULTS_STYLE.TEXT_OVERFLOW_FULL) {
+      this.props.setResultsTextOverflow(Constants.INDEX_RESULTS_STYLE.TEXT_OVERFLOW_TRUNCATED);
+    } else {
+      this.props.setResultsTextOverflow(Constants.INDEX_RESULTS_STYLE.TEXT_OVERFLOW_FULL);
+    }
   }
 
   render () {
@@ -65,11 +79,19 @@ export class ResultsToolBar extends React.Component {
         </div>
       );
     }
-
+    const isTruncated = this.props.resultsStyle.textOverflow === Constants.INDEX_RESULTS_STYLE.TEXT_OVERFLOW_TRUNCATED;
     return (
       <div className="document-result-screen__toolbar">
         {bulkAction}
         {bulkHeader}
+        <div className="text-overflow-switch">
+          <input
+            style={{margin: 6}}
+            type="checkbox"
+            checked={isTruncated}
+            onChange={this.toggleTextOverflow}
+          />Truncate values
+        </div>
         {createDocumentLink}
       </div>
     );
@@ -81,7 +103,9 @@ ResultsToolBar.propTypes = {
   allDocumentsSelected: PropTypes.bool.isRequired,
   hasSelectedItem: PropTypes.bool.isRequired,
   toggleSelectAll: PropTypes.func.isRequired,
+  setResultsTextOverflow: PropTypes.func.isRequired,
   isLoading: PropTypes.bool.isRequired,
   hasResults: PropTypes.bool.isRequired,
-  isListDeletable: PropTypes.bool
+  isListDeletable: PropTypes.bool,
+  resultsStyle: PropTypes.object.isRequired
 };

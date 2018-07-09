@@ -15,11 +15,16 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import FauxtonAPI from '../../../../../core/api';
 import Components from '../../../../components/react-components';
+import Constants from '../../../constants';
 import uuid from 'uuid';
 
 const { Copy } = Components;
 
 export default class TableRow extends React.Component {
+  static defaultProps = {
+    textOverflow: Constants.INDEX_RESULTS_STYLE.TEXT_OVERFLOW_TRUNCATED
+  };
+
   constructor (props) {
     super(props);
     this.state = {
@@ -40,8 +45,14 @@ export default class TableRow extends React.Component {
       const stringified = ['object', 'boolean'].includes(typeof el[k]) ?
         JSON.stringify(el[k], null, '  ') : el[k];
 
+      let className = '';
+      if (this.props.textOverflow === Constants.INDEX_RESULTS_STYLE.TEXT_OVERFLOW_TRUNCATED) {
+        className = undefined;
+      } else if (this.props.textOverflow === Constants.INDEX_RESULTS_STYLE.TEXT_OVERFLOW_FULL) {
+        className = 'showall';
+      }
       return (
-        <td key={key} title={stringified} onClick={this.onClick.bind(this)}>
+        <td key={key} title={stringified} className={className} onClick={this.onClick.bind(this)}>
           {stringified}
         </td>
       );
@@ -147,5 +158,6 @@ TableRow.propTypes = {
   isSelected: PropTypes.bool.isRequired,
   index: PropTypes.number.isRequired,
   data: PropTypes.object.isRequired,
-  onClick: PropTypes.func.isRequired
+  onClick: PropTypes.func.isRequired,
+  textOverflow: PropTypes.string
 };

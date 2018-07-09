@@ -104,6 +104,7 @@ export default class ResultsScreen extends React.Component {
           hasSelectedItem={this.props.hasSelectedItem}
           toggleSelect={this.toggleSelectAll}
           changeField={this.props.changeTableHeaderAttribute}
+          resultsStyle={this.props.resultsStyle}
           title="Select all docs that can be..." />
       </div>
     );
