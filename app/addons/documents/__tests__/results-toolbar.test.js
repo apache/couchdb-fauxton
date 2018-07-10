@@ -75,4 +75,30 @@ describe('Results Toolbar', () => {
     wrapper.find('div.text-overflow-switch input').first().simulate('change', { target: { checked: true } });
     expect(mockSetTextOverflow.called).toBe(true);
   });
+
+  it('does not render text overflow switch in JSON layout', () => {
+    const toolbarJson = mount(<ResultsToolBar
+      {...defaultProps}
+      hasResults={true}
+      isListDeletable={false}
+      selectedLayout={Constants.LAYOUT_ORIENTATION.JSON}/>
+    );
+    expect(toolbarJson.find('div.text-overflow-switch input').exists()).toBe(false);
+
+    const toolbarMetadata = mount(<ResultsToolBar
+      {...defaultProps}
+      hasResults={true}
+      isListDeletable={false}
+      selectedLayout={Constants.LAYOUT_ORIENTATION.METADATA}/>
+    );
+    expect(toolbarMetadata.find('div.text-overflow-switch input').exists()).toBe(true);
+
+    const toolbarTable = mount(<ResultsToolBar
+      {...defaultProps}
+      hasResults={true}
+      isListDeletable={false}
+      selectedLayout={Constants.LAYOUT_ORIENTATION.TABLE}/>
+    );
+    expect(toolbarTable.find('div.text-overflow-switch input').exists()).toBe(true);
+  });
 });

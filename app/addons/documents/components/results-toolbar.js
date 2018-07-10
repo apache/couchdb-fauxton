@@ -80,10 +80,9 @@ export class ResultsToolBar extends React.Component {
       );
     }
     const isTruncated = this.props.resultsStyle.textOverflow === Constants.INDEX_RESULTS_STYLE.TEXT_OVERFLOW_TRUNCATED;
-    return (
-      <div className="document-result-screen__toolbar">
-        {bulkAction}
-        {bulkHeader}
+    let textOverflowSwitch = null;
+    if (this.props.selectedLayout !== Constants.LAYOUT_ORIENTATION.JSON) {
+      textOverflowSwitch = (
         <div className="text-overflow-switch">
           <input
             style={{margin: 6}}
@@ -92,6 +91,13 @@ export class ResultsToolBar extends React.Component {
             onChange={this.toggleTextOverflow}
           />Truncate values
         </div>
+      );
+    }
+    return (
+      <div className="document-result-screen__toolbar">
+        {bulkAction}
+        {bulkHeader}
+        {textOverflowSwitch}
         {createDocumentLink}
       </div>
     );
