@@ -10,6 +10,7 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 import FauxtonAPI from "../../../core/api";
+import Constants from "../constants";
 import TableRow from "../index-results/components/results/TableRow";
 import utils from "../../../../test/mocha/testUtils";
 import React from "react";
@@ -22,22 +23,23 @@ const { assert } = utils;
 
 describe('Docs Table Row', () => {
 
-  it('all types of value are converted to the appropriate text for display', () => {
-    const elem = {
-      content: {
-        _id: "123",
-        vBool: true,
-        vString: 'abc',
-        vFloat: 123.1234,
-        vInt: 123,
-        vObject: { f1: 1, f2: 'b'},
-      },
-      id: "123"
-    };
+  const elem = {
+    content: {
+      _id: "123",
+      vBool: true,
+      vString: 'abc',
+      vFloat: 123.1234,
+      vInt: 123,
+      vObject: { f1: 1, f2: 'b'},
+    },
+    id: "123"
+  };
 
-    const data = {
-      selectedFields: ['vBool', 'vString', 'vFloat', 'vInt', 'vObject']
-    };
+  const data = {
+    selectedFields: ['vBool', 'vString', 'vFloat', 'vInt', 'vObject']
+  };
+
+  it('all types of value are converted to the appropriate text for display', () => {
     const wrapper = shallow(<TableRow
       onClick={sinon.stub()}
       docChecked={sinon.stub()}
@@ -53,5 +55,35 @@ describe('Docs Table Row', () => {
     assert.equal(wrapper.find('td').at(4).text(), JSON.stringify(elem.content.vFloat));
     assert.equal(wrapper.find('td').at(5).text(), JSON.stringify(elem.content.vInt));
     assert.equal(wrapper.find('td').at(6).text().replace(/[\s]/g, ''), JSON.stringify(elem.content.vObject));
+  });
+
+  it('shows full text values', () => {
+    const wrapper = shallow(<TableRow
+      onClick={sinon.stub()}
+      docChecked={sinon.stub()}
+      el={elem}
+      data={data}
+      index={0}
+      docIdentifier={elem.id}
+      isSelected={false}
+      textOverflow={Constants.INDEX_RESULTS_STYLE.TEXT_OVERFLOW_FULL}
+    />);
+
+    expect(wrapper.find('td.showall').exists()).toBe(true);
+  });
+
+  it('truncates text values', () => {
+    const wrapper = shallow(<TableRow
+      onClick={sinon.stub()}
+      docChecked={sinon.stub()}
+      el={elem}
+      data={data}
+      index={0}
+      docIdentifier={elem.id}
+      isSelected={false}
+      textOverflow={Constants.INDEX_RESULTS_STYLE.TEXT_OVERFLOW_TRUNCATED}
+    />);
+
+    expect(wrapper.find('td.showall').exists()).toBe(false);
   });
 });
