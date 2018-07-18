@@ -12,7 +12,7 @@
 
 import base64 from 'base-64';
 import React from 'react';
-import app from '../../../app';
+import Helpers from '../../../helpers';
 import {json} from '../../../core/ajax';
 import FauxtonAPI from '../../../core/api';
 import {ReplicationSource} from './source';
@@ -101,7 +101,7 @@ export default class NewReplicationController extends React.Component {
   }
 
   checkCredentials(username, password) {
-    return json(app.host + '/', 'GET', {
+    return json(Helpers.getServerUrl('/'), 'GET', {
       credentials: 'omit',
       headers: {
         'Authorization':'Basic ' + base64.encode(username + ':' + password)
