@@ -17,9 +17,16 @@ import MainFieldsView from '../index-results/components/queryoptions/MainFieldsV
 import sinon from 'sinon';
 
 describe('MainFieldsView', () => {
+  const defaultProps = {
+    stable: false,
+    toggleStable: () => {},
+    update: 'true',
+    changeUpdateField: () => {}
+  };
   const docURL = 'http://foo.com';
   it('does not render reduce when showReduce is false', () => {
     const wrapper = mount(<MainFieldsView
+      {...defaultProps}
       includeDocs={false}
       showReduce={false}
       reduce={false}
@@ -32,6 +39,7 @@ describe('MainFieldsView', () => {
 
   it('render reduce when showReduce is true but does not render grouplevel when reduce is false', () => {
     const wrapper = mount(<MainFieldsView
+      {...defaultProps}
       includeDocs={false}
       showReduce={true}
       reduce={false}
@@ -46,6 +54,7 @@ describe('MainFieldsView', () => {
   it('calls toggleIncludeDocs onChange', () => {
     const spy = sinon.spy();
     const wrapper = mount(<MainFieldsView
+      {...defaultProps}
       includeDocs={false}
       showReduce={true}
       reduce={false}
@@ -60,6 +69,7 @@ describe('MainFieldsView', () => {
   it('calls groupLevelChange onChange', () => {
     const spy = sinon.spy();
     const wrapper = mount(<MainFieldsView
+      {...defaultProps}
       includeDocs={false}
       showReduce={true}
       reduce={true}
@@ -76,6 +86,7 @@ describe('MainFieldsView', () => {
   it('calls toggleReduce onChange', () => {
     const spy = sinon.spy();
     const wrapper = mount(<MainFieldsView
+      {...defaultProps}
       includeDocs={false}
       showReduce={true}
       reduce={true}
@@ -92,6 +103,7 @@ describe('MainFieldsView', () => {
   it('calls toggleStable', () => {
     const spy = sinon.spy();
     const wrapper = mount(<MainFieldsView
+      {...defaultProps}
       includeDocs={false}
       showReduce={false}
       reduce={false}
@@ -107,6 +119,7 @@ describe('MainFieldsView', () => {
   it('calls changeUpdateField', () => {
     const spy = sinon.spy();
     const wrapper = mount(<MainFieldsView
+      {...defaultProps}
       includeDocs={false}
       showReduce={false}
       reduce={false}

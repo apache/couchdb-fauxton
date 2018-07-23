@@ -396,7 +396,7 @@ class CloneDocModal extends React.Component {
         if (res.uuids) {
           this.setState({ uuid: res.uuids[0] });
         }
-      });
+      }).catch(() => {});
     }
   }
 
