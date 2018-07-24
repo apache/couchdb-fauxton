@@ -56,9 +56,9 @@ export default function setup(state = initialState, action) {
     case SETUP_BIND_ADDRESS_FOR_SINGLE_NODE:
       return updateState(state, 'setupNode.bindAddress', options.value);
     case SETUP_PORT_FOR_SINGLE_NODE:
-      return updateState(state, 'setupNode.port', options.value);
+      return updateStateIfNotNaN(state, 'setupNode.port', parseInt(options.value));
     case SETUP_PORT_ADDITIONAL_NODE:
-      return updateState(state, 'additionalNode.port', parseInt(options.value));
+      return updateStateIfNotNaN(state, 'additionalNode.port', parseInt(options.value));
     case SETUP_BIND_ADDRESS_ADDITIONAL_NODE:
       return updateState(state, 'additionalNode.bindAddress', options.value);
     case SETUP_REMOTE_ADDRESS_ADDITIONAL_NODE:
@@ -71,8 +71,7 @@ export default function setup(state = initialState, action) {
     case SETUP_RESET_ADDITIONAL_NODE:
       return resetAdditionalNode(getStateCopy(state));
     case SETUP_NODE_COUNT:
-      const nodeCount = Math.min(options.value, 3);
-      return updateState(state, 'setupNode.nodeCount', nodeCount);
+      return updateStateIfNotNaN(state, 'setupNode.nodeCount', parseInt(options.value));
     default:
       return state;
   }
@@ -93,6 +92,14 @@ export const getStateCopy = (state) => {
       ...state.additionalNode
     }
   };
+};
+
+export const updateStateIfNotNaN = (state, path, value) => {
+  let stateCopy = getStateCopy(state);
+  if (_.isNaN(value)) {
+    return stateCopy;
+  }
+  return _.set(stateCopy, path, value);
 };
 
 /**
