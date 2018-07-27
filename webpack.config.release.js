@@ -22,7 +22,7 @@ const settings = require('./tasks/helper')
 module.exports = {
   // Entry point for static analyzer:
   entry: {
-    bundle: ['core-js/fn/array', 'core-js/fn/object', 'core-js/fn/symbol', 'core-js/fn/promise', 'regenerator-runtime/runtime', './app/main.js']
+    bundle: ['core-js/fn/array', 'core-js/fn/string/ends-with', 'core-js/fn/string/starts-with',  'core-js/fn/object', 'core-js/fn/symbol', 'core-js/fn/promise', 'regenerator-runtime/runtime', './app/main.js']
   },
 
   output: {

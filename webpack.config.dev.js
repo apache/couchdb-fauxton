@@ -20,7 +20,7 @@ const settings = require('./tasks/helper')
 
 module.exports = {
   entry: {
-    bundle: ['core-js/fn/array', 'core-js/fn/object', 'core-js/fn/symbol', 'core-js/fn/promise', 'regenerator-runtime/runtime', './app/main.js'] //Our starting point for our development.
+    bundle: ['core-js/fn/array', 'core-js/fn/string/ends-with', 'core-js/fn/string/starts-with', 'core-js/fn/object', 'core-js/fn/symbol', 'core-js/fn/promise', 'regenerator-runtime/runtime', './app/main.js'] //Our starting point for our development.
   },
 
   output: {
