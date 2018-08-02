@@ -28,24 +28,24 @@ export default {
 
   // documentation URLs
   DOC_URLS: {
-    GENERAL:'./docs/intro/api.html#documents',
-    ALL_DBS:'./docs/api/server/common.html?highlight=all_dbs#get--_all_dbs',
-    REPLICATION:'./docs/replication/replicator.html#basics',
-    DESIGN_DOCS:'./docs/ddocs/ddocs.html#design-docs',
-    DESIGN_DOC_METADATA:'./docs/api/ddoc/common.html#api-ddoc-view-index-info',
-    VIEW_FUNCS:'./docs/ddocs/ddocs.html#view-functions',
-    MAP_FUNCS:'./docs/ddocs/ddocs.html#map-functions',
-    REDUCE_FUNCS:'./docs/ddocs/ddocs.html#reduce-and-rereduce-functions',
-    API_REF:'./docs/http-api.html',
-    DB_PERMISSION:'./docs/api/database/security.html#db-security',
-    STATS:'./docs/api/server/common.html?highlight=stats#get--_stats',
-    ACTIVE_TASKS:'./docs/api/server/common.html?highlight=stats#active-tasks',
-    LOG:'./docs/api/server/common.html?highlight=stats#log',
-    CONFIG:'./docs/config/index.html',
-    VIEWS:'./docs/intro/overview.html#views',
-    MANGO_INDEX:'./docs/intro/api.html#documents',
-    MANGO_SEARCH:'./docs/intro/api.html#documents',
-    CHANGES:'./docs/api/database/changes.html?highlight=changes#post--db-_changes',
-    SETUP: './docs/cluster/setup.html#the-cluster-setup-wizard'
+    GENERAL:'./_utils/docs/intro/api.html#documents',
+    ALL_DBS:'./_utils/docs/api/server/common.html?highlight=all_dbs#get--_all_dbs',
+    REPLICATION:'./_utils/docs/replication/replicator.html#basics',
+    DESIGN_DOCS:'./_utils/docs/ddocs/ddocs.html#design-docs',
+    DESIGN_DOC_METADATA:'./_utils/docs/api/ddoc/common.html#api-ddoc-view-index-info',
+    VIEW_FUNCS:'./_utils/docs/ddocs/ddocs.html#view-functions',
+    MAP_FUNCS:'./_utils/docs/ddocs/ddocs.html#map-functions',
+    REDUCE_FUNCS:'./_utils/docs/ddocs/ddocs.html#reduce-and-rereduce-functions',
+    API_REF:'./_utils/docs/http-api.html',
+    DB_PERMISSION:'./_utils/docs/api/database/security.html#db-security',
+    STATS:'./_utils/docs/api/server/common.html?highlight=stats#get--_stats',
+    ACTIVE_TASKS:'./_utils/docs/api/server/common.html?highlight=stats#active-tasks',
+    LOG:'./_utils/docs/api/server/common.html?highlight=stats#log',
+    CONFIG:'./_utils/docs/config/index.html',
+    VIEWS:'./_utils/docs/intro/overview.html#views',
+    MANGO_INDEX:'./_utils/docs/intro/api.html#documents',
+    MANGO_SEARCH:'./_utils/docs/intro/api.html#documents',
+    CHANGES:'./_utils/docs/api/database/changes.html?highlight=changes#post--db-_changes',
+    SETUP: './_utils/docs/cluster/setup.html#the-cluster-setup-wizard'
   }
 };
