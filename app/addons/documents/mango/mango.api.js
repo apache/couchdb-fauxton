@@ -10,52 +10,32 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import 'whatwg-fetch';
 import app from "../../../app";
+import {post, get} from '../../../core/ajax';
 import FauxtonAPI from "../../../core/api";
 import Constants from '../constants';
 
 export const fetchQueryExplain = (databaseName, queryCode) => {
   const url = FauxtonAPI.urls('mango', 'explain-server', encodeURIComponent(databaseName));
 
-  return fetch(url, {
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json; charset=utf-8'
-    },
-    credentials: 'include',
-    method: 'POST',
-    body: queryCode
-  })
-    .then((res) => res.json())
-    .then((json) => {
-      if (json.error) {
-        throw new Error('(' + json.error + ') ' + json.reason);
-      }
-      return json;
-    });
+  return post(url, queryCode, {rawBody: true}).then((json) => {
+    if (json.error) {
+      throw new Error('(' + json.error + ') ' + json.reason);
+    }
+    return json;
+  });
 };
 
 export const createIndex = (databaseName, indexCode) => {
   const url = FauxtonAPI.urls('mango', 'index-server',
     app.utils.safeURLName(databaseName));
 
-  return fetch(url, {
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json; charset=utf-8'
-    },
-    credentials: 'include',
-    method: 'POST',
-    body: indexCode
-  })
-    .then((res) => res.json())
-    .then((json) => {
-      if (json.error) {
-        throw new Error('(' + json.error + ') ' + json.reason);
-      }
-      return json;
-    });
+  return post(url, indexCode, {rawBody: true}).then((json) => {
+    if (json.error) {
+      throw new Error('(' + json.error + ') ' + json.reason);
+    }
+    return json;
+  });
 };
 
 export const fetchIndexes = (databaseName, params) => {
@@ -63,24 +43,15 @@ export const fetchIndexes = (databaseName, params) => {
   let url = FauxtonAPI.urls('mango', 'index-server', app.utils.safeURLName(databaseName));
   url = `${url}${url.includes('?') ? '&' : '?'}${query}`;
 
-  return fetch(url, {
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json; charset=utf-8'
-    },
-    credentials: 'include',
-    method: 'GET'
-  })
-    .then((res) => res.json())
-    .then((json) => {
-      if (json.error) {
-        throw new Error('(' + json.error + ') ' + json.reason);
-      }
-      return {
-        docs: json.indexes,
-        docType: Constants.INDEX_RESULTS_DOC_TYPE.MANGO_INDEX
-      };
-    });
+  return get(url).then((json) => {
+    if (json.error) {
+      throw new Error('(' + json.error + ') ' + json.reason);
+    }
+    return {
+      docs: json.indexes,
+      docType: Constants.INDEX_RESULTS_DOC_TYPE.MANGO_INDEX
+    };
+  });
 };
 
 // assume all databases being accessed are on the same
@@ -128,15 +99,7 @@ export const mangoQuery = (databaseName, queryCode, fetchParams) => {
   const url = FauxtonAPI.urls('mango', 'query-server', encodeURIComponent(databaseName));
   const modifiedQuery = mergeFetchParams(queryCode, fetchParams);
 
-  return fetch(url, {
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json; charset=utf-8'
-    },
-    credentials: 'include',
-    method: 'POST',
-    body: JSON.stringify(modifiedQuery)
-  });
+  return post(url, modifiedQuery, {raw: true});
 };
 
 export const mangoQueryDocs = (databaseName, queryCode, fetchParams) => {
