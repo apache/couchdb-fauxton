@@ -82,7 +82,7 @@
     "jsondiffpatch": "^0.1.41",
     "less": "^2.7.2",
     "less-loader": "^4.1.0",
-    "lodash": "^3.10.1",
+    "lodash": "^4.17.10",
     "mkdirp": "^0.5.1",
     "moment": "^2.17.1",
     "nano": "~5.12.0",

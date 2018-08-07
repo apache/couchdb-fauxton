@@ -55,13 +55,13 @@ describe('Notification Store', () => {
     assert.equal(notifications.length, 4);
 
     // find the notification ID of the "three" message
-    const notification = _.findWhere(notifications, { msg: 'three' });
+    const notification = _.find(notifications, { msg: 'three' });
     store.clearNotification(notification.notificationId);
 
     // confirm it was removed
     const updatedNotifications = store.getNotifications();
     assert.equal(updatedNotifications.length, 3);
-    assert.equal(_.findWhere(updatedNotifications, { msg: 'three' }), undefined);
+    assert.equal(_.find(updatedNotifications, { msg: 'three' }), undefined);
   });
 
   it("setNotificationFilter only sets for known notification types", () => {
