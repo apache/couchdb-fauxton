@@ -18,6 +18,7 @@ var beforeUnloads = {};
 
 export default Backbone.Router.extend({
   routes: {},
+  originalPageTitle: window.document.title,
 
   beforeUnload: function (name, fn) {
     beforeUnloads[name] = fn;
@@ -44,6 +45,17 @@ export default Backbone.Router.extend({
 
     if (continueNav) {
       Backbone.Router.prototype.navigate(fragment, options);
+      this.updateWindowTitle(fragment);
+    }
+  },
+
+  updateWindowTitle: function(fragment) {
+    if (fragment.startsWith('#/')) {
+      window.document.title = this.originalPageTitle + ' - ' + fragment.substring(2);
+    } else if (fragment.startsWith('/') || fragment.startsWith('#')) {
+      window.document.title = this.originalPageTitle + ' - ' + fragment.substring(1);
+    } else {
+      window.document.title = this.originalPageTitle + ' - ' + fragment;
     }
   },
 

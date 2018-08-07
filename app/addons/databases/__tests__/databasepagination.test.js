@@ -33,7 +33,8 @@ describe('Database Pagination', function () {
     const tempStore = {
       getTotalAmountOfDatabases: () => { return 10; },
       getPage: () => { return 1; },
-      on: () => {}
+      on: () => {},
+      off: () => {}
     };
 
     const pagination = mount(<DatabaseComponents.DatabasePagination store={tempStore} />);

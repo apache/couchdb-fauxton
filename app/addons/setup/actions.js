@@ -197,9 +197,8 @@ export const addNode = (isOrWasAdminParty, credentials, setupNode, additionalNod
     }
     const addNodeResponse = await post(baseUrl, addNodeData, {raw: true});
 
-
     if (!addNodeResponse.ok) {
-      const json = await enableRemoteNodeResponse.json();
+      const json = await addNodeResponse.json();
       const error = json.reason ? json.reason : json.error;
       return showError(error);
     }

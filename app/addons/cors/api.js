@@ -10,51 +10,33 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import 'whatwg-fetch';
+import {get, put} from '../../core/ajax';
 
 export const fetchCORSConfig = (baseURL) => {
   const configURL = baseURL + '/cors';
-  return fetch(configURL, {
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    },
-    credentials: 'include',
-    method: 'GET'
-  })
-    .then((res) => res.json())
-    .then((json) => {
-      if (json.error) {
-        throw new Error(json.reason);
-      }
+  return get(configURL).then((json) => {
+    if (json.error) {
+      throw new Error(json.reason);
+    }
 
-      const origins = !json.origins ? [] : json.origins.split(',');
-      return {
-        origins: origins,
-        methods: json.methods,
-        credentials: json.credentials,
-        headers: json.headers
-      };
-    });
+    const origins = !json.origins ? [] : json.origins.split(',');
+    return {
+      origins: origins,
+      methods: json.methods,
+      credentials: json.credentials,
+      headers: json.headers
+    };
+  });
 };
 
 export const fetchHttpdConfig = (baseURL) => {
   const configURL = baseURL + '/httpd';
-  return fetch(configURL, {
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    },
-    credentials: 'include',
-    method: 'GET'
-  })
-    .then((res) => res.json())
-    .then((json) => {
-      if (json.error) {
-        throw new Error(json.reason);
-      }
-      return json;
-    });
+  return get(configURL).then((json) => {
+    if (json.error) {
+      throw new Error(json.reason);
+    }
+    return json;
+  });
 };
 
 export const updateEnableCorsToHttpd = (baseURL, node, enableCors) => {
@@ -62,22 +44,12 @@ export const updateEnableCorsToHttpd = (baseURL, node, enableCors) => {
     throw new Error('node not set');
   }
   const configURL = baseURL + '/httpd/enable_cors';
-  return fetch(configURL, {
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    },
-    credentials: 'include',
-    method: 'PUT',
-    body: JSON.stringify(enableCors.toString())
-  })
-    .then((res) => res.json())
-    .then((json) => {
-      if (json.error) {
-        throw new Error(json.reason);
-      }
-      return json;
-    });
+  return put(configURL, enableCors.toString())    .then((json) => {
+    if (json.error) {
+      throw new Error(json.reason);
+    }
+    return json;
+  });
 };
 
 export const updateCorsOrigins = (baseURL, node, origins) => {
@@ -101,20 +73,10 @@ const updateCorsProperty = (baseURL, node, propName, propValue) => {
     throw new Error('node not set');
   }
   const configURL = baseURL + '/cors/' + propName;
-  return fetch(configURL, {
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    },
-    credentials: 'include',
-    method: 'PUT',
-    body: JSON.stringify(propValue)
-  })
-    .then((res) => res.json())
-    .then((json) => {
-      if (json.error) {
-        throw new Error(json.reason);
-      }
-      return json;
-    });
+  return put(configURL, propValue).then((json) => {
+    if (json.error) {
+      throw new Error(json.reason);
+    }
+    return json;
+  });
 };

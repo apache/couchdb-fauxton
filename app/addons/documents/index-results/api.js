@@ -11,7 +11,7 @@
 // the License.
 
 import '@webcomponents/url';
-import 'whatwg-fetch';
+import {get, post} from '../../../core/ajax';
 import app from '../../../app';
 import Constants from '../constants';
 import FauxtonAPI from '../../../core/api';
@@ -21,21 +21,15 @@ export const queryAllDocs = (fetchUrl, params) => {
   Object.assign(params, {reduce: undefined, group: undefined, group_level: undefined});
   const query = app.utils.queryString(params);
   const url = `${fetchUrl}${fetchUrl.includes('?') ? '&' : '?'}${query}`;
-  return fetch(url, {
-    credentials: 'include',
-    headers: {
-      'Accept': 'application/json; charset=utf-8'
+  return get(url).then(json => {
+    if (json.error) {
+      throw new Error('(' + json.error + ') ' + json.reason);
     }
-  }).then(res => res.json())
-    .then(json => {
-      if (json.error) {
-        throw new Error('(' + json.error + ') ' + json.reason);
-      }
-      return {
-        docs: json.rows,
-        docType: Constants.INDEX_RESULTS_DOC_TYPE.VIEW
-      };
-    });
+    return {
+      docs: json.rows,
+      docType: Constants.INDEX_RESULTS_DOC_TYPE.VIEW
+    };
+  });
 };
 
 export const queryMapReduceView = (fetchUrl, params) => {
@@ -51,48 +45,23 @@ export const queryMapReduceView = (fetchUrl, params) => {
   }
   const query = app.utils.queryString(params);
   const url = `${fetchUrl}${fetchUrl.includes('?') ? '&' : '?'}${query}`;
-  return fetch(url, {
-    credentials: 'include',
-    headers: {
-      'Accept': 'application/json; charset=utf-8'
+  return get(url).then(json => {
+    if (json.error) {
+      throw new Error('(' + json.error + ') ' + json.reason);
     }
-  })
-    .then(res => res.json())
-    .then(json => {
-      if (json.error) {
-        throw new Error('(' + json.error + ') ' + json.reason);
-      }
-      return {
-        docs: json.rows,
-        docType: Constants.INDEX_RESULTS_DOC_TYPE.VIEW
-      };
-    });
+    return {
+      docs: json.rows,
+      docType: Constants.INDEX_RESULTS_DOC_TYPE.VIEW
+    };
+  });
 };
 
 export const postToBulkDocs = (databaseName, payload) => {
   const url = FauxtonAPI.urls('bulk_docs', 'server', databaseName);
-  return fetch(url, {
-    method: 'POST',
-    credentials: 'include',
-    body: JSON.stringify(payload),
-    headers: {
-      'Accept': 'application/json; charset=utf-8',
-      'Content-Type': 'application/json'
-    }
-  })
-    .then(res => res.json());
+  return post(url, payload);
 };
 
 export const postToIndexBulkDelete = (databaseName, payload) => {
   const url = FauxtonAPI.urls('mango', 'index-server-bulk-delete', encodeURIComponent(databaseName));
-  return fetch(url, {
-    method: 'POST',
-    credentials: 'include',
-    body: JSON.stringify(payload),
-    headers: {
-      'Accept': 'application/json; charset=utf-8',
-      'Content-Type': 'application/json'
-    }
-  })
-    .then(res => res.json());
+  return post(url, payload);
 };
