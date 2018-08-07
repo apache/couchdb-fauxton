@@ -94,7 +94,6 @@ describe('Replication API', () => {
       }, {origin: 'http://dev:6767', pathname:'/db/_utils'});
 
       assert.deepEqual(source.headers, {Authorization:"Basic dGhlLXVzZXI6cGFzc3dvcmQ="});
-      console.log(source.url);
       assert.ok(/\/db\/my%2Fdb/.test(source.url));
     });
 

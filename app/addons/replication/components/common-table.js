@@ -19,15 +19,13 @@ import {removeCredentialsFromUrl} from '../api';
 import Helpers from '../../../helpers';
 
 const getDbNameFromUrl = (urlObj, root) => {
-  let encoded;
   try {
     const urlWithoutDb = new URL(root);
     const dbName = urlObj.pathname.substring(urlWithoutDb.pathname.length);
-    encoded = encodeURIComponent(dbName);
+    return encodeURIComponent(dbName);
   } catch (e) {
     return '';
   }
-  return encoded;
 };
 
 export const formatUrl = (url) => {
