@@ -78,6 +78,10 @@ Helpers.getServerUrl = endpointRoute => {
   return app.host + endpointRoute;
 };
 
+Helpers.getRootUrl = ({origin, pathname} = window.location) => {
+  return url.resolve(origin + pathname, app.host);
+};
+
 Helpers.getUUID = function (count = 1) {
   const url = Helpers.getServerUrl(`/_uuids?count=${count}`);
   return get(url);

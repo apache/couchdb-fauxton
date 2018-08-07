@@ -100,11 +100,14 @@ export const getSource = ({
   sourceAuthType,
   sourceAuth
 },
-{origin} = window.location) => {
+{origin, pathname} = window.location) => {
 
   const source = {};
   if (replicationSource === Constants.REPLICATION_SOURCE.LOCAL) {
-    source.url = encodeFullUrl(`${origin}/${localSource}`);
+    const encodedLocalTarget = encodeURIComponent(localSource);
+
+    const root = Helpers.getRootUrl({origin, pathname});
+    source.url = `${root}${encodedLocalTarget}`;
   } else {
     source.url = encodeFullUrl(removeCredentialsFromUrl(remoteSource));
   }
@@ -121,7 +124,7 @@ export const getTarget = ({
   targetAuth
 },
 //this allows us to mock out window.location for our tests
-{origin} = window.location) => {
+{origin, pathname} = window.location) => {
 
   const target = {};
   if (replicationTarget === Constants.REPLICATION_TARGET.NEW_REMOTE_DATABASE ||
@@ -129,7 +132,8 @@ export const getTarget = ({
     target.url = encodeFullUrl(removeCredentialsFromUrl(remoteTarget));
   } else {
     const encodedLocalTarget = encodeURIComponent(localTarget);
-    target.url = `${origin}/${encodedLocalTarget}`;
+    const root = Helpers.getRootUrl({origin, pathname});
+    target.url = `${root}${encodedLocalTarget}`;
   }
 
   setCredentials(target, targetAuthType, targetAuth);

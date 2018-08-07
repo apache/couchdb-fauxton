@@ -16,22 +16,33 @@ import {Table, Tooltip, OverlayTrigger} from "react-bootstrap";
 import moment from 'moment';
 import {ErrorModal} from './modals';
 import {removeCredentialsFromUrl} from '../api';
+import Helpers from '../../../helpers';
+
+const getDbNameFromUrl = (urlObj, root) => {
+  try {
+    const urlWithoutDb = new URL(root);
+    const dbName = urlObj.pathname.substring(urlWithoutDb.pathname.length);
+    return encodeURIComponent(dbName);
+  } catch (e) {
+    return '';
+  }
+};
 
 export const formatUrl = (url) => {
   let urlObj;
   let encoded;
   try {
     urlObj = new URL(removeCredentialsFromUrl(url));
-    encoded = encodeURIComponent(urlObj.pathname.slice(1));
   } catch (e) {
     return '';
   }
-
+  const root = Helpers.getRootUrl();
+  encoded = getDbNameFromUrl(urlObj, root);
   if (url.indexOf(window.location.hostname) > -1) {
     return (
       <span>
-        {urlObj.origin + '/'}
-        <a href={`#/database/${encoded}/_all_docs`}>{urlObj.pathname.slice(1)}</a>
+        {root}
+        <a href={`#/database/${encoded}/_all_docs`}>{decodeURIComponent(encoded)}</a>
       </span>
     );
   }

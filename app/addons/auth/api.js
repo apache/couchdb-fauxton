@@ -12,43 +12,12 @@
 
 import app from './../../app';
 import Helpers from "../../helpers";
-import { defaultsDeep } from "lodash";
-
-export const json = (url, opts = {}) => fetch(
-  url,
-  defaultsDeep(
-    {
-      credentials: "include",
-      headers: {
-        accept: "application/json",
-        "Content-Type": "application/json"
-      }
-    },
-    opts
-  )
-).then(resp => resp.json());
-
-export const formEncoded = (url, opts = {}) => fetch(
-  url,
-  defaultsDeep(
-    {
-      credentials: "include",
-      headers: {
-        accept: "application/json",
-        "Content-Type": 'application/x-www-form-urlencoded;charset=UTF-8'
-      }
-    },
-    opts
-  )
-).then(resp => resp.json());
+import {deleteFormEncoded, get, postFormEncoded, put} from '../../core/ajax';
 
 
 export function createAdmin({name, password, node}) {
   const url = Helpers.getServerUrl(`/_node/${node}/_config/admins/${name}`);
-  return json(url, {
-    method: "PUT",
-    body: JSON.stringify(password)
-  });
+  return put(url, password);
 }
 
 let loggedInSessionPromise;
@@ -59,7 +28,7 @@ export function getSession() {
   }
 
   const url = Helpers.getServerUrl('/_session');
-  const promise = json(url).then(resp => {
+  const promise = get(url).then(resp => {
     if (resp.userCtx.name) {
       loggedInSessionPromise = promise;
     }
@@ -71,19 +40,13 @@ export function getSession() {
 
 export function login(body) {
   const url = Helpers.getServerUrl('/_session');
-  return formEncoded(url, {
-    method: "POST",
-    body: app.utils.queryParams(body)
-  });
+  return postFormEncoded(url, app.utils.queryParams(body));
 }
 
 export function logout() {
   loggedInSessionPromise = null;
   const url = Helpers.getServerUrl('/_session');
-  return formEncoded(url, {
-    method: "DELETE",
-    body: app.utils.queryParams({ username: "_", password: "_" })
-  });
+  return deleteFormEncoded(url, app.utils.queryParams({ username: "_", password: "_" }));
 }
 
 export default {

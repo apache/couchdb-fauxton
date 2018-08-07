@@ -1,6 +1,6 @@
 import 'whatwg-fetch';
-import { defaultsDeep } from "lodash";
-import { Subject } from 'rxjs/Subject';
+import {defaultsDeep} from "lodash";
+import {Subject} from 'rxjs/Subject';
 import 'rxjs/add/operator/filter';
 
 /* Add a multicast observer so that all fetch requests can be observed
@@ -39,8 +39,10 @@ export const json = (url, method = "GET", opts = {}) => {
         credentials: "include",
         headers: {
           accept: "application/json",
-          "Content-Type": "application/json"
-        }
+          "Content-Type": "application/json",
+          "Pragma":"no-cache" //Disables cache for IE11
+        },
+        cache: "no-cache"
       }
     )
   ).then(resp => {
@@ -80,7 +82,10 @@ export const deleteRequest = (url, opts = {}) => {
  */
 export const post = (url, body, opts = {}) => {
   if (body) {
-    opts.body = JSON.stringify(body);
+    if (opts.rawBody)
+      opts.body = body;
+    else
+      opts.body = JSON.stringify(body);
   }
   return json(url, "POST", opts);
 };
@@ -91,12 +96,45 @@ export const post = (url, body, opts = {}) => {
  * @param {string}   url  Url of request
  * @param {object} [body] Body of request
  * @param {object} [opts={}] Opts to add to request
+ * Passing in `rawBody: true` in here will not stringify the body.
  *
  * @return {Promise} A promise with the request's response
  */
 export const put = (url, body, opts = {}) => {
   if (body) {
-    opts.body = JSON.stringify(body);
+    if (opts.rawBody)
+      opts.body = body;
+    else
+      opts.body = JSON.stringify(body);
   }
   return json(url, "PUT", opts);
+};
+
+export const formEncoded = (url, method, opts = {}) => {
+  return json(url, method, defaultsDeep(
+    {},
+    opts,
+    {
+      headers: {
+        "Content-Type": 'application/x-www-form-urlencoded;charset=UTF-8'
+      }
+    }));
+};
+
+export const postFormEncoded = (url, body, opts = {}) => {
+  if (body)
+    opts.body = body;
+  return formEncoded(url, "POST", opts);
+};
+
+export const putFormEncoded = (url, body, opts = {}) => {
+  if (body)
+    opts.body = body;
+  return formEncoded(url, "PUT", opts);
+};
+
+export const deleteFormEncoded = (url, body, opts = {}) => {
+  if (body)
+    opts.body = body;
+  return formEncoded(url, "DELETE", opts);
 };

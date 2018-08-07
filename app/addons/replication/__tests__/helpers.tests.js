@@ -15,11 +15,11 @@ import helpers from '../helpers';
 describe('Replication Helpers - getDatabaseLabel', () => {
 
   it('returns database name for string', () => {
-    const db = 'http://tester:testerpass@127.0.0.1/fancy/db/name';
+    const db = 'http://tester:testerpass@127.0.0.1/db/fancy%2Fdb%2Fname';
 
     const res = helpers.getDatabaseLabel(db);
 
-    expect(res).toBe('fancy/db/name');
+    expect(res).toBe('fancy%2Fdb%2Fname');
   });
 
   it('returns database name for object', () => {
