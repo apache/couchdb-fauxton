@@ -332,6 +332,6 @@ Stores.SidebarStore = FauxtonAPI.Store.extend({
 });
 
 Stores.sidebarStore = new Stores.SidebarStore();
-Stores.sidebarStore.dispatchToken = FauxtonAPI.dispatcher.register(Stores.sidebarStore.dispatch);
+Stores.sidebarStore.dispatchToken = FauxtonAPI.dispatcher.register(Stores.sidebarStore.dispatch.bind(Stores.sidebarStore));
 
 export default Stores;

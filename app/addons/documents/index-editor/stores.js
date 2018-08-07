@@ -259,6 +259,6 @@ Stores.IndexEditorStore = FauxtonAPI.Store.extend({
 });
 
 Stores.indexEditorStore = new Stores.IndexEditorStore();
-Stores.indexEditorStore.dispatchToken = FauxtonAPI.dispatcher.register(Stores.indexEditorStore.dispatch);
+Stores.indexEditorStore.dispatchToken = FauxtonAPI.dispatcher.register(Stores.indexEditorStore.dispatch.bind(Stores.indexEditorStore));
 
 export default Stores;

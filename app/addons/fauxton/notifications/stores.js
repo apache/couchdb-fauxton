@@ -186,6 +186,6 @@ Stores.NotificationStore = FauxtonAPI.Store.extend({
 });
 
 Stores.notificationStore = new Stores.NotificationStore();
-Stores.notificationStore.dispatchToken = FauxtonAPI.dispatcher.register(Stores.notificationStore.dispatch);
+Stores.notificationStore.dispatchToken = FauxtonAPI.dispatcher.register(Stores.notificationStore.dispatch.bind(Stores.notificationStore));
 
 export default Stores;

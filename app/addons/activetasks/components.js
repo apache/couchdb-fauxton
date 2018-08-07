@@ -273,7 +273,7 @@ class ActiveTasksTableBody extends React.Component {
       return isThereASearchTerm ? this.noActiveTasks() : this.noActiveTasksMatchFilter();
     }
 
-    return _.map(this.state.filteredTable, function (item, key) {
+    return _.map(this.state.filteredTable, (item, key) => {
       return <ActiveTaskTableBodyContents key={key} item={item} />;
     });
   };

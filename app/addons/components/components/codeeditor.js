@@ -114,9 +114,9 @@ export class CodeEditor extends React.Component {
   };
 
   addCommands = () => {
-    _.each(this.props.editorCommands, function (command) {
+    _.each(this.props.editorCommands, (command) => {
       this.editor.commands.addCommand(command);
-    }, this);
+    });
   };
 
   setupEvents = () => {
@@ -297,9 +297,9 @@ export class CodeEditor extends React.Component {
   };
 
   hasErrors = () => {
-    return !_.every(this.getAnnotations(), function (error) {
+    return !_.every(this.getAnnotations(), (error) => {
       return this.isIgnorableError(error.raw);
-    }, this);
+    });
   };
 
   setReadOnly = (readonly) => {

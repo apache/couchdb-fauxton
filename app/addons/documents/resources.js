@@ -156,9 +156,9 @@ Documents.BulkDeleteDocCollection = FauxtonAPI.Collection.extend({
   },
 
   removeDocuments: function (ids) {
-    _.each(ids, function (id) {
+    _.each(ids, (id) => {
       this.remove(this.get(id));
-    }, this);
+    });
 
     this.trigger('removed', ids);
   },

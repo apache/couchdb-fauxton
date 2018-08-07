@@ -127,11 +127,11 @@ export const PagingCollection = Backbone.Collection.extend({
   updateUrlQuery: function (params) {
     var url = _.result(this, "url").split("?")[0];
 
-    _.each(['startkey', 'endkey', 'key'], function (key) {
+    _.each(['startkey', 'endkey', 'key'], (key) => {
       if (_.has(params, key) && this.shouldStringify(params[key])) {
         params[key] = JSON.stringify(params[key]);
       }
-    }, this);
+    });
 
     this.url = url + '?' + app.utils.queryParams(params);
   },

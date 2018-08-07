@@ -47,9 +47,9 @@ _.extend(RouteObject.prototype, {
   },
 
   _configure: function (options) {
-    _.each(_.intersection(_.keys(options), routeObjectOptions), function (key) {
+    _.each(_.intersection(_.keys(options), routeObjectOptions), (key) => {
       this[key] = options[key];
-    }, this);
+    });
   },
 
   getRouteUrls: function () {
