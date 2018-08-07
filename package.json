@@ -107,7 +107,6 @@
     "semver": "^5.1.0",
     "send": "^0.16.2",
     "style-loader": "^0.21.0",
-    "underscore": "~1.4.2",
     "url": "~0.7.9",
     "url-loader": "^1.0.1",
     "urls": "~0.0.3",

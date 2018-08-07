@@ -10,7 +10,7 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import _ from 'underscore';
+import _ from 'lodash';
 
 const getDatabaseLabel = db => {
   const dbString = (_.isString(db)) ? db.trim().replace(/\/$/, '') : db.url;
