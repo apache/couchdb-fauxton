@@ -95,7 +95,7 @@ export default Backbone.Router.extend({
           _.each(module.RouteObjects, this.addModuleRouteObject.bind(this));
         }
       }
-    }, this);
+    });
   },
 
   initialize: function (addons) {

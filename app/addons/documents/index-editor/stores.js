@@ -79,9 +79,9 @@ Stores.IndexEditorStore = FauxtonAPI.Store.extend({
   },
 
   getDesignDoc: function () {
-    return this._designDocs.find(function (ddoc) {
+    return this._designDocs.find((ddoc) => {
       return this._designDocId == ddoc.id;
-    }, this).dDocModel();
+    }).dDocModel();
   },
 
   getDesignDocs: function () {

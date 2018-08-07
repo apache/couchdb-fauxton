@@ -212,9 +212,9 @@ Stores.SidebarStore = FauxtonAPI.Store.extend({
   },
 
   getDeleteIndexDesignDoc: function () {
-    var designDoc = this._designDocs.find(function (ddoc) {
+    var designDoc = this._designDocs.find((ddoc) => {
       return '_design/' + this._deleteIndexModalDesignDocName === ddoc.id;
-    }, this);
+    });
 
     return (designDoc) ? designDoc.dDocModel() : null;
   },

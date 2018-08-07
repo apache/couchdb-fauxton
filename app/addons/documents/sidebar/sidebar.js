@@ -44,13 +44,13 @@ class MainSidebar extends React.Component {
 
   buildDocLinks = () => {
     const base = FauxtonAPI.urls('base', 'app', this.props.databaseName);
-    return FauxtonAPI.getExtensions('docLinks').map(function (link) {
+    return FauxtonAPI.getExtensions('docLinks').map((link) => {
       return (
         <li key={link.url} className={this.getNavItemClass(link.url)}>
           <a id={link.url} href={base + link.url}>{link.title}</a>
         </li>
       );
-    }, this);
+    });
   };
 
   getNavItemClass = (navItem) => {
