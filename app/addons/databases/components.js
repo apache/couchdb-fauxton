@@ -85,7 +85,7 @@ class DatabaseTable extends React.Component {
 
   getExtensionColumns = () => {
     var cols = FauxtonAPI.getExtensions('DatabaseTable:head');
-    return _.map(cols, function (Item, index) {
+    return _.map(cols, (Item, index) => {
       return <Item key={index} />;
     });
   };
@@ -137,7 +137,7 @@ class DatabaseRow extends React.Component {
 
   getExtensionColumns = (row) => {
     var cols = FauxtonAPI.getExtensions('DatabaseTable:databaseRow');
-    return _.map(cols, function (Item, index) {
+    return _.map(cols, (Item, index) => {
       return <Item row={row} key={index} />;
     });
   };

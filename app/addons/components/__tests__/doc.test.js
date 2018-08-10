@@ -24,7 +24,7 @@ describe('Document', () => {
   let el;
 
   const doc = {};
-  _.times(1000, function (n) {
+  _.times(1000, (n) => {
     doc['prop' + n] = n;
   });
 

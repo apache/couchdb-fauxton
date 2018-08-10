@@ -43,7 +43,7 @@ describe('Active Tasks -- Stores', function () {
       var storeFilteredtable = activeTasksStore.getFilteredTable(activeTasksStore._collection);
 
       //parse table and check that it only contains objects with type: Replication
-      _.each(storeFilteredtable, function (activeTask) {
+      _.each(storeFilteredtable, (activeTask) => {
         assert.ok(activeTasksStore.passesRadioFilter(activeTask));
         assert.deepEqual(activeTask.type, activeTasksStore.getSelectedRadio());
       });

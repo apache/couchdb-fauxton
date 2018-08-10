@@ -115,6 +115,6 @@ Stores.RevBrowserStore = FauxtonAPI.Store.extend({
 });
 
 Stores.revBrowserStore = new Stores.RevBrowserStore();
-Stores.revBrowserStore.dispatchToken = FauxtonAPI.dispatcher.register(Stores.revBrowserStore.dispatch);
+Stores.revBrowserStore.dispatchToken = FauxtonAPI.dispatcher.register(Stores.revBrowserStore.dispatch.bind(Stores.revBrowserStore));
 
 export default Stores;

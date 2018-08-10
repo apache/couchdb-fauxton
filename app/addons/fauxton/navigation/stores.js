@@ -246,6 +246,6 @@ Stores.NavBarStore = FauxtonAPI.Store.extend({
 });
 
 Stores.navBarStore = new Stores.NavBarStore();
-Stores.navBarStore.dispatchToken = FauxtonAPI.dispatcher.register(Stores.navBarStore.dispatch);
+Stores.navBarStore.dispatchToken = FauxtonAPI.dispatcher.register(Stores.navBarStore.dispatch.bind(Stores.navBarStore));
 
 export default Stores;

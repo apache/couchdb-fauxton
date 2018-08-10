@@ -127,7 +127,7 @@ class GlobalNotifications extends React.Component {
       return null;
     }
 
-    return _.map(this.props.notifications, function (notification, index) {
+    return _.map(this.props.notifications, (notification, index) => {
 
       // notifications are completely removed from the DOM once they're
       if (!notification.visible) {
@@ -146,7 +146,7 @@ class GlobalNotifications extends React.Component {
           onStartHide={Actions.startHidingNotification}
           onHideComplete={Actions.hideNotification} />
       );
-    }, this);
+    });
   };
 
   getchildren = (items) => {

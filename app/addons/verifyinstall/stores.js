@@ -24,9 +24,9 @@ var VerifyInstallStore = FauxtonAPI.Store.extend({
 
     // reset all the tests
     this._tests = {};
-    _.each(Object.keys(Constants.TESTS), function (key) {
+    _.each(Object.keys(Constants.TESTS), (key) => {
       this._tests[Constants.TESTS[key]] = { complete: false };
-    }, this);
+    });
   },
 
   startVerification: function () {
@@ -87,7 +87,7 @@ var VerifyInstallStore = FauxtonAPI.Store.extend({
 
 var Stores = {};
 Stores.verifyInstallStore = new VerifyInstallStore();
-Stores.verifyInstallStore.dispatchToken = FauxtonAPI.dispatcher.register(Stores.verifyInstallStore.dispatch);
+Stores.verifyInstallStore.dispatchToken = FauxtonAPI.dispatcher.register(Stores.verifyInstallStore.dispatch.bind(Stores.verifyInstallStore));
 
 
 export default Stores;

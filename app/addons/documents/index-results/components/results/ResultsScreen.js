@@ -53,7 +53,7 @@ export default class ResultsScreen extends React.Component {
   getDocumentList () {
     let noop = () => {};
     let data = this.props.results.results;
-    return _.map(data, function (doc, i) {
+    return _.map(data, (doc, i) => {
       return (
         <Document
           key={doc.id + i}
@@ -69,7 +69,7 @@ export default class ResultsScreen extends React.Component {
           {doc.url ? this.getUrlFragment('#' + doc.url) : doc.url}
         </Document>
       );
-    }, this);
+    });
   }
 
   getDocumentStyleView () {

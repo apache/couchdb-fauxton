@@ -48,9 +48,9 @@ export class Document extends React.Component {
 
   getExtensionIcons = () => {
     var extensions = FauxtonAPI.getExtensions('DocList:icons');
-    return _.map(extensions, function (Extension, i) {
+    return _.map(extensions, (Extension, i) => {
       return (<Extension doc={this.props.doc} key={i} />);
-    }, this);
+    });
   };
 
   getCheckbox = () => {

@@ -20,7 +20,7 @@ let store;
 describe('Sidebar Store', () => {
   beforeEach(() => {
     store = new Stores.SidebarStore();
-    dispatchToken = FauxtonAPI.dispatcher.register(store.dispatch);
+    dispatchToken = FauxtonAPI.dispatcher.register(store.dispatch.bind(store));
   });
 
   afterEach(() => {

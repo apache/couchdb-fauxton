@@ -110,7 +110,7 @@ var ActiveTasksStore = FauxtonAPI.Store.extend({
   sortCollectionByColumnHeader (colName) {
     var collectionTable = this._collection;
 
-    var sorted = _.sortBy(collectionTable, function (item) {
+    var sorted = _.sortBy(collectionTable, (item) => {
       var variable = colName;
 
       if (_.isUndefined(item[variable])) {

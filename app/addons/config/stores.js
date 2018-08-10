@@ -34,12 +34,12 @@ var ConfigStore = FauxtonAPI.Store.extend({
 
   getOptions () {
     var sections = _.sortBy(
-      _.map(this._sections, function (section, sectionName) {
+      _.map(this._sections, (section, sectionName) => {
         return {
           sectionName,
           options: this.mapSection(section, sectionName)
         };
-      }.bind(this)),
+      }),
       s => s.sectionName
     );
 
