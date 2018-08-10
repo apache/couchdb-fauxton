@@ -94,7 +94,7 @@ const runWebpackServer = function () {
       colors: true,
     },
     headers: getCspHeaders(),
-    setup: (app) => {
+    before: (app) => {
       app.all('*', (req, res, next) => {
         const accept = req.headers.accept ? req.headers.accept.split(',') : '';
 
