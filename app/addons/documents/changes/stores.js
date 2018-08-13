@@ -48,11 +48,11 @@ var ChangesStore = FauxtonAPI.Store.extend({
     // mark any additional changes that come after first page load as "new" so we can add a nice highlight effect
     // when the new row is rendered
     var firstBatch = this._changes.length === 0;
-    _.each(this._changes, function (change) {
+    _.each(this._changes, (change) => {
       change.isNew = false;
     });
 
-    var newChanges = _.map(changes, function (change) {
+    var newChanges = _.map(changes, (change) => {
       var seq = Helpers.getSeqNum(change.seq);
       return {
         id: change.id,
@@ -73,13 +73,13 @@ var ChangesStore = FauxtonAPI.Store.extend({
     this._showingSubset = false;
     var numMatches = 0;
 
-    return _.filter(this._changes, function (change) {
+    return _.filter(this._changes, (change) => {
       if (numMatches >= this._maxChangesListed) {
         this._showingSubset = true;
         return false;
       }
       var changeStr = JSON.stringify(change);
-      var match = _.every(this._filters, function (filter) {
+      var match = _.every(this._filters, (filter) => {
         return new RegExp(filter, 'i').test(changeStr);
       });
 
@@ -87,7 +87,7 @@ var ChangesStore = FauxtonAPI.Store.extend({
         numMatches++;
       }
       return match;
-    }, this);
+    });
   },
 
   addFilter: function (filter) {
@@ -152,6 +152,6 @@ var ChangesStore = FauxtonAPI.Store.extend({
 
 var Stores = {};
 Stores.changesStore = new ChangesStore();
-Stores.changesStore.dispatchToken = FauxtonAPI.dispatcher.register(Stores.changesStore.dispatch);
+Stores.changesStore.dispatchToken = FauxtonAPI.dispatcher.register(Stores.changesStore.dispatch.bind(Stores.changesStore));
 
 export default Stores;

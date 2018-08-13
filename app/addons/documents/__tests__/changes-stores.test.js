@@ -64,7 +64,7 @@ describe('ChangesStore', () => {
     // to keep the test speedy, we override the default max value
     const maxChanges = 10;
     const changes = [];
-    _.times(maxChanges + 10, function (i) {
+    _.times(maxChanges + 10, (i) => {
       changes.push({ id: 'doc_' + i, seq: 1, changes: {}});
     });
     Stores.changesStore.initChanges({ databaseName: "test" });

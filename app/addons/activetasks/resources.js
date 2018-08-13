@@ -30,7 +30,7 @@ Active.AllTasks = Backbone.Collection.extend({
     Actions.setActiveTaskIsLoading(false);
     var collectionTable = [];
 
-    _.each(resp, function (item) {
+    _.each(resp, (item) => {
       collectionTable.push(item);
     });
 

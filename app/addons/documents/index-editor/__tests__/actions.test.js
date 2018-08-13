@@ -49,7 +49,7 @@ describe('Index Editor Actions', function () {
         database: database
       });
       designDocs = designDocCollection.models;
-      designDoc = _.first(designDocs);
+      designDoc = _.head(designDocs);
     });
 
     afterEach(function () {

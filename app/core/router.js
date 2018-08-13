@@ -87,15 +87,15 @@ export default Backbone.Router.extend({
   },
 
   setModuleRoutes: function (addons) {
-    _.each(addons, function (module) {
+    _.each(addons, (module) => {
       if (module) {
         module.initialize();
         // This is pure routes the addon provides
         if (module.RouteObjects) {
-          _.each(module.RouteObjects, this.addModuleRouteObject, this);
+          _.each(module.RouteObjects, this.addModuleRouteObject.bind(this));
         }
       }
-    }, this);
+    });
   },
 
   initialize: function (addons) {

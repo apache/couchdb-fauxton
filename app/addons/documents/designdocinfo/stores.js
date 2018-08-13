@@ -77,6 +77,6 @@ Stores.DesignDocInfoStore = FauxtonAPI.Store.extend({
 
 Stores.designDocInfoStore = new Stores.DesignDocInfoStore();
 
-Stores.designDocInfoStore.dispatchToken = FauxtonAPI.dispatcher.register(Stores.designDocInfoStore.dispatch);
+Stores.designDocInfoStore.dispatchToken = FauxtonAPI.dispatcher.register(Stores.designDocInfoStore.dispatch.bind(Stores.designDocInfoStore));
 
 export default Stores;

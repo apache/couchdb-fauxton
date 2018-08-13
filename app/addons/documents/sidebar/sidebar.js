@@ -44,13 +44,13 @@ class MainSidebar extends React.Component {
 
   buildDocLinks = () => {
     const base = FauxtonAPI.urls('base', 'app', this.props.databaseName);
-    return FauxtonAPI.getExtensions('docLinks').map(function (link) {
+    return FauxtonAPI.getExtensions('docLinks').map((link) => {
       return (
         <li key={link.url} className={this.getNavItemClass(link.url)}>
           <a id={link.url} href={base + link.url}>{link.title}</a>
         </li>
       );
-    }, this);
+    });
   };
 
   getNavItemClass = (navItem) => {
@@ -141,7 +141,7 @@ class IndexSection extends React.Component {
     // sort the indexes alphabetically
     const sortedItems = this.props.items.sort();
 
-    return _.map(sortedItems, function (indexName, index) {
+    return _.map(sortedItems, (indexName, index) => {
       const href = FauxtonAPI.urls(this.props.urlNamespace, 'app', encodeURIComponent(this.props.database.id), encodeURIComponent(this.props.designDocName));
       const className = (this.props.selectedIndex === indexName) ? 'active' : '';
 
@@ -181,7 +181,7 @@ class IndexSection extends React.Component {
           </OverlayTrigger>
         </li>
       );
-    }, this);
+    });
   };
 
   indexAction = (action, params, e) => {
@@ -275,7 +275,7 @@ class DesignDoc extends React.Component {
   }
 
   indexList = () => {
-    return _.map(this.state.updatedSidebarListTypes, function (index, key) {
+    return _.map(this.state.updatedSidebarListTypes, (index, key) => {
       const expanded = _.has(this.props.toggledSections, index.name) && this.props.toggledSections[index.name];
 
       // if an index in this list is selected, pass that down
@@ -302,7 +302,7 @@ class DesignDoc extends React.Component {
           selector={index.selector}
           items={_.keys(this.props.designDoc[index.selector])} />
       );
-    }.bind(this));
+    });
   };
 
   toggle = (e) => {
@@ -381,7 +381,7 @@ class DesignDocList extends React.Component {
   }
 
   designDocList = () => {
-    return _.map(this.props.designDocs, function (designDoc, key) {
+    return _.map(this.props.designDocs, (designDoc, key) => {
       const ddName = decodeURIComponent(designDoc.safeId);
 
       // only pass down the selected nav info and toggle info if they're relevant for this particular design doc
@@ -409,7 +409,7 @@ class DesignDocList extends React.Component {
           designDocName={ddName}
           database={this.props.database} />
       );
-    }.bind(this));
+    });
   };
 
   render() {

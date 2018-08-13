@@ -24,7 +24,7 @@ describe('IndexEditorStore', () => {
 
   beforeEach(() => {
     store = new Stores.IndexEditorStore();
-    dispatchToken = FauxtonAPI.dispatcher.register(store.dispatch);
+    dispatchToken = FauxtonAPI.dispatcher.register(store.dispatch.bind(store));
   });
 
   afterEach(() => {

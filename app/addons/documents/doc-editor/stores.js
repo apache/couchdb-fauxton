@@ -200,6 +200,6 @@ Stores.DocEditorStore = FauxtonAPI.Store.extend({
 });
 
 Stores.docEditorStore = new Stores.DocEditorStore();
-Stores.docEditorStore.dispatchToken = FauxtonAPI.dispatcher.register(Stores.docEditorStore.dispatch);
+Stores.docEditorStore.dispatchToken = FauxtonAPI.dispatcher.register(Stores.docEditorStore.dispatch.bind(Stores.docEditorStore));
 
 export default Stores;

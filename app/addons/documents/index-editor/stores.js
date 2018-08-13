@@ -79,9 +79,9 @@ Stores.IndexEditorStore = FauxtonAPI.Store.extend({
   },
 
   getDesignDoc: function () {
-    return this._designDocs.find(function (ddoc) {
+    return this._designDocs.find((ddoc) => {
       return this._designDocId == ddoc.id;
-    }, this).dDocModel();
+    }).dDocModel();
   },
 
   getDesignDocs: function () {
@@ -259,6 +259,6 @@ Stores.IndexEditorStore = FauxtonAPI.Store.extend({
 });
 
 Stores.indexEditorStore = new Stores.IndexEditorStore();
-Stores.indexEditorStore.dispatchToken = FauxtonAPI.dispatcher.register(Stores.indexEditorStore.dispatch);
+Stores.indexEditorStore.dispatchToken = FauxtonAPI.dispatcher.register(Stores.indexEditorStore.dispatch.bind(Stores.indexEditorStore));
 
 export default Stores;

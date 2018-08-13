@@ -126,9 +126,9 @@ class DocEditorController extends React.Component {
 
   getExtensionIcons = () => {
     var extensions = FauxtonAPI.getExtensions('DocEditor:icons');
-    return _.map(extensions, function (Extension, i) {
+    return _.map(extensions, (Extension, i) => {
       return (<Extension doc={this.state.doc} key={i} database={this.props.database} />);
-    }, this);
+    });
   };
 
   getButtonRow = () => {
@@ -216,7 +216,7 @@ class AttachmentsPanelButton extends React.Component {
     const db = encodeURIComponent(this.props.doc.database.get('id'));
     const doc = encodeURIComponent(this.props.doc.get('_id'));
 
-    return _.map(this.props.doc.get('_attachments'), function (item, filename) {
+    return _.map(this.props.doc.get('_attachments'), (item, filename) => {
       const url = FauxtonAPI.urls('document', 'attachment', db, doc, encodeURIComponent(filename));
       return (
         <MenuItem key={filename} href={url} target="_blank" data-bypass="true">

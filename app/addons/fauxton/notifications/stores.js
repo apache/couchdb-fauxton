@@ -91,7 +91,7 @@ Stores.NotificationStore = FauxtonAPI.Store.extend({
   },
 
   clearNotification (notificationId) {
-    this._notifications = _.without(this._notifications, _.findWhere(this._notifications, { notificationId: notificationId }));
+    this._notifications = _.without(this._notifications, _.find(this._notifications, { notificationId: notificationId }));
   },
 
   clearNotifications () {
@@ -99,7 +99,7 @@ Stores.NotificationStore = FauxtonAPI.Store.extend({
   },
 
   hideNotification (notificationId) {
-    var notification = _.findWhere(this._notifications, { notificationId: notificationId });
+    var notification = _.find(this._notifications, { notificationId: notificationId });
     notification.visible = false;
     notification.isHiding = false;
   },
@@ -113,7 +113,7 @@ Stores.NotificationStore = FauxtonAPI.Store.extend({
   },
 
   startHidingNotification (notificationId) {
-    var notification = _.findWhere(this._notifications, { notificationId: notificationId });
+    var notification = _.find(this._notifications, { notificationId: notificationId });
     notification.isHiding = true;
   },
 
@@ -186,6 +186,6 @@ Stores.NotificationStore = FauxtonAPI.Store.extend({
 });
 
 Stores.notificationStore = new Stores.NotificationStore();
-Stores.notificationStore.dispatchToken = FauxtonAPI.dispatcher.register(Stores.notificationStore.dispatch);
+Stores.notificationStore.dispatchToken = FauxtonAPI.dispatcher.register(Stores.notificationStore.dispatch.bind(Stores.notificationStore));
 
 export default Stores;

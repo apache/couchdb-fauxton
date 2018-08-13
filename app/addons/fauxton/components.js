@@ -93,13 +93,13 @@ class Pagination extends React.Component {
   };
 
   createItemsForPage = (visiblePages) => {
-    return _.range(visiblePages.from, visiblePages.to).map(function (i) {
+    return _.range(visiblePages.from, visiblePages.to).map((i) => {
       return (
         <li key={i} className={(this.props.page === i ? 'active' : null)}>
           {this.getLink(i, i)}
         </li>
       );
-    }.bind(this));
+    });
   };
 
   getLink = (i, label) => {
