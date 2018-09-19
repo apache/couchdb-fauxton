@@ -20,6 +20,12 @@ Databases.DocLimit = 100;
 
 Databases.Model = FauxtonAPI.Model.extend({
 
+  partitioned: false,
+
+  setPartitioned: function (partitioned) {
+    this.partitioned = partitioned;
+  },
+
   documentation: function () {
     return FauxtonAPI.constants.DOC_URLS.ALL_DBS;
   },
@@ -55,6 +61,9 @@ Databases.Model = FauxtonAPI.Model.extend({
       return FauxtonAPI.urls('changes', 'apiurl', this.safeID(), '?descending=true&limit=100&include_docs=true');
     } else if (context === "app") {
       return "/database/" + this.safeID();
+    }
+    if (this.partitioned) {
+      return Helpers.getServerUrl("/" + this.safeID()) + '?partitioned=true';
     }
     return Helpers.getServerUrl("/" + this.safeID());
 
