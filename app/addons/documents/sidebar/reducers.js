@@ -10,19 +10,194 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import ActionTypes from './actiontypes';
+import React from "react";
+import ActionTypes from "./actiontypes";
 
 const initialState = {
-  designDocs: []
+  // designDocs: new Backbone.Collection(),
+  designDocs: [],
+  selected: {
+    navItem: 'all-docs',
+    designDocName: '',
+    designDocSection: '', // 'metadata' / name of index group ("Views", etc.)
+    indexName: ''
+  },
+  loading: true,
+  toggledSections: {},
+
+  deleteIndexModalVisible: false,
+  deleteIndexModalDesignDocName: '',
+  deleteIndexModalText: '',
+  deleteIndexModalIndexName: '',
+  deleteIndexModalOnSubmit: () => {},
+
+  cloneIndexModalVisible: false,
+  cloneIndexDesignDocProp: '',
+  cloneIndexModalTitle: '',
+  cloneIndexModalSelectedDesignDoc: '',
+  cloneIndexModalNewDesignDocName: '',
+  cloneIndexModalNewIndexName: '',
+  cloneIndexModalSourceIndexName: '',
+  cloneIndexModalSourceDesignDocName: '',
+  cloneIndexModalIndexLabel: '',
+  cloneIndexModalOnSubmit: () => {}
 };
 
-export default function resultsState(state = initialState, action) {
+function setNewOptions(state, options) {
+  const newState = {
+    ...state,
+    database: options.database,
+    designDocs: options.designDocs,
+    loading: false,
+  };
+  // this can be expanded in future as we need. Right now it can only set a top-level nav item ('all docs',
+  // 'permissions' etc.) and not a nested page
+  if (options.selectedNavItem) {
+    newState.selected = {
+      navItem: options.selectedNavItem,
+      designDocName: '',
+      designDocSection: '',
+      indexName: ''
+    };
+  }
+
+  return newState;
+}
+
+function toggleContent(state, designDoc, indexGroup) {
+  // used to toggle both design docs, and any index groups within them
+  const newState = {
+    ...state
+  };
+
+  if (!state.toggledSections[designDoc]) {
+    newState.toggledSections[designDoc] = {
+      visible: true,
+      indexGroups: {}
+    };
+    return newState;
+  }
+
+  if (indexGroup) {
+    const expanded = state.toggledSections[designDoc].indexGroups[indexGroup];
+
+    if (_.isUndefined(expanded)) {
+      newState.toggledSections[designDoc].indexGroups[indexGroup] = true;
+    } else {
+      newState.toggledSections[designDoc].indexGroups[indexGroup] = !expanded;
+    }
+    return newState;
+  }
+
+  newState.toggledSections[designDoc].visible = !state.toggledSections[designDoc].visible;
+
+  return newState;
+}
+
+function expandSelectedItem(state, {selectedNavItem}) {
+  const newState = {
+    ...state
+  };
+
+  if (selectedNavItem.designDocName) {
+    if (!_.has(state.toggledSections, selectedNavItem.designDocName)) {
+      newState.toggledSections[selectedNavItem.designDocName] = {
+        visible: true,
+        indexGroups: {}
+      };
+    }
+    newState.toggledSections[selectedNavItem.designDocName].visible = true;
+
+    if (selectedNavItem.designDocSection) {
+      newState.toggledSections[selectedNavItem.designDocName].indexGroups[selectedNavItem.designDocSection] = true;
+    }
+  }
+  return newState;
+}
+
+export default function sidebar(state = initialState, action) {
+  const { options } = action;
   switch (action.type) {
 
+    case ActionTypes.SIDEBAR_EXPAND_SELECTED_ITEM:
+      return expandSelectedItem(state, options);
+
+    case ActionTypes.SIDEBAR_NEW_OPTIONS:
+      return setNewOptions(state, options);
+
+    case ActionTypes.SIDEBAR_TOGGLE_CONTENT:
+      return toggleContent(state, action.designDoc, action.indexGroup);
+
+    case ActionTypes.SIDEBAR_FETCHING:
+      return {
+        ...state,
+        loading: true
+      };
+
+    case ActionTypes.SIDEBAR_SHOW_DELETE_INDEX_MODAL:
+      return {
+        ...state,
+        deleteIndexModalIndexName: options.indexName,
+        deleteIndexModalDesignDocName: options.designDocName,
+        deleteIndexModalVisible: true,
+        deleteIndexModalText: (
+          <div>
+            Are you sure you want to delete the <code>{options.indexName}</code> {options.indexLabel}?
+          </div>
+        ),
+        deleteIndexModalOnSubmit: options.onDelete
+      };
+
+
+    case ActionTypes.SIDEBAR_HIDE_DELETE_INDEX_MODAL:
+      return {
+        ...state,
+        deleteIndexModalVisible: false
+      };
+
+    case ActionTypes.SIDEBAR_SHOW_CLONE_INDEX_MODAL:
+      return {
+        ...state,
+        cloneIndexModalIndexLabel: options.indexLabel,
+        cloneIndexModalTitle: options.cloneIndexModalTitle,
+        cloneIndexModalSourceIndexName: options.sourceIndexName,
+        cloneIndexModalSourceDesignDocName: options.sourceDesignDocName,
+        cloneIndexModalSelectedDesignDoc: '_design/' + options.sourceDesignDocName,
+        cloneIndexDesignDocProp: '',
+        cloneIndexModalVisible: true,
+        cloneIndexModalOnSubmit: options.onSubmit
+      };
+
+    case ActionTypes.SIDEBAR_HIDE_CLONE_INDEX_MODAL:
+      return {
+        ...state,
+        cloneIndexModalVisible: false
+      };
+
+    case ActionTypes.SIDEBAR_CLONE_MODAL_DESIGN_DOC_CHANGE:
+      return {
+        ...state,
+        cloneIndexModalSelectedDesignDoc: options.value
+      };
+
+    case ActionTypes.SIDEBAR_CLONE_MODAL_DESIGN_DOC_NEW_NAME_UPDATED:
+      return {
+        ...state,
+        cloneIndexModalNewDesignDocName: options.value
+      };
+
+    case ActionTypes.SIDEBAR_CLONE_MODAL_UPDATE_INDEX_NAME:
+      return {
+        ...state,
+        cloneIndexModalNewIndexName: options.value
+      };
+
     case ActionTypes.SIDEBAR_UPDATED_DESIGN_DOCS:
-      return Object.assign({}, state, {
-        designDocs: action.options.designDocs
-      });
+      return {
+        ...state,
+        designDocs: options.designDocs,
+        loading: false
+      };
 
     default:
       return state;

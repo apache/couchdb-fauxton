@@ -20,6 +20,15 @@ FauxtonAPI.router = new FauxtonAPI.Router([]);
 
 describe('Sidebar actions', () => {
 
+  beforeEach(() => {
+    FauxtonAPI.reduxState = sinon.stub().returns({
+      sidebar:{
+        loading: true
+      }
+    });
+    FauxtonAPI.reduxDispatch = sinon.stub();
+  });
+
   afterEach(() => {
     restore(FauxtonAPI.navigate);
     restore(FauxtonAPI.addNotification);

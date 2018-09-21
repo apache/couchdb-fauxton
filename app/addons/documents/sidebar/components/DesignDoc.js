@@ -122,7 +122,7 @@ export default class DesignDoc extends React.Component {
       toggleBodyClassNames += ' in';
     }
     const designDocName = this.props.designDocName;
-    const designDocMetaUrl = FauxtonAPI.urls('designDocs', 'app', this.props.database.id, designDocName);
+    const designDocMetaUrl = FauxtonAPI.urls('designDocs', 'app', encodeURIComponent(this.props.database.id), designDocName);
     const metadataRowClass = (this.props.selectedNavInfo.designDocSection === 'metadata') ? 'active' : '';
 
     return (

@@ -27,6 +27,7 @@ describe('Index Editor Actions', function () {
   describe('delete view', function () {
     var designDocs, database, designDoc, designDocCollection, designDocId, viewName;
     beforeEach(function () {
+      FauxtonAPI.reduxDispatch = sinon.stub();
       database = {
         safeID: function () { return 'safeid';}
       };

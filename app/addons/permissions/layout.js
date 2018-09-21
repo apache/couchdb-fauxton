@@ -13,9 +13,11 @@
 import React from 'react';
 import {TabsSidebarHeader} from '../documents/layouts';
 import PermissionsContainer from './container/PermissionsContainer';
-import SidebarComponents from "../documents/sidebar/sidebar";
+import SidebarControllerContainer from "../documents/sidebar/SidebarControllerContainer";
+import {SidebarItemSelection} from '../documents/sidebar/helpers';
 
 export const PermissionsLayout = ({docURL, database, endpoint, dbName, dropDownLinks}) => {
+  const selectedNavItem = new SidebarItemSelection('permissions');
   return (
     <div id="dashboard" className="with-sidebar">
       <TabsSidebarHeader
@@ -29,7 +31,7 @@ export const PermissionsLayout = ({docURL, database, endpoint, dbName, dropDownL
       />
       <div className="with-sidebar tabs-with-sidebar content-area">
         <aside id="sidebar-content" className="scrollable">
-          <SidebarComponents.SidebarController />
+          <SidebarControllerContainer selectedNavItem={selectedNavItem}/>
         </aside>
         <section id="dashboard-content" className="flex-layout flex-col">
           <PermissionsContainer url={endpoint} />

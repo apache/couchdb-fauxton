@@ -10,74 +10,55 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+import PropTypes from 'prop-types';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ComponentsActions from "../../../components/actions";
 import Components from '../../../components/react-components';
 import ComponentsStore from '../../../components/stores';
 import GeneralComponents from '../../../fauxton/components';
-import Actions from '../actions';
-import Stores from '../stores';
 import CloneIndexModal from './CloneIndexModal';
 import DesignDocList from './DesignDocList';
 import MainSidebar from './MainSidebar';
 
-const store = Stores.sidebarStore;
 const { DeleteDatabaseModal, LoadLines } = Components;
 const { ConfirmationModal } = GeneralComponents;
 const { deleteDbModalStore } = ComponentsStore;
 
 export default class SidebarController extends React.Component {
-  getStoreState = () => {
-    return {
-      database: store.getDatabase(),
-      selectedNav: store.getSelected(),
-      designDocs: store.getDesignDocs(),
-      designDocList: store.getDesignDocList(),
-      availableDesignDocIds: store.getAvailableDesignDocs(),
-      toggledSections: store.getToggledSections(),
-      isLoading: store.isLoading(),
-      deleteDbModalProperties: deleteDbModalStore.getShowDeleteDatabaseModal(),
 
-      deleteIndexModalVisible: store.isDeleteIndexModalVisible(),
-      deleteIndexModalText: store.getDeleteIndexModalText(),
-      deleteIndexModalOnSubmit: store.getDeleteIndexModalOnSubmit(),
-      deleteIndexModalIndexName: store.getDeleteIndexModalIndexName(),
-      deleteIndexModalDesignDoc: store.getDeleteIndexDesignDoc(),
-
-      cloneIndexModalVisible: store.isCloneIndexModalVisible(),
-      cloneIndexModalTitle: store.getCloneIndexModalTitle(),
-      cloneIndexModalSelectedDesignDoc: store.getCloneIndexModalSelectedDesignDoc(),
-      cloneIndexModalNewDesignDocName: store.getCloneIndexModalNewDesignDocName(),
-      cloneIndexModalOnSubmit: store.getCloneIndexModalOnSubmit(),
-      cloneIndexDesignDocProp: store.getCloneIndexDesignDocProp(),
-      cloneIndexModalNewIndexName: store.getCloneIndexModalNewIndexName(),
-      cloneIndexSourceIndexName: store.getCloneIndexModalSourceIndexName(),
-      cloneIndexSourceDesignDocName: store.getCloneIndexModalSourceDesignDocName(),
-      cloneIndexModalIndexLabel: store.getCloneIndexModalIndexLabel()
-    };
+  static propTypes = {
+    selectedNav: PropTypes.shape({
+      designDocName: PropTypes.string,
+      designDocSection: PropTypes.string,
+      indexName: PropTypes.string,
+      navItem: PropTypes.string
+    }).isRequired
   };
 
+  constructor(props) {
+    super(props);
+    this.state = this.getDeleteDbStoreState();
+    this.deleteIndex = this.deleteIndex.bind(this);
+    this.cloneIndex = this.cloneIndex.bind(this);
+  }
+
   componentDidMount() {
-    store.on('change', this.onChange, this);
     deleteDbModalStore.on('change', this.onChange, this);
   }
 
   componentWillUnmount() {
-    store.off('change', this.onChange);
     deleteDbModalStore.off('change', this.onChange, this);
   }
 
+  getDeleteDbStoreState() {
+    return {
+      deleteDbModalProperties: deleteDbModalStore.getShowDeleteDatabaseModal()
+    };
+  }
+
   onChange = () => {
-
-    const newState = this.getStoreState();
-    // Workaround to signal Redux store that the design doc list was updated
-    // which is currently required by QueryOptionsContainer
-    // It should be removed once Sidebar components are refactored to use Redux
-    if (this.props.reduxUpdatedDesignDocList) {
-      this.props.reduxUpdatedDesignDocList(newState.designDocList);
-    }
-
+    const newState = this.getDeleteDbStoreState();
     this.setState(newState);
   };
 
@@ -91,50 +72,48 @@ export default class SidebarController extends React.Component {
 
     // if the user is currently on the index that's being deleted, pass that info along to the delete handler. That can
     // be used to redirect the user to somewhere appropriate
-    const isOnIndex = this.state.selectedNav.navItem === 'designDoc' &&
-      ('_design/' + this.state.selectedNav.designDocName) === this.state.deleteIndexModalDesignDoc.id &&
-      this.state.selectedNav.indexName === this.state.deleteIndexModalIndexName;
+    const isOnIndex = this.props.selectedNav.navItem === 'designDoc' &&
+      ('_design/' + this.props.selectedNav.designDocName) === this.props.deleteIndexModalDesignDoc.id &&
+      this.props.selectedNav.indexName === this.props.deleteIndexModalIndexName;
 
-    this.state.deleteIndexModalOnSubmit({
+    this.props.deleteIndexModalOnSubmit({
       isOnIndex: isOnIndex,
-      indexName: this.state.deleteIndexModalIndexName,
-      designDoc: this.state.deleteIndexModalDesignDoc,
-      designDocs: this.state.designDocs,
-      database: this.state.database
+      indexName: this.props.deleteIndexModalIndexName,
+      designDoc: this.props.deleteIndexModalDesignDoc,
+      designDocs: this.props.designDocs,
+      database: this.props.database
     });
   };
 
   cloneIndex = () => {
-    this.state.cloneIndexModalOnSubmit({
-      sourceIndexName: this.state.cloneIndexSourceIndexName,
-      sourceDesignDocName: this.state.cloneIndexSourceDesignDocName,
-      targetDesignDocName: this.state.cloneIndexModalSelectedDesignDoc,
-      newDesignDocName: this.state.cloneIndexModalNewDesignDocName,
-      newIndexName: this.state.cloneIndexModalNewIndexName,
-      designDocs: this.state.designDocs,
-      database: this.state.database,
-      onComplete: Actions.hideCloneIndexModal
+    this.props.cloneIndexModalOnSubmit({
+      sourceIndexName: this.props.cloneIndexSourceIndexName,
+      sourceDesignDocName: this.props.cloneIndexSourceDesignDocName,
+      targetDesignDocName: this.props.cloneIndexModalSelectedDesignDoc,
+      newDesignDocName: this.props.cloneIndexModalNewDesignDocName,
+      newIndexName: this.props.cloneIndexModalNewIndexName,
+      designDocs: this.props.designDocs,
+      database: this.props.database,
+      onComplete: this.props.hideCloneIndexModal
     });
   };
 
-  state = this.getStoreState();
-
   render() {
-    if (this.state.isLoading) {
+    if (this.props.isLoading) {
       return <LoadLines />;
     }
 
     return (
       <nav className="sidenav">
         <MainSidebar
-          selectedNavItem={this.state.selectedNav.navItem}
-          databaseName={this.state.database.id} />
+          selectedNavItem={this.props.selectedNav.navItem}
+          databaseName={this.props.database.id} />
         <DesignDocList
-          selectedNav={this.state.selectedNav}
-          toggle={Actions.toggleContent}
-          toggledSections={this.state.toggledSections}
-          designDocs={this.state.designDocList}
-          database={this.state.database} />
+          selectedNav={this.props.selectedNav}
+          toggle={this.props.toggleContent}
+          toggledSections={this.props.toggledSections}
+          designDocs={this.props.designDocList}
+          database={this.props.database} />
         <DeleteDatabaseModal
           showHide={this.showDeleteDatabaseModal}
           modalProps={this.state.deleteDbModalProperties} />
@@ -142,20 +121,20 @@ export default class SidebarController extends React.Component {
         {/* the delete and clone index modals handle all index types, hence the props all being pulled from the store */}
         <ConfirmationModal
           title="Confirm Deletion"
-          visible={this.state.deleteIndexModalVisible}
-          text={this.state.deleteIndexModalText}
-          onClose={Actions.hideDeleteIndexModal}
+          visible={this.props.deleteIndexModalVisible}
+          text={this.props.deleteIndexModalText}
+          onClose={this.props.hideDeleteIndexModal}
           onSubmit={this.deleteIndex} />
         <CloneIndexModal
-          visible={this.state.cloneIndexModalVisible}
-          title={this.state.cloneIndexModalTitle}
-          close={Actions.hideCloneIndexModal}
+          visible={this.props.cloneIndexModalVisible}
+          title={this.props.cloneIndexModalTitle}
+          close={this.props.hideCloneIndexModal}
           submit={this.cloneIndex}
-          designDocArray={this.state.availableDesignDocIds}
-          selectedDesignDoc={this.state.cloneIndexModalSelectedDesignDoc}
-          newDesignDocName={this.state.cloneIndexModalNewDesignDocName}
-          newIndexName={this.state.cloneIndexModalNewIndexName}
-          indexLabel={this.state.cloneIndexModalIndexLabel} />
+          designDocArray={this.props.availableDesignDocIds}
+          selectedDesignDoc={this.props.cloneIndexModalSelectedDesignDoc}
+          newDesignDocName={this.props.cloneIndexModalNewDesignDocName}
+          newIndexName={this.props.cloneIndexModalNewIndexName}
+          indexLabel={this.props.cloneIndexModalIndexLabel} />
       </nav>
     );
   }

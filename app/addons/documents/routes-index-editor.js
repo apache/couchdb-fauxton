@@ -15,7 +15,8 @@ import FauxtonAPI from "../../core/api";
 import BaseRoute from "./shared-routes";
 import ActionsIndexEditor from "./index-editor/actions";
 import Databases from "../databases/base";
-import SidebarActions from "./sidebar/actions";
+import SidebarActions from './sidebar/actions';
+import {SidebarItemSelection} from './sidebar/helpers';
 import {DocsTabsSidebarLayout, ViewsTabsSidebarLayout} from './layouts';
 
 const IndexEditorAndResults = BaseRoute.extend({
@@ -59,15 +60,12 @@ const IndexEditorAndResults = BaseRoute.extend({
       designDocId: '_design/' + ddoc
     });
 
-    const selectedNavItem = {
-      navItem: 'designDoc',
-      params: {
-        designDocName: ddoc,
-        designDocSection: 'Views',
-        indexName: viewName
-      }
-    };
-    SidebarActions.selectNavItem(selectedNavItem.navItem, selectedNavItem.params);
+    const selectedNavItem = new SidebarItemSelection('designDoc', {
+      designDocName: ddoc,
+      designDocSection: 'Views',
+      indexName: viewName
+    });
+    FauxtonAPI.reduxDispatch(SidebarActions.expandSelectedItem(selectedNavItem));
 
     const url = FauxtonAPI.urls('view', 'server', encodeURIComponent(databaseName),
       encodeURIComponent(ddoc), encodeURIComponent(viewName));
@@ -107,8 +105,7 @@ const IndexEditorAndResults = BaseRoute.extend({
       newDesignDoc: newDesignDoc
     });
 
-    SidebarActions.selectNavItem('');
-
+    const selectedNavItem = new SidebarItemSelection('');
     const dropDownLinks = this.getCrumbs(this.database);
 
     return <ViewsTabsSidebarLayout
@@ -117,6 +114,7 @@ const IndexEditorAndResults = BaseRoute.extend({
       dbName={this.database.id}
       dropDownLinks={dropDownLinks}
       database={this.database}
+      selectedNavItem={selectedNavItem}
     />;
   },
 
@@ -129,11 +127,12 @@ const IndexEditorAndResults = BaseRoute.extend({
       designDocId: '_design/' + ddocName
     });
 
-    SidebarActions.selectNavItem('designDoc', {
+    const selectedNavItem = new SidebarItemSelection('designDoc', {
       designDocName: ddocName,
       designDocSection: 'Views',
       indexName: viewName
     });
+    FauxtonAPI.reduxDispatch(SidebarActions.expandSelectedItem(selectedNavItem));
 
     const docURL = FauxtonAPI.constants.DOC_URLS.GENERAL;
     const endpoint = FauxtonAPI.urls('view', 'apiurl', databaseName, ddocName, viewName);
@@ -146,6 +145,7 @@ const IndexEditorAndResults = BaseRoute.extend({
       dbName={this.database.id}
       dropDownLinks={dropDownLinks}
       database={this.database}
+      selectedNavItem={selectedNavItem}
     />;
   }
 
