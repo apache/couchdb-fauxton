@@ -32,6 +32,8 @@ const DatabasesStoreConstructor = FauxtonAPI.Store.extend({
     this._databaseDetails = [];
     this._failedDbs = [];
     this._fullDbList = [];
+
+    this._partitionedDatabasesAvailable = false;
   },
 
   getPage: function () {
@@ -54,11 +56,13 @@ const DatabasesStoreConstructor = FauxtonAPI.Store.extend({
     this._promptVisible = promptVisible;
   },
 
-  obtainNewDatabaseModel: function (databaseName) {
-    return new Database({
+  obtainNewDatabaseModel: function (databaseName, partitioned) {
+    const dbModel = new Database({
       id: databaseName,
       name: databaseName
     });
+    dbModel.setPartitioned(partitioned);
+    return dbModel;
   },
 
   doesDatabaseExist: function (databaseName) {
@@ -95,8 +99,13 @@ const DatabasesStoreConstructor = FauxtonAPI.Store.extend({
       dataSize: Helpers.formatSize(dataSize),
       docCount: details.doc_count,
       docDelCount: details.doc_del_count,
-      showTombstoneWarning: details.doc_del_count > details.doc_count
+      showTombstoneWarning: details.doc_del_count > details.doc_count,
+      isPartitioned: details.props && details.props.partitioned === true
     };
+  },
+
+  isPartitionedDatabasesAvailable: function () {
+    return this._partitionedDatabasesAvailable;
   },
 
   dispatch: function (action) {
@@ -123,6 +132,10 @@ const DatabasesStoreConstructor = FauxtonAPI.Store.extend({
         this._databaseDetails = action.options.databaseDetails;
         this._failedDbs = action.options.failedDbs;
         this.setLoading(false);
+        break;
+
+      case ActionTypes.DATABASES_PARTITIONED_DB_AVAILABLE:
+        this._partitionedDatabasesAvailable = action.options.available;
         break;
 
       default:

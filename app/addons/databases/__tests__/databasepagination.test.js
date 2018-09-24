@@ -13,10 +13,10 @@
 import Stores from "../stores";
 import React from 'react';
 import ReactDOM from 'react-dom';
-import DatabaseComponents from "../components";
 import "../../documents/base";
 import DatabaseActions from "../actions";
 import {mount} from 'enzyme';
+import DatabaseComponents from "../components";
 
 const store = Stores.databasesStore;
 
