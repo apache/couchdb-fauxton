@@ -13,16 +13,6 @@
 import { connect } from 'react-redux';
 import SidebarComponents from './sidebar';
 import Action from './actions';
-import ActionTypes from './actiontypes';
-
-const reduxUpdatedDesignDocList = (designDocs) => {
-  return {
-    type: ActionTypes.SIDEBAR_UPDATED_DESIGN_DOCS,
-    options: {
-      designDocs: Array.isArray(designDocs) ? designDocs : []
-    }
-  };
-};
 
 const getDatabase = (state) => {
   if (state.loading) {
@@ -95,9 +85,6 @@ const mapStateToProps = ({ sidebar }, ownProps) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    reduxUpdatedDesignDocList: (designDocsList) => {
-      dispatch(reduxUpdatedDesignDocList(designDocsList));
-    },
     toggleContent: (designDoc, indexGroup) => {
       dispatch(Action.toggleContent(designDoc, indexGroup));
     },
