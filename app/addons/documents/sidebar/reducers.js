@@ -11,11 +11,12 @@
 // the License.
 
 import React from "react";
+import app from "../../../app";
 import ActionTypes from "./actiontypes";
 
 const initialState = {
-  // designDocs: new Backbone.Collection(),
-  designDocs: [],
+  designDocs: new Backbone.Collection(),
+  designDocList: [],
   selected: {
     navItem: 'all-docs',
     designDocName: '',
@@ -48,6 +49,7 @@ function setNewOptions(state, options) {
     ...state,
     database: options.database,
     designDocs: options.designDocs,
+    designDocList: getDesignDocList(options.designDocs),
     loading: false,
   };
   // this can be expanded in future as we need. Right now it can only set a top-level nav item ('all docs',
@@ -113,6 +115,25 @@ function expandSelectedItem(state, {selectedNavItem}) {
     }
   }
   return newState;
+}
+
+function getDesignDocList (designDocs) {
+  if (!designDocs) {
+    return [];
+  }
+  let docs = designDocs.toJSON();
+  docs = _.filter(docs, (doc) => {
+    if (_.has(doc.doc, 'language')) {
+      return doc.doc.language !== 'query';
+    }
+    return true;
+  });
+
+  const ddocsList = docs.map((doc) => {
+    doc.safeId = app.utils.safeURLName(doc._id.replace(/^_design\//, ''));
+    return _.extend(doc, doc.doc);
+  });
+  return ddocsList;
 }
 
 export default function sidebar(state = initialState, action) {
@@ -196,6 +217,7 @@ export default function sidebar(state = initialState, action) {
       return {
         ...state,
         designDocs: options.designDocs,
+        designDocList: getDesignDocList(options.designDocs),
         loading: false
       };
 

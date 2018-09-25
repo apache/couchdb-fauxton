@@ -51,7 +51,7 @@ const mapStateToProps = ({indexResults, sidebar}, ownProps) => {
   return {
     contentVisible: queryOptionsPanel.isVisible,
     includeDocs: queryOptionsPanel.includeDocs,
-    showReduce: showReduce(sidebar.designDocs, ownProps.selectedNavItem),
+    showReduce: showReduce(sidebar.designDocList, ownProps.selectedNavItem),
     reduce: queryOptionsPanel.reduce,
     groupLevel: queryOptionsPanel.groupLevel,
     showByKeys: queryOptionsPanel.showByKeys,

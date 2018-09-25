@@ -11,7 +11,6 @@
 // the License.
 
 import { connect } from 'react-redux';
-import app from "../../../app";
 import SidebarComponents from './sidebar';
 import Action from './actions';
 import ActionTypes from './actiontypes';
@@ -30,24 +29,6 @@ const getDatabase = (state) => {
     return {};
   }
   return state.database;
-};
-
-const getDesignDocList = (state) => {
-  if (state.loading) {
-    return {};
-  }
-  let docs = state.designDocs.toJSON();
-  docs = _.filter(docs, (doc) => {
-    if (_.has(doc.doc, 'language')) {
-      return doc.doc.language !== 'query';
-    }
-    return true;
-  });
-
-  return docs.map((doc) => {
-    doc.safeId = app.utils.safeURLName(doc._id.replace(/^_design\//, ''));
-    return _.extend(doc, doc.doc);
-  });
 };
 
 // returns a simple array of design doc IDs
@@ -87,7 +68,8 @@ const mapStateToProps = ({ sidebar }, ownProps) => {
     database: getDatabase(sidebar),
     selectedNav: selectedNavItem(ownProps.selectedNavItem),
     designDocs: sidebar.designDocs,
-    designDocList: getDesignDocList(sidebar),
+    // designDocList: getDesignDocList(sidebar),
+    designDocList: sidebar.designDocList,
     availableDesignDocIds: getAvailableDesignDocs(sidebar),
     toggledSections: sidebar.toggledSections,
     isLoading: sidebar.loading,
