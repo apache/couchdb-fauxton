@@ -20,8 +20,7 @@ const _getDatabaseName = ({sidebar}) => {
   return sidebar.database.safeID();
 };
 
-// NOT FOLLOWING REDUX YET DUE TO SOME DEPENDENCIES
-const newOptions = (options) => {
+const dispatchNewOptions = (options) => {
   if (options.database.safeID() !== _getDatabaseName(FauxtonAPI.reduxState())) {
     FauxtonAPI.reduxDispatch({
       type: ActionTypes.SIDEBAR_FETCHING
@@ -48,8 +47,7 @@ const newOptions = (options) => {
   });
 };
 
-// NOT FOLLOWING REDUX YET DUE TO SOME DEPENDENCIES
-const updateDesignDocs = (designDocs) => {
+const dispatchUpdateDesignDocs = (designDocs) => {
   FauxtonAPI.reduxDispatch({
     type: ActionTypes.SIDEBAR_FETCHING
   });
@@ -61,6 +59,12 @@ const updateDesignDocs = (designDocs) => {
         designDocs: designDocs
       }
     });
+  });
+};
+
+const dispatchHideDeleteIndexModal = () => {
+  FauxtonAPI.reduxDispatch({
+    type: ActionTypes.SIDEBAR_HIDE_DELETE_INDEX_MODAL
   });
 };
 
@@ -146,11 +150,12 @@ const setNewCloneIndexName = (indexName) => (dispatch) => {
 };
 
 export default {
-  newOptions,
-  updateDesignDocs,
+  dispatchNewOptions,
+  dispatchUpdateDesignDocs,
   toggleContent,
   showDeleteIndexModal,
   hideDeleteIndexModal,
+  dispatchHideDeleteIndexModal,
   showCloneIndexModal,
   hideCloneIndexModal,
   updateNewDesignDocName,

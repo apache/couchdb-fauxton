@@ -56,7 +56,7 @@ describe('Sidebar actions', () => {
       }
     };
 
-    Actions.newOptions(options);
+    Actions.dispatchNewOptions(options);
     process.nextTick(() => {
       assert.ok(notificationSpy.calledOnce);
       assert.ok(/not exist/.test(notificationSpy.args[0][0].msg));

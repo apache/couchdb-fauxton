@@ -28,7 +28,9 @@ export default class DesignDoc extends React.Component {
     isExpanded: PropTypes.bool.isRequired,
     selectedNavInfo: PropTypes.object.isRequired,
     toggledSections: PropTypes.object.isRequired,
-    designDocName:  PropTypes.string.isRequired
+    designDocName:  PropTypes.string.isRequired,
+    showDeleteIndexModal: PropTypes.func.isRequired,
+    showCloneIndexModal: PropTypes.func.isRequired
   };
 
   constructor(props) {
@@ -79,7 +81,9 @@ export default class DesignDoc extends React.Component {
           key={key}
           title={index.name}
           selector={index.selector}
-          items={_.keys(this.props.designDoc[index.selector])} />
+          items={_.keys(this.props.designDoc[index.selector])}
+          showDeleteIndexModal={this.props.showDeleteIndexModal}
+          showCloneIndexModal={this.props.showCloneIndexModal} />
       );
     });
   };

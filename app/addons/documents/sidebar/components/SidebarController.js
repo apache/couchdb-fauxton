@@ -113,7 +113,9 @@ export default class SidebarController extends React.Component {
           toggle={this.props.toggleContent}
           toggledSections={this.props.toggledSections}
           designDocs={this.props.designDocList}
-          database={this.props.database} />
+          database={this.props.database}
+          showDeleteIndexModal={this.props.showDeleteIndexModal}
+          showCloneIndexModal={this.props.showCloneIndexModal} />
         <DeleteDatabaseModal
           showHide={this.showDeleteDatabaseModal}
           modalProps={this.state.deleteDbModalProperties} />
@@ -134,7 +136,10 @@ export default class SidebarController extends React.Component {
           selectedDesignDoc={this.props.cloneIndexModalSelectedDesignDoc}
           newDesignDocName={this.props.cloneIndexModalNewDesignDocName}
           newIndexName={this.props.cloneIndexModalNewIndexName}
-          indexLabel={this.props.cloneIndexModalIndexLabel} />
+          indexLabel={this.props.cloneIndexModalIndexLabel}
+          selectDesignDoc={this.props.selectDesignDoc}
+          updateNewDesignDocName={this.props.updateNewDesignDocName}
+          setNewCloneIndexName={this.props.setNewCloneIndexName} />
       </nav>
     );
   }

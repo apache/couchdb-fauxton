@@ -16,7 +16,6 @@ import { Modal } from 'react-bootstrap';
 import ReactDOM from 'react-dom';
 import FauxtonAPI from '../../../../core/api';
 import IndexEditorComponents from '../../index-editor/components';
-import Actions from '../actions';
 
 const { DesignDocSelector } = IndexEditorComponents;
 
@@ -30,13 +29,20 @@ export default class CloneIndexModal extends React.Component {
     selectedDesignDoc: PropTypes.string.isRequired,
     newDesignDocName: PropTypes.string.isRequired,
     newIndexName: PropTypes.string.isRequired,
-    indexLabel: PropTypes.string.isRequired
+    indexLabel: PropTypes.string.isRequired,
+    selectDesignDoc: PropTypes.func.isRequired,
+    updateNewDesignDocName: PropTypes.func.isRequired,
+    setNewCloneIndexName: PropTypes.func.isRequired
   };
 
   static defaultProps = {
     title: 'Clone Index',
     visible: false
   };
+
+  constructor(props) {
+    super(props);
+  }
 
   submit = () => {
     if (!this.designDocSelector.validate()) {
@@ -61,7 +67,7 @@ export default class CloneIndexModal extends React.Component {
   };
 
   setNewIndexName = (e) => {
-    Actions.setNewCloneIndexName(e.target.value);
+    this.props.setNewCloneIndexName(e.target.value);
   };
 
   render() {
@@ -84,8 +90,8 @@ export default class CloneIndexModal extends React.Component {
                 designDocList={this.props.designDocArray}
                 selectedDesignDocName={this.props.selectedDesignDoc}
                 newDesignDocName={this.props.newDesignDocName}
-                onSelectDesignDoc={Actions.selectDesignDoc}
-                onChangeNewDesignDocName={Actions.updateNewDesignDocName} />
+                onSelectDesignDoc={this.props.selectDesignDoc}
+                onChangeNewDesignDocName={this.props.updateNewDesignDocName} />
             </div>
 
             <div className="clone-index-name-row">

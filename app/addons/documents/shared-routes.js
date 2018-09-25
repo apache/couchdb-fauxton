@@ -44,7 +44,7 @@ var BaseRoute = FauxtonAPI.RouteObject.extend({
       options.selectedNavItem = selectedNavItem;
     }
 
-    SidebarActions.newOptions(options);
+    SidebarActions.dispatchNewOptions(options);
   },
 
   getCrumbs: function (database) {

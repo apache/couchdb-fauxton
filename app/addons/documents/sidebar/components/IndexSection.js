@@ -15,7 +15,6 @@ import React from 'react';
 import { Collapse, OverlayTrigger, Popover } from 'react-bootstrap';
 import ReactDOM from 'react-dom';
 import FauxtonAPI from '../../../../core/api';
-import Actions from '../actions';
 
 export default class IndexSection extends React.Component {
   static propTypes = {
@@ -27,7 +26,9 @@ export default class IndexSection extends React.Component {
     isExpanded: PropTypes.bool.isRequired,
     selectedIndex: PropTypes.string.isRequired,
     onDelete: PropTypes.func.isRequired,
-    onClone: PropTypes.func.isRequired
+    onClone: PropTypes.func.isRequired,
+    showDeleteIndexModal: PropTypes.func.isRequired,
+    showCloneIndexModal: PropTypes.func.isRequired
   };
 
   state = {
@@ -98,10 +99,10 @@ export default class IndexSection extends React.Component {
 
     switch (action) {
       case 'delete':
-        Actions.showDeleteIndexModal(params.indexName, this.props.designDocName, this.props.indexLabel, params.onDelete);
+        this.props.showDeleteIndexModal(params.indexName, this.props.designDocName, this.props.indexLabel, params.onDelete);
         break;
       case 'clone':
-        Actions.showCloneIndexModal(params.indexName, this.props.designDocName, this.props.indexLabel, params.onClone);
+        this.props.showCloneIndexModal(params.indexName, this.props.designDocName, this.props.indexLabel, params.onClone);
         break;
       case 'edit':
         params.onEdit(this.props.database.id, this.props.designDocName, params.indexName);

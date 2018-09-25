@@ -27,7 +27,9 @@ export default class DesignDocList extends React.Component {
       designDocSection: PropTypes.string,
       indexName: PropTypes.string,
       navItem: PropTypes.string
-    }).isRequired
+    }).isRequired,
+    showDeleteIndexModal: PropTypes.func.isRequired,
+    showCloneIndexModal: PropTypes.func.isRequired
   };
 
   constructor(props) {
@@ -63,7 +65,9 @@ export default class DesignDocList extends React.Component {
           key={key}
           designDoc={designDoc}
           designDocName={ddName}
-          database={this.props.database} />
+          database={this.props.database}
+          showDeleteIndexModal={this.props.showDeleteIndexModal}
+          showCloneIndexModal={this.props.showCloneIndexModal} />
       );
     });
   };

@@ -52,7 +52,9 @@ describe('DesignDoc', () => {
       designDocName={'doc-$-#-.1'}
       selectedNavInfo={selectedNavInfo}
       toggledSections={{}}
-      designDoc={{}} />);
+      designDoc={{}}
+      showDeleteIndexModal={() => {}}
+      showCloneIndexModal={() => {}} />);
 
     assert.include(wrapper.find('a.icon .fonticon-plus-circled').at(1).props()['href'], '/doc-%24-%23-.1');
     assert.include(wrapper.find('a.toggle-view .accordion-header').props()['href'], '/doc-%24-%23-.1');
@@ -70,7 +72,9 @@ describe('DesignDoc', () => {
       designDocName={'id#1'}
       selectedNavInfo={{}}
       toggledSections={{}}
-      designDoc={{}} />);
+      designDoc={{}}
+      showDeleteIndexModal={() => {}}
+      showCloneIndexModal={() => {}} />);
 
     // NOTE: wrapper.find doesn't work special chars so we use class name instead
     wrapper.find('div.accordion-list-item').simulate('click', {preventDefault: sinon.stub()});
@@ -89,6 +93,8 @@ describe('DesignDoc', () => {
       toggledSections={{}}
       designDoc={{ customProp: { one: 'something' } }}
       designDocName={'doc-$-#-.1'}
+      showDeleteIndexModal={() => {}}
+      showCloneIndexModal={() => {}}
     />);
 
     const subOptions = el.find('.accordion-body li');
@@ -114,6 +120,8 @@ describe('DesignDoc', () => {
       toggledSections={{}}
       designDoc={{ customProp: { one: 'something' } }}
       designDocName={'doc-$-#-.1'}
+      showDeleteIndexModal={() => {}}
+      showCloneIndexModal={() => {}}
     />);
 
     const subOptions = el.find('.accordion-body li');
@@ -139,6 +147,8 @@ describe('DesignDoc', () => {
       designDoc={{}} // note that this is empty
       designDocName={'doc-$-#-.1'}
       toggledSections={{}}
+      showDeleteIndexModal={() => {}}
+      showCloneIndexModal={() => {}}
     />);
 
     const subOptions = el.find('.accordion-body li');
@@ -159,7 +169,9 @@ describe('DesignDoc', () => {
       }}
       designDocName={'doc-$-#-.1'}
       toggledSections={{}}
-      designDoc={{}} />);
+      designDoc={{}}
+      showDeleteIndexModal={() => {}}
+      showCloneIndexModal={() => {}} />);
 
     assert.equal(el.find('.accordion-body li.active a').text(), 'Metadata');
   });

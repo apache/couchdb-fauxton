@@ -125,6 +125,21 @@ const mapDispatchToProps = (dispatch) => {
     hideDeleteIndexModal: () => {
       dispatch(Action.hideDeleteIndexModal());
     },
+    showDeleteIndexModal: (indexName, designDocName, indexLabel, onDelete) => {
+      dispatch(Action.showDeleteIndexModal(indexName, designDocName, indexLabel, onDelete));
+    },
+    showCloneIndexModal: (indexName, designDocName, indexLabel, onSubmit) => {
+      dispatch(Action.showCloneIndexModal(indexName, designDocName, indexLabel, onSubmit));
+    },
+    selectDesignDoc: (designDoc) => {
+      dispatch(Action.selectDesignDoc(designDoc));
+    },
+    updateNewDesignDocName: (designDocName) => {
+      dispatch(Action.updateNewDesignDocName(designDocName));
+    },
+    setNewCloneIndexName: (indexName) => {
+      dispatch(Action.setNewCloneIndexName(indexName));
+    }
   };
 };
 
