@@ -28,8 +28,12 @@ const IndexEditorAndResults = BaseRoute.extend({
       route: 'createView',
       roles: ['fx_loggedIn']
     },
+    'database/:database/_partition/:partitionkey/_design/:ddoc/_view/:view': {
+      route: 'showPartitionedView',
+      roles: ['fx_loggedIn']
+    },
     'database/:database/_design/:ddoc/_view/:view': {
-      route: 'showView',
+      route: 'showGlobalView',
       roles: ['fx_loggedIn']
     },
     'database/:database/_design/:ddoc/_view/:view/edit': {
@@ -46,8 +50,15 @@ const IndexEditorAndResults = BaseRoute.extend({
     this.addSidebar();
   },
 
-  showView: function (databaseName, ddoc, viewName) {
+  showGlobalView: function (databaseName, ddoc, viewName) {
+    return this.showView(databaseName, '', ddoc, viewName);
+  },
 
+  showPartitionedView: function (databaseName, partitionKey, ddoc, viewName) {
+    return this.showView(databaseName, partitionKey, ddoc, viewName);
+  },
+
+  showView: function (databaseName, partitionKey, ddoc, viewName) {
     viewName = viewName.replace(/\?.*$/, '');
 
     ActionsIndexEditor.clearIndex();
@@ -74,7 +85,11 @@ const IndexEditorAndResults = BaseRoute.extend({
     const endpoint = FauxtonAPI.urls('view', 'apiurl', encodeURIComponent(databaseName),
       encodeURIComponent(ddoc), encodeURIComponent(viewName));
     const docURL = FauxtonAPI.constants.DOC_URLS.GENERAL;
-
+    const navigateToPartitionedView = (partKey) => {
+      const baseUrl = FauxtonAPI.urls('partitioned_view', 'app', encodeURIComponent(databaseName),
+        encodeURIComponent(partKey), encodeURIComponent(ddoc));
+      FauxtonAPI.navigate('#/' + baseUrl + encodeURIComponent(viewName));
+    };
     const dropDownLinks = this.getCrumbs(this.database);
     return <DocsTabsSidebarLayout
       docURL={docURL}
@@ -86,6 +101,9 @@ const IndexEditorAndResults = BaseRoute.extend({
       ddocsOnly={false}
       deleteEnabled={false}
       selectedNavItem={selectedNavItem}
+      partitionKey={partitionKey}
+      onPartitionKeySelected={navigateToPartitionedView}
+      globalMode={partitionKey === ''}
     />;
   },
 
