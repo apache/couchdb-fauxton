@@ -130,6 +130,7 @@ PartitionKeySelector.defaultProps = {
 };
 
 PartitionKeySelector.propTypes = {
+  selectorVisible: PropTypes.bool.isRequired,
   partitionKey: PropTypes.string.isRequired,
   checkDbPartitioned: PropTypes.func.isRequired,
   onPartitionKeySelected: PropTypes.func.isRequired,
