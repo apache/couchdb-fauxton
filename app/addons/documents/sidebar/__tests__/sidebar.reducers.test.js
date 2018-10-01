@@ -10,12 +10,11 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-// import FauxtonAPI from "../../../../core/api";
 import sidebar from "../reducers";
 import ActionTypes from "../actiontypes";
 import testUtils from "../../../../../test/mocha/testUtils";
+
 const assert = testUtils.assert;
-// let dispatchToken;
 
 function isVisible (state, designDoc, indexGroup) {
   if (!state.toggledSections[designDoc]) {

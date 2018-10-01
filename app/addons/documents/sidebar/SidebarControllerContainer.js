@@ -13,13 +13,8 @@
 import { connect } from 'react-redux';
 import SidebarComponents from './sidebar';
 import Action from './actions';
+import { getDatabase } from './reducers';
 
-const getDatabase = (state) => {
-  if (state.loading) {
-    return {};
-  }
-  return state.database;
-};
 
 // returns a simple array of design doc IDs
 const getAvailableDesignDocs = (state) => {

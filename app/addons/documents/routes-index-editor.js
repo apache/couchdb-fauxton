@@ -65,7 +65,7 @@ const IndexEditorAndResults = BaseRoute.extend({
       designDocSection: 'Views',
       indexName: viewName
     });
-    FauxtonAPI.reduxDispatch(SidebarActions.expandSelectedItem(selectedNavItem));
+    SidebarActions.dispatchExpandSelectedItem(selectedNavItem);
 
     const url = FauxtonAPI.urls('view', 'server', encodeURIComponent(databaseName),
       encodeURIComponent(ddoc), encodeURIComponent(viewName));
@@ -132,7 +132,7 @@ const IndexEditorAndResults = BaseRoute.extend({
       designDocSection: 'Views',
       indexName: viewName
     });
-    FauxtonAPI.reduxDispatch(SidebarActions.expandSelectedItem(selectedNavItem));
+    SidebarActions.dispatchExpandSelectedItem(selectedNavItem);
 
     const docURL = FauxtonAPI.constants.DOC_URLS.GENERAL;
     const endpoint = FauxtonAPI.urls('view', 'apiurl', databaseName, ddocName, viewName);

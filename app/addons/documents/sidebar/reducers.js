@@ -136,6 +136,13 @@ function getDesignDocList (designDocs) {
   return ddocsList;
 }
 
+export const getDatabase = (state) => {
+  if (state.loading) {
+    return {};
+  }
+  return state.database;
+};
+
 export default function sidebar(state = initialState, action) {
   const { options } = action;
   switch (action.type) {

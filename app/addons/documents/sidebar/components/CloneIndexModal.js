@@ -42,6 +42,7 @@ export default class CloneIndexModal extends React.Component {
 
   constructor(props) {
     super(props);
+    this.props.setNewCloneIndexName('');
   }
 
   submit = () => {

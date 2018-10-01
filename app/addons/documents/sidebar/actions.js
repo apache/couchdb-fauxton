@@ -68,13 +68,13 @@ const dispatchHideDeleteIndexModal = () => {
   });
 };
 
-const expandSelectedItem = (selectedNavItem) => {
-  return {
+const dispatchExpandSelectedItem = (selectedNavItem) => {
+  FauxtonAPI.reduxDispatch({
     type: ActionTypes.SIDEBAR_EXPAND_SELECTED_ITEM,
     options: {
       selectedNavItem: selectedNavItem
     }
-  };
+  });
 };
 
 const toggleContent = (designDoc, indexGroup) => (dispatch) => {
@@ -161,5 +161,5 @@ export default {
   updateNewDesignDocName,
   selectDesignDoc,
   setNewCloneIndexName,
-  expandSelectedItem
+  dispatchExpandSelectedItem
 };
