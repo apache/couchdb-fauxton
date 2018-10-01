@@ -11,66 +11,10 @@
 // the License.
 
 import PropTypes from 'prop-types';
+import React from 'react';
+import Constants from '../constants';
 
-import React from "react";
-import Constants from "./constants";
-import Actions from "./actions";
-import Stores from "./stores";
-
-const store = Stores.verifyInstallStore;
-
-class VerifyInstallController extends React.Component {
-  getStoreState = () => {
-    return {
-      isVerifying: store.checkIsVerifying(),
-      testResults: store.getTestResults()
-    };
-  };
-
-  startVerification = () => {
-    Actions.startVerification();
-  };
-
-  onChange = () => {
-    this.setState(this.getStoreState());
-  };
-
-  state = this.getStoreState();
-
-  componentDidMount() {
-    store.on('change', this.onChange, this);
-  }
-
-  componentWillUnmount() {
-    store.off('change', this.onChange);
-  }
-
-  render() {
-    return (
-      <div>
-        <VerifyInstallButton verify={this.startVerification} isVerifying={this.state.isVerifying} />
-        <VerifyInstallResults testResults={this.state.testResults} />
-      </div>
-    );
-  }
-}
-
-class VerifyInstallButton extends React.Component {
-  static propTypes = {
-    verify: PropTypes.func.isRequired,
-    isVerifying: PropTypes.bool.isRequired
-  };
-
-  render() {
-    return (
-      <button id="start" className="btn btn-primary" onClick={this.props.verify} disabled={this.props.isVerifying}>
-        {this.props.isVerifying ? 'Verifying' : 'Verify Installation'}
-      </button>
-    );
-  }
-}
-
-class VerifyInstallResults extends React.Component {
+export default class VerifyInstallResults extends React.Component {
   static propTypes = {
     testResults: PropTypes.object.isRequired
   };
@@ -124,9 +68,3 @@ class VerifyInstallResults extends React.Component {
     );
   }
 }
-
-export default {
-  VerifyInstallController: VerifyInstallController,
-  VerifyInstallButton: VerifyInstallButton,
-  VerifyInstallResults: VerifyInstallResults
-};
