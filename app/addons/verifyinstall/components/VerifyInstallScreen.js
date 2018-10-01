@@ -21,31 +21,6 @@ export default class VerifyInstallScreen extends React.Component {
     this.props.resetTests();
   }
 
-  // getStoreState = () => {
-  //   return {
-  //     isVerifying: store.checkIsVerifying(),
-  //     testResults: store.getTestResults()
-  //   };
-  // };
-
-  // startVerification = () => {
-  //   Actions.startVerification();
-  // };
-
-  // onChange = () => {
-  //   this.setState(this.getStoreState());
-  // };
-
-  // state = this.getStoreState();
-
-  // componentDidMount() {
-  //   store.on('change', this.onChange, this);
-  // }
-
-  // componentWillUnmount() {
-  //   store.off('change', this.onChange);
-  // }
-
   render() {
     return (
       <div>
