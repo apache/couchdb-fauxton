@@ -15,7 +15,6 @@ import app from "../../app";
 import FauxtonAPI from "../../core/api";
 import Databases from "../databases/resources";
 import Documents from "./shared-resources";
-import SidebarActions from "./sidebar/actions";
 import {MangoLayoutContainer} from './mangolayout';
 
 const MangoIndexEditorAndQueryEditor = FauxtonAPI.RouteObject.extend({
@@ -40,8 +39,6 @@ const MangoIndexEditorAndQueryEditor = FauxtonAPI.RouteObject.extend({
   },
 
   findUsingIndex: function (database) {
-    SidebarActions.selectNavItem('mango-query');
-
     const url = FauxtonAPI.urls(
       'allDocs', 'app', encodeURIComponent(this.databaseName), '?limit=' + FauxtonAPI.constants.DATABASES.DOCUMENT_LIMIT
     );
