@@ -10,20 +10,20 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import FauxtonAPI from "../../../core/api";
-import testUtils from "../../../../test/mocha/testUtils";
-import Stores from "../stores";
-import ActionTypes from "../actiontypes";
-import sinon from "sinon";
+import PropTypes from 'prop-types';
+import React from 'react';
 
-var assert = testUtils.assert;
+export default class VerifyInstallButton extends React.Component {
+  static propTypes = {
+    verify: PropTypes.func.isRequired,
+    isVerifying: PropTypes.bool.isRequired
+  };
 
-describe('Verify Install Actions', () => {
-
-  it('resets the store when action called', () => {
-    var spy = sinon.spy(Stores.verifyInstallStore, 'reset');
-    FauxtonAPI.dispatch({ type: ActionTypes.VERIFY_INSTALL_RESET });
-    assert.ok(spy.calledOnce);
-  });
-
-});
+  render() {
+    return (
+      <button id="start" className="btn btn-primary" onClick={this.props.verify} disabled={this.props.isVerifying}>
+        {this.props.isVerifying ? 'Verifying' : 'Verify Installation'}
+      </button>
+    );
+  }
+}

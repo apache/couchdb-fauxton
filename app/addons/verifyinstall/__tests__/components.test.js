@@ -10,14 +10,15 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import FauxtonAPI from "../../../core/api";
-import React from "react";
-import ReactDOM from "react-dom";
-import testUtils from "../../../../test/mocha/testUtils";
-import Constants from "../constants";
-import Components from "../components";
+import FauxtonAPI from '../../../core/api';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import testUtils from '../../../../test/mocha/testUtils';
+import Constants from '../constants';
+import VerifyInstallButton from '../components/VerifyInstallButton';
+import VerifyInstallResults from '../components/VerifyInstallResults';
 import {mount} from 'enzyme';
-import sinon from "sinon";
+import sinon from 'sinon';
 FauxtonAPI.router = new FauxtonAPI.Router([]);
 
 var assert = testUtils.assert;
@@ -41,7 +42,7 @@ describe('VerifyInstallResults', function () {
 
   it('confirm all result fields blank before tests ran', function () {
 
-    el = mount(<Components.VerifyInstallResults testResults={testResults} />);
+    el = mount(<VerifyInstallResults testResults={testResults} />);
 
     tests.forEach((test) => {
       assert.equal(el.find('#' + test.id).text(), '');
@@ -58,7 +59,7 @@ describe('VerifyInstallResults', function () {
         success: true
       };
 
-      el = mount(<Components.VerifyInstallResults testResults={copy} />);
+      el = mount(<VerifyInstallResults testResults={copy} />);
 
       // now look at the DOM for that element. It should contain a tick char
       assert.equal(el.find('#' + test.id + ' span').text(), '✓');
@@ -75,7 +76,7 @@ describe('VerifyInstallResults', function () {
         success: false
       };
 
-      el = mount(<Components.VerifyInstallResults testResults={copy} />);
+      el = mount(<VerifyInstallResults testResults={copy} />);
 
       // now look at the DOM for that element. It should contain an error char
       assert.equal(el.find('#' + test.id + ' span').text(), '✗');
@@ -90,20 +91,20 @@ describe('VerifyInstallButton', function () {
   it('calls verify function on click', function () {
     const stub = { func: () => { } };
     const spy = sinon.spy(stub, 'func');
-    el = mount(<Components.VerifyInstallButton verify={stub.func} isVerifying={false} />);
+    el = mount(<VerifyInstallButton verify={stub.func} isVerifying={false} />);
     el.simulate('click');
     assert.ok(spy.calledOnce);
   });
 
   it('shows appropriate default label', function () {
     const stub = { func: () => { } };
-    el = mount(<Components.VerifyInstallButton verify={stub.func} isVerifying={false} />);
+    el = mount(<VerifyInstallButton verify={stub.func} isVerifying={false} />);
     assert.equal(el.text(), 'Verify Installation');
   });
 
   it('shows appropriate label during verification', function () {
     const stub = { func: () => { } };
-    el = mount(<Components.VerifyInstallButton verify={stub.func} isVerifying={true} />);
+    el = mount(<VerifyInstallButton verify={stub.func} isVerifying={true} />);
     assert.equal(el.text(), 'Verifying');
   });
 
