@@ -81,7 +81,7 @@ export const deleteRequest = (url, opts = {}) => {
  * @return {Promise} A promise with the request's response
  */
 export const post = (url, body, opts = {}) => {
-  if (body) {
+  if (typeof body !== 'undefined') {
     if (opts.rawBody)
       opts.body = body;
     else
@@ -101,7 +101,7 @@ export const post = (url, body, opts = {}) => {
  * @return {Promise} A promise with the request's response
  */
 export const put = (url, body, opts = {}) => {
-  if (body) {
+  if (typeof body !== 'undefined') {
     if (opts.rawBody)
       opts.body = body;
     else
