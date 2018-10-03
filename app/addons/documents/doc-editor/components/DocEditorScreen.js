@@ -22,7 +22,7 @@ import PanelButton from './PanelButton';
 import UploadModal from './UploadModal';
 
 
-export class DocEditorScreen extends React.Component {
+export default class DocEditorScreen extends React.Component {
   static defaultProps = {
     database: {},
     isNewDoc: false
@@ -30,38 +30,40 @@ export class DocEditorScreen extends React.Component {
 
   static propTypes = {
     isLoading: PropTypes.bool.isRequired,
+    isNewDoc: PropTypes.bool.isRequired,
     doc: PropTypes.object,
-    isCloneDocModalVisible: PropTypes.bool.isRequired,
-    isUploadModalVisible: PropTypes.bool.isRequired,
-    isDeleteDocModalVisible: PropTypes.bool.isRequired,
-    numFilesUploaded: PropTypes.number.isRequired,
     conflictCount: PropTypes.number.isRequired,
     saveDoc: PropTypes.func.isRequired,
+
+    isCloneDocModalVisible: PropTypes.bool.isRequired,
+    database: PropTypes.object,
+    showCloneDocModal: PropTypes.func.isRequired,
+    hideCloneDocModal: PropTypes.func.isRequired,
+    cloneDoc: PropTypes.func.isRequired,
+
+    isDeleteDocModalVisible: PropTypes.bool.isRequired,
+    showDeleteDocModal: PropTypes.func.isRequired,
     hideDeleteDocModal: PropTypes.func.isRequired,
     deleteDoc: PropTypes.func.isRequired,
+
+    isUploadModalVisible: PropTypes.bool.isRequired,
+    uploadInProgress: PropTypes.bool.isRequired,
+    uploadPercentage: PropTypes.number.isRequired,
+    uploadErrorMessage: PropTypes.string,
+    numFilesUploaded: PropTypes.number.isRequired,
     showUploadModal: PropTypes.func.isRequired,
-    showCloneDocModal: PropTypes.func.isRequired,
-    showDeleteDocModal: PropTypes.func.isRequired
+    hideUploadModal: PropTypes.func.isRequired,
+    cancelUpload: PropTypes.func.isRequired,
+    resetUploadModal: PropTypes.func.isRequired,
+    uploadAttachment: PropTypes.func.isRequired
   }
 
-  // getStoreState = () => {
-  //   return {
-  //     isLoading: store.isLoading(),
-  //     doc: store.getDoc(),
-  //     cloneDocModalVisible: store.isCloneDocModalVisible(),
-  //     uploadModalVisible: store.isUploadModalVisible(),
-  //     deleteDocModalVisible: store.isDeleteDocModalVisible(),
-  //     numFilesUploaded: store.getNumFilesUploaded(),
-  //     conflictCount: store.getDocConflictCount()
-  //   };
-  // };
-
   getCodeEditor = () => {
-    if (this.state.isLoading) {
+    if (this.props.isLoading) {
       return (<GeneralComponents.LoadLines />);
     }
 
-    var code = JSON.stringify(this.state.doc.attributes, null, '  ');
+    var code = JSON.stringify(this.props.doc.attributes, null, '  ');
     var editorCommands = [{
       name: 'save',
       bindKey: { win: 'Ctrl-S', mac: 'Ctrl-S' },
@@ -81,30 +83,18 @@ export class DocEditorScreen extends React.Component {
     );
   };
 
-  // componentDidMount() {
-  //   store.on('change', this.onChange, this);
-  // }
-
-  // componentWillUnmount() {
-  //   store.off('change', this.onChange);
-  // }
-
-  UNSAFE_componentWillUpdate(nextProps, nextState) {
+  UNSAFE_componentWillUpdate(nextProps) {
     // Update the editor whenever a file is uploaded, a doc is cloned, or a new doc is loaded
-    if (this.state.numFilesUploaded !== nextState.numFilesUploaded ||
-        this.state.doc && this.state.doc.hasChanged() ||
-        (this.state.doc && nextState.doc && this.state.doc.id !== nextState.doc.id)) {
-      this.getEditor().setValue(JSON.stringify(nextState.doc.attributes, null, '  '));
+    if (this.props.numFilesUploaded !== nextProps.numFilesUploaded ||
+        this.props.doc && this.props.doc.hasChanged() ||
+        (this.props.doc && nextProps.doc && this.props.doc.id !== nextProps.doc.id)) {
+      this.getEditor().setValue(JSON.stringify(nextProps.doc.attributes, null, '  '));
       this.onSaveComplete();
     }
   }
 
-  onChange = () => {
-    this.setState(this.getStoreState());
-  };
-
   saveDoc = () => {
-    this.props.saveDoc(this.state.doc, this.checkDocIsValid(), this.onSaveComplete);
+    this.props.saveDoc(this.props.doc, this.checkDocIsValid(), this.onSaveComplete);
   };
 
   onSaveComplete = () => {
@@ -117,7 +107,7 @@ export class DocEditorScreen extends React.Component {
 
   deleteDoc = () => {
     this.props.hideDeleteDocModal();
-    this.props.deleteDoc(this.state.doc);
+    this.props.deleteDoc(this.props.doc);
   };
 
   getEditor = () => {
@@ -129,9 +119,9 @@ export class DocEditorScreen extends React.Component {
       return false;
     }
     var json = JSON.parse(this.getEditor().getValue());
-    this.state.doc.clear().set(json, { validate: true });
+    this.props.doc.clear().set(json, { validate: true });
 
-    return !this.state.doc.validationError;
+    return !this.props.doc.validationError;
   };
 
   clearChanges = () => {
@@ -141,7 +131,7 @@ export class DocEditorScreen extends React.Component {
   getExtensionIcons = () => {
     var extensions = FauxtonAPI.getExtensions('DocEditor:icons');
     return _.map(extensions, (Extension, i) => {
-      return (<Extension doc={this.state.doc} key={i} database={this.props.database} />);
+      return (<Extension doc={this.props.doc} key={i} database={this.props.database} />);
     });
   };
 
@@ -151,14 +141,14 @@ export class DocEditorScreen extends React.Component {
     }
     return (
       <div>
-        <AttachmentsPanelButton doc={this.state.doc} isLoading={this.state.isLoading} />
+        <AttachmentsPanelButton doc={this.props.doc} isLoading={this.props.isLoading} />
         <div className="doc-editor-extension-icons">{this.getExtensionIcons()}</div>
 
-        {this.state.conflictCount ? <PanelButton
-          title={`Conflicts (${this.state.conflictCount})`}
+        {this.props.conflictCount ? <PanelButton
+          title={`Conflicts (${this.props.conflictCount})`}
           iconClass="icon-columns"
           className="conflicts"
-          onClick={() => { FauxtonAPI.navigate(FauxtonAPI.urls('revision-browser', 'app', this.props.database.safeID(), this.state.doc.id));}}/> : null}
+          onClick={() => { FauxtonAPI.navigate(FauxtonAPI.urls('revision-browser', 'app', this.props.database.safeID(), this.props.doc.id));}}/> : null}
 
         <PanelButton className="upload" title="Upload Attachment" iconClass="icon-circle-arrow-up" onClick={this.props.showUploadModal} />
         <PanelButton title="Clone Document" iconClass="icon-repeat" onClick={this.props.showCloneDocModal} />
@@ -166,8 +156,6 @@ export class DocEditorScreen extends React.Component {
       </div>
     );
   };
-
-  state = this.getStoreState();
 
   render() {
     var saveButtonLabel = (this.props.isNewDoc) ? 'Create Document' : 'Save Changes';
@@ -196,16 +184,26 @@ export class DocEditorScreen extends React.Component {
 
         <UploadModal
           ref={node => this.uploadModal = node}
-          visible={this.state.uploadModalVisible}
-          doc={this.state.doc} />
+          visible={this.props.isUploadModalVisible}
+          doc={this.props.doc}
+          inProgress={this.props.uploadInProgress}
+          uploadPercentage={this.props.uploadPercentage}
+          errorMessage={this.props.uploadErrorMessage}
+          cancelUpload={this.props.cancelUpload}
+          hideUploadModal={this.props.hideUploadModal}
+          resetUploadModal={this.props.resetUploadModal}
+          uploadAttachment={this.props.uploadAttachment}/>
         <CloneDocModal
-          doc={this.state.doc}
+          doc={this.props.doc}
           database={this.props.database}
-          visible={this.state.cloneDocModalVisible}
-          onSubmit={this.clearChanges} />
+          visible={this.props.isCloneDocModalVisible}
+          onSubmit={this.clearChanges}
+          hideCloneDocModal={this.props.hideCloneDocModal}
+          cloneDoc={this.props.cloneDoc}/>
+        <span id='hey'>bb</span>
         <FauxtonComponents.ConfirmationModal
           title="Confirm Deletion"
-          visible={this.state.deleteDocModalVisible}
+          visible={this.props.isDeleteDocModalVisible}
           text="Are you sure you want to delete this document?"
           onClose={this.hideDeleteDocModal}
           onSubmit={this.deleteDoc}

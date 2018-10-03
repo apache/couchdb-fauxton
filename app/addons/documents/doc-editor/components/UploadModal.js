@@ -21,7 +21,7 @@ export default class UploadModal extends React.Component {
     visible: PropTypes.bool.isRequired,
     doc: PropTypes.object,
     inProgress: PropTypes.bool.isRequired,
-    loadPercentage: PropTypes.number.isRequired,
+    uploadPercentage: PropTypes.number.isRequired,
     errorMessage: PropTypes.string,
     cancelUpload: PropTypes.func.isRequired,
     hideUploadModal: PropTypes.func.isRequired,
@@ -51,7 +51,7 @@ export default class UploadModal extends React.Component {
 
   render() {
     let errorClasses = 'alert alert-error';
-    if (this.state.errorMessage === '') {
+    if (this.props.errorMessage === '') {
       errorClasses += ' hide';
     }
     let loadIndicatorClasses = 'progress progress-info';
@@ -79,7 +79,7 @@ export default class UploadModal extends React.Component {
             </form>
 
             <div className={loadIndicatorClasses}>
-              <div className="bar" style={{ width: this.props.loadPercentage + '%'}}></div>
+              <div className="bar" style={{ width: this.props.uploadPercentage + '%'}}></div>
             </div>
           </div>
         </Modal.Body>

@@ -18,13 +18,15 @@ import reducers from "./index-results/reducers";
 import mangoReducers from "./mango/mango.reducers";
 import sidebarReducers from "./sidebar/reducers";
 import revisionBrowserReducers from './rev-browser/reducers';
+import docEditorReducers from './doc-editor/reducers';
 import "./assets/less/documents.less";
 
 FauxtonAPI.addReducers({
   indexResults: reducers,
   mangoQuery: mangoReducers,
   sidebar: sidebarReducers,
-  revisionBrowser: revisionBrowserReducers
+  revisionBrowser: revisionBrowserReducers,
+  docEditor: docEditorReducers
 });
 
 function getQueryParam (query) {
