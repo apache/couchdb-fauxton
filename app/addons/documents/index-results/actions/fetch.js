@@ -197,6 +197,6 @@ export const processBulkDeleteResponse = (res, deletedDocs, designDocs, docType)
   }
 
   if (designDocs && hasDesignDocs) {
-    SidebarActions.updateDesignDocs(designDocs);
+    SidebarActions.dispatchUpdateDesignDocs(designDocs);
   }
 };

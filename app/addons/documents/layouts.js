@@ -117,12 +117,13 @@ export const TabsSidebarContent = ({
   upperContent,
   fetchUrl,
   databaseName,
-  queryDocs
+  queryDocs,
+  selectedNavItem
 }) => {
   return (
     <div className="with-sidebar tabs-with-sidebar content-area">
       <aside id="sidebar-content" className="scrollable">
-        <SidebarControllerContainer />
+        <SidebarControllerContainer selectedNavItem={selectedNavItem}/>
       </aside>
       <section id="dashboard-content" className="flex-layout flex-col">
         <div id="dashboard-upper-content">
@@ -149,6 +150,7 @@ TabsSidebarContent.propTypes = {
   hideFooter: PropTypes.bool,
   lowerContent: PropTypes.object,
   upperContent: PropTypes.object,
+  selectedNavItem: PropTypes.object
 };
 
 export const DocsTabsSidebarLayout = ({
@@ -205,12 +207,13 @@ export const DocsTabsSidebarLayout = ({
         fetchUrl={fetchUrl}
         databaseName={dbName}
         queryDocs={queryDocs}
+        selectedNavItem={selectedNavItem}
       />
     </div>
   );
 };
 
-export const ChangesSidebarLayout = ({ docURL, database, endpoint, dbName, dropDownLinks }) => {
+export const ChangesSidebarLayout = ({ docURL, database, endpoint, dbName, dropDownLinks, selectedNavItem }) => {
   return (
     <div id="dashboard" className="with-sidebar">
       <TabsSidebarHeader
@@ -225,12 +228,15 @@ export const ChangesSidebarLayout = ({ docURL, database, endpoint, dbName, dropD
         upperContent={<Changes.ChangesTabContent />}
         lowerContent={<Changes.ChangesController />}
         hideFooter={true}
+        selectedNavItem={selectedNavItem}
       />
     </div>
   );
 };
 
-export const ViewsTabsSidebarLayout = ({ showEditView, database, docURL, endpoint, dbName, dropDownLinks }) => {
+export const ViewsTabsSidebarLayout = ({showEditView, database, docURL, endpoint,
+  dbName, dropDownLinks, selectedNavItem }) => {
+
   const content = showEditView ? <IndexEditorComponents.EditorController /> : <DesignDocInfoComponents.DesignDocInfo />;
   return (
     <div id="dashboard" className="with-sidebar">
@@ -247,6 +253,7 @@ export const ViewsTabsSidebarLayout = ({ showEditView, database, docURL, endpoin
       <TabsSidebarContent
         lowerContent={content}
         hideFooter={true}
+        selectedNavItem={selectedNavItem}
       />
     </div>
   );

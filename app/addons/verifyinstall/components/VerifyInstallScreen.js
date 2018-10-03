@@ -10,22 +10,23 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import FauxtonAPI from "../../core/api";
-import VerifyInstall from "./routes";
-import reducers from './reducers';
-import "./assets/less/verifyinstall.less";
+import React from 'react';
+import VerifyInstallButton from './VerifyInstallButton';
+import VerifyInstallResults from './VerifyInstallResults';
 
-VerifyInstall.initialize = function () {
-  FauxtonAPI.addHeaderLink({
-    title: 'Verify',
-    href: '#/verifyinstall',
-    icon: 'fonticon-ok-circled',
-    bottomNav: true
-  });
-};
+export default class VerifyInstallScreen extends React.Component {
 
-FauxtonAPI.addReducers({
-  verifyinstall: reducers
-});
+  constructor(props) {
+    super(props);
+    this.props.resetTests();
+  }
 
-export default VerifyInstall;
+  render() {
+    return (
+      <div>
+        <VerifyInstallButton verify={this.props.startVerification} isVerifying={this.props.isVerifying} />
+        <VerifyInstallResults testResults={this.props.testResults} />
+      </div>
+    );
+  }
+}

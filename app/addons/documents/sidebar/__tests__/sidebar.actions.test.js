@@ -20,6 +20,15 @@ FauxtonAPI.router = new FauxtonAPI.Router([]);
 
 describe('Sidebar actions', () => {
 
+  beforeEach(() => {
+    FauxtonAPI.reduxState = sinon.stub().returns({
+      sidebar:{
+        loading: true
+      }
+    });
+    FauxtonAPI.reduxDispatch = sinon.stub();
+  });
+
   afterEach(() => {
     restore(FauxtonAPI.navigate);
     restore(FauxtonAPI.addNotification);
@@ -47,7 +56,7 @@ describe('Sidebar actions', () => {
       }
     };
 
-    Actions.newOptions(options);
+    Actions.dispatchNewOptions(options);
     process.nextTick(() => {
       assert.ok(notificationSpy.calledOnce);
       assert.ok(/not exist/.test(notificationSpy.args[0][0].msg));

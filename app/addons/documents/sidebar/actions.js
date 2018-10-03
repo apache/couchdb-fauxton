@@ -12,18 +12,23 @@
 
 import FauxtonAPI from "../../../core/api";
 import ActionTypes from "./actiontypes";
-import Stores from "./stores";
-var store = Stores.sidebarStore;
 
-function newOptions (options) {
-  if (options.database.safeID() !== store.getDatabaseName()) {
-    FauxtonAPI.dispatch({
+const _getDatabaseName = ({sidebar}) => {
+  if (!sidebar || sidebar.loading) {
+    return '';
+  }
+  return sidebar.database.safeID();
+};
+
+const dispatchNewOptions = (options) => {
+  if (options.database.safeID() !== _getDatabaseName(FauxtonAPI.reduxState())) {
+    FauxtonAPI.reduxDispatch({
       type: ActionTypes.SIDEBAR_FETCHING
     });
   }
 
   options.designDocs.fetch().then(() => {
-    FauxtonAPI.dispatch({
+    FauxtonAPI.reduxDispatch({
       type: ActionTypes.SIDEBAR_NEW_OPTIONS,
       options: options
     });
@@ -40,56 +45,48 @@ function newOptions (options) {
       clear:  true
     });
   });
-}
+};
 
-function updateDesignDocs (designDocs) {
-  FauxtonAPI.dispatch({
+const dispatchUpdateDesignDocs = (designDocs) => {
+  FauxtonAPI.reduxDispatch({
     type: ActionTypes.SIDEBAR_FETCHING
   });
 
   designDocs.fetch().then(function () {
-    FauxtonAPI.dispatch({
+    FauxtonAPI.reduxDispatch({
       type: ActionTypes.SIDEBAR_UPDATED_DESIGN_DOCS,
       options: {
         designDocs: designDocs
       }
     });
   });
-}
+};
 
-function toggleContent (designDoc, indexGroup) {
-  FauxtonAPI.dispatch({
+const dispatchHideDeleteIndexModal = () => {
+  FauxtonAPI.reduxDispatch({
+    type: ActionTypes.SIDEBAR_HIDE_DELETE_INDEX_MODAL
+  });
+};
+
+const dispatchExpandSelectedItem = (selectedNavItem) => {
+  FauxtonAPI.reduxDispatch({
+    type: ActionTypes.SIDEBAR_EXPAND_SELECTED_ITEM,
+    options: {
+      selectedNavItem: selectedNavItem
+    }
+  });
+};
+
+const toggleContent = (designDoc, indexGroup) => (dispatch) => {
+  dispatch({
     type: ActionTypes.SIDEBAR_TOGGLE_CONTENT,
     designDoc: designDoc,
     indexGroup: indexGroup
   });
-}
+};
 
-// This selects any item in the sidebar, including nested nav items to ensure the appropriate item is visible
-// and highlighted. Params:
-// - `navItem`: 'permissions', 'changes', 'all-docs', 'compact', 'mango-query', 'designDoc' (or anything thats been
-//    extended)
-// - `params`: optional object if you passed designDoc as the first param. This lets you specify which sub-page
-//    should be selected, e.g.
-//       Actions.selectNavItem('designDoc', { designDocName: 'my-design-doc', section: 'metadata' });
-//       Actions.selectNavItem('designDoc', { designDocName: 'my-design-doc', section: 'Views', indexName: 'my-view' });
-function selectNavItem (navItem, params) {
-  const settings = {
-    designDocName: '',
-    designDocSection: '',
-    indexName: '',
-    ...params
-  };
-  settings.navItem = navItem;
-
-  FauxtonAPI.dispatch({
-    type: ActionTypes.SIDEBAR_SET_SELECTED_NAV_ITEM,
-    options: settings
-  });
-}
-
-function showDeleteIndexModal (indexName, designDocName, indexLabel, onDelete) {
-  FauxtonAPI.dispatch({
+const showDeleteIndexModal = (indexName, designDocName, indexLabel, onDelete) => (dispatch) => {
+  dispatch({
     type: ActionTypes.SIDEBAR_SHOW_DELETE_INDEX_MODAL,
     options: {
       indexName: indexName,
@@ -98,14 +95,16 @@ function showDeleteIndexModal (indexName, designDocName, indexLabel, onDelete) {
       onDelete: onDelete
     }
   });
-}
+};
 
-function hideDeleteIndexModal () {
-  FauxtonAPI.dispatch({ type: ActionTypes.SIDEBAR_HIDE_DELETE_INDEX_MODAL });
-}
+const hideDeleteIndexModal = () => (dispatch) => {
+  dispatch({
+    type: ActionTypes.SIDEBAR_HIDE_DELETE_INDEX_MODAL
+  });
+};
 
-function showCloneIndexModal (indexName, designDocName, indexLabel, onSubmit) {
-  FauxtonAPI.dispatch({
+const showCloneIndexModal = (indexName, designDocName, indexLabel, onSubmit) => (dispatch) => {
+  dispatch({
     type: ActionTypes.SIDEBAR_SHOW_CLONE_INDEX_MODAL,
     options: {
       sourceIndexName: indexName,
@@ -115,50 +114,52 @@ function showCloneIndexModal (indexName, designDocName, indexLabel, onSubmit) {
       cloneIndexModalTitle: 'Clone ' + indexLabel
     }
   });
-}
+};
 
-function hideCloneIndexModal () {
-  FauxtonAPI.dispatch({ type: ActionTypes.SIDEBAR_HIDE_CLONE_INDEX_MODAL });
-}
+const hideCloneIndexModal = () => (dispatch) => {
+  dispatch({
+    type: ActionTypes.SIDEBAR_HIDE_CLONE_INDEX_MODAL
+  });
+};
 
-function updateNewDesignDocName (designDocName) {
-  FauxtonAPI.dispatch({
+const updateNewDesignDocName = (designDocName) => (dispatch) => {
+  dispatch({
     type: ActionTypes.SIDEBAR_CLONE_MODAL_DESIGN_DOC_NEW_NAME_UPDATED,
     options: {
       value: designDocName
     }
   });
-}
+};
 
-function selectDesignDoc (designDoc) {
-  FauxtonAPI.dispatch({
+const selectDesignDoc = (designDoc) => (dispatch) => {
+  dispatch({
     type: ActionTypes.SIDEBAR_CLONE_MODAL_DESIGN_DOC_CHANGE,
     options: {
       value: designDoc
     }
   });
-}
+};
 
-function setNewCloneIndexName (indexName) {
-  FauxtonAPI.dispatch({
+const setNewCloneIndexName = (indexName) => (dispatch) => {
+  dispatch({
     type: ActionTypes.SIDEBAR_CLONE_MODAL_UPDATE_INDEX_NAME,
     options: {
       value: indexName
     }
   });
-}
-
+};
 
 export default {
-  newOptions: newOptions,
-  updateDesignDocs: updateDesignDocs,
-  toggleContent: toggleContent,
-  selectNavItem: selectNavItem,
-  showDeleteIndexModal: showDeleteIndexModal,
-  hideDeleteIndexModal: hideDeleteIndexModal,
-  showCloneIndexModal: showCloneIndexModal,
-  hideCloneIndexModal: hideCloneIndexModal,
-  updateNewDesignDocName: updateNewDesignDocName,
-  selectDesignDoc: selectDesignDoc,
-  setNewCloneIndexName: setNewCloneIndexName
+  dispatchNewOptions,
+  dispatchUpdateDesignDocs,
+  toggleContent,
+  showDeleteIndexModal,
+  hideDeleteIndexModal,
+  dispatchHideDeleteIndexModal,
+  showCloneIndexModal,
+  hideCloneIndexModal,
+  updateNewDesignDocName,
+  selectDesignDoc,
+  setNewCloneIndexName,
+  dispatchExpandSelectedItem
 };

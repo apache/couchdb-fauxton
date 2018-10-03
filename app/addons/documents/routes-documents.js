@@ -16,7 +16,7 @@ import BaseRoute from './shared-routes';
 import ChangesActions from './changes/actions';
 import Databases from '../databases/base';
 import Resources from './resources';
-import SidebarActions from './sidebar/actions';
+import {SidebarItemSelection} from './sidebar/helpers';
 import DesignDocInfoActions from './designdocinfo/actions';
 import ComponentsActions from '../components/actions';
 import {DocsTabsSidebarLayout, ViewsTabsSidebarLayout, ChangesSidebarLayout} from './layouts';
@@ -57,8 +57,7 @@ var DocumentsRouteObject = BaseRoute.extend({
       ddocName: ddoc,
       designDocInfo: designDocInfo
     });
-
-    SidebarActions.selectNavItem('designDoc', {
+    const selectedNavItem = new SidebarItemSelection('designDoc', {
       designDocName: ddoc,
       designDocSection: 'metadata'
     });
@@ -71,6 +70,7 @@ var DocumentsRouteObject = BaseRoute.extend({
       dbName={this.database.id}
       dropDownLinks={dropDownLinks}
       database={this.database}
+      selectedNavItem={selectedNavItem}
     />;
   },
 
@@ -102,10 +102,7 @@ var DocumentsRouteObject = BaseRoute.extend({
       tab = 'design-docs';
     }
 
-    const selectedNavItem = {
-      navItem: tab
-    };
-    SidebarActions.selectNavItem(selectedNavItem.navItem);
+    const selectedNavItem = new SidebarItemSelection(tab);
     ComponentsActions.showDeleteDatabaseModal({showDeleteModal: false, dbId: ''});
 
     const endpoint = this.database.allDocs.urlRef("apiurl", {});
@@ -141,7 +138,7 @@ var DocumentsRouteObject = BaseRoute.extend({
     ChangesActions.initChanges({
       databaseName: this.database.id
     });
-    SidebarActions.selectNavItem('changes');
+    const selectedNavItem = new SidebarItemSelection('changes');
 
     return <ChangesSidebarLayout
       endpoint={FauxtonAPI.urls('changes', 'apiurl', this.database.id, '')}
@@ -149,6 +146,7 @@ var DocumentsRouteObject = BaseRoute.extend({
       dbName={this.database.id}
       dropDownLinks={this.getCrumbs(this.database)}
       database={this.database}
+      selectedNavItem={selectedNavItem}
     />;
   }
 

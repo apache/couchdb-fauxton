@@ -15,7 +15,6 @@ import FauxtonAPI from "../../../core/api";
 import Documents from "../resources";
 import ActionTypes from "./actiontypes";
 import SidebarActions from "../sidebar/actions";
-import SidebarActionTypes from "../sidebar/actiontypes";
 
 function selectReduceChanged (reduceOption) {
   FauxtonAPI.dispatch({
@@ -94,7 +93,7 @@ function saveView (viewInfo) {
       var oldDesignDoc = findDesignDoc(viewInfo.designDocs, viewInfo.originalDesignDocName);
       safeDeleteIndex(oldDesignDoc, viewInfo.designDocs, 'views', viewInfo.originalViewName, {
         onSuccess: function () {
-          SidebarActions.updateDesignDocs(viewInfo.designDocs);
+          SidebarActions.dispatchUpdateDesignDocs(viewInfo.designDocs);
         }
       });
     }
@@ -102,7 +101,7 @@ function saveView (viewInfo) {
     if (viewInfo.designDocId === 'new-doc') {
       addDesignDoc(designDoc);
     }
-
+    SidebarActions.dispatchUpdateDesignDocs(viewInfo.designDocs);
     FauxtonAPI.dispatch({ type: ActionTypes.VIEW_SAVED });
     var fragment = FauxtonAPI.urls('view', 'showView', viewInfo.database.safeID(), designDoc.safeID(), app.utils.safeURLName(viewInfo.viewName));
     FauxtonAPI.navigate(fragment, { trigger: true });
@@ -132,7 +131,7 @@ function deleteView (options) {
       FauxtonAPI.navigate(url);
     }
 
-    SidebarActions.updateDesignDocs(options.designDocs);
+    SidebarActions.dispatchUpdateDesignDocs(options.designDocs);
 
     FauxtonAPI.addNotification({
       msg: 'The <code>' + _.escape(options.indexName) + '</code> view has been deleted.',
@@ -140,7 +139,7 @@ function deleteView (options) {
       escape: false,
       clear: true
     });
-    FauxtonAPI.dispatch({ type: SidebarActionTypes.SIDEBAR_HIDE_DELETE_INDEX_MODAL });
+    SidebarActions.dispatchHideDeleteIndexModal();
   }
 
   return safeDeleteIndex(options.designDoc, options.designDocs, 'views', options.indexName, { onSuccess: onSuccess });
@@ -174,7 +173,7 @@ function cloneView (params) {
       type: 'success',
       clear: true
     });
-    SidebarActions.updateDesignDocs(params.designDocs);
+    SidebarActions.dispatchUpdateDesignDocs(params.designDocs);
   },
   function (xhr) {
     params.onComplete();

@@ -25,7 +25,8 @@ describe('Results Toolbar', () => {
     hasSelectedItem: false,
     toggleSelectAll: () => {},
     isLoading: false,
-    queryOptionsParams: {}
+    queryOptionsParams: {},
+    databaseName: 'mydb'
   };
 
   beforeEach(() => {
