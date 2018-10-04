@@ -35,7 +35,7 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(Actions.hideCloneDocModal());
     },
     cloneDoc: (database, doc, newId) => {
-      dispatch(Actions.cloneDoc(database, doc, newId));
+      Actions.cloneDoc(database, doc, newId);
     },
 
     showDeleteDocModal: () => {
