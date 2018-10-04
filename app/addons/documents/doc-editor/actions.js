@@ -118,7 +118,8 @@ const cloneDoc = (database, doc, newId) => {
   hideCloneDocModal();
 
   doc.copy(newId).then(() => {
-    FauxtonAPI.navigate('/database/' + database.safeID() + '/' + encodeURIComponent(newId), { trigger: true });
+    const url = FauxtonAPI.urls('document', 'app', database.safeID(), encodeURIComponent(newId));
+    FauxtonAPI.navigate(url, { trigger: true });
 
     FauxtonAPI.addNotification({
       msg: 'Document has been duplicated.'
