@@ -13,9 +13,9 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Components from '../../fauxton/components';
+import Components from '../../../fauxton/components';
 import {TransitionMotion, spring, presets} from 'react-motion';
-import '../../../../assets/js/plugins/prettify';
+import '../../../../../assets/js/plugins/prettify';
 
 export default class ChangesCodeTransition extends React.Component {
   willEnter () {
@@ -89,6 +89,6 @@ export default class ChangesCodeTransition extends React.Component {
 }
 
 ChangesCodeTransition.propTypes = {
-  code: PropTypes.string,
+  code: PropTypes.object.isRequired,
   codeVisible: PropTypes.bool.isRequired
 };

@@ -19,6 +19,7 @@ import mangoReducers from "./mango/mango.reducers";
 import sidebarReducers from "./sidebar/reducers";
 import partitionKeyReducers from "./partition-key/reducers";
 import revisionBrowserReducers from './rev-browser/reducers';
+import changesReducers from './changes/reducers';
 import "./assets/less/documents.less";
 
 FauxtonAPI.addReducers({
@@ -26,7 +27,8 @@ FauxtonAPI.addReducers({
   mangoQuery: mangoReducers,
   sidebar: sidebarReducers,
   revisionBrowser: revisionBrowserReducers,
-  partitionKey: partitionKeyReducers
+  partitionKey: partitionKeyReducers,
+  changes: changesReducers
 });
 
 function getQueryParam (query) {

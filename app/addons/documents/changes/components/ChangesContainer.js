@@ -1,17 +1,27 @@
 import { connect } from 'react-redux';
 import ChangesScreen from './ChangesScreen';
+import Actions from '../actions';
 
-const mapStateToProps = ({ changes }) => {
+const mapStateToProps = ({ changes }, ownProps) => {
   return {
-    changes: changes.changes,
+    changes: changes.filteredChanges,
     loaded: changes.isLoaded,
-    databaseName: changes.databaseName,
+    databaseName: ownProps.databaseName,
     isShowingSubset: changes.showingSubset
   };
 };
 
+const mapDispatchToProps = (dispatch) => {
+  return {
+    loadChanges: (databaseName) => {
+      dispatch(Actions.loadChanges(databaseName));
+    }
+  };
+};
+
 const ChangesContainer = connect(
-  mapStateToProps
+  mapStateToProps,
+  mapDispatchToProps
 )(ChangesScreen);
 
 export default ChangesContainer;

@@ -11,7 +11,7 @@
 // the License.
 
 import React from 'react';
-import FauxtonAPI from '../../../core/api';
+import FauxtonAPI from '../../../../core/api';
 
 export default class ChangeID extends React.Component {
   render () {

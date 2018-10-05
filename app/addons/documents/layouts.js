@@ -16,7 +16,8 @@ import React from 'react';
 import { NotificationCenterButton } from '../fauxton/notifications/notifications';
 import SidebarControllerContainer from "./sidebar/SidebarControllerContainer";
 import HeaderDocsLeft from './components/header-docs-left';
-import Changes from './changes/components';
+import ChangesContainer from './changes/components/ChangesContainer';
+import ChangesTabContentContainer from './changes/components/ChangesTabContentContainer';
 import IndexEditorComponents from "./index-editor/components";
 import DesignDocInfoComponents from './designdocinfo/components';
 import RightAllDocsHeader from './components/header-docs-right';
@@ -225,8 +226,8 @@ export const ChangesSidebarLayout = ({ docURL, database, endpoint, dbName, dropD
         hideQueryOptions={true}
       />
       <TabsSidebarContent
-        upperContent={<Changes.ChangesTabContent />}
-        lowerContent={<Changes.ChangesController />}
+        upperContent={<ChangesTabContentContainer />}
+        lowerContent={<ChangesContainer databaseName={dbName}/>}
         hideFooter={true}
         selectedNavItem={selectedNavItem}
       />

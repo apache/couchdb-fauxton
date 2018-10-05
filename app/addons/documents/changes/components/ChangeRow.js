@@ -14,9 +14,9 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import uuid from 'uuid';
-import FauxtonAPI from '../../../core/api';
-import Components from '../../fauxton/components';
-import ReactComponents from '../../components/react-components';
+import FauxtonAPI from '../../../../core/api';
+import Components from '../../../fauxton/components';
+import ReactComponents from '../../../components/react-components';
 import ChangesCodeTransition from './ChangesCodeTransition';
 import ChangeID from './ChangeID';
 

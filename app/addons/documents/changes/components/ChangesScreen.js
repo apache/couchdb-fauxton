@@ -18,6 +18,7 @@ import ChangeRow from './ChangeRow';
 export default class ChangesScreen extends React.Component {
   constructor (props) {
     super(props);
+    this.props.loadChanges(this.props.databaseName);
   }
 
   showingSubsetMsg () {
@@ -61,5 +62,6 @@ ChangesScreen.propTypes = {
   changes: PropTypes.array.isRequired,
   loaded: PropTypes.bool.isRequired,
   databaseName: PropTypes.string.isRequired,
-  isShowingSubset: PropTypes.bool.isRequired
+  isShowingSubset: PropTypes.bool.isRequired,
+  loadChanges: PropTypes.func.isRequired
 };

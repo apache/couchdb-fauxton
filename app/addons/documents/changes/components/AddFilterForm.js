@@ -14,9 +14,6 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-// import "../../../../assets/js/plugins/prettify";
-
-
 export default class AddFilterForm extends React.Component {
   constructor (props) {
     super(props);

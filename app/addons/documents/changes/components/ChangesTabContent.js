@@ -13,7 +13,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import ReactComponents from '../../components/react-components';
+import ReactComponents from '../../../components/react-components';
 import AddFilterForm from './AddFilterForm';
 
 export default class ChangesTabContent extends React.Component {
