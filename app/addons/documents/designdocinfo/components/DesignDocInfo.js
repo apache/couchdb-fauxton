@@ -10,38 +10,28 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import FauxtonAPI from "../../../core/api";
-import React from "react";
-import Stores from "./stores";
-import Actions from "./actions";
-import ReactComponents from "../../components/react-components";
-var designDocInfoStore = Stores.designDocInfoStore;
-var LoadLines = ReactComponents.LoadLines;
-var Copy = ReactComponents.Copy;
+import PropTypes from 'prop-types';
+import React from 'react';
 import uuid from 'uuid';
+import FauxtonAPI from '../../../../core/api';
+import ReactComponents from '../../../components/react-components';
 
+const LoadLines = ReactComponents.LoadLines;
+const Copy = ReactComponents.Copy;
 
-class DesignDocInfo extends React.Component {
-  getStoreState = () => {
-    return {
-      viewIndex: designDocInfoStore.getViewIndex(),
-      isLoading: designDocInfoStore.isLoading(),
-      ddocName: designDocInfoStore.getDdocName()
-    };
-  };
+export default class DesignDocInfo extends React.Component {
 
-  componentDidMount() {
-    designDocInfoStore.on('change', this.onChange, this);
+  constructor(props) {
+    super(props);
+    this.props.fetchDesignDocInfo({
+      designDocName: this.props.designDocName,
+      designDocInfo: this.props.designDocInfo
+    });
   }
 
   componentWillUnmount() {
-    designDocInfoStore.off('change', this.onChange);
-    Actions.stopRefresh();
+    this.props.stopRefresh();
   }
-
-  onChange = () => {
-    this.setState(this.getStoreState());
-  };
 
   showCopiedMessage = () => {
     FauxtonAPI.addNotification({
@@ -51,22 +41,18 @@ class DesignDocInfo extends React.Component {
     });
   };
 
-  state = this.getStoreState();
-
   render() {
-    var viewIndex = this.state.viewIndex;
-
-    if (this.state.isLoading) {
+    if (this.props.isLoading) {
       return <LoadLines />;
     }
-
-    var actualSize = (viewIndex.data_size) ? viewIndex.data_size.toLocaleString('en') : 0;
-    var dataSize = (viewIndex.disk_size) ? viewIndex.disk_size.toLocaleString('en') : 0;
+    const viewIndex = this.props.viewIndex;
+    const actualSize = (viewIndex.data_size) ? viewIndex.data_size.toLocaleString('en') : 0;
+    const dataSize = (viewIndex.disk_size) ? viewIndex.disk_size.toLocaleString('en') : 0;
 
     return (
       <div className="metadata-page">
         <header>
-          <h2>_design/{this.state.ddocName} Metadata</h2>
+          <h2>_design/{this.props.designDocName} Metadata</h2>
         </header>
 
         <section className="container">
@@ -131,7 +117,9 @@ class DesignDocInfo extends React.Component {
   }
 }
 
-
-export default {
-  DesignDocInfo: DesignDocInfo
+DesignDocInfo.propTypes = {
+  isLoading: PropTypes.bool.isRequired,
+  viewIndex: PropTypes.object,
+  designDocName: PropTypes.string.isRequired,
+  stopRefresh: PropTypes.func.isRequired
 };
