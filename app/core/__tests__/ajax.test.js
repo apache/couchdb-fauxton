@@ -140,4 +140,74 @@ describe('Fauxton Ajax', () => {
         assert.ok(resp.ok);
       });
   });
+
+  describe('POST with falsy values as the body', () => {
+    const successResponse = {
+      status: 200,
+      body: {
+        ok: true
+      }
+    };
+    it('accepts empty string', () => {
+      fetchMock.postOnce('/testing', successResponse);
+      return post('/testing', '')
+        .then(resp =>{
+          assert.ok(resp.ok);
+          assert.ok(fetchMock.lastOptions().body === '""');
+        });
+    });
+
+    it('accepts zero', () => {
+      fetchMock.postOnce('/testing', successResponse);
+      return post('/testing', 0)
+        .then(resp =>{
+          assert.ok(resp.ok);
+          assert.ok(fetchMock.lastOptions().body === '0');
+        });
+    });
+
+    it('accepts false', () => {
+      fetchMock.postOnce('/testing', successResponse);
+      return post('/testing', false)
+        .then(resp =>{
+          assert.ok(resp.ok);
+          assert.ok(fetchMock.lastOptions().body === 'false');
+        });
+    });
+  });
+
+  describe('PUT with falsy values as the body', () => {
+    const successResponse = {
+      status: 200,
+      body: {
+        ok: true
+      }
+    };
+    it('accepts empty string', () => {
+      fetchMock.putOnce('/testing', successResponse);
+      return put('/testing', '')
+        .then(resp =>{
+          assert.ok(resp.ok);
+          assert.ok(fetchMock.lastOptions().body === '""');
+        });
+    });
+
+    it('accepts zero', () => {
+      fetchMock.putOnce('/testing', successResponse);
+      return put('/testing', 0)
+        .then(resp =>{
+          assert.ok(resp.ok);
+          assert.ok(fetchMock.lastOptions().body === '0');
+        });
+    });
+
+    it('accepts false', () => {
+      fetchMock.putOnce('/testing', successResponse);
+      return put('/testing', false)
+        .then(resp =>{
+          assert.ok(resp.ok);
+          assert.ok(fetchMock.lastOptions().body === 'false');
+        });
+    });
+  });
 });
