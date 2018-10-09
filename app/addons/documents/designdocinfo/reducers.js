@@ -10,11 +10,10 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import ActionTypes from "./actiontypes";
+import ActionTypes from './actiontypes';
 
 const initialState = {
   isLoading: true,
-  // intervalId: undefined,
   viewIndex: undefined
 };
 
@@ -34,9 +33,6 @@ export default function designDocInfo (state = initialState, action) {
         ...state,
         isLoading: false,
         viewIndex: options.designDocInfo.get('view_index')
-        // intervalId: options.intervalId,
-        //     this._designDocInfo = options.designDocInfo;
-        // this._ddocName = options.ddocName;
       };
 
     case ActionTypes.DESIGN_DOC_REFRESH:
