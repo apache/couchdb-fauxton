@@ -32,7 +32,7 @@ function checkPartitionedDatabaseFeature () {
   // Checks if the CouchDB server supports Partitioned Databases
   return get(Helpers.getServerUrl("/")).then((couchdb) => {
     //TODO: needs to be updated with the correct feature name
-    return couchdb.features && couchdb.features.includes('partitioned-dbs');
+    return couchdb.features && couchdb.features.includes('partitions');
   }).catch(() => {
     return false;
   });

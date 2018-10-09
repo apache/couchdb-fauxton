@@ -199,12 +199,14 @@ export default {
   },
 
   setPartitionedDatabasesAvailable(available) {
-    FauxtonAPI.dispatch({
+    const action = {
       type: ActionTypes.DATABASES_PARTITIONED_DB_AVAILABLE,
       options: {
         available
       }
-    });
+    };
+    FauxtonAPI.dispatch(action);
+    FauxtonAPI.reduxDispatch(action);
   },
 
   checkPartitionedQueriesIsAvailable() {
