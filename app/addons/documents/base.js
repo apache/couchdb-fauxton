@@ -17,6 +17,7 @@ import Documents from "./routes";
 import reducers from "./index-results/reducers";
 import mangoReducers from "./mango/mango.reducers";
 import sidebarReducers from "./sidebar/reducers";
+import partitionKeyReducers from "./partition-key/reducers";
 import revisionBrowserReducers from './rev-browser/reducers';
 import "./assets/less/documents.less";
 
@@ -24,7 +25,8 @@ FauxtonAPI.addReducers({
   indexResults: reducers,
   mangoQuery: mangoReducers,
   sidebar: sidebarReducers,
-  revisionBrowser: revisionBrowserReducers
+  revisionBrowser: revisionBrowserReducers,
+  partitionKey: partitionKeyReducers
 });
 
 function getQueryParam (query) {
@@ -46,6 +48,12 @@ FauxtonAPI.registerUrls('allDocs', {
   apiurl: function (id, query) {
     /** XXX DEPRECATED: use allDocsSanitized **/
     return Helpers.getApiUrl('/' + id + '/_all_docs' + getQueryParam(query));
+  }
+});
+
+FauxtonAPI.registerUrls('partitioned_allDocs', {
+  app: function (databaseName, partitionKey, query) {
+    return 'database/' + databaseName + '/_partition/' + partitionKey + '/_all_docs' + getQueryParam(query);
   }
 });
 
@@ -121,6 +129,18 @@ FauxtonAPI.registerUrls('view', {
 
   fragment: function (database, designDoc, viewName) {
     return 'database/' + database + designDoc + '/_view/' + viewName;
+  }
+});
+
+FauxtonAPI.registerUrls('partitioned_view', {
+  server: function (database, partitionKey, designDoc, viewName) {
+    return Helpers.getServerUrl('/' + database + '/_partition/' + partitionKey + '/_design/' + designDoc + '/_view/' + viewName);
+  },
+  app: function (database, partitionKey, designDoc) {
+    return 'database/' + database + '/_partition/' + partitionKey + '/_design/' + designDoc + '/_view/';
+  },
+  apiurl: function (database, partitionKey, designDoc, viewName) {
+    return Helpers.getApiUrl('/' + database + '/_partition/' + partitionKey + '/_design/' + designDoc + '/_view/' + viewName);
   }
 });
 

@@ -23,8 +23,12 @@ import {DocsTabsSidebarLayout, ViewsTabsSidebarLayout, ChangesSidebarLayout} fro
 
 var DocumentsRouteObject = BaseRoute.extend({
   routes: {
+    "database/:database/_partition/:partitionkey/_all_docs": {
+      route: "partitionedAllDocs",
+      roles: ["fx_loggedIn"]
+    },
     "database/:database/_all_docs(:extra)": {
-      route: "allDocs",
+      route: "globalAllDocs",
       roles: ["fx_loggedIn"]
     },
     "database/:database/_design/:ddoc/_info": {
@@ -70,12 +74,20 @@ var DocumentsRouteObject = BaseRoute.extend({
     />;
   },
 
+  globalAllDocs: function (databaseName, options) {
+    return this.allDocs(databaseName, '', options);
+  },
+
+  partitionedAllDocs: function (databaseName, partitionKey) {
+    return this.allDocs(databaseName, partitionKey);
+  },
+
   /*
   * docParams are the options fauxton uses to fetch from the server
   * urlParams are what are shown in the url and to the user
   * They are not the same when paginating
   */
-  allDocs: function (databaseName, options) {
+  allDocs: function (databaseName, partitionKey, options) {
     const params = this.createParams(options),
           docParams = params.docParams;
 
@@ -95,7 +107,15 @@ var DocumentsRouteObject = BaseRoute.extend({
 
     const endpoint = this.database.allDocs.urlRef("apiurl", {});
     const docURL = FauxtonAPI.constants.DOC_URLS.GENERAL;
-
+    const navigateToPartitionedAllDocs = (partKey) => {
+      const baseUrl = FauxtonAPI.urls('partitioned_allDocs', 'app', encodeURIComponent(databaseName),
+        encodeURIComponent(partKey));
+      FauxtonAPI.navigate('#/' + baseUrl);
+    };
+    const navigateToGlobalAllDocs = () => {
+      const baseUrl = FauxtonAPI.urls('allDocs', 'app', encodeURIComponent(databaseName));
+      FauxtonAPI.navigate('#/' + baseUrl);
+    };
     const dropDownLinks = this.getCrumbs(this.database);
     return <DocsTabsSidebarLayout
       docURL={docURL}
@@ -107,6 +127,10 @@ var DocumentsRouteObject = BaseRoute.extend({
       fetchUrl={url}
       ddocsOnly={onlyShowDdocs}
       selectedNavItem={selectedNavItem}
+      partitionKey={partitionKey}
+      onPartitionKeySelected={navigateToPartitionedAllDocs}
+      onGlobalModeSelected={navigateToGlobalAllDocs}
+      globalMode={partitionKey === ''}
     />;
   },
 

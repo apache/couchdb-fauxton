@@ -24,6 +24,7 @@ import IndexResultsContainer from './index-results/containers/IndexResultsContai
 import PaginationContainer from './index-results/containers/PaginationContainer';
 import ApiBarContainer from './index-results/containers/ApiBarContainer';
 import { queryAllDocs, queryMapReduceView } from './index-results/api';
+import PartitionKeySelectorContainer from './partition-key/container';
 import Constants from './constants';
 import Helpers from './helpers';
 
@@ -39,8 +40,21 @@ export const TabsSidebarHeader = ({
   fetchUrl,
   ddocsOnly,
   queryDocs,
-  selectedNavItem
+  selectedNavItem,
+  showPartitionKeySelector,
+  partitionKey,
+  onPartitionKeySelected,
+  onGlobalModeSelected,
+  globalMode
 }) => {
+  const partKeySelector = (<PartitionKeySelectorContainer
+    databaseName={dbName}
+    partitionKey={partitionKey}
+    onPartitionKeySelected={onPartitionKeySelected}
+    onGlobalModeSelected={onGlobalModeSelected}
+    globalMode={globalMode}/>
+  );
+
   return (
     <header className="two-panel-header">
       <div className="flex-layout flex-row">
@@ -51,6 +65,9 @@ export const TabsSidebarHeader = ({
           />
         </div>
         <div className="right-header-wrapper flex-layout flex-row flex-body">
+          <div style={{flex:1, padding: '18px 6px 12px 12px'}}>
+            {showPartitionKeySelector ? partKeySelector : null}
+          </div>
           <div id="right-header" className="flex-fill">
             <RightAllDocsHeader
               hideQueryOptions={hideQueryOptions}
@@ -81,11 +98,17 @@ TabsSidebarHeader.propTypes = {
   hideJumpToDoc: PropTypes.bool,
   database: PropTypes.object.isRequired,
   queryDocs: PropTypes.func,
-  selectedNavItem: PropTypes.object
+  selectedNavItem: PropTypes.object,
+  showPartitionKeySelector: PropTypes.bool,
+  partitionKey: PropTypes.string,
+  onPartitionKeySelected: PropTypes.func.isRequired,
+  onGlobalModeSelected: PropTypes.bool,
+  globalMode: PropTypes.bool
 };
 
 TabsSidebarHeader.defaultProps = {
-  hideHeaderBar: false
+  hideHeaderBar: false,
+  showPartitionKeySelector: false
 };
 
 export const TabsSidebarContent = ({
@@ -140,7 +163,11 @@ export const DocsTabsSidebarLayout = ({
   fetchUrl,
   ddocsOnly,
   deleteEnabled = true,
-  selectedNavItem
+  selectedNavItem,
+  partitionKey,
+  onPartitionKeySelected,
+  onGlobalModeSelected,
+  globalMode
 }) => {
   let queryDocs = (params) => { return queryAllDocs(fetchUrl, params); };
   if (Helpers.isViewSelected(selectedNavItem)) {
@@ -169,6 +196,11 @@ export const DocsTabsSidebarLayout = ({
         ddocsOnly={ddocsOnly}
         queryDocs={queryDocs}
         selectedNavItem={selectedNavItem}
+        showPartitionKeySelector={!ddocsOnly}
+        partitionKey={partitionKey}
+        onPartitionKeySelected={onPartitionKeySelected}
+        onGlobalModeSelected={onGlobalModeSelected}
+        globalMode={globalMode}
       />
       <TabsSidebarContent
         lowerContent={lowerContent}
