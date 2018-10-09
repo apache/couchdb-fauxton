@@ -13,7 +13,7 @@
 import React from 'react';
 import app from "../../app";
 import FauxtonAPI from "../../core/api";
-import ClusterActions from "../cluster/cluster.actions";
+import ClusterActions from "../cluster/actions";
 import {OnePaneSimpleLayout} from '../components/layouts';
 
 import ConfiguredScreenContainer from './container/ConfiguredSceenContainer';

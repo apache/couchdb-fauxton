@@ -10,14 +10,20 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import Cluster from "./routes";
-import FauxtonAPI from "../../core/api";
-import reducers from './reducers';
+import ActionTypes from "./actiontypes";
 
-Cluster.initialize = function () {};
+const initialState = {
+  nodes: []
+};
 
-FauxtonAPI.addReducers({
-  clusters: reducers
-});
+export default (state = initialState, {type, options}) => {
+  switch (type) {
+    case ActionTypes.CLUSTER_FETCH_NODES:
+      return {
+        ...state,
+        nodes: options.nodes
+      };
+  }
 
-export default Cluster;
+  return state;
+};

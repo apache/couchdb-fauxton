@@ -11,35 +11,31 @@
 // the License.
 
 import FauxtonAPI from "../../core/api";
-import ClusterResources from "./resources";
-import ActionTypes from "./cluster.actiontypes";
+import getNodes from "./api";
+import ActionTypes from "./actiontypes";
 
 export default {
-  fetchNodes: function () {
-    var memberships = new ClusterResources.ClusterNodes();
-
-    memberships.fetch().then(() => {
+  fetchNodes () {
+    getNodes().then((nodes) => {
       this.updateNodes({
-        nodes: memberships.get('nodes_mapped')
+        nodes: nodes.nodes_mapped
       });
     });
   },
 
-  updateNodes: function (options) {
-    FauxtonAPI.dispatch({
+  updateNodes (options) {
+    FauxtonAPI.reduxDispatch({
       type: ActionTypes.CLUSTER_FETCH_NODES,
       options: options
     });
   },
 
-  navigateToNodeBasedOnNodeCount: function (successtarget) {
-    var memberships = new ClusterResources.ClusterNodes();
+  navigateToNodeBasedOnNodeCount (successtarget) {
+    getNodes().then((nodes) => {
+      const allNodes = nodes.all_nodes;
 
-    memberships.fetch().then(function () {
-      const nodes = memberships.get('all_nodes');
-
-      if (nodes.length === 1) {
-        return FauxtonAPI.navigate(successtarget + nodes[0]);
+      if (allNodes.length === 1) {
+        return FauxtonAPI.navigate(successtarget + allNodes[0]);
       }
       return FauxtonAPI.navigate('/cluster/disabled', {trigger: true});
     });

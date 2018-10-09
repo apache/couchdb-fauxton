@@ -12,7 +12,7 @@
 
 import React from "react";
 import FauxtonAPI from "../../../core/api";
-import ClusterActions from "../../cluster/cluster.actions";
+import ClusterActions from "../../cluster/actions";
 import { AuthLayout } from "./../layout";
 import app from "../../../app";
 import Components from "./../components";

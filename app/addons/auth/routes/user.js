@@ -12,7 +12,7 @@
 
 import React from "react";
 import FauxtonAPI from "../../../core/api";
-import ClusterActions from "../../cluster/cluster.actions";
+import ClusterActions from "../../cluster/actions";
 import { AdminLayout } from "./../layout";
 
 export default FauxtonAPI.RouteObject.extend({
