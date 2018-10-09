@@ -45,7 +45,7 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(Actions.hideDeleteDocModal());
     },
     deleteDoc: (doc) => {
-      dispatch(Actions.deleteDoc(doc));
+      Actions.deleteDoc(doc);
     },
 
     showUploadModal: () => {
