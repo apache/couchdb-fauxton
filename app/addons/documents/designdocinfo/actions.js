@@ -10,42 +10,52 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import FauxtonAPI from "../../../core/api";
+// import FauxtonAPI from "../../../core/api";
 import ActionTypes from "./actiontypes";
-import Stores from "./stores";
-var store = Stores.designDocInfoStore;
+
+const fetchDesignDocInfo = ({designDocName, designDocInfo}) => (dispatch) => {
+  dispatch({
+    type: ActionTypes.DESIGN_FETCHING
+  });
+
+  return designDocInfo.fetch().then(() => {
+    monitorDesignDoc({
+      designDocName,
+      designDocInfo
+    }, dispatch);
+  });
+};
+
+let intervalId;
+const monitorDesignDoc = (options, dispatch) => {
+  const refreshDDoc = () => {
+    refresh(options.designDocInfo, dispatch);
+  };
+  stopRefresh();
+  intervalId = window.setInterval(refreshDDoc, 5000);
+  dispatch({
+    type: ActionTypes.DESIGN_DOC_MONITOR,
+    options: options
+  });
+};
+
+const refresh = (designDocInfo, dispatch) => {
+  designDocInfo.fetch().then(() => {
+    dispatch({
+      type: ActionTypes.DESIGN_REFRESH,
+      designDocInfo
+    });
+  });
+};
+
+const stopRefresh = () => {
+  if (intervalId) {
+    window.clearInterval(intervalId);
+    intervalId = undefined;
+  }
+};
 
 export default {
-  fetchDesignDocInfo ({ddocName, designDocInfo}) {
-    FauxtonAPI.dispatch({
-      type: ActionTypes.DESIGN_FETCHING
-    });
-
-    return designDocInfo.fetch().then(() => {
-      this.monitorDesignDoc({
-        ddocName,
-        designDocInfo
-      });
-    });
-  },
-
-  monitorDesignDoc (options) {
-    options.intervalId = window.setInterval(_.bind(this.refresh, this), 5000);
-    FauxtonAPI.dispatch({
-      type: ActionTypes.DESIGN_DOC_MONITOR,
-      options: options
-    });
-  },
-
-  refresh () {
-    store.getDesignDocInfo().fetch().then(() => {
-      FauxtonAPI.dispatch({
-        type: ActionTypes.DESIGN_REFRESH
-      });
-    });
-  },
-
-  stopRefresh () {
-    window.clearInterval(store.getIntervalId());
-  }
+  fetchDesignDocInfo,
+  stopRefresh
 };

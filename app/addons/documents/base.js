@@ -14,6 +14,7 @@ import app from "../../app";
 import Helpers from "../../helpers";
 import FauxtonAPI from "../../core/api";
 import Documents from "./routes";
+import designDocInfoReducers from "./designdocinfo/reducers";
 import reducers from "./index-results/reducers";
 import mangoReducers from "./mango/mango.reducers";
 import sidebarReducers from "./sidebar/reducers";
@@ -26,7 +27,8 @@ FauxtonAPI.addReducers({
   mangoQuery: mangoReducers,
   sidebar: sidebarReducers,
   revisionBrowser: revisionBrowserReducers,
-  partitionKey: partitionKeyReducers
+  partitionKey: partitionKeyReducers,
+  designDocInfo: designDocInfoReducers
 });
 
 function getQueryParam (query) {

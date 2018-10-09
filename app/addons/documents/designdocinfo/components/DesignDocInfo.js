@@ -23,14 +23,24 @@ export default class DesignDocInfo extends React.Component {
 
   constructor(props) {
     super(props);
-    this.props.fetchDesignDocInfo({
-      designDocName: this.props.designDocName,
-      designDocInfo: this.props.designDocInfo
-    });
+    this.fetchDDocInfo();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.designDocInfo !== prevProps.designDocInfo) {
+      this.fetchDDocInfo();
+    }
   }
 
   componentWillUnmount() {
     this.props.stopRefresh();
+  }
+
+  fetchDDocInfo() {
+    this.props.fetchDesignDocInfo({
+      designDocName: this.props.designDocName,
+      designDocInfo: this.props.designDocInfo
+    });
   }
 
   showCopiedMessage = () => {
@@ -121,5 +131,6 @@ DesignDocInfo.propTypes = {
   isLoading: PropTypes.bool.isRequired,
   viewIndex: PropTypes.object,
   designDocName: PropTypes.string.isRequired,
-  stopRefresh: PropTypes.func.isRequired
+  stopRefresh: PropTypes.func.isRequired,
+  fetchDesignDocInfo: PropTypes.func.isRequired
 };
