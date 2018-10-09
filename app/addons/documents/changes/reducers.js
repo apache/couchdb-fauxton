@@ -19,7 +19,6 @@ const initialState = {
   filters: [],
   changes: [],
   filteredChanges: [],
-  databaseName: '',
   maxChangesListed: 100,
   showingSubset: false,
   lastSequenceNum: null
