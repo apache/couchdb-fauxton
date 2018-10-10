@@ -11,8 +11,10 @@
 // the License.
 
 import React from 'react';
-import ConfigComponents from "./components";
-import CORSComponents from "../cors/components";
+import AddOptionController from './components/AddOptionController';
+import ConfigTableController from './components/ConfigTableController';
+import ConfigTabs from './components/ConfigTabs';
+import CORSComponents from '../cors/components';
 import {Breadcrumbs} from '../components/header-breadcrumbs';
 import {NotificationCenterButton} from '../fauxton/notifications/notifications';
 import {ApiBarWrapper} from '../components/layouts';
@@ -27,7 +29,7 @@ export const ConfigHeader = ({node, crumbs, docURL, endpoint}) => {
         <div className="right-header-wrapper flex-layout flex-row flex-body">
           <div id="react-headerbar" className="flex-body"> </div>
           <div id="right-header" className="flex-fill">
-            <ConfigComponents.AddOptionController node={node} />
+            <AddOptionController node={node} />
           </div>
           <ApiBarWrapper docURL={docURL} endpoint={endpoint} />
           <div id="notification-center-btn" className="flex-fill">
@@ -51,7 +53,7 @@ export const ConfigLayout = ({showCors, docURL, node, endpoint, crumbs}) => {
     }
   ];
   const selectedTab = showCors ? 'CORS' : 'Main config';
-  const content = showCors ? <CORSComponents.CORSContainer node={node} url={endpoint}/> : <ConfigComponents.ConfigTableController node={node} />;
+  const content = showCors ? <CORSComponents.CORSContainer node={node} url={endpoint}/> : <ConfigTableController node={node} />;
   return (
     <div id="dashboard" className="with-sidebar">
       <ConfigHeader
@@ -62,7 +64,7 @@ export const ConfigLayout = ({showCors, docURL, node, endpoint, crumbs}) => {
       />
       <div className="with-sidebar tabs-with-sidebar content-area">
         <aside id="sidebar-content" className="scrollable">
-          <ConfigComponents.Tabs
+          <ConfigTabs
             sidebarItems={sidebarItems}
             selectedTab={selectedTab}
           />
