@@ -35,6 +35,20 @@ export default class MangoQueryEditor extends Component {
     this.props.loadQueryHistory({ databaseName: this.props.databaseName });
     // Clear results list in case it was populated by other pages
     this.props.clearResults();
+
+    // Add key binding to run query when doing Ctrl-Enter
+    const editor = this.codeEditor.codeEditor.editor;
+    const runQueryCmdName = "runQuery";
+    if (!editor.commands.byName[runQueryCmdName]) {
+      editor.commands.addCommand({
+        name: runQueryCmdName,
+        bindKey: {win: 'Ctrl-Enter', mac: 'Command-Option-Enter'},
+        exec: () => {
+          this.runQuery({preventDefault: () => {}});
+        },
+        readOnly: true
+      });
+    }
   }
 
   componentDidUpdate (prevProps) {
