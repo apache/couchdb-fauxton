@@ -14,24 +14,28 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import {Button, Overlay, Popover} from 'react-bootstrap';
 
-export default class AddOptionController extends React.Component {
+// export default class AddOptionController extends React.Component {
 
+//   static propTypes = {
+//     addOption: PropTypes.func.isRequired
+//   };
+
+//   addOption = (option) => {
+//     this.props.addOption(this.props.node, option);
+//   };
+
+//   render() {
+//     return (
+//       <AddOptionButton onAdd={this.addOption}/>
+//     );
+//   }
+// }
+
+export default class AddOptionButton extends React.Component {
   static propTypes = {
-    addOption: PropTypes.func.isRequired
+    onAdd: PropTypes.func.isRequired
   };
 
-  addOption = (option) => {
-    this.props.addOption(this.props.node, option);
-  };
-
-  render() {
-    return (
-      <AddOptionButton onAdd={this.addOption}/>
-    );
-  }
-}
-
-class AddOptionButton extends React.Component {
   constructor(props) {
     super(props);
     this.state = this.getInitialState();

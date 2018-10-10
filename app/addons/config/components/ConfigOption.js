@@ -12,13 +12,13 @@
 
 import PropTypes from 'prop-types';
 import React from 'react';
-import ReactDOM from 'react-dom';
 import ConfigOptionValue from './ConfigOptionValue';
 import ConfigOptionTrash from './ConfigOptionTrash';
 
 export default class ConfigOption extends React.Component {
   static propTypes = {
     option: PropTypes.object.isRequired,
+    saving: PropTypes.bool.isRequired,
     onSave: PropTypes.func.isRequired,
     onDelete: PropTypes.func.isRequired,
     onEdit: PropTypes.func.isRequired,
@@ -26,7 +26,7 @@ export default class ConfigOption extends React.Component {
   };
 
   onSave = (value) => {
-    var option = this.props.option;
+    const option = this.props.option;
     option.value = value;
     this.props.onSave(option);
   };
@@ -47,6 +47,7 @@ export default class ConfigOption extends React.Component {
         <ConfigOptionValue
           value={this.props.option.value}
           editing={this.props.option.editing}
+          saving={this.props.saving}
           onSave={this.onSave}
           onEdit={this.onEdit}
           onCancelEdit={this.props.onCancelEdit}

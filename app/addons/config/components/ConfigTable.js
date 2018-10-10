@@ -12,12 +12,18 @@
 
 import PropTypes from 'prop-types';
 import React from 'react';
-import ReactDOM from 'react-dom';
 import ConfigOption from './ConfigOption';
 
-export class ConfigTable extends React.Component {
+export default class ConfigTable extends React.Component {
   static propTypes = {
-    options: PropTypes.obkect.isRequired,
+    options: PropTypes.arrayOf(PropTypes.shape({
+      editing: PropTypes.bool.isRequired,
+      header: PropTypes.bool,
+      optionName: PropTypes.string.isRequired,
+      sectionName: PropTypes.string.isRequired,
+      value: PropTypes.string
+    })).isRequired,
+    saving: PropTypes.bool.isRequired,
     onDeleteOption: PropTypes.func.isRequired,
     onEditOption: PropTypes.func.isRequired,
     onSaveOption: PropTypes.func.isRequired,
@@ -28,6 +34,7 @@ export class ConfigTable extends React.Component {
     return _.map(this.props.options, (option) => (
       <ConfigOption
         option={option}
+        saving={this.props.saving}
         onDelete={this.props.onDeleteOption}
         onSave={this.props.onSaveOption}
         onEdit={this.props.onEditOption}

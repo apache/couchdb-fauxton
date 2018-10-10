@@ -12,7 +12,7 @@
 
 import PropTypes from 'prop-types';
 import React from 'react';
-import FauxtonComponents from "../fauxton/components";
+import FauxtonComponents from '../../fauxton/components';
 
 export default class ConfigOptionTrash extends React.Component {
   constructor (props) {

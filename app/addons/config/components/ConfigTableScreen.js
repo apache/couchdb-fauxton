@@ -12,18 +12,24 @@
 
 import PropTypes from 'prop-types';
 import React from 'react';
-import Components from '../components/react-components';
+import Components from '../../components/react-components';
 import ConfigTable from './ConfigTable';
 
-export class ConfigTableScreen extends React.Component {
+export default class ConfigTableScreen extends React.Component {
   static propTypes = {
-    options: PropTypes.object.isRequired,
+    options: PropTypes.array.isRequired,
     loading: PropTypes.bool.isRequired,
+    saving: PropTypes.bool.isRequired,
     saveOption: PropTypes.func.isRequired,
     deleteOption: PropTypes.func.isRequired,
     editOption: PropTypes.func.isRequired,
     cancelEdit: PropTypes.func.isRequired
   };
+
+  constructor(props) {
+    super(props);
+    this.props.fetchAndEditConfig(this.props.node);
+  }
 
   saveOption = (option) => {
     this.props.saveOption(this.props.node, option);
@@ -51,6 +57,7 @@ export class ConfigTableScreen extends React.Component {
     }
     return (
       <ConfigTable
+        saving={this.props.saving}
         onDeleteOption={this.deleteOption}
         onSaveOption={this.saveOption}
         onEditOption={this.editOption}

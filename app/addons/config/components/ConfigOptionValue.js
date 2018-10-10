@@ -14,19 +14,18 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 export default class ConfigOptionValue extends React.Component {
-  static defaultProps = {
-    value: '',
-    editing: false,
-    saving: false,
-    onSave: () => null,
-    onEdit: () => null,
-    onCancelEdit: () => null
-  };
+  // static defaultProps = {
+  //   value: '',
+  //   editing: false,
+  //   saving: false,
+  //   onSave: () => null,
+  //   onEdit: () => null,
+  //   onCancelEdit: () => null
+  // };
 
   static propTypes = {
     value: PropTypes.string.isRequired,
     editing: PropTypes.bool.isRequired,
-    saving: PropTypes.bool.isRequired,
     onEdit: PropTypes.func.isRequired,
     onCancelEdit: PropTypes.func.isRequired,
     onSave: PropTypes.func.isRequired
@@ -34,15 +33,16 @@ export default class ConfigOptionValue extends React.Component {
 
   state = {
     value: this.props.value,
-    editing: this.props.editing,
-    saving: this.props.saving
+    // saving: false
+    // editing: this.props.editing,
+    // saving: this.props.saving
   };
 
-  UNSAFE_componentWillReceiveProps(nextProps) {
-    if (this.props.value !== nextProps.value) {
-      this.setState({ saving: false });
-    }
-  }
+  // UNSAFE_componentWillReceiveProps(nextProps) {
+  //   if (this.props.value !== nextProps.value) {
+  //     this.setState({ saving: false });
+  //   }
+  // }
 
   onChange = (event) => {
     this.setState({ value: event.target.value });
@@ -50,7 +50,7 @@ export default class ConfigOptionValue extends React.Component {
 
   onSave = () => {
     if (this.state.value !== this.props.value) {
-      this.setState({ saving: true });
+      // this.setState({ saving: true });
       this.props.onSave(this.state.value);
     } else {
       this.props.onCancelEdit();
@@ -58,7 +58,8 @@ export default class ConfigOptionValue extends React.Component {
   };
 
   getButtons = () => {
-    if (this.state.saving) {
+    // if (this.state.saving) {
+    if (this.props.saving) {
       return null;
     }
     return (
@@ -84,7 +85,7 @@ export default class ConfigOptionValue extends React.Component {
             <input
               onChange={this.onChange.bind(this)}
               defaultValue={this.props.value}
-              disabled={this.state.saving}
+              disabled={this.props.saving}
               autoFocus type="text" className="config-value-input"
             />
             {this.getButtons()}
