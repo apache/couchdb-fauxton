@@ -11,15 +11,12 @@
 // the License.
 import FauxtonAPI from "../../core/api";
 import app from "../../app";
-import ClusterStore from "../cluster/cluster.stores";
 import ActionTypes from './actiontypes';
 import Api from './api';
 
 const {
   AUTH_HIDE_PASSWORD_MODAL,
 } = ActionTypes;
-
-const nodesStore = ClusterStore.nodesStore;
 
 const errorHandler = ({ message }) => {
   FauxtonAPI.addNotification({
@@ -69,11 +66,10 @@ export const login = (username, password, urlBack) => {
     .catch(errorHandler);
 };
 
-export const changePassword = (username, password, passwordConfirm) => () => {
+export const changePassword = (username, password, passwordConfirm, nodes) => () => {
   if (!validatePasswords(password, passwordConfirm)) {
     return errorHandler({message: app.i18n.en_US['auth-passwords-not-matching']});
   }
-  var nodes = nodesStore.getNodes();
   //To change an admin's password is the same as creating an admin. So we just use the
   //same api function call here.
   Api.createAdmin({
@@ -90,8 +86,8 @@ export const changePassword = (username, password, passwordConfirm) => () => {
   );
 };
 
-export const createAdmin = (username, password, loginAfter) => () => {
-  const node = nodesStore.getNodes()[0].node;
+export const createAdmin = (username, password, loginAfter, nodes) => () => {
+  const node = nodes[0].node;
   if (!validateUser(username, password)) {
     return errorHandler({message: app.i18n.en_US['auth-missing-credentials']});
   }

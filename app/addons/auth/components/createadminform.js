@@ -13,7 +13,6 @@
 import PropTypes from 'prop-types';
 
 import React from "react";
-import ReactDOM from "react-dom";
 import {
   createAdmin
 } from "./../actions";
@@ -45,7 +44,8 @@ export class CreateAdminForm extends React.Component {
     this.props.createAdmin(
       this.state.username,
       this.state.password,
-      this.props.loginAfter
+      this.props.loginAfter,
+      this.props.nodes
     );
   }
 
@@ -111,8 +111,14 @@ CreateAdminForm.defaultProps = {
   loginAfter: false
 };
 
+const mapStateToProps = ({clusters}) => {
+  return {
+    nodes: clusters.nodes
+  };
+};
+
 
 export default connect(
-  null,
+  mapStateToProps,
   {createAdmin}
 )(CreateAdminForm);

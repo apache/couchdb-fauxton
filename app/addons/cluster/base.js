@@ -11,7 +11,13 @@
 // the License.
 
 import Cluster from "./routes";
+import FauxtonAPI from "../../core/api";
+import reducers from './reducers';
 
 Cluster.initialize = function () {};
+
+FauxtonAPI.addReducers({
+  clusters: reducers
+});
 
 export default Cluster;

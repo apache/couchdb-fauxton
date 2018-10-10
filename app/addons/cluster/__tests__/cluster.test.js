@@ -9,13 +9,13 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
-import ClusterComponent from "../cluster";
-import ClusterActions from "../cluster.actions";
-import ClusterStores from "../cluster.stores";
+import FauxtonAPI from "../../../core/api";
+import {DisabledConfigController} from "../cluster";
 import utils from "../../../../test/mocha/testUtils";
 import React from "react";
 import ReactDOM from "react-dom";
 import {mount} from 'enzyme';
+import sinon from 'sinon';
 
 const assert = utils.assert;
 
@@ -23,6 +23,7 @@ describe('Cluster Controller', () => {
   let controller;
 
   beforeEach(() => {
+    FauxtonAPI.reduxDispatch = sinon.stub();
 
     var nodeList = [
       {'node': 'node1@127.0.0.1', 'isInCluster': true},
@@ -33,14 +34,9 @@ describe('Cluster Controller', () => {
       {'node': 'node3@127.0.0.1', 'isInCluster': false}
     ];
 
-    ClusterActions.updateNodes({nodes: nodeList});
     controller = mount(
-      <ClusterComponent.DisabledConfigController />
+      <DisabledConfigController nodes={nodeList} />
     );
-  });
-
-  afterEach(() => {
-    ClusterStores.nodesStore.reset();
   });
 
   it('renders the amount of nodes', () => {
