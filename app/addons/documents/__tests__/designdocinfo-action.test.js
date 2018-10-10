@@ -10,10 +10,11 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import FauxtonAPI from "../../../core/api";
-import Actions from "../designdocinfo/actions";
-import testUtils from "../../../../test/mocha/testUtils";
-import sinon from "sinon";
+import sinon from 'sinon';
+import FauxtonAPI from '../../../core/api';
+import testUtils from '../../../../test/mocha/testUtils';
+import Actions from '../designdocinfo/actions';
+
 const {assert, restore} = testUtils;
 
 describe('DesignDocInfo Actions', () => {
@@ -21,10 +22,10 @@ describe('DesignDocInfo Actions', () => {
   describe('fetchDesignDocInfo', () => {
 
     afterEach(() => {
-      restore(Actions.monitorDesignDoc);
+      restore(window.setInterval);
     });
 
-    it('calls monitorDesignDoc on successful fetch', () => {
+    it('schedules regular updates on successful fetch', () => {
       const promise = FauxtonAPI.Deferred();
       promise.resolve();
       const fakeDesignDocInfo = {
@@ -33,12 +34,13 @@ describe('DesignDocInfo Actions', () => {
         }
       };
 
-      const spy = sinon.spy(Actions, 'monitorDesignDoc');
+      const spy = sinon.spy(window, 'setInterval');
+      const dispatch = sinon.stub();
 
       return Actions.fetchDesignDocInfo({
         ddocName: 'test-designdoc-info',
         designDocInfo: fakeDesignDocInfo
-      }).then(() => {
+      })(dispatch).then(() => {
         assert.ok(spy.calledOnce);
       });
     });

@@ -18,7 +18,7 @@ import SidebarControllerContainer from "./sidebar/SidebarControllerContainer";
 import HeaderDocsLeft from './components/header-docs-left';
 import Changes from './changes/components';
 import IndexEditorComponents from "./index-editor/components";
-import DesignDocInfoComponents from './designdocinfo/components';
+import DesignDocInfoContainer from './designdocinfo/components/DesignDocInfoContainer';
 import RightAllDocsHeader from './components/header-docs-right';
 import IndexResultsContainer from './index-results/containers/IndexResultsContainer';
 import PaginationContainer from './index-results/containers/PaginationContainer';
@@ -47,13 +47,16 @@ export const TabsSidebarHeader = ({
   onGlobalModeSelected,
   globalMode
 }) => {
-  const partKeySelector = (<PartitionKeySelectorContainer
-    databaseName={dbName}
-    partitionKey={partitionKey}
-    onPartitionKeySelected={onPartitionKeySelected}
-    onGlobalModeSelected={onGlobalModeSelected}
-    globalMode={globalMode}/>
-  );
+  let partKeySelector = null;
+  if (showPartitionKeySelector) {
+    partKeySelector = (<PartitionKeySelectorContainer
+      databaseName={dbName}
+      partitionKey={partitionKey}
+      onPartitionKeySelected={onPartitionKeySelected}
+      onGlobalModeSelected={onGlobalModeSelected}
+      globalMode={globalMode}/>
+    );
+  }
 
   return (
     <header className="two-panel-header">
@@ -66,7 +69,7 @@ export const TabsSidebarHeader = ({
         </div>
         <div className="right-header-wrapper flex-layout flex-row flex-body">
           <div style={{flex:1, padding: '18px 6px 12px 12px'}}>
-            {showPartitionKeySelector ? partKeySelector : null}
+            {partKeySelector}
           </div>
           <div id="right-header" className="flex-fill">
             <RightAllDocsHeader
@@ -99,9 +102,9 @@ TabsSidebarHeader.propTypes = {
   database: PropTypes.object.isRequired,
   queryDocs: PropTypes.func,
   selectedNavItem: PropTypes.object,
-  showPartitionKeySelector: PropTypes.bool,
+  showPartitionKeySelector: PropTypes.bool.isRequired,
   partitionKey: PropTypes.string,
-  onPartitionKeySelected: PropTypes.func.isRequired,
+  onPartitionKeySelected: PropTypes.func,
   onGlobalModeSelected: PropTypes.bool,
   globalMode: PropTypes.bool
 };
@@ -235,9 +238,13 @@ export const ChangesSidebarLayout = ({ docURL, database, endpoint, dbName, dropD
 };
 
 export const ViewsTabsSidebarLayout = ({showEditView, database, docURL, endpoint,
-  dbName, dropDownLinks, selectedNavItem }) => {
+  dbName, dropDownLinks, selectedNavItem, designDocInfo }) => {
 
-  const content = showEditView ? <IndexEditorComponents.EditorController /> : <DesignDocInfoComponents.DesignDocInfo />;
+  const content = showEditView ?
+    <IndexEditorComponents.EditorController /> :
+    <DesignDocInfoContainer
+      designDocInfo={designDocInfo}
+      designDocName={selectedNavItem.designDocName}/>;
   return (
     <div id="dashboard" className="with-sidebar">
       <TabsSidebarHeader
@@ -268,5 +275,6 @@ ViewsTabsSidebarLayout.propTypes = {
   docURL: PropTypes.string.isRequired,
   endpoint: PropTypes.string,
   dbName: PropTypes.string.isRequired,
-  dropDownLinks: PropTypes.array.isRequired
+  dropDownLinks: PropTypes.array.isRequired,
+  designDocInfo: PropTypes.object
 };
