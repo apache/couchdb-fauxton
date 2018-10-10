@@ -142,6 +142,18 @@ export default class MangoQueryEditor extends Component {
     return false;
   }
 
+  getJsonIfValid(json) {
+    try {
+      return JSON.parse(json);
+    } catch (e) {
+      FauxtonAPI.addNotification({
+        msg:  'Please fix the JSON errors and try again. Error: ' + e.message,
+        type: 'error',
+        clear: true
+      });
+    }
+  }
+
   isRegexValid(selector = {}) {
     const regexes = Helper.getSelectorRegexes(selector);
     const errors = _.reduce(regexes, (acc, val) => {
@@ -183,7 +195,10 @@ export default class MangoQueryEditor extends Component {
       return;
     }
 
-    const queryCode = JSON.parse(this.getEditorValue());
+    const queryCode = this.getJsonIfValid(this.getEditorValue());
+    if (queryCode === undefined) {
+      return;
+    }
 
     if (!this.isRegexValid(queryCode.selector)) {
       return;
@@ -202,8 +217,10 @@ export default class MangoQueryEditor extends Component {
       return;
     }
 
-    const queryCode = JSON.parse(this.getEditorValue());
-
+    const queryCode = this.getJsonIfValid(this.getEditorValue());
+    if (queryCode == undefined) {
+      return;
+    }
     if (!this.isRegexValid(queryCode.selector)) {
       return;
     }
