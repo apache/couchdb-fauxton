@@ -19,6 +19,7 @@ import app from "../../../../app";
 import FauxtonAPI from "../../../../core/api";
 import ReactComponents from "../../../components/react-components";
 import ExecutionStats from './ExecutionStats';
+import Helper from '../mango.helper';
 
 const PaddedBorderedBox = ReactComponents.PaddedBorderedBox;
 const CodeEditorPanel = ReactComponents.CodeEditorPanel;
@@ -130,14 +131,40 @@ export default class MangoQueryEditor extends Component {
   notifyOnQueryError() {
     if (this.editorHasErrors()) {
       FauxtonAPI.addNotification({
-        msg:  'Please fix the Javascript errors and try again.',
+        msg:  'Please fix the JSON errors and try again.',
         type: 'error',
         clear: true
       });
 
       return true;
     }
+
     return false;
+  }
+
+  isRegexValid(selector = {}) {
+    const regexes = Helper.getSelectorRegexes(selector);
+    const errors = _.reduce(regexes, (acc, val) => {
+      try {
+        new RegExp(val);
+      } catch (e) {
+        acc.push(e.message);
+      }
+      return acc;
+    }, []);
+
+    if (Object.keys(errors).length > 0) {
+
+      FauxtonAPI.addNotification({
+        msg:  'There was some regex errors. Errors: ' + errors.join('. '),
+        type: 'error',
+        clear: true
+      });
+      return false;
+    }
+
+    return true;
+
   }
 
   manageIndexes(event) {
@@ -156,9 +183,15 @@ export default class MangoQueryEditor extends Component {
       return;
     }
 
+    const queryCode = JSON.parse(this.getEditorValue());
+
+    if (!this.isRegexValid(queryCode.selector)) {
+      return;
+    }
+
     this.props.runExplainQuery({
       databaseName: this.props.databaseName,
-      queryCode: this.getEditorValue()
+      queryCode: queryCode
     });
   }
 
@@ -168,10 +201,17 @@ export default class MangoQueryEditor extends Component {
     if (this.notifyOnQueryError()) {
       return;
     }
+
+    const queryCode = JSON.parse(this.getEditorValue());
+
+    if (!this.isRegexValid(queryCode.selector)) {
+      return;
+    }
+
     this.props.clearResults();
     this.props.runQuery({
       databaseName: this.props.databaseName,
-      queryCode: JSON.parse(this.getEditorValue()),
+      queryCode: queryCode,
       fetchParams: {...this.props.fetchParams, skip: 0}
     });
   }

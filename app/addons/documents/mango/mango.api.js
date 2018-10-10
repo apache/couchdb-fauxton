@@ -18,7 +18,7 @@ import Constants from '../constants';
 export const fetchQueryExplain = (databaseName, queryCode) => {
   const url = FauxtonAPI.urls('mango', 'explain-server', encodeURIComponent(databaseName));
 
-  return post(url, queryCode, {rawBody: true}).then((json) => {
+  return post(url, queryCode).then((json) => {
     if (json.error) {
       throw new Error('(' + json.error + ') ' + json.reason);
     }

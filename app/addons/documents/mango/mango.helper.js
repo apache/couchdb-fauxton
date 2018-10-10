@@ -53,8 +53,29 @@ const getIndexContent = (doc) => {
   return JSON.stringify(content, null, ' ');
 };
 
+const getSelectorRegexes = (selector) => {
+  let acc = {};
+  processSelector(selector, '', acc);
+  return acc;
+};
+
+const processSelector = (selector, currentPath, acc = {}) => {
+  const currentValue = currentPath === '' ? selector : _.get(selector, currentPath);
+
+  if (Array.isArray(currentValue) || _.isObject(currentValue)) {
+    _.each(currentValue, (val, key) => {
+      const newPath = currentPath === '' ? key : [currentPath, key].join('.');
+      processSelector(selector, newPath, acc);
+    });
+  } else if (currentPath.endsWith('$regex')) {
+    //Add the regex with the path to $regex as a key
+    acc[currentPath.slice(0, -7)] = currentValue;
+  }
+};
+
 export default {
   getIndexName,
   formatCode,
-  getIndexContent
+  getIndexContent,
+  getSelectorRegexes
 };
