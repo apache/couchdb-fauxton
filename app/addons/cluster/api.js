@@ -16,6 +16,11 @@ import {get} from '../../core/ajax';
 export default () => {
   return get(Helpers.getServerUrl('/_membership'))
     .then(res => {
+      if (!res.all_nodes) {
+        const details = res.reason ? res.reason : '';
+        throw new Error('Failed to load list of nodes.' + details);
+      }
+
       const list = res.all_nodes.reduce(function (acc, node) {
         var isInCluster = res.cluster_nodes.indexOf(node) !== -1;
 

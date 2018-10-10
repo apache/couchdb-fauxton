@@ -20,7 +20,14 @@ export default {
       this.updateNodes({
         nodes: nodes.nodes_mapped
       });
-    });
+    })
+      .catch(err => {
+        FauxtonAPI.addNotification({
+          type: 'error',
+          msg: err.message,
+          clear: true
+        });
+      });
   },
 
   updateNodes (options) {
@@ -38,7 +45,14 @@ export default {
         return FauxtonAPI.navigate(successtarget + allNodes[0]);
       }
       return FauxtonAPI.navigate('/cluster/disabled', {trigger: true});
-    });
+    })
+      .catch(err => {
+        FauxtonAPI.addNotification({
+          type: 'error',
+          msg: err.message,
+          clear: true
+        });
+      });
   }
 
 };
