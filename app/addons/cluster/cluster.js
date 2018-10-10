@@ -11,32 +11,9 @@
 // the License.
 
 import React from "react";
-import ClusterStore from "./cluster.stores";
+import {connect} from 'react-redux';
 
-var nodesStore = ClusterStore.nodesStore;
-
-
-class DisabledConfigController extends React.Component {
-  getStoreState = () => {
-    return {
-      nodes: nodesStore.getNodes()
-    };
-  };
-
-  componentDidMount() {
-    nodesStore.on('change', this.onChange, this);
-  }
-
-  componentWillUnmount() {
-    nodesStore.off('change', this.onChange);
-  }
-
-  onChange = () => {
-    this.setState(this.getStoreState());
-  };
-
-  state = this.getStoreState();
-
+export class DisabledConfigController extends React.Component {
   render() {
     return (
       <div className="config-warning-cluster-wrapper">
@@ -45,7 +22,7 @@ class DisabledConfigController extends React.Component {
             <div className="config-warning-icon-container pull-left">
               <i className="fonticon-attention-circled"></i>
             </div>
-            It seems that you are running a cluster with {this.state.nodes.length} nodes. For CouchDB 2.0
+            It seems that you are running a cluster with {this.props.nodes.length} nodes. For CouchDB 2.0
             we recommend using a configuration management tools like Chef, Ansible,
             Puppet or Salt (in no particular order) to configure your nodes in a cluster.
             <br/>
@@ -61,8 +38,13 @@ class DisabledConfigController extends React.Component {
   }
 }
 
-var Views = {
-  DisabledConfigController: DisabledConfigController
+const mapStateToProps = ({clusters}) => {
+  return {
+    nodes: clusters.nodes
+  };
 };
 
-export default Views;
+export default connect(
+  mapStateToProps,
+  null,
+)(DisabledConfigController);

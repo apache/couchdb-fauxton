@@ -17,7 +17,6 @@ import ChangesActions from './changes/actions';
 import Databases from '../databases/base';
 import Resources from './resources';
 import {SidebarItemSelection} from './sidebar/helpers';
-import DesignDocInfoActions from './designdocinfo/actions';
 import ComponentsActions from '../components/actions';
 import {DocsTabsSidebarLayout, ViewsTabsSidebarLayout, ChangesSidebarLayout} from './layouts';
 
@@ -52,11 +51,7 @@ var DocumentsRouteObject = BaseRoute.extend({
   },
 
   designDocMetadata: function (database, ddoc) {
-    var designDocInfo = new Resources.DdocInfo({ _id: "_design/" + ddoc }, { database: this.database });
-    DesignDocInfoActions.fetchDesignDocInfo({
-      ddocName: ddoc,
-      designDocInfo: designDocInfo
-    });
+    const designDocInfo = new Resources.DdocInfo({ _id: "_design/" + ddoc }, { database: this.database });
     const selectedNavItem = new SidebarItemSelection('designDoc', {
       designDocName: ddoc,
       designDocSection: 'metadata'
@@ -71,6 +66,7 @@ var DocumentsRouteObject = BaseRoute.extend({
       dropDownLinks={dropDownLinks}
       database={this.database}
       selectedNavItem={selectedNavItem}
+      designDocInfo={designDocInfo}
     />;
   },
 

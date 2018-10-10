@@ -10,29 +10,20 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import FauxtonAPI from "../../core/api";
-import Helpers from "../../helpers";
+import ActionTypes from "./actiontypes";
 
-var Cluster = FauxtonAPI.addon();
+const initialState = {
+  nodes: []
+};
 
-Cluster.ClusterNodes = Backbone.Model.extend({
-  url: function () {
-    return Helpers.getServerUrl('/_membership');
-  },
-
-  parse: function (res) {
-    var list;
-
-    list = res.all_nodes.reduce(function (acc, node) {
-      var isInCluster = res.cluster_nodes.indexOf(node) !== -1;
-
-      acc.push({node: node, isInCluster: isInCluster});
-      return acc;
-    }, []);
-
-    res.nodes_mapped = list;
-    return res;
+export default (state = initialState, {type, options}) => {
+  switch (type) {
+    case ActionTypes.CLUSTER_FETCH_NODES:
+      return {
+        ...state,
+        nodes: options.nodes
+      };
   }
-});
 
-export default Cluster;
+  return state;
+};
