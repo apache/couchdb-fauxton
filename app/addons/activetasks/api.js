@@ -10,25 +10,16 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import React from 'react';
-import FauxtonAPI from "../../core/api";
-import Layout from './container';
+import Helpers from "../../helpers";
+import { get } from '../../core/ajax';
 
-var ActiveTasksRouteObject = FauxtonAPI.RouteObject.extend({
-  selectedHeader: 'Active Tasks',
-
-  routes: {
-    'activetasks/:id': 'showActiveTasks',
-    'activetasks': 'showActiveTasks'
-  },
-
-  roles: ['_admin'],
-
-  showActiveTasks: function () {
-    return <Layout />;
-  }
-});
-
-export default {
-  RouteObjects: [ActiveTasksRouteObject]
+export default () => {
+  return get(Helpers.getServerUrl('/_active_tasks'))
+    .then(tasks => {
+      if (tasks.error) {
+        throw new Error(tasks.reason);
+      }
+      return tasks;
+    });
 };
+
