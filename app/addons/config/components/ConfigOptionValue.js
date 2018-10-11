@@ -14,15 +14,6 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 export default class ConfigOptionValue extends React.Component {
-  // static defaultProps = {
-  //   value: '',
-  //   editing: false,
-  //   saving: false,
-  //   onSave: () => null,
-  //   onEdit: () => null,
-  //   onCancelEdit: () => null
-  // };
-
   static propTypes = {
     value: PropTypes.string.isRequired,
     editing: PropTypes.bool.isRequired,
@@ -32,17 +23,8 @@ export default class ConfigOptionValue extends React.Component {
   };
 
   state = {
-    value: this.props.value,
-    // saving: false
-    // editing: this.props.editing,
-    // saving: this.props.saving
+    value: this.props.value
   };
-
-  // UNSAFE_componentWillReceiveProps(nextProps) {
-  //   if (this.props.value !== nextProps.value) {
-  //     this.setState({ saving: false });
-  //   }
-  // }
 
   onChange = (event) => {
     this.setState({ value: event.target.value });
@@ -50,7 +32,6 @@ export default class ConfigOptionValue extends React.Component {
 
   onSave = () => {
     if (this.state.value !== this.props.value) {
-      // this.setState({ saving: true });
       this.props.onSave(this.state.value);
     } else {
       this.props.onCancelEdit();
@@ -58,7 +39,6 @@ export default class ConfigOptionValue extends React.Component {
   };
 
   getButtons = () => {
-    // if (this.state.saving) {
     if (this.props.saving) {
       return null;
     }

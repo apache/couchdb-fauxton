@@ -23,7 +23,8 @@ export default class ConfigTableScreen extends React.Component {
     saveOption: PropTypes.func.isRequired,
     deleteOption: PropTypes.func.isRequired,
     editOption: PropTypes.func.isRequired,
-    cancelEdit: PropTypes.func.isRequired
+    cancelEdit: PropTypes.func.isRequired,
+    fetchAndEditConfig: PropTypes.func.isRequired
   };
 
   constructor(props) {

@@ -39,6 +39,8 @@ function deleteOption(state, { sectionName, optionName }) {
   };
 
   if (newSections[sectionName]) {
+    // copy object
+    newSections[sectionName] = {...newSections[sectionName]};
     delete newSections[sectionName][optionName];
 
     if (Object.keys(newSections[sectionName]).length == 0) {
@@ -60,7 +62,10 @@ export function options(state) {
     else if (a.sectionName > b.sectionName) return 1;
     return 0;
   });
-  return sortedSections.map(s => s.options).flat();
+  // flatten the list of options
+  return sortedSections.map(s => s.options).reduce((acc, options) => {
+    return acc.concat(options);
+  }, []);
 }
 
 function mapSection(state, sectionName) {
@@ -97,7 +102,6 @@ export default function config(state = initialState, action) {
         ...state,
         sections: options.sections,
         loading: false,
-        // saving: false,
         editOptionName: null,
         editSectionName: null
       };

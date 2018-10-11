@@ -9,13 +9,13 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
-import testUtils from "../../../../test/mocha/testUtils";
-import FauxtonAPI from "../../../core/api";
-import Actions from "../actions";
-import Backbone from "backbone";
-import sinon from "sinon";
+import testUtils from '../../../../test/mocha/testUtils';
+import FauxtonAPI from '../../../core/api';
+import * as Actions from '../actions';
+import ActionTypes from '../actiontypes';
+import * as ConfigAPI from '../api';
+import sinon from 'sinon';
 
-const assert = testUtils.assert;
 const restore = testUtils.restore;
 
 describe('Config Actions', () => {
@@ -25,190 +25,121 @@ describe('Config Actions', () => {
     optionName: 'test',
     value: 'test'
   };
-  const failXhr = { responseText: '{}' };
+  const spySaveConfigOption = sinon.stub(ConfigAPI, 'saveConfigOption');
+  const spyDeleteConfigOption = sinon.stub(ConfigAPI, 'deleteConfigOption');
+  const dispatch = sinon.stub();
 
-  describe('add', () => {
+  describe('addOption', () => {
+
     afterEach(() => {
-      restore(Actions.optionAddSuccess);
-      restore(Actions.optionAddFailure);
-      restore(FauxtonAPI.when);
+      spySaveConfigOption.reset();
+      dispatch.reset();
       restore(FauxtonAPI.addNotification);
-      restore(Backbone.Model.prototype.save);
     });
 
-    it('calls optionAddSuccess when option add succeeds', () => {
-      const stub = sinon.stub(Backbone.Model.prototype, 'save');
-      const spy = sinon.spy(Actions, 'optionAddSuccess');
-      const promise = FauxtonAPI.Deferred();
-      promise.resolve();
-      stub.returns(promise);
+    it('dispatches OPTION_ADD_SUCCESS and shows notification when option add succeeds', () => {
+      const promise = FauxtonAPI.Promise.resolve();
+      spySaveConfigOption.returns(promise);
+      const spyAddNotification = sinon.spy(FauxtonAPI, 'addNotification');
 
-      return Actions.addOption(node, option)
+      return Actions.addOption(node, option)(dispatch)
         .then(() => {
-          assert.ok(spy.calledOnce);
+          sinon.assert.calledWith(dispatch, {
+            type: ActionTypes.OPTION_ADD_SUCCESS,
+            options: { optionName: "test", sectionName: "test", value: "test" }
+          });
+          sinon.assert.called(spyAddNotification);
         });
     });
 
-    it('shows notification when option add succeeds', () => {
-      const stub = sinon.stub(Backbone.Model.prototype, 'save');
-      const spy = sinon.spy(FauxtonAPI, 'addNotification');
-      const promise = FauxtonAPI.Deferred();
-      promise.resolve();
-      stub.returns(promise);
+    it('dispatches OPTION_ADD_FAILURE and shows notification when option add fails', () => {
+      const promise = FauxtonAPI.Promise.reject(new Error(''));
+      spySaveConfigOption.returns(promise);
+      const spyAddNotification = sinon.spy(FauxtonAPI, 'addNotification');
 
-      return Actions.addOption(node, option)
+      return Actions.addOption(node, option)(dispatch)
         .then(() => {
-          assert.ok(spy.calledOnce);
-        });
-    });
-
-    it('calls optionAddFailure when option add fails', () => {
-      const stub = sinon.stub(Backbone.Model.prototype, 'save');
-      const spy = sinon.spy(Actions, 'optionAddFailure');
-      const promise = FauxtonAPI.Deferred();
-      promise.reject(failXhr);
-      stub.returns(promise);
-
-      return Actions.addOption(node, option)
-        .then(() => {
-          assert.ok(spy.calledOnce);
-        });
-    });
-
-    it('shows notification when option add fails', () => {
-      const stub = sinon.stub(Backbone.Model.prototype, 'save');
-      const spy = sinon.spy(FauxtonAPI, 'addNotification');
-      const promise = FauxtonAPI.Deferred();
-      promise.reject(failXhr);
-      stub.returns(promise);
-
-      return Actions.addOption(node, option)
-        .then(() => {
-          assert.ok(spy.calledOnce);
+          sinon.assert.calledWith(dispatch, {
+            type: ActionTypes.OPTION_ADD_FAILURE,
+            options: { optionName: "test", sectionName: "test", value: "test" }
+          });
+          sinon.assert.called(spyAddNotification);
         });
     });
   });
 
-  describe('save', () => {
+  describe('saveOption', () => {
     afterEach(() => {
-      restore(Actions.optionSaveSuccess);
-      restore(Actions.optionSaveFailure);
-      restore(FauxtonAPI.when);
+      spySaveConfigOption.reset();
+      dispatch.reset();
       restore(FauxtonAPI.addNotification);
-      restore(Backbone.Model.prototype.save);
     });
 
-    it('calls optionSaveSuccess when option save succeeds', () => {
-      const stub = sinon.stub(Backbone.Model.prototype, 'save');
-      const spy = sinon.spy(Actions, 'optionSaveSuccess');
-      const promise = FauxtonAPI.Deferred();
-      promise.resolve();
-      stub.returns(promise);
+    it('dispatches OPTION_SAVE_SUCCESS and shows notification when option add succeeds', () => {
+      const promise = FauxtonAPI.Promise.resolve();
+      spySaveConfigOption.returns(promise);
+      const spyAddNotification = sinon.spy(FauxtonAPI, 'addNotification');
 
-      return Actions.saveOption(node, option)
+      return Actions.saveOption(node, option)(dispatch)
         .then(() => {
-          assert.ok(spy.calledOnce);
+          sinon.assert.calledWith(dispatch, {
+            type: ActionTypes.OPTION_SAVE_SUCCESS,
+            options: { optionName: "test", sectionName: "test", value: "test" }
+          });
+          sinon.assert.called(spyAddNotification);
         });
     });
 
-    it('shows notification when option save succeeds', () => {
-      const stub = sinon.stub(Backbone.Model.prototype, 'save');
-      const spy = sinon.spy(FauxtonAPI, 'addNotification');
-      const promise = FauxtonAPI.Deferred();
-      promise.resolve();
-      stub.returns(promise);
+    it('dispatches OPTION_SAVE_FAILURE and shows notification when option add fails', () => {
+      const promise = FauxtonAPI.Promise.reject(new Error(''));
+      spySaveConfigOption.returns(promise);
+      const spyAddNotification = sinon.spy(FauxtonAPI, 'addNotification');
 
-      return Actions.saveOption(node, option)
+      return Actions.saveOption(node, option)(dispatch)
         .then(() => {
-          assert.ok(spy.calledOnce);
-        });
-    });
-
-    it('calls optionSaveFailure when option save fails', () => {
-      const stub = sinon.stub(Backbone.Model.prototype, 'save');
-      const spy = sinon.spy(Actions, 'optionSaveFailure');
-      const promise = FauxtonAPI.Deferred();
-      promise.reject(failXhr);
-      stub.returns(promise);
-
-      return Actions.saveOption(node, option)
-        .then(() => {
-          assert.ok(spy.calledOnce);
-        });
-    });
-
-    it('shows notification when option save fails', () => {
-      const stub = sinon.stub(Backbone.Model.prototype, 'save');
-      const spy = sinon.spy(FauxtonAPI, 'addNotification');
-      const promise = FauxtonAPI.Deferred();
-      promise.reject(failXhr);
-      stub.returns(promise);
-
-      return Actions.saveOption(node, option)
-        .then(() => {
-          assert.ok(spy.calledOnce);
+          sinon.assert.calledWith(dispatch, {
+            type: ActionTypes.OPTION_SAVE_FAILURE,
+            options: { optionName: "test", sectionName: "test", value: "test" }
+          });
+          sinon.assert.called(spyAddNotification);
         });
     });
   });
 
-  describe('delete', () => {
+  describe('deleteOption', () => {
     afterEach(() => {
-      restore(Actions.optionDeleteSuccess);
-      restore(Actions.optionDeleteFailure);
-      restore(FauxtonAPI.when);
+      spyDeleteConfigOption.reset();
+      dispatch.reset();
       restore(FauxtonAPI.addNotification);
-      restore(Backbone.Model.prototype.destroy);
     });
 
-    it('calls optionDeleteSuccess when option delete succeeds', () => {
-      const stub = sinon.stub(Backbone.Model.prototype, 'destroy');
-      const spy = sinon.spy(Actions, 'optionDeleteSuccess');
-      const promise = FauxtonAPI.Deferred();
-      promise.resolve();
-      stub.returns(promise);
+    it('dispatches OPTION_DELETE_SUCCESS and shows notification when option add succeeds', () => {
+      const promise = FauxtonAPI.Promise.resolve();
+      spyDeleteConfigOption.returns(promise);
+      const spyAddNotification = sinon.spy(FauxtonAPI, 'addNotification');
 
-      return Actions.deleteOption(node, option)
+      return Actions.deleteOption(node, option)(dispatch)
         .then(() => {
-          assert.ok(spy.calledOnce);
+          sinon.assert.calledWith(dispatch, {
+            type: ActionTypes.OPTION_DELETE_SUCCESS,
+            options: { optionName: "test", sectionName: "test", value: "test" }
+          });
+          sinon.assert.called(spyAddNotification);
         });
     });
 
-    it('shows notification when option delete succeeds', () => {
-      const stub = sinon.stub(Backbone.Model.prototype, 'destroy');
-      const spy = sinon.spy(FauxtonAPI, 'addNotification');
-      const promise = FauxtonAPI.Deferred();
-      promise.resolve();
-      stub.returns(promise);
+    it('dispatches OPTION_DELETE_FAILURE and shows notification when option add fails', () => {
+      const promise = FauxtonAPI.Promise.reject(new Error(''));
+      spyDeleteConfigOption.returns(promise);
+      const spyAddNotification = sinon.spy(FauxtonAPI, 'addNotification');
 
-      return Actions.deleteOption(node, option)
+      return Actions.deleteOption(node, option)(dispatch)
         .then(() => {
-          assert.ok(spy.calledOnce);
-        });
-    });
-
-    it('calls optionDeleteFailure when option delete fails', () => {
-      const stub = sinon.stub(Backbone.Model.prototype, 'destroy');
-      const spy = sinon.spy(Actions, 'optionDeleteFailure');
-      const promise = FauxtonAPI.Deferred();
-      promise.reject(failXhr);
-      stub.returns(promise);
-
-      return Actions.deleteOption(node, option)
-        .then(() => {
-          assert.ok(spy.calledOnce);
-        });
-    });
-
-    it('shows notification when option delete fails', () => {
-      const stub = sinon.stub(Backbone.Model.prototype, 'destroy');
-      const spy = sinon.spy(FauxtonAPI, 'addNotification');
-      const promise = FauxtonAPI.Deferred();
-      promise.reject(failXhr);
-      stub.returns(promise);
-
-      return Actions.deleteOption(node, option)
-        .then(() => {
-          assert.ok(spy.calledOnce);
+          sinon.assert.calledWith(dispatch, {
+            type: ActionTypes.OPTION_DELETE_FAILURE,
+            options: { optionName: "test", sectionName: "test", value: "test" }
+          });
+          sinon.assert.called(spyAddNotification);
         });
     });
   });

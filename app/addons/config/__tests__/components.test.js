@@ -10,85 +10,117 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import FauxtonAPI from "../../../core/api";
-import Views from "../components";
-import Actions from "../actions";
-import Stores from "../stores";
-import utils from "../../../../test/mocha/testUtils";
-import React from "react";
-import ReactDOM from "react-dom";
+import React from 'react';
 import {mount} from 'enzyme';
-import sinon from "sinon";
+import sinon from 'sinon';
+import FauxtonAPI from '../../../core/api';
+import AddOptionButton from '../components/AddOptionButton';
+import ConfigOption from '../components/ConfigOption';
+import ConfigOptionValue from '../components/ConfigOptionValue';
+import ConfigOptionTrash from '../components/ConfigOptionTrash';
+import ConfigTableScreen from '../components/ConfigTableScreen';
+// import Actions from '../actions';
+import utils from '../../../../test/mocha/testUtils';
 
 FauxtonAPI.router = new FauxtonAPI.Router([]);
 const assert = utils.assert;
-const configStore = Stores.configStore;
 
 describe('Config Components', () => {
-  describe('ConfigTableController', () => {
-    let elm, node;
-
-    beforeEach(() => {
-      configStore._loading = false;
-      configStore._sections = {};
-      node = 'node2@127.0.0.1';
-      elm = mount(
-        <Views.ConfigTableController node={node}/>
-      );
-    });
+  describe('ConfigTableScreen', () => {
+    const options = [
+      {editing: false, header:true, sectionName: 'sec1', optionName: 'opt1', value: 'value1'},
+      {editing: false, header:false, sectionName: 'sec1', optionName: 'opt2', value: 'value2'}
+    ];
+    const node = 'test_node';
+    const defaultProps = {
+      saving: false,
+      loading: false,
+      deleteOption: () => {},
+      saveOption: () => {},
+      editOption: () => {},
+      cancelEdit: () => {},
+      fetchAndEditConfig: () => {},
+      node,
+      options
+    };
 
     it('deletes options', () => {
-      const spy = sinon.stub(Actions, 'deleteOption');
-      var option = {};
-
-      elm.instance().deleteOption(option);
-      assert.ok(spy.calledWith(node, option));
+      const spy = sinon.stub();
+      const wrapper = mount(<ConfigTableScreen
+        {...defaultProps}
+        deleteOption={spy}/>
+      );
+      wrapper.instance().deleteOption({});
+      sinon.assert.called(spy);
     });
 
     it('saves options', () => {
-      const spy = sinon.stub(Actions, 'saveOption');
-      var option = {};
-
-      elm.instance().saveOption(option);
-      assert.ok(spy.calledWith(node, option));
+      const spy = sinon.stub();
+      const wrapper = mount(<ConfigTableScreen
+        {...defaultProps}
+        saveOption={spy}/>
+      );
+      wrapper.instance().saveOption({});
+      sinon.assert.called(spy);
     });
 
     it('edits options', () => {
-      const spy = sinon.stub(Actions, 'editOption');
-      var option = {};
-
-      elm.instance().editOption(option);
-      assert.ok(spy.calledWith(option));
+      const spy = sinon.stub();
+      const wrapper = mount(<ConfigTableScreen
+        {...defaultProps}
+        editOption={spy}/>
+      );
+      wrapper.instance().editOption({});
+      sinon.assert.called(spy);
     });
 
     it('cancels editing', () => {
-      const spy = sinon.stub(Actions, 'cancelEdit');
-
-      elm.instance().cancelEdit();
-      assert.ok(spy.calledOnce);
+      const spy = sinon.stub();
+      const wrapper = mount(<ConfigTableScreen
+        {...defaultProps}
+        cancelEdit={spy}/>
+      );
+      wrapper.instance().cancelEdit();
+      sinon.assert.called(spy);
     });
   });
 
   describe('ConfigOption', () => {
-
+    const defaultProps = {
+      option: {},
+      saving: false,
+      onEdit: () => {},
+      onCancelEdit: () => {},
+      onSave: () => {},
+      onDelete: () => {}
+    };
     it('renders section name if the option is a header', () => {
       const option = {
         sectionName: 'test_section',
         optionName: 'test_option',
         value: 'test_value',
-        header: true
+        header: true,
+        editing: true
       };
 
-      const el = mount(<table><tbody><Views.ConfigOption option={option}/></tbody></table>);
+      const el = mount(<table><tbody><ConfigOption {...defaultProps} option={option}/></tbody></table>);
       assert.equal(el.find('th').text(), 'test_section');
     });
   });
 
   describe('ConfigOptionValue', () => {
+    const defaultProps = {
+      value: '',
+      editing: false,
+      onEdit: () => {},
+      onCancelEdit: () => {},
+      onSave: () => {}
+    };
+
     it('displays the value prop', () => {
       const el = mount(
         <table><tbody><tr>
-          <Views.ConfigOptionValue value={'test_value'}/>
+          <ConfigOptionValue {...defaultProps} value={'test_value'}/>
         </tr></tbody></table>
       );
 
@@ -99,18 +131,18 @@ describe('Config Components', () => {
       const spy = sinon.spy();
       const el = mount(
         <table><tbody><tr>
-          <Views.ConfigOptionValue value={'test_value'} onEdit={spy}/>
+          <ConfigOptionValue {...defaultProps} value={'test_value'} onEdit={spy}/>
         </tr></tbody></table>
       );
 
-      el.find(Views.ConfigOptionValue).simulate('click');
+      el.find(ConfigOptionValue).simulate('click');
       assert.ok(spy.calledOnce);
     });
 
     it('displays editing controls if editing', () => {
       const el = mount(
         <table><tbody><tr>
-          <Views.ConfigOptionValue value={'test_value'} editing/>
+          <ConfigOptionValue {...defaultProps} value={'test_value'} editing/>
         </tr></tbody></table>
       );
 
@@ -119,15 +151,13 @@ describe('Config Components', () => {
       assert.equal(el.find('button.btn-config-save').length, 1);
     });
 
-    it('disables input when save clicked', () => {
+    it('disables input when saving is set to true', () => {
       const el = mount(
         <table><tbody><tr>
-          <Views.ConfigOptionValue value={'test_value'} editing/>
+          <ConfigOptionValue {...defaultProps} value={'test_value'} editing={true} saving={true}/>
         </tr></tbody></table>
       );
 
-      el.find('input.config-value-input').simulate('change', {target: {value: 'value'}});
-      el.find('button.btn-config-save').simulate('click');
       assert.ok(el.find('input.config-value-input').prop('disabled'));
     });
 
@@ -136,7 +166,7 @@ describe('Config Components', () => {
       const spy = sinon.spy();
       const el = mount(
         <table><tbody><tr>
-          <Views.ConfigOptionValue value={'test_value'} editing onSave={spy}/>
+          <ConfigOptionValue {...defaultProps} value={'test_value'} editing onSave={spy}/>
         </tr></tbody></table>
       );
 
@@ -149,7 +179,7 @@ describe('Config Components', () => {
       const spy = sinon.spy();
       const el = mount(
         <table><tbody><tr>
-          <Views.ConfigOptionValue value={'test_value'} editing onCancelEdit={spy}/>
+          <ConfigOptionValue {...defaultProps} value={'test_value'} editing onCancelEdit={spy}/>
         </tr></tbody></table>
       );
 
@@ -162,7 +192,7 @@ describe('Config Components', () => {
 
     it.skip('displays delete modal when clicked', () => {
       const el = mount(
-        <Views.ConfigOptionTrash sectionName='test_section' optionName='test_option'/>
+        <ConfigOptionTrash sectionName='test_section' optionName='test_option'/>
       );
 
       el.simulate('click');
@@ -172,7 +202,7 @@ describe('Config Components', () => {
     it.skip('calls on delete when confirmation modal Okay button clicked', () => {
       const spy = sinon.spy();
       const el = mount(
-        <Views.ConfigOptionTrash onDelete={spy}/>
+        <ConfigOptionTrash onDelete={spy}/>
       );
 
       el.simulate('click');
@@ -181,19 +211,14 @@ describe('Config Components', () => {
     });
   });
 
-  describe('AddOptionController', () => {
-    let elm;
-
-    beforeEach(() => {
-      elm = mount(
-        <Views.AddOptionController node='node2@127.0.0.1'/>
-      );
-    });
-
+  //we need enzyme to support portals for this
+  describe.skip('AddOptionButton', () => {
     it('adds options', () => {
-      const spy = sinon.stub(Actions, 'addOption');
-
-      elm.instance().addOption();
+      const spy = sinon.stub();
+      const wrapper = mount(
+        <AddOptionButton onAdd={spy}/>
+      );
+      wrapper.instance().onAdd();
       assert.ok(spy.calledOnce);
     });
   });
@@ -202,7 +227,7 @@ describe('Config Components', () => {
   describe.skip('AddOptionButton', () => {
     it('displays add option controls when clicked', () => {
       const el = mount(
-        <Views.AddOptionButton/>
+        <AddOptionButton/>
       );
 
       el.find('button#add-option-button').simulate('click');
@@ -214,7 +239,7 @@ describe('Config Components', () => {
 
     it('does not hide popover if create clicked with invalid input', () => {
       const el = mount(
-        <Views.AddOptionButton/>
+        <AddOptionButton/>
       );
 
       el.find('button#add-option-button').simulate('click');
@@ -224,7 +249,7 @@ describe('Config Components', () => {
 
     it('does not add option if create clicked with invalid input', () => {
       const el = mount(
-        <Views.AddOptionButton/>
+        <AddOptionButton/>
       );
 
       el.find('button#add-option-button').simulate('click');
@@ -235,7 +260,7 @@ describe('Config Components', () => {
 
     it('does adds option if create clicked with valid input', () => {
       const el = mount(
-        <Views.AddOptionButton/>
+        <AddOptionButton/>
       );
 
       el.find('button#add-option-button').simulate('click');
@@ -246,7 +271,7 @@ describe('Config Components', () => {
     it('adds option when create clicked with valid input', () => {
       const spy = sinon.spy();
       const el = mount(
-        <Views.AddOptionButton onAdd={spy}/>
+        <AddOptionButton onAdd={spy}/>
       );
 
       el.find('button#add-option-button').simulate('click');
