@@ -9,40 +9,49 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
-import { PermanentNotification } from "../notifications";
-import Stores from "../stores";
-import FauxtonAPI from "../../../../core/api";
-import ActionTypes from "../actiontypes";
-import { mount } from "enzyme";
-import React from "react";
-import ReactDOM from "react-dom";
-
-const store = Stores.notificationStore;
+import { mount } from 'enzyme';
+import React from 'react';
+import thunk from 'redux-thunk';
+import { Provider } from 'react-redux';
+// import FauxtonAPI from '../../../../core/api';
+import PermanentNotification from '../components/PermanentNotification';
+import PermanentNotificationContainer from '../components/PermanentNotificationContainer';
+import ActionTypes from '../actiontypes';
+import { createStore, applyMiddleware, combineReducers } from 'redux';
+import notificationsReducer from '../reducers';
 
 describe('PermanentNotification', () => {
-  beforeEach(() => {
-    store.reset();
-  });
 
   it('doesn\'t render content by default', () => {
-    const wrapper = mount(<PermanentNotification />);
+    const wrapper = mount(<PermanentNotification visible={false}/>);
     expect(wrapper.find('.perma-warning__content').length).toBe(0);
   });
+});
+
+describe('PermanentNotificationContainer', () => {
+  const middlewares = [thunk];
+  const store = createStore(
+    combineReducers({ notifications: notificationsReducer }),
+    applyMiddleware(...middlewares)
+  );
 
   it('shows/hides content when the display flag is switched', () => {
-    const wrapper = mount(<PermanentNotification />);
-
-    FauxtonAPI.dispatch({
+    const wrapper = mount(
+      <Provider store={store}>
+        <PermanentNotificationContainer />
+      </Provider>
+    );
+    store.dispatch({
       type: ActionTypes.SHOW_PERMANENT_NOTIFICATION,
       options: {
-        msg: "Hello World!"
+        msg: 'Hello World!'
       }
     });
 
     wrapper.update();
     expect(wrapper.find('.perma-warning__content').html()).toMatch(/Hello World!/);
 
-    FauxtonAPI.dispatch({
+    store.dispatch({
       type: ActionTypes.HIDE_PERMANENT_NOTIFICATION
     });
 
@@ -50,3 +59,4 @@ describe('PermanentNotification', () => {
     expect(wrapper.find('.perma-warning__content').length).toBe(0);
   });
 });
+
