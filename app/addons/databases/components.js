@@ -129,8 +129,6 @@ class DatabaseTable extends React.Component {
             {rows}
           </tbody>
         </table>
-        <div><button onClick={() => {FauxtonAPI.addNotification({ type: 'error', msg: 'TEST -' + new Date(), clear: false, visibleTime: 2000 });}}>show notification</button></div>
-        <div><button onClick={() => {FauxtonAPI.showPermanentNotification('PERM:' + new Date());}}>show notification</button></div>
       </div>
     );
   }
