@@ -48,7 +48,7 @@ describe('Notification', () => {
 
   it('notification text should be escaped by default', () => {
     const wrapper = mount(<Notification
-      notificationId={'some id'}
+      notificationId={123}
       isHiding={false}
       msg={'<script>window.whatever=1;</script>'}
       type={'error'}
@@ -61,7 +61,7 @@ describe('Notification', () => {
 
   it('notification text can be rendered unescaped', () => {
     const wrapper = mount(<Notification
-      notificationId={'some id'}
+      notificationId={123}
       isHiding={false}
       msg={'<script>window.whatever=1;</script>'}
       type={'error'}

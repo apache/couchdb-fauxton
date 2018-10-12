@@ -15,7 +15,7 @@ import React from 'react';
 
 export default class Notification extends React.Component {
   static propTypes = {
-    notificationId: PropTypes.string.isRequired,
+    notificationId: PropTypes.number.isRequired,
     msg: PropTypes.string.isRequired,
     onStartHide: PropTypes.func.isRequired,
     onHideComplete: PropTypes.func.isRequired,
