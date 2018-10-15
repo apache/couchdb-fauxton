@@ -42,16 +42,6 @@ export const init = () => (dispatch) => {
     });
 };
 
-export const fetchAndSetActiveTasks = (collection, backboneCollection) => {
-  return {
-    type: ActionTypes.ACTIVE_TASKS_FETCH_AND_SET,
-    options: {
-      collectionTable: collection,
-      backboneCollection: backboneCollection
-    }
-  };
-};
-
 export const switchTab = (tab) => {
   return {
     type: ActionTypes.ACTIVE_TASKS_SWITCH_TAB,
