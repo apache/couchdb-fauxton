@@ -13,7 +13,6 @@ import { mount } from 'enzyme';
 import React from 'react';
 import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
-// import FauxtonAPI from '../../../../core/api';
 import PermanentNotification from '../components/PermanentNotification';
 import PermanentNotificationContainer from '../components/PermanentNotificationContainer';
 import ActionTypes from '../actiontypes';

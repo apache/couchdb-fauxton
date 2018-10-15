@@ -43,7 +43,7 @@ export default class GlobalNotifications extends React.Component {
       return null;
     }
 
-    return _.map(this.props.notifications, (notification, index) => {
+    return this.props.notifications.map((notification, index) => {
 
       // notifications are completely removed from the DOM once they're
       if (!notification.visible) {
