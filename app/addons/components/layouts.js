@@ -14,7 +14,7 @@ import PropTypes from 'prop-types';
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {NotificationCenterButton} from '../fauxton/notifications/notifications';
+import NotificationCenterButton from '../fauxton/notifications/components/NotificationCenterButton';
 import {JSONLink, DocLink} from './components/apibar';
 import {Breadcrumbs} from './header-breadcrumbs';
 import Helpers from '../../helpers';

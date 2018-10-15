@@ -10,9 +10,11 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import FauxtonAPI from "../../core/api";
-import Config from "./routes";
-import "./assets/less/config.less";
+import FauxtonAPI from '../../core/api';
+import Config from './routes';
+import reducers from './reducers';
+import './assets/less/config.less';
+
 Config.initialize = function () {
   FauxtonAPI.addHeaderLink({
     title: 'Configuration',
@@ -21,5 +23,9 @@ Config.initialize = function () {
     className: 'config'
   });
 };
+
+FauxtonAPI.addReducers({
+  config: reducers
+});
 
 export default Config;

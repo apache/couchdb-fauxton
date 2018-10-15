@@ -9,72 +9,69 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
-import FauxtonAPI from "../../core/api";
+import FauxtonAPI from '../../core/api';
 import ActionTypes from "./actiontypes";
+import fetchActiveTasks from './api';
 
-export default {
+export const setActiveTaskIsLoading = (boolean) => {
+  return {
+    type: ActionTypes.ACTIVE_TASKS_SET_IS_LOADING,
+    options: boolean
+  };
+};
 
-  init: function (activeTasks) {
-    this.fetchAndSetActiveTasks(activeTasks.table, activeTasks);
-    FauxtonAPI.when(activeTasks.fetch()).then(function () {
-      this.fetchAndSetActiveTasks(activeTasks.table, activeTasks);
-      this.setActiveTaskIsLoading(false);
-    }.bind(this));
-  },
+export const setActiveTasks = (tasks) => {
+  return {
+    type: ActionTypes.ACTIVE_TASKS_FETCH_AND_SET,
+    options: tasks
+  };
+};
 
-  fetchAndSetActiveTasks: function (collection, backboneCollection) {
-    FauxtonAPI.dispatch({
-      type: ActionTypes.ACTIVE_TASKS_FETCH_AND_SET,
-      options: {
-        collectionTable: collection,
-        backboneCollection: backboneCollection
-      }
-    });
-  },
-  changePollingInterval: function (interval) {
-    FauxtonAPI.dispatch({
-      type: ActionTypes.ACTIVE_TASKS_CHANGE_POLLING_INTERVAL,
-      options: interval
-    });
-  },
-  switchTab: function (tab) {
-    FauxtonAPI.dispatch({
-      type: ActionTypes.ACTIVE_TASKS_SWITCH_TAB,
-      options: tab
-    });
-  },
-  setCollection: function (collection) {
-    FauxtonAPI.dispatch({
-      type: ActionTypes.ACTIVE_TASKS_SET_COLLECTION,
-      options: collection
-    });
-  },
-  setSearchTerm: function (searchTerm) {
-    FauxtonAPI.dispatch({
-      type: ActionTypes.ACTIVE_TASKS_SET_SEARCH_TERM,
-      options: searchTerm
-    });
-  },
-  sortByColumnHeader: function (columnName) {
-    FauxtonAPI.dispatch({
-      type: ActionTypes.ACTIVE_TASKS_SORT_BY_COLUMN_HEADER,
-      options: {
-        columnName: columnName
-      }
-    });
-  },
-  setActiveTaskIsLoading: function (boolean) {
-    FauxtonAPI.dispatch({
-      type: ActionTypes.ACTIVE_TASKS_SET_IS_LOADING,
-      options: boolean
-    });
-  },
-  runPollingUpdate (collection) {
-    collection.pollingFetch().then(() => {
-      FauxtonAPI.dispatch({
-        type: ActionTypes.ACTIVE_TASKS_POLLING_COLLECTION,
-        options: collection.table
+export const init = () => (dispatch) => {
+  dispatch(setActiveTaskIsLoading(true));
+  fetchActiveTasks()
+    .then(tasks => {
+      dispatch(setActiveTaskIsLoading(false));
+      dispatch(setActiveTasks(tasks));
+    })
+    .catch(error => {
+      FauxtonAPI.addNotification({
+        msg: `Fetching active tasks failed: ${error}`,
+        type: 'error'
       });
     });
-  }
+};
+
+export const switchTab = (tab) => {
+  return {
+    type: ActionTypes.ACTIVE_TASKS_SWITCH_TAB,
+    options: tab
+  };
+};
+
+export const setSearchTerm = (searchTerm) => {
+  return {
+    type: ActionTypes.ACTIVE_TASKS_SET_SEARCH_TERM,
+    options: searchTerm
+  };
+};
+
+export const sortByColumnHeader = (columnName) => {
+  return {
+    type: ActionTypes.ACTIVE_TASKS_SORT_BY_COLUMN_HEADER,
+    options: columnName
+  };
+};
+
+export const runPollingUpdate = () => (dispatch) => {
+  fetchActiveTasks()
+    .then(tasks => {
+      dispatch(setActiveTasks(tasks));
+    })
+    .catch(error => {
+      FauxtonAPI.addNotification({
+        msg: `Fetching active tasks failed: ${error}`,
+        type: 'error'
+      });
+    });
 };

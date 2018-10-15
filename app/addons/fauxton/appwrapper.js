@@ -12,7 +12,9 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import {NotificationController, PermanentNotification} from "./notifications/notifications";
+import GlobalNotificationsContainer from './notifications/components/GlobalNotificationsContainer';
+import NotificationPanelContainer from './notifications/components/NotificationPanelContainer';
+import PermanentNotificationContainer from './notifications/components/PermanentNotificationContainer';
 import NavBar from './navigation/container/NavBar';
 import * as NavbarActions from './navigation/actions';
 import classNames from 'classnames';
@@ -62,9 +64,10 @@ class App extends React.Component {
     );
     return (
       <div>
-        <PermanentNotification />
+        <PermanentNotificationContainer />
         <div id="notifications">
-          <NotificationController />
+          <GlobalNotificationsContainer />
+          <NotificationPanelContainer />
         </div>
         <div role="main" id="main"  className={mainClass}>
           <div id="app-container">

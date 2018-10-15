@@ -14,7 +14,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import app from "../../app";
 import { Breadcrumbs } from '../components/header-breadcrumbs';
-import { NotificationCenterButton } from '../fauxton/notifications/notifications';
+import NotificationCenterButton from '../fauxton/notifications/components/NotificationCenterButton';
 import MangoComponents from "./mango/mango.components";
 import * as MangoAPI from "./mango/mango.api";
 import IndexResultsContainer from './index-results/containers/IndexResultsContainer';
