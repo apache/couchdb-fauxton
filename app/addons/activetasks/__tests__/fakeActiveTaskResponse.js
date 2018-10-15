@@ -9,7 +9,7 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
-var fakeData = [
+export default [
   {
     "user": "okra",
     "updated_on": 10,
@@ -116,4 +116,3 @@ var fakeData = [
     "started_on": 1426602505
   },
 ];
-export default fakeData;

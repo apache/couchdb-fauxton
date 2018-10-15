@@ -9,42 +9,19 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
-import ActiveTasks from "../resources";
-import Components from "../components";
-import Stores from "../stores";
-import fakedResponse from "./fakeActiveTaskResponse";
+import TableHeader from '../components/tableheader';
+import FilterTabs from '../components/filtertabs';
 import React from "react";
 import ReactDOM from "react-dom";
-import Actions from "../actions";
 import utils from "../../../../test/mocha/testUtils";
 import {mount} from 'enzyme';
 import sinon from "sinon";
 const assert = utils.assert;
-var restore = utils.restore;
-var activeTasksStore = Stores.activeTasksStore;
-var activeTasksCollection = new ActiveTasks.AllTasks({});
-activeTasksCollection.parse(fakedResponse);
 
 describe('Active Tasks -- Components', () => {
 
   describe('Active Tasks Table (Components)', () => {
-    let table;
-
-    beforeEach(() => {
-      activeTasksStore.initAfterFetching(activeTasksCollection.table, activeTasksCollection);
-      table = mount(<Components.ActiveTasksController />);
-    });
-
-    afterEach(() => {
-      restore(window.confirm);
-    });
-
     describe('Active Tasks Filter tray', () => {
-
-      afterEach(() => {
-        restore(Actions.switchTab);
-        restore(Actions.setSearchTerm);
-      });
 
       const radioTexts = [
         'Replication',
@@ -54,44 +31,57 @@ describe('Active Tasks -- Components', () => {
       ];
 
       it('should trigger change to radio buttons', () => {
-
         radioTexts.forEach((text) => {
-          let spy = sinon.spy(Actions, 'switchTab');
+          let spy = sinon.spy();
+          const tabs = mount(
+            <FilterTabs
+              onRadioClick={spy}
+              selectedRadio={"All Tasks"}
+              radioNames={radioTexts}
+            />
+          );
 
-          table.find(`input[value="${text}"]`).simulate('change');
+          tabs.find(`input[value="${text}"]`).simulate('change');
           assert.ok(spy.calledOnce);
-
-          spy.restore();
         });
       });
 
       it('should trigger change to search term', () => {
-        const spy = sinon.spy(Actions, 'setSearchTerm');
-        table.find('.searchbox').simulate('change', {target: {value: 'searching'}});
+        const spy = sinon.spy();
+        const tabs = mount(
+          <FilterTabs
+            onSearch={spy}
+            selectedRadio={"All Tasks"}
+          />
+        );
+        tabs.find('.searchbox').simulate('change', {target: {value: 'searching'}});
         assert.ok(spy.calledOnce);
       });
     });
 
     describe('Active Tasks Table Headers', () => {
-      var headerNames = [
+      const tableTexts = [
         'type',
         'database',
-        'started-on',
-        'updated-on',
-        'pid',
-        'progress'
+        'started-on'
       ];
 
-      afterEach(() => {
-        restore(Actions.sortByColumnHeader);
-      });
+      it('should trigger change to radio buttons', () => {
 
-      it('should trigger change to which header to sort by', () => {
-        headerNames.forEach(header => {
-          let spy = sinon.spy(Actions, 'sortByColumnHeader');
-          table.find('#' + header).simulate('change');
+        tableTexts.forEach((text) => {
+          let spy = sinon.spy();
+          const table = mount(
+            <table>
+              <TableHeader
+                onTableHeaderClick={spy}
+                headerIsAscending={true}
+                sortByHeader={"All Tasks"}
+              />
+            </table>
+          );
+
+          table.find(`.${text}`).simulate('click');
           assert.ok(spy.calledOnce);
-          spy.restore();
         });
       });
     });
