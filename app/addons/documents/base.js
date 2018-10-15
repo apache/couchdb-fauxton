@@ -21,6 +21,7 @@ import sidebarReducers from "./sidebar/reducers";
 import partitionKeyReducers from "./partition-key/reducers";
 import revisionBrowserReducers from './rev-browser/reducers';
 import docEditorReducers from './doc-editor/reducers';
+import changesReducers from './changes/reducers';
 import "./assets/less/documents.less";
 
 FauxtonAPI.addReducers({
@@ -30,6 +31,7 @@ FauxtonAPI.addReducers({
   revisionBrowser: revisionBrowserReducers,
   partitionKey: partitionKeyReducers,
   docEditor: docEditorReducers,
+  changes: changesReducers,
   designDocInfo: designDocInfoReducers
 });
 

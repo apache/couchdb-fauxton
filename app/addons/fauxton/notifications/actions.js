@@ -10,78 +10,65 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import FauxtonAPI from "../../../core/api";
-import ActionTypes from "./actiontypes";
+import ActionTypes from './actiontypes';
 
-function addNotification (notificationInfo) {
-  FauxtonAPI.dispatch({
+export const addNotification = (notificationInfo) => (dispatch) => {
+  dispatch({
     type: ActionTypes.ADD_NOTIFICATION,
     options: {
       info: notificationInfo
     }
   });
-}
+};
 
-function showNotificationCenter () {
-  FauxtonAPI.dispatch({ type: ActionTypes.SHOW_NOTIFICATION_CENTER });
-}
+export const showNotificationCenter = () => (dispatch) => {
+  dispatch({ type: ActionTypes.SHOW_NOTIFICATION_CENTER });
+};
 
-function hideNotificationCenter () {
-  FauxtonAPI.dispatch({ type: ActionTypes.HIDE_NOTIFICATION_CENTER });
-}
+export const hideNotificationCenter = () => (dispatch) => {
+  dispatch({ type: ActionTypes.HIDE_NOTIFICATION_CENTER });
+};
 
-function clearAllNotifications () {
-  FauxtonAPI.dispatch({ type: ActionTypes.CLEAR_ALL_NOTIFICATIONS });
-}
+export const clearAllNotifications = () => (dispatch) => {
+  dispatch({ type: ActionTypes.CLEAR_ALL_NOTIFICATIONS });
+};
 
-function clearSingleNotification (notificationId) {
-  FauxtonAPI.dispatch({
+export const clearSingleNotification = (notificationId) => (dispatch) => {
+  dispatch({
     type: ActionTypes.CLEAR_SINGLE_NOTIFICATION,
     options: {
       notificationId: notificationId
     }
   });
-}
+};
 
-function selectNotificationFilter (filter) {
-  FauxtonAPI.dispatch({
+export const selectNotificationFilter = (filter) => (dispatch) => {
+  dispatch({
     type: ActionTypes.SELECT_NOTIFICATION_FILTER,
     options: {
       filter: filter
     }
   });
-}
+};
 
-function startHidingNotification (notificationId) {
-  FauxtonAPI.dispatch({
+export const startHidingNotification = (notificationId) => (dispatch) => {
+  dispatch({
     type: ActionTypes.START_HIDING_NOTIFICATION,
     options: {
       notificationId: notificationId
     }
   });
-}
+};
 
-function hideNotification (notificationId) {
-  FauxtonAPI.dispatch({
+export const hideNotification = (notificationId) => (dispatch) => {
+  dispatch({
     type: ActionTypes.HIDE_NOTIFICATION,
     options: {
       notificationId: notificationId
     }
   });
-}
+};
 
-function hideAllVisibleNotifications () {
-  FauxtonAPI.dispatch({ type: ActionTypes.HIDE_ALL_NOTIFICATIONS });
-}
-
-export default {
-  addNotification: addNotification,
-  showNotificationCenter: showNotificationCenter,
-  hideNotificationCenter: hideNotificationCenter,
-  clearAllNotifications: clearAllNotifications,
-  clearSingleNotification: clearSingleNotification,
-  selectNotificationFilter: selectNotificationFilter,
-  startHidingNotification: startHidingNotification,
-  hideNotification: hideNotification,
-  hideAllVisibleNotifications: hideAllVisibleNotifications
+export const hideAllVisibleNotifications = () => (dispatch) => {
+  dispatch({ type: ActionTypes.HIDE_ALL_NOTIFICATIONS });
 };

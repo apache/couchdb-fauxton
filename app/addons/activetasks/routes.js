@@ -12,8 +12,7 @@
 
 import React from 'react';
 import FauxtonAPI from "../../core/api";
-import ActiveTasksResources from "./resources";
-import Layout from './layout';
+import Layout from './container';
 
 var ActiveTasksRouteObject = FauxtonAPI.RouteObject.extend({
   selectedHeader: 'Active Tasks',
@@ -30,6 +29,6 @@ var ActiveTasksRouteObject = FauxtonAPI.RouteObject.extend({
   }
 });
 
-ActiveTasksResources.RouteObjects = [ActiveTasksRouteObject];
-
-export default ActiveTasksResources;
+export default {
+  RouteObjects: [ActiveTasksRouteObject]
+};
