@@ -19,7 +19,6 @@ import ConfigOption from '../components/ConfigOption';
 import ConfigOptionValue from '../components/ConfigOptionValue';
 import ConfigOptionTrash from '../components/ConfigOptionTrash';
 import ConfigTableScreen from '../components/ConfigTableScreen';
-// import Actions from '../actions';
 import utils from '../../../../test/mocha/testUtils';
 
 FauxtonAPI.router = new FauxtonAPI.Router([]);
