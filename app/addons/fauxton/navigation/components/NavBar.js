@@ -10,10 +10,9 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+import classNames from 'classnames';
 import PropTypes from 'prop-types';
-
 import React, { Component } from 'react';
-
 import Footer from './Footer';
 import Burger from './Burger';
 import NavLink from './NavLink';
@@ -21,11 +20,11 @@ import Brand from './Brand';
 import LogoutButton from './LogoutButton';
 import LoginButton from './LoginButton';
 
-import Actions from "../actions";
-
-import classNames from 'classnames';
-
 class NavBar extends Component {
+
+  constructor(props) {
+    super(props);
+  }
 
   createLinks (links) {
     const { activeLink, isMinimized } = this.props;
@@ -39,10 +38,6 @@ class NavBar extends Component {
     });
   }
 
-  toggleMenu () {
-    Actions.toggleNavbarMenu();
-  }
-
   render () {
     const {
       isMinimized,
@@ -51,7 +46,8 @@ class NavBar extends Component {
       isLoginVisibleInsteadOfLogout,
       activeLink,
       username,
-      isNavBarVisible
+      isNavBarVisible,
+      toggleNavbarMenu
     } = this.props;
 
     if (!isNavBarVisible) {
@@ -76,7 +72,7 @@ class NavBar extends Component {
       <div className={navClasses}>
         <nav>
           <div className="faux-navbar__linkcontainer">
-            <Burger isMinimized={isMinimized} toggleMenu={this.toggleMenu}/>
+            <Burger isMinimized={isMinimized} toggleMenu={toggleNavbarMenu}/>
             <div className="faux-navbar__links">
               {navLinks}
               {bottomNavLinks}
@@ -110,7 +106,8 @@ NavBar.propTypes = {
   footerNavLinks: PropTypes.array,
   isNavBarVisible: PropTypes.bool,
   isLoginSectionVisible: PropTypes.bool.isRequired,
-  isLoginVisibleInsteadOfLogout: PropTypes.bool.isRequired
+  isLoginVisibleInsteadOfLogout: PropTypes.bool.isRequired,
+  toggleNavbarMenu: PropTypes.func.isRequired
 };
 
 export default NavBar;

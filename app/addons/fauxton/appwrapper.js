@@ -11,13 +11,11 @@
 // the License.
 
 import React from 'react';
+import { connect } from 'react-redux';
 import {NotificationController, PermanentNotification} from "./notifications/notifications";
 import NavBar from './navigation/container/NavBar';
-import NavbarActions from './navigation/actions';
-import Stores from './navigation/stores';
+import * as NavbarActions from './navigation/actions';
 import classNames from 'classnames';
-
-const navBarStore = Stores.navBarStore;
 
 class ContentWrapper extends React.Component {
   constructor(props) {
@@ -27,14 +25,14 @@ class ContentWrapper extends React.Component {
     };
 
     if (props.router.currentRouteOptions && props.router.currentRouteOptions.selectedHeader) {
-      NavbarActions.setNavbarActiveLink(this.state.routerOptions.selectedHeader);
+      this.props.setNavbarActiveLink(this.state.routerOptions.selectedHeader);
     }
   }
 
   componentDidMount () {
     this.props.router.on('new-component', (routerOptions) => {
       this.setState({routerOptions});
-      NavbarActions.setNavbarActiveLink(this.state.routerOptions.selectedHeader);
+      this.props.setNavbarActiveLink(this.state.routerOptions.selectedHeader);
     });
 
     this.props.router.on('trigger-update', () => {
@@ -53,31 +51,15 @@ class ContentWrapper extends React.Component {
   }
 }
 
-export default class App extends React.Component {
+class App extends React.Component {
   constructor (props) {
     super(props);
-    this.state = this.getStoreState();
-  }
-
-  getStoreState () {
-    return {
-      isPrimaryNavMinimized: navBarStore.isMinimized()
-    };
-  }
-
-  componentDidMount () {
-    navBarStore.on('change', this.onChange, this);
-  }
-
-  onChange () {
-    this.setState(this.getStoreState());
   }
 
   render () {
     const mainClass = classNames(
-      {'closeMenu': this.state.isPrimaryNavMinimized}
+      {'closeMenu': this.props.isPrimaryNavMinimized}
     );
-
     return (
       <div>
         <PermanentNotification />
@@ -88,7 +70,7 @@ export default class App extends React.Component {
           <div id="app-container">
             <div className="wrapper">
               <div className="pusher">
-                <ContentWrapper router={this.props.router} />
+                <ContentWrapper router={this.props.router} setNavbarActiveLink={this.props.setNavbarActiveLink}/>
               </div>
               <div id="primary-navbar">
                 <NavBar/>
@@ -100,3 +82,15 @@ export default class App extends React.Component {
     );
   }
 }
+
+export default connect(
+  ({ navigation }) => {
+    return {
+      isPrimaryNavMinimized: navigation.isMinimized};
+  },
+  (dispatch) => {
+    return {
+      setNavbarActiveLink: (link) => { dispatch(NavbarActions.setNavbarActiveLink(link)); }
+    };
+  }
+)(App);

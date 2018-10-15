@@ -38,41 +38,41 @@ FauxtonAPI.config({
   // I haven't wrapped these dispatch methods in a action
   // because I don't want to require fauxton/actions in this method.
   addHeaderLink: function (link) {
-    FauxtonAPI.dispatch({
+    FauxtonAPI.reduxDispatch({
       type: 'ADD_NAVBAR_LINK',
       link: link
     });
   },
 
   updateHeaderLink: function (link) {
-    FauxtonAPI.dispatch({
+    FauxtonAPI.reduxDispatch({
       type: 'UPDATE_NAVBAR_LINK',
       link: link
     });
   },
 
   removeHeaderLink: function (link) {
-    FauxtonAPI.dispatch({
+    FauxtonAPI.reduxDispatch({
       type: 'REMOVE_NAVBAR_LINK',
       link: link
     });
   },
 
   hideLogin: function () {
-    FauxtonAPI.dispatch({
+    FauxtonAPI.reduxDispatch({
       type: 'NAVBAR_SHOW_HIDE_LOGIN_LOGOUT_SECTION',
       visible: false
     });
   },
 
   showLogout: function () {
-    FauxtonAPI.dispatch({
+    FauxtonAPI.reduxDispatch({
       type: 'NAVBAR_SHOW_LOGOUT_BUTTON'
     });
   },
 
   showLogin: function () {
-    FauxtonAPI.dispatch({
+    FauxtonAPI.reduxDispatch({
       type: 'NAVBAR_SHOW_LOGIN_BUTTON'
     });
   }
