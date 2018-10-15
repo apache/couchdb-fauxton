@@ -106,7 +106,7 @@ TabsSidebarHeader.propTypes = {
   showPartitionKeySelector: PropTypes.bool.isRequired,
   partitionKey: PropTypes.string,
   onPartitionKeySelected: PropTypes.func,
-  onGlobalModeSelected: PropTypes.bool,
+  onGlobalModeSelected: PropTypes.func,
   globalMode: PropTypes.bool
 };
 
