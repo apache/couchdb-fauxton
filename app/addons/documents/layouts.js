@@ -13,7 +13,7 @@
 import PropTypes from 'prop-types';
 
 import React from 'react';
-import { NotificationCenterButton } from '../fauxton/notifications/notifications';
+import NotificationCenterButton from '../fauxton/notifications/components/NotificationCenterButton';
 import SidebarControllerContainer from "./sidebar/SidebarControllerContainer";
 import HeaderDocsLeft from './components/header-docs-left';
 import ChangesContainer from './changes/components/ChangesContainer';

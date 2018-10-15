@@ -16,7 +16,7 @@ import ConfigTableContainer from './components/ConfigTableContainer';
 import ConfigTabs from './components/ConfigTabs';
 import CORSComponents from '../cors/components';
 import { Breadcrumbs } from '../components/header-breadcrumbs';
-import { NotificationCenterButton } from '../fauxton/notifications/notifications';
+import NotificationCenterButton from '../fauxton/notifications/components/NotificationCenterButton';
 import { ApiBarWrapper } from '../components/layouts';
 
 export const ConfigHeader = ({ node, crumbs, docURL, endpoint }) => {
