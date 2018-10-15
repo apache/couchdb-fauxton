@@ -13,7 +13,7 @@
 import React from 'react';
 import FauxtonAPI from "../../core/api";
 import Config from "./resources";
-import ClusterActions from "../cluster/cluster.actions";
+import ClusterActions from "../cluster/actions";
 import ConfigActions from "./actions";
 import Layout from './layout';
 
