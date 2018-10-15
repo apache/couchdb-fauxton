@@ -13,25 +13,23 @@
 
 import React from 'react';
 import { mount } from 'enzyme';
-
 import NavBar from '../components/NavBar';
 
 describe('Navigation Bar', () => {
-
+  const defaultProps = {
+    activeLink: '',
+    isMinimized: false,
+    version: '42',
+    navLinks: [],
+    bottomNavLinks: [],
+    footerNavLinks: [],
+    isNavBarVisible: true,
+    isLoginSectionVisible: true,
+    isLoginVisibleInsteadOfLogout: true,
+    toggleNavbarMenu: () => {}
+  };
   it('renders with login button when logged out', () => {
-    const props = {
-      activeLink: '',
-      isMinimized: false,
-      version: '42',
-      navLinks: [],
-      bottomNavLinks: [],
-      footerNavLinks: [],
-      isNavBarVisible: true,
-      isLoginSectionVisible: true,
-      isLoginVisibleInsteadOfLogout: true
-    };
-
-    const navBar = mount(<NavBar {...props} />);
+    const navBar = mount(<NavBar {...defaultProps} />);
 
     const button = navBar.find('[href="#/login"]');
     expect(button.text()).toContain('Login');
@@ -39,19 +37,11 @@ describe('Navigation Bar', () => {
 
   it('renders with logout button when logged in', () => {
     const props = {
-      activeLink: '',
-      isMinimized: false,
-      version: '42',
-      navLinks: [],
-      bottomNavLinks: [],
-      footerNavLinks: [],
       username: 'Rocko',
-      isNavBarVisible: true,
-      isLoginSectionVisible: true,
       isLoginVisibleInsteadOfLogout: false
     };
 
-    const navBar = mount(<NavBar {...props} />);
+    const navBar = mount(<NavBar {...defaultProps} {...props} />);
 
     const button = navBar.find('[href="#/logout"]');
     expect(button.text()).toContain('Log Out');
@@ -59,19 +49,12 @@ describe('Navigation Bar', () => {
 
   it('Admin Party has no Logout button and no Login button', () => {
     const props = {
-      activeLink: '',
-      isMinimized: false,
-      version: '42',
-      navLinks: [],
-      bottomNavLinks: [],
-      footerNavLinks: [],
       username: 'Rocko',
-      isNavBarVisible: true,
       isLoginSectionVisible: false,
       isLoginVisibleInsteadOfLogout: false
     };
 
-    const navBar = mount(<NavBar {...props} />);
+    const navBar = mount(<NavBar {...defaultProps} {...props} />);
 
     expect(navBar.text()).not.toMatch(/Login/);
     expect(navBar.text()).not.toMatch(/Log Out/);
