@@ -10,10 +10,20 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-export default {
-  UPDATE_CHANGES: 'UPDATE_CHANGES',
-  ADD_CHANGES_FILTER_ITEM: 'ADD_CHANGES_FILTER_ITEM',
-  REMOVE_CHANGES_FILTER_ITEM: 'REMOVE_CHANGES_FILTER_ITEM',
-  UPDATE_CHANGES_FILTER: 'UPDATE_CHANGES_FILTER',
-  TOGGLE_CHANGES_CODE_VISIBILITY: 'TOGGLE_CHANGES_CODE_VISIBILITY'
-};
+import React from 'react';
+import FauxtonAPI from '../../../../core/api';
+
+export default class ChangeID extends React.Component {
+  render () {
+    const { deleted, id, databaseName } = this.props;
+    if (deleted) {
+      return (
+        <span className="js-doc-id">{id}</span>
+      );
+    }
+    const link = '#' + FauxtonAPI.urls('document', 'app', databaseName, id);
+    return (
+      <a href={link} className="js-doc-link">{id}</a>
+    );
+  }
+}
