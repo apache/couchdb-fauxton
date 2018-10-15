@@ -11,14 +11,12 @@
 // the License.
 
 import React from 'react';
-import FauxtonAPI from "../../core/api";
-import Config from "./resources";
-import ClusterActions from "../cluster/actions";
-import ConfigActions from "./actions";
+import FauxtonAPI from '../../core/api';
+import ClusterActions from '../cluster/actions';
+import * as ConfigAPI from './api';
 import Layout from './layout';
 
-
-var ConfigDisabledRouteObject = FauxtonAPI.RouteObject.extend({
+const ConfigDisabledRouteObject = FauxtonAPI.RouteObject.extend({
   selectedHeader: 'Configuration',
 
   routes: {
@@ -35,31 +33,23 @@ var ConfigDisabledRouteObject = FauxtonAPI.RouteObject.extend({
 });
 
 
-var ConfigPerNodeRouteObject = FauxtonAPI.RouteObject.extend({
+const ConfigPerNodeRouteObject = FauxtonAPI.RouteObject.extend({
   roles: ['_admin'],
   selectedHeader: 'Configuration',
-
-  apiUrl: function () {
-    return [this.configs.url(), this.configs.documentation];
-  },
 
   routes: {
     '_config/:node': 'configForNode',
     '_config/:node/cors': 'configCorsForNode'
   },
 
-  initialize: function (_a, options) {
-    var node = options[0];
-
-    this.configs = new Config.ConfigModel({ node: node });
+  initialize: function () {
   },
 
   configForNode: function (node) {
-    ConfigActions.fetchAndEditConfig(node);
     return <Layout
       node={node}
-      docURL={this.configs.documentation}
-      endpoint={this.configs.url()}
+      docURL={FauxtonAPI.constants.DOC_URLS.CONFIG}
+      endpoint={ConfigAPI.configUrl(node)}
       crumbs={[{ name: 'Config' }]}
       showCors={false}
     />;
@@ -68,14 +58,15 @@ var ConfigPerNodeRouteObject = FauxtonAPI.RouteObject.extend({
   configCorsForNode: function (node) {
     return <Layout
       node={node}
-      docURL={this.configs.documentation}
-      endpoint={this.configs.url()}
+      docURL={FauxtonAPI.constants.DOC_URLS.CONFIG}
+      endpoint={ConfigAPI.configUrl(node)}
       crumbs={[{ name: 'Config' }]}
       showCors={true}
     />;
   }
 });
 
+const Config = FauxtonAPI.addon();
 Config.RouteObjects = [ConfigPerNodeRouteObject, ConfigDisabledRouteObject];
 
 export default Config;
