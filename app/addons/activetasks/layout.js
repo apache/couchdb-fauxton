@@ -14,13 +14,14 @@ import React from 'react';
 import Helpers from "../../helpers";
 import FauxtonAPI from "../../core/api";
 import {OnePane, OnePaneHeader, OnePaneContent} from '../components/layouts';
-import {ActiveTasksController, ActiveTasksPollingWidgetController} from "./components";
+import ActiveTasksController from "./components/controller";
+import ActiveTasksPollingWidgetController from './components/polling';
 
 const crumbs = [
   {'name': 'Active Tasks'}
 ];
 
-export const ActiveTasksLayout = () => {
+export const ActiveTasksLayout = (props) => {
   return (
     <OnePane>
       <OnePaneHeader
@@ -28,10 +29,10 @@ export const ActiveTasksLayout = () => {
         docURL={FauxtonAPI.constants.DOC_URLS.ACTIVE_TASKS}
         endpoint={Helpers.getApiUrl('/_active_tasks')}
       >
-        <ActiveTasksPollingWidgetController />
+        <ActiveTasksPollingWidgetController {...props} />
       </OnePaneHeader>
       <OnePaneContent>
-        <ActiveTasksController />
+        <ActiveTasksController {...props} />
       </OnePaneContent>
     </OnePane>
   );

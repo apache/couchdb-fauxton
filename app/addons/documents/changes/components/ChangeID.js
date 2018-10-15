@@ -11,24 +11,19 @@
 // the License.
 
 import React from 'react';
-import FauxtonAPI from "../../core/api";
-import Layout from './container';
+import FauxtonAPI from '../../../../core/api';
 
-var ActiveTasksRouteObject = FauxtonAPI.RouteObject.extend({
-  selectedHeader: 'Active Tasks',
-
-  routes: {
-    'activetasks/:id': 'showActiveTasks',
-    'activetasks': 'showActiveTasks'
-  },
-
-  roles: ['_admin'],
-
-  showActiveTasks: function () {
-    return <Layout />;
+export default class ChangeID extends React.Component {
+  render () {
+    const { deleted, id, databaseName } = this.props;
+    if (deleted) {
+      return (
+        <span className="js-doc-id">{id}</span>
+      );
+    }
+    const link = '#' + FauxtonAPI.urls('document', 'app', databaseName, id);
+    return (
+      <a href={link} className="js-doc-link">{id}</a>
+    );
   }
-});
-
-export default {
-  RouteObjects: [ActiveTasksRouteObject]
-};
+}
