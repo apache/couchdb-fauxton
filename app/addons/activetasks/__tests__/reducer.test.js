@@ -50,7 +50,7 @@ describe('Active Tasks -- Stores', () => {
       });
     });
 
-    it('should search the table correctly', () => {
+    it.only('should search the table correctly', () => {
       var searchTerm = 'base';
       const state = reducer(initState, {
         type: ActionTypes.ACTIVE_TASKS_SET_SEARCH_TERM,

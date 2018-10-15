@@ -41,7 +41,7 @@ const sortTasksByColumnHeader = (colName, tasks, headerIsAscending) => {
 
 
 const setSearchTerm = (state, searchTerm) => {
-  const filteredTasks = filterTasks(searchTerm, state.selectedRadio, state.sortbyHeader, state.tasks);
+  const filteredTasks = filterTasks(searchTerm, state.selectedRadio, state.sortbyHeader, state.tasks, state.headerIsAscending);
   return {
     ...state,
     filteredTasks,
@@ -108,10 +108,6 @@ export default (state = initialState, {type, options}) => {
         ...state,
         pollingIntervalSeconds: options
       };
-
-    case ActionTypes.ACTIVE_TASKS_SET_COLLECTION:
-      // this.setCollection(options);
-      break;
 
     case ActionTypes.ACTIVE_TASKS_SET_SEARCH_TERM:
       return setSearchTerm(state, options);
