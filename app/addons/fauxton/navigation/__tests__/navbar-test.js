@@ -9,58 +9,60 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
-import NavBarContainer from "../container/NavBar";
-import FauxtonAPI from "../../../../core/api";
-import ActionTypes from "../actiontypes";
-import React from "react";
-import ReactDOM from "react-dom";
+
 import {mount} from 'enzyme';
+import React from 'react';
+import NavBar from '../components/NavBar';
 
 describe('Navigation Bar', () => {
-  FauxtonAPI.session = {
-    user: () => {}
+  const defaultProps = {
+    isMinimized: true,
+    version: '',
+    username: '',
+    navLinks: [],
+    bottomNavLinks: [],
+    footerNavLinks: [],
+    isNavBarVisible: true,
+    isLoginSectionVisible: false,
+    isLoginVisibleInsteadOfLogout: true,
+    toggleNavbarMenu: () => {}
   };
 
   it('is displayed by default', () => {
-    const navbar = mount(<NavBarContainer />);
+    const navbar = mount(<NavBar {...defaultProps}/>);
     expect(navbar.find('.faux-navbar').length).toBe(1);
   });
 
   it('is dynamically displayed by isNavBarVisible', () => {
-    const navbar = mount(<NavBarContainer />);
+    const navbar = mount(<NavBar
+      {...defaultProps}
+      isNavBarVisible={false}/>);
 
-    FauxtonAPI.dispatch({
-      type: ActionTypes.NAVBAR_HIDE
-    });
-    navbar.update();
     expect(navbar.find('.faux-navbar').length).toBe(0);
 
-    FauxtonAPI.dispatch({
-      type: ActionTypes.NAVBAR_SHOW
-    });
+    navbar.setProps({ isNavBarVisible: true });
     navbar.update();
     expect(navbar.find('.faux-navbar').length).toBe(1);
   });
 
   it('can display items with icon badge', () => {
-    FauxtonAPI.dispatch({
-      type: ActionTypes.ADD_NAVBAR_LINK,
-      link: {
+    const navLinks = [
+      {
         href: "#/_with_badge",
         title: "WithBadge",
         icon: "fonticon-database",
         badge: true
-      }
-    });
-    FauxtonAPI.dispatch({
-      type: ActionTypes.ADD_NAVBAR_LINK,
-      link: {
+      },
+      {
         href: "#/_without_badge",
         title: "WithoutBadge",
         icon: "fonticon-database"
       }
-    });
-    const navbar = mount(<NavBarContainer />);
+    ];
+
+    const navbar = mount(<NavBar
+      {...defaultProps}
+      navLinks={navLinks}/>);
     expect(navbar.find('div[data-nav-name="WithoutBadge"] i.faux-navbar__icon-badge').length, 0);
     expect(navbar.find('div[data-nav-name="WithBadge"] i.faux-navbar__icon-badge').length, 1);
   });

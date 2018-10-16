@@ -10,53 +10,51 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import FauxtonAPI from "../../../core/api";
-import ActionTypes from "./actiontypes";
+import FauxtonAPI from '../../../core/api';
+import ActionTypes from './actiontypes';
 
-export default {
-  toggleNavbarMenu () {
-    FauxtonAPI.dispatch({
-      type: ActionTypes.TOGGLE_NAVBAR_MENU
-    });
-  },
+export const toggleNavbarMenu = () => (dispatch) => {
+  dispatch({
+    type: ActionTypes.TOGGLE_NAVBAR_MENU
+  });
+};
 
-  addHeaderLink (link) {
-    FauxtonAPI.dispatch({
-      type: ActionTypes.ADD_NAVBAR_LINK,
-      link: link
-    });
-  },
+export const addHeaderLink = (link) => (dispatch) => {
+  dispatch({
+    type: ActionTypes.ADD_NAVBAR_LINK,
+    link: link
+  });
+};
 
-  removeHeaderLink (link) {
-    FauxtonAPI.dispatch({
-      type: ActionTypes.REMOVE_NAVBAR_LINK,
-      link: link
-    });
-  },
+export const removeHeaderLink = (link) => (dispatch) => {
+  dispatch({
+    type: ActionTypes.REMOVE_NAVBAR_LINK,
+    link: link
+  });
+};
 
-  setNavbarVersionInfo (versionInfo) {
-    FauxtonAPI.dispatch({
-      type: ActionTypes.NAVBAR_SET_VERSION_INFO,
-      version: versionInfo
-    });
-  },
+export const setNavbarVersionInfo = (versionInfo) => {
+  FauxtonAPI.reduxDispatch({
+    type: ActionTypes.NAVBAR_SET_VERSION_INFO,
+    version: versionInfo
+  });
+};
 
-  setNavbarActiveLink (header) {
-    FauxtonAPI.dispatch({
-      type: ActionTypes.NAVBAR_ACTIVE_LINK,
-      name: header
-    });
-  },
+export const setNavbarActiveLink = (header) => (dispatch) => {
+  dispatch({
+    type: ActionTypes.NAVBAR_ACTIVE_LINK,
+    name: header
+  });
+};
 
-  showNavBar () {
-    FauxtonAPI.dispatch({
-      type: ActionTypes.NAVBAR_SHOW
-    });
-  },
+export const showNavBar = () => (dispatch) => {
+  dispatch({
+    type: ActionTypes.NAVBAR_SHOW
+  });
+};
 
-  hideNavBar () {
-    FauxtonAPI.dispatch({
-      type: ActionTypes.NAVBAR_HIDE
-    });
-  }
+export const hideNavBar = () => (dispatch) => {
+  dispatch({
+    type: ActionTypes.NAVBAR_HIDE
+  });
 };

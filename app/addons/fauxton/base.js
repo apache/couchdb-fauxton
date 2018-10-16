@@ -12,7 +12,8 @@
 
 import app from '../../app';
 import FauxtonAPI from '../../core/api';
-import NavigationActions from './navigation/actions';
+import * as NavigationActions from './navigation/actions';
+import navigationReducers from './navigation/reducers';
 import notificationsReducer from './notifications/reducers';
 import './assets/less/fauxton.less';
 
@@ -32,6 +33,7 @@ Fauxton.VersionInfo = Backbone.Model.extend({
 });
 
 FauxtonAPI.addReducers({
+  navigation: navigationReducers,
   notifications: notificationsReducer
 });
 

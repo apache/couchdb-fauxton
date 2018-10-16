@@ -24,19 +24,19 @@ var FauxtonAPI = {
   // I haven't wrapped these dispatch methods in a action
   // because I don't want to require fauxton/actions in this method.
   addHeaderLink: function (link) {
-    FauxtonAPI.dispatch({
+    FauxtonAPI.reduxDispatch({
       type: 'ADD_NAVBAR_LINK',
       link: link
     });
   },
   showHeaderLinkBadge: function (link) {
-    FauxtonAPI.dispatch({
+    FauxtonAPI.reduxDispatch({
       type: 'SHOW_NAVBAR_LINK_BADGE',
       link: link
     });
   },
   hideHeaderLinkBadge: function (link) {
-    FauxtonAPI.dispatch({
+    FauxtonAPI.reduxDispatch({
       type: 'HIDE_NAVBAR_LINK_BADGE',
       link: link
     });
