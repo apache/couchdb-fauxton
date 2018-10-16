@@ -10,55 +10,38 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import FauxtonAPI from "../../../../core/api";
-import React from "react";
-
-import ReactDOM from "react-dom";
-import Stores from "../stores";
-
+import { connect } from 'react-redux';
+import FauxtonAPI from '../../../../core/api';
 import NavBar from '../components/NavBar';
+import * as Actions from '../actions';
 
-const navBarStore = Stores.navBarStore;
-
-class NavBarContainer extends React.Component {
-  getStoreState = () => {
-    return {
-      navLinks: navBarStore.getNavLinks(),
-      bottomNavLinks: navBarStore.getBottomNavLinks(),
-      footerNavLinks: navBarStore.getFooterNavLinks(),
-      activeLink: navBarStore.getActiveLink(),
-      version: navBarStore.getVersion(),
-      isMinimized: navBarStore.isMinimized(),
-      isNavBarVisible: navBarStore.isNavBarVisible(),
-
-      isLoginSectionVisible: navBarStore.getIsLoginSectionVisible(),
-      isLoginVisibleInsteadOfLogout: navBarStore.getIsLoginVisibleInsteadOfLogout()
-    };
+const mapStateToProps = ({ navigation }) => {
+  const user = FauxtonAPI.session.user();
+  return {
+    navLinks: navigation.navLinks,
+    bottomNavLinks: navigation.bottomNavLinks,
+    footerNavLinks: navigation.footerNavLinks,
+    activeLink: navigation.activeLink,
+    version: navigation.version,
+    isMinimized: navigation.isMinimized,
+    isNavBarVisible: navigation.navBarVisible,
+    isLoginSectionVisible: navigation.loginSectionVisible,
+    isLoginVisibleInsteadOfLogout: navigation.loginVisibleInsteadOfLogout,
+    username: (user && user.name) ? user.name : ''
   };
+};
 
-  onChange = () => {
-    this.setState(this.getStoreState());
+const mapDispatchToProps = (dispatch) => {
+  return {
+    toggleNavbarMenu: () => {
+      dispatch(Actions.toggleNavbarMenu());
+    }
   };
+};
 
-  state = this.getStoreState();
-
-  componentDidMount() {
-    navBarStore.on('change', this.onChange, this);
-  }
-
-  componentWillUnmount() {
-    navBarStore.off('change', this.onChange);
-  }
-
-  render() {
-    const user = FauxtonAPI.session.user();
-
-    const username =  (user && user.name) ? user.name : '';
-    return (
-      <NavBar {...this.state} username={username} />
-    );
-  }
-}
-
+const NavBarContainer = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(NavBar);
 
 export default NavBarContainer;
