@@ -56,8 +56,9 @@ describe('DocEditorActions', () => {
         }
       ]
     };
+    const mockDispatch = () => {};
 
-    Actions.uploadAttachment(params);
+    Actions.uploadAttachment(params)(mockDispatch);
     sinon.assert.calledWithExactly(
       fakeOpen,
       'PUT',

@@ -15,7 +15,7 @@ import FauxtonAPI from "../../core/api";
 import Documents from "./resources";
 import Databases from "../databases/base";
 import Actions from "./doc-editor/actions";
-import ReactComponents from "./doc-editor/components";
+import DocEditorContainer from "./doc-editor/components/DocEditorContainer";
 import RevBrowserContainer from './rev-browser/container';
 import {DocEditorLayout} from '../components/layouts';
 
@@ -77,13 +77,13 @@ const DocEditorRouteObject = FauxtonAPI.RouteObject.extend({
       this.doc = new Documents.Doc({ _id: docId }, { database: this.database, fetchConflicts: true });
     }
 
-    Actions.initDocEditor({ doc: this.doc, database: this.database });
+    Actions.dispatchInitDocEditor({ doc: this.doc, database: this.database });
 
     return <DocEditorLayout
       crumbs={crumbs}
       endpoint={this.doc.url('apiurl')}
       docURL={this.doc.documentation()}
-      component={<ReactComponents.DocEditorController
+      component={<DocEditorContainer
         database={this.database}
         isNewDoc={docId ? false : true}
       />}
