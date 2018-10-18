@@ -31,6 +31,7 @@ export default class DocEditorScreen extends React.Component {
   static propTypes = {
     isLoading: PropTypes.bool.isRequired,
     isNewDoc: PropTypes.bool.isRequired,
+    isDbPartitioned: PropTypes.bool.isRequired,
     doc: PropTypes.object,
     conflictCount: PropTypes.number.isRequired,
     saveDoc: PropTypes.func.isRequired,
@@ -63,8 +64,14 @@ export default class DocEditorScreen extends React.Component {
       return (<GeneralComponents.LoadLines />);
     }
 
-    var code = JSON.stringify(this.props.doc.attributes, null, '  ');
-    var editorCommands = [{
+    const docContent = this.props.doc.attributes;
+    if (this.props.isDbPartitioned) {
+      if (!docContent._id.includes(':')) {
+        docContent._id = ':' + docContent._id;
+      }
+    }
+    const code = JSON.stringify(docContent, null, '  ');
+    const editorCommands = [{
       name: 'save',
       bindKey: { win: 'Ctrl-S', mac: 'Ctrl-S' },
       exec: this.saveDoc
@@ -94,7 +101,7 @@ export default class DocEditorScreen extends React.Component {
   }
 
   saveDoc = () => {
-    this.props.saveDoc(this.props.doc, this.checkDocIsValid(), this.onSaveComplete);
+    this.props.saveDoc(this.props.doc, this.checkDocIsValid(), this.onSaveComplete, this.props.previousUrl);
   };
 
   onSaveComplete = () => {
@@ -118,7 +125,7 @@ export default class DocEditorScreen extends React.Component {
     if (this.getEditor().hasErrors()) {
       return false;
     }
-    var json = JSON.parse(this.getEditor().getValue());
+    const json = JSON.parse(this.getEditor().getValue());
     this.props.doc.clear().set(json, { validate: true });
 
     return !this.props.doc.validationError;
@@ -158,8 +165,10 @@ export default class DocEditorScreen extends React.Component {
   };
 
   render() {
-    var saveButtonLabel = (this.props.isNewDoc) ? 'Create Document' : 'Save Changes';
-    let endpoint = FauxtonAPI.urls('allDocs', 'app', FauxtonAPI.url.encode(this.props.database.id));
+    const saveButtonLabel = (this.props.isNewDoc) ? 'Create Document' : 'Save Changes';
+    const endpoint = this.props.previousUrl ?
+      this.props.previousUrl :
+      FauxtonAPI.urls('allDocs', 'app', FauxtonAPI.url.encode(this.props.database.id));
     return (
       <div>
         <div id="doc-editor-actions-panel">

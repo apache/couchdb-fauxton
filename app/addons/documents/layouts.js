@@ -185,7 +185,8 @@ export const DocsTabsSidebarLayout = ({
     fetchAtStartup={true}
     queryDocs={queryDocs}
     docType={Constants.INDEX_RESULTS_DOC_TYPE.VIEW}
-    deleteEnabled={deleteEnabled} />;
+    deleteEnabled={deleteEnabled}
+    partitionKey={partitionKey} />;
 
   return (
     <div id="dashboard" className="with-sidebar">
