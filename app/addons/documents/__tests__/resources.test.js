@@ -11,6 +11,7 @@
 // the License.
 
 import FauxtonAPI from "../../../core/api";
+import Helpers from '../../../helpers';
 import Models from "../resources";
 import testUtils from "../../../../test/mocha/testUtils";
 import "../base";
@@ -79,6 +80,25 @@ describe('AllDocs', () => {
     });
 
     assert.ok(collection.isEditable());
+  });
+});
+
+describe('NewDoc', () => {
+
+  let getUUID;
+  beforeEach(() => {
+    getUUID = sinon.stub(Helpers, 'getUUID').resolves({ uuids: ['abc9876'] });
+  });
+
+  afterEach(() => {
+    getUUID.restore();
+  });
+
+  it('adds partition key to auto-generated ID', () => {
+    const newDoc = new Models.NewDoc(null, { database: {}, defaultPartitionKey: 'part_key' });
+    return newDoc.fetch().then(() => {
+      expect(newDoc.get('_id')).toMatch(/part_key:abc9876/);
+    });
   });
 });
 

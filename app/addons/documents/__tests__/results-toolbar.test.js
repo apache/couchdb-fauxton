@@ -50,4 +50,9 @@ describe('Results Toolbar', () => {
     expect(wrapper.find('div.two-sides-toggle-button').length).toBe(1);
     expect(wrapper.find('.document-result-screen__toolbar-create-btn').length).toBe(1);
   });
+
+  it('includes default partition key when one is selected', () => {
+    const wrapper = mount(<ResultsToolBar hasResults={true} isListDeletable={false} {...restProps} partitionKey={'partKey1'}/>);
+    expect(wrapper.find('a').prop('href')).toMatch(/\?partitionKey=partKey1$/);
+  });
 });

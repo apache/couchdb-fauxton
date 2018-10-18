@@ -34,6 +34,7 @@ export default class DocEditorScreen extends React.Component {
     isDbPartitioned: PropTypes.bool.isRequired,
     doc: PropTypes.object,
     conflictCount: PropTypes.number.isRequired,
+    previousUrl: PropTypes.string,
     saveDoc: PropTypes.func.isRequired,
 
     isCloneDocModalVisible: PropTypes.bool.isRequired,
