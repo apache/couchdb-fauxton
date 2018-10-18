@@ -43,7 +43,13 @@ export default class CloneDocModal extends React.Component {
     if (this.state.uuid === null) {
       Helpers.getUUID().then((res) => {
         if (res.uuids) {
-          this.setState({ uuid: res.uuids[0] });
+          const newState = { uuid: res.uuids[0] };
+          const idx = this.props.doc.attributes._id.indexOf(':');
+          if (idx >= 0) {
+            const partitionKey = this.props.doc.attributes._id.substring(0, idx);
+            newState.uuid = partitionKey + ':' + newState.uuid;
+          }
+          this.setState(newState);
         }
       }).catch(() => {});
     }
