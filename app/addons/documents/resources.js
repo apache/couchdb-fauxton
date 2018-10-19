@@ -71,7 +71,7 @@ Documents.DdocInfo = FauxtonAPI.Model.extend({
 
 Documents.NewDoc = Documents.Doc.extend({
   fetch: function () {
-    const prefix = this.defaultPartitionKey ? (this.defaultPartitionKey + ':') : '';
+    const prefix = this.partitionKey ? (this.partitionKey + ':') : '';
     return Helpers.getUUID().then((res) => {
       if (res.uuids) {
         this.set("_id", prefix + res.uuids[0]);

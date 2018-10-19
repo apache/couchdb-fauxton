@@ -79,8 +79,8 @@ const DocEditorRouteObject = FauxtonAPI.RouteObject.extend({
     if (docId) {
       this.doc = new Documents.Doc({ _id: docId }, { database: this.database, fetchConflicts: true });
     } else {
-      const defaultPartitionKey = urlParams ? urlParams.partitionKey : undefined;
-      this.doc = new Documents.NewDoc(null, { database: this.database, defaultPartitionKey });
+      const partitionKey = urlParams ? urlParams.partitionKey : undefined;
+      this.doc = new Documents.NewDoc(null, { database: this.database, partitionKey });
     }
     DatabaseActions.fetchSelectedDatabaseInfo(databaseName);
     Actions.dispatchInitDocEditor({ doc: this.doc, database: this.database });

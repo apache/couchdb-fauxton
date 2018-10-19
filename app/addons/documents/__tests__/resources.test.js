@@ -95,7 +95,7 @@ describe('NewDoc', () => {
   });
 
   it('adds partition key to auto-generated ID', () => {
-    const newDoc = new Models.NewDoc(null, { database: {}, defaultPartitionKey: 'part_key' });
+    const newDoc = new Models.NewDoc(null, { database: {}, partitionKey: 'part_key' });
     return newDoc.fetch().then(() => {
       expect(newDoc.get('_id')).toMatch(/part_key:abc9876/);
     });
