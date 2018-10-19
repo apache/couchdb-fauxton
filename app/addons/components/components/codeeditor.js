@@ -248,7 +248,6 @@ export class CodeEditor extends React.Component {
   parseLineForStringMatch = () => {
     const selStart = this.getSelectionStart().row;
     const selEnd   = this.getSelectionEnd().row;
-
     // one JS(ON) string can't span more than one line - we edit one string, so ensure we don't select several lines
     if (selStart >= 0 && selEnd >= 0 && selStart === selEnd && this.isRowExpanded(selStart)) {
       const editLine = this.getLine(selStart);
@@ -349,10 +348,23 @@ export class CodeEditor extends React.Component {
     this.editor.getSelection().moveCursorUp();
   };
 
+  validateContentOnPaste = () => {
+    const currentValue = this.getValue();
+    const isContentInvalid = currentValue.match(/^[^{|}|"|\s]/gm);
+
+    if (isContentInvalid) {
+      FauxtonAPI.addNotification({
+        msg: 'Invalid JSON schema.',
+        type: 'error',
+        clear: true
+      });
+    }
+  }
+
   render() {
     return (
       <div>
-        <div ref={node => this.ace = node} className="js-editor" id={this.props.id}></div>
+        <div ref={node => this.ace = node} className="js-editor" id={this.props.id} onPaste={() => this.validateContentOnPaste()}></div>
         <button ref={node => this.stringEditIcon = node} className="btn string-edit" title="Edit string" disabled={!this.state.stringEditIconVisible}
           style={this.state.stringEditIconStyle} onClick={this.openStringEditModal}>
           <i className="icon icon-edit"></i>
