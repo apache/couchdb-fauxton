@@ -11,10 +11,12 @@
 // the License.
 
 import '@webcomponents/url';
+import FauxtonAPI from '../../../core/api';
 import {get} from '../../../core/ajax';
 import Helpers from "../../../helpers";
 
 export const fetchDatabaseInfo = (databaseName) => {
-  const url = Helpers.getServerUrl("/" + encodeURIComponent(databaseName));
+  const base = FauxtonAPI.urls('databaseBaseURL', 'server', encodeURIComponent(databaseName));
+  const url = Helpers.getServerUrl(base);
   return get(url);
 };
