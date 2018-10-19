@@ -229,14 +229,16 @@ export default {
     FauxtonAPI.reduxDispatch({
       type: ActionTypes.DATABASES_FETCH_SELECTED_DB_METADATA
     });
-    API.fetchDatabaseInfo(databaseName).then(info => {
-      if (!info.db_name) {
-        const details = info.reason ? info.reason : '';
+    API.fetchDatabaseInfo(databaseName).then(res => {
+      if (!res.db_name) {
+        const details = res.reason ? res.reason : '';
         throw new Error('Failed to fetch database info. ' + details);
       }
       FauxtonAPI.reduxDispatch({
         type: ActionTypes.DATABASES_FETCH_SELECTED_DB_METADATA_SUCCESS,
-        info
+        options: {
+          metadata: res
+        }
       });
     }).catch(err => {
       FauxtonAPI.addNotification({

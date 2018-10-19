@@ -30,8 +30,8 @@ describe('Databases Reducer', () => {
   it('sets isPartitioned to false when props is not present', () => {
     const action = {
       type: ActionTypes.DATABASES_FETCH_SELECTED_DB_METADATA_SUCCESS,
-      info: {
-        name: 'dummy_db'
+      options: {
+        metadata: { name: 'dummy_db' }
       }
     };
     const newState = databases(undefined, action);
@@ -43,15 +43,17 @@ describe('Databases Reducer', () => {
   it('sets isPartitioned based on db metadata', () => {
     const action = {
       type: ActionTypes.DATABASES_FETCH_SELECTED_DB_METADATA_SUCCESS,
-      info: {
-        name: 'dummy_db',
-        props: { partitioned: true }
+      options: {
+        metadata: {
+          name: 'dummy_db',
+          props: { partitioned: true }
+        }
       }
     };
     const newState = databases(undefined, action);
     expect(newState.isDbPartitioned).toBe(true);
 
-    action.info.props.partitioned = false;
+    action.options.metadata.props.partitioned = false;
     const newState2 = databases(undefined, action);
     expect(newState2.isDbPartitioned).toBe(false);
   });

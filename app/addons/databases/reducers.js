@@ -18,8 +18,8 @@ const initialState = {
   isDbPartitioned: false
 };
 
-export function isPartitioned(dbInfo) {
-  if (dbInfo && dbInfo.props && dbInfo.props.partitioned === true) {
+export function isPartitioned(metadata) {
+  if (metadata && metadata.props && metadata.props.partitioned === true) {
     return true;
   }
   return false;
@@ -43,8 +43,8 @@ export default function databases(state = initialState, action) {
       return {
         ...state,
         isLoadingDbInfo: false,
-        dbInfo: action.info,
-        isDbPartitioned: isPartitioned(action.info)
+        dbInfo: action.options.metadata,
+        isDbPartitioned: isPartitioned(action.options.metadata)
       };
     default:
       return state;
