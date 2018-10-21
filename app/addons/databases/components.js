@@ -23,6 +23,7 @@ import FauxtonComponentsReact from "..//fauxton/components";
 import Stores from "./stores";
 import Actions from "./actions";
 
+import * as R from 'ramda';
 import {Tooltip, OverlayTrigger} from 'react-bootstrap';
 
 const databasesStore = Stores.databasesStore;
@@ -78,13 +79,73 @@ class DatabaseTable extends React.Component {
     showPartitionedColumn: PropTypes.bool.isRequired
   };
 
-  createRows = (dbList) => {
-    return dbList.map((item, k) => {
-      return (
-        <DatabaseRow item={item} key={k} showPartitionedColumn={this.props.showPartitionedColumn}/>
-      );
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      /* List of group names that should be unfolded */
+      openGroups: []
+    };
+  }
+
+  createRows = (dbList, nestLevel) => {
+    return dbList.map((item) => {
+      return (Array.isArray(item))
+        ? this.createGroup(item)
+        : (
+          <DatabaseRow
+            nestLevel={nestLevel || 0}
+            item={item}
+            key={item.id}
+            showPartitionedColumn={this.props.showPartitionedColumn}
+          />
+        );
     });
   };
+
+  createGroup = (items, nestLevel) => {
+    /* cannot create an empty group */
+    if (items.length === 0) {
+      /* @TODO add some error logging */
+      return;
+    }
+
+    const { openGroups } = this.state;
+
+    const groupName = this.getDatabaseGroupName(items[0]);
+    const isOpen = openGroups.includes(groupName);
+
+    const arrowIconClass = isOpen ? 'fonticon-up-dir' : 'fonticon-down-dir';
+
+    return [
+      <tr
+        key={`${groupName}-group-title`}
+        className="database-group-title"
+        onClick={() => this.toggleGroupVisibility(groupName)}
+      >
+        <td colSpan="4">
+          { groupName }
+          <span className={`database-group-arrow-icon ${arrowIconClass}`} />
+        </td>
+      </tr>,
+      isOpen && (
+        this.createRows(items, (nestLevel || 0) + 1)
+      )
+    ];
+  }
+
+  toggleGroupVisibility = (groupName) => {
+    const { openGroups } = this.state;
+
+    /* filter if it exists, otherwise add it */
+    const newOpenGroup = (openGroups.includes(groupName))
+      ? openGroups.filter(n => n !== groupName)
+      : [...openGroups, groupName];
+
+    this.setState({
+      openGroups: newOpenGroup
+    });
+  }
 
   getExtensionColumns = () => {
     var cols = FauxtonAPI.getExtensions('DatabaseTable:head');
@@ -99,6 +160,47 @@ class DatabaseTable extends React.Component {
     });
   };
 
+  /**
+   * Check if the given database belong to a group and
+   * if so return the grouping string. Groups exist if the
+   * database contain atleast one '/' in the ID.
+   *
+   * @param {database}
+   * @return group if exist OR null
+   */
+  getDatabaseGroupName = (db) => {
+    const idParts = db.id.split('/');
+    const hasGroup = idParts.length > 1;
+
+    if (!hasGroup) {
+      return null;
+    }
+
+    /* take all but the last part and add slashes */
+    return `${R.init(idParts).join('/')}/`;
+  };
+
+  /**
+   * Given a list of databases group them if they have
+   * a slash in their name. Otherwise store them as their ID.
+   * {
+   *   "database-id": Database Object
+   *   "group-name/": [Database Objects]
+   * }
+   */
+  groupDatabases = (databaseList) => {
+    const databaseGroupOrId = db => this.getDatabaseGroupName(db) || db.id;
+    const unwrapSingleItemArrays = array => {
+      return (array.length > 1)
+        ? array : array[0];
+    };
+
+    return R.compose(
+      R.map(unwrapSingleItemArrays),
+      R.groupBy(databaseGroupOrId)
+    )(databaseList);
+  }
+
   render() {
     if (this.props.loading) {
       return (
@@ -108,7 +210,8 @@ class DatabaseTable extends React.Component {
       );
     }
 
-    const rows = this.createRows(this.props.dbList);
+    const groupedDatabases = this.groupDatabases(this.props.dbList);
+    const rows = this.createRows(Object.values(groupedDatabases));
     return (
       <div className="view">
         <DeleteDatabaseModal
@@ -136,6 +239,7 @@ class DatabaseTable extends React.Component {
 
 class DatabaseRow extends React.Component {
   static propTypes = {
+    nestLevel: PropTypes.number,
     item: PropTypes.shape({
       id: PropTypes.string.isRequired,
       encodedId: PropTypes.string.isRequired,
@@ -179,12 +283,17 @@ class DatabaseRow extends React.Component {
         </tr>
       );
     }
+
     const partitionedCol = this.props.showPartitionedColumn ?
       (<td>{isPartitioned ? 'Yes' : 'No'}</td>) :
       null;
+
+    const DEFAULT_PADDING = 8;
+    const nestPadding = (this.props.nestLevel || 0) * 15 + DEFAULT_PADDING;
+
     return (
       <tr>
-        <td>
+        <td style={{ paddingLeft: `${nestPadding}px` }}>
           <a href={url}>{id}</a>
         </td>
         <td>{dataSize}</td>
