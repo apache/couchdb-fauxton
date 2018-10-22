@@ -16,6 +16,7 @@ import { get } from "../../core/ajax";
 import FauxtonAPI from "../../core/api";
 import Databases from "./routes";
 import Actions from "./actions";
+import reducers from './reducers';
 import "./assets/less/databases.less";
 
 Databases.initialize = function () {
@@ -44,6 +45,10 @@ function checkPartitionedDatabaseFeature () {
 // Promise resolving to either true or false.
 Databases.PARTITONED_DB_CHECK_EXTENSION = 'Databases:PartitionedDbCheck';
 FauxtonAPI.registerExtension(Databases.PARTITONED_DB_CHECK_EXTENSION, checkPartitionedDatabaseFeature);
+
+FauxtonAPI.addReducers({
+  databases: reducers
+});
 
 // Utility functions
 Databases.databaseUrl = function (database) {

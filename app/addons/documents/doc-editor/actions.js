@@ -48,7 +48,7 @@ const initDocEditor = (params) => (dispatch) => {
   });
 };
 
-const saveDoc = (doc, isValidDoc, onSave) => {
+const saveDoc = (doc, isValidDoc, onSave, navigateToUrl) => {
   if (isValidDoc) {
     FauxtonAPI.addNotification({
       msg: 'Saving document.',
@@ -57,7 +57,11 @@ const saveDoc = (doc, isValidDoc, onSave) => {
 
     doc.save().then(function () {
       onSave(doc.prettyJSON());
-      FauxtonAPI.navigate('#/' + FauxtonAPI.urls('allDocs', 'app',  FauxtonAPI.url.encode(doc.database.id)), {trigger: true});
+      if (navigateToUrl) {
+        FauxtonAPI.navigate(navigateToUrl, {trigger: true});
+      } else {
+        FauxtonAPI.navigate('#/' + FauxtonAPI.urls('allDocs', 'app',  FauxtonAPI.url.encode(doc.database.id)), {trigger: true});
+      }
     }).fail(function (xhr) {
       FauxtonAPI.addNotification({
         msg: 'Save failed: ' + JSON.parse(xhr.responseText).reason,

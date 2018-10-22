@@ -17,18 +17,6 @@ import PartitionKeySelector from '../partition-key/PartitionKeySelector';
 import sinon from 'sinon';
 
 describe('PartitionKeySelector', () => {
-  // const props = {
-  //   includeDocs: false,
-  //   queryOptionsToggleIncludeDocs: () => {},
-  //   reduce: false,
-  //   contentVisible: true,
-  //   perPage: 10,
-  //   queryOptionsToggleStable: () => {},
-  //   queryOptionsChangeUpdate: () => {},
-  //   stable: false,
-  //   update: 'true'
-  // };
-
   const defaultProps = {
     selectorVisible: true,
     partitionKey: '',

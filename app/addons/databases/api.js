@@ -9,13 +9,13 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
-export default {
-  DATABASES_SETPAGE: 'DATABASES_SETPAGE',
-  DATABASES_SET_PROMPT_VISIBLE: 'DATABASES_SET_PROMPT_VISIBLE',
-  DATABASES_STARTLOADING: 'DATABASES_STARTLOADING',
-  DATABASES_LOADCOMPLETE: 'DATABASES_LOADCOMPLETE',
-  DATABASES_UPDATE: 'DATABASES_UPDATE',
-  DATABASES_PARTITIONED_DB_AVAILABLE: 'DATABASES_PARTITIONED_DB_AVAILABLE',
-  DATABASES_FETCH_SELECTED_DB_METADATA: 'DATABASES_FETCH_SELECTED_DB_METADATA',
-  DATABASES_FETCH_SELECTED_DB_METADATA_SUCCESS: 'DATABASES_FETCH_SELECTED_DB_METADATA_SUCCESS'
+
+import FauxtonAPI from '../../core/api';
+import { get } from '../../core/ajax';
+import Helpers from '../../helpers';
+
+export const fetchDatabaseInfo = (databaseName) => {
+  const base = FauxtonAPI.urls('databaseBaseURL', 'server', databaseName);
+  const url = Helpers.getServerUrl(base);
+  return get(url);
 };

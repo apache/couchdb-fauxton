@@ -17,6 +17,7 @@ import DatabasesBase from '../databases/base';
 import Stores from "./stores";
 import ActionTypes from "./actiontypes";
 import Resources from "./resources";
+import * as API from './api';
 
 function getDatabaseDetails (dbList, fullDbList) {
   const databaseDetails = [];
@@ -219,6 +220,32 @@ export default {
       this.setPartitionedDatabasesAvailable(isAvailable);
     }).catch(() => {
       // ignore as the default is false
+    });
+  },
+
+  // Fetches and sets metadata info for the selected database, which is defined by the current URL
+  // This function is intended to be called by the routers if needed by the components in the page.
+  fetchSelectedDatabaseInfo(databaseName) {
+    FauxtonAPI.reduxDispatch({
+      type: ActionTypes.DATABASES_FETCH_SELECTED_DB_METADATA
+    });
+    API.fetchDatabaseInfo(databaseName).then(res => {
+      if (!res.db_name) {
+        const details = res.reason ? res.reason : '';
+        throw new Error('Failed to fetch database info. ' + details);
+      }
+      FauxtonAPI.reduxDispatch({
+        type: ActionTypes.DATABASES_FETCH_SELECTED_DB_METADATA_SUCCESS,
+        options: {
+          metadata: res
+        }
+      });
+    }).catch(err => {
+      FauxtonAPI.addNotification({
+        msg: err.message,
+        type: 'error',
+        clear: true
+      });
     });
   }
 };

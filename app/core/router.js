@@ -105,10 +105,10 @@ export default Backbone.Router.extend({
     this.setModuleRoutes(addons);
 
     this.lastPages = [];
-    //keep last pages visited in Fauxton
+    //keep last few pages visited in Fauxton
     Backbone.history.on('route', function () {
       this.lastPages.push(Backbone.history.fragment);
-      if (this.lastPages.length > 2) {
+      if (this.lastPages.length > 5) {
         this.lastPages.shift();
       }
     }, this);

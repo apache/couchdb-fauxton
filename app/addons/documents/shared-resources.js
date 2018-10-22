@@ -51,6 +51,7 @@ Documents.Doc = FauxtonAPI.Model.extend({
     if (options.fetchConflicts) {
       this.fetchConflicts = true;
     }
+    this.partitionKey = options.partitionKey;
   },
 
   // HACK: the doc needs to know about the database, but it may be

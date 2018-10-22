@@ -89,9 +89,13 @@ const truncateDoc = (docString, maxRows) => {
   };
 };
 
-const getNewDocUrl = (databaseName) => {
+const getNewDocUrl = (databaseName, partitionKey) => {
   const safeDatabaseName = encodeURIComponent(databaseName);
-  return FauxtonAPI.urls('new', 'newDocument', safeDatabaseName);
+  let url = FauxtonAPI.urls('new', 'newDocument', safeDatabaseName);
+  if (partitionKey) {
+    url = url + '?partitionKey=' + encodeURIComponent(partitionKey);
+  }
+  return url;
 };
 
 const selectedViewContainsReduceFunction = (designDocs, selectedNavItem) => {

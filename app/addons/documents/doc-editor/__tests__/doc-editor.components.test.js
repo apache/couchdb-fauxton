@@ -11,13 +11,16 @@
 // the License.
 
 import FauxtonAPI from '../../../../core/api';
+import Helpers from '../../../../helpers';
 import React from 'react';
-import ReactDOM from 'react-dom';
+import sinon from 'sinon';
 import Documents from '../../resources';
 import AttachmentsPanelButton from '../components/AttachmentsPanelButton';
+import CloneDocModal from '../components/CloneDocModal';
 import DocEditorScreen from '../components/DocEditorScreen';
 import DocEditorContainer from '../components/DocEditorContainer';
 import Databases from '../../../databases/base';
+import databasesReducer from '../../../databases/reducers';
 import utils from '../../../../../test/mocha/testUtils';
 import { mount } from 'enzyme';
 import thunk from 'redux-thunk';
@@ -62,6 +65,7 @@ const database = new Databases.Model({ id: 'a/special?db' });
 const defaultProps = {
   isLoading: true,
   isNewDoc: true,
+  isDbPartitioned: false,
   database: database,
   doc: new Documents.NewDoc(null, { database: database }),
   conflictCount: 0,
@@ -162,12 +166,55 @@ describe('DocEditorScreen', () => {
     assert.equal(attachmentURLactual, './a%2Fspecial%3Fdb/_design%2Ftest%23doc/one%252F.png');
   });
 
+  it('auto-generated ID for new docs starts with colon for partitioned databases', () => {
+    const doc = { database: database, attributes: { _id: 'new_doc_id'} };
+    const el = mount(<DocEditorScreen
+      {...defaultProps}
+      isLoading={false}
+      isNewDoc={true}
+      isDbPartitioned={true}
+      database={database}
+      doc={doc} />);
+
+    const editor = el.find('CodeEditor');
+    expect(editor.prop('defaultCode')).toMatch(/":new_doc_id"/);
+  });
+
+  it('cancel button navigates to all docs by default', () => {
+    const doc = new Documents.Doc(docWithAttachmentsJSON, { database: database });
+    const el = mount(<DocEditorScreen
+      {...defaultProps}
+      isLoading={false}
+      isNewDoc={true}
+      isDbPartitioned={true}
+      database={database}
+      doc={doc} />);
+
+    const linkUrl = el.find('a.cancel-button').prop('href');
+    expect(linkUrl).toBe('#/database/' + encodeURIComponent(database.id) + '/_all_docs');
+  });
+
+  it('cancel button navigates to previousUrl', () => {
+    const doc = new Documents.Doc(docWithAttachmentsJSON, { database: database });
+    const el = mount(<DocEditorScreen
+      {...defaultProps}
+      isLoading={false}
+      isNewDoc={true}
+      isDbPartitioned={true}
+      database={database}
+      previousUrl='something/else'
+      doc={doc} />);
+
+    const linkUrl = el.find('a.cancel-button').prop('href');
+    expect(linkUrl).toBe('#/something/else');
+  });
+
 });
 
 describe('DocEditorContainer', () => {
   const middlewares = [thunk];
   const store = createStore(
-    combineReducers({ docEditor: docEditorReducer }),
+    combineReducers({ docEditor: docEditorReducer, databases: databasesReducer }),
     applyMiddleware(...middlewares)
   );
 
@@ -257,3 +304,51 @@ describe("Custom Extension Buttons", () => {
     assert.equal(el.find("#testDatabaseName").text(), database.id);
   });
 });
+
+describe("CloneDocModal", () => {
+  const defaultProps = {
+    visible: false,
+    doc: { attributes: {_id: 'my_doc_id', hey: 'there'} },
+    database: {},
+    onSubmit: () => {},
+    hideCloneDocModal: () => {},
+    cloneDoc: () => {}
+  };
+
+  let getUUID;
+
+  afterEach(() => {
+    if (getUUID) {
+      getUUID.restore();
+    }
+  });
+
+  it('sets random UUID by default', () => {
+    const promise = FauxtonAPI.Promise.resolve({ uuids: ['abc9876'] });
+    getUUID = sinon.stub(Helpers, 'getUUID').returns(promise);
+    const el = mount(
+      <CloneDocModal {...defaultProps} />
+    );
+    el.setProps({visible: true});
+    return promise.then(() => {
+      expect(el.state().uuid).toBe('abc9876');
+    });
+  });
+
+  it('adds partition key from original doc to the auto-generated ID when it exists', () => {
+    const promise = FauxtonAPI.Promise.resolve({ uuids: ['abc9876'] });
+    getUUID = sinon.stub(Helpers, 'getUUID').returns(promise);
+    const el = mount(
+      <CloneDocModal
+        {...defaultProps}
+        doc={{ attributes: {_id: 'part1:my_doc_id', hey: 'there'} }}/>
+    );
+    el.setProps({visible: true});
+    return promise.then(() => {
+      expect(el.state().uuid).toBe('part1:abc9876');
+    });
+  });
+
+
+});
+

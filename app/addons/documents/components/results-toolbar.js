@@ -32,7 +32,8 @@ export class ResultsToolBar extends React.Component {
       hasSelectedItem,
       toggleSelectAll,
       isLoading,
-      databaseName
+      databaseName,
+      partitionKey
     } = this.props;
 
     // Determine if we need to display the bulk action selector
@@ -57,7 +58,7 @@ export class ResultsToolBar extends React.Component {
     if (databaseName) {
       createDocumentLink = (
         <div className="document-result-screen__toolbar-flex-container">
-          <a href={Helpers.getNewDocUrl(databaseName)} className="btn save document-result-screen__toolbar-create-btn btn-primary">
+          <a href={Helpers.getNewDocUrl(databaseName, partitionKey)} className="btn save document-result-screen__toolbar-create-btn btn-primary">
             Create Document
           </a>
         </div>
@@ -81,5 +82,6 @@ ResultsToolBar.propTypes = {
   toggleSelectAll: PropTypes.func.isRequired,
   isLoading: PropTypes.bool.isRequired,
   hasResults: PropTypes.bool.isRequired,
-  isListDeletable: PropTypes.bool
+  isListDeletable: PropTypes.bool,
+  partitionKey: PropTypes.string
 };

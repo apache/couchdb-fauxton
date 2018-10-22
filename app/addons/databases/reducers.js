@@ -12,14 +12,39 @@
 
 import ActionTypes from './actiontypes';
 const initialState = {
-  partitionedDatabasesAvailable: false
+  partitionedDatabasesAvailable: false,
+  isLoadingDbInfo: false,
+  dbInfo: undefined,
+  isDbPartitioned: false
 };
+
+export function isPartitioned(metadata) {
+  if (metadata && metadata.props && metadata.props.partitioned === true) {
+    return true;
+  }
+  return false;
+}
+
 export default function databases(state = initialState, action) {
   switch (action.type) {
     case ActionTypes.DATABASES_PARTITIONED_DB_AVAILABLE:
       return {
         ...state,
         partitionedDatabasesAvailable: action.options.available
+      };
+    case ActionTypes.DATABASES_FETCH_SELECTED_DB_METADATA:
+      return {
+        ...state,
+        isLoadingDbInfo: true,
+        dbInfo: undefined,
+        isDbPartitioned: false
+      };
+    case ActionTypes.DATABASES_FETCH_SELECTED_DB_METADATA_SUCCESS:
+      return {
+        ...state,
+        isLoadingDbInfo: false,
+        dbInfo: action.options.metadata,
+        isDbPartitioned: isPartitioned(action.options.metadata)
       };
     default:
       return state;
