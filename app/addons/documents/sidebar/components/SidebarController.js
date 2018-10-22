@@ -110,6 +110,8 @@ export default class SidebarController extends React.Component {
           databaseName={this.props.database.id} />
         <DesignDocList
           selectedNav={this.props.selectedNav}
+          selectedPartitionKey={this.props.selectedPartitionKey}
+          isDbPartitioned={this.props.isDbPartitioned}
           toggle={this.props.toggleContent}
           toggledSections={this.props.toggledSections}
           designDocs={this.props.designDocList}

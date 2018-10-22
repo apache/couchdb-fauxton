@@ -122,12 +122,13 @@ export const TabsSidebarContent = ({
   fetchUrl,
   databaseName,
   queryDocs,
-  selectedNavItem
+  selectedNavItem,
+  partitionKey
 }) => {
   return (
     <div className="with-sidebar tabs-with-sidebar content-area">
       <aside id="sidebar-content" className="scrollable">
-        <SidebarControllerContainer selectedNavItem={selectedNavItem}/>
+        <SidebarControllerContainer selectedNavItem={selectedNavItem} selectedPartitionKey={partitionKey}/>
       </aside>
       <section id="dashboard-content" className="flex-layout flex-col">
         <div id="dashboard-upper-content">
@@ -213,6 +214,7 @@ export const DocsTabsSidebarLayout = ({
         databaseName={dbName}
         queryDocs={queryDocs}
         selectedNavItem={selectedNavItem}
+        partitionKey={partitionKey}
       />
     </div>
   );

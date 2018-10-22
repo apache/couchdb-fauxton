@@ -28,6 +28,8 @@ export default class DesignDocList extends React.Component {
       indexName: PropTypes.string,
       navItem: PropTypes.string
     }).isRequired,
+    isDbPartitioned: PropTypes.bool.isRequired,
+    selectedPartitionKey: PropTypes.string,
     showDeleteIndexModal: PropTypes.func.isRequired,
     showCloneIndexModal: PropTypes.func.isRequired
   };
@@ -41,6 +43,12 @@ export default class DesignDocList extends React.Component {
   designDocList = () => {
     return _.map(this.props.designDocs, (designDoc, key) => {
       const ddName = decodeURIComponent(designDoc.safeId);
+      // By default a design doc is partitioned if the database is partitioned
+      let isDDocPartitioned = this.props.isDbPartitioned;
+      // Check if it is explictly set to not partitioned
+      if (this.props.isDbPartitioned && designDoc.options && designDoc.options.partitioned === false) {
+        isDDocPartitioned = false;
+      }
 
       // only pass down the selected nav info and toggle info if they're relevant for this particular design doc
       let expanded = false,
@@ -62,6 +70,8 @@ export default class DesignDocList extends React.Component {
           isExpanded={expanded}
           toggledSections={toggledSections}
           selectedNavInfo={selectedNavInfo}
+          selectedPartitionKey={this.props.selectedPartitionKey}
+          isPartitioned={isDDocPartitioned}
           key={key}
           designDoc={designDoc}
           designDocName={ddName}

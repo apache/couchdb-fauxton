@@ -13,6 +13,7 @@
 import React from 'react';
 import FauxtonAPI from '../../core/api';
 import BaseRoute from './shared-routes';
+import DatabaseActions from '../databases/actions';
 import Databases from '../databases/base';
 import Resources from './resources';
 import {SidebarItemSelection} from './sidebar/helpers';
@@ -112,6 +113,7 @@ var DocumentsRouteObject = BaseRoute.extend({
       FauxtonAPI.navigate('#/' + baseUrl);
     };
     const dropDownLinks = this.getCrumbs(this.database);
+    DatabaseActions.fetchSelectedDatabaseInfo(databaseName);
     return <DocsTabsSidebarLayout
       docURL={docURL}
       endpoint={endpoint}

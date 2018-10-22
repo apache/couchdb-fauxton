@@ -28,7 +28,9 @@ export default class IndexSection extends React.Component {
     onDelete: PropTypes.func.isRequired,
     onClone: PropTypes.func.isRequired,
     showDeleteIndexModal: PropTypes.func.isRequired,
-    showCloneIndexModal: PropTypes.func.isRequired
+    showCloneIndexModal: PropTypes.func.isRequired,
+    isPartitioned: PropTypes.bool.isRequired,
+    selectedPartitionKey: PropTypes.string
   };
 
   state = {
@@ -50,7 +52,13 @@ export default class IndexSection extends React.Component {
     const sortedItems = this.props.items.sort();
 
     return _.map(sortedItems, (indexName, index) => {
-      const href = FauxtonAPI.urls(this.props.urlNamespace, 'app', encodeURIComponent(this.props.database.id), encodeURIComponent(this.props.designDocName));
+      let href = FauxtonAPI.urls(this.props.urlNamespace, 'app', encodeURIComponent(this.props.database.id), encodeURIComponent(this.props.designDocName));
+      if (this.props.isPartitioned && this.props.selectedPartitionKey) {
+        href = FauxtonAPI.urls('partitioned_' + this.props.urlNamespace, 'app',
+          encodeURIComponent(this.props.database.id),
+          encodeURIComponent(this.props.selectedPartitionKey),
+          encodeURIComponent(this.props.designDocName));
+      }
       const className = (this.props.selectedIndex === indexName) ? 'active' : '';
 
       return (
