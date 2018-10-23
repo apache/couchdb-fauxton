@@ -23,7 +23,7 @@ import FauxtonComponentsReact from "..//fauxton/components";
 import Stores from "./stores";
 import Actions from "./actions";
 
-import * as R from 'ramda';
+import * as _ from 'lodash';
 import {Tooltip, OverlayTrigger} from 'react-bootstrap';
 
 const databasesStore = Stores.databasesStore;
@@ -177,7 +177,7 @@ class DatabaseTable extends React.Component {
     }
 
     /* take all but the last part and add slashes */
-    return `${R.init(idParts).join('/')}/`;
+    return `${_.initial(idParts).join('/')}/`;
   };
 
   /**
@@ -195,10 +195,11 @@ class DatabaseTable extends React.Component {
         ? array : array[0];
     };
 
-    return R.compose(
-      R.map(unwrapSingleItemArrays),
-      R.groupBy(databaseGroupOrId)
-    )(databaseList);
+    /* key an object by the single database ID OR the group prefix */
+    const groupedDatabases = _.groupBy(databaseList, databaseGroupOrId);
+
+    /* remove the array from unprefixed databases OR single group db groups */
+    return _.mapValues(groupedDatabases, unwrapSingleItemArrays);
   }
 
   render() {

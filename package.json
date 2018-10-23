@@ -90,7 +90,6 @@
     "pouchdb-adapter-http": "6.4.1",
     "pouchdb-core": "6.4.1",
     "prop-types": "^15.6.0",
-    "ramda": "^0.25.0",
     "react": "^16.4.1",
     "react-bootstrap": "^0.31.3",
     "react-dom": "^16.4.1",
