@@ -21,27 +21,33 @@ const getSeqNum = (val) => {
   return _.isArray(val) ? val[1] : val;
 };
 
-const getNewButtonLinks = (databaseName) => {
+const getNewButtonLinks = (databaseName, partitionKey) => {
   const addLinks = FauxtonAPI.getExtensions('sidebar:links');
   const newUrlPrefix = '#' + FauxtonAPI.urls('databaseBaseURL', 'app', FauxtonAPI.url.encode(databaseName));
+  let partitionKeyComponent = '';
+  let partitionKeyQueryParam = '';
+  if (partitionKey) {
+    partitionKeyComponent = '/_partition/' + encodeURIComponent(partitionKey);
+    partitionKeyQueryParam = '?partitionKey=' + encodeURIComponent(partitionKey);
+  }
 
   const addNewLinks = _.reduce(addLinks, function (menuLinks, link) {
     menuLinks.push({
       title: link.title,
-      url: newUrlPrefix + '/' + link.url,
+      url: newUrlPrefix + partitionKeyComponent + '/' + link.url,
       icon: 'fonticon-plus-circled'
     });
 
     return menuLinks;
   }, [{
     title: 'New Doc',
-    url: newUrlPrefix + '/new',
+    url: newUrlPrefix + '/new' + partitionKeyQueryParam,
     icon: 'fonticon-plus-circled'
   }, {
     title: 'New View',
-    url: newUrlPrefix + '/new_view',
+    url: newUrlPrefix + partitionKeyComponent + '/new_view',
     icon: 'fonticon-plus-circled'
-  }, getMangoLink(databaseName)]);
+  }, getMangoLink(databaseName, partitionKey)]);
 
   return [{
     title: 'Add New',
@@ -49,8 +55,9 @@ const getNewButtonLinks = (databaseName) => {
   }];
 };
 
-const getMangoLink = (databaseName) => {
-  const newUrlPrefix = '#' + FauxtonAPI.urls('databaseBaseURL', 'app', FauxtonAPI.url.encode(databaseName));
+const getMangoLink = (databaseName, partitionKey) => {
+  const newUrlPrefix = '#' + FauxtonAPI.urls('databaseBaseURL', 'app', FauxtonAPI.url.encode(databaseName)) +
+    (partitionKey ? '/_partition/' + encodeURIComponent(partitionKey) : '');
 
   return {
     title: app.i18n.en_US['new-mango-index'],

@@ -154,7 +154,7 @@ export default {
         type: 'success',
         clear: true
       });
-      const route = FauxtonAPI.urls('allDocs', 'app', app.utils.safeURLName(databaseName), '?limit=' + Resources.DocLimit);
+      const route = FauxtonAPI.urls('allDocs', 'app', app.utils.safeURLName(databaseName));
       app.router.navigate(route, { trigger: true });
     }
     ).fail(function (xhr) {

@@ -53,7 +53,7 @@ export default class IndexSection extends React.Component {
 
     return _.map(sortedItems, (indexName, index) => {
       let href = FauxtonAPI.urls(this.props.urlNamespace, 'app', encodeURIComponent(this.props.database.id), encodeURIComponent(this.props.designDocName));
-      if (this.props.isPartitioned && this.props.selectedPartitionKey) {
+      if (this.props.selectedPartitionKey) {
         href = FauxtonAPI.urls('partitioned_' + this.props.urlNamespace, 'app',
           encodeURIComponent(this.props.database.id),
           encodeURIComponent(this.props.selectedPartitionKey),
@@ -113,7 +113,7 @@ export default class IndexSection extends React.Component {
         this.props.showCloneIndexModal(params.indexName, this.props.designDocName, this.props.indexLabel, params.onClone);
         break;
       case 'edit':
-        params.onEdit(this.props.database.id, this.props.designDocName, params.indexName);
+        params.onEdit(this.props.database.id, this.props.selectedPartitionKey, this.props.designDocName, params.indexName);
         break;
     }
   };

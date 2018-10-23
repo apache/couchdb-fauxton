@@ -21,12 +21,20 @@ import {DocsTabsSidebarLayout, ViewsTabsSidebarLayout} from './layouts';
 
 const IndexEditorAndResults = BaseRoute.extend({
   routes: {
-    'database/:database/new_view': {
+    'database/:database/_partition/:partitionkey/new_view': {
       route: 'createView',
       roles: ['fx_loggedIn']
     },
-    'database/:database/new_view/:designDoc': {
+    'database/:database/_partition/:partitionkey/new_view/:designDoc': {
       route: 'createView',
+      roles: ['fx_loggedIn']
+    },
+    'database/:database/new_view': {
+      route: 'createViewNoPartition',
+      roles: ['fx_loggedIn']
+    },
+    'database/:database/new_view/:designDoc': {
+      route: 'createViewNoPartition',
       roles: ['fx_loggedIn']
     },
     'database/:database/_partition/:partitionkey/_design/:ddoc/_view/:view': {
@@ -37,8 +45,12 @@ const IndexEditorAndResults = BaseRoute.extend({
       route: 'showGlobalView',
       roles: ['fx_loggedIn']
     },
-    'database/:database/_design/:ddoc/_view/:view/edit': {
+    'database/:database/_partition/:partitionkey/_design/:ddoc/_view/:view/edit': {
       route: 'editView',
+      roles: ['fx_loggedIn']
+    },
+    'database/:database/_design/:ddoc/_view/:view/edit': {
+      route: 'editViewNoPartition',
       roles: ['fx_loggedIn']
     }
   },
@@ -88,6 +100,10 @@ const IndexEditorAndResults = BaseRoute.extend({
         encodeURIComponent(partKey), encodeURIComponent(ddoc));
       FauxtonAPI.navigate('#/' + baseUrl + encodeURIComponent(viewName));
     };
+    const navigateToGlobalView = () => {
+      const baseUrl = FauxtonAPI.urls('view', 'app', encodeURIComponent(databaseName), encodeURIComponent(ddoc));
+      FauxtonAPI.navigate('#/' + baseUrl + encodeURIComponent(viewName));
+    };
     const dropDownLinks = this.getCrumbs(this.database);
     return <DocsTabsSidebarLayout
       docURL={docURL}
@@ -101,13 +117,18 @@ const IndexEditorAndResults = BaseRoute.extend({
       selectedNavItem={selectedNavItem}
       partitionKey={partitionKey}
       onPartitionKeySelected={navigateToPartitionedView}
+      onGlobalModeSelected={navigateToGlobalView}
       globalMode={partitionKey === ''}
     />;
   },
 
-  createView: function (database, _designDoc) {
-    var newDesignDoc = true;
-    var designDoc = 'new-doc';
+  createViewNoPartition: function (databaseName, _designDoc) {
+    return this.createView(databaseName, '', _designDoc);
+  },
+
+  createView: function (database, partitionKey, _designDoc) {
+    let newDesignDoc = true;
+    let designDoc = 'new-doc';
 
     if (_designDoc) {
       designDoc = '_design/' + _designDoc;
@@ -133,10 +154,15 @@ const IndexEditorAndResults = BaseRoute.extend({
       dropDownLinks={dropDownLinks}
       database={this.database}
       selectedNavItem={selectedNavItem}
+      partitionKey={partitionKey}
     />;
   },
 
-  editView: function (databaseName, ddocName, viewName) {
+  editViewNoPartition: function (databaseName, ddocName, viewName) {
+    return this.editView(databaseName, '', ddocName, viewName);
+  },
+
+  editView: function (databaseName, partitionKey, ddocName, viewName) {
     ActionsIndexEditor.fetchDesignDocsBeforeEdit({
       viewName: viewName,
       newView: false,
@@ -164,6 +190,7 @@ const IndexEditorAndResults = BaseRoute.extend({
       dropDownLinks={dropDownLinks}
       database={this.database}
       selectedNavItem={selectedNavItem}
+      partitionKey={partitionKey}
     />;
   }
 

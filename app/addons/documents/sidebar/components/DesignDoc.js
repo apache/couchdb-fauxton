@@ -26,7 +26,7 @@ export default class DesignDoc extends React.Component {
     sidebarListTypes: PropTypes.array.isRequired,
     isExpanded: PropTypes.bool.isRequired,
     isPartitioned: PropTypes.bool.isRequired,
-    selectedPartitionKey: PropTypes.object.isRequired,
+    selectedPartitionKey: PropTypes.string,
     selectedNavInfo: PropTypes.object.isRequired,
     toggledSections: PropTypes.object.isRequired,
     designDocName:  PropTypes.string.isRequired,
@@ -97,7 +97,9 @@ export default class DesignDoc extends React.Component {
   };
 
   getNewButtonLinks = () => {
-    const newUrlPrefix = FauxtonAPI.urls('databaseBaseURL', 'app', encodeURIComponent(this.props.database.id));
+    const encodedPartKey = this.props.selectedPartitionKey ? encodeURIComponent(this.props.selectedPartitionKey) : '';
+    const newUrlPrefix = FauxtonAPI.urls('databaseBaseURL', 'app', encodeURIComponent(this.props.database.id))
+      + (encodedPartKey ? '/_partition/' + encodedPartKey : '');
     const designDocName = this.props.designDocName;
 
     const addonLinks = FauxtonAPI.getExtensions('sidebar:links');
@@ -110,7 +112,7 @@ export default class DesignDoc extends React.Component {
       return menuLinks;
     }, [{
       title: 'New View',
-      url: '#' + FauxtonAPI.urls('new', 'addView', encodeURIComponent(this.props.database.id), encodeURIComponent(designDocName)),
+      url: '#' + FauxtonAPI.urls('new', 'addView', encodeURIComponent(this.props.database.id), encodedPartKey, encodeURIComponent(designDocName)),
       icon: 'fonticon-plus-circled'
     }]);
 
@@ -130,7 +132,9 @@ export default class DesignDoc extends React.Component {
       toggleBodyClassNames += ' in';
     }
     const designDocName = this.props.designDocName;
-    const designDocMetaUrl = FauxtonAPI.urls('designDocs', 'app', encodeURIComponent(this.props.database.id), designDocName);
+    const encodedPartKey = this.props.selectedPartitionKey ? encodeURIComponent(this.props.selectedPartitionKey) : '';
+    const designDocMetaUrl = FauxtonAPI.urls('designDocs', 'app',
+      encodeURIComponent(this.props.database.id), encodedPartKey, designDocName);
     const metadataRowClass = (this.props.selectedNavInfo.designDocSection === 'metadata') ? 'active' : '';
     const iconTitle = this.props.isPartitioned ? 'Partitioned design document' : 'Global design document';
     const iconClass = this.props.isPartitioned ? 'fonticon-documents' : 'fonticon-document';

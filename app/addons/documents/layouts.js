@@ -65,6 +65,7 @@ export const TabsSidebarHeader = ({
         <div id="header-docs-left">
           <HeaderDocsLeft
             dbName={dbName}
+            partitionKey={partitionKey}
             dropDownLinks={dropDownLinks}
           />
         </div>
@@ -242,7 +243,7 @@ export const ChangesSidebarLayout = ({ docURL, database, endpoint, dbName, dropD
 };
 
 export const ViewsTabsSidebarLayout = ({showEditView, database, docURL, endpoint,
-  dbName, dropDownLinks, selectedNavItem, designDocInfo }) => {
+  dbName, dropDownLinks, selectedNavItem, designDocInfo, partitionKey }) => {
 
   const content = showEditView ?
     <IndexEditorComponents.EditorController /> :
@@ -257,6 +258,7 @@ export const ViewsTabsSidebarLayout = ({showEditView, database, docURL, endpoint
         dbName={dbName}
         dropDownLinks={dropDownLinks}
         database={database}
+        partitionKey={partitionKey}
         queryDocs={() => { }}
         hideQueryOptions={true}
         hideJumpToDoc={true}
@@ -265,6 +267,7 @@ export const ViewsTabsSidebarLayout = ({showEditView, database, docURL, endpoint
         lowerContent={content}
         hideFooter={true}
         selectedNavItem={selectedNavItem}
+        partitionKey={partitionKey}
       />
     </div>
   );

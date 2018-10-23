@@ -64,7 +64,7 @@ export default class MangoIndexEditor extends Component {
   }
 
   editor() {
-    const editQueryURL = '#' + FauxtonAPI.urls('mango', 'query-app', encodeURIComponent(this.props.databaseName));
+    const editQueryURL = '#' + FauxtonAPI.urls('mango', 'query-app', encodeURIComponent(this.props.databaseName), '');
     return (
       <div className="mango-editor-wrapper">
         <form className="form-horizontal" onSubmit={(ev) => { this.saveIndex(ev); }}>

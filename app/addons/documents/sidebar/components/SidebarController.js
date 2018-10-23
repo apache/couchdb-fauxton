@@ -107,7 +107,8 @@ export default class SidebarController extends React.Component {
       <nav className="sidenav">
         <MainSidebar
           selectedNavItem={this.props.selectedNav.navItem}
-          databaseName={this.props.database.id} />
+          databaseName={this.props.database.id}
+          selectedPartitionKey={this.props.selectedPartitionKey}/>
         <DesignDocList
           selectedNav={this.props.selectedNav}
           selectedPartitionKey={this.props.selectedPartitionKey}

@@ -22,12 +22,20 @@ const MangoIndexEditorAndQueryEditor = FauxtonAPI.RouteObject.extend({
   hideApiBar: true,
   hideNotificationCenter: true,
   routes: {
-    'database/:database/_index': {
+    'database/:database/_partition/:partitionkey/_index': {
       route: 'createIndex',
       roles: ['fx_loggedIn']
     },
-    'database/:database/_find': {
+    'database/:database/_index': {
+      route: 'createIndexNoPartition',
+      roles: ['fx_loggedIn']
+    },
+    'database/:database/_partition/:partitionkey/_find': {
       route: 'findUsingIndex',
+      roles: ['fx_loggedIn']
+    },
+    'database/:database/_find': {
+      route: 'findUsingIndexNoPartition',
       roles: ['fx_loggedIn']
     },
   },
@@ -38,9 +46,14 @@ const MangoIndexEditorAndQueryEditor = FauxtonAPI.RouteObject.extend({
     this.database = new Databases.Model({id: databaseName});
   },
 
-  findUsingIndex: function (database) {
+  findUsingIndexNoPartition: function (database) {
+    return this.findUsingIndex(database, '');
+  },
+
+  findUsingIndex: function (database, partitionKey) {
+    const encodedPartitionKey = partitionKey ? encodeURIComponent(partitionKey) : '';
     const url = FauxtonAPI.urls(
-      'allDocs', 'app', encodeURIComponent(this.databaseName), '?limit=' + FauxtonAPI.constants.DATABASES.DOCUMENT_LIMIT
+      'allDocs', 'app', encodeURIComponent(this.databaseName), encodedPartitionKey
     );
 
     const fetchUrl = '/' + encodeURIComponent(this.databaseName) + '/_find';
@@ -58,13 +71,17 @@ const MangoIndexEditorAndQueryEditor = FauxtonAPI.RouteObject.extend({
       docURL={FauxtonAPI.constants.DOC_URLS.MANGO_SEARCH}
       endpoint={endpoint}
       edit={false}
-
+      partitionKey={partitionKey}
       databaseName={this.databaseName}
       fetchUrl={fetchUrl}
     />;
   },
 
-  createIndex: function (database) {
+  createIndexNoPartition: function (database) {
+    return this.createIndex(database, '');
+  },
+
+  createIndex: function (database, partitionKey) {
     const designDocs = new Documents.AllDocs(null, {
       database: this.database,
       paging: {
@@ -78,8 +95,9 @@ const MangoIndexEditorAndQueryEditor = FauxtonAPI.RouteObject.extend({
       }
     });
 
+    const encodedPartitionKey = partitionKey ? encodeURIComponent(partitionKey) : '';
     const url = FauxtonAPI.urls(
-      'allDocs', 'app', encodeURIComponent(this.databaseName), '?limit=' + FauxtonAPI.constants.DATABASES.DOCUMENT_LIMIT
+      'allDocs', 'app', encodeURIComponent(this.databaseName), encodedPartitionKey
     );
     const endpoint = FauxtonAPI.urls('mango', 'index-apiurl', encodeURIComponent(this.databaseName));
 

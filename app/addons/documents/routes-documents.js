@@ -30,8 +30,12 @@ var DocumentsRouteObject = BaseRoute.extend({
       route: "globalAllDocs",
       roles: ["fx_loggedIn"]
     },
-    "database/:database/_design/:ddoc/_info": {
+    "database/:database/_partition/:partitionkey/_design/:ddoc/_info": {
       route: "designDocMetadata",
+      roles: ['fx_loggedIn']
+    },
+    "database/:database/_design/:ddoc/_info": {
+      route: "designDocMetadataNoPartition",
       roles: ['fx_loggedIn']
     },
     'database/:database/_changes': 'changes'
@@ -50,7 +54,11 @@ var DocumentsRouteObject = BaseRoute.extend({
     this.addSidebar();
   },
 
-  designDocMetadata: function (database, ddoc) {
+  designDocMetadataNoPartition: function (database, ddoc) {
+    return this.designDocMetadata(database, '', ddoc);
+  },
+
+  designDocMetadata: function (database, partitionKey, ddoc) {
     const designDocInfo = new Resources.DdocInfo({ _id: "_design/" + ddoc }, { database: this.database });
     const selectedNavItem = new SidebarItemSelection('designDoc', {
       designDocName: ddoc,
@@ -67,6 +75,7 @@ var DocumentsRouteObject = BaseRoute.extend({
       database={this.database}
       selectedNavItem={selectedNavItem}
       designDocInfo={designDocInfo}
+      partitionKey={partitionKey}
     />;
   },
 
