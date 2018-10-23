@@ -21,6 +21,7 @@ const { MenuDropDown } = Components;
 
 export default class MainSidebar extends React.Component {
   static propTypes = {
+    databaseName: PropTypes.string.isRequired,
     selectedNavItem: PropTypes.string.isRequired,
     selectedPartitionKey: PropTypes.string
   };
