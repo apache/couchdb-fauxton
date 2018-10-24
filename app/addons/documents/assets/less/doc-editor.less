@@ -83,7 +83,7 @@
     &:hover {
       color: @hoverHighlight;
       text-decoration: none;
-      cursor: hand;
+      cursor: pointer;
     }
   }
   .panel-button {
@@ -91,7 +91,7 @@
     &:hover {
       color: @hoverHighlight;
       text-decoration: none;
-      cursor: hand;
+      cursor: pointer;
     }
   }
 
@@ -195,9 +195,16 @@
   }
 }
 
-#editor-container div.string-editor-modal {
-  height: inherit;
-  max-height: 600px;
+div.string-editor-modal {
+  width: 80%;
+
+  .modal-content {
+    min-width: initial;
+  }
+
+  .modal-body {
+    padding: 0px;
+  }
 }
 
 .attachment-delimiter {

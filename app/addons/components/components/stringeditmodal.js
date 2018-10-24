@@ -56,7 +56,7 @@ export class StringEditModal extends React.Component {
 
   render() {
     return (
-      <Modal dialogClassName="string-editor-modal" show={this.props.visible} onHide={this.closeModal}>
+      <Modal className="string-editor-modal" show={this.props.visible} onHide={this.closeModal}>
         <Modal.Header closeButton={true}>
           <Modal.Title>Edit Value <span id="string-edit-header"></span></Modal.Title>
         </Modal.Header>
