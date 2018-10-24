@@ -10,7 +10,7 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import * as API from './api';
+import * as DatabasesAPI from '../../databases/api';
 import ActionTypes from './actiontypes';
 
 export const checkDbPartitioned = (databaseName) => (dispatch) => {
@@ -19,7 +19,7 @@ export const checkDbPartitioned = (databaseName) => (dispatch) => {
     type: ActionTypes.PARTITON_KEY_HIDE_SELECTOR
   });
 
-  API.fetchDatabaseInfo(databaseName).then(dbInfo => {
+  DatabasesAPI.fetchDatabaseInfo(databaseName).then(dbInfo => {
     if (dbInfo.props && dbInfo.props.partitioned === true) {
       dispatch({
         type: ActionTypes.PARTITON_KEY_SHOW_SELECTOR
