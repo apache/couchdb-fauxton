@@ -16,7 +16,6 @@ import { get } from "../../core/ajax";
 import DatabasesBase from '../databases/base';
 import Stores from "./stores";
 import ActionTypes from "./actiontypes";
-import Resources from "./resources";
 import * as API from './api';
 
 function getDatabaseDetails (dbList, fullDbList) {
