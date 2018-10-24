@@ -104,11 +104,13 @@ export default class DesignDoc extends React.Component {
 
     const addonLinks = FauxtonAPI.getExtensions('sidebar:links');
     const addNewLinks = addonLinks.reduce((menuLinks, link) => {
-      menuLinks.push({
-        title: link.title,
-        url: '#' + newUrlPrefix + '/' + link.url + '/' + encodeURIComponent(designDocName),
-        icon: 'fonticon-plus-circled'
-      });
+      if (!this.props.isPartitioned || link.showForPartitionedDDocs) {
+        menuLinks.push({
+          title: link.title,
+          url: '#' + newUrlPrefix + '/' + link.url + '/' + encodeURIComponent(designDocName),
+          icon: 'fonticon-plus-circled'
+        });
+      }
       return menuLinks;
     }, [{
       title: 'New View',
