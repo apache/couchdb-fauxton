@@ -50,8 +50,9 @@ export const queryMapReduceView = (fetchUrl, params) => {
   // removes params not supported by partitioned views
   const isPartitioned = fetchUrl.includes('/_partition/');
   if (isPartitioned) {
-    params.include_docs = false;
-    params.stable = false;
+    params.include_docs = undefined;
+    params.stable = undefined;
+    params.conflicts = undefined;
   }
   const query = app.utils.queryString(params);
   const url = `${fetchUrl}${fetchUrl.includes('?') ? '&' : '?'}${query}`;
