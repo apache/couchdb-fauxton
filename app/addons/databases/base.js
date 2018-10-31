@@ -30,7 +30,7 @@ Databases.initialize = function () {
 };
 
 function partitionUrlComponent(partitionKey) {
-  return partitionKey ? '/_partition/' + partitionKey : '';
+  return partitionKey ? `/_partition/${partitionKey}` : '';
 }
 
 function checkPartitionedDatabaseFeature () {

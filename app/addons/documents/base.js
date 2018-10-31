@@ -43,20 +43,17 @@ function getQueryParam (query) {
 }
 
 function partitionUrlComponent(partitionKey) {
-  return partitionKey ? '/_partition/' + partitionKey : '';
+  return partitionKey ? `/_partition/${partitionKey}` : '';
 }
 
 FauxtonAPI.registerUrls('allDocs', {
   server: function (id, query) {
-    /** XXX DEPRECATED: use allDocsSanitized **/
     return Helpers.getServerUrl('/' + id + '/_all_docs' + getQueryParam(query));
   },
   app: function (id, partitionKey, query) {
-    /** XXX DEPRECATED: use allDocsSanitized **/
     return 'database/' + id + partitionUrlComponent(partitionKey) + '/_all_docs' + getQueryParam(query);
   },
   apiurl: function (id, query) {
-    /** XXX DEPRECATED: use allDocsSanitized **/
     return Helpers.getApiUrl('/' + id + '/_all_docs' + getQueryParam(query));
   }
 });
