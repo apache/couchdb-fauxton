@@ -43,7 +43,7 @@ function getQueryParam (query) {
 }
 
 function partitionUrlComponent(partitionKey) {
-  return partitionKey ? '/_partition/' + partitionKey : '';
+  return partitionKey ? `/_partition/${partitionKey}` : '';
 }
 
 FauxtonAPI.registerUrls('allDocs', {

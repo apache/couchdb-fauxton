@@ -31,7 +31,7 @@ const getNewButtonLinks = (databaseName, partitionKey) => {
     partitionKeyQueryParam = '?partitionKey=' + encodeURIComponent(partitionKey);
   }
 
-  const addNewLinks = _.reduce(addLinks, function (menuLinks, link) {
+  const addNewLinks = addLinks.reduce((menuLinks, link) => {
     menuLinks.push({
       title: link.title,
       url: newUrlPrefix + partitionKeyComponent + '/' + link.url,

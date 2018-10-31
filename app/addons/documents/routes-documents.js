@@ -38,7 +38,14 @@ var DocumentsRouteObject = BaseRoute.extend({
       route: "designDocMetadataNoPartition",
       roles: ['fx_loggedIn']
     },
-    'database/:database/_changes': 'changes'
+    'database/:database/_partition/:partitionKey/_changes': {
+      route: 'changes',
+      roles: ['fx_loggedIn']
+    },
+    'database/:database/_changes': {
+      route: 'changes',
+      roles: ['fx_loggedIn']
+    }
   },
 
   initialize (route, options) {
@@ -140,7 +147,7 @@ var DocumentsRouteObject = BaseRoute.extend({
     />;
   },
 
-  changes: function () {
+  changes: function (_, partitionKey) {
     const selectedNavItem = new SidebarItemSelection('changes');
 
     return <ChangesSidebarLayout
@@ -150,6 +157,7 @@ var DocumentsRouteObject = BaseRoute.extend({
       dropDownLinks={this.getCrumbs(this.database)}
       database={this.database}
       selectedNavItem={selectedNavItem}
+      partitionKey={partitionKey}
     />;
   }
 
