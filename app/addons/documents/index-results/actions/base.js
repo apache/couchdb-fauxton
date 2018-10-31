@@ -13,6 +13,18 @@
 import ActionTypes from '../actiontypes';
 import { getDocId, getDocRev, isJSONDocBulkDeletable } from "../helpers/shared-helpers";
 
+export const partitionParamNotSupported = () => {
+  return {
+    type: ActionTypes.INDEX_RESULTS_REDUX_PARTITION_PARAM_NOT_SUPPORTED
+  };
+};
+
+export const partitionParamIsMandatory = () => {
+  return {
+    type: ActionTypes.INDEX_RESULTS_REDUX_PARTITION_PARAM_MANDATORY
+  };
+};
+
 export const nowLoading = () => {
   return {
     type: ActionTypes.INDEX_RESULTS_REDUX_IS_LOADING

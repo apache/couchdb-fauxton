@@ -114,6 +114,8 @@ export default class ResultsScreen extends React.Component {
 
     if (this.props.isLoading) {
       mainView = <div className="loading-lines-wrapper"><LoadLines /></div>;
+    } else if (this.props.noResultsWarning) {
+      mainView = <NoResultsScreen text={this.props.noResultsWarning} isWarning={true}/>;
     } else if (!this.props.hasResults) {
       mainView = <NoResultsScreen text={this.props.textEmptyIndex}/>;
     } else if (this.props.selectedLayout === Constants.LAYOUT_ORIENTATION.JSON) {

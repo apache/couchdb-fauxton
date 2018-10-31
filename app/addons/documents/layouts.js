@@ -81,6 +81,7 @@ export const TabsSidebarHeader = ({
               fetchUrl={fetchUrl}
               ddocsOnly={ddocsOnly}
               queryDocs={queryDocs}
+              partitionKey={partitionKey}
               selectedNavItem={selectedNavItem} />
           </div>
           <ApiBarContainer docURL={docURL} endpoint={endpoint} endpointAddQueryOptions={endpointAddQueryOptions} />
@@ -175,7 +176,8 @@ export const DocsTabsSidebarLayout = ({
   onGlobalModeSelected,
   globalMode
 }) => {
-  let queryDocs = (params) => { return queryAllDocs(fetchUrl, params); };
+  const partitionFilter = selectedNavItem.navItem === 'all-docs' && partitionKey ? partitionKey : '';
+  let queryDocs = (params) => { return queryAllDocs(fetchUrl, partitionFilter, params); };
   if (Helpers.isViewSelected(selectedNavItem)) {
     queryDocs = (params) => { return queryMapReduceView(fetchUrl, params); };
   }

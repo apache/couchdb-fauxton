@@ -49,7 +49,8 @@ export const fetchIndexes = (databaseName, params) => {
     }
     return {
       docs: json.indexes,
-      docType: Constants.INDEX_RESULTS_DOC_TYPE.MANGO_INDEX
+      docType: Constants.INDEX_RESULTS_DOC_TYPE.MANGO_INDEX,
+      layout: Constants.LAYOUT_ORIENTATION.JSON
     };
   });
 };

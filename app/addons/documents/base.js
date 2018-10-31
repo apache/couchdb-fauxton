@@ -117,16 +117,16 @@ FauxtonAPI.registerUrls('designDocs', {
 });
 
 FauxtonAPI.registerUrls('view', {
-  server: function (database, designDoc, viewName) {
-    return Helpers.getServerUrl('/' + database + '/_design/' + designDoc + '/_view/' + viewName);
+  server: function (database, partitionKey, designDoc, viewName) {
+    return Helpers.getServerUrl('/' + database + partitionUrlComponent(partitionKey) + '/_design/' + designDoc + '/_view/' + viewName);
   },
 
   app: function (database, designDoc) {
     return 'database/' + database + '/_design/' + designDoc + '/_view/';
   },
 
-  apiurl: function (id, designDoc, viewName) {
-    return Helpers.getApiUrl('/' + id + '/_design/' + designDoc + '/_view/' + viewName);
+  apiurl: function (id, partitionKey, designDoc, viewName) {
+    return Helpers.getApiUrl('/' + id + partitionUrlComponent(partitionKey) + '/_design/' + designDoc + '/_view/' + viewName);
   },
 
   edit: function (database, partitionKey, designDoc, indexName) {

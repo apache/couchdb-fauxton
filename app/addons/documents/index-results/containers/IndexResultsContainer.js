@@ -42,6 +42,7 @@ import {
 
 const mapStateToProps = ({indexResults}, ownProps) => {
   return {
+    noResultsWarning: indexResults.noResultsWarning,
     docs: getDocs(indexResults),
     selectedDocs: getSelectedDocs(indexResults),
     isLoading: getIsLoading(indexResults),
