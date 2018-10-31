@@ -10,13 +10,13 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import sinon from "sinon";
-import utils from "../../../../test/mocha/testUtils";
-import FauxtonAPI from "../../../core/api";
-import {ResultsToolBar} from "../components/results-toolbar";
-import React from 'react';
-import ReactDOM from 'react-dom';
 import { mount } from 'enzyme';
+import React from 'react';
+import sinon from 'sinon';
+import utils from '../../../../test/mocha/testUtils';
+import FauxtonAPI from '../../../core/api';
+import {ResultsToolBar} from '../components/results-toolbar';
+import Constants from '../constants';
 
 describe('Results Toolbar', () => {
   const restProps = {
@@ -26,7 +26,10 @@ describe('Results Toolbar', () => {
     toggleSelectAll: () => {},
     isLoading: false,
     queryOptionsParams: {},
-    databaseName: 'mydb'
+    databaseName: 'mydb',
+    fetchUrl: '/db1/_all_docs',
+    docType: Constants.INDEX_RESULTS_DOC_TYPE.VIEW,
+    hasResults: true
   };
 
   beforeEach(() => {
@@ -54,5 +57,23 @@ describe('Results Toolbar', () => {
   it('includes default partition key when one is selected', () => {
     const wrapper = mount(<ResultsToolBar hasResults={true} isListDeletable={false} {...restProps} partitionKey={'partKey1'}/>);
     expect(wrapper.find('a').prop('href')).toMatch(/\?partitionKey=partKey1$/);
+  });
+
+  it('shows Table, Metadata and JSON modes when querying a global view', () => {
+    const wrapper = mount(<ResultsToolBar hasResults={true} isListDeletable={false} {...restProps}
+      partitionKey={''} fetchUrl='/my_db/_design/ddoc1/_view/view1'/>);
+    expect(wrapper.find('button')).toHaveLength(3);
+  });
+
+  it('hides Table and JSON modes when querying a partitioned view', () => {
+    const wrapper = mount(<ResultsToolBar hasResults={true} isListDeletable={false} {...restProps}
+      partitionKey={'partKey1'} fetchUrl='/my_db/_partition/my_partition/_design/ddoc1/_view/view1'/>);
+    expect(wrapper.find('button')).toHaveLength(1);
+  });
+
+  it('shows Table, Metadata and JSON modes when showing All Documents filtered by partition', () => {
+    const wrapper = mount(<ResultsToolBar hasResults={true} isListDeletable={false} {...restProps}
+      partitionKey={'partKey1'} fetchUrl='/my_db/_all_docs'/>);
+    expect(wrapper.find('button')).toHaveLength(3);
   });
 });
