@@ -29,6 +29,10 @@ Databases.initialize = function () {
   Actions.checkPartitionedQueriesIsAvailable();
 };
 
+function partitionUrlComponent(partitionKey) {
+  return partitionKey ? '/_partition/' + partitionKey : '';
+}
+
 function checkPartitionedDatabaseFeature () {
   // Checks if the CouchDB server supports Partitioned Databases
   return get(Helpers.getServerUrl("/")).then((couchdb) => {
@@ -63,8 +67,8 @@ FauxtonAPI.registerUrls('changes', {
     return Helpers.getServerUrl('/' + id + '/_changes' + query);
   },
 
-  app: function (id, query) {
-    return '/database/' + id + '/_changes' + query;
+  app: function (id, partitionKey, query) {
+    return '/database/' + id + partitionUrlComponent(partitionKey) + '/_changes' + query;
   },
 
   apiurl: function (id, query) {
@@ -103,8 +107,8 @@ FauxtonAPI.registerUrls('permissions', {
     return Helpers.getServerUrl('/' + db + '/_security');
   },
 
-  app: function (db) {
-    return '/database/' + db + '/permissions';
+  app: function (db, partitionKey) {
+    return '/database/' + db + partitionUrlComponent(partitionKey) + '/permissions';
   },
 
   apiurl: function (db) {

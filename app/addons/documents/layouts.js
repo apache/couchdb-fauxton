@@ -223,7 +223,7 @@ export const DocsTabsSidebarLayout = ({
   );
 };
 
-export const ChangesSidebarLayout = ({ docURL, database, endpoint, dbName, dropDownLinks, selectedNavItem }) => {
+export const ChangesSidebarLayout = ({ docURL, database, endpoint, dbName, dropDownLinks, selectedNavItem, partitionKey }) => {
   return (
     <div id="dashboard" className="with-sidebar">
       <TabsSidebarHeader
@@ -239,6 +239,7 @@ export const ChangesSidebarLayout = ({ docURL, database, endpoint, dbName, dropD
         lowerContent={<ChangesContainer databaseName={dbName}/>}
         hideFooter={true}
         selectedNavItem={selectedNavItem}
+        partitionKey={partitionKey}
       />
     </div>
   );

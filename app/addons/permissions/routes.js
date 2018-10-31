@@ -10,19 +10,25 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import app from "../../app";
-import FauxtonAPI from "../../core/api";
-import Databases from "../databases/base";
-
-import BaseRoute from "../documents/shared-routes";
-import Layout from './layout';
 import React from 'react';
+import app from '../../app';
+import FauxtonAPI from '../../core/api';
+import Databases from '../databases/base';
+import BaseRoute from '../documents/shared-routes';
+import Layout from './layout';
 
 const PermissionsRouteObject = BaseRoute.extend({
 
   roles: ['fx_loggedIn'],
   routes: {
-    'database/:database/permissions': 'permissions'
+    'database/:database/_partition/:partitionKey/permissions': {
+      route: 'permissions',
+      roles: ['fx_loggedIn']
+    },
+    'database/:database/permissions': {
+      route: 'permissions',
+      roles: ['fx_loggedIn']
+    }
   },
 
   initialize: function () {
@@ -31,7 +37,7 @@ const PermissionsRouteObject = BaseRoute.extend({
     docOptions.include_docs = true;
   },
 
-  permissions: function (databaseId) {
+  permissions: function (databaseId, partitionKey) {
 
     // XXX magic inheritance props we need to maintain for BaseRoute
     this.database = new Databases.Model({ id: databaseId });
@@ -53,7 +59,8 @@ const PermissionsRouteObject = BaseRoute.extend({
       endpoint={url}
       dbName={this.database.id}
       dropDownLinks={crumbs}
-      database={this.database} />;
+      database={this.database}
+      partitionKey={partitionKey} />;
 
   }
 });

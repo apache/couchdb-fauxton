@@ -49,8 +49,8 @@ export default class MainSidebar extends React.Component {
     const docLinks = this.buildDocLinks();
     const dbEncoded = FauxtonAPI.url.encode(this.props.databaseName);
     const partKeyEncoded = this.props.selectedPartitionKey ? encodeURIComponent(this.props.selectedPartitionKey) : '';
-    const changesUrl = '#' + FauxtonAPI.urls('changes', 'app', dbEncoded, '');
-    const permissionsUrl = '#' + FauxtonAPI.urls('permissions', 'app', dbEncoded);
+    const changesUrl = '#' + FauxtonAPI.urls('changes', 'app', dbEncoded, partKeyEncoded, '');
+    const permissionsUrl = '#' + FauxtonAPI.urls('permissions', 'app', dbEncoded, partKeyEncoded);
     const databaseUrl = FauxtonAPI.urls('allDocs', 'app', dbEncoded, partKeyEncoded, '');
     const mangoQueryUrl = FauxtonAPI.urls('mango', 'query-app', dbEncoded, partKeyEncoded);
     const runQueryWithMangoText = app.i18n.en_US['run-query-with-mango'];
