@@ -93,8 +93,8 @@ var DocumentsRouteObject = BaseRoute.extend({
   * They are not the same when paginating
   */
   allDocs: function (databaseName, partitionKey, options) {
-    const params = this.createParams(options),
-          docParams = params.docParams;
+    const params = this.createParams(options);
+    const docParams = params.docParams;
 
     const url = FauxtonAPI.urls('allDocsSanitized', 'server', databaseName);
 

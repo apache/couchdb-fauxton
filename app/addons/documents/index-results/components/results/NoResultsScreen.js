@@ -14,11 +14,18 @@ import PropTypes from 'prop-types';
 
 import React from 'react';
 
-export default function NoResultsScreen ({ text }) {
+export default function NoResultsScreen ({ text, isWarning }) {
+  const warningMsg = (
+    <div className='no-results-screen-warning'>
+      <i className='fonticon-attention-circled'></i>
+      {text}
+    </div>
+  );
   return (
     <div className="no-results-screen">
+      {isWarning ? warningMsg : null}
       <div className="watermark-logo"></div>
-      <h3>{text}</h3>
+      {!isWarning ? <h3>{text}</h3> :  null}
     </div>
   );
 }

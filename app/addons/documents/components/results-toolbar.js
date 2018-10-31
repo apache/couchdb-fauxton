@@ -83,5 +83,6 @@ ResultsToolBar.propTypes = {
   isLoading: PropTypes.bool.isRequired,
   hasResults: PropTypes.bool.isRequired,
   isListDeletable: PropTypes.bool,
-  partitionKey: PropTypes.string
+  partitionKey: PropTypes.string,
+  docType: PropTypes.string
 };

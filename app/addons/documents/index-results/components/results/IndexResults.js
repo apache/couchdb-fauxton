@@ -41,11 +41,12 @@ export default class IndexResults extends React.Component {
       queryOptionsParams,
       ddocsOnly,
       fetchUrl,
-      resetState
+      resetState,
+      partitionKey
     } = nextProps;
 
     // Indicates the selected sidebar item has changed, so it needs to fetch the new list of docs
-    if (this.props.ddocsOnly !== ddocsOnly || this.props.fetchUrl !== fetchUrl) {
+    if (this.props.ddocsOnly !== ddocsOnly || this.props.fetchUrl !== fetchUrl || this.props.partitionKey !== partitionKey) {
       resetState();
       // Need to reset skip and reduce here because 'resetState()'
       // won't change props until the next update cycle

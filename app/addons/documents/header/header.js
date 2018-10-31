@@ -23,7 +23,9 @@ export default class BulkDocumentHeaderController extends React.Component {
     const {
       selectedLayout,
       docType,
-      queryOptionsParams
+      queryOptionsParams,
+      partitionKey,
+      fetchUrl
     } = this.props;
 
     let metadata, json, table;
@@ -38,10 +40,11 @@ export default class BulkDocumentHeaderController extends React.Component {
       return null;
     }
 
-    // reduce doesn't allow for include_docs=true, so we'll prevent JSON and table
-    // views since they force include_docs=true when reduce is checked in the
-    // query options panel.
-    if (!queryOptionsParams.reduce) {
+    // Reduce doesn't allow for include_docs=true, so we'll prevent JSON and table
+    // views since they force include_docs=true when reduce is checked in the query options panel.
+    // Partitioned queries don't supprt include_docs=true either.
+    const isAllDocsQuery = fetchUrl.includes('/_all_docs');
+    if (isAllDocsQuery || (!queryOptionsParams.reduce && !partitionKey)) {
       table = <Button
         className={selectedLayout === Constants.LAYOUT_ORIENTATION.TABLE ? 'active' : ''}
         onClick={this.toggleLayout.bind(this, Constants.LAYOUT_ORIENTATION.TABLE)}

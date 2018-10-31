@@ -18,6 +18,7 @@ import {getTableViewData} from './helpers/table-view';
 import {getDefaultPerPage, getDocId, isJSONDocBulkDeletable} from './helpers/shared-helpers';
 
 const initialState = {
+  noResultsWarning: '',
   docs: [],  // raw documents returned from couch
   selectedDocs: [],  // documents selected for manipulation
   isLoading: false,
@@ -66,6 +67,7 @@ export default function resultsState(state = initialState, action) {
 
     case ActionTypes.INDEX_RESULTS_REDUX_RESET_STATE:
       return Object.assign({}, initialState, {
+        noResultsWarning: state.noResultsWarning,
         selectedLayout: state.selectedLayout,
         selectedDocs: [],
         fetchParams: {
@@ -85,6 +87,16 @@ export default function resultsState(state = initialState, action) {
         isLoading: true
       });
 
+    case ActionTypes.INDEX_RESULTS_REDUX_PARTITION_PARAM_NOT_SUPPORTED:
+      return Object.assign({}, state, {
+        noResultsWarning: 'The selected index does not support partitions. Switch back to global mode.'
+      });
+
+    case ActionTypes.INDEX_RESULTS_REDUX_PARTITION_PARAM_MANDATORY:
+      return Object.assign({}, state, {
+        noResultsWarning: 'The selected index requires a partition key. Use the selector at the top to enter a partition key.'
+      });
+
     case ActionTypes.INDEX_RESULTS_REDUX_NEW_SELECTED_DOCS:
       return Object.assign({}, state, {
         selectedDocs: action.selectedDocs
@@ -101,6 +113,7 @@ export default function resultsState(state = initialState, action) {
       return Object.assign({}, state, {
         docs: action.docs,
         isLoading: false,
+        noResultsWarning: '',
         isEditable: true, //TODO: determine logic for this
         fetchParams: Object.assign({}, state.fetchParams, action.params),
         pagination: Object.assign({}, state.pagination, {
