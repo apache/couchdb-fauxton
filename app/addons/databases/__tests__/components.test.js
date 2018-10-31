@@ -10,7 +10,6 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 import FauxtonAPI from "../../../core/api";
-import Views from "../components";
 import Actions from "../actions";
 import Stores from "../stores";
 import utils from "../../../../test/mocha/testUtils";
@@ -18,37 +17,35 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { mount } from 'enzyme';
 import sinon from 'sinon';
+import Views from "../components";
 
 const assert = utils.assert;
 
 const store = Stores.databasesStore;
 
 describe('AddDatabaseWidget', () => {
-  let oldCreateNewDatabase;
-  let createCalled, passedDbName;
 
   beforeEach(() => {
-    oldCreateNewDatabase = Actions.createNewDatabase;
-    Actions.createNewDatabase = function (dbName) {
-      createCalled = true;
-      passedDbName = dbName;
-    };
+    sinon.stub(Actions, 'createNewDatabase');
   });
 
   afterEach(() => {
-    Actions.createNewDatabase = oldCreateNewDatabase;
+    Actions.createNewDatabase.restore();
   });
 
-  it("Creates a database with given name", () => {
-    createCalled = false;
-    passedDbName = null;
+  it("creates a database with given name", () => {
     const el = mount(<Views.AddDatabaseWidget />);
     el.setState({databaseName: 'my-db'});
     el.instance().onAddDatabase();
-    assert.equal(true, createCalled);
-    assert.equal("my-db", passedDbName);
+    sinon.assert.calledWith(Actions.createNewDatabase, 'my-db');
   });
 
+  it('creates a partitioned database', () => {
+    const el = mount(<Views.AddDatabaseWidget showPartitionedOption={true}/>);
+    el.setState({databaseName: 'my-db', partitionedSelected: true});
+    el.instance().onAddDatabase();
+    sinon.assert.calledWith(Actions.createNewDatabase, 'my-db', true);
+  });
 });
 
 
@@ -123,7 +120,7 @@ describe('DatabaseTable', () => {
     FauxtonAPI.registerExtension('DatabaseTable:head', ColHeader3);
 
     var table = mount(
-      <Views.DatabaseTable showDeleteDatabaseModal={{showModal: false}} loading={false} dbList={[]} />
+      <Views.DatabaseTable showDeleteDatabaseModal={{showModal: false}} loading={false} dbList={[]} showPartitionedColumn={false}/>
     );
     var cols = table.find('th');
 
@@ -150,7 +147,7 @@ describe('DatabaseTable', () => {
     const list = store.getDbList();
 
     var databaseRow = mount(
-      <Views.DatabaseTable showDeleteDatabaseModal={{showModal: false}} dbList={list} loading={false}/>
+      <Views.DatabaseTable showDeleteDatabaseModal={{showModal: false}} dbList={list} loading={false} showPartitionedColumn={false}/>
     );
     var links = databaseRow.find('td');
 
@@ -173,7 +170,7 @@ describe('DatabaseTable', () => {
     const list = store.getDbList();
 
     var databaseRow = mount(
-      <Views.DatabaseTable showDeleteDatabaseModal={{showModal: false}} dbList={list} loading={false} />
+      <Views.DatabaseTable showDeleteDatabaseModal={{showModal: false}} dbList={list} loading={false} showPartitionedColumn={false}/>
     );
     assert.equal(databaseRow.find('.database-load-fail').length, 1);
   });
@@ -189,9 +186,55 @@ describe('DatabaseTable', () => {
     const list = store.getDbList();
 
     var databaseRow = mount(
-      <Views.DatabaseTable showDeleteDatabaseModal={{showModal: false}} dbList={list} loading={false} />
+      <Views.DatabaseTable showDeleteDatabaseModal={{showModal: false}} dbList={list} loading={false} showPartitionedColumn={false}/>
     );
 
     assert.equal(databaseRow.find('.database-load-fail').length, 0);
+  });
+
+  it('shows Partitioned column only when prop is set to true', () => {
+    Actions.updateDatabases({
+      dbList: ['db1'],
+      databaseDetails: [{db_name: 'db1', doc_count: 0, doc_del_count: 0, props: {partitioned: true}}],
+      failedDbs: [],
+      fullDbList: ['db1']
+    });
+
+    const list = store.getDbList();
+
+    const withPartColumn = mount(
+      <Views.DatabaseTable showDeleteDatabaseModal={{showModal: false}} dbList={list} loading={false} showPartitionedColumn={true}/>
+    );
+    const colHeaders = withPartColumn.find('th');
+    assert.equal(colHeaders.length, 5);
+    assert.equal(colHeaders.get(3).props.children, 'Partitioned');
+
+    const withoutPartColumn = mount(
+      <Views.DatabaseTable showDeleteDatabaseModal={{showModal: false}} dbList={list} loading={false} showPartitionedColumn={false}/>
+    );
+    assert.equal(withoutPartColumn.find('th').length, 4);
+  });
+
+  it('shows correct values in the Partitioned column', () => {
+    Actions.updateDatabases({
+      dbList: ['db1', 'db2'],
+      databaseDetails: [
+        {db_name: 'db1', doc_count: 1, doc_del_count: 0, props: {partitioned: true}},
+        {db_name: 'db2', doc_count: 2, doc_del_count: 0, props: {partitioned: false}}
+      ],
+      failedDbs: [],
+      fullDbList: ['db1', 'db2']
+    });
+
+    const list = store.getDbList();
+
+    const dbTable = mount(
+      <Views.DatabaseTable showDeleteDatabaseModal={{showModal: false}} dbList={list} loading={false} showPartitionedColumn={true}/>
+    );
+    const colCells = dbTable.find('td');
+    // 2 rows with 5 cells each
+    assert.equal(colCells.length, 10);
+    assert.equal(colCells.get(3).props.children, 'Yes');
+    assert.equal(colCells.get(8).props.children, 'No');
   });
 });

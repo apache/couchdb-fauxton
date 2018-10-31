@@ -43,7 +43,7 @@ export class ChangePasswordForm extends React.Component {
 
   changePassword(e) {
     e.preventDefault();
-    this.props.changePassword(this.props.username, this.state.password, this.state.passwordConfirm);
+    this.props.changePassword(this.props.username, this.state.password, this.state.passwordConfirm, this.props.nodes);
   }
 
   render() {
@@ -87,11 +87,14 @@ export class ChangePasswordForm extends React.Component {
   }
 }
 
+const mapStateToProps = ({clusters}) => {
+  return {
+    nodes: clusters.nodes,
+    username: FauxtonAPI.session.user().name
+  };
+};
+
 export default connect(
-  () => {
-    return {
-      username: FauxtonAPI.session.user().name
-    };
-  },
+  mapStateToProps,
   {changePassword}
 )(ChangePasswordForm);

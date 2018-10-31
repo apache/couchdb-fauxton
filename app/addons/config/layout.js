@@ -11,23 +11,25 @@
 // the License.
 
 import React from 'react';
-import ConfigComponents from "./components";
-import CORSComponents from "../cors/components";
-import {Breadcrumbs} from '../components/header-breadcrumbs';
-import {NotificationCenterButton} from '../fauxton/notifications/notifications';
-import {ApiBarWrapper} from '../components/layouts';
+import AddOptionButtonContainer from './components/AddOptionButtonContainer';
+import ConfigTableContainer from './components/ConfigTableContainer';
+import ConfigTabs from './components/ConfigTabs';
+import CORSComponents from '../cors/components';
+import { Breadcrumbs } from '../components/header-breadcrumbs';
+import NotificationCenterButton from '../fauxton/notifications/components/NotificationCenterButton';
+import { ApiBarWrapper } from '../components/layouts';
 
-export const ConfigHeader = ({node, crumbs, docURL, endpoint}) => {
+export const ConfigHeader = ({ node, crumbs, docURL, endpoint }) => {
   return (
     <header className="two-panel-header">
       <div className="flex-layout flex-row">
         <div id='breadcrumbs' className="faux__config-breadcrumbs">
-          <Breadcrumbs crumbs={crumbs}/>
+          <Breadcrumbs crumbs={crumbs} />
         </div>
         <div className="right-header-wrapper flex-layout flex-row flex-body">
           <div id="react-headerbar" className="flex-body"> </div>
           <div id="right-header" className="flex-fill">
-            <ConfigComponents.AddOptionController node={node} />
+            <AddOptionButtonContainer node={node} />
           </div>
           <ApiBarWrapper docURL={docURL} endpoint={endpoint} />
           <div id="notification-center-btn" className="flex-fill">
@@ -39,7 +41,7 @@ export const ConfigHeader = ({node, crumbs, docURL, endpoint}) => {
   );
 };
 
-export const ConfigLayout = ({showCors, docURL, node, endpoint, crumbs}) => {
+export const ConfigLayout = ({ showCors, docURL, node, endpoint, crumbs }) => {
   const sidebarItems = [
     {
       title: 'Main config',
@@ -51,7 +53,7 @@ export const ConfigLayout = ({showCors, docURL, node, endpoint, crumbs}) => {
     }
   ];
   const selectedTab = showCors ? 'CORS' : 'Main config';
-  const content = showCors ? <CORSComponents.CORSContainer node={node} url={endpoint}/> : <ConfigComponents.ConfigTableController node={node} />;
+  const content = showCors ? <CORSComponents.CORSContainer node={node} url={endpoint} /> : <ConfigTableContainer node={node} />;
   return (
     <div id="dashboard" className="with-sidebar">
       <ConfigHeader
@@ -62,7 +64,7 @@ export const ConfigLayout = ({showCors, docURL, node, endpoint, crumbs}) => {
       />
       <div className="with-sidebar tabs-with-sidebar content-area">
         <aside id="sidebar-content" className="scrollable">
-          <ConfigComponents.Tabs
+          <ConfigTabs
             sidebarItems={sidebarItems}
             selectedTab={selectedTab}
           />

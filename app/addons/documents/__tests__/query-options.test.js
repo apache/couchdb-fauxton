@@ -23,7 +23,11 @@ describe('QueryOptions', () => {
     queryOptionsToggleIncludeDocs: () => {},
     reduce: false,
     contentVisible: true,
-    perPage: 10
+    perPage: 10,
+    queryOptionsToggleStable: () => {},
+    queryOptionsChangeUpdate: () => {},
+    stable: false,
+    update: 'true'
   };
 
   it('calls resetPagination and queryOptionsExecute on submit', () => {

@@ -28,13 +28,13 @@ export default class MultipleNodesController extends React.Component {
   }
 
   getNodeList = () => {
-    return this.props.nodeList.map(function (el, i) {
+    return this.props.nodeList.map((el, i) => {
       return (
         <div key={i} className="node-item">
           {el.remoteAddress}:{el.port}
         </div>
       );
-    }, this);
+    });
   };
 
   _addNode = () => {

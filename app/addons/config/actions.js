@@ -12,114 +12,120 @@
 
 import ActionTypes from './actiontypes';
 import FauxtonAPI from '../../core/api';
-import Resources from './resources';
+import * as ConfigAPI from './api';
 
-export default {
-  fetchAndEditConfig (node) {
-    FauxtonAPI.dispatch({ type: ActionTypes.LOADING_CONFIG });
+export const fetchAndEditConfig = (node) => (dispatch) => {
+  dispatch({ type: ActionTypes.LOADING_CONFIG });
 
-    var configModel = new Resources.ConfigModel({ node });
-
-    configModel.fetch().then(() => this.editSections({ sections: configModel.get('sections'), node }));
-  },
-
-  editSections (options) {
-    FauxtonAPI.dispatch({ type: ActionTypes.EDIT_CONFIG, options });
-  },
-
-  editOption (options) {
-    FauxtonAPI.dispatch({ type: ActionTypes.EDIT_OPTION, options });
-  },
-
-  cancelEdit (options) {
-    FauxtonAPI.dispatch({ type: ActionTypes.CANCEL_EDIT, options });
-  },
-
-  saveOption (node, options) {
-    FauxtonAPI.dispatch({ type: ActionTypes.SAVING_OPTION, options });
-
-    var modelAttrs = options;
-    modelAttrs.node = node;
-    var optionModel = new Resources.OptionModel(modelAttrs);
-
-    return optionModel.save()
-      .then(
-        () => this.optionSaveSuccess(options),
-        xhr => this.optionSaveFailure(options, JSON.parse(xhr.responseText).reason)
-      );
-  },
-
-  optionSaveSuccess (options) {
-    FauxtonAPI.dispatch({ type: ActionTypes.OPTION_SAVE_SUCCESS, options });
-    FauxtonAPI.addNotification({
-      msg: `Option ${options.optionName} saved`,
-      type: 'success'
+  ConfigAPI.fetchConfig(node).then(res => {
+    dispatch({
+      type: ActionTypes.EDIT_CONFIG,
+      options: {
+        sections: res.sections,
+        node
+      }
     });
-  },
-
-  optionSaveFailure (options, error) {
-    FauxtonAPI.dispatch({ type: ActionTypes.OPTION_SAVE_FAILURE, options });
+  }).catch(err => {
     FauxtonAPI.addNotification({
-      msg: `Option save failed: ${error}`,
-      type: 'error'
+      msg: 'Failed to load the configuration. ' + err.message,
+      type: 'error',
+      clear: true
     });
-  },
-
-  addOption (node, options) {
-    FauxtonAPI.dispatch({ type: ActionTypes.ADDING_OPTION });
-
-    var modelAttrs = options;
-    modelAttrs.node = node;
-    var optionModel = new Resources.OptionModel(modelAttrs);
-
-    return optionModel.save()
-      .then(
-        () => this.optionAddSuccess(options),
-        xhr => this.optionAddFailure(options, JSON.parse(xhr.responseText).reason)
-      );
-  },
-
-  optionAddSuccess (options) {
-    FauxtonAPI.dispatch({ type: ActionTypes.OPTION_ADD_SUCCESS, options });
-    FauxtonAPI.addNotification({
-      msg: `Option ${options.optionName} added`,
-      type: 'success'
+    dispatch({
+      type: ActionTypes.EDIT_CONFIG,
+      options: {
+        sections: [],
+        node
+      }
     });
-  },
+  });
+};
 
-  optionAddFailure (options, error) {
-    FauxtonAPI.dispatch({ type: ActionTypes.OPTION_ADD_FAILURE, options });
-    FauxtonAPI.addNotification({
-      msg: `Option add failed: ${error}`,
-      type: 'error'
-    });
-  },
+export const editOption = (options) => (dispatch) => {
+  dispatch({ type: ActionTypes.EDIT_OPTION, options });
+};
 
-  deleteOption (node, options) {
-    FauxtonAPI.dispatch({ type: ActionTypes.DELETING_OPTION, options });
+export const cancelEdit = (options) => (dispatch) => {
+  dispatch({ type: ActionTypes.CANCEL_EDIT, options });
+};
 
-    var modelAttrs = options;
-    modelAttrs.node = node;
-    var optionModel = new Resources.OptionModel(modelAttrs);
+export const saveOption = (node, options) => (dispatch) => {
+  dispatch({ type: ActionTypes.SAVING_OPTION, options });
 
-    return optionModel.destroy()
-      .then(() => this.optionDeleteSuccess(options))
-      .catch((err) => this.optionDeleteFailure(options, err.message));
-  },
+  const { sectionName, optionName, value } = options;
+  return ConfigAPI.saveConfigOption(node, sectionName, optionName, value).then(
+    () => optionSaveSuccess(options, dispatch)
+  ).catch(
+    (err) => optionSaveFailure(options, err.message, dispatch)
+  );
+};
 
-  optionDeleteSuccess (options) {
-    FauxtonAPI.dispatch({ type: ActionTypes.OPTION_DELETE_SUCCESS, options });
-    FauxtonAPI.addNotification({
-      msg: `Option ${options.optionName} deleted`,
-      type: 'success'
-    });
-  },
+const optionSaveSuccess = (options, dispatch) => {
+  dispatch({ type: ActionTypes.OPTION_SAVE_SUCCESS, options });
+  FauxtonAPI.addNotification({
+    msg: `Option ${options.optionName} saved`,
+    type: 'success'
+  });
+};
 
-  optionDeleteFailure (options, error) {
-    FauxtonAPI.dispatch({ type: ActionTypes.OPTION_DELETE_FAILURE, options });
-    FauxtonAPI.addNotification({
-      msg: `Option delete failed: ${error}`,
-      type: 'error'
-    });
-  }
+const optionSaveFailure = (options, error, dispatch) => {
+  dispatch({ type: ActionTypes.OPTION_SAVE_FAILURE, options });
+  FauxtonAPI.addNotification({
+    msg: `Option save failed: ${error}`,
+    type: 'error'
+  });
+};
+
+export const addOption = (node, options) => (dispatch) => {
+  dispatch({ type: ActionTypes.ADDING_OPTION });
+
+  const { sectionName, optionName, value } = options;
+  return ConfigAPI.saveConfigOption(node, sectionName, optionName, value).then(
+    () => optionAddSuccess(options, dispatch)
+  ).catch(
+    (err) => optionAddFailure(options, err.message, dispatch)
+  );
+};
+
+const optionAddSuccess = (options, dispatch) => {
+  dispatch({ type: ActionTypes.OPTION_ADD_SUCCESS, options });
+  FauxtonAPI.addNotification({
+    msg: `Option ${options.optionName} added`,
+    type: 'success'
+  });
+};
+
+const optionAddFailure = (options, error, dispatch) => {
+  dispatch({ type: ActionTypes.OPTION_ADD_FAILURE, options });
+  FauxtonAPI.addNotification({
+    msg: `Option add failed: ${error}`,
+    type: 'error'
+  });
+};
+
+export const deleteOption = (node, options) => (dispatch) => {
+  dispatch({ type: ActionTypes.DELETING_OPTION, options });
+
+  const { sectionName, optionName } = options;
+  return ConfigAPI.deleteConfigOption(node, sectionName, optionName).then(
+    () => optionDeleteSuccess(options, dispatch)
+  ).catch(
+    (err) => optionDeleteFailure(options, err.message, dispatch)
+  );
+};
+
+const optionDeleteSuccess = (options, dispatch) => {
+  dispatch({ type: ActionTypes.OPTION_DELETE_SUCCESS, options });
+  FauxtonAPI.addNotification({
+    msg: `Option ${options.optionName} deleted`,
+    type: 'success'
+  });
+};
+
+const optionDeleteFailure = (options, error, dispatch) => {
+  dispatch({ type: ActionTypes.OPTION_DELETE_FAILURE, options });
+  FauxtonAPI.addNotification({
+    msg: `Option delete failed: ${error}`,
+    type: 'error'
+  });
 };

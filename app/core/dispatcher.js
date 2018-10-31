@@ -27,7 +27,9 @@ export const register = (store) => {
 };
 
 export const dispatch = (msg) => {
-  stores.forEach(store => store(msg));
+  stores.forEach(store => {
+    store(msg);
+  });
 };
 
 export const unregister = (id) => {

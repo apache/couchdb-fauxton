@@ -10,16 +10,24 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import FauxtonAPI from "../../../../core/api";
-import React from "react";
-import ReactDOM from "react-dom";
-import Documents from "../../resources";
-import Components from "../components";
-import Actions from "../actions";
-import ActionTypes from "../actiontypes";
-import Databases from "../../../databases/base";
-import utils from "../../../../../test/mocha/testUtils";
-import {mount} from 'enzyme';
+import FauxtonAPI from '../../../../core/api';
+import Helpers from '../../../../helpers';
+import React from 'react';
+import sinon from 'sinon';
+import Documents from '../../resources';
+import AttachmentsPanelButton from '../components/AttachmentsPanelButton';
+import CloneDocModal from '../components/CloneDocModal';
+import DocEditorScreen from '../components/DocEditorScreen';
+import DocEditorContainer from '../components/DocEditorContainer';
+import Databases from '../../../databases/base';
+import databasesReducer from '../../../databases/reducers';
+import utils from '../../../../../test/mocha/testUtils';
+import { mount } from 'enzyme';
+import thunk from 'redux-thunk';
+import { Provider } from 'react-redux';
+import { createStore, applyMiddleware, combineReducers } from 'redux';
+import docEditorReducer from '../reducers';
+
 import '../../base';
 
 FauxtonAPI.router = new FauxtonAPI.Router([]);
@@ -54,26 +62,53 @@ const docWithAttachmentsJSON = {
 };
 
 const database = new Databases.Model({ id: 'a/special?db' });
+const defaultProps = {
+  isLoading: true,
+  isNewDoc: true,
+  isDbPartitioned: false,
+  database: database,
+  doc: new Documents.NewDoc(null, { database: database }),
+  conflictCount: 0,
+  saveDoc: () => {},
 
+  isCloneDocModalVisible: false,
+  showCloneDocModal: () => {},
+  hideCloneDocModal: () => {},
+  cloneDoc: () => {},
 
-describe('DocEditorController', () => {
+  isDeleteDocModalVisible: false,
+  showDeleteDocModal: () => {},
+  hideDeleteDocModal: () => {},
+  deleteDoc: () => {},
+
+  isUploadModalVisible: false,
+  uploadInProgress: false,
+  uploadPercentage: 0,
+  uploadErrorMessage: '',
+  numFilesUploaded: 0,
+  showUploadModal: () => {},
+  hideUploadModal: () => {},
+  cancelUpload: () => {},
+  resetUploadModal: () => {},
+  uploadAttachment: () => {}
+};
+
+describe('DocEditorScreen', () => {
+
   it('loading indicator appears on load', () => {
-    const el = mount(<Components.DocEditorController />);
+    const el = mount(<DocEditorScreen {...defaultProps} />);
     assert.equal(el.find('.loading-lines').length, 1);
   });
 
   it('new docs do not show the button row', () => {
-    const el = mount(<Components.DocEditorController isNewDoc={true} database={database} />);
-
     const doc = new Documents.Doc(docJSON, { database: database });
-    FauxtonAPI.dispatch({
-      type: ActionTypes.DOC_LOADED,
-      options: {
-        doc: doc
-      }
-    });
+    const el = mount(<DocEditorScreen
+      {...defaultProps}
+      isLoading={false}
+      isNewDoc={true}
+      database={database}
+      doc={doc} />);
 
-    el.update();
     assert.equal(el.find('.loading-lines').length, 0);
     assert.equal(el.find('.icon-circle-arrow-up').length, 0);
     assert.equal(el.find('.icon-repeat').length, 0);
@@ -81,58 +116,49 @@ describe('DocEditorController', () => {
   });
 
   it('view attachments button does not appear with no attachments', () => {
-    const el = mount(<Components.DocEditorController database={database} />);
-
     const doc = new Documents.Doc(docJSON, { database: database });
-    FauxtonAPI.dispatch({
-      type: ActionTypes.DOC_LOADED,
-      options: {
-        doc: doc
-      }
-    });
+    const el = mount(<DocEditorScreen
+      {...defaultProps}
+      isLoading={false}
+      isNewDoc={false}
+      database={database}
+      doc={doc} />);
+
     assert.equal(el.find('.view-attachments-section').length, 0);
   });
 
   it('view attachments button shows up when the doc has attachments', () => {
-    const el = mount(<Components.DocEditorController database={database} />);
-
     const doc = new Documents.Doc(docWithAttachmentsJSON, { database: database });
-    FauxtonAPI.dispatch({
-      type: ActionTypes.DOC_LOADED,
-      options: {
-        doc: doc
-      }
-    });
+    const el = mount(<DocEditorScreen
+      {...defaultProps}
+      isLoading={false}
+      isNewDoc={false}
+      database={database}
+      doc={doc} />);
 
-    el.update();
     assert.equal(el.find('.view-attachments-section').length, 1);
   });
 
   it('view attachments dropdown contains right number of docs', () => {
-    const el = mount(<Components.DocEditorController database={database} />);
-
     const doc = new Documents.Doc(docWithAttachmentsJSON, { database: database });
-    FauxtonAPI.dispatch({
-      type: ActionTypes.DOC_LOADED,
-      options: {
-        doc: doc
-      }
-    });
+    const el = mount(<DocEditorScreen
+      {...defaultProps}
+      isLoading={false}
+      isNewDoc={false}
+      database={database}
+      doc={doc} />);
+
     assert.equal(el.find('.view-attachments-section .dropdown-menu li').length, 2);
   });
 
   it('view attachments dropdown contains correct urls', () => {
-    const el = mount(
-      <Components.DocEditorController database={database} />
-    );
-
     const doc = new Documents.Doc(docWithAttachmentsJSON, { database: database });
-    FauxtonAPI.dispatch({
-      type: ActionTypes.DOC_LOADED,
-      options: {
-        doc: doc
-      }
-    });
+    const el = mount(<DocEditorScreen
+      {...defaultProps}
+      isLoading={false}
+      isNewDoc={false}
+      database={database}
+      doc={doc} />);
 
     const $attachmentNode = el.find('.view-attachments-section .dropdown-menu li');
     const attachmentURLactual = $attachmentNode.find('a').first().prop('href');
@@ -140,40 +166,97 @@ describe('DocEditorController', () => {
     assert.equal(attachmentURLactual, './a%2Fspecial%3Fdb/_design%2Ftest%23doc/one%252F.png');
   });
 
-  it.skip('setting deleteDocModal=true in store shows modal', () => {
-    mount(<Components.DocEditorController database={database} />);
-    const doc = new Documents.Doc(docWithAttachmentsJSON, { database: database });
-    FauxtonAPI.dispatch({
-      type: ActionTypes.DOC_LOADED,
-      options: {
-        doc: doc
-      }
-    });
+  it('auto-generated ID for new docs starts with colon for partitioned databases', () => {
+    const doc = { database: database, attributes: { _id: 'new_doc_id'} };
+    const el = mount(<DocEditorScreen
+      {...defaultProps}
+      isLoading={false}
+      isNewDoc={true}
+      isDbPartitioned={true}
+      database={database}
+      doc={doc} />);
 
-    // uber-kludgy, but the delete doc modal is a generic dialog used multiple times, so this test first checks
-    // no modal is open, then confirms the open modal contains the delete dialog message
-    assert.equal($('body').find('.confirmation-modal').length, 0);
-
-    Actions.showDeleteDocModal();
-
-    const modalContent = $('body').find('.confirmation-modal .modal-body p')[0];
-    assert.ok(/Are you sure you want to delete this document\?/.test(modalContent.innerHTML));
+    const editor = el.find('CodeEditor');
+    expect(editor.prop('defaultCode')).toMatch(/":new_doc_id"/);
   });
 
-  it.skip('setting uploadDocModal=true in store shows modal', () => {
-    mount(<Components.DocEditorController database={database} />);
+  it('cancel button navigates to all docs by default', () => {
     const doc = new Documents.Doc(docWithAttachmentsJSON, { database: database });
-    FauxtonAPI.dispatch({
-      type: ActionTypes.DOC_LOADED,
-      options: {
-        doc: doc
-      }
-    });
+    const el = mount(<DocEditorScreen
+      {...defaultProps}
+      isLoading={false}
+      isNewDoc={true}
+      isDbPartitioned={true}
+      database={database}
+      doc={doc} />);
 
-    assert.equal($('body').find('.upload-file-modal').length, 0);
-    Actions.showUploadModal();
-    assert.notEqual($('body').find('.upload-file-modal').length, 0);
+    const linkUrl = el.find('a.cancel-button').prop('href');
+    expect(linkUrl).toBe('#/database/' + encodeURIComponent(database.id) + '/_all_docs');
   });
+
+  it('cancel button navigates to previousUrl', () => {
+    const doc = new Documents.Doc(docWithAttachmentsJSON, { database: database });
+    const el = mount(<DocEditorScreen
+      {...defaultProps}
+      isLoading={false}
+      isNewDoc={true}
+      isDbPartitioned={true}
+      database={database}
+      previousUrl='something/else'
+      doc={doc} />);
+
+    const linkUrl = el.find('a.cancel-button').prop('href');
+    expect(linkUrl).toBe('#/something/else');
+  });
+
+});
+
+describe('DocEditorContainer', () => {
+  const middlewares = [thunk];
+  const store = createStore(
+    combineReducers({ docEditor: docEditorReducer, databases: databasesReducer }),
+    applyMiddleware(...middlewares)
+  );
+
+  it('clicking Delete button shows the confirmation modal', () => {
+    const wrapper = mount(
+      <Provider store={store}>
+        <DocEditorContainer
+          isNewDoc={false}
+          database={database} />
+      </Provider>
+    );
+    assert.equal(wrapper.find(DocEditorScreen).prop('isDeleteDocModalVisible'), false);
+    wrapper.find('button[title="Delete"]').simulate('click');
+    assert.equal(wrapper.find(DocEditorScreen).prop('isDeleteDocModalVisible'), true);
+  });
+
+  it('clicking Upload button shows the upload dialog', () => {
+    const wrapper = mount(
+      <Provider store={store}>
+        <DocEditorContainer
+          isNewDoc={false}
+          database={database} />
+      </Provider>
+    );
+    assert.equal(wrapper.find(DocEditorScreen).prop('isUploadModalVisible'), false);
+    wrapper.find('button[title="Upload Attachment"]').simulate('click');
+    assert.equal(wrapper.find(DocEditorScreen).prop('isUploadModalVisible'), true);
+  });
+
+  it('clicking Clone button shows the clone doc dialog', () => {
+    const wrapper = mount(
+      <Provider store={store}>
+        <DocEditorContainer
+          isNewDoc={false}
+          database={database} />
+      </Provider>
+    );
+    assert.equal(wrapper.find(DocEditorScreen).prop('isCloneDocModalVisible'), false);
+    wrapper.find('button[title="Clone Document"]').simulate('click');
+    assert.equal(wrapper.find(DocEditorScreen).prop('isCloneDocModalVisible'), true);
+  });
+
 });
 
 
@@ -185,12 +268,12 @@ describe("AttachmentsPanelButton", () => {
   });
 
   it('does not show up when loading', () => {
-    const el = mount(<Components.AttachmentsPanelButton isLoading={true} doc={doc} />);
+    const el = mount(<AttachmentsPanelButton isLoading={true} doc={doc} />);
     assert.equal(el.find('.panel-button').length, 0);
   });
 
   it('shows up after loading', () => {
-    const el = mount(<Components.AttachmentsPanelButton isLoading={false} doc={doc} />);
+    const el = mount(<AttachmentsPanelButton isLoading={false} doc={doc} />);
     assert.equal(el.find('button.panel-button').length, 1);
   });
 });
@@ -211,10 +294,61 @@ describe("Custom Extension Buttons", () => {
 
     FauxtonAPI.registerExtension('DocEditor:icons', CustomButton);
 
-    const el = mount(<Components.DocEditorController database={database} />);
+    const el = mount(<DocEditorScreen
+      {...defaultProps}
+      isLoading={false}
+      isNewDoc={false}
+      database={database} />);
     assert.isTrue(/Oh\sno\sshe\sdi'n't!/.test(el.html()));
-
     // confirm the database name was also included
     assert.equal(el.find("#testDatabaseName").text(), database.id);
   });
 });
+
+describe("CloneDocModal", () => {
+  const defaultProps = {
+    visible: false,
+    doc: { attributes: {_id: 'my_doc_id', hey: 'there'} },
+    database: {},
+    onSubmit: () => {},
+    hideCloneDocModal: () => {},
+    cloneDoc: () => {}
+  };
+
+  let getUUID;
+
+  afterEach(() => {
+    if (getUUID) {
+      getUUID.restore();
+    }
+  });
+
+  it('sets random UUID by default', () => {
+    const promise = FauxtonAPI.Promise.resolve({ uuids: ['abc9876'] });
+    getUUID = sinon.stub(Helpers, 'getUUID').returns(promise);
+    const el = mount(
+      <CloneDocModal {...defaultProps} />
+    );
+    el.setProps({visible: true});
+    return promise.then(() => {
+      expect(el.state().uuid).toBe('abc9876');
+    });
+  });
+
+  it('adds partition key from original doc to the auto-generated ID when it exists', () => {
+    const promise = FauxtonAPI.Promise.resolve({ uuids: ['abc9876'] });
+    getUUID = sinon.stub(Helpers, 'getUUID').returns(promise);
+    const el = mount(
+      <CloneDocModal
+        {...defaultProps}
+        doc={{ attributes: {_id: 'part1:my_doc_id', hey: 'there'} }}/>
+    );
+    el.setProps({visible: true});
+    return promise.then(() => {
+      expect(el.state().uuid).toBe('part1:abc9876');
+    });
+  });
+
+
+});
+

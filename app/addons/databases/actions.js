@@ -13,9 +13,11 @@ import app from "../../app";
 import Helpers from "../../helpers";
 import FauxtonAPI from "../../core/api";
 import { get } from "../../core/ajax";
+import DatabasesBase from '../databases/base';
 import Stores from "./stores";
 import ActionTypes from "./actiontypes";
 import Resources from "./resources";
+import * as API from './api';
 
 function getDatabaseDetails (dbList, fullDbList) {
   const databaseDetails = [];
@@ -126,7 +128,7 @@ export default {
     });
   },
 
-  createNewDatabase: function (databaseName) {
+  createNewDatabase: function (databaseName, partitioned) {
     if (_.isNull(databaseName) || databaseName.trim().length === 0) {
       FauxtonAPI.addNotification({
         msg: 'Please enter a valid database name',
@@ -144,7 +146,7 @@ export default {
       }
     });
 
-    var db = Stores.databasesStore.obtainNewDatabaseModel(databaseName);
+    const db = Stores.databasesStore.obtainNewDatabaseModel(databaseName, partitioned);
     FauxtonAPI.addNotification({ msg: 'Creating database.' });
     db.save().done(function () {
       FauxtonAPI.addNotification({
@@ -152,11 +154,11 @@ export default {
         type: 'success',
         clear: true
       });
-      var route = FauxtonAPI.urls('allDocs', 'app', app.utils.safeURLName(databaseName), '?limit=' + Resources.DocLimit);
+      const route = FauxtonAPI.urls('allDocs', 'app', app.utils.safeURLName(databaseName), '?limit=' + Resources.DocLimit);
       app.router.navigate(route, { trigger: true });
     }
     ).fail(function (xhr) {
-      var responseText = JSON.parse(xhr.responseText).reason;
+      const responseText = JSON.parse(xhr.responseText).reason;
       FauxtonAPI.addNotification({
         msg: 'Create database failed: ' + responseText,
         type: 'error',
@@ -194,6 +196,56 @@ export default {
         };
       });
       callback(null, { options: options });
+    });
+  },
+
+  setPartitionedDatabasesAvailable(available) {
+    const action = {
+      type: ActionTypes.DATABASES_PARTITIONED_DB_AVAILABLE,
+      options: {
+        available
+      }
+    };
+    FauxtonAPI.dispatch(action);
+    FauxtonAPI.reduxDispatch(action);
+  },
+
+  checkPartitionedQueriesIsAvailable() {
+    const exts = FauxtonAPI.getExtensions(DatabasesBase.PARTITONED_DB_CHECK_EXTENSION);
+    let promises = exts.map(checkFunction => {
+      return checkFunction();
+    });
+    FauxtonAPI.Promise.all(promises).then(results => {
+      const isAvailable = results.every(check => check === true);
+      this.setPartitionedDatabasesAvailable(isAvailable);
+    }).catch(() => {
+      // ignore as the default is false
+    });
+  },
+
+  // Fetches and sets metadata info for the selected database, which is defined by the current URL
+  // This function is intended to be called by the routers if needed by the components in the page.
+  fetchSelectedDatabaseInfo(databaseName) {
+    FauxtonAPI.reduxDispatch({
+      type: ActionTypes.DATABASES_FETCH_SELECTED_DB_METADATA
+    });
+    API.fetchDatabaseInfo(databaseName).then(res => {
+      if (!res.db_name) {
+        const details = res.reason ? res.reason : '';
+        throw new Error('Failed to fetch database info. ' + details);
+      }
+      FauxtonAPI.reduxDispatch({
+        type: ActionTypes.DATABASES_FETCH_SELECTED_DB_METADATA_SUCCESS,
+        options: {
+          metadata: res
+        }
+      });
+    }).catch(err => {
+      FauxtonAPI.addNotification({
+        msg: err.message,
+        type: 'error',
+        clear: true
+      });
     });
   }
 };

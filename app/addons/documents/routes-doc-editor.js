@@ -11,11 +11,13 @@
 // the License.
 
 import React from 'react';
+import app from '../../app';
 import FauxtonAPI from "../../core/api";
 import Documents from "./resources";
 import Databases from "../databases/base";
+import DatabaseActions from '../databases/actions';
 import Actions from "./doc-editor/actions";
-import ReactComponents from "./doc-editor/components";
+import DocEditorContainer from "./doc-editor/components/DocEditorContainer";
 import RevBrowserContainer from './rev-browser/container';
 import {DocEditorLayout} from '../components/layouts';
 
@@ -39,7 +41,7 @@ const DocEditorRouteObject = FauxtonAPI.RouteObject.extend({
     'database/:database/_design/:ddoc': 'showDesignDoc',
     'database/:database/_local/:doc': 'showLocalDoc',
     'database/:database/:doc': 'codeEditor',
-    'database/:database/new': 'codeEditor'
+    'database/:database/new(:extra)': 'codeEditor'
   },
 
   revisionBrowser: function (databaseName, docId) {
@@ -63,7 +65,8 @@ const DocEditorRouteObject = FauxtonAPI.RouteObject.extend({
     return this.revisionBrowser(databaseName, '_design/' + ddoc);
   },
 
-  codeEditor: function (databaseName, docId) {
+  codeEditor: function (databaseName, docId, options) {
+    const urlParams = app.getParams(options);
     const backLink = FauxtonAPI.urls('allDocs', 'app', FauxtonAPI.url.encode(databaseName));
 
     const crumbs =  [
@@ -75,17 +78,31 @@ const DocEditorRouteObject = FauxtonAPI.RouteObject.extend({
 
     if (docId) {
       this.doc = new Documents.Doc({ _id: docId }, { database: this.database, fetchConflicts: true });
+    } else {
+      const partitionKey = urlParams ? urlParams.partitionKey : undefined;
+      this.doc = new Documents.NewDoc(null, { database: this.database, partitionKey });
     }
+    DatabaseActions.fetchSelectedDatabaseInfo(databaseName);
+    Actions.dispatchInitDocEditor({ doc: this.doc, database: this.database });
 
-    Actions.initDocEditor({ doc: this.doc, database: this.database });
+    let previousUrl = undefined;
+    const previousValidUrls = FauxtonAPI.router.lastPages.filter(url => {
+      // make sure it doesn't redirect back to the code editor when cloning docs
+      return url.includes('/_all_docs') || url.match(/_design\/(\S)*\/_/) || url.includes('/_find');
+    });
+    if (previousValidUrls.length > 0) {
+      previousUrl = previousValidUrls[previousValidUrls.length - 1];
+    }
 
     return <DocEditorLayout
       crumbs={crumbs}
       endpoint={this.doc.url('apiurl')}
       docURL={this.doc.documentation()}
-      component={<ReactComponents.DocEditorController
+      partitionKey={urlParams.partitionKey}
+      component={<DocEditorContainer
         database={this.database}
         isNewDoc={docId ? false : true}
+        previousUrl={previousUrl}
       />}
     />;
   },

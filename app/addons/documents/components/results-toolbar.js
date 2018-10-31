@@ -13,13 +13,11 @@ import PropTypes from 'prop-types';
 
 import React from 'react';
 import BulkDocumentHeaderController from "../header/header";
-import Stores from "../sidebar/stores";
 import Components from "../../components/react-components";
 import Constants from '../constants';
 import Helpers from '../helpers';
 
 const {BulkActionComponent} = Components;
-const store = Stores.sidebarStore;
 
 export class ResultsToolBar extends React.Component {
   constructor (props) {
@@ -40,7 +38,6 @@ export class ResultsToolBar extends React.Component {
   }
 
   render () {
-    const database = store.getDatabase();
     const {
       hasResults,
       isListDeletable,
@@ -48,7 +45,9 @@ export class ResultsToolBar extends React.Component {
       allDocumentsSelected,
       hasSelectedItem,
       toggleSelectAll,
-      isLoading
+      isLoading,
+      databaseName,
+      partitionKey
     } = this.props;
 
     // Determine if we need to display the bulk action selector
@@ -70,10 +69,10 @@ export class ResultsToolBar extends React.Component {
     }
 
     let createDocumentLink = null;
-    if (database) {
+    if (databaseName) {
       createDocumentLink = (
         <div className="document-result-screen__toolbar-flex-container">
-          <a href={Helpers.getNewDocUrl(database.id)} className="btn save document-result-screen__toolbar-create-btn btn-primary">
+          <a href={Helpers.getNewDocUrl(databaseName, partitionKey)} className="btn save document-result-screen__toolbar-create-btn btn-primary">
             Create Document
           </a>
         </div>
@@ -113,5 +112,6 @@ ResultsToolBar.propTypes = {
   isLoading: PropTypes.bool.isRequired,
   hasResults: PropTypes.bool.isRequired,
   isListDeletable: PropTypes.bool,
+  partitionKey: PropTypes.string,
   resultsStyle: PropTypes.object.isRequired
 };

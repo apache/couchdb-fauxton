@@ -28,6 +28,12 @@ const store = createStore(
   combineReducers(FauxtonAPI.reducers),
   applyMiddleware(...FauxtonAPI.middlewares)
 );
+FauxtonAPI.reduxDispatch = (action) => {
+  store.dispatch(action);
+};
+FauxtonAPI.reduxState = () => {
+  return store.getState();
+};
 
 app.addons = LoadAddons;
 FauxtonAPI.router = app.router = new FauxtonAPI.Router(app.addons);

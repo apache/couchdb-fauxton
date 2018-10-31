@@ -97,4 +97,41 @@ describe('Code Editor', () => {
     });
   });
 
+  describe('parseLineForStringMatch', () => {
+    const initEditor = (code) => {
+      const editor = mount(
+        <ReactComponents.CodeEditor defaultCode={code} />
+      );
+      sinon.stub(editor.instance(), 'getSelectionStart').returns({row: 1});
+      sinon.stub(editor.instance(), 'getSelectionEnd').returns({row: 1});
+      sinon.stub(editor.instance(), 'isRowExpanded').returns(true);
+      return editor;
+    };
+
+    it('returns matches on pretty formatted code', () => {
+      const code = '{\n "field": "my string value" \n}';
+      codeEditorEl = initEditor(code);
+      const matches = codeEditorEl.instance().parseLineForStringMatch();
+      assert.equal('"my string value" ', matches[3]);
+    });
+    it('returns matches when line ends with comma', () => {
+      const code = '{\n "field": "my string value", \n "field2": 123 \n}';
+      codeEditorEl = initEditor(code);
+      const matches = codeEditorEl.instance().parseLineForStringMatch();
+      assert.equal('"my string value", ', matches[3]);
+    });
+    it('returns matches on code with extra spaces', () => {
+      const code = '{\n "field"  \t :  \t "my string value"  \t  ,  \t  \n "field2": 123 \n}';
+      codeEditorEl = initEditor(code);
+      const matches = codeEditorEl.instance().parseLineForStringMatch();
+      assert.equal('"my string value"  \t  ,  \t  ', matches[3]);
+    });
+    it('returns matches on code with special and non-ASCII chars', () => {
+      const code = '{\n "@langua漢字g e" : "my string value",\n "field2": 123 \n}';
+      codeEditorEl = initEditor(code);
+      const matches = codeEditorEl.instance().parseLineForStringMatch();
+      assert.equal('"my string value",', matches[3]);
+    });
+  });
+
 });

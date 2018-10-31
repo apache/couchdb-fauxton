@@ -39,7 +39,7 @@ describe('CORS helper functions', () => {
       'https://',
       'http://'
     ];
-    _.each(urls, function (url) {
+    _.each(urls, (url) => {
       assert.isFalse(Helpers.validateCORSDomain(url));
     });
   });

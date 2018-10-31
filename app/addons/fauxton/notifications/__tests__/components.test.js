@@ -9,53 +9,23 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
-import FauxtonAPI from "../../../../core/api";
-import Views from "../notifications";
-import Stores from "../stores";
-import utils from "../../../../../test/mocha/testUtils";
+
 import React from "react";
-import ReactDOM from "react-dom";
 import moment from "moment";
 import { mount } from 'enzyme';
 import sinon from 'sinon';
+import Notification from '../components/Notification';
+import NotificationCenterPanel from '../components/NotificationCenterPanel';
+import NotificationPanelRow from '../components/NotificationPanelRow';
+import utils from '../../../../../test/mocha/testUtils';
+
 const assert = utils.assert;
-var store = Stores.notificationStore;
-
-
-describe('NotificationController', () => {
-
-  beforeEach(() => {
-    store.reset();
-  });
-
-  it('notifications should be escaped by default', (done) => {
-    store._notificationCenterVisible = true;
-    const component = mount(<Views.NotificationController />);
-    FauxtonAPI.addNotification({ msg: '<script>window.whatever=1;</script>' });
-    //use timer so that controller is displayed first
-    setTimeout(() => {
-      done();
-      assert.ok(/&lt;script&gt;window.whatever=1;&lt;\/script&gt;/.test(component.html()));
-    });
-  });
-
-  it('notifications should be able to render unescaped', (done) => {
-    store._notificationCenterVisible = true;
-    const component = mount(<Views.NotificationController />);
-    FauxtonAPI.addNotification({ msg: '<script>window.whatever=1;</script>', escape: false });
-    setTimeout(() => {
-      done();
-      assert.ok(/<script>window.whatever=1;<\/script>/.test(component.html()));
-    });
-  });
-});
 
 describe('Notification', () => {
   it('startHide is only called after visible time is out', (done) => {
-    store._notificationCenterVisible = true;
     const spy = sinon.spy();
-    const component = mount(<Views.Notification
-      notificationId={'some id'}
+    const component = mount(<Notification
+      notificationId={123}
       isHiding={false}
       key={11}
       msg={'a msg'}
@@ -74,6 +44,33 @@ describe('Notification', () => {
       assert.ok(spy.called);
       done();
     }, 3000);
+  });
+
+  it('notification text should be escaped by default', () => {
+    const wrapper = mount(<Notification
+      notificationId={123}
+      isHiding={false}
+      msg={'<script>window.whatever=1;</script>'}
+      type={'error'}
+      style={{opacity:1}}
+      onStartHide={() => {}}
+      onHideComplete={() => {}}
+    />);
+    assert.ok(/&lt;script&gt;window.whatever=1;&lt;\/script&gt;/.test(wrapper.html()));
+  });
+
+  it('notification text can be rendered unescaped', () => {
+    const wrapper = mount(<Notification
+      notificationId={123}
+      isHiding={false}
+      msg={'<script>window.whatever=1;</script>'}
+      type={'error'}
+      escape={false}
+      style={{opacity:1}}
+      onStartHide={() => {}}
+      onHideComplete={() => {}}
+    />);
+    assert.ok(/<script>window.whatever=1;<\/script>/.test(wrapper.html()));
   });
 });
 
@@ -107,29 +104,30 @@ describe('NotificationPanelRow', () => {
     height: 64
   };
 
+  const defaultProps = {
+    style,
+    isVisible: true,
+    filter: 'all',
+    clearSingleNotification: () => {}
+  };
+
   it('shows all notification types when "all" filter applied', () => {
-    const row1 = mount(<Views.NotificationPanelRow
-      style={style}
-      isVisible={true}
-      filter="all"
+    const row1 = mount(<NotificationPanelRow
+      {...defaultProps}
       item={notifications.success}
     />);
 
     assert.notOk(row1.find('li').prop('aria-hidden'));
 
-    const row2 = mount(<Views.NotificationPanelRow
-      style={style}
-      isVisible={true}
-      filter="all"
+    const row2 = mount(<NotificationPanelRow
+      {...defaultProps}
       item={notifications.error}
     />
     );
     assert.notOk(row2.find('li').prop('aria-hidden'));
 
-    const row3 = mount(<Views.NotificationPanelRow
-      style={style}
-      isVisible={true}
-      filter="all"
+    const row3 = mount(<NotificationPanelRow
+      {...defaultProps}
       item={notifications.info} />
     );
     assert.notOk(row3.find('li').prop('aria-hidden'));
@@ -137,9 +135,8 @@ describe('NotificationPanelRow', () => {
 
   it('hides notification when filter doesn\'t match', () => {
     var rowEl = mount(
-      <Views.NotificationPanelRow
-        style={style}
-        isVisible={true}
+      <NotificationPanelRow
+        {...defaultProps}
         filter="success"
         item={notifications.info}
       />);
@@ -148,9 +145,8 @@ describe('NotificationPanelRow', () => {
 
   it('shows notification when filter exact match', () => {
     const rowEl = mount(
-      <Views.NotificationPanelRow
-        style={style}
-        isVisible={true}
+      <NotificationPanelRow
+        {...defaultProps}
         filter="info"
         item={notifications.info}
       />);
@@ -160,75 +156,25 @@ describe('NotificationPanelRow', () => {
 
 
 describe('NotificationCenterPanel', () => {
-  beforeEach(() => {
-    store.reset();
-  });
 
-  it('shows all notifications by default', (done) => {
-    store.addNotification({ type: 'success', msg: 'Success are okay' });
-    store.addNotification({ type: 'success', msg: 'another success.' });
-    store.addNotification({ type: 'info', msg: 'A single info message' });
-    store.addNotification({ type: 'error', msg: 'Error #1' });
-    store.addNotification({ type: 'error', msg: 'Error #2' });
-    store.addNotification({ type: 'error', msg: 'Error #3' });
+  const defaultProps = {
+    hideNotificationCenter: () => {},
+    selectNotificationFilter: () => {},
+    clearAllNotifications: () => {},
+    clearSingleNotification: () => {},
+    isVisible: true,
+    style:{ opacity: 1 }
+  };
 
-    var panelEl = mount(
-      <Views.NotificationCenterPanel
-        style={{ x: 1 }}
-        visible={true}
-        filter="all"
-        notifications={store.getNotifications()}
-      />);
+  it('clear all notifications', () => {
+    const stub = sinon.stub();
+    const panelEl = mount(<NotificationCenterPanel
+      {...defaultProps}
+      notifications={[]}
+      clearAllNotifications={stub}
+      filter={'all'} />);
 
-    setTimeout(() => {
-      done();
-      assert.equal(panelEl.find('.notification-list li[aria-hidden=false]').length, 6);
-    });
-  });
-
-  it('appropriate filters are applied - 1', (done) => {
-    store.addNotification({ type: 'success', msg: 'Success are okay' });
-    store.addNotification({ type: 'success', msg: 'another success.' });
-    store.addNotification({ type: 'info', msg: 'A single info message' });
-    store.addNotification({ type: 'error', msg: 'Error #1' });
-    store.addNotification({ type: 'error', msg: 'Error #2' });
-    store.addNotification({ type: 'error', msg: 'Error #3' });
-
-    var panelEl = mount(
-      <Views.NotificationCenterPanel
-        style={{ x: 1 }}
-        visible={true}
-        filter="success"
-        notifications={store.getNotifications()}
-      />);
-
-    // there are 2 success messages
-    setTimeout(() => {
-      done();
-      assert.equal(panelEl.find('.notification-list li[aria-hidden=false]').length, 2);
-    });
-  });
-
-  it('appropriate filters are applied - 2', (done) => {
-    store.addNotification({ type: 'success', msg: 'Success are okay' });
-    store.addNotification({ type: 'success', msg: 'another success.' });
-    store.addNotification({ type: 'info', msg: 'A single info message' });
-    store.addNotification({ type: 'error', msg: 'Error #1' });
-    store.addNotification({ type: 'error', msg: 'Error #2' });
-    store.addNotification({ type: 'error', msg: 'Error #3' });
-
-    var panelEl = mount(
-      <Views.NotificationCenterPanel
-        style={{ x: 1 }}
-        visible={true}
-        filter="error"
-        notifications={store.getNotifications()}
-      />);
-
-    // 3 errors
-    setTimeout(() => {
-      done();
-      assert.equal(panelEl.find('.notification-list li[aria-hidden=false]').length, 3);
-    });
+    panelEl.find('footer input').simulate('click');
+    sinon.assert.calledOnce(stub);
   });
 });

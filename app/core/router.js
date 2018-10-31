@@ -18,6 +18,7 @@ var beforeUnloads = {};
 
 export default Backbone.Router.extend({
   routes: {},
+  originalPageTitle: window.document.title,
 
   beforeUnload: function (name, fn) {
     beforeUnloads[name] = fn;
@@ -44,6 +45,17 @@ export default Backbone.Router.extend({
 
     if (continueNav) {
       Backbone.Router.prototype.navigate(fragment, options);
+      this.updateWindowTitle(fragment);
+    }
+  },
+
+  updateWindowTitle: function(fragment) {
+    if (fragment.startsWith('#/')) {
+      window.document.title = this.originalPageTitle + ' - ' + fragment.substring(2);
+    } else if (fragment.startsWith('/') || fragment.startsWith('#')) {
+      window.document.title = this.originalPageTitle + ' - ' + fragment.substring(1);
+    } else {
+      window.document.title = this.originalPageTitle + ' - ' + fragment;
     }
   },
 
@@ -75,15 +87,15 @@ export default Backbone.Router.extend({
   },
 
   setModuleRoutes: function (addons) {
-    _.each(addons, function (module) {
+    _.each(addons, (module) => {
       if (module) {
         module.initialize();
         // This is pure routes the addon provides
         if (module.RouteObjects) {
-          _.each(module.RouteObjects, this.addModuleRouteObject, this);
+          _.each(module.RouteObjects, this.addModuleRouteObject.bind(this));
         }
       }
-    }, this);
+    });
   },
 
   initialize: function (addons) {
@@ -93,10 +105,10 @@ export default Backbone.Router.extend({
     this.setModuleRoutes(addons);
 
     this.lastPages = [];
-    //keep last pages visited in Fauxton
+    //keep last few pages visited in Fauxton
     Backbone.history.on('route', function () {
       this.lastPages.push(Backbone.history.fragment);
-      if (this.lastPages.length > 2) {
+      if (this.lastPages.length > 5) {
         this.lastPages.shift();
       }
     }, this);

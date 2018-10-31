@@ -13,17 +13,19 @@
 import PropTypes from 'prop-types';
 
 import React from 'react';
-import { NotificationCenterButton } from '../fauxton/notifications/notifications';
+import NotificationCenterButton from '../fauxton/notifications/components/NotificationCenterButton';
 import SidebarControllerContainer from "./sidebar/SidebarControllerContainer";
 import HeaderDocsLeft from './components/header-docs-left';
-import Changes from './changes/components';
+import ChangesContainer from './changes/components/ChangesContainer';
+import ChangesTabContentContainer from './changes/components/ChangesTabContentContainer';
 import IndexEditorComponents from "./index-editor/components";
-import DesignDocInfoComponents from './designdocinfo/components';
+import DesignDocInfoContainer from './designdocinfo/components/DesignDocInfoContainer';
 import RightAllDocsHeader from './components/header-docs-right';
 import IndexResultsContainer from './index-results/containers/IndexResultsContainer';
 import PaginationContainer from './index-results/containers/PaginationContainer';
 import ApiBarContainer from './index-results/containers/ApiBarContainer';
 import { queryAllDocs, queryMapReduceView } from './index-results/api';
+import PartitionKeySelectorContainer from './partition-key/container';
 import Constants from './constants';
 import Helpers from './helpers';
 
@@ -39,8 +41,24 @@ export const TabsSidebarHeader = ({
   fetchUrl,
   ddocsOnly,
   queryDocs,
-  selectedNavItem
+  selectedNavItem,
+  showPartitionKeySelector,
+  partitionKey,
+  onPartitionKeySelected,
+  onGlobalModeSelected,
+  globalMode
 }) => {
+  let partKeySelector = null;
+  if (showPartitionKeySelector) {
+    partKeySelector = (<PartitionKeySelectorContainer
+      databaseName={dbName}
+      partitionKey={partitionKey}
+      onPartitionKeySelected={onPartitionKeySelected}
+      onGlobalModeSelected={onGlobalModeSelected}
+      globalMode={globalMode}/>
+    );
+  }
+
   return (
     <header className="two-panel-header">
       <div className="flex-layout flex-row">
@@ -51,6 +69,9 @@ export const TabsSidebarHeader = ({
           />
         </div>
         <div className="right-header-wrapper flex-layout flex-row flex-body">
+          <div style={{flex:1, padding: '18px 6px 12px 12px'}}>
+            {partKeySelector}
+          </div>
           <div id="right-header" className="flex-fill">
             <RightAllDocsHeader
               hideQueryOptions={hideQueryOptions}
@@ -81,11 +102,17 @@ TabsSidebarHeader.propTypes = {
   hideJumpToDoc: PropTypes.bool,
   database: PropTypes.object.isRequired,
   queryDocs: PropTypes.func,
-  selectedNavItem: PropTypes.object
+  selectedNavItem: PropTypes.object,
+  showPartitionKeySelector: PropTypes.bool.isRequired,
+  partitionKey: PropTypes.string,
+  onPartitionKeySelected: PropTypes.func,
+  onGlobalModeSelected: PropTypes.func,
+  globalMode: PropTypes.bool
 };
 
 TabsSidebarHeader.defaultProps = {
-  hideHeaderBar: false
+  hideHeaderBar: false,
+  showPartitionKeySelector: false
 };
 
 export const TabsSidebarContent = ({
@@ -94,12 +121,13 @@ export const TabsSidebarContent = ({
   upperContent,
   fetchUrl,
   databaseName,
-  queryDocs
+  queryDocs,
+  selectedNavItem
 }) => {
   return (
     <div className="with-sidebar tabs-with-sidebar content-area">
       <aside id="sidebar-content" className="scrollable">
-        <SidebarControllerContainer />
+        <SidebarControllerContainer selectedNavItem={selectedNavItem}/>
       </aside>
       <section id="dashboard-content" className="flex-layout flex-col">
         <div id="dashboard-upper-content">
@@ -126,6 +154,7 @@ TabsSidebarContent.propTypes = {
   hideFooter: PropTypes.bool,
   lowerContent: PropTypes.object,
   upperContent: PropTypes.object,
+  selectedNavItem: PropTypes.object
 };
 
 export const DocsTabsSidebarLayout = ({
@@ -138,7 +167,11 @@ export const DocsTabsSidebarLayout = ({
   fetchUrl,
   ddocsOnly,
   deleteEnabled = true,
-  selectedNavItem
+  selectedNavItem,
+  partitionKey,
+  onPartitionKeySelected,
+  onGlobalModeSelected,
+  globalMode
 }) => {
   let queryDocs = (params) => { return queryAllDocs(fetchUrl, params); };
   if (Helpers.isViewSelected(selectedNavItem)) {
@@ -152,7 +185,8 @@ export const DocsTabsSidebarLayout = ({
     fetchAtStartup={true}
     queryDocs={queryDocs}
     docType={Constants.INDEX_RESULTS_DOC_TYPE.VIEW}
-    deleteEnabled={deleteEnabled} />;
+    deleteEnabled={deleteEnabled}
+    partitionKey={partitionKey} />;
 
   return (
     <div id="dashboard" className="with-sidebar">
@@ -167,18 +201,24 @@ export const DocsTabsSidebarLayout = ({
         ddocsOnly={ddocsOnly}
         queryDocs={queryDocs}
         selectedNavItem={selectedNavItem}
+        showPartitionKeySelector={!ddocsOnly}
+        partitionKey={partitionKey}
+        onPartitionKeySelected={onPartitionKeySelected}
+        onGlobalModeSelected={onGlobalModeSelected}
+        globalMode={globalMode}
       />
       <TabsSidebarContent
         lowerContent={lowerContent}
         fetchUrl={fetchUrl}
         databaseName={dbName}
         queryDocs={queryDocs}
+        selectedNavItem={selectedNavItem}
       />
     </div>
   );
 };
 
-export const ChangesSidebarLayout = ({ docURL, database, endpoint, dbName, dropDownLinks }) => {
+export const ChangesSidebarLayout = ({ docURL, database, endpoint, dbName, dropDownLinks, selectedNavItem }) => {
   return (
     <div id="dashboard" className="with-sidebar">
       <TabsSidebarHeader
@@ -190,16 +230,23 @@ export const ChangesSidebarLayout = ({ docURL, database, endpoint, dbName, dropD
         hideQueryOptions={true}
       />
       <TabsSidebarContent
-        upperContent={<Changes.ChangesTabContent />}
-        lowerContent={<Changes.ChangesController />}
+        upperContent={<ChangesTabContentContainer />}
+        lowerContent={<ChangesContainer databaseName={dbName}/>}
         hideFooter={true}
+        selectedNavItem={selectedNavItem}
       />
     </div>
   );
 };
 
-export const ViewsTabsSidebarLayout = ({ showEditView, database, docURL, endpoint, dbName, dropDownLinks }) => {
-  const content = showEditView ? <IndexEditorComponents.EditorController /> : <DesignDocInfoComponents.DesignDocInfo />;
+export const ViewsTabsSidebarLayout = ({showEditView, database, docURL, endpoint,
+  dbName, dropDownLinks, selectedNavItem, designDocInfo }) => {
+
+  const content = showEditView ?
+    <IndexEditorComponents.EditorController /> :
+    <DesignDocInfoContainer
+      designDocInfo={designDocInfo}
+      designDocName={selectedNavItem.designDocName}/>;
   return (
     <div id="dashboard" className="with-sidebar">
       <TabsSidebarHeader
@@ -215,6 +262,7 @@ export const ViewsTabsSidebarLayout = ({ showEditView, database, docURL, endpoin
       <TabsSidebarContent
         lowerContent={content}
         hideFooter={true}
+        selectedNavItem={selectedNavItem}
       />
     </div>
   );
@@ -229,5 +277,6 @@ ViewsTabsSidebarLayout.propTypes = {
   docURL: PropTypes.string.isRequired,
   endpoint: PropTypes.string,
   dbName: PropTypes.string.isRequired,
-  dropDownLinks: PropTypes.array.isRequired
+  dropDownLinks: PropTypes.array.isRequired,
+  designDocInfo: PropTypes.object
 };

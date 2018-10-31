@@ -13,9 +13,14 @@
 import FauxtonAPI from "../../core/api";
 import Activetasks from "./routes";
 import "./assets/less/activetasks.less";
+import reducers from './reducers';
 
 Activetasks.initialize = function () {
   FauxtonAPI.addHeaderLink({title: 'Active Tasks', icon: 'fonticon-activetasks', href: '#/activetasks'});
 };
+
+FauxtonAPI.addReducers({
+  activetasks: reducers
+});
 
 export default Activetasks;

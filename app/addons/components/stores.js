@@ -51,6 +51,6 @@ Stores.DeleteDbModalStore = FauxtonAPI.Store.extend({
 
 
 Stores.deleteDbModalStore = new Stores.DeleteDbModalStore();
-Stores.deleteDbModalStore.dispatchToken = FauxtonAPI.dispatcher.register(Stores.deleteDbModalStore.dispatch);
+Stores.deleteDbModalStore.dispatchToken = FauxtonAPI.dispatcher.register(Stores.deleteDbModalStore.dispatch.bind(Stores.deleteDbModalStore));
 
 export default Stores;

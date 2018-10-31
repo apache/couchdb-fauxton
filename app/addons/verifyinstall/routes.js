@@ -13,8 +13,7 @@
 import React from 'react';
 import FauxtonAPI from "../../core/api";
 import VerifyInstall from "./resources";
-import Actions from "./actions";
-import Components from "./components";
+import VerifyInstallContainer from "./components/VerifyInstallContainer";
 import {OnePaneSimpleLayout} from '../components/layouts';
 
 const VerifyRouteObject = FauxtonAPI.RouteObject.extend({
@@ -24,9 +23,8 @@ const VerifyRouteObject = FauxtonAPI.RouteObject.extend({
   selectedHeader: 'Verify',
 
   verifyInstall: function () {
-    Actions.resetStore();
     return <OnePaneSimpleLayout
-      component={<Components.VerifyInstallController/>}
+      component={<VerifyInstallContainer/>}
       crumbs={[
         {name: 'Verify CouchDB Installation'}
       ]}

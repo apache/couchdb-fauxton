@@ -12,9 +12,9 @@
 
 import React from 'react';
 import FauxtonAPI from "../../core/api";
-import Cluster from "./resources";
-import ClusterComponents from "./cluster";
-import ClusterActions from "./cluster.actions";
+import Helpers from "../../helpers";
+import DisabledConfigController from "./cluster";
+import ClusterActions from "./actions";
 import {OnePaneSimpleLayout} from '../components/layouts';
 
 
@@ -25,17 +25,12 @@ var ConfigDisabledRouteObject = FauxtonAPI.RouteObject.extend({
     'cluster/disabled': 'showDisabledFeatureScreen'
   },
 
-  apiUrl: function () {
-    return [this.memberships.url('apiurl'), this.memberships.documentation];
-  },
-
   showDisabledFeatureScreen: function () {
-    const memberships = new Cluster.ClusterNodes();
     ClusterActions.fetchNodes();
     return <OnePaneSimpleLayout
-      component={<ClusterComponents.DisabledConfigController/>}
-      endpoint={memberships.url('apiurl')}
-      docURL={memberships.documentation}
+      component={<DisabledConfigController/>}
+      endpoint={Helpers.getServerUrl('/_membership')}
+      docURL={FauxtonAPI.constants.DOC_URLS.MEMBERSHIP}
       crumbs={[
         { name: 'Config disabled' }
       ]}
@@ -43,6 +38,6 @@ var ConfigDisabledRouteObject = FauxtonAPI.RouteObject.extend({
   }
 });
 
-Cluster.RouteObjects = [ConfigDisabledRouteObject];
-
-export default Cluster;
+export default {
+  RouteObjects: [ConfigDisabledRouteObject]
+};

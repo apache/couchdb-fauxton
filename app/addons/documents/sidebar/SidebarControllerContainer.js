@@ -12,25 +12,97 @@
 
 import { connect } from 'react-redux';
 import SidebarComponents from './sidebar';
-import ActionTypes from './actiontypes';
+import Action from './actions';
+import { getDatabase } from './reducers';
 
-const reduxUpdatedDesignDocList = (designDocs) => {
-  return {
-    type: ActionTypes.SIDEBAR_UPDATED_DESIGN_DOCS,
-    options: {
-      designDocs: Array.isArray(designDocs) ? designDocs : []
-    }
-  };
+
+// returns a simple array of design doc IDs
+const getAvailableDesignDocs = (state) => {
+  const availableDocs = state.designDocs.filter((doc) => {
+    return !doc.isMangoDoc();
+  });
+  return _.map(availableDocs, (doc) => {
+    return doc.id;
+  });
 };
 
-const mapStateToProps = () => {
-  return {};
+const getDeleteIndexDesignDoc = (state) => {
+  const designDoc = state.designDocs.find((ddoc) => {
+    return '_design/' + state.deleteIndexModalDesignDocName === ddoc.id;
+  });
+
+  return designDoc ? designDoc.dDocModel() : null;
+};
+
+
+const selectedNavItem = (selectedItem) => {
+
+  // resets previous selection and sets new values
+  const settings = {
+    designDocName: '',
+    designDocSection: '',
+    indexName: '',
+    navItem: '',
+    ...selectedItem
+  };
+  return settings;
+};
+
+const mapStateToProps = ({ sidebar }, ownProps) => {
+  return {
+    database: getDatabase(sidebar),
+    selectedNav: selectedNavItem(ownProps.selectedNavItem),
+    designDocs: sidebar.designDocs,
+    // designDocList: getDesignDocList(sidebar),
+    designDocList: sidebar.designDocList,
+    availableDesignDocIds: getAvailableDesignDocs(sidebar),
+    toggledSections: sidebar.toggledSections,
+    isLoading: sidebar.loading,
+
+    deleteIndexModalVisible: sidebar.deleteIndexModalVisible,
+    deleteIndexModalText: sidebar.deleteIndexModalText,
+    deleteIndexModalOnSubmit: sidebar.deleteIndexModalOnSubmit,
+    deleteIndexModalIndexName: sidebar.deleteIndexModalIndexName,
+    deleteIndexModalDesignDoc: getDeleteIndexDesignDoc(sidebar),
+
+    cloneIndexModalVisible: sidebar.cloneIndexModalVisible,
+    cloneIndexModalTitle: sidebar.cloneIndexModalTitle,
+    cloneIndexModalSelectedDesignDoc: sidebar.cloneIndexModalSelectedDesignDoc,
+    cloneIndexModalNewDesignDocName: sidebar.cloneIndexModalNewDesignDocName,
+    cloneIndexModalOnSubmit: sidebar.cloneIndexModalOnSubmit,
+    cloneIndexDesignDocProp: sidebar.cloneIndexDesignDocProp,
+    cloneIndexModalNewIndexName: sidebar.cloneIndexModalNewIndexName,
+    cloneIndexSourceIndexName: sidebar.cloneIndexModalSourceIndexName,
+    cloneIndexSourceDesignDocName: sidebar.cloneIndexModalSourceDesignDocName,
+    cloneIndexModalIndexLabel: sidebar.cloneIndexModalIndexLabel
+  };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    reduxUpdatedDesignDocList: (designDocsList) => {
-      dispatch(reduxUpdatedDesignDocList(designDocsList));
+    toggleContent: (designDoc, indexGroup) => {
+      dispatch(Action.toggleContent(designDoc, indexGroup));
+    },
+    hideCloneIndexModal: () => {
+      dispatch(Action.hideCloneIndexModal());
+    },
+    hideDeleteIndexModal: () => {
+      dispatch(Action.hideDeleteIndexModal());
+    },
+    showDeleteIndexModal: (indexName, designDocName, indexLabel, onDelete) => {
+      dispatch(Action.showDeleteIndexModal(indexName, designDocName, indexLabel, onDelete));
+    },
+    showCloneIndexModal: (indexName, designDocName, indexLabel, onSubmit) => {
+      dispatch(Action.showCloneIndexModal(indexName, designDocName, indexLabel, onSubmit));
+    },
+    selectDesignDoc: (designDoc) => {
+      dispatch(Action.selectDesignDoc(designDoc));
+    },
+    updateNewDesignDocName: (designDocName) => {
+      dispatch(Action.updateNewDesignDocName(designDocName));
+    },
+    setNewCloneIndexName: (indexName) => {
+      dispatch(Action.setNewCloneIndexName(indexName));
     }
   };
 };

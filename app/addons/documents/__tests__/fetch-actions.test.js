@@ -296,7 +296,7 @@ describe('Docs Fetch API', () => {
 
       beforeEach(() => {
         notificationSpy = sinon.spy(FauxtonAPI, 'addNotification');
-        sidebarSpy = sinon.stub(SidebarActions, 'updateDesignDocs');
+        sidebarSpy = sinon.stub(SidebarActions, 'dispatchUpdateDesignDocs');
       });
 
       afterEach(() => {
@@ -325,7 +325,7 @@ describe('Docs Fetch API', () => {
         expect(sidebarSpy.calledOnce).toBe(false);
       });
 
-      it('calls updateDesignDocs when one of the deleted docs is a ddoc', () => {
+      it('calls dispatchUpdateDesignDocs when one of the deleted docs is a ddoc', () => {
         const res = [
           {
             id: '_design/foo',

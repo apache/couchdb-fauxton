@@ -10,18 +10,19 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import app from "../../app";
-import FauxtonAPI from "../../core/api";
-import NavigationActions from "./navigation/actions";
-
-import "./assets/less/fauxton.less";
+import app from '../../app';
+import FauxtonAPI from '../../core/api';
+import * as NavigationActions from './navigation/actions';
+import navigationReducers from './navigation/reducers';
+import notificationsReducer from './notifications/reducers';
+import './assets/less/fauxton.less';
 
 const Fauxton = FauxtonAPI.addon();
 
 Fauxton.initialize = () => {
   const versionInfo = new Fauxton.VersionInfo();
   versionInfo.fetch().then(function () {
-    NavigationActions.setNavbarVersionInfo(versionInfo.get("version"));
+    NavigationActions.setNavbarVersionInfo(versionInfo.get('version'));
   });
 };
 
@@ -29,6 +30,11 @@ Fauxton.VersionInfo = Backbone.Model.extend({
   url: function () {
     return app.host;
   }
+});
+
+FauxtonAPI.addReducers({
+  navigation: navigationReducers,
+  notifications: notificationsReducer
 });
 
 export default Fauxton;

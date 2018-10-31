@@ -12,6 +12,7 @@
 
 import FauxtonAPI from "../../core/api";
 import VerifyInstall from "./routes";
+import reducers from './reducers';
 import "./assets/less/verifyinstall.less";
 
 VerifyInstall.initialize = function () {
@@ -22,5 +23,9 @@ VerifyInstall.initialize = function () {
     bottomNav: true
   });
 };
+
+FauxtonAPI.addReducers({
+  verifyinstall: reducers
+});
 
 export default VerifyInstall;

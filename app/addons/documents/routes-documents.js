@@ -13,18 +13,20 @@
 import React from 'react';
 import FauxtonAPI from '../../core/api';
 import BaseRoute from './shared-routes';
-import ChangesActions from './changes/actions';
 import Databases from '../databases/base';
 import Resources from './resources';
-import SidebarActions from './sidebar/actions';
-import DesignDocInfoActions from './designdocinfo/actions';
+import {SidebarItemSelection} from './sidebar/helpers';
 import ComponentsActions from '../components/actions';
 import {DocsTabsSidebarLayout, ViewsTabsSidebarLayout, ChangesSidebarLayout} from './layouts';
 
 var DocumentsRouteObject = BaseRoute.extend({
   routes: {
+    "database/:database/_partition/:partitionkey/_all_docs": {
+      route: "partitionedAllDocs",
+      roles: ["fx_loggedIn"]
+    },
     "database/:database/_all_docs(:extra)": {
-      route: "allDocs",
+      route: "globalAllDocs",
       roles: ["fx_loggedIn"]
     },
     "database/:database/_design/:ddoc/_info": {
@@ -48,13 +50,8 @@ var DocumentsRouteObject = BaseRoute.extend({
   },
 
   designDocMetadata: function (database, ddoc) {
-    var designDocInfo = new Resources.DdocInfo({ _id: "_design/" + ddoc }, { database: this.database });
-    DesignDocInfoActions.fetchDesignDocInfo({
-      ddocName: ddoc,
-      designDocInfo: designDocInfo
-    });
-
-    SidebarActions.selectNavItem('designDoc', {
+    const designDocInfo = new Resources.DdocInfo({ _id: "_design/" + ddoc }, { database: this.database });
+    const selectedNavItem = new SidebarItemSelection('designDoc', {
       designDocName: ddoc,
       designDocSection: 'metadata'
     });
@@ -67,7 +64,17 @@ var DocumentsRouteObject = BaseRoute.extend({
       dbName={this.database.id}
       dropDownLinks={dropDownLinks}
       database={this.database}
+      selectedNavItem={selectedNavItem}
+      designDocInfo={designDocInfo}
     />;
+  },
+
+  globalAllDocs: function (databaseName, options) {
+    return this.allDocs(databaseName, '', options);
+  },
+
+  partitionedAllDocs: function (databaseName, partitionKey) {
+    return this.allDocs(databaseName, partitionKey);
   },
 
   /*
@@ -75,7 +82,7 @@ var DocumentsRouteObject = BaseRoute.extend({
   * urlParams are what are shown in the url and to the user
   * They are not the same when paginating
   */
-  allDocs: function (databaseName, options) {
+  allDocs: function (databaseName, partitionKey, options) {
     const params = this.createParams(options),
           docParams = params.docParams;
 
@@ -90,15 +97,20 @@ var DocumentsRouteObject = BaseRoute.extend({
       tab = 'design-docs';
     }
 
-    const selectedNavItem = {
-      navItem: tab
-    };
-    SidebarActions.selectNavItem(selectedNavItem.navItem);
+    const selectedNavItem = new SidebarItemSelection(tab);
     ComponentsActions.showDeleteDatabaseModal({showDeleteModal: false, dbId: ''});
 
     const endpoint = this.database.allDocs.urlRef("apiurl", {});
     const docURL = FauxtonAPI.constants.DOC_URLS.GENERAL;
-
+    const navigateToPartitionedAllDocs = (partKey) => {
+      const baseUrl = FauxtonAPI.urls('partitioned_allDocs', 'app', encodeURIComponent(databaseName),
+        encodeURIComponent(partKey));
+      FauxtonAPI.navigate('#/' + baseUrl);
+    };
+    const navigateToGlobalAllDocs = () => {
+      const baseUrl = FauxtonAPI.urls('allDocs', 'app', encodeURIComponent(databaseName));
+      FauxtonAPI.navigate('#/' + baseUrl);
+    };
     const dropDownLinks = this.getCrumbs(this.database);
     return <DocsTabsSidebarLayout
       docURL={docURL}
@@ -110,14 +122,15 @@ var DocumentsRouteObject = BaseRoute.extend({
       fetchUrl={url}
       ddocsOnly={onlyShowDdocs}
       selectedNavItem={selectedNavItem}
+      partitionKey={partitionKey}
+      onPartitionKeySelected={navigateToPartitionedAllDocs}
+      onGlobalModeSelected={navigateToGlobalAllDocs}
+      globalMode={partitionKey === ''}
     />;
   },
 
   changes: function () {
-    ChangesActions.initChanges({
-      databaseName: this.database.id
-    });
-    SidebarActions.selectNavItem('changes');
+    const selectedNavItem = new SidebarItemSelection('changes');
 
     return <ChangesSidebarLayout
       endpoint={FauxtonAPI.urls('changes', 'apiurl', this.database.id, '')}
@@ -125,6 +138,7 @@ var DocumentsRouteObject = BaseRoute.extend({
       dbName={this.database.id}
       dropDownLinks={this.getCrumbs(this.database)}
       database={this.database}
+      selectedNavItem={selectedNavItem}
     />;
   }
 

@@ -51,9 +51,9 @@ export default class ReduceEditor extends Component {
   }
 
   getOptionsList() {
-    return _.map(this.state.reduceOptions, function (reduce, i) {
+    return _.map(this.state.reduceOptions, (reduce, i) => {
       return <option key={i} value={reduce}>{reduce}</option>;
-    }, this);
+    });
   }
 
   getReduceValue() {

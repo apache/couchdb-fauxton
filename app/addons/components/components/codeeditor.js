@@ -114,9 +114,9 @@ export class CodeEditor extends React.Component {
   };
 
   addCommands = () => {
-    _.each(this.props.editorCommands, function (command) {
+    _.each(this.props.editorCommands, (command) => {
       this.editor.commands.addCommand(command);
-    }, this);
+    });
   };
 
   setupEvents = () => {
@@ -246,14 +246,13 @@ export class CodeEditor extends React.Component {
   };
 
   parseLineForStringMatch = () => {
-    var selStart = this.getSelectionStart().row;
-    var selEnd   = this.getSelectionEnd().row;
+    const selStart = this.getSelectionStart().row;
+    const selEnd   = this.getSelectionEnd().row;
 
     // one JS(ON) string can't span more than one line - we edit one string, so ensure we don't select several lines
     if (selStart >= 0 && selEnd >= 0 && selStart === selEnd && this.isRowExpanded(selStart)) {
-      var editLine = this.getLine(selStart),
-          editMatch = editLine.match(/^([ \t]*)("[a-zA-Z0-9_-]*["|']: )?(["|'].*",?[ \t]*)$/);
-
+      const editLine = this.getLine(selStart);
+      const editMatch = editLine.match(/^([ \t]*)("[^"]*["][ \t]*:[ \t]*)?(["|'].*"[ \t]*,?[ \t]*)$/);
       if (editMatch) {
         return editMatch;
       }
@@ -262,13 +261,14 @@ export class CodeEditor extends React.Component {
   };
 
   openStringEditModal = () => {
-    var matches = this.parseLineForStringMatch();
-    var string = matches[3];
-    var lastChar = string.length - 1;
+    const matches = this.parseLineForStringMatch();
+    let string = matches[3].trim();
+    // Removes trailing comma and surrouding spaces
     if (string.substring(string.length - 1) === ',') {
-      lastChar = string.length - 2;
+      string = string.substring(0, string.length - 1).trim();
     }
-    string = string.substring(1, lastChar);
+    // Removes surrouding quotes
+    string = string.substring(1, string.length - 1);
 
     this.setState({
       stringEditModalVisible: true,
@@ -297,9 +297,9 @@ export class CodeEditor extends React.Component {
   };
 
   hasErrors = () => {
-    return !_.every(this.getAnnotations(), function (error) {
+    return !_.every(this.getAnnotations(), (error) => {
       return this.isIgnorableError(error.raw);
-    }, this);
+    });
   };
 
   setReadOnly = (readonly) => {

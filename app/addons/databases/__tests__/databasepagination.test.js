@@ -13,10 +13,10 @@
 import Stores from "../stores";
 import React from 'react';
 import ReactDOM from 'react-dom';
-import DatabaseComponents from "../components";
 import "../../documents/base";
 import DatabaseActions from "../actions";
 import {mount} from 'enzyme';
+import DatabaseComponents from "../components";
 
 const store = Stores.databasesStore;
 
@@ -33,7 +33,8 @@ describe('Database Pagination', function () {
     const tempStore = {
       getTotalAmountOfDatabases: () => { return 10; },
       getPage: () => { return 1; },
-      on: () => {}
+      on: () => {},
+      off: () => {}
     };
 
     const pagination = mount(<DatabaseComponents.DatabasePagination store={tempStore} />);

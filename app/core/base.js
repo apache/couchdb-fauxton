@@ -24,37 +24,64 @@ var FauxtonAPI = {
   // I haven't wrapped these dispatch methods in a action
   // because I don't want to require fauxton/actions in this method.
   addHeaderLink: function (link) {
-    FauxtonAPI.dispatch({
+    FauxtonAPI.reduxDispatch({
       type: 'ADD_NAVBAR_LINK',
       link: link
     });
   },
   showHeaderLinkBadge: function (link) {
-    FauxtonAPI.dispatch({
+    FauxtonAPI.reduxDispatch({
       type: 'SHOW_NAVBAR_LINK_BADGE',
       link: link
     });
   },
   hideHeaderLinkBadge: function (link) {
-    FauxtonAPI.dispatch({
+    FauxtonAPI.reduxDispatch({
       type: 'HIDE_NAVBAR_LINK_BADGE',
       link: link
     });
   },
-  addNotification: function (options) {
 
-    options = _.extend({
+  /**
+   * Displays a notification message. The message is only displayed for a few seconds.
+   * The option visibleTime can be provided to set for how long the message should be displayed.
+   *
+   * @param {object} options Options are of the form
+   * {
+   *  message: "string",
+   *  type: "success"|"error"|"info",
+   *  clear: true|false,
+   *  escape: true|false,
+   *  visibleTime: number
+   * }
+   */
+  addNotification: function (options) {
+    options = Object.assign({
       msg: 'Notification Event Triggered!',
       type: 'info',
       escape: true,
       clear: false
     }, options);
 
-    FauxtonAPI.dispatch({
-      type: 'ADD_NOTIFICATION',
-      options: {
-        info: options
-      }
+    if (FauxtonAPI.reduxDispatch) {
+      FauxtonAPI.reduxDispatch({
+        type: 'ADD_NOTIFICATION',
+        options: {
+          info: options
+        }
+      });
+    }
+  },
+
+  /**
+   * Shows a permanent notification message
+   *
+   * @param {object} message
+   */
+  showPermanentNotification: function (message) {
+    FauxtonAPI.reduxDispatch({
+      type: 'SHOW_PERMANENT_NOTIFICATION',
+      options: { msg: message }
     });
   },
 

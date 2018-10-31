@@ -58,6 +58,7 @@ const mapStateToProps = ({indexResults}, ownProps) => {
     docType: getDocType(indexResults),
     fetchParams: getFetchParams(indexResults),
     queryOptionsParams: getQueryOptionsParams(indexResults),
+    partitionKey: ownProps.partitionKey,
     resultsStyle: getResultsStyle(indexResults)
   };
 };

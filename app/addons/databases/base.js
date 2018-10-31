@@ -12,8 +12,11 @@
 
 import app from "../../app";
 import Helpers from "../../helpers";
+import { get } from "../../core/ajax";
 import FauxtonAPI from "../../core/api";
 import Databases from "./routes";
+import Actions from "./actions";
+import reducers from './reducers';
 import "./assets/less/databases.less";
 
 Databases.initialize = function () {
@@ -23,7 +26,29 @@ Databases.initialize = function () {
     icon: "fonticon-database",
     className: 'databases'
   });
+  Actions.checkPartitionedQueriesIsAvailable();
 };
+
+function checkPartitionedDatabaseFeature () {
+  // Checks if the CouchDB server supports Partitioned Databases
+  return get(Helpers.getServerUrl("/")).then((couchdb) => {
+    //TODO: needs to be updated with the correct feature name
+    return couchdb.features && couchdb.features.includes('partitions');
+  }).catch(() => {
+    return false;
+  });
+}
+
+// This extension can be used by addons to add extra checks when
+// deciding if the partitioned database feature should be enabled.
+// The registered element should be a function that returns a
+// Promise resolving to either true or false.
+Databases.PARTITONED_DB_CHECK_EXTENSION = 'Databases:PartitionedDbCheck';
+FauxtonAPI.registerExtension(Databases.PARTITONED_DB_CHECK_EXTENSION, checkPartitionedDatabaseFeature);
+
+FauxtonAPI.addReducers({
+  databases: reducers
+});
 
 // Utility functions
 Databases.databaseUrl = function (database) {

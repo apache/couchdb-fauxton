@@ -81,6 +81,22 @@ describe('Replication API', () => {
       assert.ok(/my%2Fdb/.test(source.url));
     });
 
+    it('returns local source with auth info and encoded when use relative url', () => {
+      const localSource = 'my/db';
+      const source = getSource({
+        replicationSource: Constants.REPLICATION_SOURCE.LOCAL,
+        localSource,
+        sourceAuth: {
+          username: 'the-user',
+          password: 'password'
+        },
+        sourceAuthType: Constants.REPLICATION_AUTH_METHOD.BASIC
+      }, {origin: 'http://dev:6767', pathname:'/db/_utils'});
+
+      assert.deepEqual(source.headers, {Authorization:"Basic dGhlLXVzZXI6cGFzc3dvcmQ="});
+      assert.ok(/\/db\/my%2Fdb/.test(source.url));
+    });
+
     it('returns remote source url and auth header', () => {
       const source = getSource({
         replicationSource: Constants.REPLICATION_SOURCE.REMOTE,
@@ -179,6 +195,21 @@ describe('Replication API', () => {
         },
         targetAuthType: Constants.REPLICATION_AUTH_METHOD.BASIC
       });
+
+      assert.deepEqual(target.headers, {Authorization:"Basic dGhlLXVzZXI6cGFzc3dvcmQ="});
+      assert.ok(/my-existing%2Fdb/.test(target.url));
+    });
+
+    it('returns existing local database even with relative urls', () => {
+      const target = getTarget({
+        replicationTarget: Constants.REPLICATION_TARGET.EXISTING_LOCAL_DATABASE,
+        localTarget: 'my-existing/db',
+        targetAuth: {
+          username: 'the-user',
+          password: 'password'
+        },
+        targetAuthType: Constants.REPLICATION_AUTH_METHOD.BASIC
+      }, {origin:'http://dev:6767', pathname:'/db/_utils'});
 
       assert.deepEqual(target.headers, {Authorization:"Basic dGhlLXVzZXI6cGFzc3dvcmQ="});
       assert.ok(/my-existing%2Fdb/.test(target.url));

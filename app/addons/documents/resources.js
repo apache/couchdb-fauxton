@@ -71,17 +71,18 @@ Documents.DdocInfo = FauxtonAPI.Model.extend({
 
 Documents.NewDoc = Documents.Doc.extend({
   fetch: function () {
+    const prefix = this.partitionKey ? (this.partitionKey + ':') : '';
     return Helpers.getUUID().then((res) => {
       if (res.uuids) {
-        this.set("_id", res.uuids[0]);
+        this.set("_id", prefix + res.uuids[0]);
       } else {
-        this.set("_id", 'enter_document_id');
+        this.set("_id", prefix + 'enter_document_id');
       }
       return res;
     }).catch(() => {
       // Don't throw error so the user is still able
       // to edit the new doc
-      this.set("_id", 'enter_document_id');
+      this.set("_id", prefix + 'enter_document_id');
     });
   }
 });
@@ -156,9 +157,9 @@ Documents.BulkDeleteDocCollection = FauxtonAPI.Collection.extend({
   },
 
   removeDocuments: function (ids) {
-    _.each(ids, function (id) {
+    _.each(ids, (id) => {
       this.remove(this.get(id));
-    }, this);
+    });
 
     this.trigger('removed', ids);
   },

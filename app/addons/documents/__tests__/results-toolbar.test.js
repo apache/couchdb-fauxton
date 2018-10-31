@@ -28,6 +28,7 @@ describe('Results Toolbar', () => {
     toggleSelectAll: () => {},
     isLoading: false,
     queryOptionsParams: {},
+    databaseName: 'mydb',
     setResultsTextOverflow: () => {},
     resultsStyle: {
       textOverflow: Constants.INDEX_RESULTS_STYLE.TEXT_OVERFLOW_TRUNCATED
@@ -62,6 +63,15 @@ describe('Results Toolbar', () => {
     expect(wrapper.find('.bulk-action-component').length).toBe(0);
     expect(wrapper.find('div.two-sides-toggle-button').length).toBe(1);
     expect(wrapper.find('.document-result-screen__toolbar-create-btn').length).toBe(1);
+  });
+
+  it('includes default partition key when one is selected', () => {
+    const wrapper = mount(<ResultsToolBar
+      {...defaultProps}
+      hasResults={true}
+      isListDeletable={false}
+      partitionKey={'partKey1'} />);
+    expect(wrapper.find('a').prop('href')).toMatch(/\?partitionKey=partKey1$/);
   });
 
   it('toggles text overflow mode', () => {

@@ -15,7 +15,8 @@ import FauxtonAPI from "../../core/api";
 import BaseRoute from "./shared-routes";
 import ActionsIndexEditor from "./index-editor/actions";
 import Databases from "../databases/base";
-import SidebarActions from "./sidebar/actions";
+import SidebarActions from './sidebar/actions';
+import {SidebarItemSelection} from './sidebar/helpers';
 import {DocsTabsSidebarLayout, ViewsTabsSidebarLayout} from './layouts';
 
 const IndexEditorAndResults = BaseRoute.extend({
@@ -28,8 +29,12 @@ const IndexEditorAndResults = BaseRoute.extend({
       route: 'createView',
       roles: ['fx_loggedIn']
     },
+    'database/:database/_partition/:partitionkey/_design/:ddoc/_view/:view': {
+      route: 'showPartitionedView',
+      roles: ['fx_loggedIn']
+    },
     'database/:database/_design/:ddoc/_view/:view': {
-      route: 'showView',
+      route: 'showGlobalView',
       roles: ['fx_loggedIn']
     },
     'database/:database/_design/:ddoc/_view/:view/edit': {
@@ -46,8 +51,15 @@ const IndexEditorAndResults = BaseRoute.extend({
     this.addSidebar();
   },
 
-  showView: function (databaseName, ddoc, viewName) {
+  showGlobalView: function (databaseName, ddoc, viewName) {
+    return this.showView(databaseName, '', ddoc, viewName);
+  },
 
+  showPartitionedView: function (databaseName, partitionKey, ddoc, viewName) {
+    return this.showView(databaseName, partitionKey, ddoc, viewName);
+  },
+
+  showView: function (databaseName, partitionKey, ddoc, viewName) {
     viewName = viewName.replace(/\?.*$/, '');
 
     ActionsIndexEditor.clearIndex();
@@ -59,22 +71,23 @@ const IndexEditorAndResults = BaseRoute.extend({
       designDocId: '_design/' + ddoc
     });
 
-    const selectedNavItem = {
-      navItem: 'designDoc',
-      params: {
-        designDocName: ddoc,
-        designDocSection: 'Views',
-        indexName: viewName
-      }
-    };
-    SidebarActions.selectNavItem(selectedNavItem.navItem, selectedNavItem.params);
+    const selectedNavItem = new SidebarItemSelection('designDoc', {
+      designDocName: ddoc,
+      designDocSection: 'Views',
+      indexName: viewName
+    });
+    SidebarActions.dispatchExpandSelectedItem(selectedNavItem);
 
     const url = FauxtonAPI.urls('view', 'server', encodeURIComponent(databaseName),
       encodeURIComponent(ddoc), encodeURIComponent(viewName));
     const endpoint = FauxtonAPI.urls('view', 'apiurl', encodeURIComponent(databaseName),
       encodeURIComponent(ddoc), encodeURIComponent(viewName));
     const docURL = FauxtonAPI.constants.DOC_URLS.GENERAL;
-
+    const navigateToPartitionedView = (partKey) => {
+      const baseUrl = FauxtonAPI.urls('partitioned_view', 'app', encodeURIComponent(databaseName),
+        encodeURIComponent(partKey), encodeURIComponent(ddoc));
+      FauxtonAPI.navigate('#/' + baseUrl + encodeURIComponent(viewName));
+    };
     const dropDownLinks = this.getCrumbs(this.database);
     return <DocsTabsSidebarLayout
       docURL={docURL}
@@ -86,6 +99,9 @@ const IndexEditorAndResults = BaseRoute.extend({
       ddocsOnly={false}
       deleteEnabled={false}
       selectedNavItem={selectedNavItem}
+      partitionKey={partitionKey}
+      onPartitionKeySelected={navigateToPartitionedView}
+      globalMode={partitionKey === ''}
     />;
   },
 
@@ -107,8 +123,7 @@ const IndexEditorAndResults = BaseRoute.extend({
       newDesignDoc: newDesignDoc
     });
 
-    SidebarActions.selectNavItem('');
-
+    const selectedNavItem = new SidebarItemSelection('');
     const dropDownLinks = this.getCrumbs(this.database);
 
     return <ViewsTabsSidebarLayout
@@ -117,6 +132,7 @@ const IndexEditorAndResults = BaseRoute.extend({
       dbName={this.database.id}
       dropDownLinks={dropDownLinks}
       database={this.database}
+      selectedNavItem={selectedNavItem}
     />;
   },
 
@@ -129,11 +145,12 @@ const IndexEditorAndResults = BaseRoute.extend({
       designDocId: '_design/' + ddocName
     });
 
-    SidebarActions.selectNavItem('designDoc', {
+    const selectedNavItem = new SidebarItemSelection('designDoc', {
       designDocName: ddocName,
       designDocSection: 'Views',
       indexName: viewName
     });
+    SidebarActions.dispatchExpandSelectedItem(selectedNavItem);
 
     const docURL = FauxtonAPI.constants.DOC_URLS.GENERAL;
     const endpoint = FauxtonAPI.urls('view', 'apiurl', databaseName, ddocName, viewName);
@@ -146,6 +163,7 @@ const IndexEditorAndResults = BaseRoute.extend({
       dbName={this.database.id}
       dropDownLinks={dropDownLinks}
       database={this.database}
+      selectedNavItem={selectedNavItem}
     />;
   }
 
