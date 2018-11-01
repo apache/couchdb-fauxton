@@ -54,18 +54,16 @@ export default class ResultsOptions extends React.Component {
             type="radio"
           />
         </TrayContents> */}
-        
-          <Dropdown id="dropdown-custom-1">
-            <Dropdown.Toggle>
-              <i className='fonticon-gears'></i>
-            </Dropdown.Toggle>
-            <Dropdown.Menu className="super-colors">
-              <MenuItem header>Display density</MenuItem>
-              <MenuItem eventKey="1" active>Fit values</MenuItem>
-              <MenuItem eventKey="2">Expand values</MenuItem>
-            </Dropdown.Menu>
-          </Dropdown>
-        
+        <Dropdown id="dropdown-custom-1">
+          <Dropdown.Toggle>
+            <i className='fonticon-gears'></i>
+          </Dropdown.Toggle>
+          <Dropdown.Menu className="super-colors">
+            <MenuItem header>Display density</MenuItem>
+            <MenuItem eventKey="1" active>Fit values</MenuItem>
+            <MenuItem eventKey="2">Expand values</MenuItem>
+          </Dropdown.Menu>
+        </Dropdown>
       </div>
     );
   }

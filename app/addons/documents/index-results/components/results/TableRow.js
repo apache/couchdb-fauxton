@@ -10,8 +10,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+import classnames from 'classnames';
 import PropTypes from 'prop-types';
-
 import React from 'react';
 import FauxtonAPI from '../../../../../core/api';
 import Components from '../../../../components/react-components';
@@ -45,14 +45,26 @@ export default class TableRow extends React.Component {
       const stringified = ['object', 'boolean'].includes(typeof el[k]) ?
         JSON.stringify(el[k], null, '  ') : el[k];
 
-      let className = '';
-      if (this.props.textOverflow === Constants.INDEX_RESULTS_STYLE.TEXT_OVERFLOW_TRUNCATED) {
-        className = undefined;
-      } else if (this.props.textOverflow === Constants.INDEX_RESULTS_STYLE.TEXT_OVERFLOW_FULL) {
-        className = 'showall';
-      }
+      const classNames = classnames({
+        'showall': this.props.textOverflow === Constants.INDEX_RESULTS_STYLE.TEXT_OVERFLOW_FULL,
+        'small-font': this.props.fontSize === Constants.INDEX_RESULTS_STYLE.FONT_SIZE_SMALL,
+        'large-font': this.props.fontSize === Constants.INDEX_RESULTS_STYLE.FONT_SIZE_LARGE
+      });
+      console.log('classNames:', this.props.textOverflow, this.props.fontSize);
+      // let className = '';
+      // if (this.props.textOverflow === Constants.INDEX_RESULTS_STYLE.TEXT_OVERFLOW_TRUNCATED) {
+      //   className = undefined;
+      // } else if (this.props.textOverflow === Constants.INDEX_RESULTS_STYLE.TEXT_OVERFLOW_FULL) {
+      //   className = ;
+      // }
+
+      // if (this.props.fontSize === Constants.INDEX_RESULTS_STYLE.FONT_SIZE_SMALL) {
+      //   className = undefined;
+      // } else if (this.props.fontSize === Constants.INDEX_RESULTS_STYLE.FONT_SIZE_LARGE) {
+      //   className = 'showall';
+      // }
       return (
-        <td key={key} title={stringified} className={className} onClick={this.onClick.bind(this)}>
+        <td key={key} title={stringified} className={classNames} onClick={this.onClick.bind(this)}>
           {stringified}
         </td>
       );

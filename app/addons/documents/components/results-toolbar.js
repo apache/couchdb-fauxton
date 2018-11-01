@@ -18,7 +18,7 @@ import Components from "../../components/react-components";
 import Constants from '../constants';
 import Helpers from '../helpers';
 
-const {BulkActionComponent} = Components;
+const {BulkActionComponent, MenuDropDown} = Components;
 
 export class ResultsToolBar extends React.Component {
   constructor (props) {
@@ -93,12 +93,48 @@ export class ResultsToolBar extends React.Component {
         </div>
       );
     }
+    const densityItems = [{
+      title: 'Truncate values',
+      onClick: this.toggleTextOverflow,
+      icon: this.props.resultsStyle.textOverflow === Constants.INDEX_RESULTS_STYLE.TEXT_OVERFLOW_TRUNCATED ? 'fonticon-ok' : ''
+    },
+    {
+      title: 'Show full values',
+      onClick: this.toggleTextOverflow,
+      icon: this.props.resultsStyle.textOverflow === Constants.INDEX_RESULTS_STYLE.TEXT_OVERFLOW_FULL ? 'fonticon-ok' : ''
+    }];
+    const fontSizeItems = [{
+      title: 'Small',
+      onClick: () => { this.props.setFontSize(Constants.INDEX_RESULTS_STYLE.FONT_SIZE_SMALL); },
+      icon: this.props.resultsStyle.fontSize === Constants.INDEX_RESULTS_STYLE.FONT_SIZE_SMALL ? 'fonticon-ok' : ''
+    },
+    {
+      title: 'Medium',
+      onClick: () => { this.props.setFontSize(Constants.INDEX_RESULTS_STYLE.FONT_SIZE_MEDIUM); },
+      icon: this.props.resultsStyle.fontSize === Constants.INDEX_RESULTS_STYLE.FONT_SIZE_MEDIUM ? 'fonticon-ok' : ''
+    },
+    {
+      title: 'Large',
+      onClick: () => { this.props.setFontSize(Constants.INDEX_RESULTS_STYLE.FONT_SIZE_LARGE); },
+      icon: this.props.resultsStyle.fontSize === Constants.INDEX_RESULTS_STYLE.FONT_SIZE_LARGE ? 'fonticon-ok' : ''
+    }];
+    const section = [{
+      title: 'Display density',
+      links: densityItems
+    },
+    {
+      title: 'Font size',
+      links: fontSizeItems
+    }];
     return (
       <div className="document-result-screen__toolbar">
         {bulkAction}
         {bulkHeader}
-        <ResultsOptions />
-        {textOverflowSwitch}
+        {/* <ResultsOptions /> */}
+        <div className='toolbar-dropdown'>
+          <MenuDropDown links={section} icon='fonticon-gears' hideArrow={true}/>
+        </div>
+        {/* {textOverflowSwitch} */}
         {createDocumentLink}
       </div>
     );

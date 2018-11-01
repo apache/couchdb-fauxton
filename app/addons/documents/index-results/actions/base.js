@@ -114,3 +114,12 @@ export const setResultsTextOverflow = (overflow) => {
   };
 };
 
+export const setResultsFontSize = (fontSize) => {
+  return {
+    type: ActionTypes.INDEX_RESULTS_SET_STYLE,
+    resultsStyle: {
+      fontSize: fontSize
+    }
+  };
+};
+

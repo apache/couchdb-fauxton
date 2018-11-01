@@ -30,7 +30,8 @@ const initialState = {
   textEmptyIndex: 'No Documents Found',
   docType: Constants.INDEX_RESULTS_DOC_TYPE.VIEW,
   resultsStyle: {
-    textOverflow: Constants.INDEX_RESULTS_STYLE.TEXT_OVERFLOW_TRUNCATED
+    textOverflow: Constants.INDEX_RESULTS_STYLE.TEXT_OVERFLOW_TRUNCATED,
+    fontSize: Constants.INDEX_RESULTS_STYLE.FONT_SIZE_MEDIUM
   },
   fetchParams: {
     limit: getDefaultPerPage() + 1,
@@ -69,7 +70,10 @@ export default function resultsState(state = initialState, action) {
 
     case ActionTypes.INDEX_RESULTS_SET_STYLE:
       return Object.assign({}, state, {
-        resultsStyle: action.resultsStyle
+        resultsStyle: {
+          ...state.resultsStyle,
+          ...action.resultsStyle
+        }
       });
 
     case ActionTypes.INDEX_RESULTS_REDUX_RESET_STATE:

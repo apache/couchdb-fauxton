@@ -21,7 +21,8 @@ import {
   bulkCheckOrUncheck,
   changeTableHeaderAttribute,
   resetState,
-  setResultsTextOverflow
+  setResultsTextOverflow,
+  setResultsFontSize
 } from '../actions/base';
 import {
   getDocs,
@@ -97,6 +98,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     },
     setResultsTextOverflow: (overflow) => {
       dispatch(setResultsTextOverflow(overflow));
+    },
+    setFontSize: (fontSize) => {
+      dispatch(setResultsFontSize(fontSize));
     }
   };
 };

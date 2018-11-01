@@ -40,6 +40,33 @@
     min-height: 26px;
     padding: 8px 0;
   }
+
+  .toolbar-dropdown {    
+    // padding-top: 10px;
+    
+    .btn {
+      color: #666;
+    }
+    
+    .dropdown-menu.arrow:before {
+      right: 80%;
+    }
+    // ul.dropdown-menu {
+    //   top: 30px;
+    // }
+    a.dropdown-toggle {
+      padding-left: 16px;
+    }
+    // dropdown menu
+    .dropdown-menu li a {
+      padding: 10px 15px 10px 12px;
+      &:hover {
+        background-color: #e73d34;
+        color: white;
+      }
+    }
+  }
+  
 }
 
 .document-result-screen__toolbar-flex-container {
@@ -123,8 +150,9 @@ a.document-result-screen__toolbar-create-btn:visited {
   td, th, td a {
     vertical-align: middle;
     line-height: 20px;
-    font-size: 14px;
+    font-size: 0.875rem;
   }
+
   td, th {
     color: @defaultHTag;
     max-width: 160px;
@@ -136,6 +164,12 @@ a.document-result-screen__toolbar-create-btn:visited {
       overflow: visible;
       white-space: normal;
       word-wrap: break-word;
+    }
+    &.small-font {
+      font-size: 0.75rem;
+    }
+    &.large-font {
+      font-size: 1rem;
     }
   }
   td.tableview-checkbox-cell, th.tableview-header-el-checkbox {

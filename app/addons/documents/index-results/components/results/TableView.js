@@ -21,7 +21,7 @@ export default class TableView extends React.Component {
 
   getContentRows () {
     const data = this.props.data.results;
-    const textOverflow = this.props.resultsStyle ? this.props.resultsStyle.textOverflow : undefined;
+    const { textOverflow, fontSize } = this.props.resultsStyle;
     return data.map(function (el, i) {
       return (
         <TableRow
@@ -33,7 +33,8 @@ export default class TableView extends React.Component {
           docChecked={this.props.docChecked}
           isSelected={this.props.isSelected(el.id)}
           data={this.props.data}
-          textOverflow={textOverflow} />
+          textOverflow={textOverflow}
+          fontSize={fontSize} />
       );
     }.bind(this));
   }

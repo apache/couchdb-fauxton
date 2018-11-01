@@ -24,6 +24,9 @@ export default {
   },
   INDEX_RESULTS_STYLE: {
     TEXT_OVERFLOW_TRUNCATED: 'truncated',
-    TEXT_OVERFLOW_FULL: 'full'
+    TEXT_OVERFLOW_FULL: 'full',
+    FONT_SIZE_SMALL: 'small-font',
+    FONT_SIZE_LARGE: 'large-font',
+    FONT_SIZE_MEDIUM: 'medium-font'
   }
 };

@@ -9,9 +9,10 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
+
+import classnames from 'classnames';
 import React from "react";
-import ReactDOM from "react-dom";
-import { Dropdown } from "react-bootstrap";
+import { Button, Dropdown } from "react-bootstrap";
 import RootCloseWrapper from 'react-overlays/lib/RootCloseWrapper';
 
 export class MenuDropDown extends React.Component {
@@ -30,7 +31,7 @@ export class MenuDropDown extends React.Component {
   createEntry = (link, key) => {
     return (
       <li key={key}>
-        <a className={link.icon ? 'icon ' + link.icon : ''}
+        <a className={classnames('icon', link.icon, { 'fonticon-placeholder': !link.icon})}
           data-bypass={link.external ? 'true' : ''}
           href={link.url}
           onClick={link.onClick}
@@ -65,11 +66,12 @@ export class MenuDropDown extends React.Component {
 
   render() {
     const menuItems = this.createSection();
+    const arrowClass = this.props.hideArrow ? '' : 'arrow';
     return (
       <Dropdown id="dropdown-menu">
         <CustomMenuToggle bsRole="toggle" icon={this.props.icon}>
         </CustomMenuToggle>
-        <CustomMenu bsRole="menu" className="arrow">
+        <CustomMenu bsRole="menu" className={arrowClass}>
           {menuItems}
         </CustomMenu>
       </Dropdown>
@@ -90,11 +92,14 @@ class CustomMenuToggle extends React.Component {
 
   render() {
     return (
-      <a className={"dropdown-toggle icon " + this.props.icon}
-        style={{ fontSize: '1rem', boxShadow: '0px 0px 0px' }}
+      <Button
         onClick={this.handleClick}>
+        <i className={"dropdown-toggle icon " + this.props.icon}
+          style={{ fontSize: '1rem', boxShadow: '0px 0px 0px' }}>
+        </i>
+        
         {this.props.children}
-      </a>
+      </Button>
     );
   }
 }
@@ -105,11 +110,10 @@ export class CustomMenu extends React.Component {
   }
 
   render() {
-    const { children, open, onClose } = this.props;
-
+    const { children, open, onClose, className } = this.props;
     return (
       <RootCloseWrapper disabled={!open} onRootClose={onClose}>
-        <ul className="dropdown-menu arrow" role="menu" aria-labelledby="dLabel">
+        <ul className={classnames('dropdown-menu', className)} role="menu" aria-labelledby="dLabel">
           {children}
         </ul>
       </RootCloseWrapper>
