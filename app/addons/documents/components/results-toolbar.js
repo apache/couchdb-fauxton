@@ -13,6 +13,7 @@ import PropTypes from 'prop-types';
 
 import React from 'react';
 import BulkDocumentHeaderController from "../header/header";
+import ResultsOptions from './results-options';
 import Components from "../../components/react-components";
 import Constants from '../constants';
 import Helpers from '../helpers';
@@ -96,6 +97,7 @@ export class ResultsToolBar extends React.Component {
       <div className="document-result-screen__toolbar">
         {bulkAction}
         {bulkHeader}
+        <ResultsOptions />
         {textOverflowSwitch}
         {createDocumentLink}
       </div>
