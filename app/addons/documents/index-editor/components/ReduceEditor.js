@@ -10,59 +10,32 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import React, { Component } from "react";
-import ReactDOM from "react-dom";
-import app from "../../../../app";
-import ReactComponents from "../../../components/react-components";
-import Stores from "../stores";
-import Actions from "../actions";
+import React, { Component } from 'react';
+import app from '../../../../app';
+import ReactComponents from '../../../components/react-components';
 
 const getDocUrl = app.helpers.getDocUrl;
-const store = Stores.indexEditorStore;
 const {CodeEditorPanel, StyledSelect} = ReactComponents;
 
 export default class ReduceEditor extends Component {
 
   constructor(props) {
     super(props);
-    this.state = this.getStoreState();
-  }
-
-  onChange() {
-    this.setState(this.getStoreState());
-  }
-
-  componentDidMount() {
-    store.on('change', this.onChange, this);
-  }
-
-  componentWillUnmount() {
-    store.off('change', this.onChange);
-  }
-
-  getStoreState() {
-    return {
-      reduce: store.getReduce(),
-      reduceOptions: store.reduceOptions(),
-      reduceSelectedOption: store.reduceSelectedOption(),
-      hasCustomReduce: store.hasCustomReduce(),
-      hasReduce: store.hasReduce()
-    };
   }
 
   getOptionsList() {
-    return _.map(this.state.reduceOptions, (reduce, i) => {
+    return this.props.reduceOptions.map((reduce, i) => {
       return <option key={i} value={reduce}>{reduce}</option>;
     });
   }
 
   getReduceValue() {
-    if (!this.state.hasReduce) {
+    if (!this.props.hasReduce) {
       return null;
     }
 
-    if (!this.state.hasCustomReduce) {
-      return this.state.reduce;
+    if (!this.props.hasCustomReduce) {
+      return this.props.reduce;
     }
 
     return this.reduceEditor.getValue();
@@ -73,23 +46,23 @@ export default class ReduceEditor extends Component {
   }
 
   updateReduceCode(code) {
-    Actions.updateReduceCode(code);
+    this.props.updateReduceCode(code);
   }
 
   selectChange(event) {
-    Actions.selectReduceChanged(event.target.value);
+    this.props.selectReduceChanged(event.target.value);
   }
 
   render() {
     const reduceOptions = this.getOptionsList();
     let customReduceSection;
 
-    if (this.state.hasCustomReduce) {
+    if (this.props.hasCustomReduce) {
       customReduceSection = <CodeEditorPanel
         ref={node => this.reduceEditor = node}
         id='reduce-function'
         title={'Custom Reduce function'}
-        defaultCode={this.state.reduce}
+        defaultCode={this.props.reduce}
         allowZenMode={false}
         blur={this.updateReduceCode.bind(this)}
       />;
@@ -114,7 +87,7 @@ export default class ReduceEditor extends Component {
             selectContent={reduceOptions}
             selectChange={this.selectChange.bind(this)}
             selectId="reduce-function-selector"
-            selectValue={this.state.reduceSelectedOption} />
+            selectValue={this.props.reduceSelectedOption} />
         </div>
         {customReduceSection}
       </div>

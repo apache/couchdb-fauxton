@@ -22,6 +22,7 @@ import partitionKeyReducers from "./partition-key/reducers";
 import revisionBrowserReducers from './rev-browser/reducers';
 import docEditorReducers from './doc-editor/reducers';
 import changesReducers from './changes/reducers';
+import indexEditorReducers from './index-editor/reducers';
 import "./assets/less/documents.less";
 
 FauxtonAPI.addReducers({
@@ -32,7 +33,8 @@ FauxtonAPI.addReducers({
   partitionKey: partitionKeyReducers,
   docEditor: docEditorReducers,
   changes: changesReducers,
-  designDocInfo: designDocInfoReducers
+  designDocInfo: designDocInfoReducers,
+  indexEditor: indexEditorReducers
 });
 
 function getQueryParam (query) {
