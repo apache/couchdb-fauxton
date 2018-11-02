@@ -12,13 +12,15 @@
 
 import ReactComponents from '../../components/react-components';
 import DesignDocSelector from './components/DesignDocSelector';
+import IndexEditor from './components/IndexEditor';
 import IndexEditorContainer from './components/IndexEditorContainer';
 import ReduceEditor from './components/ReduceEditor';
 
 const StyledSelect = ReactComponents.StyledSelect;
 
 export default {
-  IndexEditorContainer: IndexEditorContainer,
+  IndexEditorContainer,
+  IndexEditor,
   ReduceEditor,
   DesignDocSelector,
   StyledSelect

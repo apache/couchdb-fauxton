@@ -10,6 +10,7 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import app from '../../../../app';
 import ReactComponents from '../../../components/react-components';
@@ -94,3 +95,13 @@ export default class ReduceEditor extends Component {
     );
   }
 }
+
+ReduceEditor.propTypes = {
+  reduceOptions: PropTypes.array.isRequired,
+  hasReduce: PropTypes.bool.isRequired,
+  hasCustomReduce: PropTypes.bool.isRequired,
+  reduce: PropTypes.string,
+  reduceSelectedOption: PropTypes.string.isRequired,
+  updateReduceCode: PropTypes.func.isRequired,
+  selectReduceChanged: PropTypes.func.isRequired
+};
