@@ -11,13 +11,23 @@
 // the License.
 
 import classnames from 'classnames';
+import PropTypes from 'prop-types';
 import React from "react";
 import { Button, Dropdown } from "react-bootstrap";
 import RootCloseWrapper from 'react-overlays/lib/RootCloseWrapper';
 
 export class MenuDropDown extends React.Component {
   static defaultProps = {
-    icon: 'fonticon-plus-circled'
+    icon: 'fonticon-plus-circled',
+    hideArrow: false,
+    toggleType: 'link'
+  };
+
+  static propTypes = {
+    icon: PropTypes.string,
+    hideArrow: PropTypes.bool,
+    links: PropTypes.array.isRequired,
+    toggleType: PropTypes.string.isRequired
   };
 
   createSectionLinks = (links) => {
@@ -67,6 +77,7 @@ export class MenuDropDown extends React.Component {
   render() {
     const menuItems = this.createSection();
     const arrowClass = this.props.hideArrow ? '' : 'arrow';
+    const CustomMenuToggle = this.props.toggleType === 'button' ? CustomMenuButtonToggle : CustomMenuLinkToggle;
     return (
       <Dropdown id="dropdown-menu">
         <CustomMenuToggle bsRole="toggle" icon={this.props.icon}>
@@ -79,7 +90,7 @@ export class MenuDropDown extends React.Component {
   }
 }
 
-class CustomMenuToggle extends React.Component {
+class CustomMenuButtonToggle extends React.Component {
   constructor(props, context) {
     super(props, context);
     this.handleClick = this.handleClick.bind(this);
@@ -97,9 +108,30 @@ class CustomMenuToggle extends React.Component {
         <i className={"dropdown-toggle icon " + this.props.icon}
           style={{ fontSize: '1rem', boxShadow: '0px 0px 0px' }}>
         </i>
-        
         {this.props.children}
       </Button>
+    );
+  }
+}
+
+class CustomMenuLinkToggle extends React.Component {
+  constructor(props, context) {
+    super(props, context);
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  handleClick(e) {
+    e.preventDefault();
+    this.props.onClick(e);
+  }
+
+  render() {
+    return (
+      <a className={"dropdown-toggle icon " + this.props.icon}
+        style={{ fontSize: '1rem', boxShadow: '0px 0px 0px' }}
+        onClick={this.handleClick}>
+        {this.props.children}
+      </a>
     );
   }
 }

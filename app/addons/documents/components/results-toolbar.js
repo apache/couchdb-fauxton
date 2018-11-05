@@ -94,15 +94,12 @@ export class ResultsToolBar extends React.Component {
       );
     }
     const densityItems = [{
-      title: 'Truncate values',
-      onClick: this.toggleTextOverflow,
-      icon: this.props.resultsStyle.textOverflow === Constants.INDEX_RESULTS_STYLE.TEXT_OVERFLOW_TRUNCATED ? 'fonticon-ok' : ''
-    },
-    {
       title: 'Show full values',
-      onClick: this.toggleTextOverflow,
-      icon: this.props.resultsStyle.textOverflow === Constants.INDEX_RESULTS_STYLE.TEXT_OVERFLOW_FULL ? 'fonticon-ok' : ''
+      onClick: this.toggleTextOverflow
     }];
+    if (this.props.resultsStyle.textOverflow === Constants.INDEX_RESULTS_STYLE.TEXT_OVERFLOW_FULL) {
+      densityItems[0].title = 'Truncate values';
+    }
     const fontSizeItems = [{
       title: 'Small',
       onClick: () => { this.props.setFontSize(Constants.INDEX_RESULTS_STYLE.FONT_SIZE_SMALL); },
@@ -132,7 +129,7 @@ export class ResultsToolBar extends React.Component {
         {bulkHeader}
         {/* <ResultsOptions /> */}
         <div className='toolbar-dropdown'>
-          <MenuDropDown links={section} icon='fonticon-gears' hideArrow={true}/>
+          <MenuDropDown links={section} icon='fonticon-mixer' hideArrow={true} toggleType='button'/>
         </div>
         {/* {textOverflowSwitch} */}
         {createDocumentLink}
