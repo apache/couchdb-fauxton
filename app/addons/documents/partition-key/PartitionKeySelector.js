@@ -47,24 +47,26 @@ export default class PartitionKeySelector extends React.Component {
     setTimeout(() => this.textInput.focus());
   }
 
+  updatePartitionKey() {
+    this.setState({editMode: false});
+    const trimmedValue = this.state.editorValue.trim();
+    if (trimmedValue) {
+      this.props.onPartitionKeySelected(trimmedValue);
+    } else {
+      this.props.onGlobalModeSelected();
+    }
+  }
+
   onBlur(e) {
     if (e && e.preventDefault) {
       e.preventDefault();
     }
-    this.setState({editMode: false});
+    this.updatePartitionKey();
   }
 
   onKeyPress(e) {
     if (e.key === 'Enter') {
-      this.setState({
-        editMode: false
-      });
-      const trimmedValue = this.state.editorValue.trim();
-      if (trimmedValue) {
-        this.props.onPartitionKeySelected(trimmedValue);
-      } else {
-        this.props.onGlobalModeSelected();
-      }
+      this.updatePartitionKey();
     }
   }
 
