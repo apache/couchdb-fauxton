@@ -10,14 +10,13 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import sinon from "sinon";
-import utils from "../../../../test/mocha/testUtils";
-import FauxtonAPI from "../../../core/api";
-import Constants from "../constants";
-import {ResultsToolBar} from "../components/results-toolbar";
-import React from 'react';
-import ReactDOM from 'react-dom';
 import { mount } from 'enzyme';
+import React from 'react';
+import sinon from 'sinon';
+import utils from '../../../../test/mocha/testUtils';
+import FauxtonAPI from '../../../core/api';
+import {ResultsToolBar} from '../components/results-toolbar';
+import Constants from '../constants';
 
 describe('Results Toolbar', () => {
 
@@ -29,10 +28,11 @@ describe('Results Toolbar', () => {
     isLoading: false,
     queryOptionsParams: {},
     databaseName: 'mydb',
-    setResultsTextOverflow: () => {},
     resultsStyle: {
-      textOverflow: Constants.INDEX_RESULTS_STYLE.TEXT_OVERFLOW_TRUNCATED
-    }
+      textOverflow: Constants.INDEX_RESULTS_STYLE.TEXT_OVERFLOW_TRUNCATED,
+      fontSize: Constants.INDEX_RESULTS_STYLE.FONT_SIZE_MEDIUM
+    },
+    updateResultsStyle: () => {}
   };
 
   beforeEach(() => {
@@ -71,29 +71,49 @@ describe('Results Toolbar', () => {
       hasResults={true}
       isListDeletable={false}
       partitionKey={'partKey1'} />);
-    expect(wrapper.find('a').prop('href')).toMatch(/\?partitionKey=partKey1$/);
+    expect(wrapper.find('a.document-result-screen__toolbar-create-btn').prop('href')).toMatch(/\?partitionKey=partKey1$/);
   });
 
-  it('toggles text overflow mode', () => {
-    const mockSetTextOverflow = sinon.spy();
+  it('toggles display density', () => {
+    const mockUpdateStyle = sinon.spy();
     const wrapper = mount(<ResultsToolBar
       {...defaultProps}
       hasResults={true}
       isListDeletable={false}
-      setResultsTextOverflow={mockSetTextOverflow}/>
+      updateResultsStyle={mockUpdateStyle}
+      selectedLayout={Constants.LAYOUT_ORIENTATION.METADATA}/>
     );
-    wrapper.find('div.text-overflow-switch input').first().simulate('change', { target: { checked: true } });
-    expect(mockSetTextOverflow.called).toBe(true);
+    wrapper.find('a.icon').first().simulate('click');
+    sinon.assert.calledWith(mockUpdateStyle, { textOverflow: Constants.INDEX_RESULTS_STYLE.TEXT_OVERFLOW_FULL});
   });
 
-  it('does not render text overflow switch in JSON layout', () => {
+  it('switches font size', () => {
+    const mockUpdateStyle = sinon.spy();
+    const wrapper = mount(<ResultsToolBar
+      {...defaultProps}
+      hasResults={true}
+      isListDeletable={false}
+      updateResultsStyle={mockUpdateStyle}
+      selectedLayout={Constants.LAYOUT_ORIENTATION.METADATA}/>
+    );
+    wrapper.find('a.icon').at(1).simulate('click');
+    sinon.assert.calledWith(mockUpdateStyle, { fontSize: Constants.INDEX_RESULTS_STYLE.FONT_SIZE_SMALL});
+
+    wrapper.find('a.icon').at(2).simulate('click');
+    sinon.assert.calledWith(mockUpdateStyle, { fontSize: Constants.INDEX_RESULTS_STYLE.FONT_SIZE_MEDIUM});
+
+    wrapper.find('a.icon').at(3).simulate('click');
+    sinon.assert.calledWith(mockUpdateStyle, { fontSize: Constants.INDEX_RESULTS_STYLE.FONT_SIZE_LARGE});
+  });
+
+  it.only('does not show Display Density option in JSON layout', () => {
     const toolbarJson = mount(<ResultsToolBar
       {...defaultProps}
       hasResults={true}
       isListDeletable={false}
       selectedLayout={Constants.LAYOUT_ORIENTATION.JSON}/>
     );
-    expect(toolbarJson.find('div.text-overflow-switch input').exists()).toBe(false);
+    expect(toolbarJson.find('li.header-label').text()).toBe('Font size');
 
     const toolbarMetadata = mount(<ResultsToolBar
       {...defaultProps}
@@ -101,7 +121,8 @@ describe('Results Toolbar', () => {
       isListDeletable={false}
       selectedLayout={Constants.LAYOUT_ORIENTATION.METADATA}/>
     );
-    expect(toolbarMetadata.find('div.text-overflow-switch input').exists()).toBe(true);
+    expect(toolbarMetadata.find('li.header-label').at(0).text()).toBe('Display density');
+    expect(toolbarMetadata.find('li.header-label').at(1).text()).toBe('Font size');
 
     const toolbarTable = mount(<ResultsToolBar
       {...defaultProps}
@@ -109,6 +130,7 @@ describe('Results Toolbar', () => {
       isListDeletable={false}
       selectedLayout={Constants.LAYOUT_ORIENTATION.TABLE}/>
     );
-    expect(toolbarTable.find('div.text-overflow-switch input').exists()).toBe(true);
+    expect(toolbarTable.find('li.header-label').at(0).text()).toBe('Display density');
+    expect(toolbarTable.find('li.header-label').at(1).text()).toBe('Font size');
   });
 });

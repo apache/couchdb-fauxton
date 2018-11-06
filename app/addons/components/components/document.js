@@ -28,7 +28,10 @@ export class Document extends React.Component {
 
   static defaultProps = {
     truncate: true,
-    maxRows: 500
+    maxRows: 500,
+    resultsStyle: {
+      fontSize: Constants.INDEX_RESULTS_STYLE.FONT_SIZE_MEDIUM
+    }
   };
 
   onChange = (e) => {

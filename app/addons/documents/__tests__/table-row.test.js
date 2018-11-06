@@ -9,14 +9,14 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
-import FauxtonAPI from "../../../core/api";
-import Constants from "../constants";
-import TableRow from "../index-results/components/results/TableRow";
-import utils from "../../../../test/mocha/testUtils";
-import React from "react";
-import ReactDOM from "react-dom";
-import sinon from "sinon";
+
+import React from 'react';
+import sinon from 'sinon';
 import { shallow } from 'enzyme';
+import FauxtonAPI from '../../../core/api';
+import Constants from '../constants';
+import TableRow from '../index-results/components/results/TableRow';
+import utils from '../../../../test/mocha/testUtils';
 
 FauxtonAPI.router = new FauxtonAPI.Router([]);
 const { assert } = utils;
