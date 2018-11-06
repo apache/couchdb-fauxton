@@ -65,6 +65,7 @@ export const TabsSidebarHeader = ({
         <div id="header-docs-left">
           <HeaderDocsLeft
             dbName={dbName}
+            partitionKey={partitionKey}
             dropDownLinks={dropDownLinks}
           />
         </div>
@@ -122,12 +123,13 @@ export const TabsSidebarContent = ({
   fetchUrl,
   databaseName,
   queryDocs,
-  selectedNavItem
+  selectedNavItem,
+  partitionKey
 }) => {
   return (
     <div className="with-sidebar tabs-with-sidebar content-area">
       <aside id="sidebar-content" className="scrollable">
-        <SidebarControllerContainer selectedNavItem={selectedNavItem}/>
+        <SidebarControllerContainer selectedNavItem={selectedNavItem} selectedPartitionKey={partitionKey}/>
       </aside>
       <section id="dashboard-content" className="flex-layout flex-col">
         <div id="dashboard-upper-content">
@@ -213,12 +215,13 @@ export const DocsTabsSidebarLayout = ({
         databaseName={dbName}
         queryDocs={queryDocs}
         selectedNavItem={selectedNavItem}
+        partitionKey={partitionKey}
       />
     </div>
   );
 };
 
-export const ChangesSidebarLayout = ({ docURL, database, endpoint, dbName, dropDownLinks, selectedNavItem }) => {
+export const ChangesSidebarLayout = ({ docURL, database, endpoint, dbName, dropDownLinks, selectedNavItem, partitionKey }) => {
   return (
     <div id="dashboard" className="with-sidebar">
       <TabsSidebarHeader
@@ -234,13 +237,14 @@ export const ChangesSidebarLayout = ({ docURL, database, endpoint, dbName, dropD
         lowerContent={<ChangesContainer databaseName={dbName}/>}
         hideFooter={true}
         selectedNavItem={selectedNavItem}
+        partitionKey={partitionKey}
       />
     </div>
   );
 };
 
 export const ViewsTabsSidebarLayout = ({showEditView, database, docURL, endpoint,
-  dbName, dropDownLinks, selectedNavItem, designDocInfo }) => {
+  dbName, dropDownLinks, selectedNavItem, designDocInfo, partitionKey }) => {
 
   const content = showEditView ?
     <IndexEditorComponents.IndexEditorContainer /> :
@@ -255,6 +259,7 @@ export const ViewsTabsSidebarLayout = ({showEditView, database, docURL, endpoint
         dbName={dbName}
         dropDownLinks={dropDownLinks}
         database={database}
+        partitionKey={partitionKey}
         queryDocs={() => { }}
         hideQueryOptions={true}
         hideJumpToDoc={true}
@@ -263,6 +268,7 @@ export const ViewsTabsSidebarLayout = ({showEditView, database, docURL, endpoint
         lowerContent={content}
         hideFooter={true}
         selectedNavItem={selectedNavItem}
+        partitionKey={partitionKey}
       />
     </div>
   );

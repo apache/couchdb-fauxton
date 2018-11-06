@@ -56,7 +56,7 @@ Databases.Model = FauxtonAPI.Model.extend({
     } else if (context === "apiurl") {
       return Helpers.getApiUrl("/database/" + this.safeID() + "/_all_docs");
     } else if (context === "changes") {
-      return FauxtonAPI.urls('changes', 'app', this.safeID(), '?descending=true&limit=100&include_docs=true');
+      return FauxtonAPI.urls('changes', 'app', this.safeID(), '', '?descending=true&limit=100&include_docs=true');
     } else if (context === "changes-apiurl") {
       return FauxtonAPI.urls('changes', 'apiurl', this.safeID(), '?descending=true&limit=100&include_docs=true');
     } else if (context === "app") {

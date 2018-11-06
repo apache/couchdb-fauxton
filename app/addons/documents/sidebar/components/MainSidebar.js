@@ -12,7 +12,6 @@
 
 import PropTypes from 'prop-types';
 import React from 'react';
-import ReactDOM from 'react-dom';
 import app from "../../../../app";
 import FauxtonAPI from '../../../../core/api';
 import DocumentHelper from "../../../documents/helpers";
@@ -22,11 +21,13 @@ const { MenuDropDown } = Components;
 
 export default class MainSidebar extends React.Component {
   static propTypes = {
-    selectedNavItem: PropTypes.string.isRequired
+    databaseName: PropTypes.string.isRequired,
+    selectedNavItem: PropTypes.string.isRequired,
+    selectedPartitionKey: PropTypes.string
   };
 
   getNewButtonLinks = () => {  // these are links for the sidebar '+' on All Docs and All Design Docs
-    return DocumentHelper.getNewButtonLinks(this.props.databaseName);
+    return DocumentHelper.getNewButtonLinks(this.props.databaseName, this.props.selectedPartitionKey);
   };
 
   buildDocLinks = () => {
@@ -47,10 +48,11 @@ export default class MainSidebar extends React.Component {
   render() {
     const docLinks = this.buildDocLinks();
     const dbEncoded = FauxtonAPI.url.encode(this.props.databaseName);
-    const changesUrl = '#' + FauxtonAPI.urls('changes', 'app', dbEncoded, '');
-    const permissionsUrl = '#' + FauxtonAPI.urls('permissions', 'app', dbEncoded);
-    const databaseUrl = FauxtonAPI.urls('allDocs', 'app', dbEncoded, '');
-    const mangoQueryUrl = FauxtonAPI.urls('mango', 'query-app', dbEncoded);
+    const partKeyEncoded = this.props.selectedPartitionKey ? encodeURIComponent(this.props.selectedPartitionKey) : '';
+    const changesUrl = '#' + FauxtonAPI.urls('changes', 'app', dbEncoded, partKeyEncoded, '');
+    const permissionsUrl = '#' + FauxtonAPI.urls('permissions', 'app', dbEncoded, partKeyEncoded);
+    const databaseUrl = FauxtonAPI.urls('allDocs', 'app', dbEncoded, partKeyEncoded, '');
+    const mangoQueryUrl = FauxtonAPI.urls('mango', 'query-app', dbEncoded, partKeyEncoded);
     const runQueryWithMangoText = app.i18n.en_US['run-query-with-mango'];
     const buttonLinks = this.getNewButtonLinks();
 

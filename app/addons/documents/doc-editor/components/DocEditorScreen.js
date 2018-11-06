@@ -67,7 +67,7 @@ export default class DocEditorScreen extends React.Component {
 
     const docContent = this.props.doc.attributes;
     if (this.props.isDbPartitioned) {
-      if (!docContent._id.includes(':')) {
+      if (!docContent._id.includes(':') && !docContent._id.startsWith('_design')) {
         docContent._id = ':' + docContent._id;
       }
     }

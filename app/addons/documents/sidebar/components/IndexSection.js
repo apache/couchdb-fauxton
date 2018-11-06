@@ -28,7 +28,9 @@ export default class IndexSection extends React.Component {
     onDelete: PropTypes.func.isRequired,
     onClone: PropTypes.func.isRequired,
     showDeleteIndexModal: PropTypes.func.isRequired,
-    showCloneIndexModal: PropTypes.func.isRequired
+    showCloneIndexModal: PropTypes.func.isRequired,
+    isPartitioned: PropTypes.bool.isRequired,
+    selectedPartitionKey: PropTypes.string
   };
 
   state = {
@@ -50,7 +52,13 @@ export default class IndexSection extends React.Component {
     const sortedItems = this.props.items.sort();
 
     return _.map(sortedItems, (indexName, index) => {
-      const href = FauxtonAPI.urls(this.props.urlNamespace, 'app', encodeURIComponent(this.props.database.id), encodeURIComponent(this.props.designDocName));
+      let href = FauxtonAPI.urls(this.props.urlNamespace, 'app', encodeURIComponent(this.props.database.id), encodeURIComponent(this.props.designDocName));
+      if (this.props.selectedPartitionKey) {
+        href = FauxtonAPI.urls('partitioned_' + this.props.urlNamespace, 'app',
+          encodeURIComponent(this.props.database.id),
+          encodeURIComponent(this.props.selectedPartitionKey),
+          encodeURIComponent(this.props.designDocName));
+      }
       const className = (this.props.selectedIndex === indexName) ? 'active' : '';
 
       return (
@@ -105,7 +113,7 @@ export default class IndexSection extends React.Component {
         this.props.showCloneIndexModal(params.indexName, this.props.designDocName, this.props.indexLabel, params.onClone);
         break;
       case 'edit':
-        params.onEdit(this.props.database.id, this.props.designDocName, params.indexName);
+        params.onEdit(this.props.database.id, this.props.selectedPartitionKey, this.props.designDocName, params.indexName);
         break;
     }
   };

@@ -127,7 +127,7 @@ const deleteView = (options) => {
 
     // if the user was on the index that was just deleted, redirect them back to all docs
     if (options.isOnIndex) {
-      const url = FauxtonAPI.urls('allDocs', 'app', options.database.safeID(), '?limit=' + FauxtonAPI.constants.DATABASES.DOCUMENT_LIMIT);
+      const url = FauxtonAPI.urls('allDocs', 'app', options.database.safeID());
       FauxtonAPI.navigate(url);
     }
 
@@ -185,8 +185,9 @@ const cloneView = (params) => {
   });
 };
 
-const gotoEditViewPage = (databaseName, designDocName, indexName) => {
+const gotoEditViewPage = (databaseName, partitionKey, designDocName, indexName) => {
   FauxtonAPI.navigate('#' + FauxtonAPI.urls('view', 'edit', encodeURIComponent(databaseName),
+    (partitionKey ? encodeURIComponent(partitionKey) : ''),
     encodeURIComponent(designDocName), encodeURIComponent(indexName)));
 };
 

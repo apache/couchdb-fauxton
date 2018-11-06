@@ -13,7 +13,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Collapse } from 'react-bootstrap';
-import ReactDOM from 'react-dom';
 import FauxtonAPI from '../../../../core/api';
 import Components from '../../../components/react-components';
 import IndexEditorActions from '../../index-editor/actions';
@@ -26,6 +25,8 @@ export default class DesignDoc extends React.Component {
     database: PropTypes.object.isRequired,
     sidebarListTypes: PropTypes.array.isRequired,
     isExpanded: PropTypes.bool.isRequired,
+    isPartitioned: PropTypes.bool.isRequired,
+    selectedPartitionKey: PropTypes.string,
     selectedNavInfo: PropTypes.object.isRequired,
     toggledSections: PropTypes.object.isRequired,
     designDocName:  PropTypes.string.isRequired,
@@ -82,6 +83,8 @@ export default class DesignDoc extends React.Component {
           title={index.name}
           selector={index.selector}
           items={_.keys(this.props.designDoc[index.selector])}
+          isPartitioned={this.props.isPartitioned}
+          selectedPartitionKey={this.props.selectedPartitionKey}
           showDeleteIndexModal={this.props.showDeleteIndexModal}
           showCloneIndexModal={this.props.showCloneIndexModal} />
       );
@@ -94,19 +97,24 @@ export default class DesignDoc extends React.Component {
   };
 
   getNewButtonLinks = () => {
-    const newUrlPrefix = FauxtonAPI.urls('databaseBaseURL', 'app', encodeURIComponent(this.props.database.id));
+    const encodedPartKey = this.props.selectedPartitionKey ? encodeURIComponent(this.props.selectedPartitionKey) : '';
+    const newUrlPrefix = FauxtonAPI.urls('databaseBaseURL', 'app', encodeURIComponent(this.props.database.id))
+      + (encodedPartKey ? '/_partition/' + encodedPartKey : '');
     const designDocName = this.props.designDocName;
 
-    const addNewLinks = _.reduce(FauxtonAPI.getExtensions('sidebar:links'), function (menuLinks, link) {
-      menuLinks.push({
-        title: link.title,
-        url: '#' + newUrlPrefix + '/' + link.url + '/' + encodeURIComponent(designDocName),
-        icon: 'fonticon-plus-circled'
-      });
+    const addonLinks = FauxtonAPI.getExtensions('sidebar:links');
+    const addNewLinks = addonLinks.reduce((menuLinks, link) => {
+      if (!this.props.isPartitioned || link.showForPartitionedDDocs) {
+        menuLinks.push({
+          title: link.title,
+          url: '#' + newUrlPrefix + '/' + link.url + '/' + encodeURIComponent(designDocName),
+          icon: 'fonticon-plus-circled'
+        });
+      }
       return menuLinks;
     }, [{
       title: 'New View',
-      url: '#' + FauxtonAPI.urls('new', 'addView', encodeURIComponent(this.props.database.id), encodeURIComponent(designDocName)),
+      url: '#' + FauxtonAPI.urls('new', 'addView', encodeURIComponent(this.props.database.id), encodedPartKey, encodeURIComponent(designDocName)),
       icon: 'fonticon-plus-circled'
     }]);
 
@@ -126,16 +134,22 @@ export default class DesignDoc extends React.Component {
       toggleBodyClassNames += ' in';
     }
     const designDocName = this.props.designDocName;
-    const designDocMetaUrl = FauxtonAPI.urls('designDocs', 'app', encodeURIComponent(this.props.database.id), designDocName);
+    const encodedPartKey = this.props.selectedPartitionKey ? encodeURIComponent(this.props.selectedPartitionKey) : '';
+    const designDocMetaUrl = FauxtonAPI.urls('designDocs', 'app',
+      encodeURIComponent(this.props.database.id), encodedPartKey, designDocName);
     const metadataRowClass = (this.props.selectedNavInfo.designDocSection === 'metadata') ? 'active' : '';
-
+    const iconTitle = this.props.isPartitioned ? 'Partitioned design document' : 'Global design document';
+    const iconClass = this.props.isPartitioned ? 'fonticon-documents' : 'fonticon-document';
     return (
       <li className="nav-header">
         <div id={"sidebar-tab-" + designDocName} className={toggleClassNames}>
           <div id={"nav-header-" + designDocName} onClick={this.toggle} className='accordion-list-item'>
             <div className="fonticon-play"></div>
             <p className='design-doc-name'>
-              <span title={'_design/' + designDocName}>{designDocName}</span>
+              <span title={'_design/' + designDocName}>
+                <i className={iconClass} title={iconTitle}></i>
+                {designDocName}
+              </span>
             </p>
           </div>
           <div className='new-button add-dropdown'>
