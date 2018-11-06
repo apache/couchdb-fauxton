@@ -50,19 +50,7 @@ export default class TableRow extends React.Component {
         'small-font': this.props.fontSize === Constants.INDEX_RESULTS_STYLE.FONT_SIZE_SMALL,
         'large-font': this.props.fontSize === Constants.INDEX_RESULTS_STYLE.FONT_SIZE_LARGE
       });
-      console.log('classNames:', this.props.textOverflow, this.props.fontSize);
-      // let className = '';
-      // if (this.props.textOverflow === Constants.INDEX_RESULTS_STYLE.TEXT_OVERFLOW_TRUNCATED) {
-      //   className = undefined;
-      // } else if (this.props.textOverflow === Constants.INDEX_RESULTS_STYLE.TEXT_OVERFLOW_FULL) {
-      //   className = ;
-      // }
 
-      // if (this.props.fontSize === Constants.INDEX_RESULTS_STYLE.FONT_SIZE_SMALL) {
-      //   className = undefined;
-      // } else if (this.props.fontSize === Constants.INDEX_RESULTS_STYLE.FONT_SIZE_LARGE) {
-      //   className = 'showall';
-      // }
       return (
         <td key={key} title={stringified} className={classNames} onClick={this.onClick.bind(this)}>
           {stringified}

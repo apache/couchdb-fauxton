@@ -18,24 +18,15 @@ import Components from "../../components/react-components";
 import Constants from '../constants';
 import Helpers from '../helpers';
 
-const {BulkActionComponent, MenuDropDown} = Components;
+const {BulkActionComponent} = Components;
 
 export class ResultsToolBar extends React.Component {
   constructor (props) {
     super(props);
-    this.toggleTextOverflow = this.toggleTextOverflow.bind(this);
   }
 
   shouldComponentUpdate (nextProps) {
     return nextProps.isListDeletable != undefined;
-  }
-
-  toggleTextOverflow() {
-    if (this.props.resultsStyle.textOverflow === Constants.INDEX_RESULTS_STYLE.TEXT_OVERFLOW_FULL) {
-      this.props.setResultsTextOverflow(Constants.INDEX_RESULTS_STYLE.TEXT_OVERFLOW_TRUNCATED);
-    } else {
-      this.props.setResultsTextOverflow(Constants.INDEX_RESULTS_STYLE.TEXT_OVERFLOW_FULL);
-    }
   }
 
   render () {
@@ -79,59 +70,19 @@ export class ResultsToolBar extends React.Component {
         </div>
       );
     }
-    const isTruncated = this.props.resultsStyle.textOverflow === Constants.INDEX_RESULTS_STYLE.TEXT_OVERFLOW_TRUNCATED;
-    let textOverflowSwitch = null;
-    if (this.props.selectedLayout !== Constants.LAYOUT_ORIENTATION.JSON) {
-      textOverflowSwitch = (
-        <div className="text-overflow-switch">
-          <input
-            style={{margin: 6}}
-            type="checkbox"
-            checked={isTruncated}
-            onChange={this.toggleTextOverflow}
-          />Truncate values
-        </div>
-      );
-    }
-    const densityItems = [{
-      title: 'Show full values',
-      onClick: this.toggleTextOverflow
-    }];
-    if (this.props.resultsStyle.textOverflow === Constants.INDEX_RESULTS_STYLE.TEXT_OVERFLOW_FULL) {
-      densityItems[0].title = 'Truncate values';
-    }
-    const fontSizeItems = [{
-      title: 'Small',
-      onClick: () => { this.props.setFontSize(Constants.INDEX_RESULTS_STYLE.FONT_SIZE_SMALL); },
-      icon: this.props.resultsStyle.fontSize === Constants.INDEX_RESULTS_STYLE.FONT_SIZE_SMALL ? 'fonticon-ok' : ''
-    },
-    {
-      title: 'Medium',
-      onClick: () => { this.props.setFontSize(Constants.INDEX_RESULTS_STYLE.FONT_SIZE_MEDIUM); },
-      icon: this.props.resultsStyle.fontSize === Constants.INDEX_RESULTS_STYLE.FONT_SIZE_MEDIUM ? 'fonticon-ok' : ''
-    },
-    {
-      title: 'Large',
-      onClick: () => { this.props.setFontSize(Constants.INDEX_RESULTS_STYLE.FONT_SIZE_LARGE); },
-      icon: this.props.resultsStyle.fontSize === Constants.INDEX_RESULTS_STYLE.FONT_SIZE_LARGE ? 'fonticon-ok' : ''
-    }];
-    const section = [{
-      title: 'Display density',
-      links: densityItems
-    },
-    {
-      title: 'Font size',
-      links: fontSizeItems
-    }];
+
+    const showDensity = this.props.selectedLayout !== Constants.LAYOUT_ORIENTATION.JSON;
+    let resultOptions = <ResultsOptions
+      updateStyle={this.props.updateResultsStyle}
+      resultsStyle={this.props.resultsStyle}
+      showDensity={showDensity}
+    />;
+
     return (
       <div className="document-result-screen__toolbar">
         {bulkAction}
         {bulkHeader}
-        {/* <ResultsOptions /> */}
-        <div className='toolbar-dropdown'>
-          <MenuDropDown links={section} icon='fonticon-mixer' hideArrow={true} toggleType='button'/>
-        </div>
-        {/* {textOverflowSwitch} */}
+        {resultOptions}
         {createDocumentLink}
       </div>
     );
@@ -143,10 +94,10 @@ ResultsToolBar.propTypes = {
   allDocumentsSelected: PropTypes.bool.isRequired,
   hasSelectedItem: PropTypes.bool.isRequired,
   toggleSelectAll: PropTypes.func.isRequired,
-  setResultsTextOverflow: PropTypes.func.isRequired,
   isLoading: PropTypes.bool.isRequired,
   hasResults: PropTypes.bool.isRequired,
   isListDeletable: PropTypes.bool,
   partitionKey: PropTypes.string,
-  resultsStyle: PropTypes.object.isRequired
+  resultsStyle: PropTypes.object.isRequired,
+  updateResultsStyle: PropTypes.func.isRequired
 };

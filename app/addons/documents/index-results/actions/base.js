@@ -105,21 +105,9 @@ export const changeTableHeaderAttribute = (newField, selectedFields) => {
   };
 };
 
-export const setResultsTextOverflow = (overflow) => {
+export const updateResultsStyle = (newStyle) => {
   return {
     type: ActionTypes.INDEX_RESULTS_SET_STYLE,
-    resultsStyle: {
-      textOverflow: overflow
-    }
+    resultsStyle: newStyle
   };
 };
-
-export const setResultsFontSize = (fontSize) => {
-  return {
-    type: ActionTypes.INDEX_RESULTS_SET_STYLE,
-    resultsStyle: {
-      fontSize: fontSize
-    }
-  };
-};
-

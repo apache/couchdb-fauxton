@@ -29,10 +29,7 @@ const initialState = {
   selectedLayout: Constants.LAYOUT_ORIENTATION.METADATA,
   textEmptyIndex: 'No Documents Found',
   docType: Constants.INDEX_RESULTS_DOC_TYPE.VIEW,
-  resultsStyle: {
-    textOverflow: Constants.INDEX_RESULTS_STYLE.TEXT_OVERFLOW_TRUNCATED,
-    fontSize: Constants.INDEX_RESULTS_STYLE.FONT_SIZE_MEDIUM
-  },
+  resultsStyle: loadStyle(),
   fetchParams: {
     limit: getDefaultPerPage() + 1,
     skip: 0
@@ -65,15 +62,32 @@ const initialState = {
   }
 };
 
+function loadStyle() {
+  let style = app.utils.localStorageGet('fauxton:results_style');
+  if (!style) {
+    style = {
+      textOverflow: Constants.INDEX_RESULTS_STYLE.TEXT_OVERFLOW_TRUNCATED,
+      fontSize: Constants.INDEX_RESULTS_STYLE.FONT_SIZE_MEDIUM
+    };
+  }
+  return style;
+}
+
+function storeStyle(style) {
+  app.utils.localStorageSet('fauxton:results_style', style);
+}
+
 export default function resultsState(state = initialState, action) {
   switch (action.type) {
 
     case ActionTypes.INDEX_RESULTS_SET_STYLE:
+      const newStyle = {
+        ...state.resultsStyle,
+        ...action.resultsStyle
+      };
+      storeStyle(newStyle);
       return Object.assign({}, state, {
-        resultsStyle: {
-          ...state.resultsStyle,
-          ...action.resultsStyle
-        }
+        resultsStyle: newStyle
       });
 
     case ActionTypes.INDEX_RESULTS_REDUX_RESET_STATE:

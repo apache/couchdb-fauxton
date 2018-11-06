@@ -21,8 +21,7 @@ import {
   bulkCheckOrUncheck,
   changeTableHeaderAttribute,
   resetState,
-  setResultsTextOverflow,
-  setResultsFontSize
+  updateResultsStyle
 } from '../actions/base';
 import {
   getDocs,
@@ -96,11 +95,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     queryOptionsToggleIncludeDocs: (previousIncludeDocs) => {
       dispatch(queryOptionsToggleIncludeDocs(previousIncludeDocs));
     },
-    setResultsTextOverflow: (overflow) => {
-      dispatch(setResultsTextOverflow(overflow));
-    },
-    setFontSize: (fontSize) => {
-      dispatch(setResultsFontSize(fontSize));
+    updateResultsStyle: (newStyle) => {
+      dispatch(updateResultsStyle(newStyle));
     }
   };
 };

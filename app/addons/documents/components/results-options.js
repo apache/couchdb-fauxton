@@ -2,68 +2,94 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Components from '../../components/react-components';
-import {ButtonToolbar, Dropdown, Glyphicon, MenuItem} from 'react-bootstrap';
+import Constants from '../constants';
 
-const {ToggleHeaderButton, TrayContents} = Components;
+const { MenuDropDown } = Components;
 
 export default class ResultsOptions extends React.Component {
   static defaultProps = {
-    showPartitionedOption: false
+    showDensity: true,
+    showFontSize: true
   };
-
   static propTypes = {
-    showPartitionedOption: PropTypes.bool.isRequired
+    resultsStyle: PropTypes.object.isRequired,
+    updateStyle: PropTypes.func.isRequired,
+    showDensity: PropTypes.bool,
+    showFontSize: PropTypes.bool
   };
 
   constructor(props) {
     super(props);
-    this.state = {
-      isPromptVisible: false
+    this.toggleTextOverflow = this.toggleTextOverflow.bind(this);
+    this.setFontSize = this.setFontSize.bind(this);
+  }
+
+  toggleTextOverflow() {
+    if (this.props.resultsStyle.textOverflow === Constants.INDEX_RESULTS_STYLE.TEXT_OVERFLOW_FULL) {
+      this.props.updateStyle({
+        textOverflow: Constants.INDEX_RESULTS_STYLE.TEXT_OVERFLOW_TRUNCATED
+      });
+    } else {
+      this.props.updateStyle({
+        textOverflow: Constants.INDEX_RESULTS_STYLE.TEXT_OVERFLOW_FULL
+      });
+    }
+  }
+
+  setFontSize(size) {
+    this.props.updateStyle({
+      fontSize: size
+    });
+  }
+
+  getDensitySection() {
+    const densityItems = [{
+      title: 'Show full values',
+      onClick: this.toggleTextOverflow
+    }];
+    if (this.props.resultsStyle.textOverflow === Constants.INDEX_RESULTS_STYLE.TEXT_OVERFLOW_FULL) {
+      densityItems[0].title = 'Truncate values';
+    }
+    return {
+      title: 'Display density',
+      links: densityItems
     };
-
-    this.onTrayToggle = this.onTrayToggle.bind(this);
-    this.closeTray = this.closeTray.bind(this);
   }
 
-  onTrayToggle () {
-    this.setState({isPromptVisible: !this.state.isPromptVisible});
-  }
-
-  closeTray () {
-    this.setState({isPromptVisible: false});
+  getFontSizeSection() {
+    const fontSizeItems = [{
+      title: 'Small',
+      onClick: () => { this.setFontSize(Constants.INDEX_RESULTS_STYLE.FONT_SIZE_SMALL); },
+      icon: this.props.resultsStyle.fontSize === Constants.INDEX_RESULTS_STYLE.FONT_SIZE_SMALL ? 'fonticon-ok' : ''
+    },
+    {
+      title: 'Medium',
+      onClick: () => { this.setFontSize(Constants.INDEX_RESULTS_STYLE.FONT_SIZE_MEDIUM); },
+      icon: this.props.resultsStyle.fontSize === Constants.INDEX_RESULTS_STYLE.FONT_SIZE_MEDIUM ? 'fonticon-ok' : ''
+    },
+    {
+      title: 'Large',
+      onClick: () => { this.setFontSize(Constants.INDEX_RESULTS_STYLE.FONT_SIZE_LARGE); },
+      icon: this.props.resultsStyle.fontSize === Constants.INDEX_RESULTS_STYLE.FONT_SIZE_LARGE ? 'fonticon-ok' : ''
+    }];
+    return {
+      title: 'Font size',
+      links: fontSizeItems
+    };
   }
 
   render() {
+    const links = [];
+    if (this.props.showDensity) {
+      links.push(this.getDensitySection());
+    }
+    if (this.props.showFontSize) {
+      links.push(this.getFontSizeSection());
+    }
+
     return (
-      <div>
-        {/* <ToggleHeaderButton
-          selected={this.state.isPromptVisible}
-          toggleCallback={this.onTrayToggle}
-          // containerClasses='header-control-box add-new-database-btn'
-          title="Display options"
-          fonticon="fonticon-gears"
-          text="" />
-        <TrayContents className="new-database-tray" contentVisible={this.state.isPromptVisible} closeTray={this.closeTray}>
-          <div className="add-on">Options</div>
-          <input
-            id="display-density-default"
-            type="radio"
-          />
-          <input
-            id="display-density-default"
-            type="radio"
-          />
-        </TrayContents> */}
-        <Dropdown id="dropdown-custom-1">
-          <Dropdown.Toggle>
-            <i className='fonticon-gears'></i>
-          </Dropdown.Toggle>
-          <Dropdown.Menu className="super-colors">
-            <MenuItem header>Display density</MenuItem>
-            <MenuItem eventKey="1" active>Fit values</MenuItem>
-            <MenuItem eventKey="2">Expand values</MenuItem>
-          </Dropdown.Menu>
-        </Dropdown>
+      <div className='toolbar-dropdown'>
+        <MenuDropDown id="result-style-menu" links={links} icon='fonticon-mixer' hideArrow={true} toggleType='button'/>
       </div>
     );
   }
