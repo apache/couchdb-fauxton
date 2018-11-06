@@ -42,14 +42,18 @@ function getQueryParam (query) {
   return query;
 }
 
+function partitionUrlComponent(partitionKey) {
+  return partitionKey ? `/_partition/${partitionKey}` : '';
+}
+
 FauxtonAPI.registerUrls('allDocs', {
   server: function (id, query) {
     /** XXX DEPRECATED: use allDocsSanitized **/
     return Helpers.getServerUrl('/' + id + '/_all_docs' + getQueryParam(query));
   },
-  app: function (id, query) {
+  app: function (id, partitionKey, query) {
     /** XXX DEPRECATED: use allDocsSanitized **/
-    return 'database/' + id + '/_all_docs' + getQueryParam(query);
+    return 'database/' + id + partitionUrlComponent(partitionKey) + '/_all_docs' + getQueryParam(query);
   },
   apiurl: function (id, query) {
     /** XXX DEPRECATED: use allDocsSanitized **/
@@ -103,8 +107,8 @@ FauxtonAPI.registerUrls('designDocs', {
     return Helpers.getServerUrl('/' + id + '/' + designDoc + '/_info');
   },
 
-  app: function (id, designDoc) {
-    return 'database/' + id + '/_design/' + app.utils.safeURLName(designDoc) + '/_info';
+  app: function (id, partitionKey, designDoc) {
+    return 'database/' + id + partitionUrlComponent(partitionKey) + '/_design/' + app.utils.safeURLName(designDoc) + '/_info';
   },
 
   apiurl: function (id, designDoc) {
@@ -125,8 +129,8 @@ FauxtonAPI.registerUrls('view', {
     return Helpers.getApiUrl('/' + id + '/_design/' + designDoc + '/_view/' + viewName);
   },
 
-  edit: function (database, designDoc, indexName) {
-    return 'database/' + database + '/_design/' + designDoc + '/_view/' + indexName + '/edit';
+  edit: function (database, partitionKey, designDoc, indexName) {
+    return 'database/' + database + partitionUrlComponent(partitionKey) + '/_design/' + designDoc + '/_view/' + indexName + '/edit';
   },
 
   showView: function (database, designDoc, viewName) {
@@ -187,12 +191,12 @@ FauxtonAPI.registerUrls('new', {
     return '/database/' + database + '/new';
   },
 
-  newView: function (database) {
-    return '/database/' + database + '/new_view';
+  newView: function (database, partitionKey) {
+    return '/database/' + database + partitionUrlComponent(partitionKey) + '/new_view';
   },
 
-  addView: function (database, ddoc) {
-    return '/database/' + database + '/new_view/' + ddoc;
+  addView: function (database, partitionKey, ddoc) {
+    return '/database/' + database + partitionUrlComponent(partitionKey) + '/new_view/' + ddoc;
   }
 });
 
@@ -252,12 +256,12 @@ FauxtonAPI.registerUrls('mango', {
     return Helpers.getApiUrl('/' + db + '/_find' + query);
   },
 
-  'query-app': function (db, query) {
+  'query-app': function (db, partitionKey, query) {
     if (!query) {
       query = '';
     }
 
-    return 'database/' + db + '/_find' + query;
+    return 'database/' + db + partitionUrlComponent(partitionKey) + '/_find' + query;
   },
 
   'explain-server': function (db) {

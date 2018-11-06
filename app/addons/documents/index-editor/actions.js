@@ -127,7 +127,7 @@ function deleteView (options) {
 
     // if the user was on the index that was just deleted, redirect them back to all docs
     if (options.isOnIndex) {
-      var url = FauxtonAPI.urls('allDocs', 'app', options.database.safeID(), '?limit=' + FauxtonAPI.constants.DATABASES.DOCUMENT_LIMIT);
+      const url = FauxtonAPI.urls('allDocs', 'app', options.database.safeID());
       FauxtonAPI.navigate(url);
     }
 
@@ -186,8 +186,9 @@ function cloneView (params) {
   });
 }
 
-function gotoEditViewPage (databaseName, designDocName, indexName) {
+function gotoEditViewPage (databaseName, partitionKey, designDocName, indexName) {
   FauxtonAPI.navigate('#' + FauxtonAPI.urls('view', 'edit', encodeURIComponent(databaseName),
+    (partitionKey ? encodeURIComponent(partitionKey) : ''),
     encodeURIComponent(designDocName), encodeURIComponent(indexName)));
 }
 

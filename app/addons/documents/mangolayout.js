@@ -152,10 +152,11 @@ class MangoLayout extends Component {
   }
 }
 
-const mapStateToProps = ({ mangoQuery }) => {
+const mapStateToProps = ({ mangoQuery }, ownProps) => {
   return {
     explainPlan: mangoQuery.explainPlan,
-    queryFindCode: mangoQuery.queryFindCode
+    queryFindCode: mangoQuery.queryFindCode,
+    partitionKey: ownProps.partitionKey
   };
 };
 

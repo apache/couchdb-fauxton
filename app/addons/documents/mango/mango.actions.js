@@ -79,7 +79,7 @@ export default {
       return MangoAPI.createIndex(databaseName, indexCode)
         .then(() => {
           const runQueryURL = '#' + FauxtonAPI.urls('mango', 'query-app',
-            app.utils.safeURLName(databaseName));
+            app.utils.safeURLName(databaseName), '');
 
           const queryIndexes = (params) => { return MangoAPI.fetchIndexes(databaseName, params); };
           dispatch(IndexResultActions.fetchDocs(queryIndexes, fetchParams, {}));

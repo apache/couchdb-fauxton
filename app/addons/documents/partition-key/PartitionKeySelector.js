@@ -11,9 +11,7 @@
 // the License.
 
 import PropTypes from 'prop-types';
-import React from "react";
-import ReactDOM from "react-dom";
-
+import React from 'react';
 
 export default class PartitionKeySelector extends React.Component {
 
@@ -49,24 +47,27 @@ export default class PartitionKeySelector extends React.Component {
     setTimeout(() => this.textInput.focus());
   }
 
+  updatePartitionKey() {
+    this.setState({editMode: false});
+    const trimmedValue = this.state.editorValue.trim();
+    if (trimmedValue) {
+      this.props.onPartitionKeySelected(trimmedValue);
+    } else {
+      this.props.onGlobalModeSelected();
+    }
+  }
+
   onBlur(e) {
     if (e && e.preventDefault) {
       e.preventDefault();
     }
-    this.setState({editMode: false});
+    this.updatePartitionKey();
   }
 
   onKeyPress(e) {
     if (e.key === 'Enter') {
-      this.setState({
-        editMode: false
-      });
-      this.props.onPartitionKeySelected(this.state.editorValue);
+      this.updatePartitionKey();
     }
-  }
-
-  isPartitionSelected() {
-    return !this.state.global && (this.props.partitionKey.trim().length > 0);
   }
 
   onChange(e) {

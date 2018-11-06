@@ -89,7 +89,7 @@ describe('PartitionKeySelector', () => {
     expect(spyOnGlobalSelected.calledOnce).toBe(true);
   });
 
-  it('calls onPartitionKeySelected when a new value is set in the text input', () => {
+  it('calls onPartitionKeySelected when a new value is set by pressing Enter', () => {
     const spyOnKeySelected = sinon.spy();
     const wrapper = shallow(<PartitionKeySelector
       {...defaultProps}
@@ -104,6 +104,24 @@ describe('PartitionKeySelector', () => {
     // Set new value
     wrapper.find('input').simulate('change', { target: { value: 'new_part_key' } });
     wrapper.find('input').simulate('keypress', {key: 'Enter'});
+    expect(spyOnKeySelected.calledOnce).toBe(true);
+  });
+
+  it('calls onPartitionKeySelected when a new value is set and the component loses focus', () => {
+    const spyOnKeySelected = sinon.spy();
+    const wrapper = shallow(<PartitionKeySelector
+      {...defaultProps}
+      partitionKey=''
+      globalMode={true}
+      onPartitionKeySelected={spyOnKeySelected}
+    />);
+
+    // Start edit mode
+    wrapper.find('button').simulate('click');
+    expect(wrapper.state().editMode).toBe(true);
+    // Set new value
+    wrapper.find('input').simulate('change', { target: { value: 'new_part_key' } });
+    wrapper.find('input').simulate('blur');
     expect(spyOnKeySelected.calledOnce).toBe(true);
   });
 
