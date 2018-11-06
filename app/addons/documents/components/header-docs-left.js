@@ -10,8 +10,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+import PropTypes from 'prop-types';
 import React from "react";
-import ReactDOM from "react-dom";
 import Helpers from "../helpers";
 import FauxtonAPI from '../../../core/api';
 import { Dropdown } from "react-bootstrap";
@@ -20,8 +20,8 @@ function getModififyDbLinks (dbName) {
   return Helpers.getModifyDatabaseLinks(dbName);
 }
 
-function getAllDatabaseModalLinks (dbName) {
-  const dropdownMenuLinks = Helpers.getNewButtonLinks(dbName);
+function getAllDatabaseModalLinks (dbName, partitionKey) {
+  const dropdownMenuLinks = Helpers.getNewButtonLinks(dbName, partitionKey);
   return getModififyDbLinks(dbName).concat(dropdownMenuLinks);
 }
 
@@ -57,8 +57,8 @@ const Item = ({url, icon, onClick, children}) => {
   );
 };
 
-const HeaderDocsLeft = ({dbName}) => {
-  const items = getAllDatabaseModalLinks(dbName);
+const HeaderDocsLeft = ({dbName, partitionKey}) => {
+  const items = getAllDatabaseModalLinks(dbName, partitionKey);
   const dropdownItems = getDropdownItems(items);
 
   return (
@@ -79,6 +79,11 @@ const HeaderDocsLeft = ({dbName}) => {
       </Dropdown>
     </div>
   );
+};
+
+HeaderDocsLeft.propTypes = {
+  dbName: PropTypes.string.isRequired,
+  partitionKey: PropTypes.string
 };
 
 export default HeaderDocsLeft;

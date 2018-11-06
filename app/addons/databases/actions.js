@@ -16,7 +16,6 @@ import { get } from "../../core/ajax";
 import DatabasesBase from '../databases/base';
 import Stores from "./stores";
 import ActionTypes from "./actiontypes";
-import Resources from "./resources";
 import * as API from './api';
 
 function getDatabaseDetails (dbList, fullDbList) {
@@ -154,7 +153,7 @@ export default {
         type: 'success',
         clear: true
       });
-      const route = FauxtonAPI.urls('allDocs', 'app', app.utils.safeURLName(databaseName), '?limit=' + Resources.DocLimit);
+      const route = FauxtonAPI.urls('allDocs', 'app', app.utils.safeURLName(databaseName));
       app.router.navigate(route, { trigger: true });
     }
     ).fail(function (xhr) {

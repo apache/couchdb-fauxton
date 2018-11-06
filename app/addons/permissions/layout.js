@@ -16,7 +16,7 @@ import PermissionsContainer from './container/PermissionsContainer';
 import SidebarControllerContainer from "../documents/sidebar/SidebarControllerContainer";
 import {SidebarItemSelection} from '../documents/sidebar/helpers';
 
-export const PermissionsLayout = ({docURL, database, endpoint, dbName, dropDownLinks}) => {
+export const PermissionsLayout = ({docURL, database, endpoint, dbName, dropDownLinks, partitionKey}) => {
   const selectedNavItem = new SidebarItemSelection('permissions');
   return (
     <div id="dashboard" className="with-sidebar">
@@ -31,7 +31,7 @@ export const PermissionsLayout = ({docURL, database, endpoint, dbName, dropDownL
       />
       <div className="with-sidebar tabs-with-sidebar content-area">
         <aside id="sidebar-content" className="scrollable">
-          <SidebarControllerContainer selectedNavItem={selectedNavItem}/>
+          <SidebarControllerContainer selectedNavItem={selectedNavItem} selectedPartitionKey={partitionKey}/>
         </aside>
         <section id="dashboard-content" className="flex-layout flex-col">
           <PermissionsContainer url={endpoint} />

@@ -48,16 +48,17 @@ const selectedNavItem = (selectedItem) => {
   return settings;
 };
 
-const mapStateToProps = ({ sidebar }, ownProps) => {
+const mapStateToProps = ({ sidebar, databases }, ownProps) => {
   return {
     database: getDatabase(sidebar),
     selectedNav: selectedNavItem(ownProps.selectedNavItem),
     designDocs: sidebar.designDocs,
-    // designDocList: getDesignDocList(sidebar),
     designDocList: sidebar.designDocList,
     availableDesignDocIds: getAvailableDesignDocs(sidebar),
     toggledSections: sidebar.toggledSections,
-    isLoading: sidebar.loading,
+    isLoading: sidebar.loading || databases.isLoadingDbInfo,
+    selectedPartitionKey: ownProps.selectedPartitionKey,
+    isDbPartitioned: databases.isDbPartitioned,
 
     deleteIndexModalVisible: sidebar.deleteIndexModalVisible,
     deleteIndexModalText: sidebar.deleteIndexModalText,

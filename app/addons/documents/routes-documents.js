@@ -13,6 +13,7 @@
 import React from 'react';
 import FauxtonAPI from '../../core/api';
 import BaseRoute from './shared-routes';
+import DatabaseActions from '../databases/actions';
 import Databases from '../databases/base';
 import Resources from './resources';
 import {SidebarItemSelection} from './sidebar/helpers';
@@ -29,11 +30,22 @@ var DocumentsRouteObject = BaseRoute.extend({
       route: "globalAllDocs",
       roles: ["fx_loggedIn"]
     },
-    "database/:database/_design/:ddoc/_info": {
+    "database/:database/_partition/:partitionkey/_design/:ddoc/_info": {
       route: "designDocMetadata",
       roles: ['fx_loggedIn']
     },
-    'database/:database/_changes': 'changes'
+    "database/:database/_design/:ddoc/_info": {
+      route: "designDocMetadataNoPartition",
+      roles: ['fx_loggedIn']
+    },
+    'database/:database/_partition/:partitionKey/_changes': {
+      route: 'changes',
+      roles: ['fx_loggedIn']
+    },
+    'database/:database/_changes': {
+      route: 'changes',
+      roles: ['fx_loggedIn']
+    }
   },
 
   initialize (route, options) {
@@ -49,7 +61,11 @@ var DocumentsRouteObject = BaseRoute.extend({
     this.addSidebar();
   },
 
-  designDocMetadata: function (database, ddoc) {
+  designDocMetadataNoPartition: function (database, ddoc) {
+    return this.designDocMetadata(database, '', ddoc);
+  },
+
+  designDocMetadata: function (database, partitionKey, ddoc) {
     const designDocInfo = new Resources.DdocInfo({ _id: "_design/" + ddoc }, { database: this.database });
     const selectedNavItem = new SidebarItemSelection('designDoc', {
       designDocName: ddoc,
@@ -66,6 +82,7 @@ var DocumentsRouteObject = BaseRoute.extend({
       database={this.database}
       selectedNavItem={selectedNavItem}
       designDocInfo={designDocInfo}
+      partitionKey={partitionKey}
     />;
   },
 
@@ -112,6 +129,7 @@ var DocumentsRouteObject = BaseRoute.extend({
       FauxtonAPI.navigate('#/' + baseUrl);
     };
     const dropDownLinks = this.getCrumbs(this.database);
+    DatabaseActions.fetchSelectedDatabaseInfo(databaseName);
     return <DocsTabsSidebarLayout
       docURL={docURL}
       endpoint={endpoint}
@@ -129,7 +147,7 @@ var DocumentsRouteObject = BaseRoute.extend({
     />;
   },
 
-  changes: function () {
+  changes: function (_, partitionKey) {
     const selectedNavItem = new SidebarItemSelection('changes');
 
     return <ChangesSidebarLayout
@@ -139,6 +157,7 @@ var DocumentsRouteObject = BaseRoute.extend({
       dropDownLinks={this.getCrumbs(this.database)}
       database={this.database}
       selectedNavItem={selectedNavItem}
+      partitionKey={partitionKey}
     />;
   }
 

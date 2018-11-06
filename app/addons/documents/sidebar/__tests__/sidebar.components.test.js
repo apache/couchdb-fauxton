@@ -10,19 +10,17 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import utils from '../../../../../test/mocha/testUtils';
-import FauxtonAPI from "../../../../core/api";
-import React from "react";
-import ReactDOM from "react-dom";
-import sinon from "sinon";
 import { mount } from 'enzyme';
-import Components from "../sidebar";
+import React from 'react';
+import sinon from 'sinon';
+import utils from '../../../../../test/mocha/testUtils';
+import FauxtonAPI from '../../../../core/api';
 import '../../base';
-
-const {DesignDoc} = Components;
+import DesignDoc from '../components/DesignDoc';
+import IndexSection from '../components/IndexSection';
+import MainSidebar from '../components/MainSidebar';
 
 const { assert, restore} = utils;
-
 
 describe('DesignDoc', () => {
   const database = { id: 'test-db' };
@@ -32,29 +30,29 @@ describe('DesignDoc', () => {
     designDocSection: '',
     indexName: ''
   };
+  const defaultProps = {
+    database,
+    toggle: () => {},
+    sidebarListTypes: [],
+    isExpanded: true,
+    isPartitioned: false,
+    designDocName: 'doc-$-#-.1',
+    selectedNavInfo,
+    toggledSections: {},
+    designDoc: {},
+    showDeleteIndexModal: () => {},
+    showCloneIndexModal: () => {}
+  };
 
   afterEach(() => {
     restore(FauxtonAPI.urls);
   });
 
   it('confirm URLs are properly encoded when design doc name has special chars', () => {
-    sinon.stub(FauxtonAPI, 'urls').callsFake((a, b, c, d) => {
-      if (a === 'designDocs') {
-        return '#/database/MOCK/_design/' + encodeURIComponent(c) + '/' + encodeURIComponent(d);
-      }
-      return '' + (a || '') + '/' + (b || '') + '/' + (c || '') + '/' + (d || '');
-    });
     const wrapper = mount(<DesignDoc
-      database={database}
-      toggle={sinon.stub()}
-      sidebarListTypes={[]}
-      isExpanded={true}
+      {...defaultProps}
       designDocName={'doc-$-#-.1'}
-      selectedNavInfo={selectedNavInfo}
-      toggledSections={{}}
-      designDoc={{}}
-      showDeleteIndexModal={() => {}}
-      showCloneIndexModal={() => {}} />);
+    />);
 
     assert.include(wrapper.find('a.icon .fonticon-plus-circled').at(1).props()['href'], '/doc-%24-%23-.1');
     assert.include(wrapper.find('a.toggle-view .accordion-header').props()['href'], '/doc-%24-%23-.1');
@@ -65,16 +63,11 @@ describe('DesignDoc', () => {
 
     const toggleStub = sinon.stub();
     const wrapper = mount(<DesignDoc
-      database={database}
+      {...defaultProps}
       toggle={toggleStub}
-      sidebarListTypes={[]}
-      isExpanded={true}
       designDocName={'id#1'}
       selectedNavInfo={{}}
-      toggledSections={{}}
-      designDoc={{}}
-      showDeleteIndexModal={() => {}}
-      showCloneIndexModal={() => {}} />);
+    />);
 
     // NOTE: wrapper.find doesn't work special chars so we use class name instead
     wrapper.find('div.accordion-list-item').simulate('click', {preventDefault: sinon.stub()});
@@ -85,16 +78,9 @@ describe('DesignDoc', () => {
 
   it('confirm only single sub-option is shown by default (metadata link)', function () {
     const el = mount(<DesignDoc
-      database={database}
-      toggle={function () {}}
-      sidebarListTypes={[]}
-      isExpanded={true}
-      selectedNavInfo={selectedNavInfo}
-      toggledSections={{}}
+      {...defaultProps}
       designDoc={{ customProp: { one: 'something' } }}
       designDocName={'doc-$-#-.1'}
-      showDeleteIndexModal={() => {}}
-      showCloneIndexModal={() => {}}
     />);
 
     const subOptions = el.find('.accordion-body li');
@@ -104,8 +90,7 @@ describe('DesignDoc', () => {
   it('confirm design doc sidebar extensions appear', function () {
     sinon.stub(FauxtonAPI, 'urls');
     const el = mount(<DesignDoc
-      database={database}
-      toggle={function () {}}
+      {...defaultProps}
       sidebarListTypes={[{
         selector: 'customProp',
         name: 'Search Indexes',
@@ -115,13 +100,8 @@ describe('DesignDoc', () => {
         onDelete: () => {},
         onClone: () => {}
       }]}
-      isExpanded={true}
-      selectedNavInfo={selectedNavInfo}
-      toggledSections={{}}
       designDoc={{ customProp: { one: 'something' } }}
       designDocName={'doc-$-#-.1'}
-      showDeleteIndexModal={() => {}}
-      showCloneIndexModal={() => {}}
     />);
 
     const subOptions = el.find('.accordion-body li');
@@ -131,8 +111,7 @@ describe('DesignDoc', () => {
   it('confirm design doc sidebar extensions do not appear when they have no content', function () {
     sinon.stub(FauxtonAPI, 'urls');
     const el = mount(<DesignDoc
-      database={database}
-      toggle={function () {}}
+      {...defaultProps}
       sidebarListTypes={[{
         selector: 'customProp',
         name: 'Search Indexes',
@@ -142,13 +121,7 @@ describe('DesignDoc', () => {
         onDelete: () => {},
         onClone: () => {}
       }]}
-      isExpanded={true}
-      selectedNavInfo={selectedNavInfo}
-      designDoc={{}} // note that this is empty
       designDocName={'doc-$-#-.1'}
-      toggledSections={{}}
-      showDeleteIndexModal={() => {}}
-      showCloneIndexModal={() => {}}
     />);
 
     const subOptions = el.find('.accordion-body li');
@@ -157,10 +130,7 @@ describe('DesignDoc', () => {
 
   it('confirm doc metadata page is highlighted if selected', function () {
     const el = mount(<DesignDoc
-      database={database}
-      toggle={function () {}}
-      sidebarListTypes={[]}
-      isExpanded={true}
+      {...defaultProps}
       selectedNavInfo={{
         navItem: 'designDoc',
         designDocName: 'id',
@@ -168,11 +138,117 @@ describe('DesignDoc', () => {
         indexName: ''
       }}
       designDocName={'doc-$-#-.1'}
-      toggledSections={{}}
-      designDoc={{}}
-      showDeleteIndexModal={() => {}}
-      showCloneIndexModal={() => {}} />);
+    />);
 
     assert.equal(el.find('.accordion-body li.active a').text(), 'Metadata');
+  });
+
+  it('shows different icons for global and partitioned ddocs', () => {
+    const wrapper = mount(<DesignDoc
+      {...defaultProps}
+      designDocName={'doc-$-#-.1'}
+      isPartitioned={false}
+    />);
+    assert.ok(wrapper.find('i.fonticon-document').exists());
+
+    const wrapper2 = mount(<DesignDoc
+      {...defaultProps}
+      designDocName={'doc-$-#-.1'}
+      isPartitioned={true}
+    />);
+    assert.ok(wrapper2.find('i.fonticon-documents').exists());
+  });
+
+  it('confirms links only include the partition key when one is selected', () => {
+    const wrapper = mount(<DesignDoc
+      {...defaultProps}
+      selectedPartitionKey={'part-key-$-%1'}
+    />);
+    // Metadata link
+    assert.include(wrapper.find('a.toggle-view .accordion-header').props()['href'], '/_partition/part-key-%24-%251/');
+    // New View link
+    assert.include(wrapper.find('li > a.icon .fonticon-plus-circled').props()['href'], '/_partition/part-key-%24-%251/');
+
+    const wrapper2 = mount(<DesignDoc
+      {...defaultProps}
+    />);
+
+    assert.notInclude(wrapper2.find('a.toggle-view .accordion-header').props()['href'], '/_partition/');
+    assert.notInclude(wrapper2.find('li > a.icon .fonticon-plus-circled').props()['href'], '/_partition/');
+  });
+});
+
+describe('MainSidebar', () => {
+  const defaultProps = {
+    databaseName: 'test-db',
+    selectedNavItem: 'Metadata'
+  };
+
+  it('confirm links are properly encoded and include the partition key when provided', () => {
+    const wrapper = mount(<MainSidebar
+      {...defaultProps}
+      selectedPartitionKey={'part-key-$-%1'}
+    />);
+
+    assert.include(wrapper.find('a#all-docs').props()['href'], '/_partition/part-key-%24-%251/');
+    assert.include(wrapper.find('a#design-docs').props()['href'], '/_partition/part-key-%24-%251/');
+    assert.include(wrapper.find('a#mango-query').props()['href'], '/_partition/part-key-%24-%251/');
+  });
+
+  it('confirm New links are properly encoded and include the partition key when provided', () => {
+    const wrapper = mount(<MainSidebar
+      {...defaultProps}
+      selectedPartitionKey={'part-key-$-%1'}
+    />);
+
+    const newLinks = wrapper.instance().getNewButtonLinks()[0].links;
+    newLinks.forEach(link => {
+      if (link.title === 'New Doc') {
+        assert.include(link.url, '?partitionKey=part-key-%24-%251');
+      } else {
+        assert.include(link.url, '/_partition/part-key-%24-%251/');
+      }
+    });
+  });
+});
+
+describe('IndexSection', () => {
+  const defaultProps = {
+    urlNamespace: 'view',
+    indexLabel: 'Views',
+    database: { id: 'test-db' },
+    designDocName: 'ddoc-%-1',
+    items: ['viewA-$', 'viewB/#'],
+    isExpanded: true,
+    isPartitioned: false,
+    selectedPartitionKey: undefined,
+    selectedIndex: 'bla',
+    onDelete: () => {},
+    onClone: () => {},
+    showDeleteIndexModal: () => {},
+    showCloneIndexModal: () => {}
+  };
+
+  it('encodes the links for each item', () => {
+    const wrapper = mount(<IndexSection
+      {...defaultProps}
+    />);
+
+    defaultProps.items.forEach((view, idx) => {
+      assert.include(wrapper.find('a.toggle-view').at(idx).prop('href'),
+        '/_design/' + encodeURIComponent('ddoc-%-1') + '/_view/' + encodeURIComponent(view));
+    });
+  });
+
+  it('links include partition key when one is selected', () => {
+    const wrapper = mount(<IndexSection
+      {...defaultProps}
+      selectedPartitionKey={'part%1'}
+    />);
+
+    defaultProps.items.forEach((view, idx) => {
+      assert.include(wrapper.find('a.toggle-view').at(idx).prop('href'),
+        '/_partition/' + encodeURIComponent('part%1') + '/');
+    });
   });
 });
