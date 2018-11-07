@@ -10,22 +10,20 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import FauxtonAPI from "../../../../core/api";
-import Actions from "../actions";
-import Documents from "../../resources";
-import testUtils from "../../../../../test/mocha/testUtils";
-import sinon from "sinon";
-import "../../../documents/base";
-var assert = testUtils.assert;
-var restore = testUtils.restore;
+import FauxtonAPI from '../../../../core/api';
+import Actions from '../actions';
+import Documents from '../../resources';
+import testUtils from '../../../../../test/mocha/testUtils';
+import sinon from 'sinon';
+import '../../../documents/base';
 
+const restore = testUtils.restore;
 FauxtonAPI.router = new FauxtonAPI.Router([]);
-
 
 describe('Index Editor Actions', function () {
 
   describe('delete view', function () {
-    var designDocs, database, designDoc, designDocCollection, designDocId, viewName;
+    let designDocs, database, designDoc, designDocCollection, designDocId, viewName;
     beforeEach(function () {
       FauxtonAPI.reduxDispatch = sinon.stub();
       database = {
@@ -61,7 +59,7 @@ describe('Index Editor Actions', function () {
       designDoc.save = function () {
         return FauxtonAPI.Promise.resolve();
       };
-      var saveSpy = sinon.spy(designDoc, 'save');
+      const saveSpy = sinon.spy(designDoc, 'save');
       designDocs.fetch = function () {
         return FauxtonAPI.Promise.resolve();
       };
@@ -73,7 +71,7 @@ describe('Index Editor Actions', function () {
         designDoc: designDoc
       });
 
-      assert.ok(saveSpy.calledOnce);
+      sinon.assert.calledOnce(saveSpy);
     });
 
     it('deletes design doc if has no other views', function () {
@@ -82,7 +80,7 @@ describe('Index Editor Actions', function () {
       designDoc.destroy = function () {
         return FauxtonAPI.Promise.resolve();
       };
-      var destroySpy = sinon.spy(designDoc, 'destroy');
+      const destroySpy = sinon.spy(designDoc, 'destroy');
       designDocs.remove = function () {};
       designDocs.fetch = function () {
         return FauxtonAPI.Promise.resolve();
@@ -95,11 +93,11 @@ describe('Index Editor Actions', function () {
         designDoc: designDoc
       });
 
-      assert.ok(destroySpy.calledOnce);
+      sinon.assert.calledOnce(destroySpy);
     });
 
     it('navigates to all docs if was on view', function () {
-      var spy = sinon.spy(FauxtonAPI, 'navigate');
+      const spy = sinon.spy(FauxtonAPI, 'navigate');
 
       designDoc.save = function () {
         return FauxtonAPI.Promise.resolve();
@@ -114,8 +112,8 @@ describe('Index Editor Actions', function () {
         designDoc: designDoc,
         isOnIndex: true
       }).then(() => {
-        assert.ok(spy.getCall(0).args[0].match(/_all_docs/));
-        assert.ok(spy.calledOnce);
+        sinon.assert.calledWithMatch(spy, /_all_docs/);
+        sinon.assert.calledOnce(spy);
       });
     });
 
@@ -124,27 +122,27 @@ describe('Index Editor Actions', function () {
       const ddocModel = new Documents.Doc(ddoc, { database: database });
 
       ddocModel.setDdocView('testview', '() => {}', '() => {}');
-      assert.deepEqual(ddocModel.get('views'), {
+      expect(ddocModel.get('views')).toEqual({
         testview: {
           map: '() => {}',
           reduce: '() => {}'
         }
       });
-      assert.equal(ddocModel.get('language'), 'javascript');
+      expect(ddocModel.get('language')).toBe('javascript');
     });
 
     it('removes old view only when editting', function () {
       const viewInfo = {
-        newView: false,
+        isNewView: false,
         originalDesignDocName: 'test',
         designDocId: 'test',
         originalViewName: 'foo',
         viewName: 'bar'
       };
-      assert.isTrue(Actions.shouldRemoveDdocView(viewInfo));
+      expect(Actions.shouldRemoveDdocView(viewInfo)).toBe(true);
 
-      viewInfo.newView = true;
-      assert.isFalse(Actions.shouldRemoveDdocView(viewInfo));
+      viewInfo.isNewView = true;
+      expect(Actions.shouldRemoveDdocView(viewInfo)).toBe(false);
     });
   });
 });

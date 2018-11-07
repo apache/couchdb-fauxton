@@ -9,81 +9,42 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
-import FauxtonAPI from "../../../../core/api";
-import Resources from "../../resources";
-import Views from "../components";
-import Actions from "../actions";
-import utils from "../../../../../test/mocha/testUtils";
-import React from "react";
-import ReactDOM from "react-dom";
+
+import React from 'react';
 import {mount} from 'enzyme';
-import sinon from "sinon";
+import sinon from 'sinon';
+import FauxtonAPI from '../../../../core/api';
+import Views from '../components';
 import '../../base';
+
 FauxtonAPI.router = new FauxtonAPI.Router([]);
 
-const { assert } = utils;
-
-
-const resetStore = (designDocs) => {
-  Actions.editIndex({
-    database: { id: 'rockos-db' },
-    newView: false,
-    viewName: 'test-view',
-    designDocs: getDesignDocsCollection(designDocs),
-    designDocId: designDocs[0]._id
-  });
-};
-
-const getDesignDocsCollection = (designDocs) => {
-  designDocs = designDocs.map(function (doc) {
-    return Resources.Doc.prototype.parse(doc);
-  });
-
-  return new Resources.AllDocs(designDocs, {
-    params: { limit: 10 },
-    database: {
-      safeID: () => { return 'id'; }
-    }
-  });
-};
-
-
-describe('reduce editor', () => {
-  let reduceEl;
-
+describe('ReduceEditor', () => {
   describe('getReduceValue', () => {
+    const defaultProps = {
+      reduceOptions: [],
+      hasReduce: false,
+      hasCustomReduce: false,
+      reduce: null,
+      reduceSelectedOption: 'NONE',
+      updateReduceCode: () => {},
+      selectReduceChanged: () => {}
+    };
 
     it('returns null for none', () => {
-      const designDoc = {
-        _id: '_design/test-doc',
-        views: {
-          'test-view': {
-            map: '() => {};'
-          }
-        }
-      };
-
-      resetStore([designDoc]);
-
-      reduceEl = mount(<Views.ReduceEditor/>);
-      assert.ok(_.isNull(reduceEl.instance().getReduceValue()));
+      const reduceEl = mount(<Views.ReduceEditor
+        {...defaultProps}
+      />);
+      expect(reduceEl.instance().getReduceValue()).toBeNull();
     });
 
     it('returns built in for built in reduce', () => {
-      const designDoc = {
-        _id: '_design/test-doc',
-        views: {
-          'test-view': {
-            map: '() => {};',
-            reduce: '_sum'
-          }
-        }
-      };
-
-      resetStore([designDoc]);
-
-      reduceEl = mount(<Views.ReduceEditor/>);
-      assert.equal(reduceEl.instance().getReduceValue(), '_sum');
+      const reduceEl = mount(<Views.ReduceEditor
+        {...defaultProps}
+        reduce='_sum'
+        hasReduce={true}
+      />);
+      expect(reduceEl.instance().getReduceValue()).toBe('_sum');
     });
 
   });
@@ -107,7 +68,7 @@ describe('DesignDocSelector component', () => {
         value: '_design/test-doc'
       }
     });
-    assert.ok(spy.calledOnce);
+    sinon.assert.calledOnce(spy);
   });
 
   it('shows new design doc field when set to new-doc', () => {
@@ -119,7 +80,7 @@ describe('DesignDocSelector component', () => {
         onChangeNewDesignDocName={() => {}}
       />);
 
-    assert.equal(selectorEl.find('#new-ddoc-section').length, 1);
+    expect(selectorEl.find('#new-ddoc-section').length).toBe(1);
   });
 
   it('hides new design doc field when design doc selected', () => {
@@ -131,7 +92,7 @@ describe('DesignDocSelector component', () => {
         onChangeNewDesignDocName={() => {}}
       />);
 
-    assert.equal(selectorEl.find('#new-ddoc-section').length, 0);
+    expect(selectorEl.find('#new-ddoc-section').length).toBe(0);
   });
 
   it('always passes validation when design doc selected', () => {
@@ -143,7 +104,7 @@ describe('DesignDocSelector component', () => {
         onChangeNewDesignDocName={() => {}}
       />);
 
-    assert.equal(selectorEl.instance().validate(), true);
+    expect(selectorEl.instance().validate()).toBe(true);
   });
 
   it('fails validation if new doc name entered/not entered', () => {
@@ -157,7 +118,7 @@ describe('DesignDocSelector component', () => {
       />);
 
     // it shouldn't validate at this point: no new design doc name has been entered
-    assert.equal(selectorEl.instance().validate(), false);
+    expect(selectorEl.instance().validate()).toBe(false);
   });
 
   it('passes validation if new doc name entered/not entered', () => {
@@ -169,7 +130,7 @@ describe('DesignDocSelector component', () => {
         onSelectDesignDoc={() => { }}
         onChangeNewDesignDocName={() => {}}
       />);
-    assert.equal(selectorEl.instance().validate(), true);
+    expect(selectorEl.instance().validate()).toBe(true);
   });
 
 
@@ -181,7 +142,7 @@ describe('DesignDocSelector component', () => {
         onSelectDesignDoc={() => { }}
         onChangeNewDesignDocName={() => {}}
       />);
-    assert.equal(selectorEl.find('.help-link').length, 0);
+    expect(selectorEl.find('.help-link').length).toBe(0);
   });
 
   it('includes help doc link when supplied', () => {
@@ -194,27 +155,51 @@ describe('DesignDocSelector component', () => {
         docLink={docLink}
         onChangeNewDesignDocName={() => {}}
       />);
-    assert.equal(selectorEl.find('.help-link').length, 1);
-    assert.equal(selectorEl.find('.help-link').prop('href'), docLink);
+    expect(selectorEl.find('.help-link').length).toBe(1);
+    expect(selectorEl.find('.help-link').prop('href')).toBe(docLink);
   });
 });
 
-
-describe('Editor', () => {
-  let editorEl;
-
-  beforeEach(() => {
-    editorEl = mount(<Views.EditorController />);
-  });
+describe('IndexEditor', () => {
+  const defaultProps = {
+    isLoading: false,
+    isNewView: false,
+    isNewDesignDoc: false,
+    viewName: '',
+    database: {},
+    originalViewName: '',
+    originalDesignDocName: '',
+    designDoc: {},
+    designDocId: '',
+    designDocList: [],
+    map: '',
+    reduce: '',
+    designDocs: {},
+    updateNewDesignDocName: () => {},
+    updateMapCode: () => {},
+    selectDesignDoc: () => {},
+    onChangeNewDesignDocName: () => {},
+    reduceOptions: [],
+    reduceSelectedOption: 'NONE',
+    hasReduce: false,
+    hasCustomReduce: false,
+    updateReduceCode: () => {},
+    selectReduceChanged: () => {}
+  };
 
   it('calls changeViewName on view name change', () => {
-    const viewName = 'new-name';
-    const spy = sinon.spy(Actions, 'changeViewName');
+    const spy = sinon.spy();
+    const editorEl = mount(<Views.IndexEditor
+      {...defaultProps}
+      viewName='new-name'
+      changeViewName={spy}
+    />);
+
     editorEl.find('#index-name').simulate('change', {
       target: {
-        value: viewName
+        value: 'newViewName'
       }
     });
-    assert.ok(spy.calledWith(viewName));
+    sinon.assert.calledWith(spy, 'newViewName');
   });
 });
