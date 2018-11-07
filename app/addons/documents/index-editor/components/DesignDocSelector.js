@@ -11,11 +11,9 @@
 // the License.
 
 import PropTypes from 'prop-types';
-
-import React, { Component } from "react";
-import ReactDOM from "react-dom";
-import FauxtonAPI from "../../../../core/api";
-import ReactComponents from "../../../components/react-components";
+import React, { Component } from 'react';
+import FauxtonAPI from '../../../../core/api';
+import ReactComponents from '../../../components/react-components';
 
 const { StyledSelect } = ReactComponents;
 
