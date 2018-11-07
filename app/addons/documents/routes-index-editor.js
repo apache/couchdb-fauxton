@@ -74,10 +74,10 @@ const IndexEditorAndResults = BaseRoute.extend({
   showView: function (databaseName, partitionKey, ddoc, viewName) {
     viewName = viewName.replace(/\?.*$/, '');
 
-    ActionsIndexEditor.clearIndex();
-    ActionsIndexEditor.fetchDesignDocsBeforeEdit({
+    ActionsIndexEditor.dispatchClearIndex();
+    ActionsIndexEditor.dispatchFetchDesignDocsBeforeEdit({
       viewName: viewName,
-      newView: false,
+      isNewView: false,
       database: this.database,
       designDocs: this.designDocs,
       designDocId: '_design/' + ddoc
@@ -128,21 +128,21 @@ const IndexEditorAndResults = BaseRoute.extend({
   },
 
   createView: function (database, partitionKey, _designDoc) {
-    let newDesignDoc = true;
+    let isNewDesignDoc = true;
     let designDoc = 'new-doc';
 
     if (_designDoc) {
       designDoc = '_design/' + _designDoc;
-      newDesignDoc = false;
+      isNewDesignDoc = false;
     }
 
-    ActionsIndexEditor.fetchDesignDocsBeforeEdit({
+    ActionsIndexEditor.dispatchFetchDesignDocsBeforeEdit({
       viewName: 'new-view',
-      newView: true,
+      isNewView: true,
       database: this.database,
       designDocs: this.designDocs,
       designDocId: designDoc,
-      newDesignDoc: newDesignDoc
+      isNewDesignDoc: isNewDesignDoc
     });
 
     const selectedNavItem = new SidebarItemSelection('');
@@ -164,9 +164,9 @@ const IndexEditorAndResults = BaseRoute.extend({
   },
 
   editView: function (databaseName, partitionKey, ddocName, viewName) {
-    ActionsIndexEditor.fetchDesignDocsBeforeEdit({
+    ActionsIndexEditor.dispatchFetchDesignDocsBeforeEdit({
       viewName: viewName,
-      newView: false,
+      isNewView: false,
       database: this.database,
       designDocs: this.designDocs,
       designDocId: '_design/' + ddocName
