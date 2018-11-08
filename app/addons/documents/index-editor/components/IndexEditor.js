@@ -10,61 +10,27 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import React, { Component } from "react";
-import ReactDOM from "react-dom";
-import app from "../../../../app";
-import FauxtonAPI from "../../../../core/api";
-import ReactComponents from "../../../components/react-components";
-import Stores from "../stores";
-import Actions from "../actions";
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
+import app from '../../../../app';
+import FauxtonAPI from '../../../../core/api';
+import ReactComponents from '../../../components/react-components';
 import DesignDocSelector from './DesignDocSelector';
 import ReduceEditor from './ReduceEditor';
 
 const getDocUrl = app.helpers.getDocUrl;
-const store = Stores.indexEditorStore;
 const {CodeEditorPanel, ConfirmButton, LoadLines} = ReactComponents;
 
 export default class IndexEditor extends Component {
 
   constructor(props) {
     super(props);
-    this.state = this.getStoreState();
-  }
-
-  getStoreState() {
-    return {
-      database: store.getDatabase(),
-      isNewView: store.isNewView(),
-      viewName: store.getViewName(),
-      designDocs: store.getDesignDocs(),
-      designDocList: store.getAvailableDesignDocs(),
-      originalViewName: store.getOriginalViewName(),
-      originalDesignDocName: store.getOriginalDesignDocName(),
-      newDesignDoc: store.isNewDesignDoc(),
-      designDocId: store.getDesignDocId(),
-      newDesignDocName: store.getNewDesignDocName(),
-      saveDesignDoc: store.getSaveDesignDoc(),
-      map: store.getMap(),
-      isLoading: store.isLoading()
-    };
-  }
-
-  onChange() {
-    this.setState(this.getStoreState());
-  }
-
-  componentDidMount() {
-    store.on('change', this.onChange, this);
-  }
-
-  componentWillUnmount() {
-    store.off('change', this.onChange);
   }
 
   // the code editor is a standalone component, so if the user goes from one edit view page to another, we need to
   // force an update of the editor panel
-  componentDidUpdate(prevProps, prevState) {
-    if (this.state.map !== prevState.map && this.mapEditor) {
+  componentDidUpdate(prevProps) {
+    if (this.props.map !== prevProps.map && this.mapEditor) {
       this.mapEditor.update();
     }
   }
@@ -76,31 +42,31 @@ export default class IndexEditor extends Component {
       return;
     }
 
-    Actions.saveView({
-      database: this.state.database,
-      newView: this.state.isNewView,
-      viewName: this.state.viewName,
-      designDoc: this.state.saveDesignDoc,
-      designDocId: this.state.designDocId,
-      newDesignDoc: this.state.newDesignDoc,
-      originalViewName: this.state.originalViewName,
-      originalDesignDocName: this.state.originalDesignDocName,
+    this.props.saveView({
+      database: this.props.database,
+      isNewView: this.props.isNewView,
+      viewName: this.props.viewName,
+      designDoc: this.props.saveDesignDoc,
+      designDocId: this.props.designDocId,
+      isNewDesignDoc: this.props.isNewDesignDoc,
+      originalViewName: this.props.originalViewName,
+      originalDesignDocName: this.props.originalDesignDocName,
       map: this.mapEditor.getValue(),
       reduce: this.reduceEditor.getReduceValue(),
-      designDocs: this.state.designDocs
+      designDocs: this.props.designDocs
     });
   }
 
   viewChange(el) {
-    Actions.changeViewName(el.target.value);
+    this.props.changeViewName(el.target.value);
   }
 
   updateMapCode(code) {
-    Actions.updateMapCode(code);
+    this.props.updateMapCode(code);
   }
 
   render() {
-    if (this.state.isLoading) {
+    if (this.props.isLoading) {
       return (
         <div className="define-view">
           <LoadLines />
@@ -108,9 +74,9 @@ export default class IndexEditor extends Component {
       );
     }
 
-    const pageHeader = (this.state.isNewView) ? 'New View' : 'Edit View';
-    const btnLabel = (this.state.isNewView) ? 'Create Document and then Build Index' : 'Save Document and then Build Index';
-    const cancelLink = '#' + FauxtonAPI.urls('view', 'showView', this.state.database.id, this.state.designDocId, this.state.viewName);
+    const pageHeader = (this.props.isNewView) ? 'New View' : 'Edit View';
+    const btnLabel = (this.props.isNewView) ? 'Create Document and then Build Index' : 'Save Document and then Build Index';
+    const cancelLink = '#' + FauxtonAPI.urls('view', 'showView', this.props.database.id, this.props.designDocId, this.props.viewName);
     return (
       <div className="define-view" >
         <form className="form-horizontal view-query-save" onSubmit={this.saveView.bind(this)}>
@@ -119,11 +85,11 @@ export default class IndexEditor extends Component {
           <div className="new-ddoc-section">
             <DesignDocSelector
               ref={(el) => { this.designDocSelector = el; }}
-              designDocList={this.state.designDocList}
-              selectedDesignDocName={this.state.designDocId}
-              newDesignDocName={this.state.newDesignDocName}
-              onSelectDesignDoc={Actions.selectDesignDoc}
-              onChangeNewDesignDocName={Actions.updateNewDesignDocName}
+              designDocList={this.props.designDocList}
+              selectedDesignDocName={this.props.designDocId}
+              newDesignDocName={this.props.newDesignDocName}
+              onSelectDesignDoc={this.props.selectDesignDoc}
+              onChangeNewDesignDocName={this.props.updateNewDesignDocName}
               docLink={getDocUrl('DESIGN_DOCS')} />
           </div>
 
@@ -142,7 +108,7 @@ export default class IndexEditor extends Component {
             <input
               type="text"
               id="index-name"
-              value={this.state.viewName}
+              value={this.props.viewName}
               onChange={this.viewChange.bind(this)}
               placeholder="Index name" />
           </div>
@@ -153,8 +119,8 @@ export default class IndexEditor extends Component {
             docLink={getDocUrl('MAP_FUNCS')}
             blur={this.updateMapCode.bind(this)}
             allowZenMode={false}
-            defaultCode={this.state.map} />
-          <ReduceEditor ref={(el) => { this.reduceEditor = el; }} />
+            defaultCode={this.props.map} />
+          <ReduceEditor ref={(el) => { this.reduceEditor = el; }} {...this.props} />
           <div className="padded-box">
             <div className="control-group">
               <ConfirmButton id="save-view" text={btnLabel} />
@@ -166,3 +132,19 @@ export default class IndexEditor extends Component {
     );
   }
 }
+
+IndexEditor.propTypes = {
+  isLoading:PropTypes.bool.isRequired,
+  isNewView: PropTypes.bool.isRequired,
+  database: PropTypes.object.isRequired,
+  designDocId: PropTypes.string.isRequired,
+  viewName: PropTypes.string.isRequired,
+  isNewDesignDoc: PropTypes.bool.isRequired,
+  originalViewName: PropTypes.string,
+  originalDesignDocName: PropTypes.string,
+  designDocs: PropTypes.object,
+  saveDesignDoc: PropTypes.object,
+  updateNewDesignDocName: PropTypes.func.isRequired,
+  changeViewName: PropTypes.func.isRequired,
+  updateMapCode: PropTypes.func.isRequired
+};
