@@ -109,7 +109,7 @@ describe('Results Toolbar', () => {
     sinon.assert.calledWith(mockUpdateStyle, { fontSize: Constants.INDEX_RESULTS_STYLE.FONT_SIZE_LARGE});
   });
 
-  it.only('does not show Display Density option in JSON layout', () => {
+  it('does not show Display Density option in JSON layout', () => {
     const toolbarJson = mount(<ResultsToolBar
       {...defaultProps}
       hasResults={true}
@@ -138,20 +138,32 @@ describe('Results Toolbar', () => {
   });
 
   it('shows Table, Metadata and JSON modes when querying a global view', () => {
-    const wrapper = mount(<ResultsToolBar hasResults={true} isListDeletable={false} {...restProps}
-      partitionKey={''} fetchUrl='/my_db/_design/ddoc1/_view/view1'/>);
-    expect(wrapper.find('button')).toHaveLength(3);
+    const wrapper = mount(<ResultsToolBar
+      {...defaultProps}
+      hasResults={true}
+      isListDeletable={false}
+      partitionKey={''}
+      fetchUrl='/my_db/_design/ddoc1/_view/view1'/>);
+    expect(wrapper.find('button')).toHaveLength(4);
   });
 
   it('hides Table and JSON modes when querying a partitioned view', () => {
-    const wrapper = mount(<ResultsToolBar hasResults={true} isListDeletable={false} {...restProps}
-      partitionKey={'partKey1'} fetchUrl='/my_db/_partition/my_partition/_design/ddoc1/_view/view1'/>);
-    expect(wrapper.find('button')).toHaveLength(1);
+    const wrapper = mount(<ResultsToolBar
+      {...defaultProps}
+      hasResults={true}
+      isListDeletable={false}
+      partitionKey={'partKey1'}
+      fetchUrl='/my_db/_partition/my_partition/_design/ddoc1/_view/view1'/>);
+    expect(wrapper.find('button')).toHaveLength(2);
   });
 
   it('shows Table, Metadata and JSON modes when showing All Documents filtered by partition', () => {
-    const wrapper = mount(<ResultsToolBar hasResults={true} isListDeletable={false} {...restProps}
-      partitionKey={'partKey1'} fetchUrl='/my_db/_all_docs'/>);
-    expect(wrapper.find('button')).toHaveLength(3);
+    const wrapper = mount(<ResultsToolBar
+      {...defaultProps}
+      hasResults={true}
+      isListDeletable={false}
+      partitionKey={'partKey1'}
+      fetchUrl='/my_db/_all_docs'/>);
+    expect(wrapper.find('button')).toHaveLength(4);
   });
 });
