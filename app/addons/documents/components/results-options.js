@@ -43,13 +43,16 @@ export default class ResultsOptions extends React.Component {
   }
 
   getDensitySection() {
+    let menuOptionTitle = 'Show full values';
+    if (this.props.resultsStyle.textOverflow === Constants.INDEX_RESULTS_STYLE.TEXT_OVERFLOW_FULL) {
+      menuOptionTitle = 'Truncate values';
+    }
+
     const densityItems = [{
-      title: 'Show full values',
+      title: menuOptionTitle,
       onClick: this.toggleTextOverflow
     }];
-    if (this.props.resultsStyle.textOverflow === Constants.INDEX_RESULTS_STYLE.TEXT_OVERFLOW_FULL) {
-      densityItems[0].title = 'Truncate values';
-    }
+
     return {
       title: 'Display density',
       links: densityItems

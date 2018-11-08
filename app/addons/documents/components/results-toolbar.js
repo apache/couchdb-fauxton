@@ -21,9 +21,6 @@ import Helpers from '../helpers';
 const {BulkActionComponent} = Components;
 
 export class ResultsToolBar extends React.Component {
-  constructor (props) {
-    super(props);
-  }
 
   shouldComponentUpdate (nextProps) {
     return nextProps.isListDeletable != undefined;
@@ -54,10 +51,17 @@ export class ResultsToolBar extends React.Component {
         title="Select all docs that can be..." />;
     }
 
-    // Determine if we need to display the bulk doc header
+    // Determine if we need to display the bulk doc header and result options
     let bulkHeader = null;
+    const showDensityOptions = this.props.selectedLayout !== Constants.LAYOUT_ORIENTATION.JSON;
+    let resultOptions = null;
     if (hasResults || isLoading) {
       bulkHeader = <BulkDocumentHeaderController {...this.props} />;
+      resultOptions = <ResultsOptions
+        updateStyle={this.props.updateResultsStyle}
+        resultsStyle={this.props.resultsStyle}
+        showDensity={showDensityOptions}
+      />;
     }
 
     let createDocumentLink = null;
@@ -70,13 +74,6 @@ export class ResultsToolBar extends React.Component {
         </div>
       );
     }
-
-    const showDensity = this.props.selectedLayout !== Constants.LAYOUT_ORIENTATION.JSON;
-    let resultOptions = <ResultsOptions
-      updateStyle={this.props.updateResultsStyle}
-      resultsStyle={this.props.resultsStyle}
-      showDensity={showDensity}
-    />;
 
     return (
       <div className="document-result-screen__toolbar">

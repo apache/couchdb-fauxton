@@ -86,12 +86,14 @@ export default function resultsState(state = initialState, action) {
         ...action.resultsStyle
       };
       storeStyle(newStyle);
-      return Object.assign({}, state, {
+      return {
+        ...state,
         resultsStyle: newStyle
-      });
+      };
 
     case ActionTypes.INDEX_RESULTS_REDUX_RESET_STATE:
-      return Object.assign({}, initialState, {
+      return {
+        ...initialState,
         selectedLayout: state.selectedLayout,
         selectedDocs: [],
         fetchParams: {
@@ -105,17 +107,19 @@ export default function resultsState(state = initialState, action) {
           state.queryOptionsPanel, {reduce: false, groupLevel: 'exact', showReduce: false}),
         isLoading: false,
         resultsStyle: state.resultsStyle
-      });
+      };
 
     case ActionTypes.INDEX_RESULTS_REDUX_IS_LOADING:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         isLoading: true
-      });
+      };
 
     case ActionTypes.INDEX_RESULTS_REDUX_NEW_SELECTED_DOCS:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         selectedDocs: action.selectedDocs
-      });
+      };
 
     case ActionTypes.INDEX_RESULTS_REDUX_NEW_RESULTS:
       let selectedLayout = state.selectedLayout;
@@ -125,7 +129,8 @@ export default function resultsState(state = initialState, action) {
           selectedLayout = Constants.LAYOUT_ORIENTATION.TABLE;
         }
       }
-      return Object.assign({}, state, {
+      return {
+        ...state,
         docs: action.docs,
         isLoading: false,
         isEditable: true, //TODO: determine logic for this
@@ -137,51 +142,57 @@ export default function resultsState(state = initialState, action) {
         selectedLayout: selectedLayout,
         executionStats: action.executionStats,
         warning: action.warning
-      });
+      };
 
     case ActionTypes.INDEX_RESULTS_REDUX_CHANGE_LAYOUT:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         selectedLayout: action.layout
-      });
+      };
 
     case ActionTypes.INDEX_RESULTS_REDUX_TOGGLE_SHOW_ALL_COLUMNS:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         tableView: Object.assign({}, state.tableView, {
           showAllFieldsTableView: !state.tableView.showAllFieldsTableView,
           cachedFieldsTableView: state.tableView.selectedFieldsTableView
         })
-      });
+      };
 
     case ActionTypes.INDEX_RESULTS_REDUX_CHANGE_TABLE_HEADER_ATTRIBUTE:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         tableView: Object.assign({}, state.tableView, {
           selectedFieldsTableView: action.selectedFieldsTableView
         })
-      });
+      };
 
     case ActionTypes.INDEX_RESULTS_REDUX_SET_PER_PAGE:
       app.utils.localStorageSet('fauxton:perpageredux', action.perPage);
-      return Object.assign({}, state, {
+      return {
+        ...state,
         pagination: Object.assign({}, initialState.pagination, {
           perPage: action.perPage
         })
-      });
+      };
 
     case ActionTypes.INDEX_RESULTS_REDUX_PAGINATE_NEXT:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         pagination: Object.assign({}, state.pagination, {
           pageStart: state.pagination.pageStart + state.pagination.perPage,
           currentPage: state.pagination.currentPage + 1
         })
-      });
+      };
 
     case ActionTypes.INDEX_RESULTS_REDUX_PAGINATE_PREVIOUS:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         pagination: Object.assign({}, state.pagination, {
           pageStart: state.pagination.pageStart - state.pagination.perPage,
           currentPage: state.pagination.currentPage - 1
         })
-      });
+      };
 
     case ActionTypes.INDEX_RESULTS_REDUX_NEW_QUERY_OPTIONS:
       // includeDocs or reduce should be mutually exclusive
@@ -195,9 +206,10 @@ export default function resultsState(state = initialState, action) {
         // Switch off includeDocs when reduce is being set to true
         action.options.includeDocs = false;
       }
-      return Object.assign({}, state, {
+      return {
+        ...state,
         queryOptionsPanel: Object.assign({}, state.queryOptionsPanel, action.options)
-      });
+      };
 
     default:
       return state;

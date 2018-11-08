@@ -105,7 +105,7 @@ class CustomMenuButtonToggle extends React.Component {
     return (
       <Button
         onClick={this.handleClick}>
-        <i className={"dropdown-toggle icon " + this.props.icon}
+        <i className={"dropdown-toggle " + this.props.icon}
           style={{ fontSize: '1rem', boxShadow: '0px 0px 0px' }}>
         </i>
         {this.props.children}
