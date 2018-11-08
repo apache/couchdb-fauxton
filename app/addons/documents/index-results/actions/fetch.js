@@ -16,7 +16,7 @@ import Constants from '../../constants';
 import { errorReason } from '../helpers/shared-helpers';
 import * as IndexResultsAPI from '../api';
 import { nowLoading, newResultsAvailable, newSelectedDocs,
-  changeLayout, resetState } from './base';
+  changeLayout, resetState, partitionParamNotSupported, partitionParamIsMandatory } from './base';
 
 const maxDocLimit = 10000;
 
@@ -91,23 +91,29 @@ export const fetchDocs = (queryDocs, fetchParams, queryOptionsParams) => {
     dispatch(nowLoading());
 
     // now fetch the results
-    return queryDocs(params).then(({ docs, docType, executionStats, warning }) => {
+    return queryDocs(params).then(({ docs, docType, executionStats, warning, layout }) => {
       const {
         finalDocList,
         canShowNext
       } = removeOverflowDocsAndCalculateHasNext(docs, totalDocsRemaining, params.limit);
 
-      if (docType === Constants.INDEX_RESULTS_DOC_TYPE.MANGO_INDEX) {
-        dispatch(changeLayout(Constants.LAYOUT_ORIENTATION.JSON));
+      if (layout) {
+        dispatch(changeLayout(layout));
       }
       // dispatch that we're all done
       dispatch(newResultsAvailable(finalDocList, params, canShowNext, docType, executionStats, warning));
     }).catch((error) => {
-      FauxtonAPI.addNotification({
-        msg: 'Error running query. ' + errorReason(error),
-        type: 'error',
-        clear: true
-      });
+      if (error && error.message.includes('partition query is not supported')) {
+        dispatch(partitionParamNotSupported());
+      } else if (error && error.message.includes('`partition` parameter is mandatory')) {
+        dispatch(partitionParamIsMandatory());
+      } else {
+        FauxtonAPI.addNotification({
+          msg: 'Error running query. ' + errorReason(error),
+          type: 'error',
+          clear: true
+        });
+      }
       dispatch(resetState());
     });
   };

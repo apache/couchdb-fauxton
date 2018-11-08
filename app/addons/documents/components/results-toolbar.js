@@ -95,6 +95,7 @@ ResultsToolBar.propTypes = {
   hasResults: PropTypes.bool.isRequired,
   isListDeletable: PropTypes.bool,
   partitionKey: PropTypes.string,
+  docType: PropTypes.string,
   resultsStyle: PropTypes.object.isRequired,
   updateResultsStyle: PropTypes.func.isRequired
 };

@@ -90,9 +90,10 @@ const IndexEditorAndResults = BaseRoute.extend({
     });
     SidebarActions.dispatchExpandSelectedItem(selectedNavItem);
 
-    const url = FauxtonAPI.urls('view', 'server', encodeURIComponent(databaseName),
+    const encodedPartKey = partitionKey ? encodeURIComponent(partitionKey) : '';
+    const url = FauxtonAPI.urls('view', 'server', encodeURIComponent(databaseName), encodedPartKey,
       encodeURIComponent(ddoc), encodeURIComponent(viewName));
-    const endpoint = FauxtonAPI.urls('view', 'apiurl', encodeURIComponent(databaseName),
+    const endpoint = FauxtonAPI.urls('view', 'apiurl', encodeURIComponent(databaseName), encodedPartKey,
       encodeURIComponent(ddoc), encodeURIComponent(viewName));
     const docURL = FauxtonAPI.constants.DOC_URLS.GENERAL;
     const navigateToPartitionedView = (partKey) => {

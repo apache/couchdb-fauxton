@@ -16,9 +16,13 @@ import app from '../../../app';
 import Constants from '../constants';
 import FauxtonAPI from '../../../core/api';
 
-export const queryAllDocs = (fetchUrl, params) => {
+export const queryAllDocs = (fetchUrl, partitionKey, params) => {
   // Exclude params 'group', 'reduce' and 'group_level' if present since they not allowed for '_all_docs'
   Object.assign(params, {reduce: undefined, group: undefined, group_level: undefined});
+  if (partitionKey) {
+    // partition filter overrides any 'between keys' values set
+    Object.assign(params, {inclusive_end: false, start_key: `"${partitionKey}:"`, end_key: `"${partitionKey}:\ufff0"`});
+  }
   const query = app.utils.queryString(params);
   const url = `${fetchUrl}${fetchUrl.includes('?') ? '&' : '?'}${query}`;
   return get(url).then(json => {
@@ -43,6 +47,13 @@ export const queryMapReduceView = (fetchUrl, params) => {
     params.group = undefined;
     params.group_level = undefined;
   }
+  // removes params not supported by partitioned views
+  const isPartitioned = fetchUrl.includes('/_partition/');
+  if (isPartitioned) {
+    params.include_docs = undefined;
+    params.stable = undefined;
+    params.conflicts = undefined;
+  }
   const query = app.utils.queryString(params);
   const url = `${fetchUrl}${fetchUrl.includes('?') ? '&' : '?'}${query}`;
   return get(url).then(json => {
@@ -51,7 +62,8 @@ export const queryMapReduceView = (fetchUrl, params) => {
     }
     return {
       docs: json.rows,
-      docType: Constants.INDEX_RESULTS_DOC_TYPE.VIEW
+      docType: Constants.INDEX_RESULTS_DOC_TYPE.VIEW,
+      layout: isPartitioned ? Constants.LAYOUT_ORIENTATION.METADATA : undefined
     };
   });
 };
