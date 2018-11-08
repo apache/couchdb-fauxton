@@ -20,7 +20,8 @@ import {
   changeLayout,
   bulkCheckOrUncheck,
   changeTableHeaderAttribute,
-  resetState
+  resetState,
+  updateResultsStyle
 } from '../actions/base';
 import {
   getDocs,
@@ -36,7 +37,8 @@ import {
   getTextEmptyIndex,
   getDocType,
   getFetchParams,
-  getQueryOptionsParams
+  getQueryOptionsParams,
+  getResultsStyle
 } from '../reducers';
 
 
@@ -56,7 +58,8 @@ const mapStateToProps = ({indexResults}, ownProps) => {
     docType: getDocType(indexResults),
     fetchParams: getFetchParams(indexResults),
     queryOptionsParams: getQueryOptionsParams(indexResults),
-    partitionKey: ownProps.partitionKey
+    partitionKey: ownProps.partitionKey,
+    resultsStyle: getResultsStyle(indexResults)
   };
 };
 
@@ -91,6 +94,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     },
     queryOptionsToggleIncludeDocs: (previousIncludeDocs) => {
       dispatch(queryOptionsToggleIncludeDocs(previousIncludeDocs));
+    },
+    updateResultsStyle: (newStyle) => {
+      dispatch(updateResultsStyle(newStyle));
     }
   };
 };

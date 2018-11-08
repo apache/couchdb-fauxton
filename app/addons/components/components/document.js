@@ -9,24 +9,29 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
-import PropTypes from 'prop-types';
 
-import React from "react";
-import ReactDOM from "react-dom";
-import FauxtonAPI from "../../../core/api";
-import Helpers from "../../documents/helpers";
+import classnames from 'classnames';
+import PropTypes from 'prop-types';
+import React from 'react';
+import FauxtonAPI from '../../../core/api';
+import Constants from '../../documents/constants';
+import Helpers from '../../documents/helpers';
 
 export class Document extends React.Component {
   static propTypes = {
     docIdentifier: PropTypes.string.isRequired,
     docChecked: PropTypes.func.isRequired,
     truncate: PropTypes.bool,
-    maxRows: PropTypes.number
+    maxRows: PropTypes.number,
+    resultsStyle: PropTypes.object
   };
 
   static defaultProps = {
     truncate: true,
-    maxRows: 500
+    maxRows: 500,
+    resultsStyle: {
+      fontSize: Constants.INDEX_RESULTS_STYLE.FONT_SIZE_MEDIUM
+    }
   };
 
   onChange = (e) => {
@@ -91,10 +96,14 @@ export class Document extends React.Component {
       isTruncated = result.isTruncated;
       content = result.content;
     }
-
+    const { fontSize } = this.props.resultsStyle;
+    const classNames = classnames('prettyprint', {
+      'prettyprint--small': fontSize === Constants.INDEX_RESULTS_STYLE.FONT_SIZE_SMALL,
+      'prettyprint--large': fontSize === Constants.INDEX_RESULTS_STYLE.FONT_SIZE_LARGE
+    });
     return (
       <div className="doc-data">
-        <pre className="prettyprint">{content}</pre>
+        <pre className={classNames}>{content}</pre>
         {isTruncated ? <div className="doc-content-truncated">(truncated)</div> : null}
       </div>
     );

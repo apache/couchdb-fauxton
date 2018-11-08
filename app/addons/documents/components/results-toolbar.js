@@ -13,12 +13,15 @@ import PropTypes from 'prop-types';
 
 import React from 'react';
 import BulkDocumentHeaderController from "../header/header";
+import ResultsOptions from './results-options';
 import Components from "../../components/react-components";
+import Constants from '../constants';
 import Helpers from '../helpers';
 
 const {BulkActionComponent} = Components;
 
 export class ResultsToolBar extends React.Component {
+
   shouldComponentUpdate (nextProps) {
     return nextProps.isListDeletable != undefined;
   }
@@ -48,10 +51,17 @@ export class ResultsToolBar extends React.Component {
         title="Select all docs that can be..." />;
     }
 
-    // Determine if we need to display the bulk doc header
+    // Determine if we need to display the bulk doc header and result options
     let bulkHeader = null;
+    const showDensityOptions = this.props.selectedLayout !== Constants.LAYOUT_ORIENTATION.JSON;
+    let resultOptions = null;
     if (hasResults || isLoading) {
       bulkHeader = <BulkDocumentHeaderController {...this.props} />;
+      resultOptions = <ResultsOptions
+        updateStyle={this.props.updateResultsStyle}
+        resultsStyle={this.props.resultsStyle}
+        showDensity={showDensityOptions}
+      />;
     }
 
     let createDocumentLink = null;
@@ -69,6 +79,7 @@ export class ResultsToolBar extends React.Component {
       <div className="document-result-screen__toolbar">
         {bulkAction}
         {bulkHeader}
+        {resultOptions}
         {createDocumentLink}
       </div>
     );
@@ -83,5 +94,7 @@ ResultsToolBar.propTypes = {
   isLoading: PropTypes.bool.isRequired,
   hasResults: PropTypes.bool.isRequired,
   isListDeletable: PropTypes.bool,
-  partitionKey: PropTypes.string
+  partitionKey: PropTypes.string,
+  resultsStyle: PropTypes.object.isRequired,
+  updateResultsStyle: PropTypes.func.isRequired
 };
