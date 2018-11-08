@@ -65,7 +65,8 @@ export default class ResultsScreen extends React.Component {
           header={doc.header}
           docChecked={this.props.docChecked}
           isDeletable={doc.isDeletable}
-          docIdentifier={doc.id} >
+          docIdentifier={doc.id}
+          resultsStyle={this.props.resultsStyle} >
           {doc.url ? this.getUrlFragment('#' + doc.url) : doc.url}
         </Document>
       );
@@ -104,6 +105,7 @@ export default class ResultsScreen extends React.Component {
           hasSelectedItem={this.props.hasSelectedItem}
           toggleSelect={this.toggleSelectAll}
           changeField={this.props.changeTableHeaderAttribute}
+          resultsStyle={this.props.resultsStyle}
           title="Select all docs that can be..." />
       </div>
     );

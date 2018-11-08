@@ -30,6 +30,7 @@ const initialState = {
   selectedLayout: Constants.LAYOUT_ORIENTATION.METADATA,
   textEmptyIndex: 'No Documents Found',
   docType: Constants.INDEX_RESULTS_DOC_TYPE.VIEW,
+  resultsStyle: loadStyle(),
   fetchParams: {
     limit: getDefaultPerPage() + 1,
     skip: 0
@@ -62,11 +63,38 @@ const initialState = {
   }
 };
 
+function loadStyle() {
+  let style = app.utils.localStorageGet('fauxton:results_style');
+  if (!style) {
+    style = {
+      textOverflow: Constants.INDEX_RESULTS_STYLE.TEXT_OVERFLOW_TRUNCATED,
+      fontSize: Constants.INDEX_RESULTS_STYLE.FONT_SIZE_MEDIUM
+    };
+  }
+  return style;
+}
+
+function storeStyle(style) {
+  app.utils.localStorageSet('fauxton:results_style', style);
+}
+
 export default function resultsState(state = initialState, action) {
   switch (action.type) {
 
+    case ActionTypes.INDEX_RESULTS_SET_STYLE:
+      const newStyle = {
+        ...state.resultsStyle,
+        ...action.resultsStyle
+      };
+      storeStyle(newStyle);
+      return {
+        ...state,
+        resultsStyle: newStyle
+      };
+
     case ActionTypes.INDEX_RESULTS_REDUX_RESET_STATE:
-      return Object.assign({}, initialState, {
+      return {
+        ...initialState,
         noResultsWarning: state.noResultsWarning,
         selectedLayout: state.selectedLayout,
         selectedDocs: [],
@@ -79,13 +107,15 @@ export default function resultsState(state = initialState, action) {
         }),
         queryOptionsPanel: Object.assign({}, initialState.queryOptionsPanel,
           state.queryOptionsPanel, {reduce: false, groupLevel: 'exact', showReduce: false}),
-        isLoading: false
-      });
+        isLoading: false,
+        resultsStyle: state.resultsStyle
+      };
 
     case ActionTypes.INDEX_RESULTS_REDUX_IS_LOADING:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         isLoading: true
-      });
+      };
 
     case ActionTypes.INDEX_RESULTS_REDUX_PARTITION_PARAM_NOT_SUPPORTED:
       return Object.assign({}, state, {
@@ -98,9 +128,10 @@ export default function resultsState(state = initialState, action) {
       });
 
     case ActionTypes.INDEX_RESULTS_REDUX_NEW_SELECTED_DOCS:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         selectedDocs: action.selectedDocs
-      });
+      };
 
     case ActionTypes.INDEX_RESULTS_REDUX_NEW_RESULTS:
       let selectedLayout = state.selectedLayout;
@@ -110,7 +141,8 @@ export default function resultsState(state = initialState, action) {
           selectedLayout = Constants.LAYOUT_ORIENTATION.TABLE;
         }
       }
-      return Object.assign({}, state, {
+      return {
+        ...state,
         docs: action.docs,
         isLoading: false,
         noResultsWarning: '',
@@ -123,51 +155,57 @@ export default function resultsState(state = initialState, action) {
         selectedLayout: selectedLayout,
         executionStats: action.executionStats,
         warning: action.warning
-      });
+      };
 
     case ActionTypes.INDEX_RESULTS_REDUX_CHANGE_LAYOUT:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         selectedLayout: action.layout
-      });
+      };
 
     case ActionTypes.INDEX_RESULTS_REDUX_TOGGLE_SHOW_ALL_COLUMNS:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         tableView: Object.assign({}, state.tableView, {
           showAllFieldsTableView: !state.tableView.showAllFieldsTableView,
           cachedFieldsTableView: state.tableView.selectedFieldsTableView
         })
-      });
+      };
 
     case ActionTypes.INDEX_RESULTS_REDUX_CHANGE_TABLE_HEADER_ATTRIBUTE:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         tableView: Object.assign({}, state.tableView, {
           selectedFieldsTableView: action.selectedFieldsTableView
         })
-      });
+      };
 
     case ActionTypes.INDEX_RESULTS_REDUX_SET_PER_PAGE:
       app.utils.localStorageSet('fauxton:perpageredux', action.perPage);
-      return Object.assign({}, state, {
+      return {
+        ...state,
         pagination: Object.assign({}, initialState.pagination, {
           perPage: action.perPage
         })
-      });
+      };
 
     case ActionTypes.INDEX_RESULTS_REDUX_PAGINATE_NEXT:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         pagination: Object.assign({}, state.pagination, {
           pageStart: state.pagination.pageStart + state.pagination.perPage,
           currentPage: state.pagination.currentPage + 1
         })
-      });
+      };
 
     case ActionTypes.INDEX_RESULTS_REDUX_PAGINATE_PREVIOUS:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         pagination: Object.assign({}, state.pagination, {
           pageStart: state.pagination.pageStart - state.pagination.perPage,
           currentPage: state.pagination.currentPage - 1
         })
-      });
+      };
 
     case ActionTypes.INDEX_RESULTS_REDUX_NEW_QUERY_OPTIONS:
       // includeDocs or reduce should be mutually exclusive
@@ -181,9 +219,10 @@ export default function resultsState(state = initialState, action) {
         // Switch off includeDocs when reduce is being set to true
         action.options.includeDocs = false;
       }
-      return Object.assign({}, state, {
+      return {
+        ...state,
         queryOptionsPanel: Object.assign({}, state.queryOptionsPanel, action.options)
-      });
+      };
 
     default:
       return state;
@@ -362,3 +401,4 @@ export const getCanShowNext = state => state.pagination.canShowNext;
 export const getQueryOptionsPanel = state => state.queryOptionsPanel;
 export const getPerPage = state => state.pagination.perPage;
 export const getFetchParams = state => state.fetchParams;
+export const getResultsStyle = state => state.resultsStyle;
