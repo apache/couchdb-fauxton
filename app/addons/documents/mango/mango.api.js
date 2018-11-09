@@ -97,9 +97,9 @@ export const mergeFetchParams = (queryCode, fetchParams) => {
 };
 
 export const mangoQuery = (databaseName, partitionKey, queryCode, fetchParams) => {
-  const url = FauxtonAPI.urls('mango', 'query-server', encodeURIComponent(databaseName), partitionKey);
+  const encodedPartKey = partitionKey ? encodeURIComponent(partitionKey) : '';
+  const url = FauxtonAPI.urls('mango', 'query-server', encodeURIComponent(databaseName), encodedPartKey);
   const modifiedQuery = mergeFetchParams(queryCode, fetchParams);
-
   return post(url, modifiedQuery, {raw: true});
 };
 

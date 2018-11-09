@@ -180,7 +180,10 @@ MangoIndexEditor.propTypes = {
   isDbPartitioned: PropTypes.bool.isRequired,
   saveIndex: PropTypes.func.isRequired,
   queryIndexCode: PropTypes.string.isRequired,
-  partitionKey: PropTypes.string
+  partitionKey: PropTypes.string,
+  loadIndexTemplates: PropTypes.func.isRequired,
+  clearResults: PropTypes.func.isRequired,
+  loadIndexList: PropTypes.func.isRequired
 };
 
 MangoIndexEditor.defaultProps = {

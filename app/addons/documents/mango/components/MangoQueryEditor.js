@@ -186,6 +186,10 @@ MangoQueryEditor.propTypes = {
   queryFindCode: PropTypes.string.isRequired,
   queryFindCodeChanged: PropTypes.bool,
   databaseName: PropTypes.string.isRequired,
+  partitionKey: PropTypes.string,
   runExplainQuery: PropTypes.func.isRequired,
+  runQuery: PropTypes.func.isRequired,
   manageIndexes: PropTypes.func.isRequired,
+  loadQueryHistory: PropTypes.func.isRequired,
+  clearResults: PropTypes.func.isRequired
 };
