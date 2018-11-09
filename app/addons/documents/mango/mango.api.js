@@ -15,8 +15,8 @@ import {post, get} from '../../../core/ajax';
 import FauxtonAPI from "../../../core/api";
 import Constants from '../constants';
 
-export const fetchQueryExplain = (databaseName, queryCode) => {
-  const url = FauxtonAPI.urls('mango', 'explain-server', encodeURIComponent(databaseName));
+export const fetchQueryExplain = (databaseName, partitionKey, queryCode) => {
+  const url = FauxtonAPI.urls('mango', 'explain-server', encodeURIComponent(databaseName), encodeURIComponent(partitionKey));
 
   return post(url, queryCode, {rawBody: true}).then((json) => {
     if (json.error) {
@@ -61,7 +61,7 @@ let supportsExecutionStatsCache = null;
 const supportsExecutionStats = (databaseName) => {
   if (supportsExecutionStatsCache === null) {
     return new FauxtonAPI.Promise((resolve) => {
-      mangoQuery(databaseName, {
+      mangoQuery(databaseName, '', {
         selector: {
           "_id": {"$gt": "a" }
         },
@@ -96,21 +96,21 @@ export const mergeFetchParams = (queryCode, fetchParams) => {
   };
 };
 
-export const mangoQuery = (databaseName, queryCode, fetchParams) => {
-  const url = FauxtonAPI.urls('mango', 'query-server', encodeURIComponent(databaseName));
+export const mangoQuery = (databaseName, partitionKey, queryCode, fetchParams) => {
+  const url = FauxtonAPI.urls('mango', 'query-server', encodeURIComponent(databaseName), partitionKey);
   const modifiedQuery = mergeFetchParams(queryCode, fetchParams);
 
   return post(url, modifiedQuery, {raw: true});
 };
 
-export const mangoQueryDocs = (databaseName, queryCode, fetchParams) => {
+export const mangoQueryDocs = (databaseName, partitionKey, queryCode, fetchParams) => {
   // we can only add the execution_stats field if it is supported by the server
   // otherwise Couch throws an error
   return supportsExecutionStats(databaseName).then((shouldFetchExecutionStats) => {
     if (shouldFetchExecutionStats) {
       queryCode.execution_stats = true;
     }
-    return mangoQuery(databaseName, queryCode, fetchParams)
+    return mangoQuery(databaseName, partitionKey, queryCode, fetchParams)
       .then((res) => res.json())
       .then((json) => {
         if (json.error) {

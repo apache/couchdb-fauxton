@@ -59,7 +59,8 @@ const mapStateToProps = (state, ownProps) => {
     additionalIndexesText: ownProps.additionalIndexesText,
     fetchParams: indexResults.fetchParams,
     executionStats: indexResults.executionStats,
-    warning: indexResults.warning
+    warning: indexResults.warning,
+    partitionKey: ownProps.partitionKey
   };
 };
 
@@ -74,7 +75,9 @@ const mapDispatchToProps = (dispatch/*, ownProps*/) => {
     },
 
     runQuery: (options) => {
-      const queryDocs = (params) => { return MangoAPI.mangoQueryDocs(options.databaseName, options.queryCode, params); };
+      const queryDocs = (params) => {
+        return MangoAPI.mangoQueryDocs(options.databaseName, options.partitionKey, options.queryCode, params);
+      };
 
       dispatch(Actions.hideQueryExplain());
       dispatch(Actions.newQueryFindCode(options));

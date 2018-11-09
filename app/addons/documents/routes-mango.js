@@ -56,14 +56,25 @@ const MangoIndexEditorAndQueryEditor = FauxtonAPI.RouteObject.extend({
       'allDocs', 'app', encodeURIComponent(this.databaseName), encodedPartitionKey
     );
 
-    const fetchUrl = '/' + encodeURIComponent(this.databaseName) + '/_find';
+    const partKeyUrlComponent = partitionKey ? `/${encodeURIComponent(partitionKey)}` : '';
+    const fetchUrl = '/' + encodeURIComponent(this.databaseName) + partKeyUrlComponent + '/_find';
 
     const crumbs = [
       {name: database, link: url},
       {name: app.i18n.en_US['mango-title-editor']}
     ];
 
-    const endpoint = FauxtonAPI.urls('mango', 'query-apiurl', encodeURIComponent(this.databaseName));
+    const endpoint = FauxtonAPI.urls('mango', 'query-apiurl', encodeURIComponent(this.databaseName), encodedPartitionKey);
+
+    const navigateToPartitionedView = (partKey) => {
+      const baseUrl = FauxtonAPI.urls('mango', 'query-app', encodeURIComponent(database),
+        encodeURIComponent(partKey));
+      FauxtonAPI.navigate('#/' + baseUrl);
+    };
+    const navigateToGlobalView = () => {
+      const baseUrl = FauxtonAPI.urls('mango', 'query-app', encodeURIComponent(database));
+      FauxtonAPI.navigate('#/' + baseUrl);
+    };
 
     return <MangoLayoutContainer
       database={database}
@@ -71,9 +82,12 @@ const MangoIndexEditorAndQueryEditor = FauxtonAPI.RouteObject.extend({
       docURL={FauxtonAPI.constants.DOC_URLS.MANGO_SEARCH}
       endpoint={endpoint}
       edit={false}
-      partitionKey={partitionKey}
       databaseName={this.databaseName}
       fetchUrl={fetchUrl}
+      partitionKey={partitionKey}
+      onPartitionKeySelected={navigateToPartitionedView}
+      onGlobalModeSelected={navigateToGlobalView}
+      globalMode={partitionKey === ''}
     />;
   },
 
@@ -99,7 +113,7 @@ const MangoIndexEditorAndQueryEditor = FauxtonAPI.RouteObject.extend({
     const url = FauxtonAPI.urls(
       'allDocs', 'app', encodeURIComponent(this.databaseName), encodedPartitionKey
     );
-    const endpoint = FauxtonAPI.urls('mango', 'index-apiurl', encodeURIComponent(this.databaseName));
+    const endpoint = FauxtonAPI.urls('mango', 'index-apiurl', encodeURIComponent(this.databaseName), encodedPartitionKey);
 
     const crumbs = [
       {name: database, link: url},
@@ -113,8 +127,8 @@ const MangoIndexEditorAndQueryEditor = FauxtonAPI.RouteObject.extend({
       endpoint={endpoint}
       edit={true}
       designDocs={designDocs}
-
       databaseName={this.databaseName}
+      partitionKey={partitionKey}
     />;
   }
 });

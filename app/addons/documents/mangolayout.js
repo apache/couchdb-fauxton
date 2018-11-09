@@ -20,13 +20,36 @@ import * as MangoAPI from "./mango/mango.api";
 import IndexResultsContainer from './index-results/containers/IndexResultsContainer';
 import PaginationContainer from './index-results/containers/PaginationContainer';
 import ApiBarContainer from './index-results/containers/ApiBarContainer';
+import PartitionKeySelectorContainer from './partition-key/container';
 import FauxtonAPI from "../../core/api";
 import Constants from './constants';
 
-export const RightHeader = ({ docURL, endpoint }) => {
+export const RightHeader = ({
+  docURL,
+  endpoint,
+  databaseName,
+  showPartitionKeySelector,
+  partitionKey,
+  onPartitionKeySelected,
+  onGlobalModeSelected,
+  globalMode
+}) => {
   const apiBar = <ApiBarContainer docURL={docURL} endpoint={endpoint} includeQueryOptionsParams={false}/>;
+  let partKeySelector = null;
+  if (showPartitionKeySelector) {
+    partKeySelector = (<PartitionKeySelectorContainer
+      databaseName={databaseName}
+      partitionKey={partitionKey}
+      onPartitionKeySelected={onPartitionKeySelected}
+      onGlobalModeSelected={onGlobalModeSelected}
+      globalMode={globalMode}/>
+    );
+  }
   return (
     <div className="right-header-wrapper flex-layout flex-row flex-body">
+      <div style={{flex:1, padding: '18px 6px 12px 12px'}}>
+        {partKeySelector}
+      </div>
       <div id="right-header" className="flex-body">
       </div>
       {apiBar}
@@ -48,7 +71,17 @@ export const MangoFooter = ({databaseName, fetchUrl, queryDocs}) => {
   );
 };
 
-export const MangoHeader = ({ crumbs, docURL, endpoint }) => {
+export const MangoHeader = ({
+  crumbs,
+  docURL,
+  endpoint,
+  databaseName,
+  partitionKey,
+  showPartitionKeySelector,
+  onPartitionKeySelected,
+  onGlobalModeSelected,
+  globalMode
+}) => {
   return (
     <div className="header-wrapper flex-layout flex-row">
       <div className='flex-body faux__breadcrumbs-mango-header'>
@@ -57,6 +90,12 @@ export const MangoHeader = ({ crumbs, docURL, endpoint }) => {
       <RightHeader
         docURL={docURL}
         endpoint={endpoint}
+        databaseName={databaseName}
+        showPartitionKeySelector={showPartitionKeySelector}
+        partitionKey={partitionKey}
+        onPartitionKeySelected={onPartitionKeySelected}
+        onGlobalModeSelected={onGlobalModeSelected}
+        globalMode={globalMode}
       />
     </div>
   );
@@ -66,17 +105,19 @@ MangoHeader.defaultProps = {
   crumbs: []
 };
 
-export const MangoContent = ({ edit, designDocs, explainPlan, databaseName, fetchUrl, queryDocs, docType }) => {
+export const MangoContent = ({ edit, designDocs, explainPlan, databaseName, fetchUrl, queryDocs, docType, partitionKey }) => {
   const leftContent = edit ?
     <MangoComponents.MangoIndexEditorContainer
       description={app.i18n.en_US['mango-descripton-index-editor']}
       databaseName={databaseName}
+      partitionKey={partitionKey}
     /> :
     <MangoComponents.MangoQueryEditorContainer
       description={app.i18n.en_US['mango-descripton']}
       editorTitle={app.i18n.en_US['mango-title-editor']}
       additionalIndexesText={app.i18n.en_US['mango-additional-indexes-heading']}
       databaseName={databaseName}
+      partitionKey={partitionKey}
     />;
 
   let resultsPage = <IndexResultsContainer
@@ -86,7 +127,8 @@ export const MangoContent = ({ edit, designDocs, explainPlan, databaseName, fetc
     databaseName={databaseName}
     fetchAtStartup={false}
     queryDocs={queryDocs}
-    docType={docType} />;
+    docType={docType}
+    partitionKey={partitionKey} />;
 
   let mangoFooter = <MangoFooter
     databaseName={databaseName}
@@ -119,13 +161,13 @@ class MangoLayout extends Component {
   }
 
   render() {
-    const { database, edit, docURL, crumbs, designDocs, fetchUrl, databaseName, queryFindCode } = this.props;
+    const { database, edit, docURL, crumbs, designDocs, fetchUrl, databaseName, queryFindCode, partitionKey, onPartitionKeySelected, onGlobalModeSelected, globalMode } = this.props;
     let endpoint = this.props.endpoint;
 
     if (this.props.explainPlan) {
-      endpoint = FauxtonAPI.urls('mango', 'explain-apiurl', encodeURIComponent(database));
+      endpoint = FauxtonAPI.urls('mango', 'explain-apiurl', encodeURIComponent(database), encodeURIComponent(partitionKey));
     }
-    let queryFunction = (params) => { return MangoAPI.mangoQueryDocs(databaseName, queryFindCode, params); };
+    let queryFunction = (params) => { return MangoAPI.mangoQueryDocs(databaseName, partitionKey, queryFindCode, params); };
     let docType = Constants.INDEX_RESULTS_DOC_TYPE.MANGO_QUERY;
     if (edit) {
       queryFunction = (params) => { return MangoAPI.fetchIndexes(databaseName, params); };
@@ -137,6 +179,12 @@ class MangoLayout extends Component {
           docURL={docURL}
           endpoint={endpoint}
           crumbs={crumbs}
+          databaseName={databaseName}
+          partitionKey={partitionKey}
+          showPartitionKeySelector={!edit}
+          onPartitionKeySelected={onPartitionKeySelected}
+          onGlobalModeSelected={onGlobalModeSelected}
+          globalMode={globalMode}
         />
         <MangoContent
           edit={edit}
@@ -146,6 +194,7 @@ class MangoLayout extends Component {
           fetchUrl={fetchUrl}
           queryDocs={queryFunction}
           docType={docType}
+          partitionKey={partitionKey}
         />
       </div>
     );
@@ -156,7 +205,11 @@ const mapStateToProps = ({ mangoQuery }, ownProps) => {
   return {
     explainPlan: mangoQuery.explainPlan,
     queryFindCode: mangoQuery.queryFindCode,
-    partitionKey: ownProps.partitionKey
+    partitionKey: ownProps.partitionKey,
+    databaseName: ownProps.databaseName,
+    onPartitionKeySelected: ownProps.onPartitionKeySelected,
+    onGlobalModeSelected: ownProps.onGlobalModeSelected,
+    globalMode: ownProps.globalMode
   };
 };
 
