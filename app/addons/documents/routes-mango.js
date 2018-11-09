@@ -11,10 +11,11 @@
 // the License.
 
 import React from 'react';
-import app from "../../app";
-import FauxtonAPI from "../../core/api";
-import Databases from "../databases/resources";
-import Documents from "./shared-resources";
+import app from '../../app';
+import FauxtonAPI from '../../core/api';
+import Databases from '../databases/resources';
+import DatabaseActions from '../databases/actions';
+import Documents from './shared-resources';
 import {MangoLayoutContainer} from './mangolayout';
 
 const MangoIndexEditorAndQueryEditor = FauxtonAPI.RouteObject.extend({
@@ -119,6 +120,8 @@ const MangoIndexEditorAndQueryEditor = FauxtonAPI.RouteObject.extend({
       {name: database, link: url},
       {name: app.i18n.en_US['mango-indexeditor-title']}
     ];
+
+    DatabaseActions.fetchSelectedDatabaseInfo(database);
 
     return <MangoLayoutContainer
       showIncludeAllDocs={false}

@@ -11,23 +11,29 @@
 // the License.
 
 import PropTypes from 'prop-types';
-
-import React, { Component } from "react";
-import ReactSelect from "react-select";
-import "../../../../../assets/js/plugins/prettify";
-import app from "../../../../app";
-import FauxtonAPI from "../../../../core/api";
-import ReactComponents from "../../../components/react-components";
+import React, { Component } from 'react';
+import ReactSelect from 'react-select';
+import '../../../../../assets/js/plugins/prettify';
+import app from '../../../../app';
+import FauxtonAPI from '../../../../core/api';
+import ReactComponents from '../../../components/react-components';
 
 const PaddedBorderedBox = ReactComponents.PaddedBorderedBox;
 const CodeEditorPanel = ReactComponents.CodeEditorPanel;
 const ConfirmButton = ReactComponents.ConfirmButton;
+const LoadLines = ReactComponents.LoadLines;
 const getDocUrl = app.helpers.getDocUrl;
 
 export default class MangoIndexEditor extends Component {
 
   constructor(props) {
     super(props);
+    this.state = {
+      partitionedSelected: true
+    };
+    this.onTemplateSelected = this.onTemplateSelected.bind(this);
+    this.onTogglePartitioned = this.onTogglePartitioned.bind(this);
+    this.saveIndex = this.saveIndex.bind(this);
   }
 
   componentDidMount() {
@@ -48,7 +54,9 @@ export default class MangoIndexEditor extends Component {
   }
 
   setEditorValue(newValue = '') {
-    return this.codeEditor.getEditor().setValue(newValue);
+    if (this.codeEditor) {
+      return this.codeEditor.getEditor().setValue(newValue);
+    }
   }
 
   getEditorValue() {
@@ -63,11 +71,33 @@ export default class MangoIndexEditor extends Component {
     this.setEditorValue(selectedItem.value);
   }
 
+  onTogglePartitioned() {
+    this.setState({partitionedSelected: !this.state.partitionedSelected});
+  }
+
+  partitionedCheckobx() {
+    if (!this.props.isDbPartitioned) {
+      return null;
+    }
+    return (
+      <label style={{margin: '10px 10px 0px 0px'}}>
+        <input
+          id="js-partitioned-index"
+          type="checkbox"
+          checked={this.state.partitionedSelected}
+          onChange={this.onTogglePartitioned}
+          style={{margin: '0px 10px 0px 0px'}} />
+        Partitioned
+      </label>
+    );
+  }
+
   editor() {
-    const editQueryURL = '#' + FauxtonAPI.urls('mango', 'query-app', encodeURIComponent(this.props.databaseName), '');
+    const encodedPartKey = this.props.partitionKey ? encodeURIComponent(this.props.partitionKey) : '';
+    const editQueryURL = '#' + FauxtonAPI.urls('mango', 'query-app', encodeURIComponent(this.props.databaseName), encodedPartKey);
     return (
       <div className="mango-editor-wrapper">
-        <form className="form-horizontal" onSubmit={(ev) => { this.saveIndex(ev); }}>
+        <form className="form-horizontal" onSubmit={this.saveIndex}>
           <div className="padded-box">
             <ReactSelect
               className="mango-select"
@@ -77,7 +107,7 @@ export default class MangoIndexEditor extends Component {
               searchable={false}
               clearable={false}
               autosize={false}
-              onChange={(item) => { this.onTemplateSelected(item); }}
+              onChange={this.onTemplateSelected}
             />
           </div>
           <PaddedBorderedBox>
@@ -87,6 +117,7 @@ export default class MangoIndexEditor extends Component {
               title="Index"
               docLink={getDocUrl('MANGO_INDEX')}
               defaultCode={this.props.queryIndexCode} />
+            {this.partitionedCheckobx()}
           </PaddedBorderedBox>
           <div className="padded-box">
             <div className="control-group">
@@ -100,31 +131,59 @@ export default class MangoIndexEditor extends Component {
   }
 
   render() {
+    if (this.props.isLoading) {
+      return <LoadLines />;
+    }
     return this.editor();
   }
 
   saveIndex(event) {
     event.preventDefault();
 
-    if (this.editorHasErrors()) {
+    const showInvalidCodeMsg = () => {
       FauxtonAPI.addNotification({
         msg: 'Please fix the Javascript errors and try again.',
         type: 'error',
         clear: true
       });
+    };
+    if (this.editorHasErrors()) {
+      showInvalidCodeMsg();
       return;
+    }
+
+    let indexCode = this.getEditorValue();
+    if (this.props.isDbPartitioned) {
+      // Set the partitioned property if not yet set
+      try {
+        const json = JSON.parse(indexCode);
+        if (json.partitioned !== true && json.partitioned !== false) {
+          json.partitioned = this.state.partitionedSelected;
+        }
+        indexCode = JSON.stringify(json);
+      } catch (err) {
+        showInvalidCodeMsg();
+      }
     }
 
     this.props.saveIndex({
       databaseName: this.props.databaseName,
-      indexCode: this.getEditorValue(),
+      indexCode: indexCode,
       fetchParams: this.props.fetchParams
     });
   }
 }
 
 MangoIndexEditor.propTypes = {
+  isLoading: PropTypes.bool.isRequired,
   databaseName: PropTypes.string.isRequired,
+  isDbPartitioned: PropTypes.bool.isRequired,
   saveIndex: PropTypes.func.isRequired,
-  queryIndexCode: PropTypes.string.isRequired
+  queryIndexCode: PropTypes.string.isRequired,
+  partitionKey: PropTypes.string
+};
+
+MangoIndexEditor.defaultProps = {
+  isLoading: true,
+  isDbPartitioned: false
 };
