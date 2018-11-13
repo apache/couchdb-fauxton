@@ -80,7 +80,7 @@ export default class MangoIndexEditor extends Component {
       return null;
     }
     return (
-      <label style={{margin: '10px 10px 0px 0px'}}>
+      <label>
         <input
           id="js-partitioned-index"
           type="checkbox"

@@ -26,7 +26,6 @@ import MangoIndexEditor from '../components/MangoIndexEditor';
 import mangoReducer from '../mango.reducers';
 import '../../base';
 
-const assert = utils.assert;
 const restore = utils.restore;
 const databaseName = 'testdb';
 
@@ -60,10 +59,10 @@ describe('MangoIndexEditorContainer', function () {
     );
 
     const indexEditor = wrapper.find(MangoIndexEditor);
-    assert.ok(indexEditor.exists());
+    expect(indexEditor.exists()).toBe(true);
     if (indexEditor.exists()) {
       const json = JSON.parse(indexEditor.props().queryIndexCode);
-      assert.equal(json.index.fields[0], 'foo');
+      expect(json.index.fields[0]).toBe('foo');
     }
   });
 
@@ -76,10 +75,10 @@ describe('MangoIndexEditorContainer', function () {
       </Provider>
     );
     const indexEditor = wrapper.find(MangoIndexEditor);
-    assert.ok(indexEditor.exists());
+    expect(indexEditor.exists()).toBe(true);
     if (indexEditor.exists()) {
       const json = JSON.parse(indexEditor.props().queryIndexCode);
-      assert.equal(json.index.fields[0], 'foo');
+      expect(json.index.fields[0]).toBe('foo');
     }
   });
 
@@ -190,10 +189,10 @@ describe('MangoQueryEditorContainer', function () {
       </Provider>
     );
     const queryEditor = wrapper.find(MangoQueryEditor);
-    assert.ok(queryEditor.exists());
+    expect(queryEditor.exists()).toBe(true);
     if (queryEditor.exists()) {
       const query = JSON.parse(queryEditor.props().queryFindCode);
-      assert.property(query.selector, '_id');
+      expect(query.selector).toHaveProperty('_id');
     }
   });
 });
