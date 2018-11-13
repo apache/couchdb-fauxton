@@ -135,8 +135,8 @@ FauxtonAPI.registerUrls('view', {
     return 'database/' + database + partitionUrlComponent(partitionKey) + '/_design/' + designDoc + '/_view/' + indexName + '/edit';
   },
 
-  showView: function (database, designDoc, viewName) {
-    return '/database/' + database + '/' + designDoc + '/_view/' + viewName;
+  showView: function (database, partitionKey, designDoc, viewName) {
+    return '/database/' + database + partitionUrlComponent(partitionKey) + '/' + designDoc + '/_view/' + viewName;
   },
 
   fragment: function (database, designDoc, viewName) {

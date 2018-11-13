@@ -89,10 +89,14 @@ export default class CloneIndexModal extends React.Component {
               <DesignDocSelector
                 ref={node => this.designDocSelector = node}
                 designDocList={this.props.designDocArray}
+                isDbPartitioned={this.props.isDbPartitioned}
                 selectedDesignDocName={this.props.selectedDesignDoc}
+                selectedDesignDocPartitioned={this.props.selectedDesignDocPartitioned}
                 newDesignDocName={this.props.newDesignDocName}
+                newDesignDocPartitioned={this.props.newDesignDocPartitioned}
                 onSelectDesignDoc={this.props.selectDesignDoc}
-                onChangeNewDesignDocName={this.props.updateNewDesignDocName} />
+                onChangeNewDesignDocName={this.props.updateNewDesignDocName}
+                onChangeNewDesignDocPartitioned={this.props.updateNewDesignDocPartitioned} />
             </div>
 
             <div className="clone-index-name-row">

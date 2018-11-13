@@ -21,6 +21,7 @@ export default class DesignDocSelector extends Component {
 
   constructor(props) {
     super(props);
+    this.onTogglePartitioned = this.onTogglePartitioned.bind(this);
   }
 
   validate() {
@@ -80,6 +81,39 @@ export default class DesignDocSelector extends Component {
     );
   }
 
+  onTogglePartitioned() {
+    this.props.onChangeNewDesignDocPartitioned(!this.props.newDesignDocPartitioned);
+  }
+
+  getPartitionedCheckbox() {
+    if (!this.props.isDbPartitioned) {
+      return null;
+    }
+    const isExistingDDoc = this.props.selectedDesignDocName !== 'new-doc';
+    const checked = isExistingDDoc ?
+      this.props.selectedDesignDocPartitioned :
+      this.props.newDesignDocPartitioned;
+    const labelClass = isExistingDDoc ? 'check--disabled' : '';
+    const inputTitle = isExistingDDoc ?
+      (this.props.selectedDesignDocPartitioned ? 'Design document is partitioned' : 'Design document is not partitioned') :
+      (this.props.newDesignDocPartitioned ? 'New document will be partitioned' : 'New document will not be partitioned');
+    return (
+      <div className="ddoc-selector-partitioned">
+        <label className={labelClass} title={inputTitle}>
+          <input
+            id="js-ddoc-selector-partitioned"
+            type="checkbox"
+            title={inputTitle}
+            checked={checked}
+            onChange={this.onTogglePartitioned}
+            style={{margin: '0px 10px 0px 0px'}}
+            disabled={isExistingDDoc}/>
+          Partitioned
+        </label>
+      </div>
+    );
+  }
+
   render() {
     const selectContent =
       <optgroup label="Select a document">
@@ -101,6 +135,7 @@ export default class DesignDocSelector extends Component {
           />
         </div>
         {this.getNewDDocField()}
+        {this.getPartitionedCheckbox()}
       </div>
     );
   }
@@ -117,7 +152,9 @@ DesignDocSelector.propTypes = {
   onSelectDesignDoc: PropTypes.func.isRequired,
   onChangeNewDesignDocName: PropTypes.func.isRequired,
   selectedDesignDocName: PropTypes.string.isRequired,
+  selectedDesignDocPartitioned: PropTypes.bool.isRequired,
   newDesignDocName: PropTypes.string.isRequired,
+  newDesignDocPartitioned: PropTypes.bool.isRequired,
   designDocLabel: PropTypes.string,
   docURL: PropTypes.string
 };

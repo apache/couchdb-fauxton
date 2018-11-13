@@ -13,35 +13,39 @@
 import { connect } from 'react-redux';
 import IndexEditor from './IndexEditor';
 import Actions from '../actions';
-import { getSaveDesignDoc, getDesignDocIds, reduceSelectedOption, hasCustomReduce } from '../reducers';
+import { getSaveDesignDoc, getDesignDocList, reduceSelectedOption, hasCustomReduce, getDesignDocPartitioned } from '../reducers';
 
-const mapStateToProps = ({ indexEditor }) => {
+const mapStateToProps = ({ indexEditor, databases }, ownProps) => {
   return {
     database: indexEditor.database,
     isNewView: indexEditor.isNewView,
     viewName: indexEditor.viewName,
     designDocs: indexEditor.designDocs,
-    designDocList: getDesignDocIds(indexEditor),
+    designDocList: getDesignDocList(indexEditor),
     originalViewName: indexEditor.originalViewName,
     originalDesignDocName: indexEditor.originalDesignDocName,
     isNewDesignDoc: indexEditor.isNewDesignDoc,
     designDocId: indexEditor.designDocId,
+    designDocPartitioned: getDesignDocPartitioned(indexEditor, databases.isDbPartitioned),
     newDesignDocName: indexEditor.newDesignDocName,
-    saveDesignDoc: getSaveDesignDoc(indexEditor),
+    newDesignDocPartitioned: indexEditor.newDesignDocPartitioned,
+    saveDesignDoc: getSaveDesignDoc(indexEditor, databases.isDbPartitioned),
     map: indexEditor.view.map,
     isLoading: indexEditor.isLoading,
     reduce: indexEditor.view.reduce,
     reduceOptions: indexEditor.reduceOptions,
     reduceSelectedOption: reduceSelectedOption(indexEditor),
     hasCustomReduce: hasCustomReduce(indexEditor),
-    hasReduce: !!indexEditor.view.reduce
+    hasReduce: !!indexEditor.view.reduce,
+    isDbPartitioned: databases.isDbPartitioned,
+    partitionKey: ownProps.partitionKey
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    saveView: (viewInfo) => {
-      dispatch(Actions.saveView(viewInfo));
+    saveView: (viewInfo, navigateToURL) => {
+      dispatch(Actions.saveView(viewInfo, navigateToURL));
     },
 
     changeViewName: (name) => {
@@ -58,6 +62,10 @@ const mapDispatchToProps = (dispatch) => {
 
     updateNewDesignDocName: (designDocName) => {
       dispatch(Actions.updateNewDesignDocName(designDocName));
+    },
+
+    updateNewDesignDocPartitioned: (isPartitioned) => {
+      dispatch(Actions.updateNewDesignDocPartitioned(isPartitioned));
     },
 
     updateReduceCode: (code) => {

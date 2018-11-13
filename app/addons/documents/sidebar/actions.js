@@ -131,6 +131,15 @@ const updateNewDesignDocName = (designDocName) => (dispatch) => {
   });
 };
 
+const updateNewDesignDocPartitioned = (isPartitioned) => (dispatch) => {
+  dispatch({
+    type: ActionTypes.SIDEBAR_CLONE_MODAL_DESIGN_DOC_NEW_PARTITIONED_UPDATED,
+    options: {
+      value: isPartitioned
+    }
+  });
+};
+
 const selectDesignDoc = (designDoc) => (dispatch) => {
   dispatch({
     type: ActionTypes.SIDEBAR_CLONE_MODAL_DESIGN_DOC_CHANGE,
@@ -159,6 +168,7 @@ export default {
   showCloneIndexModal,
   hideCloneIndexModal,
   updateNewDesignDocName,
+  updateNewDesignDocPartitioned,
   selectDesignDoc,
   setNewCloneIndexName,
   dispatchExpandSelectedItem

@@ -12,8 +12,8 @@
 
 import PropTypes from 'prop-types';
 import React from 'react';
-import ReactDOM from 'react-dom';
 import FauxtonAPI from '../../../../core/api';
+import DocHelpers from '../../helpers';
 import DesignDoc from './DesignDoc';
 
 export default class DesignDocList extends React.Component {
@@ -43,12 +43,7 @@ export default class DesignDocList extends React.Component {
   designDocList = () => {
     return _.map(this.props.designDocs, (designDoc, key) => {
       const ddName = decodeURIComponent(designDoc.safeId);
-      // By default a design doc is partitioned if the database is partitioned
-      let isDDocPartitioned = this.props.isDbPartitioned;
-      // Check if it is explictly set to not partitioned
-      if (this.props.isDbPartitioned && designDoc.options && designDoc.options.partitioned === false) {
-        isDDocPartitioned = false;
-      }
+      const isDDocPartitioned = DocHelpers.isDDocPartitioned(designDoc, this.props.isDbPartitioned);
 
       // only pass down the selected nav info and toggle info if they're relevant for this particular design doc
       let expanded = false,

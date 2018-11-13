@@ -10,9 +10,10 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import React from "react";
-import app from "../../../app";
-import ActionTypes from "./actiontypes";
+import React from 'react';
+import app from '../../../app';
+import Helpers from '../helpers';
+import ActionTypes from './actiontypes';
 
 const initialState = {
   designDocs: new Backbone.Collection(),
@@ -37,6 +38,7 @@ const initialState = {
   cloneIndexModalTitle: '',
   cloneIndexModalSelectedDesignDoc: '',
   cloneIndexModalNewDesignDocName: '',
+  cloneIndexModalNewDesignDocPartitioned: true,
   cloneIndexModalNewIndexName: '',
   cloneIndexModalSourceIndexName: '',
   cloneIndexModalSourceDesignDocName: '',
@@ -136,6 +138,16 @@ function getDesignDocList (designDocs) {
   return ddocsList;
 }
 
+export function getDesignDocPartitioned(state, isDbPartitioned) {
+  const designDoc = state.designDocs.find(ddoc => {
+    return state.cloneIndexModalSelectedDesignDoc == ddoc.id;
+  });
+  if (designDoc) {
+    return Helpers.isDDocPartitioned(designDoc.get('doc'), isDbPartitioned);
+  }
+  return false;
+}
+
 export const getDatabase = (state) => {
   if (state.loading) {
     return {};
@@ -212,6 +224,12 @@ export default function sidebar(state = initialState, action) {
       return {
         ...state,
         cloneIndexModalNewDesignDocName: options.value
+      };
+
+    case ActionTypes.SIDEBAR_CLONE_MODAL_DESIGN_DOC_NEW_PARTITIONED_UPDATED:
+      return {
+        ...state,
+        cloneIndexModalNewDesignDocPartitioned: options.value
       };
 
     case ActionTypes.SIDEBAR_CLONE_MODAL_UPDATE_INDEX_NAME:

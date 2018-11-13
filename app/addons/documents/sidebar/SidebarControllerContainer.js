@@ -13,7 +13,7 @@
 import { connect } from 'react-redux';
 import SidebarComponents from './sidebar';
 import Action from './actions';
-import { getDatabase } from './reducers';
+import { getDatabase, getDesignDocPartitioned } from './reducers';
 
 
 // returns a simple array of design doc IDs
@@ -69,7 +69,9 @@ const mapStateToProps = ({ sidebar, databases }, ownProps) => {
     cloneIndexModalVisible: sidebar.cloneIndexModalVisible,
     cloneIndexModalTitle: sidebar.cloneIndexModalTitle,
     cloneIndexModalSelectedDesignDoc: sidebar.cloneIndexModalSelectedDesignDoc,
+    cloneIndexModalSelectedDesignDocPartitioned: getDesignDocPartitioned(sidebar, databases.isDbPartitioned),
     cloneIndexModalNewDesignDocName: sidebar.cloneIndexModalNewDesignDocName,
+    cloneIndexModalNewDesignDocPartitioned: sidebar.cloneIndexModalNewDesignDocPartitioned,
     cloneIndexModalOnSubmit: sidebar.cloneIndexModalOnSubmit,
     cloneIndexDesignDocProp: sidebar.cloneIndexDesignDocProp,
     cloneIndexModalNewIndexName: sidebar.cloneIndexModalNewIndexName,
@@ -101,6 +103,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     updateNewDesignDocName: (designDocName) => {
       dispatch(Action.updateNewDesignDocName(designDocName));
+    },
+    updateNewDesignDocPartitioned: (isPartitioned) => {
+      dispatch(Action.updateNewDesignDocPartitioned(isPartitioned));
     },
     setNewCloneIndexName: (indexName) => {
       dispatch(Action.setNewCloneIndexName(indexName));

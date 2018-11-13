@@ -35,13 +35,22 @@ export default class IndexEditor extends Component {
     }
   }
 
+  isPartitionedView() {
+    if (this.props.designDocId === 'new-doc') {
+      return this.props.newDesignDocPartitioned;
+    }
+    return this.props.designDocPartitioned;
+  }
+
   saveView(el) {
     el.preventDefault();
 
     if (!this.designDocSelector.validate()) {
       return;
     }
-
+    const encodedPartKey = this.isPartitionedView() && this.props.partitionKey ? encodeURIComponent(this.props.partitionKey) : '';
+    const url = FauxtonAPI.urls('view', 'showView', this.props.database.safeID(), encodedPartKey,
+      this.props.saveDesignDoc.safeID(), encodeURIComponent(this.props.viewName));
     this.props.saveView({
       database: this.props.database,
       isNewView: this.props.isNewView,
@@ -54,7 +63,7 @@ export default class IndexEditor extends Component {
       map: this.mapEditor.getValue(),
       reduce: this.reduceEditor.getReduceValue(),
       designDocs: this.props.designDocs
-    });
+    }, url);
   }
 
   viewChange(el) {
@@ -63,6 +72,17 @@ export default class IndexEditor extends Component {
 
   updateMapCode(code) {
     this.props.updateMapCode(code);
+  }
+
+  getCancelLink() {
+    const encodedDatabase = encodeURIComponent(this.props.database.id);
+    const encodedPartitionKey = this.props.partitionKey ? encodeURIComponent(this.props.partitionKey) : '';
+    const encodedDDoc = encodeURIComponent(this.props.designDocId);
+    const encodedView = encodeURIComponent(this.props.viewName);
+    if (this.props.designDocId === 'new-doc' || this.props.isNewView) {
+      return '#' + FauxtonAPI.urls('allDocs', 'app', encodedDatabase, encodedPartitionKey);
+    }
+    return '#' + FauxtonAPI.urls('view', 'showView', encodedDatabase, encodedPartitionKey, encodedDDoc, encodedView);
   }
 
   render() {
@@ -76,7 +96,6 @@ export default class IndexEditor extends Component {
 
     const pageHeader = (this.props.isNewView) ? 'New View' : 'Edit View';
     const btnLabel = (this.props.isNewView) ? 'Create Document and then Build Index' : 'Save Document and then Build Index';
-    const cancelLink = '#' + FauxtonAPI.urls('view', 'showView', this.props.database.id, this.props.designDocId, this.props.viewName);
     return (
       <div className="define-view" >
         <form className="form-horizontal view-query-save" onSubmit={this.saveView.bind(this)}>
@@ -86,10 +105,14 @@ export default class IndexEditor extends Component {
             <DesignDocSelector
               ref={(el) => { this.designDocSelector = el; }}
               designDocList={this.props.designDocList}
+              isDbPartitioned={this.props.isDbPartitioned}
               selectedDesignDocName={this.props.designDocId}
+              selectedDesignDocPartitioned={this.props.designDocPartitioned}
               newDesignDocName={this.props.newDesignDocName}
+              newDesignDocPartitioned={this.props.newDesignDocPartitioned}
               onSelectDesignDoc={this.props.selectDesignDoc}
               onChangeNewDesignDocName={this.props.updateNewDesignDocName}
+              onChangeNewDesignDocPartitioned={this.props.updateNewDesignDocPartitioned}
               docLink={getDocUrl('DESIGN_DOCS')} />
           </div>
 
@@ -124,7 +147,7 @@ export default class IndexEditor extends Component {
           <div className="padded-box">
             <div className="control-group">
               <ConfirmButton id="save-view" text={btnLabel} />
-              <a href={cancelLink} className="index-cancel-link">Cancel</a>
+              <a href={this.getCancelLink()} className="index-cancel-link">Cancel</a>
             </div>
           </div>
         </form>
@@ -137,13 +160,16 @@ IndexEditor.propTypes = {
   isLoading:PropTypes.bool.isRequired,
   isNewView: PropTypes.bool.isRequired,
   database: PropTypes.object.isRequired,
+  isDbPartitioned: PropTypes.bool.isRequired,
   designDocId: PropTypes.string.isRequired,
+  newDesignDocName: PropTypes.string.isRequired,
   viewName: PropTypes.string.isRequired,
   isNewDesignDoc: PropTypes.bool.isRequired,
   originalViewName: PropTypes.string,
   originalDesignDocName: PropTypes.string,
   designDocs: PropTypes.object,
   saveDesignDoc: PropTypes.object,
+  partitionKey: PropTypes.string,
   updateNewDesignDocName: PropTypes.func.isRequired,
   changeViewName: PropTypes.func.isRequired,
   updateMapCode: PropTypes.func.isRequired

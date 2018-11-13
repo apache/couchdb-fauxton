@@ -100,6 +100,20 @@ Documents.Doc = FauxtonAPI.Model.extend({
     return this.docType() === "design doc";
   },
 
+  setDDocPartitionedOption: function (isPartitioned) {
+    if (!this.isDdoc()) {
+      return false;
+    }
+    let options = this.get('options');
+    if (!options) {
+      options = {};
+    }
+    options.partitioned = isPartitioned;
+    this.set({ options });
+
+    return true;
+  },
+
   setDdocView: function (view, map, reduce) {
     if (!this.isDdoc()) {
       return false;
