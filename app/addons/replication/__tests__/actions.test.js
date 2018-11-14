@@ -23,10 +23,10 @@ FauxtonAPI.session = {
   }
 };
 
-Object.defineProperty(window.location, 'origin', {
-  writable: true,
-  value: 'http://dev:8000'
-});
+// Object.defineProperty(window.location, 'origin', {
+//   writable: true,
+//   value: 'http://dev:8000'
+// });
 
 const assert = utils.assert;
 
@@ -144,11 +144,20 @@ describe("Replication Actions", () => {
       "targetAuth":{"username":"tester", "password":"testerpass"}
     };
 
-    it('builds up correct state', (done) => {
+    it.only('builds up correct state', (done) => {
       const dispatch = ({type, options}) => {
+        console.log('dispatch', type, options);
         if (ActionTypes.REPLICATION_SET_STATE_FROM_DOC === type) {
-          assert.deepEqual(docState, options);
-          setTimeout(done);
+          console.log('deep equal');
+          try {
+            expect(docState).toEqual(options);
+          } catch (err) {
+            console.log(err);
+          }
+          
+          // setTimeout(done);
+          console.log('done');
+          done();
         }
       };
 

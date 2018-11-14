@@ -1,5 +1,5 @@
 {
-  "testPathDirs": ["app"],
+  "roots": ["app"],
   "testPathIgnorePatterns": ["/node_modules/", "stub", "fakeActiveTaskResponse", "fixtures"],
 
   "setupFiles": ["./jest-shim.js"],
