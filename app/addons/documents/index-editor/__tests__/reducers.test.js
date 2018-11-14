@@ -11,7 +11,7 @@
 // the License.
 
 import Documents from '../../../documents/resources';
-import reducer, { hasCustomReduce, getDesignDocIds } from '../reducers';
+import reducer, { hasCustomReduce, getDesignDocList, getDesignDocPartitioned, getSaveDesignDoc } from '../reducers';
 import ActionTypes from '../actiontypes';
 import '../../base';
 
@@ -252,7 +252,7 @@ describe('IndexEditor Reducer', () => {
 
     it('only filters mango docs', () => {
       const newState = reducer(undefined, editAction);
-      const designDocs = getDesignDocIds(newState);
+      const designDocs = getDesignDocList(newState);
 
       expect(designDocs.length).toBe(1);
       expect(designDocs[0]).toBe('_design/test-doc');
@@ -294,6 +294,57 @@ describe('IndexEditor Reducer', () => {
       };
       newState = reducer(newState, selectReduceAction);
       expect(newState.view.reduce).toBe('_sum');
+    });
+  });
+
+  describe('getDesignDocPartitioned', () => {
+    const designDocs = [
+      {id: '_design/docGlobal', get: () => { return {options: { partitioned: false }}; }},
+      {id: '_design/docPartitioned', get: () => { return {options: { partitioned: true }}; }},
+      {id: '_design/docNoOptions', get: () => { return {};}}
+    ];
+
+    it('returns true for ddocs without partitioned flag on partitioned dbs', () => {
+      const isDbPartitioned = true;
+      const state = { designDocs, designDocId: '_design/docNoOptions' };
+      expect(getDesignDocPartitioned(state, isDbPartitioned)).toBe(true);
+    });
+
+    it('returns false for ddocs where partitioned is false on partitioned dbs', () => {
+      const isDbPartitioned = true;
+      const state = { designDocs, designDocId: '_design/docGlobal' };
+      expect(getDesignDocPartitioned(state, isDbPartitioned)).toBe(false);
+    });
+
+    it('returns true for ddocs where partitioned is true on partitioned dbs', () => {
+      const isDbPartitioned = true;
+      const state = { designDocs, designDocId: '_design/docPartitioned' };
+      expect(getDesignDocPartitioned(state, isDbPartitioned)).toBe(true);
+    });
+
+    it('any ddoc is global on non-partitioned dbs', () => {
+      const isDbPartitioned = false;
+      const state = { designDocs, designDocId: '_design/docGlobal' };
+      expect(getDesignDocPartitioned(state, isDbPartitioned)).toBe(false);
+
+      const state2 = { designDocs, designDocId: '_design/docPartitioned' };
+      expect(getDesignDocPartitioned(state2, isDbPartitioned)).toBe(false);
+
+      const state3 = { designDocs, designDocId: '_design/docNoOptions' };
+      expect(getDesignDocPartitioned(state3, isDbPartitioned)).toBe(false);
+    });
+
+  });
+
+  describe.only('getSaveDesignDoc', () => {
+
+    it('only sets partitioned flag when db is partitioned', () => {
+      const state = { designDocId: 'new-doc', newDesignDocPartitioned: true, };
+      const ddoc = getSaveDesignDoc(state, true);
+      expect(ddoc.get('options')).toEqual({ partitioned: true });
+
+      const ddoc2 = getSaveDesignDoc(state, false);
+      expect(ddoc2.get('options')).toBeUndefined();
     });
   });
 });
