@@ -14,6 +14,7 @@ import React from 'react';
 import FauxtonAPI from "../../core/api";
 import BaseRoute from "./shared-routes";
 import ActionsIndexEditor from "./index-editor/actions";
+import DatabaseActions from '../databases/actions';
 import Databases from "../databases/base";
 import SidebarActions from './sidebar/actions';
 import {SidebarItemSelection} from './sidebar/helpers';
@@ -82,6 +83,7 @@ const IndexEditorAndResults = BaseRoute.extend({
       designDocs: this.designDocs,
       designDocId: '_design/' + ddoc
     });
+    DatabaseActions.fetchSelectedDatabaseInfo(databaseName);
 
     const selectedNavItem = new SidebarItemSelection('designDoc', {
       designDocName: ddoc,
@@ -144,6 +146,7 @@ const IndexEditorAndResults = BaseRoute.extend({
       designDocId: designDoc,
       isNewDesignDoc: isNewDesignDoc
     });
+    DatabaseActions.fetchSelectedDatabaseInfo(database);
 
     const selectedNavItem = new SidebarItemSelection('');
     const dropDownLinks = this.getCrumbs(this.database);
@@ -171,6 +174,7 @@ const IndexEditorAndResults = BaseRoute.extend({
       designDocs: this.designDocs,
       designDocId: '_design/' + ddocName
     });
+    DatabaseActions.fetchSelectedDatabaseInfo(databaseName);
 
     const selectedNavItem = new SidebarItemSelection('designDoc', {
       designDocName: ddocName,

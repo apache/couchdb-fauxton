@@ -29,22 +29,23 @@ export default class BulkDocumentHeaderController extends React.Component {
     } = this.props;
 
     let metadata, json, table;
-    if ((docType === Constants.INDEX_RESULTS_DOC_TYPE.VIEW)) {
+    if (docType === Constants.INDEX_RESULTS_DOC_TYPE.VIEW) {
       metadata = <Button
         className={selectedLayout === Constants.LAYOUT_ORIENTATION.METADATA ? 'active' : ''}
         onClick={this.toggleLayout.bind(this, Constants.LAYOUT_ORIENTATION.METADATA)}
       >
           Metadata
       </Button>;
-    } else if ((docType === Constants.INDEX_RESULTS_DOC_TYPE.MANGO_INDEX)) {
+    } else if (docType === Constants.INDEX_RESULTS_DOC_TYPE.MANGO_INDEX) {
       return null;
     }
 
-    // Reduce doesn't allow for include_docs=true, so we'll prevent JSON and table
-    // views since they force include_docs=true when reduce is checked in the query options panel.
-    // Partitioned queries don't supprt include_docs=true either.
+    // Reduce doesn't allow for include_docs=true, so we'll hide the JSON and table modes
+    // since they force 'include_docs=true' when reduce is checked in the query options panel.
+    // Partitioned views don't support 'include_docs=true' either.
     const isAllDocsQuery = fetchUrl && fetchUrl.includes('/_all_docs');
-    if (isAllDocsQuery || (!queryOptionsParams.reduce && !partitionKey)) {
+    const isMangoQuery = docType === Constants.INDEX_RESULTS_DOC_TYPE.MANGO_QUERY;
+    if (isAllDocsQuery || isMangoQuery || (!queryOptionsParams.reduce && !partitionKey)) {
       table = <Button
         className={selectedLayout === Constants.LAYOUT_ORIENTATION.TABLE ? 'active' : ''}
         onClick={this.toggleLayout.bind(this, Constants.LAYOUT_ORIENTATION.TABLE)}

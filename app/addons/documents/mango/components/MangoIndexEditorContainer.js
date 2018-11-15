@@ -18,13 +18,16 @@ import Helpers from '../mango.helper';
 import Actions from '../mango.actions';
 import * as MangoAPI from '../mango.api';
 
-const mapStateToProps = ({ mangoQuery, indexResults }, ownProps) => {
+const mapStateToProps = ({ mangoQuery, indexResults, databases }, ownProps) => {
   return {
     description: ownProps.description,
     databaseName: ownProps.databaseName,
     queryIndexCode: Helpers.formatCode(mangoQuery.queryIndexCode),
     templates: mangoQuery.queryIndexTemplates,
     fetchParams: indexResults.fetchParams,
+    partitionKey: ownProps.partitionKey,
+    isLoading: databases.isLoadingDbInfo,
+    isDbPartitioned: databases.isDbPartitioned
   };
 };
 

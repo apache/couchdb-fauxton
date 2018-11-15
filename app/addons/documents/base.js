@@ -222,40 +222,40 @@ FauxtonAPI.registerUrls('mango', {
     return Helpers.getServerUrl('/' + db + '/_index' + query);
   },
 
-  'index-apiurl': function (db, query) {
+  'index-apiurl': function (db, partitionKey, query) {
     if (!query) {
       query = '';
     }
 
-    return Helpers.getApiUrl('/' + db + '/_index' + query);
+    return Helpers.getApiUrl('/' + db + partitionUrlComponent(partitionKey) + '/_index' + query);
   },
 
-  'index-app': function (db, query) {
+  'index-app': function (db, partitionKey, query) {
     if (!query) {
       query = '';
     }
 
-    return 'database/' + db + '/_index' + query;
+    return 'database/' + db + partitionUrlComponent(partitionKey) + '/_index' + query;
   },
 
   'index-server-bulk-delete': function (db) {
     return Helpers.getServerUrl('/' + db + '/_index/_bulk_delete');
   },
 
-  'query-server': function (db, query) {
+  'query-server': function (db, partitionKey, query) {
     if (!query) {
       query = '';
     }
 
-    return Helpers.getServerUrl('/' + db + '/_find' + query);
+    return Helpers.getServerUrl('/' + db + partitionUrlComponent(partitionKey) + '/_find' + query);
   },
 
-  'query-apiurl': function (db, query) {
+  'query-apiurl': function (db, partitionKey, query) {
     if (!query) {
       query = '';
     }
 
-    return Helpers.getApiUrl('/' + db + '/_find' + query);
+    return Helpers.getApiUrl('/' + db + partitionUrlComponent(partitionKey) + '/_find' + query);
   },
 
   'query-app': function (db, partitionKey, query) {
@@ -266,12 +266,12 @@ FauxtonAPI.registerUrls('mango', {
     return 'database/' + db + partitionUrlComponent(partitionKey) + '/_find' + query;
   },
 
-  'explain-server': function (db) {
-    return Helpers.getServerUrl('/' + db + '/_explain');
+  'explain-server': function (db, partitionKey) {
+    return Helpers.getServerUrl('/' + db + partitionUrlComponent(partitionKey) + '/_explain');
   },
 
-  'explain-apiurl': function (db) {
-    return Helpers.getApiUrl('/' + db + '/_explain');
+  'explain-apiurl': function (db, partitionKey) {
+    return Helpers.getApiUrl('/' + db + partitionUrlComponent(partitionKey) + '/_explain');
   }
 });
 

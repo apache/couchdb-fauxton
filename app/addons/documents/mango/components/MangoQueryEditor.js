@@ -145,7 +145,8 @@ export default class MangoQueryEditor extends Component {
 
     this.props.manageIndexes();
 
-    const manageIndexURL = '#' + FauxtonAPI.urls('mango', 'index-app', encodeURIComponent(this.props.databaseName));
+    const manageIndexURL = '#' + FauxtonAPI.urls('mango', 'index-app',
+      encodeURIComponent(this.props.databaseName), encodeURIComponent(this.props.partitionKey));
     FauxtonAPI.navigate(manageIndexURL);
   }
 
@@ -158,6 +159,7 @@ export default class MangoQueryEditor extends Component {
 
     this.props.runExplainQuery({
       databaseName: this.props.databaseName,
+      partitionKey: this.props.partitionKey,
       queryCode: this.getEditorValue()
     });
   }
@@ -171,6 +173,7 @@ export default class MangoQueryEditor extends Component {
     this.props.clearResults();
     this.props.runQuery({
       databaseName: this.props.databaseName,
+      partitionKey: this.props.partitionKey,
       queryCode: JSON.parse(this.getEditorValue()),
       fetchParams: {...this.props.fetchParams, skip: 0}
     });
@@ -183,6 +186,10 @@ MangoQueryEditor.propTypes = {
   queryFindCode: PropTypes.string.isRequired,
   queryFindCodeChanged: PropTypes.bool,
   databaseName: PropTypes.string.isRequired,
+  partitionKey: PropTypes.string,
   runExplainQuery: PropTypes.func.isRequired,
+  runQuery: PropTypes.func.isRequired,
   manageIndexes: PropTypes.func.isRequired,
+  loadQueryHistory: PropTypes.func.isRequired,
+  clearResults: PropTypes.func.isRequired
 };

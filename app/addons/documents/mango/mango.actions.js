@@ -105,9 +105,9 @@ export default {
     return 'Reason: ' + ((error && error.message) || 'n/a');
   },
 
-  runExplainQuery: function ({ databaseName, queryCode }) {
+  runExplainQuery: function ({ databaseName, partitionKey, queryCode }) {
     return (dispatch) => {
-      return MangoAPI.fetchQueryExplain(databaseName, queryCode)
+      return MangoAPI.fetchQueryExplain(databaseName, partitionKey, queryCode)
         .then((explainPlan) => {
           dispatch(this.showQueryExplain({ explainPlan }));
         }).catch(() => {

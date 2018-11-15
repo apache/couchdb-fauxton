@@ -71,7 +71,7 @@ var DocumentsRouteObject = BaseRoute.extend({
       designDocName: ddoc,
       designDocSection: 'metadata'
     });
-
+    DatabaseActions.fetchSelectedDatabaseInfo(database);
     const dropDownLinks = this.getCrumbs(this.database);
     return <ViewsTabsSidebarLayout
       showEditView={false}
@@ -147,8 +147,9 @@ var DocumentsRouteObject = BaseRoute.extend({
     />;
   },
 
-  changes: function (_, partitionKey) {
+  changes: function (databaseName, partitionKey) {
     const selectedNavItem = new SidebarItemSelection('changes');
+    DatabaseActions.fetchSelectedDatabaseInfo(databaseName);
 
     return <ChangesSidebarLayout
       endpoint={FauxtonAPI.urls('changes', 'apiurl', this.database.id, '')}
