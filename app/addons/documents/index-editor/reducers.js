@@ -17,6 +17,8 @@ import Helpers from '../helpers';
 const defaultMap = 'function (doc) {\n  emit(doc._id, 1);\n}';
 const defaultReduce = 'function (keys, values, rereduce) {\n  if (rereduce) {\n    return sum(values);\n  } else {\n    return values.length;\n  }\n}';
 const builtInReducers = ['_sum', '_count', '_stats'];
+const reducersForGlobalIndexes = builtInReducers.concat(['CUSTOM', 'NONE']);
+const reducersForPartitionedIndexes = builtInReducers.concat(['NONE']);
 
 const initialState = {
   designDocs: new Backbone.Collection(),
@@ -31,7 +33,7 @@ const initialState = {
   viewName: '',
   originalViewName: '',
   originalDesignDocName: '',
-  reduceOptions: builtInReducers.concat(['CUSTOM', 'NONE'])
+  reduceOptions: reducersForGlobalIndexes
 };
 
 function editIndex(state, options) {
@@ -49,6 +51,7 @@ function editIndex(state, options) {
   };
   newState.originalViewName = newState.viewName;
   newState.view = getView(newState);
+  newState.reduceOptions = getReduceOptions(newState);
   return newState;
 }
 
@@ -63,7 +66,7 @@ function getView(state) {
   return designDoc.get('views')[state.viewName];
 }
 
-export function getDesignDocPartitioned(state, isDbPartitioned) {
+export function getSelectedDesignDocPartitioned(state, isDbPartitioned) {
   const designDoc = state.designDocs.find(ddoc => {
     return state.designDocId == ddoc.id;
   });
@@ -127,6 +130,13 @@ export function getDesignDocList(state) {
   });
 }
 
+export function getReduceOptions({ designDocId, newDesignDocPartitioned }, isSelectedDDocPartitioned) {
+  if (designDocId === 'new-doc') {
+    return newDesignDocPartitioned ? reducersForPartitionedIndexes : reducersForGlobalIndexes;
+  }
+  return isSelectedDDocPartitioned ? reducersForPartitionedIndexes : reducersForGlobalIndexes;
+}
+
 export default function indexEditor(state = initialState, action) {
   const { options } = action;
   switch (action.type) {
@@ -169,6 +179,8 @@ export default function indexEditor(state = initialState, action) {
         ...state,
         designDocId: options.value
       };
+      // newState.reduceOptions = getReduceOptions(newState);
+      // return newState;
 
     case ActionTypes.VIEW_SAVED:
       return state;

@@ -57,7 +57,7 @@ const MangoIndexEditorAndQueryEditor = FauxtonAPI.RouteObject.extend({
       'allDocs', 'app', encodeURIComponent(this.databaseName), encodedPartitionKey
     );
 
-    const partKeyUrlComponent = partitionKey ? `/${encodeURIComponent(partitionKey)}` : '';
+    const partKeyUrlComponent = partitionKey ? `/${encodedPartitionKey}` : '';
     const fetchUrl = '/' + encodeURIComponent(this.databaseName) + partKeyUrlComponent + '/_find';
 
     const crumbs = [

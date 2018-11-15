@@ -11,7 +11,8 @@
 // the License.
 
 import Documents from '../../../documents/resources';
-import reducer, { hasCustomReduce, getDesignDocList, getDesignDocPartitioned, getSaveDesignDoc } from '../reducers';
+import reducer, { hasCustomReduce, getDesignDocList, getSelectedDesignDocPartitioned,
+  getSaveDesignDoc, getReduceOptions } from '../reducers';
 import ActionTypes from '../actiontypes';
 import '../../base';
 
@@ -297,7 +298,7 @@ describe('IndexEditor Reducer', () => {
     });
   });
 
-  describe('getDesignDocPartitioned', () => {
+  describe('getSelectedDesignDocPartitioned', () => {
     const designDocs = [
       {id: '_design/docGlobal', get: () => { return {options: { partitioned: false }}; }},
       {id: '_design/docPartitioned', get: () => { return {options: { partitioned: true }}; }},
@@ -307,36 +308,36 @@ describe('IndexEditor Reducer', () => {
     it('returns true for ddocs without partitioned flag on partitioned dbs', () => {
       const isDbPartitioned = true;
       const state = { designDocs, designDocId: '_design/docNoOptions' };
-      expect(getDesignDocPartitioned(state, isDbPartitioned)).toBe(true);
+      expect(getSelectedDesignDocPartitioned(state, isDbPartitioned)).toBe(true);
     });
 
     it('returns false for ddocs where partitioned is false on partitioned dbs', () => {
       const isDbPartitioned = true;
       const state = { designDocs, designDocId: '_design/docGlobal' };
-      expect(getDesignDocPartitioned(state, isDbPartitioned)).toBe(false);
+      expect(getSelectedDesignDocPartitioned(state, isDbPartitioned)).toBe(false);
     });
 
     it('returns true for ddocs where partitioned is true on partitioned dbs', () => {
       const isDbPartitioned = true;
       const state = { designDocs, designDocId: '_design/docPartitioned' };
-      expect(getDesignDocPartitioned(state, isDbPartitioned)).toBe(true);
+      expect(getSelectedDesignDocPartitioned(state, isDbPartitioned)).toBe(true);
     });
 
     it('any ddoc is global on non-partitioned dbs', () => {
       const isDbPartitioned = false;
       const state = { designDocs, designDocId: '_design/docGlobal' };
-      expect(getDesignDocPartitioned(state, isDbPartitioned)).toBe(false);
+      expect(getSelectedDesignDocPartitioned(state, isDbPartitioned)).toBe(false);
 
       const state2 = { designDocs, designDocId: '_design/docPartitioned' };
-      expect(getDesignDocPartitioned(state2, isDbPartitioned)).toBe(false);
+      expect(getSelectedDesignDocPartitioned(state2, isDbPartitioned)).toBe(false);
 
       const state3 = { designDocs, designDocId: '_design/docNoOptions' };
-      expect(getDesignDocPartitioned(state3, isDbPartitioned)).toBe(false);
+      expect(getSelectedDesignDocPartitioned(state3, isDbPartitioned)).toBe(false);
     });
 
   });
 
-  describe.only('getSaveDesignDoc', () => {
+  describe('getSaveDesignDoc', () => {
 
     it('only sets partitioned flag when db is partitioned', () => {
       const state = { designDocId: 'new-doc', newDesignDocPartitioned: true, };
@@ -345,6 +346,33 @@ describe('IndexEditor Reducer', () => {
 
       const ddoc2 = getSaveDesignDoc(state, false);
       expect(ddoc2.get('options')).toBeUndefined();
+    });
+  });
+
+  describe('getReduceOptions', () => {
+    // { designDocId, newDesignDocPartitioned }, isSelectedDDocPartitioned
+    it('does not return CUSTOM reducer for partitioned views', () => {
+      let isSelectedDDocPartitioned = false;
+      let reducers = getReduceOptions({ designDocId: 'new-doc', newDesignDocPartitioned: true, },
+        isSelectedDDocPartitioned);
+      expect(reducers).not.toContain('CUSTOM');
+
+      isSelectedDDocPartitioned = true;
+      reducers = getReduceOptions({ designDocId: 'aDoc', newDesignDocPartitioned: true, },
+        isSelectedDDocPartitioned);
+      expect(reducers).not.toContain('CUSTOM');
+    });
+
+    it('returns CUSTOM reducer for global views', () => {
+      let isSelectedDDocPartitioned = true;
+      let reducers = getReduceOptions({ designDocId: 'new-doc', newDesignDocPartitioned: false, },
+        isSelectedDDocPartitioned);
+      expect(reducers).toContain('CUSTOM');
+
+      isSelectedDDocPartitioned = false;
+      reducers = getReduceOptions({ designDocId: 'aDoc', newDesignDocPartitioned: true, },
+        isSelectedDDocPartitioned);
+      expect(reducers).toContain('CUSTOM');
     });
   });
 });

@@ -145,8 +145,9 @@ export default class MangoQueryEditor extends Component {
 
     this.props.manageIndexes();
 
+    const encodedPartKey = this.props.partitionKey ? encodeURIComponent(this.props.partitionKey) : '';
     const manageIndexURL = '#' + FauxtonAPI.urls('mango', 'index-app',
-      encodeURIComponent(this.props.databaseName), encodeURIComponent(this.props.partitionKey));
+      encodeURIComponent(this.props.databaseName), encodedPartKey);
     FauxtonAPI.navigate(manageIndexURL);
   }
 

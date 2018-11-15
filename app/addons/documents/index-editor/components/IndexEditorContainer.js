@@ -13,9 +13,11 @@
 import { connect } from 'react-redux';
 import IndexEditor from './IndexEditor';
 import Actions from '../actions';
-import { getSaveDesignDoc, getDesignDocList, reduceSelectedOption, hasCustomReduce, getDesignDocPartitioned } from '../reducers';
+import { getSaveDesignDoc, getDesignDocList, reduceSelectedOption, hasCustomReduce,
+  getSelectedDesignDocPartitioned, getReduceOptions } from '../reducers';
 
 const mapStateToProps = ({ indexEditor, databases }, ownProps) => {
+  const isSelectedDDocPartitioned = getSelectedDesignDocPartitioned(indexEditor, databases.isDbPartitioned);
   return {
     database: indexEditor.database,
     isNewView: indexEditor.isNewView,
@@ -26,14 +28,14 @@ const mapStateToProps = ({ indexEditor, databases }, ownProps) => {
     originalDesignDocName: indexEditor.originalDesignDocName,
     isNewDesignDoc: indexEditor.isNewDesignDoc,
     designDocId: indexEditor.designDocId,
-    designDocPartitioned: getDesignDocPartitioned(indexEditor, databases.isDbPartitioned),
+    designDocPartitioned: isSelectedDDocPartitioned,
     newDesignDocName: indexEditor.newDesignDocName,
     newDesignDocPartitioned: indexEditor.newDesignDocPartitioned,
     saveDesignDoc: getSaveDesignDoc(indexEditor, databases.isDbPartitioned),
     map: indexEditor.view.map,
     isLoading: indexEditor.isLoading,
     reduce: indexEditor.view.reduce,
-    reduceOptions: indexEditor.reduceOptions,
+    reduceOptions: getReduceOptions(indexEditor, isSelectedDDocPartitioned),
     reduceSelectedOption: reduceSelectedOption(indexEditor),
     hasCustomReduce: hasCustomReduce(indexEditor),
     hasReduce: !!indexEditor.view.reduce,
