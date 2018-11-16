@@ -18,8 +18,6 @@ import {
   post,
   deleteRequest
 } from '../ajax';
-import testUtils from "../../../test/mocha/testUtils";
-const assert = testUtils.assert;
 
 describe('Fauxton Ajax', () => {
   let unsubscribe;

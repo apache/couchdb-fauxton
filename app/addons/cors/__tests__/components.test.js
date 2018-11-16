@@ -14,12 +14,11 @@ import * as Helpers from "../helpers";
 import Views from "../components";
 import utils from "../../../../test/mocha/testUtils";
 import React from "react";
-import ReactDOM from "react-dom";
 import sinon from "sinon";
 import { shallow, mount } from 'enzyme';
 
 FauxtonAPI.router = new FauxtonAPI.Router([]);
-const { assert, restore } = utils;
+const { restore } = utils;
 
 describe('CORS Components', () => {
 

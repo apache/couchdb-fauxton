@@ -10,7 +10,6 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 import FauxtonAPI from '../../../core/api';
-import utils from '../../../../test/mocha/testUtils';
 import {
   getSource,
   getTarget,
@@ -28,8 +27,6 @@ import {
 } from '../api';
 import Constants from '../constants';
 import fetchMock from 'fetch-mock';
-
-const assert = utils.assert;
 
 describe('Replication API', () => {
 

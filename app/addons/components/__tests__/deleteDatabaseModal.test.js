@@ -10,17 +10,12 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 import ReactComponents from "../react-components";
-import utils from "../../../../test/mocha/testUtils";
 import React from "react";
-import ReactDOM from "react-dom";
 import {mount} from 'enzyme';
-
-const assert = utils.assert;
 
 const noop = () => {};
 
-//Skip this until React portals are supported in enzyme
-describe.skip('DeleteDatabaseModal', function () {
+describe('DeleteDatabaseModal', function () {
 
   it('submitting is disabled when initially rendered', function () {
     const modal = mount(

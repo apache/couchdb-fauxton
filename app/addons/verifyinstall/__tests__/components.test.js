@@ -12,16 +12,12 @@
 
 import FauxtonAPI from '../../../core/api';
 import React from 'react';
-import ReactDOM from 'react-dom';
-import testUtils from '../../../../test/mocha/testUtils';
 import Constants from '../constants';
 import VerifyInstallButton from '../components/VerifyInstallButton';
 import VerifyInstallResults from '../components/VerifyInstallResults';
 import {mount} from 'enzyme';
 import sinon from 'sinon';
 FauxtonAPI.router = new FauxtonAPI.Router([]);
-
-var assert = testUtils.assert;
 
 describe('VerifyInstallResults', function () {
   let el;

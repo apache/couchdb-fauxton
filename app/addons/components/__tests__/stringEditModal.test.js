@@ -10,16 +10,12 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 import ReactComponents from "../react-components";
-import utils from "../../../../test/mocha/testUtils";
 import React from "react";
-import ReactDOM from "react-dom";
 import {mount} from 'enzyme';
 import sinon from "sinon";
 
-const assert = utils.assert;
-
 //need enzyme to support portals
-describe.skip('String Edit Modal', () => {
+describe('String Edit Modal', () => {
   var stub = () => {};
 
   describe('onSave', () => {
@@ -30,8 +26,8 @@ describe.skip('String Edit Modal', () => {
         <ReactComponents.StringEditModal visible={true} onClose={stub} onSave={spy} value={string} />
       );
       el.find('#string-edit-save-btn').simulate('click');
-      expect(spy.calledOnce).toBeTruthy();
-      expect(spy.calledWith(string)).toBeTruthy();
+      sinon.assert.calledOnce(spy);
+      sinon.assert.calledWith(spy, string);
     });
   });
 });

@@ -9,9 +9,8 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
-import testUtils from "../../../test/mocha/testUtils";
+
 import utils from "../utils";
-const assert = testUtils.assert;
 
 describe('Utils', () => {
 
@@ -71,7 +70,7 @@ describe('Utils', () => {
   describe('localStorage', () => {
 
     it('Should get undefined when getting a non-existent key', () => {
-      assert.isUndefined(utils.localStorageGet('qwerty'));
+      expect(utils.localStorageGet('qwerty')).not.toBeDefined();
     });
 
     it('Should get value after setting it', () => {

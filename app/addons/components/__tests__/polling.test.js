@@ -10,13 +10,9 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 import {Polling, clearPollCounter, resetPollCounter} from "../components/polling";
-import utils from "../../../../test/mocha/testUtils";
 import {shallow, mount} from "enzyme";
 import sinon from "sinon";
 import React from "react";
-import ReactDOM from "react-dom";
-
-const assert = utils.assert;
 
 describe("Polling", () => {
   describe('Counters', () => {

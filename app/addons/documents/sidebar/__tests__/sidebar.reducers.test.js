@@ -12,9 +12,6 @@
 
 import sidebar from "../reducers";
 import ActionTypes from "../actiontypes";
-import testUtils from "../../../../../test/mocha/testUtils";
-
-const assert = testUtils.assert;
 
 function isVisible (state, designDoc, indexGroup) {
   if (!state.toggledSections[designDoc]) {

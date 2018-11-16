@@ -17,7 +17,7 @@ import sinon from "sinon";
 import NewReplication from '../components/newreplication';
 import Constants from '../constants';
 
-const {assert, restore}  = utils;
+const {restore}  = utils;
 
 describe('New Replication Component', () => {
 

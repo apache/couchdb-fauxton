@@ -15,7 +15,6 @@ import * as Actions from "../actions";
 import * as CorsAPI from "../api";
 import sinon from "sinon";
 
-const assert = utils.assert;
 const restore = utils.restore;
 
 describe('CORS actions', () => {

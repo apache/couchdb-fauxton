@@ -17,11 +17,8 @@ import ChangeRow from '../changes/components/ChangeRow';
 import ChangesScreen from '../changes/components/ChangesScreen';
 import ChangesTabContent from "../changes/components/ChangesTabContent";
 import {mount} from 'enzyme';
-import utils from "../../../../test/mocha/testUtils";
 import sinon from "sinon";
 import '../base';
-
-const assert = utils.assert;
 
 
 describe('ChangesTabContent', () => {

@@ -12,13 +12,10 @@
 // the License.
 
 import FauxtonAPI from '../../../core/api';
-import utils from '../../../../test/mocha/testUtils';
 import ActionTypes from '../changes/actiontypes';
 import reducer from '../changes/reducers';
 
 FauxtonAPI.router = new FauxtonAPI.Router([]);
-
-const assert = utils.assert;
 
 describe('Changes Reducer', () => {
 

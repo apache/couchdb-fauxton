@@ -9,11 +9,10 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
+
 import reducer from '../reducers';
 import ActionTypes from '../actiontypes';
 import fakedResponse from "./fakeActiveTaskResponse";
-import utils from "../../../../test/mocha/testUtils";
-const assert = utils.assert;
 
 describe('Active Tasks -- Stores', () => {
   let initState;
@@ -50,7 +49,7 @@ describe('Active Tasks -- Stores', () => {
       });
     });
 
-    it.only('should search the table correctly', () => {
+    it('should search the table correctly', () => {
       var searchTerm = 'base';
       const state = reducer(initState, {
         type: ActionTypes.ACTIVE_TASKS_SET_SEARCH_TERM,

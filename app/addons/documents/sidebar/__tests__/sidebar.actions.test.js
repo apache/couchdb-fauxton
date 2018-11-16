@@ -15,7 +15,7 @@ import FauxtonAPI from "../../../../core/api";
 import Actions from '../actions';
 import sinon from 'sinon';
 
-const {restore, assert} = utils;
+const {restore} = utils;
 FauxtonAPI.router = new FauxtonAPI.Router([]);
 
 describe('Sidebar actions', () => {

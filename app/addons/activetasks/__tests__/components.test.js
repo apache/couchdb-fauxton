@@ -12,11 +12,8 @@
 import TableHeader from '../components/tableheader';
 import FilterTabs from '../components/filtertabs';
 import React from "react";
-import ReactDOM from "react-dom";
-import utils from "../../../../test/mocha/testUtils";
 import {mount} from 'enzyme';
 import sinon from "sinon";
-const assert = utils.assert;
 
 describe('Active Tasks -- Components', () => {
 

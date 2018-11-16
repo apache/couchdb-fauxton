@@ -17,9 +17,6 @@ import sinon from 'sinon';
 import Notification from '../components/Notification';
 import NotificationCenterPanel from '../components/NotificationCenterPanel';
 import NotificationPanelRow from '../components/NotificationPanelRow';
-import utils from '../../../../../test/mocha/testUtils';
-
-const assert = utils.assert;
 
 describe('Notification', () => {
   it('startHide is only called after visible time is out', (done) => {

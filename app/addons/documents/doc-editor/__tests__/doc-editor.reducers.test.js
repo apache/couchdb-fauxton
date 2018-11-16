@@ -11,14 +11,12 @@
 // the License.
 
 import FauxtonAPI from "../../../../core/api";
-import utils from "../../../../../test/mocha/testUtils";
 import Documents from "../../resources";
 import ActionTypes from "../actiontypes";
 import reducer from "../reducers";
 
 FauxtonAPI.router = new FauxtonAPI.Router([]);
 
-const assert = utils.assert;
 const doc = new Documents.Doc({id: 'foo'}, {database: 'bar'});
 
 describe('DocEditor Reducer', function () {

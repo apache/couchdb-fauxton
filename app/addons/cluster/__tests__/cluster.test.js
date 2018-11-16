@@ -11,13 +11,10 @@
 // the License.
 import FauxtonAPI from "../../../core/api";
 import {DisabledConfigController} from "../cluster";
-import utils from "../../../../test/mocha/testUtils";
 import React from "react";
-import ReactDOM from "react-dom";
 import {mount} from 'enzyme';
 import sinon from 'sinon';
 
-const assert = utils.assert;
 
 describe('Cluster Controller', () => {
   let controller;

@@ -11,15 +11,12 @@
 // the License.
 
 import React from "react";
-import ReactDOM from "react-dom";
-import utils from "../../../../test/mocha/testUtils";
 import LoginForm from "../components/loginform";
 import {CreateAdminForm} from "../components/createadminform";
 import {ChangePasswordForm} from '../components/changepasswordform';
 import * as Actions from "../actions";
 import { mount } from 'enzyme';
 import sinon from "sinon";
-const assert = utils.assert;
 
 describe('Auth -- Components', () => {
 

@@ -15,7 +15,7 @@ import FauxtonAPI from '../../../core/api';
 import testUtils from '../../../../test/mocha/testUtils';
 import Actions from '../designdocinfo/actions';
 
-const {assert, restore} = testUtils;
+const {restore} = testUtils;
 
 describe('DesignDocInfo Actions', () => {
 

@@ -10,8 +10,6 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 import Helpers from "../helpers";
-import testUtils from "../../../../test/mocha/testUtils";
-var assert = testUtils.assert;
 
 describe('Helpers', () => {
 

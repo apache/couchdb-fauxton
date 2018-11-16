@@ -13,10 +13,8 @@
 import FauxtonAPI from "../../../core/api";
 import Helpers from '../../../helpers';
 import Models from "../resources";
-import testUtils from "../../../../test/mocha/testUtils";
 import "../base";
 import sinon from 'sinon';
-const { assert } = testUtils;
 
 describe('Document', () => {
   let doc;

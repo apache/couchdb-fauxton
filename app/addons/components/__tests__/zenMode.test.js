@@ -9,14 +9,12 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
+
 import ReactComponents from "../react-components";
-import utils from "../../../../test/mocha/testUtils";
 import React from "react";
-import ReactDOM from "react-dom";
 import {mount} from 'enzyme';
 import sinon from "sinon";
 
-const assert = utils.assert;
 var code = 'function (doc) {\n  emit(doc._id, 1);\n}';
 
 describe('Zen Mode', () => {

@@ -16,10 +16,8 @@ import { shallow } from 'enzyme';
 import FauxtonAPI from '../../../core/api';
 import Constants from '../constants';
 import TableRow from '../index-results/components/results/TableRow';
-import utils from '../../../../test/mocha/testUtils';
 
 FauxtonAPI.router = new FauxtonAPI.Router([]);
-const { assert } = utils;
 
 describe('Docs Table Row', () => {
 

@@ -10,12 +10,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 import ReactComponents from "../react-components";
-import utils from "../../../../test/mocha/testUtils";
 import React from "react";
-import ReactDOM from "react-dom";
 import {mount} from 'enzyme';
-
-const assert = utils.assert;
 
 describe('Beautify', () => {
   let beautifyEl;
