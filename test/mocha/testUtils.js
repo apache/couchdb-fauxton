@@ -10,7 +10,6 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import chai from "chai";
 import _ from 'lodash';
 
 var restore = function (fn) {
@@ -20,7 +19,5 @@ var restore = function (fn) {
 };
 
 export default {
-  chai: chai,
-  assert: chai.assert,
   restore: restore
 };
