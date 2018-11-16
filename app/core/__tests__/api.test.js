@@ -24,7 +24,7 @@ describe('URLs', () => {
       }
     });
 
-    assert.equal(FauxtonAPI.urls('testURL', 'server'), testUrl);
+    expect(FauxtonAPI.urls('testURL', 'server')).toBe(testUrl);
 
   });
 
@@ -39,7 +39,7 @@ describe('URLs', () => {
       return false;
     });
 
-    assert.equal(FauxtonAPI.urls('testURL', 'intercept'), testUrl);
+    expect(FauxtonAPI.urls('testURL', 'intercept')).toBe(testUrl);
   });
 
 });

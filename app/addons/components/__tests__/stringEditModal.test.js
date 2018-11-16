@@ -30,8 +30,8 @@ describe.skip('String Edit Modal', () => {
         <ReactComponents.StringEditModal visible={true} onClose={stub} onSave={spy} value={string} />
       );
       el.find('#string-edit-save-btn').simulate('click');
-      assert.ok(spy.calledOnce);
-      assert.ok(spy.calledWith(string));
+      expect(spy.calledOnce).toBeTruthy();
+      expect(spy.calledWith(string)).toBeTruthy();
     });
   });
 });

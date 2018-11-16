@@ -29,6 +29,6 @@ describe('Header Togglebutton', () => {
 
   it('should call the passed callback', () => {
     toggleEl.simulate('click');
-    assert.ok(toggleCallback.calledOnce);
+    expect(toggleCallback.calledOnce).toBeTruthy();
   });
 });

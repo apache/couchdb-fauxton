@@ -29,7 +29,7 @@ describe.skip('DeleteDatabaseModal', function () {
         modalProps={{isSystemDatabase: false, showDeleteModal: true, dbId: 'fooo'}} />
     );
 
-    assert.ok(modal.find('button.delete').first().prop('disabled'));
+    expect(modal.find('button.delete').first().prop('disabled')).toBe(true);
   });
 
   it('submitting is disabled when garbage entered', function () {
@@ -42,7 +42,7 @@ describe.skip('DeleteDatabaseModal', function () {
     const input = modal.find('input');
 
     input.simulate('change', {target: {value: 'Hello, world'}});
-    assert.ok(modal.find('button.delete').prop('disabled'));
+    expect(modal.find('button.delete').prop('disabled')).toBe(true);
   });
 
   it('submitting is enabled when same db name entered', function () {
@@ -55,7 +55,7 @@ describe.skip('DeleteDatabaseModal', function () {
     var input = modal.find('.modal').find('input');
 
     input.simulate('change', {target: {value: 'fooo'}});
-    assert.notOk(modal.find('button.delete').prop('disabled'));
+    expect(modal.find('button.delete').prop('disabled')).toBeFalsy();
   });
 
 

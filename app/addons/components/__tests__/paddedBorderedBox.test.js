@@ -26,6 +26,6 @@ describe('PaddedBorderedBox', function () {
         <div className="foo-children"></div>
       </ReactComponents.PaddedBorderedBox>
     );
-    assert.ok(el.find('.foo-children').length);
+    expect(el.find('.foo-children').length).toBeGreaterThan(0);
   });
 });

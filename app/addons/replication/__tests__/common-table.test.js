@@ -21,17 +21,17 @@ describe('Common Table Component', () => {
     it("renders a url with tricky password characters", () => {
       const url = "http://hello:h#$!^@couchdb.com/my-db";
       const el = shallow(formatUrl(url));
-      assert.equal(el.find('a').prop('href'), '#/database/my-db/_all_docs');
+      expect(el.find('a').prop('href')).toBe('#/database/my-db/_all_docs');
     });
 
     it("renders a url with no password characters", () => {
       const url = "http://couchdb.com/my-db";
       const el = shallow(formatUrl(url));
-      assert.equal(el.find('a').prop('href'), '#/database/my-db/_all_docs');
+      expect(el.find('a').prop('href')).toBe('#/database/my-db/_all_docs');
     });
 
     it('renders a with a default url if no url is supplied', () => {
-      assert.equal(formatUrl(), '');
+      expect(formatUrl()).toBe('');
     });
   });
 });

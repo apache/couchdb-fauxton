@@ -42,7 +42,7 @@ describe('Active Tasks -- Components', () => {
           );
 
           tabs.find(`input[value="${text}"]`).simulate('change');
-          assert.ok(spy.calledOnce);
+          expect(spy.calledOnce).toBeTruthy();
         });
       });
 
@@ -55,7 +55,7 @@ describe('Active Tasks -- Components', () => {
           />
         );
         tabs.find('.searchbox').simulate('change', {target: {value: 'searching'}});
-        assert.ok(spy.calledOnce);
+        expect(spy.calledOnce).toBeTruthy();
       });
     });
 
@@ -81,7 +81,7 @@ describe('Active Tasks -- Components', () => {
           );
 
           table.find(`.${text}`).simulate('click');
-          assert.ok(spy.calledOnce);
+          expect(spy.calledOnce).toBeTruthy();
         });
       });
     });

@@ -9,7 +9,7 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
-import utils from '../../../../test/mocha/testUtils';
+
 import {replicate, getReplicationStateFrom, deleteDocs} from '../actions';
 import ActionTypes from '../actiontypes';
 import fetchMock from 'fetch-mock';
@@ -27,8 +27,6 @@ Object.defineProperty(window.location, 'origin', {
   writable: true,
   value: 'http://dev:8000'
 });
-
-const assert = utils.assert;
 
 describe("Replication Actions", () => {
 
@@ -71,7 +69,7 @@ describe("Replication Actions", () => {
         replicationType: "",
         username: "tester"
       })(dispatch).then(() => {
-        assert.lengthOf(finalPost.calls('./_replicator'), 3);
+        expect(finalPost.calls('./_replicator').length).toBe(3);
       });
     });
 
@@ -96,7 +94,7 @@ describe("Replication Actions", () => {
         replicationType: "",
         username: "tester"
       })(dispatch).then(() => {
-        assert.lengthOf(mockPost.calls('./_replicator'), 1);
+        expect(mockPost.calls('./_replicator').length).toBe(1);
       });
     });
   });
@@ -147,7 +145,7 @@ describe("Replication Actions", () => {
     it('builds up correct state', (done) => {
       const dispatch = ({type, options}) => {
         if (ActionTypes.REPLICATION_SET_STATE_FROM_DOC === type) {
-          assert.deepEqual(docState, options);
+          expect(docState).toEqual(options);
           setTimeout(done);
         }
       };
@@ -201,7 +199,7 @@ describe("Replication Actions", () => {
       });
       const dispatch = ({type, options}) => {
         if (ActionTypes.REPLICATION_SET_STATE_FROM_DOC === type) {
-          assert.deepEqual(docStateWithCustomAuth, options);
+          expect(docStateWithCustomAuth).toEqual(options);
           setTimeout(done);
         }
       };

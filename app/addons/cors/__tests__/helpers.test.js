@@ -9,9 +9,8 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
-import testUtils from "../../../../test/mocha/testUtils";
+
 import * as Helpers from "../helpers";
-const assert = testUtils.assert;
 
 describe('CORS helper functions', () => {
 
@@ -28,7 +27,7 @@ describe('CORS helper functions', () => {
     ];
 
     urls.forEach((url) => {
-      assert.isTrue(Helpers.validateCORSDomain(url));
+      expect(Helpers.validateCORSDomain(url)).toBe(true);
     });
   });
 
@@ -40,14 +39,14 @@ describe('CORS helper functions', () => {
       'http://'
     ];
     _.each(urls, (url) => {
-      assert.isFalse(Helpers.validateCORSDomain(url));
+      expect(Helpers.validateCORSDomain(url)).toBe(false);
     });
   });
 
   it('normalizes common cases, like accidentally added subfolders', () => {
-    assert.equal('https://foo.com', Helpers.normalizeUrls('https://foo.com/blerg'));
-    assert.equal('https://192.168.1.113', Helpers.normalizeUrls('https://192.168.1.113/blerg'));
-    assert.equal('https://foo.com:1337', Helpers.normalizeUrls('https://foo.com:1337/blerg'));
-    assert.equal('https://foo.com', Helpers.normalizeUrls('https://foo.com'));
+    expect('https://foo.com').toBe(Helpers.normalizeUrls('https://foo.com/blerg'));
+    expect('https://192.168.1.113').toBe(Helpers.normalizeUrls('https://192.168.1.113/blerg'));
+    expect('https://foo.com:1337').toBe(Helpers.normalizeUrls('https://foo.com:1337/blerg'));
+    expect('https://foo.com').toBe(Helpers.normalizeUrls('https://foo.com'));
   });
 });

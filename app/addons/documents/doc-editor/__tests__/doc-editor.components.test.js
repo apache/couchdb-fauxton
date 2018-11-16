@@ -21,7 +21,6 @@ import DocEditorScreen from '../components/DocEditorScreen';
 import DocEditorContainer from '../components/DocEditorContainer';
 import Databases from '../../../databases/base';
 import databasesReducer from '../../../databases/reducers';
-import utils from '../../../../../test/mocha/testUtils';
 import { mount } from 'enzyme';
 import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
@@ -31,7 +30,6 @@ import docEditorReducer from '../reducers';
 import '../../base';
 
 FauxtonAPI.router = new FauxtonAPI.Router([]);
-const assert = utils.assert;
 const docJSON = {
   _id: '_design/test-doc',
   views: {
@@ -97,7 +95,7 @@ describe('DocEditorScreen', () => {
 
   it('loading indicator appears on load', () => {
     const el = mount(<DocEditorScreen {...defaultProps} />);
-    assert.equal(el.find('.loading-lines').length, 1);
+    expect(el.find('.loading-lines').length).toBe(1);
   });
 
   it('new docs do not show the button row', () => {
@@ -109,10 +107,10 @@ describe('DocEditorScreen', () => {
       database={database}
       doc={doc} />);
 
-    assert.equal(el.find('.loading-lines').length, 0);
-    assert.equal(el.find('.icon-circle-arrow-up').length, 0);
-    assert.equal(el.find('.icon-repeat').length, 0);
-    assert.equal(el.find('.icon-trash').length, 0);
+    expect(el.find('.loading-lines').length).toBe(0);
+    expect(el.find('.icon-circle-arrow-up').length).toBe(0);
+    expect(el.find('.icon-repeat').length).toBe(0);
+    expect(el.find('.icon-trash').length).toBe(0);
   });
 
   it('view attachments button does not appear with no attachments', () => {
@@ -124,7 +122,7 @@ describe('DocEditorScreen', () => {
       database={database}
       doc={doc} />);
 
-    assert.equal(el.find('.view-attachments-section').length, 0);
+    expect(el.find('.view-attachments-section').length).toBe(0);
   });
 
   it('view attachments button shows up when the doc has attachments', () => {
@@ -136,7 +134,7 @@ describe('DocEditorScreen', () => {
       database={database}
       doc={doc} />);
 
-    assert.equal(el.find('.view-attachments-section').length, 1);
+    expect(el.find('.view-attachments-section').length).toBe(1);
   });
 
   it('view attachments dropdown contains right number of docs', () => {
@@ -148,7 +146,7 @@ describe('DocEditorScreen', () => {
       database={database}
       doc={doc} />);
 
-    assert.equal(el.find('.view-attachments-section .dropdown-menu li').length, 2);
+    expect(el.find('.view-attachments-section .dropdown-menu li').length).toBe(2);
   });
 
   it('view attachments dropdown contains correct urls', () => {
@@ -163,7 +161,7 @@ describe('DocEditorScreen', () => {
     const $attachmentNode = el.find('.view-attachments-section .dropdown-menu li');
     const attachmentURLactual = $attachmentNode.find('a').first().prop('href');
 
-    assert.equal(attachmentURLactual, './a%2Fspecial%3Fdb/_design%2Ftest%23doc/one%252F.png');
+    expect(attachmentURLactual).toBe('./a%2Fspecial%3Fdb/_design%2Ftest%23doc/one%252F.png');
   });
 
   it('auto-generated ID for new docs starts with colon for partitioned databases', () => {
@@ -226,9 +224,9 @@ describe('DocEditorContainer', () => {
           database={database} />
       </Provider>
     );
-    assert.equal(wrapper.find(DocEditorScreen).prop('isDeleteDocModalVisible'), false);
+    expect(wrapper.find(DocEditorScreen).prop('isDeleteDocModalVisible')).toBe(false);
     wrapper.find('button[title="Delete"]').simulate('click');
-    assert.equal(wrapper.find(DocEditorScreen).prop('isDeleteDocModalVisible'), true);
+    expect(wrapper.find(DocEditorScreen).prop('isDeleteDocModalVisible')).toBe(true);
   });
 
   it('clicking Upload button shows the upload dialog', () => {
@@ -239,9 +237,9 @@ describe('DocEditorContainer', () => {
           database={database} />
       </Provider>
     );
-    assert.equal(wrapper.find(DocEditorScreen).prop('isUploadModalVisible'), false);
+    expect(wrapper.find(DocEditorScreen).prop('isUploadModalVisible')).toBe(false);
     wrapper.find('button[title="Upload Attachment"]').simulate('click');
-    assert.equal(wrapper.find(DocEditorScreen).prop('isUploadModalVisible'), true);
+    expect(wrapper.find(DocEditorScreen).prop('isUploadModalVisible')).toBe(true);
   });
 
   it('clicking Clone button shows the clone doc dialog', () => {
@@ -252,9 +250,9 @@ describe('DocEditorContainer', () => {
           database={database} />
       </Provider>
     );
-    assert.equal(wrapper.find(DocEditorScreen).prop('isCloneDocModalVisible'), false);
+    expect(wrapper.find(DocEditorScreen).prop('isCloneDocModalVisible')).toBe(false);
     wrapper.find('button[title="Clone Document"]').simulate('click');
-    assert.equal(wrapper.find(DocEditorScreen).prop('isCloneDocModalVisible'), true);
+    expect(wrapper.find(DocEditorScreen).prop('isCloneDocModalVisible')).toBe(true);
   });
 
 });
@@ -269,12 +267,12 @@ describe("AttachmentsPanelButton", () => {
 
   it('does not show up when loading', () => {
     const el = mount(<AttachmentsPanelButton isLoading={true} doc={doc} />);
-    assert.equal(el.find('.panel-button').length, 0);
+    expect(el.find('.panel-button').length).toBe(0);
   });
 
   it('shows up after loading', () => {
     const el = mount(<AttachmentsPanelButton isLoading={false} doc={doc} />);
-    assert.equal(el.find('button.panel-button').length, 1);
+    expect(el.find('button.panel-button').length).toBe(1);
   });
 });
 
@@ -299,9 +297,9 @@ describe("Custom Extension Buttons", () => {
       isLoading={false}
       isNewDoc={false}
       database={database} />);
-    assert.isTrue(/Oh\sno\sshe\sdi'n't!/.test(el.html()));
+    expect(/Oh\sno\sshe\sdi'n't!/.test(el.html())).toBe(true);
     // confirm the database name was also included
-    assert.equal(el.find("#testDatabaseName").text(), database.id);
+    expect(el.find("#testDatabaseName").text()).toBe(database.id);
   });
 });
 

@@ -37,7 +37,7 @@ describe('Sidebar Reducer', () => {
         designDoc: designDoc
       };
       const newState = sidebar(undefined, action);
-      assert.ok(isVisible(newState, designDoc));
+      expect(isVisible(newState, designDoc)).toBeTruthy();
     });
 
     it('should not be visible after being toggled twice', () => {
@@ -48,7 +48,7 @@ describe('Sidebar Reducer', () => {
       };
       let newState = sidebar(undefined, action);
       newState = sidebar(newState, action);
-      assert.notOk(isVisible(newState, designDoc));
+      expect(isVisible(newState, designDoc)).toBe(false);
     });
 
   });
@@ -64,13 +64,13 @@ describe('Sidebar Reducer', () => {
 
     it('should toggle the state', () => {
       let newState = sidebar(undefined, action);
-      assert.ok(isVisible(newState, designDoc));
+      expect(isVisible(newState, designDoc)).toBeTruthy();
 
       newState = sidebar(newState, action);
-      assert.ok(isVisible(newState, designDoc, indexGroup));
+      expect(isVisible(newState, designDoc, indexGroup)).toBeTruthy();
 
       newState = sidebar(newState, action);
-      assert.notOk(isVisible(newState, designDoc, indexGroup));
+      expect(isVisible(newState, designDoc, indexGroup)).toBe(false);
     });
 
   });

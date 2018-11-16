@@ -45,7 +45,7 @@ describe('styled select', () => {
         value: 'new'
       }
     });
-    assert.ok(spy.calledOnce);
+    expect(spy.calledOnce).toBeTruthy();
   });
 
 });

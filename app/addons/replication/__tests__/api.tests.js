@@ -62,7 +62,7 @@ describe('Replication API', () => {
         remoteSource
       });
 
-      assert.deepEqual(source.url, 'http://remote-couchdb.com/my%2Fdb%2Fhere');
+      expect(source.url).toEqual('http://remote-couchdb.com/my%2Fdb%2Fhere');
     });
 
     it('returns local source with auth info and encoded', () => {
@@ -77,8 +77,8 @@ describe('Replication API', () => {
         sourceAuthType: Constants.REPLICATION_AUTH_METHOD.BASIC
       }, {origin: 'http://dev:6767'});
 
-      assert.deepEqual(source.headers, {Authorization:"Basic dGhlLXVzZXI6cGFzc3dvcmQ="});
-      assert.ok(/my%2Fdb/.test(source.url));
+      expect(source.headers).toEqual({Authorization:"Basic dGhlLXVzZXI6cGFzc3dvcmQ="});
+      expect(source.url).toMatch(/my%2Fdb/);
     });
 
     it('returns local source with auth info and encoded when use relative url', () => {
@@ -93,8 +93,8 @@ describe('Replication API', () => {
         sourceAuthType: Constants.REPLICATION_AUTH_METHOD.BASIC
       }, {origin: 'http://dev:6767', pathname:'/db/_utils'});
 
-      assert.deepEqual(source.headers, {Authorization:"Basic dGhlLXVzZXI6cGFzc3dvcmQ="});
-      assert.ok(/\/db\/my%2Fdb/.test(source.url));
+      expect(source.headers).toEqual({Authorization:"Basic dGhlLXVzZXI6cGFzc3dvcmQ="});
+      expect(source.url).toMatch(/\/db\/my%2Fdb/);
     });
 
     it('returns remote source url and auth header', () => {
@@ -109,8 +109,8 @@ describe('Replication API', () => {
         sourceAuthType: Constants.REPLICATION_AUTH_METHOD.BASIC
       }, {origin: 'http://dev:6767'});
 
-      assert.deepEqual(source.headers, {Authorization:"Basic dGhlLXVzZXI6cGFzc3dvcmQ="});
-      assert.deepEqual('http://my-couchdb.com/my-db', source.url);
+      expect(source.headers).toEqual({Authorization:"Basic dGhlLXVzZXI6cGFzc3dvcmQ="});
+      expect(source.url).toBe('http://my-couchdb.com/my-db');
     });
 
     it('returns source with no auth', () => {
@@ -125,7 +125,7 @@ describe('Replication API', () => {
         sourceAuthType: Constants.REPLICATION_AUTH_METHOD.NO_AUTH
       }, {origin: 'http://dev:6767'});
 
-      assert.deepEqual(source.headers, {});
+      expect(source.headers).toEqual({});
 
       const source2 = getSource({
         replicationSource: Constants.REPLICATION_SOURCE.REMOTE,
@@ -133,7 +133,7 @@ describe('Replication API', () => {
         localSource: "local"
       }, {origin: 'http://dev:6767'});
 
-      assert.deepEqual(source2.headers, {});
+      expect(source2.headers).toEqual({});
     });
 
     it('returns source with custom auth', () => {
@@ -154,7 +154,7 @@ describe('Replication API', () => {
         sourceAuthType: 'TEST_CUSTOM_AUTH'
       }, {origin: 'http://dev:6767'});
 
-      assert.deepEqual(source.auth, { auth_creds: 'sample_creds' });
+      expect(source.auth).toEqual({ auth_creds: 'sample_creds' });
     });
   });
 
@@ -163,10 +163,11 @@ describe('Replication API', () => {
     it('returns remote encoded target', () => {
       const remoteTarget = 'http://remote-couchdb.com/my/db';
 
-      assert.deepEqual("http://remote-couchdb.com/my%2Fdb", getTarget({
+      const url = getTarget({
         replicationTarget: Constants.REPLICATION_TARGET.NEW_REMOTE_DATABASE,
         remoteTarget: remoteTarget
-      }).url);
+      }).url;
+      expect(url).toBe("http://remote-couchdb.com/my%2Fdb");
     });
 
     it("encodes username and password for remote", () => {
@@ -181,8 +182,8 @@ describe('Replication API', () => {
         targetAuthType: Constants.REPLICATION_AUTH_METHOD.BASIC
       });
 
-      assert.deepEqual(target.url, 'http://remote-couchdb.com/my%2Fdb');
-      assert.deepEqual(target.headers, {Authorization:"Basic amltaTpteS1wYXNzd29yZA=="});
+      expect(target.url).toEqual('http://remote-couchdb.com/my%2Fdb');
+      expect(target.headers).toEqual({Authorization:"Basic amltaTpteS1wYXNzd29yZA=="});
     });
 
     it('returns existing local database', () => {
@@ -196,8 +197,8 @@ describe('Replication API', () => {
         targetAuthType: Constants.REPLICATION_AUTH_METHOD.BASIC
       });
 
-      assert.deepEqual(target.headers, {Authorization:"Basic dGhlLXVzZXI6cGFzc3dvcmQ="});
-      assert.ok(/my-existing%2Fdb/.test(target.url));
+      expect(target.headers).toEqual({Authorization:"Basic dGhlLXVzZXI6cGFzc3dvcmQ="});
+      expect(target.url).toMatch(/my-existing%2Fdb/);
     });
 
     it('returns existing local database even with relative urls', () => {
@@ -211,8 +212,8 @@ describe('Replication API', () => {
         targetAuthType: Constants.REPLICATION_AUTH_METHOD.BASIC
       }, {origin:'http://dev:6767', pathname:'/db/_utils'});
 
-      assert.deepEqual(target.headers, {Authorization:"Basic dGhlLXVzZXI6cGFzc3dvcmQ="});
-      assert.ok(/my-existing%2Fdb/.test(target.url));
+      expect(target.headers).toEqual({Authorization:"Basic dGhlLXVzZXI6cGFzc3dvcmQ="});
+      expect(target.url).toMatch(/my-existing%2Fdb/);
     });
 
     it('returns new local database', () => {
@@ -227,8 +228,8 @@ describe('Replication API', () => {
         targetAuthType: Constants.REPLICATION_AUTH_METHOD.BASIC
       });
 
-      assert.deepEqual(target.headers, {Authorization:"Basic dGhlLXVzZXI6cGFzc3dvcmQ="});
-      assert.ok(/my-new%2Fdb/.test(target.url));
+      expect(target.headers).toEqual({Authorization:"Basic dGhlLXVzZXI6cGFzc3dvcmQ="});
+      expect(target.url).toMatch(/my-new%2Fdb/);
     });
 
     it('returns new local for remote source', () => {
@@ -243,8 +244,8 @@ describe('Replication API', () => {
         targetAuthType: Constants.REPLICATION_AUTH_METHOD.BASIC
       }, {origin: 'http://dev:5555'});
 
-      assert.deepEqual(target.headers, {Authorization:"Basic dGhlLXVzZXI6cGFzc3dvcmQ="});
-      assert.ok(/my-new%2Fdb/.test(target.url));
+      expect(target.headers).toEqual({Authorization:"Basic dGhlLXVzZXI6cGFzc3dvcmQ="});
+      expect(target.url).toMatch(/my-new%2Fdb/);
     });
 
     it("doesn't encode username and password if it is not supplied", () => {
@@ -264,8 +265,8 @@ describe('Replication API', () => {
         localTarget: 'my-new/db'
       }, location);
 
-      assert.deepEqual("http://dev:8000/my-new%2Fdb", target.url);
-      assert.deepEqual({}, target.headers);
+      expect(target.url).toBe("http://dev:8000/my-new%2Fdb");
+      expect(target.headers).toEqual({});
 
       const targetNoAuth = getTarget({
         replicationTarget: Constants.REPLICATION_TARGET.NEW_LOCAL_DATABASE,
@@ -273,7 +274,7 @@ describe('Replication API', () => {
         localTarget: 'my-new/db',
         targetAuthType: Constants.REPLICATION_AUTH_METHOD.NO_AUTH
       }, location);
-      assert.deepEqual({}, targetNoAuth.headers);
+      expect(targetNoAuth.headers).toEqual({});
     });
 
     it('returns target with custom auth', () => {
@@ -294,7 +295,7 @@ describe('Replication API', () => {
         targetAuthType: 'TEST_CUSTOM_AUTH'
       });
 
-      assert.deepEqual(target.auth, { auth_creds: 'sample_creds' });
+      expect(target.auth).toEqual({ auth_creds: 'sample_creds' });
     });
 
   });
@@ -302,26 +303,26 @@ describe('Replication API', () => {
   describe('continuous', () => {
 
     it('returns true for continuous', () => {
-      assert.ok(continuous(Constants.REPLICATION_TYPE.CONTINUOUS));
+      expect(continuous(Constants.REPLICATION_TYPE.CONTINUOUS)).toBeTruthy();
     });
 
     it('returns false for once', () => {
-      assert.notOk(continuous(Constants.REPLICATION_TYPE.ONE_TIME));
+      expect(continuous(Constants.REPLICATION_TYPE.ONE_TIME)).toBeFalsy();
     });
   });
 
   describe('create target', () => {
 
     it('returns true for new local', () => {
-      assert.ok(createTarget(Constants.REPLICATION_TARGET.NEW_LOCAL_DATABASE));
+      expect(createTarget(Constants.REPLICATION_TARGET.NEW_LOCAL_DATABASE)).toBeTruthy();
     });
 
     it('returns true for new remote', () => {
-      assert.ok(createTarget(Constants.REPLICATION_TARGET.NEW_REMOTE_DATABASE));
+      expect(createTarget(Constants.REPLICATION_TARGET.NEW_REMOTE_DATABASE)).toBeTruthy();
     });
 
     it('returns false for existing', () => {
-      assert.notOk(createTarget(Constants.REPLICATION_TARGET.EXISTING_REMOTE_DATABASE));
+      expect(createTarget(Constants.REPLICATION_TARGET.EXISTING_REMOTE_DATABASE)).toBeFalsy();
     });
 
   });
@@ -331,26 +332,23 @@ describe('Replication API', () => {
     it('adds doc id if it exists', () => {
       const docId = 'docId';
 
-      assert.deepEqual(
-        addDocIdAndRev(docId, null,  {}), {
-          _id: docId
-        });
+      expect(addDocIdAndRev(docId, null,  {})).toEqual({
+        _id: docId
+      });
     });
 
     it('adds doc and Rev if it exists', () => {
       const docId = 'docId';
       const _rev = "1-rev123";
 
-      assert.deepEqual(
-        addDocIdAndRev(docId, _rev, {}), {
-          _id: docId,
-          _rev: _rev
-        });
+      expect(addDocIdAndRev(docId, _rev, {})).toEqual({
+        _id: docId,
+        _rev: _rev
+      });
     });
 
     it('does not add doc id if it does not exists', () => {
-      assert.deepEqual(
-        addDocIdAndRev(null, null, {}), {});
+      expect(addDocIdAndRev(null, null, {})).toEqual({});
     });
   });
 
@@ -359,7 +357,7 @@ describe('Replication API', () => {
       const url = "http://userone:theirpassword@couchdb-host.com/my%2Fdb%2fhere";
       const cleanedUrl = "http://couchdb-host.com/my/db/here";
 
-      assert.deepEqual(getDocUrl(url), cleanedUrl);
+      expect(getDocUrl(url)).toEqual(cleanedUrl);
     });
   });
 
@@ -368,7 +366,7 @@ describe('Replication API', () => {
       const url = "http://dev:5984/boom/aaaa";
       const encodedUrl = encodeFullUrl(url);
 
-      assert.deepEqual("http://dev:5984/boom%2Faaaa", encodedUrl);
+      expect(encodedUrl).toBe("http://dev:5984/boom%2Faaaa");
     });
 
   });
@@ -379,7 +377,7 @@ describe('Replication API', () => {
       const url = "http://dev:5984/boom%2Faaaa";
       const encodedUrl = decodeFullUrl(url);
 
-      assert.deepEqual("http://dev:5984/boom/aaaa", encodedUrl);
+      expect(encodedUrl).toBe("http://dev:5984/boom/aaaa");
     });
 
   });
@@ -389,22 +387,22 @@ describe('Replication API', () => {
     it("can get username and password", () => {
       const {username, password } = getCredentialsFromUrl("https://bob:marley@my-couchdb.com/db");
 
-      assert.deepEqual(username, 'bob');
-      assert.deepEqual(password, 'marley');
+      expect(username).toBe('bob');
+      expect(password).toBe('marley');
     });
 
     it("can get username and password with special characters", () => {
       const {username, password } = getCredentialsFromUrl("http://bob:m@:/rley@my-couchdb.com/db");
 
-      assert.deepEqual(username, 'bob');
-      assert.deepEqual(password, 'm@:/rley');
+      expect(username).toBe('bob');
+      expect(password).toBe('m@:/rley');
     });
 
     it("returns nothing for no username and password", () => {
       const {username, password } = getCredentialsFromUrl("http://my-couchdb.com/db");
 
-      assert.deepEqual(username, '');
-      assert.deepEqual(password, '');
+      expect(username).toBe('');
+      expect(password).toBe('');
     });
   });
 
@@ -412,17 +410,17 @@ describe('Replication API', () => {
 
     it("can remove username and password", () => {
       const url = removeCredentialsFromUrl("https://bob:marley@my-couchdb.com/db");
-      assert.deepEqual(url, 'https://my-couchdb.com/db');
+      expect(url).toBe('https://my-couchdb.com/db');
     });
 
     it("returns url if no password", () => {
       const url = removeCredentialsFromUrl("https://my-couchdb.com/db");
-      assert.deepEqual(url, 'https://my-couchdb.com/db');
+      expect(url).toBe('https://my-couchdb.com/db');
     });
 
     it("can remove username and password with special characters", () => {
       const url = removeCredentialsFromUrl("https://bob:m@:/rley@my-couchdb.com/db");
-      assert.deepEqual(url, 'https://my-couchdb.com/db');
+      expect(url).toBe('https://my-couchdb.com/db');
     });
   });
 
@@ -435,7 +433,7 @@ describe('Replication API', () => {
       fetchMock.getOnce('./_scheduler/jobs', {});
       return supportNewApi(true)
         .then(resp => {
-          assert.ok(resp);
+          expect(resp).toBeTruthy();
         });
     });
 
@@ -447,7 +445,7 @@ describe('Replication API', () => {
 
       return supportNewApi(true)
         .then(resp => {
-          assert.notOk(resp);
+          expect(resp).toBeFalsy();
         });
     });
 
@@ -459,7 +457,7 @@ describe('Replication API', () => {
       fetchMock.getOnce('./_scheduler/jobs', {});
       return supportNewApi(true)
         .then(resp => {
-          assert.ok(resp);
+          expect(resp).toBeTruthy();
         });
     });
 
@@ -471,7 +469,7 @@ describe('Replication API', () => {
 
       return supportNewApi(true)
         .then(resp => {
-          assert.notOk(resp);
+          expect(resp).toBeFalsy();
         });
     });
 
@@ -583,8 +581,8 @@ describe('Replication API', () => {
         return supportNewApi(true)
           .then(fetchReplicationDocs)
           .then(docs => {
-            assert.deepEqual(docs.length, 1);
-            assert.deepEqual(docs[0]._id, "c94d4839d1897105cb75e1251e0003ea");
+            expect(docs.length).toBe(1);
+            expect(docs[0]._id).toBe("c94d4839d1897105cb75e1251e0003ea");
           });
       });
     });
@@ -601,9 +599,9 @@ describe('Replication API', () => {
         return supportNewApi(true)
           .then(fetchReplicationDocs)
           .then(docs => {
-            assert.deepEqual(docs.length, 1);
-            assert.deepEqual(docs[0]._id, "c94d4839d1897105cb75e1251e0003ea");
-            assert.deepEqual(docs[0].stateTime.toDateString(), (new Date('2017-03-07T14:46:17')).toDateString());
+            expect(docs.length).toBe(1);
+            expect(docs[0]._id).toBe("c94d4839d1897105cb75e1251e0003ea");
+            expect(docs[0].stateTime.toDateString()).toBe((new Date('2017-03-07T14:46:17')).toDateString());
           });
       });
     });

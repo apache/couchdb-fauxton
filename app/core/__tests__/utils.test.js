@@ -19,17 +19,17 @@ describe('Utils', () => {
 
     it('returns doc if id not given', () => {
       const res = utils.getDocTypeFromId();
-      assert.equal(res, 'doc');
+      expect(res).toBe('doc');
     });
 
     it('returns design doc for design docs', () => {
       const res = utils.getDocTypeFromId('_design/foobar');
-      assert.equal(res, 'design doc');
+      expect(res).toBe('design doc');
     });
 
     it('returns doc for all others', () => {
       const res = utils.getDocTypeFromId('blerg');
-      assert.equal(res, 'doc');
+      expect(res).toBe('doc');
     });
   });
 
@@ -37,34 +37,34 @@ describe('Utils', () => {
 
     it('keeps _design/ intact', () => {
       const res = utils.getSafeIdForDoc('_design/foo/do');
-      assert.equal(res, '_design/foo%2Fdo');
+      expect(res).toBe('_design/foo%2Fdo');
     });
 
     it('encodes all other', () => {
       const res = utils.getSafeIdForDoc('_redesign/foobar');
-      assert.equal(res, '_redesign%2Ffoobar');
+      expect(res).toBe('_redesign%2Ffoobar');
     });
   });
 
   describe('safeURLName', () => {
 
     it('encodes special chars', () => {
-      assert.equal('foo-bar%2Fbaz', utils.safeURLName('foo-bar/baz'));
+      expect(utils.safeURLName('foo-bar/baz')).toBe('foo-bar%2Fbaz');
     });
 
     it('encodes an encoded doc', () => {
-      assert.equal('foo-bar%252Fbaz', utils.safeURLName('foo-bar%2Fbaz'));
+      expect(utils.safeURLName('foo-bar%2Fbaz')).toBe('foo-bar%252Fbaz');
     });
   });
 
   describe('isSystemDatabase', () => {
 
     it('detects system databases', () => {
-      assert.ok(utils.isSystemDatabase('_replicator'));
+      expect(utils.isSystemDatabase('_replicator')).toBeTruthy();
     });
 
     it('ignores other dbs', () => {
-      assert.notOk(utils.isSystemDatabase('foo'));
+      expect(utils.isSystemDatabase('foo')).toBeFalsy();
     });
   });
 
@@ -77,7 +77,7 @@ describe('Utils', () => {
     it('Should get value after setting it', () => {
       const key = 'key1';
       utils.localStorageSet(key, 1);
-      assert.equal(utils.localStorageGet(key), 1);
+      expect(utils.localStorageGet(key)).toBe(1);
     });
 
     it('Set and retrieve complex object', () => {
@@ -87,7 +87,7 @@ describe('Utils', () => {
               two: ['1', 'string', 3]
             };
       utils.localStorageSet(key, obj);
-      assert.deepEqual(utils.localStorageGet(key), obj);
+      expect(utils.localStorageGet(key)).toEqual(obj);
     });
 
     it('stripHTML removes HTML', () => {
@@ -97,7 +97,7 @@ describe('Utils', () => {
         { html: 'testing <a href="#whatever">attributes</span>', text: 'testing attributes' },
         { html: '<span>testing</span> multiple <p>elements</p>', text: 'testing multiple elements' }
       ].forEach(function (item) {
-        assert.equal(utils.stripHTML(item.html), item.text);
+        expect(utils.stripHTML(item.html)).toBe(item.text);
       });
     });
 
@@ -105,12 +105,11 @@ describe('Utils', () => {
 
   describe('queryParams', () => {
     it('builds query string from an object', () => {
-      assert.equal(
-        utils.queryParams({
-          startkey: JSON.stringify('_design/app'),
-          endkey: JSON.stringify('_design/app\u9999'),
-          limit:30
-        }),
+      expect(utils.queryParams({
+        startkey: JSON.stringify('_design/app'),
+        endkey: JSON.stringify('_design/app\u9999'),
+        limit:30
+      })).toBe(
         'startkey=%22_design%2Fapp%22&endkey=%22_design%2Fapp%E9%A6%99%22&limit=30'
       );
     });

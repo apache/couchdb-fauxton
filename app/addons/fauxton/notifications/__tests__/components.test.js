@@ -37,11 +37,11 @@ describe('Notification', () => {
       onHideComplete={() => {}}
     />);
 
-    assert.notOk(spy.called);
+    expect(spy.called).toBeFalsy();
 
     setTimeout(() => {
       component.update();
-      assert.ok(spy.called);
+      expect(spy.called).toBeTruthy();
       done();
     }, 3000);
   });
@@ -56,7 +56,7 @@ describe('Notification', () => {
       onStartHide={() => {}}
       onHideComplete={() => {}}
     />);
-    assert.ok(/&lt;script&gt;window.whatever=1;&lt;\/script&gt;/.test(wrapper.html()));
+    expect(/&lt;script&gt;window.whatever=1;&lt;\/script&gt;/.test(wrapper.html())).toBeTruthy();
   });
 
   it('notification text can be rendered unescaped', () => {
@@ -70,7 +70,7 @@ describe('Notification', () => {
       onStartHide={() => {}}
       onHideComplete={() => {}}
     />);
-    assert.ok(/<script>window.whatever=1;<\/script>/.test(wrapper.html()));
+    expect(/<script>window.whatever=1;<\/script>/.test(wrapper.html())).toBeTruthy();
   });
 });
 
@@ -117,20 +117,20 @@ describe('NotificationPanelRow', () => {
       item={notifications.success}
     />);
 
-    assert.notOk(row1.find('li').prop('aria-hidden'));
+    expect(row1.find('li').prop('aria-hidden')).toBeFalsy();
 
     const row2 = mount(<NotificationPanelRow
       {...defaultProps}
       item={notifications.error}
     />
     );
-    assert.notOk(row2.find('li').prop('aria-hidden'));
+    expect(row2.find('li').prop('aria-hidden')).toBeFalsy();
 
     const row3 = mount(<NotificationPanelRow
       {...defaultProps}
       item={notifications.info} />
     );
-    assert.notOk(row3.find('li').prop('aria-hidden'));
+    expect(row3.find('li').prop('aria-hidden')).toBeFalsy();
   });
 
   it('hides notification when filter doesn\'t match', () => {
@@ -140,7 +140,7 @@ describe('NotificationPanelRow', () => {
         filter="success"
         item={notifications.info}
       />);
-    assert.ok(rowEl.find('li').prop('aria-hidden'));
+    expect(rowEl.find('li').prop('aria-hidden')).toBeTruthy();
   });
 
   it('shows notification when filter exact match', () => {
@@ -150,7 +150,7 @@ describe('NotificationPanelRow', () => {
         filter="info"
         item={notifications.info}
       />);
-    assert.notOk(rowEl.find('li').prop('aria-hidden'));
+    expect(rowEl.find('li').prop('aria-hidden')).toBeFalsy();
   });
 });
 

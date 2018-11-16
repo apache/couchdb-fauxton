@@ -30,7 +30,7 @@ describe('Document', () => {
       _rev: '4-3a1b9f4b988b413e9245cd250769da72',
       id: 'foo'
     });
-    assert.equal(res.id, 'foo');
+    expect(res.id).toBe('foo');
   });
 
   it('removes the id, if we create a document and get back an "id" instead of "_id"', () => {
@@ -43,7 +43,7 @@ describe('Document', () => {
       _rev: '4-3a1b9f4b988b413e9245cd250769da72',
       ok: true
     });
-    assert.notOk(res.id);
+    expect(res.id).toBeFalsy();
   });
 
   it('can return the doc url, if id given', () => {
@@ -51,7 +51,7 @@ describe('Document', () => {
       database: {id: 'blerg', safeID: function () { return this.id; }}
     });
 
-    assert.ok(/\/blerg/.test(doc.url('apiurl')));
+    expect(doc.url('apiurl')).toMatch(/\/blerg/);
   });
 
   it('will return the API url to create a new doc, if no doc exists yet', () => {
@@ -59,7 +59,7 @@ describe('Document', () => {
       database: {id: 'blerg', safeID: function () { return this.id; }}
     });
 
-    assert.ok(/\/blerg/.test(doc.url('apiurl')));
+    expect(doc.url('apiurl')).toMatch(/\/blerg/);
   });
 });
 
@@ -79,7 +79,7 @@ describe('AllDocs', () => {
       params: {limit: 20}
     });
 
-    assert.ok(collection.isEditable());
+    expect(collection.isEditable()).toBeTruthy();
   });
 });
 
@@ -108,7 +108,7 @@ describe('QueryParams', () => {
       const params = {'foo': '[1]]'};
       const result = Models.QueryParams.parse(params);
 
-      assert.deepEqual(result, params);
+      expect(result).toEqual(params);
     });
 
     it('parses startkey, endkey', () => {
@@ -118,7 +118,7 @@ describe('QueryParams', () => {
       };
       const result = Models.QueryParams.parse(params);
 
-      assert.deepEqual(result, {
+      expect(result).toEqual({
         'startkey': ['a', 'b'],
         'endkey': ['c', 'd']
       });
@@ -130,7 +130,7 @@ describe('QueryParams', () => {
       };
       const result = Models.QueryParams.parse(params);
 
-      assert.deepEqual(result, {'key': [1, 2]});
+      expect(result).toEqual({'key': [1, 2]});
     });
 
     it('does not modify input', () => {
@@ -139,7 +139,7 @@ describe('QueryParams', () => {
       };
       const clone = _.clone(params);
       Models.QueryParams.parse(params);
-      assert.deepEqual(params, clone);
+      expect(params).toEqual(clone);
     });
   });
 
@@ -148,7 +148,7 @@ describe('QueryParams', () => {
       const params = {'foo': [1, 2, 3]};
       const result = Models.QueryParams.stringify(params);
 
-      assert.deepEqual(result, params);
+      expect(result).toEqual(params);
     });
 
     it('stringifies startkey, endkey', () => {
@@ -159,7 +159,7 @@ describe('QueryParams', () => {
 
       const result = Models.QueryParams.stringify(params);
 
-      assert.deepEqual(result, {
+      expect(result).toEqual({
         'startkey':'["a","b"]',
         'endkey':'["c","d"]'
       });
@@ -169,7 +169,7 @@ describe('QueryParams', () => {
       const params = {'key':['a', 'b']};
       const result = Models.QueryParams.stringify(params);
 
-      assert.deepEqual(result, { 'key': '["a","b"]' });
+      expect(result).toEqual({ 'key': '["a","b"]' });
     });
 
     it('does not modify input', () => {
@@ -177,7 +177,7 @@ describe('QueryParams', () => {
       const clone = _.clone(params);
       Models.QueryParams.stringify(params);
 
-      assert.deepEqual(params, clone);
+      expect(params).toEqual(clone);
     });
 
     it('is symmetrical with parse', () => {
@@ -192,7 +192,7 @@ describe('QueryParams', () => {
       const json = Models.QueryParams.stringify(params);
       const result = Models.QueryParams.parse(json);
 
-      assert.deepEqual(result, clone);
+      expect(result).toEqual(clone);
     });
   });
 });
@@ -237,7 +237,7 @@ describe('Bulk Delete', () => {
       databaseId: databaseId
     });
 
-    assert.equal(collection.length, 3);
+    expect(collection.length).toBe(3);
   });
 
   it('clears the memory if no errors happened', () => {
@@ -247,13 +247,13 @@ describe('Bulk Delete', () => {
     ], resolve, reject);
 
     return promise.then(() => {
-      assert.equal(collection.length, 1);
+      expect(collection.length).toBe(1);
     });
   });
 
   it('triggers a removed event with all ids', (done) => {
     collection.listenToOnce(collection, 'removed', function (ids) {
-      assert.deepEqual(ids, ['Deferred', 'DeskSet']);
+      expect(ids).toEqual(['Deferred', 'DeskSet']);
       done();
     });
 
@@ -266,7 +266,7 @@ describe('Bulk Delete', () => {
   it('triggers a error event with all errored ids', (done) => {
     collection.listenToOnce(collection, 'error', function (ids) {
       done();
-      assert.deepEqual(ids, ['Deferred']);
+      expect(ids).toEqual(['Deferred']);
     });
 
     collection.handleResponse([
@@ -283,9 +283,9 @@ describe('Bulk Delete', () => {
     ], resolve, reject);
 
     return promise.then(() => {
-      assert.ok(collection.get('1'));
-      assert.ok(collection.get('3'));
-      assert.notOk(collection.get('2'));
+      expect(collection.get('1')).toBeTruthy();
+      expect(collection.get('3')).toBeTruthy();
+      expect(collection.get('2')).toBeFalsy();
     });
   });
 
@@ -299,7 +299,7 @@ describe('Bulk Delete', () => {
     ], resolve, reject);
 
     return promise.then(() => {
-      assert.ok(spy.calledOnce);
+      expect(spy.calledOnce).toBeTruthy();
     });
   });
 
@@ -318,7 +318,7 @@ describe('Bulk Delete', () => {
     ], resolve, reject);
 
     return promise.then(() => {
-      assert.ok(spy.calledWith(ids));
+      expect(spy.calledWith(ids)).toBeTruthy();
     });
   });
 
@@ -328,7 +328,7 @@ describe('Bulk Delete', () => {
     ], resolve, reject);
 
     return promise.catch((errors) => {
-      assert.deepEqual(errors, ['1']);
+      expect(errors).toEqual(['1']);
     });
   });
 

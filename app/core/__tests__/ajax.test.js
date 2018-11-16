@@ -78,7 +78,7 @@ describe('Fauxton Ajax', () => {
     unsubscribe = fetchObserver.filter(resp => resp.status === 400).subscribe({
       next (resp) {
         done();
-        assert.deepEqual(resp.status, 400);
+        expect(resp.status).toEqual(400);
       }
     });
 
@@ -95,7 +95,7 @@ describe('Fauxton Ajax', () => {
     });
 
     return get('/testing').then(resp =>{
-      assert.ok(resp.ok);
+      expect(resp.ok).toBeTruthy();
     });
   });
 
@@ -109,7 +109,7 @@ describe('Fauxton Ajax', () => {
 
     return put('/testing')
       .then(resp =>{
-        assert.ok(resp.ok);
+        expect(resp.ok).toBeTruthy();
       });
   });
 
@@ -123,7 +123,7 @@ describe('Fauxton Ajax', () => {
 
     return post('/testing')
       .then(resp =>{
-        assert.ok(resp.ok);
+        expect(resp.ok).toBeTruthy();
       });
   });
 
@@ -137,7 +137,7 @@ describe('Fauxton Ajax', () => {
 
     return deleteRequest('/testing')
       .then(resp =>{
-        assert.ok(resp.ok);
+        expect(resp.ok).toBeTruthy();
       });
   });
 
@@ -152,8 +152,8 @@ describe('Fauxton Ajax', () => {
       fetchMock.postOnce('/testing', successResponse);
       return post('/testing', '')
         .then(resp =>{
-          assert.ok(resp.ok);
-          assert.ok(fetchMock.lastOptions().body === '""');
+          expect(resp.ok).toBeTruthy();
+          expect(fetchMock.lastOptions().body).toBe('""');
         });
     });
 
@@ -161,8 +161,8 @@ describe('Fauxton Ajax', () => {
       fetchMock.postOnce('/testing', successResponse);
       return post('/testing', 0)
         .then(resp =>{
-          assert.ok(resp.ok);
-          assert.ok(fetchMock.lastOptions().body === '0');
+          expect(resp.ok).toBeTruthy();
+          expect(fetchMock.lastOptions().body).toBe('0');
         });
     });
 
@@ -170,8 +170,8 @@ describe('Fauxton Ajax', () => {
       fetchMock.postOnce('/testing', successResponse);
       return post('/testing', false)
         .then(resp =>{
-          assert.ok(resp.ok);
-          assert.ok(fetchMock.lastOptions().body === 'false');
+          expect(resp.ok).toBeTruthy();
+          expect(fetchMock.lastOptions().body).toBe('false');
         });
     });
   });
@@ -187,8 +187,8 @@ describe('Fauxton Ajax', () => {
       fetchMock.putOnce('/testing', successResponse);
       return put('/testing', '')
         .then(resp =>{
-          assert.ok(resp.ok);
-          assert.ok(fetchMock.lastOptions().body === '""');
+          expect(resp.ok).toBeTruthy();
+          expect(fetchMock.lastOptions().body).toBe('""');
         });
     });
 
@@ -196,8 +196,8 @@ describe('Fauxton Ajax', () => {
       fetchMock.putOnce('/testing', successResponse);
       return put('/testing', 0)
         .then(resp =>{
-          assert.ok(resp.ok);
-          assert.ok(fetchMock.lastOptions().body === '0');
+          expect(resp.ok).toBeTruthy();
+          expect(fetchMock.lastOptions().body).toBe('0');
         });
     });
 
@@ -205,8 +205,8 @@ describe('Fauxton Ajax', () => {
       fetchMock.putOnce('/testing', successResponse);
       return put('/testing', false)
         .then(resp =>{
-          assert.ok(resp.ok);
-          assert.ok(fetchMock.lastOptions().body === 'false');
+          expect(resp.ok).toBeTruthy();
+          expect(fetchMock.lastOptions().body).toBe('false');
         });
     });
   });

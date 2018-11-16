@@ -36,12 +36,12 @@ describe('Zen Mode', () => {
 
   describe('Toggle theme', () => {
     it('defaults to dark theme', () => {
-      assert.ok(el.find('div.zen-theme-dark').exists());
+      expect(el.find('div.zen-theme-dark').exists()).toBeTruthy();
     });
 
     it('switch to light theme on click', () => {
       el.find('.js-toggle-theme').simulate('click');
-      assert.ok(el.find('div.zen-theme-light').exists());
+      expect(el.find('div.zen-theme-light').exists()).toBeTruthy();
       // reset
       el.find('.js-toggle-theme').simulate('click');
     });
@@ -50,7 +50,7 @@ describe('Zen Mode', () => {
   describe('Closing zen mode', () => {
     it('method called', () => {
       el.find('.js-exit-zen-mode').simulate('click');
-      assert.ok(spy.calledOnce);
+      expect(spy.calledOnce).toBeTruthy();
     });
   });
 

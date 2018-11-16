@@ -32,8 +32,8 @@ describe('Active Tasks -- Stores', () => {
         type: ActionTypes.ACTIVE_TASKS_SWITCH_TAB,
         options: 'all_tasks'
       });
-      assert.ok(state.tasks.length > 0);
-      assert.deepEqual(state.tasks.length, state.filteredTasks.length);
+      expect(state.tasks.length).toBeGreaterThan(0);
+      expect(state.tasks.length).toEqual(state.filteredTasks.length);
     });
 
     it('should filter the table correctly, by radio', () => {
@@ -43,10 +43,10 @@ describe('Active Tasks -- Stores', () => {
       });
 
       //parse table and check that it only contains objects with type: Replication
-      assert.ok(state.filteredTasks.length > 0);
+      expect(state.filteredTasks.length > 0).toBeTruthy();
       state.filteredTasks.forEach(task => {
-        assert.deepEqual(task.type, 'replication');
-        assert.deepEqual(task.type, state.selectedRadio);
+        expect(task.type).toEqual('replication');
+        expect(task.type).toEqual(state.selectedRadio);
       });
     });
 
@@ -62,8 +62,8 @@ describe('Active Tasks -- Stores', () => {
         { user: 'ooo'}
       ];
 
-      assert.equal(fakeFilteredTable[0].user, state.filteredTasks[0].user);
-      assert.equal(fakeFilteredTable[1].user, state.filteredTasks[1].user);
+      expect(fakeFilteredTable[0].user).toBe(state.filteredTasks[0].user);
+      expect(fakeFilteredTable[1].user).toBe(state.filteredTasks[1].user);
     });
   });
 
@@ -74,7 +74,7 @@ describe('Active Tasks -- Stores', () => {
         type: ActionTypes.ACTIVE_TASKS_SWITCH_TAB,
         options: 'all_tasks'
       });
-      assert.ok(state.headerIsAscending);
+      expect(state.headerIsAscending).toBeTruthy();
     });
 
     it('should set header as descending, if same header is selected again', () => {
@@ -82,25 +82,25 @@ describe('Active Tasks -- Stores', () => {
         type: ActionTypes.ACTIVE_TASKS_SORT_BY_COLUMN_HEADER,
         options: 'sameHeader'
       });
-      assert.ok(state.headerIsAscending);
+      expect(state.headerIsAscending).toBeTruthy();
 
       const state2 = reducer(state, {
         type: ActionTypes.ACTIVE_TASKS_SORT_BY_COLUMN_HEADER,
         options: 'sameHeader'
       });
-      assert.notOk(state2.headerIsAscending);
+      expect(state2.headerIsAscending).toBeFalsy();
 
       const state3 = reducer(state2, {
         type: ActionTypes.ACTIVE_TASKS_SORT_BY_COLUMN_HEADER,
         options: 'sameHeader'
       });
-      assert.ok(state3.headerIsAscending);
+      expect(state3.headerIsAscending).toBeTruthy();
 
       const state4 = reducer(state3, {
         type: ActionTypes.ACTIVE_TASKS_SORT_BY_COLUMN_HEADER,
         options: 'differentHeader'
       });
-      assert.ok(state4.headerIsAscending);
+      expect(state4.headerIsAscending).toBeTruthy();
     });
   });
 });

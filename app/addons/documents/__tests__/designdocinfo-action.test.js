@@ -41,7 +41,7 @@ describe('DesignDocInfo Actions', () => {
         ddocName: 'test-designdoc-info',
         designDocInfo: fakeDesignDocInfo
       })(dispatch).then(() => {
-        assert.ok(spy.calledOnce);
+        expect(spy.calledOnce).toBeTruthy();
       });
     });
   });

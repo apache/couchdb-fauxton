@@ -25,13 +25,13 @@ describe('Beautify', () => {
     beautifyEl = mount(
       <ReactComponents.Beautify code={correctCode}/>
     );
-    assert.ok(_.isNull(beautifyEl.instance().render()));
+    expect(beautifyEl.instance().render()).toBeNull();
   });
 
   it('should have button to beautify for single line code', () => {
     const badCode = '() => { console.log("hello"); }';
     beautifyEl = mount(<ReactComponents.Beautify code={badCode}/>);
-    assert.ok(beautifyEl.find('button').hasClass('beautify'));
+    expect(beautifyEl.find('button').hasClass('beautify')).toBeTruthy();
   });
 
   it('on click beautifies code', () => {
@@ -49,6 +49,6 @@ describe('Beautify', () => {
         noOfLines={1}/>
     );
     beautifyEl.simulate('click');
-    assert.equal(fixedCode, correctCode);
+    expect(fixedCode).toBe(correctCode);
   });
 });

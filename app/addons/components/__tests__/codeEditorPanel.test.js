@@ -27,14 +27,14 @@ describe('CodeEditorPanel', () => {
       const codeEditorEl = mount(
         <ReactComponents.CodeEditorPanel defaultCode={code} />
       );
-      assert.equal(codeEditorEl.find('.icon-question-sign').length, 0);
+      expect(codeEditorEl.find('.icon-question-sign').length).toBe(0);
     });
     it('hidden by default', () => {
 
       const codeEditorEl = mount(
         <ReactComponents.CodeEditorPanel defaultCode={code} docLink="http://link.com" />
       );
-      assert.equal(codeEditorEl.find('.icon-question-sign').length, 1);
+      expect(codeEditorEl.find('.icon-question-sign').length).toBe(1);
     });
   });
 
@@ -44,7 +44,7 @@ describe('CodeEditorPanel', () => {
       const codeEditorEl = mount(
         <ReactComponents.CodeEditorPanel defaultCode={code} />
       );
-      assert.equal(codeEditorEl.find('.zen-editor-icon').length, 1);
+      expect(codeEditorEl.find('.zen-editor-icon').length).toBe(1);
     });
 
     it('omits zen mode if explicitly turned off', () => {
@@ -52,7 +52,7 @@ describe('CodeEditorPanel', () => {
       const codeEditorEl = mount(
         <ReactComponents.CodeEditor defaultCode={code} allowZenMode={false} />
       );
-      assert.equal(codeEditorEl.find('.zen-editor-icon').length, 0);
+      expect(codeEditorEl.find('.zen-editor-icon').length).toBe(0);
     });
   });
 
@@ -66,12 +66,12 @@ describe('CodeEditorPanel', () => {
       );
 
       // confirm there are no newlines in the code at this point
-      assert.equal(codeEditorEl.instance().getValue().match(/\n/g), null);
+      expect(codeEditorEl.instance().getValue().match(/\n/g)).toBeNull();
 
       codeEditorEl.find('.beautify').simulate('click');
 
       // now confirm newlines are found
-      assert.equal(codeEditorEl.instance().getValue().match(/\n/g).length, 2);
+      expect(codeEditorEl.instance().getValue().match(/\n/g).length).toBe(2);
     });
   });
 

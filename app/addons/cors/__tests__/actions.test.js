@@ -48,7 +48,7 @@ describe('CORS actions', () => {
         node: localNode
       })(dispatch);
 
-      assert.ok(spyUpdateEnableCorsToHttpd.calledWith(baseURL, localNode, false));
+      expect(spyUpdateEnableCorsToHttpd.calledWith(baseURL, localNode, false)).toBeTruthy();
     });
 
     it('does not save CORS origins if CORS is not enabled', () => {
@@ -58,7 +58,7 @@ describe('CORS actions', () => {
         node: localNode
       })(dispatch);
 
-      assert.notOk(spyUpdateCorsOrigins.called);
+      expect(spyUpdateCorsOrigins.called).toBeFalsy();
     });
 
     it('saves CORS origins', () => {
@@ -68,7 +68,7 @@ describe('CORS actions', () => {
         node: localNode
       })(dispatch);
 
-      assert.ok(spyUpdateCorsOrigins.calledWith(baseURL, localNode, '*'));
+      expect(spyUpdateCorsOrigins.calledWith(baseURL, localNode, '*')).toBeTruthy();
     });
 
     it('saves CORS credentials, headers and methods', () => {
@@ -78,9 +78,9 @@ describe('CORS actions', () => {
         node: localNode
       })(dispatch);
 
-      assert.ok(spyUpdateCorsCredentials.calledOnce);
-      assert.ok(spyUpdateCorsHeaders.calledOnce);
-      assert.ok(spyUpdateCorsMethods.calledOnce);
+      expect(spyUpdateCorsCredentials.calledOnce).toBeTruthy();
+      expect(spyUpdateCorsHeaders.calledOnce).toBeTruthy();
+      expect(spyUpdateCorsMethods.calledOnce).toBeTruthy();
     });
 
     it('shows notification on successful save', () => {
@@ -94,7 +94,7 @@ describe('CORS actions', () => {
         origins: ['https://testdomain.com'],
         node: localNode
       })(dispatch).then(() => {
-        assert.ok(spyAddNotification.called);
+        expect(spyAddNotification.called).toBeTruthy();
       });
     });
   });
@@ -104,13 +104,13 @@ describe('CORS actions', () => {
     it('joins array into string', () => {
       var origins = ['https://hello.com', 'https://hello2.com'];
 
-      assert.deepEqual(Actions.sanitizeOrigins(origins), origins.join(','));
+      expect(Actions.sanitizeOrigins(origins)).toEqual(origins.join(','));
     });
 
     it('returns empty string for no origins', () => {
       var origins = [];
 
-      assert.deepEqual(Actions.sanitizeOrigins(origins), '');
+      expect(Actions.sanitizeOrigins(origins)).toEqual('');
     });
   });
 });

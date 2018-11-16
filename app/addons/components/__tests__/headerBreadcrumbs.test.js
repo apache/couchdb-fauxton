@@ -28,7 +28,7 @@ describe('Breadcrumbs', () => {
       <div><Breadcrumbs crumbs={crumbs} /></div>
     );
 
-    assert.equal(el.find('.faux-header__breadcrumbs-divider').length, 0);
+    expect(el.find('.faux-header__breadcrumbs-divider').length).toBe(0);
   });
 
   it('should inject 2 dividers if 3 elements present', () => {
@@ -44,7 +44,7 @@ describe('Breadcrumbs', () => {
     );
 
 
-    assert.equal(el.find('.faux-header__breadcrumbs-divider').length, 2);
+    expect(el.find('.faux-header__breadcrumbs-divider').length).toBe(2);
   });
 
   it('linked breadcrumbs are possible', () => {
@@ -59,7 +59,7 @@ describe('Breadcrumbs', () => {
       <div><Breadcrumbs crumbs={crumbs} /></div>
     );
 
-    assert.equal(el.find('.faux-header__breadcrumbs-link').length, 1);
+    expect(el.find('.faux-header__breadcrumbs-link').length).toBe(1);
   });
 
   it('linked breadcrumbs are not created for non-linked elements', () => {
@@ -74,6 +74,6 @@ describe('Breadcrumbs', () => {
       <div><Breadcrumbs crumbs={crumbs} /></div>
     );
 
-    assert.equal(el.find('.faux-header__breadcrumbs-link').length, 0);
+    expect(el.find('.faux-header__breadcrumbs-link').length).toBe(0);
   });
 });

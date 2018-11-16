@@ -40,6 +40,6 @@ describe('Cluster Controller', () => {
   });
 
   it('renders the amount of nodes', () => {
-    assert.ok(/6 nodes/.test(controller.text()), 'finds 6 nodes');
+    expect(controller.text()).toMatch(/6 nodes/);
   });
 });

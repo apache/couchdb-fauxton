@@ -58,10 +58,10 @@ describe('Sidebar actions', () => {
 
     Actions.dispatchNewOptions(options);
     process.nextTick(() => {
-      assert.ok(notificationSpy.calledOnce);
-      assert.ok(/not exist/.test(notificationSpy.args[0][0].msg));
-      assert.ok(navigateSpy.calledOnce);
-      assert.deepEqual(navigateSpy.args[0][0], '/');
+      expect(notificationSpy.calledOnce).toBeTruthy();
+      expect(/not exist/.test(notificationSpy.args[0][0].msg)).toBeTruthy();
+      expect(navigateSpy.calledOnce).toBeTruthy();
+      expect(navigateSpy.args[0][0]).toEqual('/');
       done();
     });
   });
