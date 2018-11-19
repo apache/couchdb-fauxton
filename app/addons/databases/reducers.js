@@ -13,7 +13,7 @@
 import ActionTypes from './actiontypes';
 const initialState = {
   partitionedDatabasesAvailable: false,
-  isLoadingDbInfo: false,
+  isLoadingDbInfo: true,
   dbInfo: undefined,
   isDbPartitioned: false
 };
