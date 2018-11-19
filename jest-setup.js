@@ -34,18 +34,7 @@ window.Worker = function FakeWorker() {
   this.onmessage = undefined;
 };
 
-
 window.alert = () => {};
-
-// Object.defineProperty(window.location, 'origin', {
-//   writable: true,
-//   value: 'http://dev:8000'
-// });
-
-// Object.defineProperty(window.location, 'href', {
-//   writable: true,
-//   value: 'http://dev:8000'
-// });
 
 // Setup enzyme's react adapter
 const Enzyme = require('enzyme');
