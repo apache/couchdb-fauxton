@@ -23,11 +23,6 @@ FauxtonAPI.session = {
   }
 };
 
-// Object.defineProperty(window.location, 'origin', {
-//   writable: true,
-//   value: 'http://dev:8000'
-// });
-
 const assert = utils.assert;
 
 describe("Replication Actions", () => {
@@ -117,13 +112,13 @@ describe("Replication Actions", () => {
         "headers": {
           "Authorization": "Basic dGVzdGVyOnRlc3RlcnBhc3M="
         },
-        "url": "http://dev:8000/animaldb"
+        "url": "http://localhost:8000/animaldb"
       },
       "target": {
         "headers": {
           "Authorization": "Basic dGVzdGVyOnRlc3RlcnBhc3M="
         },
-        "url": "http://dev:8000/boom123"
+        "url": "http://localhost:8000/boom123"
       },
       "create_target": true,
       "continuous": false,
@@ -146,17 +141,8 @@ describe("Replication Actions", () => {
 
     it.only('builds up correct state', (done) => {
       const dispatch = ({type, options}) => {
-        console.log('dispatch', type, options);
         if (ActionTypes.REPLICATION_SET_STATE_FROM_DOC === type) {
-          console.log('deep equal');
-          try {
-            expect(docState).toEqual(options);
-          } catch (err) {
-            console.log(err);
-          }
-          
-          // setTimeout(done);
-          console.log('done');
+          expect(options).toEqual(docState);
           done();
         }
       };

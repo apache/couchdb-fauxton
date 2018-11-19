@@ -10,8 +10,6 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import React from 'react';
-import sinon from 'sinon';
 import utils from "../../../../test/mocha/testUtils";
 import { shallow } from 'enzyme';
 import {formatUrl} from '../components/common-table';
@@ -22,14 +20,18 @@ describe('Common Table Component', () => {
 
   describe("formatUrl", () => {
 
+    beforeEach(() => {
+      window.history.pushState({}, 'Test title', '/my-db');
+    });
+
     it("renders a url with tricky password characters", () => {
-      const url = "http://hello:h#$!^@localhost/my-db";
+      const url = "http://hello:h#$!^@localhost:8000/my-db";
       const el = shallow(formatUrl(url));
       assert.equal(el.find('a').prop('href'), '#/database/my-db/_all_docs');
     });
 
     it("renders a url with no password characters", () => {
-      const url = "http://localhost/my-db";
+      const url = "http://localhost:8000/my-db";
       const el = shallow(formatUrl(url));
       assert.equal(el.find('a').prop('href'), '#/database/my-db/_all_docs');
     });
