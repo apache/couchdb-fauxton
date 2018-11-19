@@ -29,6 +29,7 @@ describe('Fauxton Ajax', () => {
       unsubscribe.unsubscribe();
       unsubscribe = null;
     }
+    fetchMock.reset();
   });
 
   it('should observe multiple requests', (done) => {

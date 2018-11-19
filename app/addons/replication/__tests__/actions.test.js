@@ -28,7 +28,7 @@ const assert = utils.assert;
 describe("Replication Actions", () => {
 
   describe('replicate', () => {
-    afterEach(fetchMock.restore);
+    afterEach(fetchMock.reset);
 
     it('creates a new database if it does not exist', () => {
       const dispatch = () => {};
