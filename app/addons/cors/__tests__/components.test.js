@@ -58,7 +58,7 @@ describe('CORS Components', () => {
         fetchAndLoadCORSOptions={sinon.stub()}
       />);
       wrapper.find('.enable-disable.btn').simulate('click');
-      sinon.assert.notCalled(spy).toBeTruthy();
+      sinon.assert.notCalled(spy);
     });
 
     it('confirms user change when moving from selected origins to all origins', () => {

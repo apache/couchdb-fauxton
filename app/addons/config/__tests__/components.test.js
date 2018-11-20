@@ -194,17 +194,17 @@ describe('Config Components', () => {
 
     it('displays delete modal when clicked', () => {
       const el = mount(
-        <ConfigOptionTrash {...defaultProps}/>
+        <table><tbody><tr><ConfigOptionTrash {...defaultProps}/></tr></tbody></table>
       );
 
       el.find('i.icon').simulate('click');
-      expect(el.find('div.confirmation-modal').length, 1);
+      expect(el.find('div.confirmation-modal').length).toBe(1);
     });
 
     it('calls on delete when confirmation modal Okay button clicked', () => {
       const spy = sinon.spy();
       const el = mount(
-        <ConfigOptionTrash {...defaultProps} onDelete={spy}/>
+        <table><tbody><tr><ConfigOptionTrash {...defaultProps} onDelete={spy}/></tr></tbody></table>
       );
 
       el.find('i.icon').simulate('click');
