@@ -23,17 +23,12 @@ FauxtonAPI.session = {
   }
 };
 
-Object.defineProperty(window.location, 'origin', {
-  writable: true,
-  value: 'http://dev:8000'
-});
-
 const assert = utils.assert;
 
 describe("Replication Actions", () => {
 
   describe('replicate', () => {
-    afterEach(fetchMock.restore);
+    afterEach(fetchMock.reset);
 
     it('creates a new database if it does not exist', () => {
       const dispatch = () => {};
@@ -117,13 +112,13 @@ describe("Replication Actions", () => {
         "headers": {
           "Authorization": "Basic dGVzdGVyOnRlc3RlcnBhc3M="
         },
-        "url": "http://dev:8000/animaldb"
+        "url": "http://localhost:8000/animaldb"
       },
       "target": {
         "headers": {
           "Authorization": "Basic dGVzdGVyOnRlc3RlcnBhc3M="
         },
-        "url": "http://dev:8000/boom123"
+        "url": "http://localhost:8000/boom123"
       },
       "create_target": true,
       "continuous": false,
@@ -144,11 +139,11 @@ describe("Replication Actions", () => {
       "targetAuth":{"username":"tester", "password":"testerpass"}
     };
 
-    it('builds up correct state', (done) => {
+    it.only('builds up correct state', (done) => {
       const dispatch = ({type, options}) => {
         if (ActionTypes.REPLICATION_SET_STATE_FROM_DOC === type) {
-          assert.deepEqual(docState, options);
-          setTimeout(done);
+          expect(options).toEqual(docState);
+          done();
         }
       };
 

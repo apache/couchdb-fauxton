@@ -20,7 +20,7 @@ describe('Mango API', () => {
   const paginationLimit = 6;
 
   afterEach(() => {
-    fetchMock.restore();
+    fetchMock.reset();
   });
 
   describe('mangoQueryDocs', () => {
