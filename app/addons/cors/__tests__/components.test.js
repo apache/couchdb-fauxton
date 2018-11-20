@@ -41,8 +41,8 @@ describe('CORS Components', () => {
         fetchAndLoadCORSOptions={sinon.stub()}
       />);
 
-      wrapper.find('.enable-disable .btn').simulate('click');
-      expect(spy.calledOnce).toBeTruthy();
+      wrapper.find('.enable-disable.btn').simulate('click');
+      sinon.assert.calledOnce(spy);
     });
 
     it('does not confirm user change to disable cors when restricted origins are empty', () => {
@@ -57,8 +57,8 @@ describe('CORS Components', () => {
         showDeleteDomainConfirmation={sinon.stub()}
         fetchAndLoadCORSOptions={sinon.stub()}
       />);
-      wrapper.find('.enable-disable .btn').simulate('click');
-      expect(spy.notCalled).toBeTruthy();
+      wrapper.find('.enable-disable.btn').simulate('click');
+      sinon.assert.notCalled(spy).toBeTruthy();
     });
 
     it('confirms user change when moving from selected origins to all origins', () => {

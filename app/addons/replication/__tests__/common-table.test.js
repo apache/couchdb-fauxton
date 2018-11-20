@@ -16,14 +16,19 @@ import {formatUrl} from '../components/common-table';
 describe('Common Table Component', () => {
 
   describe("formatUrl", () => {
+
+    beforeEach(() => {
+      window.history.pushState({}, 'Test title', '/my-db');
+    });
+
     it("renders a url with tricky password characters", () => {
-      const url = "http://hello:h#$!^@couchdb.com/my-db";
+      const url = "http://hello:h#$!^@localhost:8000/my-db";
       const el = shallow(formatUrl(url));
       expect(el.find('a').prop('href')).toBe('#/database/my-db/_all_docs');
     });
 
     it("renders a url with no password characters", () => {
-      const url = "http://couchdb.com/my-db";
+      const url = "http://localhost:8000/my-db";
       const el = shallow(formatUrl(url));
       expect(el.find('a').prop('href')).toBe('#/database/my-db/_all_docs');
     });

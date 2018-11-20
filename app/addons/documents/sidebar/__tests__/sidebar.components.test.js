@@ -54,8 +54,8 @@ describe('DesignDoc', () => {
       designDocName={'doc-$-#-.1'}
     />);
 
-    expect(wrapper.find('a.icon .fonticon-plus-circled').at(1).props()['href']).toContain('/doc-%24-%23-.1');
-    expect(wrapper.find('a.toggle-view .accordion-header').props()['href']).toContain('/doc-%24-%23-.1');
+    expect(wrapper.find('a.icon.fonticon-plus-circled').at(1).props()['href']).toContain('/doc-%24-%23-.1');
+    expect(wrapper.find('a.toggle-view.accordion-header').props()['href']).toContain('/doc-%24-%23-.1');
   });
 
   it('check toggle() works when design doc name has special characters', () => {
@@ -165,16 +165,16 @@ describe('DesignDoc', () => {
       selectedPartitionKey={'part-key-$-%1'}
     />);
     // Metadata link
-    expect(wrapper.find('a.toggle-view .accordion-header').props()['href']).toContain('/_partition/part-key-%24-%251/');
+    expect(wrapper.find('a.toggle-view.accordion-header').props()['href']).toContain('/_partition/part-key-%24-%251/');
     // New View link
-    expect(wrapper.find('li > a.icon .fonticon-plus-circled').props()['href']).toContain('/_partition/part-key-%24-%251/');
+    expect(wrapper.find('li > a.icon.fonticon-plus-circled').props()['href']).toContain('/_partition/part-key-%24-%251/');
 
     const wrapper2 = mount(<DesignDoc
       {...defaultProps}
     />);
 
-    expect(wrapper2.find('a.toggle-view .accordion-header').props()['href']).not.toContain('/_partition/');
-    expect(wrapper2.find('li > a.icon .fonticon-plus-circled').props()['href']).not.toContain('/_partition/');
+    expect(wrapper2.find('a.toggle-view.accordion-header').props()['href']).not.toContain('/_partition/');
+    expect(wrapper2.find('li > a.icon.fonticon-plus-circled').props()['href']).not.toContain('/_partition/');
   });
 });
 

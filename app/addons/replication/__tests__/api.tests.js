@@ -423,7 +423,7 @@ describe('Replication API', () => {
 
   describe('supportNewApi', () => {
     afterEach(() => {
-      fetchMock.restore();
+      fetchMock.reset();
     });
 
     it('returns true for support', () => {
@@ -449,6 +449,10 @@ describe('Replication API', () => {
   });
 
   describe('setCredentials', () => {
+
+    afterEach(() => {
+      fetchMock.reset();
+    });
 
     it('returns true for support', () => {
       fetchMock.getOnce('./_scheduler/jobs', {});
@@ -569,7 +573,7 @@ describe('Replication API', () => {
 
     describe('old api', () => {
       afterEach(() => {
-        fetchMock.restore();
+        fetchMock.reset();
       });
 
       it("returns parsedReplicationDocs and ignores all design docs", () => {
@@ -586,7 +590,7 @@ describe('Replication API', () => {
 
     describe('new api', () => {
       afterEach(() => {
-        fetchMock.restore();
+        fetchMock.reset();
       });
 
       it("returns parsedReplicationDocs", () => {
