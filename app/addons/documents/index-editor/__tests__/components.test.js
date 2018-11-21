@@ -11,7 +11,7 @@
 // the License.
 
 import React from 'react';
-import {mount} from 'enzyme';
+import {mount, shallow} from 'enzyme';
 import sinon from 'sinon';
 import FauxtonAPI from '../../../../core/api';
 import Views from '../components';
@@ -27,24 +27,35 @@ describe('ReduceEditor', () => {
       hasCustomReduce: false,
       reduce: null,
       reduceSelectedOption: 'NONE',
+      customReducerSupported: true,
       updateReduceCode: () => {},
       selectReduceChanged: () => {}
     };
 
     it('returns null for none', () => {
-      const reduceEl = mount(<Views.ReduceEditor
+      const reduceEl = shallow(<Views.ReduceEditor
         {...defaultProps}
       />);
       expect(reduceEl.instance().getReduceValue()).toBeNull();
     });
 
     it('returns built in for built in reduce', () => {
-      const reduceEl = mount(<Views.ReduceEditor
+      const reduceEl = shallow(<Views.ReduceEditor
         {...defaultProps}
         reduce='_sum'
         hasReduce={true}
       />);
       expect(reduceEl.instance().getReduceValue()).toBe('_sum');
+    });
+
+    it('shows warning when custom reduce is not supported', () => {
+      const reduceEl = shallow(<Views.ReduceEditor
+        {...defaultProps}
+        reduce='function() {}'
+        hasReduce={true}
+        customReducerSupported={false}
+      />);
+      expect(reduceEl.find('div.reduce-editor-warning').exists()).toBe(true);
     });
 
   });
@@ -187,7 +198,7 @@ describe('IndexEditor', () => {
     isNewDesignDoc: false,
     isDbPartitioned: false,
     viewName: '',
-    database: {},
+    database: { safeID: () => 'test_db' },
     newDesignDocName: '',
     newDesignDocPartitioned: false,
     originalViewName: '',
@@ -203,6 +214,7 @@ describe('IndexEditor', () => {
     updateMapCode: () => {},
     selectDesignDoc: () => {},
     onChangeNewDesignDocName: () => {},
+    changeViewName: () => {},
     reduceOptions: [],
     reduceSelectedOption: 'NONE',
     hasReduce: false,
@@ -210,6 +222,10 @@ describe('IndexEditor', () => {
     updateReduceCode: () => {},
     selectReduceChanged: () => {}
   };
+
+  afterEach(() => {
+    sinon.restore();
+  });
 
   it('calls changeViewName on view name change', () => {
     const spy = sinon.spy();
@@ -225,6 +241,24 @@ describe('IndexEditor', () => {
       }
     });
     sinon.assert.calledWith(spy, 'newViewName');
+  });
+
+  it('shows warning when trying to save a partitioned view with custom reduce', () => {
+    sinon.stub(FauxtonAPI, 'addNotification');
+    const editorEl = mount(<Views.IndexEditor
+      {...defaultProps}
+      viewName='new-name'
+      designDocId='new-doc'
+      newDesignDocName='test_ddoc'
+      newDesignDocPartitioned={true}
+      isDbPartitioned={true}
+      reduce='function() { /*custom reduce*/ }'
+    />);
+
+    editorEl.find('form.view-query-save').simulate('submit', {
+      preventDefault: () => {}
+    });
+    sinon.assert.calledWithMatch(FauxtonAPI.addNotification, { msg: 'Partitioned views do not support custom reduce functions.' });
   });
 
 });

@@ -31,7 +31,7 @@ module.exports = {
       .clearValue('#index-name')
       .setValue('#index-name', 'hasenindex')
       .clickWhenVisible('#reduce-function-selector')
-      .keys(['\uE013', '\uE013', '\uE013', '\uE013', '\uE006'])
+      .keys(['\uE013', '\uE013', '\uE013', '\uE013', '\uE013', '\uE006'])
       .execute('\
         var editor = ace.edit("map-function");\
         editor.getSession().setValue("function (doc) { emit(\'boom\', doc._id); }");\

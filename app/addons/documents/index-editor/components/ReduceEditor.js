@@ -58,7 +58,7 @@ export default class ReduceEditor extends Component {
     const reduceOptions = this.getOptionsList();
     let customReduceSection;
 
-    if (this.props.hasCustomReduce) {
+    if (this.props.hasCustomReduce && this.props.customReducerSupported) {
       customReduceSection = <CodeEditorPanel
         ref={node => this.reduceEditor = node}
         id='reduce-function'
@@ -67,6 +67,12 @@ export default class ReduceEditor extends Component {
         allowZenMode={false}
         blur={this.updateReduceCode.bind(this)}
       />;
+    } else if (!this.props.customReducerSupported) {
+      customReduceSection = (
+        <div className="reduce-editor-warning">
+          <label>Partitioned views do not support custom reduce functions.</label>
+        </div>
+      );
     }
 
     return (
@@ -96,10 +102,15 @@ export default class ReduceEditor extends Component {
   }
 }
 
+ReduceEditor.defaultProps = {
+  customReducerSupported: true
+};
+
 ReduceEditor.propTypes = {
   reduceOptions: PropTypes.array.isRequired,
   hasReduce: PropTypes.bool.isRequired,
   hasCustomReduce: PropTypes.bool.isRequired,
+  customReducerSupported: PropTypes.bool,
   reduce: PropTypes.string,
   reduceSelectedOption: PropTypes.string.isRequired,
   updateReduceCode: PropTypes.func.isRequired,

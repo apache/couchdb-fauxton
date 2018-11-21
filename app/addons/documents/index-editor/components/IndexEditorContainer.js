@@ -14,7 +14,7 @@ import { connect } from 'react-redux';
 import IndexEditor from './IndexEditor';
 import Actions from '../actions';
 import { getSaveDesignDoc, getDesignDocList, reduceSelectedOption, hasCustomReduce,
-  getSelectedDesignDocPartitioned, getReduceOptions } from '../reducers';
+  getSelectedDesignDocPartitioned } from '../reducers';
 
 const mapStateToProps = ({ indexEditor, databases }, ownProps) => {
   const isSelectedDDocPartitioned = getSelectedDesignDocPartitioned(indexEditor, databases.isDbPartitioned);
@@ -35,7 +35,7 @@ const mapStateToProps = ({ indexEditor, databases }, ownProps) => {
     map: indexEditor.view.map,
     isLoading: indexEditor.isLoading,
     reduce: indexEditor.view.reduce,
-    reduceOptions: getReduceOptions(indexEditor, isSelectedDDocPartitioned),
+    reduceOptions: indexEditor.reduceOptions,
     reduceSelectedOption: reduceSelectedOption(indexEditor),
     hasCustomReduce: hasCustomReduce(indexEditor),
     hasReduce: !!indexEditor.view.reduce,

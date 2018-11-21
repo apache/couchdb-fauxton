@@ -12,7 +12,7 @@
 
 import Documents from '../../../documents/resources';
 import reducer, { hasCustomReduce, getDesignDocList, getSelectedDesignDocPartitioned,
-  getSaveDesignDoc, getReduceOptions } from '../reducers';
+  getSaveDesignDoc } from '../reducers';
 import ActionTypes from '../actiontypes';
 import '../../base';
 
@@ -346,33 +346,6 @@ describe('IndexEditor Reducer', () => {
 
       const ddoc2 = getSaveDesignDoc(state, false);
       expect(ddoc2.get('options')).toBeUndefined();
-    });
-  });
-
-  describe('getReduceOptions', () => {
-    // { designDocId, newDesignDocPartitioned }, isSelectedDDocPartitioned
-    it('does not return CUSTOM reducer for partitioned views', () => {
-      let isSelectedDDocPartitioned = false;
-      let reducers = getReduceOptions({ designDocId: 'new-doc', newDesignDocPartitioned: true, },
-        isSelectedDDocPartitioned);
-      expect(reducers).not.toContain('CUSTOM');
-
-      isSelectedDDocPartitioned = true;
-      reducers = getReduceOptions({ designDocId: 'aDoc', newDesignDocPartitioned: true, },
-        isSelectedDDocPartitioned);
-      expect(reducers).not.toContain('CUSTOM');
-    });
-
-    it('returns CUSTOM reducer for global views', () => {
-      let isSelectedDDocPartitioned = true;
-      let reducers = getReduceOptions({ designDocId: 'new-doc', newDesignDocPartitioned: false, },
-        isSelectedDDocPartitioned);
-      expect(reducers).toContain('CUSTOM');
-
-      isSelectedDDocPartitioned = false;
-      reducers = getReduceOptions({ designDocId: 'aDoc', newDesignDocPartitioned: true, },
-        isSelectedDDocPartitioned);
-      expect(reducers).toContain('CUSTOM');
     });
   });
 });

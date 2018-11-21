@@ -25,6 +25,9 @@ export default class IndexEditor extends Component {
 
   constructor(props) {
     super(props);
+    this.saveView = this.saveView.bind(this);
+    this.viewChange = this.viewChange.bind(this);
+    this.updateMapCode = this.updateMapCode.bind(this);
   }
 
   // the code editor is a standalone component, so if the user goes from one edit view page to another, we need to
@@ -42,12 +45,30 @@ export default class IndexEditor extends Component {
     return this.props.designDocPartitioned;
   }
 
+  isCustomReduceSupported() {
+    if (this.props.isDbPartitioned && this.props.reduce && !this.props.reduce.startsWith('_')) {
+      const isDDocPartitioned = this.props.designDocId === 'new-doc' ? this.props.newDesignDocPartitioned : this.props.designDocPartitioned;
+      return isDDocPartitioned ? false : true;
+    }
+    return true;
+  }
+
   saveView(el) {
     el.preventDefault();
 
     if (!this.designDocSelector.validate()) {
       return;
     }
+
+    if (!this.isCustomReduceSupported()) {
+      FauxtonAPI.addNotification({
+        msg: 'Partitioned views do not support custom reduce functions.',
+        type: 'error',
+        clear: true
+      });
+      return;
+    }
+
     const encodedPartKey = this.isPartitionedView() && this.props.partitionKey ? encodeURIComponent(this.props.partitionKey) : '';
     const url = FauxtonAPI.urls('view', 'showView', this.props.database.safeID(), encodedPartKey,
       this.props.saveDesignDoc.safeID(), encodeURIComponent(this.props.viewName));
@@ -98,7 +119,7 @@ export default class IndexEditor extends Component {
     const btnLabel = (this.props.isNewView) ? 'Create Document and then Build Index' : 'Save Document and then Build Index';
     return (
       <div className="define-view" >
-        <form className="form-horizontal view-query-save" onSubmit={this.saveView.bind(this)}>
+        <form className="form-horizontal view-query-save" onSubmit={this.saveView}>
           <h3 className="simple-header">{pageHeader}</h3>
 
           <div className="new-ddoc-section">
@@ -132,7 +153,7 @@ export default class IndexEditor extends Component {
               type="text"
               id="index-name"
               value={this.props.viewName}
-              onChange={this.viewChange.bind(this)}
+              onChange={this.viewChange}
               placeholder="Index name" />
           </div>
           <CodeEditorPanel
@@ -140,10 +161,13 @@ export default class IndexEditor extends Component {
             ref={(el) => { this.mapEditor = el; }}
             title={"Map function"}
             docLink={getDocUrl('MAP_FUNCS')}
-            blur={this.updateMapCode.bind(this)}
+            blur={this.updateMapCode}
             allowZenMode={false}
             defaultCode={this.props.map} />
-          <ReduceEditor ref={(el) => { this.reduceEditor = el; }} {...this.props} />
+          <ReduceEditor
+            ref={(el) => { this.reduceEditor = el; }}
+            customReducerSupported={this.isCustomReduceSupported()}
+            {...this.props} />
           <div className="padded-box">
             <div className="control-group">
               <ConfirmButton id="save-view" text={btnLabel} />
