@@ -12,13 +12,10 @@
 // the License.
 
 import FauxtonAPI from '../../../core/api';
-import utils from '../../../../test/mocha/testUtils';
 import ActionTypes from '../changes/actiontypes';
 import reducer from '../changes/reducers';
 
 FauxtonAPI.router = new FauxtonAPI.Router([]);
-
-const assert = utils.assert;
 
 describe('Changes Reducer', () => {
 
@@ -38,8 +35,8 @@ describe('Changes Reducer', () => {
     };
     const newState = reducer(undefined, action);
 
-    assert.ok(newState.filters.length === 1);
-    assert.ok(newState.filters[0] === filter);
+    expect(newState.filters.length).toBe(1);
+    expect(newState.filters[0]).toBe(filter);
   });
 
   it('removes filter from state', () => {
@@ -58,8 +55,8 @@ describe('Changes Reducer', () => {
       filter: filter1
     });
 
-    assert.ok(newState.filters.length === 1);
-    assert.ok(newState.filters[0] === filter2);
+    expect(newState.filters.length).toBe(1);
+    expect(newState.filters[0]).toBe(filter2);
   });
 
   it('number of items is capped by maxChangesListed', () => {
@@ -79,13 +76,13 @@ describe('Changes Reducer', () => {
       seqNum,
       changes
     });
-    assert.equal(state.changes.length, changes.length);
-    assert.equal(state.filteredChanges.length, maxChanges);
+    expect(state.changes.length).toBe(changes.length);
+    expect(state.filteredChanges.length).toBe(maxChanges);
   });
 
   it('tracks last sequence number', () => {
     let state = reducer(undefined, {type: 'DO_NOTHING'});
-    assert.equal(state.lastSequenceNum, null);
+    expect(state.lastSequenceNum).toBeNull();
 
     const seqNum = 123;
     state = reducer(state, {
@@ -95,7 +92,7 @@ describe('Changes Reducer', () => {
     });
 
     // confirm it's been stored
-    assert.equal(state.lastSequenceNum, seqNum);
+    expect(state.lastSequenceNum).toBe(seqNum);
   });
 
   it('"true" filter should apply to change deleted status', () => {
@@ -112,9 +109,9 @@ describe('Changes Reducer', () => {
     });
 
     // confirm only the two deleted items are part of filtered results
-    assert.equal(state.filteredChanges.length, 2);
+    expect(state.filteredChanges.length).toBe(2);
     state.filteredChanges.forEach(el => {
-      assert.equal(el.deleted, true);
+      expect(el.deleted).toBe(true);
     });
   });
 
@@ -138,8 +135,8 @@ describe('Changes Reducer', () => {
     });
 
     // confirm only doc_5 matches both filters
-    assert.equal(state.filteredChanges.length, 1);
-    assert.equal(state.filteredChanges[0].id, 'doc_5');
+    expect(state.filteredChanges.length).toBe(1);
+    expect(state.filteredChanges[0].id).toBe('doc_5');
   });
 
 });

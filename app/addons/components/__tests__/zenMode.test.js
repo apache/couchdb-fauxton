@@ -9,14 +9,12 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
+
 import ReactComponents from "../react-components";
-import utils from "../../../../test/mocha/testUtils";
 import React from "react";
-import ReactDOM from "react-dom";
 import {mount} from 'enzyme';
 import sinon from "sinon";
 
-const assert = utils.assert;
 var code = 'function (doc) {\n  emit(doc._id, 1);\n}';
 
 describe('Zen Mode', () => {
@@ -36,12 +34,12 @@ describe('Zen Mode', () => {
 
   describe('Toggle theme', () => {
     it('defaults to dark theme', () => {
-      assert.ok(el.find('div.zen-theme-dark').exists());
+      expect(el.find('div.zen-theme-dark').exists()).toBeTruthy();
     });
 
     it('switch to light theme on click', () => {
       el.find('.js-toggle-theme').simulate('click');
-      assert.ok(el.find('div.zen-theme-light').exists());
+      expect(el.find('div.zen-theme-light').exists()).toBeTruthy();
       // reset
       el.find('.js-toggle-theme').simulate('click');
     });
@@ -50,7 +48,7 @@ describe('Zen Mode', () => {
   describe('Closing zen mode', () => {
     it('method called', () => {
       el.find('.js-exit-zen-mode').simulate('click');
-      assert.ok(spy.calledOnce);
+      expect(spy.calledOnce).toBeTruthy();
     });
   });
 

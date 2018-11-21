@@ -10,17 +10,12 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 import ReactComponents from "../react-components";
-import utils from "../../../../test/mocha/testUtils";
 import React from "react";
-import ReactDOM from "react-dom";
 import {mount} from 'enzyme';
-
-const assert = utils.assert;
 
 const noop = () => {};
 
-//Skip this until React portals are supported in enzyme
-describe.skip('DeleteDatabaseModal', function () {
+describe('DeleteDatabaseModal', function () {
 
   it('submitting is disabled when initially rendered', function () {
     const modal = mount(
@@ -29,7 +24,7 @@ describe.skip('DeleteDatabaseModal', function () {
         modalProps={{isSystemDatabase: false, showDeleteModal: true, dbId: 'fooo'}} />
     );
 
-    assert.ok(modal.find('button.delete').first().prop('disabled'));
+    expect(modal.find('button.delete').first().prop('disabled')).toBe(true);
   });
 
   it('submitting is disabled when garbage entered', function () {
@@ -42,7 +37,7 @@ describe.skip('DeleteDatabaseModal', function () {
     const input = modal.find('input');
 
     input.simulate('change', {target: {value: 'Hello, world'}});
-    assert.ok(modal.find('button.delete').prop('disabled'));
+    expect(modal.find('button.delete').prop('disabled')).toBe(true);
   });
 
   it('submitting is enabled when same db name entered', function () {
@@ -55,7 +50,7 @@ describe.skip('DeleteDatabaseModal', function () {
     var input = modal.find('.modal').find('input');
 
     input.simulate('change', {target: {value: 'fooo'}});
-    assert.notOk(modal.find('button.delete').prop('disabled'));
+    expect(modal.find('button.delete').prop('disabled')).toBeFalsy();
   });
 
 

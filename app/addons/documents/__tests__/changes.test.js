@@ -17,11 +17,8 @@ import ChangeRow from '../changes/components/ChangeRow';
 import ChangesScreen from '../changes/components/ChangesScreen';
 import ChangesTabContent from "../changes/components/ChangesTabContent";
 import {mount} from 'enzyme';
-import utils from "../../../../test/mocha/testUtils";
 import sinon from "sinon";
 import '../base';
-
-const assert = utils.assert;
 
 
 describe('ChangesTabContent', () => {
@@ -37,7 +34,7 @@ describe('ChangesTabContent', () => {
       filters={['I wandered lonely as a filter', 'A second filter']}
     />);
 
-    assert.equal(2, el.find('.remove-filter').length);
+    expect(el.find('.remove-filter').length).toBe(2);
   });
 
   it('should call addFilter action on click', () => {
@@ -52,7 +49,7 @@ describe('ChangesTabContent', () => {
     addItemField.simulate('change', {target: {value: 'I wandered lonely as a filter'}});
     submitBtn.simulate('submit');
 
-    assert.ok(addFilterStub.calledOnce);
+    expect(addFilterStub.calledOnce).toBeTruthy();
   });
 
   it('should call removeFilter action on click', () => {
@@ -64,7 +61,7 @@ describe('ChangesTabContent', () => {
     />);
     el.find('.remove-filter').simulate('click');
 
-    assert.ok(removeFilterStub.calledOnce);
+    expect(removeFilterStub.calledOnce).toBeTruthy();
   });
 
   it('should not add empty filters', () => {
@@ -79,14 +76,14 @@ describe('ChangesTabContent', () => {
     addItemField.simulate('change', {target: {value: ''}});
     submitBtn.simulate('submit');
 
-    assert.ok(addFilterStub.notCalled);
+    expect(addFilterStub.notCalled).toBeTruthy();
   });
 
   it('should not add badges by default', () => {
     const el = mount(<ChangesTabContent
       {...defaultProps}
     />);
-    assert.equal(0, el.find('.remove-filter').length);
+    expect(el.find('.remove-filter').length).toBe(0);
   });
 
   it('should not add the same filter twice', () => {
@@ -107,7 +104,7 @@ describe('ChangesTabContent', () => {
     addItemField.simulate('change', {target: {value: filter}});
     submitBtn.simulate('submit');
 
-    assert.equal(callCount, 1);
+    expect(callCount).toBe(1);
   });
 });
 
@@ -135,14 +132,14 @@ describe('ChangesScreen', () => {
       changes={changesList}
     />);
 
-    assert.equal(changesList.length, changesEl.find('.change-box').length);
+    expect(changesEl.find('.change-box').length).toBe(changesList.length);
   });
 
   it('shows a No Docs Found message if no docs', () => {
     const changesEl = mount(<ChangesScreen
       {...defaultProps}
     />);
-    assert.ok(/There\sare\sno\sdocument\schanges/.test(changesEl.html()));
+    expect(changesEl.html()).toMatch(/There\sare\sno\sdocument\schanges/);
   });
 
   it('should show a message if the results are truncated', () => {
@@ -151,7 +148,7 @@ describe('ChangesScreen', () => {
       changes={changesList}
       isShowingSubset={true}
     />);
-    assert.equal(1, changesEl.find('.changes-result-limit').length);
+    expect(changesEl.find('.changes-result-limit').length).toBe(1);
   });
 });
 
@@ -168,22 +165,22 @@ describe('ChangeRow', () => {
     const changeRow = mount(<ChangeRow change={change} databaseName="testDatabase" />);
 
     // confirm it's hidden by default
-    assert.equal(0, changeRow.find('.prettyprint').length);
+    expect(changeRow.find('.prettyprint').length).toBe(0);
 
     // confirm clicking it shows the element
     changeRow.find('button.btn').simulate('click');
-    assert.equal(1, changeRow.find('.prettyprint').length);
+    expect(changeRow.find('.prettyprint').length).toBe(1);
   });
 
   it('deleted docs should not be clickable', () => {
     change.deleted = true;
     const changeRow = mount(<ChangeRow change={change} databaseName="testDatabase" />);
-    assert.equal(0, changeRow.find('a.js-doc-link').length);
+    expect(changeRow.find('a.js-doc-link').length).toBe(0);
   });
 
   it('non-deleted docs should be clickable', () => {
     change.deleted = false;
     const changeRow = mount(<ChangeRow change={change} databaseName="testDatabase" />);
-    assert.equal(1, changeRow.find('a.js-doc-link').length);
+    expect(changeRow.find('a.js-doc-link').length).toBe(1);
   });
 });

@@ -11,15 +11,12 @@
 // the License.
 
 import React from "react";
-import ReactDOM from "react-dom";
-import utils from "../../../../test/mocha/testUtils";
 import LoginForm from "../components/loginform";
 import {CreateAdminForm} from "../components/createadminform";
 import {ChangePasswordForm} from '../components/changepasswordform';
 import * as Actions from "../actions";
 import { mount } from 'enzyme';
 import sinon from "sinon";
-const assert = utils.assert;
 
 describe('Auth -- Components', () => {
 
@@ -37,7 +34,7 @@ describe('Auth -- Components', () => {
     it('should trigger login event when form submitted', () => {
       const loginForm = mount(<LoginForm/>);
       loginForm.find('#login').simulate('submit');
-      assert.ok(stub.calledOnce);
+      expect(stub.calledOnce).toBeTruthy();
     });
 
     it('in case of nothing in state, should pass actual values to Actions.login()', () => {
@@ -51,11 +48,11 @@ describe('Auth -- Components', () => {
         />);
 
       loginForm.find('#login').simulate('submit');
-      assert.ok(stub.calledOnce);
+      expect(stub.calledOnce).toBeTruthy();
 
       // confirm Actions.login() received the values that weren't in the DOM
-      assert.equal(stub.args[0][0], username);
-      assert.equal(stub.args[0][1], password);
+      expect(stub.args[0][0]).toBe(username);
+      expect(stub.args[0][1]).toBe(password);
     });
 
   });
@@ -65,20 +62,20 @@ describe('Auth -- Components', () => {
     it('should update state on password change', () => {
       const changePasswordForm = mount(<ChangePasswordForm />);
       changePasswordForm.find('#password').simulate('change', { target: { value: 'bobsyouruncle' }});
-      assert.deepEqual(changePasswordForm.state('password'), 'bobsyouruncle');
+      expect(changePasswordForm.state('password')).toEqual('bobsyouruncle');
     });
 
     it('should update state on password confirm change', () => {
       const changePasswordForm = mount(<ChangePasswordForm />);
       changePasswordForm.find('#password-confirm').simulate('change', { target: { value: 'hotdiggity' }});
-      assert.deepEqual(changePasswordForm.state('passwordConfirm'), 'hotdiggity');
+      expect(changePasswordForm.state('passwordConfirm')).toEqual('hotdiggity');
     });
 
     it('should call action to submit form', () => {
       const spy = sinon.spy();
       const changePasswordForm = mount(<ChangePasswordForm username={"bobsyouruncle"} changePassword={spy} />);
       changePasswordForm.find('#change-password').simulate('submit');
-      assert.ok(spy.calledOnce);
+      expect(spy.calledOnce).toBeTruthy();
     });
   });
 
@@ -86,13 +83,13 @@ describe('Auth -- Components', () => {
     it('should update username state', () => {
       const createAdminForm = mount(<CreateAdminForm loginAfter={false} />);
       createAdminForm.find('#username').simulate('change',  { target: { value: 'catsmeow' }});
-      assert.deepEqual(createAdminForm.state('username'), 'catsmeow');
+      expect(createAdminForm.state('username')).toEqual('catsmeow');
     });
 
     it('should call action to update password confirm on field change', () => {
       const createAdminForm = mount(<CreateAdminForm loginAfter={false} />);
       createAdminForm.find('#password').simulate('change',  { target: { value: 'topnotch' }});
-      assert.deepEqual(createAdminForm.state('password'), 'topnotch');
+      expect(createAdminForm.state('password')).toEqual('topnotch');
     });
   });
 });

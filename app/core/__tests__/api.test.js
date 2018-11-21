@@ -9,9 +9,8 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
+
 import FauxtonAPI from "../api";
-import testUtils from "../../../test/mocha/testUtils";
-const assert = testUtils.assert;
 
 describe('URLs', () => {
 
@@ -24,7 +23,7 @@ describe('URLs', () => {
       }
     });
 
-    assert.equal(FauxtonAPI.urls('testURL', 'server'), testUrl);
+    expect(FauxtonAPI.urls('testURL', 'server')).toBe(testUrl);
 
   });
 
@@ -39,7 +38,7 @@ describe('URLs', () => {
       return false;
     });
 
-    assert.equal(FauxtonAPI.urls('testURL', 'intercept'), testUrl);
+    expect(FauxtonAPI.urls('testURL', 'intercept')).toBe(testUrl);
   });
 
 });

@@ -17,7 +17,7 @@ import sinon from "sinon";
 import NewReplication from '../components/newreplication';
 import Constants from '../constants';
 
-const {assert, restore}  = utils;
+const {restore}  = utils;
 
 describe('New Replication Component', () => {
 
@@ -44,7 +44,7 @@ describe('New Replication Component', () => {
         updateFormField={() => { return () => {}; }}
       />);
 
-      assert.ok(newreplication.instance().checkSourceTargetDatabases());
+      expect(newreplication.instance().checkSourceTargetDatabases()).toBeTruthy();
     });
 
     it('returns true for remote source and target selected', () => {
@@ -64,7 +64,7 @@ describe('New Replication Component', () => {
         updateFormField={() => { return () => {}; }}
       />);
 
-      assert.ok(newreplication.instance().checkSourceTargetDatabases());
+      expect(newreplication.instance().checkSourceTargetDatabases()).toBeTruthy();
     });
 
     it('returns false for invalid remote source', () => {
@@ -84,7 +84,7 @@ describe('New Replication Component', () => {
         updateFormField={() => { return () => {}; }}
       />);
 
-      assert.notOk(newreplication.instance().checkSourceTargetDatabases());
+      expect(newreplication.instance().checkSourceTargetDatabases()).toBeFalsy();
     });
 
     it('returns false for invalid remote target', () => {
@@ -104,7 +104,7 @@ describe('New Replication Component', () => {
         updateFormField={() => { return () => {}; }}
       />);
 
-      assert.notOk(newreplication.instance().checkSourceTargetDatabases());
+      expect(newreplication.instance().checkSourceTargetDatabases()).toBeFalsy();
     });
 
     it("warns if new local database exists", () => {
@@ -127,10 +127,10 @@ describe('New Replication Component', () => {
       />);
 
       newreplication.instance().checkSourceTargetDatabases();
-      assert.ok(spy.calledOnce);
+      expect(spy.calledOnce).toBeTruthy();
 
       const notification = spy.args[0][0];
-      assert.ok(/database already exists/.test(notification.msg));
+      expect(notification.msg).toMatch(/database already exists/);
     });
 
     it("warns if database name is wrong", () => {
@@ -153,10 +153,10 @@ describe('New Replication Component', () => {
       />);
 
       newreplication.instance().checkSourceTargetDatabases();
-      assert.ok(spy.calledOnce);
+      expect(spy.calledOnce).toBeTruthy();
 
       const notification = spy.args[0][0];
-      assert.ok(/may not contain any spaces/.test(notification.msg));
+      expect(notification.msg).toMatch(/may not contain any spaces/);
     });
 
     it("warns if database is same for local", () => {
@@ -179,10 +179,10 @@ describe('New Replication Component', () => {
       />);
 
       newreplication.instance().checkSourceTargetDatabases();
-      assert.ok(spy.calledOnce);
+      expect(spy.calledOnce).toBeTruthy();
 
       const notification = spy.args[0][0];
-      assert.ok(/Cannot replicate a database to itself/.test(notification.msg));
+      expect(notification.msg).toMatch(/Cannot replicate a database to itself/);
     });
 
     it("warns if database is same for remote", () => {
@@ -205,10 +205,10 @@ describe('New Replication Component', () => {
       />);
 
       newreplication.instance().checkSourceTargetDatabases();
-      assert.ok(spy.calledOnce);
+      expect(spy.calledOnce).toBeTruthy();
 
       const notification = spy.args[0][0];
-      assert.ok(/Cannot replicate a database to itself/.test(notification.msg));
+      expect(notification.msg).toMatch(/Cannot replicate a database to itself/);
     });
   });
 
@@ -231,7 +231,7 @@ describe('New Replication Component', () => {
         updateFormField={() => { return () => {}; }}
       />);
 
-      assert.notOk(newreplication.instance().confirmButtonEnabled());
+      expect(newreplication.instance().confirmButtonEnabled()).toBeFalsy();
     });
 
     it('returns false for empty remote source', () => {
@@ -254,7 +254,7 @@ describe('New Replication Component', () => {
         updateFormField={() => { return () => {}; }}
       />);
 
-      assert.notOk(newreplication.instance().confirmButtonEnabled());
+      expect(newreplication.instance().confirmButtonEnabled()).toBeFalsy();
     });
 
     it('returns false for empty local source', () => {
@@ -278,7 +278,7 @@ describe('New Replication Component', () => {
       />);
 
 
-      assert.notOk(newreplication.instance().confirmButtonEnabled());
+      expect(newreplication.instance().confirmButtonEnabled()).toBeFalsy();
     });
 
     it("returns true for all details filled in", () => {
@@ -302,7 +302,7 @@ describe('New Replication Component', () => {
       />);
 
 
-      assert.ok(newreplication.instance().confirmButtonEnabled());
+      expect(newreplication.instance().confirmButtonEnabled()).toBeTruthy();
     });
 
   });
@@ -311,7 +311,7 @@ describe('New Replication Component', () => {
 
     it("shows conflict modal for existing replication doc", (done) => {
       const showConflictModal = () => {
-        assert.ok(true);
+        expect(true).toBeTruthy();
         done();
       };
 
@@ -368,7 +368,7 @@ describe('New Replication Component', () => {
 
       newreplication.instance().checkAuth = checkAuth;
       newreplication.instance().runReplicationChecks();
-      assert.ok(called);
+      expect(called).toBeTruthy();
     });
 
   });

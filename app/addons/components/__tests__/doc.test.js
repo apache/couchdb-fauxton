@@ -10,13 +10,9 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 import ReactComponents from "../react-components";
-import utils from "../../../../test/mocha/testUtils";
 import React from "react";
-import ReactDOM from "react-dom";
 import {mount} from 'enzyme';
 import sinon from "sinon";
-
-const assert = utils.assert;
 
 const noop = () => {};
 
@@ -36,28 +32,28 @@ describe('Document', () => {
         <div className="foo-children"></div>
       </ReactComponents.Document>
     );
-    assert.ok(el.find('.foo-children').length);
+    expect(el.find('.foo-children').length).toBeGreaterThan(0);
   });
 
   it('does not require child elements', () => {
     el = mount(
       <ReactComponents.Document docIdentifier="foo" docChecked={noop} />
     );
-    assert.notOk(el.find('.doc-edit-symbol').length);
+    expect(el.find('.doc-edit-symbol').length).toBe(0);
   });
 
   it('you can check it', () => {
     el = mount(
       <ReactComponents.Document docChecked={noop} isDeletable={true} checked={true} docIdentifier="foo" />
     );
-    assert.ok(el.find('input').prop('data-checked'));
+    expect(el.find('input').prop('data-checked')).toBe(true);
   });
 
   it('you can uncheck it', () => {
     el = mount(
       <ReactComponents.Document docChecked={noop} isDeletable={true} docIdentifier="foo" />
     );
-    assert.equal(el.find('[data-checked="true"]').length, 0);
+    expect(el.find('[data-checked="true"]').length).toBe(0);
   });
 
   it('it calls an onchange callback', () => {
@@ -67,7 +63,7 @@ describe('Document', () => {
       <ReactComponents.Document doc={{id: "foo"}} isDeletable={true} docChecked={spy} docIdentifier="foo" />
     );
     el.find('input[type="checkbox"]').first().simulate('change', {target: {value: 'Hello, world'}});
-    assert.ok(spy.calledOnce);
+    expect(spy.calledOnce).toBeTruthy();
   });
 
   it('it calls an onclick callback', () => {
@@ -77,7 +73,7 @@ describe('Document', () => {
       <ReactComponents.Document docChecked={noop} isDeletable={true} onClick={spy} docIdentifier="foo" />
     );
     el.find('.doc-item').first().simulate('click');
-    assert.ok(spy.calledOnce);
+    expect(spy.calledOnce).toBeTruthy();
   });
 
   it('can render without checkbox', () => {
@@ -86,64 +82,64 @@ describe('Document', () => {
     el = mount(
       <ReactComponents.Document docChecked={noop} isDeletable={false} onDoubleClick={spy} docIdentifier="foo" />
     );
-    assert.notOk(el.find('input[type="checkbox"]').length);
-    assert.ok(el.find('.checkbox-dummy').length);
+    expect(el.find('input[type="checkbox"]').length).toBe(0);
+    expect(el.find('.checkbox-dummy').length).toBeGreaterThan(0);
   });
 
   it('contains a doc-data element when there\'s doc content', () => {
     el = mount(
       <ReactComponents.Document docChecked={noop} isDeletable={true} checked={true} docIdentifier="foo" docContent='{ "content": true }' />
     );
-    assert.equal(1, el.find('.doc-data').length);
+    expect(el.find('.doc-data').length).toBe(1);
   });
 
   it('doesn\'t contain a doc-data element when there\'s no doc content', () => {
     el = mount(
       <ReactComponents.Document docChecked={noop} isDeletable={true} checked={true} docIdentifier="foo" docContent='' />
     );
-    assert.equal(0, el.find('.doc-data').length);
+    expect(el.find('.doc-data').length).toBe(0);
   });
 
   it('allows empty headers', () => {
     el = mount(
       <ReactComponents.Document docChecked={noop} header={null} isDeletable={true} checked={true} docIdentifier="foo" docContent='' />,
     );
-    assert.equal('', el.find('.header-doc-id').text());
+    expect(el.find('.header-doc-id').text()).toBe('');
   });
 
   it('allows supports headers with "', () => {
     el = mount(
       <ReactComponents.Document docChecked={noop} header="foo" isDeletable={true} checked={true} docIdentifier="foo" docContent='' />
     );
-    assert.equal('"foo"', el.find('.header-doc-id').text());
+    expect(el.find('.header-doc-id').text()).toBe('"foo"');
   });
 
   it('small docs should not be truncated', () => {
     el = mount(
       <ReactComponents.Document docChecked={noop} header="foo" isDeletable={true} checked={true} docIdentifier="foo" docContent='{ "content": true }' />
     );
-    assert.equal(el.find('.doc-content-truncated').length, 0);
+    expect(el.find('.doc-content-truncated').length).toBe(0);
   });
 
   it('large docs should get truncated', () => {
     el = mount(
       <ReactComponents.Document docChecked={noop} header="foo" isDeletable={true} checked={true} docIdentifier="foo" docContent={docContent} />
     );
-    assert.equal(el.find('.doc-content-truncated').length, 1);
+    expect(el.find('.doc-content-truncated').length).toBe(1);
   });
 
   it('custom truncate value', () => {
     el = mount(
       <ReactComponents.Document docChecked={noop} header="foo" isDeletable={true} checked={true} docIdentifier="foo" docContent={docContent} maxRows={2000} />
     );
-    assert.equal(el.find('.doc-content-truncated').length, 0);
+    expect(el.find('.doc-content-truncated').length).toBe(0);
   });
 
   it('disabling truncation', () => {
     el = mount(
       <ReactComponents.Document docChecked={noop} header="foo" isDeletable={true} checked={true} docIdentifier="foo" docContent={docContent} truncate={false} />
     );
-    assert.equal(el.find('.doc-content-truncated').length, 0);
+    expect(el.find('.doc-content-truncated').length).toBe(0);
   });
 
 });

@@ -10,12 +10,9 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 import Views from "../components";
-import utils from "../../../../test/mocha/testUtils";
 import React from "react";
-import ReactDOM from "react-dom";
 import {mount} from 'enzyme';
 import sinon from "sinon";
-const assert = utils.assert;
 
 describe('Pagination', () => {
 
@@ -25,14 +22,14 @@ describe('Pagination', () => {
     );
 
     const lis = pageEl.find('li');
-    assert.equal(1 + 3 + 1, lis.length);
-    assert.notOk(lis.first().hasClass("disabled"));
-    assert.notOk(lis.at(1).hasClass("class"));
-    assert.notOk(lis.at(2).hasClass("class"));
-    assert.ok(lis.at(3).hasClass("active"));
-    assert.ok(lis.at(4).hasClass("disabled"));
-    assert.equal("2", lis.at(2).text());
-    assert.equal("?prefix=2&suffix=88", lis.at(2).find("a").prop("href"));
+    expect(1 + 3 + 1).toBe(lis.length);
+    expect(lis.first().hasClass("disabled")).toBeFalsy();
+    expect(lis.at(1).hasClass("class")).toBeFalsy();
+    expect(lis.at(2).hasClass("class")).toBeFalsy();
+    expect(lis.at(3).hasClass("active")).toBeTruthy();
+    expect(lis.at(4).hasClass("disabled")).toBeTruthy();
+    expect("2").toBe(lis.at(2).text());
+    expect("?prefix=2&suffix=88").toBe(lis.at(2).find("a").prop("href"));
   });
 
   it("can overwrite collection size", () => {
@@ -41,7 +38,7 @@ describe('Pagination', () => {
     );
 
     const lis = pageEl.find('li');
-    assert.equal(1 + 6 + 1, lis.length);
+    expect(1 + 6 + 1).toBe(lis.length);
   });
 
   it("handles large collections properly - beginning", () => {
@@ -49,11 +46,11 @@ describe('Pagination', () => {
       <Views.Pagination page={3} total={600} />,
     );
     const lis = pageEl.find('li');
-    assert.equal(1 + 10 + 1, lis.length);
-    assert.ok(lis.at(3).hasClass("active"));
-    assert.equal("3", lis.at(3).text());
-    assert.equal("7", lis.at(7).text());
-    assert.equal("10", lis.at(10).text());
+    expect(1 + 10 + 1).toBe(lis.length);
+    expect(lis.at(3).hasClass("active")).toBeTruthy();
+    expect("3").toBe(lis.at(3).text());
+    expect("7").toBe(lis.at(7).text());
+    expect("10").toBe(lis.at(10).text());
   });
 
   it("handles large collections properly - middle", () => {
@@ -62,11 +59,11 @@ describe('Pagination', () => {
     );
 
     const lis = pageEl.find('li');
-    assert.equal(1 + 10 + 1, lis.length);
-    assert.ok(lis.at(6).hasClass("active"));
-    assert.equal("7", lis.at(3).text());
-    assert.equal("11", lis.at(7).text());
-    assert.equal("14", lis.at(10).text());
+    expect(1 + 10 + 1).toBe(lis.length);
+    expect(lis.at(6).hasClass("active")).toBeTruthy();
+    expect("7").toBe(lis.at(3).text());
+    expect("11").toBe(lis.at(7).text());
+    expect("14").toBe(lis.at(10).text());
   });
 
   it("handles large collections properly - end", () => {
@@ -75,11 +72,11 @@ describe('Pagination', () => {
     );
 
     const lis = pageEl.find('li');
-    assert.equal(1 + 10 + 1, lis.length);
-    assert.ok(lis.at(9).hasClass("active"));
-    assert.equal("23", lis.at(3).text());
-    assert.equal("27", lis.at(7).text());
-    assert.equal("30", lis.at(10).text());
+    expect(1 + 10 + 1).toBe(lis.length);
+    expect(lis.at(9).hasClass("active")).toBeTruthy();
+    expect("23").toBe(lis.at(3).text());
+    expect("27").toBe(lis.at(7).text());
+    expect("30").toBe(lis.at(10).text());
   });
 
   it('limits the number of total pages when customized', () => {
@@ -88,7 +85,7 @@ describe('Pagination', () => {
       <Views.Pagination page={1} total={1000} maxNavPages={maxNavPages} />
     );
     const lis = pageEl.find('li');
-    assert.equal(1 + maxNavPages + 1, lis.length);
+    expect(1 + maxNavPages + 1).toBe(lis.length);
   });
 
   it('calls callback method when supplied', () => {
@@ -101,10 +98,10 @@ describe('Pagination', () => {
     links.at(3).simulate('click');
 
     // confirm it gets called
-    assert.ok(spy.calledOnce);
+    expect(spy.calledOnce).toBeTruthy();
 
     // confirm it's called with the pagination number (3)
-    assert.ok(spy.calledWith(3));
+    expect(spy.calledWith(3)).toBeTruthy();
   });
 
   it('calls callback method with correct values for prev and next', () => {
@@ -117,10 +114,10 @@ describe('Pagination', () => {
     var links = pageEl.find("a");
 
     links.first().simulate('click');
-    assert.ok(spy.calledWith(currentPage - 1));
+    expect(spy.calledWith(currentPage - 1)).toBeTruthy();
 
     links.at(11).simulate('click');
-    assert.ok(spy.calledWith(currentPage + 1));
+    expect(spy.calledWith(currentPage + 1)).toBeTruthy();
   });
 
 });

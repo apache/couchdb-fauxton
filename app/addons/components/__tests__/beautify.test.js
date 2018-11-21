@@ -10,12 +10,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 import ReactComponents from "../react-components";
-import utils from "../../../../test/mocha/testUtils";
 import React from "react";
-import ReactDOM from "react-dom";
 import {mount} from 'enzyme';
-
-const assert = utils.assert;
 
 describe('Beautify', () => {
   let beautifyEl;
@@ -25,13 +21,13 @@ describe('Beautify', () => {
     beautifyEl = mount(
       <ReactComponents.Beautify code={correctCode}/>
     );
-    assert.ok(_.isNull(beautifyEl.instance().render()));
+    expect(beautifyEl.instance().render()).toBeNull();
   });
 
   it('should have button to beautify for single line code', () => {
     const badCode = '() => { console.log("hello"); }';
     beautifyEl = mount(<ReactComponents.Beautify code={badCode}/>);
-    assert.ok(beautifyEl.find('button').hasClass('beautify'));
+    expect(beautifyEl.find('button').hasClass('beautify')).toBeTruthy();
   });
 
   it('on click beautifies code', () => {
@@ -49,6 +45,6 @@ describe('Beautify', () => {
         noOfLines={1}/>
     );
     beautifyEl.simulate('click');
-    assert.equal(fixedCode, correctCode);
+    expect(fixedCode).toBe(correctCode);
   });
 });

@@ -16,10 +16,8 @@ import { shallow } from 'enzyme';
 import FauxtonAPI from '../../../core/api';
 import Constants from '../constants';
 import TableRow from '../index-results/components/results/TableRow';
-import utils from '../../../../test/mocha/testUtils';
 
 FauxtonAPI.router = new FauxtonAPI.Router([]);
-const { assert } = utils;
 
 describe('Docs Table Row', () => {
 
@@ -50,11 +48,11 @@ describe('Docs Table Row', () => {
       isSelected={false}
     />);
 
-    assert.equal(wrapper.find('td').at(2).text(), JSON.stringify(elem.content.vBool));
-    assert.equal(wrapper.find('td').at(3).text(), elem.content.vString);
-    assert.equal(wrapper.find('td').at(4).text(), JSON.stringify(elem.content.vFloat));
-    assert.equal(wrapper.find('td').at(5).text(), JSON.stringify(elem.content.vInt));
-    assert.equal(wrapper.find('td').at(6).text().replace(/[\s]/g, ''), JSON.stringify(elem.content.vObject));
+    expect(wrapper.find('td').at(2).text()).toBe(JSON.stringify(elem.content.vBool));
+    expect(wrapper.find('td').at(3).text()).toBe(elem.content.vString);
+    expect(wrapper.find('td').at(4).text()).toBe(JSON.stringify(elem.content.vFloat));
+    expect(wrapper.find('td').at(5).text()).toBe(JSON.stringify(elem.content.vInt));
+    expect(wrapper.find('td').at(6).text().replace(/[\s]/g, '')).toBe(JSON.stringify(elem.content.vObject));
   });
 
   it('shows full text values', () => {

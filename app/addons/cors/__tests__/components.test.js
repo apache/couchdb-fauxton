@@ -14,12 +14,11 @@ import * as Helpers from "../helpers";
 import Views from "../components";
 import utils from "../../../../test/mocha/testUtils";
 import React from "react";
-import ReactDOM from "react-dom";
 import sinon from "sinon";
 import { shallow, mount } from 'enzyme';
 
 FauxtonAPI.router = new FauxtonAPI.Router([]);
-const { assert, restore } = utils;
+const { restore } = utils;
 
 describe('CORS Components', () => {
 
@@ -43,7 +42,7 @@ describe('CORS Components', () => {
       />);
 
       wrapper.find('.enable-disable.btn').simulate('click');
-      assert.ok(spy.calledOnce);
+      sinon.assert.calledOnce(spy);
     });
 
     it('does not confirm user change to disable cors when restricted origins are empty', () => {
@@ -59,7 +58,7 @@ describe('CORS Components', () => {
         fetchAndLoadCORSOptions={sinon.stub()}
       />);
       wrapper.find('.enable-disable.btn').simulate('click');
-      assert.ok(spy.notCalled);
+      sinon.assert.notCalled(spy);
     });
 
     it('confirms user change when moving from selected origins to all origins', () => {
@@ -75,7 +74,7 @@ describe('CORS Components', () => {
         fetchAndLoadCORSOptions={sinon.stub()}
       />);
       wrapper.find('input').at(0).simulate('change', { target: { checked: true, value: 'all' } });
-      assert.ok(spy.calledOnce);
+      expect(spy.calledOnce).toBeTruthy();
     });
 
     it('does not confirm all origins change if selected origins are emtpy', () => {
@@ -91,7 +90,7 @@ describe('CORS Components', () => {
         fetchAndLoadCORSOptions={sinon.stub()}
       />);
       wrapper.find('input').at(0).simulate('change', { target: { checked: true, value: 'all' } });
-      assert.notOk(spy.calledOnce);
+      expect(spy.calledOnce).toBeFalsy();
     });
 
     it('shows loading bars', () => {
@@ -105,7 +104,7 @@ describe('CORS Components', () => {
         fetchAndLoadCORSOptions={sinon.stub()}
       />);
 
-      assert.ok(wrapper.find('.loading-lines').exists());
+      expect(wrapper.find('.loading-lines').exists()).toBeTruthy();
     });
 
     it('hides loading bars', () => {
@@ -119,7 +118,7 @@ describe('CORS Components', () => {
         fetchAndLoadCORSOptions={sinon.stub()}
       />);
 
-      assert.notOk(wrapper.find('.loading-lines').exists());
+      expect(wrapper.find('.loading-lines').exists()).toBe(false);
     });
   });
 
@@ -132,7 +131,7 @@ describe('CORS Components', () => {
 
       wrapper.find('input').simulate('change', { target: { value: newOrigin } });
       wrapper.find('.btn').simulate('click', { preventDefault: sinon.stub() });
-      assert.ok(spyValidateDomain.called);
+      expect(spyValidateDomain.called).toBeTruthy();
     });
 
     it('calls addOrigin on add click with valid domain', () => {
@@ -141,7 +140,7 @@ describe('CORS Components', () => {
 
       wrapper.find('input').simulate('change', { target: { value: newOrigin } });
       wrapper.find('.btn').simulate('click', { preventDefault: sinon.stub() });
-      assert.ok(addOriginSpy.calledWith(newOrigin));
+      expect(addOriginSpy.calledWith(newOrigin)).toBeTruthy();
     });
 
     it('shows notification if origin is not valid', () => {
@@ -150,7 +149,7 @@ describe('CORS Components', () => {
 
       wrapper.find('input').simulate('change', { target: { value: 'badOrigin' } });
       wrapper.find('.btn').simulate('click', { preventDefault: sinon.stub() });
-      assert.ok(spyAddNotification.calledOnce);
+      expect(spyAddNotification.calledOnce).toBeTruthy();
     });
   });
 
@@ -165,14 +164,14 @@ describe('CORS Components', () => {
       const wrapper = shallow(<Views.Origins corsEnabled={true} isAllOrigins={false} originChange={spyChangeOrigin} />);
 
       wrapper.find('input[value="all"]').simulate('change', { target: { checked: true, value: 'all' } });
-      assert.ok(spyChangeOrigin.calledWith(true));
+      expect(spyChangeOrigin.calledWith(true)).toBeTruthy();
     });
 
     it('calls changeOrigin() when you switch from "Allow All Origins" to "Select List of Origins"', () => {
       const wrapper = shallow(<Views.Origins corsEnabled={true} isAllOrigins={true} originChange={spyChangeOrigin} />);
 
       wrapper.find('input[value="selected"]').simulate('change', { target: { checked: true, value: 'selected' } });
-      assert.ok(spyChangeOrigin.calledWith(false));
+      expect(spyChangeOrigin.calledWith(false)).toBeTruthy();
     });
   });
 
@@ -198,7 +197,7 @@ describe('CORS Components', () => {
         origins={[origin]} />);
 
       wrapper.find('.fonticon-trash').simulate('click', { preventDefault: sinon.stub() });
-      assert.ok(spyDeleteOrigin.calledOnce);
+      expect(spyDeleteOrigin.calledOnce).toBeTruthy();
     });
 
     it('does not throw error if origins is undefined', () => {
@@ -218,11 +217,11 @@ describe('CORS Components', () => {
 
       // Text input appears after clicking Edit
       wrapper.find('.fonticon-pencil').simulate('click', { preventDefault: sinon.stub() });
-      assert.ok(wrapper.find('input').exists());
+      expect(wrapper.find('input').exists()).toBeTruthy();
 
       // Text input is hidden after clicking Edit for the 2nd time
       wrapper.find('.fonticon-pencil').simulate('click', { preventDefault: sinon.stub() });
-      assert.notOk(wrapper.find('input').exists());
+      expect(wrapper.find('input').exists()).toBe(false);
     });
 
     it('should update origin on update clicked', () => {
@@ -238,7 +237,7 @@ describe('CORS Components', () => {
       wrapper.find('.fonticon-pencil').simulate('click', { preventDefault: sinon.stub() });
       wrapper.find('input').simulate('change', { target: { value: updatedOrigin } });
       wrapper.find('.btn').at(0).simulate('click', { preventDefault: sinon.stub() });
-      assert.ok(spyUpdateOrigin.calledWith(updatedOrigin));
+      expect(spyUpdateOrigin.calledWith(updatedOrigin)).toBeTruthy();
     });
 
     it('should not update origin on update clicked with bad origin', () => {
@@ -253,7 +252,7 @@ describe('CORS Components', () => {
       wrapper.find('.fonticon-pencil').simulate('click', { preventDefault: sinon.stub() });
       wrapper.find('input').simulate('change', { target: { value: updatedOrigin } });
       wrapper.find('.btn').at(0).simulate('click', { preventDefault: sinon.stub() });
-      assert.notOk(spyUpdateOrigin.calledWith(updatedOrigin));
+      expect(spyUpdateOrigin.calledWith(updatedOrigin)).toBe(false);
     });
 
   });

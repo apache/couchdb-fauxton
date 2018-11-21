@@ -9,7 +9,7 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
-import utils from '../../../../test/mocha/testUtils';
+
 import {replicate, getReplicationStateFrom, deleteDocs} from '../actions';
 import ActionTypes from '../actiontypes';
 import fetchMock from 'fetch-mock';
@@ -23,12 +23,13 @@ FauxtonAPI.session = {
   }
 };
 
-const assert = utils.assert;
-
 describe("Replication Actions", () => {
 
   describe('replicate', () => {
-    afterEach(fetchMock.reset);
+
+    afterEach(() => {
+      fetchMock.reset();
+    });
 
     it('creates a new database if it does not exist', () => {
       const dispatch = () => {};
@@ -52,7 +53,7 @@ describe("Replication Actions", () => {
         body: {
           ok: true
         }
-      });
+      }, { overwriteRoutes: false });
 
       return replicate ({
         localSource: "animaldb",
@@ -66,7 +67,9 @@ describe("Replication Actions", () => {
         replicationType: "",
         username: "tester"
       })(dispatch).then(() => {
-        assert.lengthOf(finalPost.calls('./_replicator'), 3);
+        expect(finalPost.calls('./_replicator').length).toBe(3);
+
+        //fetchMock.done();
       });
     });
 
@@ -91,12 +94,18 @@ describe("Replication Actions", () => {
         replicationType: "",
         username: "tester"
       })(dispatch).then(() => {
-        assert.lengthOf(mockPost.calls('./_replicator'), 1);
+        expect(mockPost.calls('./_replicator').length).toBe(1);
+        fetchMock.done();
       });
     });
   });
 
   describe('getReplicationStateFrom', () => {
+
+    afterEach(() => {
+      fetchMock.reset();
+    });
+
     const doc = {
       "_id": "7dcea9874a8fcb13c6630a1547001559",
       "_rev": "2-98d29cc74e77b6dc38f5fc0dcec0033c",
@@ -139,7 +148,7 @@ describe("Replication Actions", () => {
       "targetAuth":{"username":"tester", "password":"testerpass"}
     };
 
-    it.only('builds up correct state', (done) => {
+    it('builds up correct state', (done) => {
       const dispatch = ({type, options}) => {
         if (ActionTypes.REPLICATION_SET_STATE_FROM_DOC === type) {
           expect(options).toEqual(docState);
@@ -158,14 +167,14 @@ describe("Replication Actions", () => {
           "continuous": true,
           "source": {
             "headers": {},
-            "url": "http://dev:8000/animaldb",
+            "url": "http://localhost:8000/animaldb",
             "auth": {
               "creds": "source_user_creds"
             }
           },
           "target": {
             "headers": {},
-            "url": "http://dev:8000/boom123",
+            "url": "http://localhost:8000/boom123",
             "auth": {
               "creds": "target_user_creds"
             }
@@ -196,8 +205,8 @@ describe("Replication Actions", () => {
       });
       const dispatch = ({type, options}) => {
         if (ActionTypes.REPLICATION_SET_STATE_FROM_DOC === type) {
-          assert.deepEqual(docStateWithCustomAuth, options);
-          setTimeout(done);
+          expect(options).toEqual(docStateWithCustomAuth);
+          done();
         }
       };
 
@@ -207,6 +216,11 @@ describe("Replication Actions", () => {
   });
 
   describe('deleteDocs', () => {
+
+    afterEach(() => {
+      fetchMock.reset();
+    });
+
     it('sends bulk doc request', (done) => {
       const resp = [
         {
@@ -250,7 +264,7 @@ describe("Replication Actions", () => {
 
       const dispatch = ({type}) => {
         if (ActionTypes.REPLICATION_CLEAR_SELECTED_DOCS === type) {
-          setTimeout(done);
+          done();
         }
       };
 

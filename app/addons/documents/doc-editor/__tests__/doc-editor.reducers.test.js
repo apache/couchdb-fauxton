@@ -11,14 +11,12 @@
 // the License.
 
 import FauxtonAPI from "../../../../core/api";
-import utils from "../../../../../test/mocha/testUtils";
 import Documents from "../../resources";
 import ActionTypes from "../actiontypes";
 import reducer from "../reducers";
 
 FauxtonAPI.router = new FauxtonAPI.Router([]);
 
-const assert = utils.assert;
 const doc = new Documents.Doc({id: 'foo'}, {database: 'bar'});
 
 describe('DocEditor Reducer', function () {
@@ -26,13 +24,13 @@ describe('DocEditor Reducer', function () {
   it('defines sensible defaults', function () {
     const newState = reducer(undefined, { type: 'do_nothing'});
 
-    assert.equal(newState.isLoading, true);
-    assert.equal(newState.cloneDocModalVisible, false);
-    assert.equal(newState.deleteDocModalVisible, false);
-    assert.equal(newState.uploadModalVisible, false);
-    assert.equal(newState.numFilesUploaded, 0);
-    assert.equal(newState.uploadInProgress, false);
-    assert.equal(newState.uploadPercentage, 0);
+    expect(newState.isLoading).toBe(true);
+    expect(newState.cloneDocModalVisible).toBe(false);
+    expect(newState.deleteDocModalVisible).toBe(false);
+    expect(newState.uploadModalVisible).toBe(false);
+    expect(newState.numFilesUploaded).toBe(0);
+    expect(newState.uploadInProgress).toBe(false);
+    expect(newState.uploadPercentage).toBe(0);
   });
 
   it('marks loading as complete after doc is loaded', function () {
@@ -40,31 +38,31 @@ describe('DocEditor Reducer', function () {
       type: ActionTypes.DOC_LOADED,
       options: { doc: doc }
     });
-    assert.equal(newState.isLoading, false);
+    expect(newState.isLoading).toBe(false);
   });
 
   it('showCloneDocModal / hideCloneDocModal', function () {
     const newStateShow = reducer(undefined, { type: ActionTypes.SHOW_CLONE_DOC_MODAL });
-    assert.equal(newStateShow.cloneDocModalVisible, true);
+    expect(newStateShow.cloneDocModalVisible).toBe(true);
 
     const newStateHide = reducer(undefined, { type: ActionTypes.HIDE_CLONE_DOC_MODAL });
-    assert.equal(newStateHide.cloneDocModalVisible, false);
+    expect(newStateHide.cloneDocModalVisible).toBe(false);
   });
 
   it('showDeleteDocModal / hideDeleteDocModal', function () {
     const newStateShow = reducer(undefined, { type: ActionTypes.SHOW_DELETE_DOC_CONFIRMATION_MODAL });
-    assert.equal(newStateShow.deleteDocModalVisible, true);
+    expect(newStateShow.deleteDocModalVisible).toBe(true);
 
     const newStateHide = reducer(undefined, { type: ActionTypes.HIDE_DELETE_DOC_CONFIRMATION_MODAL });
-    assert.equal(newStateHide.deleteDocModalVisible, false);
+    expect(newStateHide.deleteDocModalVisible).toBe(false);
   });
 
   it('showUploadModal / hideUploadModal', function () {
     const newStateShow = reducer(undefined, { type: ActionTypes.SHOW_UPLOAD_MODAL });
-    assert.equal(newStateShow.uploadModalVisible, true);
+    expect(newStateShow.uploadModalVisible).toBe(true);
 
     const newStateHide = reducer(undefined, { type: ActionTypes.HIDE_UPLOAD_MODAL });
-    assert.equal(newStateHide.uploadModalVisible, false);
+    expect(newStateHide.uploadModalVisible).toBe(false);
   });
 
 });

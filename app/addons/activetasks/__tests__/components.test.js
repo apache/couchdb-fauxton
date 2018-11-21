@@ -12,11 +12,8 @@
 import TableHeader from '../components/tableheader';
 import FilterTabs from '../components/filtertabs';
 import React from "react";
-import ReactDOM from "react-dom";
-import utils from "../../../../test/mocha/testUtils";
 import {mount} from 'enzyme';
 import sinon from "sinon";
-const assert = utils.assert;
 
 describe('Active Tasks -- Components', () => {
 
@@ -42,7 +39,7 @@ describe('Active Tasks -- Components', () => {
           );
 
           tabs.find(`input[value="${text}"]`).simulate('change');
-          assert.ok(spy.calledOnce);
+          expect(spy.calledOnce).toBeTruthy();
         });
       });
 
@@ -55,7 +52,7 @@ describe('Active Tasks -- Components', () => {
           />
         );
         tabs.find('.searchbox').simulate('change', {target: {value: 'searching'}});
-        assert.ok(spy.calledOnce);
+        expect(spy.calledOnce).toBeTruthy();
       });
     });
 
@@ -81,7 +78,7 @@ describe('Active Tasks -- Components', () => {
           );
 
           table.find(`.${text}`).simulate('click');
-          assert.ok(spy.calledOnce);
+          expect(spy.calledOnce).toBeTruthy();
         });
       });
     });

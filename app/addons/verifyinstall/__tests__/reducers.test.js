@@ -10,22 +10,19 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import testUtils from "../../../../test/mocha/testUtils";
 import reducer from "../reducers";
 import ActionTypes from "../actiontypes";
-
-var assert = testUtils.assert;
 
 describe('VerifyInstall Reducer', () => {
 
   it('initial state has all tests status set to false', () => {
     const newState = reducer(undefined, {type: 'something_else'});
 
-    assert.ok(newState.isVerifying === false);
+    expect(newState.isVerifying).toBe(false);
 
     // confirm all the tests are initially marked as incomplete
     Object.keys(newState.tests).forEach((test) => {
-      assert.ok(newState.tests[test].complete === false);
+      expect(newState.tests[test].complete).toBe(false);
     });
   });
 
@@ -34,14 +31,14 @@ describe('VerifyInstall Reducer', () => {
       type: ActionTypes.VERIFY_INSTALL_START
     });
 
-    assert.ok(newState.isVerifying === true);
+    expect(newState.isVerifying).toBe(true);
   });
 
   it('verification status changes to completed', () => {
     const newState = reducer(undefined, {
       type: ActionTypes.VERIFY_INSTALL_ALL_TESTS_COMPLETE
     });
-    assert.ok(newState.isVerifying === false);
+    expect(newState.isVerifying).toBe(false);
   });
 
   it('resets status of all tests', () => {
@@ -56,8 +53,8 @@ describe('VerifyInstall Reducer', () => {
       type: ActionTypes.VERIFY_INSTALL_RESET
     });
     Object.keys(newState.tests).forEach((test) => {
-      assert.ok(newState.tests[test].complete === false);
-      assert.isUndefined(newState.tests[test].success);
+      expect(newState.tests[test].complete).toBe(false);
+      expect(newState.tests[test].success).not.toBeDefined();
     });
   });
 

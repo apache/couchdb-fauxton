@@ -10,13 +10,10 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import utils from "../../../../test/mocha/testUtils";
 import Stores from "../stores";
 import "../../documents/base";
 
 import DatabaseActions from "../actions";
-
-const assert = utils.assert;
 
 const store = Stores.databasesStore;
 describe('Databases Store', function () {
@@ -36,7 +33,7 @@ describe('Databases Store', function () {
 
       const list = store.getDbList();
 
-      assert.ok(list[0].failed);
+      expect(list[0].failed).toBeTruthy();
     });
 
     it('unions details', () => {
@@ -48,8 +45,8 @@ describe('Databases Store', function () {
 
       const list = store.getDbList();
 
-      assert.equal(list[0].docCount, 5);
-      assert.equal(list[0].docDelCount, 3);
+      expect(list[0].docCount).toBe(5);
+      expect(list[0].docDelCount).toBe(3);
     });
 
     it('determines database availability', () => {
@@ -59,8 +56,8 @@ describe('Databases Store', function () {
         failedDbs: []
       });
 
-      assert(store.doesDatabaseExist('db1'));
-      assert(!store.doesDatabaseExist('db3'));
+      expect(store.doesDatabaseExist('db1')).toBeTruthy();
+      expect(!store.doesDatabaseExist('db3')).toBeTruthy();
     });
 
     it('uses the data_size prop', () => {
@@ -78,7 +75,7 @@ describe('Databases Store', function () {
 
       const dbList = store.getDbList();
 
-      assert.equal(dbList[0].dataSize, '1.3 KB');
+      expect(dbList[0].dataSize).toBe('1.3 KB');
     });
 
   });

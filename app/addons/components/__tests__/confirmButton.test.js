@@ -10,13 +10,9 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 import ReactComponents from "../react-components";
-import utils from "../../../../test/mocha/testUtils";
 import React from "react";
-import ReactDOM from "react-dom";
 import {mount} from 'enzyme';
 import sinon from "sinon";
-
-const assert = utils.assert;
 
 describe('ConfirmButton', function () {
   let button;
@@ -25,7 +21,7 @@ describe('ConfirmButton', function () {
     button = mount(
       <ReactComponents.ConfirmButton text="Click here to render Rocko Artischocko" />
     );
-    assert.equal(button.text(), 'Click here to render Rocko Artischocko');
+    expect(button.text()).toBe('Click here to render Rocko Artischocko');
   });
 
   it('should use onClick handler if provided', function () {
@@ -36,20 +32,20 @@ describe('ConfirmButton', function () {
     );
 
     button.simulate('click');
-    assert.ok(spy.calledOnce);
+    expect(spy.calledOnce).toBeTruthy();
   });
 
   it('shows icon by default', function () {
     button = mount(
       <ReactComponents.ConfirmButton text="Click here" onClick={function () { }} />
     );
-    assert.equal(button.find('.icon').length, 1);
+    expect(button.find('.icon').length).toBe(1);
   });
 
   it('optionally omits the icon', function () {
     button = mount(
       <ReactComponents.ConfirmButton text="Click here" onClick={function () { }} showIcon={false} />
     );
-    assert.equal(button.find('.icon').length, 0);
+    expect(button.find('.icon').length).toBe(0);
   });
 });

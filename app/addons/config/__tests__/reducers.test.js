@@ -10,11 +10,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import utils from '../../../../test/mocha/testUtils';
 import ActionTypes from '../actiontypes';
 import reducer, {options} from '../reducers';
-
-const {assert} = utils;
 
 describe('Config Reducer', () => {
   const editConfigAction = {
@@ -28,12 +25,12 @@ describe('Config Reducer', () => {
   describe('fetchConfig', () => {
     it('sorts options ascending', () => {
       const newState = reducer(undefined, editConfigAction);
-      assert.ok(options(newState)[0].optionName, 'a');
+      expect(options(newState)[0].optionName).toBe('a');
     });
 
     it('sets the first option as the header', () => {
       const newState = reducer(undefined, editConfigAction);
-      assert.isTrue(options(newState)[0].header);
+      expect(options(newState)[0].header).toBe(true);
     });
   });
 
@@ -42,7 +39,7 @@ describe('Config Reducer', () => {
       let newState = reducer(undefined, editConfigAction);
       const opts = options(newState);
       opts.forEach(el => {
-        assert.isFalse(el.editing);
+        expect(el.editing).toBe(false);
       });
 
       const editOptionAction = {
@@ -54,14 +51,14 @@ describe('Config Reducer', () => {
       };
       newState = reducer(newState, editOptionAction);
       const opts2 = options(newState);
-      assert.isTrue(opts2[1].editing);
+      expect(opts2[1].editing).toBe(true);
     });
   });
 
   describe('saveOption', () => {
     it('sets new option value', () => {
       let newState = reducer(undefined, editConfigAction);
-      assert.equal(options(newState)[1].value, '1');
+      expect(options(newState)[1].value).toBe(1);
 
       const saveOptionAction = {
         type: ActionTypes.OPTION_SAVE_SUCCESS,
@@ -72,14 +69,14 @@ describe('Config Reducer', () => {
         }
       };
       newState = reducer(newState, saveOptionAction);
-      assert.equal(options(newState)[1].value, 'new_value');
+      expect(options(newState)[1].value).toBe('new_value');
     });
   });
 
   describe('deleteOption', () => {
     it('deletes option from section', () => {
       let newState = reducer(undefined, editConfigAction);
-      assert.equal(options(newState).length, 3);
+      expect(options(newState).length).toBe(3);
 
       const deleteOptionAction = {
         type: ActionTypes.OPTION_DELETE_SUCCESS,
@@ -89,12 +86,12 @@ describe('Config Reducer', () => {
         }
       };
       newState = reducer(newState, deleteOptionAction);
-      assert.equal(options(newState).length, 2);
+      expect(options(newState).length).toBe(2);
     });
 
     it('deletes section when all options are deleted', () => {
       let newState = reducer(undefined, editConfigAction);
-      assert.equal(options(newState).length, 3);
+      expect(options(newState).length).toBe(3);
 
       const deleteOptionAction = {
         type: ActionTypes.OPTION_DELETE_SUCCESS,
@@ -108,7 +105,7 @@ describe('Config Reducer', () => {
       newState = reducer(newState, deleteOptionAction);
       deleteOptionAction.options.optionName = 'c';
       newState = reducer(newState, deleteOptionAction);
-      assert.equal(options(newState).length, 0);
+      expect(options(newState).length).toBe(0);
     });
   });
 });

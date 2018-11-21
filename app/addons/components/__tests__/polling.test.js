@@ -10,13 +10,9 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 import {Polling, clearPollCounter, resetPollCounter} from "../components/polling";
-import utils from "../../../../test/mocha/testUtils";
 import {shallow, mount} from "enzyme";
 import sinon from "sinon";
 import React from "react";
-import ReactDOM from "react-dom";
-
-const assert = utils.assert;
 
 describe("Polling", () => {
   describe('Counters', () => {
@@ -25,7 +21,7 @@ describe("Polling", () => {
       let called = false;
       resetPollCounter(100, () => {
         called = true;
-        assert.ok(called);
+        expect(called).toBeTruthy();
         done();
       });
     });
@@ -38,7 +34,7 @@ describe("Polling", () => {
 
       clearPollCounter();
       setTimeout(() => {
-        assert.notOk(called);
+        expect(called).toBeFalsy();
         done();
       }, 200);
     });
@@ -65,10 +61,10 @@ describe("Polling", () => {
 
       const props = wrapper.find('Range').props();
 
-      assert.deepEqual(props.value, 10);
-      assert.deepEqual(props.step, 1);
-      assert.deepEqual(props.min, 1);
-      assert.deepEqual(props.max, 21);
+      expect(props.value).toEqual(10);
+      expect(props.step).toEqual(1);
+      expect(props.min).toEqual(1);
+      expect(props.max).toEqual(21);
     });
 
     it('turns polling off if value is max', () => {
@@ -82,14 +78,14 @@ describe("Polling", () => {
 
       wrapper.find('input').simulate('mouseMove', {buttons:1, which:1, target: {value: 21}});
       const isOff = wrapper.find('.faux__polling-info-value--off').text();
-      assert.deepEqual(isOff.toLowerCase(), "off");
+      expect(isOff.toLowerCase()).toEqual("off");
     });
 
     it('turns polling off if value is max', (done) => {
       let pollCalled = false;
       const onPoll = () => {
         pollCalled = true;
-        assert.ok(pollCalled);
+        expect(pollCalled).toBeTruthy();
         done();
       };
       mount(<Polling

@@ -19,10 +19,8 @@ import ConfigOption from '../components/ConfigOption';
 import ConfigOptionValue from '../components/ConfigOptionValue';
 import ConfigOptionTrash from '../components/ConfigOptionTrash';
 import ConfigTableScreen from '../components/ConfigTableScreen';
-import utils from '../../../../test/mocha/testUtils';
 
 FauxtonAPI.router = new FauxtonAPI.Router([]);
-const assert = utils.assert;
 
 describe('Config Components', () => {
   describe('ConfigTableScreen', () => {
@@ -103,7 +101,7 @@ describe('Config Components', () => {
       };
 
       const el = mount(<table><tbody><ConfigOption {...defaultProps} option={option}/></tbody></table>);
-      assert.equal(el.find('th').text(), 'test_section');
+      expect(el.find('th').text()).toBe('test_section');
     });
   });
 
@@ -123,7 +121,7 @@ describe('Config Components', () => {
         </tr></tbody></table>
       );
 
-      assert.equal(el.text(), 'test_value');
+      expect(el.text()).toBe('test_value');
     });
 
     it('starts editing when clicked', () => {
@@ -135,7 +133,7 @@ describe('Config Components', () => {
       );
 
       el.find(ConfigOptionValue).simulate('click');
-      assert.ok(spy.calledOnce);
+      expect(spy.calledOnce).toBeTruthy();
     });
 
     it('displays editing controls if editing', () => {
@@ -145,9 +143,9 @@ describe('Config Components', () => {
         </tr></tbody></table>
       );
 
-      assert.equal(el.find('input.config-value-input').length, 1);
-      assert.equal(el.find('button.btn-config-cancel').length, 1);
-      assert.equal(el.find('button.btn-config-save').length, 1);
+      expect(el.find('input.config-value-input').length).toBe(1);
+      expect(el.find('button.btn-config-cancel').length).toBe(1);
+      expect(el.find('button.btn-config-save').length).toBe(1);
     });
 
     it('disables input when saving is set to true', () => {
@@ -157,7 +155,7 @@ describe('Config Components', () => {
         </tr></tbody></table>
       );
 
-      assert.ok(el.find('input.config-value-input').prop('disabled'));
+      expect(el.find('input.config-value-input').prop('disabled')).toBe(true);
     });
 
     it('saves changed value of input when save clicked', () => {
@@ -171,7 +169,7 @@ describe('Config Components', () => {
 
       el.find('input.config-value-input').simulate('change', change);
       el.find('button.btn-config-save').simulate('click');
-      assert.ok(spy.calledWith('new_value'));
+      expect(spy.calledWith('new_value')).toBeTruthy();
     });
 
     it('cancels edit if save clicked with unchanged value', () => {
@@ -183,88 +181,70 @@ describe('Config Components', () => {
       );
 
       el.find('button.btn-config-save').simulate('click');
-      assert.ok(spy.calledOnce);
+      sinon.assert.calledOnce(spy);
     });
   });
 
   describe('ConfigOptionTrash', () => {
+    const defaultProps = {
+      sectionName: 'test_section',
+      optionName: 'test_option',
+      onDelete: () => {}
+    };
 
-    it.skip('displays delete modal when clicked', () => {
+    it('displays delete modal when clicked', () => {
       const el = mount(
-        <ConfigOptionTrash sectionName='test_section' optionName='test_option'/>
+        <table><tbody><tr><ConfigOptionTrash {...defaultProps}/></tr></tbody></table>
       );
 
-      el.simulate('click');
-      // assert.equal($('div.confirmation-modal').length, 1);
+      el.find('i.icon').simulate('click');
+      expect(el.find('div.confirmation-modal').length).toBe(1);
     });
 
-    it.skip('calls on delete when confirmation modal Okay button clicked', () => {
+    it('calls on delete when confirmation modal Okay button clicked', () => {
       const spy = sinon.spy();
       const el = mount(
-        <ConfigOptionTrash onDelete={spy}/>
+        <table><tbody><tr><ConfigOptionTrash {...defaultProps} onDelete={spy}/></tr></tbody></table>
       );
 
-      el.simulate('click');
-      // TestUtils.Simulate.click($('div.confirmation-modal button.btn-primary')[0]);
-      assert.ok(spy.calledOnce);
+      el.find('i.icon').simulate('click');
+      el.find('div.confirmation-modal .btn').simulate('click');
+      sinon.assert.calledOnce(spy);
     });
   });
 
-  //we need enzyme to support portals for this
-  describe.skip('AddOptionButton', () => {
-    it('adds options', () => {
-      const spy = sinon.stub();
-      const wrapper = mount(
-        <AddOptionButton onAdd={spy}/>
-      );
-      wrapper.instance().onAdd();
-      assert.ok(spy.calledOnce);
-    });
-  });
-
-  //we need enzyme to support portals for this
-  describe.skip('AddOptionButton', () => {
+  describe('AddOptionButton', () => {
     it('displays add option controls when clicked', () => {
       const el = mount(
-        <AddOptionButton/>
+        <AddOptionButton onAdd={() => {}}/>
       );
 
       el.find('button#add-option-button').simulate('click');
-      assert.equal($('div#add-option-popover .input-section-name').length, 1);
-      assert.equal($('div#add-option-popover .input-option-name').length, 1);
-      assert.equal($('div#add-option-popover .input-value').length, 1);
-      assert.equal($('div#add-option-popover .btn-create').length, 1);
+      expect(el.find('div#add-option-popover .input-section-name').length).toBe(1);
+      expect(el.find('div#add-option-popover .input-option-name').length).toBe(1);
+      expect(el.find('div#add-option-popover .input-value').length).toBe(1);
+      expect(el.find('div#add-option-popover .btn-create').length).toBe(1);
     });
 
     it('does not hide popover if create clicked with invalid input', () => {
       const el = mount(
-        <AddOptionButton/>
+        <AddOptionButton onAdd={() => {}}/>
       );
 
       el.find('button#add-option-button').simulate('click');
-      // TestUtils.Simulate.click($('div#add-option-popover .btn-create')[0]);
-      assert.equal($('div#add-option-popover').length, 1);
+      el.find('div#add-option-popover .btn-create').simulate('click');
+      expect(el.find('div#add-option-popover').length).toBe(1);
     });
 
     it('does not add option if create clicked with invalid input', () => {
+      const spy = sinon.spy();
       const el = mount(
-        <AddOptionButton/>
+        <AddOptionButton onAdd={spy}/>
       );
 
       el.find('button#add-option-button').simulate('click');
-      // TestUtils.Simulate.click($('div#add-option-popover .btn-create')[0]);
-      assert.equal($('div#add-option-popover').length, 1);
-    });
-
-
-    it('does adds option if create clicked with valid input', () => {
-      const el = mount(
-        <AddOptionButton/>
-      );
-
-      el.find('button#add-option-button').simulate('click');
-      // TestUtils.Simulate.click($('div#add-option-popover .btn-create')[0]);
-      assert.equal($('div#add-option-popover').length, 1);
+      el.find('div#add-option-popover .btn-create').simulate('click');
+      sinon.assert.notCalled(spy);
     });
 
     it('adds option when create clicked with valid input', () => {
@@ -274,15 +254,15 @@ describe('Config Components', () => {
       );
 
       el.find('button#add-option-button').simulate('click');
-      // TestUtils.Simulate.change($('div#add-option-popover .input-section-name')[0], { target: { value: 'test_section' } });
-      // TestUtils.Simulate.change($('div#add-option-popover .input-option-name')[0], { target: { value: 'test_option' } });
-      // TestUtils.Simulate.change($('div#add-option-popover .input-value')[0], { target: { value: 'test_value' } });
-      // TestUtils.Simulate.click($('div#add-option-popover .btn-create')[0]);
-      assert.ok(spy.calledWith(sinon.match({
+      el.find('div#add-option-popover .input-section-name').simulate('change', { target: { value: 'test_section' } });
+      el.find('div#add-option-popover .input-option-name').simulate('change', { target: { value: 'test_option' } });
+      el.find('div#add-option-popover .input-value').simulate('change', { target: { value: 'test_value' } });
+      el.find('div#add-option-popover .btn-create').simulate('click');
+      sinon.assert.calledWithMatch(spy, {
         sectionName: 'test_section',
         optionName: 'test_option',
         value: 'test_value'
-      })));
+      });
     });
   });
 });

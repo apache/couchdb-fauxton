@@ -14,12 +14,9 @@ import Actions from "../actions";
 import Stores from "../stores";
 import utils from "../../../../test/mocha/testUtils";
 import React from "react";
-import ReactDOM from "react-dom";
 import { mount } from 'enzyme';
 import sinon from 'sinon';
 import Views from "../components";
-
-const assert = utils.assert;
 
 const store = Stores.databasesStore;
 
@@ -59,9 +56,9 @@ describe('DatabasePagination', () => {
     const pagination = mount(<Views.DatabasePagination linkPath="_custom_path" />);
     const links = pagination.find('a');
 
-    assert.equal(links.length, 3, 'pagination contains links');
+    expect(links.length).toBe(3);
     links.forEach(link => {
-      assert.include(link.props('href').href, '_custom_path', 'link contains custom path');
+      expect(link.props('href').href).toContain('_custom_path');
     });
   });
 
@@ -80,8 +77,8 @@ describe('DatabasePagination', () => {
       fullDbList: dbList
     });
 
-    assert.equal(controller.find('.all-db-footer__range').text(), '1–20');
-    assert.equal(controller.find('.all-db-footer__total-db-count').text(), '30');
+    expect(controller.find('.all-db-footer__range').text()).toBe('1–20');
+    expect(controller.find('.all-db-footer__total-db-count').text()).toBe('30');
   });
 
 });
@@ -125,7 +122,7 @@ describe('DatabaseTable', () => {
     var cols = table.find('th');
 
     // (default # of rows is 4)
-    assert.equal(cols.length, 7, 'extra columns show up');
+    expect(cols.length).toBe(7);
 
     FauxtonAPI.unRegisterExtension('DatabaseTable:head');
   });
@@ -152,7 +149,7 @@ describe('DatabaseTable', () => {
     var links = databaseRow.find('td');
 
     // (default # of rows is 4)
-    assert.equal(links.length, 5, 'extra column shows up');
+    expect(links.length).toBe(5);
 
     FauxtonAPI.unRegisterExtension('DatabaseTable:databaseRow');
 
@@ -172,7 +169,7 @@ describe('DatabaseTable', () => {
     var databaseRow = mount(
       <Views.DatabaseTable showDeleteDatabaseModal={{showModal: false}} dbList={list} loading={false} showPartitionedColumn={false}/>
     );
-    assert.equal(databaseRow.find('.database-load-fail').length, 1);
+    expect(databaseRow.find('.database-load-fail').length).toBe(1);
   });
 
   it('shows no error if row marked as loaded', () => {
@@ -189,7 +186,7 @@ describe('DatabaseTable', () => {
       <Views.DatabaseTable showDeleteDatabaseModal={{showModal: false}} dbList={list} loading={false} showPartitionedColumn={false}/>
     );
 
-    assert.equal(databaseRow.find('.database-load-fail').length, 0);
+    expect(databaseRow.find('.database-load-fail').length).toBe(0);
   });
 
   it('shows Partitioned column only when prop is set to true', () => {
@@ -206,13 +203,13 @@ describe('DatabaseTable', () => {
       <Views.DatabaseTable showDeleteDatabaseModal={{showModal: false}} dbList={list} loading={false} showPartitionedColumn={true}/>
     );
     const colHeaders = withPartColumn.find('th');
-    assert.equal(colHeaders.length, 5);
-    assert.equal(colHeaders.get(3).props.children, 'Partitioned');
+    expect(colHeaders.length).toBe(5);
+    expect(colHeaders.get(3).props.children).toBe('Partitioned');
 
     const withoutPartColumn = mount(
       <Views.DatabaseTable showDeleteDatabaseModal={{showModal: false}} dbList={list} loading={false} showPartitionedColumn={false}/>
     );
-    assert.equal(withoutPartColumn.find('th').length, 4);
+    expect(withoutPartColumn.find('th').length).toBe(4);
   });
 
   it('shows correct values in the Partitioned column', () => {
@@ -233,8 +230,8 @@ describe('DatabaseTable', () => {
     );
     const colCells = dbTable.find('td');
     // 2 rows with 5 cells each
-    assert.equal(colCells.length, 10);
-    assert.equal(colCells.get(3).props.children, 'Yes');
-    assert.equal(colCells.get(8).props.children, 'No');
+    expect(colCells.length).toBe(10);
+    expect(colCells.get(3).props.children).toBe('Yes');
+    expect(colCells.get(8).props.children).toBe('No');
   });
 });

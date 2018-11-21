@@ -12,17 +12,14 @@
 
 import reducer from '../reducers';
 import ActionTypes from '../actiontypes';
-import testUtils from '../../../../../test/mocha/testUtils';
-
-const assert = testUtils.assert;
 
 describe('Notifications Reducer', () => {
 
   it('sets reasonable defaults', () => {
     const newState = reducer(undefined, { type: 'DO_NOTHING'});
-    assert.equal(newState.notifications.length, 0);
-    assert.equal(newState.notificationCenterVisible, false);
-    assert.equal(newState.selectedNotificationFilter, 'all');
+    expect(newState.notifications.length).toBe(0);
+    expect(newState.notificationCenterVisible).toBe(false);
+    expect(newState.selectedNotificationFilter).toBe('all');
   });
 
   it('confirm only known notification types get added', () => {
@@ -34,19 +31,19 @@ describe('Notifications Reducer', () => {
     };
 
     let newState = reducer(undefined, action);
-    assert.equal(newState.notifications.length, 1);
+    expect(newState.notifications.length).toBe(1);
 
     action.options.info.type = 'success';
     newState = reducer(newState, action);
-    assert.equal(newState.notifications.length, 2);
+    expect(newState.notifications.length).toBe(2);
 
     action.options.info.type = 'error';
     newState = reducer(newState, action);
-    assert.equal(newState.notifications.length, 3);
+    expect(newState.notifications.length).toBe(3);
 
     action.options.info.type = 'rhubarb';
     newState = reducer(newState, action);
-    assert.equal(newState.notifications.length, 3);
+    expect(newState.notifications.length).toBe(3);
   });
 
   it('notifications should be escaped by default', () => {
@@ -57,7 +54,7 @@ describe('Notifications Reducer', () => {
       }
     };
     let newState = reducer(undefined, action);
-    assert.equal(newState.notifications[0].escape, true);
+    expect(newState.notifications[0].escape).toBe(true);
   });
 
   it('clears a specific notification', () => {
@@ -75,7 +72,7 @@ describe('Notifications Reducer', () => {
     newState = reducer(newState, action);
     action.options.info.msg = 'four';
     newState = reducer(newState, action);
-    assert.equal(newState.notifications.length, 4);
+    expect(newState.notifications.length).toBe(4);
 
     const idToRemove = newState.notifications[1].notificationId;
     const msgToRemove = newState.notifications[1].msg;
@@ -83,11 +80,11 @@ describe('Notifications Reducer', () => {
       type: ActionTypes.CLEAR_SINGLE_NOTIFICATION,
       options: { notificationId: idToRemove }
     });
-    assert.equal(newState.notifications.length, 3);
+    expect(newState.notifications.length).toBe(3);
     const item = newState.notifications.find(el => {
       return el.msg === msgToRemove;
     });
-    assert.isUndefined(item);
+    expect(item).not.toBeDefined();
   });
 
   it('setNotificationFilter only sets for known notification types', () => {
@@ -100,12 +97,12 @@ describe('Notifications Reducer', () => {
     validFilters.forEach(filter => {
       action.options.filter = filter;
       newState = reducer(newState, action);
-      assert.equal(newState.selectedNotificationFilter, filter);
+      expect(newState.selectedNotificationFilter).toBe(filter);
     });
 
     action.options.filter = 'invalid_filter';
     newState = reducer(newState, action);
-    assert.equal(newState.selectedNotificationFilter, validFilters[validFilters.length - 1]);
+    expect(newState.selectedNotificationFilter).toBe(validFilters[validFilters.length - 1]);
   });
 
   it('clear all notifications', () => {
@@ -123,12 +120,12 @@ describe('Notifications Reducer', () => {
     newState = reducer(newState, action);
     action.options.info.msg = 'four';
     newState = reducer(newState, action);
-    assert.equal(newState.notifications.length, 4);
+    expect(newState.notifications.length).toBe(4);
 
     newState = reducer(newState, {
       type: ActionTypes.CLEAR_ALL_NOTIFICATIONS
     });
-    assert.equal(newState.notifications.length, 0);
+    expect(newState.notifications.length).toBe(0);
   });
 
 });

@@ -10,12 +10,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 import ReactComponents from "../react-components";
-import utils from "../../../../test/mocha/testUtils";
 import React from "react";
-import ReactDOM from "react-dom";
 import {mount} from 'enzyme';
-
-const assert = utils.assert;
 
 describe('Badges', () => {
   it('renders a list of badges', () => {
@@ -23,7 +19,7 @@ describe('Badges', () => {
       <ReactComponents.BadgeList elements={['foo', 'bar']} removeBadge={() => {}} />
     );
 
-    assert.equal(el.find('.component-badge').length, 2);
+    expect(el.find('.component-badge').length).toBe(2);
   });
 
   it('supports custom label formatters', () => {
@@ -31,8 +27,8 @@ describe('Badges', () => {
       <ReactComponents.BadgeList elements={['foo', 'bar']} removeBadge={() => {}} getLabel={(el) => { return el + 'foo'; }} />
     );
 
-    assert.equal(el.find('.component-badge').first().text(), 'foofoo×');
-    assert.equal(el.find('.component-badge').last().text(), 'barfoo×');
+    expect(el.find('.component-badge').first().text()).toBe('foofoo×');
+    expect(el.find('.component-badge').last().text()).toBe('barfoo×');
   });
 
 });

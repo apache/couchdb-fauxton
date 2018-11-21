@@ -10,13 +10,9 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 import ReactComponents from "../react-components";
-import utils from "../../../../test/mocha/testUtils";
 import React from "react";
-import ReactDOM from "react-dom";
 import {mount} from 'enzyme';
 import sinon from "sinon";
-
-const assert = utils.assert;
 
 describe('Header Togglebutton', () => {
   let toggleEl, toggleCallback;
@@ -29,6 +25,6 @@ describe('Header Togglebutton', () => {
 
   it('should call the passed callback', () => {
     toggleEl.simulate('click');
-    assert.ok(toggleCallback.calledOnce);
+    expect(toggleCallback.calledOnce).toBeTruthy();
   });
 });

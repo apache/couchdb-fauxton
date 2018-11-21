@@ -12,16 +12,12 @@
 
 import FauxtonAPI from '../../../core/api';
 import React from 'react';
-import ReactDOM from 'react-dom';
-import testUtils from '../../../../test/mocha/testUtils';
 import Constants from '../constants';
 import VerifyInstallButton from '../components/VerifyInstallButton';
 import VerifyInstallResults from '../components/VerifyInstallResults';
 import {mount} from 'enzyme';
 import sinon from 'sinon';
 FauxtonAPI.router = new FauxtonAPI.Router([]);
-
-var assert = testUtils.assert;
 
 describe('VerifyInstallResults', function () {
   let el;
@@ -45,7 +41,7 @@ describe('VerifyInstallResults', function () {
     el = mount(<VerifyInstallResults testResults={testResults} />);
 
     tests.forEach((test) => {
-      assert.equal(el.find('#' + test.id).text(), '');
+      expect(el.find('#' + test.id).text()).toBe('');
     });
   });
 
@@ -62,7 +58,7 @@ describe('VerifyInstallResults', function () {
       el = mount(<VerifyInstallResults testResults={copy} />);
 
       // now look at the DOM for that element. It should contain a tick char
-      assert.equal(el.find('#' + test.id + ' span').text(), '✓');
+      expect(el.find('#' + test.id + ' span').text()).toBe('✓');
     });
   });
 
@@ -79,7 +75,7 @@ describe('VerifyInstallResults', function () {
       el = mount(<VerifyInstallResults testResults={copy} />);
 
       // now look at the DOM for that element. It should contain an error char
-      assert.equal(el.find('#' + test.id + ' span').text(), '✗');
+      expect(el.find('#' + test.id + ' span').text()).toBe('✗');
     });
   });
 });
@@ -93,19 +89,19 @@ describe('VerifyInstallButton', function () {
     const spy = sinon.spy(stub, 'func');
     el = mount(<VerifyInstallButton verify={stub.func} isVerifying={false} />);
     el.simulate('click');
-    assert.ok(spy.calledOnce);
+    expect(spy.calledOnce).toBeTruthy();
   });
 
   it('shows appropriate default label', function () {
     const stub = { func: () => { } };
     el = mount(<VerifyInstallButton verify={stub.func} isVerifying={false} />);
-    assert.equal(el.text(), 'Verify Installation');
+    expect(el.text()).toBe('Verify Installation');
   });
 
   it('shows appropriate label during verification', function () {
     const stub = { func: () => { } };
     el = mount(<VerifyInstallButton verify={stub.func} isVerifying={true} />);
-    assert.equal(el.text(), 'Verifying');
+    expect(el.text()).toBe('Verifying');
   });
 
 });

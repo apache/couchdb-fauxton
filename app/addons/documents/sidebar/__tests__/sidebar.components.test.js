@@ -20,7 +20,7 @@ import DesignDoc from '../components/DesignDoc';
 import IndexSection from '../components/IndexSection';
 import MainSidebar from '../components/MainSidebar';
 
-const { assert, restore} = utils;
+const { restore} = utils;
 
 describe('DesignDoc', () => {
   const database = { id: 'test-db' };
@@ -54,8 +54,8 @@ describe('DesignDoc', () => {
       designDocName={'doc-$-#-.1'}
     />);
 
-    assert.include(wrapper.find('a.icon.fonticon-plus-circled').at(1).props()['href'], '/doc-%24-%23-.1');
-    assert.include(wrapper.find('a.toggle-view.accordion-header').props()['href'], '/doc-%24-%23-.1');
+    expect(wrapper.find('a.icon.fonticon-plus-circled').at(1).props()['href']).toContain('/doc-%24-%23-.1');
+    expect(wrapper.find('a.toggle-view.accordion-header').props()['href']).toContain('/doc-%24-%23-.1');
   });
 
   it('check toggle() works when design doc name has special characters', () => {
@@ -71,7 +71,7 @@ describe('DesignDoc', () => {
 
     // NOTE: wrapper.find doesn't work special chars so we use class name instead
     wrapper.find('div.accordion-list-item').simulate('click', {preventDefault: sinon.stub()});
-    assert.ok(toggleStub.calledOnce);
+    expect(toggleStub.calledOnce).toBeTruthy();
   });
 
   //here
@@ -84,7 +84,7 @@ describe('DesignDoc', () => {
     />);
 
     const subOptions = el.find('.accordion-body li');
-    assert.equal(subOptions.length, 1);
+    expect(subOptions.length).toBe(1);
   });
 
   it('confirm design doc sidebar extensions appear', function () {
@@ -105,7 +105,7 @@ describe('DesignDoc', () => {
     />);
 
     const subOptions = el.find('.accordion-body li');
-    assert.equal(subOptions.length, 3); // 1 for "Metadata" row, 1 for Type List row ("search indexes") and one for the index itself
+    expect(subOptions.length).toBe(3); // 1 for "Metadata" row, 1 for Type List row ("search indexes") and one for the index itself
   });
 
   it('confirm design doc sidebar extensions do not appear when they have no content', function () {
@@ -125,7 +125,7 @@ describe('DesignDoc', () => {
     />);
 
     const subOptions = el.find('.accordion-body li');
-    assert.equal(subOptions.length, 1);
+    expect(subOptions.length).toBe(1);
   });
 
   it('confirm doc metadata page is highlighted if selected', function () {
@@ -140,7 +140,7 @@ describe('DesignDoc', () => {
       designDocName={'doc-$-#-.1'}
     />);
 
-    assert.equal(el.find('.accordion-body li.active a').text(), 'Metadata');
+    expect(el.find('.accordion-body li.active a').text()).toBe('Metadata');
   });
 
   it('shows different icons for global and partitioned ddocs', () => {
@@ -149,14 +149,14 @@ describe('DesignDoc', () => {
       designDocName={'doc-$-#-.1'}
       isPartitioned={false}
     />);
-    assert.ok(wrapper.find('i.fonticon-document').exists());
+    expect(wrapper.find('i.fonticon-document').exists()).toBeTruthy();
 
     const wrapper2 = mount(<DesignDoc
       {...defaultProps}
       designDocName={'doc-$-#-.1'}
       isPartitioned={true}
     />);
-    assert.ok(wrapper2.find('i.fonticon-documents').exists());
+    expect(wrapper2.find('i.fonticon-documents').exists()).toBeTruthy();
   });
 
   it('confirms links only include the partition key when one is selected', () => {
@@ -165,16 +165,16 @@ describe('DesignDoc', () => {
       selectedPartitionKey={'part-key-$-%1'}
     />);
     // Metadata link
-    assert.include(wrapper.find('a.toggle-view.accordion-header').props()['href'], '/_partition/part-key-%24-%251/');
+    expect(wrapper.find('a.toggle-view.accordion-header').props()['href']).toContain('/_partition/part-key-%24-%251/');
     // New View link
-    assert.include(wrapper.find('li > a.icon.fonticon-plus-circled').props()['href'], '/_partition/part-key-%24-%251/');
+    expect(wrapper.find('li > a.icon.fonticon-plus-circled').props()['href']).toContain('/_partition/part-key-%24-%251/');
 
     const wrapper2 = mount(<DesignDoc
       {...defaultProps}
     />);
 
-    assert.notInclude(wrapper2.find('a.toggle-view.accordion-header').props()['href'], '/_partition/');
-    assert.notInclude(wrapper2.find('li > a.icon.fonticon-plus-circled').props()['href'], '/_partition/');
+    expect(wrapper2.find('a.toggle-view.accordion-header').props()['href']).not.toContain('/_partition/');
+    expect(wrapper2.find('li > a.icon.fonticon-plus-circled').props()['href']).not.toContain('/_partition/');
   });
 });
 
@@ -190,9 +190,9 @@ describe('MainSidebar', () => {
       selectedPartitionKey={'part-key-$-%1'}
     />);
 
-    assert.include(wrapper.find('a#all-docs').props()['href'], '/_partition/part-key-%24-%251/');
-    assert.include(wrapper.find('a#design-docs').props()['href'], '/_partition/part-key-%24-%251/');
-    assert.include(wrapper.find('a#mango-query').props()['href'], '/_partition/part-key-%24-%251/');
+    expect(wrapper.find('a#all-docs').props()['href']).toContain('/_partition/part-key-%24-%251/');
+    expect(wrapper.find('a#design-docs').props()['href']).toContain('/_partition/part-key-%24-%251/');
+    expect(wrapper.find('a#mango-query').props()['href']).toContain('/_partition/part-key-%24-%251/');
   });
 
   it('confirm New links are properly encoded and include the partition key when provided', () => {
@@ -204,9 +204,9 @@ describe('MainSidebar', () => {
     const newLinks = wrapper.instance().getNewButtonLinks()[0].links;
     newLinks.forEach(link => {
       if (link.title === 'New Doc') {
-        assert.include(link.url, '?partitionKey=part-key-%24-%251');
+        expect(link.url).toContain('?partitionKey=part-key-%24-%251');
       } else {
-        assert.include(link.url, '/_partition/part-key-%24-%251/');
+        expect(link.url).toContain('/_partition/part-key-%24-%251/');
       }
     });
   });
@@ -235,8 +235,9 @@ describe('IndexSection', () => {
     />);
 
     defaultProps.items.forEach((view, idx) => {
-      assert.include(wrapper.find('a.toggle-view').at(idx).prop('href'),
-        '/_design/' + encodeURIComponent('ddoc-%-1') + '/_view/' + encodeURIComponent(view));
+      expect(wrapper.find('a.toggle-view').at(idx).prop('href')).toContain(
+        '/_design/' + encodeURIComponent('ddoc-%-1') + '/_view/' + encodeURIComponent(view)
+      );
     });
   });
 
@@ -247,8 +248,7 @@ describe('IndexSection', () => {
     />);
 
     defaultProps.items.forEach((view, idx) => {
-      assert.include(wrapper.find('a.toggle-view').at(idx).prop('href'),
-        '/_partition/' + encodeURIComponent('part%1') + '/');
+      expect(wrapper.find('a.toggle-view').at(idx).prop('href')).toContain('/_partition/' + encodeURIComponent('part%1') + '/');
     });
   });
 });
