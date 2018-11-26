@@ -243,6 +243,17 @@ describe('IndexEditor', () => {
     sinon.assert.calledWith(spy, 'newViewName');
   });
 
+  it('generates the correct cancel link when db, ddoc and views have special chars', () => {
+    const editorEl = mount(<Views.IndexEditor
+      {...defaultProps}
+      database={{ id: 'db%$1' }}
+      designDocId={'_design/doc/1$2'}
+      viewName={'v?abc/123'}
+    />);
+    const expectedUrl = `/${encodeURIComponent('db%$1')}/_design/${encodeURIComponent('doc/1$2')}/_view/${encodeURIComponent('v?abc/123')}`;
+    expect(editorEl.find('a.index-cancel-link').prop('href')).toMatch(expectedUrl);
+  });
+
   it('shows warning when trying to save a partitioned view with custom reduce', () => {
     sinon.stub(FauxtonAPI, 'addNotification');
     const editorEl = mount(<Views.IndexEditor
