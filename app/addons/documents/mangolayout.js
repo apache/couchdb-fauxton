@@ -165,7 +165,8 @@ class MangoLayout extends Component {
     let endpoint = this.props.endpoint;
 
     if (this.props.explainPlan) {
-      endpoint = FauxtonAPI.urls('mango', 'explain-apiurl', encodeURIComponent(database), encodeURIComponent(partitionKey));
+      const encodedPartKey = partitionKey ? encodeURIComponent(partitionKey) : '';
+      endpoint = FauxtonAPI.urls('mango', 'explain-apiurl', encodeURIComponent(database), encodedPartKey);
     }
     let queryFunction = (params) => { return MangoAPI.mangoQueryDocs(databaseName, partitionKey, queryFindCode, params); };
     let docType = Constants.INDEX_RESULTS_DOC_TYPE.MANGO_QUERY;

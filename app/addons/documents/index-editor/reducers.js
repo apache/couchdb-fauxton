@@ -11,11 +11,13 @@
 // the License.
 
 import ActionTypes from './actiontypes';
-import Resources from "../resources";
+import Resources from '../resources';
+import Helpers from '../helpers';
 
 const defaultMap = 'function (doc) {\n  emit(doc._id, 1);\n}';
 const defaultReduce = 'function (keys, values, rereduce) {\n  if (rereduce) {\n    return sum(values);\n  } else {\n    return values.length;\n  }\n}';
-const builtInReducers = ['_sum', '_count', '_stats'];
+const builtInReducers = ['_sum', '_count', '_stats', '_approx_count_distinct'];
+const allReducers = builtInReducers.concat(['CUSTOM', 'NONE']);
 
 const initialState = {
   designDocs: new Backbone.Collection(),
@@ -25,11 +27,12 @@ const initialState = {
   designDocId: '',
   isNewDesignDoc: false,
   newDesignDocName: '',
+  newDesignDocPartitioned: true,
   isNewView: false,
   viewName: '',
   originalViewName: '',
   originalDesignDocName: '',
-  reduceOptions: builtInReducers.concat(['CUSTOM', 'NONE'])
+  reduceOptions: allReducers
 };
 
 function editIndex(state, options) {
@@ -61,6 +64,16 @@ function getView(state) {
   return designDoc.get('views')[state.viewName];
 }
 
+export function getSelectedDesignDocPartitioned(state, isDbPartitioned) {
+  const designDoc = state.designDocs.find(ddoc => {
+    return state.designDocId === ddoc.id;
+  });
+  if (designDoc) {
+    return Helpers.isDDocPartitioned(designDoc.get('doc'), isDbPartitioned);
+  }
+  return false;
+}
+
 export function reduceSelectedOption(state) {
   if (!state.view.reduce) {
     return 'NONE';
@@ -78,14 +91,18 @@ export function hasCustomReduce(state) {
   return false;
 }
 
-export function getSaveDesignDoc(state) {
+export function getSaveDesignDoc(state, isDbPartitioned) {
   if (state.designDocId === 'new-doc') {
     const doc = {
       _id: '_design/' + state.newDesignDocName,
       views: {},
       language: 'javascript'
     };
-    return new Resources.Doc(doc, { database: state.database });
+    const dDoc = new Resources.Doc(doc, { database: state.database });
+    if (isDbPartitioned) {
+      dDoc.setDDocPartitionedOption(state.newDesignDocPartitioned);
+    }
+    return dDoc;
   }
 
   if (!state.designDocs) {
@@ -100,7 +117,7 @@ export function getSaveDesignDoc(state) {
 }
 
 // returns a simple array of design doc IDs. Omits mango docs
-export function getDesignDocIds(state) {
+export function getDesignDocList(state) {
   if (!state.designDocs) {
     return [];
   }
@@ -188,6 +205,12 @@ export default function indexEditor(state = initialState, action) {
       return {
         ...state,
         newDesignDocName: options.value
+      };
+
+    case ActionTypes.DESIGN_DOC_NEW_PARTITIONED_UPDATED:
+      return {
+        ...state,
+        newDesignDocPartitioned: options.value
       };
 
     default:

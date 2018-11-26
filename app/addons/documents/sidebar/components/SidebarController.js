@@ -12,7 +12,6 @@
 
 import PropTypes from 'prop-types';
 import React from 'react';
-import ReactDOM from 'react-dom';
 import ComponentsActions from "../../../components/actions";
 import Components from '../../../components/react-components';
 import ComponentsStore from '../../../components/stores';
@@ -91,6 +90,8 @@ export default class SidebarController extends React.Component {
       sourceDesignDocName: this.props.cloneIndexSourceDesignDocName,
       targetDesignDocName: this.props.cloneIndexModalSelectedDesignDoc,
       newDesignDocName: this.props.cloneIndexModalNewDesignDocName,
+      newDesignDocPartitioned: this.props.cloneIndexModalNewDesignDocPartitioned,
+      isDbPartitioned: this.props.isDbPartitioned,
       newIndexName: this.props.cloneIndexModalNewIndexName,
       designDocs: this.props.designDocs,
       database: this.props.database,
@@ -137,12 +138,16 @@ export default class SidebarController extends React.Component {
           submit={this.cloneIndex}
           designDocArray={this.props.availableDesignDocIds}
           selectedDesignDoc={this.props.cloneIndexModalSelectedDesignDoc}
+          selectedDesignDocPartitioned={this.props.cloneIndexModalSelectedDesignDocPartitioned}
           newDesignDocName={this.props.cloneIndexModalNewDesignDocName}
+          newDesignDocPartitioned={this.props.cloneIndexModalNewDesignDocPartitioned}
           newIndexName={this.props.cloneIndexModalNewIndexName}
           indexLabel={this.props.cloneIndexModalIndexLabel}
           selectDesignDoc={this.props.selectDesignDoc}
           updateNewDesignDocName={this.props.updateNewDesignDocName}
-          setNewCloneIndexName={this.props.setNewCloneIndexName} />
+          updateNewDesignDocPartitioned={this.props.updateNewDesignDocPartitioned}
+          setNewCloneIndexName={this.props.setNewCloneIndexName}
+          isDbPartitioned={this.props.isDbPartitioned} />
       </nav>
     );
   }

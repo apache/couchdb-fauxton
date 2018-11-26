@@ -128,11 +128,22 @@ const isViewSelected = (selectedNavItem) => {
     && selectedNavItem.indexName);
 };
 
+const isDDocPartitioned = (ddoc, isDbPartitioned) => {
+  // By default a design doc is partitioned if the database is partitioned
+  let isDDocPartitioned = isDbPartitioned;
+  // Check if ddoc is explictly set to not partitioned
+  if (isDbPartitioned && ddoc.options && ddoc.options.partitioned === false) {
+    isDDocPartitioned = false;
+  }
+  return isDDocPartitioned;
+};
+
 export default {
   getSeqNum,
   getNewButtonLinks,
   getModifyDatabaseLinks,
   getNewDocUrl,
+  isDDocPartitioned,
   parseJSON,
   truncateDoc,
   selectedViewContainsReduceFunction,

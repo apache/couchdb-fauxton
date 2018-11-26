@@ -249,7 +249,7 @@ export const ViewsTabsSidebarLayout = ({showEditView, database, docURL, endpoint
   dbName, dropDownLinks, selectedNavItem, designDocInfo, partitionKey }) => {
 
   const content = showEditView ?
-    <IndexEditorComponents.IndexEditorContainer /> :
+    <IndexEditorComponents.IndexEditorContainer partitionKey={partitionKey}/> :
     <DesignDocInfoContainer
       designDocInfo={designDocInfo}
       designDocName={selectedNavItem.designDocName}/>;
