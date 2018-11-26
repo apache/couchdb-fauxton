@@ -98,11 +98,13 @@ export default class IndexEditor extends Component {
   getCancelLink() {
     const encodedDatabase = encodeURIComponent(this.props.database.id);
     const encodedPartitionKey = this.props.partitionKey ? encodeURIComponent(this.props.partitionKey) : '';
-    const encodedDDoc = encodeURIComponent(this.props.designDocId);
-    const encodedView = encodeURIComponent(this.props.viewName);
     if (this.props.designDocId === 'new-doc' || this.props.isNewView) {
       return '#' + FauxtonAPI.urls('allDocs', 'app', encodedDatabase, encodedPartitionKey);
     }
+    const encodedDDoc = this.props.designDocId.startsWith('_design/') ?
+      '_design/' + encodeURIComponent(this.props.designDocId.substring(8)) :
+      encodeURIComponent(this.props.designDocId);
+    const encodedView = encodeURIComponent(this.props.viewName);
     return '#' + FauxtonAPI.urls('view', 'showView', encodedDatabase, encodedPartitionKey, encodedDDoc, encodedView);
   }
 
