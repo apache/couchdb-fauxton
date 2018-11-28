@@ -276,10 +276,10 @@ export const deleteReplicates = (replicates) => dispatch => {
         escape: false,
         clear: true
       });
-    }, (xhr) => {
-      const errorMessage = JSON.parse(xhr.responseText);
+    }).catch(err => {
+      const errorMessage = err.responseJSON ? err.responseJSON.reason : 'Failed to delete replication.';
       FauxtonAPI.addNotification({
-        msg: errorMessage.reason,
+        msg: errorMessage,
         type: 'error',
         clear: true
       });

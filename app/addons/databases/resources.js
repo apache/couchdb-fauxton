@@ -18,37 +18,40 @@ var Databases = FauxtonAPI.addon();
 
 Databases.DocLimit = 100;
 
-Databases.Model = FauxtonAPI.Model.extend({
+Databases.Model = class extends FauxtonAPI.Model {
 
-  partitioned: false,
+  constructor(attributes, options) {
+    super(attributes, options);
+    this.partitioned = false;
+  }
 
-  setPartitioned: function (partitioned) {
+  setPartitioned(partitioned) {
     this.partitioned = partitioned;
-  },
+  }
 
-  documentation: function () {
+  documentation() {
     return FauxtonAPI.constants.DOC_URLS.ALL_DBS;
-  },
+  }
 
-  buildAllDocs: function (params) {
+  buildAllDocs(params) {
     this.allDocs = new Documents.AllDocs(null, {
       database: this,
       params: params
     });
 
     return this.allDocs;
-  },
+  }
 
-  isNew: function () {
+  isNew() {
     // Databases are never new, to make Backbone do a PUT
     return false;
-  },
+  }
 
-  isSystemDatabase: function () {
+  isSystemDatabase() {
     return app.utils.isSystemDatabase(this.id);
-  },
+  }
 
-  url: function (context) {
+  url(context) {
     if (context === "index") {
       return "/database/" + this.safeID() + "/_all_docs";
     } else if (context === "web-index") {
@@ -67,12 +70,13 @@ Databases.Model = FauxtonAPI.Model.extend({
     }
     return Helpers.getServerUrl("/" + this.safeID());
 
-  },
+  }
 
-  safeID: function () {
+  safeID() {
     return app.utils.safeURLName(this.id);
-  },
-  buildChanges: function (params) {
+  }
+
+  buildChanges(params) {
     if (!params.limit) {
       params.limit = 100;
     }
@@ -84,18 +88,20 @@ Databases.Model = FauxtonAPI.Model.extend({
 
     return this.changes;
   }
-});
+};
 
-Databases.Changes = FauxtonAPI.Collection.extend({
+Databases.Changes = class extends FauxtonAPI.Collection {
 
-  initialize: function (options) {
+  initialize(options) {
     this.database = options.database;
     this.params = options.params;
-  },
-  documentation: function () {
+  }
+
+  documentation() {
     return FauxtonAPI.constants.DOC_URLS.CHANGES;
-  },
-  url: function (context) {
+  }
+
+  url(context) {
     var query = "";
     if (this.params) {
       query = "?" + app.utils.queryParams(this.params);
@@ -104,12 +110,12 @@ Databases.Changes = FauxtonAPI.Collection.extend({
     if (!context) { context = 'server';}
 
     return FauxtonAPI.urls('changes', context, this.database.safeID(), query);
-  },
+  }
 
-  parse: function (resp) {
+  parse(resp) {
     this.last_seq = resp.last_seq;
     return resp.results;
   }
-});
+};
 
 export default Databases;

@@ -13,20 +13,24 @@
 import app from "../../app";
 import FauxtonAPI from "../../core/api";
 import { deleteRequest } from "../../core/ajax";
-import PagingCollection from "../../../assets/js/plugins/cloudant.pagingcollection";
+import PagingCollection from "../../core/data/pagingcollection";
 
 // defined here because this is contains the base resources used throughout the addon and outside,
 // so it's the first code that gets run
-var Documents = FauxtonAPI.addon();
+const Documents = FauxtonAPI.addon();
 
+Documents.Doc = class extends FauxtonAPI.Model {
 
-Documents.Doc = FauxtonAPI.Model.extend({
-  idAttribute: "_id",
-  documentation: function () {
+  constructor(attributes, options) {
+    super(attributes, options);
+    this.idAttribute = '_id';
+  }
+
+  documentation() {
     return FauxtonAPI.constants.DOC_URLS.GENERAL;
-  },
+  }
 
-  url: function (context) {
+  url(context) {
     if (context === undefined) {
       context = 'server';
     }
@@ -39,9 +43,9 @@ Documents.Doc = FauxtonAPI.Model.extend({
 
     const query = this.fetchConflicts ? '?conflicts=true' : '';
     return FauxtonAPI.urls('document', context, this.getDatabase().safeID(), id, query);
-  },
+  }
 
-  initialize: function (_attrs, options) {
+  initialize(_attrs, options) {
     if (this.collection && this.collection.database) {
       this.database = this.collection.database;
     } else if (options.database) {
@@ -52,38 +56,38 @@ Documents.Doc = FauxtonAPI.Model.extend({
       this.fetchConflicts = true;
     }
     this.partitionKey = options.partitionKey;
-  },
+  }
 
   // HACK: the doc needs to know about the database, but it may be
   // set directly or indirectly in all docs
-  getDatabase: function () {
+  getDatabase() {
     return this.database ? this.database : this.collection.database;
-  },
+  }
 
-  validate: function (attrs) {
+  validate(attrs) {
     if (this.id && this.id !== attrs._id && this.get('_rev')) {
       return "Cannot change a documents id.";
     }
-  },
+  }
 
-  docType: function () {
+  docType() {
     return app.utils.getDocTypeFromId(this.id);
-  },
+  }
 
   // @deprecated, see isJSONDocBulkDeletable
-  isBulkDeletable: function () {
+  isBulkDeletable() {
     return !!this.id && !!this.get('_rev');
-  },
+  }
 
-  isDeletable: function () {
+  isDeletable() {
     return !!this.id;
-  },
+  }
 
-  isFromView: function () {
+  isFromView() {
     return !this.id;
-  },
+  }
 
-  isMangoDoc: function () {
+  isMangoDoc() {
     if (!this.isDdoc()) return false;
     if (this.get('language') === 'query') {
       return true;
@@ -94,13 +98,13 @@ Documents.Doc = FauxtonAPI.Model.extend({
     }
 
     return false;
-  },
+  }
 
-  isDdoc: function () {
+  isDdoc() {
     return this.docType() === "design doc";
-  },
+  }
 
-  setDDocPartitionedOption: function (isPartitioned) {
+  setDDocPartitionedOption(isPartitioned) {
     if (!this.isDdoc()) {
       return false;
     }
@@ -112,9 +116,9 @@ Documents.Doc = FauxtonAPI.Model.extend({
     this.set({ options });
 
     return true;
-  },
+  }
 
-  setDdocView: function (view, map, reduce) {
+  setDdocView(view, map, reduce) {
     if (!this.isDdoc()) {
       return false;
     }
@@ -138,17 +142,17 @@ Documents.Doc = FauxtonAPI.Model.extend({
     this.set({views: views});
 
     return true;
-  },
+  }
 
-  removeDdocView: function (viewName) {
+  removeDdocView(viewName) {
     if (!this.isDdoc()) return false;
     var views = this.get('views');
 
     delete views[viewName];
     this.set({views: views});
-  },
+  }
 
-  dDocModel: function () {
+  dDocModel() {
     if (!this.isDdoc()) return false;
     var doc = this.get('doc');
 
@@ -158,23 +162,28 @@ Documents.Doc = FauxtonAPI.Model.extend({
     }
 
     return this;
-  },
+  }
 
-  safeID: function () {
+  safeID() {
     return app.utils.getSafeIdForDoc(this.id);
-  },
+  }
 
-  destroy: function () {
-    const url = this.url() + "?rev=" + this.get('_rev');
+  destroy() {
+    let url = this.url();
+    if (url.indexOf('?') === -1) {
+      url = url + "?rev=" + this.get('_rev');
+    } else {
+      url = url + "&rev=" + this.get('_rev');
+    }
     return deleteRequest(url).then(res => {
       if (res.error) {
         throw new Error(res.reason || res.error);
       }
       return res;
     });
-  },
+  }
 
-  parse: function (resp) {
+  parse(resp) {
     if (resp.rev) {
       resp._rev = resp.rev;
       delete resp.rev;
@@ -191,52 +200,60 @@ Documents.Doc = FauxtonAPI.Model.extend({
     }
 
     return resp;
-  },
+  }
 
-  prettyJSON: function () {
+  prettyJSON() {
     var data = this.get("doc") ? this.get("doc") : this.attributes;
 
     return JSON.stringify(data, null, "  ");
-  },
+  }
 
-  copy: function (copyId) {
+  copy(copyId) {
     const attrs = Object.assign({}, this.attributes, {_id: copyId});
     delete attrs._rev;
     const clonedDoc = new this.constructor(attrs, {
       database: this.database
     });
     return clonedDoc.save();
-  },
+  }
 
-  isNewDoc: function () {
+  isNewDoc() {
     return this.get('_rev') ? false : true;
   }
-});
+};
 
+Documents.AllDocs = class extends PagingCollection {
 
-Documents.AllDocs = PagingCollection.extend({
-  model: Documents.Doc,
-  documentation: function () {
+  constructor(models, options) {
+    super(models, options);
+    this.model = Documents.Doc;
+  }
+
+  documentation() {
     return FauxtonAPI.constants.DOC_URLS.GENERAL;
-  },
-  initialize: function (_models, options) {
+  }
+
+  initialize(_models, options) {
     this.viewMeta = options.viewMeta;
     this.database = options.database;
     this.params = _.clone(options.params);
 
-    this.on("remove", this.decrementTotalRows, this);
     this.perPageLimit = options.perPageLimit || 20;
 
     if (!this.params.limit) {
       this.params.limit = this.perPageLimit;
     }
-  },
+  }
 
-  isEditable: function () {
+  onRemove() {
+    this.decrementTotalRows();
+  }
+
+  isEditable () {
     return true;
-  },
+  }
 
-  urlRef: function (context, params) {
+  urlRef(context, params) {
     var query = "";
 
     if (params) {
@@ -252,13 +269,13 @@ Documents.AllDocs = PagingCollection.extend({
       context = 'server';
     }
     return FauxtonAPI.urls('allDocs', context, this.database.safeID(), query);
-  },
+  }
 
-  url: function () {
+  url() {
     return this.urlRef.apply(this, arguments);
-  },
+  }
 
-  simple: function () {
+  simple() {
     var docs = this.map(function (item) {
       return {
         _id: item.id,
@@ -270,27 +287,27 @@ Documents.AllDocs = PagingCollection.extend({
       database: this.database,
       params: this.params
     });
-  },
+  }
 
-  totalRows: function () {
+  totalRows() {
     return this.viewMeta.total_rows || "unknown";
-  },
+  }
 
-  decrementTotalRows: function () {
+  decrementTotalRows() {
     if (this.viewMeta.total_rows) {
       this.viewMeta.total_rows = this.viewMeta.total_rows - 1;
       this.trigger('totalRows:decrement');
     }
-  },
+  }
 
-  updateSeq: function () {
+  updateSeq() {
     if (!this.viewMeta) {
       return false;
     }
     return this.viewMeta.update_seq || false;
-  },
+  }
 
-  parse: function (resp) {
+  parse(resp) {
     var rows = resp.rows;
 
     // remove any query errors that may return without doc info
@@ -314,16 +331,16 @@ Documents.AllDocs = PagingCollection.extend({
       return res;
     });
 
-    return PagingCollection.prototype.parse.call(this, resp);
-  },
+    return super.parse(resp);
+  }
 
-  clone: function () {
-    return new this.constructor(this.models, {
+  clone() {
+    return new Documents.AllDocs(this.models, {
       database: this.database,
       params: this.params,
       paging: this.paging
     });
   }
-});
+};
 
 export default Documents;

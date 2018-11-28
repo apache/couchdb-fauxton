@@ -59,8 +59,8 @@ Verifyinstall.testProcess = {
         resolve();
       }).then(() => {
         resolve();
-      }, (xhr, error, reason) => {
-        reject(new Error(reason));
+      }, (err) => {
+        reject(err);
       });
     });
     return promise;
@@ -79,12 +79,7 @@ Verifyinstall.testProcess = {
       resolve = res;
       reject = rej;
     });
-    const getPromise = get(viewDoc.url() + '/_view/testview').then(res => {
-      if (res.error) {
-        throw new Error(res.reason || res.error);
-      }
-      return res;
-    });
+    const getPromise = get(viewDoc.url() + '/_view/testview').then(FauxtonAPI.throwIfCouchDbErrorResponse);
 
     getPromise.then(function (resp) {
       resp = _.isString(resp) ? JSON.parse(resp) : resp;
@@ -127,12 +122,7 @@ Verifyinstall.testProcess = {
     return post(
       Helpers.getServerUrl('/_replicate'),
       body
-    ).then(res => {
-      if (res.error) {
-        throw new Error(res.reason || res.error);
-      }
-      return res;
-    });
+    ).then(FauxtonAPI.throwIfCouchDbErrorResponse);
   },
 
   testReplicate: function () {

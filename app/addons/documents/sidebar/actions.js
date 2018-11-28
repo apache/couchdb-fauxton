@@ -32,9 +32,9 @@ const dispatchNewOptions = (options) => {
       type: ActionTypes.SIDEBAR_NEW_OPTIONS,
       options: options
     });
-  }, xhr => {
+  }).catch(err => {
     let errorMsg = 'Unable to update the sidebar.';
-    if (xhr.responseJSON && xhr.responseJSON.error === 'not_found') {
+    if (err.responseJSON && err.responseJSON.error === 'not_found') {
       const databaseName = options.designDocs.database.safeID();
       errorMsg = `The ${databaseName} database does not exist.`;
       FauxtonAPI.navigate('/', {trigger: true});

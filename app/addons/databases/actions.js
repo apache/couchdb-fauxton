@@ -153,7 +153,7 @@ export default {
 
     const db = Stores.databasesStore.obtainNewDatabaseModel(databaseName, partitioned);
     FauxtonAPI.addNotification({ msg: 'Creating database.' });
-    db.save().done(() => {
+    db.save().then(() => {
       FauxtonAPI.addNotification({
         msg: 'Database created successfully',
         type: 'success',
@@ -161,11 +161,10 @@ export default {
       });
       const route = FauxtonAPI.urls('allDocs', 'app', app.utils.safeURLName(databaseName));
       app.router.navigate(route, { trigger: true });
-    }
-    ).fail((xhr) => {
-      const responseText = JSON.parse(xhr.responseText).reason;
+    }).catch(err => {
+      const reason = err.responseJSON ? err.responseJSON.reason : '';
       FauxtonAPI.addNotification({
-        msg: 'Create database failed: ' + responseText,
+        msg: 'Create database failed. ' + reason,
         type: 'error',
         clear: true
       });

@@ -29,9 +29,9 @@ const testPassed = function (test, dispatch) {
 
 let allTestsPassed = true;
 const testFailed = function (test, dispatch) {
-  return function (xhr) {
+  return function (err) {
     allTestsPassed = false;
-    if (!xhr) { return; }
+    if (!err) { return; }
 
     dispatch({
       type: ActionTypes.VERIFY_INSTALL_SINGLE_TEST_COMPLETE,
@@ -39,10 +39,10 @@ const testFailed = function (test, dispatch) {
       success: false
     });
     let reason = 'n/a';
-    if (xhr.responseText) {
-      reason = JSON.parse(xhr.responseText).reason;
-    } else if (xhr.message) {
-      reason = xhr.message;
+    if (err.responseJSON) {
+      reason = err.responseJSON.reason;
+    } else if (err.message) {
+      reason = err.message;
     }
     FauxtonAPI.addNotification({
       msg: 'Error: ' + reason,

@@ -24,11 +24,7 @@ function showDeleteDatabaseModal (options) {
 function deleteDatabase (dbId, onDeleteSuccess) {
   const url = FauxtonAPI.urls('databaseBaseURL', 'server', dbId, '');
 
-  deleteRequest(url).then(resp => {
-    if (!resp.ok) {
-      const msg = resp.reason || '';
-      throw new Error(msg);
-    }
+  deleteRequest(url).then(FauxtonAPI.throwIfCouchDbErrorResponse).then(() => {
     this.showDeleteDatabaseModal({ showModal: true });
 
     FauxtonAPI.addNotification({

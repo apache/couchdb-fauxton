@@ -12,6 +12,8 @@
 
 import Backbone from "backbone";
 import _ from "lodash";
+import Model from './data/model';
+import Collection from './data/collection';
 
 var FauxtonAPI = {
   //add default objects
@@ -112,38 +114,39 @@ FauxtonAPI.addon = function (extra) {
   return _.extend(_.clone(FauxtonAPI.addonExtensions), extra);
 };
 
-FauxtonAPI.View = Backbone.View.extend({
-  // This should return an array of promises, an empty array, or null
-  establish: function () {
-    return null;
-  },
-  loaderClassname: 'loader',
-  manage: true,
+function fetchOnce (opt) {
+  const options = _.extend({}, opt);
 
-  forceRender: function () {
-    this.hasRendered = false;
+  if (!this._fetchPromise || this._fetchPromiseRejected || options.forceFetch) {
+    this._fetchPromise = this.fetch().catch(function (err) {
+      this._fetchPromiseRejected = true;
+      throw err;
+    });
   }
-});
+  return this._fetchPromise;
+}
 
-var caching = {
-  fetchOnce: function (opt) {
-    var options = _.extend({}, opt);
-
-    if (!this._deferred || this._deferred.state() === "rejected" || options.forceFetch) {
-      this._deferred = this.fetch();
-    }
-
-    return this._deferred;
-  }
+FauxtonAPI.Model = class extends Model {
+  fetchOnce = fetchOnce;
 };
 
-FauxtonAPI.Model = Backbone.Model.extend({ });
+FauxtonAPI.Collection = class extends Collection {
+  fetchOnce = fetchOnce;
+};
 
-FauxtonAPI.Collection = Backbone.Collection.extend({ });
-
-_.each([FauxtonAPI.Model, FauxtonAPI.Collection], function (ctor) {
-  _.extend(ctor.prototype, caching);
-});
+/**
+ * Checks if the API response is an error and throws Error with the
+ * appropriate message.
+ *
+ * @param {Object} res response from a CouchDB API call
+ * @returns
+ */
+FauxtonAPI.throwIfCouchDbErrorResponse = function (res) {
+  if (res.error) {
+    throw new Error(res.reason || res.error);
+  }
+  return res;
+};
 
 var extensions = _.extend({}, Backbone.Events);
 // Can look at a remove function later.

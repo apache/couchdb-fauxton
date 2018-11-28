@@ -39,8 +39,8 @@ const initDocEditor = (params) => (dispatch) => {
     if (params.onLoaded) {
       params.onLoaded();
     }
-  }, function (xhr) {
-    if (xhr.status === 404) {
+  }).catch(err => {
+    if (err.status === 404) {
       errorNotification(`The ${doc.id} document does not exist.`);
     }
 
@@ -62,9 +62,10 @@ const saveDoc = (doc, isValidDoc, onSave, navigateToUrl) => {
       } else {
         FauxtonAPI.navigate('#/' + FauxtonAPI.urls('allDocs', 'app',  FauxtonAPI.url.encode(doc.database.id)), {trigger: true});
       }
-    }).fail(function (xhr) {
+    }).catch(err => {
+      const errMsg = err.responseJSON ? err.responseJSON.reason : '';
       FauxtonAPI.addNotification({
-        msg: 'Save failed: ' + JSON.parse(xhr.responseText).reason,
+        msg: 'Save failed. ' + errMsg,
         type: 'error',
         fade: false,
         clear: true
@@ -129,7 +130,7 @@ const cloneDoc = (database, doc, newId) => {
       msg: 'Document has been duplicated.'
     });
 
-  }, (error) => {
+  }).catch((error) => {
     const errorMsg = `Could not duplicate document, reason: ${error.responseText}.`;
     FauxtonAPI.addNotification({
       msg: errorMsg,

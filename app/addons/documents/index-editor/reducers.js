@@ -10,6 +10,7 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+import Collection from '../../../core/data/collection';
 import ActionTypes from './actiontypes';
 import Resources from '../resources';
 import Helpers from '../helpers';
@@ -20,7 +21,7 @@ const builtInReducers = ['_sum', '_count', '_stats', '_approx_count_distinct'];
 const allReducers = builtInReducers.concat(['CUSTOM', 'NONE']);
 
 const initialState = {
-  designDocs: new Backbone.Collection(),
+  designDocs: new Collection(),
   isLoading: true,
   view: { reduce: '', map: defaultMap },
   database: { id: '0' },

@@ -43,9 +43,9 @@ const dispatchClearIndex = () => {
 const dispatchFetchDesignDocsBeforeEdit = (options) => {
   options.designDocs.fetch({reset: true}).then(() => {
     editIndex(options)(FauxtonAPI.reduxDispatch);
-  }, xhr => {
+  }).catch(err => {
     let errorMsg = 'Error';
-    if (xhr.responseJSON && xhr.responseJSON.error === 'not_found') {
+    if (err.responseJSON && err.responseJSON.error === 'not_found') {
       const databaseName = options.designDocs.database.safeID();
       errorMsg = `The ${databaseName} database does not exist`;
       FauxtonAPI.navigate('/', {trigger: true});
@@ -103,9 +103,10 @@ const saveView = (viewInfo, navigateToURL) => (dispatch) => {
     SidebarActions.dispatchUpdateDesignDocs(viewInfo.designDocs);
     dispatch({ type: ActionTypes.VIEW_SAVED });
     FauxtonAPI.navigate(navigateToURL, { trigger: true });
-  }, (xhr) => {
+  }).catch(err => {
+    const errMsg = err.responseJSON ? err.responseJSON.reason : '';
     FauxtonAPI.addNotification({
-      msg: 'Save failed. ' + (xhr.responseJSON ? `Reason: ${xhr.responseJSON.reason}` : ''),
+      msg: 'Save failed. ' + errMsg,
       type: 'error',
       clear: true
     });
@@ -173,11 +174,11 @@ const cloneView = (params) => {
       clear: true
     });
     SidebarActions.dispatchUpdateDesignDocs(params.designDocs);
-  }, (xhr) => {
+  }).catch(err => {
     params.onComplete();
-    const responseText = JSON.parse(xhr.responseText).reason;
+    const errMsg = err.responseJSON ? err.responseJSON.reason : '';
     FauxtonAPI.addNotification({
-      msg: 'Clone failed: ' + responseText,
+      msg: 'Clone failed. ' + errMsg,
       type: 'error',
       clear: true
     });
@@ -236,10 +237,10 @@ const updateNewDesignDocPartitioned = (isPartitioned) => (dispatch) => {
 const safeDeleteIndex = (designDoc, designDocs, indexPropName, indexName, options) => {
   const opts = _.extend({
     onSuccess: function () { },
-    onError: function (xhr) {
-      const responseText = JSON.parse(xhr.responseText).reason;
+    onError: function (err) {
+      const reason = err.responseJSON ? err.responseJSON.reason : '';
       FauxtonAPI.addNotification({
-        msg: 'Delete failed: ' + responseText,
+        msg: 'Delete failed. ' + reason,
         type: 'error',
         clear: true
       });

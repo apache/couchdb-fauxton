@@ -12,11 +12,12 @@
 
 import React from 'react';
 import app from '../../../app';
+import Collection from '../../../core/data/collection';
 import Helpers from '../helpers';
 import ActionTypes from './actiontypes';
 
 const initialState = {
-  designDocs: new Backbone.Collection(),
+  designDocs: new Collection(),
   designDocList: [],
   selected: {
     navItem: 'all-docs',

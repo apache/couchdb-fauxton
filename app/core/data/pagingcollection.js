@@ -11,26 +11,27 @@
 // the License.
 
 import _ from 'lodash';
-import $ from 'jquery';
-import Backbone from "backbone";
-import app from '../../../app/app';
+import app from '../../app';
+import Collection from './collection';
 
-//PagingCollection
-//----------------
-
-// A PagingCollection knows how to build appropriate requests to the
-// CouchDB-like server and how to fetch. The Collection will always contain a
-// single page of documents.
-
-export const PagingCollection = Backbone.Collection.extend({
+/**
+ * A PagingCollection knows how to build appropriate requests to the
+ * CouchDB-like server and how to fetch. The Collection will always contain a
+ * single page of documents.
+ *
+ * @export
+ * @class PagingCollection
+ * @extends {Collection}
+ */
+export default class PagingCollection extends Collection {
 
   // initialize parameters and page size
-  constructor: function() {
-    Backbone.Collection.apply(this, arguments);
+  constructor(models, options) {
+    super(models, options);
     this.configure.apply(this, arguments);
-  },
+  }
 
-  configure: function(collections, options) {
+  configure(collections, options) {
     var querystring = _.result(this, "url").split("?")[1] || "";
     this.paging = _.defaults((options.paging || {}), {
       defaultParams: _.defaults({}, options.params, this._parseQueryString(querystring)),
@@ -43,9 +44,9 @@ export const PagingCollection = Backbone.Collection.extend({
 
     this.paging.params = _.clone(this.paging.defaultParams);
     this.updateUrlQuery(this.paging.defaultParams);
-  },
+  }
 
-  calculateParams: function(currentParams, skipIncrement, limitIncrement) {
+  calculateParams(currentParams, skipIncrement, limitIncrement) {
 
     var params = _.clone(currentParams);
     params.skip = (parseInt(currentParams.skip, 10) || 0) + skipIncrement;
@@ -60,10 +61,10 @@ export const PagingCollection = Backbone.Collection.extend({
     params.skip = Math.max(params.skip, 0);
 
     return params;
-  },
+  }
 
-  pageSizeReset: function(pageSize, opts) {
-    var options = _.defaults((opts || {}), {fetch: true});
+  pageSizeReset(pageSize, opts) {
+    var options = _.defaults((opts || {}), { fetch: true });
     this.paging.direction = undefined;
     this.paging.pageSize = pageSize;
     this.paging.params = this.paging.defaultParams;
@@ -72,71 +73,71 @@ export const PagingCollection = Backbone.Collection.extend({
     if (options.fetch) {
       return this.fetch();
     }
-  },
+  }
 
-  _parseQueryString: function(uri) {
-    var queryString = decodeURI(uri).split(/&/);
+  _parseQueryString(uri) {
+    const queryString = decodeURI(uri).split(/&/);
 
     return _.reduce(queryString, function (parsedQuery, item) {
-        var nameValue = item.split(/=/);
-        if (nameValue.length === 2) {
-          parsedQuery[nameValue[0]] = nameValue[1];
-        }
+      const nameValue = item.split(/=/);
+      if (nameValue.length === 2) {
+        parsedQuery[nameValue[0]] = nameValue[1];
+      }
 
-        return parsedQuery;
+      return parsedQuery;
     }, {});
-  },
+  }
 
-  _iterate: function(offset, opts) {
-    var options = _.defaults((opts || {}), {fetch: true});
+  _iterate(offset, opts) {
+    const options = _.defaults((opts || {}), { fetch: true });
 
     this.paging.params = this.calculateParams(this.paging.params, offset, this.paging.pageSize);
 
     // Fetch the next page of documents
     this.updateUrlQuery(this.paging.params);
     if (options.fetch) {
-      return this.fetch({reset: true});
+      return this.fetch({ reset: true });
     }
-  },
+  }
 
   // `next` is called with the number of items for the next page.
   // It returns the fetch promise.
-  next: function(options) {
+  next(options) {
     this.paging.direction = "next";
     return this._iterate(this.paging.pageSize, options);
-  },
+  }
 
   // `previous` is called with the number of items for the previous page.
   // It returns the fetch promise.
-  previous: function(options) {
+  previous(options) {
     this.paging.direction = "previous";
     return this._iterate(0 - this.paging.pageSize, options);
-  },
+  }
 
-  shouldStringify: function (val) {
+  shouldStringify(val) {
     try {
       JSON.parse(val);
       return false;
     } catch (e) {
       return true;
     }
-  },
+  }
 
   // Encodes the parameters so that couchdb will understand them
   // and then sets the url with the new url.
-  updateUrlQuery: function (params) {
-    var url = _.result(this, "url").split("?")[0];
-
+  updateUrlQuery(params) {
+    let url = this.url().split("?")[0];
     _.each(['startkey', 'endkey', 'key'], (key) => {
       if (_.has(params, key) && this.shouldStringify(params[key])) {
         params[key] = JSON.stringify(params[key]);
       }
     });
 
-    this.url = url + '?' + app.utils.queryParams(params);
-  },
+    url = url + '?' + app.utils.queryParams(params);
+    this.url = () => url;
+  }
 
-  fetch: function () {
+  fetch() {
     // if this is a fetch for the first time, fetch one extra to see if there is a next
     if (!this.paging.direction && this.paging.params.limit > 0) {
       this.paging.direction = 'fetch';
@@ -144,11 +145,11 @@ export const PagingCollection = Backbone.Collection.extend({
       this.updateUrlQuery(this.paging.params);
     }
 
-    return Backbone.Collection.prototype.fetch.apply(this, arguments);
-  },
+    return super.fetch.apply(this, arguments);
+  }
 
-  parse: function (resp) {
-    var rows = resp.rows;
+  parse(resp) {
+    const rows = resp.rows;
 
     this.paging.hasNext = this.paging.hasPrevious = false;
 
@@ -170,31 +171,13 @@ export const PagingCollection = Backbone.Collection.extend({
       this.viewMeta.total_rows = this.viewMeta.total_rows - 1;
     }
     return rows;
-  },
+  }
 
-  hasNext: function() {
+  hasNext() {
     return this.paging.hasNext;
-  },
+  }
 
-  hasPrevious: function() {
+  hasPrevious() {
     return this.paging.hasPrevious;
   }
-});
-
-export default PagingCollection;
-
-
-//   if (exports) {
-//     // Overload the Backbone.ajax method, this allows PagingCollection to be able to
-//     // work in node.js
-//     exports.setAjax = function (ajax) {
-//       Backbone.ajax = ajax;
-//     };
-
-//     exports.PagingCollection = PagingCollection;
-//   }
-
-//   return PagingCollection;
-// }));
-
-
+}
