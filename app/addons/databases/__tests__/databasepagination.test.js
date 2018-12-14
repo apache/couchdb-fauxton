@@ -33,6 +33,7 @@ describe('Database Pagination', function () {
     const tempStore = {
       getTotalAmountOfDatabases: () => { return 10; },
       getPage: () => { return 1; },
+      getLimit: () => { return 20; },
       on: () => {},
       off: () => {}
     };

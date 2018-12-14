@@ -102,10 +102,19 @@ class Pagination extends React.Component {
     });
   };
 
+  getOnPageClick(pageNumber) {
+    return (e) => {
+      if (e) {
+        e.preventDefault();
+      }
+      this.props.onClick(pageNumber);
+    };
+  }
+
   getLink = (i, label) => {
     if (this.props.onClick) {
       return (
-        <a onClick={this.props.onClick.bind(null, i)} dangerouslySetInnerHTML={{__html: label}}></a>
+        <a onClick={this.getOnPageClick(i)} dangerouslySetInnerHTML={{__html: label}}></a>
       );
     }
     return (

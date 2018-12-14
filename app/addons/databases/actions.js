@@ -80,14 +80,12 @@ export default {
   getDatabaseDetails: getDatabaseDetails,
   fetch: fetch,
 
-  init: function () {
-    const params = app.getParams();
-    const page = params.page ? parseInt(params.page, 10) : 1;
-    const limit = FauxtonAPI.constants.MISC.DEFAULT_PAGE_SIZE;
-
+  init: function ({page, limit}) {
     this.setStartLoading();
-
     this.setPage(page);
+    if (limit) {
+      this.setLimit(limit);
+    }
 
     getDatabaseList(limit, page)
       .then((fullDbList) => {
@@ -110,7 +108,16 @@ export default {
     FauxtonAPI.dispatch({
       type: ActionTypes.DATABASES_SETPAGE,
       options: {
-        page: page
+        page
+      }
+    });
+  },
+
+  setLimit: function (limit) {
+    FauxtonAPI.dispatch({
+      type: ActionTypes.DATABASES_SETLIMIT,
+      options: {
+        limit
       }
     });
   },

@@ -27,6 +27,7 @@ const DatabasesStoreConstructor = FauxtonAPI.Store.extend({
     this._loading = false;
     this._promptVisible = false;
     this._page = 1;
+    this._limit = FauxtonAPI.constants.MISC.DEFAULT_PAGE_SIZE;
 
     this._dbList = [];
     this._databaseDetails = [];
@@ -38,6 +39,10 @@ const DatabasesStoreConstructor = FauxtonAPI.Store.extend({
 
   getPage: function () {
     return this._page;
+  },
+
+  getLimit: function () {
+    return this._limit;
   },
 
   isLoading: function () {
@@ -112,6 +117,10 @@ const DatabasesStoreConstructor = FauxtonAPI.Store.extend({
     switch (action.type) {
       case ActionTypes.DATABASES_SETPAGE:
         this._page = action.options.page;
+        break;
+
+      case ActionTypes.DATABASES_SETLIMIT:
+        this._limit = action.options.limit;
         break;
 
       case ActionTypes.DATABASES_SET_PROMPT_VISIBLE:

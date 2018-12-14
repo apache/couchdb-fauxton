@@ -52,14 +52,43 @@ describe('DatabasePagination', () => {
     store.reset();
   });
 
+  afterEach(() => {
+    sinon.restore();
+  });
+
   it('uses custom URL prefix on the navigation if passed through props', () => {
+    const mockNavigate = sinon.stub(FauxtonAPI, 'navigate');
     const pagination = mount(<Views.DatabasePagination linkPath="_custom_path" />);
     const links = pagination.find('a');
 
     expect(links.length).toBe(3);
     links.forEach(link => {
-      expect(link.props('href').href).toContain('_custom_path');
+      link.simulate('click', { preventDefault: () => {}});
+      sinon.assert.calledWithMatch(mockNavigate, '_custom_path');
+      mockNavigate.reset();
     });
+  });
+
+  it('sets the correct page and perPage values', () => {
+    const mockNavigate = sinon.stub(FauxtonAPI, 'navigate');
+    store._fullDbList = ['db1', 'db2', 'db3', 'db4'];
+    store._page = 2;
+    store._limit = 2;
+    const pagination = mount(<Views.DatabasePagination />);
+    const links = pagination.find('a');
+    // "<<" link
+    links.at(0).simulate('click', { preventDefault: () => {}});
+    sinon.assert.calledWithMatch(mockNavigate, 'page=1&limit=2');
+    mockNavigate.reset();
+
+    // page "2" link
+    links.at(2).simulate('click', { preventDefault: () => {}});
+    sinon.assert.calledWithMatch(mockNavigate, 'page=2&limit=2');
+    mockNavigate.reset();
+
+    // ">>" link
+    links.at(3).simulate('click', { preventDefault: () => {}});
+    sinon.assert.calledWithMatch(mockNavigate, 'page=2&limit=2');
   });
 
   it('renders the database count and range', () => {
