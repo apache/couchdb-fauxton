@@ -20,7 +20,7 @@ function showDeleteDatabaseModal (options) {
   });
 }
 
-function deleteDatabase (dbId) {
+function deleteDatabase (dbId, onDeleteSuccess) {
   const url = FauxtonAPI.urls('databaseBaseURL', 'server', dbId, '');
 
   $.ajax({
@@ -37,7 +37,9 @@ function deleteDatabase (dbId) {
     });
 
     Backbone.history.loadUrl(FauxtonAPI.urls('allDBs', 'app'));
-
+    if (onDeleteSuccess) {
+      onDeleteSuccess();
+    }
   }.bind(this)).fail(function (rsp, error, msg) {
     FauxtonAPI.addNotification({
       msg: 'Could not delete the database, reason ' + msg + '.',

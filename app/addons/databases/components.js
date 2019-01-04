@@ -32,6 +32,12 @@ const {DeleteDatabaseModal, ToggleHeaderButton, TrayContents} = Components;
 
 
 class DatabasesController extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.reloadAfterDatabaseDeleted = this.reloadAfterDatabaseDeleted.bind(this);
+  }
+
   getStoreState = () => {
     return {
       dbList: databasesStore.getDbList(),
@@ -71,6 +77,18 @@ class DatabasesController extends React.Component {
     this.setState(this.getStoreState());
   };
 
+  reloadAfterDatabaseDeleted() {
+    let page = this.state.page;
+    if (page > 1 && this.state.dbList.length === 1) {
+      //show previous page if the db deleted was the only one in the page
+      page = page - 1;
+    }
+    Actions.init({
+      page,
+      limit: this.state.limit
+    });
+  }
+
   state = this.getStoreState();
 
   render() {
@@ -81,7 +99,8 @@ class DatabasesController extends React.Component {
         showDeleteDatabaseModal={this.state.showDeleteDatabaseModal}
         dbList={dbList}
         loading={loading}
-        showPartitionedColumn={this.state.showPartitionedColumn} />
+        showPartitionedColumn={this.state.showPartitionedColumn}
+        onDatabaseDeleted={this.reloadAfterDatabaseDeleted} />
     );
   }
 }
@@ -91,7 +110,8 @@ class DatabaseTable extends React.Component {
     dbList: PropTypes.array.isRequired,
     showDeleteDatabaseModal: PropTypes.object.isRequired,
     loading: PropTypes.bool.isRequired,
-    showPartitionedColumn: PropTypes.bool.isRequired
+    showPartitionedColumn: PropTypes.bool.isRequired,
+    onDatabaseDeleted: PropTypes.func
   };
 
   createRows = (dbList) => {
@@ -129,7 +149,8 @@ class DatabaseTable extends React.Component {
       <div className="view">
         <DeleteDatabaseModal
           showHide={this.showDeleteDatabaseModal}
-          modalProps={this.props.showDeleteDatabaseModal} />
+          modalProps={this.props.showDeleteDatabaseModal}
+          onSuccess={this.props.onDatabaseDeleted} />
         <table className="table table-striped fauxton-table-list databases">
           <thead>
             <tr>
