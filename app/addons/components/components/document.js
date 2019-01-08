@@ -115,8 +115,8 @@ export class Document extends React.Component {
         <div className="custom-inputs">
           {this.getCheckbox()}
         </div>
-        <div className="doc-item" onClick={this.onClick}>
-          <header>
+        <div className="doc-item">
+          <header onClick={this.onClick}>
             <span className="header-keylabel">
               {this.props.keylabel}
             </span>
