@@ -46,14 +46,13 @@ class DdocInfoModel extends FauxtonAPI.Model {
   constructor(attributes, options) {
     super(attributes, options);
     this.idAttribute = '_id';
+    if (options) {
+      this.database = options.database;
+    }
   }
 
   documentation() {
     return FauxtonAPI.constants.DOC_URLS.GENERAL;
-  }
-
-  initialize(_attrs, options) {
-    this.database = options.database;
   }
 
   url(context) {

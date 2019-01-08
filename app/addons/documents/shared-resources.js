@@ -21,9 +21,20 @@ const Documents = FauxtonAPI.addon();
 
 Documents.Doc = class extends FauxtonAPI.Model {
 
-  constructor(attributes, options) {
+  constructor(attributes, options = {}) {
     super(attributes, options);
     this.idAttribute = '_id';
+
+    if (this.collection && this.collection.database) {
+      this.database = this.collection.database;
+    } else if (options.database) {
+      this.database = options.database;
+    }
+
+    if (options.fetchConflicts) {
+      this.fetchConflicts = true;
+    }
+    this.partitionKey = options.partitionKey;
   }
 
   documentation() {
@@ -45,17 +56,9 @@ Documents.Doc = class extends FauxtonAPI.Model {
     return FauxtonAPI.urls('document', context, this.getDatabase().safeID(), id, query);
   }
 
-  initialize(_attrs, options) {
-    if (this.collection && this.collection.database) {
-      this.database = this.collection.database;
-    } else if (options.database) {
-      this.database = options.database;
-    }
-
-    if (options.fetchConflicts) {
-      this.fetchConflicts = true;
-    }
-    this.partitionKey = options.partitionKey;
+  isNew() {
+    // This way it always use PUT when saving a Document
+    return false;
   }
 
   // HACK: the doc needs to know about the database, but it may be
@@ -229,20 +232,22 @@ Documents.AllDocs = class extends PagingCollection {
     this.model = Documents.Doc;
   }
 
-  documentation() {
-    return FauxtonAPI.constants.DOC_URLS.GENERAL;
+  initialize(_models, options) {
+    if (options) {
+      this.viewMeta = options.viewMeta;
+      this.database = options.database;
+      this.params = _.clone(options.params);
+
+      this.perPageLimit = options.perPageLimit || 20;
+
+      if (!this.params.limit) {
+        this.params.limit = this.perPageLimit;
+      }
+    }
   }
 
-  initialize(_models, options) {
-    this.viewMeta = options.viewMeta;
-    this.database = options.database;
-    this.params = _.clone(options.params);
-
-    this.perPageLimit = options.perPageLimit || 20;
-
-    if (!this.params.limit) {
-      this.params.limit = this.perPageLimit;
-    }
+  documentation() {
+    return FauxtonAPI.constants.DOC_URLS.GENERAL;
   }
 
   onRemove() {

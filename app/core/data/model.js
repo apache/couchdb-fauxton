@@ -39,22 +39,28 @@ export default class Model {
     if (options && options.collection) {
       this.collection = options.collection;
     }
-    this.initialize(attributes, options);
   }
 
   get id() {
+    // It's weird but it's possible that fetch() retrieves
+    // data that doesn't contain the ID attribute. This makes
+    // sure that 'this.id' will return a valid ID if it was ever set.
+
     if (this.idAttribute) {
+      if (this.attributes[this.idAttribute]) {
+        this.lastKnownId = this.attributes[this.idAttribute];
+      }
       return this.attributes[this.idAttribute];
     }
-    return this.attributes.id;
-  }
-
-  initialize() {
-    // default is a no-op
+    if (this.attributes.id) {
+      this.lastKnownId = this.attributes.id;
+      return this.attributes.id;
+    }
+    return this.lastKnownId;
   }
 
   isNew() {
-    return this.exists;
+    return !this.exists;
   }
 
   save() {
@@ -62,6 +68,9 @@ export default class Model {
     const method = this.isNew() ? 'POST' : 'PUT';
     return sendRequest(url, method, this.attributes).then(res => {
       if (res.ok) {
+        if (res.rev) {
+          this.attributes._rev = res.rev;
+        }
         this.exists = true;
         this.isDirty = false;
       }
@@ -125,14 +134,14 @@ export default class Model {
   }
 
   on() {
-    // no-op
+    throw new Error('Method "on" is not supported.');
   }
 
   trigger() {
-    // no-op
+    throw new Error('Method "trigger" is not supported.');
   }
 
   toJSON() {
-    return this.attributes;
+    return Object.assign({}, this.attributes);
   }
 }
