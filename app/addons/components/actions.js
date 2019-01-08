@@ -10,8 +10,9 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import FauxtonAPI from "../../core/api";
-import ActionTypes from "./actiontypes";
+import { deleteRequest } from '../../core/ajax';
+import FauxtonAPI from '../../core/api';
+import ActionTypes from './actiontypes';
 
 function showDeleteDatabaseModal (options) {
   FauxtonAPI.dispatch({
@@ -23,11 +24,11 @@ function showDeleteDatabaseModal (options) {
 function deleteDatabase (dbId, onDeleteSuccess) {
   const url = FauxtonAPI.urls('databaseBaseURL', 'server', dbId, '');
 
-  $.ajax({
-    url: url,
-    dataType: 'json',
-    type: 'DELETE'
-  }).then(function () {
+  deleteRequest(url).then(resp => {
+    if (!resp.ok) {
+      const msg = resp.reason || '';
+      throw new Error(msg);
+    }
     this.showDeleteDatabaseModal({ showModal: true });
 
     FauxtonAPI.addNotification({
@@ -40,9 +41,9 @@ function deleteDatabase (dbId, onDeleteSuccess) {
     if (onDeleteSuccess) {
       onDeleteSuccess();
     }
-  }.bind(this)).fail(function (rsp, error, msg) {
+  }).catch(err => {
     FauxtonAPI.addNotification({
-      msg: 'Could not delete the database, reason ' + msg + '.',
+      msg: 'Could not delete the database. ' + err.message,
       type: 'error',
       clear: true
     });
