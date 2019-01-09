@@ -70,7 +70,7 @@ export class DeleteDatabaseModal extends React.Component {
 
   onInputKeypress = (e) => {
     if (e.keyCode === 13 && this.state.disableSubmit !== true) {
-      Actions.deleteDatabase(this.getDatabaseName());
+      Actions.deleteDatabase(this.getDatabaseName(), this.props.onSuccess);
     }
   };
 
