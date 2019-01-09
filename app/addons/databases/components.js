@@ -15,10 +15,10 @@ import FauxtonAPI from "../../core/api";
 import PropTypes from 'prop-types';
 
 import React, { Fragment } from "react";
-import ReactDOM from "react-dom";
 import Components from "../components/react-components";
 import ComponentsStore from "../components/stores";
 import ComponentsActions from "../components/actions";
+import PerPageSelector from '../documents/index-results/components/pagination/PerPageSelector';
 import FauxtonComponentsReact from "..//fauxton/components";
 import Stores from "./stores";
 import Actions from "./actions";
@@ -32,18 +32,40 @@ const {DeleteDatabaseModal, ToggleHeaderButton, TrayContents} = Components;
 
 
 class DatabasesController extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.reloadAfterDatabaseDeleted = this.reloadAfterDatabaseDeleted.bind(this);
+  }
+
   getStoreState = () => {
     return {
       dbList: databasesStore.getDbList(),
       loading: databasesStore.isLoading(),
       showDeleteDatabaseModal: deleteDbModalStore.getShowDeleteDatabaseModal(),
-      showPartitionedColumn: databasesStore.isPartitionedDatabasesAvailable()
+      showPartitionedColumn: databasesStore.isPartitionedDatabasesAvailable(),
+      page: databasesStore.getPage(),
+      limit: databasesStore.getLimit()
     };
   };
 
   componentDidMount() {
     databasesStore.on('change', this.onChange, this);
     deleteDbModalStore.on('change', this.onChange, this);
+    this.loadData();
+  }
+
+  componentDidUpdate(_, prevState) {
+    if (prevState.page !== this.state.page || prevState.limit !== this.state.limit) {
+      this.loadData();
+    }
+  }
+
+  loadData() {
+    Actions.init({
+      page: this.state.page,
+      limit: this.state.limit
+    });
   }
 
   componentWillUnmount() {
@@ -55,6 +77,18 @@ class DatabasesController extends React.Component {
     this.setState(this.getStoreState());
   };
 
+  reloadAfterDatabaseDeleted() {
+    let page = this.state.page;
+    if (page > 1 && this.state.dbList.length === 1) {
+      //show previous page if the db deleted was the only one in the page
+      page = page - 1;
+    }
+    Actions.init({
+      page,
+      limit: this.state.limit
+    });
+  }
+
   state = this.getStoreState();
 
   render() {
@@ -65,7 +99,8 @@ class DatabasesController extends React.Component {
         showDeleteDatabaseModal={this.state.showDeleteDatabaseModal}
         dbList={dbList}
         loading={loading}
-        showPartitionedColumn={this.state.showPartitionedColumn} />
+        showPartitionedColumn={this.state.showPartitionedColumn}
+        onDatabaseDeleted={this.reloadAfterDatabaseDeleted} />
     );
   }
 }
@@ -75,7 +110,8 @@ class DatabaseTable extends React.Component {
     dbList: PropTypes.array.isRequired,
     showDeleteDatabaseModal: PropTypes.object.isRequired,
     loading: PropTypes.bool.isRequired,
-    showPartitionedColumn: PropTypes.bool.isRequired
+    showPartitionedColumn: PropTypes.bool.isRequired,
+    onDatabaseDeleted: PropTypes.func
   };
 
   createRows = (dbList) => {
@@ -113,7 +149,8 @@ class DatabaseTable extends React.Component {
       <div className="view">
         <DeleteDatabaseModal
           showHide={this.showDeleteDatabaseModal}
-          modalProps={this.props.showDeleteDatabaseModal} />
+          modalProps={this.props.showDeleteDatabaseModal}
+          onSuccess={this.props.onDatabaseDeleted} />
         <table className="table table-striped fauxton-table-list databases">
           <thead>
             <tr>
@@ -400,7 +437,8 @@ class DatabasePagination extends React.Component {
 
     return {
       totalAmountOfDatabases: store.getTotalAmountOfDatabases(),
-      page: store.getPage()
+      page: store.getPage(),
+      limit: store.getLimit()
     };
   };
 
@@ -430,18 +468,32 @@ class DatabasePagination extends React.Component {
 
   state = this.getStoreState(this.props);
 
-  render() {
-    const {page, totalAmountOfDatabases} = this.state;
+  onPageLinkClick(pageNumber) {
+    const url = `#/${this.props.linkPath}?page=${pageNumber}&limit=${this.state.limit}`;
+    FauxtonAPI.navigate(url);
+  }
 
-    const urlPrefix = `#/${this.props.linkPath}?page=`;
-    var start = 1 + (page - 1) * FauxtonAPI.constants.MISC.DEFAULT_PAGE_SIZE;
-    var end = Math.min(totalAmountOfDatabases, page * FauxtonAPI.constants.MISC.DEFAULT_PAGE_SIZE);
+  onPerPageSelected(perPage) {
+    const url = `#/${this.props.linkPath}?page=${this.state.page}&limit=${perPage}`;
+    FauxtonAPI.navigate(url);
+  }
+
+  render() {
+    const {limit, page, totalAmountOfDatabases} = this.state;
+    const start = 1 + (page - 1) * limit;
+    const end = Math.min(totalAmountOfDatabases, page * limit);
 
     return (
       <footer className="all-db-footer pagination-footer">
         <div id="database-pagination">
-          <FauxtonComponentsReact.Pagination page={page} total={totalAmountOfDatabases} urlPrefix={urlPrefix} />
+          <FauxtonComponentsReact.Pagination
+            page={page}
+            total={totalAmountOfDatabases}
+            perPage={limit}
+            onClick={this.onPageLinkClick.bind(this)}
+          />
         </div>
+        <PerPageSelector label="Databases per page" perPage={limit} perPageChange={this.onPerPageSelected.bind(this)}/>
         <div className="current-databases">
           Showing <span className="all-db-footer__range">{start}&ndash;{end}</span>
           &nbsp;of&nbsp;<span className="all-db-footer__total-db-count">{totalAmountOfDatabases}</span>

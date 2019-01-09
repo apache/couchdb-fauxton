@@ -20,7 +20,8 @@ import Actions from "../actions";
 export class DeleteDatabaseModal extends React.Component {
   static propTypes = {
     showHide: PropTypes.func.isRequired,
-    modalProps: PropTypes.object
+    modalProps: PropTypes.object,
+    onSuccess: PropTypes.func
   };
 
   state = {
@@ -64,12 +65,12 @@ export class DeleteDatabaseModal extends React.Component {
   onDeleteClick = (e) => {
     e.preventDefault();
 
-    Actions.deleteDatabase(this.getDatabaseName());
+    Actions.deleteDatabase(this.getDatabaseName(), this.props.onSuccess);
   };
 
   onInputKeypress = (e) => {
     if (e.keyCode === 13 && this.state.disableSubmit !== true) {
-      Actions.deleteDatabase(this.getDatabaseName());
+      Actions.deleteDatabase(this.getDatabaseName(), this.props.onSuccess);
     }
   };
 

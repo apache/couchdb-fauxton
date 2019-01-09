@@ -28,19 +28,17 @@ CreateDatabase.prototype.command = function (databaseName) {
   const nano = helpers.getNanoInstance(this.client.options.db_url);
 
 
-  nano.db.create(databaseName, (err, body, header) => {
-    if (err) {
-      console.log('Error in nano CreateDatabase Function: ' + databaseName, err.message);
-    }
-
+  nano.db.create(databaseName).then(() => {
     console.log('nano - created a database: ' + databaseName);
-
     const timeout = helpers.maxWaitTime;
     const couchUrl = this.client.options.db_url;
 
     checkForDatabaseCreated(couchUrl, databaseName, timeout, () => {
       this.emit('complete');
     });
+  }).catch(err => {
+    console.log('Error in CreateDatabase custom command. Db: ' + databaseName, 'Reason:', err.message);
+    this.emit('complete');
   });
 
   return this;
