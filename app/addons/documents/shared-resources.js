@@ -57,8 +57,9 @@ Documents.Doc = class extends FauxtonAPI.Model {
   }
 
   isNew() {
-    // This way it always use PUT when saving a Document
-    return false;
+    // The ID is added to the URL, so it returns FALSE to force use of PUT when saving the Doc.
+    // If an ID is not present, returns TRUE so POST is used
+    return !this.id;
   }
 
   // HACK: the doc needs to know about the database, but it may be
