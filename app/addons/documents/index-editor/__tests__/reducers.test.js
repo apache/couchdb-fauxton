@@ -10,7 +10,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import Documents from '../../../documents/resources';
+import Documents from '../../resources';
+import SharedResources from '../../shared-resources';
 import reducer, { hasCustomReduce, getDesignDocList, getSelectedDesignDocPartitioned,
   getSaveDesignDoc } from '../reducers';
 import ActionTypes from '../actiontypes';
@@ -34,14 +35,14 @@ describe('IndexEditor Reducer', () => {
   describe('reduce editor', () => {
     describe('hasCustomReduce', () => {
       it('is false for no reduce', () => {
-        const designDoc = {
+        const designDoc = new SharedResources.Doc({
           _id: '_design/test-doc',
           views: {
             'test-view': {
               map: '() => {};'
             }
           }
-        };
+        });
         const designDocs = new Documents.AllDocs([designDoc], {
           params: { limit: 10 },
           database: {
@@ -54,7 +55,7 @@ describe('IndexEditor Reducer', () => {
             isNewView: false,
             viewName: 'test-view',
             designDocs: designDocs,
-            designDocId: designDoc._id
+            designDocId: designDoc.id
           }
         };
         const newState = reducer(undefined, action);
@@ -62,7 +63,7 @@ describe('IndexEditor Reducer', () => {
       });
 
       it('is false for built in reduce', () => {
-        const designDoc = {
+        const designDoc = new SharedResources.Doc({
           _id: '_design/test-doc',
           views: {
             'test-view': {
@@ -70,7 +71,7 @@ describe('IndexEditor Reducer', () => {
               reduce: '_sum'
             }
           }
-        };
+        });
         const designDocs = new Documents.AllDocs([designDoc], {
           params: { limit: 10 },
           database: {
@@ -83,7 +84,7 @@ describe('IndexEditor Reducer', () => {
             isNewView: false,
             viewName: 'test-view',
             designDocs: designDocs,
-            designDocId: designDoc._id
+            designDocId: designDoc.id
           }
         };
         const newState = reducer(undefined, action);
@@ -91,7 +92,7 @@ describe('IndexEditor Reducer', () => {
       });
 
       it('is true for custom reduce', () => {
-        const designDoc = {
+        const designDoc = new SharedResources.Doc({
           _id: '_design/test-doc',
           views: {
             'test-view': {
@@ -99,7 +100,7 @@ describe('IndexEditor Reducer', () => {
               reduce: 'function (reduce) { reduce(); }'
             }
           }
-        };
+        });
         const designDocs = new Documents.AllDocs([designDoc], {
           params: { limit: 10 },
           database: {
@@ -112,7 +113,7 @@ describe('IndexEditor Reducer', () => {
             isNewView: false,
             viewName: 'test-view',
             designDocs: designDocs,
-            designDocId: designDoc._id
+            designDocId: designDoc.id
           }
         };
 
@@ -122,14 +123,14 @@ describe('IndexEditor Reducer', () => {
     });
 
     describe('SELECT_REDUCE_CHANGE', () => {
-      const designDoc = {
+      const designDoc = new SharedResources.Doc({
         _id: '_design/test-doc',
         views: {
           'test-view': {
             map: '() => {};'
           }
         }
-      };
+      });
       const designDocs = new Documents.AllDocs([designDoc], {
         params: { limit: 10 },
         database: {
@@ -142,7 +143,7 @@ describe('IndexEditor Reducer', () => {
           isNewView: false,
           viewName: 'test-view',
           designDocs: designDocs,
-          designDocId: designDoc._id
+          designDocId: designDoc.id
         }
       };
 
@@ -217,8 +218,8 @@ describe('IndexEditor Reducer', () => {
       }
     };
 
-    const designDocArray = _.map([designDoc, mangoDoc], (doc) => {
-      return Documents.Doc.prototype.parse(doc);
+    const designDocArray = [designDoc, mangoDoc].map(doc => {
+      return new Documents.Doc(doc);
     });
 
     const designDocs = new Documents.AllDocs(designDocArray, {

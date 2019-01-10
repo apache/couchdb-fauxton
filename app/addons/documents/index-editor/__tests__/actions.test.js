@@ -13,6 +13,7 @@
 import FauxtonAPI from '../../../../core/api';
 import Actions from '../actions';
 import Documents from '../../resources';
+import SharedResources from '../../shared-resources';
 import testUtils from '../../../../../test/mocha/testUtils';
 import sinon from 'sinon';
 import '../../../documents/base';
@@ -32,7 +33,12 @@ describe('Index Editor Actions', function () {
 
       viewName = 'test-view';
       designDocId = '_design/test-doc';
-      designDocCollection = new Documents.AllDocs([{
+      designDocCollection = new Documents.AllDocs([], {
+        params: { limit: 10 },
+        database: database
+      });
+      designDocs = designDocCollection.models;
+      designDoc = new SharedResources.Doc({
         _id: designDocId,
         _rev: '1-231',
         views: {
@@ -43,12 +49,7 @@ describe('Index Editor Actions', function () {
             map: 'function () {};'
           }
         }
-      }], {
-        params: { limit: 10 },
-        database: database
-      });
-      designDocs = designDocCollection.models;
-      designDoc = _.head(designDocs);
+      }, { collection: designDocs});
     });
 
     afterEach(function () {
