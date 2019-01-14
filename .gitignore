@@ -39,3 +39,5 @@ test/bundle.js
 test/bundle.dev.js
 test/templates.js
 test/dashboard.assets
+# test coverage dir
+coverage

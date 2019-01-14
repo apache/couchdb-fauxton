@@ -10,10 +10,19 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+import app from '../../app';
 import FauxtonAPI from "../../core/api";
 import ActionTypes from "./actiontypes";
 import Resources from "./resources";
 import Helpers from "../../helpers";
+
+function loadDatabasesPerPage() {
+  let dbsPerPage = app.utils.localStorageGet('fauxton:dbs_per_page');
+  if (!dbsPerPage) {
+    dbsPerPage = FauxtonAPI.constants.MISC.DEFAULT_PAGE_SIZE;
+  }
+  return dbsPerPage;
+}
 
 const Database = Resources.Model;
 
@@ -27,6 +36,7 @@ const DatabasesStoreConstructor = FauxtonAPI.Store.extend({
     this._loading = false;
     this._promptVisible = false;
     this._page = 1;
+    this._limit = loadDatabasesPerPage();
 
     this._dbList = [];
     this._databaseDetails = [];
@@ -38,6 +48,15 @@ const DatabasesStoreConstructor = FauxtonAPI.Store.extend({
 
   getPage: function () {
     return this._page;
+  },
+
+  getLimit: function () {
+    return this._limit;
+  },
+
+  setLimit: function (limit) {
+    this._limit = limit;
+    app.utils.localStorageSet('fauxton:dbs_per_page', limit);
   },
 
   isLoading: function () {
@@ -112,6 +131,10 @@ const DatabasesStoreConstructor = FauxtonAPI.Store.extend({
     switch (action.type) {
       case ActionTypes.DATABASES_SETPAGE:
         this._page = action.options.page;
+        break;
+
+      case ActionTypes.DATABASES_SETLIMIT:
+        this.setLimit(action.options.limit);
         break;
 
       case ActionTypes.DATABASES_SET_PROMPT_VISIBLE:

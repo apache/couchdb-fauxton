@@ -72,7 +72,7 @@ describe('Document', () => {
     el = mount(
       <ReactComponents.Document docChecked={noop} isDeletable={true} onClick={spy} docIdentifier="foo" />
     );
-    el.find('.doc-item').first().simulate('click');
+    el.find('.doc-item header').first().simulate('click');
     expect(spy.calledOnce).toBeTruthy();
   });
 

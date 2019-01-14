@@ -49,7 +49,12 @@ ul.pagination > .active > a,
 ul.pagination > .active > span {
   background-color: @paginationActiveBackground;
 }
+ul.pagination > li > a:hover {
+  cursor: pointer;
+}
+
 ul.pagination > .active > a,
+ul.pagination > .active > a:hover,
 ul.pagination > .active > span {
   color: @grayLight;
   cursor: default;

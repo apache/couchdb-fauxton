@@ -21,15 +21,11 @@ function getRandomInt(min, max) {
 const dbName = 'fauxton-selenium-tests-' + getRandomInt(1, 20000);
 
 function createDatabase(nano, database) {
-  return new Promise(function (resolve, reject) {
-    nano.db.create(database, function (err) {
-
-      //Tolerate database already existing
-      if (err && err.status_code != 412)
-        reject(err);
-      else
-        resolve();
-    });
+  return nano.db.create(database).catch(err => {
+    //Tolerate database already existing
+    if (err && err.statusCode !== 412) {
+      throw err;
+    }
   });
 }
 
@@ -48,29 +44,27 @@ module.exports = {
       database = module.exports.testDatabaseName;
 
     console.log('nano setting up database', database);
-
     // clean up the database we created previously
-    nano.db.destroy(database, function (err, body, header) {
-
+    nano.db.destroy(database).catch(err => {
       if (err && err.message !== 'Database does not exist.' && err.message !== 'missing') {
         console.log('Error in setting up ' + database, err.message);
       }
+    }).then(() => {
       // create a new database
-      nano.db.create(database, function (err, body, header) {
-          if (err) {
-            console.log('Error in setting up ' + database, err.message);
-          }
-          const databaseToCreate = ["_users", "_replicator", "_global_changes"];
-          const promises = databaseToCreate.map(db => createDatabase(nano, db));
-
-          Promise.all(promises).then(function () {
-            done();
-          }).catch(function (err) {
-            console.log("Unable to create required databases:" + JSON.stringify(err));
-            done();
-          });
-        }
-      );
+      nano.db.create(database).catch(err => {
+        console.log('Error in setting up ' + database, err.message);
+      }).then(() => {
+        // Create required dbs
+        const databaseToCreate = ["_users", "_replicator", "_global_changes"];
+        const promises = databaseToCreate.map(db => createDatabase(nano, db).catch(() => {}));
+        
+        Promise.all(promises).then(function () {
+          done();
+        }).catch(function (err) {
+          console.log("Unable to create required databases:" + JSON.stringify(err));
+          done();
+        });
+      });
     });
   },
 
@@ -79,10 +73,11 @@ module.exports = {
       database = module.exports.testDatabaseName;
 
     console.log('nano cleaning up', database);
-    nano.db.destroy(database, function (err, header, body) {
-      if (err) {
+    nano.db.destroy(database).catch(err => {
+      if (err && err.message !== 'Database does not exist.') {
         console.log('Error in cleaning up ' + database, err.message);
       }
+    }).then(() => {
       done();
     });
   }
