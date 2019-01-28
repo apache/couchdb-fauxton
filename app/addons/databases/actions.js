@@ -9,13 +9,13 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
-import app from "../../app";
-import Helpers from "../../helpers";
-import FauxtonAPI from "../../core/api";
-import { get } from "../../core/ajax";
+import app from '../../app';
+import Helpers from '../../helpers';
+import FauxtonAPI from '../../core/api';
+import { get } from '../../core/ajax';
 import DatabasesBase from '../databases/base';
-import Stores from "./stores";
-import ActionTypes from "./actiontypes";
+import Stores from './stores';
+import ActionTypes from './actiontypes';
 import * as API from './api';
 
 function getDatabaseDetails (dbList, fullDbList) {
@@ -75,19 +75,18 @@ function updateDatabases (options) {
 }
 
 export default {
-  getDatabaseList: getDatabaseList,
-  paginate: paginate,
-  getDatabaseDetails: getDatabaseDetails,
-  fetch: fetch,
+  getDatabaseList,
+  paginate,
+  getDatabaseDetails,
+  fetch,
+  updateDatabases,
 
-  init: function () {
-    const params = app.getParams();
-    const page = params.page ? parseInt(params.page, 10) : 1;
-    const limit = FauxtonAPI.constants.MISC.DEFAULT_PAGE_SIZE;
-
+  init({page, limit}) {
     this.setStartLoading();
-
     this.setPage(page);
+    if (limit) {
+      this.setLimit(limit);
+    }
 
     getDatabaseList(limit, page)
       .then((fullDbList) => {
@@ -104,30 +103,37 @@ export default {
       });
   },
 
-  updateDatabases,
-
-  setPage: function (page) {
+  setPage(page) {
     FauxtonAPI.dispatch({
       type: ActionTypes.DATABASES_SETPAGE,
       options: {
-        page: page
+        page
       }
     });
   },
 
-  setStartLoading: function () {
+  setLimit(limit) {
+    FauxtonAPI.dispatch({
+      type: ActionTypes.DATABASES_SETLIMIT,
+      options: {
+        limit
+      }
+    });
+  },
+
+  setStartLoading() {
     FauxtonAPI.dispatch({
       type: ActionTypes.DATABASES_STARTLOADING
     });
   },
 
-  setLoadComplete: function () {
+  setLoadComplete() {
     FauxtonAPI.dispatch({
       type: ActionTypes.DATABASES_LOADCOMPLETE
     });
   },
 
-  createNewDatabase: function (databaseName, partitioned) {
+  createNewDatabase(databaseName, partitioned) {
     if (_.isNull(databaseName) || databaseName.trim().length === 0) {
       FauxtonAPI.addNotification({
         msg: 'Please enter a valid database name',
@@ -147,7 +153,7 @@ export default {
 
     const db = Stores.databasesStore.obtainNewDatabaseModel(databaseName, partitioned);
     FauxtonAPI.addNotification({ msg: 'Creating database.' });
-    db.save().done(function () {
+    db.save().done(() => {
       FauxtonAPI.addNotification({
         msg: 'Database created successfully',
         type: 'success',
@@ -156,7 +162,7 @@ export default {
       const route = FauxtonAPI.urls('allDocs', 'app', app.utils.safeURLName(databaseName));
       app.router.navigate(route, { trigger: true });
     }
-    ).fail(function (xhr) {
+    ).fail((xhr) => {
       const responseText = JSON.parse(xhr.responseText).reason;
       FauxtonAPI.addNotification({
         msg: 'Create database failed: ' + responseText,
@@ -167,7 +173,7 @@ export default {
     );
   },
 
-  jumpToDatabase: function (databaseName) {
+  jumpToDatabase(databaseName) {
     if (_.isNull(databaseName) || databaseName.trim().length === 0) {
       return;
     }
@@ -179,10 +185,10 @@ export default {
     return setTimeout(() => { FauxtonAPI.navigate(url); });
   },
 
-  fetchAllDbsWithKey: (id, callback) => {
+  fetchAllDbsWithKey(id, callback) {
     const query = '?' + app.utils.queryParams({
       startkey: JSON.stringify(id),
-      endkey: JSON.stringify(id + "\u9999"),
+      endkey: JSON.stringify(id + '\u9999'),
       limit: 30
     });
 
