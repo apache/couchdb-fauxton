@@ -29,6 +29,7 @@ const JumpToDoc = ({database, loadOptions}) => {
         loadOptions={loadOptions}
         clearable={false}
         ignoreCase={false}
+        ignoreAccents={false}
         cache={false}
         onChange={({value: docId}) => {
           const url = FauxtonAPI.urls('document', 'app', app.utils.safeURLName(database.id), app.utils.safeURLName(docId));
