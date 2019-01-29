@@ -147,14 +147,14 @@ describe('Results Toolbar', () => {
     expect(wrapper.find('button')).toHaveLength(4);
   });
 
-  it('hides Table and JSON modes when querying a partitioned view', () => {
+  it('shows Table, Metadata and JSON modes when querying a partitioned view', () => {
     const wrapper = mount(<ResultsToolBar
       {...defaultProps}
       hasResults={true}
       isListDeletable={false}
       partitionKey={'partKey1'}
       fetchUrl='/my_db/_partition/my_partition/_design/ddoc1/_view/view1'/>);
-    expect(wrapper.find('button')).toHaveLength(2);
+    expect(wrapper.find('button')).toHaveLength(4);
   });
 
   it('shows Table, Metadata and JSON modes when showing All Documents filtered by partition', () => {

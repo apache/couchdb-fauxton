@@ -50,7 +50,6 @@ export const queryMapReduceView = (fetchUrl, params) => {
   // removes params not supported by partitioned views
   const isPartitioned = fetchUrl.includes('/_partition/');
   if (isPartitioned) {
-    params.include_docs = undefined;
     params.stable = undefined;
     params.conflicts = undefined;
   }
@@ -63,7 +62,7 @@ export const queryMapReduceView = (fetchUrl, params) => {
     return {
       docs: json.rows,
       docType: Constants.INDEX_RESULTS_DOC_TYPE.VIEW,
-      layout: isPartitioned ? Constants.LAYOUT_ORIENTATION.METADATA : undefined
+      layout: undefined
     };
   });
 };
