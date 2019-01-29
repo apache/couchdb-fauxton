@@ -20,6 +20,7 @@ import Helpers from '../../documents/helpers';
 export class Document extends React.Component {
   static propTypes = {
     docIdentifier: PropTypes.string.isRequired,
+    docType: PropTypes.string,
     docChecked: PropTypes.func.isRequired,
     truncate: PropTypes.bool,
     maxRows: PropTypes.number,
@@ -31,7 +32,8 @@ export class Document extends React.Component {
     maxRows: 500,
     resultsStyle: {
       fontSize: Constants.INDEX_RESULTS_STYLE.FONT_SIZE_MEDIUM
-    }
+    },
+    docType: Constants.INDEX_RESULTS_DOC_TYPE.VIEW
   };
 
   onChange = (e) => {
@@ -56,6 +58,16 @@ export class Document extends React.Component {
     return _.map(extensions, (Extension, i) => {
       return (<Extension doc={this.props.doc} key={i} />);
     });
+  };
+
+  getDocumentTypeIcon = () => {
+    if (this.props.docType === Constants.INDEX_RESULTS_DOC_TYPE.MANGO_INDEX) {
+      if (this.props.docContent.includes(`"partitioned": true`)) {
+        return <i className="fonticon-documents" title="Partitioned index"></i>;
+      }
+      return <i className="fonticon-document" title="Global index"></i>;
+    }
+    return null;
   };
 
   getCheckbox = () => {
@@ -118,6 +130,7 @@ export class Document extends React.Component {
         <div className="doc-item">
           <header onClick={this.onClick}>
             <span className="header-keylabel">
+              {this.getDocumentTypeIcon()}
               {this.props.keylabel}
             </span>
             <span className="header-doc-id">

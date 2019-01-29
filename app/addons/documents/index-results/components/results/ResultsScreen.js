@@ -51,8 +51,8 @@ export default class ResultsScreen extends React.Component {
   }
 
   getDocumentList () {
-    let noop = () => {};
-    let data = this.props.results.results;
+    const noop = () => {};
+    const data = this.props.results.results;
     return _.map(data, (doc, i) => {
       return (
         <Document
@@ -61,6 +61,7 @@ export default class ResultsScreen extends React.Component {
           onClick={this.props.isEditable ? this.onClick : noop}
           keylabel={doc.keylabel}
           docContent={doc.content}
+          docType={this.props.docType}
           checked={this.props.isSelected(doc.id)}
           header={doc.header}
           docChecked={this.props.docChecked}
