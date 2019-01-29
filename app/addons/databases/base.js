@@ -36,11 +36,11 @@ function partitionUrlComponent(partitionKey) {
 function checkPartitionedDatabaseFeature () {
   // Checks if the CouchDB server supports Partitioned Databases
   return get(Helpers.getServerUrl("/")).then((couchdb) => {
-    if (couchdb.features && couchdb.features.includes('partitions')) {
+    if (couchdb.features && couchdb.features.includes('partitioned')) {
       return true;
     }
     // Check if it's enabled as an experimental feature
-    if (couchdb.feature_flags && couchdb.feature_flags.includes('partitions')) {
+    if (couchdb.features_flags && couchdb.features_flags.includes('partitioned')) {
       return true;
     }
     return false;
