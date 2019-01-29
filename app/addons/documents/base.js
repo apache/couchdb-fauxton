@@ -190,7 +190,7 @@ FauxtonAPI.registerUrls('document', {
 
 FauxtonAPI.registerUrls('new', {
   newDocument: function (database) {
-    return '/database/' + database + '/new';
+    return '/database/' + database + '/_new';
   },
 
   newView: function (database, partitionKey) {

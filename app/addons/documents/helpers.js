@@ -41,7 +41,7 @@ const getNewButtonLinks = (databaseName, partitionKey) => {
     return menuLinks;
   }, [{
     title: 'New Doc',
-    url: newUrlPrefix + '/new' + partitionKeyQueryParam,
+    url: newUrlPrefix + '/_new' + partitionKeyQueryParam,
     icon: 'fonticon-plus-circled'
   }, {
     title: 'New View',

@@ -23,7 +23,7 @@ module.exports = {
     client
       .createDatabase(newDatabaseName)
       .loginToGUI()
-      .url(baseUrl + '/#/database/' + newDatabaseName + '/new')
+      .url(baseUrl + '/#/database/' + newDatabaseName + '/_new')
       .waitForElementPresent('#editor-container', waitTime, false)
       .waitForElementPresent('.ace_gutter-active-line', waitTime, false)
       // Move editor cursor to _id field
