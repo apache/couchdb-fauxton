@@ -19,7 +19,7 @@ module.exports = {
         newDatabaseName = client.globals.testDatabaseName,
         baseUrl = client.globals.test_settings.launch_url;
 
-    var newLink = '#/database/' + newDatabaseName + '/new';
+    var newLink = '#/database/' + newDatabaseName + '/_new';
 
     client
       .loginToGUI()
