@@ -142,4 +142,40 @@ describe('Document', () => {
     expect(el.find('.doc-content-truncated').length).toBe(0);
   });
 
+  it('shows icon only for docs with type MangoIndex', () => {
+    const index = {
+      type: "json",
+      def: { fields: [{ foo: "asc" }] }
+    };
+    const content = JSON.stringify(index, null, '  ');
+    const elMangoIndex = mount(
+      <ReactComponents.Document docChecked={noop} header="foo" isDeletable={true}
+        checked={false} docIdentifier="foo" docContent={content}
+        truncate={false} docType="MangoIndex"/>
+    );
+    expect(elMangoIndex.find('i.fonticon-document').exists()).toBe(true);
+
+    const elRegularDoc = mount(
+      <ReactComponents.Document docChecked={noop} header="foo" isDeletable={true}
+        checked={false} docIdentifier="foo" docContent={content}
+        truncate={false} docType="view"/>
+    );
+    expect(elRegularDoc.find('i.fonticon-documents').exists()).toBe(false);
+  });
+
+  it('shows icon for partitioned mango index', () => {
+    const index = {
+      type: "json",
+      partitioned: true,
+      def: { fields: [{ foo: "asc" }] }
+    };
+    const content = JSON.stringify(index, null, '  ');
+    const elMangoIndex = mount(
+      <ReactComponents.Document docChecked={noop} header="foo" isDeletable={true}
+        checked={false} docIdentifier="foo" docContent={content}
+        truncate={false} docType="MangoIndex"/>
+    );
+    expect(elMangoIndex.find('i.fonticon-documents').exists()).toBe(true);
+  });
+
 });
