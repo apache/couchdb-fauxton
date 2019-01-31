@@ -14,11 +14,12 @@ import FauxtonAPI from "../../../core/api";
 import { get } from "../../../core/ajax";
 
 export default {
-  fetchAllDocsWithKey: (database) => {
+  fetchAllDocsWithKey: (database, partitionKey) => {
+    const keyPrefix = partitionKey ? `${partitionKey}:` : "";
     return (id, callback) => {
       const query = '?' + app.utils.queryParams({
-        startkey: JSON.stringify(id),
-        endkey: JSON.stringify(id + "\u9999"),
+        startkey: JSON.stringify(keyPrefix + id),
+        endkey: JSON.stringify(keyPrefix + id + "\u9999"),
         limit: 30
       });
 

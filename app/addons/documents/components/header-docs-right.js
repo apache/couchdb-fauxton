@@ -17,13 +17,20 @@ import QueryOptionsContainer from '../index-results/containers/QueryOptionsConta
 import JumpToDoc from './jumptodoc';
 import Actions from './actions';
 
-const RightAllDocsHeader = ({database, hideQueryOptions, hideJumpToDoc, queryDocs, ddocsOnly, selectedNavItem}) =>
+const RightAllDocsHeader = ({database, hideQueryOptions, hideJumpToDoc, queryDocs, ddocsOnly, selectedNavItem, partitionKey}) =>
   <div className="header-right right-db-header flex-layout flex-row">
 
     <div className="faux-header__searchboxwrapper">
       <div className="faux-header__searchboxcontainer">
         {hideJumpToDoc ? null :
-          <JumpToDoc cache={false} loadOptions={Actions.fetchAllDocsWithKey(database)} database={database} /> }
+          <JumpToDoc
+            // 'key' is set to force mounting a new component when the partition key changes
+            // otherwise the internal ReactSelect doesn't reload the options even though
+            // it loadOptions is assigned a new function
+            key={JSON.stringify(database + partitionKey)}
+            cache={false}
+            loadOptions={Actions.fetchAllDocsWithKey(database, partitionKey)}
+            database={database} /> }
       </div>
     </div>
     {hideQueryOptions ? null :
@@ -35,7 +42,8 @@ RightAllDocsHeader.propTypes = {
   hideQueryOptions: PropTypes.bool,
   isRedux: PropTypes.bool,
   queryDocs: PropTypes.func,
-  selectedNavItem: PropTypes.object
+  selectedNavItem: PropTypes.object,
+  partitionKey: PropTypes.string
 };
 
 RightAllDocsHeader.defaultProps = {

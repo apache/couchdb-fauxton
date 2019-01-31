@@ -19,8 +19,6 @@ export class ThrottledReactSelectAsync extends React.Component {
   constructor(props) {
     super(props);
     this.lastCall = undefined;
-    const { loadOptions } = props;
-    this.throttledLoadOptions = this.wrapThrottler(loadOptions).bind(this);
   }
 
   wrapThrottler(loadOptions) {
@@ -38,9 +36,12 @@ export class ThrottledReactSelectAsync extends React.Component {
   }
 
   render() {
+    // wrapThrottler() must be called here to ensure a new
+    // function is created when props.loadOptions is updated
+    const throttledLoadOptions = this.wrapThrottler(this.props.loadOptions).bind(this);
     const newProps = {
       ...this.props,
-      loadOptions: this.throttledLoadOptions
+      loadOptions: throttledLoadOptions
     };
     return (
       <ReactSelect.Async {...newProps} />
