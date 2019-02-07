@@ -41,8 +41,8 @@ const DocEditorRouteObject = FauxtonAPI.RouteObject.extend({
     'database/:database/_design/:ddoc': 'showDesignDoc',
     'database/:database/_local/:doc': 'showLocalDoc',
     'database/:database/:doc': 'codeEditor',
-    'database/:database/_new': 'codeEditor',
-    'database/:database/_new?(:extra)': 'codeEditor'
+    'database/:database/_new': 'codeEditorNewDoc',
+    'database/:database/_new?(:extra)': 'codeEditorNewDoc'
   },
 
   revisionBrowser: function (databaseName, docId) {
@@ -64,6 +64,10 @@ const DocEditorRouteObject = FauxtonAPI.RouteObject.extend({
 
   revBrowserForDesignDoc: function(databaseName, ddoc) {
     return this.revisionBrowser(databaseName, '_design/' + ddoc);
+  },
+
+  codeEditorNewDoc: function (databaseName, options) {
+    return this.codeEditor(databaseName, null, options);
   },
 
   codeEditor: function (databaseName, docId, options) {
