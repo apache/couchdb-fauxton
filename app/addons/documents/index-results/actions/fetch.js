@@ -103,7 +103,7 @@ export const fetchDocs = (queryDocs, fetchParams, queryOptionsParams) => {
       // dispatch that we're all done
       dispatch(newResultsAvailable(finalDocList, params, canShowNext, docType, executionStats, warning));
     }).catch((error) => {
-      if (error && error.message.includes('partition query is not supported')) {
+      if (error && error.message.includes('`partition` parameter is not supported')) {
         dispatch(partitionParamNotSupported());
       } else if (error && error.message.includes('`partition` parameter is mandatory')) {
         dispatch(partitionParamIsMandatory());
