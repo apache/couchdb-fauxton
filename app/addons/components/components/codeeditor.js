@@ -45,6 +45,11 @@ export class CodeEditor extends React.Component {
 
     // optional editor key commands (e.g. specific save action)
     editorCommands: [],
+    
+    extraKeys: {
+      "Cmd+L" -> null,
+      "Ctrl+L" -> null
+    },
 
     // notifies users that there is unsaved changes in the editor when navigating away from the page
     notifyUnsavedChanges: false,
