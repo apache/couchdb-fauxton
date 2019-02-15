@@ -81,6 +81,14 @@ export class CodeEditor extends React.Component {
   setupAce = (props, shouldUpdateCode) => {
     this.editor = ace.edit(this.ace);
 
+    // see https://github.com/ajaxorg/ace/issues/36 don't steal browser's default keybinding
+    this.editor.commands.bindKeys(
+      {
+        "Ctrl-L|Command-L": null,
+        "Ctrl-Shift-L|Command-Shift-L": "gotoline"
+      }
+    );
+
     // suppresses an Ace editor error
     this.editor.$blockScrolling = Infinity;
 
