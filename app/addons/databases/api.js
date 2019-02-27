@@ -12,10 +12,8 @@
 
 import FauxtonAPI from '../../core/api';
 import { get } from '../../core/ajax';
-import Helpers from '../../helpers';
 
 export const fetchDatabaseInfo = (databaseName) => {
-  const base = FauxtonAPI.urls('databaseBaseURL', 'server', databaseName);
-  const url = Helpers.getServerUrl(base);
+  const url = FauxtonAPI.urls('databaseBaseURL', 'server', databaseName);
   return get(url);
 };
