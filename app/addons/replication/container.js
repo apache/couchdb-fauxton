@@ -56,8 +56,10 @@ import {
   someReplicateSelected
 } from './reducers';
 
-const mapStateToProps = ({replication}, ownProps) => {
+const mapStateToProps = ({replication, databases}, ownProps) => {
   return {
+    allowNewPartitionedLocalDbs: databases.partitionedDatabasesAvailable,
+
     routeLocalSource: ownProps.routeLocalSource,
     replicationId: ownProps.replicationId,
     tabSection: ownProps.section,
@@ -80,6 +82,7 @@ const mapStateToProps = ({replication}, ownProps) => {
     remoteTarget: getRemoteTarget(replication),
     targetAuthType: replication.targetAuthType,
     targetAuth: replication.targetAuth,
+    targetDatabasePartitioned: replication.targetDatabasePartitioned,
 
     // other
     isConflictModalVisible: isConflictModalVisible(replication),

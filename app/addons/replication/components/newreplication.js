@@ -138,6 +138,7 @@ export default class NewReplicationController extends React.Component {
     const {
       remoteTarget,
       remoteSource,
+      replicationSource,
       replicationTarget,
       localTarget,
       localSource,
@@ -174,7 +175,8 @@ export default class NewReplicationController extends React.Component {
     }
 
     //check if remote source/target URL is valid
-    if (!isEmpty(remoteSource)) {
+    const isRemoteSource = replicationSource === Constants.REPLICATION_SOURCE.REMOTE;
+    if (isRemoteSource && !isEmpty(remoteSource)) {
       let errorMessage = '';
       try {
         const url = new URL(remoteSource);
@@ -194,7 +196,9 @@ export default class NewReplicationController extends React.Component {
         return false;
       }
     }
-    if (!isEmpty(remoteTarget)) {
+    const isRemoteTarget = replicationTarget === Constants.REPLICATION_TARGET.NEW_REMOTE_DATABASE ||
+      replicationTarget === Constants.REPLICATION_TARGET.EXISTING_REMOTE_DATABASE;
+    if (isRemoteTarget && !isEmpty(remoteTarget)) {
       let errorMessage = '';
       try {
         const url = new URL(remoteTarget);
@@ -244,7 +248,8 @@ export default class NewReplicationController extends React.Component {
       sourceAuthType,
       sourceAuth,
       targetAuthType,
-      targetAuth
+      targetAuth,
+      targetDatabasePartitioned
     } = this.props;
 
     let _rev;
@@ -268,7 +273,8 @@ export default class NewReplicationController extends React.Component {
       sourceAuthType,
       sourceAuth,
       targetAuthType,
-      targetAuth
+      targetAuth,
+      targetDatabasePartitioned
     });
   }
 
@@ -321,6 +327,8 @@ export default class NewReplicationController extends React.Component {
       remoteSource,
       remoteTarget,
       localTarget,
+      targetDatabasePartitioned,
+      allowNewPartitionedLocalDbs,
       updateFormField,
       clearReplicationForm,
       sourceAuthType,
@@ -354,8 +362,11 @@ export default class NewReplicationController extends React.Component {
           databases={databases}
           localTarget={localTarget}
           remoteTarget={remoteTarget}
+          allowNewPartitionedLocalDbs={allowNewPartitionedLocalDbs}
+          targetDatabasePartitioned={targetDatabasePartitioned}
           onRemoteTargetChange={updateFormField('remoteTarget')}
           onLocalTargetChange={updateFormField('localTarget')}
+          onTargetDatabasePartitionedChange={updateFormField('targetDatabasePartitioned')}
         />
         <ReplicationAuth
           credentials={targetAuth}

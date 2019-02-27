@@ -9,9 +9,11 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
-import PropTypes from 'prop-types';
 
+import classnames from 'classnames';
+import PropTypes from 'prop-types';
 import React from 'react';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import Constants from '../constants';
 import Components from '../../components/react-components';
 import ReactSelect from 'react-select';
@@ -32,7 +34,7 @@ const replicationTargetSourceOptions = () => {
   });
 };
 
-const ReplicationTargetSelect = ({value, onChange}) => {
+const ReplicationTargetSelect = ({ value, onChange }) => {
   return (
     <div className="replication__section">
       <div className="replication__input-label">
@@ -54,7 +56,7 @@ ReplicationTargetSelect.propTypes = {
   onChange: PropTypes.func.isRequired
 };
 
-const RemoteTargetReplicationRow = ({onChange, value}) => {
+const RemoteTargetReplicationRow = ({ onChange, value }) => {
   return (
     <div>
       <input
@@ -73,8 +75,8 @@ RemoteTargetReplicationRow.propTypes = {
   onChange: PropTypes.func.isRequired
 };
 
-const ExistingLocalTargetReplicationRow = ({onChange, value, databases}) => {
-  const options = databases.map(db => ({value: db, label: db}));
+const ExistingLocalTargetReplicationRow = ({ onChange, value, databases }) => {
+  const options = databases.map(db => ({ value: db, label: db }));
   return (
     <div id="replication-target-local" className="replication__input-react-select">
       <ReactSelect
@@ -82,7 +84,7 @@ const ExistingLocalTargetReplicationRow = ({onChange, value, databases}) => {
         options={options}
         placeholder="Database name"
         clearable={false}
-        onChange={({value}) => onChange(value)}
+        onChange={({ value }) => onChange(value)}
       />
     </div>
   );
@@ -94,7 +96,7 @@ ExistingLocalTargetReplicationRow.propTypes = {
   onChange: PropTypes.func.isRequired
 };
 
-const NewLocalTargetReplicationRow = ({onChange, value}) =>
+const NewLocalTargetReplicationRow = ({ onChange, value }) =>
   <input
     type="text"
     className="replication__new-input"
@@ -144,7 +146,7 @@ const ReplicationTargetRow = ({
   let targetLabel = 'Name:';
 
   if (replicationTarget === Constants.REPLICATION_TARGET.NEW_REMOTE_DATABASE ||
-      replicationTarget === Constants.REPLICATION_TARGET.NEW_LOCAL_DATABASE) {
+    replicationTarget === Constants.REPLICATION_TARGET.NEW_LOCAL_DATABASE) {
     targetLabel = 'New database:';
   }
 
@@ -167,9 +169,62 @@ ReplicationTargetRow.propTypes = {
   replicationTarget: PropTypes.string.isRequired
 };
 
+const NewTargetDatabaseOptionsRow = ({
+  replicationTarget,
+  targetDatabasePartitioned,
+  onTargetDatabasePartitionedChange,
+  allowNewPartitionedLocalDbs
+}) => {
+  if (!replicationTarget) {
+    return null;
+  }
+
+  if (replicationTarget !== Constants.REPLICATION_TARGET.NEW_LOCAL_DATABASE &&
+    replicationTarget !== Constants.REPLICATION_TARGET.NEW_REMOTE_DATABASE) {
+    return null;
+  }
+
+  const disablePartitionedOption = replicationTarget === Constants.REPLICATION_TARGET.NEW_LOCAL_DATABASE &&
+    !allowNewPartitionedLocalDbs;
+  let msg = disablePartitionedOption ? "Local server does not support partitioned databases" :
+    "Creates a new partitioned database";
+  const tooltip = <Tooltip id="new-db-partitioned-tooltip">{msg}</Tooltip>;
+  const togglePartitioned = () => {
+    onTargetDatabasePartitionedChange(!targetDatabasePartitioned);
+  };
+
+  return (
+    <div className="replication__section">
+      <div className="replication__input-label">New database options:</div>
+      <div className={classnames('replication__input-checkbox', { 'replication__input-checkbox--disabled': disablePartitionedOption})}>
+
+        <input id="target-db-is-partitioned"
+          type="checkbox"
+          value="true"
+          checked={targetDatabasePartitioned}
+          onChange={togglePartitioned}
+          disabled={disablePartitionedOption}
+        />
+
+
+        <OverlayTrigger placement="right" overlay={tooltip}>
+          <label htmlFor="target-db-is-partitioned" >Partitioned</label>
+        </OverlayTrigger>
+      </div >
+    </div>
+  );
+};
+
+NewTargetDatabaseOptionsRow.propTypes = {
+  onTargetDatabasePartitionedChange: PropTypes.func.isRequired,
+  targetDatabasePartitioned: PropTypes.bool.isRequired,
+  replicationTarget: PropTypes.string.isRequired,
+  allowNewPartitionedLocalDbs: PropTypes.bool.isRequired
+};
+
 export class ReplicationTarget extends React.Component {
 
-  render () {
+  render() {
     const {
       replicationTarget,
       onLocalTargetChange,
@@ -177,7 +232,10 @@ export class ReplicationTarget extends React.Component {
       databases,
       localTarget,
       onRemoteTargetChange,
-      remoteTarget
+      remoteTarget,
+      targetDatabasePartitioned,
+      onTargetDatabasePartitionedChange,
+      allowNewPartitionedLocalDbs
     } = this.props;
     return (
       <div>
@@ -193,6 +251,12 @@ export class ReplicationTarget extends React.Component {
           localTarget={localTarget}
           onRemoteTargetChange={onRemoteTargetChange}
           onLocalTargetChange={onLocalTargetChange}
+        />
+        <NewTargetDatabaseOptionsRow
+          replicationTarget={replicationTarget}
+          onTargetDatabasePartitionedChange={onTargetDatabasePartitionedChange}
+          targetDatabasePartitioned={targetDatabasePartitioned}
+          allowNewPartitionedLocalDbs={allowNewPartitionedLocalDbs}
         />
       </div>
     );

@@ -46,7 +46,8 @@ const validFieldMap = {
   sourceAuthType: 'sourceAuthType',
   sourceAuth: 'sourceAuth',
   targetAuthType: 'targetAuthType',
-  targetAuth: 'targetAuth'
+  targetAuth: 'targetAuth',
+  targetDatabasePartitioned: 'targetDatabasePartitioned'
 };
 
 const initialState = {
@@ -66,6 +67,7 @@ const initialState = {
   remoteTarget: '',
   targetAuthType: Constants.REPLICATION_AUTH_METHOD.NO_AUTH,
   targetAuth: {},
+  targetDatabasePartitioned: false,
 
   // other
   isConflictModalVisible: false,
@@ -97,6 +99,8 @@ const clearForm = (state) => {
   Object.values(validFieldMap).forEach(field => {
     if (field === 'sourceAuth' || field === 'targetAuth') {
       newState[field] = {};
+    } else if (field === 'targetDatabasePartitioned') {
+      newState[field] = false;
     } else {
       newState[field] = '';
     }

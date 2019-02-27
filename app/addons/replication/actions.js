@@ -325,6 +325,13 @@ const getAuthTypeAndCredentials = (repSourceOrTarget) => {
   return authTypeAndCreds;
 };
 
+const getTargetDatabasePartitioned = (createTargetParams) => {
+  if (createTargetParams && createTargetParams.partitioned === true) {
+    return true;
+  }
+  return false;
+};
+
 export const getReplicationStateFrom = (id) => dispatch => {
   dispatch({
     type: ActionTypes.REPLICATION_FETCHING_FORM_STATE
@@ -364,6 +371,8 @@ export const getReplicationStateFrom = (id) => dispatch => {
       const targetAuth = getAuthTypeAndCredentials(doc.target);
       stateDoc.targetAuthType = targetAuth.type;
       stateDoc.targetAuth = targetAuth.creds;
+
+      stateDoc.targetDatabasePartitioned = getTargetDatabasePartitioned(doc.create_target_params);
 
       dispatch({
         type: ActionTypes.REPLICATION_SET_STATE_FROM_DOC,
