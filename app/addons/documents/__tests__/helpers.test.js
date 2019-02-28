@@ -42,4 +42,82 @@ describe('Helpers', () => {
 
   });
 
+  describe('selectedItemIsPartitionedView', () => {
+    const ddocs = {
+      find: () => { return {_id: '_design/ddoc1' }; }
+    };
+    const selectedView = {
+      navItem: 'designDoc',
+      designDocSection: 'Views',
+      indexName: 'view1'
+    };
+    const selectedAllDocs = {
+      navItem: 'all-docs'
+    };
+
+    it('returns false if no item is selected', () => {
+      const isPartitionedView = Helpers.selectedItemIsPartitionedView(ddocs, null, true);
+      expect(isPartitionedView).toBe(false);
+    });
+
+    it('returns false if selected item is not a view', () => {
+      const isPartitionedView = Helpers.selectedItemIsPartitionedView(ddocs, selectedAllDocs, true);
+      expect(isPartitionedView).toBe(false);
+    });
+
+    it('returns false if selected item is a global view', () => {
+      const isPartitionedView = Helpers.selectedItemIsPartitionedView(ddocs, selectedView, false);
+      expect(isPartitionedView).toBe(false);
+    });
+
+    it('returns true if selected item is a partitioned view', () => {
+      const isPartitionedView = Helpers.selectedItemIsPartitionedView(ddocs, selectedView, true);
+      expect(isPartitionedView).toBe(true);
+    });
+
+  });
+
+  describe('isDDocPartitioned', () => {
+    const ddocNoOptions = {
+      _id: '_design/ddoc1'
+    };
+    const ddocPartitionedTrue = {
+      _id: '_design/ddoc1',
+      options: {
+        partitioned: true
+      }
+    };
+    const ddocPartitionedFalse = {
+      _id: '_design/ddoc1',
+      options: {
+        partitioned: false
+      }
+    };
+
+    it('returns false if database is not partitioned', () => {
+      let isPartitionedDdoc = Helpers.isDDocPartitioned(ddocNoOptions, false);
+      expect(isPartitionedDdoc).toBe(false);
+
+      isPartitionedDdoc = Helpers.isDDocPartitioned(ddocPartitionedFalse, false);
+      expect(isPartitionedDdoc).toBe(false);
+
+      isPartitionedDdoc = Helpers.isDDocPartitioned(ddocPartitionedTrue, false);
+      expect(isPartitionedDdoc).toBe(false);
+    });
+
+    it('returns true if database is partitioned and ddoc partitioned option is not set to false', () => {
+      let isPartitionedDdoc = Helpers.isDDocPartitioned(ddocNoOptions, true);
+      expect(isPartitionedDdoc).toBe(true);
+
+      isPartitionedDdoc = Helpers.isDDocPartitioned(ddocPartitionedTrue, true);
+      expect(isPartitionedDdoc).toBe(true);
+    });
+
+    it('returns false if database is partitioned but ddoc is set as non-partitioned', () => {
+      const isPartitionedDdoc = Helpers.isDDocPartitioned(ddocPartitionedFalse, true);
+      expect(isPartitionedDdoc).toBe(false);
+    });
+
+  });
+
 });

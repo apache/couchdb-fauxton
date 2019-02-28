@@ -18,6 +18,7 @@ export default class MainFieldsView extends React.Component {
     super(props);
     this.toggleStable = this.toggleStable.bind(this);
     this.onUpdateChange = this.onUpdateChange.bind(this);
+    this.toggleIncludeDocs = this.toggleIncludeDocs.bind(this);
 
     this.updateOptions = [
       {value: 'true', label: 'true'},
@@ -72,8 +73,21 @@ export default class MainFieldsView extends React.Component {
     this.props.toggleStable(this.props.stable);
   }
 
-  reduce() {
-    if (!this.props.showReduce) {
+  includeDocsOption() {
+    const {includeDocs, reduce} = this.props;
+    return (
+      <div className="checkbox inline">
+        <input disabled={reduce} onChange={this.toggleIncludeDocs} id="qoIncludeDocs"
+          name="include_docs" type="checkbox" checked={includeDocs}/>
+        <label className={reduce ? 'disabled' : ''} htmlFor="qoIncludeDocs" id="qoIncludeDocsLabel">Include
+            Docs</label>
+      </div>
+    );
+  }
+
+  reduceOption() {
+    const {showReduce, reduce} = this.props;
+    if (!showReduce) {
       return null;
     }
 
@@ -81,7 +95,7 @@ export default class MainFieldsView extends React.Component {
       <span>
         <div className="checkbox inline">
           <input id="qoReduce" name="reduce" onChange={this.toggleReduce.bind(this)} type="checkbox"
-            checked={this.props.reduce}/>
+            checked={reduce}/>
           <label htmlFor="qoReduce">Reduce</label>
         </div>
         {this.groupLevel()}
@@ -89,12 +103,41 @@ export default class MainFieldsView extends React.Component {
     );
   }
 
-  getUpdateOptions() {
-    return this.updateOptions.map(option => <option key={option.value} value={option.value}>{option.label}</option>);
+  stableOption() {
+    let {enableStable, stable} = this.props;
+
+    if (!enableStable) {
+      // makes sure Stable option always appears unchecked when disabled
+      stable = false;
+    }
+
+    return (
+      <div className="checkbox inline">
+        <input onChange={this.toggleStable} id="qoStable" name="stable"
+          type="checkbox" checked={stable} disabled={!enableStable}/>
+        <label className={enableStable ? '' : 'disabled'} htmlFor="qoStable" id="qoStableLabel">Stable</label>
+      </div>
+    );
+  }
+
+  updateOption() {
+    const { update } = this.props;
+    const selectOptions = this.updateOptions.map(option => {
+      return <option key={option.value} value={option.value}>{option.label}</option>;
+    });
+    return (
+      <div className="dropdown inline">
+        <label className="drop-down">
+          Update
+          <select className="input-small" id="qoUpdate" value={update} onChange={this.onUpdateChange}>
+            {selectOptions}
+          </select>
+        </label>
+      </div>
+    );
   }
 
   render() {
-    let {includeDocs, stable, update} = this.props;
     return (
       <div className="query-group" id="query-options-main-fields">
         <span className="add-on">
@@ -103,31 +146,13 @@ export default class MainFieldsView extends React.Component {
             <i className="icon-question-sign"/>
           </a>
         </span>
-        <div className="controls-group qo-main-fields-row">
-          <div className="row-fluid fieldsets">
-            <div className="checkbox inline">
-              <input disabled={this.props.reduce} onChange={this.toggleIncludeDocs.bind(this)} id="qoIncludeDocs"
-                name="include_docs" type="checkbox" checked={includeDocs}/>
-              <label className={this.props.reduce ? 'disabled' : ''} htmlFor="qoIncludeDocs" id="qoIncludeDocsLabel">Include
-                  Docs</label>
-            </div>
-            {this.reduce()}
-          </div>
-          <div className="row-fluid fieldsets">
-            <div className="checkbox inline">
-              <input onChange={this.toggleStable} id="qoStable"
-                name="include_docs" type="checkbox" checked={stable}/>
-              <label htmlFor="qoStable" id="qoStableLabel">Stable</label>
-            </div>
-            <div className="dropdown inline">
-              <label className="drop-down">
-                Update
-                <select className="input-small" id="qoUpdate" value={update} onChange={this.onUpdateChange}>
-                  {this.getUpdateOptions()}
-                </select>
-              </label>
-            </div>
-          </div>
+        <div className="row-fluid fieldsets">
+          {this.includeDocsOption()}
+          {this.reduceOption()}
+        </div>
+        <div className="row-fluid fieldsets">
+          {this.stableOption()}
+          {this.updateOption()}
         </div>
       </div>
     );
@@ -145,5 +170,7 @@ MainFieldsView.propTypes = {
   stable: PropTypes.bool.isRequired,
   toggleStable: PropTypes.func.isRequired,
   update: PropTypes.string.isRequired,
-  changeUpdateField: PropTypes.func.isRequired
+  changeUpdateField: PropTypes.func.isRequired,
+  showReduce: PropTypes.bool.isRequired,
+  enableStable: PropTypes.bool.isRequired
 };

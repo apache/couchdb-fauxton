@@ -122,6 +122,22 @@ const selectedViewContainsReduceFunction = (designDocs, selectedNavItem) => {
   return showReduce;
 };
 
+const selectedItemIsPartitionedView = (designDocs, selectedNavItem, isDbPartitioned) => {
+  if (!selectedNavItem) {
+    return false;
+  }
+
+  let isPartitioned = false;
+  if (designDocs && isViewSelected(selectedNavItem)) {
+    const ddocID = '_design/' + selectedNavItem.designDocName;
+    const ddoc = designDocs.find(ddoc => ddoc._id === ddocID);
+    if (ddoc) {
+      isPartitioned = isDDocPartitioned(ddoc, isDbPartitioned);
+    }
+  }
+  return isPartitioned;
+};
+
 const isViewSelected = (selectedNavItem) => {
   return (selectedNavItem.navItem === 'designDoc'
     && selectedNavItem.designDocSection === 'Views'
@@ -147,5 +163,6 @@ export default {
   parseJSON,
   truncateDoc,
   selectedViewContainsReduceFunction,
+  selectedItemIsPartitionedView,
   isViewSelected
 };
