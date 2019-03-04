@@ -35,6 +35,14 @@ export class ReplicationAuth extends React.Component {
       this.customAuths = [];
     }
     this.customAuthTypes = this.customAuths.map(auth => auth.typeValue);
+
+    // The extension should provide:
+    //   - 'authType' is a string representing the auth type.
+    //   - 'helpText' string with the text to be displayed when the auth type is selected.
+    this.customAuthHelp = FauxtonAPI.getExtensions('Replication:Auth-help');
+    if (!this.customAuthHelp) {
+      this.customAuthHelp = [];
+    }
   }
 
   getAuthOptions = () => {
@@ -72,6 +80,19 @@ export class ReplicationAuth extends React.Component {
     return null;
   }
 
+  getHelpText(authType) {
+    const helpText = this.customAuthHelp.filter(el => authType === el.authType).map(el => el.helpText);
+    if (helpText.length == 0) {
+      return null;
+    }
+
+    return (
+      <div className="replication__section">
+        <div className="replication__input-label"></div>
+        <div className="replication__help-tile">{helpText[0]}</div>
+      </div>);
+  }
+
   render () {
     const {credentials, authType, authId} = this.props;
     return (<React.Fragment>
@@ -88,6 +109,7 @@ export class ReplicationAuth extends React.Component {
         </div>
       </div>
       {this.getAuthInputFields(credentials, authType)}
+      {this.getHelpText(authType)}
     </React.Fragment>);
   }
 }
