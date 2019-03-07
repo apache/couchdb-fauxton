@@ -145,7 +145,8 @@ describe("Replication Actions", () => {
       "replicationTarget": "REPLICATION_TARGET_EXISTING_LOCAL_DATABASE",
       "localTarget": "boom123",
       "targetAuthType":"BASIC_AUTH",
-      "targetAuth":{"username":"tester", "password":"testerpass"}
+      "targetAuth":{"username":"tester", "password":"testerpass"},
+      "targetDatabasePartitioned": false
     };
 
     it('builds up correct state', (done) => {
@@ -192,6 +193,7 @@ describe("Replication Actions", () => {
         "localTarget": "boom123",
         "targetAuthType":"TEST_CUSTOM_AUTH",
         "targetAuth":{"creds":"target_user_creds"},
+        "targetDatabasePartitioned": false
       };
       FauxtonAPI.registerExtension('Replication:Auth', {
         typeValue: 'TEST_CUSTOM_AUTH',

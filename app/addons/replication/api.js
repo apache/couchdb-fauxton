@@ -204,10 +204,11 @@ export const createReplicationDoc = ({
   sourceAuthType,
   sourceAuth,
   targetAuthType,
-  targetAuth
+  targetAuth,
+  targetDatabasePartitioned
 }) => {
   const username = getUsername();
-  return addDocIdAndRev(replicationDocName, _rev, {
+  const replicationDoc = {
     user_ctx: {
       name: username,
       roles: ['_admin', '_reader', '_writer']
@@ -229,7 +230,13 @@ export const createReplicationDoc = ({
     }),
     create_target: createTarget(replicationTarget),
     continuous: continuous(replicationType),
-  });
+  };
+  if (targetDatabasePartitioned) {
+    replicationDoc.create_target_params = {
+      partitioned: true
+    };
+  }
+  return addDocIdAndRev(replicationDocName, _rev, replicationDoc);
 };
 
 export const removeSensitiveUrlInfo = (url) => {
