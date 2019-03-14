@@ -21,7 +21,8 @@ describe('MainFieldsView', () => {
     stable: false,
     toggleStable: () => {},
     update: 'true',
-    changeUpdateField: () => {}
+    changeUpdateField: () => {},
+    enableStable: false
   };
   const docURL = 'http://foo.com';
   it('does not render reduce when showReduce is false', () => {
@@ -110,6 +111,7 @@ describe('MainFieldsView', () => {
       toggleIncludeDocs={() => {}}
       toggleStable={spy}
       docURL={docURL}
+      enableStable={true}
     />);
 
     wrapper.find('#qoStable').simulate('change');

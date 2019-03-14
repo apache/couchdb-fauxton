@@ -46,7 +46,15 @@ const showReduce = (designDocs, selectedNavItem) => {
   return DocHelpers.selectedViewContainsReduceFunction(designDocs, selectedNavItem);
 };
 
-const mapStateToProps = ({indexResults, sidebar}, ownProps) => {
+const enableStable = (designDocs, selectedNavItem, isDbPartitioned) => {
+  if (DocHelpers.isViewSelected(selectedNavItem)) {
+    const enableStable = !DocHelpers.selectedItemIsPartitionedView(designDocs, selectedNavItem, isDbPartitioned);
+    return enableStable;
+  }
+  return true;
+};
+
+const mapStateToProps = ({indexResults, sidebar, databases}, ownProps) => {
   const queryOptionsPanel = getQueryOptionsPanel(indexResults);
   return {
     contentVisible: queryOptionsPanel.isVisible,
@@ -61,6 +69,7 @@ const mapStateToProps = ({indexResults, sidebar}, ownProps) => {
     descending: queryOptionsPanel.descending,
     skip: queryOptionsPanel.skip,
     limit: queryOptionsPanel.limit,
+    enableStable: enableStable(sidebar.designDocList, ownProps.selectedNavItem, databases.isDbPartitioned),
     stable: queryOptionsPanel.stable,
     update: queryOptionsPanel.update,
     fetchParams: getFetchParams(indexResults),

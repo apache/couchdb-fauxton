@@ -113,6 +113,7 @@ export default class QueryOptions extends React.Component {
             groupLevel={this.props.groupLevel}
             updateGroupLevel={this.props.queryOptionsUpdateGroupLevel}
             docURL={FauxtonAPI.constants.DOC_URLS.GENERAL}
+            enableStable={this.props.enableStable}
             stable={this.props.stable}
             toggleStable={this.props.queryOptionsToggleStable}
             update={this.props.update}

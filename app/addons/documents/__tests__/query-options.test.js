@@ -10,11 +10,10 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+import { shallow, mount } from 'enzyme';
 import React from 'react';
-import ReactDOM from 'react-dom';
-import { shallow } from 'enzyme';
-import QueryOptions from '../index-results/components/queryoptions/QueryOptions';
 import sinon from 'sinon';
+import QueryOptions from '../index-results/components/queryoptions/QueryOptions';
 import Constants from '../constants';
 
 describe('QueryOptions', () => {
@@ -27,7 +26,10 @@ describe('QueryOptions', () => {
     queryOptionsToggleStable: () => {},
     queryOptionsChangeUpdate: () => {},
     stable: false,
-    update: 'true'
+    update: 'true',
+    betweenKeys: {},
+    showReduce: true,
+    enableStable: true
   };
 
   it('calls resetPagination and queryOptionsExecute on submit', () => {
@@ -300,4 +302,50 @@ describe('QueryOptions', () => {
     const isHighlighted = wrapper.find('ToggleHeaderButton').prop('active');
     expect(isHighlighted).toBe(false);
   });
+
+  it('stable option is only enabled when enableStable is true', () => {
+    const wrapper = mount(<QueryOptions
+      {...props}
+      ddocsOnly={true}
+      update='true'
+      queryOptionsRemoveFilterOnlyDdocs={() => {}}
+      queryOptionsApplyFilterOnlyDdocs={() => {}}
+      queryOptionsExecute={() => {}}
+      resetPagination={() => {}}
+      queryOptionsToggleVisibility={() => {}}
+      queryOptionsParams={{}}
+      selectedLayout={Constants.LAYOUT_ORIENTATION.METADATA}
+      changeLayout={() => {}}
+      showReduce={true}
+      enableStable={true}
+    />);
+
+    expect(wrapper.find('input#qoStable').prop("disabled")).toBe(false);
+    wrapper.setProps({enableStable: false});
+    expect(wrapper.find('input#qoStable').prop("disabled")).toBe(true);
+  });
+
+  it('reduce option is only displayed when showReduce is true', () => {
+    const wrapper = mount(<QueryOptions
+      {...props}
+      ddocsOnly={true}
+      update='true'
+      queryOptionsRemoveFilterOnlyDdocs={() => {}}
+      queryOptionsApplyFilterOnlyDdocs={() => {}}
+      queryOptionsExecute={() => {}}
+      resetPagination={() => {}}
+      queryOptionsToggleVisibility={() => {}}
+      queryOptionsParams={{}}
+      selectedLayout={Constants.LAYOUT_ORIENTATION.METADATA}
+      changeLayout={() => {}}
+      showReduce={true}
+      enableStable={true}
+    />);
+
+    expect(wrapper.find('input#qoReduce').exists()).toBe(true);
+
+    wrapper.setProps({showReduce: false});
+    expect(wrapper.find('input#qoReduce').exists()).toBe(false);
+  });
+
 });
