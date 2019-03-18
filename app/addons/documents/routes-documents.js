@@ -117,7 +117,9 @@ var DocumentsRouteObject = BaseRoute.extend({
     const selectedNavItem = new SidebarItemSelection(tab);
     ComponentsActions.showDeleteDatabaseModal({showDeleteModal: false, dbId: ''});
 
-    const endpoint = this.database.allDocs.urlRef("apiurl", {});
+    const endpoint = partitionKey ?
+      FauxtonAPI.urls('partitioned_allDocs', 'apiurl', encodeURIComponent(databaseName), encodeURIComponent(partitionKey)) :
+      this.database.allDocs.urlRef("apiurl", {});
     const docURL = FauxtonAPI.constants.DOC_URLS.GENERAL;
     const navigateToPartitionedAllDocs = (partKey) => {
       const baseUrl = FauxtonAPI.urls('partitioned_allDocs', 'app', encodeURIComponent(databaseName),
