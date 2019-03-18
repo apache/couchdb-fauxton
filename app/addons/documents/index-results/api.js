@@ -19,10 +19,6 @@ import FauxtonAPI from '../../../core/api';
 export const queryAllDocs = (fetchUrl, partitionKey, params) => {
   // Exclude params 'group', 'reduce' and 'group_level' if present since they not allowed for '_all_docs'
   Object.assign(params, {reduce: undefined, group: undefined, group_level: undefined});
-  if (partitionKey) {
-    // partition filter overrides any 'between keys' values set
-    Object.assign(params, {inclusive_end: false, start_key: `"${partitionKey}:"`, end_key: `"${partitionKey}:\ufff0"`});
-  }
   const query = app.utils.queryString(params);
   const url = `${fetchUrl}${fetchUrl.includes('?') ? '&' : '?'}${query}`;
   return get(url).then(json => {

@@ -103,7 +103,9 @@ var DocumentsRouteObject = BaseRoute.extend({
     const params = this.createParams(options);
     const docParams = params.docParams;
 
-    const url = FauxtonAPI.urls('allDocsSanitized', 'server', databaseName);
+    const url = partitionKey ?
+      FauxtonAPI.urls('partitioned_allDocs', 'server', encodeURIComponent(databaseName), encodeURIComponent(partitionKey)) :
+      FauxtonAPI.urls('allDocsSanitized', 'server', databaseName);
 
     // this is used for the header and sidebar
     this.database.buildAllDocs(docParams);
