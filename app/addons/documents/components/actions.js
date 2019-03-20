@@ -15,15 +15,16 @@ import { get } from "../../../core/ajax";
 
 export default {
   fetchAllDocsWithKey: (database, partitionKey) => {
-    const keyPrefix = partitionKey ? `${partitionKey}:` : "";
     return (id, callback) => {
       const query = '?' + app.utils.queryParams({
-        startkey: JSON.stringify(keyPrefix + id),
-        endkey: JSON.stringify(keyPrefix + id + "\u9999"),
+        startkey: JSON.stringify(id),
+        endkey: JSON.stringify(id + "\u9999"),
         limit: 30
       });
 
-      const url = FauxtonAPI.urls('allDocs', 'server', database.safeID(), query);
+      const url = partitionKey ?
+        FauxtonAPI.urls('partitioned_allDocs', 'server', database.safeID(), encodeURIComponent(partitionKey), query) :
+        FauxtonAPI.urls('allDocs', 'server', database.safeID(), query);
       get(url).then(res => {
         let options = [];
         if (!res.error) {
