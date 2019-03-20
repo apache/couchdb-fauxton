@@ -66,6 +66,9 @@ FauxtonAPI.registerUrls('allDocs', {
 FauxtonAPI.registerUrls('partitioned_allDocs', {
   app: function (databaseName, partitionKey, query) {
     return 'database/' + databaseName + '/_partition/' + partitionKey + '/_all_docs' + getQueryParam(query);
+  },
+  apiurl: function (databaseName, partitionKey, query) {
+    return Helpers.getApiUrl('/' + databaseName + '/_partition/' + partitionKey + '/_all_docs' + getQueryParam(query));
   }
 });
 
