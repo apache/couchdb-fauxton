@@ -69,10 +69,10 @@ class App extends React.Component {
           <GlobalNotificationsContainer />
           <NotificationPanelContainer />
         </div>
-        <div role="main" id="main"  className={mainClass}>
+        <div id="main"  className={mainClass}>
           <div id="app-container">
             <div className="wrapper">
-              <div className="pusher">
+              <div role="main" className="pusher">
                 <ContentWrapper router={this.props.router} setNavbarActiveLink={this.props.setNavbarActiveLink}/>
               </div>
               <div id="primary-navbar">
