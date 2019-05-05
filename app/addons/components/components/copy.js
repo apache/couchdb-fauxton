@@ -49,7 +49,7 @@ export class Copy extends React.Component {
 
   getClipboardElement () {
     if (this.props.displayType === 'icon') {
-      return (<i className="fontawesome icon-paste"></i>);
+      return (<i aria-hidden="true" className="fontawesome icon-paste"></i>);
     }
     return this.props.textDisplay;
   }
@@ -58,6 +58,7 @@ export class Copy extends React.Component {
     const btnClasses = this.props.displayType === 'input' ? "btn copy-button" : "copy" + " clipboard-copy-element";
     return (
       <button
+        aria-label="Copy to Clipboard"
         className={btnClasses}
         data-clipboard-text={this.props.text}
         title={this.props.title}
