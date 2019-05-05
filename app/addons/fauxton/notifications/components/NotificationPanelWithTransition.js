@@ -47,9 +47,9 @@ export default class NotificationPanelWithTransition extends React.Component {
         {...this.props} />;
     });
     return (
-      <span>
+      <aside aria-label="Notifications">
         {panel}
-      </span>
+      </aside>
     );
   };
 

@@ -29,8 +29,8 @@ const Burger = ({toggleMenu, isMinimized}) => {
     'icon-signin faux-navbar__burger__icon--flipped';
 
   return (
-    <div className={burgerClasses} onClick={toggleMenu}>
-      <i className={"faux-navbar__burger__icon " + icon}></i>
+    <div aria-expanded={!isMinimized} aria-label="Toggle Navigation Menu" className={burgerClasses} onClick={toggleMenu} role="button" tabIndex="0">
+      <i aria-hidden="true" className={"faux-navbar__burger__icon " + icon}></i>
     </div>
   );
 };

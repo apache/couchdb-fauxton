@@ -18,10 +18,11 @@ import classNames from 'classnames';
 
 const NavLink = ({link, active, isMinimized}) => {
 
+  const isActive = active === link.title;
   const linkClass = classNames(
     'faux-navbar__link',
-    {'faux-navbar__link--active':  active === link.title},
-    {'faux-navbar__link--inactive': active !== link.title},
+    {'faux-navbar__link--active':  isActive},
+    {'faux-navbar__link--inactive': !isActive},
     {'faux-navbar--wide':  !isMinimized},
     {'faux-navbar--narrow': isMinimized}
   );
@@ -33,7 +34,7 @@ const NavLink = ({link, active, isMinimized}) => {
   let linkIcon = null;
   if (link.icon) {
     linkIcon = (
-      <i className={classNames(
+      <i aria-hidden="true" className={classNames(
         link.icon,
         'fonticon faux-navbar__icon',
         {'faux-navbar__icon-badge': link.badge})}>
@@ -42,7 +43,7 @@ const NavLink = ({link, active, isMinimized}) => {
   }
 
   return (
-    <a className={linkClass} href={link.href} target={link.target ? '_blank' : null} data-bypass={link.target ? 'true' : null}>
+    <a aria-current={isActive ? "page" : null } aria-label={link.title} className={linkClass} href={link.href} target={link.target ? '_blank' : null} data-bypass={link.target ? 'true' : null}>
       <div data-nav-name={link.title} className="faux-navbar__itemarea">
         {linkIcon}
         {linkTitle}
