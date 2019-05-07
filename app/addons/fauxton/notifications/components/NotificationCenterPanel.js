@@ -103,10 +103,10 @@ export default class NotificationCenterPanel extends React.Component {
           <header className="flex-layout flex-row">
             <span className="fonticon fonticon-bell" />
             <h1 className="flex-body">Notifications</h1>
-            <button type="button" onClick={this.props.hideNotificationCenter}>×</button>
+            <button aria-label="Hide Notifications Center" type="button" onClick={this.props.hideNotificationCenter}>×</button>
           </header>
 
-          <ul className="notification-filter flex-layout flex-row">
+          <ul aria-label="Filters" className="notification-filter flex-layout flex-row">
             <li className={filterClasses.all} title="All notifications" data-filter="all"
               onClick={() => this.props.selectNotificationFilter('all')}>All</li>
             <li className={filterClasses.success} title="Success notifications" data-filter="success"

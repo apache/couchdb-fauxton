@@ -231,12 +231,15 @@ class DatabaseRow extends React.Component {
 
         <td className="database-actions">
           <a className="db-actions btn fonticon-replicate set-replication-start"
+            aria-label={`Replicate ${id}`}
             title={"Replicate " + name}
             href={"#/replication/_create/" + encodedId} />
           <a
+            aria-label={`Set permissions for ${id}`}
             className="db-actions btn icon-lock set-permissions"
             title={"Set permissions for " + name} href={"#/database/" + encodedId + "/permissions"} />
           <a
+            aria-label={`Delete ${id}`}
             className="db-actions btn icon-trash"
             onClick={this.showDeleteDatabaseModal.bind(this, id, encodedId)}
             title={'Delete ' + id} data-bypass="true" />

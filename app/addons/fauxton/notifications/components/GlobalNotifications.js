@@ -123,7 +123,7 @@ export default class GlobalNotifications extends React.Component {
 
   render() {
     return (
-      <div id="global-notifications">
+      <div id="global-notifications" role="alert">
         <TransitionMotion
           styles={this.getStyles}
         >
