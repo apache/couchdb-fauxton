@@ -25,7 +25,6 @@ import {LoadLines} from './components/loadlines';
 import {ConfirmButton} from './components/confirmbutton';
 import {MenuDropDown} from './components/menudropdown';
 import {TrayContents, TrayWrapper, connectToStores} from './components/tray';
-import {ApiBarController} from './components/apibar';
 import {DeleteDatabaseModal} from './components/deletedatabasemodal';
 import {TabElement, TabElementWrapper} from './components/tabelement';
 import {Polling, RefreshBtn} from './components/polling';
@@ -53,7 +52,6 @@ export default {
   TrayContents,
   TrayWrapper,
   connectToStores,
-  ApiBarController,
   DeleteDatabaseModal,
   TabElement,
   TabElementWrapper,

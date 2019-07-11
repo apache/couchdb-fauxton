@@ -13,7 +13,6 @@
 import PropTypes from 'prop-types';
 
 import React from "react";
-import ReactDOM from "react-dom";
 import {Overlay} from 'react-bootstrap';
 import {TransitionMotion, spring} from 'react-motion';
 
@@ -144,7 +143,7 @@ export class TrayWrapper extends React.Component {
 
       const props = {};
       Object.keys(this.props).filter((k) => {
-        return this.props.hasOwnProperty(k);
+        return Object.prototype.hasOwnProperty.call(this.props, k);
       }).map((k) => {
         return props[k] = this.props[k];
       });
