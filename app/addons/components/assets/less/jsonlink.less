@@ -16,6 +16,8 @@
   padding: 16px 12px 12px 12px !important;
   height: 64px;
   background-color: rgba(0, 0, 0, 0);
+  text-align: center;
+  min-width: 55px;
 }
 
 .faux__jsonlink-link {
@@ -36,15 +38,6 @@
   font-size: 15px;
   padding-right: 3px;
   font-weight: 500;
-}
-
-@media screen and (max-width: 1200px) {
-  .faux__jsonlink-link {
-    font-size: 10px;
-  }
-  .faux__jsonlink-link-brackets {
-    font-size: 12px;
-  }
 }
 
 .faux__doclink {
@@ -68,4 +61,20 @@
 .faux__doclink-link:visited {
   text-decoration: none;
   color: #666;
+}
+
+@media (max-width: 1090px) {
+  #main:not(.closeMenu) {
+    .faux__jsonlink-link-label{
+      display: none;
+    }
+  }
+}
+
+@media (max-width: 1120px) {
+  #main.closeMenu {
+    .faux__jsonlink-link-label{
+      display: none;
+    }
+  }
 }

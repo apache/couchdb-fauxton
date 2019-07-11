@@ -12,9 +12,9 @@ import FauxtonAPI from "../../core/api";
 // License for the specific language governing permissions and limitations under
 // the License.
 
+import classnames from 'classnames';
 import PropTypes from 'prop-types';
-
-import React, { Fragment } from "react";
+import React from "react";
 import Components from "../components/react-components";
 import ComponentsStore from "../components/stores";
 import ComponentsActions from "../components/actions";
@@ -23,12 +23,12 @@ import FauxtonComponentsReact from "..//fauxton/components";
 import Stores from "./stores";
 import Actions from "./actions";
 
-import {Tooltip, OverlayTrigger} from 'react-bootstrap';
+import { Tooltip, OverlayTrigger } from 'react-bootstrap';
 
 const databasesStore = Stores.databasesStore;
 const deleteDbModalStore = ComponentsStore.deleteDbModalStore;
 
-const {DeleteDatabaseModal, ToggleHeaderButton, TrayContents} = Components;
+const { Accordion, AccordionItem, DeleteDatabaseModal, ToggleHeaderButton, TrayContents } = Components;
 
 
 class DatabasesController extends React.Component {
@@ -92,7 +92,7 @@ class DatabasesController extends React.Component {
   state = this.getStoreState();
 
   render() {
-    const {loading, dbList} = this.state;
+    const { loading, dbList } = this.state;
 
     return (
       <DatabaseTable
@@ -117,7 +117,7 @@ class DatabaseTable extends React.Component {
   createRows = (dbList) => {
     return dbList.map((item, k) => {
       return (
-        <DatabaseRow item={item} key={k} showPartitionedColumn={this.props.showPartitionedColumn}/>
+        <DatabaseRow item={item} key={k} showPartitionedColumn={this.props.showPartitionedColumn} />
       );
     });
   };
@@ -195,7 +195,7 @@ class DatabaseRow extends React.Component {
   };
 
   showDeleteDatabaseModal = (name) => {
-    ComponentsActions.showDeleteDatabaseModal({showDeleteModal: true, dbId: name});
+    ComponentsActions.showDeleteDatabaseModal({ showDeleteModal: true, dbId: name });
   };
 
   render() {
@@ -203,7 +203,7 @@ class DatabaseRow extends React.Component {
       item
     } = this.props;
 
-    const {encodedId, id, url, dataSize, docCount, docDelCount, showTombstoneWarning, failed, isPartitioned } = item;
+    const { encodedId, id, url, dataSize, docCount, docDelCount, showTombstoneWarning, failed, isPartitioned } = item;
     const tombStoneWarning = showTombstoneWarning ?
       (<GraveyardInfo docCount={docCount} docDelCount={docDelCount} />) : null;
 
@@ -249,7 +249,7 @@ class DatabaseRow extends React.Component {
   }
 }
 
-const GraveyardInfo = ({docCount, docDelCount}) => {
+const GraveyardInfo = ({ docCount, docDelCount }) => {
   const graveyardTitle = `This database has just ${docCount} docs and ${docDelCount} deleted docs`;
   const tooltip = <Tooltip id="graveyard-tooltip">{graveyardTitle}</Tooltip>;
 
@@ -267,7 +267,7 @@ class RightDatabasesHeader extends React.Component {
     this.state = this.getStoreState();
   }
 
-  getStoreState () {
+  getStoreState() {
     return {
       showPartitionedOption: databasesStore.isPartitionedDatabasesAvailable()
     };
@@ -281,7 +281,7 @@ class RightDatabasesHeader extends React.Component {
     databasesStore.off('change', this.onChange, this);
   }
 
-  onChange () {
+  onChange() {
     this.setState(this.getStoreState());
   }
 
@@ -289,7 +289,9 @@ class RightDatabasesHeader extends React.Component {
     return (
       <div className="header-right right-db-header flex-layout flex-row">
         <JumpToDatabaseWidget loadOptions={Actions.fetchAllDbsWithKey} />
-        <AddDatabaseWidget showPartitionedOption={this.state.showPartitionedOption}/>
+        <AddDatabaseWidget
+          showPartitionedOption={this.state.showPartitionedOption}
+          partitionedDbHelpText={this.props.partitionedDbHelpText} />
       </div>
     );
   }
@@ -301,7 +303,8 @@ class AddDatabaseWidget extends React.Component {
   };
 
   static propTypes = {
-    showPartitionedOption: PropTypes.bool.isRequired
+    showPartitionedOption: PropTypes.bool.isRequired,
+    partitionedDbHelpText: PropTypes.string
   };
 
   constructor(props) {
@@ -309,7 +312,7 @@ class AddDatabaseWidget extends React.Component {
     this.state = {
       isPromptVisible: false,
       databaseName: '',
-      partitionedSelected: false
+      partitionedSelected: undefined
     };
 
     this.onTrayToggle = this.onTrayToggle.bind(this);
@@ -318,32 +321,48 @@ class AddDatabaseWidget extends React.Component {
     this.onKeyUpInInput = this.onKeyUpInInput.bind(this);
     this.onChange = this.onChange.bind(this);
     this.onAddDatabase = this.onAddDatabase.bind(this);
-    this.onTogglePartitioned = this.onTogglePartitioned.bind(this);
+    this.onSetPartitioned = this.onSetPartitioned.bind(this);
+    this.onSetNotPartitioned = this.onSetNotPartitioned.bind(this);
   }
 
-  onTrayToggle () {
-    this.setState({isPromptVisible: !this.state.isPromptVisible});
+  getI18nText(key) {
+    if (this.props.i18n) {
+      return this.props.i18n[key];
+    }
+    return '';
   }
 
-  closeTray () {
-    this.setState({isPromptVisible: false});
+  onTrayToggle() {
+    this.setState({ isPromptVisible: !this.state.isPromptVisible });
   }
 
-  focusInput () {
+  closeTray() {
+    this.setState({ isPromptVisible: false });
+  }
+
+  focusInput() {
     this.newDbName.focus();
   }
 
-  onKeyUpInInput (e) {
+  onKeyUpInInput(e) {
     if (e.which === 13) {
       this.onAddDatabase();
     }
   }
 
-  onChange (e) {
-    this.setState({databaseName: e.target.value});
+  onChange(e) {
+    this.setState({ databaseName: e.target.value });
   }
 
-  onAddDatabase () {
+  onAddDatabase() {
+    if (this.props.showPartitionedOption && this.state.partitionedSelected === undefined) {
+      FauxtonAPI.addNotification({
+        type: 'error',
+        msg: 'Please select either Partitioned or Non-partitioned',
+        clear: true
+      });
+      return;
+    }
     const partitioned = this.props.showPartitionedOption ?
       this.state.partitionedSelected :
       undefined;
@@ -354,31 +373,54 @@ class AddDatabaseWidget extends React.Component {
     );
   }
 
-  onTogglePartitioned() {
-    this.setState({ partitionedSelected: !this.state.partitionedSelected });
+  onSetNotPartitioned() {
+    this.setState({ partitionedSelected: false });
   }
 
-  partitionedCheckobx() {
+  onSetPartitioned() {
+    this.setState({ partitionedSelected: true });
+  }
+
+  partitionedOption() {
     if (!this.props.showPartitionedOption) {
       return null;
     }
+    const partitionedDbHelp = this.props.partitionedDbHelpText ? (
+      <Accordion className='partitioned-db-help'>
+        <AccordionItem title='What is a Partitioned Database?'>
+          <p dangerouslySetInnerHTML={{__html: this.props.partitionedDbHelpText}} />
+        </AccordionItem>
+      </Accordion>
+    ) : null;
     return (
-      <Fragment>
-        <br/>
-        <label style={{margin: '10px 10px 0px 0px'}}>
-          <input
-            id="js-partitioned-db"
-            type="checkbox"
-            checked={this.state.partitionedSelected}
-            onChange={this.onTogglePartitioned}
-            style={{margin: '0px 10px 0px 0px'}} />
-          Partitioned
+      <div className='partitioned-db-section' >
+        <label htmlFor="partitioned-db" className='partitioned-db-label'>
+          Partitioning
         </label>
-      </Fragment>
+        <div className='partitioned-db-options'>
+          <input
+            id="partitioned-db"
+            type="radio"
+            checked={this.state.partitionedSelected === true}
+            onChange={this.onSetPartitioned} />
+          <label htmlFor="partitioned-db">Partitioned</label>
+          <input
+            id="non-partitioned-db"
+            type="radio"
+            checked={this.state.partitionedSelected === false}
+            onChange={this.onSetNotPartitioned} />
+          <label htmlFor="non-partitioned-db">Non-partitioned</label>
+        </div>
+        {partitionedDbHelp}
+      </div>
     );
   }
 
   render() {
+    const classNames = classnames('new-database-tray', {
+      'new-database-tray--expanded': this.props.showPartitionedOption
+    });
+
     return (
       <div>
         <ToggleHeaderButton
@@ -388,19 +430,39 @@ class AddDatabaseWidget extends React.Component {
           title="Create Database"
           fonticon="fonticon-new-database"
           text="Create Database" />
-        <TrayContents className="new-database-tray" contentVisible={this.state.isPromptVisible} closeTray={this.closeTray} onEnter={this.focusInput}>
-          <span className="add-on">Create Database</span>
-          <input
-            id="js-new-database-name"
-            ref={node => this.newDbName = node}
-            type="text"
-            value={this.state.databaseName}
-            onChange={this.onChange} onKeyUp={this.onKeyUpInInput}
-            className="input-xxlarge"
-            placeholder="Name of database"
-          />
-          <a className="btn" id="js-create-database" onClick={this.onAddDatabase}>Create</a>
-          { this.partitionedCheckobx() }
+        <TrayContents
+          className={classNames}
+          contentVisible={this.state.isPromptVisible}
+          closeTray={this.closeTray}
+          onEnter={this.focusInput} >
+          <div className='tray-contents'>
+            <div className='tray-header'>
+              <h3>Create Database</h3>
+            </div>
+            <div className='tray-body'>
+              <label htmlFor="js-new-database-name" className='db-name-label'>
+                Database name
+              </label>
+              <input
+                id="js-new-database-name"
+                ref={node => this.newDbName = node}
+                type="text"
+                value={this.state.databaseName}
+                onChange={this.onChange} onKeyUp={this.onKeyUpInInput}
+                className="input-xxlarge"
+                placeholder="database-name"
+              />
+              {this.partitionedOption()}
+            </div>
+            <div className='tray-footer'>
+              <a className="btn btn-cancel" id="js-cancel-create-database" onClick={this.closeTray}>
+                Cancel
+              </a>
+              <a className="btn btn-primary" id="js-create-database" onClick={this.onAddDatabase}>
+                Create
+              </a>
+            </div>
+          </div>
         </TrayContents>
       </div>
     );
@@ -408,7 +470,7 @@ class AddDatabaseWidget extends React.Component {
 }
 
 
-const JumpToDatabaseWidget = ({loadOptions}) => {
+const JumpToDatabaseWidget = ({ loadOptions }) => {
   return (
     <div data-name="jump-to-db" className="faux-header__searchboxwrapper">
       <div className="faux-header__searchboxcontainer">
@@ -417,7 +479,7 @@ const JumpToDatabaseWidget = ({loadOptions}) => {
           placeholder="Database name"
           loadOptions={loadOptions}
           clearable={false}
-          onChange={({value: databaseName}) => {
+          onChange={({ value: databaseName }) => {
             Actions.jumpToDatabase(databaseName);
           }} />
 
@@ -436,7 +498,7 @@ class DatabasePagination extends React.Component {
   };
 
   getStoreState = (props) => {
-    const {store} = props;
+    const { store } = props;
 
     return {
       totalAmountOfDatabases: store.getTotalAmountOfDatabases(),
@@ -446,7 +508,7 @@ class DatabasePagination extends React.Component {
   };
 
   componentDidMount() {
-    const {store} = this.props;
+    const { store } = this.props;
 
     store.on('change', this.onChange, this);
   }
@@ -456,12 +518,12 @@ class DatabasePagination extends React.Component {
     if (this.props.store) {
       this.props.store.off('change', this.onChange, this);
     }
-    const {store} = nextProps;
+    const { store } = nextProps;
     store.on('change', this.onChange, this);
   }
 
   componentWillUnmount() {
-    const {store} = this.props;
+    const { store } = this.props;
     store.off('change', this.onChange, this);
   }
 
@@ -482,7 +544,7 @@ class DatabasePagination extends React.Component {
   }
 
   render() {
-    const {limit, page, totalAmountOfDatabases} = this.state;
+    const { limit, page, totalAmountOfDatabases } = this.state;
     const start = 1 + (page - 1) * limit;
     const end = Math.min(totalAmountOfDatabases, page * limit);
 
@@ -496,7 +558,7 @@ class DatabasePagination extends React.Component {
             onClick={this.onPageLinkClick.bind(this)}
           />
         </div>
-        <PerPageSelector label="Databases per page" perPage={limit} perPageChange={this.onPerPageSelected.bind(this)}/>
+        <PerPageSelector label="Databases per page" perPage={limit} perPageChange={this.onPerPageSelected.bind(this)} />
         <div className="current-databases">
           Showing <span className="all-db-footer__range">{start}&ndash;{end}</span>
           &nbsp;of&nbsp;<span className="all-db-footer__total-db-count">{totalAmountOfDatabases}</span>

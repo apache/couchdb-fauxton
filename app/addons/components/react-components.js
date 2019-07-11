@@ -10,6 +10,7 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+import {Accordion, AccordionItem} from './components/accordion';
 import {Badge, BadgeList} from './components/badge';
 import {ToggleHeaderButton} from './components/toggleheaderbutton';
 import {BulkActionComponent} from './components/bulkaction';
@@ -33,6 +34,8 @@ import {TabWindowWrapper} from './components/tabwindowwrapper';
 import {ThrottledReactSelectAsync} from './components/throttledreacselect';
 
 export default {
+  Accordion,
+  AccordionItem,
   BadgeList,
   Badge,
   BulkActionComponent,
