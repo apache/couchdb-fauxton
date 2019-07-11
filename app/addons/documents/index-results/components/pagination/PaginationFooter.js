@@ -10,50 +10,70 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import React from 'react';
-import PagingControls from './PagingControls.js';
-import PerPageSelector from './PerPageSelector.js';
-import TableControls from './TableControls';
+import React from "react";
+import PagingControls from "./PagingControls.js";
+import PerPageSelector from "./PerPageSelector.js";
+import TableControls from "./TableControls";
 
 export default class PaginationFooter extends React.Component {
   constructor(props) {
     super(props);
   }
 
-  getPageNumberText () {
+  getPageNumberText() {
     const { docs, pageStart, pageEnd } = this.props;
 
     if (docs.length === 0) {
       return <span>Showing 0 documents.</span>;
     }
 
-    return <span>Showing document {pageStart} - {pageEnd}.</span>;
+    return (
+      <span>
+        Showing document {pageStart} - {pageEnd} of {docs.length} documents.
+      </span>
+    );
   }
 
-  perPageChange (amount) {
-    const { updatePerPageResults, fetchParams, queryOptionsParams } = this.props;
+  perPageChange(amount) {
+    const {
+      updatePerPageResults,
+      fetchParams,
+      queryOptionsParams
+    } = this.props;
     updatePerPageResults(amount, fetchParams, queryOptionsParams);
   }
 
-  nextClicked (event) {
+  nextClicked(event) {
     event.preventDefault();
 
-    const { canShowNext, fetchParams, queryOptionsParams, paginateNext, perPage } = this.props;
+    const {
+      canShowNext,
+      fetchParams,
+      queryOptionsParams,
+      paginateNext,
+      perPage
+    } = this.props;
     if (canShowNext) {
       paginateNext(fetchParams, queryOptionsParams, perPage);
     }
   }
 
-  previousClicked (event) {
+  previousClicked(event) {
     event.preventDefault();
 
-    const { canShowPrevious, fetchParams, queryOptionsParams, paginatePrevious, perPage } = this.props;
+    const {
+      canShowPrevious,
+      fetchParams,
+      queryOptionsParams,
+      paginatePrevious,
+      perPage
+    } = this.props;
     if (canShowPrevious) {
       paginatePrevious(fetchParams, queryOptionsParams, perPage);
     }
   }
 
-  render () {
+  render() {
     const {
       showPrioritizedEnabled,
       hasResults,
@@ -71,20 +91,24 @@ export default class PaginationFooter extends React.Component {
           nextClicked={this.nextClicked.bind(this)}
           previousClicked={this.previousClicked.bind(this)}
           canShowNext={canShowNext}
-          canShowPrevious={canShowPrevious} />
+          canShowPrevious={canShowPrevious}
+        />
 
         <div className="footer-controls">
           <div className="page-controls">
-            {showPrioritizedEnabled && hasResults ?
+            {showPrioritizedEnabled && hasResults ? (
               <TableControls
                 prioritizedEnabled={prioritizedEnabled}
                 displayedFields={displayedFields}
-                toggleShowAllColumns={toggleShowAllColumns} /> : null}
+                toggleShowAllColumns={toggleShowAllColumns}
+              />
+            ) : null}
           </div>
-          <PerPageSelector perPageChange={this.perPageChange.bind(this)} perPage={perPage} />
-          <div className="current-docs">
-            {this.getPageNumberText()}
-          </div>
+          <PerPageSelector
+            perPageChange={this.perPageChange.bind(this)}
+            perPage={perPage}
+          />
+          <div className="current-docs">{this.getPageNumberText()}</div>
         </div>
       </footer>
     );
