@@ -10,8 +10,6 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-/* global FormData */
-
 import FauxtonAPI from '../../../core/api';
 import { deleteRequest } from '../../../core/ajax';
 import ActionTypes from './actiontypes';

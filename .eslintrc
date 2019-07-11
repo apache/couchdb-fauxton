@@ -83,6 +83,11 @@
     "expect": true,
     "prettyPrint": true,
     "jest": true
-  }
+  },
 
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  }
 }

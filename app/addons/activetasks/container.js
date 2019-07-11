@@ -14,7 +14,6 @@ import { connect } from 'react-redux';
 import Controller from './layout';
 import {
   init,
-  changePollingInterval,
   setSearchTerm,
   sortByColumnHeader,
   switchTab,
@@ -43,7 +42,6 @@ const mapStateToProps = ({activetasks}) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     init: () => dispatch(init()),
-    changePollingInterval: (interval) => dispatch(changePollingInterval(interval)),
     setSearchTerm: (term) => dispatch(setSearchTerm(term)),
     sortByColumnHeader: (column) => dispatch(sortByColumnHeader(column)),
     switchTab: (tab) => dispatch(switchTab(tab)),

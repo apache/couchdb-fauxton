@@ -3,7 +3,7 @@
   "testPathIgnorePatterns": ["/node_modules/", "stub", "fakeActiveTaskResponse", "fixtures"],
 
   "setupFiles": ["./jest-shim.js"],
-  "setupTestFrameworkScriptFile": "./jest-setup.js",
+  "setupFilesAfterEnv": ["./jest-setup.js"],
 
   "moduleNameMapper": {
     "underscore": "lodash",
