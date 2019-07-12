@@ -14,7 +14,7 @@ import FauxtonAPI from "../../core/api";
 import ActionTypes from "./actiontypes";
 import * as CorsAPI from "./api";
 
-export const fetchAndLoadCORSOptions = (url, node) => (dispatch) => {
+const fetchAndLoadCORSOptions = (url, node) => (dispatch) => {
   const fetchCors = CorsAPI.fetchCORSConfig(url);
   const fetchHttp = CorsAPI.fetchHttpdConfig(url);
 
@@ -33,21 +33,21 @@ export const fetchAndLoadCORSOptions = (url, node) => (dispatch) => {
   });
 };
 
-export const showLoadingBars = () => {
+const showLoadingBars = () => {
   return {
     type: ActionTypes.CORS_SET_IS_LOADING,
     isLoading: true
   };
 };
 
-export const hideLoadingBars = () => {
+const hideLoadingBars = () => {
   return {
     type: ActionTypes.CORS_SET_IS_LOADING,
     isLoading: false
   };
 };
 
-export const loadCORSOptions = (options) => {
+const loadCORSOptions = (options) => {
   return {
     type: ActionTypes.EDIT_CORS,
     options: options,
@@ -55,20 +55,20 @@ export const loadCORSOptions = (options) => {
   };
 };
 
-export const showDomainDeleteConfirmation = (domain) => {
+const showDomainDeleteConfirmation = (domain) => {
   return {
     type: ActionTypes.CORS_SHOW_DELETE_DOMAIN_MODAL,
     domainToDelete: domain
   };
 };
 
-export const hideDomainDeleteConfirmation = () => {
+const hideDomainDeleteConfirmation = () => {
   return {
     type: ActionTypes.CORS_HIDE_DELETE_DOMAIN_MODAL
   };
 };
 
-export const saveCors = (url, options) => (dispatch) => {
+const saveCors = (url, options) => (dispatch) => {
   const promises = [];
 
   promises.push(CorsAPI.updateEnableCorsToHttpd(url, options.node, options.corsEnabled));
@@ -101,10 +101,29 @@ const errorReason = (error) => {
   return 'Reason: ' + ((error && error.message) || 'n/a');
 };
 
-export const sanitizeOrigins = (origins) => {
+const sanitizeOrigins = (origins) => {
   if (_.isEmpty(origins)) {
     return '';
   }
 
   return origins.join(',');
 };
+
+const Actions = {
+  fetchAndLoadCORSOptions,
+  showLoadingBars,
+  hideLoadingBars,
+  showDomainDeleteConfirmation,
+  hideDomainDeleteConfirmation,
+  loadCORSOptions,
+  sanitizeOrigins,
+  saveCors,
+  overrideFetchAndLoadCORSOptions: (newFn) => {
+    Actions.fetchAndLoadCORSOptions = newFn;
+  },
+  overrideSaveCors: (newFn) => {
+    Actions.saveCors = newFn;
+  }
+};
+
+export default Actions;
