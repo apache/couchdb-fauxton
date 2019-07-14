@@ -2,14 +2,9 @@
   "root": true,
   "parser": "babel-eslint",
 
-  "plugins": [
-    "react"
-  ],
+  "plugins": ["react", "prettier"],
 
-  "extends": [
-    "eslint:recommended",
-    "plugin:react/recommended"
-  ],
+  "extends": ["eslint:recommended", "plugin:react/recommended", "prettier", "prettier/react"],
 
   "rules": {
     "semi": ["error", "always"],
@@ -17,13 +12,13 @@
     "space-infix-ops": "error",
     "space-before-blocks": "error",
     "array-bracket-spacing": ["error", "never"],
-    "brace-style": ["error", "1tbs", { "allowSingleLine": true }],
+    "brace-style": ["error", "1tbs", {"allowSingleLine": true}],
     "comma-spacing": ["error", {"before": false, "after": true}],
     "computed-property-spacing": ["error", "never"],
     "eol-last": "error",
-    "indent": ["error", 2, { "SwitchCase": 1, "VariableDeclarator": { "var": 2, "let": 2, "const": 3 } }],
+    "indent": ["error", 2, {"SwitchCase": 1, "VariableDeclarator": {"var": 2, "let": 2, "const": 3}}],
     "no-case-declarations": "off",
-    "no-console": [1, { "allow": ["warn", "error", "info"] }],
+    "no-console": [1, {"allow": ["warn", "error", "info"]}],
     "no-else-return": "error",
     "no-mixed-spaces-and-tabs": ["error", "smart-tabs"],
     "no-trailing-spaces": "error",
@@ -33,7 +28,7 @@
     "no-unused-vars": ["error", {"varsIgnorePattern": "ReactDOM"}],
     "react/display-name": "off",
     // disabling for now since there are too many components without PropTypes
-    "react/prop-types": "off"    
+    "react/prop-types": "off"
   },
 
   "parserOptions": {
@@ -84,5 +79,4 @@
     "prettyPrint": true,
     "jest": true
   }
-
 }
