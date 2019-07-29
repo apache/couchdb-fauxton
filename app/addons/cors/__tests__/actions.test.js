@@ -11,7 +11,7 @@
 // the License.
 import utils from "../../../../test/mocha/testUtils";
 import FauxtonAPI from "../../../core/api";
-import * as Actions from "../actions";
+import Actions from "../actions";
 import * as CorsAPI from "../api";
 import sinon from "sinon";
 

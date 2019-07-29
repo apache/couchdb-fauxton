@@ -12,7 +12,6 @@ Contributions to CouchDB are governed by our [Code of Conduct][6] and a set of
 [Project Bylaws][7]. Apache CouchDB itself also has a [CONTRIBUTING.md][9] if
 you want to help with the larger project. Come join us!
 
-
 ## Contributor quick start
 
 If you never created a pull request before, welcome :tada: :smile: [Here is a great tutorial](https://egghead.io/series/how-to-contribute-to-an-open-source-project-on-github)
@@ -57,26 +56,40 @@ Now run:
 
 And your Fauxton dev server will be up and running at `localhost:8000`.
 
+Caveats:
+
+If the Fauxton UI appears to be held up loading data, check the
+browser dev tool error logs. If you see an error message like:
+
+```
+Refused to connect to '<URL>' because it violates the following Content Security Policy directive: "default-src 'self'". Note that 'connect-src' was not explicitly set, so 'default-src' is used as a fallback.
+```
+
+It means you need to enable CORS on CouchDB. There are a few ways of doing this:
+
+1. Directly in Fauxton through the Config panel (Gear icon on the side menu) under the CORS tab
+2. Use the [add-cors-to-couchdb](https://github.com/pouchdb/add-cors-to-couchdb) CLI
+3. Manually set it in CouchDB's [configuration files](https://docs.couchdb.org/en/1.3.0/cors.html#enabling-cors)
 
 ## Guide to Contributions
 
-We follow our coding-styleguide to make it easier for everyone to write, read and review code: 
+We follow our coding-styleguide to make it easier for everyone to write, read and review code:
 [https://github.com/apache/couchdb-fauxton/blob/master/styleguide.md](https://github.com/apache/couchdb-fauxton/blob/master/styleguide.md)
 
 To start working on a specific ticket, create a branch with the GitHub Issue # followed by a traincase description of the issue.
 
-> e.g.   1234-Added-support-for-list-functions
+> e.g. 1234-Added-support-for-list-functions
 
 If there is no GH Issue for the issue you have, you don't have to create one.
 
-Please describe the issue, how it happens and how you fixed it in the commit message. Before you submit the Pull 
+Please describe the issue, how it happens and how you fixed it in the commit message. Before you submit the Pull
 Request, please run our testsuite and make sure that it passes:
 
 ```
 grunt test
 ```
 
-You can also open `couchdb-fauxton/test/runner.html` in a browser. Click on the headlines of the testcases to just run 
+You can also open `couchdb-fauxton/test/runner.html` in a browser. Click on the headlines of the testcases to just run
 a specific test that fails - it should be faster than running the whole testsuite every time.
 
 Commit messages should follow the following style:
@@ -92,19 +105,18 @@ Fixes #XXX (if there is a GH Issue)
 Fixes apache/couchdb#XXX (if there is a CouchDB project GH Issue)
 ```
 
-When you're ready for a review, submit a Pull Request. We regularly check the PR list for Fauxton and should get back 
-to you with a code review.  If no one has responded to you yet, you can find us on [Freenode IRC in #couchdb-dev][8].
+When you're ready for a review, submit a Pull Request. We regularly check the PR list for Fauxton and should get back
+to you with a code review. If no one has responded to you yet, you can find us on [Freenode IRC in #couchdb-dev][8].
 Ping **garren**, **robertkowalski** or **michellep** though anyone in the room should be able to help you.
 
 ## Get in Touch
 
-We appreciate constructive feedback from people who use CouchDB, so don't be shy. We know there are bugs and we know 
+We appreciate constructive feedback from people who use CouchDB, so don't be shy. We know there are bugs and we know
 there is room for improvement.
 
 ʕ´•ᴥ•`ʔ Thanks!
 
 -- Fauxton team
-
 
 [6]: http://couchdb.apache.org/conduct.html
 [7]: http://couchdb.apache.org/bylaws.html
