@@ -25,9 +25,7 @@ exports.checkForDatabaseCreated = function checkForDatabaseCreated (couchUrl, da
   }, timeout);
 
   const intervalId = setInterval(() => {
-    console.log(`Checking if db ${databaseName} exists on ${couchUrl}`);
     request(couchUrl + '/_all_dbs', function (er, res, body) {
-      console.log(`Checking if db ${databaseName} exists on ${couchUrl}`);
       if (body) {
         const reg = new RegExp('"' + databaseName + '"', 'g');
         if (reg.test(body)) {
