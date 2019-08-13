@@ -37,7 +37,7 @@ export class TrayContents extends React.Component {
 
   getChildren = (items) => {
     const {style} = items[0];
-    var className = "tray show-tray " + this.props.className;
+    const className = "tray show-tray " + this.props.className;
     return (
       <div key={'1'} id={this.props.id} style={{opacity: style.opacity, top: style.top + 'px'}} className={className}>
         {this.props.children}
@@ -47,7 +47,7 @@ export class TrayContents extends React.Component {
   willEnter = () => {
     return {
       opacity: spring(1),
-      top: spring(55)
+      top: spring(64)
     };
   };
 

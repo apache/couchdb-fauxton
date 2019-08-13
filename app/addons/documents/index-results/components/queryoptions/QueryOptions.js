@@ -100,8 +100,8 @@ export default class QueryOptions extends React.Component {
   getTray () {
     return (
       <TrayContents closeTray={this.closeTray.bind(this)} contentVisible={this.props.contentVisible}
-        className="query-options"
-        id="query-options-tray">
+        className="query-options" id="query-options-tray"
+        container={this}>
 
         <form onSubmit={this.executeQuery.bind(this)} className="js-view-query-update custom-inputs">
           <MainFieldsView
