@@ -13,8 +13,8 @@
 @import "variables.less";
 @import "icons.less";
 
-input[type=text],
-input[type=password] {
+input[type="text"],
+input[type="password"] {
   .border-radius(0);
   padding: 12px;
   border: 1px solid #ccc;
@@ -78,7 +78,8 @@ button:focus {
     }
   }
 }
-.btn-primary, .btn-success {
+.btn-primary,
+.btn-success {
   color: @buttonText;
   background-color: @primaryGreen;
   border-color: @primaryGreen;
@@ -114,7 +115,8 @@ button:focus {
   }
 }
 
-.btn-warning, .btn-danger {
+.btn-warning,
+.btn-danger {
   color: @buttonText;
   background-color: @dangerRed;
   border-color: @dangerRed;
@@ -126,7 +128,12 @@ button:focus {
   }
 }
 
-.btn-success:hover, .btn-primary:hover, .btn-secondary:hover, .btn-tertiary:hover, .btn-warning:hover, .btn-danger:hover {
+.btn-success:hover,
+.btn-primary:hover,
+.btn-secondary:hover,
+.btn-tertiary:hover,
+.btn-warning:hover,
+.btn-danger:hover {
   background-color: @hoverHighlight;
   border-color: @hoverHighlight;
 }
@@ -154,8 +161,8 @@ button:focus {
 }
 
 .form-inline {
-  input[type=password],
-  input[type=text] {
+  input[type="password"],
+  input[type="text"] {
     width: auto;
   }
 }
@@ -168,7 +175,7 @@ button:focus {
 
 label {
   margin-right: 15px;
-  padding-left:0;
+  padding-left: 0;
   display: block;
   cursor: pointer;
   position: relative;
@@ -181,26 +188,26 @@ label {
   font-size: 12px;
 }
 
-a.help-link{
+a.help-link {
   color: @secondaryBlue;
   text-decoration: none;
   &:hover {
-    color: @hoverHighlight
+    color: @hoverHighlight;
   }
 }
 
-
-input[type=text].error {
+input[type="text"].error {
   border: red 1px solid;
 }
 
-form.view-query-update, form.view-query-save {
+form.view-query-update,
+form.view-query-save {
   max-width: 100%;
 }
 
 .custom-inputs {
-  input[type=radio],
-  input[type=checkbox] {
+  input[type="radio"],
+  input[type="checkbox"] {
     display: none;
   }
 
@@ -208,47 +215,49 @@ form.view-query-update, form.view-query-save {
     border-radius: 12px;
     background-color: rgba(255, 255, 255, 0.1);
     border: 2px solid rgba(255, 255, 255, 0.1);
-    transition: linear .2s, box-shadow linear .2s;
-    -moz-transition: linear .2s, box-shadow linear .2s;
-    -webkit-transition: linear .2s, box-shadow linear .2s;
+    transition: linear 0.2s, box-shadow linear 0.2s;
+    -moz-transition: linear 0.2s, box-shadow linear 0.2s;
+    -webkit-transition: linear 0.2s, box-shadow linear 0.2s;
   }
 
-  .controls > .radio:first-child, .controls > .checkbox:first-child {
+  .controls > .radio:first-child,
+  .controls > .checkbox:first-child {
     padding-top: 15px;
   }
 
-  .radio.inline, .checkbox.inline {
+  .radio.inline,
+  .checkbox.inline {
     display: inline-block;
     padding-top: 15px;
     margin-bottom: 12px;
     vertical-align: middle;
   }
 
-  input[type=checkbox] + label:hover:before {
+  input[type="checkbox"] + label:hover:before {
     border: 2px solid @white;
-    transition: linear .2s, box-shadow linear .2s;
-    -moz-transition: linear .2s, box-shadow linear .2s;
-    -webkit-transition: linear .2s, box-shadow linear .2s;
+    transition: linear 0.2s, box-shadow linear 0.2s;
+    -moz-transition: linear 0.2s, box-shadow linear 0.2s;
+    -webkit-transition: linear 0.2s, box-shadow linear 0.2s;
   }
 
   /* if the checkbox is disabled, we don't want the red border on hover */
-  input[type=checkbox]:disabled + label:hover:before {
+  input[type="checkbox"]:disabled + label:hover:before {
     border: none;
   }
 
   /* if the checkbox is disabled, we don't want the white border on hover */
-  input[type=checkbox]:disabled + label:hover:before {
+  input[type="checkbox"]:disabled + label:hover:before {
     border: none;
   }
 
-  input[type=checkbox]:checked + label {
+  input[type="checkbox"]:checked + label {
     .fonticon-ok;
   }
-  input[type=checkbox]:checked + label:before {
+  input[type="checkbox"]:checked + label:before {
     font-family: @fauxtonFont;
     font-size: 12px;
     background-color: inherit;
-    border: 2px solid #7C8085;
+    border: 2px solid #7c8085;
     color: @linkColor;
     text-align: center;
     line-height: 19px;
@@ -265,14 +274,14 @@ form.view-query-update, form.view-query-save {
     position: absolute;
     left: 0;
     bottom: 0;
-    background-color: #7C8085;
+    background-color: #7c8085;
   }
 
   .radio label:before {
     border-radius: 8px;
   }
 
-  input[type=radio]:checked + label:before {
+  input[type="radio"]:checked + label:before {
     content: "\2022";
     color: #f3f3f3;
     font-size: 30px;
@@ -311,7 +320,6 @@ div.add-dropdown {
     }
     li a {
       padding: 10px 15px 10px 12px;
-
     }
   }
   .dropdown-toggle {
@@ -345,13 +353,20 @@ input.errorHighlight {
       background-color: @hoverHighlight;
       color: #fff;
       .box-shadow(none);
-
     }
     &.active {
+      /**
+       * The Reselect Components dropdown will go under the btn group on active 
+       * since its relatively positioned before this component which is also relatively 
+       * positioned. Based on the stacking context, no amount of z-index applied
+       * to the dropdown will overcome the activated btns z-index set in Bootstrap.
+       * The fix is to apply a z-index of !important here to override boostraps styling
+       * so the dropdown can go over the activated button. 
+       */
+      z-index: 1 !important;
       background-color: @brandHighlight;
-      color: #FFFFFF;
+      color: #ffffff;
       .box-shadow(none);
     }
   }
-
 }
