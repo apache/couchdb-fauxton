@@ -13,11 +13,10 @@
 @import "../../../../../assets/less/variables.less";
 
 .document-result-screen {
-
   .loading-lines-wrapper {
     margin-left: auto;
     margin-right: auto;
-    width:  80px;
+    width: 80px;
   }
 
   .loading-lines {
@@ -28,6 +27,7 @@
 .document-result-screen__toolbar {
   display: flex;
   padding-bottom: 20px;
+  position: relative;
 
   .bulk-action-component {
     min-width: 90px;
@@ -41,12 +41,11 @@
     padding: 8px 0;
   }
 
-  .toolbar-dropdown {    
-    
+  .toolbar-dropdown {
     .btn {
       color: #666;
     }
-    
+
     .dropdown-menu.arrow:before {
       right: 80%;
     }
@@ -63,7 +62,6 @@
       }
     }
   }
-  
 }
 
 .document-result-screen__toolbar-flex-container {
@@ -101,11 +99,12 @@ a.document-result-screen__toolbar-create-btn:visited {
     text-align: center;
     i {
       padding-right: 0.5rem;
-    } 
+    }
   }
 }
 .watermark-logo {
-  background: transparent url('../../../../../assets/img/couch-watermark.png') no-repeat 50% 50%;
+  background: transparent url("../../../../../assets/img/couch-watermark.png")
+    no-repeat 50% 50%;
   height: 205px;
   text-align: center;
   margin: 0 20%;
@@ -116,7 +115,6 @@ a.document-result-screen__toolbar-create-btn:visited {
 
 .table-view-docs {
   position: absolute;
-
 
   .bulk-action-component {
     padding-bottom: 0;
@@ -150,13 +148,16 @@ a.document-result-screen__toolbar-create-btn:visited {
       }
     }
   }
-  td, th, td a {
+  td,
+  th,
+  td a {
     vertical-align: middle;
     line-height: 20px;
     font-size: 0.875rem;
   }
 
-  td, th {
+  td,
+  th {
     color: @defaultHTag;
     max-width: 160px;
     overflow: hidden;
@@ -175,16 +176,17 @@ a.document-result-screen__toolbar-create-btn:visited {
       font-size: 1rem;
     }
   }
-  td.tableview-checkbox-cell, th.tableview-header-el-checkbox {
+  td.tableview-checkbox-cell,
+  th.tableview-header-el-checkbox {
     width: 35px;
     padding-left: 0px;
   }
   .tableview-conflict {
-    color: #F00;
+    color: #f00;
   }
   .icon-code-fork {
     padding-right: 2px;
-    color: #F00;
+    color: #f00;
   }
   .tableview-el-last {
     width: 75px;
@@ -235,7 +237,6 @@ a.document-result-screen__toolbar-create-btn:visited {
 }
 
 .document-result-screen {
-
   .table-bulkselector-section {
     .bulk-action-component {
       float: left;
