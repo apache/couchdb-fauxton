@@ -112,35 +112,42 @@ export default class ResultsScreen extends React.Component {
     );
   }
 
-  render() {
-    let mainView = null;
-    let noResultsView = null;
-
+  getMainView() {
     if (this.props.isLoading) {
-      mainView = (
+      return (
         <div className="loading-lines-wrapper">
           <LoadLines />
         </div>
       );
-    } else if (this.props.noResultsWarning) {
-      noResultsView = (
-        <NoResultsScreen text={this.props.noResultsWarning} isWarning={true} />
-      );
-    } else if (!this.props.hasResults) {
-      noResultsView = <NoResultsScreen text={this.props.textEmptyIndex} />;
-    } else if (
-      this.props.selectedLayout === Constants.LAYOUT_ORIENTATION.JSON
-    ) {
-      mainView = this.getDocumentStyleView();
-    } else {
-      mainView = this.getTableStyleView();
+    } else if (!this.props.noResultsWarning && this.props.hasResults) {
+      if (this.props.selectedLayout === Constants.LAYOUT_ORIENTATION.JSON) {
+        return this.getDocumentStyleView();
+      }
+      return this.getTableStyleView();
     }
+  }
 
+  getNoResultScreen() {
+    if (!this.props.isLoading) {
+      if (this.props.noResultsWarning) {
+        return (
+          <NoResultsScreen
+            text={this.props.noResultsWarning}
+            isWarning={true}
+          />
+        );
+      } else if (!this.props.hasResults) {
+        return <NoResultsScreen text={this.props.textEmptyIndex} />;
+      }
+    }
+  }
+
+  render() {
     return (
       <div className="document-result-screen">
-        {noResultsView}
+        {this.getNoResultScreen()}
         <ResultsToolBar {...this.props} />
-        {mainView}
+        {this.getMainView()}
       </div>
     );
   }
