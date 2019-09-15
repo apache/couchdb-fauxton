@@ -10,13 +10,13 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import React from "react";
-import FauxtonAPI from "../../../../../core/api";
-import Constants from "../../../constants";
-import Components from "../../../../components/react-components";
-import { ResultsToolBar } from "../../../components/results-toolbar";
-import NoResultsScreen from "./NoResultsScreen";
-import TableView from "./TableView";
+import React from 'react';
+import FauxtonAPI from '../../../../../core/api';
+import Constants from '../../../constants';
+import Components from '../../../../components/react-components';
+import { ResultsToolBar } from '../../../components/results-toolbar';
+import NoResultsScreen from './NoResultsScreen';
+import TableView from './TableView';
 
 const { LoadLines, Document } = Components;
 
@@ -52,7 +52,7 @@ export default class ResultsScreen extends React.Component {
   }
 
   getDocumentList() {
-    const noop = () => {};
+    const noop = () => { };
     const data = this.props.results.results;
     return _.map(data, (doc, i) => {
       return (
@@ -70,17 +70,17 @@ export default class ResultsScreen extends React.Component {
           docIdentifier={doc.id}
           resultsStyle={this.props.resultsStyle}
         >
-          {doc.url ? this.getUrlFragment("#" + doc.url) : doc.url}
+          {doc.url ? this.getUrlFragment(`#${doc.url}`) : doc.url}
         </Document>
       );
     });
   }
 
   getDocumentStyleView() {
-    let classNames = "view";
+    let classNames = 'view';
 
     if (this.props.isListDeletable) {
-      classNames += " show-select";
+      classNames = `${classNames} show-select`;
     }
 
     return (
