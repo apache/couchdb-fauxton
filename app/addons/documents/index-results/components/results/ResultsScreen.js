@@ -13,33 +13,33 @@
 import React from 'react';
 import FauxtonAPI from '../../../../../core/api';
 import Constants from '../../../constants';
-import Components from "../../../../components/react-components";
-import {ResultsToolBar} from "../../../components/results-toolbar";
+import Components from '../../../../components/react-components';
+import { ResultsToolBar } from '../../../components/results-toolbar';
 import NoResultsScreen from './NoResultsScreen';
 import TableView from './TableView';
 
 const { LoadLines, Document } = Components;
 
 export default class ResultsScreen extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props);
   }
 
-  componentDidMount () {
+  componentDidMount() {
     prettyPrint();
   }
 
-  componentDidUpdate () {
+  componentDidUpdate() {
     prettyPrint();
   }
 
-  onClick (id, doc) {
+  onClick(id, doc) {
     if (doc.url) {
       FauxtonAPI.navigate(doc.url);
     }
   }
 
-  getUrlFragment (url) {
+  getUrlFragment(url) {
     if (!this.props.isEditable) {
       return null;
     }
@@ -47,11 +47,12 @@ export default class ResultsScreen extends React.Component {
     return (
       <a href={url}>
         <i className="fonticon-pencil"></i>
-      </a>);
+      </a>
+    );
   }
 
-  getDocumentList () {
-    const noop = () => {};
+  getDocumentList() {
+    const noop = () => { };
     const data = this.props.results.results;
     return _.map(data, (doc, i) => {
       return (
@@ -67,30 +68,29 @@ export default class ResultsScreen extends React.Component {
           docChecked={this.props.docChecked}
           isDeletable={doc.isDeletable}
           docIdentifier={doc.id}
-          resultsStyle={this.props.resultsStyle} >
-          {doc.url ? this.getUrlFragment('#' + doc.url) : doc.url}
+          resultsStyle={this.props.resultsStyle}
+        >
+          {doc.url ? this.getUrlFragment(`#${doc.url}`) : doc.url}
         </Document>
       );
     });
   }
 
-  getDocumentStyleView () {
+  getDocumentStyleView() {
     let classNames = 'view';
 
     if (this.props.isListDeletable) {
-      classNames += ' show-select';
+      classNames = `${classNames} show-select`;
     }
 
     return (
       <div className={classNames}>
-        <div id="doc-list">
-          {this.getDocumentList()}
-        </div>
+        <div id="doc-list">{this.getDocumentList()}</div>
       </div>
     );
   }
 
-  getTableStyleView () {
+  getTableStyleView() {
     return (
       <div>
         <TableView
@@ -100,39 +100,55 @@ export default class ResultsScreen extends React.Component {
           isListDeletable={this.props.isListDeletable}
           data={this.props.results}
           isLoading={this.props.isLoading}
-
           removeItem={this.props.removeItem}
           isChecked={this.props.allDocumentsSelected}
           hasSelectedItem={this.props.hasSelectedItem}
           toggleSelect={this.toggleSelectAll}
           changeField={this.props.changeTableHeaderAttribute}
           resultsStyle={this.props.resultsStyle}
-          title="Select all docs that can be..." />
+          title="Select all docs that can be..."
+        />
       </div>
     );
   }
 
-  render () {
-    let mainView = null;
-
+  getMainView() {
     if (this.props.isLoading) {
-      mainView = <div className="loading-lines-wrapper"><LoadLines /></div>;
-    } else if (this.props.noResultsWarning) {
-      mainView = <NoResultsScreen text={this.props.noResultsWarning} isWarning={true}/>;
-    } else if (!this.props.hasResults) {
-      mainView = <NoResultsScreen text={this.props.textEmptyIndex}/>;
-    } else if (this.props.selectedLayout === Constants.LAYOUT_ORIENTATION.JSON) {
-      mainView = this.getDocumentStyleView();
-    } else {
-      mainView = this.getTableStyleView();
+      return (
+        <div className="loading-lines-wrapper">
+          <LoadLines />
+        </div>
+      );
+    } else if (!this.props.noResultsWarning && this.props.hasResults) {
+      if (this.props.selectedLayout === Constants.LAYOUT_ORIENTATION.JSON) {
+        return this.getDocumentStyleView();
+      }
+      return this.getTableStyleView();
     }
+  }
 
+  getNoResultScreen() {
+    if (!this.props.isLoading) {
+      if (this.props.noResultsWarning) {
+        return (
+          <NoResultsScreen
+            text={this.props.noResultsWarning}
+            isWarning={true}
+          />
+        );
+      } else if (!this.props.hasResults) {
+        return <NoResultsScreen text={this.props.textEmptyIndex} />;
+      }
+    }
+  }
+
+  render() {
     return (
       <div className="document-result-screen">
+        {this.getNoResultScreen()}
         <ResultsToolBar {...this.props} />
-        {mainView}
+        {this.getMainView()}
       </div>
     );
   }
-
 }
