@@ -1,8 +1,8 @@
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import CORSScreen from './CORSScreen';
 import Actions from '../actions';
 
-const mapStateToProps = ({ cors }) => {
+const mapStateToProps = ({cors}) => {
   return {
     node: cors.node,
     corsEnabled: cors.corsEnabled,
@@ -10,13 +10,13 @@ const mapStateToProps = ({ cors }) => {
     isLoading: cors.isLoading,
     origins: cors.origins,
     deleteDomainModalVisible: cors.deleteDomainModalVisible,
-    domainToDelete: cors.domainToDelete
+    domainToDelete: cors.domainToDelete,
   };
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    saveCORS: (options) => {
+    saveCORS: options => {
       dispatch(Actions.showLoadingBars());
       dispatch(Actions.saveCors(ownProps.url, options));
     },
@@ -25,13 +25,13 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       dispatch(Actions.fetchAndLoadCORSOptions(ownProps.url, ownProps.node));
     },
 
-    showDeleteDomainConfirmation: (domain) => {
+    showDeleteDomainConfirmation: domain => {
       dispatch(Actions.showDomainDeleteConfirmation(domain));
     },
 
     hideDeleteDomainConfirmation: () => {
       dispatch(Actions.hideDomainDeleteConfirmation());
-    }
+    },
   };
 };
 

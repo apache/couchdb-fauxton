@@ -10,13 +10,12 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import { Accordion, AccordionItem } from '../components/accordion';
-import { mount } from 'enzyme';
+import {Accordion, AccordionItem} from '../components/accordion';
+import {mount} from 'enzyme';
 import React from 'react';
 import sinon from 'sinon';
 
 describe('Accordion', () => {
-
   it('Shows and hides content after clicking on header', () => {
     const el = mount(
       <Accordion>
@@ -44,5 +43,4 @@ describe('Accordion', () => {
     el.find('.faux--accordion__item-header').simulate('click');
     sinon.assert.called(spy);
   });
-
 });

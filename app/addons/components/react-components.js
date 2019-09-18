@@ -61,5 +61,5 @@ export default {
   RefreshBtn,
   Copy,
   TabWindowWrapper,
-  ThrottledReactSelectAsync
+  ThrottledReactSelectAsync,
 };

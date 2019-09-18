@@ -12,11 +12,11 @@
 
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Collapse } from 'react-bootstrap';
+import {Collapse} from 'react-bootstrap';
 import classnames from 'classnames';
 
-export const Accordion = (props) => {
-  const { children, className, style } = props;
+export const Accordion = props => {
+  const {children, className, style} = props;
   const classNames = classnames('faux--accordion', className);
   return (
     <ul className={classNames} style={style}>
@@ -27,46 +27,36 @@ export const Accordion = (props) => {
 
 export class AccordionItem extends React.Component {
   static propTypes = {
-    title: PropTypes.string.isRequired
+    title: PropTypes.string.isRequired,
   };
 
   static defaultProps = {
-    onClick: () => { }
+    onClick: () => {},
   };
 
   state = {
-    open: false
+    open: false,
   };
 
-  handleClick = (event) => {
+  handleClick = event => {
     const newOpen = !this.state.open;
-    this.setState({ open: newOpen });
-    this.props.onClick({ isOpen: newOpen, event });
+    this.setState({open: newOpen});
+    this.props.onClick({isOpen: newOpen, event});
   };
 
   render() {
-    const { children, title } = this.props;
+    const {children, title} = this.props;
     const icon = this.state.open ? 'fonticon-down-open' : 'fonticon-right-open';
-    const contentClassNames = classnames(
-      'faux--accordion__item-content', 'collapse',
-      {in: this.state.open}
-    );
+    const contentClassNames = classnames('faux--accordion__item-content', 'collapse', {in: this.state.open});
 
     return (
-      <li
-        className='faux--accordion__item'
-        onClick={this.handleClick}>
-        <button
-          type="button"
-          className={`faux--accordion__item-header`}
-          onClick={this.handleClick}>
+      <li className="faux--accordion__item" onClick={this.handleClick}>
+        <button type="button" className={`faux--accordion__item-header`} onClick={this.handleClick}>
           <i className={icon}></i>
           <span>{title}</span>
         </button>
         <Collapse in={this.state.open}>
-          <div className={contentClassNames}>
-            { children }
-          </div>
+          <div className={contentClassNames}>{children}</div>
         </Collapse>
       </li>
     );

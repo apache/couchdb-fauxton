@@ -14,108 +14,125 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
 const settings = require('./tasks/helper')
   .init()
-  .readSettingsFile()
-  .template
-  .development;
+  .readSettingsFile().template.development;
 
 module.exports = {
-
   mode: 'development',
 
   entry: {
-    bundle: ['core-js/fn/array', 'core-js/fn/string/ends-with', 'core-js/fn/string/starts-with', 'core-js/fn/object', 'core-js/fn/symbol', 'core-js/fn/promise', 'regenerator-runtime/runtime', './app/main.js'] //Our starting point for our development.
+    bundle: [
+      'core-js/fn/array',
+      'core-js/fn/string/ends-with',
+      'core-js/fn/string/starts-with',
+      'core-js/fn/object',
+      'core-js/fn/symbol',
+      'core-js/fn/promise',
+      'regenerator-runtime/runtime',
+      './app/main.js',
+    ], //Our starting point for our development.
   },
 
   output: {
     path: path.join(__dirname, '/dist/debug/'),
-    filename: 'dashboard.assets/js/[name].js'
+    filename: 'dashboard.assets/js/[name].js',
   },
 
   plugins: [
     new webpack.optimize.LimitChunkCountPlugin({maxChunks: 1}),
-    new HtmlWebpackPlugin(Object.assign({
-      template: settings.src,
-      title: 'Project Fauxton',
-      filename: 'index.html',
-      generationLabel: 'Fauxton Dev',
-      generationDate: new Date().toISOString()
-    }, settings.variables)),
+    new HtmlWebpackPlugin(
+      Object.assign(
+        {
+          template: settings.src,
+          title: 'Project Fauxton',
+          filename: 'index.html',
+          generationLabel: 'Fauxton Dev',
+          generationDate: new Date().toISOString(),
+        },
+        settings.variables
+      )
+    ),
   ],
   module: {
     rules: [
       {
         test: /\.jsx?$/,
-        enforce: "pre",
+        enforce: 'pre',
         use: ['eslint-loader'],
-        exclude: /node_modules/
+        exclude: /node_modules/,
       },
       {
         test: /\.jsx?$/,
         exclude: /node_modules/,
-        use: 'babel-loader'
+        use: 'babel-loader',
       },
       {
         test: require.resolve('jquery'),
-        use: [{
-          loader: 'expose-loader',
-          options: 'jQuery'
-        },
-        {
-          loader: 'expose-loader',
-          options: '$'
-        }]
+        use: [
+          {
+            loader: 'expose-loader',
+            options: 'jQuery',
+          },
+          {
+            loader: 'expose-loader',
+            options: '$',
+          },
+        ],
       },
       {
-        test: require.resolve("backbone"),
-        use: [{
-          loader: 'expose-loader',
-          options: 'Backbone'
-        }]
+        test: require.resolve('backbone'),
+        use: [
+          {
+            loader: 'expose-loader',
+            options: 'Backbone',
+          },
+        ],
       },
       {
         test: /\.less$/,
         use: [
-          "style-loader",
-          "css-loader",
+          'style-loader',
+          'css-loader',
           {
-            loader: "less-loader",
+            loader: 'less-loader',
             options: {
               modifyVars: {
                 largeLogoPath: "'" + settings.variables.largeLogoPath + "'",
-                smallLogoPath: "'" + settings.variables.smallLogoPath + "'"
-              }
-            }
-          }
-        ]
+                smallLogoPath: "'" + settings.variables.smallLogoPath + "'",
+              },
+            },
+          },
+        ],
       },
       {
         test: /\.css$/,
-        use: [
-          "style-loader",
-          "css-loader"
-        ]
+        use: ['style-loader', 'css-loader'],
       },
       {
         test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
-        loader: 'url-loader?limit=10000&mimetype=application/font-woff&name=dashboard.assets/fonts/[name].[ext]'
+        loader: 'url-loader?limit=10000&mimetype=application/font-woff&name=dashboard.assets/fonts/[name].[ext]',
       },
       {
-        test: /\.woff2(\?\S*)?$/,   loader: 'url-loader?limit=10000&mimetype=application/font-woff2&name=dashboard.assets/fonts/[name].[ext]'
+        test: /\.woff2(\?\S*)?$/,
+        loader: 'url-loader?limit=10000&mimetype=application/font-woff2&name=dashboard.assets/fonts/[name].[ext]',
       },
       {
-        test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,    loader: 'url-loader?limit=10000&mimetype=application/font-tff&name=dashboard.assets/fonts/[name].[ext]'
+        test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
+        loader: 'url-loader?limit=10000&mimetype=application/font-tff&name=dashboard.assets/fonts/[name].[ext]',
       },
-      { test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,    loader: 'file-loader?name=dashboard.assets/fonts/[name].[ext]' },
-      { test: /\.png(\?v=\d+\.\d+\.\d+)?$/,    loader: 'file-loader?name=dashboard.assets/img/[name].[ext]' },
-      { test: /\.gif(\?v=\d+\.\d+\.\d+)?$/,    loader: 'file-loader?name=dashboard.assets/img/[name].[ext]' },
-      { test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,    loader: 'url-loader?limit=10000&mimetype=image/svg+xml&name=dashboard.assets/img/[name].[ext]' }
-    ]
+      {test: /\.eot(\?v=\d+\.\d+\.\d+)?$/, loader: 'file-loader?name=dashboard.assets/fonts/[name].[ext]'},
+      {test: /\.png(\?v=\d+\.\d+\.\d+)?$/, loader: 'file-loader?name=dashboard.assets/img/[name].[ext]'},
+      {test: /\.gif(\?v=\d+\.\d+\.\d+)?$/, loader: 'file-loader?name=dashboard.assets/img/[name].[ext]'},
+      {
+        test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
+        loader: 'url-loader?limit=10000&mimetype=image/svg+xml&name=dashboard.assets/img/[name].[ext]',
+      },
+    ],
   },
   resolve: {
     extensions: ['*', '.js', '.jsx'], //We can use .js and React's .jsx files using Babel
     alias: {
-      "underscore": "lodash",
-    }
+      underscore: 'lodash',
+    },
   },
-  devtool: 'source-map'
+  devtool: 'source-map',
 };

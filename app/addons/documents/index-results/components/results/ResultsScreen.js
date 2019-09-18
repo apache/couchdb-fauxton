@@ -14,11 +14,11 @@ import React from 'react';
 import FauxtonAPI from '../../../../../core/api';
 import Constants from '../../../constants';
 import Components from '../../../../components/react-components';
-import { ResultsToolBar } from '../../../components/results-toolbar';
+import {ResultsToolBar} from '../../../components/results-toolbar';
 import NoResultsScreen from './NoResultsScreen';
 import TableView from './TableView';
 
-const { LoadLines, Document } = Components;
+const {LoadLines, Document} = Components;
 
 export default class ResultsScreen extends React.Component {
   constructor(props) {
@@ -52,7 +52,7 @@ export default class ResultsScreen extends React.Component {
   }
 
   getDocumentList() {
-    const noop = () => { };
+    const noop = () => {};
     const data = this.props.results.results;
     return _.map(data, (doc, i) => {
       return (
@@ -130,12 +130,7 @@ export default class ResultsScreen extends React.Component {
   getNoResultScreen() {
     if (!this.props.isLoading) {
       if (this.props.noResultsWarning) {
-        return (
-          <NoResultsScreen
-            text={this.props.noResultsWarning}
-            isWarning={true}
-          />
-        );
+        return <NoResultsScreen text={this.props.noResultsWarning} isWarning={true} />;
       } else if (!this.props.hasResults) {
         return <NoResultsScreen text={this.props.textEmptyIndex} />;
       }

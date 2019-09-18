@@ -10,11 +10,11 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import FauxtonAPI from "../../core/api";
-import ActionTypes from "./actiontypes";
-import * as CorsAPI from "./api";
+import FauxtonAPI from '../../core/api';
+import ActionTypes from './actiontypes';
+import * as CorsAPI from './api';
 
-const fetchAndLoadCORSOptions = (url, node) => (dispatch) => {
+const fetchAndLoadCORSOptions = (url, node) => dispatch => {
   const fetchCors = CorsAPI.fetchCORSConfig(url);
   const fetchHttp = CorsAPI.fetchHttpdConfig(url);
 
@@ -22,13 +22,13 @@ const fetchAndLoadCORSOptions = (url, node) => (dispatch) => {
     const loadOptions = loadCORSOptions({
       origins: corsConfig.origins,
       corsEnabled: httpdConfig.enable_cors === 'true',
-      node: node
+      node: node,
     });
     dispatch(loadOptions);
-  }).catch((error) => {
+  }).catch(error => {
     FauxtonAPI.addNotification({
       msg: 'Could not load CORS settings.  ' + errorReason(error),
-      type: 'error'
+      type: 'error',
     });
   });
 };
@@ -36,39 +36,39 @@ const fetchAndLoadCORSOptions = (url, node) => (dispatch) => {
 const showLoadingBars = () => {
   return {
     type: ActionTypes.CORS_SET_IS_LOADING,
-    isLoading: true
+    isLoading: true,
   };
 };
 
 const hideLoadingBars = () => {
   return {
     type: ActionTypes.CORS_SET_IS_LOADING,
-    isLoading: false
+    isLoading: false,
   };
 };
 
-const loadCORSOptions = (options) => {
+const loadCORSOptions = options => {
   return {
     type: ActionTypes.EDIT_CORS,
     options: options,
-    isLoading: false
+    isLoading: false,
   };
 };
 
-const showDomainDeleteConfirmation = (domain) => {
+const showDomainDeleteConfirmation = domain => {
   return {
     type: ActionTypes.CORS_SHOW_DELETE_DOMAIN_MODAL,
-    domainToDelete: domain
+    domainToDelete: domain,
   };
 };
 
 const hideDomainDeleteConfirmation = () => {
   return {
-    type: ActionTypes.CORS_HIDE_DELETE_DOMAIN_MODAL
+    type: ActionTypes.CORS_HIDE_DELETE_DOMAIN_MODAL,
   };
 };
 
-const saveCors = (url, options) => (dispatch) => {
+const saveCors = (url, options) => dispatch => {
   const promises = [];
 
   promises.push(CorsAPI.updateEnableCorsToHttpd(url, options.node, options.corsEnabled));
@@ -79,29 +79,31 @@ const saveCors = (url, options) => (dispatch) => {
     promises.push(CorsAPI.updateCorsMethods(url, options.node));
   }
 
-  return FauxtonAPI.Promise.all(promises).then(() => {
-    FauxtonAPI.addNotification({
-      msg: 'CORS settings updated.',
-      type: 'success',
-      clear: true
+  return FauxtonAPI.Promise.all(promises)
+    .then(() => {
+      FauxtonAPI.addNotification({
+        msg: 'CORS settings updated.',
+        type: 'success',
+        clear: true,
+      });
+      dispatch(loadCORSOptions(options));
+    })
+    .catch(error => {
+      FauxtonAPI.addNotification({
+        msg: 'Error! Could not save your CORS settings. Please try again. ' + errorReason(error),
+        type: 'error',
+        clear: true,
+      });
+      dispatch(hideDomainDeleteConfirmation());
+      dispatch(hideLoadingBars());
     });
-    dispatch(loadCORSOptions(options));
-  }).catch((error) => {
-    FauxtonAPI.addNotification({
-      msg: 'Error! Could not save your CORS settings. Please try again. ' + errorReason(error),
-      type: 'error',
-      clear: true
-    });
-    dispatch(hideDomainDeleteConfirmation());
-    dispatch(hideLoadingBars());
-  });
 };
 
-const errorReason = (error) => {
+const errorReason = error => {
   return 'Reason: ' + ((error && error.message) || 'n/a');
 };
 
-const sanitizeOrigins = (origins) => {
+const sanitizeOrigins = origins => {
   if (_.isEmpty(origins)) {
     return '';
   }
@@ -118,12 +120,12 @@ const Actions = {
   loadCORSOptions,
   sanitizeOrigins,
   saveCors,
-  overrideFetchAndLoadCORSOptions: (newFn) => {
+  overrideFetchAndLoadCORSOptions: newFn => {
     Actions.fetchAndLoadCORSOptions = newFn;
   },
-  overrideSaveCors: (newFn) => {
+  overrideSaveCors: newFn => {
     Actions.saveCors = newFn;
-  }
+  },
 };
 
 export default Actions;

@@ -10,33 +10,36 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-
-
 var newDatabaseName = 'fauxton-selenium-tests-db-create';
 var invalidDatabaseName = 'fauxton-selenium-tests-#####';
 var helpers = require('../../../../../test/nightwatch_tests/helpers/helpers.js');
 module.exports = {
-
-  before: function (client, done) {
+  before: function(client, done) {
     const nano = helpers.getNanoInstance(client.globals.test_settings.db_url);
-    nano.db.destroy(newDatabaseName).then(() => {
-      done();
-    }).catch(()  => {
-      done();
-    });
+    nano.db
+      .destroy(newDatabaseName)
+      .then(() => {
+        done();
+      })
+      .catch(() => {
+        done();
+      });
   },
 
-  after: function (client, done) {
+  after: function(client, done) {
     const nano = helpers.getNanoInstance(client.globals.test_settings.db_url);
-    nano.db.destroy(newDatabaseName).then(() => {
-      done();
-    }).catch(()  => {
-      console.warn(`Could not delete ${newDatabaseName} db`);
-      done();
-    });
+    nano.db
+      .destroy(newDatabaseName)
+      .then(() => {
+        done();
+      })
+      .catch(() => {
+        console.warn(`Could not delete ${newDatabaseName} db`);
+        done();
+      });
   },
 
-  'Creates a Database' : function (client) {
+  'Creates a Database': function(client) {
     var waitTime = client.globals.maxWaitTime,
         baseUrl = client.globals.test_settings.launch_url;
 
@@ -55,17 +58,16 @@ module.exports = {
       .checkForDatabaseCreated(newDatabaseName, waitTime)
       .url(baseUrl + '/_all_dbs')
       .waitForElementVisible('html', waitTime, false)
-      .getText('html', function (result) {
+      .getText('html', function(result) {
         var data = result.value,
             createdDatabaseIsPresent = data.indexOf(newDatabaseName);
 
-        this.verify.ok(createdDatabaseIsPresent > 0,
-          'Checking if new database shows up in _all_dbs.');
+        this.verify.ok(createdDatabaseIsPresent > 0, 'Checking if new database shows up in _all_dbs.');
       })
       .end();
   },
 
-  'Creates a Database with invalid name' : function (client) {
+  'Creates a Database with invalid name': function(client) {
     var waitTime = client.globals.maxWaitTime,
         baseUrl = client.globals.test_settings.launch_url;
 
@@ -74,7 +76,7 @@ module.exports = {
       .checkForDatabaseDeleted(invalidDatabaseName, waitTime)
       .url(baseUrl)
 
-    // ensure the page has fully loaded
+      // ensure the page has fully loaded
       .waitForElementPresent('.databases.table', waitTime, false)
       .clickWhenVisible('.add-new-database-btn')
       .waitForElementVisible('#js-new-database-name', waitTime, false)
@@ -83,13 +85,12 @@ module.exports = {
       .waitForElementVisible('.global-notification.alert.alert-error', waitTime, false)
       .url(baseUrl + '/_all_dbs')
       .waitForElementVisible('html', waitTime, false)
-      .getText('html', function (result) {
+      .getText('html', function(result) {
         var data = result.value,
             createdDatabaseIsPresent = data.indexOf(invalidDatabaseName);
 
-        this.verify.ok(createdDatabaseIsPresent === -1,
-          'Checking if new database shows up in _all_dbs.');
+        this.verify.ok(createdDatabaseIsPresent === -1, 'Checking if new database shows up in _all_dbs.');
       })
       .end();
-  }
+  },
 };
