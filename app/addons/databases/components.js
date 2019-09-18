@@ -1,4 +1,4 @@
-import FauxtonAPI from "../../core/api";
+import FauxtonAPI from '../../core/api';
 
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License. You may obtain a copy of
@@ -12,27 +12,25 @@ import FauxtonAPI from "../../core/api";
 // License for the specific language governing permissions and limitations under
 // the License.
 
+import classnames from 'classnames';
 import PropTypes from 'prop-types';
-
-import React, { Fragment } from "react";
-import Components from "../components/react-components";
-import ComponentsStore from "../components/stores";
-import ComponentsActions from "../components/actions";
+import React from 'react';
+import Components from '../components/react-components';
+import ComponentsStore from '../components/stores';
+import ComponentsActions from '../components/actions';
 import PerPageSelector from '../documents/index-results/components/pagination/PerPageSelector';
-import FauxtonComponentsReact from "..//fauxton/components";
-import Stores from "./stores";
-import Actions from "./actions";
+import FauxtonComponentsReact from '..//fauxton/components';
+import Stores from './stores';
+import Actions from './actions';
 
 import {Tooltip, OverlayTrigger} from 'react-bootstrap';
 
 const databasesStore = Stores.databasesStore;
 const deleteDbModalStore = ComponentsStore.deleteDbModalStore;
 
-const {DeleteDatabaseModal, ToggleHeaderButton, TrayContents} = Components;
-
+const {Accordion, AccordionItem, DeleteDatabaseModal, ToggleHeaderButton, TrayContents} = Components;
 
 class DatabasesController extends React.Component {
-
   constructor(props) {
     super(props);
     this.reloadAfterDatabaseDeleted = this.reloadAfterDatabaseDeleted.bind(this);
@@ -45,7 +43,7 @@ class DatabasesController extends React.Component {
       showDeleteDatabaseModal: deleteDbModalStore.getShowDeleteDatabaseModal(),
       showPartitionedColumn: databasesStore.isPartitionedDatabasesAvailable(),
       page: databasesStore.getPage(),
-      limit: databasesStore.getLimit()
+      limit: databasesStore.getLimit(),
     };
   };
 
@@ -64,7 +62,7 @@ class DatabasesController extends React.Component {
   loadData() {
     Actions.init({
       page: this.state.page,
-      limit: this.state.limit
+      limit: this.state.limit,
     });
   }
 
@@ -85,7 +83,7 @@ class DatabasesController extends React.Component {
     }
     Actions.init({
       page,
-      limit: this.state.limit
+      limit: this.state.limit,
     });
   }
 
@@ -100,7 +98,8 @@ class DatabasesController extends React.Component {
         dbList={dbList}
         loading={loading}
         showPartitionedColumn={this.state.showPartitionedColumn}
-        onDatabaseDeleted={this.reloadAfterDatabaseDeleted} />
+        onDatabaseDeleted={this.reloadAfterDatabaseDeleted}
+      />
     );
   }
 }
@@ -111,14 +110,12 @@ class DatabaseTable extends React.Component {
     showDeleteDatabaseModal: PropTypes.object.isRequired,
     loading: PropTypes.bool.isRequired,
     showPartitionedColumn: PropTypes.bool.isRequired,
-    onDatabaseDeleted: PropTypes.func
+    onDatabaseDeleted: PropTypes.func,
   };
 
-  createRows = (dbList) => {
+  createRows = dbList => {
     return dbList.map((item, k) => {
-      return (
-        <DatabaseRow item={item} key={k} showPartitionedColumn={this.props.showPartitionedColumn}/>
-      );
+      return <DatabaseRow item={item} key={k} showPartitionedColumn={this.props.showPartitionedColumn} />;
     });
   };
 
@@ -131,7 +128,7 @@ class DatabaseTable extends React.Component {
 
   showDeleteDatabaseModal = () => {
     ComponentsActions.showDeleteDatabaseModal({
-      showDeleteModal: !this.props.showDeleteDatabaseModal.showDeleteModal
+      showDeleteModal: !this.props.showDeleteDatabaseModal.showDeleteModal,
     });
   };
 
@@ -150,21 +147,20 @@ class DatabaseTable extends React.Component {
         <DeleteDatabaseModal
           showHide={this.showDeleteDatabaseModal}
           modalProps={this.props.showDeleteDatabaseModal}
-          onSuccess={this.props.onDatabaseDeleted} />
+          onSuccess={this.props.onDatabaseDeleted}
+        />
         <table className="table table-striped fauxton-table-list databases">
           <thead>
             <tr>
               <th>Name</th>
               <th>Size</th>
               <th># of Docs</th>
-              {this.props.showPartitionedColumn ? (<th>Partitioned</th>) : null}
+              {this.props.showPartitionedColumn ? <th>Partitioned</th> : null}
               {this.getExtensionColumns()}
               <th>Actions</th>
             </tr>
           </thead>
-          <tbody>
-            {rows}
-          </tbody>
+          <tbody>{rows}</tbody>
         </table>
       </div>
     );
@@ -182,67 +178,74 @@ class DatabaseRow extends React.Component {
       docCount: PropTypes.number,
       docDelCount: PropTypes.number,
       isPartitioned: PropTypes.bool,
-      showTombstoneWarning: PropTypes.bool
+      showTombstoneWarning: PropTypes.bool,
     }).isRequired,
-    showPartitionedColumn: PropTypes.bool.isRequired
+    showPartitionedColumn: PropTypes.bool.isRequired,
   };
 
-  getExtensionColumns = (row) => {
+  getExtensionColumns = row => {
     var cols = FauxtonAPI.getExtensions('DatabaseTable:databaseRow');
     return _.map(cols, (Item, index) => {
       return <Item row={row} key={index} />;
     });
   };
 
-  showDeleteDatabaseModal = (name) => {
+  showDeleteDatabaseModal = name => {
     ComponentsActions.showDeleteDatabaseModal({showDeleteModal: true, dbId: name});
   };
 
   render() {
-    const {
-      item
-    } = this.props;
+    const {item} = this.props;
 
-    const {encodedId, id, url, dataSize, docCount, docDelCount, showTombstoneWarning, failed, isPartitioned } = item;
-    const tombStoneWarning = showTombstoneWarning ?
-      (<GraveyardInfo docCount={docCount} docDelCount={docDelCount} />) : null;
+    const {encodedId, id, url, dataSize, docCount, docDelCount, showTombstoneWarning, failed, isPartitioned} = item;
+    const tombStoneWarning = showTombstoneWarning ? (
+      <GraveyardInfo docCount={docCount} docDelCount={docDelCount} />
+    ) : null;
 
     // if the row status failed to load, inform the user
     if (failed) {
       return (
         <tr>
           <td data-name="database-load-fail-name">{id}</td>
-          <td colSpan="4" className="database-load-fail">This database failed to load.</td>
+          <td colSpan="4" className="database-load-fail">
+            This database failed to load.
+          </td>
         </tr>
       );
     }
-    const partitionedCol = this.props.showPartitionedColumn ?
-      (<td>{isPartitioned ? 'Yes' : 'No'}</td>) :
-      null;
+    const partitionedCol = this.props.showPartitionedColumn ? <td>{isPartitioned ? 'Yes' : 'No'}</td> : null;
     return (
       <tr>
         <td>
           <a href={url}>{id}</a>
         </td>
         <td>{dataSize}</td>
-        <td>{docCount} {tombStoneWarning}</td>
+        <td>
+          {docCount} {tombStoneWarning}
+        </td>
         {partitionedCol}
         {this.getExtensionColumns(item)}
 
         <td className="database-actions">
-          <a className="db-actions btn fonticon-replicate set-replication-start"
+          <a
+            className="db-actions btn fonticon-replicate set-replication-start"
             aria-label={`Replicate ${id}`}
-            title={"Replicate " + name}
-            href={"#/replication/_create/" + encodedId} />
+            title={'Replicate ' + name}
+            href={'#/replication/_create/' + encodedId}
+          />
           <a
             aria-label={`Set permissions for ${id}`}
             className="db-actions btn icon-lock set-permissions"
-            title={"Set permissions for " + name} href={"#/database/" + encodedId + "/permissions"} />
+            title={'Set permissions for ' + name}
+            href={'#/database/' + encodedId + '/permissions'}
+          />
           <a
             aria-label={`Delete ${id}`}
             className="db-actions btn icon-trash"
             onClick={this.showDeleteDatabaseModal.bind(this, id, encodedId)}
-            title={'Delete ' + id} data-bypass="true" />
+            title={'Delete ' + id}
+            data-bypass="true"
+          />
         </td>
       </tr>
     );
@@ -261,15 +264,14 @@ const GraveyardInfo = ({docCount, docDelCount}) => {
 };
 
 class RightDatabasesHeader extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = this.getStoreState();
   }
 
-  getStoreState () {
+  getStoreState() {
     return {
-      showPartitionedOption: databasesStore.isPartitionedDatabasesAvailable()
+      showPartitionedOption: databasesStore.isPartitionedDatabasesAvailable(),
     };
   }
 
@@ -281,7 +283,7 @@ class RightDatabasesHeader extends React.Component {
     databasesStore.off('change', this.onChange, this);
   }
 
-  onChange () {
+  onChange() {
     this.setState(this.getStoreState());
   }
 
@@ -289,7 +291,10 @@ class RightDatabasesHeader extends React.Component {
     return (
       <div className="header-right right-db-header flex-layout flex-row">
         <JumpToDatabaseWidget loadOptions={Actions.fetchAllDbsWithKey} />
-        <AddDatabaseWidget showPartitionedOption={this.state.showPartitionedOption}/>
+        <AddDatabaseWidget
+          showPartitionedOption={this.state.showPartitionedOption}
+          partitionedDbHelpText={this.props.partitionedDbHelpText}
+        />
       </div>
     );
   }
@@ -297,11 +302,12 @@ class RightDatabasesHeader extends React.Component {
 
 class AddDatabaseWidget extends React.Component {
   static defaultProps = {
-    showPartitionedOption: false
+    showPartitionedOption: false,
   };
 
   static propTypes = {
-    showPartitionedOption: PropTypes.bool.isRequired
+    showPartitionedOption: PropTypes.bool.isRequired,
+    partitionedDbHelpText: PropTypes.string,
   };
 
   constructor(props) {
@@ -309,7 +315,7 @@ class AddDatabaseWidget extends React.Component {
     this.state = {
       isPromptVisible: false,
       databaseName: '',
-      partitionedSelected: false
+      partitionedSelected: undefined,
     };
 
     this.onTrayToggle = this.onTrayToggle.bind(this);
@@ -318,130 +324,187 @@ class AddDatabaseWidget extends React.Component {
     this.onKeyUpInInput = this.onKeyUpInInput.bind(this);
     this.onChange = this.onChange.bind(this);
     this.onAddDatabase = this.onAddDatabase.bind(this);
-    this.onTogglePartitioned = this.onTogglePartitioned.bind(this);
+    this.onSetPartitioned = this.onSetPartitioned.bind(this);
+    this.onSetNotPartitioned = this.onSetNotPartitioned.bind(this);
   }
 
-  onTrayToggle () {
+  getI18nText(key) {
+    if (this.props.i18n) {
+      return this.props.i18n[key];
+    }
+    return '';
+  }
+
+  onTrayToggle() {
     this.setState({isPromptVisible: !this.state.isPromptVisible});
   }
 
-  closeTray () {
+  closeTray() {
     this.setState({isPromptVisible: false});
   }
 
-  focusInput () {
+  focusInput() {
     this.newDbName.focus();
   }
 
-  onKeyUpInInput (e) {
+  onKeyUpInInput(e) {
     if (e.which === 13) {
       this.onAddDatabase();
     }
   }
 
-  onChange (e) {
+  onChange(e) {
     this.setState({databaseName: e.target.value});
   }
 
-  onAddDatabase () {
-    const partitioned = this.props.showPartitionedOption ?
-      this.state.partitionedSelected :
-      undefined;
+  onAddDatabase() {
+    if (this.props.showPartitionedOption && this.state.partitionedSelected === undefined) {
+      FauxtonAPI.addNotification({
+        type: 'error',
+        msg: 'Please select either Partitioned or Non-partitioned',
+        clear: true,
+      });
+      return;
+    }
+    const partitioned = this.props.showPartitionedOption ? this.state.partitionedSelected : undefined;
 
-    Actions.createNewDatabase(
-      this.state.databaseName,
-      partitioned
-    );
+    Actions.createNewDatabase(this.state.databaseName, partitioned);
   }
 
-  onTogglePartitioned() {
-    this.setState({ partitionedSelected: !this.state.partitionedSelected });
+  onSetNotPartitioned() {
+    this.setState({partitionedSelected: false});
   }
 
-  partitionedCheckobx() {
+  onSetPartitioned() {
+    this.setState({partitionedSelected: true});
+  }
+
+  partitionedOption() {
     if (!this.props.showPartitionedOption) {
       return null;
     }
+    const partitionedDbHelp = this.props.partitionedDbHelpText ? (
+      <Accordion className="partitioned-db-help">
+        <AccordionItem title="What is a Partitioned Database?">
+          <p dangerouslySetInnerHTML={{__html: this.props.partitionedDbHelpText}} />
+        </AccordionItem>
+      </Accordion>
+    ) : null;
     return (
-      <Fragment>
-        <br/>
-        <label style={{margin: '10px 10px 0px 0px'}}>
-          <input
-            id="js-partitioned-db"
-            type="checkbox"
-            checked={this.state.partitionedSelected}
-            onChange={this.onTogglePartitioned}
-            style={{margin: '0px 10px 0px 0px'}} />
-          Partitioned
+      <div className="partitioned-db-section">
+        <label htmlFor="partitioned-db" className="partitioned-db-label">
+          Partitioning
         </label>
-      </Fragment>
+        <div className="partitioned-db-options">
+          <input
+            id="partitioned-db"
+            type="radio"
+            checked={this.state.partitionedSelected === true}
+            onChange={this.onSetPartitioned}
+          />
+          <label htmlFor="partitioned-db">Partitioned</label>
+          <input
+            id="non-partitioned-db"
+            type="radio"
+            checked={this.state.partitionedSelected === false}
+            onChange={this.onSetNotPartitioned}
+          />
+          <label htmlFor="non-partitioned-db">Non-partitioned</label>
+        </div>
+        {partitionedDbHelp}
+      </div>
     );
   }
 
   render() {
+    const classNames = classnames('new-database-tray', {
+      'new-database-tray--expanded': this.props.showPartitionedOption,
+    });
+
     return (
       <div>
         <ToggleHeaderButton
           selected={this.state.isPromptVisible}
           toggleCallback={this.onTrayToggle}
-          containerClasses='header-control-box add-new-database-btn'
+          containerClasses="header-control-box add-new-database-btn"
           title="Create Database"
           fonticon="fonticon-new-database"
-          text="Create Database" />
-        <TrayContents className="new-database-tray" contentVisible={this.state.isPromptVisible} closeTray={this.closeTray} onEnter={this.focusInput}>
-          <span className="add-on">Create Database</span>
-          <input
-            id="js-new-database-name"
-            ref={node => this.newDbName = node}
-            type="text"
-            value={this.state.databaseName}
-            onChange={this.onChange} onKeyUp={this.onKeyUpInInput}
-            className="input-xxlarge"
-            placeholder="Name of database"
-          />
-          <a className="btn" id="js-create-database" onClick={this.onAddDatabase}>Create</a>
-          { this.partitionedCheckobx() }
+          text="Create Database"
+        />
+        <TrayContents
+          className={classNames}
+          contentVisible={this.state.isPromptVisible}
+          closeTray={this.closeTray}
+          onEnter={this.focusInput}
+        >
+          <div className="tray-contents">
+            <div className="tray-header">
+              <h3>Create Database</h3>
+            </div>
+            <div className="tray-body">
+              <label htmlFor="js-new-database-name" className="db-name-label">
+                Database name
+              </label>
+              <input
+                id="js-new-database-name"
+                ref={node => (this.newDbName = node)}
+                type="text"
+                value={this.state.databaseName}
+                onChange={this.onChange}
+                onKeyUp={this.onKeyUpInInput}
+                className="input-xxlarge"
+                placeholder="database-name"
+              />
+              {this.partitionedOption()}
+            </div>
+            <div className="tray-footer">
+              <a className="btn btn-cancel" id="js-cancel-create-database" onClick={this.closeTray}>
+                Cancel
+              </a>
+              <a className="btn btn-primary" id="js-create-database" onClick={this.onAddDatabase}>
+                Create
+              </a>
+            </div>
+          </div>
         </TrayContents>
       </div>
     );
   }
 }
 
-
 const JumpToDatabaseWidget = ({loadOptions}) => {
   return (
     <div data-name="jump-to-db" className="faux-header__searchboxwrapper">
       <div className="faux-header__searchboxcontainer">
-
         <Components.ThrottledReactSelectAsync
           placeholder="Database name"
           loadOptions={loadOptions}
           clearable={false}
           onChange={({value: databaseName}) => {
             Actions.jumpToDatabase(databaseName);
-          }} />
-
+          }}
+        />
       </div>
     </div>
   );
 };
 JumpToDatabaseWidget.propTypes = {
-  loadOptions: PropTypes.func.isRequired
+  loadOptions: PropTypes.func.isRequired,
 };
 
 class DatabasePagination extends React.Component {
   static defaultProps = {
     linkPath: '_all_dbs',
-    store: databasesStore
+    store: databasesStore,
   };
 
-  getStoreState = (props) => {
+  getStoreState = props => {
     const {store} = props;
 
     return {
       totalAmountOfDatabases: store.getTotalAmountOfDatabases(),
       page: store.getPage(),
-      limit: store.getLimit()
+      limit: store.getLimit(),
     };
   };
 
@@ -496,9 +559,12 @@ class DatabasePagination extends React.Component {
             onClick={this.onPageLinkClick.bind(this)}
           />
         </div>
-        <PerPageSelector label="Databases per page" perPage={limit} perPageChange={this.onPerPageSelected.bind(this)}/>
+        <PerPageSelector label="Databases per page" perPage={limit} perPageChange={this.onPerPageSelected.bind(this)} />
         <div className="current-databases">
-          Showing <span className="all-db-footer__range">{start}&ndash;{end}</span>
+          Showing{' '}
+          <span className="all-db-footer__range">
+            {start}&ndash;{end}
+          </span>
           &nbsp;of&nbsp;<span className="all-db-footer__total-db-count">{totalAmountOfDatabases}</span>
           &nbsp;databases.
         </div>
@@ -515,5 +581,5 @@ export default {
   GraveyardInfo: GraveyardInfo,
   AddDatabaseWidget: AddDatabaseWidget,
   JumpToDatabaseWidget: JumpToDatabaseWidget,
-  DatabasePagination: DatabasePagination
+  DatabasePagination: DatabasePagination,
 };

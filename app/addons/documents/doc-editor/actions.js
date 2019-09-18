@@ -10,153 +10,164 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-/* global FormData */
-
 import FauxtonAPI from '../../../core/api';
-import { deleteRequest } from '../../../core/ajax';
+import {deleteRequest} from '../../../core/ajax';
 import ActionTypes from './actiontypes';
 
 var currentUploadHttpRequest;
 
-const dispatchInitDocEditor = (params) => {
+const dispatchInitDocEditor = params => {
   FauxtonAPI.reduxDispatch(initDocEditor(params));
 };
 
-const initDocEditor = (params) => (dispatch) => {
+const initDocEditor = params => dispatch => {
   const doc = params.doc;
 
   // ensure a clean slate
-  dispatch({ type: ActionTypes.RESET_DOC });
+  dispatch({type: ActionTypes.RESET_DOC});
 
-  doc.fetch().then(function () {
-    dispatch({
-      type: ActionTypes.DOC_LOADED,
-      options: {
-        doc: doc
+  doc.fetch().then(
+    function() {
+      dispatch({
+        type: ActionTypes.DOC_LOADED,
+        options: {
+          doc: doc,
+        },
+      });
+
+      if (params.onLoaded) {
+        params.onLoaded();
       }
-    });
+    },
+    function(xhr) {
+      if (xhr.status === 404) {
+        errorNotification(`The ${doc.id} document does not exist.`);
+      }
 
-    if (params.onLoaded) {
-      params.onLoaded();
+      FauxtonAPI.navigate(FauxtonAPI.urls('allDocs', 'app', params.database.id, ''));
     }
-  }, function (xhr) {
-    if (xhr.status === 404) {
-      errorNotification(`The ${doc.id} document does not exist.`);
-    }
-
-    FauxtonAPI.navigate(FauxtonAPI.urls('allDocs', 'app', params.database.id, ''));
-  });
+  );
 };
 
 const saveDoc = (doc, isValidDoc, onSave, navigateToUrl) => {
   if (isValidDoc) {
     FauxtonAPI.addNotification({
       msg: 'Saving document.',
-      clear: true
+      clear: true,
     });
 
-    doc.save().then(function () {
-      onSave(doc.prettyJSON());
-      if (navigateToUrl) {
-        FauxtonAPI.navigate(navigateToUrl, {trigger: true});
-      } else {
-        FauxtonAPI.navigate('#/' + FauxtonAPI.urls('allDocs', 'app',  FauxtonAPI.url.encode(doc.database.id)), {trigger: true});
-      }
-    }).fail(function (xhr) {
-      FauxtonAPI.addNotification({
-        msg: 'Save failed: ' + JSON.parse(xhr.responseText).reason,
-        type: 'error',
-        fade: false,
-        clear: true
+    doc
+      .save()
+      .then(function() {
+        onSave(doc.prettyJSON());
+        if (navigateToUrl) {
+          FauxtonAPI.navigate(navigateToUrl, {trigger: true});
+        } else {
+          FauxtonAPI.navigate('#/' + FauxtonAPI.urls('allDocs', 'app', FauxtonAPI.url.encode(doc.database.id)), {
+            trigger: true,
+          });
+        }
+      })
+      .fail(function(xhr) {
+        FauxtonAPI.addNotification({
+          msg: 'Save failed: ' + JSON.parse(xhr.responseText).reason,
+          type: 'error',
+          fade: false,
+          clear: true,
+        });
       });
-    });
-
   } else if (doc.validationError && doc.validationError === 'Cannot change a documents id.') {
-    errorNotification('You cannot edit the _id of an existing document. Try this: Click \'Clone Document\', then change the _id on the clone before saving.');
+    errorNotification(
+      "You cannot edit the _id of an existing document. Try this: Click 'Clone Document', then change the _id on the clone before saving."
+    );
     delete doc.validationError;
   } else {
     errorNotification('Please fix the JSON errors and try saving again.');
   }
 };
 
-const showDeleteDocModal = () => (dispatch) => {
-  dispatch({ type: ActionTypes.SHOW_DELETE_DOC_CONFIRMATION_MODAL });
+const showDeleteDocModal = () => dispatch => {
+  dispatch({type: ActionTypes.SHOW_DELETE_DOC_CONFIRMATION_MODAL});
 };
 
-const hideDeleteDocModal = () => (dispatch) => {
-  dispatch({ type: ActionTypes.HIDE_DELETE_DOC_CONFIRMATION_MODAL });
+const hideDeleteDocModal = () => dispatch => {
+  dispatch({type: ActionTypes.HIDE_DELETE_DOC_CONFIRMATION_MODAL});
 };
 
-const deleteDoc = (doc) => {
+const deleteDoc = doc => {
   const databaseName = doc.database.safeID();
   const query = '?rev=' + doc.get('_rev');
   const url = FauxtonAPI.urls('document', 'server', databaseName, doc.safeID(), query);
-  deleteRequest(url).then(res => {
-    if (res.error) {
-      throw new Error(res.reason || res.error);
-    }
-    FauxtonAPI.addNotification({
-      msg: 'Your document has been successfully deleted.',
-      type: 'success',
-      clear: true
+  deleteRequest(url)
+    .then(res => {
+      if (res.error) {
+        throw new Error(res.reason || res.error);
+      }
+      FauxtonAPI.addNotification({
+        msg: 'Your document has been successfully deleted.',
+        type: 'success',
+        clear: true,
+      });
+      FauxtonAPI.navigate(FauxtonAPI.urls('allDocs', 'app', databaseName, ''));
+    })
+    .catch(err => {
+      FauxtonAPI.addNotification({
+        msg: 'Failed to delete your document. Reason: ' + err.message,
+        type: 'error',
+        clear: true,
+      });
     });
-    FauxtonAPI.navigate(FauxtonAPI.urls('allDocs', 'app', databaseName, ''));
-  }).catch(err => {
-    FauxtonAPI.addNotification({
-      msg: 'Failed to delete your document. Reason: ' + err.message,
-      type: 'error',
-      clear: true
-    });
-  });
 };
 
-const showCloneDocModal = () => (dispatch) => {
-  dispatch({ type: ActionTypes.SHOW_CLONE_DOC_MODAL });
+const showCloneDocModal = () => dispatch => {
+  dispatch({type: ActionTypes.SHOW_CLONE_DOC_MODAL});
 };
 
-const hideCloneDocModal = () => (dispatch) => {
-  dispatch({ type: ActionTypes.HIDE_CLONE_DOC_MODAL });
+const hideCloneDocModal = () => dispatch => {
+  dispatch({type: ActionTypes.HIDE_CLONE_DOC_MODAL});
 };
 
 const cloneDoc = (database, doc, newId) => {
   hideCloneDocModal();
 
-  doc.copy(newId).then(() => {
-    const url = FauxtonAPI.urls('document', 'app', database.safeID(), encodeURIComponent(newId));
-    FauxtonAPI.navigate(url, { trigger: true });
+  doc.copy(newId).then(
+    () => {
+      const url = FauxtonAPI.urls('document', 'app', database.safeID(), encodeURIComponent(newId));
+      FauxtonAPI.navigate(url, {trigger: true});
 
-    FauxtonAPI.addNotification({
-      msg: 'Document has been duplicated.'
-    });
-
-  }, (error) => {
-    const errorMsg = `Could not duplicate document, reason: ${error.responseText}.`;
-    FauxtonAPI.addNotification({
-      msg: errorMsg,
-      type: 'error'
-    });
-  });
+      FauxtonAPI.addNotification({
+        msg: 'Document has been duplicated.',
+      });
+    },
+    error => {
+      const errorMsg = `Could not duplicate document, reason: ${error.responseText}.`;
+      FauxtonAPI.addNotification({
+        msg: errorMsg,
+        type: 'error',
+      });
+    }
+  );
 };
 
-const showUploadModal = () => (dispatch) => {
-  dispatch({ type: ActionTypes.SHOW_UPLOAD_MODAL });
+const showUploadModal = () => dispatch => {
+  dispatch({type: ActionTypes.SHOW_UPLOAD_MODAL});
 };
 
-const hideUploadModal = () => (dispatch) => {
-  dispatch({ type: ActionTypes.HIDE_UPLOAD_MODAL });
+const hideUploadModal = () => dispatch => {
+  dispatch({type: ActionTypes.HIDE_UPLOAD_MODAL});
 };
 
-const uploadAttachment = (params) => (dispatch) => {
+const uploadAttachment = params => dispatch => {
   if (params.files.length === 0) {
     dispatch({
       type: ActionTypes.FILE_UPLOAD_ERROR,
       options: {
-        error: 'Please select a file to be uploaded.'
-      }
+        error: 'Please select a file to be uploaded.',
+      },
     });
     return;
   }
-  dispatch({ type: ActionTypes.START_FILE_UPLOAD });
+  dispatch({type: ActionTypes.START_FILE_UPLOAD});
 
   const query = '?rev=' + params.rev;
   const db = params.doc.getDatabase().safeID();
@@ -164,37 +175,39 @@ const uploadAttachment = (params) => (dispatch) => {
   const file = params.files[0];
   const url = FauxtonAPI.urls('document', 'attachment', db, docId, encodeURIComponent(file.name), query);
 
-  const onProgress = (evt) => {
+  const onProgress = evt => {
     if (evt.lengthComputable) {
-      const percentComplete = evt.loaded / evt.total * 100;
+      const percentComplete = (evt.loaded / evt.total) * 100;
       dispatch({
         type: ActionTypes.SET_FILE_UPLOAD_PERCENTAGE,
         options: {
-          percent: percentComplete
-        }
+          percent: percentComplete,
+        },
       });
     }
   };
-  const onSuccess = (doc) => {
+  const onSuccess = doc => {
     // re-initialize the document editor. Only announce it's been updated when
-    dispatch(initDocEditor({
-      doc: doc,
-      onLoaded: () => {
-        dispatch({ type: ActionTypes.FILE_UPLOAD_SUCCESS });
-        FauxtonAPI.addNotification({
-          msg: 'Document saved successfully.',
-          type: 'success',
-          clear: true
-        });
-      }
-    }));
+    dispatch(
+      initDocEditor({
+        doc: doc,
+        onLoaded: () => {
+          dispatch({type: ActionTypes.FILE_UPLOAD_SUCCESS});
+          FauxtonAPI.addNotification({
+            msg: 'Document saved successfully.',
+            type: 'success',
+            clear: true,
+          });
+        },
+      })
+    );
   };
-  const onError = (msg) => {
+  const onError = msg => {
     dispatch({
       type: ActionTypes.FILE_UPLOAD_ERROR,
       options: {
-        error: msg
-      }
+        error: msg,
+      },
     });
   };
   const httpRequest = new XMLHttpRequest();
@@ -209,7 +222,7 @@ const uploadAttachment = (params) => (dispatch) => {
   httpRequest.onerror = () => {
     onError('Error uploading file');
   };
-  httpRequest.onload = (e) => {
+  httpRequest.onload = e => {
     if (httpRequest.status >= 200 && httpRequest.status < 300) {
       onSuccess(params.doc);
     } else {
@@ -240,18 +253,17 @@ const cancelUpload = () => {
   }
 };
 
-const resetUploadModal = () => (dispatch) => {
-  dispatch({ type: ActionTypes.RESET_UPLOAD_MODAL });
+const resetUploadModal = () => dispatch => {
+  dispatch({type: ActionTypes.RESET_UPLOAD_MODAL});
 };
-
 
 // helpers
 
-function errorNotification (msg) {
+function errorNotification(msg) {
   FauxtonAPI.addNotification({
     msg: msg,
     type: 'error',
-    clear: true
+    clear: true,
   });
 }
 
@@ -275,5 +287,5 @@ export default {
   hideUploadModal,
   uploadAttachment,
   cancelUpload,
-  resetUploadModal
+  resetUploadModal,
 };

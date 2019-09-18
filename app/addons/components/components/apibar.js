@@ -10,8 +10,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import React from "react";
-import ReactDOM from "react-dom";
+import React from 'react';
+import ReactDOM from 'react-dom';
 
 export const JSONLink = ({endpoint}) => {
   if (!endpoint) {
@@ -22,7 +22,7 @@ export const JSONLink = ({endpoint}) => {
     <div className="faux__jsonlink">
       <a data-bypass={true} className="faux__jsonlink-link" href={endpoint} target="_blank" rel="noopener noreferrer">
         <span className="faux__jsonlink-link-brackets">{'{\u00a0}'}</span>
-        <span>JSON</span>
+        <span className="faux__jsonlink-link-label">JSON</span>
       </a>
     </div>
   );

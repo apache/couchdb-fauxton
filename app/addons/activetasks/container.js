@@ -10,23 +10,16 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import Controller from './layout';
-import {
-  init,
-  changePollingInterval,
-  setSearchTerm,
-  sortByColumnHeader,
-  switchTab,
-  runPollingUpdate
-} from './actions';
+import {init, setSearchTerm, sortByColumnHeader, switchTab, runPollingUpdate} from './actions';
 import {
   getTasks,
   getHeaderIsAscending,
   getSelectedRadio,
   getSortByHeader,
   getSearchTerm,
-  getIsLoading
+  getIsLoading,
 } from './reducers';
 
 const mapStateToProps = ({activetasks}) => {
@@ -36,18 +29,17 @@ const mapStateToProps = ({activetasks}) => {
     selectedRadio: getSelectedRadio(activetasks),
     sortByHeader: getSortByHeader(activetasks),
     searchTerm: getSearchTerm(activetasks),
-    isLoading: getIsLoading(activetasks)
+    isLoading: getIsLoading(activetasks),
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
     init: () => dispatch(init()),
-    changePollingInterval: (interval) => dispatch(changePollingInterval(interval)),
-    setSearchTerm: (term) => dispatch(setSearchTerm(term)),
-    sortByColumnHeader: (column) => dispatch(sortByColumnHeader(column)),
-    switchTab: (tab) => dispatch(switchTab(tab)),
-    runPollingUpdate: () => dispatch(runPollingUpdate())
+    setSearchTerm: term => dispatch(setSearchTerm(term)),
+    sortByColumnHeader: column => dispatch(sortByColumnHeader(column)),
+    switchTab: tab => dispatch(switchTab(tab)),
+    runPollingUpdate: () => dispatch(runPollingUpdate()),
   };
 };
 

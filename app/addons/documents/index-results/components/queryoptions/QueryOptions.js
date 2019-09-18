@@ -21,27 +21,20 @@ import KeySearchFields from './KeySearchFields';
 import AdditionalParams from './AdditionalParams';
 import QueryButtons from './QueryButtons';
 
-const { ToggleHeaderButton, TrayContents } = GeneralComponents;
+const {ToggleHeaderButton, TrayContents} = GeneralComponents;
 
 export default class QueryOptions extends React.Component {
   constructor(props) {
     super(props);
-    const {
-      ddocsOnly,
-      queryOptionsApplyFilterOnlyDdocs
-    } = props;
+    const {ddocsOnly, queryOptionsApplyFilterOnlyDdocs} = props;
 
     if (ddocsOnly) {
       queryOptionsApplyFilterOnlyDdocs();
     }
   }
 
-  UNSAFE_componentWillReceiveProps (nextProps) {
-    const {
-      ddocsOnly,
-      queryOptionsApplyFilterOnlyDdocs,
-      queryOptionsRemoveFilterOnlyDdocs,
-    } = this.props;
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    const {ddocsOnly, queryOptionsApplyFilterOnlyDdocs, queryOptionsRemoveFilterOnlyDdocs} = this.props;
 
     if (!ddocsOnly && nextProps.ddocsOnly) {
       queryOptionsApplyFilterOnlyDdocs();
@@ -51,18 +44,17 @@ export default class QueryOptions extends React.Component {
   }
 
   componentWillUnmount() {
-    const {
-      ddocsOnly,
-      queryOptionsRemoveFilterOnlyDdocs
-    } = this.props;
+    const {ddocsOnly, queryOptionsRemoveFilterOnlyDdocs} = this.props;
     if (ddocsOnly) {
       // Remove filter it was set before
       queryOptionsRemoveFilterOnlyDdocs();
     }
   }
 
-  executeQuery (e) {
-    if (e) { e.preventDefault(); }
+  executeQuery(e) {
+    if (e) {
+      e.preventDefault();
+    }
     this.closeTray();
 
     const {
@@ -71,7 +63,7 @@ export default class QueryOptions extends React.Component {
       perPage,
       resetPagination,
       selectedLayout,
-      changeLayout
+      changeLayout,
     } = this.props;
 
     // reset pagination back to the beginning but hold on to the current perPage
@@ -89,20 +81,23 @@ export default class QueryOptions extends React.Component {
     queryOptionsExecute(queryOptionsParams, perPage);
   }
 
-  toggleTrayVisibility () {
+  toggleTrayVisibility() {
     this.props.queryOptionsToggleVisibility(!this.props.contentVisible);
   }
 
-  closeTray () {
+  closeTray() {
     this.props.queryOptionsToggleVisibility(false);
   }
 
-  getTray () {
+  getTray() {
     return (
-      <TrayContents closeTray={this.closeTray.bind(this)} contentVisible={this.props.contentVisible}
+      <TrayContents
+        closeTray={this.closeTray.bind(this)}
+        contentVisible={this.props.contentVisible}
         className="query-options"
-        id="query-options-tray">
-
+        id="query-options-tray"
+        container={this}
+      >
         <form onSubmit={this.executeQuery.bind(this)} className="js-view-query-update custom-inputs">
           <MainFieldsView
             includeDocs={this.props.includeDocs}
@@ -128,14 +123,16 @@ export default class QueryOptions extends React.Component {
             betweenKeys={this.props.betweenKeys}
             updateBetweenKeys={this.props.queryOptionsUpdateBetweenKeys}
             byKeys={this.props.byKeys}
-            updateByKeys={this.props.queryOptionsUpdateByKeys} />
+            updateByKeys={this.props.queryOptionsUpdateByKeys}
+          />
           <AdditionalParams
             descending={this.props.descending}
             toggleDescending={this.props.queryOptionsToggleDescending}
             skip={this.props.skip}
             updateSkip={this.props.queryOptionsUpdateSkip}
             updateLimit={this.props.queryOptionsUpdateLimit}
-            limit={this.props.limit} />
+            limit={this.props.limit}
+          />
           <QueryButtons onCancel={this.closeTray.bind(this)} />
         </form>
       </TrayContents>
@@ -143,13 +140,20 @@ export default class QueryOptions extends React.Component {
   }
 
   showAsActive() {
-    const { reduce, betweenKeys, byKeys, descending, skip, limit, stable, update } = this.props;
-    return !!((betweenKeys && betweenKeys.startkey) ||
-      byKeys || (limit && limit != 'none') || skip || reduce || descending || stable || update !== 'true');
+    const {reduce, betweenKeys, byKeys, descending, skip, limit, stable, update} = this.props;
+    return !!(
+      (betweenKeys && betweenKeys.startkey) ||
+      byKeys ||
+      (limit && limit != 'none') ||
+      skip ||
+      reduce ||
+      descending ||
+      stable ||
+      update !== 'true'
+    );
   }
 
-  render () {
-
+  render() {
     return (
       <div id="header-query-options">
         <div id="query-options">
@@ -160,7 +164,8 @@ export default class QueryOptions extends React.Component {
               title="Query Options"
               fonticon="fonticon-gears"
               text="Options"
-              active={this.showAsActive()} />
+              active={this.showAsActive()}
+            />
             {this.getTray()}
           </div>
         </div>
@@ -183,5 +188,5 @@ QueryOptions.propTypes = {
   queryOptionsToggleStable: PropTypes.func.isRequired,
   queryOptionsChangeUpdate: PropTypes.func.isRequired,
   stable: PropTypes.bool.isRequired,
-  update: PropTypes.string.isRequired
+  update: PropTypes.string.isRequired,
 };

@@ -19,32 +19,90 @@
 }
 
 .new-database-tray {
-  padding: 16px 20px 28px;
+
   &:before {
     right: 250px;
   }
 
   input.input-xxlarge {
     margin-bottom: 0px;
-    width: 250px;
-    .border-radius(5px 0 0 5px);
+    width: 100%;
   }
 
   a.btn {
-    color: white;
-    background-color: @linkColor;
     margin-left: 0;
     line-height: 1.5em;
     border: 0px;
     padding: 10px 10px 9px;
     font-size: 14px;
-    .border-radius(0 5px 5px 0);
 
-    &:hover {
-      background-color: #cbcbcb;
-      color: white;
+    &.btn-cancel {
+      background-color: transparent;
+      border-color: @background;
+      border-width: 1px;
+      border-style: solid;
+      color: @buttonText;
+      &:hover {
+        background-color: @background;
+        color: @hoverHighlight;
+      }
     }
   }
+
+  .tray-contents {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 352px;
+    overflow-y: scroll;
+  }
+
+  .tray-header {
+    padding-right: 20px;
+    padding-left: 20px;
+    padding-top: 10px;
+  }
+  .tray-body {
+    flex: 1;
+    padding-right: 20px;
+    padding-left: 20px;
+  }
+  .tray-footer {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    a.btn {
+      min-width: 140px;
+    }
+  }
+
+  .db-name-label {
+    font-weight: bold;
+  }
+
+  .partitioned-db-section {
+    flex: 1;
+  }
+  .partitioned-db-label {
+    font-weight: bold;
+    padding-top: 1rem;
+  }
+  .partitioned-db-options {
+    display: flex;
+    align-items: baseline;
+    input {
+      margin: 0px 10px 0px 0px;
+    }
+  }
+  .partitioned-db-help {
+    padding-top: 1rem;
+    font-size: 0.875rem;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+  }
+}
+
+.new-database-tray--expanded {
+  height: calc(100% - 64px);
 }
 
 #database-pagination {
@@ -58,4 +116,22 @@
 
 .database-actions > * {
   margin-right: 10px;
+}
+
+@media screen and (max-width: 768px) {
+  .add-new-database-btn span{
+    display: none;
+  }
+  .new-database-tray:before {
+    right: 185px;
+  }
+}
+
+@media screen and (max-width: 1120px) {
+  // Left nav menuy is closed
+  .new-database-tray {
+    .tray-contents {
+      width: 332px;
+    }
+  }
 }

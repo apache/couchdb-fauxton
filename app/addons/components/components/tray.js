@@ -12,8 +12,7 @@
 
 import PropTypes from 'prop-types';
 
-import React from "react";
-import ReactDOM from "react-dom";
+import React from 'react';
 import {Overlay} from 'react-bootstrap';
 import {TransitionMotion, spring} from 'react-motion';
 
@@ -22,40 +21,41 @@ export class TrayContents extends React.Component {
     contentVisible: PropTypes.bool.isRequired,
     closeTray: PropTypes.func.isRequired,
     onEnter: PropTypes.func,
-    container: PropTypes.object
+    container: PropTypes.object,
   };
 
   static defaultProps = {
-    onEnter: () => {}
+    onEnter: () => {},
   };
 
-  constructor (props) {
+  constructor(props) {
     super(props);
     if (!props.container) {
       this.container = this;
     }
   }
 
-  getChildren = (items) => {
+  getChildren = items => {
     const {style} = items[0];
-    var className = "tray show-tray " + this.props.className;
+    const className = 'tray show-tray ' + this.props.className;
     return (
       <div key={'1'} id={this.props.id} style={{opacity: style.opacity, top: style.top + 'px'}} className={className}>
         {this.props.children}
-      </div>);
+      </div>
+    );
   };
 
   willEnter = () => {
     return {
       opacity: spring(1),
-      top: spring(55)
+      top: spring(64),
     };
   };
 
   willLeave = () => {
     return {
       opacity: spring(0),
-      top: spring(30)
+      top: spring(30),
     };
   };
 
@@ -63,17 +63,19 @@ export class TrayContents extends React.Component {
     return [{key: '1', style: {opacity: 0, top: 30}}];
   };
 
-  getStyles = (prevStyle) => {
+  getStyles = prevStyle => {
     if (!prevStyle) {
-      return [{
-        key: '1',
-        style: this.willEnter()
-      }];
+      return [
+        {
+          key: '1',
+          style: this.willEnter(),
+        },
+      ];
     }
     return prevStyle.map(item => {
       return {
         key: '1',
-        style: item.style
+        style: item.style,
       };
     });
   };
@@ -83,7 +85,7 @@ export class TrayContents extends React.Component {
       <Overlay
         show={this.props.contentVisible}
         onHide={this.props.closeTray}
-        placement={"bottom"}
+        placement={'bottom'}
         container={this.props.container}
         rootClose={true}
         onEnter={this.props.onEnter}
@@ -101,7 +103,6 @@ export class TrayContents extends React.Component {
   }
 }
 
-
 export const connectToStores = (Component, stores, getStateFromStores) => {
   class WrappingElement extends React.Component {
     state = getStateFromStores(this.props);
@@ -113,9 +114,11 @@ export const connectToStores = (Component, stores, getStateFromStores) => {
     }
 
     componentWillUnmount() {
-      stores.forEach(function (store) {
-        store.off('change', this.onChange);
-      }.bind(this));
+      stores.forEach(
+        function(store) {
+          store.off('change', this.onChange);
+        }.bind(this)
+      );
     }
 
     onChange = () => {
@@ -136,28 +139,25 @@ export const connectToStores = (Component, stores, getStateFromStores) => {
 
 export class TrayWrapper extends React.Component {
   static defaultProps = {
-    className: ''
+    className: '',
   };
 
   renderChildren = () => {
-    return React.Children.map(this.props.children, (child) => {
-
+    return React.Children.map(this.props.children, child => {
       const props = {};
-      Object.keys(this.props).filter((k) => {
-        return this.props.hasOwnProperty(k);
-      }).map((k) => {
-        return props[k] = this.props[k];
-      });
+      Object.keys(this.props)
+        .filter(k => {
+          return Object.prototype.hasOwnProperty.call(this.props, k);
+        })
+        .map(k => {
+          return (props[k] = this.props[k]);
+        });
 
       return React.cloneElement(child, props);
     });
   };
 
   render() {
-    return (
-      <div>
-        {this.renderChildren()}
-      </div>
-    );
+    return <div>{this.renderChildren()}</div>;
   }
 }

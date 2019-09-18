@@ -9,18 +9,16 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
-import utils from "../../../../test/mocha/testUtils";
-import FauxtonAPI from "../../../core/api";
-import * as Actions from "../actions";
-import * as CorsAPI from "../api";
-import sinon from "sinon";
+import utils from '../../../../test/mocha/testUtils';
+import FauxtonAPI from '../../../core/api';
+import Actions from '../actions';
+import * as CorsAPI from '../api';
+import sinon from 'sinon';
 
 const restore = utils.restore;
 
 describe('CORS actions', () => {
-
   describe('save', () => {
-
     const localNode = 'node2@127.0.0.1';
     const baseURL = 'http://localhost:8000/#_config/couchdb@localhost/cors';
     const dispatch = sinon.stub();
@@ -44,7 +42,7 @@ describe('CORS actions', () => {
     it('should save enable_cors to httpd', () => {
       Actions.saveCors(baseURL, {
         corsEnabled: false,
-        node: localNode
+        node: localNode,
       })(dispatch);
 
       expect(spyUpdateEnableCorsToHttpd.calledWith(baseURL, localNode, false)).toBeTruthy();
@@ -54,7 +52,7 @@ describe('CORS actions', () => {
       Actions.saveCors(baseURL, {
         corsEnabled: false,
         origins: ['*'],
-        node: localNode
+        node: localNode,
       })(dispatch);
 
       expect(spyUpdateCorsOrigins.called).toBeFalsy();
@@ -64,7 +62,7 @@ describe('CORS actions', () => {
       Actions.saveCors(baseURL, {
         corsEnabled: true,
         origins: ['*'],
-        node: localNode
+        node: localNode,
       })(dispatch);
 
       expect(spyUpdateCorsOrigins.calledWith(baseURL, localNode, '*')).toBeTruthy();
@@ -74,7 +72,7 @@ describe('CORS actions', () => {
       Actions.saveCors(baseURL, {
         corsEnabled: true,
         origins: ['https://testdomain.com'],
-        node: localNode
+        node: localNode,
       })(dispatch);
 
       expect(spyUpdateCorsCredentials.calledOnce).toBeTruthy();
@@ -91,7 +89,7 @@ describe('CORS actions', () => {
       return Actions.saveCors(baseURL, {
         enableCors: true,
         origins: ['https://testdomain.com'],
-        node: localNode
+        node: localNode,
       })(dispatch).then(() => {
         expect(spyAddNotification.called).toBeTruthy();
       });
@@ -99,7 +97,6 @@ describe('CORS actions', () => {
   });
 
   describe('Sanitize origins', () => {
-
     it('joins array into string', () => {
       var origins = ['https://hello.com', 'https://hello2.com'];
 

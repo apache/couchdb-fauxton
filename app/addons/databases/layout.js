@@ -10,21 +10,22 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+import app from '../../app';
 import React from 'react';
-import FauxtonAPI from "../../core/api";
+import FauxtonAPI from '../../core/api';
 import {OnePane, OnePaneHeader, OnePaneContent, OnePaneFooter} from '../components/layouts';
-import Components from "./components";
+import Components from './components';
 const {RightDatabasesHeader, DatabasesController, DatabasePagination} = Components;
 
 export const Layout = () => {
   return (
     <OnePane>
       <OnePaneHeader
-        crumbs={[{"name": "Databases"}]}
+        crumbs={[{name: 'Databases'}]}
         endpoint={FauxtonAPI.urls('allDBs', 'apiurl')}
         docURL={FauxtonAPI.constants.DOC_URLS.ALL_DBS}
       >
-        <RightDatabasesHeader />
+        <RightDatabasesHeader partitionedDbHelpText={app.i18n.en_US['create-db-partitioned-help']} />
       </OnePaneHeader>
       <OnePaneContent>
         <DatabasesController />

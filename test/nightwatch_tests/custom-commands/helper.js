@@ -21,7 +21,7 @@ exports.checkForDocumentCreated = function checkForDocumentCreated (url, timeout
 
 exports.checkForDatabaseCreated = function checkForDatabaseCreated (couchUrl, databaseName, timeout, cb) {
   const timeOutId = setTimeout(() => {
-    throw new Error('timeout waiting for db to appear');
+    throw new Error('Timeout ('+timeout+') waiting for db to appear');
   }, timeout);
 
   const intervalId = setInterval(() => {
