@@ -56,8 +56,9 @@ export default class DesignDocInfo extends React.Component {
       return <LoadLines />;
     }
     const viewIndex = this.props.viewIndex;
-    const actualSize = (viewIndex.data_size) ? viewIndex.data_size.toLocaleString('en') : 0;
-    const dataSize = (viewIndex.disk_size) ? viewIndex.disk_size.toLocaleString('en') : 0;
+    const {sizes} = viewIndex;
+    const actualSize = (sizes.active) ? sizes.active.toLocaleString('en') : 0;
+    const dataSize = (sizes.external) ? sizes.external.toLocaleString('en') : 0;
 
     return (
       <div className="metadata-page">

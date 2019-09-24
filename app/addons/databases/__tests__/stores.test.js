@@ -27,7 +27,7 @@ describe('Databases Store', function () {
     it('marks failed detail fetches as failed dbs', () => {
       DatabaseActions.updateDatabases({
         dbList: ['db1', 'db2'],
-        databaseDetails: [{db_name: 'db1'}, {db_name: 'db2'}],
+        databaseDetails: [{db_name: 'db1', sizes: {}}, {db_name: 'db2', sizes: {}}],
         failedDbs: ['db1']
       });
 
@@ -39,7 +39,7 @@ describe('Databases Store', function () {
     it('unions details', () => {
       DatabaseActions.updateDatabases({
         dbList: ['db1'],
-        databaseDetails: [{db_name: 'db1', doc_count: 5, doc_del_count: 3}],
+        databaseDetails: [{db_name: 'db1', doc_count: 5, doc_del_count: 3, sizes: {}}],
         failedDbs: []
       });
 
@@ -60,15 +60,18 @@ describe('Databases Store', function () {
       expect(!store.doesDatabaseExist('db3')).toBeTruthy();
     });
 
-    it('uses the data_size prop', () => {
+    it('uses the sizes.active prop', () => {
       DatabaseActions.updateDatabases({
         dbList: ['db1'],
         databaseDetails: [{
           db_name: 'db1',
           doc_count: 5,
           doc_del_count: 3,
-          data_size: 1337,
-          disk_size: 0
+          sizes: {
+            active: 1337,
+            external: 0,
+            file: 0,
+          }
         }],
         failedDbs: []
       });
