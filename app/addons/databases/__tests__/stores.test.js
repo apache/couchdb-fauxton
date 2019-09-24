@@ -60,15 +60,18 @@ describe('Databases Store', function () {
       expect(!store.doesDatabaseExist('db3')).toBeTruthy();
     });
 
-    it('uses the data_size prop', () => {
+    it('uses the sizes.active prop', () => {
       DatabaseActions.updateDatabases({
         dbList: ['db1'],
         databaseDetails: [{
           db_name: 'db1',
           doc_count: 5,
           doc_del_count: 3,
-          data_size: 1337,
-          disk_size: 0
+          sizes: {
+            active: 1337,
+            file: 0,
+            external: 59
+          }
         }],
         failedDbs: []
       });
