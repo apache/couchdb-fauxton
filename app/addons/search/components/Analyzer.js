@@ -29,13 +29,6 @@ export default class Analyzer extends React.Component {
     addAnalyzerRow: PropTypes.func.isRequired
   };
 
-  constructor(props) {
-    super(props);
-    this.selectAnalyzerType = this.selectAnalyzerType.bind(this);
-    this.selectSingleAnalyzer = this.selectSingleAnalyzer.bind(this);
-    this.selectDefaultMultipleAnalyzer = this.selectDefaultMultipleAnalyzer.bind(this);
-  }
-
   selectAnalyzerType = (e) => {
     this.props.setAnalyzerType(e.target.value);
   };
@@ -48,26 +41,21 @@ export default class Analyzer extends React.Component {
   };
 
   getAnalyzerFieldsAsObject = () => {
-    const obj = {};
-    this.props.analyzerFields.forEach(row => {
+    return this.props.analyzerFields.reduce((acc, row) => {
       const fieldName = row.fieldName.replace(/["']/g, '');
-      obj[fieldName] = row.analyzer;
-    });
-    return obj;
+      acc[fieldName] = row.analyzer;
+      return acc;
+    }, {});
   };
 
   getInfo = () => {
-    let analyzerInfo;
-    if (this.props.analyzerType === Constants.ANALYZER_SINGLE) {
-      analyzerInfo = this.props.singleAnalyzer;
-    } else {
-      analyzerInfo = {
+    return this.props.analyzerType === Constants.ANALYZER_SINGLE
+      ? this.props.singleAnalyzer
+      : {
         name: 'perfield',
         default: this.props.defaultMultipleAnalyzer,
         fields: this.getAnalyzerFieldsAsObject()
       };
-    }
-    return analyzerInfo;
   };
 
   selectSingleAnalyzer = (e) => {
@@ -79,17 +67,13 @@ export default class Analyzer extends React.Component {
   };
 
   getAnalyzerType = () => {
-    if (this.props.analyzerType === Constants.ANALYZER_SINGLE) {
-      return (
-        <AnalyzerDropdown
-          label="Type"
-          defaultSelected={this.props.singleAnalyzer}
-          onChange={this.selectSingleAnalyzer}
-        />
-      );
-    }
-    return (
-      <AnalyzerMultiple
+    return this.props.analyzerType === Constants.ANALYZER_SINGLE
+      ? (<AnalyzerDropdown
+        label="Type"
+        defaultSelected={this.props.singleAnalyzer}
+        onChange={this.selectSingleAnalyzer}
+      />)
+      : (<AnalyzerMultiple
         ref={node => this.analyzerMultiple = node}
         defaultAnalyzer={this.props.defaultMultipleAnalyzer}
         selectDefaultMultipleAnalyzer={this.selectDefaultMultipleAnalyzer}
@@ -98,9 +82,7 @@ export default class Analyzer extends React.Component {
         removeAnalyzerRow={this.props.removeAnalyzerRow}
         setAnalyzerRowFieldName={this.props.setAnalyzerRowFieldName}
         setAnalyzer={this.props.setAnalyzer}
-      />
-    );
-
+      />);
   };
 
   render() {

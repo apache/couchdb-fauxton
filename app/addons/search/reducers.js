@@ -314,14 +314,16 @@ export default function search(state = initialState, action) {
       };
 
     case ActionTypes.SEARCH_INDEX_PARTITION_PARAM_NOT_SUPPORTED:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         noResultsWarning: 'The selected index does not support partitions. Switch back to global mode.'
-      });
+      };
 
     case ActionTypes.SEARCH_INDEX_PARTITION_PARAM_MANDATORY:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         noResultsWarning: 'The selected index requires a partition key. Use the selector at the top to enter a partition key.'
-      });
+      };
 
     default:
       return state;

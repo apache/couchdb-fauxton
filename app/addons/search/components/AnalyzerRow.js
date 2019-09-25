@@ -24,17 +24,13 @@ export default class AnalyzerRow extends React.Component {
     setAnalyzer: PropTypes.func.isRequired
   };
 
-  constructor(props) {
-    super(props);
-  }
-
   deleteRow = (e) => {
     e.preventDefault();
     this.props.removeAnalyzerRow(this.props.rowIndex);
   };
 
   getFieldNameHeading = (analyzerId) => {
-    return (this.props.rowIndex === 0) ? <label htmlFor={analyzerId}>Fieldname</label> : false;
+    return (this.props.rowIndex === 0) && <label htmlFor={analyzerId}>Fieldname</label>;
   };
 
   changeFieldName = (e) => {

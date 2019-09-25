@@ -305,10 +305,16 @@ const selectDesignDoc = (designDoc) => (dispatch) => {
 
 // const querySearch = (searchQuery, partitionKey) => {
 const querySearch = (databaseName, partitionKey, ddocName, indexName, searchQuery) => {
+  const encodedDatabaseName = encodeURIComponent(databaseName);
+  const encodedPartitionKey = encodeURIComponent(partitionKey);
+  const encodedDdocName = encodeURIComponent(ddocName);
+  const encodedIndexName = encodeURIComponent(indexName);
+  const encodedSearchQuery = encodeURIComponent(searchQuery);
+
   const baseUrl = partitionKey ?
-    FauxtonAPI.urls('partitioned_search', 'app', encodeURIComponent(databaseName), encodeURIComponent(partitionKey), encodeURIComponent(ddocName), encodeURIComponent(indexName)) :
-    FauxtonAPI.urls('search', 'app', encodeURIComponent(databaseName), encodeURIComponent(ddocName), encodeURIComponent(indexName));
-  FauxtonAPI.navigate(`${baseUrl}${encodeURIComponent(indexName)}?${encodeURIComponent(searchQuery)}`, {trigger: true});
+    FauxtonAPI.urls('partitioned_search', 'app', encodedDatabaseName, encodedPartitionKey, encodedDdocName, encodedIndexName) :
+    FauxtonAPI.urls('search', 'app', encodedDatabaseName, encodedDdocName, encodedIndexName);
+  FauxtonAPI.navigate(`${baseUrl}${encodedIndexName}?${encodedSearchQuery}`, {trigger: true});
 };
 
 const executSearchQuery = (database, partitionKey, ddoc, index, searchQuery, dispatch) => {
@@ -370,17 +376,13 @@ const updateNewDesignDocPartitioned = (isPartitioned) => (dispatch) => {
   });
 };
 
-const partitionParamNotSupported = () => {
-  return {
-    type: ActionTypes.SEARCH_INDEX_PARTITION_PARAM_NOT_SUPPORTED
-  };
-};
+const partitionParamNotSupported = () => ({
+  type: ActionTypes.SEARCH_INDEX_PARTITION_PARAM_NOT_SUPPORTED
+});
 
-const partitionParamIsMandatory = () => {
-  return {
-    type: ActionTypes.SEARCH_INDEX_PARTITION_PARAM_MANDATORY
-  };
-};
+const partitionParamIsMandatory = () => ({
+  type: ActionTypes.SEARCH_INDEX_PARTITION_PARAM_MANDATORY
+});
 
 
 // helpers
