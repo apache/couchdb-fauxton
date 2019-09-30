@@ -11,7 +11,7 @@
 // the License.
 
 module.exports = {
-
+  '@tags': ['search'],
   'Deletes a search index': function (client) {
     var newDatabaseName = client.globals.testDatabaseName,
         waitTime = client.globals.maxWaitTime,

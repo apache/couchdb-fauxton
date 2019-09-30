@@ -11,7 +11,7 @@
 // the License.
 
 module.exports = {
-
+  '@tags': ['search'],
   'Clones a search index': function (client) {
     var waitTime = client.globals.maxWaitTime,
         newDatabaseName = client.globals.testDatabaseName,

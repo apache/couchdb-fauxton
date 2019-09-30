@@ -10,7 +10,7 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 module.exports = {
-
+  '@tags': ['search'],
   'Creates new Search index for Dash': function (client) {
     /*jshint multistr: true */
 
@@ -126,6 +126,4 @@ module.exports = {
 
       .end();
   }
-
-
 };

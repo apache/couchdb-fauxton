@@ -10,7 +10,7 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 module.exports = {
-
+  '@tags': ['search'],
   'Check API Bar is present/hidden on appropriate page and is encoded': function (client) {
     const newDatabaseName = client.globals.testDatabaseName,
           baseUrl = client.globals.test_settings.launch_url;

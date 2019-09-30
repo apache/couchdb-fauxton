@@ -8,7 +8,7 @@ services:
 
   couchdb:
     container_name: couchdb
-    image: ibmcom/couchdb3:preview-1569600329
+    image: ${COUCHDB_IMAGE}
     environment:
       COUCHDB_USER: tester
       COUCHDB_PASSWORD: testerpass
