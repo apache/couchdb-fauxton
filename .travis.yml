@@ -9,10 +9,12 @@ git:
 
 env:
   - COUCHDB_IMAGE=apache/couchdb:2.3.1 NIGHTWATCH_SKIPTAGS="search,partitioned"
+  - COUCHDB_IMAGE=couchdb:dev NIGHTWATCH_SKIPTAGS="search,nonpartitioned"
   - COUCHDB_IMAGE=ibmcom/couchdb3:preview-1569600329 NIGHTWATCH_SKIPTAGS=nonpartitioned
 
 before_install:
   - npm install -g npm@latest
+  - ./bin/build-couchdb-dev.sh
 install:
   - npm ci
 before_script:
