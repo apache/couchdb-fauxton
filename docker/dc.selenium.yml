@@ -8,7 +8,7 @@ services:
 
   couchdb:
     container_name: couchdb
-    image: apache/couchdb:latest
+    image: ${COUCHDB_IMAGE}
     environment:
       COUCHDB_USER: tester
       COUCHDB_PASSWORD: testerpass

@@ -39,7 +39,8 @@
         "javascriptEnabled" : true,
         "acceptSslCerts" : true
       },
-      "exclude": <%= exclude_tests %>
+      "exclude": <%= exclude_tests %>,
+      "skiptags": <%= skiptags %>
     },
 
     "chrome" : {
