@@ -29,6 +29,10 @@ export default class SearchForm extends React.Component {
     this.searchInput.focus();
   }
 
+  componentDidUpdate() {
+    prettyPrint();
+  }
+
   querySearch = (e) => {
     e.preventDefault();
     if (this.props.searchQuery.trim() === '') {
