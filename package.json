@@ -103,9 +103,9 @@
     "urls": "~0.0.3",
     "uuid": "^3.0.1",
     "visualizeRevTree": "git+https://github.com/neojski/visualizeRevTree.git#gh-pages",
-    "webpack": "^4.35.3",
-    "webpack-cli": "^3.3.5",
-    "webpack-dev-server": "^3.7.2",
+    "webpack": "^4.41.0",
+    "webpack-cli": "^3.3.9",
+    "webpack-dev-server": "^3.8.2",
     "whatwg-fetch": "~2.0.1"
   },
   "scripts": {
