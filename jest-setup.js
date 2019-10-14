@@ -14,7 +14,13 @@ require('jest');
 require('whatwg-fetch');
 require('mock-local-storage');
 
-window.localStorage = global.localStorage;
+Object.defineProperty(window, 'localStorage', {
+  value: global.localStorage,
+  configurable:true,
+  enumerable:true,
+  writable:true
+});
+
 window.$ = window.jQuery = require('jquery');
 window._ = require('lodash');
 window.Backbone = require('backbone');
