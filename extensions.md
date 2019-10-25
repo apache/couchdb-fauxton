@@ -1,4 +1,4 @@
-#Extensions
+# Extensions
 
 Extensions allow Fauxton views to be have extra functionality.
 
