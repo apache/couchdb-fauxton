@@ -29,9 +29,12 @@ export default class ExecutionStats extends React.Component {
       return Math.floor(seconds) + ' seconds';
     }
     const minutes = Math.floor(seconds / 60);
-    seconds = seconds - (minutes * 60);
+    seconds = Math.floor(seconds - (minutes * 60));
 
-    return minutes + 'minute, ' + seconds + 'seconds';
+    const minuteText = minutes > 1 ? 'minutes' : 'minute';
+    const secondsText = seconds > 1 ? 'seconds' : 'second';
+
+    return [minutes, ' ', minuteText, ', ', seconds, ' ', secondsText].join('');
   }
 
   getWarning(executionStats, warning) {
@@ -70,7 +73,7 @@ export default class ExecutionStats extends React.Component {
         {this.executionStatsLine("documents examined", executionStats.total_docs_examined)}
         {this.executionStatsLine("documents examined (quorum)", executionStats.total_quorum_docs_examined)}
         {this.executionStatsLine("results returned", executionStats.results_returned, true)}
-        {this.executionStatsLine("execution time", executionStats.execution_time_ms, false, "ms")}
+        {this.executionStatsLine("execution time", Math.round(executionStats.execution_time_ms), false, "ms")}
       </div>
     );
   }
