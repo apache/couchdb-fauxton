@@ -48,5 +48,10 @@ export default {
     CHANGES:'./docs/api/database/changes.html?highlight=changes#post--db-_changes',
     SETUP: './docs/cluster/setup.html#the-cluster-setup-wizard',
     MEMBERSHIP: './docs/cluster/nodes.html'
+  },
+  // IBM IAM
+  IBM_IAM: {
+    URL: 'https://iam.cloud.ibm.com/identity/token',
+    GRANT_TYPE: 'urn:ibm:params:oauth:grant-type:apikey'
   }
 };

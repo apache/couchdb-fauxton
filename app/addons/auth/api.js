@@ -12,7 +12,7 @@
 
 import app from './../../app';
 import Helpers from "../../helpers";
-import {deleteFormEncoded, get, postFormEncoded, put} from '../../core/ajax';
+import {deleteFormEncoded, get, postFormEncoded, put, post} from '../../core/ajax';
 
 
 export function createAdmin({name, password, node}) {
@@ -43,15 +43,22 @@ export function login(body) {
   return postFormEncoded(url, app.utils.queryParams(body));
 }
 
+export function loginApiKey(body) {
+  return post('apiKey', body);
+}
+
 export function logout() {
   loggedInSessionPromise = null;
   const url = Helpers.getServerUrl('/_session');
+  document.cookie = "isApiKey=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+  // global.isApiKey = 'N';
   return deleteFormEncoded(url, app.utils.queryParams({ username: "_", password: "_" }));
 }
 
 export default {
   createAdmin,
   login,
+  loginApiKey,
   logout,
   getSession
 };

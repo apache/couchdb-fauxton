@@ -40,7 +40,8 @@ export const json = (url, method = "GET", opts = {}) => {
         headers: {
           accept: "application/json",
           "Content-Type": "application/json",
-          "Pragma":"no-cache" //Disables cache for IE11
+          "Pragma":"no-cache", //Disables cache for IE11
+          //"Authorization": global.isApiKey === 'Y' ? `Bearer ${global.iamToken}` : undefined,
         },
         cache: "no-cache"
       }

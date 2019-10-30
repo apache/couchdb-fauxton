@@ -40,11 +40,13 @@ describe('Auth -- Components', () => {
     it('in case of nothing in state, should pass actual values to Actions.login()', () => {
       const username = 'bob';
       const password = 'smith';
+      const apiKey = 'apiKey';
 
       const loginForm = mount(
         <LoginForm
           testBlankUsername={username}
           testBlankPassword={password}
+          testBlankApiKey={apiKey}
         />);
 
       loginForm.find('#login').simulate('submit');
@@ -53,6 +55,7 @@ describe('Auth -- Components', () => {
       // confirm Actions.login() received the values that weren't in the DOM
       expect(stub.args[0][0]).toBe(username);
       expect(stub.args[0][1]).toBe(password);
+      expect(stub.args[0][2]).toBe(apiKey);
     });
 
   });

@@ -78,6 +78,13 @@ const runWebpackServer = function () {
     }
   });
 
+  proxy.on('proxyReq', function(proxyReq, req, res) {
+    if (req.headers.cookie.includes('isApiKey=Y')) {
+      proxyReq.setHeader('Authorization', `Bearer ${global.iamToken}`);
+    }
+
+  });
+
   proxy.on('error', function () {
     // don't explode on cancelled requests
   });
@@ -95,6 +102,37 @@ const runWebpackServer = function () {
     },
     headers: getCspHeaders(),
     before: (app) => {
+      const IAM_URL = 'https://iam.cloud.ibm.com/identity/token';
+      var bodyParser = require('body-parser');
+      app.use(bodyParser.json());
+
+      app.post('/apiKey',  bodyParser.json(), async function(req, res) {
+
+        const querystring = require('querystring');
+        const request = require('request');
+        const formData = querystring.stringify(req.body);
+        request({
+          headers: {
+            'Content-Length': formData.length,
+            'Content-Type': 'application/x-www-form-urlencoded'
+          },
+          uri: IAM_URL,
+          body: formData,
+          method: 'POST'
+        }, function (err, response, body) {
+          if (!err) {
+            const result = JSON.parse(body);
+
+            global.isApiKey = 'Y';
+            global.iamToken = result.access_token;
+            res.json(result);
+          }
+          //it works!
+        });
+
+
+      });
+
       app.all('*', (req, res, next) => {
         const accept = req.headers.accept ? req.headers.accept.split(',') : '';
 

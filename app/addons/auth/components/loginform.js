@@ -14,16 +14,25 @@ import PropTypes from 'prop-types';
 
 import React from "react";
 import ReactDOM from "react-dom";
-import { login } from "./../actions";
+import { login, loginApiKey } from "./../actions";
 
 class LoginForm extends React.Component {
   constructor() {
     super();
     this.state = {
       username: "",
-      password: ""
+      password: "",
+      apikey: "",
+      checked: false
     };
+    this.handleChange = this.handleChange.bind(this);
   }
+  handleChange() {
+    this.setState({
+      checked: !this.state.checked
+    });
+  }
+
   onUsernameChange(e) {
     this.setState({username: e.target.value});
   }
@@ -31,10 +40,19 @@ class LoginForm extends React.Component {
     this.setState({password: e.target.value});
   }
 
+  onApikeyChange(e) {
+    this.setState({apikey: e.target.value});
+  }
+
   submit(e) {
     e.preventDefault();
-    if (!this.checkUnrecognizedAutoFill()) {
+
+
+    if (this.state.checked) {
+      this.loginApiKey(this.state.apikey);
+    } else if (!this.checkUnrecognizedAutoFill()) {
       this.login(this.state.username, this.state.password);
+      //this.loginApiKey(this.state.apikey);
     }
   }
   // Safari has a bug where autofill doesn't trigger a change event. This checks for the condition where the state
@@ -54,54 +72,108 @@ class LoginForm extends React.Component {
 
     return true;
   }
+
+  writeCookie (key, value, hours) {
+    const date = new Date();
+
+    // Default at 365 days.
+    hours = hours || 1;
+
+    // Get unix milliseconds at current time plus number of days
+    date.setTime(date + (hours * 60 * 60 * 1000)); //24 * 60 * 60 * 1000
+
+    window.document.cookie = key + "=" + value + "; expires=" + date.toGMTString() + "; path=/";
+
+    return value;
+  }
+
   login(username, password) {
+    // document.cookie = "isApiKey=N";
+    this.writeCookie('isApiKey', 'N', 1);
+    // global.isApiKey = 'N';
     login(username, password, this.props.urlBack);
+  }
+
+  loginApiKey(apiKey) {
+    document.cookie = "isApiKey=Y";
+    // global.isApiKey = 'Y';
+    loginApiKey(apiKey, this.props.urlBack);
   }
   componentDidMount() {
     this.usernameField.focus();
   }
   render() {
+    document.cookie = "isApiKey=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    // const hidden = this.state.checked ? '' : 'hidden';
+    const content = !this.state.checked
+      ? <form id="login" onSubmit={this.submit.bind(this)}>
+        <p className="help-block">
+          Enter your username and password.
+        </p>
+        <input
+          id="username"
+          type="text"
+          name="username"
+          ref={node => this.usernameField = node}
+          placeholder="Username"
+          size="24"
+          onChange={this.onUsernameChange.bind(this)}
+          value={this.state.username}
+        />
+        <br />
+        <input
+          id="password"
+          type="password"
+          name="password"
+          ref={node => this.passwordField = node}
+          placeholder="Password"
+          size="24"
+          onChange={this.onPasswordChange.bind(this)}
+          value={this.state.password}
+        />
+        <br />
+        <button id="submit" className="btn btn-success" type="submit">
+          Log In
+        </button>
+      </form>
+      : <form id="login" onSubmit={this.submit.bind(this)}>
+        <p className="help-block">
+          Enter your API KEY.
+        </p>
+        <input
+          id="apikey"
+          type="text"
+          name="apikey"
+          ref={node => this.apikeyField = node}
+          placeholder="API KEY"
+          size="24"
+          onChange={this.onApikeyChange.bind(this)}
+          value={this.state.apikey}
+        />
+        <br />
+        <br />
+        <button id="submit" className="btn btn-success" type="submit">
+          Log In
+        </button>
+      </form>;
+
+
     return (
+
       <div className="couch-login-wrapper">
         <div className="row-fluid">
           <div className="span12">
-            <form id="login" onSubmit={this.submit.bind(this)}>
-              <p className="help-block">
-                Enter your username and password.
-              </p>
-              <input
-                id="username"
-                type="text"
-                name="username"
-                ref={node => this.usernameField = node}
-                placeholder="Username"
-                size="24"
-                onChange={this.onUsernameChange.bind(this)}
-                value={this.state.username}
-              />
-              <br />
-              <input
-                id="password"
-                type="password"
-                name="password"
-                ref={node => this.passwordField = node}
-                placeholder="Password"
-                size="24"
-                onChange={this.onPasswordChange.bind(this)}
-                value={this.state.password}
-              />
-              <br />
-              <button id="submit" className="btn btn-success" type="submit">
-                Log In
-              </button>
-            </form>
+            <div className="ui checkbox">
+              <input style={{ "marginTop": 4 }} type="checkbox" checked={ this.state.checked } onChange={ this.handleChange } />
+              <label style={{ "paddingLeft": 5 }} htmlFor={this.id}>Use API KEY?</label></div>
+            { content }
+
           </div>
         </div>
       </div>
     );
   }
 }
-
 LoginForm.defaultProps = {
   urlBack: ""
 };

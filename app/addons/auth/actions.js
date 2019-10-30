@@ -13,6 +13,7 @@ import FauxtonAPI from "../../core/api";
 import app from "../../app";
 import ActionTypes from './actiontypes';
 import Api from './api';
+import constants from "../../constants";
 
 const {
   AUTH_HIDE_PASSWORD_MODAL,
@@ -33,6 +34,10 @@ export const validateUser = (username, password) => {
   return validate(!_.isEmpty(username), !_.isEmpty(password));
 };
 
+export const validateApiKey = (apiKey) => {
+  return validate(!_.isEmpty(apiKey));
+};
+
 export const validatePasswords = (password, passwordConfirm) => {
   return validate(
     !_.isEmpty(password),
@@ -48,6 +53,33 @@ export const login = (username, password, urlBack) => {
 
   return Api.login({name: username, password})
     .then(resp => {
+      if (resp.error) {
+        errorHandler({message: resp.reason});
+        return resp;
+      }
+
+      let msg = app.i18n.en_US['auth-logged-in'];
+      if (msg) {
+        FauxtonAPI.addNotification({msg});
+      }
+
+      if (urlBack && !urlBack.includes("login")) {
+        return FauxtonAPI.navigate(urlBack);
+      }
+      FauxtonAPI.navigate("/");
+    })
+    .catch(errorHandler);
+};
+
+
+export const loginApiKey = (apiKey, urlBack) => {
+  if (!validateApiKey(apiKey)) {
+    return errorHandler({message: app.i18n.en_US['auth-missing-credentials']});
+  }
+
+  return Api.loginApiKey({grant_type: constants.IBM_IAM.GRANT_TYPE, apikey:apiKey })
+    .then(resp => {
+      global.iamToken = resp.access_token;
       if (resp.error) {
         errorHandler({message: resp.reason});
         return resp;
