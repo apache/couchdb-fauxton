@@ -55,7 +55,6 @@ describe('Auth -- Components', () => {
       // confirm Actions.login() received the values that weren't in the DOM
       expect(stub.args[0][0]).toBe(username);
       expect(stub.args[0][1]).toBe(password);
-      expect(stub.args[0][2]).toBe(apiKey);
     });
 
   });
