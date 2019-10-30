@@ -78,7 +78,7 @@ const runWebpackServer = function () {
     }
   });
 
-  proxy.on('proxyReq', function(proxyReq, req, res) {
+  proxy.on('proxyReq', function(proxyReq, req) {
     if (req.headers.cookie.includes('isApiKey=Y')) {
       proxyReq.setHeader('Authorization', `Bearer ${global.iamToken}`);
     }
