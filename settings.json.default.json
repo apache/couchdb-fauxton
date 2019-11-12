@@ -9,6 +9,7 @@
   { "name": "cluster" },
   { "name": "config" },
   { "name": "replication" },
+  { "name": "search" },
   { "name": "cors" },
   { "name": "permissions" },
   { "name": "auth" },

@@ -1,6 +1,6 @@
 {
   "name": "fauxton",
-  "version": "1.1.20",
+  "version": "1.2.2",
   "description": "Fauxton is a modular CouchDB dashboard and Futon replacement.",
   "main": "./index.js",
   "directories": {
@@ -34,6 +34,8 @@
     "@babel/preset-react": "^7.0.0",
     "@babel/register": "^7.4.4",
     "@webcomponents/url": "~0.7.1",
+    "acorn": "^6.0.0",
+    "ajv": "^6.9.1",
     "async": "~0.2.6",
     "babel-eslint": "^9.0.0",
     "babel-loader": "^8.0.6",
@@ -102,10 +104,10 @@
     "url-loader": "^2.0.1",
     "urls": "~0.0.3",
     "uuid": "^3.0.1",
-    "visualizeRevTree": "git+https://github.com/neojski/visualizeRevTree.git#gh-pages",
-    "webpack": "^4.35.3",
-    "webpack-cli": "^3.3.5",
-    "webpack-dev-server": "^3.7.2",
+    "visualize-rev-tree": "0.0.1",
+    "webpack": "^4.41.0",
+    "webpack-cli": "^3.3.9",
+    "webpack-dev-server": "^3.8.2",
     "whatwg-fetch": "~2.0.1"
   },
   "scripts": {

@@ -13,7 +13,7 @@
 import FauxtonAPI from "../../../core/api";
 import {post} from "../../../core/ajax";
 import ActionTypes from "./actiontypes";
-import getTree from "visualizeRevTree/lib/getTree";
+import getTree from "visualize-rev-tree/lib/getTree";
 import PouchDB from "pouchdb-core";
 import PouchHttpAdapter from 'pouchdb-adapter-http';
 PouchDB.plugin(PouchHttpAdapter);

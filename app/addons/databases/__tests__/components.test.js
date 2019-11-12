@@ -116,7 +116,7 @@ describe('DatabaseTable', () => {
   beforeEach(() => {
     Actions.updateDatabases({
       dbList: ['db1'],
-      databaseDetails: [{db_name: 'db1', doc_count: 0, doc_del_count: 0}],
+      databaseDetails: [{db_name: 'db1', doc_count: 0, doc_del_count: 0, sizes: {}}],
       failedDbs: ['db1'],
       fullDbList: ['db1']
     });
@@ -165,7 +165,7 @@ describe('DatabaseTable', () => {
 
     Actions.updateDatabases({
       dbList: ['db1'],
-      databaseDetails: [{db_name: 'db1', doc_count: 0, doc_del_count: 0}],
+      databaseDetails: [{db_name: 'db1', doc_count: 0, doc_del_count: 0, sizes: {}}],
       failedDbs: [],
       fullDbList: ['db1']
     });
@@ -188,7 +188,7 @@ describe('DatabaseTable', () => {
   it('shows error message if row marked as failed to load', () => {
     Actions.updateDatabases({
       dbList: ['db1'],
-      databaseDetails: [{db_name: 'db1', doc_count: 0, doc_del_count: 0}],
+      databaseDetails: [{db_name: 'db1', doc_count: 0, doc_del_count: 0, sizes: {}}],
       failedDbs: ['db1'],
       fullDbList: ['db1']
     });
@@ -204,7 +204,7 @@ describe('DatabaseTable', () => {
   it('shows no error if row marked as loaded', () => {
     Actions.updateDatabases({
       dbList: ['db1'],
-      databaseDetails: [{db_name: 'db1', doc_count: 0, doc_del_count: 0}],
+      databaseDetails: [{db_name: 'db1', doc_count: 0, doc_del_count: 0, sizes: {}}],
       failedDbs: [],
       fullDbList: ['db1']
     });
@@ -221,7 +221,7 @@ describe('DatabaseTable', () => {
   it('shows Partitioned column only when prop is set to true', () => {
     Actions.updateDatabases({
       dbList: ['db1'],
-      databaseDetails: [{db_name: 'db1', doc_count: 0, doc_del_count: 0, props: {partitioned: true}}],
+      databaseDetails: [{db_name: 'db1', doc_count: 0, doc_del_count: 0, sizes:{}, props: {partitioned: true}}],
       failedDbs: [],
       fullDbList: ['db1']
     });
@@ -245,8 +245,8 @@ describe('DatabaseTable', () => {
     Actions.updateDatabases({
       dbList: ['db1', 'db2'],
       databaseDetails: [
-        {db_name: 'db1', doc_count: 1, doc_del_count: 0, props: {partitioned: true}},
-        {db_name: 'db2', doc_count: 2, doc_del_count: 0, props: {partitioned: false}}
+        {db_name: 'db1', doc_count: 1, doc_del_count: 0, sizes: {}, props: {partitioned: true}},
+        {db_name: 'db2', doc_count: 2, doc_del_count: 0, sizes: {}, props: {partitioned: false}}
       ],
       failedDbs: [],
       fullDbList: ['db1', 'db2']

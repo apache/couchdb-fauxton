@@ -16,7 +16,7 @@ var newDatabaseName = 'fauxton-selenium-tests-db-create';
 var invalidDatabaseName = 'fauxton-selenium-tests-#####';
 var helpers = require('../../../../../test/nightwatch_tests/helpers/helpers.js');
 module.exports = {
-  '@tags': ['nonpartitioned'],
+  '@tags': ['partitioned'],
 
   before: function (client, done) {
     const nano = helpers.getNanoInstance(client.globals.test_settings.db_url);
@@ -51,6 +51,7 @@ module.exports = {
       .clickWhenVisible('.add-new-database-btn')
       .waitForElementVisible('#js-new-database-name', waitTime, false)
       .setValue('#js-new-database-name', [newDatabaseName])
+      .clickWhenVisible('#non-partitioned-db', waitTime, false)
       .clickWhenVisible('#js-create-database', waitTime, false)
       .waitForElementNotPresent('.new-database-tray', waitTime, false)
       .checkForDatabaseCreated(newDatabaseName, waitTime)
@@ -80,6 +81,7 @@ module.exports = {
       .clickWhenVisible('.add-new-database-btn')
       .waitForElementVisible('#js-new-database-name', waitTime, false)
       .setValue('#js-new-database-name', [invalidDatabaseName])
+      .clickWhenVisible('#non-partitioned-db', waitTime, false)
       .clickWhenVisible('#js-create-database', waitTime, false)
       .waitForElementVisible('.global-notification.alert.alert-error', waitTime, false)
       .url(baseUrl + '/_all_dbs')

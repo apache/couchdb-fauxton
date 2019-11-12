@@ -84,7 +84,9 @@ module.exports = function (grunt) {
     var result = _getNightwatchTests(this.data.settings);
     var addonsWithTests = result.addonFolders;
     var excludeTests = result.excludeTests;
+    var skipTags = result.skipTags;
     console.info('addons and excluded', addonsWithTests, excludeTests);
+    console.info('skipTags', skipTags);
 
     // if the user passed a --file="X" on the command line, filter out
     var singleTestToRun = grunt.option('file');
@@ -107,7 +109,8 @@ module.exports = function (grunt) {
       db_protocol: this.data.settings.nightwatch.db_protocol,
       db_host: this.data.settings.nightwatch.db_host,
       db_port: this.data.settings.nightwatch.db_port,
-      selenium_port: this.data.settings.nightwatch.selenium_port
+      selenium_port: this.data.settings.nightwatch.selenium_port,
+      skiptags: skipTags
     }));
   });
 
@@ -120,7 +123,7 @@ module.exports = function (grunt) {
     }
     //making some assumptions here
     const interfaces = os.networkInterfaces();
-    const eth0 = interfaces[Object.keys(interfaces)[1]];
+    const eth0 = interfaces[Object.keys(interfaces)[2]];
     return eth0.find(function (item) {
       return item.family === 'IPv4';
     }).address;
@@ -206,9 +209,13 @@ module.exports = function (grunt) {
       }
     });
 
+    var skipTags = process.env.NIGHTWATCH_SKIPTAGS || 'nonpartitioned';
+    var skipTagsJSON = JSON.stringify(skipTags.split(',').map(s => s.trim()));
+
     return {
       addonFolders: addonFolders,
-      excludeTests: excludeTests
+      excludeTests: excludeTests,
+      skipTags: skipTagsJSON
     };
   }
 

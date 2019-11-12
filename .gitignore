@@ -20,6 +20,7 @@ app/addons/*
 !app/addons/styletests
 !app/addons/cors
 !app/addons/setup
+!app/addons/search
 settings.json*
 i18n.json
 !settings.json.default

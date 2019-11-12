@@ -1,0 +1,160 @@
+// Licensed under the Apache License, Version 2.0 (the "License"); you may not
+// use this file except in compliance with the License. You may obtain a copy of
+// the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+// WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+// License for the specific language governing permissions and limitations under
+// the License.
+@import "../../../../../assets/less/bootstrap/mixins.less";
+@import "../../../../../assets/less/variables.less";
+
+.search-index-page-loading {
+  margin-top: 20px;
+}
+
+.edit-search-index-page-loading {
+  margin-top: 25px;
+}
+
+.index-tabs.dashboard-upper-menu {
+  position: inherit;
+  &.index-tabs {
+    border-bottom: 0;
+    .fonticon:before {
+      margin-right: 6px;
+    }
+  }
+}
+
+#queryText{
+  max-width: 300px;
+}
+
+.ace-editor-section .ace_editor {
+  font-size: 13px;
+  width: 100%;
+  line-height: 22px;
+}
+
+.search-query-save {
+  max-width: 100%;
+  .design-doc-group #new-ddoc-section {
+    margin-top: 24px;
+    label {
+      padding-top: 12px;
+    }
+  }
+}
+
+#analyzer-fields {
+  margin-top: 10px;
+
+  li {
+    margin-bottom: 5px;
+
+    &:first-child {
+      button {
+        margin-top: 27px;
+      }
+    }
+    div:first-child {
+      margin-left: 0;
+    }
+  }
+
+  .span4 {
+    margin-right: 3px;
+    width: 30%;
+
+    .styled-select, select {
+      width: 100%;
+    }
+  }
+}
+
+.delete-analyzer {
+  margin-top: 3px;
+  margin-left: 15px;
+}
+
+.search-index-content>div {
+  margin: 20px 10px 0 20px;
+  .icon-question-sign {
+    margin-left: 4px;
+    &:hover {
+      color: @hoverHighlight;
+    }
+  }
+}
+
+.search-index-function {
+  label {
+    margin-right: 0;
+  }
+  .ace_editor {
+    line-height: 22px;
+  }
+}
+
+#search-query-submit {
+  padding: 12px;
+}
+
+#search-index-preview-form {
+  margin: 5px 0 20px;
+  .input-append {
+    vertical-align: bottom;
+  }
+  .help-link {
+    display: inline-block;
+    margin-left: 12px;
+    padding-bottom: 23px;
+  }
+}
+
+#search-index-help {
+  h4 {
+    margin-top: 18px;
+  }
+
+  ul {
+    margin: 0 0 10px;
+    padding: 0;
+    list-style-type: none;
+  }
+  .search-index-examples {
+    li {
+      line-height: 28px;
+      span {
+        .search-index-code-section;
+      }
+    }
+  }
+}
+
+.search-index-tab-content {
+  a:hover {
+    text-decoration: none;
+  }
+}
+
+.search-index-code-section {
+  font-size: 12px;
+  font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
+  background-color: #ddd;
+  padding: 5px;
+  border-radius: 3px;
+}
+
+#search-index-query-button {
+  height: 46px;
+  .border-right-radius(@radius);
+}
+
+body #dashboard-content #search-index-form {
+  position: relative;
+}
