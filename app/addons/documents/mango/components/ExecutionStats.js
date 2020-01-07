@@ -13,8 +13,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Popover, OverlayTrigger } from 'react-bootstrap';
 
-const TOO_MANY_DOCS_SCANNED_WARNING = "The number of documents examined is high in proportion to the number of results returned. Consider adding an index to improve this.";
-
 export default class ExecutionStats extends React.Component {
   constructor (props) {
     super(props);
@@ -37,18 +35,13 @@ export default class ExecutionStats extends React.Component {
     return [minutes, ' ', minuteText, ', ', seconds, ' ', secondsText].join('');
   }
 
-  getWarning(executionStats, warning) {
-    if (!executionStats) { return warning; }
-
-    // warn if many documents scanned in relation to results returned
-    if (!warning && executionStats.results_returned) {
-      const docsExamined = executionStats.total_docs_examined || executionStats.total_quorum_docs_examined;
-      if (docsExamined / executionStats.results_returned > 10) {
-        return TOO_MANY_DOCS_SCANNED_WARNING;
-      }
+  getWarning(warnings) {
+    if (warnings) {
+      const lines = warnings.split('\n').map((warnText, i) => {
+        return <React.Fragment key={i}>{warnText}<br/></React.Fragment>;
+      });
+      return <span>{lines}</span>;
     }
-
-    return warning;
   }
 
   warningPopupComponent(warningText) {
@@ -95,7 +88,7 @@ export default class ExecutionStats extends React.Component {
       warning
     } = this.props;
 
-    const warningText = this.getWarning(executionStats, warning);
+    const warningText = this.getWarning(warning);
 
     let warningComponent = null;
     if (warningText) {
