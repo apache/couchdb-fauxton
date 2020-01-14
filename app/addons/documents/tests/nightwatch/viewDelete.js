@@ -29,7 +29,7 @@ module.exports = {
       .assert.containsText('.prettyprint', 'stub')
 
       // confirm the sidebar shows the testdesigndoc design doc
-      .waitForElementVisible('#testdesigndoc', waitTime, true)
+      .waitForElementVisible('#design-doc-menu-testdesigndoc', waitTime, true)
 
       .clickWhenVisible('.index-list .active span', waitTime, true)
       .clickWhenVisible('.popover-content .fonticon-trash', waitTime, true)

@@ -157,7 +157,7 @@ export default class DesignDoc extends React.Component {
           </div>
         </div>
         <Collapse in={this.props.isExpanded}>
-          <ul className={toggleBodyClassNames} id={this.props.designDocName}>
+          <ul className={toggleBodyClassNames} id={`design-doc-menu-${this.props.designDocName}`}>
             <li className={metadataRowClass}>
               <a href={"#/" + designDocMetaUrl} className="toggle-view accordion-header">
                 Metadata
