@@ -144,7 +144,7 @@ export default class DocEditorScreen extends React.Component {
   };
 
   getButtonRow = () => {
-    if (this.props.isNewDoc) {
+    if (this.props.isNewDoc || this.props.doc === null) {
       return false;
     }
     return (

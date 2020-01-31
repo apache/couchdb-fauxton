@@ -20,7 +20,6 @@ exports.command = function (element, waitTime) {
 
   this
     .waitForElementPresent(element, waitTime, false)
-    .execute('document.querySelector("' + element + '").scrollIntoView();')
     .waitForElementVisible(element, waitTime, false)
     .click(element);
 

@@ -25,6 +25,7 @@ import { mount } from 'enzyme';
 import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware, combineReducers } from 'redux';
+import actiontypes from '../actiontypes';
 import docEditorReducer from '../reducers';
 
 import '../../base';
@@ -215,8 +216,25 @@ describe('DocEditorContainer', () => {
     combineReducers({ docEditor: docEditorReducer, databases: databasesReducer }),
     applyMiddleware(...middlewares)
   );
+  const loadDummyDocAction = {
+    type: actiontypes.DOC_LOADED,
+    options: {
+      doc: {
+        get: () => {},
+        unset: () => {},
+        hasChanged: () => false,
+      }
+    }
+  };
+
+  afterEach(() => {
+    store.dispatch({
+      type: actiontypes.RESET_DOC
+    });
+  });
 
   it('clicking Delete button shows the confirmation modal', () => {
+    store.dispatch(loadDummyDocAction);
     const wrapper = mount(
       <Provider store={store}>
         <DocEditorContainer
@@ -230,6 +248,7 @@ describe('DocEditorContainer', () => {
   });
 
   it('clicking Upload button shows the upload dialog', () => {
+    store.dispatch(loadDummyDocAction);
     const wrapper = mount(
       <Provider store={store}>
         <DocEditorContainer
@@ -243,6 +262,7 @@ describe('DocEditorContainer', () => {
   });
 
   it('clicking Clone button shows the clone doc dialog', () => {
+    store.dispatch(loadDummyDocAction);
     const wrapper = mount(
       <Provider store={store}>
         <DocEditorContainer

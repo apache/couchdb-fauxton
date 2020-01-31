@@ -33,9 +33,8 @@ module.exports = {
 
       .clickWhenVisible('.index-list .active span', waitTime, true)
       .clickWhenVisible('.popover-content .fonticon-trash', waitTime, true)
-      .waitForElementVisible('.confirmation-modal button.btn-primary', waitTime, true)
       .clickWhenVisible('.confirmation-modal button.btn-primary', waitTime, true)
-
+      .waitForElementNotPresent('.confirmation-modal button.btn-primary', waitTime, true)
 
       // now wait for the sidebar to have removed the design doc
       .waitForElementNotPresent('#testdesigndoc', waitTime, true)
