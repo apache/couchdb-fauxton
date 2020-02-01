@@ -201,7 +201,7 @@ module.exports = {
       .waitForElementPresent('.prettyprint', waitTime, false)
 
       // confirm the sidebar shows the testdesigndoc design doc
-      .waitForElementVisible('#testdesigndoc', waitTime, true)
+      .waitForElementVisible('#design-doc-menu-testdesigndoc', waitTime, true)
 
       .waitForElementPresent('.faux-header__doc-header-title', waitTime, false)
       .waitForAttribute('.faux-header__doc-header-title', 'textContent', function (docContents) {
@@ -234,7 +234,7 @@ module.exports = {
 
       // now wait for the old design doc to be gone, and the new one to have shown up
       .waitForElementNotPresent('#testdesigndoc', waitTime, true)
-      .waitForElementPresent('#brand-new-ddoc', waitTime, true)
+      .waitForElementPresent('#design-doc-menu-brand-new-ddoc', waitTime, true)
       .end();
   }
 

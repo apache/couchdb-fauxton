@@ -77,7 +77,7 @@ module.exports = {
 
       // just assert the search indexes section has been removed, but the design doc still exists
       .waitForElementNotPresent('#nav-design-function-testdesigndocindexes', waitTime, true)
-      .waitForElementPresent('#testdesigndoc', waitTime, true)
+      .waitForElementPresent('#design-doc-menu-testdesigndoc', waitTime, true)
 
       .end();
   }
