@@ -39,6 +39,7 @@ describe('CORS Components', () => {
         saveCORS={sinon.stub()}
         showDeleteDomainConfirmation={sinon.stub()}
         fetchAndLoadCORSOptions={sinon.stub()}
+        hideDeleteDomainConfirmation={sinon.stub()}
       />);
 
       wrapper.find('.enable-disable.btn').simulate('click');
@@ -56,6 +57,7 @@ describe('CORS Components', () => {
         saveCORS={sinon.stub()}
         showDeleteDomainConfirmation={sinon.stub()}
         fetchAndLoadCORSOptions={sinon.stub()}
+        hideDeleteDomainConfirmation={sinon.stub()}
       />);
       wrapper.find('.enable-disable.btn').simulate('click');
       sinon.assert.notCalled(spy);
@@ -72,6 +74,7 @@ describe('CORS Components', () => {
         saveCORS={sinon.stub()}
         showDeleteDomainConfirmation={sinon.stub()}
         fetchAndLoadCORSOptions={sinon.stub()}
+        hideDeleteDomainConfirmation={sinon.stub()}
       />);
       wrapper.find('input').at(0).simulate('change', { target: { checked: true, value: 'all' } });
       expect(spy.calledOnce).toBeTruthy();
@@ -88,6 +91,7 @@ describe('CORS Components', () => {
         saveCORS={sinon.stub()}
         showDeleteDomainConfirmation={sinon.stub()}
         fetchAndLoadCORSOptions={sinon.stub()}
+        hideDeleteDomainConfirmation={sinon.stub()}
       />);
       wrapper.find('input').at(0).simulate('change', { target: { checked: true, value: 'all' } });
       expect(spy.calledOnce).toBeFalsy();
@@ -102,6 +106,7 @@ describe('CORS Components', () => {
         saveCORS={sinon.stub()}
         showDeleteDomainConfirmation={sinon.stub()}
         fetchAndLoadCORSOptions={sinon.stub()}
+        hideDeleteDomainConfirmation={sinon.stub()}
       />);
 
       expect(wrapper.find('.loading-lines').exists()).toBeTruthy();
@@ -116,6 +121,7 @@ describe('CORS Components', () => {
         saveCORS={sinon.stub()}
         showDeleteDomainConfirmation={sinon.stub()}
         fetchAndLoadCORSOptions={sinon.stub()}
+        hideDeleteDomainConfirmation={sinon.stub()}
       />);
 
       expect(wrapper.find('.loading-lines').exists()).toBe(false);

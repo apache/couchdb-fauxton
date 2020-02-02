@@ -164,9 +164,7 @@ class ConfirmationModal extends React.Component {
     title: 'Please confirm',
     text: '',
     successButtonLabel: 'Okay',
-    buttonClass: 'btn-primary',
-    onClose: function () { },
-    onSubmit: function () { }
+    buttonClass: 'btn-primary'
   };
 
   close = (e) => {
@@ -177,12 +175,19 @@ class ConfirmationModal extends React.Component {
   };
 
   render() {
-    var content = <p>{this.props.text}</p>;
+    let content = <p>{this.props.text}</p>;
     if (!_.isString(this.props.text)) {
       content = this.props.text;
     }
-    var btnClasses = 'btn ' + this.props.buttonClass;
-
+    const btnClasses = 'btn ' + this.props.buttonClass;
+    const closeButton = this.props.onClose ? (
+      <a href="#" data-bypass="true" className="cancel-link" onClick={this.close}>Cancel</a>
+    ) : null;
+    const submitButton = this.props.onSubmit ? (
+      <button className={btnClasses} onClick={this.props.onSubmit}>
+        <i className="fonticon-ok-circled"></i> {this.props.successButtonLabel}
+      </button>
+    ) : null;
     return (
       <Modal dialogClassName="confirmation-modal" show={this.props.visible} onHide={this.close}>
         <Modal.Header closeButton={true}>
@@ -192,10 +197,8 @@ class ConfirmationModal extends React.Component {
           {content}
         </Modal.Body>
         <Modal.Footer>
-          <a href="#" data-bypass="true" className="cancel-link" onClick={this.close}>Cancel</a>
-          <button className={btnClasses} onClick={this.props.onSubmit}>
-            <i className="fonticon-ok-circled"></i> {this.props.successButtonLabel}
-          </button>
+          { closeButton }
+          { submitButton }
         </Modal.Footer>
       </Modal>
     );
