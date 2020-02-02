@@ -36,7 +36,7 @@ start_containters_and_check() {
       echo "=============================="
       return 1
     fi
-    if [[ $logs == *"Developers cluster is set up"* ]]; then
+    if [[ $logs == *"Apache CouchDB has started on"* ]]; then
       echo "Docker containers are up"
       echo "========================"
       docker logs couchdb
