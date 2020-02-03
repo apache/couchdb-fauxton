@@ -16,7 +16,7 @@ set -xe
 if [[ $COUCHDB_IMAGE == "couchdb:dev" ]]; then
     git clone https://github.com/apache/couchdb-docker.git
     cd couchdb-docker
-    docker build dev --build-arg configure_options='--disable-fauxton --disable-docs' -t couchdb:dev
+    docker build dev --build-arg configure_options='--disable-fauxton --disable-docs --spidermonkey-version 60' -t couchdb:dev
     cd ..
     rm -rf couchdb-docker
 fi
