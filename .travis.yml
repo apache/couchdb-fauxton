@@ -8,8 +8,9 @@ git:
   depth: 1
 env:
   - COUCHDB_IMAGE=apache/couchdb:2.3.1 NIGHTWATCH_SKIPTAGS="search,partitioned"
-  - COUCHDB_IMAGE=couchdb:dev NIGHTWATCH_SKIPTAGS="search,nonpartitioned"
   - COUCHDB_IMAGE=ibmcom/couchdb3:preview-1580123218 NIGHTWATCH_SKIPTAGS=nonpartitioned
+  # Temporarily removing as CouchDB docker image is failing to build
+  # - COUCHDB_IMAGE=couchdb:dev NIGHTWATCH_SKIPTAGS="search,nonpartitioned"
 
 before_install:
   - npm install -g npm@latest
