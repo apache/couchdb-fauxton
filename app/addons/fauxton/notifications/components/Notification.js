@@ -27,7 +27,7 @@ export default class Notification extends React.Component {
 
   static defaultProps = {
     type: 'info',
-    visibleTime: 8000,
+    visibleTime: 1000,
     escape: true
   };
 
