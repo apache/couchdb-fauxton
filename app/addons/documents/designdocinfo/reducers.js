@@ -14,6 +14,7 @@ import ActionTypes from './actiontypes';
 
 const initialState = {
   isLoading: true,
+  showLoadError: false,
   viewIndex: undefined
 };
 
@@ -28,16 +29,25 @@ export default function designDocInfo (state = initialState, action) {
         isLoading: true
       };
 
+    case ActionTypes.DESIGN_FETCHING_FAILED:
+      return {
+        ...state,
+        isLoading: false,
+        showLoadError: true,
+      };
+
     case ActionTypes.DESIGN_DOC_MONITOR:
       return {
         ...state,
         isLoading: false,
+        showLoadError: false,
         viewIndex: options.designDocInfo.get('view_index')
       };
 
     case ActionTypes.DESIGN_DOC_REFRESH:
       return {
         ...state,
+        showLoadError: false,
         viewIndex: options.designDocInfo.get('view_index')
       };
 

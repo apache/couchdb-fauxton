@@ -10,6 +10,7 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+import FauxtonAPI from '../../../core/api';
 import ActionTypes from "./actiontypes";
 
 const fetchDesignDocInfo = ({designDocName, designDocInfo}) => (dispatch) => {
@@ -22,6 +23,15 @@ const fetchDesignDocInfo = ({designDocName, designDocInfo}) => (dispatch) => {
       designDocName,
       designDocInfo
     }, dispatch);
+  }).catch(() => {
+    dispatch({
+      type: ActionTypes.DESIGN_FETCHING_FAILED
+    });
+    FauxtonAPI.addNotification({
+      msg: 'Error loading design document metadata.',
+      type: 'error',
+      clear: true
+    });
   });
 };
 
