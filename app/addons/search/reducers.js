@@ -107,7 +107,7 @@ function initEditSearch (state, { database, designDocs, ddocID, indexName }) {
     if (_.has(analyzer, 'default')) {
       newSingleAnalyzer = analyzer.default;
     } else {
-      newSingleAnalyzer = Constants.DEFAULT_ANALYZER_TYPE;
+      newSingleAnalyzer = Constants.DEFAULT_ANALYZER;
     }
   }
   const newAnalyzerFields = [];
