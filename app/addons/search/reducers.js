@@ -92,9 +92,9 @@ function setAnalyzerRow (state, { analyzer, rowIndex }) {
   return newAnalyzerFields;
 }
 
-function initEditSearch (state, { database, designDocs, ddocInfo, indexName }) {
+function initEditSearch (state, { database, designDocs, ddocID, indexName }) {
   const ddoc = designDocs.find(ddoc => {
-    return ddoc.id === ddocInfo.id;
+    return ddoc.id === ddocID;
   }).dDocModel();
 
   // the selected analyzer returned in the ddoc can be applied to both the single analyzer and the default multiple
@@ -107,7 +107,7 @@ function initEditSearch (state, { database, designDocs, ddocInfo, indexName }) {
     if (_.has(analyzer, 'default')) {
       newSingleAnalyzer = analyzer.default;
     } else {
-      newSingleAnalyzer = Constants.DEFAULT_ANALYZER_TYPE;
+      newSingleAnalyzer = Constants.DEFAULT_ANALYZER;
     }
   }
   const newAnalyzerFields = [];
@@ -128,9 +128,9 @@ function initEditSearch (state, { database, designDocs, ddocInfo, indexName }) {
     database: database,
     designDocs: designDocs,
     searchIndexName: indexName,
-    ddocName: ddocInfo.id,
+    ddocName: ddocID,
     lastSavedSearchIndexName: indexName,
-    lastSavedDesignDocName: ddocInfo.id,
+    lastSavedDesignDocName: ddocID,
     searchIndexFunction: ddoc.getIndex(indexName),
     analyzerType: ddoc.analyzerType(indexName),
     // this either returns a simple string (single) or a complex object (multiple)
