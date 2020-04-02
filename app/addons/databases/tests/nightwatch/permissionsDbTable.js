@@ -12,6 +12,8 @@
 
 module.exports = {
 
+  '@tags': ['couchdb-v2-only'],
+
   'lists databases with a 401' : function (client) {
     const waitTime = client.globals.maxWaitTime;
 

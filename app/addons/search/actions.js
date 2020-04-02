@@ -13,7 +13,6 @@
 import FauxtonAPI from '../../core/api';
 import ActionTypes from './actiontypes';
 import Search from './resources';
-import Documents from '../documents/base';
 import SidebarActions from '../documents/sidebar/actions';
 import IndexEditorActions from '../documents/index-editor/actions';
 import * as API from './api';
@@ -66,8 +65,7 @@ const dispatchInitSearchIndex = (params)  => {
 };
 
 const dispatchEditSearchIndex = (params) => {
-  var ddocInfo = new Documents.DdocInfo({ _id: params.ddocID }, { database: params.database });
-
+  const {database, ddocID, designDocs, indexName} = params;
   FauxtonAPI.reduxDispatch({
     type: ActionTypes.SEARCH_INDEX_SET_LOADING,
     options: {
@@ -75,24 +73,24 @@ const dispatchEditSearchIndex = (params) => {
     }
   });
 
-  FauxtonAPI.Promise.all([params.designDocs.fetch(), ddocInfo.fetch()]).then(([ddocs]) => {
-    const ddoc = ddocs.rows.find(ddoc => ddoc._id === ddocInfo.id).doc;
-    if (!ddoc.indexes || !ddoc.indexes[params.indexName]) {
-      throw Error(`Index "${params.indexName}" not found`);
+  designDocs.fetch().then(ddocs => {
+    const ddoc = ddocs.rows.find(ddoc => ddoc._id === ddocID).doc;
+    if (!ddoc.indexes || !ddoc.indexes[indexName]) {
+      throw Error(`Index "${indexName}" not found`);
     }
     FauxtonAPI.reduxDispatch({
       type: ActionTypes.SEARCH_INDEX_INIT_EDIT_SEARCH_INDEX,
       options: {
-        indexName: params.indexName,
-        database: params.database,
-        ddocInfo: ddocInfo,
-        designDocs: params.designDocs
+        indexName,
+        database,
+        ddocID,
+        designDocs,
       }
     });
   }).catch(err => {
     const details = err.message ? err.message : '';
     FauxtonAPI.addNotification({
-      msg: `There was a problem editing the search index "${params.indexName}". ` + details,
+      msg: `There was a problem editing the search index "${indexName}". ` + details,
       type: 'error',
       clear: true
     });
