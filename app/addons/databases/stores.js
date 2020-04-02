@@ -113,7 +113,7 @@ const DatabasesStoreConstructor = FauxtonAPI.Store.extend({
       return {};
     }
     const {sizes} = details;
-    const dataSize = (sizes && sizes.active) || details.data_size || 0;
+    const dataSize = (sizes && sizes.active) || (sizes && sizes.external) || details.data_size || 0;
 
     return {
       dataSize: Helpers.formatSize(dataSize),
