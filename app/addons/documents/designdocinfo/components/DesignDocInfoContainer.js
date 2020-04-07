@@ -5,6 +5,7 @@ import Actions from '../actions';
 const mapStateToProps = ({ designDocInfo }, ownProps) => {
   return {
     isLoading: designDocInfo.isLoading,
+    showLoadError: designDocInfo.showLoadError,
     viewIndex: designDocInfo.viewIndex,
     designDocInfo: ownProps.designDocInfo,
     designDocName: ownProps.designDocName

@@ -12,6 +12,7 @@
 
 import reducer from '../reducers';
 import ActionTypes from '../actiontypes';
+import Constants from '../constants';
 
 describe('Search Reducer', () => {
 
@@ -138,6 +139,38 @@ describe('Search Reducer', () => {
     };
     newState = reducer(newState, initAction);
     expect(newState.searchResults).toBeUndefined();
+  });
+
+  it('loads the single analyzer correctly', () => {
+    const initialState = reducer(undefined, { type: 'DO_NOTHING' });
+    expect(initialState.singleAnalyzer).toBe('standard');
+
+    const ddocID = '_design/ddoc_test';
+    const mockDesigDocModel = {
+      id: ddocID,
+      dDocModel: () => { return mockDesigDocModel; },
+      getAnalyzer: () => 'keyword',
+      getIndex: () => '',
+      analyzerType: () => Constants.ANALYZER_SINGLE
+    };
+    const designDocs = [mockDesigDocModel];
+    const action = {
+      type: ActionTypes.SEARCH_INDEX_INIT_EDIT_SEARCH_INDEX,
+      options: {
+        database: 'db1',
+        designDocs,
+        ddocID,
+        indexName: 'idx1'
+      }
+    };
+    // Validate the single analyzer is correct
+    const stateWithKeywordAnalyzer = reducer(initialState, action);
+    expect(stateWithKeywordAnalyzer.singleAnalyzer).toBe('keyword');
+
+    // Validate the default analyzer is set when the DDoc doesn't specify one
+    mockDesigDocModel.getAnalyzer = () => undefined;
+    const stateWithNoAnalyzer = reducer(initialState, action);
+    expect(stateWithNoAnalyzer.singleAnalyzer).toBe(Constants.DEFAULT_ANALYZER);
   });
 
 });

@@ -8,7 +8,8 @@ git:
   depth: 1
 env:
   - COUCHDB_IMAGE=apache/couchdb:2.3.1 NIGHTWATCH_SKIPTAGS="search,partitioned"
-  - COUCHDB_IMAGE=couchdb:dev NIGHTWATCH_SKIPTAGS="search,nonpartitioned"
+  - COUCHDB_IMAGE=apache/couchdb:3 NIGHTWATCH_SKIPTAGS="search,nonpartitioned,couchdb-v2-only"
+  # - COUCHDB_IMAGE=couchdb:dev NIGHTWATCH_SKIPTAGS="search,nonpartitioned"
 
 before_install:
   - npm install -g npm@latest

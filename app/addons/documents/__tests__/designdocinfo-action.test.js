@@ -23,6 +23,7 @@ describe('DesignDocInfo Actions', () => {
 
     afterEach(() => {
       restore(window.setInterval);
+      testUtils.restore(FauxtonAPI.addNotification);
     });
 
     it('schedules regular updates on successful fetch', () => {
@@ -42,6 +43,26 @@ describe('DesignDocInfo Actions', () => {
         designDocInfo: fakeDesignDocInfo
       })(dispatch).then(() => {
         expect(spy.calledOnce).toBeTruthy();
+      });
+    });
+
+    it('shows error message in case of failure', () => {
+      const promise = FauxtonAPI.Deferred();
+      promise.reject();
+      const fakeDesignDocInfo = {
+        fetch: () => {
+          return promise;
+        }
+      };
+
+      const notificationSpy = sinon.spy(FauxtonAPI, 'addNotification');
+      const dispatch = sinon.stub();
+
+      return Actions.fetchDesignDocInfo({
+        ddocName: 'test-designdoc-info',
+        designDocInfo: fakeDesignDocInfo
+      })(dispatch).then(() => {
+        sinon.assert.calledOnce(notificationSpy);
       });
     });
   });
