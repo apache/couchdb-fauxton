@@ -53,8 +53,11 @@ export default class ExecutionStats extends React.Component {
   }
 
   executionStatsLine(title, value, alwaysShow = false, units = "") {
-    const hasValue = value === 0 && !alwaysShow ? "false" : "true";
-    return <div data-status={hasValue}>{title + ": "}<span className="value">{value.toLocaleString()} {units}</span></div>;
+    if (typeof value === 'number') {
+      const hasValue = value === 0 && !alwaysShow ? "false" : "true";
+      return <div data-status={hasValue}>{title + ": "}<span className="value">{value.toLocaleString()} {units}</span></div>;
+    }
+    return null;
   }
 
   executionStatsPopupComponent(executionStats) {
