@@ -10,9 +10,11 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+import React from 'react';
 import moment from 'moment';
 import app from '../../../app';
 import ActionTypes from './actiontypes';
+import {toast} from "react-toastify";
 
 const initialState = {
   notifications: [],
@@ -29,32 +31,38 @@ const validFilters = ['all', 'success', 'error', 'info'];
 function addNotification ({ notifications }, info) {
   const newNotifications = notifications.slice();
   info = { ...info };
-  info.notificationId = ++counter;
-  info.cleanMsg = app.utils.stripHTML(info.msg);
+  info.toastId = ++counter;
   info.time = moment();
+  info.cleanMsg = app.utils.stripHTML(info.msg);
+
   if (info.escape !== true && info.escape !== false) {
     info.escape = true;
   }
 
-  // all new notifications are visible by default. They get hidden after their time expires, by the component
-  info.visible = true;
-  info.isHiding = false;
+  info.htmlMsg = {
+    __html: (info.escape ? _.escape(info.cleanMsg) : info.cleanMsg)
+  };
 
   // clear: true causes all visible messages to be hidden
   if (info.clear) {
-    newNotifications.forEach((notification) => {
-      if (notification.visible) {
-        notification.isHiding = true;
-      }
-    });
+    const idsToClear = _.map(notifications, 'toastId');
+
+    // Add some delay to prevent weird flickering
+    setTimeout(() => {
+      idsToClear.forEach(id => toast.dismiss(id));
+    }, 800);
   }
+
   newNotifications.unshift(info);
+
+  toast(<span dangerouslySetInnerHTML={info.htmlMsg}/>, info);
+
   return newNotifications;
 }
 
-function clearNotification({ notifications }, notificationId) {
+function clearNotification({ notifications }, toastId) {
   const idx = notifications.findIndex(el => {
-    return el.notificationId === notificationId;
+    return el.toastId === toastId;
   });
   if (idx === -1) {
     // no changes
@@ -63,45 +71,9 @@ function clearNotification({ notifications }, notificationId) {
 
   const newNotifications = [].concat(notifications);
   newNotifications.splice(idx, 1);
-  return newNotifications;
-}
 
-function startHidingNotification({ notifications }, notificationId) {
-  const idx = notifications.findIndex(el => {
-    return el.notificationId === notificationId;
-  });
-  if (idx === -1) {
-    // no changes
-    return notifications;
-  }
+  toast.dismiss(toastId);
 
-  const newNotifications = [].concat(notifications);
-  newNotifications[idx].isHiding = true;
-  return newNotifications;
-}
-
-function hideNotification({ notifications }, notificationId) {
-  const idx = notifications.findIndex(el => {
-    return el.notificationId === notificationId;
-  });
-  if (idx === -1) {
-    // no changes
-    return notifications;
-  }
-
-  const newNotifications = [].concat(notifications);
-  newNotifications[idx].visible = false;
-  newNotifications[idx].isHiding = false;
-  return newNotifications;
-}
-
-function hideAllNotifications({ notifications }) {
-  const newNotifications = [].concat(notifications);
-  newNotifications.forEach((notification) => {
-    if (notification.visible) {
-      notification.isHiding = true;
-    }
-  });
   return newNotifications;
 }
 
@@ -119,6 +91,7 @@ export default function notifications(state = initialState, action) {
       };
 
     case ActionTypes.CLEAR_ALL_NOTIFICATIONS:
+      toast.dismiss();
       return {
         ...state,
         notifications: []
@@ -127,25 +100,7 @@ export default function notifications(state = initialState, action) {
     case ActionTypes.CLEAR_SINGLE_NOTIFICATION:
       return {
         ...state,
-        notifications: clearNotification(state, options.notificationId)
-      };
-
-    case ActionTypes.START_HIDING_NOTIFICATION:
-      return {
-        ...state,
-        notifications: startHidingNotification(state, options.notificationId)
-      };
-
-    case ActionTypes.HIDE_NOTIFICATION:
-      return {
-        ...state,
-        notifications: hideNotification(state, options.notificationId)
-      };
-
-    case ActionTypes.HIDE_ALL_NOTIFICATIONS:
-      return {
-        ...state,
-        notifications: hideAllNotifications(state)
+        notifications: clearNotification(state, options.toastId)
       };
 
     case ActionTypes.SHOW_NOTIFICATION_CENTER:

@@ -24,14 +24,6 @@
   height: 100%;
 }
 
-#global-notifications {
-  position: fixed;
-  top: 0;
-  display: block;
-  z-index: 100000;
-  width: 100%;
-}
-
 #app-container {
   height: 100vh;
   position: relative;
@@ -289,3 +281,43 @@
   opacity: 0;
   height: 0;
 }
+
+.toast-container {
+  margin-top: @breadcrumbHeight;
+}
+.Toastify__toast {
+  opacity: 0.9;
+
+  &:hover{
+    opacity: 1;
+  }
+}
+.Toastify__toast--info {
+  &, .Toastify__close-button--info {
+    background-color: @infoAlertBackground;
+    color: @infoAlertColor
+  }
+}
+
+
+
+.Toastify__toast--success {
+  &, .Toastify__close-button--success {
+    background-color: @successAlertBackground;
+    color: @successAlertColor;
+  }
+}
+.Toastify__toast--warning {
+  &, .Toastify__close-button--warning {
+    background-color: @warningBackground;
+    color: @warningText;
+  }
+  border: 1px solid @warningBorder;
+}
+.Toastify__toast--error {
+  &, .Toastify__close-button--error {
+    background-color: @errorAlertBackground;
+    color: @errorAlertColor;
+  }
+}
+

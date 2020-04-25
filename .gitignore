@@ -42,3 +42,6 @@ test/templates.js
 test/dashboard.assets
 # test coverage dir
 coverage
+
+# Jetbrains IDE
+.idea/

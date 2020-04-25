@@ -56,7 +56,7 @@ export default class NotificationCenterPanel extends React.Component {
   getStyles = (prevItems = []) => {
     const styles = this.props.notifications
       .map(notification => {
-        let item = prevItems.find(style => style.key === (notification.notificationId.toString()));
+        let item = prevItems.find(style => style.key === (notification.toastId.toString()));
         let style = !item ? {opacity: 0, height: 0} : false;
 
         if (!style && (notification.type === this.props.filter || this.props.filter === 'all')) {
@@ -72,7 +72,7 @@ export default class NotificationCenterPanel extends React.Component {
         }
 
         return {
-          key: notification.notificationId.toString(),
+          key: notification.toastId.toString(),
           style,
           data: notification
         };

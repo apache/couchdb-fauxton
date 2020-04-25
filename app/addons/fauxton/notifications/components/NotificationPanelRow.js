@@ -24,8 +24,8 @@ export default class NotificationPanelRow extends React.Component {
   };
 
   clearNotification = () => {
-    const {notificationId} = this.props.item;
-    this.props.clearSingleNotification(notificationId);
+    const {toastId} = this.props.item;
+    this.props.clearSingleNotification(toastId);
   };
 
   render() {
