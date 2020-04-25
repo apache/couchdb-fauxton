@@ -47,4 +47,22 @@ describe('Beautify', () => {
     beautifyEl.simulate('click');
     expect(fixedCode).toBe(correctCode);
   });
+
+  it('on click beautifies es6 code', () => {
+    let fixedCode;
+    const correctCode = '({\n    type,\n    code\n}) => type === \'WIDGET\' && emit(code, 1)';
+
+    const beautifiedCode = (code) => {
+      fixedCode = code;
+    };
+
+    beautifyEl = mount(
+      <ReactComponents.Beautify
+        beautifiedCode={beautifiedCode}
+        code={'({type,code}) => type === \'WIDGET\' && emit(code,1)'}
+        noOfLines={1}/>
+    );
+    beautifyEl.simulate('click');
+    expect(fixedCode).toBe(correctCode);
+  });
 });
