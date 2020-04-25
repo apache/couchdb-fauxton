@@ -45,8 +45,12 @@ Search.Doc = Documents.Doc.extend({
   },
 
   analyzerType: function (indexName) {
-    if (typeof this.getAnalyzer(indexName) === 'object') {
+    const analyzer = this.getAnalyzer(indexName);
+
+    if (typeof analyzer === 'object') {
       return Constants.ANALYZER_MULTIPLE;
+    } else if (!analyzer) {
+      return Constants.ANALYZER_NONE;
     }
     return Constants.ANALYZER_SINGLE;
   },

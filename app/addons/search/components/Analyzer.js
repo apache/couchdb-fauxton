@@ -34,7 +34,7 @@ export default class Analyzer extends React.Component {
   };
 
   validate = () => {
-    if (this.props.analyzerType === Constants.ANALYZER_SINGLE) {
+    if (this.props.analyzerType !== Constants.ANALYZER_MULTIPLE) {
       return true;
     }
     return this.analyzerMultiple.validate();
@@ -49,6 +49,10 @@ export default class Analyzer extends React.Component {
   };
 
   getInfo = () => {
+    if (this.props.analyzerType === Constants.ANALYZER_NONE) {
+      return;
+    }
+
     return this.props.analyzerType === Constants.ANALYZER_SINGLE
       ? this.props.singleAnalyzer
       : {
@@ -67,6 +71,9 @@ export default class Analyzer extends React.Component {
   };
 
   getAnalyzerType = () => {
+    if (this.props.analyzerType === Constants.ANALYZER_NONE) {
+      return;
+    }
     return this.props.analyzerType === Constants.ANALYZER_SINGLE
       ? (<AnalyzerDropdown
         label="Type"
@@ -95,6 +102,11 @@ export default class Analyzer extends React.Component {
       singleClasses += ' active';
     }
 
+    let noneClasses = 'btn';
+    if (this.props.analyzerType === Constants.ANALYZER_NONE) {
+      noneClasses += ' active';
+    }
+
     return (
       <div className="well">
         <div className="control-group">
@@ -116,6 +128,14 @@ export default class Analyzer extends React.Component {
               checked={this.props.analyzerType === Constants.ANALYZER_MULTIPLE}
               onChange={this.selectAnalyzerType} />
             <label style={{width: '82px'}} htmlFor="multiple-analyzer" className={multipleClasses}>Multiple</label>
+            <input
+              type="radio"
+              id="none-analyzer"
+              name="search-analyzer"
+              value="none"
+              checked={this.props.analyzerType === Constants.ANALYZER_NONE}
+              onChange={this.selectAnalyzerType} />
+            <label style={{width: '82px'}} htmlFor="none-analyzer" className={noneClasses}>None</label>
           </div>
         </div>
         {this.getAnalyzerType()}

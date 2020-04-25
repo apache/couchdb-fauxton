@@ -10,6 +10,7 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 export default {
+  ANALYZER_NONE: 'none',
   ANALYZER_SINGLE: 'single',
   ANALYZER_MULTIPLE: 'multiple',
   DEFAULT_SEARCH_INDEX_NAME: 'newSearch',
