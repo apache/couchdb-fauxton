@@ -81,7 +81,7 @@ module.exports = {
       .waitForElementVisible('#js-new-database-name', waitTime, false)
       .setValue('#js-new-database-name', [invalidDatabaseName])
       .clickWhenVisible('#js-create-database', waitTime, false)
-      .waitForElementVisible('.global-notification.alert.alert-error', waitTime, false)
+      .waitForElementVisible('.Toastify__toast-container .Toastify__toast--error', waitTime, false)
       .url(baseUrl + '/_all_dbs')
       .waitForElementVisible('html', waitTime, false)
       .getText('html', function (result) {

@@ -39,7 +39,7 @@ module.exports = {
       .clearValue('#search-name')
       .setValue('#search-name', 'api-bar-test')
       .clickWhenVisible('#save-index')
-      .waitForElementVisible('#global-notifications .alert.alert-success', client.globals.maxWaitTime, false)
+      .waitForElementVisible('.Toastify__toast-container .Toastify__toast--success', client.globals.maxWaitTime, false)
 
       // confirm the API URL field now shows up (we're on the edit search index page now)
       .assert.elementPresent('.faux__jsonlink')
@@ -48,7 +48,7 @@ module.exports = {
       .setValue('#search-index-preview-form input', searchStr)
       .clickWhenVisible('#search-index-preview-form button')
 
-      .waitForElementNotVisible('#global-notifications', client.globals.maxWaitTime, false)
+      .waitForElementNotVisible('.Toastify__toast-container .Toastify__toast--success', client.globals.maxWaitTime, false)
       .waitForElementNotPresent('.loading-lines', client.globals.maxWaitTime, false)
       .assert.attributeContains('.faux__jsonlink-link', 'href', fullURL)
       .end();

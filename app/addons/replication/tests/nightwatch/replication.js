@@ -80,7 +80,7 @@ module.exports = {
 
       .clickWhenVisible('#replicate')
 
-      .waitForElementNotPresent('.global-notification .fonticon-cancel', waitTime, false)
+      .waitForElementNotPresent('.Toastify__toast-container .Toastify__toast', waitTime, false)
       .end();
   },
 
@@ -138,7 +138,7 @@ module.exports = {
       })
       .clickWhenVisible('#replicate')
 
-      .waitForElementNotPresent('.global-notification .fonticon-cancel', waitTime, false)
+      .waitForElementNotPresent('.Toastify__toast-container .Toastify__toast', waitTime, false)
       .end();
   },
 
@@ -208,7 +208,7 @@ module.exports = {
       .waitForElementVisible('.replication__error-doc-modal .replication__error-continue', waitTime, true)
       .clickWhenVisible('.replication__error-doc-modal .replication__error-continue')
 
-      .waitForElementNotPresent('.global-notification .fonticon-cancel', waitTime, false)
+      .waitForElementNotPresent('.Toastify__toast-container .Toastify__toast', waitTime, false)
       .end();
   },
 
@@ -240,7 +240,7 @@ module.exports = {
 
       .clickWhenVisible('#replicate')
 
-      .waitForElementPresent('.global-notification.alert-error', waitTime, true)
+      .waitForElementPresent('.Toastify__toast-container .Toastify__toast--error', waitTime, true)
       .end();
   },
 
@@ -280,7 +280,7 @@ module.exports = {
 
       .clickWhenVisible('#replicate')
 
-      .waitForElementPresent('.global-notification.alert-error', waitTime, true)
+      .waitForElementPresent('.Toastify__toast-container .Toastify__toast--error', waitTime, true)
       .end();
   }
 };

@@ -144,7 +144,7 @@ function openDifferentDropdownsAndClick (client) {
     .loginToGUI()
     .populateDatabase(newDatabaseName)
     .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
-    .waitForElementNotPresent('.global-notification .fonticon-cancel', waitTime, false)
+    .waitForElementNotPresent('.Toastify__toast-container .Toastify__toast', waitTime, false)
     .clickWhenVisible('.faux-header__doc-header-dropdown-toggle')
     .clickWhenVisible('.faux-header__doc-header-dropdown-itemwrapper a[href*="new_view"]')
     .waitForElementPresent('.index-cancel-link', waitTime, false);

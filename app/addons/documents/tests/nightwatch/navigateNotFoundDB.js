@@ -23,8 +23,8 @@ module.exports = {
     client
       .loginToGUI()
       .url(baseUrl + '/#/database/does-not-exist/_all_docs')
-      .waitForElementPresent('.global-notification', waitTime, false)
-      .assert.containsText('.global-notification', 'does not exist')
+      .waitForElementPresent('.Toastify__toast-container .Toastify__toast', waitTime, false)
+      .assert.containsText('.Toastify__toast-container .Toastify__toast', 'does not exist')
       .verify.urlEquals(baseUrl + '/#');
   }
 };

@@ -31,7 +31,7 @@ module.exports = {
       .clearValue('#search-name')
       .setValue('#search-name', 'test1-index')
       .clickWhenVisible('#save-index')
-      .waitForElementVisible('#global-notifications .alert.alert-success', waitTime, false)
+      .waitForElementVisible('.Toastify__toast-container .Toastify__toast--success', waitTime, false)
 
       .clickWhenVisible('.index-list li span', waitTime, true)
       .clickWhenVisible('.popover-content .fonticon-files-o', waitTime, true)

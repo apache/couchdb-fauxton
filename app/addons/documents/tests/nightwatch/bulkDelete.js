@@ -35,7 +35,7 @@ module.exports = {
       .clickWhenVisible('.bulk-action-component-selector-group input[type="checkbox"]')
       .clickWhenVisible('.bulk-action-component-selector-group button.fonticon-trash', waitTime, false)
       .acceptAlert()
-      .waitForElementVisible('#global-notifications .alert.alert-info', waitTime, false)
+      .waitForElementVisible('.Toastify__toast-container .Toastify__toast--info', waitTime, false)
       .waitForElementNotPresent('[data-id="' + newDocumentName1 + '"]', waitTime, false)
       .getText('body', function (result) {
         var data = result.value,
@@ -69,7 +69,7 @@ module.exports = {
       .clickWhenVisible('.bulk-action-component-selector-group input[type="checkbox"]')
       .clickWhenVisible('.bulk-action-component-selector-group button.fonticon-trash', waitTime, false)
       .acceptAlert()
-      .waitForElementVisible('#global-notifications .alert.alert-info', waitTime, false)
+      .waitForElementVisible('.Toastify__toast-container .Toastify__toast--info', waitTime, false)
       .waitForElementNotPresent('.table-view-docs ', waitTime, false)
       .getText('body', function (result) {
         var data = result.value,

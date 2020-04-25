@@ -47,7 +47,7 @@ module.exports = {
       .waitForElementVisible('.delete-db-modal', waitTime, false)
       .clickWhenVisible('.delete-db-modal input[type="text"]', waitTime, false)
       .setValue('.delete-db-modal input[type="text"]', [newDatabaseName, client.Keys.ENTER])
-      .waitForElementNotPresent('.global-notification .fonticon-cancel', waitTime, false)
+      .waitForElementNotPresent('.Toastify__toast-container .Toastify__toast', waitTime, false)
       .waitForElementPresent('.fauxton-table-list', waitTime, false)
       .checkForDatabaseDeleted(newDatabaseName, waitTime)
       .assert.elementNotPresent('a[href="database/' + newDatabaseName + '/_all_docs"]')
