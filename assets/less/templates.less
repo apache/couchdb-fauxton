@@ -284,40 +284,36 @@
 
 .toast-container {
   margin-top: @breadcrumbHeight;
+  padding:0;
+  right: 0;
 }
-.Toastify__toast {
-  opacity: 0.9;
 
-  &:hover{
-    opacity: 1;
-  }
+.Toastify__toast {
+  border: 1px solid #999;
+  background-color: #fff;
+  border-right: 0;
+  color: black;
 }
+
 .Toastify__toast--info {
   &, .Toastify__close-button--info {
-    background-color: @infoAlertBackground;
-    color: @infoAlertColor
-  }
+    border-left: 6px solid @infoAlertBackground;
+    }
 }
-
-
 
 .Toastify__toast--success {
   &, .Toastify__close-button--success {
-    background-color: @successAlertBackground;
-    color: @successAlertColor;
+    border-left: 6px solid @successAlertBackground;
   }
 }
 .Toastify__toast--warning {
   &, .Toastify__close-button--warning {
-    background-color: @warningBackground;
-    color: @warningText;
+    border-left: 6px solid @warningBackground;
   }
-  border: 1px solid @warningBorder;
 }
 .Toastify__toast--error {
   &, .Toastify__close-button--error {
-    background-color: @errorAlertBackground;
-    color: @errorAlertColor;
+    border-left: 6px solid @errorAlertColor;
   }
 }
 
