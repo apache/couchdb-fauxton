@@ -40,7 +40,7 @@
     "babel-eslint": "^9.0.0",
     "babel-loader": "^8.0.6",
     "babel-plugin-array-includes": "^2.0.3",
-    "backbone": "^1.1.0",
+    "backbone": "^1.4.0",
     "base-64": "^0.1.0",
     "bluebird": "^3.4.6",
     "brace": "^0.11.0",
