@@ -61,6 +61,12 @@ export class StringEditModal extends React.Component {
     this.props.onSave(this.editor.getValue());
   };
 
+  getSaveBtn = () => {
+    return this.state.editorInitialized && (<button id="string-edit-save-btn" onClick={this.save} className="btn btn-primary save">
+      <i className="fonticon-circle-check"></i> Modify Text
+    </button>);
+  };
+
   render() {
     const { editorInitialized } = this.state;
     const saveBt = editorInitialized ? (

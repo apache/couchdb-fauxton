@@ -35,7 +35,6 @@ module.exports = {
     client
       .loginToGUI()
       .url(baseUrl + '/#/database/' + testDbName + '/_all_docs')
-      .waitForElementNotPresent('.Toastify__toast-container .Toastify__toast', waitTime, false)
 
       .clickWhenVisible('.faux-header__doc-header-dropdown-toggle')
       .clickWhenVisible('.faux-header__doc-header-dropdown-itemwrapper .fonticon-replicate')

@@ -18,7 +18,7 @@ exports.command = function () {
 
   client
     .waitForElementVisible(dismissSelector, helpers.maxWaitTime, false)
-    .click(dismissSelector)
+    .keys(client.keys.ESCAPE)
     .waitForElementNotPresent(dismissSelector, helpers.maxWaitTime, false);
 
   return this;

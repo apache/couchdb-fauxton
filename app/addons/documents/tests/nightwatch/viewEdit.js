@@ -139,7 +139,7 @@ module.exports = {
 
       // create the second view
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
-      .waitForElementNotPresent('.Toastify__toast-container .Toastify__toast', waitTime, false)
+      .closeNotifications()
 
       .clickWhenVisible('.faux-header__doc-header-dropdown-toggle')
       .clickWhenVisible('.faux-header__doc-header-dropdown-itemwrapper a[href*="new_view"]')

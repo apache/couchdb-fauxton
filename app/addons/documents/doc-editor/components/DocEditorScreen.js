@@ -96,7 +96,10 @@ export default class DocEditorScreen extends React.Component {
     if (this.props.numFilesUploaded !== nextProps.numFilesUploaded ||
         this.props.doc && this.props.doc.hasChanged() ||
         (this.props.doc && nextProps.doc && this.props.doc.id !== nextProps.doc.id)) {
-      this.getEditor().setValue(JSON.stringify(nextProps.doc.attributes, null, '  '));
+      const editor = this.getEditor();
+      if (editor) {
+        this.getEditor().setValue(JSON.stringify(nextProps.doc.attributes, null, '  '));
+      }
       this.onSaveComplete();
     }
   }

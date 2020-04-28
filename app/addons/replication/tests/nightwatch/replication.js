@@ -80,7 +80,7 @@ module.exports = {
 
       .clickWhenVisible('#replicate')
 
-      .waitForElementNotPresent('.Toastify__toast-container .Toastify__toast', waitTime, false)
+      .closeNotifications()
       .end();
   },
 
@@ -138,7 +138,7 @@ module.exports = {
       })
       .clickWhenVisible('#replicate')
 
-      .waitForElementNotPresent('.Toastify__toast-container .Toastify__toast', waitTime, false)
+      .closeNotifications()
       .end();
   },
 
@@ -208,7 +208,7 @@ module.exports = {
       .waitForElementVisible('.replication__error-doc-modal .replication__error-continue', waitTime, true)
       .clickWhenVisible('.replication__error-doc-modal .replication__error-continue')
 
-      .waitForElementNotPresent('.Toastify__toast-container .Toastify__toast', waitTime, false)
+      .closeNotifications()
       .end();
   },
 
