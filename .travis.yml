@@ -8,8 +8,7 @@ git:
   depth: 1
 env:
   - COUCHDB_IMAGE=apache/couchdb:2.3.1 NIGHTWATCH_SKIPTAGS="search,partitioned"
-  - COUCHDB_IMAGE=ibmcom/couchdb3:preview-1580123218 NIGHTWATCH_SKIPTAGS=nonpartitioned
-  # Temporarily disable because the couchdb:dev image is not building correctly
+  - COUCHDB_IMAGE=apache/couchdb:3 NIGHTWATCH_SKIPTAGS="search,nonpartitioned,couchdb-v2-only"
   # - COUCHDB_IMAGE=couchdb:dev NIGHTWATCH_SKIPTAGS="search,nonpartitioned"
 
 before_install:

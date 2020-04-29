@@ -55,6 +55,19 @@ export default class DesignDocInfo extends React.Component {
     if (this.props.isLoading) {
       return <LoadLines />;
     }
+    if (this.props.showLoadError) {
+      return (
+        <div className="metadata-page">
+          <header>
+            <h2>_design/{this.props.designDocName} Metadata</h2>
+          </header>
+
+          <section className="container">
+            Error retrieving metadata. Try reloading the page.
+          </section>
+        </div>
+      );
+    }
     const viewIndex = this.props.viewIndex;
     const {sizes} = viewIndex;
     const actualSize = (sizes.active) ? sizes.active.toLocaleString('en') : 0;
@@ -130,6 +143,7 @@ export default class DesignDocInfo extends React.Component {
 
 DesignDocInfo.propTypes = {
   isLoading: PropTypes.bool.isRequired,
+  showLoadError: PropTypes.bool.isRequired,
   viewIndex: PropTypes.object,
   designDocName: PropTypes.string.isRequired,
   stopRefresh: PropTypes.func.isRequired,
