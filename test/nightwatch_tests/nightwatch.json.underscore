@@ -26,6 +26,8 @@
       "password": "<%- password %>",
       "launch_url": "http://<%- fauxton_host %>:<%- fauxton_port %>",
       "db_url": "<%- db_protocol %>://<%- fauxton_username %>:<%- password %>@<%- db_host %>:<%- db_port %>",
+      "end_session_on_fail": false,
+      "skip_testcases_on_fail": true,
       "selenium_host" : "127.0.0.1",
       "selenium_port" : "<%- selenium_port %>",
       "silent" : true,

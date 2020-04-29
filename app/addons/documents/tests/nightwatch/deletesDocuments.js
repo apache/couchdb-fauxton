@@ -151,6 +151,7 @@ module.exports = {
       .clickWhenVisible('#doc-editor-actions-panel button[title="Delete"]')
       .waitForElementVisible('.confirmation-modal', waitTime, false)
       .clickWhenVisible('.confirmation-modal button.btn.btn-primary')
+      .waitForElementNotPresent('.confirmation-modal button.btn-primary', waitTime, true)
       .waitForElementPresent('.jump-to-doc', waitTime, false)
 
       //check raw JSON

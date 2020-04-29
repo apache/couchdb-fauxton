@@ -74,6 +74,7 @@ module.exports = {
       .clickWhenVisible('.popover-content .fonticon-trash', waitTime, true)
       .waitForElementVisible('div.confirmation-modal', waitTime, false)
       .clickWhenVisible('.confirmation-modal button.btn.btn-primary')
+      .waitForElementNotPresent('.confirmation-modal button.btn.btn-primary', waitTime, true)
 
       // just assert the search indexes section has been removed, but the design doc still exists
       .waitForElementNotPresent('#nav-design-function-testdesigndocindexes', waitTime, true)

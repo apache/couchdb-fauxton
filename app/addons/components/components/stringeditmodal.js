@@ -36,6 +36,10 @@ export class StringEditModal extends React.Component {
     onSave () { }
   };
 
+  state = {
+    editorInitialized: false
+  };
+
   initAceEditor = (dom_node) => {
     this.editor = ace.edit(dom_node);
     this.editor.$blockScrolling = Infinity; // suppresses an Ace editor error
@@ -44,6 +48,9 @@ export class StringEditModal extends React.Component {
     this.editor.setTheme('ace/theme/idle_fingers');
     const val = Helpers.parseJSON(this.props.value);
     this.editor.setValue(val, -1);
+    if (!this.state.editorInitialized) {
+      this.setState({ editorInitialized: true });
+    }
   };
 
   closeModal = () => {
@@ -55,6 +62,12 @@ export class StringEditModal extends React.Component {
   };
 
   render() {
+    const { editorInitialized } = this.state;
+    const saveBt = editorInitialized ? (
+      <button id="string-edit-save-btn" onClick={this.save} className="btn btn-primary save">
+        <i className="fonticon-circle-check"></i> Modify Text
+      </button>
+    ) : null;
     return (
       <Modal className="string-editor-modal" show={this.props.visible} onHide={this.closeModal}>
         <Modal.Header closeButton={true}>
@@ -68,9 +81,7 @@ export class StringEditModal extends React.Component {
         </Modal.Body>
         <Modal.Footer>
           <a className="cancel-link" onClick={this.closeModal}>Cancel</a>
-          <button id="string-edit-save-btn" onClick={this.save} className="btn btn-primary save">
-            <i className="fonticon-circle-check"></i> Modify Text
-          </button>
+          { saveBt }
         </Modal.Footer>
       </Modal>
     );

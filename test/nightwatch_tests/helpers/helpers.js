@@ -69,15 +69,48 @@ module.exports = {
   },
 
   afterEach: function (browser, done) {
+    // Delete test database
     var nano = module.exports.getNanoInstance(browser.globals.test_settings.db_url),
       database = module.exports.testDatabaseName;
 
     console.log('nano cleaning up', database);
-    nano.db.destroy(database).catch(err => {
+    var destroyDbProm = nano.db.destroy(database).catch(err => {
       if (err && err.message !== 'Database does not exist.') {
-        console.log('Error in cleaning up ' + database, err.message);
+        console.warn('Error in cleaning up ' + database, err.message);
       }
-    }).then(() => {
+    });
+
+    // Prints the browser's console logs in case it's a failure
+    var promGetLog = Promise.resolve();
+    if (browser && browser.sessionId && browser.currentTest && browser.currentTest.results) {
+      var res = browser.currentTest.results;
+      if (res.errors > 0 || res.failed > 0) {
+        promGetLog = new Promise((resolve, reject) => {
+          try {
+            browser.getLog('browser', (logEntriesArray) => {
+              // !! IMPORTANT: Ends the session since the Nightwatch settings have "end_session_on_fail: false"
+              try {
+                browser.end();
+              } catch (e) {}
+              resolve(logEntriesArray);
+            });
+          } catch (err) {
+            reject(err);
+          }
+        }).catch(err => {
+          console.warn('Failed to fetch browser logs', err);
+        }).then(logEntriesArray => {
+          if (logEntriesArray) {
+            console.warn('Browser logs for failed test:');
+            logEntriesArray.forEach(function(log) {
+              console.warn('   [' + log.level + '] ' + ' : ' + log.message);
+            });
+          }
+        });
+      }
+    }
+
+    Promise.all([promGetLog, destroyDbProm]).then(() => {
       done();
     });
   }

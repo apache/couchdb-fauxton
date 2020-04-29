@@ -2,10 +2,9 @@ version: '2'
 services:
   selenium:
     container_name: selenium
-    image: selenium/standalone-chrome:3.11.0
+    image: selenium/standalone-chrome:3.13
     ports:
       - "4444:4444"
-
   couchdb:
     container_name: couchdb
     image: ${COUCHDB_IMAGE}
