@@ -20,6 +20,7 @@ exports.command = function (element, waitTime) {
 
   this
     .waitForElementPresent(element, waitTime, false)
+    .moveToElement(element, 10, 10)
     .waitForElementVisible(element, waitTime, false)
     .click(element);
 
