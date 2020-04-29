@@ -14,81 +14,27 @@ import React from "react";
 import moment from "moment";
 import { mount } from 'enzyme';
 import sinon from 'sinon';
-import Notification from '../components/Notification';
 import NotificationCenterPanel from '../components/NotificationCenterPanel';
 import NotificationPanelRow from '../components/NotificationPanelRow';
-
-describe('Notification', () => {
-  it('startHide is only called after visible time is out', (done) => {
-    const spy = sinon.spy();
-    const component = mount(<Notification
-      notificationId={123}
-      isHiding={false}
-      key={11}
-      msg={'a msg'}
-      type={'error'}
-      escape={true}
-      style={{opacity:1}}
-      visibleTime={1000}
-      onStartHide={spy}
-      onHideComplete={() => {}}
-    />);
-
-    expect(spy.called).toBeFalsy();
-
-    setTimeout(() => {
-      component.update();
-      expect(spy.called).toBeTruthy();
-      done();
-    }, 3000);
-  });
-
-  it('notification text should be escaped by default', () => {
-    const wrapper = mount(<Notification
-      notificationId={123}
-      isHiding={false}
-      msg={'<script>window.whatever=1;</script>'}
-      type={'error'}
-      style={{opacity:1}}
-      onStartHide={() => {}}
-      onHideComplete={() => {}}
-    />);
-    expect(/&lt;script&gt;window.whatever=1;&lt;\/script&gt;/.test(wrapper.html())).toBeTruthy();
-  });
-
-  it('notification text can be rendered unescaped', () => {
-    const wrapper = mount(<Notification
-      notificationId={123}
-      isHiding={false}
-      msg={'<script>window.whatever=1;</script>'}
-      type={'error'}
-      escape={false}
-      style={{opacity:1}}
-      onStartHide={() => {}}
-      onHideComplete={() => {}}
-    />);
-    expect(/<script>window.whatever=1;<\/script>/.test(wrapper.html())).toBeTruthy();
-  });
-});
 
 describe('NotificationPanelRow', () => {
   const notifications = {
     success: {
-      notificationId: 1,
+      toastId: 1,
       type: 'success',
       msg: 'Success!',
       cleanMsg: 'Success!',
       time: moment()
     },
     info: {
-      notificationId: 2,
+      toastId: 2,
       type: 'info',
       msg: 'Error!',
       cleanMsg: 'Error!',
       time: moment()
     },
     error: {
-      notificationId: 3,
+      toastId: 3,
       type: 'error',
       msg: 'Error!',
       cleanMsg: 'Error!',

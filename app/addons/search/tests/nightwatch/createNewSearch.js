@@ -67,7 +67,7 @@ module.exports = {
       .clearValue('#search-name')
       .setValue('#search-name', 'clean-slate-test')
       .clickWhenVisible('#save-index')
-      .waitForElementVisible('#global-notifications .alert.alert-success', client.globals.maxWaitTime, false)
+      .waitForElementVisible('.Toastify__toast-container .Toastify__toast--success', client.globals.maxWaitTime, false)
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
       .waitForElementPresent('.tableview-checkbox-cell', client.globals.maxWaitTime, false)
       .waitForElementNotPresent('.loading-lines', client.globals.maxWaitTime, false)
@@ -99,7 +99,7 @@ module.exports = {
       .clearValue('#search-name')
       .setValue('#search-name', 'test1-index')
       .clickWhenVisible('#save-index')
-      .waitForElementVisible('#global-notifications .alert.alert-success', client.globals.maxWaitTime, false)
+      .waitForElementVisible('.Toastify__toast-container .Toastify__toast--success', client.globals.maxWaitTime, false)
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
       .waitForElementPresent('.tableview-checkbox-cell', client.globals.maxWaitTime, false)
       .waitForElementNotPresent('.loading-lines', client.globals.maxWaitTime, false)
@@ -114,7 +114,7 @@ module.exports = {
       .setValue('#search-name', 'test2-index')
       .clickWhenVisible('#save-index')
 
-      .waitForElementVisible('#global-notifications .alert.alert-success', client.globals.maxWaitTime, false)
+      .waitForElementVisible('.Toastify__toast-container .Toastify__toast--success', client.globals.maxWaitTime, false)
 
       // 3. confirm that the nav bar shows ONLY one search index each:
       //  _design/test1 has the single _design/test1-index

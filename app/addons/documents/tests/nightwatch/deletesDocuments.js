@@ -33,7 +33,7 @@ module.exports = {
       .clickWhenVisible('label[for="checkbox-' + newDocumentName + '"]', waitTime, false)
       .clickWhenVisible('.bulk-action-component-selector-group button.fonticon-trash', waitTime, false)
       .acceptAlert()
-      .waitForElementVisible('.alert.alert-info', waitTime, false)
+      .waitForElementVisible('.Toastify__toast-container .Toastify__toast--info', waitTime, false)
 
       .waitForElementVisible('label[for="checkbox-' + newDocumentName + '2' + '"]', waitTime, false)
       .clickWhenVisible('label[for="checkbox-' + newDocumentName + '2' + '"]', waitTime, false)
@@ -74,7 +74,7 @@ module.exports = {
       .clickWhenVisible('#checkbox-' + newDocumentName, waitTime, false)
       .clickWhenVisible('.bulk-action-component-selector-group button.fonticon-trash', waitTime, false)
       .acceptAlert()
-      .waitForElementVisible('.alert.alert-info', waitTime, false)
+      .waitForElementVisible('.Toastify__toast-container .Toastify__toast--info', waitTime, false)
 
       .clickWhenVisible('#checkbox-' + newDocumentName + '2', waitTime, false)
       .clickWhenVisible('.bulk-action-component-selector-group button.fonticon-trash', waitTime, false)

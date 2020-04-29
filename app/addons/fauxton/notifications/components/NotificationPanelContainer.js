@@ -21,8 +21,8 @@ const mapDispatchToProps = (dispatch) => {
     clearAllNotifications: () => {
       dispatch(Actions.clearAllNotifications());
     },
-    clearSingleNotification: (notificationId) => {
-      dispatch(Actions.clearSingleNotification(notificationId));
+    clearSingleNotification: (toastId) => {
+      dispatch(Actions.clearSingleNotification(toastId));
     }
   };
 };

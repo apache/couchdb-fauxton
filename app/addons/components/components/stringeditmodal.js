@@ -61,13 +61,14 @@ export class StringEditModal extends React.Component {
     this.props.onSave(this.editor.getValue());
   };
 
-  render() {
-    const { editorInitialized } = this.state;
-    const saveBt = editorInitialized ? (
+  getSaveBtn = () => {
+    return this.state.editorInitialized && (
       <button id="string-edit-save-btn" onClick={this.save} className="btn btn-primary save">
         <i className="fonticon-circle-check"></i> Modify Text
-      </button>
-    ) : null;
+      </button>);
+  };
+
+  render() {
     return (
       <Modal className="string-editor-modal" show={this.props.visible} onHide={this.closeModal}>
         <Modal.Header closeButton={true}>
@@ -81,7 +82,7 @@ export class StringEditModal extends React.Component {
         </Modal.Body>
         <Modal.Footer>
           <a className="cancel-link" onClick={this.closeModal}>Cancel</a>
-          { saveBt }
+          { this.getSaveBtn() }
         </Modal.Footer>
       </Modal>
     );

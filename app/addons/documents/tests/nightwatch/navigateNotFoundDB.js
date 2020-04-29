@@ -23,8 +23,11 @@ module.exports = {
     client
       .loginToGUI()
       .url(baseUrl + '/#/database/does-not-exist/_all_docs')
-      .waitForElementPresent('.global-notification', waitTime, false)
-      .assert.containsText('.global-notification', 'does not exist')
+      .waitForElementVisible('.Toastify__toast-container .Toastify__toast--error', waitTime, false)
+      // We wait for the first toasts to be cleared
+      .pause(1000)
+      .waitForElementVisible('.Toastify__toast-container .Toastify__toast--error', waitTime, false)
+      .assert.containsText('.Toastify__toast-container .Toastify__toast--error .Toastify__toast-body', 'does not exist')
       .verify.urlEquals(baseUrl + '/#');
   }
 };

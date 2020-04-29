@@ -34,7 +34,7 @@ module.exports = {
       .clickWhenVisible('.tableview-checkbox-cell input[type="checkbox"]')
       .clickWhenVisible('.bulk-action-component-selector-group button.fonticon-trash', waitTime, false)
       .acceptAlert()
-      .waitForElementVisible('#global-notifications .alert.alert-info', waitTime, false)
+      .waitForElementVisible('.Toastify__toast-container .Toastify__toast--info', waitTime, false)
 
       .checkForStringPresent(newDatabaseName, '"doc_del_count":1')
 

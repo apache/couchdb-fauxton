@@ -12,12 +12,13 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import GlobalNotificationsContainer from './notifications/components/GlobalNotificationsContainer';
 import NotificationPanelContainer from './notifications/components/NotificationPanelContainer';
 import PermanentNotificationContainer from './notifications/components/PermanentNotificationContainer';
 import NavBar from './navigation/container/NavBar';
 import * as NavbarActions from './navigation/actions';
 import classNames from 'classnames';
+import {toast, ToastContainer} from "react-toastify";
+
 
 class ContentWrapper extends React.Component {
   constructor(props) {
@@ -31,6 +32,13 @@ class ContentWrapper extends React.Component {
     }
   }
 
+  onKeydown = e => {
+    const code = e.keyCode || e.which;
+    if (code === 27) {
+      toast.dismiss();
+    }
+  };
+
   componentDidMount () {
     this.props.router.on('new-component', (routerOptions) => {
       this.setState({routerOptions});
@@ -40,6 +48,12 @@ class ContentWrapper extends React.Component {
     this.props.router.on('trigger-update', () => {
       this.forceUpdate();
     });
+
+    document.addEventListener('keydown', this.onKeydown);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.onKeydown);
   }
 
   render () {
@@ -64,9 +78,21 @@ class App extends React.Component {
     );
     return (
       <div>
-        <PermanentNotificationContainer />
+        <ToastContainer
+          className='toast-container'
+          position="top-right"
+          autoClose={5000}
+          closeButton={false}
+          hideProgressBar
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
+        <PermanentNotificationContainer/>
         <div id="notifications">
-          <GlobalNotificationsContainer />
           <NotificationPanelContainer />
         </div>
         <div id="main"  className={mainClass}>

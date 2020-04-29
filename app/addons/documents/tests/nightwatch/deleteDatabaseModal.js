@@ -36,7 +36,6 @@ module.exports = {
     client
       .loginToGUI()
       .url(baseUrl + '/#/database/_replicator/_all_docs')
-      .waitForElementNotPresent('.global-notification .fonticon-cancel', waitTime, false)
 
       .clickWhenVisible('.faux-header__doc-header-dropdown-toggle')
       .clickWhenVisible('.faux-header__doc-header-dropdown-itemwrapper .fonticon-trash')
@@ -55,7 +54,6 @@ module.exports = {
     client
       .loginToGUI()
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
-      .waitForElementNotPresent('.global-notification .fonticon-cancel', waitTime, false)
 
       .clickWhenVisible('.faux-header__doc-header-dropdown-toggle')
       .clickWhenVisible('.faux-header__doc-header-dropdown-itemwrapper .fonticon-trash')

@@ -33,11 +33,11 @@ export const clearAllNotifications = () => (dispatch) => {
   dispatch({ type: ActionTypes.CLEAR_ALL_NOTIFICATIONS });
 };
 
-export const clearSingleNotification = (notificationId) => (dispatch) => {
+export const clearSingleNotification = (toastId) => (dispatch) => {
   dispatch({
     type: ActionTypes.CLEAR_SINGLE_NOTIFICATION,
     options: {
-      notificationId: notificationId
+      toastId: toastId
     }
   });
 };
@@ -49,26 +49,4 @@ export const selectNotificationFilter = (filter) => (dispatch) => {
       filter: filter
     }
   });
-};
-
-export const startHidingNotification = (notificationId) => (dispatch) => {
-  dispatch({
-    type: ActionTypes.START_HIDING_NOTIFICATION,
-    options: {
-      notificationId: notificationId
-    }
-  });
-};
-
-export const hideNotification = (notificationId) => (dispatch) => {
-  dispatch({
-    type: ActionTypes.HIDE_NOTIFICATION,
-    options: {
-      notificationId: notificationId
-    }
-  });
-};
-
-export const hideAllVisibleNotifications = () => (dispatch) => {
-  dispatch({ type: ActionTypes.HIDE_ALL_NOTIFICATIONS });
 };

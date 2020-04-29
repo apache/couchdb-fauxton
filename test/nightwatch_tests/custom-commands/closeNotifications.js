@@ -12,17 +12,14 @@
 
 var helpers = require('../helpers/helpers.js');
 
-exports.command = function (element, waitTime) {
+exports.command = function () {
+  var client = this,
+      dismissSelector = '.Toastify__toast-container .Toastify__toast-body';
 
-  if (waitTime === undefined) {
-    waitTime = helpers.maxWaitTime;
-  }
-
-  this
-    .waitForElementPresent(element, waitTime, false)
-    .moveToElement(element, 10, 10)
-    .waitForElementVisible(element, waitTime, false)
-    .click(element);
+  client
+    .waitForElementVisible(dismissSelector, helpers.maxWaitTime, false)
+    .keys(client.keys.ESCAPE)
+    .waitForElementNotPresent(dismissSelector, helpers.maxWaitTime, false);
 
   return this;
 };

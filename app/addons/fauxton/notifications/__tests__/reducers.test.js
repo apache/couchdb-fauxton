@@ -74,11 +74,11 @@ describe('Notifications Reducer', () => {
     newState = reducer(newState, action);
     expect(newState.notifications.length).toBe(4);
 
-    const idToRemove = newState.notifications[1].notificationId;
+    const idToRemove = newState.notifications[1].toastId;
     const msgToRemove = newState.notifications[1].msg;
     newState = reducer(newState, {
       type: ActionTypes.CLEAR_SINGLE_NOTIFICATION,
-      options: { notificationId: idToRemove }
+      options: { toastId: idToRemove }
     });
     expect(newState.notifications.length).toBe(3);
     const item = newState.notifications.find(el => {

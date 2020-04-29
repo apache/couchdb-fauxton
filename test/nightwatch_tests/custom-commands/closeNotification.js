@@ -14,10 +14,10 @@ var helpers = require('../helpers/helpers.js');
 
 exports.command = function () {
   var client = this,
-      dismissSelector = '#global-notifications .fonticon-cancel';
+      dismissSelector = '.Toastify__toast-container .Toastify__toast-body';
 
   client
-    .waitForElementPresent(dismissSelector, helpers.maxWaitTime, false)
+    .waitForElementVisible(dismissSelector, helpers.maxWaitTime, false)
     .click(dismissSelector)
     .waitForElementNotPresent(dismissSelector, helpers.maxWaitTime, false);
 

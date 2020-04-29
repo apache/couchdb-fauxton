@@ -91,7 +91,7 @@ module.exports = {
       .clickWhenVisible('.modal-footer input[type="checkbox"]')
       .clickWhenVisible('.modal-footer button.btn-danger')
       .clickWhenVisible('.fonticon-json')
-
+      .waitForElementNotVisible('.Toastify__toast-container .Toastify__toast', waitTime, false)
       .clickWhenVisible('[data-id="_design/animals"] a')
 
       .waitForElementVisible('.panel-section', waitTime, false)

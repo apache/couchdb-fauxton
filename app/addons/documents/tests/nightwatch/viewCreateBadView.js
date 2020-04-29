@@ -38,7 +38,7 @@ module.exports = {
       ')
       .execute('document.querySelector("#save-view").scrollIntoView();')
       .clickWhenVisible('#save-view')
-      .waitForElementNotPresent('.global-notification .fonticon-cancel', waitTime, false)
+      .closeNotifications()
       .clickWhenVisible('.control-toggle-queryoptions', waitTime, false)
       .clickWhenVisible('label[for="qoReduce"]', waitTime, false)
       .clickWhenVisible('.query-options .btn-secondary', waitTime, false)
