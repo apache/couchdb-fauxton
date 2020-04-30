@@ -17,7 +17,7 @@ module.exports = {
   'Edits a design doc - renames index': function (client) {
     var waitTime = client.globals.maxWaitTime,
         newDatabaseName = client.globals.testDatabaseName,
-        baseUrl = client.globals.test_settings.launch_url;
+        baseUrl = client.options.launch_url;
 
     client
       .deleteDatabase(newDatabaseName)
@@ -40,7 +40,6 @@ module.exports = {
       .clearValue('#index-name')
       .setValue('#index-name', 'hasenindex5000')
 
-      .execute('document.querySelector("#save-view").scrollIntoView();')
       .clickWhenVisible('#save-view')
 
       // confirm the new index name is present
@@ -52,7 +51,7 @@ module.exports = {
     /*jshint multistr: true */
     var waitTime = client.globals.maxWaitTime,
         newDatabaseName = client.globals.testDatabaseName,
-        baseUrl = client.globals.test_settings.launch_url;
+        baseUrl = client.options.launch_url;
 
     var viewUrl = newDatabaseName + '/_design/testdesigndoc/_view/stubview?limit=6&reduce=false';
 
@@ -81,7 +80,6 @@ module.exports = {
         editor.getSession().setValue("function (doc) { emit(\'hasehase6000\', 1); }");\
         editor._emit(\'blur\');\
       ')
-      .execute('document.querySelector("#save-view").scrollIntoView();')
       .clickWhenVisible('#save-view')
 
       .checkForStringPresent(viewUrl, 'hasehase6000')
@@ -104,7 +102,7 @@ module.exports = {
     /*jshint multistr: true */
     var waitTime = client.globals.maxWaitTime,
         newDatabaseName = client.globals.testDatabaseName,
-        baseUrl = client.globals.test_settings.launch_url;
+        baseUrl = client.options.launch_url;
 
     client
       .deleteDatabase(newDatabaseName)
@@ -133,7 +131,6 @@ module.exports = {
         var editor = ace.edit("map-function");\
         editor.getSession().setValue("function (doc) { emit(doc._id, 100); }");\
       ')
-      .execute('document.querySelector("#save-view").scrollIntoView();')
       .clickWhenVisible('#save-view')
       .checkForDocumentCreated('_design/view1-name')
 
@@ -162,7 +159,6 @@ module.exports = {
         var editor = ace.edit("map-function");\
         editor.getSession().setValue("function (doc) { emit(doc._id, 200); }");\
       ')
-      .execute('document.querySelector("#save-view").scrollIntoView();')
       .clickWhenVisible('#save-view')
       .checkForDocumentCreated('_design/view2-name')
 
@@ -189,7 +185,7 @@ module.exports = {
   'Editing a view and putting it into a new design doc removes it from the old design doc': function (client) {
     var waitTime = client.globals.maxWaitTime,
         newDatabaseName = client.globals.testDatabaseName,
-        baseUrl = client.globals.test_settings.launch_url;
+        baseUrl = client.options.launch_url;
 
     client
       .deleteDatabase(newDatabaseName)
@@ -229,7 +225,6 @@ module.exports = {
       .waitForElementPresent('#new-ddoc', waitTime, true)
       .execute('document.querySelector("#new-ddoc").scrollIntoView();')
       .setValue('#new-ddoc', 'brand-new-ddoc')
-      .execute('document.querySelector("#save-view").scrollIntoView();')
       .clickWhenVisible('#save-view')
 
       // now wait for the old design doc to be gone, and the new one to have shown up

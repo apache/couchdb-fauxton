@@ -18,7 +18,7 @@ module.exports = {
     /*jshint multistr: true */
     var waitTime = 10000,
         newDatabaseName = client.globals.testDatabaseName,
-        baseUrl = client.globals.test_settings.launch_url;
+        baseUrl = client.options.launch_url;
 
     client
       .populateDatabase(newDatabaseName)
@@ -34,7 +34,6 @@ module.exports = {
         var editor = ace.edit("query-field");\
         editor.getSession().setValue(json);\
       ')
-      .execute('document.querySelector("#create-index-btn").scrollIntoView();')
       .clickWhenVisible('#create-index-btn')
       .clickWhenVisible('.fonticon-json')
 

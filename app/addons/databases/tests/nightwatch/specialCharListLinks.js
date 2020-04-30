@@ -29,7 +29,7 @@ function createTest (db) {
   return (client) => {
 
     const waitTime = client.globals.maxWaitTime;
-    const baseUrl = client.globals.test_settings.launch_url;
+    const baseUrl = client.options.launch_url;
 
     client
       .createDatabase(db)

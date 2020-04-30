@@ -40,7 +40,7 @@ module.exports = {
   },
 
   beforeEach: function (browser, done) {
-    var nano = module.exports.getNanoInstance(browser.globals.test_settings.db_url),
+    var nano = module.exports.getNanoInstance(browser.options.db_url),
       database = module.exports.testDatabaseName;
 
     console.log('nano setting up database', database);
@@ -57,7 +57,7 @@ module.exports = {
         // Create required dbs
         const databaseToCreate = ["_users", "_replicator", "_global_changes"];
         const promises = databaseToCreate.map(db => createDatabase(nano, db).catch(() => {}));
-        
+
         Promise.all(promises).then(function () {
           done();
         }).catch(function (err) {
@@ -70,7 +70,7 @@ module.exports = {
 
   afterEach: function (browser, done) {
     // Delete test database
-    var nano = module.exports.getNanoInstance(browser.globals.test_settings.db_url),
+    var nano = module.exports.getNanoInstance(browser.options.db_url),
       database = module.exports.testDatabaseName;
 
     console.log('nano cleaning up', database);

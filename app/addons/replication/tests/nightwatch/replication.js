@@ -20,7 +20,7 @@ const docName1 = 'doc-name1';
 const docName2 = 'doc-name2';
 
 const destroyDBsAndCreateReplicator = (client, done) => {
-  var nano = helpers.getNanoInstance(client.globals.test_settings.db_url);
+  var nano = helpers.getNanoInstance(client.options.db_url);
   nano.db.destroy(newDatabaseName1, () => {
     nano.db.destroy(newDatabaseName2, () => {
       nano.db.destroy(replicatedDBName, () => {
@@ -37,8 +37,8 @@ module.exports = {
 
   'Replicates existing local db to new local db' : function (client) {
     const waitTime = client.globals.maxWaitTime;
-    const baseUrl = client.globals.test_settings.launch_url;
-    const password = client.globals.test_settings.password;
+    const baseUrl = client.options.launch_url;
+    const password = client.options.password;
 
     client
       .createDatabase(newDatabaseName1)
@@ -86,8 +86,8 @@ module.exports = {
 
   'Replicates existing local db to existing local db' : function (client) {
     const waitTime = client.globals.maxWaitTime;
-    const baseUrl = client.globals.test_settings.launch_url;
-    const password = client.globals.test_settings.password;
+    const baseUrl = client.options.launch_url;
+    const password = client.options.password;
 
     client
 
@@ -144,8 +144,8 @@ module.exports = {
 
   'Replicates using existing doc id' : function (client) {
     const waitTime = client.globals.maxWaitTime;
-    const baseUrl = client.globals.test_settings.launch_url;
-    const password = client.globals.test_settings.password;
+    const baseUrl = client.options.launch_url;
+    const password = client.options.password;
 
     const replicatorDoc = {
       _id: 'existing-doc-id',
@@ -214,7 +214,7 @@ module.exports = {
 
   'Show error for missing credentials' : function (client) {
     const waitTime = client.globals.maxWaitTime;
-    const baseUrl = client.globals.test_settings.launch_url;
+    const baseUrl = client.options.launch_url;
 
     client
       .createDatabase(newDatabaseName1)
@@ -246,7 +246,7 @@ module.exports = {
 
   'Show error for invalid credentials' : function (client) {
     const waitTime = client.globals.maxWaitTime;
-    const baseUrl = client.globals.test_settings.launch_url;
+    const baseUrl = client.options.launch_url;
 
     client
       .createDatabase(newDatabaseName1)

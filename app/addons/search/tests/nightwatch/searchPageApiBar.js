@@ -13,7 +13,7 @@ module.exports = {
   '@tags': ['search'],
   'Check API Bar is present/hidden on appropriate page and is encoded': function (client) {
     const newDatabaseName = client.globals.testDatabaseName,
-          baseUrl = client.globals.test_settings.launch_url;
+          baseUrl = client.options.launch_url;
 
     const searchStr = "class:bird";
     const searchStrEncoded = encodeURIComponent(searchStr);
@@ -32,7 +32,7 @@ module.exports = {
 
       // confirm there's no API URL field on the create index page
       .pause(5000)
-      .assert.elementNotPresent('.faux__jsonlink')
+      .assert.not.elementPresent('.faux__jsonlink')
 
       // now create the rest of the index
       .keys(['_design/keyview', '\uE006'])

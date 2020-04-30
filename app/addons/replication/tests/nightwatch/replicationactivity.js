@@ -15,7 +15,7 @@ module.exports = {
 
   'Can view doc': client => {
     const waitTime = client.globals.maxWaitTime;
-    const baseUrl = client.globals.test_settings.launch_url;
+    const baseUrl = client.options.launch_url;
 
     const replicatorDoc = {
       _id: 'existing-doc-id-view-doc',
@@ -38,7 +38,7 @@ module.exports = {
 
   'Can edit doc': client => {
     const waitTime = client.globals.maxWaitTime;
-    const baseUrl = client.globals.test_settings.launch_url;
+    const baseUrl = client.options.launch_url;
 
     const replicatorDoc = {
       _id: 'existing-doc-id-edit-doc',
@@ -63,7 +63,7 @@ module.exports = {
 
   'Can filter docs': client => {
     const waitTime = client.globals.maxWaitTime;
-    const baseUrl = client.globals.test_settings.launch_url;
+    const baseUrl = client.options.launch_url;
 
     const replicatorDoc1 = {
       _id: 'existing-doc-id-filter1',
@@ -94,7 +94,7 @@ module.exports = {
   },
   "Action click doesn't change doc's order": client =>{
     const waitTime = client.globals.maxWaitTime;
-    const baseUrl = client.globals.test_settings.launch_url;
+    const baseUrl = client.options.launch_url;
     const firstRowSelector = '.replication__table-row:nth-of-type(1)';
     let firstDoc;
 

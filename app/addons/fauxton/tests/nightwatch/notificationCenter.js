@@ -15,7 +15,7 @@
 module.exports = {
   'Notification Center' : function (client) {
     var waitTime = client.globals.maxWaitTime,
-        baseUrl = client.globals.test_settings.launch_url;
+        baseUrl = client.options.launch_url;
 
     client
       .url(baseUrl + '/#/login')

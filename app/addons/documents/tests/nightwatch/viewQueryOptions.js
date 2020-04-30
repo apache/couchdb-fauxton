@@ -17,7 +17,7 @@ module.exports = {
     /*jshint multistr: true */
     var waitTime = client.globals.maxWaitTime,
         newDatabaseName = client.globals.testDatabaseName,
-        baseUrl = client.globals.test_settings.launch_url;
+        baseUrl = client.options.launch_url;
 
     client
       .populateDatabase(newDatabaseName, 3)
@@ -29,8 +29,8 @@ module.exports = {
       .clickWhenVisible('.query-options .btn-secondary')
       .clickWhenVisible('.fonticon-json')
       .waitForElementNotPresent('#doc-list [data-id="document_2"]', waitTime, false)
-      .assert.elementNotPresent('#doc-list [data-id="document_2"]')
-      .assert.elementNotPresent('#doc-list [data-id="document_0"]')
+      .assert.not.elementPresent('#doc-list [data-id="document_2"]')
+      .assert.not.elementPresent('#doc-list [data-id="document_0"]')
       .assert.elementPresent('#doc-list [data-id="document_1"]')
       .end();
   },
@@ -39,7 +39,7 @@ module.exports = {
     /*jshint multistr: true */
     var waitTime = client.globals.maxWaitTime,
         newDatabaseName = client.globals.testDatabaseName,
-        baseUrl = client.globals.test_settings.launch_url;
+        baseUrl = client.options.launch_url;
 
     client
       .populateDatabase(newDatabaseName, 3)
@@ -51,7 +51,7 @@ module.exports = {
       .clickWhenVisible('.query-options .btn-secondary')
       .clickWhenVisible('.fonticon-json')
       .waitForElementNotPresent('#doc-list [data-id="document_0"]', waitTime, false)
-      .assert.elementNotPresent('#doc-list [data-id="document_0"]')
+      .assert.not.elementPresent('#doc-list [data-id="document_0"]')
       .assert.elementPresent('#doc-list [data-id="document_1"]')
       .end();
   }

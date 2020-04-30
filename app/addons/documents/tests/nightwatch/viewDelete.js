@@ -17,7 +17,7 @@ module.exports = {
   'Deletes a view': function (client) {
     var waitTime = client.globals.maxWaitTime,
         newDatabaseName = client.globals.testDatabaseName,
-        baseUrl = client.globals.test_settings.launch_url;
+        baseUrl = client.options.launch_url;
 
     client
       .createDatabase(newDatabaseName)

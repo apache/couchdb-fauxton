@@ -17,7 +17,7 @@ module.exports = {
   'change number of items per page': function (client) {
     var waitTime = client.globals.maxWaitTime,
         newDatabaseName = client.globals.testDatabaseName,
-        baseUrl = client.globals.test_settings.launch_url;
+        baseUrl = client.options.launch_url;
 
     client
       .populateDatabase(newDatabaseName)
@@ -53,7 +53,7 @@ module.exports = {
   'paginate to page two and back': function (client) {
     var waitTime = client.globals.maxWaitTime,
         newDatabaseName = client.globals.testDatabaseName,
-        baseUrl = client.globals.test_settings.launch_url;
+        baseUrl = client.options.launch_url;
 
     client
       .populateDatabase(newDatabaseName)
@@ -89,7 +89,7 @@ module.exports = {
   'PerPage change resets to page 1': function (client) {
     var waitTime = client.globals.maxWaitTime,
         newDatabaseName = client.globals.testDatabaseName,
-        baseUrl = client.globals.test_settings.launch_url;
+        baseUrl = client.options.launch_url;
 
     client
       .populateDatabase(newDatabaseName)
@@ -125,7 +125,7 @@ module.exports = {
   'paginate to page two and switch to json view': function (client) {
     var waitTime = client.globals.maxWaitTime,
         newDatabaseName = client.globals.testDatabaseName,
-        baseUrl = client.globals.test_settings.launch_url;
+        baseUrl = client.options.launch_url;
 
     client
       .populateDatabase(newDatabaseName)

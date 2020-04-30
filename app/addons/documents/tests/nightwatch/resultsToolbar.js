@@ -14,7 +14,7 @@ module.exports = {
   'Defaults to metadata layout when displaying results': (client) => {
     const waitTime = client.globals.maxWaitTime;
     const newDatabaseName = client.globals.testDatabaseName;
-    const baseUrl = client.globals.test_settings.launch_url;
+    const baseUrl = client.options.launch_url;
     const newDocumentName = 'resultsToolbarTest';
     const docContent = {
       "foo": "bar"
@@ -28,14 +28,14 @@ module.exports = {
       .url(`${baseUrl}#/database/${newDatabaseName}/_all_docs`)
       .waitForElementPresent('.two-sides-toggle-button', waitTime, false)
       .assert.containsText('.two-sides-toggle-button button.active', 'Metadata')
-      .assert.elementNotPresent('.table-container-autocomplete')
+      .assert.not.elementPresent('.table-container-autocomplete')
       .end();
   },
 
   'Layouts update on manual url change/refresh and query options': (client) => {
     const waitTime = client.globals.maxWaitTime;
     const newDatabaseName = client.globals.testDatabaseName;
-    const baseUrl = client.globals.test_settings.launch_url;
+    const baseUrl = client.options.launch_url;
     const newDocumentName = 'resultsToolbarTest';
     const docContent = {
       "foo": "bar"

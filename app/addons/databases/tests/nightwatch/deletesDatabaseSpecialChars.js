@@ -15,7 +15,7 @@ const newDatabaseName = 'one/two-three/_four';
 module.exports = {
   'Deletes a database with special chars': function (client) {
     const waitTime = client.globals.maxWaitTime;
-    const baseUrl = client.globals.test_settings.launch_url;
+    const baseUrl = client.options.launch_url;
 
     client
       .createDatabase(newDatabaseName)
@@ -34,7 +34,7 @@ module.exports = {
 
   'Deletes a database from the list with special chars': function (client) {
     const waitTime = client.globals.maxWaitTime;
-    const baseUrl = client.globals.test_settings.launch_url;
+    const baseUrl = client.options.launch_url;
 
     client
       .createDatabase(newDatabaseName)
@@ -50,7 +50,7 @@ module.exports = {
       .closeNotifications()
       .waitForElementPresent('.fauxton-table-list', waitTime, false)
       .checkForDatabaseDeleted(newDatabaseName, waitTime)
-      .assert.elementNotPresent('a[href="database/' + newDatabaseName + '/_all_docs"]')
+      .assert.not.elementPresent('a[href="database/' + newDatabaseName + '/_all_docs"]')
 
       .end();
   }

@@ -14,7 +14,7 @@ module.exports = {
   'mango supports encoding': function (client) {
     var waitTime = client.globals.maxWaitTime,
         newDatabaseName = 'encoded/db-' + client.globals.testDatabaseName,
-        baseUrl = client.globals.test_settings.launch_url;
+        baseUrl = client.options.launch_url;
 
     client
       .deleteDatabase(newDatabaseName)
@@ -31,7 +31,7 @@ module.exports = {
   'permissions supports encoding': function (client) {
     var waitTime = client.globals.maxWaitTime,
         newDatabaseName = 'encoded/db-' + client.globals.testDatabaseName,
-        baseUrl = client.globals.test_settings.launch_url;
+        baseUrl = client.options.launch_url;
 
     client
       .deleteDatabase(newDatabaseName)
@@ -48,7 +48,7 @@ module.exports = {
   'changes supports encoding': function (client) {
     var waitTime = client.globals.maxWaitTime,
         newDatabaseName = 'encoded/db-' + client.globals.testDatabaseName,
-        baseUrl = client.globals.test_settings.launch_url;
+        baseUrl = client.options.launch_url;
 
     client
       .deleteDatabase(newDatabaseName)
