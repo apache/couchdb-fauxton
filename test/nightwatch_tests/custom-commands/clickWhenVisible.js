@@ -10,19 +10,23 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-var helpers = require('../helpers/helpers.js');
+const helpers = require('../helpers/helpers.js');
 
-exports.command = function (element, waitTime) {
+exports.command = function(element, waitTime, scrollIntoView = true) {
 
   if (waitTime === undefined) {
     waitTime = helpers.maxWaitTime;
   }
 
-  this
-    .waitForElementPresent(element, waitTime, false)
-    .moveToElement(element, 10, 10)
-    .waitForElementVisible(element, waitTime, false)
-    .click(element);
+  this.waitForElementVisible(element);
+
+  if (scrollIntoView) {
+    this.execute(function(selector) {
+      document.querySelector(selector).scrollIntoView();
+    }, [element]);
+  }
+
+  this.pause(200).click(element);
 
   return this;
 };

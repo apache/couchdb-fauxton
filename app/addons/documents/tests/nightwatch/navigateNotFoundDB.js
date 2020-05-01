@@ -18,7 +18,7 @@ module.exports = {
   // a bug fix for where the Ace Editor threw a JS error preventing the subsequent page from loading]
   'Navigate to a database that does not exist' : function (client) {
     const waitTime = client.globals.maxWaitTime,
-          baseUrl = client.globals.test_settings.launch_url;
+          baseUrl = client.options.launch_url;
 
     client
       .loginToGUI()

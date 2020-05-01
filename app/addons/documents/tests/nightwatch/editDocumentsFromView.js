@@ -16,7 +16,7 @@ module.exports = {
   'Edit is allowed from default Map Views' : function (client) {
     const waitTime = client.globals.maxWaitTime,
           newDatabaseName = client.globals.testDatabaseName,
-          baseUrl = client.globals.test_settings.launch_url,
+          baseUrl = client.options.launch_url,
           newDocumentName = '_design/abc',
           ddocContents = {
             "views": {
@@ -44,7 +44,7 @@ module.exports = {
 
   'Edit is not allowed for Map Views where reduce is checked' : function (client) {
     const waitTime = client.globals.maxWaitTime;
-    const baseUrl = client.globals.test_settings.launch_url;
+    const baseUrl = client.options.launch_url;
     const newDatabaseName = client.globals.testDatabaseName;
 
     client

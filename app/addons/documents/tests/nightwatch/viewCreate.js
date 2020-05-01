@@ -25,9 +25,7 @@ module.exports = {
         var editor = ace.edit("map-function");\
         editor.getSession().setValue("function (doc) { if (doc != \'\') { emit(\'blerg\'); } else { emit(\'nana\'); }  }");\
       ')
-      .execute('document.querySelector("#save-view").scrollIntoView();')
-      .waitForElementPresent('#save-view', waitTime, false)
-      .clickWhenVisible('#save-view', waitTime, false)
+      .clickWhenVisible('#save-view', waitTime)
       .checkForDocumentCreated('_design/test_design_doc-selenium-0')
       .waitForElementNotPresent('.loading-lines', waitTime, false)
       .waitForElementPresent('.table-view-docs', waitTime, false)
@@ -48,9 +46,7 @@ module.exports = {
         var editor = ace.edit("map-function");\
         editor.getSession().setValue("function (doc) { emit(\'hasehase\'); }");\
       ')
-      .execute('document.querySelector("#save-view").scrollIntoView();')
-      .waitForElementPresent('#save-view', waitTime, false)
-      .clickWhenVisible('#save-view', waitTime, false)
+      .clickWhenVisible('#save-view', waitTime)
       .checkForDocumentCreated('_design/test_design_doc-selenium-1')
       .waitForElementNotPresent('.loading-lines', waitTime, false)
       .waitForElementPresent('.table-view-docs', waitTime, false)
@@ -71,9 +67,7 @@ module.exports = {
         var editor = ace.edit("map-function");\
         editor.getSession().setValue("function (doc) { emit(\'hasehase\'); }");\
       ')
-      .execute('document.querySelector("#save-view").scrollIntoView();')
-      .waitForElementPresent('#save-view', waitTime, false)
-      .clickWhenVisible('#save-view', waitTime, false)
+      .clickWhenVisible('#save-view', waitTime)
       .checkForDocumentCreated('_design/test_design_doc-selenium-3')
       .waitForElementNotPresent('.loading-lines', waitTime, false)
 
@@ -96,8 +90,6 @@ module.exports = {
         var editor = ace.edit("map-function");\
         editor.getSession().setValue("function (doc) { emit(\'gansgans\'); }");\
       ')
-      .execute('document.querySelector("#save-view").scrollIntoView();')
-      .waitForElementPresent('#save-view', waitTime, false)
       .clickWhenVisible('#save-view')
       .checkForDocumentCreated('_design/test_design_doc-selenium-2')
       .waitForElementNotPresent('.loading-lines', waitTime, false)
@@ -108,7 +100,7 @@ module.exports = {
 
   'Adds a View to a DDoc using an existing DDoc': function (client) {
     var waitTime = client.globals.maxWaitTime;
-    var baseUrl = client.globals.test_settings.launch_url;
+    var baseUrl = client.options.launch_url;
     var newDatabaseName = client.globals.testDatabaseName;
     /*jshint multistr: true */
 
@@ -125,7 +117,6 @@ module.exports = {
         var editor = ace.edit("map-function");\
         editor.getSession().setValue("function (doc) { emit(\'enteente\', 1); }");\
       ')
-      .execute('document.querySelector("#save-view").scrollIntoView();')
       .clickWhenVisible('#save-view')
       .checkForDocumentCreated('_design/testdesigndoc/_view/test-new-view')
       .waitForElementNotPresent('.loading-lines', waitTime, false)
@@ -138,7 +129,7 @@ module.exports = {
 function openDifferentDropdownsAndClick (client) {
   var waitTime = client.globals.maxWaitTime;
   var newDatabaseName = client.globals.testDatabaseName;
-  var baseUrl = client.globals.test_settings.launch_url;
+  var baseUrl = client.options.launch_url;
 
   return client
     .loginToGUI()

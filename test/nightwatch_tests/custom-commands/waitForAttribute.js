@@ -17,10 +17,11 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
-        
-var util = require('util');
-var events = require('events');
-var helpers = require('../helpers/helpers.js');
+
+const util = require('util');
+const events = require('events');
+const helpers = require('../helpers/helpers.js');
+const assert = require('assert');
 
 /*
  * This custom command allows us to locate an HTML element on the page and then wait until the value of a specified
@@ -36,38 +37,45 @@ function WaitForAttribute() {
 
 util.inherits(WaitForAttribute, events.EventEmitter);
 
-WaitForAttribute.prototype.command = function (element, attribute, checker, timeoutInMilliseconds) {
+WaitForAttribute.prototype.command = function(
+  element, attribute, checker, timeoutInMilliseconds) {
   this.startTimeInMilliseconds = new Date().getTime();
-  var self = this;
-  var message;
+  const self = this;
+  let message;
 
   if (typeof timeoutInMilliseconds !== 'number') {
     timeoutInMilliseconds = helpers.maxWaitTime;
   }
 
-  this.check(element, attribute, checker, function (result, loadedTimeInMilliseconds) {
-    if (result) {
-      message = 'waitForAttribute: ' + element + '@' + attribute + '. Expression was true after ' + (loadedTimeInMilliseconds - self.startTimeInMilliseconds) + ' ms.';
-    } else {
-      message = 'waitForAttribute: ' + element + '@' + attribute + '. Expression wasn\'t true in ' + timeoutInMilliseconds + ' ms.';
-    }
-    self.client.assertion(result, 'expression false', 'expression true', message, true);
-    self.emit('complete');
-  }, timeoutInMilliseconds);
+  this.check(element, attribute, checker,
+    function(result, loadedTimeInMilliseconds) {
+      if (result) {
+        message = 'waitForAttribute: ' + element + '@' + attribute +
+          '. Expression was true after ' +
+          (loadedTimeInMilliseconds - self.startTimeInMilliseconds) + ' ms.';
+      } else {
+        message = 'waitForAttribute: ' + element + '@' + attribute +
+          '. Expression wasn\'t true in ' + timeoutInMilliseconds + ' ms.';
+      }
+      assert.equal(result, true, message);
+      self.emit('complete');
+    }, timeoutInMilliseconds);
 
   return this;
 };
 
-WaitForAttribute.prototype.check = function (element, attribute, checker, callback, maxTimeInMilliseconds) {
-  var self = this;
+WaitForAttribute.prototype.check = function(
+  element, attribute, checker, callback, maxTimeInMilliseconds) {
+  const self = this;
 
-  this.api.getAttribute(element, attribute, function (result) {
-    var now = new Date().getTime();
+  this.api.getAttribute(element, attribute, function(result) {
+    const now = new Date().getTime();
     if (result.status === 0 && checker(result.value)) {
       callback(true, now);
     } else if (now - self.startTimeInMilliseconds < maxTimeInMilliseconds) {
-      setTimeout(function () {
-        self.check(element, attribute, checker, callback, maxTimeInMilliseconds);
+      setTimeout(function() {
+        self.check(element, attribute, checker, callback,
+          maxTimeInMilliseconds);
       }, 100);
     } else {
       callback(false);

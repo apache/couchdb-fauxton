@@ -16,14 +16,14 @@ var helpers = require('../../../../../test/nightwatch_tests/helpers/helpers.js')
 module.exports = {
 
   before: function (client, done) {
-    var nano = helpers.getNanoInstance(client.globals.test_settings.db_url);
+    var nano = helpers.getNanoInstance(client.options.db_url);
     nano.db.create('_replicator', function () {
       done();
     });
   },
 
   after: function (client, done) {
-    var nano = helpers.getNanoInstance(client.globals.test_settings.db_url);
+    var nano = helpers.getNanoInstance(client.options.db_url);
     nano.db.destroy('_replicator', function () {
       done();
     });
@@ -31,7 +31,7 @@ module.exports = {
 
   'Shows a warning for system databases (prefixed with _)': function (client) {
     var waitTime = client.globals.maxWaitTime,
-        baseUrl = client.globals.test_settings.launch_url;
+        baseUrl = client.options.launch_url;
 
     client
       .loginToGUI()
@@ -49,7 +49,7 @@ module.exports = {
   'Shows no warning for non system databases': function (client) {
     var waitTime = client.globals.maxWaitTime,
         newDatabaseName = client.globals.testDatabaseName,
-        baseUrl = client.globals.test_settings.launch_url;
+        baseUrl = client.options.launch_url;
 
     client
       .loginToGUI()
@@ -60,7 +60,7 @@ module.exports = {
 
       .waitForElementVisible('.delete-db-modal', waitTime, false)
       .waitForElementVisible('.delete-db-modal input[type="text"]', waitTime, false)
-      .assert.elementNotPresent('.warning')
+      .assert.not.elementPresent('.warning')
       .end();
   }
 };

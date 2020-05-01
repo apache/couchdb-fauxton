@@ -19,7 +19,7 @@ module.exports = {
   '@tags': ['nonpartitioned'],
 
   before: function (client, done) {
-    const nano = helpers.getNanoInstance(client.globals.test_settings.db_url);
+    const nano = helpers.getNanoInstance(client.options.db_url);
     nano.db.destroy(newDatabaseName).then(() => {
       done();
     }).catch(()  => {
@@ -28,7 +28,7 @@ module.exports = {
   },
 
   after: function (client, done) {
-    const nano = helpers.getNanoInstance(client.globals.test_settings.db_url);
+    const nano = helpers.getNanoInstance(client.options.db_url);
     nano.db.destroy(newDatabaseName).then(() => {
       done();
     }).catch(()  => {
@@ -39,7 +39,7 @@ module.exports = {
 
   'Creates a Database' : function (client) {
     var waitTime = client.globals.maxWaitTime,
-        baseUrl = client.globals.test_settings.launch_url;
+        baseUrl = client.options.launch_url;
 
     client
       .loginToGUI()
@@ -68,7 +68,7 @@ module.exports = {
 
   'Creates a Database with invalid name' : function (client) {
     var waitTime = client.globals.maxWaitTime,
-        baseUrl = client.globals.test_settings.launch_url;
+        baseUrl = client.options.launch_url;
 
     client
       .loginToGUI()

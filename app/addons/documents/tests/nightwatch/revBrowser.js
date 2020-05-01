@@ -17,7 +17,7 @@ module.exports = {
     /*jshint multistr: true */
     const waitTime = client.globals.maxWaitTime;
     const newDatabaseName = 'animaldb';
-    const baseUrl = client.globals.test_settings.launch_url;
+    const baseUrl = client.options.launch_url;
 
     client
       .createAnimalDb()
@@ -49,7 +49,7 @@ module.exports = {
       .clickWhenVisible('[data-id="zebra"] a')
 
       .waitForElementVisible('.panel-section', waitTime, false)
-      .assert.elementNotPresent('button.conflicts')
+      .assert.not.elementPresent('button.conflicts')
 
       .url(baseUrl + '/#/database/' + newDatabaseName + '?include_docs=true&conflicts=true')
 
@@ -63,7 +63,7 @@ module.exports = {
     /*jshint multistr: true */
     const waitTime = client.globals.maxWaitTime;
     const newDatabaseName = 'animaldb';
-    const baseUrl = client.globals.test_settings.launch_url;
+    const baseUrl = client.options.launch_url;
 
     client
       .createAnimalDb()
@@ -95,7 +95,7 @@ module.exports = {
       .clickWhenVisible('[data-id="_design/animals"] a')
 
       .waitForElementVisible('.panel-section', waitTime, false)
-      .assert.elementNotPresent('button.conflicts')
+      .assert.not.elementPresent('button.conflicts')
 
       .url(baseUrl + '/#/database/' + newDatabaseName + '?include_docs=true&conflicts=true')
 

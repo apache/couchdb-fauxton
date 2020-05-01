@@ -17,7 +17,7 @@ module.exports = {
     var waitTime = client.globals.maxWaitTime,
         newDatabaseName = client.globals.testDatabaseName,
         newDocumentName = 'delete_doc_doc',
-        baseUrl = client.globals.test_settings.launch_url;
+        baseUrl = client.options.launch_url;
 
     client
       .createDocument(newDocumentName, newDatabaseName)
@@ -60,7 +60,7 @@ module.exports = {
     var waitTime = client.globals.maxWaitTime,
         newDatabaseName = client.globals.testDatabaseName,
         newDocumentName = 'delete_doc_doc',
-        baseUrl = client.globals.test_settings.launch_url;
+        baseUrl = client.options.launch_url;
 
     client
       .createDocument(newDocumentName, newDatabaseName)
@@ -99,7 +99,7 @@ module.exports = {
   'Deleting a new Design Doc automatically removes it from the sidebar': function (client) {
     var waitTime = client.globals.maxWaitTime;
     var newDatabaseName = client.globals.testDatabaseName;
-    var baseUrl = client.globals.test_settings.launch_url;
+    var baseUrl = client.options.launch_url;
     var designDoc = {
       "_id": "_design/sidebar-update",
       "views": {
@@ -122,9 +122,9 @@ module.exports = {
 
       // confirm the design doc appears in the sidebar
       .waitForElementPresent('#sidebar-content span[title="_design/sidebar-update"]', waitTime, false)
-      .waitForElementPresent('label[for="checkbox-_design/sidebar-update"]', waitTime, false)
+
       .execute('document.querySelector("div[data-id=\'_design/sidebar-update\']").scrollIntoView();')
-      .clickWhenVisible('label[for="checkbox-_design/sidebar-update"]', waitTime, false)
+      .clickWhenVisible('div[data-id="_design/sidebar-update"] label[for="checkbox-_design/sidebar-update"]', waitTime, false)
 
       .waitForElementPresent('.bulk-action-component-selector-group .fonticon-trash', waitTime, false)
       .execute('document.querySelector(".bulk-action-component-selector-group .fonticon-trash").scrollIntoView();')
@@ -140,7 +140,7 @@ module.exports = {
     var waitTime = client.globals.maxWaitTime,
         newDatabaseName = client.globals.testDatabaseName,
         newDocumentName = 'delete_doc_doc',
-        baseUrl = client.globals.test_settings.launch_url;
+        baseUrl = client.options.launch_url;
 
     client
       .createDocument(newDocumentName, newDatabaseName)

@@ -13,7 +13,7 @@
 module.exports = {
   'Mango: Navigate back to _all_docs': function (client) {
     const newDatabaseName = client.globals.testDatabaseName;
-    const baseUrl = client.globals.test_settings.launch_url;
+    const baseUrl = client.options.launch_url;
 
     client
       .populateDatabase(newDatabaseName, 3)

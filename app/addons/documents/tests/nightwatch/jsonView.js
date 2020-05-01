@@ -4,7 +4,7 @@ module.exports = {
     var newDatabaseName = client.globals.testDatabaseName,
         newDocumentName = 'bitterns',
         waitTime = client.globals.maxWaitTime,
-        baseUrl = client.globals.test_settings.launch_url;
+        baseUrl = client.options.launch_url;
 
     var docContent = {
       "species": "American Bittern",

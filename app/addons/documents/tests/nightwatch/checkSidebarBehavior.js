@@ -17,7 +17,7 @@ module.exports = {
   'Checks if design docs that have special chars in the ID show up in the UI and are clickable': function (client) {
     const waitTime = 10000,
           newDatabaseName = client.globals.testDatabaseName,
-          baseUrl = client.globals.test_settings.launch_url;
+          baseUrl = client.options.launch_url;
     const docNormal = 'ddoc_normal';
     const docSpecialChars = 'ddoc_with.$pecialcharacters()+-';
     const docSpecialCharsEncoded = 'ddoc_with.%24pecialcharacters()%2B-';
@@ -28,8 +28,8 @@ module.exports = {
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
       .waitForElementPresent('.nav-list', waitTime, false)
       // Verify 'Metadata' subitem is not visible
-      .assert.hidden('a[href="#/database/' + newDatabaseName + '/_design/' + docNormal + '/_info"]')
-      .assert.hidden('a[href="#/database/' + newDatabaseName + '/_design/' + docSpecialCharsEncoded + '/_info"]')
+      .assert.not.visible('a[href="#/database/' + newDatabaseName + '/_design/' + docNormal + '/_info"]')
+      .assert.not.visible('a[href="#/database/' + newDatabaseName + '/_design/' + docSpecialCharsEncoded + '/_info"]')
       // Click sidebar items and verify they expand
       .clickWhenVisible('#nav-header-' + docNormal)
       .assert.visible('a[href="#/database/' + newDatabaseName + '/_design/' + docNormal + '/_info"]')

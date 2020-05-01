@@ -15,7 +15,7 @@ module.exports = {
   'Deletes a search index': function (client) {
     var newDatabaseName = client.globals.testDatabaseName,
         waitTime = client.globals.maxWaitTime,
-        baseUrl = client.globals.test_settings.launch_url;
+        baseUrl = client.options.launch_url;
 
     client
       .loginToGUI()
@@ -51,7 +51,7 @@ module.exports = {
   'Deleting view when design doc has search index does not remove design doc': function (client) {
     var waitTime = client.globals.maxWaitTime,
         newDatabaseName = client.globals.testDatabaseName,
-        baseUrl = client.globals.test_settings.launch_url;
+        baseUrl = client.options.launch_url;
 
     client
       // this creates a view

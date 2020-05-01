@@ -17,7 +17,7 @@ module.exports = {
   'View results with same id are all shown': function (client) {
     var waitTime = client.globals.maxWaitTime;
     var newDatabaseName = client.globals.testDatabaseName;
-    var baseUrl = client.globals.test_settings.launch_url;
+    var baseUrl = client.options.launch_url;
 
     client
       .loginToGUI()

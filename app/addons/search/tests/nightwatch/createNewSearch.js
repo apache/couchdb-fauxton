@@ -15,7 +15,7 @@ module.exports = {
     /*jshint multistr: true */
 
     var newDatabaseName = client.globals.testDatabaseName,
-        baseUrl = client.globals.test_settings.launch_url;
+        baseUrl = client.options.launch_url;
 
     var searchFunctionString = function (append) {
       return 'function (doc) {'                  +
@@ -42,7 +42,6 @@ module.exports = {
         editor.getSession().setValue("' + searchFunctionString(0) + '");\
       ')
 
-      .execute('document.querySelector("#save-index").scrollIntoView();')
       .clickWhenVisible('#save-index')
       .waitForElementPresent('#keyview_fancy_search', client.globals.maxWaitTime, false)
       .end();
@@ -50,7 +49,7 @@ module.exports = {
 
   'Creating a new index has a clean slate': function (client) {
     var newDatabaseName = client.globals.testDatabaseName,
-        baseUrl = client.globals.test_settings.launch_url;
+        baseUrl = client.options.launch_url;
 
     client
       .loginToGUI()
@@ -83,7 +82,7 @@ module.exports = {
 
   'Adding two indexes in a row does not add multiple indexes': function (client) {
     var newDatabaseName = client.globals.testDatabaseName,
-        baseUrl = client.globals.test_settings.launch_url;
+        baseUrl = client.options.launch_url;
 
     client
       .loginToGUI()

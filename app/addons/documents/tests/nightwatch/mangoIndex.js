@@ -19,7 +19,7 @@ module.exports = {
 
     var waitTime = client.globals.maxWaitTime,
         newDatabaseName = client.globals.testDatabaseName,
-        baseUrl = client.globals.test_settings.launch_url;
+        baseUrl = client.options.launch_url;
 
     client
       .populateDatabase(newDatabaseName)
@@ -38,7 +38,6 @@ module.exports = {
         var editor = ace.edit("query-field");\
         editor.getSession().setValue(json);\
       ')
-      .execute('document.querySelector("#create-index-btn").scrollIntoView();')
       .clickWhenVisible('#create-index-btn')
       .checkForStringPresent(newDatabaseName + '/_index', 'rocko-artischocko')
       .checkForStringPresent(newDatabaseName + '/_index', 'gans_gans_mango')
@@ -50,7 +49,7 @@ module.exports = {
   'Deleting new named indexes with mango': function (client) {
     var waitTime = 10000,
         newDatabaseName = client.globals.testDatabaseName,
-        baseUrl = client.globals.test_settings.launch_url;
+        baseUrl = client.options.launch_url;
 
     client
       .populateDatabase(newDatabaseName)

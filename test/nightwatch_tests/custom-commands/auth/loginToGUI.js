@@ -16,10 +16,10 @@ function LoginToGui (user, pw) {
 
   const client = this;
   const waitTime = client.globals.maxWaitTime;
-  const baseUrl = client.globals.test_settings.launch_url;
+  const baseUrl = client.options.launch_url;
 
-  const username = user || client.globals.test_settings.fauxton_username;
-  const password = pw || client.globals.test_settings.password;
+  const username = user || client.options.fauxton_username;
+  const password = pw || client.options.password;
 
   client
     .resizeWindow(1200, 1200)

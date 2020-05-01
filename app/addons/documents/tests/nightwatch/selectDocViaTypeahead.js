@@ -17,7 +17,7 @@ module.exports = {
   'Select doc via typeahead field redirects user': function (client) {
     var waitTime = client.globals.maxWaitTime,
         newDatabaseName = client.globals.testDatabaseName,
-        baseUrl = client.globals.test_settings.launch_url;
+        baseUrl = client.options.launch_url;
 
     client
       .populateDatabase(newDatabaseName, 3)
@@ -38,7 +38,7 @@ module.exports = {
   'Select doc works for capitalised id': function (client) {
     var waitTime = client.globals.maxWaitTime,
         newDatabaseName = client.globals.testDatabaseName,
-        baseUrl = client.globals.test_settings.launch_url;
+        baseUrl = client.options.launch_url;
 
     client
       .createDocument('MY_CAP_DOC_ID', newDatabaseName, {value: 2})

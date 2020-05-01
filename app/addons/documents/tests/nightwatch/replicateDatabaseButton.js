@@ -15,14 +15,14 @@ const helpers = require('../../../../../test/nightwatch_tests/helpers/helpers.js
 const testDbName = 'test_database';
 module.exports = {
   before: function (client, done) {
-    const nano = helpers.getNanoInstance(client.globals.test_settings.db_url);
+    const nano = helpers.getNanoInstance(client.options.db_url);
     nano.db.create(testDbName, function () {
       done();
     });
   },
 
   after: function (client, done) {
-    const nano = helpers.getNanoInstance(client.globals.test_settings.db_url);
+    const nano = helpers.getNanoInstance(client.options.db_url);
     nano.db.destroy(testDbName, function () {
       done();
     });
@@ -30,7 +30,7 @@ module.exports = {
 
   'Shows correct view on replicate database': function (client) {
     const waitTime = client.globals.maxWaitTime,
-          baseUrl = client.globals.test_settings.launch_url;
+          baseUrl = client.options.launch_url;
     const srcDbSelector = '.replication__page .replication__section:nth-child(3) .replication__input-react-select .Select-value-label';
     client
       .loginToGUI()

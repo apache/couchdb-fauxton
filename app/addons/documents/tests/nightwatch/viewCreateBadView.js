@@ -18,7 +18,7 @@ module.exports = {
     /*jshint multistr: true */
     const waitTime = client.globals.maxWaitTime,
           newDatabaseName = client.globals.testDatabaseName,
-          baseUrl = client.globals.test_settings.launch_url;
+          baseUrl = client.options.launch_url;
 
     client
       .loginToGUI()
@@ -36,7 +36,6 @@ module.exports = {
         var editor = ace.edit("map-function");\
         editor.getSession().setValue("function (doc) { emit(\'boom\', doc._id); }");\
       ')
-      .execute('document.querySelector("#save-view").scrollIntoView();')
       .clickWhenVisible('#save-view')
       .closeNotifications()
       .clickWhenVisible('.control-toggle-queryoptions', waitTime, false)
@@ -51,7 +50,7 @@ module.exports = {
 
   'Visit url of broken view displays error': function (client) {
     const newDatabaseName = client.globals.testDatabaseName,
-          baseUrl = client.globals.test_settings.launch_url,
+          baseUrl = client.options.launch_url,
           waitTime = client.globals.maxWaitTime;
 
     client

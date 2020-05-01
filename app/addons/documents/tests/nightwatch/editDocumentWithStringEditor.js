@@ -18,7 +18,7 @@ module.exports = {
     const waitTime = client.globals.maxWaitTime,
           newDatabaseName = client.globals.testDatabaseName,
           newDocumentName = 'str_editor_document',
-          baseUrl = client.globals.test_settings.launch_url;
+          baseUrl = client.options.launch_url;
 
     client
       .createDatabase(newDatabaseName)

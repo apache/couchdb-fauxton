@@ -17,7 +17,7 @@ module.exports = {
   'Navigate to New Doc Page, editing and then clicking on the sidebar should show a confirmation dialog': function (client) {
     var waitTime = client.globals.maxWaitTime,
         newDatabaseName = client.globals.testDatabaseName,
-        baseUrl = client.globals.test_settings.launch_url;
+        baseUrl = client.options.launch_url;
 
     var newLink = '#/database/' + newDatabaseName + '/_new';
 
@@ -31,7 +31,7 @@ module.exports = {
 
       .keys(['.ace_variable', 'v'])
       .clickWhenVisible('a[href="#/activetasks"]')
-      .accept_alert()
+      .acceptAlert()
       .verify.urlEquals(baseUrl + '/#/activetasks');
   }
 };

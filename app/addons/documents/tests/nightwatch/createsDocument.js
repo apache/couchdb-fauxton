@@ -18,7 +18,7 @@ module.exports = {
     const waitTime = client.globals.maxWaitTime,
           newDatabaseName = client.globals.testDatabaseName,
           newDocumentName = 'create_doc_document',
-          baseUrl = client.globals.test_settings.launch_url;
+          baseUrl = client.options.launch_url;
 
     client
       .createDatabase(newDatabaseName)
@@ -63,7 +63,7 @@ module.exports = {
     const waitTime = client.globals.maxWaitTime,
           newDatabaseName = client.globals.testDatabaseName,
           newDocumentName = '_local/create_doc_document',
-          baseUrl = client.globals.test_settings.launch_url;
+          baseUrl = client.options.launch_url;
 
     client
       .createDatabase(newDatabaseName)
@@ -112,7 +112,7 @@ module.exports = {
     const waitTime = client.globals.maxWaitTime,
           newDatabaseName = client.globals.testDatabaseName,
           newDocumentName = 'a-create_doc_document',
-          baseUrl = client.globals.test_settings.launch_url;
+          baseUrl = client.options.launch_url;
 
     client
       .createDatabase(newDatabaseName)

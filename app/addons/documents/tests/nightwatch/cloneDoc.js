@@ -17,7 +17,7 @@ module.exports = {
     const newDatabaseName = client.globals.testDatabaseName;
     const newDocumentName = 'clone_doc_doc';
     const clonedDocName = 'cloned/document';
-    const baseUrl = client.globals.test_settings.launch_url;
+    const baseUrl = client.options.launch_url;
 
     client
       .createDocument(newDocumentName, newDatabaseName)
