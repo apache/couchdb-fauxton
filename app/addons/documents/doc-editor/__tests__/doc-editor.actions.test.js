@@ -66,4 +66,67 @@ describe('DocEditorActions', () => {
     );
   });
 
+  it('uploadAttachment shows error reason, if available', () => {
+    sinon.stub(FauxtonAPI, 'addNotification');
+    sinon.stub(FauxtonAPI, 'urls').callsFake((p1, p2, p3, p4, p5, p6) => {
+      return [p1, p2, p3, p4, p5, p6].join('/');
+    });
+    const params = {
+      rev: 'rev-num',
+      doc: doc,
+      files: [
+        {
+          name: 'a_file.txt',
+          length: 100
+        }
+      ]
+    };
+    const mockDispatch = sinon.stub();
+
+    const fakeRequest = {
+      send: sinon.stub(),
+      setRequestHeader: sinon.stub(),
+      open: sinon.stub()
+    };
+    fakeXMLHttpRequest.returns(fakeRequest);
+
+    // Call uploadAttachment to attach the event handlers to fakeRequest
+    Actions.uploadAttachment(params)(mockDispatch);
+    expect(fakeRequest.onload).toBeDefined();
+    const mockError = {
+      error: 'bad_request',
+      reason: 'Invalid filename'
+    };
+    // Simulate an error response
+    fakeRequest.responseText = JSON.stringify(mockError);
+    fakeRequest.status = 400;
+    mockDispatch.resetHistory();
+    // Call the onload event
+    fakeRequest.onload();
+    // Verify it includes the error details
+    sinon.assert.calledWithExactly(
+      mockDispatch,
+      {
+        options: { error: `Error uploading file. Reason: ${mockError.reason}` },
+        type: 'FILE_UPLOAD_ERROR'
+      }
+    );
+
+    // Make sure it calls doesn't crash if response is not JSON
+    // Simulate an error response
+    fakeRequest.responseText = 'Forbidden';
+    fakeRequest.status = 403;
+    mockDispatch.resetHistory();
+    // Call the onload event
+    fakeRequest.onload();
+    // Verify it displays the error message, without any details
+    sinon.assert.calledWithExactly(
+      mockDispatch,
+      {
+        options: { error: `Error uploading file. ` },
+        type: 'FILE_UPLOAD_ERROR'
+      }
+    );
+  });
+
 });

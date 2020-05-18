@@ -207,20 +207,20 @@ const uploadAttachment = (params) => (dispatch) => {
   httpRequest.onerror = () => {
     onError('Error uploading file');
   };
-  httpRequest.onload = (e) => {
+  httpRequest.onload = () => {
     if (httpRequest.status >= 200 && httpRequest.status < 300) {
       onSuccess(params.doc);
     } else {
       let errorMsg = 'Error uploading file. ';
-      if (e.responseText) {
-        try {
-          const json = JSON.parse(e.responseText);
+      try {
+        if (httpRequest.responseText) {
+          const json = JSON.parse(httpRequest.responseText);
           if (json.error) {
             errorMsg += 'Reason: ' + (json.reason || json.error);
           }
-        } catch (err) {
-          //ignore parsing error
         }
+      } catch (err) {
+        //ignore parsing error
       }
       onError(errorMsg);
     }
