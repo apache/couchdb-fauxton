@@ -138,7 +138,9 @@ export default class DocEditorScreen extends React.Component {
   };
 
   clearChanges = () => {
-    this.docEditor.clearChanges();
+    if (this.docEditor) {
+      this.docEditor.clearChanges();
+    }
   };
 
   getExtensionIcons = () => {
