@@ -10,7 +10,6 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 import React from "react";
-import ReactDOM from "react-dom";
 import FauxtonAPI from "../../../core/api";
 import ace from "brace";
 import "brace/ext/searchbox";
@@ -30,7 +29,7 @@ export class CodeEditor extends React.Component {
     // this sets the default value for the editor. On the fly changes are stored in state in this component only. To
     // change the editor content after initial construction use CodeEditor.setValue()
     defaultCode: '',
-
+    disabled: false,
     showGutter: true,
     highlightActiveLine: true,
     showPrintMargin: false,
@@ -119,6 +118,7 @@ export class CodeEditor extends React.Component {
     if (this.props.autoFocus) {
       this.editor.focus();
     }
+    this.editor.setReadOnly(props.disabled);
   };
 
   addCommands = () => {
@@ -361,7 +361,10 @@ export class CodeEditor extends React.Component {
     return (
       <div>
         <div ref={node => this.ace = node} className="js-editor" id={this.props.id}></div>
-        <button ref={node => this.stringEditIcon = node} className="btn string-edit" title="Edit string" disabled={!this.state.stringEditIconVisible}
+        <button ref={node => this.stringEditIcon = node}
+          className="btn string-edit"
+          title="Edit string"
+          disabled={!this.state.stringEditIconVisible || this.props.disabled}
           style={this.state.stringEditIconStyle} onClick={this.openStringEditModal}>
           <i className="icon icon-edit"></i>
         </button>

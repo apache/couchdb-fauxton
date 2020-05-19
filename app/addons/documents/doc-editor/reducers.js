@@ -15,6 +15,7 @@ import ActionTypes from "./actiontypes";
 const initialState = {
   doc: null,
   isLoading: true,
+  isSaving: false,
   cloneDocModalVisible: false,
   deleteDocModalVisible: false,
   uploadModalVisible: false,
@@ -116,6 +117,18 @@ export default function docEditor (state = initialState, action) {
       return {
         ...state,
         uploadPercentage: options.percent
+      };
+
+    case ActionTypes.SAVING_DOCUMENT:
+      return {
+        ...state,
+        isSaving: true,
+      };
+
+    case ActionTypes.SAVING_DOCUMENT_COMPLETED:
+      return {
+        ...state,
+        isSaving: false,
       };
 
     default:

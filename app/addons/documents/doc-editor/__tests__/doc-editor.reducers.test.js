@@ -25,6 +25,7 @@ describe('DocEditor Reducer', function () {
     const newState = reducer(undefined, { type: 'do_nothing'});
 
     expect(newState.isLoading).toBe(true);
+    expect(newState.isSaving).toBe(false);
     expect(newState.cloneDocModalVisible).toBe(false);
     expect(newState.deleteDocModalVisible).toBe(false);
     expect(newState.uploadModalVisible).toBe(false);
@@ -63,6 +64,14 @@ describe('DocEditor Reducer', function () {
 
     const newStateHide = reducer(undefined, { type: ActionTypes.HIDE_UPLOAD_MODAL });
     expect(newStateHide.uploadModalVisible).toBe(false);
+  });
+
+  it('saving document in-progress / completed', function () {
+    const newStateSaving = reducer(undefined, { type: ActionTypes.SAVING_DOCUMENT });
+    expect(newStateSaving.isSaving).toBe(true);
+
+    const newStateSavingDone = reducer(undefined, { type: ActionTypes.SAVING_DOCUMENT_COMPLETED });
+    expect(newStateSavingDone.isSaving).toBe(false);
   });
 
 });

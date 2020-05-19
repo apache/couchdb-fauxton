@@ -46,21 +46,25 @@ const initDocEditor = (params) => (dispatch) => {
   });
 };
 
-const saveDoc = (doc, isValidDoc, onSave, navigateToUrl) => {
+const saveDoc = (doc, isValidDoc, onSave, navigateToUrl) => dispatch => {
   if (isValidDoc) {
-    FauxtonAPI.addNotification({
-      msg: 'Saving document.',
-      clear: true
-    });
+    dispatch({ type: ActionTypes.SAVING_DOCUMENT });
 
     doc.save().then(function () {
       onSave(doc.prettyJSON());
+      dispatch({ type: ActionTypes.SAVING_DOCUMENT_COMPLETED });
+      FauxtonAPI.addNotification({
+        msg: 'Document saved successfully.',
+        type: 'success',
+        clear: true
+      });
       if (navigateToUrl) {
         FauxtonAPI.navigate(navigateToUrl, {trigger: true});
       } else {
         FauxtonAPI.navigate('#/' + FauxtonAPI.urls('allDocs', 'app',  FauxtonAPI.url.encode(doc.database.id)), {trigger: true});
       }
     }).fail(function (xhr) {
+      dispatch({ type: ActionTypes.SAVING_DOCUMENT_COMPLETED });
       FauxtonAPI.addNotification({
         msg: 'Save failed: ' + JSON.parse(xhr.responseText).reason,
         type: 'error',
