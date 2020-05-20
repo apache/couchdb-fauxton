@@ -30,6 +30,7 @@ export default class DocEditorScreen extends React.Component {
 
   static propTypes = {
     isLoading: PropTypes.bool.isRequired,
+    isSaving: PropTypes.bool.isRequired,
     isNewDoc: PropTypes.bool.isRequired,
     isDbPartitioned: PropTypes.bool.isRequired,
     doc: PropTypes.object,
@@ -83,6 +84,7 @@ export default class DocEditorScreen extends React.Component {
         id="doc-editor"
         ref={node => this.docEditor = node}
         defaultCode={code}
+        disabled={this.props.isSaving}
         mode="json"
         autoFocus={true}
         editorCommands={editorCommands}
@@ -136,7 +138,9 @@ export default class DocEditorScreen extends React.Component {
   };
 
   clearChanges = () => {
-    this.docEditor.clearChanges();
+    if (this.docEditor) {
+      this.docEditor.clearChanges();
+    }
   };
 
   getExtensionIcons = () => {
@@ -152,36 +156,54 @@ export default class DocEditorScreen extends React.Component {
     }
     return (
       <div>
-        <AttachmentsPanelButton doc={this.props.doc} isLoading={this.props.isLoading} />
+        <AttachmentsPanelButton
+          doc={this.props.doc}
+          isLoading={this.props.isLoading}
+          disabled={this.props.isSaving} />
         <div className="doc-editor-extension-icons">{this.getExtensionIcons()}</div>
 
         {this.props.conflictCount ? <PanelButton
           title={`Conflicts (${this.props.conflictCount})`}
           iconClass="icon-columns"
           className="conflicts"
+          disabled={this.props.isSaving}
           onClick={() => { FauxtonAPI.navigate(FauxtonAPI.urls('revision-browser', 'app', this.props.database.safeID(), this.props.doc.id));}}/> : null}
 
-        <PanelButton className="upload" title="Upload Attachment" iconClass="icon-circle-arrow-up" onClick={this.props.showUploadModal} />
-        <PanelButton title="Clone Document" iconClass="icon-repeat" onClick={this.props.showCloneDocModal} />
-        <PanelButton title="Delete" iconClass="icon-trash" onClick={this.props.showDeleteDocModal} />
+        <PanelButton className="upload"
+          title="Upload Attachment"
+          iconClass="icon-circle-arrow-up"
+          disabled={this.props.isSaving}
+          onClick={this.props.showUploadModal} />
+        <PanelButton title="Clone Document"
+          iconClass="icon-repeat"
+          disabled={this.props.isSaving}
+          onClick={this.props.showCloneDocModal} />
+        <PanelButton title="Delete"
+          iconClass="icon-trash"
+          disabled={this.props.isSaving}
+          onClick={this.props.showDeleteDocModal} />
       </div>
     );
   };
 
   render() {
-    const saveButtonLabel = (this.props.isNewDoc) ? 'Create Document' : 'Save Changes';
+    const saveButtonLabel = this.props.isSaving ?
+      'Saving...' :
+      (this.props.isNewDoc ? 'Create Document' : 'Save Changes');
     const endpoint = this.props.previousUrl ?
       this.props.previousUrl :
       FauxtonAPI.urls('allDocs', 'app', FauxtonAPI.url.encode(this.props.database.id));
+    let cancelBtClass = `js-back cancel-button ${this.props.isSaving ? 'cancel-button--disabled' : ''}`;
     return (
       <div>
         <div id="doc-editor-actions-panel">
           <div className="doc-actions-left">
-            <button className="save-doc btn btn-primary save" type="button" onClick={this.saveDoc}>
+            <button disabled={this.props.isSaving} className="save-doc btn btn-primary save" type="button" onClick={this.saveDoc}>
               <i className="icon fonticon-ok-circled"></i> {saveButtonLabel}
             </button>
             <div>
-              <a href={`#/${endpoint}`} className="js-back cancel-button">Cancel</a>
+              <a href={this.props.isSaving ? undefined : `#/${endpoint}`}
+                className={cancelBtClass}>Cancel</a>
             </div>
           </div>
           <div className="alignRight">

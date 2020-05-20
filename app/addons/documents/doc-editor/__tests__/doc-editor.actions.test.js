@@ -129,4 +129,41 @@ describe('DocEditorActions', () => {
     );
   });
 
+  it('sets and resets the isSaving state', () => {
+    sinon.stub(FauxtonAPI, 'addNotification');
+    sinon.stub(FauxtonAPI, 'navigate');
+    sinon.stub(FauxtonAPI, 'urls').callsFake((p1, p2, p3, p4, p5, p6) => {
+      return [p1, p2, p3, p4, p5, p6].join('/');
+    });
+    const mockDispatch = sinon.stub();
+    const mockRes = {
+      then: cb => {
+        cb();
+        return {
+          fail: () => {},
+        };
+      }
+    };
+    const mockDoc = {
+      database: {
+        id: 'mock_db'
+      },
+      save: sinon.stub().returns(mockRes),
+      prettyJSON: sinon.stub(),
+    };
+    Actions.saveDoc(mockDoc, true, () => {}, '')(mockDispatch);
+    sinon.assert.calledWithExactly(
+      mockDispatch,
+      {
+        type: 'SAVING_DOCUMENT'
+      }
+    );
+    sinon.assert.calledWithExactly(
+      mockDispatch,
+      {
+        type: 'SAVING_DOCUMENT_COMPLETED'
+      }
+    );
+  });
+
 });

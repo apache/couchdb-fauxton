@@ -12,28 +12,32 @@
 
 import PropTypes from 'prop-types';
 import React from 'react';
-import ReactDOM from 'react-dom';
-
 
 export default class PanelButton extends React.Component {
   static propTypes = {
     title: PropTypes.string.isRequired,
     onClick: PropTypes.func.isRequired,
-    className: PropTypes.string
+    className: PropTypes.string,
+    disabled: PropTypes.bool
   };
 
   static defaultProps = {
     title: '',
     iconClass: '',
     onClick: () => { },
-    className: ''
+    className: '',
+    disabled: false
   };
 
   render() {
     var iconClasses = 'icon ' + this.props.iconClass;
     return (
       <div className="panel-section">
-        <button className={`panel-button ${this.props.className}`} title={this.props.title} onClick={this.props.onClick}>
+        <button className={`panel-button ${this.props.className}`}
+          title={this.props.title}
+          onClick={this.props.onClick}
+          disabled={this.props.disabled} >
+
           <i className={iconClasses}></i>
           <span>{this.props.title}</span>
         </button>

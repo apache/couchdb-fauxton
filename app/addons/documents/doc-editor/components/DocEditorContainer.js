@@ -17,6 +17,7 @@ import DocEditorScreen from './DocEditorScreen';
 const mapStateToProps = ({ docEditor, databases }, ownProps) => {
   return {
     isLoading: docEditor.isLoading || databases.isLoadingDbInfo,
+    isSaving: docEditor.isSaving,
     isNewDoc: ownProps.isNewDoc,
     isDbPartitioned: databases.isDbPartitioned,
     doc: docEditor.doc,
@@ -38,7 +39,7 @@ const mapStateToProps = ({ docEditor, databases }, ownProps) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     saveDoc: (doc, isValidDoc, onSave, navigateToUrl) => {
-      Actions.saveDoc(doc, isValidDoc, onSave, navigateToUrl);
+      dispatch(Actions.saveDoc(doc, isValidDoc, onSave, navigateToUrl));
     },
 
     showCloneDocModal: () => {

@@ -85,6 +85,16 @@
       text-decoration: none;
       cursor: pointer;
     }
+    &--disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      color: #666;
+    }
+    &--disabled:hover {
+      opacity: 0.5;
+      cursor: not-allowed;
+      color: #666;
+    }
   }
   .panel-button {
     color: #666;
@@ -92,6 +102,10 @@
       color: @hoverHighlight;
       text-decoration: none;
       cursor: pointer;
+    }
+    &:disabled {
+      color: @grayLight;
+      cursor: not-allowed;
     }
   }
 
