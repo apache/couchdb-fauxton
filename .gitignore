@@ -21,6 +21,7 @@ app/addons/*
 !app/addons/cors
 !app/addons/setup
 !app/addons/search
+!app/addons/news
 settings.json*
 i18n.json
 !settings.json.default
