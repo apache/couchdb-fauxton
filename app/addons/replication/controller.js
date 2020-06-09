@@ -71,7 +71,7 @@ export default class ReplicationController extends React.Component {
       filterReplicate, replicate, clearReplicationForm, selectAllDocs, changeActivitySort, selectDoc,
       deleteDocs, deleteReplicates, selectAllReplicates, selectReplicate,
       sourceAuthType, sourceAuth, targetAuthType, targetAuth, pageStart, pageEnd, docsPerPage,
-      updatePerPageResults, paginateNext, pagination, paginatePrevious
+      updatePerPageResults, paginateNext, pagination, paginatePrevious, targetDatabasePartitioned, allowNewPartitionedLocalDbs
     } = this.props;
 
     if (tabSection === 'new replication') {

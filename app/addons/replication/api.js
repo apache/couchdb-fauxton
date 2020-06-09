@@ -262,24 +262,22 @@ export const getDocUrl = (doc) => {
   return removeSensitiveUrlInfo(url);
 };
 
-export const parseReplicationDocs = (rows) => {
-  return rows.map(row => row.doc).map(doc => {
-    return {
-      _id: doc._id,
-      _rev: doc._rev,
-      selected: false, //use this field for bulk delete in the ui
-      source: getDocUrl(doc.source),
-      target: getDocUrl(doc.target),
-      createTarget: doc.create_target,
-      continuous: doc.continuous === true ? true : false,
-      status: doc._replication_state,
-      errorMsg: doc._replication_state_reason ? doc._replication_state_reason : '',
-      statusTime: new Date(doc._replication_state_time),
-      startTime: new Date(doc._replication_start_time),
-      url: `#/database/_replicator/${encodeURIComponent(doc._id)}`,
-      raw: doc
-    };
-  });
+export const parseReplicationDocs = docs => {
+  return docs.map(doc => ({
+    _id: doc._id,
+    _rev: doc._rev,
+    selected: false, //use this field for bulk delete in the ui
+    source: getDocUrl(doc.source),
+    target: getDocUrl(doc.target),
+    createTarget: doc.create_target,
+    continuous: doc.continuous === true,
+    status: doc._replication_state,
+    errorMsg: doc._replication_state_reason ? doc._replication_state_reason : '',
+    statusTime: new Date(doc._replication_state_time),
+    startTime: new Date(doc._replication_start_time),
+    url: `#/database/_replicator/${encodeURIComponent(doc._id)}`,
+    raw: doc
+  }));
 };
 
 export const convertState = (state) => {
@@ -311,22 +309,30 @@ export const combineDocsAndScheduler = (docs, schedulerDocs) => {
 };
 
 export const fetchReplicationDocs = ({docsPerPage, page}) => {
-  const params = {
-    limit: docsPerPage + 1,
-    skip: (page - 1) * docsPerPage,
-    include_docs: true
+  const limit = docsPerPage + 1;
+  const skip = (page - 1) * docsPerPage;
+
+  const mangoPayload = {
+    limit,
+    skip,
+    selector: {
+      _id: {
+        $gte: null
+      }
+    }
+  };
+
+  const schedulerDocsPayload = {
+    limit,
+    skip
   };
 
   return supportNewApi()
     .then(newApi => {
-      const url = Helpers.getServerUrl(`/_replicator/_all_docs?startkey=%22_designZ%22&${app.utils.queryParams(params)}`);
-      const docsPromise = get(url)
+      const url = Helpers.getServerUrl('/_replicator/_find');
+      const docsPromise = post(url, mangoPayload)
         .then((res) => {
-          if (res.error) {
-            return [];
-          }
-
-          return parseReplicationDocs(res.rows.filter(row => row.id.indexOf("_design/") === -1));
+          return parseReplicationDocs(res.docs);
         });
 
       if (!newApi) {
@@ -342,7 +348,7 @@ export const fetchReplicationDocs = ({docsPerPage, page}) => {
             };
           });
       }
-      const schedulerPromise = fetchSchedulerDocs(params);
+      const schedulerPromise = fetchSchedulerDocs(schedulerDocsPayload);
       return FauxtonAPI.Promise.join(docsPromise, schedulerPromise, (docs, schedulerDocs) => {
         return combineDocsAndScheduler(docs, schedulerDocs);
       })
@@ -362,8 +368,8 @@ export const fetchReplicationDocs = ({docsPerPage, page}) => {
     });
 };
 
-export const fetchSchedulerDocs = () => {
-  const url = Helpers.getServerUrl(`/_scheduler/docs?${app.utils.queryParams(parent)}`);
+export const fetchSchedulerDocs = (params) => {
+  const url = Helpers.getServerUrl(`/_scheduler/docs?${app.utils.queryParams(params)}`);
   return get(url)
     .then((res) => {
       if (res.error) {

@@ -9,13 +9,13 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
+import 'react-toastify/dist/ReactToastify.min.css';
 import "jquery";
 import app from "./initialize";
 import _ from "lodash";
 import Helpers from "./helpers";
 import Utils from "./core/utils";
 import FauxtonAPI from "./core/api";
-import 'react-toastify/dist/ReactToastify.min.css';
 import "../assets/less/fauxton.less";
 
 // Make sure we have a console.log
