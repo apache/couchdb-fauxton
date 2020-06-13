@@ -389,6 +389,7 @@ const replication = (state = initialState, {type, options}) => {
       return {
         ...state,
         pagination: {
+          ...state.pagination,
           docsPerPage: state.pagination.docsPerPage,
           page: state.pagination.page + 1
         }
@@ -398,6 +399,7 @@ const replication = (state = initialState, {type, options}) => {
       return {
         ...state,
         pagination: {
+          ...state.pagination,
           docsPerPage: state.pagination.docsPerPage,
           page: state.pagination.page - 1
         }

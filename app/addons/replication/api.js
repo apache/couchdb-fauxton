@@ -332,7 +332,8 @@ export const fetchReplicationDocs = ({docsPerPage, page}) => {
       const url = Helpers.getServerUrl('/_replicator/_find');
       const docsPromise = post(url, mangoPayload)
         .then((res) => {
-          return parseReplicationDocs(res.docs);
+          const docs = res.error ? [] : res.docs;
+          return parseReplicationDocs(docs);
         });
 
       if (!newApi) {

@@ -24,6 +24,11 @@ const {LoadLines, Polling, RefreshBtn} = Components;
 
 export default class ReplicationController extends React.Component {
 
+  constructor(props) {
+    super(props);
+    this.onRefresh = this.onRefresh.bind(this);
+  }
+
   loadReplicationInfo (props, oldProps) {
     this.props.initReplicator(props.routeLocalSource, props.localSource);
     this.getAllActivity(props.pagination);
@@ -40,6 +45,10 @@ export default class ReplicationController extends React.Component {
   getAllActivity (pagination) {
     this.props.getReplicationActivity(pagination);
     this.props.getReplicateActivity();
+  }
+
+  onRefresh() {
+    this.getAllActivity(this.props.pagination);
   }
 
   componentDidMount () {
@@ -173,10 +182,10 @@ export default class ReplicationController extends React.Component {
           max={600}
           startValue={300}
           stepSize={60}
-          onPoll={this.getAllActivity.bind(this, this.props.pagination)}
+          onPoll={this.onRefresh}
         />
         <RefreshBtn
-          refresh={this.getAllActivity.bind(this, this.props.pagination)}
+          refresh={this.onRefresh}
         />
       </div>
     );
