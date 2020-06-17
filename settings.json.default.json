@@ -14,7 +14,8 @@
   { "name": "permissions" },
   { "name": "auth" },
   { "name": "verifyinstall" },
-  { "name": "documentation" }
+  { "name": "documentation" },
+  { "name": "news" }
   ],
     "template": {
       "development": {
