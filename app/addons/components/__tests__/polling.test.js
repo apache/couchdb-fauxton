@@ -10,7 +10,7 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 import {Polling, clearPollCounter, resetPollCounter} from "../components/polling";
-import {shallow, mount} from "enzyme";
+import {mount} from "enzyme";
 import sinon from "sinon";
 import React from "react";
 
@@ -51,7 +51,7 @@ describe("Polling", () => {
     });
 
     it('renders slider with correct info', () => {
-      const wrapper = shallow(<Polling
+      const wrapper = mount(<Polling
         startValue={10}
         min={1}
         max={20}
@@ -59,9 +59,8 @@ describe("Polling", () => {
         onPoll={() => {}}
       />);
 
-      const props = wrapper.find('Range').props();
-
-      expect(props.value).toEqual(10);
+      const props = wrapper.find('.faux__polling-info-slider').at(0).props();
+      expect(props.defaultValue).toEqual(10);
       expect(props.step).toEqual(1);
       expect(props.min).toEqual(1);
       expect(props.max).toEqual(21);
@@ -76,7 +75,10 @@ describe("Polling", () => {
         onPoll={() => {}}
       />);
 
-      wrapper.find('input').simulate('mouseMove', {buttons:1, which:1, target: {value: 21}});
+      const handler = wrapper.find('.rc-slider-handle').at(1);
+      wrapper.simulate('focus');
+      // Simulate key END to move handle to the max value
+      handler.simulate('keyDown', { keyCode: 35 });
       const isOff = wrapper.find('.faux__polling-info-value--off').text();
       expect(isOff.toLowerCase()).toEqual("off");
     });
