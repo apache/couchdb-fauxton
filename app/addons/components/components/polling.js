@@ -11,10 +11,8 @@
 // the License.
 
 import PropTypes from 'prop-types';
-
 import React from 'react';
-import ReactDOM from 'react-dom';
-import Range from 'react-range';
+import Slider from 'rc-slider';
 
 let pollIntervalId;
 
@@ -75,8 +73,8 @@ export class Polling extends React.Component {
     resetPollCounter(value * 1000, () => onPoll());
   }
 
-  updatePollingFreq (e) {
-    this.setPollingCounter(parseInt(e.target.value, 10));
+  updatePollingFreq (newValue) {
+    this.setPollingCounter(parseInt(newValue, 10));
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
@@ -103,14 +101,12 @@ export class Polling extends React.Component {
           <span className='faux__polling-info-text'>Polling Interval</span>
           <span className={`faux__polling-info-value faux__polling-info-value ${pollStyle}`}>{pollValue}</span>
         </div>
-        <Range
-          onChange={this.updatePollingFreq}
-          className='faux__polling-info-slider'
-          type='range'
-          value={value}
+        <Slider
+          className="faux__polling-info-slider"
           min={min}
           max={max + stepSize}
-          step={stepSize}
+          defaultValue={value}
+          onChange={this.updatePollingFreq}
         />
       </div>
     );

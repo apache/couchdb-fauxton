@@ -12,6 +12,28 @@
 
 .faux__polling {
   padding: 0 15px !important;
+  width: 236px;
+
+  .rc-slider-rail {
+    background-color: @sliderBackground;
+    height: 8px;
+    border: 1px solid @sliderBorderColor;
+  }
+
+  .rc-slider-track {
+    background-color: @sliderBackgroundHighlight;
+    height: 8px;
+    border: 1px solid @sliderBackgroundHighlight;
+  }
+
+  .rc-slider-handle {
+    height: 14px;
+    width: 14px;
+    margin-top: -3px;
+    border: 1px solid @sliderBackgroundHighlight;
+    border-radius: 8px;
+    background-color: @sliderBackgroundHighlight;
+  }
 }
 
 .faux__polling-info {
@@ -36,6 +58,8 @@
 
 .faux__polling-info-slider {
   cursor: pointer;
+  height: 20px;
+  padding-top: 8px;
 }
 
 div.faux__refresh-btn {
