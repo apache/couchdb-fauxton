@@ -101,6 +101,7 @@
     "semver": "^5.7.1",
     "send": "^0.16.2",
     "style-loader": "^0.23.1",
+    "universal-cookie": "^4.0.3",
     "url": "~0.7.9",
     "url-loader": "^2.3.0",
     "urls": "~0.0.3",

@@ -11,6 +11,8 @@
 // the License.
 
 import React from "react";
+import Cookies from 'universal-cookie';
+const cookies = new Cookies();
 
 function LoadNewsButton(props) {
   return (
@@ -22,6 +24,13 @@ function LoadNewsButton(props) {
         If you don’t want to share your IP address, do not click the button.
       </p>
       <button className="btn btn-primary" onClick={props.showNews}>Load News</button>
+      <label className="news-checkbox">
+        <input type="checkbox"
+          checked={props.isChecked}
+          onChange={props.toggleCookieSave}
+        />
+        Remember my choice
+      </label>
     </div>
   );
 }
@@ -30,11 +39,32 @@ class NewsPage extends React.Component {
   constructor (props) {
     super(props);
     this.showNews = this.showNews.bind(this);
-    this.state = { showNews: false };
+    this.toggleCookieSave = this.toggleCookieSave.bind(this);
+
+    const hasCookie = !!cookies.get('allow-IP-sharing');
+    this.state = {
+      showNews: hasCookie ? true : false,
+      hasCookie
+    };
   }
 
   showNews() {
     this.setState({ showNews: true });
+  }
+
+  toggleCookieSave() {
+    if (!this.state.hasCookie) {
+      this.setState(() => {
+        return { hasCookie: true };
+      });
+      cookies.set('allow-IP-sharing', 'true', { sameSite: 'Strict' });
+
+    } else {
+      this.setState(() => {
+        return { hasCookie: false };
+      });
+      cookies.remove('allow-IP-sharing');
+    }
   }
 
   render() {
@@ -43,7 +73,11 @@ class NewsPage extends React.Component {
         {this.state.showNews ?
           <iframe src="https://blog.couchdb.org" width="100%" height="100%"></iframe>
           :
-          <LoadNewsButton showNews={this.showNews}></LoadNewsButton>
+          <LoadNewsButton
+            showNews={this.showNews}
+            toggleCookieSave={this.toggleCookieSave}
+            isChecked={this.state.hasCookie}
+          ></LoadNewsButton>
         }
       </div>
     );
