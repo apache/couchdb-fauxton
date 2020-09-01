@@ -12,13 +12,43 @@
 
 import React from "react";
 
-const NewsPage = () => {
+function LoadNewsButton(props) {
   return (
-    <div id="news-page" className="">
-      <iframe src="https://blog.couchdb.org" width="100%" height="100%"></iframe>
+    <div>
+      <p>
+        When you click this button, you are requesting content and sharing your IP address with <a href="https://blog.couchdb.org/">blog.couchdb.org</a> which is edited by the Apache CouchDB PMC and maintained by <a href="https://wordpress.com/">wordpress.com</a>.
+      </p>
+      <p>
+        If you don’t want to share your IP address, do not click the button.
+      </p>
+      <button className="btn btn-primary" onClick={props.showNews}>Load News</button>
     </div>
   );
-};
+}
+
+class NewsPage extends React.Component {
+  constructor (props) {
+    super(props);
+    this.showNews = this.showNews.bind(this);
+    this.state = { showNews: false };
+  }
+
+  showNews() {
+    this.setState({ showNews: true });
+  }
+
+  render() {
+    return (
+      <div id="news-page" className="">
+        {this.state.showNews ?
+          <iframe src="https://blog.couchdb.org" width="100%" height="100%"></iframe>
+          :
+          <LoadNewsButton showNews={this.showNews}></LoadNewsButton>
+        }
+      </div>
+    );
+  }
+}
 
 export default {
   NewsPage: NewsPage
