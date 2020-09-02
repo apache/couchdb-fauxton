@@ -13,7 +13,7 @@ import app from "../../app";
 
 import React from "react";
 
-const LoadNewsButton = ({ showNews, isChecked, toggleCookieSave }) => {
+const LoadNewsButton = ({ showNews, isChecked, toggleChange }) => {
   return (
     <div>
       <p>
@@ -26,7 +26,7 @@ const LoadNewsButton = ({ showNews, isChecked, toggleCookieSave }) => {
       <label className="news-checkbox">
         <input type="checkbox"
           checked={isChecked}
-          onChange={toggleCookieSave}
+          onChange={toggleChange}
         />
         Remember my choice
       </label>
@@ -38,7 +38,7 @@ class NewsPage extends React.Component {
   constructor (props) {
     super(props);
     this.showNews = this.showNews.bind(this);
-    this.toggleCookieSave = this.toggleCookieSave.bind(this);
+    this.toggleChange = this.toggleChange.bind(this);
 
     const hasCookie = !!app.utils.localStorageGet('allow-IP-sharing');
 
@@ -52,33 +52,25 @@ class NewsPage extends React.Component {
     this.setState({ showNews: true });
   }
 
-  toggleCookieSave() {
-    if (!this.state.hasCookie) {
-      this.setState(() => {
-        return { hasCookie: true };
-      });
-      app.utils.localStorageSet('allow-IP-sharing', true);
-
-    } else {
-      this.setState(() => {
-        return { hasCookie: false };
-      });
-      app.utils.localStorageSet('allow-IP-sharing', false);
-    }
+  toggleChange() {
+    const hasCookie = this.state.hasCookie;
+    this.setState(() => ({ hasCookie: !hasCookie }));
+    app.utils.localStorageSet('allow-IP-sharing', !hasCookie);
   }
 
   render() {
+    let news = <LoadNewsButton
+      showNews={this.showNews}
+      toggleChange={this.toggleChange}
+      isChecked={this.state.hasCookie}></LoadNewsButton>;
+
+    if (this.state.showNews) {
+      news = <iframe src="https://blog.couchdb.org" width="100%" height="100%"></iframe>;
+    }
+
     return (
-      <div id="news-page" className="">
-        {this.state.showNews ?
-          <iframe src="https://blog.couchdb.org" width="100%" height="100%"></iframe>
-          :
-          <LoadNewsButton
-            showNews={this.showNews}
-            toggleCookieSave={this.toggleCookieSave}
-            isChecked={this.state.hasCookie}
-          ></LoadNewsButton>
-        }
+      <div className="news-page">
+        {news}
       </div>
     );
   }
