@@ -9,12 +9,11 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
+import app from "../../app";
 
 import React from "react";
-import Cookies from 'universal-cookie';
-const cookies = new Cookies();
 
-function LoadNewsButton(props) {
+const LoadNewsButton = ({ showNews, isChecked, toggleCookieSave }) => {
   return (
     <div>
       <p>
@@ -23,17 +22,17 @@ function LoadNewsButton(props) {
       <p>
         If you don’t want to share your IP address, do not click the button.
       </p>
-      <button className="btn btn-primary" onClick={props.showNews}>Load News</button>
+      <button className="btn btn-primary" onClick={showNews}>Load News</button>
       <label className="news-checkbox">
         <input type="checkbox"
-          checked={props.isChecked}
-          onChange={props.toggleCookieSave}
+          checked={isChecked}
+          onChange={toggleCookieSave}
         />
         Remember my choice
       </label>
     </div>
   );
-}
+};
 
 class NewsPage extends React.Component {
   constructor (props) {
@@ -41,7 +40,8 @@ class NewsPage extends React.Component {
     this.showNews = this.showNews.bind(this);
     this.toggleCookieSave = this.toggleCookieSave.bind(this);
 
-    const hasCookie = !!cookies.get('allow-IP-sharing');
+    const hasCookie = !!app.utils.localStorageGet('allow-IP-sharing');
+
     this.state = {
       showNews: hasCookie ? true : false,
       hasCookie
@@ -57,13 +57,13 @@ class NewsPage extends React.Component {
       this.setState(() => {
         return { hasCookie: true };
       });
-      cookies.set('allow-IP-sharing', 'true', { sameSite: 'Strict' });
+      app.utils.localStorageSet('allow-IP-sharing', true);
 
     } else {
       this.setState(() => {
         return { hasCookie: false };
       });
-      cookies.remove('allow-IP-sharing');
+      app.utils.localStorageSet('allow-IP-sharing', false);
     }
   }
 
