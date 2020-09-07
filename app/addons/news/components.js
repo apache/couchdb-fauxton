@@ -59,18 +59,18 @@ class NewsPage extends React.Component {
   }
 
   render() {
-    let news = <LoadNewsButton
-      showNews={this.showNews}
-      toggleChange={this.toggleChange}
-      isChecked={this.state.hasCookie}></LoadNewsButton>;
-
-    if (this.state.showNews) {
-      news = <iframe src="https://blog.couchdb.org" width="100%" height="100%"></iframe>;
-    }
+    const news = <iframe src="https://blog.couchdb.org" width="100%" height="100%"></iframe>;
 
     return (
       <div className="news-page">
-        {news}
+        {this.state.showNews ?
+          <LoadNewsButton
+            showNews={this.showNews}
+            toggleChange={this.toggleChange}
+            isChecked={this.state.hasCookie}></LoadNewsButton>
+          :
+          news
+        }
       </div>
     );
   }
