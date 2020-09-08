@@ -1,6 +1,6 @@
 {
   "name": "fauxton",
-  "version": "1.2.5",
+  "version": "1.2.6",
   "description": "Fauxton is a modular CouchDB dashboard and Futon replacement.",
   "main": "./index.js",
   "directories": {
