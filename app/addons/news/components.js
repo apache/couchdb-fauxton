@@ -40,11 +40,11 @@ class NewsPage extends React.Component {
     this.showNews = this.showNews.bind(this);
     this.toggleChange = this.toggleChange.bind(this);
 
-    const hasCookie = !!app.utils.localStorageGet('allow-IP-sharing');
+    const allowsIpSharing = !!app.utils.localStorageGet('allow-IP-sharing');
 
     this.state = {
-      showNews: hasCookie ? true : false,
-      hasCookie
+      showNews: allowsIpSharing ? true : false,
+      allowsIpSharing
     };
   }
 
@@ -53,24 +53,24 @@ class NewsPage extends React.Component {
   }
 
   toggleChange() {
-    const hasCookie = this.state.hasCookie;
-    this.setState(() => ({ hasCookie: !hasCookie }));
-    app.utils.localStorageSet('allow-IP-sharing', !hasCookie);
+    const allowsIpSharing = this.state.allowsIpSharing;
+    this.setState(() => ({ allowsIpSharing: !allowsIpSharing }));
+    app.utils.localStorageSet('allow-IP-sharing', !allowsIpSharing);
   }
 
   render() {
-    const news = <iframe src="https://blog.couchdb.org" width="100%" height="100%"></iframe>;
+    let newsContent = <LoadNewsButton
+      showNews={this.showNews}
+      toggleChange={this.toggleChange}
+      isChecked={this.state.allowsIpSharing}></LoadNewsButton>;
+
+    if (this.state.showNews) {
+      newsContent = <iframe src="https://blog.couchdb.org" width="100%" height="100%"></iframe>;
+    }
 
     return (
       <div className="news-page">
-        {this.state.showNews ?
-          <LoadNewsButton
-            showNews={this.showNews}
-            toggleChange={this.toggleChange}
-            isChecked={this.state.hasCookie}></LoadNewsButton>
-          :
-          news
-        }
+        {newsContent}
       </div>
     );
   }
