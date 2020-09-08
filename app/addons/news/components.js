@@ -54,7 +54,7 @@ class NewsPage extends React.Component {
 
   toggleChange() {
     const allowsIpSharing = this.state.allowsIpSharing;
-    this.setState(() => ({ allowsIpSharing: !allowsIpSharing }));
+    this.setState({ allowsIpSharing: !allowsIpSharing });
     app.utils.localStorageSet('allow-IP-sharing', !allowsIpSharing);
   }
 
