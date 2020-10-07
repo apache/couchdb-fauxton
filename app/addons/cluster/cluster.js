@@ -23,7 +23,7 @@ export class DisabledConfigController extends React.Component {
               <i className="fonticon-attention-circled"></i>
             </div>
             It seems that you are running a cluster with {this.props.nodes.length} nodes. For CouchDB 2.0
-            we recommend using a configuration management tools like Chef, Ansible,
+            or greater we recommend using a configuration management tools like Chef, Ansible,
             Puppet or Salt (in no particular order) to configure your nodes in a cluster.
             <br/>
             <br/>
