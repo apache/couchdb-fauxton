@@ -12,8 +12,10 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-var optimist = require('optimist')
-  .usage('Fauxton server \nUsage: $0')
+const yargs = require('yargs/yargs');
+
+const fauxtonYargs = yargs(process.argv.slice(2))
+  .usage('Fauxton server \nUsage: node fauxton')
   .options('couchdb', {
     alias : 'c',
     default : 'http://localhost:5984',
@@ -24,20 +26,14 @@ var optimist = require('optimist')
     default : 8000,
     describe: 'Local port that Fauxton will run on'
   })
-  .options('help', {
-    alias : 'h',
-    describe: 'Show this message'
-  })
+  .help('help', 'Show this message')
+  .alias('h', 'help')
   .options('contentSecurityPolicy', {
     alias : 'csp',
     default : true,
     describe: 'Configure the content security policy'
-  });
+  })
+  .version(false);
+const argv = fauxtonYargs.argv;
 
-var argv = optimist.argv;
-
-if (argv.help || argv.h) {
-  return optimist.showHelp(console.log);
-}
-
-var server = require('..')(argv);
+require('..')(argv);
