@@ -106,7 +106,7 @@ FauxtonAPI.registerUrls('bulk_docs', {
 
 FauxtonAPI.registerUrls('revision-browser', {
   app: function (id, doc) {
-    return 'database/' + id + '/' + doc + '/conflicts';
+    return 'database/' + id + '/' + encodeURIComponent(doc) + '/conflicts';
   }
 });
 
