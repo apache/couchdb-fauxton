@@ -373,12 +373,8 @@ class AddDatabaseWidget extends React.Component {
     );
   }
 
-  onSetNotPartitioned() {
-    this.setState({ partitionedSelected: false });
-  }
-
-  onSetPartitioned() {
-    this.setState({ partitionedSelected: true });
+  onTogglePartitioned() {
+    this.setState({ partitionedSelected: !this.state.partitionedSelected });
   }
 
   partitionedOption() {
@@ -400,16 +396,11 @@ class AddDatabaseWidget extends React.Component {
         <div className='partitioned-db-options'>
           <input
             id="partitioned-db"
-            type="radio"
+            type="checkbox"
             checked={this.state.partitionedSelected === true}
-            onChange={this.onSetPartitioned} />
+            onChange={this.onTogglePartitioned}
+          />
           <label htmlFor="partitioned-db">Partitioned</label>
-          <input
-            id="non-partitioned-db"
-            type="radio"
-            checked={this.state.partitionedSelected === false}
-            onChange={this.onSetNotPartitioned} />
-          <label htmlFor="non-partitioned-db">Non-partitioned</label>
         </div>
         {partitionedDbHelp}
       </div>
