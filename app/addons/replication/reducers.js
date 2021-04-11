@@ -465,7 +465,13 @@ export const getReplicateInfo = (state) => {
 
 export const getPagination = (state) => state.pagination;
 export const getPageStart = (state) => 1 + (state.pagination.page - 1) * state.pagination.docsPerPage;
-export const getPageEnd = (state) => state.pagination.docsPerPage + (state.pagination.page - 1) * state.pagination.docsPerPage;
+export const getPageEnd = (state) => {
+  if (state.isLoading || !state.statusDocs || state.statusDocs.length === 0) {
+    return false;
+  }
+  const pageStart = (state.pagination.page - 1) * state.pagination.docsPerPage;
+  return pageStart + state.statusDocs.length;
+};
 export const getDocsPerPage = (state) => state.pagination.docsPerPage;
 export const canShowNext = (state) => state.pagination.canShowNext;
 
