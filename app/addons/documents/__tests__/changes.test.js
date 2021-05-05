@@ -183,4 +183,15 @@ describe('ChangeRow', () => {
     const changeRow = mount(<ChangeRow change={change} databaseName="testDatabase" />);
     expect(changeRow.find('a.js-doc-link').length).toBe(1);
   });
+
+  it('generates correct URL for doc and db with special chars', () => {
+    const changeSpecialChars = {
+      id: 'space newline\nquestion_mark?',
+      seq: 5,
+      deleted: false,
+      changes: { code: 'here' }
+    };
+    const changeRow = mount(<ChangeRow change={changeSpecialChars} databaseName="db/name" />);
+    expect(changeRow.find('a.js-doc-link').at(0).prop('href')).toBe('#/database/db%2Fname/space%20newline%0Aquestion_mark%3F');
+  });
 });
