@@ -294,13 +294,17 @@ const getAuthTypeAndCredentials = (repSourceOrTarget) => {
   if (repSourceOrTarget.headers && repSourceOrTarget.headers.Authorization) {
     // Removes 'Basic ' prefix
     const encodedCreds = repSourceOrTarget.headers.Authorization.substring(6);
-    const decodedCreds = base64.decode(encodedCreds);
-    authTypeAndCreds.type = Constants.REPLICATION_AUTH_METHOD.BASIC;
-    authTypeAndCreds.creds = {
-      username: decodedCreds.split(':')[0],
-      password: decodedCreds.split(':')[1]
-    };
-    return authTypeAndCreds;
+    try {
+      const decodedCreds = base64.decode(encodedCreds);
+      authTypeAndCreds.type = Constants.REPLICATION_AUTH_METHOD.BASIC;
+      authTypeAndCreds.creds = {
+        username: decodedCreds.split(':')[0],
+        password: decodedCreds.split(':')[1]
+      };
+      return authTypeAndCreds;
+    } catch (ex) {
+      throw new Error(`Error decoding Authorization header from replication document`);
+    }
   }
 
   // Tries to get creds using one of the custom auth methods
@@ -382,7 +386,7 @@ export const getReplicationStateFrom = (id) => dispatch => {
     })
     .catch(error => {
       FauxtonAPI.addNotification({
-        msg: error.reason,
+        msg: error.reason || error.message,
         type: 'error',
         clear: true
       });

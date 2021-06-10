@@ -43,7 +43,7 @@ const NavLink = ({link, active, isMinimized}) => {
   }
 
   return (
-    <a aria-current={isActive ? "page" : null } aria-label={link.title} className={linkClass} href={link.href} target={link.target ? '_blank' : null} data-bypass={link.target ? 'true' : null}>
+    <a aria-current={isActive ? "page" : null } aria-label={link.title} className={linkClass} href={link.href} target={link.target ? '_blank' : null} rel="noreferrer noopener" data-bypass={link.target ? 'true' : null}>
       <div data-nav-name={link.title} className="faux-navbar__itemarea">
         {linkIcon}
         {linkTitle}

@@ -45,6 +45,7 @@ export class MenuDropDown extends React.Component {
           data-bypass={link.external ? 'true' : ''}
           href={link.url}
           onClick={link.onClick}
+          rel="noreferrer noopener"
           target={link.external ? '_blank' : ''}>
           {link.title}
         </a>
