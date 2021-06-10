@@ -29,11 +29,14 @@ module.exports = {
       .waitForElementNotPresent('.loading-lines', waitTime, true)
       .waitForElementVisible('#index-name', waitTime, true)
       .waitForElementPresent('.faux-header__doc-header-title', waitTime, false)
-      .waitForAttribute('.faux-header__doc-header-title', 'textContent', function (docContents) {
-        var regExp = new RegExp(newDatabaseName);
-        return regExp.test(docContents);
+      .getText('.faux-header__doc-header-title', function (result) {
+        const headerContent = result && result.value;
+        const regExp = new RegExp(newDatabaseName);
+        this.verify.ok(
+          regExp.test(headerContent),
+          `expected header text to contain '${newDatabaseName}' and found '${headerContent}'`
+        );
       })
-
       .waitForAttribute('#index-name', 'value', function (val) {
         return val === 'stubview';
       })
@@ -66,9 +69,13 @@ module.exports = {
       .waitForElementNotPresent('.loading-lines', waitTime, true)
       .waitForElementVisible('#index-name', waitTime, true)
       .waitForElementPresent('.faux-header__doc-header-title', waitTime, false)
-      .waitForAttribute('.faux-header__doc-header-title', 'textContent', function (docContents) {
-        var regExp = new RegExp(newDatabaseName);
-        return regExp.test(docContents);
+      .getText('.faux-header__doc-header-title', function (result) {
+        const headerContent = result && result.value;
+        const regExp = new RegExp(newDatabaseName);
+        this.verify.ok(
+          regExp.test(headerContent),
+          `expected header text to contain '${newDatabaseName}' and found '${headerContent}'`
+        );
       })
 
       .waitForAttribute('#index-name', 'value', function (val) {
@@ -88,12 +95,20 @@ module.exports = {
       .clickWhenVisible('.fonticon-json')
       .waitForElementVisible('.prettyprint', waitTime, false)
       .waitForElementPresent('.faux-header__doc-header-title', waitTime, false)
-      .waitForAttribute('.faux-header__doc-header-title', 'textContent', function (docContents) {
-        var regExp = new RegExp(newDatabaseName);
-        return regExp.test(docContents);
+      .getText('.faux-header__doc-header-title', function (result) {
+        const headerContent = result && result.value;
+        const regExp = new RegExp(newDatabaseName);
+        this.verify.ok(
+          regExp.test(headerContent),
+          `expected header text to contain '${newDatabaseName}' and found '${headerContent}'`
+        );
       })
-      .waitForAttribute('#doc-list', 'textContent', function (docContents) {
-        return (/hasehase6000/).test(docContents);
+      .getText('#doc-list', function (result) {
+        const textContent = result && result.value;
+        this.verify.ok(
+          (/hasehase6000/).test(textContent),
+          `expected doc list to contain 'hasehase6000'`
+        );
       })
       .end();
   },
@@ -116,9 +131,13 @@ module.exports = {
       .clickWhenVisible('.faux-header__doc-header-dropdown-itemwrapper a[href*="new_view"]')
       .waitForElementNotPresent('.loading-lines', waitTime, true)
       .waitForElementPresent('.faux-header__doc-header-title', waitTime, false)
-      .waitForAttribute('.faux-header__doc-header-title', 'textContent', function (docContents) {
-        var regExp = new RegExp(newDatabaseName);
-        return regExp.test(docContents);
+      .getText('.faux-header__doc-header-title', function (result) {
+        const headerContent = result && result.value;
+        const regExp = new RegExp(newDatabaseName);
+        this.verify.ok(
+          regExp.test(headerContent),
+          `expected header text to contain '${newDatabaseName}' and found '${headerContent}'`
+        );
       })
 
       .waitForElementVisible('#new-ddoc', waitTime, false)
@@ -145,9 +164,13 @@ module.exports = {
       .waitForElementVisible('#new-ddoc', waitTime, false)
       .waitForElementNotPresent('.loading-lines', waitTime, true)
       .waitForElementPresent('.faux-header__doc-header-title', waitTime, false)
-      .waitForAttribute('.faux-header__doc-header-title', 'textContent', function (docContents) {
-        var regExp = new RegExp(newDatabaseName);
-        return regExp.test(docContents);
+      .getText('.faux-header__doc-header-title', function (result) {
+        const headerContent = result && result.value;
+        const regExp = new RegExp(newDatabaseName);
+        this.verify.ok(
+          regExp.test(headerContent),
+          `expected header text to contain '${newDatabaseName}' and found '${headerContent}'`
+        );
       })
 
       .setValue('#new-ddoc', 'view2-name')
@@ -168,9 +191,13 @@ module.exports = {
       .waitForElementNotPresent('.loading-lines', waitTime, true)
       .waitForElementVisible('#save-view', waitTime, false)
       .waitForElementPresent('.faux-header__doc-header-title', waitTime, false)
-      .waitForAttribute('.faux-header__doc-header-title', 'textContent', function (docContents) {
-        var regExp = new RegExp(newDatabaseName);
-        return regExp.test(docContents);
+      .getText('.faux-header__doc-header-title', function (result) {
+        const headerContent = result && result.value;
+        const regExp = new RegExp(newDatabaseName);
+        this.verify.ok(
+          regExp.test(headerContent),
+          `expected header text to contain '${newDatabaseName}' and found '${headerContent}'`
+        );
       })
 
       .execute(function () {
@@ -200,17 +227,25 @@ module.exports = {
       .waitForElementVisible('#design-doc-menu-testdesigndoc', waitTime, true)
 
       .waitForElementPresent('.faux-header__doc-header-title', waitTime, false)
-      .waitForAttribute('.faux-header__doc-header-title', 'textContent', function (docContents) {
-        var regExp = new RegExp(newDatabaseName);
-        return regExp.test(docContents);
+      .getText('.faux-header__doc-header-title', function (result) {
+        const headerContent = result && result.value;
+        const regExp = new RegExp(newDatabaseName);
+        this.verify.ok(
+          regExp.test(headerContent),
+          `expected header text to contain '${newDatabaseName}' and found '${headerContent}'`
+        );
       })
 
       // now edit the view and move it into a brand new design doc
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_design/testdesigndoc/_view/stubview/edit')
       .waitForElementPresent('.faux-header__doc-header-title', waitTime, false)
-      .waitForAttribute('.faux-header__doc-header-title', 'textContent', function (docContents) {
-        var regExp = new RegExp(newDatabaseName);
-        return regExp.test(docContents);
+      .getText('.faux-header__doc-header-title', function (result) {
+        const headerContent = result && result.value;
+        const regExp = new RegExp(newDatabaseName);
+        this.verify.ok(
+          regExp.test(headerContent),
+          `expected header text to contain '${newDatabaseName}' and found '${headerContent}'`
+        );
       })
 
       .waitForElementPresent('.index-cancel-link', waitTime, true)
