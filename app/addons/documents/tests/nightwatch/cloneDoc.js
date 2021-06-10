@@ -38,10 +38,17 @@ module.exports = {
       .clickWhenVisible('.clone-doc-modal button.btn.btn-primary')
       .closeNotification()
 
-      .waitForAttribute('.faux-header__breadcrumbs .faux-header__breadcrumbs-element:last-child', 'textContent', function (docContents) {
-        return clonedDocName === docContents.trim();
-      })
+      .waitForElementVisible('.faux-header__breadcrumbs .faux-header__breadcrumbs-element:last-child', waitTime, false)
 
+
+      .getText('.faux-header__breadcrumbs .faux-header__breadcrumbs-element:last-child', function (result) {
+        const headerContent = result && result.value;
+        const headerShowsClonedDocName = headerContent === clonedDocName;
+        this.verify.ok(
+          headerShowsClonedDocName,
+          `expected header text to be '${clonedDocName}' but found '${headerContent}'`
+        );
+      })
       .url(`${baseUrl}'/'${newDatabaseName}/${newDocumentName}`)
       .waitForElementPresent('#editor-container', waitTime, false)
       .waitForElementNotPresent('.loading-lines', waitTime, false)
