@@ -112,8 +112,15 @@ const DatabasesStoreConstructor = FauxtonAPI.Store.extend({
     if (!details) {
       return {};
     }
+
+    const sizeReporter = FauxtonAPI.getExtensions('DatabaseList:dbSizeReportFieldName');
+    let fieldName = 'active';
+    if (sizeReporter.length > 0) {
+      fieldName = sizeReporter[0];
+    }
+
     const {sizes} = details;
-    const dataSize = (sizes && sizes.active) || (sizes && sizes.external) || details.data_size || 0;
+    const dataSize = (sizes && sizes[fieldName]) || (sizes && sizes.active) || (sizes && sizes.external) || details.data_size || 0;
 
     return {
       dataSize: Helpers.formatSize(dataSize),
