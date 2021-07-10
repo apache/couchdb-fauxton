@@ -39,4 +39,4 @@
 - [ ] Code is written and works correctly;
 - [ ] Changes are covered by tests;
 - [ ] Documentation reflects the changes;
-- [ ] Update [rebar.config.script](https://github.com/apache/couchdb/blob/master/rebar.config.script) with the correct tag once a new Fauxton release is made
+- [ ] Update [rebar.config.script](https://github.com/apache/couchdb/blob/main/rebar.config.script) with the correct tag once a new Fauxton release is made

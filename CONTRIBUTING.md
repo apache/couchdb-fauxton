@@ -17,12 +17,12 @@ you want to help with the larger project. Come join us!
 If you never created a pull request before, welcome :tada: :smile: [Here is a great tutorial](https://egghead.io/series/how-to-contribute-to-an-open-source-project-on-github)
 on how to send one :)
 
-The [Readme file](https://github.com/apache/couchdb-fauxton/blob/master/readme.md) has information about how to get the project set up for development.
+The [Readme file](https://github.com/apache/couchdb-fauxton/blob/main/readme.md) has information about how to get the project set up for development.
 
 ## Guide to Contributions
 
 We follow our coding-styleguide to make it easier for everyone to write, read and review code:
-[https://github.com/apache/couchdb-fauxton/blob/master/styleguide.md](https://github.com/apache/couchdb-fauxton/blob/master/styleguide.md)
+[https://github.com/apache/couchdb-fauxton/blob/main/styleguide.md](https://github.com/apache/couchdb-fauxton/blob/main/styleguide.md)
 
 To start working on a specific ticket, create a branch with the GitHub Issue # followed by a traincase description of the issue.
 
@@ -61,4 +61,4 @@ there is room for improvement.
 [6]: http://couchdb.apache.org/conduct.html
 [7]: http://couchdb.apache.org/bylaws.html
 [8]: http://webchat.freenode.net?channels=%23couchdb-dev
-[9]: https://github.com/apache/couchdb/blob/master/CONTRIBUTING.md
+[9]: https://github.com/apache/couchdb/blob/main/CONTRIBUTING.md
