@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/apache/couchdb-fauxton.svg?branch=master)](https://travis-ci.org/apache/couchdb-fauxton)
+[![Build Status](https://travis-ci.org/apache/couchdb-fauxton.svg?branch=main)](https://travis-ci.org/apache/couchdb-fauxton)
 
 # Fauxton
 
@@ -89,11 +89,11 @@ part of the deployable release artifact.
 
 Check out the following pages for a lot more information about Fauxton:
 
-- [The Fauxton Code Layout](https://github.com/apache/couchdb-fauxton/blob/master/code-layout.md)
-- [Style Guide](https://github.com/apache/couchdb-fauxton/blob/master/styleguide.md)
-- [Testing Fauxton](https://github.com/apache/couchdb-fauxton/blob/master/tests.md)
-- [Extensions](https://github.com/apache/couchdb-fauxton/blob/master/extensions.md)
-- [How to contribute](https://github.com/apache/couchdb-fauxton/blob/master/CONTRIBUTING.md)
+- [The Fauxton Code Layout](https://github.com/apache/couchdb-fauxton/blob/main/code-layout.md)
+- [Style Guide](https://github.com/apache/couchdb-fauxton/blob/main/styleguide.md)
+- [Testing Fauxton](https://github.com/apache/couchdb-fauxton/blob/main/tests.md)
+- [Extensions](https://github.com/apache/couchdb-fauxton/blob/main/extensions.md)
+- [How to contribute](https://github.com/apache/couchdb-fauxton/blob/main/CONTRIBUTING.md)
 
 
 ------
