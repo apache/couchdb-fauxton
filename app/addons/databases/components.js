@@ -321,8 +321,7 @@ class AddDatabaseWidget extends React.Component {
     this.onKeyUpInInput = this.onKeyUpInInput.bind(this);
     this.onChange = this.onChange.bind(this);
     this.onAddDatabase = this.onAddDatabase.bind(this);
-    this.onSetPartitioned = this.onSetPartitioned.bind(this);
-    this.onSetNotPartitioned = this.onSetNotPartitioned.bind(this);
+    this.onTogglePartitioned = this.onTogglePartitioned.bind(this);
   }
 
   getI18nText(key) {
@@ -355,14 +354,6 @@ class AddDatabaseWidget extends React.Component {
   }
 
   onAddDatabase() {
-    if (this.props.showPartitionedOption && this.state.partitionedSelected === undefined) {
-      FauxtonAPI.addNotification({
-        type: 'error',
-        msg: 'Please select either Partitioned or Non-partitioned',
-        clear: true
-      });
-      return;
-    }
     const partitioned = this.props.showPartitionedOption ?
       this.state.partitionedSelected :
       undefined;
@@ -373,12 +364,8 @@ class AddDatabaseWidget extends React.Component {
     );
   }
 
-  onSetNotPartitioned() {
-    this.setState({ partitionedSelected: false });
-  }
-
-  onSetPartitioned() {
-    this.setState({ partitionedSelected: true });
+  onTogglePartitioned() {
+    this.setState({ partitionedSelected: !this.state.partitionedSelected });
   }
 
   partitionedOption() {
@@ -400,16 +387,11 @@ class AddDatabaseWidget extends React.Component {
         <div className='partitioned-db-options'>
           <input
             id="partitioned-db"
-            type="radio"
+            type="checkbox"
             checked={this.state.partitionedSelected === true}
-            onChange={this.onSetPartitioned} />
+            onChange={this.onTogglePartitioned}
+          />
           <label htmlFor="partitioned-db">Partitioned</label>
-          <input
-            id="non-partitioned-db"
-            type="radio"
-            checked={this.state.partitionedSelected === false}
-            onChange={this.onSetNotPartitioned} />
-          <label htmlFor="non-partitioned-db">Non-partitioned</label>
         </div>
         {partitionedDbHelp}
       </div>
