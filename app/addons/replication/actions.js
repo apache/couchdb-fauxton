@@ -26,7 +26,6 @@ import {
   createReplicatorDB
 } from './api';
 
-
 export const initReplicator = (routeLocalSource, localSource) => dispatch => {
   if (routeLocalSource && routeLocalSource !== localSource) {
     dispatch({
@@ -85,9 +84,9 @@ export const replicate = (params) => dispatch => {
         clear: true
       });
 
-      dispatch(getReplicationActivity());
-      FauxtonAPI.navigate('#/replication');
-    }).catch(json => {
+      dispatch(getReplicationActivity(params.pagination));
+    })
+    .catch(json => {
       if (json.error && json.error === "not_found") {
         return createReplicatorDB().then(() => {
           return replicate(params)(dispatch);
@@ -111,19 +110,16 @@ export const clearReplicationForm = () => {
   return { type: ActionTypes.REPLICATION_CLEAR_FORM };
 };
 
-export const getReplicationActivity = () => dispatch => {
+export const getReplicationActivity = (params) => dispatch => {
   dispatch({
     type: ActionTypes.REPLICATION_FETCHING_STATUS,
   });
 
-  supportNewApi()
-    .then(supportNewApi => {
-      return fetchReplicationDocs(supportNewApi);
-    })
-    .then(docs => {
+  fetchReplicationDocs(params)
+    .then(docsInfo => {
       dispatch({
         type: ActionTypes.REPLICATION_STATUS,
-        options: docs
+        options: docsInfo
       });
     });
 };
@@ -201,7 +197,7 @@ export const clearSelectedReplicates = () => {
   };
 };
 
-export const deleteDocs = (docs) => dispatch => {
+export const deleteDocs = (docs, pagination) => dispatch => {
   const bulkDocs = docs.map(({raw: doc}) => {
     doc._deleted = true;
     return doc;
@@ -237,7 +233,7 @@ export const deleteDocs = (docs) => dispatch => {
       });
 
       dispatch(clearSelectedDocs());
-      dispatch(getReplicationActivity());
+      dispatch(getReplicationActivity(pagination));
     })
     .catch(resp => {
       resp.json()
@@ -419,4 +415,44 @@ export const checkForNewApi = () => dispatch => {
       options: newApi
     });
   });
+};
+
+export const updatePerPageResults = (amount) => {
+  const newPaginate = {
+    page: 1,
+    docsPerPage: amount
+  };
+  return (dispatch) => {
+    dispatch({
+      type: ActionTypes.REPLICATION_UPDATE_PER_PAGE_RESULTS,
+      options: amount
+    });
+
+    dispatch(getReplicationActivity(newPaginate));
+  };
+};
+
+export const paginateNext = (paginate) => {
+  return dispatch => {
+    dispatch({
+      type: ActionTypes.REPLICATION_NEXT_PAGE
+    });
+
+    paginate.page += 1;
+    dispatch(getReplicationActivity(paginate));
+  };
+};
+
+export const paginatePrevious = (paginate) => {
+  return dispatch => {
+    dispatch({
+      type: ActionTypes.REPLICATION_PREVIOUS_PAGE
+    });
+
+    if (paginate.page > 1) {
+      paginate.page -= 1;
+    }
+
+    dispatch(getReplicationActivity(paginate));
+  };
 };

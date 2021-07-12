@@ -34,6 +34,20 @@ const loadActivitySort = () => {
   return sort;
 };
 
+const loadDocsPerPage = () => {
+  let docsPerPage = app.utils.localStorageGet('replication-docs-per-page');
+
+  if (!docsPerPage) {
+    docsPerPage = 10;
+  }
+
+  return docsPerPage;
+};
+
+const saveDocsPerPage = (docsPerPage) => {
+  app.utils.localStorageSet('replication-docs-per-page', docsPerPage);
+};
+
 const validFieldMap = {
   remoteSource: 'remoteSource',
   remoteTarget: 'remoteTarget',
@@ -89,7 +103,12 @@ const initialState = {
   replicateInfo: [],
 
   checkingAPI: true,
-  activitySort: loadActivitySort()
+  activitySort: loadActivitySort(),
+  pagination: {
+    docsPerPage: loadDocsPerPage(),
+    page: 1,
+    canShowNext: false
+  }
 };
 
 const clearForm = (state) => {
@@ -261,7 +280,11 @@ const replication = (state = initialState, {type, options}) => {
       return {
         ...state,
         activityLoading: false,
-        statusDocs: options
+        statusDocs: options.docs,
+        pagination: {
+          ...state.pagination,
+          canShowNext: options.canShowNext
+        }
       };
 
     case ActionTypes.REPLICATION_FILTER_DOCS:
@@ -348,6 +371,40 @@ const replication = (state = initialState, {type, options}) => {
         allReplicateSelected: false
       };
 
+    case ActionTypes.REPLICATION_UPDATE_PER_PAGE_RESULTS:
+      const newResultsState = { ...state };
+      newResultsState.pagination.docsPerPage = options;
+      saveDocsPerPage(options);
+      return {
+        ...state,
+        pagination: {
+          ...state.pagination,
+          docsPerPage: options,
+          page: 1,
+          canShowNext: false
+        }
+      };
+
+    case ActionTypes.REPLICATION_NEXT_PAGE:
+      return {
+        ...state,
+        pagination: {
+          ...state.pagination,
+          docsPerPage: state.pagination.docsPerPage,
+          page: state.pagination.page + 1
+        }
+      };
+
+    case ActionTypes.REPLICATION_PREVIOUS_PAGE:
+      return {
+        ...state,
+        pagination: {
+          ...state.pagination,
+          docsPerPage: state.pagination.docsPerPage,
+          page: state.pagination.page - 1
+        }
+      };
+
     default:
       return state;
   }
@@ -405,5 +462,17 @@ export const getReplicateInfo = (state) => {
     }).length > 0;
   });
 };
+
+export const getPagination = (state) => state.pagination;
+export const getPageStart = (state) => 1 + (state.pagination.page - 1) * state.pagination.docsPerPage;
+export const getPageEnd = (state) => {
+  if (state.isLoading || !state.statusDocs || state.statusDocs.length === 0) {
+    return false;
+  }
+  const pageStart = (state.pagination.page - 1) * state.pagination.docsPerPage;
+  return pageStart + state.statusDocs.length;
+};
+export const getDocsPerPage = (state) => state.pagination.docsPerPage;
+export const canShowNext = (state) => state.pagination.canShowNext;
 
 export default replication;

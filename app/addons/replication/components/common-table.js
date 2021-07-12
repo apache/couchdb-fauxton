@@ -381,7 +381,7 @@ export class ReplicationTable extends React.Component {
   render () {
 
     return (
-      <Table striped>
+      <Table striped style={{marginBottom: '100px'}}>
         <thead>
           <tr>
             <th className="replication__table-bulk-select">
@@ -400,9 +400,9 @@ export class ReplicationTable extends React.Component {
               Target
               <span className={`replication__table-header-icon ${this.iconDirection('target')} ${this.isSelected('target')}`} />
             </th>
-            <th className="replication__table-header-time" onClick={this.onSort('statusTime')}>
+            <th className="replication__table-header-time" onClick={this.onSort('startTime')}>
               Start Time
-              <span className={`replication__table-header-icon ${this.iconDirection('statusTime')} ${this.isSelected('statusTime')}`} />
+              <span className={`replication__table-header-icon ${this.iconDirection('startTime')} ${this.isSelected('startTime')}`} />
             </th>
             <th className="replication__table-header-type" onClick={this.onSort('continuous')}>
               Type

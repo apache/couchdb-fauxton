@@ -24,9 +24,14 @@ const {LoadLines, Polling, RefreshBtn} = Components;
 
 export default class ReplicationController extends React.Component {
 
+  constructor(props) {
+    super(props);
+    this.onRefresh = this.onRefresh.bind(this);
+  }
+
   loadReplicationInfo (props, oldProps) {
     this.props.initReplicator(props.routeLocalSource, props.localSource);
-    this.getAllActivity();
+    this.getAllActivity(props.pagination);
     this.loadReplicationStateFrom(props, oldProps);
   }
 
@@ -37,9 +42,13 @@ export default class ReplicationController extends React.Component {
     }
   }
 
-  getAllActivity () {
-    this.props.getReplicationActivity();
+  getAllActivity (pagination) {
+    this.props.getReplicationActivity(pagination);
     this.props.getReplicateActivity();
+  }
+
+  onRefresh() {
+    this.getAllActivity(this.props.pagination);
   }
 
   componentDidMount () {
@@ -70,7 +79,8 @@ export default class ReplicationController extends React.Component {
       hideConflictModal, isConflictModalVisible, filterDocs,
       filterReplicate, replicate, clearReplicationForm, selectAllDocs, changeActivitySort, selectDoc,
       deleteDocs, deleteReplicates, selectAllReplicates, selectReplicate,
-      sourceAuthType, sourceAuth, targetAuthType, targetAuth, targetDatabasePartitioned, allowNewPartitionedLocalDbs
+      sourceAuthType, sourceAuth, targetAuthType, targetAuth, pageStart, pageEnd, docsPerPage,
+      updatePerPageResults, paginateNext, pagination, paginatePrevious, targetDatabasePartitioned, allowNewPartitionedLocalDbs
     } = this.props;
 
     if (tabSection === 'new replication') {
@@ -106,6 +116,7 @@ export default class ReplicationController extends React.Component {
         checkReplicationDocID={checkReplicationDocID}
         authenticated={authenticated}
         submittedNoChange={submittedNoChange}
+        pagination={pagination}
       />;
     }
 
@@ -125,6 +136,8 @@ export default class ReplicationController extends React.Component {
         activitySort={activitySort}
         changeActivitySort={changeActivitySort}
         deleteDocs={deleteReplicates}
+        pageStart={pageStart}
+        pageEnd={pageEnd}
       />;
     }
 
@@ -143,6 +156,13 @@ export default class ReplicationController extends React.Component {
       deleteDocs={deleteDocs}
       activitySort={activitySort}
       changeActivitySort={changeActivitySort}
+      pageStart={pageStart}
+      pageEnd={pageEnd}
+      docsPerPage={docsPerPage}
+      updatePerPageResults={updatePerPageResults}
+      paginateNext={paginateNext}
+      paginatePrevious={paginatePrevious}
+      pagination={pagination}
     />;
   }
 
@@ -162,10 +182,10 @@ export default class ReplicationController extends React.Component {
           max={600}
           startValue={300}
           stepSize={60}
-          onPoll={this.getAllActivity.bind(this)}
+          onPoll={this.onRefresh}
         />
         <RefreshBtn
-          refresh={this.getAllActivity.bind(this)}
+          refresh={this.onRefresh}
         />
       </div>
     );
