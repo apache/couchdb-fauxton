@@ -64,8 +64,7 @@ Documents.DdocInfo = FauxtonAPI.Model.extend({
   // treated separately. For instance, we could default into the
   // json editor for docs, or into a ddoc specific page.
   safeID: function () {
-    var ddoc = this.id.replace(/^_design\//, "");
-    return "_design/" + app.utils.safeURLName(ddoc);
+    return app.utils.getSafeIdForDoc(this.id);
   }
 });
 
