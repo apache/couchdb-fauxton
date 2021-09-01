@@ -22,6 +22,6 @@
     "auth-change-password": "Your password has been updated.",
     "auth-admin-creation-failed-prefix": "Could not create admin.",
     "auth-passwords-not-matching": "Passwords do not match.",
-    "create-db-partitioned-help": "A partitioned database requires a partition key for every document, where the document _id format is '&lt;partition_key&gt;:&lt;doc_key&gt;'. A partition is a logical grouping of documents. Partition queries are often faster than global ones."
+    "create-db-partitioned-help": "This is an advanced feature. If you are unsure whether you need a partitioned database, you probably do not. A partitioned database requires a partition key for every document, where the document _id format is '&lt;partition_key&gt;:&lt;doc_key&gt;'. A partition is a logical grouping of documents. Partition queries are often faster than global ones."
   }
 }
