@@ -96,8 +96,7 @@ export default class SearchIndexEditor extends React.Component {
       return '#' + FauxtonAPI.urls('allDocs', 'app', encodedDatabase, encodedPartitionKey);
     }
 
-    const cleanDDocName = this.props.lastSavedDesignDocName.replace(/^_design\//, '');
-    const encodedDDoc = '_design/' + encodeURIComponent(cleanDDocName);
+    const encodedDDoc = app.utils.getSafeIdForDoc(this.props.lastSavedDesignDocName);
     const encodedIndex = encodeURIComponent(this.props.lastSavedSearchIndexName);
     return '#' + FauxtonAPI.urls('search', 'showIndex', encodedDatabase,
       encodedPartitionKey, encodedDDoc, encodedIndex);
