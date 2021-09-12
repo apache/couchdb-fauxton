@@ -25,7 +25,7 @@ Please note that [node.js](http://nodejs.org/) and npm is required. Specifically
 1. Set up the upstream repo: 
     * `git remote add upstream https://github.com/apache/couchdb-fauxton.git`
     * `git fetch upstream`
-    * `git branch --set-upstream-to=upstream/master master`
+    * `git branch --set-upstream-to=upstream/main main`
 1. Download all dependencies: `npm install`
 1. Make sure you have CouchDB installed.
     - Option 1 (**recommended**): Use `npm run docker:up` to start a Docker container running CouchDB with user `tester` and password `testerpass`.
