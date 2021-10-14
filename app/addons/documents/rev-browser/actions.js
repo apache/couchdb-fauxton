@@ -13,19 +13,20 @@
 import FauxtonAPI from "../../../core/api";
 import {post} from "../../../core/ajax";
 import ActionTypes from "./actiontypes";
-import getTree from "visualize-rev-tree/lib/getTree";
-import PouchDB from "pouchdb-core";
-import PouchHttpAdapter from 'pouchdb-adapter-http';
-PouchDB.plugin(PouchHttpAdapter);
+import getTree from './getTree';
+import docFetcher from './docFetcher';
 
-let db;
+let fetcher;
 
-export const initDiffEditor = (dbName, docId) => dispatch => {
-  // We have to use API url here because PouchDB doesn't take relative urls.
-  const url = FauxtonAPI.urls('databaseBaseURL', 'apiurl', dbName);
-  db = PouchDB(url);
+export const initDiffEditor = (dbName, docId) => (dispatch) => {
+  const url = FauxtonAPI.urls("databaseBaseURL", "apiurl", dbName);
+  fetcher = docFetcher(url);
 
-  Promise.all([db.get(docId), getTree(db, docId)])
+  fetcher
+    .getDoc(docId)
+    .then((doc) => {
+      return Promise.all([Promise.resolve(doc), getTree(fetcher, doc)]);
+    })
     .then(([doc, tree]) => {
       const conflictingRevs = getConflictingRevs(tree.paths, tree.winner, Object.keys(tree.deleted));
       const initialRev = conflictingRevs[0];
@@ -34,10 +35,9 @@ export const initDiffEditor = (dbName, docId) => dispatch => {
         return dispatch(treeLoaded(tree, doc, conflictingRevs, null, dbName));
       }
 
-      db.get(doc._id, {rev: initialRev})
-        .then((conflictDoc) => {
-          dispatch(treeLoaded(tree, doc, conflictingRevs, conflictDoc, dbName));
-        });
+      fetcher.getDoc(doc._id, { rev: initialRev }).then(conflictDoc => {
+        dispatch(treeLoaded(tree, doc, conflictingRevs, conflictDoc, dbName));
+      });
     });
 };
 
@@ -78,7 +78,7 @@ export const toggleDiffView = (enableDiff) => {
 };
 
 export const chooseLeaves = (doc, revTheirs) => dispatch => {
-  db.get(doc._id, {rev: revTheirs})
+  fetcher.getDoc(doc._id, { rev: revTheirs })
     .then((res) => {
       dispatch(docsToDiff(doc, res));
     });
