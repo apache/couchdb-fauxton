@@ -82,7 +82,8 @@
     "define": true,
     "expect": true,
     "prettyPrint": true,
-    "jest": true
+    "jest": true,
+    "fail": true
   },
 
   "settings": {
