@@ -12,7 +12,7 @@
 
 import PropTypes from 'prop-types';
 import React from 'react';
-import uuid from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 import Components from '../../../components/react-components';
 const {Copy} = Components;
 
@@ -55,7 +55,7 @@ export default class NotificationPanelRow extends React.Component {
             <div className="notification-actions">
               <span className="time-elapsed">{timeElapsed}</span>
               <span className="divider">|</span>
-              <Copy uniqueKey={uuid.v4()} text={this.props.item.cleanMsg} displayType="text" />
+              <Copy uniqueKey={uuidv4()} text={this.props.item.cleanMsg} displayType="text" />
             </div>
           </div>
           <button type="button" onClick={this.clearNotification}>×</button>
