@@ -24,13 +24,13 @@ module.exports = function (grunt) {
           settings = grunt.file.readJSON(settingsFile);
 
     const fetch = deps => {
-      var fs = require('fs-extra');
+      const fse = require('fs-extra');
       deps.forEach(dep => {
         const path = target + dep.name;
         const location = dep.url || dep.path;
         grunt.log.writeln('Fetching: ' + dep.name + ' (' + location + ')');
         try {
-          fs.copySync(dep.path, path);
+          fse.copySync(dep.path, path);
         } catch (e) {
           grunt.log.writeln('ERROR: ' + e.message);
         }

@@ -13,15 +13,14 @@
 import PropTypes from 'prop-types';
 
 import React from 'react';
-import ReactDOM from 'react-dom';
-import Clipboard from 'clipboard';
+import ClipboardJS from 'clipboard';
 
 let clipboard;
 
 // Locates the specific element on the DOM, configures the clipboard, and
 // sets the callback on 'success' (usually a Fauxton notification).
 export const initializeClipboard = (uniqueKey, cb) => {
-  clipboard = new Clipboard('#copy-' + uniqueKey);
+  clipboard = new ClipboardJS('#copy-' + uniqueKey);
   clipboard.on('success', function() {
     cb();
   });

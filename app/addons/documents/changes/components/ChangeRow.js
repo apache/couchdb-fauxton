@@ -12,8 +12,7 @@
 
 import PropTypes from 'prop-types';
 import React from 'react';
-import ReactDOM from 'react-dom';
-import uuid from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 import FauxtonAPI from '../../../../core/api';
 import Components from '../../../fauxton/components';
 import ReactComponents from '../../../components/react-components';
@@ -71,7 +70,7 @@ export default class ChangeRow extends React.Component {
             <div className="span8 change-sequence">{change.seq}</div>
             <div className="span2 text-right">
               <Copy
-                uniqueKey={uuid.v4()}
+                uniqueKey={uuidv4()}
                 text={change.seq.toString()}
                 onClipboardClick={() => this.showCopiedMessage('seq')} />
             </div>
@@ -84,7 +83,7 @@ export default class ChangeRow extends React.Component {
             </div>
             <div className="span2 text-right">
               <Copy
-                uniqueKey={uuid.v4()}
+                uniqueKey={uuidv4()}
                 text={change.id}
                 onClipboardClick={() => this.showCopiedMessage('id')} />
             </div>

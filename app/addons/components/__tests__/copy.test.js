@@ -12,28 +12,27 @@
 import { Copy } from "../components/copy";
 import { mount } from "enzyme";
 import React from "react";
-import ReactDOM from "react-dom";
-import uuid from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 
 describe('Copy', () => {
 
   it('shows a copy icon by default', () => {
-    const wrapper = mount(<Copy uniqueKey={uuid.v4()} text="copy me"/>);
+    const wrapper = mount(<Copy uniqueKey={uuidv4()} text="copy me"/>);
     expect(wrapper.find('.icon-paste').length).toBe(1);
   });
 
   it('shows text if specified', () => {
-    const wrapper = mount(<Copy uniqueKey={uuid.v4()} text="copy me" displayType="text" />);
+    const wrapper = mount(<Copy uniqueKey={uuidv4()} text="copy me" displayType="text" />);
     expect(wrapper.find('.icon-paste').length).toBe(0);
   });
 
   it('shows custom text if specified', () => {
-    const wrapper = mount(<Copy uniqueKey={uuid.v4()} displayType="text" textDisplay="booyah!" text="copy me" />);
+    const wrapper = mount(<Copy uniqueKey={uuidv4()} displayType="text" textDisplay="booyah!" text="copy me" />);
     expect(wrapper.html()).toMatch(/booyah!/);
   });
 
   it('shows an input field and button if specified', () => {
-    const wrapper = mount(<Copy uniqueKey={uuid.v4()} displayType='input' text="http://localhost:8000/_all_dbs" />);
+    const wrapper = mount(<Copy uniqueKey={uuidv4()} displayType='input' text="http://localhost:8000/_all_dbs" />);
     expect(wrapper.find('input').length).toBe(1);
   });
 });
