@@ -74,6 +74,7 @@ export default class Activity extends React.Component {
       <div className="replication__activity">
         <p className="replication__activity-caveat">
           Replications must have a replication document to display in the following table.
+          Up to about 100 replications are displayed.
         </p>
         <ReplicationHeader
           filter={filter}
