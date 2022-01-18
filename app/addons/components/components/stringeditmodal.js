@@ -15,11 +15,11 @@ import PropTypes from 'prop-types';
 import React from "react";
 import ReactDOM from "react-dom";
 import {Modal} from "react-bootstrap";
-import ace from "brace";
+import ace from "ace-builds";
 import Helpers from "../../documents/helpers";
-require('brace/mode/javascript');
-require('brace/mode/json');
-require('brace/theme/idle_fingers');
+require('ace-builds/src-min-noconflict/mode-javascript');
+require('ace-builds/src-min-noconflict/mode-json');
+require('ace-builds/src-noconflict/theme-idle_fingers');
 
 // this appears when the cursor is over a string. It shows an icon in the gutter that opens the modal.
 export class StringEditModal extends React.Component {
