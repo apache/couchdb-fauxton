@@ -15,7 +15,8 @@ import app from "../../../app";
 import {CodeEditor} from './codeeditor';
 import {Tooltip, OverlayTrigger} from 'react-bootstrap';
 
-require('brace/theme/dawn');
+require('ace-builds/src-min-noconflict/theme-dawn');
+import 'ace-builds/css/theme/dawn.css';
 
 const themes = {
   dark: 'idle_fingers',
