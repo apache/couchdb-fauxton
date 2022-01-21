@@ -12,6 +12,7 @@
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const settings = require('./tasks/helper')
   .init()
   .readSettingsFile()
@@ -40,6 +41,10 @@ module.exports = {
       generationLabel: 'Fauxton Dev',
       generationDate: new Date().toISOString()
     }, settings.variables)),
+    new MiniCssExtractPlugin({
+      filename: 'dashboard.assets/css/styles.[chunkhash].css',
+      chunkFilename: 'dashboard.assets/css/styles.[chunkhash].css'
+    })
   ],
   module: {
     rules: [
@@ -75,7 +80,13 @@ module.exports = {
       {
         test: /\.less$/,
         use: [
-          "style-loader",
+          {
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+              publicPath: '../../',
+              hmr: false,
+            },
+          },
           "css-loader",
           {
             loader: "less-loader",
@@ -91,7 +102,13 @@ module.exports = {
       {
         test: /\.css$/,
         use: [
-          "style-loader",
+          {
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+              publicPath: '../../',
+              hmr: false,
+            },
+          },
           "css-loader"
         ]
       },
