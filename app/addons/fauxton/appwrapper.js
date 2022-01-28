@@ -76,6 +76,9 @@ class App extends React.Component {
     const mainClass = classNames(
       {'closeMenu': this.props.isPrimaryNavMinimized}
     );
+    const appContainerClass = classNames(
+      {'app-container__with-perm-notification': this.props.isPermanentNotificationShowing}
+    );
     return (
       <div>
         <ToastContainer
@@ -96,7 +99,7 @@ class App extends React.Component {
           <NotificationPanelContainer />
         </div>
         <div id="main"  className={mainClass}>
-          <div id="app-container">
+          <div id="app-container" className={appContainerClass}>
             <div className="wrapper">
               <div role="main" className="pusher">
                 <ContentWrapper router={this.props.router} setNavbarActiveLink={this.props.setNavbarActiveLink}/>
@@ -113,9 +116,11 @@ class App extends React.Component {
 }
 
 export default connect(
-  ({ navigation }) => {
+  ({ navigation, notifications }) => {
     return {
-      isPrimaryNavMinimized: navigation.isMinimized};
+      isPrimaryNavMinimized: navigation.isMinimized,
+      isPermanentNotificationShowing: notifications.permanentNotificationVisible,
+    };
   },
   (dispatch) => {
     return {

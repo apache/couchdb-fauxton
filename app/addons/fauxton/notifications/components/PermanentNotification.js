@@ -34,15 +34,15 @@ export default class PermanentNotification extends React.Component {
   }
 
   getContent () {
-    if (!this.props.visible || !this.props.message) {
-      return null;
-    }
     return (
       <p className="perma-warning__content" dangerouslySetInnerHTML={this.getMsg()}></p>
     );
   }
 
   render () {
+    if (!this.props.visible || !this.props.message) {
+      return null;
+    }
     return (
       <div id="perma-warning">
         {this.getContent()}
