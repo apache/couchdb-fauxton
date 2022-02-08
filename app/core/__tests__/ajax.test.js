@@ -16,7 +16,10 @@ import {
   get,
   put,
   post,
-  deleteRequest
+  deleteRequest,
+  setPreFetchFn,
+  defaultPreFetch,
+
 } from '../ajax';
 
 describe('Fauxton Ajax', () => {
@@ -207,6 +210,54 @@ describe('Fauxton Ajax', () => {
           expect(resp.ok).toBeTruthy();
           expect(fetchMock.lastOptions().body).toBe('false');
         });
+    });
+  });
+
+  describe('pre-fetch function', () => {
+    afterEach(() => {
+      setPreFetchFn(defaultPreFetch);
+    });
+
+    const successResponse = {
+      status: 200,
+      body: {
+        ok: true
+      }
+    };
+    it('by default calls fetch with the same params', () => {
+      fetchMock.postOnce('/testing', successResponse);
+      return post('/testing', JSON.stringify({a: 123}), {extraOption: 'foo'})
+        .then(resp =>{
+          expect(resp.ok).toBeTruthy();
+          expect(fetchMock.lastOptions().extraOption).toEqual('foo');
+        });
+    });
+
+    it('is called and then fetch is called', () => {
+      fetchMock.postOnce('/testing_transformed', successResponse);
+      let prefetchCalled = false;
+      const mockPreFetch = (url, options) => {
+        prefetchCalled = true;
+        return Promise.resolve({url: url + '_transformed', options});
+      };
+      setPreFetchFn(mockPreFetch);
+      return post('/testing', JSON.stringify({a: 123}))
+        .then(resp =>{
+          expect(prefetchCalled).toEqual(true);
+          expect(resp.ok).toBeTruthy();
+          expect(fetchMock.lastOptions().body).toBe('"{\\"a\\":123}"');
+        });
+    });
+
+    it('fails when trying to set an invalid function or null/undefined', () => {
+      const caseNotFunction = () => { setPreFetchFn('not a function'); };
+      expect(caseNotFunction).toThrow();
+      const caseNull = () => { setPreFetchFn(null); };
+      expect(caseNull).toThrow();
+      const caseUndefined = () => { setPreFetchFn(undefined); };
+      expect(caseUndefined).toThrow();
+      const caseInvalidFunction = () => { setPreFetchFn((onlyOneParam) => { return onlyOneParam; }); };
+      expect(caseInvalidFunction).toThrow();
     });
   });
 });
