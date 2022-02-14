@@ -28,7 +28,6 @@ module.exports = {
       .waitForElementVisible('a[href="https://couchdb.apache.org/fauxton-visual-guide/index.html"]', waitTime, false)
       .waitForElementVisible('a[href="http://www.apache.org/"]', waitTime, false)
       .waitForElementVisible('a[href="https://twitter.com/couchdb"]', waitTime, false)
-      .waitForElementVisible('a[href="https://plus.google.com/+CouchDB"]', waitTime, false)
       .waitForElementVisible('a[href="https://www.linkedin.com/company/apache-couchdb"]', waitTime, false)
       .end();
   }
