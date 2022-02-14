@@ -59,11 +59,6 @@ const docLinks = [
     iconClassName: 'twitter-icon'
   },
   {
-    title: 'Follow CouchDB on Google Plus',
-    link: 'https://plus.google.com/+CouchDB',
-    iconClassName: 'google-plus-icon'
-  },
-  {
     title: 'Follow CouchDB on LinkedIn',
     link: 'https://www.linkedin.com/company/apache-couchdb',
     iconClassName: 'linkedin-icon'
