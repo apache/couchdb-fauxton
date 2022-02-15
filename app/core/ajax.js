@@ -15,6 +15,32 @@ import 'rxjs/add/operator/filter';
 */
 export const fetchObserver = new Subject();
 
+// The default pre-fetch function which simply resolves to the original parameters.
+export function defaultPreFetch(url, options) {
+  return Promise.resolve({url, options});
+}
+
+let _preFetchFn = defaultPreFetch;
+
+/**
+ * setPreFetchFn - sets a 'pre-fetch' function that is executed before each network request
+ * originated from this module, i.e. before fetch() is executed. Any fetch() calls from
+ * outside this module are not affected.
+ *
+ * The provided function will receive the 'url' and 'options' parameters that would be sent to fetch(),
+ * and it is expected to return a Promise that resolves to a {url, options} object.
+ * Once this Promise resolves, fetch() is then executed with the 'url' and 'options' returned by the Promise.
+ * This means, the 'pre-fetch' function can transform the original values before fetch() is called.
+ *
+ * @param {function} fn  The pre-fetch function
+ */
+export const setPreFetchFn = fn => {
+  if (fn && typeof fn === "function" && fn.length === 2) {
+    _preFetchFn = fn;
+  } else {
+    throw new Error('preFetch must be a function that accepts two parameters (url and options) like the native fetch()');
+  }
+};
 
 /**
  * json - The lowlevel fetch request with some basic headers
@@ -29,28 +55,31 @@ export const fetchObserver = new Subject();
  * @return {Promise}
  */
 export const json = (url, method = "GET", opts = {}) => {
-  return fetch(
-    url,
-    defaultsDeep(
-      {},
-      opts,
-      {
-        method,
-        credentials: "include",
-        headers: {
-          accept: "application/json",
-          "Content-Type": "application/json",
-          "Pragma":"no-cache" //Disables cache for IE11
-        },
-        cache: "no-cache"
-      }
-    )
-  ).then(resp => {
-    fetchObserver.next(resp);
-    if (opts.raw) {
-      return resp;
+  const fetchOptions = defaultsDeep(
+    {},
+    opts,
+    {
+      method,
+      credentials: "include",
+      headers: {
+        accept: "application/json",
+        "Content-Type": "application/json",
+        "Pragma":"no-cache" //Disables cache for IE11
+      },
+      cache: "no-cache"
     }
-    return resp.json();
+  );
+  return _preFetchFn(url, fetchOptions).then((result) => {
+    return fetch(
+      result.url,
+      result.options,
+    ).then(resp => {
+      fetchObserver.next(resp);
+      if (opts.raw) {
+        return resp;
+      }
+      return resp.json();
+    });
   });
 };
 
