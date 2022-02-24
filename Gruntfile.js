@@ -193,7 +193,6 @@ module.exports = function (grunt) {
   // Load fauxton specific tasks
   grunt.loadTasks('tasks');
 
-  grunt.loadNpmTasks('grunt-couchapp');
   grunt.loadNpmTasks('grunt-exec');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-clean');

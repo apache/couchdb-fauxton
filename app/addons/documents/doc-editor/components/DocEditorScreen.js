@@ -59,7 +59,7 @@ export default class DocEditorScreen extends React.Component {
     cancelUpload: PropTypes.func.isRequired,
     resetUploadModal: PropTypes.func.isRequired,
     uploadAttachment: PropTypes.func.isRequired
-  }
+  };
 
   getCodeEditor = () => {
     if (this.props.isLoading) {
