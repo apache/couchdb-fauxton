@@ -12,6 +12,7 @@
 const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ESLintPlugin = require('eslint-webpack-plugin');
 const path = require('path');
 const settings = require('./tasks/helper')
   .init()
@@ -38,6 +39,9 @@ module.exports = {
     // moment doesn't offer a modular API, so manually remove locale
     // see https://github.com/moment/moment/issues/2373
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+    new ESLintPlugin({
+      extensions: [`js`, `jsx`],
+    }),
     new HtmlWebpackPlugin(Object.assign({
       template: settings.src,
       title: 'Project Fauxton',
@@ -76,77 +80,72 @@ module.exports = {
   },
 
   module: {
-    rules: [{
-      test: /\.jsx?$/,
-      enforce: "pre",
-      use: ['eslint-loader'],
-      exclude: /node_modules/
-    },
-    {
-      test: /\.jsx?$/,
-      exclude: /node_modules/,
-      use: 'babel-loader'
-    },
-    {
-      test: require.resolve('jquery'),
-      use: [{
-        loader: 'expose-loader',
-        options: 'jQuery'
+    rules: [
+      {
+        test: /\.jsx?$/,
+        exclude: /node_modules/,
+        use: 'babel-loader'
       },
       {
-        loader: 'expose-loader',
-        options: '$'
-      }]
-    },
-    {
-      test: require.resolve("backbone"),
-      use: [{
-        loader: 'expose-loader',
-        options: 'Backbone'
-      }]
-    },
-    {
-      test: /\.less/,
-      use: [
-        {
-          loader: MiniCssExtractPlugin.loader,
-          options: {
-            publicPath: '../../',
-            hmr: false,
-          },
+        test: require.resolve('jquery'),
+        use: [{
+          loader: 'expose-loader',
+          options: 'jQuery'
         },
-        "css-loader",
         {
-          loader: "less-loader",
-          options: {
-            modifyVars: {
-              largeLogoPath: "'" + settings.variables.largeLogoPath + "'",
-              smallLogoPath: "'" + settings.variables.smallLogoPath + "'"
+          loader: 'expose-loader',
+          options: '$'
+        }]
+      },
+      {
+        test: require.resolve("backbone"),
+        use: [{
+          loader: 'expose-loader',
+          options: 'Backbone'
+        }]
+      },
+      {
+        test: /\.less/,
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+              publicPath: '../../',
+              hmr: false,
+            },
+          },
+          "css-loader",
+          {
+            loader: "less-loader",
+            options: {
+              modifyVars: {
+                largeLogoPath: "'" + settings.variables.largeLogoPath + "'",
+                smallLogoPath: "'" + settings.variables.smallLogoPath + "'"
+              }
             }
           }
-        }
-      ]
-    },
-    {
-      test: /\.css$/, use: [
-        'style-loader',
-        'css-loader'
-      ]
-    },
-    {
-      test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
-      loader: 'url-loader?limit=10000&mimetype=application/font-woff&name=dashboard.assets/fonts/[name].[ext]'
-    },
-    {
-      test: /\.woff2(\?\S*)?$/,   loader: 'url-loader?limit=10000&mimetype=application/font-woff2&name=dashboard.assets/fonts/[name].[ext]'
-    },
-    {
-      test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,    loader: 'url-loader?limit=10000&mimetype=application/font-tff&name=dashboard.assets/fonts/[name].[ext]'
-    },
-    { test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,    loader: 'file-loader?name=dashboard.assets/fonts/[name].[ext]' },
-    { test: /\.png(\?v=\d+\.\d+\.\d+)?$/,    loader: 'file-loader?name=dashboard.assets/img/[name].[ext]' },
-    { test: /\.gif(\?v=\d+\.\d+\.\d+)?$/,    loader: 'file-loader?name=dashboard.assets/img/[name].[ext]' },
-    { test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,    loader: 'url-loader?limit=10000&mimetype=image/svg+xml&name=dashboard.assets/img/[name].[ext]' }
+        ]
+      },
+      {
+        test: /\.css$/, use: [
+          'style-loader',
+          'css-loader'
+        ]
+      },
+      {
+        test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
+        loader: 'url-loader?limit=10000&mimetype=application/font-woff&name=dashboard.assets/fonts/[name].[ext]'
+      },
+      {
+        test: /\.woff2(\?\S*)?$/,   loader: 'url-loader?limit=10000&mimetype=application/font-woff2&name=dashboard.assets/fonts/[name].[ext]'
+      },
+      {
+        test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,    loader: 'url-loader?limit=10000&mimetype=application/font-tff&name=dashboard.assets/fonts/[name].[ext]'
+      },
+      { test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,    loader: 'file-loader?name=dashboard.assets/fonts/[name].[ext]' },
+      { test: /\.png(\?v=\d+\.\d+\.\d+)?$/,    loader: 'file-loader?name=dashboard.assets/img/[name].[ext]' },
+      { test: /\.gif(\?v=\d+\.\d+\.\d+)?$/,    loader: 'file-loader?name=dashboard.assets/img/[name].[ext]' },
+      { test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,    loader: 'url-loader?limit=10000&mimetype=image/svg+xml&name=dashboard.assets/img/[name].[ext]' }
     ]
   }
 };
