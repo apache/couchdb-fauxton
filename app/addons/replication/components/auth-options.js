@@ -56,7 +56,7 @@ export class ReplicationAuth extends React.Component {
     });
 
     return authOptions.map(option => <option value={option.value} key={option.value}>{option.label}</option>);
-  }
+  };
 
   onChangeType(newType) {
     this.props.onChangeAuthType(newType);

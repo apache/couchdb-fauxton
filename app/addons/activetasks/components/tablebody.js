@@ -33,7 +33,7 @@ export default class ActiveTasksTableBody extends React.Component {
     }
 
     return type;
-  }
+  };
 
   noActiveTasks = () => {
     const type = this.getType();
