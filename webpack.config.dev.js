@@ -11,6 +11,7 @@
 // the License.
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ESLintPlugin = require('eslint-webpack-plugin');
 const path = require('path');
 const settings = require('./tasks/helper')
   .init()
@@ -32,6 +33,9 @@ module.exports = {
   },
 
   plugins: [
+    new ESLintPlugin({
+      extensions: [`js`, `jsx`],
+    }),
     new webpack.optimize.LimitChunkCountPlugin({maxChunks: 1}),
     new HtmlWebpackPlugin(Object.assign({
       template: settings.src,
@@ -43,12 +47,6 @@ module.exports = {
   ],
   module: {
     rules: [
-      {
-        test: /\.jsx?$/,
-        enforce: "pre",
-        use: ['eslint-loader'],
-        exclude: /node_modules/
-      },
       {
         test: /\.jsx?$/,
         exclude: /node_modules/,
