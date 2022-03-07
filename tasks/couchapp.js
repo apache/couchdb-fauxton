@@ -11,11 +11,22 @@
 // the License.
 
 const path = require("path");
-const couchapp = require("couchapp");
 const { URL } = require("url");
+
+function loadCouchapp() {
+  try {
+    return require("couchapp");
+  } catch (ex) {
+    console.error("Missing dependency. Run 'npm install couchapp --no-save' and try again.");
+  }
+}
 
 module.exports = function (grunt) {
   grunt.registerMultiTask("couchapp", "Install Couchapp", function () {
+    // Loading 'couchapp' at runtime to avoid adding it to Fauxton's package.json
+    // because 'npm audit' is reporting vulnerabilities against it, and the package is
+    // no longer maintained.
+    const couchapp = loadCouchapp();
     const done = this.async();
     const appobj = require(path.join(process.cwd(), path.normalize(this.data.app)));
     return couchapp.createApp(appobj, this.data.db, function (app) {
