@@ -1,6 +1,8 @@
 node_modules
 dist
 build
+_build
+rebar.lock
 app/load_addons.js
 !app/addons/
 app/addons/*
