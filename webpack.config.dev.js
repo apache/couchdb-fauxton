@@ -44,30 +44,38 @@ module.exports = {
       generationLabel: 'Fauxton Dev',
       generationDate: new Date().toISOString()
     }, settings.variables)),
+    new webpack.LoaderOptionsPlugin({
+      debug: true
+    })
   ],
   module: {
     rules: [
       {
         test: /\.jsx?$/,
-        exclude: /node_modules/,
-        use: 'babel-loader'
+        exclude: ['/node_modules/'],
+        use: [{
+          loader: 'babel-loader'
+        }],
       },
       {
         test: require.resolve('jquery'),
         use: [{
           loader: 'expose-loader',
-          options: 'jQuery'
+          options: {
+            exposes: ['jQuery', '$']
+          },
         },
-        {
-          loader: 'expose-loader',
-          options: '$'
-        }]
-      },
+        ]},
       {
         test: require.resolve("backbone"),
         use: [{
           loader: 'expose-loader',
-          options: 'Backbone'
+          options: {
+            exposes: [{
+              globalName: 'Backbone',
+              override: true,
+            }],
+          },
         }]
       },
       {
@@ -78,9 +86,11 @@ module.exports = {
           {
             loader: "less-loader",
             options: {
-              modifyVars: {
-                largeLogoPath: "'" + settings.variables.largeLogoPath + "'",
-                smallLogoPath: "'" + settings.variables.smallLogoPath + "'"
+              lessOptions: {
+                modifyVars: {
+                  largeLogoPath: "'" + settings.variables.largeLogoPath + "'",
+                  smallLogoPath: "'" + settings.variables.smallLogoPath + "'"
+                }
               }
             }
           }
@@ -95,18 +105,53 @@ module.exports = {
       },
       {
         test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
-        loader: 'url-loader?limit=10000&mimetype=application/font-woff&name=dashboard.assets/fonts/[name].[ext]'
+        type: 'asset/resource',
+        generator: {
+          filename: 'dashboard.assets/fonts/[name][ext]'
+        },
       },
       {
-        test: /\.woff2(\?\S*)?$/,   loader: 'url-loader?limit=10000&mimetype=application/font-woff2&name=dashboard.assets/fonts/[name].[ext]'
+        test: /\.woff2(\?\S*)?$/,
+        type: 'asset/resource',
+        generator: {
+          filename: 'dashboard.assets/fonts/[name][ext]'
+        },
       },
       {
-        test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,    loader: 'url-loader?limit=10000&mimetype=application/font-tff&name=dashboard.assets/fonts/[name].[ext]'
+        test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
+        type: 'asset/resource',
+        generator: {
+          filename: 'dashboard.assets/fonts/[name][ext]'
+        },
       },
-      { test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,    loader: 'file-loader?name=dashboard.assets/fonts/[name].[ext]' },
-      { test: /\.png(\?v=\d+\.\d+\.\d+)?$/,    loader: 'file-loader?name=dashboard.assets/img/[name].[ext]' },
-      { test: /\.gif(\?v=\d+\.\d+\.\d+)?$/,    loader: 'file-loader?name=dashboard.assets/img/[name].[ext]' },
-      { test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,    loader: 'url-loader?limit=10000&mimetype=image/svg+xml&name=dashboard.assets/img/[name].[ext]' }
+      {
+        test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
+        type: 'asset/resource',
+        generator: {
+          filename: 'dashboard.assets/fonts/[name][ext]'
+        },
+      },
+      {
+        test: /\.png(\?v=\d+\.\d+\.\d+)?$/,
+        type: 'asset/resource',
+        generator: {
+          filename: 'dashboard.assets/img/[name][ext]'
+        },
+      },
+      {
+        test: /\.gif(\?v=\d+\.\d+\.\d+)?$/,
+        type: 'asset/resource',
+        generator: {
+          filename: 'dashboard.assets/img/[name][ext]'
+        },
+      },
+      {
+        test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
+        type: 'asset/resource',
+        generator: {
+          filename: 'dashboard.assets/img/[name][ext]'
+        },
+      }
     ]
   },
   resolve: {
