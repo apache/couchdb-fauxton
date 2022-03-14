@@ -83,43 +83,55 @@ const runWebpackServer = function () {
   });
 
   const options = {
-    contentBase: path.join(__dirname, '/dist/debug/'),
-    host: 'localhost',
+    static: {
+      directory: path.join(__dirname, '/dist/debug/')
+    },
+    host: '0.0.0.0',
     port: process.env.FAUXTON_PORT || 8000,
-    overlay: true,
+    client: {
+      overlay: true,
+    },
     hot: false,
     historyApiFallback: false,
-    disableHostCheck: true,
-    stats: {
-      colors: true,
+    allowedHosts: "auto",
+    devMiddleware: {
+      stats: {
+        colors: true,
+      },
     },
     headers: getCspHeaders(),
-    before: (app) => {
-      app.all('*', (req, res, next) => {
-        const accept = req.headers.accept ? req.headers.accept.split(',') : '';
 
-        if (/application\/json/.test(accept[0]) || /multipart\/form-data/.test(accept[0])) {
-          proxy.web(req, res);
-          return;
+    setupMiddlewares: (middlewares, devServer) => {
+      if (!devServer) {
+        throw new Error('webpack-dev-server is not defined');
+      }
+
+      middlewares.unshift(
+        {
+          name: "proxy-to-couchdb",
+          middleware: ('*', (req, res, next) => {
+            const accept = req.headers.accept ? req.headers.accept.split(',') : '';
+            if (/application\/json/.test(accept[0]) || /multipart\/form-data/.test(accept[0])) {
+              proxy.web(req, res);
+              return;
+            }
+
+            next();
+          }),
         }
+      );
 
-        next();
-      });
-    }
+      return middlewares;
+    },
   };
 
   const compiler = webpack(config);
-  const server = new WebpackDev(compiler, options);
+  const server = new WebpackDev(options, compiler);
 
-  server.listen(options.port, '0.0.0.0', function (err) {
-    if (err) {
-      console.error(err);
-      return;
-    }
+  server.startCallback(() => {
     console.info('listening on', options.host, options.port);
     console.info('Starting first compile. This will take about 10 seconds...');
   });
 };
-
 
 devSetup(runWebpackServer);
