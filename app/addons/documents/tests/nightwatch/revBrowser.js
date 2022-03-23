@@ -30,15 +30,15 @@ module.exports = {
 
       .waitForElementVisible('.revision-diff-area', waitTime, false)
 
-      .assert.containsText('.revision-diff-area', '"black & white"')
-      .assert.containsText('.revision-diff-area', '"white"')
+      .assert.textContains('.revision-diff-area', '"black & white"')
+      .assert.textContains('.revision-diff-area', '"white"')
 
       .clickWhenVisible('.two-sides-toggle-button button:last-child')
 
       .waitForElementVisible('.revision-split-area', waitTime, false)
 
-      .assert.containsText('.revision-split-area [data-id="ours"]', '"black & white"')
-      .assert.containsText('.revision-split-area [data-id="theirs"]', '"white"')
+      .assert.textContains('.revision-split-area [data-id="ours"]', '"black & white"')
+      .assert.textContains('.revision-split-area [data-id="theirs"]', '"white"')
 
 
       .clickWhenVisible('[data-id="button-select-theirs"]')
@@ -76,15 +76,15 @@ module.exports = {
 
       .waitForElementVisible('.revision-diff-area', waitTime, false)
 
-      .assert.containsText('.revision-diff-area', '"black & white"')
-      .assert.containsText('.revision-diff-area', '"white"')
+      .assert.textContains('.revision-diff-area', '"black & white"')
+      .assert.textContains('.revision-diff-area', '"white"')
 
       .clickWhenVisible('.two-sides-toggle-button button:last-child')
 
       .waitForElementVisible('.revision-split-area', waitTime, false)
 
-      .assert.containsText('.revision-split-area [data-id="ours"]', '"black & white"')
-      .assert.containsText('.revision-split-area [data-id="theirs"]', '"white"')
+      .assert.textContains('.revision-split-area [data-id="ours"]', '"black & white"')
+      .assert.textContains('.revision-split-area [data-id="theirs"]', '"white"')
 
 
       .clickWhenVisible('[data-id="button-select-theirs"]')

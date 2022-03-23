@@ -10,8 +10,6 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-
-
 module.exports = {
 
   'Displays an error if reduce is not possible': function (client) {
@@ -30,8 +28,7 @@ module.exports = {
       .setValue('#new-ddoc', 'test_design_doc-selenium-bad-reduce')
       .clearValue('#index-name')
       .setValue('#index-name', 'hasenindex')
-      .clickWhenVisible('#reduce-function-selector')
-      .keys(['\uE013', '\uE013', '\uE013', '\uE013', '\uE013', '\uE006'])
+      .clickWhenVisible('select[id="reduce-function-selector"] option[value="_sum"]')
       .execute('\
         var editor = ace.edit("map-function");\
         editor.getSession().setValue("function (doc) { emit(\'boom\', doc._id); }");\

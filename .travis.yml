@@ -1,21 +1,29 @@
-language: node_js
+sudo: required
+dist: xenial
+cache:
+  - directories:
+    - "$HOME/.npm"
 node_js:
    - "14"
-sudo: false
-services:
-  - docker
+language: node_js
 git:
   depth: 1
 env:
-  - COUCHDB_IMAGE=apache/couchdb:2.3.1 NIGHTWATCH_SKIPTAGS="search,partitioned"
+  # - COUCHDB_IMAGE=apache/couchdb:2.3.1 NIGHTWATCH_SKIPTAGS="search,partitioned"
   - COUCHDB_IMAGE=apache/couchdb:3 NIGHTWATCH_SKIPTAGS="search,nonpartitioned,couchdb-v2-only"
   # - COUCHDB_IMAGE=couchdb:dev NIGHTWATCH_SKIPTAGS="search,nonpartitioned"
-
+services:
+  - xvfb
+addons:
+  chrome: stable
 before_install:
-  - npm install -g npm@latest
-  - ./bin/build-couchdb-dev.sh
+   - export DISPLAY=:99.0
+   - ./bin/build-couchdb-dev.sh
+   - # https://docs.travis-ci.com/user/gui-and-headless-browsers/#using-the-chrome-addon-in-the-headless-mode
+   - # https://github.com/SeleniumHQ/selenium/issues/6049#issuecomment-475382749
+   - google-chrome-stable --no-sandbox --headless --disable-gpu --disable-dev-shm-usage --window-size=1400,900 --remote-debugging-port=9222 http://localhost:8000 &
 install:
-  - npm ci
+   - npm ci
 before_script:
   - travis_retry ./bin/docker-up-and-check.sh
   - curl http://127.0.0.1:5984
@@ -29,7 +37,3 @@ script:
   - ./node_modules/.bin/grunt nightwatch_retries
 after_script:
   - npm run docker:down
-cache:
-  - apt
-  - directories:
-    - "$HOME/.npm"

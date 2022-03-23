@@ -17,7 +17,7 @@ const loadSettings = function () {
     port: process.env.FAUXTON_PORT || 8000,
     contentSecurityPolicy: true,
     proxy: {
-      target: process.env.COUCH_HOST || 'http://127.0.0.1:5984',
+      target: process.env.COUCH_HOST || 'http://localhost:5984',
       changeOrigin: false
     }
   };

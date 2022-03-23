@@ -27,7 +27,7 @@ module.exports = {
 
       .url(`${baseUrl}#/database/${newDatabaseName}/_all_docs`)
       .waitForElementPresent('.two-sides-toggle-button', waitTime, false)
-      .assert.containsText('.two-sides-toggle-button button.active', 'Metadata')
+      .assert.textContains('.two-sides-toggle-button button.active', 'Metadata')
       .assert.not.elementPresent('.table-container-autocomplete')
       .end();
   },
@@ -47,7 +47,7 @@ module.exports = {
       .checkForDocumentCreated(newDocumentName)
       .url(`${baseUrl}#/database/${newDatabaseName}/_all_docs`)
       .waitForElementPresent('.two-sides-toggle-button', waitTime, false)
-      .assert.containsText('.two-sides-toggle-button button.active', 'Metadata')
+      .assert.textContains('.two-sides-toggle-button button.active', 'Metadata')
 
       // turn include_docs on through query options
       .clickWhenVisible('.control-toggle-queryoptions')
@@ -55,18 +55,18 @@ module.exports = {
       .clickWhenVisible('#qoIncludeDocsLabel')
       .clickWhenVisible('.query-options .btn-secondary')
       .waitForElementPresent('.two-sides-toggle-button', waitTime, false)
-      .assert.containsText('.two-sides-toggle-button button.active', 'Table')
+      .assert.textContains('.two-sides-toggle-button button.active', 'Table')
 
       // switch to json view and then turn off include_docs
       .clickWhenVisible('.fonticon-json')
-      .assert.containsText('.two-sides-toggle-button button.active', 'JSON')
+      .assert.textContains('.two-sides-toggle-button button.active', 'JSON')
       .clickWhenVisible('.control-toggle-queryoptions')
       .waitForElementPresent('#qoIncludeDocsLabel', waitTime, false)
       .assert.attributeEquals('#qoIncludeDocs', 'checked', 'true')
       .clickWhenVisible('#qoIncludeDocsLabel')
       .clickWhenVisible('.query-options .btn-secondary')
       .waitForElementPresent('.two-sides-toggle-button', waitTime, false)
-      .assert.containsText('.two-sides-toggle-button button.active', 'Metadata')
+      .assert.textContains('.two-sides-toggle-button button.active', 'Metadata')
       .end();
   },
 };

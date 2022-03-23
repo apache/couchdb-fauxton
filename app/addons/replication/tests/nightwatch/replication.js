@@ -50,16 +50,13 @@ module.exports = {
       .waitForElementVisible('#replication-source', waitTime, true)
 
       // select LOCAL as the source
-      .clickWhenVisible('#replication-source')
-      .keys(['\uE015', '\uE006'])
+      .clickWhenVisible('select[id="replication-source"] option[value="REPLICATION_SOURCE_LOCAL"]')
       .waitForElementVisible('.replication__input-react-select', waitTime, true)
-
       // enter our source DB
       .setValue('.replication__input-react-select .Select-input input', [newDatabaseName1, client.Keys.ENTER])
 
       // select source USER/PASSWORD authentication
-      .clickWhenVisible('#select-replication-source-auth')
-      .keys(['\uE015', '\uE006'])
+      .clickWhenVisible('select[id="select-replication-source-auth"] option[value="BASIC_AUTH"]')
       .waitForElementVisible('#replication-source-auth-username', waitTime, true)
 
       // enter source username/password
@@ -71,8 +68,7 @@ module.exports = {
       .setValue('.replication__new-input', replicatedDBName)
 
       // select target USER/PASSWORD authentication
-      .clickWhenVisible('#select-replication-target-auth')
-      .keys(['\uE015', '\uE006'])
+      .clickWhenVisible('select[id="select-replication-target-auth"] option[value="BASIC_AUTH"]')
       .waitForElementVisible('#replication-target-auth-username', waitTime, true)
 
       // enter target username/password
@@ -106,14 +102,13 @@ module.exports = {
       .waitForElementVisible('#replication-source', waitTime, true)
 
       // select the LOCAL db as the source
-      .clickWhenVisible('#replication-source')
-      .keys(['\uE015', '\uE006'])
+      .clickWhenVisible('select[id="replication-source"] option[value="REPLICATION_SOURCE_LOCAL"]')
       .waitForElementVisible('.replication__input-react-select', waitTime, true)
       .setValue('.replication__input-react-select .Select-input input', [newDatabaseName1, client.Keys.ENTER])
 
+
       // select source USER/PASSWORD authentication
-      .clickWhenVisible('#select-replication-source-auth')
-      .keys(['\uE015', '\uE006'])
+      .clickWhenVisible('select[id="select-replication-source-auth"] option[value="BASIC_AUTH"]')
       .waitForElementVisible('#replication-source-auth-username', waitTime, true)
 
       // enter source username/password
@@ -125,8 +120,7 @@ module.exports = {
       .setValue('#replication-target-local .Select-input input', [newDatabaseName2, client.Keys.ENTER])
 
       // select target USER/PASSWORD authentication
-      .clickWhenVisible('#select-replication-target-auth')
-      .keys(['\uE015', '\uE006'])
+      .clickWhenVisible('select[id="select-replication-target-auth"] option[value="BASIC_AUTH"]')
       .waitForElementVisible('#replication-target-auth-username', waitTime, true)
 
       // enter target username/password
@@ -171,14 +165,13 @@ module.exports = {
       .waitForElementVisible('#replication-source', waitTime, true)
 
       // select the LOCAL db as the source
-      .clickWhenVisible('#replication-source')
-      .keys(['\uE015', '\uE006'])
+      .clickWhenVisible('select[id="replication-source"] option[value="REPLICATION_SOURCE_LOCAL"]')
       .waitForElementVisible('.replication__input-react-select', waitTime, true)
       .setValue('.replication__input-react-select .Select-input input', [newDatabaseName1, client.Keys.ENTER])
 
+
       // select source USER/PASSWORD authentication
-      .clickWhenVisible('#select-replication-source-auth')
-      .keys(['\uE015', '\uE006'])
+      .clickWhenVisible('select[id="select-replication-source-auth"] option[value="BASIC_AUTH"]')
       .waitForElementVisible('#replication-source-auth-username', waitTime, true)
 
       // enter source username/password
@@ -191,8 +184,7 @@ module.exports = {
       .setValue('.replication__doc-name-input', [replicatorDoc._id, client.Keys.ENTER])
 
       // select target USER/PASSWORD authentication
-      .clickWhenVisible('#select-replication-target-auth')
-      .keys(['\uE015', '\uE006'])
+      .clickWhenVisible('select[id="select-replication-target-auth"] option[value="BASIC_AUTH"]')
       .waitForElementVisible('#replication-target-auth-username', waitTime, true)
 
       // enter target username/password
@@ -225,10 +217,10 @@ module.exports = {
       .waitForElementVisible('button#replicate', waitTime, true)
       .waitForElementVisible('#replication-source', waitTime, true)
 
-      // select LOCAL as the source
-      .clickWhenVisible('#replication-source')
-      .keys(['\uE015', '\uE006'])
+      // select local db as the source
+      .clickWhenVisible('select[id="replication-source"] option[value="REPLICATION_SOURCE_LOCAL"]')
       .waitForElementVisible('.replication__input-react-select', waitTime, true)
+      .setValue('.replication__input-react-select .Select-input input', [newDatabaseName1, client.Keys.ENTER])
 
       // enter our source DB
       .setValue('.replication__input-react-select .Select-input input', [newDatabaseName1, client.Keys.ENTER])
@@ -257,17 +249,16 @@ module.exports = {
       .waitForElementVisible('button#replicate', waitTime, true)
       .waitForElementVisible('#replication-source', waitTime, true)
 
-      // select LOCAL as the source
-      .clickWhenVisible('#replication-source')
-      .keys(['\uE015', '\uE006'])
+      // select local db as the source
+      .clickWhenVisible('select[id="replication-source"] option[value="REPLICATION_SOURCE_LOCAL"]')
       .waitForElementVisible('.replication__input-react-select', waitTime, true)
+      .setValue('.replication__input-react-select .Select-input input', [newDatabaseName1, client.Keys.ENTER])
 
       // enter our source DB
       .setValue('.replication__input-react-select .Select-input input', [newDatabaseName1, client.Keys.ENTER])
 
       // select source USER/PASSWORD authentication
-      .clickWhenVisible('#select-replication-source-auth')
-      .keys(['\uE015', '\uE006'])
+      .clickWhenVisible('select[id="select-replication-source-auth"] option[value="BASIC_AUTH"]')
       .waitForElementVisible('#replication-source-auth-username', waitTime, true)
 
       // enter source username/password

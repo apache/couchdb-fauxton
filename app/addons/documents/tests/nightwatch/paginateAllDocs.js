@@ -10,10 +10,7 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-
-
 module.exports = {
-
   'change number of items per page': function (client) {
     /*jshint multistr: true */
     var waitTime = client.globals.maxWaitTime,
@@ -25,16 +22,9 @@ module.exports = {
       .loginToGUI()
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
       .clickWhenVisible('.fonticon-json')
-
       // ensures the main body (results list) has been rendered
       .waitForElementPresent('.prettyprint', waitTime, false)
-
-      // ensures the select dropdown is rendered
-      .clickWhenVisible('#select-per-page', waitTime, false)
-
-      // hack to get select working by clicking on it and using keyboard to select
-      // http://www.w3.org/TR/2012/WD-webdriver-20120710/
-      .keys(['\uE013', '\uE006'])
+      .clickWhenVisible('select[id="select-per-page"] option[value="10"]')
       .waitForElementPresent('.prettyprint', waitTime, false)
       .waitForElementNotPresent('div[data-id="document_16"]', waitTime)
       .waitForElementPresent('.doc-row', waitTime, false)
@@ -63,9 +53,8 @@ module.exports = {
       // ensures the main body (results list) has been rendered
       .waitForElementPresent('.prettyprint', waitTime, false)
 
-      .clickWhenVisible('#select-per-page', waitTime, false)
-      // http://www.w3.org/TR/2012/WD-webdriver-20120710/
-      .keys(['\uE013', '\uE006'])
+      .clickWhenVisible('select[id="select-per-page"] option[value="10"]')
+
       .waitForElementNotPresent('.loading-lines', waitTime, false)
       .waitForElementNotPresent('div[data-id="document_16"]', waitTime)
       .clickWhenVisible('#next', waitTime, false)
@@ -91,17 +80,17 @@ module.exports = {
 
       // ensures the main body (results list) has been rendered
       .waitForElementPresent('.prettyprint', waitTime, false)
+      // moving from '20'
+      .clickWhenVisible('select[id="select-per-page"] option[value="10"]')
 
-      .clickWhenVisible('#select-per-page', waitTime, false)
-      // http://www.w3.org/TR/2012/WD-webdriver-20120710/
-      .keys(['\uE013', '\uE006'])
       .waitForElementNotPresent('.loading-lines', waitTime, false)
       .waitForElementNotPresent('div[data-id="document_16"]', waitTime)
       .clickWhenVisible('#next', waitTime, false)
       .waitForElementPresent('div[data-id="document_17"]', waitTime)
       .clickWhenVisible('#select-per-page', waitTime, false)
-      // http://www.w3.org/TR/2012/WD-webdriver-20120710/
-      .keys(['\uE013', '\uE006'])
+      // moving from '10'
+      .clickWhenVisible('select[id="select-per-page"] option[value="5"]')
+
       .waitForElementPresent('div[data-id="document_1"]', waitTime)
       .end();
   },
@@ -123,7 +112,8 @@ module.exports = {
 
       .clickWhenVisible('#select-per-page', waitTime, false)
       // http://www.w3.org/TR/2012/WD-webdriver-20120710/
-      .keys(['\uE013', '\uE006'])
+      // moving from '20'
+      .clickWhenVisible('select[id="select-per-page"] option[value="10"]')
       .waitForElementNotPresent('.loading-lines', waitTime, false)
       .waitForElementNotPresent('td[title="document_16"]', waitTime)
       .clickWhenVisible('#next', waitTime, false)

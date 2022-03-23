@@ -54,7 +54,7 @@ module.exports = {
       .clickWhenVisible('#js-create-database', waitTime, false)
       .waitForElementNotPresent('.new-database-tray', waitTime, false)
       .checkForDatabaseCreated(newDatabaseName, waitTime)
-      .url(baseUrl + '/_all_dbs')
+      .url(baseUrl + '/#/_all_dbs')
       .waitForElementVisible('html', waitTime, false)
       .getText('html', function (result) {
         var data = result.value,

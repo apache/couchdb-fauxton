@@ -67,7 +67,7 @@
 
     "couch_config": {
       "fauxton": {
-        "db": "http://localhost:5984/fauxton",
+        "db": "http://127.0.0.1:5984/fauxton",
         "app": "./couchapp.js",
         "options": {
           "okay_if_missing": true
@@ -80,7 +80,7 @@
       "password": "testerpass",
       "fauxton_port": "8000",
       "db_protocol": "http",
-      "db_host": "localhost",
+      "db_host": "127.0.0.1",
       "db_port": "5984",
       "custom_commands_path": ["test/nightwatch_tests/custom-commands", "test/nightwatch_tests/custom-commands/auth"],
       "globals_path": "./helpers/helpers.js",

@@ -12,8 +12,7 @@
 
 module.exports = function (grunt) {
   var _ = grunt.util._,
-      fs = require('fs'),
-      os = require('os');
+      fs = require('fs');
 
   grunt.registerMultiTask('get_deps', 'Fetch external dependencies', function () {
 
@@ -104,7 +103,7 @@ module.exports = function (grunt) {
       fauxton_username: this.data.settings.nightwatch.fauxton_username,
       password: this.data.settings.nightwatch.password,
       launch_url: this.data.settings.nightwatch.launch_url,
-      fauxton_host: _getHost(this.data.settings.nightwatch.fauxton_ip),
+      fauxton_host: 'localhost',
       fauxton_port: this.data.settings.nightwatch.fauxton_port,
       db_protocol: this.data.settings.nightwatch.db_protocol,
       db_host: this.data.settings.nightwatch.db_host,
@@ -116,18 +115,6 @@ module.exports = function (grunt) {
 
   // HELPERS
 
-  //if FAUXTON_HOST not set use ip address
-  function _getHost (fauxton_ip) {
-    if (fauxton_ip) {
-      return fauxton_ip;
-    }
-    //making some assumptions here
-    const interfaces = os.networkInterfaces();
-    const eth0 = interfaces[Object.keys(interfaces)[2]];
-    return eth0.find(function (item) {
-      return item.family === 'IPv4';
-    }).address;
-  }
 
   function _validateNightwatchSettings (data) {
     var error = '';

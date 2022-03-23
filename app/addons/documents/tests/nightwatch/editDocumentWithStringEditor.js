@@ -44,7 +44,7 @@ module.exports = {
       .waitForElementNotPresent('#string-editor-container', waitTime, false)
       //Check value has changed in the maind editor
       .waitForElementPresent('#editor-container', waitTime, false)
-      .assert.containsText('span.ace_string', '"' + newDocumentName + '"')
+      .assert.textContains('span.ace_string', '"' + newDocumentName + '"')
       .end();
   }
 };

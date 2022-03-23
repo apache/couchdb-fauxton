@@ -29,7 +29,7 @@ module.exports = {
       .checkForDocumentCreated('_design/test_design_doc-selenium-0')
       .waitForElementNotPresent('.loading-lines', waitTime, false)
       .waitForElementPresent('.table-view-docs', waitTime, false)
-      .assert.containsText('td[title="blerg"]', 'blerg')
+      .assert.textContains('td[title="blerg"]', 'blerg')
       .end();
   },
 
@@ -50,7 +50,7 @@ module.exports = {
       .checkForDocumentCreated('_design/test_design_doc-selenium-1')
       .waitForElementNotPresent('.loading-lines', waitTime, false)
       .waitForElementPresent('.table-view-docs', waitTime, false)
-      .assert.containsText('td[title="hasehase"]', 'hasehase')
+      .assert.textContains('td[title="hasehase"]', 'hasehase')
       .end();
   },
 
@@ -73,7 +73,7 @@ module.exports = {
 
       // page now automatically redirects user to results of View. Confirm the new doc is present.
       .waitForElementPresent('.table-view-docs', waitTime, false)
-      .assert.containsText('td[title="hasehase"]', 'hasehase')
+      .assert.textContains('td[title="hasehase"]', 'hasehase')
       .end();
   },
 
@@ -94,7 +94,7 @@ module.exports = {
       .checkForDocumentCreated('_design/test_design_doc-selenium-2')
       .waitForElementNotPresent('.loading-lines', waitTime, false)
       .waitForElementPresent('.table-view-docs', waitTime, false)
-      .assert.containsText('td[title="gansgans"]', 'gansgans')
+      .assert.textContains('td[title="gansgans"]', 'gansgans')
       .end();
   },
 
@@ -121,7 +121,7 @@ module.exports = {
       .checkForDocumentCreated('_design/testdesigndoc/_view/test-new-view')
       .waitForElementNotPresent('.loading-lines', waitTime, false)
       .waitForElementPresent('.table-view-docs', waitTime, false)
-      .assert.containsText('td[title="enteente"]', 'enteente')
+      .assert.textContains('td[title="enteente"]', 'enteente')
       .end();
   }
 };
