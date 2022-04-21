@@ -35,11 +35,9 @@ module.exports = {
       .waitForElementPresent('.prettyprint', waitTime, false)
 
       .waitForElementPresent('#select-per-page', waitTime, false)
-      .clickWhenVisible('#select-per-page', waitTime, false)
 
-      // hack to get select working by clicking on it and using keyboard to select
-      // http://www.w3.org/TR/2012/WD-webdriver-20120710/
-      .keys(['\uE013', '\uE006'])
+      // from '20'
+      .clickWhenVisible('select[id="select-per-page"] option[value="10"]')
       .waitForElementPresent('.prettyprint', waitTime, false)
       .waitForElementNotPresent('div[data-id="document_9"]', waitTime)
       .execute(function () {
@@ -69,10 +67,9 @@ module.exports = {
       // ensure the page content has loaded
       .waitForElementPresent('.prettyprint', waitTime, false)
 
-      .clickWhenVisible('#select-per-page', waitTime, false)
+      // from '20'
+      .clickWhenVisible('select[id="select-per-page"] option[value="10"]')
 
-      // http://www.w3.org/TR/2012/WD-webdriver-20120710/
-      .keys(['\uE013', '\uE006'])
       .waitForElementNotPresent('.loading-lines', waitTime, false)
       .waitForElementPresent('#next', waitTime, false)
       .clickWhenVisible('#next', waitTime, false)
@@ -104,19 +101,16 @@ module.exports = {
 
       // ensure the page content has loaded
       .waitForElementPresent('.prettyprint', waitTime, false)
-      .clickWhenVisible('#select-per-page', waitTime, false)
-
-      // http://www.w3.org/TR/2012/WD-webdriver-20120710/
-      .keys(['\uE013', '\uE006'])
+      // from '20'
+      .clickWhenVisible('select[id="select-per-page"] option[value="10"]')
       .waitForElementNotPresent('.loading-lines', waitTime, false)
 
       .clickWhenVisible('#next', waitTime, false)
       .waitForElementNotPresent('div[data-id="document_1"]', waitTime)
       .waitForElementNotPresent('.loading-lines', waitTime, false)
 
-      .clickWhenVisible('#select-per-page', waitTime, false)
-      // http://www.w3.org/TR/2012/WD-webdriver-20120710/
-      .keys(['\uE013', '\uE006'])
+      // from '10'
+      .clickWhenVisible('select[id="select-per-page"] option[value="5"]')
 
       .waitForElementPresent('div[data-id="document_1"]', waitTime)
       .end();
@@ -140,10 +134,9 @@ module.exports = {
       // ensure the page content has loaded
       .waitForElementPresent('.table-view-docs', waitTime)
 
-      .clickWhenVisible('#select-per-page', waitTime, false)
+      // from '20'
+      .clickWhenVisible('select[id="select-per-page"] option[value="10"]')
 
-      // http://www.w3.org/TR/2012/WD-webdriver-20120710/
-      .keys(['\uE013', '\uE006'])
       .waitForElementNotPresent('.loading-lines', waitTime, false)
       .waitForElementPresent('#next', waitTime, false)
       .clickWhenVisible('#next', waitTime, false)

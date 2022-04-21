@@ -60,7 +60,7 @@ module.exports = {
       .checkForDocumentCreated(newDocumentName1)
       .checkForDocumentCreated(newDocumentName2)
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
-      .assert.containsText('button.active', 'Metadata')
+      .assert.textContains('button.active', 'Metadata')
       .waitForElementVisible('.tableview-checkbox-cell', waitTime, false)
       .waitForElementVisible('.table', waitTime, false)
       .getText('.table', function (result) {

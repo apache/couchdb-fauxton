@@ -42,7 +42,7 @@ module.exports = {
       .checkForStringPresent(newDatabaseName + '/_index', 'rocko-artischocko')
       .checkForStringPresent(newDatabaseName + '/_index', 'gans_gans_mango')
       .waitForElementPresent('.prettyprint', waitTime, false)
-      .assert.containsText('#dashboard-lower-content', 'gans_gans_mango')
+      .assert.textContains('#dashboard-lower-content', 'gans_gans_mango')
       .end();
   },
 
@@ -56,7 +56,7 @@ module.exports = {
       .loginToGUI()
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_index')
       .waitForElementPresent('#doc-list', waitTime, false)
-      .assert.containsText('#dashboard-lower-content', 'ente_ente_mango_ananas')
+      .assert.textContains('#dashboard-lower-content', 'ente_ente_mango_ananas')
       .clickWhenVisible('.bulk-action-component-panel input[type="checkbox"]')
       .clickWhenVisible('.bulk-action-component-selector-group button.fonticon-trash', waitTime, false)
       .acceptAlert()

@@ -24,7 +24,7 @@ module.exports = {
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_design/testdesigndoc/_view/stubview')
       .clickWhenVisible('.fonticon-json')
       .waitForElementPresent('.prettyprint', waitTime, false)
-      .assert.containsText('.prettyprint', 'stub')
+      .assert.textContains('.prettyprint', 'stub')
       .clickWhenVisible('.index-list .active span', waitTime, true)
       .clickWhenVisible('.popover-content .fonticon-files-o', waitTime, true)
       .waitForElementVisible('#new-index-name', waitTime, true)

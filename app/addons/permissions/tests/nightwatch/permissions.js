@@ -29,11 +29,11 @@ module.exports = {
       .clickWhenVisible('.permissions__admins .permissions-add-user button')
 
       .waitForElementVisible('.permissions__admins .permissions__entry', waitTime, false)
-      .assert.containsText('.permissions__entry span', 'blergie')
+      .assert.textContains('.permissions__entry span', 'blergie')
 
       .url(baseUrl + '/#/database/' + newDatabaseName + '/permissions')
       .waitForElementVisible('.permissions__admins .permissions__entry', waitTime, false)
-      .assert.containsText('.permissions__entry span', 'blergie')
+      .assert.textContains('.permissions__entry span', 'blergie')
 
       .end();
   }

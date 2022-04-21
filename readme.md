@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/apache/couchdb-fauxton.svg?branch=main)](https://travis-ci.org/apache/couchdb-fauxton)
+![Build Status](https://github.com/github/docs/actions/workflows/main.yml/badge.svg?branch=main)
 
 # Fauxton
 

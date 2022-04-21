@@ -25,9 +25,9 @@ module.exports = {
       .url(baseUrl + '/#/database/does-not-exist/_all_docs')
       .waitForElementVisible('.Toastify__toast-container .Toastify__toast--error', waitTime, false)
       // We wait for the first toasts to be cleared
-      .pause(1000)
+      .pause(3000)
       .waitForElementVisible('.Toastify__toast-container .Toastify__toast--error', waitTime, false)
-      .assert.containsText('.Toastify__toast-container .Toastify__toast--error .Toastify__toast-body', 'does not exist')
+      .assert.textContains('.Toastify__toast-container .Toastify__toast--error .Toastify__toast-body', 'does not exist')
       .verify.urlEquals(baseUrl + '/#');
   }
 };

@@ -26,7 +26,7 @@ module.exports = {
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_design/testdesigndoc/_view/stubview')
       .clickWhenVisible('.fonticon-json')
       .waitForElementPresent('.prettyprint', waitTime, false)
-      .assert.containsText('.prettyprint', 'stub')
+      .assert.textContains('.prettyprint', 'stub')
 
       // confirm the sidebar shows the testdesigndoc design doc
       .waitForElementVisible('#design-doc-menu-testdesigndoc', waitTime, true)

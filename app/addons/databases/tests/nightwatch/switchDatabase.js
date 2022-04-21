@@ -10,7 +10,7 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-
+const {Key} = require('selenium-webdriver');
 
 module.exports = {
   'Confirm selecting database via typeahead redirects properly': function (client) {
@@ -32,7 +32,11 @@ module.exports = {
       .clickWhenVisible('[data-name="jump-to-db"] .Select-placeholder')
       .setValue('[data-name="jump-to-db"] input', [newDatabaseName])
       .waitForElementPresent('.Select-option', waitTime, false)
-      .keys([client.Keys.ENTER])
+      .perform(function() {
+        const actions = this.actions({async: true});
+        return actions
+          .sendKeys(Key.ENTER);
+      })
       .waitForElementPresent('.index-pagination', waitTime, false)
       // now check we've redirected and the URL ends with /_all_docs
       .url((result) => {

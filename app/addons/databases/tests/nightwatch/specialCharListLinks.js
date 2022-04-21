@@ -41,8 +41,8 @@ function createTest (db) {
       .waitForElementVisible('.faux-header__doc-header-title', waitTime, false)
       .waitForElementVisible('.no-results-screen', waitTime, false)
 
-      .assert.containsText('.no-results-screen', 'No Documents Found')
-      .assert.containsText('.faux-header__doc-header-title', db)
+      .assert.textContains('.no-results-screen', 'No Documents Found')
+      .assert.textContains('.faux-header__doc-header-title', db)
       .end();
   };
 }
