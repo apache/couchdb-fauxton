@@ -35,9 +35,9 @@
     "expose-loader": "^3.1.0",
     "fetch-mock": "^9.11.0",
     "fs-extra": "^10.0.0",
-    "grunt": "^1.4.1",
+    "grunt": "^1.5.2",
     "grunt-cli": "^1.4.3",
-    "grunt-contrib-clean": "^1.1.0",
+    "grunt-contrib-clean": "^2.0.1",
     "grunt-contrib-copy": "^1.0.0",
     "grunt-exec": "^1.0.1",
     "grunt-shell": "^2.1.0",
@@ -54,7 +54,7 @@
     "style-loader": "^3.3.1",
     "webpack": "^5.70.0",
     "webpack-cli": "^4.9.2",
-    "webpack-dev-server": "^4.7.4"
+    "webpack-dev-server": "^4.8.1"
   },
   "dependencies": {
     "@webcomponents/url": "^0.7.8",
@@ -75,7 +75,7 @@
     "jsondiffpatch": "^0.3.11",
     "lodash": "^4.17.20",
     "mkdirp": "^0.5.6",
-    "moment": "^2.29.1",
+    "moment": "^2.29.3",
     "nano": "^9.0.5",
     "prop-types": "^15.8.1",
     "rc-slider": "^9.7.5",
