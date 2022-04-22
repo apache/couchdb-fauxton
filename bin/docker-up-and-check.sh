@@ -14,7 +14,7 @@
 
 
 ## Sometimes the couchdb docker container won't start correctly, which causes
-## the Travis build to fail and forces users to resubmit their PRs.
+## the GitHub Actions build to fail and forces users to resubmit their PRs.
 ## This script tries to minimize the issue by retrying to start the containers
 ## in case of failure.
 

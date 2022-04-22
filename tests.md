@@ -20,40 +20,44 @@ E.g.: to run tests under the `addons/cors` path:
 
 ## End-to-end tests
 
-To run selenium locally you need Docker installed. Selenium runs in a Docker container and connects to a CouchDB instance in another container. To start them run the command:
+Nightwatch tests require that you have Chrome installed. If you prefer to use another browser, update `test/nightwatch_tests/nightwatch.json.underscore` and install the appropriate driver - see Nightwatch documentation for more details.
 
-    npm run docker:up
+The tests also require a CouchDB server (see step 2).
 
-You can run `npm run docker:logs` to see when the CouchDB instance is ready to go. You also need a Fauxton server instance runnning:
-
-    grunt debugDev && DIST=./dist/debug ./bin/fauxton
-
-Finally to run the tests:
-
-    grunt nightwatch
+1. Define the version of CouchDB to test against
+```bash
+COUCHDB_IMAGE=couchdb:3
+NIGHTWATCH_SKIPTAGS="search,nonpartitioned,couchdb-v2-only"
+-- OR --
+COUCHDB_IMAGE=couchdb:2.3.1
+NIGHTWATCH_SKIPTAGS="search,partitioned"
+```
+2. Start a CouchDB instance
+```bash
+npm run docker:up
+```
+(run `npm run docker:logs` to see when the CouchDB instance is ready to go)
+3. Start Fauxton
+```bash
+grunt debugDev && DIST=./dist/debug ./bin/fauxton
+```
+4. Run the tests
+```bash
+grunt nightwatch
+```
 
 Or to run only one file:
+```bash
+grunt nightwatch --file=filename
+```
 
-    grunt nightwatch --file=viewEdit
-
-View the package.json `scripts` section for some other useful docker commands.
-
-### Debugging Selenium tests
-
-To debug and view a failing selenium test, you need to run the selenium container with vnc built into it:
-
-    npm run docker:debug-up
-
-Once it is up and running you can connect to it with any VNC client on `127.0.0.1:5900`. On MacOSX open safari
-and type `vnc://127.0.0.1:5900`. That will open screen sharing. It will then prompt for the password which is `secret`.
-
-After that run a Fauxton server instance and the nightwatch tests you want to debug.
+View the package.json `scripts` section for other useful Docker commands.
 
 
 ### Omitting Nightwatch tests
 
 If you need to omit particular tests from running you can add a `testBlacklist` option to the nightwatch section of
-your settings.json file. That defines an object of the following form:
+your settings.json file. It should define an object of the following form:
 
 ```javascript
 // ...

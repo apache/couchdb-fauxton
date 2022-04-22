@@ -12,8 +12,7 @@
 
 module.exports = function (grunt) {
   var _ = grunt.util._,
-      fs = require('fs'),
-      os = require('os');
+      fs = require('fs');
 
   grunt.registerMultiTask('get_deps', 'Fetch external dependencies', function () {
 
@@ -121,12 +120,8 @@ module.exports = function (grunt) {
     if (fauxton_ip) {
       return fauxton_ip;
     }
-    //making some assumptions here
-    const interfaces = os.networkInterfaces();
-    const eth0 = interfaces[Object.keys(interfaces)[2]];
-    return eth0.find(function (item) {
-      return item.family === 'IPv4';
-    }).address;
+
+    return "127.0.0.1";
   }
 
   function _validateNightwatchSettings (data) {

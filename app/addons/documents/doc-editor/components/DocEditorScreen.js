@@ -111,7 +111,9 @@ export default class DocEditorScreen extends React.Component {
   };
 
   onSaveComplete = () => {
-    this.getEditor().clearChanges();
+    if (this.getEditor()) {
+      this.getEditor().clearChanges();
+    }
   };
 
   hideDeleteDocModal = () => {

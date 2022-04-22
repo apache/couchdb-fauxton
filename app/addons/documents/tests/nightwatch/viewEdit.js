@@ -13,7 +13,6 @@
 
 
 module.exports = {
-
   'Edits a design doc - renames index': function (client) {
     var waitTime = client.globals.maxWaitTime,
         newDatabaseName = client.globals.testDatabaseName,
@@ -139,23 +138,19 @@ module.exports = {
           `expected header text to contain '${newDatabaseName}' and found '${headerContent}'`
         );
       })
-
       .waitForElementVisible('#new-ddoc', waitTime, false)
       .setValue('#new-ddoc', 'view1-name')
       .clearValue('#index-name')
       .setValue('#index-name', 'view1')
-      .clickWhenVisible('#reduce-function-selector')
-      .keys(['\uE013', '\uE013', '\uE013', '\uE013', '\uE013', '\uE006'])
+      .clickWhenVisible('select[id="reduce-function-selector"] option[value="_sum"]')
       .execute('\
         var editor = ace.edit("map-function");\
         editor.getSession().setValue("function (doc) { emit(doc._id, 100); }");\
       ')
       .clickWhenVisible('#save-view')
       .checkForDocumentCreated('_design/view1-name')
-
       // create the second view
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
-      .closeNotifications()
 
       .clickWhenVisible('.faux-header__doc-header-dropdown-toggle')
       .clickWhenVisible('.faux-header__doc-header-dropdown-itemwrapper a[href*="new_view"]')
@@ -176,8 +171,7 @@ module.exports = {
       .setValue('#new-ddoc', 'view2-name')
       .clearValue('#index-name')
       .setValue('#index-name', 'view2')
-      .clickWhenVisible('#reduce-function-selector')
-      .keys(['\uE013', '\uE013', '\uE013', '\uE013', '\uE006'])
+      .clickWhenVisible('select[id="reduce-function-selector"] option[value="_count"]')
       .execute('\
         var editor = ace.edit("map-function");\
         editor.getSession().setValue("function (doc) { emit(doc._id, 200); }");\
@@ -251,8 +245,7 @@ module.exports = {
       .waitForElementPresent('.index-cancel-link', waitTime, true)
       .waitForElementVisible('.styled-select select', waitTime, true)
       .waitForElementNotPresent('.loading-lines', waitTime, true)
-
-      .setValue('.styled-select select', 'new-doc')
+      .clickWhenVisible('select[id="faux__edit-view__design-doc"] option[value="new-doc"]')
 
       // needed to get React to update + show the new design doc field
       .click('body')

@@ -23,7 +23,7 @@ module.exports = {
       .waitForElementPresent('.doc-item', client.globals.maxWaitTime, false)
       // by default include_docs is on, so check "American Bittern" does exist in the DOM
       .waitForElementPresent('.prettyprint', client.globals.maxWaitTime, false)
-      .assert.containsText('.prettyprint', 'American Bittern')
+      .assert.textContains('.prettyprint', 'American Bittern')
       .end();
   }
 };

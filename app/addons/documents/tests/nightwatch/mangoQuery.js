@@ -38,8 +38,8 @@ module.exports = {
       .clickWhenVisible('.fonticon-json')
 
       .waitForElementPresent('.prettyprint', waitTime, false)
-      .assert.containsText('#dashboard-lower-content', 'number')
-      .assert.containsText('#dashboard-lower-content', 'ente_ente_mango_ananas_res')
+      .assert.textContains('#dashboard-lower-content', 'number')
+      .assert.textContains('#dashboard-lower-content', 'ente_ente_mango_ananas_res')
       .end();
   }
 };

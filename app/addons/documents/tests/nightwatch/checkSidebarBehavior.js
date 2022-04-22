@@ -36,7 +36,7 @@ module.exports = {
       .clickWhenVisible('span[title="_design/' + docSpecialChars + '"]')
       .assert.visible('a[href="#/database/' + newDatabaseName + '/_design/' + docSpecialCharsEncoded + '/_info"]')
       // Verify display name is not encoded
-      .assert.containsText('span[title="_design/' + docSpecialChars + '"]', docSpecialChars)
+      .assert.textContains('span[title="_design/' + docSpecialChars + '"]', docSpecialChars)
       .end();
   }
 };

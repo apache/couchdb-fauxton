@@ -9,11 +9,11 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
+const {Key} = require('selenium-webdriver');
 
 
 
 module.exports = {
-
   'Select doc via typeahead field redirects user': function (client) {
     var waitTime = client.globals.maxWaitTime,
         newDatabaseName = client.globals.testDatabaseName,
@@ -25,12 +25,22 @@ module.exports = {
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
       .clickWhenVisible('.fonticon-json')
       .waitForElementPresent('.jump-to-doc', waitTime, false)
-      .keys(['\uE00C'])
+      .perform(function() {
+        const actions = this.actions({async: true});
+        return actions
+          .sendKeys(Key.ESCAPE);
+      })
       .waitForElementPresent('.prettyprint', waitTime, false)
       .waitForElementPresent('.documents-pagination', waitTime, false)
       .setValue('.jump-to-doc .Select-input input', ['_des'])
       .waitForElementPresent('.Select-option', waitTime, false)
-      .keys(['\uE015', '\uE015', '\uE006'])
+      .perform(function() {
+        const actions = this.actions({async: true});
+        return actions
+          .sendKeys(Key.DOWN)
+          .sendKeys(Key.DOWN)
+          .sendKeys(Key.ENTER);
+      })
       .waitForElementPresent('.panel-button.upload', waitTime, false)
       .end();
   },
@@ -46,12 +56,22 @@ module.exports = {
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
       .clickWhenVisible('.fonticon-json')
       .waitForElementPresent('.jump-to-doc', waitTime, false)
-      .keys(['\uE00C'])
+      .perform(function() {
+        const actions = this.actions({async: true});
+        return actions
+          .sendKeys(Key.ESCAPE);
+      })
       .waitForElementPresent('.prettyprint', waitTime, false)
       .waitForElementPresent('.documents-pagination', waitTime, false)
       .setValue('.jump-to-doc .Select-input input', ['MY_CAP'])
       .waitForElementPresent('.Select-option', waitTime, false)
-      .keys(['\uE015', '\uE015', '\uE006'])
+      .perform(function() {
+        const actions = this.actions({async: true});
+        return actions
+          .sendKeys(Key.DOWN)
+          .sendKeys(Key.DOWN)
+          .sendKeys(Key.ENTER);
+      })
       .waitForElementPresent('.panel-button.upload', waitTime, false)
       .end();
   }

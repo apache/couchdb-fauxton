@@ -8,20 +8,11 @@
   "live_output" : false,
 
   "webdriver": {
+    "start_process": true,
     "ssl": false,
-    "password": "<%- password %>"
-  },
-  "selenium" : {
-    "start_process" : false,
-    "server_path" : "",
-    "log_path" : "",
+    "password": "<%- password %>",
     "host" : "127.0.0.1",
-    "port" : "<%- selenium_port %>",
-    "cli_args" : {
-      "webdriver.chrome.driver" : "",
-      "webdriver.ie.driver" : "",
-      "webdriver.firefox.profile" : ""
-    }
+    "port" : "<%- selenium_port %>"
   },
 
   "test_settings" : {
@@ -58,56 +49,8 @@
         "javascriptEnabled" : true,
         "acceptSslCerts" : true,
         "chromeOptions" : {
-          "args" : ["window-size=1400,900", "--no-sandbox"]
+          "args" : ["window-size=1400,900", "--no-sandbox", "--headless", "--disable-gpu", "--disable-dev-shm-usage", "--remote-debugging-port=9222"]
         }
-      }
-    },
-
-    "saucelabs" : {
-      "selenium_host" : "ondemand.saucelabs.com",
-      "selenium_port" : 80,
-      "username" : "${SAUCE_USERNAME}",
-      "access_key" : "${SAUCE_ACCESS_KEY}",
-      "silent" : true,
-      "output" : true,
-      "screenshots" : {
-        "enabled" : false,
-        "path" : ""
-      },
-      "desiredCapabilities": {
-        "name" : "test-example",
-        "browserName": "chrome",
-        "tunnel-identifier":"${TRAVIS_JOB_NUMBER}"
-      },
-      "globals" : {
-        "myGlobal" : "some_sauce_global"
-      },
-      "selenium" : {
-        "start_process" : false
-      }
-    },
-
-    "phantomjs" : {
-      "desiredCapabilities" : {
-        "browserName" : "phantomjs",
-        "javascriptEnabled" : true,
-        "acceptSslCerts" : true,
-        "phantomjs.binary.path" : "/path/to/phantomjs"
-      }
-    },
-
-    "browserstack" : {
-      "selenium" : {
-        "start_process" : false
-      },
-      "selenium_host" : "hub.browserstack.com",
-      "selenium_port" : 80,
-      "silent" : true,
-      "desiredCapabilities": {
-        "name" : "test-example",
-        "browserName": "firefox",
-        "browserstack.user" : "...",
-        "browserstack.key" : "..."
       }
     }
   }
