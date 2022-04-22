@@ -1,4 +1,4 @@
-![Build Status](https://github.com/github/docs/actions/workflows/main.yml/badge.svg?branch=main)
+![Build Status](https://github.com/apache/couchdb-fauxton/actions/workflows/main.yml/badge.svg?branch=main)
 
 # Fauxton
 
