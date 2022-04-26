@@ -1,7 +1,6 @@
 import 'whatwg-fetch';
 import {defaultsDeep} from "lodash";
-import {Subject} from 'rxjs/Subject';
-import 'rxjs/add/operator/filter';
+import {Subject} from 'rxjs';
 
 /* Add a multicast observer so that all fetch requests can be observed
   Some usage examples:

@@ -14,7 +14,7 @@
 var util = require('util'),
     events = require('events'),
     helpers = require('../helpers/helpers.js'),
-    async = require('async'),
+    whilst = require('async/whilst'),
     request = require('request');
 
 function PopulateDatabase () {
@@ -29,8 +29,8 @@ PopulateDatabase.prototype.command = function (databaseName, count) {
   const db_url = this.client.options.db_url;
   let i = 0;
 
-  async.whilst(
-    () => { return i < (count ? count : 20); },
+  whilst(
+    async () => { return i < (count ? count : 20); },
     (cb)  => {
       i++;
       var documentId = 'document_' + i;
