@@ -10,6 +10,7 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 import fetchMock from 'fetch-mock';
+import { filter } from 'rxjs/operators';
 import {
   json,
   fetchObserver,
@@ -77,7 +78,7 @@ describe('Fauxton Ajax', () => {
       }
     });
 
-    unsubscribe = fetchObserver.filter(resp => resp.status === 400).subscribe({
+    unsubscribe = fetchObserver.pipe(filter(resp => resp.status === 400)).subscribe({
       next (resp) {
         done();
         expect(resp.status).toEqual(400);

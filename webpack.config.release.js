@@ -26,7 +26,7 @@ module.exports = {
 
   // Entry point for static analyzer:
   entry: {
-    bundle: ['core-js/fn/array', 'core-js/fn/string/ends-with', 'core-js/fn/string/starts-with',  'core-js/fn/object', 'core-js/fn/symbol', 'core-js/fn/promise', 'regenerator-runtime/runtime', './app/main.js']
+    bundle: ['core-js/features/array', 'core-js/features/string/ends-with', 'core-js/features/string/starts-with',  'core-js/features/object', 'core-js/features/symbol', 'core-js/features/promise', 'regenerator-runtime/runtime', './app/main.js']
   },
 
   output: {
