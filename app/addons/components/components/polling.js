@@ -105,6 +105,7 @@ export class Polling extends React.Component {
           className="faux__polling-info-slider"
           min={min}
           max={max + stepSize}
+          step={stepSize}
           defaultValue={value}
           onChange={this.updatePollingFreq}
         />

@@ -75,7 +75,7 @@ describe("Polling", () => {
         onPoll={() => {}}
       />);
 
-      const handler = wrapper.find('.rc-slider-handle').at(1);
+      const handler = wrapper.find('.rc-slider-handle').at(0);
       wrapper.simulate('focus');
       // Simulate key END to move handle to the max value
       handler.simulate('keyDown', { keyCode: 35 });
