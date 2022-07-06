@@ -19,15 +19,16 @@ jobs:
     - name: Run unit tests
       run: npm run test
   run-e2e-tests:
+    timeout-minutes: 15
     name: Run e2e tests
     runs-on: ubuntu-latest
     needs: [run-unit-tests]
     strategy:
       matrix:
         include:
-          - COUCHDB_IMAGE: apache/couchdb:3
+          - COUCHDB_IMAGE: couchdb:3
             NIGHTWATCH_SKIPTAGS: "search,nonpartitioned,couchdb-v2-only"
-          - COUCHDB_IMAGE: apache/couchdb:2.3.1
+          - COUCHDB_IMAGE: couchdb:2.3.1
             NIGHTWATCH_SKIPTAGS: "search,partitioned"
     steps:
     - uses: actions/checkout@v2
