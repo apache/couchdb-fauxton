@@ -19,7 +19,6 @@ jobs:
     - name: Run unit tests
       run: npm run test
   run-e2e-tests:
-    timeout-minutes: 15
     name: Run e2e tests
     runs-on: ubuntu-latest
     needs: [run-unit-tests]
