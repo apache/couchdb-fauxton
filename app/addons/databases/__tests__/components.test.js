@@ -1,3 +1,4 @@
+
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License. You may obtain a copy of
 // the License at
@@ -35,6 +36,13 @@ describe('AddDatabaseWidget', () => {
     el.setState({databaseName: 'my-db'});
     el.instance().onAddDatabase();
     sinon.assert.calledWith(Actions.createNewDatabase, 'my-db');
+  });
+
+  it('creates a non-partitioned database', () => {
+    const el = mount(<Views.AddDatabaseWidget showPartitionedOption={true}/>);
+    el.setState({databaseName: 'my-db', partitionedSelected: false});
+    el.instance().onAddDatabase();
+    sinon.assert.calledWith(Actions.createNewDatabase, 'my-db', false);
   });
 
   it('creates a partitioned database', () => {
