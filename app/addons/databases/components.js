@@ -374,7 +374,7 @@ class AddDatabaseWidget extends React.Component {
     }
     const partitionedDbHelp = this.props.partitionedDbHelpText ? (
       <Accordion className='partitioned-db-help'>
-        <AccordionItem title='Which should I chose?'>
+        <AccordionItem title='Which should I choose?'>
           <p dangerouslySetInnerHTML={{__html: this.props.partitionedDbHelpText}} />
         </AccordionItem>
       </Accordion>
