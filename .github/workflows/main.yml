@@ -44,6 +44,8 @@ jobs:
         npm install -g npm@latest
         npm ci
         npm ls --production --depth=0
+    - name: Set up chromedriver
+      run: ./bin/install-npm-chromedriver.sh
     - name: Start CouchDB
       env:
         COUCHDB_IMAGE: ${{ matrix.COUCHDB_IMAGE }}
