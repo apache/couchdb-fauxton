@@ -37,7 +37,6 @@ export class StringEditModal extends React.Component {
 
   initAceEditor = (dom_node) => {
     this.editor = ace.edit(dom_node);
-    this.editor.$blockScrolling = Infinity; // suppresses an Ace editor error
     this.editor.setShowPrintMargin(false);
     this.editor.setOption('highlightActiveLine', true);
     this.editor.setTheme('ace/theme/idle_fingers');

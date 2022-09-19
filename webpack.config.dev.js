@@ -86,8 +86,6 @@ module.exports = {
       {
         test: /\.less$/,
         use: [
-          // "style-loader",
-          //{ loader: "style-loader", options: { injectType: "linkTag" } },
           {
             loader: MiniCssExtractPlugin.loader,
             options: {
@@ -111,8 +109,6 @@ module.exports = {
       {
         test: /\.css$/,
         use: [
-          // "style-loader",
-          //{ loader: "style-loader", options: { injectType: "linkTag" } },
           {
             loader: MiniCssExtractPlugin.loader,
             options: {

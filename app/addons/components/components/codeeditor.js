@@ -92,17 +92,11 @@ export class CodeEditor extends React.Component {
       }
     );
 
-    // // suppresses an Ace editor error
-    // this.editor.$blockScrolling = Infinity;
-
     if (shouldUpdateCode) {
       this.setValue(props.defaultCode);
     }
 
-    // this.editor.setShowPrintMargin(props.showPrintMargin);
     this.editor.autoScrollEditorIntoView = props.autoScrollEditorIntoView;
-
-    // this.editor.setOption('highlightActiveLine', this.props.highlightActiveLine);
 
     if (this.props.setHeightToLineCount) {
       this.setHeightToLineCount();
@@ -113,16 +107,6 @@ export class CodeEditor extends React.Component {
     }
 
     this.addCommands();
-    // this.editor.getSession().setMode('ace/mode/' + props.mode);
-    // this.editor.setTheme('ace/theme/' + props.theme);
-    // this.editor.setFontSize(props.fontSize);
-    // this.editor.getSession().setTabSize(2);
-    // this.editor.getSession().setUseSoftTabs(true);
-
-    // if (this.props.autoFocus) {
-    //   this.editor.focus();
-    // }
-    // this.editor.setReadOnly(props.disabled);
   };
 
   addCommands = () => {
@@ -132,9 +116,6 @@ export class CodeEditor extends React.Component {
   };
 
   setupEvents = () => {
-    // this.editor.on('blur', _.bind(this.onBlur, this));
-    // this.editor.on('change', _.bind(this.onContentChange, this));
-
     if (this.props.stringEditModalEnabled) {
       this.editor.on('changeSelection', _.bind(this.showHideEditStringGutterIcon, this));
       this.editor.getSession().on('changeBackMarker', _.bind(this.showHideEditStringGutterIcon, this));
@@ -183,10 +164,6 @@ export class CodeEditor extends React.Component {
   componentDidMount() {
     this.setupAce(this.props, true);
     this.setupEvents();
-
-    // if (this.props.autoFocus) {
-    //   this.editor.focus();
-    // }
   }
 
   componentWillUnmount() {
