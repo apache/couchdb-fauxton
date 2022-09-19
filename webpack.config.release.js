@@ -195,16 +195,7 @@ module.exports = {
         generator: {
           filename: 'dashboard.assets/img/[name][ext]'
         },
-      },
-      // {
-      //   // Match imports from ace-build/webpack-resolver.js
-      //   test: /src-noconflict\/.*\.js$/i,
-      //   loader: 'file-loader',
-      //   options: {
-      //     // name: 'dashboard.assets/ace-[contenthash].[ext]'
-      //     outputPath:'dashboard.assets'
-      //   }
-      // }
+      }
     ]
   }
 };
