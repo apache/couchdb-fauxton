@@ -137,7 +137,13 @@ module.exports = {
       },
       {
         test: /\.css$/, use: [
-          'style-loader',
+          //'style-loader',
+          {
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+              publicPath: '../../'
+            },
+          },
           'css-loader'
         ]
       },
@@ -189,7 +195,16 @@ module.exports = {
         generator: {
           filename: 'dashboard.assets/img/[name][ext]'
         },
-      }
+      },
+      // {
+      //   // Match imports from ace-build/webpack-resolver.js
+      //   test: /src-noconflict\/.*\.js$/i,
+      //   loader: 'file-loader',
+      //   options: {
+      //     // name: 'dashboard.assets/ace-[contenthash].[ext]'
+      //     outputPath:'dashboard.assets'
+      //   }
+      // }
     ]
   }
 };

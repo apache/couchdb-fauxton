@@ -11,6 +11,7 @@
 // the License.
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
 const path = require('path');
 const settings = require('./tasks/helper')
@@ -44,6 +45,10 @@ module.exports = {
       generationLabel: 'Fauxton Dev',
       generationDate: new Date().toISOString()
     }, settings.variables)),
+    new MiniCssExtractPlugin({
+      filename: 'dashboard.assets/css/styles.[chunkhash].css',
+      chunkFilename: 'dashboard.assets/css/styles.[chunkhash].css'
+    }),
     new webpack.LoaderOptionsPlugin({
       debug: true
     })
@@ -81,7 +86,14 @@ module.exports = {
       {
         test: /\.less$/,
         use: [
-          "style-loader",
+          // "style-loader",
+          //{ loader: "style-loader", options: { injectType: "linkTag" } },
+          {
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+              publicPath: '../../'
+            },
+          },
           "css-loader",
           {
             loader: "less-loader",
@@ -99,7 +111,14 @@ module.exports = {
       {
         test: /\.css$/,
         use: [
-          "style-loader",
+          // "style-loader",
+          //{ loader: "style-loader", options: { injectType: "linkTag" } },
+          {
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+              publicPath: '../../'
+            },
+          },
           "css-loader"
         ]
       },

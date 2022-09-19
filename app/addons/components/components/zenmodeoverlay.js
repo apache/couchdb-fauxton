@@ -10,12 +10,12 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 import React from "react";
-import ReactDOM from "react-dom";
 import app from "../../../app";
 import {CodeEditor} from './codeeditor';
 import {Tooltip, OverlayTrigger} from 'react-bootstrap';
 
-require('brace/theme/dawn');
+require('ace-builds/src-min-noconflict/theme-dawn');
+import 'ace-builds/css/theme/dawn.css';
 
 const themes = {
   dark: 'idle_fingers',
