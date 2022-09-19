@@ -13,12 +13,8 @@
 import React from 'react';
 
 const highlight = require('ace-builds/src-min-noconflict/ext-static_highlight');
-require('ace-builds/src-min-noconflict/mode-json');
 const JSONMode = require('ace-builds/src-min-noconflict/mode-json').Mode;
 const theme = require('ace-builds/src-noconflict/theme-idle_fingers');
-// const highlight = {};
-// const JSONMode = {};
-// const theme = {};
 
 export default class SplitScreenArea extends React.Component {
 

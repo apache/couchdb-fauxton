@@ -13,46 +13,13 @@ import React from "react";
 import FauxtonAPI from "../../../core/api";
 import AceEditor from "react-ace";
 import ace from 'ace-builds';
-import "ace-builds/src-min-noconflict/ext-searchbox";
 ace.config.set("useStrictCSP", true);
-
+import './ace-webpack-resolvers';
 import {StringEditModal} from './stringeditmodal';
 
-import 'ace-builds/css/theme/idle_fingers.css';
-// import 'ace-builds/css/theme/dawn.css';
 import 'ace-builds/css/ace.css';
-// importing the webpack resolver enables dynamically loading modes, which is required for syntax checking
-// import 'ace-builds/webpack-resolver';
-
-ace.config.setModuleUrl('ace/theme/idle_fingers', require('file-loader?esModule=false&outputPath=dashboard.assets!ace-builds/src-noconflict/theme-idle_fingers.js'));
-ace.config.setModuleUrl('ace/theme/dawn', require('file-loader?esModule=false&outputPath=dashboard.assets!ace-builds/src-noconflict/theme-dawn.js'));
-ace.config.setModuleUrl('ace/mode/json', require('file-loader?esModule=false&outputPath=dashboard.assets!ace-builds/src-noconflict/mode-json.js'));
-ace.config.setModuleUrl('ace/mode/json_worker', require('file-loader?esModule=false&outputPath=dashboard.assets!ace-builds/src-noconflict/worker-json.js'));
-ace.config.setModuleUrl('ace/mode/javascript', require('file-loader?esModule=false&outputPath=dashboard.assets!ace-builds/src-noconflict/mode-javascript.js'));
-ace.config.setModuleUrl('ace/mode/javascript_worker', require('file-loader?esModule=false&outputPath=dashboard.assets!ace-builds/src-noconflict/worker-javascript.js'));
-ace.config.setModuleUrl('ace/ext/static_highlight', require('file-loader?esModule=false&outputPath=dashboard.assets!ace-builds/src-noconflict/ext-static_highlight.js'));
-
-
-// NOTE FOR MONDAY
-// EDITOR LOADS FINE WHEN THE UNSAFE-INLINE CSP IS REMOVED
-// useStrictCSP seems to be working - it doesn't add the <style> tags anymore
-// but the webpack config is adding the <style>, now I remember I still need to change some config so it generates the styles as CSS instead of <style> tags
-
-
-// ace.config.setModuleUrl('ace/mode/json', require('file-loader?esModule=false!ace-builds/src-noconflict/mode-json.js'));
-// ace.config.setModuleUrl('ace/mode/javascript', require('!file-loader?esModule=false!ace-builds/src-noconflict/mode-javascript.js'));
-// ace.config.setModuleUrl('ace/theme/idle_fingers', require('!!file-loader?esModule=false!ace-builds//src-noconflict/theme-idle_fingers.js'));
-
-// ace.config.setModuleUrl('ace/theme/dawn', require('file-loader?esModule=false&outputPath=dashboard.assets!ace-builds//src-noconflict/theme-dawn.js'));
-// ace.config.setModuleUrl('ace/theme/idle_fingers', require('file-loader?esModule=false&outputPath=dashboard.assets!ace-builds//src-noconflict/theme-idle_fingers.js'));
-// ace.config.setModuleUrl('ace/mode/json', require('file-loader?esModule=false&outputPath=dashboard.assets!ace-builds/src-noconflict/mode-json.js'));
-// ace.config.setModuleUrl('ace/mode/javascript', require('file-loader?esModule=false&outputPath=dashboard.assets!ace-builds/src-noconflict/mode-javascript.js'));
-
-
-// require('ace-builds/src-min-noconflict/theme-dawn');
-require('ace-builds/src-noconflict/mode-javascript');
-require('ace-builds/src-noconflict/mode-json');
-require('ace-builds/src-noconflict/theme-idle_fingers');
+import 'ace-builds/css/theme/idle_fingers.css';
+import 'ace-builds/css/theme/dawn.css';
 
 
 
