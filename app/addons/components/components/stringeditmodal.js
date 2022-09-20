@@ -11,15 +11,10 @@
 // the License.
 
 import PropTypes from 'prop-types';
-
 import React from "react";
-import ReactDOM from "react-dom";
 import {Modal} from "react-bootstrap";
-import ace from "brace";
+import ace from "ace-builds";
 import Helpers from "../../documents/helpers";
-require('brace/mode/javascript');
-require('brace/mode/json');
-require('brace/theme/idle_fingers');
 
 // this appears when the cursor is over a string. It shows an icon in the gutter that opens the modal.
 export class StringEditModal extends React.Component {
@@ -42,7 +37,6 @@ export class StringEditModal extends React.Component {
 
   initAceEditor = (dom_node) => {
     this.editor = ace.edit(dom_node);
-    this.editor.$blockScrolling = Infinity; // suppresses an Ace editor error
     this.editor.setShowPrintMargin(false);
     this.editor.setOption('highlightActiveLine', true);
     this.editor.setTheme('ace/theme/idle_fingers');
