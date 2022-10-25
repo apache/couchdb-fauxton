@@ -9,6 +9,9 @@
   "bin": {
     "fauxton": "./bin/fauxton"
   },
+  "engines": {
+    "node": "16"
+  },
   "devDependencies": {
     "@babel/cli": "^7.18.10",
     "@babel/core": "^7.18.13",
