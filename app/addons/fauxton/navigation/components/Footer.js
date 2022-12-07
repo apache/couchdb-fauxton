@@ -23,7 +23,7 @@ const Footer = ({version}) => {
       Fauxton on &nbsp;
       <a href="http://couchdb.apache.org/">Apache CouchDB</a>
       <div>v. {version}</div>
-      <a href={`https://docs.couchdb.org/en/${version}-docs/whatsnew/${version}.html`}>What&apos;s New?</a>
+      <a href={`https://docs.couchdb.org/en/latest/whatsnew/${version.slice(0, -2)}.html`}>What&apos;s New?</a>
     </div>
   );
 
