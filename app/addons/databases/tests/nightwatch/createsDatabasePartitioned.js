@@ -62,39 +62,42 @@ module.exports = {
         var data = result.value,
             createdDatabaseIsPresent = data.indexOf(newDatabaseName);
 
+        console.log('getText result', result.value);
+
         this.verify.ok(createdDatabaseIsPresent > 0,
           'Checking if new database shows up in _all_dbs.');
       })
       .end();
-  },
-
-  'Creates a Database with invalid name' : function (client) {
-    var waitTime = client.globals.maxWaitTime,
-        baseUrl = client.options.launch_url;
-
-    client
-      .loginToGUI()
-      .checkForDatabaseDeleted(invalidDatabaseName, waitTime)
-      .url(baseUrl)
-
-    // ensure the page has fully loaded
-      .waitForElementPresent('.databases.table', waitTime, false)
-      .clickWhenVisible('.add-new-database-btn')
-      .waitForElementVisible('#js-new-database-name', waitTime, false)
-      .setValue('#js-new-database-name', [invalidDatabaseName])
-      .clickWhenVisible('#partitioned-option', waitTime, false)
-      .clickWhenVisible('#js-create-database', waitTime, false)
-      .waitForElementVisible('.Toastify__toast-container .Toastify__toast--error', waitTime, false)
-      .url(baseUrl + '/_all_dbs')
-      .waitForElementVisible('html', waitTime, false)
-      .getText('html', function (result) {
-        var data = result.value,
-            createdDatabaseIsPresent = data.indexOf(invalidDatabaseName);
-
-        this.verify.ok(createdDatabaseIsPresent === -1,
-          'Checking if new database shows up in _all_dbs.');
-      })
-      .end();
   }
+  // },
+
+  // 'Creates a Database with invalid name' : function (client) {
+  //   var waitTime = client.globals.maxWaitTime,
+  //       baseUrl = client.options.launch_url;
+
+  //   client
+  //     .loginToGUI()
+  //     .checkForDatabaseDeleted(invalidDatabaseName, waitTime)
+  //     .url(baseUrl)
+
+  //   // ensure the page has fully loaded
+  //     .waitForElementPresent('.databases.table', waitTime, false)
+  //     .clickWhenVisible('.add-new-database-btn')
+  //     .waitForElementVisible('#js-new-database-name', waitTime, false)
+  //     .setValue('#js-new-database-name', [invalidDatabaseName])
+  //     .clickWhenVisible('#partitioned-option', waitTime, false)
+  //     .clickWhenVisible('#js-create-database', waitTime, false)
+  //     .waitForElementVisible('.Toastify__toast-container .Toastify__toast--error', waitTime, false)
+  //     .url(baseUrl + '/_all_dbs')
+  //     .waitForElementVisible('html', waitTime, false)
+  //     .getText('html', function (result) {
+  //       var data = result.value,
+  //           createdDatabaseIsPresent = data.indexOf(invalidDatabaseName);
+
+  //       this.verify.ok(createdDatabaseIsPresent === -1,
+  //         'Checking if new database shows up in _all_dbs.');
+  //     })
+  //     .end();
+  // }
 };
 
