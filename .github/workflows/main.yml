@@ -21,7 +21,7 @@ jobs:
   run-e2e-tests:
     name: Run e2e tests
     runs-on: ubuntu-latest
-    needs: [run-unit-tests]
+    # needs: [run-unit-tests]
     strategy:
       matrix:
         include:
