@@ -27,8 +27,8 @@ jobs:
         include:
           - COUCHDB_IMAGE: apache/couchdb:3
             NIGHTWATCH_SKIPTAGS: "search,nonpartitioned,couchdb-v2-only"
-          - COUCHDB_IMAGE: apache/couchdb:2.3.1
-            NIGHTWATCH_SKIPTAGS: "search,partitioned"
+          # - COUCHDB_IMAGE: apache/couchdb:2.3.1
+          #   NIGHTWATCH_SKIPTAGS: "search,partitioned"
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-node@v2
@@ -70,6 +70,6 @@ jobs:
       env:
         COUCHDB_IMAGE: ${{ matrix.COUCHDB_IMAGE }}
         NIGHTWATCH_SKIPTAGS: ${{ matrix.NIGHTWATCH_SKIPTAGS }}
-      run: xvfb-run --auto-servernum ./node_modules/.bin/grunt nightwatch_retries
+      run: xvfb-run --auto-servernum ./node_modules/.bin/grunt nightwatch -file=createsDatabasePartitioned
     - name: Shutdown CouchDB
       run: npm run docker:down
