@@ -62,6 +62,7 @@ module.exports = {
         var data = result.value,
             createdDatabaseIsPresent = data.indexOf(newDatabaseName);
 
+        console.log('URL result', baseUrl + '/_all_dbs');
         console.log('getText result', result.value);
 
         this.verify.ok(createdDatabaseIsPresent > 0,
