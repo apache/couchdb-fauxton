@@ -1,23 +1,23 @@
 name: CI
 on: [push, pull_request]
 jobs:
-  run-unit-tests:
-    name: Run unit tests
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-node@v2
-      with:
-        node-version: '16'
-    - name: Install npm packages
-      run: |
-        npm install -g npm@latest
-        npm ci
-        npm ls --production --depth=0
-    - name: Run style check
-      run: npm run stylecheck
-    - name: Run unit tests
-      run: npm run test
+  # run-unit-tests:
+  #   name: Run unit tests
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - uses: actions/checkout@v2
+  #   - uses: actions/setup-node@v2
+  #     with:
+  #       node-version: '16'
+  #   - name: Install npm packages
+  #     run: |
+  #       npm install -g npm@latest
+  #       npm ci
+  #       npm ls --production --depth=0
+  #   - name: Run style check
+  #     run: npm run stylecheck
+  #   - name: Run unit tests
+  #     run: npm run test
   run-e2e-tests:
     name: Run e2e tests
     runs-on: ubuntu-latest
