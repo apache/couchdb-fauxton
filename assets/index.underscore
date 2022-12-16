@@ -20,19 +20,6 @@
   <meta http-equiv="Content-Language" content="en" />
   <link rel="shortcut icon" type="image/png" href="dashboard.assets/img/couchdb-logo.png"/>
   <title><%= htmlWebpackPlugin.options.title %></title>
-
-  <!-- Application styles. -->
-  <style>
-    .noscript-warning {
-      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-      padding: 1px 30px 10px 30px;
-      color: #fff;
-      background: @brandHighlight;
-      margin: 100px;
-      box-shadow: 2px 2px 5px #989898;
-    }
-  </style>
-
 </head>
 
 <body id="home">

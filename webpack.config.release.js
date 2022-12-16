@@ -137,7 +137,12 @@ module.exports = {
       },
       {
         test: /\.css$/, use: [
-          'style-loader',
+          {
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+              publicPath: '../../'
+            },
+          },
           'css-loader'
         ]
       },

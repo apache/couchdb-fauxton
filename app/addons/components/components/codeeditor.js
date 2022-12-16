@@ -11,13 +11,17 @@
 // the License.
 import React from "react";
 import FauxtonAPI from "../../../core/api";
-import ace from "brace";
-import "brace/ext/searchbox";
+import AceEditor from "react-ace";
+import ace from 'ace-builds';
+ace.config.set("useStrictCSP", true);
+import './ace-webpack-resolvers';
 import {StringEditModal} from './stringeditmodal';
 
-require('brace/mode/javascript');
-require('brace/mode/json');
-require('brace/theme/idle_fingers');
+import 'ace-builds/css/ace.css';
+import 'ace-builds/css/theme/idle_fingers.css';
+import 'ace-builds/css/theme/dawn.css';
+
+
 
 export class CodeEditor extends React.Component {
   static defaultProps = {
@@ -88,17 +92,11 @@ export class CodeEditor extends React.Component {
       }
     );
 
-    // suppresses an Ace editor error
-    this.editor.$blockScrolling = Infinity;
-
     if (shouldUpdateCode) {
       this.setValue(props.defaultCode);
     }
 
-    this.editor.setShowPrintMargin(props.showPrintMargin);
     this.editor.autoScrollEditorIntoView = props.autoScrollEditorIntoView;
-
-    this.editor.setOption('highlightActiveLine', this.props.highlightActiveLine);
 
     if (this.props.setHeightToLineCount) {
       this.setHeightToLineCount();
@@ -109,16 +107,6 @@ export class CodeEditor extends React.Component {
     }
 
     this.addCommands();
-    this.editor.getSession().setMode('ace/mode/' + props.mode);
-    this.editor.setTheme('ace/theme/' + props.theme);
-    this.editor.setFontSize(props.fontSize);
-    this.editor.getSession().setTabSize(2);
-    this.editor.getSession().setUseSoftTabs(true);
-
-    if (this.props.autoFocus) {
-      this.editor.focus();
-    }
-    this.editor.setReadOnly(props.disabled);
   };
 
   addCommands = () => {
@@ -128,9 +116,6 @@ export class CodeEditor extends React.Component {
   };
 
   setupEvents = () => {
-    this.editor.on('blur', _.bind(this.onBlur, this));
-    this.editor.on('change', _.bind(this.onContentChange, this));
-
     if (this.props.stringEditModalEnabled) {
       this.editor.on('changeSelection', _.bind(this.showHideEditStringGutterIcon, this));
       this.editor.getSession().on('changeBackMarker', _.bind(this.showHideEditStringGutterIcon, this));
@@ -179,10 +164,6 @@ export class CodeEditor extends React.Component {
   componentDidMount() {
     this.setupAce(this.props, true);
     this.setupEvents();
-
-    if (this.props.autoFocus) {
-      this.editor.focus();
-    }
   }
 
   componentWillUnmount() {
@@ -357,10 +338,35 @@ export class CodeEditor extends React.Component {
     this.editor.getSelection().moveCursorUp();
   };
 
+  onAceLoad = (ace) => {
+    this.ace = ace;
+  };
+
   render() {
     return (
       <div>
-        <div ref={node => this.ace = node} className="js-editor" id={this.props.id}></div>
+        <AceEditor
+          name={this.props.id}
+          className="js-editor"
+          mode={this.props.mode}
+          theme={this.props.theme}
+          onLoad={_.bind(this.onAceLoad, this)}
+          onBlur={_.bind(this.onBlur, this)}
+          onChange={_.bind(this.onContentChange, this)}
+          editorProps={{
+            $blockScrolling: Infinity,
+            useSoftTabs: true
+          }}
+          readOnly={this.props.disabled}
+          showPrintMargin={this.props.showPrintMargin}
+          highlightActiveLine={this.props.highlightActiveLine}
+          width="100%"
+          height="100%"
+          tabSize={2}
+          fontSize={this.props.fontSize}
+          focus={this.props.autoFocus}
+          setOptions={{
+          }}/>
         <button ref={node => this.stringEditIcon = node}
           className="btn string-edit"
           title="Edit string"

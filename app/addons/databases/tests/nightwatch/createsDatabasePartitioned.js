@@ -1,3 +1,4 @@
+
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
 // use this file except in compliance with the License. You may obtain a copy of
 // the License at
@@ -51,10 +52,11 @@ module.exports = {
       .clickWhenVisible('.add-new-database-btn')
       .waitForElementVisible('#js-new-database-name', waitTime, false)
       .setValue('#js-new-database-name', [newDatabaseName])
+      .clickWhenVisible('#partitioned-option', waitTime, false)
       .clickWhenVisible('#js-create-database', waitTime, false)
       .waitForElementNotPresent('.new-database-tray', waitTime, false)
       .checkForDatabaseCreated(newDatabaseName, waitTime)
-      .url(baseUrl + '/#/_all_dbs')
+      .url(baseUrl + '/_all_dbs')
       .waitForElementVisible('html', waitTime, false)
       .getText('html', function (result) {
         var data = result.value,
@@ -80,6 +82,7 @@ module.exports = {
       .clickWhenVisible('.add-new-database-btn')
       .waitForElementVisible('#js-new-database-name', waitTime, false)
       .setValue('#js-new-database-name', [invalidDatabaseName])
+      .clickWhenVisible('#partitioned-option', waitTime, false)
       .clickWhenVisible('#js-create-database', waitTime, false)
       .waitForElementVisible('.Toastify__toast-container .Toastify__toast--error', waitTime, false)
       .url(baseUrl + '/_all_dbs')
@@ -94,3 +97,4 @@ module.exports = {
       .end();
   }
 };
+

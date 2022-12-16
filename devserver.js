@@ -52,7 +52,7 @@ const devSetup = function (cb) {
 };
 
 const defaultHeaderValue = "default-src 'self'; child-src 'self' blob: https://blog.couchdb.org; img-src 'self' data:; font-src 'self'; " +
-                  "script-src 'self' 'unsafe-eval'; style-src 'self' 'unsafe-inline';";
+                  "script-src 'self'; style-src 'self'; object-src 'none';";
 function getCspHeaders () {
   if (!settings.contentSecurityPolicy) {
     return;

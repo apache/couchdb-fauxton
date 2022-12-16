@@ -312,7 +312,7 @@ class AddDatabaseWidget extends React.Component {
     this.state = {
       isPromptVisible: false,
       databaseName: '',
-      partitionedSelected: undefined
+      partitionedSelected: false
     };
 
     this.onTrayToggle = this.onTrayToggle.bind(this);
@@ -374,7 +374,7 @@ class AddDatabaseWidget extends React.Component {
     }
     const partitionedDbHelp = this.props.partitionedDbHelpText ? (
       <Accordion className='partitioned-db-help'>
-        <AccordionItem title='What is a Partitioned Database?'>
+        <AccordionItem title='Which should I choose?'>
           <p dangerouslySetInnerHTML={{__html: this.props.partitionedDbHelpText}} />
         </AccordionItem>
       </Accordion>
@@ -385,13 +385,26 @@ class AddDatabaseWidget extends React.Component {
           Partitioning
         </label>
         <div className='partitioned-db-options'>
-          <input
-            id="partitioned-db"
-            type="checkbox"
-            checked={this.state.partitionedSelected === true}
-            onChange={this.onTogglePartitioned}
-          />
-          <label htmlFor="partitioned-db">Partitioned</label>
+          <form>
+            <label htmlFor="non-partitioned-option">
+              <input
+                id="non-partitioned-option"
+                type="radio"
+                checked={this.state.partitionedSelected === false}
+                onChange={this.onTogglePartitioned}
+              />
+              Non-partitioned - recommended for most workloads
+            </label>
+            <label htmlFor="partitioned-option">
+              <input
+                id="partitioned-option"
+                type="radio"
+                checked={this.state.partitionedSelected === true}
+                onChange={this.onTogglePartitioned}
+              />
+              Partitioned
+            </label>
+          </form>
         </div>
         {partitionedDbHelp}
       </div>
@@ -561,3 +574,4 @@ export default {
   JumpToDatabaseWidget: JumpToDatabaseWidget,
   DatabasePagination: DatabasePagination
 };
+

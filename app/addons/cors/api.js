@@ -29,8 +29,8 @@ export const fetchCORSConfig = (baseURL) => {
   });
 };
 
-export const fetchHttpdConfig = (baseURL) => {
-  const configURL = baseURL + '/httpd';
+export const fetchChttpdConfig = (baseURL) => {
+  const configURL = baseURL + '/chttpd';
   return get(configURL).then((json) => {
     if (json.error) {
       throw new Error(json.reason);
@@ -39,11 +39,11 @@ export const fetchHttpdConfig = (baseURL) => {
   });
 };
 
-export const updateEnableCorsToHttpd = (baseURL, node, enableCors) => {
+export const updateEnableCorsToChttpd = (baseURL, node, enableCors) => {
   if (!node) {
     throw new Error('node not set');
   }
-  const configURL = baseURL + '/httpd/enable_cors';
+  const configURL = baseURL + '/chttpd/enable_cors';
   return put(configURL, enableCors.toString())    .then((json) => {
     if (json.error) {
       throw new Error(json.reason);

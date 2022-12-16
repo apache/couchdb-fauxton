@@ -16,7 +16,7 @@ import * as CorsAPI from "./api";
 
 const fetchAndLoadCORSOptions = (url, node) => (dispatch) => {
   const fetchCors = CorsAPI.fetchCORSConfig(url);
-  const fetchHttp = CorsAPI.fetchHttpdConfig(url);
+  const fetchHttp = CorsAPI.fetchChttpdConfig(url);
 
   FauxtonAPI.Promise.join(fetchCors, fetchHttp, (corsConfig, httpdConfig) => {
     const loadOptions = loadCORSOptions({
@@ -71,7 +71,7 @@ const hideDomainDeleteConfirmation = () => {
 const saveCors = (url, options) => (dispatch) => {
   const promises = [];
 
-  promises.push(CorsAPI.updateEnableCorsToHttpd(url, options.node, options.corsEnabled));
+  promises.push(CorsAPI.updateEnableCorsToChttpd(url, options.node, options.corsEnabled));
   if (options.corsEnabled) {
     promises.push(CorsAPI.updateCorsOrigins(url, options.node, sanitizeOrigins(options.origins)));
     promises.push(CorsAPI.updateCorsCredentials(url, options.node));
