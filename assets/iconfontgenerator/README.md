@@ -1,6 +1,6 @@
 ### How to generate new fonts
 
-1. Add your new font(s) in SVG format to the `assets/icons` folder. Be sure there are no extraneous values, only the svg tag and its contents, otherwise svgtofont won't generate css files
+1. Add your new font(s) in SVG format to the `assets/icons` folder. Be sure there are no extraneous values, only the svg tag and its contents, otherwise svgtofont won't generate CSS/less files
 
 2. Within the iconfontgenerator folder, run the command `node createfonts.js`. That generates the following:
 
