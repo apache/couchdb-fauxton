@@ -1,9 +1,0 @@
-{
-    "src": "./assets/testicons",
-    "dist": "./assets/fonts",
-    "fontName": "fonticon",
-    "css": {
-        "output": "./assets/less",
-        "fileName": "icons"
-    }
-}
