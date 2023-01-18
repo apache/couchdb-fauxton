@@ -7,14 +7,22 @@
   url("{{cssPath}}{{fontname}}.woff") format("woff"),
   url('{{cssPath}}{{fontname}}.ttf') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
   url('{{cssPath}}{{fontname}}.svg#{{fontname}}') format('svg'); /* iOS 4.1- */
+  font-weight: normal;
+  font-style: normal;
 }
 
-[class^="{{prefix}}-"], [class*=" {{prefix}}-"] {
+[class^="{{prefix}}-"]:before, [class*="{{prefix}}-"]:before {
   font-family: '{{fontname}}' !important;
   font-weight: normal;
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-variant: normal;
+  line-height: 1;
+  text-decoration: inherit;
+  text-rendering: optimizeLegibility;
+  text-transform: none;
 }
 
 {{cssString}}
