@@ -11,18 +11,22 @@
   font-style: normal;
 }
 
-[class^="{{prefix}}-"]:before, [class*="{{prefix}}-"]:before {
-  font-family: '{{fontname}}' !important;
+[class^="{{prefix}}-"]:before, [class*=" {{prefix}}-"]:before {
+  display: inline-block;
+  font-family: 'fauxtonicon6' !important;
   font-weight: normal;
   font-style: normal;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  display: inline-block;
   font-variant: normal;
   line-height: 1;
   text-decoration: inherit;
   text-rendering: optimizeLegibility;
   text-transform: none;
+  
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
+{{cssToVars}}
+
 {{cssString}}
+
