@@ -1,4 +1,4 @@
-@fauxtonFont: "fauxtonicon6";
+@fauxtonFont: "{{fontname}}";
 
 @font-face {font-family: "{{fontname}}";
   src: url('{{cssPath}}{{fontname}}.eot'); /* IE9*/
@@ -13,7 +13,7 @@
 
 [class^="{{prefix}}-"]:before, [class*=" {{prefix}}-"]:before {
   display: inline-block;
-  font-family: 'fauxtonicon6' !important;
+  font-family: '{{fontname}}' !important;
   font-weight: normal;
   font-style: normal;
   font-variant: normal;
