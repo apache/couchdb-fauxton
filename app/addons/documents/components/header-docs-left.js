@@ -50,8 +50,8 @@ function getDropdownItems (items) {
 const Item = ({url, icon, onClick, children}) => {
   return (
     <li role="presentation">
-      <a className="faux-header__doc-header-dropdown-item" onClick={onClick} href={url}>
-        <i className={icon}></i> {children}
+      <a className={"faux-header__doc-header-dropdown-item icon " + icon} onClick={onClick} href={url}>
+        {children}
       </a>
     </li>
   );
