@@ -129,7 +129,7 @@
     "docker:logs": "docker logs couchdb",
     "docker:up": "docker-compose -f ./docker/couchdb.yml up -d",
     "docker:down": "docker-compose -f ./docker/couchdb.yml down",
-    "remove-test-dbs": "node ./bin/remove-test-dbs.js",
+    "remove-test-dbs": "node ./bin/remove-test-dbs.js"
   },
   "repository": {
     "type": "git",
