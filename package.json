@@ -130,7 +130,6 @@
     "docker:up": "docker-compose -f ./docker/couchdb.yml up -d",
     "docker:down": "docker-compose -f ./docker/couchdb.yml down",
     "remove-test-dbs": "node ./bin/remove-test-dbs.js",
-    "font": "svgtofont --sources ./assets/testicons --output ./assets/fonts"
   },
   "repository": {
     "type": "git",
