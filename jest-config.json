@@ -13,7 +13,9 @@
     "\\.(css|less)$": "<rootDir>/__mocks__/styleMock.js"
   },
 
-  "testURL": "http://localhost:8000",
-
+  "testEnvironmentOptions": {
+    "url": "http://localhost:8000"
+  },
+  
   "testEnvironment": "jsdom"
 }
