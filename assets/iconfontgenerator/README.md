@@ -16,6 +16,6 @@ cd assets/iconfontgenerator
 node createfonts.js <fauxtonicon[INTEGER]>
 ```
 
-Specifiying `fauxtonicon[INTEGER]` will update the value of `fauxtonFontname` in `assets/iconfontgenerator/createfonts.js` which is the name of the new font files. This is needed because the font files are bundled as-is by Webpack, so in order to burst the browser's cache, you need to specify a different name. Take note of the current value and increment by 1 for consistency, i.e. `fauxtonicon5` --> `fauxtonicon6`
+Specifiying `fauxtonicon[INTEGER]` will update the value of `fauxtonFontname` in `assets/iconfontgenerator/createfonts.js` which is the name of the new font files. This is needed because the font files are bundled as-is by Webpack, so in order to burst the browser's cache, you need to specify a different name. Take note of the current value and increment by 1 for consistency (e.g., `fauxtonicon5` --> `fauxtonicon6`)
 
 The new CSS and font files are generated and copied to the appropriate Fauxton folders.
