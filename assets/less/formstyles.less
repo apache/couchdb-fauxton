@@ -62,6 +62,7 @@ button:focus {
   margin-top: 0;
   .icon {
     margin-right: 0.2em;
+    vertical-align: middle;
   }
   &.btn-small {
     padding: 5px 10px;
@@ -250,11 +251,9 @@ form.view-query-save {
     border: none;
   }
 
-  input[type="checkbox"]:checked + label {
-    .fonticon-ok;
-  }
   input[type="checkbox"]:checked + label:before {
     font-family: @fauxtonFont;
+    content: @fonticon-ok;
     font-size: 12px;
     background-color: inherit;
     border: 2px solid #7c8085;

@@ -73,6 +73,15 @@ We use Less for generating our CSS. The bulk of the shared CSS used throughout t
 [assets/less/](assets/less), but any addon may contain its own `assets/less` subfolder containing whatever unique
 styles are needed.
 
+## Icons
+
+Fauxton uses icon fonts which are packaged as font files in the [assets/fonts](assets/fonts) folder.
+As the name implies, these are fonts that contain icons instead of letters and numbers.
+
+To use an icon, you simply add the corresponding `fonticon-<icon_name>` CSS class to the HTML element. E.g. `<i className="fonticon-attention-circled"></i>`.
+
+The CSS classes are defined in [assets/less/icon.less](assets/less/icon.less), which is a generated file. In order to add, update or remove icons, follow the steps outlined at [assets/iconfontgenerator/README.md](assets/iconfontgenerator/README.md). The source SVG files for each icon are located at [assets/icons](assets/icons).
+
 
 ## app/addons/components / app/addons/fauxton
   
