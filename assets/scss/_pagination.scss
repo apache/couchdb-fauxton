@@ -1,0 +1,54 @@
+//  Licensed under the Apache License, Version 2.0 (the "License"); you may not
+//  use this file except in compliance with the License. You may obtain a copy of
+//  the License at
+//
+//    http://www.apache.org/licenses/LICENSE-2.0
+//
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+//  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+//  License for the specific language governing permissions and limitations under
+//  the License.
+
+footer.pagination-footer {
+  background-color: $cf-pagination-bg;
+  border-top: 1px solid $cf-pagination-border;
+  height: 50px;
+  overflow: hidden;
+
+  font-size: 14px;
+
+  .pagination {
+    box-shadow: none;
+    margin: 0;
+    height: 50px;
+    border-left: 1px solid $cf-pagination-border;
+    li {
+      display: inline-block;
+      a {
+        padding: 13px 15px 13px 15px;
+        border: none;
+        cursor: pointer;
+      }
+    }
+  }
+
+  .page-controls {
+    float: left;
+  }
+
+  .current-databases,
+  .current-docs,
+  .current-replications {
+    float: right;
+    margin: 15px 20px 17px 20px;
+  }
+
+  .documents-pagination {
+    float: right;
+  }
+  #per-page {
+    float: right;
+    top: 2px;
+  }
+}

@@ -57,7 +57,7 @@ export default class MainSidebar extends React.Component {
     const buttonLinks = this.getNewButtonLinks();
 
     return (
-      <ul className="nav nav-list">
+      <ul className="nav flex-column">
         <li className={this.getNavItemClass('all-docs')}>
           <a id="all-docs"
             href={"#/" + databaseUrl}

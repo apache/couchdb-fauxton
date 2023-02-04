@@ -12,6 +12,7 @@
 
 import PropTypes from 'prop-types';
 import React from 'react';
+import { Button, Form } from 'react-bootstrap';
 import FauxtonAPI from '../../../core/api';
 import GeneralComponents from '../../components/react-components';
 
@@ -104,26 +105,36 @@ export default class SearchForm extends React.Component {
   };
 
   render() {
-    const buttonLabel = this.props.hasActiveQuery ? 'Querying...' : 'Query';
+    const buttonLabel = this.props.hasActiveQuery ? 'Querying...' : 'Run Query';
     return (
       <div>
         <form id="search-index-preview-form">
-          <span className="input-append">
-            <input
-              className="span4"
-              ref={el => this.searchInput = el}
-              type="text"
-              placeholder="Enter your search query"
-              onChange={this.onType}
-              value={this.props.searchQuery} />
-            <button className="btn btn-primary" id="search-index-query-button" type="submit" disabled={this.props.hasActiveQuery}
-              onClick={this.querySearch}>{buttonLabel}</button>
-          </span>
-          <a className="help-link" data-bypass="true" href={FauxtonAPI.constants.DOC_URLS.SEARCH_INDEX_QUERIES} target="_blank" rel="noopener noreferrer">
-            <i className="icon-question-sign" />
-          </a>
+          <div className='row gx-3'>
+            <div className='mb-3 mb-lg-0 col-12 col-lg-8 col-xl-4'>
+              <Form.Control type="text"
+                ref={el => this.searchInput = el}
+                placeholder="Enter your search query"
+                onChange={this.onType}
+                value={this.props.searchQuery} />
+            </div>
+            <div className='col-12 col-lg'>
+              <Button type="submit"
+                variant="cf-primary"
+                id="search-index-query-button"
+                disabled={this.props.hasActiveQuery}
+                onClick={this.querySearch}>
+                {buttonLabel}
+              </Button>
+              <a className="help-link"
+                data-bypass="true"
+                href={FauxtonAPI.constants.DOC_URLS.SEARCH_INDEX_QUERIES}
+                target="_blank"
+                rel="noopener noreferrer">
+                <i className="fonticon-help-circled" />
+              </a>
+            </div>
+          </div>
         </form>
-
         {this.getResults()}
       </div>
     );

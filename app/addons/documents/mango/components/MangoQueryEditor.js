@@ -11,8 +11,8 @@
 // the License.
 
 import PropTypes from 'prop-types';
-
 import React, { Component } from "react";
+import { Button } from 'react-bootstrap';
 import ReactSelect from "react-select";
 import "../../../../../assets/js/plugins/prettify";
 import app from "../../../../app";
@@ -100,11 +100,13 @@ export default class MangoQueryEditor extends Component {
               defaultCode={this.props.queryFindCode} />
           </PaddedBorderedBox>
           <div className="padded-box">
-            <div className="control-group">
-              <button type="submit" id="create-index-btn" className="btn btn-primary btn-space">Run Query</button>
-              <button type="button" id="explain-btn" className="btn btn-secondary btn-space"
-                onClick={(ev) => {this.runExplain(ev);} }>Explain</button>
-              <a className="edit-link" style={{} } onClick={(ev) => {this.manageIndexes(ev);}}>manage indexes</a>
+            <div className="actions-panel">
+              <Button type="submit" id="create-index-btn" variant="cf-primary" className="btn-space">Run Query</Button>
+              <Button type="button" id="explain-btn" variant="cf-secondary" className="btn-space"
+                onClick={(ev) => {this.runExplain(ev);} }>Explain</Button>
+              <div className="right-side-actions">
+                <Button variant="cf-secondary" className="edit-link" onClick={(ev) => {this.manageIndexes(ev);}}>Manage Indexes</Button>
+              </div>
             </div>
             <div>
               <ExecutionStats {...this.props} />

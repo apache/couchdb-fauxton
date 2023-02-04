@@ -1,0 +1,64 @@
+// Licensed under the Apache License, Version 2.0 (the "License"); you may not
+// use this file except in compliance with the License. You may obtain a copy of
+// the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+// WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+// License for the specific language governing permissions and limitations under
+// the License.
+
+@import "../../../../../assets/scss/variables";
+
+$loadingLinesHeight: 30px;
+$loadingLinesMargin: 3px;
+$loadingLinesWidth: 10px;
+$loadingLinesTime: 0.8s;
+$loadingLinesEffect: linear;
+$loadingLinesColor: $cf-brand-highlight;
+
+.loading-lines {
+  display: block;
+  width: 84px;
+  margin-left: auto;
+  margin-right: auto;
+  div {
+    background-color: $loadingLinesColor;
+    width: $loadingLinesWidth;
+    height: 1px;
+    float: left;
+    animation: height-change $loadingLinesTime infinite $loadingLinesEffect;
+    -webkit-animation: height-change $loadingLinesTime infinite
+      $loadingLinesEffect;
+  }
+}
+
+#line2 {
+  animation-delay: 0.1s;
+  -webkit-animation-delay: 0.1s;
+  margin-left: $loadingLinesMargin;
+}
+#line3 {
+  animation-delay: 0.2s;
+  -webkit-animation-delay: 0.2s;
+  margin-left: $loadingLinesMargin;
+}
+#line4 {
+  animation-delay: 0.3s;
+  -webkit-animation-delay: 0.3s;
+  margin-left: $loadingLinesMargin;
+}
+
+@keyframes height-change {
+  0% {
+    height: 1px;
+  }
+  50% {
+    height: $loadingLinesHeight;
+  }
+  100% {
+    height: 1px;
+  }
+}

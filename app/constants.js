@@ -47,6 +47,8 @@ export default {
     MANGO_SEARCH:'./docs/intro/api.html#documents',
     CHANGES:'./docs/api/database/changes.html?highlight=changes#post--db-_changes',
     SETUP: './docs/cluster/setup.html#the-cluster-setup-wizard',
-    MEMBERSHIP: './docs/cluster/nodes.html'
+    MEMBERSHIP: './docs/cluster/nodes.html',
+    SEARCH_INDEXES: './docs/ddocs/search.html',
+    SEARCH_INDEX_QUERIES: './docs/ddocs/search.html#queries'
   }
 };

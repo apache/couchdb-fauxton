@@ -43,7 +43,7 @@ const initialState = {
   },
   queryOptionsPanel: {
     isVisible: false,
-    showByKeys: false,
+    showByKeys: true,
     showBetweenKeys: false,
     includeDocs: false,
     betweenKeys: {

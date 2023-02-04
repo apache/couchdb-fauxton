@@ -36,8 +36,7 @@ export class Document extends React.Component {
     docType: Constants.INDEX_RESULTS_DOC_TYPE.VIEW
   };
 
-  onChange = (e) => {
-    e.preventDefault();
+  onChange = () => {
     this.props.docChecked(this.props.doc.id, this.props.doc._rev);
   };
 
@@ -47,7 +46,7 @@ export class Document extends React.Component {
     }
 
     return (
-      <div className="doc-edit-symbol pull-right" title="Edit document">
+      <div className="doc-edit-symbol float-end" title="Edit document">
         {this.props.children}
       </div>
     );
@@ -82,11 +81,13 @@ export class Document extends React.Component {
           checked={this.props.checked}
           data-checked={this.props.checked}
           type="checkbox"
-          onChange={this.onChange}
-          className="js-row-select" />
-        <label onClick={this.onChange}
-          className="label-checkbox-doclist"
-          htmlFor={'checkbox-' + this.props.docIdentifier} />
+          className="form-check-input"
+          onChange={this.onChange} />
+        <label
+          className="visually-hidden"
+          htmlFor={'checkbox-' + this.props.docIdentifier}>
+          Select document {this.props.docIdentifier}
+        </label>
       </div>
     );
   };
@@ -123,11 +124,11 @@ export class Document extends React.Component {
 
   render() {
     return (
-      <div data-id={this.props.docIdentifier} className="doc-row">
-        <div className="custom-inputs">
+      <div data-id={this.props.docIdentifier} className="row gx-0 doc-row">
+        <div className="col-auto">
           {this.getCheckbox()}
         </div>
-        <div className="doc-item">
+        <div className="col doc-item">
           <header onClick={this.onClick}>
             <span className="header-keylabel">
               {this.getDocumentTypeIcon()}
@@ -137,11 +138,10 @@ export class Document extends React.Component {
               {this.props.header ? '"' + this.props.header + '"' : null}
             </span>
             {this.getUrlFragment()}
-            <div className="doc-item-extension-icons pull-right">{this.getExtensionIcons()}</div>
+            <div className="doc-item-extension-icons float-end">{this.getExtensionIcons()}</div>
           </header>
           {this.getDocContent()}
         </div>
-        <div className="clearfix"></div>
       </div>
     );
   }

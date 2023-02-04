@@ -14,7 +14,7 @@ import FauxtonAPI from '../../../../core/api';
 import PropTypes from 'prop-types';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Dropdown, MenuItem } from 'react-bootstrap';
+import { Dropdown } from 'react-bootstrap';
 import Helpers from '../../../../helpers';
 
 
@@ -38,11 +38,11 @@ export default class AttachmentsPanelButton extends React.Component {
     return _.map(this.props.doc.get('_attachments'), (item, filename) => {
       const url = FauxtonAPI.urls('document', 'attachment', db, doc, encodeURIComponent(filename));
       return (
-        <MenuItem key={filename} href={url} target="_blank" data-bypass="true">
+        <Dropdown.Item key={filename} href={url} target="_blank" data-bypass="true">
           <strong>{filename}</strong>
           <span className="attachment-delimiter">-</span>
           <span>{item.content_type}{item.content_type ? ', ' : ''}{Helpers.formatSize(item.length)}</span>
-        </MenuItem>
+        </Dropdown.Item>
       );
     });
   };
@@ -55,8 +55,8 @@ export default class AttachmentsPanelButton extends React.Component {
     return (
       <div className="panel-section view-attachments-section btn-group">
         <Dropdown id="view-attachments-menu" disabled={this.props.disabled} >
-          <Dropdown.Toggle noCaret className="panel-button dropdown-toggle btn" data-bypass="true">
-            <i className="icon icon-paper-clip"></i>
+          <Dropdown.Toggle variant="cf-secondary" className="panel-button dropdown-toggle" data-bypass="true">
+            <i className="fonticon-paperclip"></i>
             <span className="button-text">View Attachments</span>
             <span className="caret"></span>
           </Dropdown.Toggle>

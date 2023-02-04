@@ -28,27 +28,26 @@ module.exports = {
       .waitForElementPresent('#new-design-docs-button', client.globals.maxWaitTime, false)
       .click('#new-design-docs-button a')
       .click('#new-design-docs-button a[href="#/database/' + newDatabaseName + '/new_search"]')
-      .clickWhenVisible('.styled-select select')
+      .clickWhenVisible('select.form-select')
 
       // confirm there's no API URL field on the create index page
       .pause(5000)
       .assert.not.elementPresent('.faux__jsonlink')
 
       // now create the rest of the index
-      .keys(['_design/keyview', '\uE006'])
+      .clickWhenVisible('select[id="faux__edit-view__design-doc"] option[value="_design/keyview"]')
       .clearValue('#search-name')
       .setValue('#search-name', 'api-bar-test')
       .clickWhenVisible('#save-index')
       .waitForElementVisible('.Toastify__toast-container .Toastify__toast--success', client.globals.maxWaitTime, false)
+      .closeNotification()
 
       // confirm the API URL field now shows up (we're on the edit search index page now)
       .assert.elementPresent('.faux__jsonlink')
 
       // now enter a search and confirm it's properly encoded in the api URL bar
       .setValue('#search-index-preview-form input', searchStr)
-      .clickWhenVisible('#search-index-preview-form button')
-
-      .waitForElementNotVisible('.Toastify__toast-container .Toastify__toast--success', client.globals.maxWaitTime, false)
+      .clickWhenVisible('#search-index-query-button')
       .waitForElementNotPresent('.loading-lines', client.globals.maxWaitTime, false)
       .assert.attributeContains('.faux__jsonlink-link', 'href', fullURL)
       .end();

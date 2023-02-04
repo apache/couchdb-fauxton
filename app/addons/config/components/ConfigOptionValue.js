@@ -12,6 +12,7 @@
 
 import PropTypes from 'prop-types';
 import React from 'react';
+import { Button } from 'react-bootstrap';
 
 export default class ConfigOptionValue extends React.Component {
   static propTypes = {
@@ -44,12 +45,14 @@ export default class ConfigOptionValue extends React.Component {
     }
     return (
       <span>
-        <button
-          className="btn btn-primary fonticon-ok-circled btn-small btn-config-save"
+        <Button
+          variant="cf-primary"
+          className="fonticon-ok-circled btn-config-save"
           onClick={this.onSave.bind(this)}
         />
-        <button
-          className="btn fonticon-cancel-circled btn-small btn-config-cancel"
+        <Button
+          variant="cf-secondary"
+          className="fonticon-cancel-circled btn-config-cancel"
           onClick={this.props.onCancelEdit}
         />
       </span>
@@ -61,14 +64,18 @@ export default class ConfigOptionValue extends React.Component {
     if (this.props.editing) {
       return (
         <td>
-          <div className="config-value-form">
-            <input
-              onChange={this.onChange.bind(this)}
-              defaultValue={this.props.value}
-              disabled={this.props.saving}
-              autoFocus type="text" className="config-value-input"
-            />
-            {this.getButtons()}
+          <div className="row g-2">
+            <div className="col">
+              <input
+                onChange={this.onChange.bind(this)}
+                defaultValue={this.props.value}
+                disabled={this.props.saving}
+                autoFocus type="text" className="form-control"
+              />
+            </div>
+            <div className="col-auto">
+              {this.getButtons()}
+            </div>
           </div>
         </td>
       );

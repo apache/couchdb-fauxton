@@ -35,7 +35,7 @@ module.exports = {
       .clearValue('.clone-doc-modal input')
       .setValue('.clone-doc-modal input', [clonedDocName])
 
-      .clickWhenVisible('.clone-doc-modal button.btn.btn-primary')
+      .clickWhenVisible('.clone-doc-modal button.btn.btn-cf-primary')
       .closeNotification()
 
       .waitForElementVisible('.faux-header__breadcrumbs .faux-header__breadcrumbs-element:last-child', waitTime, false)

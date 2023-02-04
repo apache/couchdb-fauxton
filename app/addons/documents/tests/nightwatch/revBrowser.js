@@ -43,7 +43,7 @@ module.exports = {
 
       .clickWhenVisible('[data-id="button-select-theirs"]')
       .clickWhenVisible('.modal-footer input[type="checkbox"]')
-      .clickWhenVisible('.modal-footer button.btn-danger')
+      .clickWhenVisible('.modal-footer button.btn-cf-danger')
       .clickWhenVisible('.fonticon-json')
 
       .clickWhenVisible('[data-id="zebra"] a')
@@ -89,7 +89,7 @@ module.exports = {
 
       .clickWhenVisible('[data-id="button-select-theirs"]')
       .clickWhenVisible('.modal-footer input[type="checkbox"]')
-      .clickWhenVisible('.modal-footer button.btn-danger')
+      .clickWhenVisible('.modal-footer button.btn-cf-danger')
       .clickWhenVisible('.fonticon-json')
       .waitForElementNotVisible('.Toastify__toast-container .Toastify__toast', waitTime, false)
       .clickWhenVisible('[data-id="_design/animals"] a')

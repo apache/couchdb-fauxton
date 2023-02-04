@@ -10,13 +10,16 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 import PropTypes from 'prop-types';
-
 import React from 'react';
-import {Table, Tooltip, OverlayTrigger} from "react-bootstrap";
+import {Form, Table, Tooltip, OverlayTrigger} from "react-bootstrap";
 import moment from 'moment';
 import {ErrorModal} from './modals';
 import {removeCredentialsFromUrl} from '../api';
+import Components from "../../components/react-components";
 import Helpers from '../../../helpers';
+import FauxtonAPI from "../../../core/api";
+
+const { ToolbarButton } = Components;
 
 const getDbNameFromUrl = (urlObj, root) => {
   try {
@@ -76,7 +79,7 @@ class RowStatus extends React.Component {
       <span>
         <a
           data-bypass="true"
-          className="replication__row-btn replication__row-btn--warning icon-exclamation-sign"
+          className="replication__row-btn replication__row-btn--warning fonticon-attention-circled"
           onClick={this.showModal.bind(this)}
           title="View error message">
         </a>
@@ -128,43 +131,33 @@ const RowActions = ({onlyDeleteAction, _id, url, deleteDocs}) => {
   const actions = [];
   if (!onlyDeleteAction) {
     actions.push(
-      <li className="replication__row-list" key={1}>
-        <a
-          href={`#replication/id/${encodeURIComponent(_id)}`}
-          className="replication__row-btn icon-wrench replication__row-btn--no-left-pad"
-          title={'Edit replication'}
-          data-bypass="true"
-        >
-        </a>
-      </li>
+      <ToolbarButton icon="fonticon-wrench"
+        title={`Edit replication`}
+        aria-label={`Edit replication`}
+        key={1}
+        onClick={() => FauxtonAPI.navigate(`#replication/id/${encodeURIComponent(_id)}`)} />
     );
     actions.push(
-      <li className="replication__row-list" key={2}>
-        <a
-          className="replication__row-btn fonticon-document"
-          title={'Edit replication document'}
-          href={url}
-          data-bypass="true"
-        >
-        </a>
-      </li>
+      <ToolbarButton icon="fonticon-document"
+        title={`Edit replication document`}
+        aria-label={`Edit replication document ${_id}`}
+        key={2}
+        onClick={() => FauxtonAPI.navigate(url)} />
     );
   }
 
   actions.push(
-    <li className="replication__row-list" key={3}>
-      <a
-        className={`replication__row-btn icon-trash ${onlyDeleteAction ? 'replication__row-btn--no-left-pad' : ''} `}
-        title={`Delete ${onlyDeleteAction ? 'job' : 'document'} ${_id}`}
-        onClick={() => deleteDocs(_id)}>
-      </a>
-    </li>
+    <ToolbarButton icon="fonticon-trash"
+      title={`Delete ${onlyDeleteAction ? 'job' : 'document'}`}
+      aria-label={`Delete ${onlyDeleteAction ? 'job' : 'document'} ${_id}`}
+      key={3}
+      onClick={() => deleteDocs(_id)} />
   );
 
   return (
-    <ul className="replication__row-actions-list">
+    <div className="replication__actions">
       {actions}
-    </ul>
+    </div>
   );
 };
 
@@ -206,7 +199,11 @@ const Row = ({
 
   return (
     <tr className="replication__table-row">
-      <td className="replication__table-col"><input checked={selected} type="checkbox" onChange={() => selectDoc(_id)} /> </td>
+      <td className="replication__table-col">
+        <Form.Check type="checkbox"
+          checked={selected}
+          onChange={() => selectDoc(_id)} />
+      </td>
       <td className="replication__table-col">{formatUrl(source)}</td>
       <td className="replication__table-col">{formatUrl(target)}</td>
       <td className="replication__table-col">{formattedStartTime}</td>
@@ -246,16 +243,18 @@ Row.propTypes = {
 
 const BulkSelectHeader = ({isSelected, deleteDocs, someDocsSelected, onCheck}) => {
   const trash = someDocsSelected ?
-    <button
-      onClick={() => deleteDocs()}
-      className="bulk-select-trash fonticon fonticon-trash"
-      title="Delete all selected">
-    </button> : null;
+    <ToolbarButton icon="fonticon-trash"
+      title="Delete all selected"
+      aria-label="Delete all selected"
+      onClick={() => deleteDocs()} /> : null;
 
   return (
     <div className="replication__bulk-select-wrapper">
       <div className="replication__bulk-select-header">
-        <input className="replication__bulk-select-input" checked={isSelected} type="checkbox" onChange={onCheck} />
+        <Form.Check type="checkbox"
+          className="replication__bulk-select-input"
+          checked={isSelected}
+          onChange={onCheck} />
       </div>
       {trash}
     </div>

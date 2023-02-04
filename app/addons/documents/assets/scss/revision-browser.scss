@@ -1,0 +1,148 @@
+// Licensed under the Apache License, Version 2.0 (the "License"); you may not
+// use this file except in compliance with the License. You may obtain a copy of
+// the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+// WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+// License for the specific language governing permissions and limitations under
+// the License.
+
+div#dashboard-content div.revision-wrapper {
+  padding: 0 0 15px 0;
+  margin-top: $cf-topheader-height;
+
+  .rev-subtree-selector {
+    font-family: monospace;
+    margin-bottom: 20px;
+  }
+  .left-area {
+    text-align: center;
+  }
+
+  .revision-browser-no-conflict {
+    text-align: center;
+    color: $cf-text02;
+  }
+
+  .revision-browser-controls {
+    padding: 1rem;
+    background-color: $cf-background01;
+  }
+
+  .revision-browser-controls-label-col {
+    min-width: 185px;
+  }
+
+  .revision-browser-controls .Select .Select-control {
+    border-radius: inherit;
+    border-color: $cf-border-color01;
+  }
+
+  .revision-browser-controls
+    .Select
+    .is-focused:not(.is-open)
+    > .Select-control {
+    box-shadow: transparent;
+    border-color: $cf-border-color01;
+  }
+
+  .revision-browser-controls .Select .Select-menu-outer {
+    border-radius: inherit;
+  }
+
+  .revision-view-controls {
+    background-color: $cf-background01;
+    padding: 1rem;
+    border-top: 1px solid $cf-border-color01;
+  }
+
+  .revision-split-area {
+    background-color: $cf-code-bg;
+    color: $cf-white;
+    margin: 0rem 1rem 1rem 1rem;
+    padding: 1rem;
+    box-shadow: $cf-box-shadow;
+    @include display-flex();
+
+    .ours-area {
+      width: 50%;
+      padding-right: 1.5rem;
+    }
+
+    .theirs-area {
+      width: 50%;
+    }
+
+    .doc-title {
+      margin-bottom: 1.5rem;
+      border-bottom: 1px solid $cf-border-color01;  
+    }
+
+    pre {
+      border: none;
+      background-color: transparent;
+    }
+  }
+
+  .conflicting-revs-dropdown {
+    @include display-flex();
+    align-items: center;
+    select {
+      margin-left: 0.5rem;
+      margin-right: 0.5rem;
+    }
+  }
+
+  .revision-diff-area {
+    background-color: $cf-code-bg;
+    color: $cf-code-token-variable-color;
+    margin: 0rem 1rem 1rem 1rem;
+    padding: 1rem;
+    box-shadow: $cf-box-shadow;
+  }
+
+  .revision-diff-area .jsondiffpatch-unchanged,
+  .revision-diff-area .jsondiffpatch-unchanged pre {
+    color: $cf-code-token-variable-color;
+    background-color: transparent;
+    border: none;
+  }
+
+  .revision-diff-area .jsondiffpatch-added,
+  .revision-diff-area .jsondiffpatch-deleted {
+    color: $cf-black;
+  }
+
+  .revision-diff-area .jsondiffpatch-modified .jsondiffpatch-left-value pre,
+  .jsondiffpatch-textdiff-deleted,
+  .jsondiffpatch-deleted .jsondiffpatch-property-name,
+  .jsondiffpatch-deleted pre {
+    text-decoration: none;
+  }
+
+  .revision-diff-area .jsondiffpatch-modified .jsondiffpatch-value {
+    color: $cf-black;
+    
+  }
+
+  .revision-diff-area .jsondiffpatch-delta {
+    font-size: 13px;
+    padding: 0;
+    pre {
+      font-size: 13px;
+    }
+  }
+
+  .two-sides-toggle-button {
+    z-index: 0;
+  }
+}
+
+.delete-conflicts-modal {
+  .do-not-show-again label {
+    font-size: 13px;
+  }
+}

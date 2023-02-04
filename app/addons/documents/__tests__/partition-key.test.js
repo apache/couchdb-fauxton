@@ -11,8 +11,7 @@
 // the License.
 
 import React from 'react';
-import ReactDOM from 'react-dom';
-import { shallow } from 'enzyme';
+import { shallow, mount } from 'enzyme';
 import PartitionKeySelector from '../partition-key/PartitionKeySelector';
 import sinon from 'sinon';
 
@@ -91,7 +90,7 @@ describe('PartitionKeySelector', () => {
 
   it('calls onPartitionKeySelected when a new value is set by pressing Enter', () => {
     const spyOnKeySelected = sinon.spy();
-    const wrapper = shallow(<PartitionKeySelector
+    const wrapper = mount(<PartitionKeySelector
       {...defaultProps}
       partitionKey=''
       globalMode={true}
@@ -109,7 +108,7 @@ describe('PartitionKeySelector', () => {
 
   it('calls onPartitionKeySelected when a new value is set and the component loses focus', () => {
     const spyOnKeySelected = sinon.spy();
-    const wrapper = shallow(<PartitionKeySelector
+    const wrapper = mount(<PartitionKeySelector
       {...defaultProps}
       partitionKey=''
       globalMode={true}

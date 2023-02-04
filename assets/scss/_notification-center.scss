@@ -1,0 +1,215 @@
+//  Licensed under the Apache License, Version 2.0 (the "License"); you may not
+//  use this file except in compliance with the License. You may obtain a copy of
+//  the License at
+//
+//    http://www.apache.org/licenses/LICENSE-2.0
+//
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+//  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+//  License for the specific language governing permissions and limitations under
+//  the License.
+
+body #dashboard #notification-center-btn {
+  border: 0;
+  background-color: $cf-topheader-bg;
+  border-left: 1px solid $cf-border-color01;
+  font-size: 24px;
+  color: $cf-topheader-color;
+  max-height: $cf-topheader-height;
+  padding: 0;
+  cursor: pointer;
+  @include flex(0 0 auto);
+
+  & > div {
+    padding: 18px 16px 10px 16px;
+  }
+  &:hover {
+    background-color: $cf-topheader-bg-hover;
+    color: $cf-topheader-color-hover;
+  }
+}
+
+#notification-center {
+  .notification-center-panel {
+    z-index: 112;
+    position: fixed;
+    box-shadow: 0 6px 5px 4px rgba(0, 0, 0, 0.1);
+    top: 0;
+    right: 0;
+    width: 300px;
+    height: 100%;
+    background-color: $cf-background02;
+    color: $cf-text02;
+
+    header {
+      @include flex(0 0 auto);
+      padding: 16px;
+
+      h1 {
+        font-size: $font-size-base;
+        line-height: $line-height-base;
+        margin: 0;
+        color: $cf-text02;
+        font-weight: normal;
+      }
+      .fonticon-bell {
+        @include flex(0 0 30px);
+      }
+      button {
+        @include flex(0 0 46px);
+        background-color: transparent;
+        border: 0;
+        margin: -18px -16px -14px; /* enlarges the hit area */
+        font-size: 21px;
+        color: $cf-text02;
+        &:hover {
+          color: $cf-brand-hightlight-hover;
+        }
+      }
+    }
+
+    .notification-filter {
+      @include flex(0 0 29px);
+
+      list-style: none;
+      margin: 0;
+      font-size: 13px;
+
+      border-top: 1px solid $cf-border-color02;
+      border-bottom: 1px solid $cf-border-color02;
+
+      li {
+        text-align: center;
+        border-right: 1px solid $cf-border-color02;
+        padding: 4px 0 3px;
+        cursor: pointer;
+
+        &.selected {
+          background-color: $cf-background01;
+          color: $cf-text01;
+        }
+        &:hover {
+          background-color: $cf-brand-hightlight-hover;
+          .fonticon {
+            color: $cf-white;
+          }
+        }
+        &:last-child {
+          border-right: none;
+        }
+      }
+      .fonticon {
+        font-size: 16px;
+      }
+      .fonticon-ok-circled {
+        font-size: 14px;
+        line-height: 24px;
+      }
+    }
+
+    .notification-list {
+      margin: 15px 0 0;
+      list-style-type: none;
+      padding: 0;
+
+      li {
+        margin: 0 16px;
+        line-height: 16px;
+        font-size: 12px;
+        overflow: hidden;
+        border-bottom: 1px solid $cf-border-color02;
+
+        &.no-notifications {
+          color: $cf-text02;
+          margin-top: 25px;
+          border-bottom: 0;
+        }
+        & > div {
+          padding: 10px 0 15px;
+        }
+        span {
+          @include flex(0 0 30px);
+        }
+        button {
+          @include flex(0 0 22px);
+          color: $cf-link-color;
+          background: transparent;
+          border: 0;
+          height: 20px;
+          margin-top: -4px;
+          margin-left: 6px;
+          font-size: 100%;
+          &:hover {
+            color: $cf-link-color-hover;
+          }
+        }
+        p {
+          margin-bottom: 0;
+          overflow-wrap: break-word;
+        }
+        div.flex-body {
+          overflow: hidden;
+        }
+      }
+      .fonticon {
+        font-size: 15px;
+      }
+      .fonticon-ok-circled {
+        font-size: 13px;
+      }
+      a {
+        color: $cf-white;
+        text-decoration: underline;
+      }
+      .notification-actions {
+        font-size: 11px;
+        margin-top: 2px;
+        span.divider {
+          color: $cf-border-color02;
+          padding: 0 5px;
+        }
+      }
+      .time-elapsed {
+        color: $cf-text02-muted;
+      }
+      .copy {
+        color: $cf-link-color;
+        text-decoration: none;
+      }
+    }
+
+    footer {
+      border-top: 1px solid $cf-border-color02;
+      @include flex(0 0 auto);
+      text-align: center;
+      padding: 4px;
+    }
+  }
+
+  .fonticon-ok-circled {
+    color: $cf-alert-success-color;
+  }
+  .fonticon-attention-circled {
+    color: $cf-alert-error-color;
+  }
+  .fonticon-info-circled {
+    color: $cf-alert-info-color;
+  }
+
+  .notification-page-mask {
+    z-index: -1;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    opacity: 0;
+
+    &.visible {
+      z-index: 110;
+      opacity: $modal-backdrop-opacity;
+      background-color: $cf-black;
+    }
+  }
+}

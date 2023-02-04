@@ -17,7 +17,7 @@ import FauxtonAPI from "../../core/api";
 import Databases from "./routes";
 import Actions from "./actions";
 import reducers from './reducers';
-import "./assets/less/databases.less";
+import "./assets/scss/databases.scss";
 
 Databases.initialize = function () {
   FauxtonAPI.addHeaderLink({

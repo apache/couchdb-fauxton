@@ -13,6 +13,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import Components from '../../components/react-components';
+import AddOptionButtonContainer from './AddOptionButtonContainer';
 import ConfigTable from './ConfigTable';
 
 export default class ConfigTableScreen extends React.Component {
@@ -57,13 +58,16 @@ export default class ConfigTableScreen extends React.Component {
       );
     }
     return (
-      <ConfigTable
-        saving={this.props.saving}
-        onDeleteOption={this.deleteOption}
-        onSaveOption={this.saveOption}
-        onEditOption={this.editOption}
-        onCancelEdit={this.cancelEdit}
-        options={this.props.options}/>
+      <>
+        <AddOptionButtonContainer node={this.props.node} />
+        <ConfigTable
+          saving={this.props.saving}
+          onDeleteOption={this.deleteOption}
+          onSaveOption={this.saveOption}
+          onEditOption={this.editOption}
+          onCancelEdit={this.cancelEdit}
+          options={this.props.options}/>
+      </>
     );
   }
 }

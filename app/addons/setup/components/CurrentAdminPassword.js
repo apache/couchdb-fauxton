@@ -11,8 +11,9 @@
 // the License.
 
 
-import React from 'react';
 import PropTypes from 'prop-types';
+import React from 'react';
+import { Form } from 'react-bootstrap';
 
 
 export default class SetupCurrentAdminPassword extends React.Component {
@@ -24,22 +25,22 @@ export default class SetupCurrentAdminPassword extends React.Component {
     }
 
     return (
-      <div className="setup-creds">
-        <div>
-          <p>{text}</p>
+      <div className="row">
+        <div className="col-12">
+          <label>{text}</label>
         </div>
-        <input
-          className="setup-username"
-          onChange={this.props.onAlterUsername}
-          placeholder="Username"
-          value={this.props.username}
-          type="text"/>
-        <input
-          className="setup-password"
-          onChange={this.props.onAlterPassword}
-          placeholder="Password"
-          value={this.props.password}
-          type="password"/>
+        <div className="col-12 col-md-5 col-xl-4 mb-3">
+          <Form.Control type="text"
+            onChange={this.props.onAlterUsername}
+            placeholder="Username"
+            value={this.props.username} />
+        </div>
+        <div className="col-12 col-md-5 col-xl-4 mb-3">
+          <Form.Control type="password"
+            onChange={this.props.onAlterPassword}
+            placeholder="Password"
+            value={this.props.password} />
+        </div>
       </div>
     );
   }

@@ -20,6 +20,7 @@ import ChangesCodeTransition from './ChangesCodeTransition';
 import ChangeID from './ChangeID';
 
 const {Copy} = ReactComponents;
+import {Button} from 'react-bootstrap';
 
 export default class ChangeRow extends React.Component {
   constructor (props) {
@@ -65,10 +66,10 @@ export default class ChangeRow extends React.Component {
     return (
       <div className={wrapperClass}>
         <div className="change-box" data-id={change.id}>
-          <div className="row-fluid">
-            <div className="span2">seq</div>
-            <div className="span8 change-sequence">{change.seq}</div>
-            <div className="span2 text-right">
+          <div className="row">
+            <div className="col-2 fw-bold">seq</div>
+            <div className="col-8 change-sequence">{change.seq}</div>
+            <div className="col-2 align-middle text-end">
               <Copy
                 uniqueKey={uuidv4()}
                 text={change.seq.toString()}
@@ -76,12 +77,12 @@ export default class ChangeRow extends React.Component {
             </div>
           </div>
 
-          <div className="row-fluid">
-            <div className="span2">id</div>
-            <div className="span8">
+          <div className="row">
+            <div className="col-2 fw-bold">id</div>
+            <div className="col-8">
               <ChangeID id={change.id} deleted={change.deleted} databaseName={databaseName} />
             </div>
-            <div className="span2 text-right">
+            <div className="col-2 text-end">
               <Copy
                 uniqueKey={uuidv4()}
                 text={change.id}
@@ -89,17 +90,15 @@ export default class ChangeRow extends React.Component {
             </div>
           </div>
 
-          <div className="row-fluid">
-            <div className="span2">deleted</div>
-            <div className="span10">{change.deleted ? 'True' : 'False'}</div>
+          <div className="row">
+            <div className="col-2 fw-bold">deleted</div>
+            <div className="col-10">{change.deleted ? 'True' : 'False'}</div>
           </div>
 
-          <div className="row-fluid">
-            <div className="span2">changes</div>
-            <div className="span10">
-              <button type="button" className='btn btn-small btn-secondary' onClick={this.toggleJSON.bind(this)}>
-                {codeVisible ? 'Close JSON' : 'View JSON'}
-              </button>
+          <div className="row">
+            <div className="col-2 fw-bold">changes</div>
+            <div className="col-10">
+              <Button variant="cf-secondary" onClick={this.toggleJSON.bind(this)}>{codeVisible ? 'Close JSON' : 'View JSON'}</Button>
             </div>
           </div>
 

@@ -9,10 +9,10 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
-import PropTypes from 'prop-types';
 
+import PropTypes from 'prop-types';
 import React from 'react';
-import {Modal} from 'react-bootstrap';
+import { Button, Modal } from 'react-bootstrap';
 import Components from '../../components/react-components';
 
 const {ConfirmButton} = Components;
@@ -40,19 +40,26 @@ export const DeleteModal = ({
     btnText = `Delete ${isReplicationDB ? 'Documents' : 'Replication Jobs'}`;
   }
 
+  const onCloseClick = ev => {
+    if (ev) {
+      ev.preventDefault();
+    }
+    onClose();
+  };
+
   return (
-    <Modal dialogClassName="replication_delete-doc-modal" show={visible} onHide={() => onClose()}>
+    <Modal dialogClassName="replication_delete-doc-modal" show={visible} onHide={onCloseClick}>
       <Modal.Header closeButton={true}>
-        <Modal.Title>Verify Deletion</Modal.Title>
+        <Modal.Title>Confirm Deletion</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <p dangerouslySetInnerHTML={{__html: header}}></p>
         <p>{infoSection}</p>
       </Modal.Body>
       <Modal.Footer>
-        <a className="cancel-link" onClick={onClose}>Cancel</a>
+        <Button href="#" data-bypass="true" variant="cf-cancel" className="cancel-link" onClick={onCloseClick}>Cancel</Button>
         <ConfirmButton
-          customIcon={"icon-trash"}
+          customIcon={"fonticon-trash"}
           text={btnText}
           onClick={onClick}
         />
@@ -99,6 +106,7 @@ export const ErrorModal = ({visible, onClose, errorMsg, status}) => {
         {warning}
       </Modal.Body>
       <Modal.Footer>
+        <Button variant="cf-primary" onClick={() => onClose()} >Close</Button>
       </Modal.Footer>
     </Modal>
   );
@@ -135,12 +143,12 @@ export const ConflictModal = ({visible, docId, onClose, onClick}) => {
         </p>
       </Modal.Body>
       <Modal.Footer>
-        <button onClick={onClose} className="btn replication__error-cancel">
+        <Button onClick={onClose} variant="cf-primary" className="replication__error-cancel">
           Change Document ID
-        </button>
-        <button onClick={onClick} className="btn replication__error-continue">
-          <i className="icon icon-eraser" /> Overwrite Existing Document
-        </button>
+        </Button>
+        <Button onClick={onClick} variant="cf-primary" className="replication__error-continue">
+          Overwrite Existing Document
+        </Button>
       </Modal.Footer>
     </Modal>
   );

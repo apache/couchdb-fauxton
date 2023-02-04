@@ -12,6 +12,7 @@
 
 import PropTypes from 'prop-types';
 import React from 'react';
+import { Button, Form, InputGroup } from 'react-bootstrap';
 import ReactDOM from 'react-dom';
 
 export default class AddFilterForm extends React.Component {
@@ -55,29 +56,22 @@ export default class AddFilterForm extends React.Component {
     this.addItem.focus();
   }
 
-  inputClassNames () {
-    let className = 'js-changes-filter-field';
-    if (this.state.error) {
-      className += ' errorHighlight';
-    }
-    return className;
-  }
-
   render () {
     return (
-      <form className="form-inline js-filter-form" onSubmit={this.submitForm}>
-        <fieldset>
-          <i className="fonticon-filter" />
-          <input
-            type="text"
+      <form onSubmit={this.submitForm}>
+        <InputGroup>
+          <Form.Control
+            id="changes-filter-field"
             ref={node => this.addItem = node}
-            className={this.inputClassNames()}
             placeholder="Sequence or ID"
             onChange={(e) => this.setState({ filter: e.target.value })}
-            value={this.state.filter} />
-          <button type="submit" className="btn btn-secondary">Filter</button>
-          <div className="help-block"></div>
-        </fieldset>
+            value={this.state.filter}
+            aria-label="sequence or ID value"
+            type="text" />
+
+          <Button type="submit" variant="cf-secondary" aria-label="Filter results"><i className="fonticon-filter" /> Filter</Button>
+        </InputGroup>
+        <div className="help-block"></div>
       </form>
     );
   }

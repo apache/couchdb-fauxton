@@ -40,12 +40,12 @@ module.exports = {
       .waitForElementPresent('.change-box[data-id="doc_3"]', waitTime, false)
 
       // add a filter
-      .waitForElementVisible('.js-changes-filter-field', waitTime, false)
-      .setValue('.js-changes-filter-field', "doc_1")
-      .clickWhenVisible('.js-filter-form button[type="submit"]')
+      .waitForElementVisible('input#changes-filter-field', waitTime, false)
+      .setValue('input#changes-filter-field', "doc_1")
+      .clickWhenVisible('.changes-header .input-group button[type="submit"]')
 
       // confirm only the single result is now listed in the page
-      .waitForElementVisible('span.label-info', waitTime, false)
+      .waitForElementVisible('li.badge', waitTime, false)
       .waitForElementPresent('.change-box[data-id="doc_1"]', waitTime, false)
       .waitForElementNotPresent('.change-box[data-id="doc_2"]', waitTime, false)
       .waitForElementNotPresent('.change-box[data-id="doc_3"]', waitTime, false)

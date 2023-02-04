@@ -117,7 +117,7 @@ describe('NotificationCenterPanel', () => {
       clearAllNotifications={stub}
       filter={'all'} />);
 
-    panelEl.find('footer input').simulate('click');
+    panelEl.find('footer button').simulate('click');
     sinon.assert.calledOnce(stub);
   });
 });

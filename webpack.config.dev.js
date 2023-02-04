@@ -14,18 +14,23 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
 const path = require('path');
-const settings = require('./tasks/helper')
-  .init()
-  .readSettingsFile()
-  .template
-  .development;
+const settings = require('./tasks/helper').init().readSettingsFile()
+  .template.development;
 
 module.exports = {
-
   mode: 'development',
 
   entry: {
-    bundle: ['core-js/features/array', 'core-js/features/string/ends-with', 'core-js/features/string/starts-with', 'core-js/features/object', 'core-js/features/symbol', 'core-js/features/promise', 'regenerator-runtime/runtime', './app/main.js'] //Our starting point for our development.
+    bundle: [
+      'core-js/features/array',
+      'core-js/features/string/ends-with',
+      'core-js/features/string/starts-with',
+      'core-js/features/object',
+      'core-js/features/symbol',
+      'core-js/features/promise',
+      'regenerator-runtime/runtime',
+      './app/main.js',
+    ], //Our starting point for our development.
   },
 
   output: {
@@ -84,27 +89,27 @@ module.exports = {
         }]
       },
       {
-        test: /\.less$/,
+        // We load Sass files through the extract text plugin.
+        test: /\.scss$/,
         use: [
           {
             loader: MiniCssExtractPlugin.loader,
             options: {
-              publicPath: '../../'
+              publicPath: "../../",
             },
           },
           "css-loader",
           {
-            loader: "less-loader",
+            loader: "sass-loader",
             options: {
-              lessOptions: {
-                modifyVars: {
-                  largeLogoPath: "'" + settings.variables.largeLogoPath + "'",
-                  smallLogoPath: "'" + settings.variables.smallLogoPath + "'"
-                }
-              }
-            }
-          }
-        ]
+              sassOptions: {
+                includePaths: ["node_modules"],
+              },
+              additionalData: `$largeLogoPath: "${settings.variables.largeLogoPath}"; $smallLogoPath: "${settings.variables.smallLogoPath}";`,
+              sourceMap: false,
+            },
+          },
+        ],
       },
       {
         test: /\.css$/,

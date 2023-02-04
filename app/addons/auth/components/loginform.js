@@ -13,8 +13,8 @@
 import PropTypes from 'prop-types';
 
 import React from "react";
-import ReactDOM from "react-dom";
 import { login } from "./../actions";
+import { Button, Form } from 'react-bootstrap';
 
 class LoginForm extends React.Component {
   constructor() {
@@ -63,40 +63,40 @@ class LoginForm extends React.Component {
   render() {
     return (
       <div className="couch-login-wrapper">
-        <div className="row-fluid">
-          <div className="span12">
-            <form id="login" onSubmit={this.submit.bind(this)}>
-              <p className="help-block">
-                Enter your username and password.
-              </p>
-              <input
+        <form id="login" onSubmit={this.submit.bind(this)}>
+          <div className="row">
+            <div className="col12 col-md-5 col-xl-4 mb-3">
+              <label>
+                Enter your username and password
+              </label>
+              <Form.Control type="text"
                 id="username"
-                type="text"
                 name="username"
                 ref={node => this.usernameField = node}
                 placeholder="Username"
-                size="24"
                 onChange={this.onUsernameChange.bind(this)}
-                value={this.state.username}
-              />
-              <br />
-              <input
+                value={this.state.username} />
+            </div>
+          </div>
+          <div className="row">
+            <div className="col12 col-md-5 col-xl-4 mb-3">
+              <Form.Control type="password"
                 id="password"
-                type="password"
                 name="password"
                 ref={node => this.passwordField = node}
                 placeholder="Password"
-                size="24"
                 onChange={this.onPasswordChange.bind(this)}
-                value={this.state.password}
-              />
-              <br />
-              <button id="submit" className="btn btn-success" type="submit">
-                Log In
-              </button>
-            </form>
+                value={this.state.password} />
+            </div>
           </div>
-        </div>
+          <div className="row">
+            <div className="col12 col-md-5 col-xl-4 mb-3">
+              <Button id="login-btn" variant="cf-primary" type="submit">
+                Log In
+              </Button>
+            </div>
+          </div>
+        </form>
       </div>
     );
   }

@@ -19,7 +19,7 @@ describe('Badges', () => {
       <ReactComponents.BadgeList elements={['foo', 'bar']} removeBadge={() => {}} />
     );
 
-    expect(el.find('.component-badge').length).toBe(2);
+    expect(el.find('.badge').length).toBe(2);
   });
 
   it('supports custom label formatters', () => {
@@ -27,8 +27,8 @@ describe('Badges', () => {
       <ReactComponents.BadgeList elements={['foo', 'bar']} removeBadge={() => {}} getLabel={(el) => { return el + 'foo'; }} />
     );
 
-    expect(el.find('.component-badge').first().text()).toBe('foofoo×');
-    expect(el.find('.component-badge').last().text()).toBe('barfoo×');
+    expect(el.find('.badge').first().text()).toBe('foofoo×');
+    expect(el.find('.badge').last().text()).toBe('barfoo×');
   });
 
 });

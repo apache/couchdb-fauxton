@@ -11,7 +11,7 @@
 // the License.
 
 import FauxtonAPI from "../../core/api";
-import "./assets/less/cors.less";
+import "./assets/scss/cors.scss";
 import reducers from "./reducers";
 
 const CORS = FauxtonAPI.addon();
@@ -19,7 +19,7 @@ const CORS = FauxtonAPI.addon();
 CORS.initialize = function () {};
 
 FauxtonAPI.addReducers({
-  cors: reducers
+  cors: reducers,
 });
 
 export default CORS;

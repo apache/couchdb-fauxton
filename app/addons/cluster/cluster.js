@@ -19,7 +19,7 @@ export class DisabledConfigController extends React.Component {
       <div className="config-warning-cluster-wrapper">
         <div className="config-warning-cluster-container">
           <div>
-            <div className="config-warning-icon-container pull-left">
+            <div className="config-warning-icon-container float-start">
               <i className="fonticon-attention-circled"></i>
             </div>
             It seems that you are running a cluster with {this.props.nodes.length} nodes. For CouchDB 2.0

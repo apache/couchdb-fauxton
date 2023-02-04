@@ -10,21 +10,22 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 import PropTypes from 'prop-types';
-
 import React from 'react';
+import { Button, Form, InputGroup } from 'react-bootstrap';
 
 export const ReplicationFilter = ({value, onChange}) => {
   return (
-    <div className="replication__filter">
-      <i className="replication__filter-icon fonticon-filter" />
-      <input
+    <InputGroup id="replication-filter-group">
+      <InputGroup.Text><i className="fonticon-filter" /></InputGroup.Text>
+      <Form.Control
+        id="replication-filter-input"
         type="text"
         placeholder="Filter replications"
-        className="replication__filter-input"
         value={value}
         onChange={(e) => {onChange(e.target.value);}}
+        aria-label="Filter replication results"
       />
-    </div>
+    </InputGroup>
   );
 };
 
@@ -35,13 +36,16 @@ ReplicationFilter.propTypes = {
 
 export const ReplicationHeader = ({filter, onFilterChange}) => {
   return (
-    <div className="replication__activity_header">
-      <div></div>
-      <ReplicationFilter value={filter} onChange={onFilterChange} />
-      <a href="#/replication/_create" className="btn save replication__activity_header-btn btn-primary">
-        <i className="icon fonticon-plus-circled"></i>
-        New Replication
-      </a>
+    <div className="row">
+      <div className="col-12 col-md-6">
+        <ReplicationFilter value={filter} onChange={onFilterChange} />
+      </div>
+      <div className="col-12 col-md text-end">
+        <Button id="new-replication-btn" className="mt-2 mt-md-0" href="#/replication/_create" variant="cf-primary">
+          <i className="fonticon-plus-circled"></i>
+          New Replication
+        </Button>
+      </div>
     </div>
   );
 };

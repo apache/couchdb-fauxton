@@ -13,19 +13,14 @@
 import PropTypes from 'prop-types';
 
 import React from 'react';
+import CloseButton from 'react-bootstrap/CloseButton';
 
 const PermissionsItem = ({removeItem, section, type, value}) => {
 
   return (
-    <li className="permissions__entry">
+    <li>
       <span>{value}</span>
-      <button
-        onClick={() => removeItem(section, type, value)}
-        type="button"
-        className="pull-right close"
-      >
-        ×
-      </button>
+      <CloseButton className="float-end" aria-label="Remove item" onClick={() => removeItem(section, type, value)} />
     </li>
   );
 };

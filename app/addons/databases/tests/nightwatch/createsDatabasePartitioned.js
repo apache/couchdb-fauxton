@@ -58,12 +58,13 @@ module.exports = {
       .checkForDatabaseCreated(newDatabaseName, waitTime)
       .url(baseUrl + '/_all_dbs')
       .waitForElementVisible('html', waitTime, false)
+
       .getText('html', function (result) {
         var data = result.value,
             createdDatabaseIsPresent = data.indexOf(newDatabaseName);
 
         this.verify.ok(createdDatabaseIsPresent > 0,
-          'Checking if new database shows up in _all_dbs.');
+          'Checking if new database shows up in _all_dbs (partitioned).');
       })
       .end();
   },
@@ -92,7 +93,7 @@ module.exports = {
             createdDatabaseIsPresent = data.indexOf(invalidDatabaseName);
 
         this.verify.ok(createdDatabaseIsPresent === -1,
-          'Checking if new database shows up in _all_dbs.');
+          'Checking if new database does not show up in _all_dbs (partitioned).');
       })
       .end();
   }

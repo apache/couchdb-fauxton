@@ -12,7 +12,7 @@
 
 import PropTypes from 'prop-types';
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { Button } from 'react-bootstrap';
 import FauxtonAPI from '../../../../core/api';
 import FauxtonComponents from '../../../fauxton/components';
 import GeneralComponents from '../../../components/react-components';
@@ -166,22 +166,22 @@ export default class DocEditorScreen extends React.Component {
 
         {this.props.conflictCount ? <PanelButton
           title={`Conflicts (${this.props.conflictCount})`}
-          iconClass="icon-columns"
+          iconClass="fonticon-columns"
           className="conflicts"
           disabled={this.props.isSaving}
           onClick={() => { FauxtonAPI.navigate(FauxtonAPI.urls('revision-browser', 'app', this.props.database.safeID(), this.props.doc.id));}}/> : null}
 
         <PanelButton className="upload"
           title="Upload Attachment"
-          iconClass="icon-circle-arrow-up"
+          iconClass="fonticon-up-circled"
           disabled={this.props.isSaving}
           onClick={this.props.showUploadModal} />
         <PanelButton title="Clone Document"
-          iconClass="icon-repeat"
+          iconClass="fonticon-cw"
           disabled={this.props.isSaving}
           onClick={this.props.showCloneDocModal} />
         <PanelButton title="Delete"
-          iconClass="icon-trash"
+          iconClass="fonticon-trash"
           disabled={this.props.isSaving}
           onClick={this.props.showDeleteDocModal} />
       </div>
@@ -195,17 +195,18 @@ export default class DocEditorScreen extends React.Component {
     const endpoint = this.props.previousUrl ?
       this.props.previousUrl :
       FauxtonAPI.urls('allDocs', 'app', FauxtonAPI.url.encode(this.props.database.id));
-    let cancelBtClass = `js-back cancel-button ${this.props.isSaving ? 'cancel-button--disabled' : ''}`;
     return (
       <div>
         <div id="doc-editor-actions-panel">
           <div className="doc-actions-left">
-            <button disabled={this.props.isSaving} className="save-doc btn btn-primary save" type="button" onClick={this.saveDoc}>
-              <i className="icon fonticon-ok-circled"></i> {saveButtonLabel}
-            </button>
+            <Button id="save-doc-btn" disabled={this.props.isSaving} variant="cf-primary" onClick={this.saveDoc}>
+              <i className="fonticon-ok-circled"></i> {saveButtonLabel}
+            </Button>
             <div>
-              <a href={this.props.isSaving ? undefined : `#/${endpoint}`}
-                className={cancelBtClass}>Cancel</a>
+              <Button href={this.props.isSaving ? undefined : `#/${endpoint}`}
+                variant="cf-cancel" className="js-back cancel-button" disabled={this.props.isSaving}>
+                  Cancel
+              </Button>
             </div>
           </div>
           <div className="alignRight">

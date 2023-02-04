@@ -44,14 +44,14 @@ describe('ReplicationAuth', () => {
           newRepAuth.setProps({authType: newType});
         }} />);
 
-      expect(newRepAuth.find('div.replication__help-tile').exists()).toBe(false);
+      expect(newRepAuth.find('#replications-auth-help-span').exists()).toBe(false);
       newRepAuth.find('select#select-test-auth').first().simulate('change', {
         target: {
           value: 'BASIC_AUTH'
         }
       });
       // Help is displayed after selecting the associated auth type
-      expect(newRepAuth.find('div.replication__help-tile').exists()).toBe(true);
+      expect(newRepAuth.find('#replications-auth-help-span').exists()).toBe(true);
     });
   });
 });

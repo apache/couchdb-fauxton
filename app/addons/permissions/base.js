@@ -13,12 +13,12 @@
 import FauxtonAPI from "../../core/api";
 import Permissions from "./routes";
 import reducers from './reducers';
-import "./assets/less/permissions.less";
+import "./assets/scss/permissions.scss";
 
 Permissions.initialize = function () {};
 
 FauxtonAPI.addReducers({
-  permissions: reducers
+  permissions: reducers,
 });
 
 export default Permissions;

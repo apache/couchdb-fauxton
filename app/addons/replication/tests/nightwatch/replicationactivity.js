@@ -29,8 +29,9 @@ module.exports = {
       .loginToGUI()
       .url(baseUrl + '/#replication')
       .waitForElementNotPresent('.load-lines', waitTime, true)
-      .waitForElementPresent('.replication__filter', waitTime, true)
-      .clickWhenVisible('a[href="#/database/_replicator/existing-doc-id-view-doc"]')
+      .waitForElementPresent('#replication-filter-group', waitTime, true)
+      .assert.elementsCount('.replication__table-row', 1)
+      .clickWhenVisible('button[title="Edit replication document"]')
       .waitForElementNotPresent('.load-lines', waitTime, true)
       .waitForElementPresent('#editor-container', waitTime, true)
       .end();
@@ -52,12 +53,12 @@ module.exports = {
       .loginToGUI()
       .url(baseUrl + '/#replication')
       .waitForElementNotPresent('.load-lines', waitTime, true)
-      .waitForElementPresent('.replication__filter', waitTime, true)
-      .clickWhenVisible('a[title="Edit replication"]')
+      .waitForElementPresent('#replication-filter-group', waitTime, true)
+      .clickWhenVisible('button[title="Edit replication"]')
       .waitForElementNotPresent('.load-lines', waitTime, true)
-      .waitForElementPresent('.replication__section', waitTime, true)
+      .waitForElementPresent('#replication-options-replication-doc', waitTime, true)
       .pause(10000)
-      .assert.valueContains(".replication__doc-name-input", replicatorDoc._id)
+      .assert.valueContains("#replication-options-replication-doc", replicatorDoc._id)
       .end();
   },
 
@@ -84,12 +85,12 @@ module.exports = {
       .loginToGUI()
       .url(baseUrl + '/#replication')
       .waitForElementNotPresent('.load-lines', waitTime, true)
-      .waitForElementVisible('.replication__filter-input', waitTime, true)
-      .setValue('.replication__filter-input', 'filter1')
-      .waitForElementNotPresent('a[href="#/database/_replicator/existing-doc-filter2"]', waitTime, true)
-      .clearValue('.replication__filter-input')
-      .setValue('.replication__filter-input', 'filter')
-      .waitForElementPresent('a[href="#/database/_replicator/existing-doc-filter2"]', waitTime, true)
+      .waitForElementVisible('#replication-filter-input', waitTime, true)
+      .setValue('#replication-filter-input', 'filter1')
+      .waitForElementNotPresent('button[aria-label="Delete document existing-doc-filter2"]', waitTime, true)
+      .clearValue('#replication-filter-input')
+      .setValue('#replication-filter-input', 'filter')
+      .waitForElementPresent('button[aria-label="Delete document existing-doc-filter2"]', waitTime, true)
       .end();
   },
 
@@ -122,7 +123,7 @@ module.exports = {
       .getText(firstRowSelector + ' td:nth-of-type(2)', function(result) {
         firstDoc = result.value;
       })
-      .clickWhenVisible(firstRowSelector + ' .replication__row-btn.icon-trash', waitTime, true)
+      .clickWhenVisible(firstRowSelector + ' button[title="Delete document"]', waitTime, true)
       .clickWhenVisible('.replication_delete-doc-modal.modal-dialog .modal-footer .cancel-link', waitTime, true)
       .waitForElementVisible(firstRowSelector, waitTime, true)
       .getText(firstRowSelector + ' td:nth-of-type(2)', function(result) {

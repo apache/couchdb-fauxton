@@ -12,26 +12,27 @@
 
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
-import React from "react";
-import { Button, Dropdown } from "react-bootstrap";
-import RootCloseWrapper from 'react-overlays/lib/RootCloseWrapper';
+import React from 'react';
+import { Button, Dropdown } from 'react-bootstrap';
 
 export class MenuDropDown extends React.Component {
   static defaultProps = {
     icon: 'fonticon-plus-circled',
     hideArrow: false,
-    toggleType: 'link'
+    toggleType: 'link',
   };
 
   static propTypes = {
     icon: PropTypes.string,
     hideArrow: PropTypes.bool,
     links: PropTypes.array.isRequired,
-    toggleType: PropTypes.string.isRequired
+    toggleType: PropTypes.string.isRequired,
   };
 
   createSectionLinks = (links) => {
-    if (!links) { return null; }
+    if (!links) {
+      return null;
+    }
 
     return links.map((link, key) => {
       return this.createEntry(link, key);
@@ -39,17 +40,21 @@ export class MenuDropDown extends React.Component {
   };
 
   createEntry = (link, key) => {
+    let itemType = (link.url == null) ? 'button' : "a";
     return (
-      <li key={key}>
-        <a className={classnames('icon', link.icon, { 'fonticon-placeholder': !link.icon})}
-          data-bypass={link.external ? 'true' : ''}
-          href={link.url}
-          onClick={link.onClick}
-          rel="noreferrer noopener"
-          target={link.external ? '_blank' : ''}>
-          {link.title}
-        </a>
-      </li>
+      <Dropdown.Item
+        as={itemType}
+        key={key}
+        href={link.url}
+        onClick={link.onClick}
+        className={"py-2 ps-0"}
+      >
+        <div className='ms-0'>
+          <span className={classnames('ms-2 align-middle icon', link.icon, {'fonticon-placeholder': !link.icon})}>
+            {link.title}
+          </span>
+        </div>
+      </Dropdown.Item>
     );
   };
 
@@ -59,17 +64,17 @@ export class MenuDropDown extends React.Component {
     }
 
     return (
-      <li key={key} className="header-label">{title}</li>
+      <Dropdown.Header key={key}>{title}</Dropdown.Header>
     );
   };
 
   createSection = () => {
     return this.props.links.map((linkSection, key) => {
       if (linkSection.title && linkSection.links) {
-        return ([
+        return [
           this.createSectionTitle(linkSection.title, 'title_' + key),
-          this.createSectionLinks(linkSection.links)
-        ]);
+          this.createSectionLinks(linkSection.links),
+        ];
       }
       return this.createEntry(linkSection, 'el' + key);
     });
@@ -77,79 +82,58 @@ export class MenuDropDown extends React.Component {
 
   render() {
     const menuItems = this.createSection();
-    const arrowClass = this.props.hideArrow ? '' : 'arrow';
-    const CustomMenuToggle = this.props.toggleType === 'button' ? CustomMenuButtonToggle : CustomMenuLinkToggle;
+    const CustomMenuToggle =
+      this.props.toggleType === 'button'
+        ? CustomMenuButtonToggle
+        : CustomMenuLinkToggle;
     return (
-      <Dropdown id="dropdown-menu">
-        <CustomMenuToggle bsRole="toggle" icon={this.props.icon}>
-        </CustomMenuToggle>
-        <CustomMenu bsRole="menu" className={arrowClass}>
+      <Dropdown
+        id="dropdown-menu">
+        <Dropdown.Toggle
+          as={CustomMenuToggle}
+          icon={this.props.icon}
+        ></Dropdown.Toggle>
+        <Dropdown.Menu
+          className={"pt-0 dropdown-arrow"}
+        >
           {menuItems}
-        </CustomMenu>
+        </Dropdown.Menu>
       </Dropdown>
     );
   }
 }
 
-class CustomMenuButtonToggle extends React.Component {
-  constructor(props, context) {
-    super(props, context);
-    this.handleClick = this.handleClick.bind(this);
-  }
-
-  handleClick(e) {
-    e.preventDefault();
-    this.props.onClick(e);
-  }
-
-  render() {
+const CustomMenuButtonToggle = React.forwardRef(
+  ({ children, onClick, icon }, ref) => {
+    const handleClick = (e) => {
+      e.preventDefault();
+      onClick(e);
+    };
     return (
-      <Button
-        onClick={this.handleClick}>
-        <i className={"dropdown-toggle " + this.props.icon}
-          style={{ fontSize: '1rem', boxShadow: '0px 0px 0px' }}>
-        </i>
-        {this.props.children}
+      <Button className="dropdown-toggle" ref={ref} onClick={handleClick} variant="cf-secondary">
+        <i className={icon} />
+        {children}
       </Button>
     );
   }
-}
+);
 
-class CustomMenuLinkToggle extends React.Component {
-  constructor(props, context) {
-    super(props, context);
-    this.handleClick = this.handleClick.bind(this);
-  }
+const CustomMenuLinkToggle = React.forwardRef(
+  ({ children, onClick, icon }, ref) => {
+    const handleClick = (e) => {
+      e.preventDefault();
+      onClick(e);
+    };
 
-  handleClick(e) {
-    e.preventDefault();
-    this.props.onClick(e);
-  }
-
-  render() {
     return (
-      <a className={"dropdown-toggle icon " + this.props.icon}
-        style={{ fontSize: '1rem', boxShadow: '0px 0px 0px' }}
-        onClick={this.handleClick}>
-        {this.props.children}
+      <a
+        ref={ref}
+        className={'dropdown-toggle cursor-pointer icon ' + icon}
+        style={{ fontSize: '1rem', boxShadow: '0px 0px 0px'}}
+        onClick={handleClick}
+      >
+        {children}
       </a>
     );
   }
-}
-
-export class CustomMenu extends React.Component {
-  constructor(props, context) {
-    super(props, context);
-  }
-
-  render() {
-    const { children, open, onClose, className } = this.props;
-    return (
-      <RootCloseWrapper disabled={!open} onRootClose={onClose}>
-        <ul className={classnames('dropdown-menu', className)} role="menu" aria-labelledby="dLabel">
-          {children}
-        </ul>
-      </RootCloseWrapper>
-    );
-  }
-}
+);

@@ -54,7 +54,7 @@ describe('Navigation Bar', () => {
     };
     it('is not displayed when not set', () => {
       const linkEl = mount(<NavLink link={aLinkNoBadge} active={"Databases"} isMinimized={false} />);
-      expect(linkEl.find('i.faux-navbar__icon-badge').length).toBe(0);
+      expect(linkEl.find('div.faux-navbar__icon-badge').length).toBe(0);
     });
 
     const aLinkWithBadge = {
@@ -65,7 +65,7 @@ describe('Navigation Bar', () => {
     };
     it('is displayed when set to true', () => {
       const linkEl = mount(<NavLink link={aLinkWithBadge} active={"Databases"} isMinimized={false} />);
-      expect(linkEl.find('i.faux-navbar__icon-badge').length).toBe(1);
+      expect(linkEl.find('div.faux-navbar__icon-badge').length).toBe(1);
     });
   });
 });

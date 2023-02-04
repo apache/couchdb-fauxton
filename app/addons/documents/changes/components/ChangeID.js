@@ -23,7 +23,7 @@ export default class ChangeID extends React.Component {
     }
     const link = '#' + FauxtonAPI.urls('document', 'app', encodeURIComponent(databaseName), encodeURIComponent(id));
     return (
-      <a href={link} className="js-doc-link">{id}</a>
+      <a href={link} className="text-break">{id}</a>
     );
   }
 }

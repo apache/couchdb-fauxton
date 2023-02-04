@@ -12,6 +12,7 @@
 
 import PropTypes from 'prop-types';
 import React from 'react';
+import Form from 'react-bootstrap/Form';
 
 export default class MainFieldsView extends React.Component {
   constructor(props) {
@@ -45,23 +46,32 @@ export default class MainFieldsView extends React.Component {
     }
 
     return (
-      <label className="drop-down inline" id="qoGroupLevelGroup">
-          Group Level
-        <select onChange={this.groupLevelChange.bind(this)} id="qoGroupLevel" value={this.props.groupLevel}
-          name="group_level" className="input-small">
-          <option value="0">None</option>
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
-          <option value="5">5</option>
-          <option value="6">6</option>
-          <option value="7">7</option>
-          <option value="8">8</option>
-          <option value="9">9</option>
-          <option value="exact">Exact</option>
-        </select>
-      </label>
+      <div className="col-6 mb-2">
+        <div className="row">
+          <div className="col-auto">
+            <label id="qoGroupLevelGroup" htmlFor="qoLimit" className="col-form-label">Group Level</label>
+          </div>
+          <div className="col-auto">
+            <Form.Select
+              id="qoGroupLevel"
+              onChange={this.groupLevelChange.bind(this)}
+              value={this.props.groupLevel}
+            >
+              <option value="0">None</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+              <option value="9">9</option>
+              <option value="exact">Exact</option>
+            </Form.Select>
+          </div>
+        </div>
+      </div>
     );
   }
 
@@ -76,11 +86,15 @@ export default class MainFieldsView extends React.Component {
   includeDocsOption() {
     const {includeDocs, reduce} = this.props;
     return (
-      <div className="checkbox inline">
-        <input disabled={reduce} onChange={this.toggleIncludeDocs} id="qoIncludeDocs"
-          name="include_docs" type="checkbox" checked={includeDocs}/>
-        <label className={reduce ? 'disabled' : ''} htmlFor="qoIncludeDocs" id="qoIncludeDocsLabel">Include
-            Docs</label>
+      <div className="col-12">
+        <Form.Check
+          id="qoIncludeDocs"
+          disabled={reduce}
+          label="Include Docs"
+          onChange={this.toggleIncludeDocs}
+          checked={includeDocs}
+          type="checkbox"
+        />
       </div>
     );
   }
@@ -92,14 +106,18 @@ export default class MainFieldsView extends React.Component {
     }
 
     return (
-      <span>
-        <div className="checkbox inline">
-          <input id="qoReduce" name="reduce" onChange={this.toggleReduce.bind(this)} type="checkbox"
-            checked={reduce}/>
-          <label htmlFor="qoReduce">Reduce</label>
+      <React.Fragment>
+        <div className="col-6">
+          <Form.Check
+            id="qoReduce"
+            label="Reduce"
+            onChange={this.toggleReduce.bind(this)}
+            checked={reduce}
+            type="checkbox"
+          />
         </div>
         {this.groupLevel()}
-      </span>
+      </React.Fragment>
     );
   }
 
@@ -112,11 +130,18 @@ export default class MainFieldsView extends React.Component {
     }
 
     return (
-      <div className="checkbox inline">
-        <input onChange={this.toggleStable} id="qoStable" name="stable"
-          type="checkbox" checked={stable} disabled={!enableStable}/>
-        <label className={enableStable ? '' : 'disabled'} htmlFor="qoStable" id="qoStableLabel">Stable</label>
-      </div>
+      <React.Fragment>
+        <div className="col-6">
+          <Form.Check
+            id="qoStable"
+            label="Stable"
+            onChange={this.toggleStable}
+            checked={stable}
+            type="checkbox"
+            disabled={!enableStable}
+          />
+        </div>
+      </React.Fragment>
     );
   }
 
@@ -126,33 +151,49 @@ export default class MainFieldsView extends React.Component {
       return <option key={option.value} value={option.value}>{option.label}</option>;
     });
     return (
-      <div className="dropdown inline">
-        <label className="drop-down">
-          Update
-          <select className="input-small" id="qoUpdate" value={update} onChange={this.onUpdateChange}>
-            {selectOptions}
-          </select>
-        </label>
-      </div>
+      <React.Fragment>
+        <div className="col-6">
+          <div className="row">
+            <div className="col-auto">
+              <label htmlFor="qoUpdate" className="col-form-label">Update</label>
+            </div>
+            <div className="col-auto">
+              <Form.Select
+                id="qoUpdate"
+                onChange={this.onUpdateChange}
+                value={update}
+              >
+                {selectOptions}
+              </Form.Select>
+            </div>
+          </div>
+        </div>
+      </React.Fragment>
     );
   }
 
   render() {
     return (
-      <div className="query-group" id="query-options-main-fields">
-        <span className="add-on">
-          Query Options
-          <a className="help-link" href={this.props.docURL} target="_blank" rel="noopener noreferrer" data-bypass="true">
-            <i className="icon-question-sign"/>
-          </a>
-        </span>
-        <div className="row-fluid fieldsets">
-          {this.includeDocsOption()}
-          {this.reduceOption()}
+      <div className="row m-2">
+        <div className="col-12">
+          <h5>
+            Query Options
+            <a className="help-link ms-1" href={this.props.docURL} target="_blank" rel="noopener noreferrer" data-bypass="true">
+              <i className="fonticon-help-circled"/>
+            </a>
+          </h5>
         </div>
-        <div className="row-fluid fieldsets">
-          {this.stableOption()}
-          {this.updateOption()}
+        <div className="col-12">
+          <div className="row align-items-center">
+            {this.includeDocsOption()}
+            {this.reduceOption()}
+          </div>
+        </div>
+        <div className="col-12">
+          <div className="row align-items-center">
+            {this.stableOption()}
+            {this.updateOption()}
+          </div>
         </div>
       </div>
     );

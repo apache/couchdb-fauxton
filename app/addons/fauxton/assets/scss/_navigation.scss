@@ -1,0 +1,235 @@
+.faux-navbar {
+  background-color: $cf-navbar-bg;
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 5;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.faux-navbar nav {
+  height: 100%;
+}
+
+.faux-navbar__linkcontainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.faux-navbar__itemarea {
+  box-sizing: border-box;
+  border-bottom: 1px solid $cf-navbar-bg;
+  height: 48px;
+  padding: 10px 20px;
+  line-height: 24px;
+}
+
+.faux-navbar__version-footer {
+  color: $cf-navbar-color;
+  font-size: 10px;
+  text-align: center;
+  background-color: $cf-navbar-bg;
+  padding-bottom: 10px;
+}
+
+.faux-navbar__burger {
+  background-color: $cf-navbar-bg;
+  padding: 18px 0 18px 20px;
+  min-height: 64px;
+  line-height: 32px;
+}
+
+.faux-navbar--narrow {
+  width: $cf-navbar-width-collapsed;
+}
+
+.faux-navbar--wide {
+  width: $cf-navbar-width;
+}
+
+.faux-navbar__burger:hover .faux-navbar__burger__icon {
+  color: $cf-navbar-item-color-hover;
+}
+
+.faux-navbar__burger__icon {
+  color: $cf-navbar-item-color;
+  font-size: 24px;
+}
+
+.faux-navbar__link,
+.faux-logout__link,
+.faux-login__link {
+  display: block;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.faux-navbar__link--active {
+  background-color: $cf-navbar-item-bg-active;
+  text-decoration: none;
+}
+
+.faux-navbar__link--inactive {
+  background-color: $cf-navbar-item-bg;
+}
+
+.faux-navbar__link:hover,
+.faux-logout__link:hover,
+.faux-login__link:hover {
+  background-color: $cf-navbar-item-bg-hover;
+  text-decoration: none;
+}
+
+.faux-logout__link:hover {
+  .faux-navbar__logout__text, .faux-navbar__logout__username {
+    color: $cf-navbar-item-color-hover;
+  }
+}
+
+.faux-navbar__link:active,
+.faux-navbar__link:focus {
+  text-decoration: none;
+}
+
+.faux-navbar__link:hover {
+  .faux-navbar__icon:before {
+    color: $cf-navbar-item-color-hover;
+  }
+  .faux-navbar__text {
+    color: $cf-navbar-item-color-hover;
+  }
+}
+
+.faux-navbar__link--active {
+  .faux-navbar__icon:before {
+    color: $cf-navbar-item-color-active;
+  }
+  .faux-navbar__text {
+    color: $cf-navbar-item-color-active;
+  }
+}
+
+.faux-navbar__icon {
+  margin-right: 14px;
+  color: $cf-navbar-item-color;
+  font-size: 24px;
+  vertical-align: middle;
+  position: relative;
+}
+
+.faux-navbar__icon-badge:after {
+  content: "";
+  display: inline-block;
+  position: relative;
+  top: -42px;
+  right: 8px;
+  background: $cf-navbar-item-badge-bg;
+  border: 1px solid $cf-navbar-item-badge-bg;
+  height: 8px;
+  width: 8px;
+  text-align: center;
+  font-size: 0.5rem;
+  border-radius: 50%;
+}
+
+.faux-navbar__link:hover .faux-navbar__icon-badge:after {
+  border-color: $cf-navbar-item-badge-bg-hover;
+  background-color: $cf-navbar-item-badge-bg-hover;
+}
+
+.faux-navbar__link--active .faux-navbar__icon-badge:after {
+  border-color: $cf-navbar-item-badge-bg-active;
+  background-color: $cf-navbar-item-badge-bg-active;
+}
+
+.faux-navbar__text {
+  color: $cf-navbar-color;
+  vertical-align: middle;
+}
+
+.faux-navbar__logout__text {
+  font-size: 0.75rem;
+  color: $cf-navbar-color;
+}
+
+.faux-navbar__logout__textcontainer {
+  text-align: center;
+  color: $cf-navbar-color;
+}
+
+.faux-navbar__logout__textcontainer--narrow {
+  padding-bottom: 4px;
+  padding: 15px 0;
+}
+
+.faux-navbar__logout__textcontainer--wide {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: 15px;
+}
+
+.faux-navbar__login__textcontainer {
+  text-align: center;
+  color: $cf-navbar-color;
+}
+
+.faux-navbar__login__textcontainer--narrow {
+  padding-bottom: 4px;
+  padding: 15px 0;
+}
+
+.faux-navbar__login__textcontainer--wide {
+  padding: 15px;
+}
+
+.faux-navbar__brand {
+  margin: 20px 0 20px 0;
+  height: 50px;
+  padding: 10px 10px 10px 10px;
+  float: none;
+  background: $cf-navbar-bg;
+}
+
+.faux-navbar__brand-logo {
+  display: block;
+  height: 100%;
+  margin-top: 10px;
+}
+
+.faux-navbar__brand-logo--wide {
+  background: url($largeLogoPath) no-repeat 23px 0px;
+  background-size: 150px;
+  width: 200px;
+}
+
+.faux-navbar__brand-logo--narrow {
+  width: 43px;
+  height: 40px;
+  background: url($smallLogoPath) no-repeat 3px 0;
+  background-size: 40px;
+}
+
+.faux-navbar__footer {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: 100%;
+  min-height: 200px;
+  width: 100%;
+}
+
+.faux-navbar__logout__username {
+  color: $cf-navbar-color;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 150px;
+  white-space: nowrap;
+  padding-right: 5px;
+  padding-left: 10px;
+  font-size: 12px;
+}

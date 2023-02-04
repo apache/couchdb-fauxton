@@ -113,7 +113,7 @@ module.exports = {
         }]
       },
       {
-        test: /\.less/,
+        test: /\.scss/,
         use: [
           {
             loader: MiniCssExtractPlugin.loader,
@@ -123,15 +123,14 @@ module.exports = {
           },
           "css-loader",
           {
-            loader: "less-loader",
+            loader: "sass-loader",
             options: {
-              lessOptions: {
-                modifyVars: {
-                  largeLogoPath: "'" + settings.variables.largeLogoPath + "'",
-                  smallLogoPath: "'" + settings.variables.smallLogoPath + "'"
-                }
-              }
-            }
+              sassOptions: {
+                includePaths: ["node_modules"],
+              },
+              additionalData: `$largeLogoPath: "${settings.variables.largeLogoPath}"; $smallLogoPath: "${settings.variables.smallLogoPath}";`,
+              sourceMap: false,
+            },
           }
         ]
       },

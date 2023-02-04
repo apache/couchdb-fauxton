@@ -34,7 +34,7 @@ describe('ChangesTabContent', () => {
       filters={['I wandered lonely as a filter', 'A second filter']}
     />);
 
-    expect(el.find('.remove-filter').length).toBe(2);
+    expect(el.find('.remove-filter > a').length).toBe(2);
   });
 
   it('should call addFilter action on click', () => {
@@ -43,8 +43,8 @@ describe('ChangesTabContent', () => {
       {...defaultProps}
       addFilter={addFilterStub}
     />);
-    const submitBtn = el.find('[type="submit"]'),
-          addItemField = el.find('.js-changes-filter-field');
+    const submitBtn = el.find('button[type="submit"]');
+    const addItemField = el.find('input#changes-filter-field');
 
     addItemField.simulate('change', {target: {value: 'I wandered lonely as a filter'}});
     submitBtn.simulate('submit');
@@ -59,7 +59,7 @@ describe('ChangesTabContent', () => {
       filters={['I wandered lonely as a filter']}
       removeFilter={removeFilterStub}
     />);
-    el.find('.remove-filter').simulate('click');
+    el.find('.remove-filter > a').simulate('click');
 
     expect(removeFilterStub.calledOnce).toBeTruthy();
   });
@@ -70,8 +70,8 @@ describe('ChangesTabContent', () => {
       {...defaultProps}
       addFilter={addFilterStub}
     />);
-    const submitBtn = el.find('[type="submit"]'),
-          addItemField = el.find('.js-changes-filter-field');
+    const submitBtn = el.find('button[type="submit"]'),
+          addItemField = el.find('input#changes-filter-field');
 
     addItemField.simulate('change', {target: {value: ''}});
     submitBtn.simulate('submit');
@@ -83,7 +83,7 @@ describe('ChangesTabContent', () => {
     const el = mount(<ChangesTabContent
       {...defaultProps}
     />);
-    expect(el.find('.remove-filter').length).toBe(0);
+    expect(el.find('.remove-filter > a').length).toBe(0);
   });
 
   it('should not add the same filter twice', () => {
@@ -94,8 +94,8 @@ describe('ChangesTabContent', () => {
       addFilter={(f) => {filters.push(f); callCount++;}}
       filters={filters}
     />);
-    const submitBtn = el.find('[type="submit"]'),
-          addItemField = el.find('.js-changes-filter-field');
+    const submitBtn = el.find('button[type="submit"]'),
+          addItemField = el.find('input#changes-filter-field');
 
     const filter = 'I am unique in the whole wide world';
     addItemField.simulate('change', {target: {value: filter}});
@@ -175,13 +175,14 @@ describe('ChangeRow', () => {
   it('deleted docs should not be clickable', () => {
     change.deleted = true;
     const changeRow = mount(<ChangeRow change={change} databaseName="testDatabase" />);
-    expect(changeRow.find('a.js-doc-link').length).toBe(0);
+    expect(changeRow.find('a').length).toBe(0);
   });
 
   it('non-deleted docs should be clickable', () => {
     change.deleted = false;
     const changeRow = mount(<ChangeRow change={change} databaseName="testDatabase" />);
-    expect(changeRow.find('a.js-doc-link').length).toBe(1);
+    expect(changeRow.find('a').length).toBe(1);
+    expect(changeRow.find('a').text()).toBe(change.id);
   });
 
   it('generates correct URL for doc and db with special chars', () => {
@@ -192,6 +193,6 @@ describe('ChangeRow', () => {
       changes: { code: 'here' }
     };
     const changeRow = mount(<ChangeRow change={changeSpecialChars} databaseName="db/name" />);
-    expect(changeRow.find('a.js-doc-link').at(0).prop('href')).toBe('#/database/db%2Fname/space%20newline%0Aquestion_mark%3F');
+    expect(changeRow.find('a').prop('href')).toBe('#/database/db%2Fname/space%20newline%0Aquestion_mark%3F');
   });
 });

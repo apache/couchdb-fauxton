@@ -1,7 +1,8 @@
 import PropTypes from 'prop-types';
 import React, { Component } from "react";
+import { Button, Form, InputGroup } from 'react-bootstrap';
 import { validateDomain } from "../helpers";
-
+import ReactComponents from '../../components/react-components';
 
 export default class OriginRow extends Component {
 
@@ -48,13 +49,20 @@ export default class OriginRow extends Component {
   createOriginDisplay () {
     if (this.state.edit) {
       return (
-        <div className="input-append edit-domain-section">
-          <input type="text" name="update_origin_domain" onChange={ this.onInputChange.bind(this) } onKeyUp={ this.onKeyUp.bind(this) } value={this.state.updatedOrigin} />
-          <button onClick={ this.updateOrigin.bind(this) } className="btn btn-primary update-origin"> Update </button>
-        </div>
+        <InputGroup>
+          <Form.Control
+            name="update_origin_domain"
+            onChange={ this.onInputChange.bind(this) }
+            onKeyUp={ this.onKeyUp.bind(this) }
+            value={this.state.updatedOrigin}
+            aria-label="Edit domain name"
+          />
+          <Button variant="cf-primary" onClick={ this.updateOrigin.bind(this) }>Update</Button>
+        </InputGroup>
+
       );
     }
-    return <div className="js-url url-display">{this.props.origin}</div>;
+    return <div>{this.props.origin}</div>;
   }
 
   render () {
@@ -64,15 +72,11 @@ export default class OriginRow extends Component {
         <td>
           {display}
         </td>
-        <td width="30">
-          <span>
-            <a className="fonticon-pencil" onClick={ this.editOrigin.bind(this) } title="Edit domain." />
-          </span>
+        <td className="action-btn-col">
+          <ReactComponents.ToolbarButton icon="fonticon-pencil" onClick={ this.editOrigin.bind(this) } aria-label="Edit domain"/>
         </td>
-        <td width="30">
-          <span>
-            <a href="#" data-bypass="true" className="fonticon-trash" onClick={ this.deleteOrigin.bind(this) } title="Delete domain." />
-          </span>
+        <td className="action-btn-col">
+          <ReactComponents.ToolbarButton icon="fonticon-trash" onClick={ this.deleteOrigin.bind(this) } aria-label="Delete domain"/>
         </td>
       </tr>
     );

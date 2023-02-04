@@ -22,12 +22,12 @@ module.exports = {
       .loginToGUI()
       .populateDatabase(newDatabaseName)
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
-      .clickWhenVisible('.faux-header__doc-header-dropdown-toggle')
-      .clickWhenVisible('.faux-header__doc-header-dropdown-itemwrapper a[href*="new_view"]')
+      .clickWhenVisible('#faux-header__doc-header-dropdown-toggle')
+      .clickWhenVisible('div.dropdown-menu a[href*="new_view"]')
       .waitForElementVisible('#new-ddoc', waitTime, false)
       .setValue('#new-ddoc', 'test_design_doc-selenium-bad-reduce')
-      .clearValue('#index-name')
-      .setValue('#index-name', 'hasenindex')
+      .clearValue('input#index-name')
+      .setValue('input#index-name', 'hasenindex')
       .clickWhenVisible('select[id="reduce-function-selector"] option[value="_sum"]')
       .execute('\
         var editor = ace.edit("map-function");\
@@ -37,7 +37,7 @@ module.exports = {
       .closeNotifications()
       .clickWhenVisible('.control-toggle-queryoptions', waitTime, false)
       .clickWhenVisible('label[for="qoReduce"]', waitTime, false)
-      .clickWhenVisible('.query-options .btn-secondary', waitTime, false)
+      .clickWhenVisible('#query-options-tray #button-options .btn-cf-primary', waitTime, false)
       .waitForElementVisible('div.table-view-docs', waitTime, false)
       .waitForAttribute('.table-view-docs td:nth-child(4)', 'title', function (docContents) {
         return (/_sum function requires/).test(docContents);
@@ -56,7 +56,7 @@ module.exports = {
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_design/brokenview/_view/brokenview')
       .clickWhenVisible('.control-toggle-queryoptions', waitTime, false)
       .clickWhenVisible('label[for="qoReduce"]', waitTime, false)
-      .clickWhenVisible('.query-options .btn-secondary', waitTime, false)
+      .clickWhenVisible('#query-options-tray #button-options .btn-cf-primary', waitTime, false)
       .waitForElementVisible('div.table-view-docs', waitTime, false)
       .waitForAttribute('.table-view-docs td:nth-child(4)', 'title', function (docContents) {
         return (/_sum function requires/).test(docContents);

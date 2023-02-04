@@ -31,29 +31,31 @@ function getDropdownItems (items) {
 
     if (el.title && el.links) {
       const items = el.links.map((subel) => {
-        return <Item key={subel.title} onClick={subel.onClick} icon={subel.icon} url={subel.url}>{subel.title}</Item>;
+        return <Item key={subel.title} title={subel.title} url={subel.url} icon={subel.icon} onClick={subel.onClick}></Item>;
       });
 
       return ([
-        <li key={el.title} className="header-label">{el.title}</li>,
+        <Dropdown.Header key={el.title}>{el.title}</Dropdown.Header>,
         items
       ]);
     }
 
-    return (
-      <Item icon={el.icon} url={el.url} onClick={el.onClick} key={i}>{el.title}</Item>
-    );
+    return <Item key={i} title={el.title} url={el.url} icon={el.icon} onClick={el.onClick}></Item>;
   });
 }
 
 
-const Item = ({url, icon, onClick, children}) => {
+const Item = ({title, url, icon, onClick}) => {
+  let itemType = (url == null) ? 'button' : "a";
   return (
-    <li role="presentation">
-      <a className={"faux-header__doc-header-dropdown-item icon " + icon} onClick={onClick} href={url}>
-        {children}
-      </a>
-    </li>
+    <Dropdown.Item as={itemType} onClick={onClick} href={url}>
+      <div className='py-1 ms-1'>
+        <i className={"align-middle icon fonticon-fw " + icon}></i>
+        <span className="ms-2 align-middle">
+          {title}
+        </span>
+      </div>
+    </Dropdown.Item>
   );
 };
 
@@ -69,11 +71,11 @@ const HeaderDocsLeft = ({dbName, partitionKey}) => {
       <div className="faux-header__doc-header-title flex-fill" title={dbName}>
         {dbName}
       </div>
-      <Dropdown id="faux-header__doc-header-left-1">
-        <Dropdown.Toggle noCaret className="faux-header__doc-header-dropdown-toggle">
-          <i className="faux-header__doc-header-dropdown-toggle-icon fonticon-vertical-ellipsis"></i>
+      <Dropdown>
+        <Dropdown.Toggle id="faux-header__doc-header-dropdown-toggle">
+          <i className="fonticon-vertical-ellipsis"></i>
         </Dropdown.Toggle>
-        <Dropdown.Menu className="faux-header__doc-header-dropdown-itemwrapper">
+        <Dropdown.Menu>
           {dropdownItems}
         </Dropdown.Menu>
       </Dropdown>

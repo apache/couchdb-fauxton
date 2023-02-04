@@ -78,7 +78,7 @@ const getModifyDatabaseLinks = (databaseName) => {
   }, {
     title: 'Delete',
     icon: 'fonticon-trash',
-    onClick: ReactComponentsActions.showDeleteDatabaseModal.bind(this, {showDeleteModal: true, dbId: databaseName})
+    onClick: () => {ReactComponentsActions.showDeleteDatabaseModal({showDeleteModal: true, dbId: databaseName});}
   }];
 };
 

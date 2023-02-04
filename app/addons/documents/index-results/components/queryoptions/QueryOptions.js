@@ -103,7 +103,7 @@ export default class QueryOptions extends React.Component {
         className="query-options" id="query-options-tray"
         container={this}>
 
-        <form onSubmit={this.executeQuery.bind(this)} className="js-view-query-update custom-inputs">
+        <form onSubmit={this.executeQuery.bind(this)} id="query-options_js-view-query-update">
           <MainFieldsView
             includeDocs={this.props.includeDocs}
             toggleIncludeDocs={this.props.queryOptionsToggleIncludeDocs}
@@ -119,6 +119,7 @@ export default class QueryOptions extends React.Component {
             update={this.props.update}
             changeUpdateField={this.props.queryOptionsChangeUpdate}
           />
+          <hr />
           <KeySearchFields
             key={1}
             showByKeys={this.props.showByKeys}
@@ -129,6 +130,7 @@ export default class QueryOptions extends React.Component {
             updateBetweenKeys={this.props.queryOptionsUpdateBetweenKeys}
             byKeys={this.props.byKeys}
             updateByKeys={this.props.queryOptionsUpdateByKeys} />
+          <hr />
           <AdditionalParams
             descending={this.props.descending}
             toggleDescending={this.props.queryOptionsToggleDescending}
@@ -136,6 +138,7 @@ export default class QueryOptions extends React.Component {
             updateSkip={this.props.queryOptionsUpdateSkip}
             updateLimit={this.props.queryOptionsUpdateLimit}
             limit={this.props.limit} />
+          <hr />
           <QueryButtons onCancel={this.closeTray.bind(this)} />
         </form>
       </TrayContents>

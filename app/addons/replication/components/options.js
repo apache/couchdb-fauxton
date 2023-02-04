@@ -13,9 +13,7 @@ import PropTypes from 'prop-types';
 
 import React from 'react';
 import Constants from '../constants';
-import Components from '../../components/react-components';
-
-const { StyledSelect } = Components;
+import Form from 'react-bootstrap/Form';
 
 const getReplicationTypeOptions = () => {
   return [
@@ -26,16 +24,16 @@ const getReplicationTypeOptions = () => {
 
 const ReplicationType = ({value, onChange}) => {
   return (
-    <div className="replication__section">
-      <div className="replication__input-label">
-        Replication type:
-      </div>
-      <div className="replication__input-select">
-        <StyledSelect
-          selectContent={getReplicationTypeOptions()}
-          selectChange={(e) => onChange(e.target.value)}
-          selectId="replication-target"
-          selectValue={value} />
+    <div className="row">
+      <div className="col-12 col-md-2">Replication type:</div>
+      <div className="col-12 col-md mt-1 mt-md-0">
+        <Form.Select
+          onChange={(e) => onChange(e.target.value)}
+          id="replication-target"
+          value={value}
+        >
+          {getReplicationTypeOptions()}
+        </Form.Select>
       </div>
     </div>
   );
@@ -46,23 +44,23 @@ ReplicationType.propTypes = {
   onChange: PropTypes.func.isRequired
 };
 
-const ReplicationDoc = ({value, onChange}) =>
-  <div className="replication__section">
-    <div className="replication__input-label">
-    Replication document:
+const ReplicationDoc = ({value, onChange}) => {
+  return (
+    <div className="row mt-2">
+      <div className="col-12 col-md-2">Replication document:</div>
+      <div className="col-12 col-md mt-1 mt-md-0">
+        <Form.Control
+          id="replication-options-replication-doc"
+          type="text"
+          className="form-control"
+          placeholder="Custom ID (optional)"
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+        />
+      </div>
     </div>
-    <div className="replication__doc-name">
-      <span className="fonticon fonticon-cancel replication__doc-name-icon" title="Clear field"
-        onClick={() => onChange('')} />
-      <input
-        type="text"
-        className="replication__doc-name-input"
-        placeholder="Custom ID (optional)"
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-      />
-    </div>
-  </div>;
+  );
+};
 
 ReplicationDoc.propTypes = {
   value: PropTypes.string.isRequired,
@@ -75,8 +73,7 @@ export class ReplicationOptions extends React.Component {
     const {replicationType, replicationDocName, onDocChange, onTypeChange} = this.props;
 
     return (
-      <div>
-        <h3>Options</h3>
+      <div className="col-12">
         <ReplicationType
           onChange={onTypeChange}
           value={replicationType}

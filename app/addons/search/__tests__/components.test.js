@@ -80,18 +80,16 @@ describe('AnalyzerDropdown', () => {
     const el = mount(<AnalyzerDropdown />);
 
     // confirm default label
-    expect(el.find('label').length).toBe(2);
-    expect(el.find('label').first().text()).toBe('Type');
+    expect(el.find('label').text()).toBe('Type');
 
     // confirm default value
-    expect(el.find('select').hasClass('standard')).toBeTruthy();
+    expect(el.find('select').prop('value')).toBe('standard');
   });
 
   it('omits label element if empty label passed', () => {
     const el = mount(<AnalyzerDropdown label="" />);
 
-    // (1, because there are normally 2 labels, see prev test)
-    expect(el.find('label').length).toBe(1);
+    expect(el.find('label').length).toBe(0);
   });
 
   it('custom ID works', () => {
@@ -106,7 +104,7 @@ describe('AnalyzerDropdown', () => {
       <AnalyzerDropdown defaultSelected={defaultSelected} />
     );
 
-    expect(el.find('select').hasClass(defaultSelected)).toBeTruthy();
+    expect(el.find('select').prop('value')).toBe(defaultSelected);
   });
 
   it('custom classes get applied', () => {

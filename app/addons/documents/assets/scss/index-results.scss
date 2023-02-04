@@ -1,0 +1,225 @@
+// Licensed under the Apache License, Version 2.0 (the "License"); you may not
+// use this file except in compliance with the License. You may obtain a copy of
+// the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+// WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+// License for the specific language governing permissions and limitations under
+// the License.
+
+@import "../../../../../assets/scss/variables";
+
+.document-result-screen {
+  .loading-lines-wrapper {
+    margin-left: auto;
+    margin-right: auto;
+    width: 84px;
+  }
+
+  .loading-lines {
+    position: absolute;
+  }
+}
+
+.document-result-screen__toolbar {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.25rem;
+
+  .bulk-action-component {
+    min-width: 85px;
+    min-height: 26px;
+    padding: 8px 0;
+  }
+
+  .toolbar-dropdown {
+    margin-right: 1rem;
+    .dropdown-toggle:empty::after {
+      margin-left: 0.25rem;
+    }
+  }
+}
+
+.no-results-screen {
+  position: absolute;
+  top: 50%;
+  margin-top: -125px;
+  width: 95%;
+  h3 {
+    border-top: 1px solid $cf-border-color01;
+    height: 45px;
+    font-size: 20px;
+    font-weight: normal;
+    width: 400px;
+    text-align: center;
+    padding-top: 8px;
+    margin: 0 auto;
+  }
+  .no-results-screen-warning {
+    text-align: center;
+    i {
+      padding-right: 0.5rem;
+    }
+  }
+}
+.watermark-logo {
+  background: transparent url("../../../../../assets/img/couch-watermark.png")
+    no-repeat 50% 50%;
+  height: 205px;
+  text-align: center;
+  margin: 0 20%;
+  .preview {
+    margin: 0 10px;
+  }
+}
+
+.table-view-docs {
+  .bulk-action-component {
+    padding-bottom: 0;
+    min-height: 0;
+  }
+  .bulk-action-component-panel input {
+    width: auto;
+  }
+
+  .tableview-data-cell-id {
+    a {
+      color: $link-hover-color;
+    }
+    div:first-of-type {
+      font-weight: 700;
+    }
+    div {
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+  }
+  tbody tr {
+    cursor: pointer;
+    border-left: 2px solid transparent;
+
+    &:hover {
+      border-left: 2px solid $cf-brand-hightlight-hover;
+      td {
+        color: $cf-brand-hightlight-hover;
+        
+      }
+    }
+
+    td {
+      input[type="checkbox"] {
+        margin-left: 7px;
+      }
+    }
+  }
+  td,
+  th,
+  td a {
+    vertical-align: middle;
+    line-height: 20px;
+    font-size: 0.875rem;
+  }
+
+  td,
+  th {
+    max-width: 160px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    vertical-align: top;
+    &.showall {
+      overflow: visible;
+      white-space: normal;
+      word-wrap: break-word;
+    }
+    &.small-font {
+      font-size: 0.75rem;
+    }
+    &.large-font {
+      font-size: 1rem;
+    }
+  }
+  td.tableview-checkbox-cell,
+  th.tableview-header-el-checkbox {
+    width: 35px;
+    padding-left: 0px;
+  }
+  .tableview-conflict {
+    color: $cf-brand-highlight;
+    .fonticon {
+      padding-right: 4px;
+      vertical-align: middle;
+    }
+  }
+  .tableview-el-last {
+    width: 75px;
+  }
+  .tableview-el-copy {
+    width: 35px;
+  }
+
+  thead input {
+    max-width: 138px;
+    width: 100%;
+    overflow: visible;
+  }
+
+  .table-container-autocomplete {
+    position: relative;
+    width: 128px;
+  }
+
+  th {
+    overflow: visible;
+  }
+
+  .table-container-autocomplete .table-select-wrapper {
+    width: inherit;
+    overflow: visible;
+  }
+
+  .tableview-conflict i {
+    margin-right: 0.4rem;
+    vertical-align: middle;
+  }
+}
+
+.document-result-screen {
+  .table-bulkselector-section {
+    .bulk-action-component {
+      float: left;
+    }
+    width: 300px;
+  }
+}
+
+.execution-stats-popup {
+  font-size: 14px;
+  .execution-stats-popup-component {
+    margin: 0.5rem;
+    [data-status="false"] {
+      color: $cf-text01-muted;
+    }
+    [data-status="true"] {
+      .value {
+        font-weight: bold;
+      }
+    }
+  }
+  .warning {
+    color: $cf-alert-error-color;
+    margin: 0.5rem;
+  }
+}
+
+.execution-stats {
+  font-size: 13px;
+  padding: 8px 8px 8px 0;
+
+  .fonticon-attention-circled {
+    margin-right: 4px;
+  }
+}

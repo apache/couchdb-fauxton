@@ -29,10 +29,10 @@ export default class BulkDocumentHeaderController extends React.Component {
 
     let metadata, json, table;
     if (docType === Constants.INDEX_RESULTS_DOC_TYPE.VIEW) {
-      metadata = <Button
-        className={selectedLayout === Constants.LAYOUT_ORIENTATION.METADATA ? 'active' : ''}
+      metadata = <Button type="button"
+        active={selectedLayout === Constants.LAYOUT_ORIENTATION.METADATA}
         onClick={this.toggleLayout.bind(this, Constants.LAYOUT_ORIENTATION.METADATA)}
-      >
+        variant="cf-secondary">
           Metadata
       </Button>;
     } else if (docType === Constants.INDEX_RESULTS_DOC_TYPE.MANGO_INDEX) {
@@ -44,17 +44,17 @@ export default class BulkDocumentHeaderController extends React.Component {
     const isAllDocsQuery = fetchUrl && fetchUrl.includes('/_all_docs');
     const isMangoQuery = docType === Constants.INDEX_RESULTS_DOC_TYPE.MANGO_QUERY;
     if (isAllDocsQuery || isMangoQuery || (!queryOptionsParams.reduce)) {
-      table = <Button
-        className={selectedLayout === Constants.LAYOUT_ORIENTATION.TABLE ? 'active' : ''}
+      table = <Button type="button"
+        active={selectedLayout === Constants.LAYOUT_ORIENTATION.TABLE}
         onClick={this.toggleLayout.bind(this, Constants.LAYOUT_ORIENTATION.TABLE)}
-      >
+        variant="cf-secondary">
         <i className="fonticon-table" /> Table
       </Button>;
 
-      json = <Button
-        className={selectedLayout === Constants.LAYOUT_ORIENTATION.JSON ? 'active' : ''}
+      json = <Button type="button"
+        active={selectedLayout === Constants.LAYOUT_ORIENTATION.JSON}
         onClick={this.toggleLayout.bind(this, Constants.LAYOUT_ORIENTATION.JSON)}
-      >
+        variant="cf-secondary">
         <i className="fonticon-json" /> JSON
       </Button>;
     }

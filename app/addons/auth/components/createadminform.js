@@ -10,13 +10,15 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+import React from "react";
+import { Button, Form } from 'react-bootstrap';
+import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 
-import React from "react";
 import {
   createAdmin
 } from "./../actions";
-import {connect} from 'react-redux';
+
 
 export class CreateAdminForm extends React.Component {
   constructor(props) {
@@ -56,47 +58,50 @@ export class CreateAdminForm extends React.Component {
 
         <p>
           Before a server admin is configured, all clients have admin privileges. This is fine when
-
-          HTTP access is restricted to trusted users. <strong>
+          HTTP access is restricted to trusted users.
+          <strong>
             If end-users will be accessing this
             CouchDB, you must create an admin account to prevent accidental (or malicious) data
-
             loss.
           </strong>
         </p>
         <p>
           Server admins can create and destroy databases, install and update _design documents, run
-
           the test suite, and edit all aspects of CouchDB configuration.
         </p>
 
         <form id="create-admin-form" onSubmit={this.createAdmin.bind(this)}>
-          <input
-            id="username"
-            type="text"
-            ref={node => this.usernameField = node}
-            name="name"
-            placeholder="Username"
-            size="24"
-            onChange={this.onChangeUsername.bind(this)}
-          />
-          <br />
-          <input
-            id="password"
-            type="password"
-            name="password"
-            placeholder="Password"
-            size="24"
-            onChange={this.onChangePassword.bind(this)}
-          />
-          <p>
+          <div className='row'>
+            <div className='col-12 col-md-5 col-xl-4 mb-3'>
+              <Form.Control type="text"
+                id="username"
+                ref={node => this.usernameField = node}
+                name="name"
+                placeholder="Username"
+                onChange={this.onChangeUsername.bind(this)} />
+            </div>
+          </div>
+          <div className='row'>
+            <div className='col-12 col-md-5 col-xl-4 mb-3'>
+              <Form.Control type="password"
+                id="password"
+                name="password"
+                placeholder="Password"
+                onChange={this.onChangePassword.bind(this)} />
+            </div>
+          </div>
+          <div className='row'>
+            <p>
             Non-admin users have read and write access to all databases, which
             are controlled by validation. CouchDB can be configured to block all
             access to anonymous users.
-          </p>
-          <button type="submit" id="create-admin" className="btn btn-primary">
-            Create Admin
-          </button>
+            </p>
+            <div className='col-12 col-md-5 col-xl-4 mb-3'>
+              <Button id="create-admin" type="submit" variant="cf-primary">
+                Create Admin
+              </Button>
+            </div>
+          </div>
         </form>
       </div>
     );

@@ -25,7 +25,7 @@ export default class ExplainPage extends Component {
 
   render () {
     return (
-      <div>
+      <div id="explain-plan-wrapper">
         <pre className="prettyprint">{JSON.stringify(this.props.explainPlan, null, ' ')}</pre>
       </div>
     );

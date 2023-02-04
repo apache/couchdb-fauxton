@@ -63,8 +63,8 @@ describe('Navigation Bar', () => {
     const navbar = mount(<NavBar
       {...defaultProps}
       navLinks={navLinks}/>);
-    expect(navbar.find('div[data-nav-name="WithoutBadge"] i.faux-navbar__icon-badge').length).toBe(0);
-    expect(navbar.find('div[data-nav-name="WithBadge"] i.faux-navbar__icon-badge').length).toBe(1);
+    expect(navbar.find('div[data-nav-name="WithoutBadge"].faux-navbar__icon-badge').length).toBe(0);
+    expect(navbar.find('div[data-nav-name="WithBadge"].faux-navbar__icon-badge').length).toBe(1);
   });
 
 });

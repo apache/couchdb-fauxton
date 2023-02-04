@@ -33,11 +33,11 @@ module.exports = {
       .clickWhenVisible('#save-index')
       .waitForElementVisible('.Toastify__toast-container .Toastify__toast--success', waitTime, false)
 
-      .clickWhenVisible('.index-list li span', waitTime, true)
-      .clickWhenVisible('.popover-content .fonticon-files-o', waitTime, true)
+      .clickWhenVisible('a.dropdown-toggle.fonticon-wrench', waitTime, true)
+      .clickWhenVisible('div.dropdown-menu span.fonticon-files-o', waitTime, true)
       .waitForElementVisible('#new-index-name', waitTime, true)
       .setValue('#new-index-name', 'cloned-search-index')
-      .clickWhenVisible('.clone-index-modal .btn-primary', waitTime, true)
+      .clickWhenVisible('.clone-index-modal .btn-cf-primary', waitTime, true)
 
       // now wait for the sidebar to be updated with the new view
       .waitForElementVisible('#test1_cloned-search-index', waitTime, true)

@@ -61,13 +61,13 @@ describe('Auth -- Components', () => {
 
     it('should update state on password change', () => {
       const changePasswordForm = mount(<ChangePasswordForm />);
-      changePasswordForm.find('#password').simulate('change', { target: { value: 'bobsyouruncle' }});
+      changePasswordForm.find('input#password').simulate('change', { target: { value: 'bobsyouruncle' }});
       expect(changePasswordForm.state('password')).toEqual('bobsyouruncle');
     });
 
     it('should update state on password confirm change', () => {
       const changePasswordForm = mount(<ChangePasswordForm />);
-      changePasswordForm.find('#password-confirm').simulate('change', { target: { value: 'hotdiggity' }});
+      changePasswordForm.find('input#password-confirm').simulate('change', { target: { value: 'hotdiggity' }});
       expect(changePasswordForm.state('passwordConfirm')).toEqual('hotdiggity');
     });
 
@@ -82,13 +82,13 @@ describe('Auth -- Components', () => {
   describe('CreateAdminForm', () => {
     it('should update username state', () => {
       const createAdminForm = mount(<CreateAdminForm loginAfter={false} />);
-      createAdminForm.find('#username').simulate('change',  { target: { value: 'catsmeow' }});
+      createAdminForm.find('input#username').simulate('change',  { target: { value: 'catsmeow' }});
       expect(createAdminForm.state('username')).toEqual('catsmeow');
     });
 
     it('should call action to update password confirm on field change', () => {
       const createAdminForm = mount(<CreateAdminForm loginAfter={false} />);
-      createAdminForm.find('#password').simulate('change',  { target: { value: 'topnotch' }});
+      createAdminForm.find('input#password').simulate('change',  { target: { value: 'topnotch' }});
       expect(createAdminForm.state('password')).toEqual('topnotch');
     });
   });

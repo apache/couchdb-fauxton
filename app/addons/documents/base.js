@@ -23,7 +23,7 @@ import revisionBrowserReducers from './rev-browser/reducers';
 import docEditorReducers from './doc-editor/reducers';
 import changesReducers from './changes/reducers';
 import indexEditorReducers from './index-editor/reducers';
-import "./assets/less/documents.less";
+import "./assets/scss/documents.scss";
 
 FauxtonAPI.addReducers({
   indexResults: reducers,

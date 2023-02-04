@@ -13,7 +13,7 @@
 import FauxtonAPI from '../../core/api';
 import Helpers from "../../helpers";
 import replication from './route';
-import './assets/less/replication.less';
+import './assets/scss/replication.scss';
 import { checkForNewApi } from './actions';
 import replicationReducer from './reducers';
 

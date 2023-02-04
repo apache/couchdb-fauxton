@@ -12,6 +12,7 @@
 
 import PropTypes from 'prop-types';
 import React from 'react';
+import { ButtonGroup, Button, Card } from 'react-bootstrap';
 import Constants from '../constants';
 import AnalyzerMultiple from './AnalyzerMultiple';
 import AnalyzerDropdown from './AnalyzerDropdown';
@@ -29,8 +30,8 @@ export default class Analyzer extends React.Component {
     addAnalyzerRow: PropTypes.func.isRequired
   };
 
-  selectAnalyzerType = (e) => {
-    this.props.setAnalyzerType(e.target.value);
+  selectAnalyzerType = (val) => {
+    this.props.setAnalyzerType(val);
   };
 
   validate = () => {
@@ -86,40 +87,31 @@ export default class Analyzer extends React.Component {
   };
 
   render() {
-    let multipleClasses = 'btn';
-    if (this.props.analyzerType === Constants.ANALYZER_MULTIPLE) {
-      multipleClasses += ' active';
-    }
-    let singleClasses = 'btn';
-    if (this.props.analyzerType === Constants.ANALYZER_SINGLE) {
-      singleClasses += ' active';
-    }
-
     return (
-      <div className="well">
-        <div className="control-group">
-          <label htmlFor="search-analyzer">Analyzer</label>
-          <div className="btn-group toggle-btns" id="analyzer">
-            <label style={{width: '82px'}}  htmlFor="single-analyzer" className={singleClasses}>Single</label>
-            <input
-              type="radio"
-              id="single-analyzer"
-              name="search-analyzer"
-              value="single"
-              checked={this.props.analyzerType === Constants.ANALYZER_SINGLE}
-              onChange={this.selectAnalyzerType} />
-            <input
-              type="radio"
-              id="multiple-analyzer"
-              name="search-analyzer"
-              value="multiple"
-              checked={this.props.analyzerType === Constants.ANALYZER_MULTIPLE}
-              onChange={this.selectAnalyzerType} />
-            <label style={{width: '82px'}} htmlFor="multiple-analyzer" className={multipleClasses}>Multiple</label>
+      <Card className='mb-3 col-12 col-xxl-8'>
+        <Card.Body>
+          <div className="row">
+            <div className="mb-3 col-12">
+              <label>Analyzer</label>
+              <div className="search-analyzer-type-selector">
+                <ButtonGroup aria-label='analyzer type selector'>
+                  <Button type="button"
+                    id="single-analyzer"
+                    active={this.props.analyzerType === Constants.ANALYZER_SINGLE}
+                    onClick={() => {this.selectAnalyzerType(Constants.ANALYZER_SINGLE);}}
+                    variant="cf-secondary">Single</Button>
+                  <Button type="button"
+                    id="multiple-analyzer"
+                    active={this.props.analyzerType === Constants.ANALYZER_MULTIPLE}
+                    onClick={() => {this.selectAnalyzerType(Constants.ANALYZER_MULTIPLE);}}
+                    variant="cf-secondary">Multiple</Button>
+                </ButtonGroup>
+              </div>
+            </div>
           </div>
-        </div>
-        {this.getAnalyzerType()}
-      </div>
+          {this.getAnalyzerType()}
+        </Card.Body>
+      </Card>
     );
   }
 }

@@ -29,15 +29,15 @@ module.exports = {
       .waitForElementPresent('#dashboard-content a[href="database/' + newDatabaseName + '/_all_docs"]', waitTime, false)
       .clickWhenVisible('#dashboard-content a[href="database/' + newDatabaseName + '/_all_docs"]', waitTime, false)
       .clickWhenVisible('.fonticon-json')
-      .waitForElementVisible('label[for="checkbox-' + newDocumentName + '"]', waitTime, false)
-      .clickWhenVisible('label[for="checkbox-' + newDocumentName + '"]', waitTime, false)
-      .clickWhenVisible('.bulk-action-component-selector-group button.fonticon-trash', waitTime, false)
+      .waitForElementVisible('input[id="checkbox-' + newDocumentName + '"][type="checkbox"]', waitTime, false)
+      .clickWhenVisible('input[id="checkbox-' + newDocumentName + '"][type="checkbox"]', waitTime, false)
+      .clickWhenVisible('.bulk-action-component-selector-group button.toolbar-btn[icon="fonticon-trash"]', waitTime, false)
       .acceptAlert()
       .waitForElementVisible('.Toastify__toast-container .Toastify__toast--info', waitTime, false)
 
-      .waitForElementVisible('label[for="checkbox-' + newDocumentName + '2' + '"]', waitTime, false)
-      .clickWhenVisible('label[for="checkbox-' + newDocumentName + '2' + '"]', waitTime, false)
-      .clickWhenVisible('.bulk-action-component-selector-group button.fonticon-trash', waitTime, false)
+      .waitForElementVisible('input[id="checkbox-' + newDocumentName + '2' + '"][type="checkbox"]', waitTime, false)
+      .clickWhenVisible('input[id="checkbox-' + newDocumentName + '2' + '"][type="checkbox"]', waitTime, false)
+      .clickWhenVisible('.bulk-action-component-selector-group button.toolbar-btn[icon="fonticon-trash"]', waitTime, false)
       .acceptAlert()
 
       .checkForStringNotPresent(newDatabaseName + '/_all_docs', newDocumentName)
@@ -72,12 +72,12 @@ module.exports = {
       .waitForElementPresent('#dashboard-content a[href="database/' + newDatabaseName + '/_all_docs"]', waitTime, false)
       .clickWhenVisible('#dashboard-content a[href="database/' + newDatabaseName + '/_all_docs"]', waitTime, false)
       .clickWhenVisible('#checkbox-' + newDocumentName, waitTime, false)
-      .clickWhenVisible('.bulk-action-component-selector-group button.fonticon-trash', waitTime, false)
+      .clickWhenVisible('.bulk-action-component-selector-group button.toolbar-btn[icon="fonticon-trash"]', waitTime, false)
       .acceptAlert()
       .waitForElementVisible('.Toastify__toast-container .Toastify__toast--info', waitTime, false)
 
       .clickWhenVisible('#checkbox-' + newDocumentName + '2', waitTime, false)
-      .clickWhenVisible('.bulk-action-component-selector-group button.fonticon-trash', waitTime, false)
+      .clickWhenVisible('.bulk-action-component-selector-group button.toolbar-btn[icon="fonticon-trash"]', waitTime, false)
       .acceptAlert()
 
       .checkForStringNotPresent(newDatabaseName + '/_all_docs', newDocumentName)
@@ -123,12 +123,12 @@ module.exports = {
       // confirm the design doc appears in the sidebar
       .waitForElementPresent('#sidebar-content span[title="_design/sidebar-update"]', waitTime, false)
 
-      .execute('document.querySelector("div[data-id=\'_design/sidebar-update\']").scrollIntoView();')
-      .clickWhenVisible('div[data-id="_design/sidebar-update"] label[for="checkbox-_design/sidebar-update"]', waitTime, false)
+      .execute('document.querySelector("input[id=\'checkbox-_design/sidebar-update\'][type=\'checkbox\']").scrollIntoView();')
+      .clickWhenVisible('input[id="checkbox-_design/sidebar-update"][type="checkbox"]', waitTime, false)
 
-      .waitForElementPresent('.bulk-action-component-selector-group .fonticon-trash', waitTime, false)
-      .execute('document.querySelector(".bulk-action-component-selector-group .fonticon-trash").scrollIntoView();')
-      .clickWhenVisible('.bulk-action-component-selector-group .fonticon-trash')
+      .waitForElementPresent('.bulk-action-component-selector-group button.toolbar-btn[icon="fonticon-trash"]', waitTime, false)
+      .execute('document.querySelector(".bulk-action-component-selector-group button.toolbar-btn[icon="fonticon-trash"]").scrollIntoView();')
+      .clickWhenVisible('.bulk-action-component-selector-group button.toolbar-btn[icon="fonticon-trash"]')
       .acceptAlert()
 
       // now confirm it's gone
@@ -150,8 +150,8 @@ module.exports = {
       .waitForElementPresent('#editor-container', waitTime, false)
       .clickWhenVisible('#doc-editor-actions-panel button[title="Delete"]')
       .waitForElementVisible('.confirmation-modal', waitTime, false)
-      .clickWhenVisible('.confirmation-modal button.btn.btn-primary')
-      .waitForElementNotPresent('.confirmation-modal button.btn-primary', waitTime, true)
+      .clickWhenVisible('.confirmation-modal button.btn.btn-cf-primary')
+      .waitForElementNotPresent('.confirmation-modal button.btn-cf-primary', waitTime, true)
       .waitForElementPresent('.jump-to-doc', waitTime, false)
 
       //check raw JSON

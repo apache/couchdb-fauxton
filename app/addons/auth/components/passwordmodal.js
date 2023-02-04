@@ -13,7 +13,7 @@
 import PropTypes from 'prop-types';
 
 import React from "react";
-import { Modal } from "react-bootstrap";
+import { Button, Modal } from "react-bootstrap";
 import { hidePasswordModal, authenticate } from "./../actions";
 import Components from "../../components/react-components";
 import FauxtonAPI from "../../../core/api";
@@ -74,7 +74,7 @@ class PasswordModal extends React.Component {
           />
         </Modal.Body>
         <Modal.Footer>
-          <a className="cancel-link" onClick={() => onClose()}>Cancel</a>
+          <Button href="#" data-bypass="true" variant="cf-cancel" className="cancel-link" onClick={() => onClose()}>Cancel</Button>
           <Components.ConfirmButton
             text={submitBtnLabel}
             onClick={this.authenticate}

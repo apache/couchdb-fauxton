@@ -58,7 +58,7 @@ module.exports = {
       .waitForElementPresent('#doc-list', waitTime, false)
       .assert.textContains('#dashboard-lower-content', 'ente_ente_mango_ananas')
       .clickWhenVisible('.bulk-action-component-panel input[type="checkbox"]')
-      .clickWhenVisible('.bulk-action-component-selector-group button.fonticon-trash', waitTime, false)
+      .clickWhenVisible('.bulk-action-component-selector-group button.toolbar-btn[icon="fonticon-trash"]', waitTime, false)
       .acceptAlert()
 
       .checkForStringNotPresent(newDatabaseName + '/_index', '"name":"rocko-artischocko"')

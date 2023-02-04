@@ -10,7 +10,7 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 import React from 'react';
-import ActiveTasksFilterTabs from './filtertabs';
+import {ActiveTasksFilterTabs, ActiveTasksFilter} from './filtertabs';
 import ActiveTaskTable from './table';
 
 export default class ActiveTasksController extends React.Component {
@@ -42,8 +42,16 @@ export default class ActiveTasksController extends React.Component {
           <ActiveTasksFilterTabs
             searchTerm={searchTerm}
             selectedRadio={selectedRadio}
-            onSearch={setSearchTerm}
             onRadioClick={this.switchTab}/>
+
+          <div className="row">
+            <div id="active-tasks-search" className="col-12 col-md-6">
+              <ActiveTasksFilter
+                onSearch={setSearchTerm}
+              />
+            </div>
+          </div>
+
           <ActiveTaskTable
             isLoading={isLoading}
             tasks={tasks}

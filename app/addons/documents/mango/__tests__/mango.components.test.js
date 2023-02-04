@@ -222,7 +222,7 @@ describe('MangoQueryEditor', function () {
       />
     );
 
-    wrapper.find('#explain-btn').simulate('click', { preventDefault: () => {} });
+    wrapper.find('button#explain-btn').simulate('click', { preventDefault: () => {} });
     sinon.assert.called(runExplainQueryStub);
     const { partitionKey } = runExplainQueryStub.firstCall.args[0];
     expect(partitionKey).toBe('part1');

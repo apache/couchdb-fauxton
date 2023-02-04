@@ -11,7 +11,6 @@
 // the License.
 
 import React from 'react';
-import ReactDOM from "react-dom";
 import PropTypes from 'prop-types';
 import * as jdp from "jsondiffpatch";
 import "jsondiffpatch/dist/formatters-styles/html.css";
@@ -27,7 +26,6 @@ const RevisionDiffArea = ({ours, theirs}) => {
   return (
     <div className="revision-diff-area">
       <div
-        style={{marginTop: '30px'}}
         dangerouslySetInnerHTML={{__html: html}}
       >
       </div>

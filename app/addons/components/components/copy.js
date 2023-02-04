@@ -48,7 +48,7 @@ export class Copy extends React.Component {
 
   getClipboardElement () {
     if (this.props.displayType === 'icon') {
-      return (<i aria-hidden="true" className="fontawesome icon-paste"></i>);
+      return (<i aria-hidden="true" className="fonticon-copy"></i>);
     }
     return this.props.textDisplay;
   }

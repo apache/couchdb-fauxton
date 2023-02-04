@@ -249,7 +249,8 @@ export default class NewReplicationController extends React.Component {
       sourceAuth,
       targetAuthType,
       targetAuth,
-      targetDatabasePartitioned
+      targetDatabasePartitioned,
+      pageLimit
     } = this.props;
 
     let _rev;
@@ -275,7 +276,7 @@ export default class NewReplicationController extends React.Component {
       targetAuthType,
       targetAuth,
       targetDatabasePartitioned
-    });
+    }, pageLimit);
   }
 
   confirmButtonEnabled () {
@@ -338,50 +339,71 @@ export default class NewReplicationController extends React.Component {
     } = this.props;
 
     return (
-      <div style={ {paddingBottom: 20} }>
-        <ReplicationSource
-          replicationSource={replicationSource}
-          localSource={localSource}
-          databases={databases}
-          remoteSource={remoteSource}
-          onSourceSelect={updateFormField('replicationSource')}
-          onRemoteSourceChange={updateFormField('remoteSource')}
-          onLocalSourceChange={updateFormField('localSource')}
-        />
-        <ReplicationAuth
-          credentials={sourceAuth}
-          authType={sourceAuthType}
-          onChangeAuthType={updateFormField('sourceAuthType')}
-          onChangeAuth={updateFormField('sourceAuth')}
-          authId={'replication-source-auth'}
-        />
-        <hr className="replication__seperator" size="1"/>
-        <ReplicationTarget
-          replicationTarget={replicationTarget}
-          onTargetChange={updateFormField('replicationTarget')}
-          databases={databases}
-          localTarget={localTarget}
-          remoteTarget={remoteTarget}
-          allowNewPartitionedLocalDbs={allowNewPartitionedLocalDbs}
-          targetDatabasePartitioned={targetDatabasePartitioned}
-          onRemoteTargetChange={updateFormField('remoteTarget')}
-          onLocalTargetChange={updateFormField('localTarget')}
-          onTargetDatabasePartitionedChange={updateFormField('targetDatabasePartitioned')}
-        />
-        <ReplicationAuth
-          credentials={targetAuth}
-          authType={targetAuthType}
-          onChangeAuthType={updateFormField('targetAuthType')}
-          onChangeAuth={updateFormField('targetAuth')}
-          authId={'replication-target-auth'}
-        />
-        <hr className="replication__seperator" size="1"/>
-        <ReplicationOptions
-          replicationType={replicationType}
-          replicationDocName={replicationDocName}
-          onDocChange={updateFormField('replicationDocName')}
-          onTypeChange={updateFormField('replicationType')}
-        />
+      <div className="container px-3 py-3">
+        <div className="row">
+          <div className="col-12"><h3>Source</h3></div>
+          <div className="col-12">
+            <ReplicationSource
+              replicationSource={replicationSource}
+              localSource={localSource}
+              databases={databases}
+              remoteSource={remoteSource}
+              onSourceSelect={updateFormField('replicationSource')}
+              onRemoteSourceChange={updateFormField('remoteSource')}
+              onLocalSourceChange={updateFormField('localSource')}
+            />
+          </div>
+          <div className="col-12 mt-2">
+            <ReplicationAuth
+              credentials={sourceAuth}
+              authType={sourceAuthType}
+              onChangeAuthType={updateFormField('sourceAuthType')}
+              onChangeAuth={updateFormField('sourceAuth')}
+              authId={'replication-source-auth'}
+            />
+          </div>
+        </div>
+
+        <hr className="replication__seperator my-3" size="1"/>
+
+        <div className="row">
+          <div className="col-12"><h3>Target</h3></div>
+          <div className="col-12">
+            <ReplicationTarget
+              replicationTarget={replicationTarget}
+              onTargetChange={updateFormField('replicationTarget')}
+              databases={databases}
+              localTarget={localTarget}
+              remoteTarget={remoteTarget}
+              allowNewPartitionedLocalDbs={allowNewPartitionedLocalDbs}
+              targetDatabasePartitioned={targetDatabasePartitioned}
+              onRemoteTargetChange={updateFormField('remoteTarget')}
+              onLocalTargetChange={updateFormField('localTarget')}
+              onTargetDatabasePartitionedChange={updateFormField('targetDatabasePartitioned')}
+            />
+          </div>
+          <div className="col-12 mt-2">
+            <ReplicationAuth
+              credentials={targetAuth}
+              authType={targetAuthType}
+              onChangeAuthType={updateFormField('targetAuthType')}
+              onChangeAuth={updateFormField('targetAuth')}
+              authId={'replication-target-auth'}
+            />
+          </div>
+        </div>
+        <hr className="replication__seperator my-3" size="1"/>
+
+        <div className="row">
+          <div className="col-12"><h3>Options</h3></div>
+          <ReplicationOptions
+            replicationType={replicationType}
+            replicationDocName={replicationDocName}
+            onDocChange={updateFormField('replicationDocName')}
+            onTypeChange={updateFormField('replicationType')}
+          />
+        </div>
+
         <ReplicationSubmit
           disabled={!this.confirmButtonEnabled()}
           onClick={this.runReplicationChecks}

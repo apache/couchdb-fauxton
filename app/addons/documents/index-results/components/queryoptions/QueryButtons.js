@@ -13,22 +13,27 @@
 import PropTypes from 'prop-types';
 
 import React from 'react';
+import { Button } from 'react-bootstrap';
 
 export default class QueryButtons extends React.Component {
   constructor (props) {
     super(props);
+    this.hideTray = this.hideTray.bind(this);
   }
 
-  hideTray () {
+  hideTray (ev) {
+    if (ev && ev.preventDefault) {
+      ev.preventDefault();
+    }
     this.props.onCancel();
   }
 
   render () {
     return (
-      <div className="controls-group query-group">
-        <div id="button-options" className="controls controls-row">
-          <button type="submit" className="btn btn-secondary">Run Query</button>
-          <a onClick={this.hideTray.bind(this)} className="btn btn-cancelDark">Cancel</a>
+      <div className="row mx-2 mb-3 mt-0 text-end">
+        <div id="button-options" className="col">
+          <Button href="#" data-bypass="true" variant="cf-cancel" onClick={this.hideTray}>Cancel</Button>
+          <Button type="submit" variant="cf-primary">Run Query</Button>
         </div>
       </div>
     );

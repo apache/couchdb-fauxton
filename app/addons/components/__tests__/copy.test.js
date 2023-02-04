@@ -18,12 +18,12 @@ describe('Copy', () => {
 
   it('shows a copy icon by default', () => {
     const wrapper = mount(<Copy uniqueKey={uuidv4()} text="copy me"/>);
-    expect(wrapper.find('.icon-paste').length).toBe(1);
+    expect(wrapper.find('.fonticon-copy').length).toBe(1);
   });
 
   it('shows text if specified', () => {
     const wrapper = mount(<Copy uniqueKey={uuidv4()} text="copy me" displayType="text" />);
-    expect(wrapper.find('.icon-paste').length).toBe(0);
+    expect(wrapper.find('.fonticon-copy').length).toBe(0);
   });
 
   it('shows custom text if specified', () => {

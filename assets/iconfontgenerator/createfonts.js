@@ -20,7 +20,7 @@ if (!process.argv[2].startsWith("fauxtonicon")) {
 const fauxtonFontname = process.argv[2];
 const generatedFontsDir = "generated";
 
-// Generate the font files (.ttf, .woff, etc) and LESS file
+// Generate the font files (.ttf, .woff, etc) and SCSS file
 svgtofont({
   emptyDist: true, // Clear output directory contents
   src: "../icons", // svg path
@@ -42,13 +42,6 @@ svgtofont({
 }).then(() => {
   console.log(`Font ${fauxtonFontname} generated`);
   try {
-    // The custom template ../styles/icons.less includes the '{{cssToVars}}' variable so the generator adds the list of icons as variables.
-    // The problem is that {{cssToVars}} is written in SCSS syntax, so we need to convert it to LESS syntax, which comes down
-    // to replacing '$<var_name>' to '@<var_name>'.
-    const original = fs.readFileSync("./generated/icons.less", "utf8");
-    const updated = original.replaceAll("$fonticon-", "@fonticon-");
-    fs.writeFileSync("./generated/icons.less", updated);
-
     // Remove old icons font files
     const fontsDir = "../fonts";
     fs.readdirSync(fontsDir).forEach((file) => {
@@ -69,14 +62,14 @@ svgtofont({
       }
     });
 
-    // Replace 'assets/less/icons.less' with the newly generated version
-    const iconsLess = "../less/icons.less";
-    console.log(`Replacing ${iconsLess} with the new version`);
-    if (fs.existsSync(iconsLess)) {
-      fs.unlinkSync(iconsLess);
+    // Replace 'assets/scss/icons.scss' with the newly generated version
+    const iconsScss = "../scss/_icons.scss";
+    console.log(`Replacing ${iconsScss} with the new version`);
+    if (fs.existsSync(iconsScss)) {
+      fs.unlinkSync(iconsScss);
     }
-    const generatedIconsLess = generatedFontsDir + "/icons.less";
-    fs.renameSync(generatedIconsLess, iconsLess);
+    const generatediconsScss = generatedFontsDir + "/icons.scss";
+    fs.renameSync(generatediconsScss, iconsScss);
   } catch (err) {
     console.error(err);
     process.exit(1);

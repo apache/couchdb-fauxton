@@ -10,18 +10,14 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import ReactComponents from '../../components/react-components';
 import DesignDocSelector from './components/DesignDocSelector';
 import IndexEditor from './components/IndexEditor';
 import IndexEditorContainer from './components/IndexEditorContainer';
 import ReduceEditor from './components/ReduceEditor';
 
-const StyledSelect = ReactComponents.StyledSelect;
-
 export default {
   IndexEditorContainer,
   IndexEditor,
   ReduceEditor,
-  DesignDocSelector,
-  StyledSelect
+  DesignDocSelector
 };

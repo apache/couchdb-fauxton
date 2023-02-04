@@ -14,7 +14,6 @@ import {Accordion, AccordionItem} from './components/accordion';
 import {Badge, BadgeList} from './components/badge';
 import {ToggleHeaderButton} from './components/toggleheaderbutton';
 import {BulkActionComponent} from './components/bulkaction';
-import {StyledSelect} from './components/styledselect';
 import {StringEditModal} from './components/stringeditmodal';
 import {CodeEditorPanel} from './components/codeeditorpanel';
 import {CodeEditor} from './components/codeeditor';
@@ -32,6 +31,7 @@ import {Polling, RefreshBtn} from './components/polling';
 import {Copy} from './components/copy';
 import {TabWindowWrapper} from './components/tabwindowwrapper';
 import {ThrottledReactSelectAsync} from './components/throttledreacselect';
+import {ToolbarButton} from './components/toolbarbutton';
 
 export default {
   Accordion,
@@ -41,7 +41,6 @@ export default {
   BulkActionComponent,
   ConfirmButton,
   ToggleHeaderButton,
-  StyledSelect,
   CodeEditorPanel,
   CodeEditor,
   StringEditModal,
@@ -61,5 +60,6 @@ export default {
   RefreshBtn,
   Copy,
   TabWindowWrapper,
-  ThrottledReactSelectAsync
+  ThrottledReactSelectAsync,
+  ToolbarButton
 };

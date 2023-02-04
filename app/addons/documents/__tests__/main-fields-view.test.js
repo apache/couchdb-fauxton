@@ -35,7 +35,7 @@ describe('MainFieldsView', () => {
       docURL={docURL}
     />);
 
-    expect(wrapper.find('#qoReduce').length).toBe(0);
+    expect(wrapper.find('input#qoReduce').length).toBe(0);
   });
 
   it('render reduce when showReduce is true but does not render grouplevel when reduce is false', () => {
@@ -48,7 +48,7 @@ describe('MainFieldsView', () => {
       docURL={docURL}
     />);
 
-    expect(wrapper.find('#qoReduce').length).toBe(1);
+    expect(wrapper.find('input#qoReduce').length).toBe(1);
     expect(wrapper.find('#qoGroupLevelGroup').length).toBe(0);
   });
 
@@ -63,7 +63,7 @@ describe('MainFieldsView', () => {
       docURL={docURL}
     />);
 
-    wrapper.find('#qoIncludeDocs').simulate('change');
+    wrapper.find('input#qoIncludeDocs').simulate('change');
     expect(spy.calledOnce).toBe(true);
   });
 
@@ -80,7 +80,7 @@ describe('MainFieldsView', () => {
       docURL={docURL}
     />);
 
-    wrapper.find('#qoGroupLevel').simulate('change');
+    wrapper.find('select#qoGroupLevel').simulate('change');
     expect(spy.calledOnce).toBe(true);
   });
 
@@ -97,7 +97,7 @@ describe('MainFieldsView', () => {
       docURL={docURL}
     />);
 
-    wrapper.find('#qoReduce').simulate('change');
+    wrapper.find('input#qoReduce').simulate('change');
     expect(spy.calledOnce).toBe(true);
   });
 
@@ -114,7 +114,7 @@ describe('MainFieldsView', () => {
       enableStable={true}
     />);
 
-    wrapper.find('#qoStable').simulate('change');
+    wrapper.find('input#qoStable').simulate('change');
     expect(spy.calledOnce).toBe(true);
   });
 
@@ -130,7 +130,7 @@ describe('MainFieldsView', () => {
       docURL={docURL}
     />);
 
-    wrapper.find('#qoUpdate').simulate('change');
+    wrapper.find('select#qoUpdate').simulate('change');
     expect(spy.calledOnce).toBe(true);
   });
 });

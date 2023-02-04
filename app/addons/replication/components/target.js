@@ -10,15 +10,11 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import Constants from '../constants';
-import Components from '../../components/react-components';
-import ReactSelect from 'react-select';
-
-const { StyledSelect } = Components;
+import Form from 'react-bootstrap/Form';
 
 const replicationTargetSourceOptions = () => {
   return [
@@ -36,16 +32,16 @@ const replicationTargetSourceOptions = () => {
 
 const ReplicationTargetSelect = ({ value, onChange }) => {
   return (
-    <div className="replication__section">
-      <div className="replication__input-label">
-        Type:
-      </div>
-      <div id="replication-target" className="replication__input-select">
-        <StyledSelect
-          selectContent={replicationTargetSourceOptions()}
-          selectChange={(e) => onChange(e.target.value)}
-          selectId="replication-target"
-          selectValue={value} />
+    <div className="row">
+      <div className="col-12 col-md-2">Type:</div>
+      <div className="col-12 col-md mt-1 mt-md-0">
+        <Form.Select
+          onChange={(e) => onChange(e.target.value)}
+          id="replication-target"
+          value={value}
+        >
+          {replicationTargetSourceOptions()}
+        </Form.Select>
       </div>
     </div>
   );
@@ -58,15 +54,14 @@ ReplicationTargetSelect.propTypes = {
 
 const RemoteTargetReplicationRow = ({ onChange, value }) => {
   return (
-    <div>
-      <input
-        type="text"
-        className="replication__remote-connection-url"
-        placeholder="https://"
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-      />
-    </div>
+    <Form.Control
+      type="text"
+      id="replication-remote-connection-url"
+      className="form-control"
+      placeholder="https://"
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+    />
   );
 };
 
@@ -76,17 +71,16 @@ RemoteTargetReplicationRow.propTypes = {
 };
 
 const ExistingLocalTargetReplicationRow = ({ onChange, value, databases }) => {
-  const options = databases.map(db => ({ value: db, label: db }));
+  const options = databases.map(option => <option value={option} key={option}>{option}</option>);
   return (
-    <div id="replication-target-local" className="replication__input-react-select">
-      <ReactSelect
-        value={value}
-        options={options}
-        placeholder="Database name"
-        clearable={false}
-        onChange={({ value }) => onChange(value)}
-      />
-    </div>
+    <Form.Select
+      id="replication-target-existing-local-database-database-name"
+      value={value}
+      placeholder="Database name"
+      onChange={(e) => onChange(e.target.value)}
+    >
+      {options}
+    </Form.Select>
   );
 };
 
@@ -96,14 +90,18 @@ ExistingLocalTargetReplicationRow.propTypes = {
   onChange: PropTypes.func.isRequired
 };
 
-const NewLocalTargetReplicationRow = ({ onChange, value }) =>
-  <input
-    type="text"
-    className="replication__new-input"
-    placeholder="Database name"
-    value={value}
-    onChange={(e) => onChange(e.target.value)}
-  />;
+const NewLocalTargetReplicationRow = ({ onChange, value }) => {
+  return (
+    <Form.Control
+      id="replication-target-new-local-database-database-name"
+      type="text"
+      className="form-control"
+      placeholder="Database name"
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+    />
+  );
+};
 
 NewLocalTargetReplicationRow.propTypes = {
   value: PropTypes.string.isRequired,
@@ -151,9 +149,9 @@ const ReplicationTargetRow = ({
   }
 
   return (
-    <div className="replication__section">
-      <div className="replication__input-label">{targetLabel}</div>
-      <div>
+    <div className="row mt-2">
+      <div className="col-12 col-md-2">{targetLabel}</div>
+      <div className="col-12 col-md mt-1 mt-md-0">
         {input}
       </div>
     </div>
@@ -194,24 +192,29 @@ const NewTargetDatabaseOptionsRow = ({
   };
 
   return (
-    <div className="replication__section">
-      <div className="replication__input-label">New database options:</div>
-      <div className={classnames('replication__input-checkbox', { 'replication__input-checkbox--disabled': disablePartitionedOption})}>
+    <React.Fragment>
+      <div className="row mt-2">
+        <div className="col-12 col-md-2">New database options:</div>
+        <div className="col-12 col-md mt-1 mt-md-0">
+          <Form.Check disabled>
+            <Form.Check.Input
+              id="target-db-is-partitioned"
+              type="checkbox"
+              value="true"
+              checked={targetDatabasePartitioned}
+              onChange={togglePartitioned}
+              disabled={disablePartitionedOption}
+            />
 
-        <input id="target-db-is-partitioned"
-          type="checkbox"
-          value="true"
-          checked={targetDatabasePartitioned}
-          onChange={togglePartitioned}
-          disabled={disablePartitionedOption}
-        />
-
-
-        <OverlayTrigger placement="right" overlay={tooltip}>
-          <label htmlFor="target-db-is-partitioned" >Partitioned</label>
-        </OverlayTrigger>
-      </div >
-    </div>
+            <OverlayTrigger placement="right" overlay={tooltip}>
+              <Form.Check.Label className="ms-2">
+                Partitioned
+              </Form.Check.Label>
+            </OverlayTrigger>
+          </Form.Check>
+        </div>
+      </div>
+    </React.Fragment>
   );
 };
 
@@ -238,8 +241,7 @@ export class ReplicationTarget extends React.Component {
       allowNewPartitionedLocalDbs
     } = this.props;
     return (
-      <div>
-        <h3>Target</h3>
+      <React.Fragment>
         <ReplicationTargetSelect
           value={replicationTarget}
           onChange={onTargetChange}
@@ -258,7 +260,7 @@ export class ReplicationTarget extends React.Component {
           targetDatabasePartitioned={targetDatabasePartitioned}
           allowNewPartitionedLocalDbs={allowNewPartitionedLocalDbs}
         />
-      </div>
+      </React.Fragment>
     );
   }
 }

@@ -12,6 +12,7 @@
 
 import PropTypes from 'prop-types';
 import React from 'react';
+import { Form } from 'react-bootstrap';
 
 export default class PartitionKeySelector extends React.Component {
 
@@ -77,15 +78,14 @@ export default class PartitionKeySelector extends React.Component {
   globalHeader() {
     return (
       <button onClick={this.onModeSwitchClick} title="Partition Key Selector" className="button partition-selector__switch">
-        <i className="fonticon-filter"></i>
-        No partition selected
+        <i className="fonticon-filter"></i><span>No partition selected</span>
       </button>
     );
   }
 
   partitionHeader() {
     const editor = (
-      <input type="text"
+      <Form.Control type="text"
         style={{padding:2, fontSize:16, margin: 0, display: this.state.editMode ? 'block' : 'none'}}
         onKeyPress={this.onKeyPress}
         onChange={this.onChange}
@@ -99,6 +99,7 @@ export default class PartitionKeySelector extends React.Component {
       partName = this.props.partitionKey;
       className += ' partition-selector__key--active';
     }
+
     return (
       <React.Fragment>
         <button onClick={this.onModeSwitchClick} title="Partition Key Selector" className="button partition-selector__switch button partition-selector__switch--active">

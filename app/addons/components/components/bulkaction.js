@@ -11,10 +11,9 @@
 // the License.
 
 import PropTypes from 'prop-types';
-
 import React from "react";
-import ReactDOM from "react-dom";
-import {OverlayTrigger, Popover} from "react-bootstrap";
+import { OverlayTrigger, Popover, Form } from "react-bootstrap";
+import { ToolbarButton } from './toolbarbutton';
 
 export class BulkActionComponent extends React.Component {
   static propTypes = {
@@ -51,19 +50,17 @@ export class BulkActionComponent extends React.Component {
       return null;
     }
 
-    return (
-      <button
-        onClick={this.props.removeItem}
-        className={'fonticon ' + this.props.bulkIcon}
-        title={this.props.buttonTitle} />
-    );
+    return <ToolbarButton icon={this.props.bulkIcon}
+      title={this.props.buttonTitle}
+      aria-label={this.props.buttonTitle}
+      onClick={this.props.removeItem} />;
   };
 
   getPopupContent = () => {
     return (
       <ul className="bulk-action-component-popover-actions">
         <li onClick={this.selectAll} >
-          <i className="icon fonticon-cancel"></i> {this.props.dropdownContentText}
+          <i className="fonticon fonticon-cancel"></i> {this.props.dropdownContentText}
         </li>
       </ul>
     );
@@ -96,10 +93,12 @@ export class BulkActionComponent extends React.Component {
   getMasterSelector = () => {
     return (
       <div className="bulk-action-component-panel">
-        <input type="checkbox"
+        <Form.Check
           checked={this.props.isChecked}
           onChange={this.props.toggleSelect}
-          disabled={this.props.disabled} />
+          disabled={this.props.disabled}
+          type="checkbox"
+        />
         {this.props.enableOverlay ? <div className="separator"></div> : null}
         {this.props.enableOverlay ? this.getOverlay() : null}
       </div>

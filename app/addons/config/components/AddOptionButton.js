@@ -12,7 +12,7 @@
 
 import PropTypes from 'prop-types';
 import React from 'react';
-import {Button, Overlay, Popover} from 'react-bootstrap';
+import {Button, Form, Overlay, Popover} from 'react-bootstrap';
 
 export default class AddOptionButton extends React.Component {
   static propTypes = {
@@ -82,47 +82,58 @@ export default class AddOptionButton extends React.Component {
 
   getPopover () {
     return (
-      <Popover className="tray" id="add-option-popover" title="Add Option">
-        <input
-          className="input-section-name"
-          onChange={this.updateSectionName.bind(this)}
-          type="text" name="section" placeholder="Section" autoComplete="off" autoFocus/>
-        <input
-          className="input-option-name"
-          onChange={this.updateOptionName.bind(this)}
-          type="text" name="name" placeholder="Name"/>
-        <input
-          className="input-value"
-          onChange={this.updateValue.bind(this)}
-          type="text" name="value" placeholder="Value"/>
-        <a
-          className="btn btn-create"
-          onClick={this.onAdd.bind(this)}>
-          Create
-        </a>
+      <Popover className="tray" id="add-option-popover">
+        <Popover.Header as="h3">Add Option</Popover.Header>
+        <Popover.Body>
+          <Form.Control type="text"
+            className="mb-3"
+            onChange={this.updateSectionName.bind(this)}
+            name="section"
+            placeholder="Section"
+            autoComplete="off"
+            autoFocus />
+          <Form.Control type="text"
+            className="mb-3"
+            onChange={this.updateOptionName.bind(this)}
+            name="name"
+            placeholder="Name" />
+          <Form.Control type="text"
+            className="mb-3"
+            onChange={this.updateValue.bind(this)}
+            name="value"
+            placeholder="Value"/>
+          <div className="col12 text-end">
+            <Button id="add-option-btn-create" variant="cf-primary" onClick={this.onAdd.bind(this)}>
+            Create
+            </Button>
+          </div>
+        </Popover.Body>
       </Popover>
     );
   }
 
   render () {
     return (
-      <div id="add-option-panel">
-        <Button
-          id="add-option-button"
-          onClick={this.togglePopover.bind(this)}
-          ref={node => this.target = node}>
-          <i className="icon icon-plus header-icon"></i>
-          Add Option
-        </Button>
-
-        <Overlay
-          show={this.state.show}
-          onHide={this.hidePopover.bind(this)}
-          placement="bottom"
-          rootClose={true}
-          target={() => this.target}>
-          {this.getPopover()}
-        </Overlay>
+      <div className="row mb-3">
+        <div className="col-12 text-end">
+          <Button
+            id="add-option-button"
+            variant="cf-primary"
+            className="col-12 col-md-auto"
+            onClick={this.togglePopover.bind(this)}
+            ref={node => this.target = node}>
+            <i className="fonticon-plus" />
+            Add Option
+          </Button>
+          <Overlay
+            show={this.state.show}
+            onHide={this.hidePopover.bind(this)}
+            placement="bottom-end"
+            rootClose={true}
+            target={() => this.target}>
+            {this.getPopover()}
+          </Overlay>
+        </div>
       </div>
     );
   }

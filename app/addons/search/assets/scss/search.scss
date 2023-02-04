@@ -1,0 +1,48 @@
+//  Licensed under the Apache License, Version 2.0 (the "License"); you may not
+//  use this file except in compliance with the License. You may obtain a copy of
+//  the License at
+//
+//    http://www.apache.org/licenses/LICENSE-2.0
+//
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+//  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+//  License for the specific language governing permissions and limitations under
+//  the License.
+
+@import "../../../../../assets/scss/variables";
+@import "../../../../../assets/scss/mixins";
+
+.search-analyzer-type-selector {
+  display: block;
+}
+
+.search-index-page-loading {
+  margin-top: 20px;
+}
+
+.edit-search-index-page-loading {
+  margin-top: 25px;
+}
+
+.ace-editor-section .ace_editor {
+  font-size: 13px;
+  width: 100%;
+  line-height: 22px;
+}
+
+.search-index-content {
+  margin-bottom: 1rem;
+}
+
+#search-index-preview-form {
+  margin: 0.5rem 0 1rem;
+  .input-append {
+    vertical-align: bottom;
+  }
+  .help-link {
+    display: inline-block;
+    vertical-align: top;
+    margin-left: 12px;
+  }
+}

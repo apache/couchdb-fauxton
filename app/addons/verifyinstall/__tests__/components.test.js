@@ -38,7 +38,7 @@ describe('VerifyInstallResults', function () {
 
   it('confirm all result fields blank before tests ran', function () {
 
-    el = mount(<VerifyInstallResults testResults={testResults} />);
+    el = mount(<VerifyInstallResults testResults={testResults} isVerifying={false} />);
 
     tests.forEach((test) => {
       expect(el.find('#' + test.id).text()).toBe('');
@@ -55,10 +55,10 @@ describe('VerifyInstallResults', function () {
         success: true
       };
 
-      el = mount(<VerifyInstallResults testResults={copy} />);
+      el = mount(<VerifyInstallResults testResults={copy} isVerifying={false}  />);
 
       // now look at the DOM for that element. It should contain a tick char
-      expect(el.find('#' + test.id + ' span').text()).toBe('✓');
+      expect(el.find('#' + test.id + ' span').text()).toBe('✓ success');
     });
   });
 
@@ -72,10 +72,10 @@ describe('VerifyInstallResults', function () {
         success: false
       };
 
-      el = mount(<VerifyInstallResults testResults={copy} />);
+      el = mount(<VerifyInstallResults testResults={copy} isVerifying={false} />);
 
       // now look at the DOM for that element. It should contain an error char
-      expect(el.find('#' + test.id + ' span').text()).toBe('✗');
+      expect(el.find('#' + test.id + ' span').text()).toBe('✗ failure');
     });
   });
 });
@@ -101,7 +101,7 @@ describe('VerifyInstallButton', function () {
   it('shows appropriate label during verification', function () {
     const stub = { func: () => { } };
     el = mount(<VerifyInstallButton verify={stub.func} isVerifying={true} />);
-    expect(el.text()).toBe('Verifying');
+    expect(el.text()).toBe('Verifying...');
   });
 
 });

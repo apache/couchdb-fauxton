@@ -24,7 +24,7 @@ const ConfigTabs = ({sidebarItems, selectedTab}) => {
   });
   return (
     <nav className="sidenav">
-      <ul className="nav nav-list">
+      <ul className="nav flex-column">
         {tabItems}
       </ul>
     </nav>

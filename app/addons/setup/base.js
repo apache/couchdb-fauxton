@@ -14,7 +14,7 @@ import FauxtonAPI from "../../core/api";
 import app from '../../app';
 import Setup from "./route";
 import reducers from './reducers';
-import "./assets/less/setup.less";
+import './assets/scss/setup.scss';
 Setup.initialize = function () {
   FauxtonAPI.addHeaderLink({
     title: 'Setup',

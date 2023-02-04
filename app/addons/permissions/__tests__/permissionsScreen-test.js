@@ -37,11 +37,11 @@ describe('PermissionsScreen', () => {
     );
 
     wrapper
-      .find('.permissions__admins .permissions-add-user input')
+      .find('div#permissions__admins #form-users-permissions input')
       .simulate('change', {target: {value: 'abc'}});
 
     wrapper
-      .find('.permissions__admins .permissions-add-user')
+      .find('div#permissions__admins #form-users-permissions')
       .simulate('submit');
 
     expect(stub).not.toHaveBeenCalled();
@@ -60,11 +60,11 @@ describe('PermissionsScreen', () => {
     );
 
     wrapper
-      .find('.permissions__admins .permissions-add-user input')
+      .find('div#permissions__admins #form-users-permissions input')
       .simulate('change', {target: {value: 'mango'}});
 
     wrapper
-      .find('.permissions__admins .permissions-add-user')
+      .find('div#permissions__admins #form-users-permissions')
       .simulate('submit');
 
     expect(stub).toHaveBeenCalled();
@@ -89,7 +89,7 @@ describe('PermissionsScreen', () => {
     );
 
     wrapper
-      .find('.permissions__admins .permissions__entry button')
+      .find('.permission-items li button')
       .simulate('click');
 
     expect(stub).toHaveBeenCalled();

@@ -115,7 +115,7 @@ export const updatePermissionUnsafe = (url, p, dispatch) => {
     })
     .then(() => {
       FauxtonAPI.addNotification({
-        msg: 'Database permissions has been updated.'
+        msg: 'Database permissions have been updated.'
       });
 
       return dispatch(receivedPermissions(p));
