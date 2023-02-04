@@ -13,7 +13,7 @@
 import FauxtonAPI from "../../core/api";
 import VerifyInstall from "./routes";
 import reducers from './reducers';
-import "./assets/less/verifyinstall.less";
+import "./assets/scss/verifyinstall.scss";
 
 VerifyInstall.initialize = function () {
   FauxtonAPI.addHeaderLink({

@@ -1,0 +1,228 @@
+// Licensed under the Apache License, Version 2.0 (the "License"); you may not
+// use this file except in compliance with the License. You may obtain a copy of
+// the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+// WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+// License for the specific language governing permissions and limitations under
+// the License.
+
+@import "../../../../../assets/scss/mixins";
+@import "../../../../../assets/scss/variables";
+
+#dashboard.doc-editor-page {
+  background-color: #4d4d4d;
+
+  #dashboard-content {
+    padding-bottom: 0;
+    top: 0;
+  }
+}
+
+#editor-container {
+  height: 100%;
+  & > div:not(.loading-lines),
+  & > div > div {
+    height: 100%;
+  }
+}
+
+.doc-editor-page {
+  border-left: none;
+
+  .loading-lines {
+    margin-top: 30px;
+    div {
+      background-color: white;
+    }
+  }
+
+  #doc-editor-actions-panel {
+    position: absolute;
+    top: 64px;
+    right: 0;
+    left: 0;
+    width: 100%;
+    background-color: #f1f1f1;
+    height: 61px;
+  }
+
+  &#dashboard > header {
+    z-index: 2;
+    > div {
+      box-shadow: none;
+    }
+  }
+
+  #editor-container {
+    margin-top: 0;
+    font-size: 13px;
+
+    .ace_editor {
+      line-height: 22px;
+    }
+  }
+
+  .doc-actions-left {
+    float: left;
+    padding: 9px 0;
+    button {
+      margin: 0 10px 0 30px;
+    }
+    div {
+      display: inline-block;
+    }
+  }
+
+  .cancel-button {
+    font-size: 14px;
+    color: #666;
+    &:hover {
+      color: $hoverHighlight;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    &--disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      color: #666;
+    }
+    &--disabled:hover {
+      opacity: 0.5;
+      cursor: not-allowed;
+      color: #666;
+    }
+  }
+  .panel-button {
+    color: #666;
+    &:hover {
+      color: $hoverHighlight;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    &:disabled {
+      color: $grayLight;
+      cursor: not-allowed;
+    }
+  }
+
+  .bgEditorGutter {
+    width: 49px;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    background-color: #3b3b3b;
+  }
+
+  .panel-button {
+    border: 0;
+    background-color: #f1f1f1;
+    padding: 11px;
+    color: #555555;
+
+    span:first-of-type {
+      margin-left: 4px;
+    }
+
+    .icon {
+      font-size: 18px;
+    }
+
+    .button-text {
+      padding-right: 5px;
+    }
+  }
+  .panel-section {
+    border-left: 1px solid #cccccc;
+    text-align: center;
+    padding: 9px 0;
+    display: inline-block;
+
+    &.open .dropdown-toggle,
+    &:active {
+      box-shadow: none;
+      background-color: inherit;
+    }
+  }
+  .alignRight {
+    text-align: right;
+    font-size: 0; // prevents whitespace gaps between elements
+  }
+  .row-fluid.content-area {
+    background-color: #4d4d4d;
+  }
+
+  // overriding the ace editor inline styles
+  .ace_gutter-layer {
+    min-width: 49px;
+  }
+  .ace_gutter-cell {
+    min-width: 49px;
+  }
+
+  .ace_marker-layer .ace_bracket {
+    margin: 0;
+    border: 1px solid #999999;
+  }
+
+  // hide the labels on the buttons when the screen is shrunk too small,
+  @media screen and (max-width: 1000px) {
+    .panel-button span {
+      display: none;
+    }
+  }
+
+  // hides the API Url header link when the page is too small (prevents wrapping)
+  @media screen and (max-width: 835px) {
+    #api-navbar {
+      display: none;
+    }
+  }
+
+  #dashboard-content .code-region {
+    overflow-y: hidden;
+    position: absolute;
+    top: 125px;
+    height: auto;
+    width: 100%;
+    padding: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+}
+
+.upload-file-modal input[type="file"] {
+  margin-top: 10px;
+  height: inherit;
+  line-height: inherit;
+}
+
+.view-attachments-section .dropdown-menu {
+  max-width: 540px;
+  text-align: left;
+  overflow: hidden;
+  a:hover {
+    color: $hoverHighlight;
+  }
+}
+
+div.string-editor-modal {
+  width: 80%;
+
+  .modal-content {
+    min-width: initial;
+  }
+
+  .modal-body {
+    padding: 0px;
+  }
+}
+
+.attachment-delimiter {
+  color: #999999;
+  margin: 0 4px;
+}

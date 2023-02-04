@@ -12,7 +12,7 @@
 
 import FauxtonAPI from "../../core/api";
 import News from "./routes";
-import "./assets/less/news.less";
+import "./assets/scss/news.scss";
 
 News.initialize = function () {
   FauxtonAPI.addHeaderLink({

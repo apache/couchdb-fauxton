@@ -1,0 +1,224 @@
+// Licensed under the Apache License, Version 2.0 (the "License"); you may not
+// use this file except in compliance with the License. You may obtain a copy of
+// the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+// WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+// License for the specific language governing permissions and limitations under
+// the License.
+/*ALL DOCS TABLE*/
+
+@import "../../../../../assets/scss/variables";
+@import "query-options";
+@import "view-editor";
+@import "changes";
+@import "sidenav";
+@import "index-results";
+@import "doc-editor";
+@import "header";
+@import "revision-browser";
+@import "header-docs-left";
+@import "partition-key";
+
+button.beautify {
+  margin-top: 20px;
+}
+
+.toggle-btns {
+  label {
+    margin-right: 0;
+  }
+}
+
+#per-page {
+  float: right;
+
+  #select-per-page {
+    margin-top: 10px;
+    width: 60px;
+  }
+}
+
+#query div.controls-group.well {
+  height: 180px;
+  margin-right: 17px;
+}
+
+/** used in view_editor.html **/
+.design-doc-group {
+  .span3 {
+    margin: 0;
+  }
+  #new-ddoc-section {
+    margin-top: 10px;
+    width: 325px;
+    label {
+      width: 100px;
+    }
+    .controls {
+      margin-left: 100px;
+    }
+  }
+}
+
+#map-function,
+#reduce-function {
+  width: 100%;
+  font-size: 13px;
+  line-height: 22px;
+}
+
+.metadata-page {
+  font-size: 14px;
+  padding: 20px;
+
+  .preheading {
+    font-size: 14px;
+  }
+  h2 {
+    margin: 5px 0 15px;
+  }
+  h3 {
+    font-size: 22px;
+    margin-top: 12px;
+  }
+  header {
+    padding-bottom: 10px;
+  }
+  .icon-question-sign {
+    margin-left: 4px;
+    color: $secondaryBlue;
+    &:hover {
+      color: $hoverHighlight;
+    }
+  }
+  section {
+    line-height: 21px;
+    width: 100%;
+
+    ul {
+      list-style-type: none;
+      margin: 0 0 15px;
+      padding: 0;
+    }
+    .item-title {
+      margin-right: 6px;
+    }
+  }
+}
+
+button.delete {
+  margin-left: 4px;
+}
+
+button.string-edit {
+  position: absolute;
+  padding: 0;
+  z-index: 1000;
+  width: 20px;
+  left: 22px;
+
+  i.icon {
+    margin-right: 0px;
+  }
+}
+
+button.string-edit[disabled] {
+  display: none;
+}
+
+#string-editor-wrapper {
+  height: 500px;
+  width: 100%;
+
+  & > div {
+    height: 100%;
+  }
+}
+
+#keys-input {
+  width: 100%;
+}
+
+#keys-error {
+  display: inline-block;
+}
+
+.change-sequence {
+  word-wrap: break-word;
+}
+
+#dashboard-upper-content {
+  .js-query-keys-wrapper {
+    padding-top: 0;
+  }
+
+  /** used in query-options.html**/
+  .custom-inputs {
+    .row-fluid {
+      padding-top: 20px;
+      .radio,
+      .checkbox {
+        padding-left: 0;
+      }
+      .checkbox.inline,
+      #skipRows {
+        margin-bottom: 0;
+        padding: 6px;
+      }
+    }
+  }
+}
+
+.nav-list {
+  border-top: none;
+}
+
+.end-of-results {
+  margin-bottom: 30px;
+
+  .muted {
+    margin-bottom: 0px;
+  }
+}
+
+body #dashboard #react-headerbar {
+  float: left;
+  overflow: hidden;
+}
+
+.doc-editor-extension-icons {
+  display: inline-block;
+}
+
+.pagination-footer {
+  .footer-table-control label {
+    margin: 0;
+    padding: 0;
+    line-height: initial;
+  }
+
+  .footer-table-control {
+    float: right;
+    display: inline-block;
+    input {
+      margin: 0 5px 0 15px;
+    }
+    margin: 17px 40px 17px 20px;
+  }
+
+  .footer-doc-control-prioritized-wrapper {
+    margin-right: 18px;
+  }
+
+  .page-controls {
+    border-right: solid 1px $btnBorder;
+  }
+}
+
+.two-pane .faux-header__breadcrumbs {
+  width: 440px;
+}

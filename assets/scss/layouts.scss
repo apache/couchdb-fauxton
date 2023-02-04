@@ -1,0 +1,165 @@
+@import "variables";
+@import "mixins";
+
+/* new flex layout for templates. Specificity needed for now. Will remove at end */
+body #dashboard .flex-layout,
+body #dashboard.flex-layout,
+body #notification-center .flex-layout {
+  @include display-flex();
+
+  &.flex-col {
+    @include flex-direction(column);
+  }
+  &.flex-row {
+    @include flex-direction(row);
+  }
+
+  /* FLEXBOX REFACTOR: temporary overrides */
+  padding: 0;
+  & > div {
+    padding: 0;
+  }
+  /* end overrides */
+
+  /*
+  always default all child elements as flex items that neither shrink nor expand. Assumes all flex-layout containers
+  contain at least one .flex-body to indicate that's the one that expands
+  */
+  & > * {
+    @include flex(0, 1, auto);
+  }
+
+  /* notice we don't set heights. Flex will expand to fill the content but no more */
+  #dashboard-upper-content {
+    @include flex(0 0 auto);
+  }
+  #dashboard-lower-content {
+    padding: $panelPadding;
+  }
+
+  #footer {
+    @include flex(0 0 auto);
+  }
+}
+
+/* can be added to any element in a display:flex element that you want to act as the main body. It expands to the
+   available space and shows a scrollbar */
+body #dashboard .flex-body,
+body #notification-center .flex-body {
+  @include flex(1);
+  overflow: auto;
+}
+
+/* tells an element to be as large as the content. This will replace the hardcoded ones */
+body #dashboard .flex-fill {
+  @include flex(0 0 auto);
+}
+
+/* used on the databases page. To be removed once moved to flexbox */
+.faux__onepane-footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  margin: 0;
+}
+
+/* this drops .fixed-header, which was a position:absolute'd element, and switches it and all children to use flexbox. */
+.one-pane > header {
+  width: 100%;
+
+  #right-header {
+    -ms-flex-preferred-size: auto;
+    -webkit-flex: 0 0 auto;
+    flex-grow: 0;
+    flex-shrink: 0;
+    flex-basis: inherit;
+  }
+  #api-navbar {
+    @include flex(0 0 auto);
+  }
+}
+
+body #dashboard .flex-body#right-header {
+  @include flex(0 1 auto);
+  overflow: hidden;
+}
+
+body #dashboard .flex-layout #api-navbar {
+  @include flex(0 0 auto);
+}
+
+/* temporary wedge. Can be replaced at end */
+.with-sidebar {
+  #api-navbar {
+    float: right;
+  }
+  /* end tmp wedge */
+}
+
+body #dashboard .header-right-panel {
+  overflow: hidden;
+}
+
+.right-header-wrapper {
+  #api-navbar {
+    float: right;
+  }
+}
+
+body #dashboard .right-db-header {
+  & > div {
+    @include flex(1 0 auto);
+    /*overflow: hidden; */
+  }
+}
+
+/** FLEXBOX REFACTOR: "body #dashboard" can be removed at end. Specificity needed right now */
+body #dashboard.two-pane {
+  height: 100%;
+
+  /* this will be renamed & reused once all templates use flexbox */
+  #two-pane-content {
+    @include display-flex();
+    @include flex-direction(row);
+  }
+  #left-content {
+    @include flex(0 0 440px);
+  }
+  #footer {
+    @include flex(0 0 50px);
+  }
+
+  /* overrides a weird default */
+  .editor-wrapper form {
+    padding-bottom: 0;
+  }
+
+  /* temporary. header-wrapper will be converted to flexbox everywhere */
+  .header-wrapper {
+    @include flex(0 0 65px);
+    position: inherit;
+  }
+}
+
+body #dashboard.template-with-sidebar {
+  header {
+    @include flex(0 0 65px);
+  }
+  #sidebar-content {
+    @include flex(0 0 330px);
+    overflow: auto;
+    overflow-x: hidden;
+  }
+  .template-content {
+    overflow: hidden;
+  }
+  #dashboard-content {
+    border-left: 1px solid $grayLight;
+    @include left-border();
+  }
+}
+
+/* tmp. Will be removed at end of flexbox refactor */
+aside#sidebar-content {
+  top: 64px;
+}

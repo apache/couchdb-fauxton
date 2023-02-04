@@ -1,0 +1,172 @@
+// Licensed under the Apache License, Version 2.0 (the "License"); you may not
+// use this file except in compliance with the License. You may obtain a copy of
+// the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+// WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+// License for the specific language governing permissions and limitations under
+// the License.
+
+@import "../../../../../assets/scss/animations";
+@import "../../../../../assets/scss/variables";
+
+// used in changes.html
+.change-box {
+  margin: 0 20px 20px 20px;
+}
+
+.change-wrapper {
+  margin-top: 20px;
+  border-bottom: 1px solid #dddddd;
+  &:last-child {
+    border-bottom: none;
+  }
+  .row-fluid {
+    padding: 4px 0 4px 0;
+  }
+  .row-fluid:first {
+    padding: 0px 0 4px 0;
+  }
+  a:hover.js-copy {
+    text-decoration: none;
+  }
+  .js-json-container {
+    display: none;
+  }
+  .span2 {
+    font-weight: bold;
+  }
+  .clipboard-copy-element {
+    color: #666666;
+  }
+}
+
+.changes-header {
+  text-align: center;
+  padding: 26px 20px 0;
+  border-bottom: 1px solid #999999;
+  .label {
+    float: left;
+    margin-right: 5px;
+  }
+  fieldset {
+    text-align: left;
+    display: inline-block;
+    position: relative;
+
+    .btn-secondary {
+      padding: 12px;
+      &:hover {
+        background-color: $hoverHighlight;
+      }
+    }
+  }
+  .fonticon-filter {
+    position: absolute;
+    left: -25px;
+    top: 10px;
+    color: #777777;
+    font-size: 20px;
+  }
+  form {
+    margin: 0;
+  }
+  .help-block {
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+  .component-badgelist li {
+    margin: 20px 0;
+  }
+  .remove-filter {
+    color: #333333;
+    text-shadow: none;
+    background-color: transparent;
+    font-size: 20px;
+    margin-top: -3px;
+    padding-left: 0;
+    margin-right: 8px;
+    &:hover {
+      color: $hoverHighlight;
+    }
+  }
+}
+
+.changes-tab-content {
+  padding-top: 70px;
+}
+
+#dashboard-upper-content .changes-header-section .tab-content {
+  padding: 0;
+  overflow: hidden;
+}
+
+// .keyframes(slideDownChangesFilter, {
+//   opacity: 0;
+//   height: 0;
+// },
+// {
+//   opacity: 1;
+//   height: 160px;
+// });
+
+// .keyframes(slideUpChangesFilter, {
+//   opacity: 1;
+//   height: 160px;
+// },
+// {
+//   opacity: 0;
+//   height: 0;
+// });
+@keyframes slideDownChangesFilter {
+  from {
+    opacity: 0;
+    height: 0;
+  }
+  to {
+    opacity: 1;
+    height: 160px;
+  }
+}
+@keyframes slideUpChangesFilter {
+  from {
+    opacity: 1;
+    height: 160px;
+  }
+  to {
+    opacity: 0;
+    height: 0;
+  }
+}
+
+.toggle-changes-filter-enter {
+  @include animation(slideDownChangesFilter 1s both);
+}
+
+.toggle-changes-filter-leave {
+  @include animation(slideUpChangesFilter 1s both);
+}
+
+.toggle-changes-code-enter {
+  @include animation(slideDown 0.6s both);
+}
+
+.toggle-changes-code-leave {
+  @include animation(slideUp 0.6s both);
+}
+
+.changes-result-limit {
+  margin-left: 20px;
+}
+
+.new-change-row {
+  -webkit-animation: slideDown 1.5s both, highlight-element 2s 1;
+  animation: slideDown 1.5s both, highlight-element 2s 1;
+}
+
+.no-doc-changes {
+  padding: 30px 0;
+}

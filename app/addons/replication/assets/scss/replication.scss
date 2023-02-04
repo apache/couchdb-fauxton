@@ -1,0 +1,377 @@
+// Licensed under the Apache License, Version 2.0 (the "License"); you may not
+// use this file except in compliance with the License. You may obtain a copy of
+// the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+// WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+// License for the specific language governing permissions and limitations under
+// the License.
+
+@import "../../../../../assets/scss/variables";
+@import "../../../../../assets/scss/mixins";
+
+$replication_input_field_width: 400px;
+
+div.replication__page {
+  padding-top: 25px !important;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.replication__section {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: flex-start;
+  & input {
+    width: $replication_input_field_width;
+    font-size: 14px;
+  }
+}
+
+.replication__seperator {
+  margin: 6px 0 15px;
+  width: 100%;
+}
+
+.replication__help-tile {
+  width: 400px;
+}
+
+.replication__input-checkbox {
+  display: flex;
+  align-items: center;
+  width: 400px;
+  height: 55px;
+
+  input[type="checkbox"] {
+    width: auto;
+    margin-right: 0.65rem;
+  }
+
+  label {
+    padding-bottom: 10px;
+  }
+
+  &--disabled label {
+    cursor: not-allowed;
+  }
+}
+
+.replication__input-label {
+  padding-right: 15px;
+  width: 165px;
+  text-align: right;
+  margin-top: 12px;
+  font-size: 14px;
+  margin-right: 10px;
+}
+
+.replication__input-select {
+  width: 540px;
+  select {
+    font-size: 14px;
+    width: $replication_input_field_width;
+    margin-bottom: 10px;
+    background-color: white;
+    border: 1px solid #cccccc;
+  }
+  .styled-select {
+    width: $replication_input_field_width;
+  }
+}
+
+.replication__input-react-select {
+  font-size: 14px;
+  padding-bottom: 10px;
+
+  .Select .Select-menu-outer {
+    width: $replication_input_field_width;
+  }
+
+  .Select div.Select-control {
+    padding: 6px;
+    border: 1px solid #cccccc;
+    width: $replication_input_field_width;
+
+    .Select-value,
+    .Select-placeholder {
+      padding: 6px 15px 6px 10px;
+    }
+
+    input {
+      margin-left: -6px;
+    }
+
+    .Select-arrow-zone {
+      padding: 0;
+      width: 18px;
+      color: black;
+    }
+  }
+}
+
+.replication__remote-connection-url[type="text"] {
+  font-size: 14px;
+  width: $replication_input_field_width;
+  color: #333;
+}
+
+.replication__remote-connection-url-text {
+  font-size: 9pt;
+  color: #999999;
+  margin-bottom: 8px;
+}
+
+.replication__new-input[type="text"] {
+  width: $replication_input_field_width;
+  font-size: 14px;
+  color: #333;
+}
+
+.replication__doc-name {
+  position: relative;
+  width: $replication_input_field_width;
+}
+
+.replication__doc-name-icon {
+  cursor: pointer;
+  position: absolute;
+  right: 6px;
+  top: 8px;
+  font-size: 11px;
+  padding: 8px;
+  color: #333;
+  // TODO
+  // @include transition(all 0.25s linear);
+}
+
+.replication__doc-name-icon:hover {
+  color: $hoverHighlight;
+}
+
+//use attribute selector to strengthen this to override bootstraps default font size for inputs
+.replication__doc-name-input[type="text"] {
+  padding-right: 32px;
+  font-size: 14px;
+  width: $replication_input_field_width;
+  color: #333;
+}
+
+.replication__button-row {
+  margin-top: 10px;
+  width: 378px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.replication__clear-link {
+  padding: 12px;
+  font-size: 14px;
+  padding: 12px 0 12px 24px;
+}
+
+.replication__clear-link:focus,
+.replication__clear-link:hover {
+  text-decoration: none;
+}
+
+.replication__activity {
+  padding: 0 10px 0 10px !important;
+  width: 100%;
+}
+
+.replication__table-row {
+  font-size: 14px;
+  height: 50px;
+}
+
+td.replication__table-col {
+  vertical-align: middle;
+}
+
+.replication__table--selected {
+  color: $hoverHighlight;
+}
+
+.replication__table-header-source {
+  width: 30%;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.replication__table-header-target {
+  width: 30%;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.replication__table-header-type {
+  font-weight: bold;
+  width: 9%;
+  cursor: pointer;
+}
+
+.replication__table-header-status {
+  font-weight: bold;
+  width: 9%;
+  cursor: pointer;
+}
+
+.replication__table-header-time {
+  font-weight: bold;
+  width: 13%;
+  cursor: pointer;
+}
+
+.replication__table-header-actions {
+  font-weight: bold;
+  width: 13%;
+}
+
+td.replication__row-status {
+  text-transform: capitalize;
+  vertical-align: middle;
+}
+
+.replication__row-status--completed {
+  color: #5cb85c;
+}
+
+.replication__row-status--error {
+  color: #d9534f;
+}
+
+.replication__table-header-icon {
+  margin-left: 6px;
+  width: 16px;
+}
+
+.replication__activity_header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.replication__activity_header-btn {
+  height: 42px;
+}
+
+a.replication__activity_header-btn:active,
+a.replication__activity_header-btn:visited {
+  color: #fff;
+}
+
+.replication__table-bulk-select {
+  width: 68px;
+}
+
+.replication__bulk-select-wrapper {
+  display: flex;
+}
+
+.replication__bulk-select-header {
+  width: 30px;
+  border: 1px solid #aaa;
+}
+
+input.replication__bulk-select-input[type="checkbox"] {
+  margin: 8px;
+}
+
+.bulk-select-trash {
+  color: #505050;
+  border: 1px solid #aaa;
+  background-color: rgba(0, 0, 0, 0);
+  margin-left: 3px;
+  padding-left: 8px;
+  &:hover {
+    color: $hoverHighlight;
+  }
+}
+
+.replication__row-actions-list {
+  margin: 0px;
+  text-decoration: none;
+}
+
+.replication__row-list {
+  display: inline;
+}
+
+.replication__row-btn {
+  font-size: 16px;
+  text-decoration: none;
+  cursor: pointer;
+  padding-right: 8px;
+  padding-left: 8px;
+  color: #333;
+  &:visited {
+    color: #333;
+    text-decoration: none;
+  }
+  &:hover {
+    color: $hoverHighlight;
+    text-decoration: none;
+  }
+}
+
+.replication__row-btn--no-left-pad {
+  padding-left: 0px;
+}
+
+.replication__row-btn--warning {
+  color: $dangerRed;
+}
+
+.replication__filter-icon {
+  padding-right: 8px;
+}
+
+input.replication__filter-input[type="text"] {
+  font-size: 14px;
+  border: 0;
+  padding: 10px;
+  margin-bottom: 0;
+}
+
+button.replication__error-continue {
+  margin-left: 20px !important; //needed to override bootstrap
+}
+
+.replication__error-cancel,
+.replication__error-continue {
+  background-color: $secondaryBlue;
+  color: #fff;
+}
+
+.replication__error-cancel:hover,
+.replication__error-continue:hover {
+  background-color: $hoverHighlight;
+  color: #fff;
+}
+
+td.replication__empty-row {
+  text-align: center;
+}
+
+.replication__remote_icon_help {
+  color: $secondaryBlue;
+}
+
+.replication__remote_icon_help:hover {
+  color: $hoverHighlight;
+}
+
+.replication__tooltip {
+  .tooltip-inner {
+    text-align: left;
+  }
+}
+
+.replication__activity-caveat {
+  padding-left: 80px;
+}

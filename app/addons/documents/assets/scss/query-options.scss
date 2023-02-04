@@ -1,0 +1,188 @@
+// Licensed under the Apache License, Version 2.0 (the "License"); you may not
+// use this file except in compliance with the License. You may obtain a copy of
+// the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+// WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+// License for the specific language governing permissions and limitations under
+// the License.
+
+@import "../../../../../assets/scss/mixins";
+
+#query-options-tray:before {
+  right: 225px;
+}
+
+#query-options-tray {
+  width: 490px;
+  padding-top: 6px;
+  max-height: calc(100vh - 64px);
+  overflow-y: scroll;
+
+  .query-group:first-child {
+    margin-top: 0;
+    padding-top: 0;
+  }
+
+  .icon-question-sign {
+    margin-left: 3px;
+    font-size: 17.5px;
+    color: $secondaryBlue;
+    &:hover {
+      color: $hoverHighlight;
+    }
+  }
+
+  .query-group {
+    padding: 20px;
+    border-bottom: 1px solid #555;
+  }
+
+  .query-group:last-child {
+    border-bottom: none;
+  }
+  .controls-group {
+    margin: 0;
+  }
+  .controls-group:last-child {
+    margin: 0;
+  }
+
+  form {
+    overflow: auto;
+    margin-bottom: 0;
+    .dropdown.inline {
+      display: inline-block;
+    }
+
+    #keys-input {
+      resize: none;
+    }
+
+    #qoGroupLevelGroup {
+      width: 34%;
+    }
+
+    .input-small {
+      width: 74px;
+      margin-left: 5px;
+    }
+    .checkbox {
+      padding: 0;
+      margin: 0;
+    }
+    .btn-success {
+      @include border-radius(5px);
+    }
+    .btn-cancel,
+    .btn-cancel:active {
+      background: none;
+      border: none;
+      box-shadow: none;
+      color: $hoverHighlight;
+      line-height: 1em;
+    }
+    .btn-cancelDark,
+    .btn-cancelDark:active {
+      background: none;
+      border: none;
+      box-shadow: none;
+      color: #ccc;
+      line-height: 1em;
+    }
+    select {
+      margin-top: -4px;
+      margin-bottom: 0px;
+    }
+    .include-end-key-row {
+      line-height: 20px;
+      margin-left: 8px;
+    }
+  }
+
+  .toggle-btns {
+    .btn {
+      padding: 5px 12px 5px;
+      background: #727a82;
+      color: #fff;
+      font-size: 12px;
+      border: none;
+    }
+    .btn.active {
+      background: #fff;
+      color: $linkColorHover;
+      box-shadow: none;
+    }
+    label:first-child {
+      @include border-radius(5px 0 0 5px);
+    }
+    label:last-child {
+      @include border-radius(0 5px 5px 0);
+      margin-left: 1px;
+    }
+  }
+
+  label {
+    margin-right: 0;
+    font-size: 13px;
+
+    /*
+    due to: https://code.google.com/p/chromium/issues/detail?id=411065 - that bug causes the checkbox state not to
+    update when the user clicks on labels quickly. It can be removed once the fix is in Chrome stable
+    */
+    -webkit-user-select: none;
+    user-select: none;
+  }
+  label.disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+  div.controls-group.well {
+    height: 156px;
+    background: none;
+    border: none;
+    padding: 10px 0;
+  }
+  .row-fluid.fieldsets {
+    .inline {
+      width: 32%;
+    }
+    .inline:nth-child(3) {
+      text-align: right;
+      width: 34%;
+    }
+  }
+  .qo-main-fields-row .row-fluid.fieldsets {
+    .inline:nth-child(2) {
+      width: 30%;
+    }
+    .inline:nth-child(3) {
+      text-align: right;
+      width: 36%;
+    }
+  }
+
+  .row-fluid.fieldsets {
+    margin-bottom: 5px;
+    :last-child {
+      margin-bottom: 2px;
+    }
+  }
+
+  #skipRows {
+    margin-left: 5px;
+  }
+  .add-on {
+    height: 28px;
+  }
+  .hide {
+    display: none;
+  }
+
+  .additionalParams {
+    margin-bottom: 2px;
+  }
+}

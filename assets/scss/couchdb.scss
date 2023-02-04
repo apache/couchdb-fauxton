@@ -1,0 +1,66 @@
+//  Licensed under the Apache License, Version 2.0 (the "License"); you may not
+//  use this file except in compliance with the License. You may obtain a copy of
+//  the License at
+//
+//    http://www.apache.org/licenses/LICENSE-2.0
+//
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+//  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+//  License for the specific language governing permissions and limitations under
+//  the License.
+
+// @import "bootstrap/bootstrap.less";
+
+//
+// Variables
+// --------------------------------------------------
+
+// Global values
+// --------------------------------------------------
+
+// TODO: these will need to be themed
+
+// Links
+$linkColor: #ca2530;
+$linkColorHover: darken($linkColor, 15%);
+
+// Grays
+$black: #0c0c0c;
+$grayDark: #5a5a5a;
+$grayDarker: darken($grayDark, 10%);
+$gray: #f80507;
+$grayLight: #e27b81;
+$grayLighter: #b95d40;
+$white: #fdfbfb;
+
+// Accent colors
+// -------------------------
+$blue: #049cdb;
+$blueDark: #0064cd;
+$green: #46a546;
+$red: #9d261d;
+$yellow: #ffc40d;
+$orange: #f89406;
+$pink: #c3325f;
+$purple: #7a43b6;
+
+// Scaffolding
+// -------------------------
+$bodyBackground: $white;
+$textColor: $grayDark;
+
+// Typography
+// -------------------------
+$sansFontFamily: "Helvetica Neue", Helvetica, Arial, sans-serif;
+$serifFontFamily: Georgia, "Times New Roman", Times, serif;
+$monoFontFamily: Monaco, Menlo, Consolas, "Courier New", monospace;
+
+$baseFontSize: 14px;
+$baseFontFamily: $sansFontFamily;
+$baseLineHeight: 20px;
+$altFontFamily: $serifFontFamily;
+
+$headingsFontFamily: inherit; // empty to use BS default, $baseFontFamily
+$headingsFontWeight: bold; // instead of browser default, bold
+$headingsColor: inherit; // empty to use BS default, $textColor

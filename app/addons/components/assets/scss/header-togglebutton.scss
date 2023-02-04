@@ -1,0 +1,74 @@
+// Licensed under the Apache License, Version 2.0 (the "License"); you may not
+// use this file except in compliance with the License. You may obtain a copy of
+// the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+// WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+// License for the specific language governing permissions and limitations under
+// the License.
+
+@import "../../../../../assets/scss/variables";
+
+.header-control-box {
+  color: #666;
+  font-size: 13px;
+  line-height: 33px;
+  padding: 12px 20px 12px 20px;
+  height: $collapsedNavWidth;
+  background-color: transparent;
+  border: none;
+  border-left: 1px solid $btnBorder;
+  text-decoration: none;
+  .icon {
+    font-size: 20px;
+    &:before {
+      float: left;
+      margin: 10px 0 0 0;
+    }
+  }
+  span {
+    margin-left: 6px;
+  }
+  .icon.fontawesome {
+    &:before {
+      margin: 6px 6px 0 0;
+    }
+  }
+}
+
+.header-control-square {
+  height: $collapsedNavWidth;
+  width: $collapsedNavWidth;
+  float: left;
+  .icon {
+    &:before {
+      margin: 0;
+      float: none;
+    }
+  }
+}
+
+.header-control-box:hover {
+  .icon, span {
+    color: $hoverHighlight;
+  }
+}
+
+.js-headerbar-togglebutton-selected {
+  .icon, span {
+    color: $linkColor;
+  }
+}
+
+button.control-toggle-alternative-header {
+  float: left;
+  border-right: 1px solid $btnBorder;
+  border-left: none;
+}
+
+button.control-toggle-alternative-header.js-headerbar-togglebutton-selected {
+  border-right: none;
+}

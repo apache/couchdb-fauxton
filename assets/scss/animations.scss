@@ -1,0 +1,102 @@
+//  Licensed under the Apache License, Version 2.0 (the "License"); you may not
+//  use this file except in compliance with the License. You may obtain a copy of
+//  the License at
+//
+//    http://www.apache.org/licenses/LICENSE-2.0
+//
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+//  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+//  License for the specific language governing permissions and limitations under
+//  the License.
+
+// TODO: likely these animation styles are no longer needed
+
+// @mixin keyframes($name, $fromRules, $toRules){
+// 	// @-webkit-keyframes '${name}' { 0% { $fromRules(); } 100% { $toRules(); } }
+// 	// @-moz-keyframes '${name}' { 0% { $fromRules(); } 100% { $toRules(); } }
+// 	@keyframes some { from { @include $fromRules() } to { $toRules; } }
+// }
+
+@mixin animation($options) {
+  -webkit-animation: $options;
+  -moz-animation: $options;
+  animation: $options;
+}
+
+// .fade {
+// transition: opacity .25s ease-in-out;
+// -moz-transition: opacity .25s ease-in-out;
+// -webkit-transition: opacity .25s ease-in-out;
+// }
+
+// .fadeIn {
+// opacity: 1;
+// }
+
+// .fadeOut {
+// opacity: 0;
+// }
+
+// @-webkit-keyframes errorBlinkBG {
+// from { background: $dangerRed; }
+// to { background: white; }
+// }
+// @keyframes errorBlinkBG {
+// from { background: $dangerRed; }
+// to { background: white; }
+// }
+
+// /* a generic slide-up/down effect that looks smooth for items with unknown heights */
+// .keyframes(slideDown, {
+// opacity: 0;
+// max-height: 0;
+// },
+// {
+// opacity: 1;
+// max-height: 1000px;
+// });
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    max-height: 1000px;
+  }
+}
+
+// .keyframes(slideUp, {
+// max-height: 1000px;
+// opacity: 1;
+// },
+// {
+// max-height: 0;
+// opacity: 0;
+// });
+
+@keyframes slideUp {
+  from {
+    max-height: 1000px;
+    opacity: 1;
+  }
+  to {
+    max-height: 0;
+    opacity: 0;
+  }
+}
+
+// .highlight {
+// -webkit-animation: highlight-element 2.5s 1;
+// -moz-animation: highlight-element 2.5s 1;
+// }
+
+// @-webkit-keyframes highlight-element {
+// 0% { background-color: $highlightEffectColor; }
+// 100% { background-color: #f1f1f1; }
+// }
+// @-moz-keyframes highlight-element {
+// 0% { background-color: $highlightEffectColor; }
+// 100% { background-color: #f1f1f1; }
+// }

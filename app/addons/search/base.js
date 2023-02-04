@@ -16,7 +16,7 @@ import SearchRoutes from './routes';
 import reducers from './reducers';
 import { get } from "../../core/ajax";
 import Constants from './constants';
-import './assets/less/search.less';
+import './assets/scss/search.scss';
 
 function checkSearchFeature () {
   // Checks if the CouchDB server supports Search

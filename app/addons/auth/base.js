@@ -12,7 +12,7 @@
 
 import FauxtonAPI from "../../core/api";
 import RouteObjects from './routes';
-import "./assets/less/auth.less";
+import "./assets/scss/auth.scss";
 import Session from './session';
 
 const cleanupAuthSection = () => {

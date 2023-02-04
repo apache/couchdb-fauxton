@@ -1,0 +1,283 @@
+// Licensed under the Apache License, Version 2.0 (the "License"); you may not
+// use this file except in compliance with the License. You may obtain a copy of
+// the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+// WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+// License for the specific language governing permissions and limitations under
+// the License.
+
+@import "../../../../../assets/scss/variables";
+
+.define-view {
+  padding: 15px;
+  .help-link {
+    margin-left: 4px;
+  }
+  .design-doc-group #new-ddoc-section {
+    margin-top: 24px;
+    label {
+      padding-top: 12px;
+    }
+  }
+}
+
+/* to remove once Mango has moved to the standard 2-panel layout */
+.mango-editor-wrapper {
+  label {
+    font-size: 16px;
+    margin-right: 0;
+  }
+  .bordered-box {
+    border-bottom: 1px solid #ccc;
+  }
+  .padded-box {
+    margin: 15px;
+  }
+  .db-title {
+    color: $brandHighlight;
+    line-height: 30px;
+  }
+  #index-name {
+    height: 46px;
+    width: 200px;
+  }
+  .new-ddoc-input {
+    margin-top: 25px;
+    height: 46px;
+  }
+  pre.prettyprint-left {
+    padding: 5px;
+  }
+  form {
+    padding-bottom: 15px;
+  }
+  a.edit-link {
+    float: right;
+    margin-right: 5px;
+    cursor: pointer;
+  }
+  .help-link {
+    margin-left: 4px;
+  }
+}
+
+.mango-select {
+  width: inherit;
+  overflow: visible;
+
+  div {
+    z-index: 100;
+  }
+
+  .mango-select-entry {
+    background-color: $queryHistoryBGColor;
+    color: $queryHistoryColor;
+
+    &.is-selected,
+    &.is-focused {
+      background-color: $brandHighlight;
+      color: $queryHistoryBGColor;
+    }
+  }
+}
+
+// 940px grid without margin
+// -------------------------
+// $gridColumnWidthNoMargin: 60px;
+// $gridGutterWidthNoMargin: 0px;
+// $gridRowWidthNoMargin: ($gridColumns * $gridColumnWidthNoMargin) +
+//   ($gridGutterWidthNoMargin * ($gridColumns - 1));
+
+// // 1200px min
+// $gridColumnWidth1200NoMargin: 70px;
+// $gridGutterWidth1200NoMargin: 0px;
+// $gridRowWidth1200NoMargin: ($gridColumns * $gridColumnWidth1200NoMargin) +
+//   ($gridGutterWidth1200NoMargin * ($gridColumns - 1));
+
+// // 768px-979px
+// $gridColumnWidth768NoMargin: 42px;
+// $gridGutterWidth768NoMargin: 0px;
+// $gridRowWidth768NoMargin: ($gridColumns * $gridColumnWidth768NoMargin) +
+//   ($gridGutterWidth768NoMargin * ($gridColumns - 1));
+// // Fluid grid
+// // -------------------------
+// $fluidGridColumnWidthNoMargin: percentage(
+//   $gridColumnWidthNoMargin/$gridRowWidthNoMargin
+// );
+// $fluidGridGutterWidthNoMargin: percentage(
+//   $gridGutterWidthNoMargin/$gridRowWidthNoMargin
+// );
+// // 1200px min
+// $fluidGridColumnWidth1200NoMargin: percentage(
+//   $gridColumnWidth1200NoMargin/$gridRowWidth1200NoMargin
+// );
+// $fluidGridGutterWidth1200NoMargin: percentage(
+//   $gridGutterWidth1200NoMargin/$gridRowWidth1200NoMargin
+// );
+// // 768px-979px
+// $fluidGridColumnWidth768NoMargin: percentage(
+//   $gridColumnWidth768NoMargin/$gridRowWidth768NoMargin
+// );
+// $fluidGridGutterWidth768NoMargin: percentage(
+//   $gridGutterWidth768NoMargin/$gridRowWidth768NoMargin
+// );
+
+// .two-pane > @include fluid($fluidGridColumnWidth1200NoMargin, $fluidGridGutterWidth1200NoMargin);
+
+// .two-pane {
+
+//   @mixin core($gridColumnWidth, $gridGutterWidth){
+
+//     @mixin spanX($index) when ($index > 0){
+//       .span${index} { @include span($index); }
+//       @include spanX($index - 1);
+//     }
+//     @mixin spanX(0){}
+
+//     @mixin offsetX($index) when ($index > 0){
+//       .offset${index} { @include offset($index); }
+//       @include offsetX($index - 1);
+//     }
+//     @mixin offsetX(0){}
+
+//     @mixin offset($columns){
+//       margin-left: ($gridColumnWidth * $columns) + ($gridGutterWidth * ($columns + 1));
+//     }
+
+//     @mixin span($columns){
+//       width: ($gridColumnWidth * $columns) + ($gridGutterWidth * ($columns - 1));
+//     }
+
+//     .row {
+//       margin-left: $gridGutterWidth * -1;
+//       @include clearfix();
+//     }
+
+//     [class*="span"] {
+//       float: left;
+//       min-height: 1px; // prevent collapsing columns
+//       margin-left: $gridGutterWidth;
+//     }
+
+//     // Set the container width, and override it for fixed navbars in media queries
+//     .container,
+//     .navbar-static-top .container,
+//     .navbar-fixed-top .container,
+//     .navbar-fixed-bottom .container { @include span($gridColumns); }
+
+//     // generate .spanX and .offsetX
+//     .spanX ($gridColumns);
+//     .offsetX ($gridColumns);
+
+//   }
+
+// @mixin fluid($fluidGridColumnWidth, $fluidGridGutterWidth){
+
+//   @mixin spanX($index) when ($index > 0){
+//     .span${index} { @include span($index); }
+//     @include spanX($index - 1);
+//   }
+//   @mixin spanX(0){}
+
+//   @mixin offsetX($index) when ($index > 0){
+//     .offset${index} { @include offset($index); }
+//     .offset${index}:first-child { @include offsetFirstChild($index); }
+//     @include offsetX($index - 1);
+//   }
+//   @mixin offsetX(0){}
+
+//   @mixin offset($columns){
+//     margin-left: ($fluidGridColumnWidth * $columns) + ($fluidGridGutterWidth * ($columns - 1)) + ($fluidGridGutterWidth*2);
+//     *margin-left: ($fluidGridColumnWidth * $columns) + ($fluidGridGutterWidth * ($columns - 1)) - (.5 / $gridRowWidth * 100 * 1%) + ($fluidGridGutterWidth*2) - (.5 / $gridRowWidth * 100 * 1%);
+//   }
+
+//   @mixin offsetFirstChild($columns){
+//     margin-left: ($fluidGridColumnWidth * $columns) + ($fluidGridGutterWidth * ($columns - 1)) + ($fluidGridGutterWidth);
+//     *margin-left: ($fluidGridColumnWidth * $columns) + ($fluidGridGutterWidth * ($columns - 1)) - (.5 / $gridRowWidth * 100 * 1%) + $fluidGridGutterWidth - (.5 / $gridRowWidth * 100 * 1%);
+//   }
+
+//   @mixin span($columns){
+//     width: ($fluidGridColumnWidth * $columns) + ($fluidGridGutterWidth * ($columns - 1));
+//     *width: ($fluidGridColumnWidth * $columns) + ($fluidGridGutterWidth * ($columns - 1)) - (.5 / $gridRowWidth * 100 * 1%);
+//   }
+
+//   .row-fluid {
+//     width: 100%;
+//     @include clearfix();
+//     [class*="span"] {
+//       @include input-block-level();
+//       float: left;
+//       margin-left: $fluidGridGutterWidth;
+//       *margin-left: $fluidGridGutterWidth - (.5 / $gridRowWidth * 100 * 1%);
+//     }
+//     [class*="span"]:first-child {
+//       margin-left: 0;
+//     }
+
+//     // Space grid-sized controls properly if multiple per line
+//     .controls-row [class*="span"] + [class*="span"] {
+//       margin-left: $fluidGridGutterWidth;
+//     }
+
+//     // generate .spanX and .offsetX
+//     .spanX ($gridColumns);
+//     .offsetX ($gridColumns);
+//   }
+
+// }
+
+//   @mixin input($gridColumnWidth, $gridGutterWidth){
+
+//     @mixin spanX($index) when ($index > 0){
+//       input.span${index}, textarea.span${index}, .uneditable-input.span${index} { @include span($index); }
+//       @include spanX($index - 1);
+//     }
+//     @mixin spanX(0){}
+
+//     @mixin span($columns){
+//       width: (($gridColumnWidth) * $columns) + ($gridGutterWidth * ($columns - 1)) - 14;
+//     }
+
+//     input,
+//     textarea,
+//     .uneditable-input {
+//       margin-left: 0; // override margin-left from core grid system
+//     }
+
+//     // Space grid-sized controls properly if multiple per line
+//     .controls-row [class*="span"] + [class*="span"] {
+//       margin-left: $gridGutterWidth;
+//     }
+
+//     // generate .spanX
+//     .spanX ($gridColumns);
+//   }
+// }
+
+a.index-cancel-link {
+  margin-left: 10px;
+  font-size: 14px;
+  color: #666;
+  &:hover {
+    color: $hoverHighlight;
+    text-decoration: none;
+    cursor: pointer;
+  }
+}
+
+.ddoc-selector-partitioned {
+  clear: both;
+  padding-top: 16px;
+
+  label.check--disabled {
+    cursor: default;
+  }
+}
+
+.reduce-editor-warning {
+  padding-bottom: 1rem;
+}

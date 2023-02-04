@@ -10,27 +10,25 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-import React from 'react';
+import React from "react";
 import FauxtonAPI from "../../core/api";
 import DocumentationComponents from "./components";
-import {OnePaneSimpleLayout} from '../components/layouts';
 
 var DocumentationRouteObject = FauxtonAPI.RouteObject.extend({
-  selectedHeader: 'Documentation',
+  selectedHeader: "Documentation",
   hideApiBar: true,
   hideNotificationCenter: true,
   routes: {
-    'documentation': 'documentation'
+    documentation: "documentation",
   },
-  roles: ['fx_loggedIn'],
+  roles: ["fx_loggedIn"],
   documentation: function () {
-    return <OnePaneSimpleLayout
-      component={<DocumentationComponents.DocumentationPage/>}
-      crumbs={[
-        {'name': 'Documentation'}
-      ]}
-    />;
-  }
+    return (
+      <div id="dashboard" className="one-pane ">
+        <DocumentationComponents.DocumentationPage />
+      </div>
+    );
+  },
 });
 DocumentationRouteObject.RouteObjects = [DocumentationRouteObject];
 

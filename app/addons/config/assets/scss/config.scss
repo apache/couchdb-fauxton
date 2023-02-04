@@ -1,0 +1,210 @@
+//  Licensed under the Apache License, Version 2.0 (the "License"); you may not
+//  use this file except in compliance with the License. You may obtain a copy of
+//  the License at
+//
+//    http://www.apache.org/licenses/LICENSE-2.0
+//
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+//  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+//  License for the specific language governing permissions and limitations under
+//  the License.
+
+@import "../../../../../assets/scss/variables";
+@import "../../../../../assets/scss/mixins";
+
+.config-item {
+  height: 65px;
+
+  .config-value-form {
+    button {
+      margin-left: 8px;
+    }
+  }
+
+  .config-value-input {
+    width: 80%;
+    margin: 0;
+  }
+
+  .config-show-value,
+  .config-delete-value {
+    cursor: pointer;
+  }
+
+  .text-center {
+    text-align: center;
+  }
+
+  button {
+    width: 7%;
+  }
+  transition: background-color 100ms;
+}
+
+.config-item-trash:hover {
+  color: $dangerRed;
+}
+
+.config-item-deleting {
+  text-decoration: line-through;
+  text-decoration-color: red;
+}
+
+#config-trash {
+  width: 5%;
+}
+
+table.config {
+  thead th {
+    border-left: none;
+    border-bottom: 2px solid #999;
+  }
+  tr {
+    th,
+    td {
+      vertical-align: middle;
+      .btn.btn-small {
+        padding: 10px 3px;
+      }
+    }
+  }
+}
+
+#add-option-button {
+  line-height: 40px;
+  cursor: pointer;
+  border-left: 1px solid #ccc;
+  border-right: none;
+  border-top: none;
+  border-bottom: none;
+  padding: 12px 14px;
+
+  &:hover {
+    transition: none;
+    text-decoration: none;
+    color: $linkColorHover;
+  }
+}
+
+#add-section-button {
+}
+
+.add-section-tray {
+  padding: 20px;
+  width: 300px;
+
+  &:before {
+    right: 138px;
+  }
+
+  input {
+    width: 100%;
+  }
+
+  form {
+    margin-bottom: 0px;
+  }
+
+  a.btn {
+    color: white;
+    background-color: $linkColor;
+    line-height: 1.5em;
+    border: 0px;
+    padding: 10px 10px 9px;
+    font-size: 14px;
+    @include border-radius(5px);
+
+    &:hover {
+      background-color: #cbcbcb;
+      color: white;
+    }
+  }
+
+  .typeahead {
+    width: 260px;
+    margin-top: 0px;
+
+    a {
+      color: #ffffff;
+    }
+  }
+}
+
+#add-option-popover {
+  background-color: #333;
+  color: white;
+  padding: 20px;
+  border-radius: 0;
+  width: 300px;
+  max-width: none;
+  display: block;
+
+  .popover-content {
+    padding: 0;
+  }
+
+  .popover-title {
+    font-size: 16px;
+    padding: 0;
+    margin: 10px 0;
+    border: none;
+    display: block;
+    text-align: left;
+    color: #fff;
+    text-shadow: none;
+    height: auto;
+    line-height: 1em;
+    background-color: #333;
+  }
+
+  input {
+    width: 100%;
+  }
+
+  a.btn {
+    color: white;
+    background-color: $linkColor;
+    line-height: 1.5em;
+    border: 0;
+    padding: 10px 10px 9px;
+    font-size: 14px;
+    @include border-radius(5px);
+
+    &:hover {
+      background-color: #cbcbcb;
+      color: white;
+    }
+  }
+
+  .arrow,
+  .arrow::after {
+    border-bottom-color: #333 !important;
+  }
+}
+
+#add-option-popover::before {
+  display: none;
+}
+
+.config-warning-cluster-wrapper {
+  .config-warning-cluster-container {
+    margin-left: -50px;
+  }
+  margin: 40px auto;
+  width: 70%;
+  .fonticon-attention-circled {
+    font-size: 40px;
+  }
+  .config-warning-icon-container {
+    width: 50px;
+    margin-top: -5px;
+  }
+  .config-warning-other-text {
+    margin-left: 50px;
+  }
+}
+
+div.faux__config-breadcrumbs {
+  flex: 0 0 331px !important;
+}

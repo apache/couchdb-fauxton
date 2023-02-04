@@ -1,0 +1,159 @@
+//  Licensed under the Apache License, Version 2.0 (the "License"); you may not
+//  use this file except in compliance with the License. You may obtain a copy of
+//  the License at
+//
+//    http://www.apache.org/licenses/LICENSE-2.0
+//
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+//  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+//  License for the specific language governing permissions and limitations under
+//  the License.
+
+// TODO: move these to theming
+// @import "bootstrap/variables.less";
+
+// TODO: added these because they were missing after removing the bootstrap files
+$warningBackground: #fcf8e3;
+$grayLight: #999;
+$white: #fff;
+$baseLineHeight: 20px;
+$paginationBackground: #fff;
+$paginationBorder: #ddd;
+$paginationActiveBackground: #f5f5f5;
+$paddingLarge: 11px 19px; // 44px
+$paddingSmall: 2px 10px; // 26px
+$paddingMini: 0 6px; // 22px
+$baseFontSize: 14px;
+$fontSizeLarge: $baseFontSize * 1.25; // ~18px
+$fontSizeSmall: $baseFontSize * 0.85; // ~12px
+$fontSizeMini: $baseFontSize * 0.75; // ~11px
+$borderRadiusLarge: 6px;
+$borderRadiusSmall: 3px;
+$hoverHighlight: #e73d34;
+$radius: 4px;
+$btnBorder: #ccc;
+
+/*Dashboard-Specific Colors*/
+$dangerRed: #f00;
+$hoverHighlight: #e73d34;
+$brandHighlight: #af2d24;
+$brandDark1: #564e4c;
+$brandDark2: #3a2c2b;
+$navIconColor: #b3b4b4;
+$navIconActive: #ffffff;
+$trayBackground1: #3a2c2b;
+$trayBackground2: #3a2c2b;
+
+/*buttons */
+$primaryGreen: #2bb673;
+$secondaryBlue: #0082bf;
+$primaryGreenDisabled: #8ec9ad;
+$secondaryBlueDisabled: #86bad2;
+$dangerDisabled: #ff9797;
+$buttonText: #fff;
+$buttonTextDisabled: #f1f1f1;
+
+/* colors */
+$orange: #f3622d;
+$blue: #049cdb;
+$green: #7fa30c;
+
+/* base */
+$background: #f2f2f2;
+$leftPanel: $background;
+$rightPanel: #cbcbcb;
+
+/* font */
+$fontGrey: #808080;
+$defaultText: #4d4d4d;
+$defaultHTag: #333333;
+
+/* sublist */
+$subListGray: #767f89;
+
+/*nav*/
+$navWidth: 220px;
+
+/*top header*/
+$breadcrumbBG: #f1f1f1;
+$breadcrumbText: $brandHighlight;
+$breadcrumbArrow: #999999;
+$breadcrumbBorder: $brandHighlight;
+$breadcrumbHeight: 64px;
+
+/* document-header in doclist */
+$docHeaderBG: #3a3a3a;
+$docHeaderBorderBottom: #2a2a2a;
+$docHeaderOtherBorders: #000;
+$docHeaderLabels: #909090;
+$docHeaderDocId: $brandHighlight;
+
+/* checkboxes in doc-list */
+$docCheckBoxUncheckedBG: #efefef;
+$docCheckBoxUncheckedBorder: 2px solid #999;
+$docCheckBoxHoverBorder: 2px solid #ccc;
+$docCheckBoxCheckedBorder: 2px solid #000;
+$docCheckBoxCheckedBG: #3a3a3a;
+
+/* sidebar */
+$sidebarBG: #f2f2f2;
+$sidebarWidth: 330px;
+
+/* secondary sidebar */
+$secondarySidebar: white;
+
+/* links */
+$linkColor: $brandHighlight;
+$linkColorHover: $brandHighlight;
+
+/* slider */
+$sliderBorderColor: #999999;
+$sliderBackground: $background;
+$sliderBackgroundHighlight: $brandHighlight;
+
+/* borders */
+$radius: 4px;
+$baseBorderRadius: 0;
+
+$darkBorder: #aaa;
+
+/* shadows */
+$boxShadow: 2px 2px rgba(0, 0, 0, 0.2);
+$boxShadowOff: 2px 2px rgba(0, 0, 0, 0);
+$boxShadowLeft: -4px 4px rgba(0, 0, 0, 0.2);
+$boxShadowLeftOff: -4px 4px rgba(0, 0, 0, 0);
+$textShadow: 1px 2px rgba(0, 0, 0, 0.2);
+$textShadowOff: 1px 2px rgba(0, 0, 0, 0);
+
+/* animation */
+$transitionSpeed: 0.25s;
+$transitionEaseType: linear;
+$highlightEffectColor: #bbbbbb;
+
+/* breakpoints */
+$collapsedNavWidth: 64px;
+
+/* padding and margins */
+$panelPadding: 15px;
+
+/* Alerts */
+$globalErrorAlertBackground: #c45b55;
+
+$infoAlertBackground: #329898;
+$infoAlertColor: #fff;
+$successAlertBackground: #448c11;
+$successAlertColor: #cbdfbd;
+$errorAlertBackground: #222;
+$errorAlertColor: #ff0c35;
+
+/* query history */
+$queryHistoryBGColor: white;
+$queryHistoryColor: $defaultText;
+
+/*
+  -- logo image paths --
+  These are set during webpack bundle through your settings.json file.
+*/
+// $largeLogoPath: "";
+// $smallLogoPath: "";
