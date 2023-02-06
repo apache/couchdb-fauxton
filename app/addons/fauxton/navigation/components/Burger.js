@@ -25,8 +25,8 @@ const Burger = ({toggleMenu, isMinimized}) => {
   );
 
   const icon = isMinimized ?
-    'icon-resize-horizontal' :
-    'icon-signin faux-navbar__burger__icon--flipped';
+    'fonticon-menu' :
+    'fonticon-menu_close';
 
   return (
     <div aria-expanded={!isMinimized} aria-label="Toggle Navigation Menu" className={burgerClasses} onClick={toggleMenu} role="button" tabIndex="0">
