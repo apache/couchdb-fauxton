@@ -92,6 +92,7 @@ module.exports = {
       .waitForElementPresent('a[href="#/database/_replicator/existing-doc-filter2"]', waitTime, true)
       .end();
   },
+
   "Action click doesn't change doc's order": client =>{
     const waitTime = client.globals.maxWaitTime;
     const baseUrl = client.options.launch_url;
@@ -128,6 +129,80 @@ module.exports = {
         this.verify.ok(result.value === firstDoc,
           'Checking if the order was reserved if no documents were sorted');
       })
+      .end();
+  },
+
+  "Change number of replications displayed": client =>{
+    const waitTime = client.globals.maxWaitTime;
+    const baseUrl = client.options.launch_url;
+
+    const replicatorDoc1 = {
+      _id: 'existing-doc-id-display',
+      source: "http://source-db.com",
+      target: "http://target-db.com"
+    };
+
+    const replicatorDoc2 = {
+      _id: 'existing-doc-id-display2',
+      source: "http://source-db2.com",
+      target: "http://target-db.com"
+    };
+
+    const replicatorDoc3 = {
+      _id: 'existing-doc-id-display3',
+      source: "http://source-db3.com",
+      target: "http://target-db.com"
+    };
+
+    const replicatorDoc4 = {
+      _id: 'existing-doc-id-display4',
+      source: "http://source-db4.com",
+      target: "http://target-db.com"
+    };
+
+    const replicatorDoc5 = {
+      _id: 'existing-doc-id-display5',
+      source: "http://source-db5.com",
+      target: "http://target-db.com"
+    };
+
+    const replicatorDoc6 = {
+      _id: 'existing-doc-id-display6',
+      source: "http://source-db6.com",
+      target: "http://target-db.com"
+    };
+
+    client
+      .deleteDatabase('_replicator')
+      .createDatabase('_replicator')
+      .createDocument(replicatorDoc1._id, '_replicator', replicatorDoc1)
+      .createDocument(replicatorDoc2._id, '_replicator', replicatorDoc2)
+      .createDocument(replicatorDoc3._id, '_replicator', replicatorDoc3)
+      .createDocument(replicatorDoc4._id, '_replicator', replicatorDoc4)
+      .createDocument(replicatorDoc5._id, '_replicator', replicatorDoc5)
+      .createDocument(replicatorDoc6._id, '_replicator', replicatorDoc6)
+      .loginToGUI()
+      .url(baseUrl + '/#replication')
+      .waitForElementNotPresent('.load-lines', waitTime, true)
+      .waitForElementPresent('.replication__table-row', waitTime, true)
+      .getText('.current-replications', function(result) {
+        this.verify.ok(result.value === "Showing replications 1 - 6");
+      })
+      .assert.elementsCount('.replication__table-row', 6)
+      .clickWhenVisible('select[id="select-per-page"] option[value="5"]')
+      .waitForElementNotPresent('.load-lines', waitTime, true)
+      .waitForElementPresent('.replication__table-row', waitTime, true)
+      .getText('.current-replications', function(result) {
+        this.verify.ok(result.value === "Showing replications 1 - 5");
+      })
+      .assert.elementsCount('.replication__table-row', 5)
+      .clickWhenVisible('select[id="select-per-page"] option[value="25"]')
+      .waitForElementNotPresent('.load-lines', waitTime, true)
+      .waitForElementPresent('.replication__table-row', waitTime, true)
+      .getText('.current-replications', function(result) {
+        this.verify.ok(result.value === "Showing replications 1 - 6");
+      })
+      .assert.elementsCount('.replication__table-row', 6)
       .end();
   }
 };

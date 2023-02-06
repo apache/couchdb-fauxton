@@ -16,9 +16,10 @@ import Components from '../components/react-components';
 import NewReplication from './components/newreplication';
 import Activity from './components/activity';
 import {checkReplicationDocID} from './api';
-import {OnePane, OnePaneHeader, OnePaneContent} from '../components/layouts';
+import {OnePane, OnePaneHeader, OnePaneContent, OnePaneFooter} from '../components/layouts';
 import {TabElementWrapper, TabElement} from '../components/components/tabelement';
 import ReplicateActivity from './components/replicate-activity';
+import { ReplicationFooter } from './components/replication-footer';
 
 const {LoadLines, Polling, RefreshBtn} = Components;
 
@@ -38,7 +39,7 @@ export default class ReplicationController extends React.Component {
   }
 
   getAllActivity () {
-    this.props.getReplicationActivity();
+    this.props.getReplicationActivity(this.props.pageLimit);
     this.props.getReplicateActivity();
   }
 
@@ -220,6 +221,21 @@ export default class ReplicationController extends React.Component {
     );
   }
 
+  getFooter () {
+    const { tabSection, statusDocs, pageLimit, setPageLimit } = this.props;
+
+    if (tabSection === 'activity') {
+      return (
+        <ReplicationFooter
+          statusDocs={statusDocs}
+          pageLimit={pageLimit}
+          setPageLimit={setPageLimit}
+        />
+      );
+    }
+    return null;
+  }
+
   render () {
     const { checkingAPI } = this.props;
 
@@ -240,6 +256,9 @@ export default class ReplicationController extends React.Component {
             </div>
           </div>
         </OnePaneContent>
+        <OnePaneFooter>
+          {this.getFooter()}
+        </OnePaneFooter>
       </OnePane>
     );
   }

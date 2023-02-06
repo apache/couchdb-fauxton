@@ -16,7 +16,6 @@ import FauxtonAPI from '../../core/api';
 import Helpers from '../../helpers';
 import {get, post, put} from '../../core/ajax';
 import base64 from 'base-64';
-import _ from 'lodash';
 
 let newApiPromise = null;
 export const supportNewApi = (forceCheck) => {
@@ -308,18 +307,23 @@ export const combineDocsAndScheduler = (docs, schedulerDocs) => {
   });
 };
 
-export const fetchReplicationDocs = () => {
+export const fetchReplicationDocs = (maxItems) => {
   return supportNewApi()
     .then(newApi => {
-      const url = Helpers.getServerUrl('/_replicator/_all_docs?include_docs=true&limit=100');
+      // Increase limit by 1 to account for the design doc in the DB
+      const url = Helpers.getServerUrl(`/_replicator/_all_docs?include_docs=true&limit=${maxItems + 1}`);
       const docsPromise = get(url)
         .then((res) => {
           if (res.error) {
             return [];
           }
-
-          return parseReplicationDocs(res.rows.filter(row => row.id.indexOf("_design/") === -1));
+          const listWithoutDDocs = res.rows.filter(row => row.id.indexOf("_design/") === -1);
+          if (listWithoutDDocs.length > maxItems) {
+            listWithoutDDocs.pop();
+          }
+          return parseReplicationDocs(listWithoutDDocs);
         });
+
 
       if (!newApi) {
         return docsPromise;
