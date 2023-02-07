@@ -11,7 +11,10 @@
 //  the License.
 
 // TODO: move these to theming
-// @import "bootstrap/variables.less";
+// @import "~bootstrap/scss/functions";
+// @import "~bootstrap/scss/variables";
+
+@import "variable_overrides";
 
 // TODO: added these because they were missing after removing the bootstrap files
 $warningBackground: #fcf8e3;
@@ -30,14 +33,27 @@ $fontSizeSmall: $baseFontSize * 0.85; // ~12px
 $fontSizeMini: $baseFontSize * 0.75; // ~11px
 $borderRadiusLarge: 6px;
 $borderRadiusSmall: 3px;
-$hoverHighlight: #e73d34;
-$radius: 4px;
+$hoverHighlight: #e73d34 !default;
+$radius: 24px;
 $btnBorder: #ccc;
+
+// TMP - just for testing
+$newColor1: #00FFFF;
+$newColor2: #FF00FF;
+$indigo: #FFFF00;
+$brandNewColor: orange !default;
+
+
+
+
+// $body-color: #FF00FF;
+
+// Below already existed before moving to Bootstrap v5
 
 /*Dashboard-Specific Colors*/
 $dangerRed: #f00;
-$hoverHighlight: #e73d34;
-$brandHighlight: #af2d24;
+$hoverHighlight: #e73d34 !default;
+$brandHighlight: #af2d24 !default;
 $brandDark1: #564e4c;
 $brandDark2: #3a2c2b;
 $navIconColor: #b3b4b4;
@@ -57,7 +73,7 @@ $buttonTextDisabled: #f1f1f1;
 /* colors */
 $orange: #f3622d;
 $blue: #049cdb;
-$green: #7fa30c;
+$green: #7fa399 !default;
 
 /* base */
 $background: #f2f2f2;
@@ -113,18 +129,18 @@ $sliderBackground: $background;
 $sliderBackgroundHighlight: $brandHighlight;
 
 /* borders */
-$radius: 4px;
+// $radius: 4px;
 $baseBorderRadius: 0;
 
 $darkBorder: #aaa;
 
 /* shadows */
 $boxShadow: 2px 2px rgba(0, 0, 0, 0.2);
-$boxShadowOff: 2px 2px rgba(0, 0, 0, 0);
-$boxShadowLeft: -4px 4px rgba(0, 0, 0, 0.2);
-$boxShadowLeftOff: -4px 4px rgba(0, 0, 0, 0);
+// $boxShadowOff: 2px 2px rgba(0, 0, 0, 0); // unused
+// $boxShadowLeft: -4px 4px rgba(0, 0, 0, 0.2); // unused
+// $boxShadowLeftOff: -4px 4px rgba(0, 0, 0, 0); // unused
 $textShadow: 1px 2px rgba(0, 0, 0, 0.2);
-$textShadowOff: 1px 2px rgba(0, 0, 0, 0);
+// $textShadowOff: 1px 2px rgba(0, 0, 0, 0); // unused
 
 /* animation */
 $transitionSpeed: 0.25s;
@@ -141,10 +157,10 @@ $panelPadding: 15px;
 $globalErrorAlertBackground: #c45b55;
 
 $infoAlertBackground: #329898;
-$infoAlertColor: #fff;
+// $infoAlertColor: #fff; // unused
 $successAlertBackground: #448c11;
-$successAlertColor: #cbdfbd;
-$errorAlertBackground: #222;
+// $successAlertColor: #cbdfbd; // unused
+// $errorAlertBackground: #222; // unused
 $errorAlertColor: #ff0c35;
 
 /* query history */

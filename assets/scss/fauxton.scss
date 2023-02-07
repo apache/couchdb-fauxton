@@ -10,13 +10,15 @@
 //  License for the specific language governing permissions and limitations under
 //  the License.
 
+// @import "../../app/addons/style/assets/scss/variables";
 @import "variables";
-// TODO: replace these imports ??
-// @import "bootstrap/bootstrap.less";
-// @import "bootstrap/mixins.less";
+
 @import "~bootstrap/scss/bootstrap";
-@import "../../node_modules/react-select/scss/default.scss";
-@import "../../node_modules/rc-slider/assets/index.css";
+@import "~react-select/scss/default.scss";
+@import "~rc-slider/assets/index.css";
+
+
+
 
 // TODO: 'grid' likely not needed
 

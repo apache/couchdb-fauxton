@@ -52,94 +52,94 @@ button:focus {
   outline: 0 !important;
 }
 
-.btn {
-  // TODO: confirm box-shadow() replacement
-  // @include box-shadow(none);
-  box-shadow: none;
-  @include border-radius($baseBorderRadius);
-  background-image: none;
-  text-shadow: none;
-  background-repeat: no-repeat;
-  padding: 10px;
-  margin-top: 0;
-  .icon {
-    margin-right: 0.2em;
-    vertical-align: middle;
-  }
-  &.btn-small {
-    padding: 5px 10px;
-    .icon {
-      margin-right: 0;
-      font-size: inherit;
-    }
-  }
-  &.btn-mini {
-    padding: 3px 8px;
-    .icon {
-      margin-right: 0;
-      font-size: inherit;
-    }
-  }
-}
-.btn-primary,
-.btn-success {
-  color: $buttonText;
-  background-color: $primaryGreen;
-  border-color: $primaryGreen;
-  &:disabled {
-    background-color: $primaryGreenDisabled;
-    border-color: $primaryGreenDisabled;
-    color: $buttonTextDisabled;
-    pointer-events: none;
-  }
-}
+// .btn {
+//   // TODO: confirm box-shadow() replacement
+//   // @include box-shadow(none);
+//   box-shadow: none;
+//   @include border-radius($baseBorderRadius);
+//   background-image: none;
+//   text-shadow: none;
+//   background-repeat: no-repeat;
+//   padding: 10px;
+//   margin-top: 0;
+//   .icon {
+//     margin-right: 0.2em;
+//     vertical-align: middle;
+//   }
+//   &.btn-small {
+//     padding: 5px 10px;
+//     .icon {
+//       margin-right: 0;
+//       font-size: inherit;
+//     }
+//   }
+//   &.btn-mini {
+//     padding: 3px 8px;
+//     .icon {
+//       margin-right: 0;
+//       font-size: inherit;
+//     }
+//   }
+// }
+// .btn-primary,
+// .btn-success {
+//   color: $buttonText;
+//   background-color: $primaryGreen;
+//   border-color: $primaryGreen;
+//   &:disabled {
+//     background-color: $primaryGreenDisabled;
+//     border-color: $primaryGreenDisabled;
+//     color: $buttonTextDisabled;
+//     pointer-events: none;
+//   }
+// }
 
-.btn-secondary {
-  color: $buttonText;
-  background-color: $secondaryBlue;
-  border-color: $secondaryBlue;
-  &:disabled {
-    color: $buttonTextDisabled;
-    background-color: $secondaryBlueDisabled;
-    border-color: $secondaryBlueDisabled;
-    pointer-events: none;
-  }
-}
+// .btn-secondary {
+//   color: $buttonText;
+//   background-color: $secondaryBlue;
+//   border-color: $secondaryBlue;
+//   &:disabled {
+//     color: $buttonTextDisabled;
+//     background-color: $secondaryBlueDisabled;
+//     border-color: $secondaryBlueDisabled;
+//     pointer-events: none;
+//   }
+// }
 
-.btn-tertiary {
-  color: $secondaryBlue;
-  background-color: $buttonText;
-  border: 2px solid $secondaryBlue;
-  &:disabled {
-    color: $secondaryBlueDisabled;
-    background-color: $primaryGreenDisabled;
-    border-color: $buttonTextDisabled;
-    pointer-events: none;
-  }
-}
+// .btn-tertiary {
+//   color: $secondaryBlue;
+//   background-color: $buttonText;
+//   border: 2px solid $secondaryBlue;
+//   &:disabled {
+//     color: $secondaryBlueDisabled;
+//     background-color: $primaryGreenDisabled;
+//     border-color: $buttonTextDisabled;
+//     pointer-events: none;
+//   }
+// }
 
-.btn-warning,
-.btn-danger {
-  color: $buttonText;
-  background-color: $dangerRed;
-  border-color: $dangerRed;
-  &:disabled {
-    color: $buttonTextDisabled;
-    background-color: $dangerDisabled;
-    border-color: $dangerDisabled;
-    pointer-events: none;
-  }
-}
+// .btn-warning,
+// .btn-danger {
+//   color: $buttonText;
+//   background-color: $dangerRed;
+//   border-color: $dangerRed;
+//   &:disabled {
+//     color: $buttonTextDisabled;
+//     background-color: $dangerDisabled;
+//     border-color: $dangerDisabled;
+//     pointer-events: none;
+//   }
+// }
 
-.btn-success:hover,
-.btn-primary:hover,
-.btn-secondary:hover,
-.btn-tertiary:hover,
-.btn-warning:hover,
-.btn-danger:hover {
-  background-color: $hoverHighlight;
-  border-color: $hoverHighlight;
-}
+// .btn-success:hover,
+// .btn-primary:hover,
+// .btn-secondary:hover,
+// .btn-tertiary:hover,
+// .btn-warning:hover,
+// .btn-danger:hover {
+//   background-color: $hoverHighlight;
+//   border-color: $hoverHighlight;
+// }
 
 .form-actions {
   background: none;
