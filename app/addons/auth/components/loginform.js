@@ -15,6 +15,27 @@ import PropTypes from 'prop-types';
 import React from "react";
 import ReactDOM from "react-dom";
 import { login } from "./../actions";
+import { Button, Tab, Tabs } from 'react-bootstrap';
+
+function UncontrolledExample() {
+  return (
+    <Tabs
+      defaultActiveKey="profile"
+      id="uncontrolled-tab-example"
+      className="mb-3"
+    >
+      <Tab eventKey="home" title="Home">
+        <p>Hello tab1</p>
+      </Tab>
+      <Tab eventKey="profile" title="Profile">
+        <p>Hello tab2</p>
+      </Tab>
+      <Tab eventKey="contact" title="Contact" disabled>
+        <p>Hello tab3</p>
+      </Tab>
+    </Tabs>
+  );
+}
 
 class LoginForm extends React.Component {
   constructor() {
@@ -69,6 +90,22 @@ class LoginForm extends React.Component {
               <p className="help-block">
                 Enter your username and password.
               </p>
+              <span id="t1" className="btn btn-success">using btn-success class</span>
+              <br/>
+              <span id="t2" ><b>using $brandHighlight</b></span>
+              <br/>
+              <span className="cls-from-style"><b>using cls-from-style class that uses $green</b></span>
+              <br/>&nbsp;
+              <div className="pagination-footer">
+                <div className="page-controls">
+                  <b>PAGE CONTROLS</b>
+                </div>
+              </div>
+              <br/>&nbsp;
+              <br/>&nbsp;
+              <br/>&nbsp;
+              <br/>&nbsp;
+              <br/>&nbsp;
               <input
                 id="username"
                 type="text"
@@ -96,6 +133,19 @@ class LoginForm extends React.Component {
               </button>
             </form>
           </div>
+        </div>
+        <div>
+          <UncontrolledExample />
+          <br/>
+          <Button variant="primary">Primary</Button>{' '}
+          <Button variant="secondary">Secondary</Button>{' '}
+          <Button variant="success">Success</Button>{' '}
+          <Button variant="warning">Warning</Button>{' '}
+          <Button variant="danger">Danger</Button>{' '}
+          <Button variant="info">Info</Button>{' '}
+          <Button variant="light">Light</Button>{' '}
+          <Button variant="dark">Dark</Button>
+          <Button variant="link">Link</Button>
         </div>
       </div>
     );
