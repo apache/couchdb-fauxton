@@ -16,7 +16,9 @@ import Helpers from "./helpers";
 import Utils from "./core/utils";
 import FauxtonAPI from "./core/api";
 import 'react-toastify/dist/ReactToastify.min.css';
-import '../assets/scss/fauxton.scss';
+
+// TOOD: this was moved to main.js. Not sure it'd still be required given the idea of using 'variables_overload.scss'
+// import '../assets/scss/fauxton.scss';
 
 // Make sure we have a console.log
 if (_.isUndefined(console)) {

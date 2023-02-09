@@ -14,14 +14,17 @@ import app from './app';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import FauxtonAPI from './core/api';
-import LoadAddons from './load_addons';
 import Backbone from 'backbone';
 import $ from 'jquery';
 import AppWrapper from './addons/fauxton/appwrapper';
-
 import { createStore, applyMiddleware, combineReducers } from 'redux';
 import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
+
+// TOOD: moved from above down here.
+import LoadAddons from './load_addons';
+// TOOD:  was moved from main.js. Not sure this and moving the LoadAddons import above are still still be required given the idea of using 'variables_overload.scss'
+import '../assets/scss/fauxton.scss';
 
 FauxtonAPI.addMiddleware(thunk);
 const store = createStore(
