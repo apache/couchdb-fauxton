@@ -6,7 +6,6 @@
 // 
 
 
-//TODO: added because were missing after bootstrap was removed
 @mixin box-sizing($boxmodel) {
   -webkit-box-sizing: $boxmodel;
   -moz-box-sizing: $boxmodel;

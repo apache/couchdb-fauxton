@@ -20,8 +20,7 @@
 
 
 
-// TODO: 'grid' likely not needed
-
+// TODO: #grid is defined in Bootstrap V2. Not sure how/if BootstrapV2 grid is used in Fauxton.
 // #grid {
 //   .core  {
 //     @mixin span($gridColumns){
@@ -39,7 +38,6 @@
 @import "pagination";
 @import "trays";
 @import "mixins";
-// TODO: likely no longer needed
 @import "animations";
 @import "react-animations";
 @import "notification-center";

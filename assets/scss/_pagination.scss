@@ -10,13 +10,20 @@
 //  License for the specific language governing permissions and limitations under
 //  the License.
 
+
+//
+// BOOTSTRAP 5 NOTES (can be removed once upgrade is completed)
+// - Are these really needed? It seems like it's a copy&paste from bootstrap/less/pagination.less files that were
+//   removed, which means we should really be converting to the V5 pagination styles.
+// 
+
+
 //
 // Pagination (multiple pages)
 // --------------------------------------------------
 
 @import "variables";
 
-// TODO: are these really needed? It seems like it's a copy&paste from bootstrap/less files removed
 
 // Space out pagination from surrounding content
 .pagination {
@@ -26,8 +33,6 @@
 ul.pagination {
   // Allow for text-based alignment
   display: inline-block;
-  // TODO: IE7 is ancient history - no longer needed
-  //@include ie7-inline-block();
   // Reset default styles
   margin-left: 0;
   margin-bottom: 0;
