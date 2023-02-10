@@ -58,8 +58,6 @@ button:focus {
 }
 
 // .btn {
-//   // TODO: confirm box-shadow() replacement
-//   // @include box-shadow(none);
 //   box-shadow: none;
 //   @include border-radius($baseBorderRadius);
 //   background-image: none;
@@ -312,7 +310,6 @@ div.add-dropdown {
     width: 148px;
     min-width: 0;
     top: 38px;
-    // TODO: confirm box-shadow() replacement below works
     box-shadow: $boxShadow;
     &.arrow:before {
       right: 4px;
@@ -364,8 +361,6 @@ input.errorHighlight {
     &:hover {
       background-color: $hoverHighlight;
       color: #fff;
-      // TODO: confirm box-shadow() replacement
-      // @include box-shadow(none);
       box-shadow: none;
     }
     &.active {
@@ -380,8 +375,6 @@ input.errorHighlight {
       z-index: 1 !important;
       background-color: $brandHighlight;
       color: #ffffff;
-      // TODO: confirm box-shadow() replacement below
-      // @include box-shadow(none);
       box-shadow: none;
     }
   }

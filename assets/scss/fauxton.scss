@@ -218,8 +218,6 @@ table.databases {
   .well {
     padding: 20px;
     @include border-radius(0);
-    // TODO: confirm box-shadow() replacement
-    // @include box-shadow(none);
     box-shadow: none;
   }
 }
@@ -428,8 +426,6 @@ footer.pagination-footer {
   font-size: 14px;
 
   .pagination {
-    // TODO: confirm box-shadow() replacement
-    // @include box-shadow(none);
     box-shadow: none;
     margin: 0;
     height: 50px;
