@@ -1,0 +1,10 @@
+//
+// WARNING: THIS IS A GENERATED FILE. DO NOT EDIT.
+//
+
+<% if (largeLogoPath) { %>$largeLogoPath: "<%= largeLogoPath %>";<% } %>
+<% if (smallLogoPath) { %>$smallLogoPath: "<%= smallLogoPath %>";<% } %>
+
+<% if (scss_overrides) { scss_overrides.forEach(function (scss_file, i) { %>
+<%= '@import "' + scss_file + '";' %>
+<% }); } %>

@@ -56,21 +56,29 @@ module.exports = function (grunt) {
     grunt.file.write(dest, tmpl({deps: deps}));
   });
 
-  grunt.registerMultiTask('gen_initialize', 'Generate the app.js file', function () {
-    var _ = grunt.util._,
-        settings = this.data,
-        template = 'app/initialize.js.underscore',
-        dest = 'app/initialize.js',
-        tmpl = _.template(grunt.file.read(template)),
-        app = {};
-
+  grunt.registerMultiTask('gen_initialize', 'Generate app/initialize.js and assets/scss/_variables_overrides.sccs', function () {
+    const _ = grunt.util._;
+    const settings = this.data;
+    const initTemplateFile = 'app/initialize.js.underscore';
+    const initDestination = 'app/initialize.js';
+    const initTemplate = _.template(grunt.file.read(initTemplateFile));
+    const app = {};
     _.defaults(app, settings.app, {
       root: '/',
       host: '../..',
       version: "0.0"
     });
+    grunt.file.write(initDestination, initTemplate(app));
 
-    grunt.file.write(dest, tmpl(app));
+    const overridesTemplateFile = 'assets/_variable_overrides.scss.underscore';
+    const overridesDestination = 'assets/scss/_variable_overrides.scss';
+    const overridesTemplate = _.template(grunt.file.read(overridesTemplateFile));
+    const overridesVariables = {
+      scss_overrides: settings.variables && settings.variables.scss_overrides,
+      largeLogoPath: settings.variables && settings.variables.smallLogoPath,
+      smallLogoPath: settings.variables && settings.variables.largeLogoPath
+    };
+    grunt.file.write(overridesDestination, overridesTemplate(overridesVariables));
   });
 
   // run every time nightwatch is executed from the command line

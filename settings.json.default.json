@@ -25,7 +25,8 @@
           "title": "Project Fauxton",
           "generationLabel": "Fauxton Dev",
           "largeLogoPath": "../../../../../assets/img/CouchDB-negative-logo.png",
-          "smallLogoPath": "../../../../../assets/img/couchdb-logo.png"
+          "smallLogoPath": "../../../../../assets/img/couchdb-logo.png",
+          "scss_overrides": []
         },
         "app": {
           "root": "/",
@@ -40,7 +41,8 @@
           "title": "Project Fauxton",
           "generationLabel": "Fauxton Release",
           "largeLogoPath": "../../../../../assets/img/CouchDB-negative-logo.png",
-          "smallLogoPath": "../../../../../assets/img/couchdb-logo.png"
+          "smallLogoPath": "../../../../../assets/img/couchdb-logo.png",
+          "scss_overrides": []
         },
         "app": {
           "root": "/",
@@ -55,7 +57,8 @@
           "title": "Project Fauxton",
           "generationLabel": "Fauxton Couchapp",
           "largeLogoPath": "../../../../../assets/img/CouchDB-negative-logo.png",
-          "smallLogoPath": "../../../../../assets/img/couchdb-logo.png"
+          "smallLogoPath": "../../../../../assets/img/couchdb-logo.png",
+          "scss_overrides": []
         },
         "app": {
           "root": "/",
