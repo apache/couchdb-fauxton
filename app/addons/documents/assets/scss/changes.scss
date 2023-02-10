@@ -162,6 +162,16 @@
   margin-left: 20px;
 }
 
+@keyframes highlight-element {
+  from {
+    background-color: $highlightEffectColor;
+    
+  }
+  to {
+    background-color: #f1f1f1;
+  }
+}
+
 .new-change-row {
   -webkit-animation: slideDown 1.5s both, highlight-element 2s 1;
   animation: slideDown 1.5s both, highlight-element 2s 1;

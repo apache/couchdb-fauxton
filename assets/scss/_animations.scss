@@ -10,13 +10,12 @@
 //  License for the specific language governing permissions and limitations under
 //  the License.
 
-// TODO: likely these animation styles are no longer needed
 
-// @mixin keyframes($name, $fromRules, $toRules){
-// 	// @-webkit-keyframes '${name}' { 0% { $fromRules(); } 100% { $toRules(); } }
-// 	// @-moz-keyframes '${name}' { 0% { $fromRules(); } 100% { $toRules(); } }
-// 	@keyframes some { from { @include $fromRules() } to { $toRules; } }
-// }
+//
+// BOOTSTRAP 5 NOTES (can be removed once upgrade is completed)
+// - Reviewed animations in this file. Unused items were removed.
+// - Some were moved to other files because they're tied to certain CSS styles - i.e. not generic enough to be placed here
+// 
 
 @mixin animation($options) {
   -webkit-animation: $options;
@@ -24,38 +23,6 @@
   animation: $options;
 }
 
-// .fade {
-// transition: opacity .25s ease-in-out;
-// -moz-transition: opacity .25s ease-in-out;
-// -webkit-transition: opacity .25s ease-in-out;
-// }
-
-// .fadeIn {
-// opacity: 1;
-// }
-
-// .fadeOut {
-// opacity: 0;
-// }
-
-// @-webkit-keyframes errorBlinkBG {
-// from { background: $dangerRed; }
-// to { background: white; }
-// }
-// @keyframes errorBlinkBG {
-// from { background: $dangerRed; }
-// to { background: white; }
-// }
-
-// /* a generic slide-up/down effect that looks smooth for items with unknown heights */
-// .keyframes(slideDown, {
-// opacity: 0;
-// max-height: 0;
-// },
-// {
-// opacity: 1;
-// max-height: 1000px;
-// });
 @keyframes slideDown {
   from {
     opacity: 0;
@@ -67,15 +34,6 @@
   }
 }
 
-// .keyframes(slideUp, {
-// max-height: 1000px;
-// opacity: 1;
-// },
-// {
-// max-height: 0;
-// opacity: 0;
-// });
-
 @keyframes slideUp {
   from {
     max-height: 1000px;
@@ -86,17 +44,3 @@
     opacity: 0;
   }
 }
-
-// .highlight {
-// -webkit-animation: highlight-element 2.5s 1;
-// -moz-animation: highlight-element 2.5s 1;
-// }
-
-// @-webkit-keyframes highlight-element {
-// 0% { background-color: $highlightEffectColor; }
-// 100% { background-color: #f1f1f1; }
-// }
-// @-moz-keyframes highlight-element {
-// 0% { background-color: $highlightEffectColor; }
-// 100% { background-color: #f1f1f1; }
-// }
