@@ -26,6 +26,14 @@ $indigo: #FFFF00;
 $brandNewColor: orange !default;
 
 
+/*Fauxton-Specific Colors that are used to override bootstrap variables go here
+  Probably need to have these more generic colors here, and component specific ones (e.g. btn-background)
+	will appear after the bootstrap overrides so they can refer to both.
+*/
+
+$brandHighlight: #af2d24 !default;
+
+
 // 
 // Bootstrap V2 variables
 // These will need to be replaced, or the corresponding V5 ones set
@@ -77,10 +85,10 @@ $green: #7fa399 !default;
 // 
 // Below already existed before moving to Bootstrap v5
 
-/*Dashboard-Specific Colors*/
+/*Fauxton-Specific Colors*/
 
 $hoverHighlight: #e73d34 !default;
-$brandHighlight: #af2d24 !default;
+// $brandHighlight: #af2d24 !default; //moved to the top
 $brandDark1: #564e4c;
 $brandDark2: #3a2c2b;
 $navIconColor: #b3b4b4;

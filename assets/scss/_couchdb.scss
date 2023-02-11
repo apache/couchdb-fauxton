@@ -13,57 +13,57 @@
 
 //
 // BOOTSTRAP 5 NOTES (can be removed once upgrade is completed)
-// - TODO: should move these to 'variables.scss' so all vars are placed in a single file
+// - None of these are in use, even in the main branch. Leaving these commented for now, but should be removed later.
 // 
 
 
-//
-// Variables
-// --------------------------------------------------
+// //
+// // Variables
+// // --------------------------------------------------
 
-// Global values
-// --------------------------------------------------
+// // Global values
+// // --------------------------------------------------
 
-// Links
-$linkColor: #ca2530;
-$linkColorHover: darken($linkColor, 15%);
+// // Links
+// $linkColor: #ca2530;
+// $linkColorHover: darken($linkColor, 15%);
 
-// Grays
-$black: #0c0c0c;
-$grayDark: #5a5a5a;
-$grayDarker: darken($grayDark, 10%);
-$gray: #f80507;
-$grayLight: #e27b81;
-$grayLighter: #b95d40;
-$white: #fdfbfb;
+// // Grays
+// $black: #0c0c0c;
+// $grayDark: #5a5a5a;
+// $grayDarker: darken($grayDark, 10%);
+// $gray: #f80507;
+// $grayLight: #e27b81;
+// $grayLighter: #b95d40;
+// $white: #fdfbfb;
 
-// Accent colors
-// -------------------------
-$blue: #049cdb;
-$blueDark: #0064cd;
-$green: #46a546;
-$red: #9d261d;
-$yellow: #ffc40d;
-$orange: #f89406;
-$pink: #c3325f;
-$purple: #7a43b6;
+// // Accent colors
+// // -------------------------
+// $blue: #049cdb;
+// $blueDark: #0064cd;
+// $green: #46a546;
+// $red: #9d261d;
+// $yellow: #ffc40d;
+// $orange: #f89406;
+// $pink: #c3325f;
+// $purple: #7a43b6;
 
-// Scaffolding
-// -------------------------
-$bodyBackground: $white;
-$textColor: $grayDark;
+// // Scaffolding
+// // -------------------------
+// $bodyBackground: $white;
+// $textColor: $grayDark;
 
-// Typography
-// -------------------------
-$sansFontFamily: "Helvetica Neue", Helvetica, Arial, sans-serif;
-$serifFontFamily: Georgia, "Times New Roman", Times, serif;
-$monoFontFamily: Monaco, Menlo, Consolas, "Courier New", monospace;
+// // Typography
+// // -------------------------
+// $sansFontFamily: "Helvetica Neue", Helvetica, Arial, sans-serif;
+// $serifFontFamily: Georgia, "Times New Roman", Times, serif;
+// $monoFontFamily: Monaco, Menlo, Consolas, "Courier New", monospace;
 
-$baseFontSize: 14px;
-$baseFontFamily: $sansFontFamily;
-$baseLineHeight: 20px;
-$altFontFamily: $serifFontFamily;
+// $baseFontSize: 14px;
+// $baseFontFamily: $sansFontFamily;
+// $baseLineHeight: 20px;
+// $altFontFamily: $serifFontFamily;
 
-$headingsFontFamily: inherit; // empty to use BS default, $baseFontFamily
-$headingsFontWeight: bold; // instead of browser default, bold
-$headingsColor: inherit; // empty to use BS default, $textColor
+// $headingsFontFamily: inherit; // empty to use BS default, $baseFontFamily
+// $headingsFontWeight: bold; // instead of browser default, bold
+// $headingsColor: inherit; // empty to use BS default, $textColor
