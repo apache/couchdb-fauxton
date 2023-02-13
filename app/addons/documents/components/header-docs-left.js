@@ -70,7 +70,7 @@ const HeaderDocsLeft = ({dbName, partitionKey}) => {
         {dbName}
       </div>
       <Dropdown id="faux-header__doc-header-left-1">
-        <Dropdown.Toggle nocaret className="faux-header__doc-header-dropdown-toggle">
+        <Dropdown.Toggle className="faux-header__doc-header-dropdown-toggle">
           <i className="faux-header__doc-header-dropdown-toggle-icon fonticon-vertical-ellipsis"></i>
         </Dropdown.Toggle>
         <Dropdown.Menu className="faux-header__doc-header-dropdown-itemwrapper">

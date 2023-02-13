@@ -55,7 +55,7 @@ export default class AttachmentsPanelButton extends React.Component {
     return (
       <div className="panel-section view-attachments-section btn-group">
         <Dropdown id="view-attachments-menu" disabled={this.props.disabled} >
-          <Dropdown.Toggle nocaret className="panel-button dropdown-toggle btn" data-bypass="true">
+          <Dropdown.Toggle className="panel-button dropdown-toggle btn" data-bypass="true">
             <i className="icon icon-paper-clip"></i>
             <span className="button-text">View Attachments</span>
             <span className="caret"></span>

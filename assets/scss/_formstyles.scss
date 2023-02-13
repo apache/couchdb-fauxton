@@ -12,7 +12,11 @@
 
 //
 // BOOTSTRAP 5 NOTES (can be removed once upgrade is completed)
-// - These are changing global default for various form elements. My guess is a bunch of these are no longer needed / conflict with the V5 settings.
+// - These are changing global default for various form elements. My guess is a bunch of these no longer exist / conflict with the V5 styles.
+//   We'll probably need to update all form elements in Fauxton (<input>, <select>, etc) to use V5 styles.
+// - And then my guess would be most of the overrides below are no longer relevant/needed.
+//   E.g. there's a '.input-block-level' class in V2 that no longer exists, and he '.form-control' in V5 that most form elements need seems to be enough.
+// - '.input-append' and '.input-prepend' from V2 needs to be replaced with '.input-group'
 // 
 
 @import "variables";
@@ -144,22 +148,24 @@ button:focus {
 //   border-color: $hoverHighlight;
 // }
 
-.form-actions {
-  background: none;
-  border: none;
-}
+// TODO: only used by Cloudant Dashboard
+// .form-actions {
+//   background: none;
+//   border: none;
+// }
 
-.input-append,
-.input-prepend {
-  .add-on {
-    font-size: 18px;
-    padding: 14px 5px 30px;
-  }
-  .btn .icon {
-    font-size: 16px;
-    margin-right: 0;
-  }
-}
+// TOOD: should be replaced by Input Groups
+// .input-append,
+// .input-prepend {
+//   .add-on {
+//     font-size: 18px;
+//     padding: 14px 5px 30px;
+//   }
+//   .btn .icon {
+//     font-size: 16px;
+//     margin-right: 0;
+//   }
+// }
 
 .row-fluid .input-append [class*="span"],
 .input-prepend input[class*="span"] {
