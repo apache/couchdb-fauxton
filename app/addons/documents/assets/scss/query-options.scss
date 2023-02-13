@@ -32,7 +32,7 @@
     font-size: 17.5px;
     color: $secondaryBlue;
     &:hover {
-      color: $hoverHighlight;
+      color: $cf-brand-hightlight-hover;
     }
   }
 
@@ -77,14 +77,6 @@
     .btn-success {
       @include border-radius(5px);
     }
-    .btn-cancel,
-    .btn-cancel:active {
-      background: none;
-      border: none;
-      box-shadow: none;
-      color: $hoverHighlight;
-      line-height: 1em;
-    }
     .btn-cancelDark,
     .btn-cancelDark:active {
       background: none;
@@ -113,7 +105,7 @@
     }
     .btn.active {
       background: #fff;
-      color: $linkColorHover;
+      color: $link-hover-color;
       box-shadow: none;
     }
     label:first-child {

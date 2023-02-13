@@ -57,7 +57,7 @@
     .dropdown-menu li a {
       padding: 10px 15px 10px 12px;
       &:hover {
-        background-color: $hoverHighlight;
+        background-color: $cf-brand-hightlight-hover;
         color: white;
       }
     }
@@ -128,7 +128,7 @@ a.document-result-screen__toolbar-create-btn:visited {
 
   .tableview-data-cell-id {
     a {
-      color: $linkColor;
+      color: $link-hover-color;
     }
     div:first-of-type {
       font-weight: 700;
@@ -141,9 +141,9 @@ a.document-result-screen__toolbar-create-btn:visited {
   tbody tr {
     cursor: pointer;
     &:hover {
-      border-left: 2px solid $hoverHighlight;
+      border-left: 2px solid $cf-brand-hightlight-hover;
       td {
-        color: $hoverHighlight;
+        color: $cf-brand-hightlight-hover;
         input[type="checkbox"] {
           margin-left: 7px;
         }
@@ -251,7 +251,7 @@ a.document-result-screen__toolbar-create-btn:visited {
   font-size: 14px;
   .execution-stats-popup-component {
     [data-status="false"] {
-      color: $fontGrey;
+      color: $cf-text-muted01;
     }
     [data-status="true"] {
       .value {
@@ -260,7 +260,7 @@ a.document-result-screen__toolbar-create-btn:visited {
     }
   }
   .warning {
-    color: $errorAlertColor;
+    color: $cf-alert-error-color;
     margin-top: 8px;
   }
 }

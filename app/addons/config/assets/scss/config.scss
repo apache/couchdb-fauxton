@@ -43,12 +43,12 @@
 }
 
 .config-item-trash:hover {
-  color: $dangerRed;
+  color: $cf-danger;
 }
 
 .config-item-deleting {
   text-decoration: line-through;
-  text-decoration-color: red;
+  text-decoration-color: $cf-danger;
 }
 
 #config-trash {
@@ -83,51 +83,7 @@ table.config {
   &:hover {
     transition: none;
     text-decoration: none;
-    color: $linkColorHover;
-  }
-}
-
-#add-section-button {
-}
-
-.add-section-tray {
-  padding: 20px;
-  width: 300px;
-
-  &:before {
-    right: 138px;
-  }
-
-  input {
-    width: 100%;
-  }
-
-  form {
-    margin-bottom: 0px;
-  }
-
-  a.btn {
-    color: white;
-    background-color: $linkColor;
-    line-height: 1.5em;
-    border: 0px;
-    padding: 10px 10px 9px;
-    font-size: 14px;
-    @include border-radius(5px);
-
-    &:hover {
-      background-color: #cbcbcb;
-      color: white;
-    }
-  }
-
-  .typeahead {
-    width: 260px;
-    margin-top: 0px;
-
-    a {
-      color: #ffffff;
-    }
+    color: $link-hover-color;
   }
 }
 
@@ -164,7 +120,7 @@ table.config {
 
   a.btn {
     color: white;
-    background-color: $linkColor;
+    background-color: $cf-brand-highlight;
     line-height: 1.5em;
     border: 0;
     padding: 10px 10px 9px;

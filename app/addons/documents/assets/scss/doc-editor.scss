@@ -14,7 +14,7 @@
 @import "../../../../../assets/scss/variables";
 
 #dashboard.doc-editor-page {
-  background-color: #4d4d4d;
+  background-color: $cf-code-bg;
 
   #dashboard-content {
     padding-bottom: 0;
@@ -46,7 +46,7 @@
     right: 0;
     left: 0;
     width: 100%;
-    background-color: #f1f1f1;
+    background-color: $cf-background01;
     height: 61px;
   }
 
@@ -81,7 +81,7 @@
     font-size: 14px;
     color: #666;
     &:hover {
-      color: $hoverHighlight;
+      color: $cf-brand-hightlight-hover;
       text-decoration: none;
       cursor: pointer;
     }
@@ -99,12 +99,12 @@
   .panel-button {
     color: #666;
     &:hover {
-      color: $hoverHighlight;
+      color: $cf-brand-hightlight-hover;
       text-decoration: none;
       cursor: pointer;
     }
     &:disabled {
-      color: $grayLight;
+      color: $cf-text-muted01;
       cursor: not-allowed;
     }
   }
@@ -119,7 +119,7 @@
 
   .panel-button {
     border: 0;
-    background-color: #f1f1f1;
+    background-color: $cf-background01;
     padding: 11px;
     color: #555555;
 
@@ -152,7 +152,7 @@
     font-size: 0; // prevents whitespace gaps between elements
   }
   .row-fluid.content-area {
-    background-color: #4d4d4d;
+    background-color: $cf-code-bg;
   }
 
   // overriding the ace editor inline styles
@@ -206,7 +206,7 @@
   text-align: left;
   overflow: hidden;
   a:hover {
-    color: $hoverHighlight;
+    color: $cf-brand-hightlight-hover;
   }
 }
 

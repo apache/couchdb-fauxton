@@ -108,7 +108,7 @@
   }
   span {
     cursor: pointer;
-    color: $brandHighlight;
+    color: $cf-brand-highlight;
     display: inline-block;
     padding-top: 9px;
   }
@@ -119,7 +119,7 @@
   }
 
   tr a:hover {
-    color: $hoverHighlight;
+    color: $cf-brand-hightlight-hover;
   }
 
   .edit-domain-section {

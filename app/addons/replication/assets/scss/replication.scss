@@ -150,7 +150,7 @@ div.replication__page {
 }
 
 .replication__doc-name-icon:hover {
-  color: $hoverHighlight;
+  color: $cf-brand-hightlight-hover;
 }
 
 //use attribute selector to strengthen this to override bootstraps default font size for inputs
@@ -194,7 +194,7 @@ td.replication__table-col {
 }
 
 .replication__table--selected {
-  color: $hoverHighlight;
+  color: $cf-brand-hightlight-hover;
 }
 
 .replication__table-header-source {
@@ -289,7 +289,7 @@ input.replication__bulk-select-input[type="checkbox"] {
   margin-left: 3px;
   padding-left: 8px;
   &:hover {
-    color: $hoverHighlight;
+    color: $cf-brand-hightlight-hover;
   }
 }
 
@@ -314,7 +314,7 @@ input.replication__bulk-select-input[type="checkbox"] {
     text-decoration: none;
   }
   &:hover {
-    color: $hoverHighlight;
+    color: $cf-brand-hightlight-hover;
     text-decoration: none;
   }
 }
@@ -324,7 +324,7 @@ input.replication__bulk-select-input[type="checkbox"] {
 }
 
 .replication__row-btn--warning {
-  color: $dangerRed;
+  color: $cf-danger;
 }
 
 .replication__filter-icon {
@@ -350,7 +350,7 @@ button.replication__error-continue {
 
 .replication__error-cancel:hover,
 .replication__error-continue:hover {
-  background-color: $hoverHighlight;
+  background-color: $cf-brand-hightlight-hover;
   color: #fff;
 }
 
@@ -363,7 +363,7 @@ td.replication__empty-row {
 }
 
 .replication__remote_icon_help:hover {
-  color: $hoverHighlight;
+  color: $cf-brand-hightlight-hover;
 }
 
 .replication__tooltip {

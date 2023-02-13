@@ -1,5 +1,5 @@
-@import "variables";
-@import "mixins";
+// @import "variables";
+// @import "mixins";
 
 /* new flex layout for templates. Specificity needed for now. Will remove at end */
 body #dashboard .flex-layout,
@@ -154,7 +154,7 @@ body #dashboard.template-with-sidebar {
     overflow: hidden;
   }
   #dashboard-content {
-    border-left: 1px solid $grayLight;
+    border-left: 1px solid $cf-border-color02;
     @include left-border();
   }
 }

@@ -1,5 +1,5 @@
 .faux-navbar {
-  background-color: $brandDark2;
+  background-color: $cf-navbar-bg;
   position: absolute;
   left: 0;
   top: 0;
@@ -22,7 +22,7 @@
 
 .faux-navbar__itemarea {
   @include box-sizing(border-box);
-  border-bottom: 1px solid $brandDark2;
+  border-bottom: 1px solid $cf-navbar-bg;
   height: 48px;
   padding: 10px 20px;
   line-height: 24px;
@@ -32,38 +32,30 @@
   color: $buttonText;
   font-size: 10px;
   text-align: center;
-  background-color: $brandDark2;
+  background-color: $cf-navbar-bg;
   padding-bottom: 10px;
 }
 
 .faux-navbar__burger {
-  background-color: $brandDark2;
+  background-color: $cf-navbar-bg;
   padding: 19px 0 18px 18px;
 }
 
 .faux-navbar--narrow {
-  width: $collapsedNavWidth;
+  width: $cf-navbar-width-collapsed;
 }
 
 .faux-navbar--wide {
-  width: $navWidth;
+  width: $cf-navbar-width;
 }
 
 .faux-navbar__burger:hover .faux-navbar__burger__icon {
-  color: $navIconActive;
+  color: $cf-navbar-icon-color-selected;
 }
 
 .faux-navbar__burger__icon {
-  color: $navIconColor;
-  font-size: 27px;
-}
-
-.faux-navbar__burger__icon--flipped:before {
-  -moz-transform: scale(-1, 1);
-  -webkit-transform: scale(-1, 1);
-  -o-transform: scale(-1, 1);
-  -ms-transform: scale(-1, 1);
-  transform: scale(-1, 1);
+  color: $cf-navbar-icon-color;
+  font-size: 24px;
 }
 
 .faux-navbar__link,
@@ -75,18 +67,18 @@
 }
 
 .faux-navbar__link--active {
-  background-color: $brandHighlight;
+  background-color: $cf-brand-highlight;
   text-decoration: none;
 }
 
 .faux-navbar__link--inactive {
-  background-color: $brandDark1;
+  background-color: $cf-navbar-item-bg;
 }
 
 .faux-navbar__link:hover,
 .faux-logout__link:hover,
 .faux-login__link:hover {
-  background-color: $hoverHighlight;
+  background-color: $cf-brand-hightlight-hover;
   text-decoration: none;
 }
 
@@ -96,16 +88,16 @@
 }
 
 .faux-navbar__link:hover .faux-navbar__icon:before {
-  color: $navIconActive;
+  color: $cf-navbar-icon-color-selected;
 }
 
 .faux-navbar__link--active .faux-navbar__icon:before {
-  color: $navIconActive;
+  color: $cf-navbar-icon-color-selected;
 }
 
 .faux-navbar__icon {
   margin-right: 14px;
-  color: $navIconColor;
+  color: $cf-navbar-icon-color;
   font-size: 24px;
   vertical-align: middle;
   position: relative;
@@ -114,8 +106,8 @@
 .faux-navbar__icon-badge:after {
   content: "";
   position: absolute;
-  background: $hoverHighlight;
-  border: 1px solid $hoverHighlight;
+  background: $cf-brand-hightlight-hover;
+  border: 1px solid $cf-brand-hightlight-hover;
   height: 8px;
   width: 8px;
   top: 0;
@@ -126,11 +118,11 @@
 }
 
 .faux-navbar__link:hover .faux-navbar__icon-badge:after {
-  border-color: $navIconActive;
+  border-color: $cf-navbar-icon-color-selected;
 }
 
 .faux-navbar__link--active .faux-navbar__icon-badge:after {
-  border-color: $navIconActive;
+  border-color: $cf-navbar-icon-color-selected;
 }
 
 .faux-navbar__text {
@@ -184,7 +176,7 @@
   height: 50px;
   padding: 10px 10px 10px 10px;
   float: none;
-  background: $brandDark2;
+  background: $cf-navbar-bg;
 }
 
 .faux-navbar__brand-logo {

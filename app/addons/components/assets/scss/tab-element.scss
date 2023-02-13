@@ -65,7 +65,7 @@
     text-align: center;
     white-space: nowrap;
     vertical-align: middle;
-    background-color: $linkColorHover;
+    background-color: $link-hover-color;
     border-radius: 10px;
     margin-left: 0.25rem;
     font-size: 0.75rem;
@@ -78,7 +78,7 @@
 
   &.tab-element-checked .tab-element-indicator {
     height: 5px;
-    background-color: $linkColorHover;
+    background-color: $link-hover-color;
   }
 
   &.tab-element-checked {
@@ -97,7 +97,7 @@
 
   &:hover {
     background-color: #fff;
-    color: $linkColorHover;
+    color: $link-hover-color;
   }
 
   &.tab-element-checked .tab-element-content:hover {
@@ -110,6 +110,6 @@
 
   &:hover .tab-element-indicator {
     height: 5px;
-    background-color: $linkColorHover;
+    background-color: $link-hover-color;
   }
 }

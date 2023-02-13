@@ -1,9 +1,9 @@
-@import "variables";
-@import "mixins";
+// @import "variables";
+// @import "mixins";
 
 body #dashboard #notification-center-btn {
   border: 0;
-  background-color: $background;
+  background-color: $cf-background01;
   border-left: 1px solid $cf-border-color01;
   font-size: 24px;
   color: #666;
@@ -15,7 +15,7 @@ body #dashboard #notification-center-btn {
     padding: 20px 16px 16px;
   }
   &:hover {
-    color: $hoverHighlight;
+    color: $cf-brand-hightlight-hover;
   }
 }
 
@@ -28,7 +28,7 @@ body #dashboard #notification-center-btn {
     right: 0;
     width: 300px;
     height: 100%;
-    background-color: #333333;
+    background-color: $cf-background02;
     color: #dddddd;
 
     header {
@@ -36,8 +36,8 @@ body #dashboard #notification-center-btn {
       padding: 16px;
 
       h1 {
-        font-size: 16px;
-        line-height: 20px;
+        font-size: $font-size-base;
+        line-height: $line-height-base;
         margin: 0;
         color: white;
         font-weight: normal;
@@ -53,7 +53,7 @@ body #dashboard #notification-center-btn {
         font-size: 21px;
         color: #dddddd;
         &:hover {
-          color: $hoverHighlight;
+          color: $cf-brand-hightlight-hover;
         }
       }
     }
@@ -76,7 +76,7 @@ body #dashboard #notification-center-btn {
           background-color: #555555;
         }
         &:hover {
-          background-color: $hoverHighlight;
+          background-color: $cf-brand-hightlight-hover;
           .fonticon {
             color: white;
           }
@@ -122,7 +122,7 @@ body #dashboard #notification-center-btn {
           margin-left: 6px;
           font-size: 100%;
           &:hover {
-            color: $hoverHighlight;
+            color: $cf-brand-hightlight-hover;
           }
         }
         p {
@@ -169,13 +169,13 @@ body #dashboard #notification-center-btn {
   }
 
   .fonticon-ok-circled {
-    color: $successAlertBackground;
+    color: $cf-alert-success-color;
   }
   .fonticon-attention-circled {
-    color: $globalErrorAlertBackground;
+    color: $cf-alert-error-color;
   }
   .fonticon-info-circled {
-    color: $infoAlertBackground;
+    color: $cf-alert-info-color;
   }
 
   .notification-page-mask {

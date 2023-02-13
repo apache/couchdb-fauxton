@@ -19,8 +19,8 @@
 // - '.input-append' and '.input-prepend' from V2 needs to be replaced with '.input-group'
 // 
 
-@import "variables";
-@import "icons";
+// @import "variables";
+// @import "icons";
 
 input[type="text"],
 input[type="password"] {
@@ -144,8 +144,8 @@ button:focus {
 // .btn-tertiary:hover,
 // .btn-warning:hover,
 // .btn-danger:hover {
-//   background-color: $hoverHighlight;
-//   border-color: $hoverHighlight;
+//   background-color: $cf-brand-hightlight-hover;
+//   border-color: $cf-brand-hightlight-hover;
 // }
 
 // TODO: only used by Cloudant Dashboard
@@ -204,7 +204,7 @@ a.help-link {
   color: $secondaryBlue;
   text-decoration: none;
   &:hover {
-    color: $hoverHighlight;
+    color: $cf-brand-hightlight-hover;
   }
 }
 
@@ -268,7 +268,7 @@ form.view-query-save {
     font-size: 12px;
     background-color: inherit;
     border: 2px solid #7c8085;
-    color: $linkColor;
+    color: $cf-brand-highlight;
     text-align: center;
     line-height: 19px;
     box-shadow: none;
@@ -321,10 +321,10 @@ div.add-dropdown {
       right: 4px;
     }
     a {
-      background-color: $brandDark1;
-      color: $navIconColor;
+      background-color: $cf-dropdown-item-bg;
+      color: $cf-dropdown-item-color;
       &:hover {
-        background-color: $hoverHighlight;
+        background-color: $cf-brand-hightlight-hover;
         color: white;
       }
     }
@@ -344,7 +344,7 @@ div.add-dropdown {
 }
 
 @keyframes errorBlinkBG {
-  from { background: $dangerRed; }
+  from { background: $cf-danger; }
   to { background: white; }
 }
 
@@ -365,7 +365,7 @@ input.errorHighlight {
       border-right-radius: 10px;
     }
     &:hover {
-      background-color: $hoverHighlight;
+      background-color: $cf-brand-hightlight-hover;
       color: #fff;
       box-shadow: none;
     }
@@ -379,7 +379,7 @@ input.errorHighlight {
        * so the dropdown can go over the activated button. 
        */
       z-index: 1 !important;
-      background-color: $brandHighlight;
+      background-color: $cf-brand-highlight;
       color: #ffffff;
       box-shadow: none;
     }

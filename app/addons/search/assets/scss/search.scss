@@ -87,7 +87,7 @@
   .icon-question-sign {
     margin-left: 4px;
     &:hover {
-      color: $hoverHighlight;
+      color: $cf-brand-hightlight-hover;
     }
   }
 }
@@ -153,7 +153,6 @@
 
 #search-index-query-button {
   height: 46px;
-  @include border-right-radius($radius);
 }
 
 body #dashboard-content #search-index-form {

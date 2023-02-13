@@ -10,7 +10,7 @@
 //  License for the specific language governing permissions and limitations under
 //  the License.
 
-@import "variables";
+// @import "variables";
 
 /* ajax loader */
 .loader {
@@ -57,13 +57,12 @@
 
 #dashboard {
   position: relative;
-  left: $navWidth;
+  left: $cf-navbar-width;
   padding-left: 0;
-  background-color: $sidebarBG;
   height: 100%;
   width: 100%;
   .closeMenu & {
-    left: $collapsedNavWidth;
+    left: $cf-navbar-width-collapsed;
   }
 }
 
@@ -75,7 +74,7 @@
 
 .one-pane {
   #dashboard-content {
-    top: $collapsedNavWidth;
+    top: $cf-navbar-width-collapsed;
     .view {
       padding-bottom: 30px;
     }
@@ -84,12 +83,12 @@
 
 .two-pane {
   .inner {
-    padding-bottom: $collapsedNavWidth;
+    padding-bottom: $cf-navbar-width-collapsed;
   }
 }
 
 #sidebar-content {
-  width: $sidebarWidth;
+  width: $cf-sidebar-width;
   background-color: $secondarySidebar;
   > div.inner {
     display: block;
@@ -117,15 +116,15 @@
   position: relative;
   height: 100%;
   left: 0;
-  padding-right: $navWidth;
+  padding-right: $cf-navbar-width;
   .closeMenu & {
-    padding-right: $collapsedNavWidth;
+    padding-right: $cf-navbar-width-collapsed;
   }
 }
 
 .right-header-wrapper {
   overflow-x: hidden;
-  height: $collapsedNavWidth;
+  height: $cf-navbar-width-collapsed;
 }
 
 .header-wrapper {
@@ -153,20 +152,20 @@
 .dashboard-upper-menu {
   border-left: 1px solid #999;
   right: 0;
-  left: $sidebarWidth + $navWidth;
+  left: $cf-sidebar-width + $cf-navbar-width;
   position: fixed;
   display: block;
 
   @include topmenu-defaults;
   background-color: #cbcbcb;
   .closeMenu & {
-    left: $sidebarWidth + $collapsedNavWidth;
+    left: $cf-sidebar-width + $cf-navbar-width-collapsed;
   }
 }
 
 #dashboard-lower-content {
   padding: 20px;
-  background-color: #f1f1f1;
+  background-color: $cf-background01;
   position: relative;
 }
 
@@ -181,14 +180,14 @@
   }
 
   .with-sidebar & {
-    border-left: 1px solid $grayLight;
+    border-left: 1px solid $cf-border-color02;
     @include left-border();
     width: auto;
     padding: 15px;
     bottom: 0px;
-    top: $collapsedNavWidth;
+    top: $cf-navbar-width-collapsed;
     position: absolute;
-    left: $sidebarWidth;
+    left: $cf-sidebar-width;
     right: 0;
     @include box-sizing(border-box);
   }
@@ -208,7 +207,7 @@
 .sidenav {
   padding: 0;
   header {
-    width: $sidebarWidth;
+    width: $cf-sidebar-width;
     border-bottom: 1px solid #d3d7db;
   }
   .nav-list {
@@ -216,11 +215,11 @@
       border: none;
     }
     > li > a:hover {
-      background-color: $hoverHighlight;
+      background-color: $cf-brand-hightlight-hover;
       color: #fff;
     }
     li.active > a {
-      color: $brandHighlight;
+      color: $cf-brand-highlight;
     }
     > li > a {
       color: #333333;
@@ -248,20 +247,20 @@
       text-shadow: none;
       color: #333333;
       & > span:hover {
-        color: $linkColor;
+        color: $cf-brand-highlight;
       }
     }
   }
 }
 
 .row-fluid.content-area {
-  background-color: $background;
+  background-color: $cf-background01;
 }
 
 .two-pane {
   .content-area {
     height: 100%;
-    top: $collapsedNavWidth;
+    top: $cf-navbar-width-collapsed;
     position: relative;
   }
 
@@ -285,16 +284,16 @@
 }
 
 .toast-container {
-  margin-top: $breadcrumbHeight;
+  margin-top: $cf-topheader-height;
   padding: 0;
   right: 0;
 }
 
 .Toastify__toast {
-  border: 1px solid #999;
-  background-color: #fff;
+  border: 1px solid $cf-border-color02;
+  background-color: $cf-alert-bg;
   border-right: 0;
-  color: black;
+  color: $cf-text01;
 }
 
 .Toastify__toast-icon {
@@ -304,25 +303,20 @@
 .Toastify__toast--info {
   &,
   .Toastify__close-button--info {
-    border-left: 6px solid $infoAlertBackground;
+    border-left: 6px solid $cf-alert-info-color;
   }
 }
 
 .Toastify__toast--success {
   &,
   .Toastify__close-button--success {
-    border-left: 6px solid $successAlertBackground;
+    border-left: 6px solid $cf-alert-success-color;
   }
 }
-.Toastify__toast--warning {
-  &,
-  .Toastify__close-button--warning {
-    border-left: 6px solid $warningBackground;
-  }
-}
+
 .Toastify__toast--error {
   &,
   .Toastify__close-button--error {
-    border-left: 6px solid $errorAlertColor;
+    border-left: 6px solid $cf-alert-error-color;
   }
 }

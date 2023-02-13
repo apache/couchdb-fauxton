@@ -60,7 +60,7 @@
     .btn-secondary {
       padding: 12px;
       &:hover {
-        background-color: $hoverHighlight;
+        background-color: $cf-brand-hightlight-hover;
       }
     }
   }
@@ -90,7 +90,7 @@
     padding-left: 0;
     margin-right: 8px;
     &:hover {
-      color: $hoverHighlight;
+      color: $cf-brand-hightlight-hover;
     }
   }
 }
@@ -168,7 +168,7 @@
     
   }
   to {
-    background-color: #f1f1f1;
+    background-color: $cf-background01;
   }
 }
 

@@ -24,22 +24,22 @@
 
 body {
   .ace-idle-fingers .ace_marker-layer .ace_selection {
-    background: #015f6f;
+    background: $cf-code-selection-bg;
   }
   .ace-idle-fingers .ace_gutter {
-    background: #3a3a3a;
+    background: $cf-code-gutter-bg;
   }
   .ace-idle-fingers {
-    background-color: #4d4d4d;
+    background-color: $cf-code-bg;
   }
   .ace-idle-fingers .ace_cursor {
-    color: #ffffff;
+    color: $cf-code-cursor-color;
   }
   .ace-idle-fingers.ace_multiselect .ace_selection.ace_start {
-    box-shadow: 0 0 3px 0 #4d4d4d;
+    box-shadow: 0 0 3px 0 $cf-code-bg;
   }
   .ace-idle-fingers .ace_marker-layer .ace_active-line {
-    background: #000000;
+    background: $cf-code-active-bg;
     opacity: 0.4;
   }
   .ace-idle-fingers .ace_constant {
@@ -52,6 +52,6 @@ body {
     color: #29be9d;
   }
   .ace-idle-fingers .ace_collab.ace_user1 {
-    color: #4d4d4d;
+    color: $cf-code-bg;
   }
 }

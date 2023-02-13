@@ -27,14 +27,14 @@
   .nav-list .active > a {
     text-shadow: none;
     background-color: #f1f0f1;
-    color: $brandHighlight;
+    color: $cf-brand-highlight;
     &:hover {
       color: white;
     }
   }
 
   .dropdown-toggle:hover {
-    color: $hoverHighlight;
+    color: $cf-brand-hightlight-hover;
   }
 
   // ugly! This styles the (+) icon to make it white when a user hovers over a row. Better solution would be to move the
@@ -62,7 +62,7 @@
         color: white;
       }
       p {
-        background-color: $hoverHighlight;
+        background-color: $cf-brand-hightlight-hover;
       }
     }
     .accordion-list-item p {
@@ -114,7 +114,7 @@
           &:hover {
             color: #fff;
             text-decoration: none;
-            background-color: $hoverHighlight;
+            background-color: $cf-brand-hightlight-hover;
           }
           border-top: none;
           &.accordion-header {
@@ -153,7 +153,7 @@
     margin: 0;
     color: #222222;
     span {
-      width: $sidebarWidth - 30px;
+      width: $cf-sidebar-width - 30px;
       display: block;
       padding: 10px 13px 10px 36px;
       text-overflow: ellipsis;
@@ -179,7 +179,7 @@
     padding-left: 4px;
     @include transition(all 0.25s linear);
     &:hover {
-      color: $hoverHighlight;
+      color: $cf-brand-hightlight-hover;
     }
     &:before {
       font-size: 17px;
@@ -191,7 +191,7 @@
 #index-menu-component-popover {
   @include border-radius(0);
   box-shadow: 2px 2px rgba(0, 0, 0, 0.2);
-  background-color: $brandDark2;
+  background-color: $cf-navbar-bg;
   color: #fff;
   font-size: 12px;
   padding: 0;
@@ -203,12 +203,12 @@
   }
   li {
     padding: 10px;
-    background-color: $brandDark1;
+    background-color: $cf-dropdown-item-bg;
     margin-bottom: 2px;
     cursor: pointer;
     @include transition(all 0.25s linear);
     &:hover {
-      background-color: $hoverHighlight;
+      background-color: $cf-brand-hightlight-hover;
     }
     &:last-child {
       margin-bottom: 0;

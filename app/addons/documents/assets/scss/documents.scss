@@ -92,7 +92,7 @@ button.beautify {
     margin-left: 4px;
     color: $secondaryBlue;
     &:hover {
-      color: $hoverHighlight;
+      color: $cf-brand-hightlight-hover;
     }
   }
   section {
@@ -215,7 +215,7 @@ body #dashboard #react-headerbar {
   }
 
   .page-controls {
-    border-right: solid 1px $btnBorder;
+    border-right: solid 1px $cf-border-color01;
   }
 }
 

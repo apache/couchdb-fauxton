@@ -38,7 +38,7 @@
     margin: 15px;
   }
   .db-title {
-    color: $brandHighlight;
+    color: $cf-brand-highlight;
     line-height: 30px;
   }
   #index-name {
@@ -73,16 +73,16 @@
     z-index: 100;
   }
 
-  .mango-select-entry {
-    background-color: $queryHistoryBGColor;
-    color: $queryHistoryColor;
+  // .mango-select-entry {
+  //   background-color: $queryHistoryBGColor;
+  //   color: $queryHistoryColor;
 
-    &.is-selected,
-    &.is-focused {
-      background-color: $brandHighlight;
-      color: $queryHistoryBGColor;
-    }
-  }
+  //   &.is-selected,
+  //   &.is-focused {
+  //     background-color: $brandHighlight;
+  //     color: $queryHistoryBGColor;
+  //   }
+  // }
 }
 
 // 940px grid without margin
@@ -263,7 +263,7 @@ a.index-cancel-link {
   font-size: 14px;
   color: #666;
   &:hover {
-    color: $hoverHighlight;
+    color: $cf-brand-hightlight-hover;
     text-decoration: none;
     cursor: pointer;
   }

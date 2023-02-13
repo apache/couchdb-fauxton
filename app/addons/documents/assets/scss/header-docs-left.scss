@@ -3,16 +3,16 @@
 .faux-header__doc-header-left {
   top: 0;
   right: 0;
-  height: $collapsedNavWidth;
-  border-right: 1px solid $grayLight;
-  width: $sidebarWidth + 1px;
+  height: $cf-navbar-width-collapsed;
+  border-right: 1px solid $cf-border-color02;
+  width: $cf-sidebar-width + 1px;
 
   @include display-flex();
   @include flex-direction(row);
 }
 
 .faux-header__doc-header-title {
-  height: $collapsedNavWidth;
+  height: $cf-navbar-width-collapsed;
   width: 247px;
   color: #333;
   font-size: 24px;
@@ -26,7 +26,7 @@
 
 button.faux-header__doc-header-dropdown-toggle {
   border: none;
-  height: $collapsedNavWidth;
+  height: $cf-navbar-width-collapsed;
   right: 0;
   padding: 10px 16px;
   width: 43px;
@@ -36,14 +36,14 @@ button.faux-header__doc-header-dropdown-toggle {
 }
 
 button.faux-header__doc-header-dropdown-toggle:focus {
-  color: $hoverHighlight;
+  color: $cf-brand-hightlight-hover;
   background-color: transparent !important;
   border: none;
   box-shadow: none !important;
 }
 
 .faux-header__doc-header-dropdown-toggle:hover {
-  color: $hoverHighlight;
+  color: $cf-brand-hightlight-hover;
   background-color: transparent;
 }
 
@@ -68,7 +68,7 @@ button.faux-header__doc-header-dropdown-toggle:focus {
 
 .faux-header__doc-header-backlink:hover {
   text-decoration: none;
-  color: $hoverHighlight;
+  color: $cf-brand-hightlight-hover;
 }
 
 // override bootstrap styles
@@ -78,7 +78,7 @@ button.faux-header__doc-header-dropdown-toggle:focus {
 }
 .faux-header__doc-header-dropdown-itemwrapper
   .faux-header__doc-header-dropdown-item:hover {
-  background-color: $hoverHighlight;
+  background-color: $cf-brand-hightlight-hover;
   color: #fff;
   cursor: pointer;
 }

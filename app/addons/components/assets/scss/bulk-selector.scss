@@ -70,8 +70,8 @@
   button {
     height: 26px;
     width: 26px;
-    background-color: $background;
-    border: 1px solid $darkBorder;
+    background-color: $cf-background01;
+    border: 1px solid $cf-border-color01;
     margin-left: 7px;
   }
 
@@ -83,7 +83,7 @@
 
 
   .separator {
-    border-left: 1px solid $darkBorder;
+    border-left: 1px solid $cf-border-color01;
     margin: 5px 0;
     height: 15px;
   }
@@ -95,7 +95,7 @@
       color: #505050;
       padding: 3px 0;
       &:hover {
-        color: $dangerRed;
+        color: $cf-danger;
       }
     }
 
@@ -106,7 +106,7 @@
       margin: 6px;
     }
 
-    border: 1px solid $darkBorder;
+    border: 1px solid $cf-border-color01;
 
     position: relative;
     float: left;

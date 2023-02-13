@@ -10,7 +10,7 @@
 //  License for the specific language governing permissions and limitations under
 //  the License.
 
-@import "icons";
+// @import "icons";
 
 // $deprated - old trays
 .hide-tray {
@@ -27,7 +27,7 @@
   right: 0px;
   top: 55px;
   z-index: 11;
-  background-color: #333;
+  background-color: $cf-tray-body-bg;
   color: #fff;
   margin: 0;
 

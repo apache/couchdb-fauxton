@@ -17,10 +17,10 @@
   font-size: 13px;
   line-height: 33px;
   padding: 12px 20px 12px 20px;
-  height: $collapsedNavWidth;
+  height: $cf-navbar-width-collapsed;
   background-color: transparent;
   border: none;
-  border-left: 1px solid $btnBorder;
+  border-left: 1px solid $cf-border-color01;
   text-decoration: none;
   .icon {
     font-size: 20px;
@@ -40,8 +40,8 @@
 }
 
 .header-control-square {
-  height: $collapsedNavWidth;
-  width: $collapsedNavWidth;
+  height: $cf-navbar-width-collapsed;
+  width: $cf-navbar-width-collapsed;
   float: left;
   .icon {
     &:before {
@@ -53,19 +53,19 @@
 
 .header-control-box:hover {
   .icon, span {
-    color: $hoverHighlight;
+    color: $cf-brand-hightlight-hover;
   }
 }
 
 .js-headerbar-togglebutton-selected {
   .icon, span {
-    color: $linkColor;
+    color: $cf-brand-highlight;
   }
 }
 
 button.control-toggle-alternative-header {
   float: left;
-  border-right: 1px solid $btnBorder;
+  border-right: 1px solid $cf-border-color01;
   border-left: none;
 }
 

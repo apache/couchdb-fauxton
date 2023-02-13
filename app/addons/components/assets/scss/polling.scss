@@ -15,24 +15,24 @@
   width: 236px;
 
   .rc-slider-rail {
-    background-color: $sliderBackground;
+    background-color: $cf-slider-bg;
     height: 8px;
-    border: 1px solid $sliderBorderColor;
+    border: 1px solid $cf-slider-border-color;
   }
 
   .rc-slider-track {
-    background-color: $sliderBackgroundHighlight;
+    background-color: $cf-slider-bg-highlight;
     height: 8px;
-    border: 1px solid $sliderBackgroundHighlight;
+    border: 1px solid $cf-slider-bg-highlight;
   }
 
   .rc-slider-handle {
     height: 14px;
     width: 14px;
     margin-top: -3px;
-    border: 1px solid $sliderBackgroundHighlight;
+    border: 1px solid $cf-slider-bg-highlight;
     border-radius: 8px;
-    background-color: $sliderBackgroundHighlight;
+    background-color: $cf-slider-bg-highlight;
     opacity: 1;
   }
 }
@@ -54,7 +54,7 @@
 }
 
 .faux__polling-info-value--active {
-  color: $brandHighlight;
+  color: $cf-brand-highlight;
 }
 
 .faux__polling-info-slider {
@@ -85,5 +85,5 @@ div.faux__refresh-btn {
 
 .faux__refresh-link:hover {
   text-decoration: none;
-  color: $hoverHighlight;
+  color: $cf-brand-hightlight-hover;
 }

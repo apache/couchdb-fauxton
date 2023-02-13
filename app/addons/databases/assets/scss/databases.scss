@@ -35,13 +35,12 @@
 
     &.btn-cancel {
       background-color: transparent;
-      border-color: $background;
       border-width: 1px;
       border-style: solid;
       color: $buttonText;
       &:hover {
-        background-color: $background;
-        color: $hoverHighlight;
+        background-color: $cf-background01;
+        color: $cf-brand-hightlight-hover;
       }
     }
   }

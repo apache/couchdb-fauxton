@@ -10,7 +10,7 @@
 //  License for the specific language governing permissions and limitations under
 //  the License.
 
-// @import "../../app/addons/style/assets/scss/variables";
+@import "variable_overrides";
 @import "variables";
 
 @import "~bootstrap/scss/bootstrap";
@@ -34,6 +34,7 @@
 //   }
 // };
 
+@import "mixins";
 @import "layouts";
 @import "prettyprint";
 @import "icons";
@@ -46,6 +47,7 @@
 @import "animations";
 @import "react-animations";
 @import "notification-center";
+
 
 /**
  * HTML-wide overrides
@@ -87,17 +89,18 @@
 //   margin: 0 0 0 8px;
 // }
 
-a,
-a:visited,
-a:active {
-  color: $linkColor;
-  text-decoration: none;
-}
+// a,
+// a:visited,
+// a:active {
+// a:visited {
+//   color: purple;
+//   text-decoration: none;
+// }
 
-a:hover {
-  color: $linkColorHover;
-  text-decoration: none;
-}
+// a:hover {
+//   color: $linkColorHover;
+//   text-decoration: none;
+// }
 
 /* bootstrap overrides */
 // .page-header {
@@ -295,10 +298,6 @@ table.databases {
 
 /*documents and databases */
 
-.view.show {
-  color: $fontGrey;
-}
-
 // legacy - remove when soft migration to header toggles is complete
 // missing: add_config_option
 .header-icon {
@@ -320,7 +319,7 @@ table.databases {
 
 //---header--//
 #dashboard > header {
-  background-color: $breadcrumbBG;
+  background-color: $cf-topheader-bg;
   height: 64px;
 
   /* the position absolute is necessary to allow the 6px box shadow overlap the panels below. The parent <header>
@@ -348,7 +347,7 @@ table.databases {
 }
 
 .faux-header__searchboxcontainer {
-  height: $collapsedNavWidth;
+  height: $cf-navbar-width-collapsed;
   overflow: visible;
   position: absolute;
   padding: 12px;
@@ -384,15 +383,15 @@ table.databases {
 
 .Select-option {
   color: #fff;
-  background-color: #333333;
+  background-color: $cf-background02;
 }
 
 .Select .is-focused {
-  background-color: $hoverHighlight;
+  background-color: $cf-brand-hightlight-hover;
 }
 
 .Select-option:hover {
-  background-color: $hoverHighlight;
+  background-color: $cf-brand-hightlight-hover;
 }
 
 .Select-option:last-child {
@@ -409,14 +408,14 @@ table.databases {
 
 .Select .Select-menu {
   max-height: 291px;
-  background-color: #333333;
+  background-color: $cf-background02;
 }
 .Select-arrow-zone > .Select-arrow {
-  border-top-color: #333;
+  border-top-color: $cf-background02;
 }
 
 .Select-arrow-zone:hover > .Select-arrow {
-  border-top-color: $hoverHighlight;
+  border-top-color: $cf-brand-hightlight-hover;
 }
 
 //----footer--///
@@ -467,7 +466,7 @@ footer.pagination-footer {
 
 #right-content {
   footer.pagination-footer {
-    bottom: $collapsedNavWidth;
+    bottom: $cf-navbar-width-collapsed;
   }
 }
 
@@ -592,9 +591,6 @@ body .control-toggle-include-docs span {
         #query-options-tray:before {
           right: 180px;
         }
-        .api-bar-tray:before {
-          right: 68px;
-        }
       }
     }
   }
@@ -646,14 +642,14 @@ body .control-toggle-include-docs span {
 .fauxton-table-list {
   a.db-actions,
   a.db-actions:visited {
-    color: $linkColor;
+    color: $cf-brand-highlight;
     border: 1px solid #e3e3e3;
     padding: 5px 7px;
     @include border-radius(6px);
     text-decoration: none;
     font-size: 19px;
     &:hover {
-      background-color: $hoverHighlight;
+      background-color: $cf-brand-hightlight-hover;
       color: white;
     }
   }
@@ -690,7 +686,7 @@ body .control-toggle-include-docs span {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   padding: 1px 30px 10px 30px;
   color: #fff;
-  background: $brandHighlight;
+  background: $cf-brand-highlight;
   margin: 100px;
   box-shadow: 2px 2px 5px #989898;
 }

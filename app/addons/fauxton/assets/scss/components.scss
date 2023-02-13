@@ -1,41 +1,6 @@
 @import "../../../../../assets/scss/variables";
 @import "../../../../../assets/scss/mixins";
 
-.api-bar-tray {
-  padding: 16px 20px;
-
-  input[type="text"].text-field-to-copy {
-    @include border-radius(5px 0 0 5px);
-  }
-  .input-append.input-prepend {
-    margin-bottom: 0;
-
-    .btn {
-      background-color: $secondaryBlue;
-      color: $buttonText;
-      margin-left: -1px;
-      padding: 10px 10px 9px;
-      border: none;
-      line-height: 1.5em;
-      &:hover {
-        background-color: #cbcbcb;
-      }
-    }
-
-    .icon-question-sign {
-      margin-left: 3px;
-      color: $secondaryBlue;
-      &:hover {
-        color: $hoverHighlight;
-      }
-    }
-  }
-}
-
-.api-bar-tray:before {
-  right: 80px;
-}
-
 .clipboard-copy-element {
   i:before {
     margin-right: 0px;
@@ -46,7 +11,7 @@ button.clipboard-copy-element {
   background: transparent;
   border: 0;
   &:hover {
-    color: $hoverHighlight;
+    color: $cf-brand-hightlight-hover;
   }
 }
 

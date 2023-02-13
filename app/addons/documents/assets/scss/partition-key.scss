@@ -29,12 +29,12 @@
     padding-right: 6px;
   }
   &:hover {
-    color: $hoverHighlight;
+    color: $cf-brand-hightlight-hover;
   }
 }
 
 .partition-selector__switch--active {
-  color: $brandHighlight;
+  color: $cf-brand-highlight;
   padding-right: 0px;
 }
 
@@ -44,7 +44,7 @@
 }
 
 .partition-selector__key--active {
-  color: $brandHighlight;
+  color: $cf-brand-highlight;
 }
 
 .partition-selector__global {

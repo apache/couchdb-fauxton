@@ -14,7 +14,7 @@
 
 .faux-header__breadcrumbs {
   @include display-flex();
-  height: $collapsedNavWidth;
+  height: $cf-navbar-width-collapsed;
 }
 
 .faux-header__breadcrumbs-element {
@@ -29,9 +29,9 @@
 }
 
 a.faux-header__breadcrumbs-link {
-  color: $brandHighlight;
+  color: $cf-brand-highlight;
   &:hover {
-    color: $hoverHighlight;
+    color: $cf-brand-hightlight-hover;
     text-decoration: none;
     cursor: pointer;
   }
