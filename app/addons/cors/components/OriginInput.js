@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Component } from "react";
+import { Button } from 'react-bootstrap';
 import { validateDomain, normalizeUrls } from "../helpers";
 
 export default class OriginInput extends Component {
@@ -44,9 +45,9 @@ export default class OriginInput extends Component {
           <div className="input-append">
             <input type="text" name="new_origin_domain" placeholder="https://example.com"
               onChange={this.onInputChange.bind(this)} value={this.state.origin} />
-            <button onClick={this.addOrigin.bind(this)} className="btn btn-secondary add-domain">
+            <Button id="add-domain" onClick={this.addOrigin.bind(this)} variant="cf-secondary">
               <i className="icon fonticon-ok-circled"></i> Add Domain
-            </button>
+            </Button>
           </div>
         </div>
       </div>

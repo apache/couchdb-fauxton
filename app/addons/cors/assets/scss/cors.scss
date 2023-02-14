@@ -16,7 +16,7 @@
   .loading-lines {
     margin-top: 20px;
   }
-  .enable-disable.btn {
+  .btn#enable-disable-cors {
     margin-top: 10px;
   }
 }
@@ -45,16 +45,15 @@
 
   .cors-enable {
     padding: 10px 30px 18px 30px;
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid $cf-border-color01;
   }
   #origin-domains-container {
-    button.add-domain {
+    button#add-domain {
       height: 46px;
     }
   }
   #collapsing-container {
-    border-top: 1px solid #fff;
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid $cf-border-color01;
     padding: 18px 30px;
   }
   .origin-domains {
@@ -67,16 +66,6 @@
     .controls {
       margin-top: 18px;
     }
-  }
-  .localhost-tip {
-    padding: 18px 30px;
-    border-top: 1px solid #fff;
-    border-bottom: 1px solid #ccc;
-  }
-  .form-actions {
-    padding: 18px 30px;
-    margin-top: 0;
-    border-top: 1px solid #fff;
   }
 
   .input-append {
@@ -115,7 +104,7 @@
 
   tr a {
     text-decoration: none;
-    color: $subListGray;
+    color: $cf-text01;
   }
 
   tr a:hover {

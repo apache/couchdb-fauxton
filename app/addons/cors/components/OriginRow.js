@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Component } from "react";
+import { Button } from 'react-bootstrap';
 import { validateDomain } from "../helpers";
 
 
@@ -50,7 +51,7 @@ export default class OriginRow extends Component {
       return (
         <div className="input-append edit-domain-section">
           <input type="text" name="update_origin_domain" onChange={ this.onInputChange.bind(this) } onKeyUp={ this.onKeyUp.bind(this) } value={this.state.updatedOrigin} />
-          <button onClick={ this.updateOrigin.bind(this) } className="btn btn-primary update-origin"> Update </button>
+          <Button onClick={ this.updateOrigin.bind(this) } variant="cf-primary"> Update </Button>
         </div>
       );
     }

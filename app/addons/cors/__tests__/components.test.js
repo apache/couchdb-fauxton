@@ -42,7 +42,7 @@ describe('CORS Components', () => {
         hideDeleteDomainConfirmation={sinon.stub()}
       />);
 
-      wrapper.find('.enable-disable.btn').simulate('click');
+      wrapper.find('.btn#enable-disable').simulate('click');
       sinon.assert.calledOnce(spy);
     });
 
@@ -59,7 +59,7 @@ describe('CORS Components', () => {
         fetchAndLoadCORSOptions={sinon.stub()}
         hideDeleteDomainConfirmation={sinon.stub()}
       />);
-      wrapper.find('.enable-disable.btn').simulate('click');
+      wrapper.find('.btn#enable-disable').simulate('click');
       sinon.assert.notCalled(spy);
     });
 

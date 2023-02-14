@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Button } from 'react-bootstrap';
 import app from "../../../app";
 import ReactComponents from "../../components/react-components";
 import FauxtonComponents from "../../fauxton/components";
@@ -124,14 +125,15 @@ export default class CORSScreen extends Component {
           <div className="cors-enable">
             {this.props.corsEnabled ? 'CORS is currently enabled.' : 'CORS is currently disabled.'}
             <br />
-            <button
+            <Button
               type="button"
-              className="enable-disable btn btn-secondary"
+              id="enable-disable-cors"
+              variant="cf-secondary"
               onClick={this.enableCorsChange.bind(this)}
-              disabled={this.props.isLoading ? 'disabled' : null}
+              disabled={this.props.isLoading}
             >
               {this.props.corsEnabled ? 'Disable CORS' : 'Enable CORS'}
-            </button>
+            </Button>
           </div>
           {originSettings}
         </form>
