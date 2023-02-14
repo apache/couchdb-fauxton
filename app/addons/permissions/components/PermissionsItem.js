@@ -22,7 +22,7 @@ const PermissionsItem = ({removeItem, section, type, value}) => {
       <button
         onClick={() => removeItem(section, type, value)}
         type="button"
-        className="pull-right close"
+        className="float-end close"
       >
         ×
       </button>

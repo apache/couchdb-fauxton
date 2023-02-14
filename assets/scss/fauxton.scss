@@ -487,8 +487,8 @@ table.table.column-bordered {
 //----footer--///
 
 footer.pagination-footer {
-  background-color: #fff;
-  border-top: 1px solid #ccc;
+  background-color: $cf-pagination-bg;
+  border-top: 1px solid $cf-pagination-border;
   height: 50px;
   overflow: hidden;
 
@@ -498,7 +498,7 @@ footer.pagination-footer {
     box-shadow: none;
     margin: 0;
     height: 50px;
-    border-left: 1px solid #ccc;
+    border-left: 1px solid $cf-pagination-border;
     li {
       display: inline-block;
       a {

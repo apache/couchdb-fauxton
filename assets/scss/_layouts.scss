@@ -34,7 +34,7 @@ body #notification-center .flex-layout {
     @include flex(0 0 auto);
   }
   #dashboard-lower-content {
-    padding: $panelPadding;
+    padding: $cf-main-content-padding;
   }
 
   #footer {

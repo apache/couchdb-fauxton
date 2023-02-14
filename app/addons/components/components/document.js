@@ -47,7 +47,7 @@ export class Document extends React.Component {
     }
 
     return (
-      <div className="doc-edit-symbol pull-right" title="Edit document">
+      <div className="doc-edit-symbol float-end" title="Edit document">
         {this.props.children}
       </div>
     );
@@ -137,7 +137,7 @@ export class Document extends React.Component {
               {this.props.header ? '"' + this.props.header + '"' : null}
             </span>
             {this.getUrlFragment()}
-            <div className="doc-item-extension-icons pull-right">{this.getExtensionIcons()}</div>
+            <div className="doc-item-extension-icons float-end">{this.getExtensionIcons()}</div>
           </header>
           {this.getDocContent()}
         </div>

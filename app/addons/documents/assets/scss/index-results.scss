@@ -140,6 +140,8 @@ a.document-result-screen__toolbar-create-btn:visited {
   }
   tbody tr {
     cursor: pointer;
+    border-left: 2px solid transparent;
+
     &:hover {
       border-left: 2px solid $cf-brand-hightlight-hover;
       td {

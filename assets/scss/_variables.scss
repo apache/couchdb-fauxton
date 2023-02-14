@@ -10,24 +10,24 @@
 //  License for the specific language governing permissions and limitations under
 //  the License.
 
-
-// TMP - just for testing
-
-
 // TMP - to force dropdown menus to show until we can fix <DropdownMenu>
-.add-dropdown {
-	.dropdown-menu {
-		display: block;
-	}
-}
+// .add-dropdown {
+// 	.dropdown-menu {
+// 		display: block;
+// 	}
+// }
 
 
-/*Fauxton-Specific Colors that are used to override bootstrap variables go here
-  Probably need to have these more generic colors here, and component specific ones (e.g. btn-background)
-	will appear after the bootstrap overrides so they can refer to both.
-*/
+// 
+// Note: Fauxton colors/styling are defined first and then can be used to 
+// override Bootstrap variables at the end.
+// 
 
-/* base */
+// 
+// Fauxton's generic styles
+// 
+
+// base
 $cf-background01: #f2f2f2 !default; // main page background color. former $background
 $cf-background02: #333333 !default; // background for overlay panels, trays
 $cf-background03: #564e4c !default; // background for items in dropdowns, main nav bar
@@ -39,18 +39,26 @@ $cf-primary: #2bb673 !default;
 $cf-secondary: #0082bf !default;
 $cf-danger: #ff0c35 !default;
 
-/* typography */
+// typography
 $cf-text01: #333333 !default; // default text color for pages
 $cf-text02: #ffffff !default; // text color for overlay panels, trays
 $cf-text03: #b3b4b4 !default; // text color for items in dropdowns, main nav bar
 $cf-text04: #767f89 !default; // sidebar subitems
-
 $cf-text-muted01: #999999 !default;
 $cf-sans-font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !default;
 
-// COMPONENT-SPECIFIC STYLES
+// padding and margins
+$cf-main-content-padding: 15px !default;
 
-/* buttons */
+// shadows
+$cf-box-shadow: 2px 2px rgba(0, 0, 0, 0.2) !default;
+
+
+// 
+// Fauxton's component-specific styles
+// 
+
+// buttons
 $cf-btn-primary-bg: $cf-primary !default;
 $cf-btn-primary-color: #ffffff !default;
 $cf-btn-secondary-bg: $cf-secondary !default;
@@ -65,20 +73,32 @@ $cf-btn-secondary-color-disabled: #f2f2f2 !default;
 $cf-btn-danger-bg-disabled: #ff9797 !default;
 $cf-btn-danger-color-disabled: #f2f2f2 !default;
 
-/* code editor or viewer */
+// code editor or viewer
 $cf-code-bg: #4d4d4d !default;
 $cf-code-gutter-bg: #3a3a3a !default;
 $cf-code-cursor-color: #ffffff !default;
 $cf-code-active-bg: #000000 !default;
 $cf-code-selection-bg: rgba(29, 151, 215, 0.5) !default;
 
-/* dropdown menus */
+// documents list (JSON view)
+$cf-jsondocs-header-bg: $cf-code-gutter-bg !default;
+$cf-jsondocs-header-label: $cf-text03 !default;
+$cf-jsondocs-header-docid: $cf-text03 !default;
+$cf-jsondocs-header-border: #000000 !default;
+$cf-jsondocs-data-border: #000000 !default;
+$cf-jsondocs-check-bg: $cf-background01 !default;
+$cf-jsondocs-check-border: 2px solid $cf-border-color02 !default;
+$cf-jsondocs-check-border-hover: 2px solid $cf-border-color01 !default;
+$cf-jsondocs-check-checked-bg: $cf-background01 !default;
+$cf-jsondocs-check-checked-border: 2px solid $cf-border-color02 !default;
+
+// dropdown menus
 $cf-dropdown-bg: $cf-background02 !default;
 $cf-dropdown-color: $cf-text02 !default;
 $cf-dropdown-item-bg: $cf-background03 !default;
 $cf-dropdown-item-color: $cf-text03 !default;
 
-/* main nav bar */
+// main nav bar
 $cf-navbar-width: 220px !default;
 $cf-navbar-width-collapsed: 64px !default;
 $cf-navbar-icon-color: $cf-text03 !default;
@@ -86,62 +106,51 @@ $cf-navbar-icon-color-selected: #ffffff !default;
 $cf-navbar-bg: $cf-background02 !default;
 $cf-navbar-item-bg: $cf-background03 !default;
 
-/* notifications */
+// notifications
 $cf-alert-bg: #ffffff !default;
 $cf-alert-info-color: #329898 !default;
 $cf-alert-success-color: #448c11 !default;
 $cf-alert-error-color: #ff0c35 !default;
 
-/* shadows */
-$cf-box-shadow: 2px 2px rgba(0, 0, 0, 0.2);
+// pagination
+$cf-pagination-bg: #ffffff !default;
+$cf-pagination-border: $cf-border-color01 !default;
 
-/* sidebar */
+// sidebar
 $cf-sidebar-width: 330px !default;
-$cf-sidebar-bg: white;
-$cf-sidebar-color: $cf-text01;
-$cf-sidebar-bg-hover: $cf-brand-hightlight-hover;
-$cf-sidebar-color-hover: white;
-$cf-sidebar-bg-active: $cf-background01;
-$cf-sidebar-color-active: $cf-brand-highlight;
-$cf-sidebar-subitem-color: $cf-text04;
+$cf-sidebar-bg: white !default;
+$cf-sidebar-color: $cf-text01 !default;
+$cf-sidebar-bg-hover: $cf-brand-hightlight-hover !default;
+$cf-sidebar-color-hover: white !default;
+$cf-sidebar-bg-active: $cf-background01 !default;
+$cf-sidebar-color-active: $cf-brand-highlight !default;
+$cf-sidebar-subitem-color: $cf-text04 !default;
 
-
-
-/* slider */
+// slider
 $cf-slider-bg: $cf-background01 !default;
 $cf-slider-bg-highlight: $cf-brand-highlight !default;
 $cf-slider-border-color: $cf-border-color02 !default;
 
-/* top header */
+// tables
+$cf-table-stripped-bg: #F7F7F7 !default;
+
+// top header
 $cf-topheader-bg: $cf-background01 !default;
 $cf-topheader-height: 64px !default;
 
-/* tray */
-$cf-tray-body-bg: $cf-background02;
+// tray
+$cf-tray-body-bg: $cf-background02 !default;
 
-// 
-// Bootstrap V2 variables
-// These will need to be replaced, or the corresponding V5 ones set
-// 
+// logo paths can be set via settings.json
+$largeLogoPath: "../../../../../assets/img/CouchDB-negative-logo.png" !default;
+$smallLogoPath: "../../../../../assets/img/couchdb-logo.png" !default;
 
-$paginationBackground: #fff; // pagination - same value as in bootstrap v2
-$paginationBorder: #ddd; // pagination - same value as in bootstrap v2
-$paginationActiveBackground: #f5f5f5; // pagination - same value as in bootstrap v2
-
-
-// 
-// Bootstrap V2 & V5 variables - These will need to be replaced, or the corresponding V5 ones set
-// 
-// $white: #fff !default;
-// $orange: #f3622d !default;
-// $blue: #049cdb !default;
-// $green: #7fa30c !default;
 
 // 
 // Bootstrap V5 variable overrides
-// Nothing so far, just adding a placeholder
 // 
 
+// globals
 $body-bg: $cf-background01;
 $body-color: $cf-text01;
 $text-muted: $cf-text-muted01;
@@ -152,50 +161,13 @@ $link-decoration: none;
 $primary: $cf-primary;
 $secondary: $cf-secondary;
 $danger: $cf-danger;
+// dropdowns
 $dropdown-bg: $cf-dropdown-bg;
 $dropdown-color: $cf-dropdown-color;
-$table-striped-bg: #F7F7F7;
+// pagination
+$pagination-bg: $cf-pagination-bg;
+$pagination-border-color: $cf-pagination-border;
+// tables
+$table-striped-bg: $cf-table-stripped-bg;
+// other
 $enable-rounded: true !default; // TODO: this is a change from the Fauxton's previously setting 'borderRadius: 0'. I think it should be using the round corners but the rest of the UI will have to follow suit.
-
-// $pagination-disabled-color: blue;
-
-// 
-// Fauxton-specific variables
-// 
-// Below already existed before moving to Bootstrap v5
-
-/*Fauxton-Specific Colors*/
-
-// $brandDark2: #3a2c2b; // background nab bar
-
-
-
-/* document-header in doclist */
-$docHeaderBG: #3a3a3a;
-$docHeaderBorderBottom: #2a2a2a;
-$docHeaderOtherBorders: #000;
-$docHeaderLabels: #909090;
-$docHeaderDocId: $cf-brand-highlight;
-
-/* checkboxes in doc-list */
-$docCheckBoxUncheckedBG: #efefef;
-$docCheckBoxUncheckedBorder: 2px solid #999;
-$docCheckBoxHoverBorder: 2px solid #ccc;
-$docCheckBoxCheckedBorder: 2px solid #000;
-$docCheckBoxCheckedBG: #3a3a3a;
-
-
-/* padding and margins */
-$panelPadding: 15px;
-
-
-
-
-/* query history */
-// TOOD: removed these because we should be having all Select components look the same.
-// $queryHistoryBGColor: white;
-// $queryHistoryColor: $defaultText;
-
-// Logo paths can be overriden via settings.json
-$largeLogoPath: "../../../../../assets/img/CouchDB-negative-logo.png" !default;
-$smallLogoPath: "../../../../../assets/img/couchdb-logo.png" !default;

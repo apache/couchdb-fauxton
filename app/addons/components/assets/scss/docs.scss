@@ -22,11 +22,11 @@
     .doc-item {
       vertical-align: top;
       position: relative;
-      box-shadow: 3px 4px 0 rgba(0, 0, 0, 0.3);
+      box-shadow: $cf-box-shadow;
       .doc-data {
-        border-bottom: 1px solid $docHeaderBorderBottom;
-        border-left: 1px solid $docHeaderOtherBorders;
-        border-right: 1px solid $docHeaderOtherBorders;
+        border-bottom: 1px solid $cf-jsondocs-data-border;
+        border-left: 1px solid $cf-jsondocs-data-border;
+        border-right: 1px solid $cf-jsondocs-data-border;
         font-family: monospace;
         .prettyprint--small {
           font-size: 11px;
@@ -40,13 +40,13 @@
         font-weight: bold;
         position: relative;
         padding: 5px 10px;
-        background-color: $docHeaderBG;
-        border-bottom: 1px solid $docHeaderBorderBottom;
-        border-left: 1px solid $docHeaderOtherBorders;
-        border-right: 1px solid $docHeaderOtherBorders;
-        border-top: 1px solid $docHeaderOtherBorders;
+        background-color: $cf-jsondocs-header-bg;
+        border-bottom: 1px solid $cf-jsondocs-header-border;
+        border-left: 1px solid $cf-jsondocs-header-border;
+        border-right: 1px solid $cf-jsondocs-header-border;
+        border-top: 1px solid $cf-jsondocs-header-border;
         .header-doc-id {
-          color: $docHeaderDocId;
+          color: $cf-jsondocs-header-docid;
           margin-left: 0;
         }
         .header-keylabel {
@@ -57,7 +57,7 @@
         }
         .header-keylabel,
         .fonticon-pencil {
-          color: $docHeaderLabels;
+          color: $cf-jsondocs-header-label;
         }
         .doc-edit-symbol {
           position: relative;
@@ -102,23 +102,25 @@
     width: auto;
     overflow: hidden;
   }
-  label.label-checkbox-doclist {
-    // https://code.google.com/p/chromium/issues/detail?id=411065
-    -webkit-user-select: none;
-    height: 1px;
-    width: 1px;
-  }
-  /* checkboxes in doc-list */
-  input[type="checkbox"] + label:before {
-    background-color: $docCheckBoxUncheckedBG;
-    border: $docCheckBoxUncheckedBorder;
-  }
-  input[type="checkbox"] + label:hover:before {
-    border: $docCheckBoxHoverBorder;
-  }
-  input[type="checkbox"]:checked + label::before {
-    border: $docCheckBoxCheckedBorder;
-    background-color: $docCheckBoxCheckedBG;
+  .custom-inputs {
+    label.label-checkbox-doclist {
+      // https://code.google.com/p/chromium/issues/detail?id=411065
+      -webkit-user-select: none;
+      height: 1px;
+      width: 1px;
+    }
+    /* checkboxes in doc-list */
+    input[type="checkbox"] + label:before {
+      background-color: $cf-jsondocs-check-bg;
+      border: $cf-jsondocs-check-border;
+    }
+    input[type="checkbox"] + label:hover:before {
+      border: $cf-jsondocs-check-border-hover;
+    }
+    input[type="checkbox"]:checked + label::before {
+      border: $cf-jsondocs-check-checked-border;
+      background-color: $cf-jsondocs-check-checked-bg;
+    }
   }
 }
 
