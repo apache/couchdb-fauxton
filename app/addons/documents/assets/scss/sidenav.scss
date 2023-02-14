@@ -24,9 +24,9 @@
   }
 
   // selected nav item row styles
-  .nav-list .active > a {
+  .nav .active > a {
     text-shadow: none;
-    background-color: #f1f0f1;
+    background-color: $cf-background01;
     color: $cf-brand-highlight;
     &:hover {
       color: white;
@@ -40,7 +40,7 @@
   // ugly! This styles the (+) icon to make it white when a user hovers over a row. Better solution would be to move the
   // active class to the <li> instead of the child <a>
   .accordion-list-item:hover,
-  .nav-list > li a:hover {
+  .nav > li a:hover {
     & + div.add-dropdown .dropdown-toggle,
     & + span.index-menu-toggle {
       color: white;
@@ -55,7 +55,7 @@
   }
 
   .design-doc-section {
-    border-bottom: 1px solid #d3d7db;
+    border-bottom: 1px solid $cf-border-color01;
     .accordion-list-item:hover {
       p,
       .fonticon-play {
@@ -90,7 +90,7 @@
     position: relative;
 
     .design-doc-body.in {
-      border-bottom: 1px solid #d3d7db;
+      border-bottom: 1px solid $cf-border-color01;
     }
 
     .accordion-body {
@@ -129,9 +129,9 @@
     }
     .fonticon-play {
       font-size: 8px;
-      top: 11px;
+      top: 16px;
       left: 15px;
-      color: $subListGray;
+      color: $cf-sidebar-subitem-color;
       position: absolute;
       display: block;
       vertical-align: bottom;
@@ -151,7 +151,6 @@
   .design-doc-name {
     cursor: pointer;
     margin: 0;
-    color: #222222;
     span {
       width: $cf-sidebar-width - 30px;
       display: block;
@@ -192,7 +191,7 @@
   @include border-radius(0);
   box-shadow: 2px 2px rgba(0, 0, 0, 0.2);
   background-color: $cf-navbar-bg;
-  color: #fff;
+  color: #ffffff;
   font-size: 12px;
   padding: 0;
   margin-left: -7px;
@@ -216,8 +215,8 @@
   }
   .arrow {
     &:after {
-      border-bottom-color: black;
-      border-top-color: black;
+      border-bottom-color: #000000;
+      border-top-color: #000000;
     }
   }
   .fonticon {

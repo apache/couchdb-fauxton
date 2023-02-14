@@ -26,7 +26,7 @@ module.exports = {
       .createDocument('_design/' + docNormal, newDatabaseName)
       .createDocument('_design/' + docSpecialChars, newDatabaseName)
       .url(baseUrl + '/#/database/' + newDatabaseName + '/_all_docs')
-      .waitForElementPresent('.nav-list', waitTime, false)
+      .waitForElementPresent('.nav', waitTime, false)
       // Verify 'Metadata' subitem is not visible
       .assert.not.visible('a[href="#/database/' + newDatabaseName + '/_design/' + docNormal + '/_info"]')
       .assert.not.visible('a[href="#/database/' + newDatabaseName + '/_design/' + docSpecialCharsEncoded + '/_info"]')

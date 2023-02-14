@@ -29,7 +29,7 @@
 }
 
 .faux-navbar__version-footer {
-  color: $buttonText;
+  color: $cf-text02;
   font-size: 10px;
   text-align: center;
   background-color: $cf-navbar-bg;
@@ -126,23 +126,18 @@
 }
 
 .faux-navbar__text {
-  margin: 0;
-  color: $buttonText;
+  color: $cf-text02;
   vertical-align: middle;
-  font-size: 16px;
-  font-weight: normal;
-  font-family: Helvetica, sans-serif;
-  font-weight: 400;
 }
 
 .faux-navbar__logout__text {
-  font-size: 12px;
-  color: $buttonText;
+  font-size: 0.75rem;
+  color: $cf-text02;
 }
 
 .faux-navbar__logout__textcontainer {
   text-align: center;
-  color: $buttonText;
+  color: $cf-text02;
 }
 
 .faux-navbar__logout__textcontainer--narrow {
@@ -159,7 +154,7 @@
 
 .faux-navbar__login__textcontainer {
   text-align: center;
-  color: $buttonText;
+  color: $cf-text02;
 }
 
 .faux-navbar__login__textcontainer--narrow {
@@ -208,7 +203,7 @@
 }
 
 .faux-navbar__logout__username {
-  color: $buttonText;
+  color: $cf-text02;
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 150px;
