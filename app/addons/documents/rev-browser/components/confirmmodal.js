@@ -74,7 +74,7 @@ export default class ConfirmModal extends React.Component {
           <ConfirmButton
             onClick={this.onDeleteConflicts}
             text="Delete Revisions"
-            buttonType="btn-danger" />
+            variant="danger" />
         </Modal.Footer>
       </Modal>
     );

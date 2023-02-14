@@ -10,6 +10,20 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+@import '../../../../../assets/scss/variables';
+
 #start {
   margin-bottom: 20px;
+}
+
+th.verify-test-col {
+  width: 250px;
+}
+
+.install-result-success {
+  color: $cf-alert-success-color;
+}
+
+.install-result-failure {
+  color: $cf-alert-error-color;
 }

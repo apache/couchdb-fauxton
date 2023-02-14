@@ -10,20 +10,18 @@
 //  License for the specific language governing permissions and limitations under
 //  the License.
 
-@import "variable_overrides";
-@import "variables";
+@import 'variable_overrides';
+@import 'variables';
 
-@import "~bootstrap/scss/bootstrap";
-@import "~react-select/scss/default.scss";
-@import "~rc-slider/assets/index.css";
-
+@import '~bootstrap/scss/bootstrap';
+@import '~react-select/scss/default.scss';
+@import '~rc-slider/assets/index.css';
 
 //
 // BOOTSTRAP 5 NOTES (can be removed once upgrade is completed)
 // - Likely nothing to do here
 // - #grid is defined in Bootstrap V2. Not sure how/if BootstrapV2 grid is used in Fauxton. For now the styling is commented out.
-// - Class '.well' was commented below as it doesn't exist in V5. The substitue should be a Card. 
-
+// - Class '.well' was commented below as it doesn't exist in V5. The substitue should be a Card.
 
 // TODO:
 // #grid {
@@ -34,20 +32,19 @@
 //   }
 // };
 
-@import "mixins";
-@import "layouts";
-@import "prettyprint";
-@import "icons";
-@import "code-editors";
-@import "templates";
-@import "formstyles";
-@import "pagination";
-@import "trays";
-@import "mixins";
-@import "animations";
-@import "react-animations";
-@import "notification-center";
-
+@import 'mixins';
+@import 'layouts';
+@import 'prettyprint';
+@import 'icons';
+@import 'code-editors';
+@import 'templates';
+@import 'formstyles';
+@import 'pagination';
+@import 'trays';
+@import 'mixins';
+@import 'animations';
+@import 'react-animations';
+@import 'notification-center';
 
 /**
  * HTML-wide overrides
@@ -179,28 +176,42 @@
 // }
 
 /*TABLE STYLES*/
-table.table {
-  table-layout: fixed;
-}
-table tr td {
-  word-wrap: break-word;
-  &.select {
-    width: 20px;
+table.table.column-bordered {
+  th {
+    border-left-width: 1px;
+  }
+  th:first-child {
+    border-left-width: 0px;
+  }
+  td {
+    border-left-width: 1px;
+  }
+  td:first-child {
+    border-left-width: 0px;
   }
 }
-thead {
-  border-bottom: 2px solid #333;
-}
-tbody {
-  padding-top: 10px;
-}
-.table-condensed td {
-  padding: 18px 5px;
-}
-.table-striped tbody > tr:nth-child(odd) > td,
-.table-striped tbody > tr:nth-child(odd) > th {
-  background-color: #f7f7f7;
-}
+// table.table {
+//   table-layout: fixed;
+// }
+// table tr td {
+//   word-wrap: break-word;
+//   &.select {
+//     width: 20px;
+//   }
+// }
+// thead {
+//   border-bottom: 2px solid #333;
+// }
+// tbody {
+//   padding-top: 10px;
+// }
+// .table-condensed td {
+//   padding: 18px 5px;
+// }
+// .table-striped tbody > tr:nth-child(odd) > td,
+// .table-striped tbody > tr:nth-child(odd) > th {
+//   background-color: #f7f7f7;
+// }
 
 /**
  * Fauxton-specific Bootstrap additions
@@ -275,7 +286,7 @@ table.databases {
     background-color: #ffffff;
     color: #666666;
     &:after {
-      content: "";
+      content: '';
       width: 0;
       height: 0;
       border-left: 7px solid transparent;
@@ -286,7 +297,7 @@ table.databases {
       top: 12px;
     }
     &:before {
-      content: "";
+      content: '';
       border-left: 1px solid #989898;
       height: 30px;
       position: absolute;
@@ -553,7 +564,7 @@ footer.pagination-footer {
 body .control-toggle-include-docs span {
   margin-left: 0;
   &::before {
-    content: "Include Docs";
+    content: 'Include Docs';
   }
 }
 
@@ -562,7 +573,7 @@ body .control-toggle-include-docs span {
     .with-sidebar {
       .two-panel-header {
         .control-toggle-include-docs span::before {
-          content: " Docs";
+          content: ' Docs';
         }
         .right-header button i:before {
           margin: 2px 0 0 0;
@@ -577,7 +588,7 @@ body .control-toggle-include-docs span {
     .with-sidebar {
       .two-panel-header {
         .control-toggle-include-docs span::before {
-          content: "Docs";
+          content: 'Docs';
         }
         button:not(.control-toggle-include-docs) span {
           display: none;
@@ -601,7 +612,7 @@ body .control-toggle-include-docs span {
     .with-sidebar {
       .two-panel-header {
         .control-toggle-include-docs span::before {
-          content: "Docs";
+          content: 'Docs';
         }
         .right-header button i:before {
           margin: 2px 0 0 0;
@@ -616,7 +627,7 @@ body .control-toggle-include-docs span {
     .with-sidebar {
       .two-panel-header {
         .control-toggle-include-docs span::before {
-          content: "Docs";
+          content: 'Docs';
         }
         button:not(.control-toggle-include-docs) span {
           display: none;
@@ -674,7 +685,7 @@ body .control-toggle-include-docs span {
 }
 
 .btn-group.toggle-btns {
-  input[type="radio"] {
+  input[type='radio'] {
     display: none;
   }
   label.btn {
@@ -683,7 +694,7 @@ body .control-toggle-include-docs span {
 }
 
 .noscript-warning {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   padding: 1px 30px 10px 30px;
   color: #fff;
   background: $cf-brand-highlight;

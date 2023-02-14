@@ -296,7 +296,7 @@ class RevisionBrowserControls extends React.Component {
                   onClick={this.onSelectAsWinnerClick.bind(this, this.props.ours)}
                   style={{marginRight: '10px', width: '220px'}}
                   text="Delete Other Conflicts"
-                  buttonType="btn-secondary"
+                  variant="secondary"
                   customIcon="icon-trophy" />
               </td>
             </tr>
@@ -316,7 +316,7 @@ class RevisionBrowserControls extends React.Component {
                   onClick={this.onSelectAsWinnerClick.bind(this, this.props.theirs)}
                   style={{marginRight: '10px', width: '220px'}}
                   text="Select as Winner"
-                  buttonType="btn-secondary"
+                  variant="secondary"
                   customIcon="icon-trophy" />
               </td>
             </tr>
@@ -404,7 +404,7 @@ class ConfirmModal extends React.Component {
           <ConfirmButton
             onClick={this.onDeleteConflicts.bind(this)}
             text="Delete Revisions"
-            buttonType="btn-danger" />
+            variant="danger" />
         </Modal.Footer>
       </Modal>
     );

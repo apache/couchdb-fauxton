@@ -13,28 +13,34 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import Constants from '../constants';
+import { Table } from 'react-bootstrap';
 
 export default class VerifyInstallResults extends React.Component {
   static propTypes = {
-    testResults: PropTypes.object.isRequired
+    testResults: PropTypes.object.isRequired,
+    isVerifying: PropTypes.bool.isRequired,
   };
 
   showTestResult = (test) => {
-    if (!this.props.testResults[test].complete) {
+    const {testResults, isVerifying} = this.props;
+    if (!testResults[test].complete) {
+      if (isVerifying) {
+        return 'In-progress...';
+      }
       return '';
     }
     if (this.props.testResults[test].success) {
-      return <span>&#10003;</span>;
+      return <span className="install-result-success">&#10003; success</span>;
     }
-    return <span>&#x2717;</span>;
+    return <span className="install-result-failure">&#x2717; failure</span>;
   };
 
   render() {
     return (
-      <table className="table table-striped table-bordered">
+      <Table striped>
         <thead>
           <tr>
-            <th>Test</th>
+            <th className='verify-test-col'>Test</th>
             <th>Status</th>
           </tr>
         </thead>
@@ -64,7 +70,7 @@ export default class VerifyInstallResults extends React.Component {
             <td id="js-test-replication">{this.showTestResult(Constants.TESTS.REPLICATION)}</td>
           </tr>
         </tbody>
-      </table>
+      </Table>
     );
   }
 }

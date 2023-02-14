@@ -25,7 +25,7 @@ export default class VerifyInstallScreen extends React.Component {
     return (
       <div>
         <VerifyInstallButton verify={this.props.startVerification} isVerifying={this.props.isVerifying} />
-        <VerifyInstallResults testResults={this.props.testResults} />
+        <VerifyInstallResults testResults={this.props.testResults} isVerifying={this.props.isVerifying}/>
       </div>
     );
   }

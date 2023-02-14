@@ -12,6 +12,7 @@
 
 import PropTypes from 'prop-types';
 import React from 'react';
+import {Button} from 'react-bootstrap';
 
 export default class VerifyInstallButton extends React.Component {
   static propTypes = {
@@ -21,9 +22,9 @@ export default class VerifyInstallButton extends React.Component {
 
   render() {
     return (
-      <button id="start" className="btn btn-primary" onClick={this.props.verify} disabled={this.props.isVerifying}>
-        {this.props.isVerifying ? 'Verifying' : 'Verify Installation'}
-      </button>
+      <Button id="start" onClick={this.props.verify} disabled={this.props.isVerifying}>
+        {this.props.isVerifying ? 'Verifying...' : 'Verify Installation'}
+      </Button>
     );
   }
 }
