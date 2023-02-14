@@ -23,13 +23,7 @@ export class ConfirmButton extends React.Component {
     variant: PropTypes.oneOf([
       'primary',
       'secondary',
-      'success',
       'danger',
-      'warning',
-      'info',
-      'dark',
-      'light',
-      'link',
     ]),
     'data-id': PropTypes.string,
     onClick: PropTypes.func,
@@ -61,7 +55,7 @@ export class ConfirmButton extends React.Component {
         type="submit"
         style={style}
         disabled={disabled}
-        variant={variant}
+        variant={'cf-' + variant}
         data-id={this.props['data-id']}
         id={id}
       >

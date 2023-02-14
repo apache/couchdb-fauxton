@@ -47,10 +47,56 @@
 @import 'notification-center';
 
 
-// Bootstrap V5 - CSS Variables overrides
-.btn {
-	--bs-btn-color: #{$cf-btn-color};
-  --bs-btn-hover-color: #{$cf-btn-color};
+// Defines new button variants
+.btn-cf-primary {
+  @include button-variant(
+    $cf-btn-primary-bg, // background
+    $cf-btn-primary-bg, // border
+    $cf-btn-primary-color, // color
+    $cf-brand-hightlight-hover, // hover background
+    $cf-brand-hightlight-hover, // hover border
+    $cf-btn-primary-color, // hover color
+    $cf-btn-primary-bg, // active background
+    $cf-btn-primary-bg, // active border
+    $cf-btn-primary-color, // active color
+    $cf-btn-primary-bg-disabled, // disabled background
+    $cf-btn-primary-bg-disabled, // disabled border
+    $cf-btn-primary-color-disabled // disabled color
+  );
+}
+
+.btn-cf-secondary {
+  @include button-variant(
+    $cf-btn-secondary-bg,
+    $cf-btn-secondary-bg,
+    $cf-btn-secondary-color,
+    $cf-brand-hightlight-hover,
+    $cf-brand-hightlight-hover,
+    $cf-btn-secondary-color,
+    $cf-btn-secondary-bg,
+    $cf-btn-secondary-bg,
+    $cf-btn-secondary-color,
+    $cf-btn-secondary-bg-disabled,
+    $cf-btn-secondary-bg-disabled,
+    $cf-btn-secondary-color-disabled
+  );
+}
+
+.btn-cf-danger {
+  @include button-variant(
+    $cf-btn-danger-bg,
+    $cf-btn-danger-bg,
+    $cf-btn-danger-color,
+    $cf-brand-hightlight-hover,
+    $cf-brand-hightlight-hover,
+    $cf-btn-danger-color,
+    $cf-btn-danger-bg,
+    $cf-btn-danger-bg,
+    $cf-btn-danger-color,
+    $cf-btn-danger-bg-disabled,
+    $cf-btn-danger-bg-disabled,
+    $cf-btn-danger-color-disabled
+  );
 }
 
 /**
@@ -183,6 +229,7 @@
 // }
 
 /*TABLE STYLES*/
+// Not in use yet but it can be used to add borders only between columns
 table.table.column-bordered {
   th {
     border-left-width: 1px;
@@ -706,5 +753,5 @@ body .control-toggle-include-docs span {
   color: #fff;
   background: $cf-brand-highlight;
   margin: 100px;
-  box-shadow: 2px 2px 5px #989898;
+  box-shadow: 2px 2px 5px $cf-border-color02;
 }

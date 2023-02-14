@@ -12,19 +12,25 @@
 
 import PropTypes from 'prop-types';
 import React from 'react';
-import {Button} from 'react-bootstrap';
+import ReactComponents from '../../components/react-components';
+
+const { ConfirmButton } = ReactComponents;
 
 export default class VerifyInstallButton extends React.Component {
   static propTypes = {
     verify: PropTypes.func.isRequired,
-    isVerifying: PropTypes.bool.isRequired
+    isVerifying: PropTypes.bool.isRequired,
   };
 
   render() {
     return (
-      <Button id="start" onClick={this.props.verify} disabled={this.props.isVerifying}>
-        {this.props.isVerifying ? 'Verifying...' : 'Verify Installation'}
-      </Button>
+      <ConfirmButton
+        id="start"
+        showIcon={false}
+        onClick={this.props.verify}
+        disabled={this.props.isVerifying}
+        text={this.props.isVerifying ? 'Verifying...' : 'Verify Installation'}
+      ></ConfirmButton>
     );
   }
 }

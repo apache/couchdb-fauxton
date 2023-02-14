@@ -47,9 +47,9 @@ $cf-brand-highlight: #af2d24 !default; // former $brandHighlight
 $cf-brand-hightlight-hover: #e73d34 !default; // former $hoverHighlight
 $cf-border-color01: #cccccc !default;
 $cf-border-color02: #999999 !default;
-$cf-danger: #ff0c35;
-$cf-primary: #2bb673;
-$cf-secondary: #0082bf;
+$cf-primary: #2bb673 !default;
+$cf-secondary: #0082bf !default;
+$cf-danger: #ff0c35 !default;
 
 /* typography */
 $cf-text01: #333333 !default; // default text color for pages
@@ -61,48 +61,54 @@ $cf-sans-font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !default;
 // COMPONENT-SPECIFIC STYLES
 
 /*buttons */
-// $primaryGreen: #2bb673;
-// $secondaryBlue: #0082bf;
-// $primaryGreenDisabled: #8ec9ad;
-// $secondaryBlueDisabled: #86bad2;
-// $dangerDisabled: #ff9797;
-$cf-btn-color: #ffffff;
-// $buttonTextDisabled: #f1f1f1;
+$cf-btn-primary-bg: $cf-primary !default;
+$cf-btn-primary-color: #ffffff !default;
+$cf-btn-secondary-bg: $cf-secondary !default;
+$cf-btn-secondary-color: #ffffff !default;
+$cf-btn-danger-bg: $cf-danger !default;
+$cf-btn-danger-color: #ffffff !default;
+
+$cf-btn-primary-bg-disabled: #8ec9ad !default;
+$cf-btn-primary-color-disabled: #f2f2f2 !default;
+$cf-btn-secondary-bg-disabled: #86bad2 !default;
+$cf-btn-secondary-color-disabled: #f2f2f2 !default;
+$cf-btn-danger-bg-disabled: #ff9797 !default;
+$cf-btn-danger-color-disabled: #f2f2f2 !default;
 
 /* code editor or viewer */
-$cf-code-bg: #4d4d4d;
-$cf-code-gutter-bg: #3a3a3a;
-$cf-code-cursor-color: #ffffff;
-$cf-code-active-bg: #000000;
-$cf-code-selection-bg: rgba(29, 151, 215, 0.5);
+$cf-code-bg: #4d4d4d !default;
+$cf-code-gutter-bg: #3a3a3a !default;
+$cf-code-cursor-color: #ffffff !default;
+$cf-code-active-bg: #000000 !default;
+$cf-code-selection-bg: rgba(29, 151, 215, 0.5) !default;
 
 /* dropdown menus */
-$cf-dropdown-bg: $cf-background02;
-$cf-dropdown-color: $cf-text02;
-$cf-dropdown-item-bg: $cf-background03;
-$cf-dropdown-item-color: $cf-text03;
+$cf-dropdown-bg: $cf-background02 !default;
+$cf-dropdown-color: $cf-text02 !default;
+$cf-dropdown-item-bg: $cf-background03 !default;
+$cf-dropdown-item-color: $cf-text03 !default;
 
 /* main nav bar */
-$cf-navbar-width: 220px;
-$cf-navbar-width-collapsed: 64px;
-$cf-navbar-icon-color: $cf-text03;
-$cf-navbar-icon-color-selected: #ffffff;
-$cf-navbar-bg: $cf-background02;
-$cf-navbar-item-bg: $cf-background03;
+$cf-navbar-width: 220px !default;
+$cf-navbar-width-collapsed: 64px !default;
+$cf-navbar-icon-color: $cf-text03 !default;
+$cf-navbar-icon-color-selected: #ffffff !default;
+$cf-navbar-bg: $cf-background02 !default;
+$cf-navbar-item-bg: $cf-background03 !default;
 
 /* notifications */
-$cf-alert-bg: #ffffff;
-$cf-alert-info-color: #329898;
-$cf-alert-success-color: #448c11;
-$cf-alert-error-color: #ff0c35;
+$cf-alert-bg: #ffffff !default;
+$cf-alert-info-color: #329898 !default;
+$cf-alert-success-color: #448c11 !default;
+$cf-alert-error-color: #ff0c35 !default;
 
 /* sidebar */
-$cf-sidebar-width: 330px;
+$cf-sidebar-width: 330px !default;
 
 /* slider */
-$cf-slider-bg: $cf-background01;
-$cf-slider-bg-highlight: $cf-brand-highlight;
-$cf-slider-border-color: $cf-border-color02;
+$cf-slider-bg: $cf-background01 !default;
+$cf-slider-bg-highlight: $cf-brand-highlight !default;
+$cf-slider-border-color: $cf-border-color02 !default;
 
 /*top header*/
 $cf-topheader-bg: $cf-background01 !default;
