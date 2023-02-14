@@ -110,7 +110,7 @@ export class DeleteDatabaseModal extends React.Component {
             disabled={this.state.disableSubmit}
             onClick={this.onDeleteClick}
             className="btn btn-danger delete">
-            <i className="icon icon-trash" /> Delete Database
+            <i className="fonticon fonticon-trash" /> Delete Database
           </button>
         </Modal.Footer>
       </Modal>

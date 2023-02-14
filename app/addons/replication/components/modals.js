@@ -52,7 +52,7 @@ export const DeleteModal = ({
       <Modal.Footer>
         <a className="cancel-link" onClick={onClose}>Cancel</a>
         <ConfirmButton
-          customIcon={"icon-trash"}
+          customIcon={"fonticon-trash"}
           text={btnText}
           onClick={onClick}
         />

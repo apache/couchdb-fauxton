@@ -111,7 +111,7 @@ describe('DocEditorScreen', () => {
     expect(el.find('.loading-lines').length).toBe(0);
     expect(el.find('.icon-circle-arrow-up').length).toBe(0);
     expect(el.find('.icon-repeat').length).toBe(0);
-    expect(el.find('.icon-trash').length).toBe(0);
+    expect(el.find('.fonticon-trash').length).toBe(0);
   });
 
   it('view attachments button does not appear with no attachments', () => {

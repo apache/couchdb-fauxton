@@ -181,7 +181,7 @@ export default class DocEditorScreen extends React.Component {
           disabled={this.props.isSaving}
           onClick={this.props.showCloneDocModal} />
         <PanelButton title="Delete"
-          iconClass="icon-trash"
+          iconClass="fonticon-trash"
           disabled={this.props.isSaving}
           onClick={this.props.showDeleteDocModal} />
       </div>

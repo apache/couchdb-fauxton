@@ -121,7 +121,7 @@ module.exports = {
       .getText(firstRowSelector + ' td:nth-of-type(2)', function(result) {
         firstDoc = result.value;
       })
-      .clickWhenVisible(firstRowSelector + ' .replication__row-btn.icon-trash', waitTime, true)
+      .clickWhenVisible(firstRowSelector + ' .replication__row-btn.fonticon-trash', waitTime, true)
       .clickWhenVisible('.replication_delete-doc-modal.modal-dialog .modal-footer .cancel-link', waitTime, true)
       .waitForElementVisible(firstRowSelector, waitTime, true)
       .getText(firstRowSelector + ' td:nth-of-type(2)', function(result) {

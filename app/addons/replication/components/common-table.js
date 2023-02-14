@@ -154,7 +154,7 @@ const RowActions = ({onlyDeleteAction, _id, url, deleteDocs}) => {
   actions.push(
     <li className="replication__row-list" key={3}>
       <a
-        className={`replication__row-btn icon-trash ${onlyDeleteAction ? 'replication__row-btn--no-left-pad' : ''} `}
+        className={`replication__row-btn fonticon-trash ${onlyDeleteAction ? 'replication__row-btn--no-left-pad' : ''} `}
         title={`Delete ${onlyDeleteAction ? 'job' : 'document'} ${_id}`}
         onClick={() => deleteDocs(_id)}>
       </a>

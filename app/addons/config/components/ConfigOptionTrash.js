@@ -44,7 +44,7 @@ export default class ConfigOptionTrash extends React.Component {
   render() {
     return (
       <td className="text-center config-item-trash config-delete-value">
-        <i className="icon icon-trash" onClick={this.showModal}></i>
+        <i className="fonticon fonticon-trash" onClick={this.showModal}></i>
         <FauxtonComponents.ConfirmationModal
           text={`Are you sure you want to delete ${this.props.sectionName}/${this.props.optionName}?`}
           onClose={this.hideModal}
