@@ -46,6 +46,13 @@
 @import 'react-animations';
 @import 'notification-center';
 
+
+// Bootstrap V5 - CSS Variables overrides
+.btn {
+	--bs-btn-color: #{$cf-btn-color};
+  --bs-btn-hover-color: #{$cf-btn-color};
+}
+
 /**
  * HTML-wide overrides
  **/

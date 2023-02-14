@@ -48,6 +48,8 @@ $cf-brand-hightlight-hover: #e73d34 !default; // former $hoverHighlight
 $cf-border-color01: #cccccc !default;
 $cf-border-color02: #999999 !default;
 $cf-danger: #ff0c35;
+$cf-primary: #2bb673;
+$cf-secondary: #0082bf;
 
 /* typography */
 $cf-text01: #333333 !default; // default text color for pages
@@ -57,6 +59,15 @@ $cf-text-muted01: #999999 !default;
 $cf-sans-font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !default;
 
 // COMPONENT-SPECIFIC STYLES
+
+/*buttons */
+// $primaryGreen: #2bb673;
+// $secondaryBlue: #0082bf;
+// $primaryGreenDisabled: #8ec9ad;
+// $secondaryBlueDisabled: #86bad2;
+// $dangerDisabled: #ff9797;
+$cf-btn-color: #ffffff;
+// $buttonTextDisabled: #f1f1f1;
 
 /* code editor or viewer */
 $cf-code-bg: #4d4d4d;
@@ -110,10 +121,10 @@ $paginationActiveBackground: #f5f5f5; // pagination - same value as in bootstrap
 // 
 // Bootstrap V2 & V5 variables - These will need to be replaced, or the corresponding V5 ones set
 // 
-$white: #fff !default;
-$orange: #f3622d !default;
-$blue: #049cdb !default;
-$green: #7fa30c !default;
+// $white: #fff !default;
+// $orange: #f3622d !default;
+// $blue: #049cdb !default;
+// $green: #7fa30c !default;
 
 // 
 // Bootstrap V5 variable overrides
@@ -128,6 +139,8 @@ $link-color: $cf-brand-highlight;
 $link-hover-color: $cf-brand-highlight;
 $link-decoration: none;
 $enable-rounded: true !default; // TODO: this is a change from the Fauxton's previously setting 'borderRadius: 0'. I think it should be using the round corners but the rest of the UI will have to follow suit.
+$primary: $cf-primary;
+$secondary: $cf-secondary;
 $danger: $cf-danger;
 $dropdown-bg: $cf-dropdown-bg;
 $dropdown-color: $cf-dropdown-color;
@@ -150,12 +163,12 @@ $dropdown-color: $cf-dropdown-color;
 $cf-tray-body-bg: $cf-background02;
 
 /*buttons */
-$primaryGreen: #2bb673;
-$secondaryBlue: #0082bf;
-$primaryGreenDisabled: #8ec9ad;
-$secondaryBlueDisabled: #86bad2;
-$dangerDisabled: #ff9797;
-$buttonText: #fff;
+// $primaryGreen: #2bb673;
+// $secondaryBlue: #0082bf;
+// $primaryGreenDisabled: #8ec9ad;
+// $secondaryBlueDisabled: #86bad2;
+// $dangerDisabled: #ff9797;
+$buttonText: #ffffff;
 $buttonTextDisabled: #f1f1f1;
 
 

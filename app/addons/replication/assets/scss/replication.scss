@@ -344,7 +344,7 @@ button.replication__error-continue {
 
 .replication__error-cancel,
 .replication__error-continue {
-  background-color: $secondaryBlue;
+  background-color: $cf-secondary;
   color: #fff;
 }
 
@@ -359,7 +359,7 @@ td.replication__empty-row {
 }
 
 .replication__remote_icon_help {
-  color: $secondaryBlue;
+  color: $cf-secondary;
 }
 
 .replication__remote_icon_help:hover {
