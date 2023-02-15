@@ -29,7 +29,7 @@ body #dashboard #notification-center-btn {
     width: 300px;
     height: 100%;
     background-color: $cf-background02;
-    color: #dddddd;
+    color: $cf-text02;
 
     header {
       @include flex(0 0 auto);
@@ -51,7 +51,7 @@ body #dashboard #notification-center-btn {
         border: 0;
         margin: -18px -16px -14px; /* enlarges the hit area */
         font-size: 21px;
-        color: #dddddd;
+        color: $cf-text02;
         &:hover {
           color: $cf-brand-hightlight-hover;
         }
@@ -93,16 +93,17 @@ body #dashboard #notification-center-btn {
     .notification-list {
       margin: 15px 0 0;
       list-style-type: none;
+      padding: 0;
 
       li {
         margin: 0 16px;
         line-height: 16px;
         font-size: 12px;
         overflow: hidden;
-        border-bottom: 1px solid #222222;
+        border-bottom: 1px solid $cf-border-color02;
 
         &.no-notifications {
-          color: #999999;
+          color: $cf-text02;
           margin-top: 25px;
           border-bottom: 0;
         }
@@ -114,7 +115,7 @@ body #dashboard #notification-center-btn {
         }
         button {
           @include flex(0 0 22px);
-          color: #dddddd;
+          color: $cf-text02;
           background: transparent;
           border: 0;
           height: 20px;
@@ -147,12 +148,12 @@ body #dashboard #notification-center-btn {
         font-size: 11px;
         margin-top: 2px;
         span.divider {
-          color: #444444;
+          color: $cf-border-color02;
           padding: 0 5px;
         }
       }
       .time-elapsed {
-        color: #565656;
+        color: $cf-text02-muted;
       }
       .copy {
         color: $blue;
@@ -161,7 +162,7 @@ body #dashboard #notification-center-btn {
     }
 
     footer {
-      border-top: 1px solid #555555;
+      border-top: 1px solid $cf-border-color02;
       @include flex(0 0 auto);
       text-align: center;
       padding: 4px;
@@ -189,8 +190,8 @@ body #dashboard #notification-center-btn {
 
     &.visible {
       z-index: 110;
-      opacity: 0.3;
-      background-color: #000000;
+      opacity: $modal-backdrop-opacity;
+      background-color: $cf-black;
     }
   }
 }

@@ -91,7 +91,8 @@ $cf-text01: #333333 !default; // default text color for pages
 $cf-text02: #ffffff !default; // text color for overlay panels, trays
 $cf-text03: #b3b4b4 !default; // text color for items in dropdowns, main nav bar
 $cf-text04: #767f89 !default; // sidebar subitems
-$cf-text-muted01: #999999 !default;
+$cf-text01-muted: #999999 !default;
+$cf-text02-muted: #bbbbbb !default;
 $cf-sans-font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !default;
 
 // padding and margins
@@ -200,7 +201,7 @@ $smallLogoPath: "../../../../../assets/img/couchdb-logo.png" !default;
 // globals
 $body-bg: $cf-background01;
 $body-color: $cf-text01;
-$text-muted: $cf-text-muted01;
+$text-muted: $cf-text01-muted;
 $font-family-base: $cf-sans-font-family;
 $link-color: $cf-brand-highlight;
 $link-hover-color: $cf-brand-highlight;

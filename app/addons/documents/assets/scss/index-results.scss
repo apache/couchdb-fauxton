@@ -251,7 +251,7 @@ a.document-result-screen__toolbar-create-btn:visited {
   font-size: 14px;
   .execution-stats-popup-component {
     [data-status="false"] {
-      color: $cf-text-muted01;
+      color: $cf-text01-muted;
     }
     [data-status="true"] {
       .value {
