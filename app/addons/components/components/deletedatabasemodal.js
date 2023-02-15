@@ -11,22 +11,20 @@
 // the License.
 
 import PropTypes from 'prop-types';
-
-import React from "react";
-import ReactDOM from "react-dom";
-import {Modal} from "react-bootstrap";
-import Actions from "../actions";
+import React from 'react';
+import { Button, Modal } from 'react-bootstrap';
+import Actions from '../actions';
 
 export class DeleteDatabaseModal extends React.Component {
   static propTypes = {
     showHide: PropTypes.func.isRequired,
     modalProps: PropTypes.object,
-    onSuccess: PropTypes.func
+    onSuccess: PropTypes.func,
   };
 
   state = {
     inputValue: '',
-    disableSubmit: true
+    disableSubmit: true,
   };
 
   close = (e) => {
@@ -36,14 +34,14 @@ export class DeleteDatabaseModal extends React.Component {
 
     this.setState({
       inputValue: '',
-      disableSubmit: true
+      disableSubmit: true,
     });
 
-    this.props.showHide({showModal: false});
+    this.props.showHide({ showModal: false });
   };
 
   open = () => {
-    this.props.showHide({showModal: true});
+    this.props.showHide({ showModal: true });
   };
 
   getDatabaseName = () => {
@@ -54,11 +52,11 @@ export class DeleteDatabaseModal extends React.Component {
     const val = e.target.value.trim();
 
     this.setState({
-      inputValue: val
+      inputValue: val,
     });
 
     this.setState({
-      disableSubmit: val !== this.getDatabaseName()
+      disableSubmit: val !== this.getDatabaseName(),
     });
   };
 
@@ -80,38 +78,51 @@ export class DeleteDatabaseModal extends React.Component {
     var dbId = this.props.modalProps.dbId;
 
     var warning = isSystemDatabase ? (
-      <p style={{color: '#d14'}} className="warning">
+      <p style={{ color: '#d14' }} className="warning">
         <b>You are about to delete a system database, be careful!</b>
       </p>
     ) : null;
 
     return (
-      <Modal dialogClassName="delete-db-modal" show={showDeleteModal} onHide={this.close}>
+      <Modal
+        dialogClassName="delete-db-modal"
+        show={showDeleteModal}
+        onHide={this.close}
+      >
         <Modal.Header closeButton={true}>
           <Modal.Title>Confirm Deletion</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {warning}
           <p>
-            Warning: This action will permanently delete <code>{dbId}</code>.
-            To confirm the deletion of the database and all of the
-            database&apos;s documents, you must enter the database&apos;s name.
+            Warning: This action will permanently delete <code>{dbId}</code>. To
+            confirm the deletion of the database and all of the database&apos;s
+            documents, you must enter the database&apos;s name.
           </p>
           <input
             type="text"
-            className="input-block-level"
+            className="form-control"
             onKeyUp={this.onInputKeypress}
             onChange={this.onInputChange}
-            autoFocus={true} />
+            autoFocus={true}
+          />
         </Modal.Body>
         <Modal.Footer>
-          <a href="#" onClick={this.close} data-bypass="true" className="cancel-link">Cancel</a>
-          <button
+          <a
+            href="#"
+            onClick={this.close}
+            data-bypass="true"
+            className="cancel-link"
+          >
+            Cancel
+          </a>
+          <Button
             disabled={this.state.disableSubmit}
             onClick={this.onDeleteClick}
-            className="btn btn-danger delete">
+            variant="cf-danger"
+          >
             <i className="fonticon fonticon-trash" /> Delete Database
-          </button>
+          </Button>
         </Modal.Footer>
       </Modal>
     );
