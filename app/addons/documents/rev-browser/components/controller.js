@@ -45,7 +45,7 @@ export default class DiffyController extends React.Component {
 
     // no conflicts happened for this doc
     if (!theirs || !conflictingRevs.length) {
-      return <div style={{textAlign: 'center', color: '#fff'}}><h2>No conflicts</h2></div>;
+      return <div style={{textAlign: 'center', color: '#ffffff'}}><h2>No conflicts</h2></div>;
     }
 
     return (
