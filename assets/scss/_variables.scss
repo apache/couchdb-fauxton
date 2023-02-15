@@ -27,6 +27,10 @@
 // Fauxton's generic styles
 // 
 
+// other colors - just listing for now but should be revised to reduce colors that are too similar
+// the idea is that all color values are listed here. other scss files should be using a color variable instead of literal values. 
+
+
 // base
 $cf-background01: #f2f2f2 !default; // main page background color. former $background
 $cf-background02: #333333 !default; // background for overlay panels, trays
@@ -164,6 +168,8 @@ $danger: $cf-danger;
 // dropdowns
 $dropdown-bg: $cf-dropdown-bg;
 $dropdown-color: $cf-dropdown-color;
+// modals
+$modal-backdrop-opacity: 0.75;
 // pagination
 $pagination-bg: $cf-pagination-bg;
 $pagination-border-color: $cf-pagination-border;

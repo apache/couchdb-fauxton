@@ -84,7 +84,7 @@ export default class CloneDocModal extends React.Component {
             <p>
               You can modify the following generated ID for your new document.
             </p>
-            <input ref={node => this.newDocId = node} type="text" autoFocus={true} className="input-block-level"
+            <input ref={node => this.newDocId = node} type="text" autoFocus={true} className="form-control"
               onChange={this.docIDChange} value={this.state.uuid} />
           </form>
         </Modal.Body>
