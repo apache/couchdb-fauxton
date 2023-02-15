@@ -22,7 +22,7 @@
 .partition-selector__switch {
   background-color: transparent;
   border: none;
-  color: #666;
+  color: $cf-text-dark-gray;
   font-size: 1rem;
   .fonticon-filter {
     font-size: 1.25rem;
@@ -40,7 +40,7 @@
 
 .partition-selector__key {
   flex: 1;
-  color: #666;
+  color: $cf-text-dark-gray;
 }
 
 .partition-selector__key--active {
@@ -48,5 +48,5 @@
 }
 
 .partition-selector__global {
-  color: #666;
+  color: $cf-text-dark-gray;
 }

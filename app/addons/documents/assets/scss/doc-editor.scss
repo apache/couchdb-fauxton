@@ -80,7 +80,7 @@
   .cancel-button {
     font-size: 16px;
     vertical-align: middle;
-    color: #666;
+    color: $cf-text-dark-gray;
     &:hover {
       color: $cf-brand-hightlight-hover;
       text-decoration: none;
@@ -89,16 +89,16 @@
     &--disabled {
       opacity: 0.5;
       cursor: not-allowed;
-      color: #666;
+      color: $cf-text-dark-gray;
     }
     &--disabled:hover {
       opacity: 0.5;
       cursor: not-allowed;
-      color: #666;
+      color: $cf-text-dark-gray;
     }
   }
   .panel-button {
-    color: #666;
+    color: $cf-text-dark-gray;
     &:hover {
       color: $cf-brand-hightlight-hover;
       text-decoration: none;

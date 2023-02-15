@@ -30,6 +30,49 @@
 // other colors - just listing for now but should be revised to reduce colors that are too similar
 // the idea is that all color values are listed here. other scss files should be using a color variable instead of literal values. 
 
+$cf-text-dark-gray: #666666;
+$cf-white: #ffffff;
+$cf-border-lighter-gray: #e3e3e3;
+$cf-red: #ff0000;
+$cf-black: #000000;
+
+
+$cf-gray: #222222;
+$cf-gray: #2b2b33;
+$cf-gray: #323232;
+$cf-gray: #3b3b3b;
+$cf-gray: #444444;
+$cf-gray: #4d4d4d;
+$cf-gray: #505050;
+$cf-gray: #555555;
+$cf-gray: #565656;
+$cf-gray: #727a82;
+$cf-gray: #767f89;
+$cf-gray: #777777;
+$cf-gray: #7c8085;
+$cf-gray: #999999;
+$cf-gray: #b3b3b3;
+$cf-gray: #b3b4b4;
+$cf-gray: #bbbbbb;
+$cf-gray: #cbcbcb;
+$cf-gray: #cccccc;
+$cf-gray: #dddddd;
+$cf-gray: #e6e6e6;
+$cf-gray: #f1f0f1;
+$cf-gray: #f3f3f3;
+
+$cf-dark-red: #9d261d;
+$cf-another-red: #b11925;
+$cf-red-ish: #d9534f;
+$cf-bright-red: #e23632;
+$cf-light-red: #fbcece;
+$cf-bright-red2: #ff6532;
+
+$cf-bright-green: #5cb85c;
+$cf-green2: #29be9d;
+
+$cf-light-blue: #72cdf4;
+
 
 // base
 $cf-background01: #f2f2f2 !default; // main page background color. former $background

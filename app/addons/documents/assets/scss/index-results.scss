@@ -43,7 +43,7 @@
 
   .toolbar-dropdown {
     .btn {
-      color: #666;
+      color: $cf-text-dark-gray;
     }
 
     .dropdown-menu.arrow:before {
@@ -78,7 +78,7 @@
 
 a.document-result-screen__toolbar-create-btn:active,
 a.document-result-screen__toolbar-create-btn:visited {
-  color: #fff;
+  color: $cf-white;
 }
 
 .no-results-screen {
@@ -116,7 +116,6 @@ a.document-result-screen__toolbar-create-btn:visited {
 }
 
 .table-view-docs {
-  position: absolute;
 
   .bulk-action-component {
     padding-bottom: 0;

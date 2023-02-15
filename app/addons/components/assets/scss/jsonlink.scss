@@ -21,7 +21,7 @@
 }
 
 .faux__jsonlink-link {
-  color: #666;
+  color: $cf-text-dark-gray;
   text-decoration: none;
   line-height: 33px;
   font-size: 13px;
@@ -31,7 +31,7 @@
 .faux__jsonlink-link:focus,
 .faux__jsonlink-link:active {
   text-decoration: none;
-  color: #666;
+  color: $cf-text-dark-gray;
 }
 
 .faux__jsonlink-link-brackets {
@@ -50,7 +50,7 @@
 }
 
 .faux__doclink-link {
-  color: #666;
+  color: $cf-text-dark-gray;
   text-decoration: none;
   line-height: 33px;
   font-size: 20px;
@@ -64,7 +64,7 @@
 .faux__doclink-link:focus,
 .faux__doclink-link:visited {
   text-decoration: none;
-  color: #666;
+  color: $cf-text-dark-gray;
 }
 
 @media (max-width: 1090px) {

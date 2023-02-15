@@ -262,7 +262,7 @@ td.replication__row-status {
 
 a.replication__activity_header-btn:active,
 a.replication__activity_header-btn:visited {
-  color: #fff;
+  color: $cf-white;
 }
 
 .replication__table-bulk-select {
@@ -345,13 +345,13 @@ button.replication__error-continue {
 .replication__error-cancel,
 .replication__error-continue {
   background-color: $cf-secondary;
-  color: #fff;
+  color: $cf-white;
 }
 
 .replication__error-cancel:hover,
 .replication__error-continue:hover {
   background-color: $cf-brand-hightlight-hover;
-  color: #fff;
+  color: $cf-white;
 }
 
 td.replication__empty-row {

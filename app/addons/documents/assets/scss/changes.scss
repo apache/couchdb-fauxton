@@ -40,7 +40,7 @@
     font-weight: bold;
   }
   .clipboard-copy-element {
-    color: #666666;
+    color: $cf-text-dark-gray;
   }
 }
 
@@ -82,7 +82,7 @@
     margin: 20px 0;
   }
   .remove-filter {
-    color: #333333;
+    color: $cf-text01;
     text-shadow: none;
     background-color: transparent;
     font-size: 20px;

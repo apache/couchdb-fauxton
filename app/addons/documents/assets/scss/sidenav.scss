@@ -112,7 +112,7 @@
           font-size: 14px;
           background-color: rgba(0, 0, 0, 0.02);
           &:hover {
-            color: #fff;
+            color: $cf-white;
             text-decoration: none;
             background-color: $cf-brand-hightlight-hover;
           }
@@ -191,7 +191,7 @@
   @include border-radius(0);
   box-shadow: 2px 2px rgba(0, 0, 0, 0.2);
   background-color: $cf-navbar-bg;
-  color: #ffffff;
+  color: $cf-white;
   font-size: 12px;
   padding: 0;
   margin-left: -7px;

@@ -25,9 +25,9 @@ pre.prettyprint {
     color: #dddddd;
   }
   .str, .lit {
-    color: #fff;
+    color: $cf-white;
   }
   .com {
-    color: #666;
+    color: $cf-text-dark-gray;
   }
 }

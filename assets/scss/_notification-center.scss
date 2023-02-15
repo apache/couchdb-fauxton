@@ -6,7 +6,7 @@ body #dashboard #notification-center-btn {
   background-color: $cf-background01;
   border-left: 1px solid $cf-border-color01;
   font-size: 24px;
-  color: #666;
+  color: $cf-text-dark-gray;
   padding: 0;
   cursor: pointer;
   @include flex(0 0 auto);
@@ -39,7 +39,7 @@ body #dashboard #notification-center-btn {
         font-size: $font-size-base;
         line-height: $line-height-base;
         margin: 0;
-        color: white;
+        color: $cf-white;
         font-weight: normal;
       }
       .fonticon-bell {
@@ -78,7 +78,7 @@ body #dashboard #notification-center-btn {
         &:hover {
           background-color: $cf-brand-hightlight-hover;
           .fonticon {
-            color: white;
+            color: $cf-white;
           }
         }
       }
@@ -140,7 +140,7 @@ body #dashboard #notification-center-btn {
         font-size: 13px;
       }
       a {
-        color: white;
+        color: $cf-white;
         text-decoration: underline;
       }
       .notification-actions {

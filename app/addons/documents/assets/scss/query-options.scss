@@ -99,12 +99,12 @@
     .btn {
       padding: 5px 12px 5px;
       background: #727a82;
-      color: #fff;
+      color: $cf-white;
       font-size: 12px;
       border: none;
     }
     .btn.active {
-      background: #fff;
+      background: $cf-white;
       color: $link-hover-color;
       box-shadow: none;
     }

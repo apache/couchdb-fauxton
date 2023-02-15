@@ -28,7 +28,7 @@
   top: 55px;
   z-index: 11;
   background-color: $cf-tray-body-bg;
-  color: #fff;
+  color: $cf-white;
   margin: 0;
 
   .add-on {
@@ -39,7 +39,7 @@
     border: none;
     display: block;
     text-align: left;
-    color: #fff;
+    color: $cf-white;
     text-shadow: none;
     height: auto;
     line-height: 1em;
@@ -48,7 +48,7 @@
   input[type="text"],
   textarea {
     @include border-radius(5px);
-    background-color: #666;
+    background-color: $cf-text-dark-gray;
     padding: 8px;
     border: none;
     color: #eee;
@@ -59,7 +59,7 @@
   textarea:focus,
   input[type="text"]:hover,
   textarea:hover {
-    border: 2px solid $white;
+    border: 2px solid $cf-white;
   }
   input[type="text"],
   textarea {

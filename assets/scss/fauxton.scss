@@ -155,7 +155,7 @@
 
 /* bootstrap overrides */
 // .page-header {
-//   border-bottom: 1px solid #e3e3e3;
+//   border-bottom: 1px solid $cf-border-lighter-gray;
 //   margin-bottom: 10px;
 //   h3 {
 //     text-transform: capitalize;
@@ -204,7 +204,7 @@
 //     border: none;
 //   }
 //   .well-item {
-//     color: #666;
+//     color: $cf-text-dark-gray;
 //     font-size: 12px;
 //     border-bottom: 1px solid #e5e5e5;
 //     padding: 8px 4px;
@@ -311,7 +311,7 @@ table.table.column-bordered {
 /*ONE PANEL TEMPLATE ONLY STYLES  AKA _all_dbs */
 
 .result-tools {
-  border-bottom: 1px solid #999999;
+  border-bottom: 1px solid $cf-border-color02;
   padding: 10px 0;
   float: left;
   width: 100%;
@@ -323,7 +323,6 @@ table.table.column-bordered {
   z-index: 1;
   margin-top: 19px;
   margin-bottom: 0;
-  /*background-color: #f4f4f4;*/
   padding: 0 20px;
 }
 
@@ -336,24 +335,24 @@ table.table.column-bordered {
   > a {
     display: block;
     padding: 5px 15px 5px 5px;
-    border: 1px solid #989898;
+    border: 1px solid $cf-border-color02;
     position: relative;
-    background-color: #ffffff;
-    color: #666666;
+    background-color: $cf-white;
+    color: $cf-text-dark-gray;
     &:after {
       content: '';
       width: 0;
       height: 0;
       border-left: 7px solid transparent;
       border-right: 7px solid transparent;
-      border-top: 7px solid #989898;
+      border-top: 7px solid $cf-border-color02;
       position: absolute;
       right: 9px;
       top: 12px;
     }
     &:before {
       content: '';
-      border-left: 1px solid #989898;
+      border-left: 1px solid $cf-border-color02;
       height: 30px;
       position: absolute;
       right: 30px;
@@ -448,7 +447,7 @@ table.table.column-bordered {
 }
 
 .Select-option {
-  color: #fff;
+  color: $cf-white;
   background-color: $cf-background02;
 }
 
@@ -469,7 +468,7 @@ table.table.column-bordered {
 }
 
 .Select-option.is-selected {
-  color: #fff;
+  color: $cf-white;
 }
 
 .Select .Select-menu {
@@ -546,25 +545,25 @@ footer.pagination-footer {
   z-index: 6;
 }
 
-.modal-title {
-  font-size: 22px;
-  margin: 0;
-  line-height: 30px;
-}
+// .modal-title {
+//   font-size: 22px;
+//   margin: 0;
+//   line-height: 30px;
+// }
 
-.modal-footer {
-  background-color: transparent;
-  border-top: none;
-  color: #666;
-}
+// .modal-footer {
+//   background-color: transparent;
+//   border-top: none;
+//   color: $cf-text-dark-gray;
+// }
 
-.modal-footer a {
-  color: #666;
-}
+// .modal-footer a {
+//   color: $cf-text-dark-gray;
+// }
 
-.modal-header {
-  border-bottom: 1px solid #666;
-}
+// .modal-header {
+//   border-bottom: 1px solid $cf-text-dark-gray;
+// }
 
 .simple-header {
   font-weight: 400;
@@ -709,14 +708,14 @@ body .control-toggle-include-docs span {
   a.db-actions,
   a.db-actions:visited {
     color: $cf-brand-highlight;
-    border: 1px solid #e3e3e3;
+    border: 1px solid $cf-border-lighter-gray;
     padding: 5px 7px;
     @include border-radius(6px);
     text-decoration: none;
     font-size: 19px;
     &:hover {
       background-color: $cf-brand-hightlight-hover;
-      color: white;
+      color: $cf-white;
     }
   }
   td {
@@ -751,7 +750,7 @@ body .control-toggle-include-docs span {
 .noscript-warning {
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   padding: 1px 30px 10px 30px;
-  color: #fff;
+  color: $cf-white;
   background: $cf-brand-highlight;
   margin: 100px;
   box-shadow: 2px 2px 5px $cf-border-color02;

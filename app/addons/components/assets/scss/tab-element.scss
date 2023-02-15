@@ -61,7 +61,7 @@
     min-width: 10px;
     padding: 3px 7px;
     line-height: 1;
-    color: #fff;
+    color: $cf-white;
     text-align: center;
     white-space: nowrap;
     vertical-align: middle;
@@ -82,7 +82,7 @@
   }
 
   &.tab-element-checked {
-    background-color: #fff;
+    background-color: $cf-white;
     label {
       cursor: default;
       pointer-events: none;
@@ -96,7 +96,7 @@
   transition: all 0.25s linear;
 
   &:hover {
-    background-color: #fff;
+    background-color: $cf-white;
     color: $link-hover-color;
   }
 

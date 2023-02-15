@@ -15,14 +15,14 @@
   margin-left: 0px;
   li {
     padding: 5px;
-    border-bottom: 1px solid #e3e3e3;
-    border-right: 1px solid #e3e3e3;
-    border-left: 3px solid #e3e3e3;
+    border-bottom: 1px solid $cf-border-lighter-gray;
+    border-right: 1px solid $cf-border-lighter-gray;
+    border-left: 3px solid $cf-border-lighter-gray;
     &:first-child {
-      border-top: 1px solid #e3e3e3;
+      border-top: 1px solid $cf-border-lighter-gray;
     }
     &:nth-child(odd) {
-      border-left: 3px solid red;
+      border-left: 3px solid $cf-red;
     }
   }
 }

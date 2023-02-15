@@ -209,7 +209,7 @@ a.help-link {
 }
 
 input[type="text"].error {
-  border: red 1px solid;
+  border: $cf-red 1px solid;
 }
 
 form.view-query-update,
@@ -246,7 +246,7 @@ form.view-query-save {
   }
 
   input[type="checkbox"] + label:hover:before {
-    border: 2px solid $white;
+    border: 2px solid $cf-white;
     transition: linear 0.2s, box-shadow linear 0.2s;
     -moz-transition: linear 0.2s, box-shadow linear 0.2s;
     -webkit-transition: linear 0.2s, box-shadow linear 0.2s;
@@ -325,7 +325,7 @@ div.add-dropdown {
       color: $cf-dropdown-item-color;
       &:hover {
         background-color: $cf-brand-hightlight-hover;
-        color: white;
+        color: $cf-white;
       }
     }
     li a {
@@ -345,7 +345,7 @@ div.add-dropdown {
 
 @keyframes errorBlinkBG {
   from { background: $cf-danger; }
-  to { background: white; }
+  to { background: $cf-white; }
 }
 
 input.errorHighlight {
@@ -359,14 +359,14 @@ input.errorHighlight {
 
   button.btn {
     padding: 10px 15px;
-    background-color: #fff;
+    background-color: $cf-white;
     color: #888;
     &.active:first-child {
       border-right-radius: 10px;
     }
     &:hover {
       background-color: $cf-brand-hightlight-hover;
-      color: #fff;
+      color: $cf-white;
       box-shadow: none;
     }
     &.active {
@@ -380,7 +380,7 @@ input.errorHighlight {
        */
       z-index: 1 !important;
       background-color: $cf-brand-highlight;
-      color: #ffffff;
+      color: $cf-white;
       box-shadow: none;
     }
   }

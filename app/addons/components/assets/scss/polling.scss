@@ -42,7 +42,7 @@
 }
 
 .faux__polling-info-text {
-  color: #666;
+  color: $cf-text-dark-gray;
 }
 
 .faux__polling-info-value {
@@ -78,7 +78,7 @@ div.faux__refresh-btn {
 .faux__refresh-link:visited,
 .faux__refresh-link:focus,
 .faux__refresh-link {
-  color: #666;
+  color: $cf-text-dark-gray;
   font-size: 14px;
   text-decoration: none;
 }
