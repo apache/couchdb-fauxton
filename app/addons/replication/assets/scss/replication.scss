@@ -117,7 +117,7 @@ div.replication__page {
 .replication__remote-connection-url[type="text"] {
   font-size: 14px;
   width: $replication_input_field_width;
-  color: #333;
+  color: $cf-text01;
 }
 
 .replication__remote-connection-url-text {
@@ -129,7 +129,7 @@ div.replication__page {
 .replication__new-input[type="text"] {
   width: $replication_input_field_width;
   font-size: 14px;
-  color: #333;
+  color: $cf-text01;
 }
 
 .replication__doc-name {
@@ -144,7 +144,7 @@ div.replication__page {
   top: 8px;
   font-size: 11px;
   padding: 8px;
-  color: #333;
+  color: $cf-text01;
   // TODO
   // @include transition(all 0.25s linear);
 }
@@ -158,7 +158,7 @@ div.replication__page {
   padding-right: 32px;
   font-size: 14px;
   width: $replication_input_field_width;
-  color: #333;
+  color: $cf-text01;
 }
 
 .replication__button-row {
@@ -275,7 +275,7 @@ a.replication__activity_header-btn:visited {
 
 .replication__bulk-select-header {
   width: 30px;
-  border: 1px solid #aaa;
+  border: 1px solid #aaaaaa;
 }
 
 input.replication__bulk-select-input[type="checkbox"] {
@@ -284,7 +284,7 @@ input.replication__bulk-select-input[type="checkbox"] {
 
 .bulk-select-trash {
   color: #505050;
-  border: 1px solid #aaa;
+  border: 1px solid #aaaaaa;
   background-color: rgba(0, 0, 0, 0);
   margin-left: 3px;
   padding-left: 8px;
@@ -308,9 +308,9 @@ input.replication__bulk-select-input[type="checkbox"] {
   cursor: pointer;
   padding-right: 8px;
   padding-left: 8px;
-  color: #333;
+  color: $cf-text01;
   &:visited {
-    color: #333;
+    color: $cf-text01;
     text-decoration: none;
   }
   &:hover {

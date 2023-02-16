@@ -19,7 +19,7 @@
 
 .faux-header__breadcrumbs-element {
   margin: 0 4px 0 4px;
-  color: #333;
+  color: $cf-text01;
   padding: 18px 10px;
   font-size: 24px;
   text-shadow: none;
@@ -44,7 +44,7 @@ a.faux-header__breadcrumbs-link {
 }
 
 .faux-header__controlbox-backlink {
-  border-right: 1px solid #ccc;
+  border-right: 1px solid #cccccc;
   padding-left: 10px;
   padding-right: 2px;
 }

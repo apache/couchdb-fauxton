@@ -28,6 +28,11 @@ div#dashboard-content div.revision-wrapper {
     margin-top: 15px;
   }
 
+  .revision-browser-no-conflict {
+    text-align: center;
+    color: $cf-text02;
+  }
+
   .revision-browser-controls {
     color: $cf-white;
     margin: 30px 0;
@@ -35,7 +40,7 @@ div#dashboard-content div.revision-wrapper {
 
   .revision-browser-controls .Select .Select-control {
     border-radius: inherit;
-    border-color: #ccc;
+    border-color: #cccccc;
   }
 
   .revision-browser-controls
@@ -43,7 +48,7 @@ div#dashboard-content div.revision-wrapper {
     .is-focused:not(.is-open)
     > .Select-control {
     box-shadow: transparent;
-    border-color: #ccc;
+    border-color: #cccccc;
   }
 
   .revision-browser-controls .Select .Select-menu-outer {
@@ -87,7 +92,7 @@ div#dashboard-content div.revision-wrapper {
   }
   .revision-diff-area .jsondiffpatch-added,
   .revision-diff-area .jsondiffpatch-deleted {
-    color: #000;
+    color: $cf-black;
   }
   .revision-diff-area .jsondiffpatch-modified .jsondiffpatch-left-value pre,
   .jsondiffpatch-textdiff-deleted,

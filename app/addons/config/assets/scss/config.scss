@@ -58,7 +58,7 @@
 table.config {
   thead th {
     border-left: none;
-    border-bottom: 2px solid #999;
+    border-bottom: 2px solid #999999;
   }
   tr {
     th,
@@ -74,7 +74,7 @@ table.config {
 #add-option-button {
   line-height: 40px;
   cursor: pointer;
-  border-left: 1px solid #ccc;
+  border-left: 1px solid #cccccc;
   border-right: none;
   border-top: none;
   border-bottom: none;
@@ -88,7 +88,7 @@ table.config {
 }
 
 #add-option-popover {
-  background-color: #333;
+  background-color: $cf-background02;
   color: white;
   padding: 20px;
   border-radius: 0;
@@ -111,7 +111,7 @@ table.config {
     text-shadow: none;
     height: auto;
     line-height: 1em;
-    background-color: #333;
+    background-color: $cf-background02;
   }
 
   input {

@@ -26,7 +26,7 @@ input[type="text"],
 input[type="password"] {
   @include border-radius(0);
   padding: 12px;
-  border: 1px solid #ccc;
+  border: 1px solid #cccccc;
   height: auto;
   font-size: 16px;
   margin-top: 0;
@@ -360,7 +360,7 @@ input.errorHighlight {
   button.btn {
     padding: 10px 15px;
     background-color: $cf-white;
-    color: #888;
+    color: #888888;
     &.active:first-child {
       border-right-radius: 10px;
     }

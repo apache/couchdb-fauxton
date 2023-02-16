@@ -65,21 +65,27 @@ body #dashboard #notification-center-btn {
       margin: 0;
       font-size: 13px;
 
+      border-top: 1px solid $cf-border-color02;
+      border-bottom: 1px solid $cf-border-color02;
+      
       li {
         text-align: center;
-        margin-right: 1px;
-        background-color: #444444;
+        border-right: 1px solid $cf-border-color02;
         padding: 4px 0 3px;
         cursor: pointer;
 
         &.selected {
-          background-color: #555555;
+          background-color: $cf-background01;
+          color: $cf-text01;
         }
         &:hover {
           background-color: $cf-brand-hightlight-hover;
           .fonticon {
             color: $cf-white;
           }
+        }
+        &:last-child {
+          border-right: none;
         }
       }
       .fonticon {

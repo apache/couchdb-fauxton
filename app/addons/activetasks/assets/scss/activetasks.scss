@@ -63,12 +63,12 @@
       margin-bottom: 3px;
 
       &.time:nth-child(2) {
-        color: #888;
+        color: #888888;
       }
 
       &.to-from-database {
         &:first-child {
-          border-bottom: 1px solid #ddd;
+          border-bottom: 1px solid #dddddd;
         }
         padding-bottom: 15px;
       }
@@ -93,7 +93,7 @@
       font-size: 14px;
       font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
       height: 51px;
-      background-color: #eee;
+      background-color: #eeeeee;
       width: 200px;
       margin: 9px 0 0 0;
 
@@ -110,7 +110,7 @@
   }
 
   .header-field {
-    background-color: #ccc;
+    background-color: #cccccc;
 
     &.radio {
       display: none;
@@ -131,7 +131,7 @@
     }
 
     .active-tasks-header {
-      background-color: #ccc;
+      background-color: #cccccc;
     }
 
     .icon-caret-up,

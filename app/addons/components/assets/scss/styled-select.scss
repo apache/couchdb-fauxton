@@ -28,7 +28,7 @@
   text-indent: 4px;
   height: 46px;
   padding-right: 35px;
-  color: #333;
+  color: $cf-text01;
 }
 
 //bug in firefox for text-indent
@@ -40,7 +40,7 @@
 
 .styled-select select:-moz-focusring {
   color: transparent;
-  text-shadow: 0 0 0 #000;
+  text-shadow: 0 0 0 $cf-black;
 }
 
 .styled-select select::-ms-expand {
@@ -52,7 +52,7 @@
   position: absolute;
   right: 10px;
   top: 12px;
-  color: #333;
+  color: $cf-text01;
 }
 
 .styled-select-hover-icon {
