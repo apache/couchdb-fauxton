@@ -254,7 +254,7 @@ form.view-query-save {
     content: $fonticon-ok;
     font-size: 12px;
     background-color: inherit;
-    border: 2px solid #7c8085;
+    border: 2px solid $cf-border-color02;
     color: $cf-brand-highlight;
     text-align: center;
     line-height: 19px;
@@ -271,7 +271,6 @@ form.view-query-save {
     position: absolute;
     left: 0;
     bottom: 0;
-    background-color: #7c8085;
   }
 
   .radio label:before {

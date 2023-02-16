@@ -19,15 +19,15 @@ pre.prettyprint {
 }
 .prettyprint {
   .pln, .pun, .typ {
-    color: #B3B4B4;
+    color: $cf-code-token-muted;
   }
   .kwd {
-    color: #dddddd;
+    color: $cf-code-token-muted;
   }
   .str, .lit {
-    color: $cf-white;
+    color: $cf-code-token-variable-color;
   }
   .com {
-    color: #666666;
+    color: $cf-code-token-muted;
   }
 }

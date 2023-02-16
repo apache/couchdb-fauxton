@@ -32,23 +32,8 @@ $cf-border-lighter-gray: #e3e3e3;
 $cf-red: #ff0000;
 $cf-black: #000000;
 
-$cf-gray: #2b2b33;
-$cf-gray: #323232;
-$cf-gray: #3b3b3b;
-$cf-gray: #4d4d4d;
-$cf-gray: #505050;
-$cf-gray: #555555;
-$cf-gray: #565656;
-$cf-gray: #666666;
-$cf-gray: #727a82;
-$cf-gray: #767f89;
-$cf-gray: #777777;
-$cf-gray: #7c8085;
+
 $cf-gray: #999999;
-$cf-gray: #b3b3b3;
-$cf-gray: #b3b4b4;
-$cf-gray: #aaaaaa;
-$cf-gray: #bbbbbb;
 $cf-gray: #cbcbcb;
 $cf-gray: #cccccc;
 $cf-gray: #dddddd;
@@ -72,6 +57,8 @@ $cf-text05: #666666 !default; // font-icon, top header icons/text
 $cf-text-fonticon01: $cf-text05;
 // Styling of cancel buttons should be revised when styling form elements 
 $cf-btn-cancel-color: $cf-text05;
+// TODO: revise. used as button bg for query options panel 
+$cf-query-options-btn-bg: #727a82;
 
 
 // ========================
@@ -131,6 +118,12 @@ $cf-code-gutter-bg: #3a3a3a !default;
 $cf-code-cursor-color: $cf-white !default;
 $cf-code-active-bg: $cf-black !default;
 $cf-code-selection-bg: rgba(29, 151, 215, 0.5) !default;
+$cf-code-token-variable-color: $cf-white;
+$cf-code-token-constant-color: #72cdf4;
+$cf-code-token-boolean-color: #ff6532;
+$cf-code-token-string-color: #29be9d;
+$cf-code-token-muted: $cf-text02-muted;
+
 
 // documents list (JSON view)
 $cf-jsondocs-header-bg: $cf-code-gutter-bg !default;
@@ -185,6 +178,9 @@ $cf-sidebar-subitem-color: $cf-text04 !default;
 $cf-slider-bg: $cf-background01 !default;
 $cf-slider-bg-highlight: $cf-brand-highlight !default;
 $cf-slider-border-color: $cf-border-color02 !default;
+
+// tabs
+$cf-tab-wrapper-bg: $cf-background03 !default;
 
 // tables
 $cf-table-stripped-bg: #F7F7F7 !default;

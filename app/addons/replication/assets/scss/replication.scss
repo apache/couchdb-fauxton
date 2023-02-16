@@ -76,7 +76,7 @@ div.replication__page {
     font-size: 14px;
     width: $replication_input_field_width;
     margin-bottom: 10px;
-    background-color: white;
+    background-color: $cf-white;
     border: 1px solid $cf-border-color01;
   }
   .styled-select {
@@ -109,7 +109,7 @@ div.replication__page {
     .Select-arrow-zone {
       padding: 0;
       width: 18px;
-      color: black;
+      color: $cf-black;
     }
   }
 }
@@ -122,7 +122,7 @@ div.replication__page {
 
 .replication__remote-connection-url-text {
   font-size: 9pt;
-  color: #999999;
+  color: $cf-text02;
   margin-bottom: 8px;
 }
 
@@ -274,20 +274,18 @@ a.replication__activity_header-btn:visited {
 }
 
 .replication__bulk-select-header {
-  width: 30px;
-  border: 1px solid #aaaaaa;
+  border: 1px solid $cf-border-color01;
 }
 
 input.replication__bulk-select-input[type="checkbox"] {
-  margin: 8px;
+  margin: 6px;
 }
 
 .bulk-select-trash {
-  color: #505050;
-  border: 1px solid #aaaaaa;
+  color: $cf-text-fonticon01;
+  border: 1px solid $cf-border-color01;
   background-color: rgba(0, 0, 0, 0);
   margin-left: 3px;
-  padding-left: 8px;
   &:hover {
     color: $cf-brand-hightlight-hover;
   }

@@ -72,11 +72,11 @@
 }
 
 @mixin bottom-border($height: 6px) {
-  border-bottom: 1px solid #999999;
+  border-bottom: 1px solid $cf-border-color02;
 }
 
 @mixin left-border() {
-  border-left: 1px solid #999999;
+  border-left: 1px solid $cf-border-color02;
 }
 
 @mixin noselect() {

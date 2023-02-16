@@ -24,7 +24,7 @@ export class TableHeader extends React.Component {
     const sortBy = this.props.sortByHeader;
     const currentName = this.props.headerName;
     const headerIsAscending = this.props.headerIsAscending;
-    const arrow = headerIsAscending ? 'icon icon-caret-up' : 'icon icon-caret-down';
+    const arrow = headerIsAscending ? 'fonticon fonticon-up-dir' : 'fonticon fonticon-down-dir';
 
     if (sortBy === currentName) {
       return <i className={arrow}></i>;

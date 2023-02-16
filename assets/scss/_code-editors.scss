@@ -43,13 +43,16 @@ body {
     opacity: 0.4;
   }
   .ace-idle-fingers .ace_constant {
-    color: #72cdf4;
+    color: $cf-code-token-constant-color;
   }
   .ace-idle-fingers .ace_boolean {
-    color: #ff6532;
+    color: $cf-code-token-boolean-color;
   }
   .ace-idle-fingers .ace_string {
-    color: #29be9d;
+    color: $cf-code-token-string-color;
+  }
+  .ace-idle-fingers .ace_variable {
+    color: $cf-code-token-variable-color;
   }
   .ace-idle-fingers .ace_collab.ace_user1 {
     color: $cf-code-bg;

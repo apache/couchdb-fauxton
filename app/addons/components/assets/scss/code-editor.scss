@@ -28,7 +28,7 @@
   z-index: 1025;
 
   &.zen-theme-dark {
-    background-color: #323232;
+    background-color: $cf-code-bg;
   }
   &.zen-theme-light {
     background-color: $cf-white;
@@ -65,7 +65,7 @@
   right: 30px;
   top: 30px;
   font-size: 20px;
-  color: white;
+  color: $cf-white;
 
   .zen-mode-controls-wrapper {
     position: relative;

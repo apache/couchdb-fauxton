@@ -47,12 +47,12 @@
 }
 
 .bottom-border {
-  border-bottom: 1px solid #999999;
+  border-bottom: 1px solid $cf-border-color02;
 }
 
 .bottom-left-border {
-  border-bottom: 1px solid #999999;
-  border-left: 1px solid #999999;
+  border-bottom: 1px solid $cf-border-color02;
+  border-left: 1px solid $cf-border-color02;
 }
 
 #dashboard {
@@ -150,14 +150,14 @@
 
 /* used in addons/changes */
 .dashboard-upper-menu {
-  border-left: 1px solid #999999;
+  border-left: 1px solid $cf-border-color02;
   right: 0;
   left: $cf-sidebar-width + $cf-navbar-width;
   position: fixed;
   display: block;
 
   @include topmenu-defaults;
-  background-color: #cbcbcb;
+  background-color: $cf-background01;
   .closeMenu & {
     left: $cf-sidebar-width + $cf-navbar-width-collapsed;
   }
@@ -261,10 +261,10 @@
     .view {
       padding: 0 0 40px;
     }
-    border-left: 1px solid #999999;
+    border-left: 1px solid $cf-border-color02;
   }
   .right-header-wrapper {
-    border-left: 1px solid #999999;
+    border-left: 1px solid $cf-border-color02;
     .faux-header__searchboxwrapper {
       display: none;
     }

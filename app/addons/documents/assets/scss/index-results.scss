@@ -184,11 +184,11 @@ a.document-result-screen__toolbar-create-btn:visited {
     padding-left: 0px;
   }
   .tableview-conflict {
-    color: #f00;
+    color: #ff0000;
   }
   .icon-code-fork {
     padding-right: 2px;
-    color: #f00;
+    color: #ff0000;
   }
   .tableview-el-last {
     width: 75px;
@@ -203,23 +203,12 @@ a.document-result-screen__toolbar-create-btn:visited {
     overflow: visible;
   }
 
-  .table-dropdown-item {
-    padding: 2px 6px;
-    cursor: pointer;
-    background: #2b2f33;
-    color: white;
-    margin: 0 2px;
-  }
-  .table-dropdown-item-highlight {
-    background: #e23632;
-  }
-
-  .icon.icon-filter {
+  .fonticon-filter {
     position: absolute;
     right: 6px;
     top: 6px;
     pointer-events: none;
-    color: #999999;
+    color: $cf-text-fonticon01;
   }
 
   .table-container-autocomplete {

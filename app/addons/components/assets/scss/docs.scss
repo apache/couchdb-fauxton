@@ -125,9 +125,9 @@
 }
 
 .doc-content-truncated {
-  background-color: #4d4d4d;
-  color: #bbbbbb;
-  padding: 10px;
+  background-color: $cf-code-bg; // should match the code editor bg
+  color: $cf-text02-muted;
+  padding: 0px 16px 8px 16px;
   font-size: 13px;
   margin: 0;
 }

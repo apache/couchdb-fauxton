@@ -38,7 +38,7 @@
 
   .query-group {
     padding: 20px;
-    border-bottom: 1px solid #555555;
+    border-bottom: 1px solid $cf-border-color02;
   }
 
   .query-group:last-child {
@@ -82,7 +82,7 @@
       background: none;
       border: none;
       box-shadow: none;
-      color: #cccccc;
+      color: $cf-text03;
       line-height: 1em;
     }
     select {
@@ -98,7 +98,7 @@
   .toggle-btns {
     .btn {
       padding: 5px 12px 5px;
-      background: #727a82;
+      background: $cf-query-options-btn-bg;
       color: $cf-white;
       font-size: 12px;
       border: none;
