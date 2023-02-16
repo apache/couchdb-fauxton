@@ -29,7 +29,7 @@
     background-color: $cf-background01;
     color: $cf-brand-highlight;
     &:hover {
-      color: white;
+      color: $cf-sidebar-color-hover;
     }
   }
 
@@ -43,7 +43,7 @@
   .nav > li a:hover {
     & + div.add-dropdown .dropdown-toggle,
     & + span.index-menu-toggle {
-      color: white;
+      color: $cf-sidebar-color-hover;
     }
   }
 
@@ -59,7 +59,7 @@
     .accordion-list-item:hover {
       p,
       .fonticon-play {
-        color: white;
+        color: $cf-sidebar-color-hover;
       }
       p {
         background-color: $cf-brand-hightlight-hover;
@@ -100,13 +100,13 @@
       li {
         cursor: pointer;
         &.active > a {
-          background-color: #f1f0f1;
+          background-color: $cf-background01;
         }
         > a.down .fonticon-play {
           @include rotate(90deg);
         }
         &:hover .fonticon-play {
-          color: #dddddd;
+          color: $cf-sidebar-color-hover;
         }
         a {
           font-size: 14px;
@@ -171,7 +171,7 @@
     position: absolute;
     top: 0;
     right: 0;
-    color: #767f89;
+    color: $cf-sidebar-color;
     height: 30px;
     width: 40px;
     padding-top: 2px;
@@ -215,8 +215,8 @@
   }
   .arrow {
     &:after {
-      border-bottom-color: #000000;
-      border-top-color: #000000;
+      border-bottom-color: $cf-black;
+      border-top-color: $cf-black;
     }
   }
   .fonticon {

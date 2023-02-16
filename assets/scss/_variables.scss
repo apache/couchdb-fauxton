@@ -57,8 +57,8 @@ $cf-gray: #cbcbcb;
 $cf-gray: #cccccc;
 $cf-gray: #dddddd;
 $cf-gray: #e6e6e6;
-$cf-gray: #f1f0f1;
-$cf-gray: #f3f3f3;
+
+
 
 $cf-dark-red: #9d261d;
 $cf-another-red: #b11925;
@@ -107,11 +107,11 @@ $cf-box-shadow: 2px 2px rgba(0, 0, 0, 0.2) !default;
 
 // buttons
 $cf-btn-primary-bg: $cf-primary !default;
-$cf-btn-primary-color: #ffffff !default;
+$cf-btn-primary-color: $cf-white !default;
 $cf-btn-secondary-bg: $cf-secondary !default;
-$cf-btn-secondary-color: #ffffff !default;
+$cf-btn-secondary-color: $cf-white !default;
 $cf-btn-danger-bg: $cf-danger !default;
-$cf-btn-danger-color: #ffffff !default;
+$cf-btn-danger-color: $cf-white !default;
 
 $cf-btn-primary-bg-disabled: #8ec9ad !default;
 $cf-btn-primary-color-disabled: #f2f2f2 !default;
@@ -123,16 +123,16 @@ $cf-btn-danger-color-disabled: #f2f2f2 !default;
 // code editor or viewer
 $cf-code-bg: #4d4d4d !default;
 $cf-code-gutter-bg: #3a3a3a !default;
-$cf-code-cursor-color: #ffffff !default;
-$cf-code-active-bg: #000000 !default;
+$cf-code-cursor-color: $cf-white !default;
+$cf-code-active-bg: $cf-black !default;
 $cf-code-selection-bg: rgba(29, 151, 215, 0.5) !default;
 
 // documents list (JSON view)
 $cf-jsondocs-header-bg: $cf-code-gutter-bg !default;
 $cf-jsondocs-header-label: $cf-text03 !default;
 $cf-jsondocs-header-docid: $cf-text03 !default;
-$cf-jsondocs-header-border: #000000 !default;
-$cf-jsondocs-data-border: #000000 !default;
+$cf-jsondocs-header-border: $cf-black !default;
+$cf-jsondocs-data-border: $cf-black !default;
 $cf-jsondocs-check-bg: $cf-background01 !default;
 $cf-jsondocs-check-border: 2px solid $cf-border-color02 !default;
 $cf-jsondocs-check-border-hover: 2px solid $cf-border-color01 !default;
@@ -145,30 +145,33 @@ $cf-dropdown-color: $cf-text02 !default;
 $cf-dropdown-item-bg: $cf-background03 !default;
 $cf-dropdown-item-color: $cf-text03 !default;
 
+// forms
+$cf-input-bg: $cf-white !default;
+
 // main nav bar
 $cf-navbar-width: 220px !default;
 $cf-navbar-width-collapsed: 64px !default;
 $cf-navbar-icon-color: $cf-text03 !default;
-$cf-navbar-icon-color-selected: #ffffff !default;
+$cf-navbar-icon-color-selected: $cf-white !default;
 $cf-navbar-bg: $cf-background02 !default;
 $cf-navbar-item-bg: $cf-background03 !default;
 
 // notifications
-$cf-alert-bg: #ffffff !default;
+$cf-alert-bg: $cf-white !default;
 $cf-alert-info-color: #329898 !default;
 $cf-alert-success-color: #448c11 !default;
 $cf-alert-error-color: #ff0c35 !default;
 
 // pagination
-$cf-pagination-bg: #ffffff !default;
+$cf-pagination-bg: $cf-white !default;
 $cf-pagination-border: $cf-border-color01 !default;
 
 // sidebar
 $cf-sidebar-width: 330px !default;
-$cf-sidebar-bg: white !default;
+$cf-sidebar-bg: $cf-white !default;
 $cf-sidebar-color: $cf-text01 !default;
 $cf-sidebar-bg-hover: $cf-brand-hightlight-hover !default;
-$cf-sidebar-color-hover: white !default;
+$cf-sidebar-color-hover: $cf-white !default;
 $cf-sidebar-bg-active: $cf-background01 !default;
 $cf-sidebar-color-active: $cf-brand-highlight !default;
 $cf-sidebar-subitem-color: $cf-text04 !default;
@@ -211,11 +214,16 @@ $danger: $cf-danger;
 // dropdowns
 $dropdown-bg: $cf-dropdown-bg;
 $dropdown-color: $cf-dropdown-color;
+// forms
+$input-bg: $cf-input-bg;
 // modals
-$modal-backdrop-opacity: 0.75;
+$modal-backdrop-opacity: 0.5;
 // pagination
 $pagination-bg: $cf-pagination-bg;
 $pagination-border-color: $cf-pagination-border;
+// popover
+$popover-bg: $cf-background02;
+$popover-body-color: $cf-text02;
 // tables
 $table-striped-bg: $cf-table-stripped-bg;
 // other

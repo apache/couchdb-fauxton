@@ -20,7 +20,7 @@
 
 .change-wrapper {
   margin-top: 20px;
-  border-bottom: 1px solid #dddddd;
+  border-bottom: 1px solid $cf-border-color02;
   &:last-child {
     border-bottom: none;
   }
