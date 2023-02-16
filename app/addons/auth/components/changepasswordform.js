@@ -11,7 +11,7 @@
 // the License.
 
 import React from "react";
-import ReactDOM from "react-dom";
+import { Button } from 'react-bootstrap';
 import FauxtonAPI from '../../../core/api';
 import {
   changePassword
@@ -57,29 +57,31 @@ export class ChangePasswordForm extends React.Component {
           </p>
 
           <input
+            className="form-control"
             id="password"
             type="password"
             ref={node => this.passwordField = node}
             name="password"
             placeholder="Password"
-            size="24"
+            size={24}
             onChange={this.onChangePassword.bind(this)}
             value={this.state.password}
           />
-          <br />
+          <br/>
           <input
+            className="form-control"
             id="password-confirm"
             type="password"
             name="password_confirm"
             placeholder="Verify Password"
-            size="24"
+            size={24}
             onChange={this.onChangePasswordConfirm.bind(this)}
             value={this.state.passwordConfirm}
           />
 
           <br />
           <p>
-            <button type="submit" className="btn btn-primary">Change</button>
+            <Button type="submit" variant="cf-primary">Change</Button>
           </p>
         </form>
       </div>

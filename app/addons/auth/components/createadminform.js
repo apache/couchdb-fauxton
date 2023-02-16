@@ -10,13 +10,15 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
+import React from "react";
+import { Button } from 'react-bootstrap';
+import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 
-import React from "react";
 import {
   createAdmin
 } from "./../actions";
-import {connect} from 'react-redux';
+
 
 export class CreateAdminForm extends React.Component {
   constructor(props) {
@@ -72,21 +74,23 @@ export class CreateAdminForm extends React.Component {
 
         <form id="create-admin-form" onSubmit={this.createAdmin.bind(this)}>
           <input
+            className="form-control"
             id="username"
             type="text"
             ref={node => this.usernameField = node}
             name="name"
             placeholder="Username"
-            size="24"
+            size={24}
             onChange={this.onChangeUsername.bind(this)}
           />
           <br />
           <input
+            className="form-control"
             id="password"
             type="password"
             name="password"
             placeholder="Password"
-            size="24"
+            size={24}
             onChange={this.onChangePassword.bind(this)}
           />
           <p>
@@ -94,9 +98,9 @@ export class CreateAdminForm extends React.Component {
             are controlled by validation. CouchDB can be configured to block all
             access to anonymous users.
           </p>
-          <button type="submit" id="create-admin" className="btn btn-primary">
+          <Button id="create-admin" type="submit" variant="cf-primary">
             Create Admin
-          </button>
+          </Button>
         </form>
       </div>
     );

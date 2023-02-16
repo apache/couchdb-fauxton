@@ -82,24 +82,27 @@ export default class AddOptionButton extends React.Component {
 
   getPopover () {
     return (
-      <Popover className="tray" id="add-option-popover" title="Add Option">
-        <input
-          className="input-section-name"
-          onChange={this.updateSectionName.bind(this)}
-          type="text" name="section" placeholder="Section" autoComplete="off" autoFocus/>
-        <input
-          className="input-option-name"
-          onChange={this.updateOptionName.bind(this)}
-          type="text" name="name" placeholder="Name"/>
-        <input
-          className="input-value"
-          onChange={this.updateValue.bind(this)}
-          type="text" name="value" placeholder="Value"/>
-        <a
-          className="btn btn-create"
-          onClick={this.onAdd.bind(this)}>
+      <Popover className="tray" id="add-option-popover">
+        <Popover.Header as="h3">Add Option</Popover.Header>
+        <Popover.Body>
+          <input
+            className="input-section-name"
+            onChange={this.updateSectionName.bind(this)}
+            type="text" name="section" placeholder="Section" autoComplete="off" autoFocus/>
+          <input
+            className="input-option-name"
+            onChange={this.updateOptionName.bind(this)}
+            type="text" name="name" placeholder="Name"/>
+          <input
+            className="input-value"
+            onChange={this.updateValue.bind(this)}
+            type="text" name="value" placeholder="Value"/>
+          <Button
+            variant="cf-primary"
+            onClick={this.onAdd.bind(this)}>
           Create
-        </a>
+          </Button>
+        </Popover.Body>
       </Popover>
     );
   }

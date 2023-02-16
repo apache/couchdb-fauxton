@@ -55,22 +55,6 @@
   width: 5%;
 }
 
-table.config {
-  thead th {
-    border-left: none;
-    border-bottom: 2px solid #999999;
-  }
-  tr {
-    th,
-    td {
-      vertical-align: middle;
-      .btn.btn-small {
-        padding: 10px 3px;
-      }
-    }
-  }
-}
-
 #add-option-button {
   line-height: 40px;
   cursor: pointer;
@@ -90,10 +74,6 @@ table.config {
 #add-option-popover {
   background-color: $cf-background02;
   color: white;
-  padding: 20px;
-  border-radius: 0;
-  width: 300px;
-  max-width: none;
   display: block;
 
   .popover-content {
@@ -114,24 +94,24 @@ table.config {
     background-color: $cf-background02;
   }
 
-  input {
-    width: 100%;
-  }
+  // input {
+  //   width: 100%;
+  // }
 
-  a.btn {
-    color: white;
-    background-color: $cf-brand-highlight;
-    line-height: 1.5em;
-    border: 0;
-    padding: 10px 10px 9px;
-    font-size: 14px;
-    @include border-radius(5px);
+  // a.btn {
+  //   color: $cf-text02;
+  //   background-color: $cf-brand-highlight;
+  //   line-height: 1.5em;
+  //   border: 0;
+  //   padding: 10px 10px 9px;
+  //   font-size: 14px;
+  //   @include border-radius(5px);
 
-    &:hover {
-      background-color: #cbcbcb;
-      color: white;
-    }
-  }
+  //   &:hover {
+  //     background-color: #cbcbcb;
+  //     color: $cf-text02;
+  //   }
+  // }
 
   .arrow,
   .arrow::after {
