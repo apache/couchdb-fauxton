@@ -30,7 +30,7 @@ export default class PanelButton extends React.Component {
   };
 
   render() {
-    var iconClasses = 'icon ' + this.props.iconClass;
+    var iconClasses = 'fonticon ' + this.props.iconClass;
     return (
       <div className="panel-section">
         <button className={`panel-button ${this.props.className}`}

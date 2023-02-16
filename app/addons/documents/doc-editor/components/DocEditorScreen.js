@@ -173,11 +173,11 @@ export default class DocEditorScreen extends React.Component {
 
         <PanelButton className="upload"
           title="Upload Attachment"
-          iconClass="icon-circle-arrow-up"
+          iconClass="fonticon-up-circled"
           disabled={this.props.isSaving}
           onClick={this.props.showUploadModal} />
         <PanelButton title="Clone Document"
-          iconClass="icon-repeat"
+          iconClass="fonticon-cw"
           disabled={this.props.isSaving}
           onClick={this.props.showCloneDocModal} />
         <PanelButton title="Delete"

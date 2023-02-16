@@ -109,7 +109,7 @@ describe('DocEditorScreen', () => {
       doc={doc} />);
 
     expect(el.find('.loading-lines').length).toBe(0);
-    expect(el.find('.icon-circle-arrow-up').length).toBe(0);
+    expect(el.find('.fonticon-fonticon-up-circled').length).toBe(0);
     expect(el.find('.icon-repeat').length).toBe(0);
     expect(el.find('.fonticon-trash').length).toBe(0);
   });
